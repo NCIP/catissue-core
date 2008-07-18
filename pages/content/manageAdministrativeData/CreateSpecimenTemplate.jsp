@@ -13,7 +13,8 @@
 <%@ page import="edu.wustl.catissuecore.bean.CollectionProtocolBean"%>
 <%@ include file="/pages/content/common/SpecimenCommonScripts.jsp" %>
 <%@ page import="edu.wustl.catissuecore.bean.DeriveSpecimenBean"%>
-
+<%@ page language="java" isELIgnored="false"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.catissuecore.bizlogic.AnnotationUtil"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
@@ -292,11 +293,22 @@ if(form != null)
 <head>
 <script src="jss/script.js" type="text/javascript"></script>
 <link rel="STYLESHEET" type="text/css" href="css/catissue_suite.css">
-<link rel="STYLESHEET" type="text/css" href="css/styleSheet.css">
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 
 <script language="JavaScript">
-	
+	function showHide(elementid)
+{
+	var switchImg = document.getElementById('imgArrow_'+elementid);
+	if (document.getElementById(elementid).style.display == 'none'){
+		document.getElementById(elementid).style.display = '';
+		switchImg.innerHTML = '<img src="images/uIEnhancementImages/uparrow.gif" border="0" width="80" height="9" hspace="10"   vspace="3"/>';
+							
+	} else {
+		document.getElementById(elementid).style.display = 'none';
+		switchImg.innerHTML = '<img src="images/uIEnhancementImages/dwn_arrow.gif" border="0" width="80" height="9" hspace="10"  vspace="3"/>';
+				
+	}
+} 
 	function insRow(subdivtag)
 	{
 		var noOfDeriveSpecimen = parseInt(document.forms[0].noOfDeriveSpecimen.value);
@@ -331,7 +343,7 @@ if(form != null)
 		
 		//type
 		var spreqtype=x.insertCell(1)
-		spreqtype.className="black_new";
+		spreqtype.className="black_ar";
 		sname="";
 		objname = "deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_specimenClass)";
 		var objunit = "deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_unit)";
@@ -353,12 +365,12 @@ if(form != null)
 		
 		//subtype
 		var spreqsubtype=x.insertCell(2)
-		spreqsubtype.className="black_new";
+		spreqsubtype.className="black_ar";
 		sname="";
 		objname = "deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_specimenType)";
 		var functionName = "onSubTypeChangeUnitforCP('" + specimenClassName + "',this,'" + objunit + "')" ;
 		
-		sname= "<select name='" + objname + "' size='1' class='formFieldSized8' id='" + objname + "' onChange=" + functionName + " onmouseover=showTip(this.id) onmouseout=hideTip(this.id)>";
+		sname= "<select name='" + objname + "' size='1' class='addRow_s' id='" + objname + "' onChange=" + functionName + " onmouseover=showTip(this.id) onmouseout=hideTip(this.id)>";
 		
 		sname = sname + "<option value='-1'><%=Constants.SELECT_OPTION%></option>";
 
@@ -368,7 +380,7 @@ if(form != null)
 		
 		//Storage Location
 		var spreqsubtype=x.insertCell(3)
-		spreqsubtype.className="black_new";
+		spreqsubtype.className="black_ar";
 		sname="";
 		objname = "deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_storageLocation)";
 		
@@ -393,7 +405,7 @@ if(form != null)
 		sname="";
 		objname = "deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_quantity)";
 
-		sname="<input type='text' name='" + objname + "' value='0' maxlength='10' size='12' class='black_ar_s' id='" + objname + "'>"        	
+		sname="<input type='text' name='" + objname + "' value='0' maxlength='10' size='12' class='black_ar' id='" + objname + "'>"        	
 		sname = sname + "&nbsp;<span id='" + objunit + "'>&nbsp;</span>"
 						
 		spreqqty.innerHTML="" + sname;
@@ -404,15 +416,14 @@ if(form != null)
 		sname="";
 		objname ="deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_concentration)";
 
-		sname="<input type='text' name='" + objname + "' value='0' size='12'  maxlength='10' class='black_ar_s' id='" + objname + "'>"        	
+		sname="<input type='text' name='" + objname + "' value='0' size='12'  maxlength='10' class='black_ar' id='" + objname + "'>"        	
 		sname = sname + "&nbsp;<span id='" + objunit + "'>&nbsp;</span>"
 						
 		spreqqty.innerHTML="" + sname;
 		
 		
 	}
-
-	window.parent.frames['CPTreeView'].location="ShowCollectionProtocol.do?pageOf=specimenEventsPage&key=<%=mapKey%>";
+	window.parent.frames['CPTreeView'].location="ShowCollectionProtocol.do?pageOf=specimenEventsPage&key=<%=mapKey%>&operation=${requestScope.operation}";
 </script>
 
 </head>
@@ -426,40 +437,25 @@ if(form != null)
 
 <html:form action="CreateSpecimenTemplate.do">
 <html:hidden property="noOfDeriveSpecimen"/>
-<table height="20"   width="100%" border="0" cellpadding="0" cellspacing="0">
-	
-    <tr>
-        <td width="10%" valign="bottom" >
-			<img src="images/uIEnhancementImages/cp_specimen.gif" alt="Specimen Requirements" width="158" height="20" />
-		</td>
-        
-        <td width="90%" valign="top" class="cp_tabbg" align="right">
-			<span class="smalllink">
-		  		<html:link href="#"  styleId="newUser" onclick="viewSummary()">
-					<bean:message key="cpbasedentry.viewsummary" /> 
-				</html:link>
-			</span>
-		</td>
-     </tr>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+			<td><table width="100%" border="0" cellpadding="0" cellspacing="0">
+                  <tr>
+                    <td valign="bottom" ><img src="images/uIEnhancementImages/cp_specimen.gif" alt="Specimen Requirements" width="158" height="20" /><a href="#"></a></td>
+                    <td width="85%" valign="bottom" class="cp_tabbg">&nbsp;</td>
+                  </tr>
+              </table></td>
+		 </tr>
       <tr>
-          <td class="cp_tabtable" colspan="3">
-			<br>
-				<table width="100%" border="0" cellpadding="3" cellspacing="0" bgcolor="#FFFFFF">
+              <td class="cp_tabtable">
+                  <br>
+                  <table width="100%" border="0" cellpadding="3" cellspacing="0" bgcolor="#FFFFFF">
 	                  <tr>
-		                   <td colspan="3" align="left">
-	                           <table width="100%" border="0" cellpadding="3" cellspacing="0">
-		                          <tr>
-			                        <td width="2%" align="center" class="black_ar">
-										<span class="blue_ar_b">
-											<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
-										</span>
-									</td>
-	                                <td width="19%" align="left" class="black_ar">
-										<label for="className">
-								     		<bean:message key="specimen.type"/>
-								     	</label> 
-									</td>
-								    <td width="35%" align="left" class="black_new">
+                      <td colspan="3" align="left"><table width="100%" border="0" cellpadding="3" cellspacing="0">
+		                <tr>
+			               <td width="1%" align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
+						   <td width="22%" align="left" class="black_ar"><bean:message key="specimen.type"/> </td>
+						   <td width="33%" align="left" nowrap class="black_ar">
 			<%
 				String classValue = (String)form.getClassName();
 				specimenTypeList = (List)specimenTypeMap.get(classValue);
@@ -493,19 +489,12 @@ if(form != null)
 										  readOnly="<%=readOnlyForSpecimen%>"
 										  onChange="onTypeChange(this);clearTypeCombo()"
 										  styleClass="formFieldSizedText"
+										  
 										/>
 								</td>
-                                <td width="1%" align="left">
-									<span class="blue_ar_b">
-										<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
-									</span>
-								</td>
-                                <td width="15%" align="left" class="black_ar" >
-									<label for="type">
-							     		<bean:message key="specimen.subType"/>
-							     	</label>
-								</td>
-                                <td width="28%" align="left" class="black_new">
+                                <td width="1%" align="center"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
+							    <td width="15%" align="left"><label for="type" class="black_ar"><bean:message key="specimen.subType"/></label></td>
+                                <td width="28%" align="left" class="black_ar">
 									<autocomplete:AutoCompleteTag property="type"
 									  optionsList = "<%=request.getAttribute(Constants.SPECIMEN_TYPE_MAP)%>"
 									  initialValue="<%=form.getType()%>"
@@ -513,28 +502,21 @@ if(form != null)
 									  readOnly="<%=readOnlyForAliquot%>"
 									  dependsOn="<%=form.getClassName()%>"
 									  styleClass="formFieldSizedText"
+									  
 							        />
 								</td>
                               </tr>
                               <tr>
-                                <td align="center" class="black_ar">
-									<span class="blue_ar_b">
-										<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
-									</span>
-								</td>
-                                <td align="left" class="black_ar">
-									<label for="tissueSite">
-										<bean:message key="specimen.tissueSite"/>
-									</label>
-								</td>
-                                <td width="35%" align="left" class="black_new">
+                                 <td align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
+                                 <td align="left" class="black_ar"><bean:message key="specimen.tissueSite"/></td>
+                                 <td width="30%" align="left" class="black_ar">
 									<autocomplete:AutoCompleteTag property="tissueSite"
-									  size="150"
 									  optionsList = "<%=request.getAttribute(Constants.TISSUE_SITE_LIST)%>"
 									  initialValue="<%=form.getTissueSite()%>"
 									  readOnly="<%=readOnlyForAliquot%>"
 									  styleClass="formFieldSizedText"
-								    />
+								      
+									/>
 				<%
 					String url = "ShowFramedPage.do?pageOf=pageOfTissueSite&propertyName=tissueSite&cdeName=Tissue Site";
 				%>
@@ -542,17 +524,9 @@ if(form != null)
 										<img src="images/uIEnhancementImages/ic_cl_diag.gif" border="0" width="16" height="16" title='Tissue Site Selector' alt="Clinical Diagnosis">
 									</a>
                                 </td>
+                               <td align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
+                               <td align="left" class="black_ar"><bean:message key="specimen.tissueSite"/></td>
                                 <td align="left" class="black_ar">
-									<span class="blue_ar_b">
-										<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
-									</span>
-								</td>
-                                <td align="left" class="black_ar">
-									<label for="tissueSide">
-										<bean:message key="specimen.tissueSide"/>
-									</label>
-								</td>
-                                <td align="left" class="black_new">
 									<autocomplete:AutoCompleteTag property="tissueSide"
 										optionsList = "<%=request.getAttribute(Constants.TISSUE_SIDE_LIST)%>"
 									    initialValue="<%=form.getTissueSide()%>"
@@ -562,17 +536,9 @@ if(form != null)
 								</td>
                               </tr>
                               <tr>
-                                <td align="center" class="black_ar">
-									<span class="blue_ar_b">
-										<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
-									</span>
-								</td>
-                                <td align="left" class="black_ar">
-									<label for="pathologicalStatus">
-										<bean:message key="specimen.pathologicalStatus"/>
-									</label>
-								</td>
-                                <td width="35%" align="left" class="black_new">
+                                <td align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
+                                <td align="left" class="black_ar"><bean:message key="specimen.pathologicalStatus"/> </td>
+                                <td width="30%" align="left" class="black_ar">
 									<autocomplete:AutoCompleteTag property="pathologicalStatus"
 									  optionsList = "<%=request.getAttribute(Constants.PATHOLOGICAL_STATUS_LIST)%>"
 									  initialValue="<%=form.getPathologicalStatus()%>"
@@ -580,17 +546,9 @@ if(form != null)
 									  styleClass="formFieldSizedText"
 									/>
 								</td>
+                               <td align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
+                               <td align="left" class="black_ar"><bean:message key="cpbasedentry.storagelocation"/></td>
                                 <td align="left" class="black_ar">
-									<span class="blue_ar_b">
-										<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
-									</span>
-								</td>
-                                <td align="left" class="black_ar">
-									<label for="storageLocation">
-										<bean:message key="cpbasedentry.storagelocation"/>
-									</label>
-								</td>
-                                <td align="left" class="black_new">
 									<autocomplete:AutoCompleteTag property="storageLocationForSpecimen"
 									  optionsList = "<%=request.getAttribute("storageContainerList")%>"
 									  initialValue="<%=form.getStorageLocationForSpecimen()%>"
@@ -599,54 +557,25 @@ if(form != null)
 								</td>
                               </tr>
                               <tr>
-                                <td align="center" class="black_ar">
-									<span class="blue_ar_b">
-										<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
-									</span>
-								</td>
-                                <td align="left" class="black_ar">
-									<label for="quantity">
-										<bean:message key="specimen.quantity"/>
-									</label>
-								</td>
+                                <td align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
+                                <td align="left" class="black_ar"><bean:message key="specimen.quantity"/></td>
+                                <td align="left" class="black_ar_s">	<html:text styleClass="black_ar" size="22" maxlength="10"styleId="quantity" property="quantity"/><span id="unitSpan">&nbsp;<%=unitSpecimen%></span><html:hidden property="unit"/></td>
+                                <td align="center" class="black_ar">&nbsp;</td>
+                                <td align="left" class="black_ar"><bean:message key="specimen.concentration"/></td>
                                 <td align="left" class="black_ar_s">
-									<html:text styleClass="black_ar" size="23" maxlength="10"					styleId="quantity" property="quantity"/>
-							     	<span id="unitSpan">
-										<%=unitSpecimen%>
-									</span>
-							     	<html:hidden property="unit"/>
-								</td>
-                                <td align="left" class="black_ar">&nbsp;</td>
-                                <td align="left" class="black_ar">
-									<label for="concentration">
-										<bean:message key="specimen.concentration"/>
-									</label>
-								</td>
-                                <td align="left">
 			<%
 				boolean concentrationDisabled = true;
 				if(form.getClassName().equals("Molecular") && !Constants.ALIQUOT.equals(form.getLineage()))
 				concentrationDisabled = false;
 			%>
-     									<html:text styleClass="black_ar" maxlength="10"  size="23"				styleId="concentration" property="concentration" 
-								     		readonly="<%=readOnlyForAll%>" disabled="<%=concentrationDisabled%>"/>
-										<bean:message key="specimen.concentrationUnit"/>
-								</td>
+     									<html:text styleClass="black_ar" maxlength="10"  size="22"	styleId="concentration" property="concentration"  readonly="<%=readOnlyForAll%>" disabled="<%=concentrationDisabled%>"/>&nbsp;<bean:message key="specimen.concentrationUnit"/></td>
                               </tr>
                               <tr>
 									<html:hidden property="collectionEventId" />
 									<html:hidden property="collectionEventSpecimenId" />
-                                <td align="center" class="black_ar">
-									<span class="blue_ar_b">
-										<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
-									</span>
-								</td>
-                                <td align="left" class="black_ar">
-									<label for="user">
-										<bean:message key="specimen.collectedevents.username"/>
-									</label>
-								</td>
-                                <td align="left" class="black_new"> 
+                                <td align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
+                            <td align="left" class="black_ar"><bean:message key="specimen.collectedevents.username"/></td>
+                                <td align="left" class="black_ar"> 
 									<autocomplete:AutoCompleteTag property="collectionEventUserId"
 									  optionsList = "<%=request.getAttribute(Constants.USERLIST)%>"
 									  initialValue="<%=new Long(form.getCollectionEventUserId())%>"
@@ -656,19 +585,9 @@ if(form != null)
 								</td>
 								<html:hidden property="receivedEventId" />
 									<html:hidden property="receivedEventSpecimenId" />
+                               <td align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
+                               <td align="left" class="black_ar"><bean:message key="specimen.receivedevents.username"/></td>
                                 <td align="left" class="black_ar">
-									<span class="blue_ar_b">
-										<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
-									</span>
-								</td>
-							<!-- RecievedEvent fields -->
-									
-								<td align="left" class="black_ar">
-									<label for="type">
-										<bean:message key="specimen.receivedevents.username"/>
-									</label>
-								</td>
-                                <td align="left" class="black_new">
 									<autocomplete:AutoCompleteTag property="receivedEventUserId"
 									  optionsList = "<%=request.getAttribute(Constants.USERLIST)%>"
 									  initialValue="<%=new Long(form.getReceivedEventUserId())%>"
@@ -678,32 +597,19 @@ if(form != null)
 								</td>
                               </tr>
                               <tr>
-                                <td align="center" class="black_ar">&nbsp;</td>
+                               <td align="center" class="black_ar">&nbsp;</td>
+                              <td align="left" class="black_ar"><bean:message key="cpbasedentry.collectionprocedure"/></td>
                                 <td align="left" class="black_ar">
-									<label for="collectionprocedure">
-										<bean:message key="cpbasedentry.collectionprocedure"/>
-									</label>
-								</td>
-                                <td align="left" class="black_new">
 									<autocomplete:AutoCompleteTag property="collectionEventCollectionProcedure"
 									  optionsList = "<%=request.getAttribute(Constants.PROCEDURE_LIST)%>"
 									  initialValue="<%=form.getCollectionEventCollectionProcedure()%>"
 									  styleClass="formFieldSizedText"
 									/>
 								</td>
-                                <td align="left" class="black_ar">
-									<span class="blue_ar_b">
-										<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
-									</span>
-								</td>
-								<!-- RecievedEvent fields -->
-                                <td align="left" class="black_ar">
-									<label for="quality">
-										<bean:message key="cpbasedentry.receivedquality"/>
-									</label>	
-								</td>
+                                <td align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
+                                <td align="left" class="black_ar"><label for="institutionId"><bean:message key="cpbasedentry.receivedquality"/></label></td>
 								<!-- receivedeventparameters.receivedquality -->
-                                <td align="left" class="black_new">
+                                <td align="left" class="black_ar">
 									<autocomplete:AutoCompleteTag property="receivedEventReceivedQuality"
 									  optionsList = "<%=request.getAttribute(Constants.RECEIVED_QUALITY_LIST)%>"
 									  initialValue="<%=form.getReceivedEventReceivedQuality()%>"
@@ -713,26 +619,17 @@ if(form != null)
                               </tr>
                               <tr>
 							  <!-- CollectionEvent fields -->
-                                <td align="center" class="black_ar">
-									<span class="blue_ar_b">
-										<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
-									</span>
-								</td>
+                                <td align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
+                                <td align="left" class="black_ar"><label for="departmentId"><bean:message key="cpbasedentry.collectioncontainer"/></label></td>
                                 <td align="left" class="black_ar">
-									<label for="container">
-										<bean:message key="cpbasedentry.collectioncontainer"/>
-									</label>
-								</td>
-                                <td align="left" class="black_new">
 									<autocomplete:AutoCompleteTag property="collectionEventContainer"
 									  optionsList = "<%=request.getAttribute(Constants.CONTAINER_LIST)%>"
 									  initialValue="<%=form.getCollectionEventContainer()%>"
 									  styleClass="formFieldSizedText"
 								    />
 								</td>
-                                <td align="left" class="black_ar">&nbsp;</td>
-                                <td align="left" class="black_ar">
-								</td>
+                                <td align="center" class="black_ar">&nbsp;</td>
+                                <td align="left" class="black_ar"><label></label></td>
                                 <td align="left">&nbsp;</td>
                               </tr>
                             </table>
@@ -741,67 +638,30 @@ if(form != null)
 					</td>
                    </tr>
                    <tr onclick="javascript:showHide('derive_specimen')">
-					  <td width="97%" height="20" align="left" class="tr_bg_blue1">
+					 <td width="97%" align="left" class="tr_bg_blue1">
 						<span class="blue_ar_b">
 							<bean:message key="cpbasedentry.derivespecimens"/>
 						</span>
 					  </td>
                       <td width="3%" align="right" class="tr_bg_blue1">
 						<a href="#" id="imgArrow_derive_specimen">
-							<img src="images/uIEnhancementImages/dwn_arrow1.gif" alt="Show Details" width="7" height="8" hspace="10" border="0" />
+							<img src="images/uIEnhancementImages/dwn_arrow.gif" alt="Show Details" border="0" width="80" height="9" hspace="10" vspace="0"/>
 						</a>
 					  </td>
                      </tr>
-                     <tr>
-                       <td colspan="2" style="padding-top:10px;">
+                       <td colspan="2" class="showhide1">
 							<div id="derive_specimen" style="display:none" >
 								<table width="100%" border="0" cellspacing="0" cellpadding="4">
 									<tr>
-		                                <td width="8%" class="tableheading">
-											<span class="black_ar_b">
-			                                  <label for="delete" align="center">
-												<bean:message key="addMore.delete" />
-											  </label>
-			                                </span>
-										</td>
-		                                <td width="18%" class="tableheading">
-											<span class="black_ar_b">
-												<span class="black_ar_b">
-													<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /> 
-												</span>
-												<bean:message key="collectionprotocol.specimenclass" />
-											</span>
-										</td>
-		                                <td width="18%" class="tableheading">
-											<span class="black_ar_b">
-												<span class="blue_ar_b">
-													<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
-												</span>
-												<bean:message key="collectionprotocol.specimetype" />
-											</span>
-										</td>
-		                                <td width="25%" class="tableheading">
-											<span class="black_ar_b">
-												<span class="blue_ar_b">
-													<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
-												</span>
-												<bean:message key="cpbasedentry.storagelocation"/>
-											</span>
-										</td>
-		                                <td width="15%" class="tableheading">
-											<span class="black_ar_b">
-												<bean:message key="collectionprotocol.quantity" />
-											</span>
-										</td>
-		                                <td width="16%" class="tableheading">
-											<span class="black_ar_b">
-												<span class="blue_ar_b">
-													<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
-												</span>
-												<bean:message key="cpbasedentry.concentration"/>
-											</span>
-										</td>
-		                              </tr>
+                              <td width="6%" class="tableheading"><span class="black_ar_b">
+                                <label for="delete" align="center"><bean:message key="addMore.delete" /></label>
+                              </span></td>
+                              <td width="15%" class="tableheading"><span class="black_ar_b"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /> </span><bean:message key="collectionprotocol.specimenclass" /> </span></td>
+                              <td width="23%" class="tableheading"><span class="black_ar_b"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span> <bean:message key="collectionprotocol.specimetype" /> </span></td>
+                              <td width="20%" class="tableheading"><span class="black_ar_b"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span> <bean:message key="cpbasedentry.storagelocation"/></span></td>
+                              <td width="21%" class="tableheading"><span class="black_ar_b"><bean:message key="collectionprotocol.quantity" /></span></td>
+                              <td width="15%" class="tableheading"><span class="black_ar_b"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span> <bean:message key="cpbasedentry.concentration"/></span></td>
+                            </tr>
 						  <script> document.forms[0].noOfDeriveSpecimen.value = <%=noOfDeriveSpecimen%> </script>
 
 										<TBODY id="DeriveSpecimenBean">
@@ -848,7 +708,7 @@ if(form != null)
 								<td class="black_ar"><label>
                                   <input type=checkbox name="<%=chk%>" id="<%=chk%>" >
                                 </label></td>
-                                <td class="black_new" >
+                                <td class="black_ar" >
 									<html:select property= "<%=specimenClass%>"
 									styleClass="formFieldSized8" 
 									styleId="<%=specimenClass%>" size="1"
@@ -857,16 +717,16 @@ if(form != null)
 										<html:options collection="<%=Constants.SPECIMEN_CLASS_LIST%>" labelProperty="name" property="value"/>
 									</html:select>
 								</td>
-                                <td class="black_new" >
+                                <td class="black_ar" >
 									<html:select property="<%=specimenType%>" 
-									styleClass="formFieldSized8" 
+									styleClass="addRow_s" 
 									styleId="<%=specimenType%>"  size="1"
 									onchange="<%=changeType%>"
 									onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 										<html:options collection="<%=Constants.SPECIMEN_TYPE_LIST%>" labelProperty="name" property="value"/>
 									</html:select>
 								</td>
-                                <td class="black_new" >
+                                <td class="black_ar" >
 									<html:select property="<%=storageLocation%>" 
 									styleClass="formFieldSized8" 
 									styleId="<%=storageLocation%>" size="1"
@@ -889,7 +749,7 @@ if(form != null)
 						concValue="0";
 					}
 				%>
-									<html:text styleClass="black_ar_s" size="12"  maxlength="10" 
+									<html:text styleClass="black_ar" size="12"  maxlength="10" 
 										styleId="<%=quantity%>" property="<%=quantity%>" 
 										value="<%=qtyValue%>" />
 									<span id="<%=unit%>">
@@ -897,7 +757,7 @@ if(form != null)
 									</span>
 								</td>
                                 <td class="black_ar">
-									<html:text styleClass="black_ar_s" size="12"  maxlength="10" 
+									<html:text styleClass="black_ar" size="12"  maxlength="10" 
 										styleId="<%=concentration%>" property="<%=concentration%>" 
 										disabled="<%=concReadOnly%>" value="<%=concValue%>" />
 								</td>
@@ -908,14 +768,14 @@ if(form != null)
 				}
 			%>
 							</tbody>
-							<tr>
-                                <td colspan="6" valign="bottom" class="black_ar">
-									<html:button property="addSpecimenReq" styleClass="black_ar" value="Add More"		disabled="<%=disabled%>" onclick="insRow('DeriveSpecimenBean')"/>
-			<%
+							<%
 							String deleteSpecimenRequirements = "deleteChecked('DeriveSpecimenBean','CreateSpecimenTemplate.do?operation="+operation+"&pageOf=delete',document.forms[0].noOfDeriveSpecimen,'checkBox_',false)"; 
 			%>
-									<html:button property="deleteSpecimenReq" styleClass="black_ar" onclick="<%=		deleteSpecimenRequirements %>" disabled="<%=disabled%>">
-										<bean:message key="buttons.delete"/>
+							<tr>
+                                <td colspan="6">
+									<html:button property="addSpecimenReq" styleClass="black_ar" value="Add More" disabled="<%=disabled%>" onclick="insRow('DeriveSpecimenBean')"/>
+			
+									<html:button property="deleteSpecimenReq" styleClass="black_ar" onclick="<%=deleteSpecimenRequirements %>" disabled="<%=disabled%>"><bean:message key="buttons.delete"/>
 									</html:button>
 								</td>
                               </tr>
@@ -923,38 +783,32 @@ if(form != null)
 						</div>
 					</td>
                   </tr>
-                  <tr>
-                     <td height="20" colspan="2" align="left">
-					 </td>
-                  </tr>
+                   <tr>
+                      <td colspan="2" class="bottomtd"></td>
+                    </tr>
                   <tr onclick="javascript:showHide('aliquot')">
-                     <td height="20" align="left" class="tr_bg_blue1">
-						<span class="blue_ar_b">
-							<bean:message key="cpbasedentry.aliquots"/>
-						</span>
-					</td>
+                     <td align="left" class="tr_bg_blue1"><span class="blue_ar_b"><bean:message key="cpbasedentry.aliquots"/></span></td>
                     <td align="right" class="tr_bg_blue1">
 						<a href="#" id="imgArrow_aliquot">
-							<img src="images/uIEnhancementImages/dwn_arrow1.gif" alt="Show Details" width="7" height="8" hspace="10" border="0" />
+							<img src="images/uIEnhancementImages/dwn_arrow.gif" alt="Show Details" border="0" width="80" height="9" hspace="10" vspace="0"/>
 						</a>
 					</td>
                  </tr>
                  <tr>
-                    <td colspan="2" align="left" style="padding-top:10px;">
+                    <td colspan="2" align="left" class="showhide1">
 						<div id="aliquot" style="display:none" >
 							<table width="100%" border="0" cellspacing="0" cellpadding="4">
 								<tr>
-		                           <td width="27%" class="black_ar" >
-										<label for="aliquotCount">
+		                           <td width="27%" class="black_ar" >										
 									   		<bean:message key="aliquots.noOfAliquots"/>
-										 </label>&nbsp;
-										 <html:text styleClass="black_ar_s" styleId="noOfAliquots" size="12" property="noOfAliquots"/>
+										 &nbsp;
+										 <html:text styleClass="black_ar" styleId="noOfAliquots" size="12" property="noOfAliquots" style="text-align:right" maxlength="50"/>
 									</td>
 		                            <td width="33%" class="black_ar">
 										<label for="qtyPerAliquot">
 									   		<bean:message key="aliquots.qtyPerAliquot"/>
 										 </label>&nbsp;
-										 <html:text styleClass="black_ar_s" styleId="quantityPerAliquot" size="12" property="quantityPerAliquot"/>
+										 <html:text styleClass="black_ar" styleId="quantityPerAliquot" size="12" property="quantityPerAliquot" style="text-align:right" maxlength="50"/>
 									</td>
 		                            <td width="40%" class="black_ar">
 										<label for="storageLocation">
@@ -963,6 +817,7 @@ if(form != null)
 										<autocomplete:AutoCompleteTag property="storageLocationForAliquotSpecimen"
 											    optionsList = "<%=request.getAttribute("storageContainerList")%>"
 												initialValue="<%=form.getStorageLocationForAliquotSpecimen()%>"
+												styleClass="formFieldSizedText"
 												/>
 									</td>
 								</tr>
@@ -971,7 +826,7 @@ if(form != null)
                       </td>
                     </tr>
                     <tr>
-                       <td height="20" colspan="2"></td>
+                      <td colspan="2" class="bttomtd"></td>
                     </tr>
                     <tr>
                        <td colspan="2" class="buttonbg">
