@@ -74,9 +74,17 @@ function openEventPage()
                       <td width="85%" valign="bottom" class="cp_tabbg">&nbsp;</td>
                     </tr>
                 </table></td>
+			 		<td valign="top" class="cp_tabbg">&nbsp;</td>
+						 <td align="left" valign="top" class="cp_tabbg">
+							
+									<html:link href="#" styleClass="view" styleId="newUser" onclick="updateCPTree();viewSummary()">
+										<bean:message key="cpbasedentry.viewsummary" /> 
+									 </html:link>
+							
+						 </td>  
               </tr>
               <tr>
-                <td class="cp_tabtable">
+                <td class="cp_tabtable" colspan="6" >
                     <br>
                     <table width="100%" border="0" cellpadding="3" cellspacing="0" id="table1">
 					    <html:hidden property="operation"/>
