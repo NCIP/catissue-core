@@ -77,7 +77,11 @@
 				title="<%=Constants.SPECIMEN_BUTTON_TIPS[0]%>"
 				onclick="onAddToCart()">
 				<bean:message key="buttons.addToCart"/>
-		</html:button>&nbsp;| <a href="#" class="cancellink">Cancel</a>
+		</html:button>&nbsp;| 
+		<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_PARTICIPANT_CP_QUERY%>">
+		<html:link onclick="closeUserWindow()" page="/ManageAdministrativeData.do" styleClass="view">
+		<bean:message key="buttons.cancel" />
+		</html:link>
 		</td>
 	</tr>
 </table>
