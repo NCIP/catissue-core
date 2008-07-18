@@ -58,12 +58,12 @@
 	  <% 
 									String backPage = Constants.REPORTED_PROBLEM_SHOW_ACTION+"?"+Constants.PAGE_NUMBER+"="+Constants.START_PAGE; 
 								%>
-		<td align = "right" colspan = "2">
+		<td class="black_ar" >&nbsp;&nbsp;&nbsp;
 			<a	class="view" href="<%=backPage%>">
 		
 												<bean:message key="reportedProblem.home" />
-											</a></td>&nbsp;
-		<td align="left">
+											</a>&nbsp;
+		
 										<logic:notEmpty name="prevpage">
 											|&nbsp;
 												

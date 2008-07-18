@@ -7,60 +7,35 @@
 <html:errors />
 
 <html:form action="/ReportedProblemShow">
-	<table width="100%" border="1" cellpadding="0" cellspacing="0"
-		class="newMaintable">
-		<tr>
-			<td class="td_color_bfdcf3">
-			<table width="100%" border="0" cellpadding="0" cellspacing="0"
-				class="whitetable_bg">
-				<tr>
-					<td width="100%" colspan="2" valign="top">
-					<table width="100%" border="0" cellspacing="0" cellpadding="0">
-						<tr>
-							<td colspan="4" valign="top" class="td_color_bfdcf3">
-							<table width="18%" border="0" cellpadding="0" cellspacing="0"
-								background="images/uIEnhancementImages/table_title_bg.gif">
-								<tr>
-									<td width="80%"><span class="wh_ar_b">&nbsp;&nbsp;&nbsp;
+	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
+  <tr>
+    <td class="td_color_bfdcf3"><table border="0" cellpadding="0" cellspacing="0">
+      <tr>
+        <td class="td_table_head"><span class="wh_ar_b">
 									<bean:message key="ReportedProblems.header" /> </span></td>
-									<td width="20%" align="right"><img
-										src="images/uIEnhancementImages/table_title_corner2.gif"
+        <td align="right"><img src="images/uIEnhancementImages/table_title_corner2.gif"
 										width="31" height="24" /></td>
 								</tr>
-
-							</table>
-							</td>
-						</tr>
-						<tr>
-							<td width="1%" valign="top" class="td_color_bfdcf3">&nbsp;</td>
-							<td width="9%" valign="top" class="td_tab_bg">&nbsp;</td>
-							<td width="89%" valign="bottom" class="td_tab_bg"
-								style="padding-top: 4px;">&nbsp;</td>
-							<td width="1%" valign="bottom" class="td_color_bfdcf3"
-								style="padding-top: 4px;">&nbsp;</td>
-						</tr>
-					</table>
-					</td>
-
-				</tr>
-				<tr>
-					<td colspan="2" class="td_color_bfdcf3"
-						style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;">
-					<table width="100%" border="0" cellpadding="0" cellspacing="0"
-						bgcolor="#FFFFFF">
-						<tr>
-							<td width="1%" align="left">&nbsp;</td>
-							<td width="99%" align="left">&nbsp;</td>
-						</tr>
-						<tr>
-							<td align="left" class="tr_bg_blue1">&nbsp;</td>
-							<td height="25" align="left" class="tr_bg_blue1"><span
-								class="blue_ar_b"> <bean:message
+    </table></td>
+  </tr>
+  <tr>
+    <td class="tablepadding"><table width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr>
+        <td width="90%" valign="bottom" class="td_tab_bg">&nbsp;</td>
+      </tr>
+    </table>
+      <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
+      
+      <tr>
+        <td width="99%" align="left" class="toptd"></td>
+      </tr>
+      <tr>
+        <td align="left" class="tr_bg_blue1"><span class="blue_ar_b"> &nbsp;<bean:message
 								key="reportedProblem.pageTitle" /> </span><span class="black_ar_s">(${requestScope.totalResults}
 							records found)</span></td>
 						</tr>
 						<tr>
-							<td></td>
+							
 							<td align="right" colspan="2"><c:if
 								test='${requestScope.totalResults > 10}'>
 								<custom:test name=" " pageNum='${requestScope.pageNum}'
@@ -71,20 +46,19 @@
 							</c:if></td>
 						</tr>
 						<tr class="td_color_F7F7F7">
-							<td>&nbsp;</td>
-							<td style="padding-top: 10px; padding-bottom: 15px;">
-							<table width="99%" border="0" cellspacing="0" cellpadding="4">
+							<td align="center" class="showhide"><table width="99%" border="0" cellspacing="0" cellpadding="4">
+            
 								<tr>
-									<td width="2%" class="tableheading"><bean:message
-										key="reportedProblem.serialNumber" /></td>
-									<td width="20%" class="tableheading"><bean:message
-										key="reportedProblem.title" /></td>
-									<td width="17%" class="tableheading"><bean:message
-										key="reportedProblem.problemId" /></td>
-									<td width="24%" class="tableheading"><bean:message
-										key="reportedProblem.from" /></td>
-									<td width="37%" class="tableheading"><bean:message
-										key="reportedProblem.reportedDate" /><span class="grey_ar">
+									<td width="2%" class="tableheading"><strong><bean:message
+										key="reportedProblem.serialNumber" /></strong></td>
+									<td width="25%" class="tableheading"><strong><bean:message
+										key="reportedProblem.title" /></strong></td>
+									<td width="18%" class="tableheading"><strong><bean:message
+										key="reportedProblem.problemId" /></strong></td>
+									<td width="28%" class="tableheading"><strong><bean:message
+										key="reportedProblem.from" /></strong></td>
+									<td width="27%" class="tableheading"><strong><bean:message
+										key="reportedProblem.reportedDate" /></strong> <span class="grey_ar_s">
 									<bean:message key="reportedProblem.dateFormat" /> </span></td>
 								</tr>
 								<logic:empty name="showDomainObjectList">
@@ -107,7 +81,7 @@
 												value='${pageScope.count}' /></td>
 											<td class='${pageScope.style}'><a
 												href="${requestScope.problemDetailsLink}${problem.id}"
-												class="link"> <bean:write name="problem"
+												class="view"> <bean:write name="problem"
 												property="subject" /> </a></td>
 											<td class='${pageScope.style}'><bean:write
 												name="problem" property="id" /></td>
@@ -122,18 +96,10 @@
 							</table>
 							</td>
 						</tr>
-						<tr class="td_color_F7F7F7">
+						<tr>
 							<td class="buttonbg">&nbsp;</td>
-							<td class="buttonbg"><span class="cancellink"> <html:link
-								page="/ManageAdministrativeData.do" styleClass="blue_ar_s_b">
-								<bean:message key="buttons.cancel" />
-							</html:link></span></td>
-						</tr>
-					</table>
-					</td>
-				</tr>
-			</table>
-			</td>
-		</tr>
-	</table>
+							</tr>
+    </table></td>
+  </tr>
+</table>
 </html:form>
