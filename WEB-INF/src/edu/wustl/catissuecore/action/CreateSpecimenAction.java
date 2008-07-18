@@ -67,7 +67,10 @@ public class CreateSpecimenAction extends SecureAction
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		CreateSpecimenForm createForm = (CreateSpecimenForm) form;
-
+		
+		List<NameValueBean> storagePositionList =  Utility.getStoragePositionTypeList();
+		
+		request.setAttribute("storageList", storagePositionList);
 		//List of keys used in map of ActionForm
 		List key = new ArrayList();
 		key.add("ExternalIdentifier:i_name");
@@ -101,10 +104,22 @@ public class CreateSpecimenAction extends SecureAction
           */ 
     
          createForm.setCreatedDate(Utility.parseDateToString(Calendar.getInstance().getTime(), Constants.DATE_PATTERN_MM_DD_YYYY));
-    
+         
+         //String pageOf = (String)request.getSession().getAttribute(Constants.PAGEOF);
+         
+         String pageOf = null;
+         if(request.getParameter("pageOf")==null)
+         {
+        	 pageOf = (String)request.getSession().getAttribute("pageOf");        	
+         }
+         else
+         {
+        	 pageOf = request.getParameter(Constants.PAGEOF);
+        	 request.getSession().setAttribute("pageOf", pageOf);
+         }
+         
+     //    String pageOf = request.getParameter(Constants.PAGEOF);
         
-        
-		String pageOf = request.getParameter(Constants.PAGEOF);
 		SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
 		/*
 		 // ---- chetan 15-06-06 ----
@@ -133,7 +148,7 @@ public class CreateSpecimenAction extends SecureAction
 					parentSpecimenLabel = Utility.toString(forwardToHashMap.get(Constants.SPECIMEN_LABEL));
 					request.setAttribute(Constants.PARENT_SPECIMEN_ID, parentSpecimenID);
 					createForm.setParentSpecimenLabel(parentSpecimenLabel);
-					createForm.setLabel("");
+					createForm.setLabel("");					
 				}
 
 				if(createForm.getLabel()==null || createForm.getLabel().equals(""))
@@ -679,24 +694,21 @@ public class CreateSpecimenAction extends SecureAction
 			request.setAttribute("buttonOnClicked",buttonOnClicked);
 			
 			int radioSelected = form.getStContSelection();
-			boolean dropDownDisable = false;
-			boolean textBoxDisable = false;					
+			String storagePosition = Constants.STORAGE_TYPE_POSITION_VIRTUAL;
 			if(radioSelected == 1)
 			{
-				dropDownDisable = true;
-				textBoxDisable = true;
+				storagePosition = Constants.STORAGE_TYPE_POSITION_VIRTUAL;
 			}
 			else if(radioSelected == 2)
 			{									
-				textBoxDisable = true;
+				storagePosition = Constants.STORAGE_TYPE_POSITION_AUTO;
 			}
 			else if(radioSelected == 3)
 			{
-				dropDownDisable = true;									
+				storagePosition = Constants.STORAGE_TYPE_POSITION_MANUAL;
 			}
-			request.setAttribute("dropDownDisable",dropDownDisable);
-			request.setAttribute("textBoxDisable",textBoxDisable);
 			
+			request.setAttribute("storagePosition",storagePosition);			
 			Map dataMap = (Map) request.getAttribute(Constants.AVAILABLE_CONTAINER_MAP);
 			String jsForOutermostDataTable = ScriptGenerator.getJSForOutermostDataTable();
 			String jsEquivalentFor = ScriptGenerator.getJSEquivalentFor(dataMap,"1");

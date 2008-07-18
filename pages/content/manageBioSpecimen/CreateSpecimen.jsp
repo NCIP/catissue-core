@@ -20,11 +20,14 @@
 <script src="jss/script.js"></script>
 <script src="jss/calendarComponent.js"></script>
 <SCRIPT>var imgsrc="images/";</SCRIPT>
+<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" /> 
+
 <LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
 <script language="JavaScript" type="text/javascript" src="jss/Hashtable.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/createSpecimen.js"></script>
-<link href="runtime/styles/xp/grid.css" rel="stylesheet" type="text/css" ></link>
+
 <script language="JavaScript" >
+ 
 		//Set last refresh time
 		if(window.parent!=null)
 		{
@@ -32,9 +35,10 @@
 			{
 				window.parent.lastRefreshTime = new Date().getTime();
 			}
-		}	
+		}		
+		
 		function isLabelBarcodeOrClassChange()
-		{
+		{	
 			var parentLabelElement = document.getElementById("parentSpecimenLabel");
 			var parentBarcodeElement = document.getElementById("parentSpecimenBarcode");
 			var classNameElement = document.getElementById("className");
@@ -46,12 +50,13 @@
 				document.forms[0].submit();
 			}	
 		}
+
 	  	function onClassOrLabelOrBarcodeChange(multipleSpecimen,element)
 		{
 			if(multipleSpecimen == "1")
-				{
-				   classChangeForMultipleSpecimen();
-				}
+			{
+			   classChangeForMultipleSpecimen();
+			}
 		    var radioArray = document.getElementsByName("checkedButton");
 		 	var flag = "0";
  			if (radioArray[0].checked) 
@@ -85,6 +90,7 @@
 		{
 			${requestScope.deleteChecked}
 		}
+
 		function onNormalSubmit()
 		{
 			var checked = document.forms[0].aliCheckedButton.checked;
@@ -113,515 +119,519 @@
 			confirmDisable('${requestScope.actionToCall}',document.forms[0].activityStatus);
 			setSubmittedFor("ForwardTo","addSpecimenToCart");
 		}
+
 	</script>
 	<logic:equal name="showRefreshTree" value="true">
 		<script language="javascript">
 			${requestScope.refreshTree}
 		</script>
 	</logic:equal>
-</head>
-	<html:errors />
-	<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
-		${requestScope.messageKey}
-	</html:messages>
-   <html:form action="${requestScope.action}">
-                      <input type="hidden" id="specimenAttributeKey"
-				       name="specimenAttributeKey"
-				       value="${requestScope.specimenAttributeKey}" />
-
-						<input type="hidden" id="derivedSpecimenCollectionGroup"
-				       name="derivedSpecimenCollectionGroup"
-				       value="${requestScope.derivedSpecimenCollectionGroup}" />
-					   
-					   	<input type="hidden" id="rowSelected"
-				       name="rowSelected"
-				       value="${requestScope.rowSelected}" />
-   <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="580">
-<tr>
-	<td>&nbsp;</td>
-</tr>
-<tr>
- <td>
-    <table summary="" cellpadding="3" cellspacing="0" border="0" width="580" >
-    <logic:notEmpty name="dataList">
-         <tr>
-		 <td width="100%" align="right">
-		 	    <html:button property="addNewDerived" styleClass="actionButton" onclick="onAddNewButtonClicked();">
-				<bean:message key="buttons.addNew"/>
-				</html:button>
-		 </td>
-		 </tr>
-   	 	<tr>
-			<td class="formTitle" height="20" >
-				Derived Specimens For This Parent Specimen
-			</td>
-		</tr>
-   	 	<tr>
-			<td>
-				<script>
-				    var specimenAttributeKey = document.getElementById("specimenAttributeKey");
-					if(specimenAttributeKey!=null)
-					{
-			          parent.window.opener.document.applets[0].setButtonCaption(specimenAttributeKey.value,"");
-					}
-					function derivedSpecimenGrid(id)
-					{
-						var cl = mygrid.cells(id,4);
-						var rowSelected = cl.getValue();
-						var c2 = mygrid.cells(id,0);
-						var eventId = c2.getValue();
-						var url = "NewMultipleSpecimenAction.do?method=showDerivedSpecimenDialog&rowSelected=" + rowSelected +"&specimenAttributeKey="+document.getElementById("specimenAttributeKey").value;
-						document.forms[0].action = url;
-				        document.forms[0].submit();
-					} 				
-					var useDefaultRowClickHandler =2;
-					var useFunction = "derivedSpecimenGrid";	
-					var gridFor="derivedSpecimen";
-				</script>
-				<%@ include file="/pages/content/search/GridPage.jsp" %>
-			</td>
-		</tr>
-</table>
-	</td>
-	</tr>
-	<tr>
-		 <td width="100%" align="right">
-		 	    <html:button property="closebutton" styleClass="actionButton" onclick="closeWindow();">
-				<bean:message key="buttons.close"/>
-				</html:button>
-		 </td>
-        </tr>
-	</table>
-	</logic:notEmpty>		<%-- datalist not empty. to check if this block is required any more --%>
-	<logic:empty name="showDerivedPage">
-		<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="580">
-		   <logic:equal name="pageOf" value="query">
-		   	<tr>
-    		    <td>
-			 	 <table summary="" cellpadding="3" cellspacing="0" border="0">
-		   			<tr>
-				  	<td align="right" colspan="3">
-					<!-- action buttons begins -->
-					<table cellpadding="4" cellspacing="0" border="0">
-						<tr>
-						   	<td>
-						   		<html:submit styleClass="actionButton" onclick="${requestScope.changeAction1}">
-						   			<bean:message key="${requestScope.editViewButton}"/>
-						   		</html:submit>
-						   	</td>
-						</tr>
-					</table>
-					<!-- action buttons end -->
-				  </td>
-				  </tr>
-				</table>
-			   </td>
-			</tr>
-			</logic:equal>
-			  <!-- NEW SPECIMEN REGISTRATION BEGINS-->
-	    	  <tr>
-			    <td>
-			 	 <table summary="" cellpadding="3" cellspacing="0" border="0" width="580">
-				 <tr>
-					<td>
-						<html:hidden property="${requestScope.oper}" value="${requestScope.operation}"/>
-						<html:hidden property="submittedFor" value="ForwardTo"/>
-						<html:hidden property="forwardTo" value="${requestScope.frdTo}"/>
-						<html:hidden property="multipleSpecimen" value="${requestScope.multipleSpecimen}"/>
-						<html:hidden property="containerId" styleId="containerId"/>
-						<html:hidden property="nextForwardTo" />
-						<td></td>
-					</td>
-				 </tr>
-				 <tr>
-					<td>
-						<html:hidden property="positionInStorageContainer" />
-					</td>
-				  </tr>
-				<logic:equal name="pageOf" value="${requestScope.query}">
-				 <tr>
-					<td>
-						<html:hidden property="sysmtemIdentifier"/>
-					</td>
-				 </tr>
-				</logic:equal>
-				<logic:notEqual name="oper" value="${requestScope.search}">
-				 <tr>
-				     <td class="formTitle" height="20" colspan="6">
-				     	<bean:message key="createSpecimen.derived.title"/>
-				     </td>
-				 </tr>
-				 <logic:notEqual name="multipleSpecimen" value="1">	<!-- to verify for valid case 1 -->
-				 <tr>
-			     	<td class="formFieldNoBordersSimple" width="5"><b>*</b></td>
-				    <td class="formFieldNoBordersSimple" width="175">
-					<html:radio styleClass="" styleId="checkedButton" property="checkedButton" value="1" onclick="onRadioButtonClick(this)"  >
-				    &nbsp;
-			        </html:radio>
-						<label for="specimenCollectionGroupId">
-							<b><bean:message key="createSpecimen.parentLabel"/></b>
-						</label>
-					</td>
-					<td class="formFieldNoBordersSimple" colspan="2">
-					<logic:equal name="createSpecimenForm" property="checkedButton" value="1">
-				     <html:text styleClass="formFieldSized15"  maxlength="50"  size="30" styleId="parentSpecimenLabel" property="parentSpecimenLabel" disabled="false" />
-			        </logic:equal>
-			        <logic:equal name="createSpecimenForm" property="checkedButton" value="2">
-			 	     <html:text styleClass="formFieldSized15"  maxlength="50"  size="30" styleId="parentSpecimenLabel" property="parentSpecimenLabel" disabled="true" />
-			        </logic:equal>
-		        	</td>
-				 </tr>				 
-				 <tr>
-			     	<td class="formFieldNoBordersSimple" width="5">&nbsp;</td>
-				    <td class="formFieldNoBordersSimple" width="175">
-					<html:radio styleClass="" styleId="checkedButton" property="checkedButton" value="2" onclick="onRadioButtonClick(this)">
-				    &nbsp;
-			        </html:radio>
-						<label for="specimenCollectionGroupId">
-							<b><bean:message key="createSpecimen.parentBarcode"/></b>
-						</label>
-					</td>
-					<td class="formFieldNoBordersSimple" colspan="2">
-					<logic:equal name="createSpecimenForm" property="checkedButton" value="1">
-				    <html:text styleClass="formFieldSized15"  maxlength="50"  size="30" styleId="parentSpecimenBarcode" property="parentSpecimenBarcode" disabled="true" />
-			        </logic:equal>
-			
-			        <logic:equal name="createSpecimenForm" property="checkedButton" value="2">
-				    <html:text styleClass="formFieldSized15"  maxlength="50"  size="30" styleId="parentSpecimenBarcode" property="parentSpecimenBarcode" disabled="false" />
-			        </logic:equal>
-		        	</td>
-				 </tr>
-				</logic:notEqual>	<%-- if(!multipleSpecimen.equals("1")) case 1 --%>
-				<logic:equal name="isSpecimenLabelGeneratorAvl" value="false">
+	</head>
+		<html:errors />
+		
+		<html:form action="${requestScope.action}">
+			<input type="hidden" id="specimenAttributeKey" name="specimenAttributeKey" value="${requestScope.specimenAttributeKey}" />
+			<input type="hidden" id="derivedSpecimenCollectionGroup" name="derivedSpecimenCollectionGroup"
+				value="${requestScope.derivedSpecimenCollectionGroup}" />
+			<input type="hidden" id="rowSelected" name="rowSelected" value="${requestScope.rowSelected}" />
+		
+			<table summary="" cellpadding="0" cellspacing="0" border="0"  width="100%">
 				<tr>
-			     	<td class="formFieldNoBordersSimple" width="5">
-				     	<logic:notEqual name="oper" value="${requestScope.view}"><b>*<b></logic:notEqual>
-				     	<logic:equal name="oper" value="${requestScope.view}">&nbsp;</logic:equal>
-				    </td>
-				    <td class="formFieldNoBordersSimple">
-						<label for="label">
-							<b><bean:message key="specimen.label"/></b>
-						</label>
-					</td>
-				    <td class="formFieldNoBordersSimple" colspan="4">
-				     	<html:text styleClass="formFieldSized15" size="30" maxlength="50"  styleId="label" property="label" readonly="${requestScope.readOnlyForAll}"/>
-				    </td>
-				 </tr>
- 				</logic:equal>	<%-- if(!Variables.isSpecimenLabelGeneratorAvl) --%>
-				 <tr>
-				 	<td class="formFieldNoBordersSimple" width="5"><b>*</b></td>
-				    <td class="formFieldNoBordersSimple">
-				     	<label for="className">
-				     		<b><bean:message key="specimen.type"/></b>
-				     	</label>
-				    </td>
-				    <td class="formFieldNoBordersSimple" colspan="2">
-					 <autocomplete:AutoCompleteTag property="className"
-										  optionsList = "${requestScope.specClassList}"
-										  initialValue="${createSpecimenForm.className}"
-										  onChange="onTypeChange(this);resetVirtualLocated()"
-										  readOnly="${requestScope.readOnlyForAll}"
-									    />
-		        	</td>
-				 </tr>
-				 <tr>
-				    <td class="formFieldNoBordersSimple" width="5"><b>*</b></td>
-				    <td class="formFieldNoBordersSimple">
-				     	<label for="type">
-				     		<b><bean:message key="specimen.subType"/></b>
-				     	</label>
-				    </td>
-				    <td class="formFieldNoBordersSimple" colspan="2">
-					  <autocomplete:AutoCompleteTag property="type"
-										  optionsList = "${requestScope.specimenTypeMap}"
-										  initialValue="${createSpecimenForm.type}"
-										  onChange="onSubTypeChangeUnit('className',this,'unitSpan')"
-										  readOnly="false"
-										  dependsOn="${createSpecimenForm.className}"
-					        />
-		        	</td>
-				 </tr>
-				 <tr>
-					<td class="formFieldNoBordersSimple" width="5">&nbsp;</td>
-					<td class="formFieldNoBordersSimple">							
-						<label for="createdDate">
-							<bean:message key="specimen.createdDate"/>
-						</label>								
-					</td>
-					<td class="formFieldNoBordersSimple" colspan="2" >
-						<table summary="" cellpadding="0" cellspacing="0" border="0" width="100%">
-							<tr>				
-								<td class="message" >
-									<ncombo:DateTimeComponent name="createdDate"
-							  			id="createdDate"
-							  			formName="createSpecimenForm"
-							  			value='${requestScope.createdDate}'
-							  			styleClass="formDateSized10"/>
-								<bean:message key="page.dateFormat" />&nbsp;
+					<td class="td_color_bfdcf3">
+					    <table summary="" cellpadding="3" cellspacing="0" border="0" width="100%"  >
+						<logic:notEmpty name="dataList">
+					         <tr>
+								<td width="100%" align="right">
+									<html:button property="addNewDerived" styleClass="actionButton" onclick="onAddNewButtonClicked();">
+										<bean:message key="buttons.addNew"/>
+									</html:button>
 								</td>
 							</tr>
-						</table>
-					</td>
-				</tr>
-				 <tr>
-			     	<td class="formFieldNoBordersSimple" width="5">
-				     	&nbsp;
-				    </td>
-				    <td class="formFieldNoBordersSimple">
-						<label for="concentration">
-							<bean:message key="specimen.concentration"/>
-						</label>
-					</td>
-					<logic:equal name="unitSpecimen" value="${requestScope.UNIT_MG}">
-				    		<td class="formFieldNoBordersSimple" colspan="2">
-				     			<html:text styleClass="formFieldSized15" size="30" styleId="concentration" property="concentration" readonly="${requestScope.readOnlyForAll}" disabled="false"/>
-								&nbsp;<bean:message key="specimen.concentrationUnit"/>
-				   			</td>
-					</logic:equal>	<!-- if(unitSpecimen.equals(Constants.UNIT_MG)) -->
-					<logic:notEqual name="unitSpecimen" value="${requestScope.UNIT_MG}">
-							<td class="formFieldNoBordersSimple" colspan="2">
-				     			<html:text styleClass="formFieldSized15" size="30" maxlength="10"  styleId="concentration" property="concentration" readonly="${requestScope.readOnlyForAll}" disabled="false"/>
-				     			&nbsp;<bean:message key="specimen.concentrationUnit"/>
-				    		</td>
-					</logic:notEqual>
-				 </tr>
-				 <tr>
-			     	<td class="formFieldNoBordersSimple" width="5">
-				     	<logic:notEqual name="${requestScope.oper}" value="${requestScope.view}"><b>*</b></logic:notEqual>
-				     	<logic:equal name="${requestScope.oper}" value="${requestScope.view}">&nbsp;</logic:equal>
-				    </td>
-				    <td class="formFieldNoBordersSimple">
-						<label for="quantity">
-							<b><bean:message key="specimen.quantity"/></b>
-						</label>
-					</td>
-				    <td class="formFieldNoBordersSimple" colspan="2">
-				     	<html:text styleClass="formFieldSized15" size="30" maxlength="10"  styleId="quantity" property="quantity" readonly="${requestScope.readOnlyForAll}"/>
-				     	<span id="unitSpan">${requestScope.unitSpecimen}</span>
-				     	<html:hidden property="unit"/>
-				    </td>
-				 </tr>
-			 	<logic:notEqual name="multipleSpecimen" value="1">	<!-- to verify for valid case 2 -->
+							<tr>
+								<td class="formTitle" height="20" >
+									Derived Specimens For This Parent Specimen
+								</td>
+							</tr>
+					   	 	<tr>
+								<td>
+									<script>
+									    var specimenAttributeKey = document.getElementById("specimenAttributeKey");
+										if(specimenAttributeKey!=null)
+										{
+											parent.window.opener.document.applets[0].setButtonCaption(specimenAttributeKey.value,"");
+										}
+						
+										function derivedSpecimenGrid(id)
+										{
+											var cl = mygrid.cells(id,4);
+											var rowSelected = cl.getValue();
+											var c2 = mygrid.cells(id,0);
+											var eventId = c2.getValue();
+											var url = "NewMultipleSpecimenAction.do?method=showDerivedSpecimenDialog&rowSelected=" + rowSelected +"&specimenAttributeKey="+document.getElementById("specimenAttributeKey").value;
+											document.forms[0].action = url;
+											document.forms[0].submit();
+										} 				
+										var useDefaultRowClickHandler =2;
+										var useFunction = "derivedSpecimenGrid";	
+										var gridFor="derivedSpecimen";
+									</script>
+									<%@ include file="/pages/content/search/GridPage.jsp" %>
+								</td>
+							</tr>			
+						
 				<tr>
-				 	<td class="formFieldNoBordersSimple" width="5"><b>*</b></td>
-					<td class="formFieldNoBordersSimple">
-					   <label for="className">
-					   		<b><bean:message key="specimen.positionInStorageContainer"/></b>
-					   </label>
+					<td width="100%" align="right">
+			 			<html:button property="closebutton" styleClass="actionButton" onclick="closeWindow();">
+							<bean:message key="buttons.close"/>
+						</html:button>
 					</td>
-					${requestScope.jsForOutermostDataTable}
-					${requestScope.jsEquivalentFor}
-					<script language="JavaScript" type="text/javascript" src="jss/CustomListBox.js"></script>
-				<td class="formFieldNoBordersSimple" colSpan="4">
-						<table border="0">
-						<logic:equal name="${requestScope.oper}" value="${requestScope.ADD}">
-						<tr>
-							<td ><html:radio value="1" onclick="onRadioButtonGroupClickForDerived(this)" styleId="stContSelection" property="stContSelection"/></td>
-							<td class="formFieldNoBorders">																			
-									<bean:message key="specimen.virtuallyLocated" />											
-							</td>
-						</tr>
-						<tr>
-							<td ><html:radio value="2" onclick="onRadioButtonGroupClickForDerived(this)" styleId="stContSelection" property="stContSelection"/></td>
-							<td>
-								<ncombo:nlevelcombo dataMap="${requestScope.dataMap}" 
-									attributeNames="${requestScope.attrNames}" 
-									initialValues="${requestScope.initValues}"  
-									styleClass = "formFieldSized5" 
-									tdStyleClass = "customFormField" 
-									labelNames="${requestScope.labelNames}" 
-									rowNumber="1" 
-									onChange = "onCustomListBoxChange(this)"
-									formLabelStyle="formLabelBorderless"
-									tdStyleClassArray="${requestScope.tdStyleClassArray}"
-									disabled = "${requestScope.dropDownDisable}"
-									noOfEmptyCombos = "3"/>
-									</tr>
-									</table>
-							</td>
-						</tr>
-						<tr>
-							<td ><html:radio value="3" onclick="onRadioButtonGroupClickForDerived(this)" styleId="stContSelection" property="stContSelection"/></td>
-							<td class="formFieldNoBordersSimple">
-								<html:text styleClass="formFieldSized10"  size="30" styleId="selectedContainerName" property="selectedContainerName" disabled= "${requestScope.textBoxDisable}"/>
-								<html:text styleClass="formFieldSized3"  size="5" styleId="pos1" property="pos1" disabled= "${requestScope.textBoxDisable}"/>
-								<html:text styleClass="formFieldSized3"  size="5" styleId="pos2" property="pos2" disabled= "${requestScope.textBoxDisable}"/>
-								<html:button styleClass="actionButton" property="containerMap" onclick="${requestScope.buttonOnClicked}" disabled= "${requestScope.textBoxDisable}">
-									<bean:message key="buttons.map"/>
-								</html:button>
-							</td>
-						</tr>
-						</logic:equal>								
-						</table>					
-				</td>	
-				 </tr>
-				 </logic:notEqual>	<%-- if(!multipleSpecimen.equals("1")) case 2 --%>
-					<logic:equal name="exceedsMaxLimit" value="true">
-					<tr>
-						<td>
-								<bean:message key="container.maxView"/>
-						</td>
-					</tr>
-					</logic:equal>
-				<logic:notEqual name="isSpecimenBarcodeGeneratorAvl" value="true">
-				 <tr>
-			     	<td class="formFieldNoBordersSimple" width="5">&nbsp;</td>
-				    <td class="formFieldNoBordersSimple">
-						<label for="barcode">
-							<bean:message key="specimen.barcode"/>
-						</label>
-					</td>
-				    <td class="formFieldNoBordersSimple" colspan="2">
-						<html:text styleClass="formFieldSized"  maxlength="50" size="30" styleId="barcode" property="barcode" readonly="${requestScope.readOnlyForAll}" />
-		        	</td>
-				 </tr>
-				 </logic:notEqual> <!-- if(!Variables.isSpecimenBarcodeGeneratorAvl ) -->
-				 <tr>
-			     	<td class="formFieldNoBordersSimple" width="5">&nbsp;</td>
-				    <td class="formFieldNoBordersSimple">
-						<label for="comments">
-							<bean:message key="specimen.comments"/>
-						</label>
-					</td>
-				    <td class="formFieldNoBordersSimple" colspan="2">
-				    	<html:textarea styleClass="formFieldSized" rows="3" styleId="comments" property="comments" readonly="${requestScope.readOnlyForAll}"/>
-				    </td>
-				 </tr>
- 				<!-- Mandar : 16June08 External Identifiers start -->
-<table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" id="externalIdentifiersTable">
+		        </tr>
+			</logic:notEmpty>		<%-- datalist not empty. to check if this block is required any more --%>
+			</table>
+			</td> </tr>
+		</table>
+
+	
+
+	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable" summary="">
 		<tr>
-			<td class="formFieldAllBorders" align="right" width="1%">
-				<a id="imageEI" style="text-decoration:none" href="javascript:switchStyle('imageEI','eiDispType','externalIdentifiers','addExId');">  
-				<img src="images/nolines_minus.gif" border="0" width="18" height="18"/>
-				</a>
-				<input type="hidden" name="eiDispType" value="${requestScope.eiDispType1}" id="eiDispType" />
-			</td> 
-			<!-- Patch ends here -->
-		     <td class="formTitle" width="200" height="20" colspan="2">
-		     	<bean:message key="specimen.externalIdentifier"/>
-		     </td>
-		     <td class="formButtonField" width="300" colspan="2">
-		     	<html:button property="addExId" styleClass="actionButton" styleId="addExId" onclick="insExIdRow('addExternalIdentifier')">
-		     		<bean:message key="buttons.addMore"/>
-		     	</html:button>
-		    </td>
-		    <td class="formTitle" align="Right">
-					<html:button property="deleteExId" styleClass="actionButton" onclick='${requestScope.delExtIds}' disabled="true">
-						<bean:message key="buttons.delete"/>
-					</html:button>
-			</td>
-			<!-- Patch ends here -->
-		 </tr>
-		 <tr>
-			 <td colspan="6" width="100%">
-			<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%" id="externalIdentifiers">
-			<!-- Patch ends here -->
-		 	<tr>
-			 	<td class="formSerialNumberLabel" width="5">
-			     	#
-			    </td>
-			    <td class="formLeftSubTableTitle" width="350">
-					<bean:message key="externalIdentifier.name"/>
-				</td>
-			    <td class="formRightSubTableTitle" colspan="2" width="350">
-					<bean:message key="externalIdentifier.value"/>
-				</td>
-				<td class="formRightSubTableTitle" width="50">
-					<label for="delete" align="center">
-						<bean:message key="addMore.delete" />
-					</label>
-				</td>
-			 </tr>
-		 	 <tbody id="addExternalIdentifier">
-		 	 <html:hidden property="exIdCounter"/>
-		 	 <logic:iterate id="xi" name="exIdList">
-				<tr>
-				 	<td class="formSerialNumberField" width="5">${xi.xtrnId}.
-					 	<html:hidden property="${xi.exIdentifier}" />
-			 		</td>
-				    <td class="formField" width="365" >
-			     		<html:text styleClass="formFieldSized15" maxlength="255"  styleId="${xi.exName}" property="${xi.exName}" />
-			    	</td>
-			    	<td class="formField" colspan="2">
-			     		<html:text styleClass="formFieldSized15" maxlength="255"  styleId="${xi.exValue}" property="${xi.exValue}" />
-			    	</td>
-					<td class="formField" width="5">
-						<input type=checkbox name="${xi.check}" id="${xi.check}" ${xi.exCondition} onClick="enableButton(document.forms[0].deleteExId,document.forms[0].exIdCounter,'chk_ex_')">		
-					</td>
-				 </tr>
-			  </logic:iterate>
-		 </tbody>
-		 </table>
-	 	</td>
-	 </tr>
-</table>				  				
-  				<!-- Mandar : 16June08 External Identifiers end -->
-				 </table>
-				 <logic:notEqual name="multipleSpecimen" value="1">	<!-- to verify for valid case 3 -->
-				 <logic:notEqual name="pageOf" value="${requestScope.query}">				 			
-				<table cellpadding="4" cellspacing="0">
-					<tr>					
-						<td class="formFieldNoBordersBold" height="20" colspan="5">
-						<input type="checkbox" name="aliCheckedButton" onclick="onCheckboxButtonClick(this)" /> &nbsp; <bean:message key="specimen.aliquot.message"/>
-							&nbsp;&nbsp;&nbsp;
-		                <bean:message key="aliquots.noOfAliquots"/>
-	                    &nbsp;
-                        <input type="text" id="noOfAliquots" name="noOfAliquots" class = "formFieldSized5" disabled="true" />
-						&nbsp;&nbsp;&nbsp;
-		                <bean:message key="aliquots.qtyPerAliquot"/>
-	                    &nbsp;
-                        <input type="text" id="quantityPerAliquot" name="quantityPerAliquot" class = "formFieldSized5" disabled="true" />
-	    				</td>
-					</tr>	
-					<tr>
-						<td colspan="3" class="formLabelNoBackGround" width="40%">
-							<html:checkbox property="disposeParentSpecimen">
-							<bean:message key="aliquots.disposeParentSpecimen" />
-							</html:checkbox>
-						</td>
-					</tr>
-					<tr>					
-						<td class="formFieldNoBorders" colspan="5"  height="20" >
-							<html:checkbox styleId="printCheckbox" property="printCheckbox" value="true" onclick="">
-								<bean:message key="print.checkboxLabel"/>
-							</html:checkbox>
-						</td>
-					</tr>
+		    <td class="td_color_bfdcf3" width="100%">
+				<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_CREATE_SPECIMEN_CP_QUERY%>">
+				<table border="0" cellpadding="0" cellspacing="0" width="17%">
+			     <tr>
+					<td class="td_table_head" width="100%"><span class="wh_ar_b">&nbsp;&nbsp;&nbsp;<bean:message key="specimen.derived.title"/></span></td>
+					<td><img src="images/uIEnhancementImages/table_title_corner2.gif" alt="Page Title" width="31" height="24" /></td>
+				</tr>
 				</table>
 				</logic:notEqual>
-				</logic:notEqual><!-- to verify for valid case 3 -->
+			<br>
+			</td>
+		</tr>		
+		<tr>
+			<td class="tablepadding" style="background-color:#bfdcf3;">
+			<logic:empty name="showDerivedPage">
+				<table width="100%" border="0" cellpadding="0" cellspacing="0" align="center" >
+					<tr>		       
+						<td width="4%" class="td_tab_bg" ><img src="images/uIEnhancementImages/spacer.gif" alt="spacer" width="50" height="1" border="0"></td>
+
+						<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_CREATE_SPECIMEN_CP_QUERY%>">
+				        <td valign="bottom">
+						<a href="SimpleQueryInterface.do?pageOf=pageOfNewSpecimen&aliasName=Specimen"><img src="images/uIEnhancementImages/tab_edit_user.jpg"  border="0" alt="Edit" width="59" height="22" /></a></td>
+				        <td valign="bottom"><img src="images/uIEnhancementImages/tab_derive.gif" alt="Derive" width="56" height="22" border="0"/></td>
+					    <td valign="bottom"><a href="Aliquots.do?pageOf=pageOfAliquot"><img src="images/uIEnhancementImages/tab_aliquot2.gif" alt="Aliquot" width="66" height="22" border="0" ></a></td>
+					    <td valign="bottom"><a href="QuickEvents.do?operation=add"><img src="images/uIEnhancementImages/tab_events2.gif" alt="Events" width="56" height="22" border="0" /></a></td>
+				        <td align="left" valign="bottom" class="td_color_bfdcf3" >
+						<a href="MultipleSpecimenFlexInitAction.do?pageOf=pageOfMultipleSpWithMenu"><img src="images/uIEnhancementImages/tab_multiple2.gif" alt="Multiple"	width="66" height="22" border="0" /></a></td>
+						</logic:notEqual>
+
+						<logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_CREATE_SPECIMEN_CP_QUERY%>">
+						<td valign="bottom"><img src="images/uIEnhancementImages/tab_derive.gif" alt="Derive" width="56" height="22" border="0"/></td>
+						</logic:equal>
+
+				        <td width="90%" align="left" valign="bottom" class="td_tab_bg">&nbsp;</td>
+				        <td width="1%" align="left" valign="bottom" class="td_color_bfdcf3" ></td>
+			      </tr>
+					
+					<html:hidden property="${requestScope.oper}" value="${requestScope.operation}"/>
+					<html:hidden property="submittedFor" value="ForwardTo"/>
+					<html:hidden property="forwardTo" value="${requestScope.frdTo}"/>
+					<html:hidden property="multipleSpecimen" value="${requestScope.multipleSpecimen}"/>
+					<html:hidden property="containerId" styleId="containerId"/>
+					<html:hidden property="nextForwardTo" />
+
+					<html:hidden property="positionInStorageContainer" />
+				
+					<logic:equal name="pageOf" value="${requestScope.query}">
+					<html:hidden property="sysmtemIdentifier"/>
+				</logic:equal>
+
+			   </table>
+		
+		<table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg" align="center">
+				<tr>
+					<td colspan="3" align="left">
+					<span class=" grey_ar_s">&nbsp;
+						<img src="images/uIEnhancementImages/star.gif" alt="Mandatory"
+								width="6" height="6" hspace="0" vspace="0" /> 
+								<bean:message key="commonRequiredField.message" />
+					</span>
+					</td>
+				</tr>
+		        <tr>
+					<td colspan="3" align="left" class="tr_bg_blue1">
+						<span class="blue_ar_b">&nbsp;<bean:message key="specimen.details.label"/>
+					</span>
+					</td>
+		        </tr>
+		        <tr>
+					<td colspan="3" align="left" valign="top" class="showhide">
+					<table width="100%" border="0" cellpadding="3" cellspacing="0">
+            <tr>
+              <td width="1%" align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></span></td>
+              <td width="17%" align="left" class="black_ar"><bean:message key="parent.specimen.details.label"/></td>
+              <td colspan="4" align="left" valign="middle" nowrap><table width="55%" border="0" cellspacing="0" cellpadding="0" >
+                  <tr class="groupElements">
+                    <td valign="middle" nowrap><label><span class="black_ar">
+                      <html:radio styleClass="" styleId="checkedButton" property="checkedButton" value="1"
+								onclick="onRadioButtonClick(this)">
+							</html:radio>
+                      <bean:message key="specimen.label"/>&nbsp;
+                      <logic:equal name="createSpecimenForm" property="checkedButton" value="1">
+								<html:text styleClass="black_ar"  maxlength="50"  size="20" styleId="parentSpecimenLabel" 
+									property="parentSpecimenLabel" disabled="false" />
+					        </logic:equal>
+						    <logic:equal name="createSpecimenForm" property="checkedButton" value="2">
+				 				<html:text styleClass="black_ar"  maxlength="50"  size="20" styleId="parentSpecimenLabel" 
+									property="parentSpecimenLabel" disabled="true" />
+						    </logic:equal>
+						&nbsp;&nbsp; </span></label>
+                        <span class="black_ar">
+                        <html:radio styleClass="" styleId="checkedButton" property="checkedButton" value="2" 
+								onclick="onRadioButtonClick(this)">
+					        </html:radio>
+                          <bean:message key="storageContainer.barcode"/>&nbsp;
+                        <logic:equal name="createSpecimenForm" property="checkedButton" value="1">
+							    <html:text styleClass="black_ar"  maxlength="50"  size="20" styleId="parentSpecimenBarcode"
+									property="parentSpecimenBarcode" disabled="true" />
+						</logic:equal>
+						<logic:equal name="createSpecimenForm" property="checkedButton" value="2">
+						    <html:text styleClass="black_ar"  maxlength="50"  size="20" styleId="parentSpecimenBarcode" 
+								property="parentSpecimenBarcode" disabled="false" />
+						</logic:equal>
+                      </span></td>
+                  </tr>
+                </table>
+                  <label></label>
+              </tr>
+
+			  <tr>
+              <td align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></span></td>
+              <td align="left" class="black_ar"><bean:message key="specimen.type"/></td>
+              <td width="40%" class="black_ar" align="left"><autocomplete:AutoCompleteTag property="className"
+								  optionsList = "${requestScope.specClassList}"
+								  styleClass="formFieldSized12"
+								  initialValue=""
+								  onChange="onTypeChange(this)"
+								  readOnly="${requestScope.readOnlyForAll}" /></td>
+              <td width="1%" align="center"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></span></td>
+              <td width="17%" align="left"><span class="black_ar"><bean:message key="specimen.subType"/></span></td>
+              <td align="left" class="black_ar" >	<autocomplete:AutoCompleteTag property="type"
+								styleClass="formFieldSized12"
+							  optionsList = "${requestScope.specimenTypeMap}"
+							  initialValue=""
+							  onChange="onSubTypeChangeUnit('className',this,'unitSpan')"
+							  readOnly="false" 
+							  dependsOn="${createSpecimenForm.className}"  /></td>
+            </tr>
+
+			<tr>
+			<logic:equal name="isSpecimenLabelGeneratorAvl" value="false">
+              <td align="center" class="black_ar"><logic:notEqual name="oper" value="${requestScope.view}"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></span></logic:notEqual></td>
+
+              <td align="left" class="black_ar"><bean:message key="specimen.label"/></td>
+
+              <td width="35%" class="black_ar" align="left"><html:text styleClass="black_ar" size="30" maxlength="50"  styleId="label" property="label" readonly="${requestScope.readOnlyForAll}"/></td>
+			</logic:equal>	<%-- if(!Variables.isSpecimenLabelGeneratorAvl) --%>
+
+			<logic:notEqual name="isSpecimenBarcodeGeneratorAvl" value="true">
+              <td width="1%" align="center"><span class="blue_ar_b"></span></td>
+
+              <td width="17%" align="left"><span class="black_ar"><bean:message key="specimen.barcode"/></span></td>
+
+              <td align="left" class="black_ar" ><html:text styleClass="black_ar"  maxlength="50" size="30" styleId="barcode" property="barcode" readonly="${requestScope.readOnlyForAll}" /></td>
+			  </logic:notEqual> <!-- if(!Variables.isSpecimenBarcodeGeneratorAvl ) -->
+            </tr>
+            <tr>
+              <td align="center" class="black_ar">&nbsp;</td>
+              <td align="left" class="black_ar"><bean:message key="specimen.concentration"/></td>
+              <td align="left"><span class="grey_ar">
+						<logic:equal name="unitSpecimen" value="${requestScope.UNIT_MG}">				    		
+				     		<html:text styleClass="black_ar" size="10" styleId="concentration" style="text-align:right" property="concentration"
+									readonly="${requestScope.readOnlyForAll}" disabled="false"/>
+
+								<bean:message key="specimen.concentrationUnit"/>				   			
+						</logic:equal>	<!-- if(unitSpecimen.equals(Constants.UNIT_MG)) -->
+						<logic:notEqual name="unitSpecimen" value="${requestScope.UNIT_MG}">							
+				     		<html:text styleClass="black_ar" size="10" maxlength="10"  styleId="concentration" 
+								property="concentration" readonly="${requestScope.readOnlyForAll}" style="text-align:right" disabled="false"/>
+								<bean:message key="specimen.concentrationUnit"/>				    		
+						</logic:notEqual>
+					</span>	</td>
+              <td align="left"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></span></td>
+              <td align="left"><span class="black_ar"><bean:message key="specimen.quantity"/></span></td>
+              <td align="left"><html:text styleClass="black_ar" size="10" maxlength="10"  styleId="quantity" property="quantity" 
+					readonly="${requestScope.readOnlyForAll}" style="text-align:right"/>
+				     	<span id="unitSpan" class="black_ar">${requestScope.unitSpecimen}</span>
+				     	<html:hidden property="unit"/></td>
+            </tr>
+            <tr>
+              <td align="center" class="black_ar">&nbsp;</td>
+              <td align="left" class="black_ar"><bean:message key="specimen.createdDate"/></td>
+              <td align="left"><ncombo:DateTimeComponent name="createdDate"
+						  			id="createdDate"
+						  			formName="createSpecimenForm"
+						  			value='${requestScope.createdDate}'
+						  			styleClass="black_ar" />
+                    <span class="grey_ar_s">
+						<bean:message key="page.dateFormat"/>
+					</span></td>
+              <td align="left">&nbsp;</td>
+              <td align="left">&nbsp;</td>
+              <td align="left">&nbsp;</td>
+            </tr>
+			 <logic:notEqual name="multipleSpecimen" value="1">	<!-- to verify for valid case 2 -->
+            <tr height="33">
+              <td align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></span></td>
+              <td align="left" class="black_ar"><bean:message key="specimen.positionInStorageContainer"/></td>
+              ${requestScope.jsForOutermostDataTable}
+					${requestScope.jsEquivalentFor}
+					<script language="JavaScript" type="text/javascript" src="jss/CustomListBox.js"></script>
+						<td class="black_ar" align = "left" colspan="4">
+									 <table border="0" align="left">
+									 <tr>
+									 <td>
+								<logic:equal name="${requestScope.oper}" value="${requestScope.ADD}">
 								
- 			   	 <logic:notEqual name="${requestScope.oper}" value="${requestScope.view}">		
+								
+									 <html:select property="stContSelection" styleClass="black_ar"
+											styleId="stContSelection" size="0"	onmouseover="showTip(this.id)"
+											onmouseout="hideTip(this.id)" onchange= "isLabelBarcodeOrClassChange()">
+
+
+											<html:options collection="storageList"
+														labelProperty="name" property="value" />										 
+																			
+									</html:select> 
+										
+									&nbsp;&nbsp;
+									</td>
+								
+									
+									<logic:equal name="storagePosition" value="Auto">
+
+										
+										<ncombo:nlevelcombo dataMap="${requestScope.dataMap}" 
+										attributeNames="${requestScope.attrNames}" 
+										initialValues="${requestScope.initValues}"  
+										styleClass = "black_ar" 
+										tdStyleClass = "customFormField" 
+										labelNames="${requestScope.labelNames}" 
+										rowNumber="1" 
+										onChange = "onCustomListBoxChange(this)"
+										formLabelStyle="formLabelBorderless"
+										tdStyleClassArray="${requestScope.tdStyleClassArray}"
+										noOfEmptyCombos = "3"/>
+										
+
+									</logic:equal>
+
+							
+							
+									<logic:equal name="storagePosition" value="Manual">
+									<td class="groupElements">
+										<html:text styleClass="black_ar"  size="13" styleId="selectedContainerName"
+													property="selectedContainerName" />
+												<html:text styleClass="black_ar"  size="3" styleId="pos1" 
+													property="pos1" />
+												<html:text styleClass="black_ar"  size="3" styleId="pos2" 
+													property="pos2" />
+												<html:button styleClass="black_ar" property="containerMap"												onclick="${requestScope.buttonOnClicked}" >
+														<bean:message key="buttons.map"/>
+												</html:button>
+										</td>
+									</logic:equal>
+								</tr>
+								</table>
+								
+							
+						
+
+					
+				
+				
+					</logic:equal>								
+					
+			</td>
+            </tr>
+			</logic:notEqual>	<%-- if(!multipleSpecimen.equals("1")) case 2 --%>
+
+
+			<logic:equal name="exceedsMaxLimit" value="true">
+<tr>
+	<td colspan="3">
+		<bean:message key="container.maxView"/>
+	</td>
+</tr>
+</logic:equal>
+
+            <tr>
+              <td align="center" class="black_ar">&nbsp;</td>
+              <td align="left" valign="top" class="black_ar"><bean:message key="specimen.comments"/></td>
+              <td colspan="4" align="left"><html:textarea styleClass="black_ar" cols="67" rows="4" styleId="comments" property="comments" 
+			readonly="${requestScope.readOnlyForAll}"/></td>
+            </tr>
+          </table>
+</td>
+</tr>
+
+
+		<!-- External identifiers starts-->
+
+        <tr onclick="showHide('add_ei')">
+			<td align="left" class="tr_bg_blue1">
+				<span class="blue_ar_b">&nbsp;<bean:message key="specimen.externalIdentifier"/>
+			</td>
+			<td width="10%" align="right" class="tr_bg_blue1">
+				<a href="#">
+				  <img src="images/uIEnhancementImages/dwn_arrow1.gif" width="80" height="9" hspace="10" border="0" alt="Show Details" />
+			  </a>
+		  </td>
+	    </tr>
+        <tr>
+
+		<input type="hidden" name="eiDispType" value="${requestScope.eiDispType1}" id="eiDispType" />
+
+          <td colspan="2" class="showhide1">
+		  <div id="add_ei" style="display:none" >
+              <table width="100%" border="0" cellspacing="0" cellpadding="3">
+                <tr class="tableheading">
+                  <td width="10%" align="left" class="black_ar_b"><bean:message key="app.select"/></td>
+                  <td width="25%" align="left" class="black_ar_b"><bean:message key="externalIdentifier.name"/> </td>
+                  <td width="65%" class="black_ar_b"><bean:message key="externalIdentifier.value"/></td>
+                </tr>
+                <tr>
+         <tbody id="addExternalIdentifier">
+		 <html:hidden property="exIdCounter"/>
+		  <logic:iterate id="xi" name="exIdList">
+				<tr>
+					<td  width="0">
+						<input type=checkbox name="${xi.check}" id="${xi.check}" ${xi.exCondition} onClick="enableButton(document.forms[0].deleteExId,document.forms[0].exIdCounter,'chk_ex_')">		
+					</td>
+					 	<html:hidden property="${xi.exIdentifier}" />
+			 		
+				    <td  width="0" >
+			     		<html:text styleClass="black_ar" maxlength="255"  styleId="${xi.exName}" property="${xi.exName}" size="25" />
+			    	</td>
+			    	<td  colspan="1">
+			     		<html:text styleClass="black_ar" maxlength="255"  styleId="${xi.exValue}" property="${xi.exValue}" size="15"/>
+			    	</td>
+					
+				 </tr>
+		  </logic:iterate>
+		 </tbody>
+
+                <tr>
+                  <td colspan="3" align="left" class="black_ar" ><table width="100%" border="0" cellspacing="0" cellpadding="0">
+                      <tr>
+                        <td width="9%">
+						<html:button property="addExId" styleClass="blue_ar_b" styleId="addExId"														onclick="insExIdRow('addExternalIdentifier')">
+							     		<bean:message key="buttons.addMore"/>
+		     			</html:button>
+						</td>
+                        <td align="left"><html:button property="deleteExId" styleClass="blue_ar_b" onclick='${requestScope.delExtIds}' disabled="true">
+						<bean:message key="buttons.delete"/>
+					</html:button>
+					</td>
+                      </tr>
+                  </table>
+				  </td>
+                </tr>
+            </table>
+			</td>
+        </tr>
+        <tr>
+          <td colspan="3" valign="middle" class="toptd"></td>
+        </tr>
+
+		<!-- derive Aliquot starts -->
+        <tr>
+          <td colspan="3" valign="middle" class="tr_bg_blue1">
+		  <span class="blue_ar_b">&nbsp;
+			<bean:message key="cpbasedentry.aliquots"/>
+		  </span>
+		  </td>
+        </tr>
+
+        <tr>
+		<logic:notEqual name="multipleSpecimen" value="1">	<!-- to verify for valid case 3 -->
+				 <logic:notEqual name="pageOf" value="${requestScope.query}">				 			
+          <td colspan="3" valign="middle">
+		  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <td width="36%" class="black_ar">
+					<input type="checkbox" name="aliCheckedButton" onclick="onCheckboxButtonClick(this)" />
+						<bean:message key="specimen.aliquot.message"/>
+				 </td>
+                <td width="25%" class="black_ar"><bean:message key="aliquots.noOfAliquots"/>
+					<input type="text" id="noOfAliquots" name="noOfAliquots" class = "formFieldSized5" disabled="true" />
+				</td>
+                <td width="39%" class="black_ar"><bean:message key="specimenArrayAliquots.qtyPerAliquot"/>
+                  <input type="text" id="quantityPerAliquot" name="quantityPerAliquot" class = "formFieldSized5" disabled="true" />
+				</td>
+              </tr>
+					</logic:notEqual>
+				</logic:notEqual>
+          </table>
+		  </td>
+        </tr>
+		<tr>
+				<td colspan="3" class="formLabelNoBackGround" width="40%">
+					<span class="black_ar">
+						<html:checkbox property="disposeParentSpecimen">
+							&nbsp;<bean:message key="aliquots.disposeParentSpecimen" />
+						</html:checkbox>
+					</span>
+				</td>
+		</tr>
+        <tr>
+          <td colspan="3" align="left" valign="middle" class="dividerline">
+		  <span class="black_ar">
+            <html:checkbox styleId="printCheckbox" property="printCheckbox" value="true" onclick="">
+								&nbsp;<bean:message key="print.checkboxLabel"/>
+			</html:checkbox>
+			</span>
+			</td>		
+        </tr>
+        <tr>
+          <td colspan="3" class="toptd"></td>
+        </tr>
+        <logic:notEqual name="${requestScope.oper}" value="${requestScope.view}">		
 				 	<tr>
-				  		<td align="right" colspan="4">
+				  		<td align="left" colspan="4">
 				  		<logic:notEqual name="multipleSpecimen" value="1">	<!-- to verify for valid case 4 -->
-							<table cellpadding="4" cellspacing="0">
-								<tr>
-						   			<td>
-						   				<html:button styleClass="actionButton" property="submitButton" onclick="onNormalSubmit()">
-						   					<bean:message key="buttons.submit"/>
+							<table cellpadding="4" cellspacing="0" width="100%" border="0">
+								<tr class="buttonbg">
+						   			<td class="buttonbg" width="100%"> 
+						   				<html:button styleClass="blue_ar_b" property="submitButton" onclick="onNormalSubmit()">
+						   					<bean:message key="buttons.create"/>
 						   				</html:button>
-						   			</td>
-									<td class="formFieldNoBorders" nowrap>
+										 &nbsp;|  &nbsp;
 										<html:button
-											styleClass="actionButton" property="moreButton"
+											styleClass="blue_ar_b" property="moreButton"
 											title="${requestScope.SPECIMEN_BUTTON_TIPS}"
 											value="${requestScope.SPECIMEN_FORWARD_TO_LIST}"
 											onclick="${requestScope.addMoreSubmit}" >
 										</html:button>
-									</td>
-									<td class="formFieldNoBorders" nowrap>
-										<html:submit styleClass="actionButton" onclick="onAddToCart()">
+									&nbsp;|  &nbsp;
+										<html:submit styleClass="blue_ar_b" onclick="onAddToCart()">
 											<bean:message key="buttons.addToCart"/>
 										</html:submit>
+										&nbsp;|  &nbsp;
+										<span class="cancellink">
+											<html:link	page="/ManageAdministrativeData.do" styleClass="blue_ar_s_b">
+												<bean:message key="buttons.cancel" />
+											</html:link>
+										</span>
 									</td>
+								</tr>
+
 	
 				  		</logic:notEqual> <!-- to verify for valid case 4 -->
 				  		<logic:equal name="multipleSpecimen" value="1">
 							<table cellpadding="4" cellspacing="0" width="100%">
 							<tr>
 					   			<td align="right">
-					   				<html:submit styleClass="actionButton" onclick="javaScript:${requestScope.changeAction3}">
+					   				<html:submit styleClass="blue_ar_b" onclick="javaScript:${requestScope.changeAction3}">
 					   					<bean:message key="buttons.submit"/>
 					   				</html:submit>
 					   			</td>
@@ -633,10 +643,9 @@
 						</logic:equal>	
 				  		</td>
 				 	</tr>
-				 </logic:notEqual>
-				</logic:notEqual>				
-			 <!-- NEW SPECIMEN REGISTRATION ends-->
-		
+
+				</logic:notEqual>		
 	</table>
 	</logic:empty> <%-- if(request.getAttribute("showDerivedPage")==null) --%>
+	
  </html:form>
