@@ -117,6 +117,12 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String  COLUMNLIST="columnList";
 	public static final String  CONSENT_RESPONSE_KEY="CR_";
 	public static final String  CONSENT_RESPONSE="ConsentResponse";
+	public static final String STORAGE_TYPE_POSITION_VIRTUAL = "Virtual";
+	public static final int STORAGE_TYPE_POSITION_VIRTUAL_VALUE = 1;
+	public static final String STORAGE_TYPE_POSITION_AUTO = "Auto";
+	public static final int STORAGE_TYPE_POSITION_AUTO_VALUE = 2;
+	public static final String STORAGE_TYPE_POSITION_MANUAL = "Manual";
+	public static final int STORAGE_TYPE_POSITION_MANUAL_VALUE = 3;	
 		
 	public static final String [][] defaultValueKeys= {
 		{Constants.DEFAULT_TISSUE_SITE, edu.wustl.common.util.global.Constants.CDE_NAME_TISSUE_SITE},
