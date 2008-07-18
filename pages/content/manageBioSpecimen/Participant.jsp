@@ -536,30 +536,31 @@ tr#hiddenCombo
 	if(pageView.equals("edit"))
 	{
 	%>
-		<table summary="" cellpadding="0" cellspacing="0" border="0" height="20" class="tabPage" width="100%">
+		<!--<table summary="" cellpadding="0" cellspacing="0" border="0" height="20" class="tabPage" width="100%">
 			<tr>
-				<td height="20" class="tabMenuItemSelected">
-					<bean:message key="edit.tab.participant"/>
+				<td class="td_tab_bg" ><img src="images/uIEnhancementImages/spacer.gif" alt="spacer" width="50" height="1"></td>
+				<td class="tabMenuItemSelected">
+					<img src="images/uIEnhancementImages/t_edit_part_sel.gif" alt="Edit Participant" width="116" height="22" border="0">
 				</td>
 
-				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="viewSPR()">
-					<bean:message key="edit.tab.surgicalpathologyreport"/>
+				<td class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="viewSPR()">
+					<img src="images/uIEnhancementImages/tab_view_surgical2.gif" alt="View Surgical Pathology Report" width="216" height="22">
 				</td>
 								
 				
-				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="showAnnotations()">
-					<bean:message key="edit.tab.clinicalannotation"/>
+				<td class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="showAnnotations()">
+					<img src="images/uIEnhancementImages/tab_view_annotation2.giff" alt="View Annotation" width="116" height="22">
 				</td>
 
-				<td width="450" class="tabMenuSeparator" colspan="3">&nbsp;</td>
+				<td width="90%" valign="bottom" class="td_tab_bg">&nbsp;</td>
 			</tr>
 
 			<tr>
 				<td class="tabField" colspan="6">
-					<%@ include file="EditParticipant.jsp" %>
+					
 				</td>
 			</tr>
-		</table>		
+		</table>		--><%@ include file="EditParticipant.jsp" %>
 	<%
 	}
 	%>

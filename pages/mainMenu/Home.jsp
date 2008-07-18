@@ -31,20 +31,22 @@ function editUserProfile(item){
 
 </head>
 <body>
-<table width="95%" cellspacing="0" cellpadding="0" border="0">
+<table width="95%" cellspacing="0" cellpadding="0" border="0" align="top">
 	<tr>
-		<td width="6%" valign="top"><img width="60" height="24"
+		<td width="6%" valign="top"><img width="48" height="24"
 			src="images/uIEnhancementImages/menustartimg.gif" /></td>
-		<td width="94%" align="left"><logic:notEmpty scope="session"
+		<td width="94%" align="left">
+		<logic:notEmpty scope="session"
 			name="<%=Constants.SESSION_DATA%>">
 			<script type="text/javascript" src="jss/menus.js"></script>
 			<div id="toolbarLoggedIn"></div>
-		</logic:notEmpty> <logic:empty scope="session" name="<%=Constants.SESSION_DATA%>">
+		</logic:notEmpty>
+		<logic:empty scope="session" name="<%=Constants.SESSION_DATA%>">
 			<script type="text/javascript" src="jss/menu_home.js"></script>
 			<div id="toolbarLoggedOut"></div>
 		</logic:empty></td>
 	</tr>
-
+	
 </table>
 </body>
 
