@@ -98,6 +98,22 @@ public class Utility extends edu.wustl.common.util.Utility {
 		Set setPV = specimenClassCDE.getPermissibleValues();
 		return setPV;
 	}
+	
+	/* Method returns the storage position list */
+	public static List getStoragePositionTypeList()
+	{
+		List<NameValueBean> storagePositionTypeList = new ArrayList<NameValueBean>();
+		
+		storagePositionTypeList.add(new NameValueBean(Constants.STORAGE_TYPE_POSITION_VIRTUAL, 
+							Constants.STORAGE_TYPE_POSITION_VIRTUAL_VALUE));
+		storagePositionTypeList.add(new NameValueBean(Constants.STORAGE_TYPE_POSITION_AUTO, 
+				Constants.STORAGE_TYPE_POSITION_AUTO_VALUE));
+		storagePositionTypeList.add(new NameValueBean(Constants.STORAGE_TYPE_POSITION_MANUAL, 
+				Constants.STORAGE_TYPE_POSITION_MANUAL_VALUE));
+		
+		return storagePositionTypeList;		
+	}
+	
 	public static List getSpecimenClassList()
 	{
 		List specimenClassList= new ArrayList();
