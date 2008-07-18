@@ -107,45 +107,44 @@
 		var rowno = q + 1;
 		var x=document.getElementById(subdivtag).insertRow(0);
 	
-		// First Cell
-		var spreqno=x.insertCell(0);
-		spreqno.className="formSerialNumberField";
-		sname=(q+1);
-		var identifier = "externalIdentifierValue(ExternalIdentifier:" + (q+1) +"_id)";
-		var hiddenTag = "<input type='hidden' name='" + identifier + "' value='' id='" + identifier + "'>";
-		spreqno.innerHTML="" + rowno + "." + hiddenTag;
+		//var spreqno=x.insertCell(0);
+		//spreqno.className="black_ar";
+		//sname=(q+1);
+		//var identifier = "externalIdentifierValue(ExternalIdentifier:" + (q+1) +"_id)";
+		//var hiddenTag = "<input type='hidden' name='" + identifier + "' value='' id='" + identifier + "'>";
+		//spreqno.innerHTML="" + rowno + "." + hiddenTag;
 	
+		// First Cell
+		var checkb=x.insertCell(0);
+		checkb.className="black_ar";
+		checkb.colSpan=1;
+		sname="";
+		var name = "chk_ex_"+ rowno;
+		sname="<input type='checkbox' name='" + name +"' id='" + name +"' value='C' onClick=\"enableButton(document.forms[0].deleteExId,document.forms[0].exIdCounter,'chk_ex_')\">";
+		checkb.innerHTML=""+sname;
+
 		//Second Cell
 		var spreqtype=x.insertCell(1);
-		spreqtype.className="formField";
+		spreqtype.className="black_ar";
 		spreqtype.colSpan=1;
 		sname="";
 		
 		var name = "externalIdentifierValue(ExternalIdentifier:" + rowno +"_name)";
-		sname="<input type='text' name='" + name + "'  maxlength='50' class='formFieldSized15' id='" + name + "'>";      
+		sname="<input type='text' name='" + name + "'  maxlength='50' size='25' class='black_ar' id='" + name + "'>";      
 	
 		spreqtype.innerHTML="" + sname;
 	
 		//Third Cell
 		var spreqsubtype=x.insertCell(2);
-		spreqsubtype.className="formField";
-		spreqsubtype.colSpan=2;
+		spreqsubtype.className="blue_ar";
+		spreqsubtype.colSpan=1;
 		sname="";
 		
 		name = "externalIdentifierValue(ExternalIdentifier:" + rowno +"_value)";
 		sname= "";
 			
-		sname="<input type='text' name='" + name + "' maxlength='50'  class='formFieldSized15' id='" + name + "'>"   
+		sname="<input type='text' name='" + name + "' maxlength='50' size='15' class='black_ar' id='" + name + "'>"   
 		
 		spreqsubtype.innerHTML="" + sname;
-			
-		//Fourth Cell
-		var checkb=x.insertCell(3);
-		checkb.className="formField";
-		checkb.colSpan=2;
-		sname="";
-		var name = "chk_ex_"+ rowno;
-		sname="<input type='checkbox' name='" + name +"' id='" + name +"' value='C' onClick=\"enableButton(document.forms[0].deleteExId,document.forms[0].exIdCounter,'chk_ex_')\">";
-		checkb.innerHTML=""+sname;
 	}
 			
