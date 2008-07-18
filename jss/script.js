@@ -4,11 +4,11 @@ function showHide(elementid)
 	var switchImg = document.getElementById('imgArrow_'+elementid);
 	if (document.getElementById(elementid).style.display == 'none'){
 		document.getElementById(elementid).style.display = '';
-		switchImg.innerHTML = '<img src="images/uIEnhancementImages/up_arrow.gif" border="0" width="7" height="8" hspace="10"  class="tr_bg_blue1" vspace="3"/>';
+		switchImg.innerHTML = '<img src="images/uIEnhancementImages/up_arrow.gif" alt="Hide Details" border="0" width="80" height="9" hspace="10" vspace="3 "/>';
 							
 	} else {
 		document.getElementById(elementid).style.display = 'none';
-		switchImg.innerHTML = '<img src="images/uIEnhancementImages/dwn_arrow1.gif" border="0" width="7" height="8" hspace="10"  class="tr_bg_blue1" vspace="3"/>';
+		switchImg.innerHTML = '<img src="images/uIEnhancementImages/dwn_arrow1.gif" alt="Show Details" border="0" width="80" height="9" hspace="10" vspace="3"/>';
 				
 	}
 } 
