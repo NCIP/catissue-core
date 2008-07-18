@@ -92,6 +92,7 @@ public class GenericSpecimenDetailsTag extends TagSupport
 	private String elementPrefixPart1="";
 	private String functionCall="";
 	
+	private int xtra=0;
 	SpecimenDetailsInfo specimenSummaryForm = null;
 //	--------------- Attribute Section end ------------
 
@@ -204,6 +205,7 @@ public class GenericSpecimenDetailsTag extends TagSupport
 		elementPrefixPart1="";
 		specimenSummaryForm = null;
 		functionCall = "";
+		xtra=0;
 		
 		return EVAL_PAGE;
 	}
@@ -339,7 +341,10 @@ public class GenericSpecimenDetailsTag extends TagSupport
 			l = dataList;
 		}
 		if(dataListType.equalsIgnoreCase(dataListTypes[0]))
+		{	
+			xtra = 3;	
 			functionCall = "onclick=\"onClickCollected(this)\"";
+		}
 		return l;
 	}
 	
@@ -505,7 +510,7 @@ public class GenericSpecimenDetailsTag extends TagSupport
 			}
 			else if(GenericSpecimenDetailsTag.COLUMN_NAMES[3].equalsIgnoreCase(columnList.get(counter).toString()))
 			{	
-				createTextComponent(sb, nameValue,  "black_ar", 14);				
+				createTextComponent(sb, nameValue,  "black_ar", (14+xtra));				
 //				return sb.toString();
 			}
 			else if(GenericSpecimenDetailsTag.COLUMN_NAMES[4].equalsIgnoreCase(columnList.get(counter).toString()))
@@ -636,11 +641,12 @@ public class GenericSpecimenDetailsTag extends TagSupport
 											+containerId +"','"+
 											specimenClassName +"','"+
 											cpId +"')" ;
+			  int scSize=12 +xtra;
 			 
 				 sb.append("<table style=\"font-size:1em\" size=\"100%\">");
 				 	sb.append("<tr>");
 				 		sb.append("<td>");
-				 			sb.append("<input type=\"text\" name=\""+nameValue[0]+"\" value=\"" + nameValue[1]+"\" size=\"12\" class=\"black_ar\" id=\""+selectedContainerName+"\" >");
+				 			sb.append("<input type=\"text\" name=\""+nameValue[0]+"\" value=\"" + nameValue[1]+"\" size=\""+scSize+"\" class=\"black_ar\" id=\""+selectedContainerName+"\" >");
 				 		sb.append("</td>");
 				 		sb.append("<td>");
 				 			sb.append("<input type=\"text\" name=\""+nameValue[2]+"\" value=\"" + nameValue[3]+"\" size=\"2\" class=\"black_ar\" id=\""+positionDimensionOne+"\" >");

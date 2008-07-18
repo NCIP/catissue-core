@@ -6,14 +6,15 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.bean.GenericSpecimen"%>
 <%@ page language="java" isELIgnored="false" %>
-<script src="jss/script.js"></script>
-<link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
-<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" /> 
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
+<script language="JavaScript" type="text/javascript" src="jss/script.js"></script>
+<link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
+<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" /> 
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/GenericSpecimenDetailsTag.js"></script>
-<script language="JavaScript">
+<script language="JavaScript" type="text/javascript">
 	window.parent.frames['SpecimenEvents'].location="ShowCollectionProtocol.do?pageOf=specimenEventsPage&operation=ViewSummary";
 	function ApplyToAll(object,type)
 		{
@@ -155,11 +156,11 @@
 	</script>
 </head>
 <body onload="UpdateCheckBoxStatus()">
-<script language="javascript">
+<script language="javascript" type="text/javascript">
 	${requestScope.refreshTree}
 </script>
 <logic:equal name="viewSpecimenSummaryForm" property="requestType" value="Multiple Specimen">
-	<script language="javascript">
+	<script language="javascript" type="text/javascript">
 		${requestScope.refreshTree}
 	</script>
 </logic:equal>
@@ -195,10 +196,10 @@
                     <td width="11%" class="black_ar_b"><bean:message key="specimen.label"/></td>
                     <td width="11%" class="black_ar_b"><bean:message key="specimen.barcode"/></td>
 
-                    <td width="16%" class="black_ar_b"><bean:message key="specimen.subType"/></td>
-                    <td width="10%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Quantity"/></td>
-                    <td width="10%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Concentration"/></td>
-                    <td width="27%" class="black_ar_b" nowrap><bean:message key="anticipatorySpecimen.Location"/><input id="chkSpecimen" type="checkbox" onClick="ApplyToAll(this,'specimen')"/>Apply First to All</td>
+                    <td width="19%" class="black_ar_b"><bean:message key="specimen.subType"/></td>
+                    <td width="7%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Quantity"/></td>
+                    <td width="7%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Concentration"/></td>
+                    <td width="30%" class="black_ar_b" nowrap><bean:message key="anticipatorySpecimen.Location"/><input id="chkSpecimen" type="checkbox" onClick="ApplyToAll(this,'specimen')"/><span class="black_ar_s">Apply First to All</span></td>
                     <td width="11%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Collected"/></td>
                   </tr>
 					<md:genericSpecimenDetails columnHeaderListName="columnHeaderList" formName="viewSpecimenSummaryForm" dataListName="specimenList" dataListType="Parent" columnListName="columnListName" isReadOnly="false" displayColumnListName="dispColumnsList" />
@@ -244,11 +245,11 @@
                     <td width="11%" class="black_ar_b"><label for="delete" align="center"><bean:message key="anticipatorySpecimen.Parent"/></label></td>
                     <td width="11%" class="black_ar_b"><bean:message key="specimen.label"/></td>
                     <td width="11%" class="black_ar_b"><bean:message key="specimen.barcode"/></td>
-                    <td width="11%" class="black_ar_b"><bean:message key="specimen.subType"/></td>
-                    <td width="10%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Quantity"/></td>
-                    <td width="10%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Concentration"/></td>
-                    <td width="27%" class="black_ar_b" nowrap><bean:message key="anticipatorySpecimen.Location"/><input id="chkAliquot" type="checkbox" onClick="ApplyToAll(this,'aliquot')"/>Apply First to All </td>
-                    <td><input type="checkbox" value="check" id="aliquotCheckBox" checked="true" onclick="applyToAlquots()"/></td>
+                    <td width="14%" class="black_ar_b"><bean:message key="specimen.subType"/></td>
+                    <td width="7%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Quantity"/></td>
+                    <td width="7%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Concentration"/></td>
+                    <td width="30%" class="black_ar_b" nowrap><bean:message key="anticipatorySpecimen.Location"/><input id="chkAliquot" type="checkbox" onClick="ApplyToAll(this,'aliquot')"/><span class="black_ar_s">Apply First to All</span> </td>
+					<td><input type="checkbox" value="check" id="aliquotCheckBox" checked="true" onclick="applyToAlquots()"/></td>
                     <td width="10%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Collected"/></td>
                   </tr>
 					<md:genericSpecimenDetails columnHeaderListName="subSpecimenColHeaderList" formName="viewSpecimenSummaryForm" dataListName="aliquotList" dataListType="Aliquot" columnListName="columnListName" isReadOnly="false" displayColumnListName="dispColumnsList" />
@@ -272,10 +273,10 @@
 						<td width="11%" class="black_ar_b"><label for="delete" align="center"><bean:message key="anticipatorySpecimen.Parent"/></label></td>
 						<td width="11%" class="black_ar_b"><bean:message key="specimen.label"/></td>
 						<td width="11%" class="black_ar_b"><bean:message key="specimen.barcode"/></td>
-						<td width="11%" class="black_ar_b"><bean:message key="specimen.subType"/></td>
-						<td width="10%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Quantity"/></td>
-						<td width="10%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Concentration"/></td>
-						<td width="27%" class="black_ar_b" nowrap><bean:message key="anticipatorySpecimen.Location"/><input id="chkDrived" type="checkbox" onClick="ApplyToAll(this,'derived')"/>Apply First to All</td>
+						<td width="14%" class="black_ar_b"><bean:message key="specimen.subType"/></td>
+						<td width="7%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Quantity"/></td>
+						<td width="7%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Concentration"/></td>
+						<td width="30%" class="black_ar_b" nowrap><bean:message key="anticipatorySpecimen.Location"/><input id="chkDrived" type="checkbox" onClick="ApplyToAll(this,'derived')"/><span class="black_ar_s">Apply First to All</span></td>
 						<td><input type="checkbox" value="check" id="derivedCheckBox" checked="true" onclick="applyToDerived()"/></td>
 						<td width="10%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Collected"/></td>
 					</tr>
@@ -317,7 +318,7 @@
 				</html:checkbox>
 			</td>
 			<td>
-			<input type="button" value="Submit" onclick="pageSubmit()" />
+			<input class="blue_ar_b" type="button" value="Submit" onclick="pageSubmit()" />
 			</td>
 		 </tr>
 		</logic:equal>
@@ -325,7 +326,7 @@
 		<div id="divForHiddenChild"></div>
 		</html:form>
 </body>
-</html>
 <script language="JavaScript" type="text/javascript">
 identifyDisabledCheckBox();
 </script>
+</html>
