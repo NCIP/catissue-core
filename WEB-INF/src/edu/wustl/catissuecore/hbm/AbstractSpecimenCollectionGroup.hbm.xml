@@ -73,16 +73,7 @@
            <key
                 column="IDENTIFIER"
             />
-            
-	      <property
-            name="clinicalStatus"
-            type="string"
-            update="true"
-            insert="true"
-            column="CLINICAL_STATUS"
-            length="50"
-         />
-         
+                    
          <property
             name="collectionPointLabel"
             type="string"
