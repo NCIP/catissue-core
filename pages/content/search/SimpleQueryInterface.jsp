@@ -174,9 +174,8 @@ function showDatafield(element,txtFieldID)
 
 <html:errors />
 
-<table width="100%" border="0" cellpadding="0" cellspacing="0"
-	class="newMaintable">
-	<html:form action="<%=Constants.SIMPLE_SEARCH_ACTION%>">
+<table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
+<html:form action="<%=Constants.SIMPLE_SEARCH_ACTION%>">
 		<html:hidden property="aliasName" value="<%=aliasName%>" />
 		<html:hidden property="<%=Constants.MENU_SELECTED%>"
 			value="<%=selectMenu%>" />
@@ -184,166 +183,86 @@ function showDatafield(element,txtFieldID)
 		<html:hidden property="counter" value="<%=noOfRows%>" />
 		<html:hidden property="pageOf" value="<%=pageOf%>" />
 		<html:hidden property="andOrOperation" />
-		<tr>
-			<td>
-			<table width="100%" border="0" cellpadding="0" cellspacing="0"
-				class="td_color_bfdcf3">
-				<tr>
-					<td>
-					<table width="100%" border="0" cellpadding="0" cellspacing="0"
-						class="whitetable_bg">
-						<tr>
-							<td width="100%" colspan="2" valign="top">
-							<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td class="td_color_bfdcf3"><table border="0" cellpadding="0" cellspacing="0">
+      <tr>
+        <td class="td_table_head"><span class="wh_ar_b"><bean:message key="<%=header%>" /></span></td>
+        <td align="right"><img src="images/uIEnhancementImages/table_title_corner2.gif" alt="Search Page Title" width="31" height="24" /></td>
+      </tr>
+    </table></td>
+  </tr>
+  <tr>
+    <td class="tablepadding"><table width="100%" border="0" cellpadding="0" cellspacing="0">
+	<logic:notEqual name="pageOf" value="<%=Constants.PAGEOF_SIMPLE_QUERY_INTERFACE%>">
+	<tr>
+	<td class="td_tab_bg" ><img src="images/uIEnhancementImages/spacer.gif" alt="spacer" width="50" height="1"></td>
+		
+        <td valign="bottom"><html:link href="#" onclick="callSerachAction('CommonTab.do')">
+		<img src="images/uIEnhancementImages/tab_add_notSelected.jpg" alt="Add" width="57" height="22" /></html:link></td>
+        
+		<td valign="bottom"><img src="images/uIEnhancementImages/tab_edit_selected.jpg" alt="Edit" width="59" height="22" border="0" /></td>
+		<logic:equal name="pageOf" value="<%=Constants.PAGEOF_USER_ADMIN%>">
+        <td valign="bottom"><html:link page="/ApproveUserShow.do?pageNum=1"><img src="images/uIEnhancementImages/tab_approve_user.jpg" alt="Approve New Users" width="139" height="22" border="0" /></html:link></td>
+		</logic:equal>
+		<td width="90%" valign="bottom" class="td_tab_bg">&nbsp;</td>
 
-								<tr>
-									<td colspan="3" valign="top" class="td_color_bfdcf3">
-									<table width="22%" border="0" cellpadding="0" cellspacing="0"
-										background="images/uIEnhancementImages/table_title_bg.gif">
-										<tr>
-											<td width="74%"><span class="wh_ar_b">&nbsp;&nbsp;&nbsp;
-											<bean:message key="<%=header%>" /> </span></td>
-											<td width="26%" align="right"><img
-												src="images/uIEnhancementImages/table_title_corner2.gif"
-												width="31" height="24" /></td>
-										</tr>
-									</table>
-									</td>
-								</tr>
+	</tr>
+	</logic:notEqual>
+	<logic:equal name="pageOf" value="<%=Constants.PAGEOF_SIMPLE_QUERY_INTERFACE%>">
+      <tr>
+        <td width="90%" valign="bottom" class="td_tab_bg">&nbsp;</td>
+      </tr>
+	  </logic:equal>
+    </table>
+      <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
+      
+      <tr>
+        <td colspan="2" align="left" class="toptd"></td>
+      </tr>
+      <tr>
+        <td colspan="2" align="left" class="tr_bg_blue1"><span class="blue_ar_b"> &nbsp;<bean:message key="<%=title%>" /></span></td>
 
-
-
-								<logic:notEqual name="pageOf"
-									value="<%=Constants.PAGEOF_SIMPLE_QUERY_INTERFACE%>">
-									<logic:notEqual name="pageOf"
-										value="<%=Constants.PAGEOF_NEW_SPECIMEN%>">
-										<tr>
-											<td width="1%" valign="top" class="td_color_bfdcf3">&nbsp;</td>
-											<td width="9%" valign="top" class="td_tab_bg">&nbsp;</td>
-											<td width="90%" valign="bottom" class="td_color_bfdcf3"
-												style="padding-top:4px;">
-											<table width="100%" border="0" cellpadding="0"
-												cellspacing="0">
-
-
-												<tr>
-													<td width="4%" class="td_tab_bg">&nbsp;</td>
-													<td width="6%" valign="bottom"
-														background="images/uIEnhancementImages/tab_bg.gif"><html:link
-														href="#" onclick="callSerachAction('CommonTab.do')">
-														<img src="images/uIEnhancementImages/tab_add_notSelected.jpg"
-															alt="Add" width="57" height="22" border="0" />
-													</html:link></td>
-													<td width="6%" valign="bottom"
-														background="images/uIEnhancementImages/tab_bg.gif"><img
-														src="images/uIEnhancementImages/tab_edit_selected.jpg"
-														alt="Edit" width="59" height="22" border="0" /></td>
-													<logic:equal name="pageOf"
-														value="<%=Constants.PAGEOF_USER_ADMIN%>">
-														<td width="15%" valign="bottom"
-															background="images/uIEnhancementImages/tab_bg.gif"><html:link
-															page="/ApproveUserShow.do?pageNum=1&menuSelected=1">
-															<img
-																src="images/uIEnhancementImages/tab_approve_user.jpg"
-																alt="Approve New Users" width="139" height="22"
-																border="0" />
-														</html:link></td>
-													</logic:equal>
-													<logic:notEqual name="pageOf"
-														value="<%=Constants.PAGEOF_USER_ADMIN%>">
-														<td width="15%" valign="bottom"
-															background="images/uIEnhancementImages/tab_bg.gif">&nbsp;</td>
-													</logic:notEqual>
-
-													<td width="65%" valign="bottom" class="td_tab_bg">&nbsp;</td>
-													<td width="1%" align="left" valign="bottom"
-														class="td_color_bfdcf3">&nbsp;</td>
-												</tr>
-
-											</table>
-											</td>
-										</tr>
-									</logic:notEqual>
-								</logic:notEqual>
-							</table>
-							</td>
-						</tr>
-						<logic:equal name="pageOf"
-							value="<%=Constants.PAGEOF_SIMPLE_QUERY_INTERFACE%>">
-							<tr>
-								<td class="td_color_bfdcf3">&nbsp;</td>
-							</tr>
-						</logic:equal>
-						<logic:equal name="pageOf"
-							value="<%=Constants.PAGEOF_NEW_SPECIMEN%>">
-							<tr>
-								<td class="td_color_bfdcf3">&nbsp;</td>
-							</tr>
-						</logic:equal>
-						<tr>
-							<td class="td_color_bfdcf3"
-								style="padding-left:10px; padding-right:10px; padding-bottom:10px;">
-							<table width="100%" border="0" cellpadding="0" cellspacing="0"
-								bgcolor="#FFFFFF">
-
-								<!-- SIMPLE QUERY INTERFACE BEGINS-->
-								<tr>
-									<td width="1%" align="left">&nbsp;</td>
-									<td colspan="3" align="left">&nbsp;</td>
-								</tr>
-								<tr class="tr_bg_blue1">
-									<!--<td align="left" class="tr_bg_blue1">&nbsp;</td>-->
-									<td height="25" colspan="7" align="left" class="tr_bg_blue1"><span
-										class="blue_ar_b"> <bean:message key="<%=title%>" /> </span></td>
-									<logic:equal name="pageOf"
-										value="<%=Constants.PAGEOF_SIMPLE_QUERY_INTERFACE%>">
-										<%
-													String addAction = "setPropertyValue('andOrOperation','true');"
-													+ "incrementCounter();callSerachAction('SimpleQueryInterfaceValidate.do?pageOf="
-													+ pageOf + "');";
-										%>
-										<td class="tr_bg_blue1" align="Right"><html:button
-											property="addKeyValue" styleClass="blue_ar_b"
-											onclick="<%=addAction%>">
-											<bean:message key="buttons.addMore" />
-										</html:button></td>
-									</logic:equal>
-								</tr>
-								<tr>
-									<td>&nbsp;</td>
-								</tr>
-								<tr bgcolor="#f8fcff">
-									<logic:equal name="pageOf"
-										value="<%=Constants.PAGEOF_SIMPLE_QUERY_INTERFACE%>">
-										<td class="black_arNew" width="5"><bean:message
-											key="query.queryNumber" /></td>
-										<td class="black_arNew"><label for="delete"
-											align="center"> <bean:message key="addMore.delete" />
-										</label></td>
-										<td class="black_arNew"><label for="object"> <bean:message
-											key="query.object" /> </label></td>
-
-									</logic:equal>
-									<td class="black_arNew" colspan="1"><label
-										for="attributes"> <bean:message key="query.attributes" />
+      </tr>
+	 <%
+ 		if (pageOf.equals(Constants.PAGEOF_SIMPLE_QUERY_INTERFACE)) {
+ 		String configAction = "callSerachAction('"
+ 		+ Constants.CONFIGURE_SIMPLE_QUERY_VALIDATE_ACTION
+ 		+ "?pageOf=pageOfSimpleQueryInterface')";
+ %>
+      <tr>
+        <td align="right"><table width="100%" border="0" cellspacing="0" cellpadding="2">
+            <tr>
+              <td width="94%" align="right" nowrap><img src="images/uIEnhancementImages/viewall_icon.gif" alt="View All" /></td>
+              <td width="6%" align="right" nowrap="nowrap"><span class="link"><html:link href="#" onclick="<%=configAction%>" styleClass="view">Define View</html:link></span></td>
+            </tr>
+        </table></td>
+        <td width="1%" align="right"></td>
+      </tr>
+	  <%
+	  }
+ %>
+      <tr>
+        <td colspan="2" align="center" class="showhide"><table width="99%" border="0" cellspacing="0" cellpadding="3">
+            <tr class="tableheading">
+<logic:equal name="pageOf" value="<%=Constants.PAGEOF_SIMPLE_QUERY_INTERFACE%>">
+              <td width="6%" align="left" class="black_ar_b">Select</td>
+              <td width="26%" align="left" class="black_ar_b"><label for="object"> <bean:message
+											key="query.object" /> </label> </td>
+	</logic:equal>
+              <td width="26%" class="black_ar_b"><label for="attributes"> <bean:message key="query.attributes" />
 									</label></td>
-
-									<td class="black_arNew"><label for="conditions"> <bean:message
+              <td width="12%" class="black_ar_b"><label for="conditions"> <bean:message
 										key="query.conditions" /> </label></td>
-									<td class="black_arNew" colspan="2"><label for="value">
+			  <td width="4%">&nbsp;</td>
+              <td width="15%" class="black_ar_b" ><label for="value">
 									<bean:message key="query.value" /> </label></td>
-									<logic:equal name="pageOf"
-										value="<%=Constants.PAGEOF_SIMPLE_QUERY_INTERFACE%>">
-										<td class="black_arNew"><label for="attributes">
+	<logic:equal name="pageOf" value="<%=Constants.PAGEOF_SIMPLE_QUERY_INTERFACE%>">
+              <td width="11%" class="black_ar_b"><label for="attributes">
 										<bean:message key="query.operator" /> </label></td>
-									</logic:equal>
-								<tr>
-									<td>&nbsp;</td>
-								</tr>
-								</tr>
-
-								<tbody id="simpleQuery">
-									<%
+	</logic:equal>
+            </tr>
+			<tbody id="simpleQuery">
+		<%
 											for (int i = 1; i <= Integer.parseInt(noOfRows); i++) {
 											String objectName = "value(SimpleConditionsNode:" + i
 											+ "_Condition_DataElement_table)";
@@ -392,18 +311,14 @@ function showDatafield(element,txtFieldID)
 											+ attributeValueID + "')";
 											String attributeConditionKey = "SimpleConditionsNode:" + i
 											+ "_Condition_Operator_operator";
-									%>
-									<tr>
-										<logic:equal name="pageOf"
-											value="<%=Constants.PAGEOF_SIMPLE_QUERY_INTERFACE%>">
-											<td class="blue_ar_b1" width="5"><%=i%>.</td>
-											<td class="blue_ar_b1"><input type=checkbox
+					%>
+            <tr>
+			<logic:equal name="pageOf" value="<%=Constants.PAGEOF_SIMPLE_QUERY_INTERFACE%>">
+              <td align="left" class="black_ar" ><input type=checkbox
 												name="<%=check %>" id="<%=check %>" disabled="true"
-												onClick="enablePreviousCheckBox(this);enableButton(document.forms[0].deleteValue,document.forms[0].counter,'chk_')">
-											</td>
-
-										</logic:equal>
-										<%
+												onClick="enablePreviousCheckBox(this);enableButton(document.forms[0].deleteValue,document.forms[0].counter,'chk_')"></td>
+			</logic:equal>
+			<%
 												String attributeAction = "javascript:onObjectChange(this,'SimpleQueryInterface.do?pageOf="
 												+ pageOf;
 												if (aliasName != null)
@@ -412,10 +327,8 @@ function showDatafield(element,txtFieldID)
 												else
 													attributeAction = attributeAction + "')";
 										%>
-
-										<logic:equal name="pageOf"
-											value="<%=Constants.PAGEOF_SIMPLE_QUERY_INTERFACE%>">
-											<td class="black_new"><html:select
+			<logic:equal name="pageOf" value="<%=Constants.PAGEOF_SIMPLE_QUERY_INTERFACE%>">
+              <td nowrap class="black_ar"><html:select
 												property="<%=objectName%>" styleClass="formFieldSized18"
 												styleId="<%=objectName%>" size="1"
 												onchange="<%=attributeAction%>"
@@ -428,14 +341,14 @@ function showDatafield(element,txtFieldID)
 													<html:options collection="<%=objectNameList%>"
 														labelProperty="name" property="value" />
 												</logic:present>
-											</html:select></td>
-										</logic:equal>
-										<logic:notEqual name="pageOf"
-											value="<%=Constants.PAGEOF_SIMPLE_QUERY_INTERFACE%>">
-											<html:hidden property="<%=objectName%>"
+											</html:select>
+				</td>
+				</logic:equal>
+				<logic:notEqual name="pageOf" value="<%=Constants.PAGEOF_SIMPLE_QUERY_INTERFACE%>">
+									<html:hidden property="<%=objectName%>"
 												value="<%=aliasName%>" />
-										</logic:notEqual>
-										<td class="black_new" width="30%"><html:select
+				</logic:notEqual>
+              <td nowrap class="black_new" ><html:select
 											property="<%=attributeName%>" styleClass="formFieldSized18"
 											styleId="<%=attributeId%>" size="1"
 											onchange="<%=onAttributeChange%>"
@@ -448,10 +361,10 @@ function showDatafield(element,txtFieldID)
 												<html:options collection="<%=attributeNameList%>"
 													labelProperty="name" property="value" />
 											</logic:present>
-										</html:select></td>
-
-										<td class="black_new"><!-- Mandar : 434 : for tooltip -->
-										<html:select property="<%=attributeCondition%>"
+										</html:select>
+						</td>
+              <td nowrap class="black_new">
+								<html:select property="<%=attributeCondition%>"
 											styleClass="formFieldSized8" styleId="<%=operatorId%>"
 											size="1" onchange="<%=operatorFunction%>"
 											onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
@@ -601,8 +514,9 @@ function showDatafield(element,txtFieldID)
 											<html:option value="<%=Operator.IS_NOT_NULL%>">
 												<%=Operator.IS_NOT_NULL%>
 											</html:option>
-										</html:select></td>
-										<td class="blue_ar_b" id="<%=columnID%>" size=3><!--  ********************* Mandar Code ********************** -->
+										</html:select>
+			  </td>
+			  <td class="blue_ar_b" id="<%=columnID%>" size=3><!--  ********************* Mandar Code ********************** -->
 										<!-- ***** Code added to check multiple rows for Calendar icon ***** -->
 										<html:hidden property="<%=showCalendarValue%>"
 											styleId="<%=showCalendarValue%>" /> <%
@@ -620,8 +534,8 @@ function showDatafield(element,txtFieldID)
  }
  %>
 										</td>
-										<td align="left">
-										<%
+              <td nowrap class="black_ar">
+								<%
 												String currentOperatorValue = (String) form
 												.getValue(attributeConditionKey);
 												if ((currentOperatorValue != null)
@@ -636,11 +550,9 @@ function showDatafield(element,txtFieldID)
 											property="<%=attributeValue%>" /> <%
  }
  %>
-										</td>
-										<!--html:hidden property="<%=nextOperator%>"/-->
-										<logic:equal name="pageOf"
-											value="<%=Constants.PAGEOF_SIMPLE_QUERY_INTERFACE%>">
-											<td class="black_new"><html:select
+			  </td>
+			  <logic:equal name="pageOf" value="<%=Constants.PAGEOF_SIMPLE_QUERY_INTERFACE%>">
+              <td nowrap class="black_ar"><html:select
 												property="<%=nextOperator%>" styleClass="formFieldSized8">
 												<html:option value="And">
 													<bean:message key="simpleQuery.and" />
@@ -648,66 +560,62 @@ function showDatafield(element,txtFieldID)
 												<html:option value="Or">
 													<bean:message key="simpleQuery.or" />
 												</html:option>
-											</html:select></td>
-										</logic:equal>
-									</tr>
-									<tr>
-										<td>&nbsp;</td>
-									</tr>
-									<%
+											</html:select>
+				</td>
+				</logic:equal>
+            </tr>
+			<%
 									}
-									%>
-								</tbody>
-
-								<tr class="td_color_F7F7F7">
-
-									<td align="right" colspan="10" class="buttonbg">
-									<%
-												String searchAction = "callSerachAction('"
-												+ Constants.SIMPLE_SEARCH_ACTION + "')";
-									%> <html:button styleClass="blue_ar_b" property="searchButton"
-										onclick="<%=searchAction%>">
-										<bean:message key="buttons.search" />
-									</html:button> <%
- 		if (pageOf.equals(Constants.PAGEOF_SIMPLE_QUERY_INTERFACE)) {
- 		String configAction = "callSerachAction('"
- 		+ Constants.CONFIGURE_SIMPLE_QUERY_VALIDATE_ACTION
- 		+ "?pageOf=pageOfSimpleQueryInterface')";
- %> &nbsp;&nbsp;|&nbsp;<span> <html:button styleClass="blue_ar_b"
-										property="configureButton" onclick="<%=configAction%>">
-										<bean:message key="buttons.configure" />
-									</html:button></span> &nbsp;&nbsp;|&nbsp;<span> <%
+			%>
+			</tbody>
+			<logic:equal name="pageOf"
+										value="<%=Constants.PAGEOF_SIMPLE_QUERY_INTERFACE%>">
+										<%
+													String addAction = "setPropertyValue('andOrOperation','true');"
+													+ "incrementCounter();callSerachAction('SimpleQueryInterfaceValidate.do?pageOf="
+													+ pageOf + "');";
+										%>
+										
+									
+            <tr>
+              <td colspan="7" align="left" class="black_ar" ><table width="100%" border="0" cellspacing="0" cellpadding="1">
+                  <tr>
+                    <td width="9%"><html:button
+											property="addKeyValue" styleClass="black_ar"
+											onclick="<%=addAction%>">
+											<bean:message key="buttons.addMore" />
+										</html:button></td>
+										<%
  		String deleteAction = "decrementCounter();setPropertyValue('value(SimpleConditionsNode:"
  		+ (Integer.parseInt(noOfRows) - 1)
  		+ "_Operator_operator)','');"
  		+ "callSerachAction('SimpleQueryInterface.do?pageOf="
  		+ pageOf + "');";
- %> <html:button property="deleteValue" styleClass="blue_ar_b"
+ %> 
+                    <td align="left"><html:button property="deleteValue" styleClass="black_ar"
 										onclick="deleteChecked('simpleQuery','SimpleQueryInterface.do?pageOf=<%=pageOf%>',document.forms[0].counter,'chk_',false,document.forms[0].deleteValue)"
 										disabled="true">
 										<bean:message key="buttons.delete" />
-									</html:button></span> <%
- }
- %> &nbsp;&nbsp;|&nbsp;<span class="cancellink"><html:link
-										page="/ManageAdministrativeData.do">
+									</html:button></td>
+                  </tr>
+              </table></td>
+            </tr>
+		</logic:equal>
+        </table></td>
+      </tr>
+      <tr>
+        <td colspan="2" class="buttonbg"><%
+												String searchAction = "callSerachAction('"
+												+ Constants.SIMPLE_SEARCH_ACTION + "')";
+									%> <html:button styleClass="blue_ar_b" property="searchButton"
+										onclick="<%=searchAction%>">
+										<bean:message key="buttons.search" />
+									</html:button>
+          &nbsp;&nbsp;|&nbsp; <html:link page="/ManageAdministrativeData.do" styleClass="cancellink">
 										<bean:message key="buttons.cancel" />
-									</html:link></span>&nbsp;&nbsp;</td>
-								</tr>
-
-								<!-- action buttons end -->
-
-
-							</table>
-							</td>
-						</tr>
-
-						<!-- SIMPLE QUERY INTERFACE ENDS-->
-
-					</table>
-					</td>
-				</tr>
-			</table>
-			</td>
-		</tr>
-	</html:form>
+									</html:link></td>
+      </tr>
+    </table></td>
+  </tr>
+ </html:form>
 </table>

@@ -110,122 +110,61 @@
 	<html:hidden property="id" />
 	<html:hidden property="submittedFor" value="<%=submittedFor%>"/>
 
-<table width="100%" border="0" cellpadding="0" cellspacing="0" class="newMaintable">
+<table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
   <tr>
-    <td class="td_color_bfdcf3"><table width="100%" border="0" cellpadding="0" cellspacing="0" class="whitetable_bg">
-
+    <td class="td_color_bfdcf3"><table border="0" cellpadding="0" cellspacing="0">
       <tr>
-        <td width="100%" colspan="2" valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="0">
-            <tr>
-              <td colspan="3" valign="top" class="td_color_bfdcf3"><table width="20%" border="0" cellpadding="0" cellspacing="0" background="images/uIEnhancementImages/table_title_bg.gif">
-                  <tr>
-                    <td width="82%"><span class="wh_ar_b">&nbsp;&nbsp;&nbsp;<bean:message key="SpecimenArrayType.header" /> </span></td>
-                    <td width="18%" align="right"><img src="images/uIEnhancementImages/table_title_corner2.gif" width="31" height="24" /></td>
-                  </tr>
-
-						  </table>
-						 </td>
-		            </tr>
-					<tr>
-		              <td width="1%" valign="top" class="td_color_bfdcf3">&nbsp;
-					  </td>
-		              <td width="9%" valign="top" class="td_tab_bg">&nbsp;
-					  </td>
-		              <td width="90%" valign="bottom" class="td_color_bfdcf3" style="padding-top:4px;">
-						<table width="100%" border="0" cellpadding="0" cellspacing="0">
-		                  <tr>
-				            <td width="4%" class="td_tab_bg" >&nbsp;
-							</td>
-					<!-- for tabs selection -->
-					<%
+        <td class="td_table_head"><span class="wh_ar_b"><bean:message key="SpecimenArrayType.header" /></span></td>
+        <td><img src="images/uIEnhancementImages/table_title_corner2.gif" alt="Page Title" width="31" height="24" /></td>
+      </tr>
+    </table></td>
+  </tr>
+  <tr>
+    <td class="tablepadding"><table width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr>
+        <td class="td_tab_bg" ><img src="images/uIEnhancementImages/spacer.gif" alt="spacer" width="50" height="1"></td>
+		<%
 						if(operation.equals(Constants.ADD))
 						{ 
-					%>
-		                    <td width="6%" valign="bottom" background="images/uIEnhancementImages/tab_bg.gif" ><img src="images/uIEnhancementImages/tab_add_selected.jpg" alt="Add" width="57" height="22" /></td>
-
-                    <td width="6%" valign="bottom" background="images/uIEnhancementImages/tab_bg.gif"><html:link page="/SimpleQueryInterface.do?pageOf=pageOfSpecimenArrayType&amp;aliasName=SpecimenArrayType&amp;menuSelected=21"><img src="images/uIEnhancementImages/tab_edit_notSelected.jpg" alt="Edit" width="59" height="22" border="0" /></html:link></td>
-                    <td valign="bottom" background="images/uIEnhancementImages/tab_bg.gif">&nbsp;</td>
-					<% 
+		%>
+        <td valign="bottom"><img src="images/uIEnhancementImages/tab_add_selected.jpg" alt="Add" width="57" height="22" /></td>
+        <td valign="bottom"><html:link page="/SimpleQueryInterface.do?pageOf=pageOfSpecimenArrayType&amp;aliasName=SpecimenArrayType"><img src="images/uIEnhancementImages/tab_edit_notSelected.jpg" alt="Edit" width="59" height="22" border="0" /></html:link></td>
+		<% 
 						}
 						   if(operation.equals(Constants.EDIT))
 						{
 					%>
-		                   <td width="6%" valign="bottom" background="images/uIEnhancementImages/tab_bg.gif" ><html:link page="/SpecimenArrayType.do?operation=add&amp;pageOf=pageOfSpecimenArrayType&amp;menuSelected=21"><img src="images/uIEnhancementImages/tab_add_notSelected.jpg" alt="Add" width="57" height="22" border="0" /> </html:link></td>
-
-                    <td width="6%" valign="bottom" background="images/uIEnhancementImages/tab_bg.gif"><img src="images/uIEnhancementImages/tab_edit_selected.jpg" alt="Edit" width="59" height="22" /></td>
-                    <td valign="bottom" background="images/uIEnhancementImages/tab_bg.gif">&nbsp;</td>
-						<%
+		<td valign="bottom"><html:link page="/SpecimenArrayType.do?operation=add&amp;pageOf=pageOfSpecimenArrayType"><img src="images/uIEnhancementImages/tab_add_notSelected.jpg" alt="Add" width="57" height="22" /></html:link></td>
+        <td valign="bottom"><img src="images/uIEnhancementImages/tab_edit_selected.jpg" alt="Edit" width="59" height="22" border="0" /></td>
+		<%
 							}
 						%>
-		                    <td valign="bottom" background="images/uIEnhancementImages/tab_bg.gif">&nbsp;
-							</td>
-		                    <td width="1%" align="left" valign="bottom" class="td_color_bfdcf3" >&nbsp;
-							</td>
-		                  </tr>
-				      </table>
-					</td>
-	            </tr>
-		    </table>
-		</td>
-     </tr>
-     <tr>
-        <td colspan="2" class="td_color_bfdcf3" style="padding-left:10px; padding-right:10px; padding-bottom:10px;">
-			<table width="100%" border="0" cellpadding="3" cellspacing="0" bgcolor="#FFFFFF">
-				<tr>
-	              <td colspan="3" align="left">
-					<span class=" grey_ar_s">
-						<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />		<bean:message key="commonRequiredField.message" />
-					</span>
-				  </td>
-	            </tr>
-				
-		        <tr>
-				    <td align="left" class="tr_bg_blue1">
-						<span class="blue_ar_b">
-			<logic:equal name="operation" value="<%=Constants.ADD%>">
-							<bean:message key="arrayType.title"/>
-			</logic:equal>
-			<logic:equal name="operation" value="<%=Constants.EDIT%>">
-							<bean:message key="arrayType.editTitle"/>
-			</logic:equal>
-						</span>
-					</td>
-	                <td align="right" class="tr_bg_blue1">&nbsp;
-					</td>
-	            </tr>
-		        <tr>
-			      <td colspan="3" align="left" style="padding-top:10px; padding-bottom:15px;">
-					<div id="part_det" >
-	                  <table width="100%" border="0" cellpadding="3" cellspacing="0">
-                         <tr>
-		                    <td width="1%" align="left" class="black_ar">
-								<span class="blue_ar_b">
-									<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
-								</span>
-							</td>
-	                        <td width="16%" align="left" class="black_ar">
-								<label for="name">
+
+        <td width="90%" valign="bottom" class="td_tab_bg">&nbsp;</td>
+      </tr>
+    </table>
+      <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
+        <tr>
+          <td colspan="2" align="left" class=" grey_ar_s">&nbsp;<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /> <bean:message key="commonRequiredField.message" /></td>
+        </tr>
+        <tr>
+          <td colspan="2" align="left" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;<logic:equal name="operation" value="<%=Constants.ADD%>"><bean:message key="arrayType.title"/></logic:equal><logic:equal name="operation" value="<%=Constants.EDIT%>"><bean:message key="arrayType.editTitle"/></logic:equal></span></td>        </tr>
+        <tr>
+          <td colspan="2" align="left" class="showhide"><table width="100%" border="0" cellpadding="3" cellspacing="0">
+              <form id="form" name="form2" method="post" action="">
+                <tr>
+                  <td width="1%" align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
+                  <td width="16%" align="left" class="black_ar"><label for="name">
 									<bean:message key="arrayType.name" />
-								</label>
-							</td>
-							<td width="82%" align="left">
-								<label>
-		                          <html:text styleClass="black_ar"  maxlength="255"  size="30" styleId="name" property="name"/>
-				                </label>
-							</td>
-	                      </tr>
-		                  <tr>
-			                <td align="left" class="black_ar">
-								<span class="blue_ar_b">
-									<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
-								</span>
-							</td>
-	                        <td align="left" class="black_ar">
-								<label for="specimenClass">
-									<bean:message key="arrayType.specimenClass" />
-								</label>
-							</td>
-	                        <td align="left" class="black_new">
+								</label> </td>
+                  <td width="83%" align="left">
+                    <html:text styleClass="black_ar"  maxlength="255"  size="30" styleId="name" property="name"/>
+                  </td>
+                </tr>
+                <tr>
+                  <td align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
+                  <td align="left" class="black_ar"><bean:message key="arrayType.specimenClass" /></td>
+                  <td align="left" class="black_new">
 								<html:select property="specimenClass" styleClass="formFieldSizedNew" styleId="className" size="1" onchange="onClassChange(this)">
 									<%
 										String classValue = form.getSpecimenClass();
@@ -240,10 +179,9 @@
 									<%
 										}
 									%>
-								</html:select>
-						    </td>
-						</tr>
-							<%
+								</html:select></td>
+                </tr>
+				<%
 								String classValue = (String)form.getSpecimenClass();
 								List specimenTypeList = (List)specimenTypeMap.get(classValue);
 								
@@ -254,107 +192,65 @@
 								}
 								pageContext.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
 							%>
-						<tr>
-							<td align="left" class="black_ar">
-								<span class="blue_ar_b">
-									<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
-								</span>
-							</td>
-	                        <td align="left" class="black_ar">
-								<label for="specimenType">
+                <tr>
+                  <td align="center" class="black_ar_t" ><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="3" /></td>
+                  <td align="left" class="black_ar_t"><label for="specimenType">
 									<bean:message key="arrayType.specimenType" />
-								</label>
-							</td>
-							<td align="left" class="black_new">
+								</label></td>
+                  <td align="left" class="black_new">
 								<html:select property="specimenTypes" styleClass="formFieldSizedNew" styleId="type" size="4" multiple="true">
 									<html:options collection="<%=Constants.SPECIMEN_TYPE_LIST%>" labelProperty="name" property="value"/>
-								</html:select>
-							</td>
-	                      </tr>
-		                  <tr>
-			                <td align="left" class="black_ar">&nbsp;</td>
-				            <td align="left" class="black_ar">
-								<label for="comments">
+								</html:select></td>
+                </tr>
+                <tr>
+                  <td align="center" class="black_ar">&nbsp;</td>
+                  <td align="left" valign="top" class="black_ar_t"><label for="comments">
 									<bean:message key="arrayType.comments"/>
-								</label>
-							</td>
-	                        <td align="left">
-								<html:textarea styleClass="black_ar_s" cols="35" rows="4" styleId="comment" property="comment"/>
-							</td>
-						</tr>
-                  </table>
-              </div></td>
-            </tr>
-
-            <tr onclick="javascript:showHide('add_id')">
-              <tr onclick="javascript:showHide('add_id')">
-										<td align="left" class="tr_bg_blue1"><span
-										class="blue_ar_b"><bean:message
-										key="arrayType.capacity" /></span>
-									</td>
-										<td align="right" class="tr_bg_blue1"><a href="#"><img
-											src="images/uIEnhancementImages/dwn_arrow1.gif" width="7" height="8" hspace="10"
-											border="0" class="tr_bg_blue1" /></a>
-										</td>
-									</tr>
-            <tr>
-              <td colspan="3" valign="top" style="padding-top:10px;">
-				<div id="add_id" style="display:block" >
-                    <table width="100%" border="0" cellpadding="2" cellspacing="0">
-                      <tr>
-                        <td width="1%" height="25" align="left" class="black_ar">
-							<span class="blue_ar_b">
-								<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
-							</span>
-						</td>
-                        <td width="16%" align="left" class="black_ar">
-							<label for="oneDimensionCapacity">
+								</label> </td>
+                  <td align="left"><html:textarea styleClass="black_ar_s" cols="80" rows="3" styleId="comment" property="comment"/></td>
+                </tr>
+              
+          </table></td>
+        </tr>
+        <tr onclick="javascript:showHide('add_dimension')">
+          <td width="96%" align="left" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;<bean:message
+										key="arrayType.capacity" /></span></td>
+          <td width="4%" align="right" class="tr_bg_blue1"><a id="imgArrow_add_dimension"><img
+											src="images/uIEnhancementImages/up_arrow.gif" width="80" height="9" hspace="10" border="0"/></a></td>
+        </tr>
+        <tr>
+          <td colspan="2" valign="top" class="showhide1"><div id="add_dimension" style="display:block" >
+              <table width="100%" border="0" cellpadding="3" cellspacing="0">
+                <tr>
+                  <td width="1%" align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
+                  <td width="16%" align="left" class="black_ar"><label for="oneDimensionCapacity">
 								<bean:message key="arrayType.oneDimensionCapacity" />
-							</label>
-						</td>
-                        <td width="83%" colspan="4" align="left" valign="top">
-							<html:text styleClass="black_ar" maxlength="10"  size="30" styleId="oneDimensionCapacity" property="oneDimensionCapacity"/>
-						</td>
-                      </tr>
-                      <tr>
-                        <td height="25" align="left" class="black_ar">&nbsp;
-						</td>
-                        <td align="left" class="black_ar">
-							<label for="twoDimensionCapacity">
+							</label></td>
+                  <td width="83%" colspan="4" align="left" valign="top"><html:text styleClass="black_ar" maxlength="10"  size="20" styleId="oneDimensionCapacity" property="oneDimensionCapacity" style="text-align:right"/></td>
+                </tr>
+                <tr>
+                  <td align="center" class="black_ar">&nbsp;</td>
+                  <td align="left" class="black_ar"><label for="twoDimensionCapacity">
 								<bean:message key="arrayType.twoDimensionCapacity" />
-							</label>
-						</td>
-                        <td colspan="4" align="left" valign="top">
-							<label>
-	                          <html:text styleClass="black_ar" maxlength="10"  size="30" styleId="twoDimensionCapacity" property="twoDimensionCapacity"/>
-		                    </label>
-						</td>
-                      </tr>
-                    </table>
-                 </td>
-            </tr>
-            <tr class="td_color_F7F7F7">
-              <td colspan="3">&nbsp;
-			  </td>
-            </tr>
-            <tr  class="td_color_F7F7F7">
-		<!-- action buttons begins -->
-              <td colspan="3" class="buttonbg">
-					<html:submit styleClass="blue_ar_b">
+							</label></td>
+                  <td colspan="4" align="left" valign="top"><html:text styleClass="black_ar" maxlength="10"  size="20" styleId="twoDimensionCapacity" property="twoDimensionCapacity" style="text-align:right"/></td>
+                </tr>
+              </table>
+          </div></td>
+        </tr>
+        <tr >
+          <td colspan="2" class="bottomtd"></td>
+        </tr>
+        <tr  >
+          <td colspan="2" class="buttonbg"><html:submit styleClass="blue_ar_b">
 						<bean:message  key="buttons.submit" />
 					</html:submit>
-			        &nbsp;| 
-					<span class="cancellink">
-						<html:link page="/ManageAdministrativeData.do" styleClass="blue_ar_s_b">
-						  <bean:message key="buttons.cancel" />
-						</html:link>
-					</span>
-				</td>
-		<!-- actio buttons ends -->
-            </tr>
-        </table></td>
-      </tr>
-    </table></td>
+            &nbsp;| <html:link
+										page="/ManageAdministrativeData.do" styleClass="cancellink">
+										<bean:message key="buttons.cancel" />
+									</html:link></td>
+        </tr>
+      </table></td>
   </tr>
 </table>
 </html:form>

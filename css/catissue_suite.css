@@ -1,25 +1,14 @@
 body {
-	background-color: #ffffff;
 	margin-left: 0px;
 	margin-top: 0px;
 	margin-right: 0px;
 	margin-bottom: 0px;
 }
 
-a {
-/*	color: #3366CC;*/
-	color: #333333;
-	text-decoration: none;
-}
-
-form {
-	background-color: #FFFFFF;
-}
-
-.newMaintable {
-	background-color:#FFFFFF;
+.maintable {
+	background-color:#bfdcf3;
 	border-bottom:1px solid #87bbe4;
-	border-top:1px solid #FFFFFF;
+	border-top:1px solid #87bbe4;
 	border-left:1px solid #87bbe4;
 	border-right:1px solid #87bbe4;
 }	
@@ -37,37 +26,15 @@ form {
 
 .grey_ar_s {
 	font-family: verdana;
-	font-size: .6em;
+	font-size: 9px;
 	color: #999999;
 }
-.black_ar {
-	font-family: verdana;
-	font-size: 11px;
-	color: #000000;
-}
-
-.black_arNew {
-	font-family: verdana;
-	font-size: 13px;
-	color: #000000;
-	font-weight: bold;
-}
-
 
 .blue_ar_b {
 	font-family: verdana;
 	font-size: 12px;
 	color: #074180;
 	font-weight: bold;
-}
-
-.button_main {
-	font-family: verdana;
-	font-size: .8em;
-	font-weight: bold;
-	color: #034381;
-	margin: 1px;
-	padding: 1px;
 }
 
 .black_ar_s {
@@ -93,6 +60,24 @@ form {
 	font-family: verdana;
 	font-size: 11px;
 	color: #000000;
+	vertical-align:middle;
+
+}
+
+.black_ar_t {
+	font-family: verdana;
+	font-size: 11px;
+	color: #000000;
+	vertical-align:top;
+	padding-top:7px;
+
+}
+
+
+.black_new{
+	font-family: verdana;
+	font-size: 11px;
+	vertical-align:middle;
 }
 
 .grey_ar {
@@ -119,13 +104,13 @@ form {
 
 }
 
+
 /*Start table css*/
 .tableheading {
 	background-color:#d7d7d7;
 	border-top:1px solid #c1c0c0;
 	font-family:Verdana;
 	font-size:11px;
-	/*font-weight:bold;*/
 	color:#323232;
 }
 
@@ -135,134 +120,40 @@ form {
 	font-size:11px;
 }	
 
-
-
 /*End table css*/
 
 
-
-
-
-
-
-
 /*Start link css*/
-.smalllink {
+
+A.cancellink:link{
 	font-family: verdana;
-	font-size: 10px;
-	color: #054281;
-	font-weight: bold;
+	font-size: 12px;
+	color: #054a8f;
+	font-weight:bold;
 	text-decoration:underline;
 }
-.smalllink a:link{
-	font-family: verdana;
-	font-size: 10px;
-	color: #054281;
-	font-weight: bold;
-	text-decoration:none;
-}
-.smalllink a:visible{
-	font-family: verdana;
-	font-size: 10px;
-	color: #054281;
-	font-weight: bold;
-	text-decoration:none;
-}
-.smalllink a:activate{
-	font-family: verdana;
-	font-size: 10px;
-	color: #054281;
-	font-weight: bold;
-	text-decoration:none;
-}
-.smalllink a:hover{
-	font-family: verdana;
-	font-size: 10px;
-	color: #054281;
-	font-weight: bold;
-	text-decoration: underline;
-}
-
-.cancellink {
+A.cancellink:visited{
 	font-family: verdana;
 	font-size: 12px;
-	color: #000000;
-	font-weight: bold;
+	color: #054a8f;
+	font-weight:bold;
 	text-decoration:underline;
 }
-.cancellink a:link{
+A.cancellink:active{
 	font-family: verdana;
 	font-size: 12px;
-	color: #000000;
-	font-weight: bold;
-	text-decoration:none;
+	color: #054a8f;
+	font-weight:bold;
+	text-decoration:underline;
 }
-.cancellink a:visible{
+A.cancellink:hover{
 	font-family: verdana;
 	font-size: 12px;
-	color: #000000;
-	font-weight: bold;
-	text-decoration:none;
-}
-.cancellink a:activate{
-	font-family: verdana;
-	font-size: 12px;
-	color: #000000;
-	font-weight: bold;
-	text-decoration:none;
-}
-.cancellink a:hover{
-	font-family: verdana;
-	font-size: 12px;
-	color: #054281;
-	font-weight: bold;
-	text-decoration: underline;
+	color: #054a8f;
+	font-weight:bold;
+	text-decoration: none;
 }
 
-A.blue:link {
-	color: #054380;
-	Text-Decoration: underline;
-	font-family: verdana;
-	font-size: 10px;
-	font-weight: bold;
-}
-A.blue:active {color: #054380; 
-	font-family: verdana;
-	font-size: 10px;
-	font-weight: bold;
-	text-decoration: underline}
-A.blue:visited {color: #054380; 
-	font-family: verdana;
-	font-size: 10px;
-	font-weight: bold;
-	Text-Decoration: underline}
-A.blue:hover {color: #0099FF; 
-	font-family: verdana;
-	font-size: 10px;
-	font-weight: bold;
-	Text-Decoration: none}
-
-A.orange:link {
-	color: #ea6c15;
-	Text-Decoration: underline;
-	font-family: verdana;
-	font-size: 11px;
-}
-A.orange:active {color: #ea6c15; 
-	font-family: verdana;
-	font-size: 11px;
-	text-decoration: underline
-}
-A.orange:visited {color: #ea6c15; 
-	font-family: verdana;
-	font-size: 11px;
-	Text-Decoration: underline
-}
-A.orange:hover {color: #0099FF; 
-	font-family: verdana;
-	font-size: 11px;
-	Text-Decoration: none
-}	
 
 A.white:link {
 	color: #FFFFFF;
@@ -275,58 +166,48 @@ A.white:active {color: #FFFFFF;
 	font-family: verdana;
 	font-size: 10px;
 	font-weight: bold;
-	text-decoration: none}
+	text-decoration: none;
+}
 A.white:visited {color: #FFFFFF; 
 	font-family: verdana;
 	font-size: 10px;
 	font-weight: bold;
-	Text-Decoration: none}
+	Text-Decoration: none;
+}
 A.white:hover {color: #d4e6f9; 
 	font-family: verdana;
 	font-size: 10px;
 	font-weight: bold;
-	Text-Decoration: underline}
+	Text-Decoration: underline;
+}
 
-.link {
+
+A.view:link{
 	font-family: verdana;
-	font-size: 10px;
-	color: #000000;
-	font-weight: bold;
-	text-decoration:none;
+	font-size: 11px;
+	color: #054a8f;
+	text-decoration:underline;
 }
-.link a:link{
+A.view:visited{
 	font-family: verdana;
-	font-size: 10px;
-	color: #000000;
-	font-weight: bold;
-	text-decoration:none;
+	font-size: 11px;
+	color: #054a8f;
+	text-decoration:underline;
 }
-.link a:visible{
+A.view:active{
 	font-family: verdana;
-	font-size: 10px;
-	color: #000000;
-	font-weight: bold;
-	text-decoration:none;
+	font-size: 11px;
+	color: #054a8f;
+	text-decoration:underline;
 }
-.link a:activate{
+A.view:hover{
 	font-family: verdana;
-	font-size: 10px;
-	color: #000000;
-	font-weight: bold;
-	text-decoration:none;
-}
-.link a:hover{
-	font-family: verdana;
-	font-size: 10px;
-	color: #ea6c15;
-	font-weight: bold;
-	text-decoration: underline;
+	font-size: 11px;
+	color: #054a8f;
+	text-decoration: none;
 }
 
 /*End link css*/
-
-
-	
 
 
 /*Start td/tr css*/
@@ -336,21 +217,22 @@ A.white:hover {color: #d4e6f9;
 }
 
 .td_tab_bg {
-/*	background-image: url(../images/tab_bg.gif);
-	background-repeat:repeat-y;	*/
 	background-color:#bfdcf3;
 	border-bottom:1px solid #ea6c15;
-
+	padding-top:8px;
 }
 
 .tr_bg_blue1 {
 	background-color: #eef5fb;
+	height:25px;
+	vertical-align:middle;
 }
 
 .buttonbg {
 	border-top:1px solid #eeeeee;
 	background-color: #F7F7F7;
 	height:30px;
+	padding-left:6px;
 }
 
 .tr_bg_border {
@@ -360,6 +242,9 @@ A.white:hover {color: #d4e6f9;
 
 .td_table_head {
 	background-image: url(../images/uIEnhancementImages/table_title_bg.gif);
+	background-repeat:repeat-x;
+	padding-left:12px;
+	padding-right:18px;
 }
 
 .td_orange_line {
@@ -387,166 +272,6 @@ A.white:hover {color: #d4e6f9;
 
 }
 
-/*End td/tr css*/
-
-
-
-
-
-/* Start Popup css */
-
-.dhtmlwindow{
-position: absolute;
-border: 1px solid #05509b;
-visibility: hidden;
-background-color: white;
-}
-
-.drag-handle{ /*CSS for Drag Handle*/
-padding: 1px;
-text-indent: 3px;
-font: bold 12px verdana;
-background-color: #CA0000;
-color: white;
-cursor: move;
-overflow: hidden;
-width: auto;
-filter:progid:DXImageTransform.Microsoft.alpha(opacity=100);
--moz-opacity: 1;
-opacity: 1;
-}
-
-.drag-handle .drag-controls{ /*CSS for controls (min, close etc) within Drag Handle*/
-position: absolute;
-right: 1px;
-top: 0px;
-cursor: hand;
-cursor: pointer;
-vertical-align:top;
-}
-
-* html .drag-handle{ /*IE6 and below CSS hack. Width must be set to 100% in order for opaque title bar to render*/
-width: 100%;
-}
-
-
-.drag-contentarea{ /*CSS for Content Display Area div*/
-/*border-top: 1px solid brown;*/
-background-color: white;
-color: black;
-height: 150px;
-padding: 0px;
-overflow: auto;
-}
-
-.drag-statusarea{ /*CSS for Status Bar div (includes resizearea)*/
-/*border-top: 1px solid gray;*/
-background-color: #F8F8F8;
-height: 13px; /*height of resize image*/
-}
-
-
-.drag-resizearea{ /*CSS for Resize Area itself*/
-float: right;
-width: 13px; /*width of resize image*/
-height: 13px; /*height of resize image*/
-cursor: nw-resize;
-font-size: 0;
-}
-
-.drag-handle{ /*Overwrite default drag handle bar background color with below*/
-/*background-color: #990000;*/
-background-image: url(../../../caTissue_suite_new/HTML/images/uIEnhancementImages/top_bg.jpg);
-vertical-align:top;
-
-}
-
-#interVeil{ /*CSS for veil that covers entire page while modal window is visible*/
-position: absolute;
-background: url(../images/uIEnhancementImages/blackdot.gif);
-width: 10px;
-left: 0;
-top: 0;
-z-index: 5;
-visibility: hidden;
-filter:progid:DXImageTransform.Microsoft.alpha(opacity=75);
-opacity: 0.8;
-}
-
-/* End Popup css */
-
-
-
-/* Start Tooltip css */
-
-#dhtmltooltip{
-position: absolute;
-left: -300px;
-width: 150px;
-border: 1px solid black;
-padding: 2px;
-background-color: lightyellow;
-visibility: hidden;
-z-index: 100;
-/*Remove below line to remove shadow. Below line should always appear last within this CSS*/
-filter: progid:DXImageTransform.Microsoft.Shadow(color=gray,direction=135);
-}
-
-#dhtmlpointer{
-position:absolute;
-left: -300px;
-z-index: 101;
-visibility: hidden;
-}
-
-/* End Tooltip css */
-
-.black_new{
-	font-family: verdana;
-	font-size: 11px;
-}
-
-.blue_ar_b1 {
-	font-family: verdana;
-	font-size: 12px;
-	color: #074180;
-	font-weight: bold;
-}
-
-
-.black_noneditable {
-	font-family: verdana;
-	font-size: 11px;
-	color: #575656;
-	font-weight:bold;
-}
-.black_noneditable2 {
-	font-family: verdana;
-	font-size: 11px;
-	color: #575656;
-}
-.viewlink2 {
-	font-family: verdana;
-	font-size: 12px;
-	color: #000000;
-	font-weight: bold;
-	text-decoration:underline;
-}
-/* to set color of row in mygrid-for skin */
-.even
-{
-	background-color:#FFFFFF;
-}
-.uneven
-{
-	background-color:#f6f6f6;
-}
-
-.grid_hover 
-{  
-  background-color:#bfdcf3;	
-  font-size:20px;
-}
 .cp_tabbg {
 	border-bottom:1px solid #61a1e3;
 }
@@ -557,14 +282,18 @@ visibility: hidden;
 	border-bottom:1px solid #61a1e3;
 	
 }
+.tablepadding {
+            padding-left:10px; 
+            padding-right:10px; 
+            padding-bottom:10px;
+            background-color:#bfdcf3;
+}
+
 
 .toptd {
 	height:18px;
 }
 /*End td/tr css*/
-
-
-
 
 
 /* Start Popup css */
@@ -621,10 +350,6 @@ background-color: #F8F8F8;
 height: 13px; /*height of resize image*/
 }
 
-.bigError{
-		font-family: verdana;
-		font-size: 13px;
-}
 
 .drag-resizearea{ /*CSS for Resize Area itself*/
 float: right;
@@ -644,7 +369,7 @@ vertical-align:top;
 
 #interVeil{ /*CSS for veil that covers entire page while modal window is visible*/
 position: absolute;
-background: url(../images/blackdot.gif);
+background: url(../images/uIEnhancementImages/blackdot.gif);
 width: 10px;
 left: 0;
 top: 0;
@@ -655,10 +380,14 @@ opacity: 0.8;
 }
 
 /* End Popup css */
+
+
+
 /* css_Anil */
 td.showhide{
 padding-top:10px; padding-bottom:15px;
 }
+
 td.showhide1{
 padding-top:10px;
 }
@@ -669,34 +398,7 @@ padding-top:10px;
 	color: #575656;
 	background-color:#f6f6f6;
 }
-a.pagenumbers:link{
-	font-family: verdana;
-	font-size: 11px;
-	color: #323232;
-	font-weight: bold;
-	text-decoration:underline;
-}
-a.pagenumbers:visited{
-	font-family: verdana;
-	font-size: 11px;
-	color: #323232;
-	font-weight: bold;
-	text-decoration:underline;
-}
-a.pagenumbers:active{
-	font-family: verdana;
-	font-size: 11px;
-	color: #323232;
-	font-weight: bold;
-	text-decoration:underline;
-}
-a.pagenumbers:hover{
-	font-family: verdana;
-	font-size: 11px;
-	color:#990000;
-	font-weight: bold;
-	text-decoration: none;
-}
+
 .subtd {
 	border-bottom:1px solid #d7d7d7;
 	background-color: #ebeaea;
@@ -706,8 +408,53 @@ a.pagenumbers:hover{
 	font-weight:bold;
 	color:#323232;
 }
+
+.groupElements {
+	background-color:#f6f6f6;
+	border:1px solid #eeeeee;
+
+}	
 .dividerline{ 
     border-top:1px solid #ebebeb;
 }
+.formFieldSized12{ /* for the autocomplete tag */
+	font-family:verdana;
+	border:1px solid #6E81A6; 
+  font-size:11px;
+}
 
+div.autocomplete {
+      background-color:white;
+      border:1px solid #888;
+      margin:0px;
+      padding:0px;
+      overflow:auto; 
+    }
+    div.autocomplete ul {
+      list-style-type:none;
+      margin:0px;
+      padding:0px;
+    }
+    div.autocomplete ul li.selected { background-color: #ffb;}
+    div.autocomplete ul li {
+      list-style-type:none;
+      margin:0;
+      padding:2px;
+	  cursor:pointer;
+	  overflow:auto;
+    }
+	.formFieldSizedNew{ /* for the autocomplete tag */
+  	font-family: verdana;
+	font-size: 11px;
+	color: #000000;
+	}
 
+	.formFieldSizedTime{ /* for the form elements themselves and with a constant width (on elements) */
+	font-family:verdana;
+	 border:1px solid #6E81A6; 
+	  font-size:11px;
+	  width:5em;
+	  vertical-align:middle;
+	  }
+
+	  
