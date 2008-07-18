@@ -15,70 +15,37 @@
 
 <%-- Main table Start --%>
 	<table style="display:none;"  width="100%" border="0" cellpadding="3" cellspacing="0" id="consentTierTable">
-      <tr>
-       <td width="24%" align="left" class="black_ar" style="padding-top:20px; padding-bottom:10px;">
-		<bean:message key="consent.unsignedformurl" />
-	  </td>
-       <td width="76%" align="left" style="padding-top:20px; padding-bottom:10px;"><label>
-        <html:text styleClass="black_ar" maxlength="50" size="42" styleId="unsignedConsentURLName" property="unsignedConsentURLName"/>
-      </label></td>
-    </tr>    
+        <tr><td width="24%" align="left" class="black_ar">&nbsp;&nbsp;&nbsp;<bean:message key="consent.unsignedformurl" /></td>
+            <td width="76%" align="left" valign="top"><label><html:text styleClass="black_ar" maxlength="50" size="42" styleId="unsignedConsentURLName" property="unsignedConsentURLName"/></label></td>
+        </tr>    
+		 <tr>
+            <td colspan="2" align="left" class="toptd"></td>
+         </tr>
      <tr>
-      <td colspan="2" align="left" class="tr_bg_blue1">
-		<span class="blue_ar_b">	<bean:message key="consent.consenttiers" /></span></td>
-    </tr>
+          <td colspan="2" align="left" class="tr_bg_blue1"><span class="blue_ar_b"> <bean:message key="consent.consenttiers" /></span></td>
+     </tr>
     <tr>
-      <td colspan="2" align="left" class="black_ar" style="padding-top:20px; padding-bottom:10px;"><table width="100%" border="0" cellspacing="0" cellpadding="3" id="innertable">
+         <td colspan="2" align="left" class="black_ar showhide" ><table width="100%" border="0" cellspacing="0" cellpadding="3" id="innertable">
         <tr>
          <%-- Title CheckBox --%>
-									<logic:equal name="operation" value='${requestScope.edit}'>										
-      							    <td width="4%" align="center" class="tableheading">
-										<div align="center">
-											<input type=checkbox class="black_ar" name="selectAll" onclick="checkAll(this)" disabled="disabled"/>
-										</div>	
-									</td>
-									</logic:equal>
-									<logic:notEqual name="operation" value='${requestScope.edit}'>
-									<td class="tableheading" width="4%" align="center">
-										<div align="center">
-											<input type=checkbox name="selectAll" class="black_ar" onclick="checkAll(this)"/>
-										</div>	
-									</td>	
-									</logic:notEqual>
-          <td width="96%" class="tableheading">
-			<html:hidden property="consentTierCounter"/>
-										<bean:message key="consent.statements" />
-			</td>
+				<logic:equal name="operation" value='${requestScope.edit}'><td width="4%" align="center" class="tableheading"><label><input type=checkbox class="black_ar" name="selectAll" onclick="checkAll(this)" disabled="disabled"/></label></td></logic:equal><logic:notEqual name="operation" value='${requestScope.edit}'><td width="4%" align="center" class="tableheading"><label><input type=checkbox name="selectAll" class="black_ar" onclick="checkAll(this)"/></label></td></logic:notEqual>
+          <td width="96%" class="tableheading"><strong><html:hidden property="consentTierCounter"/><bean:message key="consent.statements" /></strong></td>
         </tr>
-
-						<c:forEach var="counter" begin="0" end='${requestScope.noOfConsents}' step="1">
-								<c:set var="consentName" value="consentValue(ConsentBean:${counter}_statement)" scope="request"/>
-								<c:set var="consentKey" value="consentValue(ConsentBean:${counter}_consentTierID)" scope="request" />
-								<c:set var="readonly" value="false" scope="page"/>
+			<c:forEach var="counter" begin="0" end='${requestScope.noOfConsents}' step="1">
+			<c:set var="consentName" value="consentValue(ConsentBean:${counter}_statement)" scope="request"/>
+			<c:set var="consentKey" value="consentValue(ConsentBean:${counter}_consentTierID)" scope="request" />
+			<c:set var="readonly" value="false" scope="page"/>
         <tr>
-          <td align="center" class="black_ar">
-						 <logic:equal name="operation" value='${requestScope.edit}'>
-									<c:set var="readonly" value="true" scope="page"/>
-									
-									<input type="checkbox" name="consentcheckBoxs" Id="check1" disabled="disabled"/>
-									</logic:equal>
-									<logic:notEqual name="operation" value='${requestScope.edit}'>
-									<input type="checkbox" name="consentcheckBoxs" Id="check1"/>
-									</logic:notEqual>
-		  </td>
+          <td align="center" class="black_ar"><logic:equal name="operation" value='${requestScope.edit}'><c:set var="readonly" value="true" scope="page"/><input type="checkbox" name="consentcheckBoxs" Id="check1" disabled="disabled" class="black_ar"/></logic:equal><logic:notEqual name="operation" value='${requestScope.edit}'><input type="checkbox" name="consentcheckBoxs" Id="check1" class="black_ar"/></logic:notEqual> </td>
 		  <html:hidden property='${requestScope.consentKey}'/>
-          <td class="link"><label>
-<html:textarea styleClass="formFieldSized"  style="width:90%;" rows="2" property='${requestScope.consentName}' readonly='${pageScope.readonly}'/>
-          </label></td>
+          <td class="link"><label><html:textarea styleClass="black_ar"  style="width:90%;" rows="3" property='${requestScope.consentName}' readonly='${pageScope.readonly}'/></label></td>
         </tr>
 		</c:forEach>
 
       </table></td>
     </tr>
     <tr>
-      <td colspan="2" class="buttonbg"><html:button property="addButton" styleClass="blue_ar_b" onclick="addConsentTier()" value="Add More"/>
-      &nbsp;|
-      <html:button property="removeButton" styleClass="blue_ar_b" onclick="deleteSelected()" value="Delete"/></td>
+      <td colspan="2" class="buttonbg"><html:button property="addButton" styleClass="blue_ar_b" onclick="addConsentTier()" value="Add More" accesskey="A"/>&nbsp;|<html:button property="removeButton" styleClass="blue_ar_b" onclick="deleteSelected()" value="Delete"/></td>
     </tr>
   </form>
 </table>
