@@ -92,80 +92,160 @@ function openCRGWindow()
 	}
 
 
-	// for assignPrivilege
-		var request;
+	// for AssignPrivilege
+	var request;
    function sendRequestsWithData(url,data,cpOperation)
    {
      	request=newXMLHTTPReq();
 		request.onreadystatechange = function requestHandler(){
+		
         if(request.readyState == 4)
 		{       //When response is loaded
             if(request.status == 200)
 			{   
 	            var response = request.responseText; 
-	            
+				
 				var jsonResponse = eval('('+ response+')');
 	            var hasValue = false;
 				
 				if(jsonResponse.locations!=null)
 				{
 					var num = jsonResponse.locations.length; 
-				
-					if(cpOperation == "getUsersForThisSites"){
-						
+					// To clear the User List
+					var selectedEditableUserId="";
+					if((cpOperation == "getUsersForThisSites")||(cpOperation == "editRow")){
 						var eleOfUserSelBox = document.getElementById('userIds');
 						while(eleOfUserSelBox.length > 0){
+							if((eleOfUserSelBox.options[eleOfUserSelBox.length - 1].selected)==true){
+								selectedEditableUserId=	eleOfUserSelBox.options[eleOfUserSelBox.length - 1].value
+							}
 							eleOfUserSelBox.remove(eleOfUserSelBox.length - 1);
 						}
 					}	
-					else if(cpOperation == "getActionsForThisRole"){
+					// To Deselect privileges
+					if((cpOperation == "getActionsForThisRole")||(cpOperation == "editRow")||(cpOperation == "addPrivilege")){
 						var eleOfActionSelBox = document.getElementById('actionIds');	
 						for(var opt=0; opt<eleOfActionSelBox.length; opt++){
 							eleOfActionSelBox.options[opt].selected=false;
 						}
-					}	
+					}
+					// To Deselect Sites
+					if((cpOperation == "editRow")||(cpOperation == "addPrivilege")){
+						var eleOfSiteSelBox = document.getElementById('siteIds');	
+						for(var opt=0; opt<eleOfSiteSelBox.length; opt++){
+							eleOfSiteSelBox.options[opt].selected=false;
+						}
+					}
+					// To Deselect Users and Roles 
+					if(cpOperation == "addPrivilege"){
+						var eleOfUserSelBox = document.getElementById('userIds');	
+						for(var opt=0; opt<eleOfUserSelBox.length; opt++){
+							eleOfUserSelBox.options[opt].selected=false;
+						}
+						var eleOfRoleSelBox = document.getElementById('roleIds');
+						eleOfRoleSelBox.options[0].selected=true;
+					}
 					for(i=0;i<num;i++)
-					{						
+					{	
+					// User List for Selected Sites					
 						if(cpOperation == "getUsersForThisSites"){	
 							theValue  = jsonResponse.locations[i].locationId;
 							theText = jsonResponse.locations[i].locationName;
-						
-							var myNewOption = new Option(theText,theValue);	
 							
+							var myNewOption = new Option(theText,theValue);	
 							document.getElementById('userIds').options[i] = myNewOption;
+							if((selectedEditableUserId!=null)&&(theValue==selectedEditableUserId)){
+								document.getElementById('userIds').options[i].selected=true;
+							}
 						}
+					// Privileges List for Selected Roles
 						else if(cpOperation == "getActionsForThisRole"){	
 							theValue = jsonResponse.locations[i].locationId;
 							theText  = jsonResponse.locations[i].locationName;
 						
 							var elSel = document.getElementById('actionIds');	
 							for(var opt=0; opt<elSel.length; opt++){
-							
-									if(elSel.options[opt].value==theValue){
-										elSel.options[opt].selected=true;
-									}
+								if(elSel.options[opt].value==theValue){
+									elSel.options[opt].selected=true;
+								}
 							}
 						}
+					// Edit Row
 						else if(cpOperation == "editRow"){
-						var eleOfActionSelBox = document.getElementById('actionIds');	
-							for(var opt=0; opt<eleOfActionSelBox.length; opt++){
-								eleOfActionSelBox.options[opt].selected=false;
+							var selectedUserId=jsonResponse.locations[i].selectedUserId;
+							var usersList=jsonResponse.locations[i].userJsonArray;
+							var roleId=jsonResponse.locations[i].roleId; 
+							var sites=jsonResponse.locations[i].siteJsonArray;
+							var actions=jsonResponse.locations[i].actionJsonArray;
+							// --for sites
+							var siteSelBox = document.getElementById('siteIds');
+							for(var len=0;len<sites.length;len++){
+								for(var opt=0; opt<siteSelBox.length; opt++){
+									if(siteSelBox.options[opt].value==sites[len]){
+										siteSelBox.options[opt].selected=true;
+										break;
+									}
+								}
 							}
+							//-- for user
+							for(var opt=0; opt<usersList.length; opt++)
+							{
+								theValue  = jsonResponse.locations[i].userJsonArray[opt].locationId;
+								theText = jsonResponse.locations[i].userJsonArray[opt].locationName;
+						
+								var myNewOption = new Option(theText,theValue);	
+								document.getElementById('userIds').options[opt] = myNewOption;
+							}
+
+							var numOfUser=document.getElementById('userIds').length;
+							var userSelBox = document.getElementById('userIds');
+							for(var i=0;i<numOfUser;i++){
+								if(userSelBox.options[i].value==selectedUserId){
+									document.getElementById('userIds').options[i].selected=true;
+									var selectedUserName=userSelBox.options[i].text;
+									break;
+								}
+							}
+							
+							//-- for role	
+							var roleSelBox = document.getElementById('roleIds');
+							for(var opt=0; opt<roleSelBox.length; opt++){
+								if(roleSelBox.options[opt].value==roleId){
+									roleSelBox.options[opt].selected=true;
+									break;
+								}
+							}
+							
+							// --for Privileges
+							var actionSelBox = document.getElementById('actionIds');
+							for(var len=0;len<actions.length;len++){
+								for(var opt=0; opt<actionSelBox.length; opt++){
+									if(actionSelBox.options[opt].value==actions[len]){
+										actionSelBox.options[opt].selected=true;
+										break;
+									}
+								}
+							}
+						// To display edit Message
+							var editMessageDiv=document.getElementById("editMessageDivId");
+							editMessageDiv.style.display='block';
+															
+							var message="<span class='black_ar'><strong>&nbsp;Edit Privilege For "+ selectedUserName+"</strong> </span></td></tr>";;
+							editMessageDiv.innerHTML=message;	
+						
 						}
+						// Add Privileges
 						else if(cpOperation == "addPrivilege"){
-					
 							var tableId="summaryTableId";
 							var rowId=jsonResponse.locations[i].rowId; 
 							var userName=jsonResponse.locations[i].userName;
 					
 							var userId=jsonResponse.locations[i].userId;
-							var roleId=jsonResponse.locations[i].roleId; 
+							var roleName=jsonResponse.locations[i].roleName; 
 							var sites=jsonResponse.locations[i].sites;
 							var actions = jsonResponse.locations[i].actionName;
 							// for update table after response
-				
 							var selectedRowId=document.getElementById(rowId);
-							
 								if(selectedRowId!=null){
 									// replace row to table
 									var opt="updateRow";
@@ -174,7 +254,7 @@ function openCRGWindow()
 									// add row to table
 									var opt="addRow";
 								}
-								addOrUpdateRowToTable(opt,tableId,rowId,userName,userId,sites,actions);
+								addOrUpdateRowToTable(opt,tableId,rowId,userName,userId,sites,roleName,actions);
 						}
 					}
 				}
@@ -185,8 +265,7 @@ function openCRGWindow()
 		request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
 		request.send(data);
    	}
-   
-   
+   // Function to send request to get Users for selected sites.
 	function getUsersForThisSites(siteObject)
 	{	
 			var cpOperation="getUsersForThisSites";
@@ -204,6 +283,7 @@ function openCRGWindow()
 		
 			sendRequestsWithData(url,data,cpOperation);
 	}
+	// Function to send request to get Privileges for selected Roles.
 	function getActionsForThisRole(roleObject)
 	{		
 			var form=roleObject.form;
@@ -216,6 +296,7 @@ function openCRGWindow()
 			sendRequestsWithData(url,data,cpOperation);
 				
 	}
+   // Function to send request to get Privileges Summary.
 	function getUserPrivilegeSummary()
 	{
 		var cpOperation="addPrivilege";	
@@ -223,7 +304,6 @@ function openCRGWindow()
 		userListCtrl=document.getElementById("userIds");
 		roleListCtrl=document.getElementById("roleIds");
 		actionListCtrl=document.getElementById("actionIds");
-		
 		 var selectedSiteIds = new Array();
 		 var selectedUserIds = new Array();
 		 var selectedRoleIds = new Array();
@@ -262,9 +342,11 @@ function openCRGWindow()
 					}
 				}	
 			}
+		
 			var errorFlagForSite=false;
 			var errorFlagForUser=false;
 			var errorFlagForAction=false;
+			var errorFlagForRole=false;
 		
 			if(selectedSiteIds.length=='0'){
 				errorFlagForSite=true;
@@ -275,11 +357,14 @@ function openCRGWindow()
 			if(selectedActionIds.length=='0'){
 				errorFlagForAction=true;
 			}
+			if(selectedRoleIds[0]=='-1'){
+				errorFlagForRole=true;
+			}
 			
 			var divId=document.getElementById("errorMess");
 			divId.style.display="none";
-			if(errorFlagForSite==true||errorFlagForUser==true||errorFlagForAction==true){
-				validateMethod(divId,errorFlagForSite,errorFlagForUser,errorFlagForAction);
+			if(errorFlagForSite==true||errorFlagForUser==true||errorFlagForAction==true||errorFlagForRole==true){
+				validateMethod(divId,errorFlagForSite,errorFlagForUser,errorFlagForRole,errorFlagForAction);
 			}
 			else{
 				var url="ShowAssignPrivilegePage.do";
@@ -287,8 +372,8 @@ function openCRGWindow()
 				sendRequestsWithData(url,data,cpOperation);
 			}
 	}
-
-	function addOrUpdateRowToTable(opt,tableId,rowId,userName,userId,sites, actions)
+   // Function to Add or Update  a Row
+	function addOrUpdateRowToTable(opt,tableId,rowId,userName,userId,sites,roleName, actions)
 	{
 		var tb = document.getElementById(tableId);
 		var rows = new Array(); 
@@ -298,19 +383,21 @@ function openCRGWindow()
 		{
 			var row = document.getElementById(tableId).insertRow(noOfRows);
 			row.setAttribute("id",rowId);
-		 //   row.onclick=function(){editRow(rowId);} ;
+
 			if(noOfRows%2!=0){
-				row.setAttribute("class","tabletd1");
+				row.className="tabletd1";
 			}
 			var chkName="chk_"+noOfRows;
+
+			
 		}
 		else if(opt=="updateRow")
 		{
 			var row = document.getElementById(rowId);
 			for(counter=0;counter<row.cells.length;)
 			{
-				if(row.cells[counter].getElementsByTagName("input")!=null){
-					if(row.cells[counter].getElementsByTagName("input")[0]!=null){
+				if(row.cells[counter].getElementsByTagName("INPUT")!=null){
+					if(row.cells[counter].getElementsByTagName("INPUT")[0]!=null){
 						if(row.cells[counter].getElementsByTagName("INPUT")[0].nodeName=="INPUT"){
 							chkName=row.cells[counter].getElementsByTagName("INPUT")[0].id;
 						}
@@ -324,7 +411,7 @@ function openCRGWindow()
 		  // first cell
 			var aprCheckb=row.insertCell(0);
 			aprCheckb.className="black_ar";			
-			aprCheckb.width="13%";			
+			aprCheckb.width="8%";			
 			sname="<input type='checkbox' name='" + chkName +"' id='" + chkName +"'/>";		
 			aprCheckb.onclick=function(){enableDeleteButton(this.firstChild);} ;
 			aprCheckb.innerHTML=""+sname;
@@ -336,27 +423,28 @@ function openCRGWindow()
 				newSites=str.substring(0,17)+"...";
 			}
 			else{
-				newSites=str;;
+				newSites=str;
 			}
 			var aprSites=row.insertCell(1);
 			aprSites.className="black_ar";
-			aprSites.width="24%";
+			aprSites.width="25%";
 		//	aprSites.innerHTML="<div style='word-wrap:break-word;width=24%;'>"+sites+"</div>";
 			aprSites.innerHTML="<span>"+newSites+"</span>";
 			aprSites.onmouseover=function(){Tip(sites,WIDTH,200);} ;
 					//third Cell
 			var aprUser=row.insertCell(2);
 			aprUser.className="black_ar";
-			aprUser.width="23%";
+			aprUser.width="21%";
 			aprUser.innerHTML="<span>"+userName+"</span>";
 
 			//fourth Cell
 			var aprRole=row.insertCell(3);
 			aprRole.className="black_ar";
-			aprRole.width="20%";
-			ctrl=document.getElementById('roleIds');
-			sname=ctrl.options[ctrl.selectedIndex].text;
-			aprRole.innerHTML="<span>"+sname+"</span>";
+			aprRole.width="18%";
+		//	ctrl=document.getElementById('roleIds');
+		//	sname=ctrl.options[ctrl.selectedIndex].text;
+		//	aprRole.innerHTML="<span>"+sname+"</span>";
+		aprRole.innerHTML="<span>"+roleName+"</span>";
 			
 			
 			var actionString = "" + actions;
@@ -370,31 +458,38 @@ function openCRGWindow()
 			//Fifth Cell
 			var aprActions=row.insertCell(4);
 			aprActions.className="black_ar";
-			aprActions.width="20%";
+			aprActions.width="23%";
 			aprActions.innerHTML="<span>"+newActionsString+"</span>";
 			aprActions.onmouseover=function(){Tip(actions,WIDTH,200);} ;
+			//Sixth Cell
+			var aprEdit=row.insertCell(5);
+		//	aprEdit.className="view";
+			aprEdit.align="left";
+			aprEdit.width="5%";
+			aprEdit.innerHTML="<a href='#' class='view'>Edit</a>";
+			aprEdit.onclick=function(){editRow(rowId);} ;
+			
 	}
-
-/*	
+   // Function to send request to edit Row.	
  function editRow(rowId){
-	
-	 var operation="editRow";
+
+	 var cpOperation="editRow";
 	 var url="ShowAssignPrivilegePage.do";
-			var data="operation="+operation+"&selectedRow="+rowId;
+			var data="cpOperation="+cpOperation+"&selectedRow="+rowId;
 		
-			sendRequestsWithData(url,data,operation);
+			sendRequestsWithData(url,data,cpOperation);
  }
-*/
-function enableDeleteButton(itemCheck){
+ // Function to enable delete button on select a checkBob
+ function enableDeleteButton(itemCheck){
 	deleteButton=document.apForm.deleteButton;
 	var chk = document.getElementById(itemCheck.id);
 	   if (chk.checked == true)
 	   {
 	     	deleteButton.disabled = false;
 	   }
-}
-
-function validateMethod(divId,errorFlagForSite,errorFlagForUser,errorFlagForAction){
+ }
+// Validate method  to display Error messages
+function validateMethod(divId,errorFlagForSite,errorFlagForUser,errorFlagForRole,errorFlagForAction){
 	var message="";
 	if(errorFlagForSite){
 		message = 	"<li> <font color='red'>Site is required.</font> </li>";
@@ -402,8 +497,11 @@ function validateMethod(divId,errorFlagForSite,errorFlagForUser,errorFlagForActi
 	if(errorFlagForUser){
 		message = message+"<li> <font color='red'>User is required.</font> </li>";
 	}
+	if(errorFlagForRole){
+		message = message+"<li> <font color='red'>Role is required.</font> </li>";
+	}
 	if(errorFlagForAction){
-		message = message+"<li> <font color='red'>Action is required.</font> </li>";
+		message = message+"<li> <font color='red'>Privileges is required.</font> </li>";
 	}
 	
 	if(message!=null){
@@ -411,7 +509,7 @@ function validateMethod(divId,errorFlagForSite,errorFlagForUser,errorFlagForActi
 		divId.innerHTML=message;
 	}
 }
-
+//-- end Assign Privilege
 function  deleteCheckedRows() {
 	/** element of tbody    **/
 	var tbodyElement = document.getElementById('summaryTableId');
