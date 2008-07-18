@@ -10,7 +10,8 @@
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
 
-<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
+<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" /> 
+
 <script type="text/javascript" src="jss/javaScript.js"></script>
 <script type="text/javascript" src="jss/ajax.js"></script>
 <script type="text/javascript" src="jss/caTissueSuite.js"></script>
@@ -45,7 +46,7 @@ function updateCPTree()
 
 <form name="apForm" method="POST">
 <table summary="" cellpadding="0" cellspacing="0" border="0"
-	style="padding-left:0;padding-right:0;" width="710">
+	style="padding-left:0;padding-right:0;"  width="100%">
 	<tr>
 		<td valign="bottom">
 		<table width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -67,29 +68,38 @@ function updateCPTree()
 			</tr>
 		</table>
 		</td>
-		<td align="right" valign="top" class="cp_tabbg" border="0"><span
-			class="smalllink"> <html:link href="#" styleId="newUser"
+		<td align="right" valign="top" class="cp_tabbg" border="0"><html:link href="#" styleId="newUser" styleClass="view"
 			onclick="updateCPTree();viewSummary()">
 			<bean:message key="cpbasedentry.viewsummary" />
-		</html:link> </span></td>
+		</html:link> </td>
 	</tr>
+	
 	<tr>
 		<td colspan="2" class="cp_tabtable">
 		<table summary="" cellpadding="0" cellspacing="0" border="0"
 			id="table1" width="100%">
+			
 			<tr>
 				<td colspan="2" align="left"
 					style="padding-top:5px; padding-bottom:10px;">
-				<table width="100%" border="0" cellpadding="3" cellspacing="0"
+				<table width="100%" border="0" cellpadding="4" cellspacing="0"
 					style="background-color:#FFFFFF">
-
+					
+				<!--	<tr class="td_color_F7F7F7">
+						<td height="25" colspan="6" align="left" class="tr_bg_blue1"> -->
+							<div id="editMessageDivId" style="display:none; padding-bottom:10px">
+							
+					
+							</div>
+				<!--		</td>
+					</tr>  -->
 					<tr>
-						<td width="6%" align="right" valign="top" class="black_ar"><img
+						<td width="6%" align="right" class="black_ar_t"><img
 							src="images/uIEnhancementImages/star.gif" alt="Mandatory"
-							width="6" height="6" hspace="0" vspace="0" />&nbsp;<img
+							width="6" height="6" hspace="0" vspace="0" align="absmiddle" />&nbsp;<img
 							src="images/uIEnhancementImages/number_1.gif" alt="Number 1"
 							width="18" height="18" align="absmiddle"></td>
-						<td width="12%" align="left" valign="top" class="black_ar"><bean:message
+						<td width="8%" align="left" class="black_ar_t"><bean:message
 							key="Site.header" /></td>
 						<td width="36%" align="left"><select class="formFieldSized18"
 							id="siteIds" size="4" multiple="multiple"
@@ -107,20 +117,26 @@ function updateCPTree()
 							}
 							%>
 						</select></td>
-						<td width="5%" align="right" valign="top" class="black_ar"><img
+						<td width="6%" align="right"  class="black_ar_t"><img
+							src="images/uIEnhancementImages/star.gif" alt="Mandatory"
+							width="6" height="6" hspace="0" vspace="0" align="absmiddle" />&nbsp;<img
 							src="images/uIEnhancementImages/number_2.gif" alt="Number 2"
 							width="18" height="18" align="absmiddle"></td>
 
-						<td width="7%" align="left" valign="top" class="black_ar"><bean:message
+						<td width="10%" align="left" class="black_ar_t"><bean:message
 							key="User.header" /></td>
 						<td width="34%"><select class="formFieldSized18" id="userIds"
 							size="4" multiple="multiple" >
 							<%
+							String userName = "";
+							String userValue = "";
+							if(userList!=null){
 									for (int i = 0; i < userList.size(); i++) {
-									String userName = ""
+										userName =""
 									+ ((NameValueBean) userList.get(i)).getName();
-									String userValue = ""
+										userValue =""
 									+ ((NameValueBean) userList.get(i)).getValue();
+							}
 							%>
 							<option value="<%=userValue%>" onmouseover="Tip('<%=userName%>',WIDTH,200)"><%=userName%></option>
 							<%
@@ -130,13 +146,15 @@ function updateCPTree()
 					</tr>
 
 					<tr>
-						<td align="right" valign="top" class="black_ar">&nbsp;<img
+						<td align="right" class="black_ar_t"><img
+							src="images/uIEnhancementImages/star.gif" alt="Mandatory"
+							width="6" height="6" hspace="0" vspace="0" align="absmiddle"/>&nbsp;<img
 							src="images/uIEnhancementImages/number_3.gif" alt="Number 3"
 							width="18" height="18" align="absmiddle"></td>
-						<td align="left" valign="top" class="black_ar"><label
+						<td align="left" class="black_ar_t"><label
 							for="protocolCoordinatorIds"><bean:message
 							key="user.role" /></label></td>
-						<td align="left" valign="top" class="black_ar"><select
+						<td align="left" class="black_ar_t"><select
 							class="formFieldSized18" id="roleIds"
 							onchange="getActionsForThisRole(this)"
 							onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
@@ -147,19 +165,21 @@ function updateCPTree()
 									String roleValue = ""
 									+ ((NameValueBean) roleList.get(i)).getValue();
 									String selected = "";
-									if (roleValue.equals("1")) {
-										selected = "SELECTED";
-									}
+							//		if (roleValue.equals("1")) {
+							//			selected = "SELECTED";
+							//		}
 							%>
-							<option value="<%=roleValue%>" <%=selected%> ><%=roleName%></option>
+							<option value="<%=roleValue%>"  ><%=roleName%></option>
 							<%
 							}
 							%>
 						</select></td>
-						<td align="right" valign="top" class="black_ar"><img
+						<td align="right"  class="black_ar_t"><img
+							src="images/uIEnhancementImages/star.gif" alt="Mandatory"
+							width="6" height="6" hspace="0" vspace="0" align="absmiddle"/>&nbsp;<img
 							src="images/uIEnhancementImages/number_4.gif" alt="Number 4"
 							width="18" height="18" align="absmiddle"></td>
-						<td align="left" valign="top" class="black_ar"><bean:message
+						<td align="left" class="black_ar_t"><bean:message
 							key="app.Privileges" /></td>
 						<td><select class="formFieldSized18" id="actionIds" size="4"
 							multiple="multiple">
@@ -181,15 +201,16 @@ function updateCPTree()
 				</td>
 			</tr>
 			<tr>
-				<td width="66%" class="dividerline">&nbsp;</td>
-				<td width="34%" class="dividerline">&nbsp;<html:button
-					property="addKeyValue" styleClass="blue_ar_b"
+				
+				<td width="97%" align="right" class="dividerline">&nbsp;<html:button
+					property="addKeyValue" styleClass="black_ar"
 					onclick="getUserPrivilegeSummary()">
-					<bean:message key="app.add" />
+					<bean:message key="buttons.submit" />
 				</html:button></td>
+				<td width="3%" class="dividerline">&nbsp;</td>
 			</tr>
-			<tr class="td_color_F7F7F7">
-				<td colspan="3" align="left" class="toptd"></td>
+			<tr>
+				<td colspan="2" align="left" class="bottomtd"></td>
 
 			</tr>
 
@@ -200,61 +221,70 @@ function updateCPTree()
 					key="assignPrivileges.userPriviledgeSummary" /></span></td>
 			</tr>
 			<tr class="td_color_F7F7F7">
-				<td colspan="3" align="left" class="toptd"></td>
+				<td colspan="2" align="left" class="toptd"></td>
 			</tr>
 
-			<tr class="td_color_F7F7F7">
+			<tr>
 				<td colspan="2">
-				<table width="100%" border="0" cellspacing="0" cellpadding="4">
+				<table width="100%" border="0" cellspacing="0" cellpadding="3">
 					<tr class="tableheading">
-						<td width="13%" class="black_ar_b"><label for="delete"
-							align="center"><bean:message key="app.select" /></label></td>
-						<td width="24%" class="black_ar_b"><bean:message
+						<td width="8%" class="black_ar_b"><label for="delete"
+							align="left"><bean:message key="app.select" /></label></td>
+						<td width="25%" class="black_ar_b" align="left"><bean:message
 							key="assignPrivileges.site(s)" /></td>
-						<td width="23%" class="black_ar_b"><bean:message
+						<td width="21%" class="black_ar_b" align="left"><bean:message
 							key="user.name" /></td>
-						<td width="20%" class="black_ar_b"><bean:message
+						<td width="18%" class="black_ar_b" align="left"><bean:message
 							key="user.role" /></td>
-						<td width="20%" class="black_ar_b"><bean:message
-							key="assignPrivileges.action(s)" /></td>
+						<td width="23%" class="black_ar_b" align="left"><bean:message
+							key="app.Privileges" /></td>
+						<td width="5%" class="black_ar_b">&nbsp;</td>
 					</tr>
 					<tr>
-						<td colspan="5">
-						<div
+						<td colspan="6" width="100%">
+						<div 
 							style="height: 80px; background-color: #ffffff;overflow: auto;">
 						<table border="0" width="100%" cellspacing="0" cellpadding="0">
 							<tbody id="summaryTableId">
 								<%
-							List list=(List)request.getAttribute("listOnLoad");
+							List list=(List)request.getAttribute(Constants.PRIVILEGE_DATA_LIST_ONLOAD);
 							if(list!=null){
 							int valueCounter=list.size();
 							for(int i=0;i<valueCounter;i++){
 								String chkName="chk_"+i;
 								String[] arr =(String [])(list.get(i));
 							%>
+							<%if(i%2!=0){%>
+								<tr id="<%=arr[4]%>"
+								 class="tabletd1">
+							<%}else{%>
 								<tr id="<%=arr[4]%>">
-									<td width="13%" class="black_ar">
+							<%}%>
+
+									<td width="8%" class="black_ar">
 									<input type='checkbox'
 										name='<%=chkName %>' id='<%=chkName %>'
 										onclick="enableDeleteButton(this)" /></td>
-									<td width="24%" class="black_ar" onmouseover="Tip('<%=arr[1]%>',WIDTH,200)">
+									<td width="25%" class="black_ar" onmouseover="Tip('<%=arr[1]%>',WIDTH,200)">
 									<% if(arr[1].length() >20){
 									arr[1]=arr[1].substring(0,17)+"...";
 									}
 								%><span><%=arr[1]%></span>
 									</td>
 
-									<td width="23%" class="black_ar" >
+									<td width="21%" class="black_ar" >
 									<span><%=arr[0]%></span></td>
-									<td width="20%" class="black_ar"><span><%=arr[2]%></span>
+									<td width="18%" class="black_ar"><span><%=arr[2]%></span>
 									</td>
 									
-									<td width="20%" class="black_ar" onmouseover="Tip('<%=arr[3]%>',WIDTH,200)">
+									<td width="23%" class="black_ar" onmouseover="Tip('<%=arr[3]%>',WIDTH,200)">
 									<% if(arr[3].length() >20){
 									arr[3]=arr[3].substring(0,17)+"...";
 									}
 								%>
 									<span><%=arr[3]%></span></td>
+
+									<td width="5%"><a href='#' class="view" onclick="editRow('<%=arr[4]%>')"><bean:message key="app.edit" /></a></td>
 								</tr>
 
 								<%
@@ -267,16 +297,14 @@ function updateCPTree()
 						</div>
 						</td>
 					</tr>
-					<tr class="tabletd1">
-						<td class="black_ar"><html:button property="deleteButton"
-							styleClass="blue_ar_b" onclick="deleteCheckedRows()"
+					<tr>
+						<td class="black_ar" colspan="6"><html:button property="deleteButton"
+							styleClass="black_ar" onclick="deleteCheckedRows()"
 							disabled="true">
 							<bean:message key="buttons.delete" />
 						</html:button></td>
-						<td valign="bottom">&nbsp;</td>
-						<td valign="bottom">&nbsp;</td>
-						<td valign="bottom">&nbsp;</td>
-						<td valign="bottom">&nbsp;</td>
+						
+						
 					</tr>
 				</table>
 				</td>
