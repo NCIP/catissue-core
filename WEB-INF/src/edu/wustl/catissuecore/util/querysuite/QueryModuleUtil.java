@@ -38,7 +38,7 @@ import edu.wustl.common.querysuite.exceptions.SqlException;
 import edu.wustl.common.querysuite.factory.SqlGeneratorFactory;
 import edu.wustl.common.querysuite.queryengine.impl.SqlGenerator;
 import edu.wustl.common.querysuite.queryobject.IConstraints;
-import edu.wustl.common.querysuite.queryobject.IExpressionId;
+import edu.wustl.common.querysuite.queryobject.IExpression;
 import edu.wustl.common.querysuite.queryobject.IOutputAttribute;
 import edu.wustl.common.querysuite.queryobject.IQuery;
 import edu.wustl.common.querysuite.queryobject.impl.Expression;
@@ -521,7 +521,7 @@ public  class QueryModuleUtil
 				}
 				Map<String, List<String>> spreadSheetDatamap = outputSpreadsheetBizLogic
 						.createSpreadsheetData(treeNo, node, sessionData, parentNodeId,
-								recordsPerPage, selectedColumnsMetadata,randomNumber,uniqueIdNodesMap,queryResultObjectDataBeanMap,hasConditionOnIdentifiedField,mainEntityMap);
+								recordsPerPage, selectedColumnsMetadata,randomNumber,uniqueIdNodesMap,queryResultObjectDataBeanMap,hasConditionOnIdentifiedField,mainEntityMap,query.getConstraints());
 
 				QuerySessionData querySessionData = (QuerySessionData) spreadSheetDatamap
 						.get(Constants.QUERY_SESSION_DATA);
@@ -577,17 +577,16 @@ public  class QueryModuleUtil
 	 * @param query
 	 * @return
 	 */
-	public static boolean checkIfRulePresentInDag(IQuery query) {
+	public static boolean checkIfRulePresentInDag(IQuery query) 
+	{
 		boolean isRulePresentInDag = false;
 
 		if (query != null)
 		{
 			IConstraints constraints = query.getConstraints();
-			Enumeration<IExpressionId> expressionIds = constraints.getExpressionIds();
-			while (expressionIds.hasMoreElements())
+			for(IExpression expression : constraints) 
 			{
-				IExpressionId id = expressionIds.nextElement();
-				if (((Expression) constraints.getExpression(id)).containsRule())
+				if (expression.containsRule())
 				{
 					isRulePresentInDag = true;
 					break;
@@ -609,28 +608,26 @@ public  class QueryModuleUtil
 		boolean isQueryChanged = false;
 		if(query != null && selectedColumnsMetadata != null)
 		{
+			List<Integer> expressionIdsInQuery = new ArrayList<Integer>();
 			IConstraints constraints = query.getConstraints();
-			Enumeration<IExpressionId> expressionsInQuery = constraints.getExpressionIds();
-			List<IExpressionId> expressionIdsInQuery = new ArrayList<IExpressionId>();
 			List<QueryOutputTreeAttributeMetadata> selectedAttributeMetaDataList = selectedColumnsMetadata.getSelectedAttributeMetaDataList();
-			while(expressionsInQuery.hasMoreElements())
+			for(IExpression expression : constraints) 
 			{
-				IExpressionId nextElement = expressionsInQuery.nextElement();
-				if (constraints.getExpression(nextElement).isInView())
-					expressionIdsInQuery.add(nextElement);
-			}
-			for(QueryOutputTreeAttributeMetadata element :selectedAttributeMetaDataList)
-			{
-				IExpressionId expressionId = element.getTreeDataNode().getExpressionId();
-				if(!expressionIdsInQuery.contains(expressionId))
+				if (expression.isInView())
 				{
-					isQueryChanged = true;
-					break;
+					expressionIdsInQuery.add(new Integer(expression.getExpressionId()));
 				}
 			}
-			
+				for(QueryOutputTreeAttributeMetadata element :selectedAttributeMetaDataList)
+				{
+					int expressionId = element.getTreeDataNode().getExpressionId();
+					if(!expressionIdsInQuery.contains(new Integer(expressionId)))
+					{
+						isQueryChanged = true;
+						break;
+					}
+				}
 		}
-		
 		if(isQueryChanged || selectedColumnsMetadata == null)
 		{
 			selectedColumnsMetadata = new SelectedColumnsMetadata();
@@ -638,7 +635,47 @@ public  class QueryModuleUtil
 		}
 		return selectedColumnsMetadata;
 	}
+	/**
+	 * @param query
+	 * @param session
+	 * @param isQueryChanged
+	 * @return
+	 *//*
+	private static SelectedColumnsMetadata getAppropriateSelectedColumnMetadata1
+	(IQuery query, SelectedColumnsMetadata selectedColumnsMetadata)
+	{
+	boolean isQueryChanged = false;
+	if(query != null && selectedColumnsMetadata != null)
+	{
+		IConstraints constraints = query.getConstraints();
+		Enumeration<IExpressionId> expressionsInQuery = constraints.getExpressionIds();
+		List<IExpressionId> expressionIdsInQuery = new ArrayList<IExpressionId>();
+		List<QueryOutputTreeAttributeMetadata> selectedAttributeMetaDataList = selectedColumnsMetadata.getSelectedAttributeMetaDataList();
+		while(expressionsInQuery.hasMoreElements())
+		{
+			IExpressionId nextElement = expressionsInQuery.nextElement();
+			if (constraints.getExpression(nextElement).isInView())
+				expressionIdsInQuery.add(nextElement);
+		}
+		for(QueryOutputTreeAttributeMetadata element :selectedAttributeMetaDataList)
+		{
+			IExpressionId expressionId = element.getTreeDataNode().getExpressionId();
+			if(!expressionIdsInQuery.contains(expressionId))
+			{
+				isQueryChanged = true;
+				break;
+			}
+		}
+		
+	}
 	
+	if(isQueryChanged || selectedColumnsMetadata == null)
+	{
+		selectedColumnsMetadata = new SelectedColumnsMetadata();
+		selectedColumnsMetadata.setDefinedView(false);
+	}
+	return selectedColumnsMetadata;
+}*/
 	/**
 	 * checks if the current view contains any orderable entity and if the 'id' attribute of the entity is 
 	 * included in the view.

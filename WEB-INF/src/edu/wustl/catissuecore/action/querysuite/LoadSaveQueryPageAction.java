@@ -1,8 +1,6 @@
 
 package edu.wustl.catissuecore.action.querysuite;
 
-import java.util.Enumeration;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -17,6 +15,8 @@ import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.bizlogic.querysuite.GenerateHtmlForAddLimitsBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
+import edu.wustl.common.querysuite.queryobject.IConstraints;
+import edu.wustl.common.querysuite.queryobject.IExpression;
 import edu.wustl.common.querysuite.queryobject.IQuery;
 import edu.wustl.common.querysuite.queryobject.impl.ParameterizedQuery;
 import edu.wustl.common.util.global.ApplicationProperties;
@@ -65,8 +65,8 @@ public class LoadSaveQueryPageAction extends BaseAction
 				savedQueryForm.setTitle(((ParameterizedQuery)queryObject).getName());
 			}
 			
-			Enumeration e = queryObject.getConstraints().getExpressionIds();
-			if(e.hasMoreElements())
+			IConstraints c = queryObject.getConstraints();
+			for(IExpression exp: c)
 			{
 				isDagEmpty = false;
 			}

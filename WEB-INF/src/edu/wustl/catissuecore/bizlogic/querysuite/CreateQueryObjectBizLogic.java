@@ -3,7 +3,6 @@ package edu.wustl.catissuecore.bizlogic.querysuite;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,10 +14,10 @@ import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.querysuite.QueryModuleConstants;
 import edu.wustl.common.querysuite.queryobject.ICondition;
 import edu.wustl.common.querysuite.queryobject.IConstraints;
 import edu.wustl.common.querysuite.queryobject.IExpression;
-import edu.wustl.common.querysuite.queryobject.IExpressionId;
 import edu.wustl.common.querysuite.queryobject.IExpressionOperand;
 import edu.wustl.common.querysuite.queryobject.IParameterizedCondition;
 import edu.wustl.common.querysuite.queryobject.IRule;
@@ -27,7 +26,6 @@ import edu.wustl.common.querysuite.queryobject.impl.ParameterizedCondition;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
-import edu.wustl.catissuecore.util.querysuite.QueryModuleConstants;
 
 /**
  * Creates Query Object as per the data filled by the user on AddLimits section.
@@ -351,29 +349,23 @@ public class CreateQueryObjectBizLogic
 		{
 			newConditions = createConditionsMap(queryInputString);
 		}
-		Enumeration<IExpressionId> expressionIds = constraints.getExpressionIds();
-		IExpression expression;
-		while (expressionIds.hasMoreElements())
-		{
-			expression = constraints.getExpression(expressionIds.nextElement());
+		for(IExpression expression : constraints) {
+		//Enumeration<IExpressionId> expressionIds = constraints.getExpressionIds();
+		//IExpression expression;
+//		while (expressionIds.hasMoreElements())
+//		{
+//			expression = constraints.getExpression(expressionIds.nextElement());
 			int no_of_oprds = expression.numberOfOperands();
 			IExpressionOperand operand;
 			for (int i = 0; i < no_of_oprds; i++)
 			{
 				operand = expression.getOperand(i);
-				if (!operand.isSubExpressionOperand())
-				{
 					if(operand instanceof IRule)
 					{
-						int expId = expression.getExpressionId().getInt();
+						int expId = expression.getExpressionId();
 						errorMessage = componentValues(displayNamesMap, errorMessage,
 							newConditions, expId,  ((IRule) operand).getConditions());
 					}
-					else
-					{
-						errorMessage = "Could not save Temporal Query, as this feature is not yet Implemented";
-					}
-				}
 			}
 		}
 		return errorMessage;

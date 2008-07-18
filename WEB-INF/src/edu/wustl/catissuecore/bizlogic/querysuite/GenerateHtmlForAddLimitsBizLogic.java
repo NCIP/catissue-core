@@ -4,7 +4,6 @@ package edu.wustl.catissuecore.bizlogic.querysuite;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -32,7 +31,6 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.querysuite.queryobject.ICondition;
 import edu.wustl.common.querysuite.queryobject.IConstraints;
 import edu.wustl.common.querysuite.queryobject.IExpression;
-import edu.wustl.common.querysuite.queryobject.IExpressionId;
 import edu.wustl.common.querysuite.queryobject.IExpressionOperand;
 import edu.wustl.common.querysuite.queryobject.IQuery;
 import edu.wustl.common.querysuite.queryobject.IRule;
@@ -101,16 +99,16 @@ public class GenerateHtmlForAddLimitsBizLogic
 	public String getHTMLForSavedQuery(IQuery queryObject, boolean isShowAll, String forPage)
 	{
 		String htmlString = "";
-		Map<IExpressionId, Map<EntityInterface, List<ICondition>>> expressionMap = new HashMap<IExpressionId, Map<EntityInterface, List<ICondition>>>();
+		Map<Integer, Map<EntityInterface, List<ICondition>>> expressionMap = new HashMap<Integer, Map<EntityInterface, List<ICondition>>>();
 		IConstraints constraints = queryObject.getConstraints();
-		Enumeration<IExpressionId> expressionIds = constraints.getExpressionIds();
-		while (expressionIds.hasMoreElements())
-		{
-			IExpression expression = constraints.getExpression(expressionIds.nextElement());
+		//Enumeration<Integer> expressionIds = constraints.getExpressionIds();
+		for(IExpression expression : constraints) {
+		//while (expressionIds.hasMoreElements())
+		//{
+			//IExpression expression = constraints.getExpression(expressionIds.nextElement());
 			for (int i = 0; i < expression.numberOfOperands(); i++)
 			{
 				IExpressionOperand operand = expression.getOperand(i);
-				if (!operand.isSubExpressionOperand())
 				{ 
 					if(operand instanceof IRule)
 					{
@@ -155,7 +153,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 	 */
 	public StringBuffer generateSaveQueryForEntity(int expressionID, EntityInterface entity,
 			List<ICondition> conditions, boolean isShowAll, String forPage, boolean isTopButton,
-			Map<EntityInterface, List<IExpressionId>> entityList)
+			Map<EntityInterface, List<Integer>> entityList)
 	{
 		setExpressionId(expressionID);
 		StringBuffer generatedHTML = new StringBuffer();
@@ -176,7 +174,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 		if (!attributeCollection.isEmpty())
 		{
 			// get the list of dag ids for the corresponding entity
-			List<IExpressionId> entityDagId = (List<IExpressionId>)entityList.get(entity);
+			List<Integer> entityDagId = (List<Integer>)entityList.get(entity);
 			String DAGNodeId = "";		// Converting the dagId to string
 			if (entityDagId.size() > 1)
 			{
@@ -355,7 +353,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 	 */
 
 	public String generateHTMLForSavedQuery(
-			Map<IExpressionId, Map<EntityInterface, List<ICondition>>> expressionMap, boolean isShowAll,
+			Map<Integer, Map<EntityInterface, List<ICondition>>>  expressionMap, boolean isShowAll,
 			String forPage)
 	{
 		StringBuffer generatedHTML = new StringBuffer(
@@ -401,12 +399,12 @@ public class GenerateHtmlForAddLimitsBizLogic
 		else
 		{
 			//get the map which holds the list of all dag ids / expression ids for a particular entity
-			Map<EntityInterface, List<IExpressionId>> entityExpressionIdListMap = 
+			Map<EntityInterface, List<Integer>> entityExpressionIdListMap = 
 																	getEntityExpressionIdListMap(expressionMap);
-			Iterator<IExpressionId> it = expressionMap.keySet().iterator();
+			Iterator<Integer> it = expressionMap.keySet().iterator();
 			while (it.hasNext())
 			{
-				IExpressionId expressionId = (IExpressionId) it.next();
+				Integer expressionId = (Integer) it.next();
 				entityConditionMap = expressionMap.get(expressionId);
 				if (entityConditionMap.isEmpty())
 				{
@@ -417,9 +415,9 @@ public class GenerateHtmlForAddLimitsBizLogic
 				{
 					EntityInterface entity = (EntityInterface) it2.next();
 					List<ICondition> conditions = entityConditionMap.get(entity);
-					generatedHTML.append(generateSaveQueryForEntity(expressionId.getInt(), entity,
+					generatedHTML.append(generateSaveQueryForEntity(expressionId.intValue(), entity,
 							conditions, isShowAll, forPage, false, entityExpressionIdListMap));
-					expressionEntityString = expressionEntityString + expressionId.getInt() + ":"
+					expressionEntityString = expressionEntityString + expressionId.intValue() + ":"
 							+ Utility.parseClassName(entity.getName()) + ";";
 
 				}
@@ -444,33 +442,33 @@ public class GenerateHtmlForAddLimitsBizLogic
 	 * @param expressionMap
 	 * @return map consisting of the entity and their corresponding expression ids
 	 */
-	private Map<EntityInterface, List<IExpressionId>> getEntityExpressionIdListMap(
-			Map<IExpressionId, Map<EntityInterface, List<ICondition>>> expressionMap) 
+	private Map<EntityInterface, List<Integer>> getEntityExpressionIdListMap(
+			Map<Integer, Map<EntityInterface, List<ICondition>>> expressionMap) 
 	{
-			Map<EntityInterface, List<IExpressionId>> entityExpressionIdMap = new HashMap<EntityInterface, 
-																					List<IExpressionId>>();
-			Iterator<IExpressionId> outerMapIterator = expressionMap.keySet().iterator();
+			Map<EntityInterface, List<Integer>> entityExpressionIdMap = new HashMap<EntityInterface, 
+																					List<Integer>>();
+			Iterator<Integer> outerMapIterator = expressionMap.keySet().iterator();
 			while (outerMapIterator.hasNext())
 			{
-				IExpressionId expressionId = (IExpressionId) outerMapIterator.next();
+				Integer expressionId = (Integer) outerMapIterator.next();
 				Map<EntityInterface, List<ICondition>> entityMap = expressionMap.get(expressionId);
 				if (!entityMap.isEmpty())
 				{
 					Iterator<EntityInterface> innerMapIterator = entityMap.keySet().iterator();
 					while (innerMapIterator.hasNext())
 					{
-						List<IExpressionId> dagIdList = null;
+						List<Integer> dagIdList = null;
 						EntityInterface entity = (EntityInterface)innerMapIterator.next();
 						if (!entityExpressionIdMap.containsKey(entity))
 						{
 							//if the entity is not present in the map create new list and add it to map
-							dagIdList = new ArrayList<IExpressionId>();
+							dagIdList = new ArrayList<Integer>();
 							dagIdList.add(expressionId);
 							entityExpressionIdMap.put(entity, dagIdList);
 							continue;
 						}		
 						//if the entity is present in the map add the dag id to the existing list 
-						dagIdList = (List<IExpressionId>)entityExpressionIdMap.get(entity);
+						dagIdList = (List<Integer>)entityExpressionIdMap.get(entity);
 						dagIdList.add(expressionId);
 						entityExpressionIdMap.put(entity, dagIdList);
 					}

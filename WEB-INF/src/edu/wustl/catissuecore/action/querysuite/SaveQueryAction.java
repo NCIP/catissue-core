@@ -114,10 +114,6 @@ public class SaveQueryAction extends BaseAction
 				Logger.out.error(userNotAuthorizedException.getMessage(),
 						userNotAuthorizedException);
 			}
-		}else
-		{
-			String errorMessage = ApplicationProperties.getValue("save.query.tq.error");
-			setActionError(request,errorMessage);
 		}
 	}
 		else

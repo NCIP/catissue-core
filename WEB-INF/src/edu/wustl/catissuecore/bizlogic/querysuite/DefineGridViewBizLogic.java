@@ -17,8 +17,10 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.querysuite.QueryCSMUtil;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.QueryResultObjectDataBean;
+import edu.wustl.common.querysuite.queryobject.IConstraints;
 import edu.wustl.common.querysuite.queryobject.IOutputAttribute;
 import edu.wustl.common.querysuite.queryobject.IOutputEntity;
+import edu.wustl.common.querysuite.queryobject.IQuery;
 import edu.wustl.common.querysuite.queryobject.impl.OutputAttribute;
 import edu.wustl.common.querysuite.queryobject.impl.OutputTreeDataNode;
 import edu.wustl.common.querysuite.queryobject.impl.metadata.QueryOutputTreeAttributeMetadata;
@@ -187,9 +189,10 @@ public class DefineGridViewBizLogic
 	 * returns list of seletced columns
 	 * @param categorySearchForm form
 	 * @param uniqueIdNodesMap map of id and Node
+	 * @param constraints 
 	 * @return SelectedColumnsMetadata SelectedColumnsMetadata
 	 */
-	public void getSelectedColumnsMetadata(CategorySearchForm categorySearchForm, Map<String, OutputTreeDataNode> uniqueIdNodesMap, SelectedColumnsMetadata selectedColumnsMetadata)
+	public void getSelectedColumnsMetadata(CategorySearchForm categorySearchForm, Map<String, OutputTreeDataNode> uniqueIdNodesMap, SelectedColumnsMetadata selectedColumnsMetadata, IConstraints constraints)
 	{ 
 		String[] selectedColumnIds = categorySearchForm.getSelectedColumnNames();
 		List<QueryOutputTreeAttributeMetadata> attribureMetadataList = new ArrayList<QueryOutputTreeAttributeMetadata>();
@@ -199,8 +202,8 @@ public class DefineGridViewBizLogic
 		{
 			IOutputAttribute attr= null;
 			String columnId = selectedColumnIds[i];
-			String[] split = columnId.split(Constants.EXPRESSION_ID_SEPARATOR);
-			String expressionId = split[0] + Constants.EXPRESSION_ID_SEPARATOR+ split[1];
+			String[] split = columnId.split(Constants.EXPRESSION_ID_SEPARATOR); 
+			String expressionId = split[0] ;//+ Constants.EXPRESSION_ID_SEPARATOR+ split[1];
 			OutputTreeDataNode outputTreeDataNode = getMatchingOutputTreeDataNode(uniqueIdNodesMap, expressionId);
 			if(outputTreeDataNode != null)
 			{			
@@ -210,7 +213,7 @@ public class DefineGridViewBizLogic
 					if(attributeMetaData.getUniqueId().equalsIgnoreCase(columnId))
 					{
 						attribureMetadataList.add(attributeMetaData);
-						attr= new OutputAttribute(outputTreeDataNode.getExpressionId(),attributeMetaData.getAttribute());
+						attr= new OutputAttribute(constraints.getExpression(outputTreeDataNode.getExpressionId()),attributeMetaData.getAttribute());
 						outputAttributeList.add(attr);
 						NameValueBean nameValueBean = new NameValueBean(attributeMetaData.getDisplayName(),attributeMetaData.getUniqueId());
 						selectedColumnNameValue.add(nameValueBean);
@@ -238,7 +241,7 @@ public class DefineGridViewBizLogic
 			if(next instanceof String)
 			{
 				outputTreeDataNode = uniqueIdNodesMap.get(next);
-				if(outputTreeDataNode.getExpressionId().toString().equals(expressionId))
+				if(new Integer(outputTreeDataNode.getExpressionId()).toString().equals(expressionId))
 				{
 					break;
 				}
@@ -367,11 +370,12 @@ public class DefineGridViewBizLogic
 	}
 	/**
 	 * returns list of seletced columns
+	 * @param constraints 
 	 * @param categorySearchForm form
 	 * @param uniqueIdNodesMap map of id and Node
 	 * @return SelectedColumnsMetadata SelectedColumnsMetadata
 	 */
-	public SelectedColumnsMetadata getColumnsMetadataForSelectedNode(OutputTreeDataNode outputTreeDataNode,SelectedColumnsMetadata selectedColumnsMetadata)
+	public SelectedColumnsMetadata getColumnsMetadataForSelectedNode(OutputTreeDataNode outputTreeDataNode,SelectedColumnsMetadata selectedColumnsMetadata, IConstraints constraints)
 	{
 		if(outputTreeDataNode != null)
 		{
@@ -383,7 +387,7 @@ public class DefineGridViewBizLogic
 				for(QueryOutputTreeAttributeMetadata metadata:attributes)
 				{
 					AttributeInterface attribute = metadata.getAttribute();
-					OutputAttribute attr = new OutputAttribute(outputTreeDataNode.getExpressionId(),attribute);
+					OutputAttribute attr = new OutputAttribute(constraints.getExpression(outputTreeDataNode.getExpressionId()),attribute);
 					selectedOutputAttributeList.add(attr);
 				}
 				selectedColumnsMetadata.setSelectedOutputAttributeList(selectedOutputAttributeList);

@@ -648,10 +648,12 @@
 			<transaction src="${common.sql.dir}/insert_default_data.sql" />
 			<transaction src="${common.sql.dir}/indexes.sql" />
 			<transaction src="${mysql.sql.dir}/dynamicextension.sql" />
+			<transaction src="${mysql.sql.dir}/query/metadata_schema_script.sql" /> 
 			<transaction src="${mysql.sql.dir}/query/query_schema_script.sql" />
 			<transaction src="${mysql.sql.dir}/query/caB2B Table Generation Script.sql" />
 			<!-- <transaction src="${mysql.sql.dir}/query/csm.sql" /> -->
-			<transaction  src="${dbupgrade.sql.dir}/MySql/CAModel.sql"/>
+			<transaction src="${dbupgrade.sql.dir}/MySql/CAModel.sql"/>
+
 			<transaction>commit;</transaction>
 			<classpath>
 				<fileset dir="${lib.dir}">
@@ -724,6 +726,7 @@
 			<transaction src="${common.sql.dir}/indexes.sql" />
 			<transaction src="${oracle.sql.dir}/dynamicextension.sql" />
 			<transaction src="${oracle.sql.dir}/query/caB2B Table Generation Script.sql" />
+			<transaction src="${oracle.sql.dir}/query/metadata_schema_script.sql" /> 
 			<transaction src="${oracle.sql.dir}/query/query_schema_script.sql" />
 			<transaction>commit;</transaction>
 			<classpath>

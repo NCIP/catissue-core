@@ -83,14 +83,14 @@ public class ShowGridAction extends BaseAction
 				spreadSheetDatamap = outputSpreadsheetBizLogic.processSpreadsheetForLabelNode(
 						uniqueIdNodesMap, rootOutputTreeNodeList, columnMap, sessionData,
 						idOfClickedNode, recordsPerPage, selectedColumnsMetadata, randomNumber,
-						hasConditionOnIdentifiedField, queryResultObjectDataMap, mainEntityMap);
+						hasConditionOnIdentifiedField, queryResultObjectDataMap, mainEntityMap,query.getConstraints());
 			}
 			else
 			{
 				spreadSheetDatamap = outputSpreadsheetBizLogic.processSpreadsheetForDataNode(
 						uniqueIdNodesMap, rootOutputTreeNodeList, sessionData, actualParentNodeId,
 						recordsPerPage, selectedColumnsMetadata, randomNumber,
-						hasConditionOnIdentifiedField, queryResultObjectDataMap, mainEntityMap);
+						hasConditionOnIdentifiedField, queryResultObjectDataMap, mainEntityMap,query.getConstraints());
 			}
 			spreadSheetDatamap.put(Constants.MAIN_ENTITY_MAP, mainEntityMap);
 			request.getSession().setAttribute(Constants.ENTITY_IDS_MAP,spreadSheetDatamap.get(Constants.ENTITY_IDS_MAP));

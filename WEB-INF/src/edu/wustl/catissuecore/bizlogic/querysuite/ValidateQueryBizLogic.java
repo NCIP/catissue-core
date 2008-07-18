@@ -17,7 +17,6 @@ import edu.wustl.common.querysuite.factory.SqlGeneratorFactory;
 import edu.wustl.common.querysuite.queryengine.impl.SqlGenerator;
 import edu.wustl.common.querysuite.queryobject.IConstraints;
 import edu.wustl.common.querysuite.queryobject.IExpression;
-import edu.wustl.common.querysuite.queryobject.IExpressionId;
 import edu.wustl.common.querysuite.queryobject.IQuery;
 import edu.wustl.common.querysuite.queryobject.impl.OutputTreeDataNode;
 import edu.wustl.common.querysuite.queryobject.util.QueryObjectProcessor;
@@ -54,12 +53,14 @@ public class ValidateQueryBizLogic {
 			return validationMessage;
 		}
 		IConstraints constraints = query.getConstraints();
-		Enumeration<IExpressionId> expressionIds = constraints.getExpressionIds();
 		boolean noExpressionInView = true;
-		while(expressionIds.hasMoreElements())
+		for(IExpression expression : constraints)
 		{
-			IExpressionId nextElement = expressionIds.nextElement();	
-			IExpression expression = constraints.getExpression(nextElement);
+		
+		//while(expressionIds.hasMoreElements())
+		//{
+			//IExpressionId nextElement = expressionIds.nextElement();	
+			//IExpression expression = constraints.getExpression(nextElement);
 			if(expression.isInView())
 			{
 				noExpressionInView = false;
