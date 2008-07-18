@@ -39,37 +39,44 @@ function onClickCollected(Obj)
 {
 	var type='';
 	var state='';
+	var flagOfParentCall=true;
 	//this if loop decides that the checkboxes need to be checked or unchecked
 	if(Obj.checked == true)
 		{
 			type= 'aliquot';
 			state='checkUnableState';
-			uncheckDisable(type,state)
+			uncheckDisable(type,state,flagOfParentCall)
 			type= 'derived';
-			uncheckDisable(type,state);
+			
+			uncheckDisable(type,state,flagOfParentCall);
 		}
 	else
 		{
 			 type= 'aliquot';
 			 state='uncheckDisableState';
-			 uncheckDisable(type,state);
+			 uncheckDisable(type,state,flagOfParentCall);
 			 type= 'derived';
-			 uncheckDisable(type,state);
+			
+			 uncheckDisable(type,state,flagOfParentCall);
 		
 		}
 
 }
-function uncheckDisable(type,state)
+function uncheckDisable(type,state,flagOfParentCall)
 {
+	
 	// the identifier decides the hidden fields to be considered
 	var identifier='';
+	
 	if(type == "aliquot")
 		{
 			identifier="disabledAliquots";
+			var CollectedCheckBox = document.getElementById("aliquotCheckBox");
 		}
 	else if(type == "derived")
 		{
 			identifier="disabledDerivatives";
+			var CollectedCheckBox = document.getElementById("derivedCheckBox");
 		}
 		var hiddenFields= document.getElementsByTagName("input");
 		var index = new Array(); 
@@ -111,11 +118,21 @@ function uncheckDisable(type,state)
 					var element = document.getElementsByName(elementName)[0];
 						if(state=='uncheckDisableState')
 						{
+							if(CollectedCheckBox != null && flagOfParentCall == true)
+							{
+								CollectedCheckBox.checked = false;
+								CollectedCheckBox.disabled = true;
+							}
 						element.checked = false;
 						element.disabled = true;
 						}
 						else if(state=='checkUnableState')
 						{
+							if(CollectedCheckBox != null && flagOfParentCall == true)
+							{
+								CollectedCheckBox.checked = true;
+								CollectedCheckBox.disabled = false;
+							}
 						element.checked = true;
 						element.disabled = false;
 						}
@@ -124,4 +141,37 @@ function uncheckDisable(type,state)
 				}
 			}
 			while(chkCount>0);
+}
+function applyToAlquots()
+{
+	
+var v = document.getElementById("aliquotCheckBox");
+var type="aliquot";
+var flagOfParentCall = false;
+
+if(v.checked == true)
+	{
+	var state = "checkUnableState";
+	}
+	else
+	{
+var state= "uncheckDisableState";
+	}
+uncheckDisable(type,state,flagOfParentCall);
+}
+function applyToDerived()
+{
+	
+var v = document.getElementById("derivedCheckBox");
+var type="derived";
+var flagOfParentCall = false;
+if(v.checked == true)
+	{
+	var state = "checkUnableState";
+	}
+	else
+	{
+var state= "uncheckDisableState";
+	}
+uncheckDisable(type,state,flagOfParentCall);
 }

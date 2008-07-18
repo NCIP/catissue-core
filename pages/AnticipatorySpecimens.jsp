@@ -248,6 +248,7 @@
                     <td width="10%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Quantity"/></td>
                     <td width="10%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Concentration"/></td>
                     <td width="27%" class="black_ar_b" nowrap><bean:message key="anticipatorySpecimen.Location"/><input id="chkAliquot" type="checkbox" onClick="ApplyToAll(this,'aliquot')"/>Apply First to All </td>
+                    <td><input type="checkbox" value="check" id="aliquotCheckBox" checked="true" onclick="applyToAlquots()"/></td>
                     <td width="10%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Collected"/></td>
                   </tr>
 					<md:genericSpecimenDetails columnHeaderListName="subSpecimenColHeaderList" formName="viewSpecimenSummaryForm" dataListName="aliquotList" dataListType="Aliquot" columnListName="columnListName" isReadOnly="false" displayColumnListName="dispColumnsList" />
@@ -275,6 +276,7 @@
 						<td width="10%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Quantity"/></td>
 						<td width="10%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Concentration"/></td>
 						<td width="27%" class="black_ar_b" nowrap><bean:message key="anticipatorySpecimen.Location"/><input id="chkDrived" type="checkbox" onClick="ApplyToAll(this,'derived')"/>Apply First to All</td>
+						<td><input type="checkbox" value="check" id="derivedCheckBox" checked="true" onclick="applyToDerived()"/></td>
 						<td width="10%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Collected"/></td>
 					</tr>
 					<md:genericSpecimenDetails columnHeaderListName="subSpecimenColHeaderList" formName="viewSpecimenSummaryForm" dataListName="derivedList" dataListType="Derived" columnListName="columnListName" isReadOnly="false" displayColumnListName="dispColumnsList" />

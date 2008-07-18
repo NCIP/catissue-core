@@ -90,6 +90,7 @@ public class GenericSpecimenDetailsTag extends TagSupport
 	private List dataList = null;
 	private boolean showParentId = false;
 	private String elementPrefixPart1="";
+	private String functionCall="";
 	
 	SpecimenDetailsInfo specimenSummaryForm = null;
 //	--------------- Attribute Section end ------------
@@ -202,6 +203,7 @@ public class GenericSpecimenDetailsTag extends TagSupport
 		showParentId = false;
 		elementPrefixPart1="";
 		specimenSummaryForm = null;
+		functionCall = "";
 		
 		return EVAL_PAGE;
 	}
@@ -336,6 +338,8 @@ public class GenericSpecimenDetailsTag extends TagSupport
 		{
 			l = dataList;
 		}
+		if(dataListType.equalsIgnoreCase(dataListTypes[0]))
+			functionCall = "onclick=\"onClickCollected(this)\"";
 		return l;
 	}
 	
@@ -794,10 +798,10 @@ public class GenericSpecimenDetailsTag extends TagSupport
 				 else
 				 {
 					 if(Constants.TRUE.equalsIgnoreCase(nameValue[1]))
-						 sb.append("<input type=\"checkbox\" name=\""+nameValue[0]+"\" value=\"on\" checked=\"checked\" onclick=\"onClickCollected(this)\">");
+						 sb.append("<input type=\"checkbox\" name=\""+nameValue[0]+"\" value=\"on\" checked=\"checked\" "+functionCall+">");
 					 else
-						 sb.append("<input type=\"checkbox\" name=\""+nameValue[0]+"\" value=\"on\" onclick=\"onClickCollected(this)\">");					
-				 }
+						 sb.append("<input type=\"checkbox\" name=\""+nameValue[0]+"\" value=\"on\" "+functionCall+">");
+				}
 			 }
 			 else
 	 			 sb.append(getHTMLFormattedValue(""));
