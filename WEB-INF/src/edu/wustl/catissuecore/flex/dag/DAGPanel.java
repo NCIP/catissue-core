@@ -1,5 +1,6 @@
 package edu.wustl.catissuecore.flex.dag;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -359,9 +360,15 @@ public class DAGPanel {
 				{
 					//It will be a date, We need to create a Literal
 					if(timeValue != null) {
-						Date time = Calendar.getInstance().getTime();
+						try {
+							Date date = Utility.parseDate(timeValue, Constants.DATE_FORMAT);
+							dateLiteral = QueryObjectFactory.createDateLiteral(new java.sql.Date(date.getTime()));
+							} catch (ParseException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+							System.out.println("Error occurred in parsing date");
+						}
 						
-						dateLiteral = QueryObjectFactory.createDateLiteral(new java.sql.Date(time.getTime()));
 					}
 				}
 				
