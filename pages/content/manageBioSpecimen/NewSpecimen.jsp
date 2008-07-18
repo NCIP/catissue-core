@@ -168,32 +168,47 @@
 
 	}
 	
-	function onCheckboxButtonClick(chkBox)
+	function onCheckboxButtonClick(radioButton)
 		{
-			var aliquotCountTextBox  = document.getElementById("noOfAliquots");
+			var childSpecimenCount  = document.getElementById("noOfAliquots");
 			var qtyPerAliquotTextBox = document.getElementById("quantityPerAliquot");
+			var countForDerive=document.getElementById("derivedDiv");
+			var countForAliquot=document.getElementById("aliquotDiv");
 			
-			if(chkBox.checked)
+
+			if(radioButton.value==1)
 			{
-				aliquotCountTextBox.disabled = false;
-				qtyPerAliquotTextBox.disabled = false;				
-				document.forms[0].deriveButton.disabled=true;
-				document.forms[0].moreButton.disabled=true;				
-				document.forms[0].noOfAliquots.disabled=false;
-				document.forms[0].quantityPerAliquot.disabled=false;
-				document.forms[0].addToCart.disabled=true;
+				childSpecimenCount.disabled = true;
+				qtyPerAliquotTextBox.disabled = true;	
+				countForDerive.style.display="none";
+				countForAliquot.style.display="block";
+				//document.forms[0].deriveButton.disabled=true;
+				//document.forms[0].moreButton.disabled=true;				
+				//document.forms[0].noOfAliquots.disabled=false;
+				//document.forms[0].quantityPerAliquot.disabled=false;
+				//document.forms[0].addToCart.disabled=true;
 				
 								
 			}
+			else if(radioButton.value==2)
+			{
+				
+				childSpecimenCount.disabled = false;
+				qtyPerAliquotTextBox.disabled = false;	
+				countForDerive.style.display="none";
+				countForAliquot.style.display="block";
+				//document.forms[0].deriveButton.disabled=false;
+				//document.forms[0].moreButton.disabled=false;				
+				//document.forms[0].noOfAliquots.disabled=true;
+				//document.forms[0].quantityPerAliquot.disabled=true;
+				//document.forms[0].addToCart.disabled=false;
+			}
 			else
 			{
-				aliquotCountTextBox.disabled = true;
-				qtyPerAliquotTextBox.disabled = true;				
-				document.forms[0].deriveButton.disabled=false;
-				document.forms[0].moreButton.disabled=false;				
-				document.forms[0].noOfAliquots.disabled=true;
-				document.forms[0].quantityPerAliquot.disabled=true;
-				document.forms[0].addToCart.disabled=false;
+				childSpecimenCount.disabled = false;
+				qtyPerAliquotTextBox.disabled = true;
+				countForDerive.style.display="block";
+				countForAliquot.style.display="none";
 			}
 		}
 		
@@ -212,15 +227,74 @@
 				setSubmittedFor("ForwardTo",'addSpecimenToCart');
 			
 		}
+		
+		function onDeriveSubmit()
+		{
+		var operation = document.forms[0].operation.value;
+		
+			if(document.getElementById("deriveChk").checked == true)
+			{
+				if(document.getElementById("numberOfSpecimens").value > 1)
+				{
+					if(operation == "add")
+					{
+						setSubmitted("ForwardTo","CPQueryPrintSpecimenAdd","deriveMultiple");
+						confirmDisable("<%=formName%>","document.forms[0].activityStatus");
+					}
+					else
+					{
+					setSubmitted("ForwardTo","CPQueryPrintSpecimenEdit","deriveMultiple");
+					confirmDisable("<%=formName%>","document.forms[0].activityStatus");
+					}
+					
+					
+				}
+				else
+				{
+					if(operation == "add")
+					{
+						setSubmitted("ForwardTo","CPQueryPrintSpecimenAdd","createNew");
+						confirmDisable("<%=formName%>","document.forms[0].activityStatus");
+					}
+					else
+					{
+						setSubmitted("ForwardTo","CPQueryPrintSpecimenEdit","createNew");
+						confirmDisable("<%=formName%>","document.forms[0].activityStatus");
+					}
+					
+				}
+
+
+			}
+			else
+			{
+				if(operation =="add")
+			onNormalSubmit();
+				else
+				{
+				<%	ConsentTierData consentForm =(ConsentTierData)form;
+				List consentTier=(List)consentForm.getConsentTiers();
+				
+				if(consentTier.size()>0)
+				{%>
+					popupWindow("<%=consentTier.size()%>");
+				<%}%>
+					onNormalSubmit()
+					
+				}
+			}
+		}
+
 		function onNormalSubmit()
 		{
+		var operation = document.forms[0].operation.value;
 			
 			var checked = false;
-			if(document.forms[0].checkedButton != null)
+			if(document.getElementById("aliquotChk").checked == true)
 			{
-			   checked = document.forms[0].checkedButton.checked;
+			   checked = true;
 			}
-			var operation = document.forms[0].operation.value;
+			
            
 			var temp = "<%=frdTo%>";
 			//Bug ID: 4040(Virender)
@@ -235,7 +309,8 @@
 					}
 					else
 					{
-					    setSubmitted('ForwardTo','CPQueryPrintSpecimenAdd','pageOfCreateAliquot');
+					   
+						setSubmitted('ForwardTo','CPQueryPrintSpecimenAdd','pageOfCreateAliquot');
                     }
 					<%
 					actionToCall = "NewSpecimenAdd.do";
@@ -323,6 +398,7 @@
 		function onCollOrClassChange(element)
 		{			
 			var specimenCollGroupElement = document.getElementById("specimenCollectionGroupName");
+			
 			var classNameElement = document.getElementById("className").value;
 			classNameElement = trim(classNameElement);
 			var classSet = false;
@@ -594,64 +670,46 @@
     // Consent Tracking Module Virender mehta	
 	function switchToTab(selectedTab)
 	{
-		var operation = document.forms[0].operation.value;
-		var displayKey="block";
-		var showAlways="block";
-		if(!document.all)
+		var switchImg1=document.getElementById("specimenDetailsTab");
+		var switchImg2=document.getElementById("consentViewTab");
+		if(selectedTab=="specimenDetailsTab")
 		{
-			displayKey="table";
-			showAlways="table";
+			document.getElementById("consentTable").style.display='none';
+			document.getElementById("mainTable").style.display='block';
+			switchImg1.innerHTML="<img src='images/uIEnhancementImages/tab_specimen_details1.gif' alt='Specimen Details' width='126' height='22' border='0'>";
+			switchImg2.innerHTML="<img src='images/uIEnhancementImages/tab_consents2.gif' alt='Consents' width='76' height='22' border='0'>";
 		}
+		else
+		{
 			
-		var displayTable=displayKey;
-		var tabSelected="none";
-		if(selectedTab=="newSpecimenTab")
-		{
-			tabSelected=displayKey;
-			displayTable="none";
-		}	
-		if(operation=="add")
-		{
-			var display4=document.getElementById('collectionEvent');
-			display4.style.display=tabSelected;
-		}
-		var display=document.getElementById('addSpecimen');
-		display.style.display=tabSelected;
-		
-		var display2=document.getElementById('externalIdentifiersTable'); 
-		display2.style.display=tabSelected;
-			
-		var display3=document.getElementById('bioHazardsTable'); 
-		display3.style.display=tabSelected;
-	
-		var displayConsentTable=document.getElementById('consentTable');
-		if(displayConsentTable!=null)
-		{
-			displayConsentTable.style.display=displayTable;
+			document.getElementById("consentTable").style.display='block';
+			document.getElementById("mainTable").style.display='none';
+			switchImg2.innerHTML="<img src='images/uIEnhancementImages/tab_consents1.gif' alt='Consents' width='76' height='22' border='0'>";
+			switchImg1.innerHTML="<img src='images/uIEnhancementImages/tab_specimen_details2.gif' alt='Specimen Details' width='126' height='22' border='0'>";
 		}
 		
-		var display5=document.getElementById('specimenPageButton');
-		display5.style.display=showAlways;
-				
-		var aliquotTable=document.getElementById('aliquotId');
-		aliquotTable.style.display=tabSelected;
+	}
 
-		var display6=document.getElementById('multipleDerivativeTbl'); 
-		display6.style.display=tabSelected;
+	function switchToNewTab(selectedTab)
+	{
+		specimenImage=document.getElementById("newSpecimenTab");
+		consentImage=document.getElementById("newConsentTab");
+		
+		if(selectedTab == "newSpecimenTab")
+		{
+			document.getElementById("consentTable").style.display='none';
+			document.getElementById("mainTable").style.display='block';
+			specimenImage.innerHTML="<img src='images/uIEnhancementImages/new_specimen.gif' alt='Specimen Details'  width='115' height='22' border='0'>";
+			consentImage.innerHTML="<img src='images/uIEnhancementImages/tab_consents2.gif' alt='Consents' width='76' height='22' border='0'>";
+		}
+		else
+		{
+			document.getElementById("consentTable").style.display='block';
+			document.getElementById("mainTable").style.display='none';
+			specimenImage.innerHTML="<img src='images/uIEnhancementImages/new_specimen.gif' alt='Specimen Details'  width='115' height='22' border='0'>";
+			consentImage.innerHTML="<img src='images/uIEnhancementImages/tab_consents1.gif' alt='Consents' width='76' height='22' border='0'>";
+		}
 
-				
-		var collectionTab=document.getElementById('newSpecimenTab');
-		var consentTab=document.getElementById('consentTab');
-		
-		if(selectedTab=="newSpecimenTab")
-		{
-			updateTab(newSpecimenTab,consentTab);
-		}
-		else		
-		{
-			updateTab(consentTab,newSpecimenTab);
-		}
-		
 	}
 	
 	//This function is for changing the behaviour of TABs
@@ -669,7 +727,7 @@
 		//This function will Switch tab to newSpecimen page
 		function newspecimenPage()
 		{
-			switchToTab("newSpecimenTab");
+			switchToTab("specimenDetailsTab");
 		}
 	
 		//This function will switch page to consentPage
@@ -678,6 +736,16 @@
 			checkForConsents();
 		}
 		
+		function newSpecimenTab()
+		{
+			switchToNewTab("newSpecimenTab");
+		}
+
+		function newConsentTab()
+		{
+			switchToNewTab("newConsentTab");
+		}
+
 		function checkForConsents()
 		{
 			<%
@@ -732,7 +800,7 @@
 
 		function setSubmitted(forwardTo,printaction,nextforwardTo)
 		{
-				
+				//alert(forwardTo+"   "+printaction+"    "+nextforwardTo);
 			var printFlag = document.getElementById("printCheckbox");
 				
 			if(printFlag.checked)
@@ -754,9 +822,29 @@
 		
     	     container.style.width=tempWidth-50;
         }
+
+		function consentTab()
+		{
+			<%
+				if(form.getConsentTierCounter()>0)			
+				{
+				%>
+					switchToTab("consentTab");
+				<%
+				}
+				else
+				{
+				%>
+					alert("No consents available for selected Specimen Collection Group");
+				<%
+				}
+			%>
+		}
 	</script>
+	<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
+	<link href="css/styleSheet.css" rel="stylesheet" type="text/css" />
 </head>
-<body onload="setSize();newSpecimenInit();showConsents();">
+<body onload="setSize();newSpecimenInit();">
 <% 
 		int exIdRows=1;
 		int bhRows=1;
@@ -824,24 +912,17 @@
 				String specimenCollectionGroupId = (String)request.getAttribute("SpecimenCollectionGroupId");
 				String specimenCollectionGroupName = (String)request.getAttribute("SpecimenCollectionGroupName");
 	%>
-	<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="500">
 
-		<!-- If operation is equal to edit or search but,the page is for query the identifier field is not shown -->
-		<!-- NEW SPECIMEN REGISTRATION BEGINS-->
-	    	<tr>
-			    <td width = "100%">
-					<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
-						<tr>
-							<td colspan="6">
 
-								<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
+<!-----------------------------------new----------------------------------------->
+
+
+
+
+<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
 									<%=messageKey%>
 								</html:messages>
-							</td>
-						</tr>		
-						<tr>
-							<td>
-								<html:hidden property="operation" value="<%=operation%>"/>
+				    						<html:hidden property="operation" value="<%=operation%>"/>
 								<html:hidden property="submittedFor" value="<%=submittedFor%>"/>
 								<%						
 								if(form.getForwardTo().equalsIgnoreCase("orderDetails"))
@@ -859,111 +940,93 @@
 								<html:hidden property="applyChangesTo"/>
 								<html:hidden property="consentTierCounter"/>
 								<html:hidden property="parentSpecimenId"/>
-								
-							</td>
-							<td>
-							</td>
-							<td>
-							</td>
-							<td>
 								<html:hidden property="onSubmit"/>
-							</td>
-							<td>
 								<html:hidden property="id"/>
 								<html:hidden property="positionInStorageContainer" />
 								<html:hidden property="parentPresent" />
 								<html:hidden property="specimenCollectionGroupId"/>
-							</td>
-						</tr>				 
-					</table>
+<!------------------------------------------------------------------------------->
+<table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
+<logic:equal name="<%=Constants.PAGEOF%>" value="pageOfNewSpecimen">
+<tr>
+		<td class="td_color_bfdcf3">
+			<table border="0" cellpadding="0" cellspacing="0">
+		      <tr>
+				<td class="td_table_head">
+					<span class="wh_ar_b">
+						<bean:message key="app.newSpecimen" />
+					</span>
 				</td>
-			</tr>
-	</table>		
-			
+		        <td>
+					<img src="images/uIEnhancementImages/table_title_corner2.gif" alt="Page Title - Specimen" width="31" height="24" hspace="0" vspace="0" />
+				</td>
+		      </tr>
+		    </table>
+		</td>
+	  </tr>
+</logic:equal>
+	  <tr>
+		<td class="tablepadding">
 	<%
 	if(pageView.equals("edit"))
 	{
 	%>
-		<table summary="" cellpadding="1" cellspacing="0" border="0" height="20" class="tabPage" id="Container">
-			<tr>
-				<td height="20" class="tabMenuItemSelected" onclick="newspecimenPage()" id="newSpecimenTab">
-					<bean:message key="tab.specimen.details"/>
-				</td>
-				<%
-					String eventLinkAction = "'ListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParameters&menuSelected=15&specimenId="+form.getId()+"'" ;
-				%>
-				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onclick="eventClicked();">
-					<bean:message key="tab.specimen.eventparameters"/>
-				</td>
-
-				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="viewSPR()">
-					<bean:message key="edit.tab.surgicalpathologyreport"/>
-				</td>
-				
-				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="viewAnnotations(<%=specimenEntityId%>,document.forms[0].id.value,'','<%=staticEntityName%>','<%=pageOf%>')">
-					<bean:message key="edit.tab.clinicalannotation"/>
-				</td>
-				   <td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="consentPage()" id="consentTab">
-					<bean:message key="consents.consents"/>            
-				</td>								
-		
-				<td width="300" class="tabMenuSeparator" colspan="1">&nbsp;</td>
-			</tr>
-
-			<tr>
-				<td class="tabField" colspan="6">
+			<table width="100%" border="0" cellpadding="0" cellspacing="0">
+		      <tr><td class="td_tab_bg" ><img src="images/uIEnhancementImages/spacer.gif" alt="spacer" width="50" height="1"></td><td valign="bottom"><a onclick="newspecimenPage()" id="specimenDetailsTab" href="#">	<img src="images/uIEnhancementImages/tab_specimen_details1.gif" alt="Specimen Details"  width="126" height="22" border="0"></a></td><td valign="bottom"><a href="#"><img src="images/uIEnhancementImages/tab_events2.gif" alt="Events" width="56" height="21" onclick="eventClicked();" border="0"></a></td><td valign="bottom"><a href="#"><img src="images/uIEnhancementImages/tab_view_surgical3.gif" alt="Inactive View Surgical Pathology Report " width="216" height="22" border="0"></a></td><td valign="bottom"><a href="#"><img src="images/uIEnhancementImages/tab_view_annotation2.gif" alt="View Annotation" width="116" height="22" border="0" onClick="viewAnnotations(<%=specimenEntityId%>,document.forms[0].id.value,'','<%=staticEntityName%>','<%=pageOf%>')"></a></td><td align="left" valign="bottom" class="td_color_bfdcf3" ><a id="consentViewTab" href="#" onClick="consentTab()"><img src="images/uIEnhancementImages/tab_consents2.gif" alt="Consents" width="76" border="0" height="22" ></a><a href="#"></a></td>
+		        <td width="90%" align="left" valign="bottom" class="td_tab_bg" >&nbsp;
+				</td></tr>
+		    </table>
 	<%
 	}
 	%>
-<!--  Consent Tracking Module Virender mehta	 -->
-	<%
+		<%
 	if(pageView.equals("add"))
 	{
-	%>
-	
-	 <table summary="" cellpadding="1" cellspacing="0" border="0" height="20" class="tabPage" width="700">
+	%><table width="100%" border="0" cellpadding="0" cellspacing="0">
 		<tr>
-			<td height="20" width="9%" nowrap class="tabMenuItemSelected" onclick="newspecimenPage()" id="newSpecimenTab">
-				<bean:message key="consents.newspecimen"/>
-			</td>
-
-	        <td height="20" width="9%" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="consentPage()" id="consentTab">
-	          <bean:message key="consents.consents"/>      
-	        </td>								
-			<td width="600" class="tabMenuSeparator" colspan="1">&nbsp;</td>
-		</tr>
-		<tr>
-			<td class="tabField" colspan="4" width="*">
+			<td class="td_tab_bg" ><img src="images/uIEnhancementImages/spacer.gif" alt="spacer" width="50" height="1"></td>
+			<td valign="bottom"><a onclick="newSpecimenTab()" id="newSpecimenTab" href="#"><img src="images/uIEnhancementImages/new_specimen.gif" alt="Specimen Details"  width="115" height="22" border="0"></a></td><td onClick="newConsentTab()" valign="bottom" ><a id="newConsentTab" href="#" onClick="consentTab()"><img src="images/uIEnhancementImages/tab_consents2.gif" alt="Consents" width="76" height="22" border="0" ></a></td><td width="90%" class="td_tab_bg" >&nbsp;</td></tr>
+		</table>
+			
 	<%
 	}
 	%>
-	
-				<table summary="" cellpadding="1" cellspacing="0" border="0" class="contentPage" width="100%">
-					<!-- If operation is equal to edit or search but,the page is for query the identifier field is not shown -->
+		    <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg" >
+			<tr>
+			<td><div id="mainTable"style="display:block"><table width="100%"  border="0">
+				<tr>
+		          <td class="grey_ar_s">&nbsp;
+					<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0"/> <bean:message key="commonRequiredField.message" />
+				  </td>
+		        </tr>
+				<tr>
+		          <td align="left" class="showhide">
+					<table width="100%" border="0" cellpadding="3" cellspacing="0" >
 					<!-- NEW SPECIMEN REGISTRATION BEGINS-->
-			    	<tr>
-						<td width="100%">
-							<table summary="" cellpadding="1" border="0" cellspacing="0" id="addSpecimen" width="100%">
-							<tr>
-								<br>
-							</tr>
-
-										<%--
-											<span style="width:85%;">
-												<bean:message key="<%=title%>"/>    
-											</span>
-											<span style="text-align:right;margin-left:70%;">
-												<html:link href="#" styleId="newUser" onclick="consentPage()">
-													<bean:message key="consent.defineconsents" />
-												</html:link>	
-											</span>	
-										 --%>
-								 	
-								<!--  Consent Tracking Module Virender mehta	 -->	
-
-								<tr>
-									<td class="formFieldNoBordersSimple" ><b>*</b></td>
-									<%
+						<tr>
+				<logic:equal name="newSpecimenForm" property="parentPresent" value="false">
+		                  <td width="1%" align="center" class="black_ar">
+							<span class="blue_ar_b">
+								<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
+							</span>
+						  </td>
+		                  <td width="17%" align="left" class="black_ar">
+							<label for="specimenCollectionGroupName">
+								<bean:message key="newSpecimen.groupName"/>
+							</label>
+						  </td>
+						  <td width="34%" align="left" class="black_ar">
+							<html:hidden property="specimenCollectionGroupName" styleId="specimenCollectionGroupName"/>				
+								<label for="specimenCollectionGroupName">
+									<%=form.getSpecimenCollectionGroupName()%>
+								</label>
+						  </td>
+						  
+						 
+				</logic:equal>
+				
+						   
+				<%
 										String specimenColSpan;
 										if(operation.equals(Constants.EDIT))
 										{
@@ -974,170 +1037,157 @@
 											specimenColSpan="4";
 										}
 									%>
-									<!-- To remove horizontal line between label column and text box column label with out border is used.
-									style class formRequiredLabel is replaced with formRequiredLableWithoutBorder and formLabel is replaced with formLableWithoutBorder.
-									For this formLableWithoutBorder styleclass is added to css/styleSheet.jss file-->
-									<logic:equal name="newSpecimenForm" property="parentPresent" value="false">
-									<td class="formFieldNoBordersSimple">
-										<label for="specimenCollectionGroupName">
-											<b><bean:message key="newSpecimen.groupName"/></b>
-										</label>
-									</td>							
-									<td class="formFieldNoBordersSimple" colspan="<%=specimenColSpan%>">
-									<!--
-										Patch ID: Bug#3184_4
-										Description: The following change shows read-only textbox on specimen page, if specimen is being added
-										from specimen collection group page, otherwise combobox having names of specimen collection group is displayed.
-									-->
-									<html:hidden property="specimenCollectionGroupName" styleId="specimenCollectionGroupName"/>				
-									
-									<label for="specimenCollectionGroupName">
-										<b><%=form.getSpecimenCollectionGroupName()%></b>
-									</label>
-									
-									<!-- <a href="SpecimenCollectionGroup.do?operation=add&pageOf=pageOfSpecimenCollectionGroup">
-										<bean:message key="app.addNew" />
-									</a> 
-										-->			
-						        	</td>							
-									</logic:equal>
-				        	
-									<logic:equal name="newSpecimenForm" property="parentPresent" value="true">
-						        	<td class="formFieldNoBordersSimple" >
-										<label for="parentSpecimenId">
-											<b><bean:message key="newSpecimen.parentLabel"/></b>
-										</label>
-									</td>
-							
-						        	<td class="formFieldNoBordersSimple" colspan="<%=specimenColSpan%>">
-						        		<html:hidden property="specimenCollectionGroupName" styleId="specimenCollectionGroupName"/>
-										<!-- Mandar : 434 : for tooltip -->
-										<html:hidden property="parentSpecimenName"/>
-										
-										<label for="parentSpecimenId">
-											<b><%=form.getParentSpecimenName()%></b>
-										</label>
-										
-						        	</td>
-									</logic:equal>	
-									
-									<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
-									<td class="formFieldNoBordersSimple"><b>*</b></td>
-									<td class="formFieldNoBordersSimple">
-										<label for="lineage">
-											<b><bean:message key="specimen.lineage"/></b>
-										</label>
-									</td>
-									<td class="formFieldNoBordersSimple" >								
-							     		
-							     		
-							     		<label for="lineage">
-										<b><%=form.getLineage()%></b>
-									</label>
-									</td>
-									</logic:equal>
-								</tr>
-								<%  if( operation.equals(Constants.EDIT) || (!Variables.isSpecimenLabelGeneratorAvl && !Variables.isSpecimenBarcodeGeneratorAvl))
+				<logic:equal name="newSpecimenForm" property="parentPresent" value="true">
+						  <td width="1%" align="center" class="black_ar">
+							<span class="blue_ar_b">
+								&nbsp;
+							</span>
+						  </td>
+						  <td width="17%" align="left" class="black_ar">
+								<label for="parentSpecimenId">
+									<bean:message key="newSpecimen.parentLabel"/>
+								</label>
+    					  </td>
+ 			        	  <td width="34%" align="left" class="black_ar">
+						   		<html:hidden property="specimenCollectionGroupName" styleId="specimenCollectionGroupName"/>
+								<html:hidden property="parentSpecimenName"/>
+								<label for="parentSpecimenId">
+									<%=form.getParentSpecimenName()%>
+								</label>
+ 			        	  </td>
+				</logic:equal>
+						  
+				<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
+						  <td width="1%" align="center">
+							<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
+						  </td>
+						  <td width="17%" align="left" class="black_ar">
+							<label for="lineage">
+								<bean:message key="specimen.lineage"/>
+							</label>
+						  </td>
+						  <td width="34%" align="left" class="black_ar">
+							<label for="lineage">
+								<%=form.getLineage()%>
+							</label>
+						  </td>
+				</logic:equal>
+						</tr>
+				<%  if( operation.equals(Constants.EDIT) || (!Variables.isSpecimenLabelGeneratorAvl && !Variables.isSpecimenBarcodeGeneratorAvl))
 									{
-								%>	
-									<tr>
-										<td class="formFieldNoBordersSimple" >
-									     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>"><b>*</b></logic:notEqual>
-									     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
-									    </td>
-									    <td class="formFieldNoBordersSimple" >
-											<label for="label">
-												<b><bean:message key="specimen.label"/></b>
-											</label>
-										</td>
-									    <td class="formFieldNoBordersSimple" >
-									     	<html:text styleClass="formFieldSized15" size="30" maxlength="255"  styleId="label" property="label"/>
-									    </td>							
-										<td class="formFieldNoBordersSimple" width="5">&nbsp;</td>
-										<td class="formFieldNoBordersSimple">							
-								    	<label for="barcode">
-											<bean:message key="specimen.barcode"/>
-										</label>								
-									</td>
-								    <td class="formFieldNoBordersSimple" >
-										<html:text styleClass="formFieldSized15" maxlength="255"  size="30" styleId="barcode" property="barcode"/>
-						        	</td>
-								   </tr>
-									<%}
-									else  if((!Variables.isSpecimenLabelGeneratorAvl && Variables.isSpecimenBarcodeGeneratorAvl) && operation.equals(Constants.ADD) )
-										{
-									%>  <tr>
-										<td class="formFieldNoBordersSimple" >
-									     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>"><b>*</b></logic:notEqual>
-									     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
-									    </td>
-									    <td class="formFieldNoBordersSimple" >
-											<label for="label">
-												<b><bean:message key="specimen.label"/></b>
-											</label>
-										</td>
-									    <td class="formFieldNoBordersSimple"  colspan=4>
-									     	<html:text styleClass="formFieldSized15" size="30" maxlength="255"  styleId="label" property="label"/>
-									    </td>							
-										
-								        </tr>
-									<%
-									 }else if((Variables.isSpecimenLabelGeneratorAvl && !Variables.isSpecimenBarcodeGeneratorAvl) && operation.equals(Constants.ADD) )
-										{
+				%>	    
+						<tr>
+							<td align="center" class="black_ar">
+				<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">
+								<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
+				</logic:notEqual>
+				<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;
+				</logic:equal>
+							</td>
+							<td align="left" class="black_ar">
+								<label for="label">
+									<bean:message key="specimen.label"/>
+								</label>
+							</td>
+							<td align="left">
+								<html:text styleClass="black_ar" size="30" maxlength="255"  styleId="label" property="label" />
+							</td>
+							
+							<td align="center" class="black_ar">&nbsp;</td>
+							<td align="left" class="black_ar">
+								<label for="barcode">
+									<bean:message key="specimen.barcode"/>
+								</label>
+							</td>
+							<td align="left">
+								<html:text styleClass="black_ar" maxlength="255"  size="30" styleId="barcode" property="barcode" />
+							</td>
+						</tr>
+						
+				<%}
+							else  if((!Variables.isSpecimenLabelGeneratorAvl && Variables.isSpecimenBarcodeGeneratorAvl) && operation.equals(Constants.ADD) )
+				{
+				%>			
+						<tr>
+							<td align="center" class="black_ar">
+				<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">
+								<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
+				</logic:notEqual>
+				<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;
+				</logic:equal>
+							</td>
+							<td align="left" class="black_ar">
+								<label for="label">
+									<bean:message key="specimen.label"/>
+								</label>
+							</td>
+							<td align="left">
+								<html:text styleClass="black_ar" size="30" maxlength="255"  styleId="label" property="label" />
+							</td>
+							<td colspan="3">&nbsp;
+							</td>
+						</tr>
+				<%
+						 }else if((Variables.isSpecimenLabelGeneratorAvl && !Variables.isSpecimenBarcodeGeneratorAvl) && operation.equals(Constants.ADD) )
+						{
 
-									%>
-										<tr>
-										<td class="formFieldNoBordersSimple">&nbsp;</td>									
-										<td class="formFieldNoBordersSimple">							
-								    	<label for="barcode">
-											<bean:message key="specimen.barcode"/>
-										</label>								
-										</td>
-									    <td class="formFieldNoBordersSimple"  colspan=5>
-											<html:text styleClass="formFieldSized15" maxlength="255"  size="30" styleId="barcode" property="barcode" />
-							        	</td>
-										</tr>
-									
-									<% 
-										}
-									 %>
-								    								
-									
-						 		<tr>
-								 	<td class="formFieldNoBordersSimple" width="5"><b>*</b></td>
-								    <td class="formFieldNoBordersSimple">
-								     	<label for="className">
-								     		<b><bean:message key="specimen.type"/></b>
-								     	</label>
-								    </td>
-								    <td class="formFieldNoBordersSimple">
-									
-										<%
-											String classReadOnly = "false";
-											if(operation.equals(Constants.EDIT))
-											{
-											    classReadOnly = "true";
-											}
-										%>
-									    <autocomplete:AutoCompleteTag property="className"
-												  optionsList = "<%=request.getAttribute(Constants.SPECIMEN_CLASS_LIST)%>"
-												  initialValue="<%=form.getClassName()%>"
-												  onChange="onTypeChange(this);resetVirtualLocated()"
-												  readOnly="<%=classReadOnly%>"
-											    />
-						 			   
-									
-						        	</td>
-								 
-								    <td class="formFieldNoBordersSimple" width="5"><b>*</b></td>
-								    <td class="formFieldNoBordersSimple">
-								     	<label for="type">
-								     		<b><bean:message key="specimen.subType"/></b>
-								     	</label>
-								    </td>				    
-								    <td class="formFieldNoBordersSimple" >
-								    <!-- --------------------------------------- -->
-								    <%
+				%>
+						<tr>
+							<td align="center" class="black_ar">&nbsp;</td>
+							<td align="left" class="black_ar">
+								<label for="barcode">
+									<bean:message key="specimen.barcode"/>
+								</label>
+							</td>
+							<td align="left">
+								<html:text styleClass="black_ar" maxlength="255"  size="30" styleId="barcode" property="barcode" />
+							</td>
+							<td colspan="3">&nbsp;
+							</td>
+						</tr>
+			<% 
+					}
+			 %>
+						<tr>
+							<td align="center" class="black_ar">
+								<span class="blue_ar_b">
+									<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
+								</span>
+							</td>
+			                <td align="left" class="black_ar">
+								<label for="className">
+								    <bean:message key="specimen.type"/>
+						     	</label>
+							</td>
+							<td align="left" class="black_new">
+					<%
+							String classReadOnly = "false";
+							if(operation.equals(Constants.EDIT))
+							{
+								    classReadOnly = "true";
+							}
+					%>
+								 <autocomplete:AutoCompleteTag property="className"
+								  optionsList = "<%=request.getAttribute(Constants.SPECIMEN_CLASS_LIST)%>"
+								  initialValue="<%=form.getClassName()%>"
+								  onChange="onTypeChange(this);resetVirtualLocated()"
+								  readOnly="<%=classReadOnly%>"
+								  styleClass="formFieldSized12"
+							    />
+							</td>
+							
+							<td align="center" class="black_ar">
+								<span class="blue_ar_b">
+									<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
+								</span>
+							</td>
+			                <td align="left" class="black_ar">
+								<label for="type">
+								     <bean:message key="specimen.subType"/>
+						     	</label>
+							</td>
+							<td align="left" class="black_new">
+					<%
 												String classValue = (String)form.getClassName();
 												specimenTypeList = (List)specimenTypeMap.get(classValue);
 												
@@ -1163,205 +1213,243 @@
 												if(Constants.ALIQUOT.equals(form.getLineage())&&operation.equals(Constants.EDIT)) {
 												      readOnlyForAliquot = "true";
 												}
-									%>
-								  
-								   <autocomplete:AutoCompleteTag property="type"
-												  optionsList = "<%=request.getAttribute(Constants.SPECIMEN_TYPE_MAP)%>"
-												  initialValue="<%=form.getType()%>"
-												  onChange="<%=subTypeFunctionName%>"
-												  readOnly="<%=readOnlyForAliquot%>"
-												  dependsOn="<%=form.getClassName()%>"
-							        />
-					
-						        	</td>
-								</tr>
-								<tr>
-								     <td class="formFieldNoBordersSimple" width="5">
-								     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>"><b>*</b></logic:notEqual>
-								     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
-								     </td>
-								     <td class="formFieldNoBordersSimple">
-										<label for="tissueSite">
-											<b><bean:message key="specimen.tissueSite"/></b>
-										</label>
-									</td>
-								     <td class="formFieldNoBordersSimple" >
-							
-		                                       <autocomplete:AutoCompleteTag property="tissueSite"
-												  size="150"
-												  optionsList = "<%=request.getAttribute(Constants.TISSUE_SITE_LIST)%>"
-												  initialValue="<%=form.getTissueSite()%>"
-												  readOnly="<%=readOnlyForAliquot%>"
-											    />
-										
-										<%
-											String url = "ShowFramedPage.do?pageOf=pageOfTissueSite&propertyName=tissueSite&cdeName=Tissue Site";
-										%>
-										<!-- Patch ID: Bug#3090_19 -->
-										<a href="#" onclick="javascript:NewWindow('<%=url%>','tissuesite','360','525','no');return false">
-											<img src="images\Tree.gif" border="0" width="24" height="18" title='Tissue Site Selector'>
+						%>
+									<autocomplete:AutoCompleteTag property="type"
+										  optionsList = "<%=request.getAttribute(Constants.SPECIMEN_TYPE_MAP)%>"
+										  initialValue="<%=form.getType()%>" onChange="<%=subTypeFunctionName%>"
+										  readOnly="<%=readOnlyForAliquot%>" dependsOn="<%=form.getClassName()%>"
+										  styleClass="formFieldSized12"
+										/>
+								</td>
+							</tr>
+							<tr>
+								<td align="center" class="black_ar">
+									<span class="blue_ar_b">
+					<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">
+										<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
+					</logic:notEqual>
+					<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">
+										&nbsp;
+					</logic:equal>
+									</span>
+								</td>
+			                    <td align="left" class="black_ar">
+									<label for="tissueSite">
+										<bean:message key="specimen.tissueSite"/>
+									</label>
+								</td>
+								<td align="left" class="black_new">
+									<autocomplete:AutoCompleteTag property="tissueSite" size="150"
+										  optionsList = "<%=request.getAttribute(Constants.TISSUE_SITE_LIST)%>"
+	 									  initialValue="<%=form.getTissueSite()%>" readOnly="<%=readOnlyForAliquot%>"
+										  styleClass="formFieldSized12"
+										/>
+									<span class="black_ar">
+					<%
+							String url = "ShowFramedPage.do?pageOf=pageOfTissueSite&propertyName=tissueSite&cdeName=Tissue Site";
+					%>					<a href="#"																						onclick="NewWindow('<%=url%>','tissuesite','360','525','no');return							false">
+											<img src="images/uIEnhancementImages/ic_cl_diag.gif" alt="Clinical Diagnosis" width="16" height="16" border="0" />
 										</a>
-						        	  </td>
+									</span>
+								</td>
 								
-								     <td class="formFieldNoBordersSimple" width="5">
-								     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>"><b>*</b></logic:notEqual>
-								     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
-								     </td>
-								     <td class="formFieldNoBordersSimple">
-										<label for="tissueSide">
-											<b><bean:message key="specimen.tissueSide"/></b>
-										</label>
-									</td>
-								     <td class="formFieldNoBordersSimple" >
-									 
-									  <autocomplete:AutoCompleteTag property="tissueSide"
-												  optionsList = "<%=request.getAttribute(Constants.TISSUE_SIDE_LIST)%>"
-												  initialValue="<%=form.getTissueSide()%>"
-												  readOnly="<%=readOnlyForAliquot%>"
-											    />
-
-						        	  </td>
-								</tr>
-								<tr>
-								    <td class="formFieldNoBordersSimple" width="5">
-								     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>"><b>*</b></logic:notEqual>
-								     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
-								    </td>
-								    <td class="formFieldNoBordersSimple">
-										<label for="pathologicalStatus">
-											<b><bean:message key="specimen.pathologicalStatus"/></b>
-										</label>
-									</td>
-									<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
-								    <td colspan="4" class="formFieldNoBordersSimple" >
-									
+			                    <td align="center" class="black_ar">
+				<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">
+									<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0"/>
+				</logic:notEqual>
+				<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">
+									&nbsp;
+				</logic:equal>
+								</td>
+			                    <td align="left" class="black_ar">
+									<label for="tissueSide">
+										<bean:message key="specimen.tissueSide"/>
+									</label>
+								</td>
+								<td align="left" class="black_new">
+									<autocomplete:AutoCompleteTag property="tissueSide"
+										optionsList = "<%=request.getAttribute(Constants.TISSUE_SIDE_LIST)%>"
+										initialValue="<%=form.getTissueSide()%>" readOnly="<%=readOnlyForAliquot%>"
+										styleClass="formFieldSized12"
+										/>
+								</td>
+							</tr>
+							<tr>
+								<td align="center" class="black_ar">
+				<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">
+									<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
+				</logic:notEqual>
+				<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">
+									&nbsp;
+				</logic:equal>
+								</td>
+			                    <td align="left" class="black_ar">
+									<label for="pathologicalStatus">
+										<bean:message key="specimen.pathologicalStatus"/>
+									</label>
+								</td>
+				<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
+								<td align="left" class="black_new"> 
 									<autocomplete:AutoCompleteTag property="pathologicalStatus"
-												  optionsList = "<%=request.getAttribute(Constants.PATHOLOGICAL_STATUS_LIST)%>"
-												  initialValue="<%=form.getPathologicalStatus()%>"
-												  readOnly="<%=readOnlyForAliquot%>"
-									/>
-									
-						        	</td>
-									</logic:notEqual>
-							     	
-									<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
-									<td class="formFieldNoBordersSimple" >
+										optionsList="<%=request.getAttribute(Constants.PATHOLOGICAL_STATUS_LIST)%>"
+										initialValue="<%=form.getPathologicalStatus()%>"
+										 readOnly="<%=readOnlyForAliquot%>"
+										 styleClass="formFieldSized12"
+										/>
+					        	</td>
+				</logic:notEqual>
+				<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
+								<td align="left" class="black_new">
 									<autocomplete:AutoCompleteTag property="pathologicalStatus"
-												  optionsList = "<%=request.getAttribute(Constants.PATHOLOGICAL_STATUS_LIST)%>"
-												  initialValue="<%=form.getPathologicalStatus()%>"
-												  readOnly="<%=readOnlyForAliquot%>"
-									/>
-						        	</td>	
-									<!-- activitystatus -->
-									</logic:equal>
-
-					
-									 <!--
-									 * Patch ID: 3835_1_22
-									 * See also: 1_1 to 1_5
-									 * Description : show CreatedOn date field if operation is edit.				 
-									-->	 
-									<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
-										<td class="formFieldNoBordersSimple" width="5">&nbsp;</td>
-									    <td class="formFieldNoBordersSimple">							
-									    	<label for="createdDate">
-												<bean:message key="specimen.createdDate"/>
-											</label>								
-										</td>
-									   <td class="formFieldNoBordersSimple" >
-										<table summary="" cellpadding="0" cellspacing="0" border="0" width="100%">
-											<tr>				
-												<td class="message" >
-													<ncombo:DateTimeComponent name="createdDate"
-							  							id="createdDate"
-							  							formName="newSpecimenForm"
-							  							value='${requestScope.createdDate}'
-							  							styleClass="formDateSized10"/>
-													<bean:message key="page.dateFormat" />&nbsp;
-												</td>
-											</tr>
-										</table>
-			        				   </td>
-									</logic:equal>
-								</tr>
-						
-								<tr>					
-							     	<td class="formFieldNoBordersSimple" width="5">
-								     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>"><b>*</b></logic:notEqual>
-								     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
-								    </td>
-								    <td class="formFieldNoBordersSimple">
-										<label for="quantity">
-											<b><bean:message key="specimen.quantity"/></b>
-										</label>
-									</td>
-								    <td class="formFieldNoBordersSimple" >
-								     	<html:text styleClass="formFieldSized15" size="30" maxlength="10"  styleId="quantity" property="quantity" />
-								     	<span id="unitSpan"><%=unitSpecimen%></span>
-								     	<html:hidden property="unit"/>
-								    </td>
-									<td class="formFieldNoBordersSimple" width="5">
-								     	&nbsp;
-								    </td>
-								    <td class="formFieldNoBordersSimple">
-										<label for="concentration">
-											<bean:message key="specimen.concentration"/>
-										</label>
-									</td>
-									<td class="formFieldNoBordersSimple" >
-									<%
-										boolean concentrationDisabled = true;
-										
-										if(form.getClassName().equals("Molecular") && !Constants.ALIQUOT.equals(form.getLineage()))
-										{
-											concentrationDisabled = false;
-											readOnlyForAll = true;	
-										}
-									%>
-							     		<html:text styleClass="formFieldSized15" maxlength="10"  size="30" styleId="concentration" property="concentration" 
+										optionsList="<%=request.getAttribute(Constants.PATHOLOGICAL_STATUS_LIST)%>"
+										initialValue="<%=form.getPathologicalStatus()%>"
+										readOnly="<%=readOnlyForAliquot%>"
+										styleClass="formFieldSized12"
+										/>
+						        </td>	
+				</logic:equal>
+								
+								
+				<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
+								<td align="center" class="black_ar">&nbsp;
+								</td>
+								<td align="left" class="black_ar">
+									<label for="createdDate">
+										<bean:message key="specimen.createdDate"/>
+									</label>
+								</td>
+								<td class="black_ar" >
+									<ncombo:DateTimeComponent name="createdDate" id="createdDate"
+			  							formName="newSpecimenForm" value='${requestScope.createdDate}'
+			  							styleClass="black_ar"/>
+										<span class="grey_ar_s">
+									<bean:message key="page.dateFormat" /></span>&nbsp;
+								</td>
+				</logic:equal>
+							</tr>
+							<tr>
+								<td align="center" class="black_ar">
+				<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">
+									<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0"/>
+				</logic:notEqual>
+				<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">
+									&nbsp;
+				</logic:equal>
+								</td>
+			                    <td align="left" class="black_ar">
+									<label for="quantity">
+										<bean:message key="specimen.quantity"/>
+									</label>
+								</td>
+								<td align="left" class="black_ar">
+									<html:text styleClass="black_ar" size="10" maxlength="10"  styleId="quantity" property="quantity" style="text-align:right"/>
+								     <span id="unitSpan">
+										<%=unitSpecimen%>
+									 </span>
+								     <html:hidden property="unit"/>
+								</td>
+								
+				                <td align="center" class="black_ar">&nbsp;
+								</td>
+								<td align="left" class="black_ar">
+									<label for="concentration">
+										<bean:message key="specimen.concentration"/>
+									</label>
+								</td>
+								<td align="left" class="black_ar">
+					<%
+						boolean concentrationDisabled = true;
+						if(form.getClassName().equals("Molecular") && !Constants.ALIQUOT.equals(form.getLineage()))
+						{
+								concentrationDisabled = false;
+								readOnlyForAll = true;	
+						}
+					%>
+									<html:text styleClass="black_ar" maxlength="10"  size="10" styleId="concentration" property="concentration" style="text-align:right"
 							     		readonly="<%=readOnlyForAll%>" disabled="<%=concentrationDisabled%>"/>
-										&nbsp;<bean:message key="specimen.concentrationUnit"/>
-									</td>
-								</tr>
-						 
-								<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
+										<bean:message key="specimen.concentrationUnit"/>
+								</td>
+							</tr>
+			<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
+							<tr>
+								 <td align="center" class="black_ar">&nbsp;
+								 </td>
+								 <td align="left" class="black_ar">&nbsp;
+								 </td>
+								 <td align="left" valign="top">
+									<html:checkbox property="available">
+									</html:checkbox>
+									<span class="black_ar">
+										<label for="available">
+											<bean:message key="specimen.available" />
+										</label>
+									</span>
+								</td>
 								
-									<tr>
-										<!-- Available -->
-										<td class="formFieldNoBordersSimple" width="5">&nbsp;</td>
-										<td class="formFieldNoBordersSimple">
-											<label for="available">
-												<bean:message key="specimen.available" />
-											</label>
-										</td>
-										<td class="formFieldNoBordersSimple">
-											<html:checkbox property="available">
-											</html:checkbox>
-										</td>	
-										<!-- Available Quantity -->							
-										<td class="formFieldNoBordersSimple" width="5">&nbsp;</td>
-										<td class="formFieldNoBordersSimple" >
-											<label for="availableQuantity">
-												<bean:message key="specimen.availableQuantity" />
-											</label>
-										</td>
-										<td class="formFieldNoBordersSimple">
-											<html:text styleClass="formFieldSized15" maxlength="10"  size="30" styleId="availableQuantity" property="availableQuantity" />
-											<span id="unitSpan1"><%=unitSpecimen%></span>
-										</td>
-									</tr>
+								<td align="center" class="black_ar">&nbsp;
+								</td>
+								<td width="16%" align="left" class="black_ar">
+									<label for="availableQuantity">
+										<bean:message key="specimen.availableQuantity" />
+									</label>
+								</td>
 								
-								</logic:equal>						 
-						
-								<tr>
-								 	<td class="formFieldNoBordersSimple" width="5"><b>*</b></td>
-									<td class="formFieldNoBordersSimple">
-									   <label for="className">
-									   		<b><bean:message key="specimen.positionInStorageContainer"/></b>
-									   </label>
-									</td>
-									
-									<%
+								<td width="28%" align="left" class="black_ar">
+									<html:text styleClass="black_ar" maxlength="10"  size="10"						styleId="availableQuantity" property="availableQuantity"					style="text-align:right" />
+									<span id="unitSpan1">
+										<%=unitSpecimen%>
+									</span>
+								</td>
+							</tr>
+			</logic:equal>
+			<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
+							<tr>
+								<td align="center" class="black_ar">
+									<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
+								</td>
+				                <td align="left" class="black_ar">
+									<label for="collectionStatus">
+										<bean:message key="specimenCollectionGroup.collectionStatus" />
+									</label>
+								</td>
+								<td class="black_new">
+									<autocomplete:AutoCompleteTag property="collectionStatus"
+										optionsList = "<%=request.getAttribute(Constants.COLLECTIONSTATUSLIST)%>"
+										initialValue="<%=form.getCollectionStatus()%>" onChange="<%=strCheckStatus%>"
+										styleClass="formFieldSized12"
+										/>
+								</td>
+								
+								<td align="center" class="black_ar">
+									&nbsp;
+								</td>
+				                <td align="left" class="black_ar">
+									<label for="activityStatus">
+										<bean:message key="participant.activityStatus" />
+									</label>
+								</td>
+								<td align="left" class="black_ar">
+									<label for="activityStatus">
+										<%=form.getActivityStatus()%>
+									</label>
+								</td>
+							</tr>
+						</logic:equal>	
+							<tr>
+								<td width="1%" align="center">
+								<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
+									<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
+								</logic:equal>
+								<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
+								&nbsp;
+								</logic:notEqual>
+								</td>
+			                    <td width="16%" align="left" class="black_ar">
+									<label for="className">
+									   	<bean:message key="specimen.positionInStorageContainer"/>
+								   </label>
+								</td>
+								<%
 										boolean readOnly=true;
 										if(operation.equals(Constants.ADD))
 											readOnly=false;
@@ -1444,19 +1532,22 @@
 									<%//System.out.println("after getJSEquivalentFor in specimen jsp");%>
 						
 									<script language="JavaScript" type="text/javascript" src="jss/CustomListBox.js"></script>
-						
-									<td class="formFieldNoBordersSimple" colSpan="4">
-										<table border="0">
-											<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
-											<tr>
-												<td ><html:radio value="1" onclick="onRadioButtonGroupClick(this)" styleId="stContSelection" property="stContSelection"/></td>
-												<td class="formFieldNoBordersSimple">																			
-														<bean:message key="specimen.virtuallyLocated" />											
+								<td colspan="4" >
+
+								<table border="0" cellpadding="0" cellspacing="0">
+								<tr >
+								
+								<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
+									<td class="tabletd1">
+									<html:radio value="1" onclick="onRadioButtonGroupClick(this)" styleId="stContSelection" property="stContSelection"/></td>
+												<td class="black_ar tabletd1">											
+														<bean:message key="specimen.virtuallyLocated" />		
 												</td>
+												<td class="black_ar tabletd1">&nbsp;</td>
 											</tr>
 											<tr>
-												<td ><html:radio value="2" onclick="onRadioButtonGroupClick(this)" styleId="stContSelection" property="stContSelection"/></td>
-												<td>
+												<td class="tabletd1"><html:radio value="2" onclick="onRadioButtonGroupClick(this)" styleId="stContSelection" property="stContSelection"/></td>
+												<td class="black_ar tabletd1">
 													<ncombo:nlevelcombo dataMap="<%=dataMap%>" 
 														attributeNames="<%=attrNames%>" 
 														tdStyleClassArray="<%=tdStyleClassArray%>"
@@ -1472,200 +1563,199 @@
 														</tr>
 														</table>
 												</td>
+												<td class="tabletd1">&nbsp;</td>
 											</tr>
 											<tr>
-												<td ><html:radio value="3" onclick="onRadioButtonGroupClick(this)" styleId="stContSelection" property="stContSelection"/></td>
-												<td class="formFieldNoBordersSimple">
-													<html:text styleClass="formFieldSized10"  size="30" styleId="selectedContainerName" property="selectedContainerName" disabled= "<%=textBoxDisable%>"/>
-													<html:text styleClass="formFieldSized3"  size="5" styleId="pos1" property="pos1" disabled= "<%=textBoxDisable%>"/>
-													<html:text styleClass="formFieldSized3"  size="5" styleId="pos2" property="pos2" disabled= "<%=textBoxDisable%>"/>
-													<html:button styleClass="actionButton" property="containerMap" onclick="<%=buttonOnClicked%>" disabled= "<%=textBoxDisable%>">
+												<td class="tabletd1"><html:radio value="3" onclick="onRadioButtonGroupClick(this)" styleId="stContSelection" property="stContSelection"/></td>
+												<td class="tabletd1">
+													<html:text styleClass="black_ar"  size="30" styleId="selectedContainerName" property="selectedContainerName" disabled= "<%=textBoxDisable%>"/>
+													<html:text styleClass="black_ar"  size="5" styleId="pos1" property="pos1" disabled= "<%=textBoxDisable%>"/>
+													<html:text styleClass="black_ar"  size="5" styleId="pos2" property="pos2" disabled= "<%=textBoxDisable%>"/>
+													<html:button styleClass="blue_ar_g" property="containerMap" onclick="<%=buttonOnClicked%>" disabled= "<%=textBoxDisable%>">
 														<bean:message key="buttons.map"/>
 													</html:button>
 												</td>
+												<td class="black_ar tabletd1">&nbsp;</td>
 											</tr>
-											</logic:equal>								
-											<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">								
+											
+											</logic:equal>	
+											<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">		
+											
 											<%
 												NewSpecimenForm newSpecimenForm = (NewSpecimenForm) request.getAttribute("newSpecimenForm");
 												if(newSpecimenForm.getStContSelection() == 1)
-												{%>Specimen is virtually Located <%}									
+												{%><tr>
+											<td colspan="3" class="black_ar"><bean:message key="specimen.virtualLocation" /></td></tr><%}
 												else
 												{
 												%>
-													<tr>											
-														<td class="formFieldNoBordersSimple">
-															<html:text styleClass="formFieldSized10"  size="30" styleId="selectedContainerName" property="selectedContainerName" readonly= "true"/>
-															<html:text styleClass="formFieldSized3"  size="5" styleId="positionDimensionOne" property="positionDimensionOne" readonly= "true"/>
-															<html:text styleClass="formFieldSized3"  size="5" styleId="positionDimensionTwo" property="positionDimensionTwo" readonly= "true"/>
-															<html:button styleClass="actionButton" property="containerMap" onclick="<%=buttonOnClicked%>" disabled= "true">
+												<tr>											
+														<td class="tabletd1" colspan="3">
+															<html:text styleClass="black_ar"  size="30" styleId="selectedContainerName" property="selectedContainerName" readonly= "true"/>
+															<html:text styleClass="black_ar"  size="5" styleId="positionDimensionOne" property="positionDimensionOne" readonly= "true"/>
+															<html:text styleClass="black_ar"  size="5" styleId="positionDimensionTwo" property="positionDimensionTwo" readonly= "true"/>
+															<html:button styleClass="blue_ar_g" property="containerMap" onclick="<%=buttonOnClicked%>" disabled= "true">
 																<bean:message key="buttons.map"/>
 															</html:button>
 														</td>
-													</tr>										
+														</tr>									
 												<%
 												}
 												
 											%>
+											
 											</logic:notEqual>	
-										</table>
-									</td>
+											
+											
+											
+									</table>
+											</td>
+											</tr>
+											
 									<%//System.out.println("End of tag in jsp");%>
 									<%-- n-combo-box end --%>
-								</tr>
-								<!--%System.out.println("Inside if condition in jsp"+exceedsMaxLimit);
-								if(exceedsMaxLimit!=null && exceedsMaxLimit.equals("true")){
-									%-->
+								
 								<logic:equal name="exceedsMaxLimit" value="true">
 								<tr>
-									<td>
+									<td colspan="6" class="black_ar>
 											<bean:message key="container.maxView"/>
 									</td>
 								</tr>
 								</logic:equal>
-								<!--%}%-->				 				 
+											 
 								<tr>
-									<td class="formFieldNoBordersSimple" width="5">&nbsp;</td>
-									<td class="formFieldNoBordersSimple">
+								<td align="left">&nbsp;</td>
+									<td align="left" valign="top" class="black_ar">
 										<label for="comments">
 											<bean:message key="specimen.comments"/>
 										</label>
 									</td>
 									
-								 	<td class="formFieldNoBordersSimple" colspan="4">
-										<html:textarea styleClass="formFieldSized"  rows="3" styleId="comments" property="comments"/>
+								 	<td align="left" valign="top" colspan="4">
+										<html:textarea styleClass="black_ar_s"  rows="3" cols="90" styleId="comments" property="comments"/>
 									</td>
 								</tr>
+							</table>
 								<!-- collectionstatus -->							
-								<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
-								<tr>
-									<td class="formFieldNoBordersSimple" width="5"><b>*<b></td>
-									<td class="formFieldNoBordersSimple" >
-										<label for="activityStatus">
-											<b><bean:message key="participant.activityStatus" /></b>
-										</label>
-									</td>
-									<td class="formFieldNoBordersSimple">
-									
-									
-									<label for="activityStatus">
-										<b><%=form.getActivityStatus()%></b>
-									</label>
-									
-									</td>
-									
-									<td class="formFieldNoBordersSimple" width="5"><b>*</b></td>
-									<td class="formFieldNoBordersSimple">
-										<label for="collectionStatus">
-											<b><bean:message key="specimenCollectionGroup.collectionStatus" /></b>
-										</label>
-									</td>
-									<td class="formFieldNoBordersSimple">
-									<autocomplete:AutoCompleteTag property="collectionStatus"
-												  optionsList = "<%=request.getAttribute(Constants.COLLECTIONSTATUSLIST)%>"
-												  initialValue="<%=form.getCollectionStatus()%>"
-												  onChange="<%=strCheckStatus%>"
-									/>
-									</td>
-								</tr>
-								</logic:equal>
-							</table>	
+								
+							<tr>
+							<td width="100%">
 							<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
 							<%@ include file="CollAndRecEvents.jsp" %>
 							</logic:equal>
+
+						
+		  <!--------------------------including External identifier.jsp ----------------------------------->
 							<%@ include file="ExternalIdentifiers.jsp" %>
+							</td></tr>
+							<tr>
+          <td align="left" class="bottomtd"></td>
+        </tr>
+		<tr>
+		<td>
 							<%@ include file="BioHazards.jsp" %>
-							
-							<!--  Consent Tracking Module Virender mehta	 -->														
+							</td>
+							</tr>
+							</table>
+							</div>
+							</td>
+							</tr>
+							<!--  Consent Tracking Module Virender mehta	 -->								<tr>
+							<td>
 								<%
 								List requestParticipantResponse = (List)request.getAttribute(Constants.SPECIMEN_RESPONSELIST);	
 								if(requestParticipantResponse!=null&&form.getConsentTierCounter()>0)
 								{
-								%>
+								%><div id="consentTable" style="display:none">
 								    <%@ include file="/pages/content/ConsentTracking/ConsentTracking.jsp" %> 
+									</div>
 								<%
 								}
 								%>
 							<!--  Consent Tracking Module Virender mehta	 -->										
-			 				<table summary="" cellpadding="3" cellspacing="0" border="0"
-							width="100%" id="multipleDerivativeTbl">
+			 				</tr></td>
+								
+        <tr>
+          <td valign="middle" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;<bean:message key="childSpecimen.label" /></span></td>
+        </tr>
 					
-								<tr>
-									<td class="formTitle" " colspan="6" height="20">
-										<bean:message key="multipleDerivatives.mainTitle" />
+								<tr >
+          <td valign="middle" class="black_ar" >
+		  <table width="100%" border="0" cellpadding="3" cellspacing="0">
+             
+                <tr>
+                  <td width="17%" align="left" nowrap class="black_ar" colspan="2">
+						<input type="radio" value="1" id="aliquotCheck" name="specimenChild" onclick="onCheckboxButtonClick(this)" checked="true"/>
+						<bean:message key="app.none" />&nbsp;
+						<input type="radio" value="2" id="aliquotChk" name="specimenChild" onclick="onCheckboxButtonClick(this)"/>
+										<bean:message key="aliquots.title"/>
+									&nbsp;
+										<input type="radio" value="3" id="deriveChk" name="specimenChild" onclick="onCheckboxButtonClick(this)"/>
+										<bean:message key="specimen.derivative" />
+										<!--<html:text styleClass="black_ar" maxlength="50" size="30" styleId="numberOfSpecimens" property="numberOfSpecimens" style="text-align:right"/>-->
 									</td>
-								</tr>
-								<tr>
-									<td class="formLabel" colspan="2" style="border-left:1px solid #5C5C5C;">
-										<bean:message key="multipleDerivatives.numberOfSpecimen" />
-									</td>
-									<td class="formField" colspan="3">
-										<html:text styleClass="formFieldSized5" maxlength="50" size="30" styleId="numberOfSpecimens" property="numberOfSpecimens" />
-									</td>
-								</tr>			
-							</table>
+								</tr>	
+								 
+							
 							<!--specimenPageButton-->
-				 			<table summary="" cellpadding="3" cellspacing="1" border="0" width="100%" id="aliquotId">
-								<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">				 			
-								<tr>					
-									<td class="formFieldNoBordersSimple" height="20" colspan="5">
-										<html:checkbox styleId="aliquotChk" property="checkedButton" onclick="onCheckboxButtonClick(this)">
-											&nbsp; <bean:message key="specimen.aliquot.message"/>
-										</html:checkbox>
-										&nbsp;&nbsp;&nbsp;
-						                <bean:message key="aliquots.noOfAliquots"/>
-					                    &nbsp;
-					                    <!-- Resolved bug# 4287
-					                    	 Name: Virender Mehta
-					                    	 Reviewer: Sachin Lale
-					                    	 Description: replaced input type with html:text
-					                     -->
-										<html:text styleClass="formFieldSized5" styleId="noOfAliquots" property="noOfAliquots" disabled="true" />
-										&nbsp;&nbsp;&nbsp;
-						                <bean:message key="aliquots.qtyPerAliquot"/>
-					                    &nbsp;
-										<html:text styleClass="formFieldSized5" styleId="quantityPerAliquot" property="quantityPerAliquot" disabled="true" />
-								    </td>
-								</tr>			
+				 			
+								<tr><td colspan="2"></td></tr>
+								
 								<tr>
-											<td class="formFieldNoBorders" colspan="3" valign="center">
+								<td class="black_ar" width="25%" >
+										 <div style="display:none" id="derivedDiv">
+										 <bean:message key="summary.page.count" />&nbsp;
+										<html:text styleClass="black_ar" styleId="numberOfSpecimens" size="10" property="numberOfSpecimens" style="text-align:right"/></div>
+										<div style="display:block" id="aliquotDiv"><bean:message key="summary.page.count" />&nbsp;
+										<html:text styleClass="black_ar" styleId="noOfAliquots" size="10" property="noOfAliquots" disabled="true" style="text-align:right"/></div>
+										</td>
+										<td class="black_ar" width="75%">
+						                <bean:message key="aliquots.qtyPerAliquot"/>&nbsp;
+					                  
+										<html:text styleClass="black_ar" styleId="quantityPerAliquot" size="10" property="quantityPerAliquot" disabled="true" style="text-align:right"/>
+										
+								    </td>
+								</tr>
+								<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">	
+								<tr>
+											<td class="dividerline" colspan="2" valign="center">
 													<html:checkbox styleId="printCheckbox" property="printCheckbox" value="true" onclick="">
+														<span class="black_ar">
 															<bean:message key="print.checkboxLabel"/>
+														</span>
 														</html:checkbox>
 											</td>
 								</tr>					
 								</logic:notEqual>
-							</table>	 
+								 
 							
 							
-							<table>
+							<tr>
+          <td class="bottomtd"></td>
+        </tr>
 								<!-- Bio-hazards End here -->	
 						   	 	<tr>
-							  		<td align="left" colspan="6">
+							  		<td align="left" colspan="2" class="buttonbg">
 										<%
 											String changeAction = "setFormAction('"+formName+"')";
 							 			%>
 										<%@ include file="NewSpecimenPageButtons.jsp" %>
 							  		</td>
 							 	</tr>
-							</table>
-						</td>
-					</tr>
+							
 <!-- NEW SPECIMEN REGISTRATION ends-->
 				</table>
 
 <!--  Consent Tracking Module Virender mehta	 -->
-<%
-if(pageView.equals("edit")||pageView.equals("add"))
-{
-%>
+
 <!--  Consent Tracking Module Virender mehta	 -->
 			</td>
 		</tr>
+		</table>
+								</td>
+								</tr>
 	</table>
-<%
-}
-%>
+
 <html:hidden property="stContSelection"/>
 <html:hidden property="lineage"/>
 <html:hidden property="nextForwardTo" />
@@ -1681,5 +1771,5 @@ if(pageView.equals("edit")||pageView.equals("add"))
  Bug ID: 4231
 -->
 <script language="JavaScript">
-	onCheckboxButtonClick(document.getElementById("aliquotChk"));
+	//onCheckboxButtonClick(document.getElementById("aliquotChk"));
 </script>

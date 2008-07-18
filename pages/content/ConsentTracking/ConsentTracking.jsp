@@ -207,7 +207,7 @@ function popupWindow(nofConsentTiers)
 	String showHideStatus=request.getParameter("showHideStatus");
 %>
 	<%-- Main table Start --%>
-	<table summary="" cellpadding="0" cellspacing="0" border="0" width="<%=width%>" id="consentTable">
+	<table width="100%" border="0" cellpadding="0" cellspacing="0"   >
 		<%--Title of the form i.e Consent Form --%>				
 		<tr>
 			<td class="formTitle">
@@ -235,7 +235,7 @@ function popupWindow(nofConsentTiers)
 				</div>
 		  </td>
 		</tr>
-		<tr>
+		
 			<%-- If page of Collection Protocol Registration --%>						
 			<%
 			if(pageOf.equals("pageOfCollectionProtocolRegistration")||pageOf.equals("pageOfCollectionProtocolRegistrationCPQuery") || pageOf.equals("pageOfConsent"))
@@ -243,7 +243,7 @@ function popupWindow(nofConsentTiers)
 			%>
 			<tr>
 				<td >
-					<table summary="" cellpadding="3" cellspacing="0" border="0" width="<%=innerWidth%>" id="consentAttributes">
+					<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%" id="consentAttributes" >
 						<%--Signed URL --%>				
 						<tr>
 							<td class="tabrightmostcell" width="39%">
@@ -369,7 +369,7 @@ function popupWindow(nofConsentTiers)
 			<tr>
 				<td colspan="4">
 					<%-- Inner table that will show Consents--%>
-					<table summary="" cellpadding="3" cellspacing="0" border="0" width="<%=innerWidth%>" id="consentFields" colspan="2" >
+					<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%" id="consentFields" colspan="2" >
 						<tr>
 							<td class="tabrightmostcell" width="35%">
 								&nbsp;&nbsp;&nbsp;<bean:message key="collectionprotocolregistration.signedurlconsent"/>
@@ -451,7 +451,7 @@ function popupWindow(nofConsentTiers)
 			<tr>
 				<td>
 				<%-- Inner table that will show Consents Start--%>
-					<table summary="" cellpadding="3" cellspacing="0" border="0" width="<%=innerWidth%>" id="consentTable">
+					<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
 						<%-- Serial No # --%>	
 						<tr>
 							<td class="formLeftSubTableTitle">

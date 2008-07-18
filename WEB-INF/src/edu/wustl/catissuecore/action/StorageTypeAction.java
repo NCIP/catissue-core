@@ -77,7 +77,7 @@ public class StorageTypeAction  extends SecureAction
 	if(dimTwoCapacity > 1)
 	{
 		tdClassName="formRequiredLabel";
-		strStar = "<span class="+"blue_ar_b"+"><img src="+"images/uIEnhancementImages/star.gif"+" alt="+"Mandatory"+" width="+"6"+" height="+"6"+" hspace="+"0"+" vspace="+"0"+" /></span>";
+		strStar = "<span class="+"blue_ar_b"+"><img src="+"images/uIEnhancementImages/star.gif"+" alt="+"Mandatory"+" width="+"6"+" height="+"6"+" hspace="+"0"+" vspace="+"3"+" /></span>";
 	}
 	request.setAttribute("tdClassName", tdClassName);
 	request.setAttribute("strStar", strStar);

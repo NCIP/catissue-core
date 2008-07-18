@@ -40,16 +40,25 @@
 			var x=document.getElementById(subdivtag).insertRow(0);
 			
 			// First Cell
-			var spreqno=x.insertCell(0);
-			spreqno.className="formSerialNumberField";
+			//var spreqno=x.insertCell(0);
+			//spreqno.className="formSerialNumberField";
 			sname=(q+1);
 			//var identifier = "biohazardValue(Biohazard:" + (q+1) +"_id)";
 			//var hiddenTag = "<input type='hidden' name='" + identifier + "' value='' id='" + identifier + "'>";
-			spreqno.innerHTML= "" + sname;
+			//spreqno.innerHTML= "" + sname;
 
+			//check box
+			var checkb=x.insertCell(0);
+			checkb.className="black_ar";
+			//checkb.colSpan=2;
+			sname="";
+			var name = "chk_bio_"+ (q+1);
+			sname="<input type='checkbox' name='" + name +"' id='" + name +"' value='C' onClick=\"enableButton(document.forms[0].deleteBiohazard,document.forms[0].bhCounter,'chk_bio_')\">";
+			checkb.innerHTML=""+sname;
+			
 			//Second Cell
 			var spreqtype=x.insertCell(1);
-			spreqtype.className="formField";
+			spreqtype.className="black_ar";
 			sname="";
 
 			var name = "biohazardValue(Biohazard:" + (q+1) + "_type)";
@@ -71,8 +80,8 @@
 		
 			//Third Cellvalue()
 			var spreqsubtype=x.insertCell(2);
-			spreqsubtype.className="formField";
-			spreqsubtype.colSpan=2;
+			spreqsubtype.className="black_ar";
+			//spreqsubtype.colSpan=2;
 			sname="";
 
 			name = "biohazardValue(Biohazard:" + (q+1) + "_id)";
@@ -84,13 +93,7 @@
 			spreqsubtype.innerHTML="" + sname;
 			
 			//Fourth Cell
-			var checkb=x.insertCell(3);
-			checkb.className="formField";
-			checkb.colSpan=2;
-			sname="";
-			var name = "chk_bio_"+ (q+1);
-			sname="<input type='checkbox' name='" + name +"' id='" + name +"' value='C' onClick=\"enableButton(document.forms[0].deleteBiohazard,document.forms[0].bhCounter,'chk_bio_')\">";
-			checkb.innerHTML=""+sname;
+			
 		}
 		
 	// biohazard selection
@@ -119,70 +122,38 @@
 	</script>
 </head>
 
-<table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" id="bioHazardsTable">
-				 <tr>
-				 <!--	/**
-						* Name : Vijay_Pande
-						* Reviewer : Santosh_Chandak
-						* Bug ID: Improve_Space_Usability_On_Specimen_Page
-						* Patch ID: Improve_Space_Usability_On_Specimen_Page_3
-						* See also: 1-5
-						* Description: To improve space usability on specimen page, the table which are rarely used are kept invisible by default. 
- 						* Following image is provided to toggle between the show and hide the table. (Biohazard table).
-						*/   -->	
-					<td class="formFieldAllBorders" align="right" width="1%">
-						<a id="imageBH" style="text-decoration:none" href="javascript:switchStyle('imageBH','bhDispType','biohazards','addBiohazard');" >  
-						<img src="images/nolines_minus.gif" border="0" width="18" height="18"/>
-						</a>
+<table cellpadding="0" cellspacing="0" border="0" width="100%" id="bioHazardsTable">
+				 <tr onclick="showHide('add_biohazard')">
+				 
+					<td width="96%" align="left" class="tr_bg_blue1" colspan="2"><span class="blue_ar_b">&nbsp;
+						<bean:message key="specimen.biohazards"/>
+						
 						<input type="hidden" name="bhDispType" value="<%=bhDispType1%>" id="bhDispType" />
+						</span>
 					</td> 
-					<!-- Patch ends here -->
-				     <td class="formTitle" width="200" height="20" colspan="2">
-				     	<bean:message key="specimen.biohazards"/>
-				     </td>
-				     <td class="formButtonField" width="300" colspan="2">
-				     	<html:button property="addBiohazard" styleClass="actionButton" styleId="addBiohazard" onclick="insBhRow('addBiohazardRow')">
-				     		<bean:message key="buttons.addMore"/>
-				     	</html:button>
-				    </td>
-				    <!-- Patch_Id: Improve_Space_Usability_On_Specimen_Page_3
-						Description: variable to set the function name and its argument pageOf to set for the delete button  -->
-					<%
-					String delBioHazard="deleteBioHazards('pageOfMultipleSpecimen')";
-					if((String)request.getAttribute(Constants.PAGEOF)!=null)
-					{
-						delBioHazard="deleteBioHazards('"+(String)request.getAttribute(Constants.PAGEOF)+"');";
-					}
-					%>
-				    <td class="formTitle" align="Right">
-							<html:button property="deleteBiohazard" styleClass="actionButton" onclick='<%=delBioHazard%>' disabled="true">
-								<bean:message key="buttons.delete"/>
-							</html:button>
-					</td>
-					<!-- Patch ends here -->
+					
+					<td width="4%%" align="right" class="tr_bg_blue1"><a href="#" id="imgArrow_add_biohazard"><img src="images/uIEnhancementImages/dwn_arrow1.gif" width="80" height="9" hspace="10" border="0" alt="Show Details" /></a></td>
+				    
+					
 				  </tr>
 				  
-				  <tr>
-					  <td colspan="6" width="100%">
+				 <tr>
+          <td colspan="5" class="showhide1"><div id="add_biohazard" style="display:none" >
+              <table width="100%" border="0" cellspacing="0" cellpadding="3">
+                <tr class="tableheading">
 						<!-- Patch_Id: Improve_Space_Usability_On_Specimen_Page_3
 							 Description: Table is seperated from its title to collapse/expand    -->
-						  <table summary="" cellpadding="3" cellspacing="0" border="0" width="100%" id="biohazards">
-						  <!-- Patch ends here -->
-						  <tr>
-							<td class="formSerialNumberLabel" width="5">
-								#
+						  
+							<td width="6%" align="left" class="black_ar_b">
+								<bean:message key="app.select" />
 							</td>
-							<td class="formLeftSubTableTitle" width="350">
+							 <td width="20%" align="left" class="black_ar_b">
 								<bean:message key="biohazards.type"/>
 							</td>
-							<td class="formRightSubTableTitle" colspan="2" width="350">
+							<td width="70%" class="black_ar_b">
 								<bean:message key="biohazards.name"/>
 							</td>
-							<td class="formRightSubTableTitle" width="50">
-									<label for="delete" align="center">
-										<bean:message key="addMore.delete" />
-									</label>
-							</td>
+							
 						 </tr>
 						 
 						 <tbody id="addBiohazardRow">
@@ -199,17 +170,28 @@
 								String check = "chk_bio_"+i;
 						  %>
 							<tr>
-								<td class="formSerialNumberField" width="5"><%=i%>.
+								
 									<html:hidden property="<%=biohzId%>" />
+									<%
+									String biohzKey = "Biohazard:" + i + "_persisted";
+									String condition = (String)bioHazardMap.get(biohzKey);
+									boolean biohzBool = Boolean.valueOf(condition).booleanValue();
+									String biohzCondition = "";
+									if(biohzBool)
+										biohzCondition = "disabled='disabled'";
+								%>
+									<td align="left" class="black_ar" >
+									<input type=checkbox name="<%=check %>" id="<%=check %>" <%=biohzCondition%> onClick="enableButton(document.forms[0].deleteBiohazard,document.forms[0].bhCounter,'chk_bio_')">		
 								</td>
-								<td class="formField" width="365">
+								
+								<td nowrap class="black_ar">
 		<!-- Mandar : 434 : for tooltip -->
 									<html:select property="<%=bhType%>" styleClass="formFieldSized15" styleId="<%=bhType%>" size="1" onchange="onBiohazardTypeSelected(this)"
 									 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 										<html:options collection="<%=Constants.BIOHAZARD_TYPE_LIST%>" labelProperty="name" property="value"/>
 									</html:select>
 								</td>
-								<td class="formField" colspan="2">
+								 <td valign="top" class="black_ar">
 		<!-- Mandar : 434 : for tooltip -->
 									<html:select property="<%=bhId%>" styleClass="formFieldSized15" styleId="<%="bhId" + i%>" size="1"
 									 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
@@ -228,21 +210,33 @@
 										%>
 									</html:select>
 								</td>
-								<%
-									String biohzKey = "Biohazard:" + i + "_persisted";
-									String condition = (String)bioHazardMap.get(biohzKey);
-									boolean biohzBool = Boolean.valueOf(condition).booleanValue();
-									String biohzCondition = "";
-									if(biohzBool)
-										biohzCondition = "disabled='disabled'";
-								%>
-								<td class="formField" width="5">
-									<input type=checkbox name="<%=check %>" id="<%=check %>" <%=biohzCondition%> onClick="enableButton(document.forms[0].deleteBiohazard,document.forms[0].bhCounter,'chk_bio_')">		
-								</td>
+								
+								
 							 </tr>
 						  <% } %>
 						 </tbody>
+						 <tr>
+                  <td colspan="3" align="left" class="black_ar" >
+
+						<html:button property="addBiohazard" styleClass="black_ar" styleId="addBiohazard" onclick="insBhRow('addBiohazardRow')" accesskey="A">
+				     		<bean:message key="buttons.addMore"/>
+				     	</html:button>
+						
+                        
+						<%
+					String delBioHazard="deleteBioHazards('pageOfMultipleSpecimen')";
+					if((String)request.getAttribute(Constants.PAGEOF)!=null)
+					{
+						delBioHazard="deleteBioHazards('"+(String)request.getAttribute(Constants.PAGEOF)+"');";
+					}
+					%>
+						<html:button property="deleteBiohazard" styleClass="black_ar" onclick='<%=delBioHazard%>' disabled="true" accesskey="D">
+								<bean:message key="buttons.delete"/>
+							</html:button>
+
+                      </tr>
 						</table>
+						</div>
 					</td>
 				</tr>
 				
