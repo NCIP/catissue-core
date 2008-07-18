@@ -108,6 +108,12 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 	protected String isConsentAvailable;
 	
 	protected Integer offset;
+	
+	/**
+	 * barcode attribute added for Suite1.1
+	 */
+	protected String barcode;
+	
 	/**
 	 * @return the consentSignatureDate
 	 * @hibernate.property name="consentSignatureDate" column="CONSENT_SIGN_DATE"  
@@ -558,5 +564,19 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 		this.offset = offset;
 	}
 	
+	public String getBarcode()
+	{
+		return barcode;
+	}
+	
+	public void setBarcode(String barcode)
+	{
+		this.barcode = barcode;
+		if ("".equals(barcode))
+		{
+			this.barcode = null;
+		}
+	}
+
 	
 }

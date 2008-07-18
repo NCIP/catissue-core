@@ -144,6 +144,14 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 
     protected String collectionStatus;
     protected Integer offset;
+    
+    /**
+	 * barcode attribute added for Suite1.1
+	 */
+	protected String barcode;
+	
+	protected Date encounterTimestamp;
+	
     /**
      * Returns the required specimen collection event 
      * associated with a Collection Protocol.
@@ -744,5 +752,27 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 	{
 		this.name = name;
 	}
-
+	
+	public String getBarcode()
+	{
+		return barcode;
+	}
+	
+	public void setBarcode(String barcode)
+	{
+		this.barcode = barcode;
+		if ("".equals(barcode))
+		{
+			this.barcode = null;
+		}
+	}
+	
+	public Date getEncounterTimestamp()
+	{
+		return encounterTimestamp;
+	}
+	public void setEncounterTimestamp(Date encounterTimestamp)
+	{
+		this.encounterTimestamp = encounterTimestamp;
+	}
 }
