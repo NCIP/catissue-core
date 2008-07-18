@@ -1998,7 +1998,9 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 		String sql = "SELECT site.IDENTIFIER, site.NAME,COUNT(site.NAME) FROM CATISSUE_SITE "
 				+ " site join CATISSUE_STORAGE_CONTAINER sc ON sc.site_id = site.identifier join "
 				+ "CATISSUE_CONTAINER con ON con.identifier = sc.identifier WHERE con.ACTIVITY_STATUS!='Disabled' "
-				+ "GROUP BY site.IDENTIFIER, site.NAME";
+				+ "GROUP BY site.IDENTIFIER, site.NAME"
+				+" order by upper(site.NAME)";
+				
 
 		JDBCDAO dao = (JDBCDAO) DAOFactory.getInstance().getDAO(
 				Constants.JDBC_DAO);
