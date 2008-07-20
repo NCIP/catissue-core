@@ -36,7 +36,7 @@
   <tr>
     <td class="td_color_bfdcf3"><table border="0" cellpadding="0" cellspacing="0">
       <tr>
-        <td class="td_table_head" nowrap="nowrap"><span class="wh_ar_b"><bean:message key="ReportProblems.header" /></span></td>
+        <td class="td_table_head" nowrap="nowrap"><span class="wh_ar_b"><bean:message key="app.reportProblem" /></span></td>
         <td><img src="images/uIEnhancementImages/table_title_corner2.gif" width="31" height="24" alt="Page Title"/></td>
       </tr>
     </table></td>
@@ -126,6 +126,7 @@
                 <td align="left" valign="middle"><html:textarea styleClass="formFieldSizedNew" cols="34" rows="5"
 														styleId="messageBody" property="messageBody" readonly="<%=readOnlyValue%>" />                </tr>
 				<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
+				<tr>
 				<td align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>
                 <td align="left" class="black_ar"><bean:message key="reportProblem.status" /></td>	
 				<td align="left" valign="middle"><html:select property="activityStatus" styleClass="formFieldSizedNew"

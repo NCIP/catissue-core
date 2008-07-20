@@ -36,12 +36,7 @@
 		 %>     			
 		
 		
-		<logic:notEqual name="<%=Constants.PAGEOF%>"
-			value="<%=Constants.QUERY%>">
-			
-				
-			
-		</logic:notEqual>
+		
 		<!-- Commented as per bug 2115. Mandar. 10-July-06
 											</tr>
 											<tr>							
@@ -79,9 +74,10 @@
 				<bean:message key="buttons.addToCart"/>
 		</html:button>&nbsp;| 
 		<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_PARTICIPANT_CP_QUERY%>">
-		<html:link onclick="closeUserWindow()" page="/ManageAdministrativeData.do" styleClass="view">
+		<html:link page="/ManageAdministrativeData.do" styleClass="cancellink">
 		<bean:message key="buttons.cancel" />
 		</html:link>
+		</logic:notEqual>
 		</td>
 	</tr>
 </table>

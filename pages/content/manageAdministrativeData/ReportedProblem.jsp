@@ -97,7 +97,9 @@
 							</td>
 						</tr>
 						<tr>
-							<td class="buttonbg">&nbsp;</td>
+							<td class="buttonbg"><html:link page="/ManageAdministrativeData.do" styleClass="cancellink">
+												<bean:message key="buttons.cancel" />
+											</html:link></td>
 							</tr>
     </table></td>
   </tr>
