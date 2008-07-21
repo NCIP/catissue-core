@@ -260,14 +260,6 @@ function participantRegRow(subdivtag)
 <link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
 
 
-
-
-
-
-
-
-
-
 <table width="100%" border="0" cellpadding="0" cellspacing="0"
 	class="maintable">
 	<tr>
@@ -613,7 +605,7 @@ function participantRegRow(subdivtag)
 							<td class="black_ar"><html:text styleClass="black_ar"
 								size="15" styleId="<%=medicalRecordNumber%>"
 								property="<%=medicalRecordNumber%>"
-								readonly="<%=readOnlyForAll%>" style="text-align:right" /></td>
+								readonly="<%=readOnlyForAll%>"  /></td>
 						</tr>
 						<%
 								}
