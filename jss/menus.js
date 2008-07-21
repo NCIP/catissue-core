@@ -312,7 +312,7 @@ Ext.onReady(function(){
                             href:'SimpleQueryInterface.do?pageOf=pageOfNewSpecimen&aliasName=Specimen'
                         }, {
                             text: 'Derive',
-                            href:'CreateSpecimen.do?operation=add&amp;pageOf=&virtualLocated=true'
+                            href:'CreateSpecimen.do?operation=add&pageOf=pageOfDeriveSpecimen&virtualLocated=true'
                         }, {
                             text: 'Aliquot',
                             href:'Aliquots.do?pageOf=pageOfAliquot'

@@ -197,14 +197,13 @@
 		<tr>
 		    <td class="td_color_bfdcf3" width="100%">
 				<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_CREATE_SPECIMEN_CP_QUERY%>">
-				<table border="0" cellpadding="0" cellspacing="0" width="17%">
+				<table border="0" cellpadding="0" cellspacing="0" width="18%">
 			     <tr>
-					<td class="td_table_head" width="100%"><span class="wh_ar_b">&nbsp;&nbsp;&nbsp;<bean:message key="specimen.derived.title"/></span></td>
+					<td class="td_table_head" width="100%"><span class="wh_ar_b"><bean:message key="specimen.derived.title"/></span></td>
 					<td><img src="images/uIEnhancementImages/table_title_corner2.gif" alt="Page Title" width="31" height="24" /></td>
 				</tr>
 				</table>
 				</logic:notEqual>
-			<br>
 			</td>
 		</tr>		
 		<tr>
@@ -229,7 +228,6 @@
 						</logic:equal>
 
 				        <td width="90%" align="left" valign="bottom" class="td_tab_bg">&nbsp;</td>
-				        <td width="1%" align="left" valign="bottom" class="td_color_bfdcf3" ></td>
 			      </tr>
 					
 					<html:hidden property="${requestScope.oper}" value="${requestScope.operation}"/>
@@ -243,9 +241,10 @@
 				
 					<logic:equal name="pageOf" value="${requestScope.query}">
 					<html:hidden property="sysmtemIdentifier"/>
+				 </table>
 				</logic:equal>
 
-			   </table>
+			  
 		
 		<table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg" align="center">
 				<tr>
@@ -520,10 +519,11 @@
 		  </logic:iterate>
 		 </tbody>
 
-                <tr>
-                  <td colspan="3" align="left" class="black_ar" ><table width="100%" border="0" cellspacing="0" cellpadding="0">
-                      <tr>
-                        <td width="9%">
+         <tr>
+               <td colspan="3" align="left" class="black_ar" >
+			   <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                   <tr>
+                      <td width="9%">
 						<html:button property="addExId" styleClass="blue_ar_b" styleId="addExId"														onclick="insExIdRow('addExternalIdentifier')">
 							     		<bean:message key="buttons.addMore"/>
 		     			</html:button>
@@ -539,9 +539,7 @@
             </table>
 			</td>
         </tr>
-        <tr>
-          <td colspan="3" valign="middle" class="toptd"></td>
-        </tr>
+        
 
 		<!-- derive Aliquot starts -->
         <tr>
@@ -595,7 +593,7 @@
         <tr>
           <td colspan="3" class="toptd"></td>
         </tr>
-        <logic:notEqual name="${requestScope.oper}" value="${requestScope.view}">		
+			<logic:notEqual name="${requestScope.oper}" value="${requestScope.view}">		
 				 	<tr>
 				  		<td align="left" colspan="4">
 				  		<logic:notEqual name="multipleSpecimen" value="1">	<!-- to verify for valid case 4 -->
@@ -612,19 +610,26 @@
 											value="${requestScope.SPECIMEN_FORWARD_TO_LIST}"
 											onclick="${requestScope.addMoreSubmit}" >
 										</html:button>
-									&nbsp;|  &nbsp;
+										&nbsp;|  &nbsp;
 										<html:submit styleClass="blue_ar_b" onclick="onAddToCart()">
 											<bean:message key="buttons.addToCart"/>
 										</html:submit>
 										&nbsp;|  &nbsp;
-										<span class="cancellink">
-											<html:link	page="/ManageAdministrativeData.do" styleClass="blue_ar_s_b">
+
+										<logic:equal name="<%=Constants.PAGEOF%>"	value="<%=Constants.PAGE_OF_CREATE_SPECIMEN_CP_QUERY%>">
+											<html:link	page="/QueryManageBioSpecimen.do" styleClass="cancellink">
 												<bean:message key="buttons.cancel" />
 											</html:link>
-										</span>
+										</logic:equal>
+										
+										<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_CREATE_SPECIMEN_CP_QUERY%>">
+										<html:link	page="/ManageAdministrativeData.do" styleClass="cancellink">
+												<bean:message key="buttons.cancel" />
+										</html:link>
+										</logic:notEqual>
+										
 									</td>
-								</tr>
-
+								</tr>						
 	
 				  		</logic:notEqual> <!-- to verify for valid case 4 -->
 				  		<logic:equal name="multipleSpecimen" value="1">
@@ -643,8 +648,9 @@
 						</logic:equal>	
 				  		</td>
 				 	</tr>
+				
 
-				</logic:notEqual>		
+			</logic:notEqual>		
 	</table>
 	</logic:empty> <%-- if(request.getAttribute("showDerivedPage")==null) --%>
 	
