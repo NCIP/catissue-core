@@ -462,7 +462,7 @@ public class TemporalQueryBean
 	{
 		for(DSInterval time: DSInterval.values())
 		{
-			if(timeIntervalValue.equals(time.name()))
+			if(timeIntervalValue.equals(time.name() + "s"))
 			{
 				timeInterval = time;
 				break;
@@ -472,7 +472,7 @@ public class TemporalQueryBean
 		{
 			for(YMInterval time : YMInterval.values())
 			{
-				if(timeIntervalValue.equals(time.name()))
+				if(timeIntervalValue.equals(time.name() + "s"))
 				{
 					timeInterval = time;
 					break;
