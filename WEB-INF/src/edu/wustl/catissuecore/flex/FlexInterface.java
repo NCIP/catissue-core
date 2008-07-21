@@ -45,6 +45,7 @@ import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.flex.dag.CustomFormulaNode;
 import edu.wustl.catissuecore.flex.dag.DAGConstant;
 import edu.wustl.catissuecore.flex.dag.DAGNode;
 import edu.wustl.catissuecore.flex.dag.DAGPanel;
@@ -1418,9 +1419,13 @@ public class FlexInterface
 	{
 		DAGNode sourceNode = linkedNodeList.get(0);
 		DAGNode destinationNode = linkedNodeList.get(1);
-		 
-		Map queryDataMap = dagPanel.getQueryData(sourceNode,destinationNode);
-		
+		Map queryDataMap = dagPanel.getQueryData(sourceNode.getExpressionId(),destinationNode.getExpressionId(),sourceNode.getNodeName(),destinationNode.getNodeName());
+		return queryDataMap;
+	}
+	
+	public Map retrieveEditQueryData(CustomFormulaNode customNode)
+	{
+		Map queryDataMap = dagPanel.getQueryData(customNode.getFirstNodeExpId(),customNode.getSecondNodeExpId(), customNode.getFirstNodeName(),customNode.getSecondNodeName());
 		return queryDataMap;
 	}
 	
@@ -1429,6 +1434,8 @@ public class FlexInterface
 		//System.out.println("In remove custom formula");
 		dagPanel.removeCustomFormula();
 	}
+	
+	
 	/**
 	 * Deletes node from output view
 	 * @param expId
@@ -1493,9 +1500,9 @@ public class FlexInterface
 	 * @param linkedNodeList
 	 * @return
 	 */
-	public void formTemporalQuery(DAGNode sourceNode,DAGNode destinationNode,String tempQuery)
+	public CustomFormulaNode formTemporalQuery(CustomFormulaNode customFormulaNode, String operation)
 	{
-		dagPanel.formTemporalQuery(sourceNode, destinationNode,tempQuery);
+		return dagPanel.formTemporalQuery(customFormulaNode,operation);
 	}
 	/**
 	 * Links 2 nodes
