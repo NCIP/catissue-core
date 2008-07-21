@@ -93,9 +93,10 @@ window.parent.frames['CPTreeView'].location="ShowCollectionProtocol.do?pageOf=sp
               <tr>
                 <td><table width="100%" border="0" cellpadding="0" cellspacing="0">
                     <tr>
-                      <td valign="bottom" id="eventTab"><img src="images/uIEnhancementImages/cp_event.gif" alt="Collection Protocol Details" width="94" height="20" /><a href="ad_user_edit.html"></a><a href="ad_user_approve.html"></a></td>
-                      
-                      <td width="95%" valign="bottom" class="cp_tabbg">&nbsp;</td>
+                      <td valign="bottom" id="eventTab"><img src="images/uIEnhancementImages/cp_event.gif" alt="Collection Protocol Details" width="94" height="20" /></td>
+                       <td width="85%" valign="bottom" class="cp_tabbg">&nbsp;</td>
+                      <td valign="top" class="cp_tabbg">&nbsp;</td>
+					  <td align="left" valign="top" class="cp_tabbg"><html:link href="#" styleClass="view" styleId="newUser" onclick="viewSummary()"><bean:message key="cpbasedentry.viewsummary" /></html:link></td>  
                     </tr>
                 </table></td>
               </tr>

@@ -431,6 +431,7 @@ if(form != null)
                   <tr>
                     <td valign="bottom" ><img src="images/uIEnhancementImages/cp_specimen.gif" alt="Specimen Requirements" width="158" height="20" /><a href="#"></a></td>
                     <td width="85%" valign="bottom" class="cp_tabbg">&nbsp;</td>
+					<td align="left" valign="top" class="cp_tabbg"><html:link href="#" styleClass="view" styleId="newUser" onclick="viewSummary()"><bean:message key="cpbasedentry.viewsummary" /></html:link></td>  
                   </tr>
               </table></td>
 		 </tr>
