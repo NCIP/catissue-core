@@ -21,6 +21,7 @@ import edu.wustl.catissuecore.actionForm.AssignPrivilegesForm;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.multiRepository.bean.SiteUserRolePrivilegeBean;
+import edu.wustl.catissuecore.util.global.CPPrivilege;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
@@ -220,48 +221,20 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 	public List<NameValueBean> getActionList(boolean isToExcludeDisabled) throws BizLogicException
 	{     
 		PrivilegeUtility privilegeUtility = new PrivilegeUtility();
-		List<Privilege> privilegeList=new ArrayList<Privilege>();
-		try 
-		{
-			privilegeList = privilegeUtility.getPrivilegeList();
-		}
-		catch (CSException e) 
-		{
-			throw new BizLogicException("Could not get List of Privilege", e);
-		}
-		List<NameValueBean> privilegeNameValueBeanList  = new ArrayList<NameValueBean>();
+		List<NameValueBean> privilegeNameValueBeanList = null;
 		
-		String[] CP_Privileges = Constants.CP_Privileges;
-		List<String> list = new ArrayList<String>();
-		
-		for(String privilege : CP_Privileges)
+		for (CPPrivilege privilege  : CPPrivilege.values())
 		{
-			list.add(privilege);		
+			NameValueBean privilegeNameValueBean = new NameValueBean(Utility.getDisplayLabelForUnderscore(privilege.toString()), privilege.getId());
+			privilegeNameValueBeanList.add(privilegeNameValueBean);
+			
 		}
-		
-		for (Privilege privilege2 : privilegeList)
-		{
-			if(list.contains(privilege2.getName()))
-			{
-				String privilegeName="";
-				if((privilege2.getName()).equals("PHI_ACCESS"))
-				{
-					privilegeName=ApplicationProperties.getValue(privilege2.getName());
-				}
-				else
-				{
-				privilegeName=Utility.getDisplayLabelForUnderscore(privilege2.getName());
-			//	privilegeName=ApplicationProperties.getValue(privilege2.getName());
-			//	if(("Phi Access").equals(privilegeName)){
-			//		privilegeName="PHI Access";
-			//	}
-				}
-				NameValueBean privilegeNameValueBean = new NameValueBean(privilegeName, privilege2.getId());
-				privilegeNameValueBeanList.add(privilegeNameValueBean);
-			}
-		}
+	
 		return privilegeNameValueBeanList;
 	}
+	
+	
+	
 	/**
 	 * Given a list selected sites , this method will return the list of users registered under them.
 	 * @param siteIds

@@ -289,7 +289,7 @@ class ParticipantRegistrationCache
 		List cpDetailsList = new ArrayList();
 		
 		UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.USER_FORM_ID);
-		Set cpIds = userBizLogic.getCPForUser(sessionDataBean);
+		Set cpIds = userBizLogic.getRelatedCPIds(sessionDataBean.getUserId());
 			
 			
 			if(cpIds == null)

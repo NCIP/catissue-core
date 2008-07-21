@@ -2362,8 +2362,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String CART_COLUMN_LIST = "cartColumnList";
 	public static final String CART_ATTRIBUTE_LIST = "cartAttributeList";
 	public static final String ADD_SPECIMEN_TO_CART="addSpecimenToCart";
-	
-	public static final String[] CP_Privileges ={Permissions.REGISTRATION,Permissions.SPECIMEN_ACCESSION,Permissions.SPECIMEN_PROCESSING,Permissions.PHI};
+		
 	public static final String ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE = "Distributed And Close"; 												
 }
 	

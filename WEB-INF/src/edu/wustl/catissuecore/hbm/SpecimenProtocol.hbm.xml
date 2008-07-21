@@ -256,7 +256,7 @@
         <set
             name="siteCollection"
             table="CATISSUE_SITE_CP"
-            lazy="false" 
+            lazy="false" fetch="subselect"
             inverse="false"
             cascade="none"
             sort="unsorted"

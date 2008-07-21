@@ -11,6 +11,8 @@
         dynamic-insert="false"
         lazy="true"
     >
+    
+      <cache usage="read-write" />
 
         <id
             name="id"
@@ -66,7 +68,7 @@
 	            class="edu.wustl.catissuecore.domain.StorageContainer"
 	            cascade="none"
 	            outer-join="auto"
-	           lazy="false"
+	           lazy="false" 
 		     	column="CONTAINER_ID"
 	        />
         

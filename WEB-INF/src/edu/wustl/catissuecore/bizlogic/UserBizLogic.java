@@ -15,6 +15,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
@@ -25,6 +26,7 @@ import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Department;
 import edu.wustl.catissuecore.domain.Institution;
 import edu.wustl.catissuecore.domain.Password;
+import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.EmailHandler;
@@ -1204,64 +1206,107 @@ public class UserBizLogic extends DefaultBizLogic
 	 * Done for MSR functionality change
 	 * @author ravindra_jain 
 	 */
-	
-		public Set<Long> getCPForUser(SessionDataBean sessionDataBean)
+
+	public Set<Long> getRelatedCPIds(Long userId)
+	{
+		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+		Collection<CollectionProtocol> userCpCollection = new HashSet<CollectionProtocol>();
+		Collection<CollectionProtocol> userColl;
+		Set<Long> cpIds = new HashSet<Long>();
+
+		try
 		{
-			AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
-			Collection<CollectionProtocol> userCpCollection = new HashSet<CollectionProtocol>();
-			Collection<CollectionProtocol> userColl ;
-			Set<Long> cpIds = new HashSet<Long>();
-			Long userId = sessionDataBean.getUserId();
-			
-			try 
+			dao.openSession(null);
+			User user = (User) dao.retrieve(User.class.getName(), userId);
+			userColl = user.getCollectionProtocolCollection();
+			userCpCollection = user.getAssignedProtocolCollection();
+
+			if (user.getAdminuser())
 			{
-				dao.openSession(sessionDataBean);
-				
-				User user = (User) dao.retrieve(User.class.getName(), userId);
-				userColl = user.getCollectionProtocolCollection();
-				userCpCollection = user.getAssignedProtocolCollection();
-					
-				if(user.getAdminuser())
+				cpIds = null;
+			}
+			else
+			{
+				PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
+				PrivilegeCache privilegeCache = privilegeManager.getPrivilegeCache(user
+						.getLoginName());
+
+				for (CollectionProtocol collectionProtocol : userCpCollection)
 				{
-					cpIds = null;
-				}
-				else
-				{
-					PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
-					PrivilegeCache privilegeCache = privilegeManager.getPrivilegeCache(sessionDataBean.getUserName());
-					
-					for(CollectionProtocol collectionProtocol : userCpCollection)
+					if (privilegeCache.hasPrivilege(collectionProtocol.getObjectId(),
+							Permissions.PHI)
+							|| collectionProtocol.getPrincipalInvestigator().getLoginName().equals(
+									user.getLoginName()))
 					{
-						if(privilegeCache.hasPrivilege(collectionProtocol.getObjectId(), Permissions.PHI) || 
-								collectionProtocol.getPrincipalInvestigator().getLoginName().equals(sessionDataBean.getUserName()))
-						{
-							cpIds.add(collectionProtocol.getId());
-						}
-					}
-							
-					for(CollectionProtocol cp : userColl)
-					{
-						cpIds.add(cp.getId());
+						cpIds.add(collectionProtocol.getId());
 					}
 				}
-				
-			} 
-			catch (DAOException e) 
+
+				for (CollectionProtocol cp : userColl)
+				{
+					cpIds.add(cp.getId());
+				}
+			}
+
+		}
+		catch (DAOException e)
+		{
+			Logger.out.error(e.getMessage(), e);
+		}
+		finally
+		{
+			try
+			{
+				dao.closeSession();
+			}
+			catch (DAOException e)
 			{
 				Logger.out.error(e.getMessage(), e);
 			}
-			finally
+		}
+
+		return cpIds;
+	}
+
+	public Set<Long> getRelatedSiteIds(Long userId) 
+	{
+		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+
+		HashSet<Long> idSet = null;
+
+		try
+		{
+			dao.openSession(null);
+
+			User user = (User) dao.retrieve(User.class.getName(), userId);
+			if (!user.getAdminuser())
 			{
-				try 
+				Collection<Site> siteCollection = user.getSiteCollection();
+				idSet = new HashSet<Long>();
+
+				for (Site site : siteCollection)
 				{
-					dao.closeSession();
-				} 
-				catch (DAOException e) 
-				{
-					Logger.out.error(e.getMessage(), e);
+					idSet.add(site.getId());
 				}
 			}
-				
-			return cpIds;	
 		}
+		catch (DAOException e)
+		{
+			Logger.out.error(e.getMessage(), e);
+		}
+		finally
+		{
+			try
+			{
+				dao.closeSession();
+			}
+			catch (DAOException e)
+			{
+				Logger.out.error(e.getMessage(), e);
+			}
+		}
+
+		return idSet;
+	} 
+
 }

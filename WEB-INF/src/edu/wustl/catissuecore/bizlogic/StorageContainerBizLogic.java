@@ -329,27 +329,26 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 		List userList = null;
 		try {
 			dao.openSession(null);
-			Set<String> idSet = getIdSet(dao, userId);
+			Set<Long> idSet = new UserBizLogic().getRelatedSiteIds(userId);
 			userList = new ArrayList();
 			Iterator siteListIterator = siteResultList.iterator();
 			while (siteListIterator.hasNext()) {
 				NameValueBean nameValBean = (NameValueBean) siteListIterator
 						.next();
-				String siteId = nameValBean.getValue();
+				Long siteId = new Long(nameValBean.getValue());
 				if (hasPrivilegeonSite(idSet, siteId)) {
 					userList.add(nameValBean);
 				}
 			}
-		} catch (DAOException e) {
-
-		} finally
+		}  
+		finally
 		{
 			dao.closeSession();
 		}
 		return userList;
 	}
 
-	private boolean hasPrivilegeonSite(Set<String> siteidSet, String siteId) {
+	private boolean hasPrivilegeonSite(Set<Long> siteidSet, Long siteId) {
 		boolean hasPrivilege = true;
 		if (siteidSet != null) {
 			if (!siteidSet.contains(siteId)) {
@@ -359,27 +358,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 		return hasPrivilege;
 	}
 
-	private Set<String> getIdSet(DAO dao, Long userId) throws DAOException {
-
-		try {
-			User user = (User) dao.retrieve(User.class.getName(), userId);
-			HashSet<String> idSet = null;
-			if (!user.getAdminuser()) {
-				Collection siteCollection = user.getSiteCollection();
-
-				idSet = new HashSet<String>();
-				Iterator siteIterator = siteCollection.iterator();
-				while (siteIterator.hasNext()) {
-					Site site = (Site) siteIterator.next();
-					idSet.add(site.getId().toString());
-				}
-			}
-			return idSet;
-		} catch (DAOException e) {
-			throw e;
-		}
-	}
-
+	
 	/**
 	 * this function checks weather parent of the container is valid or not
 	 * according to restriction provided for the containers
@@ -2021,7 +2000,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 		Iterator iterator = resultList.iterator();
 		AbstractDAO hibernateDao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
 		hibernateDao.openSession(null);
-		Set<String> siteIdSet = getIdSet(hibernateDao,userId);
+		Set<Long> siteIdSet = new UserBizLogic().getRelatedSiteIds(userId);
 		hibernateDao.closeSession();
 
 		while (iterator.hasNext()) {
@@ -2029,7 +2008,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 
 			nodeIdentifier = Long.valueOf((String) rowList.get(0));
 
-			if (hasPrivilegeonSite(siteIdSet, nodeIdentifier.toString())) {
+			if (hasPrivilegeonSite(siteIdSet, nodeIdentifier)) {
 				nodeName = (String) rowList.get(1);
 				dummyNodeName = Constants.DUMMY_NODE_NAME;
 
@@ -2321,7 +2300,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 		Set loggedInUserSiteIdSet = null;
 		try {
 			site = getSite(dao, container.getId());
-			loggedInUserSiteIdSet = getIdSet(dao,userId);
+			loggedInUserSiteIdSet = new UserBizLogic().getRelatedSiteIds(userId);
 		} catch (DAOException e) {
 			return false;
 		} finally {

@@ -8,6 +8,8 @@
         name="edu.wustl.catissuecore.domain.DistributionSpecimenRequirement"
         table="CATISSUE_DISTRIBUTION_SPEC_REQ" 
     >
+    
+    <cache usage="read-write" />
 
         <id
             name="id"
