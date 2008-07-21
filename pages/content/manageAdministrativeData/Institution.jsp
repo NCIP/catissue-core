@@ -25,32 +25,30 @@
               <tr>
                 <td colspan="3" valign="top" class="td_color_bfdcf3"><table width="20%" border="0" cellpadding="0" cellspacing="0" background="images/uIEnhancementImages/table_title_bg.gif">
                     <tr>
-                      <td width="74%"><span class="wh_ar_b">&nbsp;&nbsp;&nbsp;
+                       <td class="td_table_head"><span class="wh_ar_b">
 					  <bean:message key="Institution.header" />
 					  </span></td>
-                      <td width="26%" align="right"><img src="images/uIEnhancementImages/table_title_corner2.gif" width="31" height="24" /></td>
+                      <td  align="right"><img src="images/uIEnhancementImages/table_title_corner2.gif" width="31" height="24" /></td>
                     </tr>
                 </table></td>
               </tr>
 			   <tr>
                 <td width="1%" valign="top" class="td_color_bfdcf3">&nbsp;</td>
-                <td width="9%" valign="top" class="td_tab_bg">&nbsp;</td>
-                <td width="90%" valign="bottom" class="td_color_bfdcf3" style="padding-top:4px;"><table width="100%" border="0" cellpadding="0" cellspacing="0">
+                <td width="4%" valign="top" class="td_tab_bg">&nbsp;</td>
+                <td width="90%" valign="bottom" class="td_color_bfdcf3" ><table width="100%" border="0" cellpadding="0" cellspacing="0">
                     <tr>
-                      <td width="4%" class="td_tab_bg" >&nbsp;</td>
+                      <td  class="td_tab_bg" >&nbsp;</td>
 					   <!-- for tabs selection -->
-				<logic:equal name="operation" value="add">
-                      <td width="6%" valign="bottom" background="images/uIEnhancementImages/tab_bg.gif" ><img src="images/uIEnhancementImages/tab_add_selected.jpg" alt="Add" width="57" height="22" /></td>
-                      <td width="6%" valign="bottom" background="images/uIEnhancementImages/tab_bg.gif"><html:link page="/SimpleQueryInterface.do?pageOf=pageOfInstitution&aliasName=Institution"><img src="images/uIEnhancementImages/tab_edit_notSelected.jpg" alt="Edit" width="59" height="22" border="0" /></html:link></td>
-                      <td width="15%" valign="bottom" background="images/uIEnhancementImages/tab_bg.gif">&nbsp;</td>
-					  </logic:equal>
+				      <logic:equal name="operation" value="add">
+                      <td  valign="bottom" ><img src="images/uIEnhancementImages/tab_add_selected.jpg" alt="Add" width="57" height="22" /></td>
+                      <td  valign="bottom"><html:link page="/SimpleQueryInterface.do?pageOf=pageOfInstitution&aliasName=Institution"><img src="images/uIEnhancementImages/tab_edit_notSelected.jpg" alt="Edit" width="59" height="22" border="0" /></html:link></td>
+                       </logic:equal>
 					  <logic:equal name="operation" value="edit">
-						<td width="6%" valign="bottom" background="images/uIEnhancementImages/tab_bg.gif" ><html:link page="/Institution.do?operation=add&pageOf=pageOfInstitution"><img src="images/uIEnhancementImages/tab_add_notSelected.jpg" alt="Add" width="57" height="22" border ="0" /></html:link></td>
-                      <td width="6%" valign="bottom" background="images/uIEnhancementImages/tab_bg.gif"><img src="images/uIEnhancementImages/tab_edit_selected.jpg" alt="Edit" width="59" height="22"/></td>
-                      <td width="15%" valign="bottom" background="images/uIEnhancementImages/tab_bg.gif">&nbsp;</td>
-					 </logic:equal>
-                      <td width="65%" valign="bottom" class="td_tab_bg" >&nbsp;</td>
-                      <td width="1%" align="left" valign="bottom" class="td_color_bfdcf3" >&nbsp;</td>
+						<td  valign="bottom" ><html:link page="/Institution.do?operation=add&pageOf=pageOfInstitution"><img src="images/uIEnhancementImages/tab_add_notSelected.jpg" alt="Add" width="57" height="22" border ="0" /></html:link></td>
+                      <td  valign="bottom" ><img src="images/uIEnhancementImages/tab_edit_selected.jpg" alt="Edit" width="59" height="22"/></td>
+                      </logic:equal>
+                      <td width="90%" valign="bottom" class="td_tab_bg">&nbsp;</td>
+					  <td width="1%" align="left" valign="bottom" class="td_color_bfdcf3" >&nbsp;</td>
                     </tr>
                 </table></td>
               </tr>
@@ -109,9 +107,9 @@
 			<bean:message  key="buttons.submit" />
 		</html:submit>
      
-      &nbsp;| <span class="cancellink"><html:link page="/ManageAdministrativeData.do"  onclick="closeUserWindow()" styleClass="blue_ar_s_b">
+      &nbsp;| <html:link page="/ManageAdministrativeData.do"  onclick="closeUserWindow()" styleClass="cancellink">
 													<bean:message key="buttons.cancel" />
-												</html:link></span></td>
+												</html:link></td>
   </tr>
  </html:form>
 </table>
