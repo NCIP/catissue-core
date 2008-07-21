@@ -478,11 +478,10 @@ public class DAGPanel {
 		populateMap(sourceNodeAttributesMap, sourceAttributeCollection);
 
 		Collection<AttributeInterface> destAttributeCollection = getAttributeCollection(destExpId);
+		List<String> timeIntervalList = getTimeIntervals();
 		populateMap(destNodeAttributesMap, destAttributeCollection);
 		List<String> arithmeticOperaorsList = getArithmeticOperators();
 		List<String> relationalOperatorsList = getRelationalOperators();
-		List<String> timeIntervalList = getTimeIntervals();
-
 		queryDataMap.put(Constants.FIRST_NODE_ATTRIBUTES, sourceNodeAttributesMap);
 		queryDataMap.put(Constants.ARITHMETIC_OPERATORS, arithmeticOperaorsList);
 		queryDataMap.put(Constants.SECOND_NODE_ATTRIBUTES, destNodeAttributesMap);
@@ -547,12 +546,12 @@ public class DAGPanel {
 		 */
 		for(DSInterval timeInterval : DSInterval.values())
 		{
-			timeIntervalList.add(timeInterval.name());
+			timeIntervalList.add(timeInterval.name()+"s");
 		}
 		
 		for(YMInterval timeInterval1 : YMInterval.values())
 		{
-			timeIntervalList.add(timeInterval1.name());
+			timeIntervalList.add(timeInterval1.name()+"s");
 		}
 		return timeIntervalList;
 	}
