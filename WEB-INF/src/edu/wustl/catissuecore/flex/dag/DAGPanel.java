@@ -1,6 +1,5 @@
 package edu.wustl.catissuecore.flex.dag;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -263,18 +262,14 @@ public class DAGPanel {
 		return map.get(ambiguityObject);
 	}
 	
-	private  AttributeInterface getAttributeIdentifier(IQuery query,DAGNode dagNode, String firstAttributeId)
- 	{
+	private AttributeInterface getAttributeIdentifier(IQuery query, int nodeExpressionId,String firstAttributeId)
+	{
 		Long identifier = new Long(firstAttributeId);
-		//IQuery query = m_queryObject.getQuery();
 		IConstraints constraints = query.getConstraints();
-		
-		int expressionId = dagNode.getExpressionId();
-		IExpression expression = constraints.getExpression(expressionId);
+		IExpression expression = constraints.getExpression(nodeExpressionId);
 		IQueryEntity sourceEntity = expression.getQueryEntity();
-		
-		AttributeInterface srcAttributeByIdentifier = sourceEntity.getDynamicExtensionsEntity().getAttributeByIdentifier(identifier);
-		
+		AttributeInterface srcAttributeByIdentifier = sourceEntity.getDynamicExtensionsEntity()
+				.getAttributeByIdentifier(identifier);
 		return srcAttributeByIdentifier;
 	}
 	/**
@@ -284,169 +279,60 @@ public class DAGPanel {
 	 * @param tempQuery 
 	 * @return
 	 */
-	public void formTemporalQuery(DAGNode sourceNode, DAGNode destNode, String tempQuery)
+	public CustomFormulaNode formTemporalQuery(CustomFormulaNode node, String operation)
 	{
-			String[] tokens = tempQuery.split("##");
-			String firstAttributeId = tokens[0];
-			String firstAttributeDataType = tokens[1];
-			String secondAttributeId = tokens[2];		
-			String secondAttributeDataType = tokens[3];
-			String arithmeticOp = tokens[4];
-			String relationalOp = tokens[5];
-			String timeValue = tokens[6];
-			String timeIntervalValue = tokens[7];
-			IDateOffsetAttribute dateOffsetAttr1 = null;
-			IDateOffsetAttribute dateOffsetAttr2 = null;
-			IExpressionAttribute IExpression1 =  null;
-			IExpressionAttribute IExpression2 = null;
-			IDateOffsetLiteral dateOffSetLiteral =  null;
-			ILiteral dateLiteral = null;
-			ITerm lhsTerm = null;
-			ITerm rhsTerm = null;
-			IConnector iCon = null;
-			ICustomFormula customFormula = null;
-			IExpression srcIExpression = null;
-			IQuery query = m_queryObject.getQuery();
-			IConstraints constraints = query.getConstraints();
-			int srcExpressionId = sourceNode.getExpressionId();
-			IExpression expression = constraints.getExpression(srcExpressionId);
-			srcIExpression = expression;
-			AttributeInterface srcAttributeByIdentifier = getAttributeIdentifier(query,sourceNode,firstAttributeId);
-			int destExpressionId = destNode.getExpressionId();
-			AttributeInterface destAttributeByIdentifier = getAttributeIdentifier(query,destNode,secondAttributeId);
-			ArithmeticOperator arithOp = getArithmeticOperator(arithmeticOp);
-			RelationalOperator relOp = getRelationalOperator(relationalOp); 
-			IExpression destExpression = constraints.getExpression(destExpressionId);
-			if(firstAttributeDataType.equals(secondAttributeDataType))
-			{
-				IExpression1 = QueryObjectFactory.createExpressionAttribute(expression,srcAttributeByIdentifier);
-				IExpression2 = QueryObjectFactory.createExpressionAttribute(destExpression,destAttributeByIdentifier);
-			}
-			else
-			{
-			    if((firstAttributeDataType.equals(Constants.DATE_TYPE)))    
-			    {
-			    	IExpression1 = QueryObjectFactory.createExpressionAttribute(expression,srcAttributeByIdentifier);
-			    	dateOffsetAttr2 = QueryObjectFactory.createDateOffsetAttribute(destExpression,destAttributeByIdentifier,DSInterval.Day);
-			    }
-			    else
-			    {
-			    	IExpression2 = QueryObjectFactory.createExpressionAttribute(destExpression,destAttributeByIdentifier);
-			    	dateOffsetAttr1 = QueryObjectFactory.createDateOffsetAttribute(destExpression,destAttributeByIdentifier,DSInterval.Day);
-			    }
-			}
-			
-			iCon = QueryObjectFactory.createArithmeticConnector(arithOp);
-			if((timeValue.equals("null")) && (timeIntervalValue.equals("null")))
-			{
-				lhsTerm = createOnlyLHS(dateOffsetAttr1, dateOffsetAttr2, IExpression1, IExpression2, iCon);
-			}
-			else
-			{	
-				//Creating IDateOffSetLiteral
-				ITimeIntervalEnum timeInterval = null;
-				if((!timeIntervalValue.equals("null")) && (timeValue != null))
-				{
-					timeInterval = getTimeInterval(timeIntervalValue, timeInterval);
-					if(timeInterval instanceof DSInterval) {
-						dateOffSetLiteral = QueryObjectFactory.createDateOffsetLiteral(timeValue, (DSInterval)timeInterval);
-					} else if(timeInterval instanceof YMInterval) {
-						dateOffSetLiteral = QueryObjectFactory.createDateOffsetLiteral(timeValue, (YMInterval)timeInterval);
-					} else {
-						throw new RuntimeException("can't occur.");
-					}
-				}
-				else
-				{
-					//It will be a date, We need to create a Literal
-					if(timeValue != null) {
-						try {
-							Date date = Utility.parseDate(timeValue, Constants.DATE_FORMAT);
-							dateLiteral = QueryObjectFactory.createDateLiteral(new java.sql.Date(date.getTime()));
-							} catch (ParseException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-							System.out.println("Error occurred in parsing date");
-						}
-						
-					}
-				}
-				
-				//Creating left ITERM and Right ITERM 
-				lhsTerm = QueryObjectFactory.createTerm();
-			    rhsTerm = 	QueryObjectFactory.createTerm();
-			    //This is the case when both attributes are either Date or Integer
-				if(IExpression1 != null && IExpression2 != null)
-				{
-					lhsTerm.addOperand(IExpression1);
-				    lhsTerm.addOperand(iCon,dateOffSetLiteral);
-				    rhsTerm.addOperand(IExpression2);
-				}
-				else
-				{
-	                //This is the case when There is first attribute is of type Date and other is of type Integer
-					if(IExpression1 != null && dateOffsetAttr2 != null)
-					{
-						lhsTerm.addOperand(IExpression1);
-					    lhsTerm.addOperand(iCon,dateOffsetAttr2);
-					    if(dateLiteral != null)
-					    {
-					    	rhsTerm.addOperand(dateLiteral);
-					    }
-					}
-					else
-					{
-						//This is the case First node attribute is of type Integer and second node attribute is of Integer
-						lhsTerm.addOperand(dateOffsetAttr1);
-						lhsTerm.addOperand(iCon,IExpression2);
-						if(dateLiteral != null)
-						{
-							rhsTerm.addOperand(dateLiteral);
-						}
-					}
-				}
-			}
-			
-		    //Here we create the custom formula 
-			customFormula = getCustomFormula(lhsTerm, rhsTerm, relOp);
-			//Adding custom formula to src node
-			srcIExpression.addOperand(getAndConnector(),customFormula);
-			srcIExpression.setInView(true);
+	    TemporalQueryBean tqBean =  new TemporalQueryBean();
+	    IQuery query = m_queryObject.getQuery();
+	    IConstraints constraints = query.getConstraints();
+	    int srcExpressionId = node.getFirstNodeExpId();
+	    tqBean.setSrcExpressionId(srcExpressionId);
+	    IExpression srcIExpression = constraints.getExpression(srcExpressionId);;
+		//Setting the src IExpression
+		tqBean.setSrcIExpression(srcIExpression);
+		tqBean.setSrcAttributeById(getAttributeIdentifier(query,node.getFirstNodeExpId(),node.getFirstSelectedAttrId()));
+		int destExpressionId = node.getSecondNodeExpId();
+		tqBean.setDestExpressionId(destExpressionId);
+		tqBean.setDestAttributeById(getAttributeIdentifier(query,node.getSecondNodeExpId(),node.getSecondSelectedAttrId()));
+		//Setting the dest IExpression
+		tqBean.setDestIExpression(constraints.getExpression(destExpressionId));
+		//Setting the attribute Types
+		tqBean.setFirstAttributeType(node.getFirstSelectedAttrType());
+		tqBean.setSecondAttributeType(node.getSecondSelectedAttrType());
+		//Setting the Arithmetic operator
+		tqBean.setArithOp(getArithmeticOperator(node.getSelectedArithmeticOp()));
+		//Setting the Relational Ops
+		tqBean.setRelOp(getRelationalOperator(node.getSelectedLogicalOp()));
 		
-	}
-	/**
-	 * 
-	 * @param dateOffsetAttr1
-	 * @param dateOffsetAttr2
-	 * @param IExpression1
-	 * @param IExpression2
-	 * @param iCon
-	 * @return
-	 */
-	private ITerm createOnlyLHS(IDateOffsetAttribute dateOffsetAttr1, IDateOffsetAttribute dateOffsetAttr2, IExpressionAttribute IExpression1, IExpressionAttribute IExpression2, IConnector iCon)
-	{
-		ITerm lhsTerm;
-		//Then the custom formula will not have RHS
-		lhsTerm = QueryObjectFactory.createTerm();
-		if(IExpression1 != null && IExpression2 != null)
+        //Creating all expressions
+		tqBean.createExpressions();
+		tqBean.setICon(QueryObjectFactory.createArithmeticConnector(tqBean.getArithOp()));	
+		if((node.getTimeValue().equals("null")) && (node.getTimeInterval().equals("null")))
 		{
-			lhsTerm.addOperand(IExpression1);
-		    lhsTerm.addOperand(iCon,IExpression2);
+			tqBean.createOnlyLHS();
 		}
 		else
 		{
-			if(IExpression1 != null && dateOffsetAttr2 != null)
-			{
-				 lhsTerm.addOperand(IExpression1);
-				 lhsTerm.addOperand(iCon,dateOffsetAttr2);
-			}
-			else
-			{
-		        lhsTerm.addOperand(IExpression2);
-		        lhsTerm.addOperand(iCon,dateOffsetAttr1);
-			}
+			tqBean.createLiterals(node.getTimeInterval(), node.getTimeValue());
+		    tqBean.createLHSAndRHS();
 		}
-		return lhsTerm;
+			
+		    //Here we create the custom formula 
+		ICustomFormula customFormula = createCustomFormula(tqBean,operation);
+	    srcIExpression.addOperand(getAndConnector(),customFormula);
+		srcIExpression.setInView(true);
+		return node;
+	}
+	private ICustomFormula createCustomFormula(TemporalQueryBean tqBean,String operation)
+	{
+		if(operation.equals(Constants.ADD))
+		{
+			return getCustomFormula(QueryObjectFactory.createCustomFormula(),tqBean);
+		}
+		else
+		{
+			return getCustomFormula(getExistingCustomFormula(),tqBean);
+		}
+		
 	}
 	/**
 	 * 
@@ -455,47 +341,45 @@ public class DAGPanel {
 	 * @param relOp
 	 * @return
 	 */
-	private ICustomFormula getCustomFormula(ITerm lhsTerm, ITerm rhsTerm, RelationalOperator relOp)
+	private ICustomFormula getCustomFormula(ICustomFormula customFormula,TemporalQueryBean tqBean)
 	{
-		ICustomFormula customFormula = QueryObjectFactory.createCustomFormula();
-		if(rhsTerm == null)
+		//ICustomFormula customFormula = QueryObjectFactory.createCustomFormula();
+		if(tqBean.getRhsTerm() == null)
 		{ 
 			//Then custom formula will have only lhs and relational Operator
-			customFormula.setLhs(lhsTerm);
-			customFormula.setOperator(relOp);
+			customFormula.setLhs(tqBean.getLhsTerm());
+			customFormula.setOperator(tqBean.getRelOp());
 		}
 		else
 		{
-			customFormula.setLhs(lhsTerm);
-			customFormula.addRhs(rhsTerm);
-			customFormula.setOperator(relOp);
+			customFormula.setLhs(tqBean.getLhsTerm());
+			customFormula.addRhs(tqBean.getRhsTerm());
+			customFormula.setOperator(tqBean.getRelOp());
 		}
 		return customFormula;
 	}
-	private ITimeIntervalEnum getTimeInterval(String timeIntervalValue, ITimeIntervalEnum timeInterval)
+	
+	public ICustomFormula getExistingCustomFormula()
 	{
-		for(DSInterval time: DSInterval.values())
+		IQuery query = m_queryObject.getQuery();
+		IConstraints c = query.getConstraints();
+		ICustomFormula customFormula = null;
+		for(IExpression expression2 : c)
 		{
-			if(timeIntervalValue.equals(time.name()))
+			int numberOfOperands = expression2.numberOfOperands();
+			for(int i=0;i<numberOfOperands;i++)
 			{
-				timeInterval = time;
-				break;
-			}
-		}
-		
-		if(timeInterval == null)
-		{
-			for(YMInterval time : YMInterval.values())
-			{
-				if(timeIntervalValue.equals(time.name()))
+				IExpressionOperand operand = expression2.getOperand(i);
+				if(operand instanceof ICustomFormula)
 				{
-					timeInterval = time;
+					customFormula = (ICustomFormula) operand;
 					break;
 				}
 			}
 		}
-		return timeInterval;
+		return customFormula;
 	}
+		
 	private RelationalOperator getRelationalOperator(String relationalOp)
 	{
 		RelationalOperator relOp = null;
@@ -572,50 +456,51 @@ public class DAGPanel {
 	    }
 		return isValid;
 	}
-	private Collection<AttributeInterface> getAttributeCollection(DAGNode node)
+	private Collection<AttributeInterface> getAttributeCollection(int nodeExpId)
 	{
 		IQuery query = m_queryObject.getQuery();
 		IConstraints constraints = query.getConstraints();
-		int expressionId =node.getExpressionId();
-		IExpression expression = constraints.getExpression(expressionId);
+		IExpression expression = constraints.getExpression(nodeExpId);
 		IQueryEntity sourceEntity = expression.getQueryEntity();
-		Collection<AttributeInterface> sourceAttributeCollection = sourceEntity.getDynamicExtensionsEntity().getEntityAttributesForQuery();
+		Collection<AttributeInterface> sourceAttributeCollection = sourceEntity
+				.getDynamicExtensionsEntity().getEntityAttributesForQuery();
 		return sourceAttributeCollection;
-	
+
 	}
-	public Map getQueryData(DAGNode sourceNode, DAGNode destNode)
-	{ 
-		Map <String, Object> queryDataMap= new HashMap<String, Object>();
-		Map <String,List<String>>sourceNodeAttributesMap = new HashMap<String, List<String>>(); 
-	    Map <String,List<String >>destNodeAttributesMap = new HashMap<String,List<String>>(); 
-	    List<String> entityLabelsList = getEntityLabelsList(sourceNode, destNode);
- 		Collection<AttributeInterface> sourceAttributeCollection = getAttributeCollection(sourceNode);
+
+	public Map getQueryData(int sourceExpId, int destExpId, String sourceNodeName,String destNodeName)
+	{
+		Map<String, Object> queryDataMap = new HashMap<String, Object>();
+		Map<String, List<String>> sourceNodeAttributesMap = new HashMap<String, List<String>>();
+		Map<String, List<String>> destNodeAttributesMap = new HashMap<String, List<String>>();
+		List<String> entityLabelsList = getEntityLabelsList(sourceNodeName, destNodeName);
+		Collection<AttributeInterface> sourceAttributeCollection = getAttributeCollection(sourceExpId);
 		populateMap(sourceNodeAttributesMap, sourceAttributeCollection);
-		
-		Collection<AttributeInterface> destAttributeCollection = getAttributeCollection(destNode);
+
+		Collection<AttributeInterface> destAttributeCollection = getAttributeCollection(destExpId);
 		populateMap(destNodeAttributesMap, destAttributeCollection);
 		List<String> arithmeticOperaorsList = getArithmeticOperators();
 		List<String> relationalOperatorsList = getRelationalOperators();
 		List<String> timeIntervalList = getTimeIntervals();
-		
-		queryDataMap.put(Constants.FIRST_NODE_ATTRIBUTES,sourceNodeAttributesMap);
-		queryDataMap.put(Constants.ARITHMETIC_OPERATORS,arithmeticOperaorsList);
-		queryDataMap.put(Constants.SECOND_NODE_ATTRIBUTES,destNodeAttributesMap);
-		queryDataMap.put(Constants.RELATIONAL_OPERATORS,relationalOperatorsList);
-		queryDataMap.put("timeIntervals",timeIntervalList);
-		queryDataMap.put("entityList",entityLabelsList);
-		
+
+		queryDataMap.put(Constants.FIRST_NODE_ATTRIBUTES, sourceNodeAttributesMap);
+		queryDataMap.put(Constants.ARITHMETIC_OPERATORS, arithmeticOperaorsList);
+		queryDataMap.put(Constants.SECOND_NODE_ATTRIBUTES, destNodeAttributesMap);
+		queryDataMap.put(Constants.RELATIONAL_OPERATORS, relationalOperatorsList);
+		queryDataMap.put("timeIntervals", timeIntervalList);
+		queryDataMap.put("entityList", entityLabelsList);
+
 		return queryDataMap;
 	}
-	private List<String> getEntityLabelsList(DAGNode sourceNode, DAGNode destNode)
+	private List<String> getEntityLabelsList(String srcNodeName, String destNodeName)
 	{
-		List <String> entityList = new ArrayList<String>();
-        
-	    String srcNodename = Utility.getDisplayLabel(sourceNode.getNodeName());
- 		String destNodeName = Utility.getDisplayLabel(destNode.getNodeName());
- 		
- 		entityList.add(0,srcNodename);
- 		entityList.add(1,destNodeName);
+		List<String> entityList = new ArrayList<String>();
+
+		String nodeName1 = Utility.getDisplayLabel(srcNodeName);
+		String nodeName2 = Utility.getDisplayLabel(destNodeName);
+
+		entityList.add(0, nodeName1);
+		entityList.add(1, nodeName2);
 		return entityList;
 	}
 	private void populateMap(Map<String, List<String>> destNodeAttributesMap, Collection<AttributeInterface> destAttributeCollection)
@@ -715,7 +600,8 @@ public class DAGPanel {
 	{
 		IQuery query = m_queryObject.getQuery();
 		IConstraints c = query.getConstraints();
-		for(IExpression expression2 : c) {
+		for(IExpression expression2 : c) 
+		{
 			int numberOfOperands = expression2.numberOfOperands();
 			for(int i=0;i<numberOfOperands;i++)
 			{
