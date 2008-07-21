@@ -15,6 +15,7 @@
             import Components.DAGNode;
             import Components.CustomFormulaNode;  
             import mx.rpc.events.ResultEvent;
+            import mx.rpc.events.FaultEvent;
            [Bindable]
            public var myArray1 : ArrayCollection; 
            
@@ -66,6 +67,9 @@
 	 	    
 	 	    [Bindable]
 	 	    private var timeIntrvalLabel : String = "Time" + "\n" + "Interval" ;
+	 	    
+	 	    [Bindable]
+	 	    public var buttonLabel : String = "OK";
 	 	     
 	 	    private var existingTextBox : TextInput = null;
 	 	    
@@ -92,19 +96,12 @@
            
            private function submitData():void
            {
-           	 
-           	  var timeValue : String = null;
+           	
+		  var timeValue : String = null;
            	  var timeIntervalValue : String =  null;
-           	  var firstOperand : String = null;
-           	  var secondOperand : String = null;
-           	  var firstOperandType : String  = null; 
-           	  var secondOperandType : String = null;
-           	  
-           	  var firstNodeAttributeId :String = null;
-			  var secondNodeAttributeId :String = null;
-			  
-			  var queryString : String =  null;
            	  var customFormulaString : String = null;
+           	  var customFormulaNode : CustomFormulaNode = new CustomFormulaNode();
+           	  
            	  //Here based on the last control, the we get the selected value and pass as parameter
            	  existingTextBox = myBox.getChildByName("txtInput") as TextInput;
            	  
@@ -114,42 +111,64 @@
            	  	  existingDatePicker = myBox.getChildByName("datePicker") as DateField;
            	 	  if((existingDatePicker != null) && (existingDatePicker.enabled == true ))
            	 	  {
-           	 	   
-           	 	    timeValue = (existingDatePicker.selectedDate.getMonth()+1) + "/"+existingDatePicker.selectedDate.getDate()+"/"+existingDatePicker.selectedDate.getFullYear();
+           	 	    var month : String = (existingDatePicker.selectedDate.getMonth()+1).toString();
+           	 	    if(month.length == 1)
+           	 	    {
+           	 	    	month = "0"+month;
+           	 	    }
+           	 	    var day : String = existingDatePicker.selectedDate.getDate().toString();
+           	 	    if(day.length == 1)
+           	 	    {
+           	 	    	day = "0"+day;
+           	 	    }
+           	 	    timeValue = month + "/" + day +"/" + existingDatePicker.selectedDate.getFullYear();
+           	 	    customFormulaNode.setTimeValue(timeValue);
+           	 	    customFormulaNode.setTimeInterval("null");
            	 	  }
-           	  	
+           	 	  else
+           	 	  {
+           	 	  	  customFormulaNode.setTimeValue("null");
+           	 	  	  customFormulaNode.setTimeInterval("null");
+           	 	  } 	
            	  }
            	  else
            	  {
            	  	   //Get the value of  text box and value of dropdown
-           	  	   
            	  	   existingTimeIntervalCb = myBox.getChildByName("timeIntervalCb") as ComboBox;   
            	  	   if((existingTextBox.enabled == true) && (existingTimeIntervalCb != null) && (existingTimeIntervalCb.enabled == true))
            	  	   {
 					    timeValue = existingTextBox.text;
+					    customFormulaNode.setTimeValue(timeValue);
            	  	   		timeIntervalValue = existingTimeIntervalCb.selectedItem.toString();
+           	  	   		customFormulaNode.setTimeInterval(timeIntervalValue);
+           	  	   }
+           	  	   else
+           	  	   {
+           	  	   	  customFormulaNode.setTimeValue("null");
+           	  	   	  customFormulaNode.setTimeInterval("null");
            	  	   }
            	  }
            	  
            	//Getting the left and right operands
-           	 firstOperand= cb1.selectedItem.toString();
-		 	 secondOperand = cb3.selectedItem.toString();
+		 	 customFormulaNode.setFirstSelectedAttrName(cb1.selectedItem.toString());
+             customFormulaNode.setSecondSelectedAttrName(cb3.selectedItem.toString());           	
            	
            	//Getting left and right entities property list containing <attributeId , attributeTyep>
-           	 firstNodeList = firstNodeDp[firstOperand];
-           	 secondNodeList = secondNodeDp[secondOperand];
-           	 	
-           	 firstOperandType = String(firstNodeList.getItemAt(1));
-           	 secondOperandType= String(secondNodeList.getItemAt(1));
-           	 	    
+           	 firstNodeList = firstNodeDp[cb1.selectedItem.toString()];
+           	 secondNodeList = secondNodeDp[cb3.selectedItem.toString()];	
+           	 customFormulaNode.setFirstSelectedAttrType(String(firstNodeList.getItemAt(1)));
+           	 customFormulaNode.setSecondSelectedAttrType(String(secondNodeList.getItemAt(1)));	    
            	 //Getting Id's of Attributes
-           	 firstNodeAttributeId = String(firstNodeList.getItemAt(0));
-           	 secondNodeAttributeId = String(secondNodeList.getItemAt(0));
-           	
-           	 //Invoking the java class method  
-                queryString = firstNodeAttributeId + "##" + firstOperandType + "##" +secondNodeAttributeId + "##"+ secondOperandType +"##"+ cb2.selectedItem +"##"+cb4.selectedItem + "##"+ timeValue +"##" + timeIntervalValue;
+           	 customFormulaNode.setFirstSelectedAttrId(String(firstNodeList.getItemAt(0)));
+             customFormulaNode.setSecondSelectedAttrId(String(secondNodeList.getItemAt(0))); 
             
-              if(timeIntervalValue != null)
+            //Setting the selected Arithmetic Operator
+            customFormulaNode.setSelectedArithmeticOp(cb2.selectedItem.toString());
+             
+            //Setting theselected logical operator
+            customFormulaNode.setSelectedLogicalOp(cb4.selectedItem.toString());  
+             
+             if(timeIntervalValue != null)
              {
              	customFormulaString = firstEntityName+"."+cb1.selectedItem + "\n "+ cb2.selectedItem + " \n" +secondEntityName+"."+cb3.selectedItem + "\n" + cb4.selectedItem + " " + timeValue + " " +  timeIntervalValue;
              } 
@@ -158,16 +177,57 @@
               	customFormulaString =  firstEntityName+"."+cb1.selectedItem+ " \n"+ cb2.selectedItem + "\n " + secondEntityName+"."+cb3.selectedItem  + "\n" + cb4.selectedItem + " " + timeValue ;
              }
              
-             parentApplication.customFormulaString = customFormulaString;
-	     rpcService.formTemporalQuery(firstDAGNode, secondDAGNode, queryString);
-             rpcService.addEventListener(ResultEvent.RESULT, resultHandler)
+             //Setting the first selected DAG Nodes Properties
+             customFormulaNode.setFirstNodeName(firstDAGNode.nodeName); 
+             customFormulaNode.setFirstNodeExpId(firstDAGNode.expressionId);
+              
+            //Setting the second selected DAG Nodes Properties
+            customFormulaNode.setSecondNodeName(secondDAGNode.nodeName);
+            customFormulaNode.setSecondNodeExpId(secondDAGNode.expressionId);
             
-	   }   
+            var customNodeName : String = firstDAGNode.nodeNumber + "_" + secondDAGNode.nodeNumber; 
+            customFormulaNode.name = customNodeName;
+            parentApplication.customFormulaString = customFormulaString;
+             
+           // this.parentApplication.rpcService.removeEventListener(ResultEvent.RESULT, resultHandler);
+            this.parentApplication.rpcService.addEventListener(FaultEvent.FAULT, faultHandler);
 
-	   private function  resultHandler(event : ResultEvent):void
-           {
-                parentApplication.addCustomFromulaNode();
-           }
+            if(submitButton.label == "OK")
+            {
+             	//rpcService.formTemporalQuery(customFormulaNode, "add");
+              this.parentApplication.rpcService.removeEventListener(ResultEvent.RESULT,editCustomNodeHandler);
+              this.parentApplication.rpcService.addEventListener(ResultEvent.RESULT, resultHandler);
+              this.parentApplication.rpcService.formTemporalQuery(customFormulaNode, "add");
+            }
+            else
+            {
+                 this.parentApplication.rpcService.removeEventListener(ResultEvent.RESULT,resultHandler);
+                 this.parentApplication.rpcService.addEventListener(ResultEvent.RESULT, editCustomNodeHandler);
+                 this.parentApplication.rpcService.formTemporalQuery(customFormulaNode, "edit");	
+            }
+                         	   
+       } 
+       
+       private function editCustomNodeHandler(event : ResultEvent) : void
+       {
+       	  var node  : CustomFormulaNode = event.result as CustomFormulaNode;
+       	  this.parentApplication.rpcService.removeEventListener(ResultEvent.RESULT,resultHandler);
+          this.parentApplication.rpcService.removeEventListener(ResultEvent.RESULT,editCustomNodeHandler);
+          parentApplication.addCustomFromulaNode(node);
+       } 
+
+	   public function  resultHandler(event : ResultEvent):void
+       {
+           var node  : CustomFormulaNode = event.result as CustomFormulaNode;
+           this.parentApplication.rpcService.removeEventListener(ResultEvent.RESULT, resultHandler);
+           parentApplication.addCustomFromulaNode(node);
+       }  
+      private function faultHandler (event:FaultEvent):void
+	  {
+		  Alert.show(event.fault.faultString, 'Error');
+	  }
+	  
+	          
     
     
            private function addInputControl() : void
@@ -429,18 +489,18 @@
       
       <mx:HBox id ="myBox" x="20" y="60">
       	
-      	<mx:ComboBox id="cb1" dataProvider="{myArray1}" width="100" arrowButtonWidth="3"  borderThickness="0" borderColor="blue" prompt="--Select--" dropdownFactory="{myDropdownFactory}" creationComplete="initClassFactory()" change="validateQueryData()"/>
-      	<mx:ComboBox id="cb2" dataProvider="{myArray2}" width="100" arrowButtonWidth="3"  borderThickness="0" borderColor="blue"  textAlign="center" prompt="--Select--" change="validateQueryData()"/>
-      	<mx:ComboBox id="cb3" dataProvider="{myArray3}" width="100" arrowButtonWidth="3"  borderThickness="0" borderColor="blue" change="validateQueryData()" prompt="--Select--" dropdownFactory="{myDropdownFactory}" creationComplete="initClassFactory()" />
-      	<mx:ComboBox id="cb4" dataProvider="{myArray4}" width="100" arrowButtonWidth="3"  borderThickness="0" borderColor="blue"  prompt="--Select--" dropdownFactory="{myDropdownFactory}" creationComplete="initClassFactory()" change="righthandSideHandler()"/>
+      	<mx:ComboBox id="cb1" dataProvider="{myArray1}" width="100"   borderThickness="0" borderColor="blue"  dropdownFactory="{myDropdownFactory}" creationComplete="initClassFactory()" change="validateQueryData()"/>
+      	<mx:ComboBox id="cb2" dataProvider="{myArray2}" width="100"   borderThickness="0" borderColor="blue"  textAlign="center" prompt="--Select--" change="validateQueryData()"/>
+      	<mx:ComboBox id="cb3" dataProvider="{myArray3}" width="100"   borderThickness="0" borderColor="blue" change="validateQueryData()"  dropdownFactory="{myDropdownFactory}" creationComplete="initClassFactory()" />
+      	<mx:ComboBox id="cb4" dataProvider="{myArray4}" width="100"   borderThickness="0" borderColor="blue"  prompt="--Select--" dropdownFactory="{myDropdownFactory}" creationComplete="initClassFactory()" change="righthandSideHandler()"/>
         <mx:TextInput id="txtInput" name="txtInput"  width="100" restrict="0-9" borderColor="blue" /> 
-        <mx:ComboBox id="cb5" name="timeIntervalCb" dataProvider="{myArray5}" width="100" arrowButtonWidth="3" borderThickness="0" borderColor="blue" prompt="--Select--" dropdownFactory="{myDropdownFactory}" creationComplete="initClassFactory()"/>
+        <mx:ComboBox id="cb5" name="timeIntervalCb" dataProvider="{myArray5}" width="100"  borderThickness="0" borderColor="blue" prompt="--Select--" dropdownFactory="{myDropdownFactory}" creationComplete="initClassFactory()"/>
        <!-- <mx:Panel  id="p1" height="20" width="100" /> -->
       </mx:HBox> 	 
 	 
 	  <mx:HBox x="20" y="50">
-	      <mx:Button label="OK" click="submitData();"/>
-          <mx:Button label="Cancel" click="removeMe();"/>  
+	      <mx:Button id="submitButton" label="{buttonLabel}" click="submitData();"/>
+          <mx:Button id="cancelButton" label="Cancel" click="removeMe();"/>  
 	  </mx:HBox>
 	  
 	  </mx:VBox>
