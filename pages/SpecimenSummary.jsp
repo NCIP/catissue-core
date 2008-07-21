@@ -115,6 +115,18 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 				<tr class="td_color_F7F7F7">	
 				<td colspan="2" style="padding-top:10px; padding-bottom:15px;">
 					<table summary="" cellpadding="4" cellspacing="0" border="0"  width="100%">
+						<tr class="tableheading">
+							<th class="black_ar_b"> &nbsp; </th>
+							<th class="black_ar_b">Label</th>
+							<th class="black_ar_b"> Class</th>
+							<th class="black_ar_b"> Type</th>
+							<th class="black_ar_b"> Tissue Site</th>
+							<th class="black_ar_b"> Tissue Side</th>
+							<th class="black_ar_b"> Pathological Status</th>
+							<th class="black_ar_b"> Storage</th>
+							<th class="black_ar_b"> Qty</th>
+						</tr>
+					
 			<md:genericSpecimenDetails columnHeaderListName="colHeaderListP" formName="viewSpecimenSummaryForm" dataListName="specimenList" dataListType="Parent" columnListName="colOrderListP" isReadOnly="true" displayColumnListName="displayColumnListP" />
 			<%-- Custom tag By Mandar for specimen display --%>
 <%-- 						<tr>
@@ -218,6 +230,12 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 				<tr>
 					<td>
 						<table summary="" cellpadding="4" cellspacing="0" border="0"  width="100%">
+						<tr>	
+							<th class="black_ar_b">Parent</th>
+							<th class="black_ar_b">Label</th>
+							<th class="black_ar_b">Storage</th>
+							<th class="black_ar_b">Qty</th>
+						</tr>
 			<md:genericSpecimenDetails columnHeaderListName="colHeaderListA" formName="viewSpecimenSummaryForm" dataListName="aliquotList" dataListType="Aliquot" columnListName="colOrderListA" isReadOnly="true" displayColumnListName="displayColumnListA" />
 			<%-- Custom tag By Mandar for specimen display --%>
 						
@@ -259,6 +277,16 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 		</tr>
 			 <td>
 			    <table summary="" cellpadding="4" cellspacing="0" border="0"  width="100%">
+			    <tr>
+					<th class="black_ar_b">Parent</th>
+					<th class="black_ar_b">Label</th>
+					<th class="black_ar_b"> Class</th>
+					<th class="black_ar_b"> Type</th>
+					<th class="black_ar_b"> Qty</th>
+					<th class="black_ar_b"> Storage</th>
+					<th class="black_ar_b"> concentration</th>
+				</tr>
+			    
 		<md:genericSpecimenDetails columnHeaderListName="colHeaderListD" formName="viewSpecimenSummaryForm" dataListName="derivedList" dataListType="Derived" columnListName="colOrderListD" isReadOnly="true" displayColumnListName="displayColumnListD" />
 			<%-- Custom tag By Mandar for specimen display --%>
 <%--
