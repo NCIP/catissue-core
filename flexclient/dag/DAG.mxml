@@ -6,6 +6,7 @@ xmlns:Components="Components.*" xmlns:display="flash.display.*"
 creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingBottom="0" paddingLeft="0" paddingRight="0">
 <mx:Script>
 <![CDATA[
+	import mx.controls.DateField;
 	import Util.Utility;
 	import mx.controls.Label;
 	import mx.utils.StringUtil;
@@ -52,7 +53,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
     import mx.managers.CursorManager;
     import Components.CustomFormulaNode;
     import Components.PopupWindow;
-    
+    import mx.controls.TextInput;
 	//------------------------
 	public var node1:String = "";
 	public var node2:String = "";
@@ -164,7 +165,6 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	
 	private function onDragExit(event : DragEvent):void
 	{
-		Alert.show("In drag exit method");
 		 //var firstDAGNode : DAGNode = DAGNode(mainPanel.getChildByName(node1));
 	   //var secondDAGNode : DAGNode = DAGNode(mainPanel.getChildByName(node2)); 
 		
@@ -175,7 +175,6 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	*/	
 	private function onDragDrop(event:DragEvent):void{
 		
-		//Alert.show(nodeSelected);
 		var pointOffSet:Point = null;
 		var pt:Point = null;
 		var customNodeName : String = null;
@@ -256,7 +255,6 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	 }
 	 else
 	 {
-	 	//Alert.show("This is custom fromula node");
 	 	var cutomformulaNode : CustomFormulaNode = CustomFormulaNode(event.dragInitiator) ;
 		pointOffSet = Point(event.dragSource.dataForFormat("point") );
 		
@@ -307,6 +305,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 		
 		registerClassAlias("edu.wustl.catissuecore.flex.dag.DAGNode", DAGNode);
 		registerClassAlias("edu.wustl.catissuecore.flex.dag.DAGPath", DAGPath);
+		registerClassAlias("edu.wustl.catissuecore.flex.dag.CustomFormulaNode",CustomFormulaNode);
 //		rpcService= new RemoteObject();
 		rpcService.channelSet = Utility.getChannelSet();
 		rpcService.destination="cdeService";
@@ -343,7 +342,6 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 					rpcService.addEventListener(ResultEvent.RESULT,initFlexInterfaceHandler);
 					rpcService.addEventListener(FaultEvent.FAULT, faultHandler);
 				}
-		    
 			}
 			else
 		 	{
@@ -607,7 +605,6 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	*/
 	public function getNodeResultHandler(event: ResultEvent):void
 	{
-		//Alert.show("In Get Node Result Handler method");
 		var node:DAGNode = event.result as DAGNode;
 		if(node!=null)
 		{
@@ -1136,11 +1133,10 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 		var areNodesValid : Boolean = event.result as Boolean;
 		if(areNodesValid == true)
 		{
-		     //Alert.show(areNodesValid);
 		     
 		     rpcService.removeEventListener(ResultEvent.RESULT,nodeValidityHandler);
-		     rpcService.addEventListener(ResultEvent.RESULT,populateDataHandler);
 		     rpcService.retrieveQueryData(selectedNodeList);
+		     rpcService.addEventListener(ResultEvent.RESULT,populateDataHandler);
 		}
 		else
 		{
@@ -1151,7 +1147,6 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	private function splitEntityName(entityName : String) : String
 	{
 		var str : String = "";
-		//Alert.show("entityName is:"+entityName);
 		//splitting the entity name on space 
 		var words : Array = entityName.split(" ");
 		
@@ -1162,10 +1157,13 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 		
 		return str;	
 	}
-	private function populateDataHandler(event :  ResultEvent):void 
+	
+	public function createAndPopulate(resultMap :Object, operation : String, currentCustomNode : CustomFormulaNode) : void
 	{
-	    
-	     queryDataMap = event.result as Object;
+		queryDataMap = resultMap;
+		
+		//rpcService.removeEventListener(ResultEvent.RESULT,editNodeHandler);
+		rpcService.removeEventListener(ResultEvent.RESULT,populateDataHandler);
 	    
 	     //Retrieving the first node attribute Map
 	     var firstNodeDataObject : Object = queryDataMap["firstDropDown"]; 
@@ -1177,7 +1175,6 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	     {
 	     	firstNodeAttributesList.addItem(key);	     	
 	     }
-	     
 	     //Getting all arithmetic operators 
 	     var arithmeticOperatorsList : ArrayCollection = queryDataMap["secondDropDown"];	
 	     
@@ -1185,39 +1182,40 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	     var secondNodeDataObject : Object = queryDataMap["thirdDropDown"];
 	    
 	     //Iterating over the first node attribute map to get all the arrtibutes which is key in the Map 	    
-	     for(var key:String in secondNodeDataObject)
+	     for(var key1:String in secondNodeDataObject)
 	     {
-	     	secondNodeAttributeList.addItem(key);	     	
+	     	secondNodeAttributeList.addItem(key1);	     	
 	     }
 	     
-	    
-	     
 	     var relationalOprsList : ArrayCollection = queryDataMap["fourthDropDown"];
-	    
 	     var timeIntervalsList : ArrayCollection = queryDataMap["timeIntervals"];
-	     
 	     var entitiesNameList : ArrayCollection = queryDataMap["entityList"];
 	    //Opening the pop up window
 	    popUp = PopupWindow(PopUpManager.createPopUp(this, PopupWindow, true));
-	    popUp.title ="Define Condition";
+	   
 	    popUp.showCloseButton = true; 
-	    
-	    if(firstNodeAttributesList.length > 1)
+	   
+	    if(operation == "create")
 	    {
-	    	popUp.cb1.prompt = "--Select--";
-	    }
-	    if(secondNodeAttributeList.length > 1)
-	    {
-	    	popUp.cb3.prompt = "--Select--";
-	    }
-	    
+	    	popUp.title ="Define Condition";
+	    	if(firstNodeAttributesList.length > 1)
+	    	{
+	    		popUp.cb1.prompt = "--Select--";
+	    	}
+	    	if(secondNodeAttributeList.length > 1)
+	    	{
+	    		popUp.cb3.prompt = "--Select--";
+	    	}
+        }
+	    	    
 	    //Setting the values to variables  
 	   popUp.myArray1 = firstNodeAttributesList;
 	   popUp.myArray2 = arithmeticOperatorsList;
 	   popUp.myArray3 = secondNodeAttributeList;
 	   popUp.myArray4 = relationalOprsList;
 	   popUp.myArray5 = timeIntervalsList;
-	  // popUp.myArray5 = doctypes;
+	   
+	   // popUp.myArray5 = doctypes;
 	 
 	   var firstDAGNode : DAGNode = DAGNode(mainPanel.getChildByName(node1));
 	   var secondDAGNode : DAGNode = DAGNode(mainPanel.getChildByName(node2)); 
@@ -1225,28 +1223,115 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	   popUp.firstDAGNode = firstDAGNode;
 	   popUp.secondDAGNode =  secondDAGNode;
 	   
-	    popUp.firstEntityLabel = splitEntityName(entitiesNameList.getItemAt(0) as String);
-	    popUp.secondEntityLabel = splitEntityName(entitiesNameList.getItemAt(1) as String ); 
-	    popUp.firstEntityName = firstDAGNode.nodeName; 
-	  popUp.secondEntityName = secondDAGNode.nodeName;
+	   popUp.firstEntityLabel = splitEntityName(entitiesNameList.getItemAt(0) as String);
+	   popUp.secondEntityLabel = splitEntityName(entitiesNameList.getItemAt(1) as String ); 
+	   popUp.firstEntityName = firstDAGNode.nodeName; 
+	   popUp.secondEntityName = secondDAGNode.nodeName;
 	   popUp.dataProvider = queryDataMap;
 	   popUp.firstNodeDp = firstNodeDataObject;
 	   popUp.secondNodeDp =  secondNodeDataObject; 
 	   //Opening the popup window in center
 	   
+	   if(operation == "edit" && currentCustomNode != null)
+	   {
+	   	    popUp.title ="Edit Condition";
+	        popUp.buttonLabel = "Edit";
+	        popUp.cb1.selectedItem = currentCustomNode.getFirstSelectedAttrName();
+	        popUp.cb2.selectedItem = currentCustomNode.getSelectedArithmeticOp();
+	        popUp.cb3.selectedItem = currentCustomNode.getSecondSelectedAttrName();
+	        popUp.cb4.selectedItem = currentCustomNode.getSelectedLogicalOp();  
+	        
+	        //If the selected Logical Operators are isNull or IsNotNull
+	        if((currentCustomNode.getSelectedLogicalOp() == "Is Null") || (currentCustomNode.getSelectedLogicalOp() == "Is Not Null"))
+	        {
+	        	//Disable both Time value box and Time Interval Combo box
+	        	var existingTextInput : TextInput = popUp.myBox.getChildByName(popUp.txtInput.name) as TextInput;
+	        	existingTextInput.enabled = false;
+	        	
+	        	var existingTimeInterval : ComboBox = popUp.myBox.getChildByName(popUp.cb5.name) as ComboBox;
+	        	existingTimeInterval.enabled = false;
+	        }
+	        else
+	        {
+	        	//This is the condition when there is both time and time Interval 
+	       		 if(currentCustomNode.getTimeInterval() != "null")
+	        	 {
+	        		popUp.txtInput.text = currentCustomNode.getTimeValue();
+	        		popUp.cb5.selectedItem = currentCustomNode.getTimeInterval(); 
+	              }
+		        else
+		        {
+		        	//This is the condition when there is DataPicker
+		        	
+		        	//Removing text Box
+	           	 	 var existingTextBox : TextInput = popUp.myBox.getChildByName(popUp.txtInput.name) as TextInput;
+	           	   	 if(existingTextBox != null)
+	           	   	 {
+	           	   	   	popUp.myBox.removeChild(existingTextBox);
+	
+	           	   	   	 //Remove the Time Value Label
+		           	 	var existingValueLabel : Label = popUp.labelHBox.getChildByName(popUp.lb5.name) as Label;
+		           	 	if(existingValueLabel != null)
+		           	 	{
+		           	 	   popUp.labelHBox.removeChild(existingValueLabel);
+		           	 	}
+	           	      }
+	           	      
+	           	      //Removing the Time Interval Combo Box
+	           	      var existingTimeIntervalCb : ComboBox = popUp.myBox.getChildByName(popUp.cb5.name) as ComboBox;
+	           	      if(existingTimeIntervalCb != null)
+	           	      {
+	           	      	 popUp.myBox.removeChild(existingTimeIntervalCb);
+	           	      		
+	           	      	 //Removing the existing tome Interval Label
+	           	      	var existingIntervalLabel : Label = popUp.labelHBox.getChildByName(popUp.lb6.name) as Label;
+	           	       	if(existingIntervalLabel != null)
+	           	       	{
+	           	       		popUp.labelHBox.removeChild(existingIntervalLabel);	
+	           	       	}
+	           	      }
+	           	      
+	           	      //Adding The Date Picker
+	           	     var datePicker : DateField =  new DateField();
+		           	 datePicker.id = "datePicker";
+		           	 datePicker.name = "datePicker";
+		           	 datePicker.width = 200;
+		           	 datePicker.focusEnabled = true;
+		           	 datePicker.formatString = "MM/DD/YYYY";
+		             datePicker.showToday = true;
+					 datePicker.text = currentCustomNode.getTimeValue();
+	                 popUp.myBox.addChild(datePicker);
+	                
+	                //Adding the Label
+	                var pickerLabel : Label = new Label();
+	           	 	pickerLabel.name = "datePickerLabel";
+	           	 	pickerLabel.text = "Select Date";           	      
+	           	 	
+	           	 	popUp.labelHBox.addChild(pickerLabel);
+		        }
+	        }
+	   }
+	   
+	   
 	   PopUpManager.centerPopUp(popUp);
-	     
+	 	   
+	}
+	
+	private function populateDataHandler(event :  ResultEvent):void 
+	{
+	     rpcService.removeEventListener(ResultEvent.RESULT,populateDataHandler);
+	     createAndPopulate(event.result as Object, "create", null);
 	 }           
 	
-      public function addCustomFromulaNode():void
+      public function addCustomFromulaNode(node : CustomFormulaNode):void
       {
-           
-             //To draw line between two Selected nodes and Custom Formula Node
+           // rpcService.removeEventListener(ResultEvent.RESULT,PopupWindow.resultHandler);
+            //To draw line between two Selected nodes and Custom Formula Node
             var dagNode1:DAGNode = DAGNode(mainPanel.getChildByName(node1));
 		    var dagNode2:DAGNode = DAGNode(mainPanel.getChildByName(node2));
      
             var customNodeName : String = dagNode1.nodeNumber + "_" + dagNode2.nodeNumber; 
-     
+            
             //Getting if there exists any custom node related to selected nodes
             var existingCustomNode : CustomFormulaNode = mainPanel.getChildByName(customNodeName) as CustomFormulaNode;
             if(existingCustomNode != null)
@@ -1257,7 +1342,39 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
             //
             var customFormulaNode : CustomFormulaNode = new CustomFormulaNode();
         	customFormulaNode.customFormula = customFormulaString;
-        	customFormulaNode.initializeNode(dagNode1.x+dagNode1.width+50,dagNode1.y+dagNode1.height+20,customNodeName);
+        	customFormulaNode.initializeNode(dagNode1.x+dagNode1.width+50,dagNode1.y+dagNode1.height+20,node.name);
+            
+            //Setting the all possible values for Custom Formula node 
+            
+            //Setting the selected nodes name
+            customFormulaNode.setFirstNodeName(node.getFirstNodeName());
+            customFormulaNode.setSecondNodeName(node.getSecondNodeName());
+            
+            //Setting the Exps Id's
+            customFormulaNode.setFirstNodeExpId(node.getFirstNodeExpId());
+            customFormulaNode.setSecondNodeExpId(node.getSecondNodeExpId());
+            
+            //Setting the selected attributes name
+            customFormulaNode.setFirstSelectedAttrName(node.getFirstSelectedAttrName());
+            customFormulaNode.setSecondSelectedAttrName(node.getSecondSelectedAttrName());
+            
+            //Setting the selected attribute Id's
+            customFormulaNode.setFirstSelectedAttrId(node.getFirstSelectedAttrId());
+            customFormulaNode.setSecondSelectedAttrId(node.getSecondSelectedAttrId());
+            
+            //Setting data types
+             customFormulaNode.setFirstSelectedAttrType(node.getFirstSelectedAttrType());
+             customFormulaNode.setSecondSelectedAttrType(node.getSecondSelectedAttrType());
+             
+             //Setting the arithmetic operator
+             customFormulaNode.setSelectedArithmeticOp(node.getSelectedArithmeticOp());
+             
+             //Setting the Logical operator
+             customFormulaNode.setSelectedLogicalOp(node.getSelectedLogicalOp()); 
+             
+             //Setting time and time Intervals
+             customFormulaNode.setTimeValue(node.getTimeValue());
+             customFormulaNode.setTimeInterval(node.getTimeInterval());
             
             customFormulaNode.addEventListener(MouseEvent.MOUSE_MOVE,doCustomFormulaNodeDrag);
             mainPanel.addChild(customFormulaNode);
@@ -1310,13 +1427,11 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
       }
       private function customFormulaNodeDragEnter(event:DragEvent) : void
       {
-      	 	//Alert.show("In do Drrag enter");
       		DragManager.acceptDragDrop(event.currentTarget as IUIComponent);
       }
       
       private function customFormulaNodeDragDrop() : void
       {
-      		//Alert.show("In drag Drop");	
       }
       
       /*
