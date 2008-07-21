@@ -264,7 +264,7 @@
 		        </tr>
 		        <tr>
 					<td colspan="3" align="left" valign="top" class="showhide">
-					<table width="100%" border="1" cellpadding="3" cellspacing="0">
+					<table width="100%" border="0" cellpadding="3" cellspacing="0">
             <tr>
               <td width="1%" align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></span></td>
               <td width="17%" align="left" class="black_ar"><bean:message key="parent.specimen.details.label"/></td>
@@ -306,7 +306,7 @@
 			  <tr>
               <td align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></span></td>
               <td align="left" class="black_ar"><bean:message key="specimen.type"/></td>
-              <td width="35%" class="black_ar" align="left"><autocomplete:AutoCompleteTag property="className"
+              <td class="black_ar" align="left"><autocomplete:AutoCompleteTag property="className"
 								  optionsList = "${requestScope.specClassList}"
 								  styleClass="formFieldSized12"
 								  initialValue=""
@@ -329,7 +329,7 @@
 
               <td align="left" class="black_ar"><bean:message key="specimen.label"/></td>
 
-              <td width="35%" class="black_ar" align="left"><html:text styleClass="black_ar" size="30" maxlength="50"  styleId="label" property="label" readonly="${requestScope.readOnlyForAll}"/></td>
+              <td  class="black_ar" align="left"><html:text styleClass="black_ar" size="30" maxlength="50"  styleId="label" property="label" readonly="${requestScope.readOnlyForAll}"/></td>
 			</logic:equal>	<%-- if(!Variables.isSpecimenLabelGeneratorAvl) --%>
 
 			<logic:notEqual name="isSpecimenBarcodeGeneratorAvl" value="true">
