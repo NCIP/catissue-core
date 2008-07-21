@@ -294,21 +294,9 @@ if(form != null)
 <script src="jss/script.js" type="text/javascript"></script>
 <link rel="STYLESHEET" type="text/css" href="css/catissue_suite.css">
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
-
+<script language="JavaScript" type="text/javascript" src="jss/caTissueSuite.js"></script>
 <script language="JavaScript">
-	function showHide(elementid)
-{
-	var switchImg = document.getElementById('imgArrow_'+elementid);
-	if (document.getElementById(elementid).style.display == 'none'){
-		document.getElementById(elementid).style.display = '';
-		switchImg.innerHTML = '<img src="images/uIEnhancementImages/uparrow.gif" border="0" width="80" height="9" hspace="10"   vspace="3"/>';
-							
-	} else {
-		document.getElementById(elementid).style.display = 'none';
-		switchImg.innerHTML = '<img src="images/uIEnhancementImages/dwn_arrow.gif" border="0" width="80" height="9" hspace="10"  vspace="3"/>';
-				
-	}
-} 
+	
 	function insRow(subdivtag)
 	{
 		var noOfDeriveSpecimen = parseInt(document.forms[0].noOfDeriveSpecimen.value);
