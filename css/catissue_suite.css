@@ -36,6 +36,12 @@ body {
 	color: #074180;
 	font-weight: bold;
 }
+.blue_ar_c {
+	font-family: verdana;
+	font-size: 12px;
+	color: #6e6d6d;
+	font-weight: bold;
+}
 
 .black_ar_s {
 	font-family: verdana;
@@ -293,7 +299,6 @@ A.view:hover{
 .toptd {
 	height:18px;
 }
-
 .bottomtd {
 	height:12px;
 }
@@ -451,6 +456,7 @@ div.autocomplete {
   	font-family: verdana;
 	font-size: 11px;
 	color: #000000;
+	width:20em;
 	}
 
 	.formFieldSizedTime{ /* for the form elements themselves and with a constant width (on elements) */
