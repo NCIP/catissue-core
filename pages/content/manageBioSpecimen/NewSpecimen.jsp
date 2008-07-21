@@ -699,14 +699,14 @@
 		{
 			document.getElementById("consentTable").style.display='none';
 			document.getElementById("mainTable").style.display='block';
-			specimenImage.innerHTML="<img src='images/uIEnhancementImages/new_specimen.gif' alt='Specimen Details'  width='115' height='22' border='0'>";
+			specimenImage.innerHTML="<img src='images/uIEnhancementImages/new_specimen_selected.gif' alt='Specimen Details'  width='115' height='22' border='0'>";
 			consentImage.innerHTML="<img src='images/uIEnhancementImages/tab_consents2.gif' alt='Consents' width='76' height='22' border='0'>";
 		}
 		else
 		{
 			document.getElementById("consentTable").style.display='block';
 			document.getElementById("mainTable").style.display='none';
-			specimenImage.innerHTML="<img src='images/uIEnhancementImages/new_specimen.gif' alt='Specimen Details'  width='115' height='22' border='0'>";
+			specimenImage.innerHTML="<img src='images/uIEnhancementImages/new_specimen_unselected.gif' alt='Specimen Details'  width='115' height='22' border='0'>";
 			consentImage.innerHTML="<img src='images/uIEnhancementImages/tab_consents1.gif' alt='Consents' width='76' height='22' border='0'>";
 		}
 
@@ -972,7 +972,7 @@
 	{
 	%>
 			<table width="100%" border="0" cellpadding="0" cellspacing="0">
-		      <tr><td class="td_tab_bg" ><img src="images/uIEnhancementImages/spacer.gif" alt="spacer" width="50" height="1"></td><td valign="bottom"><a onclick="newspecimenPage()" id="specimenDetailsTab" href="#">	<img src="images/uIEnhancementImages/tab_specimen_details1.gif" alt="Specimen Details"  width="126" height="22" border="0"></a></td><td valign="bottom"><a href="#"><img src="images/uIEnhancementImages/tab_events2.gif" alt="Events" width="56" height="21" onclick="eventClicked();" border="0"></a></td><td valign="bottom"><a href="#"><img src="images/uIEnhancementImages/tab_view_surgical3.gif" alt="Inactive View Surgical Pathology Report " width="216" height="22" border="0"></a></td><td valign="bottom"><a href="#"><img src="images/uIEnhancementImages/tab_view_annotation2.gif" alt="View Annotation" width="116" height="22" border="0" onClick="viewAnnotations(<%=specimenEntityId%>,document.forms[0].id.value,'','<%=staticEntityName%>','<%=pageOf%>')"></a></td><td align="left" valign="bottom" class="td_color_bfdcf3" ><a id="consentViewTab" href="#" onClick="consentTab()"><img src="images/uIEnhancementImages/tab_consents2.gif" alt="Consents" width="76" border="0" height="22" ></a><a href="#"></a></td>
+		      <tr><td class="td_tab_bg" ><img src="images/uIEnhancementImages/spacer.gif" alt="spacer" width="50" height="1"></td><td valign="bottom"><a onclick="newspecimenPage()" id="specimenDetailsTab" href="#">	<img src="images/uIEnhancementImages/tab_specimen_details1.gif" alt="Specimen Details"  width="126" height="22" border="0"></a></td><td valign="bottom"><a href="#"><img src="images/uIEnhancementImages/tab_events2.gif" alt="Events" width="56" height="22" onclick="eventClicked();" border="0"></a></td><td valign="bottom"><a href="#"><img src="images/uIEnhancementImages/tab_view_surgical3.gif" alt="Inactive View Surgical Pathology Report " width="216" height="22" border="0"></a></td><td valign="bottom"><a href="#"><img src="images/uIEnhancementImages/tab_view_annotation2.gif" alt="View Annotation" width="116" height="22" border="0" onClick="viewAnnotations(<%=specimenEntityId%>,document.forms[0].id.value,'','<%=staticEntityName%>','<%=pageOf%>')"></a></td><td align="left" valign="bottom" class="td_color_bfdcf3" ><a id="consentViewTab" href="#" onClick="consentTab()"><img src="images/uIEnhancementImages/tab_consents2.gif" alt="Consents" width="76" border="0" height="22" ></a><a href="#"></a></td>
 		        <td width="90%" align="left" valign="bottom" class="td_tab_bg" >&nbsp;
 				</td></tr>
 		    </table>
@@ -985,7 +985,7 @@
 	%><table width="100%" border="0" cellpadding="0" cellspacing="0">
 		<tr>
 			<td class="td_tab_bg" ><img src="images/uIEnhancementImages/spacer.gif" alt="spacer" width="50" height="1"></td>
-			<td valign="bottom"><a onclick="newSpecimenTab()" id="newSpecimenTab" href="#"><img src="images/uIEnhancementImages/new_specimen.gif" alt="Specimen Details"  width="115" height="22" border="0"></a></td><td onClick="newConsentTab()" valign="bottom" ><a id="newConsentTab" href="#" onClick="consentTab()"><img src="images/uIEnhancementImages/tab_consents2.gif" alt="Consents" width="76" height="22" border="0" ></a></td><td width="90%" class="td_tab_bg" >&nbsp;</td></tr>
+			<td valign="bottom"><a onclick="newSpecimenTab()" id="newSpecimenTab" href="#"><img src="images/uIEnhancementImages/new_specimen_selected.gif" alt="Specimen Details"  width="115" height="22" border="0"></a></td><td onClick="newConsentTab()" valign="bottom" ><a id="newConsentTab" href="#" onClick="consentTab()"><img src="images/uIEnhancementImages/tab_consents2.gif" alt="Consents" width="76" height="22" border="0" ></a></td><td width="90%" class="td_tab_bg" >&nbsp;</td></tr>
 		</table>
 			
 	<%
