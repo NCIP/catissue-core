@@ -293,6 +293,10 @@ A.view:hover{
 .toptd {
 	height:18px;
 }
+
+.bottomtd {
+	height:12px;
+}
 /*End td/tr css*/
 
 

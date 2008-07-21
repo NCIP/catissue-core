@@ -11,7 +11,9 @@
 
 <%@ include file="/pages/content/common/AdminCommonCode.jsp" %>
 <head>
-<script src="jss/script.js" type="text/javascript"></script>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" /> 
+<script src="jss/javaScript.js"></script>
 <%
 	
 	List tissueSiteList = (List) request.getAttribute(Constants.TISSUE_SITE_LIST);
@@ -74,14 +76,19 @@
 %>
 
 <%@ include file="/pages/content/common/CommonScripts.jsp" %>
-
 <SCRIPT LANGUAGE="JavaScript">
 	var search1='`';
 	var insno=0;
 </script>
-<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
-
 <SCRIPT LANGUAGE="JavaScript">
+
+function showHide(elementid){
+if (document.getElementById(elementid).style.display == 'none'){
+document.getElementById(elementid).style.display = '';
+} else {
+document.getElementById(elementid).style.display = 'none';
+}
+} 
 <!--
 	// functions for add more
 
@@ -101,11 +108,19 @@ function insRow(subdivtag)
 	var x=document.getElementById(subdivtag).insertRow(1);
 	
 	var subdivname = ""+ subdivtag;
+	var rowno=(q-1);
+	//CheckBox
+	var checkb=x.insertCell(0);
+	checkb.className="black_ar";
+	sname="";
+	var name = "chk_"+rowno;
+	sname="&nbsp;&nbsp;&nbsp;&nbsp;<input type='checkbox' name='" + name +"' id='" + name +"' value='C' class='black_ar' onClick=\"enableButton(document.forms[0].deleteValue,document.forms[0].counter,'chk_')\">";
+	checkb.innerHTML=""+sname;
 
 	// class type
-	var spreqtype=x.insertCell(0)
-	spreqtype.className="black_ar";
-	var rowno=(q-1);
+	var spreqtype=x.insertCell(1)
+	spreqtype.className="black_new";
+	
 	sname="";
 	objname = "value(DistributionSpecimenRequirement:" + rowno + "_specimenClass)";
 	var specimenClassName = objname;
@@ -126,8 +141,8 @@ function insRow(subdivtag)
 	spreqtype.innerHTML="" + sname;
 	
 	//subtype
-	var spreqsubtype=x.insertCell(1)
-	spreqsubtype.className="black_ar";
+	var spreqsubtype=x.insertCell(2)
+	spreqsubtype.className="black_new";
 	sname="";
 	objname = "value(DistributionSpecimenRequirement:"+rowno+"_specimenType)";
 	var functionName = "onSubTypeChangeUnit('" + specimenClassName + "',this,'" + objunit + "')" ;
@@ -140,7 +155,7 @@ function insRow(subdivtag)
 	spreqsubtype.innerHTML="" + sname;
 	
 	//tissuesite
-	var spreqtissuesite=x.insertCell(2)
+	var spreqtissuesite=x.insertCell(3)
 	spreqtissuesite.className="black_new";
 	sname="";
 	objname = "value(DistributionSpecimenRequirement:"+rowno+"_tissueSite)";
@@ -159,8 +174,8 @@ function insRow(subdivtag)
 	spreqtissuesite.innerHTML="" + sname;
 	
 	//pathologystatus
-	var spreqpathologystatus=x.insertCell(3)
-	spreqpathologystatus.className="black_ar";
+	var spreqpathologystatus=x.insertCell(4)
+	spreqpathologystatus.className="black_new";
 	
 	sname="";
 	objname = "value(DistributionSpecimenRequirement:"+rowno+"_pathologyStatus)";
@@ -175,218 +190,111 @@ function insRow(subdivtag)
 	spreqpathologystatus.innerHTML="" + sname;
 	
 	//qty
-	var spreqqty=x.insertCell(4)
+	var spreqqty=x.insertCell(5)
 	spreqqty.className="black_ar";
 	sname="";
 	objname = "value(DistributionSpecimenRequirement:"+rowno+"_quantity)";
 
-	sname="<input type='text' name='" + objname + "' value='0'  size='12'  class='black_ar' id='" + objname + "'>"        	
+	sname="<input type='text' name='" + objname + "' value='0'  size='7' style='text-align:right' class='black_ar' id='" + objname + "'>"        	
 	sname = sname + "&nbsp;<span id='" + objunit + "'>&nbsp;</span>"
 					
 	spreqqty.innerHTML="" + sname;
 
-	//CheckBox
-	var checkb=x.insertCell(5);
-	checkb.className="black_ar";
-	//checkb.colSpan=2;
-	sname="";
-	var name = "chk_"+rowno;
-	sname="&nbsp;&nbsp;&nbsp;&nbsp;<input type='checkbox' name='" + name +"' id='" + name +"' value='C' class='black_ar' onClick=\"enableButton(document.forms[0].deleteValue,document.forms[0].counter,'chk_')\">";
-	checkb.innerHTML=""+sname;
+	
 
 }
 
 //-->
 </SCRIPT>
 
-<style>
-	div#d1
-	{
-		display:none;
-	}
-	div#d999
-	{
-	 	display:none;
-	}
-</style>
 </head>
 <body>
-
 <html:errors />
 <html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
 	<%=messageKey%>
 </html:messages>
-
 <html:form action="<%=formName%>">
 <html:hidden property="operation" value="<%=operation%>" />
 <html:hidden property="submittedFor" value="<%=submittedFor%>"/>
 <html:hidden property="id" />
 <html:hidden property="onSubmit"/>
-<table width="100%" border="0" cellpadding="0" cellspacing="0" class="newMaintable">
+<table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
   <tr>
-    <td><table width="100%" border="0" cellpadding="0" cellspacing="0" class="td_color_bfdcf3">
+    <td class="td_color_bfdcf3"><table border="0" cellpadding="0" cellspacing="0">
       <tr>
-        <td><table width="100%" border="0" cellpadding="0" cellspacing="0" class="whitetable_bg">
-          <tr>
-            <td width="100%" colspan="2" valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="0">
-              <tr>
-                <td colspan="3" valign="top" class="td_color_bfdcf3"><table width="22%" border="0" cellpadding="0" cellspacing="0" background="images/uIEnhancementImages/table_title_bg.gif">
-                    <tr>
-                      <td width="82%"><span class="wh_ar_b">&nbsp;&nbsp;&nbsp;
-						<bean:message key="DistributionProtocol.header" /></span></td>
-                      <td width="18%" align="right"><img src="images/uIEnhancementImages/table_title_corner2.gif" width="31" height="24" /></td>
-                    </tr>
-                </table></td>
-              </tr>
-              <tr>
-                <td width="1%" valign="top" class="td_color_bfdcf3">&nbsp;</td>
-                <td width="9%" valign="top" class="td_tab_bg">&nbsp;</td>
-                <td width="90%" valign="bottom" class="td_color_bfdcf3" style="padding-top:4px;"><table width="100%" border="0" cellpadding="0" cellspacing="0">
-                    <tr>
-                      <td width="4%" class="td_tab_bg" >&nbsp;</td>
-			<!-- for tabs selection -->
-				<%
+        <td class="td_table_head"><span class="wh_ar_b"><bean:message key="DistributionProtocol.header" /></span></td>
+        <td align="right"><img src="images/uIEnhancementImages/table_title_corner2.gif" alt="Page Title - Distribution Protocol" width="31" height="24" /></td>
+      </tr>
+    </table></td>
+  </tr>
+  <tr>
+    <td class="tablepadding"><table width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr>
+        <td width="4%" class="td_tab_bg" ><img src="images/uIEnhancementImages/spacer.gif" alt="spacer" width="50" height="1"></td>
+		<%
 						if(operation.equals(Constants.ADD))
 						{ 
 				%>
-                      <td width="6%" valign="bottom" background="images/uIEnhancementImages/tab_bg.gif" ><img src="images/uIEnhancementImages/tab_add_selected.jpg" alt="Add" width="57" height="22" /></td>
-                      <td width="6%" valign="bottom" background="images/uIEnhancementImages/tab_bg.gif"><html:link page="/SimpleQueryInterface.do?pageOf=pageOfDistributionProtocol&aliasName=DistributionProtocol&menuSelected=10" ><img src="images/uIEnhancementImages/tab_edit_notSelected.jpg" alt="Edit" width="59" height="22" border="0" /></html:link></td>
-                      <td valign="bottom" background="images/uIEnhancementImages/tab_bg.gif">&nbsp;</td>
-				<% 
+        <td valign="bottom"><img src="images/uIEnhancementImages/tab_add_selected.jpg" alt="Add" width="57" height="22" /></td>
+        <td valign="bottom"><html:link page="/SimpleQueryInterface.do?pageOf=pageOfDistributionProtocol&aliasName=DistributionProtocol" ><img src="images/uIEnhancementImages/tab_edit_notSelected.jpg" alt="Edit" width="59" height="22" border="0" /></html:link></td>
+		<% 
 						}
 						   if(operation.equals(Constants.EDIT))
 						{
 				%>
-						<td width="6%" valign="bottom" background="images/uIEnhancementImages/tab_bg.gif" ><html:link page="/DistributionProtocol.do?operation=add&pageOf=pageOfDistributionProtocol&menuSelected=10"><img src="images/uIEnhancementImages/tab_add_notSelected.jpg" alt="Add" width="57" height="22" border="0" /></html:link></td>
-                      <td width="6%" valign="bottom" background="images/uIEnhancementImages/tab_bg.gif"><img src="images/uIEnhancementImages/tab_edit_selected.jpg" alt="Edit" width="59" height="22" /></td>
-                      <td valign="bottom" background="images/uIEnhancementImages/tab_bg.gif">&nbsp;</td>
-				<%
+		<td valign="bottom"><html:link page="/DistributionProtocol.do?operation=add&pageOf=pageOfDistributionProtocol"><img src="images/uIEnhancementImages/tab_add_notSelected.jpg" alt="Add" width="57" height="22" /></html:link></td>
+        <td valign="bottom"><img src="images/uIEnhancementImages/tab_edit_selected.jpg" alt="Edit" width="59" height="22" border="0" /></td>
+		<%
 						}
 				%>
-                      <td width="1%" align="left" valign="bottom" class="td_color_bfdcf3" >&nbsp;</td>
-                    </tr>
-                </table></td>
-              </tr>
-            </table></td>
-            </tr>
-          
-          <tr>
-            <td colspan="2" class="td_color_bfdcf3" style="padding-left:10px; padding-right:10px; padding-bottom:10px;">
-				<table width="100%" border="0" cellpadding="3" cellspacing="0" bgcolor="#FFFFFF">
-					<tr>
-		                <td colspan="3" align="left">
-							<table width="99%" border="0" cellpadding="1" cellspacing="0">
-			                    <tr>
-						          <td>
-									<table width="100%" border="0" cellpadding="0" cellspacing="0"						class="td_color_ffffff">
-				                         <tr>
-									          <td class=" grey_ar_s">
-												<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
-												<bean:message key="commonRequiredField.message" /></td>
-										 </tr>
-									</table>
-								</td>
-		                    </tr>
-				        </table>
-					</td>
-	              </tr>
-	            <tr>
-		<!-- Page Title -->
-		            <td colspan="2" align="left" class="tr_bg_blue1">
-						<span class="blue_ar_b"> 
-							<logic:equal name="operation" value="<%=Constants.ADD%>">
-								<bean:message key="distributionprotocol.title"/>
-							</logic:equal>
-							<logic:equal name="operation" value="<%=Constants.EDIT%>">
-								<bean:message key="distributionprotocol.editTitle"/>
-							</logic:equal>
-						</span>
-					</td>
-                </tr>
+        <td width="90%" valign="bottom" class="td_tab_bg">&nbsp;</td>
+      </tr>
+    </table>
+      <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
+        <tr>
+          <td colspan="2" align="left" class=" grey_ar_s">&nbsp;<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /> <bean:message key="commonRequiredField.message" /></td>
+        </tr>
+        <tr>
+          <td colspan="2" align="left" class="tr_bg_blue1"><span class="blue_ar_b"> &nbsp;<logic:equal name="operation" value="<%=Constants.ADD%>"><bean:message key="distributionprotocol.title"/></logic:equal>
+							<logic:equal name="operation" value="<%=Constants.EDIT%>"><bean:message key="distributionprotocol.editTitle"/></logic:equal></span></td>
+        </tr>
+        <tr>
+          <td colspan="2" align="left" class="showhide"><table width="100%" border="0" cellpadding="3" cellspacing="0">
+             
                 <tr>
-					<td colspan="3" align="left" style="padding-top:10px; padding-bottom:15px;">
-						<div id="part_det" >
-		                    <table width="100%" border="0" cellpadding="3" cellspacing="0">
-								<tr>
-		                          <td width="1%" align="left" class="black_ar">
-									<span class="blue_ar_b">
-										<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
-									</span>
-								   </td>
-			                       <td width="16%" align="left" class="black_ar">
-										<label for="principalInvestigatorId">
-											<bean:message key="distributionprotocol.principalinvestigator" />
-										</label>
-									</td>
-			                        <td width="23%" align="left">
-										<label>
-				                            <html:select property="principalInvestigatorId" styleClass="formFieldSizedNew"			styleId="principalInvestigatorId" size="1"
+                  <td width="1%" align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
+                  <td width="17%" align="left" class="black_ar"><bean:message key="distributionprotocol.principalinvestigator" /> </td>
+                  <td width="20%" align="left" class="black_new">
+					<html:select property="principalInvestigatorId" styleClass="formFieldSizedNew"			styleId="principalInvestigatorId" size="1"
 											 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 											 <html:options collection="<%=Constants.USERLIST%>" labelProperty="name" property="value"/>
 											</html:select>
-											</td>
-											<td align="left" class="smalllink">
-											<html:link href="#" styleId="newUser" styleClass="blue_ar_s_b" onclick="addNewAction('DistributionProtocolAddNew.do?addNewForwardTo=principalInvestigator&forwardTo=distributionProtocol&addNewFor=principalInvestigator')">
+                  </td>
+                  <td width="62%" align="left"><html:link href="#" styleId="newUser" styleClass="view" onclick="addNewAction('DistributionProtocolAddNew.do?addNewForwardTo=principalInvestigator&forwardTo=distributionProtocol&addNewFor=principalInvestigator')">
 												<bean:message key="buttons.addNew" />
-											</html:link>
-										</label>
-									</td>
-		                        </tr>
-				                <tr>
-						          <td align="left" class="black_ar">
-									<span class="blue_ar_b">
-										<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
-									</span>
-								  </td>
-		                          <td align="left" class="black_ar">
-										<label for="title">
-											<bean:message key="distributionprotocol.protocoltitle" />
-										</label>
-								  </td>
-		                          <td colspan="2" align="left">
-										<html:text styleClass="black_ar" maxlength="255"  size="30" styleId="title" property="title" readonly="<%=readOnlyValue%>" />
-								  </td>
-	                          </tr>
-		                      <tr>
-				                 <td align="left" class="black_ar">
-									<span class="blue_ar_b">
-										<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
-									</span>
-								 </td>
-		                         <td align="left" class="black_ar">
-										<label for="shortTitle">
-											<bean:message key="distributionprotocol.shorttitle" />
-										</label>
-								 </td>
-								 <td colspan="2" align="left">
-									 <html:text styleClass="black_ar" maxlength="255"  size="30" styleId="shortTitle" property="shortTitle" readonly="<%=readOnlyValue%>" />
-								 </td>
-	                          </tr>
-		                      <tr>
-					             <td align="left" class="black_ar">&nbsp;
-								 </td>
-	                             <td align="left" class="black_ar">
-									<label for="irbID">
-										<bean:message key="distributionprotocol.irbid" />
-									</label>
-								 </td>
-		                         <td colspan="2" align="left">
-									<html:text styleClass="black_ar" maxlength="255"  size="30" styleId="irbID" property="irbID" readonly="<%=readOnlyValue%>" />
-								 </td>
-	                          </tr>
-		                      <tr>
-				                <td align="left" class="black_ar">
-									<span class="blue_ar_b">
-										<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
-									</span>
-								</td>
-		                        <td align="left" class="black_ar">
-									<label for="startDate">
-										<bean:message key="distributionprotocol.startdate" />
-									</label>
-								</td>
-		                        <td colspan="2" align="left" valign="top">
-					<%
+											</html:link></td>
+                </tr>
+                <tr>
+                  <td align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
+                  <td align="left" class="black_ar"><bean:message key="distributionprotocol.protocoltitle" /> </td>
+                  <td colspan="2" align="left"><html:text styleClass="black_ar" maxlength="255"  size="30" styleId="title" property="title" readonly="<%=readOnlyValue%>" /></td>
+                </tr>
+                <tr>
+                  <td align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
+                  <td align="left" class="black_ar"><bean:message key="distributionprotocol.shorttitle" /> </td>
+                  <td colspan="2" align="left"><html:text styleClass="black_ar" maxlength="255"  size="30" styleId="shortTitle" property="shortTitle" readonly="<%=readOnlyValue%>" /></td>
+                </tr>
+                <tr>
+                  <td align="center" class="black_ar">&nbsp;</td>
+                  <td align="left" class="black_ar"><label for="irbID"><bean:message key="distributionprotocol.irbid" /> </label></td>
+                  <td colspan="2" align="left"><html:text styleClass="black_ar" maxlength="255"  size="30" styleId="irbID" property="irbID" readonly="<%=readOnlyValue%>" />
+                  </td>
+                </tr>
+                <tr>
+                  <td align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
+                  <td align="left" class="black_ar"><label for="startDate"><bean:message key="distributionprotocol.startdate" /> </label></td>
+                  <td colspan="2" align="left" valign="top">
+				  <%
 							
 						if(currentDistributionProtocolDate.trim().length() > 0)
 						{
@@ -415,21 +323,15 @@ function insRow(subdivtag)
 									/>
 					<% 
 						} 
-					%>				<span class="grey_ar_s">
-									<bean:message key="page.dateFormat" />
-									</span>&nbsp;
-								</td>
-							</tr>
+					%>
+						<span class="grey_ar_s"><bean:message key="page.dateFormat" /></span>
+					</td>
+                </tr>
 				<!-- enddate: should be displayed only in case of edit  -->	
 				<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
 							<tr>
-								<td align="left" class="black_ar">&nbsp;
-								</td>
-								<td class="black_ar">
-									<label for="endDate">
-										<bean:message key="distributionprotocol.enddate" />
-									</label>
-								</td>
+								<td align="center" class="black_ar">&nbsp;</td>
+								<td class="black_ar"><label for="endDate"><bean:message key="distributionprotocol.enddate" /></label></td>
 					<%
 							Integer distributionProtocolEndDateYear = new Integer(Utility.getYear(distributionProtocolEndDate ));
 							Integer distributionProtocolEndDateMonth = new Integer(Utility.getMonth(distributionProtocolEndDate ));
@@ -445,35 +347,23 @@ function insRow(subdivtag)
 								  			value="<%=distributionProtocolEndDate %>"
 								  			styleClass="black_ar"
 										/>
-									 <span class="grey_ar_s"><bean:message key="page.dateFormat" /> </span>&nbsp;
+									 <span class="grey_ar_s"><bean:message key="page.dateFormat" /> </span>
 								 </td>
 				  			  </tr>
 				</logic:equal>
-  							  <tr>
-								<td align="left" class="black_ar">&nbsp;
-								</td>
-								<td align="left" class="black_ar">
-									<label for="enrollment">
-										<bean:message key="distributionprotocol.participants" />
-									</label>
-								</td>
-								<td colspan="2" align="left">
-									<html:text styleClass="black_ar" maxlength="10"  size="30" styleId="enrollment" property="enrollment" readonly="<%=readOnlyValue%>" />
-								</td>
-							</tr>
-							<tr>
-								<td align="left" class="black_ar">&nbsp;
-								</td>
-								<td align="left" class="black_ar">
-									<label for="descriptionURL">
-										<bean:message key="distributionprotocol.descriptionurl" />
-									</label>
-								</td>
-		                        <td colspan="2" align="left">
-									<html:text styleClass="black_ar"  maxlength="255" size="30" styleId="descriptionURL" property="descriptionURL" readonly="<%=readOnlyValue%>" /> 
-								</td>
-							</tr>
-					<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
+
+                <tr>
+                  <td align="center" class="black_ar">&nbsp;</td>
+                  <td align="left" class="black_ar"><bean:message key="distributionprotocol.participants" /> </td>
+                  <td colspan="2" align="left"><html:text styleClass="black_ar" maxlength="10"  size="30" styleId="enrollment" property="enrollment" readonly="<%=readOnlyValue%>" /></td>
+                </tr>
+                <tr>
+                  <td align="center" class="black_ar">&nbsp;</td>
+                  <td align="left" class="black_ar"><label for="departmentId"><bean:message key="distributionprotocol.descriptionurl" /> </label></td>
+                  <td colspan="2" align="left"><html:text styleClass="black_ar"  maxlength="255" size="30" styleId="descriptionURL" property="descriptionURL" readonly="<%=readOnlyValue%>" />
+                  </td>
+                </tr>
+				<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
 							<tr>
 								<td align="left" class="black_ar">
 									<span class="blue_ar_b">
@@ -485,7 +375,7 @@ function insRow(subdivtag)
 											<bean:message key="site.activityStatus" />
 										</label>
 								</td>
-								<td colspan="2" align="left">
+								<td colspan="2" align="left" class="black_new">
 									 <html:select property="activityStatus" styleClass="formFieldSizedNew"				styleId="activityStatus" size="1"  onchange="<%=strCheckStatus%>"
 			   						    onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 											<html:options name="<%=Constants.ACTIVITYSTATUSLIST%>" labelName="<%=Constants.ACTIVITYSTATUSLIST%>" />
@@ -493,56 +383,29 @@ function insRow(subdivtag)
 								</td>
 							</tr>
 					</logic:equal>
-                        </table>
-					</div>
-				</td>
-			</tr>
-            <tr onclick="javascript:showHide('add_specimen_requirements')">
-	           <td height="20" align="left" class="tr_bg_blue1">
-					<span class="blue_ar_b">
-						<bean:message key="distributionprotocol.specimenreq" />
-					</span>
-					<html:hidden property="counter"/>
-				</td>
-                <td width="2%" align="right" class="tr_bg_blue1"><a href="#" id="imgArrow_add_specimen_requirements">
-					<img src="images/uIEnhancementImages/dwn_arrow1.gif" width="7" height="8" hspace="10" border="0" class="tr_bg_blue1" /></a>
-				</td>
-             </tr>
-             <tr>
-                <td colspan="3" style="padding-top:10px;">
-					<div id="add_specimen_requirements" style="display:none" >
-						<table width="100%" border="0" cellspacing="0" cellpadding="4">
-							<tbody id="SpecimenRequirementData">
-							    <tr>
-									<td width="16%" class="tableheading"><span class="black_ar_b"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /> </span>
-											<bean:message key="distributionprotocol.specimenclass" />
-										</span>
-									</td>
-				                    <td width="16%" class="tableheading"><span class="black_ar_b"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span>
-											<bean:message key="distributionprotocol.specimentype" />
-										</span>
-									</td>
-									<td width="29%" class="tableheading"><span class="black_ar_b"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span>
-											<bean:message key="distributionprotocol.specimensite" />
-										</span>
-									</td>
-				                    <td width="17%" class="tableheading"><span class="black_ar_b"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span>
-											<bean:message key="distributionprotocol.pathologystatus" />
-										</span>
-									</td>
-			                        <td width="14%" class="tableheading"><span class="black_ar_b">
-											<bean:message key="distributionprotocol.quantity" />
-										</span>
-									</td>
-			                        <td width="8%" class="tableheading"><span class="black_ar_b">
-                        <label for="delete" align="center">
-												<bean:message key="addMore.delete" />
-											</label>
-					                     </span>
-									</td>
-			                    </tr>
-						        
-		<%
+             
+          </table></td>
+        </tr>
+        <tr onclick="showHide('add_id')">
+          <td align="left" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;<bean:message key="distributionprotocol.specimenreq" /></span></td>
+		  <html:hidden property="counter"/>
+          <td width="2%" align="right" class="tr_bg_blue1"><a href="#"><img src="images/uIEnhancementImages/dwn_arrow1.gif" alt="Show Details" width="80" height="9" hspace="10" border="0"/></a></td>
+        </tr>
+        <tr>
+          <td colspan="2" class="showhide1"><div id="add_id" style="display:none">
+              <table width="100%" border="0" cellspacing="0" cellpadding="4">
+			  <tbody id="SpecimenRequirementData">
+                <tr>
+                  <td width="8%" class="tableheading"><span class="black_ar_b">
+                    <label for="delete" align="center"><bean:message key="app.select" /></label>
+                  </span></td>
+                  <td width="16%" class="tableheading"><span class="black_ar_b"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /> </span><bean:message key="distributionprotocol.specimenclass" /> </span></td>
+                  <td width="17%" class="tableheading"><span class="black_ar_b"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span> <bean:message key="distributionprotocol.specimentype" /> </span></td>
+                  <td width="29%" class="tableheading"><span class="black_ar_b"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span> <bean:message key="distributionprotocol.specimensite" /></span></td>
+                  <td width="17%" class="tableheading"><span class="black_ar_b"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span> <bean:message key="distributionprotocol.pathologystatus" /></span></td>
+                  <td width="13%" class="tableheading"><span class="black_ar_b"><bean:message key="distributionprotocol.quantity" /></span></td>
+                </tr>
+				<%
 				int maxcount=1;
 				for(int counter=noOfRows;counter>=1;counter--)
 				{		
@@ -577,12 +440,25 @@ function insRow(subdivtag)
 				String functionName ="changeUnit('" + objname + "',' " + objunit + "','" + objsubTypeName + "')"; 
 				String subTypeFunctionName ="onSubTypeChangeUnit('" + objname + "',this,' " + objunit + "')"; 
 			%>
-									<td class="black_ar"><html:select property="<%=objname%>"							styleClass="formFieldSized8" styleId="<%=objname%>" size="1"					onchange="<%=functionName%>" 
-										onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-									
-			<%
 
-						if(operation.equals(Constants.EDIT) && sysId > 0)
+
+			<%
+					
+					String key = "DistributionSpecimenRequirement:"+ counter +"_id";
+					boolean bool = Utility.isPersistedValue(map,key);
+					String condition = "";
+					if(bool)
+						condition = "disabled='disabled'";
+			%>
+						<td class="black_ar">
+										<label>&nbsp; &nbsp;
+							<input type=checkbox name="<%=check %>" id="<%=check %>" <%=condition%> class="black_ar" onClick="enableButton(document.forms[0].deleteValue,document.forms[0].counter,'chk_')" />
+						</label>
+										</td>
+
+
+									<td class="black_new"><html:select property="<%=objname%>"styleClass="formFieldSized8" styleId="<%=objname%>" size="1"onchange="<%=functionName%>" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+			<%			if(operation.equals(Constants.EDIT) && sysId > 0)
 						{
 			%>
 											<html:option value="<%=classValue%>"><%=classValue%></html:option>
@@ -597,8 +473,9 @@ function insRow(subdivtag)
 			%>
 											</html:select>
 										</td>
+										
 
-					                    <td class="black_ar">
+					                    <td class="black_new">
 			<%
 						//String classValue = (String)form.getValue(srKeyName);
 					
@@ -641,7 +518,7 @@ function insRow(subdivtag)
 									<img src="images/uIEnhancementImages/ic_cl_diag.gif" alt="Clinical Diagnosis" width="16" height="16" hspace="5" align="absmiddle" title='Tissue Site Selector' border="0"/>
 									</a>
 									</td>
-									<td class="black_ar">
+									<td class="black_new">
 			<%
 						objname="";
 						objname = "value(DistributionSpecimenRequirement:" + counter + "_pathologyStatus)";
@@ -663,76 +540,55 @@ function insRow(subdivtag)
 							qtyValue="0";
 			%>
 					  <html:text styleClass="black_ar" 
-							styleId="<%=objname%>"  size="12" 
+							styleId="<%=objname%>"  size="7" 
 							property="<%=objname%>"
 							readonly="<%=readOnlyValue%>"
-							value="<%=qtyValue %>" />
-					&nbsp;
+							value="<%=qtyValue %>" style="text-align:right"/>
+					
 					<span id=' <%= objunit %>'>
 						<%=strHiddenUnitValue%>
 					</span>
 					</td>
 			<%
 					
-					String key = "DistributionSpecimenRequirement:"+ counter +"_id";
-					boolean bool = Utility.isPersistedValue(map,key);
-					String condition = "";
-					if(bool)
-						condition = "disabled='disabled'";
+			    }
 			%>
-                      <td class="black_ar">
-						<label>&nbsp; &nbsp;
-							<input type=checkbox name="<%=check %>" id="<%=check %>" <%=condition%> class="black_ar" onClick="enableButton(document.forms[0].deleteValue,document.forms[0].counter,'chk_')" />
-						</label>
-                  </td>
-                    </tr>
-			<%
-				} // for 
-			%>
-					
-                    <tr>
-                      <td colspan="7" valign="bottom" class="black_ar">
-						
-					  <html:button property="addDistributionProtocolEvents" styleClass="blue_ar_b" onclick="insRow('SpecimenRequirementData')" > <bean:message key="buttons.addMore" /></html:button> |&nbsp;<html:button property="deleteValue" styleClass="blue_ar_b" onclick="deleteChecked('SpecimenRequirementData','DistributionProtocol.do?operation=<%=operation%>&pageOf=pageOfDistributionProtocol&status=true',document.forms[0].counter,'chk_',false)" disabled="true"><bean:message key="buttons.delete" /></html:button></td>
-                      </tr>
-					  </tbody>
-                  </table></td>
-              </tr>
-              <tr class="td_color_F7F7F7">
-                <td colspan="3">&nbsp;</td>
-              </tr>
-              <tr  class="td_color_F7F7F7">
-                <td colspan="3" class="buttonbg">
+              
+                <tr>
+                 <td colspan="6" valign="bottom" class="black_ar"><html:button property="addDistributionProtocolEvents" styleClass="black_ar" onclick="insRow('SpecimenRequirementData')" > <bean:message key="buttons.addMore" /></html:button> &nbsp;<html:button property="deleteValue" styleClass="black_ar" onclick="deleteChecked('SpecimenRequirementData','DistributionProtocol.do?operation=<%=operation%>&pageOf=pageOfDistributionProtocol&status=true',document.forms[0].counter,'chk_',false)" disabled="true"><bean:message key="buttons.delete" /></html:button></td>
+                </tr>
+				 </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr >
+          <td colspan="2" class="bottomtd"></td>
+        </tr>
+        <tr  >
+          <td colspan="2" class="buttonbg">
 			<%
 				   	String action = "confirmDisable('" + formName +"',document.forms[0].activityStatus)";
 			%>
 			<%	
 							String deleteAction = "deleteObject('" + formName +"','" + Constants.ADMINISTRATIVE + "')";
 			%>
-				<html:button styleClass="blue_ar_b" property="submitPage" onclick="<%=action%>">
+			<html:button styleClass="blue_ar_b" property="submitPage" onclick="<%=action%>" accesskey="Enter">
 						   		<bean:message key="buttons.submit"/>
 				</html:button>
-				<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
+			<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
 							&nbsp;| 
 							<span class="cancellink"><html:link
-												href="#" onclick="<%=deleteAction%>" styleClass="blue_ar_s_b">
+												href="#" onclick="<%=deleteAction%>" styleClass="cancellink">
 													<bean:message key="buttons.delete" />
 												</html:link></span>
 				</logic:equal>
-                  &nbsp;| <span class="cancellink"><html:link
-												page="/ManageAdministrativeData.do" styleClass="blue_ar_s_b">
-													<bean:message key="buttons.cancel" />
-												</html:link></span></td>
-              </tr>
-            </table></td>
-          </tr>
-          
-        </table></td>
-      </tr>
-    </table></td>
+            &nbsp;| <html:link page="/ManageAdministrativeData.do" styleClass="cancellink">
+						<bean:message key="buttons.cancel" />
+					</html:link>
+			</td>
+        </tr>
+      </table></td>
   </tr>
 </table>
-<p><!--end content -->
-</p>
 </html:form>
 </body>
