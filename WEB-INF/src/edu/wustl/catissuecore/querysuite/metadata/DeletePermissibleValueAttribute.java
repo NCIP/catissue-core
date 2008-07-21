@@ -1,0 +1,336 @@
+package edu.wustl.catissuecore.querysuite.metadata;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import edu.common.dynamicextensions.domain.Attribute;
+import edu.common.dynamicextensions.domain.DataElement;
+import edu.common.dynamicextensions.domain.StringAttributeTypeInformation;
+import edu.common.dynamicextensions.domain.UserDefinedDE;
+import edu.common.dynamicextensions.domain.databaseproperties.ColumnProperties;
+import edu.common.dynamicextensions.domaininterface.AttributeInterface;
+import edu.common.dynamicextensions.domaininterface.AttributeTypeInformationInterface;
+import edu.wustl.common.util.dbManager.DBUtil;
+
+/**
+ * 
+ * @author deepti_shelar
+ *
+ */
+public class DeletePermissibleValueAttribute {
+	private Connection connection = null;
+
+	private Statement stmt = null;
+
+	private HashMap<Long, List<AttributeInterface>> entityIDAttributeListMap = new HashMap<Long, List<AttributeInterface>>();
+	private HashMap<String, List<String>> entityAttributesToDelete = new HashMap<String, List<String>>();
+	private HashMap<String, String> attributeDatatypeMap = new HashMap<String, String>();
+	private List<String> entityNameList = new ArrayList<String>();
+	private Map<String, Long> entityIDMap = new HashMap<String, Long>();
+
+
+	public static void main(String[] args) throws Exception
+	{
+		Connection connection = DBUtil.getConnection();
+		connection.setAutoCommit(true);
+		
+		DeletePermissibleValueAttribute deletePermissibleValueAttribute =new DeletePermissibleValueAttribute(connection);
+		List<String> deleteSQL = deletePermissibleValueAttribute.deletePermissibleValue();
+		deletePermissibleValueAttribute.executeDeleteStatements(deleteSQL);
+		
+		connection.close();
+	}
+
+	public List<String> deletePermissibleValue() throws SQLException
+	{
+		List<String> deleteAttributeSQL=new ArrayList<String>();
+		List<String> deleteSQL;
+		populateEntityList();
+		populateAttributesToDeleteMap();
+		populateEntityIDList();
+		populateEntityAttributeMap();
+		populateAttributeDatatypeMap();
+		Set<String> keySet = entityIDMap.keySet();
+		Long identifier;
+		for(String  key : keySet)
+		{
+			identifier = entityIDMap.get(key);
+			List<AttributeInterface> attibuteList = entityIDAttributeListMap.get(identifier);
+			for(AttributeInterface attribute : attibuteList)
+			{
+				if(isAttributeToDelete(key, attribute.getName()))
+				{
+					deleteSQL = deleteAttribute(identifier, attribute);
+					deleteAttributeSQL.addAll(deleteSQL);
+				}
+			}
+		}
+		return deleteAttributeSQL;
+	}
+
+	private List<String> deleteAttribute(Long identifier, AttributeInterface attribute) throws SQLException
+	{
+		System.out.println("/*-----Deleting permissible value Attribute: "+attribute.getName()+" -------*/");
+		List<String> deleteSQL = new ArrayList<String>();
+		String sql;
+		sql = "delete from dyextn_column_properties where identifier = "+attribute.getColumnProperties().getId();
+		deleteSQL.add(sql);
+		
+		sql = "delete from dyextn_database_properties where identifier = "+attribute.getColumnProperties().getId();
+		deleteSQL.add(sql);
+		
+		String dataType = getDataTypeOfAttribute(attribute.getName());
+		if(dataType.equals("long"))
+		{
+			sql = "delete from dyextn_long_concept_value where IDENTIFIER in (select PERMISSIBLE_VALUE_ID from dyextn_userdef_de_value_rel where USER_DEF_DE_ID in (select identifier from dyextn_userdefined_de where  identifier in (select identifier from dyextn_data_element where ATTRIBUTE_TYPE_INFO_ID="+attribute.getAttributeTypeInformation().getDataElement().getId()+")))";
+			deleteSQL.add(sql);
+			
+			sql = "delete from  dyextn_long_type_info where identifier = "+attribute.getAttributeTypeInformation().getDataElement().getId();
+			deleteSQL.add(sql);
+		}
+		else if(dataType.equals("string"))
+		{
+			sql = "delete from  dyextn_string_concept_value where IDENTIFIER in (select PERMISSIBLE_VALUE_ID from dyextn_userdef_de_value_rel where USER_DEF_DE_ID in (select identifier from dyextn_userdefined_de where  identifier in (select identifier from dyextn_data_element where ATTRIBUTE_TYPE_INFO_ID="+attribute.getAttributeTypeInformation().getDataElement().getId()+")))";
+			deleteSQL.add(sql);
+			
+			sql = "delete from  dyextn_string_type_info where identifier = "+attribute.getAttributeTypeInformation().getDataElement().getId();
+			deleteSQL.add(sql);
+		}
+		else if(dataType.equals("integer"))
+		{
+			sql = "delete from  dyextn_integer_concept_value where IDENTIFIER in (select PERMISSIBLE_VALUE_ID from dyextn_userdef_de_value_rel where USER_DEF_DE_ID in (select identifier from dyextn_userdefined_de where  identifier in (select identifier from dyextn_data_element where ATTRIBUTE_TYPE_INFO_ID="+attribute.getAttributeTypeInformation().getDataElement().getId()+")))";
+			deleteSQL.add(sql);
+			
+			sql = "delete from  dyextn_integer_type_info where identifier = "+attribute.getAttributeTypeInformation().getDataElement().getId();
+			deleteSQL.add(sql);
+			
+		}
+		else if(dataType.equals("double"))
+		{
+			sql = "delete from  dyextn_double_concept_value where IDENTIFIER in (select PERMISSIBLE_VALUE_ID from dyextn_userdef_de_value_rel where USER_DEF_DE_ID in (select identifier from dyextn_userdefined_de where  identifier in (select identifier from dyextn_data_element where ATTRIBUTE_TYPE_INFO_ID="+attribute.getAttributeTypeInformation().getDataElement().getId()+")))";
+			deleteSQL.add(sql);
+			
+			sql = "delete from  dyextn_double_type_info where identifier = "+attribute.getAttributeTypeInformation().getDataElement().getId();
+			deleteSQL.add(sql);
+			
+		}
+		else if(dataType.equals("boolean"))
+		{
+			sql = "delete from  dyextn_boolean_concept_value where IDENTIFIER in (select PERMISSIBLE_VALUE_ID from dyextn_userdef_de_value_rel where USER_DEF_DE_ID in (select identifier from dyextn_userdefined_de where  identifier in (select identifier from dyextn_data_element where ATTRIBUTE_TYPE_INFO_ID="+attribute.getAttributeTypeInformation().getDataElement().getId()+")))";
+			deleteSQL.add(sql);
+			
+			sql = "delete from  dyextn_boolean_type_info where identifier = "+attribute.getAttributeTypeInformation().getDataElement().getId();
+			deleteSQL.add(sql);
+		}
+		
+		sql = "delete from dyextn_userdef_de_value_rel where USER_DEF_DE_ID in (select identifier from dyextn_userdefined_de where  identifier in (select identifier from dyextn_data_element where ATTRIBUTE_TYPE_INFO_ID="+attribute.getAttributeTypeInformation().getDataElement().getId()+"))";
+		deleteSQL.add(sql);
+		
+		sql = "delete from dyextn_userdefined_de where  identifier in (select identifier from dyextn_data_element where ATTRIBUTE_TYPE_INFO_ID="+attribute.getAttributeTypeInformation().getDataElement().getId()+")";
+		deleteSQL.add(sql);
+		
+		sql = "delete from dyextn_data_element where ATTRIBUTE_TYPE_INFO_ID="+attribute.getAttributeTypeInformation().getDataElement().getId();
+		deleteSQL.add(sql);
+		
+		sql = "delete from dyextn_attribute_type_info where identifier = "+attribute.getAttributeTypeInformation().getDataElement().getId();
+		deleteSQL.add(sql);
+		
+		sql = "delete from DYEXTN_CADSR_VALUE_DOMAIN_INFO where PRIMITIVE_ATTRIBUTE_ID = "+attribute.getId();
+		deleteSQL.add(sql);
+		
+		sql = "delete from dyextn_primitive_attribute where identifier = "+attribute.getId();
+		deleteSQL.add(sql);
+		
+		sql = "delete from dyextn_attribute where identifier = "+attribute.getId();
+		deleteSQL.add(sql);
+		
+		sql = "delete from DYEXTN_SEMANTIC_PROPERTY where ABSTRACT_METADATA_ID = "+attribute.getId();
+		deleteSQL.add(sql);
+		
+		sql = "delete from DYEXTN_BASE_ABSTRACT_ATTRIBUTE where identifier = "+attribute.getId();
+		deleteSQL.add(sql);
+		
+		sql = "delete from DYEXTN_TAGGED_VALUE where ABSTRACT_METADATA_ID = "+attribute.getId();
+		deleteSQL.add(sql);
+		
+		sql = "delete from dyextn_abstract_metadata where identifier = "+attribute.getId();
+		deleteSQL.add(sql);
+		
+		return deleteSQL;
+	}
+
+
+	private void executeDeleteStatements(List<String> deleteSQL) throws SQLException
+	{
+		for(String sql : deleteSQL)
+		{
+			System.out.println(sql+";");
+//			stmt = connection.createStatement();
+//			stmt.execute(sql);
+		}
+	}
+
+
+	private boolean isAttributeToDelete(String entityName, String name)
+	{
+		List<String> attributesTodeleteList = entityAttributesToDelete.get(entityName);
+		for(String attributeName  : attributesTodeleteList)
+		{
+			if(attributeName.equals(name))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private String getDataTypeOfAttribute(String attr) 
+	{
+		return attributeDatatypeMap.get(attr);
+	}
+
+	private void populateEntityAttributeMap() throws SQLException 
+	{
+		List<AttributeInterface> attributeList = new ArrayList<AttributeInterface>();
+
+		String sql;
+		Set<String> keySet = entityIDMap.keySet();
+		Long identifier;
+		for(String  key : keySet)
+		{
+			attributeList = new ArrayList<AttributeInterface>();
+			identifier = entityIDMap.get(key);
+			sql= "select identifier,name from dyextn_abstract_metadata where identifier in (select identifier from dyextn_attribute where ENTIY_ID="+identifier+")";
+			stmt = connection.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+			while(rs.next())
+			{
+				AttributeInterface attributeInterface=new Attribute();
+				attributeInterface.setId(rs.getLong(1));
+				attributeInterface.setName(rs.getString(2));
+				ColumnProperties  columnProperties=new ColumnProperties();
+				sql= "select identifier from dyextn_column_properties where PRIMITIVE_ATTRIBUTE_ID="+attributeInterface.getId();
+				stmt = connection.createStatement();
+				ResultSet rs1 = stmt.executeQuery(sql);
+				if(rs1.next())
+				{
+					columnProperties.setId(rs1.getLong(1));
+				}
+				stmt.close();
+				rs1.close();
+				attributeInterface.setColumnProperties(columnProperties);
+				
+				AttributeTypeInformationInterface  attributeTypeInfo=new StringAttributeTypeInformation();
+				DataElement dataElement = new UserDefinedDE();
+				sql= "select identifier from dyextn_attribute_type_info where PRIMITIVE_ATTRIBUTE_ID="+attributeInterface.getId();
+				stmt = connection.createStatement();
+				ResultSet rs2 = stmt.executeQuery(sql);
+				if(rs2.next())
+				{
+					dataElement.setId(rs2.getLong(1));
+				}
+				attributeTypeInfo.setDataElement(dataElement);
+				attributeInterface.setAttributeTypeInformation(attributeTypeInfo);
+				stmt.close();
+				rs2.close();
+				attributeList.add(attributeInterface);				
+			}
+			rs.close();
+			entityIDAttributeListMap.put(identifier, attributeList);
+		}
+	}
+
+	private void populateAttributesToDeleteMap()
+	{
+		List<String> attributeToDelete =  new ArrayList<String>();
+		attributeToDelete.add("type");
+		attributeToDelete.add("pathologicalStatus");
+		entityAttributesToDelete.put("edu.wustl.catissuecore.domain.CellSpecimen",attributeToDelete);
+		entityAttributesToDelete.put("edu.wustl.catissuecore.domain.FluidSpecimen",attributeToDelete);
+		entityAttributesToDelete.put("edu.wustl.catissuecore.domain.MolecularSpecimen",attributeToDelete);
+		entityAttributesToDelete.put("edu.wustl.catissuecore.domain.TissueSpecimen",attributeToDelete);
+
+		attributeToDelete =  new ArrayList<String>();
+		attributeToDelete.add("clinicalDiagnosis");
+		attributeToDelete.add("clinicalStatus");
+		attributeToDelete.add("activityStatus");
+		entityAttributesToDelete.put("edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup",attributeToDelete);
+	}
+
+	
+	private void populateAttributeDatatypeMap() 
+	{
+		attributeDatatypeMap.put("type", "string");
+		attributeDatatypeMap.put("pathologicalStatus", "string");
+		
+		attributeDatatypeMap.put("clinicalDiagnosis", "string");
+		attributeDatatypeMap.put("clinicalStatus", "string");
+		attributeDatatypeMap.put("activityStatus", "string");
+	}
+
+	private void populateEntityList() 
+	{
+
+		entityNameList.add("edu.wustl.catissuecore.domain.CellSpecimen");
+		entityNameList.add("edu.wustl.catissuecore.domain.FluidSpecimen");
+		entityNameList.add("edu.wustl.catissuecore.domain.MolecularSpecimen");
+		entityNameList.add("edu.wustl.catissuecore.domain.TissueSpecimen");
+		
+		entityNameList.add("edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup");
+	}
+	
+	private void populateEntityIDList() throws SQLException 
+	{
+		String sql;
+		for(String entityName : entityNameList)
+		{
+			sql = "select identifier from dyextn_abstract_metadata where name='"+entityName+"'";
+			ResultSet rs = executeQuery(sql);
+			if (rs.next()) 
+			{
+				Long identifier = rs.getLong(1);
+				entityIDMap.put(entityName,identifier);				
+			}
+		}
+	}
+
+	private ResultSet executeQuery(String sql) throws SQLException
+	{
+		stmt = connection.createStatement();
+		ResultSet rs = stmt.executeQuery(sql);
+		return rs;
+	}
+
+	
+	public void setEntityAttributesToDelete(
+			HashMap<String, List<String>> entityAttributesToDelete)
+	{
+		this.entityAttributesToDelete = entityAttributesToDelete;
+	}
+
+	
+	public void setAttributeDatatypeMap(HashMap<String, String> attributeDatatypeMap)
+	{
+		this.attributeDatatypeMap = attributeDatatypeMap;
+	}
+
+	
+	public void setEntityNameList(List<String> entityNameList)
+	{
+		this.entityNameList = entityNameList;
+	}
+
+	public DeletePermissibleValueAttribute(Connection connection) throws SQLException
+	{
+		super();
+		this.connection = connection;
+		this.stmt = connection.createStatement();
+	}
+}
