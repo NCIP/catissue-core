@@ -446,7 +446,7 @@ public class TemporalQueryBean
 			{
 				try 
 				{
-					Date date = Utility.parseDate(timeValue, Constants.DATE_FORMAT);
+					Date date = Utility.parseDate(timeValue, "MM/dd/yyyy");
 					dateLiteral = QueryObjectFactory.createDateLiteral(new java.sql.Date(date.getTime()));
 				} catch (ParseException e) 
 				{
