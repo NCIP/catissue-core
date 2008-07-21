@@ -542,8 +542,8 @@ function participantRegRow(subdivtag)
 							<td width="1%" align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
 						
 							<td valign="middle"><label for="activityStatus"
-								class="black_ar"> <b><bean:message
-								key="participant.activityStatus" /></b> </label></td>
+								class="black_ar"><bean:message
+								key="participant.activityStatus" /></label></td>
 							<td class="black_ar_s"><html:select
 								property="activityStatus" styleClass="formFieldSized12"
 								styleId="activityStatus" size="1" onchange="<%=strCheckStatus%>"
@@ -571,11 +571,11 @@ function participantRegRow(subdivtag)
 				<table width="100%" border="0" cellspacing="0" cellpadding="3">
 
 					<tr class="tableheading">
-						<td width="12%" align="left" class="black_ar_b"><bean:message
+						<td width="8%" align="left" class="black_ar_b"><bean:message
 							key="app.select" /></td>
 						<td width="24%" align="left" class="black_ar_b"><bean:message
 							key="medicalrecord.source" /></td>
-						<td width="64%" align="left" class="black_ar_b"><bean:message
+						<td width="68%" align="left" class="black_ar_b"><bean:message
 							key="medicalrecord.number" /></td>
 					</tr>
 					<script> document.forms[0].valueCounter.value = <%=noOfRows%> </script>
@@ -658,18 +658,18 @@ function participantRegRow(subdivtag)
 
 
 					<tr class="tableheading">
-						<td width="12%" align="left" class="black_ar_b">Select</td>
+						<td width="8%" align="left" class="black_ar_b">Select</td>
 						<td width="24%" align="left" class="black_ar_b"><bean:message
 							key="participant.collectionProtocolReg.protocolTitle" /></td>
 						<td width="20%" align="left" class="black_ar_b"><bean:message
 							key="participant.collectionProtocolReg.participantProtocolID" />
 						</td>
-						<td width="15%" align="left" class="black_ar_b"><bean:message
+						<td width="16%" align="left" class="black_ar_b"><bean:message
 							key="participant.collectionProtocolReg.participantRegistrationDate" />
 						</td>
-						<td width="15%" align="left" class="black_ar_b"><bean:message
+						<td width="16%" align="left" class="black_ar_b"><bean:message
 							key="participant.activityStatus" /></td>
-						<td width="14%" align="left" class="black_ar_b"><bean:message
+						<td width="16%" align="left" class="black_ar_b"><bean:message
 							key="participant.collectionProtocolReg.consent" /></td>
 					</tr>
 					<script> document.forms[0].collectionProtocolRegistrationValueCounter.value = <%=noOrRowsCollectionProtocolRegistration%> </script>
@@ -925,10 +925,8 @@ function participantRegRow(subdivtag)
 			<!-----action buttons-->
 			<tr>
 				<td colspan="2" class="buttonbg">
-				<%
-						String changeAction = "setFormAction('" + formName + "')";
-						%> <!-- action buttons begins -->
-
+				<% String changeAction = "setFormAction('" + formName + "')";
+						%><!-- action buttons begins -->
 				<table cellpadding="0" cellspacing="0" border="0">
 					<logic:equal name="<%=Constants.SUBMITTED_FOR%>" value="AddNew">
 						<%
@@ -960,58 +958,58 @@ function participantRegRow(subdivtag)
 
 						<logic:equal name="<%=Constants.PAGEOF%>"
 							value="<%=Constants.PAGE_OF_PARTICIPANT_CP_QUERY%>">
-							
-							<td nowrap class="buttonbg"><html:button
+						<td nowrap class="buttonbg">
+							<html:button
 								styleClass="blue_ar_b" property="registratioPage"
 								title="Register Participant"
 								value="<%=Constants.PARTICIPANT_FORWARD_TO_LIST[0][0]%>"
 								onclick="<%=forwardToSubmit%>">
-							</html:button>&nbsp;</td>
+							</html:button>
+						</td>
 						</logic:equal>
 
 						<logic:notEqual name="<%=Constants.PAGEOF%>"
 							value="<%=Constants.PAGE_OF_PARTICIPANT_CP_QUERY%>">
 
-							<td><html:button styleClass="blue_ar_b"
+							<td>
+								<html:button styleClass="blue_ar_b"
 								property="registratioPage" title="Submit Only"
-								
-								onclick="<%=normalSubmit%>"><bean:message key="buttons.submit" />
-							</html:button>&nbsp; <!-- delete button added for deleting the objects --> <logic:equal
-								name="operation" value="edit">
-										|&nbsp;
-										
+								onclick="<%=normalSubmit%>">
+								<bean:message key="buttons.submit" />
+								</html:button><!-- delete button added for deleting the objects --> 
+								<logic:equal name="operation" value="edit">
 									<% 	
 										String deleteAction="deleteObject('" + formName +"','" + Constants.ADMINISTRATIVE + "')";
 									%>
-								<html:button styleClass="blue_ar_b" property="disableRecord"
-									title="Delete" value="Delete" onclick="<%=deleteAction%>">
-								</html:button>&nbsp;
-								
-				</logic:equal> |&nbsp; <html:link page="/ManageAdministrativeData.do"
+									|&nbsp;<html:button styleClass="blue_ar_c" property="disableRecord"
+										title="Delete" value="Delete" onclick="<%=deleteAction%>">
+									</html:button>
+								</logic:equal>|&nbsp;<html:link page="/ManageAdministrativeData.do"
 								styleClass="cancellink">
 								<bean:message key="buttons.cancel" />
-							</html:link></td>
+								</html:link>
+							</td>
 						</logic:notEqual>
 
 						<logic:equal name="<%=Constants.PAGEOF%>"
 							value="<%=Constants.PAGE_OF_PARTICIPANT_CP_QUERY%>">
 
-							<td nowrap>|&nbsp;&nbsp;<html:button styleClass="blue_ar_b"
+							<td nowrap>&nbsp;|&nbsp;<html:button styleClass="blue_ar_c"
 								property="registratioPage"
 								value="<%=Constants.PARTICIPANT_FORWARD_TO_LIST[2][0]%>"
 								onclick="<%=forwardToSCG%>"
 								onmouseover="showMessage('Create additional Specimen Collection Group to collect specimens which were  not anticipated as per protocol')">
-							</html:button>&nbsp; <logic:equal name="operation" value="edit">
-										|&nbsp;
-										
-									<% 	
+							</html:button>
+							<logic:equal name="operation" value="edit">
+										|<% 	
 										String deleteAction="deleteObject('" + formName +"','" + Constants.CP_QUERY_BIO_SPECIMEN + "')";
 									%>
-								<html:button styleClass="blue_ar_b" property="disableRecord"
+								<html:button styleClass="blue_ar_c" property="disableRecord"
 									title="Disable Participant" value="Delete" onclick="<%=deleteAction%>">
 								</html:button>&nbsp;
 								
-				</logic:equal></td>
+							 </logic:equal>
+							 </td>
 						</logic:equal>
 					</tr>
 				</table>
