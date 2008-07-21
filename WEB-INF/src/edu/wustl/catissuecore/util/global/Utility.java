@@ -1173,7 +1173,7 @@ public class Utility extends edu.wustl.common.util.Utility {
 				+ " where ispr.id = "
 				+ reportId
 				+ " and ispr.deIdentifiedSurgicalPathologyReport.id=deidReport.id"
-				+ " and ispr.deIdentifiedSurgicalPathologyReport.isQuanrantined='"
+				+ " and ispr.deIdentifiedSurgicalPathologyReport.isQuarantined='"
 				+ Constants.QUARANTINE_REQUEST + "'";
 
 		List reportIDList = Utility.executeQuery(hqlString);
