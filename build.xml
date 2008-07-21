@@ -450,7 +450,7 @@
 		<copy file="build-properties.xml" todir="${zip.dir}" overwrite="true" />
 		<copy file="MANIFEST.MF" todir="${zip.dir}" overwrite="true" />
 		<copy file="deploy.xml" todir="${zip.dir}" overwrite="true" />
-		<copy file="log4j.xml" todir="${zip.dir}" overwrite="true" />
+		<!--copy file="log4j.xml" todir="${zip.dir}" overwrite="true" /> -->
 		<copy file="login-config.xml" todir="${zip.dir}" overwrite="true" />
 		<copy file="properties-service.xml" todir="${zip.dir}" overwrite="true" />
 
