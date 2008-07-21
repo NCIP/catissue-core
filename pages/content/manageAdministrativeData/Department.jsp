@@ -43,7 +43,7 @@
                        <!-- for tabs selection -->
 				<logic:equal name="operation" value="add">
                       <td  valign="bottom" ><img src="images/uIEnhancementImages/tab_add_selected.jpg" alt="Add" width="57" height="22" /></td>
-                      <td  valign="bottom" ><html:link page="/SimpleQueryInterface.do?pageOf=pageOfInstitution&aliasName=Institution"><img src="images/uIEnhancementImages/tab_edit_notSelected.jpg" alt="Edit" width="57" height="22" border="0" /></html:link></td>
+                      <td  valign="bottom" ><html:link page="/SimpleQueryInterface.do?pageOf=pageOfDepartment&aliasName=Department"><img src="images/uIEnhancementImages/tab_edit_notSelected.jpg" alt="Edit" width="57" height="22" border="0" /></html:link></td>
                       </logic:equal>
 					  <logic:equal name="operation" value="edit">
 						<td  valign="bottom"  ><html:link page="/Institution.do?operation=add&pageOf=pageOfInstitution"><img src="images/uIEnhancementImages/tab_add_notSelected.jpg" alt="Add" width="57" height="22" border ="0" /></html:link></td>
