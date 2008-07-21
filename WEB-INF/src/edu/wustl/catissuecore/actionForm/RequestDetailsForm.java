@@ -439,7 +439,8 @@ public class RequestDetailsForm extends AbstractActionForm
 		//Calculating the condition to enable or disable "Create Array Button"
 		String condition = OrderingSystemUtil.determineCreateArrayCondition(specimenOrderItemCollection);
 
-		if (newSpecimenArrayOrderItem.getStatus().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED))
+		if (newSpecimenArrayOrderItem.getStatus().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED)
+				||(newSpecimenArrayOrderItem.getStatus().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE)))
 		{
 			condition = "true";
 		}
@@ -715,7 +716,8 @@ public class RequestDetailsForm extends AbstractActionForm
 			
 			if(verificationStatus!=null)
 			{	
-				if(verificationStatus.equalsIgnoreCase(Constants.VIEW_CONSENTS) && assignStatus.equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED))
+				if((verificationStatus.equalsIgnoreCase(Constants.VIEW_CONSENTS) && assignStatus.equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED))
+						||(verificationStatus.equalsIgnoreCase(Constants.VIEW_CONSENTS )&&assignStatus.equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE)))
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.verify.Consent"));
 					break;

@@ -856,7 +856,8 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 		PathologicalCaseOrderItem pathologicalCaseOrderItem = null;
 		
 		//For Distribution.
-		if(requestDetailsBean.getAssignedStatus().trim().equalsIgnoreCase("Distributed") && requestDetailsBean.getDistributedItemId().equals(""))
+		if(requestDetailsBean.getAssignedStatus().trim().equalsIgnoreCase("Distributed") && requestDetailsBean.getDistributedItemId().equals("")
+				||(requestDetailsBean.getAssignedStatus().trim().equalsIgnoreCase("Distributed And Close") && requestDetailsBean.getDistributedItemId().equals("")))
 		{	
 			//Setting the Site for distribution.
 			distribution = setSiteInDistribution(distribution,requestDetailsForm);		
@@ -1004,7 +1005,7 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 		orderItem.setOrderDetails(order);	
 		
 		//For Distribution.
-		if(definedArrayRequestBean.getAssignedStatus().trim().equalsIgnoreCase("Distributed") && definedArrayRequestBean.getDistributedItemId().equals(""))
+		if((definedArrayRequestBean.getAssignedStatus().trim().equalsIgnoreCase("Distributed") ||definedArrayRequestBean.getAssignedStatus().trim().equalsIgnoreCase("Distributed And Close"))&& definedArrayRequestBean.getDistributedItemId().equals(""))
 		{	
 			//Setting the Site for distribution.
 			distribution = setSiteInDistribution(distribution,requestDetailsForm);
@@ -1051,7 +1052,7 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 		existingSpecArrOrderItem.setOrderDetails(order);
 		
 		//For Distribution.
-		if(existingArrayDetailsBean.getAssignedStatus().trim().equalsIgnoreCase("Distributed") && existingArrayDetailsBean.getDistributedItemId().equals(""))
+		if((existingArrayDetailsBean.getAssignedStatus().trim().equalsIgnoreCase("Distributed")||existingArrayDetailsBean.getAssignedStatus().trim().equalsIgnoreCase("Distributed And Close")) && existingArrayDetailsBean.getDistributedItemId().equals(""))
 		{	
 			//Setting the Site for distribution.
 			distribution = setSiteInDistribution(distribution,requestDetailsForm);

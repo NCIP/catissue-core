@@ -20,6 +20,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.DerivedSpecimenOrderItem;
 import edu.wustl.catissuecore.domain.DistributedItem;
 import edu.wustl.catissuecore.domain.Distribution;
@@ -127,8 +128,10 @@ public class OrderBizLogic extends DefaultBizLogic
 		this.validate(obj, oldObj, dao, Constants.EDIT);
 		OrderDetails orderImplObj = (OrderDetails) HibernateMetaData.getProxyObjectImpl(oldObj);
 		OrderDetails orderNew = updateObject(orderImplObj, obj, dao, sessionDataBean);
+		
 
 		dao.update(orderNew, sessionDataBean, true, true, false);
+		disposeSpecimen(orderNew, sessionDataBean, dao);
 		//Sending Email only if atleast one order item is updated.
 		if (numberItemsUpdated > 0 && orderNew.getMailNotification())
 		{
@@ -165,7 +168,7 @@ public class OrderBizLogic extends DefaultBizLogic
 			while (distributionCollectionIterator.hasNext())
 			{
 				Distribution distribution = (Distribution) distributionCollectionIterator.next();
-				if (distribution.getToSite().getId().compareTo(Long.valueOf(-1)) == 0)
+				if (distribution.getToSite().getId().compareTo(new Long(-1)) == 0)
 				{
 					throw new DAOException(ApplicationProperties.getValue("orderdistribution.site.required.errmsg"));
 				}
@@ -179,7 +182,8 @@ public class OrderBizLogic extends DefaultBizLogic
 			OrderItem orderItem = (OrderItem) iter.next();
 			if (orderItem.getDistributedItem() != null)
 			{
-				if (orderItem.getStatus().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED))
+				if (orderItem.getStatus().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED)
+						||orderItem.getStatus().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE))
 				{
 					if (orderItem.getDistributedItem().getQuantity() == null
 							|| orderItem.getDistributedItem().getQuantity().toString().equalsIgnoreCase(""))
@@ -202,6 +206,7 @@ public class OrderBizLogic extends DefaultBizLogic
 				{
 					//If requestFor drop down is null, do not allow distribution of that order item
 					if (orderItem.getStatus().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED)
+							||orderItem.getStatus().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE)
 							|| orderItem.getStatus().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_READY_FOR_ARRAY_PREPARATION))
 					{
 						if (oldorderItem instanceof DerivedSpecimenOrderItem)
@@ -377,7 +382,8 @@ public class OrderBizLogic extends DefaultBizLogic
 						&& (!oldOrderItem.getStatus().trim().equalsIgnoreCase(newOrderItem.getStatus().trim()) || (oldOrderItem.getDescription() != null && !oldOrderItem
 								.getDescription().equalsIgnoreCase(newOrderItem.getDescription()))))
 				{
-					if (newOrderItem.getStatus().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED))
+					if (newOrderItem.getStatus().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED)
+							||newOrderItem.getStatus().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE))
 					{
 						if (!isDistributionInserted)
 						{
@@ -561,7 +567,9 @@ public class OrderBizLogic extends DefaultBizLogic
 			{
 				orderStatusNew++;
 			}//kalpana bug #5839 If the specimens inside the specimen Array and if it's status is ORDER_REQUEST_STATUS_READY_FOR_ARRAY_PREPARATION then mark it complete.
-			else if (oldOrderItem.getStatus().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED)|| oldOrderItem.getStatus().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_READY_FOR_ARRAY_PREPARATION))
+			else if (oldOrderItem.getStatus().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED)
+					||oldOrderItem.getStatus().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE)
+					|| oldOrderItem.getStatus().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_READY_FOR_ARRAY_PREPARATION))
 			{
 				orderStatusCompleted++;
 			}
@@ -767,7 +775,6 @@ public class OrderBizLogic extends DefaultBizLogic
 	{
 		long startTime = System.currentTimeMillis();
 		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
-		List specimenArrayList=new ArrayList();
     	try
     	{
    		
@@ -776,7 +783,7 @@ public class OrderBizLogic extends DefaultBizLogic
     		String sourceObjectName = SpecimenArray.class.getName();
         	List valueField=(List)session.getAttribute(Constants.SPECIMEN_ARRAY_ID);
         	
-        	
+        	List specimenArrayList=new ArrayList();
     		dao.openSession(null);
 	    	if(valueField != null && valueField.size() >0)
 	    	{
@@ -793,12 +800,12 @@ public class OrderBizLogic extends DefaultBizLogic
 	    	
 	    	long endTime = System.currentTimeMillis();
 			Logger.out.info("EXECUTE TIME FOR RETRIEVE IN EDIT FOR DB -  : "+ (endTime - startTime));
-	    	
+	    	return specimenArrayList;	
     	}
     	catch(DAOException e)
     	{
     		Logger.out.error(e.getMessage(), e);
-    		
+    		return null;
     	}
     	finally
 		{
@@ -809,10 +816,10 @@ public class OrderBizLogic extends DefaultBizLogic
 			catch(DAOException daoEx)
 			{
 				Logger.out.error(daoEx.getMessage(), daoEx);
-	    	
+	    		return null;
 			}
-		}
-    	return specimenArrayList;	
+		}	
+    	
     	  
 		
 	}
@@ -830,14 +837,14 @@ public class OrderBizLogic extends DefaultBizLogic
 		
 		long startTime = System.currentTimeMillis();
 		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
-		List specimen=new ArrayList();
-		
+				
 		try
     	{
     		
 	    	String sourceObjectName = Specimen.class.getName();
 	    	String columnName="id";
 	    	List valueField=(List)session.getAttribute("specimenId");
+	    	List specimen=new ArrayList();
 	    	dao.openSession(null);
 	    	if(valueField != null && valueField.size() >0)
 	    	{
@@ -852,13 +859,13 @@ public class OrderBizLogic extends DefaultBizLogic
 	    	}
 	    	long endTime = System.currentTimeMillis();
 			Logger.out.info("EXECUTE TIME FOR RETRIEVE IN EDIT FOR DB -  : "+ (endTime - startTime));
-			
-		
+			System.out.println("EXECUTE TIME FOR RETRIEVE IN EDIT FOR DB -  : "+ (endTime - startTime));
+			return specimen;
     	}
     	catch(DAOException e)
     	{
     		Logger.out.error(e.getMessage(), e);
-    		
+    		return null;
     	}
     	finally
 		{
@@ -869,10 +876,9 @@ public class OrderBizLogic extends DefaultBizLogic
 			catch(DAOException daoEx)
 			{
 				Logger.out.error(daoEx.getMessage(), daoEx);
-	    		
+	    		return null;
 			}
 		}
-    	return specimen;
     	
 	}
 	
@@ -911,13 +917,13 @@ public class OrderBizLogic extends DefaultBizLogic
 			
 			long endTime = System.currentTimeMillis();
 			Logger.out.info("EXECUTE TIME FOR RETRIEVE IN EDIT FOR DB -  : "+ (endTime - startTime));
-			
-		
+			System.out.println("EXECUTE TIME FOR RETRIEVE IN EDIT FOR DB -  : "+ (endTime - startTime));
+			return pathologicalCaseList;
     	}
     	catch(DAOException e)
     	{
     		Logger.out.error(e.getMessage(), e);
-    		
+    		return null;
     	}
     	finally
 		{
@@ -928,10 +934,9 @@ public class OrderBizLogic extends DefaultBizLogic
 			catch(DAOException daoEx)
 			{
 				Logger.out.error(daoEx.getMessage(), daoEx);
-	    		
+				return null;
 			}
-		}
-    	return pathologicalCaseList;
+		}	
 		
 	}
 	
@@ -966,6 +971,69 @@ public class OrderBizLogic extends DefaultBizLogic
 		request.setAttribute(Constants.DISTRIBUTIONPROTOCOLLIST, protocolList);
 		return protocolList;
 	}
+	
+	private void disposeSpecimen(OrderDetails orderNew,
+			SessionDataBean sessionDataBean, DAO dao) throws UserNotAuthorizedException, DAOException {
+		
+		NewSpecimenBizLogic newSpecimenBizLogic=new NewSpecimenBizLogic();
+		Collection orderItemCollection = orderNew.getOrderItemCollection();
+
+		Iterator orderItemIterator = orderItemCollection.iterator();
+
+		while (orderItemIterator.hasNext()) {
+			if (((OrderItem) orderItemIterator.next()).getStatus().equals(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE)) {
+				Collection distributionCollection = orderNew
+						.getDistributionCollection();
+
+				Iterator iterator = distributionCollection.iterator();
+
+				while (iterator.hasNext()) {
+					Distribution disrt = (Distribution) iterator.next();
+
+					Collection distributedItemCollection = disrt
+							.getDistributedItemCollection();
+
+					Iterator iter = distributedItemCollection.iterator();
+
+					while (iter.hasNext()) {
+						DistributedItem distributionItem = (DistributedItem) iter
+								.next();
+
+						Specimen specimen = distributionItem.getSpecimen();
+						SpecimenArray specimenArray= distributionItem.getSpecimenArray();
+					
+						if(specimen!=null){
+							
+							try {
+								newSpecimenBizLogic.disposeSpecimen(sessionDataBean,specimen,dao);
+							} catch (BizLogicException e) {
+								
+								throw new DAOException(e);
+							}
+						}
+						else if(specimenArray!=null)
+						{
+							updateSpecimenArray(specimenArray,dao,sessionDataBean);
+							
+						}
+
+					}
+				}
+			}
+			
+		}
+	}
+
+	private void updateSpecimenArray(SpecimenArray specimenArray, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException {
+		
+		SpecimenArrayBizLogic specimenArrayBizLogic=new SpecimenArrayBizLogic();
+		SpecimenArray oldSpecimenArray = (SpecimenArray) dao.retrieve(SpecimenArray.class.getName(), specimenArray.getId());
+		SpecimenArray newSpecimenArray = oldSpecimenArray;
+		newSpecimenArray.setActivityStatus("Closed");
+		specimenArrayBizLogic.update(dao, newSpecimenArray, oldSpecimenArray, sessionDataBean);
+		
+	}
+	
 	
 	
 	

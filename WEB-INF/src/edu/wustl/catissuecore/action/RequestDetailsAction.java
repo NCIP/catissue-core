@@ -123,7 +123,8 @@ public class RequestDetailsAction extends BaseAction
 		while (tempListIter.hasNext())
 		{
 			NameValueBean nameValueBean = (NameValueBean) tempListIter.next();
-			if (nameValueBean.getValue().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED))
+			if (nameValueBean.getValue().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED)
+					||nameValueBean.getValue().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE))
 			{
 				tempList.remove(nameValueBean);
 				tempList.add(new NameValueBean(Constants.ORDER_REQUEST_STATUS_READY_FOR_ARRAY_PREPARATION,
@@ -460,7 +461,8 @@ private OrderItem getOrderItem(OrderDetails orderDetails , Long orderItemId )
 		//Calculating the condition to enable or disable "Create Array Button"
 		String condition = OrderingSystemUtil.determineCreateArrayCondition(specimenOrderItemCollection);
 
-		if (arrayRequestBean.getAssignedStatus().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED))
+		if (arrayRequestBean.getAssignedStatus().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED)
+				||arrayRequestBean.getAssignedStatus().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE))
 		{
 			condition = "true";
 		}
