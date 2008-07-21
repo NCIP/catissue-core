@@ -105,7 +105,12 @@ public class ValidateQueryBizLogic {
 			Logger.out.error(e);
 			validationMessage = ApplicationProperties.getValue("errors.executeQuery.genericmessage");
 		}
-		
+		catch (RuntimeException e)
+		{
+			Logger.out.error(e);
+			validationMessage = ApplicationProperties.getValue("errors.executeQuery.genericmessage");
+			e.printStackTrace();
+		}
 		
 		return validationMessage;
 	}
