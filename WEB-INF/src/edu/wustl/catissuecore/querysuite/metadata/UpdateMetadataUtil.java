@@ -13,9 +13,9 @@ import java.util.List;
 public class UpdateMetadataUtil
 {
 	public static BufferedWriter metadataSQLFile;
-	public static String fileName="./UpdateMetadataReport/metadata.sql";
+	public static String fileName="./metadata.sql";
 	public static BufferedWriter failureWriter;
-	public static String errorFileName="./UpdateMetadataReport/SQLerror.txt";
+	public static String errorFileName="./SQLerror.txt";
 	public static Boolean isExecuteStatement = false;
 	
 	public static int executeInsertSQL(String sql, Statement stmt) throws IOException, SQLException 
