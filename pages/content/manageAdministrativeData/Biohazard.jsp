@@ -30,8 +30,8 @@
       <tr>
         <td class="td_tab_bg" ><img src="images/uIEnhancementImages/spacer.gif" alt="spacer" width="50" height="1"></td>
 		<logic:equal name="operation" value="add">
-        <td valign="bottom" ><img src="images/uIEnhancementImages/tab_add_user.jpg" alt="Add" width="57" height="22" /></td>
-        <td valign="bottom"><html:link page="/SimpleQueryInterface.do?pageOf=pageOfBioHazard&aliasName=Biohazard" ><img src="images/uIEnhancementImages/tab_edit_user.jpg" alt="Edit" width="59" height="22" border="0" /></html:link></td>
+        <td valign="bottom" ><img src="images/uIEnhancementImages/tab_add_selected.jpg" alt="Add" width="57" height="22" /></td>
+        <td valign="bottom"><html:link page="/SimpleQueryInterface.do?pageOf=pageOfBioHazard&aliasName=Biohazard" ><img src="images/uIEnhancementImages/tab_edit_notSelected.jpg" alt="Edit" width="59" height="22" border="0" /></html:link></td>
         </logic:equal>
 		<logic:equal name="operation" value="edit">
 		<td valign="bottom" ><html:link page="/Biohazard.do?operation=add&pageOf=pageOfBioHazard"><img src="images/uIEnhancementImages/tab_add_notSelected.jpg" alt="Add" width="57" height="22" /></html:link></td>
