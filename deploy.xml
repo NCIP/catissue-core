@@ -549,7 +549,7 @@
 						<include name="hibernate.properties" />
 						<replacefilter token="@@DIALECT@@" value="${mysql.dialect.string}" />
 						<replacefilter token="@@DRIVER@@" value="com.mysql.jdbc.Driver" />
-						<replacefilter token="@@URL@@" value="jdbc:mysql://${database.host}/${database.name}" />
+						<replacefilter token="@@URL@@" value="jdbc:mysql://${database.host}:${database.port}/${database.name}" />
 					</replace>
 				</then>
 
@@ -717,7 +717,7 @@
 			</classpath>
 		</sql>
 
-		<antcall target="insertQueryMetadata" />
+		<antcall target="insertQueryMetadata" />   
 
 		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle" delimiter="/" delimitertype="row">
 			<transaction src="${oracle.sql.dir}/CSM_Trigger_Oracle.sql" />
