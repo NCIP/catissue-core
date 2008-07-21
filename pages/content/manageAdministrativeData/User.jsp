@@ -80,17 +80,17 @@ function handleStatus(status)
       <tr>
         <td class="td_tab_bg" ><img src="images/uIEnhancementImages/spacer.gif" alt="spacer" width="50" height="1"></td>
 		<logic:equal name="operation" value='${requestScope.addforJSP}'>
-        <td valign="bottom"><img src="images/uIEnhancementImages/tab_add_user.jpg" alt="Add" width="57" height="22" /><a href="#"></a></td>
+        <td valign="bottom"><img src="images/uIEnhancementImages/tab_add_selected.jpg" alt="Add" width="57" height="22" /><a href="#"></a></td>
         <logic:notEqual parameter="openInCPFrame"value='yes'>
-		<td valign="bottom"><html:link page="/SimpleQueryInterface.do?pageOf=pageOfUserAdmin&aliasName=User&menuSelected=1"><img src="images/uIEnhancementImages/tab_edit_user.jpg" alt="Edit" width="59" height="22" border="0" /></html:link><a href="#"></a></td>
-        <td valign="bottom"><html:link page="/ApproveUserShow.do?pageNum=1&menuSelected=1"><img src="images/uIEnhancementImages/tab_approve_user.gif" alt="Approve New Users" width="146" height="22" border="0" /></html:link><a href="#"></a></td>
+		<td valign="bottom"><html:link page="/SimpleQueryInterface.do?pageOf=pageOfUserAdmin&aliasName=User&menuSelected=1"><img src="images/uIEnhancementImages/tab_edit_notSelected.jpg" alt="Edit" width="59" height="22" border="0" /></html:link><a href="#"></a></td>
+        <td valign="bottom"><html:link page="/ApproveUserShow.do?pageNum=1&menuSelected=1"><img src="images/uIEnhancementImages/tab_approve_user.jpg" alt="Approve New Users" width="146" height="22" border="0" /></html:link><a href="#"></a></td>
         </logic:notEqual>
 		</logic:equal>
 		<logic:equal name="operation" value='${requestScope.editforJSP}'>
-		<td valign="bottom"><html:link page="/User.do?operation=add&pageOf=pageOfUserAdmin&menuSelected=1"><img src="images/uIEnhancementImages/tab_add_user.jpg" alt="Add" width="57" height="22" /></html:link><a href="#"></a></td>
+		<td valign="bottom"><html:link page="/User.do?operation=add&pageOf=pageOfUserAdmin&menuSelected=1"><img src="images/uIEnhancementImages/tab_add_notSelected.jpg" alt="Add" width="57" height="22" /></html:link><a href="#"></a></td>
         <logic:notEqual parameter="openInCPFrame"value='yes'>
-		<td valign="bottom"><img src="images/uIEnhancementImages/tab_edit_user.jpg" alt="Edit" width="59" height="22" border="0" /></td>
-        <td valign="bottom"><html:link page="/ApproveUserShow.do?pageNum=1&menuSelected=1"><img src="images/uIEnhancementImages/tab_approve_user.gif" alt="Approve New Users" width="146" height="22" border="0" /></html:link><a href="#"></a></td>
+		<td valign="bottom"><img src="images/uIEnhancementImages/tab_edit_selected.jpg" alt="Edit" width="59" height="22" border="0" /></td>
+        <td valign="bottom"><html:link page="/ApproveUserShow.do?pageNum=1&menuSelected=1"><img src="images/uIEnhancementImages/tab_approve_user.jpg" alt="Approve New Users" width="146" height="22" border="0" /></html:link><a href="#"></a></td>
 		</logic:notEqual>
 		</logic:equal>
 		<td width="90%" valign="bottom" class="td_tab_bg">&nbsp;</td>
