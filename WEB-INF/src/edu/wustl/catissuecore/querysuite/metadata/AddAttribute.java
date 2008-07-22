@@ -168,7 +168,7 @@ public class AddAttribute
 		{
 			List<String> attributes = new ArrayList<String>();
 			attributes.add("quantity");
-			entityNameAttributeNameMap.put("edu.wustl.catissuecore.domain.SpecimenRequirement",attributes);
+			entityNameAttributeNameMap.put("edu.wustl.catissuecore.domain.DistributionSpecimenRequirement",attributes);
 			
 			attributes = new ArrayList<String>();
 			attributes.add("unsignedConsentDocumentURL");
@@ -200,7 +200,7 @@ public class AddAttribute
 		}
 		private void populateEntityList()
 		{
-			entityList.add("edu.wustl.catissuecore.domain.SpecimenRequirement");
+			entityList.add("edu.wustl.catissuecore.domain.DistributionSpecimenRequirement");
 			entityList.add("edu.wustl.catissuecore.domain.CollectionProtocol");
 			entityList.add("edu.wustl.catissuecore.domain.CollectionProtocolRegistration");
 			
