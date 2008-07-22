@@ -1,8 +1,11 @@
 package edu.wustl.catissuecore.flex.dag;
 
+import java.text.ParseException;
 import java.util.Date;
+
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.querysuite.factory.QueryObjectFactory;
 import edu.wustl.common.querysuite.queryobject.ArithmeticOperator;
 import edu.wustl.common.querysuite.queryobject.IConnector;
 import edu.wustl.common.querysuite.queryobject.ICustomFormula;
@@ -13,12 +16,8 @@ import edu.wustl.common.querysuite.queryobject.IExpressionAttribute;
 import edu.wustl.common.querysuite.queryobject.ILiteral;
 import edu.wustl.common.querysuite.queryobject.ITerm;
 import edu.wustl.common.querysuite.queryobject.RelationalOperator;
-import edu.wustl.common.querysuite.factory.QueryObjectFactory;
-import edu.wustl.common.querysuite.queryobject.DSInterval;
-import edu.wustl.common.querysuite.queryobject.YMInterval;
-import edu.wustl.common.querysuite.queryobject.ITimeIntervalEnum;
+import edu.wustl.common.querysuite.queryobject.TimeInterval;
 import edu.wustl.common.util.Utility;
-import java.text.ParseException;
 
 public class TemporalQueryBean
 {
@@ -46,7 +45,7 @@ public class TemporalQueryBean
 	private String firstAttributeType = null;
 	private String secondAttributeType = null; 
 	
-	private ITimeIntervalEnum timeInterval = null;
+	private TimeInterval timeInterval = null;
 	
 	//private String timeIntervalValue = null;
 	//private String timeValue = null; 
@@ -379,12 +378,12 @@ public class TemporalQueryBean
 			if(firstAttributeType.equals(Constants.DATE_TYPE))
 			{
 				IExpression1 = QueryObjectFactory.createExpressionAttribute(srcIExpression,srcAttributeById);
-				dateOffsetAttr2 = QueryObjectFactory.createDateOffsetAttribute(destIExpression,destAttributeById,DSInterval.Day);
+				dateOffsetAttr2 = QueryObjectFactory.createDateOffsetAttribute(destIExpression,destAttributeById,TimeInterval.Day);
 			}
 			else
 			{
 				IExpression2 = QueryObjectFactory.createExpressionAttribute(srcIExpression,destAttributeById);
-				dateOffsetAttr1 = QueryObjectFactory.createDateOffsetAttribute(destIExpression,srcAttributeById,DSInterval.Day);
+				dateOffsetAttr1 = QueryObjectFactory.createDateOffsetAttribute(destIExpression,srcAttributeById,TimeInterval.Day);
 			}
 		}
 	}
@@ -427,18 +426,7 @@ public class TemporalQueryBean
 		{
 			//Creating the dateOffSet Literal 
 			setTimeInterval(timeIntervalValue);
-			if(timeInterval instanceof DSInterval)
-			{
-				dateOffSetLiteral = QueryObjectFactory.createDateOffsetLiteral(timeValue, (DSInterval)timeInterval);
-			}
-			else if(timeInterval instanceof YMInterval)
-			{
-				dateOffSetLiteral = QueryObjectFactory.createDateOffsetLiteral(timeValue, (YMInterval)timeInterval);
-			}
-			else
-			{
-				throw new RuntimeException("can't occur.");
-			}
+   	 	    dateOffSetLiteral = QueryObjectFactory.createDateOffsetLiteral(timeValue, timeInterval);
 		}
 		else
 		{
@@ -460,23 +448,12 @@ public class TemporalQueryBean
 
 	private void setTimeInterval(String timeIntervalValue)
 	{
-		for(DSInterval time: DSInterval.values())
+		for(TimeInterval time: TimeInterval.values())
 		{
 			if(timeIntervalValue.equals(time.name() + "s"))
 			{
 				timeInterval = time;
 				break;
-			}
-		}
-		if(timeInterval == null)
-		{
-			for(YMInterval time : YMInterval.values())
-			{
-				if(timeIntervalValue.equals(time.name() + "s"))
-				{
-					timeInterval = time;
-					break;
-				}
 			}
 		}
 	}
@@ -517,7 +494,7 @@ public class TemporalQueryBean
 	/**
 	 * @return Returns the timeInterval.
 	 */
-	public ITimeIntervalEnum getTimeInterval()
+	public TimeInterval getTimeInterval()
 	{
 		return timeInterval;
 	}
@@ -528,7 +505,7 @@ public class TemporalQueryBean
 	/**
 	 * @param timeInterval The timeInterval to set.
 	 */
-	public void setTimeInterval(ITimeIntervalEnum timeInterval)
+	public void setTimeInterval(TimeInterval timeInterval)
 	{
 		this.timeInterval = timeInterval;
 	}

@@ -61,7 +61,7 @@ create table QUERY_JOIN_GRAPH (IDENTIFIER number(19,0) not null, COMMONS_GRAPH_I
 create table QUERY_MODEL_ASSOCIATION (IDENTIFIER number(19,0) not null, primary key (IDENTIFIER));
 create table QUERY_OPERAND (IDENTIFIER number(19,0) not null, OPND_TYPE varchar2(255 char) not null, primary key (IDENTIFIER));
 create table QUERY_OUTPUT_ATTRIBUTE (IDENTIFIER number(19,0) not null, EXPRESSION_ID number(19,0), ATTRIBUTE_ID number(19,0) not null, PARAMETERIZED_QUERY_ID number(19,0), POSITION number(10,0), primary key (IDENTIFIER));
-create table QUERY_OUTPUT_TERM (IDENTIFIER number(19,0) not null, NAME varchar2(255 char), TERM_ID number(19,0), primary key (IDENTIFIER));
+create table QUERY_OUTPUT_TERM (IDENTIFIER number(19,0) not null, NAME varchar2(255 char), TIME_INTERVAL varchar2(255 char), TERM_ID number(19,0), primary key (IDENTIFIER));
 create table QUERY_PARAMETERIZED_CONDITION (IDENTIFIER number(19,0) not null, CONDITION_INDEX number(10,0), CONDITION_NAME varchar2(255 char), primary key (IDENTIFIER));
 create table QUERY_PARAMETERIZED_QUERY (IDENTIFIER number(19,0) not null, QUERY_NAME varchar2(255 char) unique, DESCRIPTION varchar2(1024 char), primary key (IDENTIFIER));
 create table QUERY_QUERY_ENTITY (IDENTIFIER number(19,0) not null, ENTITY_ID number(19,0) not null, primary key (IDENTIFIER));

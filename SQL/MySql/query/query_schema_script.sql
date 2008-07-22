@@ -54,7 +54,7 @@ create table QUERY_JOIN_GRAPH (IDENTIFIER bigint not null auto_increment, COMMON
 create table QUERY_MODEL_ASSOCIATION (IDENTIFIER bigint not null auto_increment, primary key (IDENTIFIER));
 create table QUERY_OPERAND (IDENTIFIER bigint not null auto_increment, OPND_TYPE varchar(255) not null, primary key (IDENTIFIER));
 create table QUERY_OUTPUT_ATTRIBUTE (IDENTIFIER bigint not null auto_increment, EXPRESSION_ID bigint, ATTRIBUTE_ID bigint not null, PARAMETERIZED_QUERY_ID bigint, POSITION integer, primary key (IDENTIFIER));
-create table QUERY_OUTPUT_TERM (IDENTIFIER bigint not null auto_increment, NAME varchar(255), TERM_ID bigint, primary key (IDENTIFIER));
+create table QUERY_OUTPUT_TERM (IDENTIFIER bigint not null auto_increment, NAME varchar(255), TIME_INTERVAL varchar(255), TERM_ID bigint, primary key (IDENTIFIER));
 create table QUERY_PARAMETERIZED_CONDITION (IDENTIFIER bigint not null, CONDITION_INDEX integer, CONDITION_NAME varchar(255), primary key (IDENTIFIER));
 create table QUERY_PARAMETERIZED_QUERY (IDENTIFIER bigint not null, QUERY_NAME varchar(255) unique, DESCRIPTION text, primary key (IDENTIFIER));
 create table QUERY_QUERY_ENTITY (IDENTIFIER bigint not null auto_increment, ENTITY_ID bigint not null, primary key (IDENTIFIER));
