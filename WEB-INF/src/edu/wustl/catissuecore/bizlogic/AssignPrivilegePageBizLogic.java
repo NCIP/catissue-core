@@ -220,16 +220,12 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 	 */
 	public List<NameValueBean> getActionList(boolean isToExcludeDisabled) throws BizLogicException
 	{     
-		PrivilegeUtility privilegeUtility = new PrivilegeUtility();
-		List<NameValueBean> privilegeNameValueBeanList = null;
-		
+		List<NameValueBean> privilegeNameValueBeanList = new ArrayList<NameValueBean>();
 		for (CPPrivilege privilege  : CPPrivilege.values())
 		{
 			NameValueBean privilegeNameValueBean = new NameValueBean(Utility.getDisplayLabelForUnderscore(privilege.toString()), privilege.getId());
 			privilegeNameValueBeanList.add(privilegeNameValueBean);
-			
 		}
-	
 		return privilegeNameValueBeanList;
 	}
 	
