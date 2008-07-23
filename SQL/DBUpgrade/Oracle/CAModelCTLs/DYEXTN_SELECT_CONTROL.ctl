@@ -1,6 +1,4 @@
-LOAD DATA INFILE 'D://Nightly_Build//projects//catissuecore/SQL/DBUpgrade/Common/CAModelCSVs/DYEXTN_SELECT_CONTROL.csv' 
-BADFILE '/sample.bad'
-DISCARDFILE '/sample.dsc'
+LOAD DATA INFILE 'H://caTissue//work//workspace//catissuecoreNew/SQL/DBUpgrade/Common/CAModelCSVs/DYEXTN_SELECT_CONTROL.csv' 
 APPEND 
 INTO TABLE DYEXTN_SELECT_CONTROL 
 FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"'

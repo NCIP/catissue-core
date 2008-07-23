@@ -1,6 +1,4 @@
-LOAD DATA INFILE 'D://Nightly_Build//projects//catissuecore/SQL/DBUpgrade/Common/CAModelCSVs/DYEXTN_DATA_GRID.csv' 
-BADFILE '/sample.bad'
-DISCARDFILE '/sample.dsc'
+LOAD DATA INFILE 'H://caTissue//work//workspace//catissuecoreNew/SQL/DBUpgrade/Common/CAModelCSVs/DYEXTN_DATA_GRID.csv' 
 APPEND 
 INTO TABLE DYEXTN_DATA_GRID 
 FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"'

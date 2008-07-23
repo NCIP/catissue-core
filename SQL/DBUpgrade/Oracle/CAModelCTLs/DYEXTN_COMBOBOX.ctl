@@ -1,6 +1,4 @@
-LOAD DATA INFILE 'D://Nightly_Build//projects//catissuecore/SQL/DBUpgrade/Common/CAModelCSVs/DYEXTN_COMBOBOX.csv' 
-BADFILE '/sample.bad'
-DISCARDFILE '/sample.dsc'
+LOAD DATA INFILE 'H://caTissue//work//workspace//catissuecoreNew/SQL/DBUpgrade/Common/CAModelCSVs/DYEXTN_COMBOBOX.csv' 
 APPEND 
 INTO TABLE DYEXTN_COMBOBOX 
 FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"'
