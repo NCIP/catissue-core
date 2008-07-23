@@ -32,6 +32,7 @@ import edu.wustl.catissuecore.bean.ConsentBean;
 import edu.wustl.catissuecore.bean.ConsentResponseBean;
 import edu.wustl.catissuecore.bizlogic.AnnotationUtil;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
 import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
@@ -368,7 +369,22 @@ public class ParticipantAction extends SecureAction
 		}
 		else 
 		{
+			CollectionProtocolBizLogic cpBizLogic = (CollectionProtocolBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.COLLECTION_PROTOCOL_FORM_ID);
+			String cpId = request.getParameter(Constants.CP_SEARCH_CP_ID);
 			list = participantBizlogic.getCPForUserWithRegistrationAcess(sessionDataBean.getUserId());
+			
+			// This is done when participant is added in cp based view. 
+			// Adding the CP selected in the cp based view to the list of CPs used in CPR section
+			if(cpId != null)
+			{
+				//list = participantBizlogic.getCPForUserWithRegistrationAcess(sessionDataBean.getUserId());
+				if(list.size()==1)
+				{
+					String shortTitle = cpBizLogic.getShortTitle(Long.valueOf(cpId));
+					NameValueBean nvb = new NameValueBean(shortTitle,cpId);
+					list.add(nvb);
+				}
+			}
 		}
 		request.setAttribute(Constants.PROTOCOL_LIST, list);
 		//report id from session

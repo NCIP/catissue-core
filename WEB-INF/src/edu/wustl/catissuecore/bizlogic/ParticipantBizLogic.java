@@ -28,6 +28,7 @@ import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Race;
 import edu.wustl.catissuecore.domain.Site;
+import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
@@ -56,6 +57,7 @@ import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
+import edu.wustl.common.util.global.Variables;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -1193,5 +1195,81 @@ public class ParticipantBizLogic extends DefaultBizLogic
 		}
 		
 		return cpList;
+	}
+	
+	/**
+	 * Called from DefaultBizLogic to get ObjectId for authorization check
+	 * (non-Javadoc)
+	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getObjectId(edu.wustl.common.dao.AbstractDAO, java.lang.Object)
+	 */
+	public String getObjectId(AbstractDAO dao, Object domainObject) 
+	{
+		String objectId = "";
+		if (domainObject instanceof Participant)
+		{
+			Participant participant = (Participant) domainObject;
+			Collection<CollectionProtocolRegistration> cprCollection = participant.getCollectionProtocolRegistrationCollection();
+			if(cprCollection.isEmpty())
+			{
+				objectId = Constants.ADD_GLOBAL_PARTICIPANT;
+			}
+			else
+			{	
+				CollectionProtocolRegistration cpr = cprCollection.iterator().next();
+				CollectionProtocol cp = cpr.getCollectionProtocol();
+				objectId = Constants.COLLECTION_PROTOCOL_CLASS_NAME+"_"+cp.getId();
+			}
+		}
+		return objectId;
+	}
+	
+	/**
+	 * To get PrivilegeName for authorization check from 'PermissionMapDetails.xml'
+	 * (non-Javadoc)
+	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getPrivilegeName(java.lang.Object)
+	 */
+	protected String getPrivilegeKey(Object domainObject)
+    {
+    	return Constants.ADD_EDIT_PARTICIPANT;
+    }
+	
+	/**
+	 * Over-ridden for the case of Non - Admin user should be able to Add 
+	 * Global Participant 
+	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#isAuthorized(edu.wustl.common.dao.AbstractDAO, java.lang.Object, edu.wustl.common.beans.SessionDataBean)
+	 */
+	public boolean isAuthorized(AbstractDAO dao, Object domainObject, SessionDataBean sessionDataBean)  
+	{
+		boolean isAuthorized = false;
+		String privilegeName = getPrivilegeName(domainObject);
+		String protectionElementName = getObjectId(dao, domainObject);
+		PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(sessionDataBean.getUserName());
+		
+		if(protectionElementName.equals(Constants.ADD_GLOBAL_PARTICIPANT))
+		{
+				User user = null;
+				try 
+				{
+					user = (User) dao.retrieve(User.class.getName(), sessionDataBean.getUserId());
+				} 
+				catch (DAOException e) 
+				{
+					Logger.out.error(e.getMessage(), e);
+				}
+				Collection<CollectionProtocol> cpCollection = user.getAssignedProtocolCollection();
+				for(CollectionProtocol cp : cpCollection)
+				{
+					if(privilegeCache.hasPrivilege(CollectionProtocol.class.getName()+"_"+cp.getId(), privilegeName))
+					{
+						isAuthorized = true;
+						break;
+					}
+				}
+		} 
+		else
+		{
+			isAuthorized = privilegeCache.hasPrivilege(protectionElementName,privilegeName);
+		}
+		return isAuthorized;		
 	}
 }

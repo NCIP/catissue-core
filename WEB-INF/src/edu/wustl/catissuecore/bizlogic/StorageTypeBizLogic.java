@@ -19,14 +19,17 @@ import org.apache.struts.action.ActionErrors;
 
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
+import edu.wustl.common.dao.AbstractDAO;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
+import edu.wustl.common.util.global.Variables;
 
 /**
  * StorageTypeHDAO is used to add site type information into the database using Hibernate.
@@ -238,4 +241,24 @@ public class StorageTypeBizLogic extends DefaultBizLogic
 		//Collection spcimenArrayTypeCollection = (Collection) retrieveAttribute(StorageType.class.getName(), type.getId(), "elements(holdsSpecimenArrayTypeCollection)");
 		return Utility.getobjectIds(type.getHoldsSpecimenArrayTypeCollection());
 	}
+	
+	/**
+	 * Called from DefaultBizLogic to get ObjectId for authorization check
+	 * (non-Javadoc)
+	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getObjectId(edu.wustl.common.dao.AbstractDAO, java.lang.Object)
+	 */
+	public String getObjectId(AbstractDAO dao, Object domainObject) 
+	{
+		return Constants.ADMIN_PROTECTION_ELEMENT;
+	}
+	
+	/**
+	 * To get PrivilegeName for authorization check from 'PermissionMapDetails.xml'
+	 * (non-Javadoc)
+	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getPrivilegeName(java.lang.Object)
+	 */
+	protected String getPrivilegeKey(Object domainObject)
+    {
+    	return Constants.ADD_EDIT_STORAGE_TYPE;
+    }
 }

@@ -25,6 +25,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SecurityDataBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
+import edu.wustl.common.dao.AbstractDAO;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.security.PrivilegeManager;
@@ -35,6 +36,7 @@ import edu.wustl.common.security.exceptions.SMTransactionException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.PasswordManager;
+import edu.wustl.common.util.global.Variables;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -244,4 +246,25 @@ public class ApproveUserBizLogic extends DefaultBizLogic
 
 		return userList; 
 	}
+	
+	/**
+	 * Called from DefaultBizLogic to get ObjectId for authorization check
+	 * (non-Javadoc)
+	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getObjectId(edu.wustl.common.dao.AbstractDAO, java.lang.Object)
+	 */
+	public String getObjectId(AbstractDAO dao, Object domainObject) 
+	{
+		return edu.wustl.catissuecore.util.global.Constants.ADMIN_PROTECTION_ELEMENT;
+	}
+	
+	/**
+	 * To get PrivilegeName for authorization check from 'PermissionMapDetails.xml'
+	 * (non-Javadoc)
+	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getPrivilegeName(java.lang.Object)
+	 */
+	protected String getPrivilegeKey(Object domainObject)
+    {
+	   	return Constants.ADD_EDIT_USER;
+    }
+    
 }

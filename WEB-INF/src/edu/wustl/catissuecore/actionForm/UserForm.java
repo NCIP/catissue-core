@@ -122,7 +122,7 @@ public class UserForm extends AbstractActionForm
 	/**
 	 * Role of the user.
 	 * */
-	private String role;
+	private String role=Constants.NON_ADMIN_USER;
 
 	/**
 	 * Cancer Research Group of the user.  
@@ -141,8 +141,6 @@ public class UserForm extends AbstractActionForm
 	
 	private Long csmUserId;
 	
-	private String adminuser="false";
-
 	//Mandar 24-Apr-06 Bug 972 : Confirm email address
 	/**
 	 * COnfirm EmailAddress of the user.
@@ -497,7 +495,6 @@ public class UserForm extends AbstractActionForm
 	/**
 	 * Returns the role of the user.
 	 * @return the role of the user.
-	 * @see #setRoleCollection(String)
 	 */
 	public String getRole()
 	{
@@ -640,7 +637,7 @@ public class UserForm extends AbstractActionForm
 			}
 
 			this.emailAddress = user.getEmailAddress();
-			this.adminuser = user.getAdminuser().toString();
+			//this.adminuser = user.getRoleId();
 
 			//Mandar : 24-Apr-06 : bug id 972 : confirmEmailAddress
 			confirmEmailAddress = this.emailAddress;
@@ -1037,16 +1034,6 @@ public class UserForm extends AbstractActionForm
 		{
 			setCancerResearchGroupId(addObjectIdentifier.longValue());
 		}
-	}
-
-
-	public String getAdminuser() {
-		return adminuser;
-	}
-
-
-	public void setAdminuser(String adminuser) {
-		this.adminuser = adminuser;
 	}
 	
 }

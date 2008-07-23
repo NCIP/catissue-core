@@ -91,7 +91,15 @@ public class LoginAction extends Action
 	                String ipAddress = request.getRemoteAddr();
 	                
 	                SessionDataBean sessionData = new SessionDataBean();
-	                sessionData.setAdmin(validUser.getAdminuser());
+	                
+	                boolean adminUser = false;
+	                
+	                if(validUser.getRoleId().equalsIgnoreCase(Constants.ADMIN_USER))
+	                {
+	                	adminUser = true;
+	                }
+	                
+	                sessionData.setAdmin(adminUser);
 	                sessionData.setUserName(loginName);
 	                sessionData.setIpAddress(ipAddress);
 	                sessionData.setUserId(userId);

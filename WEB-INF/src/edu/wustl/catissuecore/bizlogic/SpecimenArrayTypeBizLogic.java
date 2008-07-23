@@ -16,12 +16,14 @@ import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
+import edu.wustl.common.dao.AbstractDAO;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Constants;
 import edu.wustl.common.util.global.Validator;
+import edu.wustl.common.util.global.Variables;
 
 /**
  * <p>This class initializes the fields of SpecimenArrayTypeBizLogic.java</p>
@@ -161,4 +163,24 @@ public class SpecimenArrayTypeBizLogic extends DefaultBizLogic
 	}
 	
 	//END
+	
+	/**
+	 * Called from DefaultBizLogic to get ObjectId for authorization check
+	 * (non-Javadoc)
+	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getObjectId(edu.wustl.common.dao.AbstractDAO, java.lang.Object)
+	 */
+	public String getObjectId(AbstractDAO dao, Object domainObject) 
+	{
+		return edu.wustl.catissuecore.util.global.Constants.ADMIN_PROTECTION_ELEMENT;
+	}
+	
+	/**
+	 * To get PrivilegeName for authorization check from 'PermissionMapDetails.xml'
+	 * (non-Javadoc)
+	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getPrivilegeName(java.lang.Object)
+	 */
+	protected String getPrivilegeKey(Object domainObject)
+    {
+    	return edu.wustl.catissuecore.util.global.Constants.ADD_EDIT_SPECIMEN_ARRAY_TYPE;
+    }
 }

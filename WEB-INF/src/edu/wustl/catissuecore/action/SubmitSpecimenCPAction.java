@@ -42,6 +42,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
+import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
@@ -135,12 +136,27 @@ public class SubmitSpecimenCPAction extends BaseAction {
 				target = "pageOfMultipleSpWithMenuFailure";
 			}
 				
-     			String errorMsg = ex.getMessage();
+     		String errorMsg = ex.getMessage();
 			resultMap.put(Constants.ERROR_DETAIL, errorMsg);
 			ex.printStackTrace();
 			ActionErrors actionErrors = new ActionErrors();
 			actionErrors.add(actionErrors.GLOBAL_MESSAGE, new ActionError(
 					"errors.item",ex.getMessage()));
+		
+			SessionDataBean sessionDataBean = getSessionData(request);
+            String userName = "";
+            if(sessionDataBean != null)
+        	{
+        	    userName = sessionDataBean.getUserName();
+        	}
+            
+            // To delegate UserNotAuthorizedException forward
+			if(ex instanceof UserNotAuthorizedException)
+			{
+				ActionError error = new ActionError("access.addedit.object.denied", userName, CollectionProtocol.class.getName());
+	        	actionErrors.add(ActionErrors.GLOBAL_ERROR, error);
+			}
+			
 			saveErrors(request, actionErrors);			
 			
 		}

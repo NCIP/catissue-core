@@ -24,6 +24,7 @@ import edu.wustl.catissuecore.bean.GenericSpecimen;
 import edu.wustl.catissuecore.bean.SpecimenDataBean;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
+import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
@@ -36,6 +37,7 @@ import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 
 public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 {
@@ -98,9 +100,16 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 		{
 			//11July08 : Mandar : For GenericSpecimen
 			SpecimenDetailsTagUtil.setAnticipatorySpecimenDetails(request, specimenSummaryForm);
-
-			exception.printStackTrace();
+		   
 			ActionErrors actionErrors = new ActionErrors();
+			
+			// To delegate UserNotAuthorizedException forward
+			if(exception instanceof UserNotAuthorizedException)
+			{
+				ActionError error = new ActionError("access.addedit.object.denied", sessionDataBean.getUserName(), Specimen.class.getName());
+	        	actionErrors.add(ActionErrors.GLOBAL_ERROR, error);
+			}
+			exception.printStackTrace();
 			actionErrors.add(actionErrors.GLOBAL_MESSAGE, new ActionError(
 					"errors.item",exception.getMessage()));
 			saveErrors(request, actionErrors);

@@ -153,11 +153,12 @@
 		<Class name="edu.wustl.common.action.SimpleQueryInterfaceAction_SpecimenCollectionGroup"/>
 		<Class name="edu.wustl.common.action.SimpleQueryInterfaceAction_StorageContainer"/>	
 		<Class name="edu.wustl.common.action.SimpleQueryInterfaceAction_StorageType"/>	
-		<Class name="edu.wustl.common.action.SimpleQueryInterfaceAction_User"/>				
+		<Class name="edu.wustl.common.action.SimpleQueryInterfaceAction_User"/>
+		<Class name="ADMIN_PROTECTION_ELEMENT"/>				
 	</Classes>
 	
 	<Objects>
-		 <ObjectType pattern="edu.wustl.catissuecore.domain.User*" />
+		<!-- <ObjectType pattern="edu.wustl.catissuecore.domain.User*" /> -->
 		<ObjectType pattern="edu.wustl.catissuecore.domain.Site*"/>
 		<ObjectType pattern="edu.wustl.catissuecore.domain.CollectionProtocol*"/> 
 	</Objects>

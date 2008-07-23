@@ -26,7 +26,10 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.bizlogic.IActivityStatus;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.security.SecurityManager;
+import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.util.logger.Logger;
+import gov.nih.nci.security.authorization.domainobjects.Role;
 
 /**
  * A person who interacts with the caTISSUE Core data system
@@ -118,7 +121,7 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
     /**
      * Role id of the user.
      */
-    protected String roleId;
+    protected String roleId=Constants.NON_ADMIN_USER;
     
     /**
      * Set of collection protocol.
@@ -140,9 +143,7 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
 	 */
 	protected Boolean firstTimeLogin;
 	
-	protected Boolean adminuser;
-	
-	  /**
+	/**
      * Set of collection protocol.
      */
       protected Collection<CollectionProtocol> assignedProtocolCollection = new HashSet<CollectionProtocol>();
@@ -507,7 +508,6 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
     {
         return comments;
     }
-
     /**
      * Sets the comments given by the approver.
      * @param comments The comments to set.
@@ -524,13 +524,28 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
             this.comments = commentString;
         }
     }
-
     /**
      * @return Returns the roleId.
      */
     public String getRoleId()
     {
-        return roleId;
+        String roleId = this.roleId;
+    	
+        try 
+        {
+			
+        	if(id!=0)
+        	{
+        		Role role = SecurityManager.getInstance(User.class).getUserRole(id);
+        		roleId = role.getId().toString();
+        	}
+		} 
+        catch (SMException e) 
+        {
+			e.printStackTrace();
+		}
+    	
+    	return roleId;
     }
 
     /**
@@ -652,8 +667,8 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
                 this.setLoginName(uform.getEmailAddress());
                 this.setLastName(uform.getLastName());
                 this.setFirstName(uform.getFirstName());
-                this.setEmailAddress(uform.getEmailAddress());
-                this.setAdminuser(Boolean.valueOf(uform.getAdminuser()));
+                this.setEmailAddress(uform.getEmailAddress()); 
+                this.setRoleId(uform.getRole());
                 this.institution.setId(new Long(uform
                         .getInstitutionId()));
 
@@ -829,13 +844,4 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
 	{
 		this.siteCollection = siteCollection;
 	}
-
-	public Boolean getAdminuser() {
-		return adminuser;
-	}
-
-	public void setAdminuser(Boolean adminuser) {
-		this.adminuser = adminuser;
-	}
-
 }

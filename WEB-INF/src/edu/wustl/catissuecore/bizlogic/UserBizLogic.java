@@ -21,6 +21,7 @@ import java.util.ListIterator;
 import java.util.Set;
 import java.util.Vector;
 
+import edu.common.dynamicextensions.util.global.Variables;
 import edu.wustl.catissuecore.domain.CancerResearchGroup;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Department;
@@ -28,6 +29,7 @@ import edu.wustl.catissuecore.domain.Institution;
 import edu.wustl.catissuecore.domain.Password;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.dto.CollectionProtocolDTO;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.EmailHandler;
 import edu.wustl.catissuecore.util.ParticipantRegistrationInfo;
@@ -126,17 +128,16 @@ public class UserBizLogic extends DefaultBizLogic
 				csmUser.setStartDate(user.getStartDate());
 				csmUser.setPassword(generatedPassword);
 
-				SecurityManager securityManager = SecurityManager.getInstance(UserBizLogic.class);
-				securityManager.createUser(csmUser);
+				SecurityManager.getInstance(UserBizLogic.class).createUser(csmUser);
 
-				 if (user.getAdminuser())
-				 {
-					 securityManager.assignRoleToUser(csmUser.getUserId().toString(),"1");
-				 }
-//				if (user.getRoleId() != null)
-//				{
-//					SecurityManager.getInstance(UserBizLogic.class).assignRoleToUser(csmUser.getUserId().toString(), user.getRoleId());
-//				}
+			//	 if (user.getAdminuser())
+			//	 {
+			//		 securityManager.assignRoleToUser(csmUser.getUserId().toString(),"1");
+			//	 }
+				if (user.getRoleId() != null)
+				{
+					SecurityManager.getInstance(UserBizLogic.class).assignRoleToUser(csmUser.getUserId().toString(), user.getRoleId());
+				}
 
 				user.setCsmUserId(csmUser.getUserId());
 				//					                 user.setPassword(csmUser.getPassword());
@@ -395,11 +396,11 @@ public class UserBizLogic extends DefaultBizLogic
 				csmUser.setEmailId(user.getEmailAddress());
 
 				// Assign Role only if the page is of Administrative user edit.
-//				if ((Constants.PAGEOF_USER_PROFILE.equals(user.getPageOf()) == false)
-//						&& (Constants.PAGEOF_CHANGE_PASSWORD.equals(user.getPageOf()) == false))
-//				{
-//					SecurityManager.getInstance(UserBizLogic.class).assignRoleToUser(csmUser.getUserId().toString(), user.getRoleId());
-//				}
+				if ((Constants.PAGEOF_USER_PROFILE.equals(user.getPageOf()) == false)
+						&& (Constants.PAGEOF_CHANGE_PASSWORD.equals(user.getPageOf()) == false))
+				{
+					SecurityManager.getInstance(UserBizLogic.class).assignRoleToUser(csmUser.getUserId().toString(), user.getRoleId());
+				}
 			
 				dao.update(user.getAddress(), sessionDataBean, true, false, false);
 
@@ -553,8 +554,8 @@ public class UserBizLogic extends DefaultBizLogic
 	{
 		List userList = null;
 		Logger.out.debug("In user biz logic retrieve........................");
-//		try
-//		{
+		try
+		{
 			// Get the caTISSUE user.
 			userList = super.retrieve(className, colName, colValue);
 
@@ -566,20 +567,20 @@ public class UserBizLogic extends DefaultBizLogic
 				if (appUser.getCsmUserId() != null)
 				{
 					//Get the role of the user.
-//					Role role = SecurityManager.getInstance(UserBizLogic.class).getUserRole(appUser.getCsmUserId().longValue());
+					Role role = SecurityManager.getInstance(UserBizLogic.class).getUserRole(appUser.getCsmUserId().longValue());
 					//Logger.out.debug("In USer biz logic.............role........id......." + role.getId().toString());
 
-//					if (role != null)
-//					{
-//						appUser.setRoleId(role.getId().toString());
-//					}
+					if (role != null)
+					{
+						appUser.setRoleId(role.getId().toString());
+					}
 				}
 			}
-//		}
-//		catch (SMException e)
-//		{
-//			throw handleSMException(e);
-//		}
+		}
+		catch (SMException e)
+		{
+			throw handleSMException(e);
+		}
 
 		return userList;
 	}
@@ -1221,7 +1222,7 @@ public class UserBizLogic extends DefaultBizLogic
 			userColl = user.getCollectionProtocolCollection();
 			userCpCollection = user.getAssignedProtocolCollection();
 
-			if (user.getAdminuser())
+			if (user.getRoleId().equalsIgnoreCase(Constants.ADMIN_USER))
 			{
 				cpIds = null;
 			}
@@ -1279,7 +1280,7 @@ public class UserBizLogic extends DefaultBizLogic
 			dao.openSession(null);
 
 			User user = (User) dao.retrieve(User.class.getName(), userId);
-			if (!user.getAdminuser())
+			if (!user.getRoleId().equalsIgnoreCase(Constants.ADMIN_USER))
 			{
 				Collection<Site> siteCollection = user.getSiteCollection();
 				idSet = new HashSet<Long>();
@@ -1308,5 +1309,50 @@ public class UserBizLogic extends DefaultBizLogic
 
 		return idSet;
 	} 
-
+		
+		
+		/**
+		 * Called from DefaultBizLogic to get ObjectId for authorization check
+		 * (non-Javadoc)
+		 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getObjectId(edu.wustl.common.dao.AbstractDAO, java.lang.Object)
+		 */
+		public String getObjectId(AbstractDAO dao, Object domainObject) 
+		{
+			return Constants.ADMIN_PROTECTION_ELEMENT;
+		}
+		
+		/**
+		 * To get PrivilegeName for authorization check from 'PermissionMapDetails.xml'
+		 * (non-Javadoc)
+		 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getPrivilegeName(java.lang.Object)
+		 */
+		protected String getPrivilegeKey(Object domainObject)
+	    {
+	    	return Constants.ADD_EDIT_USER;
+	    }
+		
+		/**
+		 * Over-ridden for the case of Non - Admin user should be able to edit
+		 * his/her details e.g. Password 
+		 * (non-Javadoc)
+		 * @see edu.wustl.common.bizlogic.DefaultBizLogic#isAuthorized(edu.wustl.common.dao.AbstractDAO, java.lang.Object, edu.wustl.common.beans.SessionDataBean)
+		 */
+		public boolean isAuthorized(AbstractDAO dao, Object domainObject, SessionDataBean sessionDataBean)  
+		{
+			if(domainObject instanceof User)
+			{
+				User user = (User) domainObject;
+				if(user.getLoginName().equals(sessionDataBean.getUserName()))
+				{
+					return true;
+				}
+			}
+			boolean isAuthorized = false;
+			String protectionElementName = getObjectId(dao, domainObject);
+			String privilegeName = getPrivilegeName(domainObject);
+			PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
+			PrivilegeCache privilegeCache = privilegeManager.getPrivilegeCache(sessionDataBean.getUserName());
+			isAuthorized = privilegeCache.hasPrivilege(protectionElementName,privilegeName);
+			return isAuthorized;		
+		}
 }

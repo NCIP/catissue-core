@@ -2362,7 +2362,38 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String CART_COLUMN_LIST = "cartColumnList";
 	public static final String CART_ATTRIBUTE_LIST = "cartAttributeList";
 	public static final String ADD_SPECIMEN_TO_CART="addSpecimenToCart";
-		
-	public static final String ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE = "Distributed And Close"; 												
+	
+	public static final String ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE = "Distributed And Close"; 				
+	
+	public static final String shortTitle="shortTitle";
+	
+	// MSR purpose
+	// Used for Authentication, Authorization through CSM
+	public static final String[] CP_Privileges ={Permissions.REGISTRATION,Permissions.SPECIMEN_ACCESSION,Permissions.SPECIMEN_PROCESSING,Permissions.PHI};
+	public static final String ADMIN_USER="1";
+	public static final String NON_ADMIN_USER="7";
+	public static final String ADD_GLOBAL_PARTICIPANT="ADD_GLOBAL_PARTICIPANT";
+	
+	// Constants used from file 'PermissionMapDetails.xml'
+	public static final String ADMIN_PROTECTION_ELEMENT = "ADMIN_PROTECTION_ELEMENT";
+	public static final String ADD_EDIT_USER = "ADD_EDIT_USER";
+	public static final String ADD_EDIT_INSTITUTION = "ADD_EDIT_INSTITUTION";
+	public static final String ADD_EDIT_DEPARTMENT = "ADD_EDIT_DEPARTMENT";
+	public static final String ADD_EDIT_CRG = "ADD_EDIT_CRG";
+	public static final String ADD_EDIT_SITE = "ADD_EDIT_SITE";
+	public static final String ADD_EDIT_STORAGE_TYPE = "ADD_EDIT_STORAGE_TYPE";
+	public static final String ADD_EDIT_STORAGE_CONTAINER = "ADD_EDIT_STORAGE_CONTAINER";
+	public static final String ADD_EDIT_SPECIMEN_ARRAY_TYPE = "ADD_EDIT_SPECIMEN_ARRAY_TYPE";
+	public static final String ADD_EDIT_BIOHAZARD = "ADD_EDIT_BIOHAZARD";
+	public static final String ADD_EDIT_CP = "ADD_EDIT_CP";
+	public static final String ADD_EDIT_DP = "ADD_EDIT_DP";
+	public static final String ADD_EDIT_PARTICIPANT = "ADD_EDIT_PARTICIPANT";
+	public static final String ADD_EDIT_SPECIMEN = "ADD_EDIT_SPECIMEN";
+	public static final String ALIQUOT_SPECIMEN = "ALIQUOT_SPECIMEN";
+	public static final String DERIVE_SPECIMEN = "DERIVE_SPECIMEN";
+	public static final String ADD_EDIT_SCG = "ADD_EDIT_SCG";
+	public static final String ADD_EDIT_SPECIMEN_ARRAY = "ADD_EDIT_SPECIMEN_ARRAY";
+	public static final String ADD_EDIT_SPECIMEN_EVENTS = "ADD_EDIT_SPECIMEN_EVENTS";
+	
 }
 	

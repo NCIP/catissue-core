@@ -218,7 +218,7 @@ public class CaCoreAppServicesDelegator
         try
         {
               Role role=securityManager.getUserRole(validUser.getCsmUserId());
-              if (validUser.getAdminuser())
+              if (validUser.getRoleId().equalsIgnoreCase(Constants.ADMIN_USER))
               {
             	  reviewerRole = Constants.ADMINISTRATOR;
               }

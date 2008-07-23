@@ -26,6 +26,7 @@ import java.util.TreeMap;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 
+import edu.common.dynamicextensions.util.global.Variables;
 import edu.wustl.catissuecore.TaskTimeCalculater;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
@@ -50,6 +51,7 @@ import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.namegenerator.BarcodeGenerator;
 import edu.wustl.catissuecore.namegenerator.BarcodeGeneratorFactory;
 import edu.wustl.catissuecore.namegenerator.LabelGenerator;
@@ -3078,4 +3080,64 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			}
 		}
 	}
+	
+	/**
+	 * Called from DefaultBizLogic to get ObjectId for authorization check
+	 * (non-Javadoc)
+	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getObjectId(edu.wustl.common.dao.AbstractDAO, java.lang.Object)
+	 */
+	public String getObjectId(AbstractDAO dao, Object domainObject) 
+	{
+		String objectId = "";
+		if (domainObject instanceof Specimen)
+		{
+			Specimen specimen = (Specimen) domainObject;
+			SpecimenCollectionGroup scg = specimen.getSpecimenCollectionGroup();
+			// CollectionProtocolRegistration cpr = scg.getCollectionProtocolRegistration();
+			try 
+			{
+				if(specimen.getParentSpecimen() != null)
+				{
+					setSpecimenParent(specimen, dao);
+					scg = specimen.getSpecimenCollectionGroup();
+				}
+				
+				if(scg.getCollectionProtocolRegistration() == null)
+				{
+					scg = (SpecimenCollectionGroup) dao.retrieve(SpecimenCollectionGroup.class.getName(), scg.getId());
+				}
+			} 
+			catch (DAOException e) 
+			{
+				Logger.out.debug(e.getMessage(), e);
+			}
+			CollectionProtocolRegistration cpr = scg.getCollectionProtocolRegistration();
+			CollectionProtocol cp = cpr.getCollectionProtocol();
+			objectId = Constants.COLLECTION_PROTOCOL_CLASS_NAME+"_"+cp.getId();
+		}
+		return objectId;
+	}
+	
+	/**
+	 * To get PrivilegeName for authorization check from 'PermissionMapDetails.xml'
+	 * (non-Javadoc)
+	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getPrivilegeName(java.lang.Object)
+	 */
+	protected String getPrivilegeKey(Object domainObject)
+    {
+		Specimen specimen = (Specimen) domainObject;
+		
+		
+		if((specimen.getLineage()!=null) && (specimen.getLineage().equals(Constants.DERIVED_SPECIMEN))) 
+		{
+			return Constants.DERIVE_SPECIMEN;
+		}
+		
+		else if((specimen.getLineage()!=null) && (specimen.getLineage().equals(Constants.ALIQUOT)))
+		{
+			return Constants.ALIQUOT_SPECIMEN;
+		}
+		
+		return Constants.ADD_EDIT_SPECIMEN; 
+    }
 }

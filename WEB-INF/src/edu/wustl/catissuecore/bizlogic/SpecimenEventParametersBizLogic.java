@@ -18,6 +18,8 @@ import java.util.TreeMap;
 import net.sf.ehcache.CacheException;
 import edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
+import edu.wustl.catissuecore.domain.CollectionProtocol;
+import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.DisposalEventParameters;
 import edu.wustl.catissuecore.domain.EmbeddedEventParameters;
 import edu.wustl.catissuecore.domain.FixedEventParameters;
@@ -40,6 +42,7 @@ import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.cde.CDEManager;
+import edu.wustl.common.dao.AbstractDAO;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.dao.JDBCDAO;
@@ -49,6 +52,7 @@ import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.dbManager.HibernateMetaData;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
+import edu.wustl.common.util.global.Variables;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -889,5 +893,54 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 		return getSpecimenDataForBulkOperations(specimenIds, sessionDataBean, sql);
 	}
 	
+	/**
+	 * Called from DefaultBizLogic to get ObjectId for authorization check
+	 * (non-Javadoc)
+	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getObjectId(edu.wustl.common.dao.AbstractDAO, java.lang.Object)
+	 */
+	public String getObjectId(AbstractDAO dao, Object domainObject) 
+	{
+		String objectId = "";
+		//TODO Optimize This code with HQL
+		if(domainObject instanceof SpecimenEventParameters)
+		{
+			SpecimenCollectionGroup scg = null;
+			SpecimenEventParameters specimenEventParameters = (SpecimenEventParameters) domainObject;
+			Specimen specimen = (Specimen) specimenEventParameters.getSpecimen();
+			
+			if(specimen.getSpecimenCollectionGroup() == null)
+			{
+				try 
+				{
+					specimen = (Specimen) dao.retrieve(Specimen.class.getName(), specimen.getId());
+					// specimen = Utility.getSpecimen(specimen.getId().toString());
+				} 
+				catch (DAOException e) 
+				{
+					Logger.out.error(e.getMessage(), e);
+				}
+				scg = specimen.getSpecimenCollectionGroup();
+			}
+			else
+			{
+				scg = specimen.getSpecimenCollectionGroup();
+			}
+			
+			CollectionProtocolRegistration cpr = scg.getCollectionProtocolRegistration();
+			CollectionProtocol cp = cpr.getCollectionProtocol();
+			objectId = Constants.COLLECTION_PROTOCOL_CLASS_NAME+"_"+cp.getId();
+		}
+		
+		return objectId;
+	}
 	
+	/**
+	 * To get PrivilegeName for authorization check from 'PermissionMapDetails.xml'
+	 * (non-Javadoc)
+	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getPrivilegeName(java.lang.Object)
+	 */
+	protected String getPrivilegeKey(Object domainObject)
+    {
+    	return Constants.ADD_EDIT_SPECIMEN_EVENTS;
+    }
 } 

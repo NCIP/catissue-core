@@ -53,5 +53,36 @@
 	<Map key="edu.wustl.common.action.SimpleQueryInterfaceAction_Biohazard" value="GENERAL_ADMINISTRATION"/>
 	<Map key="edu.wustl.common.action.SimpleQueryInterfaceAction_CollectionProtocol" value="GENERAL_ADMINISTRATION"/>
 	<Map key="edu.wustl.common.action.SimpleQueryInterfaceAction_DistributionProtocol" value="GENERAL_ADMINISTRATION"/>
+	
+	<!-- Custom Protection Element created to check for General Administration tasks  -->
+	<Map key="ADMIN_PROTECTION_ELEMENT" value="GENERAL_ADMINISTRATION"/>
+	
+	<!--                BIZLOGIC  PURPOSE   		-->
+	<!-- 			Objects in ADMINISTRATIVE TAB  	-->
+	<Map key="ADD_EDIT_USER" value="USER_PROVISIONING"/>
+	<Map key="ADD_EDIT_INSTITUTION" value="GENERAL_ADMINISTRATION"/>
+	<Map key="ADD_EDIT_DEPARTMENT" value="GENERAL_ADMINISTRATION"/>
+	<Map key="ADD_EDIT_CRG" value="GENERAL_ADMINISTRATION"/>
+	<Map key="ADD_EDIT_SITE" value="GENERAL_ADMINISTRATION"/>
+	<Map key="ADD_EDIT_STORAGE_TYPE" value="GENERAL_ADMINISTRATION"/>
+	<Map key="ADD_EDIT_STORAGE_CONTAINER" value="STORAGE_ADMINISTRATION"/>
+	<Map key="ADD_EDIT_SPECIMEN_ARRAY_TYPE" value="GENERAL_ADMINISTRATION"/>
+	<Map key="ADD_EDIT_BIOHAZARD" value="GENERAL_ADMINISTRATION"/>
+	<Map key="ADD_EDIT_CP" value="PROTOCOL_ADMINISTRATION"/>
+	<Map key="ADD_EDIT_DP" value="PROTOCOL_ADMINISTRATION"/>	
+	
+	<!-- 			Objects in BIO-SPECIMEN TAB		--> 
+	<Map key="ADD_EDIT_PARTICIPANT" value="REGISTRATION"/>
+	<Map key="ADD_EDIT_SPECIMEN" value="SPECIMEN_ACCESSION"/>
+	<Map key="ALIQUOT_SPECIMEN" value="SPECIMEN_PROCESSING"/>
+	<Map key="DERIVE_SPECIMEN" value="SPECIMEN_PROCESSING"/>
+	<Map key="ADD_EDIT_SCG" value="REGISTRATION"/>
+	<Map key="ADD_EDIT_SPECIMEN_ARRAY" value="CREATE_ARRAY"/>
+
+	<!-- Specimen Events purpose -->
+	<Map key="ADD_EDIT_SPECIMEN_EVENTS" value="SPECIMEN_PROCESSING"/> 
+	
 </MapNameAndValues>
+
+
 

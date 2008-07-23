@@ -52,6 +52,7 @@ import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.dbManager.DBUtil;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
+import edu.wustl.common.util.global.Variables;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.catissuecore.util.CollectionProtocolAuthorization;
 
@@ -1218,5 +1219,54 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	
 	}
 
+	/**
+	 * Called from DefaultBizLogic to get ObjectId for authorization check
+	 * (non-Javadoc)
+	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getObjectId(edu.wustl.common.dao.AbstractDAO, java.lang.Object)
+	 */
+	public String getObjectId(AbstractDAO dao, Object domainObject) 
+	{
+		return Constants.ADMIN_PROTECTION_ELEMENT;
+	}
+	
+	/**
+	 * To get PrivilegeName for authorization check from 'PermissionMapDetails.xml'
+	 * (non-Javadoc)
+	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getPrivilegeName(java.lang.Object)
+	 */
+	protected String getPrivilegeKey(Object domainObject)
+    {
+    	return Constants.ADD_EDIT_CP;
+    }
 
+	public String getShortTitle(Long cpId) throws DAOException 
+	{
+		String shortTitle = null;
+		
+		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+		try
+		{
+			dao.openSession(null);
+			Object object = dao.retrieveAttribute(CollectionProtocol.class.getName(), cpId, Constants.shortTitle);
+			
+			if (object == null)
+			{
+				throw new DAOException("Cannot retrieve Short Title incorrect id "
+						+ cpId);
+			}
+
+			shortTitle = (String) object; 			
+		}
+		catch (DAOException exception)
+		{
+			throw exception;
+		}
+		
+		finally
+		{
+			dao.commit();
+			dao.closeSession();
+		}	
+		return shortTitle;
+	}
 }

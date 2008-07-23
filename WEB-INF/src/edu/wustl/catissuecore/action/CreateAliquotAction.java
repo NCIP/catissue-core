@@ -19,6 +19,7 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.AliquotForm;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
+import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
@@ -155,6 +156,14 @@ public class CreateAliquotAction extends BaseAction
 			saveErrors(request, actionErrors);
 			saveToken(request);
 			return false;	
+		}
+		catch(UserNotAuthorizedException e)
+		{
+			ActionErrors actionErrors = new ActionErrors();
+			ActionError error = new ActionError("access.addedit.object.denied", sessionDataBean.getUserName(), Specimen.class.getName());
+        	actionErrors.add(ActionErrors.GLOBAL_ERROR, error);
+        	saveErrors(request, actionErrors);
+        	return false;
 		}
 		return true;
 	}
