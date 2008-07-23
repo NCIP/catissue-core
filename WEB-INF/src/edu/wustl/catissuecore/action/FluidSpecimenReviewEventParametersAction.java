@@ -14,6 +14,7 @@ protected void setRequestParameters(HttpServletRequest request, EventParametersF
 {
 	 String operation=Constants.OPERATION ;
      String formName,specimenId=null;
+     specimenId = (String) request.getAttribute(Constants.SPECIMEN_ID);
      
      FluidSpecimenReviewEventParametersForm fluidSpecimenReviewEventParametersForm=(FluidSpecimenReviewEventParametersForm)eventParametersForm;
 
@@ -26,7 +27,7 @@ protected void setRequestParameters(HttpServletRequest request, EventParametersF
      else
      {
          formName = Constants.FLUID_SPECIMEN_REVIEW_EVENT_PARAMETERS_ADD_ACTION;
-			specimenId = (String) request.getAttribute(Constants.SPECIMEN_ID);
+			
          readOnlyValue = false;
      }
         String changeAction = "setFormAction('" + formName + "');";
