@@ -93,14 +93,6 @@
             column="FIRST_TIME_LOGIN"
         />
         
-        		  <property
-            name="adminuser"
-            type="boolean"
-            update="true"
-            insert="true"
-            column="IS_ADMIN"
-        />
-	
         <many-to-one
             name="department"
             class="edu.wustl.catissuecore.domain.Department"
