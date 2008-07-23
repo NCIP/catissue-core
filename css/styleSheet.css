@@ -1994,3 +1994,9 @@ td.formFieldNoBordersQuery{ /* for the cell that contains the form elements */
   font-size:11px;
 	width:12em;
 }
+
+.active-column-0 {width:30px}
+tr#hiddenCombo
+{
+ display:none;
+}

@@ -5,12 +5,12 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.FluidSpecimenReviewEventParametersForm"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
-<%@ include file="/pages/content/common/AutocompleterCommon.jsp" %>
-<%@ page language="java" isELIgnored="false" %> 
+<%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
+<%@ page language="java" isELIgnored="false" %>
+
 <head>
 <!-- Mandar : 434 : for tooltip -->
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
-
 	<script language="javascript">
 		
 	</script>
@@ -18,190 +18,104 @@
 <script src="jss/calendarComponent.js"></script>
 <SCRIPT>var imgsrc="images/";</SCRIPT>
 <LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
+<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
 <!-- Mandar 21-Aug-06 : calendar changes end -->
-
 </head>
-	
-
 			
 <html:errors/>
     
-<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
-
+<table border="0" cellpadding="0" cellspacing="0" width="100%"> 
 <html:form action='${requestScope.formName}'>
-
-
-	<!-- NEW FLUID_SPECIMEN_REVIEW_EVENT_PARAMETERS REGISTRATION BEGINS-->
-	<tr>
-	<td>
-	
-	<table summary="" cellpadding="3" cellspacing="0" border="0">
-		<tr>
-			<td><html:hidden property="operation" /></td>
+	<html:hidden property="operation" />
+	<html:hidden property="id" />
+	<html:hidden property="specimenId" value='${requestScope.specimenId}'/>        
+        
+<tr>
+          <td align="left" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;Event Parameters &quot;<em>FluidSpecimenReview</em>&quot;</span></td>
+        </tr>
+        <tr>
+          <td colspan="4" class="showhide1"></td>
+        </tr>
+        <tr>
+          <td colspan="4" class="showhide"><table width="100%" border="0" cellpadding="3" cellspacing="0">
+                <tr>
+                  <td width="1%" align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>
+                  <td width="15%" align="left" nowrap class="black_ar"><bean:message key="eventparameters.user"/></td>
+	          <td align="left" valign="middle">
+			<html:select property="userId" styleClass="formFieldSized18" styleId="userId" size="1"
+				onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+				<html:options collection='${requestScope.userListforJSP}' labelProperty="name" property="value"/>
+			</html:select>
+		  </td>
 		</tr>
-		
-		<tr>
-			<td><html:hidden property="id" /></td>
-		</tr>
+                <tr>
+                  <td align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>
+                  <td align="left" class="black_ar"><bean:message key="eventparameters.dateofevent"/></td>
+                  <td align="left">
+			  <logic:notEmpty name="currentEventParametersDate">
+				<ncombo:DateTimeComponent name="dateOfEvent"
+					 id="dateOfEvent"
+					 formName="fluidSpecimenReviewEventParametersForm"
+			                 month='${requestScope.eventParametersMonth}'
+					 year='${requestScope.eventParametersYear}'
+					 day='${requestScope.eventParametersDay}'
+					 value='${requestScope.currentEventParametersDate}'
+					 styleClass="black_ar" />
+			  </logic:notEmpty>
+			  <logic:empty name="currentEventParametersDate">
+				<ncombo:DateTimeComponent name="dateOfEvent"
+					  id="dateOfEvent"
+					  formName="fluidSpecimenReviewEventParametersForm"
+					  styleClass="black_ar"	/>
+			  </logic:empty>
+			  <span class="grey_ar_s"><bean:message key="page.dateFormat" /></span></td>
+                </tr>
+                <tr>
+                  <td align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>
+                  <td align="left" class="black_ar"><bean:message key="eventparameters.time"/></td>
+                  <td align="left"><span class="black_ar">
+			<autocomplete:AutoCompleteTag property="timeInHours"
+				optionsList = '${requestScope.hourList}'
+				initialValue='${fluidSpecimenReviewEventParametersForm.timeInHours}'
+				styleClass="black_ar"
+				staticField="false" size="3" />	&nbsp;<bean:message key="eventparameters.timeinhours"/>&nbsp;&nbsp;
+			<autocomplete:AutoCompleteTag property="timeInMinutes"
+			   optionsList = '${requestScope.minutesList}'
+			   initialValue='${fluidSpecimenReviewEventParametersForm.timeInMinutes}'
+			   styleClass="black_ar"
+			   staticField="false" size="3" />	                  
+			   &nbsp;<bean:message key="eventparameters.timeinminutes"/></span></td>
+                </tr>  
 
-		<tr>
-			<td>
-				<html:hidden property="specimenId" value='${requestScope.specimenId}'/>
-			</td>
-		</tr>
-		
-		<tr>
-			 <td class="formMessage" colspan="3">* indicates a required field</td>
-		</tr>
-		
-		<tr>
-			<td class="formTitle" height="20" colspan="3">
-				<logic:equal name="operation" value='${requestScope.addForJSP}'>
-					<bean:message key="fluidspecimenrevieweventparameters.title"/>
-				</logic:equal>
-				<logic:equal name="operation" value='${requestScope.editForJSP}'>
-					<bean:message key="fluidspecimenrevieweventparameters.edittitle"/>
-				</logic:equal>
-			</td>
-		</tr>
-		<!-- Name of the fluidspecimenrevieweventparameters -->
-<!-- User -->		
-		<tr>
-			<td class="formRequiredNotice" width="5">*</td>
-			<td class="formRequiredLabel">
-				<label for="type">
-					<bean:message key="eventparameters.user"/> 
-				</label>
-			</td>
-			<td class="formField">
-<!-- Mandar : 434 : for tooltip -->
-				<html:select property="userId" styleClass="formFieldSized" styleId="userId" size="1"
-				 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-					<html:options collection='${requestScope.userListforJSP}' labelProperty="name" property="value"/>
-				</html:select>
-			</td>
-		</tr>
-
-<!-- date -->		
-		<tr>
-			<td class="formRequiredNotice" width="5">*</td>
-			<td class="formRequiredLabel">
-				<label for="type">
-					<bean:message key="eventparameters.dateofevent"/> 
-				</label>
-			</td>
-			<td class="formField">
-<logic:notEmpty name="currentEventParametersDate">
-<ncombo:DateTimeComponent name="dateOfEvent"
-			  id="dateOfEvent"
-			  formName="fluidSpecimenReviewEventParametersForm"
-			                  month='${requestScope.eventParametersMonth}'
-							  year='${requestScope.eventParametersYear}'
-							  day='${requestScope.eventParametersDay}'
-							  value='${requestScope.currentEventParametersDate}'
-			  styleClass="formDateSized10"
-					/>
-</logic:notEmpty>
-<logic:empty name="currentEventParametersDate">
-<ncombo:DateTimeComponent name="dateOfEvent"
-			  id="dateOfEvent"
-			  formName="fluidSpecimenReviewEventParametersForm"
-			  styleClass="formDateSized10"
-					/>
-</logic:empty>
-
-<bean:message key="page.dateFormat" />&nbsp;
-
-
-			</td>
-		</tr>		
-		
-		<!-- hours & minutes -->		
-		<!-- 
-			 Bug ID:  AutocompleteBugID
-			 Patch ID: AutocompleteBugID_7
-			 Description: html:select tag is replaced by Autocomplete
-	   -->	
-		<tr>
-			<td class="formRequiredNotice" width="5">*</td>
-			<td class="formRequiredLabel">
-				<label for="eventparameters.time">
-					<bean:message key="eventparameters.time"/>
-				</label>
-			</td>
-			<td class="formField">
-				<autocomplete:AutoCompleteTag property="timeInHours"
-					  optionsList = '${requestScope.hourList}'
-					   initialValue='${fluidSpecimenReviewEventParametersForm.timeInHours}'
-					  styleClass="formFieldSized5"
-					  staticField="false"
-			    />	
-				&nbsp;
-				<label for="eventparameters.timeinhours">
-					<bean:message key="eventparameters.timeinhours"/>&nbsp; 
-				</label>
-                   <autocomplete:AutoCompleteTag property="timeInMinutes"
-						 optionsList = '${requestScope.minutesList}'
-						  initialValue='${fluidSpecimenReviewEventParametersForm.timeInMinutes}'
-						  styleClass="formFieldSized5"
-						  staticField="false"
-				    />	
-				<label for="eventparameters.timeinminutes">
-					&nbsp;<bean:message key="eventparameters.timeinminutes"/> 
-				</label>
-			</td>
-		</tr>
-
-
-<!-- cellCount -->		
-		<tr>
-			<td class="formRequiredNotice" width="5">&nbsp;</td>
-			<td class="formLabel">
-				<label for="cellCount">
-					<bean:message key="fluidspecimenrevieweventparameters.cellcount"/> 
-				</label>
-			</td>
-			<td class="formField">
-				<html:text styleClass="formDateSized"  maxlength="10" size="35" styleId="cellCount" property="cellCount" />
-			</td>
-		</tr>
-
-<!-- comments -->		
-		<tr>
-			<td class="formRequiredNotice" width="5">&nbsp;</td>
-			<td class="formLabel">
-				<label for="comments">
-					<bean:message key="eventparameters.comments"/> 
-				</label>
-			</td>
-			<td class="formField">
-				<html:textarea styleClass="formFieldSized"  styleId="comments" property="comments" />
-			</td>
-		</tr>
-
-<!-- buttons -->
-		<tr>
-		  <td align="right" colspan="3">
-			<!-- action buttons begins -->
+<!-- Mandar : For cellcount Start -->
+                <tr>
+                  <td align="center" class="black_ar">&nbsp;</td>
+                  <td align="left" class="black_ar">
+			<label for="cellCount">
+			<bean:message key="fluidspecimenrevieweventparameters.cellcount"/> 
+			</label></td>
+                  <td align="left">
+			<html:text styleClass="black_ar"  maxlength="10" size="35" styleId="cellCount" property="cellCount" />
+		  </td>
+                </tr>
+<!-- Mandar : For procedure End -->
+                <tr>
+                  <td align="center" class="black_ar">&nbsp;</td>
+                  <td align="left" valign="top" class="black_ar"><bean:message key="eventparameters.comments"/></td><td align="left"><html:textarea styleClass="black_ar" cols="32" rows="4" styleId="comments" property="comments" /></td>
+                </tr>
+          </table></td>
+        </tr>
+        <tr >
+          <td class="buttonbg">
+		  <html:submit styleClass="blue_ar_b" value="Submit" onclick='${requestScope.changeAction}' />
+            &nbsp;|&nbsp;
+			<html:link	page="/QueryManageBioSpecimen.do" styleClass="cancellink">
+				<bean:message key="buttons.cancel" />
+			</html:link>
 			
-			<table cellpadding="4" cellspacing="0" border="0">
-				<tr>
-					<td>
-						<html:submit styleClass="actionButton" value="Submit" onclick='${requestScope.changeAction}'/>
-					</td>
-					<%-- td><html:reset styleClass="actionButton"/></td --%> 
-				</tr>
-			</table>
-			<!-- action buttons end -->
 			</td>
-		</tr>
-
-		</table>
-		
-	  </td>
-	 </tr>
-
-	 <!-- NEW fluidspecimenrevieweventparameters ends-->
-	 
-	 </html:form>
- </table>
+        </tr>
+      </table></td>
+  </tr>
+  	 </html:form>
+</table>
