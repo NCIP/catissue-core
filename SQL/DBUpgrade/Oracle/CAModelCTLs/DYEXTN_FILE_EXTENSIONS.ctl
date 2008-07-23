@@ -1,4 +1,6 @@
-LOAD DATA INFILE 'H://caTissue//work//workspace//catissuecoreNew/SQL/DBUpgrade/Common/CAModelCSVs/DYEXTN_FILE_EXTENSIONS.csv' 
+LOAD DATA INFILE 'D://Nightly_Build//projects//catissuecore/SQL/DBUpgrade/Common/CAModelCSVs/DYEXTN_FILE_EXTENSIONS.csv' 
+BADFILE '/sample.bad'
+DISCARDFILE '/sample.dsc'
 APPEND 
 INTO TABLE DYEXTN_FILE_EXTENSIONS 
 FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"'

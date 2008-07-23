@@ -5,7 +5,7 @@
 <beans>
   <bean id="remoteService" class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">
     <property name="serviceUrl">
-      <value>http://@@HOST@@:@@PORT@@/catissuecore/http/remoteService</value>
+      <value>http://localhost:18080/catissuecore/http/remoteService</value>
     </property>
     <property name="serviceInterface">
       <value>gov.nih.nci.system.comm.common.ApplicationServiceProxy</value>

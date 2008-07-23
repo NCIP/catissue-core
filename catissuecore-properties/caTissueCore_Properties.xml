@@ -108,12 +108,12 @@
 	
 	<property>
 		<name>email.administrative.emailAddress</name>
-		<value>catissue@persistent.co.in</value>
+		<value>catissue_qa@persistent.co.in</value>
 	</property>
 	
 	<property>
 		<name>email.sendEmailFrom.emailAddress</name>
-		<value>catissue@persistent.co.in</value>
+		<value>catissue_qa@persistent.co.in</value>
 	</property>
 	
 	<property>

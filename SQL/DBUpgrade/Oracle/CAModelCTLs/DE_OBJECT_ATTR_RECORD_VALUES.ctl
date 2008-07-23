@@ -1,4 +1,6 @@
-LOAD DATA INFILE 'H://caTissue//work//workspace//catissuecoreNew/SQL/DBUpgrade/Common/CAModelCSVs/DE_OBJECT_ATTR_RECORD_VALUES.csv' 
+LOAD DATA INFILE 'D://Nightly_Build//projects//catissuecore/SQL/DBUpgrade/Common/CAModelCSVs/DE_OBJECT_ATTR_RECORD_VALUES.csv' 
+BADFILE '/sample.bad'
+DISCARDFILE '/sample.dsc'
 APPEND 
 INTO TABLE DE_OBJECT_ATTR_RECORD_VALUES 
 FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"'
