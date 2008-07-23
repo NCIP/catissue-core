@@ -473,7 +473,7 @@
 		<copy file="Oracle_DB_Creation.sql" todir="${zip.dir}" overwrite="true" />
 		<copy file="DBValidate_Suite1.0.sql" todir="${zip.dir}" overwrite="true" />
 		<copy file="DBValidate_V1.2.0.1.sql" todir="${zip.dir}" overwrite="true" />
-		<copy file="Sample-log4j.xml" todir="${zip.dir}" overwrite="true" />
+		<!-- <copy file="Sample-log4j.xml" todir="${zip.dir}" overwrite="true" /> -->
 		<copy file="Sample-login-config.xml" todir="${zip.dir}" overwrite="true" />
 		<copy file="Sample-properties-service.xml" todir="${zip.dir}" overwrite="true" />
 		
