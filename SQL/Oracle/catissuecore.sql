@@ -456,7 +456,6 @@ create table CATISSUE_USER (
    CSM_USER_ID number(19,0),
    STATUS_COMMENT varchar2(500),
    FIRST_TIME_LOGIN number(1,0) default 1,
-   IS_ADMIN number(1,0) default 0,
    primary key (IDENTIFIER)
 );
 create table CATISSUE_TIS_SPE_EVENT_PARAM (
