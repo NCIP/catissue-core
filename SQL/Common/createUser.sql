@@ -1,6 +1,6 @@
-insert into catissue_department values(1,'abc');
-insert into catissue_institution  values(1,'xyz');
-insert into catissue_cancer_research_group  values(1,'aaa');
+insert into catissue_department values(1,'Dept');
+insert into catissue_institution  values(1,'Inst');
+insert into catissue_cancer_research_group  values(1,'CRG');
 insert into catissue_address (identifier,state,country,zipcode) values(1,null,null,null);
 
 UPDATE CSM_USER SET LOGIN_NAME='admin@admin.com',
