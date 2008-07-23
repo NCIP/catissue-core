@@ -208,7 +208,7 @@ function handleStatus(status)
                 <tr>
                   <td width="1%" align="center" class="black_ar">&nbsp;</td>
                   <td width="16%" align="left" class="black_ar"><bean:message key="user.adminUser" /></td>
-	              <td align="left" valign="top" class="black_ar"><html:radio styleClass="black_ar" styleId="adminuser" property="adminuser" value="true" ><label for="siteId"><bean:message key="user.yes"/></label> &nbsp  &nbsp &nbsp &nbsp  </html:radio><html:radio styleClass="black_ar" styleId="adminuser1" property="adminuser" value="false"><label for="siteId"><bean:message key="user.no"/></label></html:radio></td>
+	              <td align="left" valign="top" class="black_ar"><html:radio styleClass="black_ar" styleId="adminuser" property="role" value="1"><label for="siteId"><bean:message key="user.yes"/></label> &nbsp  &nbsp &nbsp &nbsp  </html:radio><html:radio styleClass="black_ar" styleId="adminuser1" property="role" value="7" ><label for="siteId"><bean:message key="user.no"/></label></html:radio></td>
 				</tr>
 				<tr>
 				<td width="1%" height="25" align="left" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory"	width="6" height="6" hspace="0" vspace="0" /></span></td>												
