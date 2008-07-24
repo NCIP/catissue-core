@@ -27,6 +27,7 @@ public class SpecimenBean implements Externalizable
 
 	public String specimenLabel = "";
 	public String specimenBarcode = "";
+	public String lineage = "";
 
 	public String specimenClass = "";
 	public String specimenType = "";
@@ -179,6 +180,7 @@ public class SpecimenBean implements Externalizable
 		out.writeUTF(parentName);
 		out.writeUTF(specimenLabel);
 		out.writeUTF(specimenBarcode);
+		out.writeUTF(lineage);
 		out.writeUTF(specimenClass);
 		out.writeUTF(specimenType);
 		out.writeUTF(tissueSite);
@@ -210,6 +212,7 @@ public class SpecimenBean implements Externalizable
 		parentName = in.readUTF();
 		specimenLabel = in.readUTF();
 		specimenBarcode = in.readUTF();
+		lineage = in.readUTF();
 		specimenClass = in.readUTF();
 		specimenType = in.readUTF();
 		tissueSite = in.readUTF();
@@ -234,9 +237,19 @@ public class SpecimenBean implements Externalizable
 	public String toString()
 	{
 		return "spID " + spID + "\n" + "parentName " + parentName + "\n" + "specimenLabel "
-				+ specimenLabel + "\n" + "specimenBarcode " + specimenBarcode + "\n" + "specimenClass " + specimenClass + "\n" + "specimenType "
+				+ specimenLabel + "\n" + "specimenBarcode " + specimenBarcode + "\n" + "lineage " + lineage +"\n" + "specimenClass " + specimenClass + "\n" + "specimenType "
 				+ specimenType + "\n" + "tissueSite " + tissueSite + "\n" + "tissueSide " + tissueSide + "\n" + "pathologicalStatus "
 				+ pathologicalStatus + "\n" + "creationDate " + creationDate + "\n" + "quantity " + quantity + "\n" + "concentration "
 				+ concentration + "\n" + "comment " + comment + "\n" + "exIdColl " + exIdColl + "\n" + "collEvent " + collectionEvent;
+	}
+
+
+	public String getLineage() {
+		return lineage;
+	}
+
+
+	public void setLineage(String lineage) {
+		this.lineage = lineage;
 	}
 }

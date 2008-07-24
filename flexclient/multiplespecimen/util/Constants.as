@@ -63,6 +63,8 @@ package util
 		
 		public static const NEW_SPECIMEN:String = "New_Specimen";
 		public static const DERIVED_SPECIMEN:String = "Derived_Specimen";
+		public static const DERIVED:String = "Derived";
+		public static const ALIQUOT:String = "Aliquot";
 		
 		public static const SELECT:String = "-- Select --";										
 														  								        

@@ -604,8 +604,9 @@ public class FlexInterface
 			Iterator itr = specimenIdList.iterator();
 			while (itr.hasNext())
 			{
-				String specimenId = (String) itr.next();
-				Object object = bizLogic.retrieve(Specimen.class.getName(), new Long(specimenId));
+				String specimenId = (itr.next()).toString();
+				Object object = bizLogic.retrieve(Specimen.class.getName(), Long.valueOf(specimenId));
+				//Object object = bizLogic.retrieve(Specimen.class.getName(), new Long(specimenId));
 				if (object != null)
 				{
 					Specimen specimen = (Specimen) object;
@@ -622,8 +623,7 @@ public class FlexInterface
 					viewSpecimenMap.put("" + i, sdb);
 					i++;
 				}
-
-			}
+				}
 		}
 		if (session.getAttribute(edu.wustl.catissuecore.util.global.Constants.SPECIMEN_LIST_SESSION_MAP) != null)
 		{
@@ -644,6 +644,8 @@ public class FlexInterface
 			sb.specimenLabel = specimen.getLabel();
 		if (specimen.getBarcode() != null)
 			sb.specimenBarcode = specimen.getBarcode();
+		if (specimen.getLineage() != null)
+			sb.lineage = specimen.getLineage();
 		if (specimen.getClassName() != null)
 			sb.specimenClass = specimen.getClassName();
 		if (specimen.getSpecimenType() != null)
@@ -674,6 +676,10 @@ public class FlexInterface
 		{
 		//	sb.exIdColl = new ArrayList(specimen.getExternalIdentifierCollection());
 			sb.exIdColl = getExternalIdentiferBeanCollection(specimen.getExternalIdentifierCollection());
+		}
+		if(specimen.getClassName().equalsIgnoreCase("Molecular"))
+		{
+			sb.concentration=((MolecularSpecimen)specimen).getConcentrationInMicrogramPerMicroliter();
 		}
 
 		return sb;
@@ -956,6 +962,7 @@ public class FlexInterface
 		specimenDataBean.setQuantity(String.valueOf(sp.getInitialQuantity()));
 		specimenDataBean.setClassName(sp.getClassName());
 		specimenDataBean.setBarCode(sp.getBarcode());
+		specimenDataBean.setLineage(sp.getLineage());
 		specimenDataBean.setComment(sp.getComment());
 		specimenDataBean.setExternalIdentifierCollection(new HashSet<ExternalIdentifier>());
 		specimenDataBean.setExternalIdentifierCollection(sp.getExternalIdentifierCollection());
@@ -970,7 +977,10 @@ public class FlexInterface
 		specimenDataBean.setLineage(sp.getLineage());
 		specimenDataBean.setSpecimenCollectionGroup((SpecimenCollectionGroup) sp.getSpecimenCollectionGroup());
 		specimenDataBean.setSpecimenEventCollection(sp.getSpecimenEventCollection());
-
+		if(sp.getClassName().equalsIgnoreCase("Molecular"))
+		{
+			specimenDataBean.setConcentration(((MolecularSpecimen)sp).getConcentrationInMicrogramPerMicroliter().toString());
+		}
 		if (sp.getSpecimenPosition() != null && sp.getSpecimenPosition().getStorageContainer() != null)
 		{
 			specimenDataBean.setStorageContainerForSpecimen(sp.getSpecimenPosition().getStorageContainer().getName());
@@ -1020,7 +1030,11 @@ public class FlexInterface
 		Double qt = new Double(spBean.quantity);
 		specimen.setInitialQuantity(qt);
 		specimen.setAvailableQuantity(qt);
-		//if(edu.wustl.catissuecore.util.global.Constants.MOLECULAR.equals(spBean.specimenClass))
+		if(edu.wustl.catissuecore.util.global.Constants.MOLECULAR.equals(spBean.specimenClass))
+		{
+			((MolecularSpecimen)specimen).setConcentrationInMicrogramPerMicroliter(Double.valueOf(spBean.getConcentration()));
+			
+		}
 
 		//specimen.setClassName(spBean.specimenClass);
 		specimen.setBarcode(spBean.specimenBarcode);
@@ -1188,7 +1202,7 @@ public class FlexInterface
 		String[] selectColName = {"specimenCollectionGroup"};
 		String[] whereColName = {"id"};
 		String[] whereColCond = {"="};
-		Object[] whereColVal = {spId};
+		Object[] whereColVal = {Long.parseLong(spId)};
 		SpecimenCollectionGroupBizLogic bizLogic = new SpecimenCollectionGroupBizLogic();
 		try
 		{

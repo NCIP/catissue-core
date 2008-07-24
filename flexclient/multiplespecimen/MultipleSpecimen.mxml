@@ -433,6 +433,7 @@
 				specimenDatForEdit.pathologicalStatus = specimenData.pathologicalStatus;
 				specimenDatForEdit.comment = specimenData.comment;
 				specimenDatForEdit.quantity = specimenData.quantity;
+				specimenDatForEdit.concentration = specimenData.concentration;
 				specimenDatForEdit.derivedSpColl = specimenData.derivedSpColl;
 				specimenDatForEdit.exIdColl = specimenData.exIdColl;
 				specimenDatForEdit.biohazardColl = specimenData.biohazardColl;

@@ -31,7 +31,7 @@ package valueobjects
 		public var specimenLabelErrStr:String = null;
 		
 		public var specimenBarcode:String = '';
-		
+		public var lineage:String = '';
 		public var specimenClass:String = '';
 		public var specimenClassErrStr:String = null;
 		public var specimenType:String = '';
@@ -69,7 +69,7 @@ package valueobjects
 			
 			this.specimenLabel = specimenLabel;
 			this.specimenBarcode = specimenBarcode;
-			
+			this.lineage = '';
 			this.specimenClass = 'Fluid';
 			this.specimenType = 'Not Specified';
 			
@@ -105,8 +105,9 @@ package valueobjects
 			this.parentName = spData.parentName;
 			this.specimenLabel = spData.specimenLabel;
 			this.specimenBarcode = spData.specimenBarcode;
+			this.lineage = spData.lineage;
 			this.specimenClass = spData.specimenClass;
-	
+			
 			this.specimenType = spData.specimenType;
 			
 			this.tissueSite = spData.tissueSite;
@@ -285,6 +286,7 @@ package valueobjects
 			output.writeUTF(parentName);
 			output.writeUTF(specimenLabel);
 			output.writeUTF(specimenBarcode);
+			output.writeUTF(lineage);
 			output.writeUTF(specimenClass);
 			output.writeUTF(specimenType);
 			output.writeUTF(tissueSite);
@@ -311,6 +313,7 @@ package valueobjects
 			parentName = input.readUTF();
 			specimenLabel = input.readUTF();
 			specimenBarcode = input.readUTF();
+			lineage = input.readUTF();
 			specimenClass = input.readUTF();
 			specimenType = input.readUTF();
 			tissueSite = input.readUTF();

@@ -51,6 +51,12 @@
 		{
 			bindData();
 		
+			if(spData.lineage == Constants.DERIVED || spData.lineage == Constants.ALIQUOT)
+			{
+				tissueSiteBox.enabled = false;
+				tissueSideBox.enabled = false;
+				pathStatusBox.enabled = false;
+			}
 			if(spData.specimenClass == Constants.MOLECULAR)
 			{
 				spConcentration.enabled = true;
@@ -70,7 +76,7 @@
 			if(mspParameter.mode == MSPParameter.MODE_PARAM_VAL_EDIT)
 			{
 				spParentNameBox.visible = false;
-				spParentNameBox.height = 0.
+				spParentNameBox.height = 0;
 				storageContBox.visible= false;
 				storageContBox.height = 0;
 					
