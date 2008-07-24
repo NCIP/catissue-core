@@ -36,10 +36,11 @@
 							valueToSet = fields[i].value;
 							isFirstField = false;
 						}
-						if(fields[i].value=="")
-						{
 							fields[i].value = valueToSet;
-						}
+					}
+					else if(text.indexOf(type)>=0 && text.indexOf("[0]")<0 &&(text.indexOf(".positionDimensionOne")>=0 || text.indexOf(".positionDimensionTwo")>=0))
+					{
+					 fields[i].value = "";
 					}
 				}
 			}
