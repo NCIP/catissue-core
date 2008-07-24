@@ -222,7 +222,8 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 				.getChildSpecimenCollection();
 		if (childrenCollection == null)
 		{
-			childrenCollection = new HashSet<AbstractSpecimen>();
+			childrenCollection = new LinkedHashSet<AbstractSpecimen>();
+			//childrenCollection = new HashSet<AbstractSpecimen>();
 		}
 		if (!childrenCollection.contains(SpecimenRequirement))
 		{
@@ -1233,7 +1234,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	 * To get PrivilegeName for authorization check from 'PermissionMapDetails.xml'
 	 * (non-Javadoc)
 	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getPrivilegeName(java.lang.Object)
-	 */
+	 */ 
 	protected String getPrivilegeKey(Object domainObject)
     {
     	return Constants.ADD_EDIT_CP;

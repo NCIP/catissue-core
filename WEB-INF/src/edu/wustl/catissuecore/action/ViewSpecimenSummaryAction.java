@@ -1,6 +1,7 @@
 package edu.wustl.catissuecore.action;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -25,6 +26,7 @@ import edu.wustl.catissuecore.bean.CollectionProtocolBean;
 import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
 import edu.wustl.catissuecore.bean.GenericSpecimen;
 import edu.wustl.catissuecore.exception.CatissueException;
+import edu.wustl.catissuecore.util.IdComparator;
 import edu.wustl.catissuecore.util.SpecimenDetailsTagUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
@@ -604,6 +606,10 @@ public class ViewSpecimenSummaryAction extends Action {
 		if (!specimenColl.isEmpty())
 		{
 			specimenList.addAll(specimenColl);
+			
+			IdComparator speciemnIdComp = new IdComparator();
+			Collections.sort(specimenList,speciemnIdComp);
+
 		}
 		return specimenList;
 	}	

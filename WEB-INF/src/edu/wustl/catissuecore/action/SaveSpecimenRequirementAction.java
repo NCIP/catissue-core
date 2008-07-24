@@ -1,8 +1,10 @@
 package edu.wustl.catissuecore.action;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,6 +21,7 @@ import edu.wustl.catissuecore.actionForm.CreateSpecimenTemplateForm;
 import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
 import edu.wustl.catissuecore.bean.DeriveSpecimenBean;
 import edu.wustl.catissuecore.bean.SpecimenRequirementBean;
+import edu.wustl.catissuecore.util.IdComparator;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.util.MapDataParser;
@@ -268,6 +271,10 @@ public class SaveSpecimenRequirementAction extends BaseAction
 			if(deriveSpecimenMap!=null&&deriveSpecimenMap.size()!=0)
 			{
 				deriveSpecimenCollection = parser.generateData(deriveSpecimenMap);
+				// for ordering 
+				IdComparator deriveSpBeanComp = new IdComparator();
+				Collections.sort((List)deriveSpecimenCollection,deriveSpBeanComp);
+
 				deriveSpecimenMap = getderiveSpecimen(deriveSpecimenCollection,createSpecimenTemplateForm,specimenRequirementBean.getUniqueIdentifier());
 			}
 			

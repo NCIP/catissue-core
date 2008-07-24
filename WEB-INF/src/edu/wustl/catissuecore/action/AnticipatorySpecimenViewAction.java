@@ -1,8 +1,12 @@
 package edu.wustl.catissuecore.action;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,6 +29,7 @@ import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.catissuecore.util.IdComparator;
 import edu.wustl.catissuecore.util.SpecimenAutoStorageContainer;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
@@ -103,8 +108,19 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 
 		eventBean.setUniqueIdentifier(String.valueOf(specimencollectionGroup.getId().longValue()));
 
+
+		// sorting of specimen collection accoding to id 
+	
+		List<Specimen> specimenList = new ArrayList<Specimen>();
+		specimenList.addAll(specimencollectionGroup.getSpecimenCollection());
+		Comparator spIdComp = new IdComparator();
+		Collections.sort(specimenList,spIdComp);
 		eventBean.setSpecimenRequirementbeanMap(getSpecimensMap(
-				specimencollectionGroup.getSpecimenCollection(),cpId ));
+				specimenList,cpId ));
+
+		
+		//eventBean.setSpecimenRequirementbeanMap(getSpecimensMap(
+			//	specimencollectionGroup.getSpecimenCollection(),cpId ));
 
 		String globalSpecimenId = "E"+eventBean.getUniqueIdentifier() + "_";
 		cpEventMap.put(globalSpecimenId, eventBean);			

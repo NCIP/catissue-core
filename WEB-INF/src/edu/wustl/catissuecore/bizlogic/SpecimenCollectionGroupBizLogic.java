@@ -205,7 +205,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		newSpecimen.setSpecimenCollectionGroup(specimenCollectionGroup);
 		newSpecimen.setConsentTierStatusCollectionFromSCG(specimenCollectionGroup);
 
-		Collection childrenSpecimenCollection = reqSpecimen.getChildSpecimenCollection();
+		/*Collection childrenSpecimenCollection = reqSpecimen.getChildSpecimenCollection();
 		if (childrenSpecimenCollection != null && !childrenSpecimenCollection.isEmpty())
 		{
 			Collection childrenSpecimen = new LinkedHashSet();
@@ -217,7 +217,26 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 				childrenSpecimen.add(newchildSpecimen);
 			}
 			newSpecimen.setChildSpecimenCollection(childrenSpecimen);
+		}*/
+		Collection childrenSpecimenCollection = reqSpecimen.getChildSpecimenCollection();
+		List childrenspecimenList = new LinkedList(childrenSpecimenCollection);
+		CollectionProtocolUtil.getSortedCPEventList(childrenspecimenList);
+
+		
+		if (childrenspecimenList != null && !childrenspecimenList.isEmpty())
+		{
+			Collection childrenSpecimen = new LinkedHashSet();
+			Iterator<SpecimenRequirement> it = childrenspecimenList.iterator();
+			while (it.hasNext())
+			{
+				SpecimenRequirement childSpecimen = it.next();
+				Specimen newchildSpecimen = getCloneSpecimen(childSpecimen, newSpecimen, specimenCollectionGroup, userId);
+				childrenSpecimen.add(newchildSpecimen);
+			}
+			newSpecimen.setChildSpecimenCollection(childrenSpecimen);
 		}
+		
+		
 
 		return newSpecimen;
 	}

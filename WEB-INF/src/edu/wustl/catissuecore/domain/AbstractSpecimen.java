@@ -10,6 +10,7 @@ package edu.wustl.catissuecore.domain;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import edu.wustl.catissuecore.util.global.Constants;
@@ -40,7 +41,7 @@ public abstract class AbstractSpecimen extends AbstractDomainObject implements S
 	/**
 	 * Collection of children specimens derived from this specimen. 
 	 */
-	protected Collection<AbstractSpecimen> childSpecimenCollection = new HashSet<AbstractSpecimen>();
+	protected Collection<AbstractSpecimen> childSpecimenCollection = new LinkedHashSet<AbstractSpecimen>();
 
 	/**
 	 * The combined anatomic state and pathological disease classification of a specimen.

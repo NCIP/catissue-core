@@ -326,7 +326,8 @@ if(form != null)
 		//spreqno.className="formFieldNoBordersSimple";
 		
 		var srIdentifier = "deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_id)";
-		var cell1 = "<input type='hidden' name='" + srIdentifier + "' value='' id='" + srIdentifier + "'>";
+		var cell1 = "<input type='hidden' name='" + srIdentifier + "' value='"+rowno+"' id='" + srIdentifier + "'>";
+
 		//spreqno.innerHTML="" + rowno+"." + cell1;
 		
 		//type
