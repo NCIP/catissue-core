@@ -659,14 +659,15 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 						if (form.getStContSelection() == 2)
 						{
 							long stContainerId = Long.parseLong(form.getStorageContainer());
-							this.specimenPosition.storageContainer.setId(stContainerId);
-							if(this.specimenPosition == null)
-							{
-								this.specimenPosition = new SpecimenPosition();
-							}
-							this.specimenPosition.positionDimensionOne = new Integer(form.getPositionDimensionOne());
-							this.specimenPosition.positionDimensionTwo = new Integer(form.getPositionDimensionTwo());
-							this.specimenPosition.specimen = this;
+								this.specimenPosition.storageContainer.setId(stContainerId);
+								if(this.specimenPosition == null)
+								{
+									this.specimenPosition = new SpecimenPosition();
+								}
+								this.specimenPosition.positionDimensionOne = new Integer(form.getPositionDimensionOne());
+								this.specimenPosition.positionDimensionTwo = new Integer(form.getPositionDimensionTwo());
+								this.specimenPosition.specimen = this;
+							
 						//	this.specimenPosition.storageContainer = this.storageContainer;
 						}
 						else if (form.getStContSelection() == 3)
@@ -692,21 +693,56 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 						if(this.specimenPosition == null)
 						{
 							this.specimenPosition = new SpecimenPosition();
+							this.specimenPosition.storageContainer = new StorageContainer();
+					
+								if (form.getStContSelection() == 1)
+								{
+							
+									this.specimenPosition = null;							
+								}
+								if (form.getStContSelection() == 2)
+								{
+									long stContainerId = Long.parseLong(form.getStorageContainer());
+								/*	if (this.specimenPosition == null || this.specimenPosition.storageContainer == null)
+										{
+											this.specimenPosition = new SpecimenPosition();
+											this.specimenPosition.storageContainer = new StorageContainer();
+										}*/
+										this.specimenPosition.storageContainer.setId(stContainerId);
+										this.specimenPosition.positionDimensionOne = new Integer(form.getPositionDimensionOne());
+										this.specimenPosition.positionDimensionTwo = new Integer(form.getPositionDimensionTwo());
+										this.specimenPosition.specimen = this;
+								}
+								else if (form.getStContSelection() == 3)
+								{
+								
+									if (form.getPos1() != null && !form.getPos1().trim().equals("") && form.getPos2() != null
+											&& !form.getPos2().trim().equals(""))
+									{
+										/*if (this.specimenPosition == null || this.specimenPosition.storageContainer == null)
+										{
+											this.specimenPosition = new SpecimenPosition();
+											this.specimenPosition.storageContainer = new StorageContainer();
+										}*/
+										this.specimenPosition.storageContainer.setName(form.getSelectedContainerName());
+										this.specimenPosition.positionDimensionOne = new Integer(form.getPos1());
+										this.specimenPosition.positionDimensionTwo = new Integer(form.getPos2());
+										this.specimenPosition.specimen = this;
+				
+									}
+								}
+								else
+								{
+									this.specimenPosition = null;
+								}
 						}
-						if (!validator.isEmpty(form.getSelectedContainerName()))
+						else
 						{
-							//this.storageContainer = new StorageContainer();
 							this.specimenPosition.storageContainer.setName(form.getSelectedContainerName());
 							this.specimenPosition.positionDimensionOne = new Integer(form.getPositionDimensionOne());
 							this.specimenPosition.positionDimensionTwo = new Integer(form.getPositionDimensionTwo());
 							this.specimenPosition.specimen = this;
-					//		this.specimenPosition.storageContainer = this.storageContainer;
-						}
-						else
-						{
-						//	this.storageContainer = null;
-							this.specimenPosition = null;
-						
+							
 						}
 					}
 

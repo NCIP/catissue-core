@@ -1583,13 +1583,62 @@
 											
 											<%
 												NewSpecimenForm newSpecimenForm = (NewSpecimenForm) request.getAttribute("newSpecimenForm");
-												if(newSpecimenForm.getStContSelection() == 1)
-												{%><tr>
-											<td colspan="3" class="black_ar"><bean:message key="specimen.virtualLocation" /></td></tr><%}
+												if(newSpecimenForm.getCollectionStatus().equals("Pending"))//||errorsInInsertion!=null )
+												{%>
+												<tr>
+													<td class="tabletd1"><html:radio value="1" onclick="onRadioButtonGroupClick(this)" styleId="stContSelection" property="stContSelection"/></td>
+														<td class="black_ar tabletd1">																			
+														<bean:message key="specimen.virtuallyLocated" />											
+													</td>
+												</tr>								
+												<tr>
+												<td class="tabletd1"><html:radio value="2" onclick="onRadioButtonGroupClick(this)" styleId="stContSelection" property="stContSelection"/></td>
+											<td class="black_ar tabletd1">
+													<ncombo:nlevelcombo dataMap="<%=dataMap%>" 
+														attributeNames="<%=attrNames%>" 
+														tdStyleClassArray="<%=tdStyleClassArray%>"
+														initialValues="<%=initValues%>"  
+														styleClass = "<%=styClass%>" 
+														tdStyleClass = "<%=tdStyleClass%>" 
+														labelNames="<%=labelNames%>" 
+														rowNumber="<%=rowNumber%>" 
+														onChange = "<%=onChange%>"
+														formLabelStyle="formLabelBorderless"
+														disabled = "<%=dropDownDisable%>"
+														noOfEmptyCombos = "<%=noOfEmptyCombos%>"/>
+														</tr>
+														</table>
+												</td>
+											</tr>
+													<tr>	
+												<td class="tabletd1"><html:radio value="3" onclick="onRadioButtonGroupClick(this)" styleId="stContSelection" property="stContSelection"/></td>
+												<td class="formFieldNoBordersSimple">
+													<html:text styleClass="black_ar"  size="30" styleId="selectedContainerName" property="selectedContainerName" disabled= "<%=textBoxDisable%>"/>
+													<html:text styleClass="black_ar"  size="5" styleId="pos1" property="pos1" disabled= "<%=textBoxDisable%>"/>
+													<html:text styleClass="black_ar"  size="5" styleId="pos2" property="pos2" disabled= "<%=textBoxDisable%>"/>
+													<html:button styleClass="blue_ar_g" property="containerMap" onclick="<%=buttonOnClicked%>" disabled= "<%=textBoxDisable%>">
+														<bean:message key="buttons.map"/>
+													</html:button>
+												</td>
+													</tr>	
+													
+												
+												<%}									
 												else
-												{
-												%>
-												<tr>											
+												{	
+												if((newSpecimenForm.getStorageContainer().equals("")||newSpecimenForm.getStorageContainer().equals("-1"))&&newSpecimenForm.getCollectionStatus().equals("Collected"))//||errorsInInsertion!=null )
+												{%>
+												<tr>
+													<td class="tabletd1"><html:radio value="1" onclick="onRadioButtonGroupClickForDerived(this)" styleId="stContSelection" property="stContSelection"/></td>
+														<td class="black_ar tabletd1">																			
+														<bean:message key="specimen.virtuallyLocated" />											
+													</td>
+												</tr>		
+													<%
+												}
+													else{
+													%>																
+													<tr>											
 														<td class="tabletd1" colspan="3">
 															<html:text styleClass="black_ar"  size="30" styleId="selectedContainerName" property="selectedContainerName" readonly= "true"/>
 															<html:text styleClass="black_ar"  size="5" styleId="positionDimensionOne" property="positionDimensionOne" readonly= "true"/>
@@ -1598,11 +1647,9 @@
 																<bean:message key="buttons.map"/>
 															</html:button>
 														</td>
-														</tr>									
-												<%
-												}
-												
-											%>
+													</tr>		
+													<% }
+											}%>
 											
 											</logic:notEqual>	
 											

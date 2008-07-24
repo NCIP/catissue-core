@@ -962,6 +962,12 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 				storageContainerIds.clear();
 			}
 	}
+	
+	  protected  void postUpdate(DAO dao,Object currentObj,Object oldObj , SessionDataBean sessionDataBean) throws BizLogicException, UserNotAuthorizedException
+	  {
+		  	Map containerMap = getStorageContainerMap();
+			updateStorageLocations((TreeMap) containerMap, (Specimen) currentObj);
+	  }
 
 	/**
 	 * @param dao DAO object

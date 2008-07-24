@@ -35,6 +35,7 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
+import edu.wustl.catissuecore.actionForm.SpecimenForm;
 import edu.wustl.catissuecore.bizlogic.AnnotationUtil;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
@@ -524,61 +525,7 @@ public class NewSpecimenAction extends SecureAction
 					&& specimenForm.getClassName() != null && !specimenForm.getClassName().equals("") && !specimenForm.getClassName().equals("-1"))
 			{
 				//Logger.out.debug("before retrieval of spCollGroupList inside specimen action ^^^^^^^^^^^");
-				String[] selectColumnName = {"collectionProtocolRegistration.collectionProtocol.id"};
-				String[] whereColumnName = {"name"};
-				String[] whereColumnCondition = {"="};
-				String[] whereColumnValue = {specimenForm.getSpecimenCollectionGroupName()};
-				List spCollGroupList = bizLogic.retrieve(SpecimenCollectionGroup.class.getName(), selectColumnName, whereColumnName,
-						whereColumnCondition, whereColumnValue, null);
-				//Logger.out.debug("after retrieval of spCollGroupList inside specimen action ^^^^^^^^^^^");
-				if (spCollGroupList!=null && !spCollGroupList.isEmpty())
-				{
-					//					Object []spCollGroup = (Object[]) spCollGroupList
-					//							.get(0);
-					long cpId = ((Long) spCollGroupList.get(0)).longValue();
-					String spClass = specimenForm.getClassName();
-					Logger.out.info("cpId :" + cpId + "spClass:" + spClass);
-					request.setAttribute(Constants.COLLECTION_PROTOCOL_ID, cpId + "");
-					if (virtuallyLocated != null && virtuallyLocated.equals("false"))
-					{
-						specimenForm.setVirtuallyLocated(false);
-					}
-					
-					if(specimenForm.getStContSelection() == 2)
-					{
-					//Logger.out.debug("calling getAllocatedContaienrMapForSpecimen() function from NewSpecimenAction---");
-					 sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
-					containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId, spClass, 0, exceedingMaxLimit, sessionData, true);
-					//Logger.out.debug("exceedingMaxLimit in action for Boolean:"+exceedingMaxLimit);
-					Logger.out.debug("finish ---calling getAllocatedContaienrMapForSpecimen() function from NewSpecimenAction---");
-					ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
-					if (containerMap.isEmpty()) 
-					{
-						
-						if (errors == null || errors.size() == 0)
-						{
-							errors = new ActionErrors();
-						}
-						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("storageposition.not.available"));
-						saveErrors(request, errors);
-					}
-					Logger.out.debug("calling checkForInitialValues() function from NewSpecimenAction---");
-					if (errors == null || errors.size() == 0)
-					{
-						initialValues = StorageContainerUtil.checkForInitialValues(containerMap);
-					}
-					else
-					{
-						String[] startingPoints = new String[3];
-						startingPoints[0] = specimenForm.getStorageContainer();
-						startingPoints[1] = specimenForm.getPositionDimensionOne();
-						startingPoints[2] = specimenForm.getPositionDimensionTwo() ;
-						initialValues = new Vector();
-						initialValues.add(startingPoints);
-					}
-					Logger.out.debug("finish ---calling checkForInitialValues() function from NewSpecimenAction---");
-				}
-				}
+				setContainer(specimenForm, sessionData,bizLogic,request,virtuallyLocated,containerMap,scbizLogic,exceedingMaxLimit,initialValues);
 			}
 		}
 		else
@@ -594,8 +541,12 @@ public class NewSpecimenAction extends SecureAction
 			{
 				Integer id = new Integer(specimenForm.getStorageContainer());
 				String parentContainerName = "";
-				
-				Object object = bizLogic.retrieve(StorageContainer.class.getName(), new Long(specimenForm.getStorageContainer()));
+		
+				Object object=null ;
+				if(id>0)
+				{
+					object=bizLogic.retrieve(StorageContainer.class.getName(), new Long(specimenForm.getStorageContainer()));
+				}
 				if (object != null)
 				{
 					StorageContainer container = (StorageContainer) object;
@@ -631,11 +582,10 @@ public class NewSpecimenAction extends SecureAction
 			Logger.out.info("Starting points[1]" + startingPoints[1]);
 			Logger.out.info("Starting points[2]" + startingPoints[2]);
 			initialValues.add(startingPoints);
-
+			
+			SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA); 
+			setContainer(specimenForm, sessionData,bizLogic,request,virtuallyLocated,containerMap,scbizLogic,exceedingMaxLimit,initialValues);
 		}
-		request.setAttribute("initValues", initialValues);
-		request.setAttribute(Constants.EXCEEDS_MAX_LIMIT, exceedingMaxLimit);
-		request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
 		// -------------------------
 		//Falguni:Performance Enhancement.
 		Long specimenEntityId = null;
@@ -1156,5 +1106,81 @@ public class NewSpecimenAction extends SecureAction
 		}
 		return null;
 		 
+	}
+ /**
+  * 
+  * @param specimenForm   NewSpecimenForm
+  * @param sessionData  The session in which the object is saved
+  * @param bizLogic NewSpecimenBizLogic Object
+  * @param request  request Object
+  * @param virtuallyLocated String  in which virtually located info is saved
+  * @param containerMap  TreeMap
+  * @param scbizLogic StorageContainerBizLogic Object
+  * @param exceedingMaxLimit  max size
+  * @param initialValues  initial value
+  * @throws DAOException Database related Exception
+  */
+	protected void setContainer(NewSpecimenForm specimenForm,SessionDataBean sessionData, NewSpecimenBizLogic bizLogic, 
+			HttpServletRequest request, String virtuallyLocated, TreeMap containerMap, StorageContainerBizLogic scbizLogic,
+			String exceedingMaxLimit, List initialValues) throws DAOException
+	{
+		
+		String[] selectColumnName = {"collectionProtocolRegistration.collectionProtocol.id"}; String[] whereColumnName = {"name"};
+		String[] whereColumnCondition = {"="};
+		String[] whereColumnValue = {specimenForm.getSpecimenCollectionGroupName()};
+		List spCollGroupList = bizLogic.retrieve(SpecimenCollectionGroup.class.getName(), selectColumnName, whereColumnName,
+				whereColumnCondition, whereColumnValue, null);
+		//Logger.out.debug("after retrieval of spCollGroupList inside specimen action ^^^^^^^^^^^");
+		if (spCollGroupList!=null && !spCollGroupList.isEmpty())
+		{
+			//					Object []spCollGroup = (Object[]) spCollGroupList
+			//							.get(0);
+			long cpId = ((Long) spCollGroupList.get(0)).longValue();
+			String spClass = specimenForm.getClassName();
+			Logger.out.info("cpId :" + cpId + "spClass:" + spClass);
+			request.setAttribute(Constants.COLLECTION_PROTOCOL_ID, cpId + "");
+			if (virtuallyLocated != null && virtuallyLocated.equals("false"))
+			{
+				specimenForm.setVirtuallyLocated(false);
+			}
+
+			if(specimenForm.getStContSelection() == 2)
+			{
+				//Logger.out.debug("calling getAllocatedContaienrMapForSpecimen() function from NewSpecimenAction---");
+				sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
+				containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId, spClass, 0, exceedingMaxLimit, sessionData, true);
+				//Logger.out.debug("exceedingMaxLimit in action for Boolean:"+exceedingMaxLimit);
+				Logger.out.debug("finish ---calling getAllocatedContaienrMapForSpecimen() function from NewSpecimenAction---");
+				ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
+				if (containerMap.isEmpty()) 
+				{
+
+					if (errors == null || errors.size() == 0)
+					{
+						errors = new ActionErrors();
+					}
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("storageposition.not.available"));
+					saveErrors(request, errors);
+				}
+				Logger.out.debug("calling checkForInitialValues() function from NewSpecimenAction---");
+				if (errors == null || errors.size() == 0)
+				{
+					initialValues = StorageContainerUtil.checkForInitialValues(containerMap);
+				}
+				else
+				{
+					String[] startingPoints = new String[3];
+					startingPoints[0] = specimenForm.getStorageContainer();
+					startingPoints[1] = specimenForm.getPositionDimensionOne();
+					startingPoints[2] = specimenForm.getPositionDimensionTwo() ;
+					initialValues = new Vector();
+					initialValues.add(startingPoints);
+				}
+				Logger.out.debug("finish ---calling checkForInitialValues() function from NewSpecimenAction---");
+			}
+		}
+		request.setAttribute("initValues", initialValues);
+		request.setAttribute(Constants.EXCEEDS_MAX_LIMIT, exceedingMaxLimit);
+		request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
 	}
 }
