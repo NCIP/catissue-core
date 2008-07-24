@@ -8,6 +8,8 @@
 package edu.wustl.catissuecore.bizlogic;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -16,6 +18,7 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import net.sf.ehcache.CacheException;
+import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
@@ -74,22 +77,28 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 		NewSpecimenBizLogic newSpecimenBizLogic = (NewSpecimenBizLogic) BizLogicFactory.getInstance().getBizLogic(
 				Constants.NEW_SPECIMEN_FORM_ID);
 		//For bulk operations 
+		List specimenIds=new ArrayList();
 		if (obj instanceof List)
 		{
 			List eventObjectsList = (List) obj;
 			
 			for(int i=0; i<eventObjectsList.size(); i++)
 			{
-				insertEvent(eventObjectsList.get(i), dao, sessionDataBean, newSpecimenBizLogic);
+				specimenIds.add(((SpecimenEventParameters)eventObjectsList.get(i)).getSpecimen().getId());
+			}
+			
+			for(int i=0; i<eventObjectsList.size(); i++)
+			{
+				insertEvent(eventObjectsList.get(i), dao, sessionDataBean, newSpecimenBizLogic,specimenIds);
 			}
 		}
 		else
 		{
-			insertEvent(obj, dao, sessionDataBean, newSpecimenBizLogic);
+			insertEvent(obj, dao, sessionDataBean, newSpecimenBizLogic,specimenIds);
 		}
 	}
 
-	private void insertEvent(Object obj, DAO dao, SessionDataBean sessionDataBean, NewSpecimenBizLogic newSpecimenBizLogic) throws DAOException, UserNotAuthorizedException
+	private void insertEvent(Object obj, DAO dao, SessionDataBean sessionDataBean, NewSpecimenBizLogic newSpecimenBizLogic,List specimenIds) throws DAOException, UserNotAuthorizedException
 	{
 		try
 		{
@@ -215,7 +224,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 					DisposalEventParameters disposalEventParameters = (DisposalEventParameters) specimenEventParametersObject;
 					if (disposalEventParameters.getActivityStatus().equals(Constants.ACTIVITY_STATUS_DISABLED))
 					{
-						disableSubSpecimens(dao, specimen.getId().toString());
+						disableSubSpecimens(dao, specimen.getId().toString(),specimenIds);
 
 					}
 					Map disabledCont = null;
@@ -788,27 +797,31 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 		}
 	}
 
-	private void disableSubSpecimens(DAO dao, String speID) throws DAOException
+	private void disableSubSpecimens(DAO dao, String speID,List specimenIds) throws DAOException
 	{
 		String sourceObjectName = Specimen.class.getName();
 		String[] selectColumnName = {Constants.SYSTEM_IDENTIFIER};
-		String[] whereColumnName = {"parentSpecimen", Constants.ACTIVITY_STATUS};
+		String[] whereColumnName = {"parentSpecimen.id",Constants.ACTIVITY_STATUS};
 		String[] whereColumnCondition = {"=", "!="};
-		String[] whereColumnValue = {speID, Constants.ACTIVITY_STATUS_DISABLED};
+		Object[] whereColumnValue = {new Long(speID), Constants.ACTIVITY_STATUS_DISABLED};
 		String joinCondition = Constants.AND_JOIN_CONDITION;
 		List listOfSpecimenIDs = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue,
 				joinCondition);
-		listOfSpecimenIDs = Utility.removeNull(listOfSpecimenIDs);
-		//getRelatedObjects(dao, Specimen.class, "parentSpecimen", speIDArr);
-
-		if (!listOfSpecimenIDs.isEmpty())
-		{
-			throw new DAOException(ApplicationProperties.getValue("errors.specimen.contains.subspecimen"));
-		}
-		else
-		{
-			return;
-		}
+			listOfSpecimenIDs = Utility.removeNull(listOfSpecimenIDs);
+			//getRelatedObjects(dao, Specimen.class, "parentSpecimen", speIDArr);
+			
+			if (!listOfSpecimenIDs.isEmpty())
+			{
+				if(specimenIds.containsAll(listOfSpecimenIDs))
+				{
+					return;
+				}
+				throw new DAOException(ApplicationProperties.getValue("errors.specimen.contains.subspecimen"));
+			}
+			else
+			{
+				return;
+			}	
 	}
 
 	public List getRelatedObjects(DAO dao, Class sourceClass, String[] whereColumnName, String[] whereColumnValue, String[] whereColumnCondition)
