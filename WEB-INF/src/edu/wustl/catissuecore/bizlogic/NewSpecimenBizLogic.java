@@ -3089,11 +3089,20 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	public String getObjectId(AbstractDAO dao, Object domainObject) 
 	{
 		String objectId = "";
-		if (domainObject instanceof Specimen)
+		Specimen specimen = null;
+		
+		if (domainObject instanceof LinkedHashSet)			
 		{
-			Specimen specimen = (Specimen) domainObject;
+			LinkedHashSet linkedHashSet = (LinkedHashSet) domainObject;
+			specimen = (Specimen) linkedHashSet.iterator().next();
+		}
+		else if(domainObject instanceof Specimen)
+		{
+			specimen = (Specimen) domainObject;
+		}
+		
 			SpecimenCollectionGroup scg = specimen.getSpecimenCollectionGroup();
-			// CollectionProtocolRegistration cpr = scg.getCollectionProtocolRegistration();
+
 			try 
 			{
 				if(specimen.getParentSpecimen() != null)
@@ -3101,7 +3110,11 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 					setSpecimenParent(specimen, dao);
 					scg = specimen.getSpecimenCollectionGroup();
 				}
-				
+				else if(scg == null)
+				{
+					specimen = (Specimen) dao.retrieve(Specimen.class.getName(), specimen.getId());
+					scg = specimen.getSpecimenCollectionGroup();
+				}
 				if(scg.getCollectionProtocolRegistration() == null)
 				{
 					scg = (SpecimenCollectionGroup) dao.retrieve(SpecimenCollectionGroup.class.getName(), scg.getId());
@@ -3114,7 +3127,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			CollectionProtocolRegistration cpr = scg.getCollectionProtocolRegistration();
 			CollectionProtocol cp = cpr.getCollectionProtocol();
 			objectId = Constants.COLLECTION_PROTOCOL_CLASS_NAME+"_"+cp.getId();
-		}
+	
 		return objectId;
 	}
 	
@@ -3125,8 +3138,17 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	 */
 	protected String getPrivilegeKey(Object domainObject)
     {
-		Specimen specimen = (Specimen) domainObject;
+		Specimen specimen = null;
 		
+		if (domainObject instanceof LinkedHashSet)			
+		{
+			LinkedHashSet linkedHashSet = (LinkedHashSet) domainObject;
+			specimen = (Specimen) linkedHashSet.iterator().next();
+		}
+		else if(domainObject instanceof Specimen)
+		{
+			specimen = (Specimen) domainObject;
+		}
 		
 		if((specimen.getLineage()!=null) && (specimen.getLineage().equals(Constants.DERIVED_SPECIMEN))) 
 		{
