@@ -1,7 +1,5 @@
 package edu.wustl.catissuecore.querysuite.metadata;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -52,17 +50,13 @@ public class UpdateMetadata
 			connection.setAutoCommit(true);
 			stmt = connection.createStatement();
 			UpdateMetadataUtil.isExecuteStatement = true;
-			
-			
+					
 			deleteMeatadata();
 			List<String> updateSQL = updateSQLForDistributionProtocol();
 			UpdateMetadataUtil.executeSQLs(updateSQL, connection.createStatement(), false);
-
+			
 			addMetadata();
-			updateMetadata();
-			
-			
-			
+			updateMetadata();			
 		}
 		finally
 		{
@@ -133,8 +127,11 @@ public class UpdateMetadata
 		/**  update statements  start **/
 		List<String> updateSQL = getUpdateSQL();
 		UpdateMetadataUtil.executeSQLs(updateSQL, connection.createStatement(), false);
-		/**  update statements  end **/
 		
+		AddPath pathObject = new AddPath();
+		List<String> insertPathSQL = pathObject.getInsertPathStatements(stmt, connection,false);
+		UpdateMetadataUtil.executeSQLs(insertPathSQL, connection.createStatement(), false);
+		/**  update statements  end **/	
 	}
 
 	private static void deleteMeatadata() throws IOException, SQLException
@@ -246,16 +243,13 @@ public class UpdateMetadata
 		addRequirementSpecimenSubClassesMetaData.addSpecimenMetadata();
 		
 		AddAttribute addAttribute = new AddAttribute(connection);
-		addAttribute.addAttribute();
-		
+		addAttribute.addAttribute();	
 	}
 
 	private static List<String> getUpdateSQL() throws SQLException
 	{
 		List<String> updateSQL = new ArrayList<String>();
 		updateSQL.addAll(getDPUpdateSQL());
-		
-	
 		return updateSQL;
 	}
 
@@ -264,17 +258,27 @@ public class UpdateMetadata
 		List<String> dbUpdateSQL = new ArrayList<String>();
 		ResultSet rs;
 		
-		dbUpdateSQL.addAll(getInsertPathStatements());
+		stmt = connection.createStatement();
+		stmt.executeUpdate("update path set FIRST_ENTITY_ID = (Select IDENTIFIER from dyextn_abstract_metadata where NAME =  'edu.wustl.catissuecore.domain.AbstractSpecimen') where FIRST_ENTITY_ID in (Select IDENTIFIER from dyextn_abstract_metadata where NAME = 'edu.wustl.catissuecore.domain.Specimen') and LAST_ENTITY_ID in (Select IDENTIFIER from dyextn_abstract_metadata where NAME = 'edu.wustl.catissuecore.domain.SpecimenCharacteristics')");
 		
+		stmt.executeUpdate("update  path set LAST_ENTITY_ID = (Select IDENTIFIER from dyextn_abstract_metadata where NAME =  'edu.wustl.catissuecore.domain.AbstractSpecimen') where FIRST_ENTITY_ID in (Select IDENTIFIER from dyextn_abstract_metadata where NAME = 'edu.wustl.catissuecore.domain.Specimen') and LAST_ENTITY_ID in (Select IDENTIFIER from dyextn_abstract_metadata where NAME = 'edu.wustl.catissuecore.domain.Specimen')");
+		stmt.executeUpdate("update  path set FIRST_ENTITY_ID = (Select IDENTIFIER from dyextn_abstract_metadata where NAME =  'edu.wustl.catissuecore.domain.AbstractSpecimen') where FIRST_ENTITY_ID in (Select IDENTIFIER from dyextn_abstract_metadata where NAME = 'edu.wustl.catissuecore.domain.Specimen') and LAST_ENTITY_ID in (Select IDENTIFIER from dyextn_abstract_metadata where NAME = 'edu.wustl.catissuecore.domain.AbstractSpecimen')");
+
+		dbUpdateSQL.addAll(getInsertPathStatements());
 
 		dbUpdateSQL.add("update dyextn_entity set INHERITANCE_STRATEGY = 3 where PARENT_ENTITY_ID = (select IDENTIFIER from dyextn_abstract_metadata where name = 'edu.wustl.catissuecore.domain.Specimen')");
 		
 		stmt = connection.createStatement();
-		rs = stmt.executeQuery("select DE_ASSOCIATION_ID from intra_model_association where ASSOCIATION_ID in (select INTERMEDIATE_PATH from path where FIRST_ENTITY_ID in (select IDENTIFIER from dyextn_abstract_metadata where name ='edu.wustl.catissuecore.domain.AbstractSpecimen') and LAST_ENTITY_ID in (select IDENTIFIER from dyextn_abstract_metadata where name ='edu.wustl.catissuecore.domain.AbstractSpecimen'))");
+		rs = stmt.executeQuery("select DE_ASSOCIATION_ID from intra_model_association where ASSOCIATION_ID in (select INTERMEDIATE_PATH from path where FIRST_ENTITY_ID in (select IDENTIFIER from dyextn_abstract_metadata where name ='edu.wustl.catissuecore.domain.AbstractSpecimen') and LAST_ENTITY_ID in (select IDENTIFIER from dyextn_abstract_metadata where name ='edu.wustl.catissuecore.domain.SpecimenCharacteristics'))");
 		if(rs.next())
 		{
 			Long identifier = rs.getLong(1);
-			dbUpdateSQL.add("update dyextn_role set ASSOCIATION_TYPE = 'ASSOCIATION', NAME = 'edu.wustl.catissuecore.domain.AbstractSpecimen' where IDENTIFIER ="+identifier);
+			ResultSet rs1 = stmt.executeQuery("Select TARGET_ROLE_ID from dyextn_association where IDENTIFIER = "+identifier);
+			if(rs1.next())
+			{
+				Long roleId = rs1.getLong(1);
+				dbUpdateSQL.add("update dyextn_role set ASSOCIATION_TYPE = 'ASSOCIATION', NAME = 'edu.wustl.catissuecore.domain.AbstractSpecimen' where IDENTIFIER ="+roleId);
+			}
 		}
 		
 		dbUpdateSQL.add("update dyextn_database_properties set NAME = 'CATISSUE_CELL_SPECIMEN' where IDENTIFIER = (select IDENTIFIER from dyextn_table_properties  where ABSTRACT_ENTITY_ID = (select IDENTIFIER from dyextn_abstract_metadata where name = 'edu.wustl.catissuecore.domain.CellSpecimen'))");
@@ -349,13 +353,11 @@ public class UpdateMetadata
 
 		dbUpdateSQL.add("update dyextn_database_properties set NAME = 'INITIAL_QUANTITY' where IDENTIFIER in (Select IDENTIFIER from dyextn_column_properties where PRIMITIVE_ATTRIBUTE_ID in (Select IDENTIFIER from dyextn_primitive_attribute where IDENTIFIER in (Select IDENTIFIER from dyextn_abstract_metadata  where IDENTIFIER in (Select IDENTIFIER from dyextn_attribute where ENTIY_ID in (Select IDENTIFIER from dyextn_abstract_metadata where NAME = 'edu.wustl.catissuecore.domain.AbstractSpecimen')) and NAME = 'initialQuantity')))");
 
-		dbUpdateSQL.add("update path set FIRST_ENTITY_ID = (Select IDENTIFIER from dyextn_abstract_metadata where NAME =  'edu.wustl.catissuecore.domain.AbstractSpecimen') where FIRST_ENTITY_ID = NULL and LAST_ENTITY_ID in (Select IDENTIFIER from dyextn_abstract_metadata where NAME = 'edu.wustl.catissuecore.domain.SpecimenCharacteristics')");
-
 		dbUpdateSQL.add("update dyextn_attribute set ENTIY_ID = (Select IDENTIFIER from dyextn_abstract_metadata where NAME =  'edu.wustl.catissuecore.domain.AbstractSpecimen') where IDENTIFIER in (Select IDENTIFIER from dyextn_association  where TARGET_ENTITY_ID in (Select IDENTIFIER from dyextn_abstract_metadata where NAME =  'edu.wustl.catissuecore.domain.SpecimenCharacteristics') and SOURCE_ROLE_ID in (Select identifier from dyextn_role where NAME = 'edu.wustl.catissuecore.domain.Specimen'))");
 
-		dbUpdateSQL.add("update  path set LAST_ENTITY_ID = (Select IDENTIFIER from dyextn_abstract_metadata where NAME =  'edu.wustl.catissuecore.domain.AbstractSpecimen') where FIRST_ENTITY_ID in (Select IDENTIFIER from dyextn_abstract_metadata where NAME = 'edu.wustl.catissuecore.domain.Specimen') and LAST_ENTITY_ID in (Select IDENTIFIER from dyextn_abstract_metadata where NAME = 'edu.wustl.catissuecore.domain.Specimen')");
+		//dbUpdateSQL.add("update  path set LAST_ENTITY_ID = (Select IDENTIFIER from dyextn_abstract_metadata where NAME =  'edu.wustl.catissuecore.domain.AbstractSpecimen') where FIRST_ENTITY_ID in (Select IDENTIFIER from dyextn_abstract_metadata where NAME = 'edu.wustl.catissuecore.domain.Specimen') and LAST_ENTITY_ID in (Select IDENTIFIER from dyextn_abstract_metadata where NAME = 'edu.wustl.catissuecore.domain.Specimen')");
 
-		dbUpdateSQL.add("update  path set FIRST_ENTITY_ID = (Select IDENTIFIER from dyextn_abstract_metadata where NAME =  'edu.wustl.catissuecore.domain.AbstractSpecimen') where FIRST_ENTITY_ID in (Select IDENTIFIER from dyextn_abstract_metadata where NAME = 'edu.wustl.catissuecore.domain.Specimen') and LAST_ENTITY_ID in (Select IDENTIFIER from dyextn_abstract_metadata where NAME = 'edu.wustl.catissuecore.domain.AbstractSpecimen')");
+		//dbUpdateSQL.add("update  path set FIRST_ENTITY_ID = (Select IDENTIFIER from dyextn_abstract_metadata where NAME =  'edu.wustl.catissuecore.domain.AbstractSpecimen') where FIRST_ENTITY_ID in (Select IDENTIFIER from dyextn_abstract_metadata where NAME = 'edu.wustl.catissuecore.domain.Specimen') and LAST_ENTITY_ID in (Select IDENTIFIER from dyextn_abstract_metadata where NAME = 'edu.wustl.catissuecore.domain.AbstractSpecimen')");
 		
 		stmt = connection.createStatement();
 		rs = stmt.executeQuery("select DE_ASSOCIATION_ID from intra_model_association where ASSOCIATION_ID in (select INTERMEDIATE_PATH from path where FIRST_ENTITY_ID in (select IDENTIFIER from dyextn_abstract_metadata where name ='edu.wustl.catissuecore.domain.AbstractSpecimen') and LAST_ENTITY_ID in (select IDENTIFIER from dyextn_abstract_metadata where name ='edu.wustl.catissuecore.domain.AbstractSpecimen'))");
@@ -368,6 +370,8 @@ public class UpdateMetadata
 		}
 
 		dbUpdateSQL.add("update dyextn_entity set PARENT_ENTITY_ID = (Select IDENTIFIER from dyextn_abstract_metadata where NAME =  'edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup') where IDENTIFIER in (Select IDENTIFIER from dyextn_abstract_metadata where NAME = 'edu.wustl.catissuecore.domain.CollectionProtocolEvent')");
+		
+		dbUpdateSQL.add("update dyextn_entity set PARENT_ENTITY_ID = (Select IDENTIFIER from dyextn_abstract_metadata where NAME =  'edu.wustl.catissuecore.domain.AbstractSpecimen') where IDENTIFIER in (Select IDENTIFIER from dyextn_abstract_metadata where NAME = 'edu.wustl.catissuecore.domain.Specimen')");
 		
 		return dbUpdateSQL;
 	}
@@ -419,81 +423,9 @@ public class UpdateMetadata
 	private static List<String> getInsertPathStatements() throws SQLException
 	{
 		List<String> insertPathSQL =new ArrayList<String>();
-		ResultSet rs;
-		stmt = connection.createStatement();
-		
-		int identifier=0;
-		rs = stmt.executeQuery("select max(PATH_ID) from path");
-		if(rs.next())
-		{
-			identifier = rs.getInt(1)+1;
-		}
-		
-		
-		/*Copy path of AbstractSpecimen-->SpecimenCharacteristics to Specimen*/
-		insertPathSQL .add("insert into path values ("+ identifier++ +",4,584,220)");
-		 /*Copy path of Specimen<-->ReqSpecimen to all subclasses*/
-		insertPathSQL.add("insert into path values("+ identifier++ +",261,820,1868)");
-		insertPathSQL.add("insert into path values("+ identifier++ +",1868,819,261)");
-		insertPathSQL.add("insert into path values("+ identifier++ +",333,820,1868)");
-		insertPathSQL.add("insert into path values("+ identifier++ +",1868,819,333)");
-		insertPathSQL.add("insert into path values("+ identifier++ +",224,820,1868)");
-		insertPathSQL.add("insert into path values("+ identifier++ +",1868,819,224)");
-		insertPathSQL.add("insert into path values("+ identifier++ +",297,820,1868)");
-		insertPathSQL.add("insert into path values("+ identifier++ +",1868,819,297)");
-		/*Copy path of Specimen<-->SpecimenPosition to all subclasses*/
-		insertPathSQL.add("insert into path values("+ identifier++ +",261,821,1862)");
-		insertPathSQL.add("insert into path values("+ identifier++ +",1862,822,261)");
-		insertPathSQL.add("insert into path values("+ identifier++ +",333,821,1862)");
-		insertPathSQL.add("insert into path values("+ identifier++ +",1862,822,333)");
-		insertPathSQL.add("insert into path values("+ identifier++ +",224,821,1862)");
-		insertPathSQL.add("insert into path values("+ identifier++ +",1862,822,224)");
-		insertPathSQL.add("insert into path values("+ identifier++ +",297,821,1862)");
-		insertPathSQL.add("insert into path values("+ identifier++ +",1862,822,297)");
-		/*Copy path of SpecimenArrayContent-->Specimen to subclasses*/
-		insertPathSQL.add("insert into path values ("+ identifier++ +",949,550,261)");
-		insertPathSQL.add("insert into path values ("+ identifier++ +",949,550,333)");
-		insertPathSQL.add("insert into path values ("+ identifier++ +",949,550,224)");
-		insertPathSQL.add("insert into path values ("+ identifier++ +",949,550,297)");
-		/*Copy path of DistributedItem-->Specimen to subclasses*/
-		insertPathSQL.add("insert into path values ("+ identifier++ +",740,499,261)");
-		insertPathSQL.add("insert into path values ("+ identifier++ +",740,499,333)");
-		insertPathSQL.add("insert into path values ("+ identifier++ +",740,499,224)");
-		insertPathSQL.add("insert into path values ("+ identifier++ +",740,499,297)");
-		/*Copy path of AbstractSpecimen<-->AbstractSpecimen to Specimen and all its subclasses*/
-		insertPathSQL.add("insert into path values("+ identifier++ +",261,567,261)");
-		insertPathSQL.add("insert into path values("+ identifier++ +",261,274,261)");
-		insertPathSQL.add("insert into path values("+ identifier++ +",333,567,333)");
-		insertPathSQL.add("insert into path values("+ identifier++ +",333,274,333)");
-		insertPathSQL.add("insert into path values("+ identifier++ +",224,567,224)");
-		insertPathSQL.add("insert into path values("+ identifier++ +",224,274,224)");
-		insertPathSQL.add("insert into path values("+ identifier++ +",297,567,297)");
-		insertPathSQL.add("insert into path values("+ identifier++ +",297,274,297)");
-		insertPathSQL.add("insert into path values("+ identifier++ +",4,567,4)");
-		insertPathSQL.add("insert into path values("+ identifier++ +",4,274,4)");
-		/*Copy path of AbstractSpecimen-->SpecimenCharacteristics to all subclasses of Specimen*/
-		insertPathSQL.add("insert into path values("+ identifier++ +",261,584,220)");
-		insertPathSQL.add("insert into path values("+ identifier++ +",333,584,220)");
-		insertPathSQL.add("insert into path values("+ identifier++ +",224,584,220)");
-		insertPathSQL.add("insert into path values("+ identifier++ +",297,584,220)");
-		/*Copy path of SpecimenRequirement<-->CollectionProtocolEvent to all subclasses of SpecimenRequirement*/
-		insertPathSQL.add("insert into path values("+ identifier++ +",717,817,1880)");
-		insertPathSQL.add("insert into path values("+ identifier++ +",1880,818,717)");
-		insertPathSQL.add("insert into path values("+ identifier++ +",717,817,1881)");
-		insertPathSQL.add("insert into path values("+ identifier++ +",1881,818,717)");
-		insertPathSQL.add("insert into path values("+ identifier++ +",717,817,1882)");
-		insertPathSQL.add("insert into path values("+ identifier++ +",1882,818,717)");
-		insertPathSQL.add("insert into path values("+ identifier++ +",717,817,1883)");
-		insertPathSQL.add("insert into path values("+ identifier++ +",1883,818,717)");
-		/*Copy path of SpecimenRequirement<-->Specimen to all subclasses of SpecimenRequirement*/
-		insertPathSQL.add("insert into path values("+ identifier++ +",1880,819,4)");
-		insertPathSQL.add("insert into path values("+ identifier++ +",4,820,1880)");
-		insertPathSQL.add("insert into path values("+ identifier++ +",1881,819,4)");
-		insertPathSQL.add("insert into path values("+ identifier++ +",4,820,1881)");
-		insertPathSQL.add("insert into path values("+ identifier++ +",1882,819,4)");
-		insertPathSQL.add("insert into path values("+ identifier++ +",4,820,1882)");
-		insertPathSQL.add("insert into path values("+ identifier++ +",1883,819,4)");
-		insertPathSQL.add("insert into path values("+ identifier++ +",4,820,1883)");
+		AddPath.initData();
+		AddPath pathObject = new AddPath();
+		insertPathSQL = pathObject.getInsertPathStatements(stmt, connection,true);
 		return insertPathSQL;
 	}
 

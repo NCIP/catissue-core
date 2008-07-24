@@ -10,13 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import edu.common.dynamicextensions.domain.Attribute;
-import edu.common.dynamicextensions.domain.DataElement;
-import edu.common.dynamicextensions.domain.StringAttributeTypeInformation;
-import edu.common.dynamicextensions.domain.UserDefinedDE;
-import edu.common.dynamicextensions.domain.databaseproperties.ColumnProperties;
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
-import edu.common.dynamicextensions.domaininterface.AttributeTypeInformationInterface;
 import edu.wustl.common.util.dbManager.DBUtil;
 
 /**
@@ -63,7 +57,7 @@ public class DeleteAttribute {
 		
 
 		populateEntityIDList();
-		populateEntityAttributeMap();
+		entityIDAttributeListMap = UpdateMetadataUtil.populateEntityAttributeMap(connection, entityIDMap);
 		Set<String> keySet = entityIDMap.keySet();
 		Long identifier;
 		for(String  key : keySet)
@@ -241,60 +235,7 @@ public class DeleteAttribute {
 		entityNameList.add("edu.wustl.catissuecore.domain.CellSpecimen");
 		entityNameList.add("edu.wustl.catissuecore.domain.FluidSpecimen");
 		entityNameList.add("edu.wustl.catissuecore.domain.MolecularSpecimen");
-		entityNameList.add("edu.wustl.catissuecore.domain.TissueSpecimen");
-		
-	}
-	
-	private void populateEntityAttributeMap() throws SQLException 
-	{
-		List<AttributeInterface> attributeList = new ArrayList<AttributeInterface>();
-
-		String sql;
-		Set<String> keySet = entityIDMap.keySet();
-		Long identifier;
-		for(String  key : keySet)
-		{
-			attributeList = new ArrayList<AttributeInterface>();
-			identifier = entityIDMap.get(key);
-			sql= "select identifier,name from dyextn_abstract_metadata where identifier in (select identifier from dyextn_attribute where ENTIY_ID="+identifier+")";
-			stmt = connection.createStatement();
-			ResultSet rs = stmt.executeQuery(sql);
-			while(rs.next())
-			{
-				AttributeInterface attributeInterface=new Attribute();
-				attributeInterface.setId(rs.getLong(1));
-				attributeInterface.setName(rs.getString(2));
-				ColumnProperties  columnProperties=new ColumnProperties();
-				sql= "select identifier from dyextn_column_properties where PRIMITIVE_ATTRIBUTE_ID="+attributeInterface.getId();
-				stmt = connection.createStatement();
-				ResultSet rs1 = stmt.executeQuery(sql);
-				if(rs1.next())
-				{
-					columnProperties.setId(rs1.getLong(1));
-				}
-				
-				stmt.close();
-				rs1.close();
-				attributeInterface.setColumnProperties(columnProperties);
-				
-				AttributeTypeInformationInterface  attributeTypeInfo=new StringAttributeTypeInformation();
-				DataElement dataElement = new UserDefinedDE();
-				sql= "select identifier from dyextn_attribute_type_info where PRIMITIVE_ATTRIBUTE_ID="+attributeInterface.getId();
-				stmt = connection.createStatement();
-				ResultSet rs2 = stmt.executeQuery(sql);
-				if(rs2.next())
-				{
-					dataElement.setId(rs2.getLong(1));
-				}
-				attributeTypeInfo.setDataElement(dataElement);
-				attributeInterface.setAttributeTypeInformation(attributeTypeInfo);
-				stmt.close();
-				rs2.close();
-				attributeList.add(attributeInterface);				
-			}
-			rs.close();
-			entityIDAttributeListMap.put(identifier, attributeList);
-		}
+		entityNameList.add("edu.wustl.catissuecore.domain.TissueSpecimen");	
 	}
 
 	private void populateEntityIDList() throws SQLException 
