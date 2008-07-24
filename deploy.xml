@@ -863,6 +863,70 @@
 		</if>
 	</target>
 	
+	<target name="upgrade_1.2.2_to_1.0_mysql">
+	
+		<echo message="Upgrading MySQL Database from 1.2.2 to 1.0 ..." />
+			<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" onerror="continue">
+							
+				<transaction src="${dbupgrade.sql.dir}/MySql/DBUpgrade_1.2_to_CatissueSuite.sql" />
+				<transaction src="${dbupgrade.sql.dir}/MySql/SCG_DB_changes.sql" />
+				<transaction src="${mysql.sql.dir}/dynamicextension.sql" />
+				<transaction src="${mysql.sql.dir}/query/query_schema_script.sql" />
+				<transaction src="${mysql.sql.dir}/query/caB2B Table Generation Script.sql" />
+				<transaction  src="${dbupgrade.sql.dir}/MySql/CAModel.sql"/>
+				<transaction  src="${dbupgrade.sql.dir}/MySql/DBUpgrade_AddConstraints_1.2.2_to_1.0.sql"/>
+				<transaction>commit;</transaction>
+				<classpath>
+					<fileset dir="${lib.dir}">
+						<include name="*.jar" />
+					</fileset>
+				</classpath>
+			</sql>
+	
+	</target>
+	
+	<target name="upgrade_1.2.2_to_1.0_oracle">
+	
+		<echo message="Upgrading Oracle Database from 1.2.2 to 1.0 ..." />
+			<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle">
+				<transaction src="${dbupgrade.sql.dir}/Oracle/DBUpgrade_1.2_to_CatissueSuite.sql" />
+				<transaction src="${dbupgrade.sql.dir}/Oracle/SCG_DB_changes.sql" />
+				<transaction src="${oracle.sql.dir}/dynamicextension.sql" />
+				<transaction src="${oracle.sql.dir}/query/query_schema_script.sql" />
+				<transaction src="${oracle.sql.dir}/query/caB2B Table Generation Script.sql" />
+				<transaction  src="${dbupgrade.sql.dir}/Oracle/CAModel.sql"/>
+				
+				<transaction>commit;</transaction>
+				<classpath>
+					<fileset dir="${lib.dir}">
+						<include name="*.jar" />
+					</fileset>
+				</classpath>
+			</sql>
+	
+	</target>
+	
+	
+	<target name="upgrade_1.2.2_to_1.0">
+		<if>
+			<equals arg1="mysql" arg2="${database.type}" />
+			<then>
+				<antcall target="upgrade_1.2.2_to_1.0_mysql" />
+			</then>
+			<elseif>
+				<equals arg1="oracle" arg2="${database.type}" />
+				<then>
+					<antcall target="upgrade_1.2.2_to_1.0_oracle" />
+				</then>
+			</elseif>
+			<else>
+				<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
+			</else>
+		</if>
+	</target>
+	
+	
+	
 	<!--MySQL Database Upgradation -->
 	<target name="upgrade_db_mysql">
 		<echo message="Upgrading MySQL Database for caTISSUE Suite Application ..." />

@@ -264,13 +264,6 @@ TYPE = INNODB;
 /* Renamed to parent */
 
 ALTER TABLE CatIssue_Specimen_coll_Group RENAME CatIssue_Abs_Speci_coll_Group;
-/*TODO*/ 
-
-alter table CatIssue_Abs_Speci_coll_Group drop foreign key `FKDEBAF1677E07C4AC`;
-
-/*TODO*/ 
-
-alter table CatIssue_Abs_Speci_coll_Group drop foreign key `FKDEBAF16753B01F66`;
 
 /* Creating catissue_specimen_coll_group a child of Abstract SCG*/
 
@@ -443,14 +436,15 @@ UPDATE CatIssue_Specimen_Char
 SET    Tissue_Side = 'Not Specified'
 WHERE  Tissue_Side > 0;
 
-/*Deleting catissue_specimen_requirement rec those inserted in specimen table TODO*/
-alter table catissue_specimen_requirement drop foreign key FK39AFE96861A1C94F;
-alter table catissue_coll_specimen_req drop foreign key FK860E6ABEBE10F0CE;
+
 
 DELETE CATISSUE_QUANTITY
 FROM CATISSUE_QUANTITY,CatIssue_Specimen_Requirement,
        CatIssue_coll_Specimen_req
 WHERE CATISSUE_QUANTITY.IDENTIFIER=CatIssue_Specimen_Requirement.QUANTITY_ID AND CatIssue_Specimen_Requirement.IdentIfier = CatIssue_coll_Specimen_req.Specimen_Requirement_Id;
+
+/*Deleting catissue_specimen_requirement rec those inserted in specimen table TODO*/
+
 
 
 DELETE CatIssue_Specimen_Requirement
@@ -463,8 +457,8 @@ alter table catissue_specimen_requirement add constraint FK39AFE96861A1C94F fore
 
 /*Entering into CSM table */
 
-INSERT INTO `CSM_PROTECTION_ELEMENT` 
-select max(PROTECTION_ELEMENT_ID)+1,'edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup','edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup','edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup',NULL,NULL,1,'2007-01-17' from CSM_PROTECTION_ELEMENT;
+INSERT INTO `CSM_PROTECTION_ELEMENT` (PROTECTION_ELEMENT_ID,PROTECTION_ELEMENT_NAME,PROTECTION_ELEMENT_DESCRIPTION,OBJECT_ID,
+ATTRIBUTE,PROTECTION_ELEMENT_TYPE,APPLICATION_ID,UPDATE_DATE) select max(PROTECTION_ELEMENT_ID)+1,'edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup','edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup','edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup',NULL,NULL,1,'2007-01-17' from CSM_PROTECTION_ELEMENT;
 
 INSERT INTO `CSM_PG_PE` SELECT MAX(PG_PE_ID) + 1,18,(SELECT PROTECTION_ELEMENT_ID
         FROM   CSM_PROTECTION_ELEMENT
@@ -472,8 +466,6 @@ INSERT INTO `CSM_PG_PE` SELECT MAX(PG_PE_ID) + 1,18,(SELECT PROTECTION_ELEMENT_I
 
 
 /* Droping obsolate tables catissue_clinical_report... */
-alter table CatIssue_Clinical_Report drop foreign key FK54A4264515246F7;
-alter table CatIssue_Abs_Speci_coll_Group drop foreign key FKDEBAF1674CE21DDA;
 DROP TABLE CatIssue_Clinical_Report;
 
 DROP TABLE CatIssue_coll_Specimen_req;
