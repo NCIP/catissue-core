@@ -203,6 +203,21 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 					</td>
 				</tr>
 				<%}%>
+				<%if((!Variables.isSpecimenCollGroupBarcodeGeneratorAvl) || operation.equals(Constants.EDIT))
+				{%>
+				<tr>
+					<td class="formFieldNoBordersSimple" colspan="2" width="5"><b>*</b></td>
+					<td class="formFieldNoBordersSimple" >
+						<label for="barcode">
+							<b><bean:message key="specimenCollectionGroup.barcode" /></b>
+						</label>
+					</td>
+					
+					<td class="formFieldNoBordersSimple">
+						<html:text styleClass="formFieldSized" size="30"  maxlength="255" styleId="barcode" property="barcode" />						
+					</td>
+				</tr>
+				<%}%>
 				 <tr>
 				 	<td class="formFieldNoBordersSimple" colspan="2" width="5"><b>*</b></td>
 				    

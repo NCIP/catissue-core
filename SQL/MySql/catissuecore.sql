@@ -471,6 +471,7 @@ create table CATISSUE_COLL_PROT_REG (
    CONSENT_SIGN_DATE datetime,
    CONSENT_DOC_URL text,
    CONSENT_WITNESS bigint,
+   BARCODE varchar(255) unique,
    DATE_OFFSET integer,	
    primary key (IDENTIFIER)
 );
@@ -505,6 +506,7 @@ CREATE TABLE `catissue_specimen_coll_group`
 (                                                                                                         
 	`IDENTIFIER` bigint(20) NOT NULL auto_increment,        
 	`NAME` varchar(255) default NULL, 
+	`BARCODE` varchar(255) default NULL, 
 	`COMMENTS` text,                                                                                                                                    
 	`COLLECTION_PROTOCOL_REG_ID` bigint(20) default NULL,                                                                                               
 	`SURGICAL_PATHOLOGY_NUMBER` varchar(50) default NULL,                                                                                               
@@ -513,6 +515,7 @@ CREATE TABLE `catissue_specimen_coll_group`
     `DATE_OFFSET` integer,                                                                                           
 	PRIMARY KEY  (`IDENTIFIER`),
     UNIQUE KEY `NAME` (`NAME`),
+	UNIQUE KEY `BARCODE` (`BARCODE`),
 	KEY `FKDEBAF1677E07C4AC` (`COLLECTION_PROTOCOL_REG_ID`),                                                                                            
 	KEY `FK_COLL_PROT_EVENT_SPEC_COLL_GROUP` (`COLLECTION_PROTOCOL_EVENT_ID`),                                                                          
 	CONSTRAINT `FK_COLL_PROT_EVENT_SPEC_COLL_GROUP` FOREIGN KEY (`COLLECTION_PROTOCOL_EVENT_ID`) REFERENCES `catissue_coll_prot_event` (`IDENTIFIER`),  

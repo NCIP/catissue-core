@@ -26,10 +26,12 @@ function participantRegRow(subdivtag)
 			rows = document.getElementById(subdivtag).rows;
 			var cprSize = rows.length;
 			var row = document.getElementById(subdivtag).insertRow(cprSize);
+			var cellNo = 0;
 			//first Cell
-			var cprCheckb=row.insertCell(0);
+			var cprCheckb=row.insertCell(cellNo);
 			cprCheckb.className="black_ar";
 			sname="";
+			cellNo +=1;
 			
 			var identifier = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:" + (cprSize+1) +"_id)";
 			sname = sname + "<input type='hidden' name='" + identifier + "' value='' id='" + identifier + "'>";
@@ -39,7 +41,7 @@ function participantRegRow(subdivtag)
 			cprCheckb.innerHTML=""+sname;
 			
 			// Second Cell
-			var cprTitle=row.insertCell(1);
+			var cprTitle=row.insertCell(cellNo);
 			cprTitle.className="black_ar";
 			sname="";
 			var name = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:" + (cprSize+1) + "_CollectionProtocol_id)";
@@ -61,21 +63,36 @@ function participantRegRow(subdivtag)
 			var collectionProtocolTitleValue = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:" + (cprSize+1) + "_CollectionProtocol_shortTitle)";
 			sname = sname + "<input type='hidden' name='" + collectionProtocolTitleValue + "' value='' id='" + collectionProtocolTitleValue + "'>";
 			cprTitle.innerHTML="" + sname;
+			cellNo +=1;
 			
 			//third Cell
-			var cprParticipantId=row.insertCell(2);
+			var cprParticipantId=row.insertCell(cellNo);
 			cprParticipantId.className="black_ar";
 			sname="";
 			name = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:" + (cprSize+1) + "_protocolParticipantIdentifier)";
 			sname="<input type='text' name='" + name + "' maxlength='30' size='15' class='black_ar' id='" + name + "'>";
 			cprParticipantId.innerHTML="" + sname;
+			cellNo +=1;
+			
+			<%if((!Variables.isSpecimenCollGroupBarcodeGeneratorAvl) || operation.equals(Constants.EDIT))
+			{%>
+						
+			//fourth Cell
+			var cprBarcode=row.insertCell(cellNo);
+			cprBarcode.className="black_ar";
+			sname="";
+			name = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:" + (cprSize+1) + "_barcode)";
+			sname="<input type='text' name='" + name + "' maxlength='30' size='15' class='black_ar' id='" + name + "'>";
+			cprBarcode.innerHTML="" + sname;
+			cellNo +=1;
+			<%}%>
 			
 			<%
 				String registrationDate = Utility.parseDateToString(Calendar.getInstance().getTime(), Constants.DATE_PATTERN_MM_DD_YYYY);
     		%>
     		
-			//fourth Cell
-			var cprRegistrationDate=row.insertCell(3);
+			//Fifth Cell
+			var cprRegistrationDate=row.insertCell(cellNo);
 			cprRegistrationDate.className="black_ar";
 			cprRegistrationDate.colSpan=1;
 			sname="";
@@ -83,9 +100,10 @@ function participantRegRow(subdivtag)
 			//sname = "<input type='text' name='" + name + "' class='formFieldSized15' id='" + name + "' value = 'MM-DD-YYYY or MM/DD/YYYY' onclick = \"this.value = ''\" onblur = \"if(this.value=='') {this.value = 'MM-DD-YYYY or MM/DD/YYYY';}\" onkeypress=\"return titliOnEnter(event, this, document.getElementById('" + name + "'))\">";
 			sname = "<input type='text' name='" + name + "' maxlength='30' size='10' class='black_ar' id='" + name + "' value = '<%=registrationDate%>'>";
 			cprRegistrationDate.innerHTML=sname;
+			cellNo +=1;
 			
-			//Fifth Cell
-			var cprActivityStatus=row.insertCell(4);
+			//Sixth Cell
+			var cprActivityStatus=row.insertCell(cellNo);
 			cprActivityStatus.className="black_ar";
 			sname="";
 			var name = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:" + (cprSize+1) +"_activityStatus)";
@@ -105,9 +123,10 @@ function participantRegRow(subdivtag)
 			%>
 			sname = sname + "</select>";
 			cprActivityStatus.innerHTML=sname;
+			cellNo +=1;
 											
-			//sixth Cell
-			var consent=row.insertCell(5);
+			//Seventh Cell
+			var consent=row.insertCell(cellNo);
 			consent.className="black_ar";
 			sname="";
 			
@@ -656,6 +675,12 @@ function participantRegRow(subdivtag)
 						<td width="20%" align="left" class="black_ar_b"><bean:message
 							key="participant.collectionProtocolReg.participantProtocolID" />
 						</td>
+						<%if((!Variables.isSpecimenCollGroupBarcodeGeneratorAvl) || operation.equals(Constants.EDIT))
+						{%>
+							<td width="20%" align="left" class="black_ar_b"><bean:message
+								key="participant.collectionProtocolReg.barcode" />
+							</td>
+						<%}%>
 						<td width="16%" align="left" class="black_ar_b"><bean:message
 							key="participant.collectionProtocolReg.participantRegistrationDate" />
 						</td>
@@ -674,6 +699,8 @@ function participantRegRow(subdivtag)
 										+ i + "_CollectionProtocol_shortTitle)";
 										String collectionProtocolParticipantId = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:"
 										+ i + "_protocolParticipantIdentifier)";
+										String barcode = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:"
+											+ i + "_barcode)";
 										String collectionProtocolRegistrationDate = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:"
 										+ i + "_registrationDate)";
 										String collectionProtocolIdentifier = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:"
@@ -765,6 +792,13 @@ function participantRegRow(subdivtag)
 								styleClass="black_ar" size="15" maxlength="50"
 								styleId="<%=collectionProtocolParticipantId%>"
 								property="<%=collectionProtocolParticipantId%>" /></td>
+							<%if((!Variables.isSpecimenCollGroupBarcodeGeneratorAvl) || operation.equals(Constants.EDIT)) 
+							{%>
+								<td align="left" class="black_ar"><html:text
+								styleClass="black_ar" size="15" maxlength="50"
+								styleId="<%=barcode%>"
+								property="<%=barcode%>" /></td>
+							<%}%>
 							<td align="left" class="black_ar"><html:text
 								styleClass="black_ar" size="10" maxlength="50"
 								styleId="<%=collectionProtocolRegistrationDate%>"

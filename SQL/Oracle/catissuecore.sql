@@ -431,7 +431,8 @@ create table CATISSUE_COLL_PROT_REG (
    ACTIVITY_STATUS varchar(50),
    CONSENT_SIGN_DATE date,
    CONSENT_DOC_URL varchar2(500),
-   CONSENT_WITNESS number(19,0), 
+   CONSENT_WITNESS number(19,0),
+   BARCODE varchar(255) unique,
    DATE_OFFSET integer,	
    primary key (IDENTIFIER)
 );
@@ -496,7 +497,8 @@ create table CATISSUE_COLL_PROT_EVENT (
 
 create table CATISSUE_SPECIMEN_COLL_GROUP (
    IDENTIFIER number(19,0) not null ,
-   NAME varchar(255) unique,  
+   NAME varchar(255) unique, 
+   BARCODE varchar(255) unique, 
    COMMENTS varchar2(2000),
    COLLECTION_PROTOCOL_REG_ID number(19,0),
    SURGICAL_PATHOLOGY_NUMBER varchar(50),
