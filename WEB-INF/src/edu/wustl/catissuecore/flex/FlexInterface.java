@@ -1368,7 +1368,7 @@ public class FlexInterface
 	 * Repaints DAG
 	 * @return
 	 */
-	public List<DAGNode> repaintDAG()
+	public Map <String,Object> repaintDAG()
 	{
 		return dagPanel.repaintDAG();
 	}
