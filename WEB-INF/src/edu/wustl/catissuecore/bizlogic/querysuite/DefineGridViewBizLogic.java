@@ -20,6 +20,7 @@ import edu.wustl.common.beans.QueryResultObjectDataBean;
 import edu.wustl.common.querysuite.queryobject.IConstraints;
 import edu.wustl.common.querysuite.queryobject.IOutputAttribute;
 import edu.wustl.common.querysuite.queryobject.IOutputEntity;
+import edu.wustl.common.querysuite.queryobject.IOutputTerm;
 import edu.wustl.common.querysuite.queryobject.IQuery;
 import edu.wustl.common.querysuite.queryobject.impl.OutputAttribute;
 import edu.wustl.common.querysuite.queryobject.impl.OutputTreeDataNode;
@@ -257,9 +258,10 @@ public class DefineGridViewBizLogic
 	 * @param queryResultObjecctDataMap 
 	 * @param mainEntityMap 
 	 * @param uniqueIdNodesMap 
+	 * @param outputTermsColumns 
 	 * @return
 	 */
-	public List<String> getSelectedColumnList(CategorySearchForm categorySearchForm,SelectedColumnsMetadata selectedColumnsMetadata,StringBuffer selectedColumnNames, Map<Long, QueryResultObjectDataBean> queryResultObjecctDataMap, Map<EntityInterface, List<EntityInterface>> mainEntityMap, Map<String, OutputTreeDataNode> uniqueIdNodesMap)
+	public List<String> getSelectedColumnList(CategorySearchForm categorySearchForm,SelectedColumnsMetadata selectedColumnsMetadata,StringBuffer selectedColumnNames, Map<Long, QueryResultObjectDataBean> queryResultObjecctDataMap, Map<EntityInterface, List<EntityInterface>> mainEntityMap, Map<String, OutputTreeDataNode> uniqueIdNodesMap, Map<String, IOutputTerm> outputTermsColumns)
 	{
 		queryResultObjecctDataMap.clear();
 		List<String> definedColumnsList = new ArrayList<String>();
@@ -324,7 +326,11 @@ public class DefineGridViewBizLogic
 		Iterator<Long> mapItr = queryResultObjecctDataMap.keySet().iterator();
 		String sql="";
 		if (selectedColumnNames.lastIndexOf(",") != -1)
+		{
 			sql = selectedColumnNames.substring(0, selectedColumnNames.lastIndexOf(","));
+		}
+	//	QueryOutputSpreadsheetBizLogic gridBizLogic = new QueryOutputSpreadsheetBizLogic();
+	//	sql = gridBizLogic.modifySqlForTemporalColumns(null, sql, definedColumnsList, outputTermsColumns);
 		selectedColumnNames.replace(0, selectedColumnNames.length(), sql);
 		while(mapItr.hasNext())
 		{

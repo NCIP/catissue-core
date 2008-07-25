@@ -17,6 +17,7 @@ import edu.wustl.common.querysuite.factory.SqlGeneratorFactory;
 import edu.wustl.common.querysuite.queryengine.impl.SqlGenerator;
 import edu.wustl.common.querysuite.queryobject.IConstraints;
 import edu.wustl.common.querysuite.queryobject.IExpression;
+import edu.wustl.common.querysuite.queryobject.IOutputTerm;
 import edu.wustl.common.querysuite.queryobject.IQuery;
 import edu.wustl.common.querysuite.queryobject.impl.OutputTreeDataNode;
 import edu.wustl.common.querysuite.queryobject.util.QueryObjectProcessor;
@@ -76,7 +77,9 @@ public class ValidateQueryBizLogic {
 		{
 		SqlGenerator sqlGenerator = (SqlGenerator) SqlGeneratorFactory.getInstance();
 		String selectSql = sqlGenerator.generateSQL(query);
-		HttpSession session = request.getSession();
+		Map<String, IOutputTerm> outputTermsColumns = sqlGenerator.getOutputTermsColumns();
+		HttpSession session = request.getSession(); 
+		session.setAttribute(Constants.OUTPUT_TERMS_COLUMNS,outputTermsColumns);
 		session.setAttribute(Constants.SAVE_GENERATED_SQL,selectSql);
 		List<OutputTreeDataNode> rootOutputTreeNodeList = sqlGenerator
 		.getRootOutputTreeNodeList();

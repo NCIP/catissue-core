@@ -2394,6 +2394,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String ADD_EDIT_SCG = "ADD_EDIT_SCG";
 	public static final String ADD_EDIT_SPECIMEN_ARRAY = "ADD_EDIT_SPECIMEN_ARRAY";
 	public static final String ADD_EDIT_SPECIMEN_EVENTS = "ADD_EDIT_SPECIMEN_EVENTS";
-	
+	public static final String OUTPUT_TERMS_COLUMNS = "outputTermsColumns";	
 }
 	

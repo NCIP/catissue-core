@@ -40,6 +40,7 @@ import edu.wustl.common.querysuite.queryengine.impl.SqlGenerator;
 import edu.wustl.common.querysuite.queryobject.IConstraints;
 import edu.wustl.common.querysuite.queryobject.IExpression;
 import edu.wustl.common.querysuite.queryobject.IOutputAttribute;
+import edu.wustl.common.querysuite.queryobject.IOutputTerm;
 import edu.wustl.common.querysuite.queryobject.IQuery;
 import edu.wustl.common.querysuite.queryobject.impl.Expression;
 import edu.wustl.common.querysuite.queryobject.impl.OutputTreeDataNode;
@@ -518,11 +519,19 @@ public  class QueryModuleUtil
 							selectedColumnsMetadata.setDefinedView(true);
 						}
 					}
+				} 
+				Map<String, IOutputTerm> outputTermsColumns = sqlGenerator.getOutputTermsColumns();
+				if(outputTermsColumns == null)
+				{ 
+					outputTermsColumns = (Map<String, IOutputTerm>)session.getAttribute(Constants.OUTPUT_TERMS_COLUMNS);
 				}
+				session.setAttribute(Constants.OUTPUT_TERMS_COLUMNS, outputTermsColumns);
 				Map<String, List<String>> spreadSheetDatamap = outputSpreadsheetBizLogic
 						.createSpreadsheetData(treeNo, node, sessionData, parentNodeId,
-								recordsPerPage, selectedColumnsMetadata,randomNumber,uniqueIdNodesMap,queryResultObjectDataBeanMap,hasConditionOnIdentifiedField,mainEntityMap,query.getConstraints());
-
+								recordsPerPage, selectedColumnsMetadata,randomNumber,uniqueIdNodesMap,queryResultObjectDataBeanMap,
+								hasConditionOnIdentifiedField,mainEntityMap,query.getConstraints(),
+								outputTermsColumns);
+				
 				QuerySessionData querySessionData = (QuerySessionData) spreadSheetDatamap
 						.get(Constants.QUERY_SESSION_DATA);
 				int totalNumberOfRecords = querySessionData.getTotalNumberOfRecords();

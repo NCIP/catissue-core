@@ -24,6 +24,7 @@ import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.QueryResultObjectDataBean;
 import edu.wustl.common.beans.SessionDataBean;
 
+import edu.wustl.common.querysuite.queryobject.IOutputTerm;
 import edu.wustl.common.querysuite.queryobject.IQuery;
 import edu.wustl.common.querysuite.queryobject.impl.OutputTreeDataNode;
 import edu.wustl.common.querysuite.queryobject.impl.metadata.SelectedColumnsMetadata;
@@ -49,6 +50,7 @@ public class ShowGridAction extends BaseAction
 	throws Exception
 	{         
 	 	HttpSession session = request.getSession();
+	 	Map<String, IOutputTerm> outputTermsColumns = (Map<String, IOutputTerm>)session.getAttribute(Constants.OUTPUT_TERMS_COLUMNS);
 		IQuery query = (IQuery)session.getAttribute(AppletConstants.QUERY_OBJECT);
 		boolean hasConditionOnIdentifiedField = Utility.isConditionOnIdentifiedField(query);
 		session.setAttribute(Constants.HAS_CONDITION_ON_IDENTIFIED_FIELD, hasConditionOnIdentifiedField);
@@ -83,14 +85,16 @@ public class ShowGridAction extends BaseAction
 				spreadSheetDatamap = outputSpreadsheetBizLogic.processSpreadsheetForLabelNode(
 						uniqueIdNodesMap, rootOutputTreeNodeList, columnMap, sessionData,
 						idOfClickedNode, recordsPerPage, selectedColumnsMetadata, randomNumber,
-						hasConditionOnIdentifiedField, queryResultObjectDataMap, mainEntityMap,query.getConstraints());
+						hasConditionOnIdentifiedField, queryResultObjectDataMap, 
+						mainEntityMap,query.getConstraints(),outputTermsColumns);
 			}
 			else
 			{
 				spreadSheetDatamap = outputSpreadsheetBizLogic.processSpreadsheetForDataNode(
 						uniqueIdNodesMap, rootOutputTreeNodeList, sessionData, actualParentNodeId,
 						recordsPerPage, selectedColumnsMetadata, randomNumber,
-						hasConditionOnIdentifiedField, queryResultObjectDataMap, mainEntityMap,query.getConstraints());
+						hasConditionOnIdentifiedField, 
+						queryResultObjectDataMap, mainEntityMap,query.getConstraints(),outputTermsColumns);
 			}
 			spreadSheetDatamap.put(Constants.MAIN_ENTITY_MAP, mainEntityMap);
 			request.getSession().setAttribute(Constants.ENTITY_IDS_MAP,spreadSheetDatamap.get(Constants.ENTITY_IDS_MAP));

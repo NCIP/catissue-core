@@ -210,6 +210,7 @@ public class SaveQueryAction extends BaseAction
 			request.getSession().setAttribute("errorMessageForEditQuery", errorMessage);
 			
 		}
+		parameterizedQuery.setOutputTerms(query.getOutputTerms()); 
 		parameterizedQuery.setOutputAttributeList(selectedOutputAttributeList);
 		return parameterizedQuery;
 	}

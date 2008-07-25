@@ -1,9 +1,7 @@
 package edu.wustl.catissuecore.flex.dag;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -37,23 +35,22 @@ import edu.wustl.common.querysuite.metadata.associations.IIntraModelAssociation;
 import edu.wustl.common.querysuite.metadata.path.IPath;
 import edu.wustl.common.querysuite.queryobject.ArithmeticOperator;
 import edu.wustl.common.querysuite.queryobject.DSInterval;
+import edu.wustl.common.querysuite.queryobject.IArithmeticOperand;
 import edu.wustl.common.querysuite.queryobject.ICondition;
 import edu.wustl.common.querysuite.queryobject.IConnector;
 import edu.wustl.common.querysuite.queryobject.IConstraints;
 import edu.wustl.common.querysuite.queryobject.ICustomFormula;
-import edu.wustl.common.querysuite.queryobject.IDateOffsetAttribute;
 import edu.wustl.common.querysuite.queryobject.IDateOffsetLiteral;
 import edu.wustl.common.querysuite.queryobject.IExpression;
-import edu.wustl.common.querysuite.queryobject.IExpressionAttribute;
 import edu.wustl.common.querysuite.queryobject.IExpressionOperand;
 import edu.wustl.common.querysuite.queryobject.IJoinGraph;
-import edu.wustl.common.querysuite.queryobject.ILiteral;
+import edu.wustl.common.querysuite.queryobject.IOutputTerm;
 import edu.wustl.common.querysuite.queryobject.IQuery;
 import edu.wustl.common.querysuite.queryobject.IQueryEntity;
 import edu.wustl.common.querysuite.queryobject.ITerm;
-import edu.wustl.common.querysuite.queryobject.ITimeIntervalEnum;
 import edu.wustl.common.querysuite.queryobject.LogicalOperator;
 import edu.wustl.common.querysuite.queryobject.RelationalOperator;
+import edu.wustl.common.querysuite.queryobject.TimeInterval;
 import edu.wustl.common.querysuite.queryobject.YMInterval;
 import edu.wustl.common.querysuite.queryobject.impl.Expression;
 import edu.wustl.common.querysuite.queryobject.impl.JoinGraph;
@@ -280,7 +277,7 @@ public class DAGPanel {
 	 * @return
 	 */
 	public CustomFormulaNode formTemporalQuery(CustomFormulaNode node, String operation)
-	{
+	{  
 	    TemporalQueryBean tqBean =  new TemporalQueryBean();
 	    IQuery query = m_queryObject.getQuery();
 	    IConstraints constraints = query.getConstraints();
@@ -316,11 +313,37 @@ public class DAGPanel {
 		    tqBean.createLHSAndRHS();
 		}
 			
-		    //Here we create the custom formula 
 		ICustomFormula customFormula = createCustomFormula(tqBean,operation);
 	    srcIExpression.addOperand(getAndConnector(),customFormula);
 		srcIExpression.setInView(true);
+		addOutputTermsToQuery(query, customFormula);
 		return node;
+	}
+	/**
+	 * Creates output terms and adds it to Query. This will display temporal columns in results.
+	 * @param query
+	 * @param customFormula
+	 */
+	private void addOutputTermsToQuery(IQuery query, ICustomFormula customFormula) {
+		IOutputTerm outputTerm = QueryObjectFactory.createOutputTerm();
+		
+		outputTerm.setTerm(customFormula.getLhs());
+		List<ITerm> allRhs = customFormula.getAllRhs();
+		String timeIntervalName = "";
+		for(ITerm rhs : allRhs)
+		{
+			IArithmeticOperand operand = rhs.getOperand(0);
+			if(operand instanceof IDateOffsetLiteral)
+			{
+				IDateOffsetLiteral dateOffLit = (IDateOffsetLiteral)operand;
+				TimeInterval<?> timeInterval = dateOffLit.getTimeInterval();
+				outputTerm.setTimeInterval(timeInterval);
+				timeIntervalName = timeInterval.name();
+			}
+		}
+		String tqColumnName = "Temporal Results" + " (" + timeIntervalName +"/s)";
+		outputTerm.setName(tqColumnName);
+		query.getOutputTerms().add(outputTerm);
 	}
 	private ICustomFormula createCustomFormula(TemporalQueryBean tqBean,String operation)
 	{
