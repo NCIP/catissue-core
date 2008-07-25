@@ -107,9 +107,9 @@
 	<target name="Default_Label_BarCode_Generator"  depends ="Label_BarCode_Generator_Client,build_client_jar">
 		<delete file="Default_label_barcode_gen.jar" />
 	<jar destfile="Default_label_barcode_gen.jar">
-		<fileset dir="./catissuecore-properties" >
+		<!--  fileset dir="./catissuecore-properties" >
 			<include  name="LabelGenerator.Properties" />
-		</fileset>
+		</fileset -->
 		<!-- fileset dir="." >
 			<include name="label_barcode_gen_client.jar"/>
 		</fileset -->
