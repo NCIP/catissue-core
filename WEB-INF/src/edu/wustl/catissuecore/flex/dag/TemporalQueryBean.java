@@ -438,9 +438,7 @@ public class TemporalQueryBean
 					dateLiteral = QueryObjectFactory.createDateLiteral(new java.sql.Date(date.getTime()));
 				} catch (ParseException e) 
 				{
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					System.out.println("Error occurred in parsing date");
+				    throw new RuntimeException("Cann't Occur");
 				}
 			}
 		}
