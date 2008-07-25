@@ -467,12 +467,12 @@
 			<include name="ApplicationSecurityConfig.xml" />
 			<replacefilter token="@@hibernate-config-file@@" value="${jboss.server.url}/catissuecore-properties/catissuecore.hibernate.cfg.xml" />
 		</replace>
-		<!-- copy todir="${jboss.server.url}/lib" overwrite="true">
+		<copy todir="${jboss.server.url}/lib" overwrite="true">
 			<fileset dir="${lib.dir}">
-				<include name="${mysql.lib}" />
+				<!-- include name="${mysql.lib}" / -->
 				<include name="${oracle.lib}" />
 			</fileset>
-		</copy -->
+		</copy>
 		<copy todir="${jboss.home.dir}/bin" overwrite="true">
 			<fileset dir="${temp.dir}">
 				<include name="DAOConfig.xml" />
