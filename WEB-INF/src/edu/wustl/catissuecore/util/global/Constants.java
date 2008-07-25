@@ -205,6 +205,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String UNIQUE_ID_SEPARATOR = "UQ";
 	public static final String DEFINE_SEARCH_RULES = "Define Limits For";
 	public static final String DATE_FORMAT = "MM-dd-yyyy";
+	public static final String NEW_DATE_FROMAT ="MM/DD/YYYY";
 	public static final String OUTPUT_TREE_MAP = "outputTreeMap";
 	public static final String CHECK_ALL_PAGES = "checkAllPages";
 	public static final String CHECK_ALL_ACROSS_ALL_PAGES = "isCheckAllAcrossAllChecked";

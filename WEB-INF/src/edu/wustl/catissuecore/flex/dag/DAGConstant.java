@@ -9,6 +9,16 @@ public class DAGConstant {
 	public static final String EXPRESSION="EXPRESSION";
 	public static final String ADD_LIMIT="Add";
 	public static final String EDIT_LIMIT="Edit";
+	public static final String DAG_NODE_LIST = "dagNodeList";
+	public static final String CUSTOM_FORMULA_NODE_LIST = "customFormulaNodeList";
+	public static final String REPAINT_OPERATION = "rePaint";
+	public static final String ISREPAINT = "isRepaint";
+	public static final String ISREPAINT_TRUE = "true";
+	public static final String ISREPAINT_FALSE = "false";
+	public static final String EDIT_OPERATION = "edit";
+    public static final String REPAINT_EDIT = "rePaintEdit";
+    public static final String REPAINT_CREATE = "rePaintCreate";
+    
 	
 	//Error Codes 
 	public static  final int SUCCESS=0;
