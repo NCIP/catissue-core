@@ -2,10 +2,12 @@ package edu.wustl.catissuecore.flex.dag;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -36,6 +38,7 @@ import edu.wustl.common.querysuite.metadata.path.IPath;
 import edu.wustl.common.querysuite.queryobject.ArithmeticOperator;
 import edu.wustl.common.querysuite.queryobject.DSInterval;
 import edu.wustl.common.querysuite.queryobject.IArithmeticOperand;
+import edu.wustl.common.querysuite.queryobject.IExpressionAttribute;
 import edu.wustl.common.querysuite.queryobject.ICondition;
 import edu.wustl.common.querysuite.queryobject.IConnector;
 import edu.wustl.common.querysuite.queryobject.IConstraints;
@@ -43,6 +46,8 @@ import edu.wustl.common.querysuite.queryobject.ICustomFormula;
 import edu.wustl.common.querysuite.queryobject.IDateOffsetLiteral;
 import edu.wustl.common.querysuite.queryobject.IExpression;
 import edu.wustl.common.querysuite.queryobject.IExpressionOperand;
+import edu.wustl.common.querysuite.queryobject.IDateLiteral;
+import edu.wustl.common.querysuite.queryobject.IDateOffsetAttribute;
 import edu.wustl.common.querysuite.queryobject.IJoinGraph;
 import edu.wustl.common.querysuite.queryobject.IOutputTerm;
 import edu.wustl.common.querysuite.queryobject.IQuery;
@@ -57,6 +62,7 @@ import edu.wustl.common.querysuite.queryobject.impl.JoinGraph;
 import edu.wustl.common.querysuite.queryobject.impl.Rule;
 import edu.wustl.common.querysuite.queryobject.locator.Position;
 import edu.wustl.common.querysuite.queryobject.locator.QueryNodeLocator;
+import edu.wustl.common.querysuite.utils.QueryUtility;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.logger.Logger;
 /**
@@ -312,12 +318,42 @@ public class DAGPanel {
 			tqBean.createLiterals(node.getTimeInterval(), node.getTimeValue());
 		    tqBean.createLHSAndRHS();
 		}
-			
 		ICustomFormula customFormula = createCustomFormula(tqBean,operation);
-	    srcIExpression.addOperand(getAndConnector(),customFormula);
+		//First removing custom formula
+		removeCustomFormula();
+		srcIExpression.addOperand(getAndConnector(),customFormula);
 		srcIExpression.setInView(true);
 		addOutputTermsToQuery(query, customFormula);
+		setOperation(node);
 		return node;
+	}
+	/**
+	 * Setting the corresponding operation
+	 * @param node
+	 */
+	private void setOperation(CustomFormulaNode node)
+	{
+		HttpServletRequest request = flex.messaging.FlexContext.getHttpRequest();
+		HttpSession session = request.getSession();
+		String isRepaint = (String)session.getAttribute(DAGConstant.ISREPAINT);
+		if(isRepaint == null)
+		{
+			session.setAttribute(DAGConstant.ISREPAINT,DAGConstant.ISREPAINT_FALSE);
+		}
+		else
+		{
+			if(!(isRepaint.equals(DAGConstant.ISREPAINT_FALSE)))
+			{
+				if((isRepaint.equals(DAGConstant.ISREPAINT_TRUE)) && (node.getOperation().equals(DAGConstant.EDIT_OPERATION)))
+				{
+					node.setOperation(DAGConstant.REPAINT_EDIT);
+				}
+				else
+				{
+					node.setOperation(DAGConstant.REPAINT_CREATE); 
+				}
+			}
+		}
 	}
 	/**
 	 * Creates output terms and adds it to Query. This will display temporal columns in results.
@@ -343,6 +379,7 @@ public class DAGPanel {
 		}
 		String tqColumnName = "Temporal Results" + " (" + timeIntervalName +"/s)";
 		outputTerm.setName(tqColumnName);
+		query.getOutputTerms().clear();
 		query.getOutputTerms().add(outputTerm);
 	}
 	private ICustomFormula createCustomFormula(TemporalQueryBean tqBean,String operation)
@@ -376,6 +413,7 @@ public class DAGPanel {
 		else
 		{
 			customFormula.setLhs(tqBean.getLhsTerm());
+			customFormula.getAllRhs().clear();
 			customFormula.addRhs(tqBean.getRhsTerm());
 			customFormula.setOperator(tqBean.getRelOp());
 		}
@@ -591,7 +629,9 @@ public class DAGPanel {
 					(!operator.getStringRepresentation().equals(Constants.ENDS_WITH)) && 
 					(!operator.getStringRepresentation().equals(Constants.In)) &&
 					(!operator.getStringRepresentation().equals(Constants.Between)) &&
-					(!operator.getStringRepresentation().equals(Constants.Not_In)) )
+					(!operator.getStringRepresentation().equals(Constants.Not_In)) &&
+					(!operator.getStringRepresentation().equalsIgnoreCase(Constants.IS_NULL)) &&
+					(!operator.getStringRepresentation().equalsIgnoreCase(Constants.IS_NOT_NULL)))
 			{
 				relationalOperatorsList.add(operator.getStringRepresentation());	
 			}
@@ -749,34 +789,33 @@ public class DAGPanel {
 	 * Repaints DAG
 	 * @return
 	 */
-	public List<DAGNode> repaintDAG()
+	public Map<String,Object> repaintDAG()
 	{
 		List<DAGNode> nodeList = new ArrayList<DAGNode>();
+		List<CustomFormulaNode> customNodeList = new ArrayList<CustomFormulaNode>();
+		Map <String,Object> nodeMap = new HashMap<String,Object>();
 		HttpServletRequest request = flex.messaging.FlexContext.getHttpRequest();
 		HttpSession session = request.getSession();
 		IQuery query =(IQuery)session.getAttribute(DAGConstant.QUERY_OBJECT);
 		m_queryObject.setQuery(query);
 		IConstraints constraints = query.getConstraints();
-
 		positionMap = new QueryNodeLocator(400,query).getPositionMap();
-
+		String isRepaint = (String)session.getAttribute(DAGConstant.ISREPAINT);
+		if((isRepaint == null) || (isRepaint.equals(DAGConstant.ISREPAINT_FALSE)))
+		{
+		    session.setAttribute(DAGConstant.ISREPAINT,DAGConstant.ISREPAINT_TRUE);	
+		}
 		HashSet<Integer> visibleExpression = new HashSet<Integer>();
-
-		//Enumeration<IExpressionId> expressionIds = constraints.getExpressionIds();
 		for(IExpression expression :constraints)
-	//	while(expressionIds.hasMoreElements())
-		//{
-			//IExpressionId id = expressionIds.nextElement();
-			//IExpression expression  = constraints.getExpression(id);
+		{	
 			if(expression.isVisible())
 			{
 				visibleExpression.add(new Integer(expression.getExpressionId()));
 			}
-	//	}
-		for(Integer expressionId:visibleExpression){
-
+	    }
+		for(Integer expressionId:visibleExpression)
+		{
 			IExpression exp = constraints.getExpression(expressionId.intValue());
-			
 			IQueryEntity constraintEntity = exp.getQueryEntity();
 			String nodeDisplayName = edu.wustl.cab2b.common.util.Utility.getOnlyEntityName(constraintEntity.getDynamicExtensionsEntity()); 
 			DAGNode dagNode = new DAGNode();
@@ -799,7 +838,6 @@ public class DAGPanel {
 			}
 			
 			nodeform(expressionId,dagNode,constraints,new ArrayList<IIntraModelAssociation>());
-			
 			int numOperands = exp.numberOfOperands();
 			int numOperator = numOperands-1;
 			for(int i=0;i<numOperator;i++)
@@ -808,9 +846,123 @@ public class DAGPanel {
 				dagNode.setOperatorList(operator.toUpperCase());
 			}
 			nodeList.add(dagNode);
+			if(exp.containsCustomFormula())
+			{
+				Set<ICustomFormula> customFormulas = QueryUtility.getCustomFormulas(exp);
+				if(!customFormulas.isEmpty())
+				{
+					for(ICustomFormula c: customFormulas)
+					{
+						CustomFormulaNode customNode = populateCustomNodeInfo(c,constraints,exp);
+						customNode.setOperation(DAGConstant.REPAINT_OPERATION);
+						customNodeList.add(customNode);
+					}
+				}
+			}
 		}
-		return nodeList;
+		nodeMap.put(DAGConstant.DAG_NODE_LIST,nodeList);
+		nodeMap.put(DAGConstant.CUSTOM_FORMULA_NODE_LIST,customNodeList);
+		return nodeMap;
 
+	}
+	private CustomFormulaNode populateCustomNodeInfo(ICustomFormula c, IConstraints constraints, IExpression srcExp)
+	{
+		CustomFormulaNode cNode = new CustomFormulaNode();
+		Set<IExpression> containingExpressions = QueryUtility.getExpressionsInFormula(c);
+		String customNodeId = srcExp.getExpressionId() +"_";
+		cNode.setFirstNodeExpId(srcExp.getExpressionId());
+		ITerm lhs = c.getLhs();
+		IConnector<ArithmeticOperator> connector = lhs.getConnector(0,1);
+		cNode.setSelectedArithmeticOp(connector.getOperator().mathString());
+		RelationalOperator relOperator = c.getOperator();
+		cNode.setSelectedLogicalOp(relOperator.getStringRepresentation());
+		
+		List<ITerm> allRhs = c.getAllRhs();
+		if(allRhs.size()!=0)
+		{
+			ITerm term = allRhs.get(0);
+			IArithmeticOperand operand = term.getOperand(0);
+			if(operand instanceof IDateOffsetLiteral)
+			{
+				IDateOffsetLiteral dateOffSetLit = (IDateOffsetLiteral)operand;
+				cNode.setTimeValue(dateOffSetLit.getOffset());
+				cNode.setTimeInterval(dateOffSetLit.getTimeInterval().toString()+"s");
+			}else if(operand instanceof IDateLiteral)
+			{
+				IDateLiteral dateLit = (IDateLiteral)operand;
+				cNode.setTimeValue(getDateInGivenFormat(dateLit.getDate()));
+			} else
+			{
+				throw new RuntimeException("Should not occur.....");
+			}
+		}
+	
+		for(IArithmeticOperand element : lhs)
+		{
+			if(element instanceof IExpressionAttribute)
+			{
+				IExpressionAttribute expAttr = (IExpressionAttribute)element;
+				AttributeInterface attribute = expAttr.getAttribute();
+				String dataType = getAttributeDataType(attribute);
+
+				if(expAttr.getExpression().getExpressionId() == srcExp.getExpressionId())
+				{
+					cNode.setFirstSelectedAttrId(attribute.getId().toString());
+					cNode.setFirstSelectedAttrName(attribute.getName());
+					cNode.setFirstSelectedAttrType(dataType);
+				}
+				else
+				{
+					cNode.setSecondSelectedAttrId(attribute.getId().toString());
+					cNode.setSecondSelectedAttrName(attribute.getName());
+					cNode.setSecondSelectedAttrType(dataType);
+				}
+			}else 
+			{
+				throw new RuntimeException("Not yet supported...");
+			}
+				
+		}
+		String fullyQualifiedEntityName = srcExp.getQueryEntity().getDynamicExtensionsEntity().getName();
+		String entityName = Utility.parseClassName(fullyQualifiedEntityName);
+		entityName = Utility.getDisplayLabel(entityName);
+	
+		cNode.setFirstNodeName(entityName);
+		for(IExpression exp : containingExpressions)
+		{
+			if(!exp.equals(srcExp))
+			{
+				cNode.setSecondNodeExpId(exp.getExpressionId());
+				customNodeId = customNodeId + exp.getExpressionId();
+				fullyQualifiedEntityName = exp.getQueryEntity().getDynamicExtensionsEntity().getName();
+				entityName = Utility.parseClassName(fullyQualifiedEntityName);
+				entityName = Utility.getDisplayLabel(entityName);
+				cNode.setSecondNodeName(entityName);
+			}
+		}
+		cNode.setName(customNodeId);
+		return cNode;
+	}
+	private String getDateInGivenFormat(java.sql.Date date)
+	{
+	    Date jDate = new Date(date.getTime());
+		return jDate.toString();
+	}
+	private String getAttributeDataType(AttributeInterface attribute)
+	{
+		String dataType = attribute.getDataType();
+		if(dataType.equals(Constants.DATE_TYPE))
+		{
+			return dataType; 
+		}
+		else
+		{
+			if((dataType.equals(Constants.INTEGER_TYPE) || dataType.equals(Constants.LONG_TYPE) || dataType.equals(Constants.DOUBLE_TYPE)|| dataType.equals(Constants.FLOAT_TYPE) || dataType.equals(Constants.SHORT_TYPE)) && (!attribute.getName().equals("id")))
+			{
+				dataType = Constants.INTEGER_TYPE;	
+			}
+			return dataType;
+		}
 	}
 	/**
 	 * 

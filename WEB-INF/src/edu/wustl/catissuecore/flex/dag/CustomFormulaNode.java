@@ -35,6 +35,8 @@ public class CustomFormulaNode implements Externalizable
 	private String timeValue = "";
 	private String timeInterval = "";
 	
+	private String operation = "";
+	
 	private int x;
 	private int y;
 	
@@ -369,6 +371,7 @@ public class CustomFormulaNode implements Externalizable
 		selectedLogicalOp = in.readUTF();
 		timeValue = in.readUTF();
 		timeInterval = in.readUTF();
+		operation = in.readUTF();
 	    x = in.readInt();
 	    y = in.readInt();
 	}
@@ -393,8 +396,31 @@ public class CustomFormulaNode implements Externalizable
 		out.writeUTF(selectedLogicalOp);
 		out.writeUTF(timeValue);
 		out.writeUTF(timeInterval);
+		out.writeUTF(operation);
 		out.writeInt(x);
 		out.writeInt(y);
+	}
+
+
+
+	
+	/**
+	 * @return Returns the operation.
+	 */
+	public String getOperation()
+	{
+		return operation;
+	}
+
+
+
+	
+	/**
+	 * @param operation The operation to set.
+	 */
+	public void setOperation(String operation)
+	{
+		this.operation = operation;
 	}
 	
 
