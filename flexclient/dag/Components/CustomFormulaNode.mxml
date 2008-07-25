@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Box xmlns:mx="http://www.adobe.com/2006/mxml"  borderThickness="2"  width="325" height="80" color="black" backgroundColor="white"  
+<mx:Box xmlns:mx="http://www.adobe.com/2006/mxml"  borderThickness="2"  width="330" height="88" color="black" backgroundColor="white"  
 	implements="flash.utils.IExternalizable"
 	borderColor="#0000FF" borderStyle="solid">
   <mx:Script>
@@ -17,12 +17,12 @@
   		public var currentCustomNode : CustomFormulaNode = null;
   		
   		[Bindable]
-		public var menuData:Array = [	
-		{label: "Edit", type: "radio", toggled: false,enabled:true},
-		{label: "Delete", type: "radio", toggled: false,enabled:true}
-		
+		public var myMenuData:Array = [	
+		    {label: "Delete", type: "radio", toggled: false,enabled:true},
+		    {label: "Edit", type: "radio", toggled: false,enabled:true}
 		];
 
+//
         private var firstNodeName : String = "";
         private var secondNodeName : String = "";
           
@@ -44,7 +44,18 @@
 
         private var timeValue : String = null;
         private var timeInterval : String = null; 
-
+        
+        private var operation : String = null;
+        
+        public function setOperation(operation : String) : void
+        {
+         	this.operation = operation;
+        }
+        
+        public function getOperation() : String
+        {
+            return this.operation;	
+        } 
 		
   		public function initializeNode(x:int,y:int,name :String) : void
   		{
@@ -198,7 +209,6 @@
 			 this.name = input.readUTF();
 			 firstNodeName = input.readUTF();
 			 secondNodeName = input.readUTF();
-			 
 			 firstNodeExpId = input.readInt();
 			 secondNodeExpId = input.readInt();
 			 
@@ -218,7 +228,7 @@
 			 timeValue = input.readUTF();
 			 
 			 timeInterval = input.readUTF();
-			 
+			 operation = input.readUTF();
 			 this.x = input.readInt();
 			 this.y = input.readInt();
 		}	
@@ -244,18 +254,20 @@
         	out.writeUTF(selectedLogicalOp);
         	out.writeUTF(timeValue);
         	out.writeUTF(timeInterval);
+        	out.writeUTF(operation);
         	out.writeInt(this.x);
         	out.writeInt(this.y);
         }    		
   		
   		
   		
-  		private function createMenu(event:MouseEvent):void
+  		private function createMyMenu(event:MouseEvent):void
   		{
-  			var myMenu:Menu=null;
-  			myMenu = Menu.createMenu(this, menuData, true);
-  			myMenu.show(event.stageX,event.stageY);
-			myMenu.addEventListener(MenuEvent.ITEM_CLICK,handleMenuEvent);
+  			var myNewMenu:Menu=null;
+  			myNewMenu = Menu.createMenu(this, myMenuData, true);
+  			myNewMenu.show(event.stageX,event.stageY);
+			myNewMenu.addEventListener(MenuEvent.ITEM_CLICK,handleMenuEvent);
+			myNewMenu.addEventListener(FaultEvent.FAULT, faultHandler);
   	   }
   	   
   	   private function handleMenuEvent(event:MenuEvent):void
@@ -267,14 +279,14 @@
   	   	  }
   	   	  else
   	   	  {
-  	   	  	  editCustomFormula();
+  	   	  	 editCustomFormula();
   	   	  }
   	   }
   	   private function deleteCustomNode() : void
   	   {
+  	   	  this.parentApplication.rpcService.addEventListener(ResultEvent.RESULT,nodeRemoveHandler);
   	   	  this.parentApplication.rpcService.removeCustomFormula();
-          this.parentApplication.rpcService.addEventListener(ResultEvent.RESULT,nodeRemoveHandler)
-  	      this.parentApplication.rpcService.addEventListener(FaultEvent.FAULT, faultHandler);
+          this.parentApplication.rpcService.addEventListener(FaultEvent.FAULT, faultHandler);
   	   }
   	   private function nodeRemoveHandler(event : ResultEvent) : void
   	   {
@@ -310,13 +322,13 @@
   	]]>
   </mx:Script>
  
-  <mx:RemoteObject id="rpcService" destination="cdeService">
- </mx:RemoteObject>
+  <!--<mx:RemoteObject id="rpcService" destination="cdeService">
+ </mx:RemoteObject> -->
   
   <mx:HBox height="100%" width="100%" textAlign="center">
      <mx:Label id="formulaLabel" text="{customFormula}" height="100%" width="95%"/>
   	
-     <mx:Button  label=">" width="5%" click="createMenu(event)"/>	
+     <mx:Button  label=">" width="5%" click="createMyMenu(event)"/>	
   </mx:HBox> 
   
 </mx:Box>

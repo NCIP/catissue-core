@@ -49,6 +49,16 @@
      		[Bindable]
      		public var secondEntityName : String = null;
      		
+     		[Bindable]
+     		 public  var firstEntityExpId : int = 0;
+     		 
+     		[Bindable]
+     		public var secondEntityExpId : int = 0;
+     		
+     		[Bindable]
+     		public var nodeName : String = null;
+     	
+     		
      		//Declaring all Headers varibles
      		[Bindable] 
 	 	    public var firstEntityLabel : String = null;
@@ -86,8 +96,8 @@
 	 	    private var secondNodeList : ArrayCollection = null; 
 	 	    private var existingPickerLabel : Label = null; 
 	 	    
-	 	    public var firstDAGNode : DAGNode =  null;
-	 	    public var secondDAGNode : DAGNode = null;
+	 	    //public var firstDAGNode : DAGNode =  null;
+	 	    //public var secondDAGNode : DAGNode = null;
 	 	    
 	 	   public function removeMe():void 
 	 	   {
@@ -96,8 +106,7 @@
            
            private function submitData():void
            {
-           	
-		  var timeValue : String = null;
+		  	  var timeValue : String = null;
            	  var timeIntervalValue : String =  null;
            	  var customFormulaString : String = null;
            	  var customFormulaNode : CustomFormulaNode = new CustomFormulaNode();
@@ -178,15 +187,19 @@
              }
              
              //Setting the first selected DAG Nodes Properties
-             customFormulaNode.setFirstNodeName(firstDAGNode.nodeName); 
-             customFormulaNode.setFirstNodeExpId(firstDAGNode.expressionId);
+             //customFormulaNode.setFirstNodeName(firstDAGNode.nodeName);
+             customFormulaNode.setFirstNodeName(firstEntityName); 
+             //customFormulaNode.setFirstNodeExpId(firstDAGNode.expressionId);
+             customFormulaNode.setFirstNodeExpId(firstEntityExpId); 
               
             //Setting the second selected DAG Nodes Properties
-            customFormulaNode.setSecondNodeName(secondDAGNode.nodeName);
-            customFormulaNode.setSecondNodeExpId(secondDAGNode.expressionId);
+           // customFormulaNode.setSecondNodeName(secondDAGNode.nodeName);
+            customFormulaNode.setSecondNodeName(secondEntityName);
+           // customFormulaNode.setSecondNodeExpId(secondDAGNode.expressionId);
+           customFormulaNode.setSecondNodeExpId(secondEntityExpId);
             
-            var customNodeName : String = firstDAGNode.nodeNumber + "_" + secondDAGNode.nodeNumber; 
-            customFormulaNode.name = customNodeName;
+            //var customNodeName : String = firstDAGNode.nodeNumber + "_" + secondDAGNode.nodeNumber; 
+            customFormulaNode.name = nodeName;
             parentApplication.customFormulaString = customFormulaString;
              
            // this.parentApplication.rpcService.removeEventListener(ResultEvent.RESULT, resultHandler);
@@ -197,12 +210,14 @@
              	//rpcService.formTemporalQuery(customFormulaNode, "add");
               this.parentApplication.rpcService.removeEventListener(ResultEvent.RESULT,editCustomNodeHandler);
               this.parentApplication.rpcService.addEventListener(ResultEvent.RESULT, resultHandler);
+              customFormulaNode.setOperation("create");
               this.parentApplication.rpcService.formTemporalQuery(customFormulaNode, "add");
             }
             else
             {
                  this.parentApplication.rpcService.removeEventListener(ResultEvent.RESULT,resultHandler);
                  this.parentApplication.rpcService.addEventListener(ResultEvent.RESULT, editCustomNodeHandler);
+                 customFormulaNode.setOperation("edit");
                  this.parentApplication.rpcService.formTemporalQuery(customFormulaNode, "edit");	
             }
                          	   
@@ -227,9 +242,6 @@
 		  Alert.show(event.fault.faultString, 'Error');
 	  }
 	  
-	          
-    
-    
            private function addInputControl() : void
            {
            	  			//IN case of subtraction of two dates, it should be something integer 

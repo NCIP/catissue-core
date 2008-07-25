@@ -83,6 +83,8 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	
 	private var popUp:PopupWindow = null;
 	
+	private var repaintDAGNodeMap : HashMap = new HashMap();
+	
 	/**
 	* Timer handler  to check container has been initialized.	
 	*/
@@ -170,7 +172,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 		
 	}
 	
-	/**
+   /**
 	* To drag nodes on UI
 	*/	
 	private function onDragDrop(event:DragEvent):void{
@@ -182,7 +184,6 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	    var firstDAGNode : DAGNode = DAGNode(mainPanel.getChildByName(node1));
 	    var secondDAGNode : DAGNode = DAGNode(mainPanel.getChildByName(node2)); 
 
-		
 		if(nodeSelected == "DagNode")
 		{
 		var dagNode:DAGNode = DAGNode(event.dragInitiator) ;
@@ -355,7 +356,11 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	*/
 	private function repaintHandler(event: ResultEvent):void
 	{
-		var nodeList:ArrayCollection = event.result  as ArrayCollection;
+		var nodeMap : Object =  event.result as Object ;
+		
+		var customNodeList : ArrayCollection = nodeMap["customFormulaNodeList"];
+		//Alert.show("Custom Node List is:"+customNodeList.length);
+		var nodeList:ArrayCollection = nodeMap["dagNodeList"];
 		for(var i:int=0;i<nodeList.length;i++)
 		{
 			var node:DAGNode = nodeList.getItemAt(i) as DAGNode;
@@ -385,7 +390,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 						}
 						break;
 				default:																
-						nodeColor=0xFFFFAA	
+						nodeColor=0xFFFFAA;	
 			}	
 			
 			xpos = node.x;
@@ -400,11 +405,9 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 				mainPanel.addChild(node);
 			}
 			totalNodes.addItem(node);
-			
 		}
 		for(var i:int=0;i<nodeList.length;i++)
 		{
-
 			var sourceNode:DAGNode = nodeList.getItemAt(i) as DAGNode;	
 			var associationList:ArrayCollection = sourceNode.associationList;
 			var dagPathList:ArrayCollection = sourceNode.dagpathList;
@@ -448,7 +451,36 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 			 }
 		}
 		currentExp.text = getExprssionString();
+		
+		//repainting the Custom Node
+		repaintCustomNode(customNodeList, nodeList);
+		
 		rpcService.removeEventListener(ResultEvent.RESULT,repaintHandler,false)
+	}
+	
+	private function repaintCustomNode(customNodeList : ArrayCollection, dagNodeList : ArrayCollection): void
+	{
+		for(var i: int=0; i<customNodeList.length; i++)
+		{
+		    var customNode : CustomFormulaNode = customNodeList.getItemAt(i) as CustomFormulaNode;
+		    var customNodeName : String = customNode.name;
+		    var nodeIds : Array = customNode.name.split("_");
+		    var firstNodeId : String = nodeIds[0];
+		    var secondNodeId : String = nodeIds[1];
+		    var repaintDagNodeList : ArrayCollection = new ArrayCollection();
+		    for(var j : int=0; j< dagNodeList.length; j++)
+		    {
+		    	var dagNode : DAGNode = dagNodeList.getItemAt(j) as DAGNode;
+		    	if((dagNode.expressionId.toString() == firstNodeId) ||(dagNode.expressionId.toString() == secondNodeId))
+		    	{
+		    		//Put that node in List
+		    		repaintDagNodeList.addItem(dagNode);
+		    	}
+		    }
+		    repaintDAGNodeMap.put(customNodeName,repaintDagNodeList);
+            
+            addCustomFromulaNode(customNode);
+		}
 	}
 	
 	
@@ -1160,6 +1192,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	
 	public function createAndPopulate(resultMap :Object, operation : String, currentCustomNode : CustomFormulaNode) : void
 	{
+		//Alert.show("In create and Populate, custom NOde is:"+currentCustomNode.toString());
 		queryDataMap = resultMap;
 		
 		//rpcService.removeEventListener(ResultEvent.RESULT,editNodeHandler);
@@ -1191,10 +1224,11 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	     var timeIntervalsList : ArrayCollection = queryDataMap["timeIntervals"];
 	     var entitiesNameList : ArrayCollection = queryDataMap["entityList"];
 	    //Opening the pop up window
+	   
 	    popUp = PopupWindow(PopUpManager.createPopUp(this, PopupWindow, true));
 	   
 	    popUp.showCloseButton = true; 
-	   
+	    
 	    if(operation == "create")
 	    {
 	    	popUp.title ="Define Condition";
@@ -1216,22 +1250,44 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	   popUp.myArray5 = timeIntervalsList;
 	   
 	   // popUp.myArray5 = doctypes;
-	 
-	   var firstDAGNode : DAGNode = DAGNode(mainPanel.getChildByName(node1));
-	   var secondDAGNode : DAGNode = DAGNode(mainPanel.getChildByName(node2)); 
-	   
-	   popUp.firstDAGNode = firstDAGNode;
-	   popUp.secondDAGNode =  secondDAGNode;
-	   
+	  if(operation == "create")
+	  {
+	  	 var firstDAGNode : DAGNode = DAGNode(mainPanel.getChildByName(node1));
+	     var secondDAGNode : DAGNode = DAGNode(mainPanel.getChildByName(node2)); 
+	     
+	     //Setting the names
+	     popUp.firstEntityName = firstDAGNode.nodeName;
+	     popUp.secondEntityName = secondDAGNode.nodeName;
+	     
+	     //Setting the Exp Ids
+	     popUp.firstEntityExpId = firstDAGNode.expressionId;
+	     popUp.secondEntityExpId = secondDAGNode.expressionId;
+	     
+	     //Setting the nodeName
+	     popUp.nodeName = firstDAGNode.nodeNumber + "_" + secondDAGNode.nodeNumber;
+	  }
+	  else
+	  {
+	  	 popUp.firstEntityName = currentCustomNode.getFirstNodeName();
+	  	 
+	  	 popUp.secondEntityName = currentCustomNode.getSecondNodeName();
+	  	
+	     popUp.firstEntityExpId =  currentCustomNode.getFirstNodeExpId();
+	     popUp.secondEntityExpId = currentCustomNode.getSecondNodeExpId();
+	  
+	      //Setting the nodeName
+	      popUp.nodeName = currentCustomNode.name;
+	  }
 	   popUp.firstEntityLabel = splitEntityName(entitiesNameList.getItemAt(0) as String);
 	   popUp.secondEntityLabel = splitEntityName(entitiesNameList.getItemAt(1) as String ); 
-	   popUp.firstEntityName = firstDAGNode.nodeName; 
-	   popUp.secondEntityName = secondDAGNode.nodeName;
+	   
 	   popUp.dataProvider = queryDataMap;
 	   popUp.firstNodeDp = firstNodeDataObject;
 	   popUp.secondNodeDp =  secondNodeDataObject; 
 	   //Opening the popup window in center
 	   
+	   
+	  
 	   if(operation == "edit" && currentCustomNode != null)
 	   {
 	   	    popUp.title ="Edit Condition";
@@ -1311,10 +1367,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 		        }
 	        }
 	   }
-	   
-	   
 	   PopUpManager.centerPopUp(popUp);
-	 	   
 	}
 	
 	private function populateDataHandler(event :  ResultEvent):void 
@@ -1325,22 +1378,35 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	
       public function addCustomFromulaNode(node : CustomFormulaNode):void
       {
-           // rpcService.removeEventListener(ResultEvent.RESULT,PopupWindow.resultHandler);
-            //To draw line between two Selected nodes and Custom Formula Node
-            var dagNode1:DAGNode = DAGNode(mainPanel.getChildByName(node1));
-		    var dagNode2:DAGNode = DAGNode(mainPanel.getChildByName(node2));
-     
+            var dagNode1:DAGNode = null;
+            var dagNode2:DAGNode = null;
+            var operation : String = node.getOperation();
+            //Alert.show("operation is:"+operation);
+            if((operation == "rePaint") || (operation == "rePaintEdit"))
+            {
+            	var nodeName  : String= node.name;
+            	var nodeList : ArrayCollection = repaintDAGNodeMap.getValue(nodeName);
+                dagNode1 = nodeList.getItemAt(0) as DAGNode;
+                dagNode2 = nodeList.getItemAt(1) as DAGNode;
+                customFormulaString = node.getFirstNodeName()+"."+node.getFirstSelectedAttrName() +"\n" + node.getSelectedArithmeticOp() + "\n"+node.getSecondNodeName()+"."+node.getSecondSelectedAttrName() +"\n"+ node.getSelectedLogicalOp()+" " + node.getTimeValue() + " " + node.getTimeInterval();
+            }
+            else
+            {
+            	dagNode1 = DAGNode(mainPanel.getChildByName(node1));
+            	dagNode2 = DAGNode(mainPanel.getChildByName(node2));
+            }
             var customNodeName : String = dagNode1.nodeNumber + "_" + dagNode2.nodeNumber; 
-            
             //Getting if there exists any custom node related to selected nodes
             var existingCustomNode : CustomFormulaNode = mainPanel.getChildByName(customNodeName) as CustomFormulaNode;
             if(existingCustomNode != null)
             {
             	mainPanel.removeChild(existingCustomNode);
             } 
-           
-            //
+
             var customFormulaNode : CustomFormulaNode = new CustomFormulaNode();
+        	
+        	//Setting the operation
+        	customFormulaNode.setOperation(operation);
         	customFormulaNode.customFormula = customFormulaString;
         	customFormulaNode.initializeNode(dagNode1.x+dagNode1.width+50,dagNode1.y+dagNode1.height+20,node.name);
             
@@ -1349,15 +1415,12 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
             //Setting the selected nodes name
             customFormulaNode.setFirstNodeName(node.getFirstNodeName());
             customFormulaNode.setSecondNodeName(node.getSecondNodeName());
-            
             //Setting the Exps Id's
             customFormulaNode.setFirstNodeExpId(node.getFirstNodeExpId());
             customFormulaNode.setSecondNodeExpId(node.getSecondNodeExpId());
-            
             //Setting the selected attributes name
             customFormulaNode.setFirstSelectedAttrName(node.getFirstSelectedAttrName());
             customFormulaNode.setSecondSelectedAttrName(node.getSecondSelectedAttrName());
-            
             //Setting the selected attribute Id's
             customFormulaNode.setFirstSelectedAttrId(node.getFirstSelectedAttrId());
             customFormulaNode.setSecondSelectedAttrId(node.getSecondSelectedAttrId());
@@ -1379,16 +1442,16 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
             customFormulaNode.addEventListener(MouseEvent.MOUSE_MOVE,doCustomFormulaNodeDrag);
             mainPanel.addChild(customFormulaNode);
             
-            popUp.removeMe();
             drawLines(dagNode1,customFormulaNode.x,customFormulaNode.y,customFormulaNode.name);
             drawLines(dagNode2,customFormulaNode.x,customFormulaNode.y,customFormulaNode.name);
-      
+         
+            //Removing the pop up
+            popUp.removeMe();
       }
       private function drawLines(dagNode : DAGNode,toX : int,toY : int,customNodeName:String):void
       {
       	 var fromX : int= dagNode.x+dagNode.width;
       	 var fromY : int = dagNode.y + (dagNode.height/2);
-      	 
       	 //Removing the existing line
       	 var existingLine : UIComponent = mainPanel.getChildByName(dagNode.nodeNumber+"_"+customNodeName) as UIComponent;
       	 if(existingLine != null)
@@ -1440,6 +1503,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 
       public function deleteCustomNode(customNodeName : String ,line1 : String,line2 :String) : void
       {
+           //Alert.show("In delete custom node");
            var customNode : CustomFormulaNode = mainPanel.getChildByName(customNodeName) as CustomFormulaNode;
            var line : UIComponent= null; 
            if(customNode != null)
