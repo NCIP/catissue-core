@@ -3,7 +3,12 @@
  */
 package edu.wustl.catissuecore.namegenerator;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.Properties;
+
+import edu.wustl.catissuecore.util.global.Variables;
 
 /**
  * This class has functions to read LabelGenerator Properties file.
@@ -22,10 +27,10 @@ public class PropertyHandler {
 	 */
 	public static void init(String path) throws Exception
 	{
+		String absolutePath=Variables.propertiesDirPath +File.separator+path;
+		InputStream inpurStream= new FileInputStream(new File(absolutePath));
 		nameGeneratorProperties = new Properties();
-		nameGeneratorProperties.load(
-			PropertyHandler.class.getClassLoader().getResourceAsStream(path));
-		
+		nameGeneratorProperties.load(inpurStream);		
 	}
 	
 
