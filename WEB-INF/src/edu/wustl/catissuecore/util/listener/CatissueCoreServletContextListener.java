@@ -1,5 +1,5 @@
 /*
- * $Name: 1.41.2.28 $
+ * $Name: 1.41.2.29 $
  *
  * */
 package edu.wustl.catissuecore.util.listener;
@@ -51,6 +51,7 @@ import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.bizlogic.QueryBizLogic;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.util.CVSTagReader;
+import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.dbManager.DBUtil;
@@ -99,7 +100,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 	        initCatissueCache();
 			initEntityCache();
 
-			edu.wustl.common.querysuite.security.utility.Utility.initializeMap();
+			Utility.initializePrivilegesMap();
 //			initTitliIndex();
 			edu.wustl.common.querysuite.security.utility.Utility.setReadDeniedAndEntitySqlMap();
 			logger.info("Initialization complete");

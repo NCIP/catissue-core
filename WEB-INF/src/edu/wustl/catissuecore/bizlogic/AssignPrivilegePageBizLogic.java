@@ -34,6 +34,7 @@ import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.Variables;
 import edu.wustl.common.util.logger.Logger;
 import gov.nih.nci.security.authorization.domainobjects.Privilege;
 import gov.nih.nci.security.authorization.domainobjects.Role;
@@ -221,9 +222,10 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 	public List<NameValueBean> getActionList(boolean isToExcludeDisabled) throws BizLogicException
 	{     
 		List<NameValueBean> privilegeNameValueBeanList = new ArrayList<NameValueBean>();
-		for (CPPrivilege privilege  : CPPrivilege.values())
+		List<NameValueBean> cpPrivilegesList = Variables.privilegeGroupingMap.get("CP");
+		for (NameValueBean nmv  : cpPrivilegesList)
 		{
-			NameValueBean privilegeNameValueBean = new NameValueBean(Utility.getDisplayLabelForUnderscore(privilege.toString()), privilege.getId());
+			NameValueBean privilegeNameValueBean = new NameValueBean(Utility.getDisplayLabelForUnderscore(nmv.getName()), nmv.getValue());
 			privilegeNameValueBeanList.add(privilegeNameValueBean);
 		}
 		return privilegeNameValueBeanList;
