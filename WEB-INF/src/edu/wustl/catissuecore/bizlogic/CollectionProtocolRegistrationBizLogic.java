@@ -27,12 +27,16 @@ import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.namegenerator.BarcodeGenerator;
+import edu.wustl.catissuecore.namegenerator.BarcodeGeneratorFactory;
+import edu.wustl.catissuecore.namegenerator.NameGeneratorException;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.CollectionProtocolSeqComprator;
 import edu.wustl.catissuecore.util.ConsentUtil;
 import edu.wustl.catissuecore.util.ParticipantRegistrationCacheManager;
 import edu.wustl.catissuecore.util.ParticipantRegistrationInfo;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.dao.DAO;
@@ -101,6 +105,13 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 
 		collectionProtocolRegistration.setParticipant(participant);
 
+		String barcode = collectionProtocolRegistration.getBarcode();
+		generateCPRBarcode(collectionProtocolRegistration);
+		if((barcode!=collectionProtocolRegistration.getBarcode()) && barcode!=null)
+		{
+			collectionProtocolRegistration.setBarcode(barcode);
+		}
+		
 		insertCPR(collectionProtocolRegistration, dao, sessionDataBean);
 		if (armFound == false && Constants.ARM_CP_TYPE.equals(collectionProtocolRegistration.getCollectionProtocol().getType()))
 		{
@@ -109,6 +120,30 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 
 	}
 
+	/**
+	 * Method to generate barcode for the SpecimenCollectionGroup
+	 * @param specimenCollectionGroup Object of SpecimenCollectionGroup
+	 * @throws DAOException DAO exception
+	 */
+	private void generateCPRBarcode(
+			CollectionProtocolRegistration collectionProtocolRegistration)
+			throws DAOException
+	{
+		try
+		{
+			if(Variables.isCollectionProtocolRegistrationBarcodeGeneratorAvl)
+			{
+				BarcodeGenerator collectionProtocolRegistrationBarcodeGenerator = BarcodeGeneratorFactory
+				.getInstance(Constants.COLL_PROT_REG_BARCODE_GENERATOR_PROPERTY_NAME);
+				collectionProtocolRegistrationBarcodeGenerator.setBarcode(collectionProtocolRegistration);
+			}
+		}
+		catch(NameGeneratorException nameGeneratorException)
+		{
+			throw new DAOException(nameGeneratorException.getMessage(),nameGeneratorException);
+		}
+	}
+	
 	/**
 	 * This method is called when any arm is registered and it has no further
 	 * child arms. This method then registers the remaining phases of the parent

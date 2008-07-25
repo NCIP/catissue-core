@@ -421,7 +421,7 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 				this.protocolParticipantIdentifier = null;
 			
 			this.registrationDate = Utility.parseDate(form.getRegistrationDate(),Utility.datePattern(form.getRegistrationDate()));
-			
+			this.barcode = Utility.toString(form.getBarcode());
 			
 			//For Consent Tracking ----Ashish 1/12/06
 			//Setting the consent sign date.

@@ -375,6 +375,8 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 		try
 		{
 			this.setName(form.getName());
+			this.barcode = form.getBarcode();
+			
 			// Bug no. 7390
 			// adding the collection status in the add specimen collection group page
 			// removed the addOperation() if loop
@@ -753,11 +755,20 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 		this.name = name;
 	}
 	
+	/**
+	 * Returns the unique barcode of the Specimen Collection Group
+	 * @hibernate.property name="barcode" column="BARCODE" type="string" length="255"
+	 * @return the system generated unique name.
+	 * @see #setName(String)
+	 */
 	public String getBarcode()
 	{
 		return barcode;
 	}
 	
+	/**
+	 * @param barcode The barcode to set.
+	 */
 	public void setBarcode(String barcode)
 	{
 		this.barcode = barcode;

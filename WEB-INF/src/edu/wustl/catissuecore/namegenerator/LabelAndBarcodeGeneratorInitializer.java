@@ -24,6 +24,8 @@ public class LabelAndBarcodeGeneratorInitializer {
 		LabelGenerator specimenCollectionGroupLableGeneratorInstance;
 		BarcodeGenerator specimenBarcodeGeneratorInstance;
 		BarcodeGenerator storageContainerBarcodeGeneratorInstance;
+		BarcodeGenerator specimenCollectionGroupBarcodeGeneratorInstance;
+		BarcodeGenerator collectionProtocolRegistrationBarcodeGeneratorInstance;
 		try 
 		{
 			
@@ -56,6 +58,16 @@ public class LabelAndBarcodeGeneratorInitializer {
 			if(specimenCollectionGroupLableGeneratorInstance != null)
 			{
 				Variables.isSpecimenCollGroupLabelGeneratorAvl = true;
+			}
+			specimenCollectionGroupBarcodeGeneratorInstance = BarcodeGeneratorFactory.getInstance(Constants.SPECIMEN_COLL_GROUP_BARCODE_GENERATOR_PROPERTY_NAME);
+			if(specimenCollectionGroupBarcodeGeneratorInstance != null)
+			{
+				Variables.isSpecimenCollGroupBarcodeGeneratorAvl = true;
+			}
+			collectionProtocolRegistrationBarcodeGeneratorInstance = BarcodeGeneratorFactory.getInstance(Constants.COLL_PROT_REG_BARCODE_GENERATOR_PROPERTY_NAME);
+			if(collectionProtocolRegistrationBarcodeGeneratorInstance != null)
+			{
+				Variables.isCollectionProtocolRegistrationBarcodeGeneratorAvl = true;
 			}
 		} 
 		catch (Exception e) 

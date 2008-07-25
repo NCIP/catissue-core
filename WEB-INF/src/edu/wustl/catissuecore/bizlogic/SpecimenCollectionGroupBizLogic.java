@@ -41,6 +41,8 @@ import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.SpecimenObjectFactory;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.namegenerator.BarcodeGenerator;
+import edu.wustl.catissuecore.namegenerator.BarcodeGeneratorFactory;
 import edu.wustl.catissuecore.namegenerator.LabelGenerator;
 import edu.wustl.catissuecore.namegenerator.LabelGeneratorFactory;
 import edu.wustl.catissuecore.namegenerator.NameGeneratorException;
@@ -53,6 +55,7 @@ import edu.wustl.catissuecore.util.ConsentUtil;
 import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.cde.CDEManager;
@@ -69,7 +72,6 @@ import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
-import edu.wustl.common.util.global.Variables;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -120,6 +122,12 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		if((label!=specimenCollectionGroup.getName())&&label!=null)
 		{
 			specimenCollectionGroup.setName(label);
+		}
+		String barcode=specimenCollectionGroup.getName();
+		generateSCGBarcode(specimenCollectionGroup);
+		if((barcode!=specimenCollectionGroup.getName())&&barcode!=null)
+		{
+			specimenCollectionGroup.setBarcode(barcode);
 		}
 		dao.insert(specimenCollectionGroup, sessionDataBean, true, true);
 		if (specimenCollection != null)
@@ -251,9 +259,36 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	{
 		try
 		{
-			LabelGenerator specimenCollectionGroupLableGenerator = LabelGeneratorFactory
-			.getInstance(Constants.SPECIMEN_COLL_GROUP_LABEL_GENERATOR_PROPERTY_NAME);
-			specimenCollectionGroupLableGenerator.setLabel(specimenCollectionGroup);
+			if(Variables.isSpecimenCollGroupLabelGeneratorAvl)
+			{
+				LabelGenerator specimenCollectionGroupLableGenerator = LabelGeneratorFactory
+				.getInstance(Constants.SPECIMEN_COLL_GROUP_LABEL_GENERATOR_PROPERTY_NAME);
+				specimenCollectionGroupLableGenerator.setLabel(specimenCollectionGroup);
+			}
+		}
+		catch(NameGeneratorException nameGeneratorException)
+		{
+			throw new DAOException(nameGeneratorException.getMessage(),nameGeneratorException);
+		}
+	}
+	
+	/**
+	 * Method to generate barcode for the SpecimenCollectionGroup
+	 * @param specimenCollectionGroup Object of SpecimenCollectionGroup
+	 * @throws DAOException DAO exception
+	 */
+	private void generateSCGBarcode(
+			SpecimenCollectionGroup specimenCollectionGroup)
+			throws DAOException
+	{
+		try
+		{
+			if(Variables.isSpecimenCollGroupBarcodeGeneratorAvl)
+			{
+				BarcodeGenerator specimenCollectionGroupBarcodeGenerator = BarcodeGeneratorFactory
+				.getInstance(Constants.SPECIMEN_COLL_GROUP_BARCODE_GENERATOR_PROPERTY_NAME);
+				specimenCollectionGroupBarcodeGenerator.setBarcode(specimenCollectionGroup);
+			}
 		}
 		catch(NameGeneratorException nameGeneratorException)
 		{
@@ -507,6 +542,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		persistentSCG.setClinicalDiagnosis(specimenCollectionGroup.getClinicalDiagnosis());
 		persistentSCG.setClinicalStatus(specimenCollectionGroup.getClinicalStatus());
 		persistentSCG.setName(specimenCollectionGroup.getName());
+		persistentSCG.setBarcode(specimenCollectionGroup.getBarcode());
 		persistentSCG.setConsentTierStatusCollection(specimenCollectionGroup.getConsentTierStatusCollection());
 		dao.update(persistentSCG, sessionDataBean, true, true, false);
 		/**

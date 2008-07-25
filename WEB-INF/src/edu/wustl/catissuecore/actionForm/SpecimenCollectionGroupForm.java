@@ -32,6 +32,7 @@ import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.global.ApplicationProperties;
@@ -60,6 +61,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm implements C
 	private String surgicalPathologyNumber;
 	
 	private long participantsMedicalIdentifierId;
+	
+	private String barcode;
 	
 	   /**
 	 * Name : Ashish Gupta
@@ -403,7 +406,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm implements C
 		SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) abstractDomain;
 			
 		id = specimenCollectionGroup.getId().longValue();
-		name =  specimenCollectionGroup.getName();    
+		name =  specimenCollectionGroup.getName();
+		barcode = Utility.toString(specimenCollectionGroup.getBarcode());
 		Logger.out.debug("specimenCollectionGroup.getClinicalDiagnosis() "+specimenCollectionGroup.getClinicalDiagnosis());
 		clinicalDiagnosis = Utility.toString(specimenCollectionGroup.getClinicalDiagnosis());
 		clinicalStatus = Utility.toString(specimenCollectionGroup.getClinicalStatus());
@@ -1503,5 +1507,14 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm implements C
 	{
 		this.offset = offset;
 	}
-
+	
+	public String getBarcode()
+	{
+		return barcode;
+	}
+	
+	public void setBarcode(String barcode)
+	{
+		this.barcode = barcode;
+	}
 }

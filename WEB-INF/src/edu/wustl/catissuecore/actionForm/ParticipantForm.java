@@ -293,6 +293,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 					String collectionProtocolId = "CollectionProtocolRegistration:" + i + "_CollectionProtocol_id";
 					String collectionProtocolTitle = "CollectionProtocolRegistration:" + i + "_CollectionProtocol_shortTitle";
 					String collectionProtocolParticipantId = "CollectionProtocolRegistration:" + i + "_protocolParticipantIdentifier";
+					String barcode = "CollectionProtocolRegistration:" + i + "_barcode";
 					String collectionProtocolRegistrationDate = "CollectionProtocolRegistration:" + i + "_registrationDate";
 					String collectionProtocolIdentifier = "CollectionProtocolRegistration:" + i + "_id";
 					String isConsentAvailable = "CollectionProtocolRegistration:" + i + "_isConsentAvailable";
@@ -316,6 +317,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 							.getCollectionProtocol().getShortTitle()));
 					collectionProtocolRegistrationValues.put(collectionProtocolParticipantId, Utility.toString(collectionProtocolRegistration
 							.getProtocolParticipantIdentifier()));
+					collectionProtocolRegistrationValues.put(barcode, Utility.toString(collectionProtocolRegistration.getBarcode()));
 					collectionProtocolRegistrationValues.put(collectionProtocolRegistrationDate, date);
 					collectionProtocolRegistrationValues.put(collectionProtocolIdentifier, Utility.toString(collectionProtocolRegistration.getId()));
 					collectionProtocolRegistrationValues.put(isActive, Utility.toString(collectionProtocolRegistration.getActivityStatus()));

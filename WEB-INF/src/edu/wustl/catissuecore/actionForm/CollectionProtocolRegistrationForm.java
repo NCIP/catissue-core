@@ -58,6 +58,11 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm imple
 	 * Date on which the Participant is registered to the Collection Protocol.
 	 */
 	protected String registrationDate;
+	
+	/**
+	 * Date on which the Participant is registered to the Collection Protocol.
+	 */
+	protected String barcode;
 
 	/**
 	 * Represents the weather participant Name is selected or not.
@@ -591,9 +596,14 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm imple
 		this.offset = offset;
 	}
 
+	public String getBarcode()
+	{
+		return barcode;
+	}
 
-	
-	
+	public void setBarcode(String barcode)
+	{
+		this.barcode = barcode;
+	}
 	//Sub Protocol 
-	
 }

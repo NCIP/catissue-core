@@ -85,6 +85,15 @@
             column="PROTOCOL_PARTICIPANT_ID"
             length="255" 
         />
+        
+        <property
+            name="barcode"
+            type="string"
+            update="true"
+            insert="true"
+            column="BARCODE"
+            length="255"
+	    />
 
         <property
             name="registrationDate"
