@@ -1582,8 +1582,9 @@
 											<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">		
 											
 											<%
-												NewSpecimenForm newSpecimenForm = (NewSpecimenForm) request.getAttribute("newSpecimenForm");
-												if(newSpecimenForm.getCollectionStatus().equals("Pending"))//||errorsInInsertion!=null )
+												NewSpecimenForm newSpecimenForm=(NewSpecimenForm)request.getAttribute("newSpecimenForm");
+												String showContainer = (String) request.getAttribute("showContainer");
+												if(showContainer!=null&&showContainer.equals("Pending"))
 												{%>
 												<tr>
 													<td class="tabletd1"><html:radio value="1" onclick="onRadioButtonGroupClick(this)" styleId="stContSelection" property="stContSelection"/></td>
@@ -1626,7 +1627,7 @@
 												<%}									
 												else
 												{	
-												if((newSpecimenForm.getStorageContainer().equals("")||newSpecimenForm.getStorageContainer().equals("-1"))&&newSpecimenForm.getCollectionStatus().equals("Collected"))//||errorsInInsertion!=null )
+												if((newSpecimenForm.getStorageContainer().equals("")||newSpecimenForm.getStorageContainer().equals("-1"))&&newSpecimenForm.getCollectionStatus().equals("Collected"))
 												{%>
 												<tr>
 													<td class="tabletd1"><html:radio value="1" onclick="onRadioButtonGroupClickForDerived(this)" styleId="stContSelection" property="stContSelection"/></td>
