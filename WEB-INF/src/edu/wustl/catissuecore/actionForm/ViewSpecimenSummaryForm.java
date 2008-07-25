@@ -318,4 +318,19 @@ public class ViewSpecimenSummaryForm extends ActionForm implements SpecimenDetai
 			genericSpecimen.setReadOnly(this.readOnly);
 		}
 	}
+	
+	protected String forwardTo = null;
+	
+	/**
+	 * @return Returns the forwardTo.
+	 */
+	public String getForwardTo() {
+		return forwardTo;
+	}
+	/**
+	 * @param forwardTo The forwardTo to set.
+	 */
+	public void setForwardTo(String forwardTo) {
+		this.forwardTo = forwardTo;
+	}
 }

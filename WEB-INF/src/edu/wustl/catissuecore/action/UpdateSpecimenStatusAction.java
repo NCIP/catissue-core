@@ -1,11 +1,13 @@
 package edu.wustl.catissuecore.action;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -84,6 +86,19 @@ public class UpdateSpecimenStatusAction extends BaseAction {
 				}
 			}
 			
+			if(specimenSummaryForm.getForwardTo()!=null&&specimenSummaryForm.getForwardTo().equals(Constants.ADD_MULTIPLE_SPECIMEN_TO_CART))
+			{
+				HashSet specimenprintCollection = getSpecimensToPrint((Long)obj, sessionDataBean);
+				
+				Iterator iter=specimenprintCollection.iterator();
+				List specimenIdList=new ArrayList();
+				while( iter.hasNext())
+				{
+					specimenIdList.add(((Specimen)iter.next()).getId());
+				}
+				request.setAttribute("specimenIdList", specimenIdList);
+				return mapping.findForward(Constants.ADD_MULTIPLE_SPECIMEN_TO_CART);
+			}
 			return mapping.findForward(Constants.SUCCESS);
 		}
 		catch(Exception exception)

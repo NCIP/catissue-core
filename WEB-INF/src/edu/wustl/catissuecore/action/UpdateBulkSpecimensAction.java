@@ -1,11 +1,13 @@
 package edu.wustl.catissuecore.action;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -67,6 +69,14 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 			else
 			{
 				((NewSpecimenBizLogic)bizLogic).bulkUpdateSpecimens(specimenDomainCollection, sessionDataBean);
+				
+				/*Iterator iter=specimenDomainCollection.iterator();
+				List specimenIdList=new ArrayList();
+				while( iter.hasNext())
+				{
+					specimenIdList.add(((Specimen)iter.next()).getId());
+				}
+				request.setAttribute("specimenIdList", specimenIdList);*/
 			}
 			ActionMessages actionMessages = new ActionMessages();
 			actionMessages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
@@ -90,6 +100,18 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 				if(request.getParameter("pageOf") != null)
 					request.setAttribute("pageOf",request.getParameter("pageOf"));
 				return mapping.findForward("printMultiple");
+			}
+			if(specimenSummaryForm.getForwardTo()!=null&&specimenSummaryForm.getForwardTo().equals(Constants.ADD_MULTIPLE_SPECIMEN_TO_CART))
+			{
+				Iterator iter=specimenDomainCollection.iterator();
+				List specimenIdList=new ArrayList();
+				while( iter.hasNext())
+				{
+					specimenIdList.add(((Specimen)iter.next()).getId());
+				}
+				request.setAttribute("specimenIdList", specimenIdList);
+				request.setAttribute("pageOf", Constants.SUCCESS);
+				return mapping.findForward(Constants.ADD_MULTIPLE_SPECIMEN_TO_CART);
 			}
 			if(request.getParameter("pageOf") != null)
 				return mapping.findForward(request.getParameter("pageOf"));

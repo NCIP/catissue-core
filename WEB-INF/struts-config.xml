@@ -693,6 +693,26 @@ PUBLIC
 			<forward name="pageOfNewSpecimen" path="/QuerySpecimenSearch.do?pageOf=pageOfNewSpecimenCPQuery" />
 		</action>
 		
+		<action path="/AddScgToCart"
+			type="edu.wustl.catissuecore.action.NewShopingCartAction"
+			name="viewSpecimenSummaryForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path="/redirecttoSCG.do" />	
+		</action>
+		
+			<action path="/AddMltipleSpecimenToCart"
+			type="edu.wustl.catissuecore.action.NewShopingCartAction"
+			name="viewSpecimenSummaryForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path="/pages/AnticipatorySpecimens.jsp" />	
+			<forward name="multipleSpWithMenu" path=".catissuecore.viewSpecimenSummary" />	
+			<forward name="failure" path="/pages/AnticipatorySpecimens.jsp" />
+			<forward name="multipleSpWithMenuFaliure" path=".catissuecore.viewSpecimenSummary" />
+			<forward name="printMultiple" path="/printMultiple.do" />
+		</action>
+		
 		<action path="/AddDeriveSpecimenToCart"
 			type="edu.wustl.catissuecore.action.NewShopingCartAction"
 			name="createSpecimenForm"
@@ -4701,7 +4721,6 @@ PUBLIC
 					<forward name="success" path="/pages/SpecimenSummary.jsp" />
 					<forward name="bulkUpdateSpecimens"  path="/bulkUpdateSpecimens.do" />
 					<forward name="pageOfbulkUpdateSpecimens"  path="/bulkUpdateSpecimens.do?pageOf=multipleSpWithMenu" />
-
 					<forward name="anticipatory" path="/pages/AnticipatorySpecimens.jsp" />  
 					<forward name="pageOfMultipleSpWithoutMenu" path="/pages/SpecimenSummary.jsp" />
 					<forward name="updateSpecimenStatus" path="/updateSpecimenStatus.do" />
@@ -4745,7 +4764,8 @@ PUBLIC
 					<forward name="multipleSpWithMenu" path=".catissuecore.viewSpecimenSummary" />	
 					<forward name="failure" path="/pages/AnticipatorySpecimens.jsp" />
 					<forward name="multipleSpWithMenuFaliure" path=".catissuecore.viewSpecimenSummary" />
-					<forward name="printMultiple" path="/printMultiple.do" />	
+					<forward name="printMultiple" path="/printMultiple.do" />
+					<forward name="addMltipleSpecimenToCart" path="/AddMltipleSpecimenToCart.do" />	
        </action>    
 	   <action path="/printMultiple"
 			type="edu.wustl.catissuecore.action.PrintAction"
@@ -4763,6 +4783,7 @@ PUBLIC
 					<forward name="success" path="/redirecttoSCG.do" />	
 					<forward name="printAnticipatorySpecimens" path="/printMultiple.do" />	
 					<forward name="failure" path="/pages/AnticipatorySpecimens.jsp" />
+					<forward name="addMltipleSpecimenToCart" path="/AddScgToCart.do?pageOf=success" />
        </action>    
 
        <action path="/redirecttoSCG"

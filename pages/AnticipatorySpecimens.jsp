@@ -154,6 +154,13 @@
 				document.forms[0].submit();
 			}
 		}
+		
+		function onAddToCart()
+		{
+				document.forms[0].forwardTo.value="addMltipleSpecimenToCart";
+				pageSubmit();
+			
+		}
 	</script>
 </head>
 <body onload="UpdateCheckBoxStatus()">
@@ -311,6 +318,7 @@
 		<html:hidden property="showbarCode" />
 		<html:hidden property="readOnly" />
 		<html:hidden property="showParentStorage" />
+		<html:hidden property="forwardTo" />
 		<logic:equal name="viewSpecimenSummaryForm" property="readOnly" value="false">
 		<tr>					
 			<td class="formFieldNoBorders" colspan="5"  height="20" >
@@ -320,6 +328,7 @@
 			</td>
 			<td>
 			<input class="blue_ar_b" type="button" value="Submit" onclick="pageSubmit()" />
+			<input class="blue_ar_b" type="button" value="Add To My List" onclick="onAddToCart()" />
 			</td>
 		 </tr>
 		</logic:equal>

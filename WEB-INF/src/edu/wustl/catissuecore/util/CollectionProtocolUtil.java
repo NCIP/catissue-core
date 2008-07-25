@@ -855,7 +855,7 @@ public class CollectionProtocolUtil {
 		String sourceObjectName =  SpecimenCollectionGroup.class.getName();
 		String[] whereColName = {"id"};
 		String[] whereColCond = {"="};
-		Object[] whereColVal = {id};
+		Object[] whereColVal = {Long.parseLong(id)};
 		String [] selectColumnName = {"collectionProtocolRegistration.collectionProtocol"};
 		List list = collectionProtocolBizLogic.retrieve(sourceObjectName,selectColumnName,whereColName,whereColCond,whereColVal,Constants.AND_JOIN_CONDITION);
 		if(list != null && !list.isEmpty())

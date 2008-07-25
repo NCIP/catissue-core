@@ -38,6 +38,7 @@ import edu.wustl.catissuecore.actionForm.CategorySearchForm;
 import edu.wustl.catissuecore.actionForm.CreateSpecimenForm;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.SpecimenForm;
+import edu.wustl.catissuecore.actionForm.ViewSpecimenSummaryForm;
 import edu.wustl.catissuecore.annotations.AnnotationUtil;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.querysuite.QueryShoppingCartBizLogic;
@@ -69,8 +70,6 @@ public class NewShopingCartAction extends BaseAction {
 		List<AttributeInterface> cartAttributeList=new ArrayList<AttributeInterface>();
 		List<String> columnList=new ArrayList<String>();
 		String pageOf = request.getParameter(edu.wustl.catissuecore.util.global.Constants.PAGEOF);
-		
-		
 		
 		int[] searchTarget = prepareSearchTarget();
 		int basedOn = 0;
@@ -147,7 +146,7 @@ public class NewShopingCartAction extends BaseAction {
 		
 		if(selectColumnName!=null)
 		{	
-			cartnew=createListOfItems(form,selectColumnName);
+			cartnew=createListOfItems(form,selectColumnName,request);
 	
 			
 			ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
@@ -219,10 +218,11 @@ public class NewShopingCartAction extends BaseAction {
 
 	/**
 	 * @param form  object of ActionForm
+	 * @param request 
 	 * @return cart
 	 * @throws DAOException Database related Exception
 	 */
-	private List<List<String>> createListOfItems(ActionForm form,String[] selectColumnName) throws DAOException {
+	private List<List<String>> createListOfItems(ActionForm form,String[] selectColumnName, HttpServletRequest request) throws DAOException {
 		String objName=Specimen.class.getName();
 		IBizLogic bizLogic=getBizLogic(objName);
 		Object searchObjects = null;
@@ -250,7 +250,7 @@ public class NewShopingCartAction extends BaseAction {
 					cartnew.add(columnList2);
 				}
 			}
-			 else
+			 else if(form instanceof SpecimenForm)
 			 {
 				 	specimenForm = (SpecimenForm) form;
 				 	Object[] whereColumnValue = {specimenForm.getId()};
@@ -258,6 +258,23 @@ public class NewShopingCartAction extends BaseAction {
 				 	columnList=createList(ls);
 				 	cartnew.add(columnList);
 			 }
+			 else if(form instanceof ViewSpecimenSummaryForm)
+			 {
+				 	List ls=(List)request.getAttribute("specimenIdList");
+				 	if(ls!=null)
+				 	{
+				 		Iterator itr=ls.iterator();
+				 		while (itr.hasNext()) {
+					
+				 			List<String> columnList2=new ArrayList<String>();
+				 			Object[] whereColumnValue = {Long.valueOf((itr.next()).toString())};
+				 			List ls1 =bizLogic.retrieve(objName, selectColumnName,whereColumnName,whereColumnCondition,whereColumnValue,null);
+				 			columnList2=createList(ls1);
+				 			cartnew.add(columnList2);
+				 		}
+				 	}
+			 }
+			
 		return cartnew;
 		 
 	}
