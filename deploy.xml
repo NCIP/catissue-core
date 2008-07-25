@@ -846,21 +846,8 @@
 	</target>
 	
 	<target name="upgrade_db">
-		<if>
-			<equals arg1="mysql" arg2="${database.type}" />
-			<then>
-				<antcall target="upgrade_db_mysql" />
-			</then>
-			<elseif>
-				<equals arg1="oracle" arg2="${database.type}" />
-				<then>
-					<antcall target="upgrade_db_oracle" />
-				</then>
-			</elseif>
-			<else>
-				<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
-			</else>
-		</if>
+		<antcall target="upgrade_from_Suite1.0_to_1.1" />
+		<antcall target="update_metadata_for_model_changes" />
 	</target>
 	
 	<target name="upgrade_1.2.2_to_1.0_mysql">
@@ -925,10 +912,28 @@
 		</if>
 	</target>
 	
-	
+
+	<target name="upgrade_from_Suite1.0_to_1.1">
+		<if>
+			<equals arg1="mysql" arg2="${database.type}" />
+			<then>
+				<antcall target="upgrade_mysql_from_Suite1.0_to_1.1" />
+			</then>
+			<elseif>
+				<equals arg1="oracle" arg2="${database.type}" />
+				<then>
+					<antcall target="upgrade_oracle_from_Suite1.0_to_1.1" />
+				</then>
+			</elseif>
+			<else>
+				<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
+			</else>
+		</if>
+	</target>
+		
 	
 	<!--MySQL Database Upgradation -->
-	<target name="upgrade_db_mysql">
+	<target name="upgrade_mysql_from_Suite1.0_to_1.1">
 		<echo message="Upgrading MySQL Database for caTISSUE Suite Application ..." />
 		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" onerror="continue">
 			<transaction src="${dbupgrade.sql.dir}/MySql/DBUpgrade_Suite_1.0_to_1.1.sql" />
@@ -940,12 +945,17 @@
 			</classpath>
 		</sql>
 		<antcall target="upgrade_db_demodel_mysql" />
+
+	</target>
+
+	<target name="upgrade_db_mysql">
+		<antcall target="upgrade_from_Suite1.0_to_1.1" />
 		<antcall target="update_metadata_for_model_changes" />
 	</target>
 	
 	
 	<!--Oracle Database Upgradation -->
-	<target name="upgrade_db_oracle">
+	<target name="upgrade_oracle_from_Suite1.0_to_1.1">
 		<echo message="Upgrading Oracle Database for caTISSUE Suite Application ..." />
 		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle">
 			<transaction src="${dbupgrade.sql.dir}/Oracle/DBUpgrade_Suite_1.0_to_1.1.sql" />
@@ -957,8 +967,15 @@
 			</classpath>
 		</sql>
 		<antcall target="upgrade_db_demodel_oracle" />
+
+	</target>
+
+
+	<target name="upgrade_db_oracle">
+		<antcall target="upgrade_from_Suite1.0_to_1.1" />
 		<antcall target="update_metadata_for_model_changes" />
 	</target>
+	
 
 	<!-- DE Metadata Upgradation -->
 	<target name="update_metadata_for_model_changes">
