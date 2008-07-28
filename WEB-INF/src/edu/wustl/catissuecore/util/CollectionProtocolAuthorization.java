@@ -101,7 +101,7 @@ public class CollectionProtocolAuthorization implements edu.wustl.catissuecore.u
 		{
 			String key = mapItr.next();
 			SiteUserRolePrivilegeBean siteUserRolePrivilegeBean = rowIdMap.get(key);
-			List<Integer> siteList = siteUserRolePrivilegeBean.getSiteList();
+			List<Long> siteList = siteUserRolePrivilegeBean.getSiteList();
 			siteCollection =getSiteCollection(siteList);
 			
 			User user = siteUserRolePrivilegeBean.getUser();
@@ -149,13 +149,13 @@ public class CollectionProtocolAuthorization implements edu.wustl.catissuecore.u
 	 * @param siteCollection
 	 * @param siteList
 	 */
-	private Set<Site> getSiteCollection(List<Integer> siteList)
+	private Set<Site> getSiteCollection(List<Long> siteList)
 	{
 		Set<Site> siteCollection = new HashSet<Site>();
-		for (Integer siteId : siteList)
+		for (Long siteId : siteList)
 		{
 			Site site = new Site();
-			site.setId(Long.valueOf(siteId));
+			site.setId(siteId);
 			siteCollection.add(site);
 		}
 		return siteCollection;

@@ -311,12 +311,12 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 	 * @param selectedSitesList
 	 * @return List<NameValueBean> list of user NameValueBeanObjects .
 	 */
-	public List<NameValueBean> getUsersForSelectedSites(List<Integer> selectedSitesList) throws BizLogicException
+	public List<NameValueBean> getUsersForSelectedSites(List<Long> selectedSitesList) throws BizLogicException
 	{
 		Set<NameValueBean> userSet = new HashSet<NameValueBean>();
 		for(int i=0;i<selectedSitesList.size();i++)
 		{
-			int siteId=selectedSitesList.get(i);
+			long siteId=selectedSitesList.get(i);
 			 userSet.addAll(getUsersList(siteId));
 		}
 		List<NameValueBean> list = new ArrayList<NameValueBean>();
@@ -330,13 +330,13 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 	 * @param request
 	 * @return List<Integer> list of siteIds 
 	 */
-	public List<Integer> getSiteData(String siteIds)
+	public List<Long> getSiteData(String siteIds)
 	{
-		int siteId;
-		List<Integer> siteIdsList = new ArrayList<Integer>();
+		long siteId;
+		List<Long> siteIdsList = new ArrayList<Long>();
 		StringTokenizer tokenizer = new StringTokenizer("" + siteIds, ",");
 		while (tokenizer.hasMoreTokens()) {
-			siteId = Integer.parseInt(tokenizer.nextToken());
+			siteId = Long.parseLong(tokenizer.nextToken());
 			siteIdsList.add(siteId);
 		}
 		return siteIdsList;
@@ -349,7 +349,7 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 	 * @throws JSONException 
 	 * @throws IOException
 	 */
-	public List<JSONObject> getUsersForThisSites(List<Integer> selectedSitesList) throws BizLogicException,JSONException
+	public List<JSONObject> getUsersForThisSites(List<Long> selectedSitesList) throws BizLogicException,JSONException
 	{
 		List<JSONObject> arrayList = new ArrayList<JSONObject>();
 		List<NameValueBean> usersList = new ArrayList<NameValueBean>();
@@ -436,7 +436,7 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 	 * @param siteIdsList
 	 * @return List<Integer> list of siteIds related to selected user
 	 */
-	public List<Site> getUserSiteRelation(User user,List<Integer> siteIdsList) 
+	public List<Site> getUserSiteRelation(User user,List<Long> siteIdsList) 
 	{
 		List<Site> list = new ArrayList<Site>();
 		Collection<Site> siteCollection = user.getSiteCollection();
@@ -468,10 +468,10 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 		surp.setUser(user);
 		surp.setRole(roleId);
 		
-		List<Integer> listOfSiteIds = new ArrayList<Integer>();
+		List<Long> listOfSiteIds = new ArrayList<Long>();
 		for(Site site :userRelatedSites)
 		{
-			listOfSiteIds.add(new Integer(site.getId().intValue()));
+			listOfSiteIds.add(site.getId());
 		}
 		surp.setSiteList(listOfSiteIds);
 		
@@ -575,7 +575,7 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 	public List<JSONObject> addPrivilege(Map<String, SiteUserRolePrivilegeBean> rowIdBeanMap, String userIds, String siteIds, String roleId, String actionIds)throws BizLogicException,JSONException 
 	{  
 		List<JSONObject> listForUPSummary = new ArrayList<JSONObject>();
-		List<Integer> siteIdsList = new ArrayList<Integer>();
+		List<Long> siteIdsList = new ArrayList<Long>();
 		List<Long> userIdsList = new ArrayList<Long>();
 		List<String> actionIdsList = new ArrayList<String>();
 
@@ -797,7 +797,7 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 		// for site
 		JSONArray siteJsonArray=new JSONArray();
 		
-		for(int siteId:surp.getSiteList())
+		for(long siteId:surp.getSiteList())
 		{
 			siteJsonArray.put(siteId);
 		}

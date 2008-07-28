@@ -18,18 +18,18 @@ import edu.wustl.common.util.Permissions;
  */
 public class SiteUserRolePrivilegeBean
 {
-	private List<Integer> siteList ;
-	private List<Integer> cpList;
+	private List<Long> siteList ;
+	private List<Long> cpList;
 	private User user ;
     private String role;
     private Set<String> privileges;
 	
-	public List<Integer> getSiteList()
+	public List<Long> getSiteList()
 	{
 		return siteList;
 	}
 	
-	public void setSiteList(List<Integer> siteList)
+	public void setSiteList(List<Long> siteList)
 	{
 		this.siteList = siteList;
 	}
@@ -54,12 +54,12 @@ public class SiteUserRolePrivilegeBean
 		this.privileges = privileges;
 	}
 	
-		public List<Integer> getCpList()
+		public List<Long> getCpList()
 	{
 		return cpList;
 	}
 
-	public void setCpList(List<Integer> cpList)
+	public void setCpList(List<Long> cpList)
 	{
 		this.cpList = cpList;
 	}

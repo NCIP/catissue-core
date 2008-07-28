@@ -121,7 +121,7 @@ public class ShowAssignPrivilegePageAction extends BaseAction
 		{
 			final String siteIds = (String) request.getParameter(Constants.SELECTED_SITE_IDS);
 			
-		    final List<Integer> listOfSiteIds = apBizLogic.getSiteData(siteIds);
+		    final List<Long> listOfSiteIds = apBizLogic.getSiteData(siteIds);
 		    final List<JSONObject> listOfUsers = apBizLogic.getUsersForThisSites(listOfSiteIds);
 			setResponse(response, listOfUsers);
 			
