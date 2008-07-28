@@ -20,7 +20,6 @@ import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.SurgicalPathologyReport;
-import edu.wustl.common.util.Permissions;
 
  
 /**
@@ -2373,7 +2372,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	
 	// MSR purpose
 	// Used for Authentication, Authorization through CSM
-	public static final String[] CP_Privileges ={Permissions.REGISTRATION,Permissions.SPECIMEN_ACCESSION,Permissions.SPECIMEN_PROCESSING,Permissions.PHI};
 	public static final String ADMIN_USER="1";
 	public static final String NON_ADMIN_USER="7";
 	public static final String ADD_GLOBAL_PARTICIPANT="ADD_GLOBAL_PARTICIPANT";
@@ -2398,6 +2396,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String ADD_EDIT_SCG = "ADD_EDIT_SCG";
 	public static final String ADD_EDIT_SPECIMEN_ARRAY = "ADD_EDIT_SPECIMEN_ARRAY";
 	public static final String ADD_EDIT_SPECIMEN_EVENTS = "ADD_EDIT_SPECIMEN_EVENTS";
-	public static final String OUTPUT_TERMS_COLUMNS = "outputTermsColumns";	
+	public static final String OUTPUT_TERMS_COLUMNS = "outputTermsColumns";
+	public static final String CP_BASED_VIEW_FILTRATION = "CP_BASED_VIEW_FILTRATION";
+	public static final String EDIT_PROFILE_PRIVILEGE= "EDIT_PROFILE_PRIVILEGE";
 }
 	

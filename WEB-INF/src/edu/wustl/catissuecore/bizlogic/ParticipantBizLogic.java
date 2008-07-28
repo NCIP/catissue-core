@@ -51,7 +51,6 @@ import edu.wustl.common.security.PrivilegeCache;
 import edu.wustl.common.security.PrivilegeManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
-import edu.wustl.common.util.Permissions;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -1174,7 +1173,8 @@ public class ParticipantBizLogic extends DefaultBizLogic
 				{
 					StringBuffer sb = new StringBuffer();
 					sb.append(CollectionProtocol.class.getName()).append("_").append(cp.getId());
-					boolean hasPrivilege = privilegeCache.hasPrivilege(sb.toString(), Permissions.REGISTRATION);
+					boolean hasPrivilege = privilegeCache.hasPrivilege(sb.toString(), 
+							Variables.privilegeDetailsMap.get(Constants.CP_BASED_VIEW_FILTRATION));
 					if (hasPrivilege)
 					{
 						cpList.add(new NameValueBean(cp.getShortTitle(),cp.getId()));
