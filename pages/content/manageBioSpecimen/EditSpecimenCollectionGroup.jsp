@@ -266,7 +266,7 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 						%>
 						<!-- // Patch ID: Bug#3090_22 -->
 						<a href="#" onclick="javascript:NewWindow('<%=url%>','name','360','525','no');return false">
-							<img src="images\Tree.gif" border="0" width="26" height="22" title='CLinical Diagnosis Selector'>
+							<img src="images/uIEnhancementImages/ic_cl_diag.gif" border="0" width="16" height="16" title='CLinical Diagnosis Selector'>
 					</a>
 		        	 </td>
 				 </tr>

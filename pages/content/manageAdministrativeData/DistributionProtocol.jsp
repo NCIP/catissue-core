@@ -169,7 +169,7 @@ function insRow(subdivtag)
 	var url = "ShowFramedPage.do?pageOf=pageOfTissueSite&propertyName="+objname+"&cdeName=Tissue%20Site";
 	// Patch ID: Bug#3090_8
 	sname = sname + "<a href='#' onclick=javascript:NewWindow('" + url + "','name','360','525','no');return false>";
-	sname = sname + "<img src='images\\uIEnhancementImages\\ic_cl_diag.gif' border='0' align='absmiddle' height='16' hspace='5' width='16' title='Tissue Site Selector'></a>";
+	sname = sname + "<img src='images/uIEnhancementImages/ic_cl_diag.gif' border='0' align='absmiddle' height='16' hspace='5' width='16' title='Tissue Site Selector'></a>";
 	
 	spreqtissuesite.innerHTML="" + sname;
 	
