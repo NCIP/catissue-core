@@ -2,16 +2,11 @@ package edu.wustl.catissuecore.querysuite.metadata;
 
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
-
-import edu.wustl.common.util.dbManager.DBUtil;
 /**
  * 
  * @author deepti_shelar
@@ -20,18 +15,14 @@ import edu.wustl.common.util.dbManager.DBUtil;
 public class AddRaceMetadata 
 {
 	private Connection connection = null;
-
 	private Statement stmt = null;
-
 	private HashMap<String, List<String>> entityNameAttributeNameMap = new HashMap<String, List<String>>();
-
 	private HashMap<String, String> attributeColumnNameMap = new HashMap<String, String>();
-
 	private HashMap<String, String> attributeDatatypeMap = new HashMap<String, String>();
 	private HashMap<String, String> attributePrimarkeyMap = new HashMap<String, String>();
 	private List<String> entityList = new ArrayList<String>();
 
-	public static void main(String[] args)
+	/*public static void main(String[] args)
 			throws Exception
 	{
 		Connection connection = DBUtil.getConnection();
@@ -39,7 +30,7 @@ public class AddRaceMetadata
 		
 		AddRaceMetadata addRaceMetadata = new AddRaceMetadata(connection);
 		addRaceMetadata.addRaceMetadata();
-	}
+	}*/
 	
 	public void addRaceMetadata() throws SQLException, IOException
 	{

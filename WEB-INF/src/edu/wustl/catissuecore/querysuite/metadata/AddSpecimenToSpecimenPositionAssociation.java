@@ -5,22 +5,20 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import edu.wustl.common.util.dbManager.DBUtil;
-
 public class AddSpecimenToSpecimenPositionAssociation
 {
 	private Connection connection = null;
 
 	private static Statement stmt = null;
 	
-	public static void main(String args[])throws Exception
+	/*public static void main(String args[])throws Exception
 	{
 		Connection connection = DBUtil.getConnection();
 		connection.setAutoCommit(true);
 		
 		AddSpecimenToSpecimenPositionAssociation addSpecimenToSpecimenPositionAssociation = new AddSpecimenToSpecimenPositionAssociation(connection);
 		addSpecimenToSpecimenPositionAssociation.addAssociation();	
-	}
+	}*/
 	
 	public void addAssociation() throws SQLException, IOException
 	{

@@ -11,23 +11,17 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import edu.wustl.common.util.dbManager.DBUtil;
-
 public class AddAttribute 
 {
 	private Connection connection = null;
-
 	private Statement stmt = null;
-
 	private HashMap<String, List<String>> entityNameAttributeNameMap = new HashMap<String, List<String>>();
-
 	private HashMap<String, String> attributeColumnNameMap = new HashMap<String, String>();
-
 	private HashMap<String, String> attributeDatatypeMap = new HashMap<String, String>();
 	private HashMap<String, String> attributePrimarkeyMap = new HashMap<String, String>();
 	private List<String> entityList = new ArrayList<String>();
 
-	public static void main(String[] args)
+	/*public static void main(String[] args)
 	throws Exception
 	{
 		Connection connection = DBUtil.getConnection();
@@ -35,7 +29,7 @@ public class AddAttribute
 
 		AddAttribute addAttribute = new AddAttribute(connection);
 		addAttribute.addAttribute();
-	}
+	}*/
 	
 	public void addAttribute() throws SQLException, IOException
 	{

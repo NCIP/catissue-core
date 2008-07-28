@@ -11,7 +11,6 @@ import java.util.Map;
 import java.util.Set;
 
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
-import edu.wustl.common.util.dbManager.DBUtil;
 
 /**
  * 
@@ -29,7 +28,7 @@ public class DeleteAttribute {
 	private List<String> entityNameList = new ArrayList<String>();
 	private Map<String, Long> entityIDMap = new HashMap<String, Long>();
 	
-	public static void main(String[] args) throws Exception
+	/*public static void main(String[] args) throws Exception
 	{
 		Connection connection = DBUtil.getConnection();
 		connection.setAutoCommit(true);
@@ -37,12 +36,11 @@ public class DeleteAttribute {
 		
 		DeleteAttribute deleteAttribute =new DeleteAttribute(connection);
 		
-		
 		List<String> deleteSQL = deleteAttribute.deleteAttribute();
 		UpdateMetadataUtil.executeSQLs(deleteSQL,stmt, true);
 
 		connection.close();
-	}
+	}*/
 
 	public List<String> deleteAttribute() throws SQLException
 	{
@@ -79,7 +77,7 @@ public class DeleteAttribute {
 
 	private List<String> deleteAttribute(Long identifier, AttributeInterface attribute) throws SQLException
 	{
-		System.out.println("/*----- SQL Statements to delete Attribute: "+attribute.getName()+" -------*/");
+		//System.out.println("/*----- SQL Statements to delete Attribute: "+attribute.getName()+" -------*/");
 		List<String> deleteSQL = new ArrayList<String>();
 		String sql;
 		sql = "delete from dyextn_column_properties where identifier = "+attribute.getColumnProperties().getId();
@@ -134,36 +132,10 @@ public class DeleteAttribute {
 			deleteSQL.add(sql);
 			
 		}
+		UpdateMetadataUtil.commonDeleteStatements(attribute, deleteSQL);
 		
-		sql = "delete from dyextn_attribute_type_info where identifier = "+attribute.getAttributeTypeInformation().getDataElement().getId();
-		deleteSQL.add(sql);
-		
-		sql = "delete from DYEXTN_CADSR_VALUE_DOMAIN_INFO where PRIMITIVE_ATTRIBUTE_ID = "+attribute.getId();
-		deleteSQL.add(sql);
-		
-		sql = "delete from dyextn_primitive_attribute where identifier = "+attribute.getId();
-		deleteSQL.add(sql);
-		
-		sql = "delete from dyextn_attribute where identifier = "+attribute.getId();
-		deleteSQL.add(sql);
-		
-		sql = "delete from DYEXTN_SEMANTIC_PROPERTY where ABSTRACT_METADATA_ID = "+attribute.getId();
-		deleteSQL.add(sql);
-		
-		sql = "delete from DYEXTN_BASE_ABSTRACT_ATTRIBUTE where identifier = "+attribute.getId();
-		deleteSQL.add(sql);
-		
-		sql = "delete from DYEXTN_TAGGED_VALUE where ABSTRACT_METADATA_ID = "+attribute.getId();
-		deleteSQL.add(sql);
-		
-		sql = "delete from dyextn_abstract_metadata where identifier = "+attribute.getId();
-		deleteSQL.add(sql);
-		
-		return deleteSQL;
-		
+		return deleteSQL;	
 	}
-
-
 
 	private boolean isAttributeToDelete(String entityName, String name)
 	{
@@ -181,9 +153,7 @@ public class DeleteAttribute {
 	private String getDataTypeOfAttribute(String attr) 
 	{
 		return attributeDatatypeMap.get(attr);
-	}
-
-	
+	}	
 	
 	private void populateAttributesToDeleteMap()
 	{

@@ -118,7 +118,7 @@ public class UpdateMetadata
 			url = "jdbc:oracle:thin:@" + DATABASE_SERVER_NAME + ":" + DATABASE_SERVER_PORT_NUMBER
 					+ ":" + DATABASE_NAME;
 		}
-		System.out.println("URL : " + url);
+		//System.out.println("URL : " + url);
 		connection = DriverManager.getConnection(url, DATABASE_USERNAME, DATABASE_PASSWORD);
 		return connection;
 	}

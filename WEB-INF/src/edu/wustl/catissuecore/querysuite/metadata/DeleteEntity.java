@@ -7,8 +7,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import edu.common.dynamicextensions.domain.Entity;
 import edu.common.dynamicextensions.domain.databaseproperties.TableProperties;
@@ -59,13 +57,12 @@ public class DeleteEntity
 		}
 		updateEntityToDelete();
 		
-		
 		deleteSQL = getDeleteEntitySQL();
 		return deleteSQL;
 	}
 	private List<String> getDeleteEntitySQL() throws SQLException
 	{
-		System.out.println("/*------ Entity to delete: "+entityToDelete.getName()+" ----*/");
+		//System.out.println("/*------ Entity to delete: "+entityToDelete.getName()+" ----*/");
 
 		List<String> deleteSQL = new ArrayList<String>();
 		String sql;

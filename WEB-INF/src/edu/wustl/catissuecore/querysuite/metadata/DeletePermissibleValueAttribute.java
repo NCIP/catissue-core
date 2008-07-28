@@ -11,7 +11,6 @@ import java.util.Map;
 import java.util.Set;
 
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
-import edu.wustl.common.util.dbManager.DBUtil;
 
 /**
  * 
@@ -30,7 +29,7 @@ public class DeletePermissibleValueAttribute {
 	private Map<String, Long> entityIDMap = new HashMap<String, Long>();
 
 
-	public static void main(String[] args) throws Exception
+	/*public static void main(String[] args) throws Exception
 	{
 		Connection connection = DBUtil.getConnection();
 		connection.setAutoCommit(true);
@@ -40,7 +39,7 @@ public class DeletePermissibleValueAttribute {
 		deletePermissibleValueAttribute.executeDeleteStatements(deleteSQL);
 		
 		connection.close();
-	}
+	}*/
 
 	public List<String> deletePermissibleValue() throws SQLException
 	{
@@ -71,7 +70,7 @@ public class DeletePermissibleValueAttribute {
 
 	private List<String> deleteAttribute(Long identifier, AttributeInterface attribute) throws SQLException
 	{
-		System.out.println("/*-----Deleting permissible value Attribute: "+attribute.getName()+" -------*/");
+		//System.out.println("/*-----Deleting permissible value Attribute: "+attribute.getName()+" -------*/");
 		List<String> deleteSQL = new ArrayList<String>();
 		String sql;
 		sql = "delete from dyextn_column_properties where identifier = "+attribute.getColumnProperties().getId();
@@ -133,44 +132,20 @@ public class DeletePermissibleValueAttribute {
 		sql = "delete from dyextn_data_element where ATTRIBUTE_TYPE_INFO_ID="+attribute.getAttributeTypeInformation().getDataElement().getId();
 		deleteSQL.add(sql);
 		
-		sql = "delete from dyextn_attribute_type_info where identifier = "+attribute.getAttributeTypeInformation().getDataElement().getId();
-		deleteSQL.add(sql);
-		
-		sql = "delete from DYEXTN_CADSR_VALUE_DOMAIN_INFO where PRIMITIVE_ATTRIBUTE_ID = "+attribute.getId();
-		deleteSQL.add(sql);
-		
-		sql = "delete from dyextn_primitive_attribute where identifier = "+attribute.getId();
-		deleteSQL.add(sql);
-		
-		sql = "delete from dyextn_attribute where identifier = "+attribute.getId();
-		deleteSQL.add(sql);
-		
-		sql = "delete from DYEXTN_SEMANTIC_PROPERTY where ABSTRACT_METADATA_ID = "+attribute.getId();
-		deleteSQL.add(sql);
-		
-		sql = "delete from DYEXTN_BASE_ABSTRACT_ATTRIBUTE where identifier = "+attribute.getId();
-		deleteSQL.add(sql);
-		
-		sql = "delete from DYEXTN_TAGGED_VALUE where ABSTRACT_METADATA_ID = "+attribute.getId();
-		deleteSQL.add(sql);
-		
-		sql = "delete from dyextn_abstract_metadata where identifier = "+attribute.getId();
-		deleteSQL.add(sql);
+		UpdateMetadataUtil.commonDeleteStatements(attribute, deleteSQL);
 		
 		return deleteSQL;
 	}
-
 
 	private void executeDeleteStatements(List<String> deleteSQL) throws SQLException
 	{
 		for(String sql : deleteSQL)
 		{
-			System.out.println(sql+";");
+			//System.out.println(sql+";");
 //			stmt = connection.createStatement();
 //			stmt.execute(sql);
 		}
 	}
-
 
 	private boolean isAttributeToDelete(String entityName, String name)
 	{

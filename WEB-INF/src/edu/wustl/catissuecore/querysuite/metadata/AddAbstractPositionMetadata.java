@@ -8,23 +8,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import edu.wustl.common.util.dbManager.DBUtil;
-
 public class AddAbstractPositionMetadata
 {
 	private Connection connection = null;
-
 	private Statement stmt = null;
-
 	private static HashMap<String, List<String>> entityNameAttributeNameMap = new HashMap<String, List<String>>();
-
 	private static HashMap<String, String> attributeColumnNameMap = new HashMap<String, String>();
-
 	private static HashMap<String, String> attributeDatatypeMap = new HashMap<String, String>();
 	private static HashMap<String, String> attributePrimarkeyMap = new HashMap<String, String>();
 	private static List<String> entityList = new ArrayList<String>();
 	
-	public static void main(String[] args)
+	/*public static void main(String[] args)
 	throws Exception
 	{
 		Connection connection = DBUtil.getConnection();
@@ -33,7 +27,7 @@ public class AddAbstractPositionMetadata
 		
 		AddAbstractPositionMetadata addContainerMetadata = new AddAbstractPositionMetadata(connection);
 		addContainerMetadata.addContainerMetadata();
-	}
+	}*/
 	public void addContainerMetadata() throws SQLException, IOException
 	{
 		populateEntityList();

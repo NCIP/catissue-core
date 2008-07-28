@@ -7,23 +7,18 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import edu.wustl.common.util.dbManager.DBUtil;
 
 public class AddAbstractSpecimenMetaData 
 {
 	private Connection connection = null;
-
 	private Statement stmt = null;
-
 	private static HashMap<String, List<String>> entityNameAttributeNameMap = new HashMap<String, List<String>>();
-
 	private static HashMap<String, String> attributeColumnNameMap = new HashMap<String, String>();
-
 	private static HashMap<String, String> attributeDatatypeMap = new HashMap<String, String>();
 	private static HashMap<String, String> attributePrimarkeyMap = new HashMap<String, String>();
 	private static List<String> entityList = new ArrayList<String>();
 	
-	public static void main(String[] args)
+	/*public static void main(String[] args)
 	throws Exception
 	{
 		Connection connection = DBUtil.getConnection();
@@ -31,7 +26,7 @@ public class AddAbstractSpecimenMetaData
 		
 		AddAbstractSpecimenMetaData addAbstractPositionMetaData = new AddAbstractSpecimenMetaData(connection);
 		addAbstractPositionMetaData.addAbstractPositionMetaData();
-	}
+	}*/
 	public void addAbstractPositionMetaData() throws SQLException, IOException
 	{
 		populateEntityList();

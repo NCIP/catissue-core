@@ -22,7 +22,6 @@ import edu.common.dynamicextensions.domain.databaseproperties.ColumnProperties;
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.common.dynamicextensions.domaininterface.AttributeTypeInformationInterface;
 
-
 public class UpdateMetadataUtil
 {
 	public static BufferedWriter metadataSQLFile;
@@ -40,7 +39,7 @@ public class UpdateMetadataUtil
 		}
 		try
 		{
-			System.out.println(sql+";");
+			//System.out.println(sql+";");
 			metadataSQLFile.write(sql+";\n");
 			if(isExecuteStatement)
 			{
@@ -110,7 +109,7 @@ public class UpdateMetadataUtil
 			{
 				try
 				{
-					System.out.println(sql+";");
+					//System.out.println(sql+";");
 					metadataSQLFile.write(sql+";\n");
 					if(isExecuteStatement)
 					{
@@ -193,5 +192,34 @@ public class UpdateMetadataUtil
 			entityIDAttributeListMap.put(identifier, attributeList);
 		}
 		return entityIDAttributeListMap;
+	}
+	
+	public static void commonDeleteStatements(AttributeInterface attribute,
+			List<String> deleteSQL) 
+	{
+		String sql;
+		sql = "delete from dyextn_attribute_type_info where identifier = "+attribute.getAttributeTypeInformation().getDataElement().getId();
+		deleteSQL.add(sql);
+		
+		sql = "delete from DYEXTN_CADSR_VALUE_DOMAIN_INFO where PRIMITIVE_ATTRIBUTE_ID = "+attribute.getId();
+		deleteSQL.add(sql);
+		
+		sql = "delete from dyextn_primitive_attribute where identifier = "+attribute.getId();
+		deleteSQL.add(sql);
+		
+		sql = "delete from dyextn_attribute where identifier = "+attribute.getId();
+		deleteSQL.add(sql);
+		
+		sql = "delete from DYEXTN_SEMANTIC_PROPERTY where ABSTRACT_METADATA_ID = "+attribute.getId();
+		deleteSQL.add(sql);
+		
+		sql = "delete from DYEXTN_BASE_ABSTRACT_ATTRIBUTE where identifier = "+attribute.getId();
+		deleteSQL.add(sql);
+		
+		sql = "delete from DYEXTN_TAGGED_VALUE where ABSTRACT_METADATA_ID = "+attribute.getId();
+		deleteSQL.add(sql);
+		
+		sql = "delete from dyextn_abstract_metadata where identifier = "+attribute.getId();
+		deleteSQL.add(sql);
 	}
 }

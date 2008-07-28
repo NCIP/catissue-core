@@ -11,22 +11,18 @@ import java.util.List;
 public class AddSpecimenRequirementMetaData
 {	
 	private Connection connection = null;
-
 	private static Statement stmt = null;
-
 	private static HashMap<String, List<String>> entityNameAttributeNameMap = new HashMap<String, List<String>>();
-
 	private static HashMap<String, String> attributeColumnNameMap = new HashMap<String, String>();
-
 	private static HashMap<String, String> attributeDatatypeMap = new HashMap<String, String>();
 	private static HashMap<String, String> attributePrimarkeyMap = new HashMap<String, String>();
 	private static List<String> entityList = new ArrayList<String>();
 	
-	public static void main(String[] args)
+	/*public static void main(String[] args)
 	throws Exception
 	{
 		
-	}
+	}*/
 		
 	public void addSpecimenRequirementMetaData() throws SQLException, IOException
 	{

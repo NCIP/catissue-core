@@ -110,7 +110,6 @@ public class AddPath
 		 while(iterator.hasNext())
 		 {
 			 String key = iterator.next();
-			 System.out.println("Entity : "+key);
 			 sql = "Select IDENTIFIER from dyextn_abstract_metadata where NAME = '"+key+"'";
 			 rs = stmt.executeQuery(sql);
 			 if(rs.next())
@@ -119,7 +118,6 @@ public class AddPath
 			 
 				 List<String> associationsList = superClassAndAssociationsMap.get(key);
 			 	 for(String associatedEntityName:associationsList){
-			 		System.out.println("Association Name  : "+associatedEntityName);
 					 sql = "Select IDENTIFIER from dyextn_abstract_metadata where NAME = '"+associatedEntityName+"'";
 					 rs = stmt.executeQuery(sql);
 					 if(rs.next())
