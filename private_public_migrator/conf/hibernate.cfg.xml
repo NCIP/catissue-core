@@ -87,18 +87,24 @@
 		<mapping resource="edu/wustl/common/hbm/AbstractCategorialClass.hbm.xml"/>
 		<mapping resource="edu/wustl/common/hbm/AbstractCategory.hbm.xml"/>
 		
-		<mapping resource="edu/wustl/common/hbm/Expression.hbm.xml"/>
-		<mapping resource="edu/wustl/common/hbm/ExpressionOperand.hbm.xml"/>
+		<mapping resource="edu/wustl/common/hbm/BaseExpression.hbm.xml" />
 		<mapping resource="edu/wustl/common/hbm/Condition.hbm.xml"/>
-		<mapping resource="edu/wustl/common/hbm/LogicalConnector.hbm.xml"/>
-		<mapping resource="edu/wustl/common/hbm/QueryEntity.hbm.xml"/>
+		<mapping resource="edu/wustl/common/hbm/Connector.hbm.xml"/>
 		<mapping resource="edu/wustl/common/hbm/Constraints.hbm.xml"/>
+		<mapping resource="edu/wustl/common/hbm/Expression.hbm.xml"/>
+		<mapping resource="edu/wustl/common/hbm/ExpressionOperand.hbm.xml" />
+		<mapping resource="edu/wustl/common/hbm/IOperand.hbm.xml" />
 		<mapping resource="edu/wustl/common/hbm/JoinGraph.hbm.xml"/>
-		<mapping resource="edu/wustl/common/hbm/GraphEntry.hbm.xml"/>
-		<mapping resource="edu/wustl/common/hbm/ModelAssociation.hbm.xml"/>
-		<mapping resource="edu/wustl/common/hbm/Query.hbm.xml"/>
-		<mapping resource="edu/wustl/common/hbm/QueryHQL.hbm.xml"/>
-		<mapping resource="edu/wustl/common/hbm/OutputAttribute.hbm.xml"/>
+		<mapping resource="edu/wustl/common/hbm/ModelAssociation.hbm.xml" />
+		<mapping resource="edu/wustl/common/hbm/OutputAttribute.hbm.xml" />
+		<mapping resource="edu/wustl/common/hbm/Query.hbm.xml" />
+		<mapping resource="edu/wustl/common/hbm/QueryEntity.hbm.xml"/>
+		<mapping resource="edu/wustl/common/hbm/QueryHQL.hbm.xml" />
+		<mapping resource="edu/wustl/common/hbm/Term.hbm.xml" />
+		<mapping resource="edu/wustl/common/hbm/ArithmeticOperand.hbm.xml" />
+		<mapping resource="edu/wustl/common/hbm/CustomFormula.hbm.xml" />
+		<mapping resource="edu/wustl/common/hbm/OutputTerm.hbm.xml"/>
+		<mapping resource="edu/wustl/common/hbm/PersistentGraph.hbm.xml" />
 		
 		<mapping resource="edu/wustl/catissuecore/hbm/ClinicalStudyRegistration.hbm.xml"/>		
 		<mapping resource="edu/wustl/catissuecore/hbm/ClinicalStudyEvent.hbm.xml"/>		
