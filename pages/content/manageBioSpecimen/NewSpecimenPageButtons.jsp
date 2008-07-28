@@ -8,7 +8,7 @@
 
 	<tr>
 
-		<td nowrap class="buttonbg">
+		<td class="buttonbg">
 		  <%
 			if(operation.equals(Constants.ADD))
 			{
@@ -54,7 +54,7 @@
 -->
 		
 			<html:button
-				styleClass="blue_ar_b" property="moreButton"
+				styleClass="blue_ar_c" property="moreButton"
 				title="<%=Constants.SPECIMEN_BUTTON_TIPS[3]%>"
 				value="<%=Constants.SPECIMEN_FORWARD_TO_LIST[3][0]%>"
 				disabled="<%=isAddNew%>" onclick="<%=addMoreSubmit%>"
@@ -68,7 +68,7 @@
 		
 		
 		<html:button
-				styleClass="blue_ar_b" property="addToCart"
+				styleClass="blue_ar_c" property="addToCart"
 				title="<%=Constants.SPECIMEN_BUTTON_TIPS[0]%>"
 				onclick="onAddToCart()">
 				<bean:message key="buttons.addToCart"/>
