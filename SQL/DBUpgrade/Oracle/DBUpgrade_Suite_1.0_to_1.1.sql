@@ -324,16 +324,16 @@ INSERT INTO CATISSUE_QUERY_TABLE_DATA(TABLE_ID, TABLE_NAME, DISPLAY_NAME, ALIAS_
 values(95, 'CATISSUE_CONTAINER_POSITION', 'Container Position', 'ContainerPosition',2,1);
 
 INSERT INTO CATISSUE_QUERY_TABLE_DATA  ( TABLE_ID, TABLE_NAME, DISPLAY_NAME, ALIAS_NAME, PRIVILEGE_ID,FOR_SQI)
-VALUES ( 96, 'catissue_tissue_specimen', 'Tissue Specimen', 'Tissue Specimen',2,1);
+VALUES ( 96, 'catissue_tissue_specimen', 'Tissue Specimen', 'Tissue Specimen',2,NULL);
 
 INSERT INTO CATISSUE_QUERY_TABLE_DATA  ( TABLE_ID, TABLE_NAME, DISPLAY_NAME, ALIAS_NAME, PRIVILEGE_ID,FOR_SQI)
-VALUES ( 97, 'catissue_cell_specimen', 'Cell Specimen', 'Cell Specimen',2,1);
+VALUES ( 97, 'catissue_cell_specimen', 'Cell Specimen', 'Cell Specimen',2,NULL);
 
 INSERT INTO CATISSUE_QUERY_TABLE_DATA  ( TABLE_ID, TABLE_NAME, DISPLAY_NAME, ALIAS_NAME, PRIVILEGE_ID,FOR_SQI)
-VALUES ( 98, 'catissue_fluid_specimen', 'Fluid Specimen', 'Fluid Specimen',2,1);
+VALUES ( 98, 'catissue_fluid_specimen', 'Fluid Specimen', 'Fluid Specimen',2,NULL);
 
 INSERT INTO CATISSUE_QUERY_TABLE_DATA  ( TABLE_ID, TABLE_NAME, DISPLAY_NAME, ALIAS_NAME, PRIVILEGE_ID,FOR_SQI)
-VALUES ( 99, 'catissue_molecular_specimen', 'Molecular Specimen', 'Molecular Specimen',2,1);
+VALUES ( 99, 'catissue_molecular_specimen', 'Molecular Specimen', 'Molecular Specimen',2,NULL);
 
 /*Metadata updation of Simple Query due to model changes*/
 
