@@ -1596,4 +1596,29 @@ public class Utility extends edu.wustl.common.util.Utility {
 		}
 		request.setAttribute("hiddenColumnNumbers", hiddenColumnNumbers);
 	}
+	
+	 
+	/**
+     * Gets the user detail on the basis of login name
+     * @param loginName login Name
+     * @return User object
+     * @throws DAOException
+     */
+    public static User getUser(String loginName) throws DAOException
+    {
+    	UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getInstance().getBizLogic(User.class.getName());
+    	String[] whereColumnName = {"activityStatus","loginName"};
+    	String[] whereColumnCondition = {"=","="};
+    	String[] whereColumnValue = {Constants.ACTIVITY_STATUS_ACTIVE, loginName};
+    	
+    	List users = userBizLogic.retrieve(User.class.getName(), whereColumnName, 
+    			whereColumnCondition, whereColumnValue,Constants.AND_JOIN_CONDITION);
+    	
+    	if (!users.isEmpty())
+    	{
+    	    User validUser = (User)users.get(0);
+    	    return validUser;
+    	}
+        return null;
+    }
 }

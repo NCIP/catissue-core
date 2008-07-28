@@ -31,6 +31,7 @@ import edu.wustl.catissuecore.namegenerator.LabelGenerator;
 import edu.wustl.catissuecore.namegenerator.LabelGeneratorFactory;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.bizlogic.QueryBizLogic;
@@ -63,7 +64,7 @@ public class CaCoreAppServicesDelegator
 	 */
     public Boolean delegateLogin(String userName,String password) throws Exception
 	{
-    	User validUser = getUser(userName);
+    	User validUser = Utility.getUser(userName);
     	Boolean authenticated = Boolean.valueOf(false);
     	if (validUser != null)
     	{	
@@ -212,7 +213,7 @@ public class CaCoreAppServicesDelegator
 	    Logger.out.debug("list obtained from ApplicationService Search************** : "+list.getClass().getName());
 	    Logger.out.debug("Super Class ApplicationService Search************** : "+list.getClass().getSuperclass().getName());
 	    List filteredObjects = null;//new ArrayList();
-	    User validUser = getUser(userName);
+	    User validUser = Utility.getUser(userName);
 	    String reviewerRole=null;
         SecurityManager securityManager=SecurityManager.getInstance(this.getClass());
         try
@@ -666,29 +667,7 @@ public class CaCoreAppServicesDelegator
 		}
 	}
 	
-    /**
-     * Gets the user detail on the basis of login name
-     * @param loginName login Name
-     * @return User object
-     * @throws DAOException
-     */
-    private User getUser(String loginName) throws DAOException
-    {
-    	UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getInstance().getBizLogic(User.class.getName());
-    	String[] whereColumnName = {"activityStatus","loginName"};
-    	String[] whereColumnCondition = {"=","="};
-    	String[] whereColumnValue = {Constants.ACTIVITY_STATUS_ACTIVE, loginName};
-    	
-    	List users = userBizLogic.retrieve(User.class.getName(), whereColumnName, 
-    			whereColumnCondition, whereColumnValue,Constants.AND_JOIN_CONDITION);
-    	
-    	if (!users.isEmpty())
-    	{
-    	    User validUser = (User)users.get(0);
-    	    return validUser;
-    	}
-        return null;
-    }
+   
     
     /**
      * Find out the matching participant list based on the participant object provided
