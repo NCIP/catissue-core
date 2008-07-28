@@ -29,12 +29,14 @@ import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractBizLogicFactory;
+import edu.wustl.common.hibernate.HibernateCleanser;
 import edu.wustl.common.querysuite.queryobject.IOutputAttribute;
 import edu.wustl.common.querysuite.queryobject.IParameterizedQuery;
 import edu.wustl.common.querysuite.queryobject.IQuery;
 import edu.wustl.common.querysuite.queryobject.impl.ParameterizedQuery;
 import edu.wustl.common.querysuite.queryobject.impl.metadata.SelectedColumnsMetadata;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
+import edu.wustl.common.util.ObjectCloner;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
 
@@ -73,16 +75,19 @@ public class SaveQueryAction extends BaseAction
 				IBizLogic bizLogic = AbstractBizLogicFactory.getBizLogic(ApplicationProperties
 						.getValue("app.bizLogicFactory"), "getBizLogic",
 						Constants.CATISSUECORE_QUERY_INTERFACE_ID);
-				if (query.getId() != null && query instanceof ParameterizedQuery)
-				{
-					bizLogic.update(parameterizedQuery, Constants.HIBERNATE_DAO);
-					Logger.out.info(ApplicationProperties.getValue("query.update.info"));
-				}
-				else
-				{
-					bizLogic.insert(parameterizedQuery, Constants.HIBERNATE_DAO);
-					Logger.out.info(ApplicationProperties.getValue("query.saved.info"));
-				}
+//				if (query.getId() != null && query instanceof ParameterizedQuery)
+//				{
+//					bizLogic.update(parameterizedQuery, Constants.HIBERNATE_DAO);
+//					Logger.out.info(ApplicationProperties.getValue("query.update.info"));
+//				}
+//				else
+//				{
+//					bizLogic.insert(parameterizedQuery, Constants.HIBERNATE_DAO);
+//					Logger.out.info(ApplicationProperties.getValue("query.saved.info"));
+//				}
+                IParameterizedQuery queryClone = ObjectCloner.clone(parameterizedQuery);
+                new HibernateCleanser(queryClone).clean();
+                bizLogic.insert(queryClone, Constants.HIBERNATE_DAO);
 				target = Constants.SUCCESS;
 				ActionErrors errors = new ActionErrors();
 				ActionError error = new ActionError("query.saved.success");
@@ -210,7 +215,7 @@ public class SaveQueryAction extends BaseAction
 			request.getSession().setAttribute("errorMessageForEditQuery", errorMessage);
 			
 		}
-		parameterizedQuery.setOutputTerms(query.getOutputTerms()); 
+     	parameterizedQuery.setOutputTerms(query.getOutputTerms()); 
 		parameterizedQuery.setOutputAttributeList(selectedOutputAttributeList);
 		return parameterizedQuery;
 	}
