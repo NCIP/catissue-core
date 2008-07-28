@@ -966,7 +966,20 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	  protected  void postUpdate(DAO dao,Object currentObj,Object oldObj , SessionDataBean sessionDataBean) throws BizLogicException, UserNotAuthorizedException
 	  {
 		  	Map containerMap = getStorageContainerMap();
-			updateStorageLocations((TreeMap) containerMap, (Specimen) currentObj);
+		  	if (currentObj.getClass().hashCode() == LinkedHashSet.class.hashCode())
+			{
+		  		Iterator it = ((LinkedHashSet)currentObj).iterator();
+		  		while(it.hasNext())
+		  		{
+		  			Specimen specimen = (Specimen)it.next();
+		  			updateStorageLocations((TreeMap) containerMap, specimen);	
+		  		}
+			}
+			else if (currentObj instanceof Specimen)
+			{
+				updateStorageLocations((TreeMap) containerMap, (Specimen) currentObj);
+			}
+			
 	  }
 
 	/**

@@ -269,6 +269,9 @@ public class UpdateSpecimenStatusAction extends BaseAction {
 		else
 		{
 			specimen.setCollectionStatus("Pending");
+			//Mandar : 25July08: ------- start ------------
+			specimen.setAvailableQuantity(new Double(0));
+			//Mandar : 25July08: ------- end ------------
 		}
 		
 		if ("Virtual".equals(
