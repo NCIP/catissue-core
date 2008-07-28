@@ -1235,7 +1235,7 @@ public class UserBizLogic extends DefaultBizLogic
 				for (CollectionProtocol collectionProtocol : userCpCollection)
 				{
 					if (privilegeCache.hasPrivilege(collectionProtocol.getObjectId(),
-							Permissions.PHI)
+							Permissions.REGISTRATION)
 							|| collectionProtocol.getPrincipalInvestigator().getLoginName().equals(
 									user.getLoginName()))
 					{
@@ -1297,16 +1297,16 @@ public class UserBizLogic extends DefaultBizLogic
 		}
 		finally
 		{
-			try
-			{
-				dao.closeSession();
-			}
-			catch (DAOException e)
-			{
-				Logger.out.error(e.getMessage(), e);
-			}
+//			try
+//			{
+//				//dao.closeSession();
+//			}
+////			catch (DAOException e)
+////			{
+////				Logger.out.error(e.getMessage(), e);
+////			}
+//		}
 		}
-
 		return idSet;
 	} 
 		

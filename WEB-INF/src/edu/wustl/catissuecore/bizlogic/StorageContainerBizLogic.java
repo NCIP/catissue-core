@@ -2312,7 +2312,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 			// e.printStackTrace();
 			// }
 		}
-		if (loggedInUserSiteIdSet != null && loggedInUserSiteIdSet.contains(site.getId().toString())) {
+		if (loggedInUserSiteIdSet != null && loggedInUserSiteIdSet.contains(new Long(site.getId()))) {
 			return true;
 		} else {
 			return false;
