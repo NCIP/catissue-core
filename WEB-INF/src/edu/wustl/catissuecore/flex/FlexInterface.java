@@ -83,7 +83,6 @@ public class FlexInterface
 
 	public SpecimenBean say(String str)
 	{
-		System.out.println("str from flex client " + str);
 		SpecimenBean sb = new SpecimenBean();
 		sb.specimenLabel = "AA";
 		return sb;
