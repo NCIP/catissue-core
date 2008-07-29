@@ -37,12 +37,35 @@ public class CustomFormulaNode implements Externalizable
 	
 	private String operation = "";
 	
+	private String customColumnName  = "";
 	private int x;
 	private int y;
 	
 	
 	
 	
+	
+	/**
+	 * @return Returns the customColumnName.
+	 */
+	public String getCustomColumnName()
+	{
+		return customColumnName;
+	}
+
+
+
+	
+	/**
+	 * @param customColumnName The customColumnName to set.
+	 */
+	public void setCustomColumnName(String customColumnName)
+	{
+		this.customColumnName = customColumnName;
+	}
+
+
+
 	/**
 	 * @return Returns the x.
 	 */
@@ -372,6 +395,7 @@ public class CustomFormulaNode implements Externalizable
 		timeValue = in.readUTF();
 		timeInterval = in.readUTF();
 		operation = in.readUTF();
+		customColumnName = in.readUTF();
 	    x = in.readInt();
 	    y = in.readInt();
 	}
@@ -397,6 +421,7 @@ public class CustomFormulaNode implements Externalizable
 		out.writeUTF(timeValue);
 		out.writeUTF(timeInterval);
 		out.writeUTF(operation);
+		out.writeUTF(customColumnName);
 		out.writeInt(x);
 		out.writeInt(y);
 	}

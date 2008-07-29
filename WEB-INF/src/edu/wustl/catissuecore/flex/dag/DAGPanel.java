@@ -323,7 +323,7 @@ public class DAGPanel {
 		removeCustomFormula();
 		srcIExpression.addOperand(getAndConnector(),customFormula);
 		srcIExpression.setInView(true);
-		addOutputTermsToQuery(query, customFormula);
+		addOutputTermsToQuery(query, customFormula, node.getCustomColumnName());
 		setOperation(node);
 		return node;
 	}
@@ -360,9 +360,8 @@ public class DAGPanel {
 	 * @param query
 	 * @param customFormula
 	 */
-	private void addOutputTermsToQuery(IQuery query, ICustomFormula customFormula) {
+	private void addOutputTermsToQuery(IQuery query, ICustomFormula customFormula, String customColumnName) {
 		IOutputTerm outputTerm = QueryObjectFactory.createOutputTerm();
-		
 		outputTerm.setTerm(customFormula.getLhs());
 		List<ITerm> allRhs = customFormula.getAllRhs();
 		String timeIntervalName = "";
@@ -377,7 +376,7 @@ public class DAGPanel {
 				timeIntervalName = timeInterval.name();
 			}
 		}
-		String tqColumnName = "Temporal Results" + " (" + timeIntervalName +"/s)";
+		String tqColumnName = customColumnName + " (" + timeIntervalName +"/s)";
 		outputTerm.setName(tqColumnName);
 		query.getOutputTerms().clear();
 		query.getOutputTerms().add(outputTerm);
@@ -854,6 +853,9 @@ public class DAGPanel {
 					for(ICustomFormula c: customFormulas)
 					{
 						CustomFormulaNode customNode = populateCustomNodeInfo(c,constraints,exp);
+						
+						//Setting the custom Column Name
+						setCustomColumnName(customNode, query);
 						customNode.setOperation(DAGConstant.REPAINT_OPERATION);
 						customNodeList.add(customNode);
 					}
@@ -864,6 +866,18 @@ public class DAGPanel {
 		nodeMap.put(DAGConstant.CUSTOM_FORMULA_NODE_LIST,customNodeList);
 		return nodeMap;
 
+	}
+	
+	private void setCustomColumnName(CustomFormulaNode customNode, IQuery query)
+	{
+		List <IOutputTerm>outputTermList = query.getOutputTerms();
+		IOutputTerm outputTerm = outputTermList.get(0);
+		
+		String columnName  = outputTerm.getName();
+		//As custom column name consists of column Name , ( and Time Interval ), so we need to parse it to get the exact column name
+		int index = columnName.lastIndexOf("(");
+		String customColumnName  = columnName.substring(0,index);
+		customNode.setCustomColumnName(customColumnName);
 	}
 	private CustomFormulaNode populateCustomNodeInfo(ICustomFormula c, IConstraints constraints, IExpression srcExp)
 	{

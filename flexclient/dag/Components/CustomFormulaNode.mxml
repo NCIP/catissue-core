@@ -46,7 +46,17 @@
         private var timeInterval : String = null; 
         
         private var operation : String = null;
+        private var customColumnName : String = "";
         
+        public function setCustomColumnName(customColumnName : String) : void
+        {
+        	this.customColumnName = customColumnName;
+        }
+        
+        public function getCustomColumnName () : String
+        {
+        	return this.customColumnName;
+        }
         public function setOperation(operation : String) : void
         {
          	this.operation = operation;
@@ -229,6 +239,7 @@
 			 
 			 timeInterval = input.readUTF();
 			 operation = input.readUTF();
+			 customColumnName = input.readUTF();
 			 this.x = input.readInt();
 			 this.y = input.readInt();
 		}	
@@ -255,6 +266,7 @@
         	out.writeUTF(timeValue);
         	out.writeUTF(timeInterval);
         	out.writeUTF(operation);
+        	out.writeUTF(customColumnName);
         	out.writeInt(this.x);
         	out.writeInt(this.y);
         }    		
@@ -297,6 +309,7 @@
           var line1 : String = nodesNumbers[0] + "_" + customNodeName;    	   	  
   	   	  var line2 : String = nodesNumbers[1] + "_" + customNodeName;
   	     
+  	      //this.parentApplication.rpcService.addEventListener(ResultEvent.RESULT,nodeRemoveHandler);
   	      //Deleting the Custom Formula Node and corresponding connecting Nodes 
           this.parentApplication.deleteCustomNode(customNodeName,line1,line2);  	   
   	   }

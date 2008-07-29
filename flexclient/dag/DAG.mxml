@@ -359,7 +359,6 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 		var nodeMap : Object =  event.result as Object ;
 		
 		var customNodeList : ArrayCollection = nodeMap["customFormulaNodeList"];
-		//Alert.show("Custom Node List is:"+customNodeList.length);
 		var nodeList:ArrayCollection = nodeMap["dagNodeList"];
 		for(var i:int=0;i<nodeList.length;i++)
 		{
@@ -1149,17 +1148,41 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 
        public function openTQPopUp():void
        {
-		 var dagNode1:DAGNode = DAGNode(mainPanel.getChildByName(node1));
-		 var dagNode2:DAGNode = DAGNode(mainPanel.getChildByName(node2));
+		 //var dagNode1:DAGNode = DAGNode(mainPanel.getChildByName(node1));
+		 //var dagNode2:DAGNode = DAGNode(mainPanel.getChildByName(node2));
 		 
-	     if((dagNode1 != null) && (dagNode2 != null))
+	     //if((dagNode1 != null) && (dagNode2 != null))
+	     if(selectedNodeList.length ==2)
 	     {
 	         rpcService.addEventListener("result",nodeValidityHandler);
 		     rpcService.checkIfNodesAreValid(selectedNodeList);
 	     }
+	     /*else
+	     {
+	     	if(selectedNodeList.length ==1)
+	     	{
+                 rpcService.addEventListener(ResultEvent.RESULT,singleNodeValidityHandler);
+                 rpcService.checkIfSingleNodeValid(selectedNodeList); 
+	     	}
+	     }*/
 	     	 
 	 }
-	
+	 
+	 private function singleNodeValidityHandler(event : ResultEvent) : void
+	 {
+	 	var isNodeValid : Boolean = event.result as Boolean;
+	 	if(isNodeValid == true)
+	 	{
+	 		 rpcService.removeEventListener(ResultEvent.RESULT,singleNodeValidityHandler);
+	 		 rpcService.getSingleNodeQueryDate();
+	 		 rpcService.addEventListener(ResultEvent.RESULT, singleNodeDataHandler);
+	 	}
+	 	else
+	 	{
+	 	     //Alert.show("Node is Not Valid For Temporal Query");	
+	 	}
+	 }
+	 
 	private function nodeValidityHandler(event : ResultEvent):void
 	{
 		var areNodesValid : Boolean = event.result as Boolean;
@@ -1172,10 +1195,15 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 		}
 		else
 		{
-			Alert.show("Nodes are not valid");
+			//Alert.show("Nodes are not valid");
 		}
 	}
 	
+	private function singleNodeDataHandler(event : ResultEvent) : void
+	{
+		//Alert.show("In singleNodeDataHandler");
+		
+	}
 	private function splitEntityName(entityName : String) : String
 	{
 		var str : String = "";
@@ -1192,7 +1220,6 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	
 	public function createAndPopulate(resultMap :Object, operation : String, currentCustomNode : CustomFormulaNode) : void
 	{
-		//Alert.show("In create and Populate, custom NOde is:"+currentCustomNode.toString());
 		queryDataMap = resultMap;
 		
 		//rpcService.removeEventListener(ResultEvent.RESULT,editNodeHandler);
@@ -1297,6 +1324,9 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	        popUp.cb3.selectedItem = currentCustomNode.getSecondSelectedAttrName();
 	        popUp.cb4.selectedItem = currentCustomNode.getSelectedLogicalOp();  
 	        
+	        //Setting the custom column name
+	        popUp.customColumnName.text = currentCustomNode.getCustomColumnName();
+	        
 	        //If the selected Logical Operators are isNull or IsNotNull
 	        if((currentCustomNode.getSelectedLogicalOp() == "Is Null") || (currentCustomNode.getSelectedLogicalOp() == "Is Not Null"))
 	        {
@@ -1381,7 +1411,6 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
             var dagNode1:DAGNode = null;
             var dagNode2:DAGNode = null;
             var operation : String = node.getOperation();
-            //Alert.show("operation is:"+operation);
             if((operation == "rePaint") || (operation == "rePaintEdit"))
             {
             	var nodeName  : String= node.name;
@@ -1438,8 +1467,13 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
              //Setting time and time Intervals
              customFormulaNode.setTimeValue(node.getTimeValue());
              customFormulaNode.setTimeInterval(node.getTimeInterval());
+             
+             //adding the Custom Columnm Name 
+             customFormulaNode.setCustomColumnName(node.getCustomColumnName());
             
             customFormulaNode.addEventListener(MouseEvent.MOUSE_MOVE,doCustomFormulaNodeDrag);
+            
+            //Adding the  custom node as a child to main panel
             mainPanel.addChild(customFormulaNode);
             
             drawLines(dagNode1,customFormulaNode.x,customFormulaNode.y,customFormulaNode.name);
@@ -1503,7 +1537,6 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 
       public function deleteCustomNode(customNodeName : String ,line1 : String,line2 :String) : void
       {
-           //Alert.show("In delete custom node");
            var customNode : CustomFormulaNode = mainPanel.getChildByName(customNodeName) as CustomFormulaNode;
            var line : UIComponent= null; 
            if(customNode != null)
