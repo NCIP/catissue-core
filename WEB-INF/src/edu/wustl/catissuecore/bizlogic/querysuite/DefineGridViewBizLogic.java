@@ -15,6 +15,7 @@ import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.wustl.catissuecore.actionForm.CategorySearchForm;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.querysuite.QueryCSMUtil;
+import edu.wustl.catissuecore.util.querysuite.TemporalColumnUIBean;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.QueryResultObjectDataBean;
 import edu.wustl.common.querysuite.queryobject.IConstraints;
@@ -309,16 +310,12 @@ public class DefineGridViewBizLogic
 			}
 			else
 			{
-			//objectColumnIds.add(columnIndex);
-			//queryResulObjectDataBean.setIdentifiedDataColumnIds(identifiedColumnIds);
-			//queryResulObjectDataBean.setObjectColumnIds(objectColumnIds);
-			queryResulObjectDataBean.getObjectColumnIds().add(columnIndex);
-			
-			selectedColumnNames.append(element.getColumnName());
-			selectedColumnNames.append(", ");
-			definedColumnsList.add(element.getDisplayName());
-			
-			columnIndex++;
+				queryResulObjectDataBean.getObjectColumnIds().add(columnIndex);
+				selectedColumnNames.append(element.getColumnName());
+				selectedColumnNames.append(", ");
+				definedColumnsList.add(element.getDisplayName());
+				
+				columnIndex++;
 			}
 			NameValueBean nameValueBean = new NameValueBean(element.getDisplayName(),element.getUniqueId());
 			selectedColumnNameValue.add(nameValueBean);
@@ -329,8 +326,13 @@ public class DefineGridViewBizLogic
 		{
 			sql = selectedColumnNames.substring(0, selectedColumnNames.lastIndexOf(","));
 		}
-	//	QueryOutputSpreadsheetBizLogic gridBizLogic = new QueryOutputSpreadsheetBizLogic();
-	//	sql = gridBizLogic.modifySqlForTemporalColumns(null, sql, definedColumnsList, outputTermsColumns);
+		QueryOutputSpreadsheetBizLogic gridBizLogic = new QueryOutputSpreadsheetBizLogic();
+		TemporalColumnUIBean temporalColumnUIBean = new TemporalColumnUIBean(null, sql, definedColumnsList, outputTermsColumns,columnIndex);
+		gridBizLogic.modifySqlForTemporalColumns(temporalColumnUIBean);
+		sql = temporalColumnUIBean.getSql();
+		columnIndex = temporalColumnUIBean.getColumnIndex();
+	
+	
 		selectedColumnNames.replace(0, selectedColumnNames.length(), sql);
 		while(mapItr.hasNext())
 		{

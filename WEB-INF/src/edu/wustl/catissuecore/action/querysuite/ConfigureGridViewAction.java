@@ -53,7 +53,7 @@ public class ConfigureGridViewAction extends BaseAction
 	 */
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
 			throws Exception
-	{
+	{ 
 		CategorySearchForm categorySearchForm = (CategorySearchForm) form;
 		HttpSession session = request.getSession();
 		Map<String, IOutputTerm> outputTermsColumns = (Map<String, IOutputTerm>)session.getAttribute(Constants.OUTPUT_TERMS_COLUMNS);
