@@ -3126,7 +3126,8 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			{
 				if(specimen.getParentSpecimen() != null)
 				{
-					setSpecimenParent(specimen, dao);
+					specimen = getParentSpecimenByLabel(dao, (Specimen)specimen.getParentSpecimen());
+					// setSpecimenParent(specimen, dao);
 					scg = specimen.getSpecimenCollectionGroup();
 				}
 				else if(scg == null)
