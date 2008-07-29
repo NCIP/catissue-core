@@ -1205,7 +1205,6 @@ public class ParticipantBizLogic extends DefaultBizLogic
 	public String getObjectId(AbstractDAO dao, Object domainObject) 
 	{
 		String objectId = "";
-		
 		if (domainObject instanceof Participant)
 		{
 			Participant participant = (Participant) domainObject;
@@ -1214,20 +1213,11 @@ public class ParticipantBizLogic extends DefaultBizLogic
 			{
 				objectId = Constants.ADD_GLOBAL_PARTICIPANT;
 			}
-			
 			else
 			{	
-				StringBuffer sb = new StringBuffer();
-				if (cprCollection != null && !cprCollection.isEmpty())
-				{
-					sb.append(Constants.COLLECTION_PROTOCOL_CLASS_NAME);
-					for (CollectionProtocolRegistration cpr : cprCollection)
-					{
-						if (cpr.getId()==null)
-						sb.append("_").append(cpr.getCollectionProtocol().getId());
-					}
-				}
-				return sb.toString();
+				CollectionProtocolRegistration cpr = cprCollection.iterator().next();
+				CollectionProtocol cp = cpr.getCollectionProtocol();
+				objectId = Constants.COLLECTION_PROTOCOL_CLASS_NAME+"_"+cp.getId();
 			}
 		}
 		return objectId;
@@ -1251,11 +1241,10 @@ public class ParticipantBizLogic extends DefaultBizLogic
 	public boolean isAuthorized(AbstractDAO dao, Object domainObject, SessionDataBean sessionDataBean)  
 	{
 		boolean isAuthorized = false;
-		
 		String privilegeName = getPrivilegeName(domainObject);
 		String protectionElementName = getObjectId(dao, domainObject);
 		PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(sessionDataBean.getUserName());
-		 
+		
 		if(protectionElementName.equals(Constants.ADD_GLOBAL_PARTICIPANT))
 		{
 				User user = null;
@@ -1279,19 +1268,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 		} 
 		else
 		{
-			String [] prArray = protectionElementName.split("_");
-			String baseObjectId = prArray[0];
-			String objId = "";
-    		for (int i = 1 ; i < prArray.length;i++)
-    		{
-    			objId = baseObjectId + "_" + prArray[i];
-    			isAuthorized = privilegeCache.hasPrivilege(protectionElementName,privilegeName);
-    			if (!isAuthorized)
-    			{
-    				break;
-    			}
-    		}
-			
+			isAuthorized = privilegeCache.hasPrivilege(protectionElementName,privilegeName);
 		}
 		return isAuthorized;		
 	}
