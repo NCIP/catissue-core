@@ -1139,12 +1139,12 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		persistentSpecimen.setBarcode(specimen.getBarcode());
 		persistentSpecimen.setCreatedOn(specimen.getCreatedOn());
 		//bug #8039
-	    if (((Constants.COLLECTION_STATUS_COLLECTED).equals(persistentSpecimen.getCollectionStatus()) && 
+	  /*  if (((Constants.COLLECTION_STATUS_COLLECTED).equals(persistentSpecimen.getCollectionStatus()) && 
 			   (Constants.COLLECTION_STATUS_COLLECTED).equals(specimen.getCollectionStatus()) &&
 				 (new Double(0.0).equals(persistentSpecimen.getAvailableQuantity()))))
 		{
 			throw new DAOException(ApplicationProperties.getValue("specimen.available.operation"));
-	    }
+	    }*/
 	    persistentSpecimen.setIsAvailable(specimen.getIsAvailable());
 		persistentSpecimen.setBiohazardCollection(specimen.getBiohazardCollection());
 		persistentSpecimen.setNoOfAliquots(specimen.getNoOfAliquots());
