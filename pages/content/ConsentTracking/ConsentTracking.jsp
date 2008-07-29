@@ -210,7 +210,7 @@ function popupWindow(nofConsentTiers)
 	<table width="100%" border="0" cellpadding="0" cellspacing="0"   >
 		<%--Title of the form i.e Consent Form --%>				
 		<tr>
-			<td class="formTitle">
+			<td align="left" class="tr_bg_blue1"><span class="blue_ar_b">
 				<%
 				ConsentTierData consentTierForm =(ConsentTierData)form;
 				List consentTierList=(List)consentTierForm.getConsentTiers();
@@ -219,20 +219,12 @@ function popupWindow(nofConsentTiers)
 				{
 					consentTierList =new ArrayList();
 					withdrawAllDisabled=true;
-				}
-				if(operation.equals(Constants.EDIT))
-				{
-				String str = "withdrawAll('"+ consentTierList.size()+"')";
-				%>
-					<div style="float:right;">
-						<html:button property="addButton" disabled="<%=withdrawAllDisabled%>" styleClass="actionButton" onclick="<%=str%>" value="Withdraw All"/>
-					</div>	
-				<%
-				}
-				%>
+				}%>
+				
 				<div style="margin-top:2px;">
 					<bean:message key="collectionprotocolregistration.consentform"/>
 				</div>
+			</span>
 		  </td>
 		</tr>
 		
@@ -367,14 +359,13 @@ function popupWindow(nofConsentTiers)
 			%>
 			<%--Get Signed URL --%>	
 			<tr>
-				<td colspan="4">
+				<td align="left" class="showhide" colspan="4"><table width="100%" border="0" cellspacing="0" id="consentFields" cellpadding="3">
 					<%-- Inner table that will show Consents--%>
-					<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%" id="consentFields" colspan="2" >
+					
 						<tr>
-							<td class="tabrightmostcell" width="35%">
-								&nbsp;&nbsp;&nbsp;<bean:message key="collectionprotocolregistration.signedurlconsent"/>
-							</td>
-							<td class="formField" >
+							<td width="30%" class="noneditable"><strong><bean:message key="collectionprotocolregistration.signedurlconsent"/></strong></td>
+
+							<td class="noneditable">
 								<label>
 								<%
 									if(signedUrl==null||signedUrl.equals(""))
@@ -395,10 +386,9 @@ function popupWindow(nofConsentTiers)
 						</tr>
 						<%--Get Witness Name --%>						
 						<tr>
-							<td class="tabrightmostcell">
-								&nbsp;&nbsp;&nbsp;<bean:message key="collectionprotocolregistration.witnessname"/>
-							</td>	
-							<td class="formField">
+							<td class="noneditable"><strong><bean:message key="collectionprotocolregistration.witnessname"/>
+							</strong></td>
+							<td class="noneditable">
 								<label >
 									<%
 									if(witnessName==null||witnessName.equals(""))
@@ -420,10 +410,9 @@ function popupWindow(nofConsentTiers)
 						</tr>
 						<%--Get Consent Date --%>														
 						<tr>
-							<td class="tabrightmostcell">
-								&nbsp;&nbsp;&nbsp;<bean:message key="collectionprotocolregistration.consentdate"/>
+							<td class="noneditable"><label for="User"><strong><bean:message key="collectionprotocolregistration.consentdate"/>
 							</td>		
-							<td class="formField">
+							<td class="noneditable">
 								<label>
 									<%
 									if(consentDate==null||consentDate.equals(""))
@@ -451,25 +440,17 @@ function popupWindow(nofConsentTiers)
 			<tr>
 				<td>
 				<%-- Inner table that will show Consents Start--%>
-					<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
+					<table width="100%" border="0" cellspacing="0" cellpadding="4">
 						<%-- Serial No # --%>	
-						<tr>
-							<td class="formLeftSubTableTitle">
-								<div align="left">
-									<bean:message key="requestlist.dataTabel.serialNo.label" />
-								</div>
-							</td>
+						<tr class="tableheading">
+							<td width="8%" align="left" class="black_ar_b"><bean:message key="requestlist.dataTabel.serialNo.label" /></td>
 							<%-- Title ( Consent Tiers) --%>									
-							<td class="formLeftSubTableTitle">
-								<div>	
+							<td width="17%" align="left" nowrap="nowrap" class="black_ar_b">
 									<bean:message key="collectionprotocolregistration.consentTiers" />
-								</div>	
 							</td>
 							<%--Title (Participant response) --%>										
-							<td  class="formLeftSubTableTitle">
-								<div align="left">
+							<td width="24%" align="left" nowrap="nowrap" class="black_ar_b">
 									<bean:message key="collectionprotocolregistration.participantResponses" />
-								<div>	
 							</td>
 							
 							<%
@@ -478,10 +459,8 @@ function popupWindow(nofConsentTiers)
 							{
 							%>
 							<%-- Title ( Response Status if page of SCG or New Specimen --%>									
-							<td class="formLeftSubTableTitle">
-								<div align="left">
+							<td class="black_ar_b">
 									<bean:message key="consent.responsestatus" />
-								</div>
 							</td>
 							<%
 							}
@@ -563,11 +542,9 @@ function popupWindow(nofConsentTiers)
 						%>		
 						<%-- Serial No # --%>										
 						<tr>
-							<td class="tabrightmostcell">
-								<%=counter+1%>.
-							</td>
+							<td align="left" class="black_ar" ><%=counter+1%>.</td>
 							<%-- Get Consents # --%>										
-							<td class="formField" width="31%">
+							<td class="black_ar">
 							<html:hidden property="<%=consentIDKey%>"/>
 							<html:hidden property="<%=consents%>"/>
 							<%=consentResponseDisplay%>
@@ -577,7 +554,7 @@ function popupWindow(nofConsentTiers)
 							if(pageOf.equals("pageOfCollectionProtocolRegistration")||pageOf.equals("pageOfCollectionProtocolRegistrationCPQuery")  || pageOf.equals("pageOfConsent"))
 							{
 							%>
-								<td align="left" class="formField">
+								<td class="black_new">
 									<html:hidden property="<%=participantResponseIDKey%>"/>
 									<html:select property="<%=participantResponseKey%>" styleClass="formFieldSized10" styleId="<%=participantResponseKey%>" size="1"
 									onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
@@ -591,7 +568,7 @@ function popupWindow(nofConsentTiers)
 									||pageOf.equals("pageOfNewSpecimenCPQuery")||pageOf.equals("pageOfSpecimenCollectionGroup")||pageOf.equals("pageOfDistribution")||pageOf.equals("pageOfOrdering"))
 							{
 							%>
-							<td align="left" class="formField">
+							<td class="black_ar">
 								<html:hidden property="<%=participantResponseIDKey%>"/>
 								<html:hidden property="<%=participantResponseKey%>"/>
 								<%=responseDisplay%>
@@ -616,7 +593,7 @@ function popupWindow(nofConsentTiers)
 								if(operation.equals(Constants.EDIT)&&statusDisplay.equals(Constants.WITHDRAWN))
 								{
 							%>
-								<td align="left" class="formField">
+								<td class="black_new">
 								<html:select property="<%=responseKey%>" styleClass="formFieldSized10" styleId="<%=responseKey%>" size="1"
 											onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 										<html:option value="Withdrawn"><bean:message key="consent.withdrawn" /></html:option>
@@ -627,7 +604,7 @@ function popupWindow(nofConsentTiers)
 								else
 								{
 							%>
-								<td align="left" class="formField">
+								<td class="black_new">
 									<html:hidden property="<%=responseIdKey%>"/>
 									<html:select property="<%=responseKey%>" styleClass="formFieldSized10" styleId="<%=responseKey%>" size="1"
 										onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="<%=idKey%>">
@@ -653,7 +630,7 @@ function popupWindow(nofConsentTiers)
 								if(statusDisplay!=null&&operation.equals(Constants.EDIT)&&statusDisplay.equals(Constants.WITHDRAWN))
 								{
 							%>
-								<td align="left" class="formField">
+								<td class="black_new">
 								<html:select property="<%=responseKey%>" styleClass="formFieldSized10" styleId="<%=responseKey%>" size="1"
 											onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 										<html:option value="Withdrawn"><bean:message key="consent.withdrawn" /></html:option>
@@ -664,7 +641,7 @@ function popupWindow(nofConsentTiers)
 								else
 								{
 							%>
-							<td align="left" class="formField" >
+							<td class="black_new">
 								<html:hidden property="<%=responseIdKey%>"/>
 								<html:select property="<%=responseKey%>" styleClass="formFieldSized10" styleId="<%=responseKey%>" size="1"
 									onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="<%=keyValue%>">
@@ -680,7 +657,7 @@ function popupWindow(nofConsentTiers)
 							else if(pageOf.equals("pageOfDistribution") || pageOf.equals("pageOfOrdering"))
 							{
 							%>
-							<td align="left" class="formField">
+							<td class="black_ar">
 								<html:hidden property="<%=responseIdKey%>"/>
 								<html:hidden property="<%=responseKey%>"/>
 								 <%=specimenResponseDisplay%>
@@ -740,6 +717,18 @@ function popupWindow(nofConsentTiers)
 					   </table>	
 					<%-- Inner table that will show Consents--%>
 				</td>	
-			</tr>	
+			</tr>
+			<tr>
+			<td>
+			<%if(operation.equals(Constants.EDIT))
+				{
+				String str = "withdrawAll('"+ consentTierList.size()+"')";
+				%>
+					
+						<html:button property="addButton" disabled="<%=withdrawAllDisabled%>" styleClass="blue_ar_c" onclick="<%=str%>" value="Withdraw All"/>
+					
+				<%
+				}
+				%></td></tr>
 	</table>
 	<%-- Main table End --%>
