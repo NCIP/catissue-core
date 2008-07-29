@@ -444,7 +444,7 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 		{
 			for (Site site : siteCollection)
 			{
-				if(siteIdsList.contains(new Integer(site.getId().toString())))
+				if(siteIdsList.contains(site.getId()))
 				{
 					list.add(site);
 				}
