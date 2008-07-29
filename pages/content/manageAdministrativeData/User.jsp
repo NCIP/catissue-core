@@ -160,7 +160,7 @@ function handleStatus(status)
                   <td align="left" class="black_ar">&nbsp;</td>
                   <td align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
                   <td align="left" class="black_ar"><bean:message key="user.zipCode" /></td>
-                  <td align="left"  class="black_ar"><html:text styleClass="black_ar"	maxlength="30" size="30" styleId="zipCode" property="zipCode" /></td>
+                  <td align="left"  class="black_ar"><html:text styleClass="black_ar"	style="text-align:right" maxlength="30" size="30" styleId="zipCode" property="zipCode" /></td>
                   <td align="left" valign="top">&nbsp;</td>
                 </tr>
                 <tr>
@@ -170,13 +170,13 @@ function handleStatus(status)
                   <td align="left" class="black_ar">&nbsp;</td>
                   <td align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
                   <td align="left" class="black_ar"><bean:message key="user.phoneNumber" /></td>
-                  <td align="left"><html:text styleClass="black_ar"	maxlength="50" size="30" styleId="phoneNumber" property="phoneNumber" /></td>
+                  <td align="left"><html:text styleClass="black_ar"	maxlength="50" size="30" style="text-align:right" styleId="phoneNumber" property="phoneNumber" /></td>
                   <td align="left" valign="top">&nbsp;</td>
                 </tr>
                 <tr>
                   <td align="center" class="black_ar">&nbsp;</td>
                   <td align="left" class="black_ar"><bean:message key="user.faxNumber" /></td>
-                  <td align="left"><html:text styleClass="black_ar"	maxlength="50" size="30" styleId="faxNumber" property="faxNumber" /></td>
+                  <td align="left"><html:text styleClass="black_ar"	maxlength="50" size="30" style="text-align:right" styleId="faxNumber" property="faxNumber" /></td>
                   <td align="left" class="black_ar">&nbsp;</td>
                   <td align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
                   <td align="left" class="black_ar"><label for="institutionId"><bean:message key="user.institution" /></label></td>
@@ -200,10 +200,10 @@ function handleStatus(status)
 			<logic:notEqual name="pageOf" value='${requestScope.pageOfUserProfile}'>
         <tr onclick="showHide('add_id')">
           <td align="left" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;<bean:message key="user.administrativeDetails.title" /></span></td>
-          <td align="right" class="tr_bg_blue1"><a href="#" id="imgArrow_add_id"><img src="images/uIEnhancementImages/dwn_arrow1.gif" alt="Show Details" width="80" height="9" hspace="10" border="0"/></a></td>
+          <td align="right" class="tr_bg_blue1"><a href="#" id="imgArrow_add_id"><img src="images/uIEnhancementImages/up_arrow.gif" alt="Show Details" width="80" height="9" hspace="10" border="0"/></a></td>
         </tr>
         <tr>
-          <td colspan="2" class="showhide1"><div id="add_id" style="display:none" >
+          <td colspan="2" class="showhide1"><div id="add_id" style="display:block" >
               <table width="100%" border="0" cellpadding="3" cellspacing="0">
                 <tr>
                   <td width="1%" align="center" class="black_ar">&nbsp;</td>
