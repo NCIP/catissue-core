@@ -1123,20 +1123,23 @@ public class SpecimenCollectionGroupAction extends SecureAction
 		CollectionProtocolRegistrationBizLogic collectionProtocolRegistrationBizLogic = (CollectionProtocolRegistrationBizLogic) BizLogicFactory
 				.getInstance().getBizLogic(Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
 		String[] colName = new String[2];
+		Object[] val = new Object[2];
 		if (indexType.equalsIgnoreCase(Constants.PARTICIPANT_ID))
 		{
 			colName[0] = "participant.id";
 			colName[1] = "collectionProtocol.id";
+			val[0] = Long.valueOf(idOfSelectedRadioButton);
 		}
 		else
 		{
 			colName[0] = "protocolParticipantIdentifier";
 			colName[1] = "collectionProtocol.id";
+			val[0] = idOfSelectedRadioButton;
 		}
 
+		val[1]=Long.valueOf(cp_id);
+		
 		String[] colCondition = {"=", "="};
-		Long[] val = {Long.valueOf(idOfSelectedRadioButton),Long.valueOf(cp_id)};
-
 		List collProtRegObj = collectionProtocolRegistrationBizLogic
 		.retrieve( CollectionProtocolRegistration.class.getName(), colName, colCondition,
 				val, null);
