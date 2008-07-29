@@ -2101,32 +2101,6 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		return noOfDays;
 	}
 
-	
-	
-	
-
-	/**
-	 * Patch Id : FutureSCG_13 Description : method to executeQuery
-	 */
-	/**
-	 * Executes hql Query and returns the results.
-	 * 
-	 * @param hql
-	 *            String hql
-	 * @throws DAOException
-	 *             DAOException
-	 * @throws ClassNotFoundException
-	 *             ClassNotFoundException
-	 */
-	private List executeQuery(String hql) throws DAOException, ClassNotFoundException
-	{
-		HibernateDAO dao = (HibernateDAO) DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
-		dao.openSession(null);
-		List list = dao.executeQuery(hql, null, false, null);
-		dao.closeSession();
-		return list;
-	}
-
 	private List executeHqlQuery(DAO dao, String hql) throws DAOException, ClassNotFoundException
 	{
 		List list = dao.executeQuery(hql, null, false, null);

@@ -1565,26 +1565,6 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 
 	// Mandar : 11-Jan-07 For Consent Tracking Withdrawal -------- end
 
-
-	/**
-	 * Executes hql Query and returns the results.
-	 * 
-	 * @param hql
-	 *            String hql
-	 * @throws DAOException
-	 *             DAOException
-	 * @throws ClassNotFoundException
-	 *             ClassNotFoundException
-	 */
-	private List executeQuery(String hql) throws DAOException, ClassNotFoundException
-	{
-		HibernateDAO dao = (HibernateDAO) DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
-		dao.openSession(null);
-		List list = dao.executeQuery(hql, null, false, null);
-		dao.closeSession();
-		return list;
-	}
-
 	/* offset changes 27th Dec 2007 */
 
 	/**
