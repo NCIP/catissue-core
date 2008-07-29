@@ -21,16 +21,6 @@ public class AddRaceMetadata
 	private HashMap<String, String> attributeDatatypeMap = new HashMap<String, String>();
 	private HashMap<String, String> attributePrimarkeyMap = new HashMap<String, String>();
 	private List<String> entityList = new ArrayList<String>();
-
-	/*public static void main(String[] args)
-			throws Exception
-	{
-		Connection connection = DBUtil.getConnection();
-		connection.setAutoCommit(true);
-		
-		AddRaceMetadata addRaceMetadata = new AddRaceMetadata(connection);
-		addRaceMetadata.addRaceMetadata();
-	}*/
 	
 	public void addRaceMetadata() throws SQLException, IOException
 	{

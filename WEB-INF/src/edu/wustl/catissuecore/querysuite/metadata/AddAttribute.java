@@ -20,16 +20,6 @@ public class AddAttribute
 	private HashMap<String, String> attributeDatatypeMap = new HashMap<String, String>();
 	private HashMap<String, String> attributePrimarkeyMap = new HashMap<String, String>();
 	private List<String> entityList = new ArrayList<String>();
-
-	/*public static void main(String[] args)
-	throws Exception
-	{
-		Connection connection = DBUtil.getConnection();
-		connection.setAutoCommit(true);
-
-		AddAttribute addAttribute = new AddAttribute(connection);
-		addAttribute.addAttribute();
-	}*/
 	
 	public void addAttribute() throws SQLException, IOException
 	{
@@ -229,5 +219,4 @@ public class AddAttribute
 		this.attributePrimarkeyMap = attributePrimarkeyMap;
 		this.entityList = entityList;
 	}
-
 }

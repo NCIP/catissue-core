@@ -27,20 +27,6 @@ public class DeleteAttribute {
 	private HashMap<String, String> attributeDatatypeMap = new HashMap<String, String>();
 	private List<String> entityNameList = new ArrayList<String>();
 	private Map<String, Long> entityIDMap = new HashMap<String, Long>();
-	
-	/*public static void main(String[] args) throws Exception
-	{
-		Connection connection = DBUtil.getConnection();
-		connection.setAutoCommit(true);
-		Statement stmt = connection.createStatement();
-		
-		DeleteAttribute deleteAttribute =new DeleteAttribute(connection);
-		
-		List<String> deleteSQL = deleteAttribute.deleteAttribute();
-		UpdateMetadataUtil.executeSQLs(deleteSQL,stmt, true);
-
-		connection.close();
-	}*/
 
 	public List<String> deleteAttribute() throws SQLException
 	{
@@ -53,7 +39,6 @@ public class DeleteAttribute {
 		
 		List<String> deleteSQL = new ArrayList<String>();
 		
-
 		populateEntityIDList();
 		entityIDAttributeListMap = UpdateMetadataUtil.populateEntityAttributeMap(connection, entityIDMap);
 		Set<String> keySet = entityIDMap.keySet();
@@ -73,7 +58,6 @@ public class DeleteAttribute {
 		}
 		return deleteSQL;
 	}
-
 
 	private List<String> deleteAttribute(Long identifier, AttributeInterface attribute) throws SQLException
 	{
@@ -179,10 +163,8 @@ public class DeleteAttribute {
 		entityAttributesToDelete.put("edu.wustl.catissuecore.domain.CellSpecimen",attributeToDelete);
 		entityAttributesToDelete.put("edu.wustl.catissuecore.domain.FluidSpecimen",attributeToDelete);
 		entityAttributesToDelete.put("edu.wustl.catissuecore.domain.MolecularSpecimen",attributeToDelete);
-		entityAttributesToDelete.put("edu.wustl.catissuecore.domain.TissueSpecimen",attributeToDelete);
-		
+		entityAttributesToDelete.put("edu.wustl.catissuecore.domain.TissueSpecimen",attributeToDelete);	
 	}
-
 	
 	private void populateAttributeDatatypeMap() 
 	{
@@ -192,8 +174,7 @@ public class DeleteAttribute {
 		attributeDatatypeMap.put("isCollectionProtocolRequirement","boolean");
 		attributeDatatypeMap.put("type", "string");
 		attributeDatatypeMap.put("raceName", "string");
-		attributeDatatypeMap.put("lineage", "string");
-		
+		attributeDatatypeMap.put("lineage", "string");	
 	}
 
 	private void populateEntityList() 
@@ -236,19 +217,16 @@ public class DeleteAttribute {
 		this.connection = connection;
 		this.stmt = connection.createStatement();
 	}
-
 	
 	public void setEntityAttributesToDelete(HashMap<String, List<String>> entityAttributesToDelete)
 	{
 		this.entityAttributesToDelete = entityAttributesToDelete;
 	}
-
 	
 	public void setAttributeDatatypeMap(HashMap<String, String> attributeDatatypeMap)
 	{
 		this.attributeDatatypeMap = attributeDatatypeMap;
 	}
-
 	
 	public void setEntityNameList(List<String> entityNameList)
 	{

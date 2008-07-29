@@ -17,7 +17,8 @@ import edu.common.dynamicextensions.domaininterface.AttributeInterface;
  * @author deepti_shelar
  *
  */
-public class DeletePermissibleValueAttribute {
+public class DeletePermissibleValueAttribute 
+{
 	private Connection connection = null;
 
 	private Statement stmt = null;
@@ -27,19 +28,6 @@ public class DeletePermissibleValueAttribute {
 	private HashMap<String, String> attributeDatatypeMap = new HashMap<String, String>();
 	private List<String> entityNameList = new ArrayList<String>();
 	private Map<String, Long> entityIDMap = new HashMap<String, Long>();
-
-
-	/*public static void main(String[] args) throws Exception
-	{
-		Connection connection = DBUtil.getConnection();
-		connection.setAutoCommit(true);
-		
-		DeletePermissibleValueAttribute deletePermissibleValueAttribute =new DeletePermissibleValueAttribute(connection);
-		List<String> deleteSQL = deletePermissibleValueAttribute.deletePermissibleValue();
-		deletePermissibleValueAttribute.executeDeleteStatements(deleteSQL);
-		
-		connection.close();
-	}*/
 
 	public List<String> deletePermissibleValue() throws SQLException
 	{
@@ -70,7 +58,6 @@ public class DeletePermissibleValueAttribute {
 
 	private List<String> deleteAttribute(Long identifier, AttributeInterface attribute) throws SQLException
 	{
-		//System.out.println("/*-----Deleting permissible value Attribute: "+attribute.getName()+" -------*/");
 		List<String> deleteSQL = new ArrayList<String>();
 		String sql;
 		sql = "delete from dyextn_column_properties where identifier = "+attribute.getColumnProperties().getId();
@@ -137,16 +124,6 @@ public class DeletePermissibleValueAttribute {
 		return deleteSQL;
 	}
 
-	private void executeDeleteStatements(List<String> deleteSQL) throws SQLException
-	{
-		for(String sql : deleteSQL)
-		{
-			//System.out.println(sql+";");
-//			stmt = connection.createStatement();
-//			stmt.execute(sql);
-		}
-	}
-
 	private boolean isAttributeToDelete(String entityName, String name)
 	{
 		List<String> attributesTodeleteList = entityAttributesToDelete.get(entityName);
@@ -182,7 +159,6 @@ public class DeletePermissibleValueAttribute {
 		entityAttributesToDelete.put("edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup",attributeToDelete);
 	}
 
-	
 	private void populateAttributeDatatypeMap() 
 	{
 		attributeDatatypeMap.put("type", "string");
@@ -195,7 +171,6 @@ public class DeletePermissibleValueAttribute {
 
 	private void populateEntityList() 
 	{
-
 		entityNameList.add("edu.wustl.catissuecore.domain.CellSpecimen");
 		entityNameList.add("edu.wustl.catissuecore.domain.FluidSpecimen");
 		entityNameList.add("edu.wustl.catissuecore.domain.MolecularSpecimen");
@@ -226,25 +201,22 @@ public class DeletePermissibleValueAttribute {
 		return rs;
 	}
 
-	
+	public void setEntityNameList(List<String> entityNameList)
+	{
+		this.entityNameList = entityNameList;
+	}
+
 	public void setEntityAttributesToDelete(
 			HashMap<String, List<String>> entityAttributesToDelete)
 	{
 		this.entityAttributesToDelete = entityAttributesToDelete;
 	}
 
-	
 	public void setAttributeDatatypeMap(HashMap<String, String> attributeDatatypeMap)
 	{
 		this.attributeDatatypeMap = attributeDatatypeMap;
 	}
-
 	
-	public void setEntityNameList(List<String> entityNameList)
-	{
-		this.entityNameList = entityNameList;
-	}
-
 	public DeletePermissibleValueAttribute(Connection connection) throws SQLException
 	{
 		super();

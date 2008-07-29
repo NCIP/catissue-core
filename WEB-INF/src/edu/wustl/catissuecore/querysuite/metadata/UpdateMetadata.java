@@ -74,7 +74,6 @@ public class UpdateMetadata
 			}
 		}
 	}
-
 	
 	/**
 	 * Configuration
@@ -165,9 +164,7 @@ public class UpdateMetadata
 		
 		deleteSQL = deleteAttribute.deleteAttribute();
 		UpdateMetadataUtil.executeSQLs(deleteSQL, connection.createStatement(), true);
-		
-		
-		
+			
 		List<String> entityNameList = new ArrayList<String>();
 		entityNameList.add("edu.wustl.catissuecore.domain.QuantityInCount");
 		deleteAttribute.setEntityNameList(entityNameList);
@@ -205,9 +202,7 @@ public class UpdateMetadata
 		deleteEntity.setEntityNameToDelete("edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup");
 		deleteEntitySQL = deleteEntity.deleteEntity();
 		UpdateMetadataUtil.executeSQLs(deleteEntitySQL, connection.createStatement(), true);
-		/**  delete entity statements  end **/
-		
-		
+		/**  delete entity statements  end **/		
 	}
 
 	private static void addMetadata() throws SQLException, IOException
@@ -215,9 +210,8 @@ public class UpdateMetadata
 		/**  Add Race metadata statements  start **/
 		AddRaceMetadata addRaceMetadata = new AddRaceMetadata(connection);
 		addRaceMetadata.addRaceMetadata();
-		/**  Add Race metadata statements  start **/
-		
-		
+		/**  Add Race metadata statements  end **/
+				
 		AddAbstractPositionMetadata addAbstractPositionMetaData = new AddAbstractPositionMetadata(connection);
 		addAbstractPositionMetaData.addContainerMetadata();
 		
@@ -354,10 +348,6 @@ public class UpdateMetadata
 		dbUpdateSQL.add("update dyextn_database_properties set NAME = 'INITIAL_QUANTITY' where IDENTIFIER in (Select IDENTIFIER from dyextn_column_properties where PRIMITIVE_ATTRIBUTE_ID in (Select IDENTIFIER from dyextn_primitive_attribute where IDENTIFIER in (Select IDENTIFIER from dyextn_abstract_metadata  where IDENTIFIER in (Select IDENTIFIER from dyextn_attribute where ENTIY_ID in (Select IDENTIFIER from dyextn_abstract_metadata where NAME = 'edu.wustl.catissuecore.domain.AbstractSpecimen')) and NAME = 'initialQuantity')))");
 
 		dbUpdateSQL.add("update dyextn_attribute set ENTIY_ID = (Select IDENTIFIER from dyextn_abstract_metadata where NAME =  'edu.wustl.catissuecore.domain.AbstractSpecimen') where IDENTIFIER in (Select IDENTIFIER from dyextn_association  where TARGET_ENTITY_ID in (Select IDENTIFIER from dyextn_abstract_metadata where NAME =  'edu.wustl.catissuecore.domain.SpecimenCharacteristics') and SOURCE_ROLE_ID in (Select identifier from dyextn_role where NAME = 'edu.wustl.catissuecore.domain.Specimen'))");
-
-		//dbUpdateSQL.add("update  path set LAST_ENTITY_ID = (Select IDENTIFIER from dyextn_abstract_metadata where NAME =  'edu.wustl.catissuecore.domain.AbstractSpecimen') where FIRST_ENTITY_ID in (Select IDENTIFIER from dyextn_abstract_metadata where NAME = 'edu.wustl.catissuecore.domain.Specimen') and LAST_ENTITY_ID in (Select IDENTIFIER from dyextn_abstract_metadata where NAME = 'edu.wustl.catissuecore.domain.Specimen')");
-
-		//dbUpdateSQL.add("update  path set FIRST_ENTITY_ID = (Select IDENTIFIER from dyextn_abstract_metadata where NAME =  'edu.wustl.catissuecore.domain.AbstractSpecimen') where FIRST_ENTITY_ID in (Select IDENTIFIER from dyextn_abstract_metadata where NAME = 'edu.wustl.catissuecore.domain.Specimen') and LAST_ENTITY_ID in (Select IDENTIFIER from dyextn_abstract_metadata where NAME = 'edu.wustl.catissuecore.domain.AbstractSpecimen')");
 		
 		stmt = connection.createStatement();
 		rs = stmt.executeQuery("select DE_ASSOCIATION_ID from intra_model_association where ASSOCIATION_ID in (select INTERMEDIATE_PATH from path where FIRST_ENTITY_ID in (select IDENTIFIER from dyextn_abstract_metadata where name ='edu.wustl.catissuecore.domain.AbstractSpecimen') and LAST_ENTITY_ID in (select IDENTIFIER from dyextn_abstract_metadata where name ='edu.wustl.catissuecore.domain.AbstractSpecimen'))");
@@ -376,7 +366,6 @@ public class UpdateMetadata
 		return dbUpdateSQL;
 	}
 	
-
 	private static List<String> updateSQLForDistributionProtocol() throws SQLException
 	{
 		List<String> dbUpdateSQL = new ArrayList<String>();
@@ -418,7 +407,6 @@ public class UpdateMetadata
 		return dbUpdateSQL;
 		
 	}
-
 	
 	private static List<String> getInsertPathStatements() throws SQLException
 	{
@@ -446,7 +434,6 @@ public class UpdateMetadata
 		entityAttributesToDelete.put("edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup",attributeToDelete);
 		deleteAttribute.setEntityAttributesToDelete(entityAttributesToDelete);
 	}
-
 	
 	private static void populateAttributeDatatypeMap(DeleteAttribute deleteAttribute) 
 	{
@@ -468,5 +455,4 @@ public class UpdateMetadata
 		entityNameList.add("edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup");
 		deleteAttribute.setEntityNameList(entityNameList);
 	}
-
 }

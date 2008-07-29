@@ -33,7 +33,6 @@ public class AddPath
 	    associationsList.add("edu.wustl.catissuecore.domain.DistributedItem");
 	    superClassAndAssociationsMap.put("edu.wustl.catissuecore.domain.Specimen", associationsList);
 	    
-	    
 	    subClassesList = new ArrayList<String>();
 	    subClassesList.add("edu.wustl.catissuecore.domain.Specimen");
 	    subClassesList.add("edu.wustl.catissuecore.domain.CellSpecimen");
@@ -47,8 +46,7 @@ public class AddPath
 	    associationsList.add("edu.wustl.catissuecore.domain.SpecimenEventParameters");
 	    associationsList.add("edu.wustl.catissuecore.domain.AbstractSpecimen");
 	    superClassAndAssociationsMap.put("edu.wustl.catissuecore.domain.AbstractSpecimen", associationsList);
-	    
-	    
+	    	    
 	    subClassesList = new ArrayList<String>();
 	    subClassesList.add("edu.wustl.catissuecore.domain.CellSpecimenRequirement");
 	    subClassesList.add("edu.wustl.catissuecore.domain.FluidSpecimenRequirement");

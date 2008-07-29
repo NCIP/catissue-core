@@ -19,16 +19,6 @@ public class AddRequirementSpecimenSubClassesMetaData
 	private static HashMap<String, String> attributePrimarkeyMap = new HashMap<String, String>();
 	private static List<String> entityList = new ArrayList<String>();
 	
-	/*public static void main(String[] args)
-	throws Exception
-	{
-		Connection connection = DBUtil.getConnection();
-		connection.setAutoCommit(true);
-		
-		AddRequirementSpecimenSubClassesMetaData addSpecimenMetaData = new AddRequirementSpecimenSubClassesMetaData(connection);
-		addSpecimenMetaData.addSpecimenMetadata();
-	}*/
-	
 	public void addSpecimenMetadata() throws SQLException, IOException
 	{
 		populateEntityList();

@@ -18,12 +18,6 @@ public class AddSpecimenRequirementMetaData
 	private static HashMap<String, String> attributePrimarkeyMap = new HashMap<String, String>();
 	private static List<String> entityList = new ArrayList<String>();
 	
-	/*public static void main(String[] args)
-	throws Exception
-	{
-		
-	}*/
-		
 	public void addSpecimenRequirementMetaData() throws SQLException, IOException
 	{
 		populateEntityList();

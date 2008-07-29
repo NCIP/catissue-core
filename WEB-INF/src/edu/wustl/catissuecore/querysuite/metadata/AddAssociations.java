@@ -167,5 +167,5 @@ public class AddAssociations
 		+ nextIDintraModelAssociation + "," + associatedEntityId + ")";
 
 		UpdateMetadataUtil.executeInsertSQL(sql, connection.createStatement());
-	}//End of addAssociation()
+	}
 }
