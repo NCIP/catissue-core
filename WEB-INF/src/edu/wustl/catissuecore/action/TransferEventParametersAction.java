@@ -47,7 +47,10 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 	protected void setRequestParameters(HttpServletRequest request, EventParametersForm eventParametersForm) throws Exception
 	{
 		TransferEventParametersForm transferEventParametersForm = (TransferEventParametersForm)eventParametersForm ;
-				
+		
+		List<NameValueBean> storagePositionListForTransferEvent = Utility.getStoragePositionTypeListForTransferEvent();
+		
+		request.setAttribute("storageListForTransferEvent", storagePositionListForTransferEvent);				
 		
 		StorageContainerBizLogic scbizLogic = (StorageContainerBizLogic) BizLogicFactory
 				.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);

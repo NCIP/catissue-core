@@ -16,177 +16,135 @@
 <!-- Mandar 21-Aug-06 : For calendar changes -->
 <script src="jss/calendarComponent.js"></script>
 <SCRIPT>var imgsrc="images/";</SCRIPT>
-<LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
+<LINK href="css/calanderComponent.css" type=text/css rel=stylesheet />
+<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
 <!-- Mandar 21-Aug-06 : calendar changes end -->
 </head>
+<script language="JavaScript">
+
+function toStoragePositionChange(element)
+{	
+	var autoDiv = document.getElementById("AutoDiv");
+	var manualDiv = document.getElementById("ManualDiv");
+
+	if(element.value == 1)
+	{   
+		manualDiv.style.display='none';
+		autoDiv.style.display  = 'block';
+	}
+	else
+	if(element.value == 2)
+	{				
+		autoDiv.style.display  = 'none';	
+		manualDiv.style.display = 'block';				
+	}			
+}
+
+</SCRIPT>
 
 
 			
 <html:errors/>
     
-<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
+<table summary="" cellpadding="0" cellspacing="0" border="0" width="100%">
 
 <html:form action='${requestScope.formName}'>
+	<html:hidden property="operation" />
+	<html:hidden property="id" />
+	<html:hidden property="specimenId" value='${requestScope.specimenId}'/>
 
-
-	<!-- NEW TRANSFER_EVENT_PARAMETERS REGISTRATION BEGINS-->
 	<tr>
-	<td>
-	
-	<table summary="" cellpadding="3" cellspacing="0" border="0">
+         <td align="left" class="tr_bg_blue1" >
+			<span class="blue_ar_b">&nbsp;<bean:message  key="eventparameters"/> &quot;<em><bean:message key="transfereventparameters"/></em>&quot;</span></td>
+        </tr>
 		<tr>
-			<td><html:hidden property="operation" /></td>
-		</tr>
-		
-		<tr>
-			<td><html:hidden property="id" /></td>
-		</tr>
-		
-		<tr>
-			 <td class="formMessage" colspan="3">* indicates a required field</td>
-		</tr>
-		
-		<tr>
-			<td>
-				<html:hidden property="specimenId" value='${requestScope.specimenId}'/>
-			</td>
-		</tr>
+          <td  class="showhide1"></td>
+        </tr>
 
-		<tr>
-			<td class="formTitle" height="20" colspan="3">
-				<logic:equal name="operation" value='${requestScope.addForJSP}'>
-					<bean:message key="transfereventparameters.title"/>
-				</logic:equal>
-				<logic:equal name="operation" value='${requestScope.editForJSP}'>
-					<bean:message key="transfereventparameters.edittitle"/>
-				</logic:equal>
-			</td>
-		</tr>
 		
 		<!-- Name of the transfereventparameters -->
 <!-- User -->		
-		<tr>
-			<td class="formRequiredNotice" width="5">*</td>
-			<td class="formRequiredLabel">
-				<label for="type">
-					<bean:message key="eventparameters.user"/> 
-				</label>
-			</td>
-			<td class="formField">
-<!-- Mandar : 434 : for tooltip -->
-				<html:select property="userId" styleClass="formFieldSized" styleId="userId" size="1"
+		<tr >
+          <td class="showhide"><table width="100%" border="0" cellpadding="3" cellspacing="0">
+               <tr>
+                  <td width="1%" align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>
+                  <td width="15%" align="left" nowrap class="black_ar"><bean:message key="eventparameters.user"/></td>
+                  <td  align="left" valign="middle" class="black_ar" width="30%"><html:select property="userId" styleClass="formFieldSized18" styleId="userId" size="1"
 				 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 					<html:options collection='${requestScope.userListforJSP}' labelProperty="name" property="value"/>
-				</html:select>
-			</td>
-		</tr>
+				</html:select></td>
+				<td width="1%" colspan="4"></td>
+                </tr>
 
 <!-- date -->		
 		<tr>
-			<td class="formRequiredNotice" width="5">*</td>
-			<td class="formRequiredLabel">
-				<label for="type">
-					<bean:message key="eventparameters.dateofevent"/> 
-				</label>
-			</td>
-			<td class="formField">
-
-<logic:notEmpty name="currentEventParametersDate">
-<ncombo:DateTimeComponent name="dateOfEvent"
-			  id="dateOfEvent"
-			  formName="transferEventParametersForm"
+                  <td align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>
+                  <td align="left" class="black_ar"><bean:message key="eventparameters.dateofevent"/></td>
+                  <td colspan="" align="left" >
+				  <logic:notEmpty name="currentEventParametersDate">
+					<ncombo:DateTimeComponent name="dateOfEvent"
+					  id="dateOfEvent"
+							  formName="transferEventParametersForm"
 			                  month='${requestScope.eventParametersMonth}'
 							  year='${requestScope.eventParametersYear}'
 							  day='${requestScope.eventParametersDay}'
 							  value='${requestScope.currentEventParametersDate}'
-			  styleClass="formDateSized10"
-					/>
-</logic:notEmpty>
-<logic:empty name="currentEventParametersDate">
-<ncombo:DateTimeComponent name="dateOfEvent"
-			  id="dateOfEvent"
-			  formName="transferEventParametersForm"
-			  styleClass="formDateSized10"
-					/>
-</logic:empty>
-
-
-<bean:message key="page.dateFormat" />&nbsp;
-
-
-			</td>
-		</tr>
-		
-		<!-- hours & minutes -->		
-		<!-- 
-			 Bug ID:  AutocompleteBugID
-			 Patch ID: AutocompleteBugID_15
-			 Description:html:select tag is replaced by Autocomplete
-	   -->	
-		<tr>
-			<td class="formRequiredNotice" width="5">*</td>
-			<td class="formRequiredLabel">
-				<label for="eventparameters.time">
-					<bean:message key="eventparameters.time"/>
-				</label>
-			</td>
-			<td class="formField">
-				<autocomplete:AutoCompleteTag property="timeInHours"
+							  styleClass="black_ar" />
+				</logic:notEmpty>
+				<logic:empty name="currentEventParametersDate">
+					<ncombo:DateTimeComponent name="dateOfEvent"
+						  id="dateOfEvent"
+						  formName="transferEventParametersForm"
+						  styleClass="black_ar" size="5" />
+				</logic:empty>
+                    <span class="grey_ar_s"><bean:message key="page.dateFormat" /></span></td>
+					
+                  <td align="center" class="black_ar" width="1%"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>
+                  <td align="left" class="black_ar" width="8%"><bean:message key="eventparameters.time"/></td>
+                  <td colspan="0" align="left"><span class="black_ar">
+					<autocomplete:AutoCompleteTag property="timeInHours"
 					   optionsList = '${requestScope.hourList}'
 					   initialValue='${transferEventParametersForm.timeInHours}'
-					  styleClass="formFieldSized5"
+					  styleClass="black_ar"
 					  staticField="false"
-			    />	
-				&nbsp;
-				<label for="eventparameters.timeinhours">
-					<bean:message key="eventparameters.timeinhours"/>&nbsp; 
-				</label>
-                   <autocomplete:AutoCompleteTag property="timeInMinutes"
+						size = "3" /> 
+					  &nbsp;<bean:message key="eventparameters.timeinhours"/>&nbsp;&nbsp;
+                    <autocomplete:AutoCompleteTag property="timeInMinutes"
 						  optionsList = '${requestScope.minutesList}'
 						  initialValue='${transferEventParametersForm.timeInMinutes}'
-						  styleClass="formFieldSized5"
-						  staticField="false"
-				    />	
+						  styleClass="black_ar"
+						  staticField="false"  size="3"/>	
 				<label for="eventparameters.timeinminutes">
 					&nbsp;<bean:message key="eventparameters.timeinminutes"/> 
-				</label>
-			</td>
-		</tr>
+				</label></span></td>
+                </tr>
 		
 		
 
 <!-- fromPosition -->		
 		<tr>
-			<td class="formRequiredNotice" width="5">*</td>
-			<td class="formRequiredLabel">
-				<label for="type">
-					<bean:message key="transfereventparameters.fromposition"/> 
-				</label>
-			</td>
-			<td class="formField">
-				<html:hidden property="fromPositionDimensionOne" value='${requestScope.posOne}'/>
+                  <td align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>
+                  <td align="left" class="black_ar"><bean:message key="transfereventparameters.fromposition"/></td>
+                  <td colspan="5" align="left"><span class="black_ar">
+                    <html:hidden property="fromPositionDimensionOne" value='${requestScope.posOne}'/>
 				<html:hidden property="fromPositionDimensionTwo" value='${requestScope.posTwo}' />
 				<html:hidden property="fromStorageContainerId" value='${requestScope.storContId}' />
 				<html:hidden property="containerId" styleId="containerId"/>
 				<!-- Checking the fromPositionData is null -->
 				<logic:empty name="transferEventParametersForm" property="fromPositionData" >
-				<html:text styleClass="formDateSized" size="35" styleId="fromPosition" property="fromPosition" readonly="true" />
+				<html:text styleClass="black_ar" size="30" styleId="fromPosition" property="fromPosition" readonly="true" />
 				</logic:empty>
 				
 				<logic:notEmpty name="transferEventParametersForm" property="fromPositionData" >
-				<html:text styleClass="formDateSized" size="35" styleId="fromPositionData" property="fromPositionData" readonly="true" />
+				<html:text styleClass="black_ar" size="30" styleId="fromPositionData" property="fromPositionData" readonly="true" />
 				</logic:notEmpty>
-			</td>
-		</tr>
+                  </span></td>
+                </tr>
 
 <!-- toPosition -->		
 		<tr>
-			<td class="formRequiredNotice" width="5">*</td>
-			<td class="formRequiredLabel">
-				<label for="type">
-					<bean:message key="transfereventparameters.toposition"/> 
-				</label>
-			</td>
+			<td align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>
+                  <td align="left" class="black_ar"><bean:message key="transfereventparameters.toposition"/></td>
 			<%-- n-combo-box start --%>
 			${requestScope.getJSForOutermostDataTable}
 			${requestScope.getJSEquivalentFor }
@@ -194,14 +152,24 @@
 			
 			<script language="JavaScript" type="text/javascript" src="jss/CustomListBox.js"></script>
 			
-			<td class="formField" colSpan="2">							
-				<table border="0">	
-					<tr>
-						<logic:equal name="operation" value='${requestScope.add}'>
-						<td ><html:radio value="1" onclick="onRadioButtonGroupClickForTransfer(this)" styleId="stContSelection" property="stContSelection" /></td>
-						</logic:equal>
-						<td>
-							<ncombo:nlevelcombo dataMap='${requestScope.dataMap}'
+			<td class="black_ar" align = "left" colspan="4">					
+				<table border="0" align="left" cellpadding="0" cellspacing="0">
+							<tr >
+							<logic:equal name="operation" value='${requestScope.add}'>
+								<td>								
+								<html:select property="stContSelection" styleClass="black_ar"
+											styleId="stContSelection" size="1"	onmouseover="showTip(this.id)"
+											onmouseout="hideTip(this.id)" onchange= "toStoragePositionChange(this)">
+										<html:options collection="storageListForTransferEvent"
+														labelProperty="name" property="value" />
+								</html:select> 
+										
+								&nbsp;&nbsp;
+								</td>
+								</logic:equal>
+								<td>
+									<div id="AutoDiv" style="display:block" >
+										<ncombo:nlevelcombo dataMap='${requestScope.dataMap}'
 								attributeNames='${requestScope.attrNames}'
 								initialValues='${requestScope.initValues}'
 								styleClass ='${requestScope.styClass}' 
@@ -209,68 +177,65 @@
 								labelNames='${requestScope.labelNames}'
 								rowNumber='${requestScope.rowNumber}'
 								onChange ='${requestScope.onChange}' 
-								disabled = '${requestScope.dropDownDisable}'
+								
 								tdStyleClassArray='${requestScope.tdStyleClassArray}'
 								formLabelStyle="formLabelBorderless"							
 								noOfEmptyCombos = '${requestScope.noOfEmptyCombos}'/>
-								</tr>
-								</table>
-						</td>
-					</tr>
-					<logic:equal name="operation" value='${requestScope.add}'>
-					<tr>
-						<td ><html:radio value="2" onclick="onRadioButtonGroupClickForTransfer(this)" styleId="stContSelection" property="stContSelection"/></td>
-						<td class="formLabelBorderlessLeft">
-							<html:text styleClass="formFieldSized10"  size="30" styleId="selectedContainerName" property="selectedContainerName" disabled= '${requestScope.textBoxDisable}'/>
-							<html:text styleClass="formFieldSized3"  size="5" styleId="pos1" property="pos1" disabled='${requestScope.textBoxDisable}' />
-							<html:text styleClass="formFieldSized3"  size="5" styleId="pos2" property="pos2" disabled= '${requestScope.textBoxDisable}'/>
-							<html:button styleClass="actionButton" property="containerMap" onclick='${requestScope.buttonOnClicked}' disabled='${requestScope.textBoxDisable}'>
-								<bean:message key="buttons.map"/>
-							</html:button>
-						</td>
-					</tr>			
-					</logic:equal>
-				</table>											
+											</tr>
+											</table>
+
+									</div>
+								</td>
+								<td class="groupElements">
+									<div id="ManualDiv" style="display:none" >
+									
+										<html:text styleClass="black_ar"  size="15" styleId="selectedContainerName"
+													property="selectedContainerName" />
+												<html:text styleClass="black_ar"  size="3" styleId="pos1" 
+													property="pos1" />
+												<html:text styleClass="black_ar"  size="3" styleId="pos2" 
+													property="pos2" />
+												<html:button styleClass="black_ar" property="containerMap"												onclick="${requestScope.buttonOnClicked}" >
+														<bean:message key="buttons.map"/>
+												</html:button>									
+									</div>								
+								</td>
+								
+							</tr>
+							</table>										
 			</td>
 			
 			
 
 <%--		 n-combo-box end --%>
 					
-		</tr>
+		</tr>	
 
 
 
 
 <!-- comments -->		
 		<tr>
-			<td class="formRequiredNotice" width="5">&nbsp;</td>
-			<td class="formLabel">
-				<label for="type">
-					<bean:message key="eventparameters.comments"/> 
-				</label>
-			</td>
-			<td class="formField">
-				<html:textarea styleClass="formFieldSized"  styleId="comments" property="comments" />
-			</td>
-		</tr>
+                  <td align="center" class="black_ar">&nbsp;</td>
+                  <td align="left" valign="top" class="black_ar">
+						<bean:message key="eventparameters.comments"/></td>
+                  <td colspan="5" align="left">
+						<html:textarea styleClass="black_ar"  styleId="comments" property="comments" cols="73" rows="4"/>
+				</td>
+                </tr>
+				</table></td>
+        </tr>
 
 <!-- buttons -->
 		<tr>
-		  <td align="right" colspan="3">
-			<!-- action buttons begins -->
-			
-			<table cellpadding="4" cellspacing="0" border="0">
-				<tr>
-					<td>
-						<html:submit styleClass="actionButton" value="Submit" onclick='${requestScope.changeAction}' />
-					</td>
-					<%-- td><html:reset styleClass="actionButton"/></td --%> 
-				</tr>
-			</table>
-			<!-- action buttons end -->
-			</td>
-		</tr>
+          <td class="buttonbg">
+			<html:submit styleClass="blue_ar_b" value="Submit" onclick='${requestScope.changeAction}' />
+				&nbsp;|&nbsp;
+			<html:link	page="/QueryManageBioSpecimen.do" styleClass="cancellink">
+				<bean:message key="buttons.cancel" />
+			</html:link>
+		</td>
+        </tr>
 
 		</table>
 		

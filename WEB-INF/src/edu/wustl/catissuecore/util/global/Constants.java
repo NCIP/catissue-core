@@ -122,6 +122,9 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final int STORAGE_TYPE_POSITION_AUTO_VALUE = 2;
 	public static final String STORAGE_TYPE_POSITION_MANUAL = "Manual";
 	public static final int STORAGE_TYPE_POSITION_MANUAL_VALUE = 3;	
+	public static final int STORAGE_TYPE_POSITION_AUTO_VALUE_FOR_TRANSFER_EVENT = 1;
+	public static final int STORAGE_TYPE_POSITION_MANUAL_VALUE_FOR_TRANSFER_EVENT = 2;
+	
 		
 	public static final String [][] defaultValueKeys= {
 		{Constants.DEFAULT_TISSUE_SITE, edu.wustl.common.util.global.Constants.CDE_NAME_TISSUE_SITE},

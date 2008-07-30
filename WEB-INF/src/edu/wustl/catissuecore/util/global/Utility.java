@@ -114,6 +114,18 @@ public class Utility extends edu.wustl.common.util.Utility {
 		return storagePositionTypeList;		
 	}
 	
+	public static List getStoragePositionTypeListForTransferEvent()
+	{
+		List<NameValueBean> storagePositionTypeList = new ArrayList<NameValueBean>();
+		
+		storagePositionTypeList.add(new NameValueBean(Constants.STORAGE_TYPE_POSITION_AUTO, 
+				Constants.STORAGE_TYPE_POSITION_AUTO_VALUE_FOR_TRANSFER_EVENT));
+		storagePositionTypeList.add(new NameValueBean(Constants.STORAGE_TYPE_POSITION_MANUAL, 
+				Constants.STORAGE_TYPE_POSITION_MANUAL_VALUE_FOR_TRANSFER_EVENT));
+		
+		return storagePositionTypeList;	
+	}
+	
 	public static List getSpecimenClassList()
 	{
 		List specimenClassList= new ArrayList();
