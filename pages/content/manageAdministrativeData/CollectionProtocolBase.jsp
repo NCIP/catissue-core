@@ -9,9 +9,17 @@
 	function openEventPage()
 	{
 		var formId=window.frames['SpecimenRequirementView'].document.getElementById('CollectionProtocolForm');
-	    var action="DefineEvents.do?pageOf=pageOfDefineEvents&operation=add";
-        formId.action=action;
-        formId.submit();
+		if(formId!=null)
+		{
+		    var action="DefineEvents.do?pageOf=pageOfDefineEvents&operation=add";
+		}
+		else
+		{
+			formId=window.frames['SpecimenRequirementView'].document.getElementById('protocolEventDetailsForm');
+			var action = "SaveProtocolEvents.do?pageOf=newEvent&operation=add";
+		}
+	    formId.action=action;
+	    formId.submit();
 	}
 
 	function submitCP()
@@ -98,7 +106,6 @@
 					<logic:equal name="isParticipantReg" value="true">
 						   &nbsp;
 					</logic:equal>
-					
 					<logic:notEqual name="isParticipantReg" value="true">
 						<td class="buttonbg" style="border-bottom:1px solid #61a1e3;border-right:1px solid #61a1e3;border-left:1px solid #61a1e3;">
 						<html:button styleClass="blue_ar_b" property="forwardPage" onclick="openEventPage()" >

@@ -4696,7 +4696,8 @@ PUBLIC
 			validate="true"
 			input="/ProtocolEventsDetails.do?pageOf=error">
 			<forward name="defineEvents" path="/ProtocolEventsDetails.do?pageOf=defineEvents"/>
-			<forward name="specimenRequirement" path="/CreateSpecimenTemplate.do?operation=add"/>			
+			<forward name="specimenRequirement" path="/CreateSpecimenTemplate.do?operation=add"/>
+			<forward name="newEvent" path="/ProtocolEventsDetails.do?pageOf=newEvent"/>			
 		</action>
 		
 		<action path="/SaveSpecimenRequirements"
