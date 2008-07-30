@@ -5,11 +5,10 @@ package edu.wustl.catissuecore.multiRepository.bean;
 
 import java.util.List;
 import java.util.Set;
-
-import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Site;
+import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.User;
-import edu.wustl.common.util.Permissions;
+import edu.wustl.common.beans.NameValueBean;
 
 
 /**
@@ -18,61 +17,40 @@ import edu.wustl.common.util.Permissions;
  */
 public class SiteUserRolePrivilegeBean
 {
-	private List<Long> siteList ;
-	private List<Long> cpList;
+	private List<Site> siteList ;
+	private CollectionProtocol collectionProtocol;
 	private User user ;
-    private String role;
-    private Set<String> privileges;
-	
-	public List<Long> getSiteList()
-	{
-		return siteList;
+    private NameValueBean role;
+    private List<NameValueBean> privileges;
+    
+	public CollectionProtocol getCollectionProtocol() {
+		return collectionProtocol;
 	}
-	
-	public void setSiteList(List<Long> siteList)
-	{
-		this.siteList = siteList;
+	public void setCollectionProtocol(CollectionProtocol collectionProtocol) {
+		this.collectionProtocol = collectionProtocol;
 	}
-	
-	public String getRole()
-	{
-		return role;
-	}
-	
-	public void setRole(String role)
-	{
-		this.role = role;
-	}
-	
-	public Set<String> getPrivileges()
-	{
+	public List<NameValueBean> getPrivileges() {
 		return privileges;
 	}
-	
-	public void setPrivileges(Set<String> privileges)
-	{
+	public void setPrivileges(List<NameValueBean> privileges) {
 		this.privileges = privileges;
 	}
-	
-		public List<Long> getCpList()
-	{
-		return cpList;
+	public NameValueBean getRole() {
+		return role;
 	}
-
-	public void setCpList(List<Long> cpList)
-	{
-		this.cpList = cpList;
+	public void setRole(NameValueBean role) {
+		this.role = role;
 	}
-
-	
-	public User getUser()
-	{
+	public List<Site> getSiteList() {
+		return siteList;
+	}
+	public void setSiteList(List<Site> siteList) {
+		this.siteList = siteList;
+	}
+	public User getUser() {
 		return user;
 	}
-
-	
-	public void setUser(User user)
-	{
+	public void setUser(User user) {
 		this.user = user;
 	}
     
