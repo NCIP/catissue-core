@@ -18,9 +18,9 @@
         <tr>
           <td align="center">
       	    
-           	 <html:link action="viewErrorDetails" >
+           	 <!--<html:link action="viewErrorDetails" >
 					View Error Details
-		  	 </html:link>
+		  	 </html:link>-->
 		   </td>
         </tr>
 
