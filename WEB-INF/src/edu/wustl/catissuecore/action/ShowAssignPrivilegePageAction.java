@@ -26,6 +26,7 @@ import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractBizLogicFactory;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
+import gov.nih.nci.security.exceptions.CSException;
 
 /**
  * Sets data for site,user,action and role on page loading and handles the ajax requests.
@@ -107,8 +108,9 @@ public class ShowAssignPrivilegePageAction extends BaseAction
 	 * @param operation
 	 * @throws IOException 
 	 * @throws IOException
+	 * @throws CSException 
 	 */
-	private ActionForward setAJAXResponse(HttpServletRequest request, HttpServletResponse response, String cpOperation) throws IOException, JSONException,BizLogicException  
+	private ActionForward setAJAXResponse(HttpServletRequest request, HttpServletResponse response, String cpOperation) throws IOException, JSONException,BizLogicException, CSException  
 	{
 		final HttpSession session = request.getSession();
 		final AssignPrivilegePageBizLogic apBizLogic=getAssignPrivilegePageBizLogic();
