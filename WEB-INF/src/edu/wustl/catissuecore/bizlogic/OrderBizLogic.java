@@ -747,6 +747,10 @@ public class OrderBizLogic extends DefaultBizLogic
 		{
 			Logger.out.error(e.getMessage());
 		}
+		finally
+		{
+			dao.closeSession();
+		}
 		return orderList;
 	};
 	
