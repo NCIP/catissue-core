@@ -19,6 +19,7 @@ import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.multiRepository.bean.SiteUserRolePrivilegeBean;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SecurityDataBean;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.domain.AbstractDomainObject;
@@ -101,15 +102,23 @@ public class CollectionProtocolAuthorization implements edu.wustl.catissuecore.u
 		{
 			String key = mapItr.next();
 			SiteUserRolePrivilegeBean siteUserRolePrivilegeBean = rowIdMap.get(key);
-			List<Long> siteList = siteUserRolePrivilegeBean.getSiteList();
-			siteCollection =getSiteCollection(siteList);
+			List<Site> siteList = siteUserRolePrivilegeBean.getSiteList();
+			siteCollection.addAll(siteList);
 			
 			User user = siteUserRolePrivilegeBean.getUser();
 			userCollection.add(user);
-			String defaultRole = siteUserRolePrivilegeBean.getRole();
+			String defaultRole = siteUserRolePrivilegeBean.getRole().getValue();
 			roleName = getRoleName(collectionProtocol.getId(), user.getId(), defaultRole);
+			Set<String> privileges = new HashSet<String>();
+			List<NameValueBean> privilegeList = siteUserRolePrivilegeBean.getPrivileges();
+			
+			for(NameValueBean privilege : privilegeList)
+			{
+				privileges.add(privilege.getValue());
+			}
+			
 			PrivilegeManager.getInstance().createRole(roleName,
-					siteUserRolePrivilegeBean.getPrivileges());
+					privileges);
 			String userId = String.valueOf(user.getCsmUserId());
 			gov.nih.nci.security.authorization.domainobjects.User csmUser = getUserByID(userId);
 			HashSet<gov.nih.nci.security.authorization.domainobjects.User> group = new HashSet<gov.nih.nci.security.authorization.domainobjects.User>();
