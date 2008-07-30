@@ -130,6 +130,28 @@
               />
 
         </set>
+        
+        <set
+            name="collectionProtocolCollection"
+            table="CATISSUE_SITE_CP"
+            lazy="false"
+            inverse="false"
+            cascade="none"
+            sort="unsorted"
+        >
+
+            <key
+                column="SITE_ID"
+            >
+            </key>
+
+            <many-to-many
+                class="edu.wustl.catissuecore.domain.CollectionProtocol"
+                column="COLLECTION_PROTOCOL_ID"
+                outer-join="auto"
+             />
+
+        </set>
 
         <!--
             To add non XDoclet property mappings, create a file named
