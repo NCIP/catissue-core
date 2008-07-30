@@ -475,8 +475,8 @@ public class QueryOutputSpreadsheetBizLogic
 			}
 		}
 		int length = selectSql.length();
-		if(selectSql.lastIndexOf(",") == length-1)
-		{
+		if(length!=0 && selectSql.lastIndexOf(",") == length-1)
+		{ 
 			selectSql = selectSql.substring(0, selectSql.lastIndexOf(","));
 		}
 		temporalColumnUIBean.setColumnIndex(columnIndex);
