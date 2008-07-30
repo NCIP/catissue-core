@@ -484,3 +484,25 @@ div.autocomplete {
 	font-size:11px;
 	width:8em;
 }
+.even
+{
+	background-color:#FFFFFF;
+}
+.uneven
+{
+	background-color:#f6f6f6;
+}
+
+.grid_hover 
+{  
+  background-color:#bfdcf3;	
+  font-size:20px;
+}
+
+.nComboGroup{
+background-color:#f6f6f6;
+border:1px solid #eeeeee;
+font-family: verdana;
+font-size: 11px;
+color: #000000;
+}
