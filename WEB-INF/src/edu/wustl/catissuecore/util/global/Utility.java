@@ -1568,10 +1568,11 @@ public class Utility extends edu.wustl.common.util.Utility {
 	}
 	public static String getcolTypes(List dataList)
 	{
-		String colTypes="\"";
-		Variables.prepareColTypes(dataList);
-		colTypes=colTypes+"\"";
-		return colTypes;
+		StringBuffer colTypes= new StringBuffer(); 
+		colTypes.append("\"");
+		colTypes.append(Variables.prepareColTypes(dataList));
+		colTypes.append("\"");
+		return colTypes.toString();
 	}
 	
 	public static void setGridData(List dataList, List columnList, HttpServletRequest request)
