@@ -4,6 +4,8 @@
 package edu.wustl.catissuecore.util;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -21,7 +23,12 @@ import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.dao.AbstractDAO;
 import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.security.PrivilegeCache;
+import edu.wustl.common.security.PrivilegeManager;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.global.Variables;
+import gov.nih.nci.security.UserProvisioningManager;
+import gov.nih.nci.security.authorization.domainobjects.Group;
+import gov.nih.nci.security.exceptions.CSException;
 
 
 /**
@@ -153,6 +160,49 @@ public class CaTissuePrivilegeUtility
 		return beans;
 	}
 	
+	
+	
+	/**
+	 * get a map of the privileges all the users have on a given CP.
+	 * 
+	 * @param id of the CP
+	 * @return a map of login name and list of name value beans representing privilege name and privilege id 
+	 * @throws CSException 
+	 */
+	public Map<String, Set<NameValueBean>> getPrivilegesOnCP(Long id) throws CSException 
+	{
+		Map<String, Set<NameValueBean>> result = new HashMap<String, Set<NameValueBean>>();
+		
+		String objectId = CollectionProtocol.class.getName()+ "_" + id;
+		
+		for(NameValueBean nmv : Variables.privilegeGroupingMap.get("CP"))
+		{
+			String privilegeName = nmv.getName();
+			Set<String> users = PrivilegeManager.getInstance().getAccesibleUsers(objectId, privilegeName);
+			
+			for(String user : users)
+			{
+				Set<NameValueBean> nmvs = result.get(user);
+				//if no privilege was so far detected for this user
+				if(nmvs == null)
+				{
+					nmvs = new HashSet<NameValueBean>();
+					nmvs.add(nmv);
+					result.put(user, nmvs);
+				}
+				//else simply add the current privilege to the existing set
+				else
+				{
+					nmvs.add(nmv);
+				}
+			}
+			
+		}
+			
+		return result;
+	}
+	
+		
 
 }
  
