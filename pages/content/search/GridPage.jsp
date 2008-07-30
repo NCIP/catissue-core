@@ -1,5 +1,6 @@
 <!-- dataList and columnList are to be set in the main JSP file -->
 <link rel="STYLESHEET" type="text/css" href="dhtml_comp/css/dhtmlXGrid.css"/>
+<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
 <script  src="dhtml_comp/js/dhtmlXCommon.js"></script>
 <script  src="dhtml_comp/js/dhtmlXGrid.js"></script>		
 <script  src="dhtml_comp/js/dhtmlXGridCell.js"></script>	
@@ -17,16 +18,16 @@
 				//for derive only
 				if(useFunction == "derivedSpecimenGrid")	// useFunction == "eventParametersGrid" ||
 				{
-					document.write("<div id='gridbox' width='100%' height='150px' style='background-color:white;overflow:hidden'></div>");
+					document.write("<div id='gridbox' width='100%' height='150px' style='background-color:#d7d7d7;overflow:hidden'></div>");
 				}
 				// Patch ID: SpecimenEventSpaceUtilization_2
 				else if(useFunction == "eventParametersGrid") 
 				{
-					document.write("<div id='gridbox' width='100%' height='${requestScope.heightOfGrid}px' style='background-color:white;overflow:hidden'></div>");
+					document.write("<div id='gridbox' width='100%' height='125px' border='0' style='background-color:#d7d7d7;overflow:hidden'></div>");
 				}
 				else
 				{
-					document.write("<div id='gridbox' width='100%' height='350px' style='background-color:white;overflow:hidden'></div>");
+					document.write("<div id='gridbox' width='100%' height='350px' style='background-color:#d7d7d7;overflow:hidden'></div>");
 				}
 			</script>
 		</td>
@@ -69,9 +70,15 @@ function init_grid()
 	mygrid.enableAutoHeigth(false);
 
 	//document.write("<hr>"+colWidth+"<hr>");
-	if(useFunction == "eventParametersGrid" || useFunction == "derivedSpecimenGrid")
+	if(useFunction == "derivedSpecimenGrid")
 	{
 		colWidth = "130,130,130,130,0";
+	}
+
+	if(useFunction == "eventParametersGrid")
+	{
+		//colWidth = "167,167,167,167,11";
+		colWidth = "10,35,30,25,0";
 	}
 
 	if(useFunction == "goToConflictDetails")
@@ -80,9 +87,16 @@ function init_grid()
 	}
 
 	//document.write("<hr>"+colWidth+"<hr>");
-
-	mygrid.setInitWidths(colWidth);
-
+    mygrid.enableRowsHover(true,'grid_hover')
+	if(useFunction == "eventParametersGrid")
+	{
+		mygrid.setInitWidthsP(colWidth);
+	}
+	else
+		mygrid.setInitWidths(colWidth);
+	
+	mygrid.setSkin("light");
+	mygrid.enableAlterCss("even","uneven");
 	//mygrid.setColAlign("left,left")
 	mygrid.setColSorting(colTypes);
 	//mygrid.enableMultiselect(true)
@@ -100,9 +114,10 @@ function init_grid()
 		mygrid.addRow(row+1,myData[row],row+1);
 	}
 
-	if(useFunction == "eventParametersGrid" || useFunction == "derivedSpecimenGrid" )
+	//useFunction == "eventParametersGrid" || 
+	if (useFunction == "derivedSpecimenGrid" )
 	{
-		mygrid.setHeaderCol(4,"");
+		mygrid.setHeaderCol(4,"");	
 		mygrid.setColumnHidden(4,true);
 	}
 

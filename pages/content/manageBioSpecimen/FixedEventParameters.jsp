@@ -19,6 +19,7 @@
 <script src="jss/calendarComponent.js"></script>
 <SCRIPT>var imgsrc="images/";</SCRIPT>
 <LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
+<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
 <!-- Mandar 21-Aug-06 : calendar changes end -->
 </head>
 
@@ -26,66 +27,37 @@
 
 <html:errors />
 
-<table summary="" cellpadding="0" cellspacing="0" border="0"
-	class="contentPage" width="600">
+<table border="0" cellpadding="0" cellspacing="0" width="100%"> 
+<html:form action='${requestScope.formName}'>
+	<html:hidden property="operation" />
+	<html:hidden property="id" />
+	<html:hidden property="onSubmit" />
+	<html:hidden property="specimenId" value='${requestScope.specimenId}'/>        
+        
+        <tr>
+          <td align="left" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;<bean:message  key="eventparameters"/>  &quot;<em><bean:message key="fixedeventparameters"/></em>&quot;</span></td>
+        </tr>
+        <tr>
+          <td colspan="4" class="showhide1"></td>
+        </tr>
+        <tr >
+          <td colspan="4" class="showhide"><table width="100%" border="0" cellpadding="3" cellspacing="0">
 
-	<html:form action='${requestScope.formName}'>
-
-
-		<!-- NEW FixedEventParameter REGISTRATION BEGINS-->
-		<tr>
-			<td>
-
-			<table summary="" cellpadding="3" cellspacing="0" border="0">
-				<tr>
-					<td><html:hidden property="operation" /></td>
+                <tr>
+<td width="1%" align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>
+                  <td width="15%" align="left" nowrap class="black_ar"><bean:message key="eventparameters.user"/></td>
+                <td align="left" valign="middle"><html:select property="userId" styleClass="formFieldSized18" styleId="userId" size="1"
+				 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+					<html:options collection='${requestScope.userListforJSP}' labelProperty="name" property="value"/>
+				</html:select></td> 
+				<td width="1%"></td>
+				<td colspan="2"></td>
 				</tr>
 
-				<tr>
-					<td><html:hidden property="id" /></td>
-				</tr>
-
-				<tr>
-					<td><html:hidden property="specimenId"
-						value='${requestScope.specimenId}' /></td>
-				</tr>
-
-				<tr>
-					<td class="formMessage" colspan="3">* indicates a required
-					field</td>
-				</tr>
-
-				<tr>
-					<td class="formTitle" height="20" colspan="3"><logic:equal
-						name="operation" value='${requestScope.addForJSP}'>
-						<bean:message key="fixedeventparameters.title" />
-					</logic:equal> <logic:equal name="operation" value='${requestScope.editForJSP}'>
-						<bean:message key="fixedeventparameters.edittitle" />
-					</logic:equal></td>
-				</tr>
-
-				<!-- Name of the fixedEventParameters -->
-				<!-- User -->
-				<tr>
-					<td class="formRequiredNotice" width="5">*</td>
-					<td class="formRequiredLabel"><label for="type"> <bean:message
-						key="eventparameters.user" /> </label></td>
-					<td class="formField"><!-- Mandar : 434 : for tooltip --> <html:select
-						property="userId" styleClass="formFieldSized" styleId="userId"
-						size="1" onmouseover="showTip(this.id)"
-						onmouseout="hideTip(this.id)">
-						<html:options collection='${requestScope.userListforJSP}'
-							labelProperty="name" property="value" />
-					</html:select></td>
-				</tr>
-
-				<!-- date -->
-				<tr>
-					<td class="formRequiredNotice" width="5">*</td>
-					<td class="formRequiredLabel"><label for="type"> <bean:message
-						key="eventparameters.dateofevent" /> </label></td>
-					<td class="formField">
-					<logic:notEmpty name="currentEventParametersDate">
+                <tr>
+                  <td align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>
+                  <td align="left" class="black_ar"><bean:message key="eventparameters.dateofevent"/></td>
+                  <td align="left"><logic:notEmpty name="currentEventParametersDate">
 <ncombo:DateTimeComponent name="dateOfEvent"
 			  id="dateOfEvent"
 			  formName="fixedEventParametersForm"
@@ -93,97 +65,69 @@
 							  year='${requestScope.eventParametersYear}'
 							  day='${requestScope.eventParametersDay}'
 							  value='${requestScope.currentEventParametersDate}'
-			  styleClass="formDateSized10"
-					/>
+							  styleClass="black_ar"	/>
 </logic:notEmpty>
 <logic:empty name="currentEventParametersDate">
 <ncombo:DateTimeComponent name="dateOfEvent"
 			  id="dateOfEvent"
 			  formName="fixedEventParametersForm"
-			  styleClass="formDateSized10"
-					/>
-</logic:empty> 
-						<bean:message
-						key="page.dateFormat" />&nbsp;</td>
-				</tr>
-
-
-				<!-- hours & minutes -->
-				<!-- 
-			 Bug ID:  AutocompleteBugID
-			 Patch ID: AutocompleteBugID_6
-			 Description:html:select tag is replaced by Autocomplete
-	   -->
-				<tr>
-					<td class="formRequiredNotice" width="5">*</td>
-					<td class="formRequiredLabel"><label
-						for="eventparameters.time"> <bean:message
-						key="eventparameters.time" /> </label></td>
-					<td class="formField"><autocomplete:AutoCompleteTag
-						property="timeInHours" optionsList='${requestScope.hourList}'
-						initialValue='${fixedEventParametersForm.timeInHours}'
-						styleClass="formFieldSized5" staticField="false" />
-					&nbsp; <label for="eventparameters.timeinhours"> <bean:message
-						key="eventparameters.timeinhours" />&nbsp; </label> <autocomplete:AutoCompleteTag
-						property="timeInMinutes" optionsList='${requestScope.minutesList}'
-						initialValue='${fixedEventParametersForm.timeInMinutes}'
-						styleClass="formFieldSized5" staticField="false" /> <label
-						for="eventparameters.timeinminutes"> &nbsp;<bean:message
-						key="eventparameters.timeinminutes" /> </label></td>
-				</tr>
-
-
-				<!-- fixationType -->
-				<tr>
-					<td class="formRequiredNotice" width="5">*</td>
-					<td class="formRequiredLabel"><label for="type"> <bean:message
-						key="fixedeventparameters.fixationtype" /> </label></td>
-					<td class="formField"><autocomplete:AutoCompleteTag
+			  styleClass="black_ar" />
+</logic:empty><span class="grey_ar_s"><bean:message key="page.dateFormat" /></span></td>
+                
+                  <td align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>
+                  <td align="left" class="black_ar" width="15%"><bean:message key="eventparameters.time"/></td>
+                  <td align="left"><span class="black_ar"><autocomplete:AutoCompleteTag property="timeInHours"
+					  optionsList = '${requestScope.hourList}'
+					  initialValue='${fixedEventParametersForm.timeInHours}'
+					  styleClass="black_ar"
+					  staticField="false" size="3" />	
+					  &nbsp;<bean:message key="eventparameters.timeinhours"/>&nbsp;&nbsp;
+                    <autocomplete:AutoCompleteTag property="timeInMinutes"
+						 optionsList = '${requestScope.minutesList}'
+						 initialValue='${fixedEventParametersForm.timeInMinutes}'
+						  styleClass="black_ar"
+						  staticField="false" size="3"/>	
+						  &nbsp;<bean:message key="eventparameters.timeinminutes"/></span></td>
+                </tr>
+                
+                <tr>
+                 <td align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>
+                  <td align="left" class="black_ar">
+						<bean:message key="fixedeventparameters.fixationtype" /></td>
+                  <td align="left" class="black_ar"><autocomplete:AutoCompleteTag
 						property="fixationType" optionsList='${requestScope.fixationList}'
 						initialValue='${fixedEventParametersForm.fixationType}'
-						styleClass="formFieldSized" /></td>
-				</tr>
+						styleClass="black_ar" size="30"/></td>
+                
+                  <td align="center" class="black_ar">&nbsp;</td>
+                  <td align="left" class="black_ar" width="15%"><LABEL for="molecularspecimenreviewparameters.gelimageurl"><bean:message
+						key="fixedeventparameters.durationinminutes" /></LABEL></td>
+                  <td align="left"><html:text styleClass="black_ar"  maxlength="30"  styleId="durationInMinutes" property="durationInMinutes" size="30"/></td>
+                </tr>
+                
+                
 
-				<!-- durationInMinutes -->
-				<tr>
-					<td class="formRequiredNotice" width="5">&nbsp;</td>
-					<td class="formRequiredLabel"><label for="type"> <bean:message
-						key="fixedeventparameters.durationinminutes" /> </label></td>
-					<td class="formField"><html:text styleClass="formDateSized"
-						maxlength="10" size="35" styleId="durationInMinutes"
-						property="durationInMinutes" /></td>
-				</tr>
+                
+                <tr>
+                  <td align="center" class="black_ar">&nbsp;</td>
+                  <td align="left" valign="top" class="black_ar"><bean:message key="eventparameters.comments"/></td><td align="left" colspan="4"><html:textarea styleClass="black_ar" cols="73" rows="4" styleId="comments" property="comments" /></td>
+                </tr>
 
-				<!-- comments -->
-				<tr>
-					<td class="formRequiredNotice" width="5">&nbsp;</td>
-					<td class="formLabel"><label for="type"> <bean:message
-						key="eventparameters.comments" /> </label></td>
-					<td class="formField"><html:textarea
-						styleClass="formFieldSized" styleId="comments" property="comments" />
-					</td>
-				</tr>
+          </table></td>
+        </tr>
+        <tr  >
+          <td class="buttonbg">
 
-				<!-- buttons -->
-				<tr>
-					<td align="right" colspan="3"><!-- action buttons begins -->
+		  <html:submit styleClass="blue_ar_b" value="Submit" property="Submit" onclick='${requestScope.changeAction}'/>
 
-					<table cellpadding="4" cellspacing="0" border="0">
-						<tr>
-							<td><html:submit styleClass="actionButton" value="Submit"
-								onclick='${requestScope.changeAction}' /></td>
-							<%-- td><html:reset styleClass="actionButton"/></td --%>
-						</tr>
-					</table>
-					<!-- action buttons end --></td>
-				</tr>
-
-			</table>
-
-			</td>
-		</tr>
-
-		<!-- NEW FixedEventParameters ends-->
-
-	</html:form>
+            &nbsp;|&nbsp;
+			<html:link	page="/QueryManageBioSpecimen.do" styleClass="cancellink">
+				<bean:message key="buttons.cancel" />
+			</html:link></td>
+        </tr>
+      
+  
 </table>
+	 
+	 </html:form>
+ </table>

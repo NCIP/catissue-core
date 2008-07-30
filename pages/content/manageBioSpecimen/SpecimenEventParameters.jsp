@@ -17,7 +17,8 @@
 <%@ include file="/pages/content/common/EventAction.jsp" %> 
 
 
-<link href="runtime/styles/xp/grid.css" rel="stylesheet" type="text/css" ></link>
+<link href="runtime/styles/xp/grid.css" rel="stylesheet" type="text/css"/ >
+<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
 <script src="runtime/lib/grid.js"></script>
 <script src="runtime/formats/date.js"></script>
 <script src="runtime/formats/string.js"></script>
@@ -182,61 +183,39 @@
 
 <html:form action="<%=formAction%>">
 <!-- Mandar 05-July-06 Code for tabs start -->
-	 	<table summary="" cellpadding="0" cellspacing="0" border="0" height="20" class="tabPage" width="600">  
-			<tr>
-				<td height="20" class="tabMenuItem"  onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onclick="addNewAction(<%= specimenPath %>)">
-					<bean:message key="tab.specimen.details"/>
-				</td>
-
-				<td height="20" class="tabMenuItemSelected">
-					<bean:message key="tab.specimen.eventparameters"/>
-				</td>
-
-				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="viewSPR()">
-					<bean:message key="edit.tab.surgicalpathologyreport"/>
-				</td>
-				
-				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="viewAnnotations(<%=specimenEntityId%>,<%=specimenIdentifier%>,'','<%=staticEntityName%>','<%=pageOf%>')">
-						<bean:message key="edit.tab.clinicalannotation"/>
-				</td>
-				</td>
-				   <td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="addNewAction(<%= consentTab %>)" id="consentTab">
-					<bean:message key="consents.consents"/>            
-				</td>
-
-				<td width="350" class="tabMenuSeparator" colspan="1">&nbsp;</td>
-			</tr>
-			<tr>
-				<td class="tabField" colspan="6">
-<!-- Mandar 05-July-06 Code for tabs end -->
-<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="500">
-<tr>
-	<td>		
-		&nbsp;
-	</td>
-</tr>
-
-<tr>
- <td>
-  	 <table summary="" cellpadding="3" cellspacing="0" border="0" width="550">
-
-<%
+	 	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
+  
+  <tr>
+    <td class="tablepadding"><table width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr>
+        <td class="td_tab_bg" ><img src="images/uIEnhancementImages/spacer.gif" alt="spacer" width="50" height="1"></td>
+        <td valign="bottom"><a href="#" onclick="addNewAction(<%= specimenPath %>)"><img src="images/uIEnhancementImages/tab_specimen_details2.gif" alt="Specimen Details" width="126" height="22" border="0"></a></td>
+        <td valign="bottom"><img src="images/uIEnhancementImages/tab_events1.gif" alt="Events" width="56" height="22"></td>
+        <td valign="bottom"><a href="#" onClick="viewSPR()"><img src="images/uIEnhancementImages/tab_view_surgical3.gif" alt="Inactive View Surgical Pathology Report " width="216" height="22" border="0"></a></td>
+        <td valign="bottom"><a href="#" onClick="viewAnnotations(<%=specimenEntityId%>,<%=specimenIdentifier%>,'','<%=staticEntityName%>','<%=pageOf%>')"><img src="images/uIEnhancementImages/tab_view_annotation2.gif" alt="View Annotation" width="116" height="22" border="0"></a></td>
+        <td align="left" valign="bottom" class="td_color_bfdcf3" ><a href="#" onClick="addNewAction(<%= consentTab %>)" id="consentTab"><img src="images/uIEnhancementImages/tab_consents2.gif" alt="Consents" width="76" height="22" border="0"></a></td>
+        <td width="90%" align="left" valign="bottom" class="td_tab_bg" >&nbsp;</td>
+      </tr>
+    </table>
+      <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
+        <tr>
+          <td width="114%" colspan="3" align="left" class="toptd"></td>
+        </tr>
+        <tr>
+		<%
 	if(dataList!=null && dataList.size() != 0)
 	{
 //		title = "Specimen Event Parameters List for Identifier : " + specimenIdentifier;
 //		title = Constants.EVENTS_TITLE_MESSAGE;
 		title = java.text.MessageFormat.format(Constants.EVENTS_TITLE_MESSAGE,new String[]{"'"+label+"'"});
 %>
-
-   	 	<tr>
-			<td class="formTitle" height="20">
-				<%--bean:message key="specimenEventParameters.list"/--%>
-				<%=title%>
-			</td>
-		</tr>
-		
-   	 	<tr>
-			<td>
+          <td colspan="3" align="left" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;<%--bean:message key="specimenEventParameters.list"/--%>
+				<%=title%> </span></td>
+		 </tr>
+                <tr>
+                  <td align="left" colspan="3"class="showhide"><table width="100%" border="0" cellspacing="0" cellpadding="3">
+                    <tr>
+			<td >
 				<script>
 					function eventParametersGrid(id)
 					{
@@ -270,67 +249,31 @@
 		title = "No Specimen Event Paremeters are available for Identifier : " + specimenIdentifier;
 %>
 		<tr>
-			<td class="formTitle" height="20">
+			<td  align="left" class="tr_bg_blue1"><span class="blue_ar_b">
 				<%--bean:message key="specimenEventParameters.noSpecimen"/--%>
-				<%=title%>
+				<%=title%></span>
 			</td>
 		</tr>
 <% } %>	
-	</table>
- </td>
-</tr>
-
-<tr>
-	<td>&nbsp;</td>
-</tr>
-
-<tr>
-	<td>
-	  	 <table summary="" cellpadding="3" cellspacing="0" border="0" width="550">
-			<tr>
-				<td class="formTitle" height="20">
-					<bean:message key="specimenEventParameters.caption"/>
-				</td>
-			</tr>
-		</table>	
-	</td>	
-</tr>
-<tr>
-	<td>
-	  	 <table summary="" cellpadding="3" cellspacing="0" border="0" width="550">
-			<tr>
-	<td>
-<table><tr><td class="formLabelNoBackGround">
-<bean:message key="specimenEventParameters.label"/> &nbsp;
-</td>
-<td class = "formFieldNoBordersSimple">
-<!-- Mandar : 434 : for tooltip -->
-		<html:select property="specimenEventParameter" styleClass="formFieldSized15" styleId="className" size="1" disabled="false" onchange="onParameterChange(this)"
-		 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-			<html:options name="<%=Constants.EVENT_PARAMETERS_LIST%>" labelName="<%=Constants.EVENT_PARAMETERS_LIST%>"/>
-		</html:select>
-</td>
-<td width="*">&nbsp;</td>
-</tr></table>
-	</td>
-</tr>
-</table></td>
-</tr>
-<tr>
-	<td>&nbsp;</td>
-</tr>
-
-<tr>
-	<td>
-		<iframe name="newEventFrame" id="newEventFrame" src="<%=iframeSrc %>" width="650" height="400" frameborder="0" scrolling="auto">
+        </table></td>
+        </tr>
+        <tr >
+          <td align="left" width="33%" class="black_ar">&nbsp;&nbsp;<bean:message key="specimenEventParameters.caption"/></td>
+			<td align="left" class="black_ar">
+			<html:select property="specimenEventParameter" styleClass="formFieldSized15"	styleId="className" size="1" disabled="false" onchange="onParameterChange(this)"
+			onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+				<html:options name="<%=Constants.EVENT_PARAMETERS_LIST%>" labelName="<%=Constants.EVENT_PARAMETERS_LIST%>"/>
+			</html:select></span></td>                  
+        </tr>
+		<tr>
+	<td class="whitetable_bg" colspan="3">
+		<iframe name="newEventFrame" id="newEventFrame" src="<%=iframeSrc %>" width="100%" height="238" frameborder="0" scrolling="auto">
 		</iframe>
 	</td>
 </tr>
-
-</table>
-<!-- Mandar 05-July-06 Closing the tabs table -->
-		</td>
-	</tr>
+               
+    </table></td>
+  </tr>
 </table>
 
 </html:form>

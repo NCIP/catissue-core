@@ -30,7 +30,7 @@
 	<html:hidden property="specimenId" value='${requestScope.specimenId}'/>        
         
 <tr>
-          <td align="left" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;Event Parameters &quot;<em>Cell Specimen Review</em>&quot;</span></td>
+          <td align="left" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;<bean:message key="eventparameters"/> &quot;<em><bean:message key="cellspecimenreviewparameters"/></em>&quot;</span></td>
         </tr>
         <tr>
           <td colspan="4" class="showhide1"></td>
@@ -40,13 +40,14 @@
                 <tr>
                   <td width="1%" align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>
                   <td width="15%" align="left" nowrap class="black_ar"><bean:message key="eventparameters.user"/></td>
-	          <td align="left" valign="middle">
+				<td align="left" valign="middle" width="30%">
 			<html:select property="userId" styleClass="formFieldSized18" styleId="userId" size="1"
 				onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 				<html:options collection='${requestScope.userListforJSP}' labelProperty="name" property="value"/>
 			</html:select>
-		  </td>
-		</tr>
+				</td>
+				<td width="1%"></td>
+				<td colspan="2"></td></tr>
                 <tr>
                   <td align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>
                   <td align="left" class="black_ar"><bean:message key="eventparameters.dateofevent"/></td>
@@ -68,10 +69,9 @@
 					  styleClass="black_ar"	/>
 			  </logic:empty>
 			  <span class="grey_ar_s"><bean:message key="page.dateFormat" /></span></td>
-                </tr>
-                <tr>
+                
                   <td align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>
-                  <td align="left" class="black_ar"><bean:message key="eventparameters.time"/></td>
+                  <td align="left" class="black_ar" width="8%"><bean:message key="eventparameters.time"/></td>
                   <td align="left"><span class="black_ar">
 			<autocomplete:AutoCompleteTag property="timeInHours"
 				optionsList = '${requestScope.hourList}'
@@ -89,18 +89,18 @@
 <!-- Mandar : For neoplasticcellularitypercentage Start -->
 		<tr>
                   <td class="black_ar" align="center">&nbsp;</td>
-                  <td class="black_ar" align="left" valign="top" width=23%><label for="type"><bean:message key="cellspecimenreviewparameters.neoplasticcellularitypercentage"/></label></td>
+                  <td class="black_ar" align="left" valign="top" width=15%><label for="type"><bean:message key="cellspecimenreviewparameters.neoplasticcellularitypercentage"/></label></td>
                   <td align="left">
-			  <html:text styleClass="black_ar" maxlength="10"  size="34" styleId="neoplasticCellularityPercentage" property="neoplasticCellularityPercentage" />
+			  <html:text styleClass="black_ar" maxlength="10"  size="30" styleId="neoplasticCellularityPercentage" property="neoplasticCellularityPercentage" />
 		  </td>	
-                </tr>
+                
 <!-- Mandar : For neoplasticcellularitypercentage End -->
 <!-- Mandar : For viablecellpercentage Start -->
-                <tr>
+                
                   <td class="black_ar" align="center">&nbsp;</td>
-                  <td class="black_ar" align="left" valign="top"><label for="viablecellpercentage"><bean:message key="cellspecimenreviewparameters.viablecellpercentage"/></label></td>
+                  <td class="black_ar" align="left" valign="top" width="8%"><label for="viablecellpercentage"><bean:message key="cellspecimenreviewparameters.viablecellpercentage"/></label></td>
                   <td align="left">
-		  <html:text styleClass="black_ar" maxlength="10"  size="34" styleId="viableCellPercentage" property="viableCellPercentage" />
+		  <html:text styleClass="black_ar" maxlength="10"  size="30" styleId="viableCellPercentage" property="viableCellPercentage" />
 		  </td>
                 </tr>
  <!-- Mandar : For viablecellpercentage End -->
@@ -108,7 +108,7 @@
 
                 <tr>
                   <td align="center" class="black_ar">&nbsp;</td>
-                  <td align="left" valign="top" class="black_ar"><bean:message key="eventparameters.comments"/></td><td align="left"><html:textarea styleClass="black_ar" cols="35" rows="4" styleId="comments" property="comments" /></td>
+                  <td align="left" valign="top" class="black_ar"><bean:message key="eventparameters.comments"/></td><td align="left" colspan="4"><html:textarea styleClass="black_ar" cols="73" rows="4" styleId="comments" property="comments" /></td>
                 </tr>
           </table></td>
         </tr>
