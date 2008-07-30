@@ -31,6 +31,21 @@ public class CollectionProtocolBean implements Serializable
 	
 	private long[] siteIds;
 	
+	private boolean isParticiapantReg = false;
+	
+	
+	public boolean isParticiapantReg()
+	{
+		return isParticiapantReg;
+	}
+
+	
+	public void setParticiapantReg(boolean isParticiapantReg)
+	{
+		this.isParticiapantReg = isParticiapantReg;
+	}
+
+
 	/**
 	 * whether Aliquote in same container
 	 */
@@ -197,7 +212,8 @@ public class CollectionProtocolBean implements Serializable
 		return operation;
 	}
 
-	public void setOperation(String operation) {
+	public void setOperation(String operation) 
+	{
 		this.operation = operation;
 	}
 

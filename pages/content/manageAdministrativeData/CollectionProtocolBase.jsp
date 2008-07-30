@@ -5,6 +5,38 @@
 <%@ page language="java" isELIgnored="false"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
+<script>
+	function openEventPage()
+	{
+		var formId=window.frames['SpecimenRequirementView'].document.getElementById('CollectionProtocolForm');
+	    var action="DefineEvents.do?pageOf=pageOfDefineEvents&operation=add";
+        formId.action=action;
+        formId.submit();
+	}
+
+	function submitCP()
+	{
+		var formId=window.frames['SpecimenRequirementView'].document.getElementById('CollectionProtocolForm');
+		if(formId!=null)
+		{
+			var action="DefineEvents.do?Event_Id=dummyId&pageOf=submitSpecimen&operation=${requestScope.operation}";
+		}
+		else
+		{
+			var formId=window.frames['SpecimenRequirementView'].document.getElementById('protocolEventDetailsForm');
+			if(formId==null)
+			{
+				var formId=window.frames['SpecimenRequirementView'].document.getElementById('createSpecimenTemplateForm');
+			}
+			var action="SubmitCollectionProtocol.do?operation=${requestScope.operation}";
+		}
+		formId.target = '_top';
+		formId.action=action;
+        formId.submit();
+	}
+
+</script>
+
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
  <tr>
     <td class="td_color_bfdcf3"><table border="0" cellpadding="0" cellspacing="0">
@@ -29,11 +61,21 @@
         <td width="90%" valign="bottom" class="td_tab_bg">&nbsp;</td>
       </tr>
     </table>
+	 <html:errors />
+		<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
+			<%=messageKey%>
+		</html:messages>
+		<logic:equal name="isParticipantReg" value="true">
+			<b style="color: red; margin-left: 20px">
+				User can not Add/edit Events and Specimen Requirements
+			</b>
+		</logic:equal>
       <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
         <tr>
           <td colspan="2" align="left" class="grey_ar_s">&nbsp;<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /> indicates a required field</td>
         </tr>
        		<tr>
+							
 							<td width="20%"  valign="top" height="100%">
 								<iframe id="CPTreeView" src="ShowCollectionProtocol.do?operation=${requestScope.operation}" scrolling="auto" frameborder="0" width="100%" name="CPTreeView" height="410" >
 									Your Browser doesn't support IFrames.
@@ -52,8 +94,24 @@
 							 </logic:equal>	
 							 </td>
 						</tr>
+				<tr>
+					<logic:equal name="isParticipantReg" value="true">
+						   &nbsp;
+					</logic:equal>
 					
-			
+					<logic:notEqual name="isParticipantReg" value="true">
+						<td class="buttonbg" style="border-bottom:1px solid #61a1e3;border-right:1px solid #61a1e3;border-left:1px solid #61a1e3;">
+						<html:button styleClass="blue_ar_b" property="forwardPage" onclick="openEventPage()" >
+							Add Events >>
+						</html:button>
+						</td>
+					</logic:notEqual>
+					&nbsp;
+					<td class="buttonbg" style="border-bottom:1px solid #61a1e3;border-right:1px solid #61a1e3;border-left:1px solid #61a1e3;">
+					 <html:button styleClass="blue_ar_b" property="forwardPage" value="Save Collection Protocol" onclick="submitCP()">
+					</html:button>
+				   </td>
+				</tr>
 		</table>
 	</td>
  </tr>

@@ -9,7 +9,7 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
-
+<%@ page import="edu.wustl.catissuecore.actionForm.*"%>
 <link href="css/catissue_suite.css" rel="stylesheet" type="text/css" /> 
 
 <script type="text/javascript" src="jss/javaScript.js"></script>
@@ -43,10 +43,31 @@ function updateCPTree()
 <script type="text/javascript" src="jss/queryModule.js"></script>
 
 <div id="errorMess" style="display:none"></div>
-
-<form name="apForm" method="POST">
+<html:form action="DefineEvents.do?Event_Id=dummyId&pageOf=submitSpecimen&operation=${requestScope.operation}" styleId="CollectionProtocolForm">
 <table summary="" cellpadding="0" cellspacing="0" border="0"
-	style="padding-left:0;padding-right:0;"  width="100%">
+	style="padding-left:0;padding-right:0;"  width="100%" >
+	 
+	 <html:hidden property="shortTitle"/>
+	 <html:hidden property="startDate"/>
+	 <html:hidden property="title"/>
+	 <html:hidden property="principalInvestigatorId"/>
+	 <html:hidden property="irbID"/>
+ 	 <html:hidden property="descriptionURL"/>
+ 	 <html:hidden property="enrollment"/>
+	 <html:hidden property="endDate"/>
+	 <html:hidden property="protocolCoordinatorIds"/>
+  	 <html:hidden property="outerCounter"/>
+	 <html:hidden property="aliqoutInSameContainer"/>
+	 <html:hidden property="unsignedConsentURLName"/> 
+ 	 <html:hidden property="consentTierCounter"/>
+  	 <html:hidden property="consentWaived"/>
+
+	<c:forEach var="counter" begin="0" end='${requestScope.noOfConsents -1}' step="1">
+		 <html:hidden property="consentValue(ConsentBean:${counter}_statement)"/>
+	     <html:hidden property="consentValue(ConsentBean:${counter}_consentTierID)"/>
+	 </c:forEach>
+
+
 	<tr>
 		<td valign="bottom">
 		<table width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -68,10 +89,6 @@ function updateCPTree()
 			</tr>
 		</table>
 		</td>
-		<td align="right" valign="top" class="cp_tabbg" border="0"><html:link href="#" styleId="newUser" styleClass="view"
-			onclick="updateCPTree();viewSummary()">
-			<bean:message key="cpbasedentry.viewsummary" />
-		</html:link> </td>
 	</tr>
 	
 	<tr>
@@ -313,6 +330,6 @@ function updateCPTree()
 		</td>
 	</tr>
 </table>
-</form>
+</html:form>
 </body>
 

@@ -33,7 +33,6 @@ public class DefineEventsAction extends BaseAction
 		
 		CollectionProtocolBean cpBean = (CollectionProtocolBean)
 				session.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
-
 		if(cpBean == null)
 		{
 			cpBean = new CollectionProtocolBean();
@@ -42,6 +41,8 @@ public class DefineEventsAction extends BaseAction
 		{
 			populateCollectionProtocolBean(cpForm, cpBean);
 		}
+		Long cpIdentifier = cpBean.getIdentifier();
+		session.setAttribute("CP_IDENTIFIER", cpIdentifier);
 		session.setAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN, cpBean);
 		return mapping.findForward(pageOf);
 	}

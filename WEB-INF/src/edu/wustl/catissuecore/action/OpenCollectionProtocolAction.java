@@ -8,6 +8,8 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.actionForm.CollectionProtocolForm;
+import edu.wustl.catissuecore.bean.CollectionProtocolBean;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 /**
@@ -23,6 +25,7 @@ public class OpenCollectionProtocolAction extends BaseAction{
 	 */
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception {
+		CollectionProtocolForm formName = (CollectionProtocolForm)form;
 		String operation = (String)request.getParameter(Constants.OPERATION);
 		String pageOf = (String)request.getParameter(Constants.PAGEOF);
 		HttpSession session = request.getSession();
@@ -31,7 +34,13 @@ public class OpenCollectionProtocolAction extends BaseAction{
 			session.removeAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
 			session.removeAttribute(Constants.ROW_ID_OBJECT_BEAN_MAP);
 		}
-
+		CollectionProtocolBean cpBean = (CollectionProtocolBean)
+		session.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
+		if(cpBean!=null)
+		{
+			request.setAttribute("isParticipantReg", cpBean.isParticiapantReg());
+		}
+		request.setAttribute("formName", formName);
 		request.setAttribute(Constants.OPERATION, operation);
 		return mapping.findForward(Constants.SUCCESS);
 	}

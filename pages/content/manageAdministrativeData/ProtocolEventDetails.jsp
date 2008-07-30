@@ -21,6 +21,7 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <link href="css/catissue_suite.css" rel="stylesheet" type="text/css" /> 
 
+
 <%
 	Object obj = request.getAttribute("protocolEventDetailsForm");
 	String operation = "add";
@@ -31,9 +32,7 @@
 	}	
 	String operationType=null;
 	boolean disabled = false;
-	HttpSession newSession = request.getSession();
-	CollectionProtocolBean collectionProtocolBean = (CollectionProtocolBean)newSession.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
-	operationType = collectionProtocolBean.getOperation();
+	operationType = (String)request.getAttribute("opr");
 	if(operationType!=null && operationType.equals("update"))
 	{
 		disabled = true;
@@ -52,6 +51,17 @@ function specimenRequirements()
 	document.forms[0].submit();
 }
 
+function deleteEvent()
+{
+	var answer = confirm ("Are you sure want to delete event?")
+	if(answer)
+	{
+		document.forms[0].target = '_top';
+		var action ="DeleteNodeFromCP.do?pageOf=cpEvent&operation=edit";
+		document.forms[0].action = action;
+		document.forms[0].submit();
+	}
+}
 function submitAllEvents()
 {
 	var action = "SaveProtocolEvents.do?pageOf=defineEvents&operation=add";
@@ -70,12 +80,6 @@ function consentPage()
 	document.forms[0].action = action;
 	document.forms[0].submit();
 }
-function viewSummary()
-{
-	var action="GenericSpecimenSummary.do?Event_Id=dummyId";
-	document.forms[0].action=action;
-	document.forms[0].submit();
-}
 window.parent.frames['CPTreeView'].location="ShowCollectionProtocol.do?pageOf=specimenEventsPage&operation=${requestScope.operation}";
 
 </script>
@@ -87,16 +91,15 @@ window.parent.frames['CPTreeView'].location="ShowCollectionProtocol.do?pageOf=sp
 	<%=messageKey%>
 </html:messages>
 
-<html:form action="SaveProtocolEvents.do?pageOf=defineEvents&operation=add">
+<html:form action="SaveProtocolEvents.do?pageOf=defineEvents&operation=add" styleId="protocolEventDetailsForm">
 
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
               <tr>
                 <td><table width="100%" border="0" cellpadding="0" cellspacing="0">
                     <tr>
                       <td valign="bottom" id="eventTab"><img src="images/uIEnhancementImages/cp_event.gif" alt="Collection Protocol Details" width="94" height="20" /></td>
-                       <td width="85%" valign="bottom" class="cp_tabbg">&nbsp;</td>
+                       <td width="90%" valign="bottom" class="cp_tabbg">&nbsp;</td>
                       <td valign="top" class="cp_tabbg">&nbsp;</td>
-					  <td align="left" valign="top" class="cp_tabbg"><html:link href="#" styleClass="view" styleId="newUser" onclick="viewSummary()"><bean:message key="cpbasedentry.viewsummary" /></html:link></td>  
                     </tr>
                 </table></td>
               </tr>
@@ -146,15 +149,33 @@ window.parent.frames['CPTreeView'].location="ShowCollectionProtocol.do?pageOf=sp
                         <td>&nbsp;</td>
                         <td>&nbsp;</td>
                       </tr>
-                      <tr>
-                        <td colspan="3" class="buttonbg"><html:button styleClass="blue_ar_b" property="submitPage" onclick="submitAllEvents()" disabled="<%=disabled%>">
-						<bean:message key="buttons.submit"/>
-					</html:button>
-                          &nbsp;|
-                          <html:button styleClass="blue_ar_b" property="submitPage" onclick="specimenRequirements()" disabled="<%=disabled%>">
-						<bean:message key="cpbasedentry.addspecimenrequirements"/>
-					</html:button></td>
-                      </tr>
+                     <tr>
+				<logic:equal name="isParticipantReg" value="true">
+					&nbsp;
+				</logic:equal>
+				<logic:notEqual name="isParticipantReg" value="true">
+					<td class="buttonbg" colspan="3">
+						<html:button styleClass="blue_ar_b" property="submitPage" onclick="submitAllEvents()">
+							<bean:message key="buttons.submit"/>
+						</html:button>
+						&nbsp;|
+						<html:button styleClass="blue_ar_b" property="submitPage" onclick="specimenRequirements()">
+							<bean:message key="cpbasedentry.addspecimenrequirements"/>
+						</html:button>
+						
+						<logic:equal name="operation" value="edit">
+						&nbsp;|
+							<html:button styleClass="blue_ar_b" property="submitPage" onclick="deleteEvent()">
+									<bean:message key="buttons.delete"/>
+							</html:button>
+						</logic:equal>
+						<logic:notEqual name="operation" value="edit">
+							&nbsp;
+						</logic:notEqual>
+					</td>
+				</logic:notEqual>
+
+			</tr>
                     </table>
                </td>
               </tr>

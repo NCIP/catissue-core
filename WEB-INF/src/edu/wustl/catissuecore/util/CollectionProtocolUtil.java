@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -22,6 +23,7 @@ import edu.wustl.catissuecore.bean.GenericSpecimen;
 import edu.wustl.catissuecore.bean.SpecimenRequirementBean;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
+import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.CellSpecimenRequirement;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
@@ -104,6 +106,10 @@ public class CollectionProtocolUtil {
 		collectionProtocolBean.setAliqoutInSameContainer(collectionProtocol.getAliquotInSameContainer().booleanValue());
 		String endDate = Utility.parseDateToString(collectionProtocol.getEndDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
 		collectionProtocolBean.setEndDate(endDate);
+		if(collectionProtocol.getCollectionProtocolRegistrationCollection().size() > 0)
+		{
+			collectionProtocolBean.setParticiapantReg(true);
+		}
 		return collectionProtocolBean;
 	}
 
@@ -165,7 +171,6 @@ public class CollectionProtocolUtil {
 		eventBean.setUniqueIdentifier("E"+ counter++);
 		eventBean.setSpecimenCollRequirementGroupId(
 				collectionProtocolEvent.getId().longValue());
-		Collection reqSpCollection = (Collection)dao.retrieveAttribute(CollectionProtocolEvent.class.getName(), collectionProtocolEvent.getId(), "elements(specimenRequirementCollection)");
 		eventBean.setSpecimenRequirementbeanMap(
 				getSpecimensMap(collectionProtocolEvent.getSpecimenRequirementCollection(), 
 						eventBean.getUniqueIdentifier()) );
@@ -343,8 +348,7 @@ public class CollectionProtocolUtil {
 		
 		if(reqSpecimen.getStorageType() != null)
 		{
-			speRequirementBean.setStorageContainerForSpecimen( 
-				getStorageTypeValue(reqSpecimen.getStorageType()).toString() );
+			speRequirementBean.setStorageContainerForSpecimen(reqSpecimen.getStorageType());
 		}
 		setSpecimenEventParameters(reqSpecimen,speRequirementBean );
 		
@@ -503,9 +507,6 @@ public class CollectionProtocolUtil {
 		collectionProtocolBean.setOperation("update");
 		session.setAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN,
 				sessionCpList.get(0));
-		
-
-		
 		session.setAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP,
 				sessionCpList.get(1));
 	}
@@ -735,23 +736,33 @@ public class CollectionProtocolUtil {
 			}
 			reqSpecimen.setLineage(specimenRequirementBean.getLineage());
 			reqSpecimenCollection.add(reqSpecimen);
-
-			if(specimenRequirementBean.getAliquotSpecimenCollection()!=null)
+			Map aliquotColl = (LinkedHashMap)specimenRequirementBean.getAliquotSpecimenCollection();
+			Collection childSpecimens = new HashSet();
+			if(aliquotColl!=null && !aliquotColl.isEmpty())
 			{
 				Collection aliquotCollection= specimenRequirementBean.getAliquotSpecimenCollection().values();
-				Collection childSpecimens = 
+				childSpecimens = 
 					getReqSpecimens(aliquotCollection, reqSpecimen, cpEvent);
-				
 				reqSpecimenCollection.addAll(childSpecimens);
 			}
-
-			if(specimenRequirementBean.getDeriveSpecimenCollection()!=null)
+			Map drivedColl = (LinkedHashMap)specimenRequirementBean.getDeriveSpecimenCollection();
+			if(drivedColl!=null && !drivedColl.isEmpty())
 			{
 				Collection derivedCollection= specimenRequirementBean.getDeriveSpecimenCollection().values();
-				Collection childSpecimens = 
+				
+				Collection derivedSpecimens = 
 					getReqSpecimens(derivedCollection, reqSpecimen, cpEvent);
+				if(childSpecimens == null || childSpecimens.isEmpty())
+				{
+					childSpecimens = derivedSpecimens;
+				}
+				else
+				{
+					childSpecimens.addAll(derivedSpecimens);
+				}
 				reqSpecimenCollection.addAll(childSpecimens);
 			}
+			reqSpecimen.setChildSpecimenCollection(childSpecimens);
 		}
 		return reqSpecimenCollection;
 	}

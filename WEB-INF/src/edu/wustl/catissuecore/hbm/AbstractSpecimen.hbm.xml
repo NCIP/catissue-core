@@ -37,7 +37,7 @@
             table="CATISSUE_ABSTRACT_SPECIMEN"
             lazy="true"
             inverse="true"
-            cascade="save-update"
+            cascade="all"
             sort="unsorted"
         >
 			 <cache usage="read-write" /> 
@@ -54,7 +54,7 @@
 	    <many-to-one
 	            name="specimenCharacteristics"
 	            class="edu.wustl.catissuecore.domain.SpecimenCharacteristics"
-	            cascade="none"
+	            cascade="all"
 	            lazy="false"
 	            outer-join="auto"
 	            update="true"
@@ -110,7 +110,7 @@
             table="CATISSUE_SPECIMEN_EVENT_PARAM"
             fetch="subselect" lazy="false"
             inverse="true"
-            cascade="save-update"
+            cascade="all"
             sort="unsorted"
         >
 		 <cache usage="read-write" />

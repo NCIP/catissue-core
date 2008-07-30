@@ -29,17 +29,20 @@ import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
+import edu.wustl.catissuecore.domain.ConsentTier;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.dto.CollectionProtocolDTO;
 import edu.wustl.catissuecore.multiRepository.bean.SiteUserRolePrivilegeBean;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
+import edu.wustl.catissuecore.util.CollectionProtocolAuthorization;
 import edu.wustl.catissuecore.util.CollectionProtocolUtil;
 import edu.wustl.catissuecore.util.ParticipantRegistrationCacheManager;
 import edu.wustl.catissuecore.util.Roles;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.dao.AbstractDAO;
 import edu.wustl.common.dao.DAO;
@@ -52,9 +55,7 @@ import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.dbManager.DBUtil;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
-import edu.wustl.common.util.global.Variables;
 import edu.wustl.common.util.logger.Logger;
-import edu.wustl.catissuecore.util.CollectionProtocolAuthorization;
 
 /**
  * CollectionProtocolBizLogic is used to add CollectionProtocol information into the database using Hibernate.
@@ -82,7 +83,9 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			rowIdMap = CpDto.getRowIdBeanMap();
 		}
 		else
+		{
 		    collectionProtocol = (CollectionProtocol) obj;
+		}
 		
 		checkStatus(dao, collectionProtocol.getPrincipalInvestigator(), "Principal Investigator");
 		validateCollectionProtocol(dao, collectionProtocol, "Principal Investigator");
@@ -265,63 +268,190 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		CollectionProtocol collectionProtocol =null;
 		if (obj instanceof CollectionProtocolDTO)
 		{
-			CollectionProtocolAuthorization cpAuthorization = new CollectionProtocolAuthorization();
 			CollectionProtocolDTO cpDto = (CollectionProtocolDTO) obj;
 			collectionProtocol = cpDto.getCollectionProtocol();
 			HashSet<CollectionProtocol> protectionObjects = new HashSet<CollectionProtocol>();
 			protectionObjects.add(collectionProtocol);
-			//cpAuthorization.authenticate(collectionProtocol, protectionObjects, cpDto.getRowIdBeanMap());
 		}
 		else
 		{
 			collectionProtocol = (CollectionProtocol)obj;
 		}
-		/**
-		 * Patch Id : FutureSCG_7
-		 * Description : Calling method to validate the CPE against uniqueness
-		 */
-
 		isCollectionProtocolLabelUnique(collectionProtocol);
-		CollectionProtocol collectionProtocolOld = getOldCollectionProtocol(collectionProtocol);
-		int consentCount = collectionProtocol.getConsentTierCollection().size();
-		int consentCountOld = collectionProtocolOld.getConsentTierCollection().size();
-		if (collectionProtocolOld.getCollectionProtocolRegistrationCollection().size() > 0
-				&& collectionProtocol.getActivityStatus().equals(Constants.ACTIVITY_STATUS_ACTIVE)
-				&& consentCount == consentCountOld)
+		modifyCPObject(dao, sessionDataBean, collectionProtocol);
+	}
+
+	/**
+	 * @param dao
+	 * @param sessionDataBean
+	 * @param collectionProtocol
+	 * @throws DAOException
+	 * @throws UserNotAuthorizedException
+	 */
+	private void modifyCPObject(DAO dao, SessionDataBean sessionDataBean,
+			CollectionProtocol collectionProtocol) throws DAOException, UserNotAuthorizedException
+	{
+		
+		CollectionProtocol collectionProtocolOld;
+		Session session = null;
+		try
 		{
-			throw new DAOException(
-					"Unable to update, Only Consents can be added under this Collection protocol");
+			session = DBUtil.getCleanSession();
+			collectionProtocolOld = getOldCollectionProtocol(session, collectionProtocol.getId());
+			setCPRCollection(collectionProtocol);
+			if (collectionProtocolOld.getCollectionProtocolRegistrationCollection().size() > 0
+					&& collectionProtocol.getActivityStatus().equals(Constants.ACTIVITY_STATUS_ACTIVE))
+			{
+				setCPEventCollection(collectionProtocol);
+				editCPObj(dao, sessionDataBean, collectionProtocol, collectionProtocolOld);
+			}
+			else
+			{			
+				Collection<ConsentTier> oldConsentTierCollection = collectionProtocolOld.getConsentTierCollection();
+				Collection<ConsentTier> newConsentTierCollection = collectionProtocol.getConsentTierCollection();
+				checkConsents(dao, oldConsentTierCollection,newConsentTierCollection);
+				editEvents(dao, sessionDataBean, collectionProtocol, collectionProtocolOld);
+				editCPObj(dao, sessionDataBean, collectionProtocol, collectionProtocolOld);
+			}
 		}
+		catch (BizLogicException e)
+		{
+			throw new DAOException("Failed to create Session Object"+ e.getMessage());
+		} 
+		finally
+		{
+			session.close();
+		}
+	}
+
+	/**
+	 * @param dao
+	 * @param collectionProtocol
+	 * @throws DAOException
+	 */
+	private void setCPRCollection(CollectionProtocol collectionProtocol)
+			throws DAOException
+	{
+		String cprHQL ="select elements(cp.collectionProtocolRegistrationCollection)"+ 
+		" from edu.wustl.catissuecore.domain.CollectionProtocol as cp" +
+		" where cp.id="+ collectionProtocol.getId();
+		Collection cprCollection = executeHQL(cprHQL);
+		collectionProtocol.setCollectionProtocolRegistrationCollection(cprCollection);
+	}
+	
+	/**
+	 * @param dao
+	 * @param collectionProtocol
+	 * @throws DAOException
+	 */
+	private void setCPEventCollection(CollectionProtocol collectionProtocol)
+			throws DAOException
+	{
+		String cpEventHQL ="select elements(cp.collectionProtocolEventCollection)"+ 
+		" from edu.wustl.catissuecore.domain.CollectionProtocol as cp" +
+		" where cp.id="+ collectionProtocol.getId();
+		Collection cpEventCollection = executeHQL(cpEventHQL);
+		collectionProtocol.setCollectionProtocolEventCollection(cpEventCollection);
+	}
+	/**
+	 * @param dao
+	 * @param cprHQL
+	 * @return
+	 * @throws DAOException
+	 */
+	private Collection executeHQL(String cprHQL) throws DAOException
+	{
+		Collection cprCollection = new LinkedHashSet();
+		try
+		{
+			DefaultBizLogic bizLogic = new DefaultBizLogic();
+			List list = bizLogic.executeQuery(cprHQL);
+			cprCollection.addAll(list);
+		}
+		catch (ClassNotFoundException e)
+		{
+			throw new DAOException("Class Not found");
+		}
+		return cprCollection;
+	}
+	
+
+	/**
+	 * @param dao DAO Object
+	 * @param obj Transient Object
+	 * @param oldObj Persistent object
+	 * @param sessionDataBean Session data
+	 * @param collectionProtocol  Transient CP Object
+	 * @param collectionProtocolOld Persistent CP Object
+	 * @throws DAOException Database related exception
+	 * @throws UserNotAuthorizedException User Not Authorized Exception
+	 */
+	private void editCPObj(DAO dao, SessionDataBean sessionDataBean,
+			CollectionProtocol collectionProtocol, CollectionProtocol collectionProtocolOld)
+			throws DAOException, UserNotAuthorizedException
+	{
 		if (!collectionProtocol.getPrincipalInvestigator().getId().equals(
 				collectionProtocolOld.getPrincipalInvestigator().getId()))
 		{
 			checkStatus(dao, collectionProtocol.getPrincipalInvestigator(),
 					"Principal Investigator");
 		}
-
 		checkCoordinatorStatus(dao, collectionProtocol, collectionProtocolOld);
-
 		checkForChangedStatus(collectionProtocol, collectionProtocolOld);
-
-/*		
- *      Right Now we are not supporting EDIT Collection protocol thus commenting event and specimen update
- *      Collection oldCollectionProtocolEventCollection = collectionProtocolOld
-				.getCollectionProtocolEventCollection();
-		updateCollectionProtocolEvents(dao, sessionDataBean, collectionProtocol,
-				oldCollectionProtocolEventCollection);
-*/
-		// Temporary setting collection protocol event collection to null, 
-		// need to handle when user able to edit CP
-		
-		collectionProtocol.setCollectionProtocolEventCollection(null);
 		dao.update(collectionProtocol, sessionDataBean, true, true, false);
-
-		//Audit of Collection Protocol.
-		dao.audit(obj, oldObj, sessionDataBean, true);
-
+		//Audit of Collection Protocol
+		dao.audit(collectionProtocol, collectionProtocolOld, sessionDataBean, true);
 		disableRelatedObjects(dao, collectionProtocol);
-
 		updatePIAndCoordinatorGroup(dao, collectionProtocol, collectionProtocolOld);
+	}
+	
+	/**
+	 * @param dao DAO object
+	 * @param oldConsentTierCollection old Consent tier collection 
+	 * @param newConsentTierCollection New Consent tier collection
+	 * @throws DAOException
+	 */
+	private void checkConsents(DAO dao,Collection<ConsentTier> oldConsentTierCollection,Collection<ConsentTier> newConsentTierCollection) throws DAOException
+	{
+		Iterator<ConsentTier> itr = oldConsentTierCollection.iterator();
+		while(itr.hasNext())
+		{
+			ConsentTier cTier = itr.next();
+			Object obj = getCorrespondingOldObject(newConsentTierCollection, cTier.getId());
+			if(obj == null)
+			{
+				deleteConsents(dao,cTier);
+			}
+		}
+	}
+	/**
+	 * 
+	 * @param dao DAO Object
+	 * @param cTier ConsentTier object
+	 * @throws DAOException DAO Exception
+	 */
+	private void deleteConsents(DAO dao, ConsentTier cTier) throws DAOException
+	{
+		ConsentTier consentTier = (ConsentTier)dao.retrieve(ConsentTier.class.getName(),cTier.getId());
+		dao.delete(consentTier);
+	}
+
+	/**
+	 * @param dao DAO Object
+	 * @param sessionDataBean Session data
+	 * @param collectionProtocol Transient CP object
+	 * @param collectionProtocolOld Old CP Object
+	 * @throws DAOException Database related exception
+	 * @throws UserNotAuthorizedException User Not Authorized Exception
+	 */
+	private void editEvents(DAO dao, SessionDataBean sessionDataBean,
+			CollectionProtocol collectionProtocol, CollectionProtocol collectionProtocolOld)
+			throws DAOException, UserNotAuthorizedException
+	{
+		Collection oldCollectionProtocolEventCollection = collectionProtocolOld
+			.getCollectionProtocolEventCollection();
+		updateCollectionProtocolEvents(dao, sessionDataBean, collectionProtocol,
+			oldCollectionProtocolEventCollection);
 	}
 
 	/**
@@ -358,15 +488,14 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	 * @return
 	 * @throws DAOException
 	 */
-	private CollectionProtocol getOldCollectionProtocol(CollectionProtocol collectionProtocol)
+	private CollectionProtocol getOldCollectionProtocol(Session session, Long identifier)
 			throws DAOException
 	{
 		CollectionProtocol collectionProtocolOld;
 		try
 		{
-			Session sessionClean = DBUtil.getCleanSession();
-			collectionProtocolOld = (CollectionProtocol) sessionClean.load(
-					CollectionProtocol.class, collectionProtocol.getId());
+			collectionProtocolOld = (CollectionProtocol) session.load(
+					CollectionProtocol.class, identifier);
 		}
 		catch (Exception e)
 		{
@@ -395,7 +524,9 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 					checkStatus(dao, coordinator, "Coordinator");
 			}
 			else
+			{
 				it.remove();
+			}
 		}
 	}
 
@@ -423,108 +554,107 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	}
 
 	/**
-	 * @param dao
-	 * @param sessionDataBean
-	 * @param collectionProtocol
-	 * @param oldCollectionProtocolEventCollection
-	 * @throws DAOException
-	 * @throws UserNotAuthorizedException
+	 * @param dao DAO Object
+	 * @param sessionDataBean Session data
+	 * @param collectionProtocol Transient CP object
+	 * @param collectionProtocolOld Old CP Object
+	 * @throws DAOException Database related exception
+	 * @throws UserNotAuthorizedException User Not Authorized Exception
 	 */
 	private void updateCollectionProtocolEvents(DAO dao, SessionDataBean sessionDataBean,
-			CollectionProtocol collectionProtocol, Collection oldCollectionProtocolEventCollection)
+			CollectionProtocol collectionProtocol, Collection<CollectionProtocolEvent> oldCPEventCollection)
 			throws DAOException, UserNotAuthorizedException
 	{
+		RequirementSpecimenBizLogic reqSpBiz = new RequirementSpecimenBizLogic();
 		Iterator it = collectionProtocol.getCollectionProtocolEventCollection().iterator();
 		while (it.hasNext())
 		{
 			CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent) it.next();
-			Logger.out.debug("CollectionProtocolEvent Id ............... : "
-					+ collectionProtocolEvent.getId());
 			collectionProtocolEvent.setCollectionProtocol(collectionProtocol);
-			//SpecimenCollectionRequirementGroup collectionRequirementGroup;
 			CollectionProtocolEvent oldCollectionProtocolEvent = null;
-
 			if (collectionProtocolEvent.getId() == null || collectionProtocolEvent.getId() <= 0)
 			{
-				//collectionRequirementGroup = collectionProtocolEvent.getRequiredCollectionSpecimenGroup();
 				insertCollectionProtocolEvent(dao, sessionDataBean, collectionProtocolEvent);
 			}
 			else
 			{
-				//collectionRequirementGroup = collectionProtocolEvent.getRequiredCollectionSpecimenGroup();
-				//dao.update(collectionRequirementGroup, sessionDataBean, false, false, false);
 				dao.update(collectionProtocolEvent, sessionDataBean, true, false, false);
 				oldCollectionProtocolEvent = (CollectionProtocolEvent) getCorrespondingOldObject(
-						oldCollectionProtocolEventCollection, collectionProtocolEvent.getId());
+						oldCPEventCollection, collectionProtocolEvent.getId());
 				dao.audit(collectionProtocolEvent, oldCollectionProtocolEvent, sessionDataBean,
 						true);
-
 			}
-
 			//Audit of collectionProtocolEvent
-			updateSpecimens(dao, sessionDataBean, oldCollectionProtocolEvent,
+			reqSpBiz.updateSpecimens(dao, sessionDataBean, oldCollectionProtocolEvent,
 					collectionProtocolEvent);
 		}
+		Collection<CollectionProtocolEvent> newCPEventCollection = collectionProtocol.getCollectionProtocolEventCollection();
+		checkEventDelete(dao,reqSpBiz,newCPEventCollection,oldCPEventCollection);
 	}
-
+	
+	/**
+	 * This method check for Event to delete or not
+	 * @param dao DAO Object
+	 * @param reqSpBiz Object of requirement Sp Bizlogic
+	 * @param cpEventCollection CP Event Collection 
+	 * @param oldCpEventCollection Old Cp Event Collection
+	 * @throws DAOException Database related exception
+	 */
+	private void checkEventDelete(DAO dao,RequirementSpecimenBizLogic reqSpBiz,Collection<CollectionProtocolEvent> cpEventCollection, 
+			Collection<CollectionProtocolEvent> oldCpEventCollection) throws DAOException
+	{
+		CollectionProtocolEvent oldCpEvent = null;
+		Iterator<CollectionProtocolEvent> itr = oldCpEventCollection.iterator();
+		while(itr.hasNext())
+		{
+			oldCpEvent = (CollectionProtocolEvent) itr.next();
+			Object cpe = getCorrespondingOldObject(cpEventCollection, oldCpEvent.getId());
+			if(cpe == null)
+			{
+				deleteEvent(dao,oldCpEvent,reqSpBiz);
+			}
+		}
+	}
+	
+	/**
+	 * This method will delete the event and the req spe under that event 
+	 * @param dao DAO object
+	 * @param oldCpEvent Persistent CP Event
+	 * @param reqSpBiz Requirement Specimen biz logic object
+	 * @throws DAOException Database related exception
+	 */
+	private void deleteEvent(DAO dao, CollectionProtocolEvent oldCpEvent,RequirementSpecimenBizLogic reqSpBiz) throws DAOException
+	{
+		CollectionProtocolEvent cpEvent = (CollectionProtocolEvent) dao.retrieve(CollectionProtocolEvent.class.getName(), oldCpEvent.getId());
+		SpecimenRequirement oldSpReq = null;
+		Collection<SpecimenRequirement> spReqColl = cpEvent.getSpecimenRequirementCollection();
+		Iterator<SpecimenRequirement> spReqItr = spReqColl.iterator();
+		while(spReqItr.hasNext())
+		{
+			oldSpReq = (SpecimenRequirement)spReqItr.next();
+			if(Constants.NEW_SPECIMEN.equals(oldSpReq.getLineage()))
+			{
+				reqSpBiz.deleteRequirementSpecimen(dao, oldSpReq);	
+			}
+		}
+		dao.delete(cpEvent);
+	}
+	/**
+	 * 
+	 * @param dao DAO object
+	 * @param sessionDataBean Session details
+	 * @param collectionProtocolEvent CPE Object
+	 * @throws DAOException Database related exception
+	 * @throws UserNotAuthorizedException User Not Authorized Exception
+	 */
 	private void insertCollectionProtocolEvent(DAO dao, SessionDataBean sessionDataBean,
 			CollectionProtocolEvent collectionProtocolEvent) throws DAOException,
 			UserNotAuthorizedException
 	{
 		dao.insert(collectionProtocolEvent, sessionDataBean, true, false);
-		//dao.insert(reqSpecimenCollection, sessionDataBean, true, false);
-		TaskTimeCalculater eventAuth = TaskTimeCalculater.startTask(
-				"CP: Specimen collection req. group insert Authenticatge",
-				CollectionProtocolBizLogic.class);
 	}
-
-	/**
-	 * @param dao
-	 * @param sessionDataBean
-	 * @param collectionRequirementGroup
-	 * @param oldCollectionProtocolEvent
-	 * @throws DAOException
-	 * @throws UserNotAuthorizedException
-	 */
-	private void updateSpecimens(DAO dao, SessionDataBean sessionDataBean,
-			CollectionProtocolEvent oldCollectionProtocolEvent,
-			CollectionProtocolEvent collectionProtocolEvent) throws DAOException,
-			UserNotAuthorizedException
-	{
-		Iterator<SpecimenRequirement> srIt = oldCollectionProtocolEvent
-				.getSpecimenRequirementCollection().iterator();
-		RequirementSpecimenBizLogic reqSpecimenBizLogic = new RequirementSpecimenBizLogic();
-		Collection<SpecimenRequirement> oldReqspecimenCollection = null;
-		if (oldCollectionProtocolEvent != null)
-		{
-			oldReqspecimenCollection = oldCollectionProtocolEvent
-					.getSpecimenRequirementCollection();
-		}
-		while (srIt.hasNext())
-		{
-			SpecimenRequirement SpecimenRequirement = srIt.next();
-			if (SpecimenRequirement.getCollectionProtocolEvent() == null)
-			{
-				SpecimenRequirement.setCollectionProtocolEvent(collectionProtocolEvent);
-			}
-			SpecimenRequirement.setCollectionProtocolEvent(collectionProtocolEvent);
-			if (SpecimenRequirement.getId() == null || SpecimenRequirement.getId() <= 0)
-			{
-				reqSpecimenBizLogic.insert(SpecimenRequirement, dao, sessionDataBean);
-			}
-			else
-			{
-				SpecimenRequirement oldRequirementSpecimen = (SpecimenRequirement) getCorrespondingOldObject(
-						oldReqspecimenCollection, SpecimenRequirement.getId());
-				dao.update(SpecimenRequirement, sessionDataBean, true, false, false);
-				dao.audit(SpecimenRequirement, oldRequirementSpecimen, sessionDataBean, true);
-
-			}
-		}
-	}
-
-		
-//This method sets the Principal Investigator.
+	
+	//This method sets the Principal Investigator.
 	private void setPrincipalInvestigator(DAO dao, CollectionProtocol collectionProtocol)
 			throws DAOException
 	{
@@ -922,19 +1052,13 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		{
 			collectionProtocol = (CollectionProtocol)currentObj;
 		}
-		CollectionProtocol collectionProtocolOld = (CollectionProtocol) oldObj;
+		
 		ParticipantRegistrationCacheManager participantRegistrationCacheManager = new ParticipantRegistrationCacheManager();
-		if (!collectionProtocol.getTitle().equals(collectionProtocolOld.getTitle()))
-		{
 			participantRegistrationCacheManager.updateCPTitle(collectionProtocol.getId(),
 					collectionProtocol.getTitle());
-		}
 
-		if (!collectionProtocol.getShortTitle().equals(collectionProtocolOld.getShortTitle()))
-		{
 			participantRegistrationCacheManager.updateCPShortTitle(collectionProtocol.getId(),
 					collectionProtocol.getShortTitle());
-		}
 
 		if (collectionProtocol.getActivityStatus().equals(Constants.ACTIVITY_STATUS_DISABLED))
 		{
@@ -1007,63 +1131,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 
 		return cpList;
 	}
-
-	/**
-	 * this function retrieves collection protocol and all nested child objects and 
-	 * populates bean objects.
-	 * @param className 
-	 * @param colName Column name
-	 * @param colValue
-	 * @param CollectionProtocol 
-	 * @return list with collection protocol object and hashmap of collection protocol events
-	 * @throws DAOException 
-	 */
-	public List retrieveCP(String className, String colName, Object colValue) throws DAOException
-	{
-
-		List cpList;
-		if (!(CollectionProtocol.class.getName().equals(className)))
-		{
-			throw new DAOException("Cannot retrieve Collection protocol from class " + className);
-		}
-
-		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
-		try
-		{
-			dao.openSession(null);
-
-			cpList = dao.retrieve(className, colName, colValue);
-			if (cpList == null || cpList.isEmpty())
-			{
-				throw new DAOException("Cannot retrieve Collection protocol incorrect parameter "
-						+ colName + " = " + colValue);
-			}
-			CollectionProtocol collectionProtocol = (CollectionProtocol) cpList.get(0);
-			CollectionProtocolBean collectionProtocolBean = CollectionProtocolUtil
-					.getCollectionProtocolBean(collectionProtocol);
-			Collection collectionProtocolEventColl = collectionProtocol
-					.getCollectionProtocolEventCollection();
-			List cpEventList = new LinkedList(collectionProtocolEventColl);
-			CollectionProtocolUtil.getSortedCPEventList(cpEventList);
-			LinkedHashMap<String, CollectionProtocolEventBean> eventMap = CollectionProtocolUtil
-					.getCollectionProtocolEventMap(cpEventList, dao);
-
-			cpList = new ArrayList<Object>();
-			cpList.add(collectionProtocolBean);
-			cpList.add(eventMap);
-
-			return cpList;
-		}
-		catch (DAOException daoExp)
-		{
-			throw daoExp;
-		}
-		finally
-		{
-			dao.commit();
-			dao.closeSession();
-		}
-	}
+	
 	/**
 	 * this function retrieves collection protocol and all nested child objects and 
 	 * populates bean objects.
@@ -1077,6 +1145,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	 * @param id id of CP
 	 * @return list with collection protocol object and hashmap of collection protocol events
 	 * @throws DAOException 
+	 * TO DO: Move to CollectionProtocolUtil
 	 */
 	public List retrieveCP(Long id) throws DAOException
 	{
@@ -1092,7 +1161,6 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 				throw new DAOException("Cannot retrieve Collection protocol, incorrect id "
 						+ id);
 			}
-			
 			CollectionProtocol collectionProtocol = (CollectionProtocol) object;
 			CollectionProtocolBean collectionProtocolBean = CollectionProtocolUtil
 					.getCollectionProtocolBean(collectionProtocol);
@@ -1120,7 +1188,6 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			dao.closeSession();
 		}
 	}
-
 	public List<CollectionProtocol> retrieve(String className, String colName, Object colValue)
 			throws DAOException
 	{
@@ -1209,7 +1276,6 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		while (cpIterator.hasNext())
 		{
 			CollectionProtocolEvent collectionProtocolEvent = cpIterator.next();
-			
 			Collection specimenCollection = collectionProtocolEvent.getSpecimenRequirementCollection();
 			Iterator<SpecimenRequirement> specimenIterator = specimenCollection.iterator();
 			while (specimenIterator.hasNext())
@@ -1217,6 +1283,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 				specimenIterator.next();
 			}
 		}
+		collectionProtocol.getCollectionProtocolRegistrationCollection();
 	
 	}
 

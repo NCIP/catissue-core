@@ -13,6 +13,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.ProtocolEventDetailsForm;
+import edu.wustl.catissuecore.bean.CollectionProtocolBean;
 import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
@@ -30,6 +31,7 @@ public class ProtocolEventDetailsAction extends BaseAction
 		ProtocolEventDetailsForm protocolEventDetailsForm =(ProtocolEventDetailsForm)form;
 		String operation = (String)request.getParameter(Constants.OPERATION);
 		HttpSession session = request.getSession();
+		
 		//Event Key when flow is form Specimen Requirement Page
 		String key = (String)request.getParameter(Constants.EVENT_KEY);
 		String eventKey=null;
@@ -90,10 +92,16 @@ public class ProtocolEventDetailsAction extends BaseAction
 		request.setAttribute(Constants.RECEIVED_QUALITY_LIST, qualityList);
 		request.setAttribute(Constants.OPERATION, operation);
     	request.setAttribute("protocolEventDetailsForm", protocolEventDetailsForm);
+    	
+    	
+    	CollectionProtocolBean collectionProtocolBean = (CollectionProtocolBean)session.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
+    	request.setAttribute("isParticipantReg", collectionProtocolBean.isParticiapantReg());
+    	request.setAttribute("opr", collectionProtocolBean.getOperation());
 		return (mapping.findForward(Constants.SUCCESS));
 	}
 	
-	private void initSpecimenrequirementForm(ActionMapping mapping, ProtocolEventDetailsForm protocolEventDetailsForm, HttpServletRequest request)
+	private void initSpecimenrequirementForm(ActionMapping mapping, 
+			ProtocolEventDetailsForm protocolEventDetailsForm, HttpServletRequest request)
 	{
 		HttpSession session = request.getSession(); 
 		Map collectionProtocolEventMap = (Map)session.getAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
@@ -116,8 +124,7 @@ public class ProtocolEventDetailsAction extends BaseAction
 		{
 			collectionProtocolEventKey = st.nextToken();
 		}
-		
-		CollectionProtocolEventBean collectionProtocolEventBean = (CollectionProtocolEventBean)collectionProtocolEventMap.get(collectionProtocolEventKey);	
+		CollectionProtocolEventBean collectionProtocolEventBean = (CollectionProtocolEventBean)collectionProtocolEventMap.get(collectionProtocolEventKey);
 		protocolEventDetailsForm.setClinicalDiagnosis(collectionProtocolEventBean.getClinicalDiagnosis());
 		protocolEventDetailsForm.setClinicalStatus(collectionProtocolEventBean.getClinicalStatus());
 		protocolEventDetailsForm.setCollectionPointLabel(collectionProtocolEventBean.getCollectionPointLabel());

@@ -15,16 +15,18 @@ import edu.wustl.catissuecore.actionForm.ProtocolEventDetailsForm;
 import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
+import edu.wustl.common.util.dbManager.DAOException;
 
 
 public class SaveProtocolEventDetailsAction extends BaseAction
 {
 
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
+			HttpServletRequest request, HttpServletResponse response) throws DAOException 
 	{
 		ProtocolEventDetailsForm protocolEventDetailsForm = (ProtocolEventDetailsForm)form;
 		HttpSession session = request.getSession();
+		String pageOf = request.getParameter(Constants.PAGE_OF);
 		Map collectionProtocolEventMap = null;
 		CollectionProtocolEventBean collectionProtocolEventBean =null;
 		if(session.getAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP)!=null)
@@ -35,8 +37,6 @@ public class SaveProtocolEventDetailsAction extends BaseAction
 		{
 			collectionProtocolEventMap = new LinkedHashMap();
 		}
-		String pageOf = request.getParameter(Constants.PAGE_OF);
-				
 		if(protocolEventDetailsForm.getCollectionProtocolEventkey().equals(Constants.ADD_NEW_EVENT))
 		{
 			collectionProtocolEventBean = new CollectionProtocolEventBean();
@@ -57,7 +57,6 @@ public class SaveProtocolEventDetailsAction extends BaseAction
 		session.setAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP, collectionProtocolEventMap);
 		return (mapping.findForward(pageOf));
 	}
-	
 
 	private void setCollectionProtocolBean(CollectionProtocolEventBean collectionProtocolEventBean, ProtocolEventDetailsForm protocolEventDetailsForm)
 	{

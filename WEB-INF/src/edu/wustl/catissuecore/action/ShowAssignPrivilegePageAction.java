@@ -16,7 +16,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import edu.wustl.catissuecore.actionForm.CollectionProtocolForm;
-import edu.wustl.catissuecore.bean.CollectionProtocolBean;
 import edu.wustl.catissuecore.bizlogic.AssignPrivilegePageBizLogic;
 import edu.wustl.catissuecore.multiRepository.bean.SiteUserRolePrivilegeBean;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -44,12 +43,6 @@ public class ShowAssignPrivilegePageAction extends BaseAction
 	{ 
 		ActionForward findForward = null;
 		final CollectionProtocolForm  cpForm = (CollectionProtocolForm)form;
-		if(cpForm!=null)
-		{
-			CollectionProtocolBean collectionProtocolBean = (CollectionProtocolBean) request.getSession().getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
-			collectionProtocolBean.setSiteIds(cpForm.getSiteIds());
-		}
-		final String operation = (String) request.getParameter(Constants.OPERATION);
 		final String cpOperation = (String) request.getParameter("cpOperation");
 		request.setAttribute("cpOperation", cpOperation);
 		if (("AssignPrivilegePage".equals(cpOperation))) 
@@ -61,6 +54,8 @@ public class ShowAssignPrivilegePageAction extends BaseAction
 				findForward = setAJAXResponse(request, response, cpOperation);
 				
 		}
+		request.setAttribute("CollectionProtocolForm", cpForm);
+		request.setAttribute("noOfConsents", cpForm.getConsentTierCounter());
 		return findForward;
 	}
 	/**

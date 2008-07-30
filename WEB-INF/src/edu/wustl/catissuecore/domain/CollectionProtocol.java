@@ -60,7 +60,7 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	/**
 	 *  Collection of CollectionProtocol associated with the Parent CollectionProtocol.
 	 */
-	protected Collection childCollectionProtocolCollection = new LinkedHashSet();
+	protected Collection<CollectionProtocol> childCollectionProtocolCollection = new LinkedHashSet<CollectionProtocol>();
 	
 	/**
 	 * Parent Collection Protocol
@@ -93,7 +93,7 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	/**
 	 * The collection of consent tiers associated with the collection protocol.
 	 */
-	protected Collection consentTierCollection;
+	protected Collection<ConsentTier> consentTierCollection;
 	/**
 	 * The unsigned document URL for the collection protocol.
 	 */
@@ -137,7 +137,7 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	 * @hibernate.set table="CATISSUE_CONSENT_TIER" inverse="false" name="consentTierCollection"
 	 * @hibernate.collection-key column="COLL_PROTOCOL_ID"
 	 */
-	public Collection getConsentTierCollection()
+	public Collection<ConsentTier> getConsentTierCollection()
 	{
 		return consentTierCollection;
 	}
@@ -145,7 +145,7 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	/**
 	 * @param consentTierCollection the consentTierCollection to set
 	 */
-	public void setConsentTierCollection(Collection consentTierCollection)
+	public void setConsentTierCollection(Collection<ConsentTier> consentTierCollection)
 	{
 		this.consentTierCollection = consentTierCollection;
 	}
@@ -416,7 +416,7 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
     			consentTier.setId(Long.parseLong(consentBean.getConsentTierID()));
     		}
     		//Check for empty consents
-    		if(consentBean.getStatement().trim().length()>0)
+    		if(consentBean.getStatement()!=null && consentBean.getStatement().trim().length()>0)
     		{
     			consentStatementColl.add(consentTier);
     		}

@@ -231,6 +231,7 @@ PUBLIC
 	<!-- for assign priviledge -->
 	<action path="/ShowAssignPrivilegePage"
 		type="edu.wustl.catissuecore.action.ShowAssignPrivilegePageAction"		
+		name="collectionProtocolForm"
 		validate="false"
 		input="/ShowAssignPrivilegePage.do"
 		scope="request">
@@ -4676,6 +4677,7 @@ PUBLIC
 			validate="true"
 			input="/CollectionProtocol.do?pageOf=pageOfCollectionProtocol&amp;menuSelected=9">
 			<forward name="pageOfDefineEvents" path="/ProtocolEventsDetails.do?pageOf=newEvent" />
+			<forward name="submitSpecimen" path="/SubmitCollectionProtocol.do" />
 			<forward name="ViewSummary" path="/GenericSpecimenSummary.do?Event_Id=dummyId" />
 			<forward name="pageOfAssignPrivilegePage" path="/ShowAssignPrivilegePage.do?cpOperation=AssignPrivilegePage"/>
 			<forward name="pageOfCollectionProtocolPage" path="/CollectionProtocol.do?pageOf=pageOfCollectionProtocol" />
@@ -4687,7 +4689,7 @@ PUBLIC
 			validate="false">
 			<forward name="success" path=".catissuecore.ProtocolEventsDetails" />
 		</action>
-
+		
 		<action path="/SaveProtocolEvents"
 			type="edu.wustl.catissuecore.action.SaveProtocolEventDetailsAction"
 			name="protocolEventDetailsForm"
@@ -4807,14 +4809,23 @@ PUBLIC
 			<forward name="pageOfMultipleSpWithMenuFailure" path=".catissuecore.viewSpecimenSummary" />
 			
 		</action>
+		<action path="/SubmitCollectionProtocol"
+			type="edu.wustl.catissuecore.action.SubmitCPAction"
+			name="collectionProtocolForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path="/OpenCollectionProtocol.do?operation=edit&amp;pageOf=collectionProtocol" />
+			<forward name="updateCP" path="/UpdateCollectionProtocol.do" />
+			<forward name="failure" path="/OpenCollectionProtocol.do?operation=edit&amp;pageOf=collectionProtocol"/>
+		</action>
 
 		<action path="/UpdateCollectionProtocol"
 			type="edu.wustl.catissuecore.action.UpdateCollectionProtocolAction"
 			name="viewSpecimenSummaryForm"
 			validate="false"
 			scope="request">
-			<forward name="success" path="/GenericSpecimenSummary.do" />
-			<forward name="failure" path="/GenericSpecimenSummary.do" />
+			<forward name="success" path="/OpenCollectionProtocol.do?operation=edit&amp;pageOf=collectionProtocol" />
+			<forward name="failure" path="/OpenCollectionProtocol.do?operation=edit&amp;pageOf=collectionProtocol" />
 			<forward name="disabled" path="/ManageAdministrativeData.do" />
 		</action>
 		
@@ -4898,6 +4909,13 @@ PUBLIC
 				<forward name="success" path=".catissuecore.mainCollectionProtocolDef" />
 				
 		</action>
+		<action path="/DeleteNodeFromCP" 
+			type="edu.wustl.catissuecore.action.DeleteNodeFromCPAction"
+			name="protocolEventDetailsForm"
+			validate="false">
+			<forward name="success" path="/OpenCollectionProtocol.do?operation=edit&amp;pageOf=collectionProtocol" />
+		</action>
+		
 	</action-mappings>
 	
 	<controller processorClass="edu.wustl.common.struts.ApplicationRequestProcessor" />

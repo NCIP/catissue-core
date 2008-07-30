@@ -30,9 +30,7 @@ String nodeKey = (String)request.getAttribute("mapkey");
 String operation = (String)request.getAttribute(Constants.OPERATION);
 String operationType =null;
 boolean disabled = false;
-HttpSession newSession = request.getSession();
-CollectionProtocolBean collectionProtocolBean = (CollectionProtocolBean)newSession.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
-operationType = collectionProtocolBean.getOperation();
+operationType = (String)request.getAttribute("opr");
 if(operationType!=null && operationType.equals("update"))
 {
 	disabled = true;
@@ -265,6 +263,17 @@ if(form != null)
 		}
 	}
 
+	function deleteEvent()
+	{
+		var answer = confirm ("Are you sure want to delete specimen?")
+		if(answer)
+		{
+			document.forms[0].target = '_top';
+			var action ="DeleteNodeFromCP.do?pageOf=specimenRequirement&key="+"<%=mapKey%>"+"&operation=edit";
+			document.forms[0].action = action;
+			document.forms[0].submit();
+		}
+	}
 	function saveSpecimens()
 	{
 		var action ="SaveSpecimenRequirements.do?pageOf=specimenRequirement&redirectTo=defineEvents&key="+"<%=mapKey%>"+"&operation="+"<%=operation%>";
@@ -274,13 +283,6 @@ if(form != null)
 	function addNewEvent()
 	{
 			window.parent.frames['CPTreeView'].location="ProtocolEventsDetails.do?pageOf=newEvent";
-	}
-	
-	function viewSummary()
-	{
-		var action ="GenericSpecimenSummary.do?Event_Id="+"<%=mapKey%>";
-		document.forms[0].action = action;
-		document.forms[0].submit();
 	}
 
 	function clearTypeCombo()
@@ -424,15 +426,14 @@ if(form != null)
 </html:messages>
 
 
-<html:form action="CreateSpecimenTemplate.do">
+<html:form action="CreateSpecimenTemplate.do" styleId = "createSpecimenTemplateForm">
 <html:hidden property="noOfDeriveSpecimen"/>
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
             <tr>
 			<td><table width="100%" border="0" cellpadding="0" cellspacing="0">
                   <tr>
                     <td valign="bottom" ><img src="images/uIEnhancementImages/cp_specimen.gif" alt="Specimen Requirements" width="158" height="20" /><a href="#"></a></td>
-                    <td width="85%" valign="bottom" class="cp_tabbg">&nbsp;</td>
-					<td align="left" valign="top" class="cp_tabbg"><html:link href="#" styleClass="view" styleId="newUser" onclick="viewSummary()"><bean:message key="cpbasedentry.viewsummary" /></html:link></td>  
+                    <td width="90%" valign="bottom" class="cp_tabbg">&nbsp;</td>
                   </tr>
               </table></td>
 		 </tr>
@@ -763,9 +764,9 @@ if(form != null)
 			%>
 							<tr>
                                 <td colspan="6">
-									<html:button property="addSpecimenReq" styleClass="black_ar" value="Add More" disabled="<%=disabled%>" onclick="insRow('DeriveSpecimenBean')"/>
+									<html:button property="addSpecimenReq" styleClass="black_ar" value="Add More" onclick="insRow('DeriveSpecimenBean')"/>
 			
-									<html:button property="deleteSpecimenReq" styleClass="black_ar" onclick="<%=deleteSpecimenRequirements %>" disabled="<%=disabled%>"><bean:message key="buttons.delete"/>
+									<html:button property="deleteSpecimenReq" styleClass="black_ar" onclick="<%=deleteSpecimenRequirements %>" ><bean:message key="buttons.delete"/>
 									</html:button>
 								</td>
                               </tr>
@@ -818,12 +819,26 @@ if(form != null)
                     <tr>
                       <td colspan="2" class="bttomtd"></td>
                     </tr>
-                    <tr>
-                       <td colspan="2" class="buttonbg">
-							<html:button styleClass="blue_ar_b" property="submitPage" onclick="saveSpecimens()"		disabled="<%=disabled%>">
+                         <tr>
+                       <logic:equal name="isParticipantReg" value="true">
+						   &nbsp;
+						</logic:equal>
+						<logic:notEqual name="isParticipantReg" value="true">
+						   <td colspan="2" class="buttonbg">
+								<html:button styleClass="blue_ar_b" property="submitPage" onclick="saveSpecimens()"	>
 								<bean:message key="cpbasedentry.savespecimenrequirements"/>
-							</html:button>
-						</td>
+								</html:button>
+							<logic:equal name="operation" value="edit">
+								&nbsp;|
+								<html:button styleClass="blue_ar_b" property="submitPage" onclick="deleteEvent()">
+										<bean:message key="buttons.delete"/>
+								</html:button>
+							</logic:equal>
+							<logic:notEqual name="operation" value="edit">
+								&nbsp;
+							</logic:notEqual>
+							</td>
+						</logic:notEqual>
                     </tr>
              </table>
 		</td>

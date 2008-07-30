@@ -27,21 +27,9 @@ function defineEvents()
 	document.forms[0].submit();
 }
 
-function viewSummary()
-{	
-	var action="DefineEvents.do?Event_Id=dummyId&pageOf=ViewSummary&operation=${requestScope.operation}";
-	document.forms[0].action=action;
-	document.forms[0].submit();
-}
 function updateCPTree()
 {	
   window.parent.frames['CPTreeView'].location="ShowCollectionProtocol.do?operation=${requestScope.operation}";
-}
-function openEventPage()
-{
-    var action="DefineEvents.do?pageOf=pageOfDefineEvents&operation=${requestScope.operation}";
-	document.forms[0].action=action;
-	document.forms[0].submit();
 }
 
 </script>
@@ -63,7 +51,7 @@ function openEventPage()
 <html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
 	<%=messageKey%>
 </html:messages>
-<html:form action='${requestScope.formName}'>
+<html:form action='${requestScope.formName}' styleId="CollectionProtocolForm">
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
               <tr>
                    <td><table width="100%" border="0" cellpadding="0" cellspacing="0">
@@ -73,15 +61,8 @@ function openEventPage()
                       <td valign="bottom"><a href="#"><img src="images/uIEnhancementImages/cp_privileges1.gif" alt="Privileges" width="94" height="20" border="0" onclick="showAssignPrivilegePage('${requestScope.operation}')"></a></td>
                       <td width="85%" valign="bottom" class="cp_tabbg">&nbsp;</td>
                     </tr>
-                </table></td>
-			 		<td valign="top" class="cp_tabbg">&nbsp;</td>
-						 <td align="left" valign="top" class="cp_tabbg">
-							
-									<html:link href="#" styleClass="view" styleId="newUser" onclick="updateCPTree();viewSummary()">
-										<bean:message key="cpbasedentry.viewsummary" /> 
-									 </html:link>
-							
-						 </td>  
+                </table>
+                </td>
               </tr>
               <tr>
                 <td class="cp_tabtable" colspan="6" >
@@ -149,27 +130,12 @@ function openEventPage()
                         </td>
                       </tr>
 					   </table>
+					   &nbsp;
 					  <table cellpadding="0" cellspacing="0" border="0" width = "100%" id="submittable">
                       <tr>
                         <td colspan="3" class="black_ar"><br><label><html:checkbox property="aliqoutInSameContainer"><bean:message key="aliquots.storeAllAliquotes" /></html:checkbox></label><br><br></td>
                       </tr>
-                      <tr>
-                        <td colspan="3" class="buttonbg"><!-- <html:button styleClass="blue_ar_b" property="submitPage">
-						<bean:message key="buttons.submit" />
-					</html:button>
-				 &nbsp;| -->
-
-					 <html:button styleClass="blue_ar_b" property="forwardPage" onclick="openEventPage()" >
-						Add Events >>
-					</html:button>
-				<!-- &nbsp;|
-
-					<html:button styleClass="blue_ar_b" property="deletePage" onclick='${requestScope.deleteAction}'>
-						<bean:message key="buttons.delete" />
-					</html:button> --></td>
-                      </tr>
-					 
-                    </table>
+                      </table>
 					<%@ include file="/pages/content/ConsentTracking/DefineConsent.jsp" %>
                 </td>
               </tr>

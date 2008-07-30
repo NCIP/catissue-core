@@ -222,11 +222,14 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 		request.setAttribute("collectionProtocolEndDateYear", collectionProtocolEndDateYear);
 		request.setAttribute("collectionProtocolEndDateDay", collectionProtocolEndDateDay);
 		request.setAttribute("collectionProtocolEndDateMonth", collectionProtocolEndDateMonth);
+		if(collectionProtocolBean!=null)
+		{
+			request.setAttribute("isParticipantReg", collectionProtocolBean.isParticiapantReg());
+		}
+		
 		
 	    int noOfConsents=1;
 		noOfConsents = collectionProtocolForm.getConsentTierCounter();
-		 if(noOfConsents != 0)
-			 noOfConsents=noOfConsents-1;
 		  
 		request.setAttribute("noOfConsents", noOfConsents);
 	      

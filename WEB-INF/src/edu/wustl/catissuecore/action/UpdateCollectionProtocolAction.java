@@ -1,7 +1,5 @@
 package edu.wustl.catissuecore.action;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -14,10 +12,11 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
-import edu.wustl.catissuecore.actionForm.ViewSpecimenSummaryForm;
+import edu.wustl.catissuecore.actionForm.CollectionProtocolForm;
 import edu.wustl.catissuecore.bean.CollectionProtocolBean;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
+import edu.wustl.catissuecore.dto.CollectionProtocolDTO;
 import edu.wustl.catissuecore.util.CollectionProtocolUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
@@ -34,7 +33,6 @@ public class UpdateCollectionProtocolAction extends BaseAction {
 		String target = Constants.SUCCESS;
 
 		try{ 
-			ViewSpecimenSummaryForm specimenSummaryForm = (ViewSpecimenSummaryForm) form;
 			CollectionProtocol collectionProtocol = CollectionProtocolUtil
 			.populateCollectionProtocolObjects(request);
 
@@ -43,19 +41,13 @@ public class UpdateCollectionProtocolAction extends BaseAction {
 				.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
 			
 			IBizLogic bizLogic =BizLogicFactory.getInstance().getBizLogic(Constants.COLLECTION_PROTOCOL_FORM_ID);
-			Object object =bizLogic.retrieve(CollectionProtocol.class.getName(), collectionProtocolBean.getIdentifier());
-
-			if (object != null)
-			{
-				CollectionProtocol oldCollectionProtocol = (CollectionProtocol) object;
-				HttpSession session = request.getSession();
-				SessionDataBean sessionDataBean = (SessionDataBean)
-								session.getAttribute(Constants.SESSION_DATA);
-				collectionProtocol.setCollectionProtocolRegistrationCollection(oldCollectionProtocol.getCollectionProtocolRegistrationCollection());
-				bizLogic.update(collectionProtocol, oldCollectionProtocol, 
-						Constants.HIBERNATE_DAO, sessionDataBean);
-			}
-			if(specimenSummaryForm.getCollectionProtocolStatus()!=null && specimenSummaryForm.getCollectionProtocolStatus().equalsIgnoreCase(Constants.DISABLED))
+			HttpSession session = request.getSession();
+			SessionDataBean sessionDataBean = (SessionDataBean)
+							session.getAttribute(Constants.SESSION_DATA);
+			bizLogic.update(collectionProtocol, null, 
+					Constants.HIBERNATE_DAO, sessionDataBean);
+			CollectionProtocolUtil.updateSession(request, collectionProtocol.getId());
+			if(Constants.DISABLED.equals(collectionProtocolBean.getActivityStatus()))
 			{
 				target = "disabled";
 			}
@@ -68,7 +60,9 @@ public class UpdateCollectionProtocolAction extends BaseAction {
 					"object.edit.successOnly","Collection Protocol"));
 			saveMessages(request, actionMessages);
 			
-		}catch (Exception exception){
+		}
+		catch (Exception exception)
+		{
 			ActionErrors actionErrors = new ActionErrors();
 			actionErrors.add(actionErrors.GLOBAL_MESSAGE, new ActionError(
 					"errors.item",exception.getMessage()));

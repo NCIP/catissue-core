@@ -481,7 +481,7 @@ function openCRGWindow()
  }
  // Function to enable delete button on select a checkBob
  function enableDeleteButton(itemCheck){
-	deleteButton=document.apForm.deleteButton;
+	deleteButton=document.getElementById('CollectionProtocolForm').deleteButton;
 	var chk = document.getElementById(itemCheck.id);
 	   if (chk.checked == true)
 	   {
@@ -540,7 +540,7 @@ function  deleteCheckedRows() {
 			arrayCounter=arrayCounter+1;
 		}
 		if(tbodyElement.rows.length==0){
-			document.apForm.deleteButton.disabled = true;
+			document.getElementById('CollectionProtocolForm').deleteButton.disabled = true;
 		}
 	}
 
@@ -608,34 +608,38 @@ function  deleteCheckedRows() {
 	//This function will delete the selected consent Tier
 	function deleteSelected()
 	{
-		var rowIndex = 0;	
-		var rowCount=document.getElementById('innertable').rows.length;
-		var removeButton = document.getElementsByName('removeButton');
-		
-		/** creating checkbox name**/
-		var chkBox = document.getElementsByName('consentcheckBoxs');
-		var lengthChk=chkBox.length;
-		var j = 0;
-		for(var i=0;i<lengthChk;i++)
+		var answer = confirm ("Are you sure want to delete consent(s) ?")
+		if(answer)
 		{
-			if(chkBox[j].checked==true)
-			{
-				var gettable = document.getElementById('innertable');
-				var currentRow = chkBox[j].parentNode.parentNode;
-				rowIndex = currentRow.rowIndex;
-				gettable.deleteRow(rowIndex);
-			}
-			else
-			{
-				j++;
-			}	
-		}
-		var j = chkBox.length;
-		for(var i=0;i<chkBox.length;i++)
-		{
-			var currentRow = chkBox[i].parentNode.parentNode;
+			var rowIndex = 0;	
+			var rowCount=document.getElementById('innertable').rows.length;
+			var removeButton = document.getElementsByName('removeButton');
 			
-		}		
+			/** creating checkbox name**/
+			var chkBox = document.getElementsByName('consentcheckBoxs');
+			var lengthChk=chkBox.length;
+			var j = 0;
+			for(var i=0;i<lengthChk;i++)
+			{
+				if(chkBox[j].checked==true)
+				{
+					var gettable = document.getElementById('innertable');
+					var currentRow = chkBox[j].parentNode.parentNode;
+					rowIndex = currentRow.rowIndex;
+					gettable.deleteRow(rowIndex);
+				}
+				else
+				{
+					j++;
+				}	
+			}
+			var j = chkBox.length;
+			for(var i=0;i<chkBox.length;i++)
+			{
+				var currentRow = chkBox[i].parentNode.parentNode;
+				
+			}
+		}
 	}	
 	
 	//This function will the called while switching between Tabs

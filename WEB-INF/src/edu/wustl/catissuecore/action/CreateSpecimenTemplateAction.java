@@ -17,6 +17,7 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.emory.mathcs.backport.java.util.LinkedList;
 import edu.wustl.catissuecore.actionForm.CreateSpecimenTemplateForm;
+import edu.wustl.catissuecore.bean.CollectionProtocolBean;
 import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
 import edu.wustl.catissuecore.bean.SpecimenRequirementBean;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
@@ -177,6 +178,11 @@ public class CreateSpecimenTemplateAction extends BaseAction
 			}
 		}
 		
+
+		CollectionProtocolBean collectionProtocolBean = (CollectionProtocolBean)session.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
+		request.setAttribute("isParticipantReg", collectionProtocolBean.isParticiapantReg());
+		request.setAttribute("opr", collectionProtocolBean.getOperation());
+
 		if(pageOf!=null&&pageOf.equals("error"))
 		{
 			return (mapping.findForward(Constants.SUCCESS));
