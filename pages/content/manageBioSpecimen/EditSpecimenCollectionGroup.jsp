@@ -409,8 +409,9 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 		List requestParticipantResponse = (List)request.getAttribute("specimenCollectionGroupResponseList");
 		if(requestParticipantResponse!=null&&form.getConsentTierCounter()>0)
 		{
-	%>
+	%><div style="display:none" id="consentTable">
 	    	<%@ include file="/pages/content/ConsentTracking/ConsentTracking.jsp" %> 
+			</div>
 	<%
 		}
 	%>
@@ -434,9 +435,10 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 	-->
 
 	<!-- For Multiple Specimen-----Ashish -->
-		<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage"  id="multiplespecimenTable">
+<div id="multiplespecimenTable">
+		<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage"  width="100%" >
 		<tr>
-			<td>
+			<td width="100%">
 			<table summary="" cellpadding="3" cellspacing="0" border="0"
 				width="100%">
 				
@@ -457,6 +459,8 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 				</tr>			
 			</table>
 			</td>
+			</tr>
+			<tr><td>
 			<!-- Hidden fields for events 
 			/**
  			* Name : Ashish Gupta
@@ -483,9 +487,9 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 			<html:hidden property="receivedEventId"/>
 			<!-- Patch ID: Bug#4227_4 -->
 			<html:hidden styleId="buttonType" property="buttonType"/>
-			
+			</td>
 		</tr>
 	</table>
-	
+	</div>
 	<%@ include file="SpecimenCollectionGroupPageButtons.jsp" %>
 	</div>

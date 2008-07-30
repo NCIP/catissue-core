@@ -458,8 +458,8 @@
 		var showAlways="block";
 		if(!document.all)
 		{
-			displayKey="table";
-			showAlways="table";
+			displayKey="block";
+			showAlways="block";
 		}
 			
 		var displayTable=displayKey;

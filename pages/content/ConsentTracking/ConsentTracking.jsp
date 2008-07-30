@@ -11,7 +11,9 @@
 	 @version 1.1	
 	 Jsp name: ConsentTracking.jsp
 	 Company: Washington University, School of Medicine, St. Louis.
--->						
+-->
+<LINK href="css/catissue_suite.css" type=text/css rel=stylesheet>
+<script src="jss/javaScript.js" type="text/javascript"></script>
 <script language="JavaScript">
 
 var consentIDArray=new Array(<%=form.getConsentTierCounter()%>);
@@ -238,20 +240,20 @@ function popupWindow(nofConsentTiers)
 					<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%" id="consentAttributes" >
 						<%--Signed URL --%>				
 						<tr>
-							<td class="tabrightmostcell" width="39%">
+							<td class="noneditable" width="39%">
 								&nbsp;&nbsp;&nbsp;<bean:message key="collectionprotocolregistration.signedurlconsent"/>
 							</td>
-							<td class="formField">
-								<html:text styleClass="formFieldSized" property="signedConsentUrl" />
+							<td class="noneditable">
+								<html:text styleClass="black_ar" property="signedConsentUrl" />
 							</td>
 						</tr>
 						<%--Witness Name --%>									
 						<tr>
-							<td class="tabrightmostcell">
+							<td class="noneditable">
 								&nbsp;&nbsp;&nbsp;<bean:message key="collectionprotocolregistration.witnessname"/>
 							</td>	
-							<td class="formField">
-								<html:select property="witnessId" styleClass="formFieldSized10" styleId="witnessId" size="1"
+							<td class="noneditable">
+								<html:select property="witnessId" styleClass="black_new" styleId="witnessId" size="1"
 									onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" >
 								<html:options collection="witnessList" labelProperty="name" property="value" />
 								</html:select>
@@ -259,10 +261,10 @@ function popupWindow(nofConsentTiers)
 						</tr>
 						<%--Consent Date --%>									
 						<tr>
-							<td class="tabrightmostcell">
+							<td class="noneditable">
 								&nbsp;&nbsp;&nbsp;<bean:message key="collectionprotocolregistration.consentdate"/>
 							</td>	
-							<td class="formField">
+							<td class="noneditable">
 							<%
 							if(pageOf.equals("pageOfConsent"))
 							{
@@ -279,7 +281,7 @@ function popupWindow(nofConsentTiers)
 									year= "<%=consentYear %>"
 									day= "<%= consentDay %>" 
 									value="<%=signedConsentDate %>"
-									styleClass="formDateSized10"
+									styleClass="black_ar"
 								/>		
 								<% 
 								}
@@ -289,7 +291,7 @@ function popupWindow(nofConsentTiers)
 								<ncombo:DateTimeComponent name="consentDate"
 									id="consentDate"
 									formName="consentForm"	
-									styleClass="formDateSized10" 
+									styleClass="black_ar" 
 								/>		
 								<%
 								}
@@ -309,7 +311,7 @@ function popupWindow(nofConsentTiers)
 									year= "<%=consentYear %>"
 									day= "<%= consentDay %>" 
 									value="<%=signedConsentDate %>"
-									styleClass="formDateSized10"
+									styleClass="black_ar"
 								/>		
 								<% 
 								}
@@ -319,13 +321,15 @@ function popupWindow(nofConsentTiers)
 								<ncombo:DateTimeComponent name="consentDate"
 									id="consentDate"
 									formName="collectionProtocolRegistrationForm"	
-									styleClass="formDateSized10" 
+									styleClass="black_ar" 
 								/>		
 								<%
 								}
 							}
 							%>
+							<span class="grey_ar_s">
 							<bean:message key="page.dateFormat" />&nbsp;
+							</span>
 							</td>
 						</tr>
 					</table>
@@ -701,25 +705,15 @@ function popupWindow(nofConsentTiers)
 							</td>
 						</tr>
 						<% 
-						}
-						if(pageOf.equals("pageOfConsent"))
-						{
-						%>
-							<%-- action button --%>																
-							<tr>
-								<td class="tabrightmostcell" align="right" colspan="4">
-									<input type="button" name="doneConsentButton" style="actionButton" value="Done" onclick="submitConsentResponses()"/>
-								</td>
-							</tr>
-						<% 
-						}
-						%>
+						}%>
+						
+									
 					   </table>	
 					<%-- Inner table that will show Consents--%>
 				</td>	
 			</tr>
 			<tr>
-			<td>
+			<td class="buttonbg">
 			<%if(operation.equals(Constants.EDIT))
 				{
 				String str = "withdrawAll('"+ consentTierList.size()+"')";
@@ -729,6 +723,18 @@ function popupWindow(nofConsentTiers)
 					
 				<%
 				}
-				%></td></tr>
+				%>
+			<%	if(pageOf.equals("pageOfConsent"))
+						{
+						%>
+							<%-- action button --%>																
+							&nbsp;|&nbsp
+									<input type="button" name="doneConsentButton" class="blue_ar_c" value="Done" onclick="submitConsentResponses()"/>
+							
+						<% 
+						}
+						%>
+				
+				</td></tr>
 	</table>
 	<%-- Main table End --%>
