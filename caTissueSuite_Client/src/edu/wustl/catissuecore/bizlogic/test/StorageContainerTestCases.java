@@ -693,6 +693,108 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 				}
 				
 		}
+		/*Update the storage location of anticipated specimen ,
+		 * if collection status is set to collected 
+		*/
+		
+		 public void testUpdateAnticipatedSpecimen()
+			{
+				   try {
+					   TissueSpecimen specimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();		
+					   SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
+					
+					   specimenObj.setSpecimenCollectionGroup(scg);
+					   Logger.out.info("Inserting domain object------->"+specimenObj);
+					   System.out.println("Before Creating Anticipated  Specimen");
+					   specimenObj =  (TissueSpecimen) appService.createObject(specimenObj);
+					   Logger.out.info(" Domain Object is successfully added ---->    ID:: " + specimenObj.getId().toString());
+					   Logger.out.info(" Domain Object is successfully added ---->    Name:: " + specimenObj.getLabel());
+					   
+					   TissueSpecimen tissueSpecimen = new TissueSpecimen();
+					   tissueSpecimen.setId(specimenObj.getId());
+					   List resultList = appService.search(TissueSpecimen.class,tissueSpecimen);
+					   Logger.out.info(" Domain Object is successfully found ---->    Name:: " + specimenObj.getLabel());
+					
+					   StorageContainer storageContainer= BaseTestCaseUtility.initStorageContainer();
+					   storageContainer.setCollectionProtocolCollection(new HashSet());
+					   storageContainer = (StorageContainer) appService.createObject(storageContainer); 
+					   assertTrue(" Domain Object is successfully added ---->    Name:: " + storageContainer.getId(), true);	
+					   tissueSpecimen=(TissueSpecimen) resultList.get(0);
+					  
+					   tissueSpecimen.setCollectionStatus("Collected");
+					   
+					   SpecimenPosition position = new SpecimenPosition();
+					   position.setPositionDimensionOne(1);
+					   position.setPositionDimensionTwo(3);
+					   position.setStorageContainer(storageContainer);
+					   tissueSpecimen.setSpecimenPosition(position);
+					   tissueSpecimen.setExternalIdentifierCollection(null);
+					   tissueSpecimen=(TissueSpecimen) appService.updateObject(tissueSpecimen);
+					   assertTrue(" Domain Object is successfully updated  ---->    Name:: " + storageContainer.getId(), true);
+					  
+					}
+					catch(Exception e)
+					{
+						System.out.println("Exception thrown testUpdateAnticipatedSpecimen");
+						System.out.println(e);
+						Logger.out.error(e.getMessage(),e);
+						e.printStackTrace();
+						assertFalse("Failed to update Anticipated  Specimen Object", true);
+					}
+					
+			}
+		 
+			/*Update the storage location of anticipated specimen ,
+			 * if collection status is set to Pending 
+			*/
+		 public void testUpdateAnticipatedSpecimenWithPendingStatus()
+			{
+				   try {
+					   TissueSpecimen specimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();		
+					   SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
+					
+					   specimenObj.setSpecimenCollectionGroup(scg);
+					   Logger.out.info("Inserting domain object------->"+specimenObj);
+					   System.out.println("Before Creating Anticipated  Specimen");
+					   specimenObj =  (TissueSpecimen) appService.createObject(specimenObj);
+					   Logger.out.info(" Domain Object is successfully added ---->    ID:: " + specimenObj.getId().toString());
+					   Logger.out.info(" Domain Object is successfully added ---->    Name:: " + specimenObj.getLabel());
+					   
+					   TissueSpecimen tissueSpecimen = new TissueSpecimen();
+					   tissueSpecimen.setId(specimenObj.getId());
+					   List resultList = appService.search(TissueSpecimen.class,tissueSpecimen);
+					   Logger.out.info(" Domain Object is successfully found ---->    Name:: " + specimenObj.getLabel());
+					   System.out.println("after  searching Anticipated  Specimen");
+					
+					   StorageContainer storageContainer= BaseTestCaseUtility.initStorageContainer();
+					   storageContainer.setCollectionProtocolCollection(new HashSet());
+					   storageContainer = (StorageContainer) appService.createObject(storageContainer); 
+					   assertTrue(" Domain Object is successfully added ---->    Name:: " + storageContainer.getId(), true);	
+					   tissueSpecimen=(TissueSpecimen) resultList.get(0);
+					  
+					   tissueSpecimen.setCollectionStatus("Pending");
+					   
+					   SpecimenPosition position = new SpecimenPosition();
+					   position.setPositionDimensionOne(1);
+					   position.setPositionDimensionTwo(3);
+					   position.setStorageContainer(storageContainer);
+					   tissueSpecimen.setSpecimenPosition(position);
+					   tissueSpecimen.setExternalIdentifierCollection(null);
+					   tissueSpecimen=(TissueSpecimen) appService.updateObject(tissueSpecimen);
+					   assertFalse(" Domain Object is successfully updated  ---->    Name:: " + storageContainer.getId(), true);
+					  
+					}
+					catch(Exception e)
+					{
+						System.out.println("Exception thrown testUpdateAnticipatedSpecimenWithPendingStatus");
+						System.out.println(e);
+						Logger.out.error(e.getMessage(),e);
+						e.printStackTrace();
+						assertTrue("Failed to update Container Location for due to pending status of specimen  ", true);
+					}
+					
+			}
+		 
 		 /**
 		  * Search Specimen located at given position 
 		  *
@@ -731,6 +833,7 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 		 * Get all position of storage container occupied by specimen
 		 *
 		 */
+		
 		public void testSearchOccupiedSpecimenPositions()
 		{
 				try
