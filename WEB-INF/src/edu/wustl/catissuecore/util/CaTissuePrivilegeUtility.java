@@ -13,8 +13,13 @@ import com.sun.java_cup.internal.runtime.Scanner;
 
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Site;
+import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.multiRepository.bean.SiteUserRolePrivilegeBean;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.dao.AbstractDAO;
+import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.security.PrivilegeCache;
 import edu.wustl.common.util.dbManager.DAOException;
 
@@ -39,9 +44,13 @@ public class CaTissuePrivilegeUtility
 	{
 		List<SiteUserRolePrivilegeBean> beans = new ArrayList<SiteUserRolePrivilegeBean>();
 		
-		Map<String, Set<String>> privileges = privilegeCache.getPrivilegesforPrefix(CollectionProtocol.class.getName()+"_");
+		//TODO remove the DB call
+		User user = Utility.getUser(privilegeCache.getLoginName());
+		user.getSiteCollection();
+				
+		Map<String, List<NameValueBean>> privileges = privilegeCache.getPrivilegesforPrefix(CollectionProtocol.class.getName()+"_");
 		
-		for(Entry<String, Set<String>> entry : privileges.entrySet())
+		for(Entry<String, List<NameValueBean>> entry : privileges.entrySet())
 		{
 			SiteUserRolePrivilegeBean bean = new SiteUserRolePrivilegeBean();
 			
@@ -52,12 +61,26 @@ public class CaTissuePrivilegeUtility
 			if(scanner.hasNextLong())
 			{
 				id = new Long(scanner.nextLong());
-				List<Long> idList = new ArrayList<Long>();
-				idList.add(id);
-				bean.setCpList(idList);
-				//TODO remove the DB call
-				bean.setUser(Utility.getUser(privilegeCache.getLoginName()));
-				bean.setRole("CUSTOM_ROLE");
+				CollectionProtocol cp = null;
+				
+				AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+				try
+				{
+					dao.openSession(null);
+					cp = (CollectionProtocol)dao.retrieve(CollectionProtocol.class.getName(), id);
+					cp.getSiteCollection();
+				}
+				finally
+				{
+					dao.closeSession();
+				}
+				
+				bean.setCollectionProtocol(cp);
+				bean.setUser(user);
+				NameValueBean nmv = new NameValueBean();
+				nmv.setName("CUSTOM_ROLE");
+				nmv.setValue("-1");
+				bean.setRole(nmv);
 				bean.setPrivileges(entry.getValue());
 				
 				beans.add(bean);
@@ -80,9 +103,13 @@ public class CaTissuePrivilegeUtility
 	{
 		List<SiteUserRolePrivilegeBean> beans = new ArrayList<SiteUserRolePrivilegeBean>();
 		
-		Map<String, Set<String>> privileges = privilegeCache.getPrivilegesforPrefix(Site.class.getName()+"_");
+		//TODO remove the DB call
+		User user = Utility.getUser(privilegeCache.getLoginName());
+		user.getSiteCollection();
+				
+		Map<String, List<NameValueBean>> privileges = privilegeCache.getPrivilegesforPrefix(Site.class.getName()+"_");
 		
-		for(Entry<String, Set<String>> entry : privileges.entrySet())
+		for(Entry<String, List<NameValueBean>> entry : privileges.entrySet())
 		{
 			SiteUserRolePrivilegeBean bean = new SiteUserRolePrivilegeBean();
 			
@@ -93,13 +120,30 @@ public class CaTissuePrivilegeUtility
 			if(scanner.hasNextLong())
 			{			
 				id = new Long(entry.getKey().substring(entry.getKey().lastIndexOf("_")+1));
+				Site site = null;
 				  
-				List<Long> idList = new ArrayList<Long>();
-				idList.add(id);
-				bean.setSiteList(idList);
-				//TODO remove the DB call
-				bean.setUser(Utility.getUser(privilegeCache.getLoginName()));
-				bean.setRole("CUSTOM_ROLE");
+				AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+				try
+				{
+					dao.openSession(null);
+					site = (Site)dao.retrieve(Site.class.getName(), id);
+					site.getCollectionProtocolCollection();
+					site.getAssignedSiteUserCollection();
+				}
+				finally
+				{
+					dao.closeSession();
+				}
+				
+				List<Site> siteList = new ArrayList<Site>();
+				siteList.add(site);
+				bean.setSiteList(siteList);
+				bean.setUser(user);
+				
+				NameValueBean nmv = new NameValueBean();
+				nmv.setName("CUSTOM_ROLE");
+				nmv.setValue("-1");
+				bean.setRole(nmv);
 				bean.setPrivileges(entry.getValue());
 				
 				beans.add(bean);
