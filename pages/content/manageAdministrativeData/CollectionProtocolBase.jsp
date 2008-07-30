@@ -17,6 +17,11 @@
 		{
 			formId=window.frames['SpecimenRequirementView'].document.getElementById('protocolEventDetailsForm');
 			var action = "SaveProtocolEvents.do?pageOf=newEvent&operation=add";
+			if(formId==null)
+			{
+				var formId=window.frames['SpecimenRequirementView'].document.getElementById('createSpecimenTemplateForm');
+				var action = "CreateSpecimenTemplate.do?pageOf=newEvent&operation=add";
+			}
 		}
 	    formId.action=action;
 	    formId.submit();

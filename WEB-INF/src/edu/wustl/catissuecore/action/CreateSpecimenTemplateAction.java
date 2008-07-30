@@ -182,7 +182,11 @@ public class CreateSpecimenTemplateAction extends BaseAction
 		CollectionProtocolBean collectionProtocolBean = (CollectionProtocolBean)session.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
 		request.setAttribute("isParticipantReg", collectionProtocolBean.isParticiapantReg());
 		request.setAttribute("opr", collectionProtocolBean.getOperation());
-
+		
+		if("newEvent".equals(pageOf))
+		{
+			return (mapping.findForward("newEvent"));
+		}
 		if(pageOf!=null&&pageOf.equals("error"))
 		{
 			return (mapping.findForward(Constants.SUCCESS));

@@ -4715,6 +4715,7 @@ PUBLIC
 			validate="false">
 			<forward name="success" path=".catissuecore.CreateSpecimenTemplate"/>
 			<forward name="defineEvents" path="/ProtocolEventsDetails.do?pageOf=defineEvents"/>
+			<forward name="newEvent" path="/ProtocolEventsDetails.do?pageOf=newEvent"/>
 		</action>
 		<action path="/GenericSpecimenSummary"
                 type="edu.wustl.catissuecore.action.ViewSpecimenSummaryAction"
