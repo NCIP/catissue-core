@@ -374,7 +374,7 @@
 					${requestScope.jsEquivalentFor}
 					<script language="JavaScript" type="text/javascript" src="jss/CustomListBox.js"></script>
 						<td class="black_ar" align = "left" colspan="4">
-									 <table border="0" cellpadding="0" cellspacing="0" align="left">
+									 <table border="0" cellpadding="2" cellspacing="0" align="left">
 									 <tr>
 									 <td>
 								<logic:equal name="${requestScope.oper}" value="${requestScope.ADD}">
@@ -508,9 +508,9 @@
                 <td width="35%" class="black_ar"><input type="checkbox" name="aliCheckedButton" onclick="onCheckboxButtonClick(this)" />
 						<bean:message key="specimen.aliquot.message"/></td>
                 <td width="25%" class="black_ar"><bean:message key="aliquots.noOfAliquots"/>
-					<input type="text" id="noOfAliquots" name="noOfAliquots" class = "formFieldSized5" disabled="true" /></td>
+					<input type="text" id="noOfAliquots" name="noOfAliquots" class = "formFieldSized5" style="text-align:right"disabled="true" /></td>
                 <td width="40%" class="black_ar"><bean:message key="specimenArrayAliquots.qtyPerAliquot"/>
-                  <input type="text" id="quantityPerAliquot" name="quantityPerAliquot" class = "formFieldSized5" disabled="true" /></td>
+                  <input type="text" id="quantityPerAliquot" name="quantityPerAliquot" class = "formFieldSized5" disabled="true" style="text-align:right"/></td>
 				  </logic:notEqual>
 				</logic:notEqual>
               </tr>
