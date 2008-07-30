@@ -42,8 +42,8 @@
               <stringProp name="9AF7D4145A73BF71B5B350AC16E96ACD">9AF7D4145A73BF71B5B350AC16E96ACD</stringProp>
             </collectionProp>
           </collectionProp>
-          <boolProp name="TestElement.per_iteration">true</boolProp>
           <boolProp name="UserParameters.per_iteration">false</boolProp>
+          <boolProp name="TestElement.per_iteration">true</boolProp>
         </UserParameters>
         <hashTree/>
         <LoopController guiclass="LoopControlPanel" testclass="LoopController" testname="Change Password and Login" enabled="true">
@@ -270,7 +270,7 @@
             <boolProp name="LoopController.continue_forever">true</boolProp>
           </LoopController>
           <hashTree>
-            <LoopController guiclass="LoopControlPanel" testclass="LoopController" testname="Add Department" enabled="true">
+            <LoopController guiclass="LoopControlPanel" testclass="LoopController" testname="Add Department" enabled="false">
               <stringProp name="LoopController.loops">1</stringProp>
               <boolProp name="LoopController.continue_forever">true</boolProp>
             </LoopController>
@@ -379,13 +379,13 @@
                     <stringProp name="1363616355">Department successfully created </stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <stringProp name="Assertion.assume_success">false</stringProp>
                   <intProp name="Assertion.test_type">2</intProp>
+                  <stringProp name="Assertion.assume_success">false</stringProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
             </hashTree>
-            <LoopController guiclass="LoopControlPanel" testclass="LoopController" testname="Add Institution" enabled="true">
+            <LoopController guiclass="LoopControlPanel" testclass="LoopController" testname="Add Institution" enabled="false">
               <stringProp name="LoopController.loops">1</stringProp>
               <boolProp name="LoopController.continue_forever">true</boolProp>
             </LoopController>
@@ -494,13 +494,13 @@
                     <stringProp name="1965068297">Institution successfully created </stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <stringProp name="Assertion.assume_success">false</stringProp>
                   <intProp name="Assertion.test_type">2</intProp>
+                  <stringProp name="Assertion.assume_success">false</stringProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
             </hashTree>
-            <LoopController guiclass="LoopControlPanel" testclass="LoopController" testname="Add CRG" enabled="true">
+            <LoopController guiclass="LoopControlPanel" testclass="LoopController" testname="Add CRG" enabled="false">
               <stringProp name="LoopController.loops">1</stringProp>
               <boolProp name="LoopController.continue_forever">true</boolProp>
             </LoopController>
@@ -609,8 +609,8 @@
                     <stringProp name="-1906811349">Cancer Research Group successfully created </stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <stringProp name="Assertion.assume_success">false</stringProp>
                   <intProp name="Assertion.test_type">2</intProp>
+                  <stringProp name="Assertion.assume_success">false</stringProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -1009,8 +1009,8 @@
                     <stringProp name="1270632584">Site successfully created</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <stringProp name="Assertion.assume_success">false</stringProp>
                   <intProp name="Assertion.test_type">2</intProp>
+                  <stringProp name="Assertion.assume_success">false</stringProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -1183,8 +1183,8 @@
                     <stringProp name="-1419323152">Storage Type successfully created</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <intProp name="Assertion.test_type">2</intProp>
                   <stringProp name="Assertion.assume_success">false</stringProp>
+                  <intProp name="Assertion.test_type">2</intProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -1360,8 +1360,8 @@
                     <stringProp name="-1419323152">Storage Type successfully created</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <intProp name="Assertion.test_type">2</intProp>
                   <stringProp name="Assertion.assume_success">false</stringProp>
+                  <intProp name="Assertion.test_type">2</intProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -1817,8 +1817,8 @@
                     <stringProp name="423828019">Storage Container successfully created</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <intProp name="Assertion.test_type">2</intProp>
                   <stringProp name="Assertion.assume_success">false</stringProp>
+                  <intProp name="Assertion.test_type">2</intProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -2260,8 +2260,8 @@
                     <stringProp name="423828019">Storage Container successfully created</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <stringProp name="Assertion.assume_success">false</stringProp>
                   <intProp name="Assertion.test_type">2</intProp>
+                  <stringProp name="Assertion.assume_success">false</stringProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -2570,8 +2570,8 @@
                     <stringProp name="-677639594">Specimen Array Type successfully created</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <stringProp name="Assertion.assume_success">false</stringProp>
                   <intProp name="Assertion.test_type">2</intProp>
+                  <stringProp name="Assertion.assume_success">false</stringProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -2696,8 +2696,8 @@
                     <stringProp name="-111862059">Biohazard successfully created</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <stringProp name="Assertion.assume_success">false</stringProp>
                   <intProp name="Assertion.test_type">2</intProp>
+                  <stringProp name="Assertion.assume_success">false</stringProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -4490,8 +4490,8 @@
                     <stringProp name="1231830005">Collection Protocol successfully created</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <intProp name="Assertion.test_type">2</intProp>
                   <stringProp name="Assertion.assume_success">false</stringProp>
+                  <intProp name="Assertion.test_type">2</intProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -4703,8 +4703,8 @@
                     <stringProp name="471465307">Distribution Protocol successfully created</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <intProp name="Assertion.test_type">2</intProp>
                   <stringProp name="Assertion.assume_success">false</stringProp>
+                  <intProp name="Assertion.test_type">2</intProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -5062,8 +5062,8 @@
                     <stringProp name="424883315">Access denied: You are not authorized to perform this operation.</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <stringProp name="Assertion.assume_success">false</stringProp>
                   <intProp name="Assertion.test_type">2</intProp>
+                  <stringProp name="Assertion.assume_success">false</stringProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -5737,8 +5737,8 @@
                     <stringProp name="-1133686692">Participant successfully created</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <stringProp name="Assertion.assume_success">false</stringProp>
                   <intProp name="Assertion.test_type">2</intProp>
+                  <stringProp name="Assertion.assume_success">false</stringProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -10169,8 +10169,8 @@
                     <stringProp name="-11260403">Specimen Collection Group successfully updated</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <stringProp name="Assertion.assume_success">false</stringProp>
                   <intProp name="Assertion.test_type">2</intProp>
+                  <stringProp name="Assertion.assume_success">false</stringProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -11502,8 +11502,8 @@
                     <stringProp name="-1767389327">Fluid Specimen successfully created</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <stringProp name="Assertion.assume_success">false</stringProp>
                   <intProp name="Assertion.test_type">2</intProp>
+                  <stringProp name="Assertion.assume_success">false</stringProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -12310,8 +12310,8 @@
                     <stringProp name="-11260403">Specimen Collection Group successfully updated</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <stringProp name="Assertion.assume_success">false</stringProp>
                   <intProp name="Assertion.test_type">2</intProp>
+                  <stringProp name="Assertion.assume_success">false</stringProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -13643,8 +13643,8 @@
                     <stringProp name="-228382324">Tissue Specimen successfully created</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <stringProp name="Assertion.assume_success">false</stringProp>
                   <intProp name="Assertion.test_type">2</intProp>
+                  <stringProp name="Assertion.assume_success">false</stringProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -14523,8 +14523,8 @@
                     <stringProp name="-11260403">Specimen Collection Group successfully updated</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <intProp name="Assertion.test_type">2</intProp>
                   <stringProp name="Assertion.assume_success">false</stringProp>
+                  <intProp name="Assertion.test_type">2</intProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -15897,8 +15897,8 @@
                     <stringProp name="-1445888681">Molecular Specimen successfully created</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <intProp name="Assertion.test_type">2</intProp>
                   <stringProp name="Assertion.assume_success">false</stringProp>
+                  <intProp name="Assertion.test_type">2</intProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -16777,8 +16777,8 @@
                     <stringProp name="-11260403">Specimen Collection Group successfully updated</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <stringProp name="Assertion.assume_success">false</stringProp>
                   <intProp name="Assertion.test_type">2</intProp>
+                  <stringProp name="Assertion.assume_success">false</stringProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -18210,8 +18210,8 @@
                     <stringProp name="262680905">Cell Specimen successfully created</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <stringProp name="Assertion.assume_success">false</stringProp>
                   <intProp name="Assertion.test_type">2</intProp>
+                  <stringProp name="Assertion.assume_success">false</stringProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -19863,8 +19863,8 @@
                     <stringProp name="-1445888681">Molecular Specimen successfully created</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <stringProp name="Assertion.assume_success">false</stringProp>
                   <intProp name="Assertion.test_type">2</intProp>
+                  <stringProp name="Assertion.assume_success">false</stringProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -19890,7 +19890,7 @@
               <boolProp name="LoopController.continue_forever">true</boolProp>
             </LoopController>
             <hashTree>
-              <LoopController guiclass="LoopControlPanel" testclass="LoopController" testname="Add Duplicate Department Object" enabled="true">
+              <LoopController guiclass="LoopControlPanel" testclass="LoopController" testname="Add Duplicate Department Object" enabled="false">
                 <stringProp name="LoopController.loops">1</stringProp>
                 <boolProp name="LoopController.continue_forever">true</boolProp>
               </LoopController>
@@ -19999,13 +19999,13 @@
                       <stringProp name="-1880121294">Submission failed since a Department with the same NAME already exists </stringProp>
                     </collectionProp>
                     <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                    <stringProp name="Assertion.assume_success">false</stringProp>
                     <intProp name="Assertion.test_type">2</intProp>
+                    <stringProp name="Assertion.assume_success">false</stringProp>
                   </ResponseAssertion>
                   <hashTree/>
                 </hashTree>
               </hashTree>
-              <LoopController guiclass="LoopControlPanel" testclass="LoopController" testname="Add Duplicate Institution Object" enabled="true">
+              <LoopController guiclass="LoopControlPanel" testclass="LoopController" testname="Add Duplicate Institution Object" enabled="false">
                 <stringProp name="LoopController.loops">1</stringProp>
                 <boolProp name="LoopController.continue_forever">true</boolProp>
               </LoopController>
@@ -20114,8 +20114,8 @@
                       <stringProp name="1087043956">Submission failed since a Institution with the same NAME already exists </stringProp>
                     </collectionProp>
                     <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                    <stringProp name="Assertion.assume_success">false</stringProp>
                     <intProp name="Assertion.test_type">2</intProp>
+                    <stringProp name="Assertion.assume_success">false</stringProp>
                   </ResponseAssertion>
                   <hashTree/>
                 </hashTree>
@@ -20514,8 +20514,8 @@
                       <stringProp name="-391259293">Submission failed since a Site with the same NAME already exists</stringProp>
                     </collectionProp>
                     <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                    <stringProp name="Assertion.assume_success">false</stringProp>
                     <intProp name="Assertion.test_type">2</intProp>
+                    <stringProp name="Assertion.assume_success">false</stringProp>
                   </ResponseAssertion>
                   <hashTree/>
                 </hashTree>
@@ -20688,8 +20688,8 @@
                       <stringProp name="-1578895819">Submission failed since a Container Type with the same NAME already exists</stringProp>
                     </collectionProp>
                     <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                    <intProp name="Assertion.test_type">2</intProp>
                     <stringProp name="Assertion.assume_success">false</stringProp>
+                    <intProp name="Assertion.test_type">2</intProp>
                   </ResponseAssertion>
                   <hashTree/>
                 </hashTree>
@@ -20998,8 +20998,8 @@
                       <stringProp name="-1578895819">Submission failed since a Container Type with the same NAME already exists</stringProp>
                     </collectionProp>
                     <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                    <stringProp name="Assertion.assume_success">false</stringProp>
                     <intProp name="Assertion.test_type">2</intProp>
+                    <stringProp name="Assertion.assume_success">false</stringProp>
                   </ResponseAssertion>
                   <hashTree/>
                 </hashTree>
@@ -21124,8 +21124,8 @@
                       <stringProp name="-1131048946">Submission failed since a Biohazard with the same NAME already exists</stringProp>
                     </collectionProp>
                     <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                    <stringProp name="Assertion.assume_success">false</stringProp>
                     <intProp name="Assertion.test_type">2</intProp>
+                    <stringProp name="Assertion.assume_success">false</stringProp>
                   </ResponseAssertion>
                   <hashTree/>
                 </hashTree>
@@ -21342,8 +21342,8 @@
                       <stringProp name="-517167999">Submission failed since a Specimen Protocol with the same TITLE already exists</stringProp>
                     </collectionProp>
                     <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                    <intProp name="Assertion.test_type">2</intProp>
                     <stringProp name="Assertion.assume_success">false</stringProp>
+                    <intProp name="Assertion.test_type">2</intProp>
                   </ResponseAssertion>
                   <hashTree/>
                 </hashTree>
@@ -21461,8 +21461,8 @@
                       <stringProp name="1104420832">Name is required</stringProp>
                     </collectionProp>
                     <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                    <intProp name="Assertion.test_type">2</intProp>
                     <stringProp name="Assertion.assume_success">false</stringProp>
+                    <intProp name="Assertion.test_type">2</intProp>
                   </ResponseAssertion>
                   <hashTree/>
                 </hashTree>
@@ -21574,8 +21574,8 @@
                       <stringProp name="1104420832">Name is required</stringProp>
                     </collectionProp>
                     <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                    <intProp name="Assertion.test_type">2</intProp>
                     <stringProp name="Assertion.assume_success">false</stringProp>
+                    <intProp name="Assertion.test_type">2</intProp>
                   </ResponseAssertion>
                   <hashTree/>
                 </hashTree>
@@ -21687,8 +21687,8 @@
                       <stringProp name="1104420832">Name is required</stringProp>
                     </collectionProp>
                     <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                    <intProp name="Assertion.test_type">2</intProp>
                     <stringProp name="Assertion.assume_success">false</stringProp>
+                    <intProp name="Assertion.test_type">2</intProp>
                   </ResponseAssertion>
                   <hashTree/>
                 </hashTree>
@@ -22087,8 +22087,8 @@
                       <stringProp name="1104420832">Name is required</stringProp>
                     </collectionProp>
                     <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                    <stringProp name="Assertion.assume_success">false</stringProp>
                     <intProp name="Assertion.test_type">2</intProp>
+                    <stringProp name="Assertion.assume_success">false</stringProp>
                   </ResponseAssertion>
                   <hashTree/>
                 </hashTree>
@@ -22101,7 +22101,7 @@
           <boolProp name="LoopController.continue_forever">true</boolProp>
         </LoopController>
         <hashTree>
-          <LoopController guiclass="LoopControlPanel" testclass="LoopController" testname="Edit Department" enabled="true">
+          <LoopController guiclass="LoopControlPanel" testclass="LoopController" testname="Edit Department" enabled="false">
             <stringProp name="LoopController.loops">1</stringProp>
             <boolProp name="LoopController.continue_forever">true</boolProp>
           </LoopController>
@@ -22317,13 +22317,13 @@
                   <stringProp name="582118192">Department successfully updated</stringProp>
                 </collectionProp>
                 <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                <stringProp name="Assertion.assume_success">false</stringProp>
                 <intProp name="Assertion.test_type">2</intProp>
+                <stringProp name="Assertion.assume_success">false</stringProp>
               </ResponseAssertion>
               <hashTree/>
             </hashTree>
           </hashTree>
-          <LoopController guiclass="LoopControlPanel" testclass="LoopController" testname="Edit Institution" enabled="true">
+          <LoopController guiclass="LoopControlPanel" testclass="LoopController" testname="Edit Institution" enabled="false">
             <stringProp name="LoopController.loops">1</stringProp>
             <boolProp name="LoopController.continue_forever">true</boolProp>
           </LoopController>
@@ -22539,13 +22539,13 @@
                   <stringProp name="-1061048118">Institution successfully updated</stringProp>
                 </collectionProp>
                 <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                <intProp name="Assertion.test_type">2</intProp>
                 <stringProp name="Assertion.assume_success">false</stringProp>
+                <intProp name="Assertion.test_type">2</intProp>
               </ResponseAssertion>
               <hashTree/>
             </hashTree>
           </hashTree>
-          <LoopController guiclass="LoopControlPanel" testclass="LoopController" testname="Edit CRG" enabled="true">
+          <LoopController guiclass="LoopControlPanel" testclass="LoopController" testname="Edit CRG" enabled="false">
             <stringProp name="LoopController.loops">1</stringProp>
             <boolProp name="LoopController.continue_forever">true</boolProp>
           </LoopController>
@@ -22761,8 +22761,8 @@
                   <stringProp name="338073192">Cancer Research Group successfully updated</stringProp>
                 </collectionProp>
                 <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                <intProp name="Assertion.test_type">2</intProp>
                 <stringProp name="Assertion.assume_success">false</stringProp>
+                <intProp name="Assertion.test_type">2</intProp>
               </ResponseAssertion>
               <hashTree/>
             </hashTree>
@@ -23064,8 +23064,8 @@
                   <stringProp name="1022050449">Site successfully updated for Testsite_updated</stringProp>
                 </collectionProp>
                 <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                <intProp name="Assertion.test_type">2</intProp>
                 <stringProp name="Assertion.assume_success">false</stringProp>
+                <intProp name="Assertion.test_type">2</intProp>
               </ResponseAssertion>
               <hashTree/>
             </hashTree>
@@ -23458,8 +23458,8 @@
                   <stringProp name="-1940624343">Specimen Array Type successfully updated</stringProp>
                 </collectionProp>
                 <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                <stringProp name="Assertion.assume_success">false</stringProp>
                 <intProp name="Assertion.test_type">2</intProp>
+                <stringProp name="Assertion.assume_success">false</stringProp>
               </ResponseAssertion>
               <hashTree/>
             </hashTree>
@@ -24109,8 +24109,8 @@
                   <stringProp name="1898295855">Participant successfully updated</stringProp>
                 </collectionProp>
                 <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                <intProp name="Assertion.test_type">2</intProp>
                 <stringProp name="Assertion.assume_success">false</stringProp>
+                <intProp name="Assertion.test_type">2</intProp>
               </ResponseAssertion>
               <hashTree/>
             </hashTree>
