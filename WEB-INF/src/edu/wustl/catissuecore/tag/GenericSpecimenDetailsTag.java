@@ -93,6 +93,7 @@ public class GenericSpecimenDetailsTag extends TagSupport
 	private String functionCall="";
 	
 	private int xtra=0;
+	private boolean isParentList = false;
 	SpecimenDetailsInfo specimenSummaryForm = null;
 //	--------------- Attribute Section end ------------
 
@@ -343,7 +344,8 @@ public class GenericSpecimenDetailsTag extends TagSupport
 		if(dataListType.equalsIgnoreCase(dataListTypes[0]))
 		{	
 			xtra = 3;	
-			functionCall = "onclick=\"onClickCollected(this)\"";
+			isParentList = true;
+			
 		}
 		return l;
 	}
@@ -540,6 +542,12 @@ public class GenericSpecimenDetailsTag extends TagSupport
 			}
 			else if(GenericSpecimenDetailsTag.COLUMN_NAMES[7].equalsIgnoreCase(columnList.get(counter).toString()))
 			{
+				//Mandar : to add collected functionality only for selected specimen
+				if(isParentList == true && specimenSummaryForm.getSelectedSpecimenId().equals(specimen.getUniqueIdentifier()))
+				{
+					functionCall = "onclick=\"onClickCollected(this)\"";
+				}
+				else{functionCall = "";}
 				createCollectedComponent(sb, nameValue, "getElement");				
 //				return sb.toString();
 			}
@@ -745,6 +753,13 @@ public class GenericSpecimenDetailsTag extends TagSupport
 			}
 			else if(GenericSpecimenDetailsTag.COLUMN_NAMES[7].equalsIgnoreCase(columnList.get(counter).toString()))
 			{
+//				Mandar : to add collected functionality only for selected specimen
+				if(isParentList == true && specimenSummaryForm.getSelectedSpecimenId().equals(specimen.getUniqueIdentifier()))
+				{
+					functionCall = "onclick=\"onClickCollected(this)\"";
+				}
+				else{functionCall = "";}
+
 				createCollectedComponent(sb, nameValue,"getTextElement");				
 			}
 			else
