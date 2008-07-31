@@ -1702,7 +1702,10 @@ Thanking You,
 			       	<fileset dir="${temp.dir}/catissuecore/WEB-INF/lib">
 						<include name="*.jar"/>
 			           		<exclude name="uml-1.3.jar"/>
-			         </fileset>					
+			         </fileset>		
+					<fileset dir="${lib.dir}">
+						<include name="*.jar" />
+					</fileset>
 			</classpath> 			
 		</java>		
 					
