@@ -66,3 +66,6 @@ ALTER TABLE DYEXTN_DATEPICKER ADD(DATE_VALUE_TYPE varchar(255) default NULL);
 
 --Add column to table DYEXTN_CONTROL
 ALTER TABLE  DYEXTN_CONTROL ADD(READ_ONLY tinyint(1) default NULL);
+
+--Insert into id generator starting count value
+INSERT INTO DYEXTN_ID_GENERATOR( ID,NEXT_AVAILABLE_ID) values(1,1900);
