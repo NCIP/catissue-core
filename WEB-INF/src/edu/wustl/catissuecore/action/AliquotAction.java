@@ -150,7 +150,7 @@ public class AliquotAction extends SecureAction
 	{
 		Map aliquotMap = aliquotForm.getAliquotMap();
 		String aliquotCount = aliquotForm.getNoOfAliquots();
-		Integer counter = Integer.parseInt(request.getParameter("rowNo"));
+		int counter = Integer.parseInt(request.getParameter("rowNo"));
 		String containerKey = "Specimen:" + counter + "_StorageContainer_id";
 		String containerName = (String) aliquotMap.get(containerKey);
 		boolean flag = true;
@@ -173,7 +173,11 @@ public class AliquotAction extends SecureAction
 					continue;
 				}
 				Map xDimMap = (Map) containerMap.get(containerId[i]);
-				i = StorageContainerUtil.setAliquotMap("Specimen",xDimMap, containerId, aliquotCount, counter, aliquotMap, i);
+				counter = StorageContainerUtil.setAliquotMap("Specimen",xDimMap, containerId, aliquotCount, counter, aliquotMap, i);
+				if (counter <= Integer.parseInt(aliquotCount))
+				{
+					i=containerId.length;
+				}
 			}
 		}
 		aliquotForm.setAliquotMap(aliquotMap);

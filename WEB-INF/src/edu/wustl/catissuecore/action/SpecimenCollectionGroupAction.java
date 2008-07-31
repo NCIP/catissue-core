@@ -1051,7 +1051,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 		String selectColumnName[] = {"protocolParticipantIdentifier"};
 		String whereColumnName[] = {"participant.id", "collectionProtocol.id"};
 		String whereColumnCondition[] = {"=", "="};
-		Object[] whereColumnValue = {participantId, cpId};
+		Object[] whereColumnValue = {new Long(participantId), new Long(cpId)};
 		List list = bizLogic.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue,
 				Constants.AND_JOIN_CONDITION);
 		if (list != null && !list.isEmpty())
