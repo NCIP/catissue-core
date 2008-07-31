@@ -95,7 +95,6 @@ public class RequirementSpecimenBizLogic extends DefaultBizLogic
 	{
 		Iterator<SpecimenRequirement> srIt = collectionProtocolEvent
 				.getSpecimenRequirementCollection().iterator();
-		RequirementSpecimenBizLogic reqSpecimenBizLogic = new RequirementSpecimenBizLogic();
 		Collection<SpecimenRequirement> oldReqspecimenCollection = null;
 		if (oldCollectionProtocolEvent != null)
 		{
@@ -112,7 +111,7 @@ public class RequirementSpecimenBizLogic extends DefaultBizLogic
 			if (specimenRequirement.getId() == null || specimenRequirement.getId() <= 0)
 			{
 				specimenRequirement.setCollectionProtocolEvent(collectionProtocolEvent);
-				reqSpecimenBizLogic.insert(specimenRequirement, dao, sessionDataBean);
+				insert(specimenRequirement, dao, sessionDataBean);
 			}
 			else
 			{
@@ -155,6 +154,36 @@ public class RequirementSpecimenBizLogic extends DefaultBizLogic
 		while(iterator.hasNext())
 		{
 			oldSpReq = (SpecimenRequirement)iterator.next();
+			if("New".equals(oldSpReq.getLineage()))
+			{
+				newSpReq  = (SpecimenRequirement)getCorrespondingOldObject(newReqSpecimenCollection, oldSpReq.getId());
+				if(newSpReq ==  null)
+				{
+					deleteRequirementSpecimen(dao,oldSpReq);
+				}
+				else
+				{
+					checkChildSpecimenDelete(dao, oldSpReq.getChildSpecimenCollection(),newSpReq.getChildSpecimenCollection());
+				}
+			}
+		}
+	}
+	/**
+	 * This method will check for delete specimen logic 
+	 * @param dao DAO Object
+	 * @param oldReqSpecimenCollection Old Specimen Requirement Object
+	 * @param newReqSpecimenCollection New Specimen Requirement Object
+	 * @throws DAOException Databse related exception
+	 */
+	private void checkChildSpecimenDelete(DAO dao,Collection oldReqSpecimenCollection, 
+			Collection newReqSpecimenCollection) throws DAOException
+	{
+		SpecimenRequirement oldSpReq = null;
+		SpecimenRequirement newSpReq = null;
+		Iterator<SpecimenRequirement> iterator = oldReqSpecimenCollection.iterator();
+		while(iterator.hasNext())
+		{
+			oldSpReq = (SpecimenRequirement)iterator.next();
 			newSpReq  = (SpecimenRequirement)getCorrespondingOldObject(newReqSpecimenCollection, oldSpReq.getId());
 			if(newSpReq ==  null)
 			{
@@ -162,7 +191,7 @@ public class RequirementSpecimenBizLogic extends DefaultBizLogic
 			}
 			else
 			{
-				checkSpecimenDelete(dao, oldSpReq.getChildSpecimenCollection(),newSpReq.getChildSpecimenCollection());
+				checkChildSpecimenDelete(dao, oldSpReq.getChildSpecimenCollection(),newSpReq.getChildSpecimenCollection());
 			}
 		}
 	}
