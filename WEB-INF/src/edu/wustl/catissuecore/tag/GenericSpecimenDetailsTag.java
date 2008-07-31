@@ -656,7 +656,7 @@ public class GenericSpecimenDetailsTag extends TagSupport
 				 		sb.append("</td>");
 				 		sb.append("<td>");
 				 			sb.append("<a href=\"#\" onclick=\""+functionCall+"\">");
-				 			sb.append("<img src=\"images\\Tree.gif\" border=\"0\" width=\"13\" height=\"15\" title=\'View storage locations\'>");
+				 			sb.append("<img src=\"images/Tree.gif\" border=\"0\" width=\"13\" height=\"15\" title=\'View storage locations\'>");
 				 			sb.append("</a>");
 				 			sb.append("<input type=\"hidden\" name=\""+nameValue[6]+"\" value=\""+nameValue[7]+"\" id=\""+containerId+"\">");
 				 		sb.append("</td>");
