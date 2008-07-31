@@ -659,6 +659,8 @@ public class DAGPanel {
 	 */
 	public void removeCustomFormula()	
 	{
+		HttpServletRequest request = flex.messaging.FlexContext.getHttpRequest();
+		HttpSession session = request.getSession();
 		IQuery query = m_queryObject.getQuery();
 		IConstraints c = query.getConstraints();
 		for(IExpression expression2 : c) 
@@ -670,6 +672,7 @@ public class DAGPanel {
 				if(operand instanceof ICustomFormula)
 				{
 					expression2.removeOperand(i);
+					session.removeAttribute(Constants.OUTPUT_TERMS_COLUMNS);
 					break;
 				}
 			}
