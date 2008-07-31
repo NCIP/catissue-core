@@ -68,7 +68,7 @@ public class ConflictParticipantSCGTreeAction extends BaseAction{
 	private List getReportQueueDataList(String reportQueueId) throws DAOException
 	{
 		ReportLoaderQueueBizLogic reportLoaderQueueBizLogic = (ReportLoaderQueueBizLogic)BizLogicFactory.getInstance().getBizLogic(ReportLoaderQueue.class.getName());
-	    List reportQueueList = (List)reportLoaderQueueBizLogic.retrieve(ReportLoaderQueue.class.getName(),Constants.SYSTEM_IDENTIFIER, reportQueueId);
+	    List reportQueueList = (List)reportLoaderQueueBizLogic.retrieve(ReportLoaderQueue.class.getName(),Constants.SYSTEM_IDENTIFIER, new Long(reportQueueId));
 		return reportQueueList;		
 	}
 	
