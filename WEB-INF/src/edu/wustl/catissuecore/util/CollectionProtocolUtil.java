@@ -597,7 +597,7 @@ public class CollectionProtocolUtil {
 
 		if (coordinatorsArr != null) {
 			for (int i = 0; i < coordinatorsArr.length; i++) {
-				if (coordinatorsArr[i] != -1) {
+				if (coordinatorsArr[i] >= 1) {
 					User coordinator = new User();
 					coordinator.setId(new Long(coordinatorsArr[i]));
 					coordinatorCollection.add(coordinator);
