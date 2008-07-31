@@ -82,111 +82,91 @@
 			<html:hidden property="reportAction" value="true"/>
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
   <tr>
-    <td class="td_color_bfdcf3">
-    <table width="100%" border="0" cellpadding="0" cellspacing="0" class="whitetable_bg">
+    <td class="td_color_bfdcf3"><table border="0" cellpadding="0" cellspacing="0">
       <tr>
-        <td width="100%" colspan="2" valign="top">
-        <table width="100%" border="0" cellspacing="0" cellpadding="0">
-            <tr>
-              <td colspan="3" valign="top" class="td_color_bfdcf3">
-              <table width="15%" border="0" cellpadding="0" cellspacing="0" background="images/uIEnhancementImages/table_title_bg.gif">
-                  <tr>
-                    <td width="74%"><span class="wh_ar_b">&nbsp;&nbsp;&nbsp;<bean:message key="distribution.name"/></span></td>
-                    <td width="26%" align="right"><img src="images/uIEnhancementImages/table_title_corner2.gif" width="31" height="24" /></td>
-                  </tr>
-              </table>
-			  </td>
-			  </tr>
-			  	<logic:equal name="pageOf" value="<%=Constants.PAGE_OF_DISTRIBUTION%>">
-			    <tr>
-				<td width="1%" valign="top" class="td_color_bfdcf3">&nbsp;</td>
-              <td width="9%" valign="top" class="td_tab_bg">&nbsp;</td>
-              <td width="90%" valign="bottom" class="td_color_bfdcf3" style="padding-top:4px;"><table width="100%" border="0" cellpadding="0" cellspacing="0">
-                  <tr>
-                    <td width="4%" class="td_tab_bg" >&nbsp;</td>
-                    <td width="6%" valign="bottom" background="images/uIEnhancementImages/tab_bg.gif" ><img src="images/uIEnhancementImages/tab_specimen_user_selected.gif" alt="Specimen Report" width="126" height="22" border="0" /></td>
-                    <td width="6%" valign="bottom" background="images/tab_bg.gif"><a href="SimpleQueryInterface.do?pageOf=pageOfArrayDistribution&aliasName=Distribution_array"> <img src="images/uIEnhancementImages/tab_array_user.gif" alt="Array Report" width="107" height="22" /></a></td>
-                    <td valign="bottom" background="images/uIEnhancementImages/tab_bg.gif">&nbsp;</td>
-                    <td width="1%" align="left" valign="bottom" class="td_color_bfdcf3" >&nbsp;</td>
-                  </tr>
-              </table>
-			  </td>
-            </tr>
-		</logic:equal>
+        <td class="td_table_head"><span class="wh_ar_b"><bean:message key="distribution.name"/>
+		</span></td>
+        <td><img src="images/uIEnhancementImages/table_title_corner2.gif" alt="Page Title - Distribution" width="31" height="24"></td>
+      </tr>
+    </table></td>
+  </tr>
+  <tr>
+    <td class="tablepadding"><table width="100%" border="0" cellpadding="0" cellspacing="0">
+	<logic:equal name="pageOf" value="<%=Constants.PAGE_OF_DISTRIBUTION%>">
+      <tr>
+        <td class="td_tab_bg" >
+			<img src="images/uIEnhancementImages/spacer.gif" alt="spacer" width="50" height="1"></td>
+			 <td valign="bottom" ><img src="images/uIEnhancementImages/tab_specimen_user_selected.gif" alt="Specimen Report" width="126" height="22" border="0" /></td>
+			 <td valign="bottom">
+				<a href="SimpleQueryInterface.do?pageOf=pageOfArrayDistribution&aliasName=Distribution_array"> <img src="images/uIEnhancementImages/tab_array_user.gif" alt="Array Report" width="107" height="22" /></a></td>
+	</logic:equal>
+	  
 		<logic:equal name="pageOf" value="<%=Constants.PAGE_OF_DISTRIBUTION_ARRAY%>">
 			    <tr>
-				<td width="1%" valign="top" class="td_color_bfdcf3">&nbsp;</td>
-              <td width="9%" valign="top" class="td_tab_bg">&nbsp;</td>
-              <td width="90%" valign="bottom" class="td_color_bfdcf3" style="padding-top:4px;"><table width="100%" border="0" cellpadding="0" cellspacing="0">
-                  <tr>
-                    <td width="4%" class="td_tab_bg" >&nbsp;</td>
-                    <td width="6%" valign="bottom" background="images/uIEnhancementImages/tab_bg.gif" ><a href="SimpleQueryInterface.do?pageOf=pageOfDistribution&aliasName=Distribution"><img src="images/uIEnhancementImages/tab_specimen_user.gif" alt="Specimen Report" width="126" height="22" border="0" /></a></td>
-                    <td width="6%" valign="bottom" background="images/tab_bg.gif"> <img src="images/uIEnhancementImages/tab_array_user_selected.gif" alt="Array Report" width="107" height="22" /></td>
-                    <td valign="bottom" background="images/uIEnhancementImages/tab_bg.gif">&nbsp;</td>
-                    <td width="1%" align="left" valign="bottom" class="td_color_bfdcf3" >&nbsp;</td>
-                   </tr>
-              </table>
-			  </td>
-            </tr>
+        <td class="td_tab_bg" >
+			<img src="images/uIEnhancementImages/spacer.gif" alt="spacer" width="50" height="1"></td>
+			 <td valign="bottom" ><a href="SimpleQueryInterface.do?pageOf=pageOfDistribution&aliasName=Distribution"><img src="images/uIEnhancementImages/tab_specimen_user.gif" alt="Specimen Report" width="126" height="22" border="0" /></a></td>
+                     <td valign="bottom"><img src="images/uIEnhancementImages/tab_array_user_selected.gif" alt="Array Report" width="107" height="22" /></td>
+                    
 		</logic:equal>
-		</table></td>
+			<td width="90%" valign="bottom" class="td_tab_bg">&nbsp;</td>
       </tr>
-	
-			
-			
-	<!-- NEW distribution REGISTRATION BEGINS-->
-	<tr>
-        <td colspan="2" class="td_color_bfdcf3" style="padding-left:10px; padding-right:10px; padding-bottom:10px;"><table width="100%" border="0" cellpadding="3" cellspacing="0" bgcolor="#FFFFFF">
-            <tr>
-              <td height="15" colspan="3" align="left"></td>
+    </table>
+      <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
+        <tr>
+          <td colspan="3" align="left" class="toptd"></td>
+        </tr>
+        <tr>
+          <td colspan="3" align="left" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;
+			<bean:message key="distribution.reportTitle"/>
+			</span></td>
+        </tr>
+        <tr>
+          <td colspan="3" align="left" class="showhide"><table width="100%" border="0" cellpadding="3" cellspacing="0" class="noneditable">
+              <tr>
+                <td width="17%"><label for="type"><strong>
+				<bean:message key="distribution.identifier"/></strong>  </label></td>
+				<td width="83%">- <%=distForm.getDistributionId()%></td>
+				</tr>
+              <tr>
+                <td>
+					<label for="type" class="noneditable"><strong><bean:message key="distribution.protocol"/> </strong></label></td>
+					<td>- <%=distForm.getDistributionProtocolTitle()%></td>
+					</tr>
+              <tr>
+                <td><label for="User"><strong><bean:message key="eventparameters.user"/>
+				</strong></label></td>
+                <td>- <%=distForm.getUserName()%></td>
+				</tr>
+              <tr>
+                <td><strong><bean:message key="eventparameters.dateofevent"/>
+				</strong></td>
+                <td>- <%=distForm.getDateOfEvent()%></td>
+				</tr>
+              <tr>
+                <td><strong><bean:message key="eventparameters.time"/>
+				</strong></td>
+                <td>- <%=distForm.getTimeInHours()%>:<%=distForm.getTimeInMinutes()%></td>
+				</td>
               </tr>
-            <tr>
-              <td width="80%" height="25" align="left" class="tr_bg_blue1"><span class="blue_ar_b">	
-			  <bean:message key="distribution.reportTitle"/></span></td>
-              <td width="16%" align="left" class="tr_bg_blue1">&nbsp;</td>
-              <td width="4%" height="25" align="left" class="tr_bg_blue1">&nbsp;</td>
-            </tr>
-            <tr>
-              <td colspan="3" align="left" style="padding-top:10px; padding-bottom:15px; padding-left:6px;"><table width="100%" border="0" cellspacing="0" cellpadding="3" bgcolor="#f6f6f6">
-                <tr>
-                  <td width="17%" class="noneditable"><label for="type" class="noneditable"><bean:message key="distribution.identifier"/>  </label></td>
-                  <td class="noneditable">- <%=distForm.getDistributionId()%></td>
-                </tr>
-                <tr>
-                  <td class="noneditable"><label for="type" class="noneditable"><bean:message key="distribution.protocol"/> </label></td>
-                  <td class="noneditable">- <%=distForm.getDistributionProtocolTitle()%></td>
-                </tr>
-                <tr>
-                  <td class="noneditable"><label for="User" class="noneditable"><bean:message key="eventparameters.user"/>  </label></td>
-                  <td class="noneditable">- <%=distForm.getUserName()%></td>
-                </tr>
-                <tr>
-                  <td class="noneditable"><bean:message key="eventparameters.dateofevent"/></td>
-                  <td class="noneditable">- <%=distForm.getDateOfEvent()%></td>
-                </tr>
-                <tr>
-                  <td class="noneditable"><bean:message key="eventparameters.time"/></td>
-                  <td class="noneditable">- <%=distForm.getTimeInHours()%>:<%=distForm.getTimeInMinutes()%></td>
-                </tr>
-                <tr>
-                  <td class="noneditable"><bean:message key="distribution.toSite"/></td>
-                  <td class="noneditable">- <%=distForm.getToSite()%> </td>
-                </tr>
-                <tr>
-                  <td class="noneditable"><bean:message key="eventparameters.comments"/></td>
-                  <td class="noneditable"><%=distForm.getComments()%></td>
-                </tr>
-                
-              </table></td>
-            </tr>
-	
-	
-	<tr>
+              <tr>
+                <td><strong><bean:message key="distribution.toSite"/>
+				</strong></td>
+                <td>- <%=distForm.getToSite()%> </td>
+				</tr>
+              <tr>
+                <td><strong><bean:message key="eventparameters.comments"/>
+				</strong></td>
+                <td>- <%=distForm.getComments()%></td>
+				</tr>
+          </table></td>
+        </tr>
+		<tr>
 
 	   <td colspan="3" align="left" style="padding-top:10px; padding-bottom:15px; padding-left:6px;">
 	<table cellpadding="3" cellspacing="0" border="0">
-		<tr id="hiddenCombo" rowspan="4">
-			<td class="formField" colspan="4">
+		<tr id="hiddenCombo" rowspan="2">
+			<td class="black_new" >
 <!-- Mandar : 434 : for tooltip -->
 	       		<html:select property="selectedColumnNames" styleClass="selectedColumnNames"  size="1" styleId="selectedColumnNames" multiple="true"
 				 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
@@ -201,44 +181,39 @@
            	 	</html:select>
         	</td>
 		</tr>
-		<tr rowspan = 4>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>									
-		</tr>
+		
 	</table>
-	
-	 <tr onclick="javascript:showHide('distributedItems')">
-              <td width="80%" height="25" align="left" class="tr_bg_blue1" ><span class="blue_ar_b"><bean:message key="distribution.distributedItem"/> </span></td>
-			  	
-				
-              <td height="25" align="right" class="tr_bg_blue1" colspan="2"><a href="#" id="imgArrow_distributedItems"><img   src="images/uIEnhancementImages/dwn_arrow1.gif" width="7" height="8" hspace="10" border="0" class="tr_bg_blue1" alt="Show Details" /></a></td>
-       </tr>
-	     <tr>
-              <td colspan="3" style="padding-top:10px;">
-			  <div id="distributedItems" style="display:none" >
-                <table width="100%" border="0" cellspacing="0" cellpadding="3">
-					<tr>
-						<td colspan="7" class="link" align="right">
-		<%
-						if(distForm.getDistributionType().intValue() == Constants.SPECIMEN_DISTRIBUTION_TYPE) 
-						{
-					%>
-						<img src="images/uIEnhancementImages/viewall_icon.gif" alt="View All" />&nbsp;
-						<a href="#" onclick="changeActionOnConfig()"><bean:message  key="buttons.configure" /></a></span>
-						<%
-						}
-					%>
-		</td>
-					</tr>
+	</td>
+	</tr>
+        <tr onclick="javascript:showHide('distributedItems')">
+          <td width="80%" align="left" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;
+		  <bean:message key="distribution.distributedItem"/> </span></td>
+		  
+		  <td width="20%" align="right" class="tr_bg_blue1"><a href="#" id="imgArrow_distributedItems"><img src="images/uIEnhancementImages/dwn_arrow1.gif" width="80" height="9" hspace="10" border="0" alt="Show Details"></a></td>
+        </tr>
+		
+		<tr>
+          <td colspan="3" class="showhide1"><div id="distributedItems" style="display:none" >
+		  <table width="100%" border="0" cellspacing="0" cellpadding="3">
+			<tr>
+			<td>&nbsp;</td>
+			<td colspan="<%=columnNames.length%>" align="right" nowrap >
+		  
+						<img src="images/uIEnhancementImages/viewall_icon.gif" alt="View All" />
+						<a href="#" onclick="changeActionOnConfig()" class="view">
+						<span class="view">
+						<bean:message  key="buttons.configure" /></span></a>
+						
+					</span></td>
+		</tr>
+
                   <tr class="tableheading">
-                    <td width="3%" align="left" class="black_ar_b">#</td>
+                    <td align="left" class="black_ar_b">#</td>
 					<% 
 				 		for(int i=0;i<columnNames.length;i++)
 				 		{
 				 	%>
-                    <td width="15%" align="left" class="black_ar_b"><%=columnNames[i]%></td>
+                    <td align="left" class="black_ar_b"><%=columnNames[i]%></td>
 						<%
 						}
 					%>
@@ -276,29 +251,27 @@
 				<%
 				 		}
 				 	%>
-				 	</tr>
+				 	
 				
                 </table>
 				</div></td>
               </tr>
-			    <tr class="td_color_F7F7F7">
-              <td height="20" colspan="3"></td>
-              </tr>
-            
-            <tr  class="td_color_F7F7F7">
-              <td colspan="3" class="buttonbg" style="padding-left:10px;">
-					<html:submit property="expButton"  onclick="changeAction()" >
+			   <tr >
+          <td colspan="3" class="toptd"></td>
+        </tr>
+			    <tr>
+          <td colspan="3" class="buttonbg">
+				<span class="blue_ar_b">
+					<html:submit property="expButton" onclick="changeAction()" >
 							<bean:message  key="buttons.export" />
 					</html:submit>
-			 </td>
-            
-              
-					
-            </tr>
-	  </td>
-	 </tr>
-	 </table>
-	 </td>
-   </tr>
+					</span>
+					&nbsp;&nbsp;|&nbsp; 
+					<html:link page="/ManageAdministrativeData.do" styleClass="cancellink">
+						<bean:message key="buttons.cancel" />
+					</html:link>
+        </tr>
+      </table></td>
+  </tr>
 </table>
 </html:form>			

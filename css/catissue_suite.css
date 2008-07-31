@@ -65,9 +65,10 @@ body {
 .black_ar {
 	font-family: verdana;
 	font-size: 11px;
-	color: #000000;
+	color: #171717;
 	vertical-align:middle;
-
+	margin:0px;
+	
 }
 
 .black_ar_t {
@@ -456,7 +457,7 @@ div.autocomplete {
   	font-family: verdana;
 	font-size: 11px;
 	color: #000000;
-	width:20em;
+	width:18em;
 	}
 
 	.formFieldSizedTime{ /* for the form elements themselves and with a constant width (on elements) */
