@@ -62,10 +62,12 @@ function updateCPTree()
  	 <html:hidden property="consentTierCounter"/>
   	 <html:hidden property="consentWaived"/>
 
-	<c:forEach var="counter" begin="0" end='${requestScope.noOfConsents -1}' step="1">
+	<logic:notEqual name="noOfConsents" value="0">
+		<c:forEach var="counter" begin="0" end='${requestScope.noOfConsents -1}' step="1">
 		 <html:hidden property="consentValue(ConsentBean:${counter}_statement)"/>
 	     <html:hidden property="consentValue(ConsentBean:${counter}_consentTierID)"/>
-	 </c:forEach>
+	 	</c:forEach>
+	</logic:notEqual>
 
 
 	<tr>
