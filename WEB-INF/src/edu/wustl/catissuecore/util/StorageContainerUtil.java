@@ -256,7 +256,7 @@ public class StorageContainerUtil
 
 		Integer xpos= null;
 		Integer ypos=null;
-		String containerName = storageContainer.getName();
+		Long containerId = storageContainer.getId();
 		if (storageContainerMap == null || storageContainerMap.isEmpty())
 		{
 			throw new DAOException("Storagecontainer information not found!");
@@ -275,8 +275,7 @@ public class StorageContainerUtil
 			{
 				nvb =(NameValueBean) yposIterator.next();
 				ypos= new Integer(nvb.getValue());
-				String containerValue = containerName +":"+ xpos+" ," +ypos;
-				
+				String containerValue = containerId.toString() +":"+ xpos+" ," +ypos;
 				if (!allocatedPositions.contains(containerValue))
 				{
 					LinkedList<Integer> positions = new LinkedList<Integer>();
