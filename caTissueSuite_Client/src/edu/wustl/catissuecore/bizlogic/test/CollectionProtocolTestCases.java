@@ -4,12 +4,13 @@ package edu.wustl.catissuecore.bizlogic.test;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.ConsentTier;
-import edu.wustl.catissuecore.domain.Institution;
+import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.logger.Logger;
@@ -31,7 +32,6 @@ public class CollectionProtocolTestCases extends CaTissueBaseTestCase
 		 {
 			 Logger.out.error(e.getMessage(),e);
 			 e.printStackTrace();
-			 //assertFalse("could not add object", true);
 			 fail("could not add object");
 		 }
 	}
@@ -58,7 +58,109 @@ public class CollectionProtocolTestCases extends CaTissueBaseTestCase
 	    	fail("Failed to update object");
 	    }
 	}
-   
+	public void testUpdateCollectionProtocolDeleteCollectionProtocolEvent()
+	{
+	    try 
+		{
+	    	CollectionProtocol collectionProtocol = (CollectionProtocol) TestCaseUtility.getObjectMap(CollectionProtocol.class);
+	    	Collection cpeCollection = collectionProtocol.getCollectionProtocolEventCollection();
+	    	Iterator itr = cpeCollection.iterator();
+	    	Collection collectionProtocolEventList = new LinkedHashSet();
+	    	collectionProtocolEventList.add(itr.next());
+	    	System.out.println(collectionProtocolEventList.size() + " : Collection Size");
+	    	collectionProtocol.setCollectionProtocolEventCollection(collectionProtocolEventList);
+	    	CollectionProtocol updatedCollectionProtocol = (CollectionProtocol)appService.updateObject(collectionProtocol);
+	    	Logger.out.info("Domain object successfully updated ---->"+updatedCollectionProtocol);
+	    	assertTrue("Domain object updated successfully", true);
+	    } 
+	    catch (Exception e)
+	    {
+	    	Logger.out.error(e.getMessage(),e);
+	    	System.out.println("TestCaseTesting.testdeleteCollectionProtocolEvent()"+ e.getMessage());
+	    	e.printStackTrace();
+	    	fail("Failed to update object");
+	    }
+	}
+	
+	public void testUpdateCollectionProtocolDeleteChildSpecimenRequirement()
+	{
+	    try 
+		{
+	    	CollectionProtocol collectionProtocol = (CollectionProtocol) TestCaseUtility.getObjectMap(CollectionProtocol.class);
+	    	Collection cpeCollection = collectionProtocol.getCollectionProtocolEventCollection();
+	    	Iterator itr = cpeCollection.iterator();
+	    	while(itr.hasNext())
+	    	{
+	    		CollectionProtocolEvent cpe = (CollectionProtocolEvent)itr.next();
+	    		Collection reqSpecimenCollection = cpe.getSpecimenRequirementCollection();
+	    		Iterator spReqItr = reqSpecimenCollection.iterator();
+	    		while(spReqItr.hasNext())
+	    		{
+	    			SpecimenRequirement spReq = (SpecimenRequirement)spReqItr.next();
+	    			if("Aliquot".equals(spReq.getLineage()))
+	    			{
+	    				spReqItr.remove();
+	    			}
+	    		}
+	    	}
+	    	
+	    	CollectionProtocol updatedCollectionProtocol = (CollectionProtocol)appService.updateObject(collectionProtocol);
+	    	Logger.out.info("Domain object successfully updated ---->"+updatedCollectionProtocol);
+	    	assertTrue("Domain object updated successfully", true);
+	    } 
+	    catch (Exception e)
+	    {
+	    	System.out.println("TestCaseTesting.testdeleteChildSpecimenRequirement() : " + e.getMessage());
+	    	e.printStackTrace();
+	    	fail("Failed to update object");
+	    }
+	}
+	
+	public void testUpdateCollectionProtocolAddCollectionProtocolEvent()
+	{
+	    try 
+		{
+	    	CollectionProtocol collectionProtocol = (CollectionProtocol) TestCaseUtility.getObjectMap(CollectionProtocol.class);
+	    	Collection cpeCollection = collectionProtocol.getCollectionProtocolEventCollection();
+	    	CollectionProtocolEvent collectionProtocolEvent = new CollectionProtocolEvent();
+			BaseTestCaseUtility.setCollectionProtocolEvent(collectionProtocolEvent);
+			collectionProtocolEvent.setCollectionProtocol(collectionProtocol);
+			cpeCollection.add(collectionProtocolEvent);
+	    	CollectionProtocol updatedCollectionProtocol = (CollectionProtocol)appService.updateObject(collectionProtocol);
+	    	Logger.out.info("Domain object successfully updated ---->"+updatedCollectionProtocol);
+	    	assertTrue("Domain object updated successfully", true);
+	    } 
+	    catch (Exception e)
+	    {
+	    	Logger.out.error(e.getMessage(),e);
+	        System.out.println("TestCaseTesting.testAddCollectionProtocolEvent() : "+ e.getMessage());
+	    	e.printStackTrace();
+	    	fail("Failed to update object");
+	    }
+	}
+	
+	public void testUpdateCollectionProtocolDeleteConsent()
+	{
+	    try 
+		{
+	    	CollectionProtocol collectionProtocol = (CollectionProtocol) TestCaseUtility.getObjectMap(CollectionProtocol.class);
+	    	Collection consentCollection = collectionProtocol.getConsentTierCollection();
+	    	Iterator<ConsentTier> itr = consentCollection.iterator();
+	    	itr.next();
+	    	itr.remove();
+	    	System.out.println(consentCollection.size() + " : Collection Size");
+	    	CollectionProtocol updatedCollectionProtocol = (CollectionProtocol)appService.updateObject(collectionProtocol);
+	    	Logger.out.info("Domain object successfully updated ---->"+updatedCollectionProtocol);
+	    	assertTrue("Domain object updated successfully", true);
+	    } 
+	    catch (Exception e)
+	    {
+	    	Logger.out.error(e.getMessage(),e);
+	    	System.out.println("TestCaseTesting.testdeleteCollectionProtocolEvent()"+ e.getMessage());
+	    	e.printStackTrace();
+	    	fail("Failed to update object");
+	    }
+	}
 	public void testSearchCollectionProtocol()
 	{
     	CollectionProtocol collectionProtocol = new CollectionProtocol();
