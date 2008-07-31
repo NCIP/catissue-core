@@ -119,7 +119,7 @@
 						</td>
 					</logic:notEqual>
 					&nbsp;
-					<td class="buttonbg" style="border-bottom:1px solid #61a1e3;border-right:1px solid #61a1e3;border-left:1px solid #61a1e3;">
+					<td class="buttonbg" colspan="2" style="border-bottom:1px solid #61a1e3;border-right:1px solid #61a1e3;border-left:1px solid #61a1e3;">
 					 <html:button styleClass="blue_ar_b" property="forwardPage" value="Save Collection Protocol" onclick="submitCP()">
 					</html:button>
 				   </td>
