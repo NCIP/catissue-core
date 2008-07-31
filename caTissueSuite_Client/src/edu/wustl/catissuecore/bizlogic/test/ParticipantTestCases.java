@@ -53,6 +53,33 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
 		 }
 	}
 	
+	public void testUpdateCPRAssociatedCPWithDeleteCollectionProtocolEvent()
+	{
+	    try 
+		{
+	    	CollectionProtocolRegistration cpr = (CollectionProtocolRegistration)TestCaseUtility.getObjectMap(CollectionProtocolRegistration.class);
+	    	CollectionProtocol collectionProtocol = cpr.getCollectionProtocol();
+	    	Collection cpeCollection = collectionProtocol.getCollectionProtocolEventCollection();
+	    	Iterator itr = cpeCollection.iterator();
+	    	Collection collectionProtocolEventList = new LinkedHashSet();
+	    	collectionProtocolEventList.add(itr.next());
+	    	collectionProtocol.setCollectionProtocolEventCollection(collectionProtocolEventList);
+	    	CollectionProtocol updatedCollectionProtocol = (CollectionProtocol)appService.updateObject(collectionProtocol);
+	    	Collection updatedCPECollection = updatedCollectionProtocol.getCollectionProtocolEventCollection();
+	    	if(updatedCPECollection.size()!= cpeCollection.size())
+	    	{
+	    		fail("User cannot not add/edit events");
+	    	}
+	    	assertTrue("User cannot not add/edit events", true);
+	    } 
+	    catch (Exception e)
+	    {
+	    	System.out.println("TestCaseTesting.testdeleteCollectionProtocolEvent()"+ e.getMessage());
+	    	e.printStackTrace();
+	    	fail("User cannot not add/edit events");
+	    }
+	}
+	
 	public void testSearchParticipant()
 	{
 		Participant participant = new Participant();
