@@ -50,6 +50,7 @@ create table DYEXTN_CATEGORY_ENTITY (
    CATEGORY_ASSOCIATION_ID bigint,
    PARENT_CATEGORY_ENTITY_ID bigint,
    REL_ATTR_CAT_ENTITY_ID bigint,
+   IS_CREATETABLE tinyint(1),
    primary key (IDENTIFIER)
 );
 
