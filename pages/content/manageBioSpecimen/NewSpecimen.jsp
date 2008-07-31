@@ -167,7 +167,7 @@
 		
 
 	}
-	
+	//this method is called when aliquot or derivative is selected
 	function onCheckboxButtonClick(radioButton)
 		{
 			var childSpecimenCount  = document.getElementById("noOfAliquots");
@@ -182,13 +182,6 @@
 				qtyPerAliquotTextBox.disabled = true;	
 				countForDerive.style.display="none";
 				countForAliquot.style.display="block";
-				//document.forms[0].deriveButton.disabled=true;
-				//document.forms[0].moreButton.disabled=true;				
-				//document.forms[0].noOfAliquots.disabled=false;
-				//document.forms[0].quantityPerAliquot.disabled=false;
-				//document.forms[0].addToCart.disabled=true;
-				
-								
 			}
 			else if(radioButton.value==2)
 			{
@@ -197,11 +190,6 @@
 				qtyPerAliquotTextBox.disabled = false;	
 				countForDerive.style.display="none";
 				countForAliquot.style.display="block";
-				//document.forms[0].deriveButton.disabled=false;
-				//document.forms[0].moreButton.disabled=false;				
-				//document.forms[0].noOfAliquots.disabled=true;
-				//document.forms[0].quantityPerAliquot.disabled=true;
-				//document.forms[0].addToCart.disabled=false;
 			}
 			else
 			{
@@ -404,7 +392,13 @@
 			var classSet = false;
 			if(classNameElement == "Fluid" || classNameElement == "Cell"||classNameElement == "Tissue"||classNameElement == "Molecular")
 			{
+				
 			    classSet = true;
+			}
+			else
+			{
+				alert("Please select the appropriate specimen class");
+				resetVirtualLocated();
 			}
 			var value;
 			
@@ -454,46 +448,12 @@
 				document.forms[0].submit();
 			}	
 		}
-		function setVirtuallyLocated(element)
-		{
-			var containerName = document.getElementById("customListBox_1_0");
-			var pos1 = document.getElementById("customListBox_1_1");
-			var pos2 = document.getElementById("customListBox_1_2");
-			if(element.checked)
-			{
-				containerName.disabled = true;
-				pos1.disabled = true;
-				
-				pos2.disabled = true;
-				document.forms[0].mapButton.disabled = true;
-			}
-			else
-			{
-				onCollOrClassChange();
-				/*containerName.disabled = false;
-				pos1.disabled = false;;
-				pos2.disabled = false;;
-				document.forms[0].mapButton.disabled = false;*/
-			}
-		}
-
+		//FUNCTION CALLED FOR RESETTING THE SELECT BOX TO VIRTUAL
 		function resetVirtualLocated()
-		{			
-			var radioArray = document.getElementsByName("stContSelection");	
-			radioArray[0].checked= true;
-			document.forms[0].selectedContainerName.readonly = true;
-			if(document.forms[0].pos1 != null)
-				document.forms[0].pos1.disabled = true;
-			if(document.forms[0].pos2 != null)
-				document.forms[0].pos2.disabled = true;
-			if(document.forms[0].containerMap != null)
-				document.forms[0].containerMap.disabled = true;
-			if(document.forms[0].customListBox_1_0 != null)
-				document.forms[0].customListBox_1_0.disabled = true;
-			if(document.forms[0].customListBox_1_1 != null)
-				document.forms[0].customListBox_1_1.disabled = true;
-			if(document.forms[0].customListBox_1_2 != null)
-				document.forms[0].customListBox_1_2.disabled = true;
+		{	
+			document.getElementById("stContSelection").value=1;
+			document.getElementById("autoDiv").style.display="none";
+			document.getElementById("manualDiv").style.display="none";
 		}
 		/**
  			* Name : Ashish Gupta
@@ -712,17 +672,8 @@
 
 	}
 	
-	//This function is for changing the behaviour of TABs
-	function updateTab(tab1, tab2)
-	{
-		tab1.onmouseover=null;
-		tab1.onmouseout=null;
-		tab1.className="tabMenuItemSelected";
 	
-		tab2.className="tabMenuItem";
-		tab2.onmouseover=function() { changeMenuStyle(this,'tabMenuItemOver'),showCursor();};
-		tab2.onmouseout=function() {changeMenuStyle(this,'tabMenuItem'),hideCursor();};
-	}
+	
 
 		//This function will Switch tab to newSpecimen page
 		function newspecimenPage()
@@ -817,10 +768,10 @@
 	    function setSize()
 	    {
 	
-		    var container = document.getElementById("Container");
+		  //  var container = document.getElementById("Container");
 			var tempWidth =document.body.clientWidth;
 		
-    	     container.style.width=tempWidth-50;
+    	   //  container.style.width=tempWidth-50;
         }
 
 		function consentTab()
@@ -840,11 +791,38 @@
 				}
 			%>
 		}
+	//Function called on storage position change
+    function onStorageRadioClickInSpecimen(element)
+	{
+		var autoDiv=document.getElementById("autoDiv");
+		var manualDiv=document.getElementById("manualDiv");
+
+		if(element.value==1)
+		{
+			autoDiv.style.display = 'none';
+			manualDiv.style.display = 'none';
+		}
+		else if(element.value==2)
+		{
+			autoDiv.style.display = 'block';
+			manualDiv.style.display = 'none';
+			onCollOrClassChange();
+		}
+		else
+		{
+			autoDiv.style.display = 'none';
+			manualDiv.style.display = 'block';
+			onCollOrClassChange();
+		}
+	}
+
+	
+
 	</script>
 	<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
 	<link href="css/styleSheet.css" rel="stylesheet" type="text/css" />
 </head>
-<body onload="setSize();newSpecimenInit();">
+<body>
 <% 
 		int exIdRows=1;
 		int bhRows=1;
@@ -1170,9 +1148,10 @@
 								 <autocomplete:AutoCompleteTag property="className"
 								  optionsList = "<%=request.getAttribute(Constants.SPECIMEN_CLASS_LIST)%>"
 								  initialValue="<%=form.getClassName()%>"
-								  onChange="onTypeChange(this);resetVirtualLocated()"
+								  onChange="onTypeChange(this)"
 								  readOnly="<%=classReadOnly%>"
-								  styleClass="formFieldSized12"
+								  size="27"
+								  styleClass="black_ar"
 							    />
 							</td>
 							
@@ -1218,7 +1197,8 @@
 										  optionsList = "<%=request.getAttribute(Constants.SPECIMEN_TYPE_MAP)%>"
 										  initialValue="<%=form.getType()%>" onChange="<%=subTypeFunctionName%>"
 										  readOnly="<%=readOnlyForAliquot%>" dependsOn="<%=form.getClassName()%>"
-										  styleClass="formFieldSized12"
+										  size="27"
+										  styleClass="black_ar"
 										/>
 								</td>
 							</tr>
@@ -1238,20 +1218,17 @@
 										<bean:message key="specimen.tissueSite"/>
 									</label>
 								</td>
-								<td align="left" class="black_new">
-									<autocomplete:AutoCompleteTag property="tissueSite" size="150"
+								<td align="left" class="black_new" nowrap>
+									<autocomplete:AutoCompleteTag property="tissueSite" size="27"
 										  optionsList = "<%=request.getAttribute(Constants.TISSUE_SITE_LIST)%>"
 	 									  initialValue="<%=form.getTissueSite()%>" readOnly="<%=readOnlyForAliquot%>"
-										  styleClass="formFieldSized12"
+										  styleClass="black_ar"
 										/>
 									<span class="black_ar">
 					<%
 							String url = "ShowFramedPage.do?pageOf=pageOfTissueSite&propertyName=tissueSite&cdeName=Tissue Site";
 					%>					<a href="#"																						onclick="NewWindow('<%=url%>','tissuesite','360','525','no');return							false">
-											<img src="images/uIEnhancementImages/ic_cl_diag.gif" alt="Clinical Diagnosis" width="16" height="16" border="0" />
-										</a>
-									</span>
-								</td>
+											<img src="images/uIEnhancementImages/ic_cl_diag.gif" alt="Clinical Diagnosis" width="16" height="16" border="0"/></a></span></td>
 								
 			                    <td align="center" class="black_ar">
 				<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">
@@ -1270,7 +1247,8 @@
 									<autocomplete:AutoCompleteTag property="tissueSide"
 										optionsList = "<%=request.getAttribute(Constants.TISSUE_SIDE_LIST)%>"
 										initialValue="<%=form.getTissueSide()%>" readOnly="<%=readOnlyForAliquot%>"
-										styleClass="formFieldSized12"
+										styleClass="black_ar"
+										size="27"
 										/>
 								</td>
 							</tr>
@@ -1294,7 +1272,8 @@
 										optionsList="<%=request.getAttribute(Constants.PATHOLOGICAL_STATUS_LIST)%>"
 										initialValue="<%=form.getPathologicalStatus()%>"
 										 readOnly="<%=readOnlyForAliquot%>"
-										 styleClass="formFieldSized12"
+										 styleClass="black_ar"
+										 size="27"
 										/>
 					        	</td>
 				</logic:notEqual>
@@ -1304,7 +1283,8 @@
 										optionsList="<%=request.getAttribute(Constants.PATHOLOGICAL_STATUS_LIST)%>"
 										initialValue="<%=form.getPathologicalStatus()%>"
 										readOnly="<%=readOnlyForAliquot%>"
-										styleClass="formFieldSized12"
+										styleClass="black_ar"
+										size="27"
 										/>
 						        </td>	
 				</logic:equal>
@@ -1416,7 +1396,8 @@
 									<autocomplete:AutoCompleteTag property="collectionStatus"
 										optionsList = "<%=request.getAttribute(Constants.COLLECTIONSTATUSLIST)%>"
 										initialValue="<%=form.getCollectionStatus()%>" onChange="<%=strCheckStatus%>"
-										styleClass="formFieldSized12"
+										styleClass="black_ar"
+										size="27"
 										/>
 								</td>
 								
@@ -1508,19 +1489,22 @@
 										 int radioSelected = form.getStContSelection();
 										boolean dropDownDisable = false;
 										boolean textBoxDisable = false;
-										
+										String autoDisplayStyle= null;
+										String manualDisplayStyle=null;
 										if(radioSelected == 1)
 										{
-											dropDownDisable = true;
-											textBoxDisable = true;
+											autoDisplayStyle = "display:none";
+											manualDisplayStyle = "display:none";
 										}
 										else if(radioSelected == 2)
 										{									
-											textBoxDisable = true;
+											autoDisplayStyle = "display:block";
+											manualDisplayStyle = "display:none";
 										}
 										else if(radioSelected == 3)
 										{
-											dropDownDisable = true;									
+											autoDisplayStyle = "display:none";
+											manualDisplayStyle = "display:block";							
 										}
 										
 										
@@ -1533,106 +1517,81 @@
 						
 									<script language="JavaScript" type="text/javascript" src="jss/CustomListBox.js"></script>
 								<td colspan="4" >
+					<!-------Select Box Begins----->
 
-								<table border="0" cellpadding="0" cellspacing="0">
-								<tr >
-								
-								<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
-									<td class="tabletd1">
-									<html:radio value="1" onclick="onRadioButtonGroupClick(this)" styleId="stContSelection" property="stContSelection"/></td>
-												<td class="black_ar tabletd1">											
-														<bean:message key="specimen.virtuallyLocated" />		
-												</td>
-												<td class="black_ar tabletd1">&nbsp;</td>
-											</tr>
-											<tr>
-												<td class="tabletd1"><html:radio value="2" onclick="onRadioButtonGroupClick(this)" styleId="stContSelection" property="stContSelection"/></td>
-												<td class="black_ar tabletd1">
-													<ncombo:nlevelcombo dataMap="<%=dataMap%>" 
-														attributeNames="<%=attrNames%>" 
-														tdStyleClassArray="<%=tdStyleClassArray%>"
-														initialValues="<%=initValues%>"  
-														styleClass = "<%=styClass%>" 
-														tdStyleClass = "<%=tdStyleClass%>" 
-														labelNames="<%=labelNames%>" 
-														rowNumber="<%=rowNumber%>" 
-														onChange = "<%=onChange%>"
-														formLabelStyle="formLabelBorderless"
-														disabled = "<%=dropDownDisable%>"
-														noOfEmptyCombos = "<%=noOfEmptyCombos%>"/>
-														</tr>
-														</table>
-												</td>
-												<td class="tabletd1">&nbsp;</td>
-											</tr>
-											<tr>
-												<td class="tabletd1"><html:radio value="3" onclick="onRadioButtonGroupClick(this)" styleId="stContSelection" property="stContSelection"/></td>
-												<td class="tabletd1">
-													<html:text styleClass="black_ar"  size="30" styleId="selectedContainerName" property="selectedContainerName" disabled= "<%=textBoxDisable%>"/>
-													<html:text styleClass="black_ar"  size="5" styleId="pos1" property="pos1" disabled= "<%=textBoxDisable%>"/>
-													<html:text styleClass="black_ar"  size="5" styleId="pos2" property="pos2" disabled= "<%=textBoxDisable%>"/>
-													<html:button styleClass="blue_ar_g" property="containerMap" onclick="<%=buttonOnClicked%>" disabled= "<%=textBoxDisable%>">
-														<bean:message key="buttons.map"/>
-													</html:button>
-												</td>
-												<td class="black_ar tabletd1">&nbsp;</td>
-											</tr>
-											
-											</logic:equal>	
-											<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">		
-											
-											<%
+								<table border="0" cellpadding="3" cellspacing="0" width="100%">
+					<%
 												NewSpecimenForm newSpecimenForm=(NewSpecimenForm)request.getAttribute("newSpecimenForm");
 												String showContainer = (String) request.getAttribute("showContainer");
-												if(showContainer!=null&&showContainer.equals("Pending"))
-												{%>
-												<tr>
-													<td class="tabletd1"><html:radio value="1" onclick="onRadioButtonGroupClick(this)" styleId="stContSelection" property="stContSelection"/></td>
-														<td class="black_ar tabletd1">																			
-														<bean:message key="specimen.virtuallyLocated" />											
-													</td>
-												</tr>								
-												<tr>
-												<td class="tabletd1"><html:radio value="2" onclick="onRadioButtonGroupClick(this)" styleId="stContSelection" property="stContSelection"/></td>
-											<td class="black_ar tabletd1">
-													<ncombo:nlevelcombo dataMap="<%=dataMap%>" 
+					%>
+<% if( operation.equals("add") || (showContainer!=null&&showContainer.equals("Pending")))
+{%>
+
+								<tr >
+								<td width="20%">
+								
+								<html:select property="stContSelection" styleClass="black_new"
+											styleId="stContSelection" size="1"	onmouseover="showTip(this.id)"
+											onmouseout="hideTip(this.id)" onchange="onStorageRadioClickInSpecimen(this)">
+											<html:options collection="storageList"
+														labelProperty="name" property="value" />
+			</html:select> 
+			
+		</td>
+		<td width="80%" >
+			<div Style="<%=autoDisplayStyle%>" id="autoDiv" >
+									<ncombo:nlevelcombo dataMap="<%=dataMap%>" 
 														attributeNames="<%=attrNames%>" 
 														tdStyleClassArray="<%=tdStyleClassArray%>"
 														initialValues="<%=initValues%>"  
-														styleClass = "<%=styClass%>" 
-														tdStyleClass = "<%=tdStyleClass%>" 
+														styleClass = "black_new" 
+														tdStyleClass = "black_new" 
 														labelNames="<%=labelNames%>" 
 														rowNumber="<%=rowNumber%>" 
 														onChange = "<%=onChange%>"
-														formLabelStyle="formLabelBorderless"
-														disabled = "<%=dropDownDisable%>"
+														formLabelStyle="nComboGroup"
+														disabled = "false"
 														noOfEmptyCombos = "<%=noOfEmptyCombos%>"/>
 														</tr>
 														</table>
-												</td>
-											</tr>
-													<tr>	
-												<td class="tabletd1"><html:radio value="3" onclick="onRadioButtonGroupClick(this)" styleId="stContSelection" property="stContSelection"/></td>
-												<td class="formFieldNoBordersSimple">
-													<html:text styleClass="black_ar"  size="30" styleId="selectedContainerName" property="selectedContainerName" disabled= "<%=textBoxDisable%>"/>
-													<html:text styleClass="black_ar"  size="5" styleId="pos1" property="pos1" disabled= "<%=textBoxDisable%>"/>
-													<html:text styleClass="black_ar"  size="5" styleId="pos2" property="pos2" disabled= "<%=textBoxDisable%>"/>
-													<html:button styleClass="blue_ar_g" property="containerMap" onclick="<%=buttonOnClicked%>" disabled= "<%=textBoxDisable%>">
-														<bean:message key="buttons.map"/>
-													</html:button>
-												</td>
-													</tr>	
-													
-												
-												<%}									
-												else
-												{	
+			</div>
+			<div style="<%=manualDisplayStyle%>" id="manualDiv">
+				<table cellpadding="0" cellspacing="0" border="0" >
+						<tr>
+							<td class="groupelements">
+								<html:text styleClass="black_ar"  size="20" styleId="selectedContainerName" property="selectedContainerName" disabled= "false"/>
+							</td>
+							<td class="groupelements">
+								<html:text styleClass="black_ar"  size="2" styleId="pos1" property="pos1" disabled= "false"/>
+							</td>
+							<td class="groupelements">
+								<html:text styleClass="black_ar"  size="2" styleId="pos2" property="pos2" disabled= "false"/>
+							</td>
+							<td class="groupelements">
+								<html:button styleClass="blue_ar" property="containerMap" onclick="<%=buttonOnClicked%>" disabled= "false">
+											<bean:message key="buttons.map"/>
+								</html:button>
+							</td>
+						</tr>
+					</table>
+			</div>
+		</td>
+		</tr>
+		
+<%}%>
+
+											<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">		
+											
+										<% if(showContainer!=null&&showContainer.equals("Pending"))
+										{
+										}
+										else{%>
+												<%	
 												if((newSpecimenForm.getStorageContainer().equals("")||newSpecimenForm.getStorageContainer().equals("-1"))&&newSpecimenForm.getCollectionStatus().equals("Collected"))
 												{%>
 												<tr>
-													<td class="tabletd1"><html:radio value="1" onclick="onRadioButtonGroupClickForDerived(this)" styleId="stContSelection" property="stContSelection"/></td>
-														<td class="black_ar tabletd1">																			
-														<bean:message key="specimen.virtuallyLocated" />											
+														<td class="black_ar" colspan="2">																			
+														<bean:message key="specimen.virtualLocation" />										
 													</td>
 												</tr>		
 													<%
@@ -1640,17 +1599,30 @@
 													else{
 													%>																
 													<tr>											
-														<td class="tabletd1" colspan="3">
+														<td colspan="2">
+														<table cellpadding="0" cellspacing="0" border="0" >
+						<tr>
+							<td class="groupelements">
 															<html:text styleClass="black_ar"  size="30" styleId="selectedContainerName" property="selectedContainerName" readonly= "true"/>
-															<html:text styleClass="black_ar"  size="5" styleId="positionDimensionOne" property="positionDimensionOne" readonly= "true"/>
-															<html:text styleClass="black_ar"  size="5" styleId="positionDimensionTwo" property="positionDimensionTwo" readonly= "true"/>
+														</td>
+							<td class="groupelements">
+															<html:text styleClass="black_ar"  size="2" styleId="positionDimensionOne" property="positionDimensionOne" readonly= "true" style="text-align:right"/>
+											</td>
+							<td class="groupelements">
+															<html:text styleClass="black_ar"  size="2" styleId="positionDimensionTwo" property="positionDimensionTwo" readonly= "true" style="text-align:right"/>
+													</td>
+							<td class="groupelements">
 															<html:button styleClass="blue_ar_g" property="containerMap" onclick="<%=buttonOnClicked%>" disabled= "true">
 																<bean:message key="buttons.map"/>
 															</html:button>
+													</td>
+												</tr>
+											</table>
 														</td>
+
 													</tr>		
 													<% }
-											}%>
+										}%>
 											
 											</logic:notEqual>	
 											
@@ -1709,7 +1681,7 @@
 							</td>
 							</tr>
 							<!--  Consent Tracking Module Virender mehta	 -->								<tr>
-							<td>
+							<td >
 								<%
 								List requestParticipantResponse = (List)request.getAttribute(Constants.SPECIMEN_RESPONSELIST);	
 								if(requestParticipantResponse!=null&&form.getConsentTierCounter()>0)
@@ -1722,7 +1694,7 @@
 								%>
 							<!--  Consent Tracking Module Virender mehta	 -->										
 			 				</tr></td>
-								
+			<tr><td class="bottomtd"></td></tr>					
         <tr>
           <td valign="middle" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;<bean:message key="childSpecimen.label" /></span></td>
         </tr>
@@ -1740,7 +1712,7 @@
 									&nbsp;
 										<input type="radio" value="3" id="deriveChk" name="specimenChild" onclick="onCheckboxButtonClick(this)"/>
 										<bean:message key="specimen.derivative" />
-										<!--<html:text styleClass="black_ar" maxlength="50" size="30" styleId="numberOfSpecimens" property="numberOfSpecimens" style="text-align:right"/>-->
+										
 									</td>
 								</tr>	
 								 

@@ -28,11 +28,46 @@
         formAction = Constants.SPECIMENARRAY_ADD_ACTION;
     }
 %>	
+<script>
+function toStoragePositionChange(element)
+{
+	var autoDiv=document.getElementById("auto");
+	var manualDiv=document.getElementById("manual");
+
+	if(element.value == 1)
+	{
+		autoDiv.style.display = 'block';
+		manualDiv.style.display = 'none';
+	}
+	else
+	{
+		autoDiv.style.display = 'none';
+		manualDiv.style.display = 'block';
+	}
+}
+
+function checkStotagePosition()
+{
+	var selectBox=document.getElementById("stContSelection");
+	var autoDiv=document.getElementById("auto");
+	var manualDiv=document.getElementById("manual");
+	if(selectBox.value == 1)
+	{
+		autoDiv.style.display = 'block';
+		manualDiv.style.display = 'none';
+	}
+	else
+	{
+		autoDiv.style.display = 'none';
+		manualDiv.style.display = 'block';
+	}
+}
+</script>
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/CustomListBox.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/Hashtable.js"></script>
 
-
+<body onload="checkStotagePosition()">
 <html:form action="<%=formAction%>">
 <html:hidden property="id" />
 <html:hidden property="operation" value="<%=operation%>"/>
@@ -46,110 +81,143 @@
 <html:hidden  property="isDefinedArray" value="<%=form.getIsDefinedArray()%>"/>
 <html:hidden  property="newArrayOrderItemId" value="<%=form.getNewArrayOrderItemId()%>"/>	
 
-<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="100%">
-<tr>
-	<td>
-		<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
-			<tr>
-				<td class="formMessage" colspan="3">* indicates a required field</td>
-			</tr>
-			
-			<tr>
-				<td class="formTitle" height="20" colspan="6">
-					<logic:equal name="operation" value="<%=Constants.ADD%>">
+<!-----------New Code Begins----------------->
+
+<table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
+  <tr>
+    <td class="td_color_bfdcf3"><table border="0" cellpadding="0" cellspacing="0">
+      <tr>
+        <td class="td_table_head">
+			<span class="wh_ar_b">
+				<bean:message key="SpecimenArray.header" />
+				</span></td>
+        <td><img src="images/uIEnhancementImages/table_title_corner2.gif" alt="Page Title - Specimen Array" width="31" height="24" /></td>
+      </tr>
+    </table></td>
+  </tr>
+  <tr>
+    <td class="tablepadding"><table width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr>
+        <td width="90%" valign="bottom" class="td_tab_bg">&nbsp;</td>
+      </tr>
+    </table>
+    <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
+        <tr>
+          <td colspan="2" align="left" class=" grey_ar_s">&nbsp;<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
+			<bean:message key="commonRequiredField.message" />
+			</td>
+        </tr>
+        <tr>
+          <td colspan="2" align="left" class="tr_bg_blue1"><span class="blue_ar_b"> &nbsp;
+			<logic:equal name="operation" value="<%=Constants.ADD%>">
 						<bean:message key="array.title"/>
 					</logic:equal>
 					<logic:equal name="operation" value="<%=Constants.EDIT%>">
 						<bean:message key="array.editTitle"/>
 					</logic:equal>
+					</span>
 				</td>
 			</tr>
-
 			<tr>
-				<td class="formRequiredNotice" width="5">*</td>
-				<td class="formRequiredLabelWithoutBorder">
+          <td colspan="2" align="left" class="showhide"><table width="100%" border="0" cellpadding="3" cellspacing="0">
+             <tr>
+                <td width="1%" align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
+                <td width="17%" align="left" class="black_ar">
 					<label for="specimenArrayType">
 						<bean:message key="array.arrayType" />
 					</label>
 				</td>
-				<td class="formField">
-					<html:select property="specimenArrayTypeId" styleClass="formFieldVerySmallSized" styleId="state" size="1" onchange="changeArrayType()">
+				<td width="18%" align="left" class="black_new" nowrap><html:select property="specimenArrayTypeId" styleClass="formFieldSizedNew" styleId="state" size="1" onchange="changeArrayType()">
 						<html:options collection="<%=Constants.SPECIMEN_ARRAY_TYPE_LIST%>" labelProperty="name" property="value"/>
-					</html:select>
-					
-					<html:link href="#" styleId="newSpecimenArrayType" onclick="addNewAction('SpecimenArrayAddNew.do?addNewForwardTo=specimenarraytype&forwardTo=specimenarray&addNewFor=specimenArrayTypeId&subOperation=ChangeArraytype')">
+					</html:select></td>
+                <td width="16%" align="left">
+					<html:link href="#" styleId="newSpecimenArrayType" styleClass="view" onclick="addNewAction('SpecimenArrayAddNew.do?addNewForwardTo=specimenarraytype&forwardTo=specimenarray&addNewFor=specimenArrayTypeId&subOperation=ChangeArraytype')">
 							<bean:message key="buttons.addNew" />
 					</html:link>
-					
 				</td>
-
-				<td class="formRequiredNoticeWithoutLeftBorder" width="5">*</td>
-				<td class="formRequiredLabelWithoutBorder">
+                <td width="1%" align="center"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
+                <td width="17%" align="left" class="black_ar">
 					<label for="createdBy">
 						<bean:message key="array.createdBy" />
 					</label>
 				</td>
-				<td class="formField">
-					<html:select property="createdBy" styleClass="formFieldVerySmallSized" styleId="state" size="1">
+                <td width="20%" align="left" class="black_new" nowrap>
+					<html:select property="createdBy" styleClass="formFieldSizedNew" styleId="state" size="1">
 						<html:options collection="<%=Constants.USERLIST%>" labelProperty="name" property="value"/>
 					</html:select>
 				</td>
-			</tr>
-			<tr>
-				<td class="formRequiredNotice" width="5">*</td>
-				<td class="formRequiredLabelWithoutBorder">
+				<td width="10%" align="left" valign="top">&nbsp;</td>
+              </tr>
+              <tr>
+                <td align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
+                <td align="left" class="black_ar">
 					<label for="arrayLabel">
 						<bean:message key="array.arrayLabel" />
 					</label>
 				</td>
-				<td class="formField">
-					<html:text styleClass="formFieldVerySmallSized"  maxlength="name"  size="20" styleId="name" property="name"/>
+				<td align="left">
+					<html:text styleClass="black_ar"  maxlength="name"  size="30" styleId="name" property="name"/>
 				</td>
-
-				<td class="formRequiredNoticeWithoutLeftBorder" width="5">&nbsp;</td>
-				<td class="formRequiredLabelWithoutBorder">
+				<td align="left" class="black_ar">&nbsp;</td>
+                <td align="center" class="black_ar">&nbsp;</td>
+                <td align="left" class="black_ar">
 					<label for="barcode">
 						<bean:message key="array.barcode"/> 
 					</label>
 				</td>
-				<td class="formField">
-					<html:text styleClass="formFieldVerySmallSized"  maxlength="255"  size="30" styleId="barcode" property="barcode"/>
+				<td align="left">
+					<html:text styleClass="black_ar"  maxlength="255"  size="30" styleId="barcode" property="barcode"/>
 				</td>
-			</tr>
-
-			<tr>
-				<td class="formRequiredNotice" width="5">*</td>
-				<td class="formRequiredLabelWithoutBorder">
+                <td align="left" valign="top">&nbsp;</td>
+              </tr>
+			  <tr>
+                <td align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
+                <td align="left" class="black_ar">
 					<label for="specimenClass">
 						<bean:message key="arrayType.specimenClass" />
 					</label>
 				</td>
-				<td class="formField">
-					<html:select property="specimenClass" styleClass="formFieldVerySmallSized" styleId="state" size="1" disabled="true">
+				<td align="left" nowrap class="black_new">
+					<html:select property="specimenClass" styleClass="formFieldSizedNew" styleId="state" size="1" disabled="true">
 						<html:options collection="<%=Constants.SPECIMEN_CLASS_LIST%>" labelProperty="name" property="value"/>
 					</html:select>
 				</td>
-
-				<td class="formRequiredNoticeWithoutLeftBorder" width="5">*</td>
-				<td class="formRequiredLabelWithoutBorder">
+				<td align="left" class="black_ar">&nbsp;</td>
+                <td align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
+                <td align="left" class="black_ar">
 					<label for="specimenType">
 						<bean:message key="arrayType.specimenType" />
 					</label>
 				</td>
-				<td class="formField">
-					<html:select property="specimenTypes" styleClass="formFieldVerySmallSized" styleId="state" size="4" multiple="true" disabled="true">
+				<td align="left" nowrap class="black_new">
+					<html:select property="specimenTypes" styleClass="formFieldSizedNew" styleId="state" size="4" multiple="true" disabled="true">
 						<html:options collection="<%=Constants.SPECIMEN_TYPE_LIST%>" labelProperty="name" property="value"/>
 					</html:select>
 				</td>
-			</tr>
-			
-				 <tr>
-				 	<td class="formRequiredNotice" width="5">*</td>
-					<td class="formRequiredLabelWithoutBorder">
-					   <label for="className">
+				<td align="left" valign="top">&nbsp;</td>
+              </tr>
+              <tr>
+                <td align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
+                <td align="left" class="black_ar">
+					<label for="className">
 					   		<bean:message key="specimen.positionInStorageContainer"/>
 					   </label>
-					</td>
+				</td>
+				<td colspan="6" align="left" nowrap>
+					<table width="100%" border="0" cellspacing="0" cellpadding="3">
+						<tr>
+						  <td width="10%" class="black_new">
+								<html:select property="stContSelection" styleClass="black_ar"
+											styleId="stContSelection" size="1" onmouseover="showTip(this.id)"
+											onmouseout="hideTip(this.id)" onchange= "toStoragePositionChange(this)">
+										<html:options collection="storagePositionListForSpecimenArray"
+														labelProperty="name" property="value" />
+								</html:select> 
+							</td>
+							<td width="90%" align="left">
+			<div Style="display:block" id="auto" >
+					   
+					
 										<%-- n-combo-box start --%>
 				<%
 					Map dataMap = (Map) request.getAttribute(Constants.AVAILABLE_CONTAINER_MAP);
@@ -205,128 +273,141 @@
 				<%=ScriptGenerator.getJSForOutermostDataTable()%>
 				<%=ScriptGenerator.getJSEquivalentFor(dataMap,rowNumber)%>
 				
-				<td class="formField" colSpan="4">
+				<!--<td class="formField" colSpan="4">
 						<table border="0">													
 							<tr>								
 								<td ><html:radio value="1" onclick="onRadioButtonGroupClickForArray(this)" styleId="stContSelection" property="stContSelection" /></td>								
-								<td>
+								<td>-->
 									<ncombo:nlevelcombo dataMap="<%=dataMap%>" 
 										attributeNames="<%=attrNames%>" 
 										initialValues="<%=initValues%>"  
-										styleClass = "<%=styClass%>" 
-										tdStyleClass = "<%=tdStyleClass%>" 
+										styleClass = "black_new" 
+										tdStyleClass = "black_new" 
 										tdStyleClassArray="<%=tdStyleClassArray%>"
 										labelNames="<%=labelNames%>" 
 										rowNumber="<%=rowNumber%>" 
 										onChange = "<%=onChange%>"
-										formLabelStyle="formLabelBorderless"
-										disabled = "<%=dropDownDisable%>"
+										formLabelStyle="nComboGroup"
+										disabled = "false"
 										noOfEmptyCombos = "<%=noOfEmptyCombos%>"/>
 										</tr>										
 										</table>
+								</div>
+							
+			<div Style="display:none" id="manual" >
+							<table cellpadding="2" cellspacing="0" border="0" >
+						<tr>
+							<td class="groupelements">
+									<html:text styleClass="black_ar"  size="20" styleId="selectedContainerName" property="selectedContainerName" disabled= "false"/>
 								</td>
-							</tr>							
-							<tr>
-								<td ><html:radio value="2" onclick="onRadioButtonGroupClickForArray(this)" styleId="stContSelection" property="stContSelection" /></td>
-								<td class="formLabelBorderlessLeft">
-									<html:text styleClass="formFieldSized10"  size="30" styleId="selectedContainerName" property="selectedContainerName" disabled= "<%=textBoxDisable%>"/>
-									<html:text styleClass="formFieldSized3"  size="5" styleId="pos1" property="pos1" disabled= "<%=textBoxDisable%>"/>
-									<html:text styleClass="formFieldSized3"  size="5" styleId="pos2" property="pos2" disabled= "<%=textBoxDisable%>"/>
-									<html:button styleClass="actionButton" property="containerMap" onclick="<%=buttonOnClicked%>" disabled= "<%=textBoxDisable%>">
+								<td class="groupelements">
+									<html:text styleClass="black_ar" style="text-align:right" size="2" styleId="pos1" property="pos1" disabled= "false"/>
+								</td>
+								<td class="groupelements">
+									<html:text styleClass="black_ar" style="text-align:right" size="2" styleId="pos2" property="pos2" disabled= "false"/>
+								</td>
+								<td class="groupelements">
+									<html:button styleClass="black_ar" property="containerMap" onclick="<%=buttonOnClicked%>" disabled= "false">
 										<bean:message key="buttons.map"/>
 									</html:button>
+								</td>
+							</tr>
+						</table>
+					</div>
 								</td>
 							</tr>											
 						</table>		
 				</td>
-				<%-- n-combo-box end --%>
-				 </tr>
-					<logic:equal name="exceedsMaxLimit" value="true">
+
+                </tr>
+				<logic:equal name="exceedsMaxLimit" value="true">
 					<tr>
 						<td>
 							<bean:message key="container.maxView"/>
 						</td>
 					</tr>
 				</logic:equal>
-
-			<tr>
-				<td class="formRequiredNotice" width="5">&nbsp;</td>
-				<td class="formRequiredLabelWithoutBorder">
-					<label for="comments">
+				<tr>
+					<td align="center" class="black_ar_t">&nbsp;</td>
+					<td align="left" class="black_ar_t">
+						<label for="comments">
 						<bean:message key="app.comments"/>
 					</label>
 				</td>
-				<td class="formField">
-					<html:textarea styleClass="formFieldVerySmallSized" rows="3" styleId="comments" property="comment"/>
+				<td colspan="6" align="left" nowrap>
+					<html:textarea styleClass="black_ar" rows="3" styleId="comments" cols="90" property="comment"/>
 				</td>
-				<td class="formRequiredLabel" colspan="3">
-					<table cellspacing="0" border="0" width="100%">
-						<tr>
-							<td class="formRequiredNoticeWithoutBorder" width="5">&nbsp;</td>
-							<td class="formFieldNoBordersBold" colspan="2">
-								<label for="capacity">
-									<bean:message key="app.capacity" /> &nbsp;:
-								</label>
-							</td>
-						</tr>
-						<tr>
-							<td class="formRequiredNoticeWithoutBorder" width="5">&nbsp;</td>
-							<td class="formFieldNoBordersBold">
-								<label for="oneDimensionCapacity">
-									<bean:message key="app.oneDimension" />
-								</label>
-							</td>
-							<td class="formFieldNoBordersBold">
-								<html:text styleClass="formFieldVerySmallSized" maxlength="10"  size="30" styleId="oneDimensionCapacity" property="oneDimensionCapacity" readonly="true"/>
-							</td>
-						</tr>
-						<tr>
-							<td class="formRequiredNoticeWithoutBorder" width="5">&nbsp;</td>
-							<td class="formFieldNoBordersBold">
-								<label for="oneDimensionCapacity">
-									<bean:message key="app.twoDimension" />
-								</label>
-							</td>
-							<td class="formFieldNoBordersBold">
-								<html:text styleClass="formFieldVerySmallSized" maxlength="10"  size="30" styleId="twoDimensionCapacity" property="twoDimensionCapacity" readonly="true"/>
-							</td>
-						</tr>
-					</table>			
-				</td>
-			</tr>
-			<tr>
-				<td>&nbsp;</td>
-			</tr>
-			<tr>	
-				<td colspan="6">
-						<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
-						<tr>
-							<td class="formTitle" height="20" colspan="7" width="100%">
-								<label for="addspecimens">
+				 </tr>
+            
+          </table></td>
+        </tr>
+        
+        <tr onclick="showHide('cap_id')">
+			<td align="left" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;
+				<label for="capacity">
+					<bean:message key="app.capacity" /> &nbsp;
+				</label>
+					</span>
+			</td>
+			<td align="right" class="tr_bg_blue1"><a href="#" id="imgArrow_cap_id"><img src="images/uIEnhancementImages/up_arrow.gif" alt="Show Details" width="80" height="9" hspace="10" border="0"/></a></td>
+        </tr>
+			<tr >
+          <td colspan="5" class="showhide1"><div id="cap_id" style="display:block"><table width="100%" border="0" cellpadding="3" cellspacing="0">
+            <tr>
+              <td width="1%" align="center" class="black_ar">&nbsp;</td>
+              <td width="17%" align="left" class="black_ar">
+				<label for="oneDimensionCapacity">
+					<bean:message key="app.oneDimension" />
+				</label>
+			  </td>
+			  <td width="20%" align="left">
+						<html:text styleClass="black_ar" maxlength="10"  size="15" styleId="oneDimensionCapacity" property="oneDimensionCapacity" readonly="true" style="text-align:right"/>
+			  </td>
+			  <td width="17%" align="left" class="black_ar">
+					<label for="oneDimensionCapacity">
+						<bean:message key="app.twoDimension" />
+					</label>
+			  </td>
+			<td width="45%">			<html:text styleClass="black_ar" maxlength="10"  size="15" styleId="twoDimensionCapacity" property="twoDimensionCapacity" readonly="true" style="text-align:right"/>
+						</td>
+            </tr>
+          </table></td>
+        </tr>
+		 <tr  >
+          <td colspan="2" class="bottomtd"></td>
+        </tr>
+        <tr  >
+          <td align="left" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;
+			<label for="addspecimens">
 									<bean:message key="array.addspecimens" />
 								</label>
+							</span>
 							</td>
-						</tr>
-						<tr width="100%">
-							<td class="formRequiredNotice" width="5">*</td>
-							<td class="formRequiredLabelWithoutBorder">
-								<label for="array.enterSpecimenBy">
+					<td align="right" class="tr_bg_blue1">&nbsp;</td>
+        </tr>
+		<td colspan="2" class="showhide1"><table width="100%" border="0" cellpadding="3" cellspacing="0">
+            <tr>
+              <td width="1%" align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="3" /></td>
+              <td width="17%" align="left" class="black_ar">
+				<label for="array.enterSpecimenBy">
 									<bean:message key="array.enterSpecimenBy" />
 								</label>
-							</td>
-							<td class="formField" colspan="4">
-								<html:radio styleId="enterSpecimenBy" property="enterSpecimenBy" value="Label" onclick="doClickEnterSpecimenBy();"/> Label 
+				</td>
+				<td width="7%" align="left" class="black_ar">
+					<html:radio styleId="enterSpecimenBy" property="enterSpecimenBy" value="Label" onclick="doClickEnterSpecimenBy();"/> Label 
+				</td>
+				<td width="75%" align="left" class="black_ar">
 								<html:radio styleId="enterSpecimenBy" property="enterSpecimenBy" value="Barcode" onclick="doClickEnterSpecimenBy();"/> Barcode 
 							</td>
-						</tr>
-						<% 
+				</tr>
+			<% 
 							boolean disabled= true; 
 							if (form.getCreateSpecimenArray().equals("yes")) 
 							{
 								disabled = false; 
 						%>
 						<tr>
-							<td class="formField" colspan="7">
+							<td class="black_ar" colspan="4">
 							<script language="JavaScript" type="text/javascript">
 									platform = navigator.platform.toLowerCase();
 									document.writeln('<APPLET\n' +
@@ -361,38 +442,38 @@
 							</tr>				
 						<%}%>
 					<!-- Bug 4251-->
-					</table>
-				</td>
-			</tr>
-			<tr>
-				<td align="right" colspan="6">
-				<!-- action buttons begins -->
-					<table cellpadding="4" cellspacing="0" border="0">
-						<tr>
-							<td><html:hidden property="onSubmit" />
-							</td>
-							<td>
-								<html:button property="uploadSpecimenArrayButton" styleClass="actionButton"						onclick="doUploadSpecimenArray();" disabled="<%=disabled%>">
+					
+          </table></td>
+        </tr>
+		<tr  >
+          <td colspan="2" class="bottomtd"></td>
+        </tr>
+        <tr  ><html:hidden property="onSubmit" />
+          <td colspan="2" class="buttonbg">
+			<html:button property="uploadSpecimenArrayButton" styleClass="blue_ar_b"						onclick="doUploadSpecimenArray();" disabled="<%=disabled%>" accesskey="Enter">
 									<bean:message  key="buttons.uploadSpecimenArray" />
-								</html:button>
-							</td>
-							<!-- delete button added for deleting the specimen array -->
-							<td>
-								<%	
+								</html:button>&nbsp;
+
+					<%	
 									String deleteAction="deleteSpecimenArray('" + Constants.DELETE_SPECIMEN_ARRAY +"','" + Constants.BIO_SPECIMEN + "')";
 								%>
-								<html:button styleClass="actionButton" property="disableSpecimenArray"
+					<logic:equal name="operation" value="edit">
+								|&nbsp;<html:button styleClass="blue_ar_c" property="disableSpecimenArray"
 											onclick="<%=deleteAction%>">
 									<bean:message key="buttons.delete"/>
-								</html:button>
-							</td>
-						</tr>
-					</table>
-				<!-- action buttons end -->
-				</td>
-			</tr>
-		</table>
-	 </td>
-   </tr>
+								</html:button>&nbsp;
+					</logic:equal>
+								|&nbsp;
+					<html:link page="/ManageAdministrativeData.do" styleClass="cancellink">
+						<bean:message key="buttons.cancel" />
+					</html:link>
+							
+		  </td>
+        </tr>
+    </table></td>
+  </tr>
 </table>
+
+<!-----------New Code Ends------------------->
 </html:form>
+</body>
