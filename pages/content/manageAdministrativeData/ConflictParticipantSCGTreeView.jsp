@@ -13,7 +13,7 @@
 <%
 
 	String divHeight = "360";
-	String divWidth = "270";
+	String divWidth = "300";
 	String partId ="";
 	String conflictStatus = (String)request.getParameter(Constants.CONFLICT_STATUS);
 	String reportQueueId = (String)request.getParameter(Constants.REPORT_ID);
@@ -25,6 +25,7 @@
 
 <head>
 	<link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
+	<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
 	<title>DHTML Tree samples. dhtmlXTree - Action handlers</title>
 	<link rel="STYLESHEET" type="text/css" href="dhtml_comp/css/dhtmlXTree.css">
 	<script language="JavaScript" type="text/javascript" src="dhtml_comp/js/dhtmXTreeCommon.js"></script>
@@ -36,7 +37,7 @@
 	<table border="0" cellpadding="0" cellspacing="0">
 			<tr>
 				<td align="left">
-					<div id="treeboxbox_tree" style="height:<%=divHeight%>;background-color:#f5f5f5;; overflow:auto;width:<%=divWidth%>;"/>
+					<div id="treeboxbox_tree" style="height:<%=divHeight%>;background-color:#f5f5f5; overflow:auto;width:<%=divWidth%>;"/>
 				</td>
 			</tr>
 	</table>

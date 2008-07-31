@@ -6,6 +6,7 @@
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-logic" prefix="logic" %>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants" %>
 <%@ page import="edu.wustl.catissuecore.domain.Participant" %>
+<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
 
 
  <table cellpadding="0" cellspacing="0" border="0" width ="100%">
@@ -14,21 +15,17 @@
 		<%if(conflictStatus.equals(CaTIESConstants.STATUS_PARTICIPANT_CONFLICT))
 			{
 		%>
-			<td width = "30%">
-				&nbsp;
-			</td>
+			
 		<%} else {%>
-			<td width = "50%">
-				&nbsp;
-			</td>
+			
 		<%}%>
 
-		<td nowrap class="formFieldNoBorders" >
+		<td nowrap class="buttonbg" align="left">
 		
 		<%if(conflictStatus.equals(CaTIESConstants.STATUS_PARTICIPANT_CONFLICT))
 			{
 		%>
-			<html:button styleClass="actionButton" 
+			<html:button styleClass="blue_ar_c" 
 					styleId="useSelPart"
 					property="" 
 					title=""
@@ -36,34 +33,22 @@
 					disabled="<%=useSelPartDisable%>" 
 					onclick="onButtonClick('createNewSCG')">
  	    
-	     	</html:button>
-		<%}%>
-
-	    </td>
-		<td width = "5%">
-			&nbsp;
-		</td>
-	    
-	    <td nowrap class="formFieldNoBorders">
-	    	<html:button styleClass="actionButton" 
+	     	</html:button>&nbsp;|&nbsp;
+			<%}%>	   
+	    	<html:button styleClass="blue_ar_c" 
 						styleId="useSelSCG"
 						property="" 
 						title=""
 						value="Use Selected SCG" 
 						disabled="<%=useSelSCGDisable%>" 
-						onclick="onButtonClick('associateSCG')">
-									  				     	    
+						onclick="onButtonClick('associateSCG')">								  				     	    
 		    </html:button>
-		</td>
-		<td width = "5%">
-			&nbsp;
-		</td>
-
-		<td nowrap class="formFieldNoBorders"> 
+		
 		<%if(conflictStatus.equals(CaTIESConstants.STATUS_PARTICIPANT_CONFLICT))
 			{
 		%>
-			<html:button styleClass="actionButton" 
+			&nbsp;|&nbsp;
+			<html:button styleClass="blue_ar_c" 
 					styleId="crtNewPart"
 					property="" 
 					title=""
@@ -74,7 +59,7 @@
 		<%} else
 		 	 {	
 		%>
-			<html:button styleClass="actionButton"  
+			<html:button styleClass="blue_ar_c"  
 					styleId="crtNewSCG"
 					property="" 
 					title=""
@@ -86,9 +71,6 @@
 		<%}%>
 
 	    </td>
-		<td width = "5%">
-			&nbsp;
-		</td>
+		
 	</tr>
 </table>
-

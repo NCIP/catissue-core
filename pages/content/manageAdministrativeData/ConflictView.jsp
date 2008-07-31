@@ -10,6 +10,7 @@
 
 <head>
 <link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
+<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 <script language="JavaScript">
 		function onFilterChange(element)
@@ -51,45 +52,50 @@
 
 <html:form action="ConflictView.do">
 
-<table summary="" cellpadding="3" cellspacing="0" border="0" style="table-layout:fixed" width="100%" styleClass="formFieldSized">
-		<tr valign='top' align="left"  >
-				
-			<td class="formFieldNoBordersBold">
-				<bean:message key="caTies.conflict.filter.conflicts"/> :
-				<html:select property="selectedFilter" name="conflictViewForm" styleClass="formFieldSized" styleId="selectedFilter" size="1" onchange="onFilterChange(this)">
+<table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
+  <tr>
+    <td class="td_color_bfdcf3"><table border="0" cellpadding="0" cellspacing="0">
+      <tr>
+        <td nowrap="nowrap" class="td_table_head"><span class="wh_ar_b"><bean:message key="app.reportedConflicts"/></span></td>
+        <td><img src="images/uIEnhancementImages/table_title_corner2.gif" alt="Page Title" width="31" height="24" /></td>
+      </tr>
+    </table></td>
+  </tr>
+  <tr>
+    <td class="tablepadding"><table width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr>
+        <td width="90%" valign="bottom" class="td_tab_bg">&nbsp;</td>
+      </tr>
+    </table>
+      <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
+      
+      <tr>
+        <td colspan="2" align="left" class="toptd"></td>
+      </tr>
+      <tr>
+        <td colspan="2" align="left" class="tr_bg_blue1"><span class="blue_ar_b"> &nbsp;<bean:message key="caTies.conflict.resolve.title"/></span></td>
+      </tr>
+      <tr>
+        <td align="right"><label><span class="black_ar"><bean:message key="caTies.conflict.filter.conflicts"/>&nbsp;
+		<html:select property="selectedFilter" name="conflictViewForm" styleClass="black_ar" styleId="selectedFilter" size="1" onchange="onFilterChange(this)">
 				<html:options collection="<%=Constants.FILTER_LIST%>" labelProperty="name" property="value" />
-				</html:select>
-				
-			</td>
-		</tr>
-		<tr height = "10">
-			&nbsp;
-		</tr>
+				</html:select></span>
 
-</table>					
-
-<table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" height="4%">
-					
-	<tr>
-		 <td class="formTitle">
-			<bean:message key="caTies.conflict.resolve.title"/>
-		 </td>
-	</tr>	
-	<!-- paging begins -->
-	<tr>
-		<td colspan = "8" class="dataPagingSection">
-			<custom:test name="New User Search Results" pageNum="<%=pageNum%>" totalResults="<%=totalResults%>" numResultsPerPage="<%=numResultsPerPage%>" pageName="<%=pageName%>" showPageSizeCombo="<%=true%>" recordPerPageList="<%=Constants.RESULT_PERPAGE_OPTIONS%>"/>
+        </label></td>
+        <td width="1%" align="right">&nbsp;</td>
+      </tr>
+      <tr>
+        <td colspan="2" ><table width="100%" border="0" align="center" cellpadding="4" cellspacing="0">
+            <tr>
+			<td colspan="3">
+              <custom:test name="New User Search Results" pageNum="<%=pageNum%>" totalResults="<%=totalResults%>" numResultsPerPage="<%=numResultsPerPage%>" pageName="<%=pageName%>" showPageSizeCombo="<%=true%>" recordPerPageList="<%=Constants.RESULT_PERPAGE_OPTIONS%>"/>
 			<html:hidden property="<%=Constants.PAGEOF%>" value="<%=pageOf%>"/>
 			<html:hidden property="isPaging" value="true"/>
-		
-		</td>
-	</tr>
-	<!-- paging ends -->				
-</table>
-
-</html:form>
-
-<script>
+			</td>
+            </tr>
+			</html:form>
+            <tr><td>
+			<script>
 	/* 
 		to be used when you want to specify another javascript function for row selection.
 		useDefaultRowClickHandler =1 | any value other than 1 indicates you want to use another row click handler.
@@ -122,21 +128,28 @@
 		var siteName = siteNameField.getValue();
 		var reportCollDate = reportCollDateField.getValue();
 		var url = "ConflictDetails.do?reportQueueId="+reportId +"&conflictStatus="+conflictStatus +"&surgicalPathologyNumber="+ surgicalPathologyNumber +"&reportDate="+reportDate +"&siteName="+siteName +"&reportCollectionDate="+reportCollDate;
-		window.location.href = url;
-		
-		
+		window.location.href = url;	
 	}
 </script>
-<%if(dataList!=null && dataList.size() > 0)
+<%if(dataList.size() > 0)
 	{ %>
 		<%@ include file="/pages/content/search/GridPage.jsp" %>
   <%}
     else
     { %>
     
-    	<table>
+    	<table height="340" border="0">
 	    	<tr height="10%">
-				<td><b>There are no conflicting enteries.</b></td>
+				<td align="top"><b><bean:message key="caTies.conflict.noreport.message" /></b></td>
 			</tr>
+			<tr height="90%"/>
 		</table>
   <%}%>
+			</td></tr><tr><td class="bottomtd"/></tr>
+        </table></td>
+      </tr>
+    </table></td>
+  </tr>
+</table>
+
+

@@ -8,9 +8,9 @@
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-logic" prefix="logic" %>
 
 <%
-	String frame1Ysize = "120";
-	String frame2Ysize = "360";
-	String frame3Ysize = "360";
+	String frame1Ysize = "166";
+	String frame2Ysize = "264";
+	String frame3Ysize = "264";
 	Boolean useSelPartDisable=false;
 	Boolean	useSelSCGDisable=false;
 	Boolean	crtNewPartDisable=false;
@@ -27,6 +27,7 @@
 
 <head>
 	<link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
+	<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
 	<title>DHTML Tree samples. dhtmlXTree - Action handlers</title>
 	<link rel="STYLESHEET" type="text/css" href="dhtml_comp/css/dhtmlXTree.css">
 	<script language="JavaScript" type="text/javascript" src="dhtml_comp/js/dhtmXTreeCommon.js"></script>
@@ -49,40 +50,59 @@ function onButtonClick(buttonPressed)
 	}
 </script>
 <html:form action="ConflictResolver.do">
-	<table border="0"  width="100%" cellpadding="0" cellspacing="0">
-				<tr>
-					<td width="100%"  valign="top">
+<table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
+  <tr>
+    <td class="td_color_bfdcf3"><table border="0" cellpadding="0" cellspacing="0">
+      <tr>
+        <td nowrap="nowrap" class="td_table_head"><span class="wh_ar_b"><bean:message key="app.reportedConflicts"/></span></td>
+        <td><img src="images/uIEnhancementImages/table_title_corner2.gif" alt="Page Title - Conflicting Reports" width="31" height="24" /></td>
+      </tr>
+    </table></td>
+  </tr>
+  <tr>
+    <td class="tablepadding"><table width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr>
+        <td width="90%" valign="bottom" class="td_tab_bg">&nbsp;</td>
+      </tr>
+    </table>
+	<table width="100%" border="0" cellpadding="0" cellspacing="0">
+		<tr>
+				<td>
 						<iframe id="<%=Constants.CONFLICT_COMMON_VIEW%>" name="<%=Constants.CONFLICT_COMMON_VIEW%>" src="<%=Constants.CONFLICT_COMMON_VIEW_ACTION%>?conflictStatus=<%=conflictStatus%>&reportQueueId=<%=reportQueueId%>&surgicalPathologyNumber=<%=surgicalPathologyNumber%>&reportDate=<%=reportDate%>&siteName=<%=siteName%>&reportCollectionDate=<%=reportCollectionDate%>" scrolling="no" frameborder="0" width="100%" height="<%=frame1Ysize%>" marginheight=0 marginwidth=0>
-									Your Browser doesn't support IFrames.
+									<bean:message key="errors.browser.not.supports.iframe"/>
 						</iframe>
-					</td>
-			    </tr>
+				</td>
+		  </tr>
+	</table>
+	
+	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="whitetable_bg">
+
 				<tr>
 					<td width="100%" valign="top">
 					 <%if(conflictStatus.equals(CaTIESConstants.STATUS_SCG_CONFLICT))
 						{
 					%>
 						<iframe name="" src="ConflictSCGAction.do?reportQueueId=<%=reportQueueId%>" scrolling="no" frameborder="0" width="100%" height="<%=frame3Ysize%>">
-									Your Browser doesn't support IFrames.
+									<bean:message key="errors.browser.not.supports.iframe"/>
 						</iframe>
 
 					<%}
 					   else
 						{
 					%>
-						<table border="0" width="100%" >
+						<table width="100%" border="0" cellpadding="0" cellspacing="0">
 							<tr>
 								<td width="30%"  valign="top">		
 			
 								<iframe id="<%=Constants.CONFLICT_TREE_VIEW%>" name="<%=Constants.CONFLICT_TREE_VIEW%>" src="<%=Constants.CONFLICT_TREE_VIEW_ACTION%>?reportQueueId=<%=reportQueueId%>&conflictStatus=<%=conflictStatus%>" scrolling="no" frameborder="0" width="100%" height="<%=frame2Ysize%>" marginheight=0 marginwidth=0 valign="top">
-									Your Browser doesn't support IFrames.
+									<bean:message key="errors.browser.not.supports.iframe"/>
 								</iframe>
 			
 								</td>
 							
-								<td width="70%"  valign="top" >				
+								<td width="70%" valign="top" >				
 									<iframe name="<%=Constants.CONFLICT_DATA_VIEW%>" src="<%=Constants.BLANK_SCREEN_ACTION%>" scrolling="no" frameborder="0" width="100%" height="<%=frame3Ysize%>">
-									Your Browser doesn't support IFrames.
+									<bean:message key="errors.browser.not.supports.iframe"/>
 									</iframe>
 								</td>
 							</tr>	
@@ -92,7 +112,7 @@ function onButtonClick(buttonPressed)
 					
 				</tr>
 				<tr >
-					<td>
+					<td align="left">
 					<%if(conflictStatus.equals(CaTIESConstants.STATUS_SCG_CONFLICT))
 						{
 					%>
@@ -106,6 +126,11 @@ function onButtonClick(buttonPressed)
 					<%}%>
 					</td>
 				</tr>
+	</table>
+				</td>
+		  </tr>
+	
+
 			</table>	
 </html:form>
 	

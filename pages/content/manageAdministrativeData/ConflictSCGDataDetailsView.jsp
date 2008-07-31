@@ -6,71 +6,66 @@
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-logic" prefix="logic" %>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants" %>
 <%@ page import="edu.wustl.catissuecore.domain.Participant" %>
-<table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" height="40%">
-	<tr>
-		<td>
-				<table summary="" cellpadding="3" cellspacing="0" border="0" width="450" styleClass="formFieldSized">
+<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
+<table summary="" cellpadding="1" cellspacing="3" border="0" align="center" width="98%">
 						<tr>
-							<td class="formFieldNoBordersBold" styleClass="formFieldSized">
-								<label for="site">
+							<td class="black_ar" styleClass="formFieldSized" width="35%">
+								<b><label for="site">
 									<bean:message key="specimen.specimenCollectionGroupName"/>
-								</label>
+								</label></b>
 							</td>
-							<td class="formFieldNoBordersSimple" styleClass="formFieldSized">
-								 <bean:write name="specimenCollectionGroupForm" property="name"/>
+							<td class="black_ar" styleClass="formFieldSized" width="63%">
+								 <bean:message key="caTies.conflict.symbol"/>
+								 &nbsp;<bean:write name="specimenCollectionGroupForm" property="name"/>
 							 </td>
 						</tr>
 						
 											
 						<tr >
-							<td class="formFieldNoBordersBold">
-								<label for="clinicalDiagnosis">
+							<td class="black_ar">
+								<b><label for="clinicalDiagnosis">
 									<bean:message key="specimenCollectionGroup.clinicalDiagnosis"/>
-								</label>
+								</label></b>
 							</td>
-							 <td class="formFieldNoBordersSimple">
-								 <bean:write name="specimenCollectionGroupForm" property="clinicalDiagnosis"/>
+							 <td class="black_ar">
+								 <bean:message key="caTies.conflict.symbol"/>
+								 &nbsp;<bean:write name="specimenCollectionGroupForm" property="clinicalDiagnosis"/>
 							 </td>	 
 								
 						</tr>
 						<tr >
-							<td class="formFieldNoBordersBold">
-								<label for="clinicalStatus">
-									<bean:message key="specimenCollectionGroup.clinicalStatus"/></label>
+							<td class="black_ar">
+								<b><label for="clinicalStatus">
+									<bean:message key="specimenCollectionGroup.clinicalStatus"/></label></b>
 							 </td>
-							  <td class="formFieldNoBordersSimple">
-								 <bean:write name="specimenCollectionGroupForm" property="clinicalStatus"/>
+							  <td class="black_ar">
+								 <bean:message key="caTies.conflict.symbol"/>
+								 &nbsp;<bean:write name="specimenCollectionGroupForm" property="clinicalStatus"/>
 							 </td>
 								
 						</tr>
 									
 						<tr >
-							<td class="formFieldNoBordersBold">
-								<label for="surgicalPathologyNumber">
+							<td class="black_ar">
+								<b><label for="surgicalPathologyNumber">
 									<bean:message key="specimenCollectionGroup.surgicalPathologyNumber"/>
-								</label>
+								</label></b>
 							 </td>	
-							  <td class="formFieldNoBordersSimple">
-								 <bean:write name="specimenCollectionGroupForm" property="surgicalPathologyNumber"/>
+							  <td class="black_ar">
+								 <bean:message key="caTies.conflict.symbol"/>
+								 &nbsp;<bean:write name="specimenCollectionGroupForm" property="surgicalPathologyNumber"/>
 							 </td>
 						</tr>
 							
 						<tr>
-							<td class="formFieldNoBordersBold">
-								<label for="surgicalPathologyNumber">
+							<td class="black_ar">
+								<b><label for="surgicalPathologyNumber">
 									<bean:message key="caTies.conflict.collection.event.date"/> 
-								</label>
+								</label></b>
 							</td>
-							 <td class="formFieldNoBordersSimple">
-								 <bean:write name="specimenCollectionGroupForm" property="collectionEventdateOfEvent"/>
+							 <td class="black_ar">
+								 <bean:message key="caTies.conflict.symbol"/>
+								 &nbsp;<bean:write name="specimenCollectionGroupForm" property="collectionEventdateOfEvent"/>
 							 </td>
-						</tr>
-								
+						</tr>	
 					</table>
-				
-				</td>	
-			</tr>
-				
-</table>
-
-

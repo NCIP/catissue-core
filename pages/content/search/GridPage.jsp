@@ -27,7 +27,7 @@
 				}
 				else
 				{
-					document.write("<div id='gridbox' width='100%' height='350px' style='background-color:#d7d7d7;overflow:hidden'></div>");
+					document.write("<div id='gridbox' width='100%' height='320px' style='background-color:#d7d7d7;overflow:hidden'></div>");
 				}
 			</script>
 		</td>
@@ -81,14 +81,14 @@ function init_grid()
 		colWidth = "10,35,30,25,0";
 	}
 
-	if(useFunction == "goToConflictDetails")
+	if(useFunction == "goToConflictDetails" )
 	{
-		colWidth = "130,130,200,130,130,130,200";
+		colWidth = "33,0,33,34,0,0,0";
 	}
 
 	//document.write("<hr>"+colWidth+"<hr>");
     mygrid.enableRowsHover(true,'grid_hover')
-	if(useFunction == "eventParametersGrid")
+	if(useFunction == "eventParametersGrid" || useFunction == "goToConflictDetails")
 	{
 		mygrid.setInitWidthsP(colWidth);
 	}

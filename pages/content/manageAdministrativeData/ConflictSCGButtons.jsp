@@ -6,40 +6,29 @@
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-logic" prefix="logic" %>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants" %>
 <%@ page import="edu.wustl.catissuecore.domain.Participant" %>
+<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
 
  <table cellpadding="0" cellspacing="0" border="0" width ="100%">
 	
 	<tr>
-		<td width = "70%">
-			&nbsp;
-		</td>
-		<td nowrap class="formFieldNoBorders" >
 		
-			<html:button styleClass="actionButton" 
+		<td nowrap class="buttonbg" >
+		
+			<html:button styleClass="blue_ar_c" 
 					property="" 
 					title=""
 					value="Overwrite Report" 
 					onclick="onButtonClick('overwriteReport')">
- 	       	</html:button>
-	    </td>
-		
-		<td width = "5%">
-			&nbsp;
-		</td>
-	    
-	    <td nowrap class="formFieldNoBorders">
-	    	<html:button styleClass="actionButton" 
+ 	       	</html:button>&nbsp;|&nbsp;
+			
+	    	<html:button styleClass="blue_ar_c" 
 						property="" 
 						title=""
 						value="Ignore New Report" 
 						onclick="onButtonClick('ignoreNewReport')">
 		 
 		    </html:button>
-		</td>
-		
 
-		<td width = "5%">
-			&nbsp;
 		</td>
 	</tr>
 </table>

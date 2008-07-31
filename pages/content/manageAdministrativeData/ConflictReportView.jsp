@@ -6,17 +6,17 @@
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-logic" prefix="logic" %>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants" %>
 <%@ page import="edu.wustl.catissuecore.domain.Participant" %>
-</br>
+<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
+
 
 <%
 	boolean readOnlyValue=true;
 %>
 <table summary="" cellpadding="4" cellspacing="5" border="0" width="100%" height="40%">
 	<tr>
-		<td class="formSubTitle" >
-			<bean:message key="caTies.conflict.report.information"/>
-		</td>
-	</tr>
+        <td align="left" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;<bean:message key="caTies.conflict.report.information"/></span></td>
+    </tr>
+
 	<tr>
 		 <td class="formFieldWithNoBorderFontSize">
 		 	
