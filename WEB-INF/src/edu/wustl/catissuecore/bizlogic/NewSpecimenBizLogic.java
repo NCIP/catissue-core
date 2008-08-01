@@ -1390,9 +1390,20 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			specPos.setStorageContainer(storageContainerObj);		
 			specimen.setSpecimenPosition(specPos);
 
-			String storageValue = storageContainerObj.getName() + ":"
-					+ specimen.getSpecimenPosition().getPositionDimensionOne() + " ,"
-					+ specimen.getSpecimenPosition().getPositionDimensionTwo();
+			//bug 8294
+			String storageValue = null;
+			Long id = specimen.getSpecimenPosition().getStorageContainer().getId();
+			Integer pos1 = specimen.getSpecimenPosition().getPositionDimensionOne();
+			Integer pos2 = specimen.getSpecimenPosition().getPositionDimensionTwo();
+			String containerName = specimen.getSpecimenPosition().getStorageContainer().getName();
+			if(id!=null)
+			{
+				storageValue = StorageContainerUtil.getStorageValueKey(null, id.toString(), pos1, pos2);
+			}
+			else 
+			{
+				storageValue = StorageContainerUtil.getStorageValueKey(containerName, null, pos1, pos2);
+			}
 			if (!storageContainerIds.contains(storageValue))
 			{
 				storageContainerIds.add(storageValue);
@@ -1523,8 +1534,20 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			{
 			if (specimen.getSpecimenPosition() != null && specimen.getSpecimenPosition().getStorageContainer() != null)
 			{
-				String storageValue = specimen.getSpecimenPosition().getStorageContainer().getName()+":"+specimen.getSpecimenPosition().getPositionDimensionOne()+" ,"+
-				specimen.getSpecimenPosition().getPositionDimensionTwo();
+				//bug 8294
+				String storageValue = null;
+				Long id = specimen.getSpecimenPosition().getStorageContainer().getId();
+				Integer pos1 = specimen.getSpecimenPosition().getPositionDimensionOne();
+				Integer pos2 = specimen.getSpecimenPosition().getPositionDimensionTwo();
+				String containerName = specimen.getSpecimenPosition().getStorageContainer().getName();
+				if(id!=null)
+				{
+					storageValue = StorageContainerUtil.getStorageValueKey(null, id.toString(), pos1, pos2);
+				}
+				else 
+				{
+					storageValue = StorageContainerUtil.getStorageValueKey(containerName, null, pos1, pos2);
+				}
 				if (!storageContainerIds.contains(storageValue))
 				{
 					storageContainerIds.add(storageValue);
