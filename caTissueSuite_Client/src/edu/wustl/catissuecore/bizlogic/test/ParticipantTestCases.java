@@ -74,7 +74,8 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
 	    } 
 	    catch (Exception e)
 	    {
-	    	System.out.println("TestCaseTesting.testdeleteCollectionProtocolEvent()"+ e.getMessage());
+	    	System.out
+	    	.println("ParticipantTestCases.testUpdateCPRAssociatedCPWithDeleteCollectionProtocolEvent()" + e.getMessage());
 	    	e.printStackTrace();
 	    	fail("User cannot not add/edit events");
 	    }
