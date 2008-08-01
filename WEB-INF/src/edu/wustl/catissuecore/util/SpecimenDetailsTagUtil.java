@@ -34,6 +34,9 @@ public class SpecimenDetailsTagUtil
 	private static final String CH_CLASS = "specimen.type";
 	private static final String CH_BARCODE = "specimen.barcode";
 	private static final String CH_TYPE = "specimen.subType";
+	private static final String CH_TSITE = "specimen.tissueSite";
+	private static final String CH_TSIDE = "specimen.tissueSide";
+	private static final String CH_PATH_STAT = "specimen.pathologicalStatus";
 	private static final String CH_QTY = "anticipatorySpecimen.Quantity";
 	private static final String CH_LOC = "anticipatorySpecimen.Location";
 	private static final String CH_CONC = "anticipatorySpecimen.Concentration";
@@ -73,6 +76,12 @@ public class SpecimenDetailsTagUtil
 		}	
 
 		colHeaderList.add(CH_TYPE);								dispColumnsList.add(TYPE);
+//		//Mandar:28July08 ----- fix for bug 8195 ---- start
+// currently reverted to adjust the space issue.
+//		colHeaderList.add(CH_TSITE);								dispColumnsList.add(TSITE);
+//		colHeaderList.add(CH_TSIDE);								dispColumnsList.add(TSIDE);
+//		colHeaderList.add(CH_PATH_STAT);							dispColumnsList.add(PATH_STAT);
+//		//Mandar:28July08 ----- fix for bug 8195 ---- end
 		colHeaderList.add(CH_QTY);								dispColumnsList.add(QTY);
 		colHeaderList.add(CH_CONC);								dispColumnsList.add(CONCENTRATION);
 		colHeaderList.add(CH_LOC);								dispColumnsList.add(LOCATION);
@@ -110,8 +119,8 @@ public class SpecimenDetailsTagUtil
 		
 		colHeaderListP.add("");	colHeaderListP.add(CH_LABEL);	//colHeaderListP.add("specimen.received");
 		colHeaderListP.add(CH_CLASS);	colHeaderListP.add(CH_TYPE);
-		colHeaderListP.add("specimen.tissueSite");	colHeaderListP.add("specimen.tissueSide");
-		colHeaderListP.add("specimen.pathologicalStatus");	colHeaderListP.add(CH_LOC);
+		colHeaderListP.add(CH_TSITE);	colHeaderListP.add(CH_TSIDE);
+		colHeaderListP.add(CH_PATH_STAT);	colHeaderListP.add(CH_LOC);
 		colHeaderListP.add(CH_QTY);
 
 		colOrderListP.add(PARENT);			displayColumnListP.add(PARENT);
