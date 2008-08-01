@@ -59,7 +59,7 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 		//Bug: 2508: Jitendra to display name in alphabetically order.
 		if(!recordIds.isEmpty())
 		{
-			Object[] whereColumn = new String[recordIds.size()];
+			Object[] whereColumn = new Long[recordIds.size()];
 			Iterator itr = recordIds.iterator();
 			int i =0;
 			while(itr.hasNext())
