@@ -19,6 +19,8 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 
 import edu.wustl.catissuecore.actionForm.ViewSpecimenSummaryForm;
 import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
@@ -40,80 +42,94 @@ import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.logger.Logger;
 
-public class UpdateSpecimenStatusAction extends BaseAction {
+public class UpdateSpecimenStatusAction extends BaseAction
+{
 
-	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
-		ViewSpecimenSummaryForm specimenSummaryForm =
-			(ViewSpecimenSummaryForm)form;
-		try{
+	public ActionForward executeAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
+			throws Exception
+	{
+		ViewSpecimenSummaryForm specimenSummaryForm = (ViewSpecimenSummaryForm) form;
+		try
+		{
 			String eventId = specimenSummaryForm.getEventId();
-			
+
 			HttpSession session = request.getSession();
 			NewSpecimenBizLogic bizLogic = new NewSpecimenBizLogic();
 
-			LinkedHashSet specimenDomainCollection = getSpecimensToSave(
-					eventId, session);
-			
-			SessionDataBean sessionDataBean =(SessionDataBean)
-			session.getAttribute(Constants.SESSION_DATA);
-			
+			LinkedHashSet specimenDomainCollection = getSpecimensToSave(eventId, session);
+
+			SessionDataBean sessionDataBean = (SessionDataBean) session.getAttribute(Constants.SESSION_DATA);
+
 			//bizLogic.updaupdateAnticipatorySpecimens(specimenDomainCollection, sessionDataBean);
-			bizLogic.update(specimenDomainCollection,specimenDomainCollection,Constants.HIBERNATE_DAO,sessionDataBean);
-			Object obj = session.getAttribute("SCGFORM");		
+			if (specimenDomainCollection != null && specimenDomainCollection.size() > 0)
+				bizLogic.update(specimenDomainCollection, specimenDomainCollection, Constants.HIBERNATE_DAO, sessionDataBean);
+			Object obj = session.getAttribute("SCGFORM");
 
 			//11July08 : Mandar : For GenericSpecimen
 			SpecimenDetailsTagUtil.setAnticipatorySpecimenDetails(request, specimenSummaryForm);
-			if(specimenSummaryForm.getPrintCheckbox()!=null && specimenSummaryForm.getPrintCheckbox().equals("true") )
+			if (specimenSummaryForm.getPrintCheckbox() != null && specimenSummaryForm.getPrintCheckbox().equals("true"))
 			{
 				//By Falguni Sachde
 				//Code Reviewer:Abhijit Naik
 				//Bug :6569 : In case of collected SCG ,the specimenDomainCollection not contains all specimen.
 				//To get all specimen related with give SCG ,query with SCG id and get SpecimenCollection 
-				if(obj == null)
+				if (obj == null)
 				{
-				 Logger.out.fatal("SCG id is null failed to execute print of scg -UpdateSpecimenStatusAction"); 
+					Logger.out.fatal("SCG id is null failed to execute print of scg -UpdateSpecimenStatusAction");
 				}
 				else
 				{
-					HashSet specimenprintCollection = getSpecimensToPrint((Long)obj, sessionDataBean);
+					HashSet specimenprintCollection = getSpecimensToPrint((Long) obj, sessionDataBean);
 					HashMap forwardToPrintMap = new HashMap();
-					forwardToPrintMap.put("printAntiSpecimen",specimenprintCollection );
-					request.setAttribute("forwardToPrintMap",forwardToPrintMap);
-					request.setAttribute("AntiSpecimen","1");
+					forwardToPrintMap.put("printAntiSpecimen", specimenprintCollection);
+					request.setAttribute("forwardToPrintMap", forwardToPrintMap);
+					request.setAttribute("AntiSpecimen", "1");
 					return mapping.findForward("printAnticipatorySpecimens");
 				}
 			}
-			
-			if(specimenSummaryForm.getForwardTo()!=null&&specimenSummaryForm.getForwardTo().equals(Constants.ADD_MULTIPLE_SPECIMEN_TO_CART))
+
+			if (specimenSummaryForm.getForwardTo() != null && specimenSummaryForm.getForwardTo().equals(Constants.ADD_MULTIPLE_SPECIMEN_TO_CART))
 			{
-				HashSet specimenprintCollection = getSpecimensToPrint((Long)obj, sessionDataBean);
-				
-				Iterator iter=specimenprintCollection.iterator();
-				List specimenIdList=new ArrayList();
-				while( iter.hasNext())
+				HashSet specimenprintCollection = getSpecimensToPrint((Long) obj, sessionDataBean);
+
+				Iterator iter = specimenprintCollection.iterator();
+				List specimenIdList = new ArrayList();
+				while (iter.hasNext())
 				{
-					specimenIdList.add(((Specimen)iter.next()).getId());
+					specimenIdList.add(((Specimen) iter.next()).getId());
 				}
 				request.setAttribute("specimenIdList", specimenIdList);
+				saveToken(request);
+
 				return mapping.findForward(Constants.ADD_MULTIPLE_SPECIMEN_TO_CART);
+			}
+			if (request.getParameter("target") != null && request.getParameter("target").equals("viewSummary"))
+			{
+				ActionMessages actionMessages = new ActionMessages();
+				actionMessages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("object.add.successOnly", "Specimens"));
+				specimenSummaryForm.setShowbarCode(true);
+				specimenSummaryForm.setShowLabel(true);
+				saveMessages(request, actionMessages);
+				specimenSummaryForm.setReadOnly(true);
+
 			}
 			return mapping.findForward(Constants.SUCCESS);
 		}
-		catch(Exception exception)
+		catch (Exception exception)
 		{
 			//11July08 : Mandar : For GenericSpecimen
 			SpecimenDetailsTagUtil.setAnticipatorySpecimenDetails(request, specimenSummaryForm);
 
 			ActionErrors actionErrors = new ActionErrors();
-			actionErrors.add(actionErrors.GLOBAL_MESSAGE, new ActionError(
-					"errors.item",exception.getMessage()));
-			saveErrors(request, actionErrors);		
+			actionErrors.add(actionErrors.GLOBAL_MESSAGE, new ActionError("errors.item", exception.getMessage()));
+			saveErrors(request, actionErrors);
 			saveToken(request);
+			String pageOf = request.getParameter(Constants.PAGEOF);
+			if(pageOf != null)
+				request.setAttribute(Constants.PAGEOF,pageOf);
 			return mapping.findForward(Constants.FAILURE);
 		}
-		
+
 	}
 
 	/**
@@ -122,33 +138,31 @@ public class UpdateSpecimenStatusAction extends BaseAction {
 	 * @return
 	 * @throws BizLogicException
 	 */
-	protected LinkedHashSet getSpecimensToSave(String eventId, HttpSession session)
-			throws BizLogicException {
-		Map collectionProtocolEventMap = (Map) session
-		.getAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
-		
-		CollectionProtocolEventBean eventBean =(CollectionProtocolEventBean)
-							collectionProtocolEventMap.get(eventId);
-		
-		LinkedHashMap specimenMap = (LinkedHashMap)eventBean.getSpecimenRequirementbeanMap();
-		
+	protected LinkedHashSet getSpecimensToSave(String eventId, HttpSession session) throws BizLogicException
+	{
+		Map collectionProtocolEventMap = (Map) session.getAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
+
+		CollectionProtocolEventBean eventBean = (CollectionProtocolEventBean) collectionProtocolEventMap.get(eventId);
+
+		LinkedHashMap specimenMap = (LinkedHashMap) eventBean.getSpecimenRequirementbeanMap();
+
 		Collection specimenCollection = specimenMap.values();
 		Iterator iterator = specimenCollection.iterator();
-		
+
 		LinkedHashSet specimenDomainCollection = new LinkedHashSet();
-		while(iterator.hasNext())
+		while (iterator.hasNext())
 		{
-			GenericSpecimen specimenVO =(GenericSpecimen) iterator.next();
+			GenericSpecimen specimenVO = (GenericSpecimen) iterator.next();
 			Specimen specimen = null;
-			if(!specimenVO.getReadOnly())
+			if (!specimenVO.getReadOnly())
 			{
 				specimen = createSpecimenDomainObject(specimenVO);
-				specimen.setChildSpecimenCollection(getChildrenSpecimens(specimenVO,specimen));
+				specimen.setChildSpecimenCollection(getChildrenSpecimens(specimenVO, specimen));
 				specimenDomainCollection.add(specimen);
 			}
 			else
 			{
-				specimenDomainCollection.addAll(getChildrenSpecimens(specimenVO,specimen));	
+				specimenDomainCollection.addAll(getChildrenSpecimens(specimenVO, specimen));
 			}
 		}
 		return specimenDomainCollection;
@@ -160,108 +174,113 @@ public class UpdateSpecimenStatusAction extends BaseAction {
 		HashSet childrenSpecimens = new HashSet();
 		LinkedHashMap aliquotMap = specimenVO.getAliquotSpecimenCollection();
 
-		if(aliquotMap!= null && !aliquotMap.isEmpty() )
+		if (aliquotMap != null && !aliquotMap.isEmpty())
 		{
 			Collection aliquotCollection = aliquotMap.values();
 			Iterator iterator = aliquotCollection.iterator();
-			while(iterator.hasNext())
+			while (iterator.hasNext())
 			{
 				GenericSpecimen aliquotSpecimen = (GenericSpecimen) iterator.next();
 				Specimen specimen = null;
-				if(!aliquotSpecimen.getReadOnly())
+				if (!aliquotSpecimen.getReadOnly())
 				{
 					specimen = createSpecimenDomainObject(aliquotSpecimen);
 					specimen.setParentSpecimen(parentSpecimen);
-					specimen.setChildSpecimenCollection(
-						getChildrenSpecimens(aliquotSpecimen,specimen));
+					specimen.setChildSpecimenCollection(getChildrenSpecimens(aliquotSpecimen, specimen));
 					childrenSpecimens.add(specimen);
 				}
 				else
 				{
-					childrenSpecimens.addAll(getChildrenSpecimens(aliquotSpecimen,specimen));
+					childrenSpecimens.addAll(getChildrenSpecimens(aliquotSpecimen, specimen));
 				}
 			}
 		}
 
 		LinkedHashMap derivedMap = specimenVO.getDeriveSpecimenCollection();
 
-		if(derivedMap!= null && !derivedMap.isEmpty() )
+		if (derivedMap != null && !derivedMap.isEmpty())
 		{
 			Collection aliquotCollection = derivedMap.values();
 			Iterator iterator = aliquotCollection.iterator();
-			while(iterator.hasNext())
+			while (iterator.hasNext())
 			{
 				GenericSpecimen derivedSpecimen = (GenericSpecimen) iterator.next();
 				Specimen specimen = null;
-				if(!derivedSpecimen.getReadOnly())
+				if (!derivedSpecimen.getReadOnly())
 				{
 					specimen = createSpecimenDomainObject(derivedSpecimen);
 					specimen.setParentSpecimen(parentSpecimen);
-					specimen.setChildSpecimenCollection(
-							getChildrenSpecimens(derivedSpecimen,specimen));
+					specimen.setChildSpecimenCollection(getChildrenSpecimens(derivedSpecimen, specimen));
 					childrenSpecimens.add(specimen);
 				}
 				else
 				{
-					childrenSpecimens.addAll(getChildrenSpecimens(derivedSpecimen,specimen));	
+					childrenSpecimens.addAll(getChildrenSpecimens(derivedSpecimen, specimen));
 				}
 			}
 		}
 		return childrenSpecimens;
 	}
+
 	/**
 	 * @param specimenVO
 	 * @return
 	 */
-	protected Specimen createSpecimenDomainObject(GenericSpecimen specimenVO) throws BizLogicException {
+	protected Specimen createSpecimenDomainObject(GenericSpecimen specimenVO) throws BizLogicException
+	{
 
 		Specimen specimen;
-		try {
-			specimen = (Specimen) new SpecimenObjectFactory()
-				.getDomainObject(specimenVO.getClassName());
-		} catch (AssignDataException e1) {
+		try
+		{
+			specimen = (Specimen) new SpecimenObjectFactory().getDomainObject(specimenVO.getClassName());
+		}
+		catch (AssignDataException e1)
+		{
 			e1.printStackTrace();
 			return null;
-		}	
-		
+		}
+
 		if (Constants.MOLECULAR.equals(specimenVO.getClassName()))
 		{
-			Double concentration= null;
+			Double concentration = null;
 			try
 			{
 				concentration = new Double(specimenVO.getConcentration());
 			}
 			catch (Exception exception)
 			{
-				concentration =  new Double(0);
+				concentration = new Double(0);
 			}
-			((MolecularSpecimen)specimen)
-				.setConcentrationInMicrogramPerMicroliter(concentration);
+			((MolecularSpecimen) specimen).setConcentrationInMicrogramPerMicroliter(concentration);
 		}
 		Long id = getSpecimenId(specimenVO);
 		specimen.setId(id);
 		specimen.setSpecimenClass(specimenVO.getClassName());
 		specimen.setSpecimenType(specimenVO.getType());
-		specimen.setLabel(specimenVO.getDisplayName() );
+		if ("".equals(specimenVO.getDisplayName()))
+			specimen.setLabel(null);
+		else
+			specimen.setLabel(specimenVO.getDisplayName());
+
 		specimen.setBarcode(specimenVO.getBarCode());
-		
+
 		/* bug 6015  vaishali khandelwal*/
-		
+
 		/* end bug 6015 */
-		
+
 		String initialQuantity = specimenVO.getQuantity();
-		if(initialQuantity != null )
+		if (initialQuantity != null)
 		{
-			if(!initialQuantity.equals(""))
+			if (!initialQuantity.equals(""))
 			{
 				specimen.setInitialQuantity(new Double(initialQuantity));
 			}
 		}
-		if(specimenVO.getCheckedSpecimen())
+		if (specimenVO.getCheckedSpecimen())
 		{
 			specimen.setCollectionStatus(Constants.SPECIMEN_COLLECTED);
 			specimen.setAvailableQuantity(new Double(initialQuantity));
-			if((specimen.getAvailableQuantity()!=null && specimen.getAvailableQuantity().doubleValue() > 0))
+			if ((specimen.getAvailableQuantity() != null && specimen.getAvailableQuantity().doubleValue() > 0))
 			{
 				specimen.setIsAvailable(Boolean.TRUE);
 			}
@@ -273,116 +292,114 @@ public class UpdateSpecimenStatusAction extends BaseAction {
 			specimen.setAvailableQuantity(new Double(0));
 			//Mandar : 25July08: ------- end ------------
 		}
-		
-		if ("Virtual".equals(
-				specimenVO.getStorageContainerForSpecimen()))
+
+		if ("Virtual".equals(specimenVO.getStorageContainerForSpecimen()))
 		{
-		//	specimen.setStorageContainer(null);
+			//	specimen.setStorageContainer(null);
 			specimen.setSpecimenPosition(null);
 		}
 		else
 		{
 			setStorageContainer(specimenVO, specimen);
 		}
-		
+
 		return specimen;
 	}
 
-	
 	/**
 	 * @param specimenVO
 	 * @param specimen
 	 */
-	private void setStorageContainer(GenericSpecimen specimenVO,
-			Specimen specimen)throws BizLogicException {
-		
+	private void setStorageContainer(GenericSpecimen specimenVO, Specimen specimen) throws BizLogicException
+	{
+
 		String pos1 = specimenVO.getPositionDimensionOne();
 		String pos2 = specimenVO.getPositionDimensionTwo();
 
-		if (!specimenVO.getCheckedSpecimen()){
-			specimenVO.setPositionDimensionOne
-			(String.valueOf(CollectionProtocolUtil.getStorageTypeValue(
-					specimenVO.getStorageContainerForSpecimen()))
-			);
-			
+		if (!specimenVO.getCheckedSpecimen())
+		{
+			specimenVO.setPositionDimensionOne(String
+					.valueOf(CollectionProtocolUtil.getStorageTypeValue(specimenVO.getStorageContainerForSpecimen())));
+
 			return;
 		}
 		SpecimenPosition specPos = specimen.getSpecimenPosition();
-		
-		if(specPos == null)
+
+		if (specPos == null)
 		{
 			specPos = new SpecimenPosition();
 		}
-		if (pos1!=null)
-		{			
-			try
-			{				
-				specPos.setPositionDimensionOne( Integer.parseInt(pos1) );
-			}
-			catch(NumberFormatException exception)
-			{
-				specPos.setPositionDimensionOne(null);
-			}			
-		}
-		if (pos2!=null)
+		if (pos1 != null)
 		{
 			try
 			{
-				specPos.setPositionDimensionTwo( Integer.parseInt(pos2) );
+				specPos.setPositionDimensionOne(Integer.parseInt(pos1));
 			}
-			catch(NumberFormatException exception)
+			catch (NumberFormatException exception)
+			{
+				specPos.setPositionDimensionOne(null);
+			}
+		}
+		if (pos2 != null)
+		{
+			try
+			{
+				specPos.setPositionDimensionTwo(Integer.parseInt(pos2));
+			}
+			catch (NumberFormatException exception)
 			{
 				specPos.setPositionDimensionTwo(null);
-			}				
+			}
 		}
 		StorageContainer storageContainer = new StorageContainer();
 		specPos.setSpecimen(specimen);
 		specPos.setStorageContainer(storageContainer);
 		specimen.setSpecimenPosition(specPos);
-				
-		
+
 		String containerId = specimenVO.getContainerId();
-		
-		if(containerId !=null && containerId.trim().length()>0)
+
+		if (containerId != null && containerId.trim().length() > 0)
 		{
 			storageContainer.setId(new Long(containerId));
 		}
-		if (specimenVO.getSelectedContainerName() == null || specimenVO.getSelectedContainerName().trim().length()==0)
+		if (specimenVO.getSelectedContainerName() == null || specimenVO.getSelectedContainerName().trim().length() == 0)
 		{
-			throw new BizLogicException("Container name is missing for specimen :" +specimenVO.getDisplayName());
+			throw new BizLogicException("Container name is missing for specimen :" + specimenVO.getDisplayName());
 		}
 		storageContainer.setName(specimenVO.getSelectedContainerName());
-	//	specimen.setStorageContainer(storageContainer);
+		//	specimen.setStorageContainer(storageContainer);
 	}
 
 	/**
 	 * @param specimenVO
 	 * @return
 	 */
-	private Long getSpecimenId(GenericSpecimen specimenVO) {
+	private Long getSpecimenId(GenericSpecimen specimenVO)
+	{
 		long uniqueId = specimenVO.getId();
-		if(uniqueId<=0)
+		if (uniqueId <= 0)
 		{
 			return null;
 		}
 		Long id = new Long(uniqueId);
 		return id;
 	}
-	
+
 	/**
 	 * @param scgId
 	 * @param sessionDataBean
 	 * @return
 	 * @throws BizLogicException
 	 */
-	protected HashSet getSpecimensToPrint(Long scgId, SessionDataBean sessionDataBean)	throws BizLogicException {
-		
-		 SpecimenCollectionGroupBizLogic bizLogic = new SpecimenCollectionGroupBizLogic();					 
-		 SpecimenCollectionGroup objSCG = bizLogic.getSCGFromId(scgId ,sessionDataBean,true);
-		 HashSet specimenCollection = new HashSet(objSCG.getSpecimenCollection());
-		 
-		 return specimenCollection;
-		 
+	protected HashSet getSpecimensToPrint(Long scgId, SessionDataBean sessionDataBean) throws BizLogicException
+	{
+
+		SpecimenCollectionGroupBizLogic bizLogic = new SpecimenCollectionGroupBizLogic();
+		SpecimenCollectionGroup objSCG = bizLogic.getSCGFromId(scgId, sessionDataBean, true);
+		HashSet specimenCollection = new HashSet(objSCG.getSpecimenCollection());
+
+		return specimenCollection;
+
 	}
 
 }

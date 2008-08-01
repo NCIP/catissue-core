@@ -2296,6 +2296,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	 * 
 	 */
 	public static final String SCGFORM = "SCGFORM";
+	public static final String SPECIMENFORM = "SpecimenForm";
 	public static final String FILE_TYPE = "file";	
 	public static final String ORDER_REQUEST_STATUS_DISTRIBUTED_AND_DISPOSE="orderRequestStatusAndDistributedAndDispose";
 	public static final String EXPORT_FILE_NAME_START = "Report_Content_";
@@ -2404,5 +2405,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String OUTPUT_TERMS_COLUMNS = "outputTermsColumns";
 	public static final String CP_BASED_VIEW_FILTRATION = "CP_BASED_VIEW_FILTRATION";
 	public static final String EDIT_PROFILE_PRIVILEGE= "EDIT_PROFILE_PRIVILEGE";
+	public static final String CP_CHILD_SUBMIT = "cpChildSubmit";
 }
 	

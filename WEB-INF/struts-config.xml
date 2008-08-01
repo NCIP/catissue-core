@@ -1844,6 +1844,7 @@ PUBLIC
 			input="/NewSpecimen.do?operation=edit&amp;pageOf=pageOfNewSpecimen&amp;menuSelected=15&amp;showConsents=yes&amp;tableId4=disable"
 			scope="request">
 			<forward name="success" path="/NewSpecimenSearch.do?pageOf=pageOfNewSpecimen" />
+			<forward name="cpChildSubmit" path="/AnticipatorySpecimenViewForSpecimen.do" />
 			<forward name="failure" path="/NewSpecimen.do?operation=edit&amp;pageOf=pageOfNewSpecimen&amp;menuSelected=15&amp;showConsents=yes&amp;tableId4=disable" />
 			<forward name="createNew" path="/CreateSpecimen.do?operation=add&amp;pageOf=&amp;menuSelected=15&amp;virtualLocated=true" />
 			<forward name="sameCollectionGroup" path="/NewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimen&amp;menuSelected=15&amp;showConsents=yes&amp;tableId4=disable" />
@@ -4326,6 +4327,7 @@ PUBLIC
 		scope="request">
 		<forward name="CPQueryPrintSpecimenEdit" path="/CPQueryPrintSpecimenEdit.do"/>
 		<forward name="success" path="/QuerySpecimenSearch.do?pageOf=pageOfNewSpecimenCPQuery"/>
+		<forward name="cpChildSubmit" path="/AnticipatorySpecimenView.do" />
 		<forward name="failure" path="/CPQueryNewSpecimen.do?operation=edit&amp;pageOf=pageOfNewSpecimenCPQuery&amp;menuSelected=15" />
 		<forward name="createNew" path="/CPQueryCreateSpecimen.do?operation=add&amp;pageOf=pageOfCreateSpecimenCPQuery&amp;menuSelected=15&amp;virtualLocated=true" />
 		<forward name="sameCollectionGroup" path="/CPQueryNewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimenCPQuery&amp;menuSelected=15" />
@@ -4726,7 +4728,7 @@ PUBLIC
 					<forward name="bulkUpdateSpecimens"  path="/bulkUpdateSpecimens.do" />
 					<forward name="pageOfbulkUpdateSpecimens"  path="/bulkUpdateSpecimens.do?pageOf=multipleSpWithMenu" />
 					<forward name="anticipatory" path="/pages/AnticipatorySpecimens.jsp" />  
-					<forward name="pageOfMultipleSpWithoutMenu" path="/pages/SpecimenSummary.jsp" />
+p					<forward name="pageOfMultipleSpWithoutMenu" path="/pages/SpecimenSummary.jsp" />
 					<forward name="updateSpecimenStatus" path="/updateSpecimenStatus.do" />
 					<forward name="pageOfMultipleSpWithMenu" path=".catissuecore.viewSpecimenSummary" />
 	                <forward name="failure" path="/Home.do" />
@@ -4743,6 +4745,7 @@ PUBLIC
                 validate="false"
                 scope="request">
 					<forward name="success" path="/GenericSpecimenSummary.do?target=anticipatory&amp;submitAction=updateSpecimenStatus" />
+					<forward name="cpChildSubmit" path="/GenericSpecimenSummary.do?target=anticipatory&amp;submitAction=updateSpecimenStatus&amp;" />					
 					<forward name="cpQuery" path="/pages/SpecimenSummary.jsp" />
 					<forward name="pageOfMultipleSpWithMenu" path=".catissuecore.viewSpecimenSummary" />
 	                <forward name="failure" path="/Home.do" />
@@ -4917,6 +4920,48 @@ PUBLIC
 			validate="false">
 			<forward name="success" path="/OpenCollectionProtocol.do?operation=edit&amp;pageOf=collectionProtocol" />
 		</action>
+	<action path="/AnticipatorySpecimenViewForSpecimen"
+                type="edu.wustl.catissuecore.action.AnticipatorySpecimenViewAction"
+                name="specimenCollectionGroupForm"
+                validate="false"
+                scope="request">
+					<forward name="success" path="/GenericSpecimenSummaryForSpecimen.do?target=anticipatory&amp;submitAction=updateSpecimenStatus&amp;pageOf=cpChildSubmit" />
+					<forward name="cpQuery" path="/pages/SpecimenSummary.jsp" />
+					<forward name="viewSummary" path=".catissuecore.viewSpecimenSummary" />
+					<forward name="pageOfMultipleSpWithMenu" path=".catissuecore.viewSpecimenSummary" />
+	                <forward name="failure" path="/Home.do" />
+	                <forward name="Disabled" path="/homeAction.do" />
+       </action>    
+       <action path="/GenericSpecimenSummaryForSpecimen"
+                type="edu.wustl.catissuecore.action.ViewSpecimenSummaryAction"
+                name="viewSpecimenSummaryForm"
+                validate="false"
+                scope="request">
+					<forward name="success" path="/pages/SpecimenSummary.jsp" />
+					<forward name="anticipatory" path=".catissuecore.viewSpecimenSummary" />  
+					<forward name="viewSummary" path=".catissuecore.viewSpecimenSummary" />  
+					<forward name="updateSpecimenStatus" path="/updateSpecimenStatusForSpecimen.do?target=viewSummary&amp;pageOf=cpChildSubmit" />
+	                <forward name="failure" path="/Home.do" />
+       </action>    
+       <action path="/updateSpecimenStatusForSpecimen"
+             type="edu.wustl.catissuecore.action.UpdateSpecimenStatusAction"
+             name="viewSpecimenSummaryForm"
+              validate="false"
+               scope="request">
+				<forward name="success" path=".catissuecore.viewSpecimenSummary" />	
+				<forward name="printAnticipatorySpecimens" path="/printMultipleForSpecimen.do" />	
+				<forward name="failure" path=".catissuecore.viewSpecimenSummary" />
+       </action>    
+        <action path="/printMultipleForSpecimen"
+			type="edu.wustl.catissuecore.action.PrintAction"
+			scope="request">
+			<forward name="success" path=".catissuecore.viewSpecimenSummary" />
+			<forward name="failure" path=".catissuecore.viewSpecimenSummary" />	
+			<forward name="printAntiSuccess" path=".catissuecore.viewSpecimenSummary" />	
+			<forward name="multipleSpWithMenu" path=".catissuecore.viewSpecimenSummary" />			
+	   </action>
+       
+	
 		
 	</action-mappings>
 	

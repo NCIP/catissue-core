@@ -136,6 +136,10 @@ public class SpecimenRequirementBean implements Serializable, GenericSpecimen
 	private long specimenCharsId = -1;
 	private GenericSpecimen formSpecimenVo;
 	private Specimen corresSpecimen;
+	
+	private boolean showBarcode = true;
+	private boolean showLabel = true;
+	
 	public GenericSpecimen getFormSpecimenVo()
 	{
 		return this.formSpecimenVo;
@@ -708,5 +712,30 @@ public class SpecimenRequirementBean implements Serializable, GenericSpecimen
 		// TODO Auto-generated method stub
 		
 	}	
+	
+	public boolean getShowBarcode()
+	{
+		// TODO Auto-generated method stub
+		return showBarcode;
+	}
+
+	public boolean getShowLabel()
+	{
+		// TODO Auto-generated method stub
+		return showLabel;
+	}
+
+	public void setShowBarcode(boolean showBarcode)
+	{
+		this.showBarcode = showBarcode;	
+		
+	}
+
+	public void setShowLabel(boolean showLabel)
+	{
+		this.showLabel = showLabel;
+		
+	}
+
 	
 }

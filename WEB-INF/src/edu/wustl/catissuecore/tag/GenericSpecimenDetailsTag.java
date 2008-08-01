@@ -491,8 +491,8 @@ public class GenericSpecimenDetailsTag extends TagSupport
 			else if(GenericSpecimenDetailsTag.COLUMN_NAMES[1].equalsIgnoreCase(columnList.get(counter).toString()))
 			{
 				//	3June08 to uncomment after vaishali changes are commited
-//				if(specimenSummaryForm.getShowLabel() == true && specimen.getShowLabel() == true)
-				 if(specimenSummaryForm.getShowLabel() == true)
+				if(specimenSummaryForm.getShowLabel() == true && specimen.getShowLabel() == true)
+				// if(specimenSummaryForm.getShowLabel() == true)
 				 {
 					 createTextComponent(sb, nameValue,  "black_ar", 8);
 				 }
@@ -502,8 +502,8 @@ public class GenericSpecimenDetailsTag extends TagSupport
 			else if(GenericSpecimenDetailsTag.COLUMN_NAMES[2].equalsIgnoreCase(columnList.get(counter).toString()))
 			{
 				//	3June08 to uncomment after vaishali changes are commited
-//				 if(specimenSummaryForm.getShowbarCode() == true && specimen.getShowBarcode() == true)
-				if(specimenSummaryForm.getShowbarCode() == true)
+				 if(specimenSummaryForm.getShowbarCode() == true && specimen.getShowBarcode() == true)
+				//if(specimenSummaryForm.getShowbarCode() == true)
 				 {
 					 createTextComponent(sb, nameValue,  "black_ar", 8);
 				 }
@@ -728,8 +728,8 @@ public class GenericSpecimenDetailsTag extends TagSupport
 			if(GenericSpecimenDetailsTag.COLUMN_NAMES[1].equalsIgnoreCase(columnList.get(counter).toString()))
 			{
 					//3June08 to uncomment after vaishali changes are commited
-//					 if(specimenSummaryForm.getShowLabel() == true && specimen.getShowLabel() == true)
-					if(specimenSummaryForm.getShowLabel() == true)
+					 if(specimenSummaryForm.getShowLabel() == true && specimen.getShowLabel() == true)
+//					if(specimenSummaryForm.getShowLabel() == true)
 					 {
 							sb.append("<td class=\"black_ar\" >");
 							sb.append(getHTMLFormattedValue(nameValue[1]));	
@@ -800,9 +800,9 @@ public class GenericSpecimenDetailsTag extends TagSupport
 		{
 			 sb.append("<td class=\"black_ar\" >");
 			 if(specimenSummaryForm.getSelectedSpecimenId().equalsIgnoreCase(nameValue[1]))
-				 sb.append("<input type=\"radio\" name=\"selectedSpecimenId\" value=\""+nameValue[1]+"\" checked=\"checked\" onclick=\" form.action=\'GenericSpecimenSummary.do\'; submit()\">");	 
+				 sb.append("<input type=\"radio\" name=\"selectedSpecimenId\" value=\""+nameValue[1]+"\" checked=\"checked\" onclick=\"onParentRadioBtnClick()\">");	 
 			 else
-				 sb.append("<input type=\"radio\" name=\"selectedSpecimenId\" value=\""+nameValue[1]+"\" onclick=\" form.action=\'GenericSpecimenSummary.do\'; submit()\">");
+				 sb.append("<input type=\"radio\" name=\"selectedSpecimenId\" value=\""+nameValue[1]+"\" onclick=\"onParentRadioBtnClick()\">");
 //			 sb.append(nameValue[0]);
 			 sb.append("</td>");
 		}

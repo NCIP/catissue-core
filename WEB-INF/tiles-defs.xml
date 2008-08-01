@@ -1225,6 +1225,9 @@
 	<definition name=".catissuecore.viewSpecimenSummary" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/AnticipatorySpecimens.jsp" />
 	</definition>
+	<definition name=".catissuecore.specimenSummaryView" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/SpecimenSummary.jsp" />
+	</definition>
 	
 	<!-- For Admini View -->
 	<definition name=".catissuecore.ReviewQuarantineRequests" extends=".catissuecore.homePageDef">

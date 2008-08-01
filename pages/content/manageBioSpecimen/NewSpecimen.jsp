@@ -275,7 +275,7 @@
 
 		function onNormalSubmit()
 		{
-		var operation = document.forms[0].operation.value;
+			var operation = document.forms[0].operation.value;
 			
 			var checked = false;
 			if(document.getElementById("aliquotChk").checked == true)
@@ -288,7 +288,7 @@
 			//Bug ID: 4040(Virender)
 			if(checked)
 			{
-			<% String actionToCall = null;%>
+				<% String actionToCall = null;%>
 				if(operation == "add")
 				{
 				  if(temp == "orderDetails")
@@ -332,55 +332,93 @@
 			}
 			else
 			{
-				if(operation == "add")
-				{
-					if(temp == "orderDetails")
-					{
-					   	setSubmitted('ForwardTo','CPQueryPrintSpecimenAdd','orderDetails');
-					}
-					else
-					{
+				
 
-					setSubmitted('null','CPQueryPrintSpecimenAdd','success');
-					}
-					<%
-					actionToCall = "NewSpecimenAdd.do";
-					if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
+			// for cp child submit
+			
+				var cpChildChkFlag = false;
+				if(document.getElementById("createCpChildCheckBox").checked == true)
+				{
+				   cpChildChkFlag = true;
+				}
+
+				if(cpChildChkFlag)
+				{
+					if(operation == "add")
 					{
-						actionToCall = Constants.CP_QUERY_SPECIMEN_ADD_ACTION;
-					}%>
-					if(document.forms[0].nextForwardTo.value!=null)
-					{
-					 confirmDisable('<%=actionToCall%>'+"?nextForwardTo="+document.forms[0].nextForwardTo.value,document.forms[0].activityStatus);
+						<%
+						String cpChildSubmitAction = "NewSpecimenAdd.do";
+						if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
+						{
+						  	actionToCall = Constants.CP_QUERY_SPECIMEN_ADD_ACTION;
+						}%>
+						setSubmitted("ForwardTo","<%=cpChildSubmitAction%>","cpChildSubmit");
+						confirmDisable("<%=cpChildSubmitAction%>","document.forms[0].activityStatus");
 					}
 					else
 					{
-						confirmDisable('<%=actionToCall%>',document.forms[0].activityStatus);
+						<%
+						cpChildSubmitAction = "NewSpecimenEdit.do";
+						if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
+						{
+							cpChildSubmitAction = Constants.CP_QUERY_SPECIMEN_EDIT_ACTION;
+                    
+						}%>
+						setSubmitted("ForwardTo","<%=cpChildSubmitAction%>","cpChildSubmit");
+						confirmDisable("<%=cpChildSubmitAction%>","document.forms[0].activityStatus");
 					}
-					 
 				}
 				else
 				{
-					if(temp == "orderDetails")
+					if(operation == "add")
 					{
-						setSubmitted('ForwardTo','CPQueryPrintSpecimenEdit','orderDetails');
+						if(temp == "orderDetails")
+						{
+						   	setSubmitted('ForwardTo','CPQueryPrintSpecimenAdd','orderDetails');
+						}
+						else
+						{
+							setSubmitted('null','CPQueryPrintSpecimenAdd','success');
+						}
+						<%
+						actionToCall = "NewSpecimenAdd.do";
+						if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
+						{
+							actionToCall = Constants.CP_QUERY_SPECIMEN_ADD_ACTION;
+						}%>
+						if(document.forms[0].nextForwardTo.value!=null)
+						{
+						 confirmDisable('<%=actionToCall%>'+"?nextForwardTo="+document.forms[0].nextForwardTo.value,document.forms[0].activityStatus);
+						}
+						else
+						{
+							confirmDisable('<%=actionToCall%>',document.forms[0].activityStatus);
+						}
+					 
 					}
 					else
 					{
-					setSubmitted('null','CPQueryPrintSpecimenEdit','success');
-					}
-					<%
-					actionToCall = "NewSpecimenEdit.do";
-					if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
-					{
+						if(temp == "orderDetails")
+						{
+							setSubmitted('ForwardTo','CPQueryPrintSpecimenEdit','orderDetails');
+						}
+						else
+						{
+							setSubmitted('null','CPQueryPrintSpecimenEdit','success');
+						}
+						<%
+						actionToCall = "NewSpecimenEdit.do";
+						if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
+						{
 						
-						actionToCall = Constants.CP_QUERY_SPECIMEN_EDIT_ACTION;
+							actionToCall = Constants.CP_QUERY_SPECIMEN_EDIT_ACTION;
 
-					}%>
-					confirmDisable('<%=actionToCall%>',document.forms[0].activityStatus);
+						}%>
+						confirmDisable('<%=actionToCall%>',document.forms[0].activityStatus);
+					}
 				}
+						
 			}
-			
 		}
 
 		function onCollOrClassChange(element)
@@ -1736,6 +1774,21 @@
 										
 								    </td>
 								</tr>
+								
+								<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">	
+								<tr>
+											<td class="dividerline" colspan="2" valign="center">
+													<html:checkbox styleId="createCpChildCheckBox" property="createCpChildCheckBox" value="true" onclick="">
+														<span class="black_ar">
+															
+														<bean:message key="create.CpChildSp"/>
+															
+														</span>
+														</html:checkbox>
+											</td>
+								</tr>					
+								</logic:equal>
+								
 								<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">	
 								<tr>
 											<td class="dividerline" colspan="2" valign="center">

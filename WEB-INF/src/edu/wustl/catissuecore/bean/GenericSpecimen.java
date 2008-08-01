@@ -101,6 +101,13 @@ public interface GenericSpecimen extends Serializable
 	public Specimen getCorresSpecimen();
 	public void setCorresSpecimen(Specimen corresSpecimen);
 
+	public boolean getShowLabel();
+	public void setShowLabel(boolean showLabel);
+	
+	public boolean getShowBarcode();
+	public void setShowBarcode(boolean showBarcode);
+	
+	
 /*
 	public String getUniqueIdentifier();
 	public String getDisplayName();

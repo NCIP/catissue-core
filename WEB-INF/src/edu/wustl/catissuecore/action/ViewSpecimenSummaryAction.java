@@ -147,6 +147,8 @@ public class ViewSpecimenSummaryAction extends Action {
 				}
 			}
 			String pageOf = request.getParameter(Constants.PAGEOF);
+			request.setAttribute(Constants.PAGEOF,pageOf);
+			
 			//Mandar: 16May2008 : For specimenDetails customtag --- start ---
 			if("anticipatory".equalsIgnoreCase(target) || "pageOfMultipleSpWithMenu".equalsIgnoreCase(target))
 			{
@@ -161,7 +163,7 @@ public class ViewSpecimenSummaryAction extends Action {
 			summaryForm.setLastSelectedSpecimenId(summaryForm.getSelectedSpecimenId());
 			if(pageOf != null && ViewSpecimenSummaryForm.REQUEST_TYPE_MULTI_SPECIMENS.equals(summaryForm.getRequestType()))
 			{
-				request.setAttribute(Constants.PAGEOF,pageOf);
+				//request.setAttribute(Constants.PAGEOF,pageOf);
 				return mapping.findForward(target);
 			}
 			

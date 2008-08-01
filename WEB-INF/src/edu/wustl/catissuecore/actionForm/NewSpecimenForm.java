@@ -199,6 +199,8 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData
 	
 	private String printCheckbox; 
 	
+	private String createCpChildCheckBox;
+	
 	private String nextForwardTo;
 	
 	private int numberOfSpecimens;
@@ -216,6 +218,17 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData
 
 	public void setPrintCheckbox(String printCheckbox) {
 		this.printCheckbox = printCheckbox;
+	}
+
+	
+	public String getCreateCpChildCheckBox()
+	{
+		return createCpChildCheckBox;
+	}
+
+	public void setCreateCpChildCheckBox(String createCpChildCheckBox)
+	{
+		this.createCpChildCheckBox = createCpChildCheckBox;
 	}
 
 	/**

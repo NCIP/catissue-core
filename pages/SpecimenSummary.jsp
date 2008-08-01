@@ -79,6 +79,12 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 			toggleLayer('wait'); 
 			toggleLayer('summary');
 		}
+		function onParentRadioBtnClick()
+		{
+			var url = 'GenericSpecimenSummary.do';
+			document.forms[0].action =url;
+			document.forms[0].submit();
+		}
 	</script>
 </head>
 

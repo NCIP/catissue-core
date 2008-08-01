@@ -69,6 +69,7 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 			else
 			{
 				((NewSpecimenBizLogic)bizLogic).bulkUpdateSpecimens(specimenDomainCollection, sessionDataBean);
+				setLabelBarCodesToSessionData(eventId, request, specimenDomainCollection);
 				
 				/*Iterator iter=specimenDomainCollection.iterator();
 				List specimenIdList=new ArrayList();
@@ -203,7 +204,9 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 		specimen.setComment(specimenDataBean.getComment());
 		specimen.setExternalIdentifierCollection(specimenDataBean.getExternalIdentifierCollection());
 		specimen.setBiohazardCollection(specimenDataBean.getBiohazardCollection());
-		specimen.setSpecimenCollectionGroup(specimenDataBean.getSpecimenCollectionGroup());		
+		specimen.setSpecimenCollectionGroup(specimenDataBean.getSpecimenCollectionGroup());
+		
+		specimenDataBean.setCorresSpecimen(specimen);
 	}
 
 	private void setLabelBarCodesToSessionData(String EventId, 

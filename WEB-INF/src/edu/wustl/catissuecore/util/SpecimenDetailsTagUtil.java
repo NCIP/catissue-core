@@ -56,16 +56,20 @@ public class SpecimenDetailsTagUtil
 		List <String>subSpecimenColHeaderList = new ArrayList<String>();
 		List <String>dispColumnsList = new ArrayList<String>();
 		
+		boolean showLabel = false;
+		boolean showBarcode = false;
 		//columnHeaderList											DisplayColumn List
 		colHeaderList.add("");									dispColumnsList.add(PARENT);	
 		
 		if(summaryForm.getShowLabel())
 		{
-		colHeaderList.add(CH_LABEL);							dispColumnsList.add(LABEL);	
+		colHeaderList.add(CH_LABEL);							dispColumnsList.add(LABEL);
+		showLabel = true;
 		}
 		if(summaryForm.getShowbarCode())
 		{
-		colHeaderList.add(CH_BARCODE);							dispColumnsList.add(BARCODE);	
+		colHeaderList.add(CH_BARCODE);							dispColumnsList.add(BARCODE);
+		showBarcode = true;
 		}	
 
 		colHeaderList.add(CH_TYPE);								dispColumnsList.add(TYPE);
@@ -84,6 +88,9 @@ public class SpecimenDetailsTagUtil
 		request.setAttribute("columnHeaderList",colHeaderList);
 		request.setAttribute("subSpecimenColHeaderList",subSpecimenColHeaderList);
 		request.setAttribute("dispColumnsList",dispColumnsList);
+		request.setAttribute("labelShow",showLabel);
+		request.setAttribute("barcodeShow",showBarcode);
+		
 		
 		setPageData(request);
 	}

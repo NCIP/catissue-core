@@ -39,6 +39,8 @@ public final class GenericSpecimenVO implements GenericSpecimen {
 	private Specimen corresSpecimen;
 	private GenericSpecimen formSpecimenVo;
 
+	private boolean showBarcode = true;
+	private boolean showLabel = true;
 	public GenericSpecimen getFormSpecimenVo()
 	{
 		return this.formSpecimenVo;
@@ -252,4 +254,29 @@ public final class GenericSpecimenVO implements GenericSpecimen {
 		this.id = id;
 	}
 
+	public boolean getShowBarcode()
+	{
+		// TODO Auto-generated method stub
+		return showBarcode;
+	}
+
+	public boolean getShowLabel()
+	{
+		// TODO Auto-generated method stub
+		return showLabel;
+	}
+
+	public void setShowBarcode(boolean showBarcode)
+	{
+		this.showBarcode = showBarcode;	
+		
+	}
+
+	public void setShowLabel(boolean showLabel)
+	{
+		this.showLabel = showLabel;
+		
+	}
+
+	
 }

@@ -139,6 +139,12 @@ public class ForwardToProcessor extends AbstractForwardToProcessor
 				return forwardToHashMap;
 			}
 
+
+			if(actionForm.getForwardTo().equals(Constants.CP_CHILD_SUBMIT))
+			{
+				forwardToHashMap.put("specimenCollectionGroupId", specimen.getSpecimenCollectionGroup().getId());
+				forwardToHashMap.put("specimenId", specimen.getId());
+			}
 		}
 		//added for specimenArrayAliquot Summary page.
 		else if (domainObject instanceof SpecimenArray)

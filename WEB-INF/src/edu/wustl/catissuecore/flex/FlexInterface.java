@@ -835,10 +835,13 @@ public class FlexInterface
 		if (Variables.isSpecimenBarcodeGeneratorAvl)
 		{
 			specimenDataBean.setBarCode(null);
+			specimenDataBean.setShowBarcode(false);
+			spBean.specimenBarcode = "";
 		}
 		else
 		{
 			specimenDataBean.setBarCode(spBean.specimenBarcode);
+			specimenDataBean.setShowBarcode(true);
 		}
 		/*sp.setBiohazardCollection(new HashSet<Biohazard>());
 		 sp.setChildrenSpecimen(new HashSet<Specimen>());*/
@@ -857,10 +860,13 @@ public class FlexInterface
 		if (Variables.isSpecimenLabelGeneratorAvl)
 		{
 			specimenDataBean.setLabel(null);
+			specimenDataBean.setShowLabel(false);
+			spBean.specimenLabel = "";
 		}
 		else
 		{
 			specimenDataBean.setLabel(spBean.specimenLabel);
+			specimenDataBean.setShowLabel(true);
 		}
 
 		specimenDataBean.setParentSpecimen(null);
