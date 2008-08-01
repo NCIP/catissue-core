@@ -27,6 +27,7 @@
 <SCRIPT>var imgsrc="images/";</SCRIPT>
 <script src="jss/calendarComponent.js" type="text/javascript"></script>
 <LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
+<LINK href="css/catissue_suite.css" type=text/css rel=stylesheet>
 
 <% 
 		String operation = (String)request.getAttribute(Constants.OPERATION);
@@ -129,31 +130,37 @@ function editSCG()
 </script>	
 	
 <html:form action="<%=formName%>">	
-<table summary="" cellpadding="0" cellspacing="0" border="0" height="90%" class="tabPage" width="90%">
+	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">  
+ <tr>
+    <td class="tablepadding">
+		<table width="100%" border="0" cellpadding="0" cellspacing="0">
+		
+
 			<tr>
-				<td height="20" class="tabMenuItem" id="specimenCollectionGroupTab" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onclick="setTarget(); editSCG()">
-					<bean:message key="specimenCollectionGroupPage.edit.title"/>
-				</td>		
-
-				<td height="20" class="tabMenuItem"  onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()"  onClick="viewSPR()">
-					<bean:message key="edit.tab.surgicalpathologyreport"/>
-				</td>								
-				
-				<td height="20" class="tabMenuItemSelected"  onClick="">
-					<bean:message key="edit.tab.clinicalannotation"/>
-				</td>
-				
-				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="goToConsentPage()" id="consentTab">
-					<bean:message key="consents.consents"/>            
-				</td>
-
-				<td width="450" class="tabMenuSeparator" colspan="3">&nbsp;</td>
+				<td class="td_tab_bg" >
+					<img src="images/uIEnhancementImages/spacer.gif" alt="spacer" width="50" height="1" border="0"></td>
+				<td valign="bottom">
+					<html:link styleId="specimenCollectionGroupTab" href="#" onclick="setTarget(); editSCG()">
+					<img src="images/uIEnhancementImages/tab_edit_collection2.gif" alt="Edit SpecimenCollection Group" width="216" height="22" border="0"></html:link></td>
+				<td valign="bottom"><html:link href="#" onclick="viewSPR()">
+					<img src="images/uIEnhancementImages/tab_view_surgical2.gif" alt="View Surgical Pathology Report" width="216" height="22" border="0"></html:link></td>
+				<td valign="bottom">
+					<html:link href="#">
+					<img src="images/uIEnhancementImages/tab_view_annotation1.gif" alt="View Annotation" width="116" height="22" border="0" ></html:link></td>
+				<td align="left" valign="bottom" class="td_color_bfdcf3" >
+					<html:link styleId="consentViewTab" href="#" onclick="goToConsentPage()">
+					<img src="images/uIEnhancementImages/tab_consents2.gif" alt="Consents" width="76" border="0" height="22" ></html:link></td>
+				<td width="90%" align="left" valign="bottom" class="td_tab_bg" >&nbsp;
+					</td>
 			</tr>
-
-			<tr width = "100%" height = "100%">
-				<td class="tabField" colspan="6"  width = "100%" height = "100%">
+			<tr >
+				<td  colspan="6">
 					<%@   include file="DisplayAnnotationDataEntryPage.jsp" %>
 				</td>
+			</tr>
+			
+		</table>
+		</td>
 			</tr>
 		</table>
 		

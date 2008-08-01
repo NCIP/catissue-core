@@ -27,6 +27,7 @@
 <script src="jss/wz_tooltip.js"></script>
 <SCRIPT>var imgsrc="images/";</SCRIPT>
 <LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
+<LINK href="css/catissue_suite.css" type=text/css rel=stylesheet>
 <!-- Mandar 11-Aug-06 : calendar changes end -->
 
 <style>
@@ -600,26 +601,26 @@ tr#hiddenCombo
 	if(pageView.equals("viewAnnotations"))
 	{
 		%>
-		<table summary="" cellpadding="0" cellspacing="0" border="0" height="90%" class="tabPage" width="90%">
+		<table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">  
+  <tr>
+    <td class="tablepadding">
+		<table width="100%" border="0" cellpadding="0" cellspacing="0">
 				<tr>
-					<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="setTarget();editParticipant()">Edit</td>
-
-					<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="viewSPR()">
-						<bean:message key="edit.tab.surgicalpathologyreport"/>
-					</td>
-					<td height="20" class="tabMenuItemSelected"  onClick="">
-					<bean:message key="edit.tab.clinicalannotation"/>
-				</td>				
-				<td width="450" class="tabMenuSeparator" colspan="3">&nbsp;</td>
-			</tr>
-
-			<tr valign="top" >
-				<td class="tabField" colspan="6">
-				<%@ include file="DisplayAnnotationDataEntryPage.jsp" %>
+					<td class="td_tab_bg"><img src="images/uIEnhancementImages/spacer.gif" alt="spacer" width="50" height="1"></td>
+					<td valign="bottom"><html:link href="#"  onclick="setTarget();editParticipant()"><img src="images/uIEnhancementImages/tab_edit_participant1.gif" alt="Edit Participant" width="116" height="22" border="0"></html:link></td>
+					<td valign="bottom"><html:link href="#" onclick="viewSPR()"><img src="images/uIEnhancementImages/tab_view_surgical2.gif" alt="View Surgical Pathology Report" width="216" height="22" border="0"></html:link></td>
+					<td valign="bottom" ><img src="images/uIEnhancementImages/tab_view_annotation1.gif" alt="View Annotation" width="116" height="22"  border="0"></td>
+					<td width="90%" valign="bottom" class="td_tab_bg">&nbsp;</td>
+				</tr>
+				<tr><td colspan="5">				<%@ include file="DisplayAnnotationDataEntryPage.jsp" %>
+</td></tr>
+		</table>
+			
 				</td>
 			</tr>
+			
 			</table>
-
+		
 		<%
 	}
 	%>	
