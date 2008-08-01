@@ -396,7 +396,7 @@ if(form != null)
 		sname="";
 		objname = "deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_quantity)";
 
-		sname="<input type='text' name='" + objname + "' value='0' maxlength='10' size='12' class='black_ar' id='" + objname + "'>"        	
+		sname="<input type='text' name='" + objname + "' style='text-align:right' value='0' maxlength='10' size='12' class='black_ar' id='" + objname + "'>"        	
 		sname = sname + "&nbsp;<span id='" + objunit + "'>&nbsp;</span>"
 						
 		spreqqty.innerHTML="" + sname;
@@ -407,7 +407,7 @@ if(form != null)
 		sname="";
 		objname ="deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_concentration)";
 
-		sname="<input type='text' name='" + objname + "' value='0' size='12'  maxlength='10' class='black_ar' id='" + objname + "'>"        	
+		sname="<input type='text' name='" + objname + "' style='text-align:right' value='0' size='12'  maxlength='10' class='black_ar' id='" + objname + "'>"        	
 		sname = sname + "&nbsp;<span id='" + objunit + "'>&nbsp;</span>"
 						
 		spreqqty.innerHTML="" + sname;
@@ -479,7 +479,8 @@ if(form != null)
 										  initialValue="<%=form.getClassName()%>"
 										  readOnly="<%=readOnlyForSpecimen%>"
 										  onChange="onTypeChange(this);clearTypeCombo()"
-										  styleClass="formFieldSizedText"
+										  styleClass="black_ar"
+										  size="20"
 										  
 										/>
 								</td>
@@ -492,7 +493,8 @@ if(form != null)
 									  onChange="<%=subTypeFunctionName%>"
 									  readOnly="<%=readOnlyForAliquot%>"
 									  dependsOn="<%=form.getClassName()%>"
-									  styleClass="formFieldSizedText"
+									  styleClass="black_ar"
+									  size="20"
 									  
 							        />
 								</td>
@@ -500,21 +502,21 @@ if(form != null)
                               <tr>
                                  <td align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
                                  <td align="left" class="black_ar"><bean:message key="specimen.tissueSite"/></td>
-                                 <td width="30%" align="left" class="black_ar">
+                                 <td width="30%" align="left" class="black_new" nowrap>
 									<autocomplete:AutoCompleteTag property="tissueSite"
 									  optionsList = "<%=request.getAttribute(Constants.TISSUE_SITE_LIST)%>"
 									  initialValue="<%=form.getTissueSite()%>"
 									  readOnly="<%=readOnlyForAliquot%>"
-									  styleClass="formFieldSizedText"
+									  styleClass="black_ar"
+									  size="20"
 								      
 									/>
+									<span class="black_ar">
 				<%
 					String url = "ShowFramedPage.do?pageOf=pageOfTissueSite&propertyName=tissueSite&cdeName=Tissue Site";
 				%>
 									<a href="#" onclick="javascript:NewWindow('<%=url%>','name','360','525','no');return false">
-										<img src="images/uIEnhancementImages/ic_cl_diag.gif" border="0" width="16" height="16" title='Tissue Site Selector' alt="Clinical Diagnosis">
-									</a>
-                                </td>
+										<img src="images/uIEnhancementImages/ic_cl_diag.gif" border="0" width="16" height="16" title='Tissue Site Selector' alt="Clinical Diagnosis"></a></span></td>
                                <td align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
                                <td align="left" class="black_ar"><bean:message key="specimen.tissueSite"/></td>
                                 <td align="left" class="black_ar">
@@ -522,7 +524,8 @@ if(form != null)
 										optionsList = "<%=request.getAttribute(Constants.TISSUE_SIDE_LIST)%>"
 									    initialValue="<%=form.getTissueSide()%>"
 									    readOnly="<%=readOnlyForAliquot%>"
-										styleClass="formFieldSizedText"
+										styleClass="black_ar"
+										size="20"
 								    />
 								</td>
                               </tr>
@@ -534,7 +537,8 @@ if(form != null)
 									  optionsList = "<%=request.getAttribute(Constants.PATHOLOGICAL_STATUS_LIST)%>"
 									  initialValue="<%=form.getPathologicalStatus()%>"
 									  readOnly="<%=readOnlyForAliquot%>"
-									  styleClass="formFieldSizedText"
+									  styleClass="black_ar"
+									  size="20"
 									/>
 								</td>
                                <td align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
@@ -543,14 +547,15 @@ if(form != null)
 									<autocomplete:AutoCompleteTag property="storageLocationForSpecimen"
 									  optionsList = "<%=request.getAttribute("storageContainerList")%>"
 									  initialValue="<%=form.getStorageLocationForSpecimen()%>"
-									  styleClass="formFieldSizedText"
+									  styleClass="black_ar"
+									  size="20"
 									/>
 								</td>
                               </tr>
                               <tr>
                                 <td align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
                                 <td align="left" class="black_ar"><bean:message key="specimen.quantity"/></td>
-                                <td align="left" class="black_ar_s">	<html:text styleClass="black_ar" size="22" maxlength="10"styleId="quantity" property="quantity"/><span id="unitSpan">&nbsp;<%=unitSpecimen%></span><html:hidden property="unit"/></td>
+                                <td align="left" class="black_ar_s">	<html:text styleClass="black_ar" size="10" maxlength="10"styleId="quantity" property="quantity" style="text-align:right"/><span id="unitSpan">&nbsp;<%=unitSpecimen%></span><html:hidden property="unit"/></td>
                                 <td align="center" class="black_ar">&nbsp;</td>
                                 <td align="left" class="black_ar"><bean:message key="specimen.concentration"/></td>
                                 <td align="left" class="black_ar_s">
@@ -559,7 +564,7 @@ if(form != null)
 				if(form.getClassName().equals("Molecular") && !Constants.ALIQUOT.equals(form.getLineage()))
 				concentrationDisabled = false;
 			%>
-     									<html:text styleClass="black_ar" maxlength="10"  size="22"	styleId="concentration" property="concentration"  readonly="<%=readOnlyForAll%>" disabled="<%=concentrationDisabled%>"/>&nbsp;<bean:message key="specimen.concentrationUnit"/></td>
+     									<html:text styleClass="black_ar" maxlength="10"  size="10"	styleId="concentration" property="concentration"  readonly="<%=readOnlyForAll%>" disabled="<%=concentrationDisabled%>" style="text-align:right"/>&nbsp;<bean:message key="specimen.concentrationUnit" /></td>
                               </tr>
                               <tr>
 									<html:hidden property="collectionEventId" />
@@ -571,7 +576,8 @@ if(form != null)
 									  optionsList = "<%=request.getAttribute(Constants.USERLIST)%>"
 									  initialValue="<%=new Long(form.getCollectionEventUserId())%>"
 									  staticField="false"
-									  styleClass="formFieldSizedText"
+									  styleClass="black_ar"
+									  size="20"
 									/>
 								</td>
 								<html:hidden property="receivedEventId" />
@@ -583,7 +589,8 @@ if(form != null)
 									  optionsList = "<%=request.getAttribute(Constants.USERLIST)%>"
 									  initialValue="<%=new Long(form.getReceivedEventUserId())%>"
 									  staticField="false"
-									  styleClass="formFieldSizedText"
+									  styleClass="black_ar"
+									  size="20"
 									/>
 								</td>
                               </tr>
@@ -594,7 +601,8 @@ if(form != null)
 									<autocomplete:AutoCompleteTag property="collectionEventCollectionProcedure"
 									  optionsList = "<%=request.getAttribute(Constants.PROCEDURE_LIST)%>"
 									  initialValue="<%=form.getCollectionEventCollectionProcedure()%>"
-									  styleClass="formFieldSizedText"
+									  styleClass="black_ar"
+									  size="20"
 									/>
 								</td>
                                 <td align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
@@ -604,7 +612,8 @@ if(form != null)
 									<autocomplete:AutoCompleteTag property="receivedEventReceivedQuality"
 									  optionsList = "<%=request.getAttribute(Constants.RECEIVED_QUALITY_LIST)%>"
 									  initialValue="<%=form.getReceivedEventReceivedQuality()%>"
-									  styleClass="formFieldSizedText"
+									  styleClass="black_ar"
+									  size="20"
 									/>
 								</td>
                               </tr>
@@ -616,7 +625,8 @@ if(form != null)
 									<autocomplete:AutoCompleteTag property="collectionEventContainer"
 									  optionsList = "<%=request.getAttribute(Constants.CONTAINER_LIST)%>"
 									  initialValue="<%=form.getCollectionEventContainer()%>"
-									  styleClass="formFieldSizedText"
+									  styleClass="black_ar"
+									  size="20"
 								    />
 								</td>
                                 <td align="center" class="black_ar">&nbsp;</td>
@@ -740,17 +750,17 @@ if(form != null)
 						concValue="0";
 					}
 				%>
-									<html:text styleClass="black_ar" size="12"  maxlength="10" 
+									<html:text styleClass="black_ar" size="10"  maxlength="10" 
 										styleId="<%=quantity%>" property="<%=quantity%>" 
-										value="<%=qtyValue%>" />
+										value="<%=qtyValue%>" style="text-align:right"/>
 									<span id="<%=unit%>">
 										<%=strHiddenUnitValue%>
 									</span>
 								</td>
                                 <td class="black_ar">
-									<html:text styleClass="black_ar" size="12"  maxlength="10" 
+									<html:text styleClass="black_ar" size="10"  maxlength="10" 
 										styleId="<%=concentration%>" property="<%=concentration%>" 
-										disabled="<%=concReadOnly%>" value="<%=concValue%>" />
+										disabled="<%=concReadOnly%>" value="<%=concValue%>" style="text-align:right"/>
 								</td>
                               </tr>
 			
@@ -793,13 +803,13 @@ if(form != null)
 		                           <td width="27%" class="black_ar" >										
 									   		<bean:message key="aliquots.noOfAliquots"/>
 										 &nbsp;
-										 <html:text styleClass="black_ar" styleId="noOfAliquots" size="12" property="noOfAliquots" style="text-align:right" maxlength="50"/>
+										 <html:text styleClass="black_ar" styleId="noOfAliquots" size="10" property="noOfAliquots" style="text-align:right" maxlength="50" />
 									</td>
 		                            <td width="33%" class="black_ar">
 										<label for="qtyPerAliquot">
 									   		<bean:message key="aliquots.qtyPerAliquot"/>
 										 </label>&nbsp;
-										 <html:text styleClass="black_ar" styleId="quantityPerAliquot" size="12" property="quantityPerAliquot" style="text-align:right" maxlength="50"/>
+										 <html:text styleClass="black_ar" styleId="quantityPerAliquot" size="10" property="quantityPerAliquot" style="text-align:right" maxlength="50" />
 									</td>
 		                            <td width="40%" class="black_ar">
 										<label for="storageLocation">
@@ -808,7 +818,8 @@ if(form != null)
 										<autocomplete:AutoCompleteTag property="storageLocationForAliquotSpecimen"
 											    optionsList = "<%=request.getAttribute("storageContainerList")%>"
 												initialValue="<%=form.getStorageLocationForAliquotSpecimen()%>"
-												styleClass="formFieldSizedText"
+												styleClass="black_ar"
+												size="20"
 												/>
 									</td>
 								</tr>

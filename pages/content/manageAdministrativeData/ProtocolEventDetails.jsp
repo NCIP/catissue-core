@@ -120,28 +120,25 @@ window.parent.frames['CPTreeView'].location="ShowCollectionProtocol.do?pageOf=sp
                       <tr>
                         <td align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></td>
                         <td align="left" class="black_ar"><bean:message key="specimenCollectionGroup.clinicalDiagnosis"/></td>
-                        <td align="left"><autocomplete:AutoCompleteTag property="clinicalDiagnosis"
+                        <td align="left" class="black_new"><autocomplete:AutoCompleteTag property="clinicalDiagnosis"
 						optionsList = "<%=request.getAttribute(Constants.CLINICAL_DIAGNOSIS_LIST)%>"
-						initialValue="<%=form.getClinicalDiagnosis()%>"
-						styleClass="black_ar"
-						size="30"/>&nbsp;
+						initialValue="<%=form.getClinicalDiagnosis()%>" styleClass="black_ar" size="27"/>
+						<span class="black_ar">
 						<%
 							String url = "ShowFramedPage.do?pageOf=pageOfTissueSite&propertyName=clinicalDiagnosis&cdeName=Clinical%20Diagnosis";	
 						%>
 						<a href="#" onclick="javascript:NewWindow('<%=url%>','name','360','525','no');return false">
-						<img title='Clinical Diagnosis Selector' src="images/uIEnhancementImages/ic_cl_diag.gif" alt="Clinical Diagnosis" width="16" height="16" border="0">
-						</a>
-					 </td>
+						<img title='Clinical Diagnosis Selector' src="images/uIEnhancementImages/ic_cl_diag.gif" alt="Clinical Diagnosis" width="16" height="16" border="0"></a></span></td>
                       </tr>
 					 
                       <tr>
                         <td align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></td>
                         <td align="left" class="black_ar"><bean:message key="specimenCollectionGroup.clinicalStatus"/></td>
-                        <td align="left"><autocomplete:AutoCompleteTag property="clinicalStatus"
+                        <td align="left" class="black_ar"><autocomplete:AutoCompleteTag property="clinicalStatus"
 							  optionsList = "<%=request.getAttribute(Constants.CLINICAL_STATUS_LIST)%>"
 							  initialValue="<%=form.getClinicalStatus()%>"
 							  styleClass="black_ar"
-							  size="30"/>
+							  size="27"/>
 						</td>
                       </tr>
                       <tr>

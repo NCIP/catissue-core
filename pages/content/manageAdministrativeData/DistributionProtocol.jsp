@@ -355,7 +355,7 @@ function insRow(subdivtag)
                 <tr>
                   <td align="center" class="black_ar">&nbsp;</td>
                   <td align="left" class="black_ar"><bean:message key="distributionprotocol.participants" /> </td>
-                  <td colspan="2" align="left"><html:text styleClass="black_ar" maxlength="10"  size="30" styleId="enrollment" property="enrollment" readonly="<%=readOnlyValue%>" /></td>
+                  <td colspan="2" align="left"><html:text styleClass="black_ar" maxlength="10"  size="10" style="text-align:right" styleId="enrollment" property="enrollment" readonly="<%=readOnlyValue%>" /></td>
                 </tr>
                 <tr>
                   <td align="center" class="black_ar">&nbsp;</td>
