@@ -402,6 +402,13 @@ td.showhide1{
 padding-top:10px;
 }
 
+.nonedittext
+{
+	font-family: verdana;
+	font-size: 11px;
+	color: #575656;
+}
+
 .noneditable {
 	font-family: verdana;
 	font-size: 11px;
