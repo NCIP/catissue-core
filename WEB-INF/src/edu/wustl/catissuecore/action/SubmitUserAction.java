@@ -18,7 +18,6 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
-import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.dto.UserDTO;
 import edu.wustl.catissuecore.multiRepository.bean.SiteUserRolePrivilegeBean;
@@ -29,6 +28,7 @@ import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.bizlogic.QueryBizLogic;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractDomainObjectFactory;
 import edu.wustl.common.factory.AbstractForwardToFactory;
@@ -49,7 +49,7 @@ public class SubmitUserAction extends Action
 	 ActionMessages messages = null;  
 	    
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response) throws Exception
+			HttpServletRequest request, HttpServletResponse response) throws AssignDataException, BizLogicException
     {
 		AbstractDomainObjectFactory abstractDomainObjectFactory=getAbstractDomainObjectFactory();
 		AbstractActionForm form1 = (AbstractActionForm)form;
@@ -63,7 +63,10 @@ public class SubmitUserAction extends Action
         target = new String(Constants.SUCCESS);
         AbstractDomainObject abstractDomain = (AbstractDomainObject) user;
         UserDTO userDTO = getUserDTO(user, session);
-		insertUser(userDTO, request.getSession());
+		try 
+		{
+			insertUser(userDTO, request.getSession());
+
 //		Attributes to decide AddNew action
         String submittedFor = (String) request.getParameter(Constants.SUBMITTED_FOR);
         request.setAttribute(Constants.SYSTEM_IDENTIFIER, user.getId());
@@ -166,7 +169,25 @@ public class SubmitUserAction extends Action
        String statusMessageKey = String.valueOf(abstractForm.getFormId() +
 				"."+String.valueOf(abstractForm.isAddOperation()));
        request.setAttribute(Constants.STATUS_MESSAGE_KEY, statusMessageKey);
-       return mapping.findForward(target);
+		}
+		catch (UserNotAuthorizedException excp) 
+		{
+			ActionErrors errors = new ActionErrors();
+            SessionDataBean sessionDataBean = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
+            String userName = "";
+        	
+            if(sessionDataBean != null)
+        	{
+        	    userName = sessionDataBean.getUserName();
+        	}
+            
+        	ActionError error = new ActionError("access.addedit.object.denied", userName, abstractDomain.getClass().getName());
+        	errors.add(ActionErrors.GLOBAL_ERROR, error);
+        	saveErrors(request, errors);
+        	target = Constants.FAILURE;
+            Logger.out.error(excp.getMessage(), excp);
+		} 
+		return mapping.findForward(target);
 	}
 	
     /**

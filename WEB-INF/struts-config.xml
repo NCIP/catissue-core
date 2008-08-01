@@ -1220,7 +1220,9 @@ PUBLIC
 			scope="request">
 			<!--forward name="success" path="/User.do?operation=edit&amp;pageOf=pageOfUserAdmin&amp;menuSelected=1" /-->
 			<forward name="success" path="/UserSearch.do?pageOf=pageOfUserAdmin" />
-			<forward name="failure" path="/User.do?operation=add&amp;pageOf=pageOfUserAdmin&amp;menuSelected=1" />
+		<!-- 	<forward name="failure" path="/User.do?operation=add&amp;pageOf=pageOfUserAdmin&amp;menuSelected=1" />   -->
+			<forward name="failure" path="/ManageAdministrativeData.do" />
+			<forward name="access_denied" path="/ManageAdministrativeData.do" />
 			<forward name="site" path="/Site.do?operation=add&amp;pageOf=pageOfSite&amp;menuSelected=5" />
 			<forward name="collectionProtocol" path="/CollectionProtocol.do?operation=add&amp;pageOf=pageOfCollectionProtocol" />
 			<forward name="distributionProtocol" path="/DistributionProtocol.do?operation=add&amp;pageOf=pageOfDistributionProtocol" />
