@@ -9,7 +9,6 @@
 	var myData =${requestScope.myData};
 	var columns =${requestScope.columns};
 	var colWidth =${requestScope.colWidth};
-	var colWidthp =${requestScope.colWidthInPercent};
 	var colTypes =${requestScope.colTypes};
 </script>
 <table width="100%">
@@ -94,16 +93,7 @@ function init_grid()
 		mygrid.setInitWidthsP(colWidth);
 	}
 	else
-	{
-		if(colWidthp!="")
-		{
-			mygrid.setInitWidthsP(colWidthp);
-		}
-		else
-		{
-			mygrid.setInitWidths(colWidth);
-		}
-	}
+		mygrid.setInitWidths(colWidth);
 	
 	mygrid.setSkin("light");
 	mygrid.enableAlterCss("even","uneven");
