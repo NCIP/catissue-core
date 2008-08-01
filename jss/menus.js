@@ -244,11 +244,6 @@ Ext.onReady(function(){
                 }
             },
 			{
-                text: 'Reported Problems',
-				tooltip:'Shows Reported Problems',
-                href:'ReportedProblemShow.do?pageNum=1'
-            },
-			{
                 text: 'Local Extensions',
 				tooltip:'Shows Local Extensions',
                 href:'DefineAnnotationsInformationPage.do?operation=add',
@@ -264,6 +259,11 @@ Ext.onReady(function(){
                         }
                     ]
                 }
+            },
+            {
+                text: 'Reported Problems',
+				tooltip:'Shows Reported Problems',
+                href:'ReportedProblemShow.do?pageNum=1'
             },
 			{
                 text: 'Conflicting Reports',
