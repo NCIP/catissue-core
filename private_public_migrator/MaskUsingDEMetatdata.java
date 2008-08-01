@@ -29,7 +29,10 @@ public class MaskUsingDEMetatdata
 	public void maskIdentifiedData()
 	{
 		Random generator = new Random();
-		randomNumber=generator.nextInt(50);
+		while(randomNumber==0)
+		{
+			randomNumber=generator.nextInt(200);
+		}
 		
 		try
 		{
@@ -95,11 +98,11 @@ public class MaskUsingDEMetatdata
 
 		if(dbType.equalsIgnoreCase("oracle"))
 		{
-			sqlString="update "+tableName+" set "+columnName+"=add_months("+columnName+", "+randomNumber+")";
+			sqlString="update "+tableName+" set "+columnName+"=add_months("+columnName+", -"+randomNumber+")";
 		}
 		if(dbType.equalsIgnoreCase("mysql"))
 		{
-			sqlString="update "+tableName+" set "+columnName+"=date_add("+columnName+", INTERVAL "+randomNumber+" MONTH);";
+			sqlString="update "+tableName+" set "+columnName+"=date_add("+columnName+", INTERVAL -"+randomNumber+" MONTH);";
 		}
 		executeQuery(sqlString, session);
 	}
