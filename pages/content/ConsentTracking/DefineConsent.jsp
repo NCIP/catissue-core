@@ -66,7 +66,6 @@
 						<input type="checkbox" name="consentcheckBoxs" Id="check1" class="black_ar"/>
 					</logic:notEqual>
 	 			 </td>
-				 <html:hidden property='${requestScope.consentKey}'/>
 		         <td class="link">
 			  <label>
 				<logic:equal name="isParticipantReg" value="true">
