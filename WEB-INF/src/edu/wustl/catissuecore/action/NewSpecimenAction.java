@@ -92,8 +92,11 @@ public class NewSpecimenAction extends SecureAction
 	{
 		//Logger.out.debug("NewSpecimenAction start@@@@@@@@@");
 		NewSpecimenForm specimenForm = (NewSpecimenForm) form;
+		List<NameValueBean> storagePositionList =  Utility.getStoragePositionTypeList();
+		request.setAttribute("storageList", storagePositionList);
 		String pageOf = request.getParameter(Constants.PAGEOF);
 		String forwardPage=specimenForm.getForwardTo();
+		
         if(forwardPage.equals(Constants.PAGEOF_SPECIMEN_COLLECTION_REQUIREMENT_GROUP))
 	    {
         	pageOf=forwardPage;

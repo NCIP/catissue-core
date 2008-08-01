@@ -156,7 +156,7 @@ function handleStatus(status)
                 <tr>
                   <td align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
                   <td align="left" class="black_ar"><bean:message key="user.state" /> </td>
-                  <td align="left" nowrap  class="black_ar"><autocomplete:AutoCompleteTag	property="state" optionsList='${requestScope.stateList}' initialValue='${userForm.state}'styleClass="black_ar"  size="30"/></td>
+                  <td align="left" nowrap  class="black_ar"><autocomplete:AutoCompleteTag	property="state" optionsList='${requestScope.stateList}' initialValue='${userForm.state}'styleClass="black_ar"  size="27"/></td>
                   <td align="left" class="black_ar">&nbsp;</td>
                   <td align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
                   <td align="left" class="black_ar"><bean:message key="user.zipCode" /></td>
@@ -166,7 +166,7 @@ function handleStatus(status)
                 <tr>
                   <td align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
                   <td align="left" class="black_ar"><bean:message key="user.country" /></td>
-                  <td align="left" nowrap class="black_ar"><autocomplete:AutoCompleteTag	property="country" optionsList='${requestScope.countryList}' initialValue='${userForm.country}'	styleClass="black_ar" size="30"/></td>
+                  <td align="left" nowrap class="black_ar"><autocomplete:AutoCompleteTag	property="country" optionsList='${requestScope.countryList}' initialValue='${userForm.country}'	styleClass="black_ar" size="27"/></td>
                   <td align="left" class="black_ar">&nbsp;</td>
                   <td align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
                   <td align="left" class="black_ar"><bean:message key="user.phoneNumber" /></td>
@@ -180,17 +180,17 @@ function handleStatus(status)
                   <td align="left" class="black_ar">&nbsp;</td>
                   <td align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
                   <td align="left" class="black_ar"><label for="institutionId"><bean:message key="user.institution" /></label></td>
-                  <td align="left" nowrap class="black_ar"><autocomplete:AutoCompleteTag	property="institutionId" optionsList='${requestScope.instituteList}' initialValue='${userForm.institutionId}' styleClass="black_ar" staticField="false" size="30"/></td>
+                  <td align="left" nowrap class="black_ar"><autocomplete:AutoCompleteTag	property="institutionId" optionsList='${requestScope.instituteList}' initialValue='${userForm.institutionId}' styleClass="black_ar" staticField="false" size="27"/></td>
                   <td align="left"><logic:notEqual name="pageOf"value='${requestScope.pageOfSignUp}'><html:link href="#" styleClass="view"	styleId="newInstitution" onclick="openInstitutionWindow();"><bean:message key="buttons.addNew" /></html:link></logic:notEqual></td>
                 </tr>
                 <tr>
                   <td align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
                   <td align="left" class="black_ar"><label for="departmentId"><bean:message	key="user.department" /> </label></td>
-                  <td align="left" nowrap class="black_ar"><autocomplete:AutoCompleteTag property="departmentId" optionsList='${requestScope.departmentList}' initialValue='${userForm.departmentId}' styleClass="black_ar" staticField="false" size="30"/></td>
+                  <td align="left" nowrap class="black_ar"><autocomplete:AutoCompleteTag property="departmentId" optionsList='${requestScope.departmentList}' initialValue='${userForm.departmentId}' styleClass="black_ar" staticField="false" size="27"/></td>
                   <td align="left"><a href="#" class="view"><logic:notEqual name="pageOf" value='${requestScope.pageOfSignUp}'><html:link href="#" styleClass="view"	styleId="newDepartment" onclick="openDepartmentWindow();"><bean:message key="buttons.addNew" /></html:link></logic:notEqual></a></td>
                   <td align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
                   <td align="left" class="black_ar"><label for="cancerResearchGroupId"><bean:message key="user.cancerResearchGroup" /> </label></td>
-                  <td align="left" nowrap class="black_ar"><autocomplete:AutoCompleteTag property="cancerResearchGroupId" optionsList='${requestScope.cancerResearchGroupList}'	initialValue='${userForm.cancerResearchGroupId}' styleClass="black_ar" staticField="false" size="30"/></td>
+                  <td align="left" nowrap class="black_ar"><autocomplete:AutoCompleteTag property="cancerResearchGroupId" optionsList='${requestScope.cancerResearchGroupList}'	initialValue='${userForm.cancerResearchGroupId}' styleClass="black_ar" staticField="false" size="27"/></td>
                   <td align="left"><a href="#" class="view"><logic:notEqual name="pageOf" value='${requestScope.pageOfSignUp}'><html:link href="#" styleClass="view" styleId="newCancerResearchGroup" onclick="openCRGWindow();"><bean:message key="buttons.addNew" /></html:link></logic:notEqual></a></td>
                 </tr>
               

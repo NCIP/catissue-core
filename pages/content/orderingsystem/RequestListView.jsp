@@ -35,7 +35,7 @@
     <td class="td_color_bfdcf3"><table border="0" cellpadding="0" cellspacing="0">
       <tr>
         <td class="td_table_head"><span class="wh_ar_b"><bean:message key='orderingSystem.orderListPage.buttons.order'/></span></td>
-        <td><img src="images/uIEnhancementImages/table_title_corner2.gif" alt="Page Title" width="31" height="24" /></td>
+        <td><img src="images/uIEnhancementImages/table_title_corner2.gif" alt="Page Title - Order List" width="31" height="24" /></td>
       </tr>
     </table></td>
   </tr>
@@ -64,7 +64,7 @@
         <td width="1%"></td>
       </tr>
       <tr>
-        <td colspan="2" class="showhide"><table width="99%" border="0" align="center" cellpadding="4" cellspacing="0">
+        <td colspan="2" ><table width="99%" border="0" align="center" cellpadding="4" cellspacing="0">
             <tr>
               <td colspan="5" class="black_ar_b"><custom:test name=" Request List Queue: " pageNum="<%=pageNum%>" totalResults="<%=totalResults%>" numResultsPerPage="<%=numResultsPerPage%>" pageName="RequestListView.do"/></td>
               <td colspan="2" align="right" class="black_ar_b"></td>
@@ -99,6 +99,9 @@
 				  </logic:iterate>	
         </table></td>
       </tr>
+	  <tr>
+	  <td class="bottomtd"></td>
+	  </tr>
     </table></td>
   </tr>
 </table>
