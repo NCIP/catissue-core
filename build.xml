@@ -865,6 +865,7 @@
 				<include name="**/edu/wustl/catissuecore/bean/**"/>
 				<include name="**/edu/wustl/catissuecore/namegenerator/**"/>
 				<include name="**/edu/wustl/catissuecore/caties/**"/>
+				<include name="**/edu/wustl/catissuecore/hbm/**"/>
 				
 				<exclude name="**/CVS*" />
 				<exclude name="**/java.policy.applet*" />
@@ -894,6 +895,13 @@
 		            	<include name="catissuecore.jar"/>
 		            </fileset>
 		        </copy>
+		
+		<copy todir="${base.dir}/private_public_migrator/lib" overwrite="true">
+            <fileset dir="${temp.dir}">
+            	<include name="catissuecore.jar"/>
+            </fileset>
+        </copy>
+		
 	</target>
 	
 	<target name="sendMail"  description="Send mail">
