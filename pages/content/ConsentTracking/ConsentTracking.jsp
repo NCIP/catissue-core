@@ -447,7 +447,7 @@ function popupWindow(nofConsentTiers)
 			<tr>
 				<td>
 				<%-- Inner table that will show Consents Start--%>
-				<div id="" style="overflow:auto;height:150px;width:520"> <table width="100%" border="0" cellspacing="0"         cellpadding="4">
+				<div id="" style="overflow:auto;"> <table width="100%" border="0" cellspacing="0"         cellpadding="4">
 						<%-- Serial No # --%>	
 						<tr class="tableheading">
 							<td width="8%" align="left" class="black_ar_b"><bean:message key="requestlist.dataTabel.serialNo.label" /></td>
@@ -722,7 +722,7 @@ function popupWindow(nofConsentTiers)
 				String str = "withdrawAll('"+ consentTierList.size()+"')";
 				%>
 					
-						<html:button property="addButton" disabled="<%=withdrawAllDisabled%>" styleClass="blue_ar_c" onclick="<%=str%>" value="Withdraw All"/>
+						<html:button property="addButton" disabled="<%=withdrawAllDisabled%>" styleClass="blue_ar_c" onclick="<%=str%>" value="Withdraw All"/>&nbsp;
 					
 				<%
 				}
@@ -731,7 +731,7 @@ function popupWindow(nofConsentTiers)
 						{
 						%>
 							<%-- action button --%>																
-							&nbsp;|&nbsp
+							|&nbsp;
 									<input type="button" name="doneConsentButton" class="blue_ar_c" value="Done" onclick="submitConsentResponses()"/>
 							
 						<% 
