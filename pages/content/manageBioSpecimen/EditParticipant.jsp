@@ -519,7 +519,7 @@ function participantRegRow(subdivtag)
 							property="genotype"
 							optionsList="<%=request.getAttribute(Constants.GENOTYPE_LIST)%>"
 							initialValue="<%=form.getGenotype()%>"
-							styleClass="formFieldSized12" /></label></td>
+							styleClass="black_ar" size="27"/></label></td>
 
 					</tr>
 					<tr>
@@ -528,7 +528,7 @@ function participantRegRow(subdivtag)
 							key="participant.race" /></td>
 
 						<td class="black_ar"><html:select property="raceTypes"
-							styleClass="formFieldSized18" styleId="race" size="4"
+							styleClass="formFieldSizedNew" styleId="race" size="4"
 							multiple="true" disabled="<%=readOnlyForAll%>"
 							onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 							<html:options collection="<%=Constants.RACELIST%>"
@@ -543,7 +543,7 @@ function participantRegRow(subdivtag)
 							property="ethnicity"
 							optionsList="<%=request.getAttribute(Constants.ETHNICITY_LIST)%>"
 							initialValue="<%=form.getEthnicity()%>"
-							styleClass="formFieldSized12" /></label></td>
+							styleClass="black_ar" size="27" /></label></td>
 					</tr>
 
 					<!-- activitystatus -->
