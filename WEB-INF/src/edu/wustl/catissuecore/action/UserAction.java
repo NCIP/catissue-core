@@ -61,14 +61,14 @@ public class UserAction extends SecureAction
         UserForm userForm=(UserForm)form;
         
         
-        ShowAssignPrivilegePageAction showAssignPrivilegePageAction = new ShowAssignPrivilegePageAction();
+      
         MSRUtil msrUtil=new MSRUtil();
     //    final AssignPrivilegePageBizLogic apBizLogic= msrUtil.getAssignPrivilegePageBizLogic();
 	//	final List<NameValueBean> siteList = apBizLogic.getSiteList(false);
 	//	request.setAttribute(Constants.SITELIST, siteList);
 	//	request.setAttribute("siteListforJSP", Constants.SITELIST);
         
-        msrUtil.onFirstTimeLoad(mapping, request);
+        msrUtil.onFirstTimeLoadForUser(mapping, request);
         
         final String cpOperation = (String) request.getParameter("cpOperation");
         if(cpOperation !=null)

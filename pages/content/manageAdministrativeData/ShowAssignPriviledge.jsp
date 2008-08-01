@@ -61,6 +61,7 @@ function updateCPTree()
 	 <html:hidden property="unsignedConsentURLName"/> 
  	 <html:hidden property="consentTierCounter"/>
   	 <html:hidden property="consentWaived"/>
+   	 <html:hidden property="pageOf"/>
 
 	<logic:notEqual name="noOfConsents" value="0">
 		<c:forEach var="counter" begin="0" end='${requestScope.noOfConsents -1}' step="1">

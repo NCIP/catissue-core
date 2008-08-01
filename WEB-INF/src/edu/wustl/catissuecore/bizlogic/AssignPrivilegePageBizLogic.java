@@ -22,7 +22,6 @@ import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.multiRepository.bean.SiteUserRolePrivilegeBean;
-import edu.wustl.catissuecore.util.global.CPPrivilege;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
@@ -52,6 +51,7 @@ import gov.nih.nci.security.exceptions.CSObjectNotFoundException;
 
 public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 {
+	List<NameValueBean> scientistPrivilegesList = Variables.privilegeGroupingMap.get("SCIENTIST");
 	
 	public List getRecordNames(Set recordIds, AssignPrivilegesForm privilegesForm) throws DAOException
 	{				
@@ -272,6 +272,27 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 		return privilegeNameValueBeanList;
 	}
 	
+	
+	public List<NameValueBean> getActionListForUser(boolean isToExcludeDisabled) throws BizLogicException
+	{     
+		List<NameValueBean> privilegeNameValueBeanList = new ArrayList<NameValueBean>();
+		List<NameValueBean> cpPrivilegesList = Variables.privilegeGroupingMap.get("CP");
+		
+		List<NameValueBean> sitePrivilegesList = Variables.privilegeGroupingMap.get("SITE"); 
+		//List<NameValueBean> newList = 
+		//cpPrivilegesList.addAll(sitePrivilegesList);
+		privilegeNameValueBeanList.addAll(sitePrivilegesList);
+		privilegeNameValueBeanList.addAll(cpPrivilegesList);
+		List<NameValueBean> privList = new ArrayList<NameValueBean>();
+		for (NameValueBean nmv  : privilegeNameValueBeanList)
+		{
+			NameValueBean privilegeNameValueBean = new NameValueBean(Utility.getDisplayLabelForUnderscore(nmv.getName()), nmv.getValue());
+			privList.add(privilegeNameValueBean);
+		}
+		return privList;
+	}
+	
+	
 	/**
 	 * Gets list of actions when page is loaded
 	 * @param isToExcludeDisabled
@@ -348,7 +369,7 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 	    PrivilegeUtility privilegeUtility = new PrivilegeUtility();
 	   if("7".equals(role))
 	   {
-		  nameValuBeanList= getPrivilegesForScientist();
+		  nameValuBeanList= scientistPrivilegesList; 
 	   }
 	   else
 	   {
@@ -374,16 +395,16 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 	   }
 		return nameValuBeanList;
 	}
-	public List<NameValueBean> getPrivilegesForScientist() 
+	/*public List<NameValueBean> getPrivilegesForScientist() 
 	{
 		List<NameValueBean> list=new ArrayList<NameValueBean>();
 		
 		NameValueBean valueBean=new NameValueBean();
 	    valueBean.setName("View Data");
-	    valueBean.setValue("25");
+	    valueBean.setValue("30");
 	    list.add(valueBean);
 	    return list;
-	}
+	}*/
 	/**
 	 * Gives the list of user NameValueBeanObjects that are registered under the selected sites.
 	 * @param selectedSitesList
@@ -525,9 +546,17 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 	 * @throws JSONException 
 	 * @throws BizLogicException 
 	 */
-	public List<JSONObject> getActionsForThisRole(String roleId)throws JSONException, BizLogicException 
+	public List<JSONObject> getActionsForThisRole(String roleId, String pageOf)throws JSONException, BizLogicException 
 	{
-		List<NameValueBean> actionList=getActionList(false);
+		List<NameValueBean> actionList = new ArrayList<NameValueBean> ();
+		if (pageOf != null && !pageOf.equalsIgnoreCase("pageOfUserAdmin"))
+		{
+		actionList=getActionList(false);
+		}
+		else 
+		{
+		actionList=getActionListForUser(false);
+		}
 		List<NameValueBean> selectedActionsList = getActionsList(roleId);
 		// request.setAttribute(Constants.ACTIONLIST, actionsList);
 		List<JSONObject> arrayList = new ArrayList<JSONObject>();
@@ -699,7 +728,7 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 			PrivilegeUtility privilegeUtility = new PrivilegeUtility();
 			if("7".equals(roleId))
 			{
-				List<NameValueBean>  scPrivilegesList =getPrivilegesForScientist();
+				List<NameValueBean>  scPrivilegesList = scientistPrivilegesList;
 				for(int m=0;m<scPrivilegesList.size();m++)
 				{
 					NameValueBean nameValueBean=scPrivilegesList.get(m);
@@ -905,7 +934,7 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 			String actionName="";
 			if("7".equals(bean.getRole()))
 			{
-				List<NameValueBean>  scPrivilegesList =getPrivilegesForScientist();
+				List<NameValueBean>  scPrivilegesList = scientistPrivilegesList;
 				for(int m=0;m<scPrivilegesList.size();m++)
 				{
 					NameValueBean nameValueBean=scPrivilegesList.get(m);
@@ -1008,7 +1037,7 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 		List<NameValueBean> privileges=surp.getPrivileges();
 		if(("7").equals(roleId))
 		{
-			List<NameValueBean> list=getPrivilegesForScientist();
+			List<NameValueBean> list= scientistPrivilegesList;
 			JSONObject actionJsonObject=null;
 			for(int z=0;z<list.size();z++)
 			{
@@ -1062,39 +1091,84 @@ public List<JSONObject> addPrivilegeForUserPage(Map<String, SiteUserRolePrivileg
 
 	try 
 	{
-		for (int k = 0; k < cpIdsList.size(); k++) 
-		{ 
-			String roleName= "";
-			SecurityManager securityManager=SecurityManager.getInstance(this.getClass());
-			Role role=null;
-			try
-			{
-			role=securityManager.getUserProvisioningManager().getRoleById(roleId);
-			roleName=role.getName();
+		
+		
+		if(cpIdsList!=null&&!cpIdsList.isEmpty())
+		{
+			for (int k = 0; k < cpIdsList.size(); k++) 
+			{ 
+				String roleName= "";
+				SecurityManager securityManager=SecurityManager.getInstance(this.getClass());
+				Role role=null;
+				try
+				{
+				role=securityManager.getUserProvisioningManager().getRoleById(roleId);
+				roleName=role.getName();
+				}
+				catch (CSException e)
+				{
+					throw new BizLogicException("Could not get the role",e);
+				}
+				
+				 long cpId = cpIdsList.get(k);
+				 dao.openSession(null); 
+				 Object object = dao.retrieve(CollectionProtocol.class.getName(), cpId);
+				 CollectionProtocol collectionProtocol  = (CollectionProtocol)object;
+				 
+				 List<Site> cpRelatedSites = getCPSiteRelationForUserPage(collectionProtocol, siteIdsList);
+				 
+				 List<NameValueBean> actionBeanList = getPrivilegesNameValueBeanList(actionIdsList);
+				
+				 SiteUserRolePrivilegeBean surpBean =setUserPrivilegeSummaryForUserPage(collectionProtocol, cpRelatedSites, role, actionBeanList);
+				
+				 String rowId = "CP_"+ cpId;
+				 rowIdBeanMap.put(rowId,surpBean);
+				 
+				 JSONObject jsonObject=getObjectForUPSummaryForUserPage(cpRelatedSites,rowId,collectionProtocol,roleName,actionIdsList,roleId);
+				 
+				 listForUPSummary.add(jsonObject);
 			}
-			catch (CSException e)
-			{
-				throw new BizLogicException("Could not get the role",e);
-			}
-			
-			 long cpId = cpIdsList.get(k);
-			 dao.openSession(null); 
-			 Object object = dao.retrieve(CollectionProtocol.class.getName(), cpId);
-			 CollectionProtocol collectionProtocol  = (CollectionProtocol)object;
-			 
-			 List<Site> cpRelatedSites = getCPSiteRelationForUserPage(collectionProtocol, siteIdsList);
-			 
-			 List<NameValueBean> actionBeanList = getPrivilegesNameValueBeanList(actionIdsList);
-			
-			 SiteUserRolePrivilegeBean surpBean =setUserPrivilegeSummaryForUserPage(collectionProtocol, cpRelatedSites, role, actionBeanList);
-			
-			 String rowId = "" + cpId;
-			 rowIdBeanMap.put(rowId,surpBean);
-			 
-			 JSONObject jsonObject=getObjectForUPSummaryForUserPage(cpRelatedSites,rowId,collectionProtocol,roleName,actionIdsList,roleId);
-			 
-			 listForUPSummary.add(jsonObject);
 		}
+		else
+		{
+			
+			for (int k = 0; k < siteIdsList.size(); k++) 
+			{ 
+				String roleName= "";
+				SecurityManager securityManager=SecurityManager.getInstance(this.getClass());
+				Role role=null;
+				try
+				{
+				role=securityManager.getUserProvisioningManager().getRoleById(roleId);
+				roleName=role.getName();
+				}
+				catch (CSException e)
+				{
+					throw new BizLogicException("Could not get the role",e);
+				}
+				
+				 long siteId = siteIdsList.get(k);
+				 dao.openSession(null); 
+				 Object object = dao.retrieve(Site.class.getName(), siteId);
+				 Site site  = (Site)object;
+				 List <Site> siteLists = new ArrayList<Site>();
+				 siteLists.add(site);
+			//	 List<Site> cpRelatedSites = getCPSiteRelationForUserPage(si, siteIdsList);
+				 
+				 List<NameValueBean> actionBeanList = getPrivilegesNameValueBeanList(actionIdsList);
+				
+				 SiteUserRolePrivilegeBean surpBean =setUserPrivilegeSummaryForUserPage(null, siteLists, role, actionBeanList);
+				
+				 String rowId = "" + siteId;
+				 rowIdBeanMap.put(rowId,surpBean);
+				 
+				 JSONObject jsonObject=getObjectForUPSummaryForUserPage(siteLists,rowId,null,roleName,actionIdsList,roleId);
+				 
+				 listForUPSummary.add(jsonObject);
+			}
+		}
+		
+		
 	}  
 	catch (DAOException e) 
 	{
@@ -1169,9 +1243,13 @@ public JSONObject getObjectForUPSummaryForUserPage(List<Site> cpRelatedSites, St
 
 	JSONObject jsonobject = new JSONObject();
 	jsonobject.append("rowId", rowId);
-
-	String cpName = collectionProtocol.getShortTitle();
-	long cpId=collectionProtocol.getId();
+	String cpName = "";
+	long cpId = 0;
+	if (collectionProtocol != null)
+	{
+	cpName = collectionProtocol.getShortTitle();
+	cpId=collectionProtocol.getId();
+	}
 	jsonobject.append("cpName", cpName);
 	jsonobject.append("cpId", cpId);
 	jsonobject.append("sites", sites);
@@ -1187,7 +1265,7 @@ public JSONObject getObjectForUPSummaryForUserPage(List<Site> cpRelatedSites, St
 		PrivilegeUtility privilegeUtility = new PrivilegeUtility();
 		if("7".equals(roleId))
 		{
-			List<NameValueBean>  scPrivilegesList =getPrivilegesForScientist();
+			List<NameValueBean>  scPrivilegesList = scientistPrivilegesList;
 			for(int m=0;m<scPrivilegesList.size();m++)
 			{
 				NameValueBean nameValueBean=scPrivilegesList.get(m);
@@ -1284,7 +1362,7 @@ public List<JSONObject> editPrivilegeForUserPage (Map<String, SiteUserRolePrivil
 	List<NameValueBean> privileges=surp.getPrivileges();
 	if(("7").equals(roleId))
 	{
-		List<NameValueBean> list=getPrivilegesForScientist();
+		List<NameValueBean> list= scientistPrivilegesList;
 		JSONObject actionJsonObject=null;
 		for(int z=0;z<list.size();z++)
 		{

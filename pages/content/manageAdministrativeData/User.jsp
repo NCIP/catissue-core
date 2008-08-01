@@ -357,12 +357,12 @@ function handleStatus(status)
 							<logic:notEqual name="pageOf"
 								value='${requestScope.pageOfUserProfile}'>
 								<tr>
-									<td width="1%" align="center" class="black_ar"><span
+									<td width="1%" align="center" class="black_ar_t"><span
 										class="blue_ar_b"><img
 										src="images/uIEnhancementImages/star.gif" alt="Mandatory"
 										width="6" height="6" hspace="0" vspace="0" /></span></td>
-									<td width="17%" align="left" class="black_ar">Role</td>
-									<td width="19%"><select class="formFieldSized19"
+									<td width="17%" align="left" class="black_ar_t">Role</td>
+									<td width="19%" class="black_ar_t"><select class="formFieldSizedNew"
 										id="roleIds" onchange="getActionsForThisRole(this)">										
 										<%
 									for (int i = 0; i < roleList.size(); i++) {
@@ -381,17 +381,12 @@ function handleStatus(status)
 							%>
 									</select></td>
 									<td width="13%" align="left" valign="top">&nbsp;</td>
-									<td width="1%" align="center" class="black_ar"><span
+									<td width="1%" align="center" class="black_ar_t"><span
 										class="blue_ar_b"><img
 										src="images/uIEnhancementImages/star.gif" alt="Mandatory"
 										width="6" height="6" hspace="0" vspace="0" /></span></td>
-									<td width="17%" align="left" class="black_ar">Site(s)</td>
-									<td width="17%" align="left" class="black_ar">&nbsp;</td>
-									<td width="14%" align="left" valign="top">&nbsp;</td>
-								</tr>
-								<tr>
-									<td colspan="6" class="black_ar"></td>
-									<td width="17%" align="left" class="black_ar"><select
+									<td width="17%" align="left" class="black_ar_t">Site(s)</td>
+									<td width="17%" align="left" class="black_ar_t"><select
 										class="formFieldSizedNew" id="siteIds" size="4"
 										multiple="multiple" onchange="getCPsForThisSites(this)">
 										<%
@@ -406,11 +401,9 @@ function handleStatus(status)
 							}
 							%>
 									</select></td>
-
-									<td align="left" valign="top">&nbsp;</td>
+									<td width="14%" align="left" valign="top" class="black_ar_t">&nbsp;</td>
 								</tr>
-
-
+								
 								<tr class="td_color_F7F7F7">
 											<td colspan="8" align="left" class="bottomtd"></td>
 										</tr>
@@ -437,7 +430,7 @@ function handleStatus(status)
 												width="6" height="6" hspace="0" vspace="0" /></span></td>
 											<td width="17%" align="left" class="black_ar">Collection
 											Protocol(s)</td>
-											<td width="19%" class="black_ar"><input type="checkbox" checked="true" id="cpCheckId" onclick="disableOnSel('cpCheckId','cpIds')">All
+											<td width="19%" class="black_ar"><input type="checkbox" checked="true" id="cpCheckId" onclick="disableOnSel('cpCheckId','cpIds')" disabled="disabled">All
 											Current and Future</td>
 											<td width="13%" class="black_ar">&nbsp;</td>
 											<td width="1%" align="center" class="black_ar"><span
@@ -472,7 +465,7 @@ function handleStatus(status)
 											<td width="17%" align="left" class="black_ar"></td>
 											<td width="19%" class="black_ar" ><select
 												class="formFieldSizedNew" id="cpIds" size="4"
-												multiple="multiple" disabled="true">
+												multiple="multiple">
 												<%
 									for (int i = 0; i < cpList.size(); i++) {
 									String cpActionName = ""

@@ -1242,10 +1242,13 @@ function openCRGWindow()
 
       {           
 
-
-                  var form=roleObject.form;
-
-                  var cpOperation="getActionsForThisRole";                    
+				
+                  var form=document.forms[0];
+				
+				
+                  var cpOperation="getActionsForThisRole"; 
+                  var pageOf = form.pageOf.value;                  
+				
 
                   var selectedRoleType = roleObject.options[roleObject.selectedIndex].text;                             
 
@@ -1253,7 +1256,7 @@ function openCRGWindow()
 
             
 
-                  var url="ShowAssignPrivilegePage.do?pageOf=pageOfUserAdmin";
+                  var url="ShowAssignPrivilegePage.do?pageOf="+pageOf;
 
                   var data="cpOperation="+cpOperation+"&selectedRoleIds="+selectedRoleIds;                  
 
@@ -2255,11 +2258,11 @@ function disableOnSel(checkBoxId,selectBoxId)
 
                   }
 
-                  if(selectedCPIds.length=='0'){
+           //       if(selectedCPIds.length=='0'){
 
-                        errorFlagForCP=true;
+         //               errorFlagForCP=true;
 
-                  }
+         //         }
 
                   if(selectedActionIds.length=='0'){
 
@@ -2279,9 +2282,9 @@ function disableOnSel(checkBoxId,selectBoxId)
 
                   divId.style.display="none";
 
-                  if(errorFlagForSite==true||errorFlagForCP==true||errorFlagForAction==true||errorFlagForRole==true){
+                  if(errorFlagForSite==true||errorFlagForAction==true||errorFlagForRole==true){
 
-                        validateMethodForUserPriv(divId,errorFlagForSite,errorFlagForCP,errorFlagForRole,errorFlagForAction);
+                        validateMethodForUserPriv(divId,errorFlagForSite,errorFlagForRole,errorFlagForAction);
 
                   }
 
@@ -2497,7 +2500,7 @@ function disableOnSel(checkBoxId,selectBoxId)
 
  
 
-      function validateMethodForUserPriv(divId,errorFlagForSite,errorFlagForUser,errorFlagForRole,errorFlagForAction){
+      function validateMethodForUserPriv(divId,errorFlagForSite,errorFlagForRole,errorFlagForAction){
 
       var message="";
 
@@ -2506,13 +2509,7 @@ function disableOnSel(checkBoxId,selectBoxId)
             message =   "<li> <font color='red'>Site is required.</font> </li>";
 
       }
-
-      if(errorFlagForUser){
-
-            message = message+"<li> <font color='red'>Collection Protocol is required.</font> </li>";
-
-      }
-
+      
       if(errorFlagForRole){
 
             message = message+"<li> <font color='red'>Role is required.</font> </li>";

@@ -95,6 +95,7 @@
 	
 <baseObjectPrivilegeMappings>
 	<siteMappings>
+	    <siteMapping name="GENERAL_ADMINISTRATION" id="29"/>
 		<siteMapping name="STORAGE_ADMINISTRATION" id="15"/>
 		<siteMapping name="DISTRIBUTION" id="21"/>
 	</siteMappings>
