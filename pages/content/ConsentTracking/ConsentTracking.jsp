@@ -209,7 +209,7 @@ function popupWindow(nofConsentTiers)
 	String showHideStatus=request.getParameter("showHideStatus");
 %>
 	<%-- Main table Start --%>
-	<table width="100%" border="0" cellpadding="0" cellspacing="0"   >
+	<table width="100%" border="0" cellpadding="0" cellspacing="0"   id="consentTabForSCG">
 		<%--Title of the form i.e Consent Form --%>				
 		<tr>
 			<td align="left" class="tr_bg_blue1"><span class="blue_ar_b">

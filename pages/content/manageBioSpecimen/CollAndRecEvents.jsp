@@ -10,20 +10,18 @@
 <script language="JavaScript" type="text/javascript" src="jss/script.js"></script>
 
 <table width="100%" border="0" cellspacing="0" cellpadding="0" id="collectionEvent">
-  <tr >
-    <td width="50%" align="left" class="tr_bg_blue1" ><span class="blue_ar_b">&nbsp;
-							<bean:message key="specimen.collectedevents.title"/>
-							<input type="hidden" name="crDispType" value="<%=crDispType1%>" id="crDispType" />
-							</span>
-	</td>
-    <td align="centre" width=-"48%" class="tr_bg_blue1" ><span class="blue_ar_b">&nbsp;
-							<bean:message key="specimen.receivedevents.title"/>	
-							</span>
-	</td>
-    <td align="right" class="tr_bg_blue1" width="2%">
-	</td>
-  </tr>
-  
+	<tr>
+	<td width="50%" align="left" class="tr_bg_blue1" ><span class="blue_ar_b">&nbsp;Events</span></td>
+	<td width="50%"align="right" class="tr_bg_blue1" ><a href="#" id="imgArrow_event" onclick="showHide('event')"><img src="images/uIEnhancementImages/up_arrow.gif" alt="Show Details" width="80" height="9" hspace="10" border="0"/></a></td>
+	</tr>
+	<tr>
+	  <td colspan="2" class="showhide1"><div id="event" style="display:block" >
+	   <table width="100%" border="0" cellpadding="0" cellspacing="0">
+  <tr>
+    <td align="left" valign="top" class="black_ar">&nbsp;&nbsp;&nbsp;&nbsp;<strong>Collected</strong></td>
+    <td align="left" valign="middle" class="black_ar" nowrap>&nbsp;&nbsp;&nbsp;&nbsp;<strong>Received</strong></td>
+ </tr>
+  <tr><td colspan="2" class="bottomtd"></td></tr>
   <tr>
     <td>
 	<table width="100%" border="0" cellspacing="0" cellpadding="3">
@@ -38,13 +36,13 @@
 								<bean:message key="specimen.collectedevents.username"/>
 							</label>
 		</td>
-        <td align="left" class="black_new">
+        <td align="left" class="black_ar">
 						
 							<autocomplete:AutoCompleteTag property="collectionEventUserId"
 										  optionsList = "<%=request.getAttribute(Constants.USERLIST)%>"
 										  initialValue="<%=new Long(form.getCollectionEventUserId())%>"
         								  staticField="false"
-										  styleClass="formFieldSized12"
+										  styleClass="formFieldSizedAutoSCG"
 							/>		
 		</td>
       </tr>
@@ -99,25 +97,25 @@
 								<bean:message key="eventparameters.time"/>
 							</label>
 		</td>
-        <td class="black_new">
+        <td  class="black_ar">
 						
 					
 							<autocomplete:AutoCompleteTag property="collectionEventTimeInHours"
 										  optionsList = "<%=request.getAttribute(Constants.HOUR_LIST)%>"
 										  initialValue="<%=form.getCollectionEventTimeInHours()%>"
-										  styleClass="formFieldSized5"
+										  styleClass="formFieldSizedAutoSCGTime"
 										  staticField="false"
 					    />	
 							
 							&nbsp;
 							<label for="eventparameters.timeinhours">
-								<bean:message key="eventparameters.timeinhours"/>&nbsp; 
+								<bean:message key="eventparameters.timeinhours"/>
 							</label>
 							
 							<autocomplete:AutoCompleteTag property="collectionEventTimeInMinutes"
 										  optionsList = "<%=request.getAttribute(Constants.MINUTES_LIST)%>"
 										  initialValue="<%=form.getCollectionEventTimeInMinutes()%>"
-										  styleClass="formFieldSized5"
+										  styleClass="formFieldSizedAutoSCGTime"
 										  staticField="false"
 					    />	
 
@@ -135,11 +133,11 @@
 								<bean:message key="collectioneventparameters.collectionprocedure"/>
 							</label>
 		</td>
-        <td class="black_new">
+        <td class="black_ar">
 								<autocomplete:AutoCompleteTag property="collectionEventCollectionProcedure"
 										  optionsList = "<%=request.getAttribute(Constants.PROCEDURE_LIST)%>"
 										  initialValue="<%=form.getCollectionEventCollectionProcedure()%>"
-										  styleClass="formFieldSized12"
+										  styleClass="formFieldSizedAutoSCG"
 						/>	
 		</td>
       </tr>
@@ -152,11 +150,11 @@
 									<bean:message key="collectioneventparameters.container"/>
 								</label>
 		</td>
-        <td class="black_new">
+        <td class="black_ar">
 								<autocomplete:AutoCompleteTag property="collectionEventContainer"
 										  optionsList = "<%=request.getAttribute(Constants.CONTAINER_LIST)%>"
 										  initialValue="<%=form.getCollectionEventContainer()%>"
-										   styleClass="formFieldSized12"
+										   styleClass="formFieldSizedAutoSCG"
 						    />
 		</td>
       </tr>
@@ -184,12 +182,12 @@
 								<bean:message key="specimen.receivedevents.username"/>
 							</label>
 		</td>
-        <td align="left" class="black_new">
+        <td align="left" class="black_ar">
 						<autocomplete:AutoCompleteTag property="receivedEventUserId"
 										  optionsList = "<%=request.getAttribute(Constants.USERLIST)%>"
 										  initialValue="<%=new Long(form.getReceivedEventUserId())%>"
 										  staticField="false"
-										  styleClass="formFieldSized12"
+										  styleClass="formFieldSizedAutoSCG"
 					    />	
 		</td>
       </tr>
@@ -244,24 +242,24 @@
 								<bean:message key="eventparameters.time"/>
 							</label>
 		</td>
-        <td class="black_new">
+        <td class="black_ar">
 						
 						<autocomplete:AutoCompleteTag property="receivedEventTimeInHours"
 										  optionsList = "<%=request.getAttribute(Constants.HOUR_LIST)%>"
 										  initialValue="<%=form.getReceivedEventTimeInHours()%>"
-										  styleClass="formFieldSized5"
+										  styleClass="formFieldSizedAutoSCGTime"
 										  staticField="false"
 					    />	
 
 
 							<label for="eventparameters.timeinhours">
-								<bean:message key="eventparameters.timeinhours"/>&nbsp; 
+								<bean:message key="eventparameters.timeinhours"/> &nbsp;
 							</label>
 							
 							<autocomplete:AutoCompleteTag property="receivedEventTimeInMinutes"
 										  optionsList = "<%=request.getAttribute(Constants.MINUTES_LIST)%>"
 										  initialValue="<%=form.getReceivedEventTimeInMinutes()%>"
-										  styleClass="formFieldSized5"
+										  styleClass="formFieldSizedAutoSCGTime"
 										  staticField="false"
 					    />	
 
@@ -279,11 +277,11 @@
 								<bean:message key="receivedeventparameters.receivedquality"/>
 							</label>
 		</td>
-        <td class="black_new">
+        <td class="black_ar">
 							<autocomplete:AutoCompleteTag property="receivedEventReceivedQuality"
 										  optionsList = "<%=request.getAttribute(Constants.RECEIVED_QUALITY_LIST)%>"
 										  initialValue="<%=form.getReceivedEventReceivedQuality()%>"
-										   styleClass="formFieldSized12"
+										  styleClass="formFieldSizedAutoSCG"
 						/>
 		</td>
       </tr>
@@ -305,17 +303,9 @@
 	  </tr>
     </table></td> 
   </tr>
- 
+ </table>
+ </div>
+</td>
+</tr>
 </table>
 <!---------------------------------------------------->
-					
-						
-						
-						
-						
-						
-						
-						
-					
-					
-					

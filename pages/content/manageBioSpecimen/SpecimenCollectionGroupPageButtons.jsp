@@ -1,9 +1,6 @@
 <!-- action buttons begins -->
-							<table cellpadding="4" cellspacing="0" border="0" id="scgPageButtons">
-								<tr>
+							<div id="scgPageButtons">
 								
-									<td>
-										<table>
 											<logic:equal name="<%=Constants.SUBMITTED_FOR%>" value="AddNew">
 												<% 	
 													isAddNew=true;
@@ -13,28 +10,30 @@
 												Patch ID: Bug#3184_13
 												Description: Added restrict checkbox
 											-->
-											<tr>
-												<td class="formFieldNoBorders" colspan="3" valign="center">
-													&nbsp;<html:checkbox styleId="restrictSCGCheckbox" property="restrictSCGCheckbox" value="true" onclick="disableButtonsOnCheck(this)">
+											 <tr>
+									          <td colspan="3" align="left" class="dividerline" ><span class="black_ar">
+													<html:checkbox styleId="restrictSCGCheckbox" property="restrictSCGCheckbox" value="true" onclick="disableButtonsOnCheck(this)">
 														<bean:message key="specimen.checkboxLabel"/>
 													</html:checkbox>
 												</td>
 											</tr>
 											<tr>
-												<td class="formFieldNoBorders" colspan="3" valign="center">
-													&nbsp;<html:checkbox styleId="printCheckbox" property="printCheckbox" value="true" onclick="">
+												<td colspan="3" align="left" class="black_ar">
+													<html:checkbox styleId="printCheckbox" property="printCheckbox" value="true" onclick="">
 															<bean:message key="print.checkboxLabel"/>
 														</html:checkbox>
 												</td>
 											</tr>
-											<tr><td>&nbsp;</td></tr>
+											 <tr>
+												<td colspan="3" class="bottomtd"></td>
+											</tr>
 											<tr>
-												<td nowrap class="formFieldNoBorders">
+												<td colspan="3" align="left" class="buttonbg">
 												<%
 												if(operation.equals(Constants.ADD))
 												{
 												%>
-													<html:button styleClass="actionButton" 
+													<html:button styleClass="blue_ar_b" 
 															property="submitPage" 
 															title="Submit Only"
 															value="<%=Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[0][0]%>" 
@@ -53,7 +52,7 @@
 														str = "popupWindow('"+ consentTier.size() +"')";
 													}
 												%>
-													<html:button styleClass="actionButton" 
+													<html:button styleClass="blue_ar_b" 
 															property="submitPage" 
 															title="Submit Only"
 															value="<%=Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[0][0]%>" 
@@ -63,12 +62,12 @@
 												<%	
 												}
 												%>
-												</td>
+												
 											
 												<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
-												<td nowrap class="formFieldNoBorders">
+												
 													<!-- Patch ID: Bug#4227_7 -->
-													<html:button styleClass="actionButton"  
+													<html:button styleClass="blue_ar_c"  
 															property="submitPage" 
 															title="Submit and Add Specimen"
 															value="<%=Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[1][0]%>" 
@@ -78,14 +77,14 @@
 															onclick="<%=forwardToSubmit%>"
 						  				     	    		styleId = "submitAndAdd">
 											     	</html:button>
-												</td>
-												<td nowrap class="formFieldNoBorders">
+												
+												
 													<!-- 
 														Patch ID: Bug#3184_37
 													 	Description: Added id to the button. Needed to enable and disable in the javascript
 													-->
 													<!-- Patch ID: Bug#4227_6 -->
-													<html:button styleClass="actionButton"  
+													<html:button styleClass="blue_ar_c"  
 															property="submitPage" 
 															title="Submit and Add Multiple Specimen"
 															value="<%=Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[2][0]%>" 
@@ -95,14 +94,14 @@
 															onclick="<%=forwardToSubmitForMultipleSpecimen%>" 
 															styleId="submitAndAddMultiple">
 											     	</html:button>
-												</td>
+											
 												</logic:notEqual>	
 												<!-- delete button added for disabling the objects -->
-												<td>
+												
 													<%
 														String deleteAction="deleteObject('" + formName +"','" + Constants.CP_QUERY_BIO_SPECIMEN + "')";
 													%>
-													<html:button styleClass="actionButton"
+													<html:button styleClass="blue_ar_c"
 														property="disableRecord"
 														title="Delete or Disable Record"
 														value="Delete"
@@ -111,8 +110,7 @@
 												</td>
 
 											</tr>
-										</table>
-									</td>					
+															
 													   			
 									
 									<%-- td>
@@ -120,6 +118,6 @@
 											<bean:message  key="buttons.reset" />
 										</html:reset>
 									</td --%>
-								</tr>
-							</table>
+								
+							</div>
 							<!-- action buttons end -->

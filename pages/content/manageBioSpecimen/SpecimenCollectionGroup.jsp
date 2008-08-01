@@ -14,7 +14,8 @@
 <%@ page import="edu.wustl.catissuecore.bizlogic.AnnotationUtil"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
 <%@ page import="edu.wustl.catissuecore.action.annotations.AnnotationConstants"%>
-
+<%@ page language="java" isELIgnored="false"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 
 <script src="jss/script.js" type="text/javascript"></script>
@@ -25,7 +26,7 @@
 <SCRIPT>var imgsrc="images/";</SCRIPT>
 <script src="jss/calendarComponent.js" type="text/javascript"></script>
 <LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
-
+<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" /> 
 <% 
 		String operation = (String)request.getAttribute(Constants.OPERATION);
 		String tab = (String)request.getAttribute(Constants.SELECTED_TAB);
@@ -363,6 +364,7 @@
 				document.forms[0].submit();
 			}			
 		}
+			
         /**
  			* Name : Ashish Gupta
  			* Reviewer Name : Sachin Lale 
@@ -458,8 +460,8 @@
 		var showAlways="block";
 		if(!document.all)
 		{
-			displayKey="block";
-			showAlways="block";
+			displayKey="table";
+			showAlways="table";
 		}
 			
 		var displayTable=displayKey;
@@ -482,22 +484,41 @@
 		var display=document.getElementById('scgPageButtons');
 		display.style.display=tabSelected;
 				
-		var displayConsentTable=document.getElementById('consentTable');
+		var displayConsentTable=document.getElementById('consentTabForSCG');
 		if(displayConsentTable!=null)
 		{
 			displayConsentTable.style.display=displayTable;	
 		}
-				
 		//var collectionTab=document.getElementById('specimenCollectionGroupTab');
 		var consentTab=document.getElementById('consentTab');
+		var SCGImg = document.getElementById('SCGImage');
+		var consetsImg = document.getElementById('consentsImage');
 		
 		if(selectedTab=="specimenCollectionGroupTab")
 		{
-			updateTab(specimenCollectionGroupTab,consentTab);
+			if('${requestScope.operation}' == "edit")
+			{
+				SCGImg.innerHTML ="<img src=images/uIEnhancementImages/tab_edit_collection.gif  alt=Add Specimen  Collection group  width=216 height=22 border=0>"
+				consetsImg.innerHTML ="<img src=images/uIEnhancementImages/tab_consents2.gif alt=Consents width=76 height=22 border=0 onClick=consentPage()>"
+			}
+			else if('${requestScope.operation}' == "add")
+			{
+				SCGImg.innerHTML ="<img src=images/uIEnhancementImages/tab_add_scg.gif  alt=Add Specimen  Collection group  width=222 height=22 border=0>"
+				consetsImg.innerHTML ="<img src=images/uIEnhancementImages/tab_consents2.gif alt=Consents width=76 height=22 border=0 onClick=consentPage()>"
+			}
 		}
 		else		
 		{
-			updateTab(consentTab,specimenCollectionGroupTab);
+			if('${requestScope.operation}' == "edit")
+			{
+				SCGImg.innerHTML ="<img src=images/uIEnhancementImages/tab_edit_collection2.gif  alt=Edit Specimen  Collection group  width=216 height=22 border=0 onclick=specimencollgroup()>"
+				consetsImg.innerHTML ="<img src=images/uIEnhancementImages/tab_consents1.gif alt=Consents width=76 height=22 border=0>"
+			}
+			else if('${requestScope.operation}' == "add")
+			{
+				SCGImg.innerHTML ="<img src=images/uIEnhancementImages/tab_add_scg2.gif  alt=Add Specimen  Collection group  width=222 height=22 border=0 onclick=specimencollgroup()>"
+				consetsImg.innerHTML ="<img src=images/uIEnhancementImages/tab_consents1.gif alt=Consents width=76 height=22 border=0>"
+			}
 		}
 		
 	}
@@ -622,15 +643,7 @@ function editSCG()
 			}
 		
 		}
-		function setSize() {
-			var container = document.getElementById("Container");
-            var width =document.body.clientWidth;
-		      container.style.width=width-50;
-              container = document.getElementById("multiplespecimenTable");
-              container.style.width=width-100;
-		      container = document.getElementById("collAndRecEvents");
-              container.style.width=width-100;		  
-		}
+		
  </script>
 </head>
 			<!-- 
@@ -651,7 +664,7 @@ function editSCG()
 	if(pageView != null && !pageView.equals("viewAnnotations") && !pageView.equals(Constants.VIEW_SURGICAL_PATHOLOGY_REPORT))
 	{
 %>
-	<body onload="setSize();disablebuttons();initializeSCGForm();showConsents();">
+	<body onload="disablebuttons();initializeSCGForm();showConsents();">
 <%}else{%> 
 	<body>
  <%}%>
@@ -665,21 +678,20 @@ function editSCG()
 	if(pageView.equals("add"))
 	{
 	%>
-		 <table summary="" cellpadding="1" cellspacing="0" border="0" height="20" class="tabPage" width="70%">
-		<tr>
-			<td height="20" width="30%" nowrap class="tabMenuItemSelected" onclick="specimencollgroup()" id="specimenCollectionGroupTab">
-				<bean:message key="specimenCollectionGroupPage.add.title"/>
-			</td>
-
-	        <td height="20" width="20%" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="consentPage()" id="consentTab">
-	          <bean:message key="consents.consents"/>      
-	        </td>								
-			<td width="*" class="tabMenuSeparator" colspan="3">&nbsp;</td>
-		</tr>
-		<tr>
-			<td class="tabField" colspan="5">
+		 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
+	  <tr>
+		<td class="tablepadding"><table width="100%" border="0" cellpadding="0" cellspacing="0">
+			<tr>
+				<td class="td_tab_bg" ><img src="images/spacer.gif" alt="spacer" width="50" height="1"></td>
+				<td valign="bottom" class="td_color_bfdcf3" id="specimenCollectionGroupTab"><a href="#" id="SCGImage"><img src="images/uIEnhancementImages/tab_add_scg.gif" alt="Add Specimen  Collection group"  width="222" height="22" border="0"></a></td>
+				<td align="left" valign="bottom" class="td_color_bfdcf3"  id="consentTab"><a href="#" id="consentsImage"><img src="images/uIEnhancementImages/tab_consents2.gif" alt="Consents" width="76" height="22" border="0" onClick="consentPage()"></a></td>	
+				<td width="90%" align="left" valign="bottom" class="td_tab_bg" >&nbsp;</td>
+			</tr></table>
 
 		<%@ include file="EditSpecimenCollectionGroup.jsp" %>
+		</td>
+				</tr>
+				</table>
 	<%
 	}
 	%>
@@ -688,30 +700,21 @@ function editSCG()
 	if(pageView.equals("edit"))
 	{
 	%>
-		<table summary="" cellpadding="0" cellspacing="0" border="0" height="20" class="tabPage" width="650">
+	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
+	  <tr>
+		<td class="tablepadding"><table width="100%" border="0" cellpadding="0" cellspacing="0">
 			<tr>
-				<td height="20" class="tabMenuItemSelected" id="specimenCollectionGroupTab" onclick="specimencollgroup()"> 
-					<bean:message key="specimenCollectionGroupPage.edit.title"/>
-				</td>
-
-				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="viewSPR()">
-					<bean:message key="edit.tab.surgicalpathologyreport"/>
-				</td>
-								
-				
-				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="showAnnotations()">
-					<bean:message key="edit.tab.clinicalannotation"/>
-				</td>
-
-				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="consentPage()" id="consentTab">
-					<bean:message key="consents.consents"/>            
-				</td>
-				<td width="300" class="tabMenuSeparator" colspan="1" >&nbsp;</td>
-			</tr>
-
-			<tr>
-				<td class="tabField" colspan="6" >
+				<td class="td_tab_bg" ><img src="images/spacer.gif" alt="spacer" width="50" height="1"></td>
+				<td valign="bottom" id="specimenCollectionGroupTab"><a href="#" id="SCGImage"><img src="images/uIEnhancementImages/tab_edit_collection.gif" alt="Edit Specimen Collection Group" width="216" height="22"  border="0" onclick="specimencollgroup()"></a></td>
+				<td valign="bottom"  onClick="viewSPR()"><a href="#"><img src="images/uIEnhancementImages/tab_view_surgical3.gif" alt="Inactive View Surgical Pathology Report " width="216" height="22"  border="0"></a></td>
+				<td valign="bottom" onClick="showAnnotations()"><a href="#"><img src="images/uIEnhancementImages/tab_view_annotation2.gif" alt="View Annotation" width="116" height="22"  border="0"></a></td>
+				<td align="left" valign="bottom" class="td_color_bfdcf3"   id="consentTab"><a href="#" id="consentsImage"><img src="images/uIEnhancementImages/tab_consents2.gif" alt="Consents" width="76" height="22" border="0" onClick="consentPage()"></a></td>
+				<td width="90%" align="left" valign="bottom" class="td_tab_bg" >&nbsp;</td>
+			</tr></table>
+			
+			
 					<%@ include file="EditSpecimenCollectionGroup.jsp" %>
+			
 				
 	<%
 	}

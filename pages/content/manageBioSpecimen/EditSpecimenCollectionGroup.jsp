@@ -92,11 +92,13 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 		 }
 			</script>
 	<div style="width:100%">	
-	<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" id="Container" >
+	 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="whitetable_bg" id="Container">
 		<!-- NEW SPECIMEN COLLECTION GROUP REGISTRATION BEGINS-->
-		
-	    <tr><td>
-			<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%" id="scgTable">
+		 <tr>
+          <td colspan="3" align="left"><span class=" grey_ar_s">&nbsp;<img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" />&nbsp;<bean:message key="commonRequiredField.message" /></span></td>
+        </tr>
+	    <tr>
+          <td colspan="3" align="left" valign="top" class="showhide"><table width="100%" border="0" cellpadding="3" cellspacing="0" id="scgTable">
 				 <tr>
 					<td>
 						<html:hidden property="<%=Constants.OPERATION%>" value="<%=operation%>"/>
@@ -112,219 +114,140 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 						<html:hidden property="collectionProtocolName"/>
 						<html:hidden property="protocolParticipantIdentifier"/>
 						
+				
+				 
+				
+					<html:hidden property="id"/>
+					<html:hidden property="onSubmit"/>
+					<html:hidden property="redirectTo" value="<%=reqPath%>"/>
+					<html:hidden property="withdrawlButtonStatus"/>
 					</td>
 				 </tr>
-				 
-				 <tr>
-					<td><html:hidden property="id"/></td>
-					<td><html:hidden property="onSubmit"/></td>
-					<td><html:hidden property="redirectTo" value="<%=reqPath%>"/></td>
-					<html:hidden property="withdrawlButtonStatus"/>
-				 </tr>
-
-
-				<tr>
-					<br>
-				</tr>
 				 <!--Collection Protocol -->
 				 <tr>
-			     	<td class="formFieldNoBordersSimple" colspan="2" width="5"><b>*</b></td>
-				    <td class="formFieldNoBordersSimple">
-						<label for="collectionProtocolId">
-							<b><bean:message key="specimenCollectionGroup.protocolTitle"/></b> 
-						</label>
-					</td> 
+			     	<td width="1%" class="black_ar_t"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></span></td>
+				   <td width="10%" align="left" valign="top" class="black_ar"><LABEL for="collectionProtocolId"><bean:message key="specimenCollectionGroup.protocolTitle"/></LABEL></td> 
 					
-					<td class="formFieldNoBordersSimple">
-						<label for="collectionProtocolIdValue">
-							 <b><%=form.getCollectionProtocolName()%> </b>
-						</label>
+					<td width="34%" align="left" valign="top"><span class="black_ar_t"><%=form.getCollectionProtocolName()%></span>
 	
 						<input type="hidden" id="collectionProtocolId" value="<%=form.getCollectionProtocolId()%>" />
 						<input type="hidden" id="collectionProtocolName" value="<%=form.getCollectionProtocolName()%>" />
 					
 		        	</td>
-				 </tr>
-				 
-                  <tr>
-					<td class="formFieldNoBordersSimple" colspan="2" width="5"><b>*</b></td>
-					<td class="formFieldNoBordersSimple" >
-						<label for="participantName">
-							 <b><bean:message key="specimenCollectionGroup.participantNameWitProtocolId" /></b>
-						</label>
-					</td>
-					<td class="formFieldNoBordersSimple">
-						<label for="participantName">
-						<b>	<%=form.getParticipantNameWithProtocolId()%></b>
-						</label>
-						
-					</td>
+				    <td width="1%" class="black_ar_t" nowrap><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="3" /> </td>           
+                    <td width="19%" align="left" class="black_ar_t"><bean:message key="specimenCollectionGroup.participantNameWitProtocolId" /></td>
+					<td width="35%" align="left" nowrap class="black_ar_t"><%=form.getParticipantNameWithProtocolId()%></td> 
 					<html:hidden property="participantName"/>
 					<html:hidden property="protocolParticipantIdentifier"/>
 				</tr>
-				 <tr>
- 			     	<td class="formFieldNoBordersSimple" colspan="2" width="5"><b>*</b></td>
-				    <td class="formFieldNoBordersSimple">
-						<label for="siteId">
-							<b><bean:message key="specimenCollectionGroup.site"/></b>
-						</label>
-					</td>
-					
-					<td class="formFieldNoBordersSimple">
-					 <autocomplete:AutoCompleteTag property="siteId"
-										  optionsList = "<%=request.getAttribute(Constants.SITELIST)%>"
-										  initialValue="<%=new Long(form.getSiteId())%>"
-										  styleClass="formFieldSized"
-										  staticField="false"
-										 
-									    />
-					
-
-						<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_SCG_CP_QUERY%>">
-						&nbsp;
-						<html:link href="#" styleId="newSite" onclick="addNewAction('SpecimenCollectionGroupAddNew.do?addNewForwardTo=site&forwardTo=specimenCollectionGroup&addNewFor=site')">
-							<bean:message key="buttons.addNew" />
-						</html:link>
-						</logic:notEqual>
-		        	</td>
-				 </tr>
+				 <tr>				 
+				<tr>
 				<%if((!Variables.isSpecimenCollGroupLabelGeneratorAvl) || operation.equals(Constants.EDIT))
 				{%>
-				<tr>
-					<td class="formFieldNoBordersSimple" colspan="2" width="5"><b>*</b></td>
-					<td class="formFieldNoBordersSimple" >
-						<label for="name">
-							<b><bean:message key="specimenCollectionGroup.groupName" /></b>
-						</label>
-					</td>
-					
-					<td class="formFieldNoBordersSimple">
-						<html:text styleClass="formFieldSized" size="30"  maxlength="255" styleId="name" property="name" />						
-					</td>
-				</tr>
-				<%}%>
-				<%if((!Variables.isSpecimenCollGroupBarcodeGeneratorAvl) || operation.equals(Constants.EDIT))
+				
+					 <td class="black_ar_t" nowrap><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="3" /></td>    
+					<td align="left" nowrap><span class="black_ar"><label for="name"><bean:message key="specimenCollectionGroup.groupName" /></label></span></td>
+					<td align="left" valign="top" nowrap><html:text styleClass="formFieldSizedSC"   maxlength="255" styleId="name" property="name" /></td>
+				
+				<%}if((!Variables.isSpecimenCollGroupBarcodeGeneratorAvl) || operation.equals(Constants.EDIT))
 				{%>
-				<tr>
-					<td class="formFieldNoBordersSimple" colspan="2" width="5"><b>*</b></td>
-					<td class="formFieldNoBordersSimple" >
-						<label for="barcode">
-							<b><bean:message key="specimenCollectionGroup.barcode" /></b>
-						</label>
-					</td>
-					
-					<td class="formFieldNoBordersSimple">
-						<html:text styleClass="formFieldSized" size="30"  maxlength="255" styleId="barcode" property="barcode" />						
-					</td>
-				</tr>
+					<td class="black_ar_t">&nbsp;</td>
+					<td align="left" valign="top" class="black_ar_t"><bean:message key="specimenCollectionGroup.barcode" /></td>
+					<td align="left" valign="top" nowrap><html:text styleClass="formFieldSizedSCG" size="30"  maxlength="255" styleId="barcode" property="barcode" /></td>
+								
 				<%}%>
-				 <tr>
-				 	<td class="formFieldNoBordersSimple" colspan="2" width="5"><b>*</b></td>
-				    
-				    <td class="formFieldNoBordersSimple">
-						<label for="collectionProtocolEventId">
-							<b><bean:message key="specimenCollectionGroup.studyCalendarEventPoint"/></b>
-						</label>
-					</td>
-				    <td class="formFieldNoBordersSimple">
+				</tr>
+				
+				<tr>
+				    <td class="black_ar_t"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>
+				    <td align="left" valign="top" class="black_ar"><bean:message key="specimenCollectionGroup.studyCalendarEventPoint"/></td>
+				    <td align="left" nowrap class="black_ar">
 <!-- Mandar : 434 : for tooltip -->				    
-				     	<html:select property="collectionProtocolEventId" styleClass="formFieldSized" styleId="collectionProtocolEventId" size="1" onchange="onChangeEvent(this)" 
+				     	<html:select property="collectionProtocolEventId" styleClass="formFieldSizedSCG" styleId="collectionProtocolEventId" size="1" onchange="onChangeEvent(this)" 
 				     	 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
                          	<html:options collection="<%=Constants.STUDY_CALENDAR_EVENT_POINT_LIST%>" labelProperty="name" property="value"/>				     					     					     	
 						</html:select>&nbsp;
 						<bean:message key="collectionprotocol.studycalendarcomment"/>
 		        	</td>
-				 </tr>
-				<tr>
-					<td class="formFieldNoBordersSimple" colspan="2" width="5">&nbsp;</td>
-					<td class="formFieldNoBordersSimple" >
-						<label for="offset">
-							<bean:message key="specimenCollectionGroup.offset" />
-						</label>
-					</td>
-					<td class="formFieldNoBordersSimple">
-						<html:text styleClass="formFieldSized" size="10"  maxlength="10" styleId="offset" property="offset" onblur="registrationDateChange(this)"/>						
-					</td>
+					<td align="center" class="black_ar_t">&nbsp;</td>
+                    <td align="left" class="black_ar_t"><bean:message key="specimenCollectionGroup.site"/></td>
+					<td align="left" nowrap class="black_ar">
+					 <autocomplete:AutoCompleteTag property="siteId"
+										  optionsList = "<%=request.getAttribute(Constants.SITELIST)%>"
+										  initialValue="<%=new Long(form.getSiteId())%>"
+										  styleClass="formFieldSizedAutoSCG"
+										  
+										  staticField="false"										 
+									    />
+					
+
+						<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_SCG_CP_QUERY%>">
+						&nbsp;
+						<html:link href="#" styleId="newSite" styleClass="view" onclick="addNewAction('SpecimenCollectionGroupAddNew.do?addNewForwardTo=site&forwardTo=specimenCollectionGroup&addNewFor=site')">
+							<bean:message key="buttons.addNew" />
+						</html:link>
+						</logic:notEqual>
+		        	</td>
+					
+					
 				</tr>
 				 <tr>
-				     <td class="formFieldNoBordersSimple" colspan="2" width="5"><b>*</b></td>
-				     <td class="formFieldNoBordersSimple">
-						<label for="clinicalDiagnosis">
-							<b><bean:message key="specimenCollectionGroup.clinicalDiagnosis"/></b>
-						</label>
-					 </td>
-				     <td class="formFieldNoBordersSimple">
+				 	 <td align="center" nowrap>&nbsp;</td>   
+					 <td align="left" class="black_ar"><bean:message key="specimenCollectionGroup.offset" /></td>  
+					 <td align="left" nowrap class="black_ar"><html:text styleClass="formFieldSizedSCG" size="10"  maxlength="10" styleId="offset" property="offset" onblur="registrationDateChange(this)"/></td>
+					 <td align="center" nowrap colspan="3">&nbsp;</td>  
+				</tr>
+				 <tr>
+				     <td align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>
+				     <td align="left" valign="top" class="black_ar"><bean:message key="specimenCollectionGroup.clinicalDiagnosis"/></td>
+					 <td align="left" class="black_ar">
                              <autocomplete:AutoCompleteTag property="clinicalDiagnosis"
 										  optionsList = "<%=request.getAttribute(Constants.CLINICAL_DIAGNOSIS_LIST)%>"
 										  initialValue="<%=form.getClinicalDiagnosis()%>"
-										  styleClass="formFieldSized"
-										  size="30"
+										  styleClass="formFieldSizedAutoSCG"
+										  
 					        />
 							
 						<%
 						String url = "ShowFramedPage.do?pageOf=pageOfTissueSite&propertyName=clinicalDiagnosis&cdeName=Clinical%20Diagnosis";			
 						%>
 						<!-- // Patch ID: Bug#3090_22 -->
-						<a href="#" onclick="javascript:NewWindow('<%=url%>','name','360','525','no');return false">
-							<img src="images/uIEnhancementImages/ic_cl_diag.gif" border="0" width="16" height="16" title='CLinical Diagnosis Selector'>
-					</a>
-		        	 </td>
-				 </tr>
-				 
-				 <tr>
-				     <td class="formFieldNoBordersSimple" colspan="2" width="5"><b>*</b></td>
-				     <td class="formFieldNoBordersSimple">
-						<label for="clinicalStatus">
-							<b><bean:message key="specimenCollectionGroup.clinicalStatus"/></b>
-						</label>
-					 </td>
-					 
-				     <td class="formFieldNoBordersSimple">
-					 
+						<a href="#" onclick="javascript:NewWindow('<%=url%>','name','360','525','no');return false"><span class="black_ar"><img src="images/uIEnhancementImages/ic_cl_diag.gif" border="0" width="16" height="16" title='CLinical Diagnosis Selector'></span></a></td>
+				     <td align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>
+				     <td align="left" class="black_ar"><bean:message key="specimenCollectionGroup.clinicalStatus"/></td>
+					 <td align="left" class="black_ar">					 
 					 			 <autocomplete:AutoCompleteTag property="clinicalStatus"
 										  optionsList = "<%=request.getAttribute(Constants.CLINICAL_STATUS_LIST)%>"
 										  initialValue="<%=form.getClinicalStatus()%>"
-										  styleClass="formFieldSized"
-										 
+										   styleClass="formFieldSizedAutoSCG"
+										  							 
 									    />
-
 		        	  </td>
 				 </tr>
 				 
 				 <tr>
-			     	<td class="formFieldNoBordersSimple" colspan="2" width="5">&nbsp;</td>
-				    <td class="formFieldNoBordersSimple">
-						<label for="participantsMedicalIdentifierId">
-							<bean:message key="specimenCollectionGroup.medicalRecordNumber"/>
-						</label>
-					</td>
-                    <td class="formFieldNoBordersSimple">
+			     	<td align="center" class="black_ar">&nbsp;</td>
+					<td align="left" class="black_ar"><bean:message key="specimenCollectionGroup.medicalRecordNumber"/></td>
+				     <td align="left" nowrap>
    						<logic:equal name="specimenCollectionGroupForm" property="radioButtonForParticipant" value="1">
 <!-- Mandar : 434 : for tooltip -->   						
-				     		<html:select property="participantsMedicalIdentifierId" styleClass="formFieldSized" styleId="participantsMedicalIdentifierId" size="1" disabled="<%=readOnlyForAll%>"
+				     		<html:select property="participantsMedicalIdentifierId" styleClass="formFieldSizedSCG" styleId="participantsMedicalIdentifierId" size="1" disabled="<%=readOnlyForAll%>"
 				     		 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
                          		<html:options collection="<%=Constants.PARTICIPANT_MEDICAL_IDNETIFIER_LIST%>" labelProperty="name" property="value"/>
 							</html:select>
 						</logic:equal>
 						<logic:equal name="specimenCollectionGroupForm" property="radioButtonForParticipant" value="2">
 <!-- Mandar : 434 : for tooltip -->					     	
-					     	<html:select property="participantsMedicalIdentifierId" styleClass="formFieldSized" styleId="participantsMedicalIdentifierId" size="1" disabled="true"
+					     	<html:select property="participantsMedicalIdentifierId" styleClass="formFieldSizedSCG" styleId="participantsMedicalIdentifierId" size="1" disabled="true"
 					     	 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
                 	         	<html:options collection="<%=Constants.PARTICIPANT_MEDICAL_IDNETIFIER_LIST%>" labelProperty="name" property="value"/>
 							</html:select>
 						</logic:equal>
 		        	</td>					
-				 </tr>
-				 
-				 <tr>
-					<td class="formFieldNoBordersSimple" colspan="2" width="5">&nbsp;</td>
-					<td class="formFieldNoBordersSimple">
-						<label for="surgicalPathologyNumber">
-							<bean:message key="specimenCollectionGroup.surgicalPathologyNumber"/>
-						</label>
-					</td>					
-				    <td class="formFieldNoBordersSimple" noWrap="true">
-				     	<html:text styleClass="formFieldSized" size="30"  maxlength="50"  styleId="surgicalPathologyNumber" property="surgicalPathologyNumber" readonly="<%=readOnlyForAll%>"/>
+				 	<td align="center" nowrap>&nbsp;</td>
+					<td align="left" class="black_ar"><bean:message key="specimenCollectionGroup.surgicalPathologyNumber"/></td>  
+					<td align="left" nowrap class="black_ar">
+				     	<html:text styleClass="formFieldSizedSC" size="30"  maxlength="50"  styleId="surgicalPathologyNumber" property="surgicalPathologyNumber" readonly="<%=readOnlyForAll%>"/>
 					     	<!-- This feature will be implemented in next release
 							&nbsp;
 							<html:submit styleClass="actionButton" disabled="true">
@@ -343,53 +266,43 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 				 * Description : Added <TR> for comment field .				 
 				-->	 
 				 <tr>
-					<td class="formFieldNoBordersSimple" colspan="2" width="5">&nbsp;</td>
-					<td class="formFieldNoBordersSimple">
-						<label for="comments">
-							<bean:message key="app.comments"/>
-						</label>
-					</td>					
-				   <td class="formFieldNoBordersSimple" colspan="4">
-				    		<html:textarea styleClass="formFieldSized" rows="3"  property="comment"/>
-			    	</td>
-				 </tr>
-				 
-
+					
 				<!-- activitystatus -->	
 				<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
-				<tr>
-					<td class="formFieldNoBordersSimple" colspan="2" width="5"><b>*</b></td>
-					<td class="formFieldNoBordersSimple" >
-						<label for="activityStatus">
-							<b><bean:message key="site.activityStatus" /></b>
-						</label>
-					</td>
-					<td class="formFieldNoBordersSimple">
+				
+					<td align="center" nowrap><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>
+					<td align="left" class="black_ar"><bean:message key="site.activityStatus" /></td> 
+					<td align="left" class="black_ar">
 							<autocomplete:AutoCompleteTag property="activityStatus"
 								  optionsList = "<%=request.getAttribute(Constants.ACTIVITYSTATUSLIST)%>"
 								  initialValue="<%=form.getActivityStatus()%>"
 								  onChange="<%=strCheckStatus%>"
+								   styleClass="formFieldSizedAutoSCG"
+									
 							/>
 					</td>
-				</tr>
+				
 				</logic:equal>
-				<!-- collectionstatus -->	
-				<tr>
-					<td class="formFieldNoBordersSimple" colspan="2" width="5"><b>*</b></td>
-					<td class="formFieldNoBordersSimple" >
-						<label for="collectionStatus">
-							<b><bean:message key="specimenCollectionGroup.collectionStatus" /></b>
-						</label>
-					</td>
-					<td class="formFieldNoBordersSimple">
+					<!-- collectionstatus -->
+					<td align="center" nowrap><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>            
+					<td align="left" nowrap class="black_ar"><bean:message key="specimenCollectionGroup.collectionStatus" /></td>
+					<td align="left" class="black_ar">
 							<autocomplete:AutoCompleteTag property="collectionStatus"
 								optionsList = "<%=request.getAttribute(Constants.COLLECTIONSTATUSLIST)%>"
 								initialValue="<%=form.getCollectionStatus()%>"
 								onChange="<%=strCheckStatus%>"
+								 styleClass="formFieldSizedAutoSCG"
+								
 							/>
 					</td>
 				</tr>
-					
+				 <tr><td colspan="3" class="bottomtd"></td></tr>
+				<tr>
+					<td>&nbsp;</td>
+					<td align="left" class="black_ar_t"><bean:message key="app.comments"/></td>
+					<td colspan="4" align="left" ><html:textarea styleClass="black_ar" rows="3"  cols="73" property="comment"/></td>
+				 </tr>
+						
 				 		<tr>
 				  		<td align="right" colspan="3">
 							<%
@@ -401,7 +314,7 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 			</table>
 		</td></tr>
 		<!-- NEW SPECIMEN COLLECTION GROUP REGISTRATION ENDS-->
-	</table>
+	
  
 			
 	<!--  Consent Tracking Module Virender mehta	 -->
@@ -409,22 +322,28 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 		List requestParticipantResponse = (List)request.getAttribute("specimenCollectionGroupResponseList");
 		if(requestParticipantResponse!=null&&form.getConsentTierCounter()>0)
 		{
-	%><div style="display:none" id="consentTable">
+	%>
+	<tr>
+		<td colspan="3">
+		<div>
 	    	<%@ include file="/pages/content/ConsentTracking/ConsentTracking.jsp" %> 
 			</div>
+			</td>
+		</tr>
+		
 	<%
 		}
 	%>
 	<!--  Consent Tracking Module Virender mehta -->	
 
-	<table summary="" cellpadding="0" cellspacing="0" border="0"
-		class="contentPage" id="collAndRecEvents">
 		<tr>
-			<td>
+			<td colspan="3">
+				<div >
 				<%@ include file="CollAndRecEvents.jsp" %>
+				<div>
 			</td>
 		</tr>
-	</table>
+		 <tr><td colspan="3" class="bottomtd"></td></tr>
 	<!--
  * Name : Ashish Gupta
  * Reviewer Name : Sachin Lale 
@@ -435,32 +354,22 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 	-->
 
 	<!-- For Multiple Specimen-----Ashish -->
-<div id="multiplespecimenTable">
-		<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage"  width="100%" >
+		<div id="multiplespecimenTable">
+		<tr>		
+		<td colspan="3" class="tr_bg_blue1"><span class="blue_ar_b"><bean:message key="multipleSpecimen.mainTitle" /> </span></td>
+		</tr>
 		<tr>
-			<td width="100%">
-			<table summary="" cellpadding="3" cellspacing="0" border="0"
-				width="100%">
-				
-				<tr>
-					<td class="formTitle" " colspan="6" height="20">
-						<bean:message key="multipleSpecimen.mainTitle" />
-					</td>
-				</tr>
-				<tr>
-					
-					<td class="formLabel" colspan="2" style="border-left:1px solid #5C5C5C;">
-						<bean:message key="multipleSpecimen.numberOfSpecimen" />
-					</td>
-					<td class="formField" colspan="3">
+          <td colspan="3"><table width="100%" border="0" cellpadding="3" cellspacing="0">
+            <tr>
+					 <td width="1%" align="left" class="black_ar">&nbsp;</td>
+					 <td width="34%" align="left" class="black_ar">&nbsp;<bean:message key="multipleSpecimen.numberOfSpecimen" /></td>
+					 <td width="65%" align="left" nowrap>
 						<!-- html:text styleClass="formFieldSized5" maxlength="50" size="30" styleId="numberOfSpecimen" property="numberOfSpecimen"  /-->
-						<html:text styleClass="formFieldSized5" maxlength="50" size="30" styleId="numberOfSpecimen" property="numberOfSpecimens" />
+						<html:text styleClass="black_ar" maxlength="50" size="20" styleId="numberOfSpecimen" property="numberOfSpecimens" />
 					</td>
-				</tr>			
-			</table>
-			</td>
-			</tr>
-			<tr><td>
+			</tr>			
+			</table></td>
+			 </tr>
 			<!-- Hidden fields for events 
 			/**
  			* Name : Ashish Gupta
@@ -487,9 +396,10 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 			<html:hidden property="receivedEventId"/>
 			<!-- Patch ID: Bug#4227_4 -->
 			<html:hidden styleId="buttonType" property="buttonType"/>
-			</td>
+			
 		</tr>
-	</table>
-	</div>
+	<div>
+	
 	<%@ include file="SpecimenCollectionGroupPageButtons.jsp" %>
+	</table>
 	</div>
