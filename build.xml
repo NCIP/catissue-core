@@ -468,6 +468,10 @@
 			<fileset file="${base.dir}/extra_lib/ant-contrib.jar" />
 			<fileset file="${base.dir}/WEB-INF/lib/mysql-connector-java-5.0.8-bin.jar" />
 			<fileset file="${base.dir}/WEB-INF/lib/oracleDriver.jar" />
+			<fileset file="${base.dir}/lib/dom4j-1.6.jar" />
+			<fileset file="${base.dir}/lib/j2ee.jar" />
+			<fileset file="${base.dir}/lib/log4j-1.2.9.jar" />
+	
 		</copy>
 
 		<copy todir="${zip.dir}/SQL" overwrite="true">
