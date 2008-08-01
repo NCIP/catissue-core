@@ -275,7 +275,17 @@ public class StorageContainerUtil
 			{
 				nvb =(NameValueBean) yposIterator.next();
 				ypos= new Integer(nvb.getValue());
-				String containerValue = containerName +":"+ xpos+" ," +ypos;
+				//bug 8294
+				String containerValue = null;
+				Long containerId = storageContainer.getId();
+				if(containerId!=null)
+				{
+					containerValue = StorageContainerUtil.getStorageValueKey(null, containerId.toString(), xpos, ypos);
+				}
+				else 
+				{
+					containerValue = StorageContainerUtil.getStorageValueKey(containerName,null,xpos, ypos);
+				}
 				if (!allocatedPositions.contains(containerValue))
 				{
 					LinkedList<Integer> positions = new LinkedList<Integer>();
@@ -1085,5 +1095,36 @@ public class StorageContainerUtil
 			  {
 				  getChildren(dao, containerId).addAll(children);
 			  }
+		}
+		/**
+		 * Description: This method is used to create storage loaction key value.
+		 * Used while updating or inserting Specimen
+		 * @param containerName - storage container name
+		 * @param containerID - storage container id
+		 * @param containerPos1 - storage container Position 1
+		 * @param containerPos2 - storage container Position 2
+		 * @return storageValue : container name or container id:container Position 1,container Position 2
+		 */
+		//bug 8294
+		public static String getStorageValueKey(String containerName,String containerID,Integer containerPos1,Integer containerPos2)
+		{
+			StringBuffer storageValue = new StringBuffer();
+			if(containerName!=null)
+			{
+				storageValue.append(containerName);
+				storageValue.append(":");
+				storageValue.append(containerPos1);
+				storageValue.append(" ,");
+				storageValue.append(containerPos2);				
+			}
+			else if(containerID!=null)
+			{
+				storageValue.append(containerID);
+				storageValue.append(":");
+				storageValue.append(containerPos1);
+				storageValue.append(" ,");
+				storageValue.append(containerPos2);					
+			}
+			return storageValue.toString();
 		}
 }
