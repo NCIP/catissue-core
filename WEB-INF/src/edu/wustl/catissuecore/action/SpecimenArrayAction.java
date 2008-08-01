@@ -57,6 +57,8 @@ public class SpecimenArrayAction extends SecureAction
     {
         String operation = request.getParameter(Constants.OPERATION);
         request.setAttribute(Constants.OPERATION, operation);
+	    List<NameValueBean> storagePositionListForSpecimenArray = Utility.getStoragePositionTypeListForTransferEvent();
+		request.setAttribute("storagePositionListForSpecimenArray", storagePositionListForSpecimenArray);
         SpecimenArrayForm specimenArrayForm = (SpecimenArrayForm) form;
         SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
 		//boolean to indicate whether the suitable containers to be shown in dropdown 

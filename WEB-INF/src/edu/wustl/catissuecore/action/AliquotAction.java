@@ -85,7 +85,9 @@ public class AliquotAction extends SecureAction
 		{
 			methodName = "executeAliquotAction";
 		}
-        
+		
+		List<NameValueBean> storagePositionList =  Utility.getStoragePositionTypeList();
+		request.setAttribute("storageList", storagePositionList);
          /**
           * Patch ID: 3835_1_6
           * See also: 1_1 to 1_5
