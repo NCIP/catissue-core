@@ -1390,7 +1390,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			specPos.setStorageContainer(storageContainerObj);		
 			specimen.setSpecimenPosition(specPos);
 
-			String storageValue = storageContainerObj.getId().toString() + ":"
+			String storageValue = storageContainerObj.getName() + ":"
 					+ specimen.getSpecimenPosition().getPositionDimensionOne() + " ,"
 					+ specimen.getSpecimenPosition().getPositionDimensionTwo();
 			if (!storageContainerIds.contains(storageValue))
@@ -1523,7 +1523,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			{
 			if (specimen.getSpecimenPosition() != null && specimen.getSpecimenPosition().getStorageContainer() != null)
 			{
-				String storageValue = specimen.getSpecimenPosition().getStorageContainer().getId().toString()+":"+specimen.getSpecimenPosition().getPositionDimensionOne()+" ,"+
+				String storageValue = specimen.getSpecimenPosition().getStorageContainer().getName()+":"+specimen.getSpecimenPosition().getPositionDimensionOne()+" ,"+
 				specimen.getSpecimenPosition().getPositionDimensionTwo();
 				if (!storageContainerIds.contains(storageValue))
 				{
