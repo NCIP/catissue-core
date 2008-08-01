@@ -526,3 +526,50 @@ font-family: verdana;
 font-size: 11px;
 color: #000000;
 }
+.tabletdformap {
+	background-color:#f6f6f6;
+	font-family:Verdana;
+	font-size:11px;
+}
+.formFieldSizedSC{ 
+  	font-family: verdana;
+	font-size: 11px;
+	color: #000000;
+	width:15em;
+	}
+.formFieldSizedSCG{ 
+  	font-family: verdana;
+	font-size: 11px;
+	color: #171717;
+	vertical-align:middle;
+	margin:0px;
+	width:15em;
+	
+	}
+.formFieldSizedAutoSCG{ 
+  	font-family: verdana;
+	font-size: 11px;
+	color: #171717;
+	vertical-align:middle;
+	margin:0px;
+	width:13.5em;
+	
+	}
+	.formFieldSizedAutoSCGTime{ 
+  	font-family: verdana;
+	font-size: 11px;
+	color: #171717;
+	vertical-align:middle;
+	margin:0px;
+	width:4.5em;
+	
+	}
+	
+.tableborder{
+    border:1px solid #ebecec; border-collapse:collapse;
+	
+}
+.tableborder td{
+    border:1px solid #ebecec; border-collapse:collapse;
+	padding-left:10px;
+}
