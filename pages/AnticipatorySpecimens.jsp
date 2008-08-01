@@ -141,16 +141,19 @@
 		}
 		function pageSubmit()
 		{
-			
+			var url = 'GenericSpecimenSummary.do?save=SCGSpecimens';
+			<%	if(request.getAttribute(Constants.PAGEOF) != null && request.getAttribute(Constants.PAGEOF).equals(Constants.CP_CHILD_SUBMIT)) {%>
+			 url = 	'GenericSpecimenSummaryForSpecimen.do?save=SCGSpecimens';
+			<%}%>
 			var printFlag = document.getElementById("printCheckbox");
 			if(printFlag.checked)
 			{
-				document.forms[0].action ='GenericSpecimenSummary.do?save=SCGSpecimens&printflag=1'; 
-				document.forms[0].submit();
+				document.forms[0].action = url + '&printflag=1';
+				document.forms[0].submit();			
 			}
 			else
 			{
-				document.forms[0].action ='GenericSpecimenSummary.do?save=SCGSpecimens&printflag=0'; 
+				document.forms[0].action =url+'&printflag=0'; 
 				document.forms[0].submit();
 			}
 		}
@@ -160,6 +163,15 @@
 				document.forms[0].forwardTo.value="addMltipleSpecimenToCart";
 				pageSubmit();
 			
+		}
+		function onParentRadioBtnClick()
+		{
+			var url = 'GenericSpecimenSummary.do';
+			<%	if(request.getAttribute(Constants.PAGEOF) != null && request.getAttribute(Constants.PAGEOF).equals(Constants.CP_CHILD_SUBMIT)) {%>
+			 url = 	'GenericSpecimenSummaryForSpecimen.do?pageOf=<%=Constants.CP_CHILD_SUBMIT%>';
+			<%}%>
+			document.forms[0].action =url;
+			document.forms[0].submit();
 		}
 	</script>
 </head>
@@ -200,10 +212,13 @@
 				<table border="0" cellpadding="3" cellspacing="0" width="100%">
 				<logic:notEmpty name="viewSpecimenSummaryForm" property="specimenList" >	
                   <tr class="tableheading">
-                    <td width="4%" class="black_ar_b"><label for="delete" align="center"></label>                    </td>
+                    <td width="4%" class="black_ar_b"><label for="delete" align="center"></label></td>
+                    <logic:equal name="labelShow" value="true">
                     <td width="11%" class="black_ar_b"><bean:message key="specimen.label"/></td>
+                    </logic:equal>
+                    <logic:equal name="barcodeShow" value="true">
                     <td width="11%" class="black_ar_b"><bean:message key="specimen.barcode"/></td>
-
+                    </logic:equal>
                     <td width="19%" class="black_ar_b"><bean:message key="specimen.subType"/></td>
                     <td width="7%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Quantity"/></td>
                     <td width="7%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Concentration"/></td>
@@ -251,8 +266,12 @@
 				<table border="0" cellpadding="3" cellspacing="0" width="100%">
                   <tr class="tableheading">
                     <td width="11%" class="black_ar_b"><label for="delete" align="center"><bean:message key="anticipatorySpecimen.Parent"/></label></td>
+                    <logic:equal name="labelShow" value="true">
                     <td width="11%" class="black_ar_b"><bean:message key="specimen.label"/></td>
+                    </logic:equal>
+                    <logic:equal name="barcodeShow" value="true">
                     <td width="11%" class="black_ar_b"><bean:message key="specimen.barcode"/></td>
+                    </logic:equal>
                     <td width="14%" class="black_ar_b"><bean:message key="specimen.subType"/></td>
                     <td width="7%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Quantity"/></td>
                     <td width="7%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Concentration"/></td>
@@ -279,8 +298,12 @@
 				<table border="0" cellpadding="3" cellspacing="0" width="100%">
 					<tr class="tableheading">
 						<td width="11%" class="black_ar_b"><label for="delete" align="center"><bean:message key="anticipatorySpecimen.Parent"/></label></td>
+	                    <logic:equal name="labelShow" value="true">
 						<td width="11%" class="black_ar_b"><bean:message key="specimen.label"/></td>
+						</logic:equal>
+	                    <logic:equal name="barcodeShow" value="true">
 						<td width="11%" class="black_ar_b"><bean:message key="specimen.barcode"/></td>
+						</logic:equal>
 						<td width="14%" class="black_ar_b"><bean:message key="specimen.subType"/></td>
 						<td width="7%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Quantity"/></td>
 						<td width="7%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Concentration"/></td>
