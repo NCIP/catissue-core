@@ -190,7 +190,10 @@ public class UserBizLogic extends DefaultBizLogic
 
 			// Create address and the user in catissue tables.
 			dao.insert(user.getAddress(), sessionDataBean, true, false);
-			updateUserDetails(user,userRowIdMap);
+			if(userRowIdMap != null && !userRowIdMap.isEmpty())
+			{
+				updateUserDetails(user,userRowIdMap);
+			}
 			dao.insert(user, sessionDataBean, true, false);
 
 			Set protectionObjects = new HashSet();
@@ -296,6 +299,11 @@ public class UserBizLogic extends DefaultBizLogic
 
 	private void insertCPSitePrivileges(User user1, Vector authorizationData, Map<String, SiteUserRolePrivilegeBean> userRowIdMap)
 	{
+		if(userRowIdMap == null || userRowIdMap.isEmpty())
+		{
+		 return;
+		}
+		
 		Map<String, SiteUserRolePrivilegeBean> cpPrivilegeMap = new HashMap<String, SiteUserRolePrivilegeBean>();
 		Map<String, SiteUserRolePrivilegeBean> sitePrivilegeMap = new HashMap<String, SiteUserRolePrivilegeBean>();
 		
