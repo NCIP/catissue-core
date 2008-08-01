@@ -37,8 +37,8 @@ public class AddSpecimenPositionMetaData
 		String targetEntityName = "edu.wustl.catissuecore.domain.SpecimenPosition";
 		
 		AddAssociations addAssociations = new AddAssociations(connection);
-		addAssociations.addAssociation(entityName,targetEntityName,"storageContainer_specimenPosition","CONTAINTMENT","specimenPositionCollection",true,"storageContainer","CONTAINER_ID",2,1);
-		addAssociations.addAssociation(targetEntityName,entityName,"specimenPosition_storageContainer","ASSOCIATION","storageContainer",false,"","CONTAINER_ID",2,1);	
+		addAssociations.addAssociation(entityName,targetEntityName,"storageContainer_specimenPosition","CONTAINTMENT","specimenPositionCollection",true,"storageContainer","CONTAINER_ID",null,2,1,"BI_DIRECTIONAL");
+		addAssociations.addAssociation(targetEntityName,entityName,"specimenPosition_storageContainer","ASSOCIATION","storageContainer",false,"","CONTAINER_ID",null,2,1,"BI_DIRECTIONAL");	
 	}		
 		private void populateEntityAttributeMap() 
 		{

@@ -221,8 +221,8 @@ public class UpdateMetadata
 		AddSpecimenPositionMetaData addSpecimenPositionMetaData=new AddSpecimenPositionMetaData(connection);
 		addSpecimenPositionMetaData.addSpecimenPositionMetaData();
 		
-		AddSpecimenToSpecimenPositionAssociation addSpecimenToSpecimenPositionAssociation = new AddSpecimenToSpecimenPositionAssociation(connection);
-		addSpecimenToSpecimenPositionAssociation.addAssociation();
+		AddAssociation addAssociation = new AddAssociation(connection);
+		addAssociation.addAssociation();
 		
 		AddAbstractSpecimenMetaData addAbstractSpecimenMetaData = new AddAbstractSpecimenMetaData(connection);
 		addAbstractSpecimenMetaData.addAbstractPositionMetaData();
@@ -238,6 +238,9 @@ public class UpdateMetadata
 		
 		AddAttribute addAttribute = new AddAttribute(connection);
 		addAttribute.addAttribute();	
+		
+		/*AddMSRAssociations addMSRAssociations = new AddMSRAssociations(connection);
+		addMSRAssociations.addAssociation();*/
 	}
 
 	private static List<String> getUpdateSQL() throws SQLException

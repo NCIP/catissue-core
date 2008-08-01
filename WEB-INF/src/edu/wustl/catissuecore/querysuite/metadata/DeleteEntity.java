@@ -20,9 +20,8 @@ import edu.wustl.common.util.dbManager.DBUtil;
 public class DeleteEntity 
 {
 	private Connection connection = null;
-
 	private static Statement stmt = null;
-
+	
 	private String entityNameToDelete;
 	private Entity entityToDelete;
 	
@@ -62,8 +61,6 @@ public class DeleteEntity
 	}
 	private List<String> getDeleteEntitySQL() throws SQLException
 	{
-		//System.out.println("/*------ Entity to delete: "+entityToDelete.getName()+" ----*/");
-
 		List<String> deleteSQL = new ArrayList<String>();
 		String sql;
 		
@@ -93,8 +90,7 @@ public class DeleteEntity
 		sql = "delete from dyextn_abstract_metadata where identifier = "+entityToDelete.getId();
 		deleteSQL.add(sql);
 		
-		return deleteSQL;
-			
+		return deleteSQL;		
 	}
 
 	private List<String> deleteAttribute() throws SQLException
@@ -142,17 +138,12 @@ public class DeleteEntity
 		{
 			sql = "delete from dyextn_role where IDENTIFIER="+srcRoleId;
 			deleteSQL.add(sql);
-//			sql = "delete from dyextn_role where IDENTIFIER="+targetRoleId;
-//			deleteSQL.add(sql);
 		}
-
 	}
 
 	private void populateEntityToDeletetList()
 	{
-//		entityNamesToDelete = new ArrayList<String>();
 		entityNameToDelete = "edu.wustl.catissuecore.domain.Quantity";
-//		entityNamesToDelete.add("edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup");
 	}
 	
 	private void updateEntityToDelete() throws SQLException
@@ -176,8 +167,7 @@ public class DeleteEntity
 		{
 			tableProperties.setId(rs.getLong(1));
 		}
-		entityToDelete.setTableProperties(tableProperties);
-			
+		entityToDelete.setTableProperties(tableProperties);		
 	}
 	
 	public void setEntityNameToDelete(String entityNameToDelete)
@@ -192,5 +182,4 @@ public class DeleteEntity
 		this.stmt = connection.createStatement();
 		this.entityToDelete = new Entity();
 	}
-
 }

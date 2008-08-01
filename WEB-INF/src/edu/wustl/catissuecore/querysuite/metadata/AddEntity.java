@@ -26,8 +26,6 @@ public class AddEntity
 	
 	public void addEntity(List<String> entityList,String tableName,String parentEntity,int inheritanceStrategy) throws SQLException, IOException
 	{
-		//populateEntityList();
-		
 		Statement stmt = connection.createStatement();
 		for(String entityName : entityList)
 		{
@@ -50,7 +48,7 @@ public class AddEntity
 				nextIdDatabaseproperties = maxId + 1;
 			}
 			rs.close();
-			//			dyextn_abstract_metadata
+			
 			sql = "INSERT INTO dyextn_abstract_metadata values("
 			+ nextIdOfAbstractMetadata + ",NULL,NULL,NULL,'" + entityName
 			+ "',null)";

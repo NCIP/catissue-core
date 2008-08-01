@@ -88,7 +88,7 @@ public class AddAttribute
 
 				String dataType = getDataTypeOfAttribute(attr,attributeDatatypeMap);
 
-				if (!dataType.equalsIgnoreCase("String"))
+				if (!dataType.equalsIgnoreCase("String") && !dataType.equalsIgnoreCase("date"))
 				{
 					sql = "insert into dyextn_numeric_type_info (IDENTIFIER,MEASUREMENT_UNITS,DECIMAL_PLACES,NO_DIGITS) values ("
 						+ nextIdAttrTypeInfo + ",NULL,0,NULL)";
@@ -114,6 +114,11 @@ public class AddAttribute
 				{
 					sql = "insert into dyextn_long_type_info (IDENTIFIER) values ("
 						+ nextIdAttrTypeInfo + ")";
+				}
+				else if (dataType.equalsIgnoreCase("date"))
+				{
+					sql = "insert into dyextn_date_type_info (IDENTIFIER,FORMAT) values ("
+						+ nextIdAttrTypeInfo + ",'MM-dd-yyyy')";
 				}
 				UpdateMetadataUtil.executeInsertSQL(sql, connection.createStatement());
 
@@ -153,6 +158,7 @@ public class AddAttribute
 
 		attributes = new ArrayList<String>();
 		attributes.add("signedConsentDocumentURL");
+		attributes.add("consentSignatureDate");
 		//attributes.add("barcode");
 		entityNameAttributeNameMap.put("edu.wustl.catissuecore.domain.CollectionProtocolRegistration",attributes);	
 		
@@ -166,6 +172,7 @@ public class AddAttribute
 		attributeColumnNameMap.put("quantity", "QUANTITY");
 		attributeColumnNameMap.put("unsignedConsentDocumentURL", "UNSIGNED_CONSENT_DOC_URL");
 		attributeColumnNameMap.put("signedConsentDocumentURL", "CONSENT_DOC_URL");
+		attributeColumnNameMap.put("consentSignatureDate", "CONSENT_SIGN_DATE");
 		//attributeColumnNameMap.put("barcode", "BARCODE");
 	}
 
@@ -174,6 +181,7 @@ public class AddAttribute
 		attributeDatatypeMap.put("quantity", "double");
 		attributeDatatypeMap.put("unsignedConsentDocumentURL", "string");
 		attributeDatatypeMap.put("signedConsentDocumentURL", "string");
+		attributeDatatypeMap.put("consentSignatureDate", "date");
 		//attributeDatatypeMap.put("barcode", "string");
 	}
 	private void populateAttributePrimaryKeyMap() 
@@ -181,6 +189,7 @@ public class AddAttribute
 		attributePrimarkeyMap.put("quantity", "0");
 		attributePrimarkeyMap.put("unsignedConsentDocumentURL", "0");
 		attributePrimarkeyMap.put("signedConsentDocumentURL", "0");
+		attributePrimarkeyMap.put("consentSignatureDate", "0");
 		//attributePrimarkeyMap.put("barcode", "0");
 	}
 	private void populateEntityList()

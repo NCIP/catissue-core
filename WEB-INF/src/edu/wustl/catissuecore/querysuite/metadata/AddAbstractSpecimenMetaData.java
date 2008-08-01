@@ -36,8 +36,8 @@ public class AddAbstractSpecimenMetaData
 		String targetEntityName = "edu.wustl.catissuecore.domain.SpecimenEventParameters";
 		
 		AddAssociations addAssociations = new AddAssociations(connection);
-		addAssociations.addAssociation(entityName,targetEntityName,"abstractSpecimen_SpecimenEventParameters","CONTAINTMENT","specimenEventCollection",true,"abstractSpecimen","SPECIMEN_ID",2,1);
-		addAssociations.addAssociation(targetEntityName,entityName,"SpecimenEventParameters_abstractSpecimen","ASSOCIATION","abstractSpecimen",false,"","SPECIMEN_ID",2,1);
+		addAssociations.addAssociation(entityName,targetEntityName,"abstractSpecimen_SpecimenEventParameters","CONTAINTMENT","specimenEventCollection",true,"abstractSpecimen","SPECIMEN_ID",null,2,1,"BI_DIRECTIONAL");
+		addAssociations.addAssociation(targetEntityName,entityName,"SpecimenEventParameters_abstractSpecimen","ASSOCIATION","abstractSpecimen",false,"","SPECIMEN_ID",null,2,1,"BI_DIRECTIONAL");
 	}		
 		private void populateEntityAttributeMap() 
 		{

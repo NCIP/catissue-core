@@ -39,7 +39,6 @@ public class UpdateMetadataUtil
 		}
 		try
 		{
-			//System.out.println(sql+";");
 			metadataSQLFile.write(sql+";\n");
 			if(isExecuteStatement)
 			{
@@ -109,7 +108,6 @@ public class UpdateMetadataUtil
 			{
 				try
 				{
-					//System.out.println(sql+";");
 					metadataSQLFile.write(sql+";\n");
 					if(isExecuteStatement)
 					{

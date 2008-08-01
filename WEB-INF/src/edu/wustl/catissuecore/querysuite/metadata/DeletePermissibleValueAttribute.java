@@ -20,9 +20,7 @@ import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 public class DeletePermissibleValueAttribute 
 {
 	private Connection connection = null;
-
 	private Statement stmt = null;
-
 	private HashMap<Long, List<AttributeInterface>> entityIDAttributeListMap = new HashMap<Long, List<AttributeInterface>>();
 	private HashMap<String, List<String>> entityAttributesToDelete = new HashMap<String, List<String>>();
 	private HashMap<String, String> attributeDatatypeMap = new HashMap<String, String>();

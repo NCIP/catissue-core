@@ -41,8 +41,8 @@ public class AddRaceMetadata
 		String targetEntityName = "edu.wustl.catissuecore.domain.Race";
 		
 		AddAssociations addAssociations = new AddAssociations(connection);
-		addAssociations.addAssociation(entityName,targetEntityName,"participant_race","CONTAINTMENT","raceCollection",true,"participant","PARTICIPANT_ID",2,1);
-		addAssociations.addAssociation(targetEntityName,entityName,"race_participant","ASSOCIATION","participant",false,"","PARTICIPANT_ID",2,1);
+		addAssociations.addAssociation(entityName,targetEntityName,"participant_race","CONTAINTMENT","raceCollection",true,"participant","PARTICIPANT_ID",null,2,1,"BI_DIRECTIONAL");
+		addAssociations.addAssociation(targetEntityName,entityName,"race_participant","ASSOCIATION","participant",false,"","PARTICIPANT_ID",null,2,1,"BI_DIRECTIONAL");
 	}
 
 	private void populateEntityAttributeMap() 

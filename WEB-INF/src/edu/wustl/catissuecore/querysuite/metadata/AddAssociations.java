@@ -22,7 +22,7 @@ public class AddAssociations
 		connection.setAutoCommit(true);
 	}
 	
-	public void addAssociation(String entityName,String associatedEntityName,String associationName,String associationType, String roleName,boolean isSwap,String roleNameTable,String associationId,int maxCardinality,int isSystemGenerated) throws SQLException, IOException
+	public void addAssociation(String entityName,String associatedEntityName,String associationName,String associationType, String roleName,boolean isSwap,String roleNameTable,String srcAssociationId,String targetAssociationId,int maxCardinality,int isSystemGenerated,String direction) throws SQLException, IOException
 	{
 		Statement stmt = connection.createStatement();
 		String sql = "select max(identifier) from dyextn_abstract_metadata";
@@ -126,13 +126,13 @@ public class AddAssociations
 			int lastIdOfDERole =nextIdOfDERole -2;
 			int idOfDERole =nextIdOfDERole -1;
 			sql = "insert into dyextn_association values ("
-				+ nextIdOfAbstractMetadata + ",'BI_DIRECTIONAL',"
+				+ nextIdOfAbstractMetadata + ",'"+direction+"',"
 				+ associatedEntityId + "," + lastIdOfDERole + "," + idOfDERole + ","+isSystemGenerated+")";
 		} 
 		else 
 		{
 			sql = "insert into dyextn_association values ("
-				+ nextIdOfAbstractMetadata + ",'BI_DIRECTIONAL',"
+				+ nextIdOfAbstractMetadata + ",'"+direction+"',"
 				+ associatedEntityId + "," + roleId + "," + nextIdOfDERole + ",1)";
 		}
 		UpdateMetadataUtil.executeInsertSQL(sql, connection.createStatement());
@@ -142,16 +142,34 @@ public class AddAssociations
 		UpdateMetadataUtil.executeInsertSQL(sql, connection.createStatement());
 		if(isSwap)
 		{
-			sql = "insert into dyextn_constraint_properties (IDENTIFIER,SOURCE_ENTITY_KEY,TARGET_ENTITY_KEY,ASSOCIATION_ID) values("
-				+ nextIdOfDBProperties + ",null,'"+associationId+"',"
-				+ nextIdOfAbstractMetadata + ")";
+			if(targetAssociationId == null)
+			{
+				sql = "insert into dyextn_constraint_properties (IDENTIFIER,SOURCE_ENTITY_KEY,TARGET_ENTITY_KEY,ASSOCIATION_ID) values("
+					+ nextIdOfDBProperties + ",null,'"+srcAssociationId+"',"
+					+ nextIdOfAbstractMetadata + ")";
+			}
+			else
+			{
+				sql = "insert into dyextn_constraint_properties (IDENTIFIER,SOURCE_ENTITY_KEY,TARGET_ENTITY_KEY,ASSOCIATION_ID) values("
+					+ nextIdOfDBProperties + ",'"+targetAssociationId+"','"+srcAssociationId+"',"
+					+ nextIdOfAbstractMetadata + ")";
+			}
 			UpdateMetadataUtil.executeInsertSQL(sql, connection.createStatement());
 		}
 		else
 		{
-			sql = "insert into dyextn_constraint_properties (IDENTIFIER,SOURCE_ENTITY_KEY,TARGET_ENTITY_KEY,ASSOCIATION_ID) values("
-				+ nextIdOfDBProperties + ",'"+associationId+"',null,"
-				+ nextIdOfAbstractMetadata + ")";
+			if(targetAssociationId == null)
+			{
+				sql = "insert into dyextn_constraint_properties (IDENTIFIER,SOURCE_ENTITY_KEY,TARGET_ENTITY_KEY,ASSOCIATION_ID) values("
+					+ nextIdOfDBProperties + ",'"+srcAssociationId+"',null,"
+					+ nextIdOfAbstractMetadata + ")";
+			}
+			else
+			{
+				sql = "insert into dyextn_constraint_properties (IDENTIFIER,SOURCE_ENTITY_KEY,TARGET_ENTITY_KEY,ASSOCIATION_ID) values("
+					+ nextIdOfDBProperties + ",'"+srcAssociationId+"','"+targetAssociationId+"',"
+					+ nextIdOfAbstractMetadata + ")";
+			}
 			UpdateMetadataUtil.executeInsertSQL(sql, connection.createStatement());
 		}
 

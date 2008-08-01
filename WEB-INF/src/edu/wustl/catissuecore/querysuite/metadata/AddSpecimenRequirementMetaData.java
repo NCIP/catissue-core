@@ -36,14 +36,14 @@ public class AddSpecimenRequirementMetaData
 		AddAssociations addAssociations = new AddAssociations(connection);
 		String entityName = "edu.wustl.catissuecore.domain.CollectionProtocolEvent";
 		String targetEntityName = "edu.wustl.catissuecore.domain.SpecimenRequirement";
-		addAssociations.addAssociation(entityName,targetEntityName,"collectionProtocolEvent_specimenRequirement","CONTAINTMENT","specimenRequirementCollection",true,"CollectionProtocolEvent","COLLECTION_PROTOCOL_EVENT_ID",2,1);
-		addAssociations.addAssociation(targetEntityName,entityName,"specimenRequirement_collectionProtocolEvent","ASSOCIATION","collectionProtocolEvent",false,"","COLLECTION_PROTOCOL_EVENT_ID",2,1);
+		addAssociations.addAssociation(entityName,targetEntityName,"collectionProtocolEvent_specimenRequirement","CONTAINTMENT","specimenRequirementCollection",true,"CollectionProtocolEvent","COLLECTION_PROTOCOL_EVENT_ID",null,2,1,"BI_DIRECTIONAL");
+		addAssociations.addAssociation(targetEntityName,entityName,"specimenRequirement_collectionProtocolEvent","ASSOCIATION","collectionProtocolEvent",false,"","COLLECTION_PROTOCOL_EVENT_ID",null,2,1,"BI_DIRECTIONAL");
 		
 		entityName = "edu.wustl.catissuecore.domain.SpecimenRequirement";
 	    targetEntityName = "edu.wustl.catissuecore.domain.Specimen";
 	    
-	    addAssociations.addAssociation(entityName,targetEntityName,"specimenRequirement_specimen","ASSOCIATION","specimenCollection",true,"specimenRequirement","REQ_SPECIMEN_ID",2,1);
-	    addAssociations.addAssociation(targetEntityName,entityName,"specimen_specimenRequirement","ASSOCIATION","specimenRequirement",false,"","REQ_SPECIMEN_ID",2,1);
+	    addAssociations.addAssociation(entityName,targetEntityName,"specimenRequirement_specimen","ASSOCIATION","specimenCollection",true,"specimenRequirement","REQ_SPECIMEN_ID",null,2,1,"BI_DIRECTIONAL");
+	    addAssociations.addAssociation(targetEntityName,entityName,"specimen_specimenRequirement","ASSOCIATION","specimenRequirement",false,"","REQ_SPECIMEN_ID",null,2,1,"BI_DIRECTIONAL");
 	}
 		
 		private void populateEntityAttributeMap() 

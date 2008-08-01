@@ -36,8 +36,8 @@ public class AddContainerPositionMetaData
 		String targetEntityName = "edu.wustl.catissuecore.domain.ContainerPosition";
 		
 		AddAssociations addAssociations = new AddAssociations(connection);
-		addAssociations.addAssociation(entityName,targetEntityName,"container_containerPosition","CONTAINTMENT","occupiedPositions",true,"occupiedContainer","PARENT_CONTAINER_ID",2,1);
-		addAssociations.addAssociation(targetEntityName,entityName,"containerPosition_container","ASSOCIATION","occupiedContainer",false,"","PARENT_CONTAINER_ID",2,1);
+		addAssociations.addAssociation(entityName,targetEntityName,"container_containerPosition","CONTAINTMENT","occupiedPositions",true,"occupiedContainer","PARENT_CONTAINER_ID",null,2,1,"BI_DIRECTIONAL");
+		addAssociations.addAssociation(targetEntityName,entityName,"containerPosition_container","ASSOCIATION","occupiedContainer",false,"","PARENT_CONTAINER_ID",null,2,1,"BI_DIRECTIONAL");
 	}
 
 	/**

@@ -48,10 +48,7 @@ public class DeleteAssociation
 		{
 			String srcName = iterator.next();
 			deleteSQL.addAll(deleteAssociation.deleteAssociation(srcName,twoEntityMap.get(srcName)));	
-		}
-		
-	//	deleteEnetity();
-		
+		}		
 		connection.close();
 	}
 
@@ -69,8 +66,7 @@ public class DeleteAssociation
 		int TARGET_ENTITY_ID = UpdateMetadataUtil.getEntityIdByName(targetName, connection.createStatement());
 		
 		List<String> deleteSQL = deleteAssociation(SOURCE_ENTITY_ID, TARGET_ENTITY_ID);
-		
-//		executeDeleteStatements(deleteSQL);		
+			
 		return deleteSQL;
 	}
 	
@@ -89,8 +85,6 @@ public class DeleteAssociation
 				sql = "delete from dyextn_role where IDENTIFIER="+srcRoleId;
 				deleteSQL.add(sql);
 			}
-//			sql = "delete from dyextn_role where IDENTIFIER="+targetRoleId;
-//			deleteSQL.add(sql);
 		}
 
 		return deleteSQL;
@@ -210,8 +204,7 @@ public class DeleteAssociation
 			{
 				sql = "delete from dyextn_role where IDENTIFIER="+targetRoleId;
 				deleteSQL.add(sql);
-			}
-			
+			}		
 		}
 		finally
 		{
@@ -304,7 +297,6 @@ public class DeleteAssociation
 		deleteSQL.addAll(deleteAssociation("edu.wustl.catissuecore.domain.DistributedItem","edu.wustl.catissuecore.domain.FluidSpecimen"));
 		deleteSQL.addAll(deleteAssociation("edu.wustl.catissuecore.domain.DistributedItem","edu.wustl.catissuecore.domain.MolecularSpecimen"));
 		deleteSQL.addAll(deleteAssociation("edu.wustl.catissuecore.domain.DistributedItem","edu.wustl.catissuecore.domain.TissueSpecimen"));
-		//deleteSQL.addAll(deleteAssociation("edu.wustl.catissuecore.domain.Specimen","edu.wustl.catissuecore.domain.Specimen"));
 		deleteSQL.addAll(deleteAssociation("edu.wustl.catissuecore.domain.Specimen","edu.wustl.catissuecore.domain.CellSpecimen"));
 		deleteSQL.addAll(deleteAssociation("edu.wustl.catissuecore.domain.Specimen","edu.wustl.catissuecore.domain.FluidSpecimen"));
 		deleteSQL.addAll(deleteAssociation("edu.wustl.catissuecore.domain.Specimen","edu.wustl.catissuecore.domain.MolecularSpecimen"));
