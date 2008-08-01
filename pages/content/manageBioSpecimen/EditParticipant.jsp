@@ -396,22 +396,25 @@ function participantRegRow(subdivtag)
 					</tr>
 					<tr>
 						<td width="1%" align="center" class="black_ar">&nbsp;</td>
-						<td class="black_ar_t"><bean:message
+						<td class="black_ar"><bean:message
 							key="participant.Name" /> </td>
 						<td>
-						<table width="35%" border="0" cellpadding="2" cellspacing="0">
+						<table width="35%" border="0" cellpadding="0" cellspacing="0">
 							<tr>
 								<td class="black_ar"><bean:message
 											key="participant.lastName" /></br>
+								
 								<html:text styleClass="black_ar" maxlength="255"
 											size="15" styleId="lastName" name="participantForm"
 											property="lastName" readonly="<%=readOnlyForAll%>"
 											onkeyup="moveToNext(this,this.value,'firstName')" /></td>
+								<td width="2">&nbsp;</td>
 								<td  class="black_ar"><bean:message
 											key="participant.firstName" /></br><html:text styleClass="black_ar" maxlength="255"
 											size="15" styleId="firstName" property="firstName"
 											readonly="<%=readOnlyForAll%>"
 											onkeyup="moveToNext(this,this.value,'middleName')" /></td>
+								<td width="2">&nbsp;</td>
 								<td  class="black_ar"><bean:message
 											key="participant.middleName" /></br><html:text styleClass="black_ar" maxlength="255"
 											size="15" styleId="middleName" property="middleName"
@@ -1045,4 +1048,3 @@ function participantRegRow(subdivtag)
 		</td>
 	</tr>
 </table>
-
