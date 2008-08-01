@@ -251,7 +251,7 @@ tr#hiddenCombo
 			}
 			
 			var url ="ConsentDisplay.do?operation=<%=operation%>&pageOf=pageOfConsent&index="+index+"&<%=Constants.CP_SEARCH_CP_ID%>="+collectionProtocolIdValue+"&collectionProtocolRegIdValue="+collectionProtocolRegIdValue;
-			window.open(url,'ConsentForm','height=300,width=800,scrollbars=1,resizable=1');
+			window.open(url,'ConsentForm','height=360,width=530,scrollbars=1,resizable=0');
 		}
 		/*
 		 This function is linked with new CP Participant Registration Dynamically
@@ -272,7 +272,7 @@ tr#hiddenCombo
 			}
 			
 			var url ="ConsentDisplay.do?operation=<%=operation%>&pageOf=pageOfConsent&index="+index+"&<%=Constants.CP_SEARCH_CP_ID%>="+collectionProtocolIdValue;
-			window.open(url,'ConsentForm','height=300,width=800,scrollbars=1,resizable=1');
+			window.open(url,'ConsentForm','height=360,width=530,scrollbars=1,resizable=0');
 		}
 		
 		
