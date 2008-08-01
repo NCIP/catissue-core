@@ -247,8 +247,8 @@
          <set
             name="assignedProtocolCollection"
             table="CATISSUE_USER_CP"
-            lazy="true"
-            inverse="true"
+            lazy="false"
+            inverse="false"
             cascade="none"
             sort="unsorted"
         >

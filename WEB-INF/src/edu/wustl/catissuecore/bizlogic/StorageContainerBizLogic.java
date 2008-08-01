@@ -4138,6 +4138,18 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 	 */
 	public String getObjectId(AbstractDAO dao, Object domainObject) 
 	{
+		if (domainObject instanceof StorageContainer)
+			
+		{
+			StorageContainer storageContainer = (StorageContainer) domainObject;
+			Site site = storageContainer.getSite();
+			if (site != null)
+			{
+				StringBuffer sb = new StringBuffer();
+				sb.append(Site.class.getName()).append("_").append(site.getId().toString());
+				return sb.toString(); 
+			}
+		}
 		return Constants.ADMIN_PROTECTION_ELEMENT;
 	}
 	

@@ -43,11 +43,11 @@ function updateCPTree()
 <script type="text/javascript" src="jss/queryModule.js"></script>
 
 <div id="errorMess" style="display:none"></div>
+
 <html:form action="DefineEvents.do?Event_Id=dummyId&pageOf=submitSpecimen&operation=${requestScope.operation}" styleId="CollectionProtocolForm">
 <table summary="" cellpadding="0" cellspacing="0" border="0"
-	style="padding-left:0;padding-right:0;"  width="100%" >
-	 
-	 <html:hidden property="shortTitle"/>
+	style="padding-left:0;padding-right:0;"  width="100%">
+<html:hidden property="shortTitle"/>
 	 <html:hidden property="startDate"/>
 	 <html:hidden property="title"/>
 	 <html:hidden property="principalInvestigatorId"/>
@@ -69,8 +69,9 @@ function updateCPTree()
 	 	</c:forEach>
 	</logic:notEqual>
 
+	
 
-	<tr>
+<tr>
 		<td valign="bottom">
 		<table width="100%" border="0" cellspacing="0" cellpadding="0">
 			<tr>
@@ -91,6 +92,10 @@ function updateCPTree()
 			</tr>
 		</table>
 		</td>
+		<td align="right" valign="top" class="cp_tabbg" border="0"><html:link href="#" styleId="newUser" styleClass="view"
+			onclick="updateCPTree();viewSummary()">
+			<bean:message key="cpbasedentry.viewsummary" />
+		</html:link> </td>
 	</tr>
 	
 	<tr>
@@ -120,7 +125,7 @@ function updateCPTree()
 							width="18" height="18" align="absmiddle"></td>
 						<td width="8%" align="left" class="black_ar_t"><bean:message
 							key="Site.header" /></td>
-						<td width="36%" align="left"><select class="formFieldSized18"
+						<td width="36%" align="left"><select class="formFieldSizedNew"
 							id="siteIds" size="4" multiple="multiple"
 							
 							onchange="getUsersForThisSites(this)">
@@ -144,7 +149,7 @@ function updateCPTree()
 
 						<td width="10%" align="left" class="black_ar_t"><bean:message
 							key="User.header" /></td>
-						<td width="34%"><select class="formFieldSized18" id="userIds"
+						<td width="34%"><select class="formFieldSizedNew" id="userIds"
 							size="4" multiple="multiple" >
 							<%
 							String userName = "";
@@ -174,7 +179,7 @@ function updateCPTree()
 							for="protocolCoordinatorIds"><bean:message
 							key="user.role" /></label></td>
 						<td align="left" class="black_ar_t"><select
-							class="formFieldSized18" id="roleIds"
+							class="formFieldSizedNew" id="roleIds"
 							onchange="getActionsForThisRole(this)"
 							onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 							<%
@@ -200,7 +205,7 @@ function updateCPTree()
 							width="18" height="18" align="absmiddle"></td>
 						<td align="left" class="black_ar_t"><bean:message
 							key="app.Privileges" /></td>
-						<td><select class="formFieldSized18" id="actionIds" size="4"
+						<td><select class="formFieldSizedNew" id="actionIds" size="4"
 							multiple="multiple">
 							<%
 									for (int i = 0; i < actionList.size(); i++) {
@@ -283,7 +288,7 @@ function updateCPTree()
 									<td width="8%" class="black_ar">
 									<input type='checkbox'
 										name='<%=chkName %>' id='<%=chkName %>'
-										onclick="enableDeleteButton(this)" /></td>
+										onclick="enableDeleteButton('summaryTableId','deleteButtonId')" /></td>
 									<td width="25%" class="black_ar" onmouseover="Tip('<%=arr[1]%>',WIDTH,200)">
 									<% if(arr[1].length() >20){
 									arr[1]=arr[1].substring(0,17)+"...";
@@ -317,14 +322,20 @@ function updateCPTree()
 						</td>
 					</tr>
 					<tr>
-						<td class="black_ar" colspan="6"><html:button property="deleteButton"
+						<td class="black_ar" colspan="6"><html:button property="deleteButton" 
+							styleId="deleteButtonId"
 							styleClass="black_ar" onclick="deleteCheckedRows()"
 							disabled="true">
 							<bean:message key="buttons.delete" />
-						</html:button></td>
-						
+						</html:button>
+						</td>					
 						
 					</tr>
+					<tr>
+
+                        <td colspan="2" class="bottomtd"> </td>                     
+                      </tr>
+                     
 				</table>
 				</td>
 			</tr>

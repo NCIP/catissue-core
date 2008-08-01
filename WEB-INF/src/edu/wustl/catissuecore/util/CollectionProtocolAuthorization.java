@@ -103,12 +103,34 @@ public class CollectionProtocolAuthorization implements edu.wustl.catissuecore.u
 			String key = mapItr.next();
 			SiteUserRolePrivilegeBean siteUserRolePrivilegeBean = rowIdMap.get(key);
 			List<Site> siteList = siteUserRolePrivilegeBean.getSiteList();
-			siteCollection.addAll(siteList);
+			for (Site site : siteList)
+			{ 
+				boolean isPresent = false;
+				for (Site setSite : siteCollection)
+				{
+					if (setSite.getId().equals(site.getId()))
+					{
+						isPresent = true;
+					}
+				}
+				if (!isPresent)
+				{
+					siteCollection.add(site);
+				}
+			} 
+			//siteCollection.addAll(siteList);
 			
 			User user = siteUserRolePrivilegeBean.getUser();
 			userCollection.add(user);
 			String defaultRole = siteUserRolePrivilegeBean.getRole().getValue();
-			roleName = getRoleName(collectionProtocol.getId(), user.getId(), defaultRole);
+//			if (defaultRole != null && (defaultRole.equalsIgnoreCase("-1") || defaultRole.equalsIgnoreCase("0")) )
+//			{
+				roleName = getRoleName(collectionProtocol.getId(), user.getId(), defaultRole);
+//			} else
+//			{
+//				roleName = siteUserRolePrivilegeBean.getRole().getName();
+//			}
+			
 			Set<String> privileges = new HashSet<String>();
 			List<NameValueBean> privilegeList = siteUserRolePrivilegeBean.getPrivileges();
 			

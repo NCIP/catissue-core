@@ -147,7 +147,7 @@ public class UserForm extends AbstractActionForm
 	 */
 	private String confirmEmailAddress;
 
-	protected String[] siteIds = new String[]{"-1"};
+	protected String[] siteIds ;
 	
 	public String[] getSiteIds()
 	{
@@ -806,16 +806,16 @@ public class UserForm extends AbstractActionForm
 						// Mandar 10-apr-06 : bugid :353 
 						// Error messages should be in the same sequence as the sequence of fields on the page.
 						
-						if(!pageOf.equalsIgnoreCase("pageOfSignUp"))
-						{
-							if (siteIds[0].equalsIgnoreCase("-1"))
-							{
-								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
-										ApplicationProperties
-												.getValue("user.site")));
-							}
-							
-						}
+//						if(!pageOf.equalsIgnoreCase("pageOfSignUp"))
+//						{
+//							if (siteIds[0].equalsIgnoreCase("-1"))
+//							{
+//								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
+//										ApplicationProperties
+//												.getValue("user.site")));
+//							}
+//							
+//						}
 						
 						
 						if (validator.isEmpty(emailAddress))

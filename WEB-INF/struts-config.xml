@@ -1213,7 +1213,7 @@ PUBLIC
 		</action>
 		
 		<action path="/UserAdd"
-			type="edu.wustl.common.action.CommonAddEditAction"
+			type="edu.wustl.catissuecore.action.SubmitUserAction"
 			name="userForm"
 			validate="true"
 			input="/User.do?operation=add&amp;pageOf=pageOfUserAdmin&amp;menuSelected=1"

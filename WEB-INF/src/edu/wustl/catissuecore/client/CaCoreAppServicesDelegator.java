@@ -13,8 +13,10 @@ package edu.wustl.catissuecore.client;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.hibernate.Session;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
@@ -32,6 +34,7 @@ import edu.wustl.catissuecore.namegenerator.LabelGeneratorFactory;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.bizlogic.QueryBizLogic;
@@ -642,14 +645,32 @@ public class CaCoreAppServicesDelegator
 	 * @param userName user name
 	 * @return session data bean
 	 */
-	private SessionDataBean getSessionDataBean(String userName) 
+	private SessionDataBean getSessionDataBean(String userName) throws Exception
 	{
-		SessionDataBean sessionDataBean = new SessionDataBean();
-		sessionDataBean.setUserName(userName);
-		/**
-		 * This workaround for admin test cases. Need to get vraible from CSM
-		 */
-		sessionDataBean.setAdmin(true);
+		// Map<String, SessionDataBean> sessionDataMap = Variables.sessionDataMap;  
+		SessionDataBean sessionDataBean = null;
+		
+		if(Variables.sessionDataMap.containsKey(userName))
+		{
+			sessionDataBean = Variables.sessionDataMap.get(userName);
+		}
+		else
+		{
+			User user = null;
+			sessionDataBean = new SessionDataBean();
+			sessionDataBean.setUserName(userName);
+
+			sessionDataBean.setAdmin(false);
+			user = Utility.getUser(userName);
+			if(user.getRoleId().equalsIgnoreCase(Constants.ADMIN_USER))
+			{
+				sessionDataBean.setAdmin(true);
+			}	
+
+			sessionDataBean.setUserId(user.getId());
+			Variables.sessionDataMap.put(userName, sessionDataBean);
+		}
+		
 		return sessionDataBean;
 	}
 	

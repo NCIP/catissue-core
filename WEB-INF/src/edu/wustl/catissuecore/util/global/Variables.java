@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
+import edu.wustl.common.beans.SessionDataBean;
+
 /**
  * @author aarti_sharma
  *
@@ -44,6 +46,7 @@ public class Variables extends edu.wustl.common.util.global.Variables
     
     public static Map<String,List<String>> roleEntityMap = new HashMap<String, List<String>>(); 
     
+    public static Map<String, SessionDataBean> sessionDataMap = new HashMap<String, SessionDataBean>();
        
     public static String prepareColTypes(List dataColl)
     {

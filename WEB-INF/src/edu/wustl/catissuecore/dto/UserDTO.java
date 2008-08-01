@@ -3,7 +3,9 @@
  */
 package edu.wustl.catissuecore.dto;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.multiRepository.bean.SiteUserRolePrivilegeBean;
@@ -17,7 +19,8 @@ public class UserDTO
 {
   
 	private User user;
-	private List<SiteUserRolePrivilegeBean> siteUserRolePrivilegeBeanList;
+	//private List<SiteUserRolePrivilegeBean> siteUserRolePrivilegeBeanList;
+	private Map<String, SiteUserRolePrivilegeBean> userRowIdBeanMap= new HashMap<String, SiteUserRolePrivilegeBean>();
 	
 	public User getUser()
 	{
@@ -28,8 +31,18 @@ public class UserDTO
 	{
 		this.user = user;
 	}
+
+	public Map<String, SiteUserRolePrivilegeBean> getUserRowIdBeanMap() 
+	{
+		return userRowIdBeanMap;
+	}
+
+	public void setUserRowIdBeanMap(Map<String, SiteUserRolePrivilegeBean> userRowIdBeanMap) 
+	{
+		this.userRowIdBeanMap = userRowIdBeanMap;
+	}
 	
-	public List<SiteUserRolePrivilegeBean> getSiteUserRolePrivilegeBeanList()
+	/*public List<SiteUserRolePrivilegeBean> getSiteUserRolePrivilegeBeanList()
 	{
 		return siteUserRolePrivilegeBeanList;
 	}
@@ -38,7 +51,7 @@ public class UserDTO
 			List<SiteUserRolePrivilegeBean> siteUserRolePrivilegeBeanList)
 	{
 		this.siteUserRolePrivilegeBeanList = siteUserRolePrivilegeBeanList;
-	}
+	}*/
 	
 	
 }

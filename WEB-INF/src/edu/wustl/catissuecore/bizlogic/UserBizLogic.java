@@ -14,10 +14,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
@@ -29,10 +31,10 @@ import edu.wustl.catissuecore.domain.Institution;
 import edu.wustl.catissuecore.domain.Password;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.User;
-import edu.wustl.catissuecore.dto.CollectionProtocolDTO;
+import edu.wustl.catissuecore.dto.UserDTO;
+import edu.wustl.catissuecore.multiRepository.bean.SiteUserRolePrivilegeBean;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.EmailHandler;
-import edu.wustl.catissuecore.util.ParticipantRegistrationInfo;
 import edu.wustl.catissuecore.util.Roles;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.IValueObject;
@@ -49,6 +51,7 @@ import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exceptionformatter.DefaultExceptionFormatter;
 import edu.wustl.common.security.PrivilegeCache;
 import edu.wustl.common.security.PrivilegeManager;
+import edu.wustl.common.security.PrivilegeUtility;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.PasswordEncryptionException;
 import edu.wustl.common.security.exceptions.SMException;
@@ -59,7 +62,11 @@ import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.PasswordManager;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
+import gov.nih.nci.security.authorization.domainobjects.ProtectionElement;
+import gov.nih.nci.security.authorization.domainobjects.ProtectionGroup;
 import gov.nih.nci.security.authorization.domainobjects.Role;
+import gov.nih.nci.security.dao.ProtectionElementSearchCriteria;
+import gov.nih.nci.security.exceptions.CSException;
 
 /**
  * UserBizLogic is used to add user information into the database using Hibernate.
@@ -85,8 +92,18 @@ public class UserBizLogic extends DefaultBizLogic
 	 */
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
+		User user = null;
+		Map<String,SiteUserRolePrivilegeBean> userRowIdMap =new HashMap<String, SiteUserRolePrivilegeBean>();
 
-		User user = (User) obj;
+		if(obj instanceof UserDTO)
+		{
+			user = ((UserDTO)obj).getUser();
+			userRowIdMap = ((UserDTO)obj).getUserRowIdBeanMap();
+		}
+		else
+		{
+		user = (User) obj;
+		}
 		gov.nih.nci.security.authorization.domainobjects.User csmUser = new gov.nih.nci.security.authorization.domainobjects.User();
 
 		try
@@ -173,6 +190,7 @@ public class UserBizLogic extends DefaultBizLogic
 
 			// Create address and the user in catissue tables.
 			dao.insert(user.getAddress(), sessionDataBean, true, false);
+			updateUserDetails(user,userRowIdMap);
 			dao.insert(user, sessionDataBean, true, false);
 
 			Set protectionObjects = new HashSet();
@@ -193,7 +211,7 @@ public class UserBizLogic extends DefaultBizLogic
 				
 				PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
 
-				privilegeManager.insertAuthorizationData(getAuthorizationData(user), 
+				privilegeManager.insertAuthorizationData(getAuthorizationData(user, userRowIdMap), 
 						protectionObjects, null, user.getObjectId());
 
 				emailHandler.sendApprovalEmail(user);
@@ -245,7 +263,7 @@ public class UserBizLogic extends DefaultBizLogic
 	 * elements returned by this class should be added to.
 	 * @return
 	 */
-	private Vector getAuthorizationData(AbstractDomainObject obj) throws SMException
+	private Vector getAuthorizationData(AbstractDomainObject obj, Map<String,SiteUserRolePrivilegeBean> userRowIdMap) throws SMException
 	{
 		Vector authorizationData = new Vector();
 		Set group = new HashSet();
@@ -267,9 +285,272 @@ public class UserBizLogic extends DefaultBizLogic
 		authorizationData.add(userGroupRoleProtectionGroupBean);
 
 		Logger.out.debug(authorizationData.toString());
+		
+		if(userRowIdMap !=null)
+		{
+			insertCPSitePrivileges(aUser, authorizationData, userRowIdMap);
+		}
+		
 		return authorizationData;
 	}
 
+	private void insertCPSitePrivileges(User user1, Vector authorizationData, Map<String, SiteUserRolePrivilegeBean> userRowIdMap)
+	{
+		Map<String, SiteUserRolePrivilegeBean> cpPrivilegeMap = new HashMap<String, SiteUserRolePrivilegeBean>();
+		Map<String, SiteUserRolePrivilegeBean> sitePrivilegeMap = new HashMap<String, SiteUserRolePrivilegeBean>();
+		
+		distributeMapData(userRowIdMap, cpPrivilegeMap, sitePrivilegeMap);
+		
+		/* For SITE Privileges Purpose */
+		insertSitePrivileges(user1, authorizationData, sitePrivilegeMap);
+		
+		/* For CP Privileges Purpose */
+		insertCPPrivileges(user1, authorizationData, cpPrivilegeMap);
+				
+		/* Common for both */	
+		//updateUserDetails(user1, userRowIdMap);
+	}
+	
+	
+	private void updateUserDetails(User user1, Map<String, SiteUserRolePrivilegeBean> userRowIdMap) 
+	{
+		Set<Site> siteCollection = new HashSet<Site>();
+		Set<CollectionProtocol> cpCollection = new HashSet<CollectionProtocol>();
+		
+		for (Iterator<String> mapItr = userRowIdMap.keySet().iterator(); mapItr.hasNext(); )
+		{
+			String key = mapItr.next();
+			SiteUserRolePrivilegeBean siteUserRolePrivilegeBean = userRowIdMap.get(key);
+			
+			CollectionProtocol cp = siteUserRolePrivilegeBean.getCollectionProtocol();
+			if(cp != null)
+			{
+				cpCollection.add(cp);
+			}
+			
+			List<Site> siteList = siteUserRolePrivilegeBean.getSiteList();
+			
+			for(Site site : siteList)
+			{
+				siteCollection.add(site);
+			}
+		}
+		
+		user1.getSiteCollection().clear();
+		user1.getSiteCollection().addAll(siteCollection);
+		
+		user1.getAssignedProtocolCollection().clear();
+
+		user1.getAssignedProtocolCollection().addAll(cpCollection);
+		
+	}
+
+	
+	private void insertSitePrivileges(User user1, Vector authorizationData, Map<String, SiteUserRolePrivilegeBean> sitePrivilegeMap) 
+	{
+		String roleName = "";
+		
+		for (Iterator<String> mapItr = sitePrivilegeMap.keySet().iterator(); mapItr.hasNext(); )
+		{
+			try 
+			{
+				String key = mapItr.next();
+				SiteUserRolePrivilegeBean siteUserRolePrivilegeBean = sitePrivilegeMap.get(key);
+				
+				Site site = siteUserRolePrivilegeBean.getSiteList().get(0);
+				String defaultRole = siteUserRolePrivilegeBean.getRole().getValue();
+				
+				if (defaultRole != null && (defaultRole.equalsIgnoreCase("-1") || defaultRole.equalsIgnoreCase("0")) )
+				{
+					roleName = getSiteRoleName(site.getId(), user1.getId(), defaultRole);
+				} else
+				{
+					roleName = siteUserRolePrivilegeBean.getRole().getName();
+				}
+				
+				Set<String> privileges = new HashSet<String>();
+				List<NameValueBean> privilegeList = siteUserRolePrivilegeBean.getPrivileges();
+				
+				for(NameValueBean privilege : privilegeList)
+				{
+					privileges.add(privilege.getValue());
+				}
+				
+				PrivilegeManager.getInstance().createRole(roleName,
+							privileges);
+				
+				String userId = String.valueOf(user1.getCsmUserId());
+				
+				gov.nih.nci.security.authorization.domainobjects.User csmUser = null;
+				csmUser = getUserByID(userId);
+				HashSet<gov.nih.nci.security.authorization.domainobjects.User> group = new HashSet<gov.nih.nci.security.authorization.domainobjects.User>();
+				group.add(csmUser);
+				
+				String protectionGroupName = new String(Constants
+						.getSitePGName(user1.getId()));
+				
+				createProtectionGroup(protectionGroupName, site);
+				
+				SecurityDataBean userGroupRoleProtectionGroupBean = new SecurityDataBean();
+				userGroupRoleProtectionGroupBean.setUser("");
+				userGroupRoleProtectionGroupBean.setRoleName(roleName);
+				
+				userGroupRoleProtectionGroupBean.setGroupName(("Site_"+user1.getId()+ "_"+user1.getId().toString()));
+				userGroupRoleProtectionGroupBean.setProtectionGroupName(protectionGroupName);
+				userGroupRoleProtectionGroupBean.setGroup(group);
+				authorizationData.add(userGroupRoleProtectionGroupBean);
+			} 
+			
+			catch (CSException e) 
+			{
+				Logger.out.error(e.getMessage(), e);
+			} 
+			catch (SMException e) 
+			{
+				Logger.out.error(e.getMessage(), e);
+			}
+		}
+	}
+	
+	
+	private void insertCPPrivileges(User user1, Vector authorizationData, Map<String, SiteUserRolePrivilegeBean> cpPrivilegeMap) 
+	{
+		String roleName = "";
+		
+		for (Iterator<String> mapItr = cpPrivilegeMap.keySet().iterator(); mapItr.hasNext(); )
+		{
+			try 
+			{
+				String key = mapItr.next();
+				SiteUserRolePrivilegeBean siteUserRolePrivilegeBean = cpPrivilegeMap.get(key);
+				
+				CollectionProtocol cp = siteUserRolePrivilegeBean.getCollectionProtocol();
+				String defaultRole = siteUserRolePrivilegeBean.getRole().getValue();
+//				if (defaultRole != null && (defaultRole.equalsIgnoreCase("-1") || defaultRole.equalsIgnoreCase("0")) )
+//				{
+					roleName = getCPRoleName(cp.getId(), user1.getId(), defaultRole);
+//				} else
+//				{
+//					roleName = siteUserRolePrivilegeBean.getRole().getName();
+//				}
+				Set<String> privileges = new HashSet<String>();
+				List<NameValueBean> privilegeList = siteUserRolePrivilegeBean.getPrivileges();
+				
+				for(NameValueBean privilege : privilegeList)
+				{
+					privileges.add(privilege.getValue());
+				}
+				
+				PrivilegeManager.getInstance().createRole(roleName,
+							privileges);
+				
+				String userId = String.valueOf(user1.getCsmUserId());
+				
+				gov.nih.nci.security.authorization.domainobjects.User csmUser = getUserByID(userId);
+				HashSet<gov.nih.nci.security.authorization.domainobjects.User> group = new HashSet<gov.nih.nci.security.authorization.domainobjects.User>();
+				group.add(csmUser); 
+				String protectionGroupName = new String(Constants
+						.getCollectionProtocolPGName(cp.getId()));
+				
+				createProtectionGroup(protectionGroupName, cp);
+				
+				SecurityDataBean userGroupRoleProtectionGroupBean = new SecurityDataBean();
+				userGroupRoleProtectionGroupBean.setUser("");
+				userGroupRoleProtectionGroupBean.setRoleName(roleName);
+				
+				userGroupRoleProtectionGroupBean.setGroupName(("CP_"+user1.getId()+ "_"+user1.getId().toString()));
+				
+				userGroupRoleProtectionGroupBean.setProtectionGroupName(protectionGroupName);
+				userGroupRoleProtectionGroupBean.setGroup(group);
+				authorizationData.add(userGroupRoleProtectionGroupBean);
+			} 
+			catch (CSException e) 
+			{
+				Logger.out.error(e.getMessage(), e);
+			}
+			catch (SMException e) 
+			{
+				Logger.out.error(e.getMessage(), e);
+			}
+		}	
+	}
+
+	
+	private void createProtectionGroup(String protectionGroupName, AbstractDomainObject obj) 
+	{
+		ProtectionElement pe = new ProtectionElement();
+		
+		Set<ProtectionElement> peSet = new HashSet<ProtectionElement>();
+//		if(obj instanceof Site)
+//		{
+//			pe.setObjectId(Site.class.getName()+"_"+obj.getId());
+//		}
+//		else if(obj instanceof CollectionProtocol)
+//		{
+//			pe.setObjectId(CollectionProtocol.class.getName()+"_"+obj.getId());
+//		}
+		pe.setObjectId(obj.getObjectId());
+		ProtectionElementSearchCriteria searchCriteria = new ProtectionElementSearchCriteria(pe);
+		List<ProtectionElement> peList;
+		try {
+			peList = new PrivilegeUtility().getUserProvisioningManager().getObjects(searchCriteria);
+			ProtectionGroup pg = new ProtectionGroup();
+			pg.setProtectionGroupName(protectionGroupName);
+			peSet.addAll(peList);
+			pg.setProtectionElements(peSet);
+			new PrivilegeUtility().getUserProvisioningManager().createProtectionGroup(pg);	
+		} catch (CSException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+			
+	}
+	
+	private void distributeMapData(Map<String, SiteUserRolePrivilegeBean> userRowIdMap, Map<String, SiteUserRolePrivilegeBean> cpPrivilegeMap, 
+																		Map<String, SiteUserRolePrivilegeBean> sitePrivilegeMap)
+	{
+		for (Iterator<String> mapItr = userRowIdMap.keySet().iterator(); mapItr.hasNext(); )
+		{
+			String key = mapItr.next();
+			SiteUserRolePrivilegeBean siteUserRolePrivilegeBean = userRowIdMap.get(key);
+			
+			if(siteUserRolePrivilegeBean.getCollectionProtocol() == null)
+			{
+				sitePrivilegeMap.put(key, siteUserRolePrivilegeBean);
+			}
+			else
+			{
+				cpPrivilegeMap.put(key, siteUserRolePrivilegeBean);
+			}
+		}		
+	}
+	
+	protected String getCPRoleName(long collectionProtocolId, long userId, String defaultRole)
+	{
+		String roleName = defaultRole+"_"+"CP_" + collectionProtocolId + "_USER_" + userId;
+		return roleName;
+	}
+	
+	protected String getSiteRoleName(long siteId, long userId, String defaultRole)
+	{
+		String roleName = defaultRole+"_"+"SITE_" + siteId + "_USER_" + userId;
+		return roleName;
+	}
+
+	/**
+	 * @param userId
+	 * @return
+	 * @throws SMException
+	 */
+	private gov.nih.nci.security.authorization.domainobjects.User getUserByID(String userId)
+			throws SMException
+	{
+		gov.nih.nci.security.authorization.domainobjects.User user = SecurityManager.getInstance(
+				this.getClass()).getUserById(userId);
+		return user;
+	}
+	
+	
 	/**
 	 * Updates the persistent object in the database.
 	 * @param obj The object to be updated.
@@ -657,7 +938,15 @@ public class UserBizLogic extends DefaultBizLogic
 	 */
 	protected boolean validate(Object obj, DAO dao, String operation) throws DAOException
 	{
-		User user = (User) obj;		
+		User user = null;
+		if (obj instanceof UserDTO)
+		{
+			user = ((UserDTO)obj).getUser();
+		}
+		else
+		{
+			user = (User) obj;		
+		}		
 	
 		/**
 		 * Start: Change for API Search   --- Jitendra 06/10/2006

@@ -10,10 +10,7 @@
 
 package edu.wustl.catissuecore.action;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.ListIterator;
-import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,6 +27,7 @@ import edu.wustl.catissuecore.domain.CancerResearchGroup;
 import edu.wustl.catissuecore.domain.Department;
 import edu.wustl.catissuecore.domain.Institution;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.util.MSRUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.common.action.SecureAction;
@@ -37,10 +35,7 @@ import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.cde.CDEManager;
-import edu.wustl.common.security.SecurityManager;
-import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.util.logger.Logger;
-import gov.nih.nci.security.authorization.domainobjects.Role;
 
 /**
  * This class initializes the fields in the User Add/Edit webpage.
@@ -67,11 +62,19 @@ public class UserAction extends SecureAction
         
         
         ShowAssignPrivilegePageAction showAssignPrivilegePageAction = new ShowAssignPrivilegePageAction();
-        final AssignPrivilegePageBizLogic apBizLogic= showAssignPrivilegePageAction.getAssignPrivilegePageBizLogic();
-		final List<NameValueBean> siteList = apBizLogic.getSiteList(false);
-		request.setAttribute(Constants.SITELIST, siteList);
-		request.setAttribute("siteListforJSP", Constants.SITELIST);
+        MSRUtil msrUtil=new MSRUtil();
+    //    final AssignPrivilegePageBizLogic apBizLogic= msrUtil.getAssignPrivilegePageBizLogic();
+	//	final List<NameValueBean> siteList = apBizLogic.getSiteList(false);
+	//	request.setAttribute(Constants.SITELIST, siteList);
+	//	request.setAttribute("siteListforJSP", Constants.SITELIST);
         
+        msrUtil.onFirstTimeLoad(mapping, request);
+        
+        final String cpOperation = (String) request.getParameter("cpOperation");
+        if(cpOperation !=null)
+        {
+        	return msrUtil.setAJAXResponse(request, response, cpOperation);
+        }
         
         String formName,prevPage=null,nextPage=null;
         boolean roleStatus=false;

@@ -269,6 +269,12 @@ A.view:hover{
 	border-right:1px solid #bfdcf3;
 	border-left:1px solid #bfdcf3;
 }
+.cpborder {
+	border-bottom:1px solid #999999;
+	border-top:1px solid #999999;
+	border-right:1px solid #999999;
+	border-left:1px solid #999999;
+}
 
 .tdPartition {
 	border-bottom:2px solid #ffffff;
@@ -466,6 +472,12 @@ div.autocomplete {
 	color: #000000;
 	width:18em;
 	}
+	.formFieldSized19{ /* for the autocomplete tag */
+	font-family:verdana;
+	border:1px solid #6E81A6; 
+  font-size:11px;
+	width:19em;
+}
 
 	.formFieldSizedTime{ /* for the form elements themselves and with a constant width (on elements) */
 	font-family:verdana;
