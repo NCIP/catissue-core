@@ -19,7 +19,7 @@
 					title=""
 					value="Overwrite Report" 
 					onclick="onButtonClick('overwriteReport')">
- 	       	</html:button>&nbsp;|&nbsp;
+ 	       	</html:button> &nbsp;|&nbsp;
 			
 	    	<html:button styleClass="blue_ar_c" 
 						property="" 
@@ -27,7 +27,12 @@
 						value="Ignore New Report" 
 						onclick="onButtonClick('ignoreNewReport')">
 		 
-		    </html:button>
+		    </html:button> &nbsp;|&nbsp;
+
+			<html:link	page="/ManageAdministrativeData.do" styleClass="cancellink">
+					<bean:message key="buttons.cancel" />
+			</html:link>
+
 
 		</td>
 	</tr>

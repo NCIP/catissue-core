@@ -33,7 +33,7 @@
 					disabled="<%=useSelPartDisable%>" 
 					onclick="onButtonClick('createNewSCG')">
  	    
-	     	</html:button>&nbsp;|&nbsp;
+	     	</html:button> &nbsp;|&nbsp;
 			<%}%>	   
 	    	<html:button styleClass="blue_ar_c" 
 						styleId="useSelSCG"
@@ -69,6 +69,10 @@
 	     	</html:button>
 
 		<%}%>
+		 &nbsp;|&nbsp;
+		 <html:link	page="/ManageAdministrativeData.do" styleClass="cancellink">
+				<bean:message key="buttons.cancel" />
+		</html:link>
 
 	    </td>
 		
