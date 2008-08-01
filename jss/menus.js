@@ -156,20 +156,19 @@ Ext.onReady(function(){
 			{
                 text: 'Storage Container',
 				tooltip:'Add Storage Container',
-				href:'StorageContainer.do?operation=add&pageOf=pageOfStorageContainer',
+				href:'OpenStorageContainer.do?operation=add&pageOf=pageOfStorageContainer',
                 menu: {        // <-- submenu by nested config object
                     items: [
                         // stick any markup in a menu
                        {
                             text: 'Add',
-                            href:'StorageContainer.do?operation=add&pageOf=pageOfStorageContainer'
+                            href:'OpenStorageContainer.do?operation=add&pageOf=pageOfStorageContainer'
                         }, {
                             text: 'Edit',
                              href:'SimpleQueryInterface.do?pageOf=pageOfStorageContainer&aliasName=StorageContainer'
                         }, {
-                            text: 'View Map',
-                            
-                            handler: showStorageContainerMap
+                            text: 'ViewMap',
+                             href:'OpenStorageContainer.do?operation=showEditAPageAndMap&pageOf=pageOfStorageContainer'
                         }
                     ]
                 }

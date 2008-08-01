@@ -11,9 +11,12 @@
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.common.util.tag.ScriptGenerator" %>
 <%@ include file="/pages/content/common/AdminCommonCode.jsp" %>
+<%@ page language="java" isELIgnored="false"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<script src="jss/script.js" type="text/javascript"></script>
 <%
 		//StorageContainerForm form = (StorageContainerForm)request.getAttribute("storageContainerForm");
-		
+		String pageOf = request.getParameter(Constants.PAGEOF);
         String operation = (String) request.getAttribute(Constants.OPERATION);
 		//String containerNumber=(String)request.getAttribute("ContainerNumber");
         String formName;
@@ -89,6 +92,7 @@
 %>
 
 <head>
+<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" /> 
 <style>
 	.hidden
 	{
@@ -218,7 +222,7 @@
 	function onParentContainerChange1(element)
 	{
 		if(element.name == "parentContainerId")
-		{
+		{ 
 			var request = newXMLHTTPReq();
 			var handlerFunction = getReadyStateHandler(request,onResponseUpdate,true);
 		
@@ -474,6 +478,73 @@ function onEditChange()
 		ele2.remove(0);
 	}
 }
+function vieMapTabSelected(){
+ window.parent.tabSelected("viewmapTab");
+ var activityStatus= window.parent.getActivityStatus();
+ var action= "OpenStorageContainer.do?<%=Constants.SYSTEM_IDENTIFIER%>=${requestScope.storageContainerIdentifier}&<%=Constants.PAGEOF%>=viewMapTab&<%=Constants.ACTIVITY_STATUS%>="+activityStatus+""; 
+	document.forms[0].action=action;
+	document.forms[0].submit();
+}
+function refresh_tree()
+{	
+	window.parent.frames['SCTreeView'].location="<%=Constants.TREE_NODE_DATA_ACTION%>?<%=Constants.PAGEOF%>=<%=pageOf%>&<%=Constants.RELOAD%>=true&<%=Constants.TREE_NODE_ID%>=${requestScope.storageContainerIdentifier}";
+}
+function parentContainerTypeChanged(element)
+{	
+	var selectedParentSite=document.getElementById("parentContainerSite");
+	var selectedParentAuto=document.getElementById("parentContainerAuto");
+	var selectedParentManual=document.getElementById("parentContainerManual");
+	
+	if(element.value == "Site")
+    {
+		selectedParentSite.style.display="block"; 	
+		selectedParentAuto.style.display="none";
+		selectedParentManual.style.display="none";
+	}
+	else if(element.value == "Auto")
+	{
+		selectedParentSite.style.display="none"; 	
+		selectedParentAuto.style.display="block";
+		selectedParentManual.style.display="none";
+	}
+	else if(element.value == "Manual")
+	{
+		selectedParentSite.style.display="none"; 	
+		selectedParentAuto.style.display="none";
+		selectedParentManual.style.display="block";
+	}
+}
+// Patch ID: Bug#3090_11
+window.parent.selectTab('${requestScope.operation}');
+
+function setParentContainerType()
+{
+	var selectedParentSite=document.getElementById("parentContainerSite");
+	var selectedParentAuto=document.getElementById("parentContainerAuto");
+	var selectedParentManual=document.getElementById("parentContainerManual");
+	
+	if('${requestScope.operation}'== "Add")
+    {
+		selectedParentSite.style.display="block"; 	
+		selectedParentAuto.style.display="none";
+		selectedParentManual.style.display="none";
+	}
+	else if('${requestScope.operation}'== "edit")
+	{
+		if('${requestScope.parentContainerSelected}' == "Site")
+		{
+			selectedParentSite.style.display="block"; 	
+			selectedParentAuto.style.display="none";
+			selectedParentManual.style.display="none";
+		}
+		else
+		{
+			selectedParentSite.style.display="none"; 	
+			selectedParentAuto.style.display="block";
+			selectedParentManual.style.display="none";
+		}
+	}
+}
 	</script>
 </head>
 
@@ -483,127 +554,74 @@ function onEditChange()
 <html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
 	<%=messageKey%>
 </html:messages>
-
+<body>
+<script type="text/javascript" src="jss/wz_tooltip.js"></script>
 <html:form action="<%=formName%>" method="post">	
-
-	<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="750">
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+ <tr>
+    <td>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0">
 	<!-- NEW STORAGE CONTAINER REGISTRATION BEGINS-->
 		<tr>
-		<td>
-			<table summary="" cellpadding="3" cellspacing="0" border="0" width="660">
-				<tr>
-					<td>
+           <td><table width="100%" border="0" cellpadding="0" cellspacing="0">
+                 <tr>
+					<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
+                    <td  valign="bottom" ><img src="images/uIEnhancementImages/sc_info.gif" alt="Container Info" width="111" height="20" /></td>
+					 <td width="90%" valign="bottom" class="cp_tabbg">&nbsp;</td>
+					</logic:notEqual>
+					<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
+					 <td valign="bottom" ><img src="images/uIEnhancementImages/sc_edit.gif" alt="Container Info" width="158" height="20"  /><a href="#"></a></td>
+					<td  valign="bottom"><a href="#"><img src="images/uIEnhancementImages/sc_map1.gif" alt="View Map" width="94" height="20" border="0" onclick="vieMapTabSelected()"/></a></td>
+                    <td width="80%" valign="bottom" class="cp_tabbg">&nbsp;</td>
+					</logic:equal>
+                   </tr>
+              </table>
+			 </td>
+          </tr>
+		<tr>
+		<td class="cp_tabtable">
+			<table width="100%" border="0" cellpadding="3" cellspacing="0">					
 						<html:hidden property="operation" value="<%=operation%>" />
 						<%--  <html:hidden property="containerNumber" value="<%=containerNumber%>" /> --%>
 						<html:hidden property="submittedFor" value="<%=submittedFor%>"/>	
 						<input type="hidden" name="radioValue">
 						<html:hidden property="containerId" styleId="containerId"/>
-					</td>
-				</tr>
-				<tr>
-					<td><html:hidden property="id" />
+					
+				
+						<html:hidden property="id" />
 						<html:hidden property="typeName"/>
 						<html:hidden property="siteName"/>
-					</td>
-				</tr>
-				<tr>
-					<td><html:hidden property="positionInParentContainer" />
+					
+						<html:hidden property="positionInParentContainer" />
 						<html:hidden property="siteForParentContainer"/>
 
-					</td>
-				</tr>
-				<tr>
-					<td><html:hidden property="onSubmit" />
+					
+			
+					<html:hidden property="onSubmit" />
 						<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
 							<html:hidden property="isFull" />
 						</logic:equal>					
-					</td>
-				</tr>
-					<tr>
-						<td class="formMessage" colspan="5">* indicates a required field</td>
-					</tr>
 					
-					<tr>
-						<td class="formTitle" height="20" colspan="5">
-							<logic:equal name="operation" value="<%=Constants.ADD%>">
-								<bean:message key="storageContainer.title"/>
-							</logic:equal>
-							<logic:equal name="operation" value="<%=Constants.EDIT%>">
-								<bean:message key="storageContainer.editTitle"/>
-							</logic:equal>
-						</td>
-					</tr>
 					
-					<tr>
-						<td class="formRequiredNotice" width="5">*</td>
-						<td class="formRequiredLabel" colspan="2">
-							<label for="type">
-								<bean:message key="storageContainer.type" />
-							</label>
-						</td>
-						<td class="formField" colspan="2">
-<!-- Mandar : 434 : for tooltip -->
-							<html:select property="typeId" styleClass="formFieldSized" styleId="typeId" size="1" onchange="onTypeChange(this)"
-							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-								<%-- html:options name="storageTypeIdList" labelName="storageTypeList" /--%>
-								<html:options collection="<%=Constants.STORAGETYPELIST%>" labelProperty="name" property="value"/>
-							</html:select>
-							&nbsp;
-							
+				<tr>
+				   <td colspan="2" align="left" class="showhide"><table width="100%" border="0" cellpadding="3" cellspacing="0">
+						<tr>
+						 <td width="1%" align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
+                        <td width="20%" align="left" class="black_ar"><bean:message key="storageContainer.type" /></td>
+						 <td width="23%" align="left"><label><html:select property="typeId" styleClass="formFieldSizedNew" styleId="typeId" size="1" onchange="onTypeChange(this)" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">	<%-- html:options name="storageTypeIdList" labelName="storageTypeList" /--%><html:options collection="<%=Constants.STORAGETYPELIST%>" labelProperty="name" property="value"/></html:select></label></td>
+						 <td colspan="4" align="left">
 							<%if(operation.equals(Constants.ADD))
 							{
 							%>
-								<html:link href="#" styleId="newStorageType" onclick="addNewAction('StorageContainerAddNew.do?addNewForwardTo=storageType&forwardTo=storageContainer&addNewFor=storageType')">
+								<html:link href="#" styleId="newStorageType" styleClass="view" onclick="addNewAction('StorageContainerAddNew.do?addNewForwardTo=storageType&forwardTo=storageContainer&addNewFor=storageType')">
 									<bean:message key="buttons.addNew" />
 								</html:link>
 							<% } %>										
-												
-						</td>
-					</tr>
-<!-- New row 1 -->
-					<tr>
-						<td class="formRequiredNoticeNoBottom" width="5">*</td>
-						<td class="formRequiredLabelLeftBorder" colspan=2>
-							<html:radio styleClass="" styleId="checkedButton" property="checkedButton" value="1" onclick="onRadioButtonClick(this)" >
-								<label for="siteId">
-									<bean:message key="storageContainer.site" />
-								</label>
-							</html:radio>
-						</td>
-						<td class="formField" colspan="2">
-							<logic:equal name="storageContainerForm" property="checkedButton" value="1">
-<!-- Mandar : 434 : for tooltip -->
-							<html:select property="siteId" styleClass="formFieldSized" styleId="siteId" size="1" onchange="onSiteChange()"
-							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-								<html:options collection="<%=Constants.SITELIST%>" labelProperty="name" property="value"/>
-							</html:select>
-							</logic:equal>
-							<logic:equal name="storageContainerForm" property="checkedButton" value="2">
-<!-- Mandar : 434 : for tooltip -->
-							<html:select property="siteId" styleClass="formFieldSized15" styleId="siteId" size="1" onchange="onSiteChange()" disabled="true"
-							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-								<html:options collection="<%=Constants.SITELIST%>" labelProperty="name" property="value"/>
-							</html:select>
-							</logic:equal>
-							&nbsp;
-							<html:link href="#" styleId="newSite" onclick="addNewAction('StorageContainerAddNew.do?addNewForwardTo=site&forwardTo=storageContainer&addNewFor=site')">
-								<bean:message key="buttons.addNew" />
-							</html:link>
-						</td>
-					</tr>
-<!-- New row two -->
-					<tr>
-						<td class="formRequiredNotice" width="5">&nbsp;</td>
-						<td class="formRequiredLabel" colspan=2>
-							<html:radio styleClass="" styleId="checkedButton" property="checkedButton" value="2" onclick="onRadioButtonClick(this)">
-								<label for="site">
-									<bean:message key="storageContainer.parentContainer" />
-								</label>
-							</html:radio>
+										
 						</td>
 						
-						<%-- n-combo-box start --%>
-						<%
+					</tr>
+					<%
 							Map dataMap = (Map) request.getAttribute(Constants.AVAILABLE_CONTAINER_MAP);
 							
 							session.setAttribute(Constants.AVAILABLE_CONTAINER_MAP,dataMap);							
@@ -618,7 +636,7 @@ function onEditChange()
 							// labelNames = {"Name","Pos1","Pos2"};
 							String[] labelNames = Constants.STORAGE_CONTAINER_LABEL;
 							String[] attrNames = { "parentContainerId", "positionDimensionOne", "positionDimensionTwo"};
-							String[] tdStyleClassArray = { "formFieldSized15", "customFormField", "customFormField"}; 
+							String[] tdStyleClassArray = { "formFieldSizedNew", "black_ar", "black_ar"}; 
 							
 							//String[] initValues = new String[3];
 							//initValues[0] = Integer.toString((int)form.getParentContainerId());
@@ -627,8 +645,8 @@ function onEditChange()
 							//initValues[2] = Integer.toString(form.getPositionDimensionTwo());
 							
 							String rowNumber = "1";
-							String styClass = "formFieldSized5";
-							String tdStyleClass = "formField";
+							String styClass = "black_ar";
+							String tdStyleClass = "black_ar";
 							boolean disabled = true;
 							String onChange = "";
 							onChange = "onCustomListBoxChange(this),onParentContainerChange1(this)";
@@ -674,12 +692,34 @@ function onEditChange()
 						<%=ScriptGenerator.getJSEquivalentFor(dataMap,rowNumber)%>
 					
 						<script language="JavaScript" type="text/javascript" src="jss/CustomListBox.js"></script>
-						<td class="formField" colSpan="2">
-							<table border="0">									
-								<tr>
-									<td ><html:radio value="1" onclick="onStorageRadioButtonClick(this)" styleId="stContSelection" property="stContSelection" disabled= "<%=containerRadioDisable%>"/></td>
-									<td>
-										<ncombo:nlevelcombo dataMap="<%=dataMap%>" 
+					<tr>
+                      <td class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
+                      <td align="left" class="black_ar">Parent Location Details</td>
+					  <td><html:select  styleClass="formFieldSizedNew" property="parentContainerSelected" size="1"	onchange= "parentContainerTypeChanged(this)"><html:options collection="parentContainerTypeList"labelProperty="name" property="value" /></html:select></td>
+					  <td colspan="4" align="left" class="black_ar">
+					  
+					  <div id="parentContainerSite" style="display:block">
+					  <table width="100%" border="0" cellpadding="0" cellspacing="0" class="groupElements">
+						<tr>				
+							<label>
+							<html:select property="siteId" styleClass="formFieldSizedNew" styleId="siteId" size="1" onchange="onSiteChange()"
+							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+								<html:options collection="<%=Constants.SITELIST%>" labelProperty="name" property="value"/>
+							</html:select>
+							</label>						
+							&nbsp;
+							<html:link href="#" styleId="newSite"  styleClass="view" onclick="addNewAction('StorageContainerAddNew.do?addNewForwardTo=site&forwardTo=storageContainer&addNewFor=site')">
+								<bean:message key="buttons.addNew" />
+							</html:link>
+							</tr>
+                         </table>
+						 </div>
+					 
+					
+					<div id="parentContainerAuto" style="display:none">
+					  <table width="100%" border="0" cellpadding="0" cellspacing="0" class="groupElements">
+						<tr>
+							<ncombo:nlevelcombo dataMap="<%=dataMap%>" 
 											attributeNames="<%=attrNames%>" 
 											initialValues="<%=initValues%>"  
 											styleClass = "<%=styClass%>" 
@@ -688,42 +728,45 @@ function onEditChange()
 											labelNames="<%=labelNames%>" 
 											rowNumber="<%=rowNumber%>" 
 											onChange = "<%=onChange%>"
-											formLabelStyle="formLabelBorderless"
-											disabled = "<%=dropDownDisable%>"
+											formLabelStyle="nComboGroup"
 											noOfEmptyCombos = "<%=noOfEmptyCombos%>"/>
 											</tr>
-											</table>
-									</td>
-								</tr>
-								<script>
-									// Patch ID: Bug#3090_11
-									function mapButtonClicked()
-									{
-										var platform = navigator.platform.toLowerCase();
-										if (platform.indexOf("mac") != -1)
-										{
-										   	StorageMapWindow('<%=frameUrl%>','name',screen.width,screen.height,'no');
-										}
-										else
-										{
-										   	StorageMapWindow('<%=frameUrl%>','name','800','600','no');
-										}
-									}
-								</script>
-								<tr>
-									<td ><html:radio value="2" onclick="onStorageRadioButtonClick(this)" styleId="stContSelection" property="stContSelection" disabled= "<%=containerRadioDisable%>"/></td>
-									<td class="formLabelBorderlessLeft">
-										<html:text styleClass="formFieldSized10"  size="30" styleId="selectedContainerName" property="selectedContainerName" disabled= "<%=textBoxDisable%>"/>
-										<html:text styleClass="formFieldSized3"  size="5" styleId="pos1" property="pos1" disabled= "<%=textBoxDisable%>"/>
-										<html:text styleClass="formFieldSized3"  size="5" styleId="pos2" property="pos2" disabled= "<%=textBoxDisable%>"/>
-										<html:button styleClass="actionButton" property="containerMap" onclick="mapButtonClicked()" disabled= "<%=textBoxDisable%>">
-											<bean:message key="buttons.map"/>
-										</html:button>
-									</td>
-								</tr>								
-							</table>
-						</td>							
+
+						</tr>
+                         </table>
+						 </div>
+						 
+						<div id="parentContainerManual" style="display:none">
+    					  <table width="64%" border="0" cellpadding="0" cellspacing="0" class="groupElements">
+						<tr>
+							 <td width="24%"><html:text styleClass="grey_ar"   size="30" styleId="selectedContainerName" property="selectedContainerName"/></td>
+							 <td width="13%"><html:text styleClass="black_ar_s"  size="5" styleId="pos1" property="pos1"/> </td>	
+							 <td width="13%"><html:text styleClass="black_ar_s" size="5" styleId="pos2" property="pos2"/></td>	
+							 <td width="14%"><html:button styleClass="grey_ar"  property="containerMap" onclick="mapButtonClicked()"><bean:message key="buttons.map"/></html:button> </td>
+							 
+						</tr>
+                         </table>
+						 </div>
+						
+						 </td>
+						
 					</tr>
+					<script>
+						setParentContainerType();
+						// Patch ID: Bug#3090_11
+						function mapButtonClicked()
+						 {
+						    var platform = navigator.platform.toLowerCase();
+							if (platform.indexOf("mac") != -1)
+							 {
+							   	StorageMapWindow('<%=frameUrl%>','name',screen.width,screen.height,'no');
+							 }
+							else
+							 {
+							   	StorageMapWindow('<%=frameUrl%>','name','800','600','no');
+							  }
+						}
+					</script>
 					<logic:equal name="exceedsMaxLimit" value="true">
 					<tr>
 						<td>
@@ -735,78 +778,56 @@ function onEditChange()
 					{
 					%>
 					<tr>
-						<td class="formRequiredNotice" width="5">*</td>
-						<td class="formRequiredLabel" colspan="2">
-							<label for="containerName">
-								<bean:message key="storageContainer.containerName" />
-							</label>
-						</td>
-						<td class="formField" colspan="2">
-							<html:text styleClass="formFieldSized15" maxlength="255"  size="30" styleId="containerName" property="containerName"/>
-						</td>
-					</tr>
+						<td align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="3" /></td>
+                        <td align="left" class="black_ar"><bean:message key="storageContainer.containerName" /></td>
+						<td align="left"><html:text styleClass="black_ar" maxlength="255"  size="30" styleId="containerName" property="containerName"/></td>
+					
 					<%
 					}
 					%>
-					<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
-					
-					<tr>
-						<td class="formRequiredNotice" width="5">*</td>
-						<td class="formRequiredLabel" colspan="2">
-							<label for="noOfContainers">
-								<bean:message key="storageContainer.noOfContainers" />
-							</label>
-						</td>
-						<td class="formField" colspan="2">
-							<html:text styleClass="formFieldSized10"  maxlength="10" size="30" styleId="noOfContainers" property="noOfContainers" readonly="<%=readOnlyValue%>" />
-						</td>
-					</tr>
-					</logic:notEqual>
-					
 					<% if(!Variables.isStorageContainerBarcodeGeneratorAvl || operation.equals(Constants.EDIT))
 					{
-					%>
-				
-					<tr>
-						<td class="formRequiredNotice" width="5">&nbsp;</td>
-						<td class="formLabel" colspan="2">
-							<label for="barcode">
-								<bean:message key="storageContainer.barcode" />
-							</label>
-						</td>
-						<td class="formField" colspan="2">
-							<html:text styleClass="formFieldSized10" maxlength="255"  size="30" styleId="barcode" property="barcode"/>
-						</td>
+					%>		
+						<td width="10%" align="left" class="black_ar">&nbsp;</td>
+                        <td  align="left" class="black_ar"><bean:message key="storageContainer.barcode" /></td>
+						<td width="30%" align="left"><html:text styleClass="formFieldSized10" maxlength="255"  size="30" styleId="barcode" property="barcode"/></td>
+						<td width="10%" align="left" class="black_ar">&nbsp;</td>
 					</tr>
 					<%
 					}
 					%>
 					<tr>
-						<td class="formRequiredNotice" width="5">&nbsp;</td>
-						<td class="formLabel" colspan="2">
-							<label for="defaultTemperature">
-								<bean:message key="storageContainer.temperature" />
-							</label>
-						</td>
-						<td class="formField" colspan="2">
-							<html:text styleClass="formFieldSized10"  maxlength="10" size="30" styleId="defaultTemperature" property="defaultTemperature"/>
-							°C
-						</td>
+					<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
+						<td  align="left" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
+						<td  align="left" valign="top" class="black_ar"><label for="noOfContainers"><bean:message key="storageContainer.noOfContainers" /></label></td>
+						<td  class="grey_ar"><html:text styleClass="black_ar" style="text-align:right" maxlength="10" size="15" styleId="noOfContainers" property="noOfContainers" readonly="<%=readOnlyValue%>" /></td>
+					</logic:notEqual>
+						
+						<td align="center" class="black_ar"><span class="blue_ar_b">&nbsp;</span></td>
+						<td align="left" class="black_ar"><label for="defaultTemperature"><bean:message key="storageContainer.temperature" /></label></td>
+						<td align="left" nowrap><span class="grey_ar"><html:text styleClass="black_ar" style="text-align:right" maxlength="10" size="15" styleId="defaultTemperature" property="defaultTemperature"/></span><span class="black_ar">&nbsp;<sup>0</sup>C</span></td>
+						<td width="10%" align="left" class="black_ar">&nbsp;</td>
 					</tr>
+					
 <%-- MD : Code for isContainerfull
      Bug id 1007
- --%>			
- 					<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
+ --%>						
+ 					
+					
+					<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
 					<tr>
-						<td class="formRequiredNotice" width="5">*</td>
-						<td class="formRequiredLabel" colspan="2">
-							<label for="activityStatus">
-								<bean:message key="storageContainer.isContainerFull" />
-							</label>
+                         <td align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="3" /></span></td>
+						 <td align="left" class="black_ar"><bean:message key="site.activityStatus" /></td>
+						 <td align="left" nowrap>
+							<html:select property="activityStatus" styleClass="formFieldSizedNew" styleId="activityStatus" size="1" onchange="<%=strCheckStatus%>"
+							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+								<html:options name="<%=Constants.ACTIVITYSTATUSLIST%>" labelName="<%=Constants.ACTIVITYSTATUSLIST%>" />
+							</html:select>
 						</td>
-						<td class="formField" colspan="2">
+						<td align="left" class="black_ar">&nbsp;</td>                      
+
 <!-- Mandar : 434 : for tooltip -->
-							<%--<html:select property="isFull" styleClass="formFieldSized10" styleId="isFull" size="1" 
+							<%--<html:select property="isFull" styleClass="grey_ar" styleId="isFull" size="1" 
 							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 								<html:options name="<%=Constants.IS_CONTAINER_FULL_LIST%>" labelName="<%=Constants.IS_CONTAINER_FULL_LIST%>" />
 							</html:select>--%>
@@ -814,167 +835,126 @@ function onEditChange()
 							<logic:equal property="isFull" name="storageContainerForm" value="true">
 							<% disabledChkBox = true;%>
 							</logic:equal>
-							<html:checkbox property="isFull" value="true" disabled="<%=disabledChkBox%>"/>
+						<td width="1%"align="left" class="black_ar" colspan="2"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="3" /></span><html:checkbox property="isFull" value="true" disabled="<%=disabledChkBox%>"/><bean:message key="storageContainer.isContainerFull" />?</td>
+						  <td align="center" class="black_ar">&nbsp;</td>
 						</td>
 					</tr>
 					</logic:equal>
-
-					<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
+					</table>
+                      </td>
+                    </tr>
 					<tr>
-						<td class="formRequiredNotice" width="5">*</td>
-						<td class="formRequiredLabel" colspan="2">
-							<label for="activityStatus">
-								<bean:message key="site.activityStatus" />
-							</label>
-						</td>
-						<td class="formField" colspan="2">
-<!-- Mandar : 434 : for tooltip -->
-							<html:select property="activityStatus" styleClass="formFieldSized10" styleId="activityStatus" size="1" onchange="<%=strCheckStatus%>"
-							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-								<html:options name="<%=Constants.ACTIVITYSTATUSLIST%>" labelName="<%=Constants.ACTIVITYSTATUSLIST%>" />
-							</html:select>
-						</td>
-					</tr>
-					</logic:equal>
-					<tr>
-						<td class="formTitle" colspan="5">
-							<label for="restrictions">
-								<bean:message key="storageContainer.restrictions" />
-							</label>
-						</td>
+					    <td align="left" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;<bean:message key="storageContainer.restrictions" /></span></td>
+						<td align="right" class="tr_bg_blue1"><a href="javascript:showHide('add_id')" id="imgArrow_add_id"><img src="images/uIEnhancementImages/up_arrow.gif" alt="Show Details" border="0" width="80" height="9" hspace="10" vspace="0"/></a></td>
 					</tr>
 					<tr>
-						<td class="formRequiredNotice" width="5">&nbsp;</td>
-						<td class="formLabel" colspan="2">
-							<label for="collection_protocol_id">
-								<bean:message key="storageContainer.collectionProtocolTitle" />
-							</label>
-						</td>
-						<td class="formField" colspan="2">
-<!-- Mandar : 434 : for tooltip -->
-<!-- kalpana : Bug #4564 : for tooltip -->
-							<html:select property="collectionIds" styleClass="formFieldSized" styleId="collectionIds" size="4"
-							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" multiple="true" >
-								<html:options collection="<%=Constants.PROTOCOL_LIST%>" labelProperty="name" property="value"/>
-							</html:select>
-							&nbsp;
-							
-						</td>
-					</tr>
-					<tr>
-						<td class="formRequiredNotice" width="5">&nbsp;</td>
-						<td class="formLabel" colspan="2">
-							<label for="holds">
-								<bean:message key="storageContainer.holds" />
-							</label>
-						</td>
-						<td class="formField" colspan="2">
-						<table>
-							<tr><td class="standardText" align="center">
-									<bean:message key="storageContainer.containerType"/>
-							</td>
-							<td class="standardText" align="center">		
-									<html:radio property="specimenOrArrayType" value="Specimen" onclick="onRadioButtonClickOfSpecimen('Specimen')"/> <bean:message key="storageContainer.specimenClass"/>
-							</td>
-							<td class="standardText" align="center">		
-									<html:radio property="specimenOrArrayType" value="SpecimenArray" onclick="onRadioButtonClickOfSpecimen('SpecimenArray')"/> <bean:message key="storageContainer.specimenArrayType"/>
-							</td>
+					   <td colspan="5" class="showhide"><div id="add_id" style="display:block" >
+                           <table width="100%" border="0" cellpadding="3" cellspacing="0">
+                            <tr>
+                                <td width="1%" align="left" valign="top" class="black_ar">&nbsp;</td>
+								<td width="20%" align="left" valign="top" class="black_ar_t"><bean:message key="storageContainer.collectionProtocolTitle" /></td>
+								<td width="79%" colspan="4" align="left" valign="top"><html:select property="collectionIds" styleClass="formFieldSizedSC" styleId="collectionIds" size="4"  onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" multiple="true" ><html:options collection="<%=Constants.PROTOCOL_LIST%>" labelProperty="name" property="value"/></html:select></td>
 							</tr>
 							<tr>
-							<td class="formField" align="center">		
-							<html:select property="holdsStorageTypeIds" styleClass="formFieldVerySmallSized" styleId="holdsStorageTypeIds" size="4" multiple="true"
-							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-								<html:options collection="<%=Constants.HOLDS_LIST1%>" labelProperty="name" property="value"/>
-							</html:select>
-						</td>
-						<td class="formField" align="center">
+                                <td align="left" valign="top" class="black_ar">&nbsp;</td>
+                                <td align="left" valign="top" class="black_ar_t"><bean:message key="storageContainer.holds" /></td>
+                                <td colspan="4" align="left" valign="top"><table width="100%" border="0" cellpadding="0" cellspacing="0">
+							 <tr>
+                                <td width="33%" align="left" class="tabletd1"><bean:message key="storageContainer.containerType"/></td>
+								<td width="33%" align="left" class="tabletd1"><label><html:radio property="specimenOrArrayType" value="Specimen" onclick="onRadioButtonClickOfSpecimen('Specimen')"/> <bean:message key="storageContainer.specimenClass"/> </label></td>
+							    <td width="34%" align="left" class="tabletd1"><label><html:radio property="specimenOrArrayType" value="SpecimenArray" onclick="onRadioButtonClickOfSpecimen('SpecimenArray')"/> <bean:message key="storageContainer.specimenArrayType"/> </label></td>
+							</tr>
+							<tr>
+                                <td width="26%" align="left" class="tabletd1"><html:select property="holdsStorageTypeIds" styleClass="formFieldSizedSC" styleId="holdsStorageTypeIds" size="4" multiple="true" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)"><html:options collection="<%=Constants.HOLDS_LIST1%>" labelProperty="name" property="value"/></html:select></td>	
+						<td width="26%" align="left" class="tabletd1">
 							<logic:equal name="storageContainerForm" property="specimenOrArrayType" value="Specimen">
-							<html:select property="holdsSpecimenClassTypes" styleClass="formFieldVerySmallSized" styleId="holdsSpecimenClassTypeIds" size="4" multiple="true"
-							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-								<html:options collection="<%=Constants.HOLDS_LIST2%>" labelProperty="name" property="value"/>
-							</html:select>
-							</logic:equal>
-							<logic:equal name="storageContainerForm" property="specimenOrArrayType" value="SpecimenArray">
-							<html:select property="holdsSpecimenClassTypes" styleClass="formFieldVerySmallSized" styleId="holdsSpecimenClassTypeIds" size="4" multiple="true"
-							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" disabled="true">
-								<html:options collection="<%=Constants.HOLDS_LIST2%>" labelProperty="name" property="value"/>
-							</html:select>
+							<html:select property="holdsSpecimenClassTypes" styleClass="formFieldSizedSC" styleId="holdsSpecimenClassTypeIds" size="4" multiple="true" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)"><html:options collection="<%=Constants.HOLDS_LIST2%>" labelProperty="name" property="value"/></html:select></logic:equal>
+							<logic:equal name="storageContainerForm" property="specimenOrArrayType" value="SpecimenArray"><html:select property="holdsSpecimenClassTypes" styleClass="formFieldSizedForSC" styleId="holdsSpecimenClassTypeIds" size="4" multiple="true"  onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" disabled="true"><html:options collection="<%=Constants.HOLDS_LIST2%>" labelProperty="name" property="value"/></html:select>
 							</logic:equal>
 						</td>
-						<td class="formField" align="center">
+						<td width="26%" align="left" class="tabletd1">
 							<logic:equal name="storageContainerForm" property="specimenOrArrayType" value="SpecimenArray">
-							<html:select property="holdsSpecimenArrTypeIds" styleClass="formFieldVerySmallSized" styleId="holdsSpecimenArrTypeIds" size="4" multiple="true"
-							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-								<html:options collection="<%=Constants.HOLDS_LIST3%>" labelProperty="name" property="value"/>
-							</html:select>
+							<html:select property="holdsSpecimenArrTypeIds" styleClass="formFieldSizedSC" styleId="holdsSpecimenArrTypeIds" size="4" multiple="true" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">	<html:options collection="<%=Constants.HOLDS_LIST3%>" labelProperty="name" property="value"/></html:select>
 							</logic:equal>
 							<logic:equal name="storageContainerForm" property="specimenOrArrayType" value="Specimen">
-							<html:select property="holdsSpecimenArrTypeIds" styleClass="formFieldVerySmallSized" styleId="holdsSpecimenArrTypeIds" size="4" multiple="true"
-							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" disabled="true">
-								<html:options collection="<%=Constants.HOLDS_LIST3%>" labelProperty="name" property="value"/>
-							</html:select>
+							<html:select property="holdsSpecimenArrTypeIds" styleClass="formFieldSizedSC"  styleId="holdsSpecimenArrTypeIds" size="4" multiple="true"  onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" disabled="true"><html:options collection="<%=Constants.HOLDS_LIST3%>" labelProperty="name" property="value"/></html:select>
 							</logic:equal>
 							
 						</td>
-						</tr></table>
-						
+						</tr>
+						 
+						</table>				
 						</td>
 					</tr>
-					
-
-					<tr>
-						<td class="formTitle" colspan="5">
-							<label for="capacity">
-								<bean:message key="storageContainer.capacity" />
-							</label>
-						</td>
+					</table></td>
+                    </tr>
+					 <tr >
+                        <td align="left" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;<bean:message key="storageContainer.capacity" /></span></td>
+						<td align="right" class="tr_bg_blue1"><a href="javascript:showHide('cap_id')" id="imgArrow_cap_id"><img src="images/uIEnhancementImages/up_arrow.gif" alt="Show Details" border="0" width="80" height="9" hspace="10" vspace="0"/></a></td>
 					</tr>
-					
-					<tr>
-						<td class="formRequiredNotice" width="5">*</td>
-						<td class="formRequiredLabel" colspan="2">
-							&nbsp;<%=label1%>
-						</td>
-						<td class="formField" colspan="2">
-							<html:text styleClass="formFieldSized10" maxlength="10"  size="30" styleId="oneDimensionCapacity" property="oneDimensionCapacity"/>
-						</td>
-					</tr>
-					
-					<tr>
-						<td class="formRequiredNotice" width="5">&nbsp;</td>
-						<td class="formLabel" colspan="2">
-							&nbsp;
+					  <td colspan="2" class="showhide1"><div id="cap_id" style="display:block" >
+                        <table width="100%" border="0" cellpadding="3" cellspacing="0">
+					 <tr>
+                         <td width="1%" align="center" valign="top" class="black_ar_t"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="3" /></td>
+						 <td width="20%" align="left" valign="top" class="black_ar_t"><label for="twoDimensionCapacity" onmouseover="Tip(' <%=label1%>')">
+						  <%
+							String displayLabel1 = label1;
+							int label1Lenght=label1.length();
+							if(label1Lenght >= 20)
+							  displayLabel1 = label1.substring(0,20)+"...";
+							else
+							  displayLabel1 =label1.substring(0,label1Lenght);
+						%>
+						 <%=displayLabel1%>
+						 
+						 </label></td>
+						 <td width="25%" colspan="4" align="left" valign="top"><html:text styleClass="black_ar" maxlength="10"  style="text-align:right" size="15" styleId="oneDimensionCapacity" property="oneDimensionCapacity"/></td>
+						 <td width="1%" align="center" valign="top" class="black_ar_t">&nbsp;</td>
+						 <td width="15%" align="left" valign="top" class="black_ar_t"><label for="twoDimensionLabel" onmouseover="Tip(' <%=label2%>')"> 
 							<%
 								if(label2 != null || !(label2.equals("")))
 								{
+								  String displayLabel2 = label2;
+								  label1Lenght=label2.length();
+							      if(label1Lenght >= 20)
+							        displayLabel2 = label2.substring(0,20)+"...";
+							      else
+							        displayLabel2 =label2.substring(0,label1Lenght);
 							%>
-							<%=label2%>
+							<%=displayLabel2%>
 							<%
 								}
 							%>
+							</label>
 						</td>
-						<td class="formField" colspan="2">
-							<html:text styleClass="formFieldSized10" maxlength="10"  size="30" styleId="twoDimensionCapacity" property="twoDimensionCapacity"/>
+						<td width="38%" align="left" valign="top">
+							<html:text styleClass="black_ar" maxlength="10"  style="text-align:right" size="15" styleId="twoDimensionCapacity" property="twoDimensionCapacity"/>
 						</td>
 					</tr>
-					<tr>
-					<!-- delete button added for disabling the objects :Nitesh -->
-						<td colspan="1" align="right">
+					 </table></div></td>
+                    </tr>
+					<tr >
+                        <td colspan="5" class="bottomtd"></td>
+                     </tr>
+					<tr>                        
+					<!-- delete button added for disabling the objects :Nitesh 
+						<td colspan="3" class="buttonbg">
 						<%
 							String deleteAction="deleteObject('" + formName +"','" + Constants.ADMINISTRATIVE + "')";
 						%>
-								<html:button styleClass="actionButton" property="deletePage"
+								<html:button styleClass="blue_ar_b" property="deletePage"
 								onclick="<%=deleteAction%>">
 									<bean:message key="buttons.delete"/>
 									</html:button>
-						</td>
-						<td colspan="5" align="right">
+						</td> -->
+						<td colspan="5" class="buttonbg">
 								<%
 						   			String action = "validate('" + formName +"',document.forms[0].activityStatus)";
 						   		%>
-						   			<html:button styleClass="actionButton" property="submitPage" onclick="<%=action%>">
+						   			<html:button styleClass="blue_ar_b" property="submitPage" onclick="<%=action%>">
 						   				<bean:message key="buttons.submit"/>
 						   			</html:button>
+									&nbsp;|&nbsp; <a href="ManageAdministrativeData.do" class="cancellink">Cancel</a></td>
 				   		</td>
 						
 					</tr>
@@ -985,4 +965,8 @@ function onEditChange()
 
 		<!-- NEW STORAGE CONTAINER REGISTRATION ends-->
 	</table>
+	</td>
+    </tr>
+	</table>
 </html:form>
+</body>

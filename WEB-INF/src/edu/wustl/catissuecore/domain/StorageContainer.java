@@ -425,13 +425,13 @@ public class StorageContainer extends Container implements IActivityStatus
 			}
 
 			Logger.out.debug("isParentChanged " + isParentChanged);
-			if (form.getCheckedButton() == Constants.CONTAINER_IN_ANOTHER_CONTAINER)
+			if (!Constants.SITE.equals(form.getParentContainerSelected()))
 			{
 				if(this.locatedAtPosition == null)
 				{
 					this.locatedAtPosition = new ContainerPosition();
 				}
-				if (form.getStContSelection() == 1)
+				if ("Auto".equals(form.getParentContainerSelected()))
 				{					
 					
 					this.locatedAtPosition.parentContainer = new StorageContainer();

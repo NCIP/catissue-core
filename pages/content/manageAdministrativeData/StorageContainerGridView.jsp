@@ -3,9 +3,11 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants,edu.wustl.catissuecore.storage.StorageContainerGridObject"%>
 <%@ page import="java.util.*"%>
-
+<script language="JavaScript" type="text/javascript"
+	src="jss/caTissueSuite.js"></script>
 <script language="JavaScript" type="text/javascript"
 	src="jss/javaScript.js"></script>
+<script type="text/javascript" src="jss/wz_tooltip.js"></script>
 <%
 	String siteName = (String) request.getAttribute("siteName");   
 %>
@@ -143,108 +145,113 @@ function refresh_tree(nodeId)
    }
 
 %>
+<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" /> 
 
 <html:errors/>
 
 </br>
 <!-- target of anchor to skip menus -->
-<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
-<!-- ROW FOR CONTAINER DETAILS -->
-<TR>
-	<TD>
+<table summary="" cellpadding="0" cellspacing="0" border="0"  width="100%" >
 <%
 	//System.out.println("CP No. : " +collectionProtocolList.size());
 	//System.out.println("SC No. : " +specimenClassList.size());
 	int rowSpan = getRowSpan(collectionProtocolList, 3);
 //int rowSpan = (int)((collectionProtocolList.size()%3)== 0 ? collectionProtocolList.size()/3 : (collectionProtocolList.size()/3)+1 );
 %>
-		<TABLE border=1 class="borderForMap">
-			<TR>
-				<TD ROWSPAN=<%=rowSpan %> class="formLabelNoBackGround"><b><bean:message key="map.collectionprotocol"/></b></TD>
+
+		<tr>
+		 <td width="5" valign="bottom" >&nbsp;</td>
+           <td >
+		     <table  border="0" cellpadding="0" cellspacing="0" width="100%">
+                 <tr>
+                     <td   valign="bottom"><a href="#"><img src="images/uIEnhancementImages/sc_map.gif" alt="View Map" width="94" height="20" border="0" /></a></td>
+                     <td width="99%" valign="bottom" class="cp_tabbg">&nbsp;</td>
+                   </tr>
+              </table>
+			 </td>
+          </tr>
+	
+	
+	<tr>
+	 <td width="5" valign="bottom">&nbsp;</td>
+		<td class="cp_tabtable" width="100%">
+		 <table  border="0" cellpadding="3" cellspacing="0" width="100%"> 
+					 <tr>		
+                <td align="left" colspan="2"><table width="100%" border="0" cellspacing="2" cellpadding="2">
+ <%
+		int colspanForCPLabel;
+	if(collectionProtocolList.size()>specimenClassList.size())
+		colspanForCPLabel = collectionProtocolList.size();
+    else 
+	    colspanForCPLabel = specimenClassList.size();
+%>                 
+		<tr>
+          <td colspan="<%=colspanForCPLabel+1%>" align="left" class="tr_bg_blue1"><span class="blue_ar_b"> Specimen Container Restrictions</span></td>
+          </tr>
+                  <tr>
+
+                    <td  width="150" class="tabletd1">Collection Protocol</td>
 <%	
 			for(int colcnt=0;colcnt<collectionProtocolList.size();colcnt++)
 			{
 				String data =(String) collectionProtocolList.get(colcnt );
-				if(colcnt != 0)
-				{
-					if((colcnt)%3 == 0)
-					{
+				
 %>
-					</TR>
-					<tr>
-<%
-					}
-				}
- %> 				
-					<td class="formLabelNoBackGround"><%=data %></td>
+                    <td  class="tabletd1"><%=data %></td>
 <%
 			}
-			int colSpan = (int)(3-(collectionProtocolList.size()%3));
- %>
-				<td colspan="<%=colSpan %>" class="formLabelNoBackGround">&nbsp;</td>
-			</tr>
-<!-- Specimen class -->
-<%
- 	//rowSpan =(int)((specimenClassList.size()%3)== 0 ? specimenClassList.size()/3 : (specimenClassList.size()/3)+1 );
-	rowSpan = getRowSpan(specimenClassList, 3);
 %>
-
-			<TR>
-				<TD ROWSPAN=<%=rowSpan %> class="formLabelNoBackGround"><b><bean:message key="map.specimenclass"/></b></TD>
+                  </tr>
+                  <tr>
+                    <td width="150"class="tabletd1">Specimen Class</td>
 <%	
 			for(int colcnt=0;colcnt<specimenClassList.size();colcnt++)
 			{
 				String data =(String) specimenClassList.get(colcnt );
-				if(colcnt != 0)
-				{
-					if((colcnt)%3 == 0)
-					{
+				
 %>
-					</TR>
-					<tr>
-<%
-					}
-				}
- %> 				
-					<td class="formLabelNoBackGround"><%=data %></td>
+                    <td class="tabletd1"><%=data %></td>
 <%
 			}
-			colSpan = (int)(3-(specimenClassList.size()%3));
- %>
-				<td colspan="<%=colSpan %>" class="formLabelNoBackGround">&nbsp;</td>
-			</tr>
-
-		</TABLE>
-	</TD>
-</TR>
+%>
+                  </tr>
+                </table></td>
+              </tr>
+			   <tr>
+                <td class="bottomtd" colspan="2"></td>
+              </tr>
+			
+			
 <!-- CONTAINER DETAILS END -->
-
 	<tr>
-		<td>
-		<table summary="" cellpadding="0" cellspacing="0" border="0" class="borderForMap">
+		<td  width="15"class="black_ar_t">&nbsp;</td>
+		<td class="black_ar"><b>&nbsp;<%=verTempTwo%></b></td>
+		 
+	</tr>
+	<tr>
+		<td   width="15" class="black_ar_t" align="right"><b><%=verTempOne%><b></td>
+		<td class="black_ar_t">
+		<table summary="" cellpadding="0" cellspacing="1" border="0" >
+				 
 				<tr>
-					<td>
-					<table summary="Enter summary of data here" cellpadding="3" 
-							cellspacing="0" border="0" class="dataTableMap" width="100%">
-						  <tr>
-						    <td colspan="2" rowspan="2" width="6">&nbsp;</td>
-						    <td colspan="<%=colSpanValue%>" align="left"><b> <%=verTempTwo%>&rarr;</b></td>
-						  </tr>
-							
-						<tr class="dataRowLight">	
-					<% for (int i = Constants.STORAGE_CONTAINER_FIRST_ROW;i<=storageContainerGridObject.getTwoDimensionCapacity().intValue();i++){
+					<td colspan="2">
+					<table  border="0" cellspacing="1" cellpadding="3">
+					<tr><td>&nbsp;</td>	
+						<td >&nbsp;</td>	
+						
+					<%
+						String pageOfSpecimen=(String)request.getAttribute(Constants.CONTENT_OF_CONTAINNER);
+						for (int i = Constants.STORAGE_CONTAINER_FIRST_ROW;i<=storageContainerGridObject.getTwoDimensionCapacity().intValue();i++){
                         if(storageContainerGridObject.getTwoDimensionCapacity().intValue() == 1)
                         {
                             %>
-    						<td align="center" class="numberMapCol" width="45"><%=i%></td>
-    						<td width="*">&nbsp;</td>
-    						
-    					    <%
+    							<td align="center"  class="subtd"><%=i%></td>
+    						<%
                         }
                         else
                         {
 					%>
-						<td align="center" class="numberMapCol"><%=i%></td>
+								<td align="center"  class="subtd"><%=i%></td>
 					<%}}%>				
 						</tr>	
 					<% for (int i = Constants.STORAGE_CONTAINER_FIRST_ROW;i<=storageContainerGridObject.getOneDimensionCapacity().intValue()+1;i++){%>
@@ -254,34 +261,34 @@ function refresh_tree(nodeId)
 							if(i == 1)
 							{
 						%>
-						   <td rowspan="<%=rowSpanValue+1%>" valign ="top" width="6"><b> <%=verTempOne%>&darr;</b></td>
-						   
+						  
+						   <td   rowspan="<%=rowSpanValue%>" width="5"class="black_ar_t"></td>
 						<%
 							}
                         	if(i!=storageContainerGridObject.getOneDimensionCapacity().intValue()+1) 
                             {
 						%>
-							<td class="numberMapRow" width="3" align="right"><%=i%></td>
+							<td align="center" class="subtd"><%=i%></td>
 					   <% 
                             }
 					   
 					for (int j = Constants.STORAGE_CONTAINER_FIRST_COLUMN;j<=storageContainerGridObject.getTwoDimensionCapacity().intValue()+1;j++)
                     {
-					String styleClassName = "dataCellText"; // Default cell boundary
+					 // Default cell boundary
                     
                     if(i == storageContainerGridObject.getOneDimensionCapacity().intValue()+1)
                     {
                         if(j ==1)
                         {
                         %>   
-                            <td width="6" height="40">&nbsp;</td>
+                            <td  align="center">&nbsp;</td>
        					<%
                             
                         }
                         else
                         {
                          %>   
-                            <td width="*" height="40">&nbsp;</td>
+                             <td  align="center" >&nbsp;</td>
        					<%  
                         }
                     
@@ -292,19 +299,13 @@ function refresh_tree(nodeId)
                         if(j ==storageContainerGridObject.getTwoDimensionCapacity().intValue()+1)
                         {
                             %>   
-                            <td width="25" height="40">&nbsp;</td>
+                              <td  align="center" >&nbsp;</td>
        						<% 
                         }
                         else
                         {
                        
-					if(((null != positionOne) && (null != positionTwo) &&
-          				(-1 != positionOne.intValue()) && (-1 != positionTwo.intValue())) && // means nothing entered by the user
-					   (i == positionOne.intValue()) && (j == positionTwo.intValue())) // means values entered by user
-					{
-						styleClassName = "dataSelectedCellText"; // Show the selected cell
-						                   // with red boundary
-					}
+					
 						if (fullStatus[i][j] != 0)
 						{
 							String openStorageContainer = null;
@@ -322,25 +323,49 @@ function refresh_tree(nodeId)
 								+ "&" + Constants.PAGEOF + "=" + pageOf;
 							}
 							if (fullStatus[i][j] == 1)
-							{%>
-							<td class="mapTdred" noWrap="true">
-								<a href="<%=openStorageContainer%>" onclick="javaScript:refresh_tree('<%=childContainerName[i][j]%>')"> 
-								 <%=childContainerType[i][j]%><!-- : <%=childContainerIds[i][j]%> -->
+							{
+								String containerName = childContainerType[i][j];
+								 int containerNameSize=childContainerType[i][j].length();
+								 if(containerNameSize >= 20)
+									 containerName = containerName.substring(11,20)+"...";
+								 else
+									 containerName =containerName.substring(11,containerNameSize);
+							%>
+							<td  class="tabletdformap" noWrap align="center">
+								<a href="<%=openStorageContainer%>" onclick="javaScript:refresh_tree('<%=childContainerName[i][j]%>')" onmouseover="Tip(' <%=childContainerType[i][j]%>')"> <img src="images/uIEnhancementImages/used_container.gif" alt="Unused" width="32" height="32"  border="0"> <%=containerName%><!-- : <%=childContainerIds[i][j]%> -->
 								</a>
  							</td>
 					   	  <%}
-							else{%>
-							<td class="mapTdspe" noWrap="true"><%
-							String pageOfSpecimen=(String)request.getAttribute(Constants.CONTENT_OF_CONTAINNER);
+							else{
+								String containerName =childContainerType[i][j];
+								 int containerNameSize=childContainerType[i][j].length();
+								if(pageOfSpecimen!=null && pageOfSpecimen.equals(Constants.ALIAS_SPECIMEN))
+									{
+									 if(containerNameSize >= 20)
+										 containerName = containerName.substring(11,20)+"...";
+									 else
+										 containerName =containerName.substring(11,containerNameSize);
+									}
+									if(pageOfSpecimen!=null && pageOfSpecimen.equals(Constants.ALIAS_SPECIMEN_ARRAY))
+									{
+										if(containerNameSize >= 18)
+										 containerName = containerName.substring(8,18)+"...";
+									 else
+										 containerName =containerName.substring(8,containerNameSize);
+									}
+								
+							%>
+							<td  align="center" class="tabletdformap" noWrap="true"><%
+							
 								if(pageOfSpecimen!=null && pageOfSpecimen.equals(Constants.ALIAS_SPECIMEN))
 								{%>
-								<a href="QuerySpecimenSearch.do?<%=Constants.PAGEOF%>=pageOfNewSpecimenCPQuery&<%=Constants.SYSTEM_IDENTIFIER%>=<%=childContainerIds[i][j]%>"><%=childContainerType[i][j]%><!--: <%=childContainerIds[i][j]%> -->
+								<a href="QuerySpecimenSearch.do?<%=Constants.PAGEOF%>=pageOfNewSpecimenCPQuery&<%=Constants.SYSTEM_IDENTIFIER%>=<%=childContainerIds[i][j]%>" onmouseover="Tip('<%=childContainerType[i][j]%>')"><img src="images/uIEnhancementImages/specimen.gif" alt="Unused" width="32" height="32"  border="0"> <%=containerName%><!--: <%=childContainerIds[i][j]%> -->
 								</a>
 								
 								<%}
 								if(pageOfSpecimen!=null && pageOfSpecimen.equals(Constants.ALIAS_SPECIMEN_ARRAY))
 								{%>
-								<a href="QuerySpecimenArraySearch.do?<%=Constants.PAGEOF%>=pageOfSpecimenArray&<%=Constants.SYSTEM_IDENTIFIER%>=<%=childContainerIds[i][j]%>"><%=childContainerType[i][j]%><!--: <%=childContainerIds[i][j]%> -->
+								<a href="QuerySpecimenArraySearch.do?<%=Constants.PAGEOF%>=pageOfSpecimenArray&<%=Constants.SYSTEM_IDENTIFIER%>=<%=childContainerIds[i][j]%>" onmouseover="Tip('<%=childContainerType[i][j]%>')"><img src="images/uIEnhancementImages/specimen_array.gif" alt="Unused" width="32" height="32"  border="0"> <%=containerName%><!--: <%=childContainerIds[i][j]%> -->
 								</a>
 								</td>
 								<% }
@@ -389,13 +414,13 @@ function refresh_tree(nodeId)
 															+ startNumber.intValue() + "');closeFramedWindow()";
 							}
 						%>
-						<td class="mapTdred" noWrap="true">
+						<td align="center" class="tabletdformap" width="150" noWrap="true" onmouseover="Tip('Unused')">
 							<%if (enablePage){%>
-						 	<a href="<%=setParentWindowContainer%>">
-						 		<%=Constants.UNUSED%>
+						 	<a href="<%=setParentWindowContainer%>" onmouseover="Tip('Unused')">
+						 		<img src="images/uIEnhancementImages/empty_container.gif" alt="Unused" width="32" height="32" border="0">
 							</a>
 							<%}else{%>
-								<%=Constants.UNUSED%>
+								<img src="images/uIEnhancementImages/empty_container.gif" alt="Unused" width="32" height="32" border="0" onmouseover="Tip('Unused')">
 							<%}%>
 						</td>
 					  <%}%>

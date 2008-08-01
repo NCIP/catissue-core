@@ -63,11 +63,18 @@ public class ShowStorageGridViewAction  extends BaseAction
             HttpServletRequest request, HttpServletResponse response)
             throws Exception
     {
+    	String target=Constants.SUCCESS;
         String id = request.getParameter(Constants.SYSTEM_IDENTIFIER);
-        if (id==null)
+       	 if(id == null)
         {
-        	id="0";
+        	id=(String)request.getAttribute(Constants.SYSTEM_IDENTIFIER);
+        	if (id==null)
+        	{
+        		id="0";
+        	}
         }
+        request.setAttribute("storageContainerIdentifier",id);
+        
         String contentOfContainer = null;
         // To get privilegeCache through 
 		// Singleton instance of PrivilegeManager, requires User LoginName
@@ -93,7 +100,10 @@ public class ShowStorageGridViewAction  extends BaseAction
 //		}
         
         String pageOf = request.getParameter(Constants.PAGEOF);
-        
+        if(pageOf.equals(Constants.PAGEOF_STORAGE_CONTAINER))
+        {
+        	target=Constants.PAGEOF_STORAGE_CONTAINER;
+        }
 
         //Sri: Added to get the position of the storage container map
         String position = request.getParameter(Constants.STORAGE_CONTAINER_POSITION);
@@ -307,7 +317,7 @@ public class ShowStorageGridViewAction  extends BaseAction
         List specimenClassList = bizLogic.getSpecimenClassList(id);
         request.setAttribute(Constants.MAP_SPECIMEN_CLASS_LIST, specimenClassList);
 
-        return mapping.findForward(Constants.SUCCESS);
+        return mapping.findForward(target);
     }
 
     /**
@@ -321,6 +331,11 @@ public class ShowStorageGridViewAction  extends BaseAction
 	{
 		boolean enablePage=true;
 		String activityStatus = request.getParameter(Constants.ACTIVITY_STATUS);
+		if(activityStatus == null)
+		{
+			activityStatus=(String)request.getAttribute(Constants.ACTIVITY_STATUS);
+		}
+			
 		if (activityStatus!=null && activityStatus.equals(Constants.ACTIVITY_STATUS_CLOSED))
 		{
 			enablePage=false;

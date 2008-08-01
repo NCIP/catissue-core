@@ -163,7 +163,13 @@ function showDatafield(element,txtFieldID)
 	}
 }
 
+function vieMapTabSelected(){
 
+ 
+ var action= "OpenStorageContainer.do?operation=showEditAPageAndMap&pageOf=pageOfStorageContainer"; 
+	document.forms[0].action=action;
+	document.forms[0].submit();
+}
 
 
 </script>
@@ -205,6 +211,9 @@ function showDatafield(element,txtFieldID)
 		<td valign="bottom"><img src="images/uIEnhancementImages/tab_edit_selected.jpg" alt="Edit" width="59" height="22" border="0" /></td>
 		<logic:equal name="pageOf" value="<%=Constants.PAGEOF_USER_ADMIN%>">
         <td valign="bottom"><html:link page="/ApproveUserShow.do?pageNum=1"><img src="images/uIEnhancementImages/tab_approve_user.jpg" alt="Approve New Users" width="139" height="22" border="0" /></html:link></td>
+		</logic:equal>
+		<logic:equal name="pageOf" value="pageOfStorageContainer">
+		<td  valign="bottom"><a href="#"><img src="images/uIEnhancementImages/view_map2.gif" alt="View Map"width="76" height="22" border="0" onclick="vieMapTabSelected()"/></a></td>
 		</logic:equal>
 <!-- These tabs are visible in case of specimen page--->
 		 <logic:equal name="pageOf" value="<%=Constants.PAGEOF_NEW_SPECIMEN%>">

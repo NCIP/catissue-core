@@ -42,8 +42,10 @@ public class TreeNodeDataAction extends BaseAction
         String pageOf  = request.getParameter(Constants.PAGEOF);
         Logger.out.debug("pageOf in treeview........"+pageOf);
         request.setAttribute(Constants.PAGEOF,pageOf);
+        String operation=request.getParameter(Constants.OPERATION);
+		request.setAttribute(Constants.OPERATION, operation);
         String reload=null;
-       
+        String target=Constants.SUCCESS;
         if (pageOf.equals(Constants.PAGEOF_STORAGE_LOCATION))
         {
         	String storageContainerType = request.getParameter(Constants.STORAGE_CONTAINER_TYPE);
@@ -94,7 +96,12 @@ public class TreeNodeDataAction extends BaseAction
             	StorageContainerBizLogic scBizLogic = new StorageContainerBizLogic();
             	dataList = scBizLogic.getSiteWithDummyContainer(sessionData.getUserId());
             }
-            
+            else if(pageOf.equals(Constants.PAGEOF_STORAGE_CONTAINER))
+            {
+            	StorageContainerBizLogic scBizLogic = new StorageContainerBizLogic();
+            	dataList = scBizLogic.getSiteWithDummyContainer(sessionData.getUserId());
+            	target=Constants.PAGEOF_STORAGE_CONTAINER;
+            }
             if(dataList!=null)
             {
             	finalDataListVector=new Vector();
@@ -107,7 +114,7 @@ public class TreeNodeDataAction extends BaseAction
         {
         	Logger.out.error(exp.getMessage(), exp);
         }
-        return mapping.findForward(Constants.SUCCESS);
+        return mapping.findForward(target);
     }
     
    

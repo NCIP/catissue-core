@@ -61,14 +61,13 @@ public class ShowFramedPageAction extends Action
         session.setAttribute(Constants.CONTAINERID,request.getParameter(Constants.CONTAINERID));
         session.setAttribute(Constants.POS1,request.getParameter(Constants.POS1));
         session.setAttribute(Constants.POS2,request.getParameter(Constants.POS2));
-
         session.removeAttribute(Constants.CAN_HOLD_CONTAINER_TYPE);
      	session.removeAttribute(Constants.CAN_HOLD_COLLECTION_PROTOCOL);
      	session.removeAttribute(Constants.CAN_HOLD_SPECIMEN_CLASS);
      	session.removeAttribute(Constants.CAN_HOLD_SPECIMEN_ARRAY_TYPE);
 
         if (pageOf.equals(edu.wustl.common.util.global.Constants.PAGEOF_SPECIMEN) ||
-        		pageOf.equals(Constants.PAGEOF_ALIQUOT))
+        		pageOf.equals(Constants.PAGEOF_ALIQUOT) || pageOf.equals(Constants.PAGEOF_STORAGE_CONTAINER))
         {
         	String storageType = request.getParameter("storageType");
         	String isStorageContainer = request.getParameter("storageContainer");

@@ -45,7 +45,7 @@
    	}
 %>
 
-<table border="0" height="100%" width="100%">
+<table border="0"  width="100%">
 	<tr height="100%">
 		<td width="30%">
 			<!-- 
@@ -54,13 +54,13 @@
 			-->
 			<!--  changed by Pallavi Mistry -->
 			<!-- treeNodeDataAction  added for DHTMLX tree view-->
-			<iframe id="<%=Constants.APPLET_VIEW_FRAME%>" src="<%=treeNodeDataAction%>" scrolling="yes" frameborder="1" width="99%" height="<%=height%>">
+			<iframe id="<%=Constants.APPLET_VIEW_FRAME%>" src="<%=treeNodeDataAction%>" scrolling="yes" frameborder="1" width="99%" height="490">
 				Your Browser doesn't support IFrames.
 			</iframe>
 		</td>
 		<td width="70%">
 		<!--P.G. - Start 24May07:Bug 4291:Added source as initial action for blank screen-->
-			<iframe name="<%=Constants.DATA_VIEW_FRAME%>" src="<%=Constants.BLANK_SCREEN_ACTION%>" scrolling="yes" frameborder="1" width="99%" height="<%=height%>">
+			<iframe name="<%=Constants.DATA_VIEW_FRAME%>" src="<%=Constants.BLANK_SCREEN_ACTION%>" scrolling="yes" frameborder="1" width="99%" height="490">
 				Your Browser doesn't support IFrames.
 			</iframe>
 		<!--P.G. - End -->

@@ -74,7 +74,10 @@ public class StorageContainerForm extends AbstractActionForm
 	 * An name which refers to the site of the container if it is parent container.
 	 */
 	private String siteName;
-
+	/**
+	 * An name for parent container type.
+	 */
+	private String parentContainerSelected = "Site";
 	/**
 	 * A default temperature of the storage container.
 	 */
@@ -231,7 +234,7 @@ public class StorageContainerForm extends AbstractActionForm
 		if (parent != null)
 		{
 			this.parentContainerId = parent.getId().longValue();
-			this.checkedButton = 2;
+			this.parentContainerSelected = "Auto";
 			
 			StorageContainer parentContainer = (StorageContainer)HibernateMetaData.getProxyObjectImpl(parent); 
 			if(container != null && container.getLocatedAtPosition() != null)
@@ -385,6 +388,16 @@ public class StorageContainerForm extends AbstractActionForm
 	public void setContainerId(String containerId)
 	{
 		this.containerId = containerId;
+	}
+	
+	
+	public String getParentContainerSelected()
+	{
+		return parentContainerSelected;
+	}
+	public void setParentContainerSelected(String parentContainerSelected)
+	{
+		this.parentContainerSelected=parentContainerSelected;
 	}
 	/**
 	 * @return Returns the pos1.
@@ -1028,14 +1041,14 @@ public class StorageContainerForm extends AbstractActionForm
 						ApplicationProperties.getValue("storageContainer.isContainerFull")));
 			}
 
-			if (checkedButton == 1 && siteId == -1 && this.noOfContainers == 1)
+			if (parentContainerSelected.equals(Constants.SITE) && siteId == -1 && this.noOfContainers == 1)
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 						ApplicationProperties.getValue("storageContainer.site")));
 			}
-			else if (checkedButton == 2 && this.noOfContainers == 1)
+			else if (parentContainerSelected.equals("Auto") && this.noOfContainers == 1)
 			{
-			if(stContSelection==1)
+			if(parentContainerSelected.equals("Auto"))
 			{
 				if (!validator.isNumeric(String.valueOf(positionDimensionOne), 1)
 						|| !validator.isNumeric(String.valueOf(positionDimensionTwo), 1)
@@ -1052,7 +1065,7 @@ public class StorageContainerForm extends AbstractActionForm
 			
 			
 			}
-			else if (checkedButton == 2 && this.noOfContainers >= 1 && stContSelection==2)
+			else if (parentContainerSelected.equals("Manual") && this.noOfContainers >= 1)
 			{
 				
 				checkPositionForParent(errors);

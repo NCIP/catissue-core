@@ -14,7 +14,7 @@
 <%@ page import="edu.wustl.common.beans.NameValueBean" %>
 <head>
 </head>
-
+<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" /> 
 <html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
 	<%=messageKey%>
 </html:messages>
@@ -23,25 +23,25 @@
 
 <html:form action="<%=Constants.SIMILAR_CONTAINERS_ADD_ACTION%>">
 
-<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
-<tr>
-<td>
+
 	<% int cnt=0;%>
-	<table summary="" cellpadding="2" cellspacing="0" border="1" width="600">
+	 <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
 		<tr>
-			 <td class="formTitle" height="20" colspan="3">
-		 	LIST OF ADDED CONTAINERS
-			 </td>
+          <td colspan="2" align="left" class="toptd"></td>
+        </tr>
+		<tr>
+			<td colspan="2" align="left" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;List of Added Containers</span></td>
 		 </tr>	
 		 <tr>
+          <td colspan="2" align="center" class="showhide"><table width="99%" border="0" cellpadding="2" cellspacing="0">
+		   <tr>
+              <td align="left"><table width="75%"  class="tableborder" cellspacing="0" cellpadding="4">
+			  <tr>
 			<logic:iterate id="nvb" name="similarContainerList">
 			<%	NameValueBean nameValueBean=(NameValueBean)nvb;
 			String hrefString="StorageContainerSearch.do?pageOf=pageOfStorageContainer&id="+nameValueBean.getValue();
 			%>
-	
-			<td class="formFieldNoBorders">
-				<html:link href="<%=hrefString%>"><bean:write name="nvb" property="name"/></html:link>			
-			</td>	
+			<td width="33%" class="black_ar"><img src="images/uIEnhancementImages/ic_storageC.gif" alt="Storage Container" width="19" height="14" align="absmiddle"><html:link href="<%=hrefString%>"><bean:write name="nvb" property="name"/></html:link></td>
 				<%cnt=cnt+1;%>
 				<%
 					if(cnt == 3)
@@ -55,16 +55,24 @@
 			
 				<%if(cnt%3==2)
 				{%>
-				<td class="formFieldNoBorders">&nbsp;</td>
+				<td class="black_ar">&nbsp;</td>
 			<%}%>
 			<%if(cnt%3==1)
 			{%>
-				<td class="formFieldNoBorders">&nbsp;</td><td class="formFieldNoBorders">&nbsp;</td>
+				<td class="black_ar">&nbsp;</td><td >&nbsp;</td>
 			<%}%>
 	
 		</tr>
-	</table>
-</td>
-</tr>
+                
+              </table></td>
+              </tr>
+            
+          </table></td>
+        </tr>
+        <tr>
+          <td colspan="2" class="bottomtd"></td>
+        </tr>
+    </table></td>
+  </tr>
 </table>
 </html:form>

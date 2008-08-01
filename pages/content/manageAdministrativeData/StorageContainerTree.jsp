@@ -6,6 +6,8 @@
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.common.tree.StorageContainerTreeNode"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
+<%@ page language="java" isELIgnored="false"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <script src="jss/ajax.js"></script>	   
 <% 	String reload =request.getParameter(Constants.RELOAD);
 	String pageOf = request.getParameter(Constants.PAGEOF);
@@ -14,7 +16,7 @@
 	String storageContainerID = null;
 	String position = null;
 	String propertyName = null, cdeName=null;
-	String height = "100%",width="100%";
+	String height = "585",width="500";
 	if(reload!=null && reload.equals("true"))
     	{
     		treeNodeIDToBeReloaded=request.getParameter(Constants.TREE_NODE_ID);
@@ -43,12 +45,15 @@
 
 <body>
 <script language="javascript">
-platform = navigator.platform.toLowerCase();
+/*platform = navigator.platform.toLowerCase();
 	if (platform.indexOf("mac") != -1)
 	{
-		<%width="335"; height="500";%>
+		<%=width%>="335"; <%=height%>="500";
 	}
-	
+	else
+	{
+		<%=width%>="100%"; <%=height%>="100%";
+	}*/
 </script>
 <table border="0" cellpadding="0" cellspacing="0">
 			<tr>	
@@ -57,7 +62,7 @@ platform = navigator.platform.toLowerCase();
 			</tr>	
 			<tr>
 				<td align="left" colspan="2">
-					<div id="treeboxbox_tree" style="width:<%=width%>; height:<%=height%>;background-color:#f5f5f5;border :1px solid Silver;; overflow:auto;"/>
+					<div id="treeboxbox_tree" style="width: 230px; height: 430px; background-color: #ffffff; border: 1px solid Silver; overflow: auto;border-left:1px solid #61a1e3;	border-right:1px solid #61a1e3;	border-bottom:1px solid #61a1e3;border-top:1px solid #61a1e3;"/>
 				</td>
 			</tr>
 			<tr>
@@ -67,7 +72,7 @@ platform = navigator.platform.toLowerCase();
 	</table>
 
 	<script language="javascript">
-	
+	 window.parent.tabSelected("viewMapTab");
 	function expand(id,mode)
 	{
 		var iCountCount=tree.hasChildren(id);
@@ -131,6 +136,7 @@ platform = navigator.platform.toLowerCase();
 			tree.setUserData(childList[4],'activityStatus',childList[3]);
 			tree.setUserData(childList[4],'parentId',childList[2]);
 			tree.setUserData(childList[4],'nodeName',childList[4]);
+
 			if(childList[5]=="[Loading...]")
 			{
 				tree.insertNewChild(childList[4],"Loading...","Loading...",0,"bluebox.gif","bluebox.gif","bluebox.gif","");
@@ -146,21 +152,19 @@ platform = navigator.platform.toLowerCase();
 			{				
 				var nodeId=tree.getUserData(id,'nodeId');
 			    var activityStatus=tree.getUserData(id,'activityStatus');
+				var nodeType=tree.getUserData(id,'nodeType');
 			    var parentId=tree.getUserData(id,'parentId');
+				var selectedTab=window.parent.getSelectedTab();
+				var operation = '${requestScope.operation}'; 
+				window.parent.setActivityStatus(activityStatus);
 				if( parentId != "0")
-				{					
-					if("<%=pageOf%>" == "<%=Constants.PAGEOF_SPECIMEN%>")
-					{
-						window.parent.<%=Constants.DATA_VIEW_FRAME%>.location="<%=Constants.SHOW_STORAGE_CONTAINER_GRID_VIEW_ACTION%>?<%=Constants.SYSTEM_IDENTIFIER%>="+nodeId+"&<%=Constants.PAGEOF%>=<%=pageOf%>&<%=Constants.ACTIVITY_STATUS%>="+activityStatus+"";
-					}	
-					else
-					{
-						window.parent.<%=Constants.DATA_VIEW_FRAME%>.location="<%=Constants.SHOW_STORAGE_CONTAINER_GRID_VIEW_ACTION%>?<%=Constants.SYSTEM_IDENTIFIER%>="+nodeId+"&<%=Constants.STORAGE_CONTAINER_TYPE%>=<%=storageContainerType%>&<%=Constants.PAGEOF%>=<%=pageOf%>&<%=Constants.ACTIVITY_STATUS%>="+activityStatus;
-					}
+				{	
+					window.parent.frames['StorageContainerView'].location="SearchObject.do?pageOf=pageOfTreeSC&operation=search&id="+nodeId;
+					//window.parent.frames['StorageContainerView'].location="<%=Constants.SHOW_STORAGE_CONTAINER_GRID_VIEW_ACTION%>?<%=Constants.SYSTEM_IDENTIFIER%>="+nodeId+"&<%=Constants.STORAGE_CONTAINER_TYPE%>=<%=storageContainerType%>&<%=Constants.PAGEOF%>=<%=pageOf%>&<%=Constants.ACTIVITY_STATUS%>="+activityStatus;
 				}
 				else
 				{
-					window.parent.<%=Constants.DATA_VIEW_FRAME%>.location="<%=Constants.BLANK_SCREEN_ACTION%>";
+					window.parent.frames['StorageContainerView'].location="storageContainerEditMessageScreen.do";
 				}
 
 			};	
@@ -193,7 +197,7 @@ platform = navigator.platform.toLowerCase();
 									tree.setUserData("<%=nodeId%>",'parentId',"<%=parentId%>");
 									tree.setUserData("<%=nodeId%>",'nodeName',"<%=data.getValue()%>");
 									
-					<%	
+								<%	
 								}
 							}
 					%>		

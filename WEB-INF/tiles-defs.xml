@@ -157,7 +157,11 @@
 	<definition name=".catissuecore.storageContainerDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageAdministrativeData/StorageContainer.jsp" />
 	</definition>
-
+	
+    <definition name=".catissuecore.storageContainerBaseDef" extends=".catissuecore.homePageDef">
+		<put name="content" value="/pages/content/manageAdministrativeData/StorageContainerBase.jsp" />
+	</definition>
+	
 	<definition name=".catissuecore.arrayTypeDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageAdministrativeData/SpecimenArrayType.jsp" />
 	</definition>
@@ -700,6 +704,9 @@
 	<!--TreeNode view for DHTMLX tree grid view of storage container-->
 	<definition name=".catissuecore.queryResultsTreeViewNodeDef" path="/pages/content/search/TreeNodeView.jsp">
 	</definition>
+	
+	<definition name=".catissuecore.storageContainerTreeDef" path="/pages/content/manageAdministrativeData/StorageContainerTree.jsp">
+	</definition>
 			
 	<definition name=".catissuecore.searchHomeDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/search/Home.jsp" />
@@ -773,6 +780,10 @@
 	
 	<definition name=".catissuecore.storageLocationGridViewDef" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/manageAdministrativeData/StorageContainerGridView.jsp" />
+	</definition>
+	
+	<definition name=".catissuecore.storageLocationMapViewDef" extends=".catissuecore.queryDataViewDef">
+		<put name="content" value="/pages/content/manageAdministrativeData/ViewStorageContainerMap.jsp" />
 	</definition>
 	
 	<definition name=".catissuecore.participantEditDef" extends=".catissuecore.queryDataViewDef">

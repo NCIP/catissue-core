@@ -86,7 +86,7 @@
 	</script>
 </head>
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>	
-			
+<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" /> 			
 <html:errors/>
 <html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
 	<%=messageKey%>

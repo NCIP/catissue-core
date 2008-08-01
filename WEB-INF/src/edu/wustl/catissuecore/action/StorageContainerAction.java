@@ -25,12 +25,14 @@ import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.StorageContainerForm;
+import edu.wustl.catissuecore.bean.StorageContainerBean;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
@@ -62,10 +64,14 @@ public class StorageContainerAction extends SecureAction
 			throws Exception
 	{
 		StorageContainerForm storageContainerForm = (StorageContainerForm) form;
+		HttpSession session = request.getSession();
+		StorageContainerBean storageContainerBean = (StorageContainerBean)session.getAttribute(Constants.STORAGE_CONTAINER_SESSION_BEAN);
 		//boolean to indicate whether the suitable containers to be shown in dropdown 
 		//is exceeding the max limit.
 		String exceedingMaxLimit = "false";
-
+		String pageOf = request.getParameter(Constants.PAGEOF);
+		String containerId=request.getParameter("containerIdentifier"); 
+		String isPageFromStorageType=(String)session.getAttribute("isPageFromStorageType");
 		if (storageContainerForm.getSpecimenOrArrayType() == null)
 		{
 			storageContainerForm.setSpecimenOrArrayType("Specimen");
@@ -78,8 +84,8 @@ public class StorageContainerAction extends SecureAction
 
 		String str = request.getParameter("isOnChange");
 		str = request.getParameter("typeChange");
-		if (str != null && str.equals("true"))
-		{
+		 if (str != null && str.equals("true"))
+		 {
 			isTypeChange = true;
 
 		}
@@ -89,12 +95,16 @@ public class StorageContainerAction extends SecureAction
 			isSiteOrParentContainerChange = true;
 
 		} 
+		
 //		Gets the value of the operation parameter.
 		String operation = request.getParameter(Constants.OPERATION);
 		request.setAttribute(Constants.OPERATION,operation);
-		
+		if (operation.equals(Constants.EDIT) && storageContainerBean != null && Constants.PAGE_OF_STORAGE_CONTAINER.equals(pageOf))
+		{
+			initStorageContainerForm(storageContainerForm,storageContainerBean);
+		}
 		setRequestAttributes(request);
-		setStorageType(request, storageContainerForm);
+		setStorageType(request, storageContainerForm,session);
 		
 		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 		//    	 ---- chetan 15-06-06 ----
@@ -108,7 +118,20 @@ public class StorageContainerAction extends SecureAction
 			
 			System.out.println("Time taken for getAllocatedMapForCOntainer:"+(end-start));
 		}
- 
+		if(containerId != null)
+        {
+        	StorageContainerBizLogic storageContaineriBzLogic = (StorageContainerBizLogic)BizLogicFactory
+            .getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
+        	String name = StorageContainer.class.getName();
+			Long long1 = new Long(containerId);
+			StorageType storageType = (StorageType)storageContaineriBzLogic.retrieveAttribute(name,long1, "storageType");
+        	Long typeId= storageType.getId();
+        	long start = System.currentTimeMillis();
+        	containerMap = bizLogic.getAllocatedContaienrMapForContainer(typeId, exceedingMaxLimit, null);
+        	long end = System.currentTimeMillis();
+        	System.out.println("Time taken for getAllocatedMapForCOntainer:"+(end-start));
+        }
+        
 		if (operation.equals(Constants.ADD))
 		{
 
@@ -117,6 +140,7 @@ public class StorageContainerAction extends SecureAction
 
 		if (operation.equals(Constants.EDIT))
 		{
+			
 			if (StorageContainerUtil.chkContainerFull(new Long(storageContainerForm.getId()).toString(), storageContainerForm.getContainerName()))
 			{
 				storageContainerForm.setIsFull("true");
@@ -127,7 +151,7 @@ public class StorageContainerAction extends SecureAction
 			request.setAttribute(Constants.STORAGETYPELIST, storagetypeList);
 			SetParentStorageCOntainersForEdit(containerMap, storageContainerForm, request);
 		}
-
+		request.setAttribute("storageContainerIdentifier", storageContainerForm.getId());
 		request.setAttribute(Constants.EXCEEDS_MAX_LIMIT, exceedingMaxLimit);
 		request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
 
@@ -141,7 +165,7 @@ public class StorageContainerAction extends SecureAction
 		
 		setFormAttributesForAddNew(request, storageContainerForm);
 		// -- 24-Jan-06 end
-		if (isTypeChange || request.getAttribute(Constants.SUBMITTED_FOR) != null)
+		if (isTypeChange || request.getAttribute(Constants.SUBMITTED_FOR) != null || Constants.YES.equals(isPageFromStorageType))
 		{
 			onTypeChange(storageContainerForm, operation, request);
 		}
@@ -159,13 +183,22 @@ public class StorageContainerAction extends SecureAction
 		{
 			request.setAttribute(Constants.REQ_PATH, reqPath);
 		}
-
+		List<NameValueBean> parentContainerTypeList =  Utility.getParentContainerTypeList();
+		request.setAttribute("parentContainerTypeList", parentContainerTypeList);
+		request.setAttribute("parentContainerSelected", storageContainerForm.getParentContainerSelected());
+		session.removeAttribute(Constants.STORAGE_CONTAINER_SESSION_BEAN);
+		session.removeAttribute("isPageFromStorageType");
 		return mapping.findForward((String) request.getParameter(Constants.PAGEOF));
 	}
-	private void setStorageType(HttpServletRequest request, StorageContainerForm storageContainerForm)
+	private void setStorageType(HttpServletRequest request, StorageContainerForm storageContainerForm,HttpSession session)
 	{
 		//*************Start Bug:1938  ForwardTo implementation *************
 		HashMap forwardToHashMap = (HashMap) request.getAttribute("forwardToHashMap");
+		if(forwardToHashMap == null)
+		{
+			forwardToHashMap =(HashMap)session.getAttribute("forwardToHashMap");
+			session.removeAttribute("forwardToHashMap");
+		}
 		if (forwardToHashMap != null)
 		{
 			Long storageTypeId = (Long) forwardToHashMap.get("storageTypeId");
@@ -378,7 +411,7 @@ public class StorageContainerAction extends SecureAction
 			Object object = bizLogic.retrieve(StorageContainer.class.getName(), new Long(initValues[0]));
 			if (object != null)
 			{
-				if (storageContainerForm.getCheckedButton() == 2 && storageContainerForm.getStContSelection() == 1)
+				if ("Auto".equals(storageContainerForm.getParentContainerSelected()))
 				{
 					StorageContainer container = (StorageContainer) object;
 					storageContainerForm.setCollectionIds(bizLogic.getDefaultHoldCollectionProtocolList(container));
@@ -398,7 +431,7 @@ public class StorageContainerAction extends SecureAction
 	{
 		List initialValues = null;
 		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
-		if (storageContainerForm.getCheckedButton() == 2)
+		if (!Constants.SITE.equals(storageContainerForm.getParentContainerSelected()))
 		{
 			String[] startingPoints = new String[]{"-1", "-1", "-1"};
 			
@@ -437,7 +470,7 @@ public class StorageContainerAction extends SecureAction
 			initialValues = new Vector();
 			initialValues.add(startingPoints);
 		}
-		else if (storageContainerForm.getCheckedButton() == 1)
+		else if (Constants.SITE.equals(storageContainerForm.getParentContainerSelected()))
 		{
 			initialValues = StorageContainerUtil.checkForInitialValues(containerMap);
 			//falguni
@@ -479,7 +512,7 @@ public class StorageContainerAction extends SecureAction
 	private void onSiteOrParentContChange(HttpServletRequest request,HttpServletResponse response, StorageContainerForm storageContainerForm) throws DAOException, IOException
 	{
 
-		if (storageContainerForm.getCheckedButton() == 2)
+		if (!Constants.SITE.equals(storageContainerForm.getParentContainerSelected()))
 		{
 			String[] startingPoints = new String[]{"-1", "-1", "-1"};
 
@@ -538,4 +571,35 @@ public class StorageContainerAction extends SecureAction
 		out.write(collectionIdStr);
 		
 	}
+	private void initStorageContainerForm(StorageContainerForm storageContainerForm,StorageContainerBean storageContainerBean)
+	{
+		storageContainerForm.setBarcode(storageContainerBean.getBarcode());
+		storageContainerForm.setCollectionIds(storageContainerBean.getCollectionIds());
+		storageContainerForm.setContainerId(storageContainerBean.getContainerId());
+		storageContainerForm.setContainerName(storageContainerBean.getContainerName());
+		storageContainerForm.setDefaultTemperature(storageContainerBean.getDefaultTemperature());
+		storageContainerForm.setHoldsSpecimenArrTypeIds(storageContainerBean.getHoldsSpecimenArrTypeIds());
+		storageContainerForm.setHoldsSpecimenClassTypes(storageContainerBean.getHoldsSpecimenClassTypes());
+		storageContainerForm.setHoldsStorageTypeIds(storageContainerBean.getHoldsStorageTypeIds());
+		storageContainerForm.setTypeId(storageContainerBean.getTypeId());
+		storageContainerForm.setTypeName(storageContainerBean.getTypeName());
+		storageContainerForm.setId(storageContainerBean.getID());
+		storageContainerForm.setParentContainerId(storageContainerBean.getParentContainerId());
+		storageContainerForm.setPositionDimensionOne(storageContainerBean.getPositionDimensionOne());
+		storageContainerForm.setPositionDimensionTwo(storageContainerBean.getPositionDimensionTwo());
+		storageContainerForm.setContainerId(storageContainerBean.getContainerId());
+		storageContainerForm.setContainerName(storageContainerBean.getContainerName());
+		storageContainerForm.setCheckedButton(storageContainerBean.getCheckedButton());
+		storageContainerForm.setHoldsSpecimenArrTypeIds(storageContainerBean.getHoldsSpecimenArrTypeIds());
+		storageContainerForm.setHoldsSpecimenClassTypes(storageContainerBean.getHoldsSpecimenClassTypes());
+		storageContainerForm.setHoldsStorageTypeIds(storageContainerBean.getHoldsStorageTypeIds());
+		storageContainerForm.setOneDimensionCapacity(storageContainerBean.getOneDimensionCapacity());
+		storageContainerForm.setTwoDimensionCapacity(storageContainerBean.getTwoDimensionCapacity());
+		storageContainerForm.setOneDimensionLabel(storageContainerBean.getOneDimensionLabel());
+		storageContainerForm.setTwoDimensionLabel(storageContainerBean.getTwoDimensionLabel());
+		storageContainerForm.setSiteId(storageContainerBean.getSiteId());
+		storageContainerForm.setSiteName(storageContainerBean.getSiteName());
+		storageContainerForm.setSiteForParentContainer(storageContainerBean.getSiteForParentContainer());
+	}	
+	
 }

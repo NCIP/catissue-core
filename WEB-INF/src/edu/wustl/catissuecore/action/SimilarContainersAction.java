@@ -65,7 +65,7 @@ public class SimilarContainersAction extends SecureAction
 		//is exceeding the max limit.
 		String exceedingMaxLimit = "false";
 		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
-
+		String selectedParentContainer=similarContainersForm.getParentContainerSelected();
 		if (similarContainersForm.getSpecimenOrArrayType() == null)
 		{
 			similarContainersForm.setSpecimenOrArrayType("Specimen");
@@ -120,7 +120,7 @@ public class SimilarContainersAction extends SecureAction
 
 		long siteId = similarContainersForm.getSiteId();
 		
-		if (similarContainersForm.getCheckedButton() == 1)
+		if(Constants.SITE.equals(selectedParentContainer))
 		{
 			Object siteObject = ibizLogic.retrieve(Site.class.getName(), new Long(similarContainersForm.getSiteId()));
 			if (siteObject != null)
@@ -271,7 +271,10 @@ public class SimilarContainersAction extends SecureAction
 		 * long maxId = bizLogic.getNextContainerNumber();
 		request.setAttribute(Constants.MAX_IDENTIFIER, Long.toString(maxId));
 		request.setAttribute("ContainerNumber", new Long(maxId).toString());*/
-	
+		if("Auto".equals(selectedParentContainer))
+		{
+			similarContainersForm.setSelectedContainerName(null);
+		}
 		TreeMap containerMap = bizLogic.getAllocatedContaienrMapForContainer(new Long(request.getParameter("typeId")).longValue(), exceedingMaxLimit,similarContainersForm.getSelectedContainerName());
 		
 		/*Map containerMap1 = bizLogic.getAllocatedContaienrMapForContainer(new Long(request
@@ -282,11 +285,18 @@ public class SimilarContainersAction extends SecureAction
 		int noOfContainers = Integer.parseInt((String) request.getParameter("noOfContainers"));
 		if (similarContainersForm.getSimilarContainersMap().size() == 0)
 		{
-
-			int siteOrParentCont = similarContainersForm.getCheckedButton();
+			int siteOrParentCont;
+			if (Constants.SITE.equals(selectedParentContainer))
+			{
+				siteOrParentCont=1;
+			}
+			else
+			{
+				siteOrParentCont=2;
+			}
 			similarContainersForm.setSimilarContainerMapValue("checkedButton", Integer.toString(siteOrParentCont));
 
-			if (siteOrParentCont == 2)
+			if (!Constants.SITE.equals(selectedParentContainer))
 			{
 
 				//List mapSiteList = bizLogic.getAllocatedContaienrMapForContainer(new Long(request
@@ -323,7 +333,7 @@ public class SimilarContainersAction extends SecureAction
 					request.setAttribute("initValues", initialValues);
 				}
 
-				if (similarContainersForm.getCheckedButton() == 2 && !(checkAvailability(containerMap, noOfContainers)))
+				if (!Constants.SITE.equals(selectedParentContainer) && !(checkAvailability(containerMap, noOfContainers)))
 				{
 					ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
 					if (errors == null)
@@ -354,7 +364,7 @@ public class SimilarContainersAction extends SecureAction
 				}
 				//falguni
 				//similarContainersForm.setSimilarContainerMapValue("simCont:" + i + "_name", maxSiteName + "_" + maxTypeName + "_" + (maxId + i - 1));
-				if (similarContainersForm.getCheckedButton() == 1)
+				if (Constants.SITE.equals(selectedParentContainer))
 				{
 					similarContainersForm.setSimilarContainerMapValue("simCont:" + i + "_siteId", new Long(siteId).toString());
 					similarContainersForm.setSimilarContainerMapValue("simCont:" + i + "_siteName",maxSiteName.toString());
@@ -377,7 +387,7 @@ public class SimilarContainersAction extends SecureAction
 		if (change != null && !change.equals(""))
 		{
 			int i = Integer.parseInt(change);
-			if (similarContainersForm.getCheckedButton() == 1)
+			if (Constants.SITE.equals(selectedParentContainer))
 			{
 				String Id = (String) similarContainersForm.getSimilarContainerMapValue("simCont:" + i + "_siteId");
 				Object siteObject2 = ibizLogic.retrieve(Site.class.getName(), new Long(Id));
