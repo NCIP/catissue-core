@@ -99,8 +99,8 @@ function popupWindow(nofConsentTiers)
 	if(iCount==0)
 	{
 		var url="pages/content/ConsentTracking/consentDialog.jsp?withrawall=true&response=withdraw&pageOf="+"<%=pageOf%>";
-		window.open(url,'WithdrawAll','height=200,width=550,scrollbars=1,resizable=1');
-	}
+			window.open(url,'WithdrawAll','height=350,width=530,center=1,scrollbars=1,resizable=0');
+		}
 	else if(iCount==nofConsentTiers)
 	{	
 		
@@ -141,7 +141,7 @@ function popupWindow(nofConsentTiers)
 			%>	
 		
 				var url="pages/content/ConsentTracking/consentDialog.jsp?withrawall=true&response=nowithdraw&pageOf="+"<%=pageOf%>";
-				window.open(url,'WithdrawAll','height=200,width=550,scrollbars=1,resizable=1');
+				window.open(url,'WithdrawAll','height=200,width=550,scrollbars=1,resizable=0');
 			<%}
 			else
 			{%>
@@ -155,7 +155,7 @@ function popupWindow(nofConsentTiers)
 	else
 	{
 		var url="pages/content/ConsentTracking/consentDialog.jsp?withrawall=false&response=withdraw&pageOf="+"<%=pageOf%>";
-		window.open(url,'Withdraw','height=200,width=550,scrollbars=1,resizable=1');
+		window.open(url,'Withdraw','height=200,width=550,scrollbars=1,resizable=0');
 	}
 }	
 
@@ -212,6 +212,9 @@ function popupWindow(nofConsentTiers)
 	<table width="100%" border="0" cellpadding="0" cellspacing="0"   id="consentTabForSCG">
 		<%--Title of the form i.e Consent Form --%>				
 		<tr>
+    <td align="left" class="toptd"></td>
+  </tr>
+		<tr>
 			<td align="left" class="tr_bg_blue1"><span class="blue_ar_b">
 				<%
 				ConsentTierData consentTierForm =(ConsentTierData)form;
@@ -236,15 +239,15 @@ function popupWindow(nofConsentTiers)
 			{
 			%>
 			<tr>
-				<td >
-					<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%" id="consentAttributes" >
+				<td>
+				<table width="100%" border="0" cellspacing="0" cellpadding="3">
 						<%--Signed URL --%>				
 						<tr>
 							<td class="noneditable" width="39%">
 								&nbsp;&nbsp;&nbsp;<bean:message key="collectionprotocolregistration.signedurlconsent"/>
 							</td>
 							<td class="noneditable">
-								<html:text styleClass="black_ar" property="signedConsentUrl" />
+								<html:text styleClass="formFieldSized18" property="signedConsentUrl" />
 							</td>
 						</tr>
 						<%--Witness Name --%>									
@@ -253,7 +256,7 @@ function popupWindow(nofConsentTiers)
 								&nbsp;&nbsp;&nbsp;<bean:message key="collectionprotocolregistration.witnessname"/>
 							</td>	
 							<td class="noneditable">
-								<html:select property="witnessId" styleClass="black_new" styleId="witnessId" size="1"
+								<html:select property="witnessId" styleClass="formFieldSized18" styleId="witnessId" size="1"
 									onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" >
 								<html:options collection="witnessList" labelProperty="name" property="value" />
 								</html:select>
@@ -444,7 +447,7 @@ function popupWindow(nofConsentTiers)
 			<tr>
 				<td>
 				<%-- Inner table that will show Consents Start--%>
-					<table width="100%" border="0" cellspacing="0" cellpadding="4">
+				<div id="" style="overflow:auto;height:150px;width:520"> <table width="100%" border="0" cellspacing="0"         cellpadding="4">
 						<%-- Serial No # --%>	
 						<tr class="tableheading">
 							<td width="8%" align="left" class="black_ar_b"><bean:message key="requestlist.dataTabel.serialNo.label" /></td>
@@ -708,7 +711,7 @@ function popupWindow(nofConsentTiers)
 						}%>
 						
 									
-					   </table>	
+					   </table>	</div>
 					<%-- Inner table that will show Consents--%>
 				</td>	
 			</tr>
