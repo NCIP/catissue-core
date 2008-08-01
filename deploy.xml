@@ -850,7 +850,7 @@
 		<antcall target="update_metadata_for_model_changes" />
 	</target>
 	
-	<target name="upgrade_1.2.2_to_1.0_mysql">
+	<target name="upgrade_db_from_core_1.2.2_to_suite_1.0_mysql">
 	
 		<echo message="Upgrading MySQL Database from 1.2.2 to 1.0 ..." />
 			<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" onerror="continue">
@@ -872,7 +872,7 @@
 	
 	</target>
 	
-	<target name="upgrade_1.2.2_to_1.0_oracle">
+	<target name="upgrade_db_from_core_1.2.2_to_suite_1.0_oracle">
 	
 		<echo message="Upgrading Oracle Database from 1.2.2 to 1.0 ..." />
 			<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle">
@@ -894,16 +894,16 @@
 	</target>
 	
 	
-	<target name="upgrade_1.2.2_to_1.0">
+	<target name="upgrade_db_from_core_1.2.2_to_suite_1.0">
 		<if>
 			<equals arg1="mysql" arg2="${database.type}" />
 			<then>
-				<antcall target="upgrade_1.2.2_to_1.0_mysql" />
+				<antcall target="upgrade_db_from_core_1.2.2_to_suite_1.0_mysql" />
 			</then>
 			<elseif>
 				<equals arg1="oracle" arg2="${database.type}" />
 				<then>
-					<antcall target="upgrade_1.2.2_to_1.0_oracle" />
+					<antcall target="upgrade_db_from_core_1.2.2_to_suite_1.0_oracle" />
 				</then>
 			</elseif>
 			<else>
