@@ -78,7 +78,8 @@
                   <td width="21%" align="left" nowrap class="black_ar"><autocomplete:AutoCompleteTag
 												property="type" optionsList='${siteTypeList}'
 												initialValue='${siteForm.type}'
-												styleClass="formFieldSized12" /></td>
+												styleClass="black_ar"
+												size="27"/></td>
                   <td width="11%" align="left" valign="top">&nbsp;</td>
                 </tr>
                 <tr>
@@ -129,7 +130,8 @@
                   <td align="left" nowrap class="black_ar"><autocomplete:AutoCompleteTag
 												property="state" optionsList='${stateList}'
 												initialValue='${siteForm.state}'
-												styleClass="formFieldSized12" /></td>
+												styleClass="black_ar" 
+												size="27" /></td>
                   <td align="left" class="black_ar">&nbsp;</td>
                   <td align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
                   <td align="left" class="black_ar"><label for="zipCode">
@@ -146,7 +148,8 @@
                   <td align="left" nowrap class="black_ar"><autocomplete:AutoCompleteTag
 												property="country" optionsList='${countryList}'
 												initialValue='${siteForm.country}'
-												styleClass="formFieldSized12" /></td>
+												styleClass="black_ar" 
+												size="27"/></td>
                   <td align="left" class="black_ar">&nbsp;</td>
                   <td align="center" class="black_ar">&nbsp;</td>
                   <td align="left" class="black_ar"><label
@@ -179,7 +182,7 @@
 													property="activityStatus"
 													optionsList='${activityStatusList}'
 													initialValue='${siteForm.activityStatus}'
-													styleClass="formFieldSized12" onChange='${strCheckStatus}' />
+													styleClass="black_ar" size="27" onChange='${strCheckStatus}' />
 												</td>
 												<td align="left" valign="top">&nbsp;</td>
 											</logic:equal>
