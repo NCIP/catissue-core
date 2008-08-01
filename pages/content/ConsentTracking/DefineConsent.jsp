@@ -25,10 +25,24 @@
           <td colspan="2" align="left" class="tr_bg_blue1"><span class="blue_ar_b"> <bean:message key="consent.consenttiers" /></span></td>
      </tr>
     <tr>
-         <td colspan="2" align="left" class="black_ar showhide" ><table width="100%" border="0" cellspacing="0" cellpadding="3" id="innertable">
-        <tr>
+         <td colspan="2" align="left" class="black_ar showhide" >
+		 <table width="100%" border="0" cellspacing="0" cellpadding="3" id="innertable">
+         <tr>
          <%-- Title CheckBox --%>
-				<logic:equal name="operation" value='${requestScope.edit}'><td width="4%" align="center" class="tableheading"><label><input type=checkbox class="black_ar" name="selectAll" onclick="checkAll(this)" disabled="disabled"/></label></td></logic:equal><logic:notEqual name="operation" value='${requestScope.edit}'><td width="4%" align="center" class="tableheading"><label><input type=checkbox name="selectAll" class="black_ar" onclick="checkAll(this)"/></label></td></logic:notEqual>
+		 	<logic:equal name="isParticipantReg" value="true">
+			<td width="4%" align="center" class="tableheading">
+			<label>
+			<input type=checkbox class="black_ar" name="selectAll" onclick="checkAll(this)" disabled="disabled"/>
+			</label>
+			</td>
+			</logic:equal>
+			
+			<logic:notEqual name="isParticipantReg" value="true"><td width="4%" align="center" class="tableheading">
+			<label>
+				<input type=checkbox name="selectAll" class="black_ar" onclick="checkAll(this)"/>
+			</label>
+			</td>
+			</logic:notEqual>
           <td width="96%" class="tableheading"><strong><html:hidden property="consentTierCounter"/><bean:message key="consent.statements" /></strong></td>
         </tr>
 	
@@ -52,7 +66,6 @@
 						<input type="checkbox" name="consentcheckBoxs" Id="check1" class="black_ar"/>
 					</logic:notEqual>
 	 			 </td>
-				 <html:hidden property='${requestScope.consentName}'/>
 				 <html:hidden property='${requestScope.consentKey}'/>
 		         <td class="link">
 			  <label>
