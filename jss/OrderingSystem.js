@@ -241,15 +241,7 @@
 		dataObj = document.getElementById('dataArray' + rowid);
 		arrayHeaderObj = document.getElementById('headerArray' + rowid);
 		btnCreateArrayObj = document.getElementById('btnCreateArray' + rowid); 
-	
-		if(dataObj.style.display != 'none') //Clicked on - image
-		{
-			dataObj.style.display = 'none';	
-			arrayHeaderObj.style.display = 'none';
-			btnCreateArrayObj.style.display = 'none';
-			switchObj.innerHTML = '<img src="images/nolines_plus.gif" border="0"/>';
-		}
-		else
+		if(dataObj.style.display == 'none' || dataObj.style.display == ' ') //Clicked on - image
 		{
 			if(navigator.appName == "Microsoft Internet Explorer")	
 			{
@@ -263,7 +255,17 @@
 				arrayHeaderObj.style.display = 'table-row';
 				btnCreateArrayObj.style.display = 'table-row';
 			}
-			switchObj.innerHTML = '<img src="images/nolines_minus.gif" border="0"/>';
+			
+			switchObj.innerHTML = "<img src=images/uIEnhancementImages/minimize.png alt=Collapse height=16 width=16 border=0 title='Hide Array Detail' />";
+		}
+		else
+		{
+			dataObj.style.display = 'none';	
+			arrayHeaderObj.style.display = 'none';
+			btnCreateArrayObj.style.display = 'none';
+			
+			switchObj.innerHTML = "<img src=images/uIEnhancementImages/maximize.png alt=Expand height=16 width=16 border=0 title='Show Array Detail'/>";
+			
 		}
 	}
 

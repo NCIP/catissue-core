@@ -192,167 +192,122 @@ function showNewConsentPage(specimenIdentifierkey,labelStatus,consentVerificatio
 </script>
 </head>  
 <body onload="tabToDisplay()">
+<script type="text/javascript" src="jss/wz_tooltip.js"></script>
+
 	<html:form action="<%=form_action%>">
 
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
   <tr>
-    <td class="td_color_bfdcf3">
-		<table width="100%" border="0" cellpadding="0" cellspacing="0" class="whitetable_bg">
-			<tr>
-		        <td colspan="3" valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="0">
-            <tr>
-              <td height="31" valign="top" class="td_color_bfdcf3">
-				<table width="10%" border="0" cellpadding="0" cellspacing="0" background="images/uIEnhancementImages/table_title_bg.gif">
-					<tr>
-						<td width="80%">
-							<span class="wh_ar_b">&nbsp;&nbsp;&nbsp;
+    <td class="td_color_bfdcf3"><table border="0" cellpadding="0" cellspacing="0">
+      <tr>
+        <td class="td_table_head"><span class="wh_ar_b">
 								<bean:message key="requestdetails.header" />
-							</span>
-						</td>
-						<td width="20%" align="right">
-							<img src="images/uIEnhancementImages/table_title_corner2.gif" width="31" height="24" /></td>
-					</tr>
-				</table>
-			 </td>
-            </tr>
+							</span></td>
+        <td><img src="images/uIEnhancementImages/table_title_corner2.gif" alt="Page Title - Order" width="31" height="24" /></td>
+      </tr>
+    </table></td>
+  </tr>
 						  
-			</table>
-			</td>
-			</tr>
-		    <tr>
-				<td class="td_color_bfdcf3" ></td>
-		        <td height="15"  class="td_tab_bg">&nbsp;
-				</td>
-		        <td class="td_color_bfdcf3" ></td>
-			</tr>
 			<tr>
-		        <td width="1%" class="td_color_bfdcf3" ></td>
-				<td width="98%" height="15" style="padding:3px;" >
-					<span class=" grey_ar_s">&nbsp;
-						<img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" />
+    <td class="tablepadding"><table width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr>
+        <td width="90%" valign="bottom" class="td_tab_bg">&nbsp;</td>
+      </tr>
+    </table>
+      <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
+        
+        <tr>
+          <td align="left" class=" grey_ar_s">&nbsp;<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
 						<bean:message key="commonRequiredField.message" />
-					</span>
-				</td>
-		        <td width="1%" class="td_color_bfdcf3" ></td>
-			</tr>
-			<tr>
-				<td class="td_color_bfdcf3" >&nbsp;
-				</td>
-		        <td height="25" class="tr_bg_blue1" >&nbsp;
-					<span class="blue_ar_b">&nbsp;
-						<bean:message key="requestdetails.name" />
-					</span>
-				</td>
-		        <td class="td_color_bfdcf3" >&nbsp;
-				</td>
-		     </tr>
-			 <tr>
-	         <td class="td_color_bfdcf3" >&nbsp;</td>
-			 <td style="padding-top:10px; padding-bottom:20px; padding-left:6px; padding-right:3px;">
-				<table width="100%" border="0" cellspacing="0" cellpadding="3" >
-					<tr>
+					</td>
+        </tr>
+        <tr>
+          <td align="left" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;<bean:message key="requestdetails.name" />
+					</span></td>
+        </tr>
+        <tr>
+          <td align="left" class="showhide"><table width="100%" border="0" cellspacing="0" cellpadding="3" >
+              <tr>
 						  <jsp:useBean id="requestDetailsForm" class="edu.wustl.catissuecore.actionForm.RequestDetailsForm" scope="request"/>	
 				    <% 
 				    	session.setAttribute("REQUEST_DETAILS_FORM",requestDetailsForm);%>
-						<td width="17%" class="noneditable">
-							<strong>
+						<td width="17%" class="noneditable"><strong>
 								<bean:message key='requestdetails.header.label.RequestorName'/>
-							</strong>
-						</td>
-			            <td class="noneditable">- 
-							<span class="link">
+							</strong></td>
+			            <td class="noneditable">- <span class="link">
 								<a class="view" href='mailto:<bean:write name='<%=  Constants.REQUEST_HEADER_OBJECT  %>'  property='email' scope='request' />' >
 									<bean:write name="<%=  Constants.REQUEST_HEADER_OBJECT %>" property="requestedBy" scope="request"/> 
 								</a>
-							</span>
-						</td>
-					</tr>
-			        <tr>
-						<td class="noneditable">
-							<strong>
+							</span></td>
+              </tr>
+              <tr>
+                <td class="noneditable"><strong>
 								<bean:message key='requestlist.dataTabel.label.RequestDate'/>
-							</strong>
-						</td>
-			            <td class="noneditable">-
+							</strong></td>
+                <td class="noneditable">- 
 							<bean:write name="<%=  Constants.REQUEST_HEADER_OBJECT  %>" property="requestedDate" scope="request"/>
 						</td>
-			          </tr>
-					  <tr>
-			            <td class="noneditable">
-							<strong>
+              </tr>
+              <tr>
+                <td class="noneditable"><strong>
 								<bean:message key='requestlist.dataTabel.DistributionProtocol.label'/>
-							</strong>
-						</td>
-			            <td class="noneditable">-
+							</strong></td>
+                <td class="noneditable">-
 							<bean:write name="<%=  Constants.REQUEST_HEADER_OBJECT  %>" property="distributionProtocol" scope="request"/>
 						</td>
-			          </tr>
-			          <tr>
-						<td class="noneditable">
-							<strong>
+              </tr>
+              <tr>
+                <td class="noneditable"><strong>
 								<bean:message key='requestdetails.header.label.Comments'/> 
 								<bean:write name="<%=  Constants.REQUEST_HEADER_OBJECT  %>"  property="comments"  scope="request" />
-							</strong>
-						</td>
-			            <td class="noneditable">&nbsp;
-						</td>
-			          </tr>
-				</table>
-			</td>
-	        <td class="td_color_bfdcf3" >&nbsp;</td>
-		 </tr>
-	     <tr>
-		    <td class="td_color_bfdcf3" >&nbsp;</td>
-			<td >
+							</strong></td>
+                <td class="noneditable">&nbsp;</td>
+              </tr>
+          </table></td>
+        </tr>
+		 </table>
+	     <table width="100%" border="0" cellpadding="0" cellspacing="0" class="whitetable_bg">
+        <tr>
+          <td align="left">
 		<!-----------------------table for the tabs------------>
 				<table width="100%" border="0" cellpadding="0" cellspacing="0">
-					<tr>
-			            <td width="13%" style="border-bottom:1px solid #61a1e3" >&nbsp;
-						</td>
-			            <td width="6%" valign="bottom" onclick="gotoSpecimenRequestTab()" id="specimenRequestTab" >
+              <tr>
+                <td width="13%" style="border-bottom:1px solid #61a1e3" >&nbsp;</td>
+                <td width="6%" valign="bottom" onclick="gotoSpecimenRequestTab()" id="specimenRequestTab" >
 							<img src="images/uIEnhancementImages/tab_specimentR2_user.gif" alt="Specimen Request" width="124" height="20" />
 						</td>
 			            <td width="6%" valign="bottom" onClick="gotoArrayRequestTab()" id="arrayRequestTab" >
 							<img src="images/uIEnhancementImages/tab_arrayR2_user1.gif" alt="Array Request" width="101" height="20" />
 						</td>
-			            <td valign="bottom" style="border-bottom:1px solid #61a1e3">&nbsp;
-						</td>
-		            </tr>
-				</table>
-			</td>
-			<td class="td_color_bfdcf3" >&nbsp;
-			</td>
-	     </tr>
-		 <tr>
-			<td class="td_color_bfdcf3" style="padding-bottom:10px;">&nbsp;
-			</td>
-	        <td class="td_color_bfdcf3" style="padding-bottom:10px;">
-				<table width="100%" border="0" cellpadding="3" cellspacing="0" bgcolor="#FFFFFF" >
-				  <tr>
-		            <td colspan="3" align="left" style="padding-bottom:15px; border-bottom:1px solid #e3e2e2 ">
-						<div id="specimenDataTab" >
-			<!------------- heading for the specimen request tab------------>
-							<table width="100%" border="0" cellspacing="0" cellpadding="4" >
-				              <tr>
-					            <td colspan="10" align="right" valign="top" >
-				<!------table for te view all consents link------------>
-									<table width="100%" border="0" cellspacing="0" cellpadding="2">
-					                    <tr>
-										  <td width="88%" align="right" >
+			            <td valign="bottom" style="border-bottom:1px solid #61a1e3">&nbsp;</td>
+              </tr>
+          </table></td>
+        </tr>
+
+		  <tr >
+          <td colspan="4"><table width="100%" border="0" cellpadding="3" cellspacing="0">
+              <tr>
+                <td colspan="3" align="left" class="showhide" style="border-bottom:1px solid #e3e2e2 "><table width="100%" border="0" cellspacing="0" cellpadding="4">
+                    
+					<tr>
+						<td >
+					<div id="specimenDataTab">
+						<table border="0" width="100%" cellpadding="3" cellspacing="0">
+							<tr>
+                      <td colspan="11" align="right" valign="top" ><table width="100%" border="0" cellspacing="0" cellpadding="0">
+                          <tr>
+                            <td width="88%" align="right" nowrap >
 											<img src="images/uIEnhancementImages/viewall_icon.gif" alt="View All" />
 										  </td>
-					                      <td align="left" nowrap="nowrap" >
-											<span class="link">
+					                      <td width="12%" align="center" nowrap="nowrap" ><span class="link">
 												<a href="javascript:showAllSpecimen('<%=count%>')" class="view" >
 													<bean:message key="requestdetails.link.ViewAllConsents" />
 							                    </a>
-											  </span>
-											</td>
-					                    </tr>
-					                </table>
-								</td>
-				              </tr>
-							  <tr>
+											  </span></td>
+                          </tr>
+                      </table></td>
+                    </tr>
+							<tr>
 						  <% 
 									if(requestDetailsList != null)
 									{
@@ -360,19 +315,19 @@ function showNewConsentPage(specimenIdentifierkey,labelStatus,consentVerificatio
 									 	int i = 0; 
 										String rowStatusValue ="";
 						 %>
-					             <td colspan="5" align="center" valign="top" class="tableheading">
+					             <td colspan="5" align="center" valign="top" class="tableheading" width="40%">
 									<strong>
 										<bean:message key="requestdetails.header.RequestedSpecimenDetails" />
 									</strong>
 								 </td>
 								 <!--<td width="3" class="tableheading">&nbsp;
 				                 </td>-->
-				                 <td width="13%" colspan="2" rowspan="2" align="left" valign="top" class="tableheading">
+				                 <td width="8%" colspan="2" rowspan="2" align="left" valign="top" class="tableheading">
 									<strong>
 										<bean:message key='requestdetails.datatable.label.AvailableQty'/>
 									</strong>
 								 </td>
-				                 <td width="13%" rowspan="2" valign="top" class="tableheading">
+				                 <td width="15%" rowspan="2" valign="top" class="tableheading">
 									<span class=" grey_ar_s">
 										<img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" />
 									</span>
@@ -380,7 +335,7 @@ function showNewConsentPage(specimenIdentifierkey,labelStatus,consentVerificatio
 										<bean:message key='requestdetails.datatable.label.AssignQty'/>
 									</strong>
 								</td>
-				                <td width="9%" rowspan="2" valign="top" class="tableheading">
+				                <td width="11%" rowspan="2" valign="top" class="tableheading">
 									<div>
 										<strong>
 											<bean:message key="consent.consentforspecimen"/>
@@ -397,27 +352,27 @@ function showNewConsentPage(specimenIdentifierkey,labelStatus,consentVerificatio
 									     <html:select property="status" name="requestDetailsForm" styleClass="formFieldSized11" styleId="nextStatusId" size="1" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="updateAllStatus()">
 											<html:options collection="<%= Constants.REQUESTED_ITEMS_STATUS_LIST %>" labelProperty="name" property="value"/>		
 									     </html:select>
-								</td>
-				                <td rowspan="2" valign="top" class="tableheading">
+								</td>	
+				                <td rowspan="2" valign="top" class="tableheading" width="10%">
 									<strong>
 										<bean:message key="requestdetails.header.label.Comments" />
 									</strong>
 								</td>
 				              </tr>
 				              <tr>
-								<td width="7%" class="subtd">
+								<td width="9%" class="subtd">
 									<bean:message key='requestdetails.datatable.label.RequestItem'/>
 								</td>
-				                <td width="13%" class="subtd">
+				                <td width="9%" class="subtd">
 									<bean:message key='requestdetails.datatable.label.RequestFor'/>
 								</td>
-								<td width="8%" class="subtd">
+								<td width="10%" class="subtd" valign="top">
 									<bean:message key="orderingSystem.tableheader.label.type" />
 								</td>
-				                <td width="7%" class="subtd">
+				                <td width="9%" class="subtd" valign="top">
 									<bean:message key='requestdetails.datatable.label.RequestedQty'/>
 								</td>
-				                <td width="3" align="left" bgcolor="#d7d7d7" >&nbsp;
+				                <td width="3%" align="left" bgcolor="#d7d7d7" >&nbsp;
 								</td>
 				              </tr>
    <!----------------rows for the specimen request tab------------------>
@@ -505,7 +460,7 @@ function showNewConsentPage(specimenIdentifierkey,labelStatus,consentVerificatio
 								 <html:hidden name="requestDetailsForm" property="<%= actualSpecimenType %>" />	
 
 								<tr>
-									<td class="<%=fontStyle%>" width="20%" >
+									<td class="<%=fontStyle%>" >
 					<%													                                                     if(((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim(            ).equalsIgnoreCase("Derived"))
 								{
 					%>											
@@ -550,7 +505,7 @@ function showNewConsentPage(specimenIdentifierkey,labelStatus,consentVerificatio
 						 		}
 					%>
 									 	<!-- Added By Ramya for Tree View -->
-					   		 	<td class="<%=fontStyle%>" width="20%">
+					   		 	<td class="<%=fontStyle%>" >
 					<%																										if(!((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim(				).equalsIgnoreCase("Existing"))
 							{
 					%>
@@ -616,7 +571,7 @@ function showNewConsentPage(specimenIdentifierkey,labelStatus,consentVerificatio
 						}
 				%> 
 								 	</td>
-								 	<td class="<%=fontStyle%>" width="15%">
+								 	<td class="<%=fontStyle%>" >
 										<bean:write name="requestDetailsForm" property="<%= spType %>" />
 								 	</td>
 				<%
@@ -639,7 +594,7 @@ function showNewConsentPage(specimenIdentifierkey,labelStatus,consentVerificatio
 												</script>
 											</span>	
 									 	</td>
-										<td class="<%=fontStyle%>"></td>
+										<td class="<%=fontStyle%>">&nbsp;</td>
 									 	<td class="<%=fontStyle%>" align="left">
 											<div id="<%= updateAvaiQty %>" >
 										 		<bean:write name="requestDetailsForm" property="<%= availableQty %>" />
@@ -670,7 +625,7 @@ function showNewConsentPage(specimenIdentifierkey,labelStatus,consentVerificatio
 				%>
 					
 							
-										<td class="<%=fontStyle%>"  width="20%"> 
+										<td class="<%=fontStyle%>"  > 
 											<html:hidden property="<%=specimenIdInMap%>" styleId="<%=specimenIdInMap%>"  value="<%=specimenIdValue%>"/>
 											<html:hidden property="<%=rowStatuskey%>" styleId="<%=rowStatuskey%>"  value="<%=rowStatusValue%>"/>		
 
@@ -730,7 +685,7 @@ function showNewConsentPage(specimenIdentifierkey,labelStatus,consentVerificatio
 				<%		}
 				%>
 									 	
-									 	<td class="<%=fontStyle%>" width="20%">									 		<span class="black_new">
+									 	<td class="<%=fontStyle%>" >									 		<span class="black_new">
 									 		<html:select property="<%=assignStatus %>" name="requestDetailsForm" styleClass="formFieldSized11" styleId="<%=select%>"  
 					 								onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" disabled="<%= disableRow %>">
 					 								<html:options collection="<%=Constants.ITEM_STATUS_LIST%>" labelProperty="name" property="value"/>							
@@ -752,33 +707,40 @@ function showNewConsentPage(specimenIdentifierkey,labelStatus,consentVerificatio
 					 </logic:iterate>
 				<%	 } //End Outer IF 
 				%>
-							</table>
+						</table>
+						
 						</div>
-						<div id="arrayDataTable" style="display:none" width="100%">
+
+						<div id="arrayDataTable" style="display:none" >
 		<%-- Include ArrayRequest page for ArrayRequests tab --%>
 						<%@ include file="/pages/content/orderingsystem/ArrayRequests.jsp" %>
 						</div>
+						
 					</td>
 				</tr>
-				<tr class="td_color_F7F7F7">
- 					<td width="13%" height="20" valign="middle" class="black_ar">&nbsp;<br />&nbsp;
+				</table>
+				</td>
+				</tr>
+				<tr>
+ 					<td valign="top" class="black_ar">&nbsp;<br />
+                  &nbsp;
  						<bean:message key="requestdetails.header.label.Comments" />
 	 				</td>
- 					<td width="20%" height="20" valign="middle" class="black_ar"><br />
- 						<html:textarea name="requestDetailsForm" styleClass="black_ar" cols="32" rows="3" property="administratorComments"  />
+ 					<td valign="top" class="black_ar"><br />
+ 						<html:textarea name="requestDetailsForm" styleClass="black_ar" cols="90" rows="3" property="administratorComments"  />
 		 			</td>
-					<td height="20" valign="top" class="black_ar"></td>
-				</tr>
-				<tr class="td_color_F7F7F7">
-					<td height="20" valign="top" class="black_ar">&nbsp;
+					<td valign="top" class="black_ar"></td>
+              </tr>
+              <tr >
+                <td valign="top" class="black_ar">&nbsp;
 						<bean:message key='requestlist.dataTabel.label.Site'/> 
  					</td>
-					<td height="20" valign="top" class="black_new">
+					<td valign="top" class="black_new">
 						<html:select property="site" name="requestDetailsForm" styleClass="formFieldSized12" styleId="siteId" size="1" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 							<html:options collection="<%= Constants.SITE_LIST_OBJECT  %>" labelProperty="name" property="value"/>		
 						</html:select> 						
 					</td>
-					<td height="20" valign="top" class="black_ar"></td>
+					<td valign="top" class="black_ar"></td>
         				<html:hidden name="requestDetailsForm" property="id" />
 		<%							
 			  String operationUpdate = "update";
@@ -789,29 +751,26 @@ function showNewConsentPage(specimenIdentifierkey,labelStatus,consentVerificatio
 						<html:hidden name="requestDetailsForm" property="tabIndex" styleId="tabIndexId"/>			
 						<html:hidden name="requestDetailsForm" property="mailNotification" styleId="mailNotification"/>							
 				</tr>
-				<tr class="td_color_F7F7F7">
-			        <td height="20" colspan="3" valign="top" class="black_ar"></td>
-		        </tr>
-	            <tr  class="td_color_F7F7F7">
-			      <td colspan="3" class="buttonbg" style="padding-left:10px;">
-					<input type="button" class="blue_ar_b" value="Submit" onclick="submitPage()">
-					<input type="button" class="blue_ar_b" value="Submit And Notify" onclick="submitAndNotify()">
-					 &nbsp;&nbsp;|&nbsp; 
-						<span class="cancellink">
-							<html:link page="/ManageAdministrativeData.do"
-											styleClass="blue_ar_s_b">
+          </table></td>
+        </tr>
+        <tr>
+          <td class="bottomtd"></td>
+        </tr>
+        <tr>
+          <td class="buttonbg" style="padding:6px;">
+					<input type="button" class="blue_ar_b" value="Submit" onclick="submitPage()" accesskey="Enter">
+					<input type="button" class="blue_ar_c" value="Submit And Notify" onclick="submitAndNotify()">
+					 &nbsp;|&nbsp; 
+						
+							<html:link page="/ManageAdministrativeData.do" styleClass="cancellink">
 								<bean:message key="orderingsystem.button.cancel" />
 				            </html:link>
-						</span>
+						
 					</td>
 				</tr>
-			</table> <!-- table4_pageFooter ends here -->
-		</td>
-		<td class="td_color_bfdcf3" style="padding-bottom: 10px;"/>
-	  </tr>
-   </table>	
-  </td>
- </tr>
+      </table>
+    </td>
+  </tr>
 </table>
    <!-- main table ends here -->
 </html:form>

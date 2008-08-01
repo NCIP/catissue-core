@@ -11,18 +11,23 @@
 <%@ page import="java.util.Iterator"%>
 
 			<!--Tab page for Array Requests -->
-	<table summary="Display Tabbed page" cellpadding="0" cellspacing="0" border="0" width="100%" >
-	 	
+<table cellpadding="0" cellspacing="0" border="0" width="100%" >
+	<tr>
+		<td>
+			&nbsp;
+		</td>
+	</tr>
+	 <tr>
+	 <td>
+		<table border="0" width="100%" cellspacing="0" cellpadding="3">
+			
 		<%
 			//Retrieve List from request attribute for order items in defined arrays
-
 			List definedArrayRequestMapList = new ArrayList();
-			
 			if(request.getAttribute(Constants.DEFINEDARRAY_REQUESTS_LIST)!= null)
 				definedArrayRequestMapList = (ArrayList)request.getAttribute(Constants.DEFINEDARRAY_REQUESTS_LIST);
 			else
 				definedArrayRequestMapList = (ArrayList)session.getAttribute(Constants.DEFINEDARRAY_REQUESTS_LIST);	
-			
 			if(definedArrayRequestMapList != null)
 			{
 				int arrayRowCounter = 0;
@@ -32,15 +37,70 @@
 		<%							
 							int rowNumber =0 ;
 							String disabledCreateButton="true";
-						%>
+		%>
 			<!-- Iterate the list -->
 		<logic:iterate id="defineArrayMap" collection="<%=definedArrayRequestMapList%>" type="java.util.Map">
-		 <%
+			<% if(rowNumber == 0)
+				{
+			%>
+				<tr>
+								<td class="tr_bg_blue1" align="left" ><span class="blue_ar_b" >
+									<label for="existingArray">&nbsp;
+												New Array
+									</label>
+									</span>
+									</td>
+									<td align="right" class="tr_bg_blue1" colspan="5">
+									&nbsp;
+									
+								</td>
+					</tr>
+					<tr>
+					<td class="bottomtd"></td>
+					</tr>
+					<tr>
+					
+						
+						
+							<td class="tableheading" width="3%">&nbsp;</td>
+							<td class="tableheading" width="25%">
+								<strong>
+								<bean:message key="orderingsystem.label.defineArrayName" />
+								</strong>
+							</td>
+							<td class="tableheading" width="15%">
+								<strong>
+								<bean:message key="orderingSystem.tableheader.label.dimensions" />
+								</strong>
+							</td>
+							<td class="tableheading" width="15%">
+								<strong>
+								<bean:message key="query.class" />
+								</strong>
+							</td>
+							<td class="tableheading" width="15%">
+							<strong>
+								<bean:message key="specimen.subType" />
+								</strong>
+							</td>
+							<td class="tableheading" width="27%">
+							<strong>
+								<bean:message key="orderingSystem.tableheader.label.arrayStatus" />
+								</strong>
+							</td>
+							</tr>
+						
+		 <%}
 				Set defineArraySet = defineArrayMap.keySet();
 		%>
 				<tbody id="arrayTbody">
 			<logic:iterate id="definedArrayRequestBean" collection="<%=defineArraySet%>" type="edu.wustl.catissuecore.bean.DefinedArrayRequestBean">
 		<%
+					String mainRowStyle="tabletd1";
+							if(rowNumber%2 == 0)
+							{
+								mainRowStyle="black_ar";
+							}
 					List arrayDetailsBeanList = (ArrayList)defineArrayMap.get(definedArrayRequestBean);
 					String arrayStatus = "value(DefinedArrayRequestBean:"+arrayRowCounter+"_assignedStatus)";
 					String orderItemIdInDefineArray = "value(DefinedArrayRequestBean:"+arrayRowCounter+"_orderItemId)";
@@ -64,61 +124,11 @@
 
 		 <!-- Block to display Defined Array Name,Dimension,Class and type -->
 		 <tr>
-		 	<td height="30">
-		 		<table cellpadding="3" cellspacing="0" border="0" width="100%" class="formSubTableTitle" style="border-top:1px solid #5C5C5C;border-right:1px solid #5C5C5C">	
-			 			<tr>
-							<td nowrap style="font-size:0.9em;">
-								<label for="arrayName">
-									<%= ((String)(requestDetailsForm.getValue("DefinedArrayRequestBean:"+arrayRowCounter+"_arrayName"))) + " Array" %>
-								</label>
-							<html:hidden name="requestDetailsForm" property="<%=requestedItem%>" /> 
-							<html:hidden name="requestDetailsForm" property="<%=oneDimensionCapacity%>" /> 
-							<html:hidden name="requestDetailsForm" property="<%=twoDimensionCapacity%>" /> 	
-							<html:hidden name="requestDetailsForm" property="<%=specimenClass%>" /> 
-							<html:hidden name="requestDetailsForm" property="<%=specimenType%>" /> 
-							<html:hidden name="requestDetailsForm" property="<%=distributedItemId%>" /> 
-							<html:hidden name="requestDetailsForm" property="<%=noOfItemsString%>" /> 
-							</td>
-							<td nowrap style="font-size:0.9em;">
-								<label for="dimensions">
-									<bean:message key='orderingSystem.tableheader.label.dimensions'/> : 
-								</label>
-								 <span style="font-weight:normal;">
-									 <%=(String)(requestDetailsForm.getValue("DefinedArrayRequestBean:"+arrayRowCounter+"_oneDimensionCapacity"))%>,<%=(String)(requestDetailsForm.getValue("DefinedArrayRequestBean:"+arrayRowCounter+"_twoDimensionCapacity"))%>
-								</span>
-								
-							</td>		
-							<td nowrap style="font-size:0.9em;">
-								<label for="class">
-									<bean:message key='orderingSystem.tableheader.label.class' /> :
-								</label>
-								<span style="font-weight:normal;">
-									<%=(String)(requestDetailsForm.getValue("DefinedArrayRequestBean:"+arrayRowCounter+"_arrayClass"))%>
-								</span>
-							</td>
-							<td nowrap style="font-size:0.9em;">
-								<label for="type">
-									<bean:message key='orderingSystem.tableheader.label.type' /> :
-								</label>
-								<span style="font-weight:normal;">
-									<%=(String)(requestDetailsForm.getValue("DefinedArrayRequestBean:"+arrayRowCounter+"_arrayType"))%>
-								</span>
-							</td>
-							<%if((((String)(requestDetailsForm.getValue("DefinedArrayRequestBean:"+arrayRowCounter+"_assignedStatus"))).trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED))
-									&& (!((String)(requestDetailsForm.getValue("DefinedArrayRequestBean:"+arrayRowCounter+"_distributedItemId"))).trim().equals(""))) 								
-							{
-								disableDefineArray = true;
-							%>
-							<html:hidden name="requestDetailsForm" property="<%=arrayStatus%>" /> 	
-							<%}%>
-							<td nowrap>
-								<bean:message key='orderingSystem.tableheader.label.arrayStatus' />:
-								<html:select property="<%= arrayStatus %>" name="requestDetailsForm" styleClass="formFieldSized2" styleId="<%=arrayId%>" 				 								
-									onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" disabled="<%= disableDefineArray %>"> 
-									<html:options collection="<%=Constants.ITEM_STATUS_LIST%>" labelProperty="name" property="value"/>											 				   
-								</html:select>
-							</td>
-							<td nowrap>
+						<td colspan="6" class="bottomtd"></td>
+					</tr>
+			<tr>
+							
+							<td align="center" class="<%=mainRowStyle%>">
 							<%
 									String switchArray = "switchArray" + arrayRowCounter; 
 									String dataArray = "dataArray" + arrayRowCounter; 
@@ -132,50 +142,116 @@
 							%>
 								<html:hidden name="requestDetailsForm" property="<%=orderItemIdInDefineArray%>" /> 
 								<html:hidden name="requestDetailsForm" property="<%=definedArrayId%>" /> 
-								<a id="<%=switchArray%>" style="text-decoration:none" href="javascript:switchDefinedArrayBlock('<%=arrayRowCounter%>');">  
-									<img src="images/nolines_minus.gif" border="0"/>
+								<a id="<%=switchArray%>" style="text-decoration:none" href="javascript:switchDefinedArrayBlock('<%=arrayRowCounter%>');" >
+									<img src="images/uIEnhancementImages/maximize.png" alt="Expand" height="16" width="16" border="0" title="Show Array Detail" />
 								</a>
 							</td>
+
+							<td class="<%=mainRowStyle%>" >
+								<label for="arrayName">
+									<%= ((String)(requestDetailsForm.getValue("DefinedArrayRequestBean:"+arrayRowCounter+"_arrayName"))) + " Array" %>
+								</label>
+							<html:hidden name="requestDetailsForm" property="<%=requestedItem%>" /> 
+							<html:hidden name="requestDetailsForm" property="<%=oneDimensionCapacity%>" /> 
+							<html:hidden name="requestDetailsForm" property="<%=twoDimensionCapacity%>" /> 	
+							<html:hidden name="requestDetailsForm" property="<%=specimenClass%>" /> 
+							<html:hidden name="requestDetailsForm" property="<%=specimenType%>" /> 
+							<html:hidden name="requestDetailsForm" property="<%=distributedItemId%>" /> 
+							<html:hidden name="requestDetailsForm" property="<%=noOfItemsString%>" /> 
+							</td>
+							<td class="<%=mainRowStyle%>" >
+							<!--	<label for="dimensions">
+									<bean:message key='orderingSystem.tableheader.label.dimensions'/> : 
+								</label>-->
+								 <span class="black_ar">
+									 <%=(String)(requestDetailsForm.getValue("DefinedArrayRequestBean:"+arrayRowCounter+"_oneDimensionCapacity"))%>,<%=(String)(requestDetailsForm.getValue("DefinedArrayRequestBean:"+arrayRowCounter+"_twoDimensionCapacity"))%>
+								</span>
+								
+							</td>		
+							<td class="<%=mainRowStyle%>" >
+							<!--	<label for="class">
+									<bean:message key='orderingSystem.tableheader.label.class' /> :
+								</label>-->
+								<span class="black_ar">
+									<%=(String)(requestDetailsForm.getValue("DefinedArrayRequestBean:"+arrayRowCounter+"_arrayClass"))%>
+								</span>
+							</td>
+							<td class="<%=mainRowStyle%>" >
+							<!--	<label for="type">
+									<bean:message key='orderingSystem.tableheader.label.type' /> :
+								</label>-->
+								<span class="black_ar">
+									<%=(String)(requestDetailsForm.getValue("DefinedArrayRequestBean:"+arrayRowCounter+"_arrayType"))%>
+								</span>
+							</td>
+							<%if((((String)(requestDetailsForm.getValue("DefinedArrayRequestBean:"+arrayRowCounter+"_assignedStatus"))).trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED))
+									&& (!((String)(requestDetailsForm.getValue("DefinedArrayRequestBean:"+arrayRowCounter+"_distributedItemId"))).trim().equals(""))) 								
+							{
+								disableDefineArray = true;
+							%>
+							<html:hidden name="requestDetailsForm" property="<%=arrayStatus%>" /> 	
+							<%}%>
+							<td class="<%=mainRowStyle%>" >
+								<!--<bean:message key='orderingSystem.tableheader.label.arrayStatus' />:-->
+								<html:select property="<%= arrayStatus %>" name="requestDetailsForm" styleClass="formFieldSized12" styleId="<%=arrayId%>" 				 								
+									onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" disabled="<%= disableDefineArray %>"> 
+									<html:options collection="<%=Constants.ITEM_STATUS_LIST%>" labelProperty="name" property="value"/>											 				   
+								</html:select>
+							</td>
+							
 					</tr>
-		 		</table>
-		 	</td>
-		 </tr>
+					<tr>
+						<td colspan="6" class="bottomtd"></td>
+					</tr>
+		 		
 		 
 		 <!-- Block to display the table headings -->
-		 <tr id="<%=headerArray%>">
-		 	<td>
-		 		<table cellpadding="3" cellspacing="0" border="0" width="100%" class="dataTable">
+		 <tr id="<%=headerArray%>" style="display:none">
+		 	<td colspan="6">
+		 		<table cellpadding="3" cellspacing="0" border="0" width="100%" >
 		 		  <tr>
-			 		 	<th class="dataTableHeader" scope="col" align="center"  colspan='5'>
-								 	Requested
-								 	</th>
-								 	<th class="dataTableHeader" scope="col" align="left" width="5%" colspan="" rowspan="2" scope="col">
+			 		 	<td class="tableheading" scope="col" width="50%" align="center" valign="top" colspan='5'>
+							<strong>
+								 	<bean:message key="requestdetails.header.RequestedSpecimenDetails" />
+							</strong>
+								 	</td>
+								 	<td class="tableheading" scope="col" align="left" width="10%" valign="top" rowspan="2" scope="col">
+										<strong>
 										<bean:message key='requestdetails.datatable.label.AvailableQty'/>
-									</th>
+										</strong>
+									</td>
 								
 									<!-- th class="dataTableHeader" scope="col" align="left" width="10%" rowspan="2" scope="col">
 										<bean:message key='requestdetails.datatable.label.AssignQty'/>
 									</th-->
 								
-									<th class="dataTableHeader" scope="col" align="left" width="20%" rowspan="2" scope="col">
+									<td class="tableheading" scope="col" align="left" width="20%" rowspan="2" valign="top" >
+										<strong>
 										<bean:message key='requestdetails.datatable.label.AssignStatus'/>
-									</th>		
+										</strong>
+									</td>
+									<td class="tableheading" width="20%" scope="col" align="left" rowspan="2" valign="top">
+									<strong>
+										<bean:message key="requestdetails.header.label.Comments" />
+									</strong>
+									</td>
 								 </tr>
 								 <tr>	
-									<th class="dataTableHeader" scope="col" align="left" width="20%" colspan='2'>
+									<td class="subtd" scope="col" align="left" width="18%" colspan='2'>
 										<bean:message key='requestdetails.datatable.label.RequestItem'/>
-									</th>
+									</td>
 								
-									<th class="dataTableHeader" scope="col" align="left" width="25%">
+									<td class="subtd" scope="col" align="left" width="16%">
 										<bean:message key='requestdetails.datatable.label.RequestFor'/>
-									</th>
-									<th class="dataTableHeader" scope="col" align="left" width="10%">
+									</td>
+									<td class="subtd" scope="col" align="left" width="12%" nowrap="nowrap"
+									>
 										Class, Type
-									</th>
+									</td>
 								
-									<th class="dataTableHeader" scope="col" align="left" width="5%">
+									<td class="subtd" scope="col" align="left" width="4%">
 										<bean:message key='requestdetails.datatable.label.RequestedQty'/>
-									</th>
+									</td>
 		 		  </tr>
 		
 			
@@ -185,6 +261,10 @@
 						
 						<% for(int i=0; i<noOfItems; i++)
 						{
+							String rowStyle="tabletd1";
+							if(i%2 == 0)
+								rowStyle="black_ar";
+
 							//Variables required to set the id of each row.It is used in expandOrderItemsInArray() Js function for expand/collapse purpose.
 							
 							String switchDefinedArray = "switchdefineArray" + rowNumber + "_array" + arrayRowCounter;
@@ -239,7 +319,7 @@
 						    {%>
 						    <html:hidden name="requestDetailsForm" property="<%= specimenCollGrpId %>" />
 							<%}	%>
-						<tr class="dataRowLight" id="<%=dataArray%>">
+						<tr id="<%=dataArray%>">
 							<html:hidden name="requestDetailsForm" property="<%=requestedQuantity %>"/>
 							<html:hidden name="requestDetailsForm" property="<%=rqstdItem %>"/>
 							<html:hidden name="requestDetailsForm" property="<%=avaiQty %>"/>
@@ -247,23 +327,19 @@
 							<html:hidden name="requestDetailsForm" property="<%=spType %>"/>
 							<html:hidden name="requestDetailsForm" property="<%= actualSpecimenClass %>" />	
 							<html:hidden name="requestDetailsForm" property="<%= actualSpecimenType %>" />	
-									<td class="dataCellText" width="3%">
-						 					<a id="<%=switchDefinedArray%>" style="text-decoration:none" href="javascript:expandOrderItemsInArray('<%=rowNumber%>','<%=arrayRowCounter%>');">  
-											<img src="images/nolines_plus.gif" border="0"/>
-								 	</td>
+									
 										 	
-								 	<td class="dataCellText" width="20%">
-						 			<% 
+								 	<td class="<%=rowStyle%>" colspan="2">						 			<% 
 									   if(((String)(requestDetailsForm.getValue("DefinedArrayDetailsBean:"+rowNumber+"_instanceOf"))).trim().equalsIgnoreCase("Derived"))
 									   {
 									%>			
 										<%-- Display derivative icon for child specimens --%>								
-										<img src="images\Distribution.GIF" border="0"/>
+										<img src="images/uIEnhancementImages/Distribution.GIF" border="0"/>
 									<% }
 									   else if(((String)(requestDetailsForm.getValue("DefinedArrayDetailsBean:"+rowNumber+"_instanceOf"))).trim().equalsIgnoreCase("DerivedPathological")
 												|| ((String)(requestDetailsForm.getValue("DefinedArrayDetailsBean:"+rowNumber+"_instanceOf"))).trim().equalsIgnoreCase("Pathological"))
 										{%>
-											<img src="images\Participant.GIF" border="0"/>
+											<img src="images/uIEnhancementImages/Participant.GIF" border="0"/>
 										<%}String toolTipTypeClass = "Class:"+((String)(requestDetailsForm.getValue("DefinedArrayDetailsBean:"+rowNumber+"_actualSpecimenClass")))+", Type:"+((String)(requestDetailsForm.getValue("DefinedArrayDetailsBean:"+rowNumber+"_actualSpecimenType"))); %>
 							 		<span title="<%= toolTipTypeClass %>">									
 										<bean:write name="requestDetailsForm" property="<%=rqstdItem %>" />
@@ -276,10 +352,10 @@
 									 		//	disableArrayOrderItemRow=true;
 									 		//}
 									%>
-								 	<td class="formField">
+								 	<td class="<%=rowStyle%>">
 								 	<%if(!((String)(requestDetailsForm.getValue("DefinedArrayDetailsBean:"+rowNumber+"_instanceOf"))).trim().equalsIgnoreCase("Existing"))
 									 			{%>
-								 			<html:select property="<%= requestForArray %>" name="requestDetailsForm" styleClass="formFieldSized10" styleId="<%= requestForIdInArray %>" onchange="<%= onChangeValueForRequestForInArray %>"				 								
+								 			<html:select property="<%= requestForArray %>" name="requestDetailsForm" styleClass="formFieldSized6" styleId="<%= requestForIdInArray %>" onchange="<%= onChangeValueForRequestForInArray %>"				 								
 												disabled="<%= disableDefineArray %>" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" > 
 											 	<html:optionsCollection property="<%=specimenList %>" name="requestDetailsForm" label="name" value="value"/>
 											</html:select>
@@ -311,7 +387,7 @@
 													appletWindow = "javascript:NewWindow('"+urlInArray+"','name','375','330','yes');return false";
 											%>
 											<a href="#" onclick=" <%= appletWindow %>">
-												<img src="images\Tree.gif" border="0" width="24" height="18" title="<%= ApplicationProperties.getValue("requestdetails.tooltip.specimenTreeTooltip") %>">
+												<img src="images/uIEnhancementImages/ic_cl_diag.gif" border="0" width="24" height="18" title="<%= ApplicationProperties.getValue("requestdetails.tooltip.specimenTreeTooltip") %>">
 											</a>
 											<!-- Displaying add new link if specimen does not exist -->
 												<% if(((requestDetailsForm.getRequestFor("RequestForDropDownListArray:"+rowNumber)) == null) || (((List)(requestDetailsForm.getRequestFor("RequestForDropDownListArray:"+rowNumber))).size() == 0))
@@ -319,13 +395,13 @@
 														if((((String)(requestDetailsForm.getValue("DefinedArrayDetailsBean:"+rowNumber+"_instanceOf"))).trim().equalsIgnoreCase("DerivedPathological")) || (((String)(requestDetailsForm.getValue("DefinedArrayDetailsBean:"+rowNumber+"_instanceOf"))).trim().equalsIgnoreCase("Pathological")))
 												 		{												 			
 													%>
-														 <a href="createSpecimenFromOrder.do?rowNumber=<%=rowNumber%>&bean=definedArray">
+														 <a href="createSpecimenFromOrder.do?rowNumber=<%=rowNumber%>&bean=definedArray" class="view">
 														 	<bean:message key="orderingSystem.label.create" />
 														</a> 
 												  <%	}
 														else
 														{ %>
-														<a href="createDerivedSpecimen.do?rowNumber=<%=rowNumber%>&bean=definedArray">
+														<a href="createDerivedSpecimen.do?rowNumber=<%=rowNumber%>&bean=definedArray" class="view">
 														 <!-- OrderingSystemAddNew.do?addNewForwardTo=deriveSpecimen&forwardTo=orderDetails&addNewFor=specimenId -->
 															<bean:message key="orderingSystem.label.create" />
 														</a> 
@@ -334,12 +410,12 @@
 											}
 								 			else
 								 			{%>
-									    		<span title="<%= toolTipTypeClass %>">									
+									    		<span title="<%= toolTipTypeClass %>" >									
 													<bean:write name="requestDetailsForm" property="<%=rqstdItem %>" />
 												</span>
 									      <%}%> 
 							 		</td>
-								 	<td class="dataCellText" width="10%">
+								 	<td class="<%=rowStyle%>" >
 									 		<bean:write name="requestDetailsForm" property="<%= spClass %>" />, <bean:write name="requestDetailsForm" property="<%= spType %>" />
 									 </td>
 								 	<%
@@ -351,7 +427,7 @@
 									 	String orderItemtypeInArray = ((String)(requestDetailsForm.getValue("DefinedArrayDetailsBean:"+rowNumber+"_type")));
 									 %>
 								 	
-								 	<td class="dataCellText" width="13%">
+								 	<td class="<%=rowStyle%>" >
 								 			<bean:write name="requestDetailsForm" property="<%=requestedQuantity %>" />
 								 			<span>		
 												<script>
@@ -361,7 +437,7 @@
 											</span>
 								 	</td>
 								 	
-								 	<td class="dataCellText" width="10%">
+								 	<td class="<%=rowStyle%>" >
 									 		<div id="<%=updateAvaiQtyForItemInArray%>">
 									 			<bean:write name="requestDetailsForm" property="<%=avaiQty %>" />
 									 		</div>
@@ -385,45 +461,21 @@
 												</script>
 											</span>	
 								 	</td   onchange="javascript: var noOfItems='<%=noOfItems%>';changeButtonState(noOfItems,'btnCreateArray');"-->
-								 	<td class="dataCellText" width="30%">
-							 				<html:select property="<%=assignStatusArray%>" name="requestDetailsForm" styleClass="formFieldSized15" styleId="<%=assignStatusArrayId%>" 
+								 	<td class="<%=rowStyle%>" >
+							 				<html:select property="<%=assignStatusArray%>" name="requestDetailsForm" styleClass="formFieldSized11" styleId="<%=assignStatusArrayId%>" 
 								 				onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" disabled="<%= disableDefineArray %>" onchange="<%= changeCreateButtonStatus %>">
 								 			 	<html:options collection="<%=Constants.ITEM_STATUS_LIST_FOR_ITEMS_IN_ARRAY%>" labelProperty="name" property="value"/>	
 															
 											</html:select>
 								 	</td>
+									<td class="<%=rowStyle%>">
+												 
+													<html:textarea name="requestDetailsForm" styleId="description" styleClass="black_ar"  property="<%= descriptionArray %>" cols='20' rows='2' disabled="<%= disableDefineArray %>"/>
+									</td>
 										
 							</tr>
 								<!-- Block to display the expanded/collapsed row starts here-->
-							<tr id="<%=dataDefinedArray%>" style="display:none">
-								<td colspan='8'>
-								   	<table class="rowExpansionTable" width="100%"> 
-									   		<tr>
-									   			<!--td width="15%" nowrap>
-									   				<label for="LabelType">
-									   					<bean:message key="specimen.type" />
-									   				</label> : <bean:write name="requestDetailsForm" property="<%=actualSpecimenClass %>" />
-									   			</td-->
-									   			<td width="10%" nowrap>
-									   				<label for="LabelDescription">
-									    				<bean:message key="orderingSystem.requestdetails.label.description" />
-									   				</label> : 				
-									   			</td>
-												<td rowspan='2' width="60%" nowrap>
-												 
-													<html:textarea name="requestDetailsForm" styleId="description" styleClass="formFieldSized2"  property="<%= descriptionArray %>" cols='60' rows='2' disabled="<%= disableDefineArray %>"/>
-												</td>
-									   		</tr>
-									   		<!-- tr>
-									   			<td width="15%" nowrap>
-									   				<label for="LabelSubType">
-									    				<bean:message key="specimen.subType" />
-									   				</label> :  <bean:write name="requestDetailsForm" property="<%=actualSpecimenType %>" />
-									   			</td>									   												   			
-									   		</tr-->	
-								   	</table>									   		
-								</td> 
-							</tr>
+							
 								<!-- Block to display the expanded/collapsed row ends here-->
 							 <% 
 									//String orderItemIdInArray = defineArrayDetailsBeanObj.getOrderItemId();
@@ -441,17 +493,17 @@
 						
 							<!-- Create Array Button -->								
 						<tr id="<%=btnCreateArrayId%>">
-							<td colspan='7'>
-								<table width="100%" style="border-bottom:1px solid #5C5C5C;">
+							<td colspan='8'>
+								<table width="100%" border="0" >
 									<tr> 
-										<td align="right">
+										<td align="left">
 										<% if(disabledCreateButton.equals("false"))
 											{
 										 %>
-											<input type="button" id="<%= buttonCreateArrayId%>" name="btnCreateArray" class="actionButton" value="Create Array" onClick="gotoCreateArrayPage('<%= arrayRowCounter %>','<%= rowNumber-noOfItems %>')" disabled="disabled" />
+											<input type="button" id="<%= buttonCreateArrayId%>" name="btnCreateArray" class="blue_ar_c" value="Create Array" onClick="gotoCreateArrayPage('<%= arrayRowCounter %>','<%= rowNumber-noOfItems %>')" disabled="disabled" />
 										<%  }else{
 										%>
-											<input type="button" id="<%= buttonCreateArrayId%>" name="btnCreateArray" class="actionButton" value="Create Array" onClick="gotoCreateArrayPage('<%= arrayRowCounter %>','<%= rowNumber-noOfItems %>')" />
+											<input type="button" id="<%= buttonCreateArrayId%>" name="btnCreateArray" class="blue_ar_c" value="Create Array" onClick="gotoCreateArrayPage('<%= arrayRowCounter %>','<%= rowNumber-noOfItems %>')" />
 										<% }
 											String defineArrayName = "defineArrayName_" + arrayRowCounter; 
 											String nameOfArray =((String)(requestDetailsForm.getValue("DefinedArrayRequestBean:"+arrayRowCounter+"_arrayName")));
@@ -477,62 +529,40 @@
 			}//End If
 		 %>
 		
-		<tr><td></td></tr>
-		<tr><td></td></tr>
-		<tr><td></td></tr>
-		<tr><td></td></tr>
-		<tr><td></td></tr>
-		
-		<tr>
-			<td>
-				<!-- Table to display the data of existing array -->
-				<table cellpadding="3" cellspacing="0" border="0" width="100%" summary="Display Existing Array Header Info">
-					
-				<tr>
-					<td>
-						<table class="formSubTableTitle" width="100%" style="border-top:1px solid #5C5C5C;">
-							<tr>
-								<td align="left" width="90%">
-									<label for="existingArray">
+		<tr><td class="bottomtd" colspan="6"></td></tr>
+		<tr onclick="showHide('existingArrayId')">
+								<td width="12%" class="tr_bg_blue1" align="left" ><span class="blue_ar_b" >
+									<label for="existingArray">&nbsp;
+									
 										<bean:message key='orderingsystem.label.existingArray'/>
 									</label>
-								</td>
-								<td style="border-right:1px solid #5C5C5C;" width="5%">
-									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-									<a id="switchExistingArray" style="text-decoration:none" href="javascript:expandArrayBlock()">  
-										<img src="images/nolines_minus.gif" border="0"/>
-									</a>
+									</span>
+									</td>
+									<td width="88%" align="right" class="tr_bg_blue1" colspan="5">
+									<a href="#" id="imgArrow_existingArrayId"><img src="images/uIEnhancementImages/dwn_arrow1.gif" width="80" height="9" hspace="10" border="0" alt="Show Details"/></a>
+									
 								</td>
 							</tr>
-						</table>
-					</td>
-				</tr>
+		
+				<!-- Table to display the data of existing array -->
+				<tr>
+			<td colspan="6" valign="top" class="showhide1">
+						
 					
 				<!--tbody class="dataTable" id="existingArrayId"-->
-				<tr><td style="padding-right=0em;" nowrap>
-					<table summary="Display Existing Array Data" cellspacing="0" width="100%" cellpadding="3" class="dataTable" border="0" id="existingArrayId">
-						 <tr width="100%" style="border-top:1px solid #5C5C5C;">
-								<th class="dataTableHeader" scope="col" align="left" nowrap style="border-left:1px solid #5C5C5C;" width="20%">
-									<bean:message key='orderingsystem.label.arrayName'/>
-								</th>
-								<th class="dataTableHeader" scope="col" align="left" width="10%">							
-									<bean:message key='requestdetails.datatable.label.RequestedQty'/>
-								</th>
-								<th class="dataTableHeader" scope="col" align="left" width="10%" nowrap>							
-									<bean:message key='requestdetails.datatable.label.AssignQty'/>
-								</th>
-								<th class="dataTableHeader" scope="col" align="left" width="20%">
-									<bean:message key='orderingSystem.requestdetails.label.description'/>
-								</th>
-								<th class="dataTableHeader" scope="col" align="left" width="15%">
-									<bean:message key='orderingsystem.arrayRequests.datatable.label.AddDescription'/>
-								</th>
-								<th class="dataTableHeader" scope="col" align="left" width="25%">
-									<bean:message key='requestdetails.datatable.label.AssignStatus'/>
-								</th>
+				
+					<table summary="Display Existing Array Data" cellspacing="0" width="100%" cellpadding="3" border="0" id="existingArrayId" style="display:none">
+						 <tr>
+						<td class="tableheading" valign="top" scope="col" align="left" width="20%"><strong><bean:message key='orderingsystem.label.arrayName'/></strong></td>
+						<td class="tableheading" valign="top" scope="col" align="left" width="10%"><strong><bean:message key='requestdetails.datatable.label.RequestedQty'/></strong></td>
+						<td class="tableheading" valign="top" scope="col" align="left" width="10%" nowrap><strong><bean:message key='requestdetails.datatable.label.AssignQty'/></strong></td>
+						<td class="tableheading" valign="top" scope="col" align="left" width="17%"><strong><bean:message key='orderingSystem.requestdetails.label.description'/></strong></td>
+						<td class="tableheading" valign="top" scope="col" align="left" width="17%"><strong><bean:message key='orderingsystem.arrayRequests.datatable.label.AddDescription'/></strong></td>
+						<td class="tableheading" valign="top" scope="col" align="left" width="26%"><strong><bean:message key='requestdetails.datatable.label.AssignStatus'/></strong></td>
 						 </tr>
 				 	<%
 						int rowCounter = 0;
+						int rows=0;
 						if(request.getAttribute(Constants.EXISISTINGARRAY_REQUESTS_LIST) != null || session.getAttribute(Constants.EXISISTINGARRAY_REQUESTS_LIST)!= null)
 						{
 							List arrayRequestList = new ArrayList();
@@ -546,6 +576,13 @@
 					%>
 				<logic:iterate id="existingArrayRequestObj"	collection="<%=arrayRequestList%>" type="edu.wustl.catissuecore.bean.ExistingArrayDetailsBean">
 					<%
+							String fontStyle="black_ar";
+							rows++;
+							if(rows<=rowCounter)
+							if(rows%2 == 0)
+							{
+								fontStyle="tabletd1";
+							}
 							String assignedStatus = "value(ExistingArrayDetailsBean:"+rowCounter+"_assignedStatus)";
 							String addDescription = "value(ExistingArrayDetailsBean:"+rowCounter+"_addDescription)";
 							String existingArrayId = "value(ExistingArrayDetailsBean:"+rowCounter+"_arrayId)";	
@@ -563,7 +600,7 @@
 					%>
 					
 					<!-- Block to display Existing Array Data -->
-				 	<tr class="dataRowLight">
+				 	<tr>
 				 			<%if((((String)(requestDetailsForm.getValue("ExistingArrayDetailsBean:"+rowCounter+"_assignedStatus"))).trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED))
 									&& (!((String)(requestDetailsForm.getValue("ExistingArrayDetailsBean:"+rowCounter+"_distributedItemId"))).trim().equals("")))
 							{
@@ -575,14 +612,14 @@
 							}
 					 		%>
 					 		
-					 		<td class="dataCellText" width="20%" nowrap style="border-left:1px solid #5C5C5C;">
+					 		<td class="<%=fontStyle%>">
 					 			<!-- bean:write name="existingArrayRequestObj" property="bioSpecimenArrayName" /-->
-								<html:link href="#" styleId="label" onclick="<%=specimenArrayClickFunction%>">
+								<html:link href="#" styleId="label" styleClass="view" onclick="<%=specimenArrayClickFunction%>">
 									<bean:write name="requestDetailsForm" property="<%=requestedItem %>" />
 								</html:link>
 	 				 		</td>
 							
-							<td class="dataCellText" nowrap width="10%">
+							<td class="<%=fontStyle%>" >
 	 						<%
 							  //If Existing Array,then,display 'NA' in the textbox for requested qty
 											if(((String)(requestDetailsForm.getValue("ExistingArrayDetailsBean:"+rowCounter+"_requestedQuantity"))).equals("0.0"))
@@ -607,13 +644,13 @@
 							%>
 							</td>
 							
-							<td class="dataCellText" nowrap width="10%">
+							<td class="<%=fontStyle%>">
 							<%
 							  //If Existing Array,then,display 'NA' in the textbox for assign qty
 											if(((String)(requestDetailsForm.getValue("ExistingArrayDetailsBean:"+rowCounter+"_requestedQuantity"))).equals("0.0"))
 											{
 							%>
-								<html:text property="<%=existingAssignedQty%>" styleClass="formFieldSized3" maxlength="8"  size="5" value="NA" disabled="true"/>
+								<html:text property="<%=existingAssignedQty%>" styleClass="black_ar" maxlength="8"  size="5" value="NA" disabled="true"/>
 								<html:hidden name="requestDetailsForm" property="<%=existingAssignedQty%>" value="0.0" />
 								<%
 											}
@@ -622,23 +659,23 @@
 											else
 											{	
 							%>
-								<html:text property="<%=existingAssignedQty%>" styleClass="formFieldSized3" maxlength="8"  size="5" disabled="<%=disableExistingArrayOrderItem%>"/>
+								<html:text property="<%=existingAssignedQty%>" styleClass="black_ar" maxlength="8"  size="5" disabled="<%=disableExistingArrayOrderItem%>"/>
 								&nbsp;&nbsp;<%=Constants.UNIT_CN%>
 							<%
 											}
 							%>
 							</td>
 					 		
-					 		<td class="dataCellText" width="20%">					 		
-						 		<html:textarea name="requestDetailsForm" styleId="description" styleClass="formFieldSized10" property="<%= description %>" cols='60' rows='2' readonly="true"/>
+					 		<td class="<%=fontStyle%>">					 		
+						 		<html:textarea name="requestDetailsForm" styleId="description" styleClass="black_ar" property="<%= description %>" cols='25' rows='2' readonly="true"/>
 					 		</td>
 					 		
-					 		<td class="dataCellText" width="15%">
-					 			<html:textarea name="requestDetailsForm" styleClass="formFieldSized10" cols="60" rows="2" styleId="addDescription" property="<%=addDescription%>" disabled="<%=disableExistingArrayOrderItem%>"/>
+					 		<td class="<%=fontStyle%>">
+					 			<html:textarea name="requestDetailsForm" styleClass="black_ar" cols="25" rows="2" styleId="addDescription" property="<%=addDescription%>" disabled="<%=disableExistingArrayOrderItem%>"/>
 					 		</td>
 					 		
-					 		<td class="dataCellText" width="25%">
-					 			<html:select property="<%=assignedStatus%>" name="requestDetailsForm" styleClass="formFieldSized15" styleId="<%=existingArraySelectId%>" 
+					 		<td class="<%=fontStyle%>">
+					 			<html:select property="<%=assignedStatus%>" name="requestDetailsForm" styleClass="formFieldSizedNew" styleId="<%=existingArraySelectId%>" 
 								 			disabled="<%=disableExistingArrayOrderItem%>" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 								 	<html:options collection="<%=Constants.ITEM_STATUS_LIST%>" labelProperty="name" property="value"/>											 				   
 								</html:select>
@@ -666,8 +703,10 @@
 				 %>
 				</table> <!-- table with id='existingArrayId' ends here -->
 			</td></tr>
-		  </table>
-			</td>
-		</tr>
+		  
 	
 	 </table> <!-- table5_arrayDataTable ends here -->
+	 </td>
+	 </tr>
+	 </table>
+	 
