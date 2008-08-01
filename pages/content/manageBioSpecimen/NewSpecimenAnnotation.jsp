@@ -131,8 +131,8 @@ function showEvent()
 			<tr>
 				<td class="td_tab_bg" >
 					<img src="images/uIEnhancementImages/spacer.gif" alt="spacer" width="50" height="1" border="0"></td>
-				<td valign="bottom">
-					<html:link styleId="specimenDetailsTab" href="#" onclick="addNewAction(<%= specimenPath %>)">
+				<td valign="bottom" onclick="addNewAction(<%= specimenPath %>)">
+					<html:link styleId="specimenDetailsTab" href="#" >
 					<img src="images/uIEnhancementImages/tab_specimen_details2.gif" alt="Specimen Details"  width="126" height="22" border="0"></html:link></td>
 				<td valign="bottom">
 					<html:link href="#">
