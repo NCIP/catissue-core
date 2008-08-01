@@ -368,13 +368,7 @@ public class UserBizLogic extends DefaultBizLogic
 				Site site = siteUserRolePrivilegeBean.getSiteList().get(0);
 				String defaultRole = siteUserRolePrivilegeBean.getRole().getValue();
 				
-				if (defaultRole != null && (defaultRole.equalsIgnoreCase("-1") || defaultRole.equalsIgnoreCase("0")) )
-				{
-					roleName = getSiteRoleName(site.getId(), user1.getId(), defaultRole);
-				} else
-				{
-					roleName = siteUserRolePrivilegeBean.getRole().getName();
-				}
+				roleName = getSiteRoleName(site.getId(), user1.getId(), defaultRole);
 				
 				Set<String> privileges = new HashSet<String>();
 				List<NameValueBean> privilegeList = siteUserRolePrivilegeBean.getPrivileges();
