@@ -117,13 +117,20 @@ function getStatus(element)
 		{
 			parent.opener.self.close();
 		}
-		self.close();
+	self.close();
 	}
 }
+
+function cancelWindow()
+{
+  self.close();
+}
+
 var useDefaultRowClickHandler=2;
 var useFunction = "derivedSpecimenGrid";	
 
 </script>
+
 
 <html>
 	<head>
@@ -143,74 +150,79 @@ var useFunction = "derivedSpecimenGrid";
 		%>	
 		
 	</head>
-		<body class="formRequiredNotice">
-		<link rel="stylesheet" type="text/css" href="../../../css/styleSheet.css" />
-		<link rel="STYLESHEET" type="text/css" href="../../../dhtml_comp/css/dhtmlXGrid.css"/>
+		<body >
 		<script  src="../../../dhtml_comp/js/dhtmlXCommon.js"></script>
 		<script  src="../../../dhtml_comp/js/dhtmlXGrid.js"></script>		
 		<script  src="../../../dhtml_comp/js/dhtmlXGridCell.js"></script>	
 		<script  src="../../../dhtml_comp/js/dhtmlXGrid_mcol.js"></script>	
-		<%
+		<link rel="STYLESHEET" type="text/css" href="../../../dhtml_comp/css/dhtmlXGrid.css"/> 
+		<link href="../../../css/catissue_suite.css" rel="stylesheet" type="text/css" />
+
+		
+
+<table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+  <tr>
+    <td align="left" class="toptd"></td>
+  </tr>
+  <tr>
+    <td align="left" class="tr_bg_blue1"><p class="blue_ar_b">&nbsp;<bean:message key="specimen.details.label" /></td>
+  </tr>
+ <tr>
+    <td align="center" class="showhide">
+    <%
 			List dataList = (List)session.getAttribute(Constants.SPECIMEN_LIST);
 			List columnList = (List)session.getAttribute(Constants.COLUMNLIST);
 			Utility.setGridData(dataList,columnList,request);//JSP refactoring...to be removed after refacoring of this JSP(consent).
-			if(dataList!=null&&dataList.size()>0)
+			request.setAttribute("colWidthInPercent",Utility.getcolWidth(columnList,true));
+		if(dataList!=null&&dataList.size()>0)
 			{
-			%>
+	%>
 	
-				<%@ include file="/pages/content/search/GridPage.jsp" %>
+		   	<%@ include file="/pages/content/search/GridPage.jsp" %> 
 
 		<%
 			}
 		%>
-		<%
+  </td>
+  </tr>
+  
+   <%
 		if(getConsentResponse.equals(Constants.WITHDRAW))
 		{
-		%>
-			<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
-					<tr>
-						<td class="formTitle" height="20%" colspan="2">
-						<%
+  %>
+  
+       <tr >
+          <td class="showhide"><table width="99%" border="0" cellspacing="0" cellpadding="3">
+          <tr>
+           <td align="left" class="tr_bg_blue1"><span
+					class="blue_ar_b"><%
 							if(withdrawAll.equals(Constants.TRUE))
 							{
 						%>	
-								<b><bean:message key="consent.withdrawspecimens" /></b>
+								<bean:message key="consent.withdrawspecimens" />
 						<%		
 							}
 							else
 							{
 						%>	
-								<b><bean:message key="consent.withdrawquestion" /></b>
+								<bean:message key="consent.withdrawquestion" />
 						<%		
 							}
 						%>		
-						</td>
-					</tr>
-					<tr>
-						<td class="tabrightmostcell">
-							<b>
-								<bean:message key="consent.discard" />
-							</b>	
-						</td>
-						<td align="right" class="formField">
-							<input type="button" style="actionButton" style="width:100%" value="<%=Constants.WITHDRAW_RESPONSE_DISCARD %>"  onclick="getButtonStatus(this)"/>
-						</td>
-					</tr>
-					<tr>
-						<td class="tabrightmostcell">
-							<b>
-								<bean:message key="consent.returntocollectionsite" />
-							<b>
-						</td>
-						<td align="right" class="formField">
-							<input type="button" style="actionButton" style="width:100%" value="<%=Constants.WITHDRAW_RESPONSE_RETURN%>"  onclick="getButtonStatus(this)"/>
-						</td>
-					</tr>
-					<%
+			</span></td>
+	  </tr>
+      <tr>
+        <td width="45%" class="black_ar"> To <bean:message key="consent.discard" />-click '<b>Discard</b>'</td>
+        </tr>
+      <tr>
+        <td class="black_ar">To <bean:message key="consent.returntocollectionsite" />-click '<b>Return</b>'</td>
+      </tr>
+     
+	
+	<%
 					if(withdrawAll.equals(Constants.FALSE))									
 					{
-					%>
-					<tr>
+					%><tr>
 						<td class="tabrightmostcell">
 							<b>
 								<bean:message key="consent.noaction" />
@@ -223,13 +235,18 @@ var useFunction = "derivedSpecimenGrid";
 					<%
 					}
 					%>
-				</table>
-		<%
+
+	</table></td>
+  </tr>
+   <tr >
+    <td class="buttonbg"><input name="Submit" type="submit" class="blue_ar_b" value="<%=Constants.WITHDRAW_RESPONSE_DISCARD %>" onclick="getButtonStatus(this)" accesskey="Enter" />| <input name="Submit" type="submit" class="blue_ar_b" value="<%=Constants.WITHDRAW_RESPONSE_RETURN%>" onclick="getButtonStatus(this)" accesskey="Enter" />
+    | <a href="javascript:cancelWindow()" class="cancellink"><bean:message key="buttons.cancel" /> </a></td>
+  </tr>    
+<%
 		}
 		else
 		{
-		%>
-			<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
+		%><table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
 				<tr>
 					<td class="tabrightmostcell">
 						<b>
@@ -254,5 +271,9 @@ var useFunction = "derivedSpecimenGrid";
 		<%
 		}
 		%>
+
+</table>	
+		
+		
 		</body>
 </html>
