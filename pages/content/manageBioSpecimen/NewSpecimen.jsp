@@ -267,7 +267,6 @@
 				{%>
 					popupWindow("<%=consentTier.size()%>");
 				<%}%>
-					onNormalSubmit()
 					
 				}
 			}
