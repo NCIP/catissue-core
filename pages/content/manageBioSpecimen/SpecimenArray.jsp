@@ -66,7 +66,7 @@ function checkStotagePosition()
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/CustomListBox.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/Hashtable.js"></script>
-
+<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" /> 
 <body onload="checkStotagePosition()">
 <html:form action="<%=formAction%>">
 <html:hidden property="id" />

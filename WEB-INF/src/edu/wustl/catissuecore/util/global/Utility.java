@@ -1644,4 +1644,17 @@ public class Utility extends edu.wustl.common.util.Utility {
     	}
         return null;
     }
+    public static List getParentContainerTypeList()
+	{
+		List<NameValueBean> storagePositionTypeList = new ArrayList<NameValueBean>();
+		
+		storagePositionTypeList.add(new NameValueBean(Constants.SITE, 
+							Constants.SITE));
+		storagePositionTypeList.add(new NameValueBean(Constants.STORAGE_TYPE_POSITION_AUTO, 
+				Constants.STORAGE_TYPE_POSITION_AUTO));
+		storagePositionTypeList.add(new NameValueBean(Constants.STORAGE_TYPE_POSITION_MANUAL, 
+				Constants.STORAGE_TYPE_POSITION_MANUAL));
+		
+		return storagePositionTypeList;		
+	}
 }

@@ -2123,6 +2123,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public  static final String SPECIMEN_LIST_SESSION_MAP = "SpecimenListBean";
 	public static final String COLLECTION_PROTOCOL_EVENT_SESSION_MAP = "collectionProtocolEventMap";
 	public static final String COLLECTION_PROTOCOL_SESSION_BEAN = "collectionProtocolBean";
+	public static final String STORAGE_CONTAINER_SESSION_BEAN = "storageContainerBean";
 	public static final String EDIT_SPECIMEN_REQUIREMENT_BEAN ="EditSpecimenRequirementBean";
 	public static final String VIEW_SUMMARY ="ViewSummary";
 	public static final String EVENT_KEY ="key";
