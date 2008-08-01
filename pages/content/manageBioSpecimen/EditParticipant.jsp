@@ -556,7 +556,7 @@ function participantRegRow(subdivtag)
 								class="black_ar"><bean:message
 								key="participant.activityStatus" /></label></td>
 							<td class="black_ar_s"><html:select
-								property="activityStatus" styleClass="formFieldSized12"
+								property="activityStatus" styleClass="formFieldSizedNew"
 								styleId="activityStatus" size="1" onchange="<%=strCheckStatus%>"
 								onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 								<html:options name="<%=Constants.ACTIVITYSTATUSLIST%>"
