@@ -237,8 +237,7 @@ function popupWindow(nofConsentTiers)
 			{
 			%>
 			<tr>
-				<td>
-				<table width="100%" border="0" cellspacing="0" cellpadding="3">
+				<td align="left" class="showhide"><table width="100%" border="0" cellspacing="0" cellpadding="3">
 						<%--Signed URL --%>				
 						<tr>
 							<td class="noneditable" width="39%">

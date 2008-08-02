@@ -810,8 +810,35 @@
 		
     	   //  container.style.width=tempWidth-50;
         }
-
-		function consentTab()
+  
+    function showConsent()
+        {
+         
+		   <%		   
+			if( tab == null)
+            {
+			%>
+                switchToTab("specimenDetailsTab");        
+            <%
+           	}
+            if( tab != null)
+            {
+              if(tab.equals("consent"))
+			  { 
+			  %>
+                consentTab();       
+              <%
+              }          
+             else
+             {
+             %>
+              	switchToTab("specimenDetailsTab");
+             <%
+             }
+            }
+            %>  
+	 }
+	   function consentTab()
 		{
 			<%
 				if(form.getConsentTierCounter()>0)			
@@ -823,7 +850,7 @@
 				else
 				{
 				%>
-					alert("No consents available for selected Specimen Collection Group");
+					alert("No consents available for selected Specimen");
 				<%
 				}
 			%>
@@ -859,7 +886,7 @@
 	<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
 	<link href="css/styleSheet.css" rel="stylesheet" type="text/css" />
 </head>
-<body>
+<body onload="showConsent()">
 <% 
 		int exIdRows=1;
 		int bhRows=1;

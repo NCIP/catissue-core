@@ -212,10 +212,10 @@ var useFunction = "derivedSpecimenGrid";
 			</span></td>
 	  </tr>
       <tr>
-        <td width="45%" class="black_ar"> To <bean:message key="consent.discard" />-click '<b>Discard</b>'</td>
+        <td width="45%" class="black_ar"><bean:message key="consent.discard" /></td>
         </tr>
       <tr>
-        <td class="black_ar">To <bean:message key="consent.returntocollectionsite" />-click '<b>Return</b>'</td>
+        <td class="black_ar"><bean:message key="consent.returntocollectionsite" /></td>
       </tr>
      
 	
