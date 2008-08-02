@@ -483,7 +483,7 @@
 		<copy todir="${jboss.server.url}/lib" overwrite="true">
 			<fileset dir="${lib.dir}">
 				<include name="${mysql.lib}" />
-				<!-- include name="${oracle.lib}" / -->
+				<include name="${oracle.lib}" />
 			</fileset>
 		</copy>
 		<copy todir="${jboss.home.dir}/bin" overwrite="true">
