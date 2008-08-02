@@ -1,16 +1,16 @@
-insert into catissue_department values(1,'Dept');
-insert into catissue_institution  values(1,'Inst');
-insert into catissue_cancer_research_group  values(1,'CRG');
+insert into catissue_department values(1,'@@first.admin.department@@');
+insert into catissue_institution  values(1,'@@first.admin.institution@@');
+insert into catissue_cancer_research_group  values(1,'@@first.admin.cancerresearchgroup@@');
 insert into catissue_address (identifier,state,country,zipcode) values(1,null,null,null);
 
-UPDATE CSM_USER SET LOGIN_NAME='admin@admin.com',
+UPDATE CSM_USER SET LOGIN_NAME='@@first.admin.emailAddress@@',
 					DEPARTMENT=1,
-					EMAIL_ID='admin@admin.com',
-					PASSWORD='xxits++sTge8j2uyHEABIQ=='
+					EMAIL_ID='@@first.admin.emailAddress@@',
+					PASSWORD='@@first.admin.encodedPassword@@'
 				WHERE USER_ID=1;	
 
-UPDATE catissue_user SET EMAIL_ADDRESS='admin@admin.com',
-							LOGIN_NAME='admin@admin.com',
+UPDATE catissue_user SET EMAIL_ADDRESS='@@first.admin.emailAddress@@',
+							LOGIN_NAME='@@first.admin.emailAddress@@',
 							DEPARTMENT_ID=1,
 							INSTITUTION_ID=1,
 							CANCER_RESEARCH_GROUP_ID=1,
@@ -19,7 +19,7 @@ UPDATE catissue_user SET EMAIL_ADDRESS='admin@admin.com',
 							IDENTIFIER = 1;
 
 							
-UPDATE catissue_password set PASSWORD='xxits++sTge8j2uyHEABIQ==',
+UPDATE catissue_password set PASSWORD='@@first.admin.encodedPassword@@',
 						UPDATE_DATE=now()
 						WHERE 
 							IDENTIFIER = 1;
