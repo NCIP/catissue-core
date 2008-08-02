@@ -211,9 +211,7 @@ function popupWindow(nofConsentTiers)
 	<%-- Main table Start --%>
 	<table width="100%" border="0" cellpadding="0" cellspacing="0"   id="consentTabForSCG">
 		<%--Title of the form i.e Consent Form --%>				
-		<tr>
-    <td align="left" class="toptd"></td>
-  </tr>
+		
 		<tr>
 			<td align="left" class="tr_bg_blue1"><span class="blue_ar_b">
 				<%
@@ -716,7 +714,7 @@ function popupWindow(nofConsentTiers)
 				</td>	
 			</tr>
 			<tr>
-			<td class="buttonbg">
+			<td >
 			<%if(operation.equals(Constants.EDIT))
 				{
 				String str = "withdrawAll('"+ consentTierList.size()+"')";
@@ -739,5 +737,8 @@ function popupWindow(nofConsentTiers)
 						%>
 				
 				</td></tr>
+				<tr>
+				<td class="bottomtd"></td>
+				</tr>
 	</table>
 	<%-- Main table End --%>

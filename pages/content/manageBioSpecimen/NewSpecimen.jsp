@@ -1008,7 +1008,7 @@
 	%>
 		    <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg" >
 			<tr>
-			<td><div id="mainTable"style="display:block"><table width="100%"  border="0">
+			<td><div id="mainTable"style="display:block"><table width="100%"  border="0" cellpadding="3" cellspacing="0" >
 				<tr>
 		          <td class="grey_ar_s">&nbsp;
 					<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0"/> <bean:message key="commonRequiredField.message" />
@@ -1693,10 +1693,13 @@
 									</td>
 								</tr>
 							</table>
-								<!-- collectionstatus -->							
+							</td>
+							</tr>
+							<!-- collectionstatus -->							
 								
 							<tr>
-							<td width="100%">
+							<td width="100%" class="bottomtd">
+
 							<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
 							<%@ include file="CollAndRecEvents.jsp" %>
 							</logic:equal>
@@ -1705,11 +1708,9 @@
 		  <!--------------------------including External identifier.jsp ----------------------------------->
 							<%@ include file="ExternalIdentifiers.jsp" %>
 							</td></tr>
-							<tr>
-          <td align="left" class="bottomtd"></td>
-        </tr>
+							
 		<tr>
-		<td>
+		<td >
 							<%@ include file="BioHazards.jsp" %>
 							</td>
 							</tr>
@@ -1718,7 +1719,7 @@
 							</td>
 							</tr>
 							<!--  Consent Tracking Module Virender mehta	 -->								<tr>
-							<td >
+							<td class="bottomtd">
 								<%
 								List requestParticipantResponse = (List)request.getAttribute(Constants.SPECIMEN_RESPONSELIST);	
 								if(requestParticipantResponse!=null&&form.getConsentTierCounter()>0)
@@ -1731,12 +1732,12 @@
 								%>
 							<!--  Consent Tracking Module Virender mehta	 -->										
 			 				</tr></td>
-			<tr><td class="bottomtd"></td></tr>					
+					
         <tr>
           <td valign="middle" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;<bean:message key="childSpecimen.label" /></span></td>
         </tr>
 					
-								<tr >
+								<tr>
           <td valign="middle" class="black_ar" >
 		  <table width="100%" border="0" cellpadding="3" cellspacing="0">
              
