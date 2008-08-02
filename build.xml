@@ -73,18 +73,6 @@
 	<!-- sub tasks -->
 	<target name="init" description="initialize">
 		<!-- Create the time stamp -->
-		<if>
-			<equals arg1="" arg2="${jboss.home.dir}" />
-			<then>
-				<fail message="jboss.home.dir is not set in caTissueInstall.properties" />
-			</then>
-		</if>
-		<if>
-			<equals arg1="" arg2="${jboss.server.name}" />
-			<then>
-				<fail message="jboss.server.name is not set in caTissueInstall.properties" />
-			</then>
-		</if>
 		<tstamp />
 		<!-- Create the build directory structure used by compile -->
 		<mkdir dir="${target.dir}" />
