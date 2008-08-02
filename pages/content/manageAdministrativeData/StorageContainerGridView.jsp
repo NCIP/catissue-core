@@ -177,7 +177,7 @@ function refresh_tree(nodeId)
 		<td class="cp_tabtable" width="100%">
 		 <table  border="0" cellpadding="3" cellspacing="0" width="100%"> 
 					 <tr>		
-                <td align="left" colspan="2"><table width="100%" border="0" cellspacing="2" cellpadding="2">
+                <td align="left" colspan="2"><table width="100%" border="0" cellspacing="0" cellpadding="0">
  <%
 		int colspanForCPLabel;
 	if(collectionProtocolList.size()>specimenClassList.size())
@@ -186,11 +186,21 @@ function refresh_tree(nodeId)
 	    colspanForCPLabel = specimenClassList.size();
 %>                 
 		<tr>
-          <td colspan="<%=colspanForCPLabel+1%>" align="left" class="tr_bg_blue1"><span class="blue_ar_b"> Specimen Container Restrictions</span></td>
+          <td  align="left" class="tr_bg_blue1"><span class="blue_ar_b"> Specimen Container Restrictions</span></td>
           </tr>
                   <tr>
-
-                    <td  width="150" class="tabletd1">Collection Protocol</td>
+					<td>
+					  <table  border="0" cellspacing="0" cellpadding="0" width="100%"> 
+						   	<td width="150">
+								<table  border="0" cellspacing="2"  cellpadding="3" width="100%"> 
+									<tr>
+							<td  width="150" class="tabletd1">Collection Protocol</td>
+							</tr>
+								</table>
+							</td>
+							 <td>
+								<table  border="0" cellspacing="2"  cellpadding="3" > 
+									<tr>
 <%	
 			for(int colcnt=0;colcnt<collectionProtocolList.size();colcnt++)
 			{
@@ -200,20 +210,44 @@ function refresh_tree(nodeId)
                     <td  class="tabletd1"><%=data %></td>
 <%
 			}
-%>
+%>			
+							</tr>
+								</table>
+							</td>
+							</tr>
+						</table>
+					</td>
                   </tr>
                   <tr>
-                    <td width="150"class="tabletd1">Specimen Class</td>
+				    <td>
+						 <table  border="0" cellspacing="0" cellpadding="0" width="100%"> 
+						   <tr>
+							<td width="150">
+								<table  border="0" cellspacing="2"  cellpadding="3" width="100%"> 
+									<tr>
+											<td width="150" class="tabletd1">Specimen Class</td>
+									</tr>
+								</table>
+							</td>
+							 <td>
+								<table  border="0" cellspacing="2"  cellpadding="3"> 
+									<tr>
 <%	
 			for(int colcnt=0;colcnt<specimenClassList.size();colcnt++)
 			{
 				String data =(String) specimenClassList.get(colcnt );
 				
 %>
-                    <td class="tabletd1"><%=data %></td>
+								<td  width="50" class="tabletd1" ><%=data %></td>
 <%
 			}
 %>
+								</tr>
+								</table>
+							</td>
+							</tr>
+						</table>
+						</td>
                   </tr>
                 </table></td>
               </tr>
@@ -224,12 +258,12 @@ function refresh_tree(nodeId)
 			
 <!-- CONTAINER DETAILS END -->
 	<tr>
-		<td  width="15"class="black_ar_t">&nbsp;</td>
+		<td  width="5"class="black_ar_t">&nbsp;</td>
 		<td class="black_ar"><b>&nbsp;<%=verTempTwo%></b></td>
 		 
 	</tr>
 	<tr>
-		<td   width="15" class="black_ar_t" align="right"><b><%=verTempOne%><b></td>
+		<td   width="5" class="black_ar_t" align="center"><b><%=verTempOne%><b></td>
 		<td class="black_ar_t">
 		<table summary="" cellpadding="0" cellspacing="1" border="0" >
 				 

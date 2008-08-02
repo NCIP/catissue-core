@@ -263,7 +263,7 @@ function handleStatus(status)
 								width="6" height="6" hspace="0" vspace="0" /></span></td>
 							<td align="left" class="black_ar"><bean:message
 								key="user.zipCode" /></td>
-							<td align="left" class="black_ar"><html:text
+							<td align="left" class="black_ar"><html:text style="text-align:right"
 								styleClass="black_ar" maxlength="30" size="30" styleId="zipCode"
 								property="zipCode" /></td>
 							<td align="left" valign="top">&nbsp;</td>
@@ -284,7 +284,7 @@ function handleStatus(status)
 								width="6" height="6" hspace="0" vspace="0" /></span></td>
 							<td align="left" class="black_ar"><bean:message
 								key="user.phoneNumber" /></td>
-							<td align="left"><html:text styleClass="black_ar"
+							<td align="left"><html:text styleClass="black_ar" style="text-align:right"
 								maxlength="50" size="30" styleId="phoneNumber"
 								property="phoneNumber" /></td>
 							<td align="left" valign="top">&nbsp;</td>
@@ -293,7 +293,7 @@ function handleStatus(status)
 							<td align="center" class="black_ar">&nbsp;</td>
 							<td align="left" class="black_ar"><bean:message
 								key="user.faxNumber" /></td>
-							<td align="left"><html:text styleClass="black_ar"
+							<td align="left"><html:text styleClass="black_ar" style="text-align:right"
 								maxlength="50" size="30" styleId="faxNumber"
 								property="faxNumber" /></td>
 							<td align="left" class="black_ar">&nbsp;</td>
@@ -302,7 +302,7 @@ function handleStatus(status)
 								width="6" height="6" hspace="0" vspace="0" /></span></td>
 							<td align="left" class="black_ar"><label for="institutionId"><bean:message
 								key="user.institution" /></label></td>
-							<td align="left" nowrap class="black_ar"><autocomplete:AutoCompleteTag
+							<td align="left" class="black_ar"><autocomplete:AutoCompleteTag
 								property="institutionId"
 								optionsList='${requestScope.instituteList}'
 								initialValue='${userForm.institutionId}' styleClass="black_ar"
@@ -321,7 +321,7 @@ function handleStatus(status)
 								width="6" height="6" hspace="0" vspace="0" /></span></td>
 							<td align="left" class="black_ar"><label for="departmentId"><bean:message
 								key="user.department" /> </label></td>
-							<td align="left" nowrap class="black_ar"><autocomplete:AutoCompleteTag
+							<td align="left" class="black_ar"><autocomplete:AutoCompleteTag
 								property="departmentId"
 								optionsList='${requestScope.departmentList}'
 								initialValue='${userForm.departmentId}' styleClass="black_ar"
@@ -339,7 +339,7 @@ function handleStatus(status)
 							<td align="left" class="black_ar"><label
 								for="cancerResearchGroupId"><bean:message
 								key="user.cancerResearchGroup" /> </label></td>
-							<td align="left" nowrap class="black_ar"><autocomplete:AutoCompleteTag
+							<td align="left" class="black_ar"><autocomplete:AutoCompleteTag
 								property="cancerResearchGroupId"
 								optionsList='${requestScope.cancerResearchGroupList}'
 								initialValue='${userForm.cancerResearchGroupId}'

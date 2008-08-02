@@ -18,7 +18,7 @@
     <td class="td_color_bfdcf3"><table border="0" cellpadding="0" cellspacing="0">
       <tr>
         <td class="td_table_head"><span class="wh_ar_b"><bean:message key="Department.header" /></span></td>
-        <td><img src="images/uIEnhancementImages/table_title_corner2.gif" alt="Page Title - Institution" width="31" height="24" /></td>
+        <td><img src="images/uIEnhancementImages/table_title_corner2.gif" alt="Page Title - Department" width="31" height="24" /></td>
       </tr>
     </table></td>
   </tr>
