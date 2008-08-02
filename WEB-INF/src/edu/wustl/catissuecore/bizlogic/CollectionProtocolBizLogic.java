@@ -47,6 +47,7 @@ import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.dao.AbstractDAO;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.dao.DAOFactory;
+import edu.wustl.common.dao.JDBCDAO;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exceptionformatter.DefaultExceptionFormatter;
 import edu.wustl.common.security.exceptions.SMException;
@@ -810,7 +811,6 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			message = ApplicationProperties.getValue("collectionprotocol.protocoltitle");
 			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
 		}
-
 		if (validator.isEmpty(protocol.getShortTitle()))
 		{
 			message = ApplicationProperties.getValue("collectionprotocol.shorttitle");
@@ -998,6 +998,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		if (operation.equals(Constants.ADD))
 		{
 
+			validateCPTitle(protocol);
 			if (!Constants.ACTIVITY_STATUS_ACTIVE.equals(protocol.getActivityStatus()))
 			{
 				throw new DAOException(ApplicationProperties
@@ -1037,6 +1038,29 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		}
 
 		return true;
+	}
+
+	/**
+	 * @param protocol Collection protocol
+	 * @throws DAOException
+	 */
+	private void validateCPTitle(CollectionProtocol protocol) throws DAOException
+	{
+		JDBCDAO jdbcDao = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
+		jdbcDao.openSession(null);
+		String queryStr = "select title from catissue_specimen_protocol where title = '" + protocol.getTitle()+ "';";
+		try
+		{
+			List<String> titleList = jdbcDao.executeQuery(queryStr, null, false, null);
+			if(!titleList.isEmpty())
+			{
+				throw new DAOException("Collection Protocol with the same Title already exists");
+			}
+		}
+		catch (ClassNotFoundException e1)
+		{
+			throw new DAOException("Error while checking Title");
+		}
 	}
 
 	public void postUpdate(DAO dao, Object currentObj, Object oldObj,
