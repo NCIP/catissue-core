@@ -83,12 +83,12 @@
 				}
 				else if(alias == "cpName")
 				{
-					window.parent.frames['SpecimenRequirementView'].location="CollectionProtocol.do?operation=${requestScope.operation}&pageOf=pageOfCollectionProtocol&invokeFunction=cp";
+					window.parent.frames['SpecimenRequirementView'].location="CollectionProtocol.do?operation=edit&pageOf=pageOfCollectionProtocol&invokeFunction=cp";
 				}
 				
 				else
 				{
-					window.parent.frames['SpecimenRequirementView'].location="ProtocolEventsDetails.do?operation=${requestScope.operation}&pageOf=defineEvents&key="+uniqId+"&nodeId="+id+"&operationType=<%=operationType%>";
+					window.parent.frames['SpecimenRequirementView'].location="ProtocolEventsDetails.do?operation=edit&pageOf=defineEvents&key="+uniqId+"&nodeId="+id+"&operationType=<%=operationType%>";
 				}
 			}; 
 									

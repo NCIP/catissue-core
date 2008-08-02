@@ -4729,7 +4729,7 @@ PUBLIC
 			name="protocolEventDetailsForm"
 			validate="true"
 			input="/ProtocolEventsDetails.do?pageOf=error">
-			<forward name="defineEvents" path="/ProtocolEventsDetails.do?pageOf=defineEvents"/>
+			<forward name="defineEvents" path="/ProtocolEventsDetails.do?pageOf=defineEvents&amp;operation=edit"/>
 			<forward name="specimenRequirement" path="/CreateSpecimenTemplate.do?operation=add"/>
 			<forward name="newEvent" path="/ProtocolEventsDetails.do?pageOf=newEvent"/>			
 		</action>
@@ -4748,7 +4748,7 @@ PUBLIC
 			name="createSpecimenTemplateForm"
 			validate="false">
 			<forward name="success" path=".catissuecore.CreateSpecimenTemplate"/>
-			<forward name="defineEvents" path="/ProtocolEventsDetails.do?pageOf=defineEvents"/>
+			<forward name="defineEvents" path="/ProtocolEventsDetails.do?pageOf=defineEvents&amp;operation=edit"/>
 			<forward name="newEvent" path="/ProtocolEventsDetails.do?pageOf=newEvent"/>
 		</action>
 		<action path="/GenericSpecimenSummary"

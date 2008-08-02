@@ -39,10 +39,11 @@ public class OpenCollectionProtocolAction extends BaseAction{
 		if(cpBean!=null)
 		{
 			request.setAttribute("isParticipantReg", cpBean.isParticiapantReg());
+			request.setAttribute(Constants.OPERATION, operation);
+			String treeNode="cpName_"+cpBean.getTitle();
+			session.setAttribute(Constants.TREE_NODE_ID, treeNode);
 		}
 		request.setAttribute("formName", formName);
-		request.setAttribute(Constants.OPERATION, operation);
-		session.setAttribute(Constants.TREE_NODE_ID, session.getAttribute("tempKey"));
 		return mapping.findForward(Constants.SUCCESS);
 	}
 
