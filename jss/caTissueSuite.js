@@ -2555,3 +2555,43 @@ function editRowForUserPage(rowId)
                   sendRequestsWithData(url,data,cpOperation);
 
  }
+ 
+ function disableAllForSuperAdmin(roleObject)
+ {
+ 	 var selectedRoleType = roleObject.options[roleObject.selectedIndex].text;                             
+     var selectedRoleIds = roleObject.options[roleObject.selectedIndex].value;
+	 document.getElementById('actionIds').disabled=false;
+     	document.getElementById('siteIds').disabled=false;
+     	document.getElementById('cpIds').disabled=false;
+    
+     if(selectedRoleIds=="13")
+     {
+		
+		deselectAllOptions(document.getElementById('actionIds'));
+		deselectAllOptions(document.getElementById('siteIds'));
+		deselectAllOptions(document.getElementById('cpIds'));
+     	document.getElementById('actionIds').disabled=true;
+     	document.getElementById('siteIds').disabled=true;
+     	document.getElementById('cpIds').disabled=true;
+     }
+     else
+     {
+		
+     	getActionsForThisRole(roleObject);
+     }
+ }
+
+
+function deselectAllOptions(selBoxObj)
+{
+	if (selBoxObj != null && selBoxObj.options.length != 0)
+	{
+		for (i=0;i< selBoxObj.options.length ; i++)
+		{
+			selBoxObj.options[i].selected = false;
+		}
+
+	}
+
+
+}

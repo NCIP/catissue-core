@@ -338,9 +338,20 @@ public class UserBizLogic extends DefaultBizLogic
 			
 			List<Site> siteList = siteUserRolePrivilegeBean.getSiteList();
 			
-			for(Site site : siteList)
+			for(Site site : siteList) 
 			{
-				siteCollection.add(site);
+				boolean isPresent = false;
+				for (Site site1 : siteCollection)
+				{
+					if (site1.getId().equals(site.getId()))
+					{
+						isPresent = true;
+					}
+				}
+				if(!isPresent)
+				{
+					siteCollection.add(site);
+				}
 			}
 		}
 		
@@ -502,8 +513,7 @@ public class UserBizLogic extends DefaultBizLogic
 			pg.setProtectionElements(peSet);
 			new PrivilegeUtility().getUserProvisioningManager().createProtectionGroup(pg);	
 		} catch (CSException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Logger.out.error(e.getMessage(), e);
 		}
 			
 	}
@@ -1632,6 +1642,12 @@ public class UserBizLogic extends DefaultBizLogic
 			if(domainObject instanceof User)
 			{
 				User user = (User) domainObject;
+				
+				if(user.getPageOf().equalsIgnoreCase("pageOfChangePassword"))
+				{
+					return true;
+				}
+				
 				if(user.getLoginName().equals(sessionDataBean.getUserName()))
 				{
 					return true;

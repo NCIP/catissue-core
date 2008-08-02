@@ -102,9 +102,7 @@
 	
 	<collectionProtocolMappings>
 		<collectionProtocolMapping name="REGISTRATION" id="18"/>
-		<collectionProtocolMapping name="SPECIMEN_ACCESSION" id="20"/>
 		<collectionProtocolMapping name="SPECIMEN_PROCESSING" id="26"/>
-		<collectionProtocolMapping name="PHI_ACCESS" id="23"/>
 	</collectionProtocolMappings>
 
 	<scientistMappings>

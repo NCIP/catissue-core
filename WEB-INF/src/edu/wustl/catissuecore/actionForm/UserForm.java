@@ -508,7 +508,14 @@ public class UserForm extends AbstractActionForm
 	 */
 	public void setRole(String role)
 	{
-		this.role = role;
+		if (role != null && role.equalsIgnoreCase("13")) 
+		{
+			this.role = "1";
+		}
+		else
+		{
+		    this.role = role;
+		}
 	}
 
 	/**

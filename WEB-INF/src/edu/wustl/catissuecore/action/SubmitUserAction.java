@@ -49,7 +49,7 @@ public class SubmitUserAction extends Action
 	 ActionMessages messages = null;  
 	    
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response) throws AssignDataException, BizLogicException
+			HttpServletRequest request, HttpServletResponse response) throws AssignDataException
     {
 		AbstractDomainObjectFactory abstractDomainObjectFactory=getAbstractDomainObjectFactory();
 		AbstractActionForm form1 = (AbstractActionForm)form;
@@ -186,7 +186,17 @@ public class SubmitUserAction extends Action
         	saveErrors(request, errors);
         	target = Constants.FAILURE;
             Logger.out.error(excp.getMessage(), excp);
-		} 
+		}
+		catch (BizLogicException excp)
+        {
+        	ActionErrors errors = new ActionErrors();
+        	ActionError error = new ActionError("errors.item",excp.getMessage());
+        	errors.add(ActionErrors.GLOBAL_ERROR,error);
+        	saveErrors(request,errors);
+            target = new String(Constants.FAILURE);
+            
+            Logger.out.error(excp.getMessage(), excp);
+        }
 		return mapping.findForward(target);
 	}
 	

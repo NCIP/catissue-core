@@ -244,12 +244,17 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
         {
             Role role = (Role) iterator.next();
             NameValueBean nameValueBean = new NameValueBean();
-            if(!("SUPERADMINISTRATOR".equals(role.getName())))
+            
+            if(role.getName().equalsIgnoreCase("SUPERADMINISTRATOR"))
             {
-	            nameValueBean.setName(role.getName());
-	            nameValueBean.setValue(String.valueOf(role.getId()));
-	            roleNameValueBeanList.add(nameValueBean);
+            	nameValueBean.setName("Super Administrator");
             }
+            else
+            {
+            	nameValueBean.setName(role.getName());
+            }
+	        nameValueBean.setValue(String.valueOf(role.getId()));
+	        roleNameValueBeanList.add(nameValueBean);
         }
         
         return roleNameValueBeanList;
@@ -557,6 +562,7 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 		{
 		actionList=getActionListForUser(false);
 		}
+		
 		List<NameValueBean> selectedActionsList = getActionsList(roleId);
 		// request.setAttribute(Constants.ACTIONLIST, actionsList);
 		List<JSONObject> arrayList = new ArrayList<JSONObject>();

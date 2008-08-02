@@ -62,6 +62,7 @@ function handleStatus(status)
 	class="maintable">
 	<html:form action='${requestScope.formName}'>
 		<html:hidden property="operation" />
+		<html:hidden property="role" />
 		<html:hidden property="submittedFor" />
 		<html:hidden property="pageOf" />
 		<html:hidden property="id" />
@@ -362,8 +363,8 @@ function handleStatus(status)
 										src="images/uIEnhancementImages/star.gif" alt="Mandatory"
 										width="6" height="6" hspace="0" vspace="0" /></span></td>
 									<td width="17%" align="left" class="black_ar_t">Role</td>
-									<td width="19%" class="black_ar_t"><select class="formFieldSizedNew"
-										id="roleIds" onchange="getActionsForThisRole(this)">										
+									<td width="19%" class="black_ar_t"><select name = "role" class="formFieldSizedNew"
+										id="roleIds" onchange="disableAllForSuperAdmin(this)">										
 										<%
 									for (int i = 0; i < roleList.size(); i++) {
 									String roleName = ""
@@ -409,19 +410,15 @@ function handleStatus(status)
 										</tr>
 
 
-								<tr onclick="showHide('privilegesDiv')">
+								<tr >
 									<td colspan="7" align="left" class="tr_bg_blue1"><span
 										class="blue_ar_b">&nbsp;Privileges</span></td>
-									<td align="right" class="tr_bg_blue1"><a href="#"
-										id="imgArrow_privilegesDiv"><img
-										src="images/uIEnhancementImages/dwn_arrow1.gif"
-										alt="Show Details" width="80" height="9" hspace="10"
-										border="0" /></a></td>
+									<td align="right" class="tr_bg_blue1">&nbsp;</td>
 								</tr>
 
 								<tr>
 									<td colspan="8">
-									<div id="privilegesDiv" style="display:none">
+					<!--				<div id="privilegesDiv" style="display:none"> -->
 									<table width="100%" border="0" cellpadding="3" cellspacing="0">
 										<tr>
 											<td width="1%" align="center" class="black_ar"><span
@@ -509,7 +506,7 @@ function handleStatus(status)
 													<td width="25%" class="black_ar_b" align="left"><bean:message
 														key="assignPrivileges.site(s)" /></td>
 													<td width="21%" class="black_ar_b" align="left"><bean:message
-														key="user.name" /></td>
+														key="app.collectionProtocol" /></td>
 													<td width="18%" class="black_ar_b" align="left"><bean:message
 														key="user.role" /></td>
 													<td width="23%" class="black_ar_b" align="left"><bean:message
@@ -580,7 +577,7 @@ function handleStatus(status)
 
 														</tbody>
 													</table>
-													</div>
+											<!--		</div>  -->
 													</td>
 												</tr>
 												<tr>
