@@ -16,6 +16,44 @@
 		<tr>
 			<td>
 				<table summary="" cellpadding="3" cellspacing="0" border="0">
+					
+					<tr><td></td></tr>
+					<tr><td></td></tr>
+
+					<tr>
+						<td colspan='4' class="formMessage">
+							<bean:message key="errors.ordering.note"/>
+						</td>
+					</tr>
+					<tr>
+						<td colspan='4' class="formMessage">
+							<bean:message key="errors.ordering.note1"/>
+						</td>
+					</tr>
+					<tr>
+						<td colspan='4' class="formMessage">
+							<bean:message key="errors.ordering.a"/>
+						</td>
+					<tr>
+					<tr>
+						<td colspan='4' class="formMessage">
+							<bean:message key="errors.ordering.b"/>
+						</td>
+					</tr>
+					<tr>
+						<td colspan='4' class="formMessage">
+							<bean:message key="errors.ordering.c"/>
+						</td>
+					</tr>
+					<tr>
+						<td colspan='4' class="formMessage">
+							<bean:message key="errors.ordering.d"/>
+						</td>
+						
+					</tr>
+					
+					<tr><td></td></tr>
+					<tr><td></td></tr>
 					<tr>
 						<td colspan='4' class="formMessage">	
 							<bean:message key="requiredfield.message"/>

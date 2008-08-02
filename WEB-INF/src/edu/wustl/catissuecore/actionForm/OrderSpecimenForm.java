@@ -361,7 +361,7 @@ public class OrderSpecimenForm extends AbstractActionForm
 					
 					if((values.get(disSiteKey)) == null || !isSameSite())
 					{
-						errors.add("values", new ActionError("errors.same.distributionSite.required"));
+						errors.add("values", new ActionError("errors.same.distributionSite"));
 						values.clear();
 						break;
 					}

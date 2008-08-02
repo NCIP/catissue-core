@@ -9,8 +9,14 @@ import java.util.List;
 import java.util.Set;
 
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
+import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.querysuite.QueryShoppingCart;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.dao.DAOFactory;
+import edu.wustl.common.dao.HibernateDAO;
+import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * @author supriya_dankh
@@ -114,37 +120,87 @@ public class QueryShoppingCartBizLogic
 	
 	public Set<String> getEntityIdsList(QueryShoppingCart cart,List entityName,List<Integer>chkBoxValues)
 	{
+		HibernateDAO dao = (HibernateDAO) DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+		
 	    Set<String> entityIdsList = new HashSet<String>();
 	    List<Integer> entityIdsColumnIndexList = getIdsColumnIndexList(cart.getCartAttributeList(),entityName);
         List<List<String>> dataList = cart.getCart();
-        if(chkBoxValues!=null)
-        {
-	    for(Integer index:chkBoxValues)
-	    {
-			List<String> record = dataList.get(index);
-			for (int i = 0; i < entityIdsColumnIndexList.size(); i++)
+       try
+	   {
+    	   	dao.openSession(null);
+	        if(chkBoxValues!=null)
+	        {
+		    for(Integer index:chkBoxValues)
+		    {
+				List<String> record = dataList.get(index);
+				for (int i = 0; i < entityIdsColumnIndexList.size(); i++)
+				{
+					String data = record.get(entityIdsColumnIndexList.get(i));
+					
+					if(!(data.equals("")) && isSpecimenValidToOrder(dao,Long.parseLong(data)))
+					  entityIdsList.add(data);
+				}
+		    }
+	        }
+	        else
+	        {
+	        	for (List<String> record : dataList)
+	    		{
+	    			for (int j = 0; j < entityIdsColumnIndexList.size(); j++)
+	    			{
+	    				String data = record.get(entityIdsColumnIndexList.get(j));
+						if (!(data.equals(""))&& isSpecimenValidToOrder(dao,Long.parseLong(data)) )
+	    					entityIdsList.add(data);
+	    			}
+	    		}
+	        }
+	    } catch (NumberFormatException e) {
+			
+			e.printStackTrace();
+		} catch (DAOException e) {
+			
+			e.printStackTrace();
+		}
+        finally
+		{
+			try
 			{
-				String data = record.get(entityIdsColumnIndexList.get(i));
-				if(!(data.equals("")))
-				  entityIdsList.add(data);
+				dao.closeSession();
 			}
-	    }
-        }
-        else
-        {
-        	for (List<String> record : dataList)
-    		{
-    			for (int j = 0; j < entityIdsColumnIndexList.size(); j++)
-    			{
-    				String data = record.get(entityIdsColumnIndexList.get(j));
-					if (!(data.equals("")))
-    					entityIdsList.add(data);
-    			}
-    		}
-        }
+			catch (DAOException e)
+			{
+				Logger.out.error(e.getMessage(), e);
+			}
+		}
 	    return entityIdsList;
 
 	}
+	
+	
+	private boolean isSpecimenValidToOrder(HibernateDAO dao ,Long specimenId) throws DAOException
+	{
+		boolean isSpecimenValid = true;
+		Specimen specimen =(Specimen) dao.retrieve(Specimen.class.getName(), specimenId);
+		
+		if(!specimen.getCollectionStatus().equals(Constants.COLLECTION_STATUS_COLLECTED))
+		{
+			isSpecimenValid = false;
+		}
+		if(specimen.getSpecimenPosition()==null)
+		{
+			isSpecimenValid = false;
+		}
+		if(specimen.getAvailableQuantity().equals(new Double(0.0)))
+		{
+			isSpecimenValid = false;
+		}
+		if(specimen.getIsAvailable()!=null && !specimen.getIsAvailable())
+		{
+			isSpecimenValid = false;
+		}
+		return isSpecimenValid;
+	}
+	
 	
 	/**
 	 * Creates Entity Ids column indices list .
