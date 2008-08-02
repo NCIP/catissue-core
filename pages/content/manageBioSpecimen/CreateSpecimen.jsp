@@ -217,11 +217,11 @@
         <td width="4%" class="td_tab_bg" ><img src="images/spacer.gif" alt="spacer" width="50" height="1"></td>
 		<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_CREATE_SPECIMEN_CP_QUERY%>">
 
-        <td valign="bottom"><a href="SimpleQueryInterface.do?pageOf=pageOfNewSpecimen&aliasName=Specimen"><img src="images/uIEnhancementImages/tab_edit_user.jpg"  border="0"alt="Edit" width="59" height="22" /></a></td>
+        <td valign="bottom"><a href="SimpleQueryInterface.do?pageOf=pageOfNewSpecimen&aliasName=Specimen"><img src="images/uIEnhancementImages/tab_edit_user.jpg"  border="0" alt="Edit" width="59" height="22" /></a></td>
         <td valign="bottom"><img src="images/uIEnhancementImages/tab_derive.gif" alt="Derive" width="56" height="22" /></td>
-        <td valign="bottom"><a href="Aliquots.do?pageOf=pageOfAliquot"><img src="images/uIEnhancementImages/tab_aliquot2.gif" alt="Aliquot" width="66" height="22" /></a></td>
-        <td valign="bottom"><a href="QuickEvents.do?operation=add"><img src="images/uIEnhancementImages/tab_events2.gif" alt="Events" width="56" height="22" /></a></td>
-        <td align="left" valign="bottom" class="td_color_bfdcf3" ><a href="MultipleSpecimenFlexInitAction.do?pageOf=pageOfMultipleSpWithMenu"><img src="images/uIEnhancementImages/tab_multiple2.gif" alt="Multiple" width="66" height="22" /></a></td>
+        <td valign="bottom"><a href="Aliquots.do?pageOf=pageOfAliquot"><img border="0" src="images/uIEnhancementImages/tab_aliquot2.gif" alt="Aliquot" width="66" height="22" /></a></td>
+        <td valign="bottom"><a href="QuickEvents.do?operation=add"><img border="0" src="images/uIEnhancementImages/tab_events2.gif" alt="Events" width="56" height="22" /></a></td>
+        <td align="left" valign="bottom" class="td_color_bfdcf3" ><a href="MultipleSpecimenFlexInitAction.do?pageOf=pageOfMultipleSpWithMenu"><img border="0" src="images/uIEnhancementImages/tab_multiple2.gif" alt="Multiple" width="66" height="22" /></a></td>
 		</logic:notEqual>
 
 		<logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_CREATE_SPECIMEN_CP_QUERY%>">
@@ -237,7 +237,7 @@
 					<html:hidden property="multipleSpecimen" value="${requestScope.multipleSpecimen}"/>
 					<html:hidden property="containerId" styleId="containerId"/>
 					<html:hidden property="nextForwardTo" />
-
+					
 					<html:hidden property="positionInStorageContainer" />
 				
 					<logic:equal name="pageOf" value="${requestScope.query}">
@@ -296,14 +296,16 @@
               <td align="left" class="black_ar"><bean:message key="specimen.type"/></td>
               <td class="black_ar" align="left"><autocomplete:AutoCompleteTag property="className"
 								  optionsList = "${requestScope.specClassList}"
-								  styleClass="formFieldSized12"
+								  styleClass="black_ar"
+								  size="27"
 								  initialValue=""
 								  onChange="onTypeChange(this)"
 								  readOnly="${requestScope.readOnlyForAll}" /></td>
               <td width="1%" align="center"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></span></td>
               <td width="17%" align="left"><span class="black_ar"><bean:message key="specimen.subType"/></span></td>
               <td align="left" class="black_ar" >	<autocomplete:AutoCompleteTag property="type"
-								styleClass="formFieldSized12"
+								styleClass="black_ar"
+								  size="27"
 							  optionsList = "${requestScope.specimenTypeMap}"
 							  initialValue=""
 							  onChange="onSubTypeChangeUnit('className',this,'unitSpan')"
