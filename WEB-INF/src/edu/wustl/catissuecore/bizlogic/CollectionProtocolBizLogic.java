@@ -1048,7 +1048,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	{
 		JDBCDAO jdbcDao = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
 		jdbcDao.openSession(null);
-		String queryStr = "select title from catissue_specimen_protocol where title = '" + protocol.getTitle()+ "';";
+		String queryStr = "select title from catissue_specimen_protocol where title = '" + protocol.getTitle()+ "'";
 		try
 		{
 			List<String> titleList = jdbcDao.executeQuery(queryStr, null, false, null);
