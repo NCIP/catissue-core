@@ -1643,12 +1643,17 @@ public class UserBizLogic extends DefaultBizLogic
 			{
 				User user = (User) domainObject;
 				
+				if(user.getPageOf().equalsIgnoreCase("pageOfSignUp"))
+				{
+					return true;
+				}
+				
 				if(user.getPageOf().equalsIgnoreCase("pageOfChangePassword"))
 				{
 					return true;
 				}
 				
-				if(user.getLoginName().equals(sessionDataBean.getUserName()))
+				if(sessionDataBean!=null && user.getLoginName().equals(sessionDataBean.getUserName()))
 				{
 					return true;
 				}
