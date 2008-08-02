@@ -45,6 +45,10 @@ public class SubmitCPAction extends BaseAction
 			HttpSession session = request.getSession();
 			CollectionProtocolBean collectionProtocolBean = (CollectionProtocolBean) session
 			.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
+			String cptitle = collectionProtocolBean.getTitle();
+			String treeNode = "cpName_"+cptitle;
+			session.setAttribute(Constants.TREE_NODE_ID, treeNode);
+			session.setAttribute("tempKey", treeNode);
 			String operation = collectionProtocolBean.getOperation();
 			if ("update".equals(operation))//"update"
 			{					

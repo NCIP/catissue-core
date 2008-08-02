@@ -60,6 +60,10 @@ public class CreateSpecimenTemplateAction extends BaseAction
 		{
 			session.setAttribute(Constants.TREE_NODE_ID, nodeId);
 		}
+		else
+		{
+			session.setAttribute(Constants.TREE_NODE_ID, selectedNode);
+		}
 		if(pageOf!=null&&pageOf.equalsIgnoreCase("error"))
 		{
 			mapkey=null;

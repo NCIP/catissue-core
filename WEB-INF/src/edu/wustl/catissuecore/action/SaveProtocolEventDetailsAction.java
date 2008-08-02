@@ -1,5 +1,6 @@
 package edu.wustl.catissuecore.action;
 
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -39,8 +40,17 @@ public class SaveProtocolEventDetailsAction extends BaseAction
 		}
 		if(protocolEventDetailsForm.getCollectionProtocolEventkey().equals(Constants.ADD_NEW_EVENT))
 		{
+			int eventmapSize = collectionProtocolEventMap.size();
+			while(collectionProtocolEventMap.containsKey(Constants.UNIQUE_IDENTIFIER_FOR_EVENTS+(eventmapSize)))
+			{
+				eventmapSize = eventmapSize + 1;
+			}
 			collectionProtocolEventBean = new CollectionProtocolEventBean();
-			collectionProtocolEventBean.setUniqueIdentifier(Constants.UNIQUE_IDENTIFIER_FOR_EVENTS+(collectionProtocolEventMap.size()+1));
+			if(eventmapSize == 0)
+			{
+				eventmapSize = eventmapSize + 1;
+			}
+			collectionProtocolEventBean.setUniqueIdentifier(Constants.UNIQUE_IDENTIFIER_FOR_EVENTS+(eventmapSize));
 			setCollectionProtocolBean(collectionProtocolEventBean,protocolEventDetailsForm);
 			collectionProtocolEventMap.put(collectionProtocolEventBean.getUniqueIdentifier(),collectionProtocolEventBean);
 		}
@@ -48,8 +58,8 @@ public class SaveProtocolEventDetailsAction extends BaseAction
 		{
 			collectionProtocolEventBean = (CollectionProtocolEventBean)collectionProtocolEventMap.get(protocolEventDetailsForm.getCollectionProtocolEventkey());
 			setCollectionProtocolBean(collectionProtocolEventBean,protocolEventDetailsForm);
-			session.setAttribute(Constants.TREE_NODE_ID, protocolEventDetailsForm.getCollectionPointLabel()+"class_"+collectionProtocolEventBean.getUniqueIdentifier());
 			collectionProtocolEventMap.put(protocolEventDetailsForm.getCollectionProtocolEventkey(),collectionProtocolEventBean);
+			session.setAttribute(Constants.TREE_NODE_ID, protocolEventDetailsForm.getCollectionPointLabel()+"class_"+collectionProtocolEventBean.getUniqueIdentifier());
 		}
 		String listKey = collectionProtocolEventBean.getUniqueIdentifier();
 		session.setAttribute(Constants.NEW_EVENT_KEY, listKey);

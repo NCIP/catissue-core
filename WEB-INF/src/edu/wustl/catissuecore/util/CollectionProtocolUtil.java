@@ -509,6 +509,10 @@ public class CollectionProtocolUtil {
 				sessionCpList.get(0));
 		session.setAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP,
 				sessionCpList.get(1));
+		String cptitle = collectionProtocolBean.getTitle();
+		String treeNode = "cpName_"+cptitle;
+		session.setAttribute(Constants.TREE_NODE_ID, treeNode);
+		session.setAttribute("tempKey", treeNode);
 	}
 
 

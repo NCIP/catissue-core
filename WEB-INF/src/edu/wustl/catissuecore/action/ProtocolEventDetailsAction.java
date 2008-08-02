@@ -40,6 +40,11 @@ public class ProtocolEventDetailsAction extends BaseAction
 		else
 			eventKey=key;
 		String selectedNode=(String)session.getAttribute(Constants.TREE_NODE_ID);
+		String checkForSpecimen = null;
+		if(selectedNode!=null)
+		{
+			checkForSpecimen = selectedNode.substring(0,3);
+		}
 		if(key!=null && selectedNode!=null && !selectedNode.contains(eventKey))
 		{
 			String nodeId = (String)request.getParameter(Constants.TREE_NODE_ID);
@@ -48,6 +53,11 @@ public class ProtocolEventDetailsAction extends BaseAction
 		String pageOf = request.getParameter(Constants.PAGE_OF);
 		long collectionEventUserId = 0;
 		collectionEventUserId = Utility.setUserInForm(request,operation);
+		selectedNode = protocolEventDetailsForm.getCollectionPointLabel()+"class_"+eventKey;
+		if(key == null || "New".equals(checkForSpecimen))
+		{
+			session.setAttribute(Constants.TREE_NODE_ID, selectedNode);
+		}
 		if(protocolEventDetailsForm.getCollectionEventUserId() == 0)
 		{
 			protocolEventDetailsForm.setCollectionEventUserId(collectionEventUserId);
@@ -70,6 +80,8 @@ public class ProtocolEventDetailsAction extends BaseAction
 			protocolEventDetailsForm.setCollectionEventCollectionProcedure((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_COLLECTION_PROCEDURE));
 			protocolEventDetailsForm.setCollectionEventContainer((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_CONTAINER));
 			protocolEventDetailsForm.setReceivedEventReceivedQuality((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_RECEIVED_QUALITY));
+			String treeNode=(String)session.getAttribute("tempKey");
+			session.setAttribute(Constants.TREE_NODE_ID, treeNode);
 		}
 		else if(pageOf!=null&&pageOf.equals(Constants.PAGE_OF_SPECIMEN_REQUIREMENT))
 		{

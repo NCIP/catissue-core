@@ -175,25 +175,24 @@
 						var e1=str.substring(i+1,i+3);
 						if(str.indexOf(e1)>0 && str2.indexOf(e1)>0)
 						{
-							tree.selectItem("<%=nodeId%>",false);
+							tree.selectItem("<%=clickedNode%>",false);
 							tree.openItem("<%=nodeId%>");
 						}
 						else
 						{
-							var parentId =tree.getParentId("<%=clickedNode%>");
-							tree.selectItem(parentId);
+							tree.selectItem("<%=clickedNode%>",false);
 							tree.openItem(parentId);
 						}
 					}
 					else
 					{
-				
 						tree.selectItem("<%=clickedNode%>",false);
 						tree.openItem("<%=clickedNode%>");
 					}
 			<% } else 
 				{
 			%>
+				
 					tree.selectItem("<%=nodeId%>",false);
 					tree.openItem("<%=nodeId%>");
 			<%	}
