@@ -59,8 +59,8 @@ public class SaveProtocolEventDetailsAction extends BaseAction
 			collectionProtocolEventBean = (CollectionProtocolEventBean)collectionProtocolEventMap.get(protocolEventDetailsForm.getCollectionProtocolEventkey());
 			setCollectionProtocolBean(collectionProtocolEventBean,protocolEventDetailsForm);
 			collectionProtocolEventMap.put(protocolEventDetailsForm.getCollectionProtocolEventkey(),collectionProtocolEventBean);
-			session.setAttribute(Constants.TREE_NODE_ID, protocolEventDetailsForm.getCollectionPointLabel()+"class_"+collectionProtocolEventBean.getUniqueIdentifier());
 		}
+		session.setAttribute(Constants.TREE_NODE_ID, protocolEventDetailsForm.getCollectionPointLabel()+"class_"+collectionProtocolEventBean.getUniqueIdentifier());
 		String listKey = collectionProtocolEventBean.getUniqueIdentifier();
 		session.setAttribute(Constants.NEW_EVENT_KEY, listKey);
 		//request.setAttribute("listKey", listKey);
