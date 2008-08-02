@@ -80,7 +80,8 @@ public class ProtocolEventDetailsAction extends BaseAction
 			protocolEventDetailsForm.setCollectionEventCollectionProcedure((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_COLLECTION_PROCEDURE));
 			protocolEventDetailsForm.setCollectionEventContainer((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_CONTAINER));
 			protocolEventDetailsForm.setReceivedEventReceivedQuality((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_RECEIVED_QUALITY));
-			String treeNode=(String)session.getAttribute("tempKey");
+			CollectionProtocolBean collectionProtocolBean =(CollectionProtocolBean)session.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
+			String treeNode="cpName_"+collectionProtocolBean.getTitle();
 			session.setAttribute(Constants.TREE_NODE_ID, treeNode);
 		}
 		else if(pageOf!=null&&pageOf.equals(Constants.PAGE_OF_SPECIMEN_REQUIREMENT))

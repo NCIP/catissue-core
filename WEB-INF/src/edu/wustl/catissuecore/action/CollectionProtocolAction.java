@@ -333,6 +333,8 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 	private void initCleanSession(HttpServletRequest request)
 	{
 		HttpSession session = request.getSession();
+		session.removeAttribute("tempKey");
+		session.removeAttribute(Constants.CLICKED_NODE);
 		session.removeAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
 		session.removeAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
 	}
