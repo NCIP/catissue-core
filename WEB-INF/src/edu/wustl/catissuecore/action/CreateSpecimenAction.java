@@ -104,11 +104,10 @@ public class CreateSpecimenAction extends SecureAction
           */ 
     
          createForm.setCreatedDate(Utility.parseDateToString(Calendar.getInstance().getTime(), Constants.DATE_PATTERN_MM_DD_YYYY));
-         
-         //String pageOf = (String)request.getSession().getAttribute(Constants.PAGEOF);
-         
+                       
          String pageOf = null;
-         if(request.getParameter("pageOf")==null)
+         String tempPageOf = (String)request.getParameter("pageOf"); 
+         if(tempPageOf == null || tempPageOf.equals(""))
          {
         	 pageOf = (String)request.getSession().getAttribute("pageOf");        	
          }
@@ -118,9 +117,8 @@ public class CreateSpecimenAction extends SecureAction
         	 request.getSession().setAttribute("pageOf", pageOf);
          }
          
-     //    String pageOf = request.getParameter(Constants.PAGEOF);
-        
-		SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
+         SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
+         
 		/*
 		 // ---- chetan 15-06-06 ----
 		 StorageContainerBizLogic bizLogic = (StorageContainerBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
