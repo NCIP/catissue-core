@@ -164,6 +164,10 @@
 				<include name="**/*.hbm.xml" />
 				<include name="**/*.ser" />
 			</fileset>
+			<fileset dir="${base.dir}" >
+				<include name="log4j.properties" />
+			</fileset>
+			
 		</copy>
 	</target>
 	

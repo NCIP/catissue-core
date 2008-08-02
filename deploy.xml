@@ -122,6 +122,16 @@
 		<unwar src="${base.dir}/dynamicExtensions.war" dest="${temp.dir}/dynamicExtensions" />
 		<unwar src="${base.dir}/caTissuePrintWebService.war" dest="${temp.dir}/caTissuePrintWebService" />
 		<unjar src="${temp.dir}/catissuecore/WEB-INF/lib/DynamicExtensions.jar" dest="${temp.dir}/dynamicExtensionsjar" />
+		<copy  todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true">
+			<fileset dir="${base.dir}">
+				<include name="log4.properties"/>
+			</fileset>
+		</copy>
+		
+		<replace dir="${temp.dir}/catissuecore/WEB-INF/classes" propertyfile="caTissueInstall.properties"> 
+			<include name ="log4j.properties"/>
+			<replacefilter token="@@jbosshome@@" value="${jboss.server.url}"/>
+		</replace>
 		
 
 		<!-- <unwar src="${base.dir}/catissuecorecsm.war" dest="${temp.dir}/tempcsm"/> -->
@@ -345,7 +355,7 @@
 		<copy file="${temp.dir}/dynamicExtensions.jar" todir="${temp.dir}/catissuecore/Applet" overwrite="true" />
 		<copy file="${temp.dir}/dynamicExtensions.jar" todir="${temp.dir}/catissuecore/WEB-INF/Applet" overwrite="true" />
 		
-
+		<antcall target="copydeletedjars"/>
 		<war destfile="${temp.dir}/catissuecore.war" 
 			webxml="${temp.dir}/catissuecore/WEB-INF/web.xml" manifest="${base.dir}/MANIFEST.MF">
 			<fileset dir="${temp.dir}/catissuecore">
@@ -391,7 +401,7 @@
 	<target name="copydeletedjars">
 	<delete >  
 
-		<fileset dir="C:/eclipse/workspace/catissueSuiteV12/WEB-INF/lib">
+		<fileset dir="${temp.dir}/catissuecore/WEB-INF/lib">
 			<include name="backport-util-concurrent-3.0.jar" /> 
 			<include name="c3p0-0.8.4.5.jar" />
 			<include name="c3p0-0.8.5.2.jar" /> 
@@ -431,6 +441,9 @@
 			<include name="caGrid-1.0-sdkQuery.jar" /> 
 			<include name="caGrid-1.0-ServiceSecurityProvider-client.jar" /> 
 			<include name="caGrid-1.0-ServiceSecurityProvider-common.jar" /> 
+			<include name="jboss-common-jdbc-wrapper.jar"/>
+			<include name="mysql-connector-java-3.1.13-bin.jar"/>
+			<include name="ojdbc14.jar"/>
 			<include name="boot.jar" /> 
 			<include name="c3p0-0.9.0.jar" /> 
 			<include name="catissuecore-client.jar" /> 
