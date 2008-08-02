@@ -124,7 +124,7 @@
 		<unjar src="${temp.dir}/catissuecore/WEB-INF/lib/DynamicExtensions.jar" dest="${temp.dir}/dynamicExtensionsjar" />
 		<copy  todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true">
 			<fileset dir="${base.dir}">
-				<include name="log4.properties"/>
+				<include name="log4j.properties"/>
 			</fileset>
 		</copy>
 		
