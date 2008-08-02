@@ -961,18 +961,18 @@ public class UserForm extends AbstractActionForm
 						}
 					}
 
-					if (pageOf.equals(Constants.PAGEOF_USER_ADMIN) || pageOf.equals(Constants.PAGEOF_APPROVE_USER))
-					{
-						if (role != null&&!role.equals("")&&role.equals("-1"))
-						{
-							
-							if (validator.isValidOption(role) == false)
-							{
-								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
-										.getValue("user.role")));
-							}
-						}
-					}
+//					if ((pageOf.equals(Constants.PAGEOF_USER_ADMIN) || pageOf.equals(Constants.PAGEOF_APPROVE_USER)) && !this.operation.equalsIgnoreCase(Constants.EDIT))
+//					{
+//						if (role != null&&!role.equals("")&&role.equals("-1"))
+//						{
+//							
+//							if (validator.isValidOption(role) == false)
+//							{
+//								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
+//										.getValue("user.role")));
+//							}
+//						}
+//					}
 					
 					//Bug- 1516:  
 					if(pageOf.equals(Constants.PAGEOF_USER_ADMIN) && operation.equals(Constants.EDIT))

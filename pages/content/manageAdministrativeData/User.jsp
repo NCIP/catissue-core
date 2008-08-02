@@ -62,7 +62,6 @@ function handleStatus(status)
 	class="maintable">
 	<html:form action='${requestScope.formName}'>
 		<html:hidden property="operation" />
-		<html:hidden property="role" />
 		<html:hidden property="submittedFor" />
 		<html:hidden property="pageOf" />
 		<html:hidden property="id" />
@@ -483,7 +482,7 @@ function handleStatus(status)
 											<td colspan="7" width="97%" align="right" class="dividerline">&nbsp;<html:button
 												property="addKeyValue" styleClass="black_ar"
 												onclick="getUserPagePrivSummary()">
-												<bean:message key="buttons.submit" />
+												<bean:message key="buttons.addPrivilege" />
 											</html:button></td>
 											<td width="3%" class="dividerline">&nbsp;</td>
 										</tr>
