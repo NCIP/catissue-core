@@ -516,10 +516,6 @@ public class UserForm extends AbstractActionForm
 		{
 			this.role = Constants.ADMIN_USER;
 		}
-		else
-		{
-		    this.role = role;
-		}
 	}
 
 	/**
