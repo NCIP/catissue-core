@@ -2315,7 +2315,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 				long consentTierID = status.getConsentTier().getId().longValue();
 				String statusValue = status.getStatus();
 				Collection childSpecimens = (Collection) dao.retrieveAttribute(Specimen.class
-						.getName(), specimen.getId(), "elements(childrenSpecimen)");
+						.getName(), specimen.getId(), "elements(childSpecimenCollection)");
 				Iterator childItr = childSpecimens.iterator();
 				while (childItr.hasNext())
 				{

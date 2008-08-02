@@ -16,10 +16,14 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.hibernate.Session;
+
+import edu.wustl.catissuecore.bean.RequestViewBean;
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.DerivedSpecimenOrderItem;
 import edu.wustl.catissuecore.domain.DistributedItem;
@@ -31,8 +35,11 @@ import edu.wustl.catissuecore.domain.NewSpecimenArrayOrderItem;
 import edu.wustl.catissuecore.domain.OrderDetails;
 import edu.wustl.catissuecore.domain.OrderItem;
 import edu.wustl.catissuecore.domain.PathologicalCaseOrderItem;
+import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArray;
+import edu.wustl.catissuecore.domain.SpecimenArrayOrderItem;
+import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
@@ -48,9 +55,12 @@ import edu.wustl.common.dao.DAO;
 import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.dao.HibernateDAO;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.security.PrivilegeCache;
+import edu.wustl.common.security.PrivilegeManager;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.dbManager.DBUtil;
 import edu.wustl.common.util.dbManager.HibernateMetaData;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
@@ -63,6 +73,7 @@ public class OrderBizLogic extends DefaultBizLogic
 	private int orderStatusPending = 0;
 	private int orderStatusRejected = 0;
 	private int orderStatusCompleted = 0;
+	
 
 	//To display the number of Order Items updated.
 	public static int numberItemsUpdated = 0;
@@ -690,69 +701,251 @@ public class OrderBizLogic extends DefaultBizLogic
 	 * @return requestList List
 	 * @throws DAOException object
 	 */
-	public List getRequestList(String requestStatusSelected) throws DAOException
+	public List getRequestList(String requestStatusSelected,String userName,Long userId) throws DAOException
 	{
 
 		HibernateDAO dao = (HibernateDAO) DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
-		dao.openSession(null);
 		List orderList = new ArrayList();
+		List requestViewBeanList = new ArrayList();
+		dao.openSession(null);
+		PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
+		PrivilegeCache privilegeCache = privilegeManager.getPrivilegeCache(userName);
+		
+		User user = getUser(dao,userName, userId);
+		List siteIdsList = (List)getUserSitesWithDistributionPrev(user,privilegeCache);
+		
 		try
 		{
-			/*String[] colName = {"status"};*/
-
 			List orderListFromDB = null;
+			String[] whereColumnName = {"status"};
+			String[] whereColumnCondition = {"in"};
 
-			/*String[] selectColumnName = {"id", "status", "distributionProtocol", "distributionProtocol.principalInvestigator", "name",
-			 "requestedDate"};*/
-			String hql = "select orderDetails.id,orderDetails.status,orderDetails.distributionProtocol,orderDetails.distributionProtocol.principalInvestigator,orderDetails.name,orderDetails.requestedDate from "
-					+ OrderDetails.class.getName() + " orderDetails";
-			if (!requestStatusSelected.trim().equalsIgnoreCase("All"))
+			if(!requestStatusSelected.trim().equalsIgnoreCase("All"))
 			{
-				hql = hql + " where orderDetails.status ='" + requestStatusSelected + "' order by orderDetails.requestedDate desc";
-				orderListFromDB = dao.executeQuery(hql, null, false, null);
+				List whereColValues = new ArrayList();
+				whereColValues.add(new String("All"));
+
+				Object [] whereColumnValues = {whereColValues.toArray()};
+				orderListFromDB = dao.retrieve(OrderDetails.class.getName(),
+						null, whereColumnName,
+						whereColumnCondition, whereColumnValues,
+						"");
+
+			}else
+			{
+				List whereColValues = new ArrayList();
+				whereColValues.add(new String("Pending"));
+				whereColValues.add(new String("New"));
+
+				Object [] whereColumnValues = {whereColValues.toArray()};
+				orderListFromDB = dao.retrieve(OrderDetails.class.getName(),
+						null, whereColumnName,
+						whereColumnCondition, whereColumnValues,
+						"");
 
 			}
-			else
+
+			Iterator orderListFromDBIterator = orderListFromDB.iterator();
+			while(orderListFromDBIterator.hasNext())
 			{
-				hql = hql + " where orderDetails.status='Pending' or orderDetails.status='New' order by orderDetails.requestedDate desc";
-				orderListFromDB = dao.executeQuery(hql, null, false, null);
-			}
-			if (orderListFromDB != null && !orderListFromDB.isEmpty())
-			{
-				Iterator itr = orderListFromDB.iterator();
-				while (itr.hasNext())
+				OrderDetails orderDetails = (OrderDetails)orderListFromDBIterator.next();
+				boolean isOrderItemValidToDistribute = isOrderItemValidTodistribute(orderDetails.getOrderItemCollection(),siteIdsList);
+				if(isSuperAdmin(user) || isOrderItemValidToDistribute)
 				{
-					Object[] obj = (Object[]) itr.next();
-					Long id = (Long) obj[0];
-					String status = (String) obj[1];
-					DistributionProtocol dp = (DistributionProtocol) obj[2];
-					User user = (User) obj[3];
-					String name = (String) obj[4];
-					Date requestedDate = (Date) obj[5];
-
-					dp.setPrincipalInvestigator(user);
-
-					OrderDetails orderDetails = new OrderDetails();
-					orderDetails.setId(id);
-					orderDetails.setStatus(status);
-					orderDetails.setDistributionProtocol(dp);
-					orderDetails.setName(name);
-					orderDetails.setRequestedDate(requestedDate);
 					orderList.add(orderDetails);
 				}
-				//List requestList = populateRequestViewBeanList(orderList);
 			}
-		}
-		catch (ClassNotFoundException e)
-		{
-			Logger.out.error(e.getMessage());
+			requestViewBeanList =(List) populateRequestViewBeanList(orderList);
+
 		}
 		finally
 		{
-			dao.closeSession();
+			try
+			{
+				dao.closeSession();
+			}
+			catch (DAOException e)
+			{
+				Logger.out.error(e.getMessage(), e);
+			}
 		}
-		return orderList;
+		return requestViewBeanList;
 	};
+	
+	/**
+	 * Site of the order item should be one in the site list having distribution privilege. 
+	 * @param orderItemCollection
+	 * @param siteIdsList
+	 * @return
+	 */
+	private boolean isOrderItemValidTodistribute(Collection orderItemCollection,List siteIdsList)
+	{
+		boolean isValidToDistribute = false;
+		
+		Iterator orderItemColItr = orderItemCollection.iterator();
+		if(orderItemColItr.hasNext())	
+		{	
+			OrderItem orderItem = (OrderItem)orderItemColItr.next();
+			if(orderItem instanceof ExistingSpecimenOrderItem)
+			{
+				ExistingSpecimenOrderItem existingSpecimenOrderItem = (ExistingSpecimenOrderItem)orderItem;
+				if(siteIdsList.contains(existingSpecimenOrderItem.getSpecimen().getSpecimenPosition().getStorageContainer().getSite().getId()))
+				{
+					isValidToDistribute = true;
+				}
+			
+			}else if(orderItem instanceof ExistingSpecimenArrayOrderItem)
+			{
+				ExistingSpecimenArrayOrderItem existingSpecimenArrayOrderItem = (ExistingSpecimenArrayOrderItem) orderItem;
+				StorageContainer storageContainer = (StorageContainer) existingSpecimenArrayOrderItem.getSpecimenArray().getLocatedAtPosition().getParentContainer();
+				if(siteIdsList.contains(storageContainer.getSite().getId()))
+				{
+					isValidToDistribute = true;
+						
+				}
+			}else if(orderItem instanceof DerivedSpecimenOrderItem)
+			{
+				DerivedSpecimenOrderItem derivedSpecimenOrderItem = (DerivedSpecimenOrderItem) orderItem;
+				if(siteIdsList.contains(derivedSpecimenOrderItem.getParentSpecimen().getSpecimenPosition()
+						.getStorageContainer().getSite().getId()))
+				{
+					isValidToDistribute = true;
+				}
+			}
+		}
+			
+				
+		
+		return isValidToDistribute;
+	}
+	
+	/**
+	 * Retrieve all the sites of the user having distribution privilege.
+	 * @param userId
+	 * @param privilegeCache
+	 * @return
+	 * @throws DAOException 
+	 */
+	public List getRelatedSiteIds(HibernateDAO dao,Long userId,PrivilegeCache privilegeCache) throws DAOException 
+	{
+		List siteCollWithDistriPri = new ArrayList();
+		User user = (User) dao.retrieve(User.class.getName(), userId);
+		if (!user.getRoleId().equalsIgnoreCase(Constants.ADMIN_USER))
+		{
+			Collection<Site> siteCollection = user.getSiteCollection();
+			Iterator siteCollectionItr = siteCollection.iterator();
+			while(siteCollectionItr.hasNext())
+			{
+				Site site = (Site)siteCollectionItr.next();
+				String objectId = Constants.SITE_CLASS_NAME+"_"+site.getId();
+
+				boolean isAuthorized = privilegeCache.hasPrivilege(objectId,"DISTRIBUTION");
+				if(isAuthorized)
+				{
+					siteCollWithDistriPri.add(site.getId());
+				}
+
+			}
+		}
+		return (List)siteCollWithDistriPri;
+	} 
+	
+		
+	/**
+	 * It returns the user object
+	 * @param dao
+	 * @param userName
+	 * @param userId
+	 * @return
+	 * @throws DAOException
+	 */
+	private User getUser(HibernateDAO dao,String userName,Long  userId) throws DAOException
+	{		
+		User user = (User) dao.retrieve(User.class.getName(), userId);
+		return user;
+	}
+	
+	/**
+	 * Get the list of sites of user on which user have distribution privilege
+	 * @param request
+	 * @return
+	 * @throws DAOException 
+	 */
+	private List getUserSitesWithDistributionPrev(User user,PrivilegeCache privilegeCache)
+	{
+						
+		List siteCollWithDistriPri = new ArrayList();
+				
+		if (!user.getRoleId().equalsIgnoreCase(Constants.ADMIN_USER))
+		{
+			
+			Collection<Site> siteCollection = user.getSiteCollection();
+			Iterator siteCollectionItr = siteCollection.iterator();
+			while(siteCollectionItr.hasNext())
+			{
+				Site site = (Site)siteCollectionItr.next();
+				String objectId = Constants.SITE_CLASS_NAME+"_"+site.getId();
+				
+				boolean isAuthorized = privilegeCache.hasPrivilege(objectId,"DISTRIBUTION");
+				if(isAuthorized)
+				{
+					siteCollWithDistriPri.add(site.getId());
+				}
+						
+			}
+		}
+	
+	 return (List)siteCollWithDistriPri;
+	   
+	}
+	
+	/**
+	 * Check for superAdmin
+	 * @param user
+	 * @return
+	 */
+	private boolean isSuperAdmin(User user)
+	{
+		boolean isSuperAdmin = false;
+		
+		if (!user.getRoleId().equalsIgnoreCase(Constants.ADMIN_USER))
+		{
+			isSuperAdmin = false;
+		}else
+		{
+			isSuperAdmin = true;
+		}
+		
+		return isSuperAdmin;
+				
+	}
+	
+	/**
+	 * To populate the request view bean
+	 * @param orderListFromDB object 
+	 * @return List object
+	 */
+	private List populateRequestViewBeanList(List orderListFromDB)
+	{
+		List requestList  = new ArrayList();
+		RequestViewBean requestViewBean = null;		
+		OrderDetails order = null;
+		if(orderListFromDB != null)
+		{
+			Iterator iter = orderListFromDB.iterator();
+			while(iter.hasNext())
+			{			
+				order = (OrderDetails)iter.next();
+				requestViewBean = OrderingSystemUtil.getRequestViewBeanToDisplay(order);
+				
+				requestViewBean.setRequestId(order.getId().toString());				
+				requestViewBean.setStatus(order.getStatus());
+				
+				requestList.add(requestViewBean);
+			}
+		}
+		return requestList;
+	}
 	
 	
 	
@@ -770,7 +963,7 @@ public class OrderBizLogic extends DefaultBizLogic
 		return OrderDetails;
 	}
 	
-	
+		
 	/**
 	 * @param request HttpServletRequest object
 	 * @return List specimen array objects
@@ -848,7 +1041,7 @@ public class OrderBizLogic extends DefaultBizLogic
 	    	String sourceObjectName = Specimen.class.getName();
 	    	String columnName="id";
 	    	List valueField=(List)session.getAttribute("specimenId");
-	    	List specimen=new ArrayList();
+	    	List specimenList=new ArrayList();
 	    	dao.openSession(null);
 	    	if(valueField != null && valueField.size() >0)
 	    	{
@@ -856,15 +1049,15 @@ public class OrderBizLogic extends DefaultBizLogic
 				for(int i=0;i<valueField.size();i++)
 				{
 					Object object = dao.retrieve(sourceObjectName, Long.parseLong((String)valueField.get(i)));
-					Specimen speclist=(Specimen)object;
-					specimen.add(speclist);
+					Specimen spec=(Specimen)object;
+					specimenList.add(spec);
 				}
 				
 	    	}
 	    	long endTime = System.currentTimeMillis();
 			Logger.out.info("EXECUTE TIME FOR RETRIEVE IN EDIT FOR DB -  : "+ (endTime - startTime));
-			System.out.println("EXECUTE TIME FOR RETRIEVE IN EDIT FOR DB -  : "+ (endTime - startTime));
-			return specimen;
+		
+			return specimenList;
     	}
     	catch(DAOException e)
     	{

@@ -91,7 +91,14 @@ public class OrderSpecimenBean implements Serializable
 	 * OrderList
 	 */
 	private String arrayName;
-
+	
+	/**
+	 * This indicates biospecimens Distribution Site
+	 * 
+	 */
+	private String distributionSite;
+	
+	
 	/**
 	 * @return isDerived-whether specimen is existing or derived
 	 */
@@ -333,4 +340,13 @@ public class OrderSpecimenBean implements Serializable
 		this.specimenCollectionGroup = specimenCollectionGroup;
 	}
 
+	public String getDistributionSite() {
+		return distributionSite;
+	}
+
+	public void setDistributionSite(String distributionSite) {
+		this.distributionSite = distributionSite;
+	}
+
+	
 }

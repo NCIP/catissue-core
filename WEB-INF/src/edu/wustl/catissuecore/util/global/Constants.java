@@ -2407,5 +2407,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String CP_BASED_VIEW_FILTRATION = "CP_BASED_VIEW_FILTRATION";
 	public static final String EDIT_PROFILE_PRIVILEGE= "EDIT_PROFILE_PRIVILEGE";
 	public static final String CP_CHILD_SUBMIT = "cpChildSubmit";
+	public static final String SITE_CLASS_NAME = "edu.wustl.catissuecore.domain.Site";//CollectionProtocol.class.getName();
 }
 	

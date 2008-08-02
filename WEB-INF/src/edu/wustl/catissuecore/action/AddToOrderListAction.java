@@ -289,6 +289,7 @@ public class AddToOrderListAction  extends BaseAction
 			}
 			specimenMap.put("OrderSpecimenBean:"+strSelectedItems[j]+"_checkedToRemove",tempOrderSpecimenFormObjectMap.get("OrderSpecimenBean:"+strSelectedItems[j]+"_checkedToRemove"));
 			specimenMap.put("OrderSpecimenBean:"+strSelectedItems[j]+"_typeOfItem",tempOrderSpecimenFormObjectMap.get("OrderSpecimenBean:"+strSelectedItems[j]+"_typeOfItem"));
+			specimenMap.put("OrderSpecimenBean:"+strSelectedItems[j]+"_distributionSite", tempOrderSpecimenFormObjectMap.get("OrderSpecimenBean:"+strSelectedItems[j]+"_distributionSite"));
 			specimenMap.put("OrderSpecimenBean:"+strSelectedItems[j]+"_arrayName",orderSpecimenFormObject.getAddToArray());
     	}
 		return specimenMap;

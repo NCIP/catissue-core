@@ -23,6 +23,7 @@
 	OrderSpecimenForm form = (OrderSpecimenForm)request.getAttribute("OrderSpecimenForm");
   	Collection specimen;
 	specimen=(List)request.getAttribute("specimen");
+	
 %>
 
 <script language="JavaScript" type="text/javascript" src="jss/ajax.js"></script>
@@ -464,6 +465,10 @@ String onClassChangeFunctionName = "typeChangeGeneralized(this)";
 							<th class="dataTableHeader" width="25%" align="left">
 								<bean:message key="orderingsystem.label.specimenName" />
 							</th>
+
+							<th class="dataTableHeader" width="25%" align="left">
+								<bean:message key="orderingsystem.label.distributionSite" />
+							</th>
 							
 							<th class="dataTableHeader"  align="left" width="18%">
 								<bean:message key="orderingsystem.label.availableQuantity" />
@@ -497,6 +502,12 @@ String onClassChangeFunctionName = "typeChangeGeneralized(this)";
 								String typeOfItem="value(OrderSpecimenBean:"+i+"_typeOfItem)";
 								String specimenClass="value(OrderSpecimenBean:"+i+"_specimenClass)";
 								String specimenType="value(OrderSpecimenBean:"+i+"_specimenType)";
+								String distributionSite="value(OrderSpecimenBean:"+i+"_distributionSite)";
+								String distributionSiteName="N/A";
+								if(obj.getSpecimenPosition()!=null)
+								{	
+									distributionSiteName=(String)obj.getSpecimenPosition().getStorageContainer().getSite().getName();
+								}	
 								
 								String specimenClickFunction = "showSpecimenDetails("+obj.getId().toString()+")";
 							%>
@@ -516,6 +527,11 @@ String onClassChangeFunctionName = "typeChangeGeneralized(this)";
 									<html:hidden property="<%=typeOfItem%>" value="specimen"/>
 								</td>
 
+								<td class="dataCellText" width="25%" >
+									<%=distributionSiteName%>
+									<html:hidden property="<%=distributionSite%>" value="<%=distributionSiteName%>"/>
+								</td>
+
 								<td class="dataCellText" width="18%">
 									<%=obj.getAvailableQuantity()%>&nbsp;
 									<script>
@@ -523,7 +539,7 @@ String onClassChangeFunctionName = "typeChangeGeneralized(this)";
 										document.write(v);
 									</script>
 
-									<html:hidden property="<%=availableQuantity%>" value="<%=obj.getId().toString()%>"/>
+									<html:hidden property="<%=availableQuantity%>" value="<%=obj.getAvailableQuantity().toString()%>"/>
 										
 								</td>
 

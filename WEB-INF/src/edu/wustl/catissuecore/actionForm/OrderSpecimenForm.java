@@ -14,6 +14,7 @@ import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.bean.OrderSpecimenBean;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
@@ -252,15 +253,12 @@ public class OrderSpecimenForm extends AbstractActionForm
 	{
 		ActionErrors errors = new ActionErrors();
 		Validator validator = new Validator();
-
+		HttpSession session = request.getSession();
+		Map dataMap = (Map) session.getAttribute(Constants.REQUESTED_BIOSPECIMENS);
 		if (selectedItems != null)
 		{
 			boolean isNumber = true;
-			HttpSession session = request.getSession();
-
 			List defineArrayFormList = (List) session.getAttribute("DefineArrayFormObjects");
-
-			Map dataMap = (Map) session.getAttribute(Constants.REQUESTED_BIOSPECIMENS);
 
 			DefineArrayForm defineArrayFormObj = null;
 			int capacity = 0;
@@ -328,15 +326,67 @@ public class OrderSpecimenForm extends AbstractActionForm
 			if (values != null && values.size() != 0)
 			{
 				String cnt = null;
-				String key = null;
+				String reqQuantKey = null;
 				String keyClass = null;
-				int reqQntyError = 0;
+				
+				
+				
 				for (int i = 0; i < selectedItems.length; i++)
 				{
 					cnt = selectedItems[i];
-					key = "OrderSpecimenBean:" + cnt + "_requestedQuantity";
-
-					if ((values.get(key)) == null || (values.get(key)).equals(""))
+					reqQuantKey = "OrderSpecimenBean:" + cnt + "_requestedQuantity";
+					String disSiteKey = "OrderSpecimenBean:" + cnt + "_distributionSite";
+					String availQuantKey = "OrderSpecimenBean:" + cnt + "_availableQuantity";
+					String specimenName =(String) values.get("OrderSpecimenBean:" + cnt + "_specimenName");
+					
+					if (dataMap!=null && dataMap.containsKey(addToArray))
+					{
+						List orderItems = (List) dataMap.get(addToArray);
+						OrderSpecimenBean orderSpecimenBean = (OrderSpecimenBean) orderItems.get(0);
+						if(!orderSpecimenBean.getDistributionSite().equals(values.get(disSiteKey)))
+						{
+							errors.add("values", new ActionError("errors.same.distributionSite"));
+							values.clear();
+							break;
+						}
+						
+					}
+					
+					if((values.get(disSiteKey)) == null || (values.get(disSiteKey)).equals("N/A"))
+					{
+						errors.add("values", new ActionError("errors.specimenPosition.required", specimenName));
+						values.clear();
+						break;
+					}
+					
+					if((values.get(disSiteKey)) == null || !isSameSite())
+					{
+						errors.add("values", new ActionError("errors.same.distributionSite.required"));
+						values.clear();
+						break;
+					}
+					
+					
+					
+					if((values.get(availQuantKey)) == null || (values.get(availQuantKey)).equals(""))
+					{
+						errors.add("values", new ActionError("errors.availableQuantity.required",specimenName));
+						values.clear();
+						break;
+					}
+					else
+					{
+						Double reqQnty = new Double(values.get(availQuantKey).toString());
+						if (reqQnty < 0.0 || reqQnty == 0.0)
+						{
+							errors.add("values", new ActionError(
+									"errors.availableQuantity.required",specimenName));
+							values.clear();
+							break;
+						}
+					}
+						
+					if ((values.get(reqQuantKey)) == null || (values.get(reqQuantKey)).equals(""))
 					{
 						errors.add("values", new ActionError("errors.requestedQuantity.required"));
 						values.clear();
@@ -345,7 +395,7 @@ public class OrderSpecimenForm extends AbstractActionForm
 
 					else
 					{
-						isNumber = isNumeric(values.get(key).toString());
+						isNumber = isNumeric(values.get(reqQuantKey).toString());
 						if (!(isNumber))
 						{
 							errors.add("values", new ActionError(
@@ -355,7 +405,7 @@ public class OrderSpecimenForm extends AbstractActionForm
 						}
 						else
 						{
-							Double reqQnty = new Double(values.get(key).toString());
+							Double reqQnty = new Double(values.get(reqQuantKey).toString());
 							if (reqQnty < 0.0 || reqQnty == 0.0)
 							{
 								errors.add("values", new ActionError(
@@ -382,6 +432,34 @@ public class OrderSpecimenForm extends AbstractActionForm
 			}
 		}
 		return errors;
+	}
+	
+	/**
+	 * @return
+	 */
+	private boolean isSameSite()
+	{
+		boolean isSameSite = true;
+		if (values != null && values.size() != 0)
+		{
+			for (int i = 0; i < selectedItems.length; i++)
+			{
+				String cnt = selectedItems[i];
+				String disSite = (String)values.get("OrderSpecimenBean:" + cnt + "_distributionSite");
+				for (int j = 0; j < selectedItems.length; j++)
+				{
+					String count = selectedItems[j];
+					String disSiteInner = (String)values.get("OrderSpecimenBean:" + count + "_distributionSite");
+					if(!disSiteInner.equals(disSite))
+					{
+						return false;
+					}
+				}
+			}
+			
+		}
+				
+		return isSameSite;
 	}
 
 	/**

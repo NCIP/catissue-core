@@ -94,7 +94,7 @@ function getStatus(element)
 		if(parent.opener.document.forms[0].name == "<%=Constants.NEWSPECIMEN_FORM%>")
 		{
 			<%	
-			if(pageOf.equals(Constants.PAGE_OF_SPECIMEN))
+			if(pageOf.equals(Constants.PAGE_OF_SPECIMEN) ||pageOf.equals(Constants.PAGEOF_NEW_SPECIMEN) )
 			{
 			%>	
 				parent.opener.document.forms[0].action="<%=Constants.SPECIMEN_EDIT_ACTION%>";

@@ -26,11 +26,15 @@ import edu.wustl.catissuecore.actionForm.RequestListFilterationForm;
 import edu.wustl.catissuecore.bean.RequestViewBean;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.OrderBizLogic;
+import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.OrderDetails;
 import edu.wustl.catissuecore.util.OrderingSystemUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
+import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.cde.CDEManager;
+import edu.wustl.common.security.PrivilegeCache;
+import edu.wustl.common.security.PrivilegeManager;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.Validator;
 
@@ -51,7 +55,7 @@ public class RequestListAction extends SecureAction
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		Validator validator = new Validator();
-		List requestList = null, requestListFromDB = null,showList = null;		
+		List requestViewBeanList = null, requestListFromDB = null,showList = null;		
 		RequestListFilterationForm requestListForm = (RequestListFilterationForm) form;
 		
 		//For Pagenation	
@@ -67,17 +71,20 @@ public class RequestListAction extends SecureAction
 		//The start index in the list of users to be approved/rejected.
         int startIndex = Constants.ZERO;        
         //The end index in the list of users to be approved/rejected.
-        int endIndex = Constants.NUMBER_RESULTS_PER_PAGE;        
+        int endIndex = Constants.NUMBER_RESULTS_PER_PAGE;
+        SessionDataBean sessionData = getSessionData(request);
+       
         if (pageNum == Constants.START_PAGE)
         {
+        	
         	// Request List to display
     		if (requestListForm.getRequestStatusSelected() != null && !requestListForm.getRequestStatusSelected().trim().equalsIgnoreCase(""))
     		{
     			OrderBizLogic orderBizLogic = (OrderBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
-    			requestListFromDB = orderBizLogic.getRequestList(requestListForm.getRequestStatusSelected());
-    			requestList = populateRequestViewBeanList(requestListFromDB);
-    			int totalResults = requestList.size();
-    			Iterator iter = requestList.iterator();
+    			requestViewBeanList = orderBizLogic.getRequestList(requestListForm.getRequestStatusSelected(),
+    					sessionData.getUserName(),sessionData.getUserId());
+    			int totalResults = requestViewBeanList.size();
+    			Iterator iter = requestViewBeanList.iterator();
     			int serialNo = 1;
     			while(iter.hasNext())
     			{
@@ -86,33 +93,33 @@ public class RequestListAction extends SecureAction
     				serialNo++;    				
     			}
     			//Setting the number of new and pending requests
-    			setNumberOfNewAndPendingRequests(requestListForm);    			
+    			setNumberOfNewAndPendingRequests(requestListForm,requestViewBeanList);    			
     			session.setAttribute(Constants.TOTAL_RESULTS, Integer.toString(totalResults));    			
     		}            
-            if (Constants.NUMBER_RESULTS_PER_PAGE > requestList.size())
+            if (Constants.NUMBER_RESULTS_PER_PAGE > requestViewBeanList.size())
             {
-                endIndex = requestList.size();
+                endIndex = requestViewBeanList.size();
             }            
             //Save the list of users in the sesson.
-            session.setAttribute(Constants.ORIGINAL_DOMAIN_OBJECT_LIST,requestList);
+            session.setAttribute(Constants.ORIGINAL_DOMAIN_OBJECT_LIST,requestViewBeanList);
         }
         else
         {
             //Get the list of users from the session.
-        	requestList = (List)session.getAttribute(Constants.ORIGINAL_DOMAIN_OBJECT_LIST);        	
+        	requestViewBeanList = (List)session.getAttribute(Constants.ORIGINAL_DOMAIN_OBJECT_LIST);        	
             //Set the start index of the users in the list.
             startIndex = (pageNum-1) * Constants.NUMBER_RESULTS_PER_PAGE;            
             //Set the end index of the users in the list.
             endIndex = startIndex + Constants.NUMBER_RESULTS_PER_PAGE;            
-            if (endIndex > requestList.size())
+            if (endIndex > requestViewBeanList.size())
             {
-                endIndex = requestList.size();
+                endIndex = requestViewBeanList.size();
             }
             // Setting the number of new and pending requests
-			setNumberOfNewAndPendingRequests(requestListForm);
+			setNumberOfRequests(requestListForm,sessionData.getUserName(),sessionData.getUserId());
         }        
         //Gets the list of users to be shown on the page.
-        showList = requestList.subList(startIndex,endIndex);        
+        showList = requestViewBeanList.subList(startIndex,endIndex);        
         //Saves the list of users to be shown on the page in the request.
         request.setAttribute("RequestList",showList);          
         // OrderDetails Status to display in drop down
@@ -123,47 +130,44 @@ public class RequestListAction extends SecureAction
 		
 		return mapping.findForward("success");
 	}
-
 	
 	/**
-	 * @param orderListFromDB object 
-	 * @return List object
-	 */
-	private List populateRequestViewBeanList(List orderListFromDB)
+	 * @param request
+	 * @return
+	 *//*
+	private List getUserSitesWithDistributionPrev(HttpServletRequest request,Boolean isSuperAdmin)
 	{
-		List requestList  = new ArrayList();
-		RequestViewBean requestViewBean = null;		
-		OrderDetails order = null;
-		if(orderListFromDB != null)
-		{
-			Iterator iter = orderListFromDB.iterator();
-			while(iter.hasNext())
-			{			
-				order = (OrderDetails)iter.next();
-				requestViewBean = OrderingSystemUtil.getRequestViewBeanToDisplay(order);
-				
-				requestViewBean.setRequestId(order.getId().toString());				
-				requestViewBean.setStatus(order.getStatus());
-				
-				requestList.add(requestViewBean);
-			}
-		}
-		return requestList;
-	}
+		SessionDataBean sessionData = getSessionData(request);
+		System.out.println("");
+		PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
+		PrivilegeCache privilegeCache = privilegeManager.getPrivilegeCache(sessionData.getUserName());
+		
+		OrderBizLogic orderBizLogic = (OrderBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
+		List siteIds = (List)orderBizLogic.getRelatedSiteIds(sessionData.getUserId(),privilegeCache,isSuperAdmin);
+		
+    	return siteIds;
+	}*/
+	
 	/**
 	 * @param requestListFilterationForm object
 	 * @throws DAOException object
 	 */
-	private void setNumberOfNewAndPendingRequests(RequestListFilterationForm requestListFilterationForm) throws DAOException
+	private void setNumberOfRequests(RequestListFilterationForm requestListFilterationForm,String userName,Long userId) throws DAOException
+	{
+		
+		OrderBizLogic orderBizLogic = (OrderBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
+		List requestViewBeanList = orderBizLogic.getRequestList("All",userName,userId);
+		setNumberOfNewAndPendingRequests(requestListFilterationForm,requestViewBeanList);		
+		
+	}
+	
+	private void setNumberOfNewAndPendingRequests(RequestListFilterationForm requestListFilterationForm,
+			List requestViewBeanList)
 	{
 		int newStatus = 0, pendingStatus = 0;
-		OrderBizLogic orderBizLogic = (OrderBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
-		List orderListFromDB = orderBizLogic.getRequestList("All");
-		List orderList = populateRequestViewBeanList(orderListFromDB);
-		
-		if(orderList != null)
+		if(requestViewBeanList != null)
 		{
-			Iterator iter = orderList.iterator();
+			Iterator iter = requestViewBeanList.iterator();
 			while(iter.hasNext())
 			{
 				RequestViewBean requestViewBean = (RequestViewBean)iter.next();
@@ -180,4 +184,5 @@ public class RequestListAction extends SecureAction
 		requestListFilterationForm.setNewRequests(newStatus);
 		requestListFilterationForm.setPendingRequests(pendingStatus);
 	}
+	
 }

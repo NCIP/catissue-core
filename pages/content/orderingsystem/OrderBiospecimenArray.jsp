@@ -11,7 +11,9 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
 <%@ page import="edu.wustl.catissuecore.domain.SpecimenArrayType"%>
 <%@ page import="edu.wustl.catissuecore.domain.SpecimenArray"%>
+<%@ page import="edu.wustl.catissuecore.domain.StorageContainer"%>
 <%@ page import="edu.wustl.catissuecore.bean.OrderSpecimenBean"%>
+
 <%@ page import="edu.wustl.catissuecore.actionForm.OrderBiospecimenArrayForm"%>
 
 <%
@@ -338,6 +340,10 @@ String onClassChangeFunctionName = "onTypeChange(this)";%>
 										<bean:message key="orderingsystem.label.arrayName" />
 									</th>
 									
+									<th class="dataTableHeader" width="25%" align="left">
+										<bean:message key="orderingsystem.label.distributionSite" />
+									</th>
+
 									<th class="dataTableHeader" width="30%" align="left">
 										<bean:message key="orderingsystem.label.requestedQuantity" />
 									</th>
@@ -365,6 +371,15 @@ String onClassChangeFunctionName = "onTypeChange(this)";%>
 							String requestedQuantity = "value(OrderSpecimenBean:"+i+"_requestedQuantity)";
 							String specimenClass="value(OrderSpecimenBean:"+i+"_specimenClass)";
 							String specimenType="value(OrderSpecimenBean:"+i+"_specimenType)";
+							String distributionSite="value(OrderSpecimenBean:"+i+"_distributionSite)";
+							String distributionSiteName="N/A";
+							if( obj.getLocatedAtPosition()!=null && obj.getLocatedAtPosition().getParentContainer()!=null)
+							{	
+								StorageContainer storageContainer = (StorageContainer)obj.getLocatedAtPosition().getParentContainer();
+								distributionSiteName=(String)storageContainer.getSite().getName();
+							}	
+								
+
 							String test=null;
 							specimenArrayType=(Set)obj.getSpecimenArrayType().getSpecimenTypeCollection();	
 							Iterator it1=specimenArrayType.iterator();
@@ -391,6 +406,11 @@ String onClassChangeFunctionName = "onTypeChange(this)";%>
 											<html:hidden property="<%=typeOfItem%>" value="specimenArray"/>
 											<html:hidden property="<%=specimenClass%>" value="<%=obj.getSpecimenArrayType().getSpecimenClass()%>"/>
 											<html:hidden property="<%=specimenType%>" value="<%=test%>"/>
+										</td>
+
+										<td class="dataCellText" width="30%"> 
+											<%=distributionSiteName%>
+											<html:hidden property="<%=distributionSite%>" value="<%=distributionSiteName%>"/>
 										</td>
 	
 										<td class="dataCellText" width="25%" >

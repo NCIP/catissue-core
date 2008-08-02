@@ -101,6 +101,7 @@
             outer-join="auto"
             update="true"
             insert="true"
+            lazy="false"
             column="PARENT_CONTAINER_ID"
         />
         

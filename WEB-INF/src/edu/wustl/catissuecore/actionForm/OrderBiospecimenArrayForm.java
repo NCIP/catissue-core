@@ -180,7 +180,17 @@ public class OrderBiospecimenArrayForm extends AbstractActionForm
 				for (int i = 0; i < selectedItems.length; i++) 
 				{
 					cnt = selectedItems[i];
-					String key = "OrderSpecimenBean:" + cnt + "_requestedQuantity";	
+					String disSiteKey = "OrderSpecimenBean:" + cnt + "_distributionSite";
+					String key = "OrderSpecimenBean:" + cnt + "_requestedQuantity";
+					
+					
+					if((values.get(disSiteKey)) == null || !isSameSite())
+					{
+						errors.add("values", new ActionError("errors.specimenArray.same.distributionSite.required"));
+						values.clear();
+						break;
+					}
+										
 					if (typeOfArray.equals("false"))
 					{
 						values.put(key, "0.0");
@@ -253,6 +263,30 @@ public class OrderBiospecimenArrayForm extends AbstractActionForm
 			}
 		}
 		return isNumber;
+	}
+	private boolean isSameSite()
+	{
+		boolean isSameSite = true;
+		if (values != null && values.size() != 0)
+		{
+			for (int i = 0; i < selectedItems.length; i++)
+			{
+				String cnt = selectedItems[i];
+				String disSite = (String)values.get("OrderSpecimenBean:" + cnt + "_distributionSite");
+				for (int j = 0; j < selectedItems.length; j++)
+				{
+					String count = selectedItems[j];
+					String disSiteInner = (String)values.get("OrderSpecimenBean:" + count + "_distributionSite");
+					if(!disSiteInner.equals(disSite))
+					{
+						return false;
+					}
+				}
+			}
+			
+		}
+				
+		return isSameSite;
 	}
 
 	/**
