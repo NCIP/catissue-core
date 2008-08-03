@@ -266,8 +266,9 @@
 				if(consentTier.size()>0)
 				{%>
 					popupWindow("<%=consentTier.size()%>");
-				<%}%>
-					
+				<%}else{%>
+					onNormalSubmit();
+				<%}%>		
 				}
 			}
 		}
