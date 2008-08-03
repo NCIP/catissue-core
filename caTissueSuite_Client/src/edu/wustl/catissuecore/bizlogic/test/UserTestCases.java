@@ -1,18 +1,11 @@
 package edu.wustl.catissuecore.bizlogic.test;
 
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
 import edu.wustl.catissuecore.domain.Address;
-import edu.wustl.catissuecore.domain.CancerResearchGroup;
-import edu.wustl.catissuecore.domain.Department;
-import edu.wustl.catissuecore.domain.Institution;
-import edu.wustl.catissuecore.domain.Password;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
 
 
@@ -31,6 +24,7 @@ public class UserTestCases extends CaTissueBaseTestCase {
 			assertTrue("Object added successfully", true);
 		 }
 		 catch(Exception e){
+			 System.out.println("UserTestCases.testAddUser()"+ e.getMessage());
 			 e.printStackTrace();
 			 assertFalse("could not add object", true);
 		 }
