@@ -357,6 +357,7 @@ if(form != null)
 		//subtype
 		var spreqsubtype=x.insertCell(2)
 		spreqsubtype.className="black_ar";
+		spreqsubtype.Wrap = "True";
 		sname="";
 		objname = "deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_specimenType)";
 		var functionName = "onSubTypeChangeUnitforCP('" + specimenClassName + "',this,'" + objunit + "')" ;
@@ -446,7 +447,7 @@ if(form != null)
 		                <tr>
 			               <td width="1%" align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
 						   <td width="22%" align="left" class="black_ar"><bean:message key="specimen.type"/> </td>
-						   <td width="33%" align="left" nowrap class="black_ar">
+						   <td width="33%" align="left"  class="black_ar">
 			<%
 				String classValue = (String)form.getClassName();
 				specimenTypeList = (List)specimenTypeMap.get(classValue);
@@ -502,7 +503,7 @@ if(form != null)
                               <tr>
                                  <td align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
                                  <td align="left" class="black_ar"><bean:message key="specimen.tissueSite"/></td>
-                                 <td width="30%" align="left" class="black_new" nowrap>
+                                 <td width="30%" align="left" class="black_new" >
 									<autocomplete:AutoCompleteTag property="tissueSite"
 									  optionsList = "<%=request.getAttribute(Constants.TISSUE_SITE_LIST)%>"
 									  initialValue="<%=form.getTissueSite()%>"
@@ -518,7 +519,7 @@ if(form != null)
 									<a href="#" onclick="javascript:NewWindow('<%=url%>','name','360','525','no');return false">
 										<img src="images/uIEnhancementImages/ic_cl_diag.gif" border="0" width="16" height="16" title='Tissue Site Selector' alt="Clinical Diagnosis"></a></span></td>
                                <td align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
-                               <td align="left" class="black_ar"><bean:message key="specimen.tissueSite"/></td>
+                               <td align="left" class="black_ar"><bean:message key="specimen.tissueSide"/></td>
                                 <td align="left" class="black_ar">
 									<autocomplete:AutoCompleteTag property="tissueSide"
 										optionsList = "<%=request.getAttribute(Constants.TISSUE_SIDE_LIST)%>"
