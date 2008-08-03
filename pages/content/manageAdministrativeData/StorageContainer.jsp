@@ -523,25 +523,26 @@ function setParentContainerType()
 	var selectedParentAuto=document.getElementById("parentContainerAuto");
 	var selectedParentManual=document.getElementById("parentContainerManual");
 	
-	if('${requestScope.operation}'== "Add")
+	if('${requestScope.operation}'!= null)
     {
-		selectedParentSite.style.display="block"; 	
-		selectedParentAuto.style.display="none";
-		selectedParentManual.style.display="none";
-	}
-	else if('${requestScope.operation}'== "edit")
-	{
+	
 		if('${requestScope.parentContainerSelected}' == "Site")
 		{
 			selectedParentSite.style.display="block"; 	
 			selectedParentAuto.style.display="none";
 			selectedParentManual.style.display="none";
 		}
-		else
+		else if('${requestScope.parentContainerSelected}' == "Auto")
 		{
 			selectedParentSite.style.display="none"; 	
 			selectedParentAuto.style.display="block";
 			selectedParentManual.style.display="none";
+		}
+		else if('${requestScope.parentContainerSelected}' == "Manual")
+		{
+			selectedParentSite.style.display="none"; 	
+			selectedParentAuto.style.display="none";
+			selectedParentManual.style.display="block";
 		}
 	}
 }
@@ -554,7 +555,7 @@ function setParentContainerType()
 <html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
 	<%=messageKey%>
 </html:messages>
-<body>
+<body >
 <script type="text/javascript" src="jss/wz_tooltip.js"></script>
 <html:form action="<%=formName%>" method="post">	
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
