@@ -36,6 +36,28 @@ public class CollectionProtocolTestCases extends CaTissueBaseTestCase
 		 }
 	}
 	
+	public void testUpdateCollectionProtocolDeleteConsent()
+	{
+	    try 
+		{
+	    	CollectionProtocol collectionProtocol = (CollectionProtocol) TestCaseUtility.getObjectMap(CollectionProtocol.class);
+	    	Collection consentCollection = collectionProtocol.getConsentTierCollection();
+	    	Iterator<ConsentTier> itr = consentCollection.iterator();
+	    	itr.next();
+	    	itr.remove();
+	    	System.out.println(consentCollection.size() + " : Collection Size");
+	    	CollectionProtocol updatedCollectionProtocol = (CollectionProtocol)appService.updateObject(collectionProtocol);
+	    	assertTrue("Domain object updated successfully", true);
+	    } 
+	    catch (Exception e)
+	    {
+	    	Logger.out.error(e.getMessage(),e);
+	    	System.out.println("TestCaseTesting.testUpdateCollectionProtocolDeleteConsent()"+ e.getMessage());
+	    	e.printStackTrace();
+	    	fail("Failed to update object");
+	    }
+	}
+	
 	public void testUpdateCollectionProtocol()
 	{
 	    try 
@@ -58,6 +80,7 @@ public class CollectionProtocolTestCases extends CaTissueBaseTestCase
 	    	fail("Failed to update object");
 	    }
 	}
+	
 	public void testUpdateCollectionProtocolDeleteCollectionProtocolEvent()
 	{
 	    try 
@@ -139,28 +162,6 @@ public class CollectionProtocolTestCases extends CaTissueBaseTestCase
 	    }
 	}
 	
-	public void testUpdateCollectionProtocolDeleteConsent()
-	{
-	    try 
-		{
-	    	CollectionProtocol collectionProtocol = (CollectionProtocol) TestCaseUtility.getObjectMap(CollectionProtocol.class);
-	    	Collection consentCollection = collectionProtocol.getConsentTierCollection();
-	    	Iterator<ConsentTier> itr = consentCollection.iterator();
-	    	itr.next();
-	    	itr.remove();
-	    	System.out.println(consentCollection.size() + " : Collection Size");
-	    	CollectionProtocol updatedCollectionProtocol = (CollectionProtocol)appService.updateObject(collectionProtocol);
-	    	Logger.out.info("Domain object successfully updated ---->"+updatedCollectionProtocol);
-	    	assertTrue("Domain object updated successfully", true);
-	    } 
-	    catch (Exception e)
-	    {
-	    	Logger.out.error(e.getMessage(),e);
-	    	System.out.println("TestCaseTesting.testdeleteCollectionProtocolEvent()"+ e.getMessage());
-	    	e.printStackTrace();
-	    	fail("Failed to update object");
-	    }
-	}
 	public void testSearchCollectionProtocol()
 	{
     	CollectionProtocol collectionProtocol = new CollectionProtocol();
