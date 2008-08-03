@@ -195,12 +195,15 @@
 			if(event.label==DAGConstants.DELETE)
 			{
 				
-				var dagPath:DAGPath = this.parentApplication.dagPathUIMap.getValue(this.name);
+				Alert.show("Delete Path functionality is Temporarily Suspended. Please Redefine the Query");
+				/*var dagPath:DAGPath = this.parentApplication.dagPathUIMap.getValue(this.name);
 				var node1:String=dagPath.sourceExpId+"";
 				var node2:String=dagPath.destinationExpId+"";
 				var dagNode1:DAGNode = DAGNode(this.parent.getChildByName(node1));
 				var dagNode2:DAGNode = DAGNode(this.parent.getChildByName(node2));
 				deletePath(dagNode1,dagNode2);
+				
+				*/
 			}
 				
 		}

@@ -374,7 +374,8 @@
 		{
 			if(event.label == DAGConstants.DELETE)
 			{
-				deleteNode();
+				Alert.show("Delete Path functionality is Temporarily Suspended. Please Redefine the Query");
+				//deleteNode();
 			}
 			if(event.label ==DAGConstants.EDIT)
 			{
