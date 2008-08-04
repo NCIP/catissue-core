@@ -575,28 +575,14 @@ function participantRegRow(subdivtag)
 			<tr onclick="javascript:showHide('add_medical_identifier')">
 				<td width="90%" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;<bean:message key="participant.medicalIdentifier" /> </span></td>
 				<td width="10%" align="right" class="tr_bg_blue1"><a href="#"
-					id="imgArrow_add_medical_identifier">
-				<logic:equal name="<%=Constants.OPERATION%>"
-						value="<%=Constants.EDIT%>">
-					<img src="images/uIEnhancementImages/dwn_arrow1.gif" alt="Hide Details"
-					width="80" height="9" hspace="10" border="0" />
-				</logic:equal>
-				<logic:notEqual name="<%=Constants.OPERATION%>"
-						value="<%=Constants.EDIT%>">
-					<img src="images/uIEnhancementImages/up_arrow.gif" alt="Show Details"
-					width="80" height="9" hspace="10" border="0" />
-				</logic:notEqual></a></td>
+					id="imgArrow_add_medical_identifier">				
+					<img src="images/uIEnhancementImages/dwn_arrow1.gif" alt="Show Details"
+					width="80" height="9" hspace="10" border="0" />					
+				</a></td>
 			</tr>
 			<tr>
-				<td colspan="2" class="showhide1">
-				<logic:equal name="<%=Constants.OPERATION%>"
-						value="<%=Constants.EDIT%>">
-					<div id="add_medical_identifier" style="display:none">
-				</logic:equal>
-				<logic:notEqual name="<%=Constants.OPERATION%>"
-						value="<%=Constants.EDIT%>">
-					<div id="add_medical_identifier" style="display:block">
-				</logic:notEqual>
+				<td colspan="2" class="showhide1">				
+				<div id="add_medical_identifier" style="display:none">			
 				<table width="100%" border="0" cellspacing="0" cellpadding="3">
 
 					<tr class="tableheading">
@@ -677,28 +663,19 @@ function participantRegRow(subdivtag)
 				<td width="90%" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;<bean:message key="participant.collectionProtocolReg" /> </span></td>
 				<td width="10%" align="right" class="tr_bg_blue1"><a href="#"
 					id="imgArrow_add_participant_registeration">
-					<logic:equal name="<%=Constants.OPERATION%>"
-						value="<%=Constants.EDIT%>">
-							<img src="images/uIEnhancementImages/dwn_arrow1.gif" alt="Show Details"
-					width="80" height="9" hspace="10" border="0" />
-					</logic:equal>
-					<logic:notEqual name="<%=Constants.OPERATION%>"
-						value="<%=Constants.EDIT%>">
+					
+					
 							<img src="images/uIEnhancementImages/up_arrow.gif" alt="Show Details"
 					width="80" height="9" hspace="10" border="0" />
-					</logic:notEqual>
+					
 						</a></td>
 			</tr>
 			<tr>
 				<td colspan="2" class="showhide1">
-				<logic:equal name="<%=Constants.OPERATION%>"
-						value="<%=Constants.EDIT%>">
-						<div id="add_participant_registeration" style="display:none">
-				</logic:equal>
-				<logic:notEqual name="<%=Constants.OPERATION%>"
-						value="<%=Constants.EDIT%>">
+				
+				
 						<div id="add_participant_registeration" style="display:block">
-				</logic:notEqual>
+				
 				<table width="100%" border="0" cellspacing="0" cellpadding="3">
 
 
