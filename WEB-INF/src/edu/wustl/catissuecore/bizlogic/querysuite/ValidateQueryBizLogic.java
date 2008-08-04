@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
+import edu.wustl.catissuecore.querysuite.CatissueSqlGenerator;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.querysuite.QueryCSMUtil;
 import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
@@ -75,7 +76,7 @@ public class ValidateQueryBizLogic {
 		}
 		try 
 		{
-		SqlGenerator sqlGenerator = (SqlGenerator) SqlGeneratorFactory.getInstance();
+		SqlGenerator sqlGenerator = new CatissueSqlGenerator();
 		String selectSql = sqlGenerator.generateSQL(query);
 		Map<String, IOutputTerm> outputTermsColumns = sqlGenerator.getOutputTermsColumns();
 		HttpSession session = request.getSession(); 
