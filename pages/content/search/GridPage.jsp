@@ -72,7 +72,8 @@ function init_grid()
 	//document.write("<hr>"+colWidth+"<hr>");
 	if(useFunction == "derivedSpecimenGrid")
 	{
-		colWidth = "130,130,130,130,0";
+	   //colWidth = "130,130,130,130,0";
+	   colWidth="25,25,25,25";
 	}
 
 	if(useFunction == "eventParametersGrid")
@@ -85,15 +86,19 @@ function init_grid()
 	{
 		colWidth = "33,0,33,34,0,0,0";
 	}
-
+	
 	//document.write("<hr>"+colWidth+"<hr>");
     mygrid.enableRowsHover(true,'grid_hover')
-	if(useFunction == "eventParametersGrid" || useFunction == "goToConflictDetails")
+	if(useFunction == "eventParametersGrid" || useFunction == "goToConflictDetails" || useFunction == "derivedSpecimenGrid")
 	{
 		mygrid.setInitWidthsP(colWidth);
 	}
+		
 	else
-		mygrid.setInitWidths(colWidth);
+	{
+      mygrid.setInitWidths(colWidth);
+	}
+		
 	
 	mygrid.setSkin("light");
 	mygrid.enableAlterCss("even","uneven");

@@ -185,15 +185,15 @@ var useFunction = "derivedSpecimenGrid";
 		%>
   </td>
   </tr>
-  
+ 
+  <tr >
+          <td class="showhide"><table width="99%" border="0" cellspacing="0" cellpadding="3">
+   
    <%
 		if(getConsentResponse.equals(Constants.WITHDRAW))
 		{
-  %>
-  
-       <tr >
-          <td class="showhide"><table width="99%" border="0" cellspacing="0" cellpadding="3">
-          <tr>
+  %> 
+         <tr>
            <td align="left" class="tr_bg_blue1"><span
 					class="blue_ar_b"><%
 							if(withdrawAll.equals(Constants.TRUE))
@@ -219,59 +219,60 @@ var useFunction = "derivedSpecimenGrid";
       </tr>
      
 	
-	<%
-					if(withdrawAll.equals(Constants.FALSE))									
-					{
-					%><tr>
-						<td class="tabrightmostcell">
-							<b>
-								<bean:message key="consent.noaction" />
-							<b>
-						</td>
-						<td align="right" class="formField">
-							<input type="button" style="actionButton" value="<%=Constants.WITHDRAW_RESPONSE_RESET %>" style="width:100%" onclick="getButtonStatus(this)"/>
-						</td>
-					</tr>
-					<%
-					}
-					%>
+	<%	if(withdrawAll.equals(Constants.FALSE))									
+	  {
+	%>
+	      <tr>
+            <td width="45%" class="black_ar"><bean:message key="consent.noaction" /></td>
+          </tr>
+    <%
+	  }
+	%>
 
 	</table></td>
   </tr>
    <tr >
     <td class="buttonbg"><input name="Submit" type="submit" class="blue_ar_b" value="<%=Constants.WITHDRAW_RESPONSE_DISCARD %>" onclick="getButtonStatus(this)" accesskey="Enter" />| <input name="Submit" type="submit" class="blue_ar_b" value="<%=Constants.WITHDRAW_RESPONSE_RETURN%>" onclick="getButtonStatus(this)" accesskey="Enter" />
-    | <a href="javascript:cancelWindow()" class="cancellink"><bean:message key="buttons.cancel" /> </a></td>
-  </tr>    
+	 <% if(withdrawAll.equals(Constants.FALSE))									
+					{
+					%>
+					 |<input name="Submit" type="submit" class="blue_ar_b" value="<%=Constants.WITHDRAW_RESPONSE_RESET %>" onclick="getButtonStatus(this)" accesskey="Enter" />
+					 <% } %>
+    
 <%
 		}
 		else
 		{
-		%><table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
-				<tr>
-					<td class="tabrightmostcell">
-						<b>
-							<bean:message key="consent.currentstatusonnonconflictingspecimen" />
-						</b>	
-					</td>
-					<td align="right" class="formField">
-							<input type="button" style="actionButton" style="width:100%" value="<%=Constants.APPLY %>"  onclick="getStatus(this)"/>
-						</td>
-					</tr>
-					<tr>
-						<td class="tabrightmostcell">
-							<b>
-								<bean:message key="consent.currentstatusonallspecimen" />	
-							<b>
-						</td>
-						<td align="right" class="formField">
-							<input type="button" style="actionButton" style="width:100%" value="<%=Constants.APPLY_ALL%>"  onclick="getStatus(this)"/>
-						</td>
-					</tr>
-			</table>
-		<%
+		%>   	
+		         <tr>
+                    <td align="left" class="tr_bg_blue1"><span
+					class="blue_ar_b"> <bean:message key="consent.applystatusquestion" />
+                  </tr>
+
+
+		
+		        <tr>
+                   <td width="45%" class="black_ar"><bean:message key="consent.currentstatusonnonconflictingspecimen" /></td>
+                </tr>
+                <tr>
+                  <td width="45%" class="black_ar"><bean:message key="consent.currentstatusonallspecimen" /></td>
+                </tr>
+			</table> </td> </tr>
+			<tr>
+			   <td class="buttonbg"><input name="Submit" type="submit" class="blue_ar_b" value="<%=Constants.APPLY %>"  onclick="getStatus(this)" accesskey="Enter" />|
+
+			   <input name="Submit" type="submit" class="blue_ar_b" value="<%=Constants.APPLY_ALL%>"  onclick="getStatus(this)" accesskey="Enter" />
+			   
+			  
+		<%  
 		}
 		%>
 
+| <a href="javascript:cancelWindow()" class="cancellink"><bean:message key="buttons.cancel"/> </a></td>
+
+
+
+  </tr>    
 </table>	
 		
 		

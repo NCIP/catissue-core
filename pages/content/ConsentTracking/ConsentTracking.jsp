@@ -141,7 +141,7 @@ function popupWindow(nofConsentTiers)
 			%>	
 		
 				var url="pages/content/ConsentTracking/consentDialog.jsp?withrawall=true&response=nowithdraw&pageOf="+"<%=pageOf%>";
-				window.open(url,'WithdrawAll','height=200,width=550,scrollbars=1,resizable=0');
+				window.open(url,'WithdrawAll','height=350,width=530,center=1,scrollbars=1,resizable=0');
 			<%}
 			else
 			{%>
@@ -155,7 +155,7 @@ function popupWindow(nofConsentTiers)
 	else
 	{
 		var url="pages/content/ConsentTracking/consentDialog.jsp?withrawall=false&response=withdraw&pageOf="+"<%=pageOf%>";
-		window.open(url,'Withdraw','height=200,width=550,scrollbars=1,resizable=0');
+		window.open(url,'Withdraw','height=365,width=530,center=1,scrollbars=1,resizable=0');
 	}
 }	
 
@@ -211,7 +211,7 @@ function popupWindow(nofConsentTiers)
 	<%-- Main table Start --%>
 	<table width="100%" border="0" cellpadding="0" cellspacing="0"   id="consentTabForSCG">
 		<%--Title of the form i.e Consent Form --%>				
-		
+	
 		<tr>
 			<td align="left" class="tr_bg_blue1"><span class="blue_ar_b">
 				<%
@@ -713,7 +713,7 @@ function popupWindow(nofConsentTiers)
 				</td>	
 			</tr>
 			<tr>
-			<td >
+			<td class="buttonbg">
 			<%if(operation.equals(Constants.EDIT))
 				{
 				String str = "withdrawAll('"+ consentTierList.size()+"')";
@@ -736,8 +736,5 @@ function popupWindow(nofConsentTiers)
 						%>
 				
 				</td></tr>
-				<tr>
-				<td class="bottomtd"></td>
-				</tr>
 	</table>
 	<%-- Main table End --%>
