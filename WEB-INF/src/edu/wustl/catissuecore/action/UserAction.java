@@ -156,6 +156,8 @@ public class UserAction extends SecureAction
 		}
 		if(operation.equalsIgnoreCase(Constants.ADD))
 		{
+			request.getSession(true).setAttribute("rowIdBeanMapForUserPage", null);
+			
 			if(userForm.getCountry()==null)
 			{
 				userForm.setCountry((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_COUNTRY));
