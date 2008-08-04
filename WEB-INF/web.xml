@@ -7,6 +7,11 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 
    <display-name>caTISSUE Core</display-name>
    
+   <!-- This error-page has been added as a general solution for Bug:8581 -->
+  <error-page>
+  		<exception-type>java.lang.Exception</exception-type>
+  		<location>/pages/content/home/Error.jsp</location>
+  </error-page> 
   <!-- application properties file path -->
   <context-param>
     	<param-name>applicationproperties</param-name>
