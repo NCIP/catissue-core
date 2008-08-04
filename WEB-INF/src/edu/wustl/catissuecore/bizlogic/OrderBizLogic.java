@@ -64,6 +64,7 @@ import edu.wustl.common.util.dbManager.DBUtil;
 import edu.wustl.common.util.dbManager.HibernateMetaData;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
+import edu.wustl.common.util.global.Variables;
 import edu.wustl.common.util.logger.Logger;
 
 public class OrderBizLogic extends DefaultBizLogic
@@ -839,7 +840,7 @@ public class OrderBizLogic extends DefaultBizLogic
 				Site site = (Site)siteCollectionItr.next();
 				String objectId = Constants.SITE_CLASS_NAME+"_"+site.getId();
 
-				boolean isAuthorized = privilegeCache.hasPrivilege(objectId,"DISTRIBUTION");
+				boolean isAuthorized = privilegeCache.hasPrivilege(objectId, Variables.privilegeDetailsMap.get(Constants.DISTRIBUTE_SPECIMENS));
 				if(isAuthorized)
 				{
 					siteCollWithDistriPri.add(site.getId());
@@ -886,7 +887,7 @@ public class OrderBizLogic extends DefaultBizLogic
 				Site site = (Site)siteCollectionItr.next();
 				String objectId = Constants.SITE_CLASS_NAME+"_"+site.getId();
 				
-				boolean isAuthorized = privilegeCache.hasPrivilege(objectId,"DISTRIBUTION");
+				boolean isAuthorized = privilegeCache.hasPrivilege(objectId, Variables.privilegeDetailsMap.get(Constants.DISTRIBUTE_SPECIMENS));
 				if(isAuthorized)
 				{
 					siteCollWithDistriPri.add(site.getId());

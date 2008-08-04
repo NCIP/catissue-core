@@ -81,15 +81,18 @@
 	<PrivilegeMapping key="DERIVE_SPECIMEN" value="SPECIMEN_PROCESSING"/>
 	<PrivilegeMapping key="ADD_EDIT_SCG" value="REGISTRATION"/>
 	<PrivilegeMapping key="ADD_EDIT_SPECIMEN_ARRAY" value="CREATE_ARRAY"/>
+	<PrivilegeMapping key="DISTRIBUTE_SPECIMENS" value="DISTRIBUTION"/>
 
 	<!-- Specimen Events purpose -->
 	<PrivilegeMapping key="ADD_EDIT_SPECIMEN_EVENTS" value="SPECIMEN_PROCESSING"/>
 	
 	<!-- General purpose -->
 	<PrivilegeMapping key="CP_BASED_VIEW_FILTRATION" value="REGISTRATION"/>
-	<PrivilegeMapping key="PHI_ACCESS" value="PHI_ACCESS"/>
-	<PrivilegeMapping key="READ_DENIED" value="READ_DENIED"/>
 	<PrivilegeMapping key="EDIT_PROFILE_PRIVILEGE" value="REGISTRATION"/>
+		<!-- Privilege Names Used for Authorization in CsmCacheManager -->
+		<PrivilegeMapping key="PHI_ACCESS" value="PHI_ACCESS"/>
+		<PrivilegeMapping key="READ_DENIED" value="READ_DENIED"/>
+		<PrivilegeMapping key="REGISTRATION" value="REGISTRATION"/>
 </taskPrivilegeMappings>	
 
 	

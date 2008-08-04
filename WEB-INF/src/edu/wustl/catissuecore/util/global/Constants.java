@@ -2403,6 +2403,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String ADD_EDIT_SCG = "ADD_EDIT_SCG";
 	public static final String ADD_EDIT_SPECIMEN_ARRAY = "ADD_EDIT_SPECIMEN_ARRAY";
 	public static final String ADD_EDIT_SPECIMEN_EVENTS = "ADD_EDIT_SPECIMEN_EVENTS";
+	public static final String DISTRIBUTE_SPECIMENS = "DISTRIBUTE_SPECIMENS";
 	public static final String OUTPUT_TERMS_COLUMNS = "outputTermsColumns";
 	public static final String CP_BASED_VIEW_FILTRATION = "CP_BASED_VIEW_FILTRATION";
 	public static final String EDIT_PROFILE_PRIVILEGE= "EDIT_PROFILE_PRIVILEGE";
