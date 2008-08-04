@@ -24,8 +24,7 @@
 <script type="text/javascript" src="jss/ext-all.js"></script>
 <script type="text/javascript">
 function editUserProfile(item){
-	<%String actionPath="UserSearch.do?pageOf=pageOfUserProfile&id="+userId;%>
-	document.location.href = "<%=actionPath%>";
+	document.location.href = "UserProfileEdit.do?pageOf=pageOfUserProfile";
 }
 </script>
 
