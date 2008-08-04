@@ -41,7 +41,7 @@
 			<%	NameValueBean nameValueBean=(NameValueBean)nvb;
 			String hrefString="StorageContainerSearch.do?pageOf=pageOfStorageContainer&id="+nameValueBean.getValue();
 			%>
-			<td width="33%" class="black_ar"><img src="images/uIEnhancementImages/ic_storageC.gif" alt="Storage Container" width="19" height="14" align="absmiddle"><html:link href="<%=hrefString%>"><bean:write name="nvb" property="name"/></html:link></td>
+			<td width="33%" class="black_ar"><img src="images/uIEnhancementImages/ic_storageC.gif" alt="Storage Container" width="19" height="14" align="absmiddle">&nbsp;<html:link href="<%=hrefString%>" styleClass="view"><bean:write name="nvb" property="name" /></html:link></td>
 				<%cnt=cnt+1;%>
 				<%
 					if(cnt == 3)

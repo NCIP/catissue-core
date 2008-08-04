@@ -116,24 +116,24 @@ function getSelectedTab(){
         <tr>
 							<logic:equal parameter="operation"	value='showEditAPageAndMap'>
 							<td width="25%"  valign="top">
-								<iframe id="SCTreeView" src="ShowFramedPage.do?pageOf=pageOfStorageContainer&storageType=-1&operation=${requestScope.operation}" scrolling="auto" frameborder="0" width="100%" name="SCTreeView" height="450" >
+								<iframe id="SCTreeView" src="ShowFramedPage.do?pageOf=pageOfStorageContainer&storageType=-1&operation=${requestScope.operation}" scrolling="auto" frameborder="0" width="100%" name="SCTreeView" height="435" >
 									Your Browser doesn't support IFrames.
 								</iframe>
 							 </td>
 							 </logic:equal>
 							 <td width="75%" valign="top">
 								<logic:equal parameter="operation"	value='add'>
-							 	<iframe name="StorageContainerView"	id="StorageContainerView" src="StorageContainer.do?operation=add&pageOf=pageOfStorageContainer" scrolling="auto" frameborder="0" width="100%" height="450" >
+							 	<iframe name="StorageContainerView"	id="StorageContainerView" src="StorageContainer.do?operation=add&pageOf=pageOfStorageContainer" scrolling="auto" frameborder="0" width="100%" height="435" >
 									Your Browser doesn't support IFrames.
 								</iframe>
 								</logic:equal>
 								<logic:equal parameter="operation"	value='edit'>
-								<iframe name="StorageContainerView"	id="StorageContainerView" src="StorageContainer.do?operation=edit&pageOf=pageOfStorageContainer" scrolling="auto" frameborder="0" width="100%" height="450" >
+								<iframe name="StorageContainerView"	id="StorageContainerView" src="StorageContainer.do?operation=edit&pageOf=pageOfStorageContainer" scrolling="auto" frameborder="0" width="100%" height="435" >
 									Your Browser doesn't support IFrames.
 								</iframe>
 								</logic:equal>
 								<logic:equal parameter="operation"	value='showEditAPageAndMap'>
-								 <iframe name="StorageContainerView"	id="StorageContainerView" src="storageContainerEditMessageScreen.do" scrolling="auto" frameborder="0" width="100%" height="450" >
+								 <iframe name="StorageContainerView"	id="StorageContainerView" src="storageContainerEditMessageScreen.do" scrolling="auto" frameborder="0" width="100%" height="435" >
 									Your Browser doesn't support IFrames.
 								</iframe>
 								</logic:equal>

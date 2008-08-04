@@ -365,10 +365,7 @@ function refresh_tree(nodeId)
 								 else
 									 containerName =containerName.substring(11,containerNameSize);
 							%>
-							<td  class="tabletdformap" noWrap align="center">
-								<a href="<%=openStorageContainer%>" onclick="javaScript:refresh_tree('<%=childContainerName[i][j]%>')" onmouseover="Tip(' <%=childContainerType[i][j]%>')"> <img src="images/uIEnhancementImages/used_container.gif" alt="Unused" width="32" height="32"  border="0"> <%=containerName%><!-- : <%=childContainerIds[i][j]%> -->
-								</a>
- 							</td>
+							<td  class="tabletdformap" noWrap align="center"><a class="view"href="<%=openStorageContainer%>" onclick="javaScript:refresh_tree('<%=childContainerName[i][j]%>')" onmouseover="Tip(' <%=childContainerType[i][j]%>')"> <img src="images/uIEnhancementImages/used_container.gif" alt="Unused" width="32" height="32"  border="0"><br><%=containerName%><!-- : <%=childContainerIds[i][j]%> --></a></td>
 					   	  <%}
 							else{
 								String containerName =childContainerType[i][j];
@@ -393,14 +390,11 @@ function refresh_tree(nodeId)
 							
 								if(pageOfSpecimen!=null && pageOfSpecimen.equals(Constants.ALIAS_SPECIMEN))
 								{%>
-								<a href="QuerySpecimenSearch.do?<%=Constants.PAGEOF%>=pageOfNewSpecimenCPQuery&<%=Constants.SYSTEM_IDENTIFIER%>=<%=childContainerIds[i][j]%>" onmouseover="Tip('<%=childContainerType[i][j]%>')"><img src="images/uIEnhancementImages/specimen.gif" alt="Unused" width="32" height="32"  border="0"> <%=containerName%><!--: <%=childContainerIds[i][j]%> -->
-								</a>
-								
+								<a class="view" href="QuerySpecimenSearch.do?<%=Constants.PAGEOF%>=pageOfNewSpecimenCPQuery&<%=Constants.SYSTEM_IDENTIFIER%>=<%=childContainerIds[i][j]%>" onmouseover="Tip('<%=childContainerType[i][j]%>')"><img src="images/uIEnhancementImages/specimen.gif" alt="Unused" width="32" height="32"  border="0"><br><%=containerName%><!--: <%=childContainerIds[i][j]%> --></a>
 								<%}
 								if(pageOfSpecimen!=null && pageOfSpecimen.equals(Constants.ALIAS_SPECIMEN_ARRAY))
 								{%>
-								<a href="QuerySpecimenArraySearch.do?<%=Constants.PAGEOF%>=pageOfSpecimenArray&<%=Constants.SYSTEM_IDENTIFIER%>=<%=childContainerIds[i][j]%>" onmouseover="Tip('<%=childContainerType[i][j]%>')"><img src="images/uIEnhancementImages/specimen_array.gif" alt="Unused" width="32" height="32"  border="0"> <%=containerName%><!--: <%=childContainerIds[i][j]%> -->
-								</a>
+								<a class="view" href="QuerySpecimenArraySearch.do?<%=Constants.PAGEOF%>=pageOfSpecimenArray&<%=Constants.SYSTEM_IDENTIFIER%>=<%=childContainerIds[i][j]%>" onmouseover="Tip('<%=childContainerType[i][j]%>')"><img src="images/uIEnhancementImages/specimen_array.gif" alt="Unused" width="32" height="32"  border="0"><br><%=containerName%><!--: <%=childContainerIds[i][j]%> --></a>
 								</td>
 								<% }
 								}%>

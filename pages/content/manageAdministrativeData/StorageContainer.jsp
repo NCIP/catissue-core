@@ -439,7 +439,7 @@ function onRadioButtonClickOfSpecimen(element)
 {
 	var specimenClass = document.getElementById("holdsSpecimenClassTypeIds");
 	var specimenArray = document.getElementById("holdsSpecimenArrTypeIds");
-	
+
 	if(element == "Specimen")
 	{
 		specimenClass.disabled = false;
@@ -870,7 +870,7 @@ function setParentContainerType()
 						<td width="26%" align="left" class="tabletd1">
 							<logic:equal name="storageContainerForm" property="specimenOrArrayType" value="Specimen">
 							<html:select property="holdsSpecimenClassTypes" styleClass="formFieldSizedSC" styleId="holdsSpecimenClassTypeIds" size="4" multiple="true" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)"><html:options collection="<%=Constants.HOLDS_LIST2%>" labelProperty="name" property="value"/></html:select></logic:equal>
-							<logic:equal name="storageContainerForm" property="specimenOrArrayType" value="SpecimenArray"><html:select property="holdsSpecimenClassTypes" styleClass="formFieldSizedForSC" styleId="holdsSpecimenClassTypeIds" size="4" multiple="true"  onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" disabled="true"><html:options collection="<%=Constants.HOLDS_LIST2%>" labelProperty="name" property="value"/></html:select>
+							<logic:equal name="storageContainerForm" property="specimenOrArrayType" value="SpecimenArray"><html:select property="holdsSpecimenClassTypes" styleClass="formFieldSizedSC" styleId="holdsSpecimenClassTypeIds" size="4" multiple="true"  onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" disabled="true"><html:options collection="<%=Constants.HOLDS_LIST2%>" labelProperty="name" property="value"/></html:select>
 							</logic:equal>
 						</td>
 						<td width="26%" align="left" class="tabletd1">
