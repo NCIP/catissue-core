@@ -191,18 +191,22 @@ PUBLIC
 		
 		<action path="/ContactUs" type="edu.wustl.common.action.ApplicationFooterAction">
             <forward name="success" path=".catissuecore.contactUsDef"/>
+            <forward name="failure" path=".catissuecore.errorPageDef"/>
 		</action>
 
 		<action path="/Accessibility" type="edu.wustl.common.action.ApplicationFooterAction">
             <forward name="success" path=".catissuecore.accessibilityDef"/>
+            <forward name="failure" path=".catissuecore.errorPageDef"/>
 		</action>
 
 		<action path="/Disclaimer" type="edu.wustl.common.action.ApplicationFooterAction">
             <forward name="success" path=".catissuecore.disclaimerDef"/>
+            <forward name="failure" path=".catissuecore.errorPageDef"/>
 		</action>
 		
 		<action path="/PrivacyNotice" type="edu.wustl.common.action.ApplicationFooterAction">
             <forward name="success" path=".catissuecore.privacyNoticeDef"/>
+            <forward name="failure" path=".catissuecore.errorPageDef"/>
 		</action>
 		
         <action path="/Summary" type="edu.wustl.catissuecore.action.SummaryAction">
@@ -1297,6 +1301,19 @@ PUBLIC
 			<forward name="success" path="/UserSearch.do?pageOf=pageOfUserAdmin&amp;pageFrom=ApproveUser" />
 			<forward name="failure" path="/User.do?operation=edit&amp;pageOf=pageOfApproveUser&amp;menuSelected=1" />
 		</action>
+		
+		<!--Added new action servlet for bug: 7978  -->
+		<action path="/UserProfileEdit"
+		    type="edu.wustl.catissuecore.action.UserEditProfileAction"
+		    name="userForm"
+			validate="true"
+			input="/User.do?operation=edit&amp;menuSelected=1"
+			scope="request">
+			<forward name="pageOfUserAdmin" path="/User.do?operation=edit&amp;pageOf=pageOfUserAdmin&amp;menuSelected=1"/>
+			<forward name="pageOfUserProfile" path="/User.do?operation=edit&amp;pageOf=pageOfUserProfile&amp;menuSelected=1"/>
+			<forward name="failure" path="/User.do?operation=edit&amp;pageOf=&amp;menuSelected=1"/>
+			<forward name="homePage" path=".catissuecore.homeDef" /> 
+		</action> 
 		
 		<action path="/UserSearch"
 		    type="edu.wustl.common.action.CommonSearchAction"
