@@ -867,11 +867,17 @@ public class UserForm extends AbstractActionForm
 						{
 							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
 									.getValue("user.lastName")));
+						}else if(validator.isXssVulnerable(lastName)){ //Bug:7976 & 7977: added check for xxs vulnerable
+							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.xss.invalid", ApplicationProperties
+									.getValue("user.lastName")));
 						}
 
 						if (validator.isEmpty(firstName))
 						{
 							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
+									.getValue("user.firstName")));
+						}else if(validator.isXssVulnerable(firstName)){	//Bug:7976 & 7977: added check for xxs vulnerable
+							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.xss.invalid", ApplicationProperties
 									.getValue("user.firstName")));
 						}
 
@@ -999,8 +1005,11 @@ public class UserForm extends AbstractActionForm
 									errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.confirmNewPassword.reType"));
 								}
 							}
-							
-							int result = PasswordManager.validatePasswordOnFormBean(newPassword, oldPassword, request.getSession());
+							//Bug-7979
+							int result=PasswordManager.SUCCESS;
+							if(!Constants.DUMMY_PASSWORD.equals(newPassword)){
+								result = PasswordManager.validatePasswordOnFormBean(newPassword, oldPassword, request.getSession());
+							}
 							
 							if (result != PasswordManager.SUCCESS)
 							{
