@@ -618,6 +618,12 @@ public class UserBizLogic extends DefaultBizLogic
 
 			gov.nih.nci.security.authorization.domainobjects.User csmUser = SecurityManager.getInstance(UserBizLogic.class).getUserById(csmUserId);
 
+			//Bug:7979
+			if(Constants.DUMMY_PASSWORD.equals(user.getNewPassword()))
+			{
+				user.setNewPassword(csmUser.getPassword());
+			}
+			
 			String oldPassword = user.getOldPassword();
 			// If the page is of change password, 
 			// update the password of the user in csm and catissue tables. 
@@ -1086,11 +1092,21 @@ public class UserBizLogic extends DefaultBizLogic
 			message = ApplicationProperties.getValue("user.lastName");
 			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
 		}
+		else if(validator.isXssVulnerable(user.getLastName()))
+		{
+			message = ApplicationProperties.getValue("user.lastName");
+			throw new DAOException(ApplicationProperties.getValue("errors.xss.invalid",message));	
+		}
 
 		if (validator.isEmpty(user.getFirstName()))
 		{
 			message = ApplicationProperties.getValue("user.firstName");
 			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
+		}
+		else if(validator.isXssVulnerable(user.getFirstName()))
+		{
+			message = ApplicationProperties.getValue("user.firstName");
+			throw new DAOException(ApplicationProperties.getValue("errors.xss.invalid",message));	
 		}
 
 		if (validator.isEmpty(user.getAddress().getCity()))
