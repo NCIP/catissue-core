@@ -382,8 +382,8 @@ public class TemporalQueryBean
 			}
 			else
 			{
-				IExpression2 = QueryObjectFactory.createExpressionAttribute(srcIExpression,destAttributeById);
-				dateOffsetAttr1 = QueryObjectFactory.createDateOffsetAttribute(destIExpression,srcAttributeById,TimeInterval.Day);
+				IExpression2 = QueryObjectFactory.createExpressionAttribute(destIExpression,destAttributeById);
+				dateOffsetAttr1 = QueryObjectFactory.createDateOffsetAttribute(srcIExpression,srcAttributeById,TimeInterval.Day);
 			}
 		}
 	}
