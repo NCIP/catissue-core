@@ -216,7 +216,7 @@ function handleStatus(status)
 									<td align="left" class="black_ar"><label for="newPassword">
 									<bean:message key="user.newPassword" /> </label></td>
 									<td align="left"><html:password styleClass="black_ar"
-										size="30" styleId="newPassword" property="newPassword" /></td>
+										size="30" styleId="newPassword" property="newPassword" value="<%=Constants.DUMMY_PASSWORD%>" /></td>
 									<td align="left" class="black_ar">&nbsp;</td>
 									<td align="center" class="black_ar"><span
 										class="blue_ar_b"><img
@@ -227,7 +227,7 @@ function handleStatus(status)
 										key="user.confirmNewPassword" /> </label></td>
 									<td align="left"><html:password styleClass="black_ar"
 										size="30" styleId="confirmNewPassword"
-										property="confirmNewPassword" /></td>
+										property="confirmNewPassword" value="<%=Constants.DUMMY_PASSWORD%>" /></td>
 									<td align="left" valign="top">&nbsp;</td>
 								</tr>
 							</logic:equal>
