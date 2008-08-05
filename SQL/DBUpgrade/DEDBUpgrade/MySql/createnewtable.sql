@@ -1,3 +1,4 @@
+SET storage_engine=InnoDB;
 create table DYEXTN_ABSTR_CONTAIN_CTR (
    IDENTIFIER bigint not null,
    CONTAINER_ID bigint,
