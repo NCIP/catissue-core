@@ -145,29 +145,29 @@ public class CatissueSqlGenerator extends SqlGenerator {
 
         private IArithmeticOperand roundingOffset() {
             TimeInterval<?> timeInterval = timeInterval();
-            if (timeInterval == TimeInterval.Second) {
+            if (timeInterval.equals(TimeInterval.Second)) {
                 return offset(0, TimeInterval.Second);
             }
-            if (timeInterval == TimeInterval.Minute) {
+            if (timeInterval.equals(TimeInterval.Minute)) {
                 return offset(30, TimeInterval.Second);
             }
-            if (timeInterval == TimeInterval.Hour) {
+            if (timeInterval.equals(TimeInterval.Hour)) {
                 return offset(30, TimeInterval.Minute);
             }
-            if (timeInterval == TimeInterval.Day) {
+            if (timeInterval.equals(TimeInterval.Day)) {
                 return offset(12, TimeInterval.Hour);
             }
-            if (timeInterval == TimeInterval.Week) {
+            if (timeInterval.equals(TimeInterval.Week)) {
                 // 3.5 * 24
                 return offset(84, TimeInterval.Hour);
             }
-            if (timeInterval == TimeInterval.Month) {
+            if (timeInterval.equals(TimeInterval.Month)) {
                 return offset(15, TimeInterval.Day);
             }
-            if (timeInterval == TimeInterval.Quarter) {
+            if (timeInterval.equals(TimeInterval.Quarter)) {
                 return offset(45, TimeInterval.Day);
             }
-            if (timeInterval == TimeInterval.Year) {
+            if (timeInterval.equals(TimeInterval.Year)) {
                 return offset(6, TimeInterval.Month);
             }
             throw new RuntimeException("won't occur.");
