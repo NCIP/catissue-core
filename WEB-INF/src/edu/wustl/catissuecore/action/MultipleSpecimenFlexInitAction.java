@@ -31,7 +31,7 @@ public class MultipleSpecimenFlexInitAction extends SecureAction
 		String operation = request.getParameter(Constants.OPERATION);
 
 		String mode = Constants.ADD;
-		if (operation != null && operation.equals(Constants.EDIT))
+		if (operation != null && operation.equalsIgnoreCase(Constants.EDIT))
 			mode = Constants.EDIT;
 
 		String showParentSelection = "false";
@@ -64,7 +64,7 @@ public class MultipleSpecimenFlexInitAction extends SecureAction
 			request.setAttribute(Constants.PAGEOF, pageOf);
 			return mapping.findForward(pageOf);
 		}
-		else if(Constants.EDIT.equals(mode))
+		else if(Constants.EDIT.equalsIgnoreCase(mode))
 		{
 			request.setAttribute(Constants.PAGEOF,"pageOfMultipleSpWithMenu");
 		}
