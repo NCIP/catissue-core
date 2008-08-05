@@ -618,7 +618,8 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			if (specimen.getLabel() == null)
 			{
 				AbstractSpecimenCollectionGroup scg = specimen.getSpecimenCollectionGroup();
-				specimen.setLabel(scg.getGroupName() + "_" + (Math.random() * scg.getId()));
+				specimen.setLabel(null);
+				//specimen.setLabel(scg.getGroupName() + "_" + (Math.random() * scg.getId()));
 			}
 		}
 	}
@@ -1732,6 +1733,12 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 
 		if (obj instanceof LinkedHashSet)
 		{
+			//bug no. 8081 and 8083
+			if(!edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl)
+			{
+				validateLable(obj);
+				 
+			}
 			if (operation.equals(Constants.ADD))
 			{
 				return MultipleSpecimenValidationUtil.validateMultipleSpecimen((LinkedHashSet) obj,
@@ -1748,7 +1755,34 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		}
 		return result;
 	}
-
+	/**
+	 * @param obj
+	 * @throws DAOException
+	 */
+	private void validateLable(Object obj) throws DAOException {
+		Iterator specimenIterator = ((LinkedHashSet) obj).iterator();
+		while(specimenIterator.hasNext())
+		{
+			Specimen temp = (Specimen)specimenIterator.next();
+			if((temp.getLabel() == null || temp.getLabel().equals("")) && temp.getCollectionStatus().equalsIgnoreCase("Collected"))
+			{
+				throw new DAOException("Lable is a manadatory field");
+			}
+			Collection aliquotsCollection = temp.getChildSpecimenCollection();
+			if(aliquotsCollection != null)
+			{
+				Iterator aliquotItert = aliquotsCollection.iterator();
+				while(aliquotItert.hasNext())
+				{
+					Specimen tempAliquot = (Specimen)aliquotItert.next();
+					if((tempAliquot.getLabel() == null || tempAliquot.getLabel().equals("")) && tempAliquot.getCollectionStatus().equalsIgnoreCase("Collected"))
+					{
+						throw new DAOException("Lable is a manadatory field");
+					}
+				}
+			}
+		}
+	}
 	/**
 	 * Validate Single Specimen
 	 * @param specimen Specimen Object to validate

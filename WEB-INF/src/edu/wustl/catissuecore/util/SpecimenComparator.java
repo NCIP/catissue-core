@@ -19,7 +19,7 @@ public class SpecimenComparator implements Comparator{
 			Specimen specimenFirst = (Specimen)arg0;
 			Specimen specimenSec = (Specimen)arg1;
 			
-			if(specimenFirst !=null && specimenSec != null)
+			if(specimenFirst !=null && specimenSec != null && specimenFirst.getLabel() != null && specimenSec.getLabel() != null)
 			{
 				return specimenFirst.getLabel().compareTo(specimenSec.getLabel());
 			}

@@ -307,6 +307,11 @@ public class CreateAliquotAction extends BaseAction
 			specimenCharacteristics.setTissueSide(aliquotForm.getTissueSide());
 			specimenCharacteristics.setTissueSite(aliquotForm.getTissueSite());
 			aliquotSpecimen.setSpecimenCharacteristics(specimenCharacteristics);
+			//bug no. 8081 and 8083
+			if(!edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl)
+			{
+			 aliquotSpecimen.setLabel((String) aliquotMap.get(specimenKey + i + "_label"));
+			}
 			specimenCollection.add(aliquotSpecimen);
 		}
 
