@@ -52,6 +52,7 @@ import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
@@ -937,7 +938,6 @@ public class AliquotAction extends SecureAction
 		}
 
 		Map aliquotMap = form.getAliquotMap();
-		
 		/**
     	 * Name : Virender Mehta
          * Reviewer: Sachin Lale
@@ -956,9 +956,14 @@ public class AliquotAction extends SecureAction
 		{
 			String qtyKey = "Specimen:" + i + "_quantity";
 			aliquotMap.put(qtyKey, distributedQuantity);
-//			String labelKey = "Specimen:" + i + "_label";
+			//bug no. 8081 & 8083
+			if(!edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl && form.getSpecimenLabel() != null)
+			{
+			long totalAliquotCount = getTotalNoOfAliquotSpecimen(Long.valueOf(form.getSpecimenID()));
+		String labelKey = "Specimen:" + i + "_label";
 //			aliquotMap.put(labelKey,"Abc");
-//			aliquotMap.put(labelKey, aliquotLabels.get(i-1));
+		aliquotMap.put(labelKey, form.getSpecimenLabel()+"_"+totalAliquotCount++);
+			}
 			
 		}
 
@@ -1334,6 +1339,25 @@ public class AliquotAction extends SecureAction
 			return Constants.COLLECTION_PROTOCOL_CLASS_NAME +"_"+aliquotForm.getSpCollectionGroupId();
 		}
 		return null; 
+	}
+	public synchronized long getTotalNoOfAliquotSpecimen(Long specId)throws DAOException
+	{
+		long aliquotChildCount =0;
+		String[] selectColumnName = {"id"};
+		String[] whereColumnName = {"parentSpecimen.id", "lineage", "collectionStatus"};
+		String[] whereColumnCondition = {"=", "=" , "="};
+		Object[] whereColumnValue = {specId, "Aliquot", "Collected"};
+		String joinCondition = Constants.AND_JOIN_CONDITION;
+		DefaultBizLogic bizLogic = new DefaultBizLogic();
+		List AliquotChildList = bizLogic.retrieve(Specimen.class.getName(), selectColumnName, whereColumnName,
+				whereColumnCondition, whereColumnValue ,joinCondition);
+		if(AliquotChildList!=null && !AliquotChildList.isEmpty())
+		{
+			aliquotChildCount=AliquotChildList.size();
+		}
+	
+	    return aliquotChildCount;
+
 	}
 
 }
