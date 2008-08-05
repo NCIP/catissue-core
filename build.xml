@@ -148,7 +148,7 @@
 
 	<!-- Compile all files, generated and hand-written -->
 	<target name="compile" depends="init">
-		<javac destdir="${target.dir}" includes="**/*.*" includeAntRuntime="false" debug="yes">
+		<javac destdir="${target.dir}" includes="**/*.*" includeAntRuntime="false" debug="yes" target="1.5">
 			<src path="${src.dir}" />
 			<classpath>
 				<fileset dir="${lib.dir}">
@@ -643,7 +643,7 @@
 	<!-- =================================================================== -->
 	
 		<target name="compile_junit_TestCases">
-	        <javac destdir="${test.src.dir}" includes="**/*TestCases.java" includeAntRuntime="false">
+	        <javac destdir="${test.src.dir}" includes="**/*TestCases.java" includeAntRuntime="false" target="1.5">
 	            <src path="${src.dir}"/>
 	            <classpath>
 	       		  <fileset dir="${lib.dir}">
