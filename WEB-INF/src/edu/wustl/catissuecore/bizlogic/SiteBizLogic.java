@@ -10,10 +10,12 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
@@ -23,6 +25,7 @@ import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.dao.AbstractDAO;
 import edu.wustl.common.dao.DAO;
+import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.security.PrivilegeManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
@@ -304,4 +307,27 @@ public class SiteBizLogic extends DefaultBizLogic
     	String privilegeName = Variables.privilegeDetailsMap.get(Constants.ADD_EDIT_SITE);
     	return privilegeName;
     }
+
+	public Collection<CollectionProtocol> getRelatedCPs(Long siteId) 
+	{
+		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+		Site site = null;
+		
+		try 
+		{
+			dao.openSession(null);
+			site = (Site) dao.retrieve(Site.class.getName(), siteId);		
+		} 
+		catch (DAOException e) 
+		{
+			Logger.out.debug(e.getMessage(), e);
+		}
+		
+		if(site == null)
+		{
+			return null;
+		}
+		
+		return site.getCollectionProtocolCollection();
+	}
 }
