@@ -35,6 +35,7 @@ import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.bizlogic.IActivityStatus;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.util.MapDataParser;
+import edu.wustl.common.util.dbManager.HibernateMetaData;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
@@ -1274,8 +1275,10 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 		while(itr.hasNext())
 		{
 			SpecimenEventParameters eventParam = (SpecimenEventParameters)itr.next();
-			User user = new User();
-			user.setId(userId);
+			/*User user = new User();
+			user.setId(userId);*/
+			User user = (User) HibernateMetaData
+			.getProxyObjectImpl(eventParam.getUser());
 			if(eventParam instanceof CollectionEventParameters)
 			{
 				CollectionEventParameters collEventParam = (CollectionEventParameters) eventParam;
