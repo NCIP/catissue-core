@@ -41,19 +41,24 @@
 	<script language="JavaScript" type="text/javascript" src="dhtml_comp/js/dhtmXTreeCommon.js"></script>
 	<script language="JavaScript" type="text/javascript" src="dhtml_comp/js/dhtmlXTree.js"></script>
 	<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
+	<script language="JavaScript" type="text/javascript" src="jss/caTissueSuite.js"></script>
 </head>
 
 <body>
 <script language="javascript">
-/*platform = navigator.platform.toLowerCase();
-	if (platform.indexOf("mac") != -1)
-	{
-		<%=width%>="335"; <%=height%>="500";
-	}
-	else
-	{
-		<%=width%>="100%"; <%=height%>="100%";
-	}*/
+
+if ( document.getElementById && !(document.all) ) 
+{
+	var slope=10;
+}
+else
+{
+	var slope=10;
+}
+
+window.onload = function() { setFrameHeight('treeboxbox_tree', 1.0,slope);}
+window.onresize = function() { setFrameHeight('treeboxbox_tree', 1.0,slope); }
+
 </script>
 <table border="0" cellpadding="0" cellspacing="0">
 			<tr>	
@@ -62,7 +67,7 @@
 			</tr>	
 			<tr>
 				<td align="left" colspan="2">
-					<div id="treeboxbox_tree" style="width: 230px; height: 430px; background-color: #ffffff; border: 1px solid Silver; overflow: auto;border-left:1px solid #61a1e3;	border-right:1px solid #61a1e3;	border-bottom:1px solid #61a1e3;border-top:1px solid #61a1e3;"/>
+					<div id="treeboxbox_tree" style="width: 230px; height: 380px; background-color: #ffffff; border: 1px solid Silver; overflow: auto;border-left:1px solid #61a1e3;	border-right:1px solid #61a1e3;	border-bottom:1px solid #61a1e3;border-top:1px solid #61a1e3;"/>
 				</td>
 			</tr>
 			<tr>

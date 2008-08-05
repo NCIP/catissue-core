@@ -42,28 +42,30 @@
 </head>
 
 <body>
+<script language="JavaScript" type="text/javascript" src="jss/caTissueSuite.js"></script>
 <script language="javascript">
-platform = navigator.platform.toLowerCase();
-	if (platform.indexOf("mac") != -1)
-	{
-		<%width="335"; height="500";%>
-	}
+if ( document.getElementById && !(document.all) ) 
+{
+	var slope=-1;
+}
+else
+{
+	var slope=0;
+}
+
+window.onload = function() { setFrameHeight('treeboxbox_tree', 1.0,slope);}
+window.onresize = function() { setFrameHeight('treeboxbox_tree', 1.0,slope); }
+
 	
 </script>
-<table border="0" cellpadding="0" cellspacing="0">
-			<tr>	
-				<td class="formLabelAllBorder" colspan="2" width="170">
-				</td>
-			</tr>	
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+			
 			<tr>
-				<td align="left" colspan="2">
-					<div id="treeboxbox_tree" style="width:<%=width%>; height:<%=height%>;background-color:#f5f5f5;border :1px solid Silver;; overflow:auto;"/>
+				<td align="left">
+					<div id="treeboxbox_tree" width="100%" style="background-color:#f5f5f5;border :1px solid Silver; overflow:auto;"/>
 				</td>
 			</tr>
-			<tr>
-				<td colspan="2" width="170">
-				</td>
-			</tr>		
+				
 	</table>
 
 	<script language="javascript">

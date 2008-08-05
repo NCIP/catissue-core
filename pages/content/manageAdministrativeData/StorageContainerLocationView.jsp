@@ -44,9 +44,25 @@
         height = "580";
    	}
 %>
+<script language="JavaScript" type="text/javascript" src="jss/caTissueSuite.js"></script>
+<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
+<script>
+//Set the alope for the IFrame
+if ( document.getElementById && !(document.all) ) 
+{
+	var slope=10;
+}
+else
+{
+	var slope=-10;
+}
 
+window.onload = function() { setFrameHeight('<%=Constants.DATA_VIEW_FRAME%>', 1.0,slope); setFrameHeight('<%=Constants.APPLET_VIEW_FRAME%>', 1.0,slope);}
+window.onresize = function() { setFrameHeight('<%=Constants.DATA_VIEW_FRAME%>', 1.0,slope); setFrameHeight('<%=Constants.APPLET_VIEW_FRAME%>', 1.0,slope); }
+
+</script>
 <table border="0"  width="100%">
-	<tr height="100%">
+	<tr>
 		<td width="30%">
 			<!-- 
 				Patch ID: Bug#3090_13
@@ -54,13 +70,13 @@
 			-->
 			<!--  changed by Pallavi Mistry -->
 			<!-- treeNodeDataAction  added for DHTMLX tree view-->
-			<iframe id="<%=Constants.APPLET_VIEW_FRAME%>" src="<%=treeNodeDataAction%>" scrolling="yes" frameborder="1" width="99%" height="490">
+			<iframe id="<%=Constants.APPLET_VIEW_FRAME%>" src="<%=treeNodeDataAction%>" scrolling="yes" frameborder="1" width="99%" >
 				Your Browser doesn't support IFrames.
 			</iframe>
 		</td>
 		<td width="70%">
 		<!--P.G. - Start 24May07:Bug 4291:Added source as initial action for blank screen-->
-			<iframe name="<%=Constants.DATA_VIEW_FRAME%>" src="<%=Constants.BLANK_SCREEN_ACTION%>" scrolling="yes" frameborder="1" width="99%" height="490">
+			<iframe id="<%=Constants.DATA_VIEW_FRAME%>"name="<%=Constants.DATA_VIEW_FRAME%>" src="<%=Constants.BLANK_SCREEN_ACTION%>" scrolling="auto" frameborder="1" width="99%" >
 				Your Browser doesn't support IFrames.
 			</iframe>
 		<!--P.G. - End -->
