@@ -338,16 +338,18 @@ public class OrderSpecimenForm extends AbstractActionForm
 					String disSiteKey = "OrderSpecimenBean:" + cnt + "_distributionSite";
 					String availQuantKey = "OrderSpecimenBean:" + cnt + "_availableQuantity";
 					String specimenName =(String) values.get("OrderSpecimenBean:" + cnt + "_specimenName");
-					
 					if (dataMap!=null && dataMap.containsKey(addToArray))
 					{
 						List orderItems = (List) dataMap.get(addToArray);
-						OrderSpecimenBean orderSpecimenBean = (OrderSpecimenBean) orderItems.get(0);
-						if(!orderSpecimenBean.getDistributionSite().equals(values.get(disSiteKey)))
-						{
-							errors.add("values", new ActionError("errors.same.distributionSite"));
-							values.clear();
-							break;
+						if(!orderItems.isEmpty() && orderItems.size()>0)
+						{	
+							OrderSpecimenBean orderSpecimenBean = (OrderSpecimenBean) orderItems.get(0);
+							if(!orderSpecimenBean.getDistributionSite().equals(values.get(disSiteKey)))
+							{
+								errors.add("values", new ActionError("errors.same.distributionSite"));
+								values.clear();
+								break;
+							}
 						}
 						
 					}
