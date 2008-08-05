@@ -4,6 +4,8 @@
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
 <%@ page language="java" isELIgnored="false"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<script language="JavaScript" type="text/javascript" src="jss/caTissueSuite.js"></script>
+<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 <script>
 var selectedTabName="infoTabSelected";
 var selectedNodeId=null;
@@ -77,6 +79,19 @@ function getSelectedTab(){
   return selectedTabName;
 }
 
+//Set the alope for the IFrame
+if ( document.getElementById && !(document.all) ) 
+{
+	var slope=25;
+}
+else
+{
+	var slope=15;
+}
+
+window.onload = function() { setFrameHeight('SCTreeView', .7,slope);setFrameHeight('StorageContainerView', .7,slope); }
+window.onresize = function() { setFrameHeight('SCTreeView', .7,slope); setFrameHeight('StorageContainerView', .7,slope); }
+
 </script>
 <table width="100%"  border="0" cellpadding="0" cellspacing="0" class="maintable">
     <tr>
@@ -111,29 +126,29 @@ function getSelectedTab(){
       </tr></table>
 	 <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
         <tr>
-          <td colspan="2" align="left" class=" grey_ar_s">&nbsp;<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />&nbsp;<bean:message key="commonRequiredField.message" /></td>
+          <td colspan="2" align="left" class=" grey_ar_s" width="100%">&nbsp;<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />&nbsp;<bean:message key="commonRequiredField.message" /></td>
         </tr>
         <tr>
 							<logic:equal parameter="operation"	value='showEditAPageAndMap'>
 							<td width="25%"  valign="top">
-								<iframe id="SCTreeView" src="ShowFramedPage.do?pageOf=pageOfStorageContainer&storageType=-1&operation=${requestScope.operation}" scrolling="auto" frameborder="0" width="100%" name="SCTreeView" height="435" >
+								<iframe id="SCTreeView" src="ShowFramedPage.do?pageOf=pageOfStorageContainer&storageType=-1&operation=${requestScope.operation}" scrolling="auto" frameborder="0" width="100%" name="SCTreeView" >
 									Your Browser doesn't support IFrames.
 								</iframe>
 							 </td>
 							 </logic:equal>
 							 <td width="75%" valign="top">
 								<logic:equal parameter="operation"	value='add'>
-							 	<iframe name="StorageContainerView"	id="StorageContainerView" src="StorageContainer.do?operation=add&pageOf=pageOfStorageContainer" scrolling="auto" frameborder="0" width="100%" height="435" >
+							 	<iframe name="StorageContainerView"	id="StorageContainerView" src="StorageContainer.do?operation=add&pageOf=pageOfStorageContainer" scrolling="auto" frameborder="0" width="100%" >
 									Your Browser doesn't support IFrames.
 								</iframe>
 								</logic:equal>
 								<logic:equal parameter="operation"	value='edit'>
-								<iframe name="StorageContainerView"	id="StorageContainerView" src="StorageContainer.do?operation=edit&pageOf=pageOfStorageContainer" scrolling="auto" frameborder="0" width="100%" height="435" >
+								<iframe name="StorageContainerView"	id="StorageContainerView" src="StorageContainer.do?operation=edit&pageOf=pageOfStorageContainer" scrolling="auto" frameborder="0" width="100%" >
 									Your Browser doesn't support IFrames.
 								</iframe>
 								</logic:equal>
 								<logic:equal parameter="operation"	value='showEditAPageAndMap'>
-								 <iframe name="StorageContainerView"	id="StorageContainerView" src="storageContainerEditMessageScreen.do" scrolling="auto" frameborder="0" width="100%" height="435" >
+								 <iframe name="StorageContainerView"	id="StorageContainerView" src="storageContainerEditMessageScreen.do" scrolling="auto" frameborder="0" width="100%" >
 									Your Browser doesn't support IFrames.
 								</iframe>
 								</logic:equal>
