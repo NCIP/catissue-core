@@ -1297,7 +1297,6 @@ function setFrameHeight(frameId, h ,slope) {
         if (frameObj) {
             window_Viewport.getWinHeight();
             frameObj.style.height = Math.round( h * window_Viewport.height )+slope + "px";
-			alert((Math.round( h * window_Viewport.height )));
 			//alert(Math.round( h * dw_Viewport.height ));
         }
     }
