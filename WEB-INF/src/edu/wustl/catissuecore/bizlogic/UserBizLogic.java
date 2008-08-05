@@ -1628,13 +1628,48 @@ public class UserBizLogic extends DefaultBizLogic
 		
 		
 		/**
-		 * Called from DefaultBizLogic to get ObjectId for authorization check
-		 * (non-Javadoc)
-		 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getObjectId(edu.wustl.common.dao.AbstractDAO, java.lang.Object)
+		 * Custom method for Add User Case
+		 * @param dao
+		 * @param domainObject
+		 * @param sessionDataBean
+		 * @return
 		 */
-		public String getObjectId(AbstractDAO dao, Object domainObject) 
-		{
-			return Constants.ADMIN_PROTECTION_ELEMENT;
+		public String getObjectId(AbstractDAO dao, Object domainObject, SessionDataBean sessionDataBean) 
+		{	
+			User user = null;
+			
+			try 
+			{
+				user = (User) dao.retrieve(User.class.getName(), sessionDataBean.getUserId());
+			} 
+			catch (DAOException e) 
+			{
+				Logger.out.debug(e.getMessage(), e);
+			}
+			
+				Collection<Site> siteCollection = user.getSiteCollection();
+			
+				StringBuffer sb = new StringBuffer();
+				boolean hasUserProvisioningPrivilege = false;
+				
+				if (siteCollection != null && !siteCollection.isEmpty())
+				{
+					sb.append(Constants.SITE_CLASS_NAME);
+					for (Site site : siteCollection)
+					{
+						if (site.getId()!=null)
+						{
+							sb.append(Constants.UNDERSCORE).append(site.getId());
+							hasUserProvisioningPrivilege = true;
+						}
+					}
+				}
+				if(hasUserProvisioningPrivilege)
+				{
+					return sb.toString();
+				}
+				
+			return null;
 		}
 		
 		/**
@@ -1655,31 +1690,67 @@ public class UserBizLogic extends DefaultBizLogic
 		 */
 		public boolean isAuthorized(AbstractDAO dao, Object domainObject, SessionDataBean sessionDataBean)  
 		{
+			User user = null;
+			UserDTO userDTO = null;
+
+			if(sessionDataBean.isAdmin())
+			{
+				return true;
+			}
+			
 			if(domainObject instanceof User)
 			{
-				User user = (User) domainObject;
-				
-				if(user.getPageOf().equalsIgnoreCase("pageOfSignUp"))
-				{
-					return true;
-				}
-				
-				if(user.getPageOf().equalsIgnoreCase("pageOfChangePassword"))
-				{
-					return true;
-				}
-				
-				if(sessionDataBean!=null && user.getLoginName().equals(sessionDataBean.getUserName()))
-				{
-					return true;
-				}
+				user = (User) domainObject;
 			}
+			
+			if(domainObject instanceof UserDTO)
+			{
+				userDTO = (UserDTO) domainObject;
+				user = userDTO.getUser();
+			}
+			
+			if(user.getPageOf().equalsIgnoreCase("pageOfSignUp"))
+			{
+				return true;
+			}
+				
+			if(user.getPageOf().equalsIgnoreCase("pageOfChangePassword"))
+			{
+				return true;
+			}
+				
+			if(sessionDataBean!=null && user.getLoginName().equals(sessionDataBean.getUserName()))
+			{
+				return true;
+			}
+	
 			boolean isAuthorized = false;
-			String protectionElementName = getObjectId(dao, domainObject);
+			
 			String privilegeName = getPrivilegeName(domainObject);
-			PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
-			PrivilegeCache privilegeCache = privilegeManager.getPrivilegeCache(sessionDataBean.getUserName());
-			isAuthorized = privilegeCache.hasPrivilege(protectionElementName,privilegeName);
-			return isAuthorized;		
-		}
+			String protectionElementName = getObjectId(dao, domainObject, sessionDataBean);
+			PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(sessionDataBean.getUserName());
+			 
+			if (protectionElementName != null)
+			{
+				String [] prArray = protectionElementName.split(Constants.UNDERSCORE);
+				String baseObjectId = prArray[0];
+				StringBuffer objId = new StringBuffer();
+				
+	    		for (int i = 1 ; i < prArray.length;i++)
+	    		{
+	    			objId.append(baseObjectId).append(Constants.UNDERSCORE).append(prArray[i]);
+	    			isAuthorized = privilegeCache.hasPrivilege(objId.toString(),privilegeName);
+	    			if (!isAuthorized)
+	    			{
+	    				break;
+	    			}
+	    		}
+	    		
+	    		return isAuthorized;		
+			}
+			else
+			{
+				return false;
+			}		
+		}		
 }

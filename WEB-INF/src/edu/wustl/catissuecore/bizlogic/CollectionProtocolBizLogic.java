@@ -30,6 +30,7 @@ import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.ConsentTier;
+import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.dto.CollectionProtocolDTO;
@@ -50,6 +51,8 @@ import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.dao.JDBCDAO;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exceptionformatter.DefaultExceptionFormatter;
+import edu.wustl.common.security.PrivilegeCache;
+import edu.wustl.common.security.PrivilegeManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -1312,13 +1315,49 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	}
 
 	/**
-	 * Called from DefaultBizLogic to get ObjectId for authorization check
-	 * (non-Javadoc)
-	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getObjectId(edu.wustl.common.dao.AbstractDAO, java.lang.Object)
+	 * Custom method for Collection Protocol case
+	 * @param dao
+	 * @param domainObject
+	 * @param sessionDataBean
+	 * @return
 	 */
-	public String getObjectId(AbstractDAO dao, Object domainObject) 
+	private String getObjectId(AbstractDAO dao, Object domainObject, SessionDataBean sessionDataBean) 
 	{
-		return Constants.ADMIN_PROTECTION_ELEMENT;
+		User user = null;
+		
+		try 
+		{
+			user = (User) dao.retrieve(User.class.getName(), sessionDataBean.getUserId());
+		} 
+		catch (DAOException e) 
+		{
+			Logger.out.debug(e.getMessage(), e);
+		}
+		
+			Collection<Site> siteCollection = user.getSiteCollection();
+
+			StringBuffer sb = new StringBuffer();
+			boolean hasProtocolAdministrationPrivilege = false;
+			
+			if (siteCollection != null && !siteCollection.isEmpty())
+			{
+				sb.append(Constants.SITE_CLASS_NAME);
+				for (Site site : siteCollection)
+				{
+					if (site.getId()!=null)
+					{
+						sb.append(Constants.UNDERSCORE).append(site.getId());
+						hasProtocolAdministrationPrivilege = true;
+					}
+				}
+			}
+			
+			if(hasProtocolAdministrationPrivilege)
+			{
+				return sb.toString();
+			}
+				
+		return null;
 	}
 	
 	/**
@@ -1361,4 +1400,47 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		}	
 		return shortTitle;
 	}
+	
+	/**
+	 * Over-ridden for the case of Site Admin user should be able to create
+	 * Collection Protocol for Site to which he belongs
+	 * (non-Javadoc)
+	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#isAuthorized(edu.wustl.common.dao.AbstractDAO, java.lang.Object, edu.wustl.common.beans.SessionDataBean)
+	 */
+	public boolean isAuthorized(AbstractDAO dao, Object domainObject, SessionDataBean sessionDataBean)  
+	{
+		boolean isAuthorized = false;
+		
+		if(sessionDataBean.isAdmin())
+		{
+			return true;
+		}
+		
+		String privilegeName = getPrivilegeName(domainObject);
+		String protectionElementName = getObjectId(dao, domainObject, sessionDataBean);
+		PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(sessionDataBean.getUserName());
+		
+		if (protectionElementName != null)
+		{
+			String [] prArray = protectionElementName.split(Constants.UNDERSCORE);
+			String baseObjectId = prArray[0];
+			StringBuffer objId = new StringBuffer();
+			
+			for (int i = 1 ; i < prArray.length;i++)
+			{
+				objId.append(baseObjectId).append(Constants.UNDERSCORE).append(prArray[i]);
+				isAuthorized = privilegeCache.hasPrivilege(objId.toString(),privilegeName);
+				if (!isAuthorized)
+				{
+					break;
+				}
+			}	
+		   
+			return isAuthorized;
+		} 
+		else
+		{
+			return false;
+		}
+	}		
 }

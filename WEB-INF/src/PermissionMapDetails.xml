@@ -76,7 +76,7 @@
 	
 	<!-- 			Objects in BIO-SPECIMEN TAB		--> 
 	<PrivilegeMapping key="ADD_EDIT_PARTICIPANT" value="REGISTRATION"/>
-	<PrivilegeMapping key="ADD_EDIT_SPECIMEN" value="REGISTRATION"/>
+	<PrivilegeMapping key="ADD_EDIT_SPECIMEN" value="SPECIMEN_PROCESSING"/>
 	<PrivilegeMapping key="ALIQUOT_SPECIMEN" value="SPECIMEN_PROCESSING"/>
 	<PrivilegeMapping key="DERIVE_SPECIMEN" value="SPECIMEN_PROCESSING"/>
 	<PrivilegeMapping key="ADD_EDIT_SCG" value="REGISTRATION"/>
@@ -98,6 +98,8 @@
 	
 <baseObjectPrivilegeMappings>
 	<siteMappings>
+		<siteMapping name="USER_PROVISIONING" id="13"/>
+		<siteMapping name="PROTOCOL_ADMINISTRATION" id="16"/>
 	    <siteMapping name="GENERAL_ADMINISTRATION" id="29"/>
 		<siteMapping name="STORAGE_ADMINISTRATION" id="15"/>
 		<siteMapping name="DISTRIBUTION" id="21"/>

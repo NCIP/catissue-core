@@ -4,7 +4,6 @@
 package edu.wustl.catissuecore.multiRepository.bean;
 
 import java.util.List;
-import java.util.Set;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.User;
@@ -22,6 +21,7 @@ public class SiteUserRolePrivilegeBean
 	private User user ;
     private NameValueBean role;
     private List<NameValueBean> privileges;
+    private boolean isAllCPChecked = false;
     
 	public CollectionProtocol getCollectionProtocol() {
 		return collectionProtocol;
@@ -53,6 +53,10 @@ public class SiteUserRolePrivilegeBean
 	public void setUser(User user) {
 		this.user = user;
 	}
-    
-    
+	public boolean isAllCPChecked() {
+		return isAllCPChecked;
+	}
+	public void setAllCPChecked(boolean isAllCPChecked) {
+		this.isAllCPChecked = isAllCPChecked;
+	}  
 }

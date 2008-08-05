@@ -1293,7 +1293,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
     		for (int i = 1 ; i < prArray.length;i++)
     		{
     			objId = baseObjectId + "_" + prArray[i];
-    			isAuthorized = privilegeCache.hasPrivilege(protectionElementName,privilegeName);
+    			isAuthorized = privilegeCache.hasPrivilege(objId, privilegeName);
     			if (!isAuthorized)
     			{
     				break;
