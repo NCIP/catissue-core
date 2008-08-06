@@ -1187,6 +1187,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 			{
 				UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.USER_FORM_ID);
 				Set<Long> siteIds = userBizLogic.getRelatedSiteIds(userId);
+				dao.openSession(null);
 				if (siteIds != null && !siteIds.isEmpty())
 				{
 					SiteBizLogic siteBizLogic = (SiteBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.SITE_FORM_ID);
@@ -1196,7 +1197,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 						if (privilegeCache.hasPrivilege(peName,Variables.privilegeDetailsMap.get(Constants.CP_BASED_VIEW_FILTRATION)))
 						{
 							Collection<CollectionProtocol> cp1Collection = siteBizLogic.getRelatedCPs(siteId);
-							
+							 dao.openSession(null);
 							if (cp1Collection != null && !cp1Collection.isEmpty())
 							{
 								List<NameValueBean> list = new ArrayList<NameValueBean>();
@@ -1344,7 +1345,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 		else
 		// Check for ALL CURRENT & FUTURE CASE
 		{
-			isAuthorized = edu.wustl.catissuecore.util.global.Utility.checkForAllCurrentAndFutureCPs(privilegeName, sessionDataBean);
+			isAuthorized = edu.wustl.catissuecore.util.global.Utility.checkForAllCurrentAndFutureCPs(dao,privilegeName, sessionDataBean);
 		}
 		return isAuthorized;		
 	}

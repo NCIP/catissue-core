@@ -327,26 +327,20 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 			String activityStatusArr[], Long userId) throws DAOException {
 		List siteResultList = getRepositorySiteList(Site.class.getName(),
 				displayNameFields, valueField, activityStatusArr, false);
-		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
 		List userList = null;
-		try {
-			dao.openSession(null);
-			Set<Long> idSet = new UserBizLogic().getRelatedSiteIds(userId);
-			userList = new ArrayList();
-			Iterator siteListIterator = siteResultList.iterator();
-			while (siteListIterator.hasNext()) {
-				NameValueBean nameValBean = (NameValueBean) siteListIterator
-						.next();
-				Long siteId = new Long(nameValBean.getValue());
-				if (hasPrivilegeonSite(idSet, siteId)) {
-					userList.add(nameValBean);
-				}
+		Set<Long> idSet = new UserBizLogic().getRelatedSiteIds(userId);
+		userList = new ArrayList();
+		Iterator siteListIterator = siteResultList.iterator();
+		while (siteListIterator.hasNext()) {
+			NameValueBean nameValBean = (NameValueBean) siteListIterator
+					.next();
+			Long siteId = new Long(nameValBean.getValue());
+			if (hasPrivilegeonSite(idSet, siteId)) {
+				userList.add(nameValBean);
 			}
-		}  
-		finally
-		{
-			dao.closeSession();
 		}
+		  
+		
 		return userList;
 	}
 
@@ -2000,10 +1994,8 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 		}
 
 		Iterator iterator = resultList.iterator();
-		AbstractDAO hibernateDao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
-		hibernateDao.openSession(null);
 		Set<Long> siteIdSet = new UserBizLogic().getRelatedSiteIds(userId);
-		hibernateDao.closeSession();
+
 
 		while (iterator.hasNext()) {
 			List rowList = (List) iterator.next();
@@ -2303,6 +2295,10 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 		try {
 			site = getSite(dao, container.getId());
 			loggedInUserSiteIdSet = new UserBizLogic().getRelatedSiteIds(userId);
+			if(dao instanceof HibernateDAO)
+				{
+					((HibernateDAO)dao).openSession(null);
+				}
 		} catch (DAOException e) {
 			return false;
 		} finally {

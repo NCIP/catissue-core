@@ -3286,7 +3286,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		else
 		// Check for ALL CURRENT & FUTURE CASE
 		{
-			isAuthorized = edu.wustl.catissuecore.util.global.Utility.checkForAllCurrentAndFutureCPs(privilegeName, sessionDataBean);
+			isAuthorized = edu.wustl.catissuecore.util.global.Utility.checkForAllCurrentAndFutureCPs(dao,privilegeName, sessionDataBean);
 		}
 		return isAuthorized;			
 	}

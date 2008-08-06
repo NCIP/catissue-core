@@ -1660,12 +1660,22 @@ public class Utility extends edu.wustl.common.util.Utility {
 		return storagePositionTypeList;		
 	}
     
-    public static boolean checkForAllCurrentAndFutureCPs(String privilegeName, SessionDataBean sessionDataBean)
+    public static boolean checkForAllCurrentAndFutureCPs(AbstractDAO dao, String privilegeName, SessionDataBean sessionDataBean)
     {
     	boolean allowOperation = false;
     	
     	Set<Long> idSet = new UserBizLogic().getRelatedSiteIds(sessionDataBean.getUserId());
-		
+		if (dao instanceof HibernateDAO)
+		{
+			try 
+			{
+				((HibernateDAO)dao).openSession(null);
+			} 
+			catch (DAOException e) 
+			{
+				Logger.out.debug(e.getMessage(), e);
+			}
+		}
 		for(Long id : idSet)
 		{
 			if(PrivilegeManager.getInstance().getPrivilegeCache(sessionDataBean.getUserName()).hasPrivilege(Constants.getCurrentAndFuturePGAndPEName(id), privilegeName))

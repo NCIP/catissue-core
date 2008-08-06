@@ -446,7 +446,7 @@ public class UserBizLogic extends DefaultBizLogic
 					
 //					if (defaultRole != null && (defaultRole.equalsIgnoreCase("-1") || defaultRole.equalsIgnoreCase("0")) )
 //					{
-						roleName = getCurrentAndFutureRoleName(site.getId(), defaultRole);
+						roleName = getCurrentAndFutureRoleName(site.getId(), user1.getId(), defaultRole);
 //					} else
 //					{
 //						roleName = siteUserRolePrivilegeBean.getRole().getName();
@@ -614,9 +614,9 @@ public class UserBizLogic extends DefaultBizLogic
 		return roleName;
 	}
 
-	protected String getCurrentAndFutureRoleName(long siteId, String defaultRole)
+	protected String getCurrentAndFutureRoleName(long siteId, long userId, String defaultRole)
 	{
-		String roleName = defaultRole+"_"+"SITE_" + siteId + "_All_CP";
+		String roleName = defaultRole+"_"+"All CP's for SITE_" + siteId + "_For User"+userId;
 		return roleName;
 	}
 	
@@ -1684,16 +1684,16 @@ public class UserBizLogic extends DefaultBizLogic
 		}
 		finally
 		{
-//			try
-//			{
-//				//dao.closeSession();
-//			}
-////			catch (DAOException e)
-////			{
-////				Logger.out.error(e.getMessage(), e);
-////			}
-//		}
+			try
+			{
+				dao.closeSession();
+			}
+			catch (DAOException e)
+			{
+					Logger.out.error(e.getMessage(), e);
+			}
 		}
+		
 		return idSet;
 	} 
 		
