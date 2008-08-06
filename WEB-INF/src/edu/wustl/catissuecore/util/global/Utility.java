@@ -80,6 +80,8 @@ import edu.wustl.common.dao.JDBCDAO;
 import edu.wustl.common.dao.QuerySessionData;
 import edu.wustl.common.dao.queryExecutor.PagenatedResultData;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.security.PrivilegeCache;
+import edu.wustl.common.security.PrivilegeManager;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
@@ -1657,4 +1659,25 @@ public class Utility extends edu.wustl.common.util.Utility {
 		
 		return storagePositionTypeList;		
 	}
+    
+    public static boolean checkForAllCurrentAndFutureCPs(String privilegeName, SessionDataBean sessionDataBean)
+    {
+    	boolean allowOperation = false;
+    	
+    	Set<Long> idSet = new UserBizLogic().getRelatedSiteIds(sessionDataBean.getUserId());
+		
+		for(Long id : idSet)
+		{
+			if(PrivilegeManager.getInstance().getPrivilegeCache(sessionDataBean.getUserName()).hasPrivilege(Constants.getCurrentAndFuturePGAndPEName(id), privilegeName))
+			{
+				allowOperation = true;
+			}
+			
+			if(allowOperation)
+			{
+				return true;
+			}
+		}
+		return false;
+    }
 }

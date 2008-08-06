@@ -66,6 +66,8 @@ import edu.wustl.common.dao.HibernateDAO;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.security.PrivilegeCache;
+import edu.wustl.common.security.PrivilegeManager;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
@@ -2382,5 +2384,56 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
     {
     	return Constants.ADD_EDIT_SCG;
     }
+	
+	/**
+	 * (non-Javadoc)
+	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#isAuthorized(edu.wustl.common.dao.AbstractDAO, java.lang.Object, edu.wustl.common.beans.SessionDataBean)
+	 * 
+	 */
+	public boolean isAuthorized(AbstractDAO dao, Object domainObject, SessionDataBean sessionDataBean)  
+	{
+		boolean isAuthorized = false;
+		String protectionElementName = null;
+		
+		if(sessionDataBean.isAdmin())
+		{
+			return true;
+		}
+		
+		//	Get the base object id against which authorization will take place 
+		if(domainObject instanceof List)
+		{
+		    List list = (List) domainObject;
+			for(Object domainObject2 : list)
+			{
+				protectionElementName = getObjectId(dao, domainObject2);
+			}
+		}
+		else	
+		{
+			protectionElementName = getObjectId(dao, domainObject);
+		}
+
+		if(protectionElementName.equals(Constants.allowOperation))
+		{
+			return true;
+		}
+		//Get the required privilege name which we would like to check for the logged in user.
+		String privilegeName = getPrivilegeName(domainObject);
+		PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(sessionDataBean.getUserName());
+		//Checking whether the logged in user has the required privilege on the given protection element
+		isAuthorized = privilegeCache.hasPrivilege(protectionElementName,privilegeName);
+		
+		if(isAuthorized)
+		{
+			return isAuthorized;
+		}
+		else
+		// Check for ALL CURRENT & FUTURE CASE
+		{
+			isAuthorized = edu.wustl.catissuecore.util.global.Utility.checkForAllCurrentAndFutureCPs(privilegeName, sessionDataBean);
+		}
+		return isAuthorized;			
+	}
 	
 }

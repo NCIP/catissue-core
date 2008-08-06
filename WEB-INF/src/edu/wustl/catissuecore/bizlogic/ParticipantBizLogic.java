@@ -1161,27 +1161,57 @@ public class ParticipantBizLogic extends DefaultBizLogic
 		List<NameValueBean> cpList = new ArrayList<NameValueBean>(); 
 		cpList.add(new NameValueBean(Constants.SELECT_OPTION, "-1"));
 		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
-		try {
+		try 
+		{
 			dao.openSession(null);
 			User user = (User) dao.retrieve(User.class.getName(),userId);
+			PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
+			PrivilegeCache privilegeCache = privilegeManager.getPrivilegeCache(user.getLoginName());
 			Collection <CollectionProtocol> cpCollection = user.getAssignedProtocolCollection();
 			if (cpCollection != null && !cpCollection.isEmpty())
 			{
-				PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
-				PrivilegeCache privilegeCache = privilegeManager.getPrivilegeCache(user.getLoginName());
 				for (CollectionProtocol cp : cpCollection)
 				{
 					StringBuffer sb = new StringBuffer();
 					sb.append(CollectionProtocol.class.getName()).append("_").append(cp.getId());
 					boolean hasPrivilege = privilegeCache.hasPrivilege(sb.toString(), 
 							Variables.privilegeDetailsMap.get(Constants.CP_BASED_VIEW_FILTRATION));
+					
 					if (hasPrivilege)
 					{
 						cpList.add(new NameValueBean(cp.getShortTitle(),cp.getId()));
 					}
-					
 				}
 			}
+			else
+			{
+				UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.USER_FORM_ID);
+				Set<Long> siteIds = userBizLogic.getRelatedSiteIds(userId);
+				if (siteIds != null && !siteIds.isEmpty())
+				{
+					SiteBizLogic siteBizLogic = (SiteBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.SITE_FORM_ID);
+					for (Long siteId : siteIds)
+					{
+						String peName = Constants.getCurrentAndFuturePGAndPEName(siteId);
+						if (privilegeCache.hasPrivilege(peName,Variables.privilegeDetailsMap.get(Constants.CP_BASED_VIEW_FILTRATION)))
+						{
+							Collection<CollectionProtocol> cp1Collection = siteBizLogic.getRelatedCPs(siteId);
+							
+							if (cp1Collection != null && !cp1Collection.isEmpty())
+							{
+								List<NameValueBean> list = new ArrayList<NameValueBean>();
+								for (CollectionProtocol cp1 : cp1Collection)
+								{
+									list.add(new NameValueBean(cp1.getShortTitle(),cp1.getId()));
+								}
+								cpList.addAll(list);
+							}
+									
+						}
+					}
+				}
+			}
+
 		} catch (DAOException e) {
 			throw new BizLogicException("Couldn't get CP for user", e);
 		}
@@ -1260,6 +1290,11 @@ public class ParticipantBizLogic extends DefaultBizLogic
 	{
 		boolean isAuthorized = false;
 		
+		if(sessionDataBean.isAdmin())
+		{
+			return true;
+		}
+		
 		String privilegeName = getPrivilegeName(domainObject);
 		String protectionElementName = getObjectId(dao, domainObject);
 		PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(sessionDataBean.getUserName());
@@ -1300,6 +1335,16 @@ public class ParticipantBizLogic extends DefaultBizLogic
     			}
     		}
 			
+		}
+		
+		if(isAuthorized)
+		{
+			return isAuthorized;
+		}
+		else
+		// Check for ALL CURRENT & FUTURE CASE
+		{
+			isAuthorized = edu.wustl.catissuecore.util.global.Utility.checkForAllCurrentAndFutureCPs(privilegeName, sessionDataBean);
 		}
 		return isAuthorized;		
 	}

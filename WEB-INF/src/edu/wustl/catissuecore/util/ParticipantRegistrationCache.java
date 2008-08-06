@@ -3,7 +3,6 @@ package edu.wustl.catissuecore.util;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -13,15 +12,16 @@ import java.util.Vector;
 import javax.servlet.http.HttpSession;
 
 import net.sf.ehcache.CacheException;
+import edu.common.dynamicextensions.util.global.Variables;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.bizlogic.SiteBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
-import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.dao.AbstractDAO;
-import edu.wustl.common.dao.DAOFactory;
+import edu.wustl.common.security.PrivilegeCache;
+import edu.wustl.common.security.PrivilegeManager;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
@@ -309,7 +309,31 @@ class ParticipantRegistrationCache
 					}
 				}
 			}
-		
+		Set<Long> siteIds = userBizLogic.getRelatedSiteIds(sessionDataBean.getUserId());
+		if (siteIds != null && !siteIds.isEmpty())
+		{
+			PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(sessionDataBean.getUserName());
+			SiteBizLogic siteBizLogic = (SiteBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.SITE_FORM_ID);
+			for (Long siteId : siteIds)
+			{
+				String peName = Constants.getCurrentAndFuturePGAndPEName(siteId);
+				if (privilegeCache.hasPrivilege(peName,Variables.privilegeDetailsMap.get(Constants.EDIT_PROFILE_PRIVILEGE)))
+				{
+					Collection<CollectionProtocol> cpCollection = siteBizLogic.getRelatedCPs(siteId);
+					
+					if (cpCollection != null && !cpCollection.isEmpty())
+					{
+						List<NameValueBean> list = new ArrayList<NameValueBean>();
+						for (CollectionProtocol cp : cpCollection)
+						{
+							list.add(new NameValueBean(cp.getShortTitle(),cp.getId()));
+						}
+						cpDetailsList.addAll(list);
+					}
+					
+				}
+			}
+		}
 		Iterator iter = newList.iterator();
 		while (iter.hasNext())
 		{

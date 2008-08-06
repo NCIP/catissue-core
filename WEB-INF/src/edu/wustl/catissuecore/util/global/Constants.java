@@ -2384,6 +2384,12 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String NON_ADMIN_USER="7";
 	public static final String ADD_GLOBAL_PARTICIPANT="ADD_GLOBAL_PARTICIPANT";
 	
+	public static final String getCurrentAndFuturePGAndPEName(long siteId)
+	{
+		String roleName = "SITE_" + siteId + "_All_CP";
+		return roleName;
+	}
+	
 	// Constants used from file 'PermissionMapDetails.xml'
 	public static final String ADMIN_PROTECTION_ELEMENT = "ADMIN_PROTECTION_ELEMENT";
 	public static final String ADD_EDIT_USER = "ADD_EDIT_USER";
