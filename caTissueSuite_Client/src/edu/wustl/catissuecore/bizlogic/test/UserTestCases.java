@@ -529,5 +529,139 @@ public class UserTestCases extends CaTissueBaseTestCase {
 			 e.printStackTrace();
 			 assertTrue("Phone number is Empty", true);			 
 		 }		
+	}
+	
+	public void testAddUserWithXssVulnerableFirstName()
+	{
+		try
+		 {
+			User user = (User) BaseTestCaseUtility.initUser();		
+			user.setFirstName("Test>");
+			user = (User) appService.createObject(user); 
+			Logger.out.info("User with XSS vulnerable First Name");
+			fail("For invalid First Name, it should throw exception");
+			
+		 }
+		 catch(Exception e)
+		 {
+			 Logger.out.error(e.getMessage(),e);
+			 e.printStackTrace();
+			 assertTrue("For invalid First Name, it should throw exception", true);
+			 
+		 }	
 	}	
+	
+	public void testAddUserWithXssVulnerableLastName()
+	{
+		try
+		 {
+			User user = (User) BaseTestCaseUtility.initUser();		
+			user.setLastName("Test)");
+			user = (User) appService.createObject(user); 
+			Logger.out.info("User with XSS vulnerable Last Name");
+			fail("For invalid Last Name, it should throw exception");
+			
+		 }
+		 catch(Exception e)
+		 {
+			 Logger.out.error(e.getMessage(),e);
+			 e.printStackTrace();
+			 assertTrue("For invalid Last Name, it should throw exception", true);
+			 
+		 }	
+	}
+	
+	public void testUpdateUserWithXssVulnerableFirstName()
+	{
+		try
+		 {
+			User user = BaseTestCaseUtility.initUser();
+			user = (User)appService.createObject(user);
+			TestCaseUtility.setObjectMap(user, User.class);
+			Logger.out.info("Object created successfully");
+			
+			user.setFirstName("Test<");
+			user = (User)appService.updateObject(user);	
+						 
+			Logger.out.info("User with XSS vulnerable First Name");
+			fail("For invalid First Name, it should throw exception");
+			
+		 }
+		 catch(Exception e)
+		 {
+			 Logger.out.error(e.getMessage(),e);
+			 e.printStackTrace();
+			 assertTrue("For invalid First Name, it should throw exception", true);
+			 
+		 }	
+	}
+	
+	public void testUpdateUserWithXssVulnerableLastName()
+	{
+		try
+		 {
+			User user = BaseTestCaseUtility.initUser();
+			user = (User)appService.createObject(user);
+			TestCaseUtility.setObjectMap(user, User.class);
+			Logger.out.info("Object created successfully");
+			
+			user.setLastName("Test(");
+			user = (User)appService.updateObject(user);	
+						 
+			Logger.out.info("User with XSS vulnerable Last Name");
+			fail("For invalid Last Name, it should throw exception");
+			
+		 }
+		 catch(Exception e)
+		 {
+			 Logger.out.error(e.getMessage(),e);
+			 e.printStackTrace();
+			 assertTrue("For invalid Last Name, it should throw exception", true);
+			 
+		 }	
+	}
+	
+	/*public void testAddUserWithNullPassword()
+	{
+		try
+		 {
+			User user = BaseTestCaseUtility.initUser();
+			user.setNewPassword(null);
+			user = (User)appService.createObject(user);			
+			TestCaseUtility.setObjectMap(user, User.class);
+			Logger.out.info("Object created successfully with null password");
+			
+			fail("For null password, it should throw exception");	
+			
+		 }
+		 catch(Exception e)
+		 {
+			 Logger.out.error(e.getMessage(),e);
+			 e.printStackTrace();
+			 assertTrue("For null password, it should throw exception", true);			 
+			 
+		 }
+	}
+	
+	public void testAddUserWithEmptyPassword()
+	{
+		try
+		 {
+			User user = BaseTestCaseUtility.initUser();
+			user.setNewPassword("");
+			user = (User)appService.createObject(user);			
+			TestCaseUtility.setObjectMap(user, User.class);
+			Logger.out.info("Object created successfully with empty password");
+			
+			fail("For empty password, it should throw exception");	
+			
+		 }
+		 catch(Exception e)
+		 {
+			 Logger.out.error(e.getMessage(),e);
+			 e.printStackTrace();
+			 assertTrue("For empty password, it should throw exception",true);			 
+			 
+		 }
+	}*/	
 }
