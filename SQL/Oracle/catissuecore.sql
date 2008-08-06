@@ -500,6 +500,7 @@ create table CATISSUE_SPECIMEN_COLL_GROUP (
    NAME varchar(255) unique, 
    BARCODE varchar(255) unique, 
    COMMENTS varchar2(2000),
+   ENCOUNTER_TIMESTAMP date,
    COLLECTION_PROTOCOL_REG_ID number(19,0),
    SURGICAL_PATHOLOGY_NUMBER varchar(50),
    COLLECTION_PROTOCOL_EVENT_ID number(19,0),
