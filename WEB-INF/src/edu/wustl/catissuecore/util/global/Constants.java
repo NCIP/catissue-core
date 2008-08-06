@@ -2417,5 +2417,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String EDIT_PROFILE_PRIVILEGE= "EDIT_PROFILE_PRIVILEGE";
 	public static final String CP_CHILD_SUBMIT = "cpChildSubmit";
 	public static final String SITE_CLASS_NAME = "edu.wustl.catissuecore.domain.Site";//CollectionProtocol.class.getName();
+	public static final String USER_ROW_ID_BEAN_MAP = "rowIdBeanMapForUserPage";
 }
 	

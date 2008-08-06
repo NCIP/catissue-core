@@ -14,6 +14,8 @@ import org.apache.struts.action.ActionMapping;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.sun.msv.verifier.jarv.Const;
+
 import edu.wustl.catissuecore.bizlogic.AssignPrivilegePageBizLogic;
 import edu.wustl.catissuecore.multiRepository.bean.SiteUserRolePrivilegeBean;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -35,11 +37,12 @@ public class MSRUtil {
 	{
 			final AssignPrivilegePageBizLogic apBizLogic=getAssignPrivilegePageBizLogic();
 			HttpSession session=request.getSession();
+			String pageOf=request.getParameter(Constants.PAGE_OF);
 			Map<String, SiteUserRolePrivilegeBean> rowIdBeanMap = (Map<String, SiteUserRolePrivilegeBean>) session.getAttribute(Constants.ROW_ID_OBJECT_BEAN_MAP);
 			if (session.getAttribute(Constants.ROW_ID_OBJECT_BEAN_MAP) != null)
 			{
 				List<String[]> list;
-					list = apBizLogic.privilegeDataOnTabSwitch(rowIdBeanMap);
+					list = apBizLogic.privilegeDataOnTabSwitch(rowIdBeanMap,pageOf);
 					request.setAttribute(Constants.PRIVILEGE_DATA_LIST_ONLOAD, list);
 			}
 		
@@ -68,11 +71,12 @@ public class MSRUtil {
 	{
 			final AssignPrivilegePageBizLogic apBizLogic=getAssignPrivilegePageBizLogic();
 			HttpSession session=request.getSession();
-			Map<String, SiteUserRolePrivilegeBean> rowIdBeanMap = (Map<String, SiteUserRolePrivilegeBean>) session.getAttribute(Constants.ROW_ID_OBJECT_BEAN_MAP);
-			if (session.getAttribute(Constants.ROW_ID_OBJECT_BEAN_MAP) != null)
+			String pageOf=request.getParameter(Constants.PAGE_OF);
+			Map<String, SiteUserRolePrivilegeBean> rowIdBeanMapForUserPage = (Map<String, SiteUserRolePrivilegeBean>) session.getAttribute("rowIdBeanMapForUserPage");
+			if (session.getAttribute("rowIdBeanMapForUserPage") != null)
 			{
 				List<String[]> list;
-					list = apBizLogic.privilegeDataOnTabSwitch(rowIdBeanMap);
+					list = apBizLogic.privilegeDataOnTabSwitch(rowIdBeanMapForUserPage,pageOf);
 					request.setAttribute(Constants.PRIVILEGE_DATA_LIST_ONLOAD, list);
 			}
 		

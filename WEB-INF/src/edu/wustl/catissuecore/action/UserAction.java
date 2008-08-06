@@ -11,9 +11,11 @@
 package edu.wustl.catissuecore.action;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -27,6 +29,8 @@ import edu.wustl.catissuecore.domain.CancerResearchGroup;
 import edu.wustl.catissuecore.domain.Department;
 import edu.wustl.catissuecore.domain.Institution;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.multiRepository.bean.SiteUserRolePrivilegeBean;
+import edu.wustl.catissuecore.util.CaTissuePrivilegeUtility;
 import edu.wustl.catissuecore.util.MSRUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
@@ -35,6 +39,8 @@ import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.cde.CDEManager;
+import edu.wustl.common.security.PrivilegeManager;
+import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -67,13 +73,10 @@ public class UserAction extends SecureAction
 	//	final List<NameValueBean> siteList = apBizLogic.getSiteList(false);
 	//	request.setAttribute(Constants.SITELIST, siteList);
 	//	request.setAttribute("siteListforJSP", Constants.SITELIST);
-        
-        msrUtil.onFirstTimeLoadForUser(mapping, request);
-        
-        final String cpOperation = (String) request.getParameter("cpOperation");
-        if(cpOperation !=null)
+        if(operation.equalsIgnoreCase(Constants.ADD))
         {
-        	return msrUtil.setAJAXResponse(request, response, cpOperation);
+        	HttpSession session=request.getSession();
+        	session.removeAttribute("rowIdBeanMapForUserPage");
         }
         
         String formName,prevPage=null,nextPage=null;
@@ -113,6 +116,7 @@ public class UserAction extends SecureAction
 		}
         if (operation.equals(Constants.EDIT))
         {
+        	setUserPrivileges(request.getSession(),userForm.getId());
 			if (pageOf.equals(Constants.PAGEOF_APPROVE_USER))
 			{
 				formName = Constants.APPROVE_USER_EDIT_ACTION;
@@ -156,7 +160,7 @@ public class UserAction extends SecureAction
 		}
 		if(operation.equalsIgnoreCase(Constants.ADD))
 		{
-			request.getSession(true).setAttribute("rowIdBeanMapForUserPage", null);
+			request.getSession(true).setAttribute(Constants.USER_ROW_ID_BEAN_MAP, null);
 			
 			if(userForm.getCountry()==null)
 			{
@@ -234,7 +238,13 @@ public class UserAction extends SecureAction
         
         Logger.out.debug("pageOf :---------- "+ pageOf );
         
+        msrUtil.onFirstTimeLoadForUser(mapping, request);
         
+        final String cpOperation = (String) request.getParameter("cpOperation");
+        if(cpOperation !=null)
+        {
+        	return msrUtil.setAJAXResponse(request, response, cpOperation);
+        }
         //Parameters for JSP
         
         
@@ -267,7 +277,24 @@ public class UserAction extends SecureAction
     }
     
   
-    /* (non-Javadoc)
+    private void setUserPrivileges(HttpSession session, long id)
+	{
+    	try
+    	{
+	    	IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.USER_FORM_ID);
+	    	User user = (User)bizLogic.retrieve(User.class.getName(), id);
+	    	PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
+	    	Map<String, SiteUserRolePrivilegeBean> privilegeMap = CaTissuePrivilegeUtility.getAllPrivileges(privilegeManager.getPrivilegeCache(user.getLoginName()));
+			session.setAttribute(Constants.USER_ROW_ID_BEAN_MAP, privilegeMap);
+    	}
+    	catch(DAOException e)
+    	{
+    		e.printStackTrace();
+    	}
+	}
+
+
+	/* (non-Javadoc)
      * @see edu.wustl.catissuecore.action.SecureAction#isAuthorizedToExecute(javax.servlet.http.HttpServletRequest)
      */
     protected boolean isAuthorizedToExecute(HttpServletRequest request)

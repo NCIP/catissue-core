@@ -877,13 +877,13 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 	 * @throws CSException
 	 * @throws DAOException
 	 */
-	public List<String[]> privilegeDataOnTabSwitch(Map<String, SiteUserRolePrivilegeBean> rowIdBeanMap) throws BizLogicException {
+	public List<String[]> privilegeDataOnTabSwitch(Map<String, SiteUserRolePrivilegeBean>map,String pageOf) throws BizLogicException {
 		List<String[]> list=new ArrayList<String[]>();
 		
-		int mapSize=rowIdBeanMap.size();
-		Object[] surpArray= rowIdBeanMap.values().toArray();
+		int mapSize=map.size();
+		Object[] surpArray= map.values().toArray();
 		SiteUserRolePrivilegeBean bean=null;
-		Object[] keyArray=rowIdBeanMap.keySet().toArray();
+		Object[] keyArray=map.keySet().toArray();
 		
 		for(int j=0;j<mapSize;j++)
 		{
@@ -895,15 +895,14 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 			// for role id
 			for(int count=0;count<keyArray.length;count++)
 			{
-				SiteUserRolePrivilegeBean beanForKey=rowIdBeanMap.get(keyArray[count]);
+				SiteUserRolePrivilegeBean beanForKey=map.get(keyArray[count]);
 				if (bean==beanForKey)
 				{
 					rowId=(String)keyArray[count];
 				}
 			}
 			
-			// for user
-			String userName = bean.getUser().getFirstName();
+			
 			
 			//for role
 			String roleName= bean.getRole().getName();
@@ -913,8 +912,20 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 			
 			// for privileges
 			String actionNames = displayPrivilegesNames(bean);
+			if(! pageOf.equalsIgnoreCase("pageOfUserAdmin"))
+			{
+				// for user
+				String userName = bean.getUser().getFirstName();
+				array[0]=userName;
+			}
+			else
+			{
+				// for user
+				String cpName = bean.getCollectionProtocol().getShortTitle();
+				array[0]=cpName;
+			}
 			
-			array[0]=userName;
+			
 			array[1]=sites;
 			array[2]=roleName;
 			array[3]=actionNames;
@@ -923,6 +934,7 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 		}
 		return list;
 	}
+	
 	/**
 	 * @param bean
 	 * @return

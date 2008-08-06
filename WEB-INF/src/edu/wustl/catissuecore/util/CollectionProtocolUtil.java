@@ -39,6 +39,7 @@ import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.TissueSpecimenRequirement;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.multiRepository.bean.SiteUserRolePrivilegeBean;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.dao.DAO;
@@ -501,7 +502,7 @@ public class CollectionProtocolUtil {
 		HttpSession session = request.getSession();
 		session.removeAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
 		session.removeAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
-
+		setPrivilegesForCP(id,session);
 		CollectionProtocolBean collectionProtocolBean = 
 			(CollectionProtocolBean)sessionCpList.get(0);
 		collectionProtocolBean.setOperation("update");
@@ -513,6 +514,14 @@ public class CollectionProtocolUtil {
 		String treeNode = "cpName_"+cptitle;
 		session.setAttribute(Constants.TREE_NODE_ID, treeNode);
 		session.setAttribute("tempKey", treeNode);
+		
+	}
+	
+	private static  void setPrivilegesForCP(Long cpId,HttpSession session) 
+	{
+		Map<String,SiteUserRolePrivilegeBean> map = CaTissuePrivilegeUtility.getPrivilegesOnCP(cpId); 
+		session.setAttribute(Constants.ROW_ID_OBJECT_BEAN_MAP, map);
+		
 	}
 
 
