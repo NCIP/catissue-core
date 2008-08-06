@@ -663,19 +663,35 @@ function participantRegRow(subdivtag)
 				<td width="90%" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;<bean:message key="participant.collectionProtocolReg" /> </span></td>
 				<td width="10%" align="right" class="tr_bg_blue1"><a href="#"
 					id="imgArrow_add_participant_registeration">
-					
-					
-							<img src="images/uIEnhancementImages/up_arrow.gif" alt="Show Details"
+					<logic:equal name="<%=Constants.OPERATION%>"
+						value="<%=Constants.EDIT%>">
+										
+							<img src="images/uIEnhancementImages/up_arrow.gif" alt="Hide Details"
 					width="80" height="9" hspace="10" border="0" />
+
+					</logic:equal>
+
+					<logic:notEqual name="<%=Constants.OPERATION%>"
+						value="<%=Constants.EDIT%>">
+
+						<img src="images/uIEnhancementImages/dwn_arrow1.gif" alt="Show Details"
+					width="80" height="9" hspace="10" border="0" />		
+												
+					</logic:notEqual>
 					
 						</a></td>
 			</tr>
 			<tr>
 				<td colspan="2" class="showhide1">
 				
-				
+				<logic:equal name="<%=Constants.OPERATION%>"
+						value="<%=Constants.EDIT%>">
 						<div id="add_participant_registeration" style="display:block">
-				
+				</logic:equal>
+				<logic:notEqual name="<%=Constants.OPERATION%>"
+						value="<%=Constants.EDIT%>">
+						<div id="add_participant_registeration" style="display:none">
+				</logic:notEqual>
 				<table width="100%" border="0" cellspacing="0" cellpadding="3">
 
 
