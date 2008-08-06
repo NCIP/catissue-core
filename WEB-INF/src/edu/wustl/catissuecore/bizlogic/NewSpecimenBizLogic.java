@@ -1846,8 +1846,8 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		}*/
 		if (operation.equals(Constants.ADD))
 		{
-			if (!specimen.getIsAvailable().booleanValue()
-					&& !"Pending".equals(specimen.getCollectionStatus()))
+			if ((specimen.getIsAvailable() == null)
+                    || (!specimen.getIsAvailable().booleanValue() && !"Pending".equals(specimen.getCollectionStatus())))
 			{
 				throw new DAOException(ApplicationProperties.getValue("specimen.available.errMsg"));
 			}
@@ -1886,31 +1886,30 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	 */
 	private void validateSpecimenData(Specimen specimen, Validator validator) throws DAOException
 	{
-		if (specimen.getSpecimenCollectionGroup() == null
-				&& ((specimen.getSpecimenCollectionGroup().getId() == null || specimen
-						.getSpecimenCollectionGroup().getId().equals("-1")) || (specimen
-						.getSpecimenCollectionGroup().getGroupName() == null || specimen
-						.getSpecimenCollectionGroup().getGroupName().equals(""))))
-		{
-			String message = ApplicationProperties.getValue("specimen.specimenCollectionGroup");
-			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
-		}
-		if (specimen.getParentSpecimen() != null && ((Specimen) specimen.getParentSpecimen()).getLabel() == null
-				&& specimen.getParentSpecimen().getId() == null)
-		{
-			String message = ApplicationProperties.getValue("createSpecimen.parent");
-			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
-		}
-		if (validator.isEmpty(specimen.getClassName()))
-		{
-			String message = ApplicationProperties.getValue("specimen.type");
-			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
-		}
-		if (validator.isEmpty(specimen.getSpecimenType()))
-		{
-			String message = ApplicationProperties.getValue("specimen.subType");
-			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
-		}
+	    SpecimenCollectionGroup scg = specimen.getSpecimenCollectionGroup();
+
+        if (scg == null || ((scg.getId() == null || scg.getId().equals("-1")) && 
+                        (scg.getGroupName() == null || scg.getGroupName().equals(""))))
+        {
+            String message = ApplicationProperties.getValue("specimen.specimenCollectionGroup");
+            throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+        }
+        if (specimen.getParentSpecimen() != null && ((Specimen) specimen.getParentSpecimen()).getLabel() == null
+                && specimen.getParentSpecimen().getId() == null)
+        {
+            String message = ApplicationProperties.getValue("createSpecimen.parent");
+            throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+        }
+        if (validator.isEmpty(specimen.getSpecimenClass()))
+        {
+            String message = ApplicationProperties.getValue("specimen.type");
+            throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+        }
+        if (validator.isEmpty(specimen.getSpecimenType()))
+        {
+            String message = ApplicationProperties.getValue("specimen.subType");
+            throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+        }
 	}
 
 	/**
@@ -1987,7 +1986,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		}
 		else
 		{
-			if (specimen.getParentSpecimen() == null && !specimen.getCollectionStatus().equals("Pending"))
+			if (specimen.getParentSpecimen() == null && (specimen.getCollectionStatus()==null || !specimen.getCollectionStatus().equals("Pending")))
 			{
 				throw new DAOException(ApplicationProperties.getValue("error.specimen.noevents"));
 			}
@@ -2128,16 +2127,14 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 								+ specimen.getSpecimenCollectionGroup().getGroupName()));
 			}
 		}
-		if (specimen.getInitialQuantity() == null
-				|| specimen.getInitialQuantity() == null)
+		if (specimen.getInitialQuantity() == null)
 		{
 			String quantityString = ApplicationProperties.getValue("specimen.quantity");
 			throw new DAOException(ApplicationProperties.getValue("errors.item.required",
 					quantityString));
 		}
 
-		if (specimen.getAvailableQuantity() == null
-				|| specimen.getAvailableQuantity() == null)
+		if (specimen.getAvailableQuantity() == null)
 		{
 			String quantityString = ApplicationProperties.getValue("specimen.availableQuantity");
 			throw new DAOException(ApplicationProperties.getValue("errors.item.required",
@@ -3164,48 +3161,52 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	 */
 	public String getObjectId(AbstractDAO dao, Object domainObject) 
 	{
-		String objectId = "";
-		Specimen specimen = null;
-		
-		if (domainObject instanceof LinkedHashSet)			
-		{
-			LinkedHashSet linkedHashSet = (LinkedHashSet) domainObject;
-			specimen = (Specimen) linkedHashSet.iterator().next();
-		}
-		else if(domainObject instanceof Specimen)
-		{
-			specimen = (Specimen) domainObject;
-		}
-		
-			SpecimenCollectionGroup scg = specimen.getSpecimenCollectionGroup();
+	    String objectId = "";
+        Specimen specimen = null;
+        
+        if (domainObject instanceof LinkedHashSet)          
+        {
+            LinkedHashSet linkedHashSet = (LinkedHashSet) domainObject;
+            specimen = (Specimen) linkedHashSet.iterator().next();
+        }
+        else if(domainObject instanceof Specimen)
+        {
+            specimen = (Specimen) domainObject;
+        }
+        
+            SpecimenCollectionGroup scg = specimen.getSpecimenCollectionGroup();
 
-			try 
-			{
-				if(specimen.getParentSpecimen() != null)
-				{
-					specimen = getParentSpecimenByLabel(dao, (Specimen)specimen.getParentSpecimen());
-					// setSpecimenParent(specimen, dao);
-					scg = specimen.getSpecimenCollectionGroup();
-				}
-				else if(scg == null)
-				{
-					specimen = (Specimen) dao.retrieve(Specimen.class.getName(), specimen.getId());
-					scg = specimen.getSpecimenCollectionGroup();
-				}
-				if(scg.getCollectionProtocolRegistration() == null)
-				{
-					scg = (SpecimenCollectionGroup) dao.retrieve(SpecimenCollectionGroup.class.getName(), scg.getId());
-				}
-			} 
-			catch (DAOException e) 
-			{
-				Logger.out.debug(e.getMessage(), e);
-			}
-			CollectionProtocolRegistration cpr = scg.getCollectionProtocolRegistration();
-			CollectionProtocol cp = cpr.getCollectionProtocol();
-			objectId = Constants.COLLECTION_PROTOCOL_CLASS_NAME+"_"+cp.getId();
-	
-		return objectId;
+            try 
+            {
+                if(specimen.getParentSpecimen() != null)
+                {
+                    specimen = getParentSpecimenByLabel(dao, (Specimen)specimen.getParentSpecimen());
+                    scg = specimen.getSpecimenCollectionGroup();
+                }
+                else if(scg == null)
+                {
+                    specimen = (Specimen) dao.retrieve(Specimen.class.getName(), specimen.getId());
+                    scg = specimen.getSpecimenCollectionGroup();
+                }
+                if((specimen != null) && (scg != null) && (scg.getCollectionProtocolRegistration() == null))
+                {
+                    scg = (SpecimenCollectionGroup) dao.retrieve(SpecimenCollectionGroup.class.getName(), scg.getId());
+                }
+            } 
+            catch (DAOException e) 
+            {
+                Logger.out.debug(e.getMessage(), e);
+            }
+
+            if(scg!=null){
+                CollectionProtocolRegistration cpr = scg.getCollectionProtocolRegistration();
+                CollectionProtocol cp = cpr.getCollectionProtocol();
+                objectId = Constants.COLLECTION_PROTOCOL_CLASS_NAME+"_"+cp.getId();
+            }else{
+                objectId = Constants.ADMIN_PROTECTION_ELEMENT;
+            }
+    
+        return objectId;
 	}
 	
 	/**
@@ -3239,6 +3240,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		
 		return Constants.ADD_EDIT_SPECIMEN; 
     }
+
 	
 	/**
 	 * (non-Javadoc)
