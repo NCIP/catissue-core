@@ -27,7 +27,7 @@
 				}
 				else
 				{
-					document.write("<div id='gridbox' width='100%' height='320px' style='background-color:#d7d7d7;overflow:hidden'></div>");
+					document.write("<div id='gridbox' width='100%' height='300px' style='background-color:#d7d7d7;overflow:hidden'></div>");
 				}
 			</script>
 		</td>
