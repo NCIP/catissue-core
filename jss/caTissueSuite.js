@@ -2154,6 +2154,9 @@ function disableOnSel(checkBoxId,selectBoxId)
 
             var cpOperation="addPrivOnUserPage";      
 
+			
+			checkBoxCtrl=document.getElementById("cpCheckId");
+			
             siteListCtrl=document.getElementById("siteIds");
 
             cpListCtrl=document.getElementById("cpIds");
@@ -2161,6 +2164,16 @@ function disableOnSel(checkBoxId,selectBoxId)
             roleListCtrl=document.getElementById("roleIds");
 
             actionListCtrl=document.getElementById("actionIds");
+            
+            var isAllCPChecked=false;
+            if(checkBoxCtrl.checked==true)
+            {
+             isAllCPChecked=true;
+              
+            }
+            
+            
+          
 
              var selectedSiteIds = new Array();
 
@@ -2292,7 +2305,7 @@ function disableOnSel(checkBoxId,selectBoxId)
 
                         var url="ShowAssignPrivilegePage.do";
 
-                        var data="cpOperation="+cpOperation+"&selectedSiteIds="+selectedSiteIds+"&selectedCPIds="+selectedCPIds+"&selectedRoleIds="+selectedRoleIds+"&selectedActionIds="+selectedActionIds;             
+                        var data="cpOperation="+cpOperation+"&selectedSiteIds="+selectedSiteIds+"&selectedCPIds="+selectedCPIds+"&selectedRoleIds="+selectedRoleIds+"&selectedActionIds="+selectedActionIds+"&isAllCPChecked="+isAllCPChecked;             
 
                         sendRequestsWithData(url,data,cpOperation);
 

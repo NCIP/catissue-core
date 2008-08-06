@@ -1083,7 +1083,7 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 
 
 // for user page--
-public List<JSONObject> addPrivilegeForUserPage(Map<String, SiteUserRolePrivilegeBean> rowIdBeanMap, String cpIds, String siteIds, String roleId, String actionIds)throws BizLogicException,JSONException, CSException 
+public List<JSONObject> addPrivilegeForUserPage(Map<String, SiteUserRolePrivilegeBean> rowIdBeanMap, String cpIds, String siteIds, String roleId, String actionIds,boolean isAllCPChecked)throws BizLogicException,JSONException, CSException 
 {  
 	List<JSONObject> listForUPSummary = new ArrayList<JSONObject>();
 	List<Long> siteIdsList = new ArrayList<Long>();
@@ -1125,7 +1125,7 @@ public List<JSONObject> addPrivilegeForUserPage(Map<String, SiteUserRolePrivileg
 				 
 				 List<NameValueBean> actionBeanList = getPrivilegesNameValueBeanList(actionIdsList);
 				
-				 SiteUserRolePrivilegeBean surpBean =setUserPrivilegeSummaryForUserPage(collectionProtocol, cpRelatedSites, role, actionBeanList);
+				 SiteUserRolePrivilegeBean surpBean =setUserPrivilegeSummaryForUserPage(collectionProtocol, cpRelatedSites, role, actionBeanList,isAllCPChecked);
 				
 				 String rowId = "CP_"+ cpId;
 				 rowIdBeanMap.put(rowId,surpBean);
@@ -1163,7 +1163,7 @@ public List<JSONObject> addPrivilegeForUserPage(Map<String, SiteUserRolePrivileg
 				 
 				 List<NameValueBean> actionBeanList = getPrivilegesNameValueBeanList(actionIdsList);
 				
-				 SiteUserRolePrivilegeBean surpBean =setUserPrivilegeSummaryForUserPage(null, siteLists, role, actionBeanList);
+				 SiteUserRolePrivilegeBean surpBean =setUserPrivilegeSummaryForUserPage(null, siteLists, role, actionBeanList,isAllCPChecked);
 				
 				 String rowId = "" + siteId;
 				 rowIdBeanMap.put(rowId,surpBean);
@@ -1214,7 +1214,7 @@ public List<Site> getCPSiteRelationForUserPage(CollectionProtocol collectionProt
 	return list;
 }
 
-public SiteUserRolePrivilegeBean setUserPrivilegeSummaryForUserPage(CollectionProtocol collectionProtocol,List<Site> cpRelatedSites, Role role, List<NameValueBean> actionBeanList)
+public SiteUserRolePrivilegeBean setUserPrivilegeSummaryForUserPage(CollectionProtocol collectionProtocol,List<Site> cpRelatedSites, Role role, List<NameValueBean> actionBeanList,boolean isAllCPChecked)
 {
 	SiteUserRolePrivilegeBean surp = new SiteUserRolePrivilegeBean();
 	
@@ -1229,6 +1229,8 @@ public SiteUserRolePrivilegeBean setUserPrivilegeSummaryForUserPage(CollectionPr
 	surp.setSiteList(cpRelatedSites);
 	
 	surp.setPrivileges(actionBeanList);
+	
+	surp.setAllCPChecked(isAllCPChecked);
 	return surp;
 }
 

@@ -409,15 +409,19 @@ function handleStatus(status)
 										</tr>
 
 
-								<tr >
+								<tr onclick="showHide('privilegesDiv')">
 									<td colspan="7" align="left" class="tr_bg_blue1"><span
 										class="blue_ar_b">&nbsp;Privileges</span></td>
-									<td align="right" class="tr_bg_blue1">&nbsp;</td>
+									<td align="right" class="tr_bg_blue1"><a href="#"
+										id="imgArrow_privilegesDiv"><img
+										src="images/uIEnhancementImages/dwn_arrow1.gif"
+										alt="Show Details" width="80" height="9" hspace="10"
+										border="0" /></a></td>
 								</tr>
 
 								<tr>
 									<td colspan="8">
-					<!--				<div id="privilegesDiv" style="display:none"> -->
+									<div id="privilegesDiv" style="display:none">
 									<table width="100%" border="0" cellpadding="3" cellspacing="0">
 										<tr>
 											<td width="1%" align="center" class="black_ar"><span
@@ -426,7 +430,7 @@ function handleStatus(status)
 												width="6" height="6" hspace="0" vspace="0" /></span></td>
 											<td width="17%" align="left" class="black_ar">Collection
 											Protocol(s)</td>
-											<td width="19%" class="black_ar"><input type="checkbox" checked="true" id="cpCheckId" onclick="disableOnSel('cpCheckId','cpIds')" disabled="disabled">All
+											<td width="19%" class="black_ar"><input type="checkbox" checked="true" id="cpCheckId" onclick="disableOnSel('cpCheckId','cpIds')" >All
 											Current and Future</td>
 											<td width="13%" class="black_ar">&nbsp;</td>
 											<td width="1%" align="center" class="black_ar"><span
@@ -461,7 +465,7 @@ function handleStatus(status)
 											<td width="17%" align="left" class="black_ar"></td>
 											<td width="19%" class="black_ar" ><select
 												class="formFieldSizedNew" id="cpIds" size="4"
-												multiple="multiple">
+												multiple="multiple" disabled="true">
 												<%
 									for (int i = 0; i < cpList.size(); i++) {
 									String cpActionName = ""
@@ -576,7 +580,7 @@ function handleStatus(status)
 
 														</tbody>
 													</table>
-											<!--		</div>  -->
+													</div> 
 													</td>
 												</tr>
 												<tr>

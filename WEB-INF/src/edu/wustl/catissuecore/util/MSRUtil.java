@@ -202,6 +202,7 @@ public class MSRUtil {
 			final String actionIds = (String) request.getParameter(Constants.SELECTED_ACTION_IDS);
 			final String cpIds = (String) request.getParameter("selectedCPIds");
  			final String roleId = (String) request.getParameter(Constants.SELECTED_ROLE_IDS);
+ 			final boolean isAllCPChecked = new Boolean(request.getParameter("isAllCPChecked"));
  			
  			Map<String, SiteUserRolePrivilegeBean> rowIdBeanMap= new HashMap<String, SiteUserRolePrivilegeBean>();
  			if (session.getAttribute("rowIdBeanMapForUserPage") != null) 
@@ -209,7 +210,7 @@ public class MSRUtil {
  				rowIdBeanMap = (Map<String, SiteUserRolePrivilegeBean>) session.getAttribute("rowIdBeanMapForUserPage");
  			}	
  			
-			final List<JSONObject> listForUPSummary =apBizLogic.addPrivilegeForUserPage(rowIdBeanMap,cpIds,siteIds,roleId,actionIds );
+			final List<JSONObject> listForUPSummary =apBizLogic.addPrivilegeForUserPage(rowIdBeanMap,cpIds,siteIds,roleId,actionIds,isAllCPChecked );
 			session.setAttribute("rowIdBeanMapForUserPage",	rowIdBeanMap);
 			setResponse(response, listForUPSummary);
 	
