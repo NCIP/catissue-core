@@ -322,6 +322,17 @@ public class SiteBizLogic extends DefaultBizLogic
 		{
 			Logger.out.debug(e.getMessage(), e);
 		}
+		finally
+		{
+			try
+			{
+				dao.closeSession();
+			}
+			catch (DAOException e)
+			{
+				Logger.out.error(e.getMessage(), e);
+			}
+		}
 		
 		if(site == null)
 		{
