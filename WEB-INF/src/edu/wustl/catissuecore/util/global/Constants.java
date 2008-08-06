@@ -349,6 +349,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String STORAGECONTAINERLIST="storageContainerList";
 	public static final String SITELIST="siteList";
 	public static final String CPLIST="cpList";
+	public static final String REPOSITORY = "Repository";
 	
 //	public static final String SITEIDLIST="siteIdList";
 	public static final String USERIDLIST = "userIdList";

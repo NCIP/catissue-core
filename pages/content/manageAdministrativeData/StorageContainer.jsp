@@ -201,7 +201,9 @@
 		{
 			var siteElement = document.getElementById("siteId");
 			document.forms[0].siteName.value = siteElement.options[siteElement.selectedIndex].text;
-		
+			var action = "StorageContainer.do?operation="+document.forms[0].operation.value+"&pageOf=pageOfStorageContainer&isSiteChanged=true";
+			document.forms[0].action = action;
+			document.forms[0].submit();
 		}
 		function onParentContainerChange(element)
 		{

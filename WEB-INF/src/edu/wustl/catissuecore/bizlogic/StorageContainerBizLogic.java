@@ -297,12 +297,12 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 
 	}
 
+	
 	/**
-	 * Name : kalpana thakur Reviewer Name : Vaishali Bug ID: 4922
-	 * Description:Storage container will not be added to closed site :check for
-	 * closed site
+	 *  Name : Pathik Sheth  Reviewer Name :Vishvesh Mulay 	 
+	 * Description:Retrive only repository sites which are not closed.
 	 */
-	public List getSiteList(String sourceObjectName,
+	public List getRepositorySiteList(String sourceObjectName,
 			String[] displayNameFields, String valueField,
 			String activityStatusArr[], boolean isToExcludeDisabled)
 			throws DAOException {
@@ -311,10 +311,10 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 		String joinCondition = null;
 		String separatorBetweenFields = ", ";
 
-		whereColumnName = new String[] { "activityStatus" };
-		whereColumnCondition = new String[] { "not in" };
+		whereColumnName = new String[] { "activityStatus","type"};
+		whereColumnCondition = new String[] { "not in","=" };
 		// whereColumnCondition = new String[]{"in"};
-		Object[] whereColumnValue = { activityStatusArr };
+		Object[] whereColumnValue = { activityStatusArr,Constants.REPOSITORY};
 
 		return getList(sourceObjectName, displayNameFields, valueField,
 				whereColumnName, whereColumnCondition, whereColumnValue,
@@ -322,9 +322,10 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 
 	}
 
+
 	public List getSiteList(String[] displayNameFields, String valueField,
 			String activityStatusArr[], Long userId) throws DAOException {
-		List siteResultList = getSiteList(Site.class.getName(),
+		List siteResultList = getRepositorySiteList(Site.class.getName(),
 				displayNameFields, valueField, activityStatusArr, false);
 		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
 		List userList = null;
@@ -4162,4 +4163,5 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
     {
     	return Constants.ADD_EDIT_STORAGE_CONTAINER;
     }
+	
 }

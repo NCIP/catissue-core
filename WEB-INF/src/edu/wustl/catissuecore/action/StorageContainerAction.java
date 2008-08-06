@@ -35,6 +35,7 @@ import edu.wustl.catissuecore.actionForm.StorageContainerForm;
 import edu.wustl.catissuecore.bean.StorageContainerBean;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
+import edu.wustl.catissuecore.bizlogic.SiteBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageTypeBizLogic;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
@@ -72,6 +73,7 @@ public class StorageContainerAction extends SecureAction
 		String pageOf = request.getParameter(Constants.PAGEOF);
 		String containerId=request.getParameter("containerIdentifier"); 
 		String isPageFromStorageType=(String)session.getAttribute("isPageFromStorageType");
+		String isSiteChanged=(String)request.getParameter("isSiteChanged");
 		if (storageContainerForm.getSpecimenOrArrayType() == null)
 		{
 			storageContainerForm.setSpecimenOrArrayType("Specimen");
@@ -81,7 +83,7 @@ public class StorageContainerAction extends SecureAction
 
 		boolean isTypeChange = false;
 		boolean isSiteOrParentContainerChange = false;
-
+	
 		String str = request.getParameter("isOnChange");
 		str = request.getParameter("typeChange");
 		 if (str != null && str.equals("true"))
@@ -95,7 +97,7 @@ public class StorageContainerAction extends SecureAction
 			isSiteOrParentContainerChange = true;
 
 		} 
-		
+				
 //		Gets the value of the operation parameter.
 		String operation = request.getParameter(Constants.OPERATION);
 		request.setAttribute(Constants.OPERATION,operation);
@@ -106,9 +108,15 @@ public class StorageContainerAction extends SecureAction
 		setRequestAttributes(request);
 		setStorageType(request, storageContainerForm,session);
 		
+		
 		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 		//    	 ---- chetan 15-06-06 ----
+		if (isSiteChanged != null && isSiteChanged.equals("true"))
+		{
+			setCollectionProtocolList(request,storageContainerForm.getSiteId());
 
+		}
+		
 		TreeMap containerMap = new TreeMap();
 		if (storageContainerForm.getTypeId() != -1)
 		{
@@ -217,53 +225,24 @@ public class StorageContainerAction extends SecureAction
 
 	}
 
-	private void setCollectionProtocolList(HttpServletRequest request) throws DAOException
+	private void setCollectionProtocolList(HttpServletRequest request,Long siteId) throws DAOException
 	{
-		/*
-		 * Bug #4564
-		 * for tooltips
-		 * kalpana
-		 * 
-		 */
-		CollectionProtocolBizLogic bizLogic = (CollectionProtocolBizLogic) BizLogicFactory.getInstance().getBizLogic(
-				Constants.COLLECTION_PROTOCOL_FORM_ID);
-		String sourceObjectName = CollectionProtocol.class.getName();
-		String[] selectColName = {"id", "shortTitle", "title"};
-		String[] whereColName = {Constants.ACTIVITY_STATUS};
-		String[] whereColCond = {"="};
-		Object[] whereColVal = {Constants.ACTIVITY_STATUS_ACTIVE};
-		//Smita changes start
-		//String[] displayNameFields = {"shortTitle"};
-		//Smita changes end
-		//List collectionProtocolList = bizLogic.getList(sourceObjectName, displayNameFields, valueField, true);
-		List collectionProtocolList = bizLogic.retrieve(sourceObjectName, selectColName, whereColName, whereColCond, whereColVal,
-				Constants.AND_JOIN_CONDITION);
-
-		List<NameValueBean> cpWithShortTitleList = new ArrayList<NameValueBean>();
-		Map<Long, String> cpIDTitleMap = new HashMap<Long, String>();
-		if (collectionProtocolList != null)
+		SiteBizLogic siteBizLogic = (SiteBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.SITE_FORM_ID);
+		Collection<CollectionProtocol> cpCollection = siteBizLogic.getRelatedCPs(siteId);
+		List<NameValueBean> cpList = new ArrayList<NameValueBean>();
+		Map<Long,String> cpTitleMap = new HashMap<Long,String>();
+		if (cpCollection != null && !cpCollection.isEmpty())
 		{
-			Iterator itr = collectionProtocolList.iterator();
-			while (itr.hasNext())
+			for (CollectionProtocol cp : cpCollection)
 			{
-				Object[] obj = (Object[]) itr.next();
-				Long cpId = (Long) obj[0];
-				String shortTitle = (String) obj[1];
-				String title = (String) obj[2];
-				cpWithShortTitleList.add(new NameValueBean(shortTitle, cpId));
-				cpIDTitleMap.put(cpId, title);
-
+				cpList.add(new NameValueBean(cp.getShortTitle(),cp.getId()));
+				cpTitleMap.put(cp.getId(),cp.getTitle());
 			}
 		}
-		Collections.sort(cpWithShortTitleList);
-		cpWithShortTitleList.add(0, new NameValueBean(Constants.SELECT_OPTION, "-1"));
-		//List collectionProtocolList = Utility.getCollectionProtocolList(list1);
-		request.setAttribute(Constants.PROTOCOL_LIST, cpWithShortTitleList);
+		request.setAttribute(Constants.PROTOCOL_LIST, cpList);
 		//Map<Long, String> cpIDTitleMap = Utility.getCPIDTitleMap();
-		request.setAttribute(Constants.CP_ID_TITLE_MAP, cpIDTitleMap);
-		/*
-		 * End :kalpana
-		 */
+		request.setAttribute(Constants.CP_ID_TITLE_MAP, cpTitleMap);
+		
 
 	}
 
@@ -310,8 +289,12 @@ public class StorageContainerAction extends SecureAction
 			List StorageTypeListWithoutAny = Utility.getStorageTypeList(list2, false);
 			request.setAttribute(Constants.STORAGETYPELIST, StorageTypeListWithoutAny);
 		}
-
-		setCollectionProtocolList(request);
+		List<NameValueBean> cpWithShortTitleList = new ArrayList<NameValueBean>();
+		Map<Long, String> cpIDTitleMap = new HashMap<Long, String>();
+		request.setAttribute(Constants.PROTOCOL_LIST, cpWithShortTitleList);
+		//Map<Long, String> cpIDTitleMap = Utility.getCPIDTitleMap();
+		request.setAttribute(Constants.CP_ID_TITLE_MAP, cpIDTitleMap);
+		//setCollectionProtocolList(request);
 	}
 
 	private void onTypeChange(StorageContainerForm storageContainerForm, String operation, HttpServletRequest request) throws DAOException
