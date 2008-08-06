@@ -1669,7 +1669,9 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		Iterator<AbstractSpecimen> childSpecimenIterator = childSpecimen.iterator();
 		while(childSpecimenIterator.hasNext())
 		{
-			createSpecimenXML(xmlString,(Specimen)childSpecimenIterator.next());
+			Specimen childSpecimenOfSpecimen = (Specimen)childSpecimenIterator.next();
+			if(!Constants.ACTIVITY_STATUS_DISABLED.equals(childSpecimenOfSpecimen.getActivityStatus()))
+				createSpecimenXML(xmlString,childSpecimenOfSpecimen);
 		}
 		xmlString.append("</node>");
 	}
