@@ -4726,7 +4726,7 @@ PUBLIC
 			name="collectionProtocolForm"
 			scope="request"
 			validate="true"
-			input="/OpenCollectionProtocol.do?pageOf=pageOfmainCP&amp;operation=add">
+			input="/CollectionProtocol.do?pageOf=pageOfCollectionProtocolQuery">
 			<forward name="pageOfDefineEvents" path="/ProtocolEventsDetails.do?pageOf=newEvent" />
 			<forward name="submitSpecimen" path="/SubmitCollectionProtocol.do" />
 			<forward name="ViewSummary" path="/GenericSpecimenSummary.do?Event_Id=dummyId" />
