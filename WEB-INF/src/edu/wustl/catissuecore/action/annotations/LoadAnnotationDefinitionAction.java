@@ -257,12 +257,12 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 		{
 			//Getting the static entity id
 			DefaultBizLogic defaultBizLogic = BizLogicFactory.getDefaultBizLogic();
-			List<EntityMap> entityMapList = defaultBizLogic.retrieve(EntityMap.class.getName(), "containerId", dynExtContainerId);
+			List<EntityMap> entityMapList = defaultBizLogic.retrieve(EntityMap.class.getName(), "containerId", Long.parseLong(dynExtContainerId));
 			EntityMap baseLevelEntityMap = entityMapList.get(0);
 			staticEntityId = baseLevelEntityMap.getStaticEntityId().toString();
 
 			
-			//Retriving the container
+			//Retrieving the container
 			Session session = null;
 			try
 			{
