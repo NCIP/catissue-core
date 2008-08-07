@@ -42,8 +42,8 @@
               <stringProp name="9AF7D4145A73BF71B5B350AC16E96ACD">9AF7D4145A73BF71B5B350AC16E96ACD</stringProp>
             </collectionProp>
           </collectionProp>
-          <boolProp name="UserParameters.per_iteration">false</boolProp>
           <boolProp name="TestElement.per_iteration">true</boolProp>
+          <boolProp name="UserParameters.per_iteration">false</boolProp>
         </UserParameters>
         <hashTree/>
         <LoopController guiclass="LoopControlPanel" testclass="LoopController" testname="Change Password and Login" enabled="true">
@@ -379,8 +379,8 @@
                     <stringProp name="1363616355">Department successfully created </stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <intProp name="Assertion.test_type">2</intProp>
                   <stringProp name="Assertion.assume_success">false</stringProp>
+                  <intProp name="Assertion.test_type">2</intProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -494,8 +494,8 @@
                     <stringProp name="1965068297">Institution successfully created </stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <intProp name="Assertion.test_type">2</intProp>
                   <stringProp name="Assertion.assume_success">false</stringProp>
+                  <intProp name="Assertion.test_type">2</intProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -609,8 +609,8 @@
                     <stringProp name="-1906811349">Cancer Research Group successfully created </stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <intProp name="Assertion.test_type">2</intProp>
                   <stringProp name="Assertion.assume_success">false</stringProp>
+                  <intProp name="Assertion.test_type">2</intProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -1009,8 +1009,8 @@
                     <stringProp name="1270632584">Site successfully created</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <intProp name="Assertion.test_type">2</intProp>
                   <stringProp name="Assertion.assume_success">false</stringProp>
+                  <intProp name="Assertion.test_type">2</intProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -1183,8 +1183,8 @@
                     <stringProp name="-1419323152">Storage Type successfully created</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <stringProp name="Assertion.assume_success">false</stringProp>
                   <intProp name="Assertion.test_type">2</intProp>
+                  <stringProp name="Assertion.assume_success">false</stringProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -1360,8 +1360,8 @@
                     <stringProp name="-1419323152">Storage Type successfully created</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <stringProp name="Assertion.assume_success">false</stringProp>
                   <intProp name="Assertion.test_type">2</intProp>
+                  <stringProp name="Assertion.assume_success">false</stringProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -1817,8 +1817,8 @@
                     <stringProp name="423828019">Storage Container successfully created</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <stringProp name="Assertion.assume_success">false</stringProp>
                   <intProp name="Assertion.test_type">2</intProp>
+                  <stringProp name="Assertion.assume_success">false</stringProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -2260,8 +2260,8 @@
                     <stringProp name="423828019">Storage Container successfully created</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <intProp name="Assertion.test_type">2</intProp>
                   <stringProp name="Assertion.assume_success">false</stringProp>
+                  <intProp name="Assertion.test_type">2</intProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -2570,8 +2570,8 @@
                     <stringProp name="-677639594">Specimen Array Type successfully created</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <intProp name="Assertion.test_type">2</intProp>
                   <stringProp name="Assertion.assume_success">false</stringProp>
+                  <intProp name="Assertion.test_type">2</intProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -2696,8 +2696,8 @@
                     <stringProp name="-111862059">Biohazard successfully created</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <intProp name="Assertion.test_type">2</intProp>
                   <stringProp name="Assertion.assume_success">false</stringProp>
+                  <intProp name="Assertion.test_type">2</intProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -4490,8 +4490,8 @@
                     <stringProp name="1231830005">Collection Protocol successfully created</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <stringProp name="Assertion.assume_success">false</stringProp>
                   <intProp name="Assertion.test_type">2</intProp>
+                  <stringProp name="Assertion.assume_success">false</stringProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -4703,8 +4703,8 @@
                     <stringProp name="471465307">Distribution Protocol successfully created</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <stringProp name="Assertion.assume_success">false</stringProp>
                   <intProp name="Assertion.test_type">2</intProp>
+                  <stringProp name="Assertion.assume_success">false</stringProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -5062,8 +5062,8 @@
                     <stringProp name="-1133686692">Participant successfully created</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <intProp name="Assertion.test_type">2</intProp>
                   <stringProp name="Assertion.assume_success">false</stringProp>
+                  <intProp name="Assertion.test_type">2</intProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -5737,8 +5737,8 @@
                     <stringProp name="-1133686692">Participant successfully created</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <intProp name="Assertion.test_type">2</intProp>
                   <stringProp name="Assertion.assume_success">false</stringProp>
+                  <intProp name="Assertion.test_type">2</intProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -10169,8 +10169,8 @@
                     <stringProp name="-11260403">Specimen Collection Group successfully updated</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <intProp name="Assertion.test_type">2</intProp>
                   <stringProp name="Assertion.assume_success">false</stringProp>
+                  <intProp name="Assertion.test_type">2</intProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -11502,8 +11502,8 @@
                     <stringProp name="-1767389327">Fluid Specimen successfully created</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <intProp name="Assertion.test_type">2</intProp>
                   <stringProp name="Assertion.assume_success">false</stringProp>
+                  <intProp name="Assertion.test_type">2</intProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -12310,8 +12310,8 @@
                     <stringProp name="-11260403">Specimen Collection Group successfully updated</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <intProp name="Assertion.test_type">2</intProp>
                   <stringProp name="Assertion.assume_success">false</stringProp>
+                  <intProp name="Assertion.test_type">2</intProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -13643,8 +13643,8 @@
                     <stringProp name="-228382324">Tissue Specimen successfully created</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <intProp name="Assertion.test_type">2</intProp>
                   <stringProp name="Assertion.assume_success">false</stringProp>
+                  <intProp name="Assertion.test_type">2</intProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -14523,8 +14523,8 @@
                     <stringProp name="-11260403">Specimen Collection Group successfully updated</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <stringProp name="Assertion.assume_success">false</stringProp>
                   <intProp name="Assertion.test_type">2</intProp>
+                  <stringProp name="Assertion.assume_success">false</stringProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -15897,8 +15897,8 @@
                     <stringProp name="-1445888681">Molecular Specimen successfully created</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <stringProp name="Assertion.assume_success">false</stringProp>
                   <intProp name="Assertion.test_type">2</intProp>
+                  <stringProp name="Assertion.assume_success">false</stringProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -16777,8 +16777,8 @@
                     <stringProp name="-11260403">Specimen Collection Group successfully updated</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <intProp name="Assertion.test_type">2</intProp>
                   <stringProp name="Assertion.assume_success">false</stringProp>
+                  <intProp name="Assertion.test_type">2</intProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -18210,8 +18210,8 @@
                     <stringProp name="262680905">Cell Specimen successfully created</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <intProp name="Assertion.test_type">2</intProp>
                   <stringProp name="Assertion.assume_success">false</stringProp>
+                  <intProp name="Assertion.test_type">2</intProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -19863,8 +19863,8 @@
                     <stringProp name="-1445888681">Molecular Specimen successfully created</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <intProp name="Assertion.test_type">2</intProp>
                   <stringProp name="Assertion.assume_success">false</stringProp>
+                  <intProp name="Assertion.test_type">2</intProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -19999,8 +19999,8 @@
                       <stringProp name="-1880121294">Submission failed since a Department with the same NAME already exists </stringProp>
                     </collectionProp>
                     <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                    <intProp name="Assertion.test_type">2</intProp>
                     <stringProp name="Assertion.assume_success">false</stringProp>
+                    <intProp name="Assertion.test_type">2</intProp>
                   </ResponseAssertion>
                   <hashTree/>
                 </hashTree>
@@ -20070,15 +20070,15 @@
                         <stringProp name="Argument.value">add</stringProp>
                         <boolProp name="HTTPArgument.use_equals">true</boolProp>
                         <stringProp name="Argument.name">operation</stringProp>
-                        <stringProp name="HTTPArgument.always_encode">true</stringProp>
                         <stringProp name="HTTPArgument.encoded_name">operation</stringProp>
+                        <stringProp name="HTTPArgument.always_encode">true</stringProp>
                         <stringProp name="HTTPArgument.encoded_value">add</stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
                         <stringProp name="Argument.value"></stringProp>
                         <stringProp name="Argument.name">submittedFor</stringProp>
-                        <stringProp name="HTTPArgument.always_encode">true</stringProp>
                         <stringProp name="HTTPArgument.encoded_name">submittedFor</stringProp>
+                        <stringProp name="HTTPArgument.always_encode">true</stringProp>
                         <stringProp name="HTTPArgument.encoded_value"></stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
@@ -20086,8 +20086,8 @@
                         <stringProp name="Argument.value">0</stringProp>
                         <boolProp name="HTTPArgument.use_equals">true</boolProp>
                         <stringProp name="Argument.name">id</stringProp>
-                        <stringProp name="HTTPArgument.always_encode">true</stringProp>
                         <stringProp name="HTTPArgument.encoded_name">id</stringProp>
+                        <stringProp name="HTTPArgument.always_encode">true</stringProp>
                         <stringProp name="HTTPArgument.encoded_value">0</stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
@@ -20095,8 +20095,8 @@
                         <stringProp name="Argument.value">inst</stringProp>
                         <boolProp name="HTTPArgument.use_equals">true</boolProp>
                         <stringProp name="Argument.name">name</stringProp>
-                        <stringProp name="HTTPArgument.always_encode">true</stringProp>
                         <stringProp name="HTTPArgument.encoded_name">name</stringProp>
+                        <stringProp name="HTTPArgument.always_encode">true</stringProp>
                         <stringProp name="HTTPArgument.encoded_value">xx</stringProp>
                       </elementProp>
                     </collectionProp>
@@ -20114,8 +20114,8 @@
                       <stringProp name="1087043956">Submission failed since a Institution with the same NAME already exists </stringProp>
                     </collectionProp>
                     <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                    <intProp name="Assertion.test_type">2</intProp>
                     <stringProp name="Assertion.assume_success">false</stringProp>
+                    <intProp name="Assertion.test_type">2</intProp>
                   </ResponseAssertion>
                   <hashTree/>
                 </hashTree>
@@ -20125,7 +20125,7 @@
                 <boolProp name="LoopController.continue_forever">true</boolProp>
               </LoopController>
               <hashTree>
-                <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="Administrative Data Tests: Add Site" enabled="true">
+                <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="Add Duplicate Site Object" enabled="true">
                   <stringProp name="HTTPSampler.path">/catissuecore/Site.do</stringProp>
                   <stringProp name="HTTPSampler.method">GET</stringProp>
                   <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -20139,8 +20139,8 @@
                         <stringProp name="Argument.value">add</stringProp>
                         <boolProp name="HTTPArgument.use_equals">true</boolProp>
                         <stringProp name="Argument.name">operation</stringProp>
-                        <stringProp name="HTTPArgument.encoded_name">operation</stringProp>
                         <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                        <stringProp name="HTTPArgument.encoded_name">operation</stringProp>
                         <stringProp name="HTTPArgument.encoded_value">add</stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
@@ -20148,8 +20148,8 @@
                         <stringProp name="Argument.value">pageOfSite</stringProp>
                         <boolProp name="HTTPArgument.use_equals">true</boolProp>
                         <stringProp name="Argument.name">pageOf</stringProp>
-                        <stringProp name="HTTPArgument.encoded_name">pageOf</stringProp>
                         <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                        <stringProp name="HTTPArgument.encoded_name">pageOf</stringProp>
                         <stringProp name="HTTPArgument.encoded_value">pageOfSite</stringProp>
                       </elementProp>
                     </collectionProp>
@@ -20162,7 +20162,7 @@
                   <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
                 </HTTPSampler>
                 <hashTree/>
-                <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="Administrative Data Tests: Add Site" enabled="true">
+                <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="Add Duplicate Site Object" enabled="true">
                   <stringProp name="HTTPSampler.path">/catissuecore/Site.do</stringProp>
                   <stringProp name="HTTPSampler.method">POST</stringProp>
                   <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -20176,8 +20176,8 @@
                         <stringProp name="Argument.value">add</stringProp>
                         <boolProp name="HTTPArgument.use_equals">true</boolProp>
                         <stringProp name="Argument.name">operation</stringProp>
-                        <stringProp name="HTTPArgument.encoded_name">operation</stringProp>
                         <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                        <stringProp name="HTTPArgument.encoded_name">operation</stringProp>
                         <stringProp name="HTTPArgument.encoded_value">add</stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
@@ -20185,8 +20185,8 @@
                         <stringProp name="Argument.value">pageOfSite</stringProp>
                         <boolProp name="HTTPArgument.use_equals">true</boolProp>
                         <stringProp name="Argument.name">pageOf</stringProp>
-                        <stringProp name="HTTPArgument.encoded_name">pageOf</stringProp>
                         <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                        <stringProp name="HTTPArgument.encoded_name">pageOf</stringProp>
                         <stringProp name="HTTPArgument.encoded_value">pageOfSite</stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
@@ -20194,8 +20194,8 @@
                         <stringProp name="Argument.value">true</stringProp>
                         <boolProp name="HTTPArgument.use_equals">true</boolProp>
                         <stringProp name="Argument.name">isOnChange</stringProp>
-                        <stringProp name="HTTPArgument.encoded_name">isOnChange</stringProp>
                         <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                        <stringProp name="HTTPArgument.encoded_name">isOnChange</stringProp>
                         <stringProp name="HTTPArgument.encoded_value">true</stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
@@ -20203,15 +20203,15 @@
                         <stringProp name="Argument.value">1</stringProp>
                         <boolProp name="HTTPArgument.use_equals">true</boolProp>
                         <stringProp name="Argument.name">coordinatorId</stringProp>
-                        <stringProp name="HTTPArgument.encoded_name">coordinatorId</stringProp>
                         <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                        <stringProp name="HTTPArgument.encoded_name">coordinatorId</stringProp>
                         <stringProp name="HTTPArgument.encoded_value">1</stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
                         <stringProp name="Argument.value"></stringProp>
                         <stringProp name="Argument.name">submittedFor</stringProp>
-                        <stringProp name="HTTPArgument.encoded_name">submittedFor</stringProp>
                         <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                        <stringProp name="HTTPArgument.encoded_name">submittedFor</stringProp>
                         <stringProp name="HTTPArgument.encoded_value"></stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
@@ -20219,15 +20219,15 @@
                         <stringProp name="Argument.value">add</stringProp>
                         <boolProp name="HTTPArgument.use_equals">true</boolProp>
                         <stringProp name="Argument.name">operation</stringProp>
-                        <stringProp name="HTTPArgument.encoded_name">operation</stringProp>
                         <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                        <stringProp name="HTTPArgument.encoded_name">operation</stringProp>
                         <stringProp name="HTTPArgument.encoded_value">add</stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
                         <stringProp name="Argument.value"></stringProp>
                         <stringProp name="Argument.name">submittedFor</stringProp>
-                        <stringProp name="HTTPArgument.encoded_name">submittedFor</stringProp>
                         <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                        <stringProp name="HTTPArgument.encoded_name">submittedFor</stringProp>
                         <stringProp name="HTTPArgument.encoded_value"></stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
@@ -20235,15 +20235,15 @@
                         <stringProp name="Argument.value">0</stringProp>
                         <boolProp name="HTTPArgument.use_equals">true</boolProp>
                         <stringProp name="Argument.name">id</stringProp>
-                        <stringProp name="HTTPArgument.encoded_name">id</stringProp>
                         <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                        <stringProp name="HTTPArgument.encoded_name">id</stringProp>
                         <stringProp name="HTTPArgument.encoded_value">0</stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
                         <stringProp name="Argument.value"></stringProp>
                         <stringProp name="Argument.name">onSubmit</stringProp>
-                        <stringProp name="HTTPArgument.encoded_name">onSubmit</stringProp>
                         <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                        <stringProp name="HTTPArgument.encoded_name">onSubmit</stringProp>
                         <stringProp name="HTTPArgument.encoded_value"></stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
@@ -20251,8 +20251,8 @@
                         <stringProp name="Argument.value">pageOfSite</stringProp>
                         <boolProp name="HTTPArgument.use_equals">true</boolProp>
                         <stringProp name="Argument.name">pageOf</stringProp>
-                        <stringProp name="HTTPArgument.encoded_name">pageOf</stringProp>
                         <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                        <stringProp name="HTTPArgument.encoded_name">pageOf</stringProp>
                         <stringProp name="HTTPArgument.encoded_value">pageOfSite</stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
@@ -20260,8 +20260,8 @@
                         <stringProp name="Argument.value">Testsite</stringProp>
                         <boolProp name="HTTPArgument.use_equals">true</boolProp>
                         <stringProp name="Argument.name">name</stringProp>
-                        <stringProp name="HTTPArgument.encoded_name">name</stringProp>
                         <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                        <stringProp name="HTTPArgument.encoded_name">name</stringProp>
                         <stringProp name="HTTPArgument.encoded_value">Testsite</stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
@@ -20269,8 +20269,8 @@
                         <stringProp name="Argument.value">Collection Site</stringProp>
                         <boolProp name="HTTPArgument.use_equals">true</boolProp>
                         <stringProp name="Argument.name">type</stringProp>
-                        <stringProp name="HTTPArgument.encoded_name">type</stringProp>
                         <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                        <stringProp name="HTTPArgument.encoded_name">type</stringProp>
                         <stringProp name="HTTPArgument.encoded_value">Collection+Site</stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
@@ -20278,43 +20278,43 @@
                         <stringProp name="Argument.value">1</stringProp>
                         <boolProp name="HTTPArgument.use_equals">true</boolProp>
                         <stringProp name="Argument.name">coordinatorId</stringProp>
-                        <stringProp name="HTTPArgument.encoded_name">coordinatorId</stringProp>
                         <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                        <stringProp name="HTTPArgument.encoded_name">coordinatorId</stringProp>
                         <stringProp name="HTTPArgument.encoded_value">1</stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
                         <stringProp name="Argument.value"></stringProp>
                         <stringProp name="Argument.name">emailAddress</stringProp>
-                        <stringProp name="HTTPArgument.encoded_name">emailAddress</stringProp>
                         <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                        <stringProp name="HTTPArgument.encoded_name">emailAddress</stringProp>
                         <stringProp name="HTTPArgument.encoded_value"></stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
                         <stringProp name="Argument.value"></stringProp>
                         <stringProp name="Argument.name">street</stringProp>
-                        <stringProp name="HTTPArgument.encoded_name">street</stringProp>
                         <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                        <stringProp name="HTTPArgument.encoded_name">street</stringProp>
                         <stringProp name="HTTPArgument.encoded_value"></stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
                         <stringProp name="Argument.value"></stringProp>
                         <stringProp name="Argument.name">city</stringProp>
-                        <stringProp name="HTTPArgument.encoded_name">city</stringProp>
                         <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                        <stringProp name="HTTPArgument.encoded_name">city</stringProp>
                         <stringProp name="HTTPArgument.encoded_value"></stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
                         <stringProp name="Argument.value"></stringProp>
                         <stringProp name="Argument.name">state</stringProp>
-                        <stringProp name="HTTPArgument.encoded_name">state</stringProp>
                         <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                        <stringProp name="HTTPArgument.encoded_name">state</stringProp>
                         <stringProp name="HTTPArgument.encoded_value"></stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
                         <stringProp name="Argument.value"></stringProp>
                         <stringProp name="Argument.name">zipCode</stringProp>
-                        <stringProp name="HTTPArgument.encoded_name">zipCode</stringProp>
                         <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                        <stringProp name="HTTPArgument.encoded_name">zipCode</stringProp>
                         <stringProp name="HTTPArgument.encoded_value"></stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
@@ -20322,22 +20322,22 @@
                         <stringProp name="Argument.value">United States</stringProp>
                         <boolProp name="HTTPArgument.use_equals">true</boolProp>
                         <stringProp name="Argument.name">country</stringProp>
-                        <stringProp name="HTTPArgument.encoded_name">country</stringProp>
                         <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                        <stringProp name="HTTPArgument.encoded_name">country</stringProp>
                         <stringProp name="HTTPArgument.encoded_value">United+States</stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
                         <stringProp name="Argument.value"></stringProp>
                         <stringProp name="Argument.name">phoneNumber</stringProp>
-                        <stringProp name="HTTPArgument.encoded_name">phoneNumber</stringProp>
                         <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                        <stringProp name="HTTPArgument.encoded_name">phoneNumber</stringProp>
                         <stringProp name="HTTPArgument.encoded_value"></stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
                         <stringProp name="Argument.value"></stringProp>
                         <stringProp name="Argument.name">faxNumber</stringProp>
-                        <stringProp name="HTTPArgument.encoded_name">faxNumber</stringProp>
                         <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                        <stringProp name="HTTPArgument.encoded_name">faxNumber</stringProp>
                         <stringProp name="HTTPArgument.encoded_value"></stringProp>
                       </elementProp>
                     </collectionProp>
@@ -20350,7 +20350,7 @@
                   <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
                 </HTTPSampler>
                 <hashTree/>
-                <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="Administrative Data Tests: Add Site" enabled="true">
+                <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="Add Duplicate Site Object" enabled="true">
                   <stringProp name="HTTPSampler.path">/catissuecore/SiteAdd.do</stringProp>
                   <stringProp name="HTTPSampler.method">POST</stringProp>
                   <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -20364,15 +20364,15 @@
                         <stringProp name="Argument.value">add</stringProp>
                         <boolProp name="HTTPArgument.use_equals">true</boolProp>
                         <stringProp name="Argument.name">operation</stringProp>
-                        <stringProp name="HTTPArgument.always_encode">true</stringProp>
                         <stringProp name="HTTPArgument.encoded_name">operation</stringProp>
+                        <stringProp name="HTTPArgument.always_encode">true</stringProp>
                         <stringProp name="HTTPArgument.encoded_value">add</stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
                         <stringProp name="Argument.value"></stringProp>
                         <stringProp name="Argument.name">submittedFor</stringProp>
-                        <stringProp name="HTTPArgument.always_encode">true</stringProp>
                         <stringProp name="HTTPArgument.encoded_name">submittedFor</stringProp>
+                        <stringProp name="HTTPArgument.always_encode">true</stringProp>
                         <stringProp name="HTTPArgument.encoded_value"></stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
@@ -20380,15 +20380,15 @@
                         <stringProp name="Argument.value">0</stringProp>
                         <boolProp name="HTTPArgument.use_equals">true</boolProp>
                         <stringProp name="Argument.name">id</stringProp>
-                        <stringProp name="HTTPArgument.always_encode">true</stringProp>
                         <stringProp name="HTTPArgument.encoded_name">id</stringProp>
+                        <stringProp name="HTTPArgument.always_encode">true</stringProp>
                         <stringProp name="HTTPArgument.encoded_value">0</stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
                         <stringProp name="Argument.value"></stringProp>
                         <stringProp name="Argument.name">onSubmit</stringProp>
-                        <stringProp name="HTTPArgument.always_encode">true</stringProp>
                         <stringProp name="HTTPArgument.encoded_name">onSubmit</stringProp>
+                        <stringProp name="HTTPArgument.always_encode">true</stringProp>
                         <stringProp name="HTTPArgument.encoded_value"></stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
@@ -20396,8 +20396,8 @@
                         <stringProp name="Argument.value">pageOfSite</stringProp>
                         <boolProp name="HTTPArgument.use_equals">true</boolProp>
                         <stringProp name="Argument.name">pageOf</stringProp>
-                        <stringProp name="HTTPArgument.always_encode">true</stringProp>
                         <stringProp name="HTTPArgument.encoded_name">pageOf</stringProp>
+                        <stringProp name="HTTPArgument.always_encode">true</stringProp>
                         <stringProp name="HTTPArgument.encoded_value">pageOfSite</stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
@@ -20405,8 +20405,8 @@
                         <stringProp name="Argument.value">Testsite</stringProp>
                         <boolProp name="HTTPArgument.use_equals">true</boolProp>
                         <stringProp name="Argument.name">name</stringProp>
-                        <stringProp name="HTTPArgument.always_encode">true</stringProp>
                         <stringProp name="HTTPArgument.encoded_name">name</stringProp>
+                        <stringProp name="HTTPArgument.always_encode">true</stringProp>
                         <stringProp name="HTTPArgument.encoded_value">Testsite</stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
@@ -20414,8 +20414,8 @@
                         <stringProp name="Argument.value">Collection Site</stringProp>
                         <boolProp name="HTTPArgument.use_equals">true</boolProp>
                         <stringProp name="Argument.name">type</stringProp>
-                        <stringProp name="HTTPArgument.always_encode">true</stringProp>
                         <stringProp name="HTTPArgument.encoded_name">type</stringProp>
+                        <stringProp name="HTTPArgument.always_encode">true</stringProp>
                         <stringProp name="HTTPArgument.encoded_value">Collection+Site</stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
@@ -20423,8 +20423,8 @@
                         <stringProp name="Argument.value">1</stringProp>
                         <boolProp name="HTTPArgument.use_equals">true</boolProp>
                         <stringProp name="Argument.name">coordinatorId</stringProp>
-                        <stringProp name="HTTPArgument.always_encode">true</stringProp>
                         <stringProp name="HTTPArgument.encoded_name">coordinatorId</stringProp>
+                        <stringProp name="HTTPArgument.always_encode">true</stringProp>
                         <stringProp name="HTTPArgument.encoded_value">1</stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
@@ -20432,8 +20432,8 @@
                         <stringProp name="Argument.value">admin@admin.com</stringProp>
                         <boolProp name="HTTPArgument.use_equals">true</boolProp>
                         <stringProp name="Argument.name">emailAddress</stringProp>
-                        <stringProp name="HTTPArgument.always_encode">true</stringProp>
                         <stringProp name="HTTPArgument.encoded_name">emailAddress</stringProp>
+                        <stringProp name="HTTPArgument.always_encode">true</stringProp>
                         <stringProp name="HTTPArgument.encoded_value">admin@admin.com</stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
@@ -20441,8 +20441,8 @@
                         <stringProp name="Argument.value">abc</stringProp>
                         <boolProp name="HTTPArgument.use_equals">true</boolProp>
                         <stringProp name="Argument.name">street</stringProp>
-                        <stringProp name="HTTPArgument.always_encode">true</stringProp>
                         <stringProp name="HTTPArgument.encoded_name">street</stringProp>
+                        <stringProp name="HTTPArgument.always_encode">true</stringProp>
                         <stringProp name="HTTPArgument.encoded_value">abc</stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
@@ -20450,8 +20450,8 @@
                         <stringProp name="Argument.value">xyz</stringProp>
                         <boolProp name="HTTPArgument.use_equals">true</boolProp>
                         <stringProp name="Argument.name">city</stringProp>
-                        <stringProp name="HTTPArgument.always_encode">true</stringProp>
                         <stringProp name="HTTPArgument.encoded_name">city</stringProp>
+                        <stringProp name="HTTPArgument.always_encode">true</stringProp>
                         <stringProp name="HTTPArgument.encoded_value">xyz</stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
@@ -20459,8 +20459,8 @@
                         <stringProp name="Argument.value">Hawaii</stringProp>
                         <boolProp name="HTTPArgument.use_equals">true</boolProp>
                         <stringProp name="Argument.name">state</stringProp>
-                        <stringProp name="HTTPArgument.always_encode">true</stringProp>
                         <stringProp name="HTTPArgument.encoded_name">state</stringProp>
+                        <stringProp name="HTTPArgument.always_encode">true</stringProp>
                         <stringProp name="HTTPArgument.encoded_value">Hawaii</stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
@@ -20468,8 +20468,8 @@
                         <stringProp name="Argument.value">12345</stringProp>
                         <boolProp name="HTTPArgument.use_equals">true</boolProp>
                         <stringProp name="Argument.name">zipCode</stringProp>
-                        <stringProp name="HTTPArgument.always_encode">true</stringProp>
                         <stringProp name="HTTPArgument.encoded_name">zipCode</stringProp>
+                        <stringProp name="HTTPArgument.always_encode">true</stringProp>
                         <stringProp name="HTTPArgument.encoded_value">12345</stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
@@ -20477,8 +20477,8 @@
                         <stringProp name="Argument.value">United States</stringProp>
                         <boolProp name="HTTPArgument.use_equals">true</boolProp>
                         <stringProp name="Argument.name">country</stringProp>
-                        <stringProp name="HTTPArgument.always_encode">true</stringProp>
                         <stringProp name="HTTPArgument.encoded_name">country</stringProp>
+                        <stringProp name="HTTPArgument.always_encode">true</stringProp>
                         <stringProp name="HTTPArgument.encoded_value">United+States</stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
@@ -20486,8 +20486,8 @@
                         <stringProp name="Argument.value">123-321-1234</stringProp>
                         <boolProp name="HTTPArgument.use_equals">true</boolProp>
                         <stringProp name="Argument.name">phoneNumber</stringProp>
-                        <stringProp name="HTTPArgument.always_encode">true</stringProp>
                         <stringProp name="HTTPArgument.encoded_name">phoneNumber</stringProp>
+                        <stringProp name="HTTPArgument.always_encode">true</stringProp>
                         <stringProp name="HTTPArgument.encoded_value">123-321-1234</stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
@@ -20495,8 +20495,8 @@
                         <stringProp name="Argument.value">123-321-1234</stringProp>
                         <boolProp name="HTTPArgument.use_equals">true</boolProp>
                         <stringProp name="Argument.name">faxNumber</stringProp>
-                        <stringProp name="HTTPArgument.always_encode">true</stringProp>
                         <stringProp name="HTTPArgument.encoded_name">faxNumber</stringProp>
+                        <stringProp name="HTTPArgument.always_encode">true</stringProp>
                         <stringProp name="HTTPArgument.encoded_value">123-321-1234</stringProp>
                       </elementProp>
                     </collectionProp>
@@ -20514,8 +20514,8 @@
                       <stringProp name="-391259293">Submission failed since a Site with the same NAME already exists</stringProp>
                     </collectionProp>
                     <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                    <intProp name="Assertion.test_type">2</intProp>
                     <stringProp name="Assertion.assume_success">false</stringProp>
+                    <intProp name="Assertion.test_type">2</intProp>
                   </ResponseAssertion>
                   <hashTree/>
                 </hashTree>
@@ -20525,7 +20525,7 @@
                 <boolProp name="LoopController.continue_forever">true</boolProp>
               </LoopController>
               <hashTree>
-                <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="Administrative Data Tests: Add Box Type" enabled="true">
+                <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="Add Duplicate Box Type" enabled="true">
                   <stringProp name="HTTPSampler.path">/catissuecore/StorageType.do</stringProp>
                   <stringProp name="HTTPSampler.method">GET</stringProp>
                   <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -20560,7 +20560,7 @@
                   <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
                 </HTTPSampler>
                 <hashTree/>
-                <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="Administrative Data Tests: Add Box Type" enabled="true">
+                <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="Add Duplicate Box Type" enabled="true">
                   <stringProp name="HTTPSampler.path">/catissuecore/StorageTypeAdd.do</stringProp>
                   <stringProp name="HTTPSampler.method">POST</stringProp>
                   <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -20688,8 +20688,8 @@
                       <stringProp name="-1578895819">Submission failed since a Container Type with the same NAME already exists</stringProp>
                     </collectionProp>
                     <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                    <stringProp name="Assertion.assume_success">false</stringProp>
                     <intProp name="Assertion.test_type">2</intProp>
+                    <stringProp name="Assertion.assume_success">false</stringProp>
                   </ResponseAssertion>
                   <hashTree/>
                 </hashTree>
@@ -20699,7 +20699,7 @@
                 <boolProp name="LoopController.continue_forever">true</boolProp>
               </LoopController>
               <hashTree>
-                <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="Administrative Data Tests: Add Storage Type" enabled="true">
+                <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="Add Duplicate Specimen Array Type" enabled="true">
                   <stringProp name="HTTPSampler.path">/catissuecore/SpecimenArrayType.do</stringProp>
                   <stringProp name="HTTPSampler.method">GET</stringProp>
                   <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -20734,7 +20734,7 @@
                   <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
                 </HTTPSampler>
                 <hashTree/>
-                <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="Administrative Data Tests: Add Storage Type" enabled="true">
+                <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="Add Duplicate Specimen Array Type" enabled="true">
                   <stringProp name="HTTPSampler.path">/catissuecore/SpecimenArrayTypeAdd.do</stringProp>
                   <stringProp name="HTTPSampler.method">POST</stringProp>
                   <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -20998,8 +20998,8 @@
                       <stringProp name="-1578895819">Submission failed since a Container Type with the same NAME already exists</stringProp>
                     </collectionProp>
                     <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                    <intProp name="Assertion.test_type">2</intProp>
                     <stringProp name="Assertion.assume_success">false</stringProp>
+                    <intProp name="Assertion.test_type">2</intProp>
                   </ResponseAssertion>
                   <hashTree/>
                 </hashTree>
@@ -21009,7 +21009,7 @@
                 <boolProp name="LoopController.continue_forever">true</boolProp>
               </LoopController>
               <hashTree>
-                <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="Administrative Module:  Add Biohazard" enabled="true">
+                <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="Add Duplicate Biohazard Object" enabled="true">
                   <stringProp name="HTTPSampler.path">/catissuecore/Biohazard.do</stringProp>
                   <stringProp name="HTTPSampler.method">GET</stringProp>
                   <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -21023,8 +21023,8 @@
                         <stringProp name="Argument.value">add</stringProp>
                         <boolProp name="HTTPArgument.use_equals">true</boolProp>
                         <stringProp name="Argument.name">operation</stringProp>
-                        <stringProp name="HTTPArgument.always_encode">true</stringProp>
                         <stringProp name="HTTPArgument.encoded_name">operation</stringProp>
+                        <stringProp name="HTTPArgument.always_encode">true</stringProp>
                         <stringProp name="HTTPArgument.encoded_value">add</stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
@@ -21032,8 +21032,8 @@
                         <stringProp name="Argument.value">pageOfBioHazard</stringProp>
                         <boolProp name="HTTPArgument.use_equals">true</boolProp>
                         <stringProp name="Argument.name">pageOf</stringProp>
-                        <stringProp name="HTTPArgument.always_encode">true</stringProp>
                         <stringProp name="HTTPArgument.encoded_name">pageOf</stringProp>
+                        <stringProp name="HTTPArgument.always_encode">true</stringProp>
                         <stringProp name="HTTPArgument.encoded_value">pageOfBioHazard</stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
@@ -21041,8 +21041,8 @@
                         <stringProp name="Argument.value">8</stringProp>
                         <boolProp name="HTTPArgument.use_equals">true</boolProp>
                         <stringProp name="Argument.name">menuSelected</stringProp>
-                        <stringProp name="HTTPArgument.always_encode">true</stringProp>
                         <stringProp name="HTTPArgument.encoded_name">menuSelected</stringProp>
+                        <stringProp name="HTTPArgument.always_encode">true</stringProp>
                         <stringProp name="HTTPArgument.encoded_value">8</stringProp>
                       </elementProp>
                     </collectionProp>
@@ -21055,7 +21055,7 @@
                   <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
                 </HTTPSampler>
                 <hashTree/>
-                <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="Administrative Module:  Add Biohazard " enabled="true">
+                <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="Add Duplicate Biohazard Object" enabled="true">
                   <stringProp name="HTTPSampler.path">/catissuecore/BiohazardAdd.do</stringProp>
                   <stringProp name="HTTPSampler.method">POST</stringProp>
                   <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -21069,8 +21069,8 @@
                         <stringProp name="Argument.value">add</stringProp>
                         <boolProp name="HTTPArgument.use_equals">true</boolProp>
                         <stringProp name="Argument.name">operation</stringProp>
-                        <stringProp name="HTTPArgument.encoded_name">operation</stringProp>
                         <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                        <stringProp name="HTTPArgument.encoded_name">operation</stringProp>
                         <stringProp name="HTTPArgument.encoded_value">add</stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
@@ -21078,8 +21078,8 @@
                         <stringProp name="Argument.value">0</stringProp>
                         <boolProp name="HTTPArgument.use_equals">true</boolProp>
                         <stringProp name="Argument.name">id</stringProp>
-                        <stringProp name="HTTPArgument.encoded_name">id</stringProp>
                         <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                        <stringProp name="HTTPArgument.encoded_name">id</stringProp>
                         <stringProp name="HTTPArgument.encoded_value">0</stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
@@ -21087,8 +21087,8 @@
                         <stringProp name="Argument.value">Bh01</stringProp>
                         <boolProp name="HTTPArgument.use_equals">true</boolProp>
                         <stringProp name="Argument.name">name</stringProp>
-                        <stringProp name="HTTPArgument.encoded_name">name</stringProp>
                         <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                        <stringProp name="HTTPArgument.encoded_name">name</stringProp>
                         <stringProp name="HTTPArgument.encoded_value">BioHaz1</stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
@@ -21096,8 +21096,8 @@
                         <stringProp name="Argument.value">Mutagen</stringProp>
                         <boolProp name="HTTPArgument.use_equals">true</boolProp>
                         <stringProp name="Argument.name">type</stringProp>
-                        <stringProp name="HTTPArgument.encoded_name">type</stringProp>
                         <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                        <stringProp name="HTTPArgument.encoded_name">type</stringProp>
                         <stringProp name="HTTPArgument.encoded_value">Mutagen</stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
@@ -21105,8 +21105,8 @@
                         <stringProp name="Argument.value">comments</stringProp>
                         <boolProp name="HTTPArgument.use_equals">true</boolProp>
                         <stringProp name="Argument.name">comments</stringProp>
-                        <stringProp name="HTTPArgument.encoded_name">comments</stringProp>
                         <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                        <stringProp name="HTTPArgument.encoded_name">comments</stringProp>
                         <stringProp name="HTTPArgument.encoded_value">comments</stringProp>
                       </elementProp>
                     </collectionProp>
@@ -21124,8 +21124,8 @@
                       <stringProp name="-1131048946">Submission failed since a Biohazard with the same NAME already exists</stringProp>
                     </collectionProp>
                     <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                    <intProp name="Assertion.test_type">2</intProp>
                     <stringProp name="Assertion.assume_success">false</stringProp>
+                    <intProp name="Assertion.test_type">2</intProp>
                   </ResponseAssertion>
                   <hashTree/>
                 </hashTree>
@@ -21140,7 +21140,7 @@
                 <boolProp name="LoopController.continue_forever">true</boolProp>
               </LoopController>
               <hashTree>
-                <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="Administrative Data Tests: Add Distribution Protocol" enabled="true">
+                <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="Add Duplicate Distribution Protocol" enabled="true">
                   <stringProp name="HTTPSampler.path">/catissuecore/DistributionProtocol.do</stringProp>
                   <stringProp name="HTTPSampler.method">GET</stringProp>
                   <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -21175,7 +21175,7 @@
                   <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
                 </HTTPSampler>
                 <hashTree/>
-                <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="Administrative Data Tests: Add Distribution Protocol" enabled="true">
+                <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="Add Duplicate Distribution Protocol" enabled="true">
                   <stringProp name="HTTPSampler.path">/catissuecore/DistributionProtocolAdd.do</stringProp>
                   <stringProp name="HTTPSampler.method">POST</stringProp>
                   <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -21342,8 +21342,8 @@
                       <stringProp name="-517167999">Submission failed since a Specimen Protocol with the same TITLE already exists</stringProp>
                     </collectionProp>
                     <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                    <stringProp name="Assertion.assume_success">false</stringProp>
                     <intProp name="Assertion.test_type">2</intProp>
+                    <stringProp name="Assertion.assume_success">false</stringProp>
                   </ResponseAssertion>
                   <hashTree/>
                 </hashTree>
@@ -21419,15 +21419,15 @@
                         <stringProp name="Argument.value">add</stringProp>
                         <boolProp name="HTTPArgument.use_equals">true</boolProp>
                         <stringProp name="Argument.name">operation</stringProp>
-                        <stringProp name="HTTPArgument.encoded_name">operation</stringProp>
                         <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                        <stringProp name="HTTPArgument.encoded_name">operation</stringProp>
                         <stringProp name="HTTPArgument.encoded_value">add</stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
                         <stringProp name="Argument.value"></stringProp>
                         <stringProp name="Argument.name">submittedFor</stringProp>
-                        <stringProp name="HTTPArgument.encoded_name">submittedFor</stringProp>
                         <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                        <stringProp name="HTTPArgument.encoded_name">submittedFor</stringProp>
                         <stringProp name="HTTPArgument.encoded_value"></stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
@@ -21435,15 +21435,15 @@
                         <stringProp name="Argument.value">0</stringProp>
                         <boolProp name="HTTPArgument.use_equals">true</boolProp>
                         <stringProp name="Argument.name">id</stringProp>
-                        <stringProp name="HTTPArgument.encoded_name">id</stringProp>
                         <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                        <stringProp name="HTTPArgument.encoded_name">id</stringProp>
                         <stringProp name="HTTPArgument.encoded_value">0</stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
                         <stringProp name="Argument.value"></stringProp>
                         <stringProp name="Argument.name">name</stringProp>
-                        <stringProp name="HTTPArgument.encoded_name">name</stringProp>
                         <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                        <stringProp name="HTTPArgument.encoded_name">name</stringProp>
                         <stringProp name="HTTPArgument.encoded_value"></stringProp>
                       </elementProp>
                     </collectionProp>
@@ -21461,8 +21461,8 @@
                       <stringProp name="1104420832">Name is required</stringProp>
                     </collectionProp>
                     <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                    <stringProp name="Assertion.assume_success">false</stringProp>
                     <intProp name="Assertion.test_type">2</intProp>
+                    <stringProp name="Assertion.assume_success">false</stringProp>
                   </ResponseAssertion>
                   <hashTree/>
                 </hashTree>
@@ -21486,8 +21486,8 @@
                         <stringProp name="Argument.value">add</stringProp>
                         <boolProp name="HTTPArgument.use_equals">true</boolProp>
                         <stringProp name="Argument.name">operation</stringProp>
-                        <stringProp name="HTTPArgument.always_encode">true</stringProp>
                         <stringProp name="HTTPArgument.encoded_name">operation</stringProp>
+                        <stringProp name="HTTPArgument.always_encode">true</stringProp>
                         <stringProp name="HTTPArgument.encoded_value">add</stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
@@ -21495,8 +21495,8 @@
                         <stringProp name="Argument.value">pageOfDepartment</stringProp>
                         <boolProp name="HTTPArgument.use_equals">true</boolProp>
                         <stringProp name="Argument.name">pageOf</stringProp>
-                        <stringProp name="HTTPArgument.always_encode">true</stringProp>
                         <stringProp name="HTTPArgument.encoded_name">pageOf</stringProp>
+                        <stringProp name="HTTPArgument.always_encode">true</stringProp>
                         <stringProp name="HTTPArgument.encoded_value">pageOfDepartment</stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
@@ -21504,8 +21504,8 @@
                         <stringProp name="Argument.value">3</stringProp>
                         <boolProp name="HTTPArgument.use_equals">true</boolProp>
                         <stringProp name="Argument.name">menuSelected</stringProp>
-                        <stringProp name="HTTPArgument.always_encode">true</stringProp>
                         <stringProp name="HTTPArgument.encoded_name">menuSelected</stringProp>
+                        <stringProp name="HTTPArgument.always_encode">true</stringProp>
                         <stringProp name="HTTPArgument.encoded_value">3</stringProp>
                       </elementProp>
                     </collectionProp>
@@ -21574,8 +21574,8 @@
                       <stringProp name="1104420832">Name is required</stringProp>
                     </collectionProp>
                     <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                    <stringProp name="Assertion.assume_success">false</stringProp>
                     <intProp name="Assertion.test_type">2</intProp>
+                    <stringProp name="Assertion.assume_success">false</stringProp>
                   </ResponseAssertion>
                   <hashTree/>
                 </hashTree>
@@ -21687,8 +21687,8 @@
                       <stringProp name="1104420832">Name is required</stringProp>
                     </collectionProp>
                     <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                    <stringProp name="Assertion.assume_success">false</stringProp>
                     <intProp name="Assertion.test_type">2</intProp>
+                    <stringProp name="Assertion.assume_success">false</stringProp>
                   </ResponseAssertion>
                   <hashTree/>
                 </hashTree>
@@ -21698,7 +21698,7 @@
                 <boolProp name="LoopController.continue_forever">true</boolProp>
               </LoopController>
               <hashTree>
-                <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="Administrative Data Tests: Add Site" enabled="true">
+                <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="Add Site with empty name" enabled="true">
                   <stringProp name="HTTPSampler.path">/catissuecore/Site.do</stringProp>
                   <stringProp name="HTTPSampler.method">GET</stringProp>
                   <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -21735,7 +21735,7 @@
                   <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
                 </HTTPSampler>
                 <hashTree/>
-                <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="Administrative Data Tests: Add Site" enabled="true">
+                <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="Add Site with empty name" enabled="true">
                   <stringProp name="HTTPSampler.path">/catissuecore/Site.do</stringProp>
                   <stringProp name="HTTPSampler.method">POST</stringProp>
                   <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -21749,8 +21749,8 @@
                         <stringProp name="Argument.value">add</stringProp>
                         <boolProp name="HTTPArgument.use_equals">true</boolProp>
                         <stringProp name="Argument.name">operation</stringProp>
-                        <stringProp name="HTTPArgument.encoded_name">operation</stringProp>
                         <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                        <stringProp name="HTTPArgument.encoded_name">operation</stringProp>
                         <stringProp name="HTTPArgument.encoded_value">add</stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
@@ -21758,8 +21758,8 @@
                         <stringProp name="Argument.value">pageOfSite</stringProp>
                         <boolProp name="HTTPArgument.use_equals">true</boolProp>
                         <stringProp name="Argument.name">pageOf</stringProp>
-                        <stringProp name="HTTPArgument.encoded_name">pageOf</stringProp>
                         <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                        <stringProp name="HTTPArgument.encoded_name">pageOf</stringProp>
                         <stringProp name="HTTPArgument.encoded_value">pageOfSite</stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
@@ -21767,8 +21767,8 @@
                         <stringProp name="Argument.value">true</stringProp>
                         <boolProp name="HTTPArgument.use_equals">true</boolProp>
                         <stringProp name="Argument.name">isOnChange</stringProp>
-                        <stringProp name="HTTPArgument.encoded_name">isOnChange</stringProp>
                         <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                        <stringProp name="HTTPArgument.encoded_name">isOnChange</stringProp>
                         <stringProp name="HTTPArgument.encoded_value">true</stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
@@ -21776,15 +21776,15 @@
                         <stringProp name="Argument.value">1</stringProp>
                         <boolProp name="HTTPArgument.use_equals">true</boolProp>
                         <stringProp name="Argument.name">coordinatorId</stringProp>
-                        <stringProp name="HTTPArgument.encoded_name">coordinatorId</stringProp>
                         <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                        <stringProp name="HTTPArgument.encoded_name">coordinatorId</stringProp>
                         <stringProp name="HTTPArgument.encoded_value">1</stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
                         <stringProp name="Argument.value"></stringProp>
                         <stringProp name="Argument.name">submittedFor</stringProp>
-                        <stringProp name="HTTPArgument.encoded_name">submittedFor</stringProp>
                         <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                        <stringProp name="HTTPArgument.encoded_name">submittedFor</stringProp>
                         <stringProp name="HTTPArgument.encoded_value"></stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
@@ -21792,15 +21792,15 @@
                         <stringProp name="Argument.value">add</stringProp>
                         <boolProp name="HTTPArgument.use_equals">true</boolProp>
                         <stringProp name="Argument.name">operation</stringProp>
-                        <stringProp name="HTTPArgument.encoded_name">operation</stringProp>
                         <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                        <stringProp name="HTTPArgument.encoded_name">operation</stringProp>
                         <stringProp name="HTTPArgument.encoded_value">add</stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
                         <stringProp name="Argument.value"></stringProp>
                         <stringProp name="Argument.name">submittedFor</stringProp>
-                        <stringProp name="HTTPArgument.encoded_name">submittedFor</stringProp>
                         <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                        <stringProp name="HTTPArgument.encoded_name">submittedFor</stringProp>
                         <stringProp name="HTTPArgument.encoded_value"></stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
@@ -21808,15 +21808,15 @@
                         <stringProp name="Argument.value">0</stringProp>
                         <boolProp name="HTTPArgument.use_equals">true</boolProp>
                         <stringProp name="Argument.name">id</stringProp>
-                        <stringProp name="HTTPArgument.encoded_name">id</stringProp>
                         <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                        <stringProp name="HTTPArgument.encoded_name">id</stringProp>
                         <stringProp name="HTTPArgument.encoded_value">0</stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
                         <stringProp name="Argument.value"></stringProp>
                         <stringProp name="Argument.name">onSubmit</stringProp>
-                        <stringProp name="HTTPArgument.encoded_name">onSubmit</stringProp>
                         <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                        <stringProp name="HTTPArgument.encoded_name">onSubmit</stringProp>
                         <stringProp name="HTTPArgument.encoded_value"></stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
@@ -21824,8 +21824,8 @@
                         <stringProp name="Argument.value">pageOfSite</stringProp>
                         <boolProp name="HTTPArgument.use_equals">true</boolProp>
                         <stringProp name="Argument.name">pageOf</stringProp>
-                        <stringProp name="HTTPArgument.encoded_name">pageOf</stringProp>
                         <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                        <stringProp name="HTTPArgument.encoded_name">pageOf</stringProp>
                         <stringProp name="HTTPArgument.encoded_value">pageOfSite</stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
@@ -21833,8 +21833,8 @@
                         <stringProp name="Argument.value"></stringProp>
                         <boolProp name="HTTPArgument.use_equals">true</boolProp>
                         <stringProp name="Argument.name">name</stringProp>
-                        <stringProp name="HTTPArgument.encoded_name">name</stringProp>
                         <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                        <stringProp name="HTTPArgument.encoded_name">name</stringProp>
                         <stringProp name="HTTPArgument.encoded_value">Testsite</stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
@@ -21842,8 +21842,8 @@
                         <stringProp name="Argument.value">Collection Site</stringProp>
                         <boolProp name="HTTPArgument.use_equals">true</boolProp>
                         <stringProp name="Argument.name">type</stringProp>
-                        <stringProp name="HTTPArgument.encoded_name">type</stringProp>
                         <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                        <stringProp name="HTTPArgument.encoded_name">type</stringProp>
                         <stringProp name="HTTPArgument.encoded_value">Collection+Site</stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
@@ -21851,43 +21851,43 @@
                         <stringProp name="Argument.value">1</stringProp>
                         <boolProp name="HTTPArgument.use_equals">true</boolProp>
                         <stringProp name="Argument.name">coordinatorId</stringProp>
-                        <stringProp name="HTTPArgument.encoded_name">coordinatorId</stringProp>
                         <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                        <stringProp name="HTTPArgument.encoded_name">coordinatorId</stringProp>
                         <stringProp name="HTTPArgument.encoded_value">1</stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
                         <stringProp name="Argument.value"></stringProp>
                         <stringProp name="Argument.name">emailAddress</stringProp>
-                        <stringProp name="HTTPArgument.encoded_name">emailAddress</stringProp>
                         <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                        <stringProp name="HTTPArgument.encoded_name">emailAddress</stringProp>
                         <stringProp name="HTTPArgument.encoded_value"></stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
                         <stringProp name="Argument.value"></stringProp>
                         <stringProp name="Argument.name">street</stringProp>
-                        <stringProp name="HTTPArgument.encoded_name">street</stringProp>
                         <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                        <stringProp name="HTTPArgument.encoded_name">street</stringProp>
                         <stringProp name="HTTPArgument.encoded_value"></stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
                         <stringProp name="Argument.value"></stringProp>
                         <stringProp name="Argument.name">city</stringProp>
-                        <stringProp name="HTTPArgument.encoded_name">city</stringProp>
                         <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                        <stringProp name="HTTPArgument.encoded_name">city</stringProp>
                         <stringProp name="HTTPArgument.encoded_value"></stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
                         <stringProp name="Argument.value"></stringProp>
                         <stringProp name="Argument.name">state</stringProp>
-                        <stringProp name="HTTPArgument.encoded_name">state</stringProp>
                         <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                        <stringProp name="HTTPArgument.encoded_name">state</stringProp>
                         <stringProp name="HTTPArgument.encoded_value"></stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
                         <stringProp name="Argument.value"></stringProp>
                         <stringProp name="Argument.name">zipCode</stringProp>
-                        <stringProp name="HTTPArgument.encoded_name">zipCode</stringProp>
                         <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                        <stringProp name="HTTPArgument.encoded_name">zipCode</stringProp>
                         <stringProp name="HTTPArgument.encoded_value"></stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
@@ -21895,22 +21895,22 @@
                         <stringProp name="Argument.value">United States</stringProp>
                         <boolProp name="HTTPArgument.use_equals">true</boolProp>
                         <stringProp name="Argument.name">country</stringProp>
-                        <stringProp name="HTTPArgument.encoded_name">country</stringProp>
                         <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                        <stringProp name="HTTPArgument.encoded_name">country</stringProp>
                         <stringProp name="HTTPArgument.encoded_value">United+States</stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
                         <stringProp name="Argument.value"></stringProp>
                         <stringProp name="Argument.name">phoneNumber</stringProp>
-                        <stringProp name="HTTPArgument.encoded_name">phoneNumber</stringProp>
                         <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                        <stringProp name="HTTPArgument.encoded_name">phoneNumber</stringProp>
                         <stringProp name="HTTPArgument.encoded_value"></stringProp>
                       </elementProp>
                       <elementProp name="" elementType="HTTPArgument">
                         <stringProp name="Argument.value"></stringProp>
                         <stringProp name="Argument.name">faxNumber</stringProp>
-                        <stringProp name="HTTPArgument.encoded_name">faxNumber</stringProp>
                         <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                        <stringProp name="HTTPArgument.encoded_name">faxNumber</stringProp>
                         <stringProp name="HTTPArgument.encoded_value"></stringProp>
                       </elementProp>
                     </collectionProp>
@@ -21923,7 +21923,7 @@
                   <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
                 </HTTPSampler>
                 <hashTree/>
-                <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="Administrative Data Tests: Add Site" enabled="true">
+                <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="Add Site with empty name" enabled="true">
                   <stringProp name="HTTPSampler.path">/catissuecore/SiteAdd.do</stringProp>
                   <stringProp name="HTTPSampler.method">POST</stringProp>
                   <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -22087,8 +22087,8 @@
                       <stringProp name="1104420832">Name is required</stringProp>
                     </collectionProp>
                     <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                    <intProp name="Assertion.test_type">2</intProp>
                     <stringProp name="Assertion.assume_success">false</stringProp>
+                    <intProp name="Assertion.test_type">2</intProp>
                   </ResponseAssertion>
                   <hashTree/>
                 </hashTree>
@@ -22120,8 +22120,8 @@
                     <stringProp name="Argument.value">pageOfDepartment</stringProp>
                     <boolProp name="HTTPArgument.use_equals">true</boolProp>
                     <stringProp name="Argument.name">pageOf</stringProp>
-                    <stringProp name="HTTPArgument.encoded_name">pageOf</stringProp>
                     <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                    <stringProp name="HTTPArgument.encoded_name">pageOf</stringProp>
                     <stringProp name="HTTPArgument.encoded_value">pageOfDepartment</stringProp>
                   </elementProp>
                   <elementProp name="" elementType="HTTPArgument">
@@ -22129,8 +22129,8 @@
                     <stringProp name="Argument.value">Department</stringProp>
                     <boolProp name="HTTPArgument.use_equals">true</boolProp>
                     <stringProp name="Argument.name">aliasName</stringProp>
-                    <stringProp name="HTTPArgument.encoded_name">aliasName</stringProp>
                     <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                    <stringProp name="HTTPArgument.encoded_name">aliasName</stringProp>
                     <stringProp name="HTTPArgument.encoded_value">Department</stringProp>
                   </elementProp>
                   <elementProp name="" elementType="HTTPArgument">
@@ -22138,8 +22138,8 @@
                     <stringProp name="Argument.value">3</stringProp>
                     <boolProp name="HTTPArgument.use_equals">true</boolProp>
                     <stringProp name="Argument.name">menuSelected</stringProp>
-                    <stringProp name="HTTPArgument.encoded_name">menuSelected</stringProp>
                     <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                    <stringProp name="HTTPArgument.encoded_name">menuSelected</stringProp>
                     <stringProp name="HTTPArgument.encoded_value">3</stringProp>
                   </elementProp>
                 </collectionProp>
@@ -22166,8 +22166,8 @@
                     <stringProp name="Argument.value">Department</stringProp>
                     <boolProp name="HTTPArgument.use_equals">true</boolProp>
                     <stringProp name="Argument.name">aliasName</stringProp>
-                    <stringProp name="HTTPArgument.encoded_name">aliasName</stringProp>
                     <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                    <stringProp name="HTTPArgument.encoded_name">aliasName</stringProp>
                     <stringProp name="HTTPArgument.encoded_value">Department</stringProp>
                   </elementProp>
                   <elementProp name="" elementType="HTTPArgument">
@@ -22175,15 +22175,15 @@
                     <stringProp name="Argument.value">3</stringProp>
                     <boolProp name="HTTPArgument.use_equals">true</boolProp>
                     <stringProp name="Argument.name">menuSelected</stringProp>
-                    <stringProp name="HTTPArgument.encoded_name">menuSelected</stringProp>
                     <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                    <stringProp name="HTTPArgument.encoded_name">menuSelected</stringProp>
                     <stringProp name="HTTPArgument.encoded_value">3</stringProp>
                   </elementProp>
                   <elementProp name="" elementType="HTTPArgument">
                     <stringProp name="Argument.value"></stringProp>
                     <stringProp name="Argument.name">objectChanged</stringProp>
-                    <stringProp name="HTTPArgument.encoded_name">objectChanged</stringProp>
                     <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                    <stringProp name="HTTPArgument.encoded_name">objectChanged</stringProp>
                     <stringProp name="HTTPArgument.encoded_value"></stringProp>
                   </elementProp>
                   <elementProp name="" elementType="HTTPArgument">
@@ -22191,8 +22191,8 @@
                     <stringProp name="Argument.value">1</stringProp>
                     <boolProp name="HTTPArgument.use_equals">true</boolProp>
                     <stringProp name="Argument.name">counter</stringProp>
-                    <stringProp name="HTTPArgument.encoded_name">counter</stringProp>
                     <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                    <stringProp name="HTTPArgument.encoded_name">counter</stringProp>
                     <stringProp name="HTTPArgument.encoded_value">1</stringProp>
                   </elementProp>
                   <elementProp name="" elementType="HTTPArgument">
@@ -22200,8 +22200,8 @@
                     <stringProp name="Argument.value">pageOfDepartment</stringProp>
                     <boolProp name="HTTPArgument.use_equals">true</boolProp>
                     <stringProp name="Argument.name">pageOf</stringProp>
-                    <stringProp name="HTTPArgument.encoded_name">pageOf</stringProp>
                     <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                    <stringProp name="HTTPArgument.encoded_name">pageOf</stringProp>
                     <stringProp name="HTTPArgument.encoded_value">pageOfDepartment</stringProp>
                   </elementProp>
                   <elementProp name="" elementType="HTTPArgument">
@@ -22209,8 +22209,8 @@
                     <stringProp name="Argument.value">false</stringProp>
                     <boolProp name="HTTPArgument.use_equals">true</boolProp>
                     <stringProp name="Argument.name">andOrOperation</stringProp>
-                    <stringProp name="HTTPArgument.encoded_name">andOrOperation</stringProp>
                     <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                    <stringProp name="HTTPArgument.encoded_name">andOrOperation</stringProp>
                     <stringProp name="HTTPArgument.encoded_value">false</stringProp>
                   </elementProp>
                   <elementProp name="" elementType="HTTPArgument">
@@ -22218,8 +22218,8 @@
                     <stringProp name="Argument.value">Department</stringProp>
                     <boolProp name="HTTPArgument.use_equals">true</boolProp>
                     <stringProp name="Argument.name">value(SimpleConditionsNode:1_Condition_DataElement_table)</stringProp>
-                    <stringProp name="HTTPArgument.encoded_name">value%28SimpleConditionsNode%3A1_Condition_DataElement_table%29</stringProp>
                     <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                    <stringProp name="HTTPArgument.encoded_name">value%28SimpleConditionsNode%3A1_Condition_DataElement_table%29</stringProp>
                     <stringProp name="HTTPArgument.encoded_value">Department</stringProp>
                   </elementProp>
                   <elementProp name="" elementType="HTTPArgument">
@@ -22227,8 +22227,8 @@
                     <stringProp name="Argument.value">Department.IDENTIFIER.bigint</stringProp>
                     <boolProp name="HTTPArgument.use_equals">true</boolProp>
                     <stringProp name="Argument.name">value(SimpleConditionsNode:1_Condition_DataElement_field)</stringProp>
-                    <stringProp name="HTTPArgument.encoded_name">value%28SimpleConditionsNode%3A1_Condition_DataElement_field%29</stringProp>
                     <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                    <stringProp name="HTTPArgument.encoded_name">value%28SimpleConditionsNode%3A1_Condition_DataElement_field%29</stringProp>
                     <stringProp name="HTTPArgument.encoded_value">Department.IDENTIFIER.bigint</stringProp>
                   </elementProp>
                   <elementProp name="" elementType="HTTPArgument">
@@ -22236,8 +22236,8 @@
                     <stringProp name="Argument.value">=</stringProp>
                     <boolProp name="HTTPArgument.use_equals">true</boolProp>
                     <stringProp name="Argument.name">value(SimpleConditionsNode:1_Condition_Operator_operator)</stringProp>
-                    <stringProp name="HTTPArgument.encoded_name">value%28SimpleConditionsNode%3A1_Condition_Operator_operator%29</stringProp>
                     <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                    <stringProp name="HTTPArgument.encoded_name">value%28SimpleConditionsNode%3A1_Condition_Operator_operator%29</stringProp>
                     <stringProp name="HTTPArgument.encoded_value">%3D</stringProp>
                   </elementProp>
                   <elementProp name="" elementType="HTTPArgument">
@@ -22245,8 +22245,8 @@
                     <stringProp name="Argument.value">1</stringProp>
                     <boolProp name="HTTPArgument.use_equals">true</boolProp>
                     <stringProp name="Argument.name">value(SimpleConditionsNode:1_Condition_value)</stringProp>
-                    <stringProp name="HTTPArgument.encoded_name">value%28SimpleConditionsNode%3A1_Condition_value%29</stringProp>
                     <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                    <stringProp name="HTTPArgument.encoded_name">value%28SimpleConditionsNode%3A1_Condition_value%29</stringProp>
                     <stringProp name="HTTPArgument.encoded_value">1</stringProp>
                   </elementProp>
                 </collectionProp>
@@ -22273,15 +22273,15 @@
                     <stringProp name="Argument.value">edit</stringProp>
                     <boolProp name="HTTPArgument.use_equals">true</boolProp>
                     <stringProp name="Argument.name">operation</stringProp>
-                    <stringProp name="HTTPArgument.encoded_name">operation</stringProp>
                     <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                    <stringProp name="HTTPArgument.encoded_name">operation</stringProp>
                     <stringProp name="HTTPArgument.encoded_value">edit</stringProp>
                   </elementProp>
                   <elementProp name="" elementType="HTTPArgument">
                     <stringProp name="Argument.value"></stringProp>
                     <stringProp name="Argument.name">submittedFor</stringProp>
-                    <stringProp name="HTTPArgument.encoded_name">submittedFor</stringProp>
                     <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                    <stringProp name="HTTPArgument.encoded_name">submittedFor</stringProp>
                     <stringProp name="HTTPArgument.encoded_value"></stringProp>
                   </elementProp>
                   <elementProp name="" elementType="HTTPArgument">
@@ -22289,8 +22289,8 @@
                     <stringProp name="Argument.value">1</stringProp>
                     <boolProp name="HTTPArgument.use_equals">true</boolProp>
                     <stringProp name="Argument.name">id</stringProp>
-                    <stringProp name="HTTPArgument.encoded_name">id</stringProp>
                     <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                    <stringProp name="HTTPArgument.encoded_name">id</stringProp>
                     <stringProp name="HTTPArgument.encoded_value">1</stringProp>
                   </elementProp>
                   <elementProp name="" elementType="HTTPArgument">
@@ -22298,8 +22298,8 @@
                     <stringProp name="Argument.value">updatedDept</stringProp>
                     <boolProp name="HTTPArgument.use_equals">true</boolProp>
                     <stringProp name="Argument.name">name</stringProp>
-                    <stringProp name="HTTPArgument.encoded_name">name</stringProp>
                     <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                    <stringProp name="HTTPArgument.encoded_name">name</stringProp>
                     <stringProp name="HTTPArgument.encoded_value">newUpdatedDept</stringProp>
                   </elementProp>
                 </collectionProp>
@@ -22317,8 +22317,8 @@
                   <stringProp name="582118192">Department successfully updated</stringProp>
                 </collectionProp>
                 <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                <intProp name="Assertion.test_type">2</intProp>
                 <stringProp name="Assertion.assume_success">false</stringProp>
+                <intProp name="Assertion.test_type">2</intProp>
               </ResponseAssertion>
               <hashTree/>
             </hashTree>
@@ -22342,8 +22342,8 @@
                     <stringProp name="Argument.value">pageOfInstitution</stringProp>
                     <boolProp name="HTTPArgument.use_equals">true</boolProp>
                     <stringProp name="Argument.name">pageOf</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
                     <stringProp name="HTTPArgument.encoded_name">pageOf</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
                     <stringProp name="HTTPArgument.encoded_value">pageOfInstitution</stringProp>
                   </elementProp>
                   <elementProp name="" elementType="HTTPArgument">
@@ -22351,8 +22351,8 @@
                     <stringProp name="Argument.value">Institution</stringProp>
                     <boolProp name="HTTPArgument.use_equals">true</boolProp>
                     <stringProp name="Argument.name">aliasName</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
                     <stringProp name="HTTPArgument.encoded_name">aliasName</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
                     <stringProp name="HTTPArgument.encoded_value">Institution</stringProp>
                   </elementProp>
                   <elementProp name="" elementType="HTTPArgument">
@@ -22360,8 +22360,8 @@
                     <stringProp name="Argument.value">2</stringProp>
                     <boolProp name="HTTPArgument.use_equals">true</boolProp>
                     <stringProp name="Argument.name">menuSelected</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
                     <stringProp name="HTTPArgument.encoded_name">menuSelected</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
                     <stringProp name="HTTPArgument.encoded_value">2</stringProp>
                   </elementProp>
                 </collectionProp>
@@ -22388,8 +22388,8 @@
                     <stringProp name="Argument.value">Institution</stringProp>
                     <boolProp name="HTTPArgument.use_equals">true</boolProp>
                     <stringProp name="Argument.name">aliasName</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
                     <stringProp name="HTTPArgument.encoded_name">aliasName</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
                     <stringProp name="HTTPArgument.encoded_value">Institution</stringProp>
                   </elementProp>
                   <elementProp name="" elementType="HTTPArgument">
@@ -22397,15 +22397,15 @@
                     <stringProp name="Argument.value">2</stringProp>
                     <boolProp name="HTTPArgument.use_equals">true</boolProp>
                     <stringProp name="Argument.name">menuSelected</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
                     <stringProp name="HTTPArgument.encoded_name">menuSelected</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
                     <stringProp name="HTTPArgument.encoded_value">2</stringProp>
                   </elementProp>
                   <elementProp name="" elementType="HTTPArgument">
                     <stringProp name="Argument.value"></stringProp>
                     <stringProp name="Argument.name">objectChanged</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
                     <stringProp name="HTTPArgument.encoded_name">objectChanged</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
                     <stringProp name="HTTPArgument.encoded_value"></stringProp>
                   </elementProp>
                   <elementProp name="" elementType="HTTPArgument">
@@ -22413,8 +22413,8 @@
                     <stringProp name="Argument.value">1</stringProp>
                     <boolProp name="HTTPArgument.use_equals">true</boolProp>
                     <stringProp name="Argument.name">counter</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
                     <stringProp name="HTTPArgument.encoded_name">counter</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
                     <stringProp name="HTTPArgument.encoded_value">1</stringProp>
                   </elementProp>
                   <elementProp name="" elementType="HTTPArgument">
@@ -22422,8 +22422,8 @@
                     <stringProp name="Argument.value">pageOfInstitution</stringProp>
                     <boolProp name="HTTPArgument.use_equals">true</boolProp>
                     <stringProp name="Argument.name">pageOf</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
                     <stringProp name="HTTPArgument.encoded_name">pageOf</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
                     <stringProp name="HTTPArgument.encoded_value">pageOfInstitution</stringProp>
                   </elementProp>
                   <elementProp name="" elementType="HTTPArgument">
@@ -22431,8 +22431,8 @@
                     <stringProp name="Argument.value">false</stringProp>
                     <boolProp name="HTTPArgument.use_equals">true</boolProp>
                     <stringProp name="Argument.name">andOrOperation</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
                     <stringProp name="HTTPArgument.encoded_name">andOrOperation</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
                     <stringProp name="HTTPArgument.encoded_value">false</stringProp>
                   </elementProp>
                   <elementProp name="" elementType="HTTPArgument">
@@ -22440,8 +22440,8 @@
                     <stringProp name="Argument.value">Institution</stringProp>
                     <boolProp name="HTTPArgument.use_equals">true</boolProp>
                     <stringProp name="Argument.name">value(SimpleConditionsNode:1_Condition_DataElement_table)</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
                     <stringProp name="HTTPArgument.encoded_name">value%28SimpleConditionsNode%3A1_Condition_DataElement_table%29</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
                     <stringProp name="HTTPArgument.encoded_value">Institution</stringProp>
                   </elementProp>
                   <elementProp name="" elementType="HTTPArgument">
@@ -22449,8 +22449,8 @@
                     <stringProp name="Argument.value">Institution.IDENTIFIER.bigint</stringProp>
                     <boolProp name="HTTPArgument.use_equals">true</boolProp>
                     <stringProp name="Argument.name">value(SimpleConditionsNode:1_Condition_DataElement_field)</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
                     <stringProp name="HTTPArgument.encoded_name">value%28SimpleConditionsNode%3A1_Condition_DataElement_field%29</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
                     <stringProp name="HTTPArgument.encoded_value">Institution.IDENTIFIER.bigint</stringProp>
                   </elementProp>
                   <elementProp name="" elementType="HTTPArgument">
@@ -22458,8 +22458,8 @@
                     <stringProp name="Argument.value">=</stringProp>
                     <boolProp name="HTTPArgument.use_equals">true</boolProp>
                     <stringProp name="Argument.name">value(SimpleConditionsNode:1_Condition_Operator_operator)</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
                     <stringProp name="HTTPArgument.encoded_name">value%28SimpleConditionsNode%3A1_Condition_Operator_operator%29</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
                     <stringProp name="HTTPArgument.encoded_value">%3D</stringProp>
                   </elementProp>
                   <elementProp name="" elementType="HTTPArgument">
@@ -22467,8 +22467,8 @@
                     <stringProp name="Argument.value">1</stringProp>
                     <boolProp name="HTTPArgument.use_equals">true</boolProp>
                     <stringProp name="Argument.name">value(SimpleConditionsNode:1_Condition_value)</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
                     <stringProp name="HTTPArgument.encoded_name">value%28SimpleConditionsNode%3A1_Condition_value%29</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
                     <stringProp name="HTTPArgument.encoded_value">1</stringProp>
                   </elementProp>
                 </collectionProp>
@@ -22539,8 +22539,8 @@
                   <stringProp name="-1061048118">Institution successfully updated</stringProp>
                 </collectionProp>
                 <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                <stringProp name="Assertion.assume_success">false</stringProp>
                 <intProp name="Assertion.test_type">2</intProp>
+                <stringProp name="Assertion.assume_success">false</stringProp>
               </ResponseAssertion>
               <hashTree/>
             </hashTree>
@@ -22564,8 +22564,8 @@
                     <stringProp name="Argument.value">pageOfCancerResearchGroup</stringProp>
                     <boolProp name="HTTPArgument.use_equals">true</boolProp>
                     <stringProp name="Argument.name">pageOf</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
                     <stringProp name="HTTPArgument.encoded_name">pageOf</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
                     <stringProp name="HTTPArgument.encoded_value">pageOfCancerResearchGroup</stringProp>
                   </elementProp>
                   <elementProp name="" elementType="HTTPArgument">
@@ -22573,8 +22573,8 @@
                     <stringProp name="Argument.value">CancerResearchGroup</stringProp>
                     <boolProp name="HTTPArgument.use_equals">true</boolProp>
                     <stringProp name="Argument.name">aliasName</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
                     <stringProp name="HTTPArgument.encoded_name">aliasName</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
                     <stringProp name="HTTPArgument.encoded_value">CancerResearchGroup</stringProp>
                   </elementProp>
                   <elementProp name="" elementType="HTTPArgument">
@@ -22582,8 +22582,8 @@
                     <stringProp name="Argument.value">4</stringProp>
                     <boolProp name="HTTPArgument.use_equals">true</boolProp>
                     <stringProp name="Argument.name">menuSelected</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
                     <stringProp name="HTTPArgument.encoded_name">menuSelected</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
                     <stringProp name="HTTPArgument.encoded_value">4</stringProp>
                   </elementProp>
                 </collectionProp>
@@ -22610,8 +22610,8 @@
                     <stringProp name="Argument.value">CancerResearchGroup</stringProp>
                     <boolProp name="HTTPArgument.use_equals">true</boolProp>
                     <stringProp name="Argument.name">aliasName</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
                     <stringProp name="HTTPArgument.encoded_name">aliasName</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
                     <stringProp name="HTTPArgument.encoded_value">CancerResearchGroup</stringProp>
                   </elementProp>
                   <elementProp name="" elementType="HTTPArgument">
@@ -22619,15 +22619,15 @@
                     <stringProp name="Argument.value">4</stringProp>
                     <boolProp name="HTTPArgument.use_equals">true</boolProp>
                     <stringProp name="Argument.name">menuSelected</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
                     <stringProp name="HTTPArgument.encoded_name">menuSelected</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
                     <stringProp name="HTTPArgument.encoded_value">4</stringProp>
                   </elementProp>
                   <elementProp name="" elementType="HTTPArgument">
                     <stringProp name="Argument.value"></stringProp>
                     <stringProp name="Argument.name">objectChanged</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
                     <stringProp name="HTTPArgument.encoded_name">objectChanged</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
                     <stringProp name="HTTPArgument.encoded_value"></stringProp>
                   </elementProp>
                   <elementProp name="" elementType="HTTPArgument">
@@ -22635,8 +22635,8 @@
                     <stringProp name="Argument.value">1</stringProp>
                     <boolProp name="HTTPArgument.use_equals">true</boolProp>
                     <stringProp name="Argument.name">counter</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
                     <stringProp name="HTTPArgument.encoded_name">counter</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
                     <stringProp name="HTTPArgument.encoded_value">1</stringProp>
                   </elementProp>
                   <elementProp name="" elementType="HTTPArgument">
@@ -22644,8 +22644,8 @@
                     <stringProp name="Argument.value">pageOfCancerResearchGroup</stringProp>
                     <boolProp name="HTTPArgument.use_equals">true</boolProp>
                     <stringProp name="Argument.name">pageOf</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
                     <stringProp name="HTTPArgument.encoded_name">pageOf</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
                     <stringProp name="HTTPArgument.encoded_value">pageOfCancerResearchGroup</stringProp>
                   </elementProp>
                   <elementProp name="" elementType="HTTPArgument">
@@ -22653,8 +22653,8 @@
                     <stringProp name="Argument.value">false</stringProp>
                     <boolProp name="HTTPArgument.use_equals">true</boolProp>
                     <stringProp name="Argument.name">andOrOperation</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
                     <stringProp name="HTTPArgument.encoded_name">andOrOperation</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
                     <stringProp name="HTTPArgument.encoded_value">false</stringProp>
                   </elementProp>
                   <elementProp name="" elementType="HTTPArgument">
@@ -22662,8 +22662,8 @@
                     <stringProp name="Argument.value">CancerResearchGroup</stringProp>
                     <boolProp name="HTTPArgument.use_equals">true</boolProp>
                     <stringProp name="Argument.name">value(SimpleConditionsNode:1_Condition_DataElement_table)</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
                     <stringProp name="HTTPArgument.encoded_name">value%28SimpleConditionsNode%3A1_Condition_DataElement_table%29</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
                     <stringProp name="HTTPArgument.encoded_value">CancerResearchGroup</stringProp>
                   </elementProp>
                   <elementProp name="" elementType="HTTPArgument">
@@ -22671,8 +22671,8 @@
                     <stringProp name="Argument.value">CancerResearchGroup.IDENTIFIER.bigint</stringProp>
                     <boolProp name="HTTPArgument.use_equals">true</boolProp>
                     <stringProp name="Argument.name">value(SimpleConditionsNode:1_Condition_DataElement_field)</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
                     <stringProp name="HTTPArgument.encoded_name">value%28SimpleConditionsNode%3A1_Condition_DataElement_field%29</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
                     <stringProp name="HTTPArgument.encoded_value">CancerResearchGroup.IDENTIFIER.bigint</stringProp>
                   </elementProp>
                   <elementProp name="" elementType="HTTPArgument">
@@ -22680,8 +22680,8 @@
                     <stringProp name="Argument.value">=</stringProp>
                     <boolProp name="HTTPArgument.use_equals">true</boolProp>
                     <stringProp name="Argument.name">value(SimpleConditionsNode:1_Condition_Operator_operator)</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
                     <stringProp name="HTTPArgument.encoded_name">value%28SimpleConditionsNode%3A1_Condition_Operator_operator%29</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
                     <stringProp name="HTTPArgument.encoded_value">%3D</stringProp>
                   </elementProp>
                   <elementProp name="" elementType="HTTPArgument">
@@ -22689,8 +22689,8 @@
                     <stringProp name="Argument.value">1</stringProp>
                     <boolProp name="HTTPArgument.use_equals">true</boolProp>
                     <stringProp name="Argument.name">value(SimpleConditionsNode:1_Condition_value)</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
                     <stringProp name="HTTPArgument.encoded_name">value%28SimpleConditionsNode%3A1_Condition_value%29</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
                     <stringProp name="HTTPArgument.encoded_value">1</stringProp>
                   </elementProp>
                 </collectionProp>
@@ -22717,15 +22717,15 @@
                     <stringProp name="Argument.value">edit</stringProp>
                     <boolProp name="HTTPArgument.use_equals">true</boolProp>
                     <stringProp name="Argument.name">operation</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
                     <stringProp name="HTTPArgument.encoded_name">operation</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
                     <stringProp name="HTTPArgument.encoded_value">edit</stringProp>
                   </elementProp>
                   <elementProp name="" elementType="HTTPArgument">
                     <stringProp name="Argument.value"></stringProp>
                     <stringProp name="Argument.name">submittedFor</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
                     <stringProp name="HTTPArgument.encoded_name">submittedFor</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
                     <stringProp name="HTTPArgument.encoded_value"></stringProp>
                   </elementProp>
                   <elementProp name="" elementType="HTTPArgument">
@@ -22733,8 +22733,8 @@
                     <stringProp name="Argument.value">1</stringProp>
                     <boolProp name="HTTPArgument.use_equals">true</boolProp>
                     <stringProp name="Argument.name">id</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
                     <stringProp name="HTTPArgument.encoded_name">id</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
                     <stringProp name="HTTPArgument.encoded_value">1</stringProp>
                   </elementProp>
                   <elementProp name="" elementType="HTTPArgument">
@@ -22742,8 +22742,8 @@
                     <stringProp name="Argument.value">updatedCRG</stringProp>
                     <boolProp name="HTTPArgument.use_equals">true</boolProp>
                     <stringProp name="Argument.name">name</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
                     <stringProp name="HTTPArgument.encoded_name">name</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
                     <stringProp name="HTTPArgument.encoded_value">newUpdateCRG</stringProp>
                   </elementProp>
                 </collectionProp>
@@ -22761,8 +22761,8 @@
                   <stringProp name="338073192">Cancer Research Group successfully updated</stringProp>
                 </collectionProp>
                 <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                <stringProp name="Assertion.assume_success">false</stringProp>
                 <intProp name="Assertion.test_type">2</intProp>
+                <stringProp name="Assertion.assume_success">false</stringProp>
               </ResponseAssertion>
               <hashTree/>
             </hashTree>
@@ -23064,8 +23064,8 @@
                   <stringProp name="1022050449">Site successfully updated for Testsite_updated</stringProp>
                 </collectionProp>
                 <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                <stringProp name="Assertion.assume_success">false</stringProp>
                 <intProp name="Assertion.test_type">2</intProp>
+                <stringProp name="Assertion.assume_success">false</stringProp>
               </ResponseAssertion>
               <hashTree/>
             </hashTree>
@@ -23458,8 +23458,8 @@
                   <stringProp name="-1940624343">Specimen Array Type successfully updated</stringProp>
                 </collectionProp>
                 <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                <intProp name="Assertion.test_type">2</intProp>
                 <stringProp name="Assertion.assume_success">false</stringProp>
+                <intProp name="Assertion.test_type">2</intProp>
               </ResponseAssertion>
               <hashTree/>
             </hashTree>
@@ -24109,8 +24109,8 @@
                   <stringProp name="1898295855">Participant successfully updated</stringProp>
                 </collectionProp>
                 <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                <stringProp name="Assertion.assume_success">false</stringProp>
                 <intProp name="Assertion.test_type">2</intProp>
+                <stringProp name="Assertion.assume_success">false</stringProp>
               </ResponseAssertion>
               <hashTree/>
             </hashTree>
