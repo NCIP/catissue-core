@@ -11,6 +11,8 @@ package edu.wustl.catissuecore.bizlogic;
 
 import edu.wustl.catissuecore.bizlogic.bulkOperations.BulkOperationsBizlogic;
 import edu.wustl.catissuecore.bizlogic.querysuite.CatissuecoreQueryBizLogic;
+import edu.wustl.catissuecore.bizlogic.shippingtracking.ShipmentBizLogic;
+import edu.wustl.catissuecore.bizlogic.shippingtracking.ShipmentRequestBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.bizlogic.CDEBizLogic;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
@@ -222,6 +224,12 @@ public class BizLogicFactory //extends AbstractBizLogicFactory
     		case Constants.CATISSUECORE_QUERY_INTERFACE_ID://CatissecoreQueryBizLogic
     			bizLogic = new CatissuecoreQueryBizLogic();
     			break;
+    		case edu.wustl.catissuecore.util.shippingtracking.Constants.SHIPMENT_FORM_ID:
+            	bizLogic = new ShipmentBizLogic();
+            	break;
+    		case edu.wustl.catissuecore.util.shippingtracking.Constants.SHIPMENT_REQUEST_FORM_ID:
+            	bizLogic = new ShipmentRequestBizLogic();
+            	break;
     		//END
     		case Constants.DEFAULT_BIZ_LOGIC:
             default:
@@ -373,6 +381,14 @@ public class BizLogicFactory //extends AbstractBizLogicFactory
     	else if(className.equals("edu.wustl.catissuecore.domain.SpecimenRequirement"))
     	{
     		bizLogic = new RequirementSpecimenBizLogic();
+    	}
+    	else if(className.equals("edu.wustl.catissuecore.domain.shippingtracking.Shipment"))
+    	{
+    		bizLogic=new ShipmentBizLogic();
+    	}
+    	else if(className.equals("edu.wustl.catissuecore.domain.shippingtracking.ShipmentRequest"))
+    	{
+    		bizLogic=new ShipmentRequestBizLogic();
     	}
     	else
     	{

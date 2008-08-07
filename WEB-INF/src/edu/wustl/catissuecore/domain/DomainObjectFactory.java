@@ -16,6 +16,8 @@ import edu.wustl.catissuecore.actionForm.ReportedProblemForm;
 import edu.wustl.catissuecore.actionForm.UserForm;
 import edu.wustl.catissuecore.domain.pathology.PathologyReportReviewParameter;
 import edu.wustl.catissuecore.domain.pathology.QuarantineEventParameter;
+import edu.wustl.catissuecore.domain.shippingtracking.Shipment;
+import edu.wustl.catissuecore.domain.shippingtracking.ShipmentRequest;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
@@ -196,7 +198,12 @@ public class DomainObjectFactory extends AbstractDomainObjectFactory
 			case Constants.QUARANTINE_EVENT_PARAMETER_FORM_ID:
 				className = QuarantineEventParameter.class.getName();
 				break;
-
+			case edu.wustl.catissuecore.util.shippingtracking.Constants.SHIPMENT_FORM_ID:
+				className=Shipment.class.getName();
+				break;
+			case edu.wustl.catissuecore.util.shippingtracking.Constants.SHIPMENT_REQUEST_FORM_ID:
+				className=ShipmentRequest.class.getName();
+				break;
         	
         }
         return className;
@@ -401,6 +408,12 @@ public class DomainObjectFactory extends AbstractDomainObjectFactory
 			case Constants.QUARANTINE_EVENT_PARAMETER_FORM_ID:
 				abstractDomain = new QuarantineEventParameter(form);
 				break;
+			case edu.wustl.catissuecore.util.shippingtracking.Constants.SHIPMENT_FORM_ID:
+				abstractDomain=new Shipment(form);
+				 break;
+			case edu.wustl.catissuecore.util.shippingtracking.Constants.SHIPMENT_REQUEST_FORM_ID:
+				abstractDomain=new ShipmentRequest(form);
+				 break;
 				
 				 
 			//added as per bug 79
