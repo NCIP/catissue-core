@@ -510,6 +510,7 @@
 		<copy file="printservice_client.jar" todir="${zip.dir}" overwrite="true" />
 		<copy file="dynamicExtensions.war" todir="${zip.dir}" overwrite="true" />
 		<copy file="caTissuePrintWebService.war" todir="${zip.dir}" overwrite="true" />
+		<copy file="shippingtracking.zip" todir="${zip.dir}" overwrite="true" />
 		<!-- only single war file is being used so comment it -->
 		<!-- <copy file="catissuecorecsm.war" todir="${zip.dir}" overwrite="true" /> -->
 		<copy file="catissuecore-ds.xml" todir="${zip.dir}" overwrite="true" />

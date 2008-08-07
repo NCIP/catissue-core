@@ -31,7 +31,11 @@
 
 	<property name="mysql.lib" value="mysql-connector-java-5.0.8-bin.jar" />
 	<property name="oracle.lib" value="oracleDriver.jar" />
-
+	
+	<property name="catissue.struts.config.file" value="struts-config.xml" />
+	<property name="catissue.hibernate.config.file" value="hibernate.cfg.xml" />
+	<property name="catissue.tiles.def.file" value="tiles-defs.xml" />
+		
 	<!-- Check for required properties -->
 	<target name="assert">
 		<if>
@@ -516,11 +520,16 @@
 				<equals arg1="oracle" arg2="${database.type}" />
 				<then>
 					<antcall target="oracle_config" />
+					
 				</then>
 			</elseif>
 		</if>
 		<!-- configure titli.properties -->
 		<!-- <antcall target="configure_titli" /> -->
+		
+		<!-- Integrate shippingtracking application, if shippingtracking.zip present in root -->
+		<antcall target="st_integrate_app" />
+		
 		<antcall target="build_war" />
 		<antcall target="copy_files" />
 		<replace file="${basedir}/caTissueSuite_Client/conf/remoteService.xml">
@@ -634,6 +643,7 @@
 			<equals arg1="mysql" arg2="${database.type}" />
 			<then>
 				<antcall target="deploy_db_mysql" />
+				
 			</then>
 			<elseif>
 				<equals arg1="oracle" arg2="${database.type}" />
@@ -645,6 +655,10 @@
 				<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
 			</else>
 		</if>
+		
+		<!-- shippingtracking db -->
+		<antcall target="st_deploy_db" />
+		
 	</target>
 	
 	<!--MySQL Database Creation -->
@@ -1735,5 +1749,130 @@ Thanking You,
 			</fileset>
 		</delete>
 	</target>
+	
+	<!--  ShippingTracking - start -->
+	<!-- Check user selected deploy.shippingtracking to true and shippingtracking.zip exists -->
+	<target name="st_check_prerequisite">
+		<!-- Check shippingtracking.zip file exists or not in base directory. -->
+		<available file="${base.dir}/shippingtracking.zip" property="file.exists" value="false" />
+		<if>
+			<not>
+			   <isset property="file.exists"/>
+			</not>
+			<then>
+			   <!-- <fail message="ShippingTracking.zip file not found. It should be in base directory to deploy shippingtracking." />  -->
+			   <echo message="ShippingTracking.zip file not found. It should be in base directory to deploy shippingtracking." level="error" />
+			</then>
+			<else>
+			   <echo message="ShippingTracking is ready to use."/>
+			</else>
+		</if>
+	</target>
+	
+	<!-- Integrating shipping tracking application with catissue -->
+	<target name="st_integrate_app" depends="st_check_prerequisite" if="file.exists" >
+		<echo message="Integrating shippingtracking app ...." />
+		<unzip src="shippingtracking.zip" dest="${temp.dir}/shippingtracking" overwrite="true" /> 
+	
+		<!-- 1) Copy shippingtracking.jar -> copy it to catissue/WEB-INF/Lib -->
+		<copy file="${temp.dir}/shippingtracking/shippingtracking.jar" todir="${temp.dir}/catissuecore/WEB-INF/lib" overwrite="true" />
+		
+		<!-- 2) Copy *.properties, st*.cfg.xml, *.jsp, *.css, *.images, st*-struts-config.xml to respective folders -->		
+		<copy todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true">
+			<fileset dir="${temp.dir}/shippingtracking">
+				<include name="ShippingTrackingApplicationResources.properties" />
+				<include name="ShippingTrackingHibernate.cfg.xml" />
+			</fileset>
+		</copy>
+		<copy todir="${temp.dir}/catissuecore/WEB-INF" overwrite="true">
+			<fileset dir="${temp.dir}/shippingtracking">
+				<include name="shippingtracking-struts-config.xml" />
+				<include name="ShippingTracking-tiles-defs.xml" />
+			</fileset>
+		</copy>
+
+		<copy todir="${temp.dir}/catissuecore/css" overwrite="true">
+			<fileset dir="${temp.dir}/shippingtracking/css" />
+		</copy>
+		<copy todir="${temp.dir}/catissuecore/jss" overwrite="true">
+			<fileset dir="${temp.dir}/shippingtracking/jss" />
+		</copy>
+		<copy todir="${temp.dir}/catissuecore/pages" overwrite="true">
+			<fileset dir="${temp.dir}/shippingtracking/pages" />
+		</copy>
+		<copy todir="${temp.dir}/catissuecore/images" overwrite="true">
+			<fileset dir="${temp.dir}/shippingtracking/images" />
+		</copy>
+		
+		<!-- 3) Inject st-struts-config.xml entry in catisssue -> web.xml -->
+		<replace file="${temp.dir}/catissuecore/WEB-INF/web.xml">
+			<replacefilter token="/WEB-INF/${catissue.struts.config.file}" value="/WEB-INF/${catissue.struts.config.file}, /WEB-INF/shippingtracking-struts-config.xml" />
+		</replace>
+		
+		<!-- 4) Inject db-util.properties entry in catissue -> db-util.properties -->
+		<if>
+			<equals arg1="mysql" arg2="${database.type}" />
+			<then>
+				<replace file="${temp.dir}/catissuecore/WEB-INF/classes/dbutil.properties">
+					<replacefilter token="${catissue.hibernate.config.file}" value="${catissue.hibernate.config.file}, ShippingTrackingHibernate.cfg.xml" />
+				</replace>
+			</then>
+			<elseif>
+				<equals arg1="oracle" arg2="${database.type}" />
+				<then>
+					<echo message="Oracle integration not supported, Please contact system administrator." />
+				</then>
+			</elseif>
+		</if>
+		
+		<!-- 5) Inject "/WEB-INF/ShippingTracking-tiles-defs.xml" entry in catisssue -> struts-config.xml -->
+		<replace file="${temp.dir}/catissuecore/WEB-INF/${catissue.struts.config.file}">
+			<replacefilter token="/WEB-INF/${catissue.tiles.def.file}" value="/WEB-INF/${catissue.tiles.def.file}, /WEB-INF/ShippingTracking-tiles-defs.xml" />
+		</replace>
+		
+	</target>
+	
+	<!-- Deploying shippingtracking db -->
+	<target name="st_deploy_db" depends="st_check_prerequisite" if="file.exists">
+		<echo message="Deploying shippingtracking db ...." />
+		<unzip src="shippingtracking.zip" dest="${temp.dir}/shippingtracking" overwrite="true" />
+		
+		<if>
+			<equals arg1="mysql" arg2="${database.type}" />
+			<then>
+				<antcall target="st_deploy_db_mysql" />
+			</then>
+			<elseif>
+				<equals arg1="oracle" arg2="${database.type}" />
+				<then>
+					<antcall target="st_deploy_db_oracle" />
+				</then>
+			</elseif>
+			<else>
+				<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
+			</else>
+		</if>
+		
+		<delete dir="${temp.dir}"/>
+	</target>
+	
+	<target name="st_deploy_db_mysql">
+		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" onerror="continue">
+			<transaction src="${temp.dir}/shippingtracking/SQL/MYSQL/shippingtracking.sql" />
+			
+			<transaction>commit;</transaction>
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</sql>
+	</target>
+	
+	<target name="st_deploy_db_oracle">
+		<echo message="DB deploy not implemented for oracle, Please contact system administrator." />
+	</target>
+	
+	<!--  ShippingTracking - end -->
 	
 </project>
