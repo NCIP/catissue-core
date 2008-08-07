@@ -102,32 +102,62 @@ function getUnit(classname,type)
 // to check all elements
 function checkAl(element)
 {
-	var len=<%=specimen.size()%>;
-	if(document.getElementById("checked").checked==false)
-	{
-		if(len=="1")
-			document.OrderSpecimen.selectedItems.checked=false;
-		else
+
+
+		var isValidTodistribute = true;
+		for(var i=0;i<document.forms[0].selectedItems.length;i++)
 		{
-			for(var i=0;i<document.OrderSpecimen.selectedItems.length;i++)
-				document.OrderSpecimen.selectedItems[i].checked=false;
+				 var distributionSiteId = "value(OrderSpecimenBean:"+i+"_distributionSite)";
+				 var distributionSiteValue =  document.getElementById(distributionSiteId).value;
+				
+				for(var j=0;j<document.forms[0].selectedItems.length;j++)
+				{
+					 var distributionSiteIdInner = "value(OrderSpecimenBean:"+j+"_distributionSite)";
+					 var distributionSiteValueInner =  document.getElementById(distributionSiteIdInner).value;
+					 if(distributionSiteValue != distributionSiteValueInner)
+					 {
+						isValidTodistribute = false;
+						showErrorMessage("Specimen from multiple Site Exits : Can distribute specimen from only one site")
+						break;
+					}
+				}
+				if(isValidTodistribute == false)
+				{
+					break;
+				}
 		}
-		document.OrderSpecimen.orderButton.disabled=true;
-	}
-	else
-	{
-		if(len=="1")
-			document.OrderSpecimen.selectedItems.checked=true;
-		else
+
+		if(isValidTodistribute == true)
 		{
-			for(var i=0;i<len;i++)
+			enableCheckBox();
+
+			var len=<%=specimen.size()%>;
+			if(document.getElementById("checked").checked==false)
 			{
-				document.OrderSpecimen.selectedItems.checked=true;
-				document.OrderSpecimen.selectedItems[i].checked=true;
+				if(len=="1")
+					document.OrderSpecimen.selectedItems.checked=false;
+				else
+				{
+					for(var i=0;i<document.OrderSpecimen.selectedItems.length;i++)
+						document.OrderSpecimen.selectedItems[i].checked=false;
+				}
+				document.OrderSpecimen.orderButton.disabled=true;
+			}
+			else
+			{
+				if(len=="1")
+					document.OrderSpecimen.selectedItems.checked=true;
+				else
+				{
+					for(var i=0;i<len;i++)
+					{
+						document.OrderSpecimen.selectedItems.checked=true;
+						document.OrderSpecimen.selectedItems[i].checked=true;
+					}
+				}
+				document.OrderSpecimen.orderButton.disabled=false;
 			}
 		}
-		document.OrderSpecimen.orderButton.disabled=false;
-	}
 }
 
 //put quantity 
@@ -227,8 +257,12 @@ function orderToList()
 	}
 }
 //for enabling and disabling the AddToOrderList button
-function onCheck()
+function onCheck(element)
 {
+	
+	var siteId = "value(OrderSpecimenBean:"+element.value+"_distributionSite)";
+	var siteName =  document.getElementById(siteId).value;
+	
 	var cnt=0;
 	var len=<%=specimen.size()%>;
 	if(len=="1")
@@ -240,8 +274,19 @@ function onCheck()
 	{
 		for(var i=0;i<document.OrderSpecimen.selectedItems.length;i++)
 		{
-			if(document.OrderSpecimen.selectedItems[i].checked==true)
+			var checkBoxId = "checkBox_"+i;
+			
+			var distributionSiteId = "value(OrderSpecimenBean:"+i+"_distributionSite)";
+			var distributionSiteValue =  document.getElementById(distributionSiteId).value;
+			
+			if(distributionSiteValue != siteName)
+				document.getElementById(checkBoxId).disabled=true;	
+
+			if(document.OrderSpecimen.selectedItems[i].checked==true
+				&& document.getElementById(checkBoxId).disabled==false)
+			{
 				cnt++;
+			}
 		}
 	}
 	if(cnt>0)
@@ -249,7 +294,23 @@ function onCheck()
 		document.OrderSpecimen.orderButton.disabled=false;
 	}
 	else
+	{
 		document.OrderSpecimen.orderButton.disabled=true;
+		enableCheckBox();
+	}
+}
+
+function enableCheckBox()
+{
+	for(var i=0;i<document.OrderSpecimen.selectedItems.length;i++)
+	{
+			var checkBoxId = "checkBox_"+i;
+			document.getElementById(checkBoxId).disabled=false;	
+			if(document.OrderSpecimen.selectedItems[i].checked==true)
+			{
+				document.OrderSpecimen.orderButton.disabled=false;
+			}
+	}
 }
 
 function showSpecimenDetails(id)
@@ -503,6 +564,9 @@ String onClassChangeFunctionName = "typeChangeGeneralized(this)";
 								String specimenClass="value(OrderSpecimenBean:"+i+"_specimenClass)";
 								String specimenType="value(OrderSpecimenBean:"+i+"_specimenType)";
 								String distributionSite="value(OrderSpecimenBean:"+i+"_distributionSite)";
+								String collectionStatus="value(OrderSpecimenBean:"+i+"_collectionStatus)";
+								String isAvailablekey ="value(OrderSpecimenBean:"+i+"_isAvailable)";
+								String checkBoxId = "checkBox_"+i;
 								String distributionSiteName="N/A";
 								if(obj.getSpecimenPosition()!=null)
 								{	
@@ -514,7 +578,7 @@ String onClassChangeFunctionName = "typeChangeGeneralized(this)";
 							<tr class="dataRowLight" width="100%">
 	
         						<td class="dataCellText" width="5%">
-									<html:multibox property="selectedItems" value="<%=cnt%>" onclick="onCheck()"/>
+									<html:multibox property="selectedItems" styleId="<%=checkBoxId%>" value="<%=cnt%>" onclick="onCheck(this)"/>
 								</td> <!--for chk box -->
 
 								<td class="dataCellText" width="25%">
@@ -525,11 +589,17 @@ String onClassChangeFunctionName = "typeChangeGeneralized(this)";
 									<html:hidden property="<%=specimenName%>" value="<%=obj.getLabel()%>"/>
 									<html:hidden property="<%=specimenId%>" value="<%=obj.getId().toString()%>"/>
 									<html:hidden property="<%=typeOfItem%>" value="specimen"/>
+									<html:hidden property="<%=collectionStatus%>" value="<%=obj.getCollectionStatus()%>"/>
+									<html:hidden property="<%=isAvailablekey%>" value="<%=obj.getIsAvailable().toString()%>"/>
 								</td>
 
 								<td class="dataCellText" width="25%" >
-									<%=distributionSiteName%>
-									<html:hidden property="<%=distributionSite%>" value="<%=distributionSiteName%>"/>
+
+								<%=distributionSiteName%>
+								<html:hidden property="<%=distributionSite%>" styleId="<%=distributionSite%>" 
+								value="<%=distributionSiteName%>"/>
+									
+								
 								</td>
 
 								<td class="dataCellText" width="18%">
@@ -544,7 +614,7 @@ String onClassChangeFunctionName = "typeChangeGeneralized(this)";
 								</td>
 
 									<td class="dataCellText" width="20%">
-										<html:text styleClass="formFieldSized3" maxlength="8"  size="5"  styleId="requestedQuantity" property="<%=requestedQuantity%>"/>&nbsp;
+										<html:text styleClass="formFieldSized3" maxlength="8"  size="5"  styleId="requestedQuantity" value="<%=obj.getAvailableQuantity().toString()%>" property="<%=requestedQuantity%>"/>&nbsp;
 									<script>
 										var v= getUnit('<%=obj.getClassName() %>','<%=obj.getSpecimenType() %>');
 										document.write(v);

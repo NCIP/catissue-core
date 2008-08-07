@@ -750,8 +750,9 @@ public class OrderBizLogic extends DefaultBizLogic
 			while(orderListFromDBIterator.hasNext())
 			{
 				OrderDetails orderDetails = (OrderDetails)orderListFromDBIterator.next();
-				boolean isOrderItemValidToDistribute = isOrderItemValidTodistribute(orderDetails.getOrderItemCollection(),siteIdsList);
-				if(isSuperAdmin(user) || isOrderItemValidToDistribute)
+				boolean hasDributionPrivilegeOnSite = isOrderItemValidTodistribute(orderDetails.getOrderItemCollection(),siteIdsList);
+				boolean hasDistributionPrivilegeOnCp = checkDistributionPrivilegeOnCP(user,privilegeCache,orderDetails.getOrderItemCollection());
+				if(isSuperAdmin(user) || hasDributionPrivilegeOnSite || hasDistributionPrivilegeOnCp)
 				{
 					orderList.add(orderDetails);
 				}
@@ -849,6 +850,39 @@ public class OrderBizLogic extends DefaultBizLogic
 			}
 		}
 		return (List)siteCollWithDistriPri;
+	} 
+	
+	/**
+	 * @param user
+	 * @param privilegeCache
+	 * @param orderItemCollection
+	 * @return
+	 * @throws DAOException
+	 */
+	public boolean checkDistributionPrivilegeOnCP(User user,PrivilegeCache privilegeCache,Collection orderItemCollection) throws DAOException 
+	{
+	
+		boolean hasDistributionPrivilege = false; 
+		Iterator orderItemColItr = orderItemCollection.iterator();
+		if(orderItemColItr.hasNext())	
+		{	
+				OrderItem orderItem = (OrderItem)orderItemColItr.next();
+				if(orderItem instanceof PathologicalCaseOrderItem)
+				{
+					PathologicalCaseOrderItem pathologicalCaseOrderItem = (PathologicalCaseOrderItem)orderItem;
+					Long cpId = pathologicalCaseOrderItem.getSpecimenCollectionGroup().getCollectionProtocolRegistration()
+					.getCollectionProtocol().getId();
+					String objectId = Constants.COLLECTION_PROTOCOL_CLASS_NAME+"_"+cpId;
+					boolean isAuthorized = privilegeCache.hasPrivilege(objectId, Variables.privilegeDetailsMap.get(Constants.DISTRIBUTE_SPECIMENS));
+					if(isAuthorized)
+					{
+						hasDistributionPrivilege = true;
+					}
+				}
+		}	
+					
+		
+		return hasDistributionPrivilege;
 	} 
 	
 		

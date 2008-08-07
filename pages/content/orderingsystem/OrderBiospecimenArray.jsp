@@ -72,33 +72,62 @@ function showTissueSlideFromBlock(object,element)
 
 function checkAl(element)
 {
-	var len=<%=specimenArray.size()%>;
-	if(document.getElementById("checked").checked==false)
+	var isValidTodistribute = true;
+	
+	for(var i=0;i<document.forms[0].selectedItems.length;i++)
 	{
-		if(len=="1")
-			document.OrderBiospecimenArray.selectedItems.checked=false;
-		else
-		{
-			for(var i=0;i<document.forms[0].selectedItems.length;i++)
+			 var distributionSiteId = "value(OrderSpecimenBean:"+i+"_distributionSite)";
+			 var distributionSiteValue =  document.getElementById(distributionSiteId).value;
+			
+			for(var j=0;j<document.forms[0].selectedItems.length;j++)
 			{
-				document.OrderBiospecimenArray.selectedItems[i].checked=false;
+				 var distributionSiteIdInner = "value(OrderSpecimenBean:"+j+"_distributionSite)";
+				 var distributionSiteValueInner =  document.getElementById(distributionSiteIdInner).value;
+				 if(distributionSiteValue != distributionSiteValueInner)
+				 {
+					isValidTodistribute = false;
+					showErrorMessage("Specimen Array from multiple Site Exits : Can distribute specimen Array from only one site")
+					break;
+				}
 			}
-		}
-		document.OrderBiospecimenArray.orderButton.disabled=true;
+			if(isValidTodistribute == false)
+			{
+				break;
+			}
 	}
-	else
+	
+
+	if(isValidTodistribute == true)
 	{
-		if(len=="1")
-			document.OrderBiospecimenArray.selectedItems.checked=true;
+		enableCheckBox();
+		var len=<%=specimenArray.size()%>;
+		if(document.getElementById("checked").checked==false)
+		{
+			if(len=="1")
+				document.OrderBiospecimenArray.selectedItems.checked=false;
+			else
+			{
+				for(var i=0;i<document.forms[0].selectedItems.length;i++)
+				{
+					document.OrderBiospecimenArray.selectedItems[i].checked=false;
+				}
+			}
+			document.OrderBiospecimenArray.orderButton.disabled=true;
+		}
 		else
 		{
-			for(var i=0;i<len;i++)
-			{
+			if(len=="1")
 				document.OrderBiospecimenArray.selectedItems.checked=true;
-				document.OrderBiospecimenArray.selectedItems[i].checked=true;
+			else
+			{
+				for(var i=0;i<len;i++)
+				{
+					document.OrderBiospecimenArray.selectedItems.checked=true;
+					document.OrderBiospecimenArray.selectedItems[i].checked=true;
+				}
 			}
+			document.OrderBiospecimenArray.orderButton.disabled=false;
 		}
-		document.OrderBiospecimenArray.orderButton.disabled=false;
 	}
 }
 
@@ -198,8 +227,11 @@ function orderToList()
 	}
 }
 //for enabling and disabling the AddToOrderList button
-function onCheck()
+function onCheck(element)
 {
+	
+	var siteId = "value(OrderSpecimenBean:"+element.value+"_distributionSite)";
+	var siteName =  document.getElementById(siteId).value;
 	var cnt=0;
 	var len=<%=specimenArray.size()%>;
 	if(len=="1")
@@ -211,16 +243,42 @@ function onCheck()
 	{
 		for(var i=0;i<document.OrderBiospecimenArray.selectedItems.length;i++)
 		{
-			if(document.OrderBiospecimenArray.selectedItems[i].checked==true)
+
+			var checkBoxId = "checkBox_"+i;
+			
+			var distributionSiteId = "value(OrderSpecimenBean:"+i+"_distributionSite)";
+			var distributionSiteValue =  document.getElementById(distributionSiteId).value;
+			
+			if(distributionSiteValue != siteName)
+				document.getElementById(checkBoxId).disabled=true;	
+
+			if(document.OrderBiospecimenArray.selectedItems[i].checked==true && document.getElementById(checkBoxId).disabled==false)
 			{
 				cnt++;
 			}
 		}
 	}
+	
 	if(cnt>0)
 		document.OrderBiospecimenArray.orderButton.disabled=false;
 	else
+	{
 		document.OrderBiospecimenArray.orderButton.disabled=true;
+		enableCheckBox();
+	}
+}
+
+function enableCheckBox()
+{
+	for(var i=0;i<document.OrderBiospecimenArray.selectedItems.length;i++)
+	{
+			var checkBoxId = "checkBox_"+i;
+			document.getElementById(checkBoxId).disabled=false;	
+			if(document.OrderBiospecimenArray.selectedItems[i].checked==true)
+			{
+				document.OrderBiospecimenArray.orderButton.disabled=false;
+			}
+	}
 }
 
 </script>
@@ -372,6 +430,7 @@ String onClassChangeFunctionName = "onTypeChange(this)";%>
 							String specimenClass="value(OrderSpecimenBean:"+i+"_specimenClass)";
 							String specimenType="value(OrderSpecimenBean:"+i+"_specimenType)";
 							String distributionSite="value(OrderSpecimenBean:"+i+"_distributionSite)";
+							String checkBoxId = "checkBox_"+i;
 							String distributionSiteName="N/A";
 							if( obj.getLocatedAtPosition()!=null && obj.getLocatedAtPosition().getParentContainer()!=null)
 							{	
@@ -397,7 +456,7 @@ String onClassChangeFunctionName = "onTypeChange(this)";%>
 									<tr class="dataRowLight" width="100%">
 			
 										<td class="dataCellText" width="5%">
-											<html:multibox property="selectedItems" value="<%=cnt%>" onclick="onCheck()"/>
+											<html:multibox property="selectedItems"  styleId="<%=checkBoxId%>" value="<%=cnt%>" onclick="onCheck(this)"/>
 										</td> <!--for chk box -->
 										<td class="dataCellText" width="30%"> 
 											<%=obj.getName()%>
@@ -410,7 +469,7 @@ String onClassChangeFunctionName = "onTypeChange(this)";%>
 
 										<td class="dataCellText" width="30%"> 
 											<%=distributionSiteName%>
-											<html:hidden property="<%=distributionSite%>" value="<%=distributionSiteName%>"/>
+											<html:hidden property="<%=distributionSite%>"  styleId="<%=distributionSite%>"   value="<%=distributionSiteName%>"/>
 										</td>
 	
 										<td class="dataCellText" width="25%" >

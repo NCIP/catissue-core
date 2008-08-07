@@ -338,6 +338,8 @@ public class OrderSpecimenForm extends AbstractActionForm
 					String disSiteKey = "OrderSpecimenBean:" + cnt + "_distributionSite";
 					String availQuantKey = "OrderSpecimenBean:" + cnt + "_availableQuantity";
 					String specimenName =(String) values.get("OrderSpecimenBean:" + cnt + "_specimenName");
+					String collectionStatuskey =(String) values.get("OrderSpecimenBean:" + cnt + "_collectionStatus");
+					String isAvailablekey =(String) values.get("OrderSpecimenBean:" + cnt + "_isAvailable");
 					if (dataMap!=null && dataMap.containsKey(addToArray))
 					{
 						List orderItems = (List) dataMap.get(addToArray);
@@ -368,7 +370,28 @@ public class OrderSpecimenForm extends AbstractActionForm
 						break;
 					}
 					
+					if(!Constants.COLLECTION_STATUS_COLLECTED.equals(collectionStatuskey))
+					{
+						errors.add("values", new ActionError("errors.collectionStatus", specimenName));
+						values.clear();
+						break;
+					}
 					
+					if((isAvailablekey) == null || (isAvailablekey).equals(""))
+					{
+						errors.add("values", new ActionError("errors.isAvailable", specimenName));
+						values.clear();
+						break;
+					}else
+					{
+						Boolean isAvailable = new Boolean(isAvailablekey.toString());
+						if(!isAvailable)
+						{
+							errors.add("values", new ActionError("errors.isAvailable", specimenName));
+							values.clear();
+							break;
+						}
+					}
 					
 					if((values.get(availQuantKey)) == null || (values.get(availQuantKey)).equals(""))
 					{

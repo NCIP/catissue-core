@@ -98,6 +98,18 @@ public class OrderSpecimenBean implements Serializable
 	 */
 	private String distributionSite;
 	
+	/**
+	 * This indicates biospecimens collection status
+	 * 
+	 */
+	private String collectionStatus;
+	
+	/**
+	 * This checks the availablity of specimen
+	 * 
+	 */
+	private String isAvailable;
+	
 	
 	/**
 	 * @return isDerived-whether specimen is existing or derived
@@ -346,6 +358,22 @@ public class OrderSpecimenBean implements Serializable
 
 	public void setDistributionSite(String distributionSite) {
 		this.distributionSite = distributionSite;
+	}
+
+	public String getCollectionStatus() {
+		return collectionStatus;
+	}
+
+	public void setCollectionStatus(String collectionStatus) {
+		this.collectionStatus = collectionStatus;
+	}
+
+	public String getIsAvailable() {
+		return isAvailable;
+	}
+
+	public void setIsAvailable(String isAvailable) {
+		this.isAvailable = isAvailable;
 	}
 
 	
