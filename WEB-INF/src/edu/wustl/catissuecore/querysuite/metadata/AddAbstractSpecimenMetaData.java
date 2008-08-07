@@ -28,7 +28,7 @@ public class AddAbstractSpecimenMetaData
 		
 		stmt = connection.createStatement();
 		AddEntity addEntity = new AddEntity(connection);
-		addEntity.addEntity(entityList, "CATISSUE_ABSTRACT_SPECIMEN", "NULL", 3);
+		addEntity.addEntity(entityList, "CATISSUE_ABSTRACT_SPECIMEN", "NULL", 3,1);
 		AddAttribute addAttribute = new AddAttribute(connection,entityNameAttributeNameMap,attributeColumnNameMap,attributeDatatypeMap,attributePrimarkeyMap,entityList);
 		addAttribute.addAttribute();
 		

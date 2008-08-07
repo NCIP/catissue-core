@@ -24,7 +24,7 @@ public class AddEntity
 		connection.setAutoCommit(true);
 	}
 	
-	public void addEntity(List<String> entityList,String tableName,String parentEntity,int inheritanceStrategy) throws SQLException, IOException
+	public void addEntity(List<String> entityList,String tableName,String parentEntity,int inheritanceStrategy,int isAbstract) throws SQLException, IOException
 	{
 		Statement stmt = connection.createStatement();
 		for(String entityName : entityList)
@@ -59,14 +59,14 @@ public class AddEntity
 			if(parentEntity.equals("NULL"))
 			{
 				sql = "INSERT INTO dyextn_entity values("
-					+ nextIdOfAbstractMetadata + ",3,0,NULL,"+inheritanceStrategy+",NULL,NULL,1)";
+					+ nextIdOfAbstractMetadata + ",3,"+isAbstract+",NULL,"+inheritanceStrategy+",NULL,NULL,1)";
 					UpdateMetadataUtil.executeInsertSQL(sql, connection.createStatement());
 			}
 			else
 			{
 				int parEId = UpdateMetadataUtil.getEntityIdByName(parentEntity, connection.createStatement());
 				sql = "INSERT INTO dyextn_entity values("
-				+ nextIdOfAbstractMetadata + ",3,0,"+parEId+","+inheritanceStrategy+",NULL,NULL,1)";
+				+ nextIdOfAbstractMetadata + ",3,"+isAbstract+","+parEId+","+inheritanceStrategy+",NULL,NULL,1)";
 				UpdateMetadataUtil.executeInsertSQL(sql, connection.createStatement());
 			}
 		

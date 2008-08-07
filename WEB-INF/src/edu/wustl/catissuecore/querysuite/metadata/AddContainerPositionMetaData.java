@@ -27,7 +27,7 @@ public class AddContainerPositionMetaData
 		populateAttributePrimaryKeyMap();
 		stmt = connection.createStatement();
 		AddEntity addEntity = new AddEntity(connection);
-		addEntity.addEntity(entityList, "CATISSUE_CONTAINER_POSITION", "edu.wustl.catissuecore.domain.AbstractPosition", 3);
+		addEntity.addEntity(entityList, "CATISSUE_CONTAINER_POSITION", "edu.wustl.catissuecore.domain.AbstractPosition", 3,0);
 		
 		AddAttribute addAttribute = new AddAttribute(connection,entityNameAttributeNameMap,attributeColumnNameMap,attributeDatatypeMap,attributePrimarkeyMap,entityList);
 		addAttribute.addAttribute();

@@ -28,7 +28,7 @@ public class AddAbstractPositionMetadata
 		
 		stmt = connection.createStatement();
 		AddEntity addEntity = new AddEntity(connection);
-		addEntity.addEntity(entityList, "CATISSUE_ABSTRACT_POSITION", "NULL", 3);
+		addEntity.addEntity(entityList, "CATISSUE_ABSTRACT_POSITION", "NULL", 3,0);
 		AddAttribute addAttribute = new AddAttribute(connection,entityNameAttributeNameMap,attributeColumnNameMap,attributeDatatypeMap,attributePrimarkeyMap,entityList);
 		addAttribute.addAttribute();
 	}		
