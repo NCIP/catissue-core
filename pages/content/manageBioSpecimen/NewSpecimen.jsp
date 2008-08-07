@@ -337,28 +337,15 @@
 			// for cp child submit
 			
 				var cpChildChkFlag = false;
-				if(document.getElementById("createCpChildCheckBox").checked == true)
+				if(operation == "edit" && document.getElementById("createCpChildCheckBox").checked == true)
 				{
 				   cpChildChkFlag = true;
 				}
 
 				if(cpChildChkFlag)
 				{
-					if(operation == "add")
-					{
 						<%
-						String cpChildSubmitAction = "NewSpecimenAdd.do";
-						if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
-						{
-						  	actionToCall = Constants.CP_QUERY_SPECIMEN_ADD_ACTION;
-						}%>
-						setSubmitted("ForwardTo","<%=cpChildSubmitAction%>","cpChildSubmit");
-						confirmDisable("<%=cpChildSubmitAction%>","document.forms[0].activityStatus");
-					}
-					else
-					{
-						<%
-						cpChildSubmitAction = "NewSpecimenEdit.do";
+						String cpChildSubmitAction = "NewSpecimenEdit.do";
 						if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
 						{
 							cpChildSubmitAction = Constants.CP_QUERY_SPECIMEN_EDIT_ACTION;
@@ -366,7 +353,6 @@
 						}%>
 						setSubmitted("ForwardTo","<%=cpChildSubmitAction%>","cpChildSubmit");
 						confirmDisable("<%=cpChildSubmitAction%>","document.forms[0].activityStatus");
-					}
 				}
 				else
 				{
