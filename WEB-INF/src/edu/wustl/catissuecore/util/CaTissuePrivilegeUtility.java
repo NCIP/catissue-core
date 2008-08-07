@@ -86,7 +86,7 @@ public class CaTissuePrivilegeUtility
 					bean.setUser(user);
 					bean.setSiteList(new ArrayList<Site>(cp.getSiteCollection()));
 					NameValueBean nmv = new NameValueBean();
-					nmv.setName("CUSTOM_ROLE");
+					nmv.setName("Custom role");
 					nmv.setValue("-1");
 					bean.setRole(nmv);
 					bean.setPrivileges(entry.getValue());
@@ -152,7 +152,7 @@ public class CaTissuePrivilegeUtility
 					bean.setUser(user);
 	
 					NameValueBean nmv = new NameValueBean();
-					nmv.setName("CUSTOM_ROLE");
+					nmv.setName("Custom role");
 					nmv.setValue("-1");
 					bean.setRole(nmv);
 					bean.setPrivileges(entry.getValue());
