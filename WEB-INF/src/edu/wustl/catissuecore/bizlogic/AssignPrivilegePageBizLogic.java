@@ -921,8 +921,11 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 			else
 			{
 				// for user
-				String cpName = bean.getCollectionProtocol().getShortTitle();
-				array[0]=cpName;
+				if(bean.getCollectionProtocol() != null)
+				{
+					String cpName = bean.getCollectionProtocol().getShortTitle();
+					array[0]=cpName;
+				}
 			}
 			
 			
