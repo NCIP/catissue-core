@@ -1442,5 +1442,40 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		{
 			return false;
 		}
-	}		
+	}
+	
+	
+	public Collection<Site> getRelatedSites(Long cpId) 
+	{
+		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+		CollectionProtocol cp = null;
+		
+		try 
+		{
+			dao.openSession(null);
+			cp = (CollectionProtocol) dao.retrieve(CollectionProtocol.class.getName(), cpId);		
+		} 
+		catch (DAOException e) 
+		{
+			Logger.out.debug(e.getMessage(), e);
+		}
+		finally
+		{
+			try
+			{
+				dao.closeSession();
+			}
+			catch (DAOException e)
+			{
+				Logger.out.error(e.getMessage(), e);
+			}
+		}
+		
+		if(cp == null)
+		{
+			return null;
+		}
+		
+		return cp.getSiteCollection();
+	}
 }

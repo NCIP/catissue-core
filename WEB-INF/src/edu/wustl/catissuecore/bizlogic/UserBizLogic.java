@@ -23,6 +23,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
+import org.hibernate.Session;
+
 import edu.common.dynamicextensions.util.global.Variables;
 import edu.wustl.catissuecore.domain.CancerResearchGroup;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
@@ -58,6 +60,7 @@ import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.dbManager.DBUtil;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.PasswordManager;
 import edu.wustl.common.util.global.Validator;
@@ -559,7 +562,7 @@ public class UserBizLogic extends DefaultBizLogic
 				}
 				else
 				{
-				privilegeUtility.getUserProvisioningManager().createProtectionElement(pe);
+					privilegeUtility.getUserProvisioningManager().createProtectionElement(pe);
 				}
 				peList.add(pe);
 			}
@@ -1658,15 +1661,15 @@ public class UserBizLogic extends DefaultBizLogic
 
 	public Set<Long> getRelatedSiteIds(Long userId) 
 	{
-		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
-
+		Session session = null;
+	
 		HashSet<Long> idSet = null;
-
-		try
+		
+		try 
 		{
-			dao.openSession(null);
+			session = DBUtil.getCleanSession();
 
-			User user = (User) dao.retrieve(User.class.getName(), userId);
+			User user = (User) session.load(User.class.getName(), userId);
 			if (!user.getRoleId().equalsIgnoreCase(Constants.ADMIN_USER))
 			{
 				Collection<Site> siteCollection = user.getSiteCollection();
@@ -1678,20 +1681,13 @@ public class UserBizLogic extends DefaultBizLogic
 				}
 			}
 		}
-		catch (DAOException e)
+		catch (BizLogicException e1) 
 		{
-			Logger.out.error(e.getMessage(), e);
+			Logger.out.debug(e1.getMessage(), e1);
 		}
 		finally
 		{
-			try
-			{
-				dao.closeSession();
-			}
-			catch (DAOException e)
-			{
-					Logger.out.error(e.getMessage(), e);
-			}
+			session.close();
 		}
 		
 		return idSet;

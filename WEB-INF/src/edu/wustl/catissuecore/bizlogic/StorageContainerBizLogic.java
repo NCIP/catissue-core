@@ -3453,7 +3453,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 					try {
 						AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
 						dao.openSession(null);
-						hasAccess = validateContainerAccess(dao,sc, sessionData);
+						hasAccess = validateContainerAccess(dao,sc, sessionData,cpId);
 						dao.closeSession();
 					} catch (SMException sme) {
 						sme.printStackTrace();
@@ -3490,7 +3490,40 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 
 	}
 
-	/**
+	private boolean validateContainerAccess(AbstractDAO dao, StorageContainer sc, SessionDataBean sessionData, long cpId) throws SMException
+    {
+        boolean isValidContainer = validateContainerAccess(dao,sc,sessionData);
+        Collection<Site> siteCollection = null;
+        Site site = null;
+        if (isValidContainer)
+        {
+        	try 
+        	{
+				site = getSite(dao, sc.getId());
+			} 
+        	catch (DAOException e) 
+        	{
+				Logger.out.debug(e.getMessage(), e);
+			}
+        	
+            siteCollection = new CollectionProtocolBizLogic().getRelatedSites(cpId);
+            
+            	if (siteCollection != null)  
+            	{
+            		for(Site site1 : siteCollection)
+            		{
+            			if(site1.getId() == site.getId())
+            			{
+            				return true;
+            			}
+            		}
+            	}
+            
+        }
+        return false;
+    }
+
+    /**
 	 * This function gets the list of container in order of there relvance.
 	 * 
 	 * @param cpId
@@ -4136,10 +4169,32 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 	public String getObjectId(AbstractDAO dao, Object domainObject) 
 	{
 		if (domainObject instanceof StorageContainer)
-			
 		{
 			StorageContainer storageContainer = (StorageContainer) domainObject;
-			Site site = storageContainer.getSite();
+            Site site = null;
+            if (storageContainer.getLocatedAtPosition() != null
+                    && storageContainer.getLocatedAtPosition().getParentContainer() != null)
+            {
+                try
+                {
+                    Object object = dao.retrieve(StorageContainer.class.getName(),
+                            storageContainer.getLocatedAtPosition().getParentContainer()
+                                    .getId());
+                    if (object != null)
+                    {
+                        StorageContainer parentContainer = (StorageContainer) object;
+                        site = parentContainer.getSite();
+                    }
+                }
+                catch (DAOException e)
+                {
+                   return null;
+                }
+            }
+            else
+            {
+            site = storageContainer.getSite();
+            }
 			if (site != null)
 			{
 				StringBuffer sb = new StringBuffer();
@@ -4147,7 +4202,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 				return sb.toString(); 
 			}
 		}
-		return Constants.ADMIN_PROTECTION_ELEMENT;
+		return null;
 	}
 	
 	/**
