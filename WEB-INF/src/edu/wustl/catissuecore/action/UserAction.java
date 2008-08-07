@@ -116,7 +116,11 @@ public class UserAction extends SecureAction
 		}
         if (operation.equals(Constants.EDIT))
         {
-        	setUserPrivileges(request.getSession(),userForm.getId());
+        	if (!pageOf.equals(Constants.PAGEOF_APPROVE_USER))
+        	{	
+        		setUserPrivileges(request.getSession(),userForm.getId());
+        	}
+        	
 			if (pageOf.equals(Constants.PAGEOF_APPROVE_USER))
 			{
 				formName = Constants.APPROVE_USER_EDIT_ACTION;
