@@ -40,6 +40,7 @@ create table DYEXTN_CATEGORY_ATTRIBUTE (
    CATEGORY_ENTIY_ID bigint,
    CATEGORY_ENTITY_ID bigint,
    IS_VISIBLE bigint,
+   IS_RELATTRIBUTE boolean,
    primary key (IDENTIFIER)
 );
 create table DYEXTN_CATEGORY_ENTITY (
@@ -51,7 +52,7 @@ create table DYEXTN_CATEGORY_ENTITY (
    CATEGORY_ASSOCIATION_ID bigint,
    PARENT_CATEGORY_ENTITY_ID bigint,
    REL_ATTR_CAT_ENTITY_ID bigint,
-   IS_CREATETABLE tinyint(1),
+   IS_CREATETABLE boolean,  
    primary key (IDENTIFIER)
 );
 
