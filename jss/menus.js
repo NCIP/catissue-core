@@ -369,6 +369,23 @@ Ext.onReady(function(){
 							tooltip:'Order View',
 		                    href:'RequestListView.do?pageNum=1'
 
+            },
+            {
+                text: 'Shipping And Tracking',
+				tooltip:'Shipping And Tracking',
+				href:'BaseShipment.do',
+                menu: {        // <-- submenu by nested config object
+                    items: [
+                        // stick any markup in a menu
+                       {
+                            text: 'Create Shipment',
+                            href:'BaseShipment.do'
+                        }, {
+                            text: 'Create Shipment Request',
+                             href:'ShipmentRequestAction.do'
+                        }
+                    ]
+                }
             }
         ]
     });
