@@ -109,7 +109,7 @@ public class StorageContainerAction extends SecureAction
 		setStorageType(request, storageContainerForm,session);
 		
 		
-		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
+		StorageContainerBizLogic bizLogic  = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 		//    	 ---- chetan 15-06-06 ----
 		if (isSiteChanged != null && isSiteChanged.equals("true"))
 		{
@@ -219,6 +219,12 @@ public class StorageContainerAction extends SecureAction
 			{
 				Long storageTypeId = new Long(request.getParameter("storageTypeId"));
 				storageContainerForm.setTypeId(storageTypeId.longValue());
+			}
+			else if(session.getAttribute("storageTypeIdentifier") != null)
+			{
+				Long storageTypeId = (Long)session.getAttribute("storageTypeIdentifier");
+				storageContainerForm.setTypeId(storageTypeId.longValue());
+				session.removeAttribute("storageTypeIdentifier");
 			}
 		}
 		//*************End Bug:1938 ForwardTo implementation *************
@@ -568,11 +574,13 @@ public class StorageContainerAction extends SecureAction
 		storageContainerForm.setTypeName(storageContainerBean.getTypeName());
 		storageContainerForm.setId(storageContainerBean.getID());
 		storageContainerForm.setParentContainerId(storageContainerBean.getParentContainerId());
+		storageContainerForm.setPos1(storageContainerBean.getPos1());
+		storageContainerForm.setPos2(storageContainerBean.getPos2());
 		storageContainerForm.setPositionDimensionOne(storageContainerBean.getPositionDimensionOne());
 		storageContainerForm.setPositionDimensionTwo(storageContainerBean.getPositionDimensionTwo());
 		storageContainerForm.setContainerId(storageContainerBean.getContainerId());
 		storageContainerForm.setContainerName(storageContainerBean.getContainerName());
-		storageContainerForm.setCheckedButton(storageContainerBean.getCheckedButton());
+		//storageContainerForm.setCheckedButton(storageContainerBean.getCheckedButton());
 		storageContainerForm.setHoldsSpecimenArrTypeIds(storageContainerBean.getHoldsSpecimenArrTypeIds());
 		storageContainerForm.setHoldsSpecimenClassTypes(storageContainerBean.getHoldsSpecimenClassTypes());
 		storageContainerForm.setHoldsStorageTypeIds(storageContainerBean.getHoldsStorageTypeIds());
@@ -583,6 +591,7 @@ public class StorageContainerAction extends SecureAction
 		storageContainerForm.setSiteId(storageContainerBean.getSiteId());
 		storageContainerForm.setSiteName(storageContainerBean.getSiteName());
 		storageContainerForm.setSiteForParentContainer(storageContainerBean.getSiteForParentContainer());
+		storageContainerForm.setParentContainerSelected(storageContainerBean.getParentContainerSelected());
 	}	
 	
 }

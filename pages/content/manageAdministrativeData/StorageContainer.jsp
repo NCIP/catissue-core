@@ -548,6 +548,13 @@ function setParentContainerType()
 		}
 	}
 }
+function addNewTypeAction(action)
+{
+	var action = action;
+	document.forms[0].target="_top";
+	document.forms[0].action = action;
+	document.forms[0].submit();
+}
 	</script>
 </head>
 
@@ -616,7 +623,7 @@ function setParentContainerType()
 							<%if(operation.equals(Constants.ADD))
 							{
 							%>
-								<html:link href="#" styleId="newStorageType" styleClass="view" onclick="addNewAction('StorageContainerAddNew.do?addNewForwardTo=storageType&forwardTo=storageContainer&addNewFor=storageType')">
+								<html:link href="#" styleId="newStorageType" styleClass="view"   onclick="addNewTypeAction('StorageContainerAddNew.do?addNewForwardTo=storageType&forwardTo=storageContainer&addNewFor=storageType')">
 									<bean:message key="buttons.addNew" />
 								</html:link>
 							<% } %>										

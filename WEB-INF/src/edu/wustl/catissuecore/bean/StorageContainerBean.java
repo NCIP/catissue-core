@@ -108,6 +108,10 @@ public class StorageContainerBean implements Serializable
 	 * Storage Id selected from map
 	 */
 	private String containerId;
+	/**
+	 * Storage contianer parent type
+	 */
+	private String parentContainerSelected;
 
 	private long id;
 	/**
@@ -178,6 +182,17 @@ public class StorageContainerBean implements Serializable
 	public void setPos2(String pos2)
 	{
 		this.pos2 = pos2;
+	}
+	/**
+	 * For parent container type.
+	 */
+	public String getParentContainerSelected()
+	{
+		return parentContainerSelected;
+	}
+	public void setParentContainerSelected(String parentContainerSelected)
+	{
+		this.parentContainerSelected=parentContainerSelected;
 	}
 	/**
 	 * @return Returns the selectedContainerName.

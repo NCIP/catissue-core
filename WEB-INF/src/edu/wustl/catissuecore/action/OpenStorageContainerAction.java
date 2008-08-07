@@ -23,7 +23,8 @@ public class OpenStorageContainerAction extends BaseAction{
 		StorageContainerForm storageContainerForm = (StorageContainerForm)form;
 		StorageContainerBean storageContainerBean=null;
 		String target=Constants.SUCCESS;
-		String pageOf=request.getParameter(Constants.PAGE_OF);		
+		String pageOf=request.getParameter(Constants.PAGE_OF);
+		
 		if("viewMapTab".equals(pageOf))
 		{
 			 target=pageOf;
@@ -55,6 +56,8 @@ public class OpenStorageContainerAction extends BaseAction{
 			storageContainerBean.setTypeName(storageContainerForm.getTypeName());
 			storageContainerBean.setId(storageContainerForm.getId());
 			storageContainerBean.setParentContainerId(storageContainerForm.getParentContainerId());
+			storageContainerBean.setPos1(storageContainerForm.getPos1());
+			storageContainerBean.setPos2(storageContainerForm.getPos2());
 			storageContainerBean.setPositionDimensionOne(storageContainerForm.getPositionDimensionOne());
 			storageContainerBean.setPositionDimensionTwo(storageContainerForm.getPositionDimensionTwo());
 			storageContainerBean.setOneDimensionCapacity(storageContainerForm.getOneDimensionCapacity());
@@ -64,9 +67,12 @@ public class OpenStorageContainerAction extends BaseAction{
 			storageContainerBean.setSiteId(storageContainerForm.getSiteId());
 			storageContainerBean.setSiteName(storageContainerForm.getSiteName());
 			storageContainerBean.setSiteForParentContainer(storageContainerForm.getSiteForParentContainer());
+			storageContainerBean.setParentContainerSelected(storageContainerForm.getParentContainerSelected());
 		}
 		if("pageOfStorageType".equals(pageOf))
 		{
+			  Long storageTypeIdentifier=(Long)request.getAttribute(Constants.SYSTEM_IDENTIFIER);
+			  session.setAttribute("storageTypeIdentifier", storageTypeIdentifier);
 			  session.setAttribute("isPageFromStorageType",Constants.YES);
 		      session.setAttribute("forwardToHashMap", (HashMap) request.getAttribute("forwardToHashMap"));
 		}
