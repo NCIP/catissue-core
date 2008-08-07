@@ -10,7 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
- 
+
 import javax.servlet.http.HttpSession;
 
 import edu.common.dynamicextensions.domaininterface.AssociationInterface;
@@ -21,19 +21,14 @@ import edu.common.dynamicextensions.entitymanager.EntityManager;
 import edu.common.dynamicextensions.entitymanager.EntityManagerInterface;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.wustl.cab2b.server.cache.EntityCache;
+import edu.wustl.catissuecore.bizlogic.querysuite.QueryCsmBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.beans.QueryResultObjectDataBean;
-import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.dao.DAOFactory;
-import edu.wustl.common.dao.JDBCDAO;
 import edu.wustl.common.querysuite.queryobject.IQuery;
 import edu.wustl.common.querysuite.queryobject.IQueryEntity;
 import edu.wustl.common.querysuite.queryobject.impl.OutputTreeDataNode;
 import edu.wustl.common.querysuite.queryobject.impl.metadata.QueryOutputTreeAttributeMetadata;
-import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
-import edu.wustl.common.util.logger.Logger;
 
 
 /**
@@ -137,7 +132,7 @@ public abstract class QueryCSMUtil
 	}
 
 	/**
-	 * This method will return map of a entity as value and list of all the main entities of this perticuler entity as value. 
+	 * This method will return map of a entity as value and list of all the main entities of this particular entity as value. 
 	 * @param uniqueIdNodesMap Map that will all nodes present in query as node id as key and node as value. 
 	 * @return mainEntityMap Map of all main entities present in query.
 	 */
@@ -152,11 +147,56 @@ public abstract class QueryCSMUtil
 			EntityInterface dynamicExtensionsEntity = queryNode.getOutputEntity()
 					.getDynamicExtensionsEntity();
 			mainEntityList = getAllMainEntities(dynamicExtensionsEntity, mainEntityList);
+			EntityInterface tempDynamicExtensionsEntity = dynamicExtensionsEntity;
+			List<EntityInterface> tempMainEntityList;
+	
+			while(true)
+			{
+				tempMainEntityList = new ArrayList<EntityInterface>();
+				EntityInterface parentEntity = tempDynamicExtensionsEntity.getParentEntity();
+				if(parentEntity == null)
+					break;
+				else
+				{
+					tempMainEntityList = getAllMainEntities(parentEntity, tempMainEntityList);
+					for(EntityInterface tempMainEntity : tempMainEntityList)
+					{
+						if(!(tempMainEntity.equals(parentEntity)))
+						{
+							mainEntityList.add(tempMainEntity);
+						}
+					}
+					tempDynamicExtensionsEntity = parentEntity;
+				}
+			}
+			if(mainEntityList.size() != 1)
+			{
+				List<EntityInterface> temperoryList = mainEntityList;
+				mainEntityList = new ArrayList<EntityInterface>();
+				for(EntityInterface temperoryEntity : temperoryList)
+				{
+					if(!(temperoryEntity.equals(dynamicExtensionsEntity)))
+						mainEntityList.add(temperoryEntity);
+				}
+			}
+			
 			if(!(mainEntityList!=null && mainEntityList.size()==1 &&mainEntityList.get(0).equals(dynamicExtensionsEntity)))
+			{
+				tempMainEntityList = new ArrayList<EntityInterface>();
+				for(EntityInterface mainEntity : mainEntityList)
+				{
+					if(mainEntity.isAbstract())
+					{
+						tempMainEntityList.addAll(QueryCsmBizLogic.getMainEntityList(mainEntity, dynamicExtensionsEntity));
+					}
+				}
+				mainEntityList.addAll(tempMainEntityList);
 			    mainEntityMap.put(dynamicExtensionsEntity, mainEntityList);
+			}
 		}
 		return mainEntityMap;
 	}
+
 	/**This is a recursive method that will create list of all main entities (Entities for which entity passed to it is having containment association ) 
 	 * @param entity
 	 * @param mainEntityList
@@ -181,7 +221,6 @@ public abstract class QueryCSMUtil
 		{
 			deExeption.printStackTrace();
 		}
-
 		return mainEntityList;
 	}
 	
@@ -358,7 +397,7 @@ public abstract class QueryCSMUtil
 	public static List<AssociationInterface> getIncomingContainmentAssociations(EntityInterface entity) throws DynamicExtensionsSystemException
 	{   
 		EntityManagerInterface entityManager = EntityManager.getInstance();
-		List<Long> allIds = (List<Long>)entityManager.getIncomingAssociationIds(entity);
+		ArrayList<Long> allIds = (ArrayList<Long>)entityManager.getIncomingAssociationIds(entity);
 		List<AssociationInterface> list = new ArrayList<AssociationInterface>();
 		EntityCache cache = EntityCache.getInstance();
 		for (Long id: allIds)
@@ -508,5 +547,4 @@ public abstract class QueryCSMUtil
 		}
 		return null;
 	}
-	
 } 
