@@ -1,20 +1,45 @@
 
+/**Confirm dialog box for disable functionality*/
+function confirmDialogForDisable()
+{
+	var go = confirm("Disabling any data will disable ALL its associated data also. Once disabled you will not be able to recover any of the data back from the system. Please refer to the user manual for more details. \n Do you really want to disable?");
+	return go;
+}
+
 /* for deleting or disabling the objects*/
 function deleteObject(action,onSubmitAction)
 {
-	document.forms[0].onSubmit.value = onSubmitAction;
-	document.forms[0].activityStatus.value = "Disabled";
-	document.forms[0].action = action;
-	document.forms[0].submit();
+	var go = confirmDialogForDisable();
+	 if (go==true)
+	 {
+		document.forms[0].onSubmit.value = onSubmitAction;
+		document.forms[0].activityStatus.value = "Disabled";
+		document.forms[0].action = action;
+		document.forms[0].submit();
+	 }
 }
 /* for deleting or disabling the SpecimenArray objects*/
 function deleteSpecimenArray(action,onSubmitAction)
-{	
-	document.forms[0].onSubmit.value = onSubmitAction;
-	document.forms[0].action = action;
-	document.forms[0].submit();
+{	var go = confirmDialogForDisable();
+	if (go==true)
+	{
+		document.forms[0].onSubmit.value = onSubmitAction;
+		document.forms[0].action = action;
+		document.forms[0].submit();
+	}	
 }
-
+/* for deleting or disabling the Storage Container objects*/
+function deleteStorageContainer(action,onSubmitAction)
+{	
+	var go = confirmDialogForDisable();
+	 if (go==true)
+	 {
+		document.forms[0].onSubmit.value = onSubmitAction;
+		document.forms[0].activityStatus.value = "Disabled";
+		document.forms[0].action = action;
+		document.forms[0].submit();
+	 }
+}
 
 
 /* section for outer block start */
@@ -45,12 +70,13 @@ function addDiv(div,adstr)
 
 
 function confirmDisable(action,formField)
-{
+{	
 	if((formField != undefined) && (formField.value == "Disabled"))
 	{
-		var go = confirm("Disabling any data will disable ALL its associated data also. Once disabled you will not be able to recover any of the data back from the system. Please refer to the user manual for more details. \n Do you really want to disable?");
+		var go = confirmDialogForDisable();
 		if (go==true)
-		{	document.forms[0].action = action;
+		{	
+			document.forms[0].action = action;
 			document.forms[0].submit();
 		}
 	}

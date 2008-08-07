@@ -577,10 +577,8 @@ function insRow(subdivtag)
 				</html:button>
 			<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
 							&nbsp;| 
-							<span class="cancellink"><html:link
-												href="#" onclick="<%=deleteAction%>" styleClass="cancellink">
-													<bean:message key="buttons.delete" />
-												</html:link></span>
+							<html:button styleClass="blue_ar_c" property="submitPage" onclick="<%=deleteAction%>" accesskey="Enter">
+						   		<bean:message key="buttons.delete" /></html:button>
 				</logic:equal>
             &nbsp;| <html:link page="/ManageAdministrativeData.do" styleClass="cancellink">
 						<bean:message key="buttons.cancel" />

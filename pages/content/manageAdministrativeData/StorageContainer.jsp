@@ -941,23 +941,28 @@ function setParentContainerType()
                      </tr>
 					<tr>                        
 					<!-- delete button added for disabling the objects :Nitesh 
-						<td colspan="3" class="buttonbg">
+						<td colspan="3" class="buttonbg"></td> -->
 						<%
-							String deleteAction="deleteObject('" + formName +"','" + Constants.ADMINISTRATIVE + "')";
+							String deleteAction="deleteStorageContainer('" + formName +"','" + Constants.ADMINISTRATIVE + "')";
 						%>
-								<html:button styleClass="blue_ar_b" property="deletePage"
-								onclick="<%=deleteAction%>">
-									<bean:message key="buttons.delete"/>
-									</html:button>
-						</td> -->
+								
+						
 						<td colspan="5" class="buttonbg">
 								<%
-						   			String action = "validate('" + formName +"',document.forms[0].activityStatus)";
+						   			String action = "validate('" + formName +"?pageOf=pageOfStorageContainer"+"',document.forms[0].activityStatus)";
 						   		%>
 						   			<html:button styleClass="blue_ar_b" property="submitPage" onclick="<%=action%>">
 						   				<bean:message key="buttons.submit"/>
-						   			</html:button>
-									&nbsp;|&nbsp; <a href="ManageAdministrativeData.do" class="cancellink">Cancel</a></td>
+						   			</html:button>&nbsp;
+						   		
+						   		   <logic:equal name="<%=Constants.OPERATION%>" value="edit">
+									|&nbsp;<html:button styleClass="blue_ar_c" property="deletePage"
+									onclick="<%=deleteAction%>">
+										<bean:message key="buttons.delete"/>&nbsp;
+									</html:button>
+					          		</logic:equal>
+						   		
+									|&nbsp; <a href="ManageAdministrativeData.do" class="cancellink" target="_top">Cancel</a></td>
 				   		</td>
 						
 					</tr>

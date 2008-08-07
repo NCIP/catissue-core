@@ -719,7 +719,7 @@ function popupWindow(nofConsentTiers)
 				String str = "withdrawAll('"+ consentTierList.size()+"')";
 				%>
 					
-						<html:button property="addButton" disabled="<%=withdrawAllDisabled%>" styleClass="blue_ar_c" onclick="<%=str%>" value="Withdraw All"/>&nbsp;
+						<html:button property="addButton" disabled="<%=withdrawAllDisabled%>" styleClass="blue_ar_c" onclick="<%=str%>" value="Withdraw All"/>&nbsp;|
 					
 				<%
 				}
@@ -728,7 +728,7 @@ function popupWindow(nofConsentTiers)
 						{
 						%>
 							<%-- action button --%>																
-							|&nbsp;
+							
 									<input type="button" name="doneConsentButton" class="blue_ar_c" value="Done" onclick="submitConsentResponses()"/>
 							
 						<% 
