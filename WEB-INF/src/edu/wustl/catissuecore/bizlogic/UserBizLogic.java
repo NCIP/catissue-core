@@ -1760,7 +1760,7 @@ public class UserBizLogic extends DefaultBizLogic
 			User user = null;
 			UserDTO userDTO = null;
 
-			if(sessionDataBean.isAdmin())
+			if(sessionDataBean != null && sessionDataBean.isAdmin())
 			{
 				return true;
 			}

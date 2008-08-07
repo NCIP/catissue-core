@@ -969,7 +969,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 		boolean isAuthorized = false;
 		String protectionElementName = null;
 		
-		if(sessionDataBean.isAdmin())
+		if(sessionDataBean != null && sessionDataBean.isAdmin())
 		{
 			return true;
 		}

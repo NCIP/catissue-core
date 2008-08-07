@@ -2276,7 +2276,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 		Logger.out.debug("validateContainerAccess..................");
 		String userName = sessionDataBean.getUserName();
 
-		if(sessionDataBean.isAdmin())
+		if(sessionDataBean != null && sessionDataBean.isAdmin())
 		{
 			return true;
 		}

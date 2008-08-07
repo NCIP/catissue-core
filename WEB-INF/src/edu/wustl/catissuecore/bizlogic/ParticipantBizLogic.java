@@ -1291,7 +1291,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 	{
 		boolean isAuthorized = false;
 		
-		if(sessionDataBean.isAdmin())
+		if(sessionDataBean != null && sessionDataBean.isAdmin())
 		{
 			return true;
 		}

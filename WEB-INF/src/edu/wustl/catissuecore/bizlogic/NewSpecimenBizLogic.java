@@ -3252,7 +3252,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		boolean isAuthorized = false;
 		String protectionElementName = null;
 		
-		if(sessionDataBean.isAdmin())
+		if(sessionDataBean != null && sessionDataBean.isAdmin())
 		{
 			return true;
 		}

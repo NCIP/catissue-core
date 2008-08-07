@@ -1411,7 +1411,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	{
 		boolean isAuthorized = false;
 		
-		if(sessionDataBean.isAdmin())
+		if(sessionDataBean != null && sessionDataBean.isAdmin())
 		{
 			return true;
 		}

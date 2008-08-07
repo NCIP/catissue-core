@@ -359,7 +359,7 @@ public class ParticipantAction extends SecureAction
 		request.setAttribute(Constants.SITELIST, siteList);
 		
 		List list = new ArrayList();
-		if (sessionDataBean.isAdmin())
+		if(sessionDataBean != null && sessionDataBean.isAdmin())
 		{
 		//Set the collection protocol title list
 		String cpSourceObjectName = CollectionProtocol.class.getName();
