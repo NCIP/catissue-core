@@ -1,6 +1,7 @@
 package edu.wustl.catissuecore.util;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,8 +14,6 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import com.sun.msv.verifier.jarv.Const;
 
 import edu.wustl.catissuecore.bizlogic.AssignPrivilegePageBizLogic;
 import edu.wustl.catissuecore.multiRepository.bean.SiteUserRolePrivilegeBean;
@@ -37,26 +36,45 @@ public class MSRUtil {
 	{
 			final AssignPrivilegePageBizLogic apBizLogic=getAssignPrivilegePageBizLogic();
 			HttpSession session=request.getSession();
-			String pageOf=request.getParameter(Constants.PAGE_OF);
-			Map<String, SiteUserRolePrivilegeBean> rowIdBeanMap = (Map<String, SiteUserRolePrivilegeBean>) session.getAttribute(Constants.ROW_ID_OBJECT_BEAN_MAP);
-			if (session.getAttribute(Constants.ROW_ID_OBJECT_BEAN_MAP) != null)
+			final String pageOf = (String) request.getParameter(Constants.PAGE_OF);
+			if(!("pageOfUserAdmin").equalsIgnoreCase(pageOf))
 			{
-				List<String[]> list;
+				Map<String, SiteUserRolePrivilegeBean> rowIdBeanMap = (Map<String, SiteUserRolePrivilegeBean>) session.getAttribute(Constants.ROW_ID_OBJECT_BEAN_MAP);
+				if (session.getAttribute(Constants.ROW_ID_OBJECT_BEAN_MAP) != null)
+				{
+					List<String[]> list;
 					list = apBizLogic.privilegeDataOnTabSwitch(rowIdBeanMap,pageOf);
+					
 					request.setAttribute(Constants.PRIVILEGE_DATA_LIST_ONLOAD, list);
+				}
+				
+				final List<NameValueBean> userList=new ArrayList<NameValueBean>();
+			//	final List<NameValueBean> userList = apBizLogic.getUserList(false);
+				final List actionList = apBizLogic.getActionList(false);
+				
+				request.setAttribute(Constants.USERLIST, userList);
+				request.setAttribute(Constants.ACTIONLIST, actionList);
+			}
+			else
+			{
+				Map<String, SiteUserRolePrivilegeBean> rowIdBeanMapForUserPage = (Map<String, SiteUserRolePrivilegeBean>) session.getAttribute("rowIdBeanMapForUserPage");
+				if (session.getAttribute("rowIdBeanMapForUserPage") != null)
+				{
+					List<String[]> list;
+					list = apBizLogic.privilegeDataOnTabSwitch(rowIdBeanMapForUserPage,pageOf);
+					request.setAttribute(Constants.PRIVILEGE_DATA_LIST_ONLOAD, list);
+				}
+				final List<NameValueBean> cpList = apBizLogic.getCPList(false);
+				final List<NameValueBean> actionList = apBizLogic.getActionListForUserPage(false);
+				
+				request.setAttribute(Constants.CPLIST, cpList);
+				request.setAttribute(Constants.ACTIONLIST, actionList);
 			}
 		
 			final List<NameValueBean> siteList = apBizLogic.getSiteList(false);
-			final List<NameValueBean> cpList = apBizLogic.getCPList(false);
-			
+			final List roleList = apBizLogic.getRoleList(pageOf);
 			request.setAttribute(Constants.SITELIST, siteList);
-			request.setAttribute(Constants.CPLIST, cpList);
-	//		final List<NameValueBean> userList = apBizLogic.getUserList(false);
-	//		request.setAttribute(Constants.USERLIST, userList);
-			final List roleList = apBizLogic.getRoleList();
 			request.setAttribute(Constants.ROLELIST, roleList);
-			final List actionList = apBizLogic.getActionList(false);
-			request.setAttribute(Constants.ACTIONLIST, actionList);
 			
 		return mapping.findForward(Constants.SUCCESS);
 	}
@@ -67,35 +85,35 @@ public class MSRUtil {
 	 * @param request
 	 * @return ActionForward
 	 */
+	/*
 	public ActionForward onFirstTimeLoadForUser(ActionMapping mapping, HttpServletRequest request) throws BizLogicException
 	{
 			final AssignPrivilegePageBizLogic apBizLogic=getAssignPrivilegePageBizLogic();
 			HttpSession session=request.getSession();
-			String pageOf=request.getParameter(Constants.PAGE_OF);
-			Map<String, SiteUserRolePrivilegeBean> rowIdBeanMapForUserPage = (Map<String, SiteUserRolePrivilegeBean>) session.getAttribute("rowIdBeanMapForUserPage");
-			if (session.getAttribute("rowIdBeanMapForUserPage") != null)
+			Map<String, SiteUserRolePrivilegeBean> rowIdBeanMap = (Map<String, SiteUserRolePrivilegeBean>) session.getAttribute(Constants.ROW_ID_OBJECT_BEAN_MAP);
+			if (session.getAttribute(Constants.ROW_ID_OBJECT_BEAN_MAP) != null)
 			{
 				List<String[]> list;
-					list = apBizLogic.privilegeDataOnTabSwitch(rowIdBeanMapForUserPage,pageOf);
+					list = apBizLogic.privilegeDataOnTabSwitch(rowIdBeanMap);
 					request.setAttribute(Constants.PRIVILEGE_DATA_LIST_ONLOAD, list);
 			}
 		
 			final List<NameValueBean> siteList = apBizLogic.getSiteList(false);
+			final List<NameValueBean> roleList = apBizLogic.getRoleList();
+		
 			final List<NameValueBean> cpList = apBizLogic.getCPList(false);
+//			final List<NameValueBean> userList = apBizLogic.getUserList(false);
 			
 			request.setAttribute(Constants.SITELIST, siteList);
 			request.setAttribute(Constants.CPLIST, cpList);
-	//		final List<NameValueBean> userList = apBizLogic.getUserList(false);
-	//		request.setAttribute(Constants.USERLIST, userList);
-			final List roleList = apBizLogic.getRoleList();
 			request.setAttribute(Constants.ROLELIST, roleList);
-			final List actionList = apBizLogic.getActionListForUser(false);
 			request.setAttribute(Constants.ACTIONLIST, actionList);
+	//		request.setAttribute(Constants.USERLIST, userList);
 			
 		return mapping.findForward(Constants.SUCCESS);
 	}
 	
-	
+*/	
 	/**
 	 * Handles Ajax requests 
 	 * @param request
@@ -131,7 +149,13 @@ public class MSRUtil {
 		{
 			final String role = (String) request.getParameter(Constants.SELECTED_ROLE_IDS);
 			final String pageOf = (String) request.getParameter(Constants.PAGE_OF);
-			final List<JSONObject> listOfAction = apBizLogic.getActionsForThisRole(role,pageOf);
+			final String siteIds = (String) request.getParameter(Constants.SELECTED_SITE_IDS);
+			final String cpIds = (String) request.getParameter("selectedCPIds");
+			
+		    final List<Long> selectedSiteIds = apBizLogic.getSiteData(siteIds);
+		    final List<Long> selectedCPIds = apBizLogic.getCPData(cpIds);
+		    
+			final List<JSONObject> listOfAction = apBizLogic.getActionsForThisRole(role,pageOf,selectedSiteIds,selectedCPIds);
 			setResponse(response, listOfAction);
 			
 		}
@@ -218,6 +242,37 @@ public class MSRUtil {
 			session.setAttribute("rowIdBeanMapForUserPage",	rowIdBeanMap);
 			setResponse(response, listForUPSummary);
 	
+		}
+		
+		else if (("getActionsForThisCPs").equals(cpOperation))
+		{
+	//		final String cpIds = (String) request.getParameter("selectedCPIds");
+	//		final String siteIds = (String) request.getParameter("selectedSiteIds");
+			final String selectedRoleId = (String) request.getParameter(Constants.SELECTED_ROLE_IDS);
+			List<JSONObject> listOfAction=new ArrayList<JSONObject>();
+			
+			
+//			if(cpIds!=null && ! ("").equalsIgnoreCase(cpIds))
+//			{
+	//			final List<Long> selectedCPIds = apBizLogic.getCPData(cpIds);
+				listOfAction = apBizLogic.getActionsForThisCPs(selectedRoleId);
+	//		}
+//			else
+	//		{
+	//			 final List<Long> selectedSiteIds = apBizLogic.getSiteData(siteIds);
+//				 listOfAction = apBizLogic.getActionsForThisSites(selectedSiteIds,selectedRoleId);
+	//		}
+			setResponse(response, listOfAction);	
+		}
+		else if (("getActionsForThisSites").equals(cpOperation))
+		{
+	//		final String siteIds = (String) request.getParameter("selectedSiteIds");
+			final String selectedRoleId = (String) request.getParameter(Constants.SELECTED_ROLE_IDS);
+			
+//		    final List<Long> selectedSiteIds = apBizLogic.getSiteData(siteIds);
+		    final List<JSONObject> listOfAction = apBizLogic.getActionsForThisSites(selectedRoleId);
+	//	    final List<JSONObject> listOfAction = apBizLogic.getActionsForThisRole(roleId, pageOf, selectedSiteIds);
+		    setResponse(response, listOfAction);
 		}
 		return null;
 	}
