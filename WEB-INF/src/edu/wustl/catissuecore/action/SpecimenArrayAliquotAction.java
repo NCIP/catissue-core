@@ -55,6 +55,9 @@ public class SpecimenArrayAliquotAction extends SecureAction
 		String pageOf = request.getParameter(Constants.PAGEOF);		
 		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 		SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
+		//Bean List for the dropdown for the storage location
+		List<NameValueBean> storagePositionListForSpecimenArrayAliquot = Utility.getStoragePositionTypeListForTransferEvent();
+		request.setAttribute("storagePositionListForSpecimenArrayAliquot", storagePositionListForSpecimenArrayAliquot);
 		//boolean to indicate whether the suitable containers to be shown in dropdown 
 		//is exceeding the max limit.
 		String exceedingMaxLimit = "false";
@@ -143,11 +146,10 @@ public class SpecimenArrayAliquotAction extends SecureAction
 
 		}	
 		
-		//
 		if (Constants.PAGEOF_SPECIMEN_ARRAY_ALIQUOT_SUMMARY.equals(pageOf))
 		{	
 			Map map = (Map) request.getAttribute("forwardToHashMap");
-
+		
 			if (map != null)
 			{
 				//TODO
