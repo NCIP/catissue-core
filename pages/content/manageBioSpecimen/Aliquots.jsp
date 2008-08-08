@@ -177,7 +177,7 @@
 		{
 			autoDiv.style.display = 'none';
 			manualDiv.style.display = 'block';
-			}
+		}
 	}		
 	
 	function mapButtonClickedInAliquot(frameUrl,count)
@@ -238,7 +238,7 @@ ${requestScope.messageKey}
 			<table border="0" cellpadding="0" cellspacing="0">
 		      <tr>
 				<td class="td_table_head">
-					<span class="wh_ar_b">Specimen Aliquot
+					<span class="wh_ar_b"><bean:message key="aliquots.header" />
 					</span>
 				</td>
 				<td>
