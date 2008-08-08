@@ -1773,7 +1773,21 @@ Thanking You,
 	<target name="st_integrate_app" depends="st_check_prerequisite" if="file.exists" >
 		<echo message="Integrating shippingtracking app ...." />
 		<unzip src="shippingtracking.zip" dest="${temp.dir}/shippingtracking" overwrite="true" /> 
-	
+
+		<!-- Inject db specific information to configuration files -->
+		<if>
+			<equals arg1="mysql" arg2="${database.type}" />
+			<then>
+				<antcall target="st_mysql_config" />
+			</then>
+			<elseif>
+				<equals arg1="oracle" arg2="${database.type}" />
+				<then>
+					<antcall target="st_oracle_config" />
+				</then>
+			</elseif>
+		</if>
+		
 		<!-- 1) Copy shippingtracking.jar -> copy it to catissue/WEB-INF/Lib -->
 		<copy file="${temp.dir}/shippingtracking/shippingtracking.jar" todir="${temp.dir}/catissuecore/WEB-INF/lib" overwrite="true" />
 		
@@ -1810,26 +1824,29 @@ Thanking You,
 		</replace>
 		
 		<!-- 4) Inject db-util.properties entry in catissue -> db-util.properties -->
-		<if>
-			<equals arg1="mysql" arg2="${database.type}" />
-			<then>
-				<replace file="${temp.dir}/catissuecore/WEB-INF/classes/dbutil.properties">
-					<replacefilter token="${catissue.hibernate.config.file}" value="${catissue.hibernate.config.file}, ShippingTrackingHibernate.cfg.xml" />
-				</replace>
-			</then>
-			<elseif>
-				<equals arg1="oracle" arg2="${database.type}" />
-				<then>
-					<echo message="Oracle integration not supported, Please contact system administrator." />
-				</then>
-			</elseif>
-		</if>
+		<replace file="${temp.dir}/catissuecore/WEB-INF/classes/dbutil.properties">
+			<replacefilter token="${catissue.hibernate.config.file}" value="${catissue.hibernate.config.file}, ShippingTrackingHibernate.cfg.xml" />
+		</replace>
 		
 		<!-- 5) Inject "/WEB-INF/ShippingTracking-tiles-defs.xml" entry in catisssue -> struts-config.xml -->
 		<replace file="${temp.dir}/catissuecore/WEB-INF/${catissue.struts.config.file}">
 			<replacefilter token="/WEB-INF/${catissue.tiles.def.file}" value="/WEB-INF/${catissue.tiles.def.file}, /WEB-INF/ShippingTracking-tiles-defs.xml" />
 		</replace>
 		
+	</target>
+	
+	<!-- Modify shippingtracking configuration For MySQL -->
+	<target name="st_mysql_config">
+		<replace file="${temp.dir}/shippingtracking/ShippingTrackingHibernate.cfg.xml">
+			<replacefilter token="${mysql.dialect.string}" value="${mysql.dialect.string}" />
+		</replace>
+	</target>
+	
+	<!-- Modify shippingtracking configuration For ORACLE -->
+	<target name="st_oracle_config">
+		<replace file="${temp.dir}/shippingtracking/ShippingTrackingHibernate.cfg.xml">
+			<replacefilter token="${mysql.dialect.string}" value="${oracle.dialect.string}" />
+		</replace>
 	</target>
 	
 	<!-- Deploying shippingtracking db -->
@@ -1856,6 +1873,7 @@ Thanking You,
 		<delete dir="${temp.dir}"/>
 	</target>
 	
+	<!-- Deploying shippingtracking db for mysql -->
 	<target name="st_deploy_db_mysql">
 		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" onerror="continue">
 			<transaction src="${temp.dir}/shippingtracking/SQL/MYSQL/shippingtracking.sql" />
@@ -1869,8 +1887,18 @@ Thanking You,
 		</sql>
 	</target>
 	
+	<!-- Deploying shippingtracking db for oracle -->
 	<target name="st_deploy_db_oracle">
-		<echo message="DB deploy not implemented for oracle, Please contact system administrator." />
+		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle">
+			<transaction src="${temp.dir}/shippingtracking/SQL/oracle/shippingtracking.sql" />
+						
+			<transaction>commit;</transaction>
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</sql>
 	</target>
 	
 	<!--  ShippingTracking - end -->
