@@ -17,7 +17,9 @@ import java.util.Set;
 import java.util.Vector;
 
 import edu.wustl.catissuecore.domain.Password;
+import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.dto.UserDTO;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.EmailHandler;
 import edu.wustl.catissuecore.util.Roles;
@@ -28,6 +30,7 @@ import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.dao.AbstractDAO;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.security.PrivilegeCache;
 import edu.wustl.common.security.PrivilegeManager;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.PasswordEncryptionException;
@@ -149,11 +152,11 @@ public class ApproveUserBizLogic extends DefaultBizLogic
 
 		SecurityManager.getInstance(ApproveUserBizLogic.class).createUser(csmUser);
 
-//		if (user.getRoleId() != null)
-//		{
-//			SecurityManager.getInstance(ApproveUserBizLogic.class)
-//			.assignRoleToUser(csmUser.getUserId().toString(), user.getRoleId());
-//		}
+		if (user.getRoleId() != null)
+		{
+			SecurityManager.getInstance(ApproveUserBizLogic.class)
+			.assignRoleToUser(csmUser.getUserId().toString(), user.getRoleId());
+		}
 
 		user.setCsmUserId(csmUser.getUserId());
 
@@ -252,9 +255,42 @@ public class ApproveUserBizLogic extends DefaultBizLogic
 	 * (non-Javadoc)
 	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getObjectId(edu.wustl.common.dao.AbstractDAO, java.lang.Object)
 	 */
-	public String getObjectId(AbstractDAO dao, Object domainObject) 
+	public String getObjectId(AbstractDAO dao, Object domainObject, SessionDataBean sessionDataBean) 
 	{
-		return edu.wustl.catissuecore.util.global.Constants.ADMIN_PROTECTION_ELEMENT;
+		User user = null;
+		
+		try 
+		{
+			user = (User) dao.retrieve(User.class.getName(), sessionDataBean.getUserId());
+		} 
+		catch (DAOException e) 
+		{
+			Logger.out.debug(e.getMessage(), e);
+		}
+		
+			Collection<Site> siteCollection = user.getSiteCollection();
+		
+			StringBuffer sb = new StringBuffer();
+			boolean hasUserProvisioningPrivilege = false;
+			
+			if (siteCollection != null && !siteCollection.isEmpty())
+			{
+				sb.append(Constants.SITE_CLASS_NAME);
+				for (Site site : siteCollection)
+				{
+					if (site.getId()!=null)
+					{
+						sb.append(Constants.UNDERSCORE).append(site.getId());
+						hasUserProvisioningPrivilege = true;
+					}
+				}
+			}
+			if(hasUserProvisioningPrivilege)
+			{
+				return sb.toString();
+			}
+			
+		return null;
 	}
 	
 	/**
@@ -267,4 +303,44 @@ public class ApproveUserBizLogic extends DefaultBizLogic
 	   	return Constants.ADD_EDIT_USER;
     }
     
+	/**
+	 * (non-Javadoc)
+	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#isAuthorized(edu.wustl.common.dao.AbstractDAO, java.lang.Object, edu.wustl.common.beans.SessionDataBean)
+	 */
+	public boolean isAuthorized(AbstractDAO dao, Object domainObject, SessionDataBean sessionDataBean)  
+	{
+		if(sessionDataBean != null && sessionDataBean.isAdmin())
+		{
+			return true;
+		}
+		
+		boolean isAuthorized = false;
+		
+		String privilegeName = getPrivilegeName(domainObject);
+		String protectionElementName = getObjectId(dao, domainObject, sessionDataBean);
+		PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(sessionDataBean.getUserName());
+		 
+		if (protectionElementName != null)
+		{
+			String [] prArray = protectionElementName.split(Constants.UNDERSCORE);
+			String baseObjectId = prArray[0];
+			StringBuffer objId = new StringBuffer();
+			
+    		for (int i = 1 ; i < prArray.length;i++)
+    		{
+    			objId.append(baseObjectId).append(Constants.UNDERSCORE).append(prArray[i]);
+    			isAuthorized = privilegeCache.hasPrivilege(objId.toString(),privilegeName);
+    			if (!isAuthorized)
+    			{
+    				break;
+    			}
+    		}
+    		
+    		return isAuthorized;		
+		}
+		else
+		{
+			return false;
+		}		
+	}		
 }

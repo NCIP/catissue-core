@@ -404,7 +404,7 @@ public class UserBizLogic extends DefaultBizLogic
 				group.add(csmUser);
 				
 				String protectionGroupName = new String(Constants
-						.getSitePGName(user1.getId()));
+						.getSitePGName(site.getId()));
 				
 				createProtectionGroup(protectionGroupName, site, false);
 				
@@ -412,7 +412,7 @@ public class UserBizLogic extends DefaultBizLogic
 				userGroupRoleProtectionGroupBean.setUser("");
 				userGroupRoleProtectionGroupBean.setRoleName(roleName);
 				
-				userGroupRoleProtectionGroupBean.setGroupName(("Site_"+user1.getId()+ "_"+user1.getId().toString()));
+				userGroupRoleProtectionGroupBean.setGroupName(("Site_"+site.getId()+ "_"+user1.getId().toString()));
 				userGroupRoleProtectionGroupBean.setProtectionGroupName(protectionGroupName);
 				userGroupRoleProtectionGroupBean.setGroup(group);
 				authorizationData.add(userGroupRoleProtectionGroupBean);

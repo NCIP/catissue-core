@@ -114,7 +114,7 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 		String[] activityStatusArray = {Constants.ACTIVITY_STATUS_DISABLED,Constants.ACTIVITY_STATUS_CLOSED};
 		String joinCondition = null;
 		String separatorBetweenFields = ", ";
-
+/*
 		String[] whereColumnName = new String[]{Constants.ACTIVITY_STATUS};
 		String[] whereColumnCondition = new String[]{"not in"};
 		Object[] whereColumnValue = {activityStatusArray};
@@ -129,9 +129,27 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 		{
 			throw new BizLogicException("Could not get List of siteNameValueBean", e);
 		}
+		if (siteNameValueBeanList != null && !siteNameValueBeanList.isEmpty())
+		{
+		NameValueBean siteNameValueBean = siteNameValueBeanList.get(0);
+		if(siteNameValueBean.getValue().equals("-1"))
+		{
+			siteNameValueBeanList.remove(0);
+		}
+		}*/
 		
-		siteNameValueBeanList=removeSelect(siteNameValueBeanList);
+		List<NameValueBean> siteNameValueBeanList = null;
+		try 
+		{
+			siteNameValueBeanList = new StorageContainerBizLogic().getRepositorySiteList(sourceObjectName, siteDisplayField, valueField, activityStatusArray, isToExcludeDisabled);
+		} 
+		catch (DAOException e) 
+		{
+			Logger.out.debug(e.getMessage(), e);
+		}
 		
+		// To remove 1st row which contains "Select" & "-1"
+		siteNameValueBeanList.remove(0);
 		return siteNameValueBeanList;
 		
 	}

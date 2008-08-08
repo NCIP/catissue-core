@@ -28,6 +28,7 @@ import edu.wustl.catissuecore.domain.EmbeddedEventParameters;
 import edu.wustl.catissuecore.domain.FixedEventParameters;
 import edu.wustl.catissuecore.domain.FrozenEventParameters;
 import edu.wustl.catissuecore.domain.ReceivedEventParameters;
+import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
@@ -985,6 +986,38 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 		}
 		else	
 		{
+			// Handle for SERIAL CHECKS, whether user has access to source site or not
+	
+			if(domainObject instanceof SpecimenEventParameters)
+			{
+				SpecimenPosition specimenPosition = null;
+				SpecimenEventParameters spe = (SpecimenEventParameters) domainObject;
+				Specimen specimen = (Specimen) spe.getSpecimen();
+				
+				try 
+				{
+					specimen = (Specimen) dao.retrieve(Specimen.class.getName(), specimen.getId());
+					specimenPosition = specimen.getSpecimenPosition();
+				} 
+				catch (DAOException e) 
+				{
+					Logger.out.debug(e.getMessage(), e);
+				}
+				
+				if(specimenPosition != null) // Specimen is NOT Virtually Located
+				{
+					StorageContainer sc = specimenPosition.getStorageContainer();
+					Site site = sc.getSite();
+					
+					Set<Long> siteIdSet = new UserBizLogic().getRelatedSiteIds(sessionDataBean.getUserId());
+					
+					if(!siteIdSet.contains(site.getId()))
+					{
+						return false;
+					}
+				}
+			}
+			
 			protectionElementName = getObjectId(dao, domainObject);
 		}
 

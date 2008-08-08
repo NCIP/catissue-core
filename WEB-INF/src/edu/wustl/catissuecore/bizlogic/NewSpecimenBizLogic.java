@@ -44,6 +44,7 @@ import edu.wustl.catissuecore.domain.DistributedItem;
 import edu.wustl.catissuecore.domain.ExternalIdentifier;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.ReceivedEventParameters;
+import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
@@ -1888,7 +1889,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	{
 	    SpecimenCollectionGroup scg = specimen.getSpecimenCollectionGroup();
 
-        if (scg == null || ((scg.getId() == null || scg.getId().equals("-1")) && 
+	    if (scg == null || ((scg.getId() == null || scg.getId().equals("-1")) && 
                         (scg.getGroupName() == null || scg.getGroupName().equals(""))))
         {
             String message = ApplicationProperties.getValue("specimen.specimenCollectionGroup");
@@ -3268,6 +3269,29 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		}
 		else	
 		{
+			//	Handle for SERIAL CHECKS, whether user has access to source site or not
+			
+			if(domainObject instanceof Specimen)
+			{
+				SpecimenPosition specimenPosition = null;
+				Specimen specimen = (Specimen) domainObject;
+				
+				specimenPosition = specimen.getSpecimenPosition();
+				
+				if(specimenPosition != null) // Specimen is NOT Virtually Located
+				{
+					StorageContainer sc = specimenPosition.getStorageContainer();
+					Site site = sc.getSite();
+					
+					Set<Long> siteIdSet = new UserBizLogic().getRelatedSiteIds(sessionDataBean.getUserId());
+					
+					if(!siteIdSet.contains(site.getId()))
+					{
+						return false;
+					}
+				}
+			}
+			
 			protectionElementName = getObjectId(dao, domainObject);
 		}
 
@@ -3278,8 +3302,20 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		//Get the required privilege name which we would like to check for the logged in user.
 		String privilegeName = getPrivilegeName(domainObject);
 		PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(sessionDataBean.getUserName());
-		//Checking whether the logged in user has the required privilege on the given protection element
-		isAuthorized = privilegeCache.hasPrivilege(protectionElementName,privilegeName);
+		
+		String [] privilegeNames = privilegeName.split(",");
+		// Checking whether the logged in user has the required privilege on the given protection element
+		if(privilegeNames.length > 1)
+		{	
+			if((privilegeCache.hasPrivilege(protectionElementName, privilegeNames[0])) || (privilegeCache.hasPrivilege(protectionElementName, privilegeNames[1])))
+			{
+				isAuthorized = true;
+			}
+		}
+		else
+		{
+			isAuthorized = privilegeCache.hasPrivilege(protectionElementName,privilegeName);
+		}
 		
 		if(isAuthorized)
 		{

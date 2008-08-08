@@ -76,7 +76,7 @@
 	
 	<!-- 			Objects in BIO-SPECIMEN TAB		--> 
 	<PrivilegeMapping key="ADD_EDIT_PARTICIPANT" value="REGISTRATION"/>
-	<PrivilegeMapping key="ADD_EDIT_SPECIMEN" value="SPECIMEN_PROCESSING"/>
+	<PrivilegeMapping key="ADD_EDIT_SPECIMEN" value="SPECIMEN_PROCESSING,REGISTRATION"/>
 	<PrivilegeMapping key="ALIQUOT_SPECIMEN" value="SPECIMEN_PROCESSING"/>
 	<PrivilegeMapping key="DERIVE_SPECIMEN" value="SPECIMEN_PROCESSING"/>
 	<PrivilegeMapping key="ADD_EDIT_SCG" value="REGISTRATION"/>
