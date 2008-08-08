@@ -1,226 +1,202 @@
-<%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
-<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+		 "http://www.w3.org/TR/html4/loose.dtd">
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
-<%@ page import="java.util.*"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
+<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
+<%@ page import="edu.wustl.catissuecore.actionForm.SummaryForm"%>
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
-<%@ page import="edu.wustl.catissuecore.util.global.Constants,edu.wustl.common.beans.SessionDataBean;"%>
+<%@ page import="java.util.*"%>
+<%@ page language="java" isELIgnored="false" %>
+<%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Constants" %>
+<%@ page import="edu.wustl.catissuecore.util.global.Utility" %>
+<%@ page import="edu.wustl.catissuecore.actionForm.StorageContainerForm" %>
+<%@ page import="java.lang.Integer" %>
+<%@ page import="edu.wustl.common.util.tag.ScriptGenerator" %>
+
+<%
+			String temp = null;
+			Object obj = request.getAttribute("summaryForm");
+			SummaryForm summaryForm = null;
+			if(obj != null && obj instanceof SummaryForm)
+			{
+				summaryForm = (SummaryForm)obj;
+			}			
+%>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
+  <tr>
+    <td><table border="0" cellpadding="0" cellspacing="0">
+      <tr>
+        <td nowrap class="td_table_head"><span class="wh_ar_b"><bean:message key="summary.page.welcome"/></span></td>
+        <td><img src="images/uIEnhancementImages/table_title_corner2.gif" alt="Page Title" width="31" height="24" /></td>
+      </tr>
+    </table></td>
+  </tr>
+  <tr>
+    <td valign="top" class="tablepadding"><table width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr>
+        <td class="td_tab_bg" >&nbsp;</td>
+        </tr>
+    </table>
+      <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
+        
+        <tr>
+          <td height="8" ></td>
+        </tr>
+        <tr>
+          <td align="left" class="black_ar">&nbsp;<bean:message key="summary.page.description"/></td>
+        </tr>
+        
+        <tr>
+          <td align="center" valign="top" class="showhide"><table width="100%" border="0" cellpadding="4" cellspacing="0">
+
+		 
+              <tr class="tr_bg_blue1">
+                <td width="350"><span class="blue_ar_b">&nbsp;<bean:message key="summary.page.caption"/>&nbsp;</span></td>
+                <td class="blue_ar_b">${summaryForm.totalSpecimenCount}</td>
+              </tr>
+
+              <tr>
+                <td colspan="2"></td>
+              </tr>
 
 
-<table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" height="100%">
-    <tr>
-    	<td colspan="2" valign="top">
-          	<table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" height="40%">
-            	<tr>
-              		<td class="welcomeTitle" ><bean:message key="summary.page.welcome"/></td>
-            	</tr>
-            	<tr>
-              		<td class="formMessage">&nbsp;</td>
-            	</tr>
-            	<tr>
-              		<td  class="formMessage"><bean:message key="summary.page.description"/></td>
-            	</tr>
-            	<tr>
-              		<td class="formMessage">&nbsp;</td>
-            	</tr>
-
-
-            	<tr>
-            		<td>
-                  		<table class="tbBorders" summary="" cellpadding="0" cellspacing="0" border="0" width="80%" >
-<!-- FIRST ROW total specimens -->	
-						<TR class="mainTotal">
-							<TD COLSPAN=3>
-								<%=Constants.TOTAL%>&nbsp;<%=Constants.SPECIMENS%>
-							</TD>
-							<TD>
-								<BIG><%= request.getAttribute(Constants.SPECIMEN_COUNT)%></BIG>
-							</TD>
-<!-- FRIST ROW END -->	</TR>		
-
-<!-- SEPARATOR -->
-						<TR>
-							<TD COLSPAN=4>						
-								<HR>
-							</TD>
-						</TR>
+			   <tr>
+                <td class="tableheading"><strong><bean:message key="summary.page.total.cell.count"/></strong></td>
+                <td class="tableheading"><strong>${summaryForm.cellCount}</strong></td>
+              </tr>
+			  <%
+					Collection cellType = summaryForm.getCellTypeDetails();
+					int cellCount = 1;
+					if (!cellType.isEmpty())
+					{
+						Iterator itr = cellType.iterator();
+					   	while(itr.hasNext())
+				    	{
+				    		NameValueBean bean = (NameValueBean)itr.next();
+						%>
+						<tr>
+						<c:set var = "count" value = "<%=cellCount%>" scope="page" />
+						<c:set var="style" value="black_ar" scope="page" />
 						
+						<c:if test='${pageScope.count % 2 == 0}'>
+							<c:set var="style" value="tabletd1" scope="page" />
+						</c:if>
+						<td class='${pageScope.style}'><c:out value='<%=bean.getName()%>' /></td>
+						<td class='${pageScope.style}'><c:out value='<%=bean.getValue()%>' /></td></tr>
+						<%
+							cellCount++;
+						}
+					}		
+				%>			  
+              <tr>
+                <td colspan="2">&nbsp;</td>
+              </tr>
 
-<!-- 2ND ROW cell specimen -->
-						<TR>
-							<TD>&nbsp;</TD>
-							<TD COLSPAN=2 class="classTotalText">
-								<%=Constants.TOTAL%>&nbsp;<%=Constants.CELL%>&nbsp;<%=Constants.SPECIMENS%>
-							</TD>
-							<TD class="classTotalData">
-								<%= request.getAttribute(Constants.CELL+Constants.SPECIMEN_TYPE_COUNT)%>
-							</TD>
-<!-- 2ND ROW END -->	</TR>
-<%
-	Collection cellDetails = (Collection)request.getAttribute(Constants.CELL+Constants.SPECIMEN_TYPE_DETAILS);
-	if (cellDetails != null)
-	{
-		Iterator itr = cellDetails.iterator();
-    	while(itr.hasNext())
-    	{
-    		NameValueBean bean = (NameValueBean)itr.next();
-%>
-<!--  CELL specimen DETAILS -->
-<TR>
-	<TD COLSPAN=2>&nbsp;&nbsp;</TD>
-	<TD class="detailsData">
-		<%=bean.getName()%>			
-	</TD>
-	<TD class="detailsCount">
-		<%=bean.getValue()%>
-	</TD>
-</TR>
-<!--  CELL specimen DETAILS end -->
-<%        		
-}
-}		
-%>
-
-<!-- SEPARATOR -->
-						<TR>
-							<TD COLSPAN=4>						
-								<HR>
-							</TD>
-						</TR>
+              <tr class="tableheading">
+                <td><strong><bean:message key="summary.page.total.tissue.count"/></strong></td>
+                <td><b>${summaryForm.tissueCount}</b></td>
+              </tr>
+			<%
+					Collection tissueType = summaryForm.getTissueTypeDetails();
+					int tissueCount = 1;
+					if (!tissueType.isEmpty())
+					{
+						Iterator itr = tissueType.iterator();
+					   	while(itr.hasNext())
+				    	{
+				    		NameValueBean bean = (NameValueBean)itr.next();							
+						%>
+						<tr>
+						<c:set var = "count" value = "<%=tissueCount%>" scope="page" />
+						<c:set var="style" value="black_ar" scope="page" />
 						
-<!-- 4TH ROW TISSUE specimen -->
-						<TR>
-							<TD>&nbsp;</TD>
-							<TD COLSPAN=2 class="classTotalText">
-								<%=Constants.TOTAL%>&nbsp;<%=Constants.TISSUE%>&nbsp;<%=Constants.SPECIMENS%>
-							</TD>
-							<TD class="classTotalData">
-								<%= request.getAttribute(Constants.TISSUE+Constants.SPECIMEN_TYPE_COUNT)%>
-							</TD>
-<!-- 4TH ROW END -->	</TR>
-
-<%
-	Collection tissueDetails = (Collection)request.getAttribute(Constants.TISSUE+Constants.SPECIMEN_TYPE_DETAILS);
-	if(tissueDetails != null)
-	{
-        	Iterator itr = tissueDetails.iterator();
-        	while(itr.hasNext())
-        	{
-        		NameValueBean bean = (NameValueBean)itr.next(); 
-%>
-<!--  TISSUE specimen DETAILS -->
-						<TR>
-							<TD COLSPAN=2>&nbsp;&nbsp;</TD>
-							<TD class="detailsData">
-								<%=bean.getName()%>			
-							</TD>
-							<TD class="detailsCount">
-								<%=bean.getValue()%>
-							</TD>
-						</TR>
-<!--  TISSUE specimen DETAILS end -->
-<%        		
-        	}
- 	}		
-%>
-<!-- SEPARATOR -->
-						<TR>
-							<TD COLSPAN=4>						
-								<HR>
-							</TD>
-						</TR>
-
-
-<!-- 5TH ROW FLUID specimen -->
-						<TR>
-							<TD>&nbsp;</TD>
-							<TD COLSPAN=2 class="classTotalText">
-								<%=Constants.TOTAL%>&nbsp;<%=Constants.FLUID%>&nbsp;<%=Constants.SPECIMENS%>
-							</TD>
-							<TD class="classTotalData">
-								<%= request.getAttribute(Constants.FLUID+Constants.SPECIMEN_TYPE_COUNT)%>
-							</TD>
-<!-- 5TH ROW END -->	</TR>
-
-<%
-	Collection fluidDetails = (Collection)request.getAttribute(Constants.FLUID+Constants.SPECIMEN_TYPE_DETAILS);
-	if(fluidDetails != null)
-	{
-        	Iterator itr = fluidDetails.iterator();
-        	while(itr.hasNext())
-        	{
-        		NameValueBean bean = (NameValueBean)itr.next(); 
-%>
-<!--  fluid specimen DETAILS -->
-						<TR>
-							<TD COLSPAN=2>&nbsp;&nbsp;</TD>
-							<TD class="detailsData">
-								<%=bean.getName()%>			
-							</TD>
-							<TD class="detailsCount">
-								<%=bean.getValue()%>
-							</TD>
-						</TR>
-<!--  fluid specimen DETAILS end -->
-<%        		
-        	}
- 	}		
-%>
-<!-- SEPARATOR -->
-						<TR>
-							<TD COLSPAN=4>						
-								<HR>
-							</TD>
-						</TR>
-
-
-<!-- 6TH ROW MOLECULAR specimen -->
-						<TR>
-							<TD>&nbsp;</TD>
-							<TD COLSPAN=2 class="classTotalText">
-								<%=Constants.TOTAL%>&nbsp;<%=Constants.MOLECULAR%>&nbsp;<%=Constants.SPECIMENS%>
-							</TD>
-							<TD class="classTotalData">
-								<%= request.getAttribute(Constants.MOLECULAR+Constants.SPECIMEN_TYPE_COUNT)%>
-							</TD>
-<!-- 6TH ROW END -->	</TR>
-
-<%
-	Collection molecularDetails = (Collection)request.getAttribute(Constants.MOLECULAR+Constants.SPECIMEN_TYPE_DETAILS);
-	if(molecularDetails != null)
-	{
-        	Iterator itr = molecularDetails.iterator();
-        	while(itr.hasNext())
-        	{
-        		NameValueBean bean = (NameValueBean)itr.next(); 
-%>
-<!--  molecular specimen DETAILS -->
-						<TR>
-							<TD COLSPAN=2>&nbsp;&nbsp;</TD>
-							<TD class="detailsData">
-								<%=bean.getName()%>			
-							</TD>
-							<TD class="detailsCount">
-								<%=bean.getValue()%>
-							</TD>
-						</TR>
-<!--  molecular specimen DETAILS end -->
-<%        		
-        	}
- 	}		
-%>
-<!-- SEPARATOR -->
-						<TR>
-							<TD COLSPAN=4>						
-								<HR>
-							</TD>
-						</TR>
-
-
+						<c:if test='${pageScope.count % 2 == 0}'>
+							<c:set var="style" value="tabletd1" scope="page" />
+						</c:if>
+						<td class='${pageScope.style}'><c:out value='<%=bean.getName()%>' /></td>
+						<td class='${pageScope.style}'><c:out value='<%=bean.getValue()%>' /></td>
+						</tr>
+						<%
+							tissueCount++;
+						}
+					}		
+				%>
+              <tr>
+                <td colspan="2">&nbsp;</td>
+              </tr>
+			  <tr>
+                <td class="tableheading"><strong><bean:message key="summary.page.total.fluid.count"/></strong></td>
+                <td class="tableheading"><strong>${summaryForm.fluidCount}</strong></td>
+              </tr>
+			  <%
+					Collection fluidType = summaryForm.getFluidTypeDetails();
+					int fluidCount = 1;
+					if (!fluidType.isEmpty())
+					{
+						Iterator itr = fluidType.iterator();
+					   	while(itr.hasNext())
+				    	{
+				    		NameValueBean bean = (NameValueBean)itr.next();							
+						%>
+						<tr>
+						<c:set var = "count" value = "<%=fluidCount%>" scope="page" />
+						<c:set var="style" value="black_ar" scope="page" />
 						
-						</table>
-					</td>
-				</tr>
-           </table>
-      	</td>
-    </tr>
+						<c:if test='${pageScope.count % 2 == 0}'>
+							<c:set var="style" value="tabletd1" scope="page" />
+						</c:if>
+						<td class='${pageScope.style}'><c:out value='<%=bean.getName()%>' /></td>
+						<td class='${pageScope.style}'><c:out value='<%=bean.getValue()%>' /></td></tr>
+						<%	
+							fluidCount++;
+						}
+					}		
+				%>
+			  <tr>
+                <td colspan="2">&nbsp;</td>
+              </tr>			  
+			  <tr>
+                <td class="tableheading"><strong><bean:message key="summary.page.total.molecular.count"/></strong></td>
+                <td class="tableheading"><strong>${summaryForm.moleculeCount}</strong></td>
+              </tr>
+			 <%
+					Collection molecularType = summaryForm.getMoleculeTypeDetails();
+					int molecularCount = 1;
+					if (!molecularType.isEmpty())
+					{
+						Iterator itr = molecularType.iterator();
+					   	while(itr.hasNext())
+				    	{
+				    		NameValueBean bean = (NameValueBean)itr.next();					
+						%>
+						<tr>
+						<c:set var = "count" value = "<%=molecularCount%>" scope="page" />
+						<c:set var="style" value="black_ar" scope="page" />
+						
+						<c:if test='${pageScope.count % 2 == 0}'>
+							<c:set var="style" value="tabletd1" scope="page" />
+						</c:if>
+						<td class='${pageScope.style}'><c:out value='<%=bean.getName()%>' /></td>
+						<td class='${pageScope.style}'><c:out value='<%=bean.getValue()%>' /></td></tr>
+						<%
+							molecularCount++;
+						}
+					}		
+				%>
+          </table></td>
+        </tr>
+    </table></td>
+  </tr>
 </table>
+</body>
+</html>

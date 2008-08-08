@@ -6,82 +6,99 @@
  */
 package edu.wustl.catissuecore.action;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.axis.client.HappyClient;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.actionForm.AliquotForm;
+import edu.wustl.catissuecore.actionForm.SummaryForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.bizlogic.QueryBizLogic;
+import edu.wustl.common.util.dbManager.DAOException;
 
 
 /**
- * @author gautam_shetty
- *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
+ * @author sagar_baldwa
+ * This class instantiates the QueryBizLogic class and retrieves data
+ * from database and populates the SummaryForm
  */
 public class SummaryAction extends Action
 {
     
     /* (non-Javadoc)
-     * @see org.apache.struts.action.Action#execute(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+     * @see org.apache.struts.action.Action#execute(org.apache.struts.action.ActionMapping, 
+     * org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, 
+     * javax.servlet.http.HttpServletResponse)
      */
-    public ActionForward execute(ActionMapping mapping, ActionForm form,
+    @SuppressWarnings("unchecked")
+	public ActionForward execute(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws Exception
     {
-        //preparing QueryBizLogic to query
-        QueryBizLogic bizLogic = (QueryBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
-        
-        //Total specimens
-        String totalSpecimenCount = bizLogic.getTotalSpecimenCount();
-        request.setAttribute(Constants.SPECIMEN_COUNT, totalSpecimenCount);
-        
-        //Class Count
-       //TODO test for null values
-        String tissueCount = bizLogic.getSpecimenTypeCount(Constants.TISSUE);
-        String cellCount = bizLogic.getSpecimenTypeCount(Constants.CELL);
-        String molCount = bizLogic.getSpecimenTypeCount(Constants.MOLECULAR );
-        String fluidCount = bizLogic.getSpecimenTypeCount(Constants.FLUID);
-        
-        //set the total count for different type of specimen
-        request.setAttribute(Constants.TISSUE+Constants.SPECIMEN_TYPE_COUNT, tissueCount);
-        request.setAttribute(Constants.CELL+Constants.SPECIMEN_TYPE_COUNT, cellCount);
-        request.setAttribute(Constants.MOLECULAR+Constants.SPECIMEN_TYPE_COUNT, molCount);
-        request.setAttribute(Constants.FLUID+Constants.SPECIMEN_TYPE_COUNT, fluidCount);
-        
-        //Type Count
-        Collection tissueTypeDetails = bizLogic.getSpecimenTypeDetailsCount(Constants.TISSUE);
-        Collection cellTypeDetails = bizLogic.getSpecimenTypeDetailsCount(Constants.CELL);
-        Collection fluidTypeDetails = bizLogic.getSpecimenTypeDetailsCount(Constants.FLUID);
-        Collection molecularTypeDetails = bizLogic.getSpecimenTypeDetailsCount(Constants.MOLECULAR);
-        
-        //set the collections for different type of specimen
-        request.setAttribute(Constants.TISSUE+Constants.SPECIMEN_TYPE_DETAILS, tissueTypeDetails);
-        request.setAttribute(Constants.CELL+Constants.SPECIMEN_TYPE_DETAILS, cellTypeDetails);
-        request.setAttribute(Constants.MOLECULAR+Constants.SPECIMEN_TYPE_DETAILS, molecularTypeDetails);
-        request.setAttribute(Constants.FLUID+Constants.SPECIMEN_TYPE_DETAILS, fluidTypeDetails);
-        
-        // Quantity
-        //TODO test for null values
-        String tissueQuantity = bizLogic.getSpecimenTypeQuantity(Constants.TISSUE);
-        String cellQuantity = bizLogic.getSpecimenTypeQuantity(Constants.CELL);
-        String molQuantity = bizLogic.getSpecimenTypeQuantity(Constants.MOLECULAR);
-        String fluidQuantity = bizLogic.getSpecimenTypeQuantity(Constants.FLUID);
-        
-        //set the total quantity for different type of specimen
-        request.setAttribute(Constants.TISSUE+Constants.SPECIMEN_TYPE_QUANTITY, tissueQuantity);
-        request.setAttribute(Constants.CELL+Constants.SPECIMEN_TYPE_QUANTITY, cellQuantity);
-        request.setAttribute(Constants.MOLECULAR+Constants.SPECIMEN_TYPE_QUANTITY, molQuantity);
-        request.setAttribute(Constants.FLUID+Constants.SPECIMEN_TYPE_QUANTITY, fluidQuantity);
-        
-        return mapping.findForward(Constants.SUCCESS);
-    }
+    	SummaryForm summaryForm = null;
+		try 
+		{
+			summaryForm = (SummaryForm) form;
+			// preparing QueryBizLogic to query
+			QueryBizLogic bizLogic = (QueryBizLogic) BizLogicFactory
+					.getInstance().getBizLogic(
+							Constants.SIMPLE_QUERY_INTERFACE_ID);
 
-}
+			//Populating the Map<String, Object> with data from database for summary report
+			Map<String, Object> summaryDataMap = bizLogic
+					.getTotalSummaryDetails();
+
+			//Extract the Map data
+			Object totalSpecimenCount = summaryDataMap
+					.get("TotalSpecimenCount");
+			Object tissueCount = summaryDataMap.get("TissueCount");
+			Object cellCount = summaryDataMap.get("CellCount");
+			Object moleculeCount = summaryDataMap.get("MoleculeCount");
+			Object fluidCount = summaryDataMap.get("FluidCount");
+			Collection<Object> tissueTypeDetails = (Collection<Object>) summaryDataMap
+					.get("TissueTypeDetails");
+			Collection<Object> cellTypeDetails = (Collection<Object>) summaryDataMap
+					.get("CellTypeDetails");
+			Collection<Object> moleculeTypeDetails = (Collection<Object>) summaryDataMap
+					.get("MoleculeTypeDetails");
+			Collection<Object> fluidTypeDetails = (Collection<Object>) summaryDataMap
+					.get("FluidTypeDetails");
+			Object tissueQuantity = summaryDataMap.get("TissueQuantity");
+			Object cellQuantity = summaryDataMap.get("CellQuantity");
+			Object moleculeQuantity = summaryDataMap.get("MoleculeQuantity");
+			Object fluidQuantity = summaryDataMap.get("FluidQuantity");
+
+			//Populate the Summary Form
+			summaryForm.setTotalSpecimenCount(totalSpecimenCount.toString());
+			summaryForm.setTissueCount(tissueCount.toString());
+			summaryForm.setCellCount(cellCount.toString());
+			summaryForm.setMoleculeCount(moleculeCount.toString());
+			summaryForm.setFluidCount((String) fluidCount);
+			summaryForm.setTissueTypeDetails(tissueTypeDetails);
+			summaryForm.setCellTypeDetails(cellTypeDetails);
+			summaryForm.setMoleculeTypeDetails(moleculeTypeDetails);
+			summaryForm.setFluidTypeDetails(fluidTypeDetails);
+			summaryForm.setTissueQuantity((String) tissueQuantity);
+			summaryForm.setCellQuantity((String) cellQuantity);
+			summaryForm.setMoleculeQuantity((String) moleculeQuantity);
+			summaryForm.setFluidQuantity((String) fluidQuantity);
+		}
+		catch (Exception e)
+		{
+			System.out.println(e);
+		}		
+		request.setAttribute("summaryForm", summaryForm);
+		return mapping.findForward(Constants.SUCCESS);
+    }
+} 
+       
