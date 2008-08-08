@@ -1977,7 +1977,7 @@ PUBLIC
 			validate="false"
 			scope="request">
 			<forward name="pageOfStorageType" path=".catissuecore.storageTypeDef" />
-			<forward name="pageOfAddForSC" path="/pages/content/manageAdministrativeData/StorageType.jsp" />
+			<forward name="pageOfAddForSC" path=".catissuecore.storageTypeDef" />
 			<forward name="failure" path=".catissuecore.storageTypeDef" />
 			<forward name="access_denied" path="/ManageAdministrativeData.do" />
 		</action>
