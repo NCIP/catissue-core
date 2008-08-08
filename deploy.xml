@@ -35,7 +35,7 @@
 	<property name="catissue.struts.config.file" value="struts-config.xml" />
 	<property name="catissue.hibernate.config.file" value="hibernate.cfg.xml" />
 	<property name="catissue.tiles.def.file" value="tiles-defs.xml" />
-		
+	
 	<!-- Check for required properties -->
 	<target name="assert">
 		<if>
@@ -501,9 +501,60 @@
 	<target name="deploy_all">
 		<antcall target="deploy_app" />
 		<antcall target="deploy_db" />
+		<antcall target="server_security" />
 	</target>
 	
-	<!--Target for fresh deployment of caTissue application-->
+	<!--Target for checking server security -->
+		<target name="server_security">
+			<copy file="${jboss.home.dir}/server/default/deploy/jmx-console.war/WEB-INF/web.xml"
+						tofile="${temp.dir}/web.xml" >
+			</copy>
+				<concat destfile="${temp.dir}/web1.xml" > 
+					<filelist dir="${temp.dir}" files="web.xml"/>
+						<filterchain>
+							<headfilter lines="83"/>
+						</filterchain>
+				</concat>
+				<concat destfile="${temp.dir}/web2.xml" > 
+					<filelist dir="${temp.dir}" files="web.xml"/>
+						<filterchain>
+							<headfilter lines="27" skip="83"/>
+								<tokenfilter>
+								 	<replacestring from="-->" to=""/>
+								</tokenfilter>
+								<tokenfilter>
+								 	<replacestring from="console." to="console.-->"/>
+								</tokenfilter> 		 		 	
+						</filterchain>
+			     </concat>
+				 <concat destfile="${temp.dir}/web1.xml" append="true"> 
+					 <filelist dir="${temp.dir}" files="web2.xml"/>
+				 </concat>
+			<copy file="${temp.dir}/web1.xml" tofile="${temp.dir}/web.xml" overwrite="true"/>
+			<copy file="${temp.dir}/web.xml" 
+						tofile="${jboss.home.dir}/server/default/deploy/jmx-console.war/WEB-INF/web.xml" overwrite="true"/>
+					
+			<copy file="${jboss.home.dir}/server/default/deploy/jmx-console.war/WEB-INF/jboss-web.xml"
+						tofile="${temp.dir}/jboss-web.xml" >
+			</copy>
+				<concat destfile="${temp.dir}/web3.xml" > 
+					<filelist dir="${temp.dir}" files="jboss-web.xml"/>
+						<filterchain>
+							<headfilter lines="7" />
+								<tokenfilter>
+									<replacestring from="-->" to=""/>
+								</tokenfilter>
+								<tokenfilter>
+									<replacestring from="users." to="users.-->"/>
+								</tokenfilter> 		 		 	
+						</filterchain>
+				</concat>
+			<copy file="${temp.dir}/web3.xml" tofile="${temp.dir}/jboss-web.xml" overwrite="true"/>
+			<copy file="${temp.dir}/jboss-web.xml" 
+						tofile="${jboss.home.dir}/server/default/deploy/jmx-console.war/WEB-INF/jboss-web.xml" overwrite="true"/>			
+		</target>
+	
+		<!--Target for fresh deployment of caTissue application-->
 	<target name="deploy_app">
 		<antcall target="clean_server" />
 		<antcall target="assert" />
@@ -536,6 +587,11 @@
            <replacefilter token="@@HOST@@" value="${jboss.server.host}" />
            <replacefilter token="@@PORT@@" value="${jboss.server.port}" />
         </replace>
+		<replace file="${jboss.server.url}/catissuecore-properties/caTissueCore_Properties.xml">
+			<replacefilter token="@@ADMIN-EMAILADDRESS@@" value="${email.administrative.emailAddress}" />
+			<replacefilter token="@@SENDEMAILFROM-EMAILADDRESS@@" value="${email.sendEmailFrom.emailAddress}" />
+			<replacefilter token="@@MAILSERVER-EMAILADDRESS@@" value="${email.mailServer}" />
+		</replace>
 		<antcall target="send_mail" />
 		<antcall target="config_jboss_files" />
 		
@@ -563,7 +619,6 @@
 		<echo>Modifying ${warName}.war....</echo>
 			<unwar src="${basedir}/${warName}.war" dest="${temp.dir}/${warName}" />
 			<copy file="${basedir}/DE_conf/hibernate.properties" todir="${temp.dir}/${warName}/WEB-INF/classes" overwrite="true" />
-
 			<if>
 				<equals arg1="mysql" arg2="${database.type}" />
 				<then>
@@ -600,7 +655,7 @@
 				</fileset>
 			</war>
 		<echo>Copying ${warName}.war....</echo>
-			<copy todir="${jboss.server.url}/deploy" file="${temp.dir}/${warName}.war" overwrite="true" />
+		    <copy todir="${jboss.server.url}/deploy" file="${temp.dir}/${warName}.war" overwrite="true" />
 			<delete file="${temp.dir}/${warName}.war" />
 			<delete includeemptydirs="true">
 				<fileset dir="${temp.dir}/${warName}">
