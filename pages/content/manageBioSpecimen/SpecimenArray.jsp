@@ -98,6 +98,18 @@ function checkStotagePosition()
   <tr>
     <td class="tablepadding"><table width="100%" border="0" cellpadding="0" cellspacing="0">
       <tr>
+		<td class="td_tab_bg"><img src="images/uIEnhancementImages/spacer.gif" alt="spacer" width="50"  height="1"></td>
+<!-- Add Edit Tabs for the add Operation-->
+<logic:equal name="operation" value="<%=Constants.ADD%>">
+		<td valign="bottom"><img src="images/uIEnhancementImages/tab_add_selected.jpg" alt="Add Specimen Array" width="57" height="22" /></td>
+		<td valign="bottom"><html:link page="/SimpleQueryInterface.do?pageOf=pageOfSpecimenArray&aliasName=SpecimenArray"><img src="images/uIEnhancementImages/tab_edit_notSelected.jpg" alt="Edit Specimen Array" width="59" height="22" border="0" /></html:link></td>
+</logic:equal>
+<!-- Add Edit Tabs for the edit Operation-->
+<logic:equal name="operation" value="<%=Constants.EDIT%>">
+		<td valign="bottom"><html:link page="/SpecimenArray.do?operation=add&amp;pageOf=pageOfSpecimenArray"><img src="images/uIEnhancementImages/tab_add_notSelected.jpg" alt="Add Specimen Array" width="57" height="22" /></html:link></td>
+		<td valign="bottom"><img src="images/uIEnhancementImages/tab_edit_selected.jpg" alt="Edit Specimen Array" width="59" height="22" border="0" /></td>
+</logic:equal>
+		<td valign="bottom"><html:link page="/SpecimenArrayAliquots.do?pageOf=pageOfSpecimenArrayAliquot"><img src="images/uIEnhancementImages/tab_aliquot2.gif" alt="Aliquot Specimen Array" width="66" height="22" /></html:link></td>
         <td width="90%" valign="bottom" class="td_tab_bg">&nbsp;</td>
       </tr>
     </table>
