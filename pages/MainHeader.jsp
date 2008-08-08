@@ -1,7 +1,7 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
-
+<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
 
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
 	<tr>
@@ -25,10 +25,10 @@
 					href="/catissuecore/Summary.do" class="white"> <img
 					src="images/uIEnhancementImages/ic_summary.gif" alt="Summary"
 					width="10" height="10" hspace="3" vspace="0" border="0" />
-				<bean:message key="app.summary" /></a> &nbsp;<a target="_NEW"
-					href="RedirectToHelp.do" class="white"> <img
+				<bean:message key="app.summary" /></a> &nbsp;<a 
+					href="/catissuecore/RedirectToHelp.do" class="white"><img
 					src="images/uIEnhancementImages/ic_help.gif" alt="Help" width="12"
-					height="12" hspace="3" vspace="0" /> <bean:message key="app.help" /></a></td>
+					height="12" hspace="3" vspace="0" /><bean:message key="app.help" /></a></td>
 
 				<logic:notEmpty scope="session" name="<%=Constants.SESSION_DATA%>">
 					<td width="14%" align="right" valign="top"><a
@@ -50,5 +50,3 @@
 		</td>
 	</tr>
 </table>
-
-

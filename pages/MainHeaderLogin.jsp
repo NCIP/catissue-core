@@ -31,8 +31,7 @@
 					class="white"><img
 					src="images/uIEnhancementImages/ic_summary.gif" alt="Summary"
 					width="10" height="10" hspace="3" vspace="0" border="0" /><bean:message
-					key="app.summary" /></a>&nbsp;<a target="_NEW"
-					href="RedirectToHelp.do" class="white"><img
+					key="app.summary" /></a>&nbsp;<a href="/catissuecore/RedirectToHelp.do" class="white"><img
 					src="images/uIEnhancementImages/ic_help.gif" alt="Help" width="12"
 					height="12" hspace="3" vspace="0" border="0" /><bean:message
 					key="app.help" /></a>&nbsp;&nbsp;</td>
