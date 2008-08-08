@@ -242,7 +242,7 @@ public class UserAction extends SecureAction
         
         Logger.out.debug("pageOf :---------- "+ pageOf );
         
-        msrUtil.onFirstTimeLoadForUser(mapping, request);
+        msrUtil.onFirstTimeLoad(mapping, request);
         
         final String cpOperation = (String) request.getParameter("cpOperation");
         if(cpOperation !=null)
