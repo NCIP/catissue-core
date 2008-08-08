@@ -64,6 +64,7 @@ public class SpecimenArrayAliquotsBizLogic extends DefaultBizLogic
 			//Preparing the map keys			
 			String radioButonKey = "radio_"+i;
 			String labelKey = specimenKey + i + "_label";
+			String idKey = specimenKey + i + "_id";
 			String barcodeKey = specimenKey + i + "_barcode";
 			String containerIdKey = specimenKey + i + "_StorageContainer_id";
 			String containerNameKey = specimenKey + i + "_StorageContainer_name";
@@ -151,7 +152,7 @@ public class SpecimenArrayAliquotsBizLogic extends DefaultBizLogic
 						String[] selectColumnName = {"name"};
 						String[] whereColumnName = {"id"}; //"storageContainer."+Constants.SYSTEM_IDENTIFIER
 						String[] whereColumnCondition = {"="};
-						Object[] whereColumnValue = {containerId};
+						Object[] whereColumnValue = {new Long(containerId)};
 						String joinCondition = null;
 
 						List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
@@ -201,6 +202,8 @@ public class SpecimenArrayAliquotsBizLogic extends DefaultBizLogic
 			specimenArrayBizLogic.insert(aliquotSpecimenArray, dao, sessionDataBean);	
 			//postInsert(aliquotSpecimenArray, dao, sessionDataBean);
 			
+			// set ID of Specimen array inserted to be used in Aliqut summary page
+			aliquotMap.put(idKey, aliquotSpecimenArray.getId());
 			
 		}
 		
