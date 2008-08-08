@@ -3493,6 +3493,12 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 	private boolean validateContainerAccess(AbstractDAO dao, StorageContainer sc, SessionDataBean sessionData, long cpId) throws SMException
     {
         boolean isValidContainer = validateContainerAccess(dao,sc,sessionData);
+        
+        if(sessionData != null && sessionData.isAdmin())
+		{
+			return true;
+		}
+        
         Collection<Site> siteCollection = null;
         Site site = null;
         if (isValidContainer)
