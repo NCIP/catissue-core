@@ -49,6 +49,33 @@ function onButtonClick(buttonPressed)
 		
 	}
 </script>
+<script>
+//Set the slope for the IFrame
+if ( document.getElementById && !(document.all) ) 
+{
+	var slope=-7	;
+}
+else
+{
+	var slope=-8;
+}
+
+window.onload = function()
+				{ 
+						setFrameHeight('<%=Constants.CONFLICT_COMMON_VIEW%>', .31,slope);
+						setFrameHeight('<%=Constants.CONFLICT_TREE_VIEW%>', .42,slope);
+						setFrameHeight('<%=Constants.CONFLICT_DATA_VIEW%>', .42,slope); 
+				}
+
+window.onresize = function() 
+				{
+					setFrameHeight('<%=Constants.CONFLICT_COMMON_VIEW%>', .31,slope); 
+					setFrameHeight('<%=Constants.CONFLICT_TREE_VIEW%>', .42,slope);
+					setFrameHeight('<%=Constants.CONFLICT_DATA_VIEW%>', .42,slope);
+				}
+</script>
+
+<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 <html:form action="ConflictResolver.do">
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
   <tr>
@@ -65,10 +92,10 @@ function onButtonClick(buttonPressed)
         <td width="90%" valign="bottom" class="td_tab_bg">&nbsp;</td>
       </tr>
     </table>
-	<table width="100%" border="0" cellpadding="0" cellspacing="0">
+	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="whitetable_bg">
 		<tr>
 				<td>
-						<iframe id="<%=Constants.CONFLICT_COMMON_VIEW%>" name="<%=Constants.CONFLICT_COMMON_VIEW%>" src="<%=Constants.CONFLICT_COMMON_VIEW_ACTION%>?conflictStatus=<%=conflictStatus%>&reportQueueId=<%=reportQueueId%>&surgicalPathologyNumber=<%=surgicalPathologyNumber%>&reportDate=<%=reportDate%>&siteName=<%=siteName%>&reportCollectionDate=<%=reportCollectionDate%>" scrolling="no" frameborder="0" width="100%" height="<%=frame1Ysize%>" marginheight=0 marginwidth=0>
+						<iframe id="<%=Constants.CONFLICT_COMMON_VIEW%>" name="<%=Constants.CONFLICT_COMMON_VIEW%>" src="<%=Constants.CONFLICT_COMMON_VIEW_ACTION%>?conflictStatus=<%=conflictStatus%>&reportQueueId=<%=reportQueueId%>&surgicalPathologyNumber=<%=surgicalPathologyNumber%>&reportDate=<%=reportDate%>&siteName=<%=siteName%>&reportCollectionDate=<%=reportCollectionDate%>" scrolling="no" frameborder="0" width="100%" marginheight=0 marginwidth=0>
 									<bean:message key="errors.browser.not.supports.iframe"/>
 						</iframe>
 				</td>
@@ -82,7 +109,7 @@ function onButtonClick(buttonPressed)
 					 <%if(conflictStatus.equals(CaTIESConstants.STATUS_SCG_CONFLICT))
 						{
 					%>
-						<iframe name="" src="ConflictSCGAction.do?reportQueueId=<%=reportQueueId%>" scrolling="no" frameborder="0" width="100%" height="<%=frame3Ysize%>">
+						<iframe name="" src="ConflictSCGAction.do?reportQueueId=<%=reportQueueId%>" scrolling="no" frameborder="0" width="100%" >
 									<bean:message key="errors.browser.not.supports.iframe"/>
 						</iframe>
 
@@ -94,14 +121,14 @@ function onButtonClick(buttonPressed)
 							<tr>
 								<td width="30%"  valign="top">		
 			
-								<iframe id="<%=Constants.CONFLICT_TREE_VIEW%>" name="<%=Constants.CONFLICT_TREE_VIEW%>" src="<%=Constants.CONFLICT_TREE_VIEW_ACTION%>?reportQueueId=<%=reportQueueId%>&conflictStatus=<%=conflictStatus%>" scrolling="no" frameborder="0" width="100%" height="<%=frame2Ysize%>" marginheight=0 marginwidth=0 valign="top">
+								<iframe id="<%=Constants.CONFLICT_TREE_VIEW%>" name="<%=Constants.CONFLICT_TREE_VIEW%>" src="<%=Constants.CONFLICT_TREE_VIEW_ACTION%>?reportQueueId=<%=reportQueueId%>&conflictStatus=<%=conflictStatus%>" scrolling="no" frameborder="0" width="100%" marginheight=0 marginwidth=0 valign="top">
 									<bean:message key="errors.browser.not.supports.iframe"/>
 								</iframe>
 			
 								</td>
 							
 								<td width="70%" valign="top" >				
-									<iframe name="<%=Constants.CONFLICT_DATA_VIEW%>" src="<%=Constants.BLANK_SCREEN_ACTION%>" scrolling="no" frameborder="0" width="100%" height="<%=frame3Ysize%>">
+									<iframe id="<%=Constants.CONFLICT_DATA_VIEW%>" name="<%=Constants.CONFLICT_DATA_VIEW%>" src="<%=Constants.BLANK_SCREEN_ACTION%>" scrolling="no" frameborder="0" width="100%" >
 									<bean:message key="errors.browser.not.supports.iframe"/>
 									</iframe>
 								</td>

@@ -138,11 +138,11 @@
     else
     { %>
     
-    	<table height="340" border="0">
-	    	<tr height="10%">
-				<td align="top"><b><bean:message key="caTies.conflict.noreport.message" /></b></td>
+    	<table  border="0">
+	    	<tr>
+				<td class="black_ar" align="top"><b><bean:message key="caTies.conflict.noreport.message" /></b></td>
 			</tr>
-			<tr height="90%"/>
+			<tr />
 		</table>
   <%}%>
 			</td></tr><tr><td class="bottomtd"/></tr>
