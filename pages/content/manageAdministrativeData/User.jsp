@@ -408,7 +408,26 @@ function handleStatus(status)
 									</select></td>
 								<td width="14%" align="left" valign="top" class="black_ar_t">&nbsp;</td>
 								</tr>
-
+								
+												<logic:equal name="pageOf" value='${pageOfApproveUser}'>
+													<tr>
+														<td width="1%" height="25" align="left" class="black_ar">
+														<span class="blue_ar_b"><img
+															src="images/uIEnhancementImages/star.gif" alt="Mandatory"
+															width="6" height="6" hspace="0" vspace="0" /></span></td>
+														<td width="16%" align="left" class="black_ar"><label
+															for="status"> <bean:message
+															key="user.approveOperation" /> </label></td>
+														<td width="83%" colspan="4" align="left" valign="top"
+															class="black_new"><html:select property="status"
+															styleClass="formFieldSizedNew" styleId="status" size="1"
+															onchange="javascript:handleStatus(this)"
+															onmouseover="showTip(this.id)"
+															onmouseout="hideTip(this.id)">
+															<html:options name="statusList" labelName="statusList" />
+														</html:select></td>
+													</tr>
+												</logic:equal>
 								<tr class="td_color_F7F7F7">
 											<td colspan="8" align="left" class="bottomtd"></td>
 										</tr>
