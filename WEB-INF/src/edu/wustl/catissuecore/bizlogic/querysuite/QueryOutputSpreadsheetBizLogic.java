@@ -397,13 +397,13 @@ public class QueryOutputSpreadsheetBizLogic
 			addHashedRow(spreadSheetDataMap);
 			return "";
 		}
-		TemporalColumnUIBean temporalColumnUIBean = new TemporalColumnUIBean(node, selectSql, columnsList, outputTermsColumns,columnIndex);
-		modifySqlForTemporalColumns(temporalColumnUIBean);
-		selectSql = temporalColumnUIBean.getSql();
-		columnIndex = temporalColumnUIBean.getColumnIndex();
 	
 		if(!selectedColumnMetaData.isDefinedView() && queryResultObjectDataBean.getMainEntityIdentifierColumnId()==-1)
 		{ 
+			TemporalColumnUIBean temporalColumnUIBean = new TemporalColumnUIBean(node, selectSql, columnsList, outputTermsColumns,columnIndex);
+			modifySqlForTemporalColumns(temporalColumnUIBean);
+			selectSql = temporalColumnUIBean.getSql();
+			columnIndex = temporalColumnUIBean.getColumnIndex();
 			Map<EntityInterface, Integer> entityIdIndexMap =new HashMap<EntityInterface, Integer>();
 		    selectSql = QueryCSMUtil.updateEntityIdIndexMap(queryResultObjectDataBean,columnIndex,selectSql,null,
 		    																	entityIdIndexMap,idNodesMap);
@@ -575,21 +575,25 @@ public class QueryOutputSpreadsheetBizLogic
 				queryResultObjectDataBeanMap.put(metaData.getTreeDataNode().getId(),
 						queryResultObjectDataBean);
 			}
-		}
+		} 
 		this.selectedColumnMetaData.setSelectedColumnNameValueBeanList(selectedColumnNameValue);
 		int lastindexOfComma = sqlColumnNames.lastIndexOf(",");
 		String sql = sqlColumnNames.toString();
 		TemporalColumnUIBean temporalColumnUIBean = new TemporalColumnUIBean(null, selectSql, definedColumnsList, outputTermsColumns,columnIndex);
 		modifySqlForTemporalColumns(temporalColumnUIBean);
-		selectSql = temporalColumnUIBean.getSql();
+		String selectTQSql = temporalColumnUIBean.getSql();
 		columnIndex = temporalColumnUIBean.getColumnIndex();
 	
 		//columnIndex = modifySqlForTemporalColumns(null, sql, definedColumnsList, outputTermsColumns,columnIndex);
-		if (lastindexOfComma != -1 || selectSql.equals(""))
+		if (lastindexOfComma != -1 || selectTQSql.equals(""))
 		{
 			String columnsInSql = "";
 			if (lastindexOfComma != -1)
 				columnsInSql = sql.substring(0, lastindexOfComma).toString();
+			if(!selectTQSql.equals(""))
+			{
+				columnsInSql = columnsInSql + selectTQSql;
+			}
 			Map<EntityInterface, Integer> entityIdIndexMap = new HashMap<EntityInterface, Integer>();
 			columnsInSql = QueryCSMUtil.updateEntityIdIndexMap(null, columnIndex, columnsInSql,
 					defineViewNodeList, entityIdIndexMap,idNodesMap);
@@ -609,7 +613,9 @@ public class QueryOutputSpreadsheetBizLogic
 
 			}
 			selectSql = Constants.SELECT_DISTINCT + columnsInSql;
+			
 		}
+		
 		spreadSheetDataMap.put(Constants.SPREADSHEET_COLUMN_LIST, definedColumnsList);
 		return selectSql;
 	}
@@ -839,13 +845,18 @@ public class QueryOutputSpreadsheetBizLogic
 			}
 		}
 		if (queryResultObjectDataBean.isClobeType())
-		{
+		{ 
 			queryResultObjectDataBean.setFileTypeAtrributeIndexMetadataMap(fileTypeAtrributeIndexMetadataMap);
-		}
+		} 
+		
 		if(! selectedColumnMetaData.isDefinedView())
 		{
 			spreadSheetDataMap.put(Constants.SPREADSHEET_COLUMN_LIST, columnsList);
 			selectSql = selectSql.substring(0, selectSql.lastIndexOf(","));
+			TemporalColumnUIBean temporalColumnUIBean = new TemporalColumnUIBean(node, selectSql, columnsList, outputTermsColumns,columnIndex);
+			modifySqlForTemporalColumns(temporalColumnUIBean);
+			selectSql = temporalColumnUIBean.getSql();
+			columnIndex = temporalColumnUIBean.getColumnIndex();
 			selectedColumnMetaData.setSelectedAttributeMetaDataList(attributes);
 		}
 		else 
@@ -854,10 +865,10 @@ public class QueryOutputSpreadsheetBizLogic
 			selectSql = getSQLForSelectedColumns(spreadSheetDataMap,queryResultObjectDataBeanMap,mainEntityMap,idNodesMap,outputTermsColumns);
 			columnsList = (List<String>)spreadSheetDataMap.get(Constants.SPREADSHEET_COLUMN_LIST);
 		}
-		TemporalColumnUIBean temporalColumnUIBean = new TemporalColumnUIBean(node, selectSql, columnsList, outputTermsColumns,columnIndex);
-		modifySqlForTemporalColumns(temporalColumnUIBean);
-		selectSql = temporalColumnUIBean.getSql();
-		columnIndex = temporalColumnUIBean.getColumnIndex();
+//		TemporalColumnUIBean temporalColumnUIBean = new TemporalColumnUIBean(node, selectSql, columnsList, outputTermsColumns,columnIndex);
+//		modifySqlForTemporalColumns(temporalColumnUIBean);
+//		selectSql = temporalColumnUIBean.getSql();
+//		columnIndex = temporalColumnUIBean.getColumnIndex();
 		//columnIndex = modifySqlForTemporalColumns(node, selectSql, columnsList, outputTermsColumns,columnIndex);
 		if(!selectedColumnMetaData.isDefinedView() && queryResultObjectDataBean.getMainEntityIdentifierColumnId() == -1)
 		{
