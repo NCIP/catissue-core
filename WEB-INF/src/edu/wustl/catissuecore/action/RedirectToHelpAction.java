@@ -12,21 +12,34 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.common.cde.CDEConConfig;
+import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.dbManager.DAOException;
 
 /**
- * 
- * @author pathik_sheth
- *
+ * This class sets the link values for the Help.jsp page tab/icons
+ * @author sagar_baldwa
  */
-public class RedirectToHelpAction extends Action{
+public class RedirectToHelpAction extends Action
+{
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
 	throws IOException, ServletException, DAOException
-      {
-		 ActionForward actionForward=null; 
-		 RequestDispatcher dispatcher = 
-			request.getRequestDispatcher(Constants.HELP_FILE);
-		 dispatcher.forward(request, response);
-		 return actionForward;
+	{
+		//Retrives link values from caTissueCore_Properties.xml file	
+		String userGuideLink = XMLPropertyHandler.getValue("userguide.link");
+		String technicalGuideLink = XMLPropertyHandler.getValue("technicalguide.link");
+		String trainingGuideLink = XMLPropertyHandler.getValue("trainingguide.link");
+		String umlmodelGuideLink = XMLPropertyHandler.getValue("umlmodelguide.link");
+		String gforeGuideLink = XMLPropertyHandler.getValue("gforge.link");
+		String knowledgeCenterGuideLink = XMLPropertyHandler.getValue("knowledgecenter.link");
+		
+		request.setAttribute("UserGuide", userGuideLink);
+		request.setAttribute("TechnicalGuide", technicalGuideLink);
+		request.setAttribute("TrainingGuide", trainingGuideLink);
+		request.setAttribute("UmlModelGuide", umlmodelGuideLink);
+		request.setAttribute("GforgeGuide", gforeGuideLink);
+		request.setAttribute("KnowledgeCenterGuide", knowledgeCenterGuideLink);
+		
+		return mapping.findForward(Constants.SUCCESS);
       }
 }

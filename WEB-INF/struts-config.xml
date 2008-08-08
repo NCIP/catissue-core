@@ -26,6 +26,7 @@ PUBLIC
 		<form-bean name="loginForm" type="edu.wustl.catissuecore.actionForm.LoginForm"/>
 		<form-bean name="newSpecimenForm" type="edu.wustl.catissuecore.actionForm.NewSpecimenForm"/>
 		<form-bean name="createSpecimenForm" type="edu.wustl.catissuecore.actionForm.CreateSpecimenForm"/>
+		<form-bean name="summaryForm" type="edu.wustl.catissuecore.actionForm.SummaryForm"/>
 		<form-bean name="participantForm" type="edu.wustl.catissuecore.actionForm.ParticipantForm"/>
 		<form-bean name="collectionProtocolRegistrationForm" type="edu.wustl.catissuecore.actionForm.CollectionProtocolRegistrationForm"/>
 		<form-bean name="specimenCollectionGroupForm" type="edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm"/>
@@ -209,7 +210,7 @@ PUBLIC
             <forward name="failure" path=".catissuecore.errorPageDef"/>
 		</action>
 		
-        <action path="/Summary" type="edu.wustl.catissuecore.action.SummaryAction">
+        <action path="/Summary" type="edu.wustl.catissuecore.action.SummaryAction" name="summaryForm">
         	<forward name="success" path=".catissuecore.summaryHomeDef" />
             <forward name="failure" path=".catissuecore.homePageDef" />
 		</action>
@@ -226,8 +227,9 @@ PUBLIC
                     type="org.apache.struts.actions.ForwardAction"
                     parameter=".catissuecore.helpLoggedInDef" />
                    
-        <action path="/RedirectToHelp"  type="edu.wustl.catissuecore.action.RedirectToHelpAction" />
-                    
+        <action path="/RedirectToHelp"  type="edu.wustl.catissuecore.action.RedirectToHelpAction" >
+        	<forward name="success" path=".catissuecore.RedirectToHelp" />
+        </action>       	     
        
 		<!--Suite-->		
 			

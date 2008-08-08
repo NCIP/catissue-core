@@ -4,7 +4,7 @@
        "-//Apache Software Foundation//DTD Tiles Configuration 1.1//EN"
        "http://jakarta.apache.org/struts/dtds/tiles-config_1_1.dtd">
 
-<tiles-definitions>
+<tiles-definitions> 
 
 	<!-- Home tab pages definitions start -->
 	<definition name=".catissuecore.mainTitlePageDef" path="/pages/Layout.jsp">
@@ -74,6 +74,10 @@
 	
 	<definition name=".catissuecore.redirectToLoginPageDef" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/common/RedirectToLoginPage.jsp" />
+	</definition>
+	
+	<definition name=".catissuecore.RedirectToHelp" extends=".catissuecore.homePageDef">
+		<put name="content" value="/pages/content/common/Help.jsp" />
 	</definition>
 	
 	<definition name=".catissuecore.contactUsDef" extends=".catissuecore.homePageDef">
@@ -878,8 +882,7 @@
 	<!-- Search tab pages definitions end -->
 	
 	<!-- Summary tab pages definitions Begin -->
-	<definition name=".catissuecore.summaryHomeDef" extends=".catissuecore.homePageDef">
-		
+	<definition name=".catissuecore.summaryHomeDef" extends=".catissuecore.homePageDef">		
 		<put name="content" value="/pages/content/summary/Home.jsp" />
 	</definition>
 	<!-- Summary tab pages definitions End -->
