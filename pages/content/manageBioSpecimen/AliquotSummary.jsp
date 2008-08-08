@@ -1,7 +1,5 @@
 <!-- 
 	This is the aliquot summary page.
-	Author : Aniruddha Phadnis
-	Date   : Jul 12, 2006
 -->
 
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
@@ -50,6 +48,7 @@
 	<%}}%>
 
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
+<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" /> 
 <script>
 	var newWindow;
 	function showNewPage(action)
@@ -70,9 +69,44 @@
 		
 </script>
 <html:form action="<%=formName%>">
-<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
-
-<%
+<table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
+<logic:empty name="CPQuery">
+  <tr>
+    <td class="td_color_bfdcf3"><table border="0" cellpadding="0" cellspacing="0">
+      <tr>
+        <td class="td_table_head"><span class="wh_ar_b"> <bean:message key="aliquots.header" /></span></td>
+        <td><img src="images/uIEnhancementImages/table_title_corner2.gif" alt="Page Title - Specimen Aliquot" width="31" height="24" /></td>
+      </tr>
+    </table></td>
+  </tr>
+  </logic:empty>
+  <tr>
+    <td class="tablepadding">
+	
+	<table width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr>
+        <td class="td_tab_bg"><img src="images/uIEnhancementImages/spacer.gif" alt="spacer" width="50" height="1"></td>
+		<logic:empty name="CPQuery">
+        <td valign="bottom"><html:link page="/SimpleQueryInterface.do?pageOf=pageOfNewSpecimen&aliasName=Specimen"><img src="images/uIEnhancementImages/tab_edit_notSelected.jpg"  border="0"alt="Edit" width="59" height="22" /></html:link></td>
+        <td valign="bottom"><html:link page="/CreateSpecimen.do?operation=add&pageOf=pageOfDeriveSpecimen&virtualLocated=true"><img src="images/uIEnhancementImages/tab_derive2.gif" alt="Derive" width="56" height="22" border="0" /></html:link></td>
+		</logic:empty>
+		
+        <td valign="bottom"><img src="images/uIEnhancementImages/tab_aliquot.gif" alt="Aliquot" width="66" height="22" /></td>
+		<logic:empty name="CPQuery">
+        <td valign="bottom"><html:link page="/QuickEvents.do?operation=add"><img src="images/uIEnhancementImages/tab_events2.gif" alt="Events" width="56" height="22" border="0"/></html:link></td>
+        <td valign="bottom"><html:link page="/MultipleSpecimenFlexInitAction.do?pageOf=pageOfMultipleSpWithMenu"><img src="images/uIEnhancementImages/tab_multiple2.gif" alt="Multiple" width="66" height="22" border="0" /></html:link></td>
+		</logic:empty>
+        <td width="90%" class="td_tab_bg">&nbsp;</td>
+      </tr>
+    </table>
+	
+      <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
+        <tr>
+          <td width="61%" align="left" class="toptd"></td>
+        </tr>
+        
+        <tr>
+		<%
 	AliquotForm form = (AliquotForm)request.getAttribute("aliquotForm");
 	String unit = "";
 	String conc = "";
@@ -86,165 +120,113 @@
 		unit = Utility.getUnit(form.getClassName(),form.getType());
 	}
 %>
-
-<tr>
-<td>
-	<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
-	
-	 						<!-- 							
-							 * Patch ID: 3835_1_12
-							 * See also: 1_1 to 1_5
-							 * Description : Changed readonly text to labels
-							-->	 
-	
-		
-	<tr>
-		<td class="formTitle" height="20" colspan="3">
-			<bean:message key="aliquots.summaryTitle"/>
-		</td>
-	</tr>
-	
-	<%--tr>
-		<td class="formRequiredNotice" width="5">&nbsp;</td>
-		<td class="formRequiredLabel">
-			<label for="spCollectionGroupId">
-				<bean:message key="specimen.specimenCollectionGroupId"/> 
-			</label>
-		</td>
-		<td class="formField">
-			<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="spCollectionGroupId" property="spCollectionGroupId" readonly="true"/>
-		</td>
-	</tr--%>
-	
-	<tr>
-		<td class="formRequiredNotice" width="5">&nbsp;</td>
-		<td class="formRequiredLabel">
-			<label for="type">
+          <td colspan="2" align="left" class="tr_bg_blue1"><span class="blue_ar_b"> &nbsp;<bean:message key="aliquots.summaryTitle"/></span></td>
+        </tr>
+		 <tr>
+          <td align="left" class="showhide"><table width="100%" border="0" cellspacing="0" cellpadding="3">
+              <tr>
+                <td width="20%" class="noneditable"><strong>
+					<label for="type">
 				<bean:message key="specimen.type"/> 
 			</label>
-		</td>
-
-		<td class="formField"> <%=form.getClassName()%>
+			</strong>
+			</td>
+			<td width="30%" class="noneditable">- <%=form.getClassName()%>
 			<html:hidden styleId="className" property="className" />
 		</td>
-	</tr>
-	
-	<tr>
-		<td class="formRequiredNotice" width="5">&nbsp;</td>
-		<td class="formRequiredLabel">
+		<td width="20%" class="noneditable"><strong>
 			<label for="subType">
 				<bean:message key="specimen.subType"/> 
 			</label>
+			</strong>
 		</td>
-		<td class="formField"> <%=form.getType()%>
+		<td width="30%" class="noneditable">-  <%=form.getType()%>
 			<html:hidden styleId="type" property="type" />
 		</td>
 	</tr>
-	
 	<tr>
-		<td class="formRequiredNotice" width="5">&nbsp;</td>
-		<td class="formRequiredLabel">
-			<label for="tissueSite">
+                <td class="noneditable"><strong>
+					<label for="tissueSite">
 				<bean:message key="specimen.tissueSite"/> 
 			</label>
-		</td>
-
-		<td class="formField"> <%=form.getTissueSite()%>
+			</strong>
+			</td>
+			<td class="noneditable">-  <%=form.getTissueSite()%>
 			<html:hidden styleId="tissueSite" property="tissueSite" />
 		</td>
-	</tr>
-	
-	<tr>
-		<td class="formRequiredNotice" width="5">&nbsp;</td>
-		<td class="formRequiredLabel">
+		<td class="noneditable"><strong>
 			<label for="tissueSide">
 				<bean:message key="specimen.tissueSide"/> 
 			</label>
+			</strong>
 		</td>
-		<td class="formField"> <%=form.getTissueSide()%>
+		<td class="noneditable">- <%=form.getTissueSide()%>
 			<html:hidden styleId="tissueSide" property="tissueSide" />
 		</td>
-	</tr>
-	
-	<tr>
-		<td class="formRequiredNotice" width="5">&nbsp;</td>
-		<td class="formRequiredLabel">
-			<label for="pathologicalStatus">
+			</tr>
+              <tr>
+                <td class="noneditable"><strong>
+					<label for="pathologicalStatus">
 				<bean:message key="specimen.pathologicalStatus"/> 
 			</label>
-		</td>
-		<td class="formField"> <%=form.getPathologicalStatus()%>
+			</strong>
+			</td>
+			<td class="noneditable">- <%=form.getPathologicalStatus()%>
 			<html:hidden styleId="pathologicalStatus" property="pathologicalStatus" />
 		</td>
-	</tr>
-	
-	<tr>
-		<td class="formRequiredNotice" width="5">&nbsp;</td>
-		<td class="formRequiredLabel">
-			<label for="availableQuantity">
-				<bean:message key="specimen.availableQuantity"/> 
-			</label>
-		</td>
-		<td class="formField"><%=form.getAvailableQuantity()%>&nbsp; <%=unit%>
-			<html:hidden styleId="availableQuantity" property="availableQuantity" />
-		</td>
-	</tr>
-	
-	<tr>
-		<td class="formRequiredNotice" width="5">&nbsp;</td>
-		<td class="formRequiredLabel">
+		<td class="noneditable"><strong>
 			<label for="concentration">
 				<bean:message key="specimen.concentration"/> 
 			</label>
+			</strong>
 		</td>
-		<td class="formField">
-		<bean:write name="aliquotForm" property="concentration"/> &nbsp;
+		<td class="noneditable">- <bean:write name="aliquotForm" property="concentration"/> &nbsp;
 		<bean:message key="specimen.concentrationUnit"/>
-			<html:hidden styleId="concentration" property="concentration" />		
+			<html:hidden styleId="concentration" property="concentration" />
 		</td>
-	</tr>
-	 						<!-- 							
-							 * Patch ID: 3835_1_13
-							 * See also: 1_1 to 1_5
-							 * Description : Added <TR> for createdOn date field .				 
-							-->	 
-
-
-	<tr>
-		<td class="formRequiredNotice" width="5">&nbsp;</td>
-		<td class="formRequiredLabel">
-			<label for="createdDate">
-				<bean:message key="specimen.createdDate"/>
+		</tr>
+              <tr>
+                <td class="noneditable"><strong>
+					<label for="availableQuantity">
+				<bean:message key="specimen.availableQuantity"/> 
 			</label>
-		</td>
-		<td class="formField"><%=form.getCreatedDate()%>&nbsp;<bean:message key="scecimen.dateformat"/>
+			</strong>
+			</td>
+			<td class="noneditable">- <%=form.getAvailableQuantity()%>&nbsp; <%=unit%>
+			<html:hidden styleId="availableQuantity" property="availableQuantity" />
+			</td>
+			<td class="noneditable"><strong><label for="createdDate">
+				<bean:message key="specimen.createdDate"/>
+			</label></strong></td>
+			<td class="noneditable">- 
+				<%=form.getCreatedDate()%>&nbsp;<span class="grey_ar_s"><bean:message key="scecimen.dateformat"/></span>
 			<html:hidden styleId="createdDate" property="createdDate" />	
 			<html:hidden styleId="spCollectionGroupId" property="spCollectionGroupId" />
 			<html:hidden styleId="scgName" property="scgName" />
-		</td>
-	</tr>
-</table>
-	
-	<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
-	<tr>
-		<td class="formLeftSubTableTitle" width="5">
-	     	#
-	    </td>
-	    <td class="formLeftSubTableTitle" width="5">
-	     	<bean:message key="specimen.label"/>
-	    </td>
-	    <td class="formRightSubTableTitle">
-			<bean:message key="specimen.quantity"/>
-		</td>
-		<td class="formRightSubTableTitle">
-			<bean:message key="specimen.barcode"/>
-		</td>
-		<td class="formRightSubTableTitle">
-			<bean:message key="aliquots.location"/>
-		</td>
-	</tr>
-	
-	<%
+			</td>
+			</tr>
+			
+          </table></td>
+        </tr>
+		<tr>
+          <td class="showhide1"><table width="100%" border="0" cellspacing="0" cellpadding="4">
+              <tr class="tableheading">
+                <td width="2%" align="left" class="black_ar_b">#</td>
+                <td width="15%" align="left" nowrap="nowrap" class="black_ar_b">
+					<bean:message key="specimen.label"/>
+					</td>
+					<td width="15%" class="black_ar_b">&nbsp;
+					<bean:message key="specimen.barcode"/>
+				</td>
+                <td width="15%" align="left" nowrap="nowrap" class="black_ar_b">
+				<bean:message key="specimen.quantity"/>
+				</td>
+                
+                <td width="55%" class="black_ar_b" >
+					<bean:message key="cpbasedentry.storagelocation"/>
+				</td>
+              </tr>
+			  <%
 		int counter=0;
 	%>
 		<logic:iterate name="aliquotForm" property="specimenList" id="aliquot">
@@ -257,52 +239,50 @@
 				}
 			%>
 			
-		<tr>
-			<td class="formSerialNumberField" width="5">
-		     	<%=++counter%>.
-		    </td>
-		    <td class="formField" width="5">
-				<html:link href="#" styleId="label" onclick="<%=onClickSpecimenFunction%>">
+	
+              <tr>
+				<td align="left" class="black_ar" ><%=++counter%>.  </td>
+				<td class="black_ar"><html:link href="#" styleClass="view" styleId="label" onclick="<%=onClickSpecimenFunction%>">
 					<bean:write name="aliquot" property="label"/>
 					<html:hidden styleId="label" property="createdDate" />
 				</html:link>
-		    </td>
-		    <td class="formField" nowrap>
-				<bean:write name="aliquot" property="initialQuantity"/>		
+				</td>
+                
+                <td class="black_ar">&nbsp;
+					<bean:write name="aliquot" property="barcode"/>
+				</td>
+				<td class="black_ar">
+					<bean:write name="aliquot" property="initialQuantity"/>		
 					&nbsp; <%=unit%>
-			</td>
-			<td class="formField">
-				<bean:write name="aliquot" property="barcode"/>			&nbsp;					
-			</td>
-			<td class="formField" nowrap>
-			<logic:empty name="aliquot" property="specimenPosition">
+				</td>
+                <td class="black_ar" align="left">
+					<logic:empty name="aliquot" property="specimenPosition">
 					Virtually Located 
 				</logic:empty>
 			<logic:notEmpty name="aliquot" property="specimenPosition">
 				<bean:define id="position" name="aliquot" property="specimenPosition"/>
 				<logic:notEmpty name="position" property="positionDimensionOne">
-					<bean:define id="sc" name="position" property="storageContainer"/> &nbsp;
+					<bean:define id="sc" name="position" property="storageContainer"/>
 					<bean:write name="sc" property="name"/> &nbsp;
 					
 					<bean:write name="position" property="positionDimensionOne"/> &nbsp;
 					<bean:write name="position" property="positionDimensionTwo"/>
 				</logic:notEmpty>
 			</logic:notEmpty>
-			
-				
-				
-				
 			</td>
-		</tr>
-	</logic:iterate>
-</table>
-</td>
-</tr>
-<tr colspan="5">
-		<td align="right">
-			<table width="100%">
-				<tr>									
-					<html:hidden property="submittedFor" value=""/>				
+              </tr>
+			  </logic:iterate>
+			      </tr>
+          </table></td>
+        </tr>
+        
+        
+        <tr>
+          <td class=" bottomtd"></td>
+        </tr>
+        <tr>
+          <td colspan="2" class="buttonbg">
+			<html:hidden property="submittedFor" value=""/>				
 					<html:hidden property="forwardTo" value=""/>					
 					<html:hidden property="noOfAliquots"/>					
 					<%
@@ -311,17 +291,17 @@
 						String addMoreSubmitFunctionName= "setSubmittedFor('ForwardTo','" + Constants.SPECIMEN_FORWARD_TO_LIST[3][1]+"')";	
 						String addMoreSubmit = addMoreSubmitFunctionName + ","+confirmDisableFuncName;
 					%>						
-					<td align="right" class="formFieldNoBorders" nowrap>	
-						<html:button
-							styleClass="actionButton" property="submitAndDistributeButton"
+
+				<html:button
+							styleClass="blue_ar_b" property="submitAndDistributeButton"
 							title="<%=Constants.SPECIMEN_BUTTON_TIPS[3]%>"
 							value="<%=Constants.SPECIMEN_FORWARD_TO_LIST[3][0]%>"
 							onclick="<%=addMoreSubmit%>">
 						</html:button>
 					</td>
-				<tr>
-			</table>
-		</td>
-</tr>
+				</tr>
+    </table></td>
+  </tr>
 </table>
 </html:form>
+<!----------------------------------------------------------------------------------------->
