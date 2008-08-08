@@ -258,7 +258,7 @@
               <td width="17%" align="left" class="black_ar"><bean:message key="parent.specimen.details.label"/></td>
               <td colspan="4" align="left" valign="middle" nowrap><table width="55%" border="0" cellspacing="0" cellpadding="0" >
                   <tr class="groupElements">
-                    <td valign="middle" nowrap><label><span class="black_ar">
+                    <td valign="middle" nowrap><span class="black_ar">
                       <html:radio styleClass="" styleId="checkedButton" property="checkedButton" value="1"
 								onclick="onRadioButtonClick(this)">
 							</html:radio>
@@ -271,7 +271,7 @@
 				 				<html:text styleClass="black_ar"  maxlength="50"  size="20" styleId="parentSpecimenLabel" 
 									property="parentSpecimenLabel" disabled="true" />
 						    </logic:equal>
-						&nbsp;&nbsp; </span></label>
+						&nbsp;&nbsp; </span>
                         <span class="black_ar">
                         <html:radio styleClass="" styleId="checkedButton" property="checkedButton" value="2" 
 								onclick="onRadioButtonClick(this)">
