@@ -363,20 +363,22 @@ function handleStatus(status)
 										width="6" height="6" hspace="0" vspace="0" /></span></td>
 									<td width="17%" align="left" class="black_ar_t">Role</td>
 									<td width="19%" class="black_ar_t"><select name = "role" class="formFieldSizedNew"
-										id="roleIds" onchange="disableAllForSuperAdmin(this)">										
+										id="roleIds" onchange="disableAllForSuperAdmin(this,'cpCheckId')">										
 										<%
+										String roleName = "";
+										String roleValue = "";
+										if((roleList!=null)&& !(roleList.isEmpty())){
 									for (int i = 0; i < roleList.size(); i++) {
-									String roleName = ""
-									+ ((NameValueBean) roleList.get(i)).getName();
-									String roleValue = ""
-									+ ((NameValueBean) roleList.get(i)).getValue();
+									roleName = ""+ ((NameValueBean) roleList.get(i)).getName();
+									roleValue = ""+ ((NameValueBean) roleList.get(i)).getValue();
 									String selected = "";
-							//		if (roleValue.equals("1")) {
-							//			selected = "SELECTED";
-							//		}
+									if (roleValue.equals("0")) {
+										selected = "SELECTED";
+									}
 							%>
 							<option value="<%=roleValue%>"  ><%=roleName%></option>
 							<%
+									}
 							}
 							%>
 									</select></td>
@@ -390,20 +392,23 @@ function handleStatus(status)
 										class="formFieldSizedNew" id="siteIds" size="4"
 										multiple="multiple" onchange="getCPsForThisSites(this)">
 										<%
-									for (int i = 0; i < siteList.size(); i++) {
-									String siteName = ""
-									+ ((NameValueBean) siteList.get(i)).getName();
-									String siteValue = ""
-									+ ((NameValueBean) siteList.get(i)).getValue();
+										String siteName = "";
+										String siteValue = "";
+										if((siteList!=null)&& !(siteList.isEmpty()))
+										{
+										for (int i = 0; i < siteList.size(); i++) {
+										siteName = ""+ ((NameValueBean) siteList.get(i)).getName();
+										siteValue = ""+ ((NameValueBean) siteList.get(i)).getValue();
 							%>
 							<option value="<%=siteValue%>" onmouseover="Tip('<%=siteName%>',WIDTH,200)"><%=siteName%></option>
 							<%
+										}
 							}
 							%>
 									</select></td>
-									<td width="14%" align="left" valign="top" class="black_ar_t">&nbsp;</td>
+								<td width="14%" align="left" valign="top" class="black_ar_t">&nbsp;</td>
 								</tr>
-								
+
 								<tr class="td_color_F7F7F7">
 											<td colspan="8" align="left" class="bottomtd"></td>
 										</tr>
@@ -430,7 +435,7 @@ function handleStatus(status)
 												width="6" height="6" hspace="0" vspace="0" /></span></td>
 											<td width="17%" align="left" class="black_ar">Collection
 											Protocol(s)</td>
-											<td width="19%" class="black_ar"><input type="checkbox" checked="true" id="cpCheckId" onclick="disableOnSel('cpCheckId','cpIds')" >All
+											<td width="19%" class="black_ar"><input type="checkbox" checked="true" id="cpCheckId" onclick="disableSelBoxOnChk('cpCheckId','cpIds')" >All
 											Current and Future</td>
 											<td width="13%" class="black_ar">&nbsp;</td>
 											<td width="1%" align="center" class="black_ar"><span
@@ -439,43 +444,45 @@ function handleStatus(status)
 												width="6" height="6" hspace="0" vspace="0" /></span></td>
 											<td width="17%" align="left" class="black_ar">Privilege(s)</td>
 											<td rowspan="2" width="17%" align="center" class="black_ar_t" valign="top"><select
-												class="formFieldSizedNew" id="actionIds" size="4"
+												class="formFieldSizedNew" id="actionIds" size="4" onchange="getCutomRole('roleIds')"
 												multiple="multiple" >
 												<%
-									for (int i = 0; i < actionList.size(); i++) {
-									String actionName = ""
-									+ ((NameValueBean) actionList.get(i)).getName();
-									String actionValue = ""
-									+ ((NameValueBean) actionList.get(i)).getValue();
-							%>
-							<option value="<%=actionValue%>" ><%=actionName%></option>
-							<%
-							}
-							%>
+												String actionName = "";
+												String actionValue = "";
+												if((actionList!=null)&& !(actionList.isEmpty()))
+												{
+													for (int i = 0; i < actionList.size(); i++) {
+													actionName = ""+ ((NameValueBean) actionList.get(i)).getName();
+													actionValue = ""+ ((NameValueBean) actionList.get(i)).getValue();
+											%>
+											<option value="<%=actionValue%>" ><%=actionName%></option>
+											<%
+												}
+											}
+											%>
 											</select></td>
 											<td width="14%" align="left" valign="top">&nbsp;</td>
 
 										</tr>
-
-
-
-
 										<tr>
 											<td width="1%" align="center" class="black_ar">&nbsp;</td>
 											<td width="17%" align="left" class="black_ar"></td>
 											<td width="19%" class="black_ar" ><select
 												class="formFieldSizedNew" id="cpIds" size="4"
-												multiple="multiple" disabled="true">
+												multiple="multiple" onchange="getActionsForThisCPs(this.id,'siteIds','roleIds')" disabled="true">
 												<%
+												String cpActionName = "";
+												String cpActionValue = "";
+												if((cpList!=null)&& !(cpList.isEmpty()))
+												{
 									for (int i = 0; i < cpList.size(); i++) {
-									String cpActionName = ""
-									+ ((NameValueBean) cpList.get(i)).getName();
-									String cpActionValue = ""
-									+ ((NameValueBean) cpList.get(i)).getValue();
+									cpActionName = ""+ ((NameValueBean) cpList.get(i)).getName();
+									cpActionValue = ""+ ((NameValueBean) cpList.get(i)).getValue();
 							%>
 							<option value="<%=cpActionValue%>"><%=cpActionName%></option>
 							<%
 							}
+												}
 							%>
 											</select></td>
 										</tr>
@@ -504,15 +511,15 @@ function handleStatus(status)
 											<table width="100%" border="0" cellspacing="0"
 												cellpadding="3">
 												<tr class="tableheading">
-													<td width="8%" class="black_ar_b"><label for="delete"
+													<td width="6%" class="black_ar_b"><label for="delete"
 														align="left"><bean:message key="app.select" /></label></td>
-													<td width="25%" class="black_ar_b" align="left"><bean:message
-														key="assignPrivileges.site(s)" /></td>
 													<td width="21%" class="black_ar_b" align="left"><bean:message
+														key="assignPrivileges.site(s)" /></td>
+													<td width="15%" class="black_ar_b" align="left"><bean:message
 														key="app.collectionProtocol" /></td>
-													<td width="18%" class="black_ar_b" align="left"><bean:message
+													<td width="13%" class="black_ar_b" align="left"><bean:message
 														key="user.role" /></td>
-													<td width="23%" class="black_ar_b" align="left"><bean:message
+													<td width="40%" class="black_ar_b" align="left"><bean:message
 														key="app.Privileges" /></td>
 													<td width="5%" class="black_ar_b">&nbsp;</td>
 												</tr>
@@ -545,10 +552,10 @@ function handleStatus(status)
 																}
 																%>
 
-																<td width="8%" class="black_ar"><input
+																<td width="6%" class="black_ar"><input
 																	type='checkbox' name='<%=chkName %>' id='<%=chkName %>'
 																	onclick="enableDeleteButton('summaryTableId','deleteButtonId')" /></td>
-																<td width="25%" class="black_ar"
+																<td width="21%" class="black_ar"
 																	onmouseover="Tip('<%=arr[1]%>',WIDTH,200)">
 																<%
 																		if (arr[1].length() > 20) {
@@ -556,11 +563,11 @@ function handleStatus(status)
 																			}
 																%><span><%=arr[1]%></span></td>
 
-																<td width="21%" class="black_ar"><span><%=arr[0]%></span></td>
-																<td width="18%" class="black_ar"><span><%=arr[2]%></span>
+																<td width="15%" class="black_ar"><span><%=arr[0]%></span></td>
+																<td width="13%" class="black_ar"><span><%=arr[2]%></span>
 																</td>
 
-																<td width="23%" class="black_ar"
+																<td width="40%" class="black_ar"
 																	onmouseover="Tip('<%=arr[3]%>',WIDTH,200)">
 																<%
 																		if (arr[3].length() > 20) {
@@ -580,13 +587,13 @@ function handleStatus(status)
 
 														</tbody>
 													</table>
-													</div> 
+													</div>
 													</td>
 												</tr>
 												<tr>
 													<td class="black_ar" colspan="7"><html:button
 														property="deleteButton" styleId="deleteButtonId" styleClass="black_ar"
-														onclick="deleteCheckedRows()" disabled="true">
+														onclick="deleteCheckedRows('summaryTableId',this.id)" disabled="true">
 														<bean:message key="buttons.delete" />
 													</html:button></td>
 												</tr>
@@ -625,7 +632,7 @@ function handleStatus(status)
 												<bean:message key="buttons.cancel" />
 											</html:link>
 										</logic:equal>
-									</logic:notEqual> <logic:equal name="pageOf"
+									</logic:notEqual> <logic:equal name="pageOf" 
 										value='${requestScope.pageOfSignUp}'>
 										<a href="#" class="cancellink"><html:link
 											page="/RedirectHome.do" styleClass="cancellink">
