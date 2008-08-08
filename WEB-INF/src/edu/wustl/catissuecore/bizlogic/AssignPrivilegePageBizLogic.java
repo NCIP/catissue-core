@@ -118,9 +118,8 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 		String[] whereColumnName = new String[]{Constants.ACTIVITY_STATUS};
 		String[] whereColumnCondition = new String[]{"not in"};
 		Object[] whereColumnValue = {activityStatusArray};
-		
 
-		List<NameValueBean> siteNameValueBeanList;
+		List<NameValueBean> siteNameValueBeanList=new ArrayList<NameValueBean>();
 		try
 		{
 			siteNameValueBeanList = getList(sourceObjectName, siteDisplayField, valueField, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition,
@@ -130,14 +129,8 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 		{
 			throw new BizLogicException("Could not get List of siteNameValueBean", e);
 		}
-		if (siteNameValueBeanList != null && !siteNameValueBeanList.isEmpty())
-		{
-		NameValueBean siteNameValueBean = siteNameValueBeanList.get(0);
-		if(siteNameValueBean.getValue().equals("-1"))
-		{
-			siteNameValueBeanList.remove(0);
-		}
-		}
+		
+		siteNameValueBeanList=removeSelect(siteNameValueBeanList);
 		
 		return siteNameValueBeanList;
 		
@@ -155,7 +148,6 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 		String[] whereColumnName = new String[]{Constants.ACTIVITY_STATUS};
 		String[] whereColumnCondition = new String[]{"not in"};
 		Object[] whereColumnValue = {activityStatusArray};
-		
 
 		List<NameValueBean> cpNameValueBeanList;
 		try
@@ -167,17 +159,10 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 		{
 			throw new BizLogicException("Could not get List of siteNameValueBean", e);
 		}
-		if (cpNameValueBeanList != null && !cpNameValueBeanList.isEmpty())
-		{
-		NameValueBean siteNameValueBean = cpNameValueBeanList.get(0);
-		if(siteNameValueBean.getValue().equals("-1"))
-		{
-			cpNameValueBeanList.remove(0);
-		}
-		}
+
+		cpNameValueBeanList=removeSelect(cpNameValueBeanList);
 		
 		return cpNameValueBeanList;
-		
 	}
 	/**
 	 * Gets list of users when page is loaded
@@ -199,7 +184,7 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 		String[] whereColumnCondition = new String[]{"not in"};
 		Object[] whereColumnValue = {activityStatusArray};		
 
-		List<NameValueBean> userNameValueBeanList;
+		List<NameValueBean> userNameValueBeanList=new ArrayList<NameValueBean>();
 		try
 		{
 			userNameValueBeanList = getList(sourceObjectName, userDisplayField, valueField, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition,
@@ -209,11 +194,8 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 		{
 			throw new BizLogicException("Could not get List of userNameValueBean", e);
 		}
-		NameValueBean  userNameValueBean=userNameValueBeanList.get(0);
-		if(userNameValueBean.getValue().equals("-1"))
-		{
-			userNameValueBeanList.remove(0);
-		}
+		
+		userNameValueBeanList=removeSelect(userNameValueBeanList);
 		
 		return userNameValueBeanList;
 		
@@ -223,7 +205,7 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 	 * @return List of role NameValueBean objects.
 	 * @throws BizLogicException
 	 */
-	public List<NameValueBean> getRoleList() throws BizLogicException
+	public List<NameValueBean> getRoleList(String pageOf) throws BizLogicException
     {
         //Sets the roleList attribute to be used in the Add/Edit User Page.
         Vector roleList;
@@ -240,22 +222,24 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
         
         List<NameValueBean> roleNameValueBeanList = new ArrayList<NameValueBean>();
         roleNameValueBeanList.add(0,new NameValueBean(Constants.SELECT_OPTION,"-1"));
+        roleNameValueBeanList.add(new NameValueBean("Custom","0"));
         while (iterator.hasNext())
         {
             Role role = (Role) iterator.next();
             NameValueBean nameValueBean = new NameValueBean();
-            
-            if(role.getName().equalsIgnoreCase("SUPERADMINISTRATOR"))
+            if(!("SUPERADMINISTRATOR".equals(role.getName())))
+            {
+	            nameValueBean.setName(role.getName());
+	        }
+            else
             {
             	nameValueBean.setName("Super Administrator");
             }
-            else
-            {
-            	nameValueBean.setName(role.getName());
-            }
-	        nameValueBean.setValue(String.valueOf(role.getId()));
-	        roleNameValueBeanList.add(nameValueBean);
+             nameValueBean.setValue(String.valueOf(role.getId()));
+	         roleNameValueBeanList.add(nameValueBean);
+          
         }
+        
         
         return roleNameValueBeanList;
     }
@@ -278,15 +262,14 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 	}
 	
 	
-	public List<NameValueBean> getActionListForUser(boolean isToExcludeDisabled) throws BizLogicException
+	public List<NameValueBean> getActionListForUserPage(boolean isToExcludeDisabled) throws BizLogicException
 	{     
 		List<NameValueBean> privilegeNameValueBeanList = new ArrayList<NameValueBean>();
 		List<NameValueBean> cpPrivilegesList = Variables.privilegeGroupingMap.get("CP");
 		
 		List<NameValueBean> sitePrivilegesList = Variables.privilegeGroupingMap.get("SITE"); 
-		//List<NameValueBean> newList = 
-		//cpPrivilegesList.addAll(sitePrivilegesList);
-		privilegeNameValueBeanList.addAll(sitePrivilegesList);
+		
+		privilegeNameValueBeanList.addAll(sitePrivilegesList); 
 		privilegeNameValueBeanList.addAll(cpPrivilegesList);
 		List<NameValueBean> privList = new ArrayList<NameValueBean>();
 		for (NameValueBean nmv  : privilegeNameValueBeanList)
@@ -297,7 +280,6 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 		return privList;
 	}
 	
-	
 	/**
 	 * Gets list of actions when page is loaded
 	 * @param isToExcludeDisabled
@@ -306,7 +288,6 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 	 */
 	public List<NameValueBean> getAllPrivilegeList(boolean isToExcludeDisabled) throws BizLogicException
 	{     
-		
 		List<NameValueBean> privilegeNameValueBeanList = Utility.getAllPrivileges();
 		for (int i=0;i<privilegeNameValueBeanList.size();i++)
 		{
@@ -317,9 +298,50 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 		}
 		return privilegeNameValueBeanList;
 	}
+
+	/**
+	 * Gives list of JSONObjects, having user NameValueBean assigned to selected sites as a response
+	 * @param selectedSitesList
+	 * @param assignPrivilegePageBizLogic
+	 * @return List<JSONObject> ,list of JSONObjects, having user NameValueBean assigned to selected sites
+	 * @throws JSONException 
+	 * @throws IOException
+	 */
+	public List<JSONObject> getUsersForThisSites(List<Long> selectedSitesList) throws BizLogicException,JSONException
+	{
+		List<JSONObject> arrayList = new ArrayList<JSONObject>();
+		List<NameValueBean> usersList = new ArrayList<NameValueBean>();
+		
+		usersList = getUsersForSelectedSites(selectedSitesList);
+		
+		if(usersList!=null && !usersList.isEmpty())
+		{
+			arrayList = getJSONObjListOfNameValue(usersList);
+		}
+		return arrayList;
+	}
 	
-	
-	
+	/**
+	 * Gives the list of user NameValueBeanObjects that are registered under the selected sites.
+	 * @param selectedSitesList
+	 * @return List<NameValueBean> list of user NameValueBeanObjects .
+	 */
+	public List<NameValueBean> getUsersForSelectedSites(List<Long> selectedSitesList) throws BizLogicException
+	{
+		List<NameValueBean> list = new ArrayList<NameValueBean>();
+		if(selectedSitesList!=null && !selectedSitesList.isEmpty())
+		{
+			Set<NameValueBean> userSet = new HashSet<NameValueBean>();
+			for(int i=0;i<selectedSitesList.size();i++)
+			{
+				long siteId=selectedSitesList.get(i);
+				
+				userSet.addAll(getUsersList(siteId));
+			}
+			list.addAll(userSet);
+		}
+ 		return list;
+	}
 	
 	/**
 	 * Given a list selected sites , this method will return the list of users registered under them.
@@ -361,145 +383,36 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 		
 		return nameValuBeanList;
 	}
-	/**
-	 * Given a selected role this method will return the list of actions under this role.
-	 * @param role
-	 * @return List of actions assigned to the selected role
-	 */
-	public List<NameValueBean> getActionsList(String role) 
-	{	
-		List<NameValueBean> nameValuBeanList=new ArrayList<NameValueBean>();
-		
-		Set<Privilege> actions;	
-	    PrivilegeUtility privilegeUtility = new PrivilegeUtility();
-	   if("7".equals(role))
-	   {
-		  nameValuBeanList= scientistPrivilegesList; 
-	   }
-	   else
-	   {
-		try
-		{ 
-			actions = privilegeUtility.getRolePrivileges(role);
-			  for (Privilege action : actions)
-				{
-			    	NameValueBean valueBean=new NameValueBean();
-			    	valueBean.setName(action.getName());
-			    	valueBean.setValue(String.valueOf(action.getId()));
-			    	nameValuBeanList.add(valueBean);
-				}
-		}
-		catch (CSObjectNotFoundException e)
-		{
-			e.printStackTrace();
-		}
-		catch (CSException e)
-		{
-			e.printStackTrace();
-		}
-	   }
-		return nameValuBeanList;
-	}
-	/*public List<NameValueBean> getPrivilegesForScientist() 
-	{
-		List<NameValueBean> list=new ArrayList<NameValueBean>();
-		
-		NameValueBean valueBean=new NameValueBean();
-	    valueBean.setName("View Data");
-	    valueBean.setValue("30");
-	    list.add(valueBean);
-	    return list;
-	}*/
-	/**
-	 * Gives the list of user NameValueBeanObjects that are registered under the selected sites.
-	 * @param selectedSitesList
-	 * @return List<NameValueBean> list of user NameValueBeanObjects .
-	 */
-	public List<NameValueBean> getUsersForSelectedSites(List<Long> selectedSitesList) throws BizLogicException
-	{
-		Set<NameValueBean> userSet = new HashSet<NameValueBean>();
-		for(int i=0;i<selectedSitesList.size();i++)
-		{
-			long siteId=selectedSitesList.get(i);
-			userSet.addAll(getUsersList(siteId));
-		}
-		List<NameValueBean> list = new ArrayList<NameValueBean>();
-		list.addAll(userSet);
- 		return list;
-	}
 	
-	/**
-	 *Create the List of siteIds from request data
-	 * @param assignPrivilegePageBizLogic
-	 * @param request
-	 * @return List<Integer> list of siteIds 
-	 */
-	public List<Long> getSiteData(String siteIds)
-	{
-		long siteId;
-		List<Long> siteIdsList = new ArrayList<Long>();
-		StringTokenizer tokenizer = new StringTokenizer("" + siteIds, ",");
-		while (tokenizer.hasMoreTokens()) {
-			siteId = Long.parseLong(tokenizer.nextToken());
-			siteIdsList.add(siteId);
-		}
-		return siteIdsList;
-	}
-	/**
-	 * Gives list of JSONObjects, having user NameValueBean assigned to selected sites as a response
-	 * @param selectedSitesList
-	 * @param assignPrivilegePageBizLogic
-	 * @return List<JSONObject> ,list of JSONObjects, having user NameValueBean assigned to selected sites
-	 * @throws JSONException 
-	 * @throws IOException
-	 */
-	public List<JSONObject> getUsersForThisSites(List<Long> selectedSitesList) throws BizLogicException,JSONException
-	{
-		List<JSONObject> arrayList = new ArrayList<JSONObject>();
-		List<NameValueBean> usersList = new ArrayList<NameValueBean>();
-		usersList = getUsersForSelectedSites(selectedSitesList);
-		JSONObject jsonobject = null;
-		for (int j = 0; j < usersList.size(); j++) 
-		{
-			jsonobject = new JSONObject();
-			jsonobject.append("locationName", ((NameValueBean) usersList
-					.get(j)).getName());
-			jsonobject.append("locationId", ((NameValueBean) usersList
-					.get(j)).getValue());
-			arrayList.add(jsonobject);
-		}
-		return arrayList;
-	}
+
 	public List<JSONObject> getCPsForThisSites(List<Long> selectedSitesList) throws BizLogicException,JSONException
 	{
-		List<JSONObject> arrayList = null;
+		List<JSONObject> arrayList=new ArrayList<JSONObject>();
 		List<NameValueBean> cpsList = new ArrayList<NameValueBean>();
+		
 		cpsList = getCPsForSelectedSites(selectedSitesList);
-		if(cpsList!=null)
+		
+		if(cpsList!=null && !cpsList.isEmpty()&& cpsList.size()>0)
 		{
-			arrayList=new ArrayList<JSONObject>();
-			JSONObject jsonobject = null;
-			for (int j = 0; j < cpsList.size(); j++) 
-			{
-				jsonobject = new JSONObject();
-				jsonobject.append("locationName", ((NameValueBean) cpsList
-						.get(j)).getName());
-				jsonobject.append("locationId", ((NameValueBean) cpsList
-						.get(j)).getValue());
-				arrayList.add(jsonobject);
-			}
+			arrayList = getJSONObjListOfNameValue(cpsList);
 		}
 		return arrayList;
 	}
-	public List<NameValueBean> getCPsForSelectedSites(List<Long> selectedSitesList)throws BizLogicException {
-		Set<NameValueBean> cpSet = new HashSet<NameValueBean>();
-		for(int i=0;i<selectedSitesList.size();i++)
-		{
-			Long siteId=selectedSitesList.get(i);
-			 cpSet.addAll(getCPsList(siteId));
-		}
+	
+	public List<NameValueBean> getCPsForSelectedSites(List<Long> selectedSitesList)throws BizLogicException
+	{
 		List<NameValueBean> list = new ArrayList<NameValueBean>();
-		list.addAll(cpSet);
+		if(selectedSitesList!=null && ! selectedSitesList.isEmpty())
+		{
+			Set<NameValueBean> cpSet = new HashSet<NameValueBean>();
+			long siteId=0;
+			for(int i=0;i<selectedSitesList.size();i++)
+			{
+				 siteId=(long)selectedSitesList.get(i);
+				 cpSet.addAll(getCPsList(siteId));
+			}
+			list.addAll(cpSet);
+		}
  		return list;
 		
 	}
@@ -519,11 +432,6 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 				valueBean.setValue(String.valueOf(colectionProtocol.getId()));
 				nameValuBeanList.add(valueBean);
 			} 
-//			NameValueBean valueBean=new NameValueBean(); 
-//			valueBean.setName("cp3");
-//			valueBean.setValue("4");
-//			nameValuBeanList.add(valueBean);
-			
 		}
 		catch (DAOException e)
 		{
@@ -543,6 +451,8 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 		
 		return nameValuBeanList;
 	}
+	
+
 	/**
 	 * Gives list of JSONObjects, having action NameValueBean assigned to selected role as a response 
 	 * @param roleId
@@ -551,59 +461,301 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 	 * @throws JSONException 
 	 * @throws BizLogicException 
 	 */
-	public List<JSONObject> getActionsForThisRole(String roleId, String pageOf)throws JSONException, BizLogicException 
+	public List<JSONObject> getActionsForThisRole(String roleId, String pageOf,List<Long> selectedSiteIds,List<Long> selectedCPIds)throws JSONException, BizLogicException 
 	{
 		List<NameValueBean> actionList = new ArrayList<NameValueBean> ();
 		if (pageOf != null && !pageOf.equalsIgnoreCase("pageOfUserAdmin"))
 		{
-		actionList=getActionList(false);
+			actionList=getActionList(false);
 		}
 		else 
 		{
-		actionList=getActionListForUser(false);
+			if((selectedCPIds!=null)&& ! selectedCPIds.isEmpty()&& selectedCPIds.size()>0)
+			{
+				actionList = getActionsForSelCPs();
+			}
+			
+			else if((selectedSiteIds!=null)&& ! selectedSiteIds.isEmpty()&& selectedSiteIds.size()>0)
+			{
+				actionList = getActionsForSelSites();
+			}
+			else 
+			{
+				actionList = getActionListForUserPage(false);
+			}
 		}
 		
 		List<NameValueBean> selectedActionsList = getActionsList(roleId);
-		// request.setAttribute(Constants.ACTIONLIST, actionsList);
+
 		List<JSONObject> arrayList = new ArrayList<JSONObject>();
-		
-		
 		JSONObject jsonObject=new JSONObject();
-	//	if(!("7".equals(roleId)))
-	//	{
-		JSONArray actionJsonArray=new JSONArray();
-		JSONObject actionJsonobject = null;
-		for(int j=0;j<actionList.size();j++)
-		{
-			actionJsonobject=new JSONObject();
-			actionJsonobject.append("actionName", ((NameValueBean)actionList.get(j)).getName());
-			actionJsonobject.append("actionId", ((NameValueBean) actionList.get(j)).getValue());
-			actionJsonArray.put(actionJsonobject);
-		}
-		
+	
+		List<JSONObject> actionJsonArray=getJSONObjListOfNameValue(actionList);
 		jsonObject.put("actionJsonArray", actionJsonArray);
-	//	}
-		
-		JSONArray selectedActionArray=new JSONArray();
-		JSONObject selectedActionObj = null;
-		for (int i = 0; i < selectedActionsList.size(); i++)
-		{
-			selectedActionObj = new JSONObject();
-			selectedActionObj.append("actionName", ((NameValueBean) selectedActionsList
-					.get(i)).getName());
-			selectedActionObj.append("actionId", ((NameValueBean) selectedActionsList
-					.get(i)).getValue());
-			
-			selectedActionArray.put(selectedActionObj);
-		}
+	
+		List<JSONObject> selectedActionArray=getJSONObjListOfNameValue(selectedActionsList);
 		jsonObject.put("selectedActionArray", selectedActionArray);
+		
 		arrayList.add(jsonObject);
 		
-	//		jsonobject = new JSONObject();
-	//		jsonobject.append("roleId", roleId);
-	//		arrayList.add(jsonobject);
 		return arrayList;
 	}
+	
+	public List<JSONObject> getActionsForThisSites(String selectedRoleId) throws BizLogicException,JSONException
+	{
+		List<NameValueBean> actionList =  getActionsForSelSites();
+		List<NameValueBean> selectedActionsList=new ArrayList<NameValueBean>();
+		
+		if(selectedRoleId!=null&& selectedRoleId!=""&& ! selectedRoleId.equalsIgnoreCase("-1"))
+		{
+			List<NameValueBean> actionsListForSelRole = getActionsForSelRole(selectedRoleId);
+			for(int count=0;count<actionsListForSelRole.size();count++)
+			{
+				NameValueBean nameValueBean=(NameValueBean)actionsListForSelRole.get(count);
+				if(actionList.contains(nameValueBean))
+				{
+					selectedActionsList.add(nameValueBean);
+				}
+			}
+		}
+		
+
+		List<JSONObject> arrayList = new ArrayList<JSONObject>();
+		JSONObject jsonObject=new JSONObject();
+
+		List<JSONObject> actionJsonArray=getJSONObjListOfNameValue(actionList);
+		jsonObject.put("actionJsonArray", actionJsonArray);
+
+		List<JSONObject> selectedActionArray=getJSONObjListOfNameValue(selectedActionsList);
+		jsonObject.put("selectedActionArray", selectedActionArray);
+		
+		arrayList.add(jsonObject);
+		
+		return arrayList;
+	}
+
+	public List<JSONObject> getActionsForThisCPs(String selectedRoleId) throws BizLogicException,JSONException
+	{
+		List<NameValueBean> selectedActionsList=new ArrayList<NameValueBean>();
+		List<NameValueBean> actionList = getActionsForSelCPs();
+		
+		if(selectedRoleId!=null&& selectedRoleId!=""&& ! selectedRoleId.equalsIgnoreCase("-1"))
+		{
+			List<NameValueBean> actionsListForSelRole = getActionsForSelRole(selectedRoleId);
+			for(int count=0;count<actionsListForSelRole.size();count++)
+			{
+				NameValueBean nameValueBean=(NameValueBean)actionsListForSelRole.get(count);
+				if(actionList.contains(nameValueBean))
+				{
+					selectedActionsList.add(nameValueBean);
+				}
+			}
+		}
+		
+		List<JSONObject> arrayList = new ArrayList<JSONObject>();
+		JSONObject jsonObject=new JSONObject();
+
+		List<JSONObject> actionJsonArray=getJSONObjListOfNameValue(actionList);
+		jsonObject.put("actionJsonArray", actionJsonArray);
+
+		List<JSONObject> selectedActionArray=getJSONObjListOfNameValue(selectedActionsList);
+		jsonObject.put("selectedActionArray", selectedActionArray);
+		
+		arrayList.add(jsonObject);
+		
+		return arrayList;
+	}
+	/**
+	 * Given a selected role this method will return the list of actions under this role.
+	 * @param role
+	 * @return List of actions assigned to the selected role
+	 */
+	public List<NameValueBean> getActionsList(String role) 
+	{	
+		List<NameValueBean> nameValueBeanList=new ArrayList<NameValueBean>();
+		if(role!=null&& role!=""&& ! role.equalsIgnoreCase("-1"))
+		{
+			nameValueBeanList = getActionsForSelRole(role);
+		}
+	//	List<NameValueBean> actionsListForSelRole=new ArrayList<NameValueBean>();
+	//	List<NameValueBean> actionsListForSelSites=new ArrayList<NameValueBean>();
+		
+	/*	if(role!=null&& role!=""&& ! role.equalsIgnoreCase("-1"))
+		{
+			actionsListForSelRole = getActionsForSelRole(role);
+		}
+		
+		if((selectedSiteIds!=null)&& ! selectedSiteIds.isEmpty()&& selectedSiteIds.size()>0)
+		{
+			actionsListForSelSites = getActionsForSelSites();
+		}
+		
+		if(role!=null && ((selectedSiteIds!=null)&& ! selectedSiteIds.isEmpty()&& selectedSiteIds.size()>0))
+		{
+			for(int count=0;count<actionsListForSelRole.size();count++)
+			{
+				NameValueBean nameValueBean=(NameValueBean)actionsListForSelRole.get(count);
+				if(actionsListForSelSites.contains(nameValueBean))
+				{
+					nameValueBeanList.add(nameValueBean);
+				}
+			}
+		}
+		else if(role!=null && ((selectedSiteIds==null)||  selectedSiteIds.isEmpty()|| selectedSiteIds.size()==0))
+		{
+			nameValueBeanList=actionsListForSelRole;
+		}
+		else if((role==null||role=="") && ((selectedSiteIds!=null)&& ! selectedSiteIds.isEmpty()&& selectedSiteIds.size()>0))
+		{
+			nameValueBeanList=actionsListForSelSites;
+		}
+	*/		
+		return nameValueBeanList;
+		
+	}
+	
+	/**
+	 * @param role
+	 * @param nameValuBeanList
+	 */
+	private  List<NameValueBean> getActionsForSelRole(String role)
+	{
+		List<NameValueBean> nameValuBeanList=new ArrayList<NameValueBean>();
+		Set<Privilege> actions;	
+		PrivilegeUtility privilegeUtility = new PrivilegeUtility();
+		if("7".equals(role))
+		{
+		   NameValueBean scNameValueBean=null;
+		   for(int count=0;count<scientistPrivilegesList.size();count++)
+		   {
+			  scNameValueBean =new NameValueBean();
+			  String scPrivilegeName=((NameValueBean)scientistPrivilegesList.get(count)).getName();
+			  scNameValueBean.setName(Utility.getDisplayLabelForUnderscore(scPrivilegeName));
+			  scNameValueBean.setValue(((NameValueBean)scientistPrivilegesList.get(count)).getValue());
+			  nameValuBeanList.add(scNameValueBean);
+		   }
+		}
+		else
+		{
+		   try
+		   { 
+			actions = privilegeUtility.getRolePrivileges(role);
+			  for (Privilege action : actions)
+				{
+			    	NameValueBean valueBean=new NameValueBean();
+			    	valueBean.setName(Utility.getDisplayLabelForUnderscore(action.getName()));
+			    	valueBean.setValue(String.valueOf(action.getId()));
+			    	nameValuBeanList.add(valueBean);
+				}
+		   }
+			catch (CSObjectNotFoundException e)
+			{
+				e.printStackTrace();
+			}
+			catch (CSException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		return nameValuBeanList;
+	}
+	
+	public List<NameValueBean> getActionsForSelSites() 
+	{
+		List<NameValueBean> tempList=Variables.privilegeGroupingMap.get("SITE");
+		List<NameValueBean> actionsListForSelSites=new ArrayList<NameValueBean>();
+		NameValueBean nameValueBean=null;
+		
+		for(int i=0;i<tempList.size();i++)
+		{
+			nameValueBean=new NameValueBean();
+			String privilegeName=((NameValueBean)tempList.get(i)).getName();
+			String privilegeValue=((NameValueBean)tempList.get(i)).getValue();
+			nameValueBean.setName(Utility.getDisplayLabelForUnderscore(privilegeName));
+			nameValueBean.setValue(privilegeValue);
+			actionsListForSelSites.add(nameValueBean);
+		}
+		return actionsListForSelSites;
+	}
+	public List<NameValueBean> getActionsForSelCPs() 
+	{
+		List<NameValueBean> tempList=Variables.privilegeGroupingMap.get("CP");
+		List<NameValueBean> actionsListForSelSites=new ArrayList<NameValueBean>();
+		NameValueBean nameValueBean=null;
+		
+		for(int i=0;i<tempList.size();i++)
+		{
+			nameValueBean=new NameValueBean();
+			String privilegeName=((NameValueBean)tempList.get(i)).getName();
+			String privilegeValue=((NameValueBean)tempList.get(i)).getValue();
+			nameValueBean.setName(Utility.getDisplayLabelForUnderscore(privilegeName));
+			nameValueBean.setValue(privilegeValue);
+			actionsListForSelSites.add(nameValueBean);
+		}
+		return actionsListForSelSites;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/*public List<NameValueBean> getPrivilegesForScientist() 
+	{
+		List<NameValueBean> list=new ArrayList<NameValueBean>();
+		
+		NameValueBean valueBean=new NameValueBean();
+	    valueBean.setName("View Data");
+	    valueBean.setValue("30");
+	    list.add(valueBean);
+	    return list;
+	}*/
+	
+	
+	/**
+	 *Create the List of siteIds from request data
+	 * @param assignPrivilegePageBizLogic
+	 * @param request
+	 * @return List<Integer> list of siteIds 
+	 */
+	public List<Long> getSiteData(String siteIds)
+	{
+		
+		List<Long> siteIdsList = new ArrayList<Long>();
+		if(!("").equalsIgnoreCase(siteIds)&& siteIds!=null)
+		{
+			long siteId;
+			StringTokenizer tokenizer = new StringTokenizer("" + siteIds, ",");
+			while (tokenizer.hasMoreTokens()) {
+				siteId = Long.parseLong(tokenizer.nextToken());
+				siteIdsList.add(siteId);
+			}
+		}
+		return siteIdsList;
+	}
+	
+	
+	
+	
+	
+	
+	
 	/**
 	 * Create the List of userIds from request data
 	 * @param assignPrivilegePageBizLogic
@@ -877,7 +1029,7 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 	 * @throws CSException
 	 * @throws DAOException
 	 */
-	public List<String[]> privilegeDataOnTabSwitch(Map<String, SiteUserRolePrivilegeBean>map,String pageOf) throws BizLogicException {
+public List<String[]> privilegeDataOnTabSwitch(Map<String, SiteUserRolePrivilegeBean>map,String pageOf) throws BizLogicException {
 		List<String[]> list=new ArrayList<String[]>();
 		
 		int mapSize=map.size();
@@ -948,7 +1100,6 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 		}
 		return list;
 	}
-	
 	/**
 	 * @param bean
 	 * @return
@@ -1090,23 +1241,17 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 		}
 		jsonObject.put("selActionJsonArray",selActionJsonArray );
 		
-		JSONArray actionJsonArray=new JSONArray();
-		JSONObject actionJsonobject=new JSONObject();
+		List<JSONObject> actionJsonArray=new ArrayList<JSONObject>();
 		List<NameValueBean> actionList=getActionList(false);
-		for(int j=0;j<actionList.size();j++)
+		if(actionList!=null && ! actionList.isEmpty())
 		{
-			actionJsonobject=new JSONObject();
-			actionJsonobject.append("actionName", ((NameValueBean)actionList.get(j)).getName());
-			actionJsonobject.append("actionId", ((NameValueBean) actionList.get(j)).getValue());
-			actionJsonArray.put(actionJsonobject);
+			actionJsonArray = getJSONObjListOfNameValue(actionList);
 		}
 		jsonObject.put("actionJsonArray",actionJsonArray);
 		
 		privilegeList.add(jsonObject);
 		return privilegeList;
 	}
-
-
 
 // for user page--
 public List<JSONObject> addPrivilegeForUserPage(Map<String, SiteUserRolePrivilegeBean> rowIdBeanMap, String cpIds, String siteIds, String roleId, String actionIds,boolean isAllCPChecked)throws BizLogicException,JSONException, CSException 
@@ -1151,7 +1296,7 @@ public List<JSONObject> addPrivilegeForUserPage(Map<String, SiteUserRolePrivileg
 				 
 				 List<NameValueBean> actionBeanList = getPrivilegesNameValueBeanList(actionIdsList);
 				
-				 SiteUserRolePrivilegeBean surpBean =setUserPrivilegeSummaryForUserPage(collectionProtocol, cpRelatedSites, role, actionBeanList,isAllCPChecked);
+			     SiteUserRolePrivilegeBean surpBean =setUserPrivilegeSummaryForUserPage(collectionProtocol, cpRelatedSites, role, actionBeanList,isAllCPChecked);
 				
 				 String rowId = "CP_"+ cpId;
 				 rowIdBeanMap.put(rowId,surpBean);
@@ -1257,6 +1402,7 @@ public SiteUserRolePrivilegeBean setUserPrivilegeSummaryForUserPage(CollectionPr
 	surp.setPrivileges(actionBeanList);
 	
 	surp.setAllCPChecked(isAllCPChecked);
+	
 	return surp;
 }
 
@@ -1417,15 +1563,12 @@ public List<JSONObject> editPrivilegeForUserPage (Map<String, SiteUserRolePrivil
 	}
 	jsonObject.put("selActionJsonArray",selActionJsonArray );
 	
-	JSONArray actionJsonArray=new JSONArray();
-	JSONObject actionJsonobject=new JSONObject();
-	List<NameValueBean> actionList=getActionList(false);
-	for(int j=0;j<actionList.size();j++)
+	List<JSONObject> actionJsonArray=new ArrayList<JSONObject>();
+	List<NameValueBean> actionList=getActionListForUserPage(false);
+
+	if(actionList!=null && ! actionList.isEmpty())
 	{
-		actionJsonobject=new JSONObject();
-		actionJsonobject.append("actionName", ((NameValueBean)actionList.get(j)).getName());
-		actionJsonobject.append("actionId", ((NameValueBean) actionList.get(j)).getValue());
-		actionJsonArray.put(actionJsonobject);
+		actionJsonArray=getJSONObjListOfNameValue(actionList);
 	}
 	jsonObject.put("actionJsonArray",actionJsonArray);
 	
@@ -1438,7 +1581,7 @@ public List<JSONObject> editPrivilegeForUserPage (Map<String, SiteUserRolePrivil
  * @return
  * @throws CSException
  */
-private List<NameValueBean> getPrivilegesNameValueBeanList(List<String> actionIdsList) throws CSException {
+public List<NameValueBean> getPrivilegesNameValueBeanList(List<String> actionIdsList) throws CSException {
 	List<NameValueBean> actionBeanList=new ArrayList<NameValueBean>();
 	 NameValueBean nameValueBean=null;
 	 for(int len=0;len<actionIdsList.size();len++)
@@ -1458,5 +1601,41 @@ private List<NameValueBean> getPrivilegesNameValueBeanList(List<String> actionId
 	return actionBeanList;
 }
 
+
+
+
+
+public List<NameValueBean> removeSelect(List<NameValueBean> list) 
+{
+	if(list != null && !list.isEmpty())
+	{
+		for(int len=0;len<list.size();len++)
+		{
+			String val=""+((NameValueBean)list.get(len)).getValue();
+			String name=((NameValueBean)list.get(len)).getName();
+			if((("-1").equalsIgnoreCase(val))&& ((Constants.SELECT_OPTION).equalsIgnoreCase(name)))
+			{
+				list.remove(len);
+			}
+		}
+	}
+	return list;
+}
+// get JSONArray of JSON Objects having Name and Value as  fields.
+	public List<JSONObject>  getJSONObjListOfNameValue(List<NameValueBean> list) throws JSONException
+	{
+		List<JSONObject> jsonObjectList= new ArrayList<JSONObject>(); 
+		JSONObject jsonObject = null;
+		for (int i = 0; i < list.size(); i++)
+		{
+			jsonObject = new JSONObject();
+			jsonObject.append("locationName", ((NameValueBean) list.get(i)).getName());
+			jsonObject.append("locationId", ((NameValueBean) list.get(i)).getValue());
+			
+			jsonObjectList.add(jsonObject);
+		}
+
+		return jsonObjectList;
+	}
 }
 
