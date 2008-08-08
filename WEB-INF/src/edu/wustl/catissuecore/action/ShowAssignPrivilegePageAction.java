@@ -29,6 +29,7 @@ public class ShowAssignPrivilegePageAction extends BaseAction
 			HttpServletRequest request, HttpServletResponse response) throws Exception 
 	{ 
 		ActionForward findForward = null;
+		String pageOf = request.getParameter(Constants.PAGE_OF);
 		MSRUtil msrUtil=new MSRUtil();
 		final CollectionProtocolForm  cpForm = (CollectionProtocolForm)form; 
 		final String operation = (String) request.getParameter(Constants.OPERATION);
@@ -40,8 +41,7 @@ public class ShowAssignPrivilegePageAction extends BaseAction
 		}
 		else 
 		{
-				findForward =msrUtil.setAJAXResponse(request, response, cpOperation);
-				
+			findForward =msrUtil.setAJAXResponse(request, response, cpOperation);
 		} 
 		request.setAttribute("CollectionProtocolForm", cpForm);
 		request.setAttribute("noOfConsents", cpForm.getConsentTierCounter());
