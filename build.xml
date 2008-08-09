@@ -935,34 +935,34 @@
 				<exclude name="**/java.policy.applet*" />
 			</fileset>
 		</jar>
-		
+	
 		<copy todir="${base.dir}/caTissueSuite_Client/lib" overwrite="true">
             <fileset dir="${lib.dir}">
             	<include name="commonpackage.jar"/>
+            	<include name="shippingtracking.jar"/>
             </fileset>
+			<fileset dir="${temp.dir}">
+	            	<include name="catissuecore.jar"/>
+	        </fileset>
         </copy>
 
-		<copy todir="${base.dir}/caTissueSuite_Client/lib" overwrite="true">
-            <fileset dir="${temp.dir}">
-            	<include name="catissuecore.jar"/>
-            </fileset>
-        </copy>
-		
 		<copy todir="${base.dir}/catissue_de_integration_client/lib" overwrite="true">
-		            <fileset dir="${lib.dir}">
-		            	<include name="commonpackage.jar"/>
-		            </fileset>
-		        </copy>
+            <fileset dir="${lib.dir}">
+            	<include name="commonpackage.jar"/>
+				<include name="shippingtracking.jar"/>
+            </fileset>
+			 <fileset dir="${temp.dir}">
+	            	<include name="catissuecore.jar"/>
+	         </fileset>
+		</copy>
 
-				<copy todir="${base.dir}/catissue_de_integration_client/lib" overwrite="true">
-		            <fileset dir="${temp.dir}">
-		            	<include name="catissuecore.jar"/>
-		            </fileset>
-		        </copy>
-		
 		<copy todir="${base.dir}/private_public_migrator/lib" overwrite="true">
             <fileset dir="${temp.dir}">
             	<include name="catissuecore.jar"/>
+            </fileset>
+			<fileset dir="${lib.dir}">
+            	<include name="commonpackage.jar"/>
+				<include name="shippingtracking.jar"/>
             </fileset>
         </copy>
 		
