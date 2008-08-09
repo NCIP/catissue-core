@@ -39,6 +39,7 @@ import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.EmailHandler;
 import edu.wustl.catissuecore.util.Roles;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SecurityDataBean;
@@ -310,6 +311,23 @@ public class UserBizLogic extends DefaultBizLogic
 		
 		Map<String, SiteUserRolePrivilegeBean> cpPrivilegeMap = new HashMap<String, SiteUserRolePrivilegeBean>();
 		Map<String, SiteUserRolePrivilegeBean> sitePrivilegeMap = new HashMap<String, SiteUserRolePrivilegeBean>();
+		
+		
+		for (Iterator<String> mapItr = userRowIdMap.keySet().iterator(); mapItr.hasNext(); )
+		{
+			String key = mapItr.next();
+			SiteUserRolePrivilegeBean siteUserRolePrivilegeBean = userRowIdMap.get(key);
+			
+			if(siteUserRolePrivilegeBean.isAllCPChecked())
+			{
+				Map<String, SiteUserRolePrivilegeBean> map = Utility.splitBeanData(siteUserRolePrivilegeBean);
+				SiteUserRolePrivilegeBean bean1 = map.get("SITE");
+				SiteUserRolePrivilegeBean bean2 = map.get("CP");
+				userRowIdMap.remove(key);
+				userRowIdMap.put(key, bean1);
+				userRowIdMap.put(key+"All_CurrentnFuture_CPs", bean2);			
+			}
+		}
 		
 		distributeMapData(userRowIdMap, cpPrivilegeMap, sitePrivilegeMap);
 		

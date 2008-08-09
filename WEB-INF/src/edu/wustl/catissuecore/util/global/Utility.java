@@ -19,6 +19,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -53,6 +54,7 @@ import edu.wustl.catissuecore.domain.FluidSpecimen;
 import edu.wustl.catissuecore.domain.FrozenEventParameters;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.ReceivedEventParameters;
+import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
@@ -62,6 +64,7 @@ import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.domain.TissueSpecimenReviewEventParameters;
 import edu.wustl.catissuecore.domain.TransferEventParameters;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.multiRepository.bean.SiteUserRolePrivilegeBean;
 import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.QueryResultObjectData;
@@ -1664,6 +1667,8 @@ public class Utility extends edu.wustl.common.util.Utility {
     {
     	boolean allowOperation = false;
     	
+    	String privilegeNames[] = privilegeName.split(",");
+    	
     	Set<Long> idSet = new UserBizLogic().getRelatedSiteIds(sessionDataBean.getUserId());
 		if (dao instanceof HibernateDAO)
 		{
@@ -1678,7 +1683,15 @@ public class Utility extends edu.wustl.common.util.Utility {
 		}
 		for(Long id : idSet)
 		{
-			if(PrivilegeManager.getInstance().getPrivilegeCache(sessionDataBean.getUserName()).hasPrivilege(Constants.getCurrentAndFuturePGAndPEName(id), privilegeName))
+			if(privilegeNames.length > 1)
+			{
+				if((PrivilegeManager.getInstance().getPrivilegeCache(sessionDataBean.getUserName()).hasPrivilege(Constants.getCurrentAndFuturePGAndPEName(id), privilegeNames[0])) ||
+					(PrivilegeManager.getInstance().getPrivilegeCache(sessionDataBean.getUserName()).hasPrivilege(Constants.getCurrentAndFuturePGAndPEName(id), privilegeNames[1])))
+					{	
+						allowOperation = true;
+					}
+			}
+			else if(PrivilegeManager.getInstance().getPrivilegeCache(sessionDataBean.getUserName()).hasPrivilege(Constants.getCurrentAndFuturePGAndPEName(id), privilegeName))
 			{
 				allowOperation = true;
 			}
@@ -1690,4 +1703,79 @@ public class Utility extends edu.wustl.common.util.Utility {
 		}
 		return false;
     }
+    
+	/**
+	 * To distribute bean data in case C & F checkbox is checked 
+	 * into 2 beans - 1 for CP privileges, other for Site privileges
+	 */
+	public static Map splitBeanData(SiteUserRolePrivilegeBean siteUserRolePrivBean)
+	{
+		Map<String, SiteUserRolePrivilegeBean> rowIdMap = new HashMap<String, SiteUserRolePrivilegeBean>();
+		
+		SiteUserRolePrivilegeBean siteUserRolePrivilegeBean = siteUserRolePrivBean;
+		
+		List<Site> siteList = siteUserRolePrivilegeBean.getSiteList();
+		
+	    NameValueBean role = siteUserRolePrivilegeBean.getRole();
+	    List<NameValueBean> sitePrivileges = new ArrayList<NameValueBean>();
+	    List<NameValueBean> cpPrivileges = new ArrayList<NameValueBean>();
+	    Set<String> sitePriv = getSitePrivileges();
+	    Set<String> cpPriv = getCPPrivileges();
+	    
+	    List<NameValueBean> allPrivileges = siteUserRolePrivilegeBean.getPrivileges();
+		allPrivileges.add(new NameValueBean("REGISTRATION", "18"));	    
+		allPrivileges.add(new NameValueBean("SPECIMEN_PROCESSING", "26"));
+	    
+	    for(NameValueBean nmv : allPrivileges)
+	    {
+	    	if(sitePriv.contains(nmv.getName()))
+	    	{
+	    		sitePrivileges.add(nmv);
+	    	}
+	    	else
+	    	{
+	    		cpPrivileges.add(nmv);
+	    	}
+	    }
+	    
+	    SiteUserRolePrivilegeBean bean1 = new SiteUserRolePrivilegeBean();
+	    SiteUserRolePrivilegeBean bean2 = new SiteUserRolePrivilegeBean();
+	    
+	    bean1.setSiteList(siteList);
+	    bean1.setRole(role);
+	    bean1.setPrivileges(sitePrivileges);
+	    
+	    bean2.setSiteList(siteList);
+	    bean2.setRole(role);
+	    bean2.setPrivileges(cpPrivileges);
+	    bean2.setAllCPChecked(true);
+	    
+	    rowIdMap.put("SITE", bean1);
+	    rowIdMap.put("CP", bean2);
+	    
+	    return rowIdMap;
+	}
+	
+	
+	public static Set getSitePrivileges()
+	{
+		List<NameValueBean> list = edu.wustl.common.util.global.Variables.privilegeGroupingMap.get("SITE");
+		Set<String> sitePrivileges = new HashSet<String>();
+		for(NameValueBean nmv : list)
+		{
+			sitePrivileges.add(nmv.getName());
+		}
+		return sitePrivileges;
+	}
+	
+	public static Set getCPPrivileges()
+	{
+		List<NameValueBean> list = edu.wustl.common.util.global.Variables.privilegeGroupingMap.get("CP");
+		Set<String> cpPrivileges = new HashSet<String>();
+		for(NameValueBean nmv : list)
+		{
+			cpPrivileges.add(nmv.getName());
+		}
+		return cpPrivileges;
+	}
 }
