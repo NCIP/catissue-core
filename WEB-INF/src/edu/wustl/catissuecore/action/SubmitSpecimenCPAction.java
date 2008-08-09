@@ -40,12 +40,14 @@ import edu.wustl.catissuecore.util.CollectionProtocolUtil;
 import edu.wustl.catissuecore.util.MultipleSpecimenValidationUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
+import edu.wustl.common.action.CommonAddEditAction;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
+import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.logger.Logger;
  
 public class SubmitSpecimenCPAction extends BaseAction {
@@ -153,7 +155,19 @@ public class SubmitSpecimenCPAction extends BaseAction {
             // To delegate UserNotAuthorizedException forward
 			if(ex instanceof UserNotAuthorizedException)
 			{
-				ActionError error = new ActionError("access.addedit.object.denied", userName, CollectionProtocol.class.getName());
+                UserNotAuthorizedException excp = (UserNotAuthorizedException) ex;
+                 
+                String className = new CommonAddEditAction().getActualClassName(CollectionProtocol.class.getName());
+                String decoratedPrivilegeName = Utility.getDisplayLabelForUnderscore(((UserNotAuthorizedException)ex).getPrivilegeName());
+                String baseObject = "";
+                if (excp.getBaseObject() != null && excp.getBaseObject().trim().length() != 0)
+                {
+                    baseObject = excp.getBaseObject();
+                } else 
+                {
+                    baseObject = className;
+                }
+				ActionError error = new ActionError("access.addedit.object.denied", userName, className,decoratedPrivilegeName,baseObject);
 	        	actionErrors.add(ActionErrors.GLOBAL_ERROR, error);
 			}
 			

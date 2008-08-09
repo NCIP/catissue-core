@@ -400,9 +400,13 @@ public class UserBizLogic extends DefaultBizLogic
 				
 				Site site = siteUserRolePrivilegeBean.getSiteList().get(0);
 				String defaultRole = siteUserRolePrivilegeBean.getRole().getValue();
-				
-				roleName = getSiteRoleName(site.getId(), user1.getId(), defaultRole);
-				
+				if (defaultRole != null && (defaultRole.equalsIgnoreCase("0") || defaultRole.equalsIgnoreCase("-1")))
+				{
+				    roleName = getSiteRoleName(site.getId(), user1.getId(), defaultRole);
+                } else
+                {
+                    roleName = siteUserRolePrivilegeBean.getRole().getName();
+                }
 				Set<String> privileges = new HashSet<String>();
 				List<NameValueBean> privilegeList = siteUserRolePrivilegeBean.getPrivileges();
 				
@@ -465,13 +469,13 @@ public class UserBizLogic extends DefaultBizLogic
 					String defaultRole = siteUserRolePrivilegeBean.getRole().getValue();
 					Site site = siteUserRolePrivilegeBean.getSiteList().get(0);
 					
-//					if (defaultRole != null && (defaultRole.equalsIgnoreCase("-1") || defaultRole.equalsIgnoreCase("0")) )
-//					{
+					if (defaultRole != null && (defaultRole.equalsIgnoreCase("-1") || defaultRole.equalsIgnoreCase("0")) )
+					{
 						roleName = getCurrentAndFutureRoleName(site.getId(), user1.getId(), defaultRole);
-//					} else
-//					{
-//						roleName = siteUserRolePrivilegeBean.getRole().getName();
-//					}
+					} else
+					{
+						roleName = siteUserRolePrivilegeBean.getRole().getName();
+					}
 					Set<String> privileges = new HashSet<String>();
 					List<NameValueBean> privilegeList = siteUserRolePrivilegeBean.getPrivileges();
 					
