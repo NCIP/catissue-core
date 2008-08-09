@@ -1723,8 +1723,6 @@ public class Utility extends edu.wustl.common.util.Utility {
 	    Set<String> cpPriv = getCPPrivileges();
 	    
 	    List<NameValueBean> allPrivileges = siteUserRolePrivilegeBean.getPrivileges();
-		allPrivileges.add(new NameValueBean("REGISTRATION", "18"));	    
-		allPrivileges.add(new NameValueBean("SPECIMEN_PROCESSING", "26"));
 	    
 	    for(NameValueBean nmv : allPrivileges)
 	    {
