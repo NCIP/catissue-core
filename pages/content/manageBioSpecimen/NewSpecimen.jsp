@@ -200,21 +200,6 @@
 			}
 		}
 		
-		function onAddToCart()
-		{
-			document.forms[0].forwardTo.value="addSpecimenToCart";
-			//document.forms[0].submit();
-			//var checked = false;
-				
-				<% String actionToCall4 = "NewSpecimenAdd.do";
-				
-				  	actionToCall4 = Constants.CP_QUERY_SPECIMEN_ADD_ACTION;
-				%>
-				
-				confirmDisable('<%=actionToCall4%>',document.forms[0].activityStatus);
-				setSubmittedFor("ForwardTo",'addSpecimenToCart');
-			
-		}
 		
 		function onDeriveSubmit()
 		{
@@ -866,7 +851,26 @@
 			onCollOrClassChange();
 		}
 	}
-
+	function onAddToCart()
+		{
+			document.forms[0].forwardTo.value="addSpecimenToCart";
+			
+			
+			//document.forms[0].submit();
+			//var checked = false;
+				
+				<% String actionToCall4 ="NewSpecimenEdit.do";
+				
+					if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
+					{
+				  		actionToCall4 = Constants.CP_QUERY_SPECIMEN_ADD_ACTION;
+				  	}
+				%>
+				
+				confirmDisable('<%=actionToCall4%>',document.forms[0].activityStatus);
+				setSubmittedFor("ForwardTo",'addSpecimenToCart');
+			
+		}
 	
 
 	</script>
