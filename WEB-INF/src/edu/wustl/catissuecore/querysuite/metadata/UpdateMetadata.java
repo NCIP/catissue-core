@@ -56,7 +56,8 @@ public class UpdateMetadata
 			UpdateMetadataUtil.executeSQLs(updateSQL, connection.createStatement(), false);
 			
 			addMetadata();
-			updateMetadata();			
+			updateMetadata();
+			addCurratedPath();
 		}
 		finally
 		{
@@ -75,6 +76,12 @@ public class UpdateMetadata
 		}
 	}
 	
+	private static void addCurratedPath() throws IOException, SQLException
+	{
+		AddCuratedPath addCurratedPath = new AddCuratedPath(connection);
+		addCurratedPath.addCurratedPath();
+	}
+
 	/**
 	 * Configuration
 	 * @param args
@@ -239,8 +246,6 @@ public class UpdateMetadata
 		AddAttribute addAttribute = new AddAttribute(connection);
 		addAttribute.addAttribute();	
 		
-		/*AddMSRAssociations addMSRAssociations = new AddMSRAssociations(connection);
-		addMSRAssociations.addAssociation();*/
 	}
 
 	private static List<String> getUpdateSQL() throws SQLException
