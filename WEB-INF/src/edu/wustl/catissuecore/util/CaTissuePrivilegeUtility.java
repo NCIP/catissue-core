@@ -90,6 +90,9 @@ public class CaTissuePrivilegeUtility
 					nmv.setValue("-1");
 					bean.setRole(nmv);
 					bean.setPrivileges(entry.getValue());
+					
+					// Added by Ravindra to handle bean for EDIT mode
+					bean.setRowEdited(false);
 	
 					map.put("CP_"+cp.getId(), bean);
 				}
@@ -156,6 +159,9 @@ public class CaTissuePrivilegeUtility
 					nmv.setValue("-1");
 					bean.setRole(nmv);
 					bean.setPrivileges(entry.getValue());
+					
+					// Added by Ravindra to handle bean for EDIT mode
+					bean.setRowEdited(false);
 	
 					map.put(""+site.getId(), bean);
 				}
@@ -251,6 +257,10 @@ public class CaTissuePrivilegeUtility
 						bean.setSiteList(siteList);
 
 						bean.setPrivileges(privileges);
+						
+						// Added by Ravindra to handle bean for EDIT mode
+						bean.setRowEdited(false);
+						
 						bean.setUser(user);
 						result.put(user.getId().toString(), bean);
 					}

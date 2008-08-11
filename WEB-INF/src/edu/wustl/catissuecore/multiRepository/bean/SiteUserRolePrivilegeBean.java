@@ -23,6 +23,7 @@ public class SiteUserRolePrivilegeBean
     private List<NameValueBean> privileges;
     private boolean isAllCPChecked = false;
     private boolean isRowDeleted = false;
+    private boolean isRowEdited = true;
     
 	public CollectionProtocol getCollectionProtocol() {
 		return collectionProtocol;
@@ -65,5 +66,11 @@ public class SiteUserRolePrivilegeBean
 	}
 	public void setRowDeleted(boolean isRowDeleted) {
 		this.isRowDeleted = isRowDeleted;
-	}  
+	} 
+	public boolean isRowEdited() {
+		return isRowEdited;
+	}
+	public void setRowEdited(boolean isRowEdited) {
+		this.isRowEdited = isRowEdited;
+	}
 }
