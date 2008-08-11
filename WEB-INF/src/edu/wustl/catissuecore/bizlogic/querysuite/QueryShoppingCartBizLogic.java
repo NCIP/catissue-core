@@ -5,6 +5,7 @@ package edu.wustl.catissuecore.bizlogic.querysuite;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -120,60 +121,78 @@ public class QueryShoppingCartBizLogic
 	
 	public Set<String> getEntityIdsList(QueryShoppingCart cart,List entityName,List<Integer>chkBoxValues)
 	{
-		HibernateDAO dao = (HibernateDAO) DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
-		
-	    Set<String> entityIdsList = new HashSet<String>();
+		Set<String> entityIdsList = new HashSet<String>();
 	    List<Integer> entityIdsColumnIndexList = getIdsColumnIndexList(cart.getCartAttributeList(),entityName);
         List<List<String>> dataList = cart.getCart();
-       try
-	   {
-    	   	dao.openSession(null);
-	        if(chkBoxValues!=null)
-	        {
-		    for(Integer index:chkBoxValues)
-		    {
-				List<String> record = dataList.get(index);
-				for (int i = 0; i < entityIdsColumnIndexList.size(); i++)
-				{
-					String data = record.get(entityIdsColumnIndexList.get(i));
-					
-					if(!(data.equals("")) && isSpecimenValidToOrder(dao,Long.parseLong(data)))
-					  entityIdsList.add(data);
-				}
-		    }
-	        }
-	        else
-	        {
+        if(chkBoxValues!=null)
+	    {
+			    for(Integer index:chkBoxValues)
+			    {
+					List<String> record = dataList.get(index);
+					for (int i = 0; i < entityIdsColumnIndexList.size(); i++)
+					{
+						String data = record.get(entityIdsColumnIndexList.get(i));
+						
+						if(!(data.equals("")))
+						  entityIdsList.add(data);
+					}
+			    }
+	       }
+	       else
+	       {
 	        	for (List<String> record : dataList)
 	    		{
 	    			for (int j = 0; j < entityIdsColumnIndexList.size(); j++)
 	    			{
 	    				String data = record.get(entityIdsColumnIndexList.get(j));
-						if (!(data.equals(""))&& isSpecimenValidToOrder(dao,Long.parseLong(data)) )
+						if (!(data.equals("")))
 	    					entityIdsList.add(data);
 	    			}
 	    		}
-	        }
-	    } catch (NumberFormatException e) {
-			
-			e.printStackTrace();
-		} catch (DAOException e) {
-			
-			e.printStackTrace();
-		}
-        finally
-		{
-			try
-			{
-				dao.closeSession();
-			}
-			catch (DAOException e)
-			{
-				Logger.out.error(e.getMessage(), e);
-			}
-		}
+	       }
+	   
 	    return entityIdsList;
 
+	}
+	
+	public Set getListOfOrderItem(Set<String> entityIdsList)
+	{
+		 Set<String> orderIdsList = new HashSet<String>();
+		 HibernateDAO dao = (HibernateDAO) DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);	
+		 try
+		   {
+	    	   	dao.openSession(null);
+	    	   	Iterator itr = entityIdsList.iterator();
+	    	   	while(itr.hasNext())
+	    	   	{
+	    	   		Long specimenId = Long.parseLong(itr.next().toString());
+	    	   		if(isSpecimenValidToOrder(dao,specimenId))
+	    	   		{
+	    	   			orderIdsList.add(specimenId.toString());
+	    	   		}
+	    	   		
+				}
+	    	   	
+		 
+		   } catch (NumberFormatException e) {
+		
+			   e.printStackTrace();
+		   } catch (DAOException e) {
+		
+			   e.printStackTrace();
+		   }
+		    finally
+			{
+				try
+				{
+					dao.closeSession();
+				}
+				catch (DAOException e)
+				{
+					Logger.out.error(e.getMessage(), e);
+				}
+			}
+		 return orderIdsList;
 	}
 	
 	
