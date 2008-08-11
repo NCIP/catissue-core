@@ -216,7 +216,8 @@ function handleStatus(status)
 									<td align="left" class="black_ar"><label for="newPassword">
 									<bean:message key="user.newPassword" /> </label></td>
 									<td align="left"><html:password styleClass="black_ar"
-										size="30" styleId="newPassword" property="newPassword" value="<%=Constants.DUMMY_PASSWORD%>" /></td>
+										size="30" styleId="newPassword" property="newPassword"
+										value="<%=Constants.DUMMY_PASSWORD%>" /></td>
 									<td align="left" class="black_ar">&nbsp;</td>
 									<td align="center" class="black_ar"><span
 										class="blue_ar_b"><img
@@ -227,7 +228,8 @@ function handleStatus(status)
 										key="user.confirmNewPassword" /> </label></td>
 									<td align="left"><html:password styleClass="black_ar"
 										size="30" styleId="confirmNewPassword"
-										property="confirmNewPassword" value="<%=Constants.DUMMY_PASSWORD%>" /></td>
+										property="confirmNewPassword"
+										value="<%=Constants.DUMMY_PASSWORD%>" /></td>
 									<td align="left" valign="top">&nbsp;</td>
 								</tr>
 							</logic:equal>
@@ -263,9 +265,9 @@ function handleStatus(status)
 								width="6" height="6" hspace="0" vspace="0" /></span></td>
 							<td align="left" class="black_ar"><bean:message
 								key="user.zipCode" /></td>
-							<td align="left" class="black_ar"><html:text style="text-align:right"
-								styleClass="black_ar" maxlength="30" size="30" styleId="zipCode"
-								property="zipCode" /></td>
+							<td align="left" class="black_ar"><html:text
+								style="text-align:right" styleClass="black_ar" maxlength="30"
+								size="30" styleId="zipCode" property="zipCode" /></td>
 							<td align="left" valign="top">&nbsp;</td>
 						</tr>
 						<tr>
@@ -284,18 +286,18 @@ function handleStatus(status)
 								width="6" height="6" hspace="0" vspace="0" /></span></td>
 							<td align="left" class="black_ar"><bean:message
 								key="user.phoneNumber" /></td>
-							<td align="left"><html:text styleClass="black_ar" style="text-align:right"
-								maxlength="50" size="30" styleId="phoneNumber"
-								property="phoneNumber" /></td>
+							<td align="left"><html:text styleClass="black_ar"
+								style="text-align:right" maxlength="50" size="30"
+								styleId="phoneNumber" property="phoneNumber" /></td>
 							<td align="left" valign="top">&nbsp;</td>
 						</tr>
 						<tr>
 							<td align="center" class="black_ar">&nbsp;</td>
 							<td align="left" class="black_ar"><bean:message
 								key="user.faxNumber" /></td>
-							<td align="left"><html:text styleClass="black_ar" style="text-align:right"
-								maxlength="50" size="30" styleId="faxNumber"
-								property="faxNumber" /></td>
+							<td align="left"><html:text styleClass="black_ar"
+								style="text-align:right" maxlength="50" size="30"
+								styleId="faxNumber" property="faxNumber" /></td>
 							<td align="left" class="black_ar">&nbsp;</td>
 							<td align="center" class="black_ar"><span class="blue_ar_b"><img
 								src="images/uIEnhancementImages/star.gif" alt="Mandatory"
@@ -361,82 +363,86 @@ function handleStatus(status)
 										class="blue_ar_b"><img
 										src="images/uIEnhancementImages/star.gif" alt="Mandatory"
 										width="6" height="6" hspace="0" vspace="0" /></span></td>
-									<td width="17%" align="left" class="black_ar_t">Role</td>
-									<td width="19%" class="black_ar_t"><select name = "role" class="formFieldSizedNew"
-										id="roleIds" onchange="disableAllForSuperAdmin(this,'cpCheckId')">										
+									<td width="17%" align="left" class="black_ar_t"><bean:message
+										key="user.role" /></td>
+									<td width="19%" class="black_ar_t"><select name="role"
+										class="formFieldSizedNew" id="roleIds"
+										onchange="disableAllForSuperAdmin(this,'cpCheckId')">
 										<%
-										String roleName = "";
-										String roleValue = "";
-										if((roleList!=null)&& !(roleList.isEmpty())){
-									for (int i = 0; i < roleList.size(); i++) {
-									roleName = ""+ ((NameValueBean) roleList.get(i)).getName();
-									roleValue = ""+ ((NameValueBean) roleList.get(i)).getValue();
-									String selected = "";
-									if (roleValue.equals("0")) {
-										selected = "SELECTED";
-									}
-							%>
-							<option value="<%=roleValue%>"  ><%=roleName%></option>
-							<%
-									}
-							}
-							%>
+											String roleName = "";
+											String roleValue = "";
+											if ((roleList != null) && !(roleList.isEmpty())) {
+												for (int i = 0; i < roleList.size(); i++) {
+													roleName = "" + ((NameValueBean) roleList.get(i)).getName();
+													roleValue = ""
+													+ ((NameValueBean) roleList.get(i)).getValue();
+													String selected = "";
+													if (roleValue.equals("0")) {
+												selected = "SELECTED";
+													}
+										%>
+										<option value="<%=roleValue%>"><%=roleName%></option>
+										<%
+											}
+											}
+										%>
 									</select></td>
 									<td width="13%" align="left" valign="top">&nbsp;</td>
 									<td width="1%" align="center" class="black_ar_t"><span
 										class="blue_ar_b"><img
 										src="images/uIEnhancementImages/star.gif" alt="Mandatory"
 										width="6" height="6" hspace="0" vspace="0" /></span></td>
-									<td width="17%" align="left" class="black_ar_t">Site(s)</td>
+									<td width="17%" align="left" class="black_ar_t"><bean:message
+										key="assignPrivileges.site(s)" /></td>
 									<td width="17%" align="left" class="black_ar_t"><select
 										class="formFieldSizedNew" id="siteIds" size="4"
 										multiple="multiple" onchange="getCPsForThisSites(this)">
 										<%
-										String siteName = "";
-										String siteValue = "";
-										if((siteList!=null)&& !(siteList.isEmpty()))
-										{
-										for (int i = 0; i < siteList.size(); i++) {
-										siteName = ""+ ((NameValueBean) siteList.get(i)).getName();
-										siteValue = ""+ ((NameValueBean) siteList.get(i)).getValue();
-							%>
-							<option value="<%=siteValue%>" onmouseover="Tip('<%=siteName%>',WIDTH,200)"><%=siteName%></option>
-							<%
-										}
-							}
-							%>
+											String siteName = "";
+											String siteValue = "";
+											if ((siteList != null) && !(siteList.isEmpty())) {
+												for (int i = 0; i < siteList.size(); i++) {
+													siteName = "" + ((NameValueBean) siteList.get(i)).getName();
+													siteValue = ""
+													+ ((NameValueBean) siteList.get(i)).getValue();
+										%>
+										<option value="<%=siteValue%>"
+											onmouseover="Tip('<%=siteName%>',WIDTH,200)"><%=siteName%></option>
+										<%
+											}
+											}
+										%>
 									</select></td>
-								<td width="14%" align="left" valign="top" class="black_ar_t">&nbsp;</td>
+									<td width="14%" align="left" valign="top" class="black_ar_t">&nbsp;</td>
 								</tr>
-								
-												<logic:equal name="pageOf" value='${pageOfApproveUser}'>
-													<tr>
-														<td width="1%" height="25" align="left" class="black_ar">
-														<span class="blue_ar_b"><img
-															src="images/uIEnhancementImages/star.gif" alt="Mandatory"
-															width="6" height="6" hspace="0" vspace="0" /></span></td>
-														<td width="16%" align="left" class="black_ar"><label
-															for="status"> <bean:message
-															key="user.approveOperation" /> </label></td>
-														<td width="83%" colspan="4" align="left" valign="top"
-															class="black_new"><html:select property="status"
-															styleClass="formFieldSizedNew" styleId="status" size="1"
-															onchange="javascript:handleStatus(this)"
-															onmouseover="showTip(this.id)"
-															onmouseout="hideTip(this.id)">
-															<html:options name="statusList" labelName="statusList" />
-														</html:select></td>
-													</tr>
-												</logic:equal>
+
+								<logic:equal name="pageOf" value='${pageOfApproveUser}'>
+									<tr>
+										<td width="1%" height="25" align="left" class="black_ar">
+										<span class="blue_ar_b"><img
+											src="images/uIEnhancementImages/star.gif" alt="Mandatory"
+											width="6" height="6" hspace="0" vspace="0" /></span></td>
+										<td width="16%" align="left" class="black_ar"><label
+											for="status"> <bean:message
+											key="user.approveOperation" /> </label></td>
+										<td width="83%" colspan="4" align="left" valign="top"
+											class="black_new"><html:select property="status"
+											styleClass="formFieldSizedNew" styleId="status" size="1"
+											onchange="javascript:handleStatus(this)"
+											onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+											<html:options name="statusList" labelName="statusList" />
+										</html:select></td>
+									</tr>
+								</logic:equal>
 								<tr class="td_color_F7F7F7">
-											<td colspan="8" align="left" class="bottomtd"></td>
-										</tr>
+									<td colspan="8" align="left" class="bottomtd"></td>
+								</tr>
 
 
 								<tr onclick="showHide('privilegesDiv')">
 									<td colspan="7" align="left" class="tr_bg_blue1"><span
 										class="blue_ar_b">&nbsp;<bean:message
-					key="assignPrivileges.privilegeDetails" /></span></td>
+										key="assignPrivileges.privilegeDetails" /></span></td>
 									<td align="right" class="tr_bg_blue1"><a href="#"
 										id="imgArrow_privilegesDiv"><img
 										src="images/uIEnhancementImages/dwn_arrow1.gif"
@@ -453,33 +459,37 @@ function handleStatus(status)
 												class="blue_ar_b"><img
 												src="images/uIEnhancementImages/star.gif" alt="Mandatory"
 												width="6" height="6" hspace="0" vspace="0" /></span></td>
-											<td width="17%" align="left" class="black_ar">Collection
-											Protocol(s)</td>
-											<td width="19%" class="black_ar"><input type="checkbox" checked="true" id="cpCheckId" onclick="eventOnChkBoxClick('cpCheckId','cpIds','siteIds','roleIds')" >All
-											Current and Future</td>
+											<td width="17%" align="left" class="black_ar"><bean:message
+												key="assignPrivileges.collectionProtocol(s)" /></span></td>
+											<td width="19%" class="black_ar"><input type="checkbox"
+												checked="true" id="cpCheckId"
+												onclick="eventOnChkBoxClick('cpCheckId','cpIds','siteIds','roleIds')"><bean:message
+												key="assignPrivileges.allCurrentAndFuture" /></td>
 											<td width="13%" class="black_ar">&nbsp;</td>
 											<td width="1%" align="center" class="black_ar"><span
 												class="blue_ar_b"><img
 												src="images/uIEnhancementImages/star.gif" alt="Mandatory"
 												width="6" height="6" hspace="0" vspace="0" /></span></td>
 											<td width="17%" align="left" class="black_ar">Privilege(s)</td>
-											<td rowspan="2" width="17%" align="center" class="black_ar_t" valign="top"><select
-												class="formFieldSizedNew" id="actionIds" size="4" onchange="getCutomRole('roleIds')"
-												multiple="multiple" >
+											<td rowspan="2" width="17%" align="center" class="black_ar_t"
+												valign="top"><select class="formFieldSizedNew"
+												id="actionIds" size="4" onchange="getCutomRole('roleIds')"
+												multiple="multiple">
 												<%
-												String actionName = "";
-												String actionValue = "";
-												if((actionList!=null)&& !(actionList.isEmpty()))
-												{
-													for (int i = 0; i < actionList.size(); i++) {
-													actionName = ""+ ((NameValueBean) actionList.get(i)).getName();
-													actionValue = ""+ ((NameValueBean) actionList.get(i)).getValue();
-											%>
-											<option value="<%=actionValue%>" ><%=actionName%></option>
-											<%
-												}
-											}
-											%>
+													String actionName = "";
+													String actionValue = "";
+													if ((actionList != null) && !(actionList.isEmpty())) {
+														for (int i = 0; i < actionList.size(); i++) {
+															actionName = ""
+															+ ((NameValueBean) actionList.get(i)).getName();
+															actionValue = ""
+															+ ((NameValueBean) actionList.get(i)).getValue();
+												%>
+												<option value="<%=actionValue%>"><%=actionName%></option>
+												<%
+													}
+													}
+												%>
 											</select></td>
 											<td width="14%" align="left" valign="top">&nbsp;</td>
 
@@ -487,29 +497,32 @@ function handleStatus(status)
 										<tr>
 											<td width="1%" align="center" class="black_ar">&nbsp;</td>
 											<td width="17%" align="left" class="black_ar"></td>
-											<td width="19%" class="black_ar" ><select
+											<td width="19%" class="black_ar"><select
 												class="formFieldSizedNew" id="cpIds" size="4"
-												multiple="multiple" onchange="getActionsForThisCPs(this.id,'siteIds','roleIds','cpCheckId')" disabled="true">
+												multiple="multiple"
+												onchange="getActionsForThisCPs(this.id,'siteIds','roleIds','cpCheckId')"
+												disabled="true">
 												<%
-												String cpActionName = "";
-												String cpActionValue = "";
-												if((cpList!=null)&& !(cpList.isEmpty()))
-												{
-									for (int i = 0; i < cpList.size(); i++) {
-									cpActionName = ""+ ((NameValueBean) cpList.get(i)).getName();
-									cpActionValue = ""+ ((NameValueBean) cpList.get(i)).getValue();
-							%>
-							<option value="<%=cpActionValue%>"><%=cpActionName%></option>
-							<%
-							}
-												}
-							%>
+													String cpActionName = "";
+													String cpActionValue = "";
+													if ((cpList != null) && !(cpList.isEmpty())) {
+														for (int i = 0; i < cpList.size(); i++) {
+															cpActionName = ""
+															+ ((NameValueBean) cpList.get(i)).getName();
+															cpActionValue = ""
+															+ ((NameValueBean) cpList.get(i)).getValue();
+												%>
+												<option value="<%=cpActionValue%>"><%=cpActionName%></option>
+												<%
+													}
+													}
+												%>
 											</select></td>
 										</tr>
 
 
 										<tr>
-				
+
 											<td colspan="7" width="97%" align="right" class="dividerline">&nbsp;<html:button
 												property="addKeyValue" styleClass="black_ar"
 												onclick="getUserPagePrivSummary()">
@@ -517,12 +530,12 @@ function handleStatus(status)
 											</html:button></td>
 											<td width="3%" class="dividerline">&nbsp;</td>
 										</tr>
-										
-										
+
+
 										<tr class="td_color_F7F7F7">
 
 											<td height="25" colspan="8" align="left"><span
-												class="blue_ar_b">&nbsp;Summary</span></td>
+												class="blue_ar_b">&nbsp;<bean:message key="app.summary" /></span></td>
 										</tr>
 
 
@@ -536,7 +549,7 @@ function handleStatus(status)
 													<td width="21%" class="black_ar_b" align="left"><bean:message
 														key="assignPrivileges.site(s)" /></td>
 													<td width="20%" class="black_ar_b" align="left"><bean:message
-														key="app.collectionProtocol" /></td>
+														key="assignPrivileges.collectionProtocol(s)" /></td>
 													<td width="15%" class="black_ar_b" align="left"><bean:message
 														key="user.role" /></td>
 													<td width="33%" class="black_ar_b" align="left"><bean:message
@@ -612,12 +625,14 @@ function handleStatus(status)
 												</tr>
 												<tr>
 													<td class="black_ar" colspan="7"><html:button
-														property="deleteButton" styleId="deleteButtonId" styleClass="black_ar"
-														onclick="deleteCheckedRows('summaryTableId',this.id)" disabled="true">
+														property="deleteButton" styleId="deleteButtonId"
+														styleClass="black_ar"
+														onclick="deleteCheckedRows('summaryTableId',this.id)"
+														disabled="true">
 														<bean:message key="buttons.delete" />
 													</html:button></td>
 												</tr>
-												
+
 											</table>
 
 											</td>
@@ -652,7 +667,7 @@ function handleStatus(status)
 												<bean:message key="buttons.cancel" />
 											</html:link>
 										</logic:equal>
-									</logic:notEqual> <logic:equal name="pageOf" 
+									</logic:notEqual> <logic:equal name="pageOf"
 										value='${requestScope.pageOfSignUp}'>
 										<a href="#" class="cancellink"><html:link
 											page="/RedirectHome.do" styleClass="cancellink">
@@ -665,4 +680,4 @@ function handleStatus(status)
 				</tr>
 				</html:form>
 			</table>
-			</body>
+</body>
