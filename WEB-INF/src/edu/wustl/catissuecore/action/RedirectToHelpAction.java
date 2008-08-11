@@ -25,20 +25,20 @@ public class RedirectToHelpAction extends Action
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
 	throws IOException, ServletException, DAOException
 	{
-		//Retrives link values from caTissueCore_Properties.xml file	
-		String userGuideLink = XMLPropertyHandler.getValue("userguide.link");
-		String technicalGuideLink = XMLPropertyHandler.getValue("technicalguide.link");
-		String trainingGuideLink = XMLPropertyHandler.getValue("trainingguide.link");
-		String umlmodelGuideLink = XMLPropertyHandler.getValue("umlmodelguide.link");
-		String gforeGuideLink = XMLPropertyHandler.getValue("gforge.link");
-		String knowledgeCenterGuideLink = XMLPropertyHandler.getValue("knowledgecenter.link");
+		//Retrives link values from caTissueCore_Properties.xml file
+		Constants.USER_GUIDE = XMLPropertyHandler.getValue("userguide.link");
+		Constants.TECHNICAL_GUIDE = XMLPropertyHandler.getValue("technicalguide.link");
+		Constants.TRAINING_GUIDE = XMLPropertyHandler.getValue("trainingguide.link");
+		Constants.UMLMODEL_GUIDE = XMLPropertyHandler.getValue("umlmodel.link");
+		Constants.GFORGE_GUIDE = XMLPropertyHandler.getValue("gforge.link");
+		Constants.KNOWLEDGECENTER_GUIDE = XMLPropertyHandler.getValue("knowledgecenter.link");
 		
-		request.setAttribute("UserGuide", userGuideLink);
-		request.setAttribute("TechnicalGuide", technicalGuideLink);
-		request.setAttribute("TrainingGuide", trainingGuideLink);
-		request.setAttribute("UmlModelGuide", umlmodelGuideLink);
-		request.setAttribute("GforgeGuide", gforeGuideLink);
-		request.setAttribute("KnowledgeCenterGuide", knowledgeCenterGuideLink);
+		request.setAttribute(Constants.USER_GUIDE_LINK, Constants.USER_GUIDE);
+		request.setAttribute(Constants.TECHNICAL_GUIDE_LINK, Constants.TECHNICAL_GUIDE);
+		request.setAttribute(Constants.TRAINING_GUIDE_LINK, Constants.TRAINING_GUIDE);
+		request.setAttribute(Constants.UMLMODEL_GUIDE_LINK, Constants.UMLMODEL_GUIDE);
+		request.setAttribute(Constants.GFORGE_GUIDE_LINK, Constants.GFORGE_GUIDE);
+		request.setAttribute(Constants.KNOWLEDGECENTER_GUIDE_LINK, Constants.KNOWLEDGECENTER_GUIDE);
 		
 		return mapping.findForward(Constants.SUCCESS);
       }
