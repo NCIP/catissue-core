@@ -1,0 +1,106 @@
+<project name="run-tools file" basedir="." default="runClient">
+     <property name="service.url" value="https://localhost:18443/wsrf/services/cagrid/CaTissueSuite" />
+
+<target name="runClient" depends="checkGlobus, defineClasspaths" description="Run the sample Client">
+        <property name="runclasspath" refid="run.classpath"/>
+		<echo message="Connecting to service: ${service.url}" />
+        <java failonerror="true" classname="edu.wustl.catissuecore.client.CaTissueSuiteClient" classpathref="run.classpath" fork="yes">
+            <jvmarg value="-DGLOBUS_LOCATION=${ext.globus.dir}" />
+            <arg value="-url" />
+			 <arg value="${service.url}" />
+            <arg value="./cqls/Query1.xml" />
+      </java>
+ </target>
+
+<target name="runQueryForAllObjects" depends="checkGlobus, defineClasspaths" description="Run the sample Client">
+        <echo message="Connecting to service: ${service.url}" />
+        <java failonerror="true" classname="edu.wustl.catissuecore.client.CaTissueSuiteClient" classpathref="run.classpath" fork="yes">
+            <jvmarg value="-DGLOBUS_LOCATION=${ext.globus.dir}" />
+            <arg value="-url" />
+            <arg value="${service.url}" />
+			<arg value="./cqls/allobjectscql/Address.xml" />
+			<arg value="./cqls/allobjectscql/Biohazard.xml" />
+			<arg value="./cqls/allobjectscql/CancerResearchGroup.xml" />
+			<arg value="./cqls/allobjectscql/Capacity.xml" />
+			<arg value="./cqls/allobjectscql/CellSpecimen.xml" />
+			<arg value="./cqls/allobjectscql/CellSpecimenRequirement.xml" />
+			<arg value="./cqls/allobjectscql/CellSpecimenReviewParameters.xml" />
+			<arg value="./cqls/allobjectscql/CheckInCheckOutEventParameter.xml" />
+			<arg value="./cqls/allobjectscql/CollectionEventParameters.xml" />
+			<arg value="./cqls/allobjectscql/CollectionProtocol.xml" />
+			<arg value="./cqls/allobjectscql/CollectionProtocolEvent.xml" />
+			<arg value="./cqls/allobjectscql/CollectionProtocolRegistration.xml" />
+			<arg value="./cqls/allobjectscql/ConsentTier.xml" />
+			<arg value="./cqls/allobjectscql/ConsentTierResponse.xml" />
+			<arg value="./cqls/allobjectscql/ConsentTierStatus.xml" />
+			<arg value="./cqls/allobjectscql/Container.xml" />
+			<arg value="./cqls/allobjectscql/ContainerPosition.xml" />
+			<arg value="./cqls/allobjectscql/ContainerType.xml" />
+			<arg value="./cqls/allobjectscql/Department.xml" />
+			<arg value="./cqls/allobjectscql/DerivedSpecimenOrderItem.xml" />
+			<arg value="./cqls/allobjectscql/DisposalEventParameters.xml" />
+			<arg value="./cqls/allobjectscql/DistributedItem.xml" />
+			<arg value="./cqls/allobjectscql/Distribution.xml" />
+			<arg value="./cqls/allobjectscql/DistributionProtocol.xml" />
+			<arg value="./cqls/allobjectscql/DistributionSpecimenRequirement.xml" />
+			<arg value="./cqls/allobjectscql/EmbeddedEventParameters.xml" />
+			<arg value="./cqls/allobjectscql/ExistingSpecimenArrayOrderItem.xml" />
+			<arg value="./cqls/allobjectscql/ExistingSpecimenOrderItem.xml" />
+			<arg value="./cqls/allobjectscql/ExternalIdentifier.xml" />
+			<arg value="./cqls/allobjectscql/FixedEventParameters.xml" />
+			<arg value="./cqls/allobjectscql/FluidSpecimen.xml" />
+			<arg value="./cqls/allobjectscql/FluidSpecimenRequirement.xml" />
+			<arg value="./cqls/allobjectscql/FluidSpecimenReviewEventParameters.xml" />
+			<arg value="./cqls/allobjectscql/FrozenEventParameters.xml" />
+			<arg value="./cqls/allobjectscql/Institution.xml" />
+			<arg value="./cqls/allobjectscql/MolecularSpecimen.xml" />
+			<arg value="./cqls/allobjectscql/MolecularSpecimenRequirement.xml" />
+			<arg value="./cqls/allobjectscql/MolecularSpecimenReviewParameters.xml" />
+			<arg value="./cqls/allobjectscql/NewSpecimenArrayOrderItem.xml" />
+			<arg value="./cqls/allobjectscql/NewSpecimenOrderItem.xml" />
+			<arg value="./cqls/allobjectscql/OrderDetails.xml" />
+			<arg value="./cqls/allobjectscql/OrderItem.xml" />
+			<arg value="./cqls/allobjectscql/Participant.xml" />
+			<arg value="./cqls/allobjectscql/ParticipantMedicalIdentifier.xml" />
+			<arg value="./cqls/allobjectscql/Password.xml" />
+			<arg value="./cqls/allobjectscql/PathologicalCaseOrderItem.xml" />
+			<arg value="./cqls/allobjectscql/ProcedureEventParameters.xml" />
+			<arg value="./cqls/allobjectscql/Race.xml" />
+			<arg value="./cqls/allobjectscql/ReceivedEventParameters.xml" />
+			<arg value="./cqls/allobjectscql/ReportedProblem.xml" />
+			<arg value="./cqls/allobjectscql/Site.xml" />
+			<arg value="./cqls/allobjectscql/Specimen.xml" />
+			<arg value="./cqls/allobjectscql/SpecimenArray.xml" />
+			<arg value="./cqls/allobjectscql/SpecimenArrayContent.xml" />
+			<arg value="./cqls/allobjectscql/SpecimenArrayType.xml" />
+			<arg value="./cqls/allobjectscql/SpecimenCharacteristics.xml" />
+			<arg value="./cqls/allobjectscql/SpecimenCollectionGroup.xml" />
+			<arg value="./cqls/allobjectscql/SpecimenOrderItem.xml" />
+			<arg value="./cqls/allobjectscql/SpecimenPosition.xml" />
+			<arg value="./cqls/allobjectscql/SpecimenRequirement.xml" />
+			<arg value="./cqls/allobjectscql/SpunEventParameters.xml" />
+			<arg value="./cqls/allobjectscql/StorageContainer.xml" />
+			<arg value="./cqls/allobjectscql/StorageType.xml" />
+			<arg value="./cqls/allobjectscql/ThawEventParameters.xml" />
+			<arg value="./cqls/allobjectscql/TissueSpecimen.xml" />
+			<arg value="./cqls/allobjectscql/TissueSpecimenRequirement.xml" />
+			<arg value="./cqls/allobjectscql/TissueSpecimenReviewEventParameters.xml" />
+			<arg value="./cqls/allobjectscql/TransferEventParameters.xml" />
+			<arg value="./cqls/allobjectscql/User.xml" />
+			<arg value="./cqls/allobjectscql/BinaryContent.xml" />
+			<arg value="./cqls/allobjectscql/Concept.xml" />
+			<arg value="./cqls/allobjectscql/ConceptReferent.xml" />
+			<arg value="./cqls/allobjectscql/ConceptReferentClassification.xml" />
+			<arg value="./cqls/allobjectscql/DeidentifiedSurgicalPathologyReport.xml" />
+			<arg value="./cqls/allobjectscql/IdentifiedSurgicalPathologyReport.xml" />
+			<arg value="./cqls/allobjectscql/PathologyReportReviewParameter.xml" />
+			<arg value="./cqls/allobjectscql/QuarantineEventParameter.xml" />
+			<arg value="./cqls/allobjectscql/ReportContent.xml" />
+			<arg value="./cqls/allobjectscql/ReportSection.xml" />
+			<arg value="./cqls/allobjectscql/SemanticType.xml" />
+			<arg value="./cqls/allobjectscql/SurgicalPathologyReport.xml" />
+			<arg value="./cqls/allobjectscql/TextContent.xml" />
+			<arg value="./cqls/allobjectscql/XMLContent.xml" />
+      </java>
+ </target>
+</project>

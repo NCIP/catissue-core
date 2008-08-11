@@ -1,0 +1,11 @@
+#Introduce Properties
+#Mon Aug 11 11:39:19 GMT+05:30 2008
+introduce.skeleton.services.list=CaTissueSuite
+introduce.skeleton.extensions=cagrid_metadata,data
+introduce.skeleton.timestamp=0
+introduce.skeleton.service.name=CaTissueSuite
+introduce.skeleton.resource.options=main,singleton,identifiable,resourcePropertyManagement
+introduce.skeleton.destination.dir=F\:\\caTissueSuite caGRID Service\\CaTissueSuite
+introduce.skeleton.namespace.domain=http\://catissuecore.wustl.edu/CaTissueSuite
+introduce.soap.binding.excludes=\ gme\://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain gme\://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology gme\://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.shippingtracking
+introduce.ns.excludes=\ -x gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service -x gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata -x http\://gov.nih.nci.cagrid.data/DataServiceExceptions -x gme\://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain -x gme\://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology -x gme\://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.shippingtracking -x gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security -x gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common

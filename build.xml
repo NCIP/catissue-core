@@ -945,6 +945,16 @@
 	            	<include name="catissuecore.jar"/>
 	        </fileset>
         </copy>
+		
+		<copy todir="${base.dir}/CaTissueSuite_caGrid_Service/lib" overwrite="true">
+	            <fileset dir="${lib.dir}">
+	            	<include name="commonpackage.jar"/>
+	            	<include name="shippingtracking.jar"/>
+	            </fileset>
+				<fileset dir="${temp.dir}">
+		            	<include name="catissuecore.jar"/>
+		        </fileset>
+	    </copy>
 
 		<copy todir="${base.dir}/catissue_de_integration_client/lib" overwrite="true">
             <fileset dir="${lib.dir}">

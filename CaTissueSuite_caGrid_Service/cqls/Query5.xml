@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CQLQuery xmlns="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery">
+<Target name="edu.wustl.catissuecore.domain.MolecularSpecimen">
+	<Group logicRelation="AND">
+		<Attribute name="specimenType" predicate="EQUAL_TO" value="RNA"/>
+			<Association roleName="parentSpecimen" name="edu.wustl.catissuecore.domain.TissueSpecimen">	
+				<Group logicRelation="AND">
+					<Attribute name="id"  predicate="IS_NOT_NULL"/>
+					<Association roleName="specimenEventCollection" name="edu.wustl.catissuecore.domain.FixedEventParameters">	
+							<Attribute name="fixationType"  value="Neutral Buffered Formalin" predicate="NOT_EQUAL_TO"/>
+					</Association>
+				</Group>
+		</Association>		
+	</Group>
+ </Target>
+</CQLQuery>
