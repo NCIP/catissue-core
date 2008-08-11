@@ -1,4 +1,4 @@
-                              // function to set focus on first element
+					                               // function to set focus on first element
 
 function setFocusOnFirstElement()
       {
@@ -200,7 +200,7 @@ function openCRGWindow()
                      }
                       if((cpOperation == "getCPsForThisSites")&& num==0)
 					{
-						 getActionsForThisCPs('cpIds','siteIds','roleIds');
+						 getActionsForThisCPs('cpIds','siteIds','roleIds','cpCheckId');
 					}
 
                      
@@ -387,7 +387,7 @@ function openCRGWindow()
                                           }
                                           if(i==(num-1))
                                           {
-                                       	 	 getActionsForThisCPs('cpIds','siteIds','roleIds');
+                                       	 	 getActionsForThisCPs('cpIds','siteIds','roleIds','cpCheckId');
                                        	  break;
                                           }
                                     }
@@ -883,7 +883,7 @@ function openCRGWindow()
 
                   aprUser.className="black_ar";
 
-                  aprUser.width="15%";
+                  aprUser.width="20%";
 
                   aprUser.innerHTML="<span>"+userName+"</span>";
 
@@ -895,7 +895,7 @@ function openCRGWindow()
 
                   aprRole.className="black_ar";
 
-                  aprRole.width="13%";
+                  aprRole.width="15%";
 
             //    ctrl=document.getElementById('roleIds');
 
@@ -931,7 +931,7 @@ function openCRGWindow()
 
                   aprActions.className="black_ar";
 
-                  aprActions.width="40%";
+                  aprActions.width="33%";
 
                   aprActions.innerHTML="<span>"+newActionsString+"</span>";
 
@@ -1504,7 +1504,8 @@ function consentPage()
             var tb = document.getElementById(tableId);
             var rows = new Array(); 
             rows = tb.rows;
-            var noOfRows = rows.length;   
+            var noOfRows = rows.length;  
+ 
             if(opt=="addRow")
             {
                   var row = document.getElementById(tableId).insertRow(noOfRows);
@@ -1557,15 +1558,15 @@ function consentPage()
                   aprSites.onmouseover=function(){Tip(sites,WIDTH,200);} ;
                               //third Cell
 
-                  var aprUser=row.insertCell(2);
-                  aprUser.className="black_ar";
-                  aprUser.width="15%";
-                  aprUser.innerHTML="<span>"+cpName+"</span>";
+                  var aprCP=row.insertCell(2);
+                  aprCP.className="black_ar";
+                  aprCP.width="20%";
+                  aprCP.innerHTML="<span>"+cpName+"</span>";
                   //fourth Cell
 
                   var aprRole=row.insertCell(3);
                   aprRole.className="black_ar";
-                  aprRole.width="13%";
+                  aprRole.width="15%";
             //    ctrl=document.getElementById('roleIds');
 
             //    sname=ctrl.options[ctrl.selectedIndex].text;
@@ -1587,7 +1588,7 @@ function consentPage()
 
                   var aprActions=row.insertCell(4);
                   aprActions.className="black_ar";
-                  aprActions.width="40%";
+                  aprActions.width="33%";
                   aprActions.innerHTML="<span>"+newActionsString+"</span>";
                   aprActions.onmouseover=function(){Tip(actions,WIDTH,200);} ;
 
@@ -1707,10 +1708,17 @@ function editRowForUserPage(rowId)
  
  
  // function is used for both site and cp
- function getActionsForThisCPs(cpSelBoxId,siteSelBoxId,roleSelBoxId)
+ function getActionsForThisCPs(cpSelBoxId,siteSelBoxId,roleSelBoxId,checkBoxId)
  {
 	var cpOperation="";
-
+	
+	var checkBoxCtrl=document.getElementById(checkBoxId);
+	var isAllCPChecked=false;
+    if(checkBoxCtrl.checked==true)
+    {
+       isAllCPChecked=true;
+	   alert(isAllCPChecked);
+    }
 	var roleSelBoxObj=document.getElementById(roleSelBoxId);
 	var cpSelBoxObj= document.getElementById(cpSelBoxId);
 	var siteSelBoxObj= document.getElementById(siteSelBoxId);
@@ -1722,6 +1730,7 @@ function editRowForUserPage(rowId)
 	if(selectedCPIds!=null&&(selectedCPIds.length>0))
 	{
 		cpOperation="getActionsForThisCPs";
+
 		var url="ShowAssignPrivilegePage.do";
 		var data="cpOperation="+cpOperation+"&selectedCPIds="+selectedCPIds+"&selectedRoleIds="+selectedRoleIds;
 		sendRequestsWithData(url,data,cpOperation);
@@ -1729,9 +1738,10 @@ function editRowForUserPage(rowId)
 	else if(selectedSiteIds!=null&&(selectedSiteIds.length>0))
 	{
 		cpOperation="getActionsForThisSites";
-		    
+		 alert('getActionsForThisSites');   
    		var url="ShowAssignPrivilegePage.do";
-		var data="cpOperation="+cpOperation+"&selectedSiteIds="+selectedSiteIds+"&selectedRoleIds="+selectedRoleIds;
+		var data="cpOperation="+cpOperation+"&selectedSiteIds="+selectedSiteIds+"&selectedRoleIds="+selectedRoleIds+"&isAllCPChecked="+isAllCPChecked;
+		alert(data);
 		sendRequestsWithData(url,data,cpOperation);
 	}
 	else
@@ -1741,7 +1751,7 @@ function editRowForUserPage(rowId)
         var pageOf = form.pageOf.value;                  
           
         var url="ShowAssignPrivilegePage.do?pageOf="+pageOf;   
-        var data="cpOperation="+cpOperation+"&selectedRoleIds="+selectedRoleIds+"&selectedSiteIds="+selectedSiteIds+"&selectedCPIds="+selectedCPIds;                    
+        var data="cpOperation="+cpOperation+"&selectedRoleIds="+selectedRoleIds+"&selectedSiteIds="+selectedSiteIds+"&selectedCPIds="+selectedCPIds+"&isAllCPChecked="+isAllCPChecked;;                    
 		sendRequestsWithData(url,data,cpOperation);
 	}
  }
@@ -1793,6 +1803,15 @@ function editRowForUserPage(rowId)
     }
   }
  
+ //  disabling and enabling of selectBox on checkbox click and get Actions for Sites and role based on
+ //  condition whether they are selected or not.
+
+function eventOnChkBoxClick(checkBoxId,cpSelBoxId,siteSelBoxId,roleSelBoxId)
+{
+	disableSelBoxOnChk(checkBoxId,cpSelBoxId);
+	getActionsForThisCPs(cpSelBoxId,siteSelBoxId,roleSelBoxId,checkBoxId);
+}
+
  // disabling and enabling of selectBox on checkbox click.
  function disableSelBoxOnChk(checkBoxId,selectBoxId)
 {

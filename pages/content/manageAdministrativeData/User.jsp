@@ -435,7 +435,8 @@ function handleStatus(status)
 
 								<tr onclick="showHide('privilegesDiv')">
 									<td colspan="7" align="left" class="tr_bg_blue1"><span
-										class="blue_ar_b">&nbsp;Privileges</span></td>
+										class="blue_ar_b">&nbsp;<bean:message
+					key="assignPrivileges.privilegeDetails" /></span></td>
 									<td align="right" class="tr_bg_blue1"><a href="#"
 										id="imgArrow_privilegesDiv"><img
 										src="images/uIEnhancementImages/dwn_arrow1.gif"
@@ -454,7 +455,7 @@ function handleStatus(status)
 												width="6" height="6" hspace="0" vspace="0" /></span></td>
 											<td width="17%" align="left" class="black_ar">Collection
 											Protocol(s)</td>
-											<td width="19%" class="black_ar"><input type="checkbox" checked="true" id="cpCheckId" onclick="disableSelBoxOnChk('cpCheckId','cpIds')" >All
+											<td width="19%" class="black_ar"><input type="checkbox" checked="true" id="cpCheckId" onclick="eventOnChkBoxClick('cpCheckId','cpIds','siteIds','roleIds')" >All
 											Current and Future</td>
 											<td width="13%" class="black_ar">&nbsp;</td>
 											<td width="1%" align="center" class="black_ar"><span
@@ -488,7 +489,7 @@ function handleStatus(status)
 											<td width="17%" align="left" class="black_ar"></td>
 											<td width="19%" class="black_ar" ><select
 												class="formFieldSizedNew" id="cpIds" size="4"
-												multiple="multiple" onchange="getActionsForThisCPs(this.id,'siteIds','roleIds')" disabled="true">
+												multiple="multiple" onchange="getActionsForThisCPs(this.id,'siteIds','roleIds','cpCheckId')" disabled="true">
 												<%
 												String cpActionName = "";
 												String cpActionValue = "";
@@ -534,11 +535,11 @@ function handleStatus(status)
 														align="left"><bean:message key="app.select" /></label></td>
 													<td width="21%" class="black_ar_b" align="left"><bean:message
 														key="assignPrivileges.site(s)" /></td>
-													<td width="15%" class="black_ar_b" align="left"><bean:message
+													<td width="20%" class="black_ar_b" align="left"><bean:message
 														key="app.collectionProtocol" /></td>
-													<td width="13%" class="black_ar_b" align="left"><bean:message
+													<td width="15%" class="black_ar_b" align="left"><bean:message
 														key="user.role" /></td>
-													<td width="40%" class="black_ar_b" align="left"><bean:message
+													<td width="33%" class="black_ar_b" align="left"><bean:message
 														key="app.Privileges" /></td>
 													<td width="5%" class="black_ar_b">&nbsp;</td>
 												</tr>
@@ -546,7 +547,7 @@ function handleStatus(status)
 													<td colspan="6" width="100%">
 													<div
 														style="height: 80px; background-color: #ffffff;overflow: auto;">
-													<table border="0" width="100%" cellspacing="0"
+													<table border="1" width="100%" cellspacing="0"
 														cellpadding="0">
 														<tbody id="summaryTableId">
 															<%
@@ -582,11 +583,11 @@ function handleStatus(status)
 																			}
 																%><span><%=arr[1]%></span></td>
 
-																<td width="15%" class="black_ar"><span><%=arr[0]%></span></td>
-																<td width="13%" class="black_ar"><span><%=arr[2]%></span>
+																<td width="20%" class="black_ar"><span><%=arr[0]%></span></td>
+																<td width="15%" class="black_ar"><span><%=arr[2]%></span>
 																</td>
 
-																<td width="40%" class="black_ar"
+																<td width="33%" class="black_ar"
 																	onmouseover="Tip('<%=arr[3]%>',WIDTH,200)">
 																<%
 																		if (arr[3].length() > 20) {

@@ -151,11 +151,12 @@ public class MSRUtil {
 			final String pageOf = (String) request.getParameter(Constants.PAGE_OF);
 			final String siteIds = (String) request.getParameter(Constants.SELECTED_SITE_IDS);
 			final String cpIds = (String) request.getParameter("selectedCPIds");
+			final boolean isAllCPChecked = new Boolean(request.getParameter("isAllCPChecked"));
 			
 		    final List<Long> selectedSiteIds = apBizLogic.getSiteData(siteIds);
 		    final List<Long> selectedCPIds = apBizLogic.getCPData(cpIds);
 		    
-			final List<JSONObject> listOfAction = apBizLogic.getActionsForThisRole(role,pageOf,selectedSiteIds,selectedCPIds);
+			final List<JSONObject> listOfAction = apBizLogic.getActionsForThisRole(role,pageOf,selectedSiteIds,selectedCPIds,isAllCPChecked);
 			setResponse(response, listOfAction);
 			
 		}
@@ -268,9 +269,10 @@ public class MSRUtil {
 		{
 	//		final String siteIds = (String) request.getParameter("selectedSiteIds");
 			final String selectedRoleId = (String) request.getParameter(Constants.SELECTED_ROLE_IDS);
+			final boolean isAllCPChecked = new Boolean(request.getParameter("isAllCPChecked"));
 			
 //		    final List<Long> selectedSiteIds = apBizLogic.getSiteData(siteIds);
-		    final List<JSONObject> listOfAction = apBizLogic.getActionsForThisSites(selectedRoleId);
+		    final List<JSONObject> listOfAction = apBizLogic.getActionsForThisSites(selectedRoleId,isAllCPChecked);
 	//	    final List<JSONObject> listOfAction = apBizLogic.getActionsForThisRole(roleId, pageOf, selectedSiteIds);
 		    setResponse(response, listOfAction);
 		}

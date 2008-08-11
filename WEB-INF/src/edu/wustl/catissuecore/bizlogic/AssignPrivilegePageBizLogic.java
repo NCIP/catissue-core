@@ -241,20 +241,35 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
         List<NameValueBean> roleNameValueBeanList = new ArrayList<NameValueBean>();
         roleNameValueBeanList.add(0,new NameValueBean(Constants.SELECT_OPTION,"-1"));
         roleNameValueBeanList.add(new NameValueBean("Custom","0"));
+       
         while (iterator.hasNext())
         {
             Role role = (Role) iterator.next();
             NameValueBean nameValueBean = new NameValueBean();
-            if(!("SUPERADMINISTRATOR".equals(role.getName())))
+            if(! ("pageOfUserAdmin").equalsIgnoreCase(pageOf))
             {
-	            nameValueBean.setName(role.getName());
-	        }
+            	if(!(("SUPERADMINISTRATOR").equals(role.getName()))&&!(("Administrator").equals(role.getName())))
+            	{
+            		 nameValueBean.setName(role.getName());
+            		 nameValueBean.setValue(String.valueOf(role.getId()));
+        	         roleNameValueBeanList.add(nameValueBean);
+            	}
+            	 
+            }
             else
             {
-            	nameValueBean.setName("Super Administrator");
+            	if(!("SUPERADMINISTRATOR".equals(role.getName())))
+                {
+    	            nameValueBean.setName(role.getName());
+    	        }
+                else
+                {
+                	nameValueBean.setName("Super Administrator");
+                }
+                 nameValueBean.setValue(String.valueOf(role.getId()));
+    	         roleNameValueBeanList.add(nameValueBean);
             }
-             nameValueBean.setValue(String.valueOf(role.getId()));
-	         roleNameValueBeanList.add(nameValueBean);
+            
           
         }
         
@@ -479,7 +494,7 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 	 * @throws JSONException 
 	 * @throws BizLogicException 
 	 */
-	public List<JSONObject> getActionsForThisRole(String roleId, String pageOf,List<Long> selectedSiteIds,List<Long> selectedCPIds)throws JSONException, BizLogicException 
+	public List<JSONObject> getActionsForThisRole(String roleId, String pageOf,List<Long> selectedSiteIds,List<Long> selectedCPIds,boolean isAllCPChecked)throws JSONException, BizLogicException 
 	{
 		List<NameValueBean> actionList = new ArrayList<NameValueBean> ();
 		if (pageOf != null && !pageOf.equalsIgnoreCase("pageOfUserAdmin"))
@@ -495,7 +510,14 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 			
 			else if((selectedSiteIds!=null)&& ! selectedSiteIds.isEmpty()&& selectedSiteIds.size()>0)
 			{
-				actionList = getActionsForSelSites();
+				if(isAllCPChecked)
+				{
+					actionList = getActionListForUserPage(false);
+				}
+				else
+				{
+					actionList = getActionsForSelSites();
+				}
 			}
 			else 
 			{
@@ -519,9 +541,18 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 		return arrayList;
 	}
 	
-	public List<JSONObject> getActionsForThisSites(String selectedRoleId) throws BizLogicException,JSONException
+	public List<JSONObject> getActionsForThisSites(String selectedRoleId,boolean isAllCPChecked) throws BizLogicException,JSONException
 	{
-		List<NameValueBean> actionList =  getActionsForSelSites();
+		List<NameValueBean> actionList=null;
+		if(isAllCPChecked)
+		{
+			actionList = getActionListForUserPage(false);
+		}
+		else
+		{
+			actionList =  getActionsForSelSites();
+		}
+	//	actionList =  getActionsForSelSites();
 		List<NameValueBean> selectedActionsList=new ArrayList<NameValueBean>();
 		
 		if(selectedRoleId!=null&& selectedRoleId!=""&& ! selectedRoleId.equalsIgnoreCase("-1"))
@@ -1319,7 +1350,7 @@ public List<JSONObject> addPrivilegeForUserPage(Map<String, SiteUserRolePrivileg
 				 String rowId = "CP_"+ cpId;
 				 rowIdBeanMap.put(rowId,surpBean);
 				 
-				 JSONObject jsonObject=getObjectForUPSummaryForUserPage(cpRelatedSites,rowId,collectionProtocol,roleName,actionIdsList,roleId);
+				 JSONObject jsonObject=getObjectForUPSummaryForUserPage(cpRelatedSites,rowId,collectionProtocol,roleName,actionIdsList,roleId,isAllCPChecked);
 				 
 				 listForUPSummary.add(jsonObject);
 			}
@@ -1357,7 +1388,7 @@ public List<JSONObject> addPrivilegeForUserPage(Map<String, SiteUserRolePrivileg
 				 String rowId = "" + siteId;
 				 rowIdBeanMap.put(rowId,surpBean);
 				 
-				 JSONObject jsonObject=getObjectForUPSummaryForUserPage(siteLists,rowId,null,roleName,actionIdsList,roleId);
+				 JSONObject jsonObject=getObjectForUPSummaryForUserPage(siteLists,rowId,null,roleName,actionIdsList,roleId,isAllCPChecked);
 				 
 				 listForUPSummary.add(jsonObject);
 			}
@@ -1425,7 +1456,7 @@ public SiteUserRolePrivilegeBean setUserPrivilegeSummaryForUserPage(CollectionPr
 }
 
 
-public JSONObject getObjectForUPSummaryForUserPage(List<Site> cpRelatedSites, String rowId, CollectionProtocol collectionProtocol, String roleName, List<String> actionIdsList,String roleId) throws JSONException,BizLogicException 
+public JSONObject getObjectForUPSummaryForUserPage(List<Site> cpRelatedSites, String rowId, CollectionProtocol collectionProtocol, String roleName, List<String> actionIdsList,String roleId,boolean isAllCPChecked) throws JSONException,BizLogicException 
 {
 	StringBuffer sbForSitesIds = new StringBuffer();
 	for (int i = 0; i < cpRelatedSites.size(); i++) 
@@ -1448,6 +1479,15 @@ public JSONObject getObjectForUPSummaryForUserPage(List<Site> cpRelatedSites, St
 	cpName = collectionProtocol.getShortTitle();
 	cpId=collectionProtocol.getId();
 	}
+	else if(isAllCPChecked && cpRelatedSites!=null)
+	{
+		cpName="All Current and Future";
+	}
+	else if(cpRelatedSites!=null && ! isAllCPChecked)
+	{
+		cpName="NA";
+	}
+	
 	jsonobject.append("cpName", cpName);
 	jsonobject.append("cpId", cpId);
 	jsonobject.append("sites", sites);

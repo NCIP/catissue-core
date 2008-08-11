@@ -237,7 +237,7 @@ function updateCPTree()
 				<td width="97%" align="right" class="dividerline">&nbsp;<html:button
 					property="addKeyValue" styleClass="black_ar"
 					onclick="getUserPrivilegeSummary()">
-					<bean:message key="buttons.submit" />
+					<bean:message key="buttons.addPrivilege" />
 				</html:button></td>
 				<td width="3%" class="dividerline">&nbsp;</td>
 			</tr>
@@ -250,7 +250,7 @@ function updateCPTree()
 
 				<td height="25" colspan="2" align="left" class="tr_bg_blue1"><span
 					class="blue_ar_b">&nbsp; <bean:message
-					key="assignPrivileges.userPriviledgeSummary" /></span></td>
+					key="assignPrivileges.privilegeDetails" /></span></td>
 			</tr>
 			<tr class="td_color_F7F7F7">
 				<td colspan="2" align="left" class="toptd"></td>
@@ -304,12 +304,12 @@ function updateCPTree()
 								%><span><%=arr[1]%></span>
 									</td>
 
-									<td width="15%" class="black_ar" >
+									<td width="20%" class="black_ar" >
 									<span><%=arr[0]%></span></td>
-									<td width="13%" class="black_ar"><span><%=arr[2]%></span>
+									<td width="15%" class="black_ar"><span><%=arr[2]%></span>
 									</td>
 									
-									<td width="40%" class="black_ar" onmouseover="Tip('<%=arr[3]%>',WIDTH,200)">
+									<td width="33%" class="black_ar" onmouseover="Tip('<%=arr[3]%>',WIDTH,200)">
 									<% if(arr[3].length() >20){
 									arr[3]=arr[3].substring(0,17)+"...";
 									}
