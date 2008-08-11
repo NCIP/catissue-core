@@ -191,7 +191,7 @@
         <td class="td_tab_bg" ><img src="images/uIEnhancementImages/spacer.gif" alt="spacer" width="50" height="1"></td>
         <td valign="bottom"><a href="#" onclick="addNewAction(<%= specimenPath %>)"><img src="images/uIEnhancementImages/tab_specimen_details2.gif" alt="Specimen Details" width="126" height="22" border="0"></a></td>
         <td valign="bottom"><img src="images/uIEnhancementImages/tab_events1.gif" alt="Events" width="56" height="22"></td>
-        <td valign="bottom"><a href="#" onClick="viewSPR()"><img src="images/uIEnhancementImages/tab_view_surgical3.gif" alt="Inactive View Surgical Pathology Report " width="216" height="22" border="0"></a></td>
+        <td valign="bottom"><a href="#" onClick="viewSPR()"><img src="images/uIEnhancementImages/tab_view_surgical2.gif" alt="Inactive View Surgical Pathology Report " width="216" height="22" border="0"></a></td>
         <td valign="bottom"><a href="#" onClick="viewAnnotations(<%=specimenEntityId%>,<%=specimenIdentifier%>,'','<%=staticEntityName%>','<%=pageOf%>')"><img src="images/uIEnhancementImages/tab_view_annotation2.gif" alt="View Annotation" width="116" height="22" border="0"></a></td>
         <td align="left" valign="bottom" class="td_color_bfdcf3" ><a href="#" onClick="addNewAction(<%= consentTab %>)" id="consentTab"><img src="images/uIEnhancementImages/tab_consents2.gif" alt="Consents" width="76" height="22" border="0"></a></td>
         <td width="90%" align="left" valign="bottom" class="td_tab_bg" >&nbsp;</td>

@@ -139,7 +139,7 @@ function showEvent()
 					<img src="images/uIEnhancementImages/tab_events2.gif" alt="Events" width="56" height="22" onclick="showEvent()" border="0"></html:link></td>
 				<td valign="bottom">
 					<html:link href="#"  onclick="viewSPR()">
-					<img src="images/uIEnhancementImages/tab_view_surgical3.gif" alt="Inactive View Surgical Pathology Report " width="216" height="22" border="0"></html:link></td>
+					<img src="images/uIEnhancementImages/tab_view_surgical2.gif" alt="Inactive View Surgical Pathology Report " width="216" height="22" border="0"></html:link></td>
 				<td valign="bottom">
 					<html:link href="#">
 					<img src="images/uIEnhancementImages/tab_view_annotation1.gif" alt="View Annotation" width="116" height="22" border="0" ></html:link></td>

@@ -251,7 +251,7 @@ tr#hiddenCombo
 			}
 			
 			var url ="ConsentDisplay.do?operation=<%=operation%>&pageOf=pageOfConsent&index="+index+"&<%=Constants.CP_SEARCH_CP_ID%>="+collectionProtocolIdValue+"&collectionProtocolRegIdValue="+collectionProtocolRegIdValue;
-			window.open(url,'ConsentForm','height=360,width=530,scrollbars=1,resizable=0');
+			window.open(url,'ConsentForm','height=300,width=800,scrollbars=1,resizable=1');
 		}
 		/*
 		 This function is linked with new CP Participant Registration Dynamically
@@ -272,7 +272,7 @@ tr#hiddenCombo
 			}
 			
 			var url ="ConsentDisplay.do?operation=<%=operation%>&pageOf=pageOfConsent&index="+index+"&<%=Constants.CP_SEARCH_CP_ID%>="+collectionProtocolIdValue;
-			window.open(url,'ConsentForm','height=360,width=530,scrollbars=1,resizable=0');
+			window.open(url,'ConsentForm','height=300,width=800,scrollbars=1,resizable=1');
 		}
 		
 		
@@ -569,28 +569,29 @@ tr#hiddenCombo
 	if(pageView.equals(Constants.VIEW_SURGICAL_PATHOLOGY_REPORT))
 	{
 	%>
-		<table summary="" cellpadding="0" cellspacing="0" border="0" height="20" class="tabPage" width="600">
+		<table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
+		  <tr>
+		    <td class="td_color_bfdcf3"></td>
+		  </tr>
+		  <tr>
+			<td class="tablepadding">
+				<table width="100%" border="0" cellpadding="0" cellspacing="0">
+				<tr>				
+			
+				<td class="td_tab_bg" ><img src="images/spacer.gif" alt="spacer" width="50" border="0" height="1"></td>
+		        <td valign="bottom" ><a href="#" onClick="editParticipant()"><img src="images/uIEnhancementImages/tab_edit_participant1.gif" border="0" alt="Edit Participant" width="116" height="22" border="0"></a></td>
+		        <td valign="bottom"><img src="images/uIEnhancementImages/tab_view_surgical1.gif" alt="View Surgical Pathology Report" width="216" height="22"></td>
+		        <td valign="bottom"><a href="#" onClick="showAnnotations()"><img src="images/uIEnhancementImages/tab_view_annotation2.gif" border="0" alt="View Annotation" width="116" height="22"></a></td>
+		        <td width="29%" valign="bottom" class="td_tab_bg">&nbsp;</td>
+		</tr>
+
 			<tr>
-				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="editParticipant()">Edit</td>
-
-				<td height="20" class="tabMenuItemSelected"   onClick="">
-					<bean:message key="edit.tab.surgicalpathologyreport"/>
-				</td>
-								
-				
-				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="showAnnotations()">
-					<bean:message key="edit.tab.clinicalannotation"/>
-				</td>
-
-				<td width="450" class="tabMenuSeparator" colspan="3">&nbsp;</td>
-			</tr>
-
-			<tr>
-				<td class="tabField" colspan="6">
+				<td colspan="5">
 				<%@include file="ViewSurgicalPathologyReport.jsp" %>
 				</td>
 			</tr>
 		</table>
+		</td></tr></table>
 	<%
 	}
 	%>
@@ -601,26 +602,26 @@ tr#hiddenCombo
 	if(pageView.equals("viewAnnotations"))
 	{
 		%>
-		<table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">  
-  <tr>
-    <td class="tablepadding">
-		<table width="100%" border="0" cellpadding="0" cellspacing="0">
+		<table summary="" cellpadding="0" cellspacing="0" border="0" height="90%" class="tabPage" width="90%">
 				<tr>
-					<td class="td_tab_bg"><img src="images/uIEnhancementImages/spacer.gif" alt="spacer" width="50" height="1"></td>
-					<td valign="bottom"><html:link href="#"  onclick="setTarget();editParticipant()"><img src="images/uIEnhancementImages/tab_edit_participant1.gif" alt="Edit Participant" width="116" height="22" border="0"></html:link></td>
-					<td valign="bottom"><html:link href="#" onclick="viewSPR()"><img src="images/uIEnhancementImages/tab_view_surgical2.gif" alt="View Surgical Pathology Report" width="216" height="22" border="0"></html:link></td>
-					<td valign="bottom" ><img src="images/uIEnhancementImages/tab_view_annotation1.gif" alt="View Annotation" width="116" height="22"  border="0"></td>
-					<td width="90%" valign="bottom" class="td_tab_bg">&nbsp;</td>
-				</tr>
-				<tr><td colspan="5">				<%@ include file="DisplayAnnotationDataEntryPage.jsp" %>
-</td></tr>
-		</table>
-			
+					<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="setTarget();editParticipant()">Edit</td>
+
+					<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="viewSPR()">
+						<bean:message key="edit.tab.surgicalpathologyreport"/>
+					</td>
+					<td height="20" class="tabMenuItemSelected"  onClick="">
+					<bean:message key="edit.tab.clinicalannotation"/>
+				</td>				
+				<td width="450" class="tabMenuSeparator" colspan="3">&nbsp;</td>
+			</tr>
+
+			<tr valign="top" >
+				<td class="tabField" colspan="6">
+				<%@ include file="DisplayAnnotationDataEntryPage.jsp" %>
 				</td>
 			</tr>
-			
 			</table>
-		
+
 		<%
 	}
 	%>	

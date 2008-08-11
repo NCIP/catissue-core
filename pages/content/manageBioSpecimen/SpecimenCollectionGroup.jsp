@@ -706,7 +706,7 @@ function editSCG()
 			<tr>
 				<td class="td_tab_bg" ><img src="images/spacer.gif" alt="spacer" width="50" height="1"></td>
 				<td valign="bottom" id="specimenCollectionGroupTab"><a href="#" id="SCGImage"><img src="images/uIEnhancementImages/tab_edit_collection.gif" alt="Edit Specimen Collection Group" width="216" height="22"  border="0" onclick="specimencollgroup()"></a></td>
-				<td valign="bottom"  onClick="viewSPR()"><a href="#"><img src="images/uIEnhancementImages/tab_view_surgical3.gif" alt="Inactive View Surgical Pathology Report " width="216" height="22"  border="0"></a></td>
+				<td valign="bottom"  onClick="viewSPR()"><a href="#"><img src="images/uIEnhancementImages/tab_view_surgical2.gif" alt="Inactive View Surgical Pathology Report " width="216" height="22"  border="0"></a></td>
 				<td valign="bottom" onClick="showAnnotations()"><a href="#"><img src="images/uIEnhancementImages/tab_view_annotation2.gif" alt="View Annotation" width="116" height="22"  border="0"></a></td>
 				<td align="left" valign="bottom" class="td_color_bfdcf3"   id="consentTab"><a href="#" id="consentsImage"><img src="images/uIEnhancementImages/tab_consents2.gif" alt="Consents" width="76" height="22" border="0" onClick="consentPage()"></a></td>
 				<td width="90%" align="left" valign="bottom" class="td_tab_bg" >&nbsp;</td>
