@@ -191,6 +191,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 		"label",
 		"shorttitle"
 	};
+	public static final String ROOT = "root";
 	public static final String MISSING_TWO_VALUES = "missingTwoValues";
 	public static final String DATE = "date";
 	public static final String DEFINE_RESULTS_VIEW = "DefineResultsView";
@@ -249,7 +250,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String TOTAL_FILE_TYPE_ATTRIBUTES = "totalFileTypeAttributes";
 	public static final String CLOBTYPE_ID_LIST = "clobTypeIdList"; 
 	public static final String GETREPORTID = "getReportID.do";
-	
+	public static final String DOUBLE_QUOTES = "";
 	/**
 	 * Name: Abhishek Mehta
 	 * Reviewer Name : Deepti 
@@ -430,7 +431,11 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String CLINICAL_DIAGNOSIS_LIST = "clinicalDiagnosisList";
 	public static final String HISTOLOGICAL_QUALITY_LIST="histologicalQualityList";
 	
-	//For Specimen Event Parameters.
+	//For Specimen Event Parameters.	
+	public static final String REQUEST_TO_ORDER = "requestToOrder";
+	public static final String ADD_TO_ORDER_LIST = "addToOrderList";
+	public static final String REQUESTED_FOR_BIOSPECIMENS = "RequestedBioSpecimens";
+	public static final String DEFINE_ARRAY_FORM_OBJECTS = "DefineArrayFormObjects";
 	public static final String SPECIMEN_ID = "specimenId";
 	public static final String SPECIMEN_ARRAY_ID = "specimenArrayIds";
 	public static final String PATHALOGICAL_CASE_ID = "pathalogicalCaseIds";
@@ -662,6 +667,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String ALIQUOT_SPECIMEN_CLASS="SpecimenClass";
 	public static final String ALIQUOT_SPECIMEN_TYPES="SpecimenTypes";
 	public static final String ALIQUOT_ALIQUOT_COUNTS="AliquotCounts";
+	public static final String QUERY_SESSION_DATA = "querySessionData";
 	
 	//Specimen Array Aliquots pages
 	public static final String PAGEOF_SPECIMEN_ARRAY_ALIQUOT = "pageOfSpecimenArrayAliquot";
@@ -801,8 +807,9 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String APPROVE_USER_REJECT_STATUS = "Reject";
 	public static final String APPROVE_USER_PENDING_STATUS = "Pending";
 	
-	//Approve User Constants
+	//Approve User Constants		
 	public static final int ZERO = 0;
+	public static final int ONE = 1;
 	public static final int START_PAGE = 1;
 	public static final int NUMBER_RESULTS_PER_PAGE = 20;
 	public static final int NUMBER_RESULTS_PER_PAGE_SEARCH = 15;
@@ -868,6 +875,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	//Shopping Cart
 	public static final String SHOPPING_CART = "shoppingCart";
 	public static final String QUERY_SHOPPING_CART = "queryShoppingCart";
+	public static final String DELIMETER = ",";
 	
 	public static final int SELECT_OPTION_VALUE = -1;
 	
@@ -1373,10 +1381,10 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String STORAGE_CONTAINER_DIM_ONE_LABEL = "oneDimLabel";
 	public static final String STORAGE_CONTAINER_DIM_TWO_LABEL = "twoDimLabel";
 	
-//    public static final String SPECIMEN_TYPE_TISSUE = "Tissue";
-//    public static final String SPECIMEN_TYPE_FLUID = "Fluid";
-//    public static final String SPECIMEN_TYPE_CELL = "Cell";
-//    public static final String SPECIMEN_TYPE_MOL = "Molecular";
+	//public static final String SPECIMEN_TYPE_TISSUE = "Tissue";
+	//public static final String SPECIMEN_TYPE_FLUID = "Fluid";
+	//public static final String SPECIMEN_TYPE_CELL = "Cell";
+	//public static final String SPECIMEN_TYPE_MOL = "Molecular";
     public static final String SPECIMEN_TYPE_COUNT = "Count";
     public static final String SPECIMEN_TYPE_QUANTITY = "Quantity";
     public static final String SPECIMEN_TYPE_DETAILS = "Details";
@@ -1683,6 +1691,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String ADD = "add";
 	public static final String EDIT = "edit";
 	public static final String ID = "id";
+	public static final String FILE = "file";
 	public static final String MANAGE_BIO_SPECIMEN_ACTION = "/ManageBioSpecimen.do";
 	public static final String CREATE_PARTICIPANT_REGISTRATION = "createParticipantRegistration";
 	public static final String CREATE_PARTICIPANT_REGISTRATION_ADD = "createParticipantRegistrationAdd";
@@ -1869,6 +1878,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	
 	// Patch ID: SimpleSearchEdit_5 
 	// AliasName constants, used in Edit in Simple Search feature.
+	public static final String SPREADSHEET_COLUMN_LIST = "spreadsheetColumnList";
 	public static final String ALIAS_COLLECTION_PROTOCOL = "CollectionProtocol";
 	public static final String ALIAS_BIOHAZARD = "Biohazard";
 	public static final String ALIAS_CANCER_RESEARCH_GROUP = "CancerResearchGroup";
@@ -2119,6 +2129,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
     public static final String VALIDATION_MESSAGE_FOR_ORDERING = "validationMessageForOrdering";
     public static final String UPDATE_SESSION_DATA = "updateSessionData";
     public static final String IS_LIST_EMPTY = "isListEmpty";
+    public static final String DOT_CSV = ".csv";
+    public static final String APPLICATION_DOWNLOAD = "application/download";
 
     // Constants for CP Based Entry
     public static final String COLLECTION_PROTOCOL_EVENT_ID = "Event_Id";
@@ -2373,7 +2385,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String CART_COLUMN_LIST = "cartColumnList";
 	public static final String CART_ATTRIBUTE_LIST = "cartAttributeList";
 	public static final String ADD_SPECIMEN_TO_CART="addSpecimenToCart";
-	public static final String ADD_MULTIPLE_SPECIMEN_TO_CART="addMltipleSpecimenToCart";
+public static final String ADD_MULTIPLE_SPECIMEN_TO_CART="addMltipleSpecimenToCart";
 	
 	public static final String ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE = "Distributed And Close"; 				
 	
@@ -2418,5 +2430,9 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String CP_CHILD_SUBMIT = "cpChildSubmit";
 	public static final String SITE_CLASS_NAME = "edu.wustl.catissuecore.domain.Site";//CollectionProtocol.class.getName();
 	public static final String USER_ROW_ID_BEAN_MAP = "rowIdBeanMapForUserPage";
+	public static final String ON = "on";
+	public static final String OFF = "off";
+	public static final String TEXT_RADIOBUTTON = "text_radioButton";
+	public static final String TREENO_ZERO = "zero";
+	public static final String PAGE_OF_QUERY_MODULE = "pageOfQueryModule";
 }
-	

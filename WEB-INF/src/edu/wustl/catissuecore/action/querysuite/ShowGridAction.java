@@ -19,6 +19,7 @@ import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.bizlogic.querysuite.QueryOutputSpreadsheetBizLogic;
 import edu.wustl.catissuecore.bizlogic.querysuite.QueryOutputTreeBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.querysuite.QueryDetails;
 import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.QueryResultObjectDataBean;
@@ -50,6 +51,7 @@ public class ShowGridAction extends BaseAction
 	throws Exception
 	{         
 	 	HttpSession session = request.getSession();
+	 	QueryDetails queryDetailsObj = new QueryDetails(session);
 	 	Map<String, IOutputTerm> outputTermsColumns = (Map<String, IOutputTerm>)session.getAttribute(Constants.OUTPUT_TERMS_COLUMNS);
 		IQuery query = (IQuery)session.getAttribute(AppletConstants.QUERY_OBJECT);
 		boolean hasConditionOnIdentifiedField = Utility.isConditionOnIdentifiedField(query);
@@ -83,18 +85,16 @@ public class ShowGridAction extends BaseAction
 			if (idOfClickedNode.endsWith(Constants.LABEL_TREE_NODE))
 			{
 				spreadSheetDatamap = outputSpreadsheetBizLogic.processSpreadsheetForLabelNode(
-						uniqueIdNodesMap, rootOutputTreeNodeList, columnMap, sessionData,
-						idOfClickedNode, recordsPerPage, selectedColumnsMetadata, randomNumber,
-						hasConditionOnIdentifiedField, queryResultObjectDataMap, 
-						mainEntityMap,query.getConstraints(),outputTermsColumns);
+						queryDetailsObj, columnMap, idOfClickedNode, recordsPerPage,
+						selectedColumnsMetadata, hasConditionOnIdentifiedField, 
+						queryResultObjectDataMap, query.getConstraints(), outputTermsColumns);
 			}
 			else
 			{
 				spreadSheetDatamap = outputSpreadsheetBizLogic.processSpreadsheetForDataNode(
-						uniqueIdNodesMap, rootOutputTreeNodeList, sessionData, actualParentNodeId,
-						recordsPerPage, selectedColumnsMetadata, randomNumber,
-						hasConditionOnIdentifiedField, 
-						queryResultObjectDataMap, mainEntityMap,query.getConstraints(),outputTermsColumns);
+						queryDetailsObj, actualParentNodeId, recordsPerPage, 
+						selectedColumnsMetadata, hasConditionOnIdentifiedField, 
+						queryResultObjectDataMap, query.getConstraints(), outputTermsColumns);
 			}
 			spreadSheetDatamap.put(Constants.MAIN_ENTITY_MAP, mainEntityMap);
 			request.getSession().setAttribute(Constants.ENTITY_IDS_MAP,spreadSheetDatamap.get(Constants.ENTITY_IDS_MAP));

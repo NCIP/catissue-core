@@ -25,7 +25,6 @@ import edu.wustl.catissuecore.bizlogic.querysuite.QueryCsmBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.QueryResultObjectDataBean;
 import edu.wustl.common.querysuite.queryobject.IQuery;
-import edu.wustl.common.querysuite.queryobject.IQueryEntity;
 import edu.wustl.common.querysuite.queryobject.impl.OutputTreeDataNode;
 import edu.wustl.common.querysuite.queryobject.impl.metadata.QueryOutputTreeAttributeMetadata;
 import edu.wustl.common.util.global.ApplicationProperties;
@@ -43,23 +42,25 @@ public abstract class QueryCSMUtil
 	 * If not then will set error message in session.
 	 * @param query
 	 * @param session
-	 * @param uniqueIdNodesMap
+	 * @param queryDetailsObj
 	 * @return
 	 */
 	public static Map<EntityInterface, List<EntityInterface>> setMainObjectErrorMessage(
-			IQuery query, HttpSession session, Map<String, OutputTreeDataNode> uniqueIdNodesMap)
+			IQuery query, HttpSession session, QueryDetails queryDetailsObj)
 	{
-		int status;
-		Map<EntityInterface ,List<EntityInterface>> mainEntityMap = getMainEntitiesForAllQueryNodes(uniqueIdNodesMap);
-		List<Long> queryDeEntities = getAllDEEntities(query);
-		String errorMessg = getErrorMessage(mainEntityMap, uniqueIdNodesMap);
+		Map<EntityInterface ,List<EntityInterface>> mainEntityMap = getMainEntitiesForAllQueryNodes(queryDetailsObj);
+		queryDetailsObj.setMainEntityMap(mainEntityMap);
+		
+		String errorMessg = getErrorMessage(queryDetailsObj);
 		if(!errorMessg.equals(""))
 		{
 			session.setAttribute(Constants.NO_MAIN_OBJECT_IN_QUERY, errorMessg);
 			return null;
 		}
 		else
+		{
 			session.setAttribute(Constants.MAIN_ENTITY_MAP, mainEntityMap);
+		}
 		return mainEntityMap;
 	}
 	
@@ -68,15 +69,14 @@ public abstract class QueryCSMUtil
 	/**
 	 * This method will return error message for main object.
 	 * @param mainEntityMap main entity map.
-	 * @param uniqueIdNodesMap contains all the entities in the query 
+	 * @param queryDetailsObj contains group of fields in this Object 
 	 * @return error message if main entity of node not present.
 	 */
-	private static String getErrorMessage(Map<EntityInterface, List<EntityInterface>> mainEntityMap, 
-			Map<String, OutputTreeDataNode> uniqueIdNodesMap)
+	private static String getErrorMessage(QueryDetails queryDetailsObj)
 	{ 
 		String errorMsg = ""; 
 		//iterate through the uniqueIdNodesMap and check if main entities of all the nodes are present
-		for (Iterator idMapIterator = uniqueIdNodesMap.entrySet().iterator(); idMapIterator.hasNext();)
+		for (Iterator idMapIterator = queryDetailsObj.getUniqueIdNodesMap().entrySet().iterator(); idMapIterator.hasNext();)
 		{	
 			Map.Entry<String, OutputTreeDataNode> IdmapValue = (Map.Entry<String, OutputTreeDataNode>) idMapIterator.next();
 			// get the node
@@ -84,7 +84,7 @@ public abstract class QueryCSMUtil
 			//get the entity
 			EntityInterface mapEntity = node.getOutputEntity().getDynamicExtensionsEntity();
 			// get the main entities list for the entity
-			List<EntityInterface> mainEntityList = (List<EntityInterface>)mainEntityMap.get(mapEntity);
+			List<EntityInterface> mainEntityList = (List<EntityInterface>)queryDetailsObj.getMainEntityMap().get(mapEntity);
 			//mainEntityList is null if the entity itself is main entity;
 			EntityInterface mainEntity = null;
 			if (mainEntityList != null)
@@ -115,33 +115,16 @@ public abstract class QueryCSMUtil
 		return errorMsg;
 	}
 
-	
 	/**
-	 * @param query
-	 * @return
-	 */
-	private static List<Long> getAllDEEntities(IQuery query)
-	{
-		Set<IQueryEntity> queryEntities = query.getConstraints().getQueryEntities();
-		List<Long> queryDeEntities = new ArrayList<Long>();
-		for(IQueryEntity queryEntity : queryEntities)
-		{
-			queryDeEntities.add(queryEntity.getDynamicExtensionsEntity().getId());
-		}
-		return queryDeEntities;
-	}
-
-	/**
-	 * This method will return map of a entity as value and list of all the main entities of this particular entity as value. 
+	 * This method will return map of a entity as value and list of all the main entities of this perticuler entity as value. 
 	 * @param uniqueIdNodesMap Map that will all nodes present in query as node id as key and node as value. 
 	 * @return mainEntityMap Map of all main entities present in query.
 	 */
 	private static Map<EntityInterface, List<EntityInterface>> getMainEntitiesForAllQueryNodes(
-			Map<String, OutputTreeDataNode> uniqueIdNodesMap)
+			QueryDetails queryDetailsObj)
 	{
 		Map<EntityInterface, List<EntityInterface>> mainEntityMap = new HashMap<EntityInterface, List<EntityInterface>>();
-
-		for (OutputTreeDataNode queryNode : uniqueIdNodesMap.values())
+		for (OutputTreeDataNode queryNode : queryDetailsObj.getUniqueIdNodesMap().values())
 		{
 			List<EntityInterface> mainEntityList = new ArrayList<EntityInterface>();
 			EntityInterface dynamicExtensionsEntity = queryNode.getOutputEntity()
@@ -227,11 +210,11 @@ public abstract class QueryCSMUtil
 	/**
 	 * This method will create queryResultObjectDataBean for a node passed to it.
 	 * @param node node for which QueryResultObjectDataBean is to be created.
-	 * @param mainEntityMap main entity map. 
+	 * @param queryDetailsObj. 
 	 * @return queryResultObjectDataBean.
 	 */
 	public static  QueryResultObjectDataBean getQueryResulObjectDataBean(
-			OutputTreeDataNode node, Map<EntityInterface, List<EntityInterface>> mainEntityMap)
+			OutputTreeDataNode node, QueryDetails queryDetailsObj)
 	{   
 		QueryResultObjectDataBean queryResultObjectDataBean = new QueryResultObjectDataBean();
 		boolean readDeniedObject = false;
@@ -245,7 +228,7 @@ public abstract class QueryCSMUtil
 						.getPrivilegeType(dynamicExtensionsEntity));
 		queryResultObjectDataBean.setEntity(dynamicExtensionsEntity);
 
-		List<EntityInterface> mainEntityList = mainEntityMap.get(dynamicExtensionsEntity);
+		List<EntityInterface> mainEntityList = queryDetailsObj.getMainEntityMap().get(dynamicExtensionsEntity);
 		if (mainEntityList != null)
 		{
 			//
@@ -289,7 +272,7 @@ public abstract class QueryCSMUtil
 	
 	/**This method will check if for an entity read denied has to checked or not. All theses entities are present in 
 	 * Variables.queryReadDeniedObjectList list.
-	 * @param name
+	 * @param entityName
 	 * @return
 	 */
 	private static boolean isReadDeniedObject(String entityName)
@@ -416,18 +399,18 @@ public abstract class QueryCSMUtil
 	 * @param columnIndex
 	 * @param selectSql 
 	 * @param entityIdIndexMap 
-	 * @param uniqueIdNodesMap2 
+	 * @param queryDetailsObj 
 	 * @param defineViewEntityList 
 	 */
 	public static String updateEntityIdIndexMap(QueryResultObjectDataBean queryResultObjectDataBean,
 			int columnIndex, String selectSql, List<EntityInterface> defineViewNodeList, 
-			Map<EntityInterface, Integer> entityIdIndexMap, Map<String, OutputTreeDataNode> uniqueIdNodesMap)
+			Map<EntityInterface, Integer> entityIdIndexMap, QueryDetails queryDetailsObj)
 	{ 
 		List<String> selectSqlColumnList = getListOfSelectedColumns(selectSql);
 		if (defineViewNodeList != null)
 		{
 			//Map<String, OutputTreeDataNode> uniqueIdNodesMap = QueryModuleUtil.uniqueIdNodesMap;
-			Set<String> keySet = uniqueIdNodesMap.keySet();
+			Set<String> keySet = queryDetailsObj.getUniqueIdNodesMap().keySet();
 			for (Iterator iterator = keySet.iterator(); iterator.hasNext();)
 			{
 				String key = "";
@@ -435,7 +418,7 @@ public abstract class QueryCSMUtil
 				if (nextObject instanceof String)
 				{
 					key = (String) nextObject;
-					OutputTreeDataNode outputTreeDataNode = uniqueIdNodesMap.get(key);
+					OutputTreeDataNode outputTreeDataNode = queryDetailsObj.getUniqueIdNodesMap().get(key);
 					Map sqlIndexMap = putIdColumnsInSql(columnIndex, selectSql, entityIdIndexMap,
 							selectSqlColumnList, outputTreeDataNode);
 					selectSql = (String) sqlIndexMap.get(Constants.SQL);
@@ -446,7 +429,7 @@ public abstract class QueryCSMUtil
 		else
 		{
 			OutputTreeDataNode outputTreeDataNode = getMatchingEntityNode(queryResultObjectDataBean
-					.getMainEntity(),uniqueIdNodesMap);
+					.getMainEntity(),queryDetailsObj);
 			Map sqlIndexMap = putIdColumnsInSql(columnIndex, selectSql, entityIdIndexMap,
 					selectSqlColumnList, outputTreeDataNode);
 			selectSql = (String) sqlIndexMap.get(Constants.SQL);
@@ -475,8 +458,7 @@ public abstract class QueryCSMUtil
 	 */
 	private static Map putIdColumnsInSql(int columnIndex, String selectSql,
 			Map<EntityInterface, Integer> entityIdIndexMap,
-			List<String> selectSqlColumnList,
-			OutputTreeDataNode outputTreeDataNode) {
+			List<String> selectSqlColumnList, OutputTreeDataNode outputTreeDataNode) {
 		Map sqlIndexMap = new HashMap();
 		if (outputTreeDataNode != null)
 		{
@@ -533,12 +515,11 @@ public abstract class QueryCSMUtil
  
 	/**This method will return node corresponding to an entity from query.
 	 * @param entity
-	 * @param uniqueIdNodesMap 
-	 * @return outputTreeDataNode
+	 * @param queryDetailsObj 
 	 */
-	private static OutputTreeDataNode getMatchingEntityNode(EntityInterface entity, Map<String, OutputTreeDataNode> uniqueIdNodesMap)
+	private static OutputTreeDataNode getMatchingEntityNode(EntityInterface entity, QueryDetails queryDetailsObj)
 	{
-		Iterator<OutputTreeDataNode> iterator = uniqueIdNodesMap.values().iterator(); 
+		Iterator<OutputTreeDataNode> iterator =  queryDetailsObj.getUniqueIdNodesMap().values().iterator(); 
 		while (iterator.hasNext())
 		{
 			OutputTreeDataNode outputTreeDataNode = (OutputTreeDataNode) iterator.next();

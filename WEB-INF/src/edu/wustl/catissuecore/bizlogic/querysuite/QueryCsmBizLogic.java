@@ -14,6 +14,7 @@ import java.util.Map;
 
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.querysuite.QueryDetails;
 import edu.wustl.common.beans.QueryResultObjectDataBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.dao.DAOFactory;
@@ -40,15 +41,19 @@ public class QueryCsmBizLogic
 	 * @throws DAOException 
 	 * @throws ClassNotFoundException 
 	 */
-	public List executeCSMQuery(String selectSql, SessionDataBean sessionData,
-			Map<Long, QueryResultObjectDataBean> queryResulObjectDataMap, OutputTreeDataNode root, boolean hasConditionOnIdentifiedField) throws DAOException, ClassNotFoundException
+	public List executeCSMQuery(String selectSql, QueryDetails queryDetailsObj,
+			Map<Long, QueryResultObjectDataBean> queryResulObjectDataMap,
+			OutputTreeDataNode root, boolean hasConditionOnIdentifiedField)
+	throws DAOException, ClassNotFoundException
 	{  
 		JDBCDAO dao = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
 		List<List<String>> dataList = new ArrayList<List<String>>();
 		try
 		{ 
-			dao.openSession(sessionData);
-			dataList = dao.executeQuery(selectSql, sessionData, sessionData.isSecurityRequired(), hasConditionOnIdentifiedField, queryResulObjectDataMap);
+			dao.openSession(queryDetailsObj.getSessionData());
+			dataList = dao.executeQuery(selectSql, queryDetailsObj.getSessionData(),
+					queryDetailsObj.getSessionData().isSecurityRequired(),
+					hasConditionOnIdentifiedField, queryResulObjectDataMap);
 			dao.commit();
 		}
 		finally

@@ -15,6 +15,7 @@ import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.wustl.catissuecore.actionForm.CategorySearchForm;
 import edu.wustl.catissuecore.bizlogic.querysuite.QueryOutputTreeBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.querysuite.QueryDetails;
 import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
@@ -41,11 +42,12 @@ public class BuildQueryOutputTreeAction extends BaseAction
 	throws Exception
 	{
 		HttpSession session = request.getSession();
-		Map<String,OutputTreeDataNode> idNodesMap = (Map<String,OutputTreeDataNode>)session.getAttribute(Constants.ID_NODES_MAP);
+		QueryDetails queryDetailsObj = new QueryDetails(session);
+		//Map<String,OutputTreeDataNode> idNodesMap = (Map<String,OutputTreeDataNode>)session.getAttribute(Constants.ID_NODES_MAP);
 		boolean hasConditionOnIdentifiedField = (Boolean)session.getAttribute(Constants.HAS_CONDITION_ON_IDENTIFIED_FIELD);
-		Map<EntityInterface ,List<EntityInterface>> mainEntityMap =(Map<EntityInterface ,List<EntityInterface>>)session.getAttribute(Constants.MAIN_ENTITY_MAP);
+		//Map<EntityInterface ,List<EntityInterface>> mainEntityMap =(Map<EntityInterface ,List<EntityInterface>>)session.getAttribute(Constants.MAIN_ENTITY_MAP);
 		CategorySearchForm actionForm = (CategorySearchForm)form;
-		SessionDataBean sessionData = getSessionData(request);
+		//SessionDataBean sessionData = getSessionData(request);
 		String outputTreeStr = "";
 		String nodeId = actionForm.getNodeId();	
 		QueryOutputTreeBizLogic outputTreeBizLogic = new QueryOutputTreeBizLogic();
@@ -54,16 +56,17 @@ public class BuildQueryOutputTreeAction extends BaseAction
 		String treeNo = nodeIds[0];
 		String treeNodeId = nodeIds[1]; 
 		String uniqueId = treeNo+"_"+treeNodeId;
-		OutputTreeDataNode parentNode = idNodesMap.get(uniqueId);
+		OutputTreeDataNode parentNode = queryDetailsObj.getUniqueIdNodesMap().get(uniqueId);
 		String randomNumber =(String)session.getAttribute("randomNumber");
 		if(nodeId.endsWith(Constants.LABEL_TREE_NODE))
 		{
-			outputTreeStr = outputTreeBizLogic.updateTreeForLabelNode(nodeId,idNodesMap,sessionData,randomNumber,hasConditionOnIdentifiedField,mainEntityMap);
+			outputTreeStr = outputTreeBizLogic.updateTreeForLabelNode(nodeId,queryDetailsObj,
+					hasConditionOnIdentifiedField);
 		}
 		else
 		{
 			String data = nodeIds[2];
-			outputTreeStr = outputTreeBizLogic.updateTreeForDataNode(nodeId,parentNode, data, sessionData,randomNumber);	
+			outputTreeStr = outputTreeBizLogic.updateTreeForDataNode(nodeId,parentNode, data, queryDetailsObj);	
 		}
 		response.setContentType("text/html");
 		response.getWriter().write(outputTreeStr);

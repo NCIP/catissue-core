@@ -14,13 +14,13 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.wustl.catissuecore.actionForm.CategorySearchForm;
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.bizlogic.querysuite.DefineGridViewBizLogic;
 import edu.wustl.catissuecore.bizlogic.querysuite.QueryOutputSpreadsheetBizLogic;
 import edu.wustl.catissuecore.querysuite.QueryShoppingCart;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.querysuite.QueryDetails;
 import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
@@ -58,7 +58,7 @@ public class ConfigureGridViewAction extends BaseAction
 		HttpSession session = request.getSession();
 		Map<String, IOutputTerm> outputTermsColumns = (Map<String, IOutputTerm>)session.getAttribute(Constants.OUTPUT_TERMS_COLUMNS);
 		IQuery query = (IQuery)session.getAttribute(AppletConstants.QUERY_OBJECT);
-
+		QueryDetails queryDetailsObj = new QueryDetails(session);
 		SelectedColumnsMetadata selectedColumnsMetadata = (SelectedColumnsMetadata)session.getAttribute(Constants.SELECTED_COLUMN_META_DATA);
 		OutputTreeDataNode currentSelectedObject = selectedColumnsMetadata.getCurrentSelectedObject();
 		QuerySessionData querySessionData = (QuerySessionData) session.getAttribute(Constants.QUERY_SESSION_DATA);
@@ -66,9 +66,9 @@ public class ConfigureGridViewAction extends BaseAction
 		int recordsPerPage = new Integer(recordsPerPageStr);
 		
 		Boolean hasConditionOnIdentifiedField = (Boolean)session.getAttribute(Constants.HAS_CONDITION_ON_IDENTIFIED_FIELD);
-		Map<EntityInterface ,List<EntityInterface>> mainEntityMap =(Map<EntityInterface ,List<EntityInterface>>)session.getAttribute(Constants.MAIN_ENTITY_MAP);
+		//Map<EntityInterface ,List<EntityInterface>> mainEntityMap =(Map<EntityInterface ,List<EntityInterface>>)session.getAttribute(Constants.MAIN_ENTITY_MAP);
 
-		Map<String, OutputTreeDataNode> uniqueIdNodesMap = (Map<String, OutputTreeDataNode>) session.getAttribute(Constants.ID_NODES_MAP);
+		//Map<String, OutputTreeDataNode> uniqueIdNodesMap = (Map<String, OutputTreeDataNode>) session.getAttribute(Constants.ID_NODES_MAP);
 		DefineGridViewBizLogic defineGridViewBizLogic = new DefineGridViewBizLogic();
 		QueryOutputSpreadsheetBizLogic queryOutputSpreadsheetBizLogic = new QueryOutputSpreadsheetBizLogic();
 
@@ -87,20 +87,24 @@ public class ConfigureGridViewAction extends BaseAction
 		}
 		
 		if (op.equalsIgnoreCase(Constants.FINISH))
-		{ 
+		{  
 			selectedColumnsMetadata.setDefinedView(true);
-			Map<Long, QueryResultObjectDataBean> queryResultObjecctDataMap = new HashMap<Long, QueryResultObjectDataBean>();
-			defineGridViewBizLogic.getSelectedColumnsMetadata(categorySearchForm, uniqueIdNodesMap,selectedColumnsMetadata,query.getConstraints());
+			Map<Long, QueryResultObjectDataBean> queryResultObjecctDataMap = new HashMap<Long, QueryResultObjectDataBean>();			
+			//defineGridViewBizLogic.getSelectedColumnsMetadata(categorySearchForm, queryDetailsObj,selectedColumnsMetadata);
+			defineGridViewBizLogic.getSelectedColumnsMetadata(categorySearchForm, queryDetailsObj, selectedColumnsMetadata,query.getConstraints());
 			StringBuffer selectedColumnNames = new StringBuffer();
-			definedColumnsList = defineGridViewBizLogic.getSelectedColumnList(categorySearchForm, selectedColumnsMetadata, selectedColumnNames,queryResultObjecctDataMap,mainEntityMap,uniqueIdNodesMap,outputTermsColumns);
+			definedColumnsList = defineGridViewBizLogic.getSelectedColumnList(categorySearchForm,
+					selectedColumnsMetadata.getSelectedAttributeMetaDataList(), selectedColumnNames,
+						queryResultObjecctDataMap, queryDetailsObj, outputTermsColumns);
 			spreadSheetDataMap.put(Constants.SPREADSHEET_COLUMN_LIST, definedColumnsList);
 			QueryShoppingCart cart = (QueryShoppingCart)session.getAttribute(Constants.QUERY_SHOPPING_CART);
 			// gets the message and sets it in the session.
 			String message = QueryModuleUtil.getMessageIfIdNotPresentForOrderableEntities(selectedColumnsMetadata,cart);
 			session.setAttribute(Constants.VALIDATION_MESSAGE_FOR_ORDERING, message);
-			String SqlForSelectedColumns = defineGridViewBizLogic.createSQLForSelectedColumn(selectedColumnNames, sql);
-			querySessionData = queryOutputSpreadsheetBizLogic.getQuerySessionData(sessionData, recordsPerPage, 0, spreadSheetDataMap,
-					SqlForSelectedColumns,queryResultObjecctDataMap,hasConditionOnIdentifiedField);
+			String SqlForSelectedColumns = defineGridViewBizLogic.createSQLForSelectedColumn(selectedColumnNames.toString(), sql);
+			querySessionData = queryOutputSpreadsheetBizLogic.getQuerySessionData(queryDetailsObj,
+					recordsPerPage, 0, spreadSheetDataMap, SqlForSelectedColumns,
+					queryResultObjecctDataMap, hasConditionOnIdentifiedField);
 			selectedColumnNameValueBeanList = categorySearchForm.getSelectedColumnNameValueBeanList();
 			session.setAttribute(Constants.DEFINE_VIEW_QUERY_REASULT_OBJECT_DATA_MAP, queryResultObjecctDataMap);
 			spreadSheetDataMap.put(Constants.DEFINE_VIEW_QUERY_REASULT_OBJECT_DATA_MAP, queryResultObjecctDataMap);
@@ -120,7 +124,9 @@ public class ConfigureGridViewAction extends BaseAction
 			categorySearchForm.setSelectedColumnNameValueBeanList(selectedColumnNameValueBeanList);
 			definedColumnsList = (List<String>) session.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
 			spreadSheetDataMap.put(Constants.SPREADSHEET_COLUMN_LIST, definedColumnsList);
-			querySessionData = queryOutputSpreadsheetBizLogic.getQuerySessionData(sessionData, recordsPerPage, 0, spreadSheetDataMap, sql,queryResultObjecctDataMap,hasConditionOnIdentifiedField);
+			querySessionData = queryOutputSpreadsheetBizLogic.getQuerySessionData(queryDetailsObj,
+					recordsPerPage, 0, spreadSheetDataMap, sql, queryResultObjecctDataMap,
+					hasConditionOnIdentifiedField);
 		}
 		else if (op.equalsIgnoreCase(Constants.RESTORE))
 		{ 
@@ -130,12 +136,14 @@ public class ConfigureGridViewAction extends BaseAction
 			StringBuffer selectedColumnNames = new StringBuffer();
 			//Restoring to the default view.
 			selectedColumnsMetadata.setSelectedOutputAttributeList(new ArrayList<IOutputAttribute>());
-			definedColumnsList = defineGridViewBizLogic.getSelectedColumnList(categorySearchForm, selectedColumnsMetadata, selectedColumnNames,queryResultObjecctDataMap,
-					mainEntityMap,uniqueIdNodesMap,outputTermsColumns);
-			String SqlForSelectedColumns = defineGridViewBizLogic.createSQLForSelectedColumn(selectedColumnNames, sql);
+			definedColumnsList = defineGridViewBizLogic.getSelectedColumnList(categorySearchForm, 
+					selectedColumnsMetadata.getSelectedAttributeMetaDataList(), selectedColumnNames,
+					queryResultObjecctDataMap, queryDetailsObj,outputTermsColumns);
+			String SqlForSelectedColumns = defineGridViewBizLogic.createSQLForSelectedColumn(selectedColumnNames.toString(), sql);
 			spreadSheetDataMap.put(Constants.SPREADSHEET_COLUMN_LIST, definedColumnsList);
-			querySessionData = queryOutputSpreadsheetBizLogic.getQuerySessionData(sessionData, recordsPerPage, 0, spreadSheetDataMap,
-					SqlForSelectedColumns,queryResultObjecctDataMap,hasConditionOnIdentifiedField);
+			querySessionData = queryOutputSpreadsheetBizLogic.getQuerySessionData(queryDetailsObj,
+					recordsPerPage, 0, spreadSheetDataMap, SqlForSelectedColumns,
+					queryResultObjecctDataMap, hasConditionOnIdentifiedField);
 			selectedColumnNameValueBeanList = null;
 			//session.setAttribute(Constants.DEFINE_VIEW_QUERY_REASULT_OBJECT_DATA_MAP, queryResultObjecctDataMap);
 			spreadSheetDataMap.put(Constants.DEFINE_VIEW_QUERY_REASULT_OBJECT_DATA_MAP, queryResultObjecctDataMap);
@@ -146,7 +154,7 @@ public class ConfigureGridViewAction extends BaseAction
 		selectedColumnsMetadata.setCurrentSelectedObject(currentSelectedObject);
 		spreadSheetDataMap.put(Constants.QUERY_SESSION_DATA, querySessionData);
 		spreadSheetDataMap.put(Constants.SELECTED_COLUMN_META_DATA,selectedColumnsMetadata);
-		spreadSheetDataMap.put(Constants.MAIN_ENTITY_MAP, mainEntityMap);
+		spreadSheetDataMap.put(Constants.MAIN_ENTITY_MAP, queryDetailsObj.getMainEntityMap());
 		QueryModuleUtil.setGridData(request, spreadSheetDataMap);
 		return mapping.findForward(Constants.SUCCESS);
 	}

@@ -16,6 +16,7 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.CategorySearchForm;
 import edu.wustl.catissuecore.bizlogic.querysuite.DefineGridViewBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.querysuite.QueryDetails;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.querysuite.queryobject.impl.OutputTreeDataNode;
@@ -45,17 +46,19 @@ public class DefineQueryResultsViewAction extends BaseAction
 	{
 		CategorySearchForm categorySearchForm = (CategorySearchForm)form;
 		HttpSession session  = request.getSession();
+		QueryDetails queryDetailsObj = new QueryDetails(session);
 		SelectedColumnsMetadata selectedColumnsMetadata = (SelectedColumnsMetadata)session.getAttribute(Constants.SELECTED_COLUMN_META_DATA);
 		List<NameValueBean> prevSelectedColumnNameValueBeanList= selectedColumnsMetadata.getSelectedColumnNameValueBeanList();
 		if(!selectedColumnsMetadata.isDefinedView())
 			prevSelectedColumnNameValueBeanList = null;
 		OutputTreeDataNode currentSelectedObject = selectedColumnsMetadata.getCurrentSelectedObject();
 		request.setAttribute(Constants.categorySearchForm,categorySearchForm);
+		
 		Map<Long,OutputTreeDataNode> uniqueIdNodesMap = (Map<Long,OutputTreeDataNode>) session.getAttribute(Constants.ID_NODES_MAP);
 		Vector<QueryTreeNodeData> treeDataVector = new Vector<QueryTreeNodeData>();
 		DefineGridViewBizLogic defineGridViewBizLogic = new DefineGridViewBizLogic();
-		defineGridViewBizLogic.createTree(categorySearchForm, uniqueIdNodesMap, 
-				treeDataVector,currentSelectedObject,prevSelectedColumnNameValueBeanList);
+		defineGridViewBizLogic.createTree(categorySearchForm, queryDetailsObj,
+				treeDataVector, currentSelectedObject,prevSelectedColumnNameValueBeanList);
 		List<NameValueBean> selectedColumnNameValueBeanList = categorySearchForm.getSelectedColumnNameValueBeanList();
 		selectedColumnsMetadata.setSelectedColumnNameValueBeanList(selectedColumnNameValueBeanList);
 		session.setAttribute(Constants.SELECTED_COLUMN_META_DATA,selectedColumnsMetadata);

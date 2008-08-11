@@ -11,6 +11,7 @@ import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.wustl.catissuecore.querysuite.CatissueSqlGenerator;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.querysuite.QueryCSMUtil;
+import edu.wustl.catissuecore.util.querysuite.QueryDetails;
 import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
 import edu.wustl.common.querysuite.exceptions.MultipleRootsException;
 import edu.wustl.common.querysuite.exceptions.SqlException;
@@ -45,8 +46,7 @@ public class ValidateQueryBizLogic {
 	 */
 	public static String getValidationMessage(HttpServletRequest request, IQuery query)
 	{
-		String validationMessage = null;  
-		
+		String validationMessage = null;  				
 		boolean isRulePresentInDag = QueryModuleUtil.checkIfRulePresentInDag(query);
 		if (!isRulePresentInDag)
 		{	
@@ -80,6 +80,7 @@ public class ValidateQueryBizLogic {
 		String selectSql = sqlGenerator.generateSQL(query);
 		Map<String, IOutputTerm> outputTermsColumns = sqlGenerator.getOutputTermsColumns();
 		HttpSession session = request.getSession(); 
+		QueryDetails queryDetailsObj = new QueryDetails(session);
 		session.setAttribute(Constants.OUTPUT_TERMS_COLUMNS,outputTermsColumns);
 		session.setAttribute(Constants.SAVE_GENERATED_SQL,selectSql);
 		List<OutputTreeDataNode> rootOutputTreeNodeList = sqlGenerator
@@ -87,9 +88,10 @@ public class ValidateQueryBizLogic {
 		session.setAttribute(Constants.SAVE_TREE_NODE_LIST, rootOutputTreeNodeList);
 		Map<String, OutputTreeDataNode> uniqueIdNodesMap = QueryObjectProcessor
 		.getAllChildrenNodes(rootOutputTreeNodeList);
+		queryDetailsObj.setUniqueIdNodesMap(uniqueIdNodesMap);
 		//This method will check if main objects for all the dependant objects are present in query or not.
 		Map<EntityInterface, List<EntityInterface>> mainEntityMap = QueryCSMUtil.setMainObjectErrorMessage(
-				query, session, uniqueIdNodesMap);
+				query, session, queryDetailsObj);
 		session.setAttribute(Constants.ID_NODES_MAP, uniqueIdNodesMap);
 		// if no main object is present in the map show the error message set in the session.
 		if(mainEntityMap == null)

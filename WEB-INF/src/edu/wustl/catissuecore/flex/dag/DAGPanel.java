@@ -28,6 +28,7 @@ import edu.wustl.catissuecore.bizlogic.querysuite.CreateQueryObjectBizLogic;
 import edu.wustl.catissuecore.bizlogic.querysuite.GenerateHtmlForAddLimitsBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.querysuite.QueryModuleError;
+import edu.wustl.catissuecore.util.querysuite.QueryModuleSearchQueryUtil;
 import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
 import edu.wustl.common.querysuite.exceptions.CyclicException;
 import edu.wustl.common.querysuite.exceptions.MultipleRootsException;
@@ -777,9 +778,10 @@ public class DAGPanel {
 		IQuery query = m_queryObject.getQuery();
 		HttpServletRequest request = flex.messaging.FlexContext.getHttpRequest();
 		boolean isRulePresentInDag = QueryModuleUtil.checkIfRulePresentInDag(query) ;
+		QueryModuleSearchQueryUtil QMSearchQuery = new QueryModuleSearchQueryUtil(request, query);
 		if (isRulePresentInDag)
 		{
-			status=QueryModuleUtil.searchQuery(request, query,null);
+			status=QMSearchQuery.searchQuery(null);
 		}
 		else
 		{

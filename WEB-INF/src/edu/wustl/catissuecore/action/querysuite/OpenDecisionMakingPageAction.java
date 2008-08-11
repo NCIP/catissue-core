@@ -14,6 +14,7 @@ import edu.wustl.catissuecore.actionForm.CategorySearchForm;
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
+import edu.wustl.catissuecore.util.querysuite.QueryModuleSearchQueryUtil;
 import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.querysuite.queryobject.IQuery;
@@ -41,13 +42,14 @@ public class OpenDecisionMakingPageAction extends BaseAction
 		IQuery query = (IQuery)session.getAttribute(AppletConstants.QUERY_OBJECT);
 		String noOfResults = (String)session.getAttribute(Constants.TREE_NODE_LIMIT_EXCEEDED_RECORDS);
 		String option = actionForm.getOptions();
+		QueryModuleSearchQueryUtil QMSearchQuery = new QueryModuleSearchQueryUtil(request, query);
 		
 		if(option != null)
 		{
 			boolean isRulePresentInDag = QueryModuleUtil.checkIfRulePresentInDag(query) ;
 			if (isRulePresentInDag)
 			{
-				QueryModuleUtil.searchQuery(request, query,option);
+				QMSearchQuery.searchQuery(option);
 			}
 			return mapping.findForward(Constants.VIEW_ALL_RECORDS);
 		}

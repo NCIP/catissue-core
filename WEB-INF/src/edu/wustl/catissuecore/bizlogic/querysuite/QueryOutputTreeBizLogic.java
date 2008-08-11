@@ -12,6 +12,8 @@ import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.querysuite.QueryCSMUtil;
+import edu.wustl.catissuecore.util.querysuite.QueryDetails;
+import edu.wustl.catissuecore.util.querysuite.QueryModuleSqlUtil;
 import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
 import edu.wustl.common.beans.QueryResultObjectDataBean;
 import edu.wustl.common.beans.SessionDataBean;
@@ -40,11 +42,12 @@ public class QueryOutputTreeBizLogic
 	 * @param String tableName 
 	 * @throws Exception Exception
 	 */
-	public void createOutputTreeTable(String selectSql, SessionDataBean sessionData,String randomNumber) throws DAOException
+	public void createOutputTreeTable(String selectSql, QueryDetails queryDetailsObj) throws DAOException
 	{
-		String tableName = Constants.TEMP_OUPUT_TREE_TABLE_NAME + sessionData.getUserId()+randomNumber;
+		String tableName = Constants.TEMP_OUPUT_TREE_TABLE_NAME + queryDetailsObj.getSessionData()
+			.getUserId()+queryDetailsObj.getRandomNumber();
 		String createTableSql = Constants.CREATE_TABLE + tableName + " " + Constants.AS + " " + selectSql;
-		QueryModuleUtil.executeCreateTable(tableName, createTableSql, sessionData);
+		QueryModuleSqlUtil.executeCreateTable(tableName, createTableSql, queryDetailsObj);
 	}
 	/**
 	 * This method creates first level(Default) output tree data.
@@ -59,20 +62,28 @@ public class QueryOutputTreeBizLogic
 	 * @throws DAOException DAOException
 	 * @throws ClassNotFoundException ClassNotFoundException
 	 */
-	public Vector<QueryTreeNodeData> createDefaultOutputTreeData(int treeNo,OutputTreeDataNode root, SessionDataBean sessionData,String randomNumber, boolean hasConditionOnIdentifiedField, Map<EntityInterface, List<EntityInterface>> mainEntityMap, Map<String, OutputTreeDataNode> uniqueIdNodesMap) throws DAOException, ClassNotFoundException
+	public Vector<QueryTreeNodeData> createDefaultOutputTreeData(int treeNo, OutputTreeDataNode root,
+			boolean hasConditionOnIdentifiedField, QueryDetails queryDetailsObj)
+			throws DAOException, ClassNotFoundException
 			{ 
-		String tableName = Constants.TEMP_OUPUT_TREE_TABLE_NAME+sessionData.getUserId()+randomNumber;
-		QueryResultObjectDataBean queryResulObjectDataBean = QueryCSMUtil.getQueryResulObjectDataBean(root,mainEntityMap);
-		Map<Long,QueryResultObjectDataBean> queryResultObjectDataBeanMap = new HashMap<Long, QueryResultObjectDataBean>();
+		String tableName = Constants.TEMP_OUPUT_TREE_TABLE_NAME 
+		+ queryDetailsObj.getSessionData().getUserId() + queryDetailsObj.getRandomNumber();
+		QueryResultObjectDataBean queryResulObjectDataBean = QueryCSMUtil
+			.getQueryResulObjectDataBean(root,queryDetailsObj);
+		Map<Long,QueryResultObjectDataBean> queryResultObjectDataBeanMap 
+			= new HashMap<Long, QueryResultObjectDataBean>();
 		queryResultObjectDataBeanMap.put(root.getId(), queryResulObjectDataBean);
-		String selectSql = QueryModuleUtil.getSQLForRootNode(tableName,QueryModuleUtil.getColumnNamesForSelectpart(root.getAttributes(),uniqueIdNodesMap, queryResultObjectDataBeanMap.get(root.getId())));
+		String selectSql = QueryModuleSqlUtil.getSQLForRootNode(tableName, QueryModuleUtil
+			.getColumnNamesForSelectpart(root.getAttributes(), queryDetailsObj,
+			queryResultObjectDataBeanMap.get(root.getId())));
 		
 		String[] sqlIndex = selectSql.split(Constants.NODE_SEPARATOR);
 		selectSql = sqlIndex[0];
 		int index = Integer.parseInt(sqlIndex[1]);
 
 		QueryCsmBizLogic queryCsmBizLogic = new QueryCsmBizLogic();
-		List dataList = queryCsmBizLogic.executeCSMQuery(selectSql, sessionData,queryResultObjectDataBeanMap,root,hasConditionOnIdentifiedField);
+		List dataList = queryCsmBizLogic.executeCSMQuery(selectSql, queryDetailsObj,
+				queryResultObjectDataBeanMap, root, hasConditionOnIdentifiedField);
 		Vector<QueryTreeNodeData> treeDataVector = new Vector<QueryTreeNodeData>();
 		if (dataList != null && dataList.size() != 0)
 		{
@@ -204,10 +215,11 @@ public class QueryOutputTreeBizLogic
 	 * @throws DAOException DAOException
 	 */
 	public String updateTreeForDataNode(String id, OutputTreeDataNode node,
-			String parentNodeId, SessionDataBean sessionData,
-			String randomNumber) throws ClassNotFoundException, DAOException
+			String parentNodeId, QueryDetails queryDetailsObj)
+	throws ClassNotFoundException, DAOException
 			{
-		String tableName = Constants.TEMP_OUPUT_TREE_TABLE_NAME+sessionData.getUserId()+randomNumber;
+		String tableName = Constants.TEMP_OUPUT_TREE_TABLE_NAME 
+		+ queryDetailsObj.getSessionData().getUserId() + queryDetailsObj.getRandomNumber();
 		String parentIdColumnName = QueryModuleUtil.getParentIdColumnName(node);
 		List<OutputTreeDataNode> children = node.getChildren();
 		String outputTreeStr = "";
@@ -216,7 +228,7 @@ public class QueryOutputTreeBizLogic
  			String selectSql = getSql(parentNodeId, tableName, parentIdColumnName, childNode);
 			String name = childNode.getOutputEntity().getDynamicExtensionsEntity().getName();
 			name = Utility.parseClassName(name);
-			List<List<String>> dataList = getTreeDataList(sessionData, selectSql, null, false);
+			List<List<String>> dataList = getTreeDataList(queryDetailsObj, selectSql, null, false);
 			//List dataList = QueryModuleUtil.executeQuery(selectSql, sessionData);
 			int size = dataList.size();
 			if(size != 0)
@@ -281,10 +293,12 @@ public class QueryOutputTreeBizLogic
 	 * String for one node is comma seperated for its id, display name, object name , parentId, parent Object name.
 	 * Such string elements for child nodes are seperated by "|".
 	 */
-	public String updateTreeForLabelNode(String nodeId, Map<String, OutputTreeDataNode> idNodeMap, SessionDataBean sessionData,String randomNumber, boolean hasConditionOnIdentifiedField, Map<EntityInterface, List<EntityInterface>> mainEntityMap)
+	public String updateTreeForLabelNode(String nodeId, QueryDetails queryDetailsObj,
+			boolean hasConditionOnIdentifiedField)
 	throws ClassNotFoundException, DAOException
 	{ 
-		String tableName = Constants.TEMP_OUPUT_TREE_TABLE_NAME + sessionData.getUserId()+randomNumber;
+		String tableName = Constants.TEMP_OUPUT_TREE_TABLE_NAME 
+		+ queryDetailsObj.getSessionData().getUserId()+ queryDetailsObj.getRandomNumber();
 		String selectSql = "";
 		int index = -1;
 
@@ -304,8 +318,8 @@ public class QueryOutputTreeBizLogic
 			parentData = nodeIds[2];
 		}
 		String uniqueParentId = treeNo+"_"+parentId;
-		OutputTreeDataNode parentNode = idNodeMap.get(uniqueParentId);
-		OutputTreeDataNode currentNode = idNodeMap.get(uniqueCurrentNodeId);
+		OutputTreeDataNode parentNode = queryDetailsObj.getUniqueIdNodesMap().get(uniqueParentId);
+		OutputTreeDataNode currentNode = queryDetailsObj.getUniqueIdNodesMap().get(uniqueCurrentNodeId);
 		if (!parentNodeId.contains(Constants.NULL_ID))
 		{
 			String parentIdColumnName = QueryModuleUtil.getParentIdColumnName(parentNode);
@@ -315,10 +329,10 @@ public class QueryOutputTreeBizLogic
 				return "";
 			}
 			String columnNames = "";
-			QueryResultObjectDataBean queryResulObjectDataBean = QueryCSMUtil.getQueryResulObjectDataBean(currentNode,mainEntityMap);
+			QueryResultObjectDataBean queryResulObjectDataBean = QueryCSMUtil.getQueryResulObjectDataBean(currentNode, queryDetailsObj);
 		    queryResultObjectDataBeanMap = new HashMap<Long, QueryResultObjectDataBean>();
 			queryResultObjectDataBeanMap.put(currentNode.getId(), queryResulObjectDataBean);
-			Map<String,String> columnNameIndexMap = QueryModuleUtil.getColumnNamesForSelectpart(currentNode.getAttributes(),idNodeMap, queryResultObjectDataBeanMap.get(currentNode.getId()));
+			Map<String,String> columnNameIndexMap = QueryModuleUtil.getColumnNamesForSelectpart(currentNode.getAttributes(),queryDetailsObj, queryResultObjectDataBeanMap.get(currentNode.getId()));
 			columnNames = columnNameIndexMap.get(Constants.COLUMN_NAMES);
 			String indexStr = columnNameIndexMap.get(Constants.INDEX);
 			if ((indexStr != null) && (!indexStr.equalsIgnoreCase(Constants.NULL)))
@@ -338,7 +352,7 @@ public class QueryOutputTreeBizLogic
 		if (parentNodeId.contains(Constants.NULL_ID))
 		{
 			
-			selectSql = QueryModuleUtil.getSQLForRootNode(tableName,QueryModuleUtil.getColumnNamesForSelectpart(currentNode.getAttributes(),idNodeMap, queryResultObjectDataBeanMap.get(currentNode.getId())));
+			selectSql = QueryModuleSqlUtil.getSQLForRootNode(tableName,QueryModuleUtil.getColumnNamesForSelectpart(currentNode.getAttributes(),queryDetailsObj, queryResultObjectDataBeanMap.get(currentNode.getId())));
 
 			String indexStr = selectSql.substring(selectSql.indexOf(Constants.NODE_SEPARATOR)+2,selectSql.length());
 			if (!indexStr.equalsIgnoreCase(Constants.NULL))
@@ -347,10 +361,11 @@ public class QueryOutputTreeBizLogic
 			}
 			selectSql = selectSql.substring(0,selectSql.indexOf(Constants.NODE_SEPARATOR));
 		}
-		List<List<String>> dataList = getTreeDataList(sessionData,selectSql , queryResultObjectDataBeanMap, hasConditionOnIdentifiedField);
+		List<List<String>> dataList = getTreeDataList(queryDetailsObj, selectSql,
+				queryResultObjectDataBeanMap, hasConditionOnIdentifiedField);
 		
 		//List dataList = QueryModuleUtil.executeQuery(selectSql, sessionData);
-		String outputTreeStr = buildOutputTreeString(index, dataList, currentNode, nodeId, parentNode, idNodeMap);
+		String outputTreeStr = buildOutputTreeString(index, dataList, currentNode, nodeId, parentNode, queryDetailsObj);
 		return outputTreeStr;
 			}
 	
@@ -366,7 +381,7 @@ public class QueryOutputTreeBizLogic
 	 * Such string elements for child nodes are seperated by "|".
 	 **/
 	String buildOutputTreeString(int index, List dataList, OutputTreeDataNode currentNode, String parentNodeId, OutputTreeDataNode parentNode,
-			Map<String, OutputTreeDataNode> idNodeMap)
+			QueryDetails queryDetailsObj)
 	{
 		Iterator dataListIterator = dataList.iterator();
 		List<String> existingNodesList = new ArrayList<String>();
@@ -411,7 +426,7 @@ public class QueryOutputTreeBizLogic
 			if (!existingNodesList.contains(nodeIdToSet))
 			{
 				existingNodesList.add(nodeIdToSet);
-				idNodeMap.put(String.valueOf(currentNode.getUniqueNodeId()), currentNode);
+				queryDetailsObj.getUniqueIdNodesMap().put(String.valueOf(currentNode.getUniqueNodeId()), currentNode);
 				outputTreeStr = outputTreeStr + nodeIdToSet + "," + displayName + "," + objectname + "," + parentNodeId + "," + parentObjectName
 				+ "|";
 			}
@@ -425,17 +440,17 @@ public class QueryOutputTreeBizLogic
 	 * @throws DAOException 
 	 * @throws ClassNotFoundException 
 	 */
-	private List<List<String>> getTreeDataList(SessionDataBean sessionData, String selectSql,
+	private List<List<String>> getTreeDataList(QueryDetails queryDetailsObj, String selectSql,
 			Map<Long, QueryResultObjectDataBean> queryResultObjectDataBeanMap,
 			boolean hasConditionOnIdentifiedField) throws ClassNotFoundException, DAOException
 	{
 		QuerySessionData querySessionData = new QuerySessionData();
 		querySessionData.setSql(selectSql);
 		querySessionData.setQueryResultObjectDataMap(queryResultObjectDataBeanMap);
-		querySessionData.setSecureExecute(sessionData.isSecurityRequired());
+		querySessionData.setSecureExecute(queryDetailsObj.getSessionData().isSecurityRequired());
 		querySessionData.setHasConditionOnIdentifiedField(hasConditionOnIdentifiedField);
-		List<List<String>> dataList = QueryModuleUtil.executeQuery(selectSql, sessionData,
-				querySessionData);
+		List<List<String>> dataList = QueryModuleSqlUtil.executeQuery(queryDetailsObj
+				.getSessionData(), querySessionData);
 
 		querySessionData.setTotalNumberOfRecords(dataList.size());
 
