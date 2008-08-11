@@ -156,7 +156,7 @@ function openCRGWindow()
                    }
                     // To clear Privileges
                   if((cpOperation == "getActionsForThisRole")||(cpOperation == "editRow")||(cpOperation == "editRowForUserPage")){
-                      var eleOfActionSelBox = document.getElementById('actionIds');
+					  var eleOfActionSelBox = document.getElementById('actionIds');
                       clearSelBoxList(eleOfActionSelBox);
                   }
   
@@ -396,6 +396,7 @@ function openCRGWindow()
                                     else if(cpOperation == "editRowForUserPage")
 
                                     {
+										
                                           var selectedCPId=jsonResponse.locations[i].selectedCPId;
                                           var cpList=jsonResponse.locations[i].cpJsonArray;
                                           var roleId=jsonResponse.locations[i].roleId; 
@@ -450,7 +451,8 @@ function openCRGWindow()
 
                                           else
                                           {
-                                                for(var counter1=0;counter1<totalPrivileges;counter1++)
+											  selectedOptsList(eleOfActionSelBox,actions,selActionVal);
+                                       /*         for(var counter1=0;counter1<totalPrivileges;counter1++)
                                                 {
                                                       theValue = actions[counter1].actionId;
                                                       theText  =actions[counter1].actionName;
@@ -465,11 +467,11 @@ function openCRGWindow()
                                                                   break;
                                                             }
                                                       }
-                                                }
+                                                }*/
                                           }
-                              //-- for user
+                              //-- for CP
 
-                                          for(var opt=0; opt<usersList.length; opt++)
+                                          for(var opt=0; opt<cpList.length; opt++)
                                           {
                                                 theValue  = jsonResponse.locations[i].cpJsonArray[opt].locationId;
                                                 theText = jsonResponse.locations[i].cpJsonArray[opt].locationName;

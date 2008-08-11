@@ -76,7 +76,12 @@ public class UserAction extends SecureAction
         if(operation.equalsIgnoreCase(Constants.ADD))
         {
         	HttpSession session=request.getSession();
-        	session.removeAttribute("rowIdBeanMapForUserPage");
+        	boolean dirtyVar=false;
+            dirtyVar= new Boolean(request.getParameter("dirtyVar"));
+            if(!dirtyVar)
+            {
+            	session.removeAttribute("rowIdBeanMapForUserPage");
+            }
         }
         
         String formName,prevPage=null,nextPage=null;
@@ -164,7 +169,7 @@ public class UserAction extends SecureAction
 		}
 		if(operation.equalsIgnoreCase(Constants.ADD))
 		{
-			request.getSession(true).setAttribute(Constants.USER_ROW_ID_BEAN_MAP, null);
+//			request.getSession(true).setAttribute(Constants.USER_ROW_ID_BEAN_MAP, null);
 			
 			if(userForm.getCountry()==null)
 			{

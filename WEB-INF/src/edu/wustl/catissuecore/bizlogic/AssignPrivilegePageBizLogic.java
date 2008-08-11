@@ -131,11 +131,11 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 		}
 		if (siteNameValueBeanList != null && !siteNameValueBeanList.isEmpty())
 		{
-		NameValueBean siteNameValueBean = siteNameValueBeanList.get(0);
-		if(siteNameValueBean.getValue().equals("-1"))
-		{
-			siteNameValueBeanList.remove(0);
-		}
+			NameValueBean siteNameValueBean = siteNameValueBeanList.get(0);
+			if(siteNameValueBean.getValue().equals("-1"))
+			{
+				siteNameValueBeanList.remove(0);
+			}
 		}*/
 		
 		List<NameValueBean> siteNameValueBeanList = null;
@@ -1093,7 +1093,7 @@ public List<String[]> privilegeDataOnTabSwitch(Map<String, SiteUserRolePrivilege
 			
 			bean =(SiteUserRolePrivilegeBean)surpArray[j];
 			
-			// for role id
+			// for row id
 			for(int count=0;count<keyArray.length;count++)
 			{
 				SiteUserRolePrivilegeBean beanForKey=map.get(keyArray[count]);
@@ -1132,9 +1132,13 @@ public List<String[]> privilegeDataOnTabSwitch(Map<String, SiteUserRolePrivilege
 					else
 					{
 						array[0]="N/A";
-					}	
+					}
 				}
-				else
+				else if(bean.isAllCPChecked())
+				{
+					array[0]="All Current and Future";
+				}
+				else if(!bean.isAllCPChecked())
 				{
 					array[0]="N/A";
 				}
@@ -1563,8 +1567,11 @@ public List<JSONObject> editPrivilegeForUserPage (Map<String, SiteUserRolePrivil
 	
 	List<JSONObject> privilegeList = new ArrayList<JSONObject>();
 	JSONObject jsonObject=new JSONObject();
-	
-	long selectedCPId=surp.getCollectionProtocol().getId();
+	long selectedCPId=0;
+	if(surp.getCollectionProtocol()!=null)
+	{
+		selectedCPId=surp.getCollectionProtocol().getId();
+	}
 	
 	// for site
 	JSONArray siteJsonArray=new JSONArray();
@@ -1576,7 +1583,7 @@ public List<JSONObject> editPrivilegeForUserPage (Map<String, SiteUserRolePrivil
 	}
 	jsonObject.put("siteJsonArray",siteJsonArray );
 
-	// for User
+	// for CP
 	jsonObject.append("selectedCPId", selectedCPId);
 	
 	List<Site> siteList=surp.getSiteList();
