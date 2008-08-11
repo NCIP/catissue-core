@@ -1717,7 +1717,6 @@ function editRowForUserPage(rowId)
     if(checkBoxCtrl.checked==true)
     {
        isAllCPChecked=true;
-	   alert(isAllCPChecked);
     }
 	var roleSelBoxObj=document.getElementById(roleSelBoxId);
 	var cpSelBoxObj= document.getElementById(cpSelBoxId);
@@ -1738,10 +1737,9 @@ function editRowForUserPage(rowId)
 	else if(selectedSiteIds!=null&&(selectedSiteIds.length>0))
 	{
 		cpOperation="getActionsForThisSites";
-		 alert('getActionsForThisSites');   
+		
    		var url="ShowAssignPrivilegePage.do";
 		var data="cpOperation="+cpOperation+"&selectedSiteIds="+selectedSiteIds+"&selectedRoleIds="+selectedRoleIds+"&isAllCPChecked="+isAllCPChecked;
-		alert(data);
 		sendRequestsWithData(url,data,cpOperation);
 	}
 	else

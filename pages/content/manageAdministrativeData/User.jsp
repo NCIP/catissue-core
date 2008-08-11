@@ -547,7 +547,7 @@ function handleStatus(status)
 													<td colspan="6" width="100%">
 													<div
 														style="height: 80px; background-color: #ffffff;overflow: auto;">
-													<table border="1" width="100%" cellspacing="0"
+													<table border="0" width="100%" cellspacing="0"
 														cellpadding="0">
 														<tbody id="summaryTableId">
 															<%
