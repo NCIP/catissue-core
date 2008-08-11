@@ -669,27 +669,48 @@ PUBLIC
 			<forward name="success" path=".catissuecore.openDecisionMakingPage"/>		
 			<forward name="viewAllRecords" path=".catissuecore.viewSearchResults"/>		
 		</action>
+								
+		<action path="/ViewCart"
+			type="edu.wustl.catissuecore.action.querysuite.ViewCartAction"
+			name="advanceSearchForm"
+			validate="false"
+			scope="request">
+			<forward name="view" path=".catissuecore.shoppingCartDef" />
+			<forward name="differentCartView" path=".catissuecore.queryResultsSpreadsheetViewDef" />
+			<forward name="access_denied" path=".catissuecore.searchHomeDef" />
+		</action>
 		
+		<action path="/ExportCart"
+			type="edu.wustl.catissuecore.action.querysuite.ExportCartAction"
+			name="advanceSearchForm"
+			validate="false"
+			scope="request">			
+			<forward name="shoppingCartExport" path=".catissuecore.shoppingCartDef" />
+     		<forward name="access_denied" path=".catissuecore.searchHomeDef" />
+		</action>
 		
-		<!--Action to add any object to shopping cart called from Query Wizard -->
-		<action path="/QueryAddToCart"
-			type="edu.wustl.catissuecore.action.querysuite.QueryShoppingCartAction"
+		<action path="/AddDeleteCart"
+			type="edu.wustl.catissuecore.action.querysuite.AddDeleteCartAction"
 			name="advanceSearchForm"
 			validate="false"
 			scope="request">
 			<forward name="shoppingCartAdd" path=".catissuecore.queryResultsSpreadsheetViewDef" />
 			<forward name="duplicateObject" path=".catissuecore.queryResultsSpreadsheetViewDef" />
-			<forward name="view" path=".catissuecore.shoppingCartDef" />
-			<forward name="differentCartView" path=".catissuecore.queryResultsSpreadsheetViewDef" />
 			<forward name="shoppingCartDelete" path=".catissuecore.shoppingCartDef" />
-			<forward name="shoppingCartExport" path=".catissuecore.shoppingCartDef" />
+			<forward name="access_denied" path=".catissuecore.searchHomeDef" />
+		</action>
+		
+		<action path="/BulkCart"
+			type="edu.wustl.catissuecore.action.querysuite.BulkCartAction"
+			name="advanceSearchForm"
+			validate="false"
+			scope="request">
 			<forward name="requestToOrder" path="/RequestToOrder.do"/>
 			<forward name="bulkTransfers" path="/BulkTransferEvents.do?menuSelected=15"/>
 			<forward name="bulkDisposals" path="/BulkDisposalEvents.do?menuSelected=15"/>
 			<forward name="editMultipleSp" path="/MultipleSpecimenFlexInitAction.do?operation=edit"/>
 			<forward name="access_denied" path=".catissuecore.searchHomeDef" />
-			
-			
+			<forward name="access_denied" path=".catissuecore.searchHomeDef" />
 		</action>
 		
 		<action path="/AddSpecimenToCart"

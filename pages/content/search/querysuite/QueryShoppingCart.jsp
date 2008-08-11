@@ -108,7 +108,7 @@ function onDelete()
 				var flag = confirm("Are you sure you want to delete the selected item(s)?");
 				if(flag)
 				{
-					var action = "QueryAddToCart.do?operation=delete";
+					var action = "AddDeleteCart.do?operation=delete";
 					document.forms[0].action = action;
 					document.forms[0].target = "_parent";
 					document.forms[0].submit();
@@ -126,7 +126,7 @@ function onExport()
 		    
 		    if(isChecked == "true")
 		    {
-				var action = "QueryAddToCart.do?operation=export";
+				var action = "ExportCart.do?operation=export";
 				document.forms[0].action = action;
 				document.forms[0].submit();
 			}
@@ -142,7 +142,7 @@ function dobulkTransferOperations()
 		    
 		    if(isChecked == "true")
 		    {
-				var action = "QueryAddToCart.do?operation=bulkTransfers";
+				var action = "BulkCart.do?operation=bulkTransfers";
 				document.forms[0].action = action;
 				document.forms[0].submit();
 			}
@@ -158,7 +158,7 @@ function dobulkDisposals()
 		    
 		    if(isChecked == "true")
 		    {
-				var action = "QueryAddToCart.do?operation=bulkDisposals";
+				var action = "BulkCart.do?operation=bulkDisposals";
 				document.forms[0].action = action;
 				document.forms[0].submit();
 			}
@@ -173,7 +173,7 @@ function addToOrderList()
 		    var isChecked = updateHiddenFields();
 		    if(isChecked == "true")
 		    {
-				var action = "QueryAddToCart.do?operation=addToOrderList";
+				var action = "BulkCart.do?operation=addToOrderList";
 				document.forms[0].action = action;
 				document.forms[0].submit();
 			}
@@ -188,7 +188,7 @@ function addToOrderList()
 			 var isChecked = updateHiddenFields();
 		    if(isChecked == "true")
 		    {
-				var action = "QueryAddToCart.do?operation=editMultipleSp";
+				var action = "BulkCart.do?operation=editMultipleSp";
 				document.forms[0].action = action;
 				document.forms[0].submit();
 			}
@@ -218,7 +218,7 @@ function checkAll(element)
 <html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
 	<%=messageKey%>
 </html:messages>
-<html:form action="QueryAddToCart.do">
+<html:form action="AddDeleteCart.do">
 
 <%
    if(dataList!=null && dataList.size()!=0)

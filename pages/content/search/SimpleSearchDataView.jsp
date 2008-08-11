@@ -98,7 +98,7 @@ tr#hiddenCombo
                 {
                 %>
 				
-				 action = "QueryAddToCart.do?operation=add&pageNum="+pageNum+"&isCheckAllAcrossAllChecked="+isCheckAllAcrossAllChecked;
+				 action = "AddDeleteCart.do?operation=add&pageNum="+pageNum+"&isCheckAllAcrossAllChecked="+isCheckAllAcrossAllChecked;
 				  document.forms[0].target = "gridFrame";
 				<%} else {%>
 				

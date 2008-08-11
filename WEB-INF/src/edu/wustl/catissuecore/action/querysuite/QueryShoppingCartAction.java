@@ -1,279 +1,37 @@
 /**
  * 
  */
-
 package edu.wustl.catissuecore.action.querysuite;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
-
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.wustl.catissuecore.actionForm.AdvanceSearchForm;
-import edu.wustl.catissuecore.bizlogic.querysuite.QueryShoppingCartBizLogic;
-import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.querysuite.QueryShoppingCart;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
-import edu.wustl.catissuecore.util.global.Variables;
-import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
 import edu.wustl.common.action.BaseAction;
-import edu.wustl.common.dao.QuerySessionData;
-import edu.wustl.common.querysuite.queryobject.impl.metadata.SelectedColumnsMetadata;
-import edu.wustl.common.util.ExportReport;
-import edu.wustl.common.util.SendFile;
-import edu.wustl.common.util.dbManager.DAOException;
 
 /**
  * @author supriya_dankh Handles all the actions related to shopping cart.
  */
-public class QueryShoppingCartAction extends BaseAction
+abstract public class QueryShoppingCartAction extends BaseAction
 {
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see edu.wustl.common.action.BaseAction#executeAction(org.apache.struts.action.ActionMapping,
-	 *      org.apache.struts.action.ActionForm,
-	 *      javax.servlet.http.HttpServletRequest,
-	 *      javax.servlet.http.HttpServletResponse)
-	 */
-	@Override
-	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response) throws Exception
-	{
-		AdvanceSearchForm searchForm = (AdvanceSearchForm) form;
-		HttpSession session = request.getSession();
-		String target = "";
-		String operation = request.getParameter(Constants.OPERATION);
-				
-		List<String> columnList;
-
-		if (operation == null)
-			operation = "";
-
-		// Extracting map from formbean which gives the serial numbers of
-		// selected rows
-		Map map = searchForm.getValues();
-		Set chkBoxValuesSet = map.keySet();
-		List<Integer> chkBoxValues = null;;
-		if(chkBoxValuesSet!=null)
-		{
-			chkBoxValues = new ArrayList<Integer>();
-			for(Object checkedValue: chkBoxValuesSet)
-			{
-				chkBoxValues.add(getIndex(checkedValue));
-			}
-		}
-
-		String isCheckAllAcrossAllChecked = (String) request
-				.getParameter(Constants.CHECK_ALL_ACROSS_ALL_PAGES);
-		QueryShoppingCart cart = (QueryShoppingCart) session
-				.getAttribute(Constants.QUERY_SHOPPING_CART);
-		//Get Attribute list and column list after define view.
-		SelectedColumnsMetadata selectedColumnMetaData = (SelectedColumnsMetadata) session
-				.getAttribute(Constants.SELECTED_COLUMN_META_DATA);
-
-		//QueryShoppingCartBizLogic bizLogic = new QueryShoppingCartBizLogic();
-		List<AttributeInterface> attributeList = null;
-		if (selectedColumnMetaData != null)
-			attributeList = selectedColumnMetaData.getAttributeList();
-		columnList = (List<String>) session.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
-
-		// Check if user wants to add in Shopping Cart.
-		if (operation.equals(Constants.ADD))
-		{
-			target = addToCart(request, chkBoxValues, isCheckAllAcrossAllChecked, cart,
-					attributeList, columnList);
-			// if My List is not empty sets the value to false.
-			request.getSession().setAttribute("IsListEmpty", "false");
-
-		}// Check if user wants to delete record from cart.
-		else if (operation.equalsIgnoreCase(Constants.DELETE))
-		{
-			deleteFromCart(cart, chkBoxValues);
-			if (cart.getCart().size() == 0)
-			{
-				ActionErrors errors = new ActionErrors();
-				ActionError error = new ActionError("ShoppingCart.emptyCartTitle");
-				errors.add(ActionErrors.GLOBAL_ERROR, error);
-				saveErrors(request, errors);
-				// if My List is empty sets the value to true.
-				request.getSession().setAttribute("IsListEmpty", "true");
-			}
-			// set the options 
-			setCartView(request, cart);
-			target = new String(Constants.SHOPPING_CART_DELETE);
-		}
-		// Check if user wants to export cart.
-		else if (operation.equalsIgnoreCase(Constants.EXPORT))
-		{
-			export(cart, chkBoxValues, session, request, response);
-			return null;
-		}// Check if user wants to view the cart.
-		else if (operation.equalsIgnoreCase(Constants.VIEW))
-		{  
-			request.setAttribute(Constants.EVENT_PARAMETERS_LIST,Constants.EVENT_PARAMETERS);
-			setCartView(request, cart);
-			target = new String(Constants.VIEW);
-		}
-		else if (operation.equals("addToOrderList"))
-		{
-			
-		 	if(session.getAttribute("RequestedBioSpecimens") != null)
-	    		session.removeAttribute("RequestedBioSpecimens");
-		 	
-			if(session.getAttribute("DefineArrayFormObjects")!=null)
-	    		session.removeAttribute("DefineArrayFormObjects");
-		 	
-			if(session.getAttribute(Constants.SPECIMEN_ARRAY_ID) != null)
-				session.removeAttribute(Constants.SPECIMEN_ARRAY_ID);
-			
-			if(session.getAttribute(Constants.PATHALOGICAL_CASE_ID) != null)
-				session.removeAttribute(Constants.PATHALOGICAL_CASE_ID);
-			
-			if(session.getAttribute(Constants.DEIDENTIFIED_PATHALOGICAL_CASE_ID) != null)
-				session.removeAttribute(Constants.DEIDENTIFIED_PATHALOGICAL_CASE_ID);
-			
-			if(session.getAttribute(Constants.SURGICAL_PATHALOGY_CASE_ID) != null)
-				session.removeAttribute(Constants.SURGICAL_PATHALOGY_CASE_ID);
-			
-			Map <String,Set<String>> entityIdsMap = getOrderableEntityIds(chkBoxValues, cart);
-			
-			Set<String> specimenIdsSet = entityIdsMap.get(Constants.SPECIMEN_NAME);
-			Set<String> specimenArrayIdsSet = entityIdsMap.get(Constants.SPECIMEN_ARRAY_CLASS_NAME);
-			Set<String> pathalogicalCaseIdsSet = entityIdsMap.get(Constants.IDENTIFIED_SURGICAL_PATHALOGY_REPORT_CLASS_NAME);
-			Set<String> deidentifiedPathalogicalCaseIdsSet = entityIdsMap.get(Constants.DEIDENTIFIED_SURGICAL_PATHALOGY_REPORT_CLASS_NAME);
-			Set<String> surgicalPathalogicalCaseIdsSet = entityIdsMap.get(Constants.SURGICAL_PATHALOGY_REPORT_CLASS_NAME);
-			
-			List<String> specimenArrayIds = new ArrayList<String>();
-			List<String> specimenIds = new ArrayList<String>();
-			List<String> pathalogicalCaseIds = new ArrayList<String>();
-			List<String> deidentifiedPathalogicalCaseIds = new ArrayList<String>();
-			List<String> surgicalPathalogicalCaseIds = new ArrayList<String>();
-			
-			specimenIds.addAll(specimenIdsSet);
-			specimenArrayIds.addAll(specimenArrayIdsSet);
-			pathalogicalCaseIds.addAll(pathalogicalCaseIdsSet);
-			deidentifiedPathalogicalCaseIds.addAll(deidentifiedPathalogicalCaseIdsSet);
-			surgicalPathalogicalCaseIds.addAll(surgicalPathalogicalCaseIdsSet);
-			
-			session.setAttribute(Constants.SPECIMEN_ID, specimenIds);
-			session.setAttribute(Constants.SPECIMEN_ARRAY_ID, specimenArrayIds);
-			session.setAttribute(Constants.PATHALOGICAL_CASE_ID, pathalogicalCaseIds);
-			session.setAttribute(Constants.DEIDENTIFIED_PATHALOGICAL_CASE_ID, deidentifiedPathalogicalCaseIds);
-			session.setAttribute(Constants.SURGICAL_PATHALOGY_CASE_ID, surgicalPathalogicalCaseIds);
-			
-			target = new String("requestToOrder");
-		}
-		else if (operation.equals(Constants.BULK_TRANSFERS) || operation.equals(Constants.BULK_DISPOSALS))
-		{
-			QueryShoppingCartBizLogic bizLogic = new QueryShoppingCartBizLogic();
-			List<String> specimenIds = new ArrayList<String>(bizLogic.getEntityIdsList(cart, Arrays.asList(Constants.specimenNameArray), chkBoxValues));
-			request.setAttribute(Constants.SPECIMEN_ID, specimenIds);
-			request.setAttribute(Constants.OPERATION, operation);
-			target = new String(operation);
-		}
-		else if(Constants.EDIT_MULTIPLE_SPECIMEN.equals(operation))
-		{
-			if(session.getAttribute(Constants.SPECIMEN_ID) != null)
-				session.removeAttribute(Constants.SPECIMEN_ID);
-							
-			QueryShoppingCartBizLogic bizLogic = new QueryShoppingCartBizLogic();
-			Set<String> specimenIds = new HashSet<String>(bizLogic.getEntityIdsList(cart, Arrays.asList(Constants.specimenNameArray), chkBoxValues));
-			session.setAttribute(Constants.SPECIMEN_ID, specimenIds);
-			
-			target = new String(operation);
-		}
-		// sets the message in the session. This message is showed in popup on the result view page if the 
-		//'id' attribute of the orderable entity is not included in view.
-		String message = QueryModuleUtil.getMessageIfIdNotPresentForOrderableEntities( selectedColumnMetaData,  cart);
-		session.setAttribute(Constants.VALIDATION_MESSAGE_FOR_ORDERING, message);
-		request.setAttribute(Constants.PAGEOF, Constants.PAGEOF_QUERY_MODULE);
-		return mapping.findForward(target);
-	}
-
-	/**
-	 * @param chkBoxValues check box values.
-	 * @param cart Shopping cart object from session.
-	 * @return Map of entity ids.This map will contain 3 different Lists of all specimen ,specimen arrays and IdentifiedSurgicalPathologyReports. 
-	 */
-	private Map<String,Set<String>> getOrderableEntityIds(List<Integer> chkBoxValues, QueryShoppingCart cart)
-	{
-		QueryShoppingCartBizLogic bizLogic = new QueryShoppingCartBizLogic();
-		Set<String> specimenIds = new HashSet<String>();
-		Set<String> specimenArrayIds = new HashSet<String>();
-		Set<String> pathalogicalCaseIds = new HashSet<String>();
-		Set<String> deidentifiedPathalogicalCaseIds = new HashSet<String>();
-		Set<String> surgicalPathalogicalCaseIds = new HashSet<String>();
-		
-		Map <String,Set<String>> entityIdsMap = new HashMap<String, Set<String>>();
-		
-		List<AttributeInterface> cartAttributeList = cart.getCartAttributeList();
-		if (cartAttributeList != null)
-		{
-			List<String> orderableEntityNameList = Arrays.asList(Constants.entityNameArray);
-			Set<String> distinctEntityNameSet = new HashSet<String>(); 
-			for (AttributeInterface attribute : cartAttributeList)
-			{
-				
-				if ((attribute.getName().equals(Constants.ID))
-						&& ((orderableEntityNameList))
-								.contains(attribute.getEntity().getName()))
-				{
-					distinctEntityNameSet.add(attribute.getEntity().getName());
-				}
-			}
-			for(String entityName :distinctEntityNameSet)
-			{
-				Set<String> tempEntityIdsList = new HashSet<String>();
-				tempEntityIdsList = bizLogic.getEntityIdsList(cart, Arrays.asList(entityName),
-						chkBoxValues);
-				if(entityName.equals(Constants.SPECIMEN_ARRAY_CLASS_NAME))
-					specimenArrayIds.addAll(tempEntityIdsList);
-				else if(entityName.equals(Constants.IDENTIFIED_SURGICAL_PATHALOGY_REPORT_CLASS_NAME))
-					pathalogicalCaseIds.addAll(tempEntityIdsList);
-				else if(entityName.equals(Constants.DEIDENTIFIED_SURGICAL_PATHALOGY_REPORT_CLASS_NAME))
-					deidentifiedPathalogicalCaseIds.addAll(tempEntityIdsList);
-				else if(entityName.equals(Constants.SURGICAL_PATHALOGY_REPORT_CLASS_NAME))
-					surgicalPathalogicalCaseIds.addAll(tempEntityIdsList);
-				else
-					specimenIds.addAll(tempEntityIdsList);
-			}
-			entityIdsMap.put(Constants.SPECIMEN_ARRAY_CLASS_NAME, specimenArrayIds);
-			entityIdsMap.put(Constants.IDENTIFIED_SURGICAL_PATHALOGY_REPORT_CLASS_NAME, pathalogicalCaseIds);
-			entityIdsMap.put(Constants.DEIDENTIFIED_SURGICAL_PATHALOGY_REPORT_CLASS_NAME, deidentifiedPathalogicalCaseIds);
-			entityIdsMap.put(Constants.SURGICAL_PATHALOGY_REPORT_CLASS_NAME, surgicalPathalogicalCaseIds);
-			entityIdsMap.put(Constants.SPECIMEN_NAME, specimenIds);
-		}
-		return entityIdsMap;
-	}
-
+	
 	/** sets the options enabled or disabled depending on the entities and their attributes present 
 	 * in the cart.
 	 * @param request
 	 * @param cart
 	 */
-	private void setCartView(HttpServletRequest request, QueryShoppingCart cart)
+	protected  void setCartView(HttpServletRequest request, QueryShoppingCart cart)
 	{ 
-		String isSpecimenIdPresent = "false";
-		boolean isEmpty = false;
+		String isSpecimenIdPresent = Constants.FALSE;
 		if (cart != null)
 		{
 			List<AttributeInterface> cartAttributeList = cart.getCartAttributeList();
@@ -283,266 +41,27 @@ public class QueryShoppingCartAction extends BaseAction
 				for (AttributeInterface attribute :cartAttributeList)
 				{
 					if ((attribute.getName().equals(Constants.ID))
-							&& ((orderableEntityNameList)).contains(attribute.getEntity().getName()))
+							&& ((orderableEntityNameList)).contains(attribute
+									.getEntity().getName()))
 					{
-						isSpecimenIdPresent = "true";
+						isSpecimenIdPresent = Constants.TRUE;
 						
-						if(!Arrays.asList(Constants.specimenNameArray).contains(attribute.getEntity().getName()))
+						if(!Arrays.asList(Constants.specimenNameArray).contains(attribute
+								.getEntity().getName()))
 						{
-							request.setAttribute(Constants.IS_SPECIMENARRAY_PRESENT, "true");
+							request.setAttribute(Constants.IS_SPECIMENARRAY_PRESENT,
+									Constants.TRUE);
 						}
 					}
 				}
 				request.setAttribute(Constants.IS_SPECIMENID_PRESENT, isSpecimenIdPresent);
+				return;
 			}
-			else
-				isEmpty = true;
 		}
-		if(cart==null || isEmpty)
-		{
-			ActionErrors errors = new ActionErrors();
-			ActionError error = new ActionError("ShoppingCart.emptyCartTitle");
-			errors.add(ActionErrors.GLOBAL_ERROR, error);
-			saveErrors(request, errors);
-		}
-	}
-
-	/**
-	 * @param request
-	 * @param chkBoxValues
-	 * @param isCheckAllAcrossAllChecked
-	 * @param cart
-	 * @param attributeList
-	 * @param columnList
-	 * @return
-	 * @throws DAOException
-	 */
-	private String addToCart(HttpServletRequest request, List<Integer> chkBoxValues,
-			String isCheckAllAcrossAllChecked, QueryShoppingCart cart,
-			List<AttributeInterface> attributeList, List<String> columnList) throws DAOException
-	{
-		String target;
-
-		HttpSession session = request.getSession();
-		List<List<String>> dataList = getPaginationDataList(request, session);
-
-		if (isCheckAllAcrossAllChecked != null
-				&& isCheckAllAcrossAllChecked.equalsIgnoreCase(Constants.TRUE))
-			chkBoxValues = null;
-
-		//if cart is not present in session create new cart object
-		if (cart == null)
-		{
-			cart = new QueryShoppingCart();
-			cart.setCartAttributeList(attributeList);
-			cart.setColumnList(columnList);
-			addDataToCart(cart, dataList, chkBoxValues, request, session, columnList);
-		}
-		else
-		{
-			/*
-			 * if cart is in session but user has deleted all the records
-			 * from cart.Then take same cart object from session and set the
-			 * view of cart according to current records.
-			 */
-			if (cart.isEmpty())
-			{
-				cart.setCartAttributeList(attributeList);
-				cart.setColumnList(columnList);
-				addDataToCart(cart, dataList, chkBoxValues, request, session, columnList);
-			}
-			else
-			{
-				/*
-				 * check if view i.e. attribute list of current selection of
-				 * user and cart view is same if not display error message
-				 * to user.
-				 */
-				List<AttributeInterface> oldAttributeList = cart.getCartAttributeList();
-				QueryShoppingCartBizLogic queryShoppingCartBizLogic = new QueryShoppingCartBizLogic();
-				int indexArray[] = queryShoppingCartBizLogic.getNewAttributeListIndexArray(oldAttributeList, attributeList);
-				if (indexArray != null)
-				{
-
-					List<List<String>> tempdataList = getManipulatedDataList(dataList, indexArray);
-					addDataToCart(cart, tempdataList, chkBoxValues, request, session, columnList);
-				}
-				else
-					addDifferentCartViewError(request);
-			}
-
-		}
-
-		target = new String(Constants.SHOPPING_CART_ADD);
-		request.setAttribute(Constants.PAGINATION_DATA_LIST, dataList);
-		return target;
-	}
-
-	/**
-	 * @param dataList list of cart records.
-	 * @param indexArray array of indexes of new attributes.
-	 * @return
-	 */
-	private List<List<String>> getManipulatedDataList(List<List<String>> dataList, int[] indexArray)
-	{
-		List<List<String>> tempDataList = new ArrayList<List<String>>();
-		for (int recordIndex = 0; recordIndex < dataList.size(); recordIndex++)
-		{
-			List<String> oldReord = dataList.get(recordIndex);
-			String[] newRecordArray = new String[indexArray.length];
-			for (int i = 0; i < indexArray.length; i++)
-			{
-				newRecordArray[indexArray[i]] = oldReord.get(i);
-			}
-			List<String> newRecord = Arrays.asList(newRecordArray);
-			tempDataList.add(newRecord);
-		}
-		return tempDataList;
-	}
-
-	
-	/**
-	 * @param request
-	 */
-	private void addDifferentCartViewError(HttpServletRequest request)
-	{
-		String target;
 		ActionErrors errors = new ActionErrors();
-		ActionError error = new ActionError("shoppingcart.differentViewError");
+		ActionError error = new ActionError("ShoppingCart.emptyCartTitle");
 		errors.add(ActionErrors.GLOBAL_ERROR, error);
 		saveErrors(request, errors);
-		target = new String(Constants.DIFFERENT_VIEW_IN_CART);
-	}
-
-	/**
-	 * Add data in Cart .
-	 * 
-	 * @param cart a shopping cart object preset in session.
-	 * @param dataList List of records.
-	 * @param session HttpSession object. 
-	 * @param request HttpServletRequest.
-	 * @param response HttpServletResponse.
-	*/
-	public void addDataToCart(QueryShoppingCart cart, List<List<String>> dataList,
-			List<Integer> chkBoxValues, HttpServletRequest request, HttpSession session,
-			List<String> columnList)
-	{
-		QueryShoppingCartBizLogic bizLogic = new QueryShoppingCartBizLogic();
-		// Add a record to cart.
-		int addRecordCount = bizLogic.add(cart, dataList, chkBoxValues);
-		int duplicateRecordCount = 0;
-
-		if (chkBoxValues != null)
-			duplicateRecordCount = chkBoxValues.size() - addRecordCount;
-		else
-			duplicateRecordCount = dataList.size() - addRecordCount;
-
-		ActionErrors errors = new ActionErrors();
-		// Check if no. of duplicate records is not zero then set a
-		// error message.
-		if (duplicateRecordCount != 0)
-		{
-			ActionError error = null;
-			if (duplicateRecordCount == 1)
-				error = new ActionError("shoppingcart.duplicateObjError", addRecordCount,
-						duplicateRecordCount);
-			else
-				error = new ActionError("shoppingcart.duplicateObjsError", addRecordCount,
-						duplicateRecordCount);
-			errors.add(ActionErrors.GLOBAL_ERROR, error);
-		}
-		else
-		{
-			ActionError addMsg = new ActionError("shoppingCart.addMessage", addRecordCount);
-			errors.add(ActionErrors.GLOBAL_ERROR, addMsg);
-			session.setAttribute(Constants.QUERY_SHOPPING_CART, cart);
-			request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST, columnList);
-		}
-		saveErrors(request, errors);
-	}
-
-	/**
-	 * Get Pegination data list .
-	 * 
-	 * @param session HttpSession object. 
-	 * @param request HttpServletRequest.
-	*/
-	public List<List<String>> getPaginationDataList(HttpServletRequest request, HttpSession session)
-			throws DAOException
-	{
-		String pageNo = (String) request.getParameter(Constants.PAGE_NUMBER);
-		String recordsPerPageStr = (String) session.getAttribute(Constants.RESULTS_PER_PAGE);// Integer.parseInt(XMLPropertyHandler.getValue(Constants.NO_OF_RECORDS_PER_PAGE));
-		String isCheckAllAcrossAllChecked = (String) request
-				.getParameter(Constants.CHECK_ALL_ACROSS_ALL_PAGES);
-
-		if (pageNo != null)
-		{
-			request.setAttribute(Constants.PAGE_NUMBER, pageNo);
-		}
-
-		int recordsPerPage = Integer.parseInt(recordsPerPageStr);
-		int pageNum = Integer.parseInt(pageNo);
-
-		if (isCheckAllAcrossAllChecked != null
-				&& isCheckAllAcrossAllChecked.equalsIgnoreCase(Constants.TRUE))
-		{
-			Integer totalRecords = (Integer) session.getAttribute(Constants.TOTAL_RESULTS);
-			recordsPerPage = totalRecords;
-			pageNum = 1;
-		}
-
-		QuerySessionData querySessionData = (QuerySessionData) request.getSession().getAttribute(
-				edu.wustl.common.util.global.Constants.QUERY_SESSION_DATA);
-		List<List<String>> dataList = Utility.getPaginationDataList(request,
-				getSessionData(request), recordsPerPage, pageNum, querySessionData);
-
-		return dataList;
-
-	}
-
-	public void deleteFromCart(QueryShoppingCart cart, List<Integer> chkBoxValues)
-	{
-		QueryShoppingCartBizLogic bizLogic = new QueryShoppingCartBizLogic();
-		bizLogic.delete(cart, chkBoxValues);
-
-	}
-
-	/**
-	 * Export Cart data.
-	 * 
-	 * @param cart a shopping cart object preset in session.
-	 * @param session HttpSession object. 
-	 * @param request HttpServletRequest.
-	 * @param response HttpServletResponse.
-	*/
-	public void export(QueryShoppingCart cart, List<Integer> chkBoxValues, HttpSession session,
-			HttpServletRequest request, HttpServletResponse response)
-	{
-		QueryShoppingCartBizLogic bizLogic = new QueryShoppingCartBizLogic();
-		String fileName = Variables.applicationHome + System.getProperty("file.separator")
-				+ session.getId() + ".csv";
-		List<List<String>> exportList = bizLogic.export(cart, chkBoxValues);
-
-		String delimiter = Constants.DELIMETER;
-		// Exporting the data to the given file & sending it to user
-
-		try
-		{
-			ExportReport report = new ExportReport(fileName);
-			report.writeData(exportList, delimiter);
-			report.closeFile();
-		}
-		catch (IOException e)
-		{
-			ActionErrors errors = new ActionErrors();
-			ActionError error = new ActionError("shoppingcart.exportfilexception");
-			errors.add(ActionErrors.GLOBAL_ERROR, error);
-			saveErrors(request, errors);
-		}
-
-		SendFile.sendFileToClient(response, fileName, Constants.SHOPPING_CART_FILE_NAME,
-				"application/download");
-
 	}
 	
 	/**
@@ -551,13 +70,24 @@ public class QueryShoppingCartAction extends BaseAction
      * @param obj.
      * @return index.
 	 */
-	public Integer getIndex(Object obj)
+	protected Integer getIndex(Object obj)
 	{
 		String str = obj.toString();
-    	StringTokenizer strTokens = new StringTokenizer(str,"_");
+    	StringTokenizer strTokens = new StringTokenizer(str,Constants.UNDERSCORE);
     	strTokens.nextToken();
     	int index = Integer.parseInt(strTokens.nextToken());
 		return new Integer(index);
+	}
+
+	protected  List<Integer> getCheckboxValues(AdvanceSearchForm searchForm) {
+		Map map = searchForm.getValues();
+		Set chkBoxValuesSet = map.keySet();
+		List<Integer> chkBoxValues = new ArrayList<Integer>();
+		for(Object checkedValue: chkBoxValuesSet)
+		{
+			chkBoxValues.add(getIndex(checkedValue));
+		}
+		return chkBoxValues;
 	}
 
 }

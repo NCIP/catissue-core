@@ -70,7 +70,7 @@ function QueryWizard()
 		</div>		
 		
 		<div>
-      		<a class="subMenuPrimary" href="QueryAddToCart.do?operation=view">
+      		<a class="subMenuPrimary" href="ViewCart.do?operation=view">
 	  			<bean:message key="app.view" />
 	  		</a>
       </div>

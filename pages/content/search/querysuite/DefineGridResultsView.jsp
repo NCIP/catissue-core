@@ -159,7 +159,7 @@
 			for(i=selLength-1; i>=0; i--)
 			{
 				var selectedOption = selectedAttrs[i];
-				if(selectedOption.indexOf("Root") != 0)
+				if(selectedOption.indexOf("root") != 0)
 				{
 					if(selectedOption.indexOf("class") != 0)
 					{

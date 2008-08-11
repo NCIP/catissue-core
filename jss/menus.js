@@ -421,7 +421,7 @@ Ext.onReady(function(){
 
                 text: 'My List View',
 				tooltip:'My List View',
-                href:'QueryAddToCart.do?operation=view'
+                href:'ViewCart.do?operation=view'
             }
         ]
 
