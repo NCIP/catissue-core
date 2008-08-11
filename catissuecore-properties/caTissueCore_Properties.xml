@@ -400,7 +400,7 @@
 	</property>
 	
 	<property>
-		<name>umlmodelguide.link</name>
+		<name>umlmodel.link</name>
 		<value>http://gforge.nci.nih.gov/frs/download.php/3883/caTissueSuiteDeploymentManual.doc</value>
 	</property>
 	
