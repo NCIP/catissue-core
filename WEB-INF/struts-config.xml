@@ -719,6 +719,7 @@ PUBLIC
 			validate="false"
 			scope="request">
 			<forward name="pageOfNewSpecimen" path="/QuerySpecimenSearch.do?pageOf=pageOfNewSpecimenCPQuery" />
+			<forward name="pageOfEditSpecimen" path="/NewSpecimen.do?pageOf=pageOfNewSpecimen" />
 		</action>
 		
 		<action path="/AddScgToCart"
@@ -1896,6 +1897,8 @@ PUBLIC
 			<forward name="pageOfCreateAliquot" path="/CreateAliquots.do?pageOf=pageOfCreateAliquot&amp;operation=add&amp;menuSelected=15&amp;buttonClicked=submit" />
 			<forward name="distribution" path="/Distribution.do?operation=add&amp;pageOf=pageOfDistribution&amp;menuSelected=16" />
 			<forward name="orderDetails" path="/RequestDetails.do" />
+			<forward name="addSpecimenToCart" path="/AddSpecimenToCart.do?pageOf=pageOfEditSpecimen" />	
+			
 		</action>
 		
 		<action path="/NewSpecimenSearch"
