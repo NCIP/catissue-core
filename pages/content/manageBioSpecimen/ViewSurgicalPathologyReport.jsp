@@ -17,6 +17,7 @@
 <script src="jss/ajax.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/viewSPR.js"></script>
 <LINK href="css/styleSheet.css" type=text/css rel=stylesheet>
+<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
 <%
 	Map mapPMI = null;
 	int noOfRowsPMI=0;
@@ -87,7 +88,7 @@
 
 	function checkBoxClicked()
 	{
-		document.getElementById("deidentifiedReportText").innerHTML="<PRE>"+document.getElementById("deidText").innerHTML+"</PRE>";
+		document.getElementById("deidentifiedReportText").innerHTML="<span class="+"black_ar"+"<PRE>"+document.getElementById("deidText").innerHTML+"</PRE></span>";
 		for(i=0;i<conceptName.length;i++)
 		{	
 			selectByOffset(document.getElementById("select"+i),startOff[i],endOff[i],colours[i],conceptName[i]);	
@@ -113,11 +114,13 @@ if(!hasAccess)
 }
 %>
 <html:form action="<%=Constants.VIEW_SPR_ACTION%>">
-<!-- Main table start -->
-<table id="reportTable" summary="" cellspacing="5" cellpadding="0" border="0"  style="table-layout:fixed" width="650" >
-	 <tr>
-		<td>		
-			<html:hidden property="id" />
+<!-- ------------------------------------- -->
+
+      <table width="100%" border="0" cellpadding="3" cellspacing="0" id="reportTable" class="whitetable_bg">
+        <tr>
+          <td colspan="2" align="left" class="toptd"></td>
+        </tr>
+		<html:hidden property="id" />
 			<html:hidden property="identifiedReportId" />
 			<html:hidden property="deIdentifiedReportId" />
 			<html:hidden property="submittedFor"/>
@@ -125,91 +128,77 @@ if(!hasAccess)
 			<html:hidden property="pageOf"/>
 			<html:hidden property="acceptReject"/>
 			<html:hidden property="participantIdForReport"/>
-			
-		</td>
-	</tr>
-<!-- if pageOf is pageOfParticipant then display drop down list of surgical pathology number -->
-<% if(pageOf.equals(Constants.PAGEOF_PARTICIPANT) || pageOf.equals(Constants.PAGE_OF_PARTICIPANT_CP_QUERY))
-{
-%>
-	<tr>
-		<td class="formFieldNoBordersSimple">
-			<b>
-				<bean:message key="viewSPR.reportInfo.spn"/> : 
-			</b>
-			<logic:notEmpty name="viewSurgicalPathologyReportForm" property="reportIdList" >
-			
-				<c:set var="reportIdElt" value="${viewSurgicalPathologyReportForm.reportIdList}"/>
+
+        <tr>
+          <td colspan="2" align="left">
+		  <% if(pageOf.equals(Constants.PAGEOF_PARTICIPANT) || pageOf.equals(Constants.PAGE_OF_PARTICIPANT_CP_QUERY))
+			{
+		  %>
+		  <table width="100%" border="0" cellspacing="0" cellpadding="2">
+                <tr>
+                  <td width="27%" align="left" valign="middle" class="black_ar">&nbsp;<bean:message key="viewSPR.reportInfo.spn"/></td>
+                  <td width="73%" align="left" class="black_ar"><label>
+				  <logic:notEmpty name="viewSurgicalPathologyReportForm" property="reportIdList" >
+
+                    <c:set var="reportIdElt" value="${viewSurgicalPathologyReportForm.reportIdList}"/>
 				<jsp:useBean id="reportIdElt" type="java.util.List"/>
-				<html:select property="reportId" styleClass="formFieldSized" styleId="reportId" size="1"
+				<html:select property="reportId" styleClass="formFieldSized18" styleId="reportId" size="1"
 				 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="sendRequestForReportInfo()">
 					<html:options collection="reportIdElt" labelProperty="name" property="value"/>
 				</html:select>
-
-			</logic:notEmpty>
-		</td>
-	</tr>
-<%
-}
-%>
-	<tr>
-		<td>
-		<!-- block to diaply default links -->
-			<table width="100%" >
-				<tr>
-					<td class="formTitle" height="20" colspan="2">
-						<bean:message key="viewSPR.view.title" />
-					</td>
-				</tr>
-	<% 
+                  </logic:notEmpty>
+				  </label></td>
+                </tr>
+            </table>
+		  <%
+			}
+		%>
+			  </td>
+        </tr>
+        <tr>
+          <td colspan="2" align="left" class="tr_bg_blue1"><span class="blue_ar_b"> &nbsp;<bean:message key="viewSPR.view.title" /></span></td>
+        </tr>
+		
+        <tr>
+          <td colspan="2" align="left" class="showhide">
+		  <table width="100%" border="0" cellspacing="0" cellpadding="3">
+		  <% 
 	if(hasAccess)
 	{
 	%>	
-				<tr>
-					<td class="formFieldNoBordersBold" >
-						<input type=radio name="review" value="abc1" checked="checked" onClick="clickOnLinkReport()" />
-							<bean:message key="viewSPR.identifiedReport" />
-					</td>
-					<td class="formFieldNoBordersBold" >
-						<input type=radio name="review" value="abc2" onClick="clickOnLinkShowDeidReport()" />
-							<bean:message key="viewSPR.deIdenfiedReport" />
-					</td>
-				</tr>
-				<tr>
-					<td class="formFieldNoBordersBold" >
-						<input type=radio name="review" value="abc3" onClick="clickOnLinkCompareReport()" />
-							<bean:message key="viewSPR.compareReports" />
-					</td>
-					<td class="formFieldNoBordersBold" >
-						<input type=radio name="review" value="abc4" onClick="" disabled="true" />
-							<bean:message key="viewSPR.myRequests" />						
-					</td>
-				</tr>
+                <tr>
+                  <td width="27%" align="left" class="black_ar_t"><input type=radio name="review" value="abc1" checked="checked" onClick="clickOnLinkReport()" />
+							<bean:message key="viewSPR.identifiedReport" /></td>
+                <td width="28%" align="left" class="black_ar_t"><input type=radio name="review" value="abc2" onClick="clickOnLinkShowDeidReport()" />
+							<bean:message key="viewSPR.deIdenfiedReport" /></td>
+                  <td width="28%" align="left" class="black_ar_t"><input type=radio name="review" value="abc3" onClick="clickOnLinkCompareReport()" />
+							<bean:message key="viewSPR.compareReports" /></td>
+                  <td width="17%" align="left" class="black_ar_t"><input type=radio name="review" value="abc4" onClick="" disabled="true" />
+							<bean:message key="viewSPR.myRequests" /></td>
+                </tr>
 	<% 	
 	}
 	else
 	{
-	%>	
+	%>
 				<tr>
-					<td class="formFieldNoBordersBold" >
-						<input type=radio name="review" value="abc2" checked="checked" onClick="setUI()" />
-							<bean:message key="viewSPR.deIdenfiedReport" />
-					</td>
-					<td class="formFieldNoBordersBold" >
-						<input type=radio name="review" value="abc4" onClick="" disabled="true" />
-							<bean:message key="viewSPR.myRequests" />						
-					</td>
-				</tr>
-	<%
+                  <td width="50%" colspan="2" align="left" class="black_ar_t"><input type=radio name="review" value="abc2" checked="checked" onClick="setUI()" />
+							<bean:message key="viewSPR.deIdenfiedReport" /></td>
+                <td width="50%" colspan="2" align="left" class="black_ar_t"><input type=radio name="review" value="abc4" onClick="" disabled="true" />
+							<bean:message key="viewSPR.myRequests" /></td>
+                 
+                </tr>
+				<%
 	}
 	%>
-				<%
+
+	<%
 				String requestFor=(String)request.getParameter(Constants.REQUEST_FOR);
 				if(requestFor!=null||pageOf.equals(Constants.PAGEOF_REVIEW_SPR)||pageOf.equals(Constants.PAGEOF_QUARANTINE_SPR)||requestFor!=null)
 				{
 				%>
 					<tr>
-					<td width="80%" colspan="2" class="formTitle" height="20">
+					<td width="20%" class="formTitle">
 						<% if(formSPR.getUserName()!=null||requestFor!=null)
 							{
 						%>
@@ -218,143 +207,92 @@ if(!hasAccess)
 							}
 						%>
 					</td>
-				</tr>
-				<tr>
-					<td colspan="2">
-						<html:textarea property="userComments" rows="2" cols="89" readonly="true"/>
+				
+					<td width="80%">
+						<html:textarea property="userComments" rows="3" cols="32" readonly="true"/>
 					</td>
 				</tr>
 				<%
 				}
 				%>
-			</table>
-		</td>
-	</tr>
-	<tr>
-		<td valign="top" >
-			
-		</td>
-	</tr>
-	<tr>
-		<td>
-	<% 
-	if(hasAccess)
-	{
-	%>	
-		<table id="participantTable" border="0" cellpadding="0" cellspacing="0"   width="100%" id="table2" >
-			<tr>
-				<td class="formFieldAllBorders" align="right" width="1%">
-					<a id="image" style="text-decoration:none" href="javascript:switchStyle('hide');">  
-					<img src="images/nolines_minus.gif" border="0" width="18" height="18"/>
-				</td> 
-				<td class="formTitle" height="20">
-					<bean:message key="viewSPR.participantInformation.title"/>						
-				</td>
-			</tr>
-			<tr>
-				<td colspan="2" >
-				<table border="0" cellpadding="5" cellspacing="0" width="100%" id="paricipantInformation" >
-					<tr>
-						<td class="formFieldNoBordersSimple" width="365"  height="20" colspan="2">
-							<b>  
-								<bean:message key="participant.name" /> : 
-							</b>
-							<logic:notEmpty name="viewSurgicalPathologyReportForm" property="participantName" >
-								<%=formSPR.getParticipantName()%>
-							</logic:notEmpty>
-					     </td>
-						<td class="formFieldNoBordersSimple" width="365" height="20" colspan="2">
-							<b>
-								<bean:message key="participant.vitalStatus" /> : 
-							</b>
-							<logic:notEmpty name="viewSurgicalPathologyReportForm" property="vitalStatus" >
-				     			<%=formSPR.getVitalStatus()%>
-							</logic:notEmpty>
-					     </td>
-					</tr>
-					<tr>
-						<td class="formFieldNoBordersSimple" width="50%" height="20" colspan="2">
-							<b>
-								<bean:message key="participant.birthDate" /> : 
-							</b>
-							<logic:notEmpty name="viewSurgicalPathologyReportForm" property="birthDate" >
-				     			<%=formSPR.getBirthDate()%>
-							</logic:notEmpty>
-					     </td>
-						<td class="formFieldNoBordersSimple" width="50%" height="20" colspan="2">
-							<b>
-								<bean:message key="participant.deathDate" /> : 
-							</b>
-							<logic:notEmpty name="viewSurgicalPathologyReportForm" property="deathDate" >
-				     			<%=formSPR.getDeathDate()%>
-							</logic:notEmpty>
-					     </td>
-					</tr>
-					<tr>
-						<td class="formFieldNoBordersSimple" width="50%" height="20" colspan="2">
-							<b>
-								<bean:message key="participant.ethnicity" /> : 
-							</b>
-							<logic:notEmpty name="viewSurgicalPathologyReportForm" property="ethinicity" >
-				     			<%=formSPR.getEthinicity()%>
-							</logic:notEmpty>
-					     </td>
-						<td class="formFieldNoBordersSimple" width="50%" height="20" colspan="2">
-							<b>
-								<bean:message key="participant.race" /> : 
-							</b>
-							<logic:notEmpty name="viewSurgicalPathologyReportForm" property="race" >
-									<%=formSPR.getRace()%>
-							</logic:notEmpty>
-					     </td>
-					</tr>
-					<tr>
-						<td class="formFieldNoBordersSimple" width="50%" height="20" colspan="2">
-							<b>
-								<bean:message key="participant.gender" /> : 
-							</b>
-							<logic:notEmpty name="viewSurgicalPathologyReportForm" property="gender" >
-				     			<%=formSPR.getGender()%>
-							</logic:notEmpty>
-					     </td>
-						<td class="formFieldNoBordersSimple" width="50%" height="20" colspan="2">
-							<b>
-								<bean:message key="participant.genotype" /> : 
-							</b>
-							<logic:notEmpty name="viewSurgicalPathologyReportForm" property="sexGenotype" >
-				     			<%=formSPR.getSexGenotype()%>
-							</logic:notEmpty>
-					     </td>
-					</tr>
-					<tr>
-						<td class="formFieldNoBordersSimple" width="50%" height="20" colspan="4">
-							<b>
-								<bean:message key="participant.socialSecurityNumber" /> : 
-							</b>
-							<logic:notEmpty name="viewSurgicalPathologyReportForm" property="socialSecurityNumber" >
-				     			<%=formSPR.getSocialSecurityNumber()%>
-							</logic:notEmpty>
-					     </td>
-					</tr>
 
-					<!-- Medical Identifiers Begin here -->
-				 <tr>
-				     <td class="formSubTitle" height="20" colspan="4">
-				     	<bean:message key="viewSPR.participantInformation.medicalIdentifiers"/>
-				     </td>
-				  </tr>
-				 <tr>
-				 	<td class="formLabelBorderlessLeftAndBold" width="5">
-				     	#
-				    </td>
-				    <td class="formLabelBorderlessLeftAndBold">
-						<bean:message key="medicalrecord.source"/>
-					</td>
-				    <td class="formLabelBorderlessLeftAndBold">
-						<bean:message key="medicalrecord.number"/>
-					</td>
-				 </tr>	 
-				 <tbody id="addMore">
+              
+          </table></td>
+        </tr>
+		<tr>
+		<td colspan="2">
+		<table id="participantTable" border="0" cellpadding="0" cellspacing="0"   width="100%" id="table2" >
+		
+        <tr onclick="javascript:showHide('add_id')">
+          <td width="90%" align="left" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;&nbsp;<bean:message key="viewSPR.participantInformation.title"/></span></td>
+          <td width="10%" align="right" class="tr_bg_blue1"><a id="imgArrow_add_id" href="#"><img src="images/uIEnhancementImages/dwn_arrow1.gif" width="80" height="9" hspace="10" border="0" alt="Show Details"/></a></td>
+        </tr>
+        <tr>
+          <td colspan="2" class="showhide1"><div id="add_id" style="display:none; margin:0px; padding:0px;">
+              <table width="100%" border="0" cellspacing="0" cellpadding="3" >
+                <tr>
+                  <td width="23%" class="noneditable"><label for="type"><strong><bean:message key="participant.name" /></strong></label></td>
+                  <td width="25%" colspan="3" class="noneditable">-  <logic:notEmpty name="viewSurgicalPathologyReportForm" property="participantName" >
+								<%=formSPR.getParticipantName()%>
+							</logic:notEmpty></td>
+                  <td width="23%" class="noneditable"><span><strong><bean:message key="participant.vitalStatus" /></strong></span></td>
+                  <td width="29%" class="noneditable">-  <logic:notEmpty name="viewSurgicalPathologyReportForm" property="vitalStatus" >
+				     			<%=formSPR.getVitalStatus()%>
+							</logic:notEmpty></td>
+                </tr>
+                <tr>
+                  <td class="noneditable"><label for="type"><strong><bean:message key="participant.birthDate" /></strong></label></td>
+                  <td colspan="3" class="noneditable">- <logic:notEmpty name="viewSurgicalPathologyReportForm" property="birthDate" >
+				     			<%=formSPR.getBirthDate()%>
+							</logic:notEmpty></td>
+                  <td class="noneditable"><span><strong><bean:message key="participant.deathDate" /></strong></span></td>
+                  <td class="noneditable">- <logic:notEmpty name="viewSurgicalPathologyReportForm" property="deathDate" >
+				     			<%=formSPR.getDeathDate()%>
+							</logic:notEmpty></td>
+                </tr>
+                <tr>
+                  <td class="noneditable"><label for="User"><strong><bean:message key="participant.ethnicity" /></strong></label></td>
+                  <td colspan="3" class="noneditable">- <logic:notEmpty name="viewSurgicalPathologyReportForm" property="ethinicity" >
+				     			<%=formSPR.getEthinicity()%>
+							</logic:notEmpty></td>
+                  <td class="noneditable"><span><strong><bean:message key="participant.race" /></strong></span></td>
+                  <td class="noneditable">- <logic:notEmpty name="viewSurgicalPathologyReportForm" property="race" >
+									<%=formSPR.getRace()%>
+							</logic:notEmpty></td>
+                </tr>
+                <tr>
+                  <td class="noneditable"><strong><bean:message key="participant.gender" /></strong></td>
+                  <td colspan="3" class="noneditable">- <logic:notEmpty name="viewSurgicalPathologyReportForm" property="gender" >
+				     			<%=formSPR.getGender()%>
+							</logic:notEmpty></td>
+                  <td class="noneditable"><span><strong><bean:message key="participant.genotype" /></strong></span></td>
+                  <td class="noneditable">- <logic:notEmpty name="viewSurgicalPathologyReportForm" property="sexGenotype" >
+				     			<%=formSPR.getSexGenotype()%>
+							</logic:notEmpty></td>
+                </tr>
+                <tr>
+                  <td class="noneditable" ><strong><bean:message key="participant.socialSecurityNumber" /></strong></td>
+                  <td colspan="3" valign="top" class="noneditable">- <logic:notEmpty name="viewSurgicalPathologyReportForm" property="socialSecurityNumber" >
+				     			<%=formSPR.getSocialSecurityNumber()%>
+							</logic:notEmpty></td>
+                  <td class="noneditable" >&nbsp;</td>
+                  <td class="noneditable">&nbsp;</td>
+                </tr>
+              </table>
+              <table width="100%" border="0" cellspacing="0" cellpadding="3">
+                
+                <tr class="black_ar_b">
+                  <td colspan="3" class="bottomtd" align="left"></td>
+                </tr>
+                <tr class="black_ar_b">
+                  <td colspan="3" align="left"><strong><bean:message key="viewSPR.participantInformation.medicalIdentifiers"/></strong> </td>
+                </tr>
+                <tr class="tableheading">
+                  <td width="3%" align="left" class="black_ar_b">#</td>
+                  <td width="12%" align="left" class="black_ar_b"><bean:message key="medicalrecord.source"/></td>
+                  <td width="85%" class="black_ar_b"><bean:message key="medicalrecord.number"/></td>
+              </tr>
+                <tbody id="addMore">
 				<%
 				for(int i=1;i<=noOfRowsPMI;i++)
 				{
@@ -379,83 +317,72 @@ if(!hasAccess)
 				 	}
 				}
 				%>
-				 </tbody>  					
-				  <!-- Medical Identifiers End here -->
-
-
-				</table>
-				</td>
-			</tr>
-			
+				 </tbody>
+          </table></td>
+        </tr>
 		</table>
 		</td></tr>
-		
-		<tr>
-		<td>
-		<table border="0" cellpadding="5" cellspacing="0" width="100%" id="identifiedReportInfo" >
-			<tr>
-				<td colspan="3" class="formTitle" height="20">
-					<bean:message key="viewSPR.identifiedReportInformation.title"/>
-				</td>
-			</tr>
-			<tr>
-			<!--	<td class="formFieldWithNoTopBorder"  height="20" >
-					<b>
-						<bean:message key="viewSPR.reportInfo.reportId"/> : 
-					</b>
-				    	<% if(!formSPR.getIdentifiedReportId().equals("")) {%>
-				     		<%=formSPR.getIdentifiedReportId()%>
-						<%}%>
-				</td> -->
-				<td class="formFieldWithNoTopBorder"  height="20" >
-					<b>
-						<bean:message key="viewSPR.reportInfo.spn" /> : 
-					</b>
-						<span id="surgicalPathologyNumber">
-						<logic:notEmpty name="viewSurgicalPathologyReportForm" property="surgicalPathologyNumber" >
+        <tr>
+          <td></td>
+        </tr>
+
+        <tr>
+          <td colspan="2" class=" bottomtd"></td>
+        </tr>
+
+        <tr>
+          <td colspan="2" align="left">
+	<table border="0" cellpadding="5" cellspacing="0" width="100%" id="identifiedReportInfo" >
+		  <tr>
+		  <td colspan="5" class="tr_bg_blue1">
+		  <span class="blue_ar_b"> &nbsp;<bean:message key="viewSPR.identifiedReportInformation.title"/></span></td>
+        </tr>
+        <tr>
+          <td colspan="5">
+		  
+			<table width="100%" border="0" cellspacing="0" cellpadding="3" >
+              <tr>
+                <td width="27%" class="noneditable"><label for="type"><strong><bean:message key="viewSPR.reportInfo.spn" /></strong></label></td>
+                <td width="20%" colspan="3" class="noneditable">-  <logic:notEmpty name="viewSurgicalPathologyReportForm" property="surgicalPathologyNumber" >
 				     		<%=formSPR.getSurgicalPathologyNumber()%>
-						</logic:notEmpty>
-						</span>
-				</td>
-				<td class="formField"  height="20">
-					<b>
-						<bean:message key="specimenCollectionGroup.site"/> : 
-					</b>
-						<span id="identifiedReportSite">
-						<logic:notEmpty name="viewSurgicalPathologyReportForm" property="identifiedReportSite" >
+						</logic:notEmpty></td>
+                <td width="25%" class="noneditable"><span><strong><bean:message key="specimenCollectionGroup.site"/></strong></span></td>
+                <td width="28%" class="noneditable">- <SPAN id="identifiedReportSite"><logic:notEmpty name="viewSurgicalPathologyReportForm" property="identifiedReportSite" >
 				     		<%=formSPR.getIdentifiedReportSite()%>
-						</logic:notEmpty>
-						</span>
-				</td>
-			</tr>
-			<tr>
-				<td  class="formFieldWithNoTopBorderFontSize1" colspan="3" >
-				
-				<div id="identifiedReportText" style="overflow:auto;height:200px;width:628" onmousemove='scrollInSync();'><PRE><logic:notEmpty name="viewSurgicalPathologyReportForm" property="identifiedReportTextContent" ><%=formSPR.getIdentifiedReportTextContent()%></logic:notEmpty></PRE>
-				</div>
-				</td>
-			</tr>
+						</logic:notEmpty></SPAN> </td>
+              </tr>
+          </table></td>
+        </tr>
+        <tr>
+          <td colspan="5" style="padding-left:6px; padding-right:6px;"><span class="black_ar">
+            <!--<textarea name="textfield15"  style="width:100% " cols="32" rows="6" class="black_ar">
+
+            </textarea>
+			<div id="identifiedReportText" style="overflow:auto;height:175px;width:100%" onmousemove='scrollInSync();'><logic:notEmpty name="viewSurgicalPathologyReportForm" property="identifiedReportTextContent" ><textarea name="textfield15" cols="32" rows="10" class="black_ar" readonly="true"><%=formSPR.getIdentifiedReportTextContent()%></textarea></logic:notEmpty>
+				</div>-->
+
+				<div id="identifiedReportText" class="black_ar" style="overflow:auto;height:125px;width:100%;border: 2px solid #eef5fb;"" onmousemove='scrollInSync();'><PRE><logic:notEmpty name="viewSurgicalPathologyReportForm" property="identifiedReportTextContent" ><%=formSPR.getIdentifiedReportTextContent()%></logic:notEmpty>
+				</PRE></div>
+
+          </span></td>
+        </tr>
 		</table>
-		</td>
-		</tr>
+
 		<tr>
-		<td>
-	<% 	
-	}
-	%>	
+		<td colspan="2">
+
 		<table border="0" cellpadding="5" cellspacing="0" width="100%" id="deidReportInfo" style='display:none'>
 			<tr>
-				<td colspan="3" class="formTitle" height="20">
-					<bean:message key="viewSPR.deIdentifiedReportInformation.title"/>
-				</td>
-			</tr>
+		  <td class="tr_bg_blue1">
+		  <span class="blue_ar_b"> &nbsp;<bean:message key="viewSPR.deIdentifiedReportInformation.title"/>&nbsp;</span></td>
+        </tr>
 			<tr>
-				<td colspan="3" class="formLabelAllBorder">
+				<td>
 					<table border="0" cellpadding="0" width="100%" cellspacing="0" id="categoryHighlighter" >
 						<tr>
-							<td class="formSubTitle" height="20"  nowrap>
+							<td class="noneditable"><strong>
 								<bean:message key="viewSPR.categoryHighlighter.title"/>
-							</td>
+							</strong></td>
 						</tr>
 						 <tr>
 						  <td>
@@ -468,7 +395,7 @@ if(!hasAccess)
 						 
 						  <tr id="classificationNamesRow">
 						<logic:iterate id="referentClassificationObj" collection="<%= conceptClassificationList %>" type="edu.wustl.catissuecore.bean.ConceptHighLightingBean">
-							<td class="formFieldNoBordersBold">
+							<td class="black_ar">
 								<% String chkBoxId = "select"+chkBoxNo; %>
 								<input type="checkbox" id="<%=chkBoxId %>" onclick="checkBoxClicked()" />
 								<% String spanStyle = "background-color:"+colours[chkBoxNo];%>
@@ -489,33 +416,34 @@ if(!hasAccess)
 				</td>
 			</tr>
 			<tr>
-				<td  class="formFieldWithNoTopBorderFontSize1" colspan="3" >
+				<td class="black_ar">
 				
-				<div id="deidentifiedReportText" style="overflow:auto;height:200px;width:628"><PRE><logic:notEmpty name="viewSurgicalPathologyReportForm" property="deIdentifiedReportTextContent" ><%=formSPR.getDeIdentifiedReportTextContent()%></logic:notEmpty></PRE>
+				<!--<div id="deidentifiedReportText" style="overflow:auto;height:200px;width:628"><PRE><logic:notEmpty name="viewSurgicalPathologyReportForm" property="deIdentifiedReportTextContent" ><%=formSPR.getDeIdentifiedReportTextContent()%></logic:notEmpty></PRE>
+				</div>-->
+
+				<div id="deidentifiedReportText" class="black_ar" style="overflow:auto;height:125px;width:100%;border: 2px solid #eef5fb;"><PRE><logic:notEmpty name="viewSurgicalPathologyReportForm" property="deIdentifiedReportTextContent" ><%=formSPR.getDeIdentifiedReportTextContent()%></logic:notEmpty></PRE>
 				</div>
+
 				</td>
 			</tr>
 		</table>
-		</td>
-	</tr>
-	<tr>	
-	<td>
-		<table id="commentsTable" style="table-layout:fixed" width="100%">
-			<tr>
-				<td width="80%" colspan="2" class="formTitle" height="20">
-					<bean:message key="viewSPR.label.comment"/>
-				</td>
-			</tr>
-			<tr>
-				<td colspan="2">
-					<html:textarea property="comments" rows="3" cols="76"/>
-				</td>
-			</tr>
-			
-			<tr>
-				
-				<td colspan="2" align="right">
-<%
+		</td></tr>
+		
+        <tr>
+          <td colspan="2"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <td width="20%" valign="top" class="black_ar">&nbsp;<bean:message key="viewSPR.label.comment"/></td>
+                <td width="80%" valign="top">
+                  <html:textarea property="comments" rows="3" cols="60"/>                </td>
+              </tr>
+          </table></td>
+        </tr>
+        <tr>
+          <td colspan="2" class="bottomtd"></td>
+        </tr>
+
+        <tr>
+          <td colspan="2" class="buttonbg"><%
 	pageOf=request.getParameter(Constants.PAGEOF);
 	if(pageOf.equals(Constants.PAGEOF_REVIEW_SPR))
 	{
@@ -528,9 +456,9 @@ if(!hasAccess)
 	{
 %>
 		
-		<input type="button" name="doneButton" style="actionButton" value="Accept" onclick="submitAcceptComments()"/>
+		<input type="button" name="doneButton" style="blue_ar_c" value="Accept" onclick="submitAcceptComments()"/>
 		
-		<input type="button" name="doneButton" style="actionButton" value="Reject" onclick="submitRejectComments()"/>
+		<input type="button" name="doneButton" style="blue_ar_c" value="Reject" onclick="submitRejectComments()"/>
 		
 <%
 	}
@@ -553,33 +481,24 @@ if(!hasAccess)
 		isQuarantineDisabled=new Boolean(false);
 	}
 %>
-					<html:button property="action1" styleClass="actionButton" onclick="<%=submitReviewComments%>" disabled="<%=isReviewDisabled.booleanValue()%>" >
+					<html:button property="action1" styleClass="blue_ar_c" onclick="<%=submitReviewComments%>" disabled="<%=isReviewDisabled.booleanValue()%>" >
 						<bean:message key="viewSPR.button.requestForReview" />
-					</html:button>
-
-					<html:button property="action2" styleClass="actionButton" onclick="<%=submitQuarantineComments%>" disabled="<%=isQuarantineDisabled.booleanValue()%>" >
+					</html:button> &nbsp;|&nbsp;
+					<html:button property="action2" styleClass="blue_ar_c" onclick="<%=submitQuarantineComments%>" disabled="<%=isQuarantineDisabled.booleanValue()%>" >
 						<bean:message key="viewSPR.button.requestForQuarantine" />
-					</html:button>
+					</html:button> &nbsp;|&nbsp;
+					<html:link	page="/QueryManageBioSpecimen.do" styleClass="cancellink">
+						<bean:message key="buttons.cancel" />
+					</html:link>
 <%
 	}
 %>
 				</td>
-			</tr>	
-		</table>
-	</td>
-	</tr>
-	<tr>
-		<td>
-			<span id="deidText" style="display:none"><PRE><%=deidText%></PRE></span>
+        </tr>
+		<tr>
+		<td colspan="2">
+			<span id="deidText" class="black_ar" style="display:none;"><PRE><%=deidText%></PRE></span>
 		</td>
 	</tr>
-</table>	
+    </table>
 </html:form>
-<%
-if(!hasAccess)
-{
-%>
-	</body>
-<%
-}
-%>
