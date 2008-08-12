@@ -917,9 +917,9 @@ function openCRGWindow()
 
                   var newActionsString="";
 
-                  if(actionString.length>30){
+                  if(actionString.length>40){
 
-                        newActionsString=actionString.substring(0,27)+"...";
+                        newActionsString=actionString.substring(0,37)+"...";
 
                   }
 
@@ -1380,7 +1380,7 @@ function consentPage()
 		
 			document.getElementById('cpIds').disabled=true;
 		 }
-     	getActionsForThisRole(roleObject,'siteIds','cpIds')
+     	getActionsForThisRole(roleObject,'siteIds','cpIds','cpCheckId')
      }
  }
  
@@ -1583,8 +1583,8 @@ function consentPage()
 
                   var actionString = "" + actions;
                   var newActionsString="";
-                  if(actionString.length>30){
-                        newActionsString=actionString.substring(0,27)+"...";
+                  if(actionString.length>50){
+                        newActionsString=actionString.substring(0,47)+"...";
                   }
                   else{
                         newActionsString=actionString;;
@@ -1627,15 +1627,16 @@ function consentPage()
 	   }
 
   // Function to send request to get Privileges for selected Roles.
-      function getActionsForThisRole(roleObject,siteSelBoxId,cpSelBoxId)
-      {          
-          var siteObject=document.getElementById(siteSelBoxId);
+      function getActionsForThisRole(roleObject,siteSelBoxId,cpSelBoxId,cpCheckId)
+      {         
+		  var siteObject=document.getElementById(siteSelBoxId);
           var cpObject=document.getElementById(cpSelBoxId);
           var form=document.forms[0];
           var pageOf = form.pageOf.value; 
           var selectedSiteIds= null;
-          var selectedCPIds= null;    
-          
+          var selectedCPIds= null; 
+		  var isAllCPChecked=false;
+	            
 	      if(pageOf !="pageOfUserAdmin")
 		  {
 	//			 var cpOperation="getActionsForThisRoleForUser"; 
@@ -1644,6 +1645,14 @@ function consentPage()
 		  }
 		  else
 		  {
+			 if(cpCheckId!=null&& cpCheckId!=undefined)
+			 {
+				 var cpCheckBoxObj=document.getElementById(cpCheckId);
+				 if(cpCheckBoxObj.checked==true)
+				 {
+					isAllCPChecked=true;
+				 }
+			  }
 	//			 var cpOperation="getActionsForThisRole"; 
 		     selectedSiteIds = getSelElementsList(siteObject);
 		     selectedCPIds = getSelElementsList(cpObject);
@@ -1654,7 +1663,7 @@ function consentPage()
            var selectedRoleIds = roleObject.options[roleObject.selectedIndex].value;  
    //        var selectedRoleIds= getSelElementsList(roleObject); 
            var url="ShowAssignPrivilegePage.do?pageOf="+pageOf;   
-           var data="cpOperation="+cpOperation+"&selectedRoleIds="+selectedRoleIds+"&selectedSiteIds="+selectedSiteIds+"&selectedCPIds="+selectedCPIds;                    
+           var data="cpOperation="+cpOperation+"&selectedRoleIds="+selectedRoleIds+"&selectedSiteIds="+selectedSiteIds+"&selectedCPIds="+selectedCPIds+"&isAllCPChecked="+isAllCPChecked;                    
 		   sendRequestsWithData(url,data,cpOperation);
       }
 
@@ -1755,7 +1764,7 @@ function editRowForUserPage(rowId)
         var pageOf = form.pageOf.value;                  
           
         var url="ShowAssignPrivilegePage.do?pageOf="+pageOf;   
-        var data="cpOperation="+cpOperation+"&selectedRoleIds="+selectedRoleIds+"&selectedSiteIds="+selectedSiteIds+"&selectedCPIds="+selectedCPIds+"&isAllCPChecked="+isAllCPChecked;;                    
+        var data="cpOperation="+cpOperation+"&selectedRoleIds="+selectedRoleIds+"&selectedSiteIds="+selectedSiteIds+"&selectedCPIds="+selectedCPIds+"&isAllCPChecked="+isAllCPChecked;                    
 		sendRequestsWithData(url,data,cpOperation);
 	}
  }

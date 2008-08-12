@@ -312,8 +312,8 @@ function updateCPTree()
 									</td>
 									
 									<td width="33%" class="black_ar" onmouseover="Tip('<%=arr[3]%>',WIDTH,200)">
-									<% if(arr[3].length() >20){
-									arr[3]=arr[3].substring(0,17)+"...";
+									<% if(arr[3].length() >40){
+									arr[3]=arr[3].substring(0,37)+"...";
 									}
 								%>
 									<span><%=arr[3]%></span></td>
