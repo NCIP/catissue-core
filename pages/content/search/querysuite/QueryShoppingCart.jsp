@@ -59,9 +59,33 @@
 <head>
 <script language="javascript">
 
+function showEvents()
+{
+   
+	 var autoDiv1 = document.getElementById("eventlist1");
+     var autoDiv2 = document.getElementById("eventlist2");
+
+	 var chkbox=  document.getElementById("ch1");
+
+	 if(chkbox.checked== true)
+	{
+		   
+		   autoDiv1.style.display  = 'block';
+		   autoDiv2.style.display  = 'none';
+	}
+    else
+   {
+       
+		autoDiv2.style.display  = 'block';
+		autoDiv1.style.display  = 'none';
+		 
+   }
+}
+
+
 function onSubmit()
 {
-	if(document.forms[0].chkName[0].checked == true)
+	if(document.forms[0].chkName[2].checked == true)
 	{
 		if(document.getElementById('specimenEventParameter').value == "Transfer")
 		{
@@ -80,17 +104,17 @@ function onSubmit()
 	{
 		editMultipleSp();
 	}
-	else if(document.forms[0].chkName[2].checked == true)
+	else if(document.forms[0].chkName[0].checked == true)
 	{
 		addToOrderList();
 	}
 }
 function setCheckBoxState()
-		{
+		{	
 			var chkBox = document.getElementById('checkAll1');
 			chkBox.checked = true;
-				rowCount = mygrid.getRowsNum();
-				for(i=1;i<=rowCount;i++)
+			rowCount = mygrid.getRowsNum();
+        	for(i=1;i<=rowCount;i++)
 				{
 					var cl = mygrid.cells(i,0);
 					if(cl.isCheckbox())
@@ -141,7 +165,7 @@ function dobulkTransferOperations()
 			var isChecked = updateHiddenFields();
 		    
 		    if(isChecked == "true")
-		    {
+		    {		
 				var action = "BulkCart.do?operation=bulkTransfers";
 				document.forms[0].action = action;
 				document.forms[0].submit();
@@ -224,39 +248,36 @@ function checkAll(element)
    if(dataList!=null && dataList.size()!=0)
    {
 %>
-<table summary="" cellpadding="0" cellspacing="0" border="0" width="700" height="100%">
-
-	<tr >
-		 <td class="formTitle" colspan="2">
-			<bean:message key="shoppingCart.title"/>
-		 </td>
-	</tr>
-
-	<tr>
-		 <td colspan="2">
-			&nbsp;
-		 </td>
-	</tr>
-	
-	<tr width="700">
-	<td width="700" class="formFieldNoBordersSimple" align="left">
+<table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
+  <tr>
+    <td class="td_color_bfdcf3"><table border="0" cellpadding="0" cellspacing="0">
+      <tr>
+        <td class="td_table_head"><span class="wh_ar_b"><bean:message key="shoppingCart.title"/></span></td>
+        <td><img src="images/uIEnhancementImages/table_title_corner2.gif" alt="Page Title - My List" width="31" height="24" /></td>
+      </tr>
+    </table></td>
+  </tr>
+  <tr>
+   
+      <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
+      
+     
+      <tr>
+        <td colspan="2" align="left" class="tr_bg_blue1"><span class="blue_ar_b"> &nbsp;<bean:message key="shoppingCart.title" />&nbsp <bean:message key="buttons.view"/> &nbsp;</span></td>
+      </tr>
+     
+      <tr>
+        <td colspan="2"><table width="99%" border="0" align="center" cellpadding="3" cellspacing="0">
+           
+			<tr >
+	<td class="formFieldNoBordersSimple" align="left">
 		<input type='checkbox' name='checkAll1' id='checkAll1' onClick='checkAll(this)'>
 				<bean:message key="buttons.checkAll" />
 		</td>
-		<td nowrap align="right" width="50%" class="padding-reight:3em">
-			<html:button styleClass="actionButton" property="deleteCart" onclick="onDelete()">
-				<bean:message key="buttons.delete"/>
-			</html:button>
-		
-			<html:button styleClass="actionButton" property="exportCart" onclick="onExport()">
-				<bean:message key="buttons.export"/>
-			</html:button>
-		</td>
-	<tr>
-	<tr>
-		<td colspan="2" width="100%">
-<!--  **************  Code for New Grid  *********************** -->
-			<script>
+		<!--  **************  Code for New Grid  *********************** -->	
+			<tr>
+			  <td>
+			  <script>
 					function queryshopingcart(id)
 					{
 						//do nothing
@@ -269,95 +290,93 @@ function checkAll(element)
 					*/
 					var useDefaultRowClickHandler =2;
 					var useFunction = "queryshopingcart";	
-			</script>
-			<%@ include file="/pages/content/search/AdvanceGrid.jsp" %>
-<!--  **************  Code for New Grid  *********************** -->
-		</td>
-	</tr>
+			 </script>
+			<%@ include file="/pages/content/search/AdvanceGrid.jsp" %> </td>
+           </tr>
+   <!--  **************  Code for New Grid  *********************** -->
+		</table></td>
+      </tr>
 
+	 <tr>
+        <td colspan="2" class="bottomtd"></td>
+      </tr>
+      <tr>
+        <td colspan="2">
+         &nbsp;&nbsp;&nbsp;&nbsp;<html:button styleClass="black_ar" property="deleteCart" onclick="onDelete()">
+				<bean:message key="buttons.delete"/>
+			</html:button>
+		
+			&nbsp;<html:button styleClass="black_ar" property="exportCart" onclick="onExport()">
+				<bean:message key="buttons.export"/>
+			</html:button>
+      </tr>
+	<tr>
+        <td colspan="2" class="bottomtd"></td>
+    </tr>	
 	
 	<tr>
-		<td colspan="2">
-			&nbsp;
-		</td>
-	</tr>		
-	<tr>
-		<td nowrap class="formFieldNoBordersSimpleBold" colspan="2">
+		
+        <td colspan="2" align="left" class="tr_bg_blue1">
 			<label for="selectLabel">&nbsp;&nbsp;
-				<bean:message key="mylist.label.selectLabel"/>
+				<span class="blue_ar_b"> &nbsp;<bean:message key="mylist.label.selectLabel" /> </span>
 			</label>
 		</td>
 	</tr>
-
-	<tr>
-		<td colspan="2">
-			&nbsp;
-		</td>
-	</tr>
-	<tr>
-		<td colspan="2">
-			<table cellpadding="2" cellspacing="0" border="0" width="300">
-			<tr>
-				<td nowrap class="formFieldNoBordersSimpleNotBold">
-					<INPUT TYPE='RADIO' NAME='chkName' value="Events" <%=disabled%> ><bean:message key="mylist.label.specimenEvent"/></INPUT>
-				</td>
-				<% if(!disabledList)
-					{
-				%>
-				<td nowrap class="formFieldNoBordersSimpleNotBold">
-					<autocomplete:AutoCompleteTag property="specimenEventParameter"
-						  optionsList = "<%=request.getAttribute(Constants.EVENT_PARAMETERS_LIST)%>"
-						  initialValue="Transfer"
-						  />
-				</td>
-				<%
-					}
-					else
-					{
-				%>
-					<td nowrap class="formFieldNoBordersSimpleNotBold">
-						<input type="text" id="specimenEventParameter" name="specimenEventParameter" value="Transfer" readonly="<%=disabledList%>"/>
-					</td>
-				<%
-					}
-				%>
-			</tr>
-			<tr>
-				<td nowrap class="formFieldNoBordersSimpleNotBold">
-					<INPUT TYPE='RADIO' NAME='chkName' value="Specimenpage" <%=disabled%> ><bean:message key="mylist.label.multipleSpecimenPage"/></INPUT>	
-				</td>
-				<td nowrap class="formFieldNoBordersSimple">
-					&nbsp;
-				</td>
-			</tr>
-			<tr>
-				<td nowrap class="formFieldNoBordersSimpleNotBold">
-					<INPUT TYPE='RADIO' NAME='chkName' value="OrderSpecimen" checked=true <%=disabledOrder%> ><bean:message key="mylist.label.orderBioSpecimen"/></INPUT>
-				</td>
-				<td nowrap class="formFieldNoBordersSimple">
-					&nbsp;
-				</td>
-			</tr>
-			</table>
-		</td>
-	</tr>
-
-	<tr>
-		<td  colspan="2" nowrap class="formFieldNoBordersSimpleNotBold">
-			&nbsp;
-		</td>
-	</tr>
 	
 	<tr>
-		<td colspan="2" nowrap class="formFieldNoBordersSimpleNotBold">&nbsp;&nbsp;
-			<html:button styleClass="actionButton" property="proceed" onclick="onSubmit()" disabled="<%=disabledButton%>" >
-				<bean:message key="buttons.submit"/>	
-			</html:button>
-		</td>
-	</tr>
+        <td colspan="2" class="black_ar showhide"><table width="99%" border="0" align="center" cellpadding="3" cellspacing="0">
+          <tr>
+           
+			 <td>&nbsp;&nbsp;</td>
+			 <td class="black_ar"><input type="radio" name="chkName"      value="OrderSpecimen" onclick="showEvents()" checked=true <%=disabledOrder%> ></td>
+             <td class="black_ar" ><bean:message key="mylist.label.orderBioSpecimen"/></td>
+             <td class="black_ar">&nbsp;</td>
+			 
+			 <td class="black_ar"><INPUT TYPE='RADIO' NAME='chkName' onclick="showEvents()" value="Specimenpage"  <%=disabled%> ></td>
+			 <td class="black_ar" ><bean:message key="mylist.label.multipleSpecimenPage"/>
+               </td>
+			  <td class="black_ar">&nbsp;&nbsp;&nbsp;&nbsp;</td>
 
-	</table>
-	<%}else{
+           
+			<td class="black_ar"><INPUT TYPE='RADIO' NAME='chkName'     onclick="showEvents()" id="ch1" value="Events" <%=disabled%> ></INPUT></td>
+            <td class="black_ar" ><bean:message key="mylist.label.specimenEvent"/> </td>
+			 <td class="black_ar">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+		 
+		  <td class="black_ar">
+		 	   <div id="eventlist2" style="display:block"><input type="text" styleClass="black_ar" size="27" id="specimenEventParameter" name="specimenEventParameter" value="Transfer" readonly="true"/> </div>
+				    <div id="eventlist1" style="display:none"><autocomplete:AutoCompleteTag  property="specimenEventParameter" styleClass="black_ar" size="27"
+						  optionsList = "<%=request.getAttribute(Constants.EVENT_PARAMETERS_LIST)%>"
+						  initialValue="Transfer" 
+						  /> </div>
+		    </td>
+          				  
+		  </tr>
+		
+         
+          <tr>
+            <td>&nbsp;&nbsp;</td>
+			<td class="black_ar"><input type="radio" name="chkName" onclick="showEvents()" value="requestShipment" ></td>
+            <td class="black_ar" >Request for Shipment</td>
+			 <td class="black_ar">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+            
+			<td class="black_ar"><input type="radio" name="chkName"  value="createShipment" onclick="showEvents()" ></td>
+            <td class="black_ar" >Create New Shipment </td>
+            <td class="black_ar">&nbsp;</td>
+		  
+		  </tr>
+          
+        </table>          
+      </tr>
+
+	 <tr>
+       <td colspan="2" class="buttonbg"> <html:button styleClass="blue_ar_b" property="proceed" onclick="onSubmit()" disabled="<%=disabledButton%>" >
+				<bean:message key="buttons.submit"/>	
+			</html:button>&nbsp|&nbsp <html:link page="/ManageAdministrativeData.do" styleClass="cancellink">
+		<bean:message key="buttons.cancel" /> </html:link></td>
+      </tr>
+	
+   </table>
+ <%}else{
 			%>
      <table summary="" cellpadding="0" cellspacing="0" border="0" width="100%">
      <tr >
@@ -365,7 +384,7 @@ function checkAll(element)
 
 	</tr>
 	</table>
-	<%}%>
+ <%}%>
 	</body>
 	</html:form>
 	</html:html>

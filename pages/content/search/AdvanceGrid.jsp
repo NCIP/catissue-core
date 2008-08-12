@@ -257,6 +257,10 @@ function setEditableChkbox(checkAllPages)
 	mygrid.clearAll();
 	*/
 	mygrid.setDelimiter('<%=Constants.DHTMLXGRID_DELIMETER%>');
+	if(useFunction == "queryshopingcart" )
+	{
+		mygrid.entBox.style.height="218px";
+	}
 	for(var row=0;row<myData.length;row++)
 	{
 		if(useFunction == "shopingcart" )
