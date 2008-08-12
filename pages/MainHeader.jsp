@@ -5,9 +5,9 @@
 
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
 	<tr>
-		<td width="6%" valign="top"><img
+		<td width="5%" valign="top"><img
 			src="images/uIEnhancementImages/top_bg1.jpg" width="53" height="20" /></td>
-		<td width="94%" valign="top"
+		<td width="95%" valign="top"
 			background="images/uIEnhancementImages/top_bg.jpg"
 			style="background-repeat:repeat-x;">
 		<table width="100%" border="0" cellpadding="0" cellspacing="0">
