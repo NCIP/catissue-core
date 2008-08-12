@@ -644,18 +644,18 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	//Constants required in Main menu
 	
 	public static String HELP_FILE= "caTissue_Suite_User_Manual.pdf";
-	public static String USER_GUIDE = "userguide";
-	public static String TECHNICAL_GUIDE = "technicalguide";
-	public static String TRAINING_GUIDE = "trainingguide";
-	public static String UMLMODEL_GUIDE = "umlmodelguide";
-	public static String KNOWLEDGECENTER_GUIDE =  "knowledgecenterguide";
-	public static String GFORGE_GUIDE = "gforgeguide";
-	public static String USER_GUIDE_LINK = "userguidelink";
-	public static String TECHNICAL_GUIDE_LINK = "technicalguidelink";
-	public static String TRAINING_GUIDE_LINK = "trainingguidelink";
-	public static String UMLMODEL_GUIDE_LINK = "umlmodelguidelink";
-	public static String KNOWLEDGECENTER_GUIDE_LINK =  "knowledgecenterguidelink";
-	public static String GFORGE_GUIDE_LINK = "gforgeguidelink";
+//	public static String USER_GUIDE = "userguide";
+//	public static String TECHNICAL_GUIDE = "technicalguide";
+//	public static String TRAINING_GUIDE = "trainingguide";
+//	public static String UMLMODEL_GUIDE = "umlmodelguide";
+//	public static String KNOWLEDGECENTER_GUIDE =  "knowledgecenterguide";
+//	public static String GFORGE_GUIDE = "gforgeguide";
+	public static String USER_GUIDE_LINK_PROPERTY = "userguide.link";
+	public static String TECHNICAL_GUIDE_LINK_PROPERTY = "technicalguide.link";
+	public static String TRAINING_GUIDE_LINK_PROPERTY = "trainingguide.link";
+	public static String UML_MODEL_LINK_PROPERTY = "umlmodel.link";
+	public static String KNOWLEDGE_CENTER_LINK_PROPERTY =  "knowledgecenter.link";
+	public static String GFORGE_GUIDE_LINK_PROPERTY = "gforge.link";
 	
 	//Spreadsheet Export Action
 	public static final String SPREADSHEET_EXPORT_ACTION = "SpreadsheetExport.do";
