@@ -32,9 +32,9 @@ function editUserProfile(item){
 <body>
 <table width="95%" cellspacing="0" cellpadding="0" border="0" align="top">
 	<tr>
-		<td width="6%" valign="top"><img width="48" height="24"
+		<td width="5%" valign="top"><img width="48" height="24"
 			src="images/uIEnhancementImages/menustartimg.gif" /></td>
-		<td width="94%" align="left">
+		<td width="95%" align="left">
 		<logic:notEmpty scope="session"
 			name="<%=Constants.SESSION_DATA%>">
 			<script type="text/javascript" src="jss/menus.js"></script>
