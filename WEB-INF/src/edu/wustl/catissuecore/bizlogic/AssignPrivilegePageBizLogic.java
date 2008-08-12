@@ -111,7 +111,7 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 		String valueField = "id";
 		
 		String[] activityStatusArray = {Constants.ACTIVITY_STATUS_DISABLED,Constants.ACTIVITY_STATUS_CLOSED};
-		String joinCondition = null;
+/*		String joinCondition = null;
 		String separatorBetweenFields = ", ";
 
 		String[] whereColumnName = new String[]{Constants.ACTIVITY_STATUS};
@@ -136,8 +136,8 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 				siteNameValueBeanList.remove(0);
 			}
 		}
-		
-	/*	List<NameValueBean> siteNameValueBeanList = null;
+		*/
+		List<NameValueBean> siteNameValueBeanList = null;
 		try 
 		{
 			siteNameValueBeanList = new StorageContainerBizLogic().getRepositorySiteList(sourceObjectName, siteDisplayField, valueField, activityStatusArray, isToExcludeDisabled);
@@ -148,7 +148,7 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 		}
 		
 		// To remove 1st row which contains "Select" & "-1"
-		siteNameValueBeanList.remove(0);*/
+		siteNameValueBeanList.remove(0);
 		return siteNameValueBeanList;
 		
 	}
