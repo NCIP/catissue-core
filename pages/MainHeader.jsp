@@ -25,10 +25,7 @@
 					href="/catissuecore/Summary.do" class="white"> <img
 					src="images/uIEnhancementImages/ic_summary.gif" alt="Summary"
 					width="10" height="10" hspace="3" vspace="0" border="0" />
-				<bean:message key="app.summary" /></a> &nbsp;<a 
-					href="/catissuecore/RedirectToHelp.do" class="white"><img
-					src="images/uIEnhancementImages/ic_help.gif" alt="Help" width="12"
-					height="12" hspace="3" vspace="0" /><bean:message key="app.help" /></a></td>
+				<bean:message key="app.summary" /></a></td>
 
 				<logic:notEmpty scope="session" name="<%=Constants.SESSION_DATA%>">
 					<td width="14%" align="right" valign="top"><a

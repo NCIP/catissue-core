@@ -107,9 +107,17 @@
 				%>		  
 		}	
 		
-
-	
-
+		function getUmlModelLink()
+		{
+				var  frameUrl="<%=XMLPropertyHandler.getValue("umlmodel.link")%>";
+				NewWindow(frameUrl,'name');
+		}
+		
+		function getUserGuideLink()
+		{
+			var frameUrl = "<%=XMLPropertyHandler.getValue("userguide.link")%>";
+			NewWindow(frameUrl,'name');
+		}
 	</script>
 <!--Jitendra -->
 
