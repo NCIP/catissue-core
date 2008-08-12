@@ -339,13 +339,14 @@ public class StorageContainer extends Container implements IActivityStatus
 			{
 				this.tempratureInCentigrade = new Double(form.getDefaultTemperature());
 			}
-			if (this.noOfContainers.intValue() == 1)
+			/*if (this.noOfContainers.intValue() == 1)
 			{
 				if (!Variables.isStorageContainerBarcodeGeneratorAvl &&  form.getBarcode()!=null &&  !form.getBarcode().trim().equals(""))
 					this.barcode = form.getBarcode();
 				else
 					this.barcode = null;
-			}
+			}*/
+			this.barcode = form.getBarcode();
 			this.full = new Boolean(form.getIsFull());
 			Logger.out.debug("SC Domain : " + this.full + " :-: form.getIsFull() : " + form.getIsFull());
 			this.activityStatus = form.getActivityStatus();

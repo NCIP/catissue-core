@@ -937,6 +937,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 		persistentCPR.setProtocolParticipantIdentifier(collectionProtocolRegistration.getProtocolParticipantIdentifier());
 		persistentCPR.setRegistrationDate(collectionProtocolRegistration.getRegistrationDate());
 		persistentCPR.setActivityStatus(collectionProtocolRegistration.getActivityStatus());
+		persistentCPR.setBarcode(collectionProtocolRegistration.getBarcode());
 		//persistentCPR.setSpecimenCollectionGroupCollection(collectionProtocolRegistration.getSpecimenCollectionGroupCollection());
 		/* for offset 27th Dec 2007 */
 		// Check if Offset is present.If it is present then all the below
