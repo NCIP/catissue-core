@@ -19,6 +19,7 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -42,6 +43,7 @@ import edu.wustl.catissuecore.util.ParticipantRegistrationCacheManager;
 import edu.wustl.catissuecore.util.Roles;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.common.beans.SecurityDataBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.cde.CDEManager;
@@ -60,6 +62,7 @@ import edu.wustl.common.util.dbManager.DBUtil;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
+import gov.nih.nci.security.exceptions.CSException;
 
 /**
  * CollectionProtocolBizLogic is used to add CollectionProtocol information into the database using Hibernate.
@@ -270,10 +273,12 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			throws DAOException, UserNotAuthorizedException
 	{
 		CollectionProtocol collectionProtocol =null;
+		Map<String,SiteUserRolePrivilegeBean> rowIdMap =null;
 		if (obj instanceof CollectionProtocolDTO)
 		{
 			CollectionProtocolDTO cpDto = (CollectionProtocolDTO) obj;
 			collectionProtocol = cpDto.getCollectionProtocol();
+			rowIdMap = cpDto.getRowIdBeanMap();
 			HashSet<CollectionProtocol> protectionObjects = new HashSet<CollectionProtocol>();
 			protectionObjects.add(collectionProtocol);
 		}
@@ -283,6 +288,23 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		}
 		isCollectionProtocolLabelUnique(collectionProtocol);
 		modifyCPObject(dao, sessionDataBean, collectionProtocol);
+		
+		Vector<SecurityDataBean> authorizationData = new Vector<SecurityDataBean>();
+		if(rowIdMap !=null)
+		{
+		  try 
+		  {
+			new CollectionProtocolAuthorization().insertCpUserPrivilegs(collectionProtocol, authorizationData, rowIdMap);
+		  } 
+		  catch (SMException e) 
+		  {
+			  Logger.out.debug(e.getMessage(), e);
+		  }
+		  catch (CSException e) 
+		  {
+			  Logger.out.debug(e.getMessage(), e);
+		  }
+		}
 	}
 
 	/**

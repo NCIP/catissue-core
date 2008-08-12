@@ -225,7 +225,7 @@
          <set
             name="siteCollection"
             table="CATISSUE_SITE_USERS"
-            lazy="true"
+            lazy="false"
             inverse="false"
             cascade="none"
             sort="unsorted"

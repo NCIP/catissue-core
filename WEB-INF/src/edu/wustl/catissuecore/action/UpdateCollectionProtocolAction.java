@@ -19,6 +19,7 @@ import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.dto.CollectionProtocolDTO;
 import edu.wustl.catissuecore.util.CollectionProtocolUtil;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
@@ -44,7 +45,8 @@ public class UpdateCollectionProtocolAction extends BaseAction {
 			HttpSession session = request.getSession();
 			SessionDataBean sessionDataBean = (SessionDataBean)
 							session.getAttribute(Constants.SESSION_DATA);
-			bizLogic.update(collectionProtocol, null, 
+			CollectionProtocolDTO collectionProtocolDTO = Utility.getCoolectionProtocolDTO(collectionProtocol,session);
+			bizLogic.update(collectionProtocolDTO, null, 
 					Constants.HIBERNATE_DAO, sessionDataBean);
 			CollectionProtocolUtil.updateSession(request, collectionProtocol.getId());
 			if(Constants.DISABLED.equals(collectionProtocolBean.getActivityStatus()))

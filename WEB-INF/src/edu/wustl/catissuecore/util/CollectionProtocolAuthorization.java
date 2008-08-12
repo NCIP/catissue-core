@@ -19,6 +19,7 @@ import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.multiRepository.bean.SiteUserRolePrivilegeBean;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SecurityDataBean;
 import edu.wustl.common.dao.DAO;
@@ -89,7 +90,7 @@ public class CollectionProtocolAuthorization implements edu.wustl.catissuecore.u
 		return authorizationData;
 	}
 
-	protected void insertCpUserPrivilegs(CollectionProtocol collectionProtocol,
+	public void insertCpUserPrivilegs(CollectionProtocol collectionProtocol,
 			Vector<SecurityDataBean> authorizationData, Map<String,SiteUserRolePrivilegeBean> rowIdMap) throws SMException,
 			CSException
 	{
@@ -102,58 +103,66 @@ public class CollectionProtocolAuthorization implements edu.wustl.catissuecore.u
 		{
 			String key = mapItr.next();
 			SiteUserRolePrivilegeBean siteUserRolePrivilegeBean = rowIdMap.get(key);
-			List<Site> siteList = siteUserRolePrivilegeBean.getSiteList();
-			for (Site site : siteList)
-			{ 
-				boolean isPresent = false;
-				for (Site setSite : siteCollection)
-				{
-					if (setSite.getId().equals(site.getId()))
-					{
-						isPresent = true;
-					}
-				}
-				if (!isPresent)
-				{
-					siteCollection.add(site);
-				}
-			} 
-			//siteCollection.addAll(siteList);
 			
-			User user = siteUserRolePrivilegeBean.getUser();
-			userCollection.add(user);
-			String defaultRole = siteUserRolePrivilegeBean.getRole().getValue();
-//			if (defaultRole != null && (defaultRole.equalsIgnoreCase("-1") || defaultRole.equalsIgnoreCase("0")) )
-//			{
-				roleName = getRoleName(collectionProtocol.getId(), user.getId(), defaultRole);
-//			} else
-//			{
-//				roleName = siteUserRolePrivilegeBean.getRole().getName();
-//			}
-			
-			Set<String> privileges = new HashSet<String>();
-			List<NameValueBean> privilegeList = siteUserRolePrivilegeBean.getPrivileges();
-			
-			for(NameValueBean privilege : privilegeList)
+			if(siteUserRolePrivilegeBean.isRowDeleted())
 			{
-				privileges.add(privilege.getValue());
+				Utility.processDeletedPrivileges(siteUserRolePrivilegeBean);
 			}
-			
-			PrivilegeManager.getInstance().createRole(roleName,
-					privileges);
-			String userId = String.valueOf(user.getCsmUserId());
-			gov.nih.nci.security.authorization.domainobjects.User csmUser = getUserByID(userId);
-			HashSet<gov.nih.nci.security.authorization.domainobjects.User> group = new HashSet<gov.nih.nci.security.authorization.domainobjects.User>();
-			group.add(csmUser); 
-			String protectionGroupName = new String(Constants
-					.getCollectionProtocolPGName(collectionProtocol.getId()));
-			SecurityDataBean userGroupRoleProtectionGroupBean = new SecurityDataBean();
-			userGroupRoleProtectionGroupBean.setUser("");
-			userGroupRoleProtectionGroupBean.setRoleName(roleName);
-			userGroupRoleProtectionGroupBean.setGroupName(("CP_"+collectionProtocol.getId()+ "_"+user.getId().toString()));
-			userGroupRoleProtectionGroupBean.setProtectionGroupName(protectionGroupName);
-			userGroupRoleProtectionGroupBean.setGroup(group);
-			authorizationData.add(userGroupRoleProtectionGroupBean);
+			else if(siteUserRolePrivilegeBean.isRowEdited())
+			{
+				List<Site> siteList = siteUserRolePrivilegeBean.getSiteList();
+				for (Site site : siteList)
+				{ 
+					boolean isPresent = false;
+					for (Site setSite : siteCollection)
+					{
+						if (setSite.getId().equals(site.getId()))
+						{
+							isPresent = true;
+						}
+					}
+					if (!isPresent)
+					{
+						siteCollection.add(site);
+					}
+				} 
+				//siteCollection.addAll(siteList);
+				
+				User user = siteUserRolePrivilegeBean.getUser();
+				userCollection.add(user);
+				String defaultRole = siteUserRolePrivilegeBean.getRole().getValue();
+				if (defaultRole != null && (defaultRole.equalsIgnoreCase("-1") || defaultRole.equalsIgnoreCase("0")) )
+				{
+					roleName = Constants.getCPRoleName(collectionProtocol.getId(), user.getCsmUserId(), defaultRole);
+				} else
+				{
+					roleName = siteUserRolePrivilegeBean.getRole().getName();
+				}
+				
+				Set<String> privileges = new HashSet<String>();
+				List<NameValueBean> privilegeList = siteUserRolePrivilegeBean.getPrivileges();
+				
+				for(NameValueBean privilege : privilegeList)
+				{
+					privileges.add(privilege.getValue());
+				}
+				
+				PrivilegeManager.getInstance().createRole(roleName,
+						privileges);
+				String userId = String.valueOf(user.getCsmUserId());
+				gov.nih.nci.security.authorization.domainobjects.User csmUser = getUserByID(userId);
+				HashSet<gov.nih.nci.security.authorization.domainobjects.User> group = new HashSet<gov.nih.nci.security.authorization.domainobjects.User>();
+				group.add(csmUser); 
+				String protectionGroupName = new String(Constants
+						.getCollectionProtocolPGName(collectionProtocol.getId()));
+				SecurityDataBean userGroupRoleProtectionGroupBean = new SecurityDataBean();
+				userGroupRoleProtectionGroupBean.setUser("");
+				userGroupRoleProtectionGroupBean.setRoleName(roleName);
+				userGroupRoleProtectionGroupBean.setGroupName(Constants.getCPUserGroupName(collectionProtocol.getId(), user.getCsmUserId()));
+				userGroupRoleProtectionGroupBean.setProtectionGroupName(protectionGroupName);
+				userGroupRoleProtectionGroupBean.setGroup(group);
+				authorizationData.add(userGroupRoleProtectionGroupBean);
+			}
 		}
 		collectionProtocol.getSiteCollection().clear();
 		collectionProtocol.getSiteCollection().addAll(siteCollection);
@@ -190,12 +199,6 @@ public class CollectionProtocolAuthorization implements edu.wustl.catissuecore.u
 			siteCollection.add(site);
 		}
 		return siteCollection;
-	}
-
-	protected String getRoleName(long collectionProtocollId, long userId, String defaultRole)
-	{
-		String roleName = defaultRole+"_"+"CP_" + collectionProtocollId + "_USER_" + userId;
-		return roleName;
 	}
 
 	protected void insertCoordinatorPrivileges(CollectionProtocol collectionProtocol,

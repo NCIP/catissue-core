@@ -27,6 +27,7 @@ import java.util.Set;
 import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts.Globals;
 import org.apache.struts.action.ActionError;
@@ -64,6 +65,7 @@ import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.domain.TissueSpecimenReviewEventParameters;
 import edu.wustl.catissuecore.domain.TransferEventParameters;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.dto.CollectionProtocolDTO;
 import edu.wustl.catissuecore.multiRepository.bean.SiteUserRolePrivilegeBean;
 import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.common.beans.NameValueBean;
@@ -85,10 +87,16 @@ import edu.wustl.common.dao.queryExecutor.PagenatedResultData;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.security.PrivilegeCache;
 import edu.wustl.common.security.PrivilegeManager;
+import edu.wustl.common.security.PrivilegeUtility;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
+import gov.nih.nci.security.authorization.domainobjects.Group;
+import gov.nih.nci.security.authorization.domainobjects.ProtectionGroup;
+import gov.nih.nci.security.dao.GroupSearchCriteria;
+import gov.nih.nci.security.dao.ProtectionGroupSearchCriteria;
+import gov.nih.nci.security.exceptions.CSException;
 
 /**
  * Utility Class contain general methods used through out the application.
@@ -1775,5 +1783,83 @@ public class Utility extends edu.wustl.common.util.Utility {
 			cpPrivileges.add(nmv.getName());
 		}
 		return cpPrivileges;
+	}
+	
+	public static void processDeletedPrivileges(SiteUserRolePrivilegeBean siteUserRolePrivilegeBean)
+	{
+		SiteUserRolePrivilegeBean bean = siteUserRolePrivilegeBean;
+		String groupName = null;
+		String pgName = null;
+		Site site = bean.getSiteList().get(0);
+		User user = bean.getUser();
+		String csmUserId = user.getCsmUserId().toString();
+		CollectionProtocol cp = bean.getCollectionProtocol();
+		PrivilegeUtility privilegeUtility = new PrivilegeUtility();
+		
+		List<Group> grpList = new ArrayList<Group>();
+		List<ProtectionGroup> pgList = new ArrayList<ProtectionGroup>();
+		
+		if(bean.getCollectionProtocol()!=null)
+		{
+			groupName = Constants.getCPUserGroupName(cp.getId(), user.getCsmUserId());
+			pgName = Constants.getCollectionProtocolPGName(cp.getId());
+		}
+		else
+		{
+			if(bean.isAllCPChecked())
+			{
+				pgName = Constants.getCurrentAndFuturePGAndPEName(site.getId());
+			}
+			else
+			{
+				pgName = Constants.getSitePGName(site.getId());
+			}
+			
+			groupName = Constants.getSiteUserGroupName(site.getId(), user.getCsmUserId());		
+		}
+		
+		Group group = new Group();
+		group.setGroupName(groupName);
+		GroupSearchCriteria groupSearchCriteria = new GroupSearchCriteria(group);
+		try 
+		{
+			grpList = privilegeUtility.getUserProvisioningManager().getObjects(groupSearchCriteria);
+			
+			if (grpList != null && !grpList.isEmpty())
+			{
+				group = grpList.get(0);
+			}
+			
+			ProtectionGroup pg = new ProtectionGroup();
+			pg.setProtectionGroupName(pgName);
+			ProtectionGroupSearchCriteria pgSearchCriteria = new ProtectionGroupSearchCriteria(pg);
+			pgList = privilegeUtility.getUserProvisioningManager().getObjects(pgSearchCriteria);
+			if (pgList != null && !pgList.isEmpty())
+			{
+				pg = pgList.get(0);
+			}
+			
+			new PrivilegeUtility().getUserProvisioningManager().removeGroupFromProtectionGroup(pg.getProtectionGroupId().toString(), group.getGroupId().toString());
+			PrivilegeManager.getInstance().removePrivilegeCache(user.getLoginName());
+		} 
+		catch (CSException e) 
+		{
+			Logger.out.debug(e.getMessage(), e);
+		}
+	}
+	
+	
+	/**
+	 * @param collectionProtocol
+	 * @param session 
+	 * @return
+	 */
+	public static CollectionProtocolDTO getCoolectionProtocolDTO(CollectionProtocol collectionProtocol, HttpSession session)
+	{
+		CollectionProtocolDTO collectionProtocolDTO = new CollectionProtocolDTO();
+		Map<String, SiteUserRolePrivilegeBean> rowIdBeanMap  = (Map<String, SiteUserRolePrivilegeBean>)session.getAttribute(Constants.ROW_ID_OBJECT_BEAN_MAP);
+		collectionProtocolDTO.setCollectionProtocol(collectionProtocol);
+		collectionProtocolDTO.setRowIdBeanMap(rowIdBeanMap);
+		return collectionProtocolDTO;
 	}
 }

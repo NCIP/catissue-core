@@ -2415,6 +2415,34 @@ public static final String ADD_MULTIPLE_SPECIMEN_TO_CART="addMltipleSpecimenToCa
 		return roleName;
 	}
 	
+	public static final String getCurrentAndFutureRoleName(long siteId, long userId, String defaultRole)
+	{
+		String roleName = defaultRole+"_"+"All CP's for SITE_" + siteId + "_For User"+userId;
+		return roleName;
+	}
+	
+	public static final String getCPRoleName(long collectionProtocolId, long userId, String defaultRole)
+	{
+		String roleName = defaultRole+"_"+"CP_" + collectionProtocolId + "_USER_" + userId;
+		return roleName;
+	}
+	
+	public static final String getSiteRoleName(long siteId, long userId, String defaultRole)
+	{
+		String roleName = defaultRole+"_"+"SITE_" + siteId + "_USER_" + userId;
+		return roleName;
+	}
+	
+	public static final String getSiteUserGroupName(long siteId, long csmUserId)
+	{
+		return "SITE_"+siteId+"_USER_"+csmUserId;
+	}
+	
+	public static final String getCPUserGroupName(long cpId, long csmUserId)
+	{
+		return "CP_"+cpId+"_USER_"+csmUserId;
+	}
+	
 	// Constants used from file 'PermissionMapDetails.xml'
 	public static final String ADMIN_PROTECTION_ELEMENT = "ADMIN_PROTECTION_ELEMENT";
 	public static final String ADD_EDIT_USER = "ADD_EDIT_USER";

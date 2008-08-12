@@ -88,7 +88,7 @@ public class SubmitSpecimenCPAction extends BaseAction {
 					CollectionProtocol collectionProtocol = CollectionProtocolUtil
 							.populateCollectionProtocolObjects(request);
 
-					CollectionProtocolDTO collectionProtocolDTO = getCoolectionProtocolDTO(collectionProtocol,session);
+					CollectionProtocolDTO collectionProtocolDTO = edu.wustl.catissuecore.util.global.Utility.getCoolectionProtocolDTO(collectionProtocol,session);
 					insertCollectionProtocol(collectionProtocolDTO, request.getSession());
 
 					collectionProtocolBean.setIdentifier(collectionProtocol.getId());
@@ -181,20 +181,6 @@ public class SubmitSpecimenCPAction extends BaseAction {
 		
 		return mapping.findForward(target);
 
-	}
-
-	/**
-	 * @param collectionProtocol
-	 * @param session 
-	 * @return
-	 */
-	private CollectionProtocolDTO getCoolectionProtocolDTO(CollectionProtocol collectionProtocol, HttpSession session)
-	{
-		CollectionProtocolDTO collectionProtocolDTO = new CollectionProtocolDTO();
-		Map<String, SiteUserRolePrivilegeBean> rowIdBeanMap  = (Map<String, SiteUserRolePrivilegeBean>)session.getAttribute(Constants.ROW_ID_OBJECT_BEAN_MAP);
-		collectionProtocolDTO.setCollectionProtocol(collectionProtocol);
-		collectionProtocolDTO.setRowIdBeanMap(rowIdBeanMap);
-		return collectionProtocolDTO;
 	}
 
 	/**
