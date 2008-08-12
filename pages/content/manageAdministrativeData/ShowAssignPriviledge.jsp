@@ -73,7 +73,7 @@ function updateCPTree()
 	
 
 <tr>
-		<td valign="bottom">
+		<td valign="bottom" colspan="2">
 		<table width="100%" border="0" cellspacing="0" cellpadding="0">
 			<tr>
 				<td width="10%" valign="bottom" id="collectionProtocolTab"><a
@@ -93,10 +93,6 @@ function updateCPTree()
 			</tr>
 		</table>
 		</td>
-		<td align="right" valign="top" class="cp_tabbg" border="0"><html:link href="#" styleId="newUser" styleClass="view"
-			onclick="updateCPTree();viewSummary()">
-			<bean:message key="cpbasedentry.viewsummary" />
-		</html:link> </td>
 	</tr>
 	
 	<tr>
