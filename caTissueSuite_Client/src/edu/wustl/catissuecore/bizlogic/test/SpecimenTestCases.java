@@ -203,7 +203,92 @@ public class SpecimenTestCases extends CaTissueBaseTestCase {
 			assertFalse("Failed to create Domain Object", true);
 		}
 	}
-	
+	public void testUpdateSpecimenWithBarcode()
+	{
+		String uniqueKey=UniqueKeyGeneratorUtil.getUniqueKey();
+		MolecularSpecimen specimen = (MolecularSpecimen) TestCaseUtility.getObjectMap(MolecularSpecimen.class);
+    	specimen.setBarcode("barcode"+uniqueKey);
+    	specimen.setExternalIdentifierCollection(null);
+    	try
+    	{
+    		specimen =  (MolecularSpecimen) appService.updateObject(specimen);
+    		System.out.println(specimen+": specimen After Update");
+    		assertTrue(" Domain Object is successfully added ---->    Name:: " + specimen, true);
+		}
+		catch(Exception e)
+		{
+			Logger.out.error("testUpdateCollectionStatusOfSpecimen"+ e.getMessage(),e);
+			System.out.println("SpecimenTestCases.testUpdateCollectionStatusOfSpecimen():"+e.getMessage());
+			e.printStackTrace();
+			assertFalse("Failed to create Domain Object", true);
+		}
+    	
+	}
+	public void testUpdateSpecimenWithCaseSensitiveBarcode()
+	{
+		String uniqueKey=UniqueKeyGeneratorUtil.getUniqueKey();
+		MolecularSpecimen cellSpecimen = (MolecularSpecimen) TestCaseUtility.getObjectMap(MolecularSpecimen.class);
+		cellSpecimen.setBarcode("specimen with barcode"+uniqueKey);
+		cellSpecimen.setExternalIdentifierCollection(null);
+    	try
+    	{
+    		cellSpecimen =  (MolecularSpecimen) appService.updateObject(cellSpecimen);
+    		System.out.println(cellSpecimen+": specimen After Update");
+    		assertTrue(" Domain Object is successfully added ---->    Name:: " + cellSpecimen, true);
+		}
+		catch(Exception e)
+		{
+			Logger.out.error("testUpdateCollectionStatusOfSpecimen"+ e.getMessage(),e);
+			System.out.println("SpecimenTestCases.testUpdateCollectionStatusOfSpecimen():"+e.getMessage());
+			e.printStackTrace();
+			assertFalse("Failed to create Domain Object", true);
+		}
+		TissueSpecimen specimen = (TissueSpecimen) TestCaseUtility.getObjectMap(TissueSpecimen.class);
+    	specimen.setBarcode("SPECIMEN WITH BARCODE"+uniqueKey);
+    	specimen.setExternalIdentifierCollection(null);
+    	try
+    	{
+    		specimen =  (TissueSpecimen) appService.updateObject(specimen);
+    		System.out.println(specimen+": specimen After Update");
+    		assertTrue(" Domain Object is successfully added ---->    Name:: " + specimen, true);
+		}
+		catch(Exception e)
+		{
+			Logger.out.error("testUpdateCollectionStatusOfSpecimen"+ e.getMessage(),e);
+			System.out.println("SpecimenTestCases.testUpdateCollectionStatusOfSpecimen():"+e.getMessage());
+			e.printStackTrace();
+			assertFalse("Failed to create Domain Object", true);
+		}
+	}
+	public void testSearchSpecimenWithBarcode()
+	{
+		Specimen specimen =new Specimen();
+    	TissueSpecimen cachedSpecimen = (TissueSpecimen) TestCaseUtility.getObjectMap(TissueSpecimen.class);
+    	specimen.setBarcode(cachedSpecimen.getBarcode());
+     	Logger.out.info("searching domain object");
+    	 try {
+        	 List resultList = appService.search(Specimen.class,specimen);
+        	 if(resultList!=null)
+        	 {	 
+        		 if(resultList.size()==1)
+        		 {
+        			 System.out.println(resultList.size());
+        		 	System.out.println("Case sensitive match is found of barcode is for Specimen");
+        		 	assertFalse("Case sensitive match is found of barcode is for Specimen", true);
+        		 }
+        		 else
+        		 {
+        			 assertTrue("All the  Specimen matched barcode found", true);  
+        		 }
+        	 }
+          } 
+          catch (Exception e) {
+        	Logger.out.error(e.getMessage(),e);
+	 		e.printStackTrace();
+	 		assertFalse("Couldnot found Specimen", true);  
+          }
+	}
+
 	public void testSearchTissueSpecimen()
     {
     	TissueSpecimen specimen = new TissueSpecimen();
@@ -858,5 +943,5 @@ public class SpecimenTestCases extends CaTissueBaseTestCase {
 		}		
 		
 	}
-
+	
 }
