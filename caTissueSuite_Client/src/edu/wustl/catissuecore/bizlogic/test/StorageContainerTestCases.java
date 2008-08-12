@@ -220,6 +220,100 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
           }
 	}
 	
+	public void testUpdateContainerWithCaseSensitiveBarcode()
+	{
+		StorageContainer storageContainer1 =  BaseTestCaseUtility.initStorageContainer();
+		System.out.println("Before Update");
+    	Logger.out.info("updating domain object------->"+storageContainer1);
+	    try 
+		{
+	    	String  uniqueKey=UniqueKeyGeneratorUtil.getUniqueKey();
+	    	storageContainer1 = (StorageContainer) appService.createObject(storageContainer1);
+	    	BaseTestCaseUtility.updateStorageContainer(storageContainer1);
+	    	storageContainer1.setBarcode("CONTAINER BAORCODE"+uniqueKey);
+	    	System.out.println("After Update");
+	    	StorageContainer updatedStorageContainer1 = (StorageContainer) appService.updateObject(storageContainer1);
+	       	Logger.out.info("Domain object successfully updated ---->"+updatedStorageContainer1);
+	
+	       	StorageContainer storageContainer2 =  BaseTestCaseUtility.initStorageContainer();
+	       	System.out.println("Before Update");
+	       	Logger.out.info("updating domain object------->"+storageContainer2);
+	   
+	    	storageContainer2 = (StorageContainer) appService.createObject(storageContainer2);
+	    	BaseTestCaseUtility.updateStorageContainer(storageContainer2);
+	    	storageContainer1.setBarcode("container barcode"+uniqueKey);
+	    	System.out.println("After Update");
+	    	StorageContainer updatedStorageContainer2 = (StorageContainer) appService.updateObject(storageContainer2);
+	       	Logger.out.info("Domain object successfully updated ---->"+updatedStorageContainer2);
+	       	assertTrue("Domain object successfully updated ---->"+updatedStorageContainer2, true);
+		}
+	     catch (Exception e) {
+	       	Logger.out.error(e.getMessage(),e);
+	 		e.printStackTrace();
+	 		System.out
+					.println("StorageContainerTestCases.testUpdateStorageContainer()"+e.getMessage() );
+	 		assertFalse("failed to update Object", true);
+	    }
+	}
+	
+	    
+		public void testSearchContainerWithCaseSensitiveBarcode()
+		{
+			StorageContainer storageContainer1 =  BaseTestCaseUtility.initStorageContainer();
+			System.out.println("Before Update");
+	    	Logger.out.info("updating domain object------->"+storageContainer1);
+	    	String  uniqueKey=UniqueKeyGeneratorUtil.getUniqueKey();
+		    try 
+			{
+		    	
+		    	storageContainer1 = (StorageContainer) appService.createObject(storageContainer1);
+		    	BaseTestCaseUtility.updateStorageContainer(storageContainer1);
+		    	storageContainer1.setBarcode("CONTAINER BAORCODE"+uniqueKey);
+		    	System.out.println("After Update");
+		    	StorageContainer updatedStorageContainer1 = (StorageContainer) appService.updateObject(storageContainer1);
+		       	Logger.out.info("Domain object successfully updated ---->"+updatedStorageContainer1);
+		
+		       	StorageContainer storageContainer2 =  BaseTestCaseUtility.initStorageContainer();
+		       	System.out.println("Before Update");
+		       	Logger.out.info("updating domain object------->"+storageContainer2);
+		   
+		    	storageContainer2 = (StorageContainer) appService.createObject(storageContainer2);
+		    	BaseTestCaseUtility.updateStorageContainer(storageContainer2);
+		    	storageContainer1.setBarcode("container barcode"+uniqueKey);
+		    	System.out.println("After Update");
+		    	StorageContainer updatedStorageContainer2 = (StorageContainer) appService.updateObject(storageContainer2);
+		       	Logger.out.info("Domain object successfully updated ---->"+updatedStorageContainer2);
+		       	assertTrue("Domain object successfully updated ---->"+updatedStorageContainer2, true);
+			}
+		     catch (Exception e) {
+		       	Logger.out.error(e.getMessage(),e);
+		 		e.printStackTrace();
+		 		System.out
+						.println("StorageContainerTestCases.testUpdateStorageContainer()"+e.getMessage() );
+		 		assertFalse("failed to update Object", true);
+		    }
+		     
+			StorageContainer storageContainer = new StorageContainer();
+	    	Logger.out.info(" searching domain object");
+	    	storageContainer.setBarcode("CONTAINER BAORCODE"+uniqueKey);
+	   
+	         try {
+	        	 List resultList = appService.search(StorageContainer.class,storageContainer);
+	        	if(resultList.size()==1)
+	        	{
+	        		assertTrue("Storage Container successfully found. Size:" +resultList.size(), true);
+	        	}
+	        	else{
+	        		assertFalse("Does not find Domain Object", true);
+	        	}
+	          } 
+	          catch (Exception e) {
+	           	Logger.out.error(e.getMessage(),e);
+	           	e.printStackTrace();
+	           	assertFalse("Does not find Domain Object", true);
+		 		
+	          }
+		}
 	public void testUpdateStorageContainer()
 	{
 		StorageContainer storageContainer =  BaseTestCaseUtility.initStorageContainer();

@@ -141,6 +141,81 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
 	    }
 	}
 	
+
+	public void testUpdateCPRWithBarcode()
+	{
+		Participant participant =  BaseTestCaseUtility.initParticipantWithCPR();
+		
+
+    	Logger.out.info("updating domain object------->"+participant);
+	    try 
+		{
+	    	participant = (Participant) appService.createObject(participant);
+	    	BaseTestCaseUtility.updateParticipant(participant);
+			Collection collectionProtocolRegistrationCollection = new HashSet();
+			CollectionProtocolRegistration collectionProtocolRegistration=(CollectionProtocolRegistration)participant.getCollectionProtocolRegistrationCollection().iterator().next();
+			collectionProtocolRegistrationCollection.add(collectionProtocolRegistration);
+			collectionProtocolRegistration.setBarcode("PATICIPANT"+UniqueKeyGeneratorUtil.getUniqueKey());
+			participant.setCollectionProtocolRegistrationCollection(collectionProtocolRegistrationCollection);
+	    	Participant updatedParticipant = (Participant) appService.updateObject(participant);
+	       	Logger.out.info("Domain object successfully updated ---->"+updatedParticipant);
+	       	assertTrue("Domain object successfully updated ---->"+updatedParticipant, true);
+	    } 
+	    catch (Exception e) {
+	       	Logger.out.error(e.getMessage(),e);
+	 		e.printStackTrace();
+	 		assertFalse("failed to update Object", true);
+	    }
+	}
+	
+
+	public void testUpdateCPRWithCaseSensitiveBarcode()
+	{
+		String uniqueKey=UniqueKeyGeneratorUtil.getUniqueKey();
+		Participant participant1 =  BaseTestCaseUtility.initParticipantWithCPR();
+		
+    	Logger.out.info("updating domain object------->"+participant1);
+	    try 
+		{
+	    	participant1 = (Participant) appService.createObject(participant1);
+	    	BaseTestCaseUtility.updateParticipant(participant1);
+			Collection collectionProtocolRegistrationCollection = new HashSet();
+			CollectionProtocolRegistration collectionProtocolRegistration=(CollectionProtocolRegistration)participant1.getCollectionProtocolRegistrationCollection().iterator().next();
+			collectionProtocolRegistration.setBarcode("CPR"+uniqueKey);
+			collectionProtocolRegistrationCollection.add(collectionProtocolRegistration);
+			participant1.setCollectionProtocolRegistrationCollection(collectionProtocolRegistrationCollection);
+	    	Participant updatedParticipant1 = (Participant) appService.updateObject(participant1);
+	       	Logger.out.info("Domain object successfully updated ---->"+updatedParticipant1);
+	       	assertTrue("Domain object successfully updated ---->"+updatedParticipant1, true);
+	    } 
+	    catch (Exception e) {
+	       	Logger.out.error(e.getMessage(),e);
+	 		e.printStackTrace();
+	 		assertFalse("failed to update Object", true);
+	    }
+	    
+	    Participant participant2 =  BaseTestCaseUtility.initParticipantWithCPR();
+    	Logger.out.info("updating domain object------->"+participant2);
+	    try 
+		{
+	    	participant2 = (Participant) appService.createObject(participant2);
+	    	BaseTestCaseUtility.updateParticipant(participant2);
+			Collection collectionProtocolRegistrationCollection2 = new HashSet();
+			CollectionProtocolRegistration collectionProtocolRegistration2=(CollectionProtocolRegistration)participant2.getCollectionProtocolRegistrationCollection().iterator().next();
+			collectionProtocolRegistrationCollection2.add(collectionProtocolRegistration2);
+			collectionProtocolRegistration2.setBarcode("cpr"+uniqueKey);
+			participant2.setCollectionProtocolRegistrationCollection(collectionProtocolRegistrationCollection2);
+	    	Participant updatedParticipant2 = (Participant) appService.updateObject(participant2);
+	       	Logger.out.info("Domain object successfully updated ---->"+updatedParticipant2);
+	       	assertTrue("Domain object successfully updated ---->"+updatedParticipant2, true);
+	    } 
+	    catch (Exception e) {
+	       	Logger.out.error(e.getMessage(),e);
+	 		e.printStackTrace();
+	 		assertFalse("failed to update Object", true);
+	    }
+	}
+	
 	
 	public void testCollectedSCGAndNoOfChildSpecimens()
 	{

@@ -121,6 +121,73 @@ public class SpecimenCollectGroupTestCases extends CaTissueBaseTestCase
 
     }
 	
+	public void testUpdateSpecimenCollectionGroupWithBarcode()
+	{
+    	SpecimenCollectionGroup cachedSCG = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
+    	cachedSCG.setBarcode("SCG"+UniqueKeyGeneratorUtil.getUniqueKey());
+     	Logger.out.info(" searching domain object");
+    	 try {
+    		 SpecimenCollectionGroup scg = (SpecimenCollectionGroup)appService.updateObject(cachedSCG);
+    		 assertTrue("SCG found", true);
+          } 
+          catch (Exception e) {
+        	Logger.out.error(e.getMessage(),e);
+	 		e.printStackTrace();
+	 		assertFalse("Couldnot found Specimen", true);  
+          }
+	}
+	public void testUpdateSCGWithCaseSensitiveBarcode()
+	{
+		String uniqueKey=UniqueKeyGeneratorUtil.getUniqueKey();
+		SpecimenCollectionGroup cachedSCG = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
+    	cachedSCG.setBarcode("SCG"+uniqueKey);
+     	Logger.out.info(" searching domain object");
+    	 try {
+    		 	cachedSCG= (SpecimenCollectionGroup)appService.updateObject(cachedSCG);
+    		 	assertTrue("SCG  updated", true);
+        
+    		 	SpecimenCollectionGroup scg = (SpecimenCollectionGroup)BaseTestCaseUtility.initSCG();		    
+    		 	scg = (SpecimenCollectionGroup)appService.createObject(scg);
+    		 	scg.setBarcode("scg"+uniqueKey);
+  		   	    scg = (SpecimenCollectionGroup)appService.updateObject(scg);
+  		 
+  		}
+  		 catch(Exception e){
+  			Logger.out.error(e.getMessage(),e);
+  			e.printStackTrace();
+  			assertTrue("Can not update case sensitive scg" , true);
+  			
+  			 
+  		 }
+	}
+	
+	public void testSearchScgWithBarcode()
+	{ 
+		SpecimenCollectionGroup specimenCollectionGroup=new SpecimenCollectionGroup();
+		specimenCollectionGroup.setBarcode(((SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class)).getBarcode());
+		 try {
+        	 List resultList = appService.search(SpecimenCollectionGroup.class, specimenCollectionGroup);
+        	 if(resultList!=null)
+        	 {
+        		 if(resultList.size()==1)
+        		 {	
+        			 
+        			 assertFalse("SCG found with case sensitive barcode", true);
+        		 }
+        		 else{
+        			 assertTrue("All the matches find for the given barcode" , true);
+        		 }
+        	 }
+          } 
+          catch (Exception e) {
+        	Logger.out.error(e.getMessage(),e);
+	 		e.printStackTrace();
+	 		assertFalse("Could not found SCG", true);  
+          }
+
+		
+	}
+	
 	public void testAddSCGWithDuplicateName()
 	{
 		
