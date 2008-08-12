@@ -427,6 +427,31 @@ Ext.onReady(function(){
 
     });
 
+	//For Help Tab
+
+	var helpMenu = new Ext.menu.Menu({
+        id: 'helpMenu',
+         items: [
+			{
+				text: 'Help Home',
+				href:'/catissuecore/RedirectToHelpMain.do',
+				tooltip:'Help Home'
+			},
+			{
+				text: 'User Guide',
+				href: '#',
+				handler: getUserGuideLink,
+				tooltip: 'User Guide'
+			},
+			{
+				text: 'UML Model',
+				href:'#',
+				handler: getUmlModelLink, 
+				tooltip:'UML Model'
+			}           
+        ]
+    });
+	
     var tb = new Ext.Toolbar();
     tb.render('toolbarLoggedIn');
         
@@ -443,7 +468,12 @@ Ext.onReady(function(){
 		{
        		text: 'Search',
             menu: menu_search  // assign menu by instance
-        });
+        },
+			
+		{	text:'Help',
+			menu: helpMenu
+		}
+		);
 
 
     // functions to display feedback
