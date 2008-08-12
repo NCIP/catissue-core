@@ -347,6 +347,16 @@
               />
         </set>
         
+        <property
+            name="labelFormat"
+            type="string"
+            update="true"
+            insert="true"
+            column="LABELFORMAT"
+            length="255"
+        />
+        
+        
 		<property
 	            name="storageType"
 	            type="string"

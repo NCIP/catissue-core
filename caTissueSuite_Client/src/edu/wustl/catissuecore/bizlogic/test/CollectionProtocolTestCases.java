@@ -2,17 +2,22 @@ package edu.wustl.catissuecore.bizlogic.test;
 
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 
+import edu.wustl.catissuecore.domain.CellSpecimenRequirement;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.ConsentTier;
+import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
+import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
 
 public class CollectionProtocolTestCases extends CaTissueBaseTestCase 
@@ -35,7 +40,82 @@ public class CollectionProtocolTestCases extends CaTissueBaseTestCase
 			 fail("could not add object");
 		 }
 	}
+	public  void testAddCollectionProtocolWithLableFormat()
+	{
+		CollectionProtocol collectionProtocol=new CollectionProtocol();
+		
+		collectionProtocol.setTitle("qwewqer");
+		collectionProtocol.setShortTitle("sesdrwe");
+		
+		User user=new User();
+		user.setId(1L);
+		List<?> resultList1 = null;
+		try {
+			resultList1 = appService.search(User.class, user);
+			user=(User)resultList1.get(0);
+			user.setRoleId("1");
+			user.setPageOf(Constants.PAGEOF_USER_ADMIN);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		collectionProtocol.setPrincipalInvestigator(user);
+		collectionProtocol.setActivityStatus("Active");
+		
+		CollectionProtocolEvent collectionProtocolEvent = new CollectionProtocolEvent();		
+		collectionProtocolEvent.setClinicalStatus("New Diagnosis");
+		collectionProtocolEvent.setStudyCalendarEventPoint(new Double(1));		
+	 
+
+		Collection specimenRequirementCollection = new HashSet();
+		CellSpecimenRequirement specimenRequirement = new CellSpecimenRequirement();
+		specimenRequirement.setSpecimenClass("Cell");
+		specimenRequirement.setSpecimenType("Not Specified");
+		specimenRequirement.setStorageType("Not Specified");
+		SpecimenCharacteristics specimenCharacteristics =
+			new SpecimenCharacteristics();
 	
+		specimenCharacteristics.setTissueSide("Left");
+		specimenCharacteristics.setTissueSite("Accessory sinus, NOS");
+		specimenRequirement.setCollectionProtocolEvent(collectionProtocolEvent);					
+		specimenRequirement.setSpecimenCharacteristics(specimenCharacteristics);
+		specimenRequirement.setLabelFormat("Label Format");
+		
+		specimenRequirement.setInitialQuantity(new Double(10));
+		specimenRequirementCollection.add(specimenRequirement);
+		
+		collectionProtocolEvent.setSpecimenRequirementCollection(specimenRequirementCollection);
+
+		//Setting collection point label
+		collectionProtocolEvent.setCollectionPointLabel("Wk1");
+		Collection collectionProtocolEventCollection=new HashSet();
+		collectionProtocolEventCollection.add(collectionProtocolEvent);
+		
+		
+		
+		try
+		{
+			collectionProtocol.setStartDate( new Date());
+		}
+		catch (Exception e1)
+		{
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		collectionProtocol.setCollectionProtocolEventCollection(collectionProtocolEventCollection);
+		
+		try{
+			collectionProtocol= (CollectionProtocol) appService.createObject(collectionProtocol);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+	}
+
 	public void testUpdateCollectionProtocolDeleteConsent()
 	{
 	    try 

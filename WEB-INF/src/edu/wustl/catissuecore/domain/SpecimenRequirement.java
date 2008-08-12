@@ -12,6 +12,8 @@ public class SpecimenRequirement extends AbstractSpecimen
 	
 	private Collection<Specimen> specimenCollection;
 	
+	private String labelFormat;
+	
 	
 	public CollectionProtocolEvent getCollectionProtocolEvent()
 	{
@@ -44,5 +46,15 @@ public class SpecimenRequirement extends AbstractSpecimen
 	{
 		this.specimenCollection = specimenCollection;
 	}
+
+	public String getLabelFormat() {
+		return labelFormat;
+	}
+
+	public void setLabelFormat(String labelFormat) {
+		this.labelFormat = labelFormat;
+	}
+
+	
 	
 }
