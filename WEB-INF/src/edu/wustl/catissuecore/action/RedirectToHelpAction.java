@@ -26,19 +26,12 @@ public class RedirectToHelpAction extends Action
 	throws IOException, ServletException, DAOException
 	{
 		//Retrives link values from caTissueCore_Properties.xml file
-		Constants.USER_GUIDE = XMLPropertyHandler.getValue("userguide.link");
-		Constants.TECHNICAL_GUIDE = XMLPropertyHandler.getValue("technicalguide.link");
-		Constants.TRAINING_GUIDE = XMLPropertyHandler.getValue("trainingguide.link");
-		Constants.UMLMODEL_GUIDE = XMLPropertyHandler.getValue("umlmodel.link");
-		Constants.GFORGE_GUIDE = XMLPropertyHandler.getValue("gforge.link");
-		Constants.KNOWLEDGECENTER_GUIDE = XMLPropertyHandler.getValue("knowledgecenter.link");
-		
-		request.setAttribute(Constants.USER_GUIDE_LINK, Constants.USER_GUIDE);
-		request.setAttribute(Constants.TECHNICAL_GUIDE_LINK, Constants.TECHNICAL_GUIDE);
-		request.setAttribute(Constants.TRAINING_GUIDE_LINK, Constants.TRAINING_GUIDE);
-		request.setAttribute(Constants.UMLMODEL_GUIDE_LINK, Constants.UMLMODEL_GUIDE);
-		request.setAttribute(Constants.GFORGE_GUIDE_LINK, Constants.GFORGE_GUIDE);
-		request.setAttribute(Constants.KNOWLEDGECENTER_GUIDE_LINK, Constants.KNOWLEDGECENTER_GUIDE);
+		request.setAttribute(Constants.USER_GUIDE_LINK_PROPERTY, XMLPropertyHandler.getValue(Constants.USER_GUIDE_LINK_PROPERTY));
+		request.setAttribute(Constants.TECHNICAL_GUIDE_LINK_PROPERTY, XMLPropertyHandler.getValue(Constants.TECHNICAL_GUIDE_LINK_PROPERTY));
+		request.setAttribute(Constants.TRAINING_GUIDE_LINK_PROPERTY, XMLPropertyHandler.getValue(Constants.TRAINING_GUIDE_LINK_PROPERTY));
+		request.setAttribute(Constants.UML_MODEL_LINK_PROPERTY, XMLPropertyHandler.getValue(Constants.UML_MODEL_LINK_PROPERTY));
+		request.setAttribute(Constants.GFORGE_GUIDE_LINK_PROPERTY, XMLPropertyHandler.getValue(Constants.GFORGE_GUIDE_LINK_PROPERTY));
+		request.setAttribute(Constants.KNOWLEDGE_CENTER_LINK_PROPERTY, XMLPropertyHandler.getValue(Constants.KNOWLEDGE_CENTER_LINK_PROPERTY));
 		
 		return mapping.findForward(Constants.SUCCESS);
       }

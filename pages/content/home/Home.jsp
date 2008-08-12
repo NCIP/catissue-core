@@ -63,12 +63,27 @@ table#browserDetailsContainer
 									key="app.disclaimer" /></a></td>
 
 							</tr>
+							<logic:empty scope="session" name="<%=Constants.SESSION_DATA%>">
+							<tr>
+								<td><a
+									href="Accessibility.do?PAGE_TITLE_KEY=app.accessibility&FILE_NAME_KEY=app.accessibility.file"
+									class="view"><span class="wh_ar_b"></span><bean:message
+									key="app.accessibility" /></a></td>
+							</tr>
+							<tr>
+								<td style="padding-bottom:16px;"><a
+									href="/catissuecore/RedirectToHelp.do" class="view"><span class="wh_ar_b"></span><bean:message
+									key="app.help" /></a></td>
+							</tr>
+							</logic:empty>
+							<logic:notEmpty scope="session" name="<%=Constants.SESSION_DATA%>">
 							<tr>
 								<td style="padding-bottom:16px;"><a
 									href="Accessibility.do?PAGE_TITLE_KEY=app.accessibility&FILE_NAME_KEY=app.accessibility.file"
 									class="view"><span class="wh_ar_b"></span><bean:message
 									key="app.accessibility" /></a></td>
 							</tr>
+							</logic:notEmpty>
 						</table>
 						</td>
 					</tr>

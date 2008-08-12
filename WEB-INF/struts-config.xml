@@ -229,7 +229,11 @@ PUBLIC
                    
         <action path="/RedirectToHelp"  type="edu.wustl.catissuecore.action.RedirectToHelpAction" >
         	<forward name="success" path=".catissuecore.RedirectToHelp" />
-        </action>       	     
+        </action> 
+        
+        <action path="/RedirectToHelpMain"  type="edu.wustl.catissuecore.action.RedirectToHelpAction" >
+        	<forward name="success" path=".catissuecore.RedirectToHelpMain" />
+        </action>
        
 		<!--Suite-->		
 			
