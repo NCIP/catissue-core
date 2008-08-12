@@ -89,10 +89,11 @@ function onSubmit()
 	{
 		if(document.getElementById('specimenEventParameter').value == "Transfer")
 		{
-			dobulkTransferOperations();
+		    dobulkTransferOperations();
 		}
 		else if(document.getElementById('specimenEventParameter').value == "Disposal")
 		{
+			
 			dobulkDisposals();
 		}
 		else
@@ -324,44 +325,48 @@ function checkAll(element)
 	</tr>
 	
 	<tr>
-        <td colspan="2" class="black_ar showhide"><table width="99%" border="0" align="center" cellpadding="3" cellspacing="0">
+        <td colspan="2" class="black_ar showhide">
+		<table width="99%" border="0" align="center" cellpadding="2" cellspacing="0">
           <tr>
            
-			 <td>&nbsp;&nbsp;</td>
+			 <td>&nbsp;</td>
 			 <td class="black_ar"><input type="radio" name="chkName"      value="OrderSpecimen" onclick="showEvents()" checked=true <%=disabledOrder%> ></td>
              <td class="black_ar" ><bean:message key="mylist.label.orderBioSpecimen"/></td>
-             <td class="black_ar">&nbsp;</td>
+             <td class="black_ar" colspan="2">&nbsp;</td>
 			 
-			 <td class="black_ar"><INPUT TYPE='RADIO' NAME='chkName' onclick="showEvents()" value="Specimenpage"  <%=disabled%> ></td>
+			 
+			 <td class="black_ar"><INPUT TYPE='RADIO' NAME='chkName' onclick="showEvents()" value="Specimenpage" <%=disabled%> ></td>
 			 <td class="black_ar" ><bean:message key="mylist.label.multipleSpecimenPage"/>
                </td>
-			  <td class="black_ar">&nbsp;&nbsp;&nbsp;&nbsp;</td>
-
-           
+			<td class="black_ar" colspan="2">&nbsp;</td>
+			
 			<td class="black_ar"><INPUT TYPE='RADIO' NAME='chkName'     onclick="showEvents()" id="ch1" value="Events" <%=disabled%> ></INPUT></td>
-            <td class="black_ar" ><bean:message key="mylist.label.specimenEvent"/> </td>
-			 <td class="black_ar">&nbsp;&nbsp;&nbsp;&nbsp;</td>
-		 
-		  <td class="black_ar">
-		 	   <div id="eventlist2" style="display:block"><input type="text" styleClass="black_ar" size="27" id="specimenEventParameter" name="specimenEventParameter" value="Transfer" readonly="true"/> </div>
-				    <div id="eventlist1" style="display:none"><autocomplete:AutoCompleteTag  property="specimenEventParameter" styleClass="black_ar" size="27"
-						  optionsList = "<%=request.getAttribute(Constants.EVENT_PARAMETERS_LIST)%>"
-						  initialValue="Transfer" 
-						  /> </div>
-		    </td>
-          				  
+            
+			<td class="black_ar" ><bean:message key="mylist.label.specimenEvent"/> </td>
+			 
+		
+			
+		   <td class="black_ar">
+		 	   <div id="eventlist1" style="display:none">
+			   
+			   <autocomplete:AutoCompleteTag  property="specimenEventParameter" 
+						  optionsList = "<%=Constants.EVENT_PARAMETERS%>" styleClass="black_ar" size="27"
+						  initialValue="Transfer"/>
+				 </div> 
+		     
+			   <div id="eventlist2" style="display:block"><input type="text" styleClass="black_ar" size="25" id="specimenEventParameter1" name="specimenEventParameter" value="Transfer" readonly="true"/></div>
+             </td>
 		  </tr>
 		
-         
           <tr>
-            <td>&nbsp;&nbsp;</td>
-			<td class="black_ar"><input type="radio" name="chkName" onclick="showEvents()" value="requestShipment" ></td>
-            <td class="black_ar" >Request for Shipment</td>
-			 <td class="black_ar">&nbsp;&nbsp;&nbsp;&nbsp;</td>
-            
+            <td>&nbsp;</td>
+			<td class="black_ar"><input type="radio" name="chkName" onclick="showEvents()" value="requestShipment"></td>
+            <td class="black_ar" ><bean:message key="shipment.request"/></td>
+			<td class="black_ar" colspan="2">&nbsp;</td>
+			
 			<td class="black_ar"><input type="radio" name="chkName"  value="createShipment" onclick="showEvents()" ></td>
-            <td class="black_ar" >Create New Shipment </td>
-            <td class="black_ar">&nbsp;</td>
+            <td class="black_ar" ><bean:message key="shipment.create"/></td>
+            <td class="black_ar" colspan="5">&nbsp;</td>
 		  
 		  </tr>
           
