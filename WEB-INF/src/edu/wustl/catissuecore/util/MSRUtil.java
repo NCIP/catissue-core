@@ -166,6 +166,7 @@ public class MSRUtil {
 			final String actionIds = (String) request.getParameter(Constants.SELECTED_ACTION_IDS);
 			final String userIds = (String) request.getParameter(Constants.SELECTED_USER_IDS);
  			final String roleId = (String) request.getParameter(Constants.SELECTED_ROLE_IDS);
+ 			final String operation = (String) request.getParameter("operation");
  			
  			Map<String, SiteUserRolePrivilegeBean> rowIdBeanMap= new HashMap<String, SiteUserRolePrivilegeBean>();
  			if (session.getAttribute(Constants.ROW_ID_OBJECT_BEAN_MAP) != null) 
@@ -173,7 +174,7 @@ public class MSRUtil {
  				rowIdBeanMap = (Map<String, SiteUserRolePrivilegeBean>) session.getAttribute(Constants.ROW_ID_OBJECT_BEAN_MAP);
  			}	
  			
-			final List<JSONObject> listForUPSummary =apBizLogic.addPrivilege(rowIdBeanMap,userIds,siteIds,roleId,actionIds );
+			final List<JSONObject> listForUPSummary =apBizLogic.addPrivilege(rowIdBeanMap,userIds,siteIds,roleId,actionIds,operation );
 			session.setAttribute(Constants.ROW_ID_OBJECT_BEAN_MAP,	rowIdBeanMap);
 			setResponse(response, listForUPSummary);
 			
@@ -181,15 +182,25 @@ public class MSRUtil {
 		else if (Constants.OPERATION_DELETE_ROW.equals(cpOperation))
 		{
 			final String deletedRowsArray = (String) request.getParameter("deletedRowsArray");
+			final String operation = (String) request.getParameter("operation");
+			final String pageOf = (String)request.getParameter(Constants.PAGE_OF);
+			 String temp="";
 			
 			Map<String, SiteUserRolePrivilegeBean> rowIdBeanMap= new HashMap<String, SiteUserRolePrivilegeBean>();
-			if (session.getAttribute(Constants.ROW_ID_OBJECT_BEAN_MAP) != null)
+			
+			if (!("pageOfUserAdmin").equals(pageOf)&& (session.getAttribute(Constants.ROW_ID_OBJECT_BEAN_MAP) != null))
 			{
 				rowIdBeanMap = (Map<String, SiteUserRolePrivilegeBean>) session.getAttribute(Constants.ROW_ID_OBJECT_BEAN_MAP);
+				temp=Constants.ROW_ID_OBJECT_BEAN_MAP;
+			}
+			else if(session.getAttribute("rowIdBeanMapForUserPage")!=null)
+			{
+				rowIdBeanMap =(Map<String, SiteUserRolePrivilegeBean>)session.getAttribute("rowIdBeanMapForUserPage");
+				temp="rowIdBeanMapForUserPage";
 			}
 			
-			rowIdBeanMap=apBizLogic.deletePrivilege(rowIdBeanMap,deletedRowsArray);
-			session.setAttribute(Constants.ROW_ID_OBJECT_BEAN_MAP,	rowIdBeanMap);
+			rowIdBeanMap=apBizLogic.deletePrivilege(rowIdBeanMap,deletedRowsArray,operation);
+			session.setAttribute(temp,	rowIdBeanMap);
 			
 			final List<JSONObject> nullList=null;
 			setResponse(response, nullList);
@@ -232,6 +243,7 @@ public class MSRUtil {
 			final String cpIds = (String) request.getParameter("selectedCPIds");
  			final String roleId = (String) request.getParameter(Constants.SELECTED_ROLE_IDS);
  			final boolean isAllCPChecked = new Boolean(request.getParameter("isAllCPChecked"));
+ 			final String operation = (String) request.getParameter("operation");
  			
  			Map<String, SiteUserRolePrivilegeBean> rowIdBeanMap= new HashMap<String, SiteUserRolePrivilegeBean>();
  			if (session.getAttribute("rowIdBeanMapForUserPage") != null) 
@@ -239,7 +251,7 @@ public class MSRUtil {
  				rowIdBeanMap = (Map<String, SiteUserRolePrivilegeBean>) session.getAttribute("rowIdBeanMapForUserPage");
  			}	
  			
-			final List<JSONObject> listForUPSummary =apBizLogic.addPrivilegeForUserPage(rowIdBeanMap,cpIds,siteIds,roleId,actionIds,isAllCPChecked );
+			final List<JSONObject> listForUPSummary =apBizLogic.addPrivilegeForUserPage(rowIdBeanMap,cpIds,siteIds,roleId,actionIds,isAllCPChecked,operation );
 			session.setAttribute("rowIdBeanMapForUserPage",	rowIdBeanMap);
 			setResponse(response, listForUPSummary);
 	

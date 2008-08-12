@@ -31,7 +31,7 @@ function updateCPTree()
 <%
 	//Object obj=  request.getAttribute(Constants.ACTIONLIST);
 	//String pageOf = (String) request.getAttribute(Constants.PAGEOF);
-	//String operation = (String) request.getAttribute(Constants.OPERATION);
+	String operation = (String) request.getAttribute(Constants.OPERATION);
 	List siteList = (List) request.getAttribute(Constants.SITELIST);
 	List userList = (List) request.getAttribute(Constants.USERLIST);
 	List roleList = (List) request.getAttribute(Constants.ROLELIST);
@@ -233,10 +233,12 @@ function updateCPTree()
 				</td>
 			</tr>
 			<tr>
-				
+				<c:set var="functionName1">getUserPrivilegeSummary('<c:out value="${requestScope.operation}"/>')</c:set>
+					<jsp:useBean id="functionName1" type="java.lang.String"/>
+
 				<td width="97%" align="right" class="dividerline">&nbsp;<html:button
 					property="addKeyValue" styleClass="black_ar"
-					onclick="getUserPrivilegeSummary()">
+					onclick="<%=functionName1%>">
 					<bean:message key="buttons.addPrivilege" />
 				</html:button></td>
 				<td width="3%" class="dividerline">&nbsp;</td>
@@ -264,11 +266,11 @@ function updateCPTree()
 							align="left"><bean:message key="app.select" /></label></td>
 						<td width="21%" class="black_ar_b" align="left"><bean:message
 							key="assignPrivileges.site(s)" /></td>
-						<td width="15%" class="black_ar_b" align="left"><bean:message
+						<td width="20%" class="black_ar_b" align="left"><bean:message
 							key="user.name" /></td>
-						<td width="13%" class="black_ar_b" align="left"><bean:message
+						<td width="15%" class="black_ar_b" align="left"><bean:message
 							key="user.role" /></td>
-						<td width="40%" class="black_ar_b" align="left"><bean:message
+						<td width="33%" class="black_ar_b" align="left"><bean:message
 							key="app.Privileges" /></td>
 						<td width="5%" class="black_ar_b">&nbsp;</td>
 					</tr>
@@ -298,8 +300,8 @@ function updateCPTree()
 										name='<%=chkName %>' id='<%=chkName %>'
 										onclick="enableDeleteButton('summaryTableId','deleteButtonId')" /></td>
 									<td width="21%" class="black_ar" onmouseover="Tip('<%=arr[1]%>',WIDTH,200)">
-									<% if(arr[1].length() >20){
-									arr[1]=arr[1].substring(0,17)+"...";
+									<% if(arr[1].length() >30){
+									arr[1]=arr[1].substring(0,27)+"...";
 									}
 								%><span><%=arr[1]%></span>
 									</td>
@@ -330,9 +332,14 @@ function updateCPTree()
 						</td>
 					</tr>
 					<tr>
+
+					<c:set var="functionName">deleteCheckedRows('<c:out value="${requestScope.operation}"/>','summaryTableId',this.id)</c:set>
+					<jsp:useBean id="functionName" type="java.lang.String"/>
+								
+					
 						<td class="black_ar" colspan="6"><html:button property="deleteButton" 
 							styleId="deleteButtonId"
-							styleClass="black_ar" onclick="deleteCheckedRows('summaryTableId',this.id)"
+							styleClass="black_ar" onclick="<%=functionName%>"
 							disabled="true">
 							<bean:message key="buttons.delete" />
 						</html:button>

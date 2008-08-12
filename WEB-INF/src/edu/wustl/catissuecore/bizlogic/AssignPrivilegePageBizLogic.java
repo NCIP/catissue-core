@@ -41,7 +41,6 @@ import gov.nih.nci.security.authorization.domainobjects.Role;
 import gov.nih.nci.security.exceptions.CSException;
 import gov.nih.nci.security.exceptions.CSObjectNotFoundException;
 
-
 /**
  * AssignPrivilegePageBizLogic is a class which contains the  
  * implementations for ShowAssignPrivilegePageAction.
@@ -114,7 +113,7 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 		String[] activityStatusArray = {Constants.ACTIVITY_STATUS_DISABLED,Constants.ACTIVITY_STATUS_CLOSED};
 		String joinCondition = null;
 		String separatorBetweenFields = ", ";
-/*
+
 		String[] whereColumnName = new String[]{Constants.ACTIVITY_STATUS};
 		String[] whereColumnCondition = new String[]{"not in"};
 		Object[] whereColumnValue = {activityStatusArray};
@@ -136,9 +135,9 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 			{
 				siteNameValueBeanList.remove(0);
 			}
-		}*/
+		}
 		
-		List<NameValueBean> siteNameValueBeanList = null;
+	/*	List<NameValueBean> siteNameValueBeanList = null;
 		try 
 		{
 			siteNameValueBeanList = new StorageContainerBizLogic().getRepositorySiteList(sourceObjectName, siteDisplayField, valueField, activityStatusArray, isToExcludeDisabled);
@@ -149,7 +148,7 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 		}
 		
 		// To remove 1st row which contains "Select" & "-1"
-		siteNameValueBeanList.remove(0);
+		siteNameValueBeanList.remove(0);*/
 		return siteNameValueBeanList;
 		
 	}
@@ -978,17 +977,28 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 	 * @param deletedRowsArray
 	 * @param rowIdObjectBeanMap
 	 */
-	public Map<String, SiteUserRolePrivilegeBean> deletePrivilege(Map<String, SiteUserRolePrivilegeBean> rowIdBeanMap,String deletedRowsArray) 
+	public Map<String, SiteUserRolePrivilegeBean> deletePrivilege(Map<String, SiteUserRolePrivilegeBean> rowIdBeanMap,String deletedRowsArray,String operation) 
 	{
-		String deletedRowId = "";
-		List<String> deletedRowsList = new ArrayList<String>();
-		StringTokenizer tokenizer = new StringTokenizer(deletedRowsArray, ",");
-		while (tokenizer.hasMoreTokens())
-		{
-			deletedRowId = tokenizer.nextToken().intern();
-			deletedRowsList.add(deletedRowId);
-			rowIdBeanMap.remove(deletedRowId);
-		}
+		
+			String deletedRowId = "";
+			SiteUserRolePrivilegeBean surp=null;
+			List<String> deletedRowsList = new ArrayList<String>();
+			StringTokenizer tokenizer = new StringTokenizer(deletedRowsArray, ",");
+			while (tokenizer.hasMoreTokens())
+			{
+				deletedRowId = tokenizer.nextToken().intern();
+				deletedRowsList.add(deletedRowId);
+				if((Constants.ADD).equalsIgnoreCase(operation))
+				{
+					rowIdBeanMap.remove(deletedRowId);
+				}
+				else
+				{
+					surp = rowIdBeanMap.get(deletedRowId);
+					surp.setRowDeleted(true);
+					rowIdBeanMap.put(deletedRowId, surp);
+				}
+			}
 		
 		return rowIdBeanMap;
 	}    
@@ -1001,7 +1011,7 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 	 * @param actionIds
 	 * @return List<JSONObject> of userSummaryBean Objects
 	 */	
-	public List<JSONObject> addPrivilege(Map<String, SiteUserRolePrivilegeBean> rowIdBeanMap, String userIds, String siteIds, String roleId, String actionIds)throws BizLogicException,JSONException, CSException 
+	public List<JSONObject> addPrivilege(Map<String, SiteUserRolePrivilegeBean> rowIdBeanMap, String userIds, String siteIds, String roleId, String actionIds,String operation)throws BizLogicException,JSONException, CSException 
 	{  
 		List<JSONObject> listForUPSummary = new ArrayList<JSONObject>();
 		List<Long> siteIdsList = new ArrayList<Long>();
@@ -1043,6 +1053,18 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 				 SiteUserRolePrivilegeBean surpBean =setUserPrivilegeSummary(user, userRelatedSites, role, actionBeanList);
 				
 				 String rowId = "" + userId;
+				 if((Constants.EDIT).equalsIgnoreCase(operation))
+				 {
+					 if(rowIdBeanMap.containsKey(rowId))
+					 {
+						 String updatedRowId="Updated_"+rowId;
+						 SiteUserRolePrivilegeBean tempBean=rowIdBeanMap.get(rowId);
+						 tempBean.setRowDeleted(true);
+						 rowIdBeanMap.remove(rowId);
+						 rowIdBeanMap.put(updatedRowId, tempBean);
+						 
+					 }
+				 }
 				 rowIdBeanMap.put(rowId,surpBean);
 				 
 				 JSONObject jsonObject=getObjectForUPSummary(userRelatedSites,rowId,user,roleName,actionIdsList,roleId);
@@ -1078,7 +1100,8 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 	 * @throws CSException
 	 * @throws DAOException
 	 */
-public List<String[]> privilegeDataOnTabSwitch(Map<String, SiteUserRolePrivilegeBean>map,String pageOf) throws BizLogicException {
+public List<String[]> privilegeDataOnTabSwitch(Map<String, SiteUserRolePrivilegeBean>map,String pageOf) throws BizLogicException 
+{
 		List<String[]> list=new ArrayList<String[]>();
 		
 		int mapSize=map.size();
@@ -1093,64 +1116,64 @@ public List<String[]> privilegeDataOnTabSwitch(Map<String, SiteUserRolePrivilege
 			
 			bean =(SiteUserRolePrivilegeBean)surpArray[j];
 			
-			// for row id
-			for(int count=0;count<keyArray.length;count++)
+			if(!bean.isRowDeleted())
 			{
-				SiteUserRolePrivilegeBean beanForKey=map.get(keyArray[count]);
-				if (bean==beanForKey)
+//				 for row id
+				for(int count=0;count<keyArray.length;count++)
 				{
-					rowId=(String)keyArray[count];
-				}
-			}
-			
-			
-			
-			//for role
-			String roleName= bean.getRole().getName();
-			
-			// for site
-			String sites = displaySiteNames(bean);
-			
-			// for privileges
-			String actionNames = displayPrivilegesNames(bean);
-			if(! pageOf.equalsIgnoreCase("pageOfUserAdmin"))
-			{
-				// for user
-				String userName = bean.getUser().getFirstName();
-				array[0]=userName;
-			}
-			else
-			{
-				// for user
-				if(bean.getCollectionProtocol() != null)
-				{
-					String cpName = bean.getCollectionProtocol().getShortTitle();
-					if(cpName!=null && !cpName.equalsIgnoreCase(""))
+					SiteUserRolePrivilegeBean beanForKey=map.get(keyArray[count]);
+					if (bean==beanForKey)
 					{
-						array[0]=cpName;
+						rowId=(String)keyArray[count];
 					}
-					else
+				}
+				
+				//for role
+				String roleName= bean.getRole().getName();
+				
+				// for site
+				String sites = displaySiteNames(bean);
+				
+				// for privileges
+				String actionNames = displayPrivilegesNames(bean);
+				if(! pageOf.equalsIgnoreCase("pageOfUserAdmin"))
+				{
+					// for user
+					String userName = bean.getUser().getFirstName();
+					array[0]=userName;
+				}
+				else
+				{
+					// for user
+					if(bean.getCollectionProtocol() != null)
+					{
+						String cpName = bean.getCollectionProtocol().getShortTitle();
+						if(cpName!=null && !cpName.equalsIgnoreCase(""))
+						{
+							array[0]=cpName;
+						}
+						else
+						{
+							array[0]="N/A";
+						}
+					}
+					else if(bean.isAllCPChecked())
+					{
+						array[0]="All Current and Future";
+					}
+					else if(!bean.isAllCPChecked())
 					{
 						array[0]="N/A";
 					}
 				}
-				else if(bean.isAllCPChecked())
-				{
-					array[0]="All Current and Future";
-				}
-				else if(!bean.isAllCPChecked())
-				{
-					array[0]="N/A";
-				}
+				
+				array[1]=sites;
+				array[2]=roleName;
+				array[3]=actionNames;
+				array[4]=rowId;
+				list.add(j,array);
 			}
-			
-			
-			array[1]=sites;
-			array[2]=roleName;
-			array[3]=actionNames;
-			array[4]=rowId;
-			list.add(j,array);
-		}
+		}	
 		return list;
 	}
 	/**
@@ -1307,22 +1330,20 @@ public List<String[]> privilegeDataOnTabSwitch(Map<String, SiteUserRolePrivilege
 	}
 
 // for user page--
-public List<JSONObject> addPrivilegeForUserPage(Map<String, SiteUserRolePrivilegeBean> rowIdBeanMap, String cpIds, String siteIds, String roleId, String actionIds,boolean isAllCPChecked)throws BizLogicException,JSONException, CSException 
+public List<JSONObject> addPrivilegeForUserPage(Map<String, SiteUserRolePrivilegeBean> rowIdBeanMap, String cpIds, String siteIds, String roleId, String actionIds,boolean isAllCPChecked,String operation)throws BizLogicException,JSONException, CSException 
 {  
 	List<JSONObject> listForUPSummary = new ArrayList<JSONObject>();
 	List<Long> siteIdsList = new ArrayList<Long>();
 	List<Long> cpIdsList = new ArrayList<Long>();
 	List<String> actionIdsList = new ArrayList<String>();
 
-		siteIdsList = getSiteData(siteIds);
-		cpIdsList =getCPData(cpIds);
+	siteIdsList = getSiteData(siteIds);
+	cpIdsList = getCPData(cpIds);
 	actionIdsList = getActionData(actionIds);
 	AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
 
 	try 
 	{
-		
-		
 		if(cpIdsList!=null&&!cpIdsList.isEmpty())
 		{
 			for (int k = 0; k < cpIdsList.size(); k++) 
@@ -1352,6 +1373,18 @@ public List<JSONObject> addPrivilegeForUserPage(Map<String, SiteUserRolePrivileg
 			     SiteUserRolePrivilegeBean surpBean =setUserPrivilegeSummaryForUserPage(collectionProtocol, cpRelatedSites, role, actionBeanList,isAllCPChecked);
 				
 				 String rowId = "CP_"+ cpId;
+				 if((Constants.EDIT).equalsIgnoreCase(operation))
+				 {
+					 if(rowIdBeanMap.containsKey(rowId))
+					 {
+						 String updatedRowId="Updated_"+rowId;
+						 SiteUserRolePrivilegeBean tempBean=rowIdBeanMap.get(rowId);
+						 tempBean.setRowDeleted(true);
+						 rowIdBeanMap.remove(rowId);
+						 rowIdBeanMap.put(updatedRowId, tempBean);
+						 
+					 }
+				 }
 				 rowIdBeanMap.put(rowId,surpBean);
 				 
 				 JSONObject jsonObject=getObjectForUPSummaryForUserPage(cpRelatedSites,rowId,collectionProtocol,roleName,actionIdsList,roleId,isAllCPChecked);
@@ -1390,6 +1423,18 @@ public List<JSONObject> addPrivilegeForUserPage(Map<String, SiteUserRolePrivileg
 				 SiteUserRolePrivilegeBean surpBean =setUserPrivilegeSummaryForUserPage(null, siteLists, role, actionBeanList,isAllCPChecked);
 				
 				 String rowId = "" + siteId;
+				 if((Constants.EDIT).equalsIgnoreCase(operation))
+				 {
+					 if(rowIdBeanMap.containsKey(rowId))
+					 {
+						 String updatedRowId="Updated_"+rowId;
+						 SiteUserRolePrivilegeBean tempBean=rowIdBeanMap.get(rowId);
+						 tempBean.setRowDeleted(true);
+						 rowIdBeanMap.remove(rowId);
+						 rowIdBeanMap.put(updatedRowId, tempBean);
+						 
+					 }
+				 }
 				 rowIdBeanMap.put(rowId,surpBean);
 				 
 				 JSONObject jsonObject=getObjectForUPSummaryForUserPage(siteLists,rowId,null,roleName,actionIdsList,roleId,isAllCPChecked);
@@ -1441,7 +1486,6 @@ public List<Site> getCPSiteRelationForUserPage(CollectionProtocol collectionProt
 public SiteUserRolePrivilegeBean setUserPrivilegeSummaryForUserPage(CollectionProtocol collectionProtocol,List<Site> cpRelatedSites, Role role, List<NameValueBean> actionBeanList,boolean isAllCPChecked)
 {
 	SiteUserRolePrivilegeBean surp = new SiteUserRolePrivilegeBean();
-	
 	
 	surp.setCollectionProtocol(collectionProtocol);
 

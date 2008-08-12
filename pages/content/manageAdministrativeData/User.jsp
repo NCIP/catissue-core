@@ -50,7 +50,7 @@ function handleStatus(status)
 <%
 	//Object obj=  request.getAttribute(Constants.ACTIONLIST);
 	//String pageOf = (String) request.getAttribute(Constants.PAGEOF);
-	//String operation = (String) request.getAttribute(Constants.OPERATION);
+	String operation = (String) request.getAttribute(Constants.OPERATION);
 	List siteList = (List) request.getAttribute(Constants.SITELIST);
 	List userList = (List) request.getAttribute(Constants.USERLIST);
 	List roleList = (List) request.getAttribute(Constants.ROLELIST);
@@ -61,14 +61,14 @@ function handleStatus(status)
 <table width="100%" border="0" cellpadding="0" cellspacing="0"
 	class="maintable">
 	<html:form action='${requestScope.formName}'>
-		<html:hidden property="operation" />
+		<html:hidden property="operation" styleId = "operation"/>
 		<html:hidden property="submittedFor" />
 		<html:hidden property="pageOf" />
 		<html:hidden property="id" />
 		<html:hidden property="csmUserId" />
 		<html:hidden property='${requestScope.redirectTo}' />
 		<logic:equal name="pageOf" value='${requestScope.pageOfSignUp}'>
-			<html:hidden property="activityStatus" />
+		<html:hidden property="activityStatus" />
 		</logic:equal>
 		<tr>
 			<td class="td_color_bfdcf3">
@@ -525,7 +525,7 @@ function handleStatus(status)
 
 											<td colspan="7" width="97%" align="right" class="dividerline">&nbsp;<html:button
 												property="addKeyValue" styleClass="black_ar"
-												onclick="getUserPagePrivSummary()">
+												onclick="getUserPagePrivSummary(document.getElementById('operation').value)">
 												<bean:message key="buttons.addPrivilege" />
 											</html:button></td>
 											<td width="3%" class="dividerline">&nbsp;</td>
@@ -603,8 +603,8 @@ function handleStatus(status)
 																<td width="33%" class="black_ar"
 																	onmouseover="Tip('<%=arr[3]%>',WIDTH,200)">
 																<%
-																		if (arr[3].length() > 20) {
-																		arr[3] = arr[3].substring(0, 17) + "...";
+																		if (arr[3].length() > 30) {
+																		arr[3] = arr[3].substring(0, 27) + "...";
 																			}
 																%> <span><%=arr[3]%></span></td>
 
@@ -626,8 +626,7 @@ function handleStatus(status)
 												<tr>
 													<td class="black_ar" colspan="7"><html:button
 														property="deleteButton" styleId="deleteButtonId"
-														styleClass="black_ar"
-														onclick="deleteCheckedRows('summaryTableId',this.id)"
+														styleClass="black_ar" onclick="deleteCheckedRows(document.getElementById('operation').value,'summaryTableId',this.id)"
 														disabled="true">
 														<bean:message key="buttons.delete" />
 													</html:button></td>

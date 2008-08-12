@@ -403,6 +403,7 @@ function openCRGWindow()
                                           var sites=jsonResponse.locations[i].siteJsonArray;
                                           var actions=jsonResponse.locations[i].actionJsonArray;
                                           var selActions=jsonResponse.locations[i].selActionJsonArray;
+										  
                                           // --for sites
                                           var siteSelBox = document.getElementById('siteIds');
                                           for(var len=0;len<sites.length;len++){
@@ -440,6 +441,7 @@ function openCRGWindow()
                                           {
                                                 for(var actionCounter=0;actionCounter<numOfSelPrivilges;actionCounter++)
                                                 {
+													
                                                       theValue = selActions[actionCounter].actionId;
                                                       theText  =selActions[actionCounter].actionName;
                                                       var myNewOption = new Option(theText,theValue);
@@ -451,7 +453,7 @@ function openCRGWindow()
 
                                           else
                                           {
-											  selectedOptsList(eleOfActionSelBox,actions,selActionVal);
+											  selectedOptsList(eleOfActionSelBox,actions,selActions);
                                        /*         for(var counter1=0;counter1<totalPrivileges;counter1++)
                                                 {
                                                       theValue = actions[counter1].actionId;
@@ -611,7 +613,7 @@ function openCRGWindow()
     
    // Function to send request to get Privileges Summary.
 
-      function getUserPrivilegeSummary()
+      function getUserPrivilegeSummary(operation)
 
       {
 
@@ -753,7 +755,7 @@ function openCRGWindow()
 
                         var url="ShowAssignPrivilegePage.do";
 
-                        var data="cpOperation="+cpOperation+"&selectedSiteIds="+selectedSiteIds+"&selectedUserIds="+selectedUserIds+"&selectedRoleIds="+selectedRoleIds+"&selectedActionIds="+selectedActionIds;               
+                        var data="cpOperation="+cpOperation+"&selectedSiteIds="+selectedSiteIds+"&selectedUserIds="+selectedUserIds+"&selectedRoleIds="+selectedRoleIds+"&selectedActionIds="+selectedActionIds+"&operation="+operation;               
 
                         sendRequestsWithData(url,data,cpOperation);
 
@@ -855,9 +857,9 @@ function openCRGWindow()
 
                   var newSites = "" ;
 
-                  if(str.length>20){
+                  if(str.length>30){
 
-                        newSites=str.substring(0,17)+"...";
+                        newSites=str.substring(0,27)+"...";
 
                   }
 
@@ -915,9 +917,9 @@ function openCRGWindow()
 
                   var newActionsString="";
 
-                  if(actionString.length>20){
+                  if(actionString.length>30){
 
-                        newActionsString=actionString.substring(0,17)+"...";
+                        newActionsString=actionString.substring(0,27)+"...";
 
                   }
 
@@ -1040,8 +1042,10 @@ function validateMethod(divId,errorFlagForSite,errorFlagForUser,errorFlagForRole
 
 //-- end Assign Privilege
 
-function  deleteCheckedRows(tableId,deleteButtonId)
+function deleteCheckedRows(operation,tableId,deleteButtonId)
 	{
+	  var form=document.forms[0];
+      var pageOf = form.pageOf.value; 
       /** element of tbody    **/
       var tbodyElement = document.getElementById(tableId);
       /** number of rows present    **/
@@ -1097,8 +1101,8 @@ function  deleteCheckedRows(tableId,deleteButtonId)
             }
       }
 
-      var url="ShowAssignPrivilegePage.do";
-      var data="cpOperation="+cpOperation+"&deletedRowsArray="+deletedRowsArray;                
+      var url="ShowAssignPrivilegePage.do?pageOf="+pageOf; 
+      var data="cpOperation="+cpOperation+"&deletedRowsArray="+deletedRowsArray+"&operation="+operation;                
       sendRequestsWithData(url,data,cpOperation);
 }
 
@@ -1403,7 +1407,7 @@ function consentPage()
 
   // Function to send request to get Privileges Summary.
 
-      function getUserPagePrivSummary()
+      function getUserPagePrivSummary(operation)
       {
             var cpOperation="addPrivOnUserPage";      
             checkBoxCtrl=document.getElementById("cpCheckId");
@@ -1493,7 +1497,7 @@ function consentPage()
 
                   else{
                         var url="ShowAssignPrivilegePage.do";
-                        var data="cpOperation="+cpOperation+"&selectedSiteIds="+selectedSiteIds+"&selectedCPIds="+selectedCPIds+"&selectedRoleIds="+selectedRoleIds+"&selectedActionIds="+selectedActionIds+"&isAllCPChecked="+isAllCPChecked;                                     
+                        var data="cpOperation="+cpOperation+"&selectedSiteIds="+selectedSiteIds+"&selectedCPIds="+selectedCPIds+"&selectedRoleIds="+selectedRoleIds+"&selectedActionIds="+selectedActionIds+"&isAllCPChecked="+isAllCPChecked+"&operation="+operation;                                     
                         sendRequestsWithData(url,data,cpOperation);
                   }
 
@@ -1545,8 +1549,8 @@ function consentPage()
                   // Second Cell
                   var str=""+sites;
                   var newSites = "" ;
-                  if(str.length>20){
-                        newSites=str.substring(0,17)+"...";
+                  if(str.length>30){
+                        newSites=str.substring(0,27)+"...";
                   }
                   else{
                         newSites=str;
@@ -1579,8 +1583,8 @@ function consentPage()
 
                   var actionString = "" + actions;
                   var newActionsString="";
-                  if(actionString.length>20){
-                        newActionsString=actionString.substring(0,17)+"...";
+                  if(actionString.length>30){
+                        newActionsString=actionString.substring(0,27)+"...";
                   }
                   else{
                         newActionsString=actionString;;
@@ -1850,5 +1854,18 @@ function getSelElementsList(selectBoxObj)
 	 }
 	 return selectedElementIds;
 }
-
- 
+/*
+// for Preactions performed based on operation before deleting  row .
+function preDeleteActions()
+{
+	var form=document.forms[0];
+    var operation = form.operation.value; 
+	if(operation=="Add")
+	{
+	
+	}
+	else
+	{
+	}
+}
+ */
