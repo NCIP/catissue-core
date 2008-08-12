@@ -603,8 +603,8 @@ function handleStatus(status)
 																<td width="33%" class="black_ar"
 																	onmouseover="Tip('<%=arr[3]%>',WIDTH,200)">
 																<%
-																		if (arr[3].length() > 30) {
-																		arr[3] = arr[3].substring(0, 27) + "...";
+																		if (arr[3].length() > 50) {
+																		arr[3] = arr[3].substring(0, 47) + "...";
 																			}
 																%> <span><%=arr[3]%></span></td>
 
