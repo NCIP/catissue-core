@@ -69,3 +69,6 @@ ALTER TABLE DYEXTN_CONTROL  ADD(READ_ONLY number(1,0));
 
 --Insert into id generator starting count value
 INSERT INTO DYEXTN_ID_GENERATOR( ID,NEXT_AVAILABLE_ID) VALUES(1,1900);
+
+--Insert into dyextn_rule column CATEGORY_ATTR_ID
+ALTER TABLE DYEXTN_RULE ADD (CATEGORY_ATTR_ID  number(19,0)); 
