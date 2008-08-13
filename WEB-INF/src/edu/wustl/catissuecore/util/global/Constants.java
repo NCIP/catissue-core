@@ -2381,6 +2381,9 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String ARITHMETIC_OPERATORS = "secondDropDown";
 	public static final String SECOND_NODE_ATTRIBUTES = "thirdDropDown";
 	public static final String RELATIONAL_OPERATORS = "fourthDropDown";
+	public static final String TIME_INTERVALS_LIST = "timeIntervals";
+	public static final String ENTITY_LABEL_LIST = "entityList";
+	
 	
 	public static final String LEFT_OPERAND = "leftTerm" ;
 	public static final String RIGHT_OPERAND = "rightTerm";
