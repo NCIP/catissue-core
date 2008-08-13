@@ -666,7 +666,7 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 	 * @param role
 	 * @param nameValuBeanList
 	 */
-	private  List<NameValueBean> getActionsForSelRole(String role)
+	public  List<NameValueBean> getActionsForSelRole(String role)
 	{
 		List<NameValueBean> nameValuBeanList=new ArrayList<NameValueBean>();
 		Set<Privilege> actions;	

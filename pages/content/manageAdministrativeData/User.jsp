@@ -395,7 +395,7 @@ function handleStatus(status)
 									<td width="17%" align="left" class="black_ar_t"><bean:message
 										key="assignPrivileges.site(s)" /></td>
 									<td width="17%" align="left" class="black_ar_t"><select
-										class="formFieldSizedNew" id="siteIds" size="4"
+										class="formFieldSizedNew" name = "siteIds" id="siteIds" size="4"
 										multiple="multiple" onchange="getCPsForThisSites(this)">
 										<%
 											String siteName = "";

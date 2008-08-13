@@ -107,8 +107,47 @@ public class UserBizLogic extends DefaultBizLogic
 		}
 		else
 		{
-			user = (User) obj;
+			user = (User) obj;            
 		}
+        if (user.getRoleId() != null && !user.getRoleId().equalsIgnoreCase("-1") && !user.getRoleId().equalsIgnoreCase("0"))
+        {
+            if (userRowIdMap == null || userRowIdMap.isEmpty() && user.getSiteCollection() != null && !user.getSiteCollection().isEmpty())
+            {
+                List<NameValueBean> list = new AssignPrivilegePageBizLogic().getActionsForSelRole(user.getRoleId());
+                NameValueBean roleBean = new NameValueBean();
+                try
+                {
+                    Vector<Role> roleList = SecurityManager.getInstance(this.getClass()).getRoles();
+                    roleBean.setValue(user.getRoleId());
+                    for (Role role : roleList)
+                    {
+                        if (role.getId().toString().equalsIgnoreCase(user.getRoleId()))
+                        {
+                            roleBean.setName(role.getName());
+                            break;
+                        }
+                    }
+                }
+                catch (SMException e)
+                {
+                    
+                }
+                int i = 0;
+                userRowIdMap = new HashMap<String, SiteUserRolePrivilegeBean>(); 
+                for (Site site : user.getSiteCollection())
+                {
+                    List <Site> siteList = new ArrayList<Site>();
+                    siteList.add(site);
+                    SiteUserRolePrivilegeBean siteUserRolePrivilegeBean = new SiteUserRolePrivilegeBean();
+                    siteUserRolePrivilegeBean.setAllCPChecked(true);
+                    siteUserRolePrivilegeBean.setPrivileges(list);
+                    siteUserRolePrivilegeBean.setRole(roleBean);
+                    siteUserRolePrivilegeBean.setSiteList(siteList);
+                    userRowIdMap.put(new Integer(i).toString(),siteUserRolePrivilegeBean);
+                    i++;
+                }
+            }
+        }
 						
 		gov.nih.nci.security.authorization.domainobjects.User csmUser = new gov.nih.nci.security.authorization.domainobjects.User();
 

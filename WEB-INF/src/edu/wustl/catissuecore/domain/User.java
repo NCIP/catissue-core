@@ -650,18 +650,20 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
             	
             	if(!pageOf.equalsIgnoreCase("pageOfSignUp"))
             	{
-//	            	String[] siteIds = uform.getSiteIds();
-//	            	
-//	            	Collection newSiteCollection = new HashSet();
-//	            	for(String siteId : siteIds)
-//	            	{
-//	            		Site site = new Site();
-//	            		site.setId(Long.valueOf(siteId)); 
-//	            		newSiteCollection.add(site);
-//	            	}
-//	            	
-//	            	this.getSiteCollection().clear();
-//	            	this.getSiteCollection().addAll(newSiteCollection);
+	            	String[] siteIds = uform.getSiteIds();
+	            	if (siteIds != null && siteIds.length != 0)
+                    {
+    	            	Collection newSiteCollection = new HashSet();
+    	            	for(String siteId : siteIds)
+    	            	{
+    	            		Site site = new Site();
+    	            		site.setId(Long.valueOf(siteId)); 
+    	            		newSiteCollection.add(site);
+    	            	}
+    	            	
+    	            	this.getSiteCollection().clear();
+    	            	this.getSiteCollection().addAll(newSiteCollection);
+                    }
             	}
                 this.id = new Long(uform.getId());
                 this.setLoginName(uform.getEmailAddress());
