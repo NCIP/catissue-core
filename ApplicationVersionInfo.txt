@@ -1,6 +1,9 @@
 /*
- * $Name: S5
+ * $Name: S6
  * $Log: ApplicationVersionInfo.txt,v $
+ * Revision 1.2.8.17  2008/08/13 09:23:19  sachin_lale
+ * Sprint 6 release
+ *
  * Revision 1.2.8.16  2008/08/03 10:34:45  sachin_lale
  * S5
  *
