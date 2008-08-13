@@ -416,20 +416,7 @@ function checkQuantityforAll(count)
 						<td >
 					<div id="specimenDataTab">
 						<table border="0" width="100%" cellpadding="3" cellspacing="0">
-							<tr>
-                      <td colspan="11" align="right" valign="top" ><table width="100%" border="0" cellspacing="0" cellpadding="0">
-                          <tr>
-                            <td width="88%" align="right" nowrap >
-											<img src="images/uIEnhancementImages/viewall_icon.gif" alt="View All" />
-										  </td>
-					                      <td width="12%" align="center" nowrap="nowrap" ><span class="link">
-												<a href="javascript:showAllSpecimen('<%=count%>')" class="view" >
-													<bean:message key="requestdetails.link.ViewAllConsents" />
-							                    </a>
-						   </span></td>
-                          </tr>
-                      </table></td>
-                    </tr>
+						
 					<tr>
 						  <% 
 									if(requestDetailsList != null)
@@ -451,12 +438,30 @@ function checkQuantityforAll(count)
 								 </td>
 				                 
 				                <td width="11%" rowspan="2" valign="top" class="tableheading">
-									<div>
-										<strong>
-											<bean:message key="consent.consentforspecimen"/>
-											</br>
-										</strong>	
-									</div>
+									<table width="100%" border="0" cellspacing="0" cellpadding="0">
+										
+										<tr>
+											 <td colspan="4" valign="top" class="tableheading" width="20%">
+												<div>
+													<strong>
+														<bean:message key="consent.consentforspecimen"/>
+														</br>
+													</strong>	
+												</div>
+											</td>
+										</tr>
+										<tr>
+											<td width="88%" align="right" nowrap >
+												<img src="images/uIEnhancementImages/viewall_icon.gif" alt="View All" />
+											</td>
+											<td width="12%" align="center" nowrap="nowrap" ><span class="link">
+												<a href="javascript:showAllSpecimen('<%=count%>')" class="view" >
+													<bean:message key="requestdetails.link.ViewAllConsents" />
+							                    </a>
+											</span></td>
+										</tr>
+									</table>
+									
 								</td>
 				                <td width="16%" rowspan="2" valign="top" class="tableheading">
 									<strong>

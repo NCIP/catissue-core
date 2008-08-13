@@ -39,6 +39,7 @@ import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.SpecimenArrayOrderItem;
+import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
@@ -750,7 +751,7 @@ public class OrderBizLogic extends DefaultBizLogic
 			while(orderListFromDBIterator.hasNext())
 			{
 				OrderDetails orderDetails = (OrderDetails)orderListFromDBIterator.next();
-				boolean hasDributionPrivilegeOnSite = isOrderItemValidTodistribute(orderDetails.getOrderItemCollection(),siteIdsList);
+				boolean hasDributionPrivilegeOnSite = isOrderItemValidTodistribute(orderDetails.getOrderItemCollection(),siteIdsList,dao);
 				boolean hasDistributionPrivilegeOnCp = checkDistributionPrivilegeOnCP(user,privilegeCache,orderDetails.getOrderItemCollection());
 				if(isSuperAdmin(user) || hasDributionPrivilegeOnSite || hasDistributionPrivilegeOnCp)
 				{
@@ -780,12 +781,12 @@ public class OrderBizLogic extends DefaultBizLogic
 	 * @param siteIdsList
 	 * @return
 	 */
-	private boolean isOrderItemValidTodistribute(Collection orderItemCollection,List siteIdsList)
+	private boolean isOrderItemValidTodistribute(Collection orderItemCollection,List siteIdsList,HibernateDAO dao)
 	{
 		boolean isValidToDistribute = false;
 		
 		Iterator orderItemColItr = orderItemCollection.iterator();
-		if(orderItemColItr.hasNext())	
+		while(orderItemColItr.hasNext())	
 		{	
 			OrderItem orderItem = (OrderItem)orderItemColItr.next();
 			if(orderItem instanceof ExistingSpecimenOrderItem)
@@ -794,6 +795,7 @@ public class OrderBizLogic extends DefaultBizLogic
 				if(siteIdsList.contains(existingSpecimenOrderItem.getSpecimen().getSpecimenPosition().getStorageContainer().getSite().getId()))
 				{
 					isValidToDistribute = true;
+					break;
 				}
 			
 			}else if(orderItem instanceof ExistingSpecimenArrayOrderItem)
@@ -803,18 +805,23 @@ public class OrderBizLogic extends DefaultBizLogic
 				if(siteIdsList.contains(storageContainer.getSite().getId()))
 				{
 					isValidToDistribute = true;
-						
+					break;	
 				}
 			}else if(orderItem instanceof DerivedSpecimenOrderItem)
 			{
 				DerivedSpecimenOrderItem derivedSpecimenOrderItem = (DerivedSpecimenOrderItem) orderItem;
-				//derivedSpecimenOrderItem= (DerivedSpecimenOrderItem)HibernateMetaData.getProxyObjectImpl(derivedSpecimenOrderItem);
-				Long siteId = (Long)HibernateMetaData.getProxyObjectImpl(derivedSpecimenOrderItem.getParentSpecimen()
-						.getSpecimenPosition().getStorageContainer().getSite().getId());
-				if(siteIdsList.contains(siteId))
+				SpecimenPosition specimenPosition = (SpecimenPosition)HibernateMetaData.getProxyObjectImpl(derivedSpecimenOrderItem.getParentSpecimen().getSpecimenPosition());
+				if(specimenPosition != null && !derivedSpecimenOrderItem.getStatus().equals(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED))
 				{
-					isValidToDistribute = true;
+					Long siteId = (Long)specimenPosition.getStorageContainer().getSite().getId();
+					if(siteIdsList.contains(siteId))
+					{
+						isValidToDistribute = true;
+						break;
+					}
 				}
+				
+				
 			}
 		}
 			
@@ -1268,6 +1275,10 @@ public class OrderBizLogic extends DefaultBizLogic
 		
 	}
 	
+	/**
+	 * @param specimenId
+	 * @return
+	 */
 	public Specimen getSpecimenObject(Long specimenId)
 	{
 		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
@@ -1298,6 +1309,11 @@ public class OrderBizLogic extends DefaultBizLogic
 		}
     	return specimen;
 	}
+	/**
+	 * @param specimenId
+	 * @param dao
+	 * @return
+	 */
 	public Specimen getSpecimen(Long specimenId,AbstractDAO dao)
 	{
 		String sourceObjectName = Specimen.class.getName();
@@ -1310,7 +1326,6 @@ public class OrderBizLogic extends DefaultBizLogic
 		}
 		return specimen;
 	}
-	
 	
 	
 	
