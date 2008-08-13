@@ -14,6 +14,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import edu.wustl.catissuecore.bean.ConsentBean;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
@@ -404,6 +405,18 @@ public class ConsentUtil
 
 	/*
 	 * This method verifies the consents of SCG and specimen for any conflicts.
+	 * 1. Check for conflciting consent status
+	 * 		a. Create a Map<ConsentTiedId,ConsentStatus> of curent specimen consents
+	 * 		b. Iterate over a oldStatusCollection and check the status against above map
+	 *  	c. If all are matching then set is changable true, else if any obne status failt ot match 
+	 *  	   set flag false adn break
+	 * 2. Set new status to specimen if no conflict from above step
+	 * 		a.  Iterate over specimen consent colelction
+	 *      b. Iterate over nEw consent collection
+	 *      c. check if Consenttier id of specimen and new colelction is macth if yes change 
+	 *         the status value of specimen consent
+	 *      d. Put all changed Sepcimen ConsnetStatus object in new collection updatedSpecimenConsentStatusCollection 
+	 *         and set updatedSpecimenConsentStatusCollection in specimen.
 	 */
 	private static void checkConflictingConsents(Collection newConsentCollection, Collection oldConsentCollection, Specimen specimen, DAO dao ) throws DAOException
 	{
@@ -411,36 +424,53 @@ public class ConsentUtil
  * 			OR
  *		 if oldS.c1 == cS.c1 then update child specimen with new S.c1
  */		
+		//bug 8381 start
+		
+		Map<Long,ConsentTierStatus> specimenConsentsMap = new HashMap<Long,ConsentTierStatus>();
+		Collection specimenConsentStatusCollection = specimen.getConsentTierStatusCollection();
+		Iterator specimenConsentStatusItr = specimenConsentStatusCollection.iterator() ;
+		
+		while(specimenConsentStatusItr.hasNext() )
+		{
+			ConsentTierStatus specimenConsentStatus = (ConsentTierStatus)specimenConsentStatusItr.next() ;
+			specimenConsentsMap.put(specimenConsentStatus.getConsentTier().getId(), specimenConsentStatus);
+		}
+		boolean isChangable = true;
+		
 		Iterator oldConsentItr = oldConsentCollection.iterator();
-		while(oldConsentItr.hasNext() )
+		while(oldConsentItr.hasNext())
 		{
 			ConsentTierStatus oldConsentStatus = (ConsentTierStatus)oldConsentItr.next() ;
-			Collection specimenConsentStatusCollection = specimen.getConsentTierStatusCollection();
-			Iterator specimenConsentStatusItr = specimenConsentStatusCollection.iterator() ;
-			Collection updatedSpecimenConsentStatusCollection = new HashSet();
-			while(specimenConsentStatusItr.hasNext() )
+			Long consentTierid = oldConsentStatus.getConsentTier().getId();			
+			ConsentTierStatus specimenConsentStatus = specimenConsentsMap.get(consentTierid);
+			if(!oldConsentStatus.getStatus().equals(specimenConsentStatus.getStatus()))
 			{
-				ConsentTierStatus specimenConsentStatus = (ConsentTierStatus)specimenConsentStatusItr.next() ;
-				if(oldConsentStatus.getConsentTier().getId().longValue() == specimenConsentStatus.getConsentTier().getId().longValue() )
+				isChangable = false;
+				break;
+			}
+		}
+		
+		if(isChangable)
+		{
+			Collection updatedSpecimenConsentStatusCollection = new HashSet();			
+			Iterator specimenConsentItr = specimenConsentStatusCollection.iterator() ;
+			while(specimenConsentItr.hasNext())
+			{
+				ConsentTierStatus specimenConsent = (ConsentTierStatus) specimenConsentItr.next();
+				Iterator newConsentItr = newConsentCollection.iterator();
+				while(newConsentItr.hasNext() )
 				{
-					if(oldConsentStatus.getStatus().equals(specimenConsentStatus.getStatus()))
+					ConsentTierStatus newConsentStatus = (ConsentTierStatus)newConsentItr.next() ;
+					if(newConsentStatus.getConsentTier().getId().longValue() == specimenConsent.getConsentTier().getId().longValue())
 					{
-						Iterator newConsentItr = newConsentCollection.iterator();
-						while(newConsentItr.hasNext() )
-						{
-							ConsentTierStatus newConsentStatus = (ConsentTierStatus)newConsentItr.next() ;
-							if(newConsentStatus.getConsentTier().getId().longValue() == specimenConsentStatus.getConsentTier().getId().longValue() )
-							{
-								specimenConsentStatus.setStatus(newConsentStatus.getStatus()); 
-							}
-						}
+						specimenConsent.setStatus(newConsentStatus.getStatus()); 
 					}
 				}
-				updatedSpecimenConsentStatusCollection.add(specimenConsentStatus);
+				updatedSpecimenConsentStatusCollection.add(specimenConsent);
 			}
-			specimen.setConsentTierStatusCollection(updatedSpecimenConsentStatusCollection);
+			specimen.setConsentTierStatusCollection(updatedSpecimenConsentStatusCollection);			
 		}
-
+		//bug 8381 end
 		//to update child specimens
 		Collection childSpecimens = specimen.getChildSpecimenCollection();
 		Iterator childItr = childSpecimens.iterator();  
