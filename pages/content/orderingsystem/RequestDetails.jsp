@@ -475,7 +475,7 @@ function checkQuantityforAll(count)
 								</td>
 				              </tr>
 				              <tr>
-								<td width="9%" class="subtd">
+								<td width="11%" class="subtd">
 									<bean:message key='requestdetails.datatable.label.RequestItem'/>
 								</td>
 				               
@@ -615,24 +615,23 @@ function checkQuantityforAll(count)
 																		
 					%>					
 										
-											<html:select property="<%= requestFor %>" name="requestDetailsForm" size="l" styleClass="formFieldSized9" styleId="<%= requestForId %>" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="<%= changeAvailableQuantity%>" disabled="<%= disableRow %>">
+											<html:select property="<%= requestFor %>" name="requestDetailsForm" size="l" styleClass="formFieldSized6" styleId="<%= requestForId %>" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="<%= changeAvailableQuantity%>" disabled="<%= disableRow %>">
 												<html:optionsCollection property="<%=specimenList%>" name="requestDetailsForm" label="name" value="value"/>
 											</html:select> 		
 										
 											<logic:equal name="requestDetailsForm" property="<%=rowStatuskey%>" value="enable">
 					
 																				 		
-												<html:link href="#" styleClass="view" styleId="label" onclick="<%=specimenClickFunction%>">
-													View 
-												</html:link>
+												<a href="#" onclick="<%=specimenClickFunction%>">
+													<img src="images/uIEnhancementImages/ic_specimen.gif" border="0" alt="View Specimen"  title="View Specimen"/>
+												</a> 
 																						
 												<a href="#" onclick="<%=aliquoteClickFunction%>">
-													Aliquot
+													<img src="images/uIEnhancementImages/a.gif" border="0"  alt="Create Aliquot" title="Create Aliquot"/>
 												</a> 
 												
-
 												<a href="#" onclick="<%=derivativeCreateFunction%>">
-													Derivative
+													<img src="images/uIEnhancementImages/ic_d.gif" border="0" alt="Create Derivative"  title="Create Derivative"/>
 												</a> 
 
 											</logic:equal>
