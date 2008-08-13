@@ -582,13 +582,16 @@
     		    	  
 	 	]]>
 	 </mx:Script>
+      
+  <!-- <mx:RemoteObject id="rpcService" destination="cdeService"></mx:RemoteObject> -->
    
 
    <!--customColumnName field validation it is a mandatory field -->  
    <mx:StringValidator id="fieldVal" source="{customColumnName}" property="text" required="true"/> 
-   		
-   <mx:RemoteObject id="rpcService" destination="cdeService"></mx:RemoteObject>
    
+   
+   		
+      
      <mx:VBox x="20" y="20">
       <mx:HBox x="20" y="20" id="labelHBox">
         <mx:Label id="lb1" name="label1" width="100"  height="50" color="blue" text="{firstEntityLabel}" fontStyle="normal" fontWeight="bold" buttonMode="true" />
@@ -602,7 +605,7 @@
       
       <mx:HBox id ="myBox" x="20" y="60" creationComplete="validateComboboxText()">
       	
-      	<mx:ComboBox id="cb1" dataProvider="{myArray1}" width="100"  borderThickness="0" borderColor="blue"  
+     	<mx:ComboBox id="cb1" dataProvider="{myArray1}" width="100"  borderThickness="0" borderColor="blue"  
       		prompt="--Select--" itemRenderer="mx.controls.Label" change="validateQueryData()"
       		rowCount="10" close="truncateLongText(event)" toolTip=""/>
       	<mx:ComboBox id="cb2" dataProvider="{myArray2}" width="100"   borderThickness="0" borderColor="blue"  
@@ -622,6 +625,7 @@
       </mx:HBox> 	 
 	 <mx:HBox x="20">
          <mx:Label id="columnLabel" width="330" text="Please Enter Column Name To Be Displayed in Results:"/>
+              
          <mx:TextInput id="customColumnName" width="300" restrict="A-Z a-z" borderColor="blue" focusOut="validate()"/>
 	 </mx:HBox>
 	  

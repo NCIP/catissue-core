@@ -35,7 +35,7 @@
      	/**
      	* Init method for DAGPath
      	*/
-	    public function init()
+	    public function init() : void
 	    {
 	    	this.addEventListener(MouseEvent.CLICK,createAndShow); 
 			this.addEventListener(MouseEvent.MOUSE_OVER,select);
@@ -159,7 +159,6 @@
 			var ass:Association=dagNode1.getOutAssociation(node2);
 			if(ass != null)
 			{
-				
 				if(dagNode1.nodeType==DAGConstants.VIEW_ONLY_NODE)
 				{
 					dagNode1.removeOutAssociation(node2,ass.associatedLink);
@@ -195,15 +194,12 @@
 			if(event.label==DAGConstants.DELETE)
 			{
 				
-				Alert.show("Delete Path functionality is Temporarily Suspended. Please Redefine the Query");
-				/*var dagPath:DAGPath = this.parentApplication.dagPathUIMap.getValue(this.name);
+				var dagPath:DAGPath = this.parentApplication.dagPathUIMap.getValue(this.name);
 				var node1:String=dagPath.sourceExpId+"";
 				var node2:String=dagPath.destinationExpId+"";
 				var dagNode1:DAGNode = DAGNode(this.parent.getChildByName(node1));
 				var dagNode2:DAGNode = DAGNode(this.parent.getChildByName(node2));
 				deletePath(dagNode1,dagNode2);
-				
-				*/
 			}
 				
 		}

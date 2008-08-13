@@ -20,7 +20,7 @@
 		import mx.rpc.events.FaultEvent;
 		import flash.utils.IDataInput;
 		import flash.utils.IDataOutput;
-		import mx.controls.Alert;
+		//import mx.controls.Alert;
 		import mx.core.Repeater;
 		import mx.controls.Menu;
 		import mx.collections.Sort;
@@ -55,6 +55,7 @@
 
 		public var dagpathList:ArrayCollection;
 		public var outAssociations:ArrayCollection = new ArrayCollection();		
+		[Bindable]
 		public var displayoutAssociations:ArrayCollection = new ArrayCollection();		
 		public var inAssociations:ArrayCollection = new ArrayCollection();
 		public var orderOfAss:HashMap=new HashMap();
@@ -150,7 +151,8 @@
 		* Remove out association
 		*/	
 		[Bindable]
-		public function removeOutAssociation(node:String,link:String):void{
+		public function removeOutAssociation(node:String,link:String):void
+		{
 			var ass:Association;
 			for(var i:int=0;i<outAssociations.length;i++)
 			{
@@ -320,7 +322,6 @@
 					this.outputMenuData[0].enabled=true;
 					this.outputMenuData[1].enabled=false;
 				}
-				
 			}
 			else
 			{
@@ -348,6 +349,7 @@
 		*/
 		public function deleteNode():void
 		{
+				
 				var ass:Association;
 				var length:int  = inAssociations.length as int;
 				for(var i:int=0;i<length;i++)
@@ -375,8 +377,7 @@
 		{
 			if(event.label == DAGConstants.DELETE)
 			{
-				Alert.show("Delete Path functionality is Temporarily Suspended. Please Redefine the Query");
-				//deleteNode();
+				deleteNode();
 			}
 			if(event.label ==DAGConstants.EDIT)
 			{
