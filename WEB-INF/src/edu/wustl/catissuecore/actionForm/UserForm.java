@@ -512,10 +512,6 @@ public class UserForm extends AbstractActionForm
 		{
 			this.role = Constants.NON_ADMIN_USER;
 		}
-        else if (role != null && role.equalsIgnoreCase("13")) 
-		{
-			this.role = Constants.ADMIN_USER;
-		}
         else
         {
             this.role = role;

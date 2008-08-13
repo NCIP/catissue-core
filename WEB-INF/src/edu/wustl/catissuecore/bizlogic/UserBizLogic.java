@@ -197,6 +197,15 @@ public class UserBizLogic extends DefaultBizLogic
 			//	 }
 				if (user.getRoleId() != null)
 				{
+                    if (user.getRoleId().equalsIgnoreCase(Constants.ADMIN_USER))
+                    {
+                        user.setRoleId(Constants.NON_ADMIN_USER);
+                    }
+                    if (user.getRoleId().equalsIgnoreCase(Constants.SUPER_ADMIN_USER))
+                    {
+                        user.setRoleId(Constants.ADMIN_USER);
+                    }
+                     
 					SecurityManager.getInstance(UserBizLogic.class).assignRoleToUser(csmUser.getUserId().toString(), user.getRoleId());
 				}
 

@@ -2411,6 +2411,7 @@ public static final String ADD_MULTIPLE_SPECIMEN_TO_CART="addMltipleSpecimenToCa
 	// Used for Authentication, Authorization through CSM
 	public static final String ADMIN_USER="1";
 	public static final String NON_ADMIN_USER="7";
+    public static final String SUPER_ADMIN_USER="13";
 	public static final String ADD_GLOBAL_PARTICIPANT="ADD_GLOBAL_PARTICIPANT";
 	
 	public static final String getCurrentAndFuturePGAndPEName(long siteId)
