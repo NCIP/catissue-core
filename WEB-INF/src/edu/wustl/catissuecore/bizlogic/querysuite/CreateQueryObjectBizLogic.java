@@ -144,7 +144,7 @@ public class CreateQueryObjectBizLogic
 				for (int i = 0; i < len; i++)
 				{
 					if(!"".equals(values[i]))
-					attributeValues.add(values[i].trim());
+						attributeValues.add(values[i].trim());
 				}
 		}
 		if (params[2] != null)
@@ -384,6 +384,8 @@ public class CreateQueryObjectBizLogic
 	{
 		ICondition condition;
 		String componentName;
+		ArrayList<ICondition> removalList = new ArrayList<ICondition>();
+		List<ICondition> deafultConditions = new ArrayList<ICondition>();
 		int size = conditions.size();
 		for (int j = 0; j < size; j++)
 		{
@@ -395,9 +397,18 @@ public class CreateQueryObjectBizLogic
 				ArrayList<String> attributeValues = getConditionValuesList(params);
 				errorMessage = errorMessage + validateAttributeValues(condition
 						.getAttribute().getDataType().toString(),attributeValues);
+				
 				condition.setValues(attributeValues);
 				condition.setRelationalOperator(RelationalOperator.getOperatorForStringRepresentation(
-						params[QueryModuleConstants.INDEX_PARAM_ZERO]));
+							params[QueryModuleConstants.INDEX_PARAM_ZERO]));
+			}
+			if((!newConditions.containsKey(componentName)) && (displayNamesMap == null))
+			{
+				removalList.add(condition);
+				if(!(condition instanceof IParameterizedCondition))
+				{
+					deafultConditions.add(condition);
+				}
 			}
 			if (displayNamesMap != null && displayNamesMap.containsKey(componentName))
 			{
@@ -406,6 +417,11 @@ public class CreateQueryObjectBizLogic
 				iparameterizedCondition.setName(displayNamesMap.get(componentName));
 				conditions.set(j, iparameterizedCondition);
 			}
+		}
+		for(ICondition removalEntity : removalList)
+		{
+			if(!deafultConditions.contains(removalEntity))
+				conditions.remove(removalEntity);
 		}
 		return errorMessage;
 	}

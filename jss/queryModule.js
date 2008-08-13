@@ -558,6 +558,149 @@
 		hideCursor();
 	}
 	
+	function createQueryStringForSavedQuery(nameOfFormToPost, entityName , attributesList,callingFrom)
+	{
+		waitCursor();
+		alert(attributesList);
+		var strToCreateQueyObject ="";
+		var attribute = attributesList.split(";");
+		for(i=1; i<attribute.length; i++)
+		{
+			var opId =  attribute[i]+"_combobox";
+			var textBoxId = attribute[i]+"_textBox";
+			var textBoxId1 = attribute[i]+"_textBox1";
+			var enumBox = attribute[i]+"_enumeratedvaluescombobox";
+			
+			//var radioButtonFalse = attribute[i]+"_radioButton_false";
+			if(navigator.appName == "Microsoft Internet Explorer")
+			{					
+				var op = document.getElementById(opId).value;
+				if(document.getElementById(enumBox))
+				{
+					enumValue = document.getElementById(enumBox).value;
+				}
+			}
+			else
+			{
+				var op = document.forms[nameOfFormToPost].elements[opId].value;
+				if(document.forms[nameOfFormToPost].elements[enumBox])
+				{
+					enumValue = document.forms[nameOfFormToPost].elements[enumBox].value;	
+				}
+			}		
+			if(op != "Between")
+			{
+				if (document.getElementById(textBoxId))
+				{
+					textId = document.getElementById(textBoxId).value;		
+					/*if(textId != "")
+					{*/
+						if(op == "In" || op =="Not In")
+						{
+							var valString = "";
+							var inVals = textId.split(",");
+							for(g=0; g<inVals.length; g++)
+							{
+								if(inVals[g] != "")
+								{
+									valString = valString  + "&" + inVals[g];
+								}
+							}
+							strToCreateQueyObject = strToCreateQueyObject + "@#condition#@"+ attribute[i] + "!*=*!" + op + "!*=*!" + valString +";";
+						} else 
+						{
+							if(textId == "")
+								strToCreateQueyObject = strToCreateQueyObject + "@#condition#@"+ attribute[i] + "!*=*!" + op + "!*=*!" + " " +";";
+							else
+								strToCreateQueyObject = strToCreateQueyObject + "@#condition#@"+ attribute[i] + "!*=*!" + op + "!*=*!" + textId +";";
+						}
+					//}
+				}
+				if(navigator.appName == "Microsoft Internet Explorer")
+				{
+					if(document.getElementById(enumBox))
+						var ob =  document.getElementById(enumBox);
+				}
+				else
+				{
+					if(document.forms[nameOfFormToPost].elements[enumBox])
+						var ob = document.forms[nameOfFormToPost].elements[enumBox];
+				}	
+
+				if(ob)
+				{
+					if(ob.value != "")
+					{
+						var values = "";
+						while(ob.selectedIndex != -1)
+						{
+							var selectedValue = ob.options[ob.selectedIndex].value;
+							values = values + "&" +  selectedValue;
+							ob.options[ob.selectedIndex].selected = false;
+						}
+						strToCreateQueyObject = strToCreateQueyObject + "@#condition#@"+ attribute[i] + "!*=*!" + op + "!*=*!" + values +";";
+					}
+				}
+				var radioButtonTrue = attribute[i]+"_radioButton_true";
+			    var radioButtonFalse = attribute[i]+"_radioButton_false";
+				if(document.getElementById(radioButtonTrue) != null  || document.getElementById(radioButtonFalse)!= null)
+				{
+					var objTrue = document.getElementById(radioButtonTrue);
+					var objFalse = document.getElementById(radioButtonFalse);
+					if(objTrue.checked)
+					{
+						strToCreateQueyObject = strToCreateQueyObject + "@#condition#@"+ attribute[i] + "!*=*!" + op + "!*=*!" + 'true' +";";
+					}
+					else if(objFalse.checked)
+					{
+						strToCreateQueyObject = strToCreateQueyObject + "@#condition#@"+ attribute[i] + "!*=*!" + op + "!*=*!" + 'false' +";";
+					}
+				}
+				else
+				{
+				   if(callingFrom=='addLimit')
+					{
+				 	 var row = document.getElementById('validationMessagesRow');
+				 	 row.innerHTML = "";
+					}
+					
+				}
+			}
+			if(op == "Between")
+			{
+				if(document.getElementById(textBoxId1))
+				{
+					textId1 = document.getElementById(textBoxId1).value;
+				}
+				if (document.getElementById(textBoxId))
+				{
+					textId = document.getElementById(textBoxId).value;		
+				}
+				if(textId != "" && textId1 == "")
+				{
+					strToCreateQueyObject =  strToCreateQueyObject + "@#condition#@"+ attribute[i] + "!*=*!" + op + "!*=*!" + textId +"!*=*!"+"missingTwoValues"+";";
+				}
+				if(textId1 != "" && textId == "")
+				{
+					strToCreateQueyObject =  strToCreateQueyObject + "@#condition#@"+ attribute[i] + "!*=*!" + op + "!*=*!" + "missingTwoValues" +"!*=*!"+"textId1"+";";
+				}
+				if(textId != "" && textId1!= "")
+				{
+					strToCreateQueyObject =  strToCreateQueyObject + "@#condition#@"+ attribute[i] + "!*=*!" + op + "!*=*!" + textId +"!*=*!"+textId1+";";
+				}
+				if(textId == "" && textId1== "")
+				{
+					strToCreateQueyObject =  strToCreateQueyObject + "@#condition#@"+ attribute[i] + "!*=*!" + op + "!*=*!" + " " +"!*=*!"+" "+";";
+				}
+			}
+			if(op == "Is Null" || op == "Is Not Null")
+			{
+				strToCreateQueyObject =  strToCreateQueyObject + "@#condition#@"+ attribute[i] + "!*=*!" + op +";";
+			}
+		}
+           return strToCreateQueyObject;
+	}
+	
 	 function createQueryString(nameOfFormToPost, entityName , attributesList,callingFrom)
         {
          waitCursor();
@@ -832,7 +975,7 @@
         var entityName="";
         var frmName = document.forms[0].name;
         var list = document.getElementById('attributesList').value;
-    	var buildquerystr =  createQueryString(frmName, entityName , list,frmName);
+    	var buildquerystr =  createQueryStringForSavedQuery(frmName, entityName , list,frmName);
         document.getElementById('conditionList').value = buildquerystr;
         // Save query
         document.getElementById('saveQueryForm').submit();
