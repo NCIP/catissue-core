@@ -228,12 +228,12 @@ function checkQuantity(index)
 
 		if(availableQty > requiredQty)
 		{
-			answer= confirm("Available Quantity is greater then the Ordered Quantity : Do you still want to distribute the specimen");
+			answer= confirm("Available Quantity is greater then the Ordered Quantity :Select OK if you still want to distribute the specimen");
 		
 
 		}else if(availableQty < requiredQty)
 		{
-			answer= confirm("Available Quantity is less then the Ordered Quantity : Do you still want to distribute the specimen");
+			answer= confirm("Available Quantity is less then the Ordered Quantity :Select OK if you still want to distribute the specimen");
 		}
 
 		if(availableQty == requiredQty || answer)
@@ -263,7 +263,7 @@ function checkQuantityforAll(count)
 			availableQty = document.getElementById("availableQtyId" + i).value;	
 			requiredQty = document.getElementById("requestedQtyId" + i).value;	
 			if(availableQty != requiredQty) {
-				answer= confirm("Some of the specimens have Available Quantity greater then or less then the Ordered Quantity : Do you still want to distribute the specimen");
+				answer= confirm("Some of the specimens have Available Quantity greater then or less then the Ordered Quantity : Select Ok if you still want to distribute the specimen");
 				break;
 			}
 		
@@ -274,11 +274,13 @@ function checkQuantityforAll(count)
 			{
 				canDistribute = "value(RequestDetailsBean:"+i+"_canDistribute)";
 				document.getElementById(canDistribute).value="true";
+				updateAllStatus();
 
 			}
 		}
+	} else {
+		updateAllStatus();
 	}
-	updateAllStatus();
 
 }
 
