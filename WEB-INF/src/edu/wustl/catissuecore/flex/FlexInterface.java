@@ -46,6 +46,7 @@ import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.flex.dag.CustomFormulaNode;
+import edu.wustl.catissuecore.flex.dag.SingleNodeCustomFormulaNode;
 import edu.wustl.catissuecore.flex.dag.DAGConstant;
 import edu.wustl.catissuecore.flex.dag.DAGNode;
 import edu.wustl.catissuecore.flex.dag.DAGPanel;
@@ -1434,6 +1435,27 @@ public class FlexInterface
 		return areNodesValid;
 	}
 	
+	public boolean checkIfSingleNodeValid(List<DAGNode> linkedNodeList)
+	{
+		boolean isNodeValid =  false;
+		isNodeValid =dagPanel.checkForNodeValidAttributes(linkedNodeList.get(0));
+		return isNodeValid;
+	}
+	
+	public Map getSingleNodeQueryDate(List<DAGNode> linkedNodeList)
+	{
+		DAGNode sourceNode = linkedNodeList.get(0);
+		Map singleNodeDataMap = dagPanel.getSingleNodeQueryData(sourceNode.getExpressionId(), sourceNode.getNodeName());
+		
+		return singleNodeDataMap;
+	}
+	
+	public Map getSingleNodeEditData(SingleNodeCustomFormulaNode customNode)
+	{
+		Map singleNodeDataMap = dagPanel.getSingleNodeQueryData(customNode.getNodeExpressionId(), customNode.getEntityName());
+		return singleNodeDataMap;
+	}
+	
 	public Map retrieveQueryData(List<DAGNode> linkedNodeList)
 	{
 		DAGNode sourceNode = linkedNodeList.get(0);
@@ -1448,10 +1470,10 @@ public class FlexInterface
 		return queryDataMap;
 	}
 	
-	public void removeCustomFormula()
+	public void removeCustomFormula(String nodeID)
 	{
 		//System.out.println("In remove custom formula");
-		dagPanel.removeCustomFormula();
+		dagPanel.removeCustomFormula(nodeID);
 	}
 	
 	
@@ -1522,6 +1544,11 @@ public class FlexInterface
 	public CustomFormulaNode formTemporalQuery(CustomFormulaNode customFormulaNode, String operation)
 	{
 		return dagPanel.formTemporalQuery(customFormulaNode,operation);
+	}
+	
+	public SingleNodeCustomFormulaNode formSingleNodeFormula(SingleNodeCustomFormulaNode node,String operation)
+	{
+		return dagPanel.formSingleNodeFormula(node,operation);
 	}
 	/**
 	 * Links 2 nodes
