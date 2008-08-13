@@ -286,6 +286,10 @@ public class UserAction extends SecureAction
   
     private void setUserPrivileges(HttpSession session, long id)
 	{
+    	if (id == 0)
+    	{
+    		return;
+    	}
     	try
     	{
 	    	IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.USER_FORM_ID);

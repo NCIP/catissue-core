@@ -88,6 +88,7 @@ import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.security.PrivilegeCache;
 import edu.wustl.common.security.PrivilegeManager;
 import edu.wustl.common.security.PrivilegeUtility;
+import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
@@ -1792,7 +1793,6 @@ public class Utility extends edu.wustl.common.util.Utility {
 		String pgName = null;
 		Site site = bean.getSiteList().get(0);
 		User user = bean.getUser();
-		String csmUserId = user.getCsmUserId().toString();
 		CollectionProtocol cp = bean.getCollectionProtocol();
 		PrivilegeUtility privilegeUtility = new PrivilegeUtility();
 		
@@ -1848,6 +1848,50 @@ public class Utility extends edu.wustl.common.util.Utility {
 		}
 	}
 	
+	public static void processDeletedPrivilegesOnCPPage(SiteUserRolePrivilegeBean siteUserRolePrivilegeBean, Long cpId)
+	{
+		SiteUserRolePrivilegeBean bean = siteUserRolePrivilegeBean;
+		String groupName = null;
+		String pgName = null;
+		User user = bean.getUser();
+		
+		PrivilegeUtility privilegeUtility = new PrivilegeUtility();
+		
+		List<Group> grpList = new ArrayList<Group>();
+		List<ProtectionGroup> pgList = new ArrayList<ProtectionGroup>();
+		
+		groupName = Constants.getCPUserGroupName(cpId, user.getCsmUserId());
+		pgName = Constants.getCollectionProtocolPGName(cpId);
+		
+		Group group = new Group();
+		group.setGroupName(groupName);
+		GroupSearchCriteria groupSearchCriteria = new GroupSearchCriteria(group);
+		try 
+		{
+			grpList = privilegeUtility.getUserProvisioningManager().getObjects(groupSearchCriteria);
+			
+			if (grpList != null && !grpList.isEmpty())
+			{
+				group = grpList.get(0);
+			}
+			
+			ProtectionGroup pg = new ProtectionGroup();
+			pg.setProtectionGroupName(pgName);
+			ProtectionGroupSearchCriteria pgSearchCriteria = new ProtectionGroupSearchCriteria(pg);
+			pgList = privilegeUtility.getUserProvisioningManager().getObjects(pgSearchCriteria);
+			if (pgList != null && !pgList.isEmpty())
+			{
+				pg = pgList.get(0);
+			}
+			
+			new PrivilegeUtility().getUserProvisioningManager().removeGroupFromProtectionGroup(pg.getProtectionGroupId().toString(), group.getGroupId().toString());
+			PrivilegeManager.getInstance().removePrivilegeCache(user.getLoginName());
+		} 
+		catch (CSException e) 
+		{
+			Logger.out.debug(e.getMessage(), e);
+		}
+	}
 	
 	/**
 	 * @param collectionProtocol
@@ -1861,5 +1905,20 @@ public class Utility extends edu.wustl.common.util.Utility {
 		collectionProtocolDTO.setCollectionProtocol(collectionProtocol);
 		collectionProtocolDTO.setRowIdBeanMap(rowIdBeanMap);
 		return collectionProtocolDTO;
+	}
+	
+	public static UserNotAuthorizedException getUserNotAuthorizedException(String privilegeName, String protectionElementName)
+	{
+		 UserNotAuthorizedException ex = new UserNotAuthorizedException();
+         ex.setPrivilegeName(privilegeName);
+         if (protectionElementName != null && (protectionElementName.contains("Site") || protectionElementName.contains("CollectionProtocol")))
+         {
+             String [] arr = protectionElementName.split("_");
+             String [] nameArr = arr[0].split("\\.");
+             String baseObject = nameArr[nameArr.length-1];
+             ex.setBaseObject(baseObject);
+             ex.setBaseObjectIdentifier(arr[1]);
+         }
+         return ex;
 	}
 }

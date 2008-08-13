@@ -100,7 +100,6 @@
 	<siteMappings>
 		<siteMapping name="USER_PROVISIONING" id="13"/>
 		<siteMapping name="PROTOCOL_ADMINISTRATION" id="16"/>
-	    <siteMapping name="GENERAL_ADMINISTRATION" id="29"/>
 		<siteMapping name="STORAGE_ADMINISTRATION" id="15"/>
 		<siteMapping name="DISTRIBUTION" id="21"/>
 	</siteMappings>
@@ -108,6 +107,7 @@
 	<collectionProtocolMappings>
 		<collectionProtocolMapping name="REGISTRATION" id="18"/>
 		<collectionProtocolMapping name="SPECIMEN_PROCESSING" id="26"/>
+		<collectionProtocolMapping name="DISTRIBUTION" id="21"/>
 	</collectionProtocolMappings>
 
 	<scientistMappings>
@@ -120,6 +120,7 @@
 		<globalMapping name="PROTOCOL_ADMINISTRATION" id="16"/>
 		<globalMapping name="DEFINE_ANNOTATION" id="17"/>
 		<globalMapping name="QUERY" id="22"/>
+		<globalMapping name="GENERAL_ADMINISTRATION" id="29"/>
 	</globalMappings>	
 </baseObjectPrivilegeMappings>
 </PrivilegeMappings>

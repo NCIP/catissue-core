@@ -1285,9 +1285,10 @@ public class ParticipantBizLogic extends DefaultBizLogic
 	/**
 	 * Over-ridden for the case of Non - Admin user should be able to Add 
 	 * Global Participant 
+	 * @throws UserNotAuthorizedException 
 	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#isAuthorized(edu.wustl.common.dao.AbstractDAO, java.lang.Object, edu.wustl.common.beans.SessionDataBean)
 	 */
-	public boolean isAuthorized(AbstractDAO dao, Object domainObject, SessionDataBean sessionDataBean)  
+	public boolean isAuthorized(AbstractDAO dao, Object domainObject, SessionDataBean sessionDataBean) throws UserNotAuthorizedException  
 	{
 		boolean isAuthorized = false;
 		
@@ -1347,6 +1348,10 @@ public class ParticipantBizLogic extends DefaultBizLogic
 		{
 			isAuthorized = edu.wustl.catissuecore.util.global.Utility.checkForAllCurrentAndFutureCPs(dao,privilegeName, sessionDataBean);
 		}
+		if (!isAuthorized)
+        {
+			throw edu.wustl.catissuecore.util.global.Utility.getUserNotAuthorizedException(privilegeName, protectionElementName);    
+        }
 		return isAuthorized;		
 	}
 }

@@ -23,10 +23,12 @@ import edu.wustl.catissuecore.multiRepository.bean.SiteUserRolePrivilegeBean;
 import edu.wustl.catissuecore.util.CollectionProtocolUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
+import edu.wustl.common.action.CommonAddEditAction;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
+import edu.wustl.common.util.Utility;
 
 /**
  * This is the method for submitting Collection Protocol
@@ -87,8 +89,21 @@ public class SubmitCPAction extends BaseAction
             // To delegate UserNotAuthorizedException forward
 			if(ex instanceof UserNotAuthorizedException)
 			{
-				ActionError error = new ActionError("access.addedit.object.denied", userName, CollectionProtocol.class.getName());
-	        	actionErrors.add(ActionErrors.GLOBAL_ERROR, error);
+				UserNotAuthorizedException excp = (UserNotAuthorizedException) ex;
+				 String className = new CommonAddEditAction().getActualClassName(CollectionProtocol.class.getName());
+		            String decoratedPrivilegeName = Utility.getDisplayLabelForUnderscore(excp.getPrivilegeName());
+		            String baseObject = "";
+		            if (excp.getBaseObject() != null && excp.getBaseObject().trim().length() != 0)
+		            {
+		                baseObject = excp.getBaseObject();
+		            } else 
+		            {
+		                baseObject = className;
+		            }
+		                
+		            ActionError error = new ActionError("access.addedit.object.denied", userName, className,decoratedPrivilegeName,baseObject);
+
+				actionErrors.add(ActionErrors.GLOBAL_ERROR, error);
 			}
 			saveErrors(request, actionErrors);			
 		}

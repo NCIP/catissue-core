@@ -12,6 +12,7 @@ package edu.wustl.catissuecore.bizlogic;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -1343,41 +1344,53 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	 * @param sessionDataBean
 	 * @return
 	 */
-	private String getObjectId(AbstractDAO dao, Object domainObject, SessionDataBean sessionDataBean) 
+	public String getObjectId(AbstractDAO dao, Object domainObject) 
 	{
-		User user = null;
+		CollectionProtocol cp = null;
+		CollectionProtocolDTO cpDTO = null;
+		Map<String,SiteUserRolePrivilegeBean> cpRowIdMap =new HashMap<String, SiteUserRolePrivilegeBean>();
+		Collection<Site> siteCollection = new ArrayList<Site>();
 		
-		try 
+		if(domainObject instanceof CollectionProtocolDTO)
 		{
-			user = (User) dao.retrieve(User.class.getName(), sessionDataBean.getUserId());
-		} 
-		catch (DAOException e) 
+			cpDTO = (CollectionProtocolDTO) domainObject;
+			cp = cpDTO.getCollectionProtocol();
+			cpRowIdMap = cpDTO.getRowIdBeanMap();
+		}
+		else
 		{
-			Logger.out.debug(e.getMessage(), e);
+			cp = (CollectionProtocol) domainObject;
 		}
 		
-			Collection<Site> siteCollection = user.getSiteCollection();
-
-			StringBuffer sb = new StringBuffer();
-			boolean hasProtocolAdministrationPrivilege = false;
+		Object[] mapKeys = cpRowIdMap.keySet().toArray();
+		for(Object mapKey : mapKeys)
+		{
+			String key = mapKey.toString();
+			SiteUserRolePrivilegeBean siteUserRolePrivilegeBean = cpRowIdMap.get(key);
 			
-			if (siteCollection != null && !siteCollection.isEmpty())
+			siteCollection.add(siteUserRolePrivilegeBean.getSiteList().get(0));
+		}
+		
+		StringBuffer sb = new StringBuffer();
+		boolean hasProtocolAdministrationPrivilege = false;
+		
+		if (siteCollection != null && !siteCollection.isEmpty())
+		{
+			sb.append(Constants.SITE_CLASS_NAME);
+			for (Site site : siteCollection)
 			{
-				sb.append(Constants.SITE_CLASS_NAME);
-				for (Site site : siteCollection)
+				if (site.getId()!=null)
 				{
-					if (site.getId()!=null)
-					{
-						sb.append(Constants.UNDERSCORE).append(site.getId());
-						hasProtocolAdministrationPrivilege = true;
-					}
+					sb.append(Constants.UNDERSCORE).append(site.getId());
+					hasProtocolAdministrationPrivilege = true;
 				}
 			}
-			
-			if(hasProtocolAdministrationPrivilege)
-			{
-				return sb.toString();
-			}
+		}
+		
+		if(hasProtocolAdministrationPrivilege)
+		{
+			return sb.toString();
+		}
 				
 		return null;
 	}
@@ -1427,9 +1440,10 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	 * Over-ridden for the case of Site Admin user should be able to create
 	 * Collection Protocol for Site to which he belongs
 	 * (non-Javadoc)
+	 * @throws UserNotAuthorizedException 
 	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#isAuthorized(edu.wustl.common.dao.AbstractDAO, java.lang.Object, edu.wustl.common.beans.SessionDataBean)
 	 */
-	public boolean isAuthorized(AbstractDAO dao, Object domainObject, SessionDataBean sessionDataBean)  
+	public boolean isAuthorized(AbstractDAO dao, Object domainObject, SessionDataBean sessionDataBean) throws UserNotAuthorizedException  
 	{
 		boolean isAuthorized = false;
 		
@@ -1439,31 +1453,37 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		}
 		
 		String privilegeName = getPrivilegeName(domainObject);
-		String protectionElementName = getObjectId(dao, domainObject, sessionDataBean);
+		String protectionElementName = getObjectId(dao, domainObject);
 		PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(sessionDataBean.getUserName());
 		
 		if (protectionElementName != null)
 		{
 			String [] prArray = protectionElementName.split(Constants.UNDERSCORE);
 			String baseObjectId = prArray[0];
-			StringBuffer objId = new StringBuffer();
+			String objId = null;
+			boolean isAuthorized1 = false;
 			
 			for (int i = 1 ; i < prArray.length;i++)
 			{
-				objId.append(baseObjectId).append(Constants.UNDERSCORE).append(prArray[i]);
-				isAuthorized = privilegeCache.hasPrivilege(objId.toString(),privilegeName);
-				if (!isAuthorized)
+				objId = baseObjectId+Constants.UNDERSCORE+prArray[i];
+				isAuthorized1 = privilegeCache.hasPrivilege(objId.toString(),privilegeName);
+				if (!isAuthorized1)
 				{
 					break;
 				}
 			}	
 		   
-			return isAuthorized;
+			isAuthorized = isAuthorized1;
 		} 
 		else
 		{
-			return false;
+			isAuthorized = false;
 		}
+		if (!isAuthorized)
+        {
+			throw Utility.getUserNotAuthorizedException(privilegeName, protectionElementName);  
+        }
+		return isAuthorized;
 	}
 	
 	

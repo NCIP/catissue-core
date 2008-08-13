@@ -24,6 +24,7 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.multiRepository.bean.SiteUserRolePrivilegeBean;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.dao.AbstractDAO;
 import edu.wustl.common.dao.DAOFactory;
@@ -104,40 +105,16 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 	 * @return List<NameValueBean> of sites.
 	 * @throws BizLogicException
 	 */	
-	public List<NameValueBean> getSiteList(boolean isToExcludeDisabled) throws BizLogicException
+	public List<NameValueBean> getSiteList(boolean isToExcludeDisabled, SessionDataBean sessionDataBean) throws BizLogicException
 	{
 		String sourceObjectName =Site.class.getName();
 		String[] siteDisplayField = {"name"};
 		String valueField = "id";
 		
 		String[] activityStatusArray = {Constants.ACTIVITY_STATUS_DISABLED,Constants.ACTIVITY_STATUS_CLOSED};
-/*		String joinCondition = null;
-		String separatorBetweenFields = ", ";
 
-		String[] whereColumnName = new String[]{Constants.ACTIVITY_STATUS};
-		String[] whereColumnCondition = new String[]{"not in"};
-		Object[] whereColumnValue = {activityStatusArray};
-
-		List<NameValueBean> siteNameValueBeanList=new ArrayList<NameValueBean>();
-		try
-		{
-			siteNameValueBeanList = getList(sourceObjectName, siteDisplayField, valueField, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition,
-							separatorBetweenFields,isToExcludeDisabled);
-		}
-		catch (DAOException e) 
-		{
-			throw new BizLogicException("Could not get List of siteNameValueBean", e);
-		}
-		if (siteNameValueBeanList != null && !siteNameValueBeanList.isEmpty())
-		{
-			NameValueBean siteNameValueBean = siteNameValueBeanList.get(0);
-			if(siteNameValueBean.getValue().equals("-1"))
-			{
-				siteNameValueBeanList.remove(0);
-			}
-		}
-		*/
 		List<NameValueBean> siteNameValueBeanList = null;
+		List<NameValueBean> tempSiteNameValueBeanList = new ArrayList<NameValueBean>();
 		try 
 		{
 			siteNameValueBeanList = new StorageContainerBizLogic().getRepositorySiteList(sourceObjectName, siteDisplayField, valueField, activityStatusArray, isToExcludeDisabled);
@@ -149,6 +126,22 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 		
 		// To remove 1st row which contains "Select" & "-1"
 		siteNameValueBeanList.remove(0);
+		tempSiteNameValueBeanList.addAll(siteNameValueBeanList);
+		
+		if(sessionDataBean != null && !sessionDataBean.isAdmin())
+		{
+			Set<Long> idSet = new UserBizLogic().getRelatedSiteIds(sessionDataBean.getUserId());
+			
+			for(NameValueBean nvb : siteNameValueBeanList)
+			{
+				Long siteId = Long.valueOf(nvb.getValue());
+				if(!idSet.contains(siteId))
+				{
+					tempSiteNameValueBeanList.remove(nvb);
+				}
+			}
+			return tempSiteNameValueBeanList;
+		}
 		return siteNameValueBeanList;
 		
 	}

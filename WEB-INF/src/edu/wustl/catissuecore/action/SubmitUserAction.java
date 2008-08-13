@@ -23,6 +23,7 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.dto.UserDTO;
 import edu.wustl.catissuecore.multiRepository.bean.SiteUserRolePrivilegeBean;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.action.CommonAddEditAction;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.beans.AddNewSessionDataBean;
 import edu.wustl.common.beans.SessionDataBean;
@@ -118,13 +119,23 @@ public class SubmitUserAction extends Action
         	{
         	    userName = sessionDataBean.getUserName();
         	}
-            
-        	ActionError error = new ActionError("access.addedit.object.denied", userName, abstractDomain.getClass().getName());
+            String className = new CommonAddEditAction().getActualClassName(abstractDomain.getClass().getName());
+            String decoratedPrivilegeName = Utility.getDisplayLabelForUnderscore(e.getPrivilegeName());
+            String baseObject = "";
+            if (e.getBaseObject() != null && e.getBaseObject().trim().length() != 0)
+            {
+                baseObject = e.getBaseObject();
+            } else 
+            {
+                baseObject = className;
+            }
+                
+            ActionError error = new ActionError("access.addedit.object.denied", userName, className,decoratedPrivilegeName,baseObject);
         	errors.add(ActionErrors.GLOBAL_ERROR, error);
         	saveErrors(request, errors);
         	target = Constants.FAILURE;
-            Logger.out.error(e.getMessage(), e);
-			
+        	return (mapping.findForward(target));
+            		
 		}
 
 		//	Attributes to decide AddNew action

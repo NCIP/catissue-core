@@ -106,7 +106,7 @@ public class CollectionProtocolAuthorization implements edu.wustl.catissuecore.u
 			
 			if(siteUserRolePrivilegeBean.isRowDeleted())
 			{
-				Utility.processDeletedPrivileges(siteUserRolePrivilegeBean);
+				Utility.processDeletedPrivilegesOnCPPage(siteUserRolePrivilegeBean, collectionProtocol.getId());
 			}
 			else if(siteUserRolePrivilegeBean.isRowEdited())
 			{

@@ -3245,10 +3245,11 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	
 	/**
 	 * (non-Javadoc)
+	 * @throws UserNotAuthorizedException 
 	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#isAuthorized(edu.wustl.common.dao.AbstractDAO, java.lang.Object, edu.wustl.common.beans.SessionDataBean)
 	 * 
 	 */
-	public boolean isAuthorized(AbstractDAO dao, Object domainObject, SessionDataBean sessionDataBean)  
+	public boolean isAuthorized(AbstractDAO dao, Object domainObject, SessionDataBean sessionDataBean) throws UserNotAuthorizedException  
 	{
 		boolean isAuthorized = false;
 		String protectionElementName = null;
@@ -3269,30 +3270,45 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		}
 		else	
 		{
+			protectionElementName = getObjectId(dao, domainObject);
+			Site site = null;
+			StorageContainer sc = null;
 			//	Handle for SERIAL CHECKS, whether user has access to source site or not
-			
 			if(domainObject instanceof Specimen)
 			{
 				SpecimenPosition specimenPosition = null;
 				Specimen specimen = (Specimen) domainObject;
+				if(specimen.getSpecimenPosition()!=null)
+				{
+					sc = specimenPosition.getStorageContainer();
+				}
+				if(specimen.getSpecimenPosition()!=null && specimen.getSpecimenPosition().getStorageContainer().getSite() == null)
+				{
+					try 
+					{
+						sc = (StorageContainer) dao.retrieve(StorageContainer.class.getName(), specimen.getSpecimenPosition().getStorageContainer().getId());
+					} 
+					catch (DAOException e) 
+					{
+						Logger.out.debug(e.getMessage(), e);
+					}
+				}
 				
 				specimenPosition = specimen.getSpecimenPosition();
 				
 				if(specimenPosition != null) // Specimen is NOT Virtually Located
 				{
-					StorageContainer sc = specimenPosition.getStorageContainer();
-					Site site = sc.getSite();
-					
+					// sc = specimenPosition.getStorageContainer();
+					site = sc.getSite();
 					Set<Long> siteIdSet = new UserBizLogic().getRelatedSiteIds(sessionDataBean.getUserId());
 					
 					if(!siteIdSet.contains(site.getId()))
 					{
-						return false;
+						// return false;
+						throw new UserNotAuthorizedException();
 					}
 				}
 			}
-			
-			protectionElementName = getObjectId(dao, domainObject);
 		}
 
 		if(protectionElementName.equals(Constants.allowOperation))
@@ -3326,6 +3342,10 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		{
 			isAuthorized = edu.wustl.catissuecore.util.global.Utility.checkForAllCurrentAndFutureCPs(dao,privilegeName, sessionDataBean);
 		}
+		if (!isAuthorized)
+        {
+			throw Utility.getUserNotAuthorizedException(privilegeName, protectionElementName);    
+        }
 		return isAuthorized;			
 	}
 }

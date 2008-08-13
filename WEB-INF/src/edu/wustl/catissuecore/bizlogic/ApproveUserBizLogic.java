@@ -24,6 +24,7 @@ import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.EmailHandler;
 import edu.wustl.catissuecore.util.Roles;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.SecurityDataBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
@@ -305,9 +306,10 @@ public class ApproveUserBizLogic extends DefaultBizLogic
     
 	/**
 	 * (non-Javadoc)
+	 * @throws UserNotAuthorizedException 
 	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#isAuthorized(edu.wustl.common.dao.AbstractDAO, java.lang.Object, edu.wustl.common.beans.SessionDataBean)
 	 */
-	public boolean isAuthorized(AbstractDAO dao, Object domainObject, SessionDataBean sessionDataBean)  
+	public boolean isAuthorized(AbstractDAO dao, Object domainObject, SessionDataBean sessionDataBean) throws UserNotAuthorizedException  
 	{
 		if(sessionDataBean != null && sessionDataBean.isAdmin())
 		{
@@ -325,22 +327,28 @@ public class ApproveUserBizLogic extends DefaultBizLogic
 			String [] prArray = protectionElementName.split(Constants.UNDERSCORE);
 			String baseObjectId = prArray[0];
 			StringBuffer objId = new StringBuffer();
+			boolean isAuthorized1 = false;
 			
     		for (int i = 1 ; i < prArray.length;i++)
     		{
     			objId.append(baseObjectId).append(Constants.UNDERSCORE).append(prArray[i]);
-    			isAuthorized = privilegeCache.hasPrivilege(objId.toString(),privilegeName);
-    			if (!isAuthorized)
+    			isAuthorized1 = privilegeCache.hasPrivilege(objId.toString(),privilegeName);
+    			if (!isAuthorized1)
     			{
     				break;
     			}
     		}
     		
-    		return isAuthorized;		
+    		isAuthorized = isAuthorized1;		
 		}
 		else
 		{
-			return false;
-		}		
+			isAuthorized = false;
+		}
+		if (!isAuthorized)
+        {
+			throw Utility.getUserNotAuthorizedException(privilegeName, protectionElementName);    
+        }
+		return isAuthorized;
 	}		
 }

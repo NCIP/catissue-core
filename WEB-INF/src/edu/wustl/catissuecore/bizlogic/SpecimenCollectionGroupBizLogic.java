@@ -2387,10 +2387,11 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	
 	/**
 	 * (non-Javadoc)
+	 * @throws UserNotAuthorizedException 
 	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#isAuthorized(edu.wustl.common.dao.AbstractDAO, java.lang.Object, edu.wustl.common.beans.SessionDataBean)
 	 * 
 	 */
-	public boolean isAuthorized(AbstractDAO dao, Object domainObject, SessionDataBean sessionDataBean)  
+	public boolean isAuthorized(AbstractDAO dao, Object domainObject, SessionDataBean sessionDataBean) throws UserNotAuthorizedException  
 	{
 		boolean isAuthorized = false;
 		String protectionElementName = null;
@@ -2433,6 +2434,10 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		{
 			isAuthorized = edu.wustl.catissuecore.util.global.Utility.checkForAllCurrentAndFutureCPs(dao,privilegeName, sessionDataBean);
 		}
+		if (!isAuthorized)
+        {
+			throw Utility.getUserNotAuthorizedException(privilegeName, protectionElementName);    
+        }
 		return isAuthorized;			
 	}
 	

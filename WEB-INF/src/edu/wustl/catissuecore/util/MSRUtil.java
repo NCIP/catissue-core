@@ -19,6 +19,7 @@ import edu.wustl.catissuecore.bizlogic.AssignPrivilegePageBizLogic;
 import edu.wustl.catissuecore.multiRepository.bean.SiteUserRolePrivilegeBean;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractBizLogicFactory;
 import edu.wustl.common.util.global.ApplicationProperties;
@@ -71,8 +72,8 @@ public class MSRUtil {
 				request.setAttribute(Constants.CPLIST, cpList);
 				request.setAttribute(Constants.ACTIONLIST, actionList);
 			}
-		
-			final List<NameValueBean> siteList = apBizLogic.getSiteList(false);
+			SessionDataBean sessionDataBean = (SessionDataBean) session.getAttribute(Constants.SESSION_DATA);
+			final List<NameValueBean> siteList = apBizLogic.getSiteList(false, sessionDataBean);
 			final List roleList = apBizLogic.getRoleList(pageOf);
 			request.setAttribute(Constants.SITELIST, siteList);
 			request.setAttribute(Constants.ROLELIST, roleList);

@@ -393,12 +393,17 @@ public class UserBizLogic extends DefaultBizLogic
 			SiteUserRolePrivilegeBean siteUserRolePrivilegeBean = userRowIdMap.get(key);
 			
 			CollectionProtocol cp = siteUserRolePrivilegeBean.getCollectionProtocol();
-			if(cp != null)
+			if(cp != null && !siteUserRolePrivilegeBean.isRowDeleted())
 			{
 				cpCollection.add(cp);
 			}
 			
-			List<Site> siteList = siteUserRolePrivilegeBean.getSiteList();
+			List<Site> siteList = null;
+			
+			if(!siteUserRolePrivilegeBean.isRowDeleted())
+			{
+				siteList = siteUserRolePrivilegeBean.getSiteList();
+			}
 			
 			for(Site site : siteList) 
 			{
@@ -1766,40 +1771,54 @@ public class UserBizLogic extends DefaultBizLogic
 		 * @param sessionDataBean
 		 * @return
 		 */
-		public String getObjectId(AbstractDAO dao, Object domainObject, SessionDataBean sessionDataBean) 
+		public String getObjectId(AbstractDAO dao, Object domainObject) 
 		{	
 			User user = null;
+			UserDTO userDTO = null;
+			Map<String,SiteUserRolePrivilegeBean> userRowIdMap =new HashMap<String, SiteUserRolePrivilegeBean>();
+			Collection<Site> siteCollection = new ArrayList<Site>();
 			
-			try 
+			if(domainObject instanceof UserDTO)
 			{
-				user = (User) dao.retrieve(User.class.getName(), sessionDataBean.getUserId());
-			} 
-			catch (DAOException e) 
+				userDTO = (UserDTO) domainObject;
+				user = userDTO.getUser();
+				userRowIdMap = userDTO.getUserRowIdBeanMap();
+			}
+			else
 			{
-				Logger.out.debug(e.getMessage(), e);
+				user = (User) domainObject;
 			}
 			
-				Collection<Site> siteCollection = user.getSiteCollection();
-			
-				StringBuffer sb = new StringBuffer();
-				boolean hasUserProvisioningPrivilege = false;
+			Object[] mapKeys = userRowIdMap.keySet().toArray();
+			for(Object mapKey : mapKeys)
+			{
+				String key = mapKey.toString();
+				SiteUserRolePrivilegeBean siteUserRolePrivilegeBean = userRowIdMap.get(key);
 				
-				if (siteCollection != null && !siteCollection.isEmpty())
+				siteCollection.add(siteUserRolePrivilegeBean.getSiteList().get(0));
+			}
+			 
+			// Collection<Site> siteCollection = user.getSiteCollection();
+			
+			StringBuffer sb = new StringBuffer();
+			boolean hasUserProvisioningPrivilege = false;
+			
+			if (siteCollection != null && !siteCollection.isEmpty())
+			{
+				sb.append(Constants.SITE_CLASS_NAME);
+				for (Site site : siteCollection)
 				{
-					sb.append(Constants.SITE_CLASS_NAME);
-					for (Site site : siteCollection)
+					if (site.getId()!=null)
 					{
-						if (site.getId()!=null)
-						{
-							sb.append(Constants.UNDERSCORE).append(site.getId());
-							hasUserProvisioningPrivilege = true;
-						}
+						sb.append(Constants.UNDERSCORE).append(site.getId());
+						hasUserProvisioningPrivilege = true;
 					}
 				}
-				if(hasUserProvisioningPrivilege)
-				{
-					return sb.toString();
-				}
+			}
+			if(hasUserProvisioningPrivilege)
+			{
+				return sb.toString();
+			}
 				
 			return null;
 		}
@@ -1818,9 +1837,10 @@ public class UserBizLogic extends DefaultBizLogic
 		 * Over-ridden for the case of Non - Admin user should be able to edit
 		 * his/her details e.g. Password 
 		 * (non-Javadoc)
+		 * @throws UserNotAuthorizedException 
 		 * @see edu.wustl.common.bizlogic.DefaultBizLogic#isAuthorized(edu.wustl.common.dao.AbstractDAO, java.lang.Object, edu.wustl.common.beans.SessionDataBean)
 		 */
-		public boolean isAuthorized(AbstractDAO dao, Object domainObject, SessionDataBean sessionDataBean)  
+		public boolean isAuthorized(AbstractDAO dao, Object domainObject, SessionDataBean sessionDataBean) throws UserNotAuthorizedException  
 		{
 			User user = null;
 			UserDTO userDTO = null;
@@ -1859,18 +1879,18 @@ public class UserBizLogic extends DefaultBizLogic
 			boolean isAuthorized = false;
 			
 			String privilegeName = getPrivilegeName(domainObject);
-			String protectionElementName = getObjectId(dao, domainObject, sessionDataBean);
+			String protectionElementName = getObjectId(dao, domainObject);
 			PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(sessionDataBean.getUserName());
 			 
 			if (protectionElementName != null)
 			{
 				String [] prArray = protectionElementName.split(Constants.UNDERSCORE);
 				String baseObjectId = prArray[0];
-				StringBuffer objId = new StringBuffer();
+				String objId = null;
 				
 	    		for (int i = 1 ; i < prArray.length;i++)
 	    		{
-	    			objId.append(baseObjectId).append(Constants.UNDERSCORE).append(prArray[i]);
+	    			objId = baseObjectId+Constants.UNDERSCORE+prArray[i];
 	    			isAuthorized = privilegeCache.hasPrivilege(objId.toString(),privilegeName);
 	    			if (!isAuthorized)
 	    			{
@@ -1878,11 +1898,16 @@ public class UserBizLogic extends DefaultBizLogic
 	    			}
 	    		}
 	    		
+	    		if (!isAuthorized)
+	            {
+	    			throw Utility.getUserNotAuthorizedException(privilegeName, protectionElementName);    
+	            }
 	    		return isAuthorized;		
 			}
 			else
 			{
-				return false;
+				// return false;
+				throw Utility.getUserNotAuthorizedException(privilegeName, protectionElementName);  
 			}		
 		}		
 }
