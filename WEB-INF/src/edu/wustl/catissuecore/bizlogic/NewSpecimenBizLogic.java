@@ -3280,7 +3280,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 				Specimen specimen = (Specimen) domainObject;
 				if(specimen.getSpecimenPosition()!=null)
 				{
-					sc = specimenPosition.getStorageContainer();
+					sc = specimen.getSpecimenPosition().getStorageContainer();
 				}
 				if(specimen.getSpecimenPosition()!=null && specimen.getSpecimenPosition().getStorageContainer().getSite() == null)
 				{
