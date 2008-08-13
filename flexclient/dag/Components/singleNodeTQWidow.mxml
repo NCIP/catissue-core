@@ -1,0 +1,458 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="700" height="200"
+	showCloseButton="true" close="removeMe();" borderColor="#0000FF" backgroundColor="white" left="0" right="0" borderThicknessLeft="2" borderThicknessRight="2" borderThicknessBottom="2" borderThicknessTop="5">
+	<mx:Script>
+		<![CDATA[
+		import mx.rpc.events.ResultEvent;
+		import mx.collections.ArrayCollection;
+		import Components.DAGConstants;
+		import mx.managers.PopUpManager;
+		import mx.controls.List;  
+		import mx.controls.Alert;
+		 [Bindable]
+		 public var entityLabelString : String = null;	
+		
+		 [Bindable]
+		 public var buttonLabel : String = "OK"; 
+		
+		 [Bindable]
+		 public var datePickerLabel : String = "Select Date";
+		 
+		 [Bindable]
+		 public var entityName : String = "";
+		 
+		 [Bindable]
+		 public var entityExpressionId  : int = 0; 
+		 
+		 [Bindable]
+		 public var customNodeName : String = "";
+		
+		[Bindable]
+		public var arithmeticOpDp : ArrayCollection ;
+		[Bindable]
+		public var attributesDp : ArrayCollection;
+		[Bindable]
+		public var relationalDp : ArrayCollection;
+		[Bindable]
+		public var timeIntervalsDp : ArrayCollection;
+		
+		[Bindable]
+		public var entityDp : Object;
+		
+		[Bindable]
+	 	private var arithmeticLabel : String = "Arithmetic" + "\n" +"Operators"; 
+	 	    
+	 	[Bindable]
+	 	private var relationalLabel : String  = "Relational" + "\n" + "Operators";
+	 	    
+	 	[Bindable]
+	 	private var timeValueLabel : String = "Time" + "\n" + "Value";
+	 	    
+	 	[Bindable]
+	 	private var timeIntrvalLabel : String = "Time" + "\n" + "Interval" ;
+	 	
+	 	[Bindable]
+     		private var myDropdownFactory:ClassFactory;
+     		
+     	private var existingTextBox : TextInput = null;	
+        private var existingTimeIntervalCb : ComboBox = null;
+	    private var existingValueLabel : Label = null;
+	 	private var existingIntervalLabel : Label = null; 
+	 	private var existingRHSDatePicker : DateField = null;
+	    private var existingRHSPickerLabel : Label = null; 
+	 	private var existingLHSDatePicker : DateField =  null;  
+		
+		public function removeMe():void 
+	 	{
+           PopUpManager.removePopUp(this);
+        }
+		
+		private function submitData() : void
+		{
+			var rhsTimeValue : String = "";
+          	var rhsTimeIntervalValue : String =  "";
+           	var customFormulaString : String = "";
+            
+            var lhsTimeValue : String = "";
+            var lhsTimeIntervalValue : String = "";
+            var month : String =  "";
+            var day : String = "";
+            var singleNodeCustomFormula : SingleNodeCustomFormulaNode = new SingleNodeCustomFormulaNode(); 
+            existingLHSDatePicker = myBox.getChildByName("leftDatePicker")as DateField;
+            
+            if(existingLHSDatePicker != null)
+             {
+             	//If there exists date Picker on Lefty hand side, the lhs time value will be Date only
+             	 month = (existingLHSDatePicker.selectedDate.getMonth()+1).toString();
+           	 	 if(month.length == 1)
+           	 	 {
+           	 	    month = "0"+month;
+           	 	 }
+           	 	    
+           	 	 day = existingLHSDatePicker.selectedDate.getDate().toString();
+           	 	 if(day.length == 1)
+           	 	 {
+           	 	     day = "0"+day;
+           	 	 }
+           	 	 lhsTimeValue = month + "/" + day +"/" + existingLHSDatePicker.selectedDate.getFullYear();
+                 singleNodeCustomFormula.setLhsTimeValue(lhsTimeValue);
+                 singleNodeCustomFormula.setLhsTimeInterval("null");
+             }
+             else
+             {
+                  // IF there is no DatePicker on LHS then this is the case when we will have TextInput Box as well as Time Intervals
+                  
+                   	
+                  // Will  see this case later
+             
+             }	   
+		     
+		     //Setting the selected arithmatic op
+		     singleNodeCustomFormula.setSelectedArithmeticOp(arithmaticOpsCb.selectedItem.toString());
+
+             //Setting the attribute's properties
+             singleNodeCustomFormula.setAttributeName(attributesCb.selectedItem.toString());
+             
+             var attributeDataList : ArrayCollection = entityDp[attributesCb.selectedItem.toString()];
+             singleNodeCustomFormula.setAttributeType(String(attributeDataList.getItemAt(1)));
+             singleNodeCustomFormula.setAttributeID(String(attributeDataList.getItemAt(0)));
+              		    
+             //Setting the Entity Datails
+             singleNodeCustomFormula.setEntityName(entityName);
+             singleNodeCustomFormula.setNodeExpressionId(entityExpressionId);
+             
+             //Setting the relational Op
+             singleNodeCustomFormula.setSelectedLogicalOp(relationalOpsCb.selectedItem.toString());
+             
+             //Handling RHS time value and Intervals
+             existingTextBox = myBox.getChildByName("timeInputBox") as TextInput;
+             if(existingTextBox != null)
+             {
+             	//Means there exists the Time Intervals also
+             	rhsTimeValue = existingTextBox.text;
+             	singleNodeCustomFormula.setTimeValue(rhsTimeValue);
+             	existingTimeIntervalCb = myBox.getChildByName("timeIntervalCb") as ComboBox;
+               	if(existingTimeIntervalCb != null)
+                {
+                   rhsTimeIntervalValue = existingTimeIntervalCb.selectedItem.toString();
+                   singleNodeCustomFormula.setTimeInterval(rhsTimeIntervalValue);
+                }
+                else
+                {
+                	//This condition should not exist if text Input is there 
+                	singleNodeCustomFormula.setTimeInterval("null");
+                }
+             }
+             else
+             {
+             	//Means there exists the Date Picker, so get the Date Picker
+             	existingRHSDatePicker = myBox.getChildByName("rhsDatePicker") as DateField;
+                if(existingRHSDatePicker != null)
+                {
+                	month = (existingRHSDatePicker.selectedDate.getMonth()+1).toString();
+           	 	 	if(month.length == 1)
+           	 	 	{
+           	 	    	month = "0"+month;
+           	 	 	}
+           	 	    
+           	 	 	day = existingRHSDatePicker.selectedDate.getDate().toString();
+           	 	 	if(day.length == 1)
+           	 	 	{
+           	 	    	 day = "0"+day;
+           	 	 	}
+           	 	 
+           	 	 	rhsTimeValue = month + "/" + day +"/" + existingRHSDatePicker.selectedDate.getFullYear();
+           	 	 	
+           	 	 	singleNodeCustomFormula.setTimeValue(rhsTimeValue);
+           	 	 	singleNodeCustomFormula.setTimeInterval("null");
+                }             	
+             	
+             }
+             
+             var lhsTime :  String = "";
+             //Creating custom Formula String 
+             if(lhsTimeIntervalValue != null && lhsTimeIntervalValue != "")
+             {
+             	lhsTime = lhsTimeValue + "\n" +  lhsTimeIntervalValue;
+             }
+             else
+             {
+             	lhsTime = lhsTimeValue;
+             }
+             
+             var rhsTime : String = "";
+             if(rhsTimeIntervalValue != null && rhsTimeIntervalValue != "")
+             {
+             	rhsTime = rhsTimeValue + rhsTimeIntervalValue;
+             }
+             else
+             {
+             	rhsTime = rhsTimeValue;
+             }
+             customFormulaString =  lhsTimeValue + "\n" + arithmaticOpsCb.selectedItem.toString() + "\n" +  entityName + "." + attributesCb.selectedItem.toString() + "\n" + relationalOpsCb.selectedItem.toString() + "\n" + rhsTime;
+             this.parentApplication.singleNodecustomFormulaString = customFormulaString;
+             singleNodeCustomFormula.setCustomFormulaString(customFormulaString);
+              
+             //Setting the custom Formula Node Name 
+            // singleNodeCustomFormula.name = entityExpressionId + "#";
+             singleNodeCustomFormula.name = customNodeName;
+             
+             //Setting node Type
+             singleNodeCustomFormula.setNodeType("singleNodeCustomNode");
+             
+             //Setting the custom Column Name
+             singleNodeCustomFormula.setCustomColumnName(customColumnName.text);
+             
+             //Invoking the RPC Method
+             if(submitButton1.label == "OK")
+             {
+             	this.parentApplication.rpcService.addEventListener(ResultEvent.RESULT, createCustomNodeHandler);
+             	singleNodeCustomFormula.setOperation("create");
+             	this.parentApplication.rpcService.formSingleNodeFormula(singleNodeCustomFormula, "add");
+             }
+             else
+             {
+             	this.parentApplication.rpcService.addEventListener(ResultEvent.RESULT, editCustomNodeHandler);
+             	singleNodeCustomFormula.setOperation("edit");
+             	this.parentApplication.rpcService.formSingleNodeFormula(singleNodeCustomFormula, "edit");
+             }
+             
+		}
+		private function editCustomNodeHandler(event : ResultEvent) : void
+		{
+			var node  : SingleNodeCustomFormulaNode = event.result as SingleNodeCustomFormulaNode;
+			this.parentApplication.rpcService.removeEventListener(ResultEvent.RESULT, editCustomNodeHandler);
+			this.parentApplication.addSingleNodeCustomNode(node); 
+		}
+		
+		private function createCustomNodeHandler(event : ResultEvent) : void
+		{
+			var node  : SingleNodeCustomFormulaNode = event.result as SingleNodeCustomFormulaNode;
+            this.parentApplication.rpcService.removeEventListener(ResultEvent.RESULT, createCustomNodeHandler);
+            this.parentApplication.addSingleNodeCustomNode(node);
+            			
+		}
+		private function validate() : void
+		{
+			var operandType : String  = null;  //Specifies the type of Attribute either date or NonDate 
+			var operand : String = ""; //Specifies selected attrinbute 
+			var nodeAttributeId : String = null; //
+			var nodeList : ArrayCollection =  null;
+			if(arithmaticOpsCb.selectedIndex > -1 && attributesCb.selectedIndex > -1)
+			{
+				operand  =  attributesCb.selectedItem.toString();
+				nodeList = entityDp[operand];
+				operandType = String(nodeList.getItemAt(1));
+			    
+			    existingLHSDatePicker = myBox.getChildByName("leftDatePicker") as DateField;
+			    if(existingLHSDatePicker != null)
+			    {
+			    	if(operandType == "Date" && arithmaticOpsCb.selectedItem.toString() == "-")
+				    {
+					    //Selected attribute type is of Date type , then on LHS it should be a text Input and TimeInterval drop down 
+					    addTextAndTimeIntervals();    
+					
+				    }
+				    else
+				    {
+					 	//If Selected attribute type is not of Date type
+                    	//Removing the Text boxes and Time Intervals 
+                    	removeLHSTxtAndIntervals();
+                    
+                    	//Add Date Picker for RHS 
+                    	addRHSDatePicker();
+					}
+			    }
+			    else
+			    {
+			    	//If there dosen't exists any date Picker on left hand side
+			    }
+			}
+			else
+			{
+			}
+		}
+		
+		private function addTextAndTimeIntervals() : void
+		{
+			
+			 //Remove Date Picker and corresponding Labels
+			 existingRHSDatePicker = myBox.getChildByName("rhsDatePicker") as DateField;
+			 if(existingRHSDatePicker != null)
+			 {
+			 	myBox.removeChild(existingRHSDatePicker);
+			 }
+			 existingRHSPickerLabel = labelHBox.getChildByName("rhsDatePickerLabel") as Label;
+			 if(existingRHSPickerLabel != null)
+			 {
+			 	labelHBox.removeChild(existingRHSPickerLabel);
+			 }
+			 
+			 //Add Text Input box and Time Interval Labels
+           	 existingValueLabel = labelHBox.getChildByName("label5") as Label;
+           	 if(existingValueLabel == null)
+           	 {
+           	 	 //Add New label
+           	 	 var valueLabel  : Label= new Label();
+           	 	 valueLabel.id = "lb5";
+           	 	 valueLabel.name = "label5";
+           	 	 valueLabel.text = "Time Value";
+           	 	 valueLabel.width = 100;
+           	 	 valueLabel.buttonMode = true;
+           	 	 labelHBox.addChild(valueLabel);
+           	 }
+             existingIntervalLabel = labelHBox.getChildByName("label6") as Label;
+           	 if(existingIntervalLabel == null)
+           	 {
+           	 	 var intervalLabel : Label = new Label();
+           	 	 intervalLabel.id = "lb6";
+           	 	 intervalLabel.name ="label6";
+           	 	 intervalLabel.text = "Time Interval";
+           	 	 intervalLabel.width = 100;
+           	 	 intervalLabel.buttonMode = true;
+           	 	            
+           	 	 labelHBox.addChild(intervalLabel);
+           	 }
+           	 
+           	 //Adding text Input Box and Time Intervals 
+           	 existingTextBox = myBox.getChildByName("timeInputBox") as TextInput;
+           	 if(existingTextBox == null)
+             {
+           	 	//If no text input exists, create text input
+           	 	var textBox : TextInput = new TextInput();
+           	    textBox.id = "timeInputBox";
+           	    textBox.name = "timeInputBox"
+			 	textBox.width = 100;
+           	    myBox.addChild(textBox);
+           	}
+           	existingTimeIntervalCb = myBox.getChildByName("timeIntervalCb") as ComboBox;   
+            if(existingTimeIntervalCb == null)
+            {
+                var comboBox : ComboBox = new ComboBox();
+                comboBox.id = "cb5";
+                comboBox.name = "timeIntervalCb";
+                comboBox.width = 100;
+                comboBox.dropdownFactory = myDropdownFactory;
+                comboBox.dataProvider = timeIntervalsDp;
+                myBox.addChild(comboBox);
+           }
+		}
+		
+		//This method is made public as it is invoked from Parent class to remove TextInput etc in case of EDIT
+		public function removeLHSTxtAndIntervals() : void
+		{
+			//Removing text Box
+           	existingTextBox = myBox.getChildByName("timeInputBox") as TextInput;
+           	var value : String =  null;
+           	if(existingTextBox != null)
+           	{
+           	    value = existingTextBox.text;
+           	   	myBox.removeChild(existingTextBox);
+           	   	   				
+           	   	 //Remove the Time Value Label
+	           	 existingValueLabel = labelHBox.getChildByName("label5") as Label;
+	           	 if(existingValueLabel != null)
+	           	 {
+	           	 	 labelHBox.removeChild(existingValueLabel);
+	           	 }
+           	}
+           	        	
+           	//Removing time interval ComboBox
+            existingTimeIntervalCb = myBox.getChildByName("timeIntervalCb") as ComboBox; 
+            if(existingTimeIntervalCb != null)
+           	{
+           	   myBox.removeChild(existingTimeIntervalCb);
+           	       				
+           	   //Remove the Time Interval Label
+           	   existingIntervalLabel = labelHBox.getChildByName("label6") as Label;
+           	   if(existingIntervalLabel != null)
+           	    {
+           	        labelHBox.removeChild(existingIntervalLabel);	
+           	    }
+           	}
+		} 
+		
+		public function addRHSDatePicker() : DateField
+		{
+			existingRHSDatePicker= myBox.getChildByName("rhsDatePicker") as DateField;
+           	var datePicker : DateField = null;
+           	if(existingRHSDatePicker == null)
+           	{
+           	 	datePicker =  new DateField();
+	           	datePicker.id = "rhsDatePicker";
+	           	datePicker.name = "rhsDatePicker";
+	           	datePicker.width = 200;
+	           	datePicker.focusEnabled = true;
+	           	datePicker.formatString = "MM/DD/YYYY";
+	           	datePicker.showToday = true;
+	           	              
+	           	//Adding datePicket as childs
+	            myBox.addChild(datePicker); 
+	         }
+	         //Creating the DatePicker Label
+	         existingRHSPickerLabel = labelHBox.getChildByName("rhsDatePickerLabel") as Label;
+           	 if(existingRHSPickerLabel == null)
+           	 {
+           	 	var pickerLabel : Label = new Label();
+           	 	pickerLabel.name = "rhsDatePickerLabel";
+           	 	pickerLabel.text = "Select Date";
+           	 	labelHBox.addChild(pickerLabel);
+           	 }
+           	 
+           	 return datePicker;
+		}
+		
+		private function initClassFactory():void
+		{
+			/**
+			 Creating the Drop down factory
+			*/
+						
+			myDropdownFactory = new ClassFactory(List);
+			myDropdownFactory.properties = {showDataTips:true, dataTipFunction:myDataTipFunction};
+		}
+           
+        private function myDataTipFunction(item:Object):String
+        { 
+            return String(item);
+       
+       
+        }
+			
+		]]>
+	</mx:Script>
+	
+	<mx:VBox x="20" y="20"> 
+		 <!--Specifying Labels -->
+		<mx:HBox x="20" y="20" id="labelHBox">
+			<mx:Label id="leftDatePicker" name="leftDatePickerLabel" width="100" height="50"  text="{datePickerLabel}"  color="blue" fontStyle="normal" fontWeight="bold" buttonMode="true" />
+			<mx:Label id="arithmeticOpLabel" name="arithmeticOpLabel" width="100"  height="50" color="blue" text="{arithmeticLabel}" fontStyle="normal" fontWeight="bold" buttonMode="true"/>
+			<mx:Label id="entityLabel" name="entityLabel" width="100" height="50" color="blue" text="{entityLabelString}" fontStyle="normal" fontWeight="bold" buttonMode="true"/>
+	    	<mx:Label id="relationalOpsLabel" name="relationalOpsLabel" width="100" height="50" color="blue" text="{relationalLabel}" fontStyle="normal" fontWeight="bold" buttonMode="true" />
+	    	<mx:Label id="lb5" name="label5" width="100"  height="50" color="blue" text="{timeValueLabel}" fontStyle="normal" fontWeight="bold"/>
+	    	<mx:Label id="lb6" name="label6" width="100"  height="50" color="blue" text="{timeIntrvalLabel}" fontStyle="normal" fontWeight="bold"/>
+       </mx:HBox>
+	
+		<!--Specifying Controls -->
+		<mx:HBox id ="myBox" x="20" y="60">
+			<mx:DateField id="datePicker" name="leftDatePicker" width="100" showToday="true" formatString="MM/DD/YYYY" />
+			<mx:ComboBox id="arithmaticOpsCb" dataProvider="{arithmeticOpDp}" width="100"  textAlign="center" borderThickness="0" borderColor="blue" prompt="--Select--" change="validate()"/>
+			<mx:ComboBox id="attributesCb" dataProvider="{attributesDp}" width="100"  textAlign="center" borderThickness="0" borderColor="blue" prompt="--Select--"  change="validate()"/>		
+			<mx:ComboBox id="relationalOpsCb" dataProvider="{relationalDp}" width="100" borderThickness="0" borderColor="blue"  prompt="--Select--" dropdownFactory="{myDropdownFactory}" creationComplete="initClassFactory()"/>
+			<mx:TextInput id="timeInputBox" name="timeInputBox"  width="100" restrict="0-9" borderColor="blue" /> 
+	    	<mx:ComboBox id="timeIntervalCb" name="timeIntervalCb" dataProvider="{timeIntervalsDp}" width="100"  borderThickness="0" borderColor="blue" prompt="--Select--" dropdownFactory="{myDropdownFactory}" creationComplete="initClassFactory()"/>
+        </mx:HBox>
+        
+        <mx:HBox x="20">
+         <mx:Label id="columnLabel" width="330" text="Please Enter Column Name To Be Displayed in Results:"/>
+         <mx:TextInput id="customColumnName" width="300" restrict="A-Z a-z" borderColor="blue" />
+	    </mx:HBox>
+	    
+	   <mx:HBox x="20" y="50">
+	      <mx:Button id="submitButton1" label="{buttonLabel}" click="submitData();"/>
+          <mx:Button id="cancelButton" label="Cancel" click="removeMe();"/>  
+	    </mx:HBox>
+	
+	</mx:VBox>
+
+</mx:TitleWindow>
