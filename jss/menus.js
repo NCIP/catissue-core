@@ -377,10 +377,15 @@ Ext.onReady(function(){
                 menu: {        // <-- submenu by nested config object
                     items: [
                         // stick any markup in a menu
+						{
+                            text: 'Dashboard',
+                            href:'ShowDashboardAction.do'
+                        },
                        {
                             text: 'Create Shipment',
                             href:'BaseShipment.do'
-                        }, {
+                        }, 
+						{
                             text: 'Create Shipment Request',
                              href:'ShipmentRequestAction.do'
                         }
