@@ -77,6 +77,8 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
     import Components.CustomFormulaNode;
     import Components.PopupWindow;
     import mx.controls.TextInput;
+    import Components.singleNodeTQWidow;
+    import Components.SingleNodeCustomFormulaNode; 
 	//------------------------
 	public var node1:String = "";
 	public var node2:String = "";
@@ -103,11 +105,17 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
     public var queryDataMap : Object; 
 	public var nodeSelected : String = null; 
 	public var customFormulaString : String = null;
+	public var singleNodecustomFormulaString : String = null;
 	
 	private var popUp:PopupWindow = null;
+	private var singleNodeTQPope : singleNodeTQWidow = null;
 	
 	private var repaintDAGNodeMap : HashMap = new HashMap();
 	
+	private var singleRepaintDAGNodeMap : HashMap = new HashMap();
+	private var associatedDAGNodes : Object = new Object;
+	
+	private var associatedSingleDagNodes : Object = new Object;
 	/**
 	* Timer handler  to check container has been initialized.	
 	*/
@@ -205,9 +213,10 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 		var pt:Point = null;
 		var customNodeName : String = null;
 		var customNode : CustomFormulaNode = null;
-	    var firstDAGNode : DAGNode = DAGNode(mainPanel.getChildByName(node1));
-	    var secondDAGNode : DAGNode = DAGNode(mainPanel.getChildByName(node2)); 
-
+	    var firstDAGNode : DAGNode = null;
+	    var secondDAGNode : DAGNode = null; 
+        var key  : String = "";     
+        var dagNodeList : ArrayCollection = null; 
 		if(nodeSelected == "DagNode")
 		{
 		var dagNode:DAGNode = DAGNode(event.dragInitiator) ;
@@ -264,8 +273,34 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 			linkNodes(ass.associatedNode,dagNode.name,path);
 		}
 		
-		//Redrawing the lines between the selected nodes and custom formula node
-		if((firstDAGNode != null) && (secondDAGNode != null))
+		//Handling all associated custom nodes with a DAG NOde
+		
+		//First find out all associated 2 nodes TQ custom nodes
+		var associtedCustomNodes : ArrayCollection = getAllAsscoiatedCNodes(dagNode);
+		
+		for(var t : int = 0; t<associtedCustomNodes.length ;t++)
+		{
+			customNodeName = associtedCustomNodes[t] as String;
+			customNode = mainPanel.getChildByName(customNodeName) as CustomFormulaNode;
+			if(customNode != null)
+			{
+				drawLines(dagNode, customNode.x,customNode.y,customNode.name);
+			}
+		}
+		
+		//Finding all associated single node TQ custom node
+		var associatedSingleCNodes : ArrayCollection = getAllSingleAssociatedNodes(dagNode);
+		for(var n : int = 0; n < associatedSingleCNodes.length ; n++)
+		{
+			customNodeName = associatedSingleCNodes[n] as String;
+			var  singleCustomNode : SingleNodeCustomFormulaNode = mainPanel.getChildByName(customNodeName) as SingleNodeCustomFormulaNode;
+			if(singleCustomNode != null)
+			{
+				drawLines(dagNode, singleCustomNode.x,singleCustomNode.y,singleCustomNode.name);
+			}
+		}
+		
+		/*if((firstDAGNode != null) && (secondDAGNode != null))
 		{
 			 customNodeName = firstDAGNode.nodeNumber + "_" + secondDAGNode.nodeNumber;
 			 customNode = mainPanel.getChildByName(customNodeName) as CustomFormulaNode;
@@ -274,15 +309,16 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 		     	drawLines(firstDAGNode, customNode.x,customNode.y,customNode.name);
 		     	drawLines(secondDAGNode, customNode.x,customNode.y,customNode.name);
 		     }
-		
-		} 
-	  
+		} */
 	 }
-	 else
+	 else if(nodeSelected == "customFormulaNode")
 	 {
 	 	var cutomformulaNode : CustomFormulaNode = CustomFormulaNode(event.dragInitiator) ;
+		key = cutomformulaNode.name;
+		dagNodeList = associatedDAGNodes[key] as ArrayCollection;
+        firstDAGNode = dagNodeList[0] as DAGNode ;
+		secondDAGNode = dagNodeList[1] as DAGNode ;
 		pointOffSet = Point(event.dragSource.dataForFormat("point") );
-		
 	    pt = new Point(event.stageX-pointOffSet.x, event.stageY-pointOffSet.y);
 		pt = mainPanel.globalToContent(pt);
 		
@@ -292,20 +328,69 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 		//Redrawing the lines between the selected nodes and custom formula node
 		if((firstDAGNode != null) && (secondDAGNode!= null))
 		{
-			 customNodeName = firstDAGNode.nodeNumber + "_" + secondDAGNode.nodeNumber;
-			 customNode = mainPanel.getChildByName(customNodeName) as CustomFormulaNode;
-		     if(customNode != null)
-		     {
-		     	drawLines(firstDAGNode, customNode.x,customNode.y,customNode.name);
-		        drawLines(secondDAGNode, customNode.x,customNode.y,customNode.name);
-		     }
-
+		    drawLines(firstDAGNode, cutomformulaNode.x,cutomformulaNode.y,cutomformulaNode.name);
+		    drawLines(secondDAGNode, cutomformulaNode.x,cutomformulaNode.y,cutomformulaNode.name);
 		} 
+	 }
+	 else
+	 {
+	 	var singleCustomFormulaNode : SingleNodeCustomFormulaNode = SingleNodeCustomFormulaNode(event.dragInitiator);
+	 	key = singleCustomFormulaNode.name;
+        dagNodeList = associatedSingleDagNodes[key] as ArrayCollection;
+        
+        //Getting the associated DAG NODE 
+        var node : DAGNode = dagNodeList[0] as DAGNode;
+        pointOffSet = Point(event.dragSource.dataForFormat("point") );
+	    pt = new Point(event.stageX-pointOffSet.x, event.stageY-pointOffSet.y);
+		pt = mainPanel.globalToContent(pt);
 
-
+        singleCustomFormulaNode.x = pt.x;
+        singleCustomFormulaNode.y = pt.y;
+                  
+	 	if(node != null)
+	 	{
+	 		drawLines(node,singleCustomFormulaNode.x,singleCustomFormulaNode.y,singleCustomFormulaNode.name);
+	 	}
 	 }	
 
 	}
+	
+	//This method is declared as public as it will be called from delete node method 
+	public function getAllSingleAssociatedNodes(dagNode  : DAGNode) : ArrayCollection
+	{
+		var associtedCustomNodesList : ArrayCollection = new ArrayCollection();
+		for(var key : String in associatedSingleDagNodes)
+		{
+			var words : Array = key.split("_");
+			//For single node TQ, the node is named as DagNode.nodeNummber + "_" + DagNode.nodeNummber , so the words[0] will be the exp Id of the DAG Node
+			if((dagNode.expressionId.toString() == words[0]))
+			{
+				associtedCustomNodesList.addItem(key);
+			}
+		}
+		return associtedCustomNodesList;
+	}
+	
+	
+	
+	//This method is declared as public as it will be called from delete node method 
+	public  function getAllAsscoiatedCNodes(dagNode  : DAGNode) : ArrayCollection
+	{
+		var associtedCustomNodesList : ArrayCollection = new ArrayCollection();
+		for(var key : String in associatedDAGNodes)
+		{
+		   var words : Array = key.split("_");
+		   //At index 0, we will have first node exp id and at index 1 we will have second node Exp Id     
+		   if((dagNode.expressionId.toString() == words[0]) || (dagNode.expressionId.toString() == words[1]))
+		   {
+              associtedCustomNodesList.addItem(key);	   	   
+		   }
+		}  
+		return associtedCustomNodesList;
+	}
+	
+	
+	
 	/**
 	* Initilization handler
 	*/		
@@ -331,11 +416,13 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 		registerClassAlias("edu.wustl.catissuecore.flex.dag.DAGNode", DAGNode);
 		registerClassAlias("edu.wustl.catissuecore.flex.dag.DAGPath", DAGPath);
 		registerClassAlias("edu.wustl.catissuecore.flex.dag.CustomFormulaNode",CustomFormulaNode);
+		registerClassAlias("edu.wustl.catissuecore.flex.dag.SingleNodeCustomFormulaNode",SingleNodeCustomFormulaNode);
 //		rpcService= new RemoteObject();
 		rpcService.channelSet = Utility.getChannelSet();
 		rpcService.destination="cdeService";
 		isQuery =Application.application.parameters.isQuery;
 		view= Application.application.parameters.view;
+    
 		dagPathUIMap = new HashMap();
 		totalNodes = new ArrayCollection();
 		allPaths = new ArrayCollection();
@@ -373,7 +460,6 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 		 		rpcService.addEventListener(ResultEvent.RESULT,restoreQueryObjectHandler);
 				rpcService.restoreQueryObject();
 		    }
-		  
 	}
 	/**
 	* Repaint handler DAG on NEXT, PREVIOUS and REDEFINE buttons.
@@ -384,6 +470,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 		
 		var customNodeList : ArrayCollection = nodeMap["customFormulaNodeList"];
 		var nodeList:ArrayCollection = nodeMap["dagNodeList"];
+		var singleCustomNodeList : ArrayCollection = nodeMap["singleNodeCFList"];
 		for(var i:int=0;i<nodeList.length;i++)
 		{
 			var node:DAGNode = nodeList.getItemAt(i) as DAGNode;
@@ -396,6 +483,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 			var hideNodeFlag:Boolean=false;
 			switch(node.nodeType)
 			{
+				
 				case DAGConstants.CONSTRAINT_VIEW_NODE:	
 						nodeColor=0xFFFFAA
 						break;
@@ -476,10 +564,39 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 		}
 		currentExp.text = getExprssionString();
 		
-		//repainting the Custom Node
+		//repainting the Two Nodes TQ Custom Node
 		repaintCustomNode(customNodeList, nodeList);
 		
+		//repainting the Single Node TQ Custom Node
+        repainSingleCustomNode(singleCustomNodeList, nodeList); 
+		
 		rpcService.removeEventListener(ResultEvent.RESULT,repaintHandler,false)
+	}
+	private function repainSingleCustomNode(customNodeList : ArrayCollection, dagNodeList : ArrayCollection) : void
+	{
+		for(var i: int=0; i<customNodeList.length; i++)
+		{
+ 			var singleNodeCustomNode : SingleNodeCustomFormulaNode = customNodeList.getItemAt(i) as SingleNodeCustomFormulaNode;
+ 			var customNodeName : String = singleNodeCustomNode.name;
+ 			var Ids : Array = singleNodeCustomNode.name.split("_");
+ 			var dagNodeId : String = Ids[0];
+ 			 var repaintDagNodeList : ArrayCollection = new ArrayCollection();
+ 			
+ 			for(var j : int=0; j< dagNodeList.length; j++)
+ 			{
+ 				var dagNode : DAGNode = dagNodeList.getItemAt(j) as DAGNode;
+ 				if(dagNode.expressionId.toString() == dagNodeId)
+ 				{
+ 					repaintDagNodeList.addItem(dagNode);
+ 					break;
+ 				}
+ 			} 
+ 			
+ 			singleRepaintDAGNodeMap.put(customNodeName,repaintDagNodeList);
+ 			
+ 			//addSingleCustomFormulaNode(singleNodeCustomNode);
+ 			addSingleNodeCustomNode(singleNodeCustomNode);
+		}
 	}
 	
 	private function repaintCustomNode(customNodeList : ArrayCollection, dagNodeList : ArrayCollection): void
@@ -1194,14 +1311,14 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	         rpcService.addEventListener("result",nodeValidityHandler);
 		     rpcService.checkIfNodesAreValid(selectedNodeList);
 	     }
-	     /*else
+	     else
 	     {
 	     	if(selectedNodeList.length ==1)
 	     	{
                  rpcService.addEventListener(ResultEvent.RESULT,singleNodeValidityHandler);
                  rpcService.checkIfSingleNodeValid(selectedNodeList); 
 	     	}
-	     }*/
+	     }
 	     	 
 	 }
 	 
@@ -1211,11 +1328,13 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	 	if(isNodeValid == true)
 	 	{
 	 		 rpcService.removeEventListener(ResultEvent.RESULT,singleNodeValidityHandler);
-	 		 rpcService.getSingleNodeQueryDate();
+	 		 rpcService.getSingleNodeQueryDate(selectedNodeList);
 	 		 rpcService.addEventListener(ResultEvent.RESULT, singleNodeDataHandler);
 	 	}
 	 	else
 	 	{
+	     
+	 	     AlertManager.showWarning("Node is not valid for Temporal Query");	
 	 	     AlertManager.showWarning("Node is not valid for Temporal Query");	
 	 	}
 	 }
@@ -1225,7 +1344,6 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 		var areNodesValid : Boolean = event.result as Boolean;
 		if(areNodesValid == true)
 		{
-		     
 		     rpcService.removeEventListener(ResultEvent.RESULT,nodeValidityHandler);
 		     rpcService.retrieveQueryData(selectedNodeList);
 		     rpcService.addEventListener(ResultEvent.RESULT,populateDataHandler);
@@ -1236,11 +1354,123 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 		}
 	}
 	
+	
 	private function singleNodeDataHandler(event : ResultEvent) : void
 	{
-		//Alert.show("In singleNodeDataHandler");
-		
+		var queryDataMap : Object =event.result as Object;
+	    createAndPopulateSingleNodeTq(queryDataMap, "create", null);
 	}
+	
+    public  function createAndPopulateSingleNodeTq(queryDataMap : Object, operation : String, customNode : SingleNodeCustomFormulaNode) : void
+	{
+		rpcService.removeEventListener(ResultEvent.RESULT,singleNodeDataHandler);
+		
+		//Getting all arithmetic operators 
+	     var arithmeticOperatorsList : ArrayCollection = queryDataMap["secondDropDown"];	
+   
+	     //Getting the Entity's Map
+	     var nodeAttributeList : ArrayCollection = new ArrayCollection();
+         var nodeDataObject : Object = queryDataMap["thirdDropDown"];
+	     
+	     //Iterating over the first node attribute map to get all the arrtibutes which is key in the Map 	    
+	     for(var key:String in nodeDataObject)
+	     {
+	     	nodeAttributeList.addItem(key);	     	
+	     }
+	     var relationalOprsList : ArrayCollection = queryDataMap["fourthDropDown"];
+	     var timeIntervalsList : ArrayCollection = queryDataMap["timeIntervals"];
+	     var entitiesNameList : ArrayCollection = queryDataMap["entityList"];
+
+         //Creating the popup
+         singleNodeTQPope = singleNodeTQWidow(PopUpManager.createPopUp(this, singleNodeTQWidow, true)); 
+	     
+	     //Initalizing various DataProviders
+	     singleNodeTQPope.arithmeticOpDp = arithmeticOperatorsList;
+	     singleNodeTQPope.attributesDp = nodeAttributeList;
+	     singleNodeTQPope.relationalDp = relationalOprsList;
+	     singleNodeTQPope.timeIntervalsDp = timeIntervalsList;
+	     singleNodeTQPope.entityLabelString = entitiesNameList.getItemAt(0) as String;
+  	    
+  	     //Initializing node Data Map
+  	     singleNodeTQPope.entityDp = nodeDataObject;
+  	     
+	     //By default selecting if it is a single attribute in the list
+	     if(operation == "create")
+	     {
+	      //Getting the selected DAGNode
+  	       var dagNode : DAGNode = selectedNodeList.getItemAt(0) as DAGNode;
+  	       singleNodeTQPope.entityExpressionId = dagNode.expressionId;
+  	       singleNodeTQPope.entityName = dagNode.nodeName;
+	       
+	       singleNodeTQPope.customNodeName = getSingleCustomNodeName(dagNode);   
+	     	
+	     	singleNodeTQPope.buttonLabel = "OK";
+	     	singleNodeTQPope.title ="Define Condition";
+	     	if(nodeAttributeList.length ==1)
+	     	{
+	          singleNodeTQPope.attributesCb.selectedIndex = 0;
+	        }
+	        singleNodeTQPope.arithmaticOpsCb.selectedItem = "-";    	
+	        
+	     }
+	     else
+        {
+        	if(operation == "edit" && customNode != null)
+        	{
+               	singleNodeTQPope.title = "Edit Condition";
+               	singleNodeTQPope.buttonLabel = "Edit";
+               	singleNodeTQPope.arithmaticOpsCb.selectedItem = customNode.getSelectedArithmeticOp();
+               	singleNodeTQPope.attributesCb.selectedItem = customNode.getAtributeName();
+               	singleNodeTQPope.relationalOpsCb.selectedItem = customNode.getSelectedLogicalOp();
+                
+                //Setting the Expression Id as it is used for creating the node name
+                singleNodeTQPope.entityExpressionId =  customNode.getNodeExpressionId(); 
+                
+                //Setting the Entity name 
+                 singleNodeTQPope.entityName = customNode.getEntityName();
+               
+                 //Setting the node name
+                 singleNodeTQPope.customNodeName = customNode.name;
+               
+               //Setting the custom column Name
+               singleNodeTQPope.customColumnName.text = customNode.getCustomColumnName();
+               
+               //Handling LHS DatePickers and Text Inputs
+               if(customNode.getLhsTimeInterval() != "null")
+               {
+					//Right now there exists only DatePicker on LHS
+					Alert.show("This condition is not yet Handled");	               	
+               }
+               else
+               {
+					var date  : Date = new Date(customNode.getLhsTimeValue());
+					singleNodeTQPope.datePicker.selectedDate = date;
+					                	
+               }	
+               
+               //Handling RHS DatePickers and Text Inputs
+               if(customNode.getTimeInterval() != "null")
+               {
+               	   //Means No DatePicker was there on rhs
+               	   singleNodeTQPope.timeInputBox.text = customNode.getTimeValue();
+               	   singleNodeTQPope.timeIntervalCb.selectedItem = customNode.getTimeInterval();  
+               } 
+               else
+               {
+               		//Means there exists DatePicker on RHS, so remove text boxes and Add Date Picker
+               		 singleNodeTQPope.removeLHSTxtAndIntervals();
+               		 
+               		 //Add Date Picker
+               		 var datePicker : DateField = singleNodeTQPope.addRHSDatePicker();
+               		 datePicker.text = customNode.getTimeValue();
+               }
+        	}
+        }
+
+	     //Aligning the popup to center     
+	     PopUpManager.centerPopUp(singleNodeTQPope);
+	} 
+	
 	private function splitEntityName(entityName : String) : String
 	{
 		var str : String = "";
@@ -1251,9 +1481,62 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 		{
 		   str += words[i] + "\n";	
 		}
-		
 		return str;	
 	}
+	
+	private function getSingleCustomNodeName(dagNode : DAGNode) : String
+	{
+		var customNodeName : String = ""; 
+		var dagNodesList : ArrayCollection  = new ArrayCollection();
+		var existingCustomNode : SingleNodeCustomFormulaNode = null;
+		var nodeName : String = dagNode.nodeNumber + "_" + dagNode.nodeNumber;
+		var cunstomNodeNumber : int = 1;
+		do
+		{
+			customNodeName = "";
+	        customNodeName = nodeName +  "_" + cunstomNodeNumber;
+            existingCustomNode = mainPanel.getChildByName(customNodeName) as SingleNodeCustomFormulaNode; 
+            if(existingCustomNode != null)
+            {
+            	cunstomNodeNumber = cunstomNodeNumber +  1;  
+            }
+		}while(existingCustomNode != null); 
+	    
+	    //Populating associated Dag Nodes Map for Single Custom Nodes
+	    dagNodesList.addItemAt(dagNode,0);
+	    associatedSingleDagNodes[customNodeName] = dagNodesList;   
+	    return  customNodeName;
+	}
+	
+	private function getCustomNodeName(dagNode1 : DAGNode,dagNode2 : DAGNode) : String
+	{
+		//This condition should be  when operation is create
+		var dagNodesList : ArrayCollection  = new ArrayCollection();
+		var customNodeName : String = ""; 
+		var existingCustomNode : CustomFormulaNode = null;
+        var nodesName : String = dagNode1.nodeNumber + "_" + dagNode2.nodeNumber; 
+	    var cunstomNodeNumber : int = 1;
+	    do
+	    {
+	      //Adding any no. of TQ Nodes on two selected nodes 
+	      customNodeName = "";
+	      customNodeName = nodesName +  "_" + cunstomNodeNumber;
+	      existingCustomNode = mainPanel.getChildByName(customNodeName) as CustomFormulaNode; 
+	      if(existingCustomNode != null)
+	      {
+	           cunstomNodeNumber = cunstomNodeNumber +  1;  
+	      }
+	   }while(existingCustomNode != null);
+	             
+	  //Storing the DAG Nodes corresponding to a custom node in a Map
+	   dagNodesList.addItemAt(dagNode1,0);
+	   dagNodesList.addItemAt(dagNode2,1);
+	   associatedDAGNodes[customNodeName] = dagNodesList;
+	   
+	   return customNodeName;
+	}
+	
+	
 	
 	public function createAndPopulate(resultMap :Object, operation : String, currentCustomNode : CustomFormulaNode) : void
 	{
@@ -1293,20 +1576,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	   
 	    popUp.showCloseButton = true; 
 	    
-	    if(operation == "create")
-	    {
-	    	popUp.title ="Define Condition";
-	    	if(firstNodeAttributesList.length ==1)
-	    	{
-	    		popUp.cb1.selectedIndex = 0;
-	    	}
-	    	if(secondNodeAttributeList.length == 1)
-	    	{
-	    		popUp.cb3.selectedIndex = 0;
-	    	}
-        }
-	    	    
-	    //Setting the values to variables  
+      //Setting the values to variables  
 	   popUp.myArray1 = firstNodeAttributesList;
 	   popUp.myArray2 = arithmeticOperatorsList;
 	   popUp.myArray3 = secondNodeAttributeList;
@@ -1316,6 +1586,16 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	   // popUp.myArray5 = doctypes;
 	  if(operation == "create")
 	  {
+	  	 popUp.title ="Define Condition";
+	    if(firstNodeAttributesList.length == 1)
+	    {
+	    	popUp.cb1.selectedIndex = 0;
+	    }
+	    if(secondNodeAttributeList.length == 1)
+	    {
+	    	popUp.cb3.selectedIndex = 0;
+	    }
+	  	 
 	  	 var firstDAGNode : DAGNode = DAGNode(mainPanel.getChildByName(node1));
 	     var secondDAGNode : DAGNode = DAGNode(mainPanel.getChildByName(node2)); 
 	     
@@ -1328,7 +1608,8 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	     popUp.secondEntityExpId = secondDAGNode.expressionId;
 	     
 	     //Setting the nodeName
-	     popUp.nodeName = firstDAGNode.nodeNumber + "_" + secondDAGNode.nodeNumber;
+	     //popUp.nodeName = firstDAGNode.nodeNumber + "_" + secondDAGNode.nodeNumber;
+	     popUp.nodeName = getCustomNodeName(firstDAGNode,secondDAGNode); 
 	  }
 	  else
 	  {
@@ -1349,9 +1630,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	   popUp.firstNodeDp = firstNodeDataObject;
 	   popUp.secondNodeDp =  secondNodeDataObject; 
 	   //Opening the popup window in center
-	   
-	   
-	  
+
 	   if(operation == "edit" && currentCustomNode != null)
 	   {
 	   	    popUp.title ="Edit Condition";
@@ -1422,7 +1701,9 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 		           	 datePicker.focusEnabled = true;
 		           	 datePicker.formatString = "MM/DD/YYYY";
 		             datePicker.showToday = true;
-					 datePicker.text = currentCustomNode.getTimeValue();
+					 var date  : Date = new Date(currentCustomNode.getTimeValue());
+					 //datePicker.text = currentCustomNode.getTimeValue();
+	                 datePicker.selectedDate = date;
 	                 popUp.myBox.addChild(datePicker);
 	                
 	                //Adding the Label
@@ -1441,40 +1722,185 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	{
 	     rpcService.removeEventListener(ResultEvent.RESULT,populateDataHandler);
 	     createAndPopulate(event.result as Object, "create", null);
+	 }
+	 
+	 public function addSingleNodeCustomNode(node : SingleNodeCustomFormulaNode) : void
+	 {
+	 	var operation : String = node.getOperation();
+	 	var dagNode : DAGNode = null;
+	 	var customNodeName : String = "";
+	 	var nodeList : ArrayCollection = null;
+	 	var nodeName : String = node.name;  
+	 	 var existingCustomNode : SingleNodeCustomFormulaNode = null;
+	 	//Handling the DAG Nodes
+	 	if(operation == "create")
+	 	{
+            dagNode = DAGNode(mainPanel.getChildByName(node1));
+           customNodeName = node.name;
+	 	}
+	 	else if(operation == "edit")
+	 	{
+	 	    //This is operations related to Edit of Single Node, so retrieve the DAG Node from Map
+	 	   nodeList = associatedSingleDagNodes[nodeName];
+	 	   dagNode = nodeList.getItemAt(0) as DAGNode;
+	 	    
+	 	}else if((operation == "rePaint") || (operation == "rePaintEdit"))
+	 	{
+	 		//This is the case of repaint, so get the DAG Node from singleRepaintDAG Node Map
+	 		nodeList = singleRepaintDAGNodeMap.getValue(nodeName);
+	 		dagNode = nodeList.getItemAt(0) as DAGNode;
+	 		singleNodecustomFormulaString = node.getLhsTimeValue() + "\n" + node.getSelectedArithmeticOp() + "\n" + node.getEntityName()+ "."+ node.getAtributeName() + "\n" + node.getSelectedLogicalOp()+ "  "+ node.getTimeValue() + " " + node.getTimeInterval(); 
+	 	}
+	 	
+	 	 //Handling the existing custom Formula Node
+          if((operation == "rePaintEdit") || (operation == "edit"))
+          {
+            	//Then we need to remove existing node by that name and Add new node
+            	customNodeName = node.name;
+            	existingCustomNode = mainPanel.getChildByName(customNodeName) as SingleNodeCustomFormulaNode;
+            	if(existingCustomNode != null)
+            	{
+            		mainPanel.removeChild(existingCustomNode);
+            	} 
+           }
+           else if(operation == "rePaint")
+           {
+           	  customNodeName = getSingleCustomNodeName(dagNode);
+           	  
+           }
+           
+	 	var customNode : SingleNodeCustomFormulaNode  = new SingleNodeCustomFormulaNode();
+	 	customNode.initializeNode(dagNode.x+dagNode.width+50,dagNode.y+dagNode.height+20,customNodeName);
+  
+	 	customNode.customFormulaString = singleNodecustomFormulaString;
+	 	customNode.setNodeType(node.getNodeType());
+	 	customNode.setAttributeID(node.getAttributeID());
+	 	
+	 	customNode.setAttributeType(node.getAtributeType());
+	 	customNode.setAttributeName(node.getAtributeName());
+	 	
+	 	customNode.setEntityName(node.getEntityName());
+	 	
+	 	customNode.setNodeExpressionId(node.getNodeExpressionId());
+	 	
+	 	customNode.setSelectedArithmeticOp(node.getSelectedArithmeticOp());
+	 	customNode.setSelectedLogicalOp(node.getSelectedLogicalOp());
+	 	
+	 	customNode.setTimeValue(node.getTimeValue());
+	 	customNode.setTimeInterval(node.getTimeInterval());
+	 	
+	 	customNode.setLhsTimeValue(node.getLhsTimeValue());
+	 	customNode.setLhsTimeInterval(node.getLhsTimeInterval());
+	 	
+	 	customNode.setOperation(node.getOperation());
+	 	
+	 	customNode.setCustomColumnName(node.getCustomColumnName());
+	 	
+	 	//customNode.setCustomFormulaString(node.getCustomFormulaString());
+	 	
+	   //Adding Event Listener
+	   customNode.addEventListener(MouseEvent.MOUSE_MOVE,doSingleNodeCustomNodeDrag);   	 		
+	   mainPanel.addChild(customNode);
+	   drawLines(dagNode,customNode.x,customNode.y,customNode.name);
+	 	
+	 	singleNodeTQPope.removeMe();
 	 }           
 	
       public function addCustomFromulaNode(node : CustomFormulaNode):void
       {
             var dagNode1:DAGNode = null;
             var dagNode2:DAGNode = null;
+            var nodeList : ArrayCollection = null;
+            var customNodeName : String = ""; 
+            var nodeName  : String =  node.name;
             var operation : String = node.getOperation();
-            if((operation == "rePaint") || (operation == "rePaintEdit"))
+            var existingCustomNode : CustomFormulaNode = null;
+           // var customNodeDagNodes : Object  = new Object();
+            var dagNodesList : ArrayCollection  = new ArrayCollection();
+            
+            //Initializing the DAG NOdes
+            if(operation == "create")
             {
-            	var nodeName  : String= node.name;
-            	var nodeList : ArrayCollection = repaintDAGNodeMap.getValue(nodeName);
+            	//This is the case of creating custom node first time
+            	dagNode1 = DAGNode(mainPanel.getChildByName(node1));
+            	dagNode2 = DAGNode(mainPanel.getChildByName(node2));
+            	customNodeName = nodeName;
+            }
+            else if((operation == "rePaint") || (operation == "rePaintEdit"))
+            {
+            	//var nodeName  : String= node.name;
+            	nodeList = repaintDAGNodeMap.getValue(nodeName);
                 dagNode1 = nodeList.getItemAt(0) as DAGNode;
                 dagNode2 = nodeList.getItemAt(1) as DAGNode;
                 customFormulaString = node.getFirstNodeName()+"."+node.getFirstSelectedAttrName() +"\n" + node.getSelectedArithmeticOp() + "\n"+node.getSecondNodeName()+"."+node.getSecondSelectedAttrName() +"\n"+ node.getSelectedLogicalOp()+" " + node.getTimeValue() + " " + node.getTimeInterval();
             }
             else
             {
-            	dagNode1 = DAGNode(mainPanel.getChildByName(node1));
-            	dagNode2 = DAGNode(mainPanel.getChildByName(node2));
+            	//This is the case of EDIT
+            	nodeList = associatedDAGNodes[nodeName]; 
+                dagNode1 = nodeList.getItemAt(0) as DAGNode;
+                dagNode2 = nodeList.getItemAt(1) as DAGNode;
             }
-            var customNodeName : String = dagNode1.nodeNumber + "_" + dagNode2.nodeNumber; 
+           
+            //Handling the existing custom Formula Node
+            if((operation == "rePaintEdit") || (operation == "edit"))
+            {
+            	//Then we need to remove existing node by that name and Add new node
+            	customNodeName = node.name;
+            	existingCustomNode = mainPanel.getChildByName(customNodeName) as CustomFormulaNode;
+            	if(existingCustomNode != null)
+            	{
+            		mainPanel.removeChild(existingCustomNode);
+            	} 
+            }
+            else if(operation == "rePaint")
+            {
+            	customNodeName = getCustomNodeName(dagNode1,dagNode2);
+            	//This condition should be  when operation is create or repaint Create
+            	/*var nodesName : String = dagNode1.nodeNumber + "_" + dagNode2.nodeNumber; 
+	            var cunstomNodeNumber : int = 1;
+	            do
+	            {
+	            	//Adding any no. of TQ Nodes on two selected nodes 
+	            	customNodeName = "";
+	            	customNodeName = nodesName +  "_" + cunstomNodeNumber;
+	            	existingCustomNode = mainPanel.getChildByName(customNodeName) as CustomFormulaNode; 
+	                if(existingCustomNode != null)
+	                {
+	                 	 cunstomNodeNumber = cunstomNodeNumber +  1;  
+	                }
+	            }while(existingCustomNode != null);
+	             
+	            //Storing the DAG Nodes corresponding to a custom node in a Map
+	            dagNodesList.addItemAt(dagNode1,0);
+	            dagNodesList.addItemAt(dagNode2,1);
+	            associatedDAGNodes[customNodeName] = dagNodesList;
+	            */
+            }
+            
+            //Iterating over the Map
+          /*  for(var key:String in repaintDagNodes)
+            {
+            	Alert.show("Key is:"+key);
+            	var list : ArrayCollection  = repaintDagNodes[key] as ArrayCollection;
+            	var dagNode : DAGNode = list[0] as DAGNode ;
+            	Alert.show("NOde name is:"+dagNode.name);
+            }*/ 
+            
+            
             //Getting if there exists any custom node related to selected nodes
-            var existingCustomNode : CustomFormulaNode = mainPanel.getChildByName(customNodeName) as CustomFormulaNode;
+            /*var existingCustomNode : CustomFormulaNode = mainPanel.getChildByName(customNodeName) as CustomFormulaNode;
             if(existingCustomNode != null)
             {
             	mainPanel.removeChild(existingCustomNode);
             } 
-
+             */
             var customFormulaNode : CustomFormulaNode = new CustomFormulaNode();
         	
         	//Setting the operation
         	customFormulaNode.setOperation(operation);
         	customFormulaNode.customFormula = customFormulaString;
-        	customFormulaNode.initializeNode(dagNode1.x+dagNode1.width+50,dagNode1.y+dagNode1.height+20,node.name);
+        	customFormulaNode.initializeNode(dagNode1.x+dagNode1.width+50,dagNode1.y+dagNode1.height+20,customNodeName);
             
             //Setting the all possible values for Custom Formula node 
             
@@ -1543,6 +1969,23 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
       	 
       }
       
+      private function doSingleNodeCustomNodeDrag(event : MouseEvent) : void
+      {
+      	 var dragInitiator : SingleNodeCustomFormulaNode = SingleNodeCustomFormulaNode(event.currentTarget);
+      	 var ds:DragSource = new DragSource();
+      	 
+      	 var nodeProxy : SingleNodeCustomFormulaNode = new SingleNodeCustomFormulaNode();
+      	 nodeProxy.customFormulaString = dragInitiator.formulaLabel.text;
+      	 
+      	 var pointOffSet:Point = new Point(dragInitiator.mouseX,dragInitiator.mouseY);
+		 ds.addData(pointOffSet,"point");
+         
+         DragManager.doDrag(dragInitiator,ds,event,nodeProxy,0,0);
+         
+         nodeSelected = "singleCustomFormulaNode";    
+      }
+      
+      
       private function doCustomFormulaNodeDrag(event:MouseEvent):void
       {
       	 //Retrieving the node to drag 
@@ -1567,6 +2010,20 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
       private function customFormulaNodeDragDrop() : void
       {
       }
+      
+      public function deleteSingleNodeCustomNode(customNodeName : String ,line1 : String) : void
+      { 
+      	    var customNode : SingleNodeCustomFormulaNode =  mainPanel.getChildByName(customNodeName) as SingleNodeCustomFormulaNode;
+      	    if(customNode != null)
+      	    {
+      	    	mainPanel.removeChild(customNode);
+      	    }
+      	    var line : UIComponent = mainPanel.getChildByName(line1)as UIComponent;
+            if(line != null)
+            {
+				mainPanel.removeChild(line);           	
+            }
+      }	
       
       /*
   	       This method is invoked from CustomFormulaNode file to delete the Custom Node on click of delete menu  
