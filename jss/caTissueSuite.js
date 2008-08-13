@@ -1348,7 +1348,7 @@ function consentPage()
       switchToTab("consentTab");
 }
 
- function disableAllForSuperAdmin(roleObject,cpCheckId)
+ function preEventsOnRoleSelect(roleObject,cpCheckId)
  {
  	 var selectedRoleType = roleObject.options[roleObject.selectedIndex].text;                             
      var selectedRoleIds = roleObject.options[roleObject.selectedIndex].value;
@@ -1366,6 +1366,12 @@ function consentPage()
      	document.getElementById('cpIds').disabled=true;
 		document.getElementById(cpCheckId).disabled=true;
      }
+	 else if(selectedRoleIds=="7")
+	 {
+		 document.getElementById('siteIds').disabled=true;
+		 document.getElementById(cpCheckId).checked=true;
+		 getActionsForThisRole(roleObject,'siteIds','cpIds','cpCheckId')
+	 }
      else
      {	
 		
@@ -1373,7 +1379,6 @@ function consentPage()
 		 if(document.getElementById(cpCheckId).checked==false)
 		 {
 			 document.getElementById('cpIds').disabled=false;
-			 
 		 }
 		 else
 		 {
@@ -1382,6 +1387,7 @@ function consentPage()
 		 }
      	getActionsForThisRole(roleObject,'siteIds','cpIds','cpCheckId')
      }
+
  }
  
 
@@ -1863,18 +1869,3 @@ function getSelElementsList(selectBoxObj)
 	 }
 	 return selectedElementIds;
 }
-/*
-// for Preactions performed based on operation before deleting  row .
-function preDeleteActions()
-{
-	var form=document.forms[0];
-    var operation = form.operation.value; 
-	if(operation=="Add")
-	{
-	
-	}
-	else
-	{
-	}
-}
- */
