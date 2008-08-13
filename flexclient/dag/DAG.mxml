@@ -4,8 +4,32 @@
 layout="vertical" dragEnter="doDragEnter(event)" dragDrop="onDragDrop(event)" dragExit="onDragExit(event)"
 xmlns:Components="Components.*" xmlns:display="flash.display.*"
 creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingBottom="0" paddingLeft="0" paddingRight="0">
+<mx:Style>	
+	 Alert{
+		color : #0f3177;
+		title-style-name : "alertTitle";			
+		header-height:19;
+		border-thickness: 1;
+		drop-shadow-enabled: true;
+		drop-shadow-color :#d1ddf7;
+		background-color: #ffffff;
+		corner-radius :6;
+		border-style :solid;
+		header-colors : #90a4d1, #5970a0;
+		footer-colors : #9db6d9, #ffffff;
+		border-color : #5970a0;
+	}		
+	.alertTitle{
+		font-family :Verdana;
+		font-size :10;
+		font-weight :bold;
+		text-align :left;
+		color :#ffffff;
+	}	
+</mx:Style>
 <mx:Script>
 <![CDATA[
+	import Components.AlertManager;
 	import mx.controls.DateField;
 	import Util.Utility;
 	import mx.controls.Label;
@@ -36,8 +60,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	import mx.core.DragSource;
 	import mx.managers.DragManager;
 	import mx.events.MenuEvent;
-	import flash.external.ExternalInterface;
-	import mx.controls.Alert;
+	import flash.external.ExternalInterface;	
 	import mx.rpc.events.ResultEvent;
 	import mx.rpc.remoting.RemoteObject;
 	import mx.rpc.events.FaultEvent;
@@ -137,7 +160,8 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	*/	
 	private function faultHandler (event:FaultEvent):void
 	{
-		Alert.show(event.fault.faultString, 'Error');
+		//Alert.show(event.fault.faultString, 'Error');
+		AlertManager.showError(event.fault.faultString);
 	}
 	/**
 	* To drag nodes on UI
@@ -444,7 +468,8 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
                 
                 }catch(error:TypeError)
                 {
-                	Alert.show("Error:"+error.message);	
+                	//Alert.show("Error:"+error.message);
+                	AlertManager.showError("Error:"+error.message);	
                 }
 			 	
 			 }
@@ -598,13 +623,15 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 			}
 			else
 			{
-				Alert.show("Cannot connect selected nodes as it creates cycle in the query graph");
+				//Alert.show("Cannot connect selected nodes as it creates cycle in the query graph");
+				AlertManager.showWarning("Cannot connect selected nodes as it creates cycle in the query graph");
 			}
 				
 		}
 		else
 		{
-			Alert.show("No association present or no association selected.");
+			//Alert.show("No association present or no association selected.");
+			AlertManager.showWarning("No association present or no association selected.");
 		}
 		rpcService.removeEventListener(ResultEvent.RESULT,linkNodesHandler,false);
 	}
@@ -714,15 +741,17 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 			
 		if(dagNode1 == null || dagNode2 == null)
 		{
-			Alert.show("Please select two nodes to link");
-			 CursorManager.removeBusyCursor();	
+			//Alert.show("Please select two nodes to link");
+			AlertManager.showWarning("Please select two nodes to link");
+			CursorManager.removeBusyCursor();	
 		}
 		else
 		{
 			if(dagNode1.getOutAssociation(node2) != null)
 			{
-				Alert.show("An association already exists between selected nodes");
-		  		 CursorManager.removeBusyCursor();   	   
+				//Alert.show("An association already exists between selected nodes");
+				AlertManager.showWarning("An association already exists between selected nodes");
+		  		CursorManager.removeBusyCursor();   	   
 			}
 			else
 			{
@@ -745,7 +774,8 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 		ambiguityPanel.pathList= event.result as ArrayCollection;
 		if(ambiguityPanel.pathList==null || ambiguityPanel.pathList.length==0)
 		{
-			Alert.show("No paths present.");
+			//Alert.show("No paths present.");
+			AlertManager.showInfo("No paths present.");
 		}
 		else
 		{
@@ -763,7 +793,8 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 		}
 		}catch(error:Error)
 		{
-			Alert.show("Error"+error.getStackTrace())
+			//Alert.show("Error"+error.getStackTrace())
+			AlertManager.showError("Error"+error.getStackTrace());
 		}
 		finally
 		{
@@ -874,8 +905,13 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	*/
 	public function updateNodeSelection(event:MouseEvent):void {
 	selectedNode=null;
-		if(event.shiftKey)
-		{
+		//if(event.shiftKey)
+		
+		if(!event.altKey && !event.ctrlKey && !event.shiftKey )
+		{	
+			if(event.target.className != "UITextField" && event.target.className != "Button")
+				if(event.target.id != "createMenu" && event.target.id != "operatorCombo"){					
+					trace("this is target Id:" + event.target.id);		
 			var dagNode:DAGNode = DAGNode(mainPanel.getChildByName(event.currentTarget.name));
 			if(dagNode != null)
 			{
@@ -941,6 +977,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 					count++;
 				}
 			}
+		  }
 		}
 		
 	}
@@ -1179,7 +1216,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	 	}
 	 	else
 	 	{
-	 	     //Alert.show("Node is Not Valid For Temporal Query");	
+	 	     AlertManager.showWarning("Node is not valid for Temporal Query");	
 	 	}
 	 }
 	 
@@ -1195,7 +1232,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 		}
 		else
 		{
-			//Alert.show("Nodes are not valid");
+			 AlertManager.showWarning("Nodes are not valid for Temporal Query");
 		}
 	}
 	
@@ -1259,13 +1296,13 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	    if(operation == "create")
 	    {
 	    	popUp.title ="Define Condition";
-	    	if(firstNodeAttributesList.length > 1)
+	    	if(firstNodeAttributesList.length ==1)
 	    	{
-	    		popUp.cb1.prompt = "--Select--";
+	    		popUp.cb1.selectedIndex = 0;
 	    	}
-	    	if(secondNodeAttributeList.length > 1)
+	    	if(secondNodeAttributeList.length == 1)
 	    	{
-	    		popUp.cb3.prompt = "--Select--";
+	    		popUp.cb3.selectedIndex = 0;
 	    	}
         }
 	    	    
@@ -1578,14 +1615,17 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 <mx:RemoteObject id="rpcService" destination="cdeService">
 </mx:RemoteObject>
 
-<mx:VBox width="100%" height="100%" backgroundColor="#f9e886">
-	<mx:Panel backgroundColor="white" id="mainPanel" width="100%" height="100%" layout="absolute" title="Diagrammatic View" fontSize="11">
-		<mx:HBox  borderStyle="none" paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5" width="320" height="39" x="0" y="0">
-			<mx:Button label="Add Link" click="drawLine()" fontSize="9"/>
-			<mx:Button label="Clear All Paths" click="clearPaths()" fontSize="9"/>
-			<mx:Button label="Temporal Query" click="openTQPopUp()" fontSize="9"/> 
-		</mx:HBox>
-	</mx:Panel>
+<mx:VBox width="100%" height="100%" backgroundColor="#f9e886" horizontalGap="0" verticalGap="0">
+		<mx:VBox backgroundColor="white" id="mainPanelx" verticalGap="0" width="100%" height="100%" fontSize="11">
+			<mx:Label text="Diagrammatic View" fontSize="11" fontWeight="bold" x="0" y="0"/>
+			<mx:ApplicationControlBar top="0" dock="true" height="5%" width="100%" fillAlphas="[1.0, 1.0]" fillColors="[#f9e886, #f9e886]">
+				<mx:Button label="Add Link" click="drawLine()" fontSize="9" toolTip="Add Link to nodes"/>
+				<mx:Button label="Clear All Paths" click="clearPaths()" fontSize="9" toolTip="Clear All Paths"/>
+				<mx:Button label="Temporal Query" click="openTQPopUp()" fontSize="9" toolTip="Create temporal query on selected nodes"/>				
+			</mx:ApplicationControlBar>
+			<mx:Canvas id="mainPanel" width="100%" height="95%" borderStyle="none">
+			</mx:Canvas>
+		</mx:VBox>	
 	<mx:Label id="currentExp" fontFamily="Courier New" fontSize="11" fontWeight="bold"/>
 </mx:VBox>		
 </mx:Application>
