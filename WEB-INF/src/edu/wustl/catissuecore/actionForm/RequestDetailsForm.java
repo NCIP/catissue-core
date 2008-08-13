@@ -844,8 +844,8 @@ public class RequestDetailsForm extends AbstractActionForm
 					
 					if(!(specimen.getClassName().equals(requestDetailsBean.getClassName()) && 
 							specimen.getSpecimenType().equals(requestDetailsBean.getType())) && 
-							!(requestDetailsBean.getAssignedStatus().equals(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED)
-									||requestDetailsBean.equals(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE) ))
+							requestDetailsBean.getRowStatuskey().equals("enable") && (requestDetailsBean.getAssignedStatus().equals(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED)
+							||requestDetailsBean.getAssignedStatus().equals(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE)))
 					{
 						
 						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.distribution.derivedspecimen.type.class"));
