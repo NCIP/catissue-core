@@ -56,7 +56,7 @@ window.onresize = function() { setFrameHeight('cpFrameNew', .9,slope); setFrameH
 			<table border="0" width="100%" >
 				<tr>
 					<td valign="top" >
-					<iframe id="<%=Constants.CP_AND_PARTICIPANT_VIEW%>" name="<%=Constants.CP_AND_PARTICIPANT_VIEW%>" src="<%=Constants.SHOW_CP_AND_PARTICIPANTS_ACTION%>?pageOf=<%=Constants.PAGE_OF_CP_QUERY_RESULTS%>" scrolling="no" frameborder="0" width="100%"  marginheight=0 marginwidth=0>
+					<iframe id="<%=Constants.CP_AND_PARTICIPANT_VIEW%>" name="<%=Constants.CP_AND_PARTICIPANT_VIEW%>" src="<%=Constants.SHOW_CP_AND_PARTICIPANTS_ACTION%>?pageOf=<%=Constants.PAGE_OF_CP_QUERY_RESULTS%>" scrolling="no" frameborder="0" width="100%" height="524" marginheight=0 marginwidth=0>
 						Your Browser doesn't support IFrames.
 					</iframe>
 
