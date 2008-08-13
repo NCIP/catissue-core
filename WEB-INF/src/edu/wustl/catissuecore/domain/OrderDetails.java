@@ -864,38 +864,36 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 		    DistributedItem distributedItem = new DistributedItem();
 			
 			Specimen specimen = new Specimen();
-        	if(requestDetailsBean.getRequestFor() == null || requestDetailsBean.getRequestFor().trim().equalsIgnoreCase(""))
-				{//for existing Specimen.
-					if(requestDetailsBean.getInstanceOf().trim().equalsIgnoreCase("Existing"))
-					{   
+        	//for existing Specimen.
+			if(requestDetailsBean.getInstanceOf().trim().equalsIgnoreCase("Existing"))
+			{   
 						existingOrderItem =  new ExistingSpecimenOrderItem();
-						specimen.setId(new Long(requestDetailsBean.getSpecimenId()));
+						specimen.setId(new Long(requestDetailsBean.getRequestFor()));
 						specimen.setLabel(requestDetailsBean.getRequestedItem());
 						existingOrderItem.setSpecimen(specimen);
 						orderItem = existingOrderItem;
-					}
-				} 
-			else  if(requestDetailsBean.getInstanceOf().trim().equalsIgnoreCase("DerivedPathological"))
-				{//For pathologicalcase Specimen .
+			}else  if(requestDetailsBean.getInstanceOf().trim().equalsIgnoreCase("DerivedPathological"))
+			{//For pathologicalcase Specimen .
 					pathologicalCaseOrderItem =  new PathologicalCaseOrderItem();
 					specimen.setId(new Long(requestDetailsBean.getRequestFor()));
 			        specimen.setLabel(requestDetailsBean.getRequestedItem());
 				    orderItem = pathologicalCaseOrderItem;
-				}
-            else  
-			    {//For derived specimen.
+			}else  
+			  {//For derived specimen.
 					derivedOrderItem = new DerivedSpecimenOrderItem();
 					specimen.setId(new Long(requestDetailsBean.getRequestFor()));
 				    specimen.setLabel(requestDetailsBean.getRequestedItem());
 					derivedOrderItem.setParentSpecimen(specimen);
+					derivedOrderItem.setSpecimenClass(requestDetailsBean.getClassName());
+					derivedOrderItem.setSpecimenType(requestDetailsBean.getType());
                     orderItem = derivedOrderItem;
                }
 	     distributedItem.setSpecimen(specimen);
 	
 		//For setting assigned quantity in Distribution.
-		if(requestDetailsBean.getAssignedQty() != null && !requestDetailsBean.getAssignedQty().trim().equalsIgnoreCase(""))
+		if(requestDetailsBean.getRequestedQty() != null && !requestDetailsBean.getRequestedQty().trim().equalsIgnoreCase(""))
 		{
-			distributedItem.setQuantity(new Double(requestDetailsBean.getAssignedQty()));
+			distributedItem.setQuantity(new Double(requestDetailsBean.getRequestedQty()));
 		}
 		
 		distribution = setDistributedItemCollectionInDistribution(orderItem,distributedItem,distribution,distributedItemCollection);

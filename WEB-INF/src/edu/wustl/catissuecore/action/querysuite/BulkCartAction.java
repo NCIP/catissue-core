@@ -203,7 +203,8 @@ public class BulkCartAction extends QueryShoppingCartAction
 				
 				Set<String> tempEntityIdsList = bizLogic.getEntityIdsList(cart,
 						Arrays.asList(entityName), chkBoxValues);
-				tempEntityIdsList = bizLogic.getListOfOrderItem(tempEntityIdsList);
+				if(Constants.SPECIMEN_CLASSNAME.equals(entityName))
+					tempEntityIdsList = bizLogic.getListOfOrderItem(tempEntityIdsList);
 				Set<String> idMap = entityIdsMap.get(entityName);
 				idMap.addAll(tempEntityIdsList);
 			}

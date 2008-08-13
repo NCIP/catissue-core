@@ -24,6 +24,7 @@ import edu.wustl.catissuecore.domain.SpecimenOrderItem;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.util.dbManager.HibernateMetaData;
 
 
 
@@ -112,7 +113,7 @@ public class OrderingSystemUtil
 	 * @param childNodes Collection
 	 * @return List. ArrayList of children Specimen objects.
 	 */
-	public static List getAllChildrenSpecimen(Specimen rootNode,Collection childNodes)
+	public static List getAllChildrenSpecimen(Collection childNodes)
 	{
 		ArrayList childrenSpecimenList = new ArrayList();	
 		
@@ -127,12 +128,30 @@ public class OrderingSystemUtil
 		while(specimenItr.hasNext())
 		{
 			Specimen specimen  = (Specimen)specimenItr.next();
-			List subChildNodesList = getAllChildrenSpecimen(specimen,specimen.getChildSpecimenCollection());
+			List subChildNodesList = getAllChildrenSpecimen(specimen.getChildSpecimenCollection());
 			childrenSpecimenList.add(specimen);
 		}
 		
 		return childrenSpecimenList;
 	}
+	
+	public static List getAllSpecimen(Specimen specimen)
+	{
+		ArrayList allSpecimenList = new ArrayList();	
+		allSpecimenList.add(specimen);
+		
+		Iterator childSpec = specimen.getChildSpecimenCollection().iterator();
+		while(childSpec.hasNext())
+		{
+			List subChildNodesList = getAllSpecimen((Specimen)childSpec.next());
+			for(int i=0;i<subChildNodesList.size();i++)
+			allSpecimenList.add(subChildNodesList.get(i));
+		}
+		
+		return allSpecimenList;
+		
+	}
+	
 	/**
 	 * @param childrenSpecimenList Collection
 	 * @param className String
@@ -146,7 +165,8 @@ public class OrderingSystemUtil
 		while(childrenSpecimenListIterator.hasNext())
 		{
 			Specimen childrenSpecimen = (Specimen)childrenSpecimenListIterator.next();
-			if(childrenSpecimen.getClassName().trim().equalsIgnoreCase(className) && childrenSpecimen.getSpecimenType().trim().equalsIgnoreCase(type) && childrenSpecimen.getAvailableQuantity() > 0)
+			childrenSpecimen= (Specimen)HibernateMetaData.getProxyObjectImpl(childrenSpecimen);
+			if(childrenSpecimen.getSpecimenClass().trim().equalsIgnoreCase(className) && childrenSpecimen.getSpecimenType().trim().equalsIgnoreCase(type) && childrenSpecimen.getAvailableQuantity() > 0)
 			{
 				finalChildrenSpecimenList.add(childrenSpecimen);
 			}
@@ -170,6 +190,27 @@ public class OrderingSystemUtil
 		
 		return nameValueBeanList;
 	}
+	
+	
+	/**
+	 * @param listToConvert Collection
+	 * @return List. The namevaluebean list of children specimen to display.
+	 */
+	public static List getNameValueBean(Specimen specimen)
+	{
+		List nameValueBeanList = new ArrayList();
+		nameValueBeanList.add(new NameValueBean(specimen.getLabel(),specimen.getId().toString()));		
+		Iterator iter = specimen.getChildSpecimenCollection().iterator();		
+		while(iter.hasNext())
+		{
+			Specimen childSpecimen = (Specimen)iter.next();
+			nameValueBeanList.add(new NameValueBean(childSpecimen.getLabel(),childSpecimen.getId().toString()));
+		}
+		
+		return nameValueBeanList;
+	}
+	
+	
 	/**
 	 * @param specimenCollectionGroup
 	 * @param pathologicalCaseOrderItem
@@ -185,7 +226,7 @@ public class OrderingSystemUtil
     	while (childrenSpecimenListIterator.hasNext())
     	{
     		Specimen specimen = (Specimen)childrenSpecimenListIterator.next();
-    		List childSpecimenCollection = OrderingSystemUtil.getAllChildrenSpecimen(specimen,specimen.getChildSpecimenCollection());
+    		List childSpecimenCollection = OrderingSystemUtil.getAllChildrenSpecimen(specimen.getChildSpecimenCollection());
     		List finalChildrenSpecimenCollection = null;
     		if(pathologicalCaseOrderItem.getSpecimenClass() != null && pathologicalCaseOrderItem.getSpecimenType() != null && !pathologicalCaseOrderItem.getSpecimenClass().trim().equalsIgnoreCase("") && !pathologicalCaseOrderItem.getSpecimenType().trim().equalsIgnoreCase(""))
     	    {	//"Derived"	

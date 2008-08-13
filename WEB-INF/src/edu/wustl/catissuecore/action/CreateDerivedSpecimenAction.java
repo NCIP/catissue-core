@@ -21,6 +21,9 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.CreateSpecimenForm;
 import edu.wustl.catissuecore.actionForm.RequestDetailsForm;
+import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.bizlogic.OrderBizLogic;
+import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 
@@ -39,41 +42,58 @@ public class CreateDerivedSpecimenAction extends BaseAction
 		HttpSession session = request.getSession();
 		RequestDetailsForm requestDetailsForm = (RequestDetailsForm)session.getAttribute("REQUEST_DETAILS_FORM");		
 		String rowNumber = request.getParameter("rowNumber");
+		String specimenId = request.getParameter("specimenId");
 		String beanName = request.getParameter("bean");
 		
-		//Keys
+		
 		String  parentSpecimenLabelKey = "";
 		String requestedClassKey = "";
 		String requestedTypeKey = "";
 		String requestedQtyKey = "";
 		String parentSpecimenIdKey = "";
+		String parentSpecimenLabel = "";	
+		String requestedClass = "";
+		String requestedType ="";
+		String requestedQty = "";
+		String parentSpecimenId = "";
+		
 		//whether request is from request details page or defined array page 
-		if(beanName != null && !beanName.equals(""))
+		if(specimenId!=null)
 		{
-			parentSpecimenLabelKey = "DefinedArrayDetailsBean:"+rowNumber+"_requestedItem";
-			requestedClassKey = "DefinedArrayDetailsBean:"+rowNumber+"_className";
-			requestedTypeKey = "DefinedArrayDetailsBean:"+rowNumber+"_type";
-			requestedQtyKey = "DefinedArrayDetailsBean:"+rowNumber+"_requestedQuantity";
-			parentSpecimenIdKey = "DefinedArrayDetailsBean:"+rowNumber+"_specimenId";
-		}
-		else
-		{
-			parentSpecimenLabelKey = "RequestDetailsBean:"+rowNumber+"_requestedItem";
-			requestedClassKey = "RequestDetailsBean:"+rowNumber+"_className";
-			requestedTypeKey = "RequestDetailsBean:"+rowNumber+"_type";
-			requestedQtyKey = "RequestDetailsBean:"+rowNumber+"_requestedQty";
-			parentSpecimenIdKey = "RequestDetailsBean:"+rowNumber+"_specimenId";
+			OrderBizLogic orderBizLogic = (OrderBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
+			Specimen specimen = (Specimen)orderBizLogic.getSpecimenObject(Long.parseLong(specimenId));
+			parentSpecimenLabel = specimen.getLabel();	
+			requestedClass = specimen.getClassName();
+			requestedType = specimen.getSpecimenType();
+			requestedQty = specimen.getAvailableQuantity().toString();
+			parentSpecimenId = specimen.getId().toString();
+			 
+		}else {
+				if(beanName != null && !beanName.equals(""))
+				{
+					parentSpecimenLabelKey = "DefinedArrayDetailsBean:"+rowNumber+"_requestedItem";
+					requestedClassKey = "DefinedArrayDetailsBean:"+rowNumber+"_className";
+					requestedTypeKey = "DefinedArrayDetailsBean:"+rowNumber+"_type";
+					requestedQtyKey = "DefinedArrayDetailsBean:"+rowNumber+"_requestedQuantity";
+					parentSpecimenIdKey = "DefinedArrayDetailsBean:"+rowNumber+"_specimenId";
+				}
+				else
+				{
+					parentSpecimenLabelKey = "RequestDetailsBean:"+rowNumber+"_requestedItem";
+					requestedClassKey = "RequestDetailsBean:"+rowNumber+"_className";
+					requestedTypeKey = "RequestDetailsBean:"+rowNumber+"_type";
+					requestedQtyKey = "RequestDetailsBean:"+rowNumber+"_requestedQty";
+					parentSpecimenIdKey = "RequestDetailsBean:"+rowNumber+"_specimenId";
+				}
+				 Map valuesMap = requestDetailsForm.getValues();		
+				 parentSpecimenLabel = (String)valuesMap.get(parentSpecimenLabelKey);	
+				 requestedClass = (String)valuesMap.get(requestedClassKey);
+				 requestedType = (String)valuesMap.get(requestedTypeKey);
+				 requestedQty = ((String)valuesMap.get(requestedQtyKey)).toString();
+				 parentSpecimenId = ((String)valuesMap.get(parentSpecimenIdKey)).toString();
+				
 		}
 		
-		Map valuesMap = requestDetailsForm.getValues();		
-		//getting the values
-		
-		String parentSpecimenLabel = (String)valuesMap.get(parentSpecimenLabelKey);	
-		String requestedClass = (String)valuesMap.get(requestedClassKey);
-		String requestedType = (String)valuesMap.get(requestedTypeKey);
-		String requestedQty = ((String)valuesMap.get(requestedQtyKey)).toString();
-		//String instanceOf = (String)valuesMap.get("RequestDetailsBean:"+rowNumber+"_instanceOf");
-		String parentSpecimenId = ((String)valuesMap.get(parentSpecimenIdKey)).toString();
 		
 		//Create Specimen Form to populate.
 		CreateSpecimenForm createSpecimenForm = (CreateSpecimenForm)form;
@@ -89,4 +109,5 @@ public class CreateDerivedSpecimenAction extends BaseAction
 		
 		return mapping.findForward("derivedSpecimen");
 	}
+ 
 }

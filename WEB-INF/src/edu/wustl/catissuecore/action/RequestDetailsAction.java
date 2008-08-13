@@ -10,8 +10,10 @@
 
 package edu.wustl.catissuecore.action;
 
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -59,6 +61,7 @@ import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenOrderItem;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.OrderingSystemUtil;
+import edu.wustl.catissuecore.util.SpecimenComparator;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
@@ -105,6 +108,21 @@ public class RequestDetailsAction extends BaseAction
 			requestDetailsForm.setId((new Long(requestId)).longValue());
 			
 		}
+		
+//		ajax call to change the available quantity on change of specimen
+		OrderBizLogic orderBizLogic = (OrderBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
+		boolean isAjaxCalled = isAjaxCalled(request);
+		String identifier = request.getParameter("identifier");
+		if(isAjaxCalled && request.getParameter("specimenId")!=null)
+		{
+			Long specimenId =  Long.parseLong(request.getParameter("specimenId"));
+			Specimen specimen = orderBizLogic.getSpecimenObject(specimenId);
+			sendSpecimenAvailableQuantity(specimen.getAvailableQuantity().toString(), response,identifier);
+			
+//			for ajax return null as Actionservlet returns ActionForward object
+			return null;   
+		}
+			
 
 		// order items status to display
 		List requestedItemsStatusList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_REQUESTED_ITEMS_STATUS, null);
@@ -136,13 +154,15 @@ public class RequestDetailsAction extends BaseAction
 		request.setAttribute(Constants.ITEM_STATUS_LIST_FOR_ITEMS_IN_ARRAY, tempList);
 
 		//The order items list corresponding to the request Id
-		getRequestDetailsList(requestId, requestDetailsForm, request);
+		getRequestDetailsList(requestId, requestDetailsForm, request,response);
 
 		if(request.getParameter(Constants.TAB_INDEX_ID)!=null)
 		{
 			Integer tabIndexId = new Integer(request.getParameter(Constants.TAB_INDEX_ID));
 			requestDetailsForm.setTabIndex(tabIndexId.intValue());
 		}
+		
+		
 		return mapping.findForward("success");
 	}
 
@@ -159,9 +179,9 @@ public class RequestDetailsAction extends BaseAction
 	 * @param id String containing the requestId
 	 * @param requestDetailsForm RequestDetailsForm object
 	 * @param request HttpServletRequest object
-	 * @throws DAOException object
+	 * @throws Exception 
 	 */
-	private void getRequestDetailsList(String id, RequestDetailsForm requestDetailsForm, HttpServletRequest request) throws DAOException
+	private void getRequestDetailsList(String id, RequestDetailsForm requestDetailsForm, HttpServletRequest request,HttpServletResponse response) throws Exception
 	{
 		//fetching the order object corresponding to obtained id.
 
@@ -171,8 +191,8 @@ public class RequestDetailsAction extends BaseAction
 		try
 		{
 			dao.openSession(null);
-
 			OrderBizLogic orderBizLogic = (OrderBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
+
 			OrderDetails orderDetails = (OrderDetails)orderBizLogic.getOrderListFromDB(id,dao);
 
 //			 The request details  corresponding to the request Id
@@ -188,7 +208,7 @@ public class RequestDetailsAction extends BaseAction
 				cleanSession(request);
 				//Showing specimen tab by default.
 				requestDetailsForm.setTabIndex(1);
-				requestDetailsForm.setAllValuesForOrder(orderDetails, request);
+				requestDetailsForm.setAllValuesForOrder(orderDetails, request,dao);
 
 				List requestDetailsList = new ArrayList();
 				OrderItem orderItem = null;
@@ -311,7 +331,7 @@ private OrderItem getOrderItem(OrderDetails orderDetails , Long orderItemId )
 		
 			if (key.endsWith("orderItemId"))
 			{
-				List childrenSpecimenListToDisplay = new ArrayList();
+				List allSpecimensToDisplay = new ArrayList();
 				rowNumber = getRowNumber(key);
 				//				Fetching the order item id
 				orderItemId = (String) valuesMap.get(key);
@@ -319,47 +339,60 @@ private OrderItem getOrderItem(OrderDetails orderDetails , Long orderItemId )
 				//OrderItem orderItem = (OrderItem) orderItemListFromDb.get(0);
 			
 				
-					List finalChildrenSpecimenList = new ArrayList();
+					//List finalChildrenSpecimenList = new ArrayList();
+				
 										
 					if (orderItem instanceof DerivedSpecimenOrderItem)
 					{
+						List allSpecimen = new ArrayList();
 						DerivedSpecimenOrderItem derivedSpecimenOrderItem = (DerivedSpecimenOrderItem) orderItem;
-						Collection childrenSpecimenList = OrderingSystemUtil.getAllChildrenSpecimen(derivedSpecimenOrderItem.getParentSpecimen(), derivedSpecimenOrderItem.getParentSpecimen().getChildSpecimenCollection());
+						/*Collection childrenSpecimenList = OrderingSystemUtil.getAllChildrenSpecimen( derivedSpecimenOrderItem.getParentSpecimen().getChildSpecimenCollection());
 
 						finalChildrenSpecimenList = OrderingSystemUtil.getChildrenSpecimenForClassAndType(childrenSpecimenList,
-								derivedSpecimenOrderItem.getSpecimenClass(), derivedSpecimenOrderItem.getSpecimenType());
-					}
-					childrenSpecimenListToDisplay = OrderingSystemUtil.getNameValueBeanList(finalChildrenSpecimenList);
-					if ((orderItem instanceof SpecimenOrderItem) && !(orderItem instanceof ExistingSpecimenOrderItem))
-					{
+								derivedSpecimenOrderItem.getSpecimenClass(), derivedSpecimenOrderItem.getSpecimenType());*/
+						
+						allSpecimen = OrderingSystemUtil.getAllSpecimen(derivedSpecimenOrderItem.getParentSpecimen());
+						SpecimenComparator comparator = new SpecimenComparator();
+						Collections.sort(allSpecimen, comparator);
+						allSpecimensToDisplay = OrderingSystemUtil.getNameValueBeanList(allSpecimen);
 						SpecimenOrderItem specimenOrderItem = (SpecimenOrderItem) orderItem;
 						if (specimenOrderItem.getNewSpecimenArrayOrderItem() == null)
 						{
-							requestForMap.put("RequestForDropDownList:" + rowNumber, childrenSpecimenListToDisplay);
+								requestForMap.put("RequestForDropDownList:" + rowNumber, allSpecimensToDisplay);
 						}
 						else
 						{
-							requestForMap.put("RequestForDropDownListArray:" + rowNumber, childrenSpecimenListToDisplay);
+								requestForMap.put("RequestForDropDownListArray:" + rowNumber, allSpecimensToDisplay);
 						}
+						
+						
+					}
+					if(orderItem instanceof ExistingSpecimenOrderItem)
+					{
+						List allSpecimen = new ArrayList();
+						ExistingSpecimenOrderItem existingSpecimenOrderItem = (ExistingSpecimenOrderItem)orderItem;
+						allSpecimen = OrderingSystemUtil.getAllSpecimen(existingSpecimenOrderItem.getSpecimen());
+						SpecimenComparator comparator = new SpecimenComparator();
+						Collections.sort(allSpecimen, comparator);
+						allSpecimensToDisplay = OrderingSystemUtil.getNameValueBeanList(allSpecimen);
+						requestForMap.put("RequestForDropDownList:" + rowNumber, allSpecimensToDisplay);
 					}
 								
 					if (orderItem instanceof PathologicalCaseOrderItem)
 					{
-						
-																	
 						/* chnages finsh */
 						PathologicalCaseOrderItem pathologicalCaseOrderItem = (PathologicalCaseOrderItem) orderItem;
 						List totalChildrenSpecimenColl = OrderingSystemUtil.getRequestForListForPathologicalCases(pathologicalCaseOrderItem.getSpecimenCollectionGroup(),
 								pathologicalCaseOrderItem);
-						childrenSpecimenListToDisplay = OrderingSystemUtil.getNameValueBeanList(totalChildrenSpecimenColl);
+						allSpecimensToDisplay = OrderingSystemUtil.getNameValueBeanList(totalChildrenSpecimenColl);
 						SpecimenOrderItem specimenOrderItem = (SpecimenOrderItem) orderItem;
 						if (specimenOrderItem.getNewSpecimenArrayOrderItem() == null)
 						{
-							requestForMap.put("RequestForDropDownList:" + rowNumber, childrenSpecimenListToDisplay);
+							requestForMap.put("RequestForDropDownList:" + rowNumber, allSpecimensToDisplay);
 						}
 						else
 						{
-							requestForMap.put("RequestForDropDownListArray:" + rowNumber, childrenSpecimenListToDisplay);
+							requestForMap.put("RequestForDropDownListArray:" + rowNumber, allSpecimensToDisplay);
 						}
 					}
 				
@@ -561,8 +594,7 @@ private OrderItem getOrderItem(OrderDetails orderDetails , Long orderItemId )
 		arrayDetailsBean.setRequestedItem(derivedSpecimenOrderItem.getParentSpecimen().getLabel());
 		arrayDetailsBean.setSpecimenId(derivedSpecimenOrderItem.getParentSpecimen().getId().toString());
 		//Obtain all children specimens
-		Collection childrenSpecimenList = OrderingSystemUtil.getAllChildrenSpecimen(derivedSpecimenOrderItem.getParentSpecimen(),
-				derivedSpecimenOrderItem.getParentSpecimen().getChildSpecimenCollection());
+		Collection childrenSpecimenList = OrderingSystemUtil.getAllChildrenSpecimen(derivedSpecimenOrderItem.getParentSpecimen().getChildSpecimenCollection());
 		//Obtain only those specimens of this class and type from the above list
 		List finalChildrenSpecimenList = OrderingSystemUtil.getChildrenSpecimenForClassAndType(childrenSpecimenList, derivedSpecimenOrderItem
 				.getSpecimenClass(), derivedSpecimenOrderItem.getSpecimenType());
@@ -605,7 +637,7 @@ private OrderItem getOrderItem(OrderDetails orderDetails , Long orderItemId )
 		while (childrenSpecimenListIterator.hasNext())
 		{
 			Specimen specimen = (Specimen) childrenSpecimenListIterator.next();
-			List childSpecimenCollection = OrderingSystemUtil.getAllChildrenSpecimen(specimen, specimen.getChildSpecimenCollection());
+			List childSpecimenCollection = OrderingSystemUtil.getAllChildrenSpecimen(specimen.getChildSpecimenCollection());
 			List finalChildrenSpecimenCollection = null;
 			if (pathologicalCaseOrderItem.getSpecimenClass() != null && pathologicalCaseOrderItem.getSpecimenType() != null
 					&& !pathologicalCaseOrderItem.getSpecimenClass().trim().equalsIgnoreCase("")
@@ -754,7 +786,8 @@ private OrderItem getOrderItem(OrderDetails orderDetails , Long orderItemId )
 	{
 		requestDetailsBean.setRequestedItem(existingSpecimenorderItem.getSpecimen().getLabel());
 		requestDetailsBean.setSpecimenId(existingSpecimenorderItem.getSpecimen().getId().toString());
-		List childrenSpecimenListToDisplay = new ArrayList();
+		
+		List childrenSpecimenListToDisplay = OrderingSystemUtil.getNameValueBean(existingSpecimenorderItem.getSpecimen());
 		requestDetailsBean.setSpecimenList(childrenSpecimenListToDisplay);
 		
 			
@@ -806,8 +839,7 @@ private OrderItem getOrderItem(OrderDetails orderDetails , Long orderItemId )
 	{
 		requestDetailsBean.setRequestedItem(derivedSpecimenorderItem.getParentSpecimen().getLabel());
 		Long specimenId = derivedSpecimenorderItem.getParentSpecimen().getId();
-		Collection childrenSpecimenList = OrderingSystemUtil.getAllChildrenSpecimen(derivedSpecimenorderItem.getParentSpecimen(),
-				derivedSpecimenorderItem.getParentSpecimen().getChildSpecimenCollection());
+		Collection childrenSpecimenList = OrderingSystemUtil.getAllChildrenSpecimen(derivedSpecimenorderItem.getParentSpecimen().getChildSpecimenCollection());
 		List finalChildrenSpecimenList = OrderingSystemUtil.getChildrenSpecimenForClassAndType(childrenSpecimenList, derivedSpecimenorderItem
 				.getSpecimenClass(), derivedSpecimenorderItem.getSpecimenType());
 		//	  removing final specimen List from session
@@ -874,7 +906,7 @@ private OrderItem getOrderItem(OrderDetails orderDetails , Long orderItemId )
 		while (childrenSpecimenListIterator.hasNext())
 		{
 			Specimen specimen = (Specimen) childrenSpecimenListIterator.next();
-			List childSpecimenCollection = OrderingSystemUtil.getAllChildrenSpecimen(specimen, specimen.getChildSpecimenCollection());
+			List childSpecimenCollection = OrderingSystemUtil.getAllChildrenSpecimen(specimen.getChildSpecimenCollection());
 			List finalChildrenSpecimenCollection = null;
 			if (pathologicalCaseOrderItem.getSpecimenClass() != null && pathologicalCaseOrderItem.getSpecimenType() != null
 					&& !pathologicalCaseOrderItem.getSpecimenClass().trim().equalsIgnoreCase("")
@@ -1008,27 +1040,31 @@ private OrderItem getOrderItem(OrderDetails orderDetails , Long orderItemId )
 		}
 	}
 	
-	
-	private void getChildrenSpecimen(Specimen specimen) throws DAOException
+	/**
+	 * method for getting isOnChange from request
+	 * @param request:object of HttpServletResponse
+	 * @return isOnChange :boolean 
+	 */
+	private boolean isAjaxCalled(HttpServletRequest request)
 	{
-		OrderBizLogic orderBizLogic = (OrderBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
-		if (specimen != null)
+    	boolean isOnChange=false;
+		String str = request.getParameter("isOnChange");
+		if(str!=null && str.equals("true"))
 		{
-			Collection childrenSpecimenCollection = (Collection) orderBizLogic.retrieveAttribute(Specimen.class.getName(), specimen.getId(),
-					"elements(childrenSpecimen)");
-			if (childrenSpecimenCollection != null)
-			{
-				specimen.setChildSpecimenCollection(childrenSpecimenCollection);
-				Iterator iterator = childrenSpecimenCollection.iterator();
-				while (iterator.hasNext())
-				{
-					Specimen childSpecimen = (Specimen) iterator.next();
-					getChildrenSpecimen(childSpecimen);
-				}
-			}
+			isOnChange = true;
 		}
+		return isOnChange;
 	}
 	
+	private void sendSpecimenAvailableQuantity(String availableQuantity, HttpServletResponse response,String identifier) throws Exception 		  
+	{
+			PrintWriter out = response.getWriter();
+			String responseString = identifier + Constants.RESPONSE_SEPARATOR + availableQuantity;
+			Logger.out.debug("mail"+availableQuantity);
+			response.setContentType("text/html");
+			out.write(responseString );
+	}
+
 
 
 	

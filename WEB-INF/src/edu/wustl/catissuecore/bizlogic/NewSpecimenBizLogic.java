@@ -1889,8 +1889,8 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	{
 	    SpecimenCollectionGroup scg = specimen.getSpecimenCollectionGroup();
 
-	    if (scg == null || ((scg.getId() == null || scg.getId().equals("-1")) && 
-                        (scg.getGroupName() == null || scg.getGroupName().equals(""))))
+	    if (specimen.getParentSpecimen() ==null && (scg == null || ((scg.getId() == null || scg.getId().equals("-1")) && 
+                        (scg.getGroupName() == null || scg.getGroupName().equals("")))))
         {
             String message = ApplicationProperties.getValue("specimen.specimenCollectionGroup");
             throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));

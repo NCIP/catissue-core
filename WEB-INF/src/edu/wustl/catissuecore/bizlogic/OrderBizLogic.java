@@ -263,7 +263,7 @@ public class OrderBizLogic extends DefaultBizLogic
 								{
 									Specimen specimen = (Specimen) specimenCollIter.next();
 									List childSpecimenCollection = OrderingSystemUtil
-											.getAllChildrenSpecimen(specimen, specimen.getChildSpecimenCollection());
+											.getAllChildrenSpecimen(specimen.getChildSpecimenCollection());
 									List finalChildrenSpecimenCollection = null;
 									if (pathologicalCaseOrderItem.getSpecimenClass() != null && pathologicalCaseOrderItem.getSpecimenType() != null
 											&& !pathologicalCaseOrderItem.getSpecimenClass().trim().equalsIgnoreCase("")
@@ -808,8 +808,10 @@ public class OrderBizLogic extends DefaultBizLogic
 			}else if(orderItem instanceof DerivedSpecimenOrderItem)
 			{
 				DerivedSpecimenOrderItem derivedSpecimenOrderItem = (DerivedSpecimenOrderItem) orderItem;
-				if(siteIdsList.contains(derivedSpecimenOrderItem.getParentSpecimen().getSpecimenPosition()
-						.getStorageContainer().getSite().getId()))
+				//derivedSpecimenOrderItem= (DerivedSpecimenOrderItem)HibernateMetaData.getProxyObjectImpl(derivedSpecimenOrderItem);
+				Long siteId = (Long)HibernateMetaData.getProxyObjectImpl(derivedSpecimenOrderItem.getParentSpecimen()
+						.getSpecimenPosition().getStorageContainer().getSite().getId());
+				if(siteIdsList.contains(siteId))
 				{
 					isValidToDistribute = true;
 				}
@@ -1264,6 +1266,49 @@ public class OrderBizLogic extends DefaultBizLogic
 		newSpecimenArray.setActivityStatus("Closed");
 		specimenArrayBizLogic.update(dao, newSpecimenArray, oldSpecimenArray, sessionDataBean);
 		
+	}
+	
+	public Specimen getSpecimenObject(Long specimenId)
+	{
+		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+		Specimen specimen = null;
+    	try
+    	{
+    		dao.openSession(null);
+    		String sourceObjectName = Specimen.class.getName();
+    		specimen = (Specimen)dao.retrieve(sourceObjectName,specimenId);
+		   		
+    	}
+    	catch(DAOException e)
+    	{
+    		Logger.out.error(e.getMessage(), e);
+    		return null;
+    	}
+    	finally
+		{
+			try
+			{
+				dao.closeSession();
+			}
+			catch(DAOException daoEx)
+			{
+				Logger.out.error(daoEx.getMessage(), daoEx);
+				return null;
+			}
+		}
+    	return specimen;
+	}
+	public Specimen getSpecimen(Long specimenId,AbstractDAO dao)
+	{
+		String sourceObjectName = Specimen.class.getName();
+		Specimen specimen=null;
+		try {
+			specimen = (Specimen)dao.retrieve(sourceObjectName,specimenId);
+		} catch (DAOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return specimen;
 	}
 	
 	

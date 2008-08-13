@@ -99,7 +99,8 @@ public class RequestDetailsBean implements Serializable
 	
 	private String rowStatuskey;
 	
-		
+	private String canDistribute;
+			
 	/**
 	 * @return the className
 	 */	
@@ -425,6 +426,14 @@ public class RequestDetailsBean implements Serializable
 
 	public void setRowStatuskey(String rowStatuskey) {
 		this.rowStatuskey = rowStatuskey;
+	}
+
+	public String getCanDistribute() {
+		return canDistribute;
+	}
+
+	public void setCanDistribute(String canDistribute) {
+		this.canDistribute = canDistribute;
 	}
 
 	

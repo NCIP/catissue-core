@@ -155,6 +155,10 @@ public class QueryShoppingCartBizLogic
 
 	}
 	
+	/**
+	 * @param entityIdsList
+	 * @return
+	 */
 	public Set getListOfOrderItem(Set<String> entityIdsList)
 	{
 		 Set<String> orderIdsList = new HashSet<String>();
@@ -196,6 +200,13 @@ public class QueryShoppingCartBizLogic
 	}
 	
 	
+	/**
+	 * To check specimen is valid or not for ordering
+	 * @param dao
+	 * @param specimenId
+	 * @return
+	 * @throws DAOException
+	 */
 	private boolean isSpecimenValidToOrder(HibernateDAO dao ,Long specimenId) throws DAOException
 	{
 		boolean isSpecimenValid = true;

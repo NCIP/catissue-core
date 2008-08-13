@@ -117,7 +117,7 @@ function checkAl(element)
 					 if(distributionSiteValue != distributionSiteValueInner)
 					 {
 						isValidTodistribute = false;
-						showErrorMessage("Specimen from multiple Site Exits : Can distribute specimen from only one site")
+						showErrorMessage("Specimen from multiple site exist : Can distribute specimens from only one site")
 						break;
 					}
 				}

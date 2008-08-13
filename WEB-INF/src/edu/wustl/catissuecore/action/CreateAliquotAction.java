@@ -16,6 +16,8 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 
 import edu.wustl.catissuecore.actionForm.AliquotForm;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
@@ -115,7 +117,18 @@ public class CreateAliquotAction extends BaseAction
 		}
 		 else if(insertAliquotSpecimen)
 		{
-			return mapping.findForward(Constants.SUCCESS);
+			 if(aliquotForm.getForwardTo().equals(Constants.ORDER_DETAILS))
+			 {
+				 Specimen specimen = (Specimen)specimenList.get(0);
+				 String parentSpecimenLable= specimen.getParentSpecimen().getLabel();
+				 ActionMessages actionMessages = new ActionMessages();
+				 actionMessages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
+							"errors.distribution.aliquots.created",parentSpecimenLable));
+				 saveMessages(request, actionMessages);
+				 return mapping.findForward(aliquotForm.getForwardTo());
+			 }	 
+			 else
+				 return mapping.findForward(Constants.SUCCESS);
 		}
 		else
 		{

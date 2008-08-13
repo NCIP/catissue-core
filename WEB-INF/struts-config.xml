@@ -283,6 +283,14 @@ PUBLIC
 		<forward name="derivedSpecimen" path="/OrderingSystemAddNew.do?addNewForwardTo=deriveSpecimen&amp;forwardTo=orderDetails&amp;addNewFor=specimenId" />		
 	</action>
 	
+	<action path="/createAliquotSpecimen"
+		type="edu.wustl.catissuecore.action.CreateAliquotSpecimenAction"
+		name="aliquotForm"
+		validate="false"
+		scope="request">
+		<forward name="aliquotSpecimen" path="/OrderingSystemAddNew.do?addNewForwardTo=aliquotSpecimen&amp;forwardTo=orderDetails&amp;addNewFor=specimenId" />	
+	</action>
+	
 	<action path="/createSpecimenFromOrder"
 		type="edu.wustl.catissuecore.action.CreateSpecimenFromOrderAction"
 		name="newSpecimenForm"
@@ -468,6 +476,7 @@ PUBLIC
 			scope="request">
 			<forward name="deriveSpecimen" path="/CreateSpecimen.do?operation=add&amp;pageOf=&amp;menuSelected=15&amp;virtualLocated=true" />
 			<forward name="specimen" path="/NewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimen&amp;menuSelected=15&amp;virtualLocated=true" />
+			<forward name="aliquotSpecimen" path="/CreateAliquots.do?operation=add&amp;pageOf=pageOfAliquot&amp;menuSelected=15&amp;virtualLocated=true" />
 			
 		</action>
 
@@ -3733,6 +3742,7 @@ PUBLIC
 		<forward name="pageOfAliquot" path=".catissuecore.aliquotDef" />
 		<forward name="pageOfCreateAliquot" path=".catissuecore.aliquotDef"/>
 		<forward name="pageOfAliquotSummary" path=".catissuecore.aliquotSummaryDef" />
+		<forward name="orderDetails" path="/RequestDetails.do" />
 		<forward name="failure" path=".catissuecore.aliquotDef" />
 		<forward name="access_denied" path="/ManageBioSpecimen.do" />
 	</action>
@@ -3758,6 +3768,7 @@ PUBLIC
 		input="/CreateAliquots.do?pageOf=pageOfCreateAliquot&amp;menuSelected=15"
 		scope="request">
 		<forward name="success" path=".catissuecore.aliquotSummaryDef" />
+		<forward name="orderDetails" path="/RequestDetails.do" />
 		<forward name="failure" path="/Aliquots.do?pageOf=pageOfCreateAliquot&amp;menuSelected=15" />
 	</action>
 	

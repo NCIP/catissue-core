@@ -186,7 +186,7 @@ public class DistributionBizLogic extends DefaultBizLogic
 
 			if (!availability)
 			{
-				throw new DAOException(ApplicationProperties.getValue("errors.distribution.quantity"));
+				throw new DAOException(ApplicationProperties.getValue("errors.distribution.quantity.should.equal"));
 			}
 			else
 			{
@@ -234,8 +234,10 @@ public class DistributionBizLogic extends DefaultBizLogic
 			TissueSpecimen tissueSpecimen = (TissueSpecimen) specimen;
 			double availabeQty = Double.parseDouble(tissueSpecimen.getAvailableQuantity().toString());//tissueSpecimen.getAvailableQuantityInGram().doubleValue();
 			Logger.out.debug("TissueAvailabeQty" + availabeQty);
-			if (quantity > availabeQty)
-				return false;
+			if (availabeQty <= quantity)
+			{
+				tissueSpecimen.setAvailableQuantity(new Double(0.0));
+			}
 			else
 			{
 				availabeQty = availabeQty - quantity;
@@ -247,8 +249,10 @@ public class DistributionBizLogic extends DefaultBizLogic
 		{
 			CellSpecimen cellSpecimen = (CellSpecimen) specimen;
 			int availabeQty = (int) Double.parseDouble(cellSpecimen.getAvailableQuantity().toString());//cellSpecimen.getAvailableQuantityInCellCount().intValue();
-			if (quantity > availabeQty)
-				return false;
+			if (availabeQty <= quantity)
+			{
+				cellSpecimen.setAvailableQuantity(new Double(0.0));
+			}
 			else
 			{
 				availabeQty = availabeQty - (int) quantity;
@@ -259,8 +263,10 @@ public class DistributionBizLogic extends DefaultBizLogic
 		{
 			MolecularSpecimen molecularSpecimen = (MolecularSpecimen) specimen;
 			double availabeQty = Double.parseDouble(molecularSpecimen.getAvailableQuantity().toString());//molecularSpecimen.getAvailableQuantityInMicrogram().doubleValue();
-			if (quantity > availabeQty)
-				return false;
+			if (availabeQty <= quantity)
+			{
+				molecularSpecimen.setAvailableQuantity(new Double(0.0));
+			}
 			else
 			{
 				availabeQty = availabeQty - quantity;
@@ -271,8 +277,10 @@ public class DistributionBizLogic extends DefaultBizLogic
 		{
 			FluidSpecimen fluidSpecimen = (FluidSpecimen) specimen;
 			double availabeQty = Double.parseDouble(fluidSpecimen.getAvailableQuantity().toString());//fluidSpecimen.getAvailableQuantityInMilliliter().doubleValue();
-			if (quantity > availabeQty)
-				return false;
+			if (availabeQty <= quantity)
+			{
+				fluidSpecimen.setAvailableQuantity(new Double(0.0));
+			}
 			else
 			{
 				availabeQty = availabeQty - quantity;
@@ -464,7 +472,7 @@ public class DistributionBizLogic extends DefaultBizLogic
 					}
 					if (!checkAndSetAvailableQty(specimenObj, quantity))
 					{
-						throw new DAOException(ApplicationProperties.getValue("errors.distribution.quantity"));
+						throw new DAOException(ApplicationProperties.getValue("errors.distribution.quantity.should.equal"));
 					}
 
 					distributedItem.setSpecimen(specimenObj);

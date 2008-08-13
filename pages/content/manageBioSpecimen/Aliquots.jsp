@@ -78,8 +78,13 @@
 			document.forms[0].action = '${requestScope.action2}';
 			document.forms[0].forwardTo.value= "CPQueryPrintAliquot";
 		</logic:notEmpty>
+			
 		<logic:empty name="CPQuery">
-			document.forms[0].forwardTo.value= "printAliquot";
+			
+			<logic:notEqual name="aliquotForm" property="forwardTo" value="orderDetails" >
+				document.forms[0].forwardTo.value= "printAliquot";
+			</logic:notEqual>
+			
 		</logic:empty>
 		
 		document.forms[0].nextForwardTo.value = "success";

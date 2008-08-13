@@ -1662,6 +1662,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	 */
 	public static final String SPECIMEN_ARRAY_TYPE_LIST = "specimenArrayList";
 	public static final String SPECIMEN_ARRAY_CLASSNAME = "edu.wustl.catissuecore.domain.SpecimenArray";
+	public static final String SPECIMEN_CLASSNAME = "edu.wustl.catissuecore.domain.Specimen";
 	public static final String SPECIMEN_ARRAY_TYPE_CLASSNAME = "edu.wustl.catissuecore.domain.SpecimenArrayType";
 	// End
 	
@@ -2475,4 +2476,5 @@ public static final String ADD_MULTIPLE_SPECIMEN_TO_CART="addMltipleSpecimenToCa
 	public static final String TEXT_RADIOBUTTON = "text_radioButton";
 	public static final String TREENO_ZERO = "zero";
 	public static final String PAGE_OF_QUERY_MODULE = "pageOfQueryModule";
+	public static final String ORDER_DETAILS = "orderDetails";
 }
