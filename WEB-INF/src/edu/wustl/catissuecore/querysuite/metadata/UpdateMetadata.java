@@ -137,6 +137,23 @@ public class UpdateMetadata
 		AddPath pathObject = new AddPath();
 		List<String> insertPathSQL = pathObject.getInsertPathStatements(stmt, connection,false);
 		UpdateMetadataUtil.executeSQLs(insertPathSQL, connection.createStatement(), false);
+		
+		//Copy site to abstract SCG path to site-SCG, can not add this to getUpdateSQL() method because of path_id conflict
+		ResultSet rs = null;
+		stmt = connection.createStatement();
+		rs = stmt.executeQuery("select max(PATH_ID) from path");
+		if(rs.next())
+		{
+			Long pathId=rs.getLong(1)+1;
+			rs = stmt.executeQuery("select INTERMEDIATE_PATH from path where FIRST_ENTITY_ID = (select IDENTIFIER from dyextn_abstract_metadata where name='edu.wustl.catissuecore.domain.Site') and LAST_ENTITY_ID = (select IDENTIFIER from dyextn_abstract_metadata where name='edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup')");
+			if(rs.next())
+			{
+				String intermediatePath = rs.getString(1);
+				UpdateMetadataUtil.executeInsertSQL("insert into path values("+pathId+", (select IDENTIFIER from dyextn_abstract_metadata where name='edu.wustl.catissuecore.domain.Site'),'"+intermediatePath+"',(select IDENTIFIER from dyextn_abstract_metadata where name='edu.wustl.catissuecore.domain.SpecimenCollectionGroup'))", connection.createStatement());
+			}
+		}
+		stmt.close();
+		
 		/**  update statements  end **/	
 	}
 
@@ -248,23 +265,15 @@ public class UpdateMetadata
 		
 	}
 
-	private static List<String> getUpdateSQL() throws SQLException
-	{
-		List<String> updateSQL = new ArrayList<String>();
-		updateSQL.addAll(getDPUpdateSQL());
-		return updateSQL;
-	}
-
-	private static List<String> getDPUpdateSQL() throws SQLException
+	private static List<String> getUpdateSQL() throws SQLException, IOException
 	{
 		List<String> dbUpdateSQL = new ArrayList<String>();
 		ResultSet rs;
 		
 		stmt = connection.createStatement();
-		stmt.executeUpdate("update path set FIRST_ENTITY_ID = (Select IDENTIFIER from dyextn_abstract_metadata where NAME =  'edu.wustl.catissuecore.domain.AbstractSpecimen') where FIRST_ENTITY_ID in (Select IDENTIFIER from dyextn_abstract_metadata where NAME = 'edu.wustl.catissuecore.domain.Specimen') and LAST_ENTITY_ID in (Select IDENTIFIER from dyextn_abstract_metadata where NAME = 'edu.wustl.catissuecore.domain.SpecimenCharacteristics')");
-		
-		stmt.executeUpdate("update  path set LAST_ENTITY_ID = (Select IDENTIFIER from dyextn_abstract_metadata where NAME =  'edu.wustl.catissuecore.domain.AbstractSpecimen') where FIRST_ENTITY_ID in (Select IDENTIFIER from dyextn_abstract_metadata where NAME = 'edu.wustl.catissuecore.domain.Specimen') and LAST_ENTITY_ID in (Select IDENTIFIER from dyextn_abstract_metadata where NAME = 'edu.wustl.catissuecore.domain.Specimen')");
-		stmt.executeUpdate("update  path set FIRST_ENTITY_ID = (Select IDENTIFIER from dyextn_abstract_metadata where NAME =  'edu.wustl.catissuecore.domain.AbstractSpecimen') where FIRST_ENTITY_ID in (Select IDENTIFIER from dyextn_abstract_metadata where NAME = 'edu.wustl.catissuecore.domain.Specimen') and LAST_ENTITY_ID in (Select IDENTIFIER from dyextn_abstract_metadata where NAME = 'edu.wustl.catissuecore.domain.AbstractSpecimen')");
+		UpdateMetadataUtil.executeInsertSQL("update path set FIRST_ENTITY_ID = (Select IDENTIFIER from dyextn_abstract_metadata where NAME =  'edu.wustl.catissuecore.domain.AbstractSpecimen') where FIRST_ENTITY_ID in (Select IDENTIFIER from dyextn_abstract_metadata where NAME = 'edu.wustl.catissuecore.domain.Specimen') and LAST_ENTITY_ID in (Select IDENTIFIER from dyextn_abstract_metadata where NAME = 'edu.wustl.catissuecore.domain.SpecimenCharacteristics')", connection.createStatement());
+		UpdateMetadataUtil.executeInsertSQL("update  path set LAST_ENTITY_ID = (Select IDENTIFIER from dyextn_abstract_metadata where NAME =  'edu.wustl.catissuecore.domain.AbstractSpecimen') where FIRST_ENTITY_ID in (Select IDENTIFIER from dyextn_abstract_metadata where NAME = 'edu.wustl.catissuecore.domain.Specimen') and LAST_ENTITY_ID in (Select IDENTIFIER from dyextn_abstract_metadata where NAME = 'edu.wustl.catissuecore.domain.Specimen')", connection.createStatement());
+		UpdateMetadataUtil.executeInsertSQL("update  path set FIRST_ENTITY_ID = (Select IDENTIFIER from dyextn_abstract_metadata where NAME =  'edu.wustl.catissuecore.domain.AbstractSpecimen') where FIRST_ENTITY_ID in (Select IDENTIFIER from dyextn_abstract_metadata where NAME = 'edu.wustl.catissuecore.domain.Specimen') and LAST_ENTITY_ID in (Select IDENTIFIER from dyextn_abstract_metadata where NAME = 'edu.wustl.catissuecore.domain.AbstractSpecimen')", connection.createStatement());
 
 		dbUpdateSQL.addAll(getInsertPathStatements());
 
@@ -350,6 +359,7 @@ public class UpdateMetadata
 			Long identifier = rs.getLong(1);
 			dbUpdateSQL.add("update dyextn_abstract_metadata set NAME = 'isAvailable' where IDENTIFIER ="+identifier);
 		}
+		stmt.close();
 		
 		dbUpdateSQL.add("update dyextn_database_properties set NAME = 'SPECIMEN_TYPE' where IDENTIFIER in (Select IDENTIFIER from dyextn_column_properties where PRIMITIVE_ATTRIBUTE_ID in (Select IDENTIFIER from dyextn_primitive_attribute where IDENTIFIER in (Select IDENTIFIER from dyextn_abstract_metadata  where IDENTIFIER in (Select IDENTIFIER from dyextn_attribute where ENTIY_ID in (Select IDENTIFIER from dyextn_abstract_metadata where NAME = 'edu.wustl.catissuecore.domain.AbstractSpecimen')) and NAME = 'specimenType')))");
 
@@ -366,6 +376,7 @@ public class UpdateMetadata
 			
 			dbUpdateSQL.add("update dyextn_attribute set ENTIY_ID = (Select IDENTIFIER from dyextn_abstract_metadata where NAME = 'edu.wustl.catissuecore.domain.AbstractSpecimen') where IDENTIFIER="+identifier);
 		}
+		stmt.close();
 
 		dbUpdateSQL.add("update dyextn_entity set PARENT_ENTITY_ID = (Select IDENTIFIER from dyextn_abstract_metadata where NAME =  'edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup') where IDENTIFIER in (Select IDENTIFIER from dyextn_abstract_metadata where NAME = 'edu.wustl.catissuecore.domain.CollectionProtocolEvent')");
 		
