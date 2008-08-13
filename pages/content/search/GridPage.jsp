@@ -84,7 +84,7 @@ function init_grid()
 
 	if(useFunction == "goToConflictDetails" )
 	{
-		colWidth = "33,0,33,34,0,0,0";
+		colWidth = "33.2,0,33,34,0,0,0";
 	}
 	
 	//document.write("<hr>"+colWidth+"<hr>");
