@@ -108,7 +108,7 @@ session.setAttribute("EventOrigin", "QuickEvents");
               <td align="left" valign="middle" width="84%">
 				<table width="53%" border="0" cellspacing="0" cellpadding="0" >
                   <tr class="groupElements">
-                    <td valign="middle" nowrap><label><span class="black_ar">
+                    <td valign="middle" nowrap><span class="black_ar">
                       <html:radio styleClass="" styleId="checkedButton" property="checkedButton" value="1"
 								onclick="onRadioButtonClick(this)">
 							</html:radio>
@@ -121,7 +121,7 @@ session.setAttribute("EventOrigin", "QuickEvents");
 				 				<html:text styleClass="black_ar"  maxlength="50"  size="20" styleId="specimenLabel" 
 									property="specimenLabel" disabled="true" />
 						    </logic:equal>
-						&nbsp;&nbsp; </span></label>
+						&nbsp;&nbsp; </span>
                         <span class="black_ar">
                         <html:radio styleClass="" styleId="checkedButton" property="checkedButton" value="2" 
 								onclick="onRadioButtonClick(this)">
