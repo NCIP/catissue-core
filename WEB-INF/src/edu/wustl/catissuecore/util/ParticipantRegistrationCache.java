@@ -286,7 +286,7 @@ class ParticipantRegistrationCache
 		session = flex.messaging.FlexContext.getHttpRequest().getSession();
 		SessionDataBean sessionDataBean = (SessionDataBean) session.getAttribute(Constants.SESSION_DATA);
 		List newList = new Vector();
-		List cpDetailsList = new ArrayList();
+		List<NameValueBean> cpDetailsList = new ArrayList<NameValueBean>();
 		
 		UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.USER_FORM_ID);
 		Set cpIds = userBizLogic.getRelatedCPIds(sessionDataBean.getUserId());
@@ -326,6 +326,16 @@ class ParticipantRegistrationCache
 						List<NameValueBean> list = new ArrayList<NameValueBean>();
 						for (CollectionProtocol cp : cpCollection)
 						{
+                            boolean isPresent = false; 
+                            for (NameValueBean nameValueBean : list)
+                            {
+                                if (nameValueBean.getValue().equalsIgnoreCase(cp.getId().toString()))
+                                {
+                                    isPresent = true;
+                                    break;
+                                }
+                            }
+                            if (!isPresent)
 							list.add(new NameValueBean(cp.getShortTitle(),cp.getId()));
 						}
 						cpDetailsList.addAll(list);
@@ -339,6 +349,17 @@ class ParticipantRegistrationCache
 		{
 			ParticipantRegistrationInfo participantRegInfo = (ParticipantRegistrationInfo) iter.next();
 			NameValueBean cpDetails = new NameValueBean(participantRegInfo.getCpShortTitle(), participantRegInfo.getCpId());
+            
+            boolean isPresent = false; 
+            for (NameValueBean nameValueBean : cpDetailsList)
+            {
+                if (nameValueBean.getValue().equalsIgnoreCase(participantRegInfo.getCpId().toString()))
+                {
+                    isPresent = true;
+                    break;
+                }
+            }
+            if (!isPresent)
 			cpDetailsList.add(cpDetails);
 		}
 		return cpDetailsList;
