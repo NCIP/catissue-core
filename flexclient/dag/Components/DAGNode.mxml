@@ -2,7 +2,8 @@
 
 <mx:Box backgroundColor="white" borderStyle="solid" direction="vertical"  
 	xmlns:mx="http://www.adobe.com/2006/mxml"  verticalGap="0"
-		implements="flash.utils.IExternalizable" creationComplete="init()" fontSize="9" verticalScrollPolicy="off" horizontalScrollPolicy="off">
+	implements="flash.utils.IExternalizable" creationComplete="init()" fontSize="9" 
+	verticalScrollPolicy="off" horizontalScrollPolicy="off">
 <mx:Script>
 	<![CDATA[
 		import Util.HashMap;
@@ -490,12 +491,12 @@
 	]]>
 </mx:Script>
 	<mx:HBox name="Node" backgroundColor="{nodeColor}" borderStyle="solid" width="100%" paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5">
-		<mx:Canvas backgroundColor="0xF5F5F5"  borderStyle="solid">
-			<mx:Label text="{nodeNumber}" />
+		<mx:Canvas  backgroundColor="0xF5F5F5"  borderStyle="solid">
+			<mx:Label id="nodeNo" text="{nodeNumber}" mouseChildren="false"/>
 		</mx:Canvas>
-		<mx:Label styleName="Arial"  text="{nodeName}" color="blue" width="100"/>
+		<mx:Label  styleName="Arial" text="{nodeName}" color="blue" width="100" mouseChildren="false"/>
 		
-		<mx:Button label=">" click="createAndShow(event);" />
+		<mx:Button id="createMenu" label=">" click="createAndShow(event);" mouseChildren="false"/>
 	</mx:HBox>
 		<mx:VBox id="assVbox" name="Association" label="Associations" width="100%" verticalGap="0" visible="false">
 		
@@ -503,9 +504,10 @@
 			
 				<mx:HBox name="hbox" width="100%" borderStyle="solid">
 				<mx:Canvas backgroundColor="0xF5F5F5"  borderStyle="solid">
-					<mx:Label text="{assRep.currentItem.associatedNode}" />
+					<mx:Label text="{assRep.currentItem.associatedNode}" mouseChildren="false" />
 				</mx:Canvas>
-				<mx:ComboBox id="operatorCombo"  name="{assRep.currentIndex.toString()}"  dataProvider="{operatorArray}" change="operatorChange(event)"  selectedIndex="{assRep.currentItem.operatorIndex}" enabled="{enable}"/>
+				<mx:ComboBox id="operatorCombo"  name="{assRep.currentIndex.toString()}"  dataProvider="{operatorArray}" 
+					change="operatorChange(event)"  selectedIndex="{assRep.currentItem.operatorIndex}" enabled="{enable}"/>
 		
 			</mx:HBox>
 			</mx:Repeater>
