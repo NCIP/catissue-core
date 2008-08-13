@@ -367,7 +367,7 @@ function handleStatus(status)
 										key="user.role" /></td>
 									<td width="19%" class="black_ar_t"><select name="role"
 										class="formFieldSizedNew" id="roleIds"
-										onchange="disableAllForSuperAdmin(this,'cpCheckId')">
+										onchange="preEventsOnRoleSelect(this,'cpCheckId')">
 										<%
 											String roleName = "";
 											String roleValue = "";

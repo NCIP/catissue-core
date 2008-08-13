@@ -1028,16 +1028,28 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 			for (int k = 0; k < userIdsList.size(); k++) 
 			{ 
 				String roleName= "";
-				SecurityManager securityManager=SecurityManager.getInstance(this.getClass());
 				Role role=null;
-				try
+				
+				if(!("0").equalsIgnoreCase(roleId))
 				{
+					SecurityManager securityManager=SecurityManager.getInstance(this.getClass());
+					
+					try
+					{
 					role=securityManager.getUserProvisioningManager().getRoleById(roleId);
 					roleName=role.getName();
+					}
+					catch (CSException e)
+					{
+						throw new BizLogicException("Could not get the role",e);
+					}
 				}
-				catch (CSException e)
+				else
 				{
-					throw new BizLogicException("Could not get the role",e);
+					roleName="Custom";
+					role=new Role();
+					role.setName(roleName);
+					role.setId(new Long(roleId));
 				}
 				
 				 long userId = userIdsList.get(k);
@@ -1048,7 +1060,6 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 				 List<Site> userRelatedSites = getUserSiteRelation(user, siteIdsList);
 				 
 				 List<NameValueBean> actionBeanList = getPrivilegesNameValueBeanList(actionIdsList);
-				
 				
 				 SiteUserRolePrivilegeBean surpBean =setUserPrivilegeSummary(user, userRelatedSites, role, actionBeanList);
 				
@@ -1349,16 +1360,28 @@ public List<JSONObject> addPrivilegeForUserPage(Map<String, SiteUserRolePrivileg
 			for (int k = 0; k < cpIdsList.size(); k++) 
 			{ 
 				String roleName= "";
-				SecurityManager securityManager=SecurityManager.getInstance(this.getClass());
 				Role role=null;
-				try
+				
+				if(!("0").equalsIgnoreCase(roleId))
 				{
-				role=securityManager.getUserProvisioningManager().getRoleById(roleId);
-				roleName=role.getName();
+					SecurityManager securityManager=SecurityManager.getInstance(this.getClass());
+					
+					try
+					{
+					role=securityManager.getUserProvisioningManager().getRoleById(roleId);
+					roleName=role.getName();
+					}
+					catch (CSException e)
+					{
+						throw new BizLogicException("Could not get the role",e);
+					}
 				}
-				catch (CSException e)
+				else
 				{
-					throw new BizLogicException("Could not get the role",e);
+					roleName="Custom";
+					role=new Role();
+					role.setName(roleName);
+					role.setId(new Long(roleId));
 				}
 				
 				 long cpId = cpIdsList.get(k);
@@ -1398,18 +1421,29 @@ public List<JSONObject> addPrivilegeForUserPage(Map<String, SiteUserRolePrivileg
 			for (int k = 0; k < siteIdsList.size(); k++) 
 			{ 
 				String roleName= "";
-				SecurityManager securityManager=SecurityManager.getInstance(this.getClass());
 				Role role=null;
-				try
-				{
-				role=securityManager.getUserProvisioningManager().getRoleById(roleId);
-				roleName=role.getName();
-				}
-				catch (CSException e)
-				{
-					throw new BizLogicException("Could not get the role",e);
-				}
 				
+				if(!("0").equalsIgnoreCase(roleId))
+				{
+					SecurityManager securityManager=SecurityManager.getInstance(this.getClass());
+					
+					try
+					{
+					role=securityManager.getUserProvisioningManager().getRoleById(roleId);
+					roleName=role.getName();
+					}
+					catch (CSException e)
+					{
+						throw new BizLogicException("Could not get the role",e);
+					}
+				}
+				else
+				{
+					roleName="Custom";
+					role=new Role();
+					role.setName(roleName);
+					role.setId(new Long(roleId));
+				}
 				 long siteId = siteIdsList.get(k);
 				 dao.openSession(null); 
 				 Object object = dao.retrieve(Site.class.getName(), siteId);
@@ -1533,7 +1567,7 @@ public JSONObject getObjectForUPSummaryForUserPage(List<Site> cpRelatedSites, St
 	}
 	else if(cpRelatedSites!=null && ! isAllCPChecked)
 	{
-		cpName="NA";
+		cpName="N/A";
 	}
 	
 	jsonobject.append("cpName", cpName);
@@ -1647,7 +1681,8 @@ public List<JSONObject> editPrivilegeForUserPage (Map<String, SiteUserRolePrivil
 	jsonObject.append("roleId", roleId);
 	
 	// for Privileges
-	JSONArray selActionJsonArray=new JSONArray();
+//	JSONArray selActionJsonArray=new JSONArray();
+	List<JSONObject> selActionJsonArray=new ArrayList<JSONObject>();
 	List<NameValueBean> privileges=surp.getPrivileges();
 	if(("7").equals(roleId))
 	{
@@ -1658,17 +1693,18 @@ public List<JSONObject> editPrivilegeForUserPage (Map<String, SiteUserRolePrivil
 			actionJsonObject=new JSONObject();
 			actionJsonObject.append("actionName", ((NameValueBean)list.get(z)).getName());
 			actionJsonObject.append("actionId", ((NameValueBean)list.get(z)).getValue());
-			selActionJsonArray.put(actionJsonObject);
+			selActionJsonArray.add(actionJsonObject);
 		}
 		
 	}
 	else
 	{
-		for(NameValueBean actionNameValueBean:privileges)
-		{
-			String actionId=actionNameValueBean.getValue();
-			selActionJsonArray.put(actionId);
-		}
+//		for(NameValueBean actionNameValueBean:privileges)
+//		{
+//			String actionId=actionNameValueBean.getValue();
+//			selActionJsonArray.put(actionId);
+//		}
+		selActionJsonArray=getJSONObjListOfNameValue(privileges);
 	}
 	jsonObject.put("selActionJsonArray",selActionJsonArray );
 	
