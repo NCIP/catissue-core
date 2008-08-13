@@ -403,23 +403,24 @@ public class UserBizLogic extends DefaultBizLogic
 			if(!siteUserRolePrivilegeBean.isRowDeleted())
 			{
 				siteList = siteUserRolePrivilegeBean.getSiteList();
+                for(Site site : siteList) 
+                {
+                    boolean isPresent = false;
+                    for (Site site1 : siteCollection)
+                    {
+                        if (site1.getId().equals(site.getId()))
+                        {
+                            isPresent = true;
+                        }
+                    }
+                    if(!isPresent)
+                    {
+                        siteCollection.add(site);
+                    }
+                }
 			}
 			
-			for(Site site : siteList) 
-			{
-				boolean isPresent = false;
-				for (Site site1 : siteCollection)
-				{
-					if (site1.getId().equals(site.getId()))
-					{
-						isPresent = true;
-					}
-				}
-				if(!isPresent)
-				{
-					siteCollection.add(site);
-				}
-			}
+			
 		}
 		
 		user1.getSiteCollection().clear();
