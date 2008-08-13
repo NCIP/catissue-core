@@ -149,7 +149,7 @@ session.setAttribute("EventOrigin", "QuickEvents");
 					<autocomplete:AutoCompleteTag property="specimenEventParameter"
 							optionsList = "<%=request.getAttribute(Constants.EVENT_PARAMETERS_LIST)%>"
 							initialValue="<%=request.getParameter("specimenEventParameter")%>"
-							styleClass="black_ar" size="27"/>
+							styleClass="black_ar" size="29"/>
 				</td>
 				<td align="left" valign="top">&nbsp;</td>
                   
