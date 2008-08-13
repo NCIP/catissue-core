@@ -561,7 +561,7 @@
 	function createQueryStringForSavedQuery(nameOfFormToPost, entityName , attributesList,callingFrom)
 	{
 		waitCursor();
-		alert(attributesList);
+		
 		var strToCreateQueyObject ="";
 		var attribute = attributesList.split(";");
 		for(i=1; i<attribute.length; i++)
