@@ -1225,6 +1225,7 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 				{
 					consentTierstatusN = (ConsentTierStatus) specCoIterator.next();
 					consentTierstatusN.setConsentTier(consentTierStatus.getConsentTier());
+					consentTierstatusN.setStatus(consentTierStatus.getStatus());//bug 7637
 					hasMoreConsents =specCoIterator.hasNext();
 				}
 				else
