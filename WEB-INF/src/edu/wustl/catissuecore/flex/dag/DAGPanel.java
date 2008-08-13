@@ -276,6 +276,63 @@ public class DAGPanel {
 				.getAttributeByIdentifier(identifier);
 		return srcAttributeByIdentifier;
 	}
+	
+	
+	public SingleNodeCustomFormulaNode formSingleNodeFormula(SingleNodeCustomFormulaNode node, String operation)
+	{
+       //Forming custom Formula
+	    IQuery query = m_queryObject.getQuery();
+	    IConstraints constraints = query.getConstraints();
+	    SingalNodeTemporalQuery singalNodeTq = new SingalNodeTemporalQuery(); 
+	    int nodeExpressionId  = node.getNodeExpressionId();
+   	    
+	    singalNodeTq.setEntityExpressionId(nodeExpressionId);
+	    IExpression entityExpression =  constraints.getExpression(nodeExpressionId);
+	    singalNodeTq.setEntityIExpression(entityExpression);
+	    
+	    //Setting Attribute by ID
+	    singalNodeTq.setAttributeById(getAttributeIdentifier(query,node.getNodeExpressionId(),node.getAttributeID()));
+        
+	    //Setting attribute type
+	    singalNodeTq.setAttributeType(node.getAttributeType());
+	    
+	    //Setting Arithmetic Operator 
+	    singalNodeTq.setArithOp(getArithmeticOperator(node.getSelectedArithmeticOp()));
+	    
+	    //Setting Relational Operator
+	    singalNodeTq.setRelOp(getRelationalOperator(node.getSelectedLogicalOp()));
+	    
+	    singalNodeTq.setICon(QueryObjectFactory.createArithmeticConnector(singalNodeTq.getArithOp()));	
+	    //Creating HHS Literals
+	    singalNodeTq.createLeftLiterals(node.getLhsTimeValue(),node.getLhsTimeInterval());
+	    
+	    //Creating RHS Literals
+	    singalNodeTq.createRightLiterals(node.getTimeValue(), node.getTimeInterval());
+	    
+	    //Create Expressions
+	    singalNodeTq.createExpressions();
+	    
+	    //Create LHS Terms and RHS Terms
+	    singalNodeTq.createLHSAndRHS();
+	    
+	    ICustomFormula customFormula = createSingleNodeCustomFormula(singalNodeTq, operation);
+		//**** Note Single node First removing custom formula
+		removeCustomFormula(node.getName());
+
+		entityExpression.addOperand(getAndConnector(),customFormula);
+		entityExpression.setInView(true);
+		
+		addOutputTermsToQuery(query, customFormula, node.getCustomColumnName());
+		
+		//Make sure for operations......they are not set yet
+		String oprs = setOperation(node.getOperation());
+	    if(oprs != null)
+	    {
+	    	node.setOperation(oprs);
+	    }
+		return node;
+	}
+	
 	/**
 	 * Gets list of paths between two nodes
 	 * @param sourceNode
@@ -285,12 +342,12 @@ public class DAGPanel {
 	 */
 	public CustomFormulaNode formTemporalQuery(CustomFormulaNode node, String operation)
 	{  
-	    TemporalQueryBean tqBean =  new TemporalQueryBean();
+	    TwoNodesTemporalQuery tqBean =  new TwoNodesTemporalQuery();
 	    IQuery query = m_queryObject.getQuery();
 	    IConstraints constraints = query.getConstraints();
 	    int srcExpressionId = node.getFirstNodeExpId();
 	    tqBean.setSrcExpressionId(srcExpressionId);
-	    IExpression srcIExpression = constraints.getExpression(srcExpressionId);;
+	    IExpression srcIExpression = constraints.getExpression(srcExpressionId);
 		//Setting the src IExpression
 		tqBean.setSrcIExpression(srcIExpression);
 		tqBean.setSrcAttributeById(getAttributeIdentifier(query,node.getFirstNodeExpId(),node.getFirstSelectedAttrId()));
@@ -321,22 +378,27 @@ public class DAGPanel {
 		}
 		ICustomFormula customFormula = createCustomFormula(tqBean,operation);
 		//First removing custom formula
-		removeCustomFormula();
+		removeCustomFormula(node.getName());
 		srcIExpression.addOperand(getAndConnector(),customFormula);
 		srcIExpression.setInView(true);
 		addOutputTermsToQuery(query, customFormula, node.getCustomColumnName());
-		setOperation(node);
+		String oprs = setOperation(node.getOperation());
+	    if(oprs != null)
+	    {
+	    	node.setOperation(oprs);
+	    }
 		return node;
 	}
 	/**
 	 * Setting the corresponding operation
 	 * @param node
 	 */
-	private void setOperation(CustomFormulaNode node)
+	private String setOperation(String nodeOperation)
 	{
 		HttpServletRequest request = flex.messaging.FlexContext.getHttpRequest();
 		HttpSession session = request.getSession();
 		String isRepaint = (String)session.getAttribute(DAGConstant.ISREPAINT);
+		String operation = null;
 		if(isRepaint == null)
 		{
 			session.setAttribute(DAGConstant.ISREPAINT,DAGConstant.ISREPAINT_FALSE);
@@ -345,16 +407,17 @@ public class DAGPanel {
 		{
 			if(!(isRepaint.equals(DAGConstant.ISREPAINT_FALSE)))
 			{
-				if((isRepaint.equals(DAGConstant.ISREPAINT_TRUE)) && (node.getOperation().equals(DAGConstant.EDIT_OPERATION)))
+				if((isRepaint.equals(DAGConstant.ISREPAINT_TRUE)) && (nodeOperation.equals(DAGConstant.EDIT_OPERATION)))
 				{
-					node.setOperation(DAGConstant.REPAINT_EDIT);
+					operation = DAGConstant.REPAINT_EDIT;
 				}
 				else
 				{
-					node.setOperation(DAGConstant.REPAINT_CREATE); 
+					operation = DAGConstant.REPAINT_CREATE; 
 				}
 			}
 		}
+		return operation;
 	}
 	/**
 	 * Creates output terms and adds it to Query. This will display temporal columns in results.
@@ -382,7 +445,27 @@ public class DAGPanel {
 		query.getOutputTerms().clear();
 		query.getOutputTerms().add(outputTerm);
 	}
-	private ICustomFormula createCustomFormula(TemporalQueryBean tqBean,String operation)
+	
+	private ICustomFormula createSingleNodeCustomFormula(SingalNodeTemporalQuery singleNodeTq, String operation)
+	{
+		if(operation.equals(Constants.ADD))
+		{
+			return getSingleNodeCustomFormula(QueryObjectFactory.createCustomFormula(),singleNodeTq);
+		}
+		else
+		{
+			return getSingleNodeCustomFormula(getExistingCustomFormula(),singleNodeTq);
+		}
+	}
+	private ICustomFormula getSingleNodeCustomFormula(ICustomFormula customFormula,SingalNodeTemporalQuery singleNodeTq)
+	{
+		customFormula.setLhs(singleNodeTq.getLhsTerm());
+		customFormula.getAllRhs().clear();
+		customFormula.addRhs(singleNodeTq.getRhsTerm());
+		customFormula.setOperator(singleNodeTq.getRelOp());
+		return customFormula;
+	}
+	private ICustomFormula createCustomFormula(TwoNodesTemporalQuery tqBean,String operation)
 	{
 		if(operation.equals(Constants.ADD))
 		{
@@ -401,7 +484,7 @@ public class DAGPanel {
 	 * @param relOp
 	 * @return
 	 */
-	private ICustomFormula getCustomFormula(ICustomFormula customFormula,TemporalQueryBean tqBean)
+	private ICustomFormula getCustomFormula(ICustomFormula customFormula,TwoNodesTemporalQuery tqBean)
 	{
 		//ICustomFormula customFormula = QueryObjectFactory.createCustomFormula();
 		if(tqBean.getRhsTerm() == null)
@@ -468,9 +551,15 @@ public class DAGPanel {
 		return arithOp;
 	}
 	
-	 private static IConnector<LogicalOperator> getAndConnector() {
+	 private static IConnector<LogicalOperator> getAndConnector() 
+	 {
 	        return QueryObjectFactory.createLogicalConnector(LogicalOperator.And);
-	    }
+	 }
+	 
+	 public boolean checkForNodeValidAttributes(DAGNode dagNode)
+	 { 
+		 return checkIfValidNode(dagNode);
+	 }
 	
 	public boolean checkForValidAttributes(List<DAGNode> linkedNodeList)
 	{
@@ -527,6 +616,32 @@ public class DAGPanel {
 				.getDynamicExtensionsEntity().getEntityAttributesForQuery();
 		return sourceAttributeCollection;
 
+	}
+	
+	public Map getSingleNodeQueryData(int sourceExpId, String nodeName)
+	{
+		Map<String, Object> queryDataMap = new HashMap<String, Object>();
+		Map<String, List<String>> nodeAttributesMap = new HashMap<String, List<String>>();
+		
+		//Setting the Entity Name as Label
+		String nodeNameLabel = Utility.getDisplayLabel(nodeName);
+		List<String> entityLabelsList = new ArrayList<String>();
+		entityLabelsList.add(nodeNameLabel);
+		
+		//Getting the Entity's data Map
+		Collection<AttributeInterface> nodeAttributeCollection = getAttributeCollection(sourceExpId);
+		populateMap(nodeAttributesMap, nodeAttributeCollection);
+		
+		List<String> timeIntervalList = getTimeIntervals();
+		List<String> arithmeticOperaorsList = getArithmeticOperators();
+		List<String> relationalOperatorsList = getRelationalOperators();
+
+		queryDataMap.put(Constants.ARITHMETIC_OPERATORS, arithmeticOperaorsList);
+		queryDataMap.put(Constants.SECOND_NODE_ATTRIBUTES, nodeAttributesMap);
+		queryDataMap.put(Constants.RELATIONAL_OPERATORS, relationalOperatorsList);
+		queryDataMap.put(Constants.TIME_INTERVALS_LIST, timeIntervalList);
+		queryDataMap.put(Constants.ENTITY_LABEL_LIST, entityLabelsList);
+		return queryDataMap;
 	}
 
 	public Map getQueryData(int sourceExpId, int destExpId, String sourceNodeName,String destNodeName)
@@ -658,7 +773,7 @@ public class DAGPanel {
 	 * This method removes the Custom formula from query on delete of custom Node 
 	 * @throws MultipleRootsException
 	 */
-	public void removeCustomFormula()	
+	public void removeCustomFormula(String customNodeId)	
 	{
 		HttpServletRequest request = flex.messaging.FlexContext.getHttpRequest();
 		HttpSession session = request.getSession();
@@ -797,6 +912,7 @@ public class DAGPanel {
 	{
 		List<DAGNode> nodeList = new ArrayList<DAGNode>();
 		List<CustomFormulaNode> customNodeList = new ArrayList<CustomFormulaNode>();
+		List<SingleNodeCustomFormulaNode> SNcustomNodeList = new ArrayList<SingleNodeCustomFormulaNode>();
 		Map <String,Object> nodeMap = new HashMap<String,Object>();
 		HttpServletRequest request = flex.messaging.FlexContext.getHttpRequest();
 		HttpSession session = request.getSession();
@@ -858,22 +974,107 @@ public class DAGPanel {
 					for(ICustomFormula c: customFormulas)
 					{
 						CustomFormulaNode customNode = populateCustomNodeInfo(c,constraints,exp);
-						
-						//Setting the custom Column Name
-						setCustomColumnName(customNode, query);
-						customNode.setOperation(DAGConstant.REPAINT_OPERATION);
-						customNodeList.add(customNode);
+						if(customNode != null)
+						{
+							//Setting the custom Column Name
+							String customColumnName = setCustomColumnName(query);
+							customNode.setCustomColumnName(customColumnName);
+							customNode.setOperation(DAGConstant.REPAINT_OPERATION);
+							customNodeList.add(customNode);
+						} else
+						{
+							SingleNodeCustomFormulaNode singleNodeCF = populateSingleNodeInfo(c,constraints,exp);
+							String customColumnName = setCustomColumnName(query);
+							singleNodeCF.setCustomColumnName(customColumnName);
+							singleNodeCF.setOperation(DAGConstant.REPAINT_OPERATION);
+							SNcustomNodeList.add(singleNodeCF);
+						}
 					}
 				}
 			}
 		}
 		nodeMap.put(DAGConstant.DAG_NODE_LIST,nodeList);
 		nodeMap.put(DAGConstant.CUSTOM_FORMULA_NODE_LIST,customNodeList);
+		nodeMap.put(DAGConstant.SINGLE_NODE_CUSTOM_FORMULA_NODE_LIST,SNcustomNodeList);
 		return nodeMap;
 
 	}
 	
-	private void setCustomColumnName(CustomFormulaNode customNode, IQuery query)
+	private SingleNodeCustomFormulaNode populateSingleNodeInfo(ICustomFormula c, IConstraints constraints, IExpression exp)
+	{
+		// TODO Auto-generated method stub
+		SingleNodeCustomFormulaNode singleCNode = new SingleNodeCustomFormulaNode();
+		Set<IExpression> containingExpressions = QueryUtility.getExpressionsInFormula(c);
+		//See how the name set is done
+		singleCNode.setName(exp.getExpressionId()+"_"+exp.getExpressionId()+"_"+1);
+		singleCNode.setNodeExpressionId(exp.getExpressionId());
+		//Setting the Entity Name
+		String fullyQualifiedEntityName = exp.getQueryEntity().getDynamicExtensionsEntity().getName();
+		String entityName = Utility.parseClassName(fullyQualifiedEntityName);
+		entityName = Utility.getDisplayLabel(entityName);
+		singleCNode.setEntityName(entityName);
+		//Seting the Arithmetic and Relational Operator
+		ITerm lhs = c.getLhs();
+		IConnector<ArithmeticOperator> connector = lhs.getConnector(0,1);
+		singleCNode.setSelectedArithmeticOp(connector.getOperator().mathString());
+		RelationalOperator relOperator = c.getOperator();
+		singleCNode.setSelectedLogicalOp(relOperator.getStringRepresentation());
+
+		//Handling RHS part
+		List<ITerm> allRhs = c.getAllRhs();
+		if(allRhs.size()!=0)
+		{
+			ITerm term = allRhs.get(0);
+			IArithmeticOperand operand = term.getOperand(0);
+			if(operand instanceof IDateOffsetLiteral)
+			{
+				IDateOffsetLiteral dateOffSetLit = (IDateOffsetLiteral)operand;
+				singleCNode.setTimeValue(dateOffSetLit.getOffset());
+				singleCNode.setTimeInterval(dateOffSetLit.getTimeInterval().toString()+"s");
+			}else if(operand instanceof IDateLiteral)
+			{
+				IDateLiteral dateLit = (IDateLiteral)operand;
+				singleCNode.setTimeValue(getDateInGivenFormat(dateLit.getDate()));
+			} else
+			{
+				throw new RuntimeException("Should not occur.....");
+				//return null;
+			}
+		}
+
+		//Handling LHS
+		for(IArithmeticOperand element : lhs)
+		{
+			if(element instanceof IDateLiteral)
+			{
+				IDateLiteral dateLit = (IDateLiteral)element;
+				singleCNode.setLhsTimeValue(getDateInGivenFormat(dateLit.getDate()));
+                singleCNode.setLhsTimeInterval("");
+				
+			}
+			else if(element instanceof IExpressionAttribute)
+			{
+				IExpressionAttribute expAttr = (IExpressionAttribute)element;
+				AttributeInterface attribute = expAttr.getAttribute();
+               
+				singleCNode.setAttributeID(attribute.getId().toString());
+				singleCNode.setAttributeName(attribute.getName());
+				singleCNode.setAttributeType(attribute.getDataType());
+				
+			}
+			else if(element instanceof IDateOffsetLiteral)
+			{
+				//This case is not yet Handled....means for Now there is only DatePicker on LHS
+				
+			}
+			else
+			{
+				throw new RuntimeException("Should not occur.....");
+			}
+		}
+		return singleCNode;
+	}
+	private String setCustomColumnName(IQuery query)
 	{
 		List <IOutputTerm>outputTermList = query.getOutputTerms();
 		IOutputTerm outputTerm = outputTermList.get(0);
@@ -882,7 +1083,8 @@ public class DAGPanel {
 		//As custom column name consists of column Name , ( and Time Interval ), so we need to parse it to get the exact column name
 		int index = columnName.lastIndexOf("(");
 		String customColumnName  = columnName.substring(0,index);
-		customNode.setCustomColumnName(customColumnName);
+		return customColumnName;
+		
 	}
 	private CustomFormulaNode populateCustomNodeInfo(ICustomFormula c, IConstraints constraints, IExpression srcExp)
 	{
@@ -912,7 +1114,8 @@ public class DAGPanel {
 				cNode.setTimeValue(getDateInGivenFormat(dateLit.getDate()));
 			} else
 			{
-				throw new RuntimeException("Should not occur.....");
+				//throw new RuntimeException("Should not occur.....");
+				return null;
 			}
 		}
 	
@@ -938,7 +1141,8 @@ public class DAGPanel {
 				}
 			}else 
 			{
-				throw new RuntimeException("Not yet supported...");
+				//throw new RuntimeException("Not yet supported...");
+				return null;
 			}
 				
 		}
