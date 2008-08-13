@@ -1,30 +1,30 @@
 -- Enabling constraints--
 /* File:query_schema */
-alter table QUERY_PARAMETERIZED_QUERY enable constraint FKA272176BBC7298A9 ;
+--alter table QUERY_PARAMETERIZED_QUERY enable constraint FKA272176BBC7298A9 ;
 alter table CATEGORIAL_CLASS enable constraint FK9651EF32D8D56A33 ;
 /*alter table CATEGORIAL_CLASS enable constraint FK9651EF3291B ; */
-alter table QUERY_INTRA_MODEL_ASSOCIATION enable constraint FKF1EDBDD3BC7298A9 ;
-alter table QUERY_CONSTRAINTS enable constraint FKE364FCFFD3C625EA ;
-alter table QUERY_PARAMETERIZED_CONDITION enable constraint FK9BE75A3EBC7298A9 ;
-alter table QUERY_CONDITION enable constraint FKACCE6246104CA7 ;
-alter table QUERY_RULE enable constraint FK14A6503365F8F4CB ;
-alter table QUERY_RULE enable constraint FK14A65033BC7298A9 ;
-alter table QUERY enable constraint FK49D20A8251EDC5B ;
-alter table QUERY_LOGICAL_CONNECTOR enable constraint FKCF30478065F8F4CB ;
-alter table QUERY_EXPRESSION enable constraint FK1B473A8FCA571190 ;
-alter table QUERY_EXPRESSION enable constraint FK1B473A8F9E19EF66 ;
-alter table QUERY_EXPRESSION enable constraint FK1B473A8F1CF7F689 ;
-alter table QUERY_CONDITION_VALUES enable constraint FK9997379DDA532516 ;
+--alter table QUERY_INTRA_MODEL_ASSOCIATION enable constraint FKF1EDBDD3BC7298A9 ;
+--alter table QUERY_CONSTRAINTS enable constraint FKE364FCFFD3C625EA ;
+--alter table QUERY_PARAMETERIZED_CONDITION enable constraint FK9BE75A3EBC7298A9 ;
+--alter table QUERY_CONDITION enable constraint FKACCE6246104CA7 ;
+--alter table QUERY_RULE enable constraint FK14A6503365F8F4CB ;
+--alter table QUERY_RULE enable constraint FK14A65033BC7298A9 ;
+--alter table QUERY enable constraint FK49D20A8251EDC5B ;
+--alter table QUERY_LOGICAL_CONNECTOR enable constraint FKCF30478065F8F4CB ;
+--alter table QUERY_EXPRESSION enable constraint FK1B473A8FCA571190 ;
+--alter table QUERY_EXPRESSION enable constraint FK1B473A8F9E19EF66 ;
+--alter table QUERY_EXPRESSION enable constraint FK1B473A8F1CF7F689 ;
+--alter table QUERY_CONDITION_VALUES enable constraint FK9997379DDA532516 ;
 alter table CATEGORIAL_ATTRIBUTE enable constraint FK31F77B56E8CBD948 ;
-alter table QUERY_INTER_MODEL_ASSOCIATION enable constraint FKD70658D1BC7298A9 ;
-alter table QUERY_EXPRESSION_OPERAND enable constraint FKA3B976F965F8F4CB ;
-alter table QUERY_GRAPH_ENTRY enable constraint FKF055E4EA955C60E6 ;
-alter table QUERY_GRAPH_ENTRY enable constraint FKF055E4EAD3C625EA ;
-alter table QUERY_GRAPH_ENTRY enable constraint FKF055E4EA7A5E6479 ;
-alter table QUERY_GRAPH_ENTRY enable constraint FKF055E4EAEE560703 ;
+--alter table QUERY_INTER_MODEL_ASSOCIATION enable constraint FKD70658D1BC7298A9 ;
+--alter table QUERY_EXPRESSION_OPERAND enable constraint FKA3B976F965F8F4CB ;
+--alter table QUERY_GRAPH_ENTRY enable constraint FKF055E4EA955C60E6 ;
+--alter table QUERY_GRAPH_ENTRY enable constraint FKF055E4EAD3C625EA ;
+---alter table QUERY_GRAPH_ENTRY enable constraint FKF055E4EA7A5E6479 ;
+--alter table QUERY_GRAPH_ENTRY enable constraint FKF055E4EAEE560703 ;
 alter table CATEGORY enable constraint FK31A8ACFE2D0F63E7 ;
 alter table CATEGORY enable constraint FK31A8ACFE211D9A6B ;
-alter table QUERY_EXPRESSIONID enable constraint FK6662DBEABC7298A9 ;
+--alter table QUERY_EXPRESSIONID enable constraint FK6662DBEABC7298A9 ;
 
 /* File:dynamicextension_AddConstraintsNew.sql */
 
