@@ -199,7 +199,7 @@
 			<equals arg1="mysql" arg2="${database.type}" />
 			<then>
 				<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" onerror="continue">
-						<transaction src="${mysql.sql.dir}/testsql.sql" />
+				<transaction src="${mysql.sql.dir}/testsql.sql" />
 						<transaction>select 1;</transaction>
 						<transaction>commit;</transaction>
 							<classpath>
@@ -749,7 +749,7 @@
 		<antcall target="assert" />
 		<delete dir="${temp.dir}" />
 		<antcall target="init" />
-		<antcall target="config_parameter_valid" />
+		<!--<antcall target="config_parameter_valid" />-->
 		<antcall target="configure_war" />
 		<antcall target="adopter_configuration" />
 		<if>
