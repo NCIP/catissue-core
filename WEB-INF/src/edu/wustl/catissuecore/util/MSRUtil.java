@@ -64,7 +64,8 @@ public class MSRUtil {
 					list = apBizLogic.privilegeDataOnTabSwitch(rowIdBeanMapForUserPage,pageOf);
 					request.setAttribute(Constants.PRIVILEGE_DATA_LIST_ONLOAD, list);
 				}
-				final List<NameValueBean> cpList = apBizLogic.getCPList(false);
+				final List<NameValueBean> cpList = new ArrayList<NameValueBean>();
+			//	final List<NameValueBean> cpList = apBizLogic.getCPList(false);
 				final List<NameValueBean> actionList = apBizLogic.getActionListForUserPage(false);
 				
 				request.setAttribute(Constants.CPLIST, cpList);
