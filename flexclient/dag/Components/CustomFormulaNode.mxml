@@ -21,6 +21,13 @@
 		    {label: "Delete", type: "radio", toggled: false,enabled:true},
 		    {label: "Edit", type: "radio", toggled: false,enabled:true}
 		];
+		
+		[Bindable]
+		public var outputMenuData:Array = [	
+			{label: "Edit", type: "radio", toggled: false,enabled:false},
+			{label: "Delete", type: "radio", toggled: false,enable:true}
+		];
+
 
 //
         private var firstNodeName : String = "";
@@ -276,7 +283,16 @@
   		private function createMyMenu(event:MouseEvent):void
   		{
   			var myNewMenu:Menu=null;
-  			myNewMenu = Menu.createMenu(this, myMenuData, true);
+  			if(this.parentApplication.view=="Result")
+  			{
+  				//This is the case when view is Result, so menu shoud be different and editing should be disabled
+  				myNewMenu = Menu.createMenu(this, outputMenuData, true);
+  			}
+  			else
+  			{
+  				myNewMenu = Menu.createMenu(this, myMenuData, true);
+  			}	
+  			
   			myNewMenu.show(event.stageX,event.stageY);
 			myNewMenu.addEventListener(MenuEvent.ITEM_CLICK,handleMenuEvent);
 			myNewMenu.addEventListener(FaultEvent.FAULT, faultHandler);
@@ -297,7 +313,7 @@
   	   private function deleteCustomNode() : void
   	   {
   	   	  this.parentApplication.rpcService.addEventListener(ResultEvent.RESULT,nodeRemoveHandler);
-  	   	  this.parentApplication.rpcService.removeCustomFormula();
+  	   	  this.parentApplication.rpcService.removeCustomFormula(this.name);
           this.parentApplication.rpcService.addEventListener(FaultEvent.FAULT, faultHandler);
   	   }
   	   private function nodeRemoveHandler(event : ResultEvent) : void
