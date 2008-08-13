@@ -639,6 +639,11 @@ input.formFieldVerySmallSized,textarea.formFieldVerySmallSized,select.formFieldV
   width:3em;
 }
 
+.formFieldSmallNoBorder{ /* for the form elements themselves and with a constant width (on elements) */
+ border:0;
+ width:1.5em;
+}
+
 /* used by mandar in collection prptocol. Size set to 5em */
 input.formFieldSized2{ /* for the form elements themselves and with a constant width (on elements) */
   font-family:arial,helvetica,verdana,sans-serif;
@@ -1949,6 +1954,13 @@ td.formFieldNoBordersQuery{ /* for the cell that contains the form elements */
 	border:1px solid #6E81A6; 
   font-size:11px;
 	width:15em;
+}
+
+.formFieldSized9{ /* for the autocomplete tag */
+	font-family:verdana;
+	border:1px solid #6E81A6; 
+  font-size:11px;
+	width:9em;
 }
 
 .formFieldSizedNew{ /* for the autocomplete tag */
