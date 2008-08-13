@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="700" height="200"
-	 showCloseButton="true" close="removeMe();" borderColor="#0000FF" backgroundColor="white" left="0" right="0" borderThicknessLeft="2" borderThicknessRight="2" borderThicknessBottom="2" borderThicknessTop="5">
-	 
+	 showCloseButton="true" close="removeMe();" borderColor="#0000FF" backgroundColor="white" 
+	 left="0" right="0" borderThicknessLeft="2" borderThicknessRight="2" borderThicknessBottom="2" 
+	 borderThicknessTop="5">
 	 <mx:Script>
 	 	<![CDATA[
+	 		import mx.events.ValidationResultEvent;
 	 		import mx.formatters.DateFormatter;
 	 		import mx.controls.DateField;
 	 		import mx.controls.DateChooser
@@ -104,6 +106,10 @@
            
            private function submitData():void
            {
+           	  var flag:Boolean = validate();
+           	  if(flag == false) 
+           	  	 return;
+           	  	   
 		  	  var timeValue : String = null;
            	  var timeIntervalValue : String =  null;
            	  var customFormulaString : String = null;
@@ -273,8 +279,7 @@
            	 	        	intervalLabel.name ="label6";
            	 	        	intervalLabel.text = "Time Interval";
            	 	        	intervalLabel.width = 100;
-           	 	            intervalLabel.buttonMode = true;
-           	 	            
+           	 	            intervalLabel.buttonMode = true;           	 	            
            	 	            labelHBox.addChild(intervalLabel);
            	 	        }
            	 	        
@@ -303,11 +308,9 @@
            	
            } 
            
-            private function initClassFactory():void
+          /*  private function initClassFactory():void
 			{
-				/**
-				  Creating the Drop down factory
-				*/
+				
 						
 				myDropdownFactory = new ClassFactory(List);
 				myDropdownFactory.properties = {showDataTips:true, dataTipFunction:myDataTipFunction};
@@ -317,17 +320,21 @@
            { 
            	    return String(item);
            }
+           */
            private function validateQueryData():void
            {
            	  	var firstOperandType : String  = null; 
            	  	var secondOperandType : String = null;
-		 		var firstOperand : String = cb1.selectedItem.toString();
-		 		var secondOperand : String = cb3.selectedItem.toString();
+		 		var firstOperand : String = "";
+		 		var secondOperand : String = "";
          
 			 	var firstNodeAttributeId : String = null;
 			 	var secondNodeAttributeId :String = null;
-			 	if(firstOperand != null && secondOperand != null)
+			 	if(cb1.selectedIndex > -1 && cb2.selectedIndex > -1 && cb3.selectedIndex > -1)
     	     	{
+           	 		firstOperand = cb1.selectedItem.toString();
+           	 		secondOperand = cb3.selectedItem.toString();
+           	 		
            	 		firstNodeList = firstNodeDp[firstOperand];
            	 		secondNodeList = secondNodeDp[secondOperand];
            	 	
@@ -339,10 +346,13 @@
            	 			arithmeticOperand= cb2.selectedItem.toString();
            	 	    	if((arithmeticOperand == "+") || (arithmeticOperand == "/") || (arithmeticOperand == "*"))
            	 	    	{
-           	 	    		Alert.show("Not a valid operation. Change the Operator");
+           	 	    		AlertManager.showWarning("Not a valid operation. Change the Operator");           	 	    		
+           	 	    		//Alert.show("Not a valid operation. Change the Operator");
+           	 	    		createBigTip("Not a valid operation. Change the Operator");
            	 	    	}
            	 	    	else
            	 	    	{
+           	 	    		destroyBigTip();
            	 	    	  	addInputControl();         	 	    
            	 	    	}
            	 		}
@@ -353,19 +363,24 @@
            	 		}
            	 		else if(firstOperandType.match("Integer") && secondOperandType.match("Date") && (cb2.selectedItem.toString()=="-"))
            	 		{
-           	 			Alert.show("Not a valid Operand. Second Operand should be DateOffset");
+           	 			AlertManager.showWarning("Not a valid Operand. Second Operand should be DateOffset");
+           	 			//Alert.show("Not a valid Operand. Second Operand should be DateOffset");
+           	 			createBigTip("Not a valid Operand. Second Operand should be DateOffset");
            	 		}
            	 		else
            	 		{
-           	 	    
+           	 	    		destroyBigTip();
            	 	    	//here any of the operand is Date and another is Integer, we should use DatePicker
            	 	    	arithmeticOperand= cb2.selectedItem.toString();
            	 	   	 	if((arithmeticOperand == "/") || (arithmeticOperand == "*") )
            	 	    	{
-           	 	    		Alert.show("Operation is not valid. Change Operator");
+           	 	    		AlertManager.showWarning("Operation is not valid. Change Operator");
+           	 	    		//Alert.show("Operation is not valid. Change Operator");
+           	 	    		createBigTip("Operation is not valid. Change Operator");
            	 	    	}
            	 	    	else
            	 	    	{
+           	 	    		destroyBigTip();
            	 	    		//Removing text Box
            	 	    		existingTextBox = myBox.getChildByName("txtInput") as TextInput;
            	   				var value : String =  null;
@@ -424,10 +439,6 @@
            	 	    	}
            	 		}
         	  	}
-	          	else
-    	      	{
-        	   	 	Alert.show("Please select the left Operand");
-           	  	}
            	} 
            	
            	/*
@@ -479,10 +490,105 @@
            			}
            		}
             }
+            
+            /**
+			   truncateLongText function is doing the truncatation of Label and create a elipses like "..." 
+			   and set value to comboBox text.  
+			*/				
+    		public function truncateLongText(e : Event):void{   
+    					 
+    			var txt:String = e.currentTarget.itemToLabel(e.currentTarget.selectedItem);  			
+    			e.currentTarget.toolTip=txt; 
+    			if(txt.length >= 11)
+    				e.currentTarget.text =  txt.substring(0,9).toString() + "...";    			 		   		       		    
+    		}
+    		
+    		/**
+    			validateComboboxText function is create to validate first element of arraylist
+    			here if a dropdown list contains only on item then it will show in comboBox as selected item
+    			if item length is more than 1 then i will show prompt like "-select-" and store item text to myToolTip variable for further refrence.    			 
+    		*/ 		
+    		public function validateComboboxText():void{     			   			
+    			 if(myArray1.length <= 1){
+	    			 cb1.selectedIndex = 0;
+	    			 cb1.toolTip=cb1.selectedLabel.toString();
+	    		 }else{
+    				cb1.selectedIndex = -1;
+    				cb1.toolTip=cb1.selectedLabel.toString();
+	    		 }
+    			 
+    			 if(myArray2.length <= 1){
+    				cb2.selectedIndex = 0;
+    				cb2.toolTip=cb2.selectedLabel.toString();
+    			 }else{
+    				cb2.selectedIndex = -1;
+    				cb2.toolTip=cb1.selectedLabel.toString();
+    			 }
+    			    			 
+    			 if(myArray3.length <= 1){
+    				cb3.selectedIndex = 0;
+    				cb3.toolTip=cb3.selectedLabel.toString();
+    			 }else{
+    				cb3.selectedIndex = -1;
+    				cb3.toolTip=cb3.selectedLabel.toString();
+    			 }
+    			
+    			 if(myArray4.length <= 1){
+    				cb4.selectedIndex = 0;
+    				cb4.toolTip=cb4.selectedLabel.toString();
+    			 }else{
+    				cb4.selectedIndex = -1;
+    				cb4.toolTip=cb4.selectedLabel.toString();
+    			 }    			 
+    			 
+    			 if(myArray5.length <= 1){
+    				cb5.selectedIndex = 0;
+    				cb5.toolTip=cb5.selectedLabel.toString();
+    			 }else{
+    				cb5.selectedIndex = -1;
+    				cb5.toolTip=cb5.selectedLabel.toString();
+    			 }
+    		}
+    		
+    		private function validate():Boolean{    			
+    			var strVal:StringValidator = new StringValidator();    			
+                strVal.source = customColumnName;
+                strVal.property = "text";
+                strVal.required = true;
+                
+                var event:ValidationResultEvent = strVal.validate();
+				var currentControlIsValid:Boolean = (event.type == ValidationResultEvent.VALID);
+				return currentControlIsValid;                                         	           	  				
+    		}    		    		
+			
+			/**
+    			createBigTip function is create a errorString which is displayed while validation messages appears.
+    			it will disable submitButton control.    			  
+    		*/ 	
+		    private function createBigTip(s:String):void {		      
+		      submitButton.enabled=false;
+		      submitButton.errorString = s;		           
+		    }
+			
+			/**
+    			destroyBigTip function is remove a errorString which was displayed while validation messages appears.
+    			it will enable submitButton control.    			  
+    		*/
+		    private function destroyBigTip():void {
+		      submitButton.enabled=true;
+		      submitButton.errorString="";		      
+		      
+		    }
+    		    	  
 	 	]]>
 	 </mx:Script>
-      
+   
+
+   <!--customColumnName field validation it is a mandatory field -->  
+   <mx:StringValidator id="fieldVal" source="{customColumnName}" property="text" required="true"/> 
+   		
    <mx:RemoteObject id="rpcService" destination="cdeService"></mx:RemoteObject>
+   
      <mx:VBox x="20" y="20">
       <mx:HBox x="20" y="20" id="labelHBox">
         <mx:Label id="lb1" name="label1" width="100"  height="50" color="blue" text="{firstEntityLabel}" fontStyle="normal" fontWeight="bold" buttonMode="true" />
@@ -494,19 +600,29 @@
       	
       </mx:HBox>
       
-      <mx:HBox id ="myBox" x="20" y="60">
+      <mx:HBox id ="myBox" x="20" y="60" creationComplete="validateComboboxText()">
       	
-      	<mx:ComboBox id="cb1" dataProvider="{myArray1}" width="100"   borderThickness="0" borderColor="blue"  dropdownFactory="{myDropdownFactory}" creationComplete="initClassFactory()" change="validateQueryData()"/>
-      	<mx:ComboBox id="cb2" dataProvider="{myArray2}" width="100"   borderThickness="0" borderColor="blue"  textAlign="center" prompt="--Select--" change="validateQueryData()"/>
-      	<mx:ComboBox id="cb3" dataProvider="{myArray3}" width="100"   borderThickness="0" borderColor="blue" change="validateQueryData()"  dropdownFactory="{myDropdownFactory}" creationComplete="initClassFactory()" />
-      	<mx:ComboBox id="cb4" dataProvider="{myArray4}" width="100"   borderThickness="0" borderColor="blue"  prompt="--Select--" dropdownFactory="{myDropdownFactory}" creationComplete="initClassFactory()" change="righthandSideHandler()"/>
+      	<mx:ComboBox id="cb1" dataProvider="{myArray1}" width="100"  borderThickness="0" borderColor="blue"  
+      		prompt="--Select--" itemRenderer="mx.controls.Label" change="validateQueryData()"
+      		rowCount="10" close="truncateLongText(event)" toolTip=""/>
+      	<mx:ComboBox id="cb2" dataProvider="{myArray2}" width="100"   borderThickness="0" borderColor="blue"  
+      		textAlign="center" prompt="--Select--" itemRenderer="mx.controls.Label" close="truncateLongText(event)"
+      		change="validateQueryData()" rowCount="10" toolTip=""/>
+      	<mx:ComboBox id="cb3" dataProvider="{myArray3}" width="100"   borderThickness="0" borderColor="blue" 
+      		change="validateQueryData()"  prompt="--Select--" itemRenderer="mx.controls.Label" rowCount="10"
+      		close="truncateLongText(event)" toolTip=""/>
+      	<mx:ComboBox id="cb4" dataProvider="{myArray4}" width="100"   borderThickness="0" borderColor="blue"  
+      		prompt="--Select--" itemRenderer="mx.controls.Label"  
+      		close="truncateLongText(event)" change="righthandSideHandler()" rowCount="10" toolTip=""/>
         <mx:TextInput id="txtInput" name="txtInput"  width="100" restrict="0-9" borderColor="blue" /> 
-        <mx:ComboBox id="cb5" name="timeIntervalCb" dataProvider="{myArray5}" width="100"  borderThickness="0" borderColor="blue" prompt="--Select--" dropdownFactory="{myDropdownFactory}" creationComplete="initClassFactory()"/>
+        <mx:ComboBox id="cb5" name="timeIntervalCb" dataProvider="{myArray5}" width="100"  borderThickness="0" 
+        	borderColor="blue" prompt="--Select--" itemRenderer="mx.controls.Label" close="truncateLongText(event)"
+        	rowCount="10" toolTip=""/>
        <!-- <mx:Panel  id="p1" height="20" width="100" /> -->
       </mx:HBox> 	 
 	 <mx:HBox x="20">
          <mx:Label id="columnLabel" width="330" text="Please Enter Column Name To Be Displayed in Results:"/>
-         <mx:TextInput id="customColumnName" width="300" restrict="A-Z a-z" borderColor="blue"/>
+         <mx:TextInput id="customColumnName" width="300" restrict="A-Z a-z" borderColor="blue" focusOut="validate()"/>
 	 </mx:HBox>
 	  
 	  <mx:HBox x="20" y="50">
