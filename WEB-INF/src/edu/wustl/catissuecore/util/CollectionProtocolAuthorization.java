@@ -219,7 +219,7 @@ public class CollectionProtocolAuthorization implements edu.wustl.catissuecore.u
 				.getCollectionProtocolPGName(collectionProtocol.getId()));
 		SecurityDataBean userGroupRoleProtectionGroupBean = new SecurityDataBean();
 		userGroupRoleProtectionGroupBean.setUser(userId);
-		userGroupRoleProtectionGroupBean.setRoleName(SUPERVISOR);
+		userGroupRoleProtectionGroupBean.setRoleName(COORDINATOR);
 		userGroupRoleProtectionGroupBean.setGroupName(Constants
 				.getCollectionProtocolCoordinatorGroupName(collectionProtocol.getId()));
 		userGroupRoleProtectionGroupBean.setProtectionGroupName(protectionGroupName);
@@ -240,7 +240,7 @@ public class CollectionProtocolAuthorization implements edu.wustl.catissuecore.u
 				.getCollectionProtocolPGName(collectionProtocol.getId()));
 		SecurityDataBean userGroupRoleProtectionGroupBean = new SecurityDataBean();
 		userGroupRoleProtectionGroupBean.setUser(userId);
-		userGroupRoleProtectionGroupBean.setRoleName(SUPERVISOR);
+		userGroupRoleProtectionGroupBean.setRoleName(PI);
 		userGroupRoleProtectionGroupBean.setGroupName(Constants
 				.getCollectionProtocolPIGroupName(collectionProtocol.getId()));
 		userGroupRoleProtectionGroupBean.setProtectionGroupName(protectionGroupName);
