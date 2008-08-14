@@ -868,6 +868,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String SELECTED_SITE_IDS = "selectedSiteIds";
 	public static final String SELECTED_ROLE_IDS = "selectedRoleIds";
 	public static final String OPERATION_EDIT_ROW = "editRow";
+	public static final String ROW_ID_BEAN_MAP_FOR_USERPAGE ="rowIdBeanMapForUserPage";
 	
 	//Constants for default column names to be shown for query result.
 	public static final String[] DEFAULT_SPREADSHEET_COLUMNS = {
@@ -2383,7 +2384,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String RELATIONAL_OPERATORS = "fourthDropDown";
 	public static final String TIME_INTERVALS_LIST = "timeIntervals";
 	public static final String ENTITY_LABEL_LIST = "entityList";
-	
 	
 	public static final String LEFT_OPERAND = "leftTerm" ;
 	public static final String RIGHT_OPERAND = "rightTerm";
