@@ -9,7 +9,7 @@
 			<td align="right"><a href="http://bioinformatics.wustl.edu"><img
 				border="0" src="images/uIEnhancementImages/siteman_logo.gif"
 				alt="Siteman Cancer Center" width="198" height="54" vspace="5" /></a><img
-				border="0" src="images/uIEnhancementImages/or_dot.gif" width="1"
+				border="0" src="images/uIEnhancementImages/or_dot.gif"  alt="Divider line" width="1"
 				height="50" hspace="10" vspace="5" /><a
 				href="http://cabig.nci.nih.gov/"><img border="0"
 				src="images/uIEnhancementImages/cabig_logo.jpg" alt="caBIG"

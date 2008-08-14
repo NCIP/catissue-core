@@ -90,12 +90,13 @@ table#browserDetailsContainer
 				</table>
 				</td>
 				<td width="5"
-					background="images/uIEnhancementImages/shadow_right.gif"></td>
+					background="images/uIEnhancementImages/shadow_right.gif" style="background-repeat: repeat-y"></td>
 
 			</tr>
 			<tr>
 				<td background="images/uIEnhancementImages/shadow_down.gif"></td>
-				<td><img src="images/uIEnhancementImages/shadow_corner.gif"
+				<td><img src="images/uIEnhancementImages/shadow_corner.gif" 
+				alt="Shadow Corner"
 					width="5" height="5" /></td>
 			</tr>
 		</table>
@@ -156,6 +157,7 @@ table#browserDetailsContainer
 													class="blue_ar_b" value="Login" /> <a href="#"
 													class="blue"><span class="wh_ar_b"></span></a></td>
 												<td><img src="images/uIEnhancementImages/or_dot.gif"
+												 alt="Divider line"
 													width="1" height="15" hspace="5" /></td>
 												<td><a
 													href="SignUp.do?operation=add&amp;pageOf=pageOfSignUp"
@@ -201,6 +203,7 @@ table#browserDetailsContainer
 			<tr>
 				<td background="images/uIEnhancementImages/shadow_down.gif"></td>
 				<td><img src="images/uIEnhancementImages/shadow_corner.gif"
+				alt="Shadow Corner"
 					width="5" height="5" /></td>
 			</tr>
 		</table>
@@ -272,12 +275,14 @@ table#browserDetailsContainer
 						</p>
 						</td>
 						<td width="50%" align="center"><a href="http://www.nih.gov/"><img
-							src="images/uIEnhancementImages/logo2.gif" width="56" height="50"
+							src="images/uIEnhancementImages/logo2.gif" 
+							alt="National Institues of Health" width="56" height="50"
 							border="0" /></a></td>
 					</tr>
 					<tr>
 						<td align="center"><a href="http://www.dhhs.gov/"><img
-							src="images/uIEnhancementImages/logo3.gif" width="54" height="50"
+							src="images/uIEnhancementImages/logo3.gif"
+							alt="Department of Health &amp; Human Services" width="54" height="50"
 							border="0" /></a></td>
 						<td align="center"><a href="http://www.firstgov.gov/"><img
 							src="images/uIEnhancementImages/logo4.gif"
@@ -293,6 +298,6 @@ table#browserDetailsContainer
 	</tr>
 	<tr>
 		<td colspan="5" align="center" valign="top" bgcolor="#bcbcbc"><img
-			src="images/uIEnhancementImages/spacer.gif" width="1" height="1" /></td>
+			src="images/uIEnhancementImages/spacer.gif" alt="Spacer" width="1" height="1" /></td>
 	</tr>
 </table>

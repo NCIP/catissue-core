@@ -20,7 +20,7 @@
 					arg2="<%=Variables.applicationCvsTag%>" /> </span></td>
 				<td width="50%" align="right" valign="top"><a
 					href="ReportProblem.do?operation=add" class="white"> <img
-					src="images/uIEnhancementImages/ic_report.gif" width="15"
+					src="images/uIEnhancementImages/ic_report.gif" alt="Report Problems" width="15"
 					height="12" border="0" hspace="3" vspace="0"> <bean:message
 					key="app.reportedProblems" /></a>&nbsp; <a
 					href="ContactUs.do?PAGE_TITLE_KEY=app.contactUs&FILE_NAME_KEY=app.contactUs.file"
