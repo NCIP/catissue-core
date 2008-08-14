@@ -641,7 +641,7 @@ input.formFieldVerySmallSized,textarea.formFieldVerySmallSized,select.formFieldV
 
 .formFieldSmallNoBorder{ /* for the form elements themselves and with a constant width (on elements) */
  border:0;
- width:1.5em;
+ width:2em;
 }
 
 /* used by mandar in collection prptocol. Size set to 5em */
