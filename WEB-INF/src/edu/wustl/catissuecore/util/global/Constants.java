@@ -2481,4 +2481,5 @@ public static final String ADD_MULTIPLE_SPECIMEN_TO_CART="addMltipleSpecimenToCa
 	public static final String TREENO_ZERO = "zero";
 	public static final String PAGE_OF_QUERY_MODULE = "pageOfQueryModule";
 	public static final String ORDER_DETAILS = "orderDetails";
+	public static final String Association = "ASSOCIATION";
 }

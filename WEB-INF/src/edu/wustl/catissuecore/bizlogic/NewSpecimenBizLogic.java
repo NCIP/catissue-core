@@ -3305,7 +3305,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 					if(!siteIdSet.contains(site.getId()))
 					{
 						// return false;
-						throw new UserNotAuthorizedException();
+						throw Utility.getUserNotAuthorizedException(Constants.Association, site.getObjectId());
 					}
 				}
 			}

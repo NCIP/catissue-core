@@ -12,23 +12,29 @@ package edu.wustl.catissuecore.bizlogic;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 import org.hibernate.proxy.HibernateProxyHelper;
 
 import net.sf.ehcache.CacheException;
 import edu.wustl.catissuecore.domain.CellSpecimen;
+import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Container;
 import edu.wustl.catissuecore.domain.ContainerPosition;
 import edu.wustl.catissuecore.domain.FluidSpecimen;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.NewSpecimenArrayOrderItem;
+import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.SpecimenArrayContent;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
+import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
@@ -43,6 +49,8 @@ import edu.wustl.common.dao.AbstractDAO;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.security.PrivilegeCache;
+import edu.wustl.common.security.PrivilegeManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -51,6 +59,7 @@ import edu.wustl.common.util.dbManager.HibernateUtility;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.global.Variables;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * <p>This class initializes the fields of SpecimenArrayBizLogic.java</p>
@@ -932,7 +941,37 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 	 */
 	public String getObjectId(AbstractDAO dao, Object domainObject) 
 	{
-		return edu.wustl.catissuecore.util.global.Constants.ADMIN_PROTECTION_ELEMENT;
+        SpecimenArray specimenArray = null;
+        Specimen specimen = null;
+        StringBuffer sb = new StringBuffer();
+        sb.append(Constants.COLLECTION_PROTOCOL_CLASS_NAME);
+        
+        if(domainObject instanceof SpecimenArray)
+        {
+            specimenArray = (SpecimenArray) domainObject;
+        }
+        
+        Collection<SpecimenArrayContent> specimenArrayContentCollection = specimenArray.getSpecimenArrayContentCollection();
+        
+        for(SpecimenArrayContent specimenArrayContent : specimenArrayContentCollection)
+        {
+        	try 
+        	{
+				specimen = getSpecimen(dao, specimenArrayContent);
+			} 
+        	catch (DAOException e) 
+        	{
+				Logger.out.debug(e.getMessage(), e);
+			}
+        	
+        	if(specimen!=null)
+        	{
+	        	SpecimenCollectionGroup scg = specimen.getSpecimenCollectionGroup();
+	        	CollectionProtocolRegistration cpr = scg.getCollectionProtocolRegistration();
+	        	sb.append(Constants.UNDERSCORE).append(cpr.getCollectionProtocol().getId());
+        	}
+        }
+        return sb.toString();
 	}
 	
 	/**
@@ -944,4 +983,109 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
     {
     	return edu.wustl.catissuecore.util.global.Constants.ADD_EDIT_SPECIMEN_ARRAY;
     }
+	
+	
+	/**
+	 * (non-Javadoc)
+	 * @throws UserNotAuthorizedException 
+	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#isAuthorized(edu.wustl.common.dao.AbstractDAO, java.lang.Object, edu.wustl.common.beans.SessionDataBean)
+	 * 
+	 */
+	public boolean isAuthorized(AbstractDAO dao, Object domainObject, SessionDataBean sessionDataBean) throws UserNotAuthorizedException  
+	{
+		boolean isAuthorized = false;
+		String protectionElementName = null;
+		SpecimenArray specimenArray = null;
+	    Specimen specimen = null;
+	    SpecimenPosition specimenPosition = null;
+		
+		if(sessionDataBean != null && sessionDataBean.isAdmin())
+		{
+			return true;
+		}
+		
+		//	Get the base object id against which authorization will take place 
+		protectionElementName = getObjectId(dao, domainObject);
+		Site site = null;
+		StorageContainer sc = null;
+		//	Handle for SERIAL CHECKS, whether user has access to source site or not
+		if(domainObject instanceof SpecimenArray)
+        {
+            specimenArray = (SpecimenArray) domainObject;
+        }
+			
+		Collection<SpecimenArrayContent> specimenArrayContentCollection = specimenArray.getSpecimenArrayContentCollection();
+        
+        for(SpecimenArrayContent specimenArrayContent : specimenArrayContentCollection)
+        {
+        	try 
+        	{
+				specimen = getSpecimen(dao, specimenArrayContent);
+        	
+				if(specimen == null)
+				{
+					continue;
+				}
+	        	if(specimen.getSpecimenPosition()!=null)
+	    		{
+	    			sc = specimen.getSpecimenPosition().getStorageContainer();
+	    		}
+	        	
+	        	if(specimen.getSpecimenPosition()!=null && specimen.getSpecimenPosition().getStorageContainer().getSite() == null)
+	    		{
+	    			sc = (StorageContainer) dao.retrieve(StorageContainer.class.getName(), specimen.getSpecimenPosition().getStorageContainer().getId());
+	    		}
+	        	
+	        	specimenPosition = specimen.getSpecimenPosition();
+	    		
+	    		if(specimenPosition != null) // Specimen is NOT Virtually Located
+	    		{
+	    			site = sc.getSite();
+	    			Set<Long> siteIdSet = new UserBizLogic().getRelatedSiteIds(sessionDataBean.getUserId());
+	    			
+	    			if(!siteIdSet.contains(site.getId()))
+	    			{
+	    				throw Utility.getUserNotAuthorizedException(Constants.Association, site.getObjectId()); 
+	    			}
+	    		}
+        	} 
+        	catch (DAOException e) 
+        	{
+				Logger.out.debug(e.getMessage(), e);
+			}
+        }
+			
+		//Get the required privilege name which we would like to check for the logged in user.
+		String privilegeName = getPrivilegeName(domainObject);
+		PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(sessionDataBean.getUserName());
+		
+		// Checking whether the logged in user has the required privilege on the given protection element
+		String [] prArray = protectionElementName.split("_");
+		String baseObjectId = prArray[0];
+		String objId = "";
+		for (int i = 1 ; i < prArray.length;i++)
+		{
+			objId = baseObjectId + "_" + prArray[i];
+			isAuthorized = privilegeCache.hasPrivilege(objId, privilegeName);
+			if (!isAuthorized)
+			{
+				break;
+			}
+		}
+		
+		if(isAuthorized)
+		{
+			return isAuthorized;
+		}
+		else
+		// Check for ALL CURRENT & FUTURE CASE
+		{
+			isAuthorized = edu.wustl.catissuecore.util.global.Utility.checkForAllCurrentAndFutureCPs(dao,privilegeName, sessionDataBean);
+		}
+		if (!isAuthorized)
+        {
+			throw Utility.getUserNotAuthorizedException(privilegeName, protectionElementName);    
+        }
+		return isAuthorized;			
+	}
 }

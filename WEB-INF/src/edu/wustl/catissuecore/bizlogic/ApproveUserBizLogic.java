@@ -9,10 +9,13 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
@@ -20,6 +23,7 @@ import edu.wustl.catissuecore.domain.Password;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.dto.UserDTO;
+import edu.wustl.catissuecore.multiRepository.bean.SiteUserRolePrivilegeBean;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.EmailHandler;
 import edu.wustl.catissuecore.util.Roles;
@@ -256,42 +260,9 @@ public class ApproveUserBizLogic extends DefaultBizLogic
 	 * (non-Javadoc)
 	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getObjectId(edu.wustl.common.dao.AbstractDAO, java.lang.Object)
 	 */
-	public String getObjectId(AbstractDAO dao, Object domainObject, SessionDataBean sessionDataBean) 
+	public String getObjectId(AbstractDAO dao, Object domainObject) 
 	{
-		User user = null;
-		
-		try 
-		{
-			user = (User) dao.retrieve(User.class.getName(), sessionDataBean.getUserId());
-		} 
-		catch (DAOException e) 
-		{
-			Logger.out.debug(e.getMessage(), e);
-		}
-		
-			Collection<Site> siteCollection = user.getSiteCollection();
-		
-			StringBuffer sb = new StringBuffer();
-			boolean hasUserProvisioningPrivilege = false;
-			
-			if (siteCollection != null && !siteCollection.isEmpty())
-			{
-				sb.append(Constants.SITE_CLASS_NAME);
-				for (Site site : siteCollection)
-				{
-					if (site.getId()!=null)
-					{
-						sb.append(Constants.UNDERSCORE).append(site.getId());
-						hasUserProvisioningPrivilege = true;
-					}
-				}
-			}
-			if(hasUserProvisioningPrivilege)
-			{
-				return sb.toString();
-			}
-			
-		return null;
+		return new UserBizLogic().getObjectId(dao, domainObject);
 	}
 	
 	/**
@@ -319,19 +290,19 @@ public class ApproveUserBizLogic extends DefaultBizLogic
 		boolean isAuthorized = false;
 		
 		String privilegeName = getPrivilegeName(domainObject);
-		String protectionElementName = getObjectId(dao, domainObject, sessionDataBean);
+		String protectionElementName = getObjectId(dao, domainObject);
 		PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(sessionDataBean.getUserName());
 		 
 		if (protectionElementName != null)
 		{
 			String [] prArray = protectionElementName.split(Constants.UNDERSCORE);
 			String baseObjectId = prArray[0];
-			StringBuffer objId = new StringBuffer();
+			String objId = null;
 			boolean isAuthorized1 = false;
 			
     		for (int i = 1 ; i < prArray.length;i++)
     		{
-    			objId.append(baseObjectId).append(Constants.UNDERSCORE).append(prArray[i]);
+    			objId = baseObjectId+Constants.UNDERSCORE+prArray[i];
     			isAuthorized1 = privilegeCache.hasPrivilege(objId.toString(),privilegeName);
     			if (!isAuthorized1)
     			{
