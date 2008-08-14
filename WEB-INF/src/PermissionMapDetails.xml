@@ -111,7 +111,7 @@
 	</collectionProtocolMappings>
 
 	<scientistMappings>
-		<scientistMapping name="VIEW_DATA" id="30"/>
+		<scientistMapping name="READ_DENIED" id="12"/>
 	</scientistMappings>
 
 	<globalMappings>
