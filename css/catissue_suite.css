@@ -304,6 +304,12 @@ A.view:hover{
 .bottomtd {
 	height:12px;
 }
+
+.searchbox {
+	border-bottom:1px solid #f2f2f2;
+	border-right:1px solid #f2f2f2;
+	border-left:1px solid #f2f2f2;
+}
 /*End td/tr css*/
 
 
