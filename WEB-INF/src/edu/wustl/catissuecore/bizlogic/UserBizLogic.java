@@ -412,21 +412,25 @@ public class UserBizLogic extends DefaultBizLogic
 			if(!siteUserRolePrivilegeBean.isRowDeleted())
 			{
 				siteList = siteUserRolePrivilegeBean.getSiteList();
-                for(Site site : siteList) 
-                {
-                    boolean isPresent = false;
-                    for (Site site1 : siteCollection)
-                    {
-                        if (site1.getId().equals(site.getId()))
-                        {
-                            isPresent = true;
-                        }
-                    }
-                    if(!isPresent)
-                    {
-                        siteCollection.add(site);
-                    }
-                }
+				
+				if(siteList != null && !siteList.isEmpty())
+				{
+	                for(Site site : siteList) 
+	                {
+	                    boolean isPresent = false;
+	                    for (Site site1 : siteCollection)
+	                    {
+	                        if (site1.getId().equals(site.getId()))
+	                        {
+	                            isPresent = true;
+	                        }
+	                    }
+	                    if(!isPresent)
+	                    {
+	                        siteCollection.add(site);
+	                    }
+	                }
+				}
 			}
 			
 			
@@ -539,7 +543,7 @@ public class UserBizLogic extends DefaultBizLogic
 						String defaultRole = siteUserRolePrivilegeBean.getRole().getValue();
 						Site site = siteUserRolePrivilegeBean.getSiteList().get(0);
 						
-						if (defaultRole != null && (defaultRole.equalsIgnoreCase("-1") || defaultRole.equalsIgnoreCase("0")) )
+						if (defaultRole != null && (defaultRole.equalsIgnoreCase("-1") || defaultRole.equalsIgnoreCase("0") || defaultRole.equalsIgnoreCase("7")))
 						{
 							roleName = Constants.getCurrentAndFutureRoleName(site.getId(), user1.getCsmUserId(), defaultRole);
 						} else
