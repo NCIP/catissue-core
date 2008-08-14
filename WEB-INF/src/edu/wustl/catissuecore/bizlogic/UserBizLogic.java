@@ -561,7 +561,7 @@ public class UserBizLogic extends DefaultBizLogic
 						CollectionProtocol cp = siteUserRolePrivilegeBean.getCollectionProtocol();
 						String defaultRole = siteUserRolePrivilegeBean.getRole().getValue();
 						
-						if (defaultRole != null && (defaultRole.equalsIgnoreCase("0") || defaultRole.equalsIgnoreCase("-1")))
+						if (defaultRole != null && (defaultRole.equalsIgnoreCase("0") || defaultRole.equalsIgnoreCase("-1") || defaultRole.equalsIgnoreCase("7")))
 						{
 							roleName = Constants.getCPRoleName(cp.getId(), user1.getCsmUserId(), defaultRole);
 						}
