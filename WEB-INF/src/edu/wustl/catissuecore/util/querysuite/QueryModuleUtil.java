@@ -216,7 +216,8 @@ final public  class QueryModuleUtil
 			actionForm.setIncludeDescriptionChecked(Constants.OFF);
 		}
 		//TODO check if null and then set the value of seleted.
-		actionForm.setSelected(Constants.TEXT_RADIOBUTTON);
+		// Bug #5131: Commenting until the Concept Code search is fixed
+		// actionForm.setSelected(Constants.TEXT_RADIOBUTTON);
 		actionForm.setTextField("");
 		actionForm.setPermissibleValuesChecked(Constants.OFF);
 		return actionForm;
