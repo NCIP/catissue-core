@@ -441,24 +441,20 @@ function checkQuantityforAll(count)
 									<table width="100%" border="0" cellspacing="0" cellpadding="0">
 										
 										<tr>
-											 <td colspan="4" valign="top" class="tableheading" width="20%">
-												<div>
+											 <td valign="top" class="black_ar" width="20%">
 													<strong>
 														<bean:message key="consent.consentforspecimen"/>
-														</br>
+														
 													</strong>	
-												</div>
 											</td>
 										</tr>
 										<tr>
-											<td width="88%" align="right" nowrap >
-												<img src="images/uIEnhancementImages/viewall_icon.gif" alt="View All" />
-											</td>
-											<td width="12%" align="center" nowrap="nowrap" ><span class="link">
+											
+											<td align="left" >
 												<a href="javascript:showAllSpecimen('<%=count%>')" class="view" >
 													<bean:message key="requestdetails.link.ViewAllConsents" />
 							                    </a>
-											</span></td>
+										</td>
 										</tr>
 									</table>
 									
@@ -499,11 +495,13 @@ function checkQuantityforAll(count)
 				%>
 					<logic:iterate id="requestDetailsBeanObj" collection="<%= requestDetailsList%>" type="edu.wustl.catissuecore.bean.RequestDetailsBean">
 				<%			String fontStyle="black_ar";
+							String bgStyle="background-color:#ffffff;";
 							rows++;
 							if(rows<=count)
 							if(rows%2 == 0)
 							{
 								fontStyle="tabletd1";
+								bgStyle="background-color:#f6f6f6;";
 							}
 							
 						 	String requestFor = "value(RequestDetailsBean:"+i+"_requestFor)"; 
@@ -661,7 +659,7 @@ function checkQuantityforAll(count)
 					 			String type = ((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_type")));
 					%>
 								<td class="<%=fontStyle%>" >
-							 		<html:text styleClass="formFieldSmallNoBorder" styleId="<%=requestedQtyId%>" property="<%= requestedQty %>" readonly="true"/>
+							 		<html:text styleClass="formFieldSmallNoBorder" styleId="<%=requestedQtyId%>"	property="<%= requestedQty %>" readonly="true" style="<%=bgStyle%>"/>
 							 		<span>		
 											<script>
 													var v= getUnit('<%= className %>','<%= type %>');
@@ -672,7 +670,7 @@ function checkQuantityforAll(count)
 									<td class="<%=fontStyle%>">&nbsp;</td>
 								 	<td class="<%=fontStyle%>" align="left">
 									<div id="<%= updateAvaiQty %>" >
-											<html:text styleClass="formFieldSmallNoBorder" styleId="<%=availableQtyId%>" property="<%= availableQty %>" readonly="true"/>
+											<html:text styleClass="formFieldSmallNoBorder" styleId="<%=availableQtyId%>" property="<%= availableQty %>" readonly="true" style="<%=bgStyle%>"/>
 									</div></td>
 									<td class="<%=fontStyle%>">
 									<span>
