@@ -1273,7 +1273,7 @@
 										<bean:message key="specimen.tissueSite"/>
 									</label>
 								</td>
-								<td align="left" class="black_new" nowrap>
+								<td align="left" class="black_new">
 									<autocomplete:AutoCompleteTag property="tissueSite" size="27"
 										  optionsList = "<%=request.getAttribute(Constants.TISSUE_SITE_LIST)%>"
 	 									  initialValue="<%=form.getTissueSite()%>" readOnly="<%=readOnlyForAliquot%>"
