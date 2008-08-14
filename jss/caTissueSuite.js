@@ -235,6 +235,7 @@ function openCRGWindow()
                                     theText  =jsonResponse.locations[i].selectedActionArray[actionCounter].locationName;
                                     var myNewOption = new Option(theText,theValue);
                                     eleOfActionSelBox.options[i] = myNewOption;
+                                 //   eleOfActionSelBox.options[i].selected=true;
                                 }                         
                             }
                             //--for others
@@ -1368,15 +1369,18 @@ function consentPage()
      }
 	 else if(selectedRoleIds=="7")
 	 {
+	 	 deselectAllOptsOfSelBox(document.getElementById('siteIds'));
+	 	 document.getElementById(cpCheckId).disabled=true;
+	 	 document.getElementById(cpCheckId).checked=false;
+	 	 document.getElementById('cpIds').disabled=false;
 		 document.getElementById('siteIds').disabled=true;
-		 document.getElementById(cpCheckId).checked=true;
 		 getActionsForThisRole(roleObject,'siteIds','cpIds','cpCheckId')
 	 }
      else
      {	
 		
 		 document.getElementById(cpCheckId).disabled=false;
-		 if(document.getElementById(cpCheckId).checked==false)
+/*		 if(document.getElementById(cpCheckId).checked==false)
 		 {
 			 document.getElementById('cpIds').disabled=false;
 		 }
@@ -1384,7 +1388,10 @@ function consentPage()
 		 {
 		
 			document.getElementById('cpIds').disabled=true;
-		 }
+		 }*/
+		 document.getElementById(cpCheckId).checked=true;
+		 document.getElementById('cpIds').disabled=true;
+		 deselectAllOptsOfSelBox( document.getElementById('cpIds'));
      	getActionsForThisRole(roleObject,'siteIds','cpIds','cpCheckId')
      }
 
@@ -1433,6 +1440,12 @@ function consentPage()
              var selectedCPIds = new Array();
              var selectedRoleIds = new Array();
              var selectedActionIds = new Array();  
+             
+             var errorFlagForSite=false;
+             var errorFlagForCP=false;
+             var errorFlagForAction=false;
+             var errorFlagForRole=false;
+             var flagForSite=false;
 
                   if(siteListCtrl.options.length>0){
                         for (var i = 0; i < siteListCtrl.options.length; i++)
@@ -1469,15 +1482,21 @@ function consentPage()
                               if (actionListCtrl.options[ i ].selected){
                                   selectedActionIds.push(actionListCtrl.options[ i ].value);
                               }
+                              if(actionListCtrl.options[ i ].value=="12")
+                              {                              		
+                              		flagForSite=true;	
+                              		if(selectedCPIds.length==0)
+                              		{
+                              			errorFlagForCP=true;
+                              		}	
+                              }
                         }     
                   }
 
-                  var errorFlagForSite=false;
-                  var errorFlagForCP=false;
-                  var errorFlagForAction=false;
-                  var errorFlagForRole=false;
+                 
 
-                  if(selectedSiteIds.length=='0'){
+                  if(selectedSiteIds.length=='0'&& !flagForSite)
+                  {
                         errorFlagForSite=true;
                   }
 
@@ -1494,16 +1513,32 @@ function consentPage()
                   if(selectedRoleIds[0]=='-1'){
                         errorFlagForRole=true;
                   }
+                  
+          //        if(selectedActionIds.length>0)
+          //        {
+          //        	for(var x=0;x<selectedActionIds.length;x++)
+         //         	{
+           //       	alert(selectedActionIds[x]);
+           //       	 	alert(selectedActionIds[x]=="30");
+           //       		if(selectedActionIds[x]=="30")
+          //        		{
+          ///       		
+           //       		}
+          //        	}
+         //         }
 
                   var divId=document.getElementById("errorMess");
                   divId.style.display="none";
-                  if(errorFlagForSite==true||errorFlagForAction==true||errorFlagForRole==true){
-                        validateMethodForUserPriv(divId,errorFlagForSite,errorFlagForRole,errorFlagForAction);
+                  if(errorFlagForSite==true||errorFlagForAction==true||errorFlagForRole==true||errorFlagForCP==true)
+                  {
+                        validateMethodForUserPriv(divId,errorFlagForSite,errorFlagForRole,errorFlagForAction,errorFlagForCP);
                   }
 
                   else{
+                 
                         var url="ShowAssignPrivilegePage.do";
                         var data="cpOperation="+cpOperation+"&selectedSiteIds="+selectedSiteIds+"&selectedCPIds="+selectedCPIds+"&selectedRoleIds="+selectedRoleIds+"&selectedActionIds="+selectedActionIds+"&isAllCPChecked="+isAllCPChecked+"&operation="+operation;                                     
+                       
                         sendRequestsWithData(url,data,cpOperation);
                   }
 
@@ -1614,11 +1649,14 @@ function consentPage()
                   aprEdit.onclick=function(){editRowForUserPage(rowId);} ;
       }
 
-      function validateMethodForUserPriv(divId,errorFlagForSite,errorFlagForRole,errorFlagForAction)
+      function validateMethodForUserPriv(divId,errorFlagForSite,errorFlagForRole,errorFlagForAction,errorFlagForCP)
       {
 	      var message="";
 	      if(errorFlagForSite){
 	            message =   "<li> <font color='red'>Site is required.</font> </li>";
+	      }
+	      if(errorFlagForCP){
+	            message =   "<li> <font color='red'>Collection Protocol is required.</font> </li>";
 	      }
 	      if(errorFlagForRole){
 	            message = message+"<li> <font color='red'>Role is required.</font> </li>";
@@ -1681,16 +1719,28 @@ function editRowForUserPage(rowId)
        sendRequestsWithData(url,data,cpOperation);
  }
  
- function getCutomRole(roleSelBoxId)
- {
-     var roleSelBoxObj = document.getElementById(roleSelBoxId);
-	 var len = roleSelBoxObj.options.length;
-	 for(var x=0; x<len;x++)
+ function getCustomRole(roleSelBoxId,actionSelBoxObj)
+ {	
+	 var flagForScientist=false;
+	 for(var i=0;i<actionSelBoxObj.length;i++)
 	 {
-		 if(roleSelBoxObj.options[x].value=="0")
+		 if(actionSelBoxObj.options[i].value=="12")
 		 {
-			  roleSelBoxObj.options[ x ].selected=true;
-			  break;
+		 	flagForScientist=true;
+		 }
+	 }
+ 	
+ 	if(!flagForScientist)
+ 	{
+	     var roleSelBoxObj = document.getElementById(roleSelBoxId);
+		 var len = roleSelBoxObj.options.length;
+		 for(var x=0; x<len;x++)
+		 {
+			 if(roleSelBoxObj.options[x].value=="0")
+			 {
+				  roleSelBoxObj.options[ x ].selected=true;
+				  break;
+			 }
 		 }
 	 }
  }

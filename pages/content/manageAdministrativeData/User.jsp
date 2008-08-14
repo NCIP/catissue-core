@@ -473,7 +473,7 @@ function handleStatus(status)
 											<td width="17%" align="left" class="black_ar">Privilege(s)</td>
 											<td rowspan="2" width="17%" align="center" class="black_ar_t"
 												valign="top"><select class="formFieldSizedNew"
-												id="actionIds" size="4" onchange="getCutomRole('roleIds')"
+												id="actionIds" size="4" onchange="getCustomRole('roleIds',this)"
 												multiple="multiple">
 												<%
 													String actionName = "";
