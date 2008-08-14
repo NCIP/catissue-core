@@ -1,4 +1,4 @@
-
+<!-- orderPathologyCase.jsp Which shows the pathologycases List for ordering-->
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
@@ -28,6 +28,7 @@ OrderPathologyCaseForm form = (OrderPathologyCaseForm)request.getAttribute("orde
 %>
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>	
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>	
+<script type="text/javascript" src="jss/wz_tooltip.js"></script>
 <script language="JavaScript">
 
 
@@ -66,7 +67,7 @@ function showDerivative(objectenabled,objectdisabled,element)
 		{
 			var requestQtyId = "requestedQuantity"+i;
 			document.getElementById(requestQtyId).value="";
-			document.getElementById(requestQtyId).disabled=false;
+			document.getElementById(requestQtyId).readOnly=false;
 		}
 		
 		span_tags = document.all.tags("span");
@@ -95,7 +96,7 @@ function showDerivative(objectenabled,objectdisabled,element)
 		}
 			
 		var unitreq=document.getElementById("unitSpan");
-		unitreq.innerHTML="count";
+		unitreq.innerHTML="Count";
 		
 		span_tags = document.all.tags("span");
 		for(var counter = 0; counter < span_tags.length; counter++)
@@ -124,6 +125,7 @@ function checkAl(element)
 			}
 		}
 		document.OrderPathologyCase.orderButton.disabled=true;
+		document.OrderPathologyCase.submitButton.disabled=true;
 	}
 	else
 	{
@@ -138,13 +140,14 @@ function checkAl(element)
 			}
 		}
 		document.OrderPathologyCase.orderButton.disabled=false;
+		document.OrderPathologyCase.submitButton.disabled=false;
 	}
 }
 
 function putQuantity(element)
 {
-
-	var isNumber=IsNumeric(document.getElementById("reqquantity").value);
+	var firstRequestedQuantity=document.getElementById("requestedQuantity0").value;
+	var isNumber=IsNumeric(firstRequestedQuantity);
 	if(isNumber==false)
 	{
 		alert("Enter valid number");
@@ -154,7 +157,7 @@ function putQuantity(element)
 		var len=<%=pathologyCase.size()%>;
 		if(len=="1")
 		{
-			document.OrderPathologyCase.requestedQuantity.value=document.getElementById("reqquantity").value;
+			document.OrderPathologyCase.requestedQuantity.value=firstRequestedQuantity;
 		}
 		else
 		{
@@ -162,7 +165,7 @@ function putQuantity(element)
 			{
 					//document.OrderPathologyCase.requestedQuantity[i].value=document.getElementById("reqquantity").value;
 					//Bug fixed -5837
-					document.getElementById("requestedQuantity"+i).value=document.getElementById("reqquantity").value;
+					document.getElementById("requestedQuantity"+i).value=firstRequestedQuantity;
 			}
 		}
 	}
@@ -256,9 +259,15 @@ function onCheck()
 		}
 	}
 	if(cnt>0)
+	{
 		document.OrderPathologyCase.orderButton.disabled=false;
+		document.OrderPathologyCase.submitButton.disabled=false;
+	}
 	else
+	{
 		document.OrderPathologyCase.orderButton.disabled=true;
+		document.OrderPathologyCase.submitButton.disabled=true;
+	}
 }
 </script>
 
@@ -280,106 +289,85 @@ function onCheck()
 
 <html:form action="AddToOrderListSpecimen.do" type="edu.wustl.catissuecore.actionForm.OrderPathologyCaseForm"
 			name="OrderPathologyCase">
-  <div height="90%">			
-	<table summary="Table to display Pathology Case Reports" cellpadding="0" cellspacing="0" border="0" class="tabPage" width="100%" style="border-right:1px solid #5C5C5C;padding-right:0em;">
-		<tr style="background-color:#AAAAAB">
-			<td height="30" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="specimen()" nowrap>		
-				<bean:message key="orderingSystem.tab.biospecimen"/>				
-			</td>
-				
-			<td height="30" class="tabMenuItemSelected" nowrap>				 
-				<bean:message key="orderingSystem.tab.pathologicalCase"/>			
-			</td>
-
-			<td height="30" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="biospecimenArray()" nowrap>				 
-				<bean:message key="orderingSystem.tab.biospecimenArray"/>				
-			</td>
-				
-			<td width="10%" class="tabMenuSeparator">
-				<html:button styleClass="actionButton" property="defineArrayButton" onclick="DefineArray()">
-				<bean:message key="orderingsystem.button.defineArray"/>
-				</html:button> 
-			</td>
-		 </tr>
-			 
-			<tr>
-			  	<td style="border-left:1px solid #5C5C5C" colspan="6">
-
-	<html:hidden property="typeOfCase"/>
-	<html:hidden property="unit" value=""/>
-	<html:hidden property="concentration"/>
-	<table summary="" cellpadding="0" cellspacing="0" border="0"  width="100%">
+ <div>			
+   <table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" valign="top">
 	<tr>
-		<td colspan='4'  class="formMessage">	
-			<bean:message key="requiredfield.message"/>
+		<td class="bottomtd">&nbsp;
 		</td>
-	</tr>	
-
+	</tr>
 	<tr>
-        <td class="formTitle" height="30" colspan="3">
-			<bean:message key="orderingsystem.label.caseList" />
-		</td>
-    </tr>
-
-	<tr>
-         <td>
-				<table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" style="height:100%">
-                    <tr>
-					 	<td class="formRequiredNotice" width="1%" height="30">&nbsp;*</td>
-
-						<td width="29%" class="formRequiredLabel" align="left" height="30">
-							&nbsp;&nbsp;<bean:message key="orderingsystem.label.requestFor" />
-						</td>
-
-						<td width="30%" class="formRequiredLabelWithoutBorder" align="left" height="30">
-							<INPUT TYPE="radio" NAME="derivative" value="derivative" onclick="showDerivative('showenabled','showdisabled',this.value)">
+		<td valign="bottom" >
+			<table width="100%" border="0" cellpadding="0" cellspacing="0">
+				<tr>
+                   <td valign="bottom" onclick="specimen()"><img src="images/uIEnhancementImages/cp_biospecimen1.gif" alt="Biospecimen" width="111" height="20" /></td>
+                    <td valign="bottom"><img src="images/uIEnhancementImages/cp_pathological.gif" alt="Pathological Case" width="127" height="20" border="0" /></td>
+                     <td valign="bottom" onClick="biospecimenArray()"><img src="images/uIEnhancementImages/cp_biospecimenA1.gif" alt="Biospecimen Array" width="132" height="20" border="0"></td>
+                     <td width="85%" valign="bottom" class="cp_tabbg">&nbsp;</td>
+                   </tr>
+                </table>
+			</td>
+           </tr>
+		   <tr>
+			<td class="cp_tabtable">
+				<table summary="" cellpadding="3" cellspacing="0" border="0"  width="100%">
+				 <tr>
+                    <td colspan="3" class=" bottomtd">
+						<html:hidden property="typeOfCase"/>
+						<html:hidden property="unit" value=""/>
+						<html:hidden property="concentration"/>
+					</td>
+                 </tr>
+				<tr>
+					<td width="100%" colspan="3" align="left" class="tr_bg_blue1 blue_ar_b">
+						<bean:message key="orderingsystem.label.caseList" />
+					</td>
+				</tr>
+				<tr>
+					<td width="1%" align="center" class="black_ar">
+						<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
+					</td>
+                    <td width="22%" align="left" class="black_ar">
+						<bean:message key="orderingsystem.label.requestFor" />
+					</td>
+					<td width="77%" align="left" class="black_ar">
+						<INPUT TYPE="radio" NAME="derivative" value="derivative" onclick="showDerivative('showenabled','showdisabled',this.value)">
 							<bean:message key="orderingsystem.label.derivative" />
-						</td>
-							
-						<td width="30%" class="formRequiredLabelWithoutBorder" align="left" height="30">
-							<INPUT TYPE="radio" NAME="block" value="block" onclick="showDerivative('showenabled','showdisabled',this.value)">
+						&nbsp;
+						<INPUT TYPE="radio" NAME="block" value="block" onclick="showDerivative('showenabled','showdisabled',this.value)">
 							<bean:message key="orderingsystem.label.block" />
-						</td>
-
-						<td width="10%" class="formField" align="left" height="30">&nbsp;</td>
-					</tr>
-			<tr>
-               <td width="100%" colspan="5" >
-				<div id="showenabled"  style=" position:relative ;display: none; width=100%;">
-				<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
-					<!-- get  specimen class list-->
-					<tr>
-					 	<td class="formRequiredNotice" width="1%">*</td>
-						<td width="29%" class="formRequiredLabel" >
-							<bean:message key="orderingsystem.label.classList" />
-						</td>
-						
-						 <td width="70%" class="formField" >
-							
-							 <autocomplete:AutoCompleteTag property="className"
+					</td>
+				</tr>
+				<tr>
+	               <td colspan="3" >
+						<div id="showenabled">
+							<table summary="" cellpadding="2" cellspacing="0" border="0" width="100%">
+											<!-- get  specimen class list-->
+								<tr>
+								 	<td width="1%" align="center" class="black_ar">
+										<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
+									</td>
+									<td width="22%" align="left" class="black_ar">
+										<bean:message key="orderingsystem.label.classList" />
+									</td>
+								    <td width="27%" class="black_ar" >
+										<autocomplete:AutoCompleteTag property="className"
 										  optionsList = "<%=request.getAttribute(Constants.SPECIMEN_CLASS_LIST)%>"
 										  initialValue="<%=form.getClassName()%>"
 										  onChange="onTypeChange(this);resetVirtualLocated()"
 										  readOnly="false"
+										  styleClass="black_ar"
+										  size="25"
 									    />
-						</td>
-                    </tr>
-				
-                
-					<!-- get specimen type list-->
-					<tr>
-					 	<td class="formRequiredNotice" width="1%">*</td>
-						<td width="29%" class="formRequiredLabel">
-								<bean:message key="orderingsystem.label.typeList" />
-						</td>
-							<%--
-								boolean subListEnabled = false;
-								specimenTypeList = new ArrayList();
-								specimenTypeList.add(new NameValueBean(Constants.SELECT_OPTION,"-1"));
-								pageContext.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
-								String subTypeFunctionName ="onSubTypeChangeUnit('specimenClass',this,'unitSpan'),onChangeUnit()";
-							--%>
-							<%
+									</td>
+						 <!-- get specimen type list-->
+								 	<td align="center" width="1%" class="black_ar">
+										<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
+									</td>
+									<td class="black_ar" align="left" wdth="22%">
+										<bean:message key="orderingsystem.label.typeList" />
+									</td>
+									 <td  class="black_ar" width="27%">
+								<%
 										String classValue = (String)form.getClassName();
 										specimenTypeList = (List)specimenTypeMap.get(classValue);
 										
@@ -399,115 +387,110 @@ function onCheck()
 										String readOnlyForAliquot = "false";
 						
 							%>
-
-                        <td  width="70%" class="formField">
-							<%--<html:select property="type" styleClass="formFieldSized15" styleId="type"
-							 size="1" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" disabled="<%=subListEnabled%>" onchange="<%=subTypeFunctionName%>">
-								<html:options collection="<%=Constants.SPECIMEN_TYPE_LIST%>" labelProperty="name" property="value"/>
-							</html:select>--%>
-							<autocomplete:AutoCompleteTag property="type"
+								
+											<autocomplete:AutoCompleteTag property="type"
+											  optionsList = "<%=request.getAttribute(Constants.SPECIMEN_TYPE_MAP)%>"
+											  initialValue="<%=form.getType()%>"
+											  onChange="<%=subTypeFunctionName%>"
+											  readOnly="<%=readOnlyForAliquot%>"
+											  dependsOn="<%=form.getClassName()%>"
+											  styleClass="black_ar"
+											  size="25"
+									        />
+										</td>
+									</tr>
+								</table>
+							</div>
+						</td>
+					</tr>
+					<tr>
+		               <td colspan="3" >
+						<div id="showdisabled"  style="display: none;">
+							<table summary="" cellpadding="2" cellspacing="0" border="0" width="100%">
+											<!-- get  specimen class list-->
+								<tr>
+								 	<td width="1%" align="center" class="black_ar">
+										<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
+									</td>
+									 <td width="22%" align="left" class="black_ar">
+										<bean:message key="orderingsystem.label.classList" />
+									</td>
+									<td width="27%" class="black_ar" >
+										<autocomplete:AutoCompleteTag property="className"
+										  optionsList = "<%=request.getAttribute(Constants.SPECIMEN_CLASS_LIST)%>"
+										  initialValue="Tissue"
+										  onChange="onTypeChange(this);resetVirtualLocated()"
+										  readOnly="true"
+										  styleClass="black_ar"
+										  size="25"
+									    />
+									</td>
+									<td align="center" width="1%" class="black_ar">
+										<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
+									</td>
+									<td class="black_ar" align="left" wdth="22%">
+										<bean:message key="orderingsystem.label.typeList" />
+									</td>
+									<td  class="black_ar" width="27%">
+										<autocomplete:AutoCompleteTag property="name"
 										  optionsList = "<%=request.getAttribute(Constants.SPECIMEN_TYPE_MAP)%>"
-										  initialValue="<%=form.getType()%>"
-										  onChange="<%=subTypeFunctionName%>"
-										  readOnly="<%=readOnlyForAliquot%>"
-										  dependsOn="<%=form.getClassName()%>"
-					        />
-						</td>
-                    </tr>
-				</table>
-				</div>
-				</td>
-			</tr>
-				
-			<tr>
-
-               <td width="100%" colspan="5" >
-				<div id="showdisabled"  style=" position:relative ;display: none; width=100%;">
-				
-				<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
-					
-					<!-- get  specimen class list-->
-					<tr>
-					 	<td class="formRequiredNotice" width="1%">*</td>
-						<td width="29%" class="formRequiredLabel" >
-							<bean:message key="orderingsystem.label.classList" />
-						</td>
-						
-						 <td width="70%" class="formField" >
-							<SELECT NAME="Tissue" disabled="true" value="Tissue" size="1" selected="selected">
-							<OPTION selected value="Tissue">Tissue</OPTION>
-							</SELECT>
-						</td>
-                    </tr>
-				
-                
-					<!-- get specimen type list-->
-					<tr>
-					 	<td class="formRequiredNotice" width="1%">*</td>
-						<td width="29%" class="formRequiredLabel">
-								<bean:message key="orderingsystem.label.typeList" />
-						</td>
-                        <td  width="70%" class="formField">
-							<SELECT NAME="Block" disabled="true" value="Block" selected="selected" size="1">
-							<OPTION selected value="Block">Block</OPTION>
-							</SELECT>
-						</td>
-                    </tr>
-
-   					
-				</table>
-				</div>
-				</td>
-				
+										  initialValue="Block"
+										  readOnly="true"
+										  styleClass="black_ar"
+										  size="25"
+								        />
+									</td>
+						        </tr>
+							</table>
+						</div>
+					</td>
 				</tr>
-                    <tr>
-					 	<td class="formRequiredNotice" width="1%" height="30" >&nbsp;*</td>
-						<td width="29%" class="formRequiredLabel" height="30" >
-							&nbsp;&nbsp;<bean:message key="orderingsystem.label.tissueSite" />
-						</td>
-						
-						 <td width="70%" class="formField" height="30" colspan="3">
-							&nbsp;<html:select property="tissueSite" styleClass="formFieldSized15" styleId="classList" size="1" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" >
-								<html:options collection="<%=Constants.TISSUE_SITE_LIST%>" labelProperty="name" property="value" />
-							</html:select>
-						</td>
-                    </tr>
-                    
-                    
-                    <tr>
-					 	<td class="formRequiredNotice" width="1%" height="30" >&nbsp;*</td>
-						<td width="29%" class="formRequiredLabel" height="30">
-							&nbsp;&nbsp;<bean:message key="orderingsystem.label.pathologicalStatus" />
-						</td>
-						
-						 <td width="70%" class="formField" height="30" colspan="3">&nbsp;
-							<html:select property="pathologicalStatus" styleClass="formFieldSized15" styleId="classList" size="1" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-								<html:options collection="<%=Constants.PATHOLOGICAL_STATUS_LIST%>" labelProperty="name" property="value" />
-							</html:select>
-						</td>
-                    </tr>
-                    
-					<tr>
-                        <td class="formRequiredNotice"  width="1%" height="30">&nbsp;</td>
-						<td width="29%" class="formLabel" height="30">
-							&nbsp;&nbsp;<bean:message key="orderingsystem.label.requestedQuantity"/>
-						</td>
-
-                        <td width="70%" class="formField" colspan="3" height="30" colspan="2">&nbsp;&nbsp;
-							<INPUT TYPE="text" NAME="reqquantity" id="reqquantity" size="5" MAXLENGTH="8"/>
-							&nbsp;<span id="unitSpan"></span>
-							
-							&nbsp;&nbsp;&nbsp;&nbsp;
-							
-							<html:button styleClass="actionButton" property="submitButton" styleClass="actionButton" value="Apply To All" onclick="putQuantity(this)">
-							</html:button>
-						</td>
-
-                    </tr>
-                </table>
-                </td>
-            </tr>
-            
+				<tr>
+					<td colspan="3">
+						<table summary="" cellpadding="2" cellspacing="0" border="0" width="100%">
+							<tr>
+							 	<td width="1%" align="center" class="black_ar">
+									<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
+								</td>
+								<td width="22%" align="left" class="black_ar">
+									<bean:message key="orderingsystem.label.tissueSite" />
+								</td>
+							    <td width="27%" class="black_ar" >
+									<autocomplete:AutoCompleteTag property="tissueSite"
+										  optionsList = "<%=request.getAttribute(Constants.TISSUE_SITE_LIST)%>"
+										  initialValue=""
+										  
+										  styleClass="black_ar"
+										  size="25"
+							        />
+									
+								</td>
+								<td align="center" width="1%" class="black_ar">
+									<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
+								</td>
+								<td class="black_ar" align="left" wdth="22%">
+									<bean:message key="orderingsystem.label.pathologicalStatus" />
+								</td>
+								<td  class="black_ar" width="27%">
+									<autocomplete:AutoCompleteTag property="pathologicalStatus"
+										  optionsList = "<%=request.getAttribute(Constants.PATHOLOGICAL_STATUS_LIST)%>"
+										  initialValue=""
+										  styleClass="black_ar"
+										  size="25"
+							        />
+								</td>
+				            </tr>
+						</table>
+					</td>
+				</tr>
+				<tr><td class="bottomtd" colspan="3"></td></tr>
+				<tr>
+					<td class="black_ar dividerline" colspan="3">
+							&nbsp;&nbsp;
+						<html:button styleClass="black_ar" property="submitButton" value="Apply To All" onclick="putQuantity(this)" onmouseover="Tip(' Assign first required quantity to all')" disabled="true">
+						</html:button>
+					</td>
+				</tr>
 			<%	
 			if(request.getAttribute("value")!=null)
 			{
@@ -515,31 +498,27 @@ function onCheck()
 			}
 			String strarray[]=(String[])request.getAttribute("array");
 			%>
-			
-			<tr>
-                <td>
-                	<!--div class="tableScroll"-->
-					<table summary="Enter summary of data here" cellpadding="3"
-						cellspacing="0" border="0" class="dataTable" width="100%">
-    				<tr>
-							<th class="dataTableHeader" width="5%">
-							<INPUT TYPE="checkbox" NAME="checked" id="checked" onclick="checkAl(this)"/>
-							</th>
-
-							<th class="dataTableHeader" width="30%" align="left">
+				<tr>
+                    <td colspan="3" class="black_ar ">
+	                   <table width="100%" border="0" cellspacing="0" cellpadding="4">
+                           <tr>
+                             <td class="tableheading">
+								<INPUT TYPE="checkbox" NAME="checked" id="checked" onclick="checkAl(this)"/>
+							 </td>
+						     <td class="tableheading"><strong>
 								<bean:message key="orderingsystem.label.caseName" />
-							</th>
-							
-							
-							<th class="dataTableHeader"  align="left" width="25%">
+								</strong>
+							 </td>
+							 <td class="tableheading"><strong>
 								<bean:message key="orderingsystem.label.requestedQuantity" />
-							</th>
-							
-							<th class ="dataTableHeader"  align="left" width="15%">
-								<bean:message key="orderingsystem.label.description" />
-							</th>
-                    </tr>
-  					
+								</strong>
+							</td>
+							<td class="tableheading"><strong>
+									<bean:message key="orderingsystem.label.description" />
+								</strong>
+							</td>
+		                </tr>
+						<tr><td class="bottomtd"></td></tr>
 						<!-- getting values form the specimen object-->
 						
 						<%
@@ -574,81 +553,70 @@ function onCheck()
 								
 								
 							%>
-							<tr class="dataRowLight" width="100%">
-	
-        						<td class="dataCellText" width="5%">
+							<tr>
+								<td valign="top">
 									<html:multibox property="selectedItems" value="<%=cnt%>" onclick="onCheck()"/>
 								</td> <!--for chk box -->
-
-									<td class="dataCellText" width="30%">
+								<td class="black_ar_t">
 											<%=obj.getSpecimenCollectionGroup().getSurgicalPathologyNumber()%>
 
 										<html:hidden property="<%=specimenName%>" value="<%=obj.getSpecimenCollectionGroup().getSurgicalPathologyNumber()%>"/>
 										<html:hidden property="<%=specimenId%>" value="<%=obj.getId().toString()%>"/>
 										<html:hidden property="<%=typeOfItem%>" value="pathologyCase"/>
 										<html:hidden property="<%=specimenCollectionGroup%>" value="<%=speccollgrp.getId().toString()%>"/>
-									</td>
-
-									<td class="dataCellText" width="25%">
-										<html:text styleClass="formFieldSized3" maxlength="8"  size="5"  styleId="<%=requestedQuantityId%>" property="<%=requestedQuantity%>"/>
+								</td>
+								<td class="black_ar_t">
+										<html:text styleClass="black_ar" maxlength="8"  size="5"  styleId="<%=requestedQuantityId%>" property="<%=requestedQuantity%>" style="text-align:right"/>
 										&nbsp;
-										<span id="requnitSpan"></span>		
+										<span id="unitSpan"></span>		
 										<html:hidden property="<%=unitRequestedQuantity%>" value="" styleId="unitRequestedQuantity"/>
 										<html:hidden property="<%=isDerived%>" styleId="isDerived" value=""/>
-									</td>
+								</td>
 
-									<td class="dataCellText" width="20%">
-										<html:textarea styleClass="formFieldSized10" rows="2" cols="8"  styleId="description" property="<%=description%>"/>		
-									</td>
+								<td class="black_ar_t">
+										<html:textarea styleClass="black_ar" rows="2" cols="25"  styleId="description" property="<%=description%>"/>		
+								</td>
 							</tr>
 							<%i++;
 							}%>
-					<script>
+							<script>
 						document.OrderPathologyCase.derivative.checked=true;
 						document.OrderPathologyCase.block.checked=false;
 						document.OrderPathologyCase.typeOfCase.value="false";
 						showDerivative('showenabled','showdisabled',"derivative");
 					</script>
-
-
-                </table>
-                <!--/div-->
-                </td>
-            </tr>
-</table>
-									
+					 </table>
 				</td>
-			 </tr>
+			</tr>
 			 <tr>
-				<td align="right" colspan='4' class="tabField">
-
-				<!-- action buttons begins -->
-					<table cellpadding="4" cellspacing="0" border="0">
-						<tr>
-							<td width="50%" class="formLabelBorderless" style="background-color:white">
-									<label for="AddToArrayName">
-										 <bean:message key="orderingsystem.label.defineArrayName" />
-									 </label>:
-								<html:select property="addToArray" styleClass="formFieldSized10" size="1" 
+                 <td align="center" class="black_ar dividerline">&nbsp;</td>
+                  <td align="left" class="black_ar dividerline">
+						<label for="AddToArrayName">
+						 <bean:message key="orderingsystem.label.defineArrayName" />
+						</label>
+				  </td>
+				  <td align="left" class="black_new dividerline">
+						<html:select property="addToArray" styleClass="formFieldSized10" size="1" 
 						 			onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 									<html:options collection="<%= Constants.ORDERTO_LIST_ARRAY  %>" labelProperty="name" property="value"/>		
-								</html:select>  							
-							</td>
-						
-							<td width="50%">
-							<html:button styleClass="actionButton" property="orderButton" onclick="orderToList()" disabled="true">
-									<bean:message key="orderingsystem.button.addToOrderList"/>
-							  </html:button>
-
-							</td>
-		
-						</tr>
-					</table>
-						
-						<!-- action buttons end -->
-				</td>		 
-			</tr>		  			  
+								</html:select> 
+								&nbsp; <a href="#" class="view" onclick="DefineArray()"><bean:message key="orderingsystem.button.defineArray"/></a>
+				 </td>
+			</tr>
+            <tr>
+                  <td colspan="3" class=" bottomtd"></td>
+            </tr>
+			<tr>
+                  <td colspan="3" align="right" class="buttonbg">
+					<html:button styleClass="blue_ar_b" property="orderButton" onclick="orderToList()" disabled="true">
+						<bean:message key="orderingsystem.button.addToOrderList"/>
+				    </html:button>
+				</td>
+              </tr>
+         </table>
+	</td>
+  </tr>
 </table>
+
 </div>
 </html:form>
-
