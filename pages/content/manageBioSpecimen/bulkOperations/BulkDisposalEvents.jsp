@@ -40,31 +40,19 @@
 </script>
 <html:form action="BulkTransferEventsSubmit.do" >
 	<jsp:include page="/pages/content/manageBioSpecimen/bulkOperations/BulkEventsCommonAttributes.jsp" />
-	
-	<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="60%">
-			<tr>
-			<td>
-			<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
-				<tr>
-					<td class="formRequiredNotice" width="5">&nbsp;</td>
-					<td class="formLabel" width="25%">
-						<label for="type">
-							<bean:message key="disposaleventparameters.reason" /> 
-						</label>
-					</td>
-					<td class="formField">
-						<html:textarea styleClass="formFieldSized"  styleId="comments" property="fieldValue(ID_ALL_REASON)" />
-					</td>
-				</tr>
-					
-				
-				<tr>
-					<td class="formRequiredNotice" width="5">&nbsp;</td>
-					<td class="formLabel" width="25%">
-						Specimen Labels
-					</td>
-					<td class="formLabel">
-						<%
+	 
+	 
+	  <tr>
+        <td colspan="3" class="showhide"><table width="100%" border="0" cellpadding="2" cellspacing="0">
+            <tr>
+              <td width="1%" align="center" class="black_ar">&nbsp;</td>
+              <td width="15%" align="left" valign="top" class="black_ar_t"><bean:message key="disposaleventparameters.reason" />  </td>
+              <td align="left" width="84%"><html:textarea styleClass="black_ar" cols="70" rows="3"  styleId="comments" property="fieldValue(ID_ALL_REASON)" /></td>
+            </tr>
+            <tr>
+              <td align="center" class="black_ar">&nbsp;</td>
+              <td align="left" valign="top" class="black_ar"><bean:message key="specimenLabels" /></td>
+              <td align="left" class="black_ar"><%
 							String specimenList = "";
 							String specimenLabelField = "";
 							String commaString = "";
@@ -80,50 +68,28 @@
 								}
 							%>
 							<html:hidden property="<%=specimenList%>" />
-							<%=commaString%>
-							<label for="type">
+							<%=commaString%><label for="type">
 								<bean:write name="bulkEventOperationsForm" property="<%=specimenLabelField%>" />
 							</label>
-						</logic:iterate>
-						
-					</td>
-				</tr>
-				
-				<tr>
-									<td class="formRequiredNotice" width="5">&nbsp;</td>
-									<td class="formLabel" width="25%">
-										Status
-									</td>
-									<td class="formLabel">
-										<html:select styleId="comments" property="fieldValue(ID_ALL_STATUS)" styleClass="formFieldSized4" size="1">
-												<html:options name="<%=Constants.ACTIVITYSTATUSLIST%>" />
-										</html:select>
-									</td>
-				</tr>
-			</table>
-	</table>
-	
-	<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="60%">
-		<tr>
-		<td>
-		<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
-			<tr>
-				<td align="right"> 
-					<table border="0" cellpadding="4" cellspacing="0">
-
-						<tbody><tr>
-							<td>
-								<html:submit styleClass="actionButton"/>
-							</td>
-
-						</tr>
-					</tbody></table>
-				</td>
-			</tr>
-		</table>
-		</td>
-				
-		</tr>
-		
-	</table>
+						</logic:iterate></td>
+            </tr>
+            <tr>
+              <td align="center" class="black_ar">&nbsp;</td>
+              <td align="left" class="black_ar"><LABEL for="type">Status</LABEL></td>
+              <td align="left">	
+			   <html:select styleId="comments" property="fieldValue(ID_ALL_STATUS)"    styleClass="formFieldSized4" size="1"> <html:options      
+			    name="<%=Constants.ACTIVITYSTATUSLIST%>" />
+			   </html:select></td>
+            </tr>
+       </table></td>
+      </tr>
+        
+      <tr>
+        <td colspan="2" class="buttonbg"><html:submit styleClass="blue_ar_b"/>&nbsp; | &nbsp;<html:link page="/ManageAdministrativeData.do" styleClass="cancellink">
+		<bean:message key="buttons.cancel" /> </html:link></td>
+      </tr>
+    
+	</table></td>
+  </tr>
+</table>
 </html:form>

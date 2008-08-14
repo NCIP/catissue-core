@@ -8,15 +8,17 @@
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
 <head>
 	<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
+    <script type="text/javascript" src="jss/wz_tooltip.js"></script>
 </head>
 
 <script language="JavaScript" type="text/javascript">
+
 	
 		function ApplyToAll()
 		{
-			if(document.getElementById("chk").checked)
-			{
+			
 				var fields = document.getElementsByTagName("input");
+				  
 				var i =0;
 				var text="";
 				var valueToSet = "";
@@ -65,7 +67,6 @@
 						}
 					}
 				}
-			}
 		}
 		
 		function virtualLocationSelChanged(specimenId)
@@ -86,25 +87,20 @@
 <html:form action="BulkTransferEventsSubmit.do" >
 	<jsp:include page="/pages/content/manageBioSpecimen/bulkOperations/BulkEventsCommonAttributes.jsp" />
 	
-	<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="60%">
+	
 		<tr>
-		<td>
-		<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
-			<tr>
-				
-				<td class="formRightSubTableTitleWithBorder">
-					Label
-				</td>
-				<td class="formRightSubTableTitleWithBorder">
-					From Location
-				</td>
-				<td class="formRightSubTableTitleWithBorder">
-					Destination Container &nbsp;&nbsp;&nbsp;<input id="chk" type="checkbox" onClick="ApplyToAll()"/>Apply First Destination to All
-				</td>
-				
-			</tr>
-			
-			<logic:iterate id="specimenId" name="<%=Constants.SPECIMEN_ID_LIST%>" scope="request" indexId="id">
+        <td colspan="2">&nbsp;<input name="Submit2" type="button" class="black_ar" value="Apply to All" onmouseover="Tip('Apply first destination to all specimen',WIDTH,200)" onClick="ApplyToAll();"/>
+        </td>
+      </tr>
+	
+      <tr>
+        <td colspan="2"><table width="100%" border="0" cellspacing="0" cellpadding="4">
+          <tr>
+            <td width="20%" class="tableheading"><strong><bean:message key="specimenLabel"/></strong></td>
+            <td width="30%" class="tableheading"><strong><bean:message key="specimenfromLocation"/></strong></td>
+            <td width="50%" class="tableheading"><strong><bean:message key="specimenDestContainer"/></strong></td>
+          </tr>
+          <logic:iterate id="specimenId" name="<%=Constants.SPECIMEN_ID_LIST%>" scope="request" indexId="id">
 				<%
 					String specimenLabelField = "fieldValue(ID_"+specimenId+"_LABEL)";
 					String specimenFromLocField = "fieldValue(ID_"+specimenId+"_FROMLOC)";
@@ -126,8 +122,7 @@
 					String methodCall = "virtualLocationSelChanged("+specimenId+")";
 					String virLoc = "VirLocChk"+specimenId;
 										
-				%>
-				<tr>
+				%><tr>
 					
 					<html:hidden property="<%=specimenFromLocIDField%>" />
 					<html:hidden property="<%=specimenFromLocPos1Field%>" />
@@ -135,12 +130,12 @@
 					<html:hidden property="<%=specimenList%>" />
 					<html:hidden property="<%=specimenFromLocField%>" />
 				
-					<td class="formLabelWithLeftBorder">
+					<td class="black_ar">
 						<label for="type">
 							<bean:write name="bulkEventOperationsForm" property="<%=specimenLabelField%>" />
 						</label>
 					</td>
-					<td class="formLabel">
+					<td class="black_ar">
 						<label for="type">
 							<bean:write name="bulkEventOperationsForm" property="<%=specimenFromLocField%>" />
 						</label>
@@ -150,12 +145,12 @@
 					<!-- To Container Field starts -->
 					
 					
-					<td class="formField">
+					<td class="black_ar">
 						<logic:equal name="bulkEventOperationsForm" property="<%=specimenToVirLocField%>" value="true" >
-							<html:text styleId="<%=selContainerId%>" property="<%=specimenToSCLabelField%>" disabled="true" />			
+							<html:text styleId="<%=selContainerId%>" styleClass="black_ar" size="25" property="<%=specimenToSCLabelField%>" disabled="true" />			
 						</logic:equal>
 						<logic:notEqual name="bulkEventOperationsForm" property="<%=specimenToVirLocField%>" value="true" >
-							<html:text styleId="<%=selContainerId%>" property="<%=specimenToSCLabelField%>" disabled="false" />			
+							<html:text styleId="<%=selContainerId%>" styleClass="black_ar" size="25" property="<%=specimenToSCLabelField%>" disabled="false" />			
 						</logic:notEqual>
 					</td>					
 					<!-- To Container Field ends -->
@@ -187,22 +182,19 @@
 				
 				</tr>
 			</logic:iterate>
-		</table>
-		</td>
-				
+        </table></td>
+      </tr>
+      <tr>
+        <td colspan="2" class="bottomtd"></td>
+      </tr>
+      
+      
+          
+      <tr>
+        <td colspan="2" class="buttonbg"><html:submit styleClass="blue_ar_b"/>&nbsp; | &nbsp;<html:link page="/ManageAdministrativeData.do" styleClass="cancellink">
+		<bean:message key="buttons.cancel" /> </html:link></td>
+      </tr>
+    </table></td>
+			
 		</tr>
-		<tr>
-			<td align="right"> 
-				<table border="0" cellpadding="4" cellspacing="0">
-				
-					<tbody><tr>
-						<td>
-							<html:submit styleClass="actionButton"/>
-						</td>
-
-					</tr>
-				</tbody></table>
-			</td>
-		</tr>
-	</table>
 </html:form>

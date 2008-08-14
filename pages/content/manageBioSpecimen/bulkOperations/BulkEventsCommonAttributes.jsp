@@ -8,51 +8,47 @@
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
 
 <html:errors />
-<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="60%">
-		<html:hidden property="operation" />
-		<tr><td height="10"></td></tr>
-		<tr>
-			<td>
-				<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
-					<tr>
-						<td class="formTitle" height="20" colspan="2">
-							<logic:equal name="bulkEventOperationsForm" property="operation" value="<%=Constants.BULK_TRANSFERS%>">
+<table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
+ <html:hidden property="operation" />
+  <tr>
+    <td class="td_color_bfdcf3"><table border="0" cellpadding="0" cellspacing="0">
+      <tr>
+        <td class="td_table_head"><span class="wh_ar_b"><bean:message key="app.shoppingCart"/> </span></td>
+        <td><img src="images/uIEnhancementImages/table_title_corner2.gif" alt="Page Title - My List" width="31" height="24" /></td>
+      </tr>
+    </table></td>
+  </tr>
+  <tr>
+    <td class="tablepadding"><table width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr>
+        <td width="90%" valign="bottom" class="td_tab_bg">&nbsp;</td>
+      </tr>
+    </table>
+      <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
+      
+      <tr>
+        <td width="1%"  align="left" class="toptd"></td>
+      </tr>
+      <tr>
+        <td  align="left" class="tr_bg_blue1"><span class="blue_ar_b"> &nbsp;<logic:equal name="bulkEventOperationsForm" property="operation" value="<%=Constants.BULK_TRANSFERS%>">
 								<bean:message key="bulk.events.operation"/> 
 							</logic:equal>
 							<logic:equal name="bulkEventOperationsForm" property="operation" value="<%=Constants.BULK_DISPOSALS%>">
 								<bean:message key="bulk.events.disposals"/> 
-							</logic:equal>
-						</td>
-						<td class="formTitle"  align="right">
-							<html:submit styleClass="actionButton"/>
-						</td>
-					</tr>
-					<!-- User -->		
-					<tr>
-						<td class="formRequiredNotice" width="5">*</td>
-						<td class="formRequiredLabel" width="25%">
-							<label for="type">
-								<bean:message key="eventparameters.user"/> 
-							</label>
-						</td>
-						<td class="formField">
-						<!-- For tooltip -->
-							<html:select property="userId" styleClass="formFieldSized" styleId="userId" size="1">
-								<html:options collection="<%=Constants.USERLIST%>" labelProperty="name" property="value"/>
-							</html:select>
-						</td>
-					</tr>
-
-					<!-- date -->		
-					<tr>
-						<td class="formRequiredNotice" width="5">*</td>
-						<td class="formRequiredLabel" width="25%">
-							<label for="type">
-								<bean:message key="eventparameters.dateofevent"/> 
-							</label>
-						</td>
-						<td class="formField">
-							<bean:define id="eventDate" name="bulkEventOperationsForm" type="java.lang.String" property="dateOfEvent"/>
+							</logic:equal></span></td>
+      </tr>
+      
+      <tr>
+        <td  class="showhide"><table width="100%" border="0" cellpadding="3" cellspacing="0">
+            <tr>
+              <td width="1%" align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>
+              <td width="15%" align="left" nowrap class="black_ar"><bean:message key="eventparameters.user"/> </td>
+              <td width="84%" align="left" valign="middle"><html:select property="userId" styleClass="formFieldSizedNew" styleId="userId" size="1" ><html:options collection="<%=Constants.USERLIST%>" labelProperty="name" property="value"/></html:select> </td>
+			 </tr>
+            <tr>
+              <td align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>
+              <td align="left" class="black_ar"><bean:message key="eventparameters.dateofevent"/> </td>
+              <td align="left"><bean:define id="eventDate" name="bulkEventOperationsForm" type="java.lang.String" property="dateOfEvent"/>
 							<ncombo:DateTimeComponent name="dateOfEvent"
 							  id="dateOfEvent"
 							  formName="bulkEventOperationsForm"
@@ -60,58 +56,42 @@
 							  year= "<%= Utility.getYear(eventDate) %>"
 							  day= "<%= Utility.getDay(eventDate) %>"
 							  value="<%= eventDate %>"
-							  styleClass="formDateSized10"
-							/>
-							<bean:message key="page.dateFormat" />&nbsp;	
-						</td>
-					<tr>
-					
-					<!-- Time -->
-					<tr>
-						<td class="formRequiredNotice" width="5">*</td>
-						<td class="formRequiredLabel" width="25%">
-							<label for="eventparameters.time">
-								<bean:message key="eventparameters.time"/>
-							</label>
-						</td>
-						<td class="formField">
-							<bean:define id="hours" name="bulkEventOperationsForm" type="java.lang.String" property="timeInHours"/>
-							<bean:define id="minutes" name="bulkEventOperationsForm" type="java.lang.String" property="timeInMinutes"/>
-							<autocomplete:AutoCompleteTag property="timeInHours"
+							  styleClass="black_ar"
+							/><span class="grey_ar_s">
+                   <bean:message key="page.dateFormat" />&nbsp</span></td>
+				</tr>
+            <tr>
+              <td align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>
+              <td align="left" class="black_ar"><bean:message key="eventparameters.time"/></td>
+              <td align="left"><span class="black_ar">
+			  <bean:define id="hours" name="bulkEventOperationsForm" type="java.lang.String" property="timeInHours"/>
+			  <bean:define id="minutes" name="bulkEventOperationsForm" type="java.lang.String" property="timeInMinutes"/>
+        		<autocomplete:AutoCompleteTag property="timeInHours"
 								  optionsList = "<%=request.getAttribute(Constants.HOUR_LIST)%>"
 								  initialValue="<%=hours%>"
-								  styleClass="formFieldSized5"
+								  styleClass="black_ar"
+								  size="3"
 								  staticField="false"
-						    	/>	
-							&nbsp;
-							<label for="eventparameters.timeinhours">
-								<bean:message key="eventparameters.timeinhours"/>&nbsp; 
-							</label>
-					   		<autocomplete:AutoCompleteTag property="timeInMinutes"
+						    	/>&nbsp;<bean:message key="eventparameters.timeinhours"/>&nbsp;&nbsp;
+               <autocomplete:AutoCompleteTag property="timeInMinutes"
 									  optionsList = "<%=request.getAttribute(Constants.MINUTES_LIST)%>"
 									  initialValue="<%=minutes%>"
-									  styleClass="formFieldSized5"
+									  styleClass="black_ar"
+									  size="3"
 									  staticField="false"
-							   />	
-							<label for="eventparameters.timeinminutes">
-								&nbsp;<bean:message key="eventparameters.timeinminutes"/> 
-							</label>
-						</td>
-					</tr>
-					
-					<!-- comments -->		
-					<tr>
-						<td class="formRequiredNotice" width="5">&nbsp;</td>
-						<td class="formLabel" width="25%">
-							<label for="type">
-								<bean:message key="eventparameters.comments"/> 
-							</label>
-						</td>
-						<td class="formField">
-							<html:textarea styleClass="formFieldSized"  styleId="comments" property="comments" />
-						</td>
-					</tr>
-				</table>
-			</td>
-		</tr>
-	</table>
+							   />	&nbsp;<bean:message key="eventparameters.timeinminutes"/> </span></td>
+            </tr>
+            
+            
+            <tr>
+              <td align="center" class="black_ar">&nbsp;</td>
+              <td align="left" valign="top" class="black_ar_t"><bean:message key="eventparameters.comments"/></td>
+              <td align="left" valign="top" class="black_ar_t"><html:textarea styleClass="black_ar" cols="70" rows="3"  styleId="comments" property="comments"/></td>
+            </tr>
+	  <logic:equal name="bulkEventOperationsForm" property="operation" value="<%=Constants.BULK_TRANSFERS%>">
+		</table></tr></td>
+		</logic:equal>
+	 
+	  
+	  
+	  
