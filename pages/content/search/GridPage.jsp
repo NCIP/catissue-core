@@ -11,7 +11,7 @@
 	var colWidth =${requestScope.colWidth};
 	var colTypes =${requestScope.colTypes};
 </script>
-<table width="100%">
+<table width="100%" cellpadding="3" cellspacing="0" border="0"	>
 	<tr>
 		<td>
 			<script>	
@@ -27,7 +27,7 @@
 				}
 				else
 				{
-					document.write("<div id='gridbox' width='100%' height='300px' style='background-color:#d7d7d7;overflow:hidden'></div>");
+					document.write("<div id='gridbox' width='100%' height='340px' style='background-color:#d7d7d7;overflow:hidden'></div>");
 				}
 			</script>
 		</td>
