@@ -413,10 +413,15 @@
 		
 		var radioCheckStatus;
 		var actionURL;
+		
+		// Bug #5131: Setting 'text' mode as default
+		radioCheckStatus="text_radioButton";
+		/*
 		if(document.forms[0].selected[0].checked)
 			radioCheckStatus = "text_radioButton";
 		else if(document.forms[0].selected[1].checked)
 			radioCheckStatus = "conceptCode_radioButton";
+		*/
 
 		if(currentPage == 'null')
 		{

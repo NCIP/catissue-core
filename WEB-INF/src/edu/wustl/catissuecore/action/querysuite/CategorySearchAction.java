@@ -71,7 +71,13 @@ public class CategorySearchAction extends BaseAction
 		if (textfieldValue != null && !textfieldValue.equals(""))
 		{
 			int[] searchTarget = prepareSearchTarget(searchForm);
-			int basedOn = prepareBaseOn(searchForm.getSelected());
+			
+			/* 
+			 * Bug #5131 : Disabling function call and supplying value directly
+			 * until the Concept-Code search is fixed
+			 */
+            // int basedOn = prepareBaseOn(searchForm.getSelected());
+			int basedOn = Constants.BASED_ON_TEXT;
 			Set<EntityInterface> entityCollection = new HashSet<EntityInterface>();
 			String[] searchString = null;
 			searchString = prepareSearchString(textfieldValue);
