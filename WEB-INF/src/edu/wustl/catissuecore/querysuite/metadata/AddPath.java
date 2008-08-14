@@ -62,6 +62,20 @@ public class AddPath
 	    subClassesList = new ArrayList<String>();
 	    subClassesList.add("edu.wustl.catissuecore.domain.CollectionEventParameters");
 	    subClassesList.add("edu.wustl.catissuecore.domain.FrozenEventParameters");
+	    subClassesList.add("edu.wustl.catissuecore.domain.FixedEventParameters");
+	    subClassesList.add("edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter");
+	    subClassesList.add("edu.wustl.catissuecore.domain.ProcedureEventParameters");
+	    subClassesList.add("edu.wustl.catissuecore.domain.SpunEventParameters");
+	    subClassesList.add("edu.wustl.catissuecore.domain.TransferEventParameters");
+	    subClassesList.add("edu.wustl.catissuecore.domain.ReceivedEventParameters");
+	    subClassesList.add("edu.wustl.catissuecore.domain.EmbeddedEventParameters");
+	    subClassesList.add("edu.wustl.catissuecore.domain.ThawEventParameters");
+	    subClassesList.add("edu.wustl.catissuecore.domain.ReviewEventParameters");
+	    subClassesList.add("edu.wustl.catissuecore.domain.CellSpecimenReviewParameters");
+	    subClassesList.add("edu.wustl.catissuecore.domain.TissueSpecimenReviewEventParameters");
+	    subClassesList.add("edu.wustl.catissuecore.domain.FluidSpecimenReviewEventParameters");
+	    subClassesList.add("edu.wustl.catissuecore.domain.MolecularSpecimenReviewParameters");
+	    subClassesList.add("edu.wustl.catissuecore.domain.DisposalEventParameters");
 	    superClassAndSubClassesMap.put("edu.wustl.catissuecore.domain.SpecimenEventParameters", subClassesList);
 	    
 	    associationsList = new ArrayList<String>();
@@ -79,6 +93,20 @@ public class AddPath
 			 List<String> subClassesList = new ArrayList<String>();
 			 subClassesList.add("edu.wustl.catissuecore.domain.CollectionEventParameters");
 			 subClassesList.add("edu.wustl.catissuecore.domain.FrozenEventParameters");
+			 subClassesList.add("edu.wustl.catissuecore.domain.FixedEventParameters");
+			 subClassesList.add("edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter");
+			 subClassesList.add("edu.wustl.catissuecore.domain.ProcedureEventParameters");
+			 subClassesList.add("edu.wustl.catissuecore.domain.SpunEventParameters");
+			 subClassesList.add("edu.wustl.catissuecore.domain.TransferEventParameters");
+			 subClassesList.add("edu.wustl.catissuecore.domain.ReceivedEventParameters");
+			 subClassesList.add("edu.wustl.catissuecore.domain.EmbeddedEventParameters");
+			 subClassesList.add("edu.wustl.catissuecore.domain.ThawEventParameters");
+			 subClassesList.add("edu.wustl.catissuecore.domain.ReviewEventParameters");
+			 subClassesList.add("edu.wustl.catissuecore.domain.CellSpecimenReviewParameters");
+			 subClassesList.add("edu.wustl.catissuecore.domain.TissueSpecimenReviewEventParameters");
+			 subClassesList.add("edu.wustl.catissuecore.domain.FluidSpecimenReviewEventParameters");
+			 subClassesList.add("edu.wustl.catissuecore.domain.MolecularSpecimenReviewParameters");
+			 subClassesList.add("edu.wustl.catissuecore.domain.DisposalEventParameters");
 			 superClassAndSubClassesMap.put("edu.wustl.catissuecore.domain.SpecimenEventParameters", subClassesList);
 			    
 			 List<String> associationsList = new ArrayList<String>();
