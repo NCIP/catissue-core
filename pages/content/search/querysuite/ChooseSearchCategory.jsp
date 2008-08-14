@@ -127,8 +127,9 @@ else
 								<tr><td>&nbsp;</td></tr>
 								<tr id="radio_view" >
 									<td class="standardTextQuery">
-										<html:radio property="selected" value="text_radioButton" onclick="radioButtonSelected(this)"/><bean:message key="query.text"/>
-										<html:radio property="selected" value="conceptCode_radioButton" onclick="radioButtonSelected(this)" disabled="true" /><bean:message key="query.conceptCode"/>
+										<!-- Bug #5131: Removing the radios until Concept Code search is fixed  -->
+										<!-- html:radio property="selected" value="text_radioButton" onclick="radioButtonSelected(this)"/--><!--bean:message key="query.text"/-->
+										<!-- html:radio property="selected" value="conceptCode_radioButton" onclick="radioButtonSelected(this)" disabled="true" /--><!--bean:message key="query.conceptCode"/-->
 									</td>
 								</tr>											
 							</table>
