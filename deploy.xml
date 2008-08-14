@@ -126,28 +126,24 @@
 			   <fail message="The 'jboss.home.dir' is empty,so server should not start" />
 			</then>
 		</if>
-		<echo>${jboss.home.dir}</echo>
 		<if>
 			<equals arg1="" arg2="${jboss.server.name}" />
 			<then>
 				<fail message="The 'jboss.server.name' is empty,so server should not start" />
 			</then>
 		</if>
-		<echo>${jboss.server.name}</echo>
 		<if>
 			<equals arg1="" arg2="${jboss.server.port}" />
 			<then>
 				<fail message="The 'jboss.server.port' is empty,so server should not start" />
 			</then>
 		</if>
-		<echo>${jboss.server.port}</echo>
 		<if>
 			<equals arg1="" arg2="${database.type}" />
 			<then>
 				<fail message="The 'database.type' is empty,so server should not start" />
 			</then>
 		</if>
-		<echo>${database.type}</echo>
 		<if>
 			<or>
 				<equals arg1="mysql" arg2="${database.type}" />
@@ -170,28 +166,24 @@
 				<fail message="The property 'database.port' is empty,so server should not start" />
 			</then>
 		</if>
-		<echo>${database.port}</echo>
 		<if>
 			<equals arg1="" arg2="${database.name}" />
 			<then>
 				<fail message="The property 'database.name' can not be empty" />
 			</then>
 		</if>
-			<echo>${database.name}</echo>
 		<if>
 			<equals arg1="" arg2="${database.username}" />
 			<then>
 				<fail message="The property 'database.username' can not be empty" />
 			</then>
 		</if>
-			<echo>${database.username}</echo>
 		<if>
 			<equals arg1="" arg2="${database.password}" />
 		<then>
 			<fail message="The property 'database.password' can not be empty" />
 		</then>
 		</if>
-		<echo>${database.password}</echo>
 		<!-- validation for mysql connection -->
 		<trycatch>
 			<try>
@@ -199,7 +191,6 @@
 			<equals arg1="mysql" arg2="${database.type}" />
 			<then>
 				<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" onerror="continue">
-				<transaction src="${mysql.sql.dir}/testsql.sql" />
 						<transaction>select 1;</transaction>
 						<transaction>commit;</transaction>
 							<classpath>
@@ -247,63 +238,54 @@
 			 	<fail message="The property 'email.administrative.emailAddress' can not be empty" />
 			</then>
 		</if>
-		<echo>${email.administrative.emailAddress}</echo>
 		<if>
 			<equals arg1="" arg2="${email.sendEmailFrom.emailAddress}" />
 			<then>
 				<fail message="The property 'email.sendEmailFrom.emailAddress' can not be empty" />
 			</then>
 		</if>
-		<echo>${email.sendEmailFrom.emailAddress}</echo>
 		<if>
 			<equals arg1="" arg2="${email.mailServer}" />
 			<then>
 				<fail message="The property 'email.mailServer' can not be empty" />
 			</then>
 		</if>
-		<echo>${email.mailServer}</echo>
 		<if>
 			<equals arg1="" arg2="${session.timeout}" />
 			<then>
 				<fail message="The property 'session.timeout' can not be empty" />
 			</then>
 		</if>
-		<echo>${session.timeout}</echo>
 		<if>
 			<equals arg1="" arg2="${first.admin.department}" />
 			<then>
 				<fail message="The property 'first.admin.department' can not be empty" />
 			</then>
 		</if>
-		<echo>${first.admin.department}</echo>
 		<if>
 			<equals arg1="" arg2="${first.admin.institution}" />
 			<then>
 				<fail message="The property 'first.admin.institution' can not be empty" />
 			</then>
 		</if>
-		<echo>${first.admin.institution}</echo>
 		<if>
 			<equals arg1="" arg2="${first.admin.cancerresearchgroup}" />
 			<then>
 				<fail message="The property 'first.admin.cancerresearchgroup' can not be empty" />
 			</then>
 		</if>
-		<echo>${first.admin.cancerresearchgroup}</echo>
 		<if>
 			<equals arg1="" arg2="${first.admin.emailAddress}" />
 			<then>
 				<fail message="The property 'first.admin.emailAddress' can not be empty" />
 			</then>
 		</if>
-		<echo>${first.admin.emailAddress}</echo>
 		<if>
 			<equals arg1="" arg2="${first.admin.password}" />
 			<then>
 				<fail message="The property 'first.admin.password' can not be empty" />
 			</then>
 		</if>
-		<echo>${first.admin.password}</echo>
 	</target>
 
 	<!--Extrct WAR and copy Configuration files to temp directory-->
@@ -749,7 +731,7 @@
 		<antcall target="assert" />
 		<delete dir="${temp.dir}" />
 		<antcall target="init" />
-		<!--<antcall target="config_parameter_valid" />-->
+		<antcall target="config_parameter_valid" />
 		<antcall target="configure_war" />
 		<antcall target="adopter_configuration" />
 		<if>
