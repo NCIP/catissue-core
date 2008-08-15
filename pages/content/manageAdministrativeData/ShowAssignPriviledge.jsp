@@ -207,7 +207,7 @@ function updateCPTree()
 							width="18" height="18" align="absmiddle"></td>
 						<td align="left" class="black_ar_t"><bean:message
 							key="app.Privileges" /></td>
-						<td><select class="formFieldSizedNew" id="actionIds" size="4" onchange="getCutomRole('roleIds')"
+						<td><select class="formFieldSizedNew" id="actionIds" size="4" onchange="getCustomRole('roleIds',this)"
 							multiple="multiple">
 							<%
 							String actionName = "";
