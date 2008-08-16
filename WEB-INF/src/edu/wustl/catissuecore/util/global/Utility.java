@@ -38,6 +38,7 @@ import edu.common.dynamicextensions.entitymanager.EntityManagerConstantsInterfac
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolRegistrationBizLogic;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
@@ -1672,13 +1673,19 @@ public class Utility extends edu.wustl.common.util.Utility {
 		return storagePositionTypeList;		
 	}
     
-    public static boolean checkForAllCurrentAndFutureCPs(AbstractDAO dao, String privilegeName, SessionDataBean sessionDataBean)
+    public static boolean checkForAllCurrentAndFutureCPs(AbstractDAO dao, String privilegeName, SessionDataBean sessionDataBean, String cpId)
     {
     	boolean allowOperation = false;
     	
     	String privilegeNames[] = privilegeName.split(",");
+    	Collection<Site> siteCollection = new CollectionProtocolBizLogic().getRelatedSites(Long.valueOf(cpId));
+    	Set<Long> idSet = new HashSet<Long>();
     	
-    	Set<Long> idSet = new UserBizLogic().getRelatedSiteIds(sessionDataBean.getUserId());
+    	for(Site site : siteCollection)
+    	{
+    		idSet.add(site.getId());
+    	}
+    	// Set<Long> idSet = new UserBizLogic().getRelatedSiteIds(sessionDataBean.getUserId());
 		if (dao instanceof HibernateDAO)
 		{
 			try 

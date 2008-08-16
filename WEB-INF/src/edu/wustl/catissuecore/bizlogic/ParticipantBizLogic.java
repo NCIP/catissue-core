@@ -1346,7 +1346,8 @@ public class ParticipantBizLogic extends DefaultBizLogic
 		else
 		// Check for ALL CURRENT & FUTURE CASE
 		{
-			isAuthorized = edu.wustl.catissuecore.util.global.Utility.checkForAllCurrentAndFutureCPs(dao,privilegeName, sessionDataBean);
+			String protectionElementNames[] = protectionElementName.split("_");
+			isAuthorized = edu.wustl.catissuecore.util.global.Utility.checkForAllCurrentAndFutureCPs(dao,privilegeName, sessionDataBean, protectionElementNames[1]);
 		}
 		if (!isAuthorized)
         {

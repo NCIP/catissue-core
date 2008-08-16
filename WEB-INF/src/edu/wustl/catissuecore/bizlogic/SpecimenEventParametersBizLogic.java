@@ -1028,6 +1028,11 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 		TransferEventParameters tep = (TransferEventParameters) domainObject;
 		StorageContainer sc = null;
 		
+		if(tep.getToStorageContainer().getName() == null)
+		{
+			return; // Case when To & FROM Storage containers are the same
+		}
+		
 		try 
 		{
 			List list = dao.retrieve(StorageContainer.class.getName(), Constants.NAME, tep.getToStorageContainer().getName());
@@ -1068,7 +1073,8 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 		else
 		// Check for ALL CURRENT & FUTURE CASE
 		{
-			isAuthorized = edu.wustl.catissuecore.util.global.Utility.checkForAllCurrentAndFutureCPs(dao,privilegeName, sessionDataBean);
+			String protectionElementNames[] = protectionElementName.split("_");
+			isAuthorized = edu.wustl.catissuecore.util.global.Utility.checkForAllCurrentAndFutureCPs(dao,privilegeName, sessionDataBean, protectionElementNames[1]);
 		}
 		return isAuthorized;
 	}
