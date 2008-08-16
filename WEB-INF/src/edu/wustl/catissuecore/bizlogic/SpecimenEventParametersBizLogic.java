@@ -969,7 +969,9 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 	public boolean isAuthorized(AbstractDAO dao, Object domainObject, SessionDataBean sessionDataBean) throws UserNotAuthorizedException  
 	{
 		boolean isAuthorized = false;
+		boolean validOperation;
 		String protectionElementName = null;
+		String privilegeName = null;
 		
 		if(sessionDataBean != null && sessionDataBean.isAdmin())
 		{
@@ -982,47 +984,73 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 		    List list = (List) domainObject;
 			for(Object domainObject2 : list)
 			{
+				if(domainObject2 instanceof TransferEventParameters)
+				{
+					checkPrivilegeOnDestinationSite(dao, domainObject2, sessionDataBean);
+				}
 				protectionElementName = getObjectId(dao, domainObject2);
+				checkPrivilegeOnSourceSite(dao, domainObject2, sessionDataBean);
+				privilegeName = getPrivilegeName(domainObject2);
+				validOperation = checkPrivilegeOnCP(dao, domainObject2, protectionElementName, sessionDataBean);
+				if(!validOperation)
+				{
+					isAuthorized = false;
+					break;
+				}
+				else
+				{
+					isAuthorized = true;
+				}
 			}
 		}
 		else	
 		{
 			// Handle for SERIAL CHECKS, whether user has access to source site or not
-	
-			if(domainObject instanceof SpecimenEventParameters)
+			if(domainObject instanceof TransferEventParameters)
 			{
-				SpecimenPosition specimenPosition = null;
-				SpecimenEventParameters spe = (SpecimenEventParameters) domainObject;
-				Specimen specimen = (Specimen) spe.getSpecimen();
-				
-				try 
-				{
-					specimen = (Specimen) dao.retrieve(Specimen.class.getName(), specimen.getId());
-					specimenPosition = specimen.getSpecimenPosition();
-				} 
-				catch (DAOException e) 
-				{
-					Logger.out.debug(e.getMessage(), e);
-				}
-				
-				if(specimenPosition != null) // Specimen is NOT Virtually Located
-				{
-					StorageContainer sc = specimenPosition.getStorageContainer();
-					Site site = sc.getSite();
-					
-					Set<Long> siteIdSet = new UserBizLogic().getRelatedSiteIds(sessionDataBean.getUserId());
-					
-					if(!siteIdSet.contains(site.getId()))
-					{
-						// return false;
-						throw Utility.getUserNotAuthorizedException(Constants.Association, site.getObjectId());
-					}
-				}
+				checkPrivilegeOnDestinationSite(dao, domainObject, sessionDataBean);
 			}
-			
+			checkPrivilegeOnSourceSite(dao, domainObject, sessionDataBean);
+			privilegeName = getPrivilegeName(domainObject);
 			protectionElementName = getObjectId(dao, domainObject);
+			isAuthorized = checkPrivilegeOnCP(dao, domainObject, protectionElementName, sessionDataBean);
 		}
 
+		if (!isAuthorized)
+        {
+			throw Utility.getUserNotAuthorizedException(privilegeName, protectionElementName);    
+        }
+		return isAuthorized;			
+	}
+
+	private void checkPrivilegeOnDestinationSite(AbstractDAO dao, Object domainObject, SessionDataBean sessionDataBean) throws UserNotAuthorizedException 
+	{
+		TransferEventParameters tep = (TransferEventParameters) domainObject;
+		StorageContainer sc = null;
+		
+		try 
+		{
+			List list = dao.retrieve(StorageContainer.class.getName(), Constants.NAME, tep.getToStorageContainer().getName());
+			sc = (StorageContainer) list.get(0);
+		} 
+		catch (DAOException e) 
+		{
+			Logger.out.debug(e.getMessage(), e);
+		}
+
+		Site site = sc.getSite();
+		Set<Long> siteIdSet = new UserBizLogic().getRelatedSiteIds(sessionDataBean.getUserId());
+		
+		if(!siteIdSet.contains(site.getId()))
+		{
+			throw Utility.getUserNotAuthorizedException(Constants.Association, site.getObjectId());
+		}	
+	}
+
+	private boolean checkPrivilegeOnCP(AbstractDAO dao, Object domainObject, String protectionElementName, SessionDataBean sessionDataBean) 
+	{
+		boolean isAuthorized = false;
+		
 		if(protectionElementName.equals(Constants.allowOperation))
 		{
 			return true;
@@ -1042,10 +1070,37 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 		{
 			isAuthorized = edu.wustl.catissuecore.util.global.Utility.checkForAllCurrentAndFutureCPs(dao,privilegeName, sessionDataBean);
 		}
-		if (!isAuthorized)
-        {
-			throw Utility.getUserNotAuthorizedException(privilegeName, protectionElementName);    
-        }
-		return isAuthorized;			
+		return isAuthorized;
+	}
+
+	private void checkPrivilegeOnSourceSite(AbstractDAO dao, Object domainObject, SessionDataBean sessionDataBean) throws UserNotAuthorizedException 
+	{
+		SpecimenPosition specimenPosition = null;
+		SpecimenEventParameters spe = (SpecimenEventParameters) domainObject;
+		Specimen specimen = (Specimen) spe.getSpecimen();
+		
+		try 
+		{
+			specimen = (Specimen) dao.retrieve(Specimen.class.getName(), specimen.getId());
+			specimenPosition = specimen.getSpecimenPosition();
+		} 
+		catch (DAOException e) 
+		{
+			Logger.out.debug(e.getMessage(), e);
+		}
+		
+		if(specimenPosition != null) // Specimen is NOT Virtually Located
+		{
+			StorageContainer sc = specimenPosition.getStorageContainer();
+			Site site = sc.getSite();
+			
+			Set<Long> siteIdSet = new UserBizLogic().getRelatedSiteIds(sessionDataBean.getUserId());
+			
+			if(!siteIdSet.contains(site.getId()))
+			{
+				// return false;
+				throw Utility.getUserNotAuthorizedException(Constants.Association, site.getObjectId());
+			}
+		}	
 	}
 } 

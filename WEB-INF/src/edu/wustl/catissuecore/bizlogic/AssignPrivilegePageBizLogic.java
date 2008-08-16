@@ -300,6 +300,10 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 		for (NameValueBean nmv  : privilegeNameValueBeanList)
 		{
 			NameValueBean privilegeNameValueBean = new NameValueBean(Utility.getDisplayLabelForUnderscore(nmv.getName()), nmv.getValue());
+			if(privList.contains(privilegeNameValueBean))
+			{
+				continue;
+			}
 			privList.add(privilegeNameValueBean);
 		}
 		return privList;

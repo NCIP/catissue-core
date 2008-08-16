@@ -1884,6 +1884,10 @@ public class Utility extends edu.wustl.common.util.Utility {
 				pg = pgList.get(0);
 			}
 			
+			if(pgList.isEmpty() || grpList.isEmpty())
+			{
+				return;
+			}
 			new PrivilegeUtility().getUserProvisioningManager().removeGroupFromProtectionGroup(pg.getProtectionGroupId().toString(), group.getGroupId().toString());
 			PrivilegeManager.getInstance().removePrivilegeCache(user.getLoginName());
 		} 
