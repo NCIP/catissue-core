@@ -560,6 +560,9 @@
 		<copy todir="${zip.dir}/caTissueSuite_Client" overwrite="true">
 			<fileset dir="${base.dir}/caTissueSuite_Client" />
 		</copy>
+		<copy todir="${zip.dir}/CaTissueSuite_caGrid_Service" overwrite="true">
+			<fileset dir="${base.dir}/CaTissueSuite_caGrid_Service" />
+		</copy>
 		<!--- caTIES related files  start-->
 		<copy todir="${zip.dir}/caTIES_conf" overwrite="true">
 			<fileset dir="${base.dir}/CaTIES_conf" />
