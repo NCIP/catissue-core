@@ -6,7 +6,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
-
 import junit.framework.TestCase;
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.CancerResearchGroup;
@@ -37,9 +36,20 @@ import gov.nih.nci.system.applicationservice.ApplicationService;
 import gov.nih.nci.system.applicationservice.ApplicationServiceProvider;
 import gov.nih.nci.system.comm.client.ClientSession;
 
-public class TechnicianRoleTestCases extends BaseTestCase {
+/**
+ * It is a test which would create a User with a Role of Technician and
+ * check wheather the Technician is able to carry and perform all the necessay
+ * operation which he has access and rights to do so.
+ * @author sagar_baldwa
+ *
+ */public class TechnicianRoleTestCases extends BaseTestCase {
 	 static ApplicationService appService = null;
-	  public void setUp(){
+	  /**
+	   * User with made available with a Role of Technician and sign-up
+	   * into the caTISSUE core application
+	   * @return void 
+	   */
+	 public void setUp(){
 		 Logger.configure("");
 		appService = ApplicationServiceProvider.getApplicationService();
 		ClientSession cs = ClientSession.getInstance();
@@ -57,7 +67,13 @@ public class TechnicianRoleTestCases extends BaseTestCase {
 		}		
 	}
      
-   public void testAddDepartmentWithTechnicianLogin()
+   /**
+    * Check wheather the access rights are working properly by
+    * making a new Department to be added into the system
+    * by a Technician 
+    * @return void
+    */
+	 public void testAddDepartmentWithTechnicianLogin()
  	  {
  		try{
  			Department dept =(Department) BaseTestCaseUtility.initDepartment();			
@@ -71,7 +87,13 @@ public class TechnicianRoleTestCases extends BaseTestCase {
  			 assertTrue("Access denied: You are not authorized to perform this operation. ", true);
  		 }
  	  }
-   public void testUpdateDepartmentWithTechnicianLogin()
+   
+	 /**
+	  * Check wheather the access rights are working properly by
+	  * making a Technician Update the Department Information
+	  * @return void
+	  */
+	 public void testUpdateDepartmentWithTechnicianLogin()
 	{ 	
 	    try 
 		{
@@ -89,22 +111,31 @@ public class TechnicianRoleTestCases extends BaseTestCase {
 	    }
 	}
     
-   public void testAddInstitutionWithTechnicianLogin()
-	{
-		try{
+	 /**
+	  * Check wheather a Technician is allowed to add a New Institution into
+	  * the system 
+	  * @return void
+	  */
+	public void testAddInstitutionWithTechnicianLogin() {
+		try {
 			Institution institution = BaseTestCaseUtility.initInstitution();
 			System.out.println(institution);
-			institution = (Institution) appService.createObject(institution); 
+			institution = (Institution) appService.createObject(institution);
 			System.out.println("Object created successfully");
 			assertFalse("Test failed.Inst successfully added", true);
-		 }
-		 catch(Exception e){
-			 e.printStackTrace();
-			 assertTrue("Access denied: You are not authorized to perform this operation. ", true);
-		 }
+		} catch (Exception e) {
+			e.printStackTrace();
+			assertTrue("Access denied: You are not authorized to perform this operation. ",
+					true);
+		}
 	}
     
-  public void testUpdateInstitutionWithTechnicianLogin()
+  /**
+   * Check wheather the access rights are working properly by
+   * making a Technician Update the Institution Information
+   * @return void
+   */
+	public void testUpdateInstitutionWithTechnicianLogin()
 	{		
     	
 	    try 
@@ -122,7 +153,13 @@ public class TechnicianRoleTestCases extends BaseTestCase {
 	 		 assertTrue("Access denied: You are not authorized to perform this operation. ", true);
 	    }
 	}
-  public void testAddCancerResearchGrpWithTechnicianLogin()
+  
+	/**
+	 * Check wheather a Technician is allowed to add a New Cancer Research Group
+	 * into the system 
+	 * @return void
+	 */
+	public void testAddCancerResearchGrpWithTechnicianLogin()
 	{
 		try{
 			CancerResearchGroup crg = BaseTestCaseUtility.initCancerResearchGrp();			
@@ -136,7 +173,12 @@ public class TechnicianRoleTestCases extends BaseTestCase {
 		 }
 	}
     
-  public void testUpdateCancerResearchGrpWithTechnicianLogin()
+  /**
+   * Check wheather a Technician is allowed to Update Cancer Research Group 
+   * Information
+   * @retun void
+   */
+	public void testUpdateCancerResearchGrpWithTechnicianLogin()
 	{
   
 	    try 
@@ -156,7 +198,11 @@ public class TechnicianRoleTestCases extends BaseTestCase {
 	} 
     
      
-  public void testAddSiteWithTechnicianLogin()
+  /**
+   * Check for adding a New Site by Technician
+   * @return void
+   *
+   */public void testAddSiteWithTechnicianLogin()
 	{
 		try{
 			Site site= BaseTestCaseUtility.initSite();			
@@ -170,6 +216,11 @@ public class TechnicianRoleTestCases extends BaseTestCase {
 		     assertTrue("Access denied: You are not authorized to perform this operation. ", true);
 		 }
 	}
+   
+   /**
+    * Check wheather a Technician is allowed to Update a Site Information
+    * @return void
+    */
    public void testUpdateSiteWithTechnicianLogin()
 	{
 		try 
@@ -188,7 +239,11 @@ public class TechnicianRoleTestCases extends BaseTestCase {
 	    }
 	}
    
-    public void testAddBioHazardWithTechnicianLogin()
+    /**
+     * Check wheather a Technician is allowed to add a BioHazard into system
+     * @return void
+     */
+   public void testAddBioHazardWithTechnicianLogin()
 	{
 		try{
 			Biohazard biohazard= BaseTestCaseUtility.initBioHazard();			
@@ -203,6 +258,11 @@ public class TechnicianRoleTestCases extends BaseTestCase {
 			 assertTrue("Access denied: You are not authorized to perform this operation. ", true);
 		 }
 	}
+   
+   /**
+    * Check wheather a Technician is allowed to Update a BioHazard Information
+    * @return void
+    */
    public void testUpdateBioHazardWithTechnicianLogin()
 	{		  
 	    try 
@@ -221,7 +281,11 @@ public class TechnicianRoleTestCases extends BaseTestCase {
 	    }
 	}
    
-    public void testAddCollectionProtocolWithTechnicianLogin()
+    /**
+     * Check wheather a Technician is allowed to Create a Collection Protocol
+     * @return void
+     */
+   public void testAddCollectionProtocolWithTechnicianLogin()
 	{
 		try
 		 {
@@ -238,6 +302,11 @@ public class TechnicianRoleTestCases extends BaseTestCase {
 		 }
 	}
    
+   /**
+    * Check wheather a Technician is allowed to Update a Collection Protocol
+    * Information 
+    * @return void
+    */
    public void testUpdateCollectionProtocolWithTechnicianLogin()
 	{
 	    try 
@@ -257,6 +326,10 @@ public class TechnicianRoleTestCases extends BaseTestCase {
 	    }
 	}
    
+   /**
+    * Check wheather a Technician is allowed to Create a Distribution Protocol
+    * @return void
+    */
    public void testAddDistributionProtocolWithTechnicianLogin()
 	{
 		try{
@@ -272,6 +345,11 @@ public class TechnicianRoleTestCases extends BaseTestCase {
 		 }
 	}
    
+   /**
+    * Check wheather a Technician is allowed to Update a Distribution Protocol
+    * Information 
+    * @return void
+    */
    public void testUpdateDistributionProtocolWithTechnicianLogin()
 	{
 	    try 
@@ -289,6 +367,11 @@ public class TechnicianRoleTestCases extends BaseTestCase {
 	 		assertTrue("Access denied: You are not authorized to perform this operation. ", true);
 	    }
 	} 
+   
+   /**
+    * Check wheather a Technician is allowed to Search for a Department
+    * @return void
+    */
    public void testSearchDepartmetWithTechnicianLogin()
 	{
 		Department dept = new Department();
@@ -305,9 +388,14 @@ public class TechnicianRoleTestCases extends BaseTestCase {
          catch (Exception e) {
           	Logger.out.error(e.getMessage(),e);
           	e.printStackTrace();
-          	assertFalse("Does not find Domain Object", true);	 		
+          	assertFalse("Does not find Department", true);	 		
          }
 	}
+   
+   /**
+    * Check wheather a Technician is allowed to Search for a Cancer Research Group
+    * @return void
+    */
    public void testSearchCancerResearchGrpWithTechnicianLogin()
 	{
 			CancerResearchGroup crg = new CancerResearchGroup();
@@ -325,10 +413,15 @@ public class TechnicianRoleTestCases extends BaseTestCase {
 	          catch (Exception e) {
 	           	Logger.out.error(e.getMessage(),e);
 	           	e.printStackTrace();
-	           	assertFalse("Does not find Domain Object", true);
+	           	assertFalse("Does not find Cancer Research Group", true);
 		 		
 	          }
 	}
+   
+   /**
+    * Check wheather a Technician is allowed to Search for a Institution
+    * @return void
+    */
    public void testSearchInstitutionWithTechnicianLogin()
 	{
 		Institution institution = new Institution();
@@ -346,10 +439,15 @@ public class TechnicianRoleTestCases extends BaseTestCase {
          catch (Exception e) {
           	Logger.out.error(e.getMessage(),e);
           	e.printStackTrace();
-          	assertFalse("Does not find Domain Object", true);
+          	assertFalse("Does not find Institution ", true);
 	 		
          }
 	}
+   
+   /**
+    * Check wheather a Technician is allowed to Search for a Site
+    * @return void
+    */
    public void testSearchSiteWithTechnicianLogin()
 	{
 		Site site = new Site();
@@ -366,12 +464,15 @@ public class TechnicianRoleTestCases extends BaseTestCase {
          catch (Exception e) {
           	Logger.out.error(e.getMessage(),e);
           	e.printStackTrace();
-          	assertFalse("Does not find Domain Object", true);
+          	assertFalse("Does not find Site", true);
 	 		
          }
 	}  
    
-   //storage type and storage container testcases
+   /**
+    * Check wheather a Technician is allowed to Add a new Storage Type
+    * @return void
+    */
    public void testAddStorageTypeWithTechnicianLogin()
 	{
 		try{
@@ -388,7 +489,12 @@ public class TechnicianRoleTestCases extends BaseTestCase {
 		 }
 	}
 	
-	public void testSearchStorageTypeWithSTechnicianLogin()
+   /**
+    * Check wheather a Technician is allowed to Search for Storage Type which starts with
+    * some character
+    * @return void
+    */
+   public void testSearchStorageTypeWithSTechnicianLogin()
 	{
 		StorageType getStoragetype = (StorageType)TestCaseUtility.getObjectMap(StorageType.class);
 		StorageType storagetype = new StorageType();
@@ -408,6 +514,10 @@ public class TechnicianRoleTestCases extends BaseTestCase {
        }
 	}
 	
+	 /**
+    * Check wheather a Technician is allowed to Update a Storage Type
+    * @return void
+    */
 	public void testUpdateStorageTypeWithTechnicianLogin()
 	{
 		StorageType getStorageType = (StorageType) TestCaseUtility.getObjectMap(StorageType.class);
@@ -431,6 +541,10 @@ public class TechnicianRoleTestCases extends BaseTestCase {
 	    }
 	}
 	
+	/**
+	 * Check wheather a Technician is allowed to Add a new Storage Container
+	 * @return void
+	 */
 	public void testAddStorageContainerTechnicianLogin()
 	{
 		try{
@@ -447,6 +561,10 @@ public class TechnicianRoleTestCases extends BaseTestCase {
 		 }
 	}
 	
+	/**
+	 * Check wheather a Technician is allowed to Seatch for a Storage Container
+	 * @return void
+	 */
 	public void testSearchStorageContainerTechnicianLogin()
 	{
 	   StorageContainer getStorageContainer =(StorageContainer) TestCaseUtility.getObjectMap(StorageContainer.class);
@@ -465,6 +583,10 @@ public class TechnicianRoleTestCases extends BaseTestCase {
          }
 	}
 	
+	/**
+	 * Check wheather a Technician is allowed to Upadte a Storage Container
+	 * @return void
+	 */
 	public void testUpdateStorageContainerTechnicianLogin()
 	{
 		StorageContainer getStorageContainer = (StorageContainer) TestCaseUtility.getObjectMap(StorageContainer.class);
@@ -488,7 +610,12 @@ public class TechnicianRoleTestCases extends BaseTestCase {
 	 		assertTrue("Access denied: You are not authorized to perform this operation. ", true);
 	    }
 	}
- public void testSearchCollectionProtocolWithTechnicianLogin()
+	
+	/**
+	 * Check to test the functioning Search Collection Protocol through a Technician Login 
+	 * @return void
+	 */
+	public void testSearchCollectionProtocolWithTechnicianLogin()
 	{
    	CollectionProtocol collectionProtocol = new CollectionProtocol();
    	CollectionProtocol cachedCollectionProtocol = (CollectionProtocol) TestCaseUtility.getObjectMap(CollectionProtocol.class);
@@ -507,11 +634,15 @@ public class TechnicianRoleTestCases extends BaseTestCase {
        	Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
 	 		//assertFalse("Doesnot found collection protocol", true);
-	 		fail("Doesnot found collection protocol");
+	 		fail("Does not found collection protocol");
          }
 	}
  
- public void testSearchDistributionProtocolWithTechnicianLogin()
+ /**
+  * Check to test the functioning Search Distribution Protocol through a Technician Login
+  * @return void
+  */
+	public void testSearchDistributionProtocolWithTechnicianLogin()
 	{
 		try {		
 		    DistributionProtocol distributionProtocol = new DistributionProtocol();
@@ -528,12 +659,16 @@ public class TechnicianRoleTestCases extends BaseTestCase {
 	          catch (Exception e) {
 	           	Logger.out.error(e.getMessage(),e);
 	           	e.printStackTrace();
-	           	assertFalse("Does not find Domain Object", true);
+	           	assertFalse("Does not find Distribution Protocol with Technician Login", true);
 		 		
 	          }
 	}
    
-   public void testAddParticipantWithTechnicianLogin()
+   /**
+    * Check for adding a New Participant with Technician Login
+    * @return void
+    */
+	public void testAddParticipantWithTechnicianLogin()
 	{
 		try{
 			Participant participant= BaseTestCaseUtility.initParticipant();			
@@ -551,7 +686,11 @@ public class TechnicianRoleTestCases extends BaseTestCase {
 	}
   
    
-   public void testUpdateParticipantWithTechnicianLogin()
+   /**
+    * Check for Updating a Participant with Technician Login
+    * @return void
+    */
+	public void testUpdateParticipantWithTechnicianLogin()
 	{
 		Participant participant =  BaseTestCaseUtility.initParticipant();
 		Logger.out.info("updating domain object------->"+participant);
@@ -570,7 +709,12 @@ public class TechnicianRoleTestCases extends BaseTestCase {
 	 		
 	    }
 	}
-   public void testSearchParticipantWithTechnicianLogin()
+  
+	/**
+	 * Check for Searching a Participant with Technician Login
+     * @return void
+	 */
+	public void testSearchParticipantWithTechnicianLogin()
 	{
 		Participant participant = new Participant();
 		Logger.out.info(" searching domain object");
@@ -586,7 +730,7 @@ public class TechnicianRoleTestCases extends BaseTestCase {
          catch (Exception e) {
           	Logger.out.error(e.getMessage(),e);
           	e.printStackTrace();
-          	assertFalse("Does not find Domain Object", true);
+          	assertFalse("Does not Find Participant", true);
 	 		
          }
 	}  
@@ -720,7 +864,11 @@ public class TechnicianRoleTestCases extends BaseTestCase {
    */
    
    
-   
+   /**
+    * Create Specimen Collection Group with Consents with a Technician Role
+    * @return one or more specimens for the participant
+    * @param Collection Protocol to which the participant has registered
+    */
    public SpecimenCollectionGroup createSCGWithConsents(CollectionProtocol cp){
 		
 		Participant participant = BaseTestCaseUtility.initParticipant();
@@ -800,7 +948,11 @@ public class TechnicianRoleTestCases extends BaseTestCase {
 		return scg;			
  }
    
-  public void testAddTissueSpecimenWithTechnicianWithTechnicianLogin()
+  /**
+   * Test to add a Tissue Specimen by a Technician
+   * @return void
+   */
+   public void testAddTissueSpecimenWithTechnicianWithTechnicianLogin()
 	{
 	   try {
 		  
@@ -813,7 +965,7 @@ public class TechnicianRoleTestCases extends BaseTestCase {
 			TestCaseUtility.setObjectMap(specimenObj, TissueSpecimen.class);
 			Logger.out.info(" Domain Object is successfully added ---->    ID:: " + specimenObj.getId().toString());
 			Logger.out.info(" Domain Object is successfully added ---->    Name:: " + specimenObj.getLabel());
-			assertTrue(" Domain Object is successfully added ---->    Name:: " + specimenObj.getLabel(), true);			
+			assertTrue(" Tissue Specimen Created Successfully by Technician ---->    Name:: " + specimenObj.getLabel(), true);			
 		}
 		catch(Exception e)
 		{
@@ -821,10 +973,14 @@ public class TechnicianRoleTestCases extends BaseTestCase {
 			System.out.println(e);
 			Logger.out.error(e.getMessage(),e);
 			e.printStackTrace();
-			assertFalse("Failed to create Domain Object", true);
+			assertFalse("Failed to create a Tissue Specimen by Technician", true);
 		}
 	}
    
+   /**
+    * Add a Molecular Specimen by a User with Role as Technician
+    * @return void
+    */
    public void testAddMolecularSpecimenWithTechnicianLogin()
 	{
 	   try {
@@ -838,7 +994,7 @@ public class TechnicianRoleTestCases extends BaseTestCase {
 			System.out.println("Afer Creating Tissue Specimen");
 			Logger.out.info(" Domain Object is successfully added ---->    ID:: " + specimenObj.getId().toString());
 			Logger.out.info(" Domain Object is successfully added ---->    Name:: " + specimenObj.getLabel());
-			assertTrue("Domain Object is successfully added ---->    Name:: " + specimenObj.getLabel(), true);		
+			assertTrue("Molecular Specimen Created Successfully by Technician---->    Name:: " + specimenObj.getLabel(), true);		
 	   
 	   }
 		catch(Exception e)
@@ -847,11 +1003,15 @@ public class TechnicianRoleTestCases extends BaseTestCase {
 			System.out.println(e);
 			Logger.out.error(e.getMessage(),e);
 			e.printStackTrace();
-			assertFalse("Failed to create Domain Object", true);
+			assertFalse("Failed to create a Molecular Specimen by Technician", true);
 		}
 	}
 	
-	public void testAddCellSpecimenWithTechnicianLogin()
+	/**
+	 * Check for adding a Cell Specimen by a User with a Technician Role
+	 * @return void 
+	 */
+   public void testAddCellSpecimenWithTechnicianLogin()
 	{
 	   try {
 		    CellSpecimen specimenObj = (CellSpecimen) BaseTestCaseUtility.initCellSpecimen();
@@ -864,7 +1024,7 @@ public class TechnicianRoleTestCases extends BaseTestCase {
 			System.out.println("Afer Creating Tissue Specimen");
 			Logger.out.info(" Domain Object is successfully added ---->    ID:: " + specimenObj.getId().toString());
 			Logger.out.info(" Domain Object is successfully added ---->    Name:: " + specimenObj.getLabel());
-			assertTrue("Domain Object is successfully added ---->    Name:: " + specimenObj.getLabel(), true);		
+			assertTrue("Cell Specimen Created Successfully by Technician---->    Name:: " + specimenObj.getLabel(), true);		
 	   
 	   }
 		catch(Exception e)
@@ -873,10 +1033,15 @@ public class TechnicianRoleTestCases extends BaseTestCase {
 			System.out.println(e);
 			Logger.out.error(e.getMessage(),e);
 			e.printStackTrace();
-			assertFalse("Failed to create Domain Object", true);
+			assertFalse("Failed to create a Cell Specimen by Technician", true);
 		}
 	}
-	public void testAddFluidSpecimenWithTechnicianLogin()
+	
+   /**
+    * Check for adding a Fluid Specimen into System from a User with a Technician Role
+    * @return void
+    */
+   public void testAddFluidSpecimenWithTechnicianLogin()
 	{
 	   try {
 		    FluidSpecimen specimenObj = (FluidSpecimen) BaseTestCaseUtility.initFluidSpecimen();
@@ -889,7 +1054,7 @@ public class TechnicianRoleTestCases extends BaseTestCase {
 			System.out.println("Afer Creating Tissue Specimen");
 			Logger.out.info(" Domain Object is successfully added ---->    ID:: " + specimenObj.getId().toString());
 			Logger.out.info(" Domain Object is successfully added ---->    Name:: " + specimenObj.getLabel());
-			assertTrue("Domain Object is successfully added ---->    Name:: " + specimenObj.getLabel(), true);		
+			assertTrue("Fluid Specimen Created Successfully by Technician---->    Name:: " + specimenObj.getLabel(), true);		
 	   
 	   }
 		catch(Exception e)
@@ -898,11 +1063,15 @@ public class TechnicianRoleTestCases extends BaseTestCase {
 			System.out.println(e);
 			Logger.out.error(e.getMessage(),e);
 			e.printStackTrace();
-			assertFalse("Failed to create Domain Object", true);
+			assertFalse("Failed to create a Fluid Specimen by Technician", true);
 		}
 	}
 	
-	public void testAddSpecimenArrayWithTechnicianLogin()
+	/**
+	 * Check for adding a Specimen Array into System from a User with a Technician Role
+	 * @return void
+	 */
+    public void testAddSpecimenArrayWithTechnicianLogin()
 	{
 		try
 		{
@@ -917,9 +1086,14 @@ public class TechnicianRoleTestCases extends BaseTestCase {
 		{
 			Logger.out.error(e.getMessage(),e);
 			e.printStackTrace();
-			assertTrue("Able to create specimen array in container which technician  don't have access", true);
+			assertTrue("Unable to create specimen array in container which technician role, don't have access", true);
 		}
-	}  
+	}
+    
+    /**
+     * Test for Seatching a Specimen by a Technician in the caTISSUE core system
+     * @return void
+     */
 	public void testSearchSpecimenWithTechnicianLogin()
 	   {
 			Specimen specimen = new TissueSpecimen();
