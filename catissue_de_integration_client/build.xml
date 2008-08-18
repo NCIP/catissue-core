@@ -63,7 +63,7 @@
 					<include name="*.cfg.xml" />
 					<replacefilter token="@@DIALECT@@" value="${mysql.dialect.string}" />
 					<replacefilter token="@@DRIVER@@" value="${mysql.driver.string}" />
-					<replacefilter token="@@URL@@" value="jdbc:mysql://${database.host}/${database.name}" />
+					<replacefilter token="@@URL@@" value="jdbc:mysql://${database.host}:${database.port}/${database.name}" />
 				</replace>
 			</then>
 			<elseif>
@@ -167,7 +167,7 @@
 					<include name="hibernate.properties" />
 					<replacefilter token="@@DIALECT@@" value="org.hibernate.dialect.MySQLDialect" />
 					<replacefilter token="@@DRIVER@@" value="com.mysql.jdbc.Driver" />
-					<replacefilter token="@@URL@@" value="jdbc:mysql://${database.host}/${database.name}" />
+					<replacefilter token="@@URL@@" value="jdbc:mysql://${database.host}:${database.port}/${database.name}" />
 				</replace>
 			</then>
 
