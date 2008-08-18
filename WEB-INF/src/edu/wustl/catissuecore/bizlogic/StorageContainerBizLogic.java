@@ -3518,7 +3518,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
             	{
             		for(Site site1 : siteCollection)
             		{
-            			if(site1.getId() == site.getId())
+            			if(site1.getId().equals(site.getId()))
             			{
             				return true;
             			}
