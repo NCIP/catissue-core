@@ -12,7 +12,6 @@ package edu.wustl.catissuecore.bizlogic;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -28,7 +27,6 @@ import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Race;
 import edu.wustl.catissuecore.domain.Site;
-import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
@@ -1347,6 +1345,14 @@ public class ParticipantBizLogic extends DefaultBizLogic
 		// Check for ALL CURRENT & FUTURE CASE
 		{
 			String protectionElementNames[] = protectionElementName.split("_");
+			
+			Long cpId = Long.valueOf(protectionElementNames[1]);
+			Set<Long> cpIdSet = new UserBizLogic().getRelatedCPIds(sessionDataBean.getUserId());
+			
+			if(cpIdSet.contains(cpId))
+			{
+				throw edu.wustl.catissuecore.util.global.Utility.getUserNotAuthorizedException(privilegeName, protectionElementName);    
+			}
 			isAuthorized = edu.wustl.catissuecore.util.global.Utility.checkForAllCurrentAndFutureCPs(dao,privilegeName, sessionDataBean, protectionElementNames[1]);
 		}
 		if (!isAuthorized)

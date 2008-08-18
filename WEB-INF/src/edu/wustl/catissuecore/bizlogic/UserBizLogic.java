@@ -1684,15 +1684,16 @@ public class UserBizLogic extends DefaultBizLogic
 
 	public Set<Long> getRelatedCPIds(Long userId)
 	{
-		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+		Session session = null;
 		Collection<CollectionProtocol> userCpCollection = new HashSet<CollectionProtocol>();
 		Collection<CollectionProtocol> userColl;
 		Set<Long> cpIds = new HashSet<Long>();
 
-		try
+		try 
 		{
-			dao.openSession(null);
-			User user = (User) dao.retrieve(User.class.getName(), userId);
+			session = DBUtil.getCleanSession();
+			
+			User user = (User) session.load(User.class.getName(), userId);
 			userColl = user.getCollectionProtocolCollection();
 			userCpCollection = user.getAssignedProtocolCollection();
 
@@ -1722,22 +1723,14 @@ public class UserBizLogic extends DefaultBizLogic
 					cpIds.add(cp.getId());
 				}
 			}
-
-		}
-		catch (DAOException e)
+		} 
+		catch (BizLogicException e) 
 		{
-			Logger.out.error(e.getMessage(), e);
+			Logger.out.debug(e.getMessage(), e);
 		}
 		finally
 		{
-			try
-			{
-				dao.closeSession();
-			}
-			catch (DAOException e)
-			{
-				Logger.out.error(e.getMessage(), e);
-			}
+			session.close();
 		}
 
 		return cpIds;

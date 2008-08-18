@@ -1489,35 +1489,29 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	
 	public Collection<Site> getRelatedSites(Long cpId) 
 	{
-		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+		Session session = null;
 		CollectionProtocol cp = null;
+		Collection<Site> siteCollection = null;
 		
 		try 
 		{
-			dao.openSession(null);
-			cp = (CollectionProtocol) dao.retrieve(CollectionProtocol.class.getName(), cpId);		
+			session = DBUtil.getCleanSession();
+			cp = (CollectionProtocol) session.load(CollectionProtocol.class.getName(), cpId);		
+	
+			if(cp == null)
+			{
+				return null;
+			}
+			siteCollection = cp.getSiteCollection();
 		} 
-		catch (DAOException e) 
+		catch (BizLogicException e1) 
 		{
-			Logger.out.debug(e.getMessage(), e);
+			Logger.out.debug(e1.getMessage(), e1);
 		}
 		finally
 		{
-			try
-			{
-				dao.closeSession();
-			}
-			catch (DAOException e)
-			{
-				Logger.out.error(e.getMessage(), e);
-			}
+			session.close();
 		}
-		
-		if(cp == null)
-		{
-			return null;
-		}
-		
-		return cp.getSiteCollection();
+		return siteCollection;
 	}
 }

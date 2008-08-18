@@ -26,7 +26,6 @@ import java.util.TreeMap;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 
-import edu.common.dynamicextensions.util.global.Variables;
 import edu.wustl.catissuecore.TaskTimeCalculater;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
@@ -3341,6 +3340,14 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		// Check for ALL CURRENT & FUTURE CASE
 		{
 			String protectionElementNames[] = protectionElementName.split("_");
+			
+			Long cpId = Long.valueOf(protectionElementNames[1]);
+			Set<Long> cpIdSet = new UserBizLogic().getRelatedCPIds(sessionDataBean.getUserId());
+			
+			if(cpIdSet.contains(cpId))
+			{
+				throw Utility.getUserNotAuthorizedException(privilegeName, protectionElementName);    
+			}
 			isAuthorized = edu.wustl.catissuecore.util.global.Utility.checkForAllCurrentAndFutureCPs(dao,privilegeName, sessionDataBean, protectionElementNames[1]);
 		}
 		if (!isAuthorized)

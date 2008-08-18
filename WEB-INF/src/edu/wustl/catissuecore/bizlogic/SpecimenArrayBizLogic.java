@@ -12,15 +12,11 @@ package edu.wustl.catissuecore.bizlogic;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import org.hibernate.proxy.HibernateProxyHelper;
-
-import net.sf.ehcache.CacheException;
 import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Container;
@@ -55,10 +51,8 @@ import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.dbManager.HibernateMetaData;
-import edu.wustl.common.util.dbManager.HibernateUtility;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
-import edu.wustl.common.util.global.Variables;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -1081,6 +1075,14 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 		// Check for ALL CURRENT & FUTURE CASE
 		{
 			String protectionElementNames[] = protectionElementName.split("_");
+			
+			Long cpId = Long.valueOf(protectionElementNames[1]);
+			Set<Long> cpIdSet = new UserBizLogic().getRelatedCPIds(sessionDataBean.getUserId());
+			
+			if(cpIdSet.contains(cpId))
+			{
+				throw Utility.getUserNotAuthorizedException(privilegeName, protectionElementName);    
+			}
 			isAuthorized = edu.wustl.catissuecore.util.global.Utility.checkForAllCurrentAndFutureCPs(dao,privilegeName, sessionDataBean, protectionElementNames[1]);
 		}
 		if (!isAuthorized)

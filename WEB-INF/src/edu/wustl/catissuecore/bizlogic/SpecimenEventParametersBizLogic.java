@@ -1052,7 +1052,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 		}	
 	}
 
-	private boolean checkPrivilegeOnCP(AbstractDAO dao, Object domainObject, String protectionElementName, SessionDataBean sessionDataBean) 
+	private boolean checkPrivilegeOnCP(AbstractDAO dao, Object domainObject, String protectionElementName, SessionDataBean sessionDataBean) throws UserNotAuthorizedException 
 	{
 		boolean isAuthorized = false;
 		
@@ -1074,6 +1074,14 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 		// Check for ALL CURRENT & FUTURE CASE
 		{
 			String protectionElementNames[] = protectionElementName.split("_");
+			
+			Long cpId = Long.valueOf(protectionElementNames[1]);
+			Set<Long> cpIdSet = new UserBizLogic().getRelatedCPIds(sessionDataBean.getUserId());
+			
+			if(cpIdSet.contains(cpId))
+			{
+				throw Utility.getUserNotAuthorizedException(privilegeName, protectionElementName);    
+			}
 			isAuthorized = edu.wustl.catissuecore.util.global.Utility.checkForAllCurrentAndFutureCPs(dao,privilegeName, sessionDataBean, protectionElementNames[1]);
 		}
 		return isAuthorized;
