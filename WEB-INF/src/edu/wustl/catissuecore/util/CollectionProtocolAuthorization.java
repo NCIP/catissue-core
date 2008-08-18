@@ -103,6 +103,7 @@ public class CollectionProtocolAuthorization implements edu.wustl.catissuecore.u
 		{
 			String key = mapItr.next();
 			SiteUserRolePrivilegeBean siteUserRolePrivilegeBean = rowIdMap.get(key);
+			User user = null;
 			
 			if(siteUserRolePrivilegeBean.isRowDeleted())
 			{
@@ -110,26 +111,9 @@ public class CollectionProtocolAuthorization implements edu.wustl.catissuecore.u
 			}
 			else if(siteUserRolePrivilegeBean.isRowEdited())
 			{
-				List<Site> siteList = siteUserRolePrivilegeBean.getSiteList();
-				for (Site site : siteList)
-				{ 
-					boolean isPresent = false;
-					for (Site setSite : siteCollection)
-					{
-						if (setSite.getId().equals(site.getId()))
-						{
-							isPresent = true;
-						}
-					}
-					if (!isPresent)
-					{
-						siteCollection.add(site);
-					}
-				} 
 				//siteCollection.addAll(siteList);
-				
-				User user = siteUserRolePrivilegeBean.getUser();
-				userCollection.add(user);
+				user = siteUserRolePrivilegeBean.getUser();
+				// userCollection.add(user);
 				String defaultRole = siteUserRolePrivilegeBean.getRole().getValue();
 				if (defaultRole != null && (defaultRole.equalsIgnoreCase("-1") || defaultRole.equalsIgnoreCase("0")) )
 				{
@@ -163,6 +147,25 @@ public class CollectionProtocolAuthorization implements edu.wustl.catissuecore.u
 				userGroupRoleProtectionGroupBean.setGroup(group);
 				authorizationData.add(userGroupRoleProtectionGroupBean);
 			}
+			
+			userCollection.add(user);
+			
+			List<Site> siteList = siteUserRolePrivilegeBean.getSiteList();
+			for (Site site : siteList)
+			{ 
+				boolean isPresent = false;
+				for (Site setSite : siteCollection)
+				{
+					if (setSite.getId().equals(site.getId()))
+					{
+						isPresent = true;
+					}
+				}
+				if (!isPresent)
+				{
+					siteCollection.add(site);
+				}
+			}
 		}
 		collectionProtocol.getSiteCollection().clear();
 		collectionProtocol.getSiteCollection().addAll(siteCollection);
@@ -181,8 +184,6 @@ public class CollectionProtocolAuthorization implements edu.wustl.catissuecore.u
 				collectionProtocol.getAssignedProtocolUserCollection().add(user);
 			}
 		} 
-		  
-		
 	}
 
 	/**
