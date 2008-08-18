@@ -3277,19 +3277,41 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			{
 				SpecimenPosition specimenPosition = null;
 				Specimen specimen = (Specimen) domainObject;
-				if(specimen.getSpecimenPosition()!=null)
+				
+				if(specimen.getLineage().equals(Constants.DERIVED_SPECIMEN) || specimen.getLineage().equals(Constants.ALIQUOT))
 				{
-					sc = specimen.getSpecimenPosition().getStorageContainer();
-				}
-				if(specimen.getSpecimenPosition()!=null && specimen.getSpecimenPosition().getStorageContainer().getSite() == null)
-				{
+					List<Specimen> list = null;
 					try 
 					{
-						sc = (StorageContainer) dao.retrieve(StorageContainer.class.getName(), specimen.getSpecimenPosition().getStorageContainer().getId());
+						list = dao.retrieve(Specimen.class.getName(), "label", specimen.getParentSpecimen().getLabel());
 					} 
 					catch (DAOException e) 
 					{
 						Logger.out.debug(e.getMessage(), e);
+					}
+					specimen = (Specimen) list.get(0); 
+
+					if(specimen.getSpecimenPosition()!=null)
+					{
+						sc = specimen.getSpecimenPosition().getStorageContainer();
+					}
+				}
+				else
+				{	
+					if(specimen.getSpecimenPosition()!=null)
+					{
+						sc = specimen.getSpecimenPosition().getStorageContainer();
+					}
+					if(specimen.getSpecimenPosition()!=null && specimen.getSpecimenPosition().getStorageContainer().getSite() == null)
+					{
+						try 
+						{
+							sc = (StorageContainer) dao.retrieve(StorageContainer.class.getName(), specimen.getSpecimenPosition().getStorageContainer().getId());
+						} 
+						catch (DAOException e) 
+						{
+							Logger.out.debug(e.getMessage(), e);
+						}
 					}
 				}
 				
