@@ -1077,7 +1077,7 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 			String protectionElementNames[] = protectionElementName.split("_");
 			
 			Long cpId = Long.valueOf(protectionElementNames[1]);
-			Set<Long> cpIdSet = new UserBizLogic().getRelatedCPIds(sessionDataBean.getUserId());
+			Set<Long> cpIdSet = new UserBizLogic().getRelatedCPIds(sessionDataBean.getUserId(), false);
 			
 			if(cpIdSet.contains(cpId))
 			{

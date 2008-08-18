@@ -1682,7 +1682,7 @@ public class UserBizLogic extends DefaultBizLogic
 	 * @author ravindra_jain 
 	 */
 
-	public Set<Long> getRelatedCPIds(Long userId)
+	public Set<Long> getRelatedCPIds(Long userId, boolean isCheckForCPBasedView)
 	{
 		Session session = null;
 		Collection<CollectionProtocol> userCpCollection = new HashSet<CollectionProtocol>();
@@ -1703,16 +1703,26 @@ public class UserBizLogic extends DefaultBizLogic
 			}
 			else
 			{
-				PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
-				PrivilegeCache privilegeCache = privilegeManager.getPrivilegeCache(user
-						.getLoginName());
-
-				for (CollectionProtocol collectionProtocol : userCpCollection)
+				if(isCheckForCPBasedView)
 				{
-					if (privilegeCache.hasPrivilege(collectionProtocol.getObjectId(),
-							Variables.privilegeDetailsMap.get(Constants.EDIT_PROFILE_PRIVILEGE))
-							|| collectionProtocol.getPrincipalInvestigator().getLoginName().equals(
-									user.getLoginName()))
+					PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
+					PrivilegeCache privilegeCache = privilegeManager.getPrivilegeCache(user
+							.getLoginName());
+	
+					for (CollectionProtocol collectionProtocol : userCpCollection)
+					{
+						if (privilegeCache.hasPrivilege(collectionProtocol.getObjectId(),
+								Variables.privilegeDetailsMap.get(Constants.EDIT_PROFILE_PRIVILEGE))
+								|| collectionProtocol.getPrincipalInvestigator().getLoginName().equals(
+										user.getLoginName()))
+						{
+							cpIds.add(collectionProtocol.getId());
+						}
+					}
+				}
+				else
+				{
+					for (CollectionProtocol collectionProtocol : userCpCollection)
 					{
 						cpIds.add(collectionProtocol.getId());
 					}
