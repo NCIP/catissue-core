@@ -103,7 +103,7 @@ public class CollectionProtocolAuthorization implements edu.wustl.catissuecore.u
 		{
 			String key = mapItr.next();
 			SiteUserRolePrivilegeBean siteUserRolePrivilegeBean = rowIdMap.get(key);
-			User user = null;
+			User user = siteUserRolePrivilegeBean.getUser();
 			
 			if(siteUserRolePrivilegeBean.isRowDeleted())
 			{
@@ -111,8 +111,8 @@ public class CollectionProtocolAuthorization implements edu.wustl.catissuecore.u
 			}
 			else if(siteUserRolePrivilegeBean.isRowEdited())
 			{
-				//siteCollection.addAll(siteList);
-				user = siteUserRolePrivilegeBean.getUser();
+				// siteCollection.addAll(siteList);
+				// user = siteUserRolePrivilegeBean.getUser();
 				// userCollection.add(user);
 				String defaultRole = siteUserRolePrivilegeBean.getRole().getValue();
 				if (defaultRole != null && (defaultRole.equalsIgnoreCase("-1") || defaultRole.equalsIgnoreCase("0")) )
