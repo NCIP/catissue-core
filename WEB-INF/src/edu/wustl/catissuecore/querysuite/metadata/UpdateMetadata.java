@@ -58,6 +58,7 @@ public class UpdateMetadata
 			addMetadata();
 			updateMetadata();
 			addCurratedPath();
+			deletePermissibleValue();
 		}
 		finally
 		{
@@ -76,6 +77,14 @@ public class UpdateMetadata
 		}
 	}
 	
+	private static void deletePermissibleValue() throws SQLException, IOException
+	{
+		DeletePermissibleValue deletePermissibleValue = new DeletePermissibleValue(connection);
+		List<String> deleteSQL = deletePermissibleValue.deletePermissibleValue();
+		UpdateMetadataUtil.executeSQLs(deleteSQL, connection.createStatement(), true);
+		
+	}
+
 	private static void addCurratedPath() throws IOException, SQLException
 	{
 		AddCuratedPath addCurratedPath = new AddCuratedPath(connection);
