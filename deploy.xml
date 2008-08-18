@@ -555,6 +555,7 @@
 				<include name="DAOConfig.xml" />
 			</fileset>
 		</copy>
+		<delete file="${jboss.server.url}/lib/oracledriver.jar" />
 	</target>
 	
 	<!--Target call for both fresh deployment and database creation-->
