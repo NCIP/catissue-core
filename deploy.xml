@@ -116,176 +116,65 @@
 				<fail message="The property 'first.admin.password' can not be empty" />
 			</then>
 		</if>
-	</target>
-	
-	<!--Target for validation of configuration parameters-->
-	<target name="config_parameter_valid">
-		<if>
-			<equals arg1="" arg2="${jboss.home.dir}" />
-			<then>
-			   <fail message="The 'jboss.home.dir' is empty,so server should not start" />
-			</then>
-		</if>
-		<if>
-			<equals arg1="" arg2="${jboss.server.name}" />
-			<then>
-				<fail message="The 'jboss.server.name' is empty,so server should not start" />
-			</then>
-		</if>
-		<if>
-			<equals arg1="" arg2="${jboss.server.port}" />
-			<then>
-				<fail message="The 'jboss.server.port' is empty,so server should not start" />
-			</then>
-		</if>
-		<if>
-			<equals arg1="" arg2="${database.type}" />
-			<then>
-				<fail message="The 'database.type' is empty,so server should not start" />
-			</then>
-		</if>
-		<if>
-			<or>
-				<equals arg1="mysql" arg2="${database.type}" />
-				<equals arg1="oracle" arg2="${database.type}" />
-			</or>
-			<then />
-		<else>
-			<fail message="The value of property 'database.type' must be mysql or oracle" />
-		</else>
-		</if>
-		<if>
-			<equals arg1="" arg2="${database.host}" />
-			<then>
-				<fail message="The property 'database.host' is empty,so server should not start" />
-			</then>
-		</if>
-		<if>
-			<equals arg1="" arg2="${database.port}" />
-			<then>
-				<fail message="The property 'database.port' is empty,so server should not start" />
-			</then>
-		</if>
-		<if>
-			<equals arg1="" arg2="${database.name}" />
-			<then>
-				<fail message="The property 'database.name' can not be empty" />
-			</then>
-		</if>
-		<if>
-			<equals arg1="" arg2="${database.username}" />
-			<then>
-				<fail message="The property 'database.username' can not be empty" />
-			</then>
-		</if>
-		<if>
-			<equals arg1="" arg2="${database.password}" />
-		<then>
-			<fail message="The property 'database.password' can not be empty" />
-		</then>
-		</if>
-		<!-- validation for mysql connection -->
-		<trycatch>
-			<try>
-		<if>
-			<equals arg1="mysql" arg2="${database.type}" />
-			<then>
-				<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" onerror="continue">
-						<transaction>select 1;</transaction>
-						<transaction>commit;</transaction>
-							<classpath>
-							  <fileset dir="${lib.dir}">
-							 	<include name="*.jar" />
-							  </fileset>
-							</classpath>
-				</sql>
-			</then>	
-		</if>	
-		   </try>
-		   <catch>
-				<fail message="The value of property 'database.port'/'database.host'/is not correct " />
-		   </catch>
-	   </trycatch>
-		<!--end of mysql validation-->
-		<!-- validation for oracle connection -->
-		<trycatch>
-			<try>
-		<if>
-			<equals arg1="oracle" arg2="${database.type}" />
-			<then>
-				<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle">
-					<transaction>select sysdate from dual;</transaction>
-					<transaction>commit;</transaction>
-					<classpath>
-						<fileset dir="${lib.dir}">
-							<include name="*.jar" />
-						</fileset>
-					</classpath>
-				</sql>					
-			</then>
-		</if>
-			 </try>
-			 <catch>
-				<fail message="The value of property 'database.port'/'database.host'/'oracle.tns.name'is not correct " />
-			 </catch>
-	   </trycatch>
-	<!--end of oracle validation-->
-				
-		<echo>oracle connection is done,query-select sysdate from dual; </echo>
+		<antcall target="validate_database_connection" />
 		<if>
 			<equals arg1="" arg2="${email.administrative.emailAddress}" />
 			<then>
-			 	<fail message="The property 'email.administrative.emailAddress' can not be empty" />
+				<echo>email.adminstartive.emailaddress can be left blank.</echo>
 			</then>
 		</if>
 		<if>
 			<equals arg1="" arg2="${email.sendEmailFrom.emailAddress}" />
 			<then>
-				<fail message="The property 'email.sendEmailFrom.emailAddress' can not be empty" />
+				<echo>email.sendEmailFrom.emailAddress can be left blank.</echo>
 			</then>
 		</if>
 		<if>
 			<equals arg1="" arg2="${email.mailServer}" />
 			<then>
-				<fail message="The property 'email.mailServer' can not be empty" />
+				<echo>email.mailServer can be left blank.</echo>
 			</then>
 		</if>
-		<if>
-			<equals arg1="" arg2="${session.timeout}" />
-			<then>
-				<fail message="The property 'session.timeout' can not be empty" />
-			</then>
-		</if>
-		<if>
-			<equals arg1="" arg2="${first.admin.department}" />
-			<then>
-				<fail message="The property 'first.admin.department' can not be empty" />
-			</then>
-		</if>
-		<if>
-			<equals arg1="" arg2="${first.admin.institution}" />
-			<then>
-				<fail message="The property 'first.admin.institution' can not be empty" />
-			</then>
-		</if>
-		<if>
-			<equals arg1="" arg2="${first.admin.cancerresearchgroup}" />
-			<then>
-				<fail message="The property 'first.admin.cancerresearchgroup' can not be empty" />
-			</then>
-		</if>
-		<if>
-			<equals arg1="" arg2="${first.admin.emailAddress}" />
-			<then>
-				<fail message="The property 'first.admin.emailAddress' can not be empty" />
-			</then>
-		</if>
-		<if>
-			<equals arg1="" arg2="${first.admin.password}" />
-			<then>
-				<fail message="The property 'first.admin.password' can not be empty" />
-			</then>
-		</if>
+	</target>
+	
+	<!--Target for validation of connection parameters-->
+	<target name="validate_database_connection">
+		<!-- validation for database connection -->
+		<trycatch>
+        	<try>
+					<if>
+						<equals arg1="mysql" arg2="${database.type}" />
+						<then>							
+							<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" onerror="continue">
+									<transaction>select 1;</transaction>
+									<transaction>commit;</transaction>
+									<classpath>
+									  <fileset dir="${lib.dir}">
+									 	<include name="*.jar" />
+									  </fileset>
+									</classpath>
+							</sql>							
+						</then>					
+						<elseif >					
+							<equals arg1="oracle" arg2="${database.type}" />					
+							<then>							
+								<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle">
+									<transaction>select sysdate from dual;</transaction>
+									<transaction>commit;</transaction>
+									<classpath>
+										<fileset dir="${lib.dir}">
+											<include name="*.jar" />
+										</fileset>
+									</classpath>
+								</sql>					
+							</then>					
+						</elseif>
+					</if>
+			</try>
+		    <catch>
+				<fail message="Connection fails.Please check the database configuration parameters like database.host,database.port,database.name etc.  " />
+		   	</catch>
+		</trycatch> 
 	</target>
 
 	<!--Extrct WAR and copy Configuration files to temp directory-->
@@ -731,7 +620,6 @@
 		<antcall target="assert" />
 		<delete dir="${temp.dir}" />
 		<antcall target="init" />
-		<antcall target="config_parameter_valid" />
 		<antcall target="configure_war" />
 		<antcall target="adopter_configuration" />
 		<if>
@@ -759,11 +647,6 @@
            <replacefilter token="@@HOST@@" value="${jboss.server.host}" />
            <replacefilter token="@@PORT@@" value="${jboss.server.port}" />
         </replace>
-		<replace file="${jboss.server.url}/catissuecore-properties/caTissueCore_Properties.xml">
-			<replacefilter token="@@ADMIN-EMAILADDRESS@@" value="${email.administrative.emailAddress}" />
-			<replacefilter token="@@SENDEMAILFROM-EMAILADDRESS@@" value="${email.sendEmailFrom.emailAddress}" />
-			<replacefilter token="@@MAILSERVER-EMAILADDRESS@@" value="${email.mailServer}" />
-		</replace>
 		<antcall target="send_mail" />
 		<antcall target="config_jboss_files" />
 		
@@ -1451,18 +1334,18 @@
 	<target name="send_mail">
 		<echo message="Sending mail to: ${email.administrative.emailAddress}" />
 		<echo message="Sending mail from: ${email.sendEmailFrom.emailAddress}" />
-		<mail mailhost="${email.mailServer}" subject="caTissue Core Successfully Deployed" encoding="plain" failonerror="false">
+		<mail mailhost="${email.mailServer}" subject="caTissueSuite v1.1 Successfully Deployed" encoding="plain" failonerror="false">
 			<from address="${email.sendEmailFrom.emailAddress}" />
 			<to address="${email.administrative.emailAddress}" />
 			<message>
-Dear caTissue Core Administrator,
+Dear caTissueSuite Administrator,
 	
-	This is to validate that caTissue Core application has been installed at 
+	This is to validate that caTissueSuite application has been installed at 
 the following location: ${jboss.home.dir}		
     
 	To complete the deployment, you have to now perform the post installation 
 steps described in section "Post Installation Configuration" in the deployment 
-guide (caTissue Core Deployment Guide.doc). 
+guide (caTissueSuite v1.1 Deployment Guide.doc). 
 
 	Once you have completed deployment, you should be able to login with the following 
 details:			
