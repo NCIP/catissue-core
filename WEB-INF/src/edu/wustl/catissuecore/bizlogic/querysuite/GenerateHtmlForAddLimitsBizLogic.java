@@ -1012,11 +1012,12 @@ public class GenerateHtmlForAddLimitsBizLogic
 		String componentId = generateComponentName(attribute);
 		if (permissibleValues != null && permissibleValues.size() != 0)
 		{
+            html.append("\n<td width='70%' valign='centre' colspan='4' >");
 
-			html.append("\n<td width='15%' valign='centre' >");
-			html
-					.append("\n<select style=\"width:150px; display:block;\" MULTIPLE styleId='country' size ='3' name=\""
-							+ componentId + "_enumeratedvaluescombobox\"\">");
+            // Bug #3700. Derestricting the list width & increasing the
+            // height
+            html.append("\n<select style=\"display:block;\" MULTIPLE styleId='country' size ='5' name=\"" + componentId
+                    + "_enumeratedvaluescombobox\"\">");
 			List<PermissibleValueInterface> values = new ArrayList<PermissibleValueInterface>(permissibleValues);
 			Collections.sort(values, new PermissibleValueComparator());
 			for (int i = 0; i < values.size(); i++)
@@ -1037,12 +1038,6 @@ public class GenerateHtmlForAddLimitsBizLogic
 				}
 			}
 			html.append("\n</select>");
-			html.append("\n</td>");
-			html.append("\n<td>");
-			html.append("\n</td>");
-			html.append("\n<td>");
-			html.append("\n</td>");
-			html.append("\n<td>");
 			html.append("\n</td>");
 		}
 		return html.toString();
