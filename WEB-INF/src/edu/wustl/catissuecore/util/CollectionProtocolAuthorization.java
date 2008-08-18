@@ -148,22 +148,25 @@ public class CollectionProtocolAuthorization implements edu.wustl.catissuecore.u
 				authorizationData.add(userGroupRoleProtectionGroupBean);
 			}
 			
-			userCollection.add(user);
+			if(!siteUserRolePrivilegeBean.isRowDeleted())
+			{
+				userCollection.add(user);
 			
-			List<Site> siteList = siteUserRolePrivilegeBean.getSiteList();
-			for (Site site : siteList)
-			{ 
-				boolean isPresent = false;
-				for (Site setSite : siteCollection)
-				{
-					if (setSite.getId().equals(site.getId()))
+				List<Site> siteList = siteUserRolePrivilegeBean.getSiteList();
+				for (Site site : siteList)
+				{ 
+					boolean isPresent = false;
+					for (Site setSite : siteCollection)
 					{
-						isPresent = true;
+						if (setSite.getId().equals(site.getId()))
+						{
+							isPresent = true;
+						}
 					}
-				}
-				if (!isPresent)
-				{
-					siteCollection.add(site);
+					if (!isPresent)
+					{
+						siteCollection.add(site);
+					}
 				}
 			}
 		}
