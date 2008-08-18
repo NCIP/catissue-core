@@ -19,9 +19,13 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.common.dynamicextensions.bizlogic.BizLogicFactory;
+import edu.common.dynamicextensions.domain.CategoryEntity;
 import edu.common.dynamicextensions.domain.integration.EntityMap;
 import edu.common.dynamicextensions.domain.integration.EntityMapRecord;
 import edu.common.dynamicextensions.domain.integration.FormContext;
+import edu.common.dynamicextensions.domaininterface.EntityInterface;
+import edu.common.dynamicextensions.domaininterface.userinterface.ContainerInterface;
 import edu.common.dynamicextensions.entitymanager.EntityManager;
 import edu.common.dynamicextensions.entitymanager.EntityManagerInterface;
 import edu.common.dynamicextensions.exception.DataTypeFactoryInitializationException;
@@ -29,6 +33,7 @@ import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationExcept
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.common.dynamicextensions.ui.webui.util.WebUIManager;
 import edu.common.dynamicextensions.ui.webui.util.WebUIManagerConstants;
+import edu.common.dynamicextensions.util.DynamicExtensionsUtility;
 import edu.common.dynamicextensions.util.global.Constants;
 import edu.wustl.catissuecore.actionForm.AnnotationDataEntryForm;
 import edu.wustl.catissuecore.annotations.AnnotationUtil;
@@ -38,6 +43,7 @@ import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.bizlogic.AbstractBizLogic;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
@@ -607,6 +613,7 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
         List dynEntitiesList = null;
         List allEntitiesList = new ArrayList();
         List cpIdList = new ArrayList();
+        List allCategoryEntityList =  new ArrayList();
         if(staticEntityName != null && staticEntityRecordId != null )
         {
             ICPCondition annoCondn=getConditionInvoker(staticEntityName,staticEntityRecordId);
@@ -620,7 +627,7 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
             dynEntitiesList = annotationBizLogic.getListOfDynamicEntities(Utility.toLong(entityId));
             dynEntitiesList = annotationBizLogic.getAnnotationIdsBasedOnCondition(dynEntitiesList,cpIdList);
             allEntitiesList = checkForAbstractEntity(dynEntitiesList);
-            allEntitiesList.addAll(checkForAbstractCategoryEntity(dynEntitiesList));
+	        allCategoryEntityList = checkForAbstractCategoryEntity(dynEntitiesList);
            
         }
       //  getConditionalDEId(dynEntitiesList,cpIdList);
@@ -635,6 +642,20 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
                 if (annotationBean != null)
                 {
                     annotationsList.add(annotationBean);
+                }
+            }
+        }
+        if (allCategoryEntityList != null)
+        {
+            Iterator<Long> dynEntitiesIterator = allCategoryEntityList.iterator();
+            NameValueBean annotationBean = null;
+            while (dynEntitiesIterator.hasNext())
+            {
+                annotationBean = getNameValueBeanForCategoryEntity(dynEntitiesIterator
+                        .next());
+                if (annotationBean != null)
+                {
+                   annotationsList.add(annotationBean);
                 }
             }
         }
@@ -677,7 +698,7 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
    			throws DynamicExtensionsSystemException,
    			DynamicExtensionsApplicationException
    	{
-	   	List entitesList = new ArrayList();
+   	   	List entitesList = new ArrayList();
 	   	if (dynEntitiesList != null)
 	   	{
 	   		Iterator<Long> dynEntitiesIterator = dynEntitiesList.iterator();
@@ -700,18 +721,37 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
      * @throws DynamicExtensionsApplicationException
      * @throws DynamicExtensionsSystemException
      */
-    private NameValueBean getNameValueBeanForDE(Long deContainerId)
+    private NameValueBean getNameValueBeanForCategoryEntity(Long deContainerId)
             throws DynamicExtensionsSystemException,
             DynamicExtensionsApplicationException
     {
         NameValueBean nameValueBean = null;
-        String deEntityName = getDEContainerName(deContainerId);
+        String deEntityName = getDEContainerCategoryName(deContainerId);
         if ((deContainerId != null) && (deEntityName != null))
         {
+        	deEntityName = "Form--"+deEntityName;
             nameValueBean = new NameValueBean(deEntityName, deContainerId);
         }
         return nameValueBean;
     }
+    /**
+     * @param deContainerId
+     * @return
+     * @throws DynamicExtensionsSystemException
+     * @throws DynamicExtensionsApplicationException
+     */
+    private NameValueBean getNameValueBeanForDE(Long deContainerId)
+    throws DynamicExtensionsSystemException,
+    DynamicExtensionsApplicationException
+    {
+    	NameValueBean nameValueBean = null;
+    	String deEntityName = getDEContainerName(deContainerId);
+    	if ((deContainerId != null) && (deEntityName != null))
+    	{
+    		nameValueBean = new NameValueBean(deEntityName, deContainerId);
+    	}
+    	return nameValueBean;
+	}
 
     /**
      * @param deContainerId
@@ -731,7 +771,51 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
         }
         return containerName;
     }
+    /**
+     * @param deContainerId
+     * @return
+     * @throws DynamicExtensionsSystemException
+     * @throws DynamicExtensionsApplicationException
+     */
+    private String getDEContainerCategoryName(Long deContainerId)
+    		throws DynamicExtensionsSystemException,
+    		DynamicExtensionsApplicationException
+    {
+    	String containerName = null;
+    	if (deContainerId != null)
+    	{
+    		EntityManagerInterface entityManager = EntityManager.getInstance();
+    		Long rootcontainerId =  entityManager.getCategoryRootContainerId(deContainerId);
+    		//containerName = entityManager.getContainerCaption(rootcontainerId);
+    		ContainerInterface rootContainer = DynamicExtensionsUtility.getContainerByIdentifier(rootcontainerId.toString());
+    		Long  entityIdentifier = ((EntityInterface) rootContainer.getAbstractEntity()).getId();
+    		
+    		AbstractBizLogic bizLogic = BizLogicFactory.getDefaultBizLogic();
+    		CategoryEntity objCategory =null;
+    		try
+    		{
+    			
+    			List objectList = bizLogic.retrieve(CategoryEntity.class.getName(), "entity.id",entityIdentifier);
 
+    			if (objectList == null || objectList.size() == 0)
+    			{
+    				
+    				throw new DynamicExtensionsApplicationException("OBJECT_NOT_FOUND");
+    			}
+
+    			objCategory = (CategoryEntity) objectList.get(0);
+    			containerName =objCategory.getCategory().getName();
+    		}
+    		catch (DAOException e)
+    		{
+    			throw new DynamicExtensionsSystemException(e.getMessage(), e);
+    		}
+    		
+    		
+    	}
+    	return containerName;
+    }
+    
     /**
      *
      * @param staticEntityName
