@@ -32,6 +32,7 @@ import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.BaseAction;
+import edu.wustl.common.action.CommonAddEditAction;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
@@ -172,9 +173,30 @@ public class CreateAliquotAction extends BaseAction
 		}
 		catch(UserNotAuthorizedException e)
 		{
+            String userName = "";
+            if(sessionDataBean != null)
+        	{
+        	    userName = sessionDataBean.getUserName();
+        	}
+			UserNotAuthorizedException excp = (UserNotAuthorizedException) e;
 			ActionErrors actionErrors = new ActionErrors();
-			ActionError error = new ActionError("access.addedit.object.denied", sessionDataBean.getUserName(), Specimen.class.getName());
+			
+            String className = new CommonAddEditAction().getActualClassName(Specimen.class.getName());
+            String decoratedPrivilegeName = Utility.getDisplayLabelForUnderscore(((UserNotAuthorizedException)e).getPrivilegeName());
+            String baseObject = "";
+            if (excp.getBaseObject() != null && excp.getBaseObject().trim().length() != 0)
+            {
+                baseObject = excp.getBaseObject();
+            } else 
+            {
+                baseObject = className;
+            }
+			ActionError error = new ActionError("access.addedit.object.denied", userName, className,decoratedPrivilegeName,baseObject);
         	actionErrors.add(ActionErrors.GLOBAL_ERROR, error);
+			
+			// ActionErrors actionErrors = new ActionErrors();
+			// ActionError error = new ActionError("access.addedit.object.denied", sessionDataBean.getUserName(), Specimen.class.getName());
+        	// actionErrors.add(ActionErrors.GLOBAL_ERROR, error);
         	saveErrors(request, actionErrors);
         	return false;
 		}
