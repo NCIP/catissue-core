@@ -27,6 +27,7 @@ import edu.wustl.common.security.PrivilegeCache;
 import edu.wustl.common.security.PrivilegeManager;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.Variables;
+import gov.nih.nci.security.authorization.domainobjects.Role;
 import gov.nih.nci.security.exceptions.CSException;
 
 /**
@@ -45,43 +46,44 @@ public class CaTissuePrivilegeUtility
 	 * @return list of SiteUserRolePrivilegeBean where each SiteUserRolePrivilegeBean represents privileges on a CP
 	 * @throws DAOException
 	 */
-	public static Map<String, SiteUserRolePrivilegeBean> getCPPrivileges(PrivilegeCache privilegeCache)
-			throws DAOException
+	public static Map<String, SiteUserRolePrivilegeBean> getCPPrivileges(
+			PrivilegeCache privilegeCache) throws DAOException
 	{
 		Map<String, SiteUserRolePrivilegeBean> map = new HashMap<String, SiteUserRolePrivilegeBean>();
 
 		//TODO remove the DB call
 		User user = Utility.getUser(privilegeCache.getLoginName());
-		
+
 		Map<String, List<NameValueBean>> privileges = privilegeCache
 				.getPrivilegesforPrefix(CollectionProtocol.class.getName() + "_");
-		
+
 		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
 		try
 		{
 			dao.openSession(null);
 			user = (User) dao.retrieve(User.class.getName(), user.getId());
-			
+
 			for (Entry<String, List<NameValueBean>> entry : privileges.entrySet())
 			{
 				SiteUserRolePrivilegeBean bean = new SiteUserRolePrivilegeBean();
-	
+
 				java.util.Scanner scanner = new java.util.Scanner(entry.getKey().substring(
 						entry.getKey().lastIndexOf("_") + 1));
-	
+
 				Long id = null;
-	
+
 				if (scanner.hasNextLong())
 				{
 					id = new Long(scanner.nextLong());
-									
-					CollectionProtocol cp = (CollectionProtocol) dao.retrieve(CollectionProtocol.class.getName(), id);
-					for(Site site : cp.getSiteCollection())
+
+					CollectionProtocol cp = (CollectionProtocol) dao.retrieve(
+							CollectionProtocol.class.getName(), id);
+					for (Site site : cp.getSiteCollection())
 					{
 						Long temp = site.getId();
-						
+
 					}
-					
+
 					bean.setCollectionProtocol(cp);
 					bean.setUser(user);
 					bean.setSiteList(new ArrayList<Site>(cp.getSiteCollection()));
@@ -90,7 +92,7 @@ public class CaTissuePrivilegeUtility
 					nmv.setValue("-1");
 					bean.setRole(nmv);
 					bean.setPrivileges(entry.getValue());
-					
+
 					// Added by Ravindra to handle bean for EDIT mode
 					bean.setRowEdited(false);
 	
@@ -98,7 +100,7 @@ public class CaTissuePrivilegeUtility
 				}
 			}
 		}
-		
+
 		finally
 		{
 			dao.closeSession();
@@ -115,14 +117,13 @@ public class CaTissuePrivilegeUtility
 	 * @return list of SiteUserRolePrivilegeBean where each SiteUserRolePrivilegeBean represents privileges on a Site
 	 * 	@throws DAOException
 	 */
-	public static Map<String, SiteUserRolePrivilegeBean> getSitePrivileges(PrivilegeCache privilegeCache)
-			throws DAOException
+	public static Map<String, SiteUserRolePrivilegeBean> getSitePrivileges(
+			PrivilegeCache privilegeCache) throws DAOException
 	{
 		Map<String, SiteUserRolePrivilegeBean> map = new HashMap<String, SiteUserRolePrivilegeBean>();
 
 		//TODO remove the DB call
 		User user = Utility.getUser(privilegeCache.getLoginName());
-		
 
 		Map<String, List<NameValueBean>> privileges = privilegeCache
 				.getPrivilegesforPrefix(Site.class.getName() + "_");
@@ -131,35 +132,35 @@ public class CaTissuePrivilegeUtility
 		try
 		{
 			dao.openSession(null);
-			
+
 			user = (User) dao.retrieve(User.class.getName(), user.getId());
-				
+
 			for (Entry<String, List<NameValueBean>> entry : privileges.entrySet())
 			{
 				SiteUserRolePrivilegeBean bean = new SiteUserRolePrivilegeBean();
-	
+
 				java.util.Scanner scanner = new java.util.Scanner(entry.getKey().substring(
 						entry.getKey().lastIndexOf("_") + 1));
-	
+
 				Long id = null;
-	
+
 				if (scanner.hasNextLong())
 				{
 					id = new Long(entry.getKey().substring(entry.getKey().lastIndexOf("_") + 1));
 					Site site = null;
 
 					site = (Site) dao.retrieve(Site.class.getName(), id);
-								List<Site> siteList = new ArrayList<Site>();
+					List<Site> siteList = new ArrayList<Site>();
 					siteList.add(site);
 					bean.setSiteList(siteList);
 					bean.setUser(user);
-	
+
 					NameValueBean nmv = new NameValueBean();
 					nmv.setName("Custom role");
 					nmv.setValue("-1");
 					bean.setRole(nmv);
 					bean.setPrivileges(entry.getValue());
-					
+
 					// Added by Ravindra to handle bean for EDIT mode
 					bean.setRowEdited(false);
 	
@@ -182,20 +183,21 @@ public class CaTissuePrivilegeUtility
 	 * @return
 	 * @throws DAOException
 	 */
-	public static Map<String, SiteUserRolePrivilegeBean> getAllPrivileges(PrivilegeCache privilegeCache)
+	public static Map<String, SiteUserRolePrivilegeBean> getAllPrivileges(
+			PrivilegeCache privilegeCache)
 	{
 		Map<String, SiteUserRolePrivilegeBean> map = null;
 		try
 		{
 			map = getCPPrivileges(privilegeCache);
 			map.putAll(getSitePrivileges(privilegeCache));
-			
+
 		}
-		catch(DAOException e)
+		catch (DAOException e)
 		{
 			e.printStackTrace();
 		}
-		
+
 		return map;
 
 	}
@@ -212,20 +214,20 @@ public class CaTissuePrivilegeUtility
 		Map<String, SiteUserRolePrivilegeBean> result = new HashMap<String, SiteUserRolePrivilegeBean>();
 
 		String objectId = CollectionProtocol.class.getName() + "_" + id;
-		
+
 		AbstractDAO hibernateDao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
-		
+
 		try
 		{
 			hibernateDao.openSession(null);
-			
+
 			for (NameValueBean nmv : Variables.privilegeGroupingMap.get("CP"))
 			{
 				String privilegeName = nmv.getName();
 				Set<String> users = PrivilegeManager.getInstance().getAccesibleUsers(objectId,
 						privilegeName);
 
-				for (String userName : users) 
+				for (String userName : users)
 				{
 					User user = Utility.getUser(userName);
 					SiteUserRolePrivilegeBean bean = result.get(user.getId().toString());
@@ -237,23 +239,23 @@ public class CaTissuePrivilegeUtility
 						privileges.add(nmv);
 
 						NameValueBean role = new NameValueBean();
-						role.setName("Custom");
+						role.setName("Custom Role");
 						role.setValue("-1");
 						bean.setRole(role);
 						Set<Long> siteSet = new UserBizLogic().getRelatedSiteIds(user.getId());
 						List<Site> siteList = new ArrayList<Site>();
-						if(siteSet == null || siteSet.isEmpty())
-						{						
+						if (siteSet == null || siteSet.isEmpty())
+						{
 							continue;
 						}
-						
+
 						hibernateDao.openSession(null);
 						for (Long siteId : siteSet)
 						{
-							Site site = (Site) hibernateDao.retrieve(Site.class.getName(),siteId);
+							Site site = (Site) hibernateDao.retrieve(Site.class.getName(), siteId);
 							siteList.add(site);
 						}
-						
+
 						bean.setSiteList(siteList);
 
 						bean.setPrivileges(privileges);
