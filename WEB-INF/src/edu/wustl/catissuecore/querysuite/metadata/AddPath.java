@@ -126,7 +126,7 @@ public class AddPath
 		 {
 		 	identifier = rs.getInt(1)+1;
 		 }
-		 
+		 stmt.close();
 		 String sql;
 		 String entityId=null;
 		 String associatedEntityId = null;
@@ -137,6 +137,7 @@ public class AddPath
 		 {
 			 String key = iterator.next();
 			 sql = "Select IDENTIFIER from dyextn_abstract_metadata where NAME = '"+key+"'";
+			 stmt = connection.createStatement();
 			 rs = stmt.executeQuery(sql);
 			 if(rs.next())
 			 {
@@ -160,7 +161,7 @@ public class AddPath
 							for(String subClassEntity : subClassList)
 							{
 								 String subClassEntityId;
-								 stmt = connection.createStatement();
+								 Statement stmt1 = connection.createStatement();
 								 sql = "Select IDENTIFIER from dyextn_abstract_metadata where NAME = '"+subClassEntity+"'";
 								 ResultSet rs1 = stmt.executeQuery(sql);
 								 if(rs1.next())
@@ -171,11 +172,13 @@ public class AddPath
 									 else	 
 										 insertPathSQL.add("insert into path values("+ identifier++ +","+subClassEntityId+","+intermediatePathId+","+associatedEntityId+")");
 								 } 
+								 stmt1.close();
 							 }
 						 }
 						 if(!(key.equals(associatedEntityName)))
 						 {
 							 sql = "Select INTERMEDIATE_PATH from PATH where FIRST_ENTITY_ID = "+associatedEntityId+" and LAST_ENTITY_ID = "+entityId;
+							 Statement stmt2 = connection.createStatement();
 							  rs = stmt.executeQuery(sql);
 							 while(rs.next())
 							 {
@@ -194,6 +197,7 @@ public class AddPath
 									 } 
 								 }
 							 }
+							 stmt2.close();
 						 }
 					 }
 				 }
@@ -202,6 +206,7 @@ public class AddPath
 			 {
 				 System.out.println("Entity with name : "+key+" not found");
 			 }
+			 stmt.close();
 		 }
 		 return insertPathSQL;
 	 }

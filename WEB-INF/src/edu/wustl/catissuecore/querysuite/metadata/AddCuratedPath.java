@@ -56,7 +56,7 @@ public class AddCuratedPath
 			int maxId = rs.getInt(1);
 			nextIdPath = maxId + 1;
 		}
-		
+		stmt.close();
 		for(String key : entityList)
 		{
 			intermediatePath="";
@@ -101,6 +101,7 @@ public class AddCuratedPath
 		{
 			inetrmediatePath = rs.getString(1);
 		}
+		stmt.close();
 		return inetrmediatePath;
 	}
 
