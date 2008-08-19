@@ -2,6 +2,7 @@
 package edu.wustl.catissuecore.bizlogic.querysuite;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -10,9 +11,13 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.Vector;
 
+import edu.common.dynamicextensions.domaininterface.AssociationInterface;
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
+import edu.common.dynamicextensions.domaininterface.databaseproperties.ConstraintPropertiesInterface;
+import edu.common.dynamicextensions.util.global.Constants.Cardinality;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.listener.CatissueCoreServletContextListener;
 import edu.wustl.catissuecore.util.querysuite.QueryCSMUtil;
 import edu.wustl.catissuecore.util.querysuite.QueryDetails;
 import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
@@ -37,6 +42,7 @@ import edu.wustl.common.querysuite.queryobject.impl.metadata.SelectedColumnsMeta
 import edu.wustl.common.querysuite.utils.QueryUtility;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * Creates QueryOutput spreadsheet data as per the inputs given by user on AddLimits and define results section .
@@ -69,7 +75,7 @@ public class QueryOutputSpreadsheetBizLogic
 			QueryResultObjectDataBean> queryResultObjectDataMap,IConstraints constraints,
 			Map<String, IOutputTerm> outputTermsColumns)
 	throws DAOException, ClassNotFoundException
-	{
+	{ 
 		this.selectedColumnMetaData = selectedColumnMetaData;
 		DefineGridViewBizLogic defineGridViewBizLogic = new DefineGridViewBizLogic();
 		Map spreadSheetDataMap = new HashMap();
@@ -391,28 +397,26 @@ public class QueryOutputSpreadsheetBizLogic
 			addHashedRow(spreadSheetDataMap);
 			return "";
 		}
-		//TemporalColumnUIBean temporalColumnUIBean = new TemporalColumnUIBean(node, selectSql, columnsList, outputTermsColumns,columnIndex);
-		//modifySqlForTemporalColumns(temporalColumnUIBean);
-		//selectSql = temporalColumnUIBean.getSql();
-		//columnIndex = temporalColumnUIBean.getColumnIndex();
-		if(!selectedColumnMetaData.isDefinedView() && queryResultObjectDataBean
-				.getMainEntityIdentifierColumnId()==-1)
+	 
+		if(!selectedColumnMetaData.isDefinedView() )
 		{ 
 			TemporalColumnUIBean temporalColumnUIBean = new TemporalColumnUIBean(node, selectSql, columnsList, outputTermsColumns,columnIndex);
-			modifySqlForTemporalColumns(temporalColumnUIBean);
+			modifySqlForTemporalColumns(temporalColumnUIBean); 
 			selectSql = temporalColumnUIBean.getSql();
 			columnIndex = temporalColumnUIBean.getColumnIndex();
-			Map<EntityInterface, Integer> entityIdIndexMap =new HashMap<EntityInterface, Integer>();
-		    selectSql = QueryCSMUtil.updateEntityIdIndexMap(queryResultObjectDataBean, columnIndex,
-		    		selectSql, null, entityIdIndexMap, queryDetailsObj);
-		    entityIdIndexMap = queryResultObjectDataBean.getEntityIdIndexMap();
-		    if(entityIdIndexMap.get(queryResultObjectDataBean.getMainEntity())!=null)
+			if(queryResultObjectDataBean.getMainEntityIdentifierColumnId()==-1)
 			{
-				queryResultObjectDataBean.setMainEntityIdentifierColumnId(entityIdIndexMap
-						.get(queryResultObjectDataBean.getMainEntity()));
-			} 
+				Map<EntityInterface, Integer> entityIdIndexMap =new HashMap<EntityInterface, Integer>();
+			    selectSql = QueryCSMUtil.updateEntityIdIndexMap(queryResultObjectDataBean, columnIndex,
+			    		selectSql, null, entityIdIndexMap, queryDetailsObj);
+			    entityIdIndexMap = queryResultObjectDataBean.getEntityIdIndexMap();
+			    if(entityIdIndexMap.get(queryResultObjectDataBean.getMainEntity())!=null)
+				{
+					queryResultObjectDataBean.setMainEntityIdentifierColumnId(entityIdIndexMap
+							.get(queryResultObjectDataBean.getMainEntity()));
+				} 
+		    }
 		}
-		//selectSql = modifySqlForTemporalColumns(node, selectSql, columnsList, outputTermsColumns);
 		selectSql = selectSql + " from " + tableName;
 		if (parentData != null)
 		{
@@ -441,12 +445,10 @@ public class QueryOutputSpreadsheetBizLogic
 	 * 
 	 * @param temporalColumnUIBean
 	 */
-	public void modifySqlForTemporalColumns(TemporalColumnUIBean temporalColumnUIBean) {
+	public void modifySqlForTemporalColumns(TemporalColumnUIBean temporalColumnUIBean) 
+	{
 		OutputTreeDataNode node = temporalColumnUIBean.getNode();
-		String selectSql = temporalColumnUIBean.getSql();
-		List<String> columnsList = temporalColumnUIBean.getColumnsList();
 		Map<String, IOutputTerm> outputTermsColumns = temporalColumnUIBean.getOutputTermsColumns();
-		int columnIndex = temporalColumnUIBean.getColumnIndex();
 		Set<String> keySet = outputTermsColumns.keySet();
 		Iterator<String> iterator = keySet.iterator();
 		while (iterator.hasNext())
@@ -456,480 +458,524 @@ public class QueryOutputSpreadsheetBizLogic
 			String displayColumnName = outputTerm.getName();
 			ITerm term = outputTerm.getTerm();
 			Set<IExpression> expressionsInTerm = QueryUtility.getExpressionsInTerm(term);
-			if(node != null)
+
+			if(node == null || expressionsInTerm.size() == 1)
 			{
-				for(IExpression exp : expressionsInTerm)
+				modifyTemporalColumnBean(temporalColumnUIBean,displayColumnName,columnName);
+			}
+			else if(isContainingExpressionInTQ(node, expressionsInTerm) && isValidAssociationForTQ(node, expressionsInTerm))
+			{
+				modifyTemporalColumnBean(temporalColumnUIBean,displayColumnName,columnName);
+			}
+		}
+	}
+	/**
+	 * @param node
+	 * @param expressionsInTerm
+	 */
+	private boolean isValidAssociationForTQ(OutputTreeDataNode node, Set<IExpression> expressionsInTerm) {
+		org.apache.log4j.Logger logger =Logger.getLogger(CatissueCoreServletContextListener.class);
+		Collection<AssociationInterface> associationCollection = 
+			node.getOutputEntity().getDynamicExtensionsEntity().getAllAssociations();
+		boolean isValidAssociationForTQ = false;
+		for(AssociationInterface asso :associationCollection)
+		{
+			EntityInterface targetEntity = asso.getTargetEntity();
+			for(IExpression exp : expressionsInTerm)
+			{
+				EntityInterface tqEntity = exp.getQueryEntity().getDynamicExtensionsEntity();
+				if(tqEntity.equals(targetEntity))
 				{
-					if(node.getExpressionId() == exp.getExpressionId())
+					ConstraintPropertiesInterface constraintProperties = asso.getConstraintProperties();
+					if (constraintProperties.getSourceEntityKey() != null
+							&& constraintProperties.getTargetEntityKey() != null)// Many to Many Case
 					{
-						columnsList.add(displayColumnName);
-						selectSql = selectSql + ", " + columnName + ",";
-						columnIndex++;
+						logger.info("many to many association between "+tqEntity + 
+								"and "+targetEntity +"So not showing custom column name in grid");
+					} else  if (constraintProperties.getSourceEntityKey() != null)// Many Side
+					{
+						logger.info("many to one association between "+tqEntity + 
+								"and "+targetEntity +"So showing custom column name in grid");
+						isValidAssociationForTQ = true;
+						break;
+					} else 
+					{
+						logger.info("one to many association between "+tqEntity + 
+								"and "+targetEntity +"So not showing custom column name in grid");
 					}
 				}
-			}else
-			{
-				columnsList.add(displayColumnName);
-				selectSql = selectSql + ", " + columnName + ",";
-				columnIndex++;
 			}
 		}
-		int length = selectSql.length();
-		if(length!=0 && selectSql.lastIndexOf(",") == length-1)
-		{
-			selectSql = selectSql.substring(0, selectSql.lastIndexOf(","));
-		}
-		temporalColumnUIBean.setColumnIndex(columnIndex);
-		temporalColumnUIBean.setColumnsList(columnsList);
-		temporalColumnUIBean.setSql(selectSql);
+		return isValidAssociationForTQ;
 	}
-	
-	/**
-	 * @param spreadSheetDataMap
-	 */
-	private void addHashedRow(Map spreadSheetDataMap)
-	{
-		List<String> columnsList = (List<String>)spreadSheetDataMap.get(Constants.SPREADSHEET_COLUMN_LIST);
-		List<List<String>> dataList = new ArrayList<List<String>>();
-		List<String> row = new ArrayList<String>();
-		for(int columnIndex=0;columnIndex<columnsList.size();columnIndex++)
-		{
-			row.add(Constants.HASHED_OUT);
+		/**
+		 * 
+		 * @param temporalColumnUIBean
+		 * @param displayColumnName
+		 * @param columnName
+		 */
+		private void modifyTemporalColumnBean(TemporalColumnUIBean temporalColumnUIBean, String displayColumnName, String columnName) {
+			temporalColumnUIBean.getColumnsList().add(displayColumnName);
+			String sql = temporalColumnUIBean.getSql() + ", " +columnName; 
+			temporalColumnUIBean.setSql(sql);
+			temporalColumnUIBean.setColumnIndex(temporalColumnUIBean.getColumnIndex()+1);
+
 		}
-		dataList.add(row);
-		spreadSheetDataMap.put(Constants.SPREADSHEET_DATA_LIST, dataList);
-	}
-	/**
-	 * @param spreadSheetDataMap map to store data list
-	 * @param queryResultObjectDataBeanMap 
-	 * @param mainEntityMap 
-	 * @param idNodesMap 
-	 * @return String sql
-	 */
-	private String getSQLForSelectedColumns(Map spreadSheetDataMap,
-			Map<Long, QueryResultObjectDataBean> queryResultObjectDataBeanMap,
-			QueryDetails queryDetailsObj, Map<String, IOutputTerm> outputTermsColumns)
-	{ 
-		String selectSql = "";
-		List<String> definedColumnsList = new ArrayList<String>();
-		StringBuffer sqlColumnNames = new StringBuffer();
-		List<QueryOutputTreeAttributeMetadata> selectedAttributeMetaDataList = selectedColumnMetaData
-				.getSelectedAttributeMetaDataList();
-		int columnIndex = 0;
-		int addedFileTypeAttributes = 0;
-		List<EntityInterface> defineViewNodeList = new ArrayList<EntityInterface>();
-		List<NameValueBean> selectedColumnNameValue = new ArrayList<NameValueBean>();
-		
-		for (QueryOutputTreeAttributeMetadata metaData : selectedAttributeMetaDataList)
-		{
-			AttributeInterface attribute = metaData.getAttribute();
-			if (metaData.getAttribute().equals(attribute))
+		/**
+		 * @param node
+		 * @param expressionsInTerm
+		 * @return
+		 */
+		private boolean isContainingExpressionInTQ(OutputTreeDataNode node, Set<IExpression> expressionsInTerm) {
+			for(IExpression ex :expressionsInTerm)
 			{
-				NameValueBean nameValueBean = new NameValueBean();
-				QueryResultObjectDataBean queryResultObjectDataBean = queryResultObjectDataBeanMap
-				.get(metaData.getTreeDataNode().getId());
-				String attributeWithClassName = metaData.getDisplayName();
-				String treeAttributeNodeId = metaData.getUniqueId();
-				nameValueBean.setName(attributeWithClassName);
-				nameValueBean.setValue(treeAttributeNodeId);
-				selectedColumnNameValue.add(nameValueBean);
-				
-				if (queryResultObjectDataBean==null)
+				if(node.getExpressionId() == ex.getExpressionId())
 				{
-					queryResultObjectDataBean = QueryCSMUtil
+					return true;
+				}
+			}
+			return false;
+		}
+
+			/**
+			 * @param spreadSheetDataMap
+			 */
+			private void addHashedRow(Map spreadSheetDataMap)
+			{
+				List<String> columnsList = (List<String>)spreadSheetDataMap.get(Constants.SPREADSHEET_COLUMN_LIST);
+				List<List<String>> dataList = new ArrayList<List<String>>();
+				List<String> row = new ArrayList<String>();
+				for(int columnIndex=0;columnIndex<columnsList.size();columnIndex++)
+				{
+					row.add(Constants.HASHED_OUT);
+				}
+				dataList.add(row);
+				spreadSheetDataMap.put(Constants.SPREADSHEET_DATA_LIST, dataList);
+			}
+			/**
+			 * @param spreadSheetDataMap map to store data list
+			 * @param queryResultObjectDataBeanMap 
+			 * @param mainEntityMap 
+			 * @param idNodesMap 
+			 * @return String sql
+			 */
+			private String getSQLForSelectedColumns(Map spreadSheetDataMap,
+					Map<Long, QueryResultObjectDataBean> queryResultObjectDataBeanMap,
+					QueryDetails queryDetailsObj, Map<String, IOutputTerm> outputTermsColumns)
+			{ 
+				String selectSql = "";
+				List<String> definedColumnsList = new ArrayList<String>();
+				StringBuffer sqlColumnNames = new StringBuffer();
+				List<QueryOutputTreeAttributeMetadata> selectedAttributeMetaDataList = selectedColumnMetaData
+				.getSelectedAttributeMetaDataList();
+				int columnIndex = 0;
+				int addedFileTypeAttributes = 0;
+				List<EntityInterface> defineViewNodeList = new ArrayList<EntityInterface>();
+				List<NameValueBean> selectedColumnNameValue = new ArrayList<NameValueBean>();
+
+				for (QueryOutputTreeAttributeMetadata metaData : selectedAttributeMetaDataList)
+				{
+					AttributeInterface attribute = metaData.getAttribute();
+					if (metaData.getAttribute().equals(attribute))
+					{
+						NameValueBean nameValueBean = new NameValueBean();
+						QueryResultObjectDataBean queryResultObjectDataBean = queryResultObjectDataBeanMap
+						.get(metaData.getTreeDataNode().getId());
+						String attributeWithClassName = metaData.getDisplayName();
+						String treeAttributeNodeId = metaData.getUniqueId();
+						nameValueBean.setName(attributeWithClassName);
+						nameValueBean.setValue(treeAttributeNodeId);
+						selectedColumnNameValue.add(nameValueBean);
+
+						if (queryResultObjectDataBean==null)
+						{
+							queryResultObjectDataBean = QueryCSMUtil
 							.getQueryResulObjectDataBean(metaData
 									.getTreeDataNode(), queryDetailsObj);
-					defineViewNodeList.add(attribute.getEntity());
-				}
+							defineViewNodeList.add(attribute.getEntity());
+						}
 
-				if (attribute.getName().equalsIgnoreCase(Constants.ID))
+						if (attribute.getName().equalsIgnoreCase(Constants.ID))
+						{
+							if (queryResultObjectDataBean.isMainEntity())
+								queryResultObjectDataBean.setMainEntityIdentifierColumnId(columnIndex);
+							else
+								queryResultObjectDataBean.setEntityId(columnIndex);
+						}
+						if (attribute.getIsIdentified() != null && attribute.getIsIdentified())
+						{
+							queryResultObjectDataBean.getIdentifiedDataColumnIds().add(columnIndex);
+							queryResultObjectDataBean.setHasAssociatedIdentifiedData(true);
+						}
+						if(attribute.getDataType().equalsIgnoreCase(Constants.FILE_TYPE))
+						{
+							queryResultObjectDataBean.setClobeType(true);
+							Map beanMetadataMap = queryResultObjectDataBean
+							.getFileTypeAtrributeIndexMetadataMap();
+							int fileTypeIndex = columnIndex + addedFileTypeAttributes;
+							addedFileTypeAttributes++;
+							beanMetadataMap.put(fileTypeIndex, metaData);
+							queryResultObjectDataBean.setFileTypeAtrributeIndexMetadataMap(beanMetadataMap);
+						}
+						else
+						{
+							String sqlColumnName = metaData.getColumnName();
+							sqlColumnNames.append(sqlColumnName);
+							sqlColumnNames.append(", ");
+							String columnDisplayName = metaData.getDisplayName();
+							definedColumnsList.add(columnDisplayName);
+							queryResultObjectDataBean.getObjectColumnIds().add(columnIndex);
+							columnIndex++;
+						}
+						queryResultObjectDataBeanMap.put(metaData.getTreeDataNode().getId(),
+								queryResultObjectDataBean);
+					}
+				} 
+				this.selectedColumnMetaData.setSelectedColumnNameValueBeanList(selectedColumnNameValue);
+				int lastindexOfComma = sqlColumnNames.lastIndexOf(",");
+				String sql = sqlColumnNames.toString();
+				TemporalColumnUIBean temporalColumnUIBean = new TemporalColumnUIBean(null, selectSql, definedColumnsList, outputTermsColumns,columnIndex);
+				modifySqlForTemporalColumns(temporalColumnUIBean);
+				String selectTQSql = temporalColumnUIBean.getSql();
+				columnIndex = temporalColumnUIBean.getColumnIndex();
+
+				if (lastindexOfComma != -1 || selectTQSql.equals(""))
 				{
-					if (queryResultObjectDataBean.isMainEntity())
-						queryResultObjectDataBean.setMainEntityIdentifierColumnId(columnIndex);
-					else
-						queryResultObjectDataBean.setEntityId(columnIndex);
-				}
-				if (attribute.getIsIdentified() != null && attribute.getIsIdentified())
-				{
-					queryResultObjectDataBean.getIdentifiedDataColumnIds().add(columnIndex);
-					queryResultObjectDataBean.setHasAssociatedIdentifiedData(true);
-				}
-				if(attribute.getDataType().equalsIgnoreCase(Constants.FILE_TYPE))
-				{
-					queryResultObjectDataBean.setClobeType(true);
-					Map beanMetadataMap = queryResultObjectDataBean
-						.getFileTypeAtrributeIndexMetadataMap();
-					int fileTypeIndex = columnIndex + addedFileTypeAttributes;
-					addedFileTypeAttributes++;
-					beanMetadataMap.put(fileTypeIndex, metaData);
-					queryResultObjectDataBean.setFileTypeAtrributeIndexMetadataMap(beanMetadataMap);
-				}
-				else
-				{
-					String sqlColumnName = metaData.getColumnName();
-					sqlColumnNames.append(sqlColumnName);
-					sqlColumnNames.append(", ");
-					String columnDisplayName = metaData.getDisplayName();
-					definedColumnsList.add(columnDisplayName);
-					queryResultObjectDataBean.getObjectColumnIds().add(columnIndex);
-					columnIndex++;
-				}
-				queryResultObjectDataBeanMap.put(metaData.getTreeDataNode().getId(),
-						queryResultObjectDataBean);
-			}
-		} 
-		this.selectedColumnMetaData.setSelectedColumnNameValueBeanList(selectedColumnNameValue);
-		int lastindexOfComma = sqlColumnNames.lastIndexOf(",");
-		String sql = sqlColumnNames.toString();
-		TemporalColumnUIBean temporalColumnUIBean = new TemporalColumnUIBean(null, selectSql, definedColumnsList, outputTermsColumns,columnIndex);
-		modifySqlForTemporalColumns(temporalColumnUIBean);
-		String selectTQSql = temporalColumnUIBean.getSql();
-		columnIndex = temporalColumnUIBean.getColumnIndex();
-	
-		//columnIndex = modifySqlForTemporalColumns(null, sql, definedColumnsList, outputTermsColumns,columnIndex);
-		if (lastindexOfComma != -1 || selectTQSql.equals(""))
-		{
-			String columnsInSql = "";
-			if (lastindexOfComma != -1)
-				columnsInSql = sql.substring(0, lastindexOfComma).toString();
-			if(!selectTQSql.equals(""))
-			{
-				columnsInSql = columnsInSql + selectTQSql;
-			}
-			Map<EntityInterface, Integer> entityIdIndexMap = new HashMap<EntityInterface, Integer>();
-			columnsInSql = QueryCSMUtil.updateEntityIdIndexMap(null, columnIndex, columnsInSql,
-					defineViewNodeList, entityIdIndexMap,queryDetailsObj);
-			Iterator<QueryResultObjectDataBean> iterator = queryResultObjectDataBeanMap.values()
+					String columnsInSql = "";
+					if (lastindexOfComma != -1)
+						columnsInSql = sql.substring(0, lastindexOfComma).toString();
+					if(!selectTQSql.equals(""))
+					{
+						columnsInSql = columnsInSql + selectTQSql;
+					}
+					Map<EntityInterface, Integer> entityIdIndexMap = new HashMap<EntityInterface, Integer>();
+					columnsInSql = QueryCSMUtil.updateEntityIdIndexMap(null, columnIndex, columnsInSql,
+							defineViewNodeList, entityIdIndexMap,queryDetailsObj);
+					Iterator<QueryResultObjectDataBean> iterator = queryResultObjectDataBeanMap.values()
 					.iterator();
-			while (iterator.hasNext())
-			{
-				QueryResultObjectDataBean elem = (QueryResultObjectDataBean) iterator.next();
-				if (elem.getMainEntityIdentifierColumnId() == -1)
-				{
-					if (!elem.isMainEntity())
-						elem.setMainEntityIdentifierColumnId(entityIdIndexMap.get(elem
-								.getMainEntity()));
-					else
-						elem.setMainEntityIdentifierColumnId(entityIdIndexMap
-								.get(elem.getEntity()));
+					while (iterator.hasNext())
+					{
+						QueryResultObjectDataBean elem = (QueryResultObjectDataBean) iterator.next();
+						if (elem.getMainEntityIdentifierColumnId() == -1)
+						{
+							if (!elem.isMainEntity())
+								elem.setMainEntityIdentifierColumnId(entityIdIndexMap.get(elem
+										.getMainEntity()));
+							else
+								elem.setMainEntityIdentifierColumnId(entityIdIndexMap
+										.get(elem.getEntity()));
+						}
+
+					}
+					selectSql = Constants.SELECT_DISTINCT + columnsInSql;
+
 				}
 
+				spreadSheetDataMap.put(Constants.SPREADSHEET_COLUMN_LIST, definedColumnsList);
+				return selectSql;
 			}
-			selectSql = Constants.SELECT_DISTINCT + columnsInSql;
-			
-		}
-		
-		spreadSheetDataMap.put(Constants.SPREADSHEET_COLUMN_LIST, definedColumnsList);
-		return selectSql;
-	}
-	/**
-	 * @param sessionData
-	 * @param recordsPerPage
-	 * @param startIndex 
-	 * @param spreadSheetDataMap
-	 * @param selectSql
-	 * @return
-	 * @throws ClassNotFoundException
-	 * @throws DAOException
-	 */
-	public QuerySessionData getQuerySessionData(QueryDetails queryDetailsObj,
-			int recordsPerPage, int startIndex, Map spreadSheetDataMap,
-			String selectSql, Map<Long, QueryResultObjectDataBean> queryResultObjectDataBeanMap,
-			boolean hasConditionOnIdentifiedField) throws ClassNotFoundException, DAOException
-	{          
-		QuerySessionData querySessionData = new QuerySessionData();
-		querySessionData.setSql(selectSql);
-		querySessionData.setQueryResultObjectDataMap(queryResultObjectDataBeanMap);
-		querySessionData.setSecureExecute(queryDetailsObj.getSessionData().isSecurityRequired());
-		querySessionData.setHasConditionOnIdentifiedField(hasConditionOnIdentifiedField);
-		querySessionData.setRecordsPerPage(recordsPerPage);
-		QueryBizLogic qBizLogic = new QueryBizLogic(); 
-		PagenatedResultData pagenatedResultData = qBizLogic.execute(queryDetailsObj.getSessionData(), querySessionData, startIndex);
-		List<List <String>> dataList = pagenatedResultData.getResult();
-		
-		for (Iterator<Long> beanMapIterator = queryResultObjectDataBeanMap.keySet().iterator(); beanMapIterator.hasNext(); )
-		{
-			Long id = beanMapIterator.next();
-			QueryResultObjectDataBean queryResultObjectDataBean = queryResultObjectDataBeanMap.get(id);
-			if (queryResultObjectDataBean.isClobeType())
-			{	
-				List<String> columnList = (List<String>)spreadSheetDataMap.get(Constants.SPREADSHEET_COLUMN_LIST);
-				Map<Integer, Integer> fileTypeIndexMainEntityIndexMap = updateSpreadSheetColumnList(columnList, queryResultObjectDataBeanMap);	
-				Map exportMetataDataMap = updateDataList(dataList, fileTypeIndexMainEntityIndexMap);	
-				spreadSheetDataMap.put(Constants.ENTITY_IDS_MAP,exportMetataDataMap.get(Constants.ENTITY_IDS_MAP));
-				spreadSheetDataMap.put(Constants.EXPORT_DATA_LIST,exportMetataDataMap.get(Constants.EXPORT_DATA_LIST));
-				break;
-			}
-		}
-		spreadSheetDataMap.put(Constants.SPREADSHEET_DATA_LIST, pagenatedResultData.getResult());
-		/**
-		 * Name: Prafull
-		 * Description: Query performance issue. Instead of saving complete query results in session, resultd will be fetched for each result page navigation.
-		 * object of class QuerySessionData will be saved session, which will contain the required information for query execution while navigating through query result pages.
-		 * 
-		 *  saving required query data in Session so that can be used later on while navigating through result pages using pagination.  
-		 */
-		querySessionData.setTotalNumberOfRecords(pagenatedResultData.getTotalRecords());
-		
-		return querySessionData;
-	}
-	
-	/**
-	 * if file type attribute column is present in the spreadsheet view add the column to the datalist
-	 * @param dataList
-	 * @param fileTypeIndexMainEntityIndexMap
-	 */
-	public static Map updateDataList(List<List<String>> dataList, Map<Integer, Integer> fileTypeIndexMainEntityIndexMap)
-	{
-		Map<Integer, String> entityIdIndexMainEntityIdMap = new HashMap<Integer, String>();
-		Map<String, Object> exportMetataDataMap = new HashMap<String, Object>();
-		List<List<String>> newDataList = new ArrayList<List<String>>();
-		List<String> exportRow = new ArrayList<String>();
-		Map<Integer, List> entityIdsMap = new HashMap<Integer, List>();
-		//int i = 0;
-		int rowNo = 0;
-		for(List<String> row : dataList)
-		{
-			List<String> entityIdsList = new ArrayList<String>();
-			exportRow = new ArrayList<String>();
-			exportRow.addAll(row);
-			for (Iterator<Integer> fileTypeIterator = fileTypeIndexMainEntityIndexMap.keySet().iterator(); fileTypeIterator.hasNext(); )
-			{
-				int fileTypeIndex = fileTypeIterator.next();
-				int mainEntityIdIndex = fileTypeIndexMainEntityIndexMap.get(fileTypeIndex);
-				String mainEntityId = row.get(mainEntityIdIndex);
-				entityIdIndexMainEntityIdMap.put(fileTypeIndex, mainEntityId);					
-			}
-			int fileTypeIndex = 0;
-			for (Iterator<Integer> fileTypeIterator = fileTypeIndexMainEntityIndexMap.keySet().iterator(); fileTypeIterator.hasNext(); )
-			{
-				fileTypeIndex = fileTypeIterator.next();
-				String mainEntityId = entityIdIndexMainEntityIdMap.get(fileTypeIndex);
-				String newColumn = "<img src='images/ic_view_up_file.gif' onclick='javascript:viewSPR(\""+ mainEntityId
-				+"\")' alt='click here' style='cursor:pointer;'>";
-				String fileName =  Constants.EXPORT_FILE_NAME_START +mainEntityId+".txt";
-				row.add(fileTypeIndex, newColumn);
-				exportRow.add(fileTypeIndex,fileName);
-				entityIdsList.add(mainEntityId);
-				//i++;
-			}
-			newDataList.add(exportRow);
-			entityIdsMap.put(rowNo, entityIdsList);
-			rowNo++;
-		}			
-		exportMetataDataMap.put(Constants.ENTITY_IDS_MAP, entityIdsMap);
-		exportMetataDataMap.put(Constants.EXPORT_DATA_LIST, newDataList);
-		
-		return exportMetataDataMap;
-	}
-	/**
-	 * 
-	 * @param spreadSheetDataMap
-	 * @param queryResultObjectDataBeanMap
-	 * @return
-	 */
-	public Map<Integer, Integer> updateSpreadSheetColumnList(List<String> spreadsheetColumnsList,Map<Long,QueryResultObjectDataBean> queryResultObjectDataBeanMap)
-	{
-		Map<Integer, String> fileTypeIndexColumnNameMap = new TreeMap<Integer, String>();
-		Map<Integer, Integer> fileTypeIndexMainEntityIndexMap = new TreeMap<Integer, Integer>();
-		// Stores all the file type attribute column names of all the entities in the map i.e. indexDisplayNameMap
-		for (Iterator<Long> beanMapIterator = queryResultObjectDataBeanMap.keySet().iterator(); beanMapIterator.hasNext(); )
-		{
-			Long id = beanMapIterator.next();
-			QueryResultObjectDataBean queryResultObjectDataBean = queryResultObjectDataBeanMap.get(id);
-			if (queryResultObjectDataBean.isClobeType())
-			{	
-				Map<Integer, QueryOutputTreeAttributeMetadata> fileTypeAtrributeIndexMetadataMap
-				= (Map<Integer, QueryOutputTreeAttributeMetadata>)
-				queryResultObjectDataBean.getFileTypeAtrributeIndexMetadataMap();
-				int mainEntityIdColumn = queryResultObjectDataBean.getMainEntityIdentifierColumnId();
-				for (Iterator<Integer> iterator = fileTypeAtrributeIndexMetadataMap
-					.keySet().iterator(); iterator.hasNext(); )
+			/**
+			 * @param sessionData
+			 * @param recordsPerPage
+			 * @param startIndex 
+			 * @param spreadSheetDataMap
+			 * @param selectSql
+			 * @return
+			 * @throws ClassNotFoundException
+			 * @throws DAOException
+			 */
+			public QuerySessionData getQuerySessionData(QueryDetails queryDetailsObj,
+					int recordsPerPage, int startIndex, Map spreadSheetDataMap,
+					String selectSql, Map<Long, QueryResultObjectDataBean> queryResultObjectDataBeanMap,
+					boolean hasConditionOnIdentifiedField) throws ClassNotFoundException, DAOException
+					{          
+				QuerySessionData querySessionData = new QuerySessionData();
+				querySessionData.setSql(selectSql);
+				querySessionData.setQueryResultObjectDataMap(queryResultObjectDataBeanMap);
+				querySessionData.setSecureExecute(queryDetailsObj.getSessionData().isSecurityRequired());
+				querySessionData.setHasConditionOnIdentifiedField(hasConditionOnIdentifiedField);
+				querySessionData.setRecordsPerPage(recordsPerPage);
+				QueryBizLogic qBizLogic = new QueryBizLogic(); 
+				PagenatedResultData pagenatedResultData = qBizLogic.execute(queryDetailsObj.getSessionData(), querySessionData, startIndex);
+				List<List <String>> dataList = pagenatedResultData.getResult();
+
+				for (Iterator<Long> beanMapIterator = queryResultObjectDataBeanMap.keySet().iterator(); beanMapIterator.hasNext(); )
 				{
-					int fileTypeColumnId = iterator.next();
-					QueryOutputTreeAttributeMetadata metaData 
-					= (QueryOutputTreeAttributeMetadata)fileTypeAtrributeIndexMetadataMap
-					.get(fileTypeColumnId);
-					String displayName = metaData.getDisplayName();
-					fileTypeIndexColumnNameMap.put(fileTypeColumnId, displayName);
-					fileTypeIndexMainEntityIndexMap.put(fileTypeColumnId, mainEntityIdColumn);
+					Long id = beanMapIterator.next();
+					QueryResultObjectDataBean queryResultObjectDataBean = queryResultObjectDataBeanMap.get(id);
+					if (queryResultObjectDataBean.isClobeType())
+					{	
+						List<String> columnList = (List<String>)spreadSheetDataMap.get(Constants.SPREADSHEET_COLUMN_LIST);
+						Map<Integer, Integer> fileTypeIndexMainEntityIndexMap = updateSpreadSheetColumnList(columnList, queryResultObjectDataBeanMap);	
+						Map exportMetataDataMap = updateDataList(dataList, fileTypeIndexMainEntityIndexMap);	
+						spreadSheetDataMap.put(Constants.ENTITY_IDS_MAP,exportMetataDataMap.get(Constants.ENTITY_IDS_MAP));
+						spreadSheetDataMap.put(Constants.EXPORT_DATA_LIST,exportMetataDataMap.get(Constants.EXPORT_DATA_LIST));
+						break;
+					}
 				}
-			}
-		}
-		for (Iterator<Integer> columnNameIterator = fileTypeIndexColumnNameMap
-				.keySet().iterator(); columnNameIterator.hasNext(); )
-		{
-			int index = (Integer)columnNameIterator.next();
-			String displayName = (String)fileTypeIndexColumnNameMap.get(index);
-			if (!spreadsheetColumnsList.contains(displayName))
+				spreadSheetDataMap.put(Constants.SPREADSHEET_DATA_LIST, pagenatedResultData.getResult());
+				/**
+				 * Name: Prafull
+				 * Description: Query performance issue. Instead of saving complete query results in session, resultd will be fetched for each result page navigation.
+				 * object of class QuerySessionData will be saved session, which will contain the required information for query execution while navigating through query result pages.
+				 * 
+				 *  saving required query data in Session so that can be used later on while navigating through result pages using pagination.  
+				 */
+				querySessionData.setTotalNumberOfRecords(pagenatedResultData.getTotalRecords());
+
+				return querySessionData;
+					}
+
+			/**
+			 * if file type attribute column is present in the spreadsheet view add the column to the datalist
+			 * @param dataList
+			 * @param fileTypeIndexMainEntityIndexMap
+			 */
+			public static Map updateDataList(List<List<String>> dataList, Map<Integer, Integer> fileTypeIndexMainEntityIndexMap)
 			{
-				spreadsheetColumnsList.add(index, displayName);
-			}
-			else
-			{
-				int indexOfColumn = spreadsheetColumnsList.lastIndexOf(displayName);
-				if(index == spreadsheetColumnsList.size())
+				Map<Integer, String> entityIdIndexMainEntityIdMap = new HashMap<Integer, String>();
+				Map<String, Object> exportMetataDataMap = new HashMap<String, Object>();
+				List<List<String>> newDataList = new ArrayList<List<String>>();
+				List<String> exportRow = new ArrayList<String>();
+				Map<Integer, List> entityIdsMap = new HashMap<Integer, List>();
+				//int i = 0;
+				int rowNo = 0;
+				for(List<String> row : dataList)
 				{
-					spreadsheetColumnsList.add(index, displayName);
+					List<String> entityIdsList = new ArrayList<String>();
+					exportRow = new ArrayList<String>();
+					exportRow.addAll(row);
+					for (Iterator<Integer> fileTypeIterator = fileTypeIndexMainEntityIndexMap.keySet().iterator(); fileTypeIterator.hasNext(); )
+					{
+						int fileTypeIndex = fileTypeIterator.next();
+						int mainEntityIdIndex = fileTypeIndexMainEntityIndexMap.get(fileTypeIndex);
+						String mainEntityId = row.get(mainEntityIdIndex);
+						entityIdIndexMainEntityIdMap.put(fileTypeIndex, mainEntityId);					
+					}
+					int fileTypeIndex = 0;
+					for (Iterator<Integer> fileTypeIterator = fileTypeIndexMainEntityIndexMap.keySet().iterator(); fileTypeIterator.hasNext(); )
+					{
+						fileTypeIndex = fileTypeIterator.next();
+						String mainEntityId = entityIdIndexMainEntityIdMap.get(fileTypeIndex);
+						String newColumn = "<img src='images/ic_view_up_file.gif' onclick='javascript:viewSPR(\""+ mainEntityId
+						+"\")' alt='click here' style='cursor:pointer;'>";
+						String fileName =  Constants.EXPORT_FILE_NAME_START +mainEntityId+".txt";
+						row.add(fileTypeIndex, newColumn);
+						exportRow.add(fileTypeIndex,fileName);
+						entityIdsList.add(mainEntityId);
+						//i++;
+					}
+					newDataList.add(exportRow);
+					entityIdsMap.put(rowNo, entityIdsList);
+					rowNo++;
+				}			
+				exportMetataDataMap.put(Constants.ENTITY_IDS_MAP, entityIdsMap);
+				exportMetataDataMap.put(Constants.EXPORT_DATA_LIST, newDataList);
+
+				return exportMetataDataMap;
+			}
+			/**
+			 * 
+			 * @param spreadSheetDataMap
+			 * @param queryResultObjectDataBeanMap
+			 * @return
+			 */
+			public Map<Integer, Integer> updateSpreadSheetColumnList(List<String> spreadsheetColumnsList,Map<Long,QueryResultObjectDataBean> queryResultObjectDataBeanMap)
+			{
+				Map<Integer, String> fileTypeIndexColumnNameMap = new TreeMap<Integer, String>();
+				Map<Integer, Integer> fileTypeIndexMainEntityIndexMap = new TreeMap<Integer, Integer>();
+				// Stores all the file type attribute column names of all the entities in the map i.e. indexDisplayNameMap
+				for (Iterator<Long> beanMapIterator = queryResultObjectDataBeanMap.keySet().iterator(); beanMapIterator.hasNext(); )
+				{
+					Long id = beanMapIterator.next();
+					QueryResultObjectDataBean queryResultObjectDataBean = queryResultObjectDataBeanMap.get(id);
+					if (queryResultObjectDataBean.isClobeType())
+					{	
+						Map<Integer, QueryOutputTreeAttributeMetadata> fileTypeAtrributeIndexMetadataMap
+						= (Map<Integer, QueryOutputTreeAttributeMetadata>)
+						queryResultObjectDataBean.getFileTypeAtrributeIndexMetadataMap();
+						int mainEntityIdColumn = queryResultObjectDataBean.getMainEntityIdentifierColumnId();
+						for (Iterator<Integer> iterator = fileTypeAtrributeIndexMetadataMap
+								.keySet().iterator(); iterator.hasNext(); )
+						{
+							int fileTypeColumnId = iterator.next();
+							QueryOutputTreeAttributeMetadata metaData 
+							= (QueryOutputTreeAttributeMetadata)fileTypeAtrributeIndexMetadataMap
+							.get(fileTypeColumnId);
+							String displayName = metaData.getDisplayName();
+							fileTypeIndexColumnNameMap.put(fileTypeColumnId, displayName);
+							fileTypeIndexMainEntityIndexMap.put(fileTypeColumnId, mainEntityIdColumn);
+						}
+					}
+				}
+				for (Iterator<Integer> columnNameIterator = fileTypeIndexColumnNameMap
+						.keySet().iterator(); columnNameIterator.hasNext(); )
+				{
+					int index = (Integer)columnNameIterator.next();
+					String displayName = (String)fileTypeIndexColumnNameMap.get(index);
+					if (!spreadsheetColumnsList.contains(displayName))
+					{
+						spreadsheetColumnsList.add(index, displayName);
+					}
+					else
+					{
+						int indexOfColumn = spreadsheetColumnsList.lastIndexOf(displayName);
+						if(index == spreadsheetColumnsList.size())
+						{
+							spreadsheetColumnsList.add(index, displayName);
+						}
+						else
+						{
+							if ((indexOfColumn != index) && (!spreadsheetColumnsList.get(index)
+									.equals(displayName)))
+								spreadsheetColumnsList.add(index, displayName);
+						}
+
+					}
+				}
+				return fileTypeIndexMainEntityIndexMap;
+			}
+
+			/**
+			 * @param spreadSheetDataMap
+			 * @param columnsMap
+			 * @param tableName 
+			 * @param parentData 
+			 * @param parentIdColumnName 
+			 * @param mainEntityMap 
+			 * @param outputTermsColumns 
+			 * @return
+			 */
+			private List createSQL(Map spreadSheetDataMap, OutputTreeDataNode node,
+					String parentIdColumnName, String parentData, String tableName,
+					Map<Long, QueryResultObjectDataBean> queryResultObjectDataBeanMap,
+					QueryDetails queryDetailsObj,Map<String, IOutputTerm> outputTermsColumns)
+			{  
+				String selectSql = Constants.SELECT_DISTINCT;
+				List<String> columnsList = new ArrayList<String>();
+				String idColumnOfCurrentNode = "";
+				QueryResultObjectDataBean queryResultObjectDataBean = queryResultObjectDataBeanMap.get(node.getId());
+				List<QueryOutputTreeAttributeMetadata> attributes = node.getAttributes();
+				Vector<Integer> identifiedDataColumnIds = new Vector<Integer>();
+				Vector<Integer> objectColumnIds = new Vector<Integer>();
+				List resultList = new ArrayList();
+				int columnIndex =0;
+				int addedFileTypeAttributes = 0;
+				Map<Integer, QueryOutputTreeAttributeMetadata> fileTypeAtrributeIndexMetadataMap = new HashMap<Integer, 
+				QueryOutputTreeAttributeMetadata>();
+				for(QueryOutputTreeAttributeMetadata attributeMetaData : attributes)
+				{
+					AttributeInterface attribute = attributeMetaData.getAttribute();
+					String className = attribute.getEntity().getName();
+					className = Utility.parseClassName(className);
+					String sqlColumnName = attributeMetaData.getColumnName();
+
+					if(attribute.getName().equalsIgnoreCase(Constants.ID))
+					{
+						idColumnOfCurrentNode = sqlColumnName;
+						if(queryResultObjectDataBean.isMainEntity())
+							queryResultObjectDataBean.setMainEntityIdentifierColumnId(columnIndex);
+						else
+							queryResultObjectDataBean.setEntityId(columnIndex);
+					}
+					if(attribute.getIsIdentified()!=null && attribute.getIsIdentified())
+					{
+						identifiedDataColumnIds.add(columnIndex);
+						queryResultObjectDataBean.setIdentifiedDataColumnIds(identifiedDataColumnIds);
+					}
+					if(!attribute.getAttributeTypeInformation().getDataType().equalsIgnoreCase(Constants.FILE_TYPE))
+					{
+						objectColumnIds.add(columnIndex);
+						selectSql = selectSql + sqlColumnName + ",";
+						sqlColumnName = sqlColumnName.substring(
+								SqlGenerator.COLUMN_NAME.length(), sqlColumnName
+								.length());
+						String attrLabel = Utility.getDisplayLabel(attribute.getName());
+						columnsList.add(attrLabel + " : " + className);
+						columnIndex++;
+					}
+					else 
+					{
+						queryResultObjectDataBean.setClobeType(true);
+						int fileTypeIndex = columnIndex + addedFileTypeAttributes;
+						fileTypeAtrributeIndexMetadataMap.put(fileTypeIndex, attributeMetaData);
+						addedFileTypeAttributes++;
+					}
+				}
+				if (queryResultObjectDataBean.isClobeType())
+				{
+					queryResultObjectDataBean.setFileTypeAtrributeIndexMetadataMap(
+							fileTypeAtrributeIndexMetadataMap);
+				}
+				if(! selectedColumnMetaData.isDefinedView())
+				{
+					spreadSheetDataMap.put(Constants.SPREADSHEET_COLUMN_LIST, columnsList);
+					selectSql = selectSql.substring(0, selectSql.lastIndexOf(","));
+					TemporalColumnUIBean temporalColumnUIBean = new TemporalColumnUIBean(node, selectSql, columnsList, outputTermsColumns,columnIndex);
+					modifySqlForTemporalColumns(temporalColumnUIBean);
+					selectSql = temporalColumnUIBean.getSql();
+					columnIndex = temporalColumnUIBean.getColumnIndex();
+					selectedColumnMetaData.setSelectedAttributeMetaDataList(attributes);
+				}
+				else 
+				{
+					queryResultObjectDataBeanMap = new HashMap<Long, QueryResultObjectDataBean>();
+					selectSql = getSQLForSelectedColumns(spreadSheetDataMap, queryResultObjectDataBeanMap,
+							queryDetailsObj, outputTermsColumns);
+					columnsList = (List<String>)spreadSheetDataMap.get(Constants.SPREADSHEET_COLUMN_LIST);
+				}
+				if(!selectedColumnMetaData.isDefinedView() && queryResultObjectDataBean
+						.getMainEntityIdentifierColumnId() == -1)
+				{
+					Map<EntityInterface, Integer> entityIdIndexMap = new HashMap<EntityInterface, Integer>();
+					selectSql = QueryCSMUtil.updateEntityIdIndexMap(queryResultObjectDataBean, columnIndex, 
+							selectSql, null, entityIdIndexMap, queryDetailsObj);
+					entityIdIndexMap = queryResultObjectDataBean.getEntityIdIndexMap();
+					if(entityIdIndexMap.get(queryResultObjectDataBean.getMainEntity())!=null)
+						queryResultObjectDataBean.setMainEntityIdentifierColumnId(entityIdIndexMap
+								.get(queryResultObjectDataBean.getMainEntity()));
+					else
+						queryResultObjectDataBean.setMainEntityIdentifierColumnId(-1);
+				}
+				selectSql = selectSql + " from " + tableName;
+				if (parentData != null)
+				{
+					selectSql = selectSql + " where (" + parentIdColumnName + " = '" + parentData + "' "
+					+ LogicalOperator.And+ " " + idColumnOfCurrentNode+" "+RelationalOperator
+					.getSQL(RelationalOperator.IsNotNull)+")";
 				}
 				else
 				{
-					if ((indexOfColumn != index) && (!spreadsheetColumnsList.get(index)
-						.equals(displayName)))
-						spreadsheetColumnsList.add(index, displayName);
+					selectSql = selectSql + " where "+idColumnOfCurrentNode+" "+RelationalOperator
+					.getSQL(RelationalOperator.IsNotNull);	
 				}
-										
+				//return selectSql;
+				if(identifiedDataColumnIds.size()!=0)
+					queryResultObjectDataBean.setHasAssociatedIdentifiedData(true);
+				queryResultObjectDataBean.setObjectColumnIds(objectColumnIds);
+
+				resultList.add(selectSql);
+				resultList.add(queryResultObjectDataBeanMap);
+				return resultList;
 			}
-		}
-		return fileTypeIndexMainEntityIndexMap;
-	}
-	
-	/**
-	 * @param spreadSheetDataMap
-	 * @param columnsMap
-	 * @param tableName 
-	 * @param parentData 
-	 * @param parentIdColumnName 
-	 * @param mainEntityMap 
-	 * @param outputTermsColumns 
-	 * @return
-	 */
-	private List createSQL(Map spreadSheetDataMap, OutputTreeDataNode node,
-			String parentIdColumnName, String parentData, String tableName,
-			Map<Long, QueryResultObjectDataBean> queryResultObjectDataBeanMap,
-			QueryDetails queryDetailsObj,Map<String, IOutputTerm> outputTermsColumns)
-	{  
-		String selectSql = Constants.SELECT_DISTINCT;
-		List<String> columnsList = new ArrayList<String>();
-		String idColumnOfCurrentNode = "";
-		QueryResultObjectDataBean queryResultObjectDataBean = queryResultObjectDataBeanMap.get(node.getId());
-		List<QueryOutputTreeAttributeMetadata> attributes = node.getAttributes();
-		Vector<Integer> identifiedDataColumnIds = new Vector<Integer>();
-		Vector<Integer> objectColumnIds = new Vector<Integer>();
-		List resultList = new ArrayList();
-		int columnIndex =0;
-		int addedFileTypeAttributes = 0;
-		Map<Integer, QueryOutputTreeAttributeMetadata> fileTypeAtrributeIndexMetadataMap = new HashMap<Integer, 
-			QueryOutputTreeAttributeMetadata>();
-		for(QueryOutputTreeAttributeMetadata attributeMetaData : attributes)
-		{
-			AttributeInterface attribute = attributeMetaData.getAttribute();
-			String className = attribute.getEntity().getName();
-			className = Utility.parseClassName(className);
-			String sqlColumnName = attributeMetaData.getColumnName();
-			
-			if(attribute.getName().equalsIgnoreCase(Constants.ID))
+
+			/**
+			 * @param idNodesMap Map<Long, OutputTreeDataNode> map of ids and nodes present in tree
+			 * @param actualParentNodeId string id of parent
+			 * @return boolean true if node is a leafNode else false.
+			 */
+			public boolean isLeafNode(Map<String, OutputTreeDataNode> idNodesMap,String actualParentNodeId)
 			{
-				idColumnOfCurrentNode = sqlColumnName;
-				if(queryResultObjectDataBean.isMainEntity())
-					   queryResultObjectDataBean.setMainEntityIdentifierColumnId(columnIndex);
-					else
-					   queryResultObjectDataBean.setEntityId(columnIndex);
+				String[] nodeIds;
+				nodeIds = actualParentNodeId.split(Constants.UNDERSCORE);
+				String treeNo = nodeIds[0];
+				String parentId = nodeIds[1];
+				String uniqueNodeId = treeNo+"_"+parentId;
+				OutputTreeDataNode parentNode = idNodesMap.get(uniqueNodeId);
+				if (parentNode.getChildren().isEmpty())
+				{
+					return true;
+				}
+				return false;
 			}
-			if(attribute.getIsIdentified()!=null && attribute.getIsIdentified())
-			{
-				identifiedDataColumnIds.add(columnIndex);
-				queryResultObjectDataBean.setIdentifiedDataColumnIds(identifiedDataColumnIds);
-			}
-			if(!attribute.getAttributeTypeInformation().getDataType().equalsIgnoreCase(Constants.FILE_TYPE))
-			{
-				objectColumnIds.add(columnIndex);
-				selectSql = selectSql + sqlColumnName + ",";
-				sqlColumnName = sqlColumnName.substring(
-						SqlGenerator.COLUMN_NAME.length(), sqlColumnName
-								.length());
-				String attrLabel = Utility.getDisplayLabel(attribute.getName());
-				columnsList.add(attrLabel + " : " + className);
-				columnIndex++;
-			}
-			else 
-			{
-				queryResultObjectDataBean.setClobeType(true);
-				int fileTypeIndex = columnIndex + addedFileTypeAttributes;
-				fileTypeAtrributeIndexMetadataMap.put(fileTypeIndex, attributeMetaData);
-				addedFileTypeAttributes++;
-			}
-		}
-		if (queryResultObjectDataBean.isClobeType())
-		{
-			queryResultObjectDataBean.setFileTypeAtrributeIndexMetadataMap(
-					fileTypeAtrributeIndexMetadataMap);
-		}
-		if(! selectedColumnMetaData.isDefinedView())
-		{
-			spreadSheetDataMap.put(Constants.SPREADSHEET_COLUMN_LIST, columnsList);
-			selectSql = selectSql.substring(0, selectSql.lastIndexOf(","));
-			TemporalColumnUIBean temporalColumnUIBean = new TemporalColumnUIBean(node, selectSql, columnsList, outputTermsColumns,columnIndex);
-			modifySqlForTemporalColumns(temporalColumnUIBean);
-			selectSql = temporalColumnUIBean.getSql();
-			columnIndex = temporalColumnUIBean.getColumnIndex();
-			selectedColumnMetaData.setSelectedAttributeMetaDataList(attributes);
-		}
-		else 
-		{
-			queryResultObjectDataBeanMap = new HashMap<Long, QueryResultObjectDataBean>();
-			selectSql = getSQLForSelectedColumns(spreadSheetDataMap, queryResultObjectDataBeanMap,
-					queryDetailsObj, outputTermsColumns);
-			columnsList = (List<String>)spreadSheetDataMap.get(Constants.SPREADSHEET_COLUMN_LIST);
-		}
-//		TemporalColumnUIBean temporalColumnUIBean = new TemporalColumnUIBean(node, selectSql, columnsList, outputTermsColumns,columnIndex);
-//		modifySqlForTemporalColumns(temporalColumnUIBean);
-//		selectSql = temporalColumnUIBean.getSql();
-//		columnIndex = temporalColumnUIBean.getColumnIndex();
-		//columnIndex = modifySqlForTemporalColumns(node, selectSql, columnsList, outputTermsColumns,columnIndex);
-		if(!selectedColumnMetaData.isDefinedView() && queryResultObjectDataBean
-					.getMainEntityIdentifierColumnId() == -1)
-		{
-			Map<EntityInterface, Integer> entityIdIndexMap = new HashMap<EntityInterface, Integer>();
-		    selectSql = QueryCSMUtil.updateEntityIdIndexMap(queryResultObjectDataBean, columnIndex, 
-		    		selectSql, null, entityIdIndexMap, queryDetailsObj);
-		    entityIdIndexMap = queryResultObjectDataBean.getEntityIdIndexMap();
-			 if(entityIdIndexMap.get(queryResultObjectDataBean.getMainEntity())!=null)
-				  queryResultObjectDataBean.setMainEntityIdentifierColumnId(entityIdIndexMap
-				  .get(queryResultObjectDataBean.getMainEntity()));
-			 else
-				 queryResultObjectDataBean.setMainEntityIdentifierColumnId(-1);
-		}
-		//selectSql = modifySqlForTemporalColumns(node, selectSql, columnsList, outputTermsColumns);
-		selectSql = selectSql + " from " + tableName;
-		if (parentData != null)
-		{
-			selectSql = selectSql + " where (" + parentIdColumnName + " = '" + parentData + "' "
-			+ LogicalOperator.And+ " " + idColumnOfCurrentNode+" "+RelationalOperator
-			.getSQL(RelationalOperator.IsNotNull)+")";
-		}
-		else
-		{
-			selectSql = selectSql + " where "+idColumnOfCurrentNode+" "+RelationalOperator
-			.getSQL(RelationalOperator.IsNotNull);	
-		}
-		//return selectSql;
-		if(identifiedDataColumnIds.size()!=0)
-			queryResultObjectDataBean.setHasAssociatedIdentifiedData(true);
-		queryResultObjectDataBean.setObjectColumnIds(objectColumnIds);
-		 
-		resultList.add(selectSql);
-		resultList.add(queryResultObjectDataBeanMap);
-		return resultList;
-	}
-	
-	/**
-	 * @param idNodesMap Map<Long, OutputTreeDataNode> map of ids and nodes present in tree
-	 * @param actualParentNodeId string id of parent
-	 * @return boolean true if node is a leafNode else false.
-	 */
-	public boolean isLeafNode(Map<String, OutputTreeDataNode> idNodesMap,String actualParentNodeId)
-	{
-		String[] nodeIds;
-		nodeIds = actualParentNodeId.split(Constants.UNDERSCORE);
-		String treeNo = nodeIds[0];
-		String parentId = nodeIds[1];
-		String uniqueNodeId = treeNo+"_"+parentId;
-		OutputTreeDataNode parentNode = idNodesMap.get(uniqueNodeId);
-		if (parentNode.getChildren().isEmpty())
-		{
-			return true;
-		}
-		return false;
-	}
 }
