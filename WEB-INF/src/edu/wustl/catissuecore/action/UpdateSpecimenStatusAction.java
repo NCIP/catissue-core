@@ -41,6 +41,7 @@ import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.catissuecore.util.StorageContainerUtil;
 
 public class UpdateSpecimenStatusAction extends BaseAction
 {
@@ -119,9 +120,19 @@ public class UpdateSpecimenStatusAction extends BaseAction
 		{
 			//11July08 : Mandar : For GenericSpecimen
 			SpecimenDetailsTagUtil.setAnticipatorySpecimenDetails(request, specimenSummaryForm);
-
+			// Suman-For bug #8228
+			String s = "";
+			if (exception.getMessage().equals("Failed to update multiple specimen Stroage location already in use")
+					|| exception.getMessage().equals("Failed to update multiple specimen Either Storagecontainer is full! or it cannot accomodate all the specimens.")
+					|| exception.getMessage().equals("Failed to update multiple specimen Storagecontainer information not found!"))
+			{
+				clearSCLocation(specimenSummaryForm);
+				s = "Please allocate a different container to the specimens shown below with empty container names as the container you specified has insufficient space";
+			} else {
+				s = exception.getMessage();
+			}
 			ActionErrors actionErrors = new ActionErrors();
-			actionErrors.add(actionErrors.GLOBAL_MESSAGE, new ActionError("errors.item", exception.getMessage()));
+			actionErrors.add(actionErrors.GLOBAL_MESSAGE, new ActionError("errors.item", s));
 			saveErrors(request, actionErrors);
 			saveToken(request);
 			String pageOf = request.getParameter(Constants.PAGEOF);
@@ -131,6 +142,70 @@ public class UpdateSpecimenStatusAction extends BaseAction
 		}
 
 	}
+	// bug 8228 -suman
+	// this method checks for free locations of a container and clears the ones
+	// which are not available
+	private void clearSCLocation(ViewSpecimenSummaryForm specimenSummaryForm)
+			throws Exception {
+		List<GenericSpecimen> specimenList = specimenSummaryForm.getSpecimenList();
+		List<GenericSpecimen> aliquotList = specimenSummaryForm.getAliquotList();
+		List<GenericSpecimen> derivedList = specimenSummaryForm.getDerivedList();
+		List<String> allocatedPositions = new ArrayList<String>();
+		int freeSizeofContainer = 0;
+		for (GenericSpecimen spec : specimenList) 
+		{
+			String conName = spec.getSelectedContainerName();
+			String conId = spec.getContainerId();
+			try {
+				freeSizeofContainer = StorageContainerUtil.getCountofFreeLocationOfContainer(conId, conName);
+			}
+			catch (Exception e) 
+			{
+				e.printStackTrace();
+		    }
+		}
+		int tempContainerSize = checkList(specimenList, allocatedPositions,freeSizeofContainer);
+		tempContainerSize = checkList(aliquotList, allocatedPositions,tempContainerSize);
+		checkList(derivedList, allocatedPositions, tempContainerSize);
+	}
+
+	// this method check if the x and y positions are given and clears them if
+	// not allocated.
+	public int checkList(List<GenericSpecimen> gs,
+			List<String> allocatedPositions, int containerSize) {
+		for (GenericSpecimen spec : gs) {
+			String positionOne = spec.getPositionDimensionOne();
+			String positionTwo = spec.getPositionDimensionTwo();
+			String containerName = spec.getStorageContainerForSpecimen();
+			String key = containerName + ":" + positionOne + "," + positionTwo;
+			if (positionOne != "" && positionTwo != "") 
+			{
+				if (!(StorageContainerUtil.isPostionAvaialble(spec.getContainerId(), spec.getSelectedContainerName(),positionOne, positionTwo))
+						|| allocatedPositions.contains(key)) {
+					spec.setPositionDimensionOne("");
+					spec.setPositionDimensionTwo("");
+					spec.setStorageContainerForSpecimen("");
+					spec.setSelectedContainerName("");
+				} else {
+					allocatedPositions.add(key);
+				}
+			} else {
+				if (containerSize >= 1) {
+					allocatedPositions.add(key);
+				} else {
+					spec.setPositionDimensionOne("");
+					spec.setPositionDimensionTwo("");
+					spec.setStorageContainerForSpecimen("");
+					spec.setSelectedContainerName("");
+				}
+			}
+			containerSize = containerSize - 1;
+		}
+		return containerSize;
+	}
+
+	// end bug 8228 - Suman
+	
 
 	/**
 	 * @param eventId
