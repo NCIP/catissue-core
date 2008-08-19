@@ -6,7 +6,8 @@
 <%@ page import="java.util.List"%>
 <%@ page import="edu.wustl.catissuecore.bean.RequestViewBean" %>
 <script src="jss/ajax.js"></script>	   
-
+<script type="text/javascript" src="jss/dhtmlwindow.js"></script>
+<script type="text/javascript" src="jss/modal.js"></script>
 
 <html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
 	<%=messageKey%>
@@ -195,10 +196,15 @@ function showAllSpecimen(count)
 	}
 	else
 	{
-			
-		
 		var url= 'ConsentVerification.do?operation=&pageOf=pageOfOrdering&specimenConsents=yes&verifiedRows='+verifiedRows+'&noOfRows='+count+'&speciemnIdValue='+speciemnIdValue+'&labelIndexCount='+labelIndexCount;
-		window.open(url,'ConsentVerificationForm','height=300,width=800,scrollbars=1,resizable=1');
+		
+		//model window popup
+		allConsentWindow=dhtmlmodal.open('Institution', 'iframe', url,'Consent Form', 'width=600px,height=300px,center=1,resize=0,scrolling=1')
+		allConsentWindow.onclose=function()
+      { 
+            return true;
+      }
+	  
 	}
 }
 //This function called to view the consent page
@@ -210,8 +216,15 @@ function showNewConsentPage(specimenIdentifierkey,labelStatus,consentVerificatio
 
 	if(status!="No Consents")
 	{
-		window.open(url,'ConsentVerificationForm','height=300,width=800,scrollbars=1,resizable=1');
-	}
+		
+	
+//model window popup
+	consentWindow=dhtmlmodal.open('Institution', 'iframe', url,'Consent Form', 'width=600px,height=260px,center=1,resize=0,scrolling=1')
+    consentWindow.onclose=function()
+      { 
+            return true;
+      }
+	  }
 }
 
 function checkQuantity(index)
@@ -416,7 +429,18 @@ function checkQuantityforAll(count)
 						<td >
 					<div id="specimenDataTab">
 						<table border="0" width="100%" cellpadding="3" cellspacing="0">
-						
+						<tr>
+						<td colspan="9" align="right" valign="top">
+							<img src="images/uIEnhancementImages/viewall_icon.gif" alt="View All" />
+								
+							<a href="javascript:showAllSpecimen('<%=count%>')" class="view" >
+													<bean:message key="requestdetails.link.ViewAllConsents" />
+							                    </a>
+						</td>
+					</tr>
+					<tr>
+						<td class="bottomtd"></td>
+					</tr>
 					<tr>
 						  <% 
 									if(requestDetailsList != null)
@@ -425,7 +449,7 @@ function checkQuantityforAll(count)
 									 	int i = 0; 
 										String rowStatusValue ="";
 						 %>
-					             <td colspan="4" align="center" valign="top" class="tableheading" width="20%">
+					             <td colspan="4	" align="center" valign="top" class="tableheading" width="20%">
 									<strong>
 										<bean:message key="requestdetails.header.RequestedSpecimenDetails" />
 									</strong>
@@ -438,26 +462,9 @@ function checkQuantityforAll(count)
 								 </td>
 				                 
 				                <td width="11%" rowspan="2" valign="top" class="tableheading">
-									<table width="100%" border="0" cellspacing="0" cellpadding="0">
-										
-										<tr>
-											 <td valign="top" class="black_ar" width="20%">
-													<strong>
-														<bean:message key="consent.consentforspecimen"/>
-														
-													</strong>	
-											</td>
-										</tr>
-										<tr>
-											
-											<td align="left" >
-												<a href="javascript:showAllSpecimen('<%=count%>')" class="view" >
-													<bean:message key="requestdetails.link.ViewAllConsents" />
-							                    </a>
-										</td>
-										</tr>
-									</table>
-									
+									<strong>
+										<bean:message key="consent.consentforspecimen"/>
+									</strong>	
 								</td>
 				                <td width="16%" rowspan="2" valign="top" class="tableheading">
 									<strong>
@@ -466,7 +473,7 @@ function checkQuantityforAll(count)
 									</br>
 					                <span class="black_new">
 									     <html:select property="status" name="requestDetailsForm" styleClass="formFieldSized11" styleId="nextStatusId" size="1" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="<%=checkQuantityforAll%>">
-											<html:options collection="<%= Constants.REQUESTED_ITEMS_STATUS_LIST %>" labelProperty="name" property="value"/>		
+											<html:options collection="<%= Constants.REQUESTED_ITEMS_STATUS_LIST %>" labelProperty="name" property="value" />		
 									     </html:select>
 								</td>	
 				                <td rowspan="2" valign="top" class="tableheading" width="10%">
@@ -479,7 +486,7 @@ function checkQuantityforAll(count)
 								<td width="11%" class="subtd">
 									<bean:message key='requestdetails.datatable.label.RequestItem'/>
 								</td>
-				               
+								
 								<td width="10%" class="subtd" valign="top">
 									<bean:message key="orderingSystem.tableheader.label.type" />
 								</td>
@@ -585,6 +592,7 @@ function checkQuantityforAll(count)
 								 <html:hidden name="requestDetailsForm" property="<%=canDistribute%>"  styleId="<%=canDistribute%>" />
 								
 								<tr>
+									
 									<td class="<%=fontStyle%>" >
 					<%			if(((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim(										).equalsIgnoreCase("Derived"))
 								{
@@ -691,6 +699,7 @@ function checkQuantityforAll(count)
 					
 							
 								<td class="<%=fontStyle%>"  > 
+									<span class="view">
 									<html:hidden property="<%=specimenIdInMap%>" styleId="<%=specimenIdInMap%>"  value="<%=specimenIdValue%>"/>
 									<html:hidden property="<%=rowStatuskey%>" styleId="<%=rowStatuskey%>"  value="<%=rowStatusValue%>"/>		
 
@@ -721,7 +730,7 @@ function checkQuantityforAll(count)
 											<html:hidden property="<%=consentVerificationkey%>" styleId="<%=consentVerificationkey%>"  value="<%=Constants.NO_CONSENTS%>"/>
 									</logic:equal>
 									<logic:notEqual name="requestDetailsForm" property="<%=consentVerificationkey%>" value="<%=Constants.NO_CONSENTS%>">
-											<a  id="<%=labelStatus%>" href="javascript:showNewConsentPage('<%=specimenIdInMap%>','<%=labelStatus%>','<%=consentVerificationkey%>')">
+											<a  id="<%=labelStatus%>" class="view" href="javascript:showNewConsentPage('<%=specimenIdInMap%>','<%=labelStatus%>','<%=consentVerificationkey%>')">
 									<logic:notEmpty name="requestDetailsForm" property="<%=consentVerificationkey%>">
 												<bean:write name="requestDetailsForm" property="<%=consentVerificationkey%>"/>
 									</logic:notEmpty>
@@ -745,7 +754,7 @@ function checkQuantityforAll(count)
 										<html:hidden property="<%=consentVerificationkey%>" styleId="<%=consentVerificationkey%>"  value="<%=Constants.VERIFIED%>"/>
 				<%
 								}
-				%>
+				%>				</span>
 								</td>
 				<%		}
 				%>
