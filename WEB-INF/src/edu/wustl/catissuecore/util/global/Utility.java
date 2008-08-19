@@ -1573,7 +1573,7 @@ public class Utility extends edu.wustl.common.util.Utility {
 		if(columnList!=null)
 		{
 			String fixedColWidth = null;
-			if(isWidthInPercent&&columnList.size()>0)
+			if(isWidthInPercent)
 			{
 				fixedColWidth = String.valueOf(100/columnList.size());
 			}
@@ -1604,7 +1604,13 @@ public class Utility extends edu.wustl.common.util.Utility {
 	{
 		request.setAttribute("myData",getmyData(dataList));
 		request.setAttribute("columns", getcolumns(columnList));
-		request.setAttribute("colWidth",getcolWidth(columnList,false));
+		boolean isWidthInPercent=false;
+		if( columnList.size()<10)
+		{
+			isWidthInPercent=true;
+		}
+		request.setAttribute("colWidth",getcolWidth(columnList,isWidthInPercent));
+		request.setAttribute("isWidthInPercent",isWidthInPercent);
 		request.setAttribute("colTypes",getcolTypes(dataList));
 		int heightOfGrid = 100;
 		if(dataList!=null)
