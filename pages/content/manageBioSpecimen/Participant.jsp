@@ -582,7 +582,7 @@ tr#hiddenCombo
 		        <td valign="bottom" ><a href="#" onClick="editParticipant()"><img src="images/uIEnhancementImages/tab_edit_participant1.gif" border="0" alt="Edit Participant" width="116" height="22" border="0"></a></td>
 		        <td valign="bottom"><img src="images/uIEnhancementImages/tab_view_surgical1.gif" alt="View Surgical Pathology Report" width="216" height="22"></td>
 		        <td valign="bottom"><a href="#" onClick="showAnnotations()"><img src="images/uIEnhancementImages/tab_view_annotation2.gif" border="0" alt="View Annotation" width="116" height="22"></a></td>
-		        <td width="29%" valign="bottom" class="td_tab_bg">&nbsp;</td>
+		        <td width="90%" valign="bottom" class="td_tab_bg">&nbsp;</td>
 		</tr>
 
 			<tr>
@@ -615,7 +615,7 @@ tr#hiddenCombo
 		        <td valign="bottom" ><a href="#" onClick="setTarget();editParticipant()"><img src="images/uIEnhancementImages/tab_edit_participant1.gif" border="0" alt="Edit Participant" width="116" height="22" border="0"></a></td>
 		        <td valign="bottom"><a href="#" onClick="viewSPR()"><img src="images/uIEnhancementImages/tab_view_surgical2.gif" alt="View Surgical Pathology Report" width="216" height="22" border="0"></a></td>
 		        <td valign="bottom"><img src="images/uIEnhancementImages/tab_view_annotation1.gif" border="0" alt="View Annotation" width="116" height="22"></td>
-		        <td width="29%" valign="bottom" class="td_tab_bg">&nbsp;</td>
+		        <td width="90%" valign="bottom" class="td_tab_bg">&nbsp;</td>
 		</tr>
 
 			<tr>
