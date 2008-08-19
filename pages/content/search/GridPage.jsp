@@ -9,6 +9,7 @@
 	var myData =${requestScope.myData};
 	var columns =${requestScope.columns};
 	var colWidth =${requestScope.colWidth};
+	var isWidthInPercent=${requestScope.isWidthInPercent};
 	var colTypes =${requestScope.colTypes};
 </script>
 <table width="100%" cellpadding="3" cellspacing="0" border="0"	>
@@ -70,11 +71,7 @@ function init_grid()
 	mygrid.enableAutoHeigth(false);
 
 	//document.write("<hr>"+colWidth+"<hr>");
-	if(useFunction == "derivedSpecimenGrid")
-	{
-	   //colWidth = "130,130,130,130,0";
-	   colWidth="25,25,25,25";
-	}
+
 
 	if(useFunction == "eventParametersGrid")
 	{
@@ -89,16 +86,15 @@ function init_grid()
 	
 	//document.write("<hr>"+colWidth+"<hr>");
     mygrid.enableRowsHover(true,'grid_hover')
-	if(useFunction == "eventParametersGrid" || useFunction == "goToConflictDetails" || useFunction == "derivedSpecimenGrid")
+
+	if(isWidthInPercent)
 	{
 		mygrid.setInitWidthsP(colWidth);
 	}
-		
 	else
 	{
-      mygrid.setInitWidths(colWidth);
+		mygrid.setInitWidths(colWidth);
 	}
-		
 	
 	mygrid.setSkin("light");
 	mygrid.enableAlterCss("even","uneven");

@@ -8,7 +8,8 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
-
+<%@ page language="java" isELIgnored="false"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <script src="jss/script.js"></script>
 <script type="text/javascript" src="jss/ajax.js"></script> 
 <style>
@@ -269,13 +270,54 @@ function checkAllOnThisPageResponse()
 	<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 </head>
 <body onload="setCheckBoxState()">
-<div style="width:100%; overflow:auto " height="<%=height%>">
-<table summary="" cellpadding="0" cellspacing="0" border="0" width="99%" height="100%" style="overflow:auto;">
+
+<!-------new--->
+<html:errors /> <!--Prafull:Added errors tag inside the table-->
+<table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
+<tr>
+		<td class="td_color_bfdcf3">
+<logic:equal name="pageOf" value="<%=Constants.PAGEOF_SIMPLE_QUERY_INTERFACE%>">
+			<table border="0" cellpadding="0" cellspacing="0">
+		      <tr>
+				<td class="td_table_head">
+					<span class="wh_ar_b">
+						Simple Query
+					</span>
+				</td>
+		        <td>
+					<img src="images/uIEnhancementImages/table_title_corner2.gif" alt="Page Title - Search Results" width="31" height="24" hspace="0" vspace="0" />
+				</td>
+		      </tr>
+		    </table>
+ 
+		</td>
+	  </tr>
+	   <tr>
+		<td class="tablepadding">
+			<table width="100%" border="0" cellpadding="0" cellspacing="0">
+			
+      <tr>
+        <td width="90%" valign="bottom" class="td_tab_bg">&nbsp;</td>
+      </tr>
+	 
+    </table>
+	</logic:equal>
+	<table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
+      
+      <tr>
+        <td align="left" class="toptd"></td>
+      </tr>
+      <tr>
+        <td align="left" class="tr_bg_blue1"><span class="blue_ar_b"> &nbsp;<bean:message key="<%=title%>" />&nbsp;</span></td>
+
+      </tr>
+<!------new--->
+<!--<table summary="" cellpadding="0" cellspacing="0" border="0" width="99%" height="100%" style="overflow:auto;">
 <tr>
 	<td >
-		<html:errors /> <!--Prafull:Added errors tag inside the table-->
+		
 	</td>
-</tr>
+</tr>-->
 <html:form action="<%=Constants.SPREADSHEET_EXPORT_ACTION%>" style="margin:0;padding:0;">
 <html:hidden property="checkAllPages" value=""/>	
 
@@ -299,8 +341,8 @@ function checkAllOnThisPageResponse()
 			 </td>
 		</tr>--%>	
 		
-		<tr height="5%">
-			<td class="bgResultRow" >					
+		<tr>
+			<td class="black_ar" >					
 				<custom:test name="" pageNum="<%=pageNum%>" totalResults="<%=totalResults%>" numResultsPerPage="<%=numResultsPerPage%>" pageName="<%=pageName%>"  showPageSizeCombo="<%=true%>" recordPerPageList="<%=Constants.RESULT_PERPAGE_OPTIONS%>" />
 				<html:hidden property="<%=Constants.PAGEOF%>" value="<%=pageOf%>"/>
 				<html:hidden property="isPaging" value="true"/>			
@@ -312,8 +354,8 @@ function checkAllOnThisPageResponse()
 			String []selectedColumns=form.getSelectedColumnNames();
 		%>
 		
-		<tr id="hiddenCombo" rowspan="4" height="2%">
-			<td class="formField" colspan="4">
+		<tr id="hiddenCombo" rowspan="4" >
+			<td class="black_new" >
 	<!-- Mandar : 434 : for tooltip -->
 	   			<html:select property="selectedColumnNames" styleClass="selectedColumnNames"  size="1" styleId="selectedColumnNames" multiple="true"
 				 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
@@ -331,8 +373,8 @@ function checkAllOnThisPageResponse()
 		<% } 
 		%>
 		
-		<tr height="300px" valign="top" width="100%">
-			<td  width="100%" valign="top" height="300px">
+		<tr valign="top" width="100%">
+			<td  width="100%" valign="top" >
 <!--  **************  Code for New Grid  *********************** -->
 				<script>
 					/* 
@@ -348,17 +390,17 @@ function checkAllOnThisPageResponse()
 			</td>
 		</tr>
 
-		<tr height="100%" width="100%" valign="top">
+		<tr width="100%" valign="top">
 		
 		<td width="90%">
 		
-			<table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" height="100%" valign="top">
+			<table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" valign="top">
 			<tr>
-					<td width="5%" nowrap valign="top">
+					<td width="5%" nowrap valign="top" class="black_ar">
 						<input type='checkbox' name='checkAll2' id='checkAll2' onClick='checkAllOnThisPage(this)'>
-						<span class="formLabelNoBackGround"><bean:message key="buttons.checkAllOnThisPage" /></span>
+						<span class="black_ar"><bean:message key="buttons.checkAllOnThisPage" /></span>
 						<input type='checkbox' name='checkAll' id='checkAll' onClick='checkAllAcrossAllPages(this)'>
-						<span class="formLabelNoBackGround"><bean:message key="buttons.checkAll" /></span>
+						<span class="black_ar"><bean:message key="buttons.checkAll" /></span>
 					</td>
 					<%
 						Object obj = session.getAttribute(Constants.SPECIMENT_VIEW_ATTRIBUTE);
@@ -367,7 +409,7 @@ function checkAllOnThisPageResponse()
 					<td width="5%" valign="top">
 					<%if(pageOf.equals(Constants.PAGEOF_QUERY_RESULTS)){%>
 						<input type='checkbox' <%if (isDefaultView){%>checked='checked' <%}%>name='checkDefaultSpecimenView' id='checkDefaultSpecimenView' onClick='setDefaultView(this)'>
-						<span class="formLabelNoBackGroundWithSize6"><bean:message key="buttons.defaultSpecimenView" /></span>&nbsp;
+						<span class="black_ar"><bean:message key="buttons.defaultSpecimenView" /></span>&nbsp;
 					<%}else{%>
 						&nbsp;
 					<%}%>
@@ -408,4 +450,7 @@ function checkAllOnThisPageResponse()
 	<input type="hidden" name="isQuery" value="true">
 </html:form>
 </table>
-</div>
+</td>
+</tr>
+</table>
+	
