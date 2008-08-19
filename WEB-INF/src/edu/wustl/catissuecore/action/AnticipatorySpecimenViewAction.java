@@ -6,9 +6,11 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -51,13 +53,15 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 	private static final String SPECIMEN_KEY_PREFIX = "S_";
 	Long cpId = null;
 	private SpecimenAutoStorageContainer autoStorageContainer;
-
+	
+	Set asignedPositonSet = null;
 	/* (non-Javadoc)
 	 * @see edu.wustl.common.action.BaseAction#executeAction(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
 	 */
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
 			throws Exception
 	{
+		asignedPositonSet = new HashSet();
 		String target = Constants.SUCCESS;
 		boolean isFromSpecimenEditPage = false;
 		SpecimenCollectionGroupForm specimenCollectionGroupForm = (SpecimenCollectionGroupForm) form;
@@ -65,6 +69,7 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 		Long id = specimenCollectionGroupForm.getId();
 
 		Long specimenId = null;
+		
 
 		HashMap forwardToHashMap = (HashMap) request.getAttribute("forwardToHashMap");
 		if (forwardToHashMap != null)
@@ -110,6 +115,8 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 			if(request.getParameter("target") != null)
 				target = request.getParameter("target");
 			
+			autoStorageContainer.fillAllocatedPositionSet(asignedPositonSet);
+			session.setAttribute("asignedPositonSet",asignedPositonSet);
 			return mapping.findForward(target);
 
 		}
@@ -308,6 +315,11 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 			specimenDataBean.setPositionDimensionTwo(String.valueOf(specimen.getSpecimenPosition().getPositionDimensionTwo()));
 			specimenDataBean.setStorageContainerForSpecimen("Auto");
 		}
+		//Mandar : 18Aug08 to check for virtual specimens which are collected after updating the initial storage types. START
+		else if (specimen != null && specimen.getSpecimenPosition() == null && "Collected".equals(specimen.getCollectionStatus()))
+		{
+			specimenDataBean.setStorageContainerForSpecimen("Virtual");
+		} // //Mandar : 18Aug08 to check for virtual specimens which are collected after updating the initial storage types. END
 		else
 		{
 			//TODO:After model change 
@@ -317,9 +329,7 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 		}
 		if ("Auto".equals(storageType))
 		{
-
 			autoStorageContainer.addSpecimen(specimenDataBean, specimenDataBean.getClassName());
-
 		}
 		setChildren(specimen, specimenDataBean);
 		//specimenDataBean.setAliquotSpecimenCollection(getChildren(specimen, Constants.ALIQUOT));

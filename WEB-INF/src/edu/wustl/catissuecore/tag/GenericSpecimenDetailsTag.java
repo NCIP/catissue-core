@@ -527,16 +527,19 @@ public class GenericSpecimenDetailsTag extends TagSupport
 			}
 			else if(GenericSpecimenDetailsTag.COLUMN_NAMES[6].equalsIgnoreCase(columnList.get(counter).toString()))
 			{
+				createNewStorageComponent(sb, nameValue, specimen);
 				//if(specimen.getStorageContainerForSpecimen()!= null && specimen.getStorageContainerForSpecimen().equalsIgnoreCase("Virtual"))
 				//if((specimen.getStorageContainerForSpecimen()!= null && "Virtual".equalsIgnoreCase(specimen.getStorageContainerForSpecimen())) || (getFormattedValue(specimen.getSelectedContainerName()).trim().length() ==0))
-				if(specimen.getStorageContainerForSpecimen()!= null && "Virtual".equalsIgnoreCase(specimen.getStorageContainerForSpecimen()))
-				{
-					createVirtualStorageComponent( sb, nameValue);
-				}
-				else
-				{
-					createStorageComponent(sb, nameValue, specimen);
-				}
+//				if(specimen.getStorageContainerForSpecimen()!= null && "Virtual".equalsIgnoreCase(specimen.getStorageContainerForSpecimen()))
+//				{
+////					createVirtualStorageComponent( sb, nameValue);
+//					createNewStorageComponent(sb, nameValue, specimen);
+//				}
+//				else
+//				{
+//					//createStorageComponent(sb, nameValue, specimen);
+//					createNewStorageComponent(sb, nameValue, specimen);
+//				}
 				
 //				return sb.toString();
 			}
@@ -595,15 +598,23 @@ public class GenericSpecimenDetailsTag extends TagSupport
 				//if((specimen.getStorageContainerForSpecimen()!= null && specimen.getStorageContainerForSpecimen().equalsIgnoreCase("Virtual")) || (getFormattedValue(specimen.getSelectedContainerName()).trim().length() ==0))
 				if((specimen.getStorageContainerForSpecimen()!= null && "Virtual".equalsIgnoreCase(specimen.getStorageContainerForSpecimen())))
 				{
-					s[0] = elementNamePrefix+"storageContainerForSpecimen";	s[1] =getFormattedValue(specimen.getStorageContainerForSpecimen());
+//					s[0] = elementNamePrefix+"storageContainerForSpecimen";	s[1] =getFormattedValue(specimen.getStorageContainerForSpecimen());
+					s = new String[10];
+					s[0] = elementNamePrefix+"selectedContainerName";	s[1] =getFormattedValue("");
+					s[2] = elementNamePrefix+"positionDimensionOne";	s[3] =getFormattedValue("");
+					s[4] = elementNamePrefix+"positionDimensionTwo";	s[5] =getFormattedValue("");
+					s[6] = elementNamePrefix+"containerId";				s[7] =getFormattedValue("");
+					s[8] = elementNamePrefix+"storageContainerForSpecimen";	s[9] =getFormattedValue(specimen.getStorageContainerForSpecimen());
+
 				}
 				else
 				{
-						s = new String[8];
+						s = new String[10];
 						s[0] = elementNamePrefix+"selectedContainerName";	s[1] =getFormattedValue(specimen.getSelectedContainerName());
 						s[2] = elementNamePrefix+"positionDimensionOne";	s[3] =getFormattedValue(specimen.getPositionDimensionOne());
 						s[4] = elementNamePrefix+"positionDimensionTwo";	s[5] =getFormattedValue(specimen.getPositionDimensionTwo());
 						s[6] = elementNamePrefix+"containerId";				s[7] =getFormattedValue(specimen.getContainerId());
+						s[8] = elementNamePrefix+"storageContainerForSpecimen";	s[9] =getFormattedValue(specimen.getStorageContainerForSpecimen());
 				}
 			}
 			else if(GenericSpecimenDetailsTag.COLUMN_NAMES[7].equalsIgnoreCase(columnList.get(counter).toString()))
@@ -835,5 +846,88 @@ public class GenericSpecimenDetailsTag extends TagSupport
 			 sb.append("&nbsp;");
 			 sb.append("</td>");
 		}
+		
+		private void createNewStorageComponent(StringBuffer sb, String[] nameValue, GenericSpecimen specimen)
+		{
+
+			 sb.append("<td class=\"black_ar\" >");
+//			 sb.append(getHTMLFormattedValue(specimen.getStorageContainerForSpecimen()));
+
+			 String specimenId = getFormattedValue(specimen.getUniqueIdentifier());
+			 String specimenClass = getFormattedValue(specimen.getClassName());
+			 Long collectionProtocolId = specimen.getCollectionProtocolId();
+			 
+			  String containerId = "containerId_"+specimenId;
+			  String selectedContainerName = "selectedContainerName_"+specimenId;
+			  String positionDimensionOne = "positionDimensionOne_"+specimenId;
+			  String positionDimensionTwo = "positionDimensionTwo_"+specimenId;
+			  String specimenClassName = (String)specimenClass;
+			  String cpId = getFormattedValue(collectionProtocolId);
+			  String functionCall="showMap('" + selectedContainerName + "','"+
+											positionDimensionOne +"','"
+											+ positionDimensionTwo +"','"
+											+containerId +"','"+
+											specimenClassName +"','"+
+											cpId +"')" ;
+			  int scSize=12 +xtra;
+	 			String sid = specimen.getUniqueIdentifier();
+	 			String isDisabled = ""; 
+			  
+				 sb.append("<table style=\"font-size:1em\" size=\"100%\">");
+				 	sb.append("<tr>");
+				 		sb.append("<td>");
+				 			sb.append("");
+
+				 			sb.append("<select name=\""+nameValue[8]+"\" size=\"1\" onchange=\"scForSpecimen(this,'"+ sid +"','"+specimenClassName+"')\" class=\"black_new\" id=\""+nameValue[9]+"\">");
+
+							  if("Virtual".equals(specimen.getStorageContainerForSpecimen()))
+							  {
+								  sb.append("<option value=\"Virtual\" selected=\"selected\">Virtual</option>");
+								  isDisabled = "disabled='disabled'";
+							  }
+							  else
+							  {
+								  sb.append("<option value=\"Virtual\">Virtual</option>");
+							  }
+							  if("Auto".equals(specimen.getStorageContainerForSpecimen()))
+							  {
+								  sb.append("<option value=\"Auto\" selected=\"selected\">Auto</option>");
+							  }
+							  else
+							  {
+								  sb.append("<option value=\"Auto\">Auto</option>");
+							  }
+							  if("Manual".equals(specimen.getStorageContainerForSpecimen()))
+							  {
+								  sb.append("<option value=\"Manual\" selected=\"selected\">Manual</option>");
+							  }
+							  else
+							  {
+								  sb.append("<option value=\"Manual\">Manual</option>");
+							  }
+							  sb.append("</select>");  
+				 		sb.append("</td>");
+
+				 		sb.append("<td>");
+				 			sb.append("<input type=\"text\" name=\""+nameValue[0]+"\" value=\"" + nameValue[1]+"\" size=\""+scSize+"\" class=\"black_ar\" id=\""+selectedContainerName+"\" "+ isDisabled +" >");
+				 		sb.append("</td>");
+				 		sb.append("<td>");
+				 			sb.append("<input type=\"text\" name=\""+nameValue[2]+"\" value=\"" + nameValue[3]+"\" size=\"2\" class=\"black_ar\" id=\""+positionDimensionOne+"\" "+ isDisabled +" >");
+				 		sb.append("</td>");
+				 		sb.append("<td>");
+				 			sb.append("<input type=\"text\" name=\""+nameValue[4]+"\" value=\"" + nameValue[5]+"\" size=\"2\" class=\"black_ar\" id=\""+positionDimensionTwo+"\" "+ isDisabled +" >");
+				 		sb.append("</td>");
+				 		sb.append("<td>");
+				 			sb.append("<a href=\"#\" onclick=\""+functionCall+"\">");
+				 			sb.append("<img src=\"images/Tree.gif\" border=\"0\" width=\"13\" height=\"15\" title=\'View storage locations\'>");
+				 			sb.append("</a>");
+				 			sb.append("<input type=\"hidden\" name=\""+nameValue[6]+"\" value=\""+nameValue[7]+"\" id=\""+containerId+"\">");
+				 		sb.append("</td>");
+				 	sb.append("</tr>");										
+				 sb.append("</table>");
+				 
+				 sb.append("</td>");
+		}
+
 }
 

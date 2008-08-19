@@ -227,4 +227,25 @@ public class SpecimenAutoStorageContainer {
 		return counter;
 	}
 
+	public void fillAllocatedPositionSet(Set asignedPositonSet)
+	{
+		Iterator keyItr = specimenMap.keySet().iterator();
+		while(keyItr.hasNext())
+		{
+			String key = (String)keyItr.next();
+			ArrayList speciList = (ArrayList)specimenMap.get(key);
+			Iterator speciListItr = speciList.iterator();
+			while(speciListItr.hasNext())
+			{
+				GenericSpecimen specimen = (GenericSpecimen)speciListItr.next();
+				//Mandar : 19Aug08 ---start
+				if(specimen.getSelectedContainerName() != null)
+				{
+					String allocatedPos = specimen.getSelectedContainerName() + "#"+ specimen.getContainerId()+"#"+specimen.getPositionDimensionOne()+"#"+specimen.getPositionDimensionTwo();
+					asignedPositonSet.add(allocatedPos);
+				}
+				//Mandar : 19Aug08 ---end
+			}
+		}
+	}
 }

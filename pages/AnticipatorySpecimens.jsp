@@ -13,6 +13,7 @@
 <link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
 <link href="css/catissue_suite.css" rel="stylesheet" type="text/css" /> 
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
+<script language="JavaScript" type="text/javascript" src="jss/antiSpecAjax.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/GenericSpecimenDetailsTag.js"></script>
 <script language="JavaScript" type="text/javascript">
 	window.parent.frames['SpecimenEvents'].location="ShowCollectionProtocol.do?pageOf=specimenEventsPage&operation=ViewSummary";
@@ -173,6 +174,109 @@
 			document.forms[0].action =url;
 			document.forms[0].submit();
 		}
+
+//Mandar : 6Aug08 ----- ajax call for storage location
+var sid="";
+function scForSpecimen(element,spid)
+{
+	sid=spid;
+//	alert(element.value + " : "+element.name);
+	var name= element.name;
+	var prefix = name.substring(0,name.indexOf('.'));
+	var cpidName = prefix+".collectionProtocolId";
+	var cpid = document.getElementsByName(cpidName)[0].value;
+	var className = prefix+".className";
+	var cName = document.getElementsByName(className)[0].value;
+	
+	//alert(prefix+" : " + cpid + " : " + cName);
+	if(element.value == "Auto")
+	{
+		var responseHandlerFn = setSCLocation;
+		var bool = true;
+		var reqType = "GET";
+		var url = "GenericSpecimenSummaryForSpecimen.do?sid="+sid+"&cpid="+cpid+"&cName="+cName;
+
+		ajaxCall(reqType, url, bool, responseHandlerFn);
+	}
+	else
+	{
+		setContainerType(element.value,sid);
+	}
+}
+
+function setContainerType(containerType, sid)
+{
+		if(containerType == "Manual")
+		{
+			updateSCFields(sid, false);
+		}
+		else
+		{
+			updateSCFields(sid, true);
+		}
+}
+function updateSCFields(sid, isDisabled)
+{
+	var scName = "selectedContainerName_"+sid;
+	var scPos1 = "positionDimensionOne_"+sid;
+	var scPos2 = "positionDimensionTwo_"+sid;
+	var t1 = document.getElementById(scName);
+	var t2 = document.getElementById(scPos1);
+	var t3 = document.getElementById(scPos2);
+	t1.value="";
+	t2.value="";
+	t3.value="";
+	t1.disabled = isDisabled;
+	t2.disabled = isDisabled;
+	t3.disabled = isDisabled;
+}
+
+
+
+function setSCLocation()
+{
+	if ((xmlHttpReq.readyState == 4) && (xmlHttpReq.status == 200))
+	{
+		var msg = xmlHttpReq.responseText;
+	//	alert(msg);
+		if(msg.indexOf('#') != -1)
+		{
+			updateSCDetails(msg);
+		}
+		else
+		{
+			alert("Container info not available right now. Try again after some time.");
+		}
+	}
+/*	else
+	{
+		alert("Could not fetch location right now");
+	}
+*/
+}
+
+function updateSCDetails(msg)
+{
+	var scName = "selectedContainerName_"+sid;
+	var scPos1 = "positionDimensionOne_"+sid;
+	var scPos2 = "positionDimensionTwo_"+sid;
+	var scontid = "containerId_"+sid;
+	var t1 = document.getElementById(scName);
+	var t2 = document.getElementById(scPos1);
+	var t3 = document.getElementById(scPos2);
+	var t4 = document.getElementById(scontid);
+
+	//alert(msg); 
+	var data = msg.split("#");
+	t1.value=data[0];
+	t2.value=data[2];
+	t3.value=data[3];
+	t4.value=data[1];
+	t1.disabled = false;
+	t2.disabled = false;
+	t3.disabled = false;
+
+}
 	</script>
 </head>
 <body onload="UpdateCheckBoxStatus()">

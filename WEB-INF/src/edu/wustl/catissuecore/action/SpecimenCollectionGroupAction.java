@@ -670,6 +670,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 		HttpSession session = request.getSession();
 		session.setAttribute(Constants.IDENTIFIED_REPORT_ID, reportId);
 
+		session.removeAttribute("asignedPositonSet");
 		return mapping.findForward(pageOf);
 	}
 

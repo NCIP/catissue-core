@@ -1,14 +1,18 @@
 package edu.wustl.catissuecore.action;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,11 +29,15 @@ import edu.wustl.catissuecore.actionForm.ViewSpecimenSummaryForm;
 import edu.wustl.catissuecore.bean.CollectionProtocolBean;
 import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
 import edu.wustl.catissuecore.bean.GenericSpecimen;
+import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.exception.CatissueException;
 import edu.wustl.catissuecore.util.IdComparator;
 import edu.wustl.catissuecore.util.SpecimenDetailsTagUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.util.dbManager.DAOException;
 
 public class ViewSpecimenSummaryAction extends Action {
@@ -41,7 +49,14 @@ public class ViewSpecimenSummaryAction extends Action {
 		try {
 			HttpSession session = request.getSession();
 //			summaryForm.setLastSelectedSpecimenId(summaryForm.getSelectedSpecimenId());
-			
+			// Mandar : 5Aug08 ----------- start
+			String sid = (String)request.getParameter("sid");
+			if(sid!= null)
+			{
+				getAvailablePosition(request, response);
+				return null;
+			}	
+//			Mandar : 5Aug08 ----------- end
 			String eventId = summaryForm.getEventId();
 			session.setAttribute(Constants.TREE_NODE_ID,(String)request.getParameter("nodeId"));
 			String event_id=(String)request.getParameter("Event_Id");
@@ -80,7 +95,7 @@ public class ViewSpecimenSummaryAction extends Action {
 			if (summaryForm.getSpecimenList()!= null  )
 			{
 				updateSessionBean(summaryForm, session);
-				
+				verifyCollectedStatus(summaryForm, session);				
 			}
 		
 			if(request.getParameter("save")!=null)
@@ -298,6 +313,9 @@ public class ViewSpecimenSummaryAction extends Action {
 		derivedSessionVO.setBarCode(derivedFormVO.getBarCode());
 		//derivedSessionVO.setContainerId(derivedFormVO.getContainerId());
 		derivedSessionVO.setContainerId(null);
+		//Mandar : 6August08 ------- start
+		derivedSessionVO.setStorageContainerForSpecimen(derivedFormVO.getStorageContainerForSpecimen());
+		//Mandar : 6August08 ------- end
 		derivedSessionVO.setSelectedContainerName(derivedFormVO.getSelectedContainerName());
 		derivedSessionVO.setPositionDimensionOne(derivedFormVO.getPositionDimensionOne());
 		derivedSessionVO.setPositionDimensionTwo(derivedFormVO.getPositionDimensionTwo());
@@ -650,4 +668,146 @@ public class ViewSpecimenSummaryAction extends Action {
 		}
 		
 	}
+	
+	private void verifyCollectedStatus(ViewSpecimenSummaryForm summaryForm, HttpSession session)
+	{
+		String eventId = summaryForm.getEventId();
+		if (eventId == null || session
+				.getAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP) == null)
+		{
+			return;
+		}
+		
+		Map collectionProtocolEventMap = (Map) session
+		.getAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);		
+		CollectionProtocolEventBean eventBean =(CollectionProtocolEventBean)
+							collectionProtocolEventMap.get(eventId);	// get nullpointer sometimes
+		LinkedHashMap specimenMap = (LinkedHashMap)eventBean.getSpecimenRequirementbeanMap();
+		
+		Iterator specItr = specimenMap.values().iterator();
+		while(specItr.hasNext())
+		{
+			GenericSpecimen pSpecimen=(GenericSpecimen)specItr.next();
+			if(pSpecimen.getCheckedSpecimen()== false)
+			{
+				unCheckChildSpecimens(pSpecimen);
+			}
+		}
+	}
+	
+	private void unCheckChildSpecimens(GenericSpecimen pSpecimen)
+	{
+		if(pSpecimen.getAliquotSpecimenCollection() != null)
+		{
+			Iterator aliqItr = pSpecimen.getAliquotSpecimenCollection().values().iterator();
+			while(aliqItr.hasNext())
+			{
+				GenericSpecimen aliqSpecimen=(GenericSpecimen)aliqItr.next();
+				aliqSpecimen.setCheckedSpecimen(false);
+				unCheckChildSpecimens(aliqSpecimen);
+			}
+		}
+		if(pSpecimen.getDeriveSpecimenCollection() != null)
+		{
+			Iterator derItr = pSpecimen.getDeriveSpecimenCollection().values().iterator();
+			while(derItr.hasNext())
+			{
+				GenericSpecimen derSpecimen=(GenericSpecimen)derItr.next();
+				derSpecimen.setCheckedSpecimen(false);
+				unCheckChildSpecimens(derSpecimen);
+			}
+		}
+	}
+	
+
+	private void getAvailablePosition(HttpServletRequest request, HttpServletResponse response) throws IOException, DAOException
+	{
+		response.setContentType("text/html");
+		response.setHeader("Cache-Control", "no-cache");
+		HttpSession session = request.getSession();
+		Set asignedPositonSet = (HashSet)session.getAttribute("asignedPositonSet");
+		if(asignedPositonSet == null)
+		{	asignedPositonSet = new HashSet();	}
+		//TODO 
+		//to get available position from SC for the specimen.
+		String sid = (String)request.getParameter("sid");
+		String className = (String)request.getParameter("cName");
+		String cpid = (String)request.getParameter("cpid");
+		List initialValues = null;
+		TreeMap containerMap = new TreeMap();
+		StorageContainerBizLogic scbizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(
+				Constants.STORAGE_CONTAINER_FORM_ID);
+		String exceedingMaxLimit = new String();
+		SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
+			long cpId = 0;
+			cpId = Long.parseLong(cpid);
+			containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId, className, 0, exceedingMaxLimit, sessionData, true);
+			String containerName = ((NameValueBean)(containerMap.keySet().iterator().next())).getName();
+			StringBuffer sb = new StringBuffer();
+			if (containerMap.isEmpty()) 
+			{
+				sb.append("No Container available for the specimen");
+			}
+			else
+			{
+				//initialValues = StorageContainerUtil.checkForInitialValues(containerMap);
+				sb.append(checkForFreeInitialValues(containerMap, asignedPositonSet));
+				session.setAttribute("asignedPositonSet",asignedPositonSet);
+			}
+			String msg = sb.toString();
+		response.getWriter().write(msg);
+		
+	}
+
+	private String checkForFreeInitialValues(Map containerMap, Set asignedPositonSet)
+	{
+		System.out.println("containerMap :: "+containerMap+"\n\n");
+		if (containerMap.size() > 0)
+		{
+			StringBuffer mainKey = null;
+			Set containerMapkeySet = containerMap.keySet();
+			Iterator containerMapkeySetitr = containerMapkeySet.iterator();
+			while(containerMapkeySetitr.hasNext())
+			{
+				mainKey = new StringBuffer();
+				NameValueBean containerMapkey = (NameValueBean) containerMapkeySetitr.next();
+				System.out.println("\t"+containerMapkey);
+				mainKey.append(containerMapkey.getName());
+				mainKey.append("#");
+				mainKey.append(containerMapkey.getValue());
+				mainKey.append("#");
+				Map maincontainerMapvaluemap1 = (Map) containerMap.get(containerMapkey);
+				Set maincontainerMapvaluemap1keySet = maincontainerMapvaluemap1.keySet();
+				Iterator maincontainerMapvaluemap1keySetitr = maincontainerMapvaluemap1keySet.iterator();
+				
+				while(maincontainerMapvaluemap1keySetitr.hasNext())
+				{
+					NameValueBean maincontainerMapvaluemap1key = (NameValueBean) maincontainerMapvaluemap1keySetitr.next();
+					System.out.println("\t\t"+maincontainerMapvaluemap1key);
+					StringBuffer pos1 = new StringBuffer();
+					pos1.append(maincontainerMapvaluemap1key.getValue());
+					pos1.append("#");
+					List list = (List) maincontainerMapvaluemap1.get(maincontainerMapvaluemap1key);
+					
+					for(int i=0; i< list.size(); i++)
+					{
+						NameValueBean maincontainerMapvaluemap1value = (NameValueBean) list.get(i);
+						System.out.println("\t\t\t\t"+maincontainerMapvaluemap1value);
+						StringBuffer pos2 = new StringBuffer();
+						pos2.append(maincontainerMapvaluemap1value.getValue());
+						StringBuffer availablePos = new StringBuffer();
+						availablePos.append(mainKey);availablePos.append(pos1);availablePos.append(pos2);
+						String freePosition = availablePos.toString();
+						if(!asignedPositonSet.contains(freePosition))
+						{
+							asignedPositonSet.add(freePosition);
+							return freePosition;
+						}
+					}
+				}
+			}
+		}
+		return "";
+	}
+
 }
