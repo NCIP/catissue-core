@@ -2,6 +2,7 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
+<%@ include file="/pages/content/common/AutocompleterCommon.jsp"%>
 <%@ page language="java" isELIgnored="false"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <head>
@@ -129,6 +130,22 @@ function updateCPTree()
                         <td align="left"><html:text styleClass="black_ar" maxlength="200"  size="30" styleId="descriptionURL" property="descriptionURL" readonly='${requestScope.readOnlyValue}' />
                         </td>
                       </tr>
+                      <logic:equal name='${requestScope.operation}' value="edit">
+						<tr>
+							<td align="center" class="black_ar">&nbsp;</td>
+							<td align="left" class="black_ar">
+								<bean:message key="site.activityStatus" />
+							</td> 
+							<td align="left" class="black_ar">
+								<autocomplete:AutoCompleteTag
+								property="activityStatus"
+								optionsList='${activityStatusList}'
+								initialValue='${collectionProtocolForm.activityStatus}'
+								styleClass="black_ar" size="27"
+								onChange='${strCheckStatus}'/>
+							</td>
+						</tr>
+					</logic:equal>
 					   </table>
 					   &nbsp;
 					  <table cellpadding="0" cellspacing="0" border="0" width = "100%" id="submittable">
