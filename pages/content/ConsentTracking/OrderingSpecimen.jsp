@@ -46,7 +46,7 @@
 				function submitAllResponses()
 				{
 					var checkboxInstance = document.getElementById('verifyAllCheckBox');
-					var parentId=parent.opener.document.getElementById('<%=request.getParameter("labelStatusId")%>');
+					var parentId=window.parent.document.getElementById('<%=request.getParameter("labelStatusId")%>');
 					var theId = '<%=request.getParameter("consentVerificationkey")%>';
 					if(checkboxInstance.checked)
 					{
@@ -56,10 +56,8 @@
 					{
 						parentId.innerHTML="View"+"<input type='hidden' name='" + theId + "' value='View' id='" + theId + "'/>";
 					}
-					window.close ();
+					parent.consentWindow.hide();
 				}
-				
-				
 			</script>
 	</head>
 
