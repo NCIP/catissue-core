@@ -1,6 +1,8 @@
 package edu.wustl.catissuecore.querysuite.metadata;
 
+import java.io.IOException;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -25,8 +27,8 @@ public class DeletePermissibleValue
 	private HashMap<String, String> attributeDatatypeMap = new HashMap<String, String>();
 	private List<String> entityNameList = new ArrayList<String>();
 	private Map<String, Long> entityIDMap = new HashMap<String, Long>();
-	private HashMap<String, String> permissibleValueToDeleteMap = new HashMap<String, String>();
 	private HashMap<String, Integer> numberOfOccurenceToDeleteMap = new HashMap<String, Integer>();
+	private List<String> permissibleValueToDeleteList = new ArrayList<String>();
 
 	
 	public List<String> deletePermissibleValue() throws SQLException
@@ -91,7 +93,7 @@ public class DeletePermissibleValue
 
 	private boolean isValueToDelete(String string, String name)
 	{
-		if(permissibleValueToDeleteMap.get(name).equals(string) && numberOfOccurenceToDeleteMap.get(name+"_"+string) > 0)
+		if(permissibleValueToDeleteList.contains(name) && numberOfOccurenceToDeleteMap.get(name+"_"+string)!=null && numberOfOccurenceToDeleteMap.get(name+"_"+string) > 0)
 		{
 			int temp = numberOfOccurenceToDeleteMap.get(name+"_"+string);
 			temp--;
@@ -121,15 +123,110 @@ public class DeletePermissibleValue
 
 	private void populateNumberOfOccurenceToDeleteMap()
 	{
-		numberOfOccurenceToDeleteMap.put("tissueSite_Thyroid gland", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_ACCESSORY SINUSES", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_ADRENAL GLAND", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_ANUS AND ANAL CANAL", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_BASE OF TONGUE", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_BLADDER", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_BONES, JOINTS AND ARTICULAR CARTILAGE", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_BONES, JOINTS AND ARTICULAR CARTILAGE OF LIMBS", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_BONES, JOINTS AND ARTICULAR CARTILAGE OF OTHER AND UNSPECIFIED SITES", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_BRAIN", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_BREAST", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_BRONCHUS AND LUNG", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_CERVIX UTERI", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_COLON", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_CONNECTIVE, SUBCUTANEOUS AND OTHER SOFT TISSUES", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_CORPUS UTERI", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_DIGESTIVE ORGANS", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_ESOPHAGUS", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_EYE AND ADNEXA", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_EYE, BRAIN AND OTHER PARTS OF CENTRAL NERVOUS SYSTEM", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_FEMALE GENITAL ORGANS", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_FLOOR OF MOUTH", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_GALLBLADDER", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_GUM", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_HEART, MEDIASTINUM, AND PLEURA", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_HEMATOPOIETIC AND RETICULOENDOTHELIAL SYSTEMS", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_KIDNEY", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_LARYNX", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_LIP", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_LIP, ORAL CAVITY AND PHARYNX", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_LIVER AND INTRAHEPATIC BILE DUCTS", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_LYMPH NODES", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_MALE GENITAL ORGANS", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_MENINGES", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_NASAL CAVITY AND MIDDLE EAR", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_NASOPHARYNX", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_OROPHARYNX", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_OTHER AND ILL-DEFINED DIGESTIVE ORGANS", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_OTHER AND ILL-DEFINED SITES", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_OTHER AND ILL-DEFINED SITES IN LIP, ORAL CAVITY AND PHARYNX", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_OTHER AND ILL-DEFINED SITES WITHIN RESPIRATORY SYSTEM AND INTRATHORACIC ORGANS", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_OTHER AND UNSPECIFIED FEMALE GENITAL ORGANS", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_OTHER AND UNSPECIFIED MAJOR SALIVARY GLANDS", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_OTHER AND UNSPECIFIED MALE GENITAL ORGANS", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_OTHER AND UNSPECIFIED PARTS OF BILIARY TRACT", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_OTHER AND UNSPECIFIED PARTS OF MOUTH", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_OTHER AND UNSPECIFIED PARTS OF TONGUE", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_OTHER AND UNSPECIFIED URINARY ORGANS", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_OTHER ENDOCRINE GLANDS AND RELATED STRUCTURES", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_OVARY", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_PALATE", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_PANCREAS", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_PAROTID GLAND", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_PENIS", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_PERIPHERAL NERVES AND AUTONOMIC NERVOUS SYSTEM", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_PLACENTA", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_PROSTATE GLAND", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_PYRIFORM SINUS", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_RECTOSIGMOID JUNCTION", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_RECTUM", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_RENAL PELVIS", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_RESPIRATORY SYSTEM AND INTRATHORACIC ORGANS", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_RETROPERITONEUM AND PERITONEUM", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_SKIN", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_SMALL INTESTINE", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_SPINAL CORD, CRANIAL NERVES, AND OTHER PARTS OF CENTRAL NERVOUS SYSTEM", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_STOMACH", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_TESTIS", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_THYROID AND OTHER ENDOCRINE GLANDS", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_THYROID GLAND", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_THYMUS", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_TONSIL", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_TRACHEA", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_UNKNOWN PRIMARY SITE", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_URETER", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_URINARY TRACT", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_UTERUS, NOS", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_VAGINA", 1);
+		numberOfOccurenceToDeleteMap.put("tissueSite_VULVA", 1);
+		
 		numberOfOccurenceToDeleteMap.put("specimenType_Not Specified", 3);
 	}
 
+	public static void main(String[] args) throws SQLException, ClassNotFoundException, IOException
+	{
+		Class.forName("com.mysql.jdbc.Driver");
+		String url = "jdbc:mysql://localhost:3307/upgrade";
+		Connection connection = DriverManager.getConnection(url, "root", "pspl");
+		UpdateMetadataUtil.isExecuteStatement = true;
+		
+		DeletePermissibleValue deletePermissibleValue = new DeletePermissibleValue(connection);
+		List<String> arraList = deletePermissibleValue.deletePermissibleValue();
+		for(String sql : arraList)
+		{
+			System.out.println(sql);
+		}
+		
+		UpdateMetadataUtil.metadataSQLFile.close();
+		UpdateMetadataUtil.failureWriter.close();
+	}
 	
 	private void populatePermissibleValueToDeleteMap()
 	{
-		permissibleValueToDeleteMap.put("tissueSite", "Thyroid gland");
-		permissibleValueToDeleteMap.put("specimenType", "Not Specified");
+		permissibleValueToDeleteList.add("tissueSite");
+		permissibleValueToDeleteList.add("specimenType");
 	}
 	
 	private void populateAttributesToDeleteMap()
