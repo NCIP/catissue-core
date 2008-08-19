@@ -9,16 +9,20 @@
 <%@ page import="edu.wustl.catissuecore.actionForm.*"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="java.util.*"%>
-
+<%@ page language="java" isELIgnored="false" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 			
 <html>
 	<head>
 		<title>caTissue Core v 1.1</title>
-			<link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
+			<link rel="stylesheet" type="text/css" href="css/catissue_suite.css" />
 			<script src="jss/script.js" type="text/javascript"></script>
 			<script src="jss/overlib_mini.js" type="text/javascript"></script>
 			<script language="JavaScript">
-
+			function cancelWindow()
+			{
+			  parent.allConsentWindow.hide();
+			}
 			//This function will check if the verifyCheck box is checked or not
 			function submitAllResponses()
 				{
@@ -49,9 +53,9 @@
 								
 						var labelStatus="labelStatus"+indexval;
 						consentVerificationkey = "value(RequestDetailsBean:"+indexval+"_consentVerificationkey)";
-						var parentId=parent.opener.document.getElementById(labelStatus);
+						var parentId=window.parent.document.getElementById(labelStatus);
 						var rowstatus= "value(RequestDetailsBean:"+indexval+"_rowStatuskey)";
-						var statusValue = parent.opener.document.getElementById(rowstatus).value;
+						var statusValue = window.parent.document.getElementById(rowstatus).value;
 															
 						if(statusValue!="disable")
 						{
@@ -74,14 +78,23 @@
 					}
 				%>
 					
-					window.close ();
+					parent.allConsentWindow.hide();
 				}
 			</script>
 	</head>
 	<body>		
 			<%-- Set Variables according to the pages --%>
 			<%-- Main table Start --%>
-			<table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" id="table4" >
+			<table width="100%" border="0" cellpadding="3" cellspacing="0" class="maintable" >
+			<tr>
+			<td>
+			<table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
+			<tr>
+			<td>
+			<div style="height:250px; background-color: #ffffff;overflow: auto;">
+		<!--	<div width="600px" height="100" style="height:50px;oveflow:auto;display:block" id="consent">-->
+			
+			<table width="100%" border="0" cellpadding="3" cellspacing="0" id="table4" >
 			  	<%
 				String verifiedRows=request.getParameter("verifiedRows");
 				StringTokenizer stringToken = new StringTokenizer(verifiedRows,",");
@@ -104,20 +117,22 @@
 					String barcodeLabel=specimenAttributes[4];
 					Map map =(Map)listOfMap.get(counter);
 				%>
+
 				<tr>
-					<td class="formTitle">
+					<td align="left" class="tr_bg_blue1"><span class="blue_ar_b">
 						<bean:message key="collectionprotocolregistration.consentform"/>
+						</span>
 					</td>
 				</tr>
 				<tr>
-					<td colspan="4">
-						<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%" id="table5" colspan="2" >
+					<td class="showhide">
+						<table cellpadding="3" cellspacing="0" border="0" width="100%" id="table5">
 							<tr>
-								<td class="tabrightmostcell" width="35%">
+								<td class="noneditable" width="35%">
 									&nbsp;&nbsp;&nbsp;
 									<bean:message key="consent.barcodelable"/>
 								</td>
-								<td class="formField" >
+								<td class="noneditable" >
 									<label>
 										<%
 											if(barcodeLabel==null||barcodeLabel.equals(""))
@@ -138,11 +153,11 @@
 							</tr>
 							
 							<tr>
-								<td class="tabrightmostcell" width="35%">
+								<td class="noneditable" width="35%">
 									&nbsp;&nbsp;&nbsp;
 									<bean:message key="collectionprotocolregistration.signedurlconsent"/>
 								</td>
-								<td class="formField" >
+								<td class="noneditable" >
 									<label>
 										<%
 											if(signedUrl==null||signedUrl.equals(""))
@@ -163,11 +178,11 @@
 							</tr>
 							<%--Get Witness Name --%>						
 							<tr>
-								<td class="tabrightmostcell">
+								<td class="noneditable">
 									&nbsp;&nbsp;&nbsp;
 									<bean:message key="collectionprotocolregistration.witnessname"/>
 								</td>	
-								<td class="formField">
+								<td class="noneditable">
 									<label >
 										<%
 											if(witnessName==null||witnessName.equals(""))
@@ -188,11 +203,11 @@
 							</tr>
 							<%--Get Consent Date --%>														
 							<tr>
-								<td class="tabrightmostcell">
+								<td class="noneditable">
 									&nbsp;&nbsp;&nbsp;
 									<bean:message key="collectionprotocolregistration.consentdate"/>
 								</td>		
-								<td class="formField">
+								<td class="noneditable">
 									<label>
 										<%
 											if(consentDate==null||consentDate.equals(""))
@@ -217,34 +232,36 @@
 				<%-- Inner table that will show Consents Start--%>								
 				<tr>
 					<td>
-						<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%" id="consentTable">
+						<table cellpadding="3" cellspacing="0" border="0" width="100%" id="consentTable">
 							<%-- Serial No # --%>	
 							<tr>
-								<td class="formLeftSubTableTitle">
+								<td class="tableheading">
 									<div align="left">
 										<bean:message key="requestlist.dataTabel.serialNo.label" />
 									</div>
 								</td>
 								<%-- Title ( Consent Tiers) --%>									
-								<td class="formLeftSubTableTitle">
+								<td class="tableheading">
 									<div>	
 										<bean:message key="collectionprotocolregistration.consentTiers" />
 									</div>	
 								</td>
 								<%--Title (Participant response) --%>										
-								<td  class="formLeftSubTableTitle">
+								<td  class="tableheading">
 									<div align="left">
 										<bean:message key="collectionprotocolregistration.participantResponses" />
 									<div>	
 								</td>
-								<td class="formLeftSubTableTitle">
+								<td class="tableheading">
 									<div align="left">
 										<bean:message key="consent.responsestatus" />
 									</div>
 								</td>
 							</tr>
 							<%-- Get Consents and Responses from DB --%>	
-							<%-- For loop Start --%>							
+							<!-- Setting the local variable count for the row counting for setting row color-->
+							<c:set var="count" value='1' scope="page"/>
+							<%-- For loop Start --%>	
 							<%	
 							for(int iCounter=0;iCounter<consentTierCounter;iCounter++)
 							{
@@ -257,24 +274,30 @@
 								 String consentDisplay=(String)map.get(statementKey);
 								 String responseDisplay=(String)map.get(responseKey);
 								 String specimenResponseDisplay=(String)map.get(specimenResponsekey);
-								
-							%>		
+								 
+							%>
+							<c:set var="style" value="black_ar" scope="page" />	
+							<c:if test='${pageScope.count % 2 == 0}'>
+						<c:set var="style" value="tabletd1" scope="page" />
+					</c:if>
 							<%-- Serial No # --%>										
 							<tr>
-								<td class="tabrightmostcell">
+
+								<td class='${pageScope.style}'>
 									<%=iCounter+1%>.
 								</td>
 								<%-- Get Consents # --%>										
-								<td class="formField" width="31%">
+								<td class='${pageScope.style}' width="31%">
 									<%=consentDisplay%>
 								</td>
-								<td align="left" class="formField">
+								<td align="left" class='${pageScope.style}'>
 									<%=responseDisplay%>
 								</td>
-								<td align="left" class="formField">
+								<td align="left" class='${pageScope.style}'>
 									 <%=specimenResponseDisplay%>
 								</td>
-							</tr>	
+							</tr>
+							<c:set var="count" value='${pageScope.count+1}' scope="page" />
 							<%
 							}
 							%>
@@ -314,7 +337,7 @@
 							<%
 								}
 							%>
-								<td class="formField" colspan="3">
+								<td class="black_ar" colspan="3">
 									<label><b><bean:message key="consent.verificationmessage" /><b></label>
 								</td>
 							</tr>
@@ -330,13 +353,25 @@
 				<%
 				}
 				%>
-				<%-- action button --%>																
+				<%-- action button --%>	
+				</table>
+				
+				</div>
+				</td>
+				</tr>
 				<tr>
-					<td class="tabrightmostcell" align="right" colspan="4">
-						<input type="button" name="doneButton" style="actionButton" value="Done" onclick="submitAllResponses()"/>
+					<td class="buttonbg" align="left" >
+						<input type="button" name="doneButton" class="blue_ar_b" value="Ok" onclick="submitAllResponses()"/>
+						&nbsp;|&nbsp;
+						<html:link href="#" styleClass="cancellink" onclick= "cancelWindow();">
+													<bean:message key="buttons.cancel" />
+												</html:link>
 					</td>
 				</tr>
 			
+			</table>
+			</td>
+			</tr>
 			</table>
 			<%-- Main table End --%>
 	</body>
