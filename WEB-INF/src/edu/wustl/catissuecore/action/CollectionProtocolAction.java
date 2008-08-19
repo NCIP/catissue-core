@@ -239,14 +239,11 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 		collectionProtocolForm.setOperation(operation);
 		collectionProtocolForm.setSubmittedFor(submittedFor);
 		collectionProtocolForm.setRedirectTo(reqPath);
-		
 		String fieldWidth = Utility.getColumnWidth(CollectionProtocol.class,"title" );
 		String deleteAction="deleteObject('" + formName +"','" + Constants.ADMINISTRATIVE + "')";
-				
 		request.setAttribute("pageOf", pageOf);
 		request.setAttribute("operation", operation);
 		request.setAttribute("edit", Constants.EDIT);
-		request.setAttribute("activityStatusforJSP", Constants.ACTIVITYSTATUSLIST);
 		request.setAttribute("deleteAction", deleteAction);
 		request.setAttribute("fieldWidth", fieldWidth);
 		request.setAttribute("queryforJSP", Constants.QUERY);
@@ -264,7 +261,6 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 		request.setAttribute("predefinedConsentsList", predefinedConsentsList);
 		request.setAttribute("title", title);
 		request.setAttribute("userListforJSP", Constants.USERLIST);
-		
 		return mapping.findForward(pageOf);
     }
   
