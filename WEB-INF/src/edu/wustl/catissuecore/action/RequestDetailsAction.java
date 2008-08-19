@@ -70,6 +70,7 @@ import edu.wustl.common.dao.AbstractDAO;
 import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.dbManager.HibernateMetaData;
+import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
 
 public class RequestDetailsAction extends BaseAction
@@ -126,6 +127,9 @@ public class RequestDetailsAction extends BaseAction
 
 		// order items status to display
 		List requestedItemsStatusList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_REQUESTED_ITEMS_STATUS, null);
+		//removing the --select-- from the list and adding --select Status for all-- to the list
+		requestedItemsStatusList.remove(0);
+		requestedItemsStatusList.add(0,new NameValueBean(ApplicationProperties.getValue("orderingSystem.details.distributionStatus"),"-1"));
 		request.setAttribute(Constants.REQUESTED_ITEMS_STATUS_LIST, requestedItemsStatusList);
 
 		//Setting the Site List
