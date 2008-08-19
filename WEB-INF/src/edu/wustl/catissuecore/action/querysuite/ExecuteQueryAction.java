@@ -19,7 +19,9 @@ import edu.wustl.catissuecore.bizlogic.querysuite.CreateQueryObjectBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
 import edu.wustl.common.action.BaseAction;
+import edu.wustl.common.hibernate.HibernateCleanser;
 import edu.wustl.common.querysuite.queryobject.IParameterizedQuery;
+import edu.wustl.common.util.ObjectCloner;
 
 /**
  * @author chetan_patil
@@ -41,13 +43,15 @@ public class ExecuteQueryAction extends BaseAction
 		session.removeAttribute(Constants.EXPORT_DATA_LIST);
 		session.removeAttribute(Constants.ENTITY_IDS_MAP);
 		IParameterizedQuery parameterizedQuery = (IParameterizedQuery) session.getAttribute(AppletConstants.QUERY_OBJECT);
+		IParameterizedQuery parameterizedQuery1 = ObjectCloner.clone(parameterizedQuery);
+		
 		String conditionstr = request.getParameter("conditionList");
 		session.setAttribute(Constants.IS_SAVED_QUERY, Constants.TRUE);
 		
 		if (conditionstr != null) 
 		{
 			CreateQueryObjectBizLogic bizLogic = new CreateQueryObjectBizLogic();
-			String errorMessage = bizLogic.setInputDataToQuery(conditionstr, parameterizedQuery.getConstraints(), null);
+			String errorMessage = bizLogic.setInputDataToQuery(conditionstr, parameterizedQuery1.getConstraints(), null);
 			if (errorMessage.trim().length()>0)
 			{
 				ActionErrors errors = new ActionErrors();
@@ -61,7 +65,9 @@ public class ExecuteQueryAction extends BaseAction
 			
 		}
 		
-		String errorMessage = QueryModuleUtil.executeQuery(request, parameterizedQuery);
+		String errorMessage = QueryModuleUtil.executeQuery(request, parameterizedQuery1);
+		session.setAttribute(AppletConstants.QUERY_OBJECT, parameterizedQuery);
+		
 		if (errorMessage == null)
 		{
 			target = Constants.SUCCESS;

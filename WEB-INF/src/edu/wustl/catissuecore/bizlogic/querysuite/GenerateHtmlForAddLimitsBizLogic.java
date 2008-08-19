@@ -1102,7 +1102,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 						+ "',this)\" name='" + componentName + "'><font class='"
 						+ cssClass + "'>False</font>");
 			}
-			else
+			else if(values.get(0).equalsIgnoreCase("false"))
 			{
 				html.append("\n<input type='radio' id = '" + componentId
 						+ "_true' value='true' onclick=\"resetOptionButton('" + radioButtonTrueId
@@ -1112,6 +1112,17 @@ public class GenerateHtmlForAddLimitsBizLogic
 						+ "_false' value='false' onclick=\"resetOptionButton('" + radioButtonFalseId
 					+ "',this)\" name='" + componentName
 						+ "'  checked><font class='" + cssClass + "'>False</font>");
+			}
+			else
+			{
+				html.append("\n<input type='radio' id = '" + componentId
+						+ "_true' value='true' onclick=\"resetOptionButton('" + radioButtonTrueId
+					+ "',this)\" name='" + componentName + "' ><font class='"
+						+ cssClass + "'>True</font>");
+				html.append("\n<input type='radio' id = '" + componentId
+						+ "_false' value='false' onclick=\"resetOptionButton('" + radioButtonFalseId
+					+ "',this)\" name='" + componentName
+						+ "'><font class='" + cssClass + "'>False</font>");
 			}
 		}
 		html.append("\n</td>");

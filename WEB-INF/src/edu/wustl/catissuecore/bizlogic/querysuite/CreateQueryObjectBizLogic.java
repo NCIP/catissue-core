@@ -9,12 +9,14 @@ import java.util.Map;
 import java.util.StringTokenizer;
 
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
+import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationException;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.catissuecore.util.querysuite.QueryModuleConstants;
+import edu.wustl.common.querysuite.factory.QueryObjectFactory;
 import edu.wustl.common.querysuite.queryobject.ICondition;
 import edu.wustl.common.querysuite.queryobject.IConstraints;
 import edu.wustl.common.querysuite.queryobject.IExpression;
@@ -179,11 +181,15 @@ public class CreateQueryObjectBizLogic
 					|| QueryModuleConstants.LONG.equals(dataType))
 			{
 				Logger.out.debug(" Check for integer");
+				
 				if (validator.convertToLong(enteredValue) == null)
 				{
-					errorMessages = errorMessages + ApplicationProperties
-					.getValue("simpleQuery.intvalue.required");
-					Logger.out.debug(enteredValue + " is not a valid integer");
+					if(!"".equals(enteredValue))
+					{
+						errorMessages = errorMessages + ApplicationProperties
+						.getValue("simpleQuery.intvalue.required");
+						Logger.out.debug(enteredValue + " is not a valid integer");
+					}
 				}
 				else if (!validator.isPositiveNumeric(enteredValue, QueryModuleConstants.ARGUMENT_ZERO))
 				{
@@ -365,11 +371,54 @@ public class CreateQueryObjectBizLogic
 						int expId = expression.getExpressionId();
 						errorMessage = componentValues(displayNamesMap, errorMessage,
 							newConditions, expId,  ((IRule) operand).getConditions());
+						if(displayNamesMap == null && ((IRule) operand).getConditions().size()==0)
+						{
+							IRule rule = (IRule) operand;
+							IExpression expression1 = rule.getContainingExpression();
+					        AttributeInterface attributeObj = getIdNotNullAttribute(expression1.getQueryEntity()
+					                .getDynamicExtensionsEntity());
+
+					        if (attributeObj != null) 
+					        {
+					            ICondition condition = createIdNotNullCondition(attributeObj);
+					            rule.addCondition(condition);
+					        }
+						}
 					}
 			}
 		}
 		return errorMessage;
 	}
+	
+	/**
+     * Check if identifier present in entity.
+     * 
+     * @param entityInterfaceObj The Entity for which it is required to check if
+     *            identifier present.
+     * @return Reference to the AttributeInterface if identifier attribute is
+     *         present in the entity, else null.
+     */
+	private AttributeInterface getIdNotNullAttribute(EntityInterface entityInterfaceObj) 
+	{	
+		Collection<AttributeInterface> attributes = entityInterfaceObj.getEntityAttributesForQuery();
+        for (AttributeInterface attribute : attributes) {
+            if (attribute.getName().equals(Constants.ID)) {
+                return attribute;
+            }
+        }
+        return null;
+	}
+
+	/**
+     * Creates condition identifier != null'
+     * @param attributeObj The attribute on which the condition has to be created(In this case its 'identifier')
+     * @return condition that is created on identifier
+     */
+	private ICondition createIdNotNullCondition(AttributeInterface attributeObj) 
+	{
+        ICondition condition = QueryObjectFactory.createCondition(attributeObj, RelationalOperator.IsNotNull, null);
+        return condition;
+    }
 
 	/**
 	 * @param displayNamesMap
@@ -398,9 +447,14 @@ public class CreateQueryObjectBizLogic
 				errorMessage = errorMessage + validateAttributeValues(condition
 						.getAttribute().getDataType().toString(),attributeValues);
 				
-				condition.setValues(attributeValues);
-				condition.setRelationalOperator(RelationalOperator.getOperatorForStringRepresentation(
+				if(displayNamesMap!=null && !(displayNamesMap.containsKey(componentName)))
+				{}
+				else
+				{
+					condition.setValues(attributeValues);
+					condition.setRelationalOperator(RelationalOperator.getOperatorForStringRepresentation(
 							params[QueryModuleConstants.INDEX_PARAM_ZERO]));
+				}
 			}
 			if((!newConditions.containsKey(componentName)) && (displayNamesMap == null))
 			{

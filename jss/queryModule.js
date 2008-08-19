@@ -645,6 +645,10 @@
 						}
 						strToCreateQueyObject = strToCreateQueyObject + "@#condition#@"+ attribute[i] + "!*=*!" + op + "!*=*!" + values +";";
 					}
+					else if(ob.value == "")
+					{
+						strToCreateQueyObject = strToCreateQueyObject + "@#condition#@"+ attribute[i] + "!*=*!" + op + "!*=*!" + " " +";";
+					}
 				}
 				var radioButtonTrue = attribute[i]+"_radioButton_true";
 			    var radioButtonFalse = attribute[i]+"_radioButton_false";
@@ -659,6 +663,10 @@
 					else if(objFalse.checked)
 					{
 						strToCreateQueyObject = strToCreateQueyObject + "@#condition#@"+ attribute[i] + "!*=*!" + op + "!*=*!" + 'false' +";";
+					}
+					else if(!objTrue.checked && !objFalse.checked)
+					{
+						strToCreateQueyObject = strToCreateQueyObject + "@#condition#@"+ attribute[i] + "!*=*!" + op + "!*=*!" + " " +";";
 					}
 				}
 				else
