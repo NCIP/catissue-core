@@ -1222,7 +1222,7 @@
 	
 	<target name="CAModel_import_data_oracle">
 		<echo message="Importing CA models data for caTISSUE Suite Application to Oracle Database ..." />
-		<java classname="edu.wustl.common.util.global.AutomateImport"  fork="false" >
+		<java classname="edu.wustl.common.util.global.AutomateImport"  fork="true" >
 			
 			<classpath refid="temp.classpath" />
 			
