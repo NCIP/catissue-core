@@ -139,7 +139,8 @@ public class LoginAction extends Action
 	                 * 				If user login as Scientist Default view is set as Admin Advance Search unser Search tab
 	                 * Forwarding to default page depending on user role
 	                 */
-					String forwardToPage = getForwardToPageOnLogin(validUser.getCsmUserId().longValue());
+					String forwardToPage =Constants.SUCCESS; 
+					//getForwardToPageOnLogin(validUser.getCsmUserId().longValue());
 					return (mapping.findForward(forwardToPage));
 	            }
 	            else
