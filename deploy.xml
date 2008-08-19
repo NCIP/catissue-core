@@ -191,10 +191,7 @@
 			</fileset>
 		</copy>
 		
-		<replace dir="${temp.dir}/catissuecore/WEB-INF/classes" propertyfile="caTissueInstall.properties"> 
-			<include name ="log4j.properties"/>
-			<replacefilter token="@@jbosshome@@" value="${jboss.server.url}"/>
-		</replace>
+		<antcall target="configure_log4j" />
 		
 
 		<!-- <unwar src="${base.dir}/catissuecorecsm.war" dest="${temp.dir}/tempcsm"/> -->
@@ -208,6 +205,13 @@
 		<!--Kapil V 1.0.1 Changes-->
 		<copy file="login-config.xml" todir="${temp.dir}" overwrite="true" />
 		<copy file="properties-service.xml" todir="${temp.dir}" overwrite="true" />
+	</target>
+	
+	<target name="configure_log4j">
+		<replace dir="${temp.dir}/catissuecore/WEB-INF/classes" propertyfile="caTissueInstall.properties"> 
+			<include name ="log4j.properties"/>
+			<replacefilter token="@@jbosshome@@" value="${jboss.server.url}"/>
+		</replace>
 	</target>
 
 	<!--Modify Configuration such as Session Timeout, Admin details and JBoss server port-->
@@ -1515,6 +1519,8 @@ Thanking You,
 		<copy file="${base.dir}/DE_conf/hibernate.cfg.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true" />
 		<copy file="${base.dir}/DE_conf/DynamicExtensionsHibernate.cfg.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true" />
 
+		<echo>Configuring logger ...</echo>
+		<antcall target="configure_log4j" />
 		<if>
 			<equals arg1="mysql" arg2="${database.type}" />
 			<then>
@@ -1584,7 +1590,10 @@ Thanking You,
 
 		<copy file="${base.dir}/DE_conf/hibernate.cfg.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true" />
 		<copy file="${base.dir}/DE_conf/DynamicExtensionsHibernate.cfg.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true" />
-
+		
+		<echo>Configuring logger ...</echo>
+		<antcall target="configure_log4j" />
+		
 		<if>
 			<equals arg1="mysql" arg2="${database.type}" />
 			<then>
@@ -1751,7 +1760,9 @@ Thanking You,
 		<unwar src="${base.dir}/dynamicExtensions.war" dest="${temp.dir}/catissuecore"/>		
 			<copy file="${base.dir}/DE_conf/hibernate.cfg.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true"/>
 			<copy file="${base.dir}/DE_conf/DynamicExtensionsHibernate.cfg.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true"/>
-
+		
+			<echo>Configuring logger ...</echo>
+			<antcall target="configure_log4j" />
 			<if>
 				<equals arg1="mysql" arg2="${database.type}"/>
 				<then>
@@ -1811,7 +1822,9 @@ Thanking You,
 		<unwar src="${base.dir}/dynamicExtensions.war" dest="${temp.dir}/catissuecore"/>		
 		<copy file="${base.dir}/DE_conf/hibernate.cfg.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true"/>
 		<copy file="${base.dir}/DE_conf/DynamicExtensionsHibernate.cfg.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true"/>
-				
+		
+		<echo>Configuring logger ...</echo>
+		<antcall target="configure_log4j" />
 		<if>
 			<equals arg1="mysql" arg2="${database.type}"/>
 			<then>
