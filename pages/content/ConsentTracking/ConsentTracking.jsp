@@ -5,7 +5,8 @@
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.*"%>
-
+<%@ page language="java" isELIgnored="false" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>	
 <!-- 
 	 @author Virender Mehta 
 	 @version 1.1	
@@ -18,6 +19,11 @@
 
 var consentIDArray=new Array(<%=form.getConsentTierCounter()%>);
 var changeInStatus=false;
+
+function cancelWindow()
+{
+  parent.consentWindow.hide();
+}
 
 function changeInResponse(responseIdkey)
 {
@@ -209,7 +215,7 @@ function popupWindow(nofConsentTiers)
 	String showHideStatus=request.getParameter("showHideStatus");
 %>
 	<%-- Main table Start --%>
-	<table width="100%" border="0" cellpadding="0" cellspacing="0"   id="consentTabForSCG">
+	<table width="100%" border="0" cellpadding="3" cellspacing="0"   id="consentTabForSCG">
 		<%--Title of the form i.e Consent Form --%>				
 	
 		<tr>
@@ -471,6 +477,8 @@ function popupWindow(nofConsentTiers)
 							%>										
 						</tr>
 						<%-- Get Consents and Responses from DB --%>	
+						<!-- Setting the local variable count for the row counting for setting row color-->
+							<c:set var="count" value='1' scope="page"/>
 						<%-- For loop Start --%>							
 						<%	
 						
@@ -544,11 +552,15 @@ function popupWindow(nofConsentTiers)
 								}
 															
 						%>		
-						<%-- Serial No # --%>										
+						<%-- Serial No # --%>	
+						<c:set var="style" value="black_ar" scope="page" />	
+							<c:if test='${pageScope.count % 2 == 0}'>
+								<c:set var="style" value="tabletd1" scope="page" />
+							</c:if>
 						<tr>
-							<td align="left" class="black_ar" ><%=counter+1%>.</td>
+							<td align="left" class='${pageScope.style}'	 ><%=counter+1%>.</td>
 							<%-- Get Consents # --%>										
-							<td class="black_ar">
+							<td class='${pageScope.style}'>
 							<html:hidden property="<%=consentIDKey%>"/>
 							<html:hidden property="<%=consents%>"/>
 							<%=consentResponseDisplay%>
@@ -558,7 +570,7 @@ function popupWindow(nofConsentTiers)
 							if(pageOf.equals("pageOfCollectionProtocolRegistration")||pageOf.equals("pageOfCollectionProtocolRegistrationCPQuery")  || pageOf.equals("pageOfConsent"))
 							{
 							%>
-								<td class="black_new">
+								<td class='${pageScope.style}'>
 									<html:hidden property="<%=participantResponseIDKey%>"/>
 									<html:select property="<%=participantResponseKey%>" styleClass="formFieldSized10" styleId="<%=participantResponseKey%>" size="1"
 									onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
@@ -572,7 +584,7 @@ function popupWindow(nofConsentTiers)
 									||pageOf.equals("pageOfNewSpecimenCPQuery")||pageOf.equals("pageOfSpecimenCollectionGroup")||pageOf.equals("pageOfDistribution")||pageOf.equals("pageOfOrdering"))
 							{
 							%>
-							<td class="black_ar">
+							<td class='${pageScope.style}'>
 								<html:hidden property="<%=participantResponseIDKey%>"/>
 								<html:hidden property="<%=participantResponseKey%>"/>
 								<%=responseDisplay%>
@@ -597,7 +609,7 @@ function popupWindow(nofConsentTiers)
 								if(operation.equals(Constants.EDIT)&&statusDisplay.equals(Constants.WITHDRAWN))
 								{
 							%>
-								<td class="black_new">
+								<td class='${pageScope.style}'>
 								<html:select property="<%=responseKey%>" styleClass="formFieldSized10" styleId="<%=responseKey%>" size="1"
 											onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 										<html:option value="Withdrawn"><bean:message key="consent.withdrawn" /></html:option>
@@ -608,7 +620,7 @@ function popupWindow(nofConsentTiers)
 								else
 								{
 							%>
-								<td class="black_new">
+								<td class='${pageScope.style}'>
 									<html:hidden property="<%=responseIdKey%>"/>
 									<html:select property="<%=responseKey%>" styleClass="formFieldSized10" styleId="<%=responseKey%>" size="1"
 										onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="<%=idKey%>">
@@ -634,7 +646,7 @@ function popupWindow(nofConsentTiers)
 								if(statusDisplay!=null&&operation.equals(Constants.EDIT)&&statusDisplay.equals(Constants.WITHDRAWN))
 								{
 							%>
-								<td class="black_new">
+								<td class='${pageScope.style}'>
 								<html:select property="<%=responseKey%>" styleClass="formFieldSized10" styleId="<%=responseKey%>" size="1"
 											onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 										<html:option value="Withdrawn"><bean:message key="consent.withdrawn" /></html:option>
@@ -645,7 +657,7 @@ function popupWindow(nofConsentTiers)
 								else
 								{
 							%>
-							<td class="black_new">
+							<td class='${pageScope.style}'>
 								<html:hidden property="<%=responseIdKey%>"/>
 								<html:select property="<%=responseKey%>" styleClass="formFieldSized10" styleId="<%=responseKey%>" size="1"
 									onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="<%=keyValue%>">
@@ -661,12 +673,13 @@ function popupWindow(nofConsentTiers)
 							else if(pageOf.equals("pageOfDistribution") || pageOf.equals("pageOfOrdering"))
 							{
 							%>
-							<td class="black_ar">
+							<td class='${pageScope.style}'>
 								<html:hidden property="<%=responseIdKey%>"/>
 								<html:hidden property="<%=responseKey%>"/>
 								 <%=specimenResponseDisplay%>
 							</td>
 						</tr>	
+						<c:set var="count" value='${pageScope.count+1}' scope="page" />
 						<%
 						}
 							%>
@@ -690,20 +703,20 @@ function popupWindow(nofConsentTiers)
 									status="";
 								}
 							%>
-							<td class="tabrightmostcell">
+							<td class="black_ar">
 								<input type="checkbox" name="verifyAllCheckBox" id="verifyAllCheckBox"
 								<%=status%> />
 							</td>
-							<td class="formField" colspan="3">
+							<td class="black_ar" colspan="3">
 								<label><b><bean:message key="consent.verificationmessage" /><b></label>
 							</td>
 						</tr>
 						<%-- action button --%>																
-						<tr>
-							<td class="tabrightmostcell" align="right" colspan="4">
-								<input type="button" name="doneButton" style="actionButton" value="Done" onclick="submitAllResponses()"/>
+						<!--<tr>
+							<td class="buttonbg" align="left" colspan="4">
+								<input type="button" name="doneButton" style="blue_ar_b" value="Done" onclick="submitAllResponses()"/>
 							</td>
-						</tr>
+						</tr>-->
 						<% 
 						}%>
 						
@@ -713,8 +726,19 @@ function popupWindow(nofConsentTiers)
 				</td>	
 			</tr>
 			<tr>
-			<td class="buttonbg">
-			<%if(operation.equals(Constants.EDIT))
+			<td class="buttonbg" align="left">
+
+			<%
+			if(pageOf.equals("pageOfDistribution") ||pageOf.equals("pageOfOrdering"))
+						{%>
+
+						<input type="button" name="doneButton" class="blue_ar_b" value="Ok" onclick="submitAllResponses()"/>
+						&nbsp;|&nbsp;
+						<html:link href="#" styleClass="cancellink" onclick= "cancelWindow();">
+													<bean:message key="buttons.cancel" />
+												</html:link>
+					<%	}
+			if(operation.equals(Constants.EDIT))
 				{
 				String str = "withdrawAll('"+ consentTierList.size()+"')";
 				%>
