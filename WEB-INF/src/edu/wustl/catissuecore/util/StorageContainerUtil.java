@@ -14,6 +14,8 @@ import java.util.TreeMap;
 
 import net.sf.ehcache.CacheException;
 import edu.wustl.catissuecore.actionForm.SpecimenArrayForm;
+import edu.wustl.catissuecore.actionForm.ViewSpecimenSummaryForm;
+import edu.wustl.catissuecore.bean.GenericSpecimen;
 import edu.wustl.catissuecore.bizlogic.SpecimenArrayBizLogic;
 import edu.wustl.catissuecore.domain.Container;
 import edu.wustl.catissuecore.domain.Specimen;
@@ -1127,4 +1129,46 @@ public class StorageContainerUtil
 			}
 			return storageValue.toString();
 		}
-}
+
+
+		// added by Suman-bug 8228
+		  public static int getCountofFreeLocationOfContainer (String containerId, String storageContainerName)throws CacheException,Exception{
+			  Map <NameValueBean, NameValueBean>  containerMapFromCache = null;
+			  int freeSizeofContainer = 0;
+				try
+				{
+					containerMapFromCache = (TreeMap)getContainerMapFromCache();
+				}
+				catch (CacheException e)
+				{
+					e.printStackTrace();
+				}
+											
+				if (containerMapFromCache != null && !(chkContainerFull(containerId,storageContainerName)))
+					{
+						Iterator <NameValueBean>itr = containerMapFromCache.keySet().iterator();
+						while (itr.hasNext())
+						{
+							NameValueBean nvb = (NameValueBean) itr.next();
+							String nvbName = nvb.getName();
+							String containerName = storageContainerName;
+							if(nvbName.equals(containerName))
+							{
+								Map <NameValueBean ,NameValueBean>positionMap = (Map <NameValueBean ,NameValueBean> ) containerMapFromCache.get(nvb);
+								Iterator <NameValueBean>tempIterator = positionMap.keySet().iterator();;
+									while(tempIterator.hasNext())
+									{
+										NameValueBean nvb1 = (NameValueBean) tempIterator.next();
+										List <NameValueBean>locationList = (List) positionMap.get(nvb1);
+										freeSizeofContainer = freeSizeofContainer +locationList.size();
+									}
+								break;
+							}
+						}
+					}
+				
+					
+				return freeSizeofContainer;
+		  }
+
+	}
