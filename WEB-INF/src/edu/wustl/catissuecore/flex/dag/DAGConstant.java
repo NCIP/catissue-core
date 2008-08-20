@@ -19,7 +19,7 @@ public class DAGConstant {
 	public static final String EDIT_OPERATION = "edit";
     public static final String REPAINT_EDIT = "rePaintEdit";
     public static final String REPAINT_CREATE = "rePaintCreate";
-    
+    public static final String TQUIMap = "TQUIMap";
 	
 	//Error Codes 
 	public static  final int SUCCESS=0;
