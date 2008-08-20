@@ -1080,7 +1080,7 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 		}
 		
 		/**
-		 * Negative test case : Test case for Transfer Specimen Position
+		 * Test case for Transfer Specimen Position from one position to another
 		 */
 		public void testTransferPositionOFSpecimen()
 		 {
