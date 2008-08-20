@@ -491,13 +491,15 @@
 		
 	]]>
 </mx:Script>
-	<mx:HBox name="Node" backgroundColor="{nodeColor}" borderStyle="solid" width="100%" paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5">
+	<mx:HBox name="Node" backgroundColor="{nodeColor}" borderStyle="solid" height="100%" width="100%" paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5">
 		<mx:Canvas  backgroundColor="0xF5F5F5"  borderStyle="solid">
 			<mx:Label id="nodeNo" text="{nodeNumber}" mouseChildren="false"/>
 		</mx:Canvas>
 		<mx:Label  styleName="Arial" text="{nodeName}" color="blue" width="100" mouseChildren="false"/>
+		<mx:VBox height="100%" verticalAlign="middle">
+			<mx:Button id="createMenu" label=">" click="createAndShow(event);" mouseChildren="false"/>	
+		</mx:VBox>
 		
-		<mx:Button id="createMenu" label=">" click="createAndShow(event);" mouseChildren="false"/>
 	</mx:HBox>
 		<mx:VBox id="assVbox" name="Association" label="Associations" width="100%" verticalGap="0" visible="false">
 		
