@@ -107,6 +107,18 @@ var myData = [<%int i;%><%for (i=0;i<(dataList.size()-1);i++){%>
 	 document.forms[0].submit();
 	 }
 	}
+
+	if ( document.getElementById && !(document.all) ) 
+	{
+		var slope=-10;
+	}
+	else
+	{
+		var slope=-40;
+	}
+
+window.onload = function() { setFrameHeight('definedAnnotationsGrid', .8,slope);}
+window.onresize = function() { setFrameHeight('definedAnnotationsGrid', .8,slope); }
 	</script>
 
 </head>

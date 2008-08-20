@@ -4,7 +4,20 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ page import="java.util.List"%>
 
+<script>
+if ( document.getElementById && !(document.all) ) 
+	{
+		var slope=5;
+	}
+	else
+	{
+		var slope=-10;
+	}
 
+window.onload = function() { setFrameHeight('dynamicExtensionsFrame', .9,slope);}
+window.onresize = function() { setFrameHeight('dynamicExtensionsFrame', .9,slope); }
+
+</script>
 <html>
 	<head>
 			<title></title>
@@ -28,7 +41,7 @@
 
 	
 	%><table width="100%" border="0" cellpadding="0" cellspacing="0"><tr><td>
-	<iframe src = "<%=url%>" style = "overflow-y:auto;overflow-x:auto" height = "430" width = "100%" name = "dynamicExtensionsFrame" id = "dynamicExtensionsFrame" frameborder="0" marginheight="0" marginwidth="0">
+	<iframe src = "<%=url%>" style = "overflow-y:hidden;overflow-x:hidden" height = "430" width = "100%" name = "dynamicExtensionsFrame" id = "dynamicExtensionsFrame" frameborder="0" marginheight="0" marginwidth="0">
 	</iframe>
 	</td></tr></table>
 

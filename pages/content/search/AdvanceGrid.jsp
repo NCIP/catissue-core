@@ -5,11 +5,18 @@
 <script  src="dhtml_comp/js/dhtmlXCommon.js"></script>
 <script  src="dhtml_comp/js/dhtmlXGrid.js"></script>		
 <script  src="dhtml_comp/js/dhtmlXGridCell.js"></script>
+<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 
 <%@ page import="java.util.HashMap,java.util.Map,edu.wustl.common.beans.QueryResultObjectData"%>
 <script>
 <%
 String checkAllPagesSession = (String)session.getAttribute("checkAllPages");
+String gridDivHeight="280";
+if(pageOf.equals(Constants.PAGEOF_QUERY_RESULTS) || pageOf.equals(Constants.PAGEOF_QUERY_MODULE) || pageOf.equals(Constants.PAGE_OF_PARTICIPANT_CP_QUERY))
+	{
+		 gridDivHeight = "205";
+	}
+	
 %>
 // --------------------  FUNCTION SECTION
 //checks or unchecks all the check boxes in the grid.
@@ -188,7 +195,22 @@ function setEditableChkbox(checkAllPages)
 		    }
 			hideCursor();		
 	}
+
+	if ( document.getElementById && !(document.all) ) 
+	{
+		var slope=-36;
+	}
+	else
+	{
+		var slope=-20;
+	}
+
+window.onload = function() { setFrameHeight('gridbox', .6,slope);}
+window.onresize = function() { setFrameHeight('gridbox', .6,slope); }
+
 </script>
+
+
 
 <table width="100%" valign="top" border="0">
 	<tr valign="top">
@@ -202,9 +224,10 @@ function setEditableChkbox(checkAllPages)
 							 screen, the div runs out of the frame, and there was no way to scroll
 							 down, as we had disabled the scrollbar.
 			-->
-			<div id="gridbox" width="100%" style="background-color:#d7d7d7;overflow:hidden;height:280px"></div>
+			<div id='gridbox' width='100%' height='<%=gridDivHeight%>' border='0' style='background-color:#d7d7d7;overflow:hidden'>
+			</div>
 		</td>
-	</tr>
+	</tr>	
 </table>
 
 <script>
