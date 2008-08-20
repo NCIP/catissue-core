@@ -354,10 +354,12 @@
   <!--<mx:RemoteObject id="rpcService" destination="cdeService">
  </mx:RemoteObject> -->
   
-  <mx:HBox height="100%" width="100%" textAlign="center">
+  <mx:HBox height="100%" width="100%" textAlign="center" horizontalGap="0">
      <mx:Label id="formulaLabel" text="{customFormula}" height="100%" width="95%"/>
   	
-     <mx:Button  label=">" width="5%" click="createMyMenu(event)"/>	
+     <mx:VBox height="100%" verticalAlign="middle">
+  	 	<mx:Button  label=">" width="5%" click="createMyMenu(event)"/>	
+  	 </mx:VBox>     	
   </mx:HBox> 
   
 </mx:Box>
