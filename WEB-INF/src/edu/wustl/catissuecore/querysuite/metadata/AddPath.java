@@ -126,7 +126,7 @@ public class AddPath
 		 {
 		 	identifier = rs.getInt(1)+1;
 		 }
-		 stmt.close();
+		 //stmt.close();
 		 String sql;
 		 String entityId=null;
 		 String associatedEntityId = null;
@@ -144,15 +144,18 @@ public class AddPath
 				 entityId = String.valueOf(rs.getLong(1));
 			 
 				 List<String> associationsList = superClassAndAssociationsMap.get(key);
-			 	 for(String associatedEntityName:associationsList){
+			 	 for(String associatedEntityName:associationsList)
+			 	 {
 					 sql = "Select IDENTIFIER from dyextn_abstract_metadata where NAME = '"+associatedEntityName+"'";
-					 rs = stmt.executeQuery(sql);
+					 Statement stmt4 = connection.createStatement();
+					 rs = stmt4.executeQuery(sql);
 					 if(rs.next())
 					 {
 						 associatedEntityId = String.valueOf(rs.getLong(1));
 					 
 						 sql = "Select INTERMEDIATE_PATH from PATH where FIRST_ENTITY_ID = "+entityId+" and LAST_ENTITY_ID = "+associatedEntityId;
-						  rs = stmt.executeQuery(sql);
+						 Statement stmt5 = connection.createStatement();
+						  rs = stmt5.executeQuery(sql);
 						  
 						 while(rs.next())
 						 {
@@ -175,11 +178,12 @@ public class AddPath
 								 stmt1.close();
 							 }
 						 }
+						 stmt5.close();
 						 if(!(key.equals(associatedEntityName)))
 						 {
 							 sql = "Select INTERMEDIATE_PATH from PATH where FIRST_ENTITY_ID = "+associatedEntityId+" and LAST_ENTITY_ID = "+entityId;
 							 Statement stmt2 = connection.createStatement();
-							  rs = stmt.executeQuery(sql);
+							  rs = stmt2.executeQuery(sql);
 							 while(rs.next())
 							 {
 								 String intermediatePathId = rs.getString(1);
@@ -187,27 +191,29 @@ public class AddPath
 								 for(String subClassEntity : subClassList)
 								 {
 									 String subClassEntityId;
-									 stmt = connection.createStatement();
+									 Statement stmt3 = connection.createStatement();
 									 sql = "Select IDENTIFIER from dyextn_abstract_metadata where NAME = '"+subClassEntity+"'";
-									 ResultSet rs1 = stmt.executeQuery(sql);
+									 ResultSet rs1 = stmt3.executeQuery(sql);
 									 if(rs1.next())
 									 {
 										 subClassEntityId = String.valueOf(rs1.getLong(1));
 										 insertPathSQL.add("insert into path values("+ identifier++ +","+associatedEntityId+","+intermediatePathId+","+subClassEntityId+")");
-									 } 
+									 }
+									 stmt3.close();
 								 }
 							 }
 							 stmt2.close();
 						 }
 					 }
+					 stmt4.close();
 				 }
 			 }
 			 else
 			 {
 				 System.out.println("Entity with name : "+key+" not found");
-			 }
-			 stmt.close();
+			 }		 
 		 }
+		 stmt.close();
 		 return insertPathSQL;
 	 }
 }
