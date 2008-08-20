@@ -194,6 +194,7 @@
 		<copy todir="${temp.caties.dir}/classes">
 			<fileset dir="${temp.dir}/catissuecore/WEB-INF/classes" />
 		</copy>
+		<delete file="${temp.caties.dir}/classes/log4j.properties" />
 		<jar destfile="${temp.caties.dir}/caties.jar" basedir="${temp.caties.dir}/classes" />
 		<delete dir="${temp.caties.dir}/classes" />
 	</target>
