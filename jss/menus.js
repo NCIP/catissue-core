@@ -439,7 +439,7 @@ Ext.onReady(function(){
          items: [
 			{
 				text: 'Help Home',
-				href:'/catissuecore/RedirectToHelpMain.do',
+				href:'/catissuecore/RedirectToHelp.do',
 				tooltip:'Help Home'
 			},
 			{
