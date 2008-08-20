@@ -4,9 +4,11 @@
 
 package edu.wustl.catissuecore.bizlogic.test;
 
+import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import gov.nih.nci.system.applicationservice.ApplicationException;
 
@@ -37,32 +39,126 @@ public class MSRSiteAdminTestCases extends MSRBaseTestCase
 		
 		try
 		{
-			// this should work
-			StorageContainer sc = createNewSC(site1);
-		}
-		catch(Exception e)
-		{
-			fail();
-		}
-		
-		try
-		{
 			//this must fail
 			StorageContainer sc = createNewSC(site2);
 		}
 		catch(Exception e)
 		{
-			if(confirmUserNotAuthorizedException(e))
+			if(!confirmUserNotAuthorizedException(e))
 			{
-				return;
+				fail("Negative test for testAddSC failed since exception was thrown but not UserNotAuthorizedException");
 			}
 			
-			fail("Negative test for testAddSC failed since exception was thrown but not UserNotAuthorizedException");
+			return;
+		}
+		
+		fail();
+
+	}
+	
+	
+	public void testAddUser()
+	{
+		Site site = createNewSite();
+		User admin = createNewSiteAdmin(site);
+		loginAs(admin.getLoginName());
+		
+		User user = BaseTestCaseUtility.initUser();
+		user.setRoleId("7");
+		user.getSiteCollection().clear();
+		user.getSiteCollection().add(site);
+		try
+		{
+			user = (User)appService.createObject(user);
+		}
+		catch (ApplicationException e)
+		{
+			fail();
 		}
 
 	}
 
+	
+	public void testAddUserNegative()
+	{
+		Site site1 = createNewSite();
+		Site site2 = createNewSite();
+		User admin = createNewSiteAdmin(site1);
+		loginAs(admin.getLoginName());
+		
+		User user = BaseTestCaseUtility.initUser();
+		user.setRoleId("1");
+		user.getSiteCollection().clear();
+		user.getSiteCollection().add(site2);
+		user.setPageOf(Constants.PAGEOF_USER_ADMIN);
+		try
+		{
+			user = (User)appService.createObject(user);
+		}
+		catch (ApplicationException e)
+		{
+			if(!confirmUserNotAuthorizedException(e))
+			{
+				fail("Negative test for testAddUser failed since exception was thrown but not UserNotAuthorizedException");
+			}
+			
+			return;
+		}
+		
+		fail();
+
+	}
 
 	
+	public void testAddCP()
+	{
+		Site site = createNewSite();
+		User admin = createNewSiteAdmin(site);
+		loginAs(admin.getLoginName());
+		
+		CollectionProtocol cp = BaseTestCaseUtility.initCollectionProtocol();
+		cp.getSiteCollection().clear();
+		cp.getSiteCollection().add(site);
+		
+		try
+		{
+			cp = (CollectionProtocol)appService.createObject(cp);
+		}
+		catch (ApplicationException e)
+		{
+			fail();
+		}
+
+	}
+
+	
+	public void testAddCPNegative()
+	{
+		Site site1 = createNewSite();
+		Site site2 = createNewSite();
+		User admin = createNewSiteAdmin(site1);
+		loginAs(admin.getLoginName());
+		
+		CollectionProtocol cp = BaseTestCaseUtility.initCollectionProtocol();
+		cp.getSiteCollection().clear();
+		cp.getSiteCollection().add(site2);
+		
+		try
+		{
+			cp = (CollectionProtocol)appService.createObject(cp);
+		}
+		catch (ApplicationException e)
+		{
+			if(!confirmUserNotAuthorizedException(e))
+			{
+				fail("Negative test for testAddCP failed since exception was thrown but not UserNotAuthorizedException");
+			}
+			
+			return;
+		}
+		
+		fail();
+
+	}
 
 }
