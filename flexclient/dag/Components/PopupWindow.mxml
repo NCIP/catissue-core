@@ -2,7 +2,7 @@
 <mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="700" height="200"
 	 showCloseButton="true" close="removeMe();" borderColor="#0000FF" backgroundColor="white" 
 	 left="0" right="0" borderThicknessLeft="2" borderThicknessRight="2" borderThicknessBottom="2" 
-	 borderThicknessTop="5">
+	 borderThicknessTop="5" creationComplete="removeComponent()">
 	 <mx:Script>
 	 	<![CDATA[
 	 		import mx.events.ValidationResultEvent;
@@ -200,8 +200,11 @@
             
             customFormulaNode.name = nodeName;
             
-            //Setting custom column Name
-            customFormulaNode.setCustomColumnName(customColumnName.text);
+            //Setting custom column Name with time Interval
+            trace("cb6.selectedItem = " + cb6.selectedItem);
+            customFormulaNode.setCustomColumnName(customColumnName.text + "#" + cb6.selectedItem);
+            
+            
             parentApplication.customFormulaString = customFormulaString;
              
             this.parentApplication.rpcService.addEventListener(FaultEvent.FAULT, faultHandler);
@@ -300,7 +303,7 @@
                        	   comboBox.id = "cb5";
                        	   comboBox.name = "timeIntervalCb";
                        	   comboBox.width = 100;
-                           comboBox.dropdownFactory = myDropdownFactory;
+                           comboBox.rowCount = 10;
                        	   comboBox.dataProvider = myArray5;
                        	   myBox.addChild(comboBox);
                        	   
@@ -410,7 +413,11 @@
            	       				   labelHBox.removeChild(existingIntervalLabel);	
            	       				}
            	       			}
-           	       		
+							
+							//depends on view shows components 							           	       		
+							if(this.parentApplication.view != "Result"){
+								
+							
            	       			//Creating the DatePicker
            	       			existingDatePicker= myBox.getChildByName("datePicker") as DateField;
            	 	        	if(existingDatePicker == null)
@@ -436,10 +443,11 @@
            	 	    	   	  
            	 	    	   	  labelHBox.addChild(pickerLabel);
            	 	    	   }
-           	 	    	}
-           	 		}
-        	  	}
-           	} 
+       					}
+           	 	    }
+           	 	}
+        	  }
+           } 
            	
            	/*
                 This method will enable/Disable the right hand side controls based on the relational operator selected
@@ -522,7 +530,7 @@
     				cb2.toolTip=cb2.selectedLabel.toString();
     			 }else{
     				cb2.selectedIndex = -1;
-    				cb2.toolTip=cb1.selectedLabel.toString();
+    				cb2.toolTip=cb2.selectedLabel.toString();
     			 }
     			    			 
     			 if(myArray3.length <= 1){
@@ -579,6 +587,24 @@
 		      submitButton.errorString="";		      
 		      
 		    }
+		    
+		    private function removeComponent():void {
+		      if(this.parentApplication.view=="Result"){
+		      	cb4.visible = false;
+		      	cb5.visible = false;
+		      	txtInput.visible = false;
+		      	lb4.visible = false;
+		      	lb5.visible = false;
+		      	lb6.visible = false;
+		      }else{
+		      	cb4.visible = true;
+		      	cb5.visible = true;
+		      	txtInput.visible = true;
+		      	lb4.visible = true;
+		      	lb5.visible = true;
+		      	lb6.visible = true;
+		      }
+		    }
     		    	  
 	 	]]>
 	 </mx:Script>
@@ -592,18 +618,18 @@
    
    		
       
-     <mx:VBox x="20" y="20">
-      <mx:HBox x="20" y="20" id="labelHBox">
-        <mx:Label id="lb1" name="label1" width="100"  height="50" color="blue" text="{firstEntityLabel}" fontStyle="normal" fontWeight="bold" buttonMode="true" />
-      	<mx:Label id="lb2" name="label2" width="100"  height="50" color="blue" text="{arithmeticLabel}" fontStyle="normal" fontWeight="bold" buttonMode="true"/>
-      	<mx:Label id="lb3" name="label3" width="100"  height="50" color="blue" text="{secondEntityLabel}" fontStyle="normal" fontWeight="bold" buttonMode="true"/>
-      	<mx:Label id="lb4" name="label4" width="100"  height="50" color="blue"  text="{relationalLabel}" fontStyle="normal" fontWeight="bold"/>
-      	<mx:Label id="lb5" name="label5" width="100"  height="50" color="blue" text="{timeValueLabel}" fontStyle="normal" fontWeight="bold"/>
-      	<mx:Label id="lb6" name="label6" width="100"  height="50" color="blue" text="{timeIntrvalLabel}" fontStyle="normal" fontWeight="bold"/>
+     <mx:VBox x="20" y="20" width="655">
+      <mx:HBox x="20" y="20" id="labelHBox" width="100%"> 
+        <mx:Label id="lb1" name="label1" width="100"  height="30" color="blue" text="{firstEntityLabel}" fontStyle="normal" fontWeight="bold" buttonMode="true" />
+      	<mx:Label id="lb2" name="label2" width="100"  height="30" color="blue" text="{arithmeticLabel}" fontStyle="normal" fontWeight="bold" buttonMode="true"/>
+      	<mx:Label id="lb3" name="label3" width="100"  height="30" color="blue" text="{secondEntityLabel}" fontStyle="normal" fontWeight="bold" buttonMode="true"/>
+      	<mx:Label id="lb4" name="label4" width="100"  height="30" color="blue"  text="{relationalLabel}" fontStyle="normal" fontWeight="bold"/>
+      	<mx:Label id="lb5" name="label5" width="100"  height="30" color="blue" text="{timeValueLabel}" fontStyle="normal" fontWeight="bold"/>
+      	<mx:Label id="lb6" name="label6" width="100"  height="30" color="blue" text="{timeIntrvalLabel}" fontStyle="normal" fontWeight="bold"/>
       	
       </mx:HBox>
       
-      <mx:HBox id ="myBox" x="20" y="60" creationComplete="validateComboboxText()">
+      <mx:HBox id ="myBox" x="20" y="60" creationComplete="validateComboboxText()" width="100%">
       	
      	<mx:ComboBox id="cb1" dataProvider="{myArray1}" width="100"  borderThickness="0" borderColor="blue"  
       		prompt="--Select--" itemRenderer="mx.controls.Label" change="validateQueryData()"
@@ -622,11 +648,16 @@
         	borderColor="blue" prompt="--Select--" itemRenderer="mx.controls.Label" close="truncateLongText(event)"
         	rowCount="10" toolTip=""/>
        <!-- <mx:Panel  id="p1" height="20" width="100" /> -->
-      </mx:HBox> 	 
-	 <mx:HBox x="20">
-         <mx:Label id="columnLabel" width="330" text="Please Enter Column Name To Be Displayed in Results:"/>
+      </mx:HBox> 
+      <mx:Spacer height="5"/> 	 
+	 <mx:HBox x="20" horizontalGap="6" width="100%">
+         <mx:Label id="columnLabel" width="170" text="Please Enter Column Name :"/>
               
-         <mx:TextInput id="customColumnName" width="300" restrict="A-Z a-z" borderColor="blue" focusOut="validate()"/>
+         <mx:TextInput id="customColumnName" width="250" restrict="0-9 A-Z a-z" borderColor="blue" focusOut="validate()"/>
+         <mx:ComboBox id="cb6" name="timeIntervalCb2" dataProvider="{myArray5}" width="100"  borderThickness="0" 
+         	borderColor="blue" prompt="--Select--" itemRenderer="mx.controls.Label" close="truncateLongText(event)"
+         	rowCount="10" toolTip=""/>
+         <mx:Label id="lb7" name="label6" width="100%" height="30" color="blue" text="{timeIntrvalLabel}" fontStyle="normal" fontWeight="bold"/>
 	 </mx:HBox>
 	  
 	  <mx:HBox x="20" y="50">
