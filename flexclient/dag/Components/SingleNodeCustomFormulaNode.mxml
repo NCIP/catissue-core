@@ -286,8 +286,9 @@
 
        private function deleteCustomNode() : void
        {
+       	   var nodeName : String = this.name;
        	   this.parentApplication.rpcService.addEventListener(ResultEvent.RESULT,deleteNodeHandler);
-       	   this.parentApplication.rpcService.removeCustomFormula(this.name);
+       	   this.parentApplication.rpcService.removeCustomFormula(nodeName);
        }
        
        private function editNodeHandler(event : ResultEvent) : void

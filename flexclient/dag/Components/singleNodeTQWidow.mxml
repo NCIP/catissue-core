@@ -527,7 +527,7 @@
 	    <mx:HBox x="20" horizontalGap="6" width="100%">
          <mx:Label id="columnLabel" width="170" text="Please Enter Column Name :"/>
               
-         <mx:TextInput id="customColumnName" width="250" restrict="0-9" borderColor="blue" focusOut="validateColumnName()"/>
+         <mx:TextInput id="customColumnName" width="250" restrict="0-9 A-Z a-z" borderColor="blue" focusOut="validateColumnName()"/>
          <mx:ComboBox id="cb6" name="timeIntervalCb" dataProvider="{timeIntervalsDp}" width="100"  borderThickness="0" 
          	borderColor="blue" prompt="--Select--" itemRenderer="mx.controls.Label" close="truncateLongText(event)"
          	rowCount="10" toolTip=""/>
