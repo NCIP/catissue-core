@@ -2,18 +2,21 @@ package edu.wustl.catissuecore.bizlogic.test;
 
 import java.text.ParseException;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
-import edu.wustl.catissuecore.bean.CpAndParticipentsBean;
 import edu.wustl.catissuecore.domain.Capacity;
+import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.ConsentTier;
 import edu.wustl.catissuecore.domain.ConsentTierResponse;
 import edu.wustl.catissuecore.domain.Container;
 import edu.wustl.catissuecore.domain.ContainerPosition;
+import edu.wustl.catissuecore.domain.FluidSpecimen;
+import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
@@ -24,6 +27,7 @@ import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
+import edu.wustl.catissuecore.domain.TransferEventParameters;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.Utility;
@@ -58,8 +62,8 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 	    try 
 		{
 	    	Capacity capacity = storageContainer.getCapacity();
-			capacity.setOneDimensionCapacity(new Integer(3));
-			capacity.setTwoDimensionCapacity(new Integer(3));
+			capacity.setOneDimensionCapacity(new Integer(4));
+			capacity.setTwoDimensionCapacity(new Integer(4));
 			storageContainer.setCapacity(capacity);
 	    	System.out.println("After Update");
 	    	StorageContainer updatedStorageContainer = (StorageContainer) appService.updateObject(storageContainer);
@@ -1001,5 +1005,131 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 					e.printStackTrace();
 					assertFalse("Could not find Specimen position ", true);
 				}
+		}
+		/**
+		 * Negative test case : Test case for decreasing capacity of already filled Storage Container
+		 */
+		public void testDecreseCapacityOfFullContainer()
+		 {
+			 try
+			 {
+				   TissueSpecimen tSpecimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
+				   MolecularSpecimen mSpecimenObj = (MolecularSpecimen) BaseTestCaseUtility.initMolecularSpecimen();
+				   FluidSpecimen fSpecimenObj = (FluidSpecimen) BaseTestCaseUtility.initFluidSpecimen();
+				   CellSpecimen cSpecimenObj = (CellSpecimen) BaseTestCaseUtility.initCellSpecimen();
+				   
+				   SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
+				   
+				   StorageContainer storageContainer =  BaseTestCaseUtility.initStorageContainer();
+				   Capacity capacity = new Capacity();
+				   capacity.setOneDimensionCapacity(new Integer(2));
+				   capacity.setTwoDimensionCapacity(new Integer(2));
+				   storageContainer.setCapacity(capacity);
+				   storageContainer = (StorageContainer) appService.createObject(storageContainer);
+			   
+				   SpecimenPosition pos1 = new SpecimenPosition();
+				   pos1.setPositionDimensionOne(1);
+				   pos1.setPositionDimensionTwo(1);
+				   pos1.setStorageContainer(storageContainer);
+				   tSpecimenObj.setSpecimenPosition(pos1);
+					
+				   SpecimenPosition pos2 = new SpecimenPosition();
+				   pos2.setPositionDimensionOne(1);
+				   pos2.setPositionDimensionTwo(2);
+				   pos2.setStorageContainer(storageContainer);
+				   mSpecimenObj.setSpecimenPosition(pos2);
+					
+				   SpecimenPosition pos3 = new SpecimenPosition();
+				   pos3.setPositionDimensionOne(2);
+				   pos3.setPositionDimensionTwo(1);
+				   pos3.setStorageContainer(storageContainer);
+				   cSpecimenObj.setSpecimenPosition(pos3);
+					
+				   SpecimenPosition pos4 = new SpecimenPosition();
+				   pos4.setPositionDimensionOne(2);
+				   pos4.setPositionDimensionTwo(2);
+				   pos4.setStorageContainer(storageContainer);
+				   fSpecimenObj.setSpecimenPosition(pos4);
+					
+				   
+				   tSpecimenObj.setSpecimenCollectionGroup(scg);
+				   cSpecimenObj.setSpecimenCollectionGroup(scg);
+				   mSpecimenObj.setSpecimenCollectionGroup(scg);
+				   fSpecimenObj.setSpecimenCollectionGroup(scg);
+				   
+				   System.out.println("Before Creating Specimen object");
+				   
+				   tSpecimenObj = (TissueSpecimen) appService.createObject(tSpecimenObj);
+				   mSpecimenObj = (MolecularSpecimen) appService.createObject(mSpecimenObj);
+				   fSpecimenObj = (FluidSpecimen) appService.createObject(fSpecimenObj);
+				   cSpecimenObj = (CellSpecimen) appService.createObject(cSpecimenObj);
+				   
+				   Capacity cap = storageContainer.getCapacity();	
+				   cap.setOneDimensionCapacity(new Integer(1));
+				   cap.setTwoDimensionCapacity(new Integer(1));
+				   storageContainer = (StorageContainer) appService.updateObject(storageContainer);
+				   assertFalse("Container is already Full:" +storageContainer , true);  
+			}
+			catch(Exception e)
+			{
+				System.out.println("TestCaseTesting.testDecreseCapacityOfFullContainer()");
+				e.printStackTrace();
+				assertTrue("Failed to Update as Storage Container is already Full :" +e.getMessage() , true);
+				
+			}
+		}
+		
+		/**
+		 * Negative test case : Test case for Transfer Specimen Position
+		 */
+		public void testTransferPositionOFSpecimen()
+		 {
+			 try
+			 {
+				   TissueSpecimen tSpecimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
+				   SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
+				   
+				   StorageContainer storageContainer =  BaseTestCaseUtility.initStorageContainer();
+				   Collection collectionProtocolCollection = new HashSet();
+				   storageContainer.setCollectionProtocolCollection(collectionProtocolCollection);
+				   storageContainer = (StorageContainer) appService.createObject(storageContainer);
+			   
+				   SpecimenPosition pos1 = new SpecimenPosition();
+				   pos1.setPositionDimensionOne(1);
+				   pos1.setPositionDimensionTwo(1);
+				   pos1.setStorageContainer(storageContainer);
+				   tSpecimenObj.setSpecimenPosition(pos1);
+				   tSpecimenObj.setSpecimenCollectionGroup(scg);
+				   System.out.println("Before Creating Specimen object");
+				   tSpecimenObj = (TissueSpecimen) appService.createObject(tSpecimenObj);
+				   System.out.println("After Creating Specimen object");
+				   			   
+				   TransferEventParameters spe = new TransferEventParameters();
+				   spe.setSpecimen(tSpecimenObj);
+			       spe.setTimestamp(new Date(System.currentTimeMillis()));
+			       User user = new User();
+			       user.setId(1l);//admin
+			       //(User)TestCaseUtility.getObjectMap(User.class);
+			       spe.setUser(user);
+			       spe.setComment("Transfer Event");
+			       spe.setFromPositionDimensionOne(1);
+				   spe.setFromPositionDimensionTwo(1);
+				   spe.setFromStorageContainer(storageContainer);
+				   spe.setToPositionDimensionOne(2);
+				   spe.setToPositionDimensionTwo(2);
+				   spe.setToStorageContainer(storageContainer);
+				   System.out.println("Before Creating TransferEvent");
+				   spe = (TransferEventParameters) appService.createObject(spe);
+				   System.out.println("After Creating Specimen object");
+				   assertTrue("Specimen Position Sucessfully Transfered :" + spe , true);
+				   
+			}
+			catch(Exception e)
+			{
+				System.out.println("TestCaseTesting.testTransferPositionOFSpecimen()");
+				e.printStackTrace();
+				assertFalse("Container is already Full:" +e.getMessage(), true);  
+				
+			}
 		}
 }
