@@ -5,11 +5,11 @@
 		<![CDATA[
 			import mx.events.ValidationResultEvent;
 			import mx.validators.StringValidator;
-		import mx.rpc.events.ResultEvent;
-		import mx.collections.ArrayCollection;
-		import Components.DAGConstants;
-		import mx.managers.PopUpManager;
-		import mx.controls.List;		
+			import mx.rpc.events.ResultEvent;
+			import mx.collections.ArrayCollection;
+			import Components.DAGConstants;
+			import mx.managers.PopUpManager;
+			import mx.controls.List;		
 		 [Bindable]
 		 public var entityLabelString : String = null;	
 		
@@ -202,9 +202,10 @@
              //Setting node Type
              singleNodeCustomFormula.setNodeType("singleNodeCustomNode");
              
-             //Setting the custom Column Name
-             singleNodeCustomFormula.setCustomColumnName(customColumnName.text);
-             
+             //Setting custom column Name with time Int
+             trace("cb6.selectedItem = " + cb6.selectedItem);
+             singleNodeCustomFormula.setCustomColumnName(customColumnName.text + "#" + cb6.selectedItem);
+                                      
              //Invoking the RPC Method
              if(submitButton1.label == "OK")
              {
@@ -427,7 +428,9 @@
     			here if a dropdown list contains only on item then it will show in comboBox as selected item
     			if item length is more than 1 then i will show prompt like "-select-" and store item text to myToolTip variable for further refrence.    			 
     		*/ 		
-    		public function validateComboboxText():void{     			   			
+    		public function validateComboboxText():void{ 
+    		 if(this.parentApplication.operation==""){     				
+    				this.parentApplication.operation="edit";    			   			
     			 if(arithmeticOpDp.length <= 1){
 	    			 arithmaticOpsCb.selectedIndex = 0;
 	    			 arithmaticOpsCb.toolTip=arithmaticOpsCb.selectedLabel.toString();
@@ -459,6 +462,7 @@
     				timeIntervalCb.selectedIndex = -1;
     				timeIntervalCb.toolTip=timeIntervalCb.selectedLabel.toString();
     			 }
+    			}
     		}
     		
     		private function validateColumnName():Boolean{    			
@@ -506,7 +510,7 @@
        </mx:HBox>
 	
 		<!--Specifying Controls -->
-		<mx:HBox id ="myBox" x="20" y="60" width="100%">
+		<mx:HBox id ="myBox" x="20" y="60" width="100%" creationComplete="validateComboboxText()">
 			<mx:DateField id="datePicker" name="leftDatePicker" width="100" showToday="true" 
 				formatString="MM/DD/YYYY" />
 			<mx:ComboBox id="arithmaticOpsCb" dataProvider="{arithmeticOpDp}" width="100"  textAlign="center" 
