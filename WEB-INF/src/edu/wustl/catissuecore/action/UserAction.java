@@ -37,6 +37,7 @@ import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.cde.CDEManager;
+import edu.wustl.common.security.PrivilegeCache;
 import edu.wustl.common.security.PrivilegeManager;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
@@ -295,13 +296,20 @@ public class UserAction extends SecureAction
 	    	IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.USER_FORM_ID);
 	    	User user = (User)bizLogic.retrieve(User.class.getName(), id);
 	    	PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
-	    	Map<String, SiteUserRolePrivilegeBean> privilegeMap = CaTissuePrivilegeUtility.getAllPrivileges(privilegeManager.getPrivilegeCache(user.getLoginName()));
+	    	// privilegeManager.removePrivilegeCache(user.getLoginName());
+	    	PrivilegeCache privilegeCache = privilegeManager.getPrivilegeCache(user.getLoginName());
+	    	privilegeCache.refresh();
+	    	Map<String, SiteUserRolePrivilegeBean> privilegeMap = CaTissuePrivilegeUtility.getAllPrivileges(privilegeCache);
 			session.setAttribute(Constants.USER_ROW_ID_BEAN_MAP, privilegeMap);
     	}
     	catch(DAOException e)
     	{
     		e.printStackTrace();
     	}
+    	catch (Exception e) 
+    	{
+			e.printStackTrace();
+		}
 	}
 
 
