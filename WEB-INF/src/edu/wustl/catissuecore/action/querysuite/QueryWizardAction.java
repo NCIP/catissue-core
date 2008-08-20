@@ -10,6 +10,7 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.CategorySearchForm;
 import edu.wustl.catissuecore.applet.AppletConstants;
+import edu.wustl.catissuecore.flex.dag.DAGConstant;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
 import edu.wustl.common.action.BaseAction;
@@ -37,6 +38,8 @@ public class QueryWizardAction extends BaseAction
 		session.removeAttribute(Constants.SELECTED_COLUMN_META_DATA);
 		session.removeAttribute(Constants.IS_SAVED_QUERY);
 		session.removeAttribute(edu.wustl.common.util.global.Constants.IS_SIMPLE_SEARCH);
+		session.removeAttribute(DAGConstant.ISREPAINT);
+		session.removeAttribute(DAGConstant.TQUIMap);
 		session.removeAttribute(Constants.EXPORT_DATA_LIST);
 		session.removeAttribute(Constants.ENTITY_IDS_MAP);
 		searchForm = QueryModuleUtil.setDefaultSelections(searchForm);
