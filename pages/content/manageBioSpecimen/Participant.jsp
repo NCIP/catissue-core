@@ -7,6 +7,7 @@
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.ParticipantForm"%>
+<%@ page import="edu.wustl.catissuecore.actionForm.ViewSurgicalPathologyReportForm"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.CollectionProtocolRegistrationForm"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
 <%@ page import="java.util.*"%>
@@ -110,6 +111,15 @@ tr#hiddenCombo
 			noOrRowsCollectionProtocolRegistration = form.getCollectionProtocolRegistrationValueCounter();
 			currentBirthDate = form.getBirthDate(); 
 			currentDeathDate = form.getDeathDate();
+		}
+		else 
+		{
+			Object obj1 = request.getAttribute("viewSurgicalPathologyReportForm");
+			if(obj1 != null && obj1 instanceof ViewSurgicalPathologyReportForm)
+			{
+				ViewSurgicalPathologyReportForm viewSPRForm = (ViewSurgicalPathologyReportForm)obj1;
+				participantId = String.valueOf(viewSPRForm.getParticipantIdForReport());
+			}
 		}
 	
 		if(noOfRows == 0)
