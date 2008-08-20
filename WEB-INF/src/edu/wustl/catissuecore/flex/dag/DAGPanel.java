@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -315,9 +316,11 @@ public class DAGPanel {
 	    //Create LHS Terms and RHS Terms
 	    singalNodeTq.createLHSAndRHS();
 	    
-	    ICustomFormula customFormula = createSingleNodeCustomFormula(singalNodeTq, operation);
+	    ICustomFormula customFormula = createSingleNodeCustomFormula(singalNodeTq, operation,node.getName());
 		//**** Note Single node First removing custom formula
-		removeCustomFormula(node.getName());
+//		removeCustomFormula(node.getName());
+	    CustomFormulaUIBean bean = createTQUIBean(customFormula,null,node);
+		populateUIMap(node.getName(),bean);
 
 		entityExpression.addOperand(getAndConnector(),customFormula);
 		entityExpression.setInView(true);
@@ -376,9 +379,12 @@ public class DAGPanel {
 			tqBean.createLiterals(node.getTimeInterval(), node.getTimeValue());
 		    tqBean.createLHSAndRHS();
 		}
-		ICustomFormula customFormula = createCustomFormula(tqBean,operation);
+		ICustomFormula customFormula = createCustomFormula(tqBean,operation,node.getName());
 		//First removing custom formula
-		removeCustomFormula(node.getName());
+		//removeCustomFormula(node.getName());
+		CustomFormulaUIBean bean = createTQUIBean(customFormula,node,null);
+		populateUIMap(node.getName(),bean);
+		
 		srcIExpression.addOperand(getAndConnector(),customFormula);
 		srcIExpression.setInView(true);
 		addOutputTermsToQuery(query, customFormula, node.getCustomColumnName());
@@ -388,6 +394,11 @@ public class DAGPanel {
 	    	node.setOperation(oprs);
 	    }
 		return node;
+	}
+	private CustomFormulaUIBean createTQUIBean(ICustomFormula cf,CustomFormulaNode twoNode, SingleNodeCustomFormulaNode singleNode)
+	{
+		CustomFormulaUIBean bean =new CustomFormulaUIBean(cf,twoNode,singleNode);
+		return bean;
 	}
 	/**
 	 * Setting the corresponding operation
@@ -442,11 +453,11 @@ public class DAGPanel {
 		}
 		String tqColumnName = customColumnName + " (" + timeIntervalName +"/s)";
 		outputTerm.setName(tqColumnName);
-		query.getOutputTerms().clear();
+		//query.getOutputTerms().clear(); 
 		query.getOutputTerms().add(outputTerm);
 	}
 	
-	private ICustomFormula createSingleNodeCustomFormula(SingalNodeTemporalQuery singleNodeTq, String operation)
+	private ICustomFormula createSingleNodeCustomFormula(SingalNodeTemporalQuery singleNodeTq, String operation, String nodeId)
 	{
 		if(operation.equals(Constants.ADD))
 		{
@@ -454,7 +465,7 @@ public class DAGPanel {
 		}
 		else
 		{
-			return getSingleNodeCustomFormula(getExistingCustomFormula(),singleNodeTq);
+			return getSingleNodeCustomFormula(getExistingCustomFormula(nodeId),singleNodeTq);
 		}
 	}
 	private ICustomFormula getSingleNodeCustomFormula(ICustomFormula customFormula,SingalNodeTemporalQuery singleNodeTq)
@@ -465,7 +476,7 @@ public class DAGPanel {
 		customFormula.setOperator(singleNodeTq.getRelOp());
 		return customFormula;
 	}
-	private ICustomFormula createCustomFormula(TwoNodesTemporalQuery tqBean,String operation)
+	private ICustomFormula createCustomFormula(TwoNodesTemporalQuery tqBean,String operation, String nodeId)
 	{
 		if(operation.equals(Constants.ADD))
 		{
@@ -473,9 +484,21 @@ public class DAGPanel {
 		}
 		else
 		{
-			return getCustomFormula(getExistingCustomFormula(),tqBean);
+			return getCustomFormula(getExistingCustomFormula(nodeId),tqBean);
 		}
 		
+	}
+	private void populateUIMap(String id, CustomFormulaUIBean customFormulaUIBean)
+	{
+		HttpServletRequest request = flex.messaging.FlexContext.getHttpRequest();
+		HttpSession session = request.getSession();
+		Map<String,CustomFormulaUIBean> TQUIMap = (Map<String,CustomFormulaUIBean>)session.getAttribute(DAGConstant.TQUIMap);
+		if(TQUIMap == null)
+		{
+			TQUIMap = new HashMap<String,CustomFormulaUIBean>();
+			session.setAttribute(DAGConstant.TQUIMap,TQUIMap);
+		}
+		TQUIMap.put(id,customFormulaUIBean);
 	}
 	/**
 	 * 
@@ -503,9 +526,18 @@ public class DAGPanel {
 		return customFormula;
 	}
 	
-	public ICustomFormula getExistingCustomFormula()
+	public ICustomFormula getExistingCustomFormula(String id)
 	{
-		IQuery query = m_queryObject.getQuery();
+		ICustomFormula customFormula = null;
+		HttpServletRequest request = flex.messaging.FlexContext.getHttpRequest();
+		HttpSession session = request.getSession();
+		Map<String,CustomFormulaUIBean> TQUIMap = (Map<String,CustomFormulaUIBean>)session.getAttribute("TQUIMap");
+		if(TQUIMap != null)
+		{
+			CustomFormulaUIBean customFormulaUIBean = TQUIMap.get(id);
+			customFormula = customFormulaUIBean.getCf();
+		}
+		/*IQuery query = m_queryObject.getQuery();
 		IConstraints c = query.getConstraints();
 		ICustomFormula customFormula = null;
 		for(IExpression expression2 : c)
@@ -520,7 +552,7 @@ public class DAGPanel {
 					break;
 				}
 			}
-		}
+		}*/
 		return customFormula;
 	}
 		
@@ -777,7 +809,22 @@ public class DAGPanel {
 	{
 		HttpServletRequest request = flex.messaging.FlexContext.getHttpRequest();
 		HttpSession session = request.getSession();
-		IQuery query = m_queryObject.getQuery();
+		Map<String,CustomFormulaUIBean> TQUIMap = (Map<String,CustomFormulaUIBean>)session.getAttribute("TQUIMap");
+		if(TQUIMap != null)
+		{
+			CustomFormulaUIBean customFormulaUIBean = TQUIMap.get(customNodeId);
+			ICustomFormula cf = customFormulaUIBean.getCf();
+			IQuery query = m_queryObject.getQuery();
+			IConstraints c = query.getConstraints();
+			for(IExpression expression2 : c) 
+			{
+				expression2.removeOperand(cf);
+			}
+			customFormulaUIBean.setCf(null);
+			customFormulaUIBean.setSingleNode(null);
+			customFormulaUIBean.setTwoNode(null);
+		}
+		/*IQuery query = m_queryObject.getQuery();
 		IConstraints c = query.getConstraints();
 		for(IExpression expression2 : c) 
 		{
@@ -792,7 +839,7 @@ public class DAGPanel {
 					break;
 				}
 			}
-		}
+		}*/
 	}
 	/**
 	 * Link 2 nodes
@@ -966,6 +1013,7 @@ public class DAGPanel {
 				dagNode.setOperatorList(operator.toUpperCase());
 			}
 			nodeList.add(dagNode);
+			Map<String,CustomFormulaUIBean> TQUIMap = (Map<String,CustomFormulaUIBean>)session.getAttribute(DAGConstant.TQUIMap);
 			if(exp.containsCustomFormula())
 			{
 				Set<ICustomFormula> customFormulas = QueryUtility.getCustomFormulas(exp);
@@ -973,7 +1021,58 @@ public class DAGPanel {
 				{
 					for(ICustomFormula c: customFormulas)
 					{
-						CustomFormulaNode customNode = populateCustomNodeInfo(c,constraints,exp);
+						Set keySet = TQUIMap.keySet();
+						Iterator keySetItr = keySet.iterator();
+						while(keySetItr.hasNext())
+						{
+							String key = (String)keySetItr.next();
+							String [] ids = key.split("_");
+							String id1 = ids[0];
+							String id2 = ids[1];
+							if(id1.equals(id2))
+							{
+								//This is the case for Single node TQ 
+								CustomFormulaUIBean beanObj = (CustomFormulaUIBean)TQUIMap.get(key);
+								if(beanObj.getCf().equals(c))
+								{
+									SingleNodeCustomFormulaNode singleNodeCF = beanObj.getSingleNode();
+									if(singleNodeCF != null)
+									{
+										singleNodeCF.setName(key);
+										String customColumnName = setCustomColumnName(query);
+										singleNodeCF.setCustomColumnName(customColumnName);
+										singleNodeCF.setOperation(DAGConstant.REPAINT_OPERATION);
+
+										SNcustomNodeList.add(singleNodeCF);
+									}
+								}
+							}
+							else
+							{
+								//This is the case for Multiple Node TQ 
+								CustomFormulaUIBean beanObj = (CustomFormulaUIBean)TQUIMap.get(key);
+								if(beanObj.getCf().equals(c))
+								{
+									CustomFormulaNode customNode = beanObj.getTwoNode();
+									if(customNode != null)
+									{
+										customNode.setName(key);
+										String customColumnName = setCustomColumnName(query);
+										customNode.setCustomColumnName(customColumnName);
+										customNode.setOperation(DAGConstant.REPAINT_OPERATION);
+										customNodeList.add(customNode);
+
+									}
+								}
+							}
+							/*CustomFormulaUIBean beanObj = (CustomFormulaUIBean)TQUIMap.get(key);
+						    if(beanObj.getCf().equals(c))
+						    {
+						    	System.out.println("Custom Formulas Are Equal");
+						    }*/
+						}
+						
+						/*CustomFormulaNode customNode = populateCustomNodeInfo(c,constraints,exp);
 						if(customNode != null)
 						{
 							//Setting the custom Column Name
@@ -988,7 +1087,7 @@ public class DAGPanel {
 							singleNodeCF.setCustomColumnName(customColumnName);
 							singleNodeCF.setOperation(DAGConstant.REPAINT_OPERATION);
 							SNcustomNodeList.add(singleNodeCF);
-						}
+						}*/
 					}
 				}
 			}
@@ -1114,8 +1213,8 @@ public class DAGPanel {
 				cNode.setTimeValue(getDateInGivenFormat(dateLit.getDate()));
 			} else
 			{
-				//throw new RuntimeException("Should not occur.....");
-				return null;
+				throw new RuntimeException("Should not occur.....");
+				//return null;
 			}
 		}
 	
