@@ -49,7 +49,6 @@ import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.dao.AbstractDAO;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.dao.DAOFactory;
-import edu.wustl.common.dao.HibernateDAO;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exceptionformatter.DefaultExceptionFormatter;
@@ -1806,13 +1805,25 @@ public class UserBizLogic extends DefaultBizLogic
 				user = (User) domainObject;
 			}
 			
-			Object[] mapKeys = userRowIdMap.keySet().toArray();
-			for(Object mapKey : mapKeys)
+			if(user.getRoleId().equals(Constants.SUPER_ADMIN_USER))
 			{
-				String key = mapKey.toString();
-				SiteUserRolePrivilegeBean siteUserRolePrivilegeBean = userRowIdMap.get(key);
-				
-				siteCollection.add(siteUserRolePrivilegeBean.getSiteList().get(0));
+				return Constants.cannotCreateSuperAdmin;
+			}
+			if(userRowIdMap==null)
+			{
+				return Constants.siteIsRequired;
+			}
+			
+			if(userRowIdMap != null)
+			{
+				Object[] mapKeys = userRowIdMap.keySet().toArray();
+				for(Object mapKey : mapKeys)
+				{
+					String key = mapKey.toString();
+					SiteUserRolePrivilegeBean siteUserRolePrivilegeBean = userRowIdMap.get(key);
+					
+					siteCollection.add(siteUserRolePrivilegeBean.getSiteList().get(0));
+				}
 			}
 			 
 			// Collection<Site> siteCollection = user.getSiteCollection();
@@ -1850,53 +1861,91 @@ public class UserBizLogic extends DefaultBizLogic
 	    	return Constants.ADD_EDIT_USER;
 	    }
 		
+		private boolean checkUser(Object domainObject, SessionDataBean sessionDataBean) throws DAOException 
+		{
+			User user = null;
+			UserDTO userDTO = null;
+			Map<String, SiteUserRolePrivilegeBean> userRowIdMap= new HashMap<String, SiteUserRolePrivilegeBean>();
+			
+			if(sessionDataBean != null && sessionDataBean.isAdmin())
+			{
+				return true;
+			}
+			if(domainObject instanceof User)
+			{
+				user = (User) domainObject;
+			}
+			if(domainObject instanceof UserDTO)
+			{
+				userDTO = (UserDTO) domainObject;
+				user = userDTO.getUser();
+				userRowIdMap = userDTO.getUserRowIdBeanMap();
+				if(userRowIdMap != null)
+				{
+					Object[] mapKeys = userRowIdMap.keySet().toArray();
+					for(Object mapKey : mapKeys)
+					{
+						String key = mapKey.toString();
+						SiteUserRolePrivilegeBean bean = userRowIdMap.get(key);
+						if(bean.getSiteList()==null || bean.getSiteList().isEmpty())
+						{
+							throw new DAOException(ApplicationProperties.getValue("user.cannotCreateScientist"));
+						}
+					}
+				}
+				else
+				{
+					throw new DAOException(ApplicationProperties.getValue("user.siteIsRequired"));
+				}
+			}
+			if(user.getPageOf().equalsIgnoreCase("pageOfChangePassword"))
+			{
+				return true;
+			}
+			/*if(user.getId().equals(sessionDataBean.getUserId()))
+			{
+				throw new DAOException(ApplicationProperties.getValue("user.cannotEditOwnPrivileges"));
+			}*/
+			if(user.getPageOf().equalsIgnoreCase("pageOfSignUp"))
+			{
+				return true;
+			}
+			if(sessionDataBean!=null && user.getLoginName().equals(sessionDataBean.getUserName()))
+			{
+				return true;
+			}
+			return false;
+		}	
+		
 		/**
 		 * Over-ridden for the case of Non - Admin user should be able to edit
 		 * his/her details e.g. Password 
 		 * (non-Javadoc)
 		 * @throws UserNotAuthorizedException 
+		 * @throws DAOException 
 		 * @see edu.wustl.common.bizlogic.DefaultBizLogic#isAuthorized(edu.wustl.common.dao.AbstractDAO, java.lang.Object, edu.wustl.common.beans.SessionDataBean)
 		 */
-		public boolean isAuthorized(AbstractDAO dao, Object domainObject, SessionDataBean sessionDataBean) throws UserNotAuthorizedException  
+		public boolean isAuthorized(AbstractDAO dao, Object domainObject, SessionDataBean sessionDataBean) throws UserNotAuthorizedException, DAOException  
 		{
-			User user = null;
-			UserDTO userDTO = null;
-
-			if(sessionDataBean != null && sessionDataBean.isAdmin())
-			{
-				return true;
-			}
-			
-			if(domainObject instanceof User)
-			{
-				user = (User) domainObject;
-			}
-			
-			if(domainObject instanceof UserDTO)
-			{
-				userDTO = (UserDTO) domainObject;
-				user = userDTO.getUser();
-			}
-			
-			if(user.getPageOf().equalsIgnoreCase("pageOfSignUp"))
-			{
-				return true;
-			}
-				
-			if(user.getPageOf().equalsIgnoreCase("pageOfChangePassword"))
-			{
-				return true;
-			}
-				
-			if(sessionDataBean!=null && user.getLoginName().equals(sessionDataBean.getUserName()))
-			{
-				return true;
-			}
-	
 			boolean isAuthorized = false;
+			isAuthorized = checkUser(domainObject, sessionDataBean);
+			if(isAuthorized)
+			{
+				return true;
+			}
 			
 			String privilegeName = getPrivilegeName(domainObject);
 			String protectionElementName = getObjectId(dao, domainObject);
+			
+			if(protectionElementName.equals(Constants.cannotCreateSuperAdmin))
+			{
+				throw new DAOException(ApplicationProperties.getValue("user.cannotCreateSuperAdmin"));
+			}
+			if(protectionElementName.equals(Constants.siteIsRequired))
+			{
+				throw new DAOException(ApplicationProperties.getValue("user.siteIsRequired"));
+			}
+			
 			PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(sessionDataBean.getUserName());
 			 
 			if (protectionElementName != null)
@@ -1926,5 +1975,5 @@ public class UserBizLogic extends DefaultBizLogic
 				// return false;
 				throw Utility.getUserNotAuthorizedException(privilegeName, protectionElementName);  
 			}		
-		}		
+		}			
 }
