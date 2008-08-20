@@ -27,6 +27,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.sf.ehcache.CacheException;
 
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -90,6 +92,19 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 		// {
 		AnnotationForm annotationForm = (AnnotationForm) form;
 		annotationForm.setSelectedStaticEntityId(null);
+		
+		// Added by Ravindra to disallow Non Super Admin users to add Local Extension
+		SessionDataBean sessionDataBean = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
+		if(!sessionDataBean.isAdmin())
+		{
+			ActionErrors errors = new ActionErrors();
+	        ActionError error = new ActionError("access.execute.action.denied");
+	        errors.add(ActionErrors.GLOBAL_ERROR, error);
+	        saveErrors(request, errors);
+
+	        return mapping.findForward(Constants.ACCESS_DENIED);
+		}
+		
 		//Ajax Code
 		if (request.getParameter(AnnotationConstants.AJAX_OPERATION) != null
 				&& !request.getParameter(AnnotationConstants.AJAX_OPERATION).equals("null"))
