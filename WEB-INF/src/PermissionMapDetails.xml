@@ -102,6 +102,7 @@
 		<siteMapping name="PROTOCOL_ADMINISTRATION" id="16"/>
 		<siteMapping name="STORAGE_ADMINISTRATION" id="15"/>
 		<siteMapping name="DISTRIBUTION" id="21"/>
+		<siteMapping name="SHIPMENT_PROCESSING" id="30"/>
 	</siteMappings>
 	
 	<collectionProtocolMappings>
