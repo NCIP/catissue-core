@@ -5,8 +5,7 @@
 	<mx:Script>
 		<![CDATA[
 		import mx.controls.Menu;
-        import mx.events.MenuEvent;
-        import mx.controls.Alert;
+        import mx.events.MenuEvent;        
         import Components.DAGConstants;
         import mx.rpc.events.ResultEvent;
         import mx.rpc.events.FaultEvent; 
@@ -273,7 +272,7 @@
   	   
   	  private function faultHandler (event:FaultEvent):void
 	  {
-		  Alert.show(event.fault.faultString, 'Error');
+		  AlertManager.showError(event.fault.faultString);
 	  }
 	  
 	  private function deleteNodeHandler(event : ResultEvent) : void
@@ -309,10 +308,12 @@
 		]]>
 	</mx:Script>
 	
-	  <mx:HBox height="100%" width="100%" textAlign="center">
+  <mx:HBox height="100%" width="100%" textAlign="center" horizontalGap="0">
      <mx:Label id="formulaLabel" text="{customFormulaString}" height="100%" width="95%"/>
-  	
-     <mx:Button  label=">" width="5%" click="createMyMenu(event)"/>	
+  	 <mx:VBox height="100%" verticalAlign="middle">
+  	 	<mx:Button  label=">" width="5%" click="createMyMenu(event)"/>	
+  	 </mx:VBox>
+     	
   </mx:HBox> 
 	
 </mx:Box>
