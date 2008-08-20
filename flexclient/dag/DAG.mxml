@@ -116,9 +116,6 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	private var associatedDAGNodes : Object = new Object;
 	
 	private var associatedSingleDagNodes : Object = new Object;
-	
-	[Bindable]
-	public var operation:String="";	
 	/**
 	* Timer handler  to check container has been initialized.	
 	*/
@@ -468,7 +465,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	* Repaint handler DAG on NEXT, PREVIOUS and REDEFINE buttons.
 	*/
 	private function repaintHandler(event: ResultEvent):void
-	{	
+	{
 		var nodeMap : Object =  event.result as Object ;
 		
 		var customNodeList : ArrayCollection = nodeMap["customFormulaNodeList"];
@@ -608,6 +605,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 		{
 		    var customNode : CustomFormulaNode = customNodeList.getItemAt(i) as CustomFormulaNode;
 		    var customNodeName : String = customNode.name;
+		   
 		    var nodeIds : Array = customNode.name.split("_");
 		    var firstNodeId : String = nodeIds[0];
 		    var secondNodeId : String = nodeIds[1];
@@ -1336,8 +1334,6 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	 	}
 	 	else
 	 	{
-	     
-	 	     AlertManager.showWarning("Node is not valid for Temporal Query");	
 	 	     AlertManager.showWarning("Node is not valid for Temporal Query");	
 	 	}
 	 }
@@ -1435,15 +1431,13 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
                  //Setting the node name
                  singleNodeTQPope.customNodeName = customNode.name;
                
+               //Setting the custom column Name
+               singleNodeTQPope.customColumnName.text = customNode.getCustomColumnName();
                
-               //Setting the custom column name and time interval	        	
-	        	singleNodeTQPope.customColumnName.text = customNode.getCustomColumnName()
-	        	
                //Handling LHS DatePickers and Text Inputs
                if(customNode.getLhsTimeInterval() != "null")
                {
 					//Right now there exists only DatePicker on LHS
-					Alert.show("This condition is not yet Handled");	               	
                }
                else
                {
@@ -1574,8 +1568,10 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	     var relationalOprsList : ArrayCollection = queryDataMap["fourthDropDown"];
 	     var timeIntervalsList : ArrayCollection = queryDataMap["timeIntervals"];
 	     var entitiesNameList : ArrayCollection = queryDataMap["entityList"];
-	    	    
-	    popUp = PopupWindow(PopUpManager.createPopUp(this, PopupWindow, true));	    
+	    //Opening the pop up window
+	   
+	    popUp = PopupWindow(PopUpManager.createPopUp(this, PopupWindow, true));
+	   
 	    popUp.showCloseButton = true; 
 	    
       //Setting the values to variables  
@@ -1639,10 +1635,10 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	        popUp.buttonLabel = "Edit";
 	        popUp.cb1.selectedItem = currentCustomNode.getFirstSelectedAttrName();
 	        popUp.cb2.selectedItem = currentCustomNode.getSelectedArithmeticOp();
-	        popUp.cb3.selectedItem = currentCustomNode.getSecondSelectedAttrName();	        	        	
-        	popUp.cb4.selectedItem = currentCustomNode.getSelectedLogicalOp();  
-        
-        	//Setting the custom column name and time interval        	
+	        popUp.cb3.selectedItem = currentCustomNode.getSecondSelectedAttrName();
+	        popUp.cb4.selectedItem = currentCustomNode.getSelectedLogicalOp();  
+	        
+	        //Setting the custom column name
 	        popUp.customColumnName.text = currentCustomNode.getCustomColumnName();
 	        
 	        //If the selected Logical Operators are isNull or IsNotNull
@@ -1657,14 +1653,11 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	        }
 	        else
 	        {
-	        	
-	        
 	        	//This is the condition when there is both time and time Interval 
 	       		 if(currentCustomNode.getTimeInterval() != "null")
-	        	 {    	 	
-	        			popUp.txtInput.text = currentCustomNode.getTimeValue();
-	        			popUp.cb5.selectedItem = currentCustomNode.getTimeInterval();
-	        	 	
+	        	 {
+	        		popUp.txtInput.text = currentCustomNode.getTimeValue();
+	        		popUp.cb5.selectedItem = currentCustomNode.getTimeInterval(); 
 	              }
 		        else
 		        {
@@ -1718,8 +1711,8 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	           	 	
 	           	 	popUp.labelHBox.addChild(pickerLabel);
 		        }
-		      }	        
-	   }	   
+	        }
+	   }
 	   PopUpManager.centerPopUp(popUp);
 	}
 	
@@ -1770,8 +1763,12 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
            }
            else if(operation == "rePaint")
            {
-           	  customNodeName = getSingleCustomNodeName(dagNode);
-           	  
+           	  //customNodeName = getSingleCustomNodeName(dagNode);
+           	  customNodeName = node.name;
+           	  var dagNodesList  : ArrayCollection = new ArrayCollection();
+           	  dagNodesList.addItemAt(dagNode,0);
+	          associatedSingleDagNodes[customNodeName] = dagNodesList;   
+
            }
            
 	 	var customNode : SingleNodeCustomFormulaNode  = new SingleNodeCustomFormulaNode();
@@ -1808,7 +1805,11 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	   mainPanel.addChild(customNode);
 	   drawLines(dagNode,customNode.x,customNode.y,customNode.name);
 	 	
-	 	singleNodeTQPope.removeMe();
+	 	if(operation != "rePaint")
+	 	{
+	 		singleNodeTQPope.removeMe();
+	 	}
+	 	
 	 }           
 	
       public function addCustomFromulaNode(node : CustomFormulaNode):void
@@ -1821,7 +1822,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
             var operation : String = node.getOperation();
             var existingCustomNode : CustomFormulaNode = null;
            // var customNodeDagNodes : Object  = new Object();
-            var dagNodesList : ArrayCollection  = new ArrayCollection();
+           // var dagNodesList : ArrayCollection  = new ArrayCollection();
             
             //Initializing the DAG NOdes
             if(operation == "create")
@@ -1860,7 +1861,12 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
             }
             else if(operation == "rePaint")
             {
-            	customNodeName = getCustomNodeName(dagNode1,dagNode2);
+            	customNodeName = node.name;
+            	var dagNodesList : ArrayCollection  = new ArrayCollection();
+            	dagNodesList.addItemAt(dagNode1,0);
+            	dagNodesList.addItemAt(dagNode2,1);
+            	associatedDAGNodes[customNodeName] = dagNodesList;
+            	//getCustomNodeName(dagNode1,dagNode2);
             	//This condition should be  when operation is create or repaint Create
             	/*var nodesName : String = dagNode1.nodeNumber + "_" + dagNode2.nodeNumber; 
 	            var cunstomNodeNumber : int = 1;
@@ -1948,7 +1954,11 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
             drawLines(dagNode2,customFormulaNode.x,customFormulaNode.y,customFormulaNode.name);
          
             //Removing the pop up
-            popUp.removeMe();
+            if(operation != "rePaint")
+            {
+           		 popUp.removeMe(); 	
+            }
+           
       }
       private function drawLines(dagNode : DAGNode,toX : int,toY : int,customNodeName:String):void
       {
@@ -2083,7 +2093,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 			<mx:ApplicationControlBar top="0" dock="true" height="5%" width="100%" fillAlphas="[1.0, 1.0]" fillColors="[#f9e886, #f9e886]">
 				<mx:Button label="Add Link" click="drawLine()" fontSize="9" toolTip="Add Link to nodes"/>
 				<mx:Button label="Clear All Paths" click="clearPaths()" fontSize="9" toolTip="Clear All Paths"/>
-				<mx:Button label="Temporal Query" id="TQBtn" click="openTQPopUp()" fontSize="9" toolTip="Create temporal query on selected nodes"/>								
+				<mx:Button label="Temporal Query" click="openTQPopUp()" fontSize="9" toolTip="Create temporal query on selected nodes"/>				
 			</mx:ApplicationControlBar>
 			<mx:Canvas id="mainPanel" width="100%" height="95%" borderStyle="none">
 			</mx:Canvas>
