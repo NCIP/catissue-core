@@ -2,4 +2,4 @@ Please send questions or comments to the E-mail addresses listed below:
 
 <b>E-mail: </b><a href='mailto:catissue_support@mga.wustl.edu'>catissue_support@mga.wustl.edu</a>
 
-For help regarding the caTISSUE Core system, please refer to the <a href='LoggedInHelp.do'>Help</a>&nbsp;section.
+For help regarding the caTISSUE Suite system, please refer to the <a href='RedirectToHelp.do'>Help</a>&nbsp;section.
