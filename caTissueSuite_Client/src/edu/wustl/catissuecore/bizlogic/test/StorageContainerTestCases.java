@@ -48,7 +48,9 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 			 assertFalse("could not add object", true);
 		 }
 	}
-	
+	/**
+	 * Test case to edit the capacity of the Storage Container
+	 */
 	public void testUpdateCapacityOFStorageContainer()
 	{
 		StorageContainer storageContainer = (StorageContainer)TestCaseUtility.getObjectMap(StorageContainer.class);
@@ -61,40 +63,38 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 			storageContainer.setCapacity(capacity);
 	    	System.out.println("After Update");
 	    	StorageContainer updatedStorageContainer = (StorageContainer) appService.updateObject(storageContainer);
-	       	Logger.out.info("Domain object successfully updated ---->"+updatedStorageContainer);
 	       	assertTrue("Domain object successfully updated ---->"+updatedStorageContainer, true);
 	    } 
 	    catch (Exception e) 
 	    {
-	       	Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
 	 		System.out
 					.println("StorageContainerTestCases.testUpdateCapacityOFStorageContainer()"+e.getMessage() );
-	 		assertFalse("failed to update Object", true);
+	 		assertFalse("failed to update Object:"+e.getMessage(), true);
 	    }
 	}
 	
+	/**
+	 * Test case to edit the Name and Temperature  capacity of the Storage Container
+	 */
 	public void testUpdateNameAndTempOFStorageContainer()
 	{
 		StorageContainer storageContainer = (StorageContainer)TestCaseUtility.getObjectMap(StorageContainer.class);
 		System.out.println("Before Update");
-    	Logger.out.info("updating domain object------->"+storageContainer);
 	    try 
 		{
 	    	storageContainer.setTempratureInCentigrade(new Double(-70));
 	    	storageContainer.setName("UpdatedSC" + UniqueKeyGeneratorUtil.getUniqueKey());
 	    	System.out.println("After Update");
 	    	StorageContainer updatedStorageContainer = (StorageContainer) appService.updateObject(storageContainer);
-	       	Logger.out.info("Domain object successfully updated ---->"+updatedStorageContainer);
 	       	assertTrue("Domain object successfully updated ---->"+updatedStorageContainer, true);
 	    } 
 	    catch (Exception e) 
 	    {
-	       	Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
 	 		System.out
 					.println("StorageContainerTestCases.testUpdateNameAndTempOFStorageContainer()"+e.getMessage() );
-	 		assertFalse("failed to update Object", true);
+	 		assertFalse("failed to update Object:"+e.getMessage(), true);
 	    }
 	}
 	/**
