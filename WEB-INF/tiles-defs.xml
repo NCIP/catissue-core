@@ -80,10 +80,6 @@
 		<put name="content" value="/pages/content/common/Help.jsp" />
 	</definition>
 	
-	<definition name=".catissuecore.RedirectToHelpMain" extends=".catissuecore.homePageDef">
-		<put name="content" value="/pages/content/common/Help.jsp" />
-	</definition>
-	
 	<definition name=".catissuecore.contactUsDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/common/ApplicationFooterTab.jsp" />
 	</definition>
