@@ -468,15 +468,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	* Repaint handler DAG on NEXT, PREVIOUS and REDEFINE buttons.
 	*/
 	private function repaintHandler(event: ResultEvent):void
-	{	 
-		if(view=="Result"){
-			TQBtn.label = "Calculate Query";
-			TQBtn.toolTip = "Calculate query on selected nodes"
-		}else if(view=="AddLimit"){		
-			TQBtn.label = "Temporal Query";
-			TQBtn.toolTip = "Create temporal query on selected nodes"		
-		}else{}		
-		
+	{	
 		var nodeMap : Object =  event.result as Object ;
 		
 		var customNodeList : ArrayCollection = nodeMap["customFormulaNodeList"];
@@ -1344,7 +1336,9 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	 	}
 	 	else
 	 	{
-	          AlertManager.showWarning("Node is not valid for Temporal Query");	
+	     
+	 	     AlertManager.showWarning("Node is not valid for Temporal Query");	
+	 	     AlertManager.showWarning("Node is not valid for Temporal Query");	
 	 	}
 	 }
 	 
@@ -1442,15 +1436,14 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
                  singleNodeTQPope.customNodeName = customNode.name;
                
                
-               //Setting the custom column name and time interval
-	        	var tmpCustomNode:Array = customNode.getCustomColumnName().split('#',2);
-	        	singleNodeTQPope.customColumnName.text = tmpCustomNode[0].toString();
-	        	singleNodeTQPope.cb6.selectedItem = tmpCustomNode[1].toString();
+               //Setting the custom column name and time interval	        	
+	        	singleNodeTQPope.customColumnName.text = customNode.getCustomColumnName()
 	        	
                //Handling LHS DatePickers and Text Inputs
                if(customNode.getLhsTimeInterval() != "null")
                {
 					//Right now there exists only DatePicker on LHS
+					Alert.show("This condition is not yet Handled");	               	
                }
                else
                {
@@ -1581,7 +1574,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	     var relationalOprsList : ArrayCollection = queryDataMap["fourthDropDown"];
 	     var timeIntervalsList : ArrayCollection = queryDataMap["timeIntervals"];
 	     var entitiesNameList : ArrayCollection = queryDataMap["entityList"];
-	    //Opening the pop up window	    
+	    	    
 	    popUp = PopupWindow(PopUpManager.createPopUp(this, PopupWindow, true));	    
 	    popUp.showCloseButton = true; 
 	    
@@ -1649,10 +1642,8 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	        popUp.cb3.selectedItem = currentCustomNode.getSecondSelectedAttrName();	        	        	
         	popUp.cb4.selectedItem = currentCustomNode.getSelectedLogicalOp();  
         
-        	//Setting the custom column name and time interval
-        	var tmpCustomNode:Array = currentCustomNode.getCustomColumnName().split('#',2);
-        	popUp.customColumnName.text = tmpCustomNode[0].toString();
-        	popUp.cb6.selectedItem = tmpCustomNode[1].toString();
+        	//Setting the custom column name and time interval        	
+	        popUp.customColumnName.text = currentCustomNode.getCustomColumnName();
 	        
 	        //If the selected Logical Operators are isNull or IsNotNull
 	        if((currentCustomNode.getSelectedLogicalOp() == "Is Null") || (currentCustomNode.getSelectedLogicalOp() == "Is Not Null"))
@@ -1666,7 +1657,9 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	        }
 	        else
 	        {
-	           	//This is the condition when there is both time and time Interval 
+	        	
+	        
+	        	//This is the condition when there is both time and time Interval 
 	       		 if(currentCustomNode.getTimeInterval() != "null")
 	        	 {    	 	
 	        			popUp.txtInput.text = currentCustomNode.getTimeValue();
@@ -1777,12 +1770,8 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
            }
            else if(operation == "rePaint")
            {
-           	  //customNodeName = getSingleCustomNodeName(dagNode);
-           	  customNodeName = node.name;
-           	  var dagNodesList  : ArrayCollection = new ArrayCollection();
-           	  dagNodesList.addItemAt(dagNode,0);
-	          associatedSingleDagNodes[customNodeName] = dagNodesList;   
-
+           	  customNodeName = getSingleCustomNodeName(dagNode);
+           	  
            }
            
 	 	var customNode : SingleNodeCustomFormulaNode  = new SingleNodeCustomFormulaNode();
@@ -1819,11 +1808,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	   mainPanel.addChild(customNode);
 	   drawLines(dagNode,customNode.x,customNode.y,customNode.name);
 	 	
-	 	if(operation != "rePaint")
-	 	{
-	 		singleNodeTQPope.removeMe();
-	 	}
-	 	
+	 	singleNodeTQPope.removeMe();
 	 }           
 	
       public function addCustomFromulaNode(node : CustomFormulaNode):void
@@ -1836,7 +1821,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
             var operation : String = node.getOperation();
             var existingCustomNode : CustomFormulaNode = null;
            // var customNodeDagNodes : Object  = new Object();
-           // var dagNodesList : ArrayCollection  = new ArrayCollection();
+            var dagNodesList : ArrayCollection  = new ArrayCollection();
             
             //Initializing the DAG NOdes
             if(operation == "create")
@@ -1875,12 +1860,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
             }
             else if(operation == "rePaint")
             {
-            	customNodeName = node.name;
-            	var dagNodesList : ArrayCollection  = new ArrayCollection();
-            	dagNodesList.addItemAt(dagNode1,0);
-            	dagNodesList.addItemAt(dagNode2,1);
-            	associatedDAGNodes[customNodeName] = dagNodesList;
-            	//getCustomNodeName(dagNode1,dagNode2);
+            	customNodeName = getCustomNodeName(dagNode1,dagNode2);
             	//This condition should be  when operation is create or repaint Create
             	/*var nodesName : String = dagNode1.nodeNumber + "_" + dagNode2.nodeNumber; 
 	            var cunstomNodeNumber : int = 1;
@@ -1968,11 +1948,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
             drawLines(dagNode2,customFormulaNode.x,customFormulaNode.y,customFormulaNode.name);
          
             //Removing the pop up
-            if(operation != "rePaint")
-            {
-           		 popUp.removeMe(); 	
-            }
-           
+            popUp.removeMe();
       }
       private function drawLines(dagNode : DAGNode,toX : int,toY : int,customNodeName:String):void
       {

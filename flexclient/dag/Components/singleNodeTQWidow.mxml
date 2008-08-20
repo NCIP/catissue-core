@@ -202,10 +202,10 @@
              //Setting node Type
              singleNodeCustomFormula.setNodeType("singleNodeCustomNode");
              
-             //Setting custom column Name with time Int
-             trace("cb6.selectedItem = " + cb6.selectedItem);
-             singleNodeCustomFormula.setCustomColumnName(customColumnName.text + "#" + cb6.selectedItem);
-                                      
+             //Setting custom column Name with time Int            
+             //singleNodeCustomFormula.setCustomColumnName(customColumnName.text + "#" + cb6.selectedItem);
+			 singleNodeCustomFormula.setCustomColumnName(customColumnName.text);
+			                                       
              //Invoking the RPC Method
              if(submitButton1.label == "OK")
              {
@@ -531,11 +531,8 @@
 	    <mx:HBox x="20" horizontalGap="6" width="100%">
          <mx:Label id="columnLabel" width="170" text="Please Enter Column Name :"/>
               
-         <mx:TextInput id="customColumnName" width="250" restrict="0-9 A-Z a-z" borderColor="blue" focusOut="validateColumnName()"/>
-         <mx:ComboBox id="cb6" name="timeIntervalCb" dataProvider="{timeIntervalsDp}" width="100"  borderThickness="0" 
-         	borderColor="blue" prompt="--Select--" itemRenderer="mx.controls.Label" close="truncateLongText(event)"
-         	rowCount="10" toolTip=""/>
-         <mx:Label id="lb7" name="label6" width="100%"  height="30" color="blue" text="{timeIntrvalLabel}" fontStyle="normal" fontWeight="bold"/>
+         <mx:TextInput id="customColumnName" width="300" restrict="0-9 A-Z a-z" borderColor="blue" focusOut="validateColumnName()"/>         
+         
 	   </mx:HBox>
 	 
 	   <mx:HBox x="20" y="50">
