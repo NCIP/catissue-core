@@ -743,11 +743,21 @@ function popupWindow(nofConsentTiers)
 				String str = "withdrawAll('"+ consentTierList.size()+"')";
 				%>
 					
-						<html:button property="addButton" disabled="<%=withdrawAllDisabled%>" styleClass="blue_ar_c" onclick="<%=str%>" value="Withdraw All"/>&nbsp;|
+						<html:button property="addButton" disabled="<%=withdrawAllDisabled%>" styleClass="blue_ar_c" onclick="<%=str%>" value="Withdraw All"/>&nbsp;
 					
 				<%
 				}
 				%>
+				
+			<% if(operation.equals(Constants.EDIT) && pageOf.equals("pageOfConsent") )	
+		     	{
+		     %>
+		     	    &nbsp;|&nbsp;
+		    <% 
+		      }
+		    %>
+		     	 
+				
 			<%	if(pageOf.equals("pageOfConsent"))
 						{
 						%>
