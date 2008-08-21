@@ -191,12 +191,19 @@
 				countForDerive.style.display="none";
 				countForAliquot.style.display="block";
 			}
-			else
+			else if(radioButton.value==3)
 			{
 				childSpecimenCount.disabled = false;
 				qtyPerAliquotTextBox.disabled = true;
 				countForDerive.style.display="block";
 				countForAliquot.style.display="none";
+			}
+			else
+			{
+				childSpecimenCount.disabled = true;
+				qtyPerAliquotTextBox.disabled = true;
+				countForDerive.style.display="none";
+				countForAliquot.style.display="block";
 			}
 		}
 		
@@ -605,10 +612,10 @@
 			  // Clear the value of onSubmit 
 		    document.forms[0].onSubmit.value="";
 		    var consentTier=document.forms[0].consentTierCounter.value;
-			var answer = confirm("Do you want to submit any changes?");
+			//var answer = confirm("Do you want to submit any changes?");
 			var formName;
 			<% String formNameAction = null;%>
-			if (answer){
+			/*if (answer){
 				setSubmitted('ForwardTo','CPQueryPrintSpecimenEdit','eventParameters');
 				<%
 				formNameAction = "NewSpecimenEdit.do";
@@ -618,7 +625,7 @@
 				}%>
 				formName = "<%=formNameAction%>?consentTierCounter="+consentTier;
 			}
-			else{
+			else{*/
 				var id = document.forms[0].id.value;			
 				var label = document.getElementById("label").value;
 				
@@ -630,7 +637,7 @@
 				}%>
 						
 				formName = "<%=formNameAction%>&specimenId="+id+"&menuSelected=15&consentTierCounter="+consentTier;
-			}			
+			//}			
 
 			 
 			confirmDisable(formName,document.forms[0].activityStatus);
@@ -1762,7 +1769,11 @@
 									&nbsp;
 										<input type="radio" value="3" id="deriveChk" name="specimenChild" onclick="onCheckboxButtonClick(this)"/>
 										<bean:message key="specimen.derivative" />
-										
+									&nbsp;
+									<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">	
+										<input type="radio" value="4" id="createCpChildCheckBox" name="specimenChild" onclick="onCheckboxButtonClick(this)"/>
+										<bean:message key="create.CpChildSp"/>
+									</logic:equal>
 									</td>
 								</tr>	
 								 
@@ -1787,7 +1798,7 @@
 								    </td>
 								</tr>
 								
-								<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">	
+							<!--	//The check box is changed to radio button
 								<tr>
 											<td class="dividerline" colspan="2" valign="center">
 													<html:checkbox styleId="createCpChildCheckBox" property="createCpChildCheckBox" value="true" onclick="">
@@ -1798,8 +1809,8 @@
 														</span>
 														</html:checkbox>
 											</td>
-								</tr>					
-								</logic:equal>
+								</tr>					-->
+								
 								
 								<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">	
 								<tr>
