@@ -346,7 +346,10 @@ public class StorageContainer extends Container implements IActivityStatus
 				else
 					this.barcode = null;
 			}*/
-			this.barcode = form.getBarcode();
+			if(form.getBarcode() != null && form.getBarcode().equals(""))
+				this.barcode = null;
+			else
+				this.barcode = form.getBarcode();
 			this.full = new Boolean(form.getIsFull());
 			Logger.out.debug("SC Domain : " + this.full + " :-: form.getIsFull() : " + form.getIsFull());
 			this.activityStatus = form.getActivityStatus();
