@@ -458,7 +458,7 @@ public class QueryOutputSpreadsheetBizLogic
 			ITerm term = outputTerm.getTerm();
 			Set<IExpression> expressionsInTerm = QueryUtility.getExpressionsInTerm(term);
 
-			if(node == null || expressionsInTerm.size() == 1)
+			if(node == null || (expressionsInTerm.size() == 1 && isContainingExpressionInTQ(node, expressionsInTerm)))
 			{
 				modifyTemporalColumnBean(temporalColumnUIBean,displayColumnName,columnName);
 			}
