@@ -6,12 +6,7 @@
 <%@ page import="org.apache.struts.action.ActionErrors"%>
 <%@ page language="java" isELIgnored="false"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<script src="jss/script.js" type="text/javascript"></script>
-<script type="text/javascript" src="jss/dhtmlwindow.js"></script>
-<script type="text/javascript" src="jss/modal.js"></script>
 <link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
-<script language="JavaScript" type="text/javascript"
-	src="jss/caTissueSuite.js"></script>
 <html>
 <c:if test="${requestScope['org.apache.struts.action.ERROR'] != null }">
 	<table border="0" cellspacing="0" cellpadding="3">
