@@ -22,8 +22,13 @@
 	String checkAllPages = (String)session.getAttribute("checkAllPages");
 	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
 	String isSpecimenIdPresent = (String)request.getAttribute(Constants.IS_SPECIMENID_PRESENT);
+	String isContainerPresent=(String)request.getAttribute(Constants.IS_CONTAINER_PRESENT);
+	
 	if(isSpecimenIdPresent==null)
 	 isSpecimenIdPresent = "";
+	 
+	if(isContainerPresent==null)
+	 isContainerPresent = "";
 	
 	String isSpecimenArrayPresent = (String)request.getAttribute(Constants.IS_SPECIMENARRAY_PRESENT);
 	
@@ -36,6 +41,8 @@
 	}
 	
 	String disabledOrder = "";
+	String disabledShipping="";
+	
 	boolean disabledButton = false;
 	if(isSpecimenIdPresent.equals("false"))
 	{
@@ -43,6 +50,18 @@
 		disabledList = true;
 		disabledButton = true;
 		disabledOrder = "DISABLED";
+		disabledShipping="DISABLED";
+	}
+	
+	if(isContainerPresent.equals("true"))
+	{
+		disabledButton = false;
+		disabledShipping="";
+	}
+	
+	if(disabledOrder=="DISABLED" && disabledShipping=="DISABLED")
+	{
+		disabledButton = true;
 	}
 
     QueryShoppingCart cart = (QueryShoppingCart)session.getAttribute(Constants.QUERY_SHOPPING_CART);
@@ -110,7 +129,18 @@ function onSubmit()
 	{
 		addToOrderList();
 	}
+	else if(document.forms[0].chkName[3].checked == true)
+	{
+		//create Shipment Request
+		createShipmentRequest();
+	}
+	else if(document.forms[0].chkName[4].checked == true)
+	{
+		//create Shipment
+		createShipment();
+	}
 }
+
 function setCheckBoxState()
 		{	
 			var chkBox = document.getElementById('checkAll1');
@@ -223,6 +253,20 @@ function addToOrderList()
 				alert("Please select at least one checkbox");
 			}
 		}		
+
+function createShipmentRequest()
+{
+	var action = "BulkCart.do?operation=createShipmentRequest";
+	document.forms[0].action = action;
+	document.forms[0].submit();
+}
+
+function createShipment()
+{
+	var action = "BulkCart.do?operation=createShipment";
+	document.forms[0].action = action;
+	document.forms[0].submit();
+}
 
 function checkAll(element)
 {
@@ -356,8 +400,13 @@ function checkAll(element)
 		  </tr>
 		
           <tr>
+            <td>&nbsp;</td>
+			<td class="black_ar"><input type="radio" name="chkName" onclick="showEvents()" value="requestShipment" <%=disabledShipping%> ></td>
 			<td class="black_ar"><input type="radio" name="chkName" onclick="showEvents()" value="requestShipment"></td>
             <td class="black_ar" ><bean:message key="shipment.request"/></td>
+			<td class="black_ar" colspan="2">&nbsp;</td>
+			
+			<td class="black_ar"><input type="radio" name="chkName"  value="createShipment" onclick="showEvents()" <%=disabledShipping%> ></td>
 			<td class="black_ar"><input type="radio" name="chkName"  value="createShipment" onclick="showEvents()" ></td>
             <td class="black_ar" ><bean:message key="shipment.create"/></td>
 			<td colspan="4">&nbsp;</td>
@@ -386,4 +435,4 @@ function checkAll(element)
   </table>
 	</body>
 	</html:form>
-	</html:html>
+</html:html>
