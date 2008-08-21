@@ -13,7 +13,8 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.wustl.catissuecore.actionForm.AdvanceSearchForm;
 import edu.wustl.catissuecore.bizlogic.querysuite.QueryShoppingCartBizLogic;
@@ -216,23 +217,23 @@ public class AddDeleteCartAction extends QueryShoppingCartAction
 			duplicateRecordCount = chkBoxValues.size() - addRecordCount;
 		else
 			duplicateRecordCount = dataList.size() - addRecordCount;
-
-		ActionErrors errors = new ActionErrors();
+		//ActionErrors changed to ActionMessages
+		ActionMessages messages = new ActionMessages();
 		// Check if no. of duplicate records is not zero then set a error message.
 		if (duplicateRecordCount != 0)
 		{
-			ActionError error = new ActionError("shoppingcart.duplicateObjError", addRecordCount,
-					duplicateRecordCount);
-			errors.add(ActionErrors.GLOBAL_ERROR, error);
+			messages.add(ActionMessages.GLOBAL_MESSAGE,
+					new ActionMessage("shoppingcart.duplicateObjError", addRecordCount,
+					duplicateRecordCount));		
 		}
 		else
 		{
-			ActionError addMsg = new ActionError("shoppingCart.addMessage", addRecordCount);
-			errors.add(ActionErrors.GLOBAL_ERROR, addMsg);
+			messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("shoppingCart.addMessage", addRecordCount));
+			
 			session.setAttribute(Constants.QUERY_SHOPPING_CART, cart);
 			request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST, columnList);
 		}
-		saveErrors(request, errors);
+		saveMessages(request, messages);
 	}
 	
 	/**

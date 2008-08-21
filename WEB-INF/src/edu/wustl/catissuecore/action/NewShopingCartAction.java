@@ -23,6 +23,8 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import edu.common.dynamicextensions.domain.Entity;
 import edu.common.dynamicextensions.domaininterface.AbstractAttributeInterface;
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
@@ -148,13 +150,8 @@ public class NewShopingCartAction extends BaseAction {
 		{	
 			cartnew=createListOfItems(form,selectColumnName,request);
 	
-			
-			ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
-			if(errors==null)
-			{
-				 errors=new ActionErrors();
-			}
-			
+			//Action Errors changed to Action Messages
+			ActionMessages messages = new ActionMessages();
 			int indexArray[] = queryShoppingCartBizLogic.getNewAttributeListIndexArray(oldAttributeList, cartAttributeList);
 			if (indexArray != null)
 			{
@@ -166,15 +163,16 @@ public class NewShopingCartAction extends BaseAction {
 				{
 					if((cartnew.size()+oldCartSize-newCartSize)>0)
 					{
-						ActionError actionError =new ActionError("shoppingcart.duplicateObjError",count,cartnew.size()+oldCartSize-newCartSize);
-						errors.add(ActionErrors.GLOBAL_ERROR, actionError);
-						saveErrors(request, errors);
+						messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage
+								("shoppingcart.duplicateObjError",count,
+										cartnew.size()+oldCartSize-newCartSize));
+						saveMessages(request, messages);
 					}
 					else
 					{
-						ActionError actionError =new ActionError("shoppingCart.addMessage",cartnew.size());
-						errors.add(ActionErrors.GLOBAL_ERROR, actionError);
-						saveErrors(request, errors);
+						messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage
+								("shoppingCart.addMessage",cartnew.size()));
+						saveMessages(request, messages);
 					}
 					
 				}
@@ -182,9 +180,9 @@ public class NewShopingCartAction extends BaseAction {
 				{
 					if((cartnew.size()+oldCartSize-newCartSize)>0)
 					{
-						ActionError actionError =new ActionError("shoppingcart.duplicateObjError",count,cartnew.size()+oldCartSize-newCartSize);
-						errors.add(ActionErrors.GLOBAL_ERROR, actionError);
-						saveErrors(request, errors);
+						messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage
+								("shoppingcart.duplicateObjError",count,cartnew.size()+oldCartSize-newCartSize));
+						saveMessages(request, messages);
 					}
 				}
 	

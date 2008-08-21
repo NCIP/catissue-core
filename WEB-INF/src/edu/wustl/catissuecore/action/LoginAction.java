@@ -15,6 +15,8 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 
 import edu.wustl.catissuecore.actionForm.LoginForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
@@ -116,9 +118,11 @@ public class LoginAction extends Action
 					
 					if(!result.equals(Constants.SUCCESS)) 
 					{
-	                	  ActionErrors errors = new ActionErrors();
-	                      errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(result));
-	                      saveErrors(request, errors);
+						//ActionError changed to ActionMessage
+						ActionMessages messages = new ActionMessages();
+						messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(result));
+						saveMessages(request, messages);
+	                
 	                      session.setAttribute(Constants.SESSION_DATA,null);
 	                      session.setAttribute(Constants.TEMP_SESSION_DATA,sessionData);
 	                      request.setAttribute(Constants.PAGEOF,Constants.PAGEOF_CHANGE_PASSWORD);
