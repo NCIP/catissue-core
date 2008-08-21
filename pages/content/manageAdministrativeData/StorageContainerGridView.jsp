@@ -288,7 +288,7 @@ function refresh_tree(nodeId)
 					<%}}%>				
 						</tr>	
 					<% for (int i = Constants.STORAGE_CONTAINER_FIRST_ROW;i<=storageContainerGridObject.getOneDimensionCapacity().intValue()+1;i++){%>
-						<tr class="dataRowLight">
+						<tr>
 						<%
 	                        
 							if(i == 1)
@@ -385,7 +385,7 @@ function refresh_tree(nodeId)
 									}
 								
 							%>
-							<td  align="center" class="tabletdformap" noWrap="true"><%
+							<td  align="center" width="120" class="tabletdformap" noWrap="true"><%
 							
 								if(pageOfSpecimen!=null && pageOfSpecimen.equals(Constants.ALIAS_SPECIMEN))
 								{%>
