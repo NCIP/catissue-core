@@ -578,7 +578,7 @@ function addNewTypeAction(action)
 					</logic:notEqual>
 					<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
 					 <td valign="bottom" ><img src="images/uIEnhancementImages/sc_edit.gif" alt="Container Info" width="158" height="20"  /><a href="#"></a></td>
-					<td  valign="bottom"><a href="#"><img src="images/uIEnhancementImages/sc_map1.gif" alt="View Map" width="94" height="20" border="0" onclick="vieMapTabSelected()"/></a></td>
+					<td  valign="bottom"><a href="#"><img src="images/uIEnhancementImages/cp_containerMap1.gif" alt="View Map" width="111" height="20" border="0" onclick="vieMapTabSelected()"/></a></td>
                     <td width="80%" valign="bottom" class="cp_tabbg">&nbsp;</td>
 					</logic:equal>
                    </tr>
