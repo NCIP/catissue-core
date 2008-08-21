@@ -9,6 +9,7 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
+<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" /> 
 
 <script src="jss/script.js"></script>
 
@@ -259,16 +260,24 @@ function checkAll(element)
     </table></td>
   </tr>
   <tr>
-   
-      <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
-      
-     
+    <td class="tablepadding"><table width="100%" border="0" cellpadding="0" cellspacing="0">
       <tr>
+        <td width="90%" valign="bottom" class="td_tab_bg">&nbsp;</td>
+      </tr>
+    </table>
+  
+   <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
+      
+     <tr>
+        <td colspan="2" align="left" class="toptd"></td>
+      </tr>
+      
+	  <tr>
         <td colspan="2" align="left" class="tr_bg_blue1"><span class="blue_ar_b"> &nbsp;<bean:message key="shoppingCart.title" />&nbsp <bean:message key="buttons.view"/> &nbsp;</span></td>
       </tr>
      
       <tr>
-        <td colspan="2"><table width="99%" border="0" align="center" cellpadding="3" cellspacing="0">
+        <td colspan="2"><table width="99%" border="0" align="center" cellpadding="0" cellspacing="0">
            
 			<tr >
 	<td class="formFieldNoBordersSimple" align="left">
@@ -297,13 +306,9 @@ function checkAll(element)
    <!--  **************  Code for New Grid  *********************** -->
 		</table></td>
       </tr>
-
-	 <tr>
-        <td colspan="2" class="bottomtd"></td>
-      </tr>
-      <tr>
+<tr>
         <td colspan="2">
-         &nbsp;&nbsp;&nbsp;&nbsp;<html:button styleClass="black_ar" property="deleteCart" onclick="onDelete()">
+         &nbsp; &nbsp;<html:button styleClass="black_ar" property="deleteCart" onclick="onDelete()">
 				<bean:message key="buttons.delete"/>
 			</html:button>
 		
@@ -318,35 +323,27 @@ function checkAll(element)
 	<tr>
 		
         <td colspan="2" align="left" class="tr_bg_blue1">
-			<label for="selectLabel">&nbsp;&nbsp;
-				<span class="blue_ar_b"> &nbsp;<bean:message key="mylist.label.selectLabel" /> </span>
+			<label for="selectLabel">&nbsp;<span class="blue_ar_b"><bean:message key="mylist.label.selectLabel" /> </span>
 			</label>
 		</td>
 	</tr>
 	
 	<tr>
-        <td colspan="2" class="black_ar showhide">
-		<table width="99%" border="0" align="center" cellpadding="2" cellspacing="0">
+        <td colspan="2" class="black_ar">
+		<table width="100%" border="0" cellpadding="1" cellspacing="0">
           <tr>
-           
-			 <td>&nbsp;</td>
-			 <td class="black_ar"><input type="radio" name="chkName"      value="OrderSpecimen" onclick="showEvents()" checked=true <%=disabledOrder%> ></td>
-             <td class="black_ar" ><bean:message key="mylist.label.orderBioSpecimen"/></td>
-             <td class="black_ar" colspan="2">&nbsp;</td>
-			 
-			 
-			 <td class="black_ar"><INPUT TYPE='RADIO' NAME='chkName' onclick="showEvents()" value="Specimenpage" <%=disabled%> ></td>
-			 <td class="black_ar" ><bean:message key="mylist.label.multipleSpecimenPage"/>
+			 <td class="black_ar" width="2%"><input type="radio" name="chkName"      value="OrderSpecimen" onclick="showEvents()" checked=true <%=disabledOrder%> ></td>
+             <td class="black_ar" width="23%" ><bean:message key="mylist.label.orderBioSpecimen"/></td>
+			 <td class="black_ar" width="2%"><INPUT TYPE='RADIO' NAME='chkName' onclick="showEvents()" value="Specimenpage" <%=disabled%> ></td>
+			 <td class="black_ar" width="23%" ><bean:message key="mylist.label.multipleSpecimenPage"/>
                </td>
-			<td class="black_ar" colspan="2">&nbsp;</td>
-			
-			<td class="black_ar"><INPUT TYPE='RADIO' NAME='chkName'     onclick="showEvents()" id="ch1" value="Events" <%=disabled%> ></INPUT></td>
+			<td class="black_ar" width="2%"><INPUT TYPE='RADIO' NAME='chkName'     onclick="showEvents()" id="ch1" value="Events" <%=disabled%> ></INPUT></td>
             
-			<td class="black_ar" ><bean:message key="mylist.label.specimenEvent"/> </td>
+			<td class="black_ar" width="15%" ><bean:message key="mylist.label.specimenEvent"/> </td>
 			 
 		
 			
-		   <td class="black_ar">
+		   <td class="black_ar" width="33%">
 		 	   <div id="eventlist1" style="display:none">
 			   
 			   <autocomplete:AutoCompleteTag  property="specimenEventParameter" 
@@ -359,28 +356,24 @@ function checkAll(element)
 		  </tr>
 		
           <tr>
-            <td>&nbsp;</td>
 			<td class="black_ar"><input type="radio" name="chkName" onclick="showEvents()" value="requestShipment"></td>
             <td class="black_ar" ><bean:message key="shipment.request"/></td>
-			<td class="black_ar" colspan="2">&nbsp;</td>
-			
 			<td class="black_ar"><input type="radio" name="chkName"  value="createShipment" onclick="showEvents()" ></td>
             <td class="black_ar" ><bean:message key="shipment.create"/></td>
-            <td class="black_ar" colspan="5">&nbsp;</td>
-		  
+			<td colspan="4">&nbsp;</td>
 		  </tr>
-          
         </table>          
       </tr>
-
-	 <tr>
+<tr>
+			<td class="bottomtd"></td></tr>
+<tr>
        <td colspan="2" class="buttonbg"> <html:button styleClass="blue_ar_b" property="proceed" onclick="onSubmit()" disabled="<%=disabledButton%>" >
 				<bean:message key="buttons.submit"/>	
 			</html:button>&nbsp|&nbsp <html:link page="/ManageAdministrativeData.do" styleClass="cancellink">
 		<bean:message key="buttons.cancel" /> </html:link></td>
       </tr>
 	
-   </table>
+   </table></td></tr>
  <%}else{
 			%>
      <table summary="" cellpadding="0" cellspacing="0" border="0" width="100%">
@@ -390,6 +383,7 @@ function checkAll(element)
 	</tr>
 	</table>
  <%}%>
+  </table>
 	</body>
 	</html:form>
 	</html:html>

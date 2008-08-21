@@ -6,6 +6,7 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
+<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
 
 <%@ include file="/pages/content/common/ActionErrors.jsp" %>
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
@@ -88,9 +89,7 @@
               <td align="left" valign="top" class="black_ar_t"><bean:message key="eventparameters.comments"/></td>
               <td align="left" valign="top" class="black_ar_t"><html:textarea styleClass="black_ar" cols="70" rows="3"  styleId="comments" property="comments"/></td>
             </tr>
-	  <logic:equal name="bulkEventOperationsForm" property="operation" value="<%=Constants.BULK_TRANSFERS%>">
-		</table></tr></td>
-		</logic:equal>
+	
 	 
 	  
 	  
