@@ -284,7 +284,7 @@ window.onresize = function() { setFrameHeight('gridbox', .6,slope); }
 	mygrid.setDelimiter('<%=Constants.DHTMLXGRID_DELIMETER%>');
 	if(useFunction == "queryshopingcart" )
 	{
-		mygrid.entBox.style.height="218px";
+		mygrid.entBox.style.height="205px";
 	}
 	for(var row=0;row<myData.length;row++)
 	{

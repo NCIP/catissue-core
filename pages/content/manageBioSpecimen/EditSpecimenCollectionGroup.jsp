@@ -171,7 +171,7 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 		        	</td>
 					<td class="black_ar_t"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="3" /></td>
                     <td align="left" class="black_ar_t"><bean:message key="specimenCollectionGroup.site"/></td>
-					<td align="left" nowrap class="black_ar">
+					<td align="left"  class="black_ar">
 					 <autocomplete:AutoCompleteTag property="siteId"
 										  optionsList = "<%=request.getAttribute(Constants.SITELIST)%>"
 										  initialValue="<%=new Long(form.getSiteId())%>"
