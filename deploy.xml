@@ -660,6 +660,7 @@
 	</target>
 	
 	<target name="CopyCAModelWars">
+		<!--
 		<antcall target="modifyDEWars">
 			<param name="warName" value="CA"/>
 		</antcall>
@@ -669,10 +670,11 @@
 		<antcall target="modifyDEWars">
 			<param name="warName" value="pathologySpecimen"/>
 		</antcall>
+
 		<antcall target="modifyDEWars">
 			<param name="warName" value="deintegration"/>
 		</antcall>
-		
+		-->
 	</target>
 	
 	<target name="modifyDEWars">
@@ -1083,6 +1085,8 @@
 		<echo message="Upgrading MySQL Database for caTISSUE Suite Application ..." />
 		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" onerror="continue">
 			<transaction src="${dbupgrade.sql.dir}/MySql/DBUpgrade_Suite_1.0_to_1.1.sql" />
+			<transaction src="${dbupgrade.sql.dir}/MySql/query_Suite1.0_to_Suite1.1.sql" />
+
 			<transaction>commit;</transaction>
 			<classpath>
 				<fileset dir="${lib.dir}">
