@@ -231,7 +231,7 @@ PUBLIC
         	<forward name="success" path=".catissuecore.RedirectToHelp" />
         </action> 
         
-        <!--Suite-->		
+        <!--Suite-->	
 			
 	<!-- Ordering System -->
 	<!-- for assign priviledge -->
@@ -717,6 +717,8 @@ PUBLIC
 			<forward name="requestToOrder" path="/RequestToOrder.do"/>
 			<forward name="bulkTransfers" path="/BulkTransferEvents.do?menuSelected=15"/>
 			<forward name="bulkDisposals" path="/BulkDisposalEvents.do?menuSelected=15"/>
+			<forward name="createShipmentRequest" path="/ProcessMyListCreateShipmentRequest.do?menuSelected=15"/>
+			<forward name="createShipment" path="/ProcessMyListCreateShipment.do?menuSelected=15"/>
 			<forward name="editMultipleSp" path="/MultipleSpecimenFlexInitAction.do?operation=edit"/>
 			<forward name="access_denied" path=".catissuecore.searchHomeDef" />
 			<forward name="access_denied" path=".catissuecore.searchHomeDef" />
