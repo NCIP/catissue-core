@@ -187,7 +187,7 @@ function containerInfoTab()
 		     <table  border="0" cellpadding="0" cellspacing="0" width="100%">
                  <tr>
                     <td valign="bottom" ><a href="#"><img src="images/uIEnhancementImages/sc_info1.gif" alt="Container Info" width="111" height="20" border="0" onclick="containerInfoTab()"/></a></td>
-                    <td   valign="bottom"><a href="#"><img src="images/uIEnhancementImages/sc_map.gif" alt="View Map" width="94" height="20" border="0" /></a></td>
+                    <td   valign="bottom"><a href="#"><img src="images/uIEnhancementImages/cp_containerMap.gif" alt="View Map" width="111" height="20" border="0" /></a></td>
                      <td width="99%" valign="bottom" class="cp_tabbg">&nbsp;</td>
                    </tr>
               </table>
