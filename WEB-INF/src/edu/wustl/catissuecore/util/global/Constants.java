@@ -16,6 +16,7 @@ import edu.wustl.catissuecore.domain.FluidSpecimen;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArray;
+import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
@@ -2145,6 +2146,9 @@ public class Constants extends edu.wustl.common.util.global.Constants
     public static final String IS_LIST_EMPTY = "isListEmpty";
     public static final String DOT_CSV = ".csv";
     public static final String APPLICATION_DOWNLOAD = "application/download";
+    
+    //For SNT
+    public static final String IS_CONTAINER_PRESENT = "isContainerPresent";
 
     // Constants for CP Based Entry
     public static final String COLLECTION_PROTOCOL_EVENT_ID = "Event_Id";
@@ -2255,6 +2259,9 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String DEIDENTIFIED_SURGICAL_PATHALOGY_REPORT_CLASS_NAME = DeidentifiedSurgicalPathologyReport.class.getName();
 	public static final String SURGICAL_PATHALOGY_REPORT_CLASS_NAME = SurgicalPathologyReport.class.getName();
 	public static final String SPECIMEN_NAME = Specimen.class.getName();
+	
+	//Shopping cart constants for Shipping And Tracking
+	public static final String STORAGE_CONTAINER_CLASS_NAME = StorageContainer.class.getName();
 	
 	public static final String[] specimenNameArray = {
         SPECIMEN_NAME,
@@ -2484,4 +2491,9 @@ public static final String ADD_MULTIPLE_SPECIMEN_TO_CART="addMltipleSpecimenToCa
 	public static final String PAGE_OF_QUERY_MODULE = "pageOfQueryModule";
 	public static final String ORDER_DETAILS = "orderDetails";
 	public static final String Association = "ASSOCIATION";
+	
+	//For Shipping And Tracking My List
+	public static final String SPECIMEN_LABELS_LIST = "specimenLabelName";
+	public static final String CONTAINER_NAMES_LIST = "containerNames";
+	
 }
