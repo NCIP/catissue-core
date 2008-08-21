@@ -155,6 +155,42 @@ public class QueryShoppingCartBizLogic
 
 	}
 	
+	public Set<String> getEntityLabelsList(QueryShoppingCart cart,List entityName,List<Integer>chkBoxValues,String attributeName)
+	{
+		Set<String> entityIdsList = new HashSet<String>();
+	    List<Integer> entityIdsColumnIndexList = getLabelsColumnIndexList(cart.getCartAttributeList(),entityName,attributeName);
+        List<List<String>> dataList = cart.getCart();
+        if(chkBoxValues!=null)
+	    {
+			    for(Integer index:chkBoxValues)
+			    {
+					List<String> record = dataList.get(index);
+					for (int i = 0; i < entityIdsColumnIndexList.size(); i++)
+					{
+						String data = record.get(entityIdsColumnIndexList.get(i));
+						
+						if(!(data.equals("")))
+						  entityIdsList.add(data);
+					}
+			    }
+	       }
+	       else
+	       {
+	        	for (List<String> record : dataList)
+	    		{
+	    			for (int j = 0; j < entityIdsColumnIndexList.size(); j++)
+	    			{
+	    				String data = record.get(entityIdsColumnIndexList.get(j));
+						if (!(data.equals("")))
+	    					entityIdsList.add(data);
+	    			}
+	    		}
+	       }
+	   
+	    return entityIdsList;
+
+	}
+	
 	/**
 	 * @param entityIdsList
 	 * @return
@@ -179,7 +215,6 @@ public class QueryShoppingCartBizLogic
 	    	   	
 		 
 		   } catch (NumberFormatException e) {
-		
 			   e.printStackTrace();
 		   } catch (DAOException e) {
 		
@@ -246,6 +281,30 @@ public class QueryShoppingCartBizLogic
 		for (AttributeInterface attribute : cartAttributeList)
 		{
 			if ((attribute.getName().equals(Constants.ID))
+					&& (entityName.contains(attribute.getEntity().getName())))
+			{
+				idIndexList.add(new Integer(i));
+			}
+			i++;
+		}
+		
+		return idIndexList;
+	}
+	
+	/**
+	 * Creates Entity Ids column indices list .
+	 * 
+     * @param cartAttributeList Shopping cart attribute list.
+     * @param entityName Name of Entity.
+     * @return List of entity indices of entity ids present in cart.
+	 */
+	public List<Integer> getLabelsColumnIndexList(List<AttributeInterface> cartAttributeList,List entityName,String attributeName)
+	{
+		List<Integer> idIndexList = new ArrayList<Integer>();
+		int i = 0;
+		for (AttributeInterface attribute : cartAttributeList)
+		{
+			if ((attribute.getName().equals(attributeName))
 					&& (entityName.contains(attribute.getEntity().getName())))
 			{
 				idIndexList.add(new Integer(i));
