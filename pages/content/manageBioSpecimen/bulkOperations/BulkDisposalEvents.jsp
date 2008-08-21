@@ -42,8 +42,6 @@
 	<jsp:include page="/pages/content/manageBioSpecimen/bulkOperations/BulkEventsCommonAttributes.jsp" />
 	 
 	 
-	  <tr>
-        <td colspan="3" class="showhide"><table width="100%" border="0" cellpadding="2" cellspacing="0">
             <tr>
               <td width="1%" align="center" class="black_ar">&nbsp;</td>
               <td width="15%" align="left" valign="top" class="black_ar_t"><bean:message key="disposaleventparameters.reason" />  </td>
@@ -77,7 +75,8 @@
               <td align="center" class="black_ar">&nbsp;</td>
               <td align="left" class="black_ar"><LABEL for="type">Status</LABEL></td>
               <td align="left">	
-			   <html:select styleId="comments" property="fieldValue(ID_ALL_STATUS)"    styleClass="formFieldSized4" size="1"> <html:options      
+			 		   
+			  <html:select styleId="comments" property="fieldValue(ID_ALL_STATUS)"    styleClass="formFieldSized4" size="1"> <html:options      
 			    name="<%=Constants.ACTIVITYSTATUSLIST%>" />
 			   </html:select></td>
             </tr>
@@ -85,11 +84,10 @@
       </tr>
         
       <tr>
-        <td colspan="2" class="buttonbg"><html:submit styleClass="blue_ar_b"/>&nbsp; | &nbsp;<html:link page="/ManageAdministrativeData.do" styleClass="cancellink">
-		<bean:message key="buttons.cancel" /> </html:link></td>
+        <td colspan="3" class="buttonbg"><html:submit styleClass="blue_ar_b"/>&nbsp; | &nbsp;<html:link page="/ManageAdministrativeData.do" styleClass="cancellink">
+		<bean:message key="buttons.cancel"/></html:link></td>
       </tr>
-    
-	</table></td>
+    </table></td>
   </tr>
 </table>
 </html:form>
