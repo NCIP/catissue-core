@@ -16,7 +16,7 @@ if(request.getAttribute(Constants.PAGEOF)!=null)
 {
 	if(pageOf.equals(Constants.PAGEOF_QUERY_RESULTS) || pageOf.equals(Constants.PAGEOF_QUERY_MODULE) || pageOf.equals(Constants.PAGE_OF_PARTICIPANT_CP_QUERY))
 		{
-		 gridDivHeight = "205";
+		 gridDivHeight = "240";
 	}
 }
 %>
@@ -197,19 +197,7 @@ function setEditableChkbox(checkAllPages)
 		    }
 			hideCursor();		
 	}
-
-	if ( document.getElementById && !(document.all) ) 
-	{
-		var slope=-36;
-	}
-	else
-	{
-		var slope=-20;
-	}
-
-window.onload = function() { setFrameHeight('gridbox', .6,slope);}
-window.onresize = function() { setFrameHeight('gridbox', .6,slope); }
-
+	
 </script>
 
 
