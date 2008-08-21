@@ -20,6 +20,7 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Vector;
 
 import org.hibernate.HibernateException;
@@ -805,11 +806,41 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		//setAllValues(obj);
 		//END
 
+		Map<String,SiteUserRolePrivilegeBean> rowIdMap =null;
 		CollectionProtocol protocol =null;
 		if (obj instanceof CollectionProtocolDTO)
 		{
 			CollectionProtocolDTO CpDto = (CollectionProtocolDTO) obj;
 			protocol = CpDto.getCollectionProtocol();
+			rowIdMap = CpDto.getRowIdBeanMap();
+			
+			Set<Long> piAndCoOrdIds = new HashSet<Long>();
+			
+			piAndCoOrdIds.add(protocol.getPrincipalInvestigator().getId());
+			
+			Collection<User> coordinatorCollection = protocol.getCoordinatorCollection();
+			
+			if(coordinatorCollection!=null && !coordinatorCollection.isEmpty())
+			{
+				for(User user : coordinatorCollection)
+				{
+					piAndCoOrdIds.add(user.getId());
+				}
+			}
+			
+			if(rowIdMap != null)
+			{
+				Object[] mapKeys = rowIdMap.keySet().toArray();
+				for(Object mapKey : mapKeys)
+				{
+					String key = mapKey.toString();
+					SiteUserRolePrivilegeBean bean = rowIdMap.get(key);
+					if(piAndCoOrdIds.contains(bean.getUser().getId()))
+					{
+						throw new DAOException(ApplicationProperties.getValue("cp.cannotChangePrivilegesOfPIOrCoord"));
+					}
+				}
+			}
 		}
 		else
 		{
@@ -1368,13 +1399,16 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			cp = (CollectionProtocol) domainObject;
 		}
 		
-		Object[] mapKeys = cpRowIdMap.keySet().toArray();
-		for(Object mapKey : mapKeys)
+		if(cpRowIdMap != null)
 		{
-			String key = mapKey.toString();
-			SiteUserRolePrivilegeBean siteUserRolePrivilegeBean = cpRowIdMap.get(key);
-			
-			siteCollection.add(siteUserRolePrivilegeBean.getSiteList().get(0));
+			Object[] mapKeys = cpRowIdMap.keySet().toArray();
+			for(Object mapKey : mapKeys)
+			{
+				String key = mapKey.toString();
+				SiteUserRolePrivilegeBean siteUserRolePrivilegeBean = cpRowIdMap.get(key);
+				
+				siteCollection.add(siteUserRolePrivilegeBean.getSiteList().get(0));
+			}
 		}
 		
 		StringBuffer sb = new StringBuffer();
@@ -1447,13 +1481,14 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	 * Collection Protocol for Site to which he belongs
 	 * (non-Javadoc)
 	 * @throws UserNotAuthorizedException 
+	 * @throws DAOException 
 	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#isAuthorized(edu.wustl.common.dao.AbstractDAO, java.lang.Object, edu.wustl.common.beans.SessionDataBean)
 	 */
-	public boolean isAuthorized(AbstractDAO dao, Object domainObject, SessionDataBean sessionDataBean) throws UserNotAuthorizedException  
+	public boolean isAuthorized(AbstractDAO dao, Object domainObject, SessionDataBean sessionDataBean) throws UserNotAuthorizedException, DAOException  
 	{
 		boolean isAuthorized = false;
-		
-		if(sessionDataBean != null && sessionDataBean.isAdmin())
+		isAuthorized = checkCP(domainObject, sessionDataBean);
+		if(isAuthorized)
 		{
 			return true;
 		}
@@ -1493,6 +1528,48 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	}
 	
 	
+	private boolean checkCP(Object domainObject, SessionDataBean sessionDataBean) throws DAOException 
+	{
+		CollectionProtocol cp = null;
+		CollectionProtocolDTO cpDTO = null;
+		Map<String, SiteUserRolePrivilegeBean> cpRowIdMap= new HashMap<String, SiteUserRolePrivilegeBean>();
+		if(sessionDataBean != null && sessionDataBean.isAdmin())
+		{
+			return true;
+		}
+		
+		if(domainObject instanceof CollectionProtocol)
+		{
+			cp = (CollectionProtocol) domainObject;
+		}
+		if(domainObject instanceof CollectionProtocolDTO)
+		{
+			cpDTO = (CollectionProtocolDTO) domainObject;
+			cp = cpDTO.getCollectionProtocol();
+			cpRowIdMap = cpDTO.getRowIdBeanMap();
+			
+			if(cpRowIdMap != null)
+			{
+				Object[] mapKeys = cpRowIdMap.keySet().toArray();
+				for(Object mapKey : mapKeys)
+				{
+					String key = mapKey.toString();
+					SiteUserRolePrivilegeBean bean = cpRowIdMap.get(key);
+					
+					if(bean.getSiteList()==null || bean.getSiteList().isEmpty())
+					{
+						throw new DAOException(ApplicationProperties.getValue("cp.siteIsRequired"));
+					}
+				}
+			}
+			else
+			{
+				throw new DAOException(ApplicationProperties.getValue("cp.siteIsRequired"));
+			}
+		}
+		return false;
+	}
+
 	public Collection<Site> getRelatedSites(Long cpId) 
 	{
 		Session session = null;

@@ -350,7 +350,7 @@ public class UserBizLogic extends DefaultBizLogic
 		return authorizationData;
 	}
 
-	private void insertCPSitePrivileges(User user1, Vector authorizationData, Map<String, SiteUserRolePrivilegeBean> userRowIdMap)
+	public void insertCPSitePrivileges(User user1, Vector authorizationData, Map<String, SiteUserRolePrivilegeBean> userRowIdMap)
 	{
 		if(userRowIdMap == null || userRowIdMap.isEmpty())
 		{
@@ -1861,7 +1861,7 @@ public class UserBizLogic extends DefaultBizLogic
 	    	return Constants.ADD_EDIT_USER;
 	    }
 		
-		private boolean checkUser(Object domainObject, SessionDataBean sessionDataBean) throws DAOException 
+		public boolean checkUser(Object domainObject, SessionDataBean sessionDataBean) throws DAOException 
 		{
 			User user = null;
 			UserDTO userDTO = null;
@@ -1879,6 +1879,10 @@ public class UserBizLogic extends DefaultBizLogic
 			{
 				userDTO = (UserDTO) domainObject;
 				user = userDTO.getUser();
+				if(user.getRoleId().equals(Constants.SUPER_ADMIN_USER))
+				{
+					throw new DAOException(ApplicationProperties.getValue("user.cannotCreateSuperAdmin"));
+				}
 				userRowIdMap = userDTO.getUserRowIdBeanMap();
 				if(userRowIdMap != null)
 				{
@@ -1887,6 +1891,7 @@ public class UserBizLogic extends DefaultBizLogic
 					{
 						String key = mapKey.toString();
 						SiteUserRolePrivilegeBean bean = userRowIdMap.get(key);
+						
 						if(bean.getSiteList()==null || bean.getSiteList().isEmpty())
 						{
 							throw new DAOException(ApplicationProperties.getValue("user.cannotCreateScientist"));

@@ -60,7 +60,18 @@ public class ApproveUserBizLogic extends DefaultBizLogic
 	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) 
 	throws DAOException, UserNotAuthorizedException
 	{
-		User user = (User) obj;        
+		User user = null;        
+		UserDTO userDTO = null;
+		
+		if(obj instanceof UserDTO)
+		{
+			userDTO = (UserDTO) obj;
+			user = userDTO.getUser(); 
+		}
+		else
+		{
+			user = (User) obj;
+		}
 		/**
 		 * Start: Change for API Search   --- Jitendra 06/10/2006
 		 * In Case of Api Search, previoulsy it was failing since there was default class level initialization 
@@ -140,7 +151,23 @@ public class ApproveUserBizLogic extends DefaultBizLogic
 	 * @throws PasswordEncryptionException
 	 * @throws DAOException 
 	 */
-	private void approveUser(User user, gov.nih.nci.security.authorization.domainobjects.User csmUser, DAO dao, SessionDataBean sessionDataBean) throws SMTransactionException, SMException, PasswordEncryptionException, DAOException {
+	private void approveUser(Object user1, gov.nih.nci.security.authorization.domainobjects.User csmUser, DAO dao, SessionDataBean sessionDataBean) throws SMTransactionException, SMException, PasswordEncryptionException, DAOException {
+		
+		User user = null;
+		UserDTO userDTO = null;
+		Map<String,SiteUserRolePrivilegeBean> userRowIdMap = new HashMap<String, SiteUserRolePrivilegeBean>();
+		
+		if(user1 instanceof UserDTO)
+		{
+			userDTO = (UserDTO) user1;
+			user = userDTO.getUser();
+			userRowIdMap = userDTO.getUserRowIdBeanMap();
+		}
+		else
+		{
+			user = (User) user1;
+		}
+		
 		csmUser.setLoginName(user.getLoginName());
 		csmUser.setLastName(user.getLastName());
 		csmUser.setFirstName(user.getFirstName());
@@ -176,7 +203,7 @@ public class ApproveUserBizLogic extends DefaultBizLogic
 		protectionObjects.add(user);
 
 		privilegeManager.insertAuthorizationData(
-				getAuthorizationData(user), protectionObjects, null, user.getObjectId());
+				getAuthorizationData(user, userRowIdMap), protectionObjects, null, user.getObjectId());
 
 //		SecurityManager.getInstance(this.getClass()).insertAuthorizationData(
 //		getAuthorizationData(user), protectionObjects, null);
@@ -190,7 +217,7 @@ public class ApproveUserBizLogic extends DefaultBizLogic
 	 * elements returned by this class should be added to.
 	 * @return
 	 */
-	private Vector getAuthorizationData(AbstractDomainObject obj) throws SMException
+	private Vector getAuthorizationData(AbstractDomainObject obj, Map<String,SiteUserRolePrivilegeBean> userRowIdMap) throws SMException
 	{
 		Vector authorizationData = new Vector();
 		Set group = new HashSet();
@@ -215,6 +242,12 @@ public class ApproveUserBizLogic extends DefaultBizLogic
 		authorizationData.add(userGroupRoleProtectionGroupBean);
 
 		Logger.out.debug(authorizationData.toString());
+		
+		if(userRowIdMap !=null)
+		{
+			new UserBizLogic().insertCPSitePrivileges(aUser, authorizationData, userRowIdMap);
+		}
+		
 		return authorizationData;
 	}
 
@@ -278,16 +311,17 @@ public class ApproveUserBizLogic extends DefaultBizLogic
 	/**
 	 * (non-Javadoc)
 	 * @throws UserNotAuthorizedException 
+	 * @throws DAOException 
 	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#isAuthorized(edu.wustl.common.dao.AbstractDAO, java.lang.Object, edu.wustl.common.beans.SessionDataBean)
 	 */
-	public boolean isAuthorized(AbstractDAO dao, Object domainObject, SessionDataBean sessionDataBean) throws UserNotAuthorizedException  
+	public boolean isAuthorized(AbstractDAO dao, Object domainObject, SessionDataBean sessionDataBean) throws UserNotAuthorizedException, DAOException  
 	{
-		if(sessionDataBean != null && sessionDataBean.isAdmin())
+		boolean isAuthorized = false;
+		isAuthorized = checkUser(domainObject, sessionDataBean);
+		if(isAuthorized)
 		{
 			return true;
 		}
-		
-		boolean isAuthorized = false;
 		
 		String privilegeName = getPrivilegeName(domainObject);
 		String protectionElementName = getObjectId(dao, domainObject);
@@ -321,5 +355,11 @@ public class ApproveUserBizLogic extends DefaultBizLogic
 			throw Utility.getUserNotAuthorizedException(privilegeName, protectionElementName);    
         }
 		return isAuthorized;
+	}
+
+
+	private boolean checkUser(Object domainObject, SessionDataBean sessionDataBean) throws DAOException 
+	{
+		return new UserBizLogic().checkUser(domainObject, sessionDataBean);
 	}		
 }

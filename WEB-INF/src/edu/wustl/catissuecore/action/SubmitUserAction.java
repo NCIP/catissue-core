@@ -106,7 +106,7 @@ public class SubmitUserAction extends Action
 		
 		try 
 		{
-			insertUser(userDTO, request.getSession());
+			insertUser(userDTO, request.getSession(), form);
 		} 
 		catch (UserNotAuthorizedException e) 
 		{
@@ -280,7 +280,7 @@ public class SubmitUserAction extends Action
 				
 	            try 
 	            {
-					updateUser(userCurrent, userOld, request.getSession());
+					updateUser(userCurrent, userOld, request.getSession(), abstractForm);
 				} 
 	            catch (UserNotAuthorizedException e) 
 	    		{
@@ -443,18 +443,18 @@ public class SubmitUserAction extends Action
      * @throws BizLogicException
      * @throws UserNotAuthorizedException
      */
-    private void insertUser(UserDTO userDTO, HttpSession session)
+    private void insertUser(UserDTO userDTO, HttpSession session, AbstractActionForm form)
 	throws BizLogicException, UserNotAuthorizedException 
 	{
-    	IBizLogic bizLogic =BizLogicFactory.getInstance().getBizLogic(Constants.USER_FORM_ID);
+    	IBizLogic bizLogic =BizLogicFactory.getInstance().getBizLogic(form.getFormId());
 		SessionDataBean sessionDataBean = (SessionDataBean) session.getAttribute(Constants.SESSION_DATA);		
 		bizLogic.insert(userDTO, sessionDataBean, Constants.HIBERNATE_DAO);
 	}
     
-    private void updateUser(UserDTO userCurrent, User userOld, HttpSession session)
+    private void updateUser(UserDTO userCurrent, User userOld, HttpSession session, AbstractActionForm form)
 	throws BizLogicException, UserNotAuthorizedException 
 	{
-    	IBizLogic bizLogic =BizLogicFactory.getInstance().getBizLogic(Constants.USER_FORM_ID);
+    	IBizLogic bizLogic =BizLogicFactory.getInstance().getBizLogic(form.getFormId());
 		SessionDataBean sessionDataBean = (SessionDataBean) session.getAttribute(Constants.SESSION_DATA);		
 		bizLogic.update(userCurrent, userOld , Constants.HIBERNATE_DAO, sessionDataBean);
 	}
