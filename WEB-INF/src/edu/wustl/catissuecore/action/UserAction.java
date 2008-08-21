@@ -295,12 +295,16 @@ public class UserAction extends SecureAction
     	{
 	    	IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.USER_FORM_ID);
 	    	User user = (User)bizLogic.retrieve(User.class.getName(), id);
-	    	PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
-	    	// privilegeManager.removePrivilegeCache(user.getLoginName());
-	    	PrivilegeCache privilegeCache = privilegeManager.getPrivilegeCache(user.getLoginName());
-	    	privilegeCache.refresh();
-	    	Map<String, SiteUserRolePrivilegeBean> privilegeMap = CaTissuePrivilegeUtility.getAllPrivileges(privilegeCache);
-			session.setAttribute(Constants.USER_ROW_ID_BEAN_MAP, privilegeMap);
+            String role = user.getRoleId();
+            if (role != null && !role.equalsIgnoreCase(Constants.ADMIN_USER))
+            {
+                PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
+                // privilegeManager.removePrivilegeCache(user.getLoginName());
+                PrivilegeCache privilegeCache = privilegeManager.getPrivilegeCache(user.getLoginName());
+                privilegeCache.refresh();
+                Map<String, SiteUserRolePrivilegeBean> privilegeMap = CaTissuePrivilegeUtility.getAllPrivileges(privilegeCache);
+                session.setAttribute(Constants.USER_ROW_ID_BEAN_MAP, privilegeMap);
+            }
     	}
     	catch(DAOException e)
     	{

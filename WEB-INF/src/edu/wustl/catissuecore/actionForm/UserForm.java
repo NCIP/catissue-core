@@ -512,6 +512,10 @@ public class UserForm extends AbstractActionForm
 		{
 			this.role = Constants.NON_ADMIN_USER;
 		}
+        else if (role != null && role.equalsIgnoreCase(Constants.ADMIN_USER))
+        {
+            this.role = Constants.SUPER_ADMIN_USER;
+        }
         else
         {
             this.role = role;
@@ -680,7 +684,7 @@ public class UserForm extends AbstractActionForm
 					this.comments = user.getComments();
 				}
 
-				this.role = user.getRoleId();
+				this.setRole(user.getRoleId());
 
 				if (getFormId() == Constants.APPROVE_USER_FORM_ID)
 				{
