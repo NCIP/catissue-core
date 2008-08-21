@@ -93,7 +93,7 @@ public class ApproveUserBizLogic extends DefaultBizLogic
 			//If the activity status is Active, create a csm user.
 			if (Constants.ACTIVITY_STATUS_ACTIVE.equals(user.getActivityStatus()))
 			{
-				approveUser(user, csmUser, dao, sessionDataBean );
+				approveUser(obj, csmUser, dao, sessionDataBean );
 			}
 			else
 			{
