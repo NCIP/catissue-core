@@ -14,6 +14,7 @@ import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.wustl.catissuecore.actionForm.AdvanceSearchForm;
+import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.querysuite.QueryShoppingCart;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
@@ -32,6 +33,7 @@ abstract public class QueryShoppingCartAction extends BaseAction
 	protected  void setCartView(HttpServletRequest request, QueryShoppingCart cart)
 	{ 
 		String isSpecimenIdPresent = Constants.FALSE;
+		String isContainerPresent = Constants.FALSE;
 		if (cart != null)
 		{
 			List<AttributeInterface> cartAttributeList = cart.getCartAttributeList();
@@ -52,6 +54,13 @@ abstract public class QueryShoppingCartAction extends BaseAction
 							request.setAttribute(Constants.IS_SPECIMENARRAY_PRESENT,
 									Constants.TRUE);
 						}
+					}
+					if ((attribute.getName().equals(Constants.ID))
+							&& attribute.getEntity().getName().equals(StorageContainer.class.getName()))
+					{
+						isContainerPresent = Constants.TRUE;
+							request.setAttribute(Constants.IS_CONTAINER_PRESENT,
+									Constants.TRUE);
 					}
 				}
 				request.setAttribute(Constants.IS_SPECIMENID_PRESENT, isSpecimenIdPresent);
