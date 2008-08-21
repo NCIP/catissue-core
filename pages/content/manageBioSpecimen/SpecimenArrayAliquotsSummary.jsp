@@ -10,13 +10,6 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
 <%@ page import="java.util.*"%>
 
-<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
-	<%=messageKey%>
-</html:messages>
-
-<html:errors/>
-
-<html:errors/>
 <script type="text/javascript" src="jss/wz_tooltip.js"></script>
 <style type="text/css">
 input {
@@ -61,7 +54,7 @@ var newWindow;
 		</table>
 		<table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
 			<tr>
-				<td width="61%" align="left" class="toptd"></td>
+				<td width="61%" align="left" class="toptd"><%@ include file="/pages/content/common/ActionErrors.jsp" %></td>
 			</tr>
 	        <tr>
 		      <td colspan="2" align="left" class="tr_bg_blue1">

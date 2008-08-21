@@ -62,7 +62,7 @@ function callUpdateSpecimen()
 </script>
 </head>
 <body>
-<html:errors />
+<%@ include file="/pages/content/common/ActionErrors.jsp" %>
 
 	<table border="1" width="100%" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF" height="100%" bordercolorlight="#000000">
 		<tr>

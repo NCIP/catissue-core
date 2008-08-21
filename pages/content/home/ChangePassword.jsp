@@ -41,11 +41,7 @@
 <tr>
 <td class="bigError"><b><html:errors /></b></td></tr></table>-->
 
-<html:errors />
-
-
-
-  <table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
+<table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
   
   <html:form action="<%=Constants.UPDATE_PASSWORD_ACTION%>">
   	<html:hidden property="operation" value="<%=operation%>" />				
@@ -60,7 +56,7 @@
       <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
       
       <tr>
-        <td align="left" class=" grey_ar_s">&nbsp;<img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /> indicates a required field</td>
+        <td align="left"><%@ include file="/pages/content/common/ActionErrors.jsp" %></td>
       </tr>
       <tr>
         <td align="left" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;<bean:message key="user.changePassword"/></span></td>

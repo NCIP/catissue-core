@@ -79,10 +79,7 @@ function onCreate()
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 
 
-<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
-	<%=messageKey%>
-</html:messages>
-<html:errors/>    
+<%@ include file="/pages/content/common/ActionErrors.jsp" %>   
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="100%">
 
 <html:form action="/DefineArraySubmit.do" type="edu.wustl.catissuecore.actionForm.DefineArrayForm"

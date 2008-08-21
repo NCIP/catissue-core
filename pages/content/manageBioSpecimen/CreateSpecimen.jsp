@@ -127,7 +127,6 @@
 		</script>
 	</logic:equal>
 	</head>
-	<html:errors />
 
 	<html:form action="${requestScope.action}">
 			<input type="hidden" id="specimenAttributeKey" name="specimenAttributeKey" value="${requestScope.specimenAttributeKey}" />
@@ -246,7 +245,7 @@
 	</logic:equal>
       <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
         <tr>
-          <td colspan="3" align="left"><span class=" grey_ar_s">&nbsp;<img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" />&nbsp;<bean:message key="commonRequiredField.message" /></span></td>
+          <td colspan="3" align="left"><%@ include file="/pages/content/common/ActionErrors.jsp" %></td>
         </tr>
         <tr>
           <td colspan="3" align="left" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;<bean:message key="parent.specimen.details.label"/></span></td>

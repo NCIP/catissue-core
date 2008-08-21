@@ -134,10 +134,6 @@
 <%
 %>
 
-<html:errors />
-<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
-	<%=messageKey%>
-</html:messages>
 <html:form action="<%=formName%>"  onsubmit="showhide()">
 	
 	<%
@@ -172,7 +168,7 @@
 				</tr>
 
 				<tr>
-					<td class="formMessage" colspan="3">* indicates a required field</td>
+					<td colspan="3"><%@ include file="/pages/content/common/ActionErrors.jsp" %></td>
 				</tr>
 					
 				<tr>

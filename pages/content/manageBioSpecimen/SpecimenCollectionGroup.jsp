@@ -668,11 +668,6 @@ function editSCG()
 <%}else{%> 
 	<body>
  <%}%>
-<html:errors />
-<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
-	<%=messageKey%>
-</html:messages>
-
 <html:form action="<%=formName%>">
 	<%
 	if(pageView.equals("add"))
@@ -687,6 +682,13 @@ function editSCG()
 				<td align="left" valign="bottom" class="td_color_bfdcf3"  id="consentTab"><a href="#" id="consentsImage"><img src="images/uIEnhancementImages/tab_consents2.gif" alt="Consents" width="76" height="22" border="0" onClick="consentPage()"></a></td>	
 				<td width="90%" align="left" valign="bottom" class="td_tab_bg" >&nbsp;</td>
 			</tr></table>
+			<table border="0" width="100%" class="whitetable_bg"  cellpadding="3" cellspacing="0">
+			<tr>
+				<td>			
+					<%@ include file="/pages/content/common/ActionErrors.jsp" %>
+				</td>
+			</tr>
+			</table>
 
 		<%@ include file="EditSpecimenCollectionGroup.jsp" %>
 		</td>
@@ -712,8 +714,14 @@ function editSCG()
 				<td width="90%" align="left" valign="bottom" class="td_tab_bg" >&nbsp;</td>
 			</tr></table>
 			
-			
-					<%@ include file="EditSpecimenCollectionGroup.jsp" %>
+			<table border="0" width="100%" class="whitetable_bg"  cellpadding="3" cellspacing="0">
+			<tr>
+				<td>			
+					<%@ include file="/pages/content/common/ActionErrors.jsp" %>
+				</td>
+			</tr>
+			</table>
+				<%@ include file="EditSpecimenCollectionGroup.jsp" %>
 			
 				
 	<%
@@ -742,6 +750,18 @@ function editSCG()
 				</td>
 				<td width="300" class="tabMenuSeparator" colspan="1" >&nbsp;</td>
 			</tr>
+			<tr>
+			<td colspan="6">
+				<table border="0" width="100%" class="whitetable_bg"  cellpadding="3" cellspacing="0">
+				<tr>
+					<td>			
+						<%@ include file="/pages/content/common/ActionErrors.jsp" %>
+					</td>
+				</tr>
+				</table>
+			</td>
+			</tr>
+			
 
 			<tr>
 				<td class="tabField" colspan="6">

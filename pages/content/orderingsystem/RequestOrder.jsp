@@ -6,12 +6,6 @@
 <%@ page import="edu.wustl.common.util.global.ApplicationProperties"%>
 
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>	
-<html:errors/> 
-
-<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
-	<%=messageKey%>
-</html:messages>
-
 <html:form action="/RequestToOrderSubmit.do">
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
   <tr>
@@ -51,6 +45,7 @@
 			 </tr>
             <tr>
 			<td>
+			<%@ include file="/pages/content/common/ActionErrors.jsp" %>
 			<table summary="" cellpadding="3" cellspacing="0" border="0">
 					<tr>
 						<td class="black_ar_t"><strong><bean:message key="errors.ordering.note.heading" /></strong>

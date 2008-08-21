@@ -417,7 +417,7 @@
 	</script>
 </head>
 
-<html:errors />
+<%@ include file="/pages/content/common/ActionErrors.jsp" %>
 
 <html:form action="AdvanceSearchS.do">
 <table summary="" cellpadding="5" cellspacing="0" border="0" width="650">

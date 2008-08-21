@@ -272,7 +272,7 @@ function checkAllOnThisPageResponse()
 <body onload="setCheckBoxState()">
 
 <!-------new--->
-<html:errors /> <!--Prafull:Added errors tag inside the table-->
+ <!--Prafull:Added errors tag inside the table-->
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
 <tr>
 		<td class="td_color_bfdcf3">
@@ -305,7 +305,7 @@ function checkAllOnThisPageResponse()
 	<table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
       
       <tr>
-        <td align="left" class="toptd"></td>
+        <td align="left" ><%@ include file="/pages/content/common/ActionErrors.jsp" %></td>
       </tr>
       <tr>
         <td align="left" class="tr_bg_blue1"><span class="blue_ar_b"> &nbsp;<bean:message key="<%=title%>" />&nbsp;</span></td>

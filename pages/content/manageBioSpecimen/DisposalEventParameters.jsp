@@ -58,8 +58,7 @@ function confirmAction(form)
 </head>
 	
 			
-<html:errors/>
-    
+<%@ include file="/pages/content/common/ActionErrors.jsp" %>    
 <table border="0" cellpadding="0" cellspacing="0" width="100%"> 
 <html:form action='${requestScope.formName}'>
 	<html:hidden property="operation" />

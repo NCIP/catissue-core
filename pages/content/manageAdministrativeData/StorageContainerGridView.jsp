@@ -147,8 +147,7 @@ function refresh_tree(nodeId)
 %>
 <link href="css/catissue_suite.css" rel="stylesheet" type="text/css" /> 
 
-<html:errors/>
-
+<%@ include file="/pages/content/common/ActionErrors.jsp" %>
 </br>
 <!-- target of anchor to skip menus -->
 <table summary="" cellpadding="0" cellspacing="0" border="0"  width="100%" >
@@ -186,7 +185,7 @@ function refresh_tree(nodeId)
 	    colspanForCPLabel = specimenClassList.size();
 %>                 
 		<tr>
-          <td  align="left" class="tr_bg_blue1"><span class="blue_ar_b"> Specimen Container Restrictions</span></td>
+          <td  align="left" class="tr_bg_blue1"><span class="blue_ar_b"> Storage Container Restrictions</span></td>
           </tr>
                   <tr>
 					<td>

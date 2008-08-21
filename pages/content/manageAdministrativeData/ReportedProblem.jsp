@@ -4,8 +4,6 @@
 <%@ taglib uri="/WEB-INF/PagenationTag.tld" prefix="custom"%>
 <%@ page language="java" isELIgnored="false"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<html:errors />
-
 <html:form action="/ReportedProblemShow">
 	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
   <tr>
@@ -27,7 +25,7 @@
       <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
       
       <tr>
-        <td width="99%" align="left" class="toptd"></td>
+        <td width="99%" align="left" ><%@ include file="/pages/content/common/ActionErrors.jsp" %></td>
       </tr>
       <tr>
         <td align="left" class="tr_bg_blue1"><span class="blue_ar_b"> &nbsp;<bean:message
@@ -47,7 +45,7 @@
 						</tr>
 						<tr class="td_color_F7F7F7">
 							<td align="center" class="showhide"><table width="99%" border="0" cellspacing="0" cellpadding="4">
-            
+								<logic:notEmpty name="showDomainObjectList">
 								<tr>
 									<td width="2%" class="tableheading"><strong><bean:message
 										key="reportedProblem.serialNumber" /></strong></td>
@@ -61,6 +59,7 @@
 										key="reportedProblem.reportedDate" /></strong> <span class="grey_ar_s">
 									<bean:message key="reportedProblem.dateFormat" /> </span></td>
 								</tr>
+								</logic:notEmpty>
 								<logic:empty name="showDomainObjectList">
 									<tr>
 										<td class="grey_ar" colspan="5"><bean:message

@@ -421,17 +421,13 @@ if(form != null)
 </head>
 <body>
 
-<html:errors />
-<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
-	<%=messageKey%>
-</html:messages>
-
-
 <html:form action="CreateSpecimenTemplate.do" styleId = "createSpecimenTemplateForm">
 <html:hidden property="noOfDeriveSpecimen"/>
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
             <tr>
-			<td><table width="100%" border="0" cellpadding="0" cellspacing="0">
+			<td>
+			<%@ include file="/pages/content/common/ActionErrors.jsp" %>
+				<table width="100%" border="0" cellpadding="0" cellspacing="0">
                   <tr>
                     <td valign="bottom" ><img src="images/uIEnhancementImages/cp_specimen.gif" alt="Specimen Requirements" width="158" height="20" /><a href="#"></a></td>
                     <td width="90%" valign="bottom" class="cp_tabbg">&nbsp;</td>
@@ -443,7 +439,8 @@ if(form != null)
                   <br>
                   <table width="100%" border="0" cellpadding="3" cellspacing="0" bgcolor="#FFFFFF">
 	                  <tr>
-                      <td colspan="3" align="left"><table width="100%" border="0" cellpadding="3" cellspacing="0">
+                      <td colspan="3" align="left">
+					  <table width="100%" border="0" cellpadding="3" cellspacing="0">
 		                <tr>
 			               <td width="1%" align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
 						   <td width="22%" align="left" class="black_ar"><bean:message key="specimen.type"/> </td>

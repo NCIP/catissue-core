@@ -95,7 +95,7 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 	 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="whitetable_bg" id="Container">
 		<!-- NEW SPECIMEN COLLECTION GROUP REGISTRATION BEGINS-->
 		 <tr>
-          <td colspan="3" align="left"><span class=" grey_ar_s">&nbsp;<img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" />&nbsp;<bean:message key="commonRequiredField.message" /></span></td>
+          <td colspan="3" align="left"></td>
         </tr>
 	    <tr>
           <td colspan="3" align="left" valign="top" class="showhide"><table width="100%" border="0" cellpadding="3" cellspacing="0" id="scgTable">

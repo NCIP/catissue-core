@@ -276,10 +276,7 @@ function onCheck()
 	String onClassChangeFunctionName = "onTypeChange(this)";
 %>
 
-<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
-	<%=messageKey%>
-</html:messages>
-<html:errors/>    
+<%@ include file="/pages/content/common/ActionErrors.jsp" %>
 
 
 <!-- Include external css and js files-->

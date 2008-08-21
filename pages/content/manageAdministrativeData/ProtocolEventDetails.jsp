@@ -86,16 +86,13 @@ window.parent.frames['CPTreeView'].location="ShowCollectionProtocol.do?pageOf=sp
 </head>
 
 
-<html:errors />
-<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
-	<%=messageKey%>
-</html:messages>
-
 <html:form action="SaveProtocolEvents.do?pageOf=defineEvents&operation=add" styleId="protocolEventDetailsForm">
 
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
               <tr>
-                <td><table width="100%" border="0" cellpadding="0" cellspacing="0">
+                <td>
+					<%@ include file="/pages/content/common/ActionErrors.jsp" %>
+					<table width="100%" border="0" cellpadding="0" cellspacing="0">
                     <tr>
                       <td valign="bottom" id="eventTab"><img src="images/uIEnhancementImages/cp_event.gif" alt="Collection Protocol Details" width="94" height="20" /></td>
                        <td width="90%" valign="bottom" class="cp_tabbg">&nbsp;</td>
@@ -105,7 +102,7 @@ window.parent.frames['CPTreeView'].location="ShowCollectionProtocol.do?pageOf=sp
               </tr>
               <tr>
                 <td class="cp_tabtable">
-                    <br>
+                    <br>					
                     <table width="100%" border="0" cellpadding="3" cellspacing="0">
                       <tr>
                         <td width="1%" align="center" valign="top" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="3" /></td>

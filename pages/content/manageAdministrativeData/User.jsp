@@ -5,6 +5,9 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
+
+<%@ page import="org.apache.struts.action.Action,org.apache.struts.action.ActionError,edu.wustl.common.util.global.ApplicationProperties,org.apache.struts.action.ActionErrors"%>
+
 <%@ page language="java" isELIgnored="false"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <head>
@@ -41,11 +44,8 @@ function handleStatus(status)
 <body>
 <script type="text/javascript" src="jss/wz_tooltip.js"></script>
 <script type="text/javascript" src="jss/queryModule.js"></script>
-<html:errors />
-<html:messages id="messageKey" message="true" header="messages.header"
-	footer="messages.footer">
-	<%=messageKey%>
-</html:messages>
+
+
 
 <%
 	//Object obj=  request.getAttribute(Constants.ACTIONLIST);
@@ -139,13 +139,11 @@ function handleStatus(status)
 					</tr>
 				</table>
 			</logic:notEqual>
-			<table width="100%" border="0" cellpadding="3" cellspacing="0"
-				class="whitetable_bg">
+			<table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
 				<tr>
-					<td colspan="2" align="left" class=" grey_ar_s">&nbsp;<img
-						src="images/uIEnhancementImages/star.gif" alt="Mandatory"
-						width="6" height="6" hspace="0" vspace="0" /><bean:message
-						key="commonRequiredField.message" /></td>
+					<td colspan="2" align="left" >
+							<%@ include file="/pages/content/common/ActionErrors.jsp" %>  				
+					</td>
 				</tr>
 				<tr>
 					<td colspan="2" align="left" class="tr_bg_blue1"><span
@@ -172,20 +170,23 @@ function handleStatus(status)
 								styleId="emailAddress" property="emailAddress"
 								readonly='${requestScope.readOnlyEmail}' /></td>
 							<td width="13%" align="left">&nbsp;</td>
+							<logic:notEqual name="pageOf"
+								value='${requestScope.pageOfUserProfile}'>
 							<td width="1%" align="center"><span class="blue_ar_b"><img
 								src="images/uIEnhancementImages/star.gif" alt="Mandatory"
 								width="6" height="6" hspace="0" vspace="0" /></span></td>
-							<logic:notEqual name="pageOf"
-								value='${requestScope.pageOfUserProfile}'>
+							
 								<td width="17%" align="left"><label
 									for="confirmEmailAddress" class="black_ar"><bean:message
 									key="user.confirmemailAddress" /></label></td>
-							</logic:notEqual>
+							
 							<td width="17%" align="left"><html:text
 								styleClass="black_ar" maxlength="255" size="30"
 								styleId="confirmEmailAddress" property="confirmEmailAddress"
 								readonly='${requestScope.readOnlyEmail}' /></td>
+								
 							<td width="14%" align="left" valign="top">&nbsp;</td>
+							</logic:notEqual>
 						</tr>
 						<tr>
 							<td align="center" class="black_ar"><span class="blue_ar_b"><img

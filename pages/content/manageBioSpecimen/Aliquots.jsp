@@ -229,10 +229,6 @@
 </script>
 </head>
 <body onload="checkForStoragePosition()">
-<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
-${requestScope.messageKey}
-</html:messages>
-<html:errors/>
 <html:form action="${requestScope.ALIQUOT_ACTION}">
 
 <!------------------New code--------------->
@@ -274,7 +270,7 @@ ${requestScope.messageKey}
 
 	<table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
         <tr>
-          <td align="left" class=" grey_ar_s">&nbsp;<img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" />&nbsp;<bean:message key="commonRequiredField.message"/></td>
+          <td align="left"><%@ include file="/pages/content/common/ActionErrors.jsp" %></td>
         </tr>
         <tr>
           <td align="left" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;
@@ -312,14 +308,14 @@ ${requestScope.messageKey}
 					</span>
 				</td>
 		 
-                  <td align="left" valign="middle" nowrap="nowrap" ><label>
+                  <td align="left" valign="middle" nowrap="nowrap" >
 					<html:radio styleClass="" styleId="checkedButton" property="checkedButton" value="2" onclick="onRadioButtonClick(this)">
 					&nbsp;
 					</html:radio>
 					<span class="black_ar">
-					<label for="barcode">
+					
 						<bean:message key="specimen.barcode"/>
-					</label>
+					
 					</span>
 					&nbsp;
 					<span class="black_ar">

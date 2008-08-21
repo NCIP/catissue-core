@@ -24,10 +24,6 @@
 //            readOnlyValue = false;
         }
         %>
-<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
-	<%=messageKey%>
-</html:messages>
-<html:errors/>
 <script type="text/javascript">
 
 <%
@@ -145,7 +141,7 @@
     </table>
       <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
         <tr>
-          <td colspan="2" align="left" class=" grey_ar_s">&nbsp;<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /> <bean:message key="commonRequiredField.message" /></td>
+          <td colspan="2" align="left"><%@ include file="/pages/content/common/ActionErrors.jsp" %></td>
         </tr>
         <tr>
           <td colspan="2" align="left" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;<logic:equal name="operation" value="<%=Constants.ADD%>"><bean:message key="arrayType.title"/></logic:equal><logic:equal name="operation" value="<%=Constants.EDIT%>"><bean:message key="arrayType.editTitle"/></logic:equal></span></td>        </tr>

@@ -70,10 +70,7 @@
 	</script>
 </head>
 <body onload="initializeCPTechForm();disablebuttons()">
-	<html:errors />
-	<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
-		<%=messageKey%>
-	</html:messages>
+	<%@ include file="/pages/content/common/ActionErrors.jsp" %>
 	<html:form action="CPQueryNewSpecimen.do?operation=add&pageOf=pageOfNewSpecimenCPQuery&menuSelected=15&virtualLocated=true<%=Constants.SPECIMEN_COLLECTION_GROUP_ID%>=<%=scgId%>">
 		<table cellpadding="4" cellspacing="0" border="0">
 			<tr>

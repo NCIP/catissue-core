@@ -4,7 +4,8 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
-<%@ taglib uri="/WEB-INF/c.tld" prefix="c" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ page language="java" isELIgnored="false"%>
 <%-- Imports --%>
 <%@
 	page language="java" contentType="text/html"
@@ -159,11 +160,7 @@ var myData = [<%int i;%><%for (i=0;i<(groupList.size()-1);i++){%>
 
 		</script>
 	</head>
-	<html:errors />
-	<html:messages id="messageKey" message="true" header="messages.header" 	footer="messages.footer">
-		<%=messageKey%>
-	</html:messages>
-
+	<%@ include file="/pages/content/common/ActionErrors.jsp" %>
 	<html:form styleId='annotationForm' action='/DefineAnnotations'>
 	
 	<body onload = "initializeAnnotationsForm()">
@@ -182,7 +179,7 @@ var myData = [<%int i;%><%for (i=0;i<(groupList.size()-1);i++){%>
 		  <td>        
           	  <table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">			
 
-				 <tr>
+				<tr>
 					   <td class="formTitle" height="20" colspan="3">
 						  <bean:message key="app.buldAnnotationForms"/> 
 						</td>

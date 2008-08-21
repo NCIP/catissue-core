@@ -67,9 +67,7 @@ function showEvent()
 
 
 </script>
-<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
-	<%=messageKey%>
-</html:messages>
+<%@ include file="/pages/content/common/ActionErrors.jsp" %>
 <html:form action="<%=formAction%>">
 
 	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">

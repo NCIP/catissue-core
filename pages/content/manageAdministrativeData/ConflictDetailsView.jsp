@@ -35,7 +35,7 @@
 	<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 </head>
 
-<html:errors />
+
 <body>
 <script language="javascript">
 
@@ -94,6 +94,9 @@ window.onresize = function()
     </table>
 	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="whitetable_bg">
 		<tr>
+		<td>
+			<%@ include file="/pages/content/common/ActionErrors.jsp" %>
+		</td>
 				<td>
 						<iframe id="<%=Constants.CONFLICT_COMMON_VIEW%>" name="<%=Constants.CONFLICT_COMMON_VIEW%>" src="<%=Constants.CONFLICT_COMMON_VIEW_ACTION%>?conflictStatus=<%=conflictStatus%>&reportQueueId=<%=reportQueueId%>&surgicalPathologyNumber=<%=surgicalPathologyNumber%>&reportDate=<%=reportDate%>&siteName=<%=siteName%>&reportCollectionDate=<%=reportCollectionDate%>" scrolling="no" frameborder="0" width="100%" marginheight=0 marginwidth=0>
 									<bean:message key="errors.browser.not.supports.iframe"/>

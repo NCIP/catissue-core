@@ -53,7 +53,7 @@
 
 </head>
 
-<html:errors />
+<%@ include file="/pages/content/common/ActionErrors.jsp" %>
 <html:form action="<%=actionName%>">
 <table summary="" cellpadding="5" cellspacing="0" border="0" width="600">
 <tr>

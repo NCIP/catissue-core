@@ -919,7 +919,6 @@
 		}
 %>
 <html:form action="<%=Constants.SPECIMEN_ADD_ACTION%>">
-	<html:errors />
 	<%
 		
 				String printAction = "CPQueryPrintSpecimenAdd";
@@ -952,10 +951,7 @@
 
 
 
-<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
-									<%=messageKey%>
-								</html:messages>
-				    						<html:hidden property="operation" value="<%=operation%>"/>
+	    						<html:hidden property="operation" value="<%=operation%>"/>
 								<html:hidden property="submittedFor" value="<%=submittedFor%>"/>
 								<%						
 								if(form.getForwardTo().equalsIgnoreCase("orderDetails"))
@@ -1028,9 +1024,7 @@
 			<tr>
 			<td><div id="mainTable"style="display:block"><table width="100%"  border="0" cellpadding="3" cellspacing="0" >
 				<tr>
-		          <td class="grey_ar_s">&nbsp;
-					<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0"/> <bean:message key="commonRequiredField.message" />
-				  </td>
+		          <td><%@ include file="/pages/content/common/ActionErrors.jsp" %></td>
 		        </tr>
 				<tr>
 		          <td align="left" class="showhide">

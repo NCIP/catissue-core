@@ -48,14 +48,12 @@ function updateCPTree()
 </head>
 <link href="css/catissue_suite.css" rel="stylesheet" type="text/css" /> 
 <LINK href="css/calanderComponent.css" type="text/css" rel="stylesheet">
-<html:errors />
-<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
-	<%=messageKey%>
-</html:messages>
 <html:form action='${requestScope.formName}' styleId="CollectionProtocolForm">
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
               <tr>
-                   <td><table width="100%" border="0" cellpadding="0" cellspacing="0">
+                   <td>
+				   <%@ include file="/pages/content/common/ActionErrors.jsp" %>
+				   	<table width="100%" border="0" cellpadding="0" cellspacing="0">
                     <tr>
                       <td valign="bottom" id="collectionProtocolTab" onclick="collectionProtocolPage()"><img src="images/uIEnhancementImages/cp_details.gif" alt="Collection Protocol Details" width="174" height="20" /><a href="#"></a></td>
                       <td valign="bottom" onclick="consentPage()" id="consentTab"><a href="#"><img src="images/uIEnhancementImages/cp_consents1.gif" alt="Consents" width="94" height="20" border="0" /></a></td>
@@ -67,8 +65,8 @@ function updateCPTree()
               </tr>
               <tr>
                 <td class="cp_tabtable" colspan="6" >
-                    <br>
-                    <table width="100%" border="0" cellpadding="3" cellspacing="0" id="table1">
+					<br>
+					<table width="100%" border="0" cellpadding="3" cellspacing="0" id="table1">
 					    <html:hidden property="operation"/>
 						<html:hidden property="submittedFor"/>
 						<html:hidden property="onSubmit"/>

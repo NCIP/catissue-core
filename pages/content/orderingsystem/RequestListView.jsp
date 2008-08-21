@@ -20,10 +20,6 @@
 	  int count = numResultsPerPage * (pageNum -1) + 1;
 
   %>
-<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
-	<%=messageKey%>
-</html:messages>
-<html:errors/>
 <head>
 </head>
 <body >
@@ -48,7 +44,7 @@
       <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
       
       <tr>
-        <td colspan="2" align="left" class="toptd"></td>
+        <td colspan="2" align="left"><%@ include file="/pages/content/common/ActionErrors.jsp" %></td>
       </tr>
       <tr>
         <td colspan="2" align="left" class="tr_bg_blue1"><span class="blue_ar_b"> &nbsp;<bean:message key='header.requestList.label'/> &nbsp;</span><span class="black_ar_s">(<% int totalRequests=requestListForm.getNewRequests()+requestListForm.getPendingRequests();%>

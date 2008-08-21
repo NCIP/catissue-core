@@ -178,8 +178,6 @@ function vieMapTabSelected(){
   window.onload = enableLastCheckbox;
 </script>
 
-<html:errors />
-
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
 <html:form action="<%=Constants.SIMPLE_SEARCH_ACTION%>">
 		<html:hidden property="aliasName" value="<%=aliasName%>" />
@@ -235,7 +233,7 @@ function vieMapTabSelected(){
       <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
       
       <tr>
-        <td colspan="2" align="left" class="toptd"></td>
+        <td colspan="2" align="left" class="toptd"><%@ include file="/pages/content/common/ActionErrors.jsp" %></td>
       </tr>
       <tr>
         <td colspan="2" align="left" class="tr_bg_blue1"><span class="blue_ar_b"> &nbsp;<bean:message key="<%=title%>" /></span></td>

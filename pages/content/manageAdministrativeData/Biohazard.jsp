@@ -8,10 +8,6 @@
 <link href="css/catissue_suite.css" rel="stylesheet" type="text/css" /> 
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 </head>
-<html:errors/>
-<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
-	<%=messageKey%>
-</html:messages>
 
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
 <html:form action='${requestScope.formName}'>
@@ -42,7 +38,9 @@
     </table>
       <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
       <tr>
-        <td align="left" class=" grey_ar_s">&nbsp;<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /> <bean:message key="commonRequiredField.message" /></td>
+        <td align="left">
+			<%@ include file="/pages/content/common/ActionErrors.jsp" %>
+		</td>
       </tr>
       <tr>
         <td align="left" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;<logic:equal name="operation" value='${requestScope.operationAdd}'><bean:message key="biohazard.title"/></logic:equal>
@@ -74,7 +72,7 @@
       </tr>
       <tr>
         <td class="buttonbg"><html:submit styleClass="blue_ar_b" accesskey="Enter"><bean:message key="buttons.submit"/></html:submit>
-          &nbsp;| <span ><html:link page="/ManageAdministrativeData.do" styleClass="cancellink"><bean:message key="buttons.cancel" /></html:link></span></td>
+          &nbsp;| &nbsp;<span ><html:link page="/ManageAdministrativeData.do" styleClass="cancellink"><bean:message key="buttons.cancel" /></html:link></span></td>
       </tr>
     </table></td>
   </tr>

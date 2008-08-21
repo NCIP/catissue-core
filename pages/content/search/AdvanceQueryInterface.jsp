@@ -65,7 +65,7 @@
 			<table width="100%" height="100%">
 			<tr>
 				<td width="100%">
-		        	<html:errors />
+		        	<%@ include file="/pages/content/common/ActionErrors.jsp" %>
 				</td>
 			</tr>
 			</table>

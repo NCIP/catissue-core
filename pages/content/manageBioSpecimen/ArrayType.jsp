@@ -3,12 +3,7 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 
-<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
-	<%=messageKey%>
-</html:messages>
-
-<html:errors/>
-
+<%@ include file="/pages/content/common/ActionErrors.jsp" %>
 <html:form action="ArrayTypeAdd.do">
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
 <tr>

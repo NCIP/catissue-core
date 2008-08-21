@@ -44,7 +44,7 @@ function toStoragePositionChange(element)
 
 
 			
-<html:errors/>
+<%@ include file="/pages/content/common/ActionErrors.jsp" %>
     
 <table summary="" cellpadding="0" cellspacing="0" border="0" width="100%">
 

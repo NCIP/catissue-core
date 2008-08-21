@@ -7,7 +7,7 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
 
-<html:errors />
+<%@ include file="/pages/content/common/ActionErrors.jsp" %>
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
  <html:hidden property="operation" />
   <tr>

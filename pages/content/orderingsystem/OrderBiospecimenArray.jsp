@@ -294,7 +294,7 @@ function enableCheckBox()
 String onClassChangeFunctionName = "onTypeChange(this)";%>
 
 
-<html:errors/>
+<%@ include file="/pages/content/common/ActionErrors.jsp" %>
 
 <!-- Include external css and js files-->
 <LINK REL=StyleSheet HREF="css/styleSheet.css" TYPE="text/css">

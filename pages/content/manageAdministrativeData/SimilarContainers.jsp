@@ -267,11 +267,7 @@
 </head>
 <link href="css/catissue_suite.css" rel="stylesheet" type="text/css" /> 
 <link href="css/styleSheet.css" rel="stylesheet" type="text/css" />
-<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
-	<%=messageKey%>
-</html:messages>
-
-<html:errors/>
+<%@ include file="/pages/content/common/ActionErrors.jsp" %>
 <body>
 <script type="text/javascript" src="jss/wz_tooltip.js"></script>
 <html:form action="<%=Constants.SIMILAR_CONTAINERS_ADD_ACTION%>">

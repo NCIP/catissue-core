@@ -560,10 +560,7 @@ function addNewTypeAction(action)
 
 
 
-<html:errors />
-<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
-	<%=messageKey%>
-</html:messages>
+<%@ include file="/pages/content/common/ActionErrors.jsp" %>
 <body >
 <script type="text/javascript" src="jss/wz_tooltip.js"></script>
 <html:form action="<%=formName%>" method="post">	

@@ -358,7 +358,7 @@ function participantRegRow(subdivtag)
 			class="whitetable_bg">
 					
 			<tr>
-				<td colspan="2" align="left" class="toptd"></td>
+				<td colspan="2" align="left"><%@ include file="/pages/content/common/ActionErrors.jsp" %></td>
 			</tr>
 			
 			<tr>

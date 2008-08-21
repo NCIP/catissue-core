@@ -12,10 +12,7 @@
 </script>
 </head>
 <body >
-	<html:errors/>
-	<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
-		<%=messageKey%>
-	</html:messages>
+
   <html:form action="/ForgotPasswordSearch">	
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
   <tr>
@@ -28,6 +25,9 @@
       
       <tr>
         <td align="left" class=" grey_ar_s">&nbsp; <bean:message  key="forgotpassword.subtitle" /></td>
+      </tr>
+	  <tr>
+        <td align="left" ><%@ include file="/pages/content/common/ActionErrors.jsp" %></td>
       </tr>
       <tr>
         <td align="left" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;<bean:message key="forgotpassword.title"/></span></td>

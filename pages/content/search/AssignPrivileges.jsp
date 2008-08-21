@@ -113,7 +113,7 @@ AssignPrivilegesForm form = (AssignPrivilegesForm)request.getAttribute("assignPr
 	</SCRIPT>
 </head>
 
-<html:errors/>
+<%@ include file="/pages/content/common/ActionErrors.jsp" %>
 
 <html:form action="<%=Constants.ASSIGN_PRIVILEGES_ACTION%>">
 <table summary="" cellpadding="5" cellspacing="0" border="0" width="500">

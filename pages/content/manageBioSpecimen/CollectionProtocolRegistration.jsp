@@ -155,12 +155,7 @@
 </head>
 <%
 %>
-
-<html:errors />
-<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
-	<%=messageKey%>
-</html:messages>
-
+<%@ include file="/pages/content/common/ActionErrors.jsp" %>
 <html:form action="<%=formName%>">
 	
 	<%

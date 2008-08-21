@@ -54,7 +54,7 @@
  <tr>
     <td class="td_color_bfdcf3"><table border="0" cellpadding="0" cellspacing="0">
       <tr>
-        <td class="td_table_head"><span class="wh_ar_b">Collection Protocol</span></td>
+        <td class="td_table_head"><span class="wh_ar_b"><bean:message key="app.collectionProtocol"/></span></td>
         <td align="right"><img src="images/uIEnhancementImages/table_title_corner2.gif" alt="Page Title" width="31" height="24" /></td>
       </tr>
     </table></td>
@@ -74,10 +74,8 @@
         <td width="90%" valign="bottom" class="td_tab_bg">&nbsp;</td>
       </tr>
     </table>
-	 <html:errors />
-		<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
-			<%=messageKey%>
-		</html:messages>
+
+
 		<logic:equal name="isParticipantReg" value="true">
 			<b style="color: red; margin-left: 20px">
 				User can not Add/edit Events and Specimen Requirements
@@ -85,24 +83,25 @@
 		</logic:equal>
       <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
         <tr>
-          <td colspan="2" align="left" class="grey_ar_s">&nbsp;<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /> indicates a required field</td>
+          <td colspan="2" align="left">
+				<%@ include file="/pages/content/common/ActionErrors.jsp" %>
+		  </td>
         </tr>
        		<tr>
-							
-							<td width="20%"  valign="top" height="100%">
-								<iframe id="CPTreeView" src="ShowCollectionProtocol.do?operation=${requestScope.operation}" scrolling="auto" frameborder="0" width="100%" name="CPTreeView" height="410" >
-									Your Browser doesn't support IFrames.
-								</iframe>
-							 </td>
+				<td width="20%"  valign="top" height="100%">
+					<iframe id="CPTreeView" src="ShowCollectionProtocol.do?operation=${requestScope.operation}" scrolling="auto" frameborder="0" width="100%" name="CPTreeView" height="410" >
+							<bean:message key="errors.browser.not.supports.iframe"/>
+					</iframe>
+				</td>
 							 <td width="80%" colspan="3" valign="top" height="100%">
 							 <logic:equal name="operation" value="add">
 								<iframe name="SpecimenRequirementView"	src="CollectionProtocol.do?operation=add&pageOf=pageOfCollectionProtocol" scrolling="auto" frameborder="0" width="100%" height="410" >
-									Your Browser doesn't support IFrames.
+									<bean:message key="errors.browser.not.supports.iframe"/>
 								</iframe>
 							</logic:equal>
 							 <logic:equal name="operation" value="edit">
 								<iframe name="SpecimenRequirementView"	src="CollectionProtocol.do?operation=edit&pageOf=pageOfCollectionProtocol&invokeFunction=cp" scrolling="auto" frameborder="0" width="100%" height="410" >
-									Your Browser doesn't support IFrames.
+									<bean:message key="errors.browser.not.supports.iframe"/>
 								</iframe>
 							 </logic:equal>	
 							 </td>
@@ -126,7 +125,7 @@
 						</html:button>
 						
 					</logic:notEqual>
-					&nbsp;
+					&nbsp;|&nbsp;
 					
 					 <html:button styleClass="blue_ar_b" property="forwardPage" value="Save Collection Protocol" onclick="submitCP()">
 					</html:button>

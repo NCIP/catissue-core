@@ -173,12 +173,7 @@
 
 </head>
 <body>
-   <html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
-	
-   </html:messages>
-
-   <html:errors/>
-   
+<%@ include file="/pages/content/common/ActionErrors.jsp" %>   
  <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" id="Layout" width="100%" height="99.9%">
 		<param name=movie value="flexclient/biospecimen/Layout.swf"> 
 		<param name=quality value=high>

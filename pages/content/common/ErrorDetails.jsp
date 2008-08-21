@@ -1,4 +1,4 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 
-<html:errors/>
+<%@ include file="/pages/content/common/ActionErrors.jsp" %>
 

@@ -527,11 +527,6 @@ tr#hiddenCombo
 	</script>
 </head>
 
-<html:errors />
-<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
-	<%=messageKey%>
-</html:messages>
-
 <html:form action="<%=formName%>">
 <html:hidden property="cpId" />
 	<%

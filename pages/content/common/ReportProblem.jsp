@@ -24,11 +24,6 @@
 <!-- Mandar : 434 : for tooltip -->
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 
-	<html:errors/>
-	<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
-		<%=messageKey%>
-	</html:messages>
-
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
 <html:form action="<%=formName%>">	
 <html:hidden property="operation" value="<%=operation%>" />
@@ -50,8 +45,7 @@
       <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
       
       <tr>
-        <td align="left" class=" grey_ar_s">&nbsp;<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /> <bean:message
-														key="commonRequiredField.message" /></td>
+        <td align="left"><%@ include file="/pages/content/common/ActionErrors.jsp" %></td>
       </tr>
 	  <logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
 	  <tr>

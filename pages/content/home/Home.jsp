@@ -2,7 +2,7 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ page
-	import="edu.wustl.catissuecore.util.global.Constants,edu.wustl.common.util.global.ApplicationProperties,edu.wustl.catissuecore.util.global.Variables,edu.wustl.common.beans.SessionDataBean;"%>
+	import="edu.wustl.catissuecore.util.global.Constants,edu.wustl.common.util.global.ApplicationProperties,edu.wustl.catissuecore.util.global.Variables,edu.wustl.common.beans.SessionDataBean"%>
 
 <style type="text/css">
 table#browserDetailsContainer
@@ -131,7 +131,8 @@ table#browserDetailsContainer
 						</td>
 					</tr>
 					<tr>
-						<td colspan="3" align="left" class="showhide1"><html:errors />
+						<td colspan="3" align="left" class="showhide1">
+						<%@ include file="/pages/content/common/ActionErrors.jsp" %>
 						<logic:empty scope="session" name="<%=Constants.SESSION_DATA%>">
 							<html:form styleId="form1" styleClass="whitetable_bg"
 								action="/Login.do">

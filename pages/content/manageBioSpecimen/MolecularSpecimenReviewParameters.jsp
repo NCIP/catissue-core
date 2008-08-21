@@ -23,7 +23,7 @@
 </head>
 	<body>
 		
-<html:errors/>
+<%@ include file="/pages/content/common/ActionErrors.jsp" %>
 <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
 <html:form action='${requestScope.formName}'>
 <html:hidden property="operation" />

@@ -176,11 +176,6 @@
 
 </head>
 
-<html:errors />
-<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
-	<%=messageKey%>
-</html:messages>
-
 <html:form action="<%=formAction%>">
 <!-- Mandar 05-July-06 Code for tabs start -->
 	 	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
@@ -199,7 +194,7 @@
     </table>
       <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
         <tr>
-          <td width="114%" colspan="3" align="left" class="toptd"></td>
+          <td colspan="3" align="left" ><%@ include file="/pages/content/common/ActionErrors.jsp" %></td>
         </tr>
         <tr>
 		<%
@@ -257,10 +252,9 @@
 <% } %>	
         </table></td>
         </tr>
-        <tr >
-          <td align="left" width="33%" class="black_ar">&nbsp;&nbsp;<bean:message key="specimenEventParameters.caption"/></td>
-			<td align="left" class="black_ar">
-			<html:select property="specimenEventParameter" styleClass="formFieldSized15"	styleId="className" size="1" disabled="false" onchange="onParameterChange(this)"
+        <tr>
+          <td align="left" width="33%" class="black_ar">&nbsp;&nbsp;<bean:message key="specimenEventParameters.caption"/>
+			&nbsp;&nbsp;&nbsp;&nbsp;<html:select property="specimenEventParameter" styleClass="formFieldSized15"	styleId="className" size="1" disabled="false" onchange="onParameterChange(this)"
 			onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 				<html:options name="<%=Constants.EVENT_PARAMETERS_LIST%>" labelName="<%=Constants.EVENT_PARAMETERS_LIST%>"/>
 			</html:select></span></td>                  

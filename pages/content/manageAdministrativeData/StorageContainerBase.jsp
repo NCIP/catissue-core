@@ -126,7 +126,7 @@ window.onresize = function() { setFrameHeight('SCTreeView', .7,slope); setFrameH
       </tr></table>
 	 <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
         <tr>
-          <td colspan="2" align="left" class=" grey_ar_s" width="100%">&nbsp;<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />&nbsp;<bean:message key="commonRequiredField.message" /></td>
+          <td colspan="2" align="left" width="100%"></td>
         </tr>
         <tr>
 							<logic:equal parameter="operation"	value='showEditAPageAndMap'>

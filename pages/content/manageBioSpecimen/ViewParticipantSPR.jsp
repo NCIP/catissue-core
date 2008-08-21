@@ -54,11 +54,6 @@
 </script>
 </head>
 
-<html:errors />
-<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
-	<%=messageKey%>
-</html:messages>
-	
 <html:form action="ViewSpecimenCollectionGroupSPR.do">
 
 	<table summary="" cellpadding="0" cellspacing="0" border="0" height="20" class="tabPage" width="600">
@@ -90,7 +85,7 @@
 				    <tr><td>
 						<table summary="" cellpadding="3" cellspacing="0" border="0"  width="100%">
 							<tr>
-							 	<td class="formMessage" colspan="2">* indicates a required field</td>
+							 	<td class="formMessage" colspan="2"><%@ include file="/pages/content/common/ActionErrors.jsp" %></td>
 							 </tr>
 			
 							<tr>

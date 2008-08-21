@@ -24,7 +24,7 @@
 </script>
 </head>
 
-<html:errors />
+
 
 <%
 	int selectedFilter =  Integer.parseInt((String)request.getSession().getAttribute(Constants.SELECTED_FILTER));
@@ -70,7 +70,9 @@
       <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
       
       <tr>
-        <td colspan="2" align="left" class="toptd"></td>
+        <td colspan="2" align="left">
+			<%@ include file="/pages/content/common/ActionErrors.jsp" %>
+		</td>
       </tr>
       <tr>
         <td colspan="2" align="left" class="tr_bg_blue1"><span class="blue_ar_b"> &nbsp;<bean:message key="caTies.conflict.resolve.title"/></span></td>
@@ -88,10 +90,14 @@
         <td colspan="2" ><table width="100%" border="0" align="center" cellpadding="4" cellspacing="0">
             <tr>
 			<td colspan="3">
+			<%if(dataList.size() > 0)
+			{
+			%>
               <custom:test name="New User Search Results" pageNum="<%=pageNum%>" totalResults="<%=totalResults%>" numResultsPerPage="<%=numResultsPerPage%>" pageName="<%=pageName%>" showPageSizeCombo="<%=true%>" recordPerPageList="<%=Constants.RESULT_PERPAGE_OPTIONS%>"/>
 			<html:hidden property="<%=Constants.PAGEOF%>" value="<%=pageOf%>"/>
 			<html:hidden property="isPaging" value="true"/>
 			</td>
+			  <%}%>
             </tr>
 			</html:form>
             <tr><td>

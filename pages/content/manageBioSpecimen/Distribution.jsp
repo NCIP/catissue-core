@@ -434,11 +434,6 @@
 
 			%>
 
-<html:errors />
-<html:messages id="messageKey" message="true" header="messages.header"
-	footer="messages.footer">
-	<%=messageKey%>
-</html:messages>
 <html:form action="DistributionSubmit.do">
 	<table  summary="" cellpadding="0" cellspacing="0" border="0"
 		class="contentPage" width="100%">
@@ -462,7 +457,7 @@
 				</tr>
 
 				<tr>
-					<td class="formMessage" colspan="3">* indicates a required field</td>
+					<td colspan="3"><%@ include file="/pages/content/common/ActionErrors.jsp" %></td>
 				</tr>
 
 				<tr>

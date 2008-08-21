@@ -15,15 +15,8 @@
 <head>
 </head>
 <link href="css/catissue_suite.css" rel="stylesheet" type="text/css" /> 
-<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
-	<%=messageKey%>
-</html:messages>
-
-<html:errors/>
-
+<%@ include file="/pages/content/common/ActionErrors.jsp" %>
 <html:form action="<%=Constants.SIMILAR_CONTAINERS_ADD_ACTION%>">
-
-
 	<% int cnt=0;%>
 	 <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
 		<tr>

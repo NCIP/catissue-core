@@ -119,10 +119,7 @@ function checkAll(element)
 }
 	</script>
 </head>
-<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
-	<%=messageKey%>
-</html:messages>
-<html:errors/>    
+<%@ include file="/pages/content/common/ActionErrors.jsp" %>  
 <html:form action="<%=Constants.SHOPPING_CART_OPERATION%>">
 
 <table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" height="100%">

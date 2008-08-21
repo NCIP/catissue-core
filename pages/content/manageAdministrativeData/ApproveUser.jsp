@@ -5,7 +5,7 @@
 <%@ page language="java" isELIgnored="false" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <SCRIPT LANGUAGE="JavaScript" SRC="jss/javaScript.js"></SCRIPT>
-<html:errors/>
+
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <link href="css/catissue_suite.css" rel="stylesheet" type="text/css" /> 
@@ -35,7 +35,9 @@
     </table>
       <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
         <tr>
-          <td align="left" class="toptd"></td>
+          <td align="left" class="toptd">
+				<%@ include file="/pages/content/common/ActionErrors.jsp" %>
+		  </td>
         </tr>
         <tr>
           <td align="left" class="tr_bg_blue1"><span class="blue_ar_b"> &nbsp;<bean:message key="approveUser.title" />  </span><span class="black_ar_s">(${requestScope.totalResults} records		found)</span></td>
@@ -46,7 +48,9 @@
 		</tr>
 		<!-- paging ends -->
         <tr>
-          <td align="center" class="showhide"><table width="99%" border="0" cellspacing="0" cellpadding="4">
+          <td align="center" class="showhide">
+		  <table width="99%" border="0" cellspacing="0" cellpadding="4">
+		  <c:if test='${requestScope.totalResults > 0}'>
               <tr>
                 <td width="2%" class="tableheading"><strong>#</strong></td>
                 <td width="25%" class="tableheading"><strong><bean:message key="user.loginName" /> </strong></td>
@@ -54,6 +58,7 @@
                 <td width="28%" class="tableheading"><strong><bean:message key="user.emailAddress" /></strong></td>
                 <td width="25%" class="tableheading"><strong><bean:message key="approveUser.registrationDate" /> </strong> <span class="grey_ar_s">[MM-DD-YYYY] </span></td>
               </tr>
+			  </c:if>
 			  <logic:empty name="showDomainObjectList">
 			  <tr>
 				<td>&nbsp;</td>
@@ -80,7 +85,8 @@
 				</logic:iterate>
 			</logic:notEmpty>
 				</tr>		                
-          </table></td>
+          </table>	  
+		  </td>
         </tr>
       </table></td>
   </tr>
