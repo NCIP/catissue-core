@@ -19,6 +19,7 @@ import java.util.Vector;
 
 import edu.wustl.catissuecore.domain.DistributionProtocol;
 import edu.wustl.catissuecore.domain.DistributionSpecimenRequirement;
+import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.Roles;
@@ -30,6 +31,8 @@ import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.dao.AbstractDAO;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.security.PrivilegeCache;
+import edu.wustl.common.security.PrivilegeManager;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
@@ -385,4 +388,44 @@ public class DistributionProtocolBizLogic extends SpecimenProtocolBizLogic imple
     {
     	return Constants.ADD_EDIT_DP;
     }
+	
+	public boolean isAuthorized(AbstractDAO dao, Object domainObject, SessionDataBean sessionDataBean) throws UserNotAuthorizedException, DAOException
+	{
+		if(sessionDataBean != null && sessionDataBean.isAdmin())
+		{
+			return true;
+		}
+		boolean isAuthorized = false;
+		String protectionElementName = null;
+		protectionElementName = getObjectId(dao, domainObject);
+		//Get the required privilege name which we would like to check for the logged in user.
+		String privilegeName = getPrivilegeName(domainObject);
+		PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(sessionDataBean.getUserName());
+		Set<Long> siteIdSet = new UserBizLogic().getRelatedSiteIds(sessionDataBean.getUserId());
+		for(Long id : siteIdSet)
+		{
+			String objectId = Site.class.getName()+"_"+id;
+			if(privilegeCache.hasPrivilege(objectId, privilegeName))
+			{
+				return true;
+			}
+		}
+		// control is here, that means, User is not Auth.
+        if (!isAuthorized)
+        {
+            UserNotAuthorizedException ex = new UserNotAuthorizedException();
+            ex.setPrivilegeName(privilegeName);
+            if (protectionElementName != null && (protectionElementName.contains("Site") || protectionElementName.contains("CollectionProtocol")))
+            {
+                String [] arr = protectionElementName.split("_");
+                String [] nameArr = arr[0].split("\\.");
+                String baseObject = nameArr[nameArr.length-1];
+                ex.setBaseObject(baseObject);
+                ex.setBaseObjectIdentifier(arr[1]);
+            }
+            throw ex;
+            //ex.setBaseObject()
+        }
+		return isAuthorized;		
+	}
 }
