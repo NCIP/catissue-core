@@ -207,14 +207,6 @@ public class SaveQueryAction extends BaseAction
 		{
 			selectedOutputAttributeList = selectedColumnsMetadata.getSelectedOutputAttributeList();
 		}
-		if(query.getId()!= null && selectedColumnsMetadata.isDefinedView())
-		{
-			selectedOutputAttributeList = new ArrayList<IOutputAttribute>();
-			
-			String errorMessage = ApplicationProperties.getValue("query.edit.message");
-			request.getSession().setAttribute("errorMessageForEditQuery", errorMessage);
-			
-		}
      	parameterizedQuery.setOutputTerms(query.getOutputTerms()); 
 		parameterizedQuery.setOutputAttributeList(selectedOutputAttributeList);
 		return parameterizedQuery;
