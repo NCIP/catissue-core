@@ -163,6 +163,11 @@ public class CaTissuePrivilegeUtility
 
 					// Added by Ravindra to handle bean for EDIT mode
 					bean.setRowEdited(false);
+					String PEName = Constants.getCurrentAndFuturePGAndPEName(id);
+					if(privilegeCache.hasPrivilege(PEName))
+					{
+						bean.setAllCPChecked(true);
+					}
 	
 					map.put(""+site.getId(), bean);
 				}
@@ -175,6 +180,7 @@ public class CaTissuePrivilegeUtility
 
 		return map;
 	}
+
 
 	/**
 	 * get the privileges on all Sites and CPs for the user associated with the given privilege cache
