@@ -14,24 +14,22 @@ import java.util.Iterator;
 import java.util.List;
 
 import net.sf.ehcache.CacheException;
-import edu.common.dynamicextensions.DEIntegration.DEIntegration;
-import edu.common.dynamicextensions.DEIntegration.DEIntegration;
 import edu.common.dynamicextensions.bizlogic.BizLogicFactory;
-import edu.common.dynamicextensions.domaininterface.AssociationInterface;
-import edu.common.dynamicextensions.domaininterface.EntityInterface;
-import edu.common.dynamicextensions.entitymanager.CategoryManager;
-import edu.common.dynamicextensions.entitymanager.EntityManager;
-import edu.common.dynamicextensions.entitymanager.EntityManagerInterface;
-import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
-import edu.wustl.cab2b.server.cache.EntityCache;
-import edu.wustl.cab2b.server.util.DynamicExtensionUtility;
-import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
-import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
+import edu.common.dynamicextensions.domain.Category;
 import edu.common.dynamicextensions.domain.CategoryEntity;
 import edu.common.dynamicextensions.domain.integration.EntityMap;
-import edu.common.dynamicextensions.domain.integration.FormContext;
 import edu.common.dynamicextensions.domain.integration.EntityMapCondition;
 import edu.common.dynamicextensions.domain.integration.EntityMapRecord;
+import edu.common.dynamicextensions.domain.integration.FormContext;
+import edu.common.dynamicextensions.domaininterface.AssociationInterface;
+import edu.common.dynamicextensions.domaininterface.EntityInterface;
+import edu.common.dynamicextensions.entitymanager.EntityManager;
+import edu.common.dynamicextensions.entitymanager.EntityManagerInterface;
+import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationException;
+import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
+import edu.wustl.cab2b.server.cache.EntityCache;
+import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
+import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.exception.BizLogicException;
@@ -599,7 +597,7 @@ public class AnnotationBizLogic extends DefaultBizLogic
         }
         catch (Exception e)
         {
-            // TODO Auto-generated catch block
+          
             e.printStackTrace();
         }    
     
@@ -611,5 +609,24 @@ public class AnnotationBizLogic extends DefaultBizLogic
 		List entityMaps = retrieve(EntityMap.class.getName(),
 		"containerId", deContainerId);
 		return entityMaps;
+	}
+	
+	/**
+	 * @param categoryEntityId
+	 * @return
+	 * @throws DAOException
+	 * @throws DynamicExtensionsSystemException
+	 * @throws DynamicExtensionsApplicationException
+	 */
+	public String getCategoryTitle(Long categoryEntityId) throws DAOException, DynamicExtensionsSystemException, DynamicExtensionsApplicationException
+	{
+		//Select from dyextn_category table where the  category_entity_id is the given id ,there is only one entry for it .Thats the name of category  
+		List idList = retrieve(Category.class.getName(),"rootCategoryElement.id", categoryEntityId);
+		if(idList.size()>0)
+		{
+			return ((Category)idList.get(0)).getName();
+			
+		}
+		return null;
 	}
 }
