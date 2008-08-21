@@ -400,16 +400,11 @@ function checkAll(element)
 		  </tr>
 		
           <tr>
-            <td>&nbsp;</td>
 			<td class="black_ar"><input type="radio" name="chkName" onclick="showEvents()" value="requestShipment" <%=disabledShipping%> ></td>
-			<td class="black_ar"><input type="radio" name="chkName" onclick="showEvents()" value="requestShipment"></td>
-            <td class="black_ar" ><bean:message key="shipment.request"/></td>
-			<td class="black_ar" colspan="2">&nbsp;</td>
-			
+            <td class="black_ar" ><bean:message key="shipment.request"/></td>			
 			<td class="black_ar"><input type="radio" name="chkName"  value="createShipment" onclick="showEvents()" <%=disabledShipping%> ></td>
-			<td class="black_ar"><input type="radio" name="chkName"  value="createShipment" onclick="showEvents()" ></td>
             <td class="black_ar" ><bean:message key="shipment.create"/></td>
-			<td colspan="4">&nbsp;</td>
+			<td colspan="3">&nbsp;</td>
 		  </tr>
         </table>          
       </tr>
