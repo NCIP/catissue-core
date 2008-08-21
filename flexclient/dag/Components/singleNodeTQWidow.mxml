@@ -5,11 +5,11 @@
 		<![CDATA[
 			import mx.events.ValidationResultEvent;
 			import mx.validators.StringValidator;
-			import mx.rpc.events.ResultEvent;
-			import mx.collections.ArrayCollection;
-			import Components.DAGConstants;
-			import mx.managers.PopUpManager;
-			import mx.controls.List;		
+		import mx.rpc.events.ResultEvent;
+		import mx.collections.ArrayCollection;
+		import Components.DAGConstants;
+		import mx.managers.PopUpManager;
+		import mx.controls.List;		
 		 [Bindable]
 		 public var entityLabelString : String = null;	
 		
@@ -202,10 +202,9 @@
              //Setting node Type
              singleNodeCustomFormula.setNodeType("singleNodeCustomNode");
              
-             //Setting custom column Name with time Int            
-             //singleNodeCustomFormula.setCustomColumnName(customColumnName.text + "#" + cb6.selectedItem);
-			 singleNodeCustomFormula.setCustomColumnName(customColumnName.text);
-			                                       
+             //Setting the custom Column Name
+             singleNodeCustomFormula.setCustomColumnName(customColumnName.text);
+             
              //Invoking the RPC Method
              if(submitButton1.label == "OK")
              {
@@ -428,41 +427,42 @@
     			here if a dropdown list contains only on item then it will show in comboBox as selected item
     			if item length is more than 1 then i will show prompt like "-select-" and store item text to myToolTip variable for further refrence.    			 
     		*/ 		
-    		public function validateComboboxText():void{ 
-    		 if(this.parentApplication.operation==""){     				
-    				this.parentApplication.operation="edit";    			   			
-    			 if(arithmeticOpDp.length <= 1){
-	    			 arithmaticOpsCb.selectedIndex = 0;
-	    			 arithmaticOpsCb.toolTip=arithmaticOpsCb.selectedLabel.toString();
-	    		 }else{
-    				arithmaticOpsCb.selectedIndex = -1;
-    				arithmaticOpsCb.toolTip=arithmaticOpsCb.selectedLabel.toString();
-	    		 }
-    			 
-    			 if(attributesDp.length <= 1){
-    				attributesCb.selectedIndex = 0;
-    				attributesCb.toolTip=attributesCb.selectedLabel.toString();
-    			 }else{
-    				attributesCb.selectedIndex = -1;
-    				attributesCb.toolTip=attributesCb.selectedLabel.toString();
-    			 }
-    			    			 
-    			 if(relationalDp.length <= 1){
-    				relationalOpsCb.selectedIndex = 0;
-    				relationalOpsCb.toolTip=relationalOpsCb.selectedLabel.toString();
-    			 }else{
-    				relationalOpsCb.selectedIndex = -1;
-    				relationalOpsCb.toolTip=relationalOpsCb.selectedLabel.toString();
-    			 }
-    			
-    			 if(timeIntervalsDp.length <= 1){
-    				timeIntervalCb.selectedIndex = 0;
-    				timeIntervalCb.toolTip=timeIntervalCb.selectedLabel.toString();
-    			 }else{
-    				timeIntervalCb.selectedIndex = -1;
-    				timeIntervalCb.toolTip=timeIntervalCb.selectedLabel.toString();
-    			 }
-    			}
+    		public function validateComboboxText():void{
+    			if(this.parentApplication.operation==""){     				
+    				this.parentApplication.operation="edit"; 
+    				 	     			   			
+	    			 if(arithmeticOpDp.length <= 1){
+		    			 arithmaticOpsCb.selectedIndex = 0;
+		    			 arithmaticOpsCb.toolTip=arithmaticOpsCb.selectedLabel.toString();
+		    		 }else{
+	    				arithmaticOpsCb.selectedIndex = -1;
+	    				arithmaticOpsCb.toolTip=arithmaticOpsCb.selectedLabel.toString();
+		    		 }
+	    			 
+	    			 if(attributesDp.length <= 1){
+	    				attributesCb.selectedIndex = 0;
+	    				attributesCb.toolTip=attributesCb.selectedLabel.toString();
+	    			 }else{
+	    				attributesCb.selectedIndex = -1;
+	    				attributesCb.toolTip=attributesCb.selectedLabel.toString();
+	    			 }
+	    			    			 
+	    			 if(relationalDp.length <= 1){
+	    				relationalOpsCb.selectedIndex = 0;
+	    				relationalOpsCb.toolTip=relationalOpsCb.selectedLabel.toString();
+	    			 }else{
+	    				relationalOpsCb.selectedIndex = -1;
+	    				relationalOpsCb.toolTip=relationalOpsCb.selectedLabel.toString();
+	    			 }
+	    			
+	    			 if(timeIntervalsDp.length <= 1){
+	    				timeIntervalCb.selectedIndex = 0;
+	    				timeIntervalCb.toolTip=timeIntervalCb.selectedLabel.toString();
+	    			 }else{
+	    				timeIntervalCb.selectedIndex = -1;
+	    				timeIntervalCb.toolTip=timeIntervalCb.selectedLabel.toString();
+	    			 }
+	    		}
     		}
     		
     		private function validateColumnName():Boolean{    			
@@ -501,16 +501,16 @@
 	<mx:VBox x="20" y="20" width="655"> 
 		 <!--Specifying Labels -->
 		<mx:HBox x="20" y="20" id="labelHBox" width="100%">
-			<mx:Label id="leftDatePicker" name="leftDatePickerLabel" width="100" height="30"  text="{datePickerLabel}"  color="blue" fontStyle="normal" fontWeight="bold" buttonMode="true" />
-			<mx:Label id="arithmeticOpLabel" name="arithmeticOpLabel" width="100"  height="30" color="blue" text="{arithmeticLabel}" fontStyle="normal" fontWeight="bold" buttonMode="true"/>
-			<mx:Label id="entityLabel" name="entityLabel" width="100" height="30" color="blue" text="{entityLabelString}" fontStyle="normal" fontWeight="bold" buttonMode="true"/>
-	    	<mx:Label id="relationalOpsLabel" name="relationalOpsLabel" width="100" height="30" color="blue" text="{relationalLabel}" fontStyle="normal" fontWeight="bold" buttonMode="true" />
-	    	<mx:Label id="lb5" name="label5" width="100"  height="30" color="blue" text="{timeValueLabel}" fontStyle="normal" fontWeight="bold"/>
-	    	<mx:Label id="lb6" name="label6" width="100"  height="30" color="blue" text="{timeIntrvalLabel}" fontStyle="normal" fontWeight="bold"/>
+			<mx:Label id="leftDatePicker" name="leftDatePickerLabel" width="100" height="50"  text="{datePickerLabel}"  color="blue" fontStyle="normal" fontWeight="bold" buttonMode="true" />
+			<mx:Label id="arithmeticOpLabel" name="arithmeticOpLabel" width="100"  height="50" color="blue" text="{arithmeticLabel}" fontStyle="normal" fontWeight="bold" buttonMode="true"/>
+			<mx:Label id="entityLabel" name="entityLabel" width="100" height="50" color="blue" text="{entityLabelString}" fontStyle="normal" fontWeight="bold" buttonMode="true"/>
+	    	<mx:Label id="relationalOpsLabel" name="relationalOpsLabel" width="100" height="50" color="blue" text="{relationalLabel}" fontStyle="normal" fontWeight="bold" buttonMode="true" />
+	    	<mx:Label id="lb5" name="label5" width="100"  height="50" color="blue" text="{timeValueLabel}" fontStyle="normal" fontWeight="bold"/>
+	    	<mx:Label id="lb6" name="label6" width="100"  height="50" color="blue" text="{timeIntrvalLabel}" fontStyle="normal" fontWeight="bold"/>
        </mx:HBox>
 	
 		<!--Specifying Controls -->
-		<mx:HBox id ="myBox" x="20" y="60" width="100%" creationComplete="validateComboboxText()">
+		<mx:HBox id ="myBox" x="20" y="60" width="100%">
 			<mx:DateField id="datePicker" name="leftDatePicker" width="100" showToday="true" 
 				formatString="MM/DD/YYYY" />
 			<mx:ComboBox id="arithmaticOpsCb" dataProvider="{arithmeticOpDp}" width="100"  textAlign="center" 
@@ -529,10 +529,9 @@
         </mx:HBox>
         <mx:Spacer height="5"/>   
 	    <mx:HBox x="20" horizontalGap="6" width="100%">
-         <mx:Label id="columnLabel" width="170" text="Please Enter Column Name :"/>
+         <mx:Label id="columnLabel" width="330" text="Please Enter Column Name To Be Displayed in Results:"/>
               
-         <mx:TextInput id="customColumnName" width="300" restrict="0-9 A-Z a-z" borderColor="blue" focusOut="validateColumnName()"/>         
-         
+         <mx:TextInput id="customColumnName" width="300" restrict="0-9 A-Z a-z" borderColor="blue" focusOut="validateColumnName()"/>
 	   </mx:HBox>
 	 
 	   <mx:HBox x="20" y="50">

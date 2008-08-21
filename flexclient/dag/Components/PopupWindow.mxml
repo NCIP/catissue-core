@@ -161,8 +161,7 @@
            	  	   	  customFormulaNode.setTimeInterval("null");
            	  	   }
            	  }
-           	 
-           	 
+           	  
            	//Getting the left and right operands
 		 	 customFormulaNode.setFirstSelectedAttrName(cb1.selectedItem.toString());
              customFormulaNode.setSecondSelectedAttrName(cb3.selectedItem.toString());           	
@@ -178,19 +177,18 @@
             
             //Setting the selected Arithmetic Operator
             customFormulaNode.setSelectedArithmeticOp(cb2.selectedItem.toString());
-            
-            
-        	//Setting theselected logical operator
-        	customFormulaNode.setSelectedLogicalOp(cb4.selectedItem.toString());  
-        
-            if(timeIntervalValue != null)
-            {
-            	customFormulaString = firstEntityName+"."+cb1.selectedItem + "\n "+ cb2.selectedItem + " \n" +secondEntityName+"."+cb3.selectedItem + "\n" + cb4.selectedItem + " " + timeValue + " " +  timeIntervalValue;
-            } 
-            else
-            {
-             	customFormulaString =  firstEntityName+"."+cb1.selectedItem+ " \n"+ cb2.selectedItem + "\n " + secondEntityName+"."+cb3.selectedItem  + "\n" + cb4.selectedItem + " " + timeValue ;
-            }
+             
+            //Setting theselected logical operator
+            customFormulaNode.setSelectedLogicalOp(cb4.selectedItem.toString());  
+             
+             if(timeIntervalValue != null)
+             {
+             	customFormulaString = firstEntityName+"."+cb1.selectedItem + "\n "+ cb2.selectedItem + " \n" +secondEntityName+"."+cb3.selectedItem + "\n" + cb4.selectedItem + " " + timeValue + " " +  timeIntervalValue;
+             } 
+             else
+             {
+              	customFormulaString =  firstEntityName+"."+cb1.selectedItem+ " \n"+ cb2.selectedItem + "\n " + secondEntityName+"."+cb3.selectedItem  + "\n" + cb4.selectedItem + " " + timeValue ;
+             }
              
              //Setting the first selected DAG Nodes Properties
              customFormulaNode.setFirstNodeName(firstEntityName); 
@@ -203,8 +201,9 @@
             customFormulaNode.name = nodeName;
             
             //Setting custom column Name with time Interval            
-            //customFormulaNode.setCustomColumnName(customColumnName.text + "#" + cb6.selectedItem);
             customFormulaNode.setCustomColumnName(customColumnName.text);
+            
+            
             parentApplication.customFormulaString = customFormulaString;
              
             this.parentApplication.rpcService.addEventListener(FaultEvent.FAULT, faultHandler);
@@ -413,11 +412,7 @@
            	       				   labelHBox.removeChild(existingIntervalLabel);	
            	       				}
            	       			}
-							
-							//depends on view shows components 							           	       		
-							if(this.parentApplication.view != "Result"){
-								
-							
+           	       		
            	       			//Creating the DatePicker
            	       			existingDatePicker= myBox.getChildByName("datePicker") as DateField;
            	 	        	if(existingDatePicker == null)
@@ -443,11 +438,10 @@
            	 	    	   	  
            	 	    	   	  labelHBox.addChild(pickerLabel);
            	 	    	   }
-       					}
-           	 	    }
-           	 	}
-        	  }
-           } 
+           	 	    	}
+           	 		}
+        	  	}
+           	} 
            	
            	/*
                 This method will enable/Disable the right hand side controls based on the relational operator selected
@@ -516,49 +510,50 @@
     			here if a dropdown list contains only on item then it will show in comboBox as selected item
     			if item length is more than 1 then i will show prompt like "-select-" and store item text to myToolTip variable for further refrence.    			 
     		*/ 		
-    		public function validateComboboxText():void{  
+    		public function validateComboboxText():void{
     			if(this.parentApplication.operation==""){     				
-    				this.parentApplication.operation="edit"; 				
-    			 if(myArray1.length <= 1){
-	    			 cb1.selectedIndex = 0;
-	    			 cb1.toolTip=cb1.selectedLabel.toString();
-	    		 }else{
-    				cb1.selectedIndex = -1;
-    				cb1.toolTip=cb1.selectedLabel.toString();
-	    		 }
-    			 
-    			 if(myArray2.length <= 1){
-    				cb2.selectedIndex = 0;
-    				cb2.toolTip=cb2.selectedLabel.toString();
-    			 }else{
-    				cb2.selectedIndex = -1;
-    				cb2.toolTip=cb2.selectedLabel.toString();
+    				this.parentApplication.operation="edit"; 
+    				 
+					 if(myArray1.length <= 1){
+		    			 cb1.selectedIndex = 0;
+		    			 cb1.toolTip=cb1.selectedLabel.toString();
+		    		 }else{
+						cb1.selectedIndex = -1;
+						cb1.toolTip=cb1.selectedLabel.toString();
+		    		 }
+					 
+					 if(myArray2.length <= 1){
+						cb2.selectedIndex = 0;
+						cb2.toolTip=cb2.selectedLabel.toString();
+					 }else{
+						cb2.selectedIndex = -1;
+						cb2.toolTip=cb2.selectedLabel.toString();
+					 }
+					    			 
+					 if(myArray3.length <= 1){
+						cb3.selectedIndex = 0;
+						cb3.toolTip=cb3.selectedLabel.toString();
+					 }else{
+						cb3.selectedIndex = -1;
+						cb3.toolTip=cb3.selectedLabel.toString();
+					 }
+					
+					 if(myArray4.length <= 1){
+						cb4.selectedIndex = 0;
+						cb4.toolTip=cb4.selectedLabel.toString();
+					 }else{
+						cb4.selectedIndex = -1;
+						cb4.toolTip=cb4.selectedLabel.toString();
+					 }    			 
+					 
+					 if(myArray5.length <= 1){
+						cb5.selectedIndex = 0;
+						cb5.toolTip=cb5.selectedLabel.toString();
+					 }else{
+						cb5.selectedIndex = -1;
+						cb5.toolTip=cb5.selectedLabel.toString();
+					 }
     			 }
-    			    			 
-    			 if(myArray3.length <= 1){
-    				cb3.selectedIndex = 0;
-    				cb3.toolTip=cb3.selectedLabel.toString();
-    			 }else{
-    				cb3.selectedIndex = -1;
-    				cb3.toolTip=cb3.selectedLabel.toString();
-    			 }
-    			
-    			 if(myArray4.length <= 1){
-    				cb4.selectedIndex = 0;
-    				cb4.toolTip=cb4.selectedLabel.toString();
-    			 }else{
-    				cb4.selectedIndex = -1;
-    				cb4.toolTip=cb4.selectedLabel.toString();
-    			 }    			 
-    			 
-    			 if(myArray5.length <= 1){
-    				cb5.selectedIndex = 0;
-    				cb5.toolTip=cb5.selectedLabel.toString();
-    			 }else{
-    				cb5.selectedIndex = -1;
-    				cb5.toolTip=cb5.selectedLabel.toString();
-    			 }    			 
-    		   }  
     		}
     		
     		private function validate():Boolean{    			
@@ -589,7 +584,7 @@
 		      submitButton.enabled=true;
 		      submitButton.errorString="";		      
 		      
-		    }	    
+		    }
     		    	  
 	 	]]>
 	 </mx:Script>
@@ -605,12 +600,12 @@
       
      <mx:VBox x="20" y="20" width="655">
       <mx:HBox x="20" y="20" id="labelHBox" width="100%"> 
-        <mx:Label id="lb1" name="label1" width="100"  height="30" color="blue" text="{firstEntityLabel}" fontStyle="normal" fontWeight="bold" buttonMode="true" />
-      	<mx:Label id="lb2" name="label2" width="100"  height="30" color="blue" text="{arithmeticLabel}" fontStyle="normal" fontWeight="bold" buttonMode="true"/>
-      	<mx:Label id="lb3" name="label3" width="100"  height="30" color="blue" text="{secondEntityLabel}" fontStyle="normal" fontWeight="bold" buttonMode="true"/>
-      	<mx:Label id="lb4" name="label4" width="100"  height="30" color="blue"  text="{relationalLabel}" fontStyle="normal" fontWeight="bold"/>
-      	<mx:Label id="lb5" name="label5" width="100"  height="30" color="blue" text="{timeValueLabel}" fontStyle="normal" fontWeight="bold"/>
-      	<mx:Label id="lb6" name="label6" width="100"  height="30" color="blue" text="{timeIntrvalLabel}" fontStyle="normal" fontWeight="bold"/>
+        <mx:Label id="lb1" name="label1" width="100"  height="50" color="blue" text="{firstEntityLabel}" fontStyle="normal" fontWeight="bold" buttonMode="true" />
+      	<mx:Label id="lb2" name="label2" width="100"  height="50" color="blue" text="{arithmeticLabel}" fontStyle="normal" fontWeight="bold" buttonMode="true"/>
+      	<mx:Label id="lb3" name="label3" width="100"  height="50" color="blue" text="{secondEntityLabel}" fontStyle="normal" fontWeight="bold" buttonMode="true"/>
+      	<mx:Label id="lb4" name="label4" width="100"  height="50" color="blue"  text="{relationalLabel}" fontStyle="normal" fontWeight="bold"/>
+      	<mx:Label id="lb5" name="label5" width="100"  height="50" color="blue" text="{timeValueLabel}" fontStyle="normal" fontWeight="bold"/>
+      	<mx:Label id="lb6" name="label6" width="100"  height="50" color="blue" text="{timeIntrvalLabel}" fontStyle="normal" fontWeight="bold"/>
       	
       </mx:HBox>
       
@@ -634,10 +629,10 @@
         	rowCount="10" toolTip=""/>
        <!-- <mx:Panel  id="p1" height="20" width="100" /> -->
       </mx:HBox> 
-      <mx:Spacer height="5"/> 	 
+      	 
 	 <mx:HBox x="20" horizontalGap="6" width="100%">
-         <mx:Label id="columnLabel" width="170" text="Please Enter Column Name :"/>
-         <mx:TextInput id="customColumnName" width="300" restrict="0-9 A-Z a-z" borderColor="blue" focusOut="validate()"/>        
+         <mx:Label id="columnLabel" width="330" text="Please Enter Column Name To Be Displayed in Results:"/>
+         <mx:TextInput id="customColumnName" width="300" restrict="0-9 A-Z a-z" borderColor="blue" focusOut="validate()"/>
 	 </mx:HBox>
 	  
 	  <mx:HBox x="20" y="50">

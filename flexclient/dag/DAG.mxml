@@ -116,6 +116,11 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	private var associatedDAGNodes : Object = new Object;
 	
 	private var associatedSingleDagNodes : Object = new Object;
+	
+	//operation is stroing information about node creation / edit 
+	[Bindable]
+	public var operation:String="";	
+	
 	/**
 	* Timer handler  to check container has been initialized.	
 	*/
