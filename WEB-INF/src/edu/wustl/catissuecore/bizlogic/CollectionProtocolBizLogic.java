@@ -837,7 +837,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 					SiteUserRolePrivilegeBean bean = rowIdMap.get(key);
 					if(piAndCoOrdIds.contains(bean.getUser().getId()))
 					{
-						throw new DAOException(ApplicationProperties.getValue("cp.cannotChangePrivilegesOfPIOrCoord"));
+						// throw new DAOException(ApplicationProperties.getValue("cp.cannotChangePrivilegesOfPIOrCoord"));
 					}
 				}
 			}

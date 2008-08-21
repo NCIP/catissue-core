@@ -310,6 +310,8 @@ class ParticipantRegistrationCache
 				}
 			}
 		Set<Long> siteIds = userBizLogic.getRelatedSiteIds(sessionDataBean.getUserId());
+		Set<Long> cp_Ids = userBizLogic.getRelatedCPIds(sessionDataBean.getUserId(), false);
+		
 		if (siteIds != null && !siteIds.isEmpty())
 		{
 			PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(sessionDataBean.getUserName());
@@ -326,6 +328,10 @@ class ParticipantRegistrationCache
 						List<NameValueBean> list = new ArrayList<NameValueBean>();
 						for (CollectionProtocol cp : cpCollection)
 						{
+							if(cp_Ids.contains(cp.getId()))
+							{
+								continue;
+							}
                             boolean isPresent = false; 
                             for (NameValueBean nameValueBean : list)
                             {
