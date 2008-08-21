@@ -373,7 +373,7 @@ Ext.onReady(function(){
             {
                 text: 'Shipping And Tracking',
 				tooltip:'Shipping And Tracking',
-				href:'BaseShipment.do',
+				href:'ShowDashboardAction.do',
                 menu: {        // <-- submenu by nested config object
                     items: [
                         // stick any markup in a menu
