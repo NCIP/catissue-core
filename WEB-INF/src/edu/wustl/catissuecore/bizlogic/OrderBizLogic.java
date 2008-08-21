@@ -25,6 +25,7 @@ import org.hibernate.Session;
 
 import edu.wustl.catissuecore.bean.RequestViewBean;
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
+import edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.DerivedSpecimenOrderItem;
 import edu.wustl.catissuecore.domain.DistributedItem;
 import edu.wustl.catissuecore.domain.Distribution;
@@ -39,6 +40,7 @@ import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.SpecimenArrayOrderItem;
+import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.User;
@@ -792,10 +794,15 @@ public class OrderBizLogic extends DefaultBizLogic
 			if(orderItem instanceof ExistingSpecimenOrderItem)
 			{
 				ExistingSpecimenOrderItem existingSpecimenOrderItem = (ExistingSpecimenOrderItem)orderItem;
-				if(siteIdsList.contains(existingSpecimenOrderItem.getSpecimen().getSpecimenPosition().getStorageContainer().getSite().getId()))
-				{
-					isValidToDistribute = true;
-					break;
+				SpecimenPosition specimenPosition = (SpecimenPosition)HibernateMetaData.getProxyObjectImpl(existingSpecimenOrderItem.getSpecimen().getSpecimenPosition());
+				if(specimenPosition != null && !(existingSpecimenOrderItem.getStatus().equals(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED)||
+						existingSpecimenOrderItem.getStatus().equals(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE)))
+				{	
+					if(siteIdsList.contains(existingSpecimenOrderItem.getSpecimen().getSpecimenPosition().getStorageContainer().getSite().getId()))
+					{
+						isValidToDistribute = true;
+						break;
+					}
 				}
 			
 			}else if(orderItem instanceof ExistingSpecimenArrayOrderItem)
@@ -811,7 +818,8 @@ public class OrderBizLogic extends DefaultBizLogic
 			{
 				DerivedSpecimenOrderItem derivedSpecimenOrderItem = (DerivedSpecimenOrderItem) orderItem;
 				SpecimenPosition specimenPosition = (SpecimenPosition)HibernateMetaData.getProxyObjectImpl(derivedSpecimenOrderItem.getParentSpecimen().getSpecimenPosition());
-				if(specimenPosition != null && !derivedSpecimenOrderItem.getStatus().equals(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED))
+				if(specimenPosition != null && !(derivedSpecimenOrderItem.getStatus().equals(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED)||
+						derivedSpecimenOrderItem.getStatus().equals(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE)))
 				{
 					Long siteId = (Long)specimenPosition.getStorageContainer().getSite().getId();
 					if(siteIdsList.contains(siteId))
@@ -873,19 +881,25 @@ public class OrderBizLogic extends DefaultBizLogic
 	
 		boolean hasDistributionPrivilege = false; 
 		Iterator orderItemColItr = orderItemCollection.iterator();
-		if(orderItemColItr.hasNext())	
+		while(orderItemColItr.hasNext())	
 		{	
 				OrderItem orderItem = (OrderItem)orderItemColItr.next();
 				if(orderItem instanceof PathologicalCaseOrderItem)
 				{
 					PathologicalCaseOrderItem pathologicalCaseOrderItem = (PathologicalCaseOrderItem)orderItem;
-					Long cpId = pathologicalCaseOrderItem.getSpecimenCollectionGroup().getCollectionProtocolRegistration()
-					.getCollectionProtocol().getId();
-					String objectId = Constants.COLLECTION_PROTOCOL_CLASS_NAME+"_"+cpId;
-					boolean isAuthorized = privilegeCache.hasPrivilege(objectId, Variables.privilegeDetailsMap.get(Constants.DISTRIBUTE_SPECIMENS));
-					if(isAuthorized)
+					SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup)pathologicalCaseOrderItem.getSpecimenCollectionGroup();
+					if(specimenCollectionGroup != null && !(pathologicalCaseOrderItem.getStatus().equals(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED)||
+							pathologicalCaseOrderItem.getStatus().equals(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE)))
 					{
-						hasDistributionPrivilege = true;
+									
+						Long cpId = specimenCollectionGroup.getCollectionProtocolRegistration()
+						.getCollectionProtocol().getId();
+						String objectId = Constants.COLLECTION_PROTOCOL_CLASS_NAME+"_"+cpId;
+						boolean isAuthorized = privilegeCache.hasPrivilege(objectId, Variables.privilegeDetailsMap.get(Constants.DISTRIBUTE_SPECIMENS));
+						if(isAuthorized)
+						{
+							hasDistributionPrivilege = true;
+						}
 					}
 				}
 		}	
@@ -1293,7 +1307,7 @@ public class OrderBizLogic extends DefaultBizLogic
     	catch(DAOException e)
     	{
     		Logger.out.error(e.getMessage(), e);
-    		return null;
+    		
     	}
     	finally
 		{
@@ -1304,7 +1318,7 @@ public class OrderBizLogic extends DefaultBizLogic
 			catch(DAOException daoEx)
 			{
 				Logger.out.error(daoEx.getMessage(), daoEx);
-				return null;
+				
 			}
 		}
     	return specimen;
@@ -1325,6 +1339,32 @@ public class OrderBizLogic extends DefaultBizLogic
 			e.printStackTrace();
 		}
 		return specimen;
+	}
+	
+	public SpecimenCollectionGroup retrieveSCG(Long scgId)
+	{
+		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+		SpecimenCollectionGroup scg = null;
+		try {
+			dao.openSession(null);
+			scg = (SpecimenCollectionGroup)dao.retrieve(SpecimenCollectionGroup.class.getName(),	scgId);
+		} catch (DAOException e) {
+			
+			e.printStackTrace();
+		}finally
+		{
+			try
+			{
+				dao.closeSession();
+			}
+			catch(DAOException daoEx)
+			{
+				Logger.out.error(daoEx.getMessage(), daoEx);
+				
+			}
+		}
+		
+		return scg;
 	}
 	
 	

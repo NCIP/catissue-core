@@ -2201,7 +2201,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		String[] selectColumnName = {"name"};
 		String[] whereColumnName = {"id"};
 		String[] whereColumnCondition = {"="};
-		Object[] whereColumnValue = {id};
+		Object[] whereColumnValue = {Long.parseLong(id)};
 		HibernateDAO dao = (HibernateDAO) DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
 		dao.openSession(null);
 		List scgList = dao.retrieve(SpecimenCollectionGroup.class.getName(), selectColumnName, whereColumnName, whereColumnCondition,

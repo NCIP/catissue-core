@@ -92,6 +92,22 @@ public class RequestDetailsBean implements Serializable
 	
 	
 	/**
+	 * This gives the type of selected specimen.
+	 */
+	private String selectedSpecimenType;
+	
+	/**
+	 * Selected specimen Unit
+	 */
+	private String specimenQuantityUnit;
+	
+	/**
+	 * Selected specimen Quantity
+	 */
+	private String selectedSpecimenQuantity;
+	
+	
+	/**
 	 * For consent View form
 	 * 
 	 */
@@ -434,6 +450,30 @@ public class RequestDetailsBean implements Serializable
 
 	public void setCanDistribute(String canDistribute) {
 		this.canDistribute = canDistribute;
+	}
+
+	public String getSelectedSpecimenType() {
+		return selectedSpecimenType;
+	}
+
+	public void setSelectedSpecimenType(String selectedSpecimenType) {
+		this.selectedSpecimenType = selectedSpecimenType;
+	}
+
+	public String getSpecimenQuantityUnit() {
+		return specimenQuantityUnit;
+	}
+
+	public void setSpecimenQuantityUnit(String specimenQuantityUnit) {
+		this.specimenQuantityUnit = specimenQuantityUnit;
+	}
+
+	public String getSelectedSpecimenQuantity() {
+		return selectedSpecimenQuantity;
+	}
+
+	public void setSelectedSpecimenQuantity(String selectedSpecimenQuantity) {
+		this.selectedSpecimenQuantity = selectedSpecimenQuantity;
 	}
 
 	

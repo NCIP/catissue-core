@@ -40,6 +40,7 @@ import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
@@ -73,6 +74,8 @@ public class CreateArrayInitAction extends BaseAction
 		
 		String arrayName = (String)request.getAttribute(Constants.ARRAY_NAME);
 		String operation = (String)request.getAttribute(Constants.OPERATION);
+		List<NameValueBean> storagePositionListForSpecimenArray = Utility.getStoragePositionTypeListForTransferEvent();
+		request.setAttribute("storagePositionListForSpecimenArray", storagePositionListForSpecimenArray);
 
 		String exceedingMaxLimit = "false";
 		SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);

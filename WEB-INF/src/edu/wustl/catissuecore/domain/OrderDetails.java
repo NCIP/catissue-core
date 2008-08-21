@@ -30,6 +30,7 @@ import edu.wustl.catissuecore.bean.DefinedArrayRequestBean;
 import edu.wustl.catissuecore.bean.ExistingArrayDetailsBean;
 import edu.wustl.catissuecore.bean.OrderSpecimenBean;
 import edu.wustl.catissuecore.bean.RequestDetailsBean;
+import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.OrderBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
@@ -877,7 +878,13 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 					pathologicalCaseOrderItem =  new PathologicalCaseOrderItem();
 					specimen.setId(new Long(requestDetailsBean.getRequestFor()));
 			        specimen.setLabel(requestDetailsBean.getRequestedItem());
-				    orderItem = pathologicalCaseOrderItem;
+			        OrderBizLogic orderBizLogic = (OrderBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
+					SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup)orderBizLogic.retrieveSCG(Long.parseLong
+							(requestDetailsBean.getSpecimenCollGroupId()));
+					pathologicalCaseOrderItem.setSpecimenCollectionGroup(specimenCollectionGroup);
+					pathologicalCaseOrderItem.setSpecimenClass(requestDetailsBean.getClassName());
+					pathologicalCaseOrderItem.setSpecimenType(requestDetailsBean.getType());
+			        orderItem = pathologicalCaseOrderItem;
 			}else  
 			  {//For derived specimen.
 					derivedOrderItem = new DerivedSpecimenOrderItem();

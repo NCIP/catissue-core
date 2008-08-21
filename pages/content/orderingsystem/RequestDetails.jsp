@@ -130,6 +130,13 @@ function createDerivatives(id)
 //	showNewPage('CreateSpecimen.do?pageOf=success&operation=add&id=' + objId );
 }
 
+function createSpecimen(id)
+{
+	var url = "createSpecimenFromOrder.do?rowNumber="+id;
+	window.parent.location.href=url;	
+
+}
+
 function showSpecimenArrayDetails(id)
 {
 	showNewPage('SearchObject.do?pageOf=pageOfSpecimenArray&operation=search&id=' + id );
@@ -320,6 +327,14 @@ function checkQuantityforAll(count)
 		var values = response.split("#@#");
 		var availableQtyId = "availableQtyId" + values[0];	
 		document.getElementById(availableQtyId).value	= values[1];
+
+		var selectedSpecimenTypeId = "selectedSpecimenTypeId" +  values[0];
+		document.getElementById(selectedSpecimenTypeId).value	= values[2];
+
+		var specimenQuantityUnitId = "specimenQuantityUnitId" +  values[0];
+		document.getElementById(specimenQuantityUnitId).value	= values[3];
+
+
 	}
 
 	/*** code using ajax  ***/
@@ -430,7 +445,7 @@ function checkQuantityforAll(count)
 					<div id="specimenDataTab">
 						<table border="0" width="100%" cellpadding="3" cellspacing="0">
 						<tr>
-						<td colspan="9" align="right" valign="top">
+						<td colspan="11" align="right" valign="top">
 							<img src="images/uIEnhancementImages/viewall_icon.gif" alt="View All" />
 								
 							<a href="javascript:showAllSpecimen('<%=count%>')" class="view" >
@@ -439,7 +454,7 @@ function checkQuantityforAll(count)
 						</td>
 					</tr>
 					<tr>
-						<td class="bottomtd"></td>
+						<td class="bottomtd" colspan="11"></td>
 					</tr>
 					<tr>
 						  <% 
@@ -449,24 +464,23 @@ function checkQuantityforAll(count)
 									 	int i = 0; 
 										String rowStatusValue ="";
 						 %>
-					             <td colspan="4	" align="center" valign="top" class="tableheading" width="20%">
+								<td colspan="3" align="center" valign="top" class="tableheading" width="30%">
+									<strong>
+									<bean:message key="requestdetails.header.orderedSpecimenDetails" />
+									</strong>
+								</td>
+					             <td colspan="3" align="center" valign="top" class="tableheading" width="30%">
 									<strong>
 										<bean:message key="requestdetails.header.RequestedSpecimenDetails" />
 									</strong>
 								 </td>
-								
-				                 <td width="8%" colspan="2" rowspan="2" align="left" valign="top" class="tableheading">
-									<strong>
-										<bean:message key='requestdetails.datatable.label.AvailableQty'/>
-									</strong>
-								 </td>
-				                 
-				                <td width="11%" rowspan="2" valign="top" class="tableheading">
+												               
+				                <td width="10%" rowspan="2" valign="top" class="tableheading">
 									<strong>
 										<bean:message key="consent.consentforspecimen"/>
 									</strong>	
 								</td>
-				                <td width="16%" rowspan="2" valign="top" class="tableheading">
+				                <td width="18%" rowspan="2" valign="top" class="tableheading">
 									<strong>
 										<bean:message key='requestdetails.datatable.label.AssignStatus'/>
 									</strong>
@@ -483,17 +497,31 @@ function checkQuantityforAll(count)
 								</td>
 				              </tr>
 				              <tr>
-								<td width="11%" class="subtd">
+								<td width="15%" class="subtd" >
 									<bean:message key='requestdetails.datatable.label.RequestItem'/>
 								</td>
+								<td class="subtd" width="12%">
+								<bean:message key="orderingSystem.tableheader.label.type" />,
+								<bean:message key='requestdetails.datatable.label.AvailableQty'/>
+								</td>
+								<!--<td class="subtd" width="10%">
 								
-								<td width="10%" class="subtd" valign="top">
-									<bean:message key="orderingSystem.tableheader.label.type" />
+								</td>-->
+								<td bgcolor="#d7d7d7" width="2%">&nbsp;
 								</td>
-				                <td width="9%" class="subtd" valign="top">
-									<bean:message key='requestdetails.datatable.label.RequestedQty'/>
+								
+								<td width="17%" class="subtd"  valign="top">
+									<bean:message key='requestdetails.datatable.label.RequestFor'/>
 								</td>
-				                <td width="3%" align="left" bgcolor="#d7d7d7" >&nbsp;
+				              
+								<td width="12%" class="subtd"  valign="top">
+									<strong>
+										<bean:message key="orderingSystem.tableheader.label.type" />,
+										<bean:message key='requestdetails.datatable.label.AvailableQty'/>
+									</strong>
+								</td>	
+
+				                <td width="1%" align="left" bgcolor="#d7d7d7" >&nbsp;
 								</td>
 				              </tr>
    <!----------------rows for the specimen request tab------------------>
@@ -520,7 +548,10 @@ function checkQuantityforAll(count)
 							String specimenIdInMap = "value(RequestDetailsBean:"+i+"_specimenId)";
 							String consentVerificationkey = "value(RequestDetailsBean:"+i+"_consentVerificationkey)";
 							String rowStatuskey = "value(RequestDetailsBean:"+i+"_rowStatuskey)";
+							String specimenQuantityUnit = "value(RequestDetailsBean:"+i+"_specimenQuantityUnit)";
 							String labelStatus="labelStatus"+i;
+							String selectedSpecimenType="value(RequestDetailsBean:"+i+"_selectedSpecimenType)";
+							String selectedSpecimenQuantity="value(RequestDetailsBean:"+i+"_selectedSpecimenQuantity)";
 							String requestedItem = "value(RequestDetailsBean:"+i+"_requestedItem)";
 							String requestedQty = "value(RequestDetailsBean:"+i+"_requestedQty)";
 							String availableQty = "value(RequestDetailsBean:"+i+"_availableQty)";
@@ -533,11 +564,12 @@ function checkQuantityforAll(count)
 							String actualSpecimenClass = "value(RequestDetailsBean:"+i+"_actualSpecimenClass)";
 							String canDistribute = "value(RequestDetailsBean:"+i+"_canDistribute)";
 							String specimenClickFunction = "showSpecimenDetails("+i+")";
+							String createSpecimenFunction = "createSpecimen("+i+")";
 							String aliquoteClickFunction = "createAliquots("+i+")";
 							String derivativeCreateFunction = "createDerivatives("+i+")";
 							String changeAvailableQuantity = " onSpecimenChange("+i+")";
 							String checkQuantity = "checkQuantity("+i+")";
-									//added for consent page:	
+							//added for consent page:	
 							String showNewConsentPageFunction = "showNewConsentPage("+requestDetailsBeanObj.getSpecimenId()+")";
 							boolean disableRow = false;
 							if((((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_assignedStatus"))).trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED))
@@ -567,6 +599,8 @@ function checkQuantityforAll(count)
 									//This is to update available qty for the specimen selected from requestFor drop down.
 							String updateAvaiQty = "avaiQty" + i;
 							String availableQtyId = "availableQtyId"+i;
+							String selectedSpecimenTypeId = "selectedSpecimenTypeId"+i;
+							String specimenQuantityUnitId = "specimenQuantityUnitId"+i;
 							String requestedQtyId = "requestedQtyId"+i;
 							String requestForId = "requestFor" + i;
 							String onChangeValueForRequestFor = "updateQuantity('"+ requestForId  +"')";
@@ -591,10 +625,9 @@ function checkQuantityforAll(count)
 								 <html:hidden name="requestDetailsForm" property="<%= actualSpecimenType %>" />	
 								 <html:hidden name="requestDetailsForm" property="<%=canDistribute%>"  styleId="<%=canDistribute%>" />
 								
-								<tr>
-									
+								<tr>	
 									<td class="<%=fontStyle%>" >
-					<%			if(((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim(										).equalsIgnoreCase("Derived"))
+									<%													                                                     if(((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim(            ).equalsIgnoreCase("Derived"))
 								{
 					%>											
 										<img src="images/Distribution.GIF" border="0"/>
@@ -612,82 +645,112 @@ function checkQuantityforAll(count)
 									 		<%--Bug :6010- Hide link to Specimen Label in case of Pathological case report. 
 									 		    Modified by:Falguni Sachde
 									 		  --%>
-					<%		
-											if(((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim().
-											equalsIgnoreCase("DerivedPathological")
+					<%			if(((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim().equalsIgnoreCase("DerivedPathological")
 												|| ((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim().equalsIgnoreCase("Pathological")) 
-											{
+									{
 					%>
-												<bean:write name="requestDetailsForm" property="<%= requestedItem%>" />									 	
+												
+											<bean:write name="requestDetailsForm" property="<%= requestedItem%>" />									 	
 					<%
-											}
-											else
-											{
-																		
-					%>					
+									}
+									else
+									{
+					%>
+										<html:link href="#" styleClass="view" styleId="label" onclick="<%=specimenClickFunction%>">
+									 		<bean:write name="requestDetailsForm" property="<%= requestedItem %>" />	
+										</html:link>
+					<%
+									}
+									String className = ((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_className")));
+									String type = ((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_type")));
+					%>
+							 		</span>
+									</td>
+								
+			 						<td class="<%=fontStyle%>" >
+										<bean:write name="requestDetailsForm" property="<%= spType %>" />,
+											
+					<%
+										if((((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim().equalsIgnoreCase("Existing")||((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim().equalsIgnoreCase("Pathological"))&&(((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_distributedItemId"))).trim().equals("")))
+										{
+											disableRow=false;												
+										}
 										
-											<html:select property="<%= requestFor %>" name="requestDetailsForm" size="l" styleClass="formFieldSized6" styleId="<%= requestForId %>" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="<%= changeAvailableQuantity%>" disabled="<%= disableRow %>">
+					%>
+										</br>
+											<html:text styleClass="formFieldSmallNoBorder" styleId="<%=requestedQtyId%>" property="<%= requestedQty %>" readonly="true" style="<%=bgStyle%>"/>
+											<span>		
+													<script>
+															var v= getUnit('<%= className %>','<%= type %>');
+															document.write(v);
+														</script>
+											</span>	
+										</td>
+
+									<td class="<%=fontStyle%>">
+									</td>
+
+
+								<td class="<%=fontStyle%>" >
+				
+					<%		
+									toolTipTypeClass = "Class:"+((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_actualSpecimenClass")))+", Type:"+((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_actualSpecimenType")));
+					 %>
+									 	<span title="<%= toolTipTypeClass %>">
+									 		<%--Bug :6010- Hide link to Specimen Label in case of Pathological case report. 
+									 		    Modified by:Falguni Sachde
+									 		  --%>
+															
+											<html:select property="<%= requestFor %>" name="requestDetailsForm" size="l" styleClass="formFieldSizedText" styleId="<%= requestForId %>" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="<%= changeAvailableQuantity%>" disabled="<%= disableRow %>">
 												<html:optionsCollection property="<%=specimenList%>" name="requestDetailsForm" label="name" value="value"/>
 											</html:select> 		
-										
+											</br>
 											<logic:equal name="requestDetailsForm" property="<%=rowStatuskey%>" value="enable">
-					
-																				 		
+												
+												<logic:equal name="requestDetailsForm" property="<%=instanceOf%>" value="Pathological">
+													<a href="#" onclick="<%=createSpecimenFunction%>">
+													   <img src="images/Cycle_col.gif" border="0" alt="Create Specimen"  title="Create Specimen"/>
+													</a> 
+												</logic:equal>
+
+												<logic:equal name="requestDetailsForm" property="<%=instanceOf%>" value="DerivedPathological">
+													<a href="#" onclick="<%=createSpecimenFunction%>">
+													   <img src="images/Cycle_col.gif" border="0" alt="Create Specimen"  title="Create Specimen"/>
+													</a> 
+												</logic:equal>
+																	
+
 												<a href="#" onclick="<%=specimenClickFunction%>">
 													<img src="images/uIEnhancementImages/ic_specimen.gif" border="0" alt="View Specimen"  title="View Specimen"/>
 												</a> 
-																						
 												<a href="#" onclick="<%=aliquoteClickFunction%>">
 													<img src="images/uIEnhancementImages/a.gif" border="0"  alt="Create Aliquot" title="Create Aliquot"/>
 												</a> 
-												
 												<a href="#" onclick="<%=derivativeCreateFunction%>">
 													<img src="images/uIEnhancementImages/ic_d.gif" border="0" alt="Create Derivative"  title="Create Derivative"/>
 												</a> 
-
 											</logic:equal>
 
 
-					<%
-									}
-					%>
+					
 							 		</span>
 		  					 	</td>
-				 			 	<!-- Added By Ramya for Tree View -->
 					
-								 	<td class="<%=fontStyle%>" >
-										<bean:write name="requestDetailsForm" property="<%= spType %>" />
-								 	</td>
-					<%
-							 	if((((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim().equalsIgnoreCase("Existing")||((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim().equalsIgnoreCase("Pathological"))&&(((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_distributedItemId"))).trim().equals("")))
-				 				{
-				 					disableRow=false;												
-				 				}
-					 			String className = ((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_className")));
-					 			String type = ((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_type")));
-					%>
-								<td class="<%=fontStyle%>" >
-							 		<html:text styleClass="formFieldSmallNoBorder" styleId="<%=requestedQtyId%>"	property="<%= requestedQty %>" readonly="true" style="<%=bgStyle%>"/>
-							 		<span>		
-											<script>
-													var v= getUnit('<%= className %>','<%= type %>');
-													document.write(v);
-												</script>
-									</span>	
+								
+							 	<td class="<%=fontStyle%>">
+									
+																		
+									<html:text styleClass="formFieldSmallNoBorderlargeSize" styleId="<%=selectedSpecimenTypeId%>" property="<%= selectedSpecimenType %>" readonly="true" style="<%=bgStyle%>"/>
+										</br>
+										
+									<html:text styleClass="formFieldSmallNoBorder" styleId="<%=availableQtyId%>" property="<%=selectedSpecimenQuantity%>" readonly="true" style="<%=bgStyle%>" />
+
+									<html:text styleClass="formFieldSmallNoBorder" styleId="<%=specimenQuantityUnitId%>" property="<%=specimenQuantityUnit%>" readonly="true" style="<%=bgStyle%>"/>
+								
 								</td>
-									<td class="<%=fontStyle%>">&nbsp;</td>
-								 	<td class="<%=fontStyle%>" align="left">
-									<div id="<%= updateAvaiQty %>" >
-											<html:text styleClass="formFieldSmallNoBorder" styleId="<%=availableQtyId%>" property="<%= availableQty %>" readonly="true" style="<%=bgStyle%>"/>
-									</div></td>
-									<td class="<%=fontStyle%>">
-									<span>
-										<script>
-											var v= getUnit('<%= className %>','<%= type %>');
-											document.write(v);
-										</script>
-									</span>	
-								</td>
+								
+								<td class="<%=fontStyle%>">
+									</td>
 	
 
 			   <%
@@ -794,7 +857,7 @@ function checkQuantityforAll(count)
 				</td>
 				</tr>
 				<tr>
- 					<td valign="top" class="black_ar">&nbsp;<br />
+ 					<td valign="top" class="black_ar_t">&nbsp;<br />
                   &nbsp;
  						<bean:message key="requestdetails.header.label.Comments" />
 	 				</td>

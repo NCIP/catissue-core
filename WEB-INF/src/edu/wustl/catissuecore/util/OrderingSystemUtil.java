@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Vector;
 
 import edu.wustl.catissuecore.bean.DefinedArrayRequestBean;
 import edu.wustl.catissuecore.bean.RequestViewBean;
@@ -177,15 +178,23 @@ public class OrderingSystemUtil
 	 * @param listToConvert Collection
 	 * @return List. The namevaluebean list of children specimen to display.
 	 */
-	public static List getNameValueBeanList(Collection listToConvert)
+	public static List getNameValueBeanList(Collection listToConvert,Specimen requestFor)
 	{
-		List nameValueBeanList = new ArrayList();
+		Vector nameValueBeanList = new Vector();
+		
+		
+		if(requestFor != null)
+			nameValueBeanList.add(0,new NameValueBean(requestFor.getLabel(),requestFor.getId().toString()));
+		else 
+			nameValueBeanList.add(0,new NameValueBean(" ","#"));
 		
 		Iterator iter = listToConvert.iterator();		
 		while(iter.hasNext())
 		{
 			Specimen specimen = (Specimen)iter.next();
-			nameValueBeanList.add(new NameValueBean(specimen.getLabel(),specimen.getId().toString()));
+			NameValueBean nameValueBean = new NameValueBean(specimen.getLabel(),specimen.getId().toString());
+			if(!nameValueBeanList.contains(nameValueBean))
+				nameValueBeanList.add(nameValueBean);
 		}
 		
 		return nameValueBeanList;
@@ -216,7 +225,7 @@ public class OrderingSystemUtil
 	 * @param pathologicalCaseOrderItem
 	 * @return
 	 */
-	public static List getRequestForListForPathologicalCases(SpecimenCollectionGroup specimenCollectionGroup,PathologicalCaseOrderItem pathologicalCaseOrderItem)
+	/*public static List getRequestForListForPathologicalCases(SpecimenCollectionGroup specimenCollectionGroup,PathologicalCaseOrderItem pathologicalCaseOrderItem)
 	{
 		Collection childrenSpecimenList = specimenCollectionGroup.getSpecimenCollection();
 		List totalChildrenSpecimenColl = new ArrayList();
@@ -252,7 +261,41 @@ public class OrderingSystemUtil
     	} 	
     	
     	return totalChildrenSpecimenColl;
+	}*/
+	
+	
+	/**
+	 * @param specimenCollectionGroup
+	 * @param pathologicalCaseOrderItem
+	 * @return
+	 */
+	public static List getAllSpecimensForPathologicalCases(SpecimenCollectionGroup specimenCollectionGroup,PathologicalCaseOrderItem pathologicalCaseOrderItem)
+	{
+		Collection specimenList = specimenCollectionGroup.getSpecimenCollection();
+		List totalSpecimenColl = new ArrayList();
+    	    	
+    	Iterator specimenListIterator = specimenList.iterator();
+    	while (specimenListIterator.hasNext())
+    	{
+    		Specimen specimen = (Specimen)specimenListIterator.next();
+    		if(specimen.getClassName().equalsIgnoreCase(pathologicalCaseOrderItem.getSpecimenClass()) && specimen.getSpecimenType().equalsIgnoreCase(pathologicalCaseOrderItem.getSpecimenType()))
+    		{	
+	    		totalSpecimenColl.add(specimen);
+	    		List childSpecimenCollection = OrderingSystemUtil.getAllSpecimen(specimen);
+	    		if(childSpecimenCollection!=null)
+	    		{
+	    			Iterator childSpecimenCollectionIterator = childSpecimenCollection.iterator();
+	    			while(childSpecimenCollectionIterator.hasNext())
+	    			{	    		
+	    				totalSpecimenColl.add((Specimen)(childSpecimenCollectionIterator.next()));
+	    			}	    			
+	    		}
+    		}	
+    	} 	
+    	
+    	return totalSpecimenColl;
 	}
+	
 	/**
 	 * @param specimenOrderItemCollection collection
 	 * @param arrayRequestBean objetc
@@ -297,5 +340,45 @@ public class OrderingSystemUtil
 		{
 			return "false"; 
 		}		
+	}
+	
+	
+	public static String getUnit(Specimen specimen)
+	{
+		String specimenQuantityUnit="";
+		if(specimen.getSpecimenClass().equals("Tissue"))
+		{
+			if(specimen.getSpecimenType().equals(Constants.FROZEN_TISSUE_SLIDE) || specimen.getSpecimenType().equals(Constants.FIXED_TISSUE_BLOCK)
+					||specimen.getSpecimenType().equals(Constants.FROZEN_TISSUE_BLOCK) || specimen.getSpecimenType().equals(Constants.NOT_SPECIFIED)
+					|| specimen.getSpecimenType().equals(Constants.FIXED_TISSUE_SLIDE))
+			{
+				specimenQuantityUnit = Constants.UNIT_CN;
+				
+			}	
+			else 
+			{
+					if(specimen.getSpecimenType().equals(Constants.MICRODISSECTED))
+					{
+						specimenQuantityUnit = Constants.UNIT_CL;
+					}
+					else
+					{
+						specimenQuantityUnit = Constants.UNIT_GM;
+					}
+			}	
+		}
+		else if(specimen.getSpecimenClass().equals("Fluid"))
+		{
+			specimenQuantityUnit = Constants.UNIT_ML;
+		}
+		else if(specimen.getSpecimenClass().equals("Cell"))
+		{
+			specimenQuantityUnit = Constants.UNIT_CC;
+		}
+		else if(specimen.getSpecimenClass().equals("Molecular"))
+		{
+			specimenQuantityUnit = Constants.UNIT_MG;
+		}
+		return specimenQuantityUnit;
 	}
 }

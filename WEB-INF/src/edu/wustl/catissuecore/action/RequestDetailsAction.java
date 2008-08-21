@@ -116,9 +116,14 @@ public class RequestDetailsAction extends BaseAction
 		String identifier = request.getParameter("identifier");
 		if(isAjaxCalled && request.getParameter("specimenId")!=null)
 		{
-			Long specimenId =  Long.parseLong(request.getParameter("specimenId"));
-			Specimen specimen = orderBizLogic.getSpecimenObject(specimenId);
-			sendSpecimenAvailableQuantity(specimen.getAvailableQuantity().toString(), response,identifier);
+			String specimenIdentifier =  (String)request.getParameter("specimenId");
+			Specimen specimen = null;
+			if(!specimenIdentifier.equals("#"))
+			{
+				Long specimenId =  Long.parseLong(request.getParameter("specimenId"));
+				specimen = orderBizLogic.getSpecimenObject(specimenId);
+			}
+			sendSpecimenDetails(specimen, response,identifier);
 			
 //			for ajax return null as Actionservlet returns ActionForward object
 			return null;   
@@ -358,7 +363,7 @@ private OrderItem getOrderItem(OrderDetails orderDetails , Long orderItemId )
 						allSpecimen = OrderingSystemUtil.getAllSpecimen(derivedSpecimenOrderItem.getParentSpecimen());
 						SpecimenComparator comparator = new SpecimenComparator();
 						Collections.sort(allSpecimen, comparator);
-						allSpecimensToDisplay = OrderingSystemUtil.getNameValueBeanList(allSpecimen);
+						allSpecimensToDisplay = OrderingSystemUtil.getNameValueBeanList(allSpecimen,null);
 						SpecimenOrderItem specimenOrderItem = (SpecimenOrderItem) orderItem;
 						if (specimenOrderItem.getNewSpecimenArrayOrderItem() == null)
 						{
@@ -378,7 +383,7 @@ private OrderItem getOrderItem(OrderDetails orderDetails , Long orderItemId )
 						allSpecimen = OrderingSystemUtil.getAllSpecimen(existingSpecimenOrderItem.getSpecimen());
 						SpecimenComparator comparator = new SpecimenComparator();
 						Collections.sort(allSpecimen, comparator);
-						allSpecimensToDisplay = OrderingSystemUtil.getNameValueBeanList(allSpecimen);
+						allSpecimensToDisplay = OrderingSystemUtil.getNameValueBeanList(allSpecimen,existingSpecimenOrderItem.getSpecimen());
 						requestForMap.put("RequestForDropDownList:" + rowNumber, allSpecimensToDisplay);
 					}
 								
@@ -386,9 +391,9 @@ private OrderItem getOrderItem(OrderDetails orderDetails , Long orderItemId )
 					{
 						/* chnages finsh */
 						PathologicalCaseOrderItem pathologicalCaseOrderItem = (PathologicalCaseOrderItem) orderItem;
-						List totalChildrenSpecimenColl = OrderingSystemUtil.getRequestForListForPathologicalCases(pathologicalCaseOrderItem.getSpecimenCollectionGroup(),
+						List totalChildrenSpecimenColl = OrderingSystemUtil.getAllSpecimensForPathologicalCases(pathologicalCaseOrderItem.getSpecimenCollectionGroup(),
 								pathologicalCaseOrderItem);
-						allSpecimensToDisplay = OrderingSystemUtil.getNameValueBeanList(totalChildrenSpecimenColl);
+						allSpecimensToDisplay = OrderingSystemUtil.getNameValueBeanList(totalChildrenSpecimenColl,null);
 						SpecimenOrderItem specimenOrderItem = (SpecimenOrderItem) orderItem;
 						if (specimenOrderItem.getNewSpecimenArrayOrderItem() == null)
 						{
@@ -602,7 +607,7 @@ private OrderItem getOrderItem(OrderDetails orderDetails , Long orderItemId )
 		//Obtain only those specimens of this class and type from the above list
 		List finalChildrenSpecimenList = OrderingSystemUtil.getChildrenSpecimenForClassAndType(childrenSpecimenList, derivedSpecimenOrderItem
 				.getSpecimenClass(), derivedSpecimenOrderItem.getSpecimenType());
-		List childrenSpecimenListToDisplay = OrderingSystemUtil.getNameValueBeanList(finalChildrenSpecimenList);
+		List childrenSpecimenListToDisplay = OrderingSystemUtil.getNameValueBeanList(finalChildrenSpecimenList,null);
 		arrayDetailsBean.setSpecimenList(childrenSpecimenListToDisplay);
 
 		arrayDetailsBean.setRequestedQuantity(derivedSpecimenOrderItem.getRequestedQuantity().toString());
@@ -668,7 +673,7 @@ private OrderItem getOrderItem(OrderDetails orderDetails , Long orderItemId )
 		{
 			totalChildrenSpecimenColl = new ArrayList();
 		}
-		childrenSpecimenListToDisplay = OrderingSystemUtil.getNameValueBeanList(totalChildrenSpecimenColl);
+		childrenSpecimenListToDisplay = OrderingSystemUtil.getNameValueBeanList(totalChildrenSpecimenColl,null);
 		arrayDetailsBean.setSpecimenList(childrenSpecimenListToDisplay);
 		arrayDetailsBean.setSpecimenCollGroupId(pathologicalCaseOrderItem.getSpecimenCollectionGroup().getId().toString());
 		if (isDerived)
@@ -851,7 +856,7 @@ private OrderItem getOrderItem(OrderDetails orderDetails , Long orderItemId )
 		//To display the available quantity of the selected specimen from RequestFor dropdown.
 		//request.getSession().setAttribute("finalSpecimenList"+finalSpecimenListId, finalChildrenSpecimenList);
 
-		List childrenSpecimenListToDisplay = OrderingSystemUtil.getNameValueBeanList(finalChildrenSpecimenList);
+		List childrenSpecimenListToDisplay = OrderingSystemUtil.getNameValueBeanList(finalChildrenSpecimenList,null);
 
 		//setting requestFor list in request
 		//request.setAttribute(Constants.REQUEST_FOR_LIST, childrenSpecimenListToDisplay);
@@ -861,14 +866,17 @@ private OrderItem getOrderItem(OrderDetails orderDetails , Long orderItemId )
 		requestDetailsBean.setInstanceOf("Derived");
 		requestDetailsBean.setRequestedQty(derivedSpecimenorderItem.getRequestedQuantity().toString());
 		//Displaying the quantity of the first specimen in the request for drop down.
-		if (childrenSpecimenListToDisplay.size() != 0)
+		requestDetailsBean.setAvailableQty("NA");
+		requestDetailsBean.setSelectedSpecimenType("NA");
+		
+		/*if (childrenSpecimenListToDisplay.size() > 1)
 		{
-			requestDetailsBean.setAvailableQty(((Specimen) finalChildrenSpecimenList.get(0)).getAvailableQuantity().toString());
+			requestDetailsBean.setAvailableQty(((Specimen) finalChildrenSpecimenList.get(1)).getAvailableQuantity().toString());
 		}
 		else
 		{
 			requestDetailsBean.setAvailableQty("NA");//derivedSpecimenorderItem.getSpecimen().getAvailableQuantity().getValue().toString()	  		
-		}
+		}*/
 		//Assigned Quantity
 		if (derivedSpecimenorderItem.getDistributedItem() != null)
 		{
@@ -940,7 +948,7 @@ private OrderItem getOrderItem(OrderDetails orderDetails , Long orderItemId )
 		//To display the available quantity of the selected specimen from RequestFor dropdown.
 		//request.getSession().setAttribute("finalSpecimenList"+finalSpecimenListId, totalChildrenSpecimenColl);
 
-		childrenSpecimenListToDisplay = OrderingSystemUtil.getNameValueBeanList(totalChildrenSpecimenColl);
+		childrenSpecimenListToDisplay = OrderingSystemUtil.getNameValueBeanList(totalChildrenSpecimenColl,null);
 		requestDetailsBean.setSpecimenList(childrenSpecimenListToDisplay);
 
 		requestDetailsBean.setSpecimenCollGroupId(pathologicalCaseOrderItem.getSpecimenCollectionGroup().getId().toString());
@@ -954,14 +962,14 @@ private OrderItem getOrderItem(OrderDetails orderDetails , Long orderItemId )
 		}
 		requestDetailsBean.setRequestedQty(pathologicalCaseOrderItem.getRequestedQuantity().toString());
 		//Displaying the quantity of the first specimen in the request for drop down.
-		if (childrenSpecimenListToDisplay.size() != 0)
+		/*if (childrenSpecimenListToDisplay.size() != 0)
 		{
 			requestDetailsBean.setAvailableQty(((Specimen) totalChildrenSpecimenColl.get(0)).getAvailableQuantity().toString());
 		}
 		else
 		{
 			requestDetailsBean.setAvailableQty("-");
-		}
+		}*/
 		//	  Assigned Quantity
 		if (pathologicalCaseOrderItem.getDistributedItem() != null)
 		{
@@ -1060,14 +1068,25 @@ private OrderItem getOrderItem(OrderDetails orderDetails , Long orderItemId )
 		return isOnChange;
 	}
 	
-	private void sendSpecimenAvailableQuantity(String availableQuantity, HttpServletResponse response,String identifier) throws Exception 		  
+	private void sendSpecimenDetails(Specimen specimen ,HttpServletResponse response,String identifier) throws Exception 		  
 	{
 			PrintWriter out = response.getWriter();
-			String responseString = identifier + Constants.RESPONSE_SEPARATOR + availableQuantity;
-			Logger.out.debug("mail"+availableQuantity);
+			String responseString = "";
+			if(specimen!=null){
+				String specimenQuantityUnit = OrderingSystemUtil.getUnit(specimen);
+				responseString = identifier + Constants.RESPONSE_SEPARATOR + 
+				specimen.getAvailableQuantity().toString()+Constants.RESPONSE_SEPARATOR +specimen.getSpecimenType() +
+				Constants.RESPONSE_SEPARATOR +specimenQuantityUnit;
+			}else {
+				responseString = identifier + Constants.RESPONSE_SEPARATOR + 
+				"NA"+Constants.RESPONSE_SEPARATOR +"NA" +
+				Constants.RESPONSE_SEPARATOR +"NA";
+			}
 			response.setContentType("text/html");
 			out.write(responseString );
 	}
+	
+	
 
 
 
