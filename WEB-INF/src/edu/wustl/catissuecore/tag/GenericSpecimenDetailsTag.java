@@ -665,7 +665,7 @@ public class GenericSpecimenDetailsTag extends TagSupport
 				 sb.append("<table style=\"font-size:1em\" size=\"100%\">");
 				 	sb.append("<tr>");
 				 		sb.append("<td>");
-				 			sb.append("<input type=\"text\" name=\""+nameValue[0]+"\" value=\"" + nameValue[1]+"\" size=\""+scSize+"\" class=\"black_ar\" id=\""+selectedContainerName+"\" >");
+				 			sb.append("<input type=\"text\" name=\""+nameValue[0]+"\" value=\"" + nameValue[1]+"\" size=\""+scSize+"\" class=\"black_ar\" onmouseover=\"showTip(this.id)\" id=\""+selectedContainerName+"\" >");
 				 		sb.append("</td>");
 				 		sb.append("<td>");
 				 			sb.append("<input type=\"text\" name=\""+nameValue[2]+"\" value=\"" + nameValue[3]+"\" size=\"2\" class=\"black_ar\" id=\""+positionDimensionOne+"\" >");
