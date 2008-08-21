@@ -12,11 +12,13 @@
 <%
 String checkAllPagesSession = (String)session.getAttribute("checkAllPages");
 String gridDivHeight="280";
-if(pageOf.equals(Constants.PAGEOF_QUERY_RESULTS) || pageOf.equals(Constants.PAGEOF_QUERY_MODULE) || pageOf.equals(Constants.PAGE_OF_PARTICIPANT_CP_QUERY))
-	{
+if(request.getAttribute(Constants.PAGEOF)!=null)
+{
+	if(pageOf.equals(Constants.PAGEOF_QUERY_RESULTS) || pageOf.equals(Constants.PAGEOF_QUERY_MODULE) || pageOf.equals(Constants.PAGE_OF_PARTICIPANT_CP_QUERY))
+		{
 		 gridDivHeight = "205";
 	}
-	
+}
 %>
 // --------------------  FUNCTION SECTION
 //checks or unchecks all the check boxes in the grid.
