@@ -62,7 +62,7 @@ window.onresize = function() { setFrameHeight('treeboxbox_tree', 1.0,slope); }
 			
 			<tr>
 				<td align="left">
-					<div id="treeboxbox_tree" width="100%" style="background-color:#f5f5f5;border :1px solid Silver; overflow:auto;"/>
+					<div id="treeboxbox_tree" width="100%" style="background-color:#f5f5f5;height=320px;border :1px solid Silver; overflow:auto;"/>
 				</td>
 			</tr>
 				
