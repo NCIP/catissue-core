@@ -19,6 +19,7 @@ import org.apache.struts.action.ActionMapping;
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.wustl.catissuecore.actionForm.AdvanceSearchForm;
 import edu.wustl.catissuecore.bizlogic.querysuite.QueryShoppingCartBizLogic;
+import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.querysuite.QueryShoppingCart;
 import edu.wustl.catissuecore.util.global.Constants;
 
@@ -71,8 +72,93 @@ public class BulkCartAction extends QueryShoppingCartAction
 		else if(Constants.EDIT_MULTIPLE_SPECIMEN.equals(operation))
 		{
 			target = editMultipleSpecimen(searchForm, session, operation);
-		}		
+		}	
+		else if(edu.wustl.catissuecore.util.shippingtracking.Constants.CREATE_SHIPMENT.equals(operation) ||
+				edu.wustl.catissuecore.util.shippingtracking.Constants.CREATE_SHIPMENT_REQUEST.equals(operation))
+		{
+			target = createShipment(searchForm, session, operation);
+		}
+	    
 		return mapping.findForward(target);
+	}
+	
+	private String createShipment(AdvanceSearchForm searchForm, HttpSession session, String operation) 
+	{
+		String target="";
+		
+		QueryShoppingCart cart = (QueryShoppingCart) session.getAttribute(Constants.QUERY_SHOPPING_CART);
+		
+		removeSessionAttributes(session);
+		List<AttributeInterface> cartAttributeList = cart.getCartAttributeList();
+		 
+		if (cartAttributeList != null)
+		{
+			Map <String,Set<String>> entityIdsMap = getShippingEntityNames(cartAttributeList,
+					getCheckboxValues(searchForm), cart);
+			getMapDetailsForShipment(session, entityIdsMap);
+		}
+		
+		target = new String(operation);
+		
+		return target;
+	}
+
+	private void getMapDetailsForShipment(HttpSession session, Map<String, Set<String>> entityIdsMap) 
+	{
+		Set<String> specimenLabelsSet = entityIdsMap.get(Constants.SPECIMEN_NAME);
+		Set<String> containerNamesSet = entityIdsMap
+			.get(Constants.STORAGE_CONTAINER_CLASS_NAME);
+		
+		List<String> specimenLabels = new ArrayList<String>();
+		List<String> containerNames = new ArrayList<String>();
+		
+		specimenLabels.addAll(specimenLabelsSet);
+		containerNames.addAll(containerNamesSet);
+		
+		session.setAttribute(Constants.SPECIMEN_LABELS_LIST, specimenLabels);
+		session.setAttribute(Constants.CONTAINER_NAMES_LIST, containerNames);
+	}
+
+	private Map<String, Set<String>> getShippingEntityNames(List<AttributeInterface> cartAttributeList, List<Integer> chkBoxValues, QueryShoppingCart cart) 
+	{
+		Map <String,Set<String>> entityIdsMap = getShippingEntityMap();
+		QueryShoppingCartBizLogic bizLogic = new QueryShoppingCartBizLogic(); 
+		List<String> orderableEntityNameList = Arrays.asList(Constants.entityNameArray);
+		for (AttributeInterface attribute : cartAttributeList)
+		{
+			
+			if ((Constants.SYSTEM_LABEL.equals(attribute.getName()))
+					&& ((orderableEntityNameList))
+							.contains(attribute.getEntity().getName()))
+			{
+				String entityName = attribute.getEntity().getName();
+				
+				Set<String> tempEntityIdsList = bizLogic.getEntityLabelsList(cart,
+						Arrays.asList(entityName), chkBoxValues,Constants.SYSTEM_LABEL);
+				Set<String> idMap = entityIdsMap.get(entityName);
+				idMap.addAll(tempEntityIdsList);
+			}
+			
+			if ((Constants.SYSTEM_NAME.equals(attribute.getName()))
+					&& attribute.getEntity().getName().equals(StorageContainer.class.getName()))
+			{
+				String entityName = attribute.getEntity().getName();
+				
+				Set<String> tempEntityIdsList = bizLogic.getEntityLabelsList(cart,
+						Arrays.asList(entityName), chkBoxValues,Constants.SYSTEM_NAME);
+				Set<String> idMap = entityIdsMap.get(entityName);
+				idMap.addAll(tempEntityIdsList);
+			}
+		}
+		return entityIdsMap;
+	}
+
+	private Map<String, Set<String>> getShippingEntityMap() 
+	{
+		Map <String,Set<String>> entityIdsMap = new HashMap<String, Set<String>>();
+		entityIdsMap.put(Constants.SPECIMEN_NAME, new HashSet<String>());
+		entityIdsMap.put(Constants.STORAGE_CONTAINER_CLASS_NAME, new HashSet<String>());
+		return entityIdsMap;
 	}
 
 	/**
