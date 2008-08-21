@@ -417,7 +417,7 @@
 							
 									<logic:equal name="storagePosition" value="Manual">
 									<td class="groupElements">
-										<html:text styleClass="black_ar"  size="13" styleId="selectedContainerName"
+										<html:text styleClass="black_ar"  size="13" onmouseover="showTip(this.id)" styleId="selectedContainerName"
 													property="selectedContainerName" />
 												<html:text styleClass="black_ar"  size="3" styleId="pos1" 
 													property="pos1" />

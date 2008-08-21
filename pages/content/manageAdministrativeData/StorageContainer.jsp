@@ -746,7 +746,7 @@ function addNewTypeAction(action)
 						<div id="parentContainerManual" style="display:none">
     					  <table width="64%" border="0" cellpadding="0" cellspacing="0" class="groupElements">
 						<tr>
-							 <td width="24%"><html:text styleClass="grey_ar"   size="30" styleId="selectedContainerName" property="selectedContainerName"/></td>
+							 <td width="24%"><html:text styleClass="grey_ar"   size="30" styleId="selectedContainerName" onmouseover="showTip(this.id)" property="selectedContainerName"/></td>
 							 <td width="13%"><html:text styleClass="black_ar_s"  size="5" styleId="pos1" property="pos1"/> </td>	
 							 <td width="13%"><html:text styleClass="black_ar_s" size="5" styleId="pos2" property="pos2"/></td>	
 							 <td width="14%"><html:button styleClass="grey_ar"  property="containerMap" onclick="mapButtonClicked()"><bean:message key="buttons.map"/></html:button> </td>

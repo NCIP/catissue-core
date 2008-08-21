@@ -573,7 +573,7 @@ ${aliquotBean.jsScript}
 			<div style="display:none" id="manual_${counter+1}"  >
 					<table cellpadding="0" cellspacing="0" border="0" >
 						<tr>
-							<td class="groupelements"><html:text styleClass="black_ar"  size="20" styleId="${aliquotBean.containerStyle}" property="${aliquotBean.containerNameFromMapKey}" />&nbsp;
+							<td class="groupelements"><html:text styleClass="black_ar"  size="20" styleId="${aliquotBean.containerStyle}" onmouseover="showTip(this.id)" property="${aliquotBean.containerNameFromMapKey}" />&nbsp;
 							</td>
 							<td class="groupelements"><html:text styleClass="black_ar" size="2" styleId="${aliquotBean.pos1Style}" property="${aliquotBean.pos1FromMapKey}" />&nbsp;
 							</td>

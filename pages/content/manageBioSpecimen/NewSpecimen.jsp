@@ -18,7 +18,7 @@
 
 <%@ include file="/pages/content/common/BioSpecimenCommonCode.jsp" %>
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
-
+<script type="text/javascript" src="jss/wz_tooltip.js"></script>
 <script src="jss/script.js"></script>
 <script src="jss/calendarComponent.js"></script>
 <SCRIPT>var imgsrc="images/";</SCRIPT>
@@ -1608,7 +1608,7 @@
 				<table cellpadding="0" cellspacing="0" border="0" >
 						<tr>
 							<td class="groupelements">
-								<html:text styleClass="black_ar"  size="20" styleId="selectedContainerName" property="selectedContainerName" disabled= "false"/>
+								<html:text styleClass="black_ar"  size="20" styleId="selectedContainerName" onmouseover="showTip(this.id)" property="selectedContainerName" disabled= "false"/>
 							</td>
 							<td class="groupelements">
 								<html:text styleClass="black_ar"  size="2" styleId="pos1" property="pos1" disabled= "false"/>
@@ -1652,7 +1652,7 @@
 														<table cellpadding="0" cellspacing="0" border="0" >
 						<tr>
 							<td class="groupelements">
-															<html:text styleClass="black_ar"  size="30" styleId="selectedContainerName" property="selectedContainerName" readonly= "true"/>
+															<html:text styleClass="black_ar"  size="30" styleId="selectedContainerName" onmouseover="showTip(this.id)" property="selectedContainerName" readonly= "true"/>
 														</td>
 							<td class="groupelements">
 															<html:text styleClass="black_ar"  size="2" styleId="positionDimensionOne" property="positionDimensionOne" readonly= "true" style="text-align:right"/>
