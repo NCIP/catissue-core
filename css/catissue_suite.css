@@ -99,6 +99,22 @@ body {
 	color:#ea6c15;
 }
 
+.messagetexterror {
+	font-family:Verdana;
+	font-size:11px;
+	color: red;
+	vertical-align:middle;
+	margin:0px;
+}
+
+.messagetextsuccess {
+	font-family:Verdana;
+	font-size:11px;
+	color: green;
+	vertical-align:middle;
+	margin:0px;
+}
+
 .messagehighlight {
 	border-bottom:1px solid #ea6c15;
 	border-top:1px solid #ea6c15;
