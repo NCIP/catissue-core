@@ -160,8 +160,27 @@ function popupWindow(nofConsentTiers)
 	}	
 	else
 	{
-		var url="pages/content/ConsentTracking/consentDialog.jsp?withrawall=false&response=withdraw&pageOf="+"<%=pageOf%>";
+	if(changeInStatus==false)
+		{
+			<%
+				Object formVar = form;
+				if(formVar instanceof NewSpecimenForm)
+				{
+			%>
+					return onNormalSubmit();
+			<%
+				}
+				else
+			   {
+			%>
+					return <%=normalSubmit%>;
+			<%
+			   }
+			%>
+		}
+	   var url="pages/content/ConsentTracking/consentDialog.jsp?withrawall=false&response=withdraw&pageOf="+"<%=pageOf%>";
 		window.open(url,'Withdraw','height=365,width=530,center=1,scrollbars=1,resizable=0');
+		
 	}
 }	
 
