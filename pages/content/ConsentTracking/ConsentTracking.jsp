@@ -170,7 +170,7 @@ function popupWindow(nofConsentTiers)
 					return onNormalSubmit();
 			<%
 				}
-				else
+				else if(formVar instanceof SpecimenCollectionGroupForm)
 			   {
 			%>
 					return <%=normalSubmit%>;
