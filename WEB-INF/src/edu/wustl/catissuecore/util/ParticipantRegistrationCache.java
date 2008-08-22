@@ -314,6 +314,7 @@ class ParticipantRegistrationCache
 		
 		if (siteIds != null && !siteIds.isEmpty())
 		{
+			List<NameValueBean> list = new ArrayList<NameValueBean>();
 			PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(sessionDataBean.getUserName());
 			SiteBizLogic siteBizLogic = (SiteBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.SITE_FORM_ID);
 			for (Long siteId : siteIds)
@@ -325,7 +326,7 @@ class ParticipantRegistrationCache
 					
 					if (cpCollection != null && !cpCollection.isEmpty())
 					{
-						List<NameValueBean> list = new ArrayList<NameValueBean>();
+						// List<NameValueBean> list = new ArrayList<NameValueBean>();
 						for (CollectionProtocol cp : cpCollection)
 						{
 							if(cp_Ids.contains(cp.getId()))
@@ -344,11 +345,12 @@ class ParticipantRegistrationCache
                             if (!isPresent)
 							list.add(new NameValueBean(cp.getShortTitle(),cp.getId()));
 						}
-						cpDetailsList.addAll(list);
+						// cpDetailsList.addAll(list);
 					}
 					
 				}
 			}
+			cpDetailsList.addAll(list);
 		}
 		Iterator iter = newList.iterator();
 		while (iter.hasNext())
