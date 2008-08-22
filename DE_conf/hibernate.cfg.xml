@@ -15,7 +15,7 @@
 	
 	 	<property name="connection.url">@@URL@@</property>
 	    <property name="connection.username">@@DATABASE_USERNAME@@</property>
-	    <property name="connection.password">@@DATABSE_PASSWORD@@</property> 
+	    <property name="connection.password">@@DATABASE_PASSWORD@@</property> 
 	 
 	 	<property name="hibernate.jdbc.batch_size">0</property>
     	
