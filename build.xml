@@ -876,6 +876,7 @@
 	<!-- unpack caCORE war into temp folder -->
 	<target name="unpack_cacore_war" depends ="clean_temp_dir_csmwar">		
 		<unwar src="${base.dir}/catissuecorecsm.war" dest="${temp.dir}/catissuecorecsm"/>
+		<delete file="${temp.dir}/catissuecorecsm/WEB-INF/lib/jboss-common-jdbc-wrapper.jar" />
 		<!--
 		<if>
 			<equals arg1="mysql" arg2="${database.type}"/>
