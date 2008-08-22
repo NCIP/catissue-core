@@ -23,7 +23,7 @@ import edu.wustl.common.util.global.Constants;
  * @author abhijit_naik
  *
  */
-public class UserDBTestcases extends CaTissueBaseDBUnitTestCase
+public class UserDBTestcases extends DefaultCatissueDBUnitTestCase
 {
 
 	public UserDBTestcases()
@@ -31,29 +31,19 @@ public class UserDBTestcases extends CaTissueBaseDBUnitTestCase
 		super();
 		
 	}
-	protected DatabaseOperation getSetUpOperation() 
-	  throws Exception {
-	   return DatabaseOperation.NONE;
-	 }
-	protected IDataSet getDataSet() throws Exception
-	{
 
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public void testUserCreate()
-	{
-		try
-		{
-			User user = initUser();
-			insert(user);
-			assertTrue("UserCreated", user.getId()<=0);
-		}catch(Exception e)
-		{
-			fail("failed to insert user");
-		}
-	}
+//	public void testUserCreate()
+//	{
+//		try
+//		{
+//			User user = initUser();
+//			insert(user);
+//			assertTrue("UserCreated", user.getId()<=0);
+//		}catch(Exception e)
+//		{
+//			fail("failed to insert user");
+//		}
+//	}
 	public void testUserUpdate()
 	{
 		User user = initUser();
