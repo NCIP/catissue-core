@@ -273,8 +273,13 @@ public class DAGPanel {
 		IConstraints constraints = query.getConstraints();
 		IExpression expression = constraints.getExpression(nodeExpressionId);
 		IQueryEntity sourceEntity = expression.getQueryEntity();
-		AttributeInterface srcAttributeByIdentifier = sourceEntity.getDynamicExtensionsEntity()
-				.getAttributeByIdentifier(identifier);
+		AttributeInterface srcAttributeByIdentifier = null;
+		EntityInterface dynamicExtensionsEntity = sourceEntity.getDynamicExtensionsEntity();
+		while(srcAttributeByIdentifier==null)
+		{
+			srcAttributeByIdentifier = dynamicExtensionsEntity.getAttributeByIdentifier(identifier);
+			dynamicExtensionsEntity = dynamicExtensionsEntity.getParentEntity();
+		}
 		return srcAttributeByIdentifier;
 	}
 	
