@@ -9,7 +9,8 @@
 			<pathelement location="./lib/ant-contrib.jar" />
 		</classpath>
 	</taskdef>
-
+	
+	<property environment="env" />	
 	<import file="build-properties.xml"/>
 	
 	<property name="base.dir" value="." />
@@ -36,6 +37,10 @@
 	<property name="catissue.hibernate.config.file" value="hibernate.cfg.xml" />
 	<property name="catissue.tiles.def.file" value="tiles-defs.xml" />
 	
+	<property name="oracle_home" value="${env.ORACLE_HOME}"/>
+	<property name="oracle_home.bin" value="${oracle_home}\bin" />
+	<property name="sqlldr" value="${oracle_home.bin}\sqlldr.exe" />
+	<property name="path" value="${env.Path}" />
 	<!-- Check for required properties -->
 	<target name="assert">
 		<if>
@@ -61,6 +66,45 @@
 				<fail message="The value of property 'database.type' must be mysql or oracle" />
 			</else>
 		</if>
+		
+		<!-- Validation for ORACLE_HOME and path-->
+		<if>
+		<equals arg1="oracle" arg2="${database.type}" />
+			<then>				
+				<available file="${oracle_home}" type="dir" property="IsOracleHomeBlank" />
+				<if>
+					<not>
+					<equals arg1="true" arg2="${IsOracleHomeBlank}" />
+					</not>	
+					<then>
+						<fail message="ORACLE_HOME is not set on your server. For windows set oracle_home as environment variable or in linux set in .bash_profile file." />
+					</then>
+				</if>
+				
+				<condition property="isOracleBinDirSetInPath">
+				<contains string="${path}" substring="${oracle_home.bin}" casesensitive="true" />
+				</condition>
+				<if>	
+					<equals arg1="true" arg2="${isOracleBinDirSetInPath}" />
+					<then>
+						<echo>Oracle bin present in path... </echo>
+					</then>
+					<else>
+						<fail message="ORACLE_HOME is not set in path,please set it" />
+					</else>	
+				</if>
+				<available file="${sqlldr}" property="issqlldrPresentInBin"/>		
+				<if>	
+					<equals arg1="true" arg2="${issqlldrPresentInBin}" />			
+					<then>
+						<echo>${sqlldr} file exists. </echo>
+					</then>								
+					<else>
+						<fail message="${sqlldr} file is not present." />
+					</else>
+				</if>
+			</then>
+		</if>				
 		<if>
 			<equals arg1="" arg2="${database.host}" />
 			<then>
@@ -136,7 +180,7 @@
 			</then>
 		</if>
 	</target>
-	
+
 	<!--Target for validation of connection parameters-->
 	<target name="validate_database_connection">
 		<!-- validation for database connection -->
@@ -157,24 +201,24 @@
 						</then>					
 						<elseif >					
 							<equals arg1="oracle" arg2="${database.type}" />					
-							<then>							
+							<then>				
 								<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle">
 									<transaction>select sysdate from dual;</transaction>
 									<transaction>commit;</transaction>
-									<classpath>
-										<fileset dir="${lib.dir}">
-											<include name="*.jar" />
-										</fileset>
-									</classpath>
+										<classpath>
+											<fileset dir="${lib.dir}">
+												<include name="*.jar" />
+											</fileset>
+										</classpath>
 								</sql>					
 							</then>					
 						</elseif>
-					</if>
-			</try>
-		    <catch>
-				<fail message="Connection fails.Please check the database configuration parameters like database.host,database.port,database.name etc.  " />
-		   	</catch>
-		</trycatch> 
+				</if>
+		</try>
+		<catch>
+			<fail message="Connection fails.Please check the database configuration parameters like database.host,database.port,database.name etc.  " />
+		</catch>
+	</trycatch> 
 	</target>
 
 	<!--Extrct WAR and copy Configuration files to temp directory-->
@@ -707,7 +751,7 @@
 			<replace dir="${temp.dir}/${warName}/WEB-INF/classes">
 				<include name="hibernate.properties" />
 				<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}" />
-				<replacefilter token="@@DATABSE_PASSWORD@@" value="${database.password}" />
+				<replacefilter token="${token.database.password}" value="${database.password}" />
 
 			</replace>
 
@@ -1555,11 +1599,11 @@ Thanking You,
 		<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
 			<include name="*.cfg.xml" />
 			<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}" />
-			<replacefilter token="@@DATABSE_PASSWORD@@" value="${database.password}" />
+			<replacefilter token="${token.database.password}" value="${database.password}" />
 			<!--<replacefilter token="@@DATABASE_NAME@@" value="${database.name}"/>  -->
 		</replace>
 
-		<java classname="edu.wustl.catissuecore.annotations.xmi.ImportXmi" fork="true">
+	<!--	<java classname="edu.wustl.catissuecore.annotations.xmi.ImportXmi" fork="true">
 			<arg value="${filename}" />
 			<arg value="${hookentity}" />
 			<arg value="${mainContainerList}" />
@@ -1582,7 +1626,7 @@ Thanking You,
 			<fileset dir="${temp.dir}/catissuecore">
 				<include name="**/*" />
 			</fileset>
-		</delete>
+		</delete>-->
 	</target>
 
 <!-- XMI EXPORT-->
@@ -1628,7 +1672,7 @@ Thanking You,
 		<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
 			<include name="*.cfg.xml" />
 			<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}" />
-			<replacefilter token="@@DATABSE_PASSWORD@@" value="${database.password}" />
+			<replacefilter token="${token.database.password}" value="${database.password}" />
 			<!--<replacefilter token="@@DATABASE_NAME@@" value="${database.name}"/>  -->
 		</replace>
 
@@ -1797,7 +1841,7 @@ Thanking You,
 		<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
 			<include name="*.cfg.xml" />
 			<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}"/>
-			<replacefilter token="@@DATABSE_PASSWORD@@" value="${database.password}"/>
+			<replacefilter token="${token.database.password}" value="${database.password}"/>
 		</replace>
 				
 		<java classname="edu.wustl.catissuecore.annotations.xmi.CategoryIntegration" fork="true" maxmemory="1024M">		
@@ -1859,7 +1903,7 @@ Thanking You,
 		<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
 			<include name="*.cfg.xml" />
 			<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}"/>
-			<replacefilter token="@@DATABSE_PASSWORD@@" value="${database.password}"/>
+			<replacefilter token="${token.database.password}" value="${database.password}"/>
 		</replace>		
 					
 		<java classname="edu.common.dynamicextensions.util.parser.ImportPermissibleValues" fork="true" maxmemory="1024M">		
