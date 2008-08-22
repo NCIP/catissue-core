@@ -6,9 +6,10 @@ package edu.wustl.catissuecore.bizlogic.test;
 
 import java.util.List;
 
+import edu.wustl.catissuecore.dbunit.test.DefaultCatissueDBUnitTestCase;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.User;
-import gov.nih.nci.system.applicationservice.ApplicationException;
+import edu.wustl.common.exception.BizLogicException;
 
 /**
  * This class is specifically for the migration code required to move legacy data to 
@@ -17,7 +18,7 @@ import gov.nih.nci.system.applicationservice.ApplicationException;
  * @author juberahamad_patel
  *
  */
-public class MSRMigrationTestCases extends MSRBaseTestCase
+public class MSRMigrationTestCases extends DefaultCatissueDBUnitTestCase
 {
 
 	/**
@@ -33,10 +34,10 @@ public class MSRMigrationTestCases extends MSRBaseTestCase
 
 		try
 		{
-			users = appService.search(User.class, new User());
-			sites = appService.search(Site.class, new Site());
+			users = search(User.class);
+			sites = search(Site.class);
 		}
-		catch (ApplicationException e)
+		catch (BizLogicException e)
 		{
 			fail("failed to retrieve all the users and sites");
 		}
@@ -49,9 +50,9 @@ public class MSRMigrationTestCases extends MSRBaseTestCase
 				user.getSiteCollection().addAll(sites);
 				try
 				{
-					appService.updateObject(user);
+					update(user);
 				}
-				catch (ApplicationException e)
+				catch (BizLogicException e)
 				{
 					fail("failed to update User with email id " + user.getEmailAddress());
 				}
