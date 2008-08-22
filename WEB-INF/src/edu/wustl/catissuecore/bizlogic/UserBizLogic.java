@@ -108,46 +108,8 @@ public class UserBizLogic extends DefaultBizLogic
 		{
 			user = (User) obj;            
 		}
-        if (user.getRoleId() != null && !user.getRoleId().equalsIgnoreCase("-1") && !user.getRoleId().equalsIgnoreCase("0"))
-        {
-            if (userRowIdMap == null || userRowIdMap.isEmpty() && user.getSiteCollection() != null && !user.getSiteCollection().isEmpty())
-            {
-                List<NameValueBean> list = new AssignPrivilegePageBizLogic().getActionsForSelRole(user.getRoleId());
-                NameValueBean roleBean = new NameValueBean();
-                try
-                {
-                    Vector<Role> roleList = SecurityManager.getInstance(this.getClass()).getRoles();
-                    roleBean.setValue(user.getRoleId());
-                    for (Role role : roleList)
-                    {
-                        if (role.getId().toString().equalsIgnoreCase(user.getRoleId()))
-                        {
-                            roleBean.setName(role.getName());
-                            break;
-                        }
-                    }
-                }
-                catch (SMException e)
-                {
-                    
-                }
-                int i = 0;
-                userRowIdMap = new HashMap<String, SiteUserRolePrivilegeBean>(); 
-                for (Site site : user.getSiteCollection())
-                {
-                    List <Site> siteList = new ArrayList<Site>();
-                    siteList.add(site);
-                    SiteUserRolePrivilegeBean siteUserRolePrivilegeBean = new SiteUserRolePrivilegeBean();
-                    siteUserRolePrivilegeBean.setAllCPChecked(true);
-                    siteUserRolePrivilegeBean.setPrivileges(list);
-                    siteUserRolePrivilegeBean.setRole(roleBean);
-                    siteUserRolePrivilegeBean.setSiteList(siteList);
-                    userRowIdMap.put(new Integer(i).toString(),siteUserRolePrivilegeBean);
-                    i++;
-                }
-            }
-        }
-						
+		// Method to populate rowIdMap in case, Add Privilege button is not clicked
+        userRowIdMap = getUserRowIdMap(user, userRowIdMap);
 		gov.nih.nci.security.authorization.domainobjects.User csmUser = new gov.nih.nci.security.authorization.domainobjects.User();
 
 		try
@@ -291,6 +253,50 @@ public class UserBizLogic extends DefaultBizLogic
 			deleteCSMUser(csmUser);
 			throw new DAOException(e.getMessage(), e);
 		}
+	}
+
+	public Map<String, SiteUserRolePrivilegeBean> getUserRowIdMap(User user, Map<String, SiteUserRolePrivilegeBean> userRowIdMap) throws DAOException 
+	{
+		if (user.getRoleId() != null && !user.getRoleId().equalsIgnoreCase("-1") && !user.getRoleId().equalsIgnoreCase("0"))
+        {
+            if (userRowIdMap == null || userRowIdMap.isEmpty() && user.getSiteCollection() != null && !user.getSiteCollection().isEmpty())
+            {
+                List<NameValueBean> list = new AssignPrivilegePageBizLogic().getActionsForSelRole(user.getRoleId());
+                NameValueBean roleBean = new NameValueBean();
+                try
+                {
+                    Vector<Role> roleList = SecurityManager.getInstance(this.getClass()).getRoles();
+                    roleBean.setValue(user.getRoleId());
+                    for (Role role : roleList)
+                    {
+                        if (role.getId().toString().equalsIgnoreCase(user.getRoleId()))
+                        {
+                            roleBean.setName(role.getName());
+                            break;
+                        }
+                    }
+                }
+                catch (SMException e)
+                {
+                	throw new DAOException(ApplicationProperties.getValue("user.roleNotFound"));
+                }
+                int i = 0;
+                userRowIdMap = new HashMap<String, SiteUserRolePrivilegeBean>(); 
+                for (Site site : user.getSiteCollection())
+                {
+                    List <Site> siteList = new ArrayList<Site>();
+                    siteList.add(site);
+                    SiteUserRolePrivilegeBean siteUserRolePrivilegeBean = new SiteUserRolePrivilegeBean();
+                    siteUserRolePrivilegeBean.setAllCPChecked(true);
+                    siteUserRolePrivilegeBean.setPrivileges(list);
+                    siteUserRolePrivilegeBean.setRole(roleBean);
+                    siteUserRolePrivilegeBean.setSiteList(siteList);
+                    userRowIdMap.put(new Integer(i).toString(),siteUserRolePrivilegeBean);
+                    i++;
+                }
+            }
+        }
+		return userRowIdMap;
 	}
 
 	/**
@@ -712,6 +718,8 @@ public class UserBizLogic extends DefaultBizLogic
 		{
 			user = (User) obj;
 		}
+		// Method to populate rowIdMap in case, Add Privilege button is not clicked
+        userRowIdMap = getUserRowIdMap(user, userRowIdMap);
 		
 		User oldUser = (User) oldObj;
 		
@@ -838,7 +846,20 @@ public class UserBizLogic extends DefaultBizLogic
 				if ((Constants.PAGEOF_USER_PROFILE.equals(user.getPageOf()) == false)
 						&& (Constants.PAGEOF_CHANGE_PASSWORD.equals(user.getPageOf()) == false))
 				{
-					SecurityManager.getInstance(UserBizLogic.class).assignRoleToUser(csmUser.getUserId().toString(), user.getRoleId());
+					if (user.getRoleId() != null)
+					{
+	                    if (user.getRoleId().equalsIgnoreCase(Constants.SUPER_ADMIN_USER))
+	                    {
+	                        user.setRoleId(Constants.ADMIN_USER);
+	                    }
+	                    else
+	                    {
+	                    	user.setRoleId(Constants.NON_ADMIN_USER);
+	                    }
+	                  
+						SecurityManager.getInstance(UserBizLogic.class).assignRoleToUser(csmUser.getUserId().toString(), user.getRoleId());
+					}
+					// SecurityManager.getInstance(UserBizLogic.class).assignRoleToUser(csmUser.getUserId().toString(), user.getRoleId());
 				}
 				
 				// Set protectionObjects = new HashSet();
