@@ -168,10 +168,11 @@ table#browserDetailsContainer
 										</td>
 									</tr>
 									<tr>
-										<td>&nbsp;</td>
-										<td align="left" valign="middle"><a
+										<td>&nbsp;</td><td>&nbsp;</td>
+										<!-- <td align="left" valign="middle"><a
 											href="ForgotPassword.do" class="view"><bean:message
 											key="app.requestPassword" /> </a></td>
+										 -->
 									</tr>
 								</table>
 							</html:form>
