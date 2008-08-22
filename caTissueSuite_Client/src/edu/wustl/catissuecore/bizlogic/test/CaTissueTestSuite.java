@@ -29,6 +29,7 @@ public class CaTissueTestSuite
 		suite.addTestSuite(SpecimenTestCases.class);
 		suite.addTestSuite(StorageTypeTestCases.class);
 		suite.addTestSuite(StorageContainerTestCases.class);
+		suite.addTestSuite(SpecimenEventTestCases.class);
 		suite.addTestSuite(StorageContainerRestrictionsTestCases.class);
 		suite.addTestSuite(DisableFunctionalityTestCases.class);
 		suite.addTestSuite(SupervisorRoleTestCases.class);
