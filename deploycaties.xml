@@ -67,6 +67,24 @@
 				</if>
 			</then>
 		</if>
+		<!-- Assertions for add collection protocol-->
+		<if>
+			<equals arg1="yes" arg2="${add.default.collection.protocol}" />
+			<then>
+				<if>
+					<equals arg1="" arg2="${collection.protocol.title}" />
+					<then>
+						<fail message="The property 'collection.protocol.title' can not be empty" />
+					</then>
+				</if>
+				<if>
+					<equals arg1="" arg2="${site.name}" />
+					<then>
+						<fail message="The property 'site.name' can not be empty" />
+					</then>
+				</if>
+			</then>
+		</if>
 		<!-- Assertions for report loader server-->
 		<if>
 			<equals arg1="yes" arg2="${install.report.loader.server}" />
@@ -205,6 +223,7 @@
 		<copy file="${base.dir}/caTissueSuite_Client/conf/remoteService.xml" todir="${temp.caties.dir}/caTIES_conf" overwrite="true" />
 		<replace file="${temp.caties.dir}/caTIES_conf/caTIES.properties">
 			<replacefilter token="@@COLL_PROT_TITLE@@" value="${collection.protocol.title}" />
+			<replacefilter token="@@SITE_NAME@@" value="${site.name}" />
 			<replacefilter token="@@ADMIN_EMAIL@@" value="${first.admin.emailAddress}" />
 			<replacefilter token="@@ADMIN_PASSWORD@@" value="${first.admin.password}" />
 			<replacefilter token="@@INPUT_FILES_DIR@@" value="${input.files.dir}" />

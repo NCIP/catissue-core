@@ -133,6 +133,7 @@ public abstract class CaTIESConstants
 	public static final String SITE_INFO_FILENAME="siteInfoFilename";
 	public static final String FILE_POLLER_PORT="filePollerPort";
 	public static final String COLLECTION_PROTOCOL_TITLE="collectionProtocolTitle";
+	public static final String SITE_NAME_FROM_PROPERTIES="siteName";
 	public static final String SECTION_HEADER_FILENAME="sectionHeaderPriorityFilename";
 	public static final String USER_NAME="userName";
 	public static final String PASSWORD="password";
