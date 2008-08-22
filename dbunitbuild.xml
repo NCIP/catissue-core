@@ -1,0 +1,106 @@
+<project basedir="." name="caTissue_DBUnit" default="RunAllTestCases" >
+
+	<property name="db_unit.dir" value="${basedir}/caTissueSuite_dbunit" />
+	<property name="db_src.dir" value="${db_unit.dir}/src" />
+	<property file="${db_src.dir}/caTissueDBUnit.properties" />
+	<property name="db_temp.dir" value="${db_unit.dir}/tmp" />
+	<property name="db_lib.dir" value="${db_unit.dir}/lib" />
+	<property name="base.dir" value="." />
+	<property name="lib.dir" value="${base.dir}/WEB-INF/lib" />
+	<!-- import file="deploy.xml"/ -->
+	<target name="init">
+		<deltree dir="${db_temp.dir}"/>
+		<mkdir dir="${db_temp.dir}"/>
+		<mkdir dir="${db_temp.dir}/Nightly_Build_Report"/>
+		
+	</target>
+	
+	<target name="clean">
+		<deltree dir="${db_temp.dir}"/>
+	</target>
+	
+	<target name="catissue_compile">
+		<delete dir="${db_temp.dir}/suite" />
+		<mkdir dir="${db_temp.dir}/suite"/>
+		<javac destdir="${db_temp.dir}/suite" srcdir="${base.dir}/WEB-INF/src" includes="**/*.java">
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar"/>
+				</fileset>
+			</classpath>
+		</javac>
+		<jar destfile="${db_lib.dir}/catissue.jar">
+			<fileset dir="${db_temp.dir}/suite">
+				<include name="**/*.class"/>
+			</fileset>
+			<fileset dir="${base.dir}/WEB-INF/src">
+				<include name="**/*hbm.xml"/>
+			</fileset>
+
+		</jar>
+		<delete dir="${db_temp.dir}/suite" />
+	</target>	
+	<target name="db_compile" depends="init">
+		<javac destdir="${db_temp.dir}" srcdir="${db_src.dir}" includes="**/*">
+			<classpath id="DbUnit_classpath2">
+				<fileset dir="${lib.dir}">
+					<include name="*.jar"/>
+				</fileset>
+					
+				<fileset dir="${db_lib.dir}">
+					<include name="*.jar"/>
+				</fileset>	
+			</classpath>
+		</javac>
+		<copy todir="${db_temp.dir}">
+			<fileset dir="${db_unit.dir}/src" >
+				<include name ="*.xml"/>
+				<include name = "*.properties"/>
+			</fileset>
+			<fileset dir="${base.dir}">
+				<include name="TestDataSet.xml"/>
+			</fileset>
+		</copy>
+	</target>
+	<target name ="clean_db">
+		<sql driver="${database.driver}" password="${database.password}" url="${database.jdbc.url}" userid="${database.username}">
+			<classpath path="${lib.dir}/mysql*.jar" > 
+				<fileset dir="${lib.dir}">
+					<include name="*.jar"/>
+				</fileset> 
+			</classpath>
+		<transaction>drop database ${database.name}</transaction>
+		<transaction>create database ${database.name}</transaction>
+		</sql>
+			
+		<!-- antcall target="deploy_db" / -->
+	</target>
+	<target name="RunAllTestCases" depends="clean_db,RundbUnit" />
+	
+	<target name="RundbUnit" depends="db_compile">
+		<junit printsummary="yes" haltonfailure="yes">
+			  <formatter type="xml"/>
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar"/>
+				</fileset>
+
+				<fileset dir="${base.dir}/third_party_lib/WEB-INF/lib">
+					<include name="*.jar"/>
+				</fileset>
+					
+				<fileset dir="${db_lib.dir}">
+					<include name="*.jar"/>
+				</fileset>	
+				<pathelement path="${db_temp.dir}"/>
+			</classpath>
+			<batchtest todir="${db_temp.dir}/Nightly_Build_Report">
+				<fileset dir="${db_src.dir}">
+					<include name="**/UserDBTestcases.java"/>
+				</fileset>
+			</batchtest>
+		</junit>
+
+		<!--antcall target="clean"></antcall -->
+	</target>	
+</project>
