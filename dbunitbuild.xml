@@ -7,16 +7,17 @@
 	<property name="db_lib.dir" value="${db_unit.dir}/lib" />
 	<property name="base.dir" value="." />
 	<property name="lib.dir" value="${base.dir}/WEB-INF/lib" />
-	<!-- import file="deploy.xml"/ -->
-	<target name="init">
-		<deltree dir="${db_temp.dir}"/>
+	<import file="deploy.xml"/>
+	<target name="init" depends = "clean">
+		<delete dir="${db_unit.dir}/Build_Report"/>
 		<mkdir dir="${db_temp.dir}"/>
 		<mkdir dir="${db_temp.dir}/Nightly_Build_Report"/>
-		
+		<mkdir dir="${db_unit.dir}/Build_Report"/>
 	</target>
 	
 	<target name="clean">
 		<deltree dir="${db_temp.dir}"/>
+		
 	</target>
 	
 	<target name="catissue_compile">
@@ -40,6 +41,7 @@
 		</jar>
 		<delete dir="${db_temp.dir}/suite" />
 	</target>	
+
 	<target name="db_compile" depends="init">
 		<javac destdir="${db_temp.dir}" srcdir="${db_src.dir}" includes="**/*">
 			<classpath id="DbUnit_classpath2">
@@ -62,6 +64,7 @@
 			</fileset>
 		</copy>
 	</target>
+	
 	<target name ="clean_db">
 		<sql driver="${database.driver}" password="${database.password}" url="${database.jdbc.url}" userid="${database.username}">
 			<classpath path="${lib.dir}/mysql*.jar" > 
@@ -73,11 +76,25 @@
 		<transaction>create database ${database.name}</transaction>
 		</sql>
 			
-		<!-- antcall target="deploy_db" / -->
+		<antcall target="deploy_db" />
 	</target>
-	<target name="RunAllTestCases" depends="clean_db,RundbUnit" />
+	<target name="RunAllTestCases" depends="catissue_compile, clean_db, initialize_data, RundbUnit" />
+	
+	<target name="initialize_data">
+		<antcall target="runJUnit">
+			<param name="classNames" value="**/CaTissueBaseDBUnitTestCase.java" />
+		</antcall>
+	</target>
 	
 	<target name="RundbUnit" depends="db_compile">
+		<antcall target="runJUnit">
+			<param name="classNames" value="**/UserDBTestcases.java" />
+		</antcall>
+		<antcall target="clean"></antcall>
+	</target>
+	
+	<target name="runJUnit">
+		<echo message="Please see the test report at ${db_unit.dir}/Build_Report" /> 
 		<junit printsummary="yes" haltonfailure="yes">
 			  <formatter type="xml"/>
 			<classpath>
@@ -94,13 +111,14 @@
 				</fileset>	
 				<pathelement path="${db_temp.dir}"/>
 			</classpath>
-			<batchtest todir="${db_temp.dir}/Nightly_Build_Report">
+			<batchtest todir="${db_unit.dir}/Build_Report">
 				<fileset dir="${db_src.dir}">
-					<include name="**/UserDBTestcases.java"/>
+					<include name="${classNames}"/>
 				</fileset>
 			</batchtest>
 		</junit>
 
-		<!--antcall target="clean"></antcall -->
-	</target>	
+	</target>
+
+	
 </project>
