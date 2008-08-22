@@ -784,8 +784,9 @@ public class SpecimenForm extends AbstractActionForm
 				if (validator.isEmpty(type))
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
-							ApplicationProperties.getValue("specimen.subType")));
+							ApplicationProperties.getValue("specimen.subType")));					
 				}
+							
 				boolean isQuantityValid = true; 
 				if (!validator.isEmpty(quantity))
 				{					
@@ -806,6 +807,22 @@ public class SpecimenForm extends AbstractActionForm
 	        		        	errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.format",ApplicationProperties.getValue("specimen.quantity")));        		        	
 	        		        }
 	        			}
+						
+						//bug#7788
+						if(Constants.FIXED_TISSUE_BLOCK.equals(type) ||	Constants.FIXED_TISSUE_SLIDE.equals(type)
+								|| Constants.FROZEN_TISSUE_BLOCK.equals(type) || Constants.FROZEN_TISSUE_SLIDE.equals(type)
+								|| Constants.NOT_SPECIFIED.equals(type))
+						{
+							Double initialFloorQty = Math.floor(Double.parseDouble(quantity));
+							Double initialQty = Double.parseDouble(quantity);
+							int initialQtyDiff = initialQty.compareTo(initialFloorQty);
+							if(initialQtyDiff != 0)
+							{
+								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.specimen.quantity",
+										ApplicationProperties.getValue("specimen.quantity"),type));
+							}										
+						}
+						//#7788 ends
 					}
 					catch (NumberFormatException exp)
 			        {    		  
@@ -842,6 +859,22 @@ public class SpecimenForm extends AbstractActionForm
 		        		        	errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.format",ApplicationProperties.getValue("specimen.availableQuantity")));        		        	
 		        		        }
 		        			}
+							
+							//bug#7788
+							if(Constants.FIXED_TISSUE_BLOCK.equals(type) ||	Constants.FIXED_TISSUE_SLIDE.equals(type)
+									|| Constants.FROZEN_TISSUE_BLOCK.equals(type) || Constants.FROZEN_TISSUE_SLIDE.equals(type)
+									|| Constants.NOT_SPECIFIED.equals(type))
+							{								
+								Double availableFloorQty = Math.floor(Double.parseDouble(availableQuantity));
+								Double availableQty = Double.parseDouble(availableQuantity);
+								int availableQtyDiff = availableQty.compareTo(availableFloorQty);
+								if(availableQtyDiff != 0)
+								{
+									errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.specimen.quantity",
+											ApplicationProperties.getValue("specimen.availableQuantity"), type));											
+								}					
+							}
+							//#7788 ends
 						}
 						catch (NumberFormatException exp)
 				        {    		  
