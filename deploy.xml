@@ -1046,7 +1046,6 @@
 				<transaction src="${mysql.sql.dir}/query/query_schema_script.sql" />
 				<transaction src="${mysql.sql.dir}/query/caB2B Table Generation Script.sql" />
 				<transaction  src="${dbupgrade.sql.dir}/MySql/CAModel.sql"/>
-				<transaction  src="${dbupgrade.sql.dir}/MySql/DBUpgrade_AddConstraints_1.2.2_to_1.0.sql"/>
 				<transaction>commit;</transaction>
 				<classpath>
 					<fileset dir="${lib.dir}">

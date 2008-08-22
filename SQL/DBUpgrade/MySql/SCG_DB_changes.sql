@@ -267,7 +267,7 @@ ALTER TABLE CatIssue_Specimen_coll_Group RENAME CatIssue_Abs_Speci_coll_Group;
 
 /* Creating catissue_specimen_coll_group a child of Abstract SCG*/
 
-CREATE TABLE `CatIssue_Specimen_coll_Group` (
+CREATE TABLE `Catissue_Specimen_coll_Group` (
   `IdentIfier`                 BIGINT(20) NOT NULL AUTO_INCREMENT,
   `Name`                       VARCHAR(255) DEFAULT NULL ,
   `Comments`                   TEXT,
@@ -275,9 +275,9 @@ CREATE TABLE `CatIssue_Specimen_coll_Group` (
   `Surgical_Pathology_Number`  VARCHAR(50) DEFAULT NULL ,
   PRIMARY KEY( `IdentIfier` ),
   UNIQUE KEY `Name`( `Name` ),
-  KEY `fkDebaf1677e07c4ac`( `Collection_Protocol_reg_Id` ),
-  CONSTRAINT `fkDebaf1677e07c4ac` FOREIGN KEY( `Collection_Protocol_reg_Id` ) REFERENCES `CatIssue_coll_Prot_reg`( `IdentIfier` ),
-  CONSTRAINT fk_Parent_spec_coll_Group FOREIGN KEY( IdentIfier ) REFERENCES CatIssue_Abs_Speci_coll_Group( IdentIfier ))
+  KEY `fk_scg_coll_prot_reg`( `Collection_Protocol_reg_Id` ),
+  CONSTRAINT `fk_scg_coll_prot_reg` FOREIGN KEY( `Collection_Protocol_reg_Id` ) REFERENCES `CatIssue_coll_Prot_reg`( `IdentIfier` ),
+  CONSTRAINT fk_scg_parent_spec_coll_Group FOREIGN KEY( IdentIfier ) REFERENCES CatIssue_Abs_Speci_coll_Group( IdentIfier ))
 ENGINE = INNODB
 DEFAULT CHARSET = utf8;
 
@@ -399,7 +399,7 @@ SELECT a.Specimen_Class,
        'New',
        a.Pathology_Status,
        0,/*False for dummy*/
-       NULL,
+       2,
        NULL,
        NULL,
        NULL,
@@ -438,23 +438,6 @@ WHERE  Tissue_Side > 0;
 
 
 
-DELETE CATISSUE_QUANTITY
-FROM CATISSUE_QUANTITY,CatIssue_Specimen_Requirement,
-       CatIssue_coll_Specimen_req
-WHERE CATISSUE_QUANTITY.IDENTIFIER=CatIssue_Specimen_Requirement.QUANTITY_ID AND CatIssue_Specimen_Requirement.IdentIfier = CatIssue_coll_Specimen_req.Specimen_Requirement_Id;
-
-/*Deleting catissue_specimen_requirement rec those inserted in specimen table TODO*/
-
-
-
-DELETE CatIssue_Specimen_Requirement
-FROM   CatIssue_Specimen_Requirement,
-       CatIssue_coll_Specimen_req  
-WHERE  CatIssue_Specimen_Requirement.IdentIfier = CatIssue_coll_Specimen_req.Specimen_Requirement_Id;  
-
-
-alter table catissue_specimen_requirement add constraint FK39AFE96861A1C94F foreign key (`QUANTITY_ID`) REFERENCES `catissue_quantity` (`IDENTIFIER`)  ;
-
 /*Entering into CSM table */
 
 INSERT INTO `CSM_PROTECTION_ELEMENT` (PROTECTION_ELEMENT_ID,PROTECTION_ELEMENT_NAME,PROTECTION_ELEMENT_DESCRIPTION,OBJECT_ID,
@@ -466,11 +449,16 @@ INSERT INTO `CSM_PG_PE` SELECT MAX(PG_PE_ID) + 1,18,(SELECT PROTECTION_ELEMENT_I
 
 
 /* Droping obsolate tables catissue_clinical_report... */
-DROP TABLE CatIssue_Clinical_Report;
 
-DROP TABLE CatIssue_coll_Specimen_req;
+
+
 
 /*Droping unwanted columns from CatIssue_Abs_Speci_coll_Group which comes from catissue_specimen_coll_group */
+
+alter table CatIssue_Abs_Speci_coll_Group DROP FOREIGN KEY FKDEBAF1674CE21DDA;
+alter table CatIssue_Abs_Speci_coll_Group DROP FOREIGN KEY FKDEBAF16753B01F66;
+alter table CatIssue_Abs_Speci_coll_Group DROP FOREIGN KEY FKDEBAF1677E07C4AC;
+
 alter table CatIssue_Abs_Speci_coll_Group drop column name;
 
 alter table CatIssue_Abs_Speci_coll_Group drop column comments;
@@ -478,7 +466,7 @@ alter table CatIssue_Abs_Speci_coll_Group drop column comments;
 
 /*alter table CatIssue_Abs_Speci_coll_Group drop column SURGICAL_PATHOLOGY_NUMBER */
 
-alter table CatIssue_Abs_Speci_coll_Group drop column COLLECTION_PROTOCOL_EVENT_ID;
+alter table Catissue_Abs_Speci_coll_Group drop column COLLECTION_PROTOCOL_EVENT_ID;
 
 alter table CatIssue_Abs_Speci_coll_Group drop column COLLECTION_PROTOCOL_REG_ID;
 
@@ -514,7 +502,11 @@ VALUES     (18,
              WHERE  OBJECT_ID = 'edu.wustl.catissuecore.action.SubCollectionProtocolRegistrationAction' limit 1));
 
 
+
 /*CP Enhacements finish */
+
+alter table CatIssue_Clinical_Report DROP FOREIGN KEY FK54A4264515246F7;
+DROP TABLE CatIssue_coll_Specimen_req;
 
 commit;
 
