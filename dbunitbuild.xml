@@ -94,7 +94,8 @@
 	</target>
 	
 	<target name="runJUnit">
-		<echo message="Please see the test report at ${db_unit.dir}/Build_Report" /> 
+		<echo message="Please see the test report at ${db_unit.dir}/Build_Report" />
+		<echo message="running test cases ${classNames}" />		
 		<junit printsummary="yes" haltonfailure="yes">
 			  <formatter type="xml"/>
 			<classpath>
