@@ -167,6 +167,8 @@ public class ApproveUserBizLogic extends DefaultBizLogic
 		{
 			user = (User) user1;
 		}
+		// Method to populate rowIdMap in case, Add Privilege button is not clicked
+        userRowIdMap = new UserBizLogic().getUserRowIdMap(user, userRowIdMap);
 		
 		csmUser.setLoginName(user.getLoginName());
 		csmUser.setLastName(user.getLastName());
@@ -186,8 +188,16 @@ public class ApproveUserBizLogic extends DefaultBizLogic
 
 		if (user.getRoleId() != null)
 		{
-			SecurityManager.getInstance(ApproveUserBizLogic.class)
-			.assignRoleToUser(csmUser.getUserId().toString(), user.getRoleId());
+            if (user.getRoleId().equalsIgnoreCase(Constants.SUPER_ADMIN_USER))
+            {
+                user.setRoleId(Constants.ADMIN_USER);
+            }
+            else
+            {
+            	user.setRoleId(Constants.NON_ADMIN_USER);
+            }
+            
+			SecurityManager.getInstance(ApproveUserBizLogic.class).assignRoleToUser(csmUser.getUserId().toString(), user.getRoleId());
 		}
 
 		user.setCsmUserId(csmUser.getUserId());
