@@ -119,12 +119,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 			specimenCollection = getCollectionSpecimen(specimenCollectionGroup, cpe, userId );
 		}
 		setCollectionProtocolRegistration(dao, specimenCollectionGroup, null);
-		String label=specimenCollectionGroup.getName();
 		generateSCGLabel(specimenCollectionGroup);
-		if((label!=specimenCollectionGroup.getName())&&label!=null)
-		{
-			specimenCollectionGroup.setName(label);
-		}
 		String barcode=specimenCollectionGroup.getName();
 		generateSCGBarcode(specimenCollectionGroup);
 		if((barcode!=specimenCollectionGroup.getName())&&barcode!=null)

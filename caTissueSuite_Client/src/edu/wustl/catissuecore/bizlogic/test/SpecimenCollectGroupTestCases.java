@@ -18,6 +18,7 @@ import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.EventsUtil;
@@ -296,7 +297,7 @@ public class SpecimenCollectGroupTestCases extends CaTissueBaseTestCase
 		sprObj.setSpecimenEventParametersCollection(specimenEventParametersCollection);
 	}
 	
-	public void testAddSCGWithName()
+	public void testAddSCGWithNameAndEvents()
 	{
 		CollectionProtocol cp = BaseTestCaseUtility.initCollectionProtocol();
 		try{
@@ -371,22 +372,87 @@ public class SpecimenCollectGroupTestCases extends CaTissueBaseTestCase
 		specimenCollectionGroup.setSpecimenCollectionSite(site);
 		String scgName="scg added through api"+UniqueKeyGeneratorUtil.getUniqueKey();
 		specimenCollectionGroup.setName(scgName);
-		specimenCollectionGroup = (SpecimenCollectionGroup) BaseTestCaseUtility.setEventParameters(specimenCollectionGroup);
-		try{
-			specimenCollectionGroup=(SpecimenCollectionGroup)appService.createObject(specimenCollectionGroup);
 		
-			if(specimenCollectionGroup.getName().equals(scgName))
+		CollectionEventParameters collectionEventParameters = new CollectionEventParameters();
+		
+		collectionEventParameters.setUser(user);
+		collectionEventParameters.setTimestamp(new Date(00,02,04));
+		collectionEventParameters.setCollectionProcedure("Lavage");
+		collectionEventParameters.setComment("collected");
+		collectionEventParameters.setContainer("ACD Vacutainer");
+		collectionEventParameters.setSpecimenCollectionGroup(specimenCollectionGroup);
+
+		//Adding RECEIVED  Event PARAMETERS
+		ReceivedEventParameters receivedEventParameters = new ReceivedEventParameters();
+		receivedEventParameters.setComment("received");
+		receivedEventParameters.setReceivedQuality("Acceptable");
+		receivedEventParameters.setTimestamp(new Date(00,02,04));
+		receivedEventParameters.setUser(user);
+		receivedEventParameters.setSpecimenCollectionGroup(specimenCollectionGroup);
+
+		//COLLECTION OF SPCIMEN EVENT PARAMETERS COLLECTION
+		Collection<SpecimenEventParameters> specimenEventParamsColl = new HashSet<SpecimenEventParameters>();
+		specimenEventParamsColl.add(collectionEventParameters);
+		specimenEventParamsColl.add(receivedEventParameters);
+		specimenCollectionGroup.setSpecimenEventParametersCollection(specimenEventParamsColl);
+		
+		//specimenCollectionGroup = (SpecimenCollectionGroup) BaseTestCaseUtility.setEventParameters(specimenCollectionGroup);
+		try{
+			int count=0;
+			SpecimenCollectionGroup	specimenCollectionGroup1 = (SpecimenCollectionGroup) appService.createObject(specimenCollectionGroup);
+			
+			Iterator iter=specimenCollectionGroup1.getSpecimenEventParametersCollection().iterator();
+			while(iter.hasNext())
 			{
-				assertTrue("SCG name is retained while inserting through api", true);
+				SpecimenEventParameters parameters=(SpecimenEventParameters) iter.next();
+				if(parameters instanceof ReceivedEventParameters)
+				{ 
+					ReceivedEventParameters receivedEventParameters2=(ReceivedEventParameters)parameters;
+					
+					if(receivedEventParameters2.getTimestamp().equals(receivedEventParameters.getTimestamp())&&receivedEventParameters2.getComment().equals(receivedEventParameters.getComment())
+							&&receivedEventParameters.getReceivedQuality().equals(receivedEventParameters2.getReceivedQuality())&&(receivedEventParameters2.getUser().getId()).equals(receivedEventParameters.getUser().getId())
+							)
+					{
+						count++;
+					}
+					else
+					{
+						System.out.println("Received event parameter not retained");
+					}
+				}
+				if(parameters instanceof CollectionEventParameters)
+				{
+					CollectionEventParameters collectionEventParameters2=(CollectionEventParameters)parameters;
+					if(collectionEventParameters2.getCollectionProcedure().equals(collectionEventParameters.getCollectionProcedure())
+							&&collectionEventParameters2.getComment().equals(collectionEventParameters.getComment())
+							&&collectionEventParameters2.getContainer().equals(collectionEventParameters.getContainer())
+							&&collectionEventParameters2.getTimestamp().equals(collectionEventParameters.getTimestamp())
+							&&collectionEventParameters2.getUser().getId().equals(collectionEventParameters.getUser().getId()))
+					{
+						count++;
+					}
+					else
+					{
+						System.out.println("Collection event parameter not retained");
+					}
+				}
 			}
-			else{
-				assertFalse("SCG name is not retained while inserting through api", true);
+			if(!specimenCollectionGroup1.getGroupName().equals(specimenCollectionGroup.getGroupName()))
+			{
+				count++;
 			}
+			if(count==3)
+			{
+				
+				System.out.println("all the parameters retained"+ count);
+				assertTrue("all the parameters retained", true);
+			}
+			
 		}catch(Exception e)
 		{
 			Logger.out.error(e.getMessage(),e);
 			e.printStackTrace();
-			assertFalse("SCG name is not retained while inserting through api ", true);
+			assertFalse("SCG Name and Other parameters are not retained", true);
 		}
 		
 		
