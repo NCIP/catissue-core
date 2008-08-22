@@ -12,6 +12,36 @@ import edu.wustl.catissuecore.domain.Specimen;
  */
 public class SpecimenComparator implements Comparator{
 	
+//	public int compare(Object arg0, Object arg1) {
+//		
+//		if((Specimen)arg0 instanceof Specimen && (Specimen)arg1 instanceof Specimen)
+//		{
+//			Specimen specimenFirst = (Specimen)arg0;
+//			Specimen specimenSec = (Specimen)arg1;
+//			
+//			if(specimenFirst !=null && specimenSec != null && specimenFirst.getLabel() != null && specimenSec.getLabel() != null)
+//			{
+//				return specimenFirst.getLabel().compareTo(specimenSec.getLabel());
+//			}
+//			
+//			if(specimenFirst ==null && specimenSec == null)
+//			{
+//				return 0;
+//			}
+//			
+//			
+//			if(specimenFirst ==null)
+//				return 1;
+//			if(specimenSec == null)
+//				return -1;
+//								
+//		}
+//		
+//		
+//		return 0;
+//	}
+
+	//changed the comparison from label to id
 	public int compare(Object arg0, Object arg1) {
 		
 		if((Specimen)arg0 instanceof Specimen && (Specimen)arg1 instanceof Specimen)
@@ -19,9 +49,9 @@ public class SpecimenComparator implements Comparator{
 			Specimen specimenFirst = (Specimen)arg0;
 			Specimen specimenSec = (Specimen)arg1;
 			
-			if(specimenFirst !=null && specimenSec != null && specimenFirst.getLabel() != null && specimenSec.getLabel() != null)
+			if(specimenFirst !=null && specimenSec != null && specimenFirst.getId() != null && specimenSec.getId() != null)
 			{
-				return specimenFirst.getLabel().compareTo(specimenSec.getLabel());
+				return specimenFirst.getId().compareTo(specimenSec.getId());
 			}
 			
 			if(specimenFirst ==null && specimenSec == null)
@@ -40,5 +70,5 @@ public class SpecimenComparator implements Comparator{
 		
 		return 0;
 	}
-	
+
 }

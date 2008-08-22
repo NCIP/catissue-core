@@ -1595,7 +1595,10 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		
 		List specimenList = new ArrayList();
 		specimenList.addAll(specimenCollectionGroup.getSpecimenCollection());
-				
+		//Mandar 20aug08--start
+		SpecimenComparator comparator = new SpecimenComparator();
+		Collections.sort(specimenList,comparator);
+		//Mandar 20Aug08--end		
 		List finalList = new ArrayList();
 		
 
