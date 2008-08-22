@@ -794,38 +794,47 @@ public class OrderBizLogic extends DefaultBizLogic
 			if(orderItem instanceof ExistingSpecimenOrderItem)
 			{
 				ExistingSpecimenOrderItem existingSpecimenOrderItem = (ExistingSpecimenOrderItem)orderItem;
-				SpecimenPosition specimenPosition = (SpecimenPosition)HibernateMetaData.getProxyObjectImpl(existingSpecimenOrderItem.getSpecimen().getSpecimenPosition());
-				if(specimenPosition != null && !(existingSpecimenOrderItem.getStatus().equals(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED)||
-						existingSpecimenOrderItem.getStatus().equals(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE)))
-				{	
-					if(siteIdsList.contains(existingSpecimenOrderItem.getSpecimen().getSpecimenPosition().getStorageContainer().getSite().getId()))
-					{
-						isValidToDistribute = true;
-						break;
+				if(existingSpecimenOrderItem.getSpecimen()!=null)
+				{
+					SpecimenPosition specimenPosition = existingSpecimenOrderItem.getSpecimen().getSpecimenPosition();
+					if(specimenPosition != null && !(existingSpecimenOrderItem.getStatus().equals(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED)||
+							existingSpecimenOrderItem.getStatus().equals(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE)))
+					{	
+						if(siteIdsList.contains(existingSpecimenOrderItem.getSpecimen().getSpecimenPosition().getStorageContainer().getSite().getId()))
+						{
+							isValidToDistribute = true;
+							break;
+						}
 					}
 				}
 			
 			}else if(orderItem instanceof ExistingSpecimenArrayOrderItem)
 			{
 				ExistingSpecimenArrayOrderItem existingSpecimenArrayOrderItem = (ExistingSpecimenArrayOrderItem) orderItem;
-				StorageContainer storageContainer = (StorageContainer) existingSpecimenArrayOrderItem.getSpecimenArray().getLocatedAtPosition().getParentContainer();
-				if(siteIdsList.contains(storageContainer.getSite().getId()))
+				if(existingSpecimenArrayOrderItem.getSpecimenArray()!=null && existingSpecimenArrayOrderItem.getSpecimenArray().getLocatedAtPosition()!=null)
 				{
-					isValidToDistribute = true;
-					break;	
+					StorageContainer storageContainer = (StorageContainer) existingSpecimenArrayOrderItem.getSpecimenArray().getLocatedAtPosition().getParentContainer();
+					if(siteIdsList.contains(storageContainer.getSite().getId()))
+					{
+						isValidToDistribute = true;
+						break;	
+					}
 				}
 			}else if(orderItem instanceof DerivedSpecimenOrderItem)
 			{
 				DerivedSpecimenOrderItem derivedSpecimenOrderItem = (DerivedSpecimenOrderItem) orderItem;
-				SpecimenPosition specimenPosition = (SpecimenPosition)HibernateMetaData.getProxyObjectImpl(derivedSpecimenOrderItem.getParentSpecimen().getSpecimenPosition());
-				if(specimenPosition != null && !(derivedSpecimenOrderItem.getStatus().equals(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED)||
-						derivedSpecimenOrderItem.getStatus().equals(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE)))
-				{
-					Long siteId = (Long)specimenPosition.getStorageContainer().getSite().getId();
-					if(siteIdsList.contains(siteId))
+				if(derivedSpecimenOrderItem.getParentSpecimen()!=null)
+				{	
+					SpecimenPosition specimenPosition = (SpecimenPosition)derivedSpecimenOrderItem.getParentSpecimen().getSpecimenPosition();
+					if(specimenPosition != null && !(derivedSpecimenOrderItem.getStatus().equals(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED)||
+							derivedSpecimenOrderItem.getStatus().equals(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE)))
 					{
-						isValidToDistribute = true;
-						break;
+						Long siteId = (Long)specimenPosition.getStorageContainer().getSite().getId();
+						if(siteIdsList.contains(siteId))
+						{
+							isValidToDistribute = true;
+							break;
+						}
 					}
 				}
 				

@@ -490,10 +490,10 @@ public class DistributionBizLogic extends DefaultBizLogic
 					{
 						throw new DAOException(ApplicationProperties.getValue("errors.distribution.closedOrDisableSpecimenArray"));
 					}
-					else if (chkForSpecimenArrayDistributed(((SpecimenArray) object).getId(), dao))
+					/*else if (chkForSpecimenArrayDistributed(((SpecimenArray) object).getId(), dao))
 					{
 						throw new DAOException(ApplicationProperties.getValue("errors.distribution.arrayAlreadyDistributed"));
-					}
+					}*/
 					distributedItem.setSpecimenArray(specimenArrayObj);
 				}
 				/**

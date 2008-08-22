@@ -506,6 +506,13 @@ function onCheck()
 								<bean:message key="orderingsystem.label.caseName" />
 								</strong>
 							 </td>
+
+							 <td class="tableheading"><strong>
+								<bean:message key="orderingsystem.label.colprot" />
+								</strong>
+							  </td>	
+
+
 							 <td class="tableheading"><strong>
 								<bean:message key="orderingsystem.label.requestedQuantity" />
 								</strong>
@@ -535,16 +542,21 @@ function onCheck()
 								String specimenId="value(OrderSpecimenBean:"+i+"_specimenId)";
 								String typeOfItem="value(OrderSpecimenBean:"+i+"_typeOfItem)";
 								String specimenCollectionGroup="value(OrderSpecimenBean:"+i+"_specimenCollectionGroup)";
+								String collectionProtocol = "";
 								SpecimenCollectionGroup speccollgrp;
 								if (obj instanceof IdentifiedSurgicalPathologyReport) {
 									speccollgrp =(SpecimenCollectionGroup)obj.getSpecimenCollectionGroup();
+									collectionProtocol = speccollgrp.getCollectionProtocolRegistration().getCollectionProtocol().getTitle();
 								}
 								else if(obj instanceof DeidentifiedSurgicalPathologyReport)
 								{
 									speccollgrp =(SpecimenCollectionGroup)obj.getSpecimenCollectionGroup();
+									collectionProtocol = speccollgrp.getCollectionProtocolRegistration().getCollectionProtocol().getTitle();
 								}
 								else
 								{
+									collectionProtocol = obj.getSpecimenCollectionGroup().getCollectionProtocolRegistration().
+										getCollectionProtocol().getTitle();
 									continue;
 								}
 								
@@ -561,6 +573,9 @@ function onCheck()
 										<html:hidden property="<%=specimenId%>" value="<%=obj.getId().toString()%>"/>
 										<html:hidden property="<%=typeOfItem%>" value="pathologyCase"/>
 										<html:hidden property="<%=specimenCollectionGroup%>" value="<%=speccollgrp.getId().toString()%>"/>
+								</td>
+								<td class="black_ar_t">
+									<%=collectionProtocol%>
 								</td>
 								<td class="black_ar_t">
 										<html:text styleClass="black_ar" maxlength="8"  size="5"  styleId="<%=requestedQuantityId%>" property="<%=requestedQuantity%>" style="text-align:right"/>
