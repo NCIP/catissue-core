@@ -127,21 +127,33 @@ public class SpunEventParametersForm extends SpecimenEventParametersForm
         {
         	if (!gravityForce.equals(""))
      		{
-        		if (!validator.isNumeric(gravityForce, -1))
-        		{
-        			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.valid.number",
-        					ApplicationProperties.getValue("fixedeventparameters.gforce")));          		
-        		}	
+        		if (!validator.isDouble(gravityForce)) 
+				{
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.invalid.gforge",
+							ApplicationProperties.getValue("spuneventparameters.gforce")));
+				}
+				
+				if(Double.parseDouble(gravityForce) <= 0)
+				{
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.capacity.greaterThan0",
+							ApplicationProperties.getValue("spuneventparameters.gforce")));
+				}	
      		}
         	
         	if (!durationInMinutes.equals(""))
-     		{
-        		if (!validator.isNumeric(durationInMinutes, -1))
-        		{
-        			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.valid.number",
-        					ApplicationProperties.getValue("fixedeventparameters.durationinminutes")));          		
-        		}   
-     		}
+			{
+				if (durationInMinutes.contains(".") || !validator.isNumeric(durationInMinutes)) 
+				{
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.invalid.durationinminutes",
+							ApplicationProperties.getValue("spuneventparameters.durationinminutes")));
+				}
+				
+				if(Integer.parseInt(durationInMinutes) < 0)
+				{
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.capacity.greaterThan0",
+							ApplicationProperties.getValue("spuneventparameters.durationinminutes")));
+				}
+			}
         	Logger.out.info("durationInMinutes: "+ durationInMinutes);        	
         }
         catch(Exception excp)

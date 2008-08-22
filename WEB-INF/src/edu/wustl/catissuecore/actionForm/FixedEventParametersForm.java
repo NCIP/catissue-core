@@ -11,11 +11,10 @@
 package edu.wustl.catissuecore.actionForm;
 
 import javax.servlet.http.HttpServletRequest;
-
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
-
+import sun.security.krb5.internal.af;
 import edu.wustl.catissuecore.domain.FixedEventParameters;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
@@ -124,31 +123,37 @@ public class FixedEventParametersForm extends SpecimenEventParametersForm
      public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
      {
      	ActionErrors errors = super.validate(mapping, request);
-         Validator validator = new Validator();
-         
-         try
-         {
-        	 if (!durationInMinutes.equals(""))
-     		{
-        		if (!validator.isNumeric(durationInMinutes, -1))
-        		{
-        			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.valid.number",
-        					ApplicationProperties.getValue("fixedeventparameters.durationinminutes")));          		
-        		}         	
-     		}
-         }
-         catch(Exception excp)
-         {
-             Logger.out.error(excp.getMessage());
-         }
-         return errors;
-      }
+		Validator validator = new Validator();
+
+		try 
+		{
+			if (!durationInMinutes.equals(""))
+			{
+				if (durationInMinutes.contains(".") || !validator.isNumeric(durationInMinutes)) 
+				{
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.invalid.durationinminutes",
+							ApplicationProperties.getValue("fixedeventparameters.durationinminutes")));
+				}
+				
+				if(Integer.parseInt(durationInMinutes) <= 0)
+				{
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.capacity.greaterThan0",
+							ApplicationProperties.getValue("fixedeventparameters.durationinminutes")));
+				}
+			}
+		}
+		catch (Exception excp) 
+		{
+			Logger.out.error(excp.getMessage());
+		}
+        return errors;
+     }
 	
 
      /**
-      * Resets the values of all the fields.
-      * This method defined in ActionForm is overridden in this class.
-      */
+	  * Resets the values of all the fields. This method defined in
+	  * ActionForm is overridden in this class.
+	  */
      protected void reset()
      {
 //         super.reset();
