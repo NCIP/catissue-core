@@ -158,7 +158,10 @@ session.setAttribute("EventOrigin", "QuickEvents");
 		<tr>
           <td align="left" class="toptd"></td>
         </tr>
-
+		<%
+			if(eventSelected != null)
+			{
+		%>
 		<tr>
               <td align="left" class="black_ar" >
 					<iframe name="newEventFrame" id="newEventFrame" src="<%=iframeSrc %>" width="100%" height="281" frameborder="0" scrolling="auto">
@@ -166,7 +169,9 @@ session.setAttribute("EventOrigin", "QuickEvents");
 			  </td>
         </tr>
               
-          
+          <%
+          	}
+          %>
       </table></td>
 
   </tr>

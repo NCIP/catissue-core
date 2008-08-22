@@ -171,6 +171,18 @@
 			document.forms[0].submit();
 		}
 	}
+
+	/*if ( document.getElementById && !(document.all) ) 
+{
+	var slope=10;
+}
+else
+{
+	var slope=-10;
+}
+
+window.onload = function() { setFrameHeight('newEventFrame', .5,slope);}
+window.onresize = function() { setFrameHeight('newEventFrame', .5,slope); }*/
 </script>
 <!-- Mandar : 434 : for tooltip -->
 
@@ -196,6 +208,9 @@
         <tr>
           <td colspan="3" align="left" ><%@ include file="/pages/content/common/ActionErrors.jsp" %></td>
         </tr>
+		<tr>
+		<td class="bottomtd" colspan="3"></td>
+		</tr>
         <tr>
 		<%
 	if(dataList!=null && dataList.size() != 0)
@@ -239,18 +254,23 @@
 				<%@ include file="/pages/content/search/GridPage.jsp" %>
 			</td>
 		</tr>
+		 </table>
 <% } else
    {
 		title = "No Specimen Event Paremeters are available for Identifier : " + specimenIdentifier;
 %>
 		<tr>
+                  <td align="left" colspan="3"class="showhide"><table width="100%" border="0" cellspacing="0" cellpadding="3">
+                    <tr>
+			
 			<td  align="left" class="tr_bg_blue1"><span class="blue_ar_b">
 				<%--bean:message key="specimenEventParameters.noSpecimen"/--%>
 				<%=title%></span>
 			</td>
 		</tr>
+		 </table>
 <% } %>	
-        </table></td>
+       </td>
         </tr>
         <tr>
           <td align="left" width="33%" class="black_ar">&nbsp;&nbsp;<bean:message key="specimenEventParameters.caption"/>
@@ -261,7 +281,7 @@
         </tr>
 		<tr>
 	<td class="whitetable_bg" colspan="3">
-		<iframe name="newEventFrame" id="newEventFrame" src="<%=iframeSrc %>" width="100%" height="238" frameborder="0" scrolling="auto">
+		<iframe name="newEventFrame" id="newEventFrame" src="<%=iframeSrc %>" width="100%" height="200" frameborder="0" scrolling="auto">
 		</iframe>
 	</td>
 </tr>
@@ -271,4 +291,3 @@
 </table>
 
 </html:form>
-
