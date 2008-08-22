@@ -110,6 +110,12 @@ function showSpecimenDetails(id)
 	showNewPage('SearchObject.do?pageOf=pageOfNewSpecimen&operation=search&target=orderDetails&id=' + objId );
 }
 
+function viewSpecimenDetails(id)
+{
+	showNewPage('SearchObject.do?pageOf=pageOfNewSpecimen&operation=search&target=orderDetails&id=' + id );
+}
+
+
 function createAliquots(id)
 {
 	var id = "requestFor"+id;
@@ -564,6 +570,7 @@ function checkQuantityforAll(count)
 							String actualSpecimenClass = "value(RequestDetailsBean:"+i+"_actualSpecimenClass)";
 							String canDistribute = "value(RequestDetailsBean:"+i+"_canDistribute)";
 							String specimenClickFunction = "showSpecimenDetails("+i+")";
+							String viewSpecimenDetailsFunction = "viewSpecimenDetails("+requestDetailsBeanObj.getSpecimenId()+")";
 							String createSpecimenFunction = "createSpecimen("+i+")";
 							String aliquoteClickFunction = "createAliquots("+i+")";
 							String derivativeCreateFunction = "createDerivatives("+i+")";
@@ -640,12 +647,10 @@ function checkQuantityforAll(count)
 					%>
 										<img src="images/Participant.GIF" border="0"/>
 					<%				}
-										String toolTipTypeClass = "Class:"+((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_actualSpecimenClass")))+", Type:"+((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_actualSpecimenType"))); %>
+										String toolTipTypeClass = "Type:"+((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_actualSpecimenType")))+", Quantity:"+((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_availableQty")).toString()); %>
 									 	<span title="<%= toolTipTypeClass %>">
-									 		<%--Bug :6010- Hide link to Specimen Label in case of Pathological case report. 
-									 		    Modified by:Falguni Sachde
-									 		  --%>
-					<%			if(((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim().equalsIgnoreCase("DerivedPathological")
+									 		
+					<%				if(((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim().equalsIgnoreCase("DerivedPathological")
 												|| ((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim().equalsIgnoreCase("Pathological")) 
 									{
 					%>
@@ -656,7 +661,7 @@ function checkQuantityforAll(count)
 									else
 									{
 					%>
-										<html:link href="#" styleClass="view" styleId="label" onclick="<%=specimenClickFunction%>">
+										<html:link href="#" styleClass="view" styleId="label" onclick="<%=viewSpecimenDetailsFunction%>">
 									 		<bean:write name="requestDetailsForm" property="<%= requestedItem %>" />	
 										</html:link>
 					<%
@@ -693,52 +698,39 @@ function checkQuantityforAll(count)
 
 								<td class="<%=fontStyle%>" >
 				
-					<%		
-									toolTipTypeClass = "Class:"+((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_actualSpecimenClass")))+", Type:"+((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_actualSpecimenType")));
-					 %>
-									 	<span title="<%= toolTipTypeClass %>">
-									 		<%--Bug :6010- Hide link to Specimen Label in case of Pathological case report. 
-									 		    Modified by:Falguni Sachde
-									 		  --%>
-															
-											<html:select property="<%= requestFor %>" name="requestDetailsForm" size="l" styleClass="formFieldSizedText" styleId="<%= requestForId %>" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="<%= changeAvailableQuantity%>" disabled="<%= disableRow %>">
-												<html:optionsCollection property="<%=specimenList%>" name="requestDetailsForm" label="name" value="value"/>
-											</html:select> 		
-											</br>
-											<logic:equal name="requestDetailsForm" property="<%=rowStatuskey%>" value="enable">
-												
-												<logic:equal name="requestDetailsForm" property="<%=instanceOf%>" value="Pathological">
-													<a href="#" onclick="<%=createSpecimenFunction%>">
-													   <img src="images/Cycle_col.gif" border="0" alt="Create Specimen"  title="Create Specimen"/>
-													</a> 
-												</logic:equal>
-
-												<logic:equal name="requestDetailsForm" property="<%=instanceOf%>" value="DerivedPathological">
-													<a href="#" onclick="<%=createSpecimenFunction%>">
-													   <img src="images/Cycle_col.gif" border="0" alt="Create Specimen"  title="Create Specimen"/>
-													</a> 
-												</logic:equal>
 																	
-
-												<a href="#" onclick="<%=specimenClickFunction%>">
-													<img src="images/uIEnhancementImages/ic_specimen.gif" border="0" alt="View Specimen"  title="View Specimen"/>
-												</a> 
-												<a href="#" onclick="<%=aliquoteClickFunction%>">
-													<img src="images/uIEnhancementImages/a.gif" border="0"  alt="Create Aliquot" title="Create Aliquot"/>
-												</a> 
-												<a href="#" onclick="<%=derivativeCreateFunction%>">
-													<img src="images/uIEnhancementImages/ic_d.gif" border="0" alt="Create Derivative"  title="Create Derivative"/>
+										<html:select property="<%= requestFor %>" name="requestDetailsForm" size="l" styleClass="formFieldSizedText" styleId="<%= requestForId %>" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="<%= changeAvailableQuantity%>" disabled="<%= disableRow %>">
+										<html:optionsCollection property="<%=specimenList%>" name="requestDetailsForm" label="name" value="value"/>
+										</html:select> 		
+										</br>
+										<logic:equal name="requestDetailsForm" property="<%=rowStatuskey%>" value="enable">
+										
+											<logic:equal name="requestDetailsForm" property="<%=instanceOf%>" value="Pathological">
+												<a href="#" onclick="<%=createSpecimenFunction%>">
+												   <img src="images/Cycle_col.gif" border="0" alt="Create Specimen"  title="Create Specimen"/>
 												</a> 
 											</logic:equal>
-
-
-					
-							 		</span>
+										<logic:equal name="requestDetailsForm" property="<%=instanceOf%>" value="DerivedPathological">
+											<a href="#" onclick="<%=createSpecimenFunction%>">
+												   <img src="images/Cycle_col.gif" border="0" alt="Create Specimen"  title="Create Specimen"/>
+												</a> 
+										</logic:equal>
+							
+										<a href="#" onclick="<%=specimenClickFunction%>">
+											<img src="images/uIEnhancementImages/ic_specimen.gif" border="0" alt="View Specimen"  title="View Specimen"/>
+										</a> 
+										<a href="#" onclick="<%=aliquoteClickFunction%>">
+											<img src="images/uIEnhancementImages/a.gif" border="0"  alt="Create Aliquot" title="Create Aliquot"/>
+										</a> 
+										<a href="#" onclick="<%=derivativeCreateFunction%>">
+											<img src="images/uIEnhancementImages/ic_d.gif" border="0" alt="Create Derivative"  title="Create Derivative"/>
+										</a> 
+										</logic:equal>
+					 		
 		  					 	</td>
-					
-								
+						
 							 	<td class="<%=fontStyle%>">
-									
+				
 																		
 									<html:text styleClass="formFieldSmallNoBorderlargeSize" styleId="<%=selectedSpecimenTypeId%>" property="<%= selectedSpecimenType %>" readonly="true" style="<%=bgStyle%>"/>
 										</br>
