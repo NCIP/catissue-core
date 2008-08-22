@@ -194,18 +194,20 @@ public class SpecimenCollectGroupTestCases extends CaTissueBaseTestCase
 		
 		try{
 			SpecimenCollectionGroup scg = (SpecimenCollectionGroup)BaseTestCaseUtility.initSCG();		    
+		    	
+		  //  TestCaseUtility.setObjectMap(scg, SpecimenCollectionGroup.class);
 		    SpecimenCollectionGroup duplicateSCG = (SpecimenCollectionGroup)BaseTestCaseUtility.initSCG();
 		    duplicateSCG.setName(scg.getName());
 		    scg = (SpecimenCollectionGroup)appService.createObject(scg);
 		    duplicateSCG = (SpecimenCollectionGroup)appService.createObject(duplicateSCG);
 		    System.out.println("After Creating SCG");
-		    assertFalse("Test Failed. Duplicate SCG name should not throw exception" , true);
+		    assertTrue("Submission doe not fail since label generator already present" , true);
 		    TestCaseUtility.setObjectMap(scg, SpecimenCollectionGroup.class);
 		}
 		 catch(Exception e){
 			Logger.out.error(e.getMessage(),e);
 			e.printStackTrace();
-			assertTrue("Submission failed due to scg with same label already exist" , true);
+			fail("Test Failed. Duplicate SCG name should not throw exception");
 			
 			 
 		 }
