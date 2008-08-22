@@ -360,13 +360,13 @@ function handleStatus(status)
 							<logic:notEqual name="pageOf"
 								value='${requestScope.pageOfUserProfile}'>
 								<tr>
-									<td width="1%" align="center" class="black_ar_t"><span
+									<td width="1%" align="center" class="black_ar"><span
 										class="blue_ar_b"><img
 										src="images/uIEnhancementImages/star.gif" alt="Mandatory"
 										width="6" height="6" hspace="0" vspace="0" /></span></td>
-									<td width="17%" align="left" class="black_ar_t"><bean:message
+									<td width="17%" align="left" class="black_ar"><bean:message
 										key="user.role" /></td>
-									<td width="19%" class="black_ar_t"><select name="role"
+									<td width="19%" class="black_ar"><select name="role"
 										class="formFieldSizedNew" id="roleIds"
 										onchange="preEventsOnRoleSelect(this,'cpCheckId')">
 										<%
@@ -389,13 +389,13 @@ function handleStatus(status)
 										%>
 									</select></td>
 									<td width="13%" align="left" valign="top">&nbsp;</td>
-									<td width="1%" align="center" class="black_ar_t"><span
+									<td width="1%" align="center" class="black_ar"><span
 										class="blue_ar_b"><img
 										src="images/uIEnhancementImages/star.gif" alt="Mandatory"
 										width="6" height="6" hspace="0" vspace="0" /></span></td>
-									<td width="17%" align="left" class="black_ar_t"><bean:message
+									<td width="17%" align="left" class="black_ar"><bean:message
 										key="assignPrivileges.site(s)" /></td>
-									<td width="17%" align="left" class="black_ar_t"><select
+									<td rowspan="3" width="17%" align="left" class="black_ar_t"><select
 										class="formFieldSizedNew" name = "siteIds" id="siteIds" size="4"
 										multiple="multiple" onchange="getCPsForThisSites(this)">
 										<%
@@ -414,19 +414,20 @@ function handleStatus(status)
 											}
 										%>
 									</select></td>
+									
 									<td width="14%" align="left" valign="top" class="black_ar_t">&nbsp;</td>
 								</tr>
-
 								<logic:equal name="pageOf" value='${pageOfApproveUser}'>
 									<tr>
+									
 										<td width="1%" height="25" align="left" class="black_ar">
 										<span class="blue_ar_b"><img
 											src="images/uIEnhancementImages/star.gif" alt="Mandatory"
 											width="6" height="6" hspace="0" vspace="0" /></span></td>
-										<td width="16%" align="left" class="black_ar"><label
+										<td width="17%" align="left" class="black_ar"><label
 											for="status"> <bean:message
 											key="user.approveOperation" /> </label></td>
-										<td width="83%" colspan="4" align="left" valign="top"
+										<td width="19%" colspan="1" align="left" valign="top"
 											class="black_new"><html:select property="status"
 											styleClass="formFieldSizedNew" styleId="status" size="1"
 											onchange="javascript:handleStatus(this)"
@@ -435,6 +436,41 @@ function handleStatus(status)
 										</html:select></td>
 									</tr>
 								</logic:equal>
+								
+												<logic:equal name="pageOf"
+													value='${requestScope.pageOfUserAdmin}'>
+													<logic:equal name="operation"
+														value='${requestScope.editforJSP}'>
+														<tr>
+															<td width="1%" height="25" align="left" class="black_ar"><span
+																class="blue_ar_b"><img
+																src="images/uIEnhancementImages/star.gif"
+																alt="Mandatory" width="6" height="6" hspace="0"
+																vspace="0" /></span></td>
+															<td width="17%" align="left" class="black_ar"><label
+																for="activityStatus"> <bean:message
+																key="user.activityStatus" /> </label></td>
+															
+
+																<td width="19%" align="left" nowrap class="black_ar"><autocomplete:AutoCompleteTag
+								property="activityStatus" optionsList='${requestScope.activityStatusList}'
+								initialValue='${userForm.activityStatus}' styleClass="black_ar"
+								size="27" /></td>
+														</tr>
+
+													</logic:equal>
+													
+												</logic:equal>
+												<tr>
+													<td height="25" align="left" class="black_ar_t">&nbsp;</td>
+													<td align="left" class="black_ar_t"><label
+														for="comments"> <bean:message key="user.comments" />
+													</label></td>
+													<td colspan="4" align="left" valign="top"><label>
+													<html:textarea styleClass="black_ar_s" cols="90" rows="3"
+														styleId="comments" property="comments" /> </label></td>
+												</tr>
+								
 								<tr class="td_color_F7F7F7">
 									<td colspan="8" align="left" class="bottomtd"></td>
 								</tr>
