@@ -88,22 +88,15 @@
 
 	function checkBoxClicked()
 	{
-		document.getElementById("deidentifiedReportText").innerHTML="<span class="+"black_ar"+"<PRE>"+document.getElementById("deidText").innerHTML+"</PRE></span>";
+		document.getElementById("deidentifiedReportText").innerHTML="<table style='table-layout: fixed;'>"+
+			"<tr><td><PRE class='pre'>"+document.getElementById("deidText").innerHTML+"</PRE></td></tr></table>";
 		for(i=0;i<conceptName.length;i++)
 		{	
 			selectByOffset(document.getElementById("select"+i),startOff[i],endOff[i],colours[i],conceptName[i]);	
 		}		
 	}
 	</script>
-	<style>
-	pre {
-	 white-space: pre-wrap;       /* css-3 */
-	 white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
-	 white-space: -pre-wrap;      /* Opera 4-6 */
-	 white-space: -o-pre-wrap;    /* Opera 7 */
-	 word-wrap: break-word;       /* Internet Explorer 5.5+ */
-	}
-	</style>
+	
 </head>
 <%
 if(!hasAccess)
@@ -326,9 +319,7 @@ if(!hasAccess)
           <td></td>
         </tr>
 
-        <tr>
-          <td colspan="2" class=" bottomtd"></td>
-        </tr>
+		
 
         <tr>
           <td colspan="2" align="left">
@@ -354,17 +345,11 @@ if(!hasAccess)
           </table></td>
         </tr>
         <tr>
-          <td colspan="5" style="padding-left:6px; padding-right:6px;"><span class="black_ar">
-            <!--<textarea name="textfield15"  style="width:100% " cols="32" rows="6" class="black_ar">
-
-            </textarea>
-			<div id="identifiedReportText" style="overflow:auto;height:175px;width:100%" onmousemove='scrollInSync();'><logic:notEmpty name="viewSurgicalPathologyReportForm" property="identifiedReportTextContent" ><textarea name="textfield15" cols="32" rows="10" class="black_ar" readonly="true"><%=formSPR.getIdentifiedReportTextContent()%></textarea></logic:notEmpty>
-				</div>-->
-
-				<div id="identifiedReportText" class="black_ar" style="overflow:auto;height:125px;width:100%;border: 2px solid #eef5fb;"" onmousemove='scrollInSync();'><PRE><logic:notEmpty name="viewSurgicalPathologyReportForm" property="identifiedReportTextContent" ><%=formSPR.getIdentifiedReportTextContent()%></logic:notEmpty>
-				</PRE></div>
-
-          </span></td>
+          <td colspan="5" style="padding-left:6px; padding-right:6px;" class="black_ar">
+           		<div id="identifiedReportText" class="pre" style="overflow:auto;height:125px;width:100%;border:2px solid #eef5fb;" onmousemove='scrollInSync();'><table  style="table-layout: fixed;"><tr><td><PRE class="pre" ><logic:notEmpty name="viewSurgicalPathologyReportForm" property="identifiedReportTextContent" ><%=formSPR.getIdentifiedReportTextContent()%></logic:notEmpty>
+				</PRE></td></tr></table>
+				</div>
+          </td>
         </tr>
 		</table>
 
@@ -416,30 +401,23 @@ if(!hasAccess)
 				</td>
 			</tr>
 			<tr>
-				<td class="black_ar">
-				
-				<!--<div id="deidentifiedReportText" style="overflow:auto;height:200px;width:628"><PRE><logic:notEmpty name="viewSurgicalPathologyReportForm" property="deIdentifiedReportTextContent" ><%=formSPR.getDeIdentifiedReportTextContent()%></logic:notEmpty></PRE>
-				</div>-->
-
-				<div id="deidentifiedReportText" class="black_ar" style="overflow:auto;height:125px;width:100%;border: 2px solid #eef5fb;"><PRE><logic:notEmpty name="viewSurgicalPathologyReportForm" property="deIdentifiedReportTextContent" ><%=formSPR.getDeIdentifiedReportTextContent()%></logic:notEmpty></PRE>
-				</div>
-
+				<td class="black_ar" style="padding-left:6px; padding-right:6px;">
+					<div id="deidentifiedReportText" class="pre" style="overflow:auto;height:125px;width:100%;border:2px solid #eef5fb;" onmousemove='scrollInSync();'><table style="table-layout: fixed;"><tr><td><PRE class="pre" ><logic:notEmpty name="viewSurgicalPathologyReportForm" property="deIdentifiedReportTextContent" ><%=formSPR.getDeIdentifiedReportTextContent()%></logic:notEmpty>
+					</PRE></td></tr></table>
+					</div>
 				</td>
 			</tr>
 		</table>
 		</td></tr>
 		
         <tr>
-          <td colspan="2"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+          <td colspan="2" class="bottomtd"><table width="100%" border="0" cellspacing="0" cellpadding="0">
               <tr>
                 <td width="20%" valign="top" class="black_ar">&nbsp;<bean:message key="viewSPR.label.comment"/></td>
                 <td width="80%" valign="top">
-                  <html:textarea property="comments" rows="3" cols="60"/>                </td>
+                  <html:textarea property="comments" rows="3" cols="50"/>                </td>
               </tr>
           </table></td>
-        </tr>
-        <tr>
-          <td colspan="2" class="bottomtd"></td>
         </tr>
 
         <tr>
@@ -497,7 +475,8 @@ if(!hasAccess)
         </tr>
 		<tr>
 		<td colspan="2">
-			<span id="deidText" class="black_ar" style="display:none;"><PRE><%=deidText%></PRE></span>
+			<div id="deidText" class="pre" style="overflow:auto;height:125px;width:100%;border:2px solid #eef5fb;display:none;"><table style="table-layout: fixed;"><tr><td><PRE class="pre" >
+			<%=deidText%></PRE></td></tr></table></div>
 		</td>
 	</tr>
     </table>
