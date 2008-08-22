@@ -5,7 +5,9 @@
 package edu.wustl.catissuecore.util;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -222,11 +224,32 @@ public class CaTissuePrivilegeUtility
 		String objectId = CollectionProtocol.class.getName() + "_" + id;
 
 		AbstractDAO hibernateDao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
-
-		try
+		CollectionProtocol cp = null;
+		// Added by Ravindra - contains user ids of those users who are asso. to the CP
+		// viz. PI of CP, co-ords of CP, users having explicit privileges on the CP (users in cp.assignedProtocolUserCollection)
+		Set<Long> validUserIds = new HashSet<Long>();
+		
+ 		try
 		{
 			hibernateDao.openSession(null);
-
+			cp = (CollectionProtocol) hibernateDao.retrieve(CollectionProtocol.class.getName(), id);
+			validUserIds.add(cp.getPrincipalInvestigator().getId());
+			
+			if(cp.getAssignedProtocolUserCollection()!=null)
+			{
+				for(User user : cp.getAssignedProtocolUserCollection())
+				{
+					validUserIds.add(user.getId());
+				}
+			}
+			if(cp.getCoordinatorCollection()!=null)
+			{
+				for(User user : (Collection<User>) cp.getCoordinatorCollection())
+				{
+					validUserIds.add(user.getId());
+				}
+			}
+			
 			for (NameValueBean nmv : Variables.privilegeGroupingMap.get("CP"))
 			{
 				String privilegeName = nmv.getName();
@@ -236,6 +259,12 @@ public class CaTissuePrivilegeUtility
 				for (String userName : users)
 				{
 					User user = Utility.getUser(userName);
+					// Added by Ravindra 
+					// show Privileges of only those users who are associated to that CP
+					if(!validUserIds.contains(user.getId()))
+					{
+						continue;
+					}
 					SiteUserRolePrivilegeBean bean = result.get(user.getId().toString());
 					//if no privilege was so far detected for this user
 					if (bean == null)
