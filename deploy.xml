@@ -1599,11 +1599,11 @@ Thanking You,
 		<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
 			<include name="*.cfg.xml" />
 			<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}" />
-			<replacefilter token="${token.database.password}" value="${database.password}" />
+			<replacefilter token="@@DATABASE_PASSWORD@@" value="${database.password}" />
 			<!--<replacefilter token="@@DATABASE_NAME@@" value="${database.name}"/>  -->
 		</replace>
 
-	<!--	<java classname="edu.wustl.catissuecore.annotations.xmi.ImportXmi" fork="true">
+		<java classname="edu.wustl.catissuecore.annotations.xmi.ImportXmi" fork="true">
 			<arg value="${filename}" />
 			<arg value="${hookentity}" />
 			<arg value="${mainContainerList}" />
@@ -1626,7 +1626,7 @@ Thanking You,
 			<fileset dir="${temp.dir}/catissuecore">
 				<include name="**/*" />
 			</fileset>
-		</delete>-->
+		</delete>
 	</target>
 
 <!-- XMI EXPORT-->
@@ -1841,7 +1841,7 @@ Thanking You,
 		<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
 			<include name="*.cfg.xml" />
 			<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}"/>
-			<replacefilter token="${token.database.password}" value="${database.password}"/>
+			<replacefilter token="@@DATABASE_PASSWORD@@" value="${database.password}"/>
 		</replace>
 				
 		<java classname="edu.wustl.catissuecore.annotations.xmi.CategoryIntegration" fork="true" maxmemory="1024M">		
@@ -1903,7 +1903,7 @@ Thanking You,
 		<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
 			<include name="*.cfg.xml" />
 			<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}"/>
-			<replacefilter token="${token.database.password}" value="${database.password}"/>
+			<replacefilter token="@@DATABASE_PASSWORD@@" value="${database.password}"/>
 		</replace>		
 					
 		<java classname="edu.common.dynamicextensions.util.parser.ImportPermissibleValues" fork="true" maxmemory="1024M">		
