@@ -33,8 +33,6 @@ public class LoadSaveQueryPageAction extends BaseAction
 	{
 		IQuery queryObject = (IQuery) request.getSession().getAttribute(
 				AppletConstants.QUERY_OBJECT);
-		IQuery newQueryObject = (IQuery) request.getSession().getAttribute(
-				"newQuery");
 		String target = Constants.FAILURE;
 		/**
 		 * Name: Abhishek Mehta
