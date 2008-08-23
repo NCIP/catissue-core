@@ -366,28 +366,11 @@ function handleStatus(status)
 										width="6" height="6" hspace="0" vspace="0" /></span></td>
 									<td width="17%" align="left" class="black_ar"><bean:message
 										key="user.role" /></td>
-									<td width="19%" class="black_ar"><select name="role"
-										class="formFieldSizedNew" id="roleIds"
-										onchange="preEventsOnRoleSelect(this,'cpCheckId')">
-										<%
-											String roleName = "";
-											String roleValue = "";
-											if ((roleList != null) && !(roleList.isEmpty())) {
-												for (int i = 0; i < roleList.size(); i++) {
-													roleName = "" + ((NameValueBean) roleList.get(i)).getName();
-													roleValue = ""
-													+ ((NameValueBean) roleList.get(i)).getValue();
-													String selected = "";
-													if (roleValue.equals("0")) {
-												selected = "SELECTED";
-													}
-										%>
-										<option value="<%=roleValue%>"><%=roleName%></option>
-										<%
-											}
-											}
-										%>
-									</select></td>
+									<td width="19%" class="black_ar">
+										<html:select property = "role" styleId= "roleIds" styleClass = "formFieldSizedNew" onchange="preEventsOnRoleSelect(this,'cpCheckId')">
+											<html:options collection  = "roleList" labelProperty = "name" property = "value" />
+										</html:select>
+									</td>
 									<td width="13%" align="left" valign="top">&nbsp;</td>
 									<td width="1%" align="center" class="black_ar"><span
 										class="blue_ar_b"><img
@@ -395,25 +378,11 @@ function handleStatus(status)
 										width="6" height="6" hspace="0" vspace="0" /></span></td>
 									<td width="17%" align="left" class="black_ar"><bean:message
 										key="assignPrivileges.site(s)" /></td>
-									<td rowspan="3" width="17%" align="left" class="black_ar_t"><select
-										class="formFieldSizedNew" name = "siteIds" id="siteIds" size="4"
-										multiple="multiple" onchange="getCPsForThisSites(this)">
-										<%
-											String siteName = "";
-											String siteValue = "";
-											if ((siteList != null) && !(siteList.isEmpty())) {
-												for (int i = 0; i < siteList.size(); i++) {
-													siteName = "" + ((NameValueBean) siteList.get(i)).getName();
-													siteValue = ""
-													+ ((NameValueBean) siteList.get(i)).getValue();
-										%>
-										<option value="<%=siteValue%>"
-											onmouseover="Tip('<%=siteName%>',WIDTH,200)"><%=siteName%></option>
-										<%
-											}
-											}
-										%>
-									</select></td>
+									<td rowspan="3" width="17%" align="left" class="black_ar_t">
+										<html:select property = "siteIds" styleId= "siteIds" size = "4" styleClass = "formFieldSizedNew" multiple="multiple" onchange="getCPsForThisSites(this)">
+											<html:options collection  = "siteList" labelProperty = "name" property = "value" />
+										</html:select>
+									</td>
 									
 									<td width="14%" align="left" valign="top" class="black_ar_t">&nbsp;</td>
 								</tr>
