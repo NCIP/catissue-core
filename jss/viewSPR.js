@@ -356,3 +356,13 @@ function setUI()
 {
 	show('deidReportInfo');
 }
+
+//This function is called when action button is pressed to resolve the conflict:
+function onButtonClick(buttonPressed, reportQueueId)
+{
+	var actionUrl = "ConflictResolver.do?reportQueueId="+reportQueueId+"&conflictButton="+buttonPressed;
+	document.forms[0].action = actionUrl;
+	document.forms[0].submit();
+	
+}
+
