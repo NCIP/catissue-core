@@ -10,7 +10,7 @@
 	String technicalGuide = (String) request.getAttribute(Constants.TECHNICAL_GUIDE_LINK_PROPERTY);
 	String trainingGuide = (String) request.getAttribute(Constants.TRAINING_GUIDE_LINK_PROPERTY);
 	String umlmodelGuide = (String) request.getAttribute(Constants.UML_MODEL_LINK_PROPERTY);
-	String gforgeGuide = (String) request.getAttribute(Constants.GFORGE_GUIDE_LINK_PROPERTY);
+	String knowledgecenterForum = (String) request.getAttribute(Constants.KNOWLEDGE_CENTER_FORUM_LINK_PROPERTY);
 	String knowledgecenterGuide = (String) request.getAttribute(Constants.KNOWLEDGE_CENTER_LINK_PROPERTY);
 %>
 <head>
@@ -100,11 +100,11 @@
               <td class="tabletd1"></td>
               <td align="center" valign="top"><table width="260" border="0" cellspacing="0" cellpadding="4">
                 <tr>
-                  <td rowspan="2" valign="top"><img src="images/uIEnhancementImages/ic_gforge.gif" alt="GForge / Knowledge Center" width="46" height="46"></td>
-                  <td><a href="<%=gforgeGuide%>" target="_NEW" class="blue_ar_b"><bean:message key="app.gforge"/></a></td>
+                  <td rowspan="2" valign="top"><img src="images/uIEnhancementImages/ic_gforge.gif" alt="Knowledge Center Forum" width="46" height="46"></td>
+                  <td><a href="<%=knowledgecenterForum%>" target="_NEW" class="blue_ar_b"><bean:message key="app.knowledgecenterForum"/></a></td>
                 </tr>
                 <tr>
-                  <td class="black_ar" align="justify"><bean:message key="app.gforge.message"/></td>
+                  <td class="black_ar" align="justify"><bean:message key="app.knowledgecenterForum.message"/></td>
                 </tr>
               </table></td>
               <td width="1" class="tabletd1"></td>

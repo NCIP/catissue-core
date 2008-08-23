@@ -386,31 +386,31 @@
 	<!--  property for the help page links/icons -->
 	<property>
 		<name>userguide.link</name>
-		<value>http://gforge.nci.nih.gov/frs/download.php/3883/caTissueSuiteDeploymentManual.doc</value>
+		<value>https://gforge.nci.nih.gov/docman/view.php/18/13148/Suite1_1_UserManual_C1.doc</value>
 	</property>
 	
 	<property>
 		<name>technicalguide.link</name>
-		<value>http://gforge.nci.nih.gov/frs/download.php/3883/caTissueSuiteDeploymentManual.doc</value>
+		<value>https://gforge.nci.nih.gov/docman/view.php/18/13150/caTissueSuiteV11_Technical_Guide.doc</value>
 	</property>
 	
 	<property>
 		<name>trainingguide.link</name>
-		<value>http://gforge.nci.nih.gov/frs/download.php/3883/caTissueSuiteDeploymentManual.doc</value>
+		<value>http://59.163.69.22:8888/</value>
 	</property>
 	
 	<property>
 		<name>umlmodel.link</name>
-		<value>http://gforge.nci.nih.gov/frs/download.php/3883/caTissueSuiteDeploymentManual.doc</value>
+		<value>https://gforge.nci.nih.gov/docman/view.php/18/13775/caTissueSuite_v1_1.zip</value>
 	</property>
 	
 	<property>
 		<name>knowledgecenter.link</name>
-		<value>http://gforge.nci.nih.gov/frs/download.php/3883/caTissueSuiteDeploymentManual.doc</value>
+		<value>https://cabig-kc.nci.nih.gov/Biospecimen/KC/index.php/Main_Page</value>
 	</property>
 	
 	<property>
-		<name>gforge.link</name>
-		<value>http://gforge.nci.nih.gov/frs/download.php/3883/caTissueSuiteDeploymentManual.doc</value>
+		<name>knowledgecenterforum.link</name>
+		<value>https://cabig-kc.nci.nih.gov/Biospecimen/forums/</value>
 	</property>
 </properties>

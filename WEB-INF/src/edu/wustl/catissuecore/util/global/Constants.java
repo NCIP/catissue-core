@@ -656,7 +656,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static String TRAINING_GUIDE_LINK_PROPERTY = "trainingguide.link";
 	public static String UML_MODEL_LINK_PROPERTY = "umlmodel.link";
 	public static String KNOWLEDGE_CENTER_LINK_PROPERTY =  "knowledgecenter.link";
-	public static String GFORGE_GUIDE_LINK_PROPERTY = "gforge.link";
+	public static String KNOWLEDGE_CENTER_FORUM_LINK_PROPERTY = "knowledgecenterforum.link";
 	
 	//Spreadsheet Export Action
 	public static final String SPREADSHEET_EXPORT_ACTION = "SpreadsheetExport.do";
