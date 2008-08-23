@@ -7,6 +7,7 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Constants" %>
 <%@ page import="edu.wustl.catissuecore.domain.Participant" %>
 <link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
+<script language="JavaScript" type="text/javascript" src="jss/viewSPR.js"></script>
 
 
  <table cellpadding="0" cellspacing="0" border="0" width ="100%">
@@ -31,7 +32,7 @@
 					title=""
 					value="Use Selected Participant" 
 					disabled="<%=useSelPartDisable%>" 
-					onclick="onButtonClick('createNewSCG')">
+					onclick="submitValue('createNewSCG')">
  	    
 	     	</html:button> &nbsp;|&nbsp;
 			<%}%>	   
@@ -41,7 +42,7 @@
 						title=""
 						value="Use Selected SCG" 
 						disabled="<%=useSelSCGDisable%>" 
-						onclick="onButtonClick('associateSCG')">								  				     	    
+						onclick="submitValue('associateSCG')">								  				     	    
 		    </html:button>
 		
 		<%if(conflictStatus.equals(CaTIESConstants.STATUS_PARTICIPANT_CONFLICT))
@@ -54,7 +55,7 @@
 					title=""
 					value="Create New Participant"
 					disabled="<%=crtNewPartDisable%>" 
-					onclick="onButtonClick('creatNewParticipant')">
+					onclick="submitValue('creatNewParticipant')">
 	     	</html:button>
 		<%} else
 		 	 {	
@@ -65,7 +66,7 @@
 					title=""
 					value="Create New SCG"
 					disabled="<%=crtNewSCGDisable%>" 
-					onclick="onButtonClick('createNewSCG')">
+					onclick="submitValue('createNewSCG')">
 	     	</html:button>
 
 		<%}%>
@@ -78,3 +79,10 @@
 		
 	</tr>
 </table>
+
+<script>
+function submitValue(buttonPressed)
+{
+	onButtonClick(buttonPressed, "<%=reportQueueId%>");
+}
+</script>

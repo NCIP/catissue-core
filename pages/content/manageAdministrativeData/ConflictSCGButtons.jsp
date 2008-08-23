@@ -7,6 +7,7 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Constants" %>
 <%@ page import="edu.wustl.catissuecore.domain.Participant" %>
 <link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
+<script language="JavaScript" type="text/javascript" src="jss/viewSPR.js"></script>
 
  <table cellpadding="0" cellspacing="0" border="0" width ="100%">
 	
@@ -18,14 +19,14 @@
 					property="" 
 					title=""
 					value="Overwrite Report" 
-					onclick="onButtonClick('overwriteReport')">
+					onclick="submitValue('overwriteReport')">
  	       	</html:button> &nbsp;|&nbsp;
 			
 	    	<html:button styleClass="blue_ar_c" 
 						property="" 
 						title=""
 						value="Ignore New Report" 
-						onclick="onButtonClick('ignoreNewReport')">
+						onclick="submitValue('ignoreNewReport')">
 		 
 		    </html:button> &nbsp;|&nbsp;
 
@@ -38,3 +39,9 @@
 	</tr>
 </table>
 
+<script>
+function submitValue(buttonPressed)
+{
+	onButtonClick(buttonPressed, "<%=reportQueueId%>");
+}
+</script>
