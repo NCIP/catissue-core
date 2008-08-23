@@ -22,7 +22,15 @@ public class CollectionProtocolEventComparator implements Comparator{
 			
 			if(collectionProtocolEventFirst !=null && collectionProtocolEventSec != null)
 			{
-				return collectionProtocolEventFirst.getStudyCalendarEventPoint().compareTo(collectionProtocolEventSec.getStudyCalendarEventPoint());
+				/**
+				 * IF eventPoint are equal comparet with ID
+				 */
+				int compareValue = collectionProtocolEventFirst.getStudyCalendarEventPoint().compareTo(collectionProtocolEventSec.getStudyCalendarEventPoint());
+				if(compareValue==0&&collectionProtocolEventFirst.getId()!=null&&collectionProtocolEventSec.getId()!=null)
+				{
+					compareValue = collectionProtocolEventFirst.getId().compareTo(collectionProtocolEventSec.getId());
+				}
+				return compareValue;
 			}
 			
 			if(collectionProtocolEventFirst ==null && collectionProtocolEventSec == null)

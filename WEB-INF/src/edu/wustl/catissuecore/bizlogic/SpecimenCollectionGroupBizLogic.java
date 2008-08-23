@@ -13,7 +13,6 @@ package edu.wustl.catissuecore.bizlogic;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -24,8 +23,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
+import java.util.TreeMap;
 
-import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
@@ -34,12 +33,12 @@ import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.ConsentTierStatus;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ReceivedEventParameters;
-import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.SpecimenObjectFactory;
+import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.namegenerator.BarcodeGenerator;
 import edu.wustl.catissuecore.namegenerator.BarcodeGeneratorFactory;
@@ -48,11 +47,11 @@ import edu.wustl.catissuecore.namegenerator.LabelGeneratorFactory;
 import edu.wustl.catissuecore.namegenerator.NameGeneratorException;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.CollectionProtocolEventComparator;
-import edu.wustl.catissuecore.util.SpecimenComparator;
 import edu.wustl.catissuecore.util.CollectionProtocolSeqComprator;
 import edu.wustl.catissuecore.util.CollectionProtocolUtil;
 import edu.wustl.catissuecore.util.ConsentUtil;
 import edu.wustl.catissuecore.util.EventsUtil;
+import edu.wustl.catissuecore.util.SpecimenComparator;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.catissuecore.util.global.Variables;
@@ -71,6 +70,7 @@ import edu.wustl.common.security.PrivilegeManager;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
+import edu.wustl.common.util.DomainBeanIdentifierComparator;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
@@ -1211,31 +1211,26 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
     	try
     	{
     		dao.openSession(null);
+    		Date regDate = null;
+    		Integer offset = null;
+    		CollectionProtocolRegistration cpr = null; 
 			Logger.out.debug("Start of getSCGTreeForCPBasedView");
-			CollectionProtocolRegistration collectionProtocolRegistration = null;
-			CollectionProtocolRegistration cpr = null;
-						
-			Object object = dao.retrieve(CollectionProtocol.class.getName(), cpId);
-			CollectionProtocol collectionProtocol = (CollectionProtocol)object;
-			
-			
-			Iterator collectionProtCollectionItr = collectionProtocol.getCollectionProtocolRegistrationCollection().iterator();
-			
-			while(collectionProtCollectionItr.hasNext())
+			String hql1 = "select cpr.id,cpr.registrationDate,cpr.offset from " + CollectionProtocolRegistration.class.getName()
+			+ " as cpr where cpr.collectionProtocol.id = " + cpId.toString() + " and cpr.participant.id = " + participantId.toString();
+			List list = executeQuery(hql1);
+			if (list != null && list.size() > 0)
 			{
-				collectionProtocolRegistration = 
-					(CollectionProtocolRegistration)collectionProtCollectionItr.next();
-				if(collectionProtocolRegistration.getCollectionProtocol().getId().equals(cpId) && 
-						collectionProtocolRegistration.getParticipant().getId().equals(participantId))
-				{
-					cpr = collectionProtocolRegistration;
-					break;
-				}
-				
+				Object[] obj = (Object[]) list.get(0);
+				cpr =new CollectionProtocolRegistration();
+				cpr.setId((Long)obj[0]);
+				cpr.setRegistrationDate((Date) obj[1]);
+				cpr.setOffset((Integer) obj[2]);
+
 			}
+
 			StringBuffer xmlString = new StringBuffer();
 			xmlString.append("<node>");
-			childCPtree(xmlString,participantId, cpr,collectionProtocol);
+			childCPtree(xmlString,participantId, cpr,cpId);
 			xmlString.append("</node>");
 			
 			long endTime = System.currentTimeMillis();
@@ -1273,14 +1268,15 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	 * @throws ClassNotFoundException
 	 */
 	public void childCPtree(StringBuffer xmlString, Long participantId,CollectionProtocolRegistration collectionProtocolRegistration,
-			CollectionProtocol collectionProtocol) throws DAOException, ClassNotFoundException
+			Long cpId) throws DAOException, ClassNotFoundException
 	{
 		//done
-		Date evtLastDate = SCGTreeFrCPBasedView(xmlString, collectionProtocol,
-				collectionProtocolRegistration);
+		Date evtLastDate = SCGTreeFrCPBasedView(xmlString,collectionProtocolRegistration);
 		
-		List cpchildList = new ArrayList();
-		cpchildList.addAll(collectionProtocol.getChildCollectionProtocolCollection());
+		String hql = "select  cp." + Constants.CHILD_COLLECTION_PROTOCOL_COLLECTION + " from " + CollectionProtocol.class.getName()
+		+ " as cp where cp.id= " + cpId.toString();
+		
+		List cpchildList = executeQuery(hql);
 		CollectionProtocolSeqComprator comparator = new CollectionProtocolSeqComprator();
 		Collections.sort(cpchildList, comparator);
 		
@@ -1314,7 +1310,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 					if(cpr.getOffset() != null)
 						addOffset(cpr.getOffset());
 				}
-				childCPtree(xmlString, participantId, collectionProtocolRegistration,colProt);
+				childCPtree(xmlString, participantId, collectionProtocolRegistration,colProt.getId());
 				xmlString.append("</node>");
 			}
 
@@ -1335,58 +1331,85 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	 * @throws DAOException
 	 * @throws ClassNotFoundException
 	 */
-	public Date SCGTreeFrCPBasedView(StringBuffer xmlString, CollectionProtocol collectionProtocol,CollectionProtocolRegistration
+	public Date SCGTreeFrCPBasedView(StringBuffer xmlString, CollectionProtocolRegistration
 			collectionProtocolRegistration) throws DAOException,
 	ClassNotFoundException
 	{
+		/** 
+		 * replaced get SCGColelction call with HQL.  
+		 */	
+		String hql = "select scg.id,scg.name,scg.activityStatus,scg.collectionStatus,scg.offset," +
+				"scg.collectionProtocolEvent.id,scg.collectionProtocolEvent.studyCalendarEventPoint," +
+				"scg.collectionProtocolEvent.collectionPointLabel from " + SpecimenCollectionGroup.class.getName()+
+				" as scg where scg.collectionProtocolRegistration.id = " + collectionProtocolRegistration.getId() +
+				" and scg.activityStatus <> '" + Constants.ACTIVITY_STATUS_DISABLED + "' order by scg.collectionProtocolEvent.studyCalendarEventPoint";
 		
-		Iterator specimenCollectionGroupColItr = (Iterator)collectionProtocolRegistration.
-													getSpecimenCollectionGroupCollection().iterator();
-		List collectionProtocolEvents = new ArrayList();
-		Map collectionProtocolEventsIdAndSCGMap = new HashMap();
+		List list =  executeQuery(hql); 
 		
-		while(specimenCollectionGroupColItr.hasNext())
+		/**
+		 * Map to store key as event id and value as collectionprotocolevt object
+		 */
+		Map<Long,CollectionProtocolEvent> collectionProtocolEventsIdMap = new HashMap<Long,CollectionProtocolEvent>();
+		/**
+		 * Iterate and create SCG and CollectionProtocolEvent objects
+		 * After this loop a collectionProtocolEventsIdMap will populate with valus like
+		 * key = event id and value = CollectionProtocolEvent object with respective SCGCollection
+		 */
+		for(int i=0;i<list.size();i++)
 		{
-			SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup)specimenCollectionGroupColItr.next();
+			Object[] obj1 = (Object[]) list.get(i);
+			SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
+			scg.setId((Long) obj1[0]);
+			scg.setName((String) obj1[1]);
+			scg.setActivityStatus((String) obj1[2]);
+			scg.setCollectionStatus((String) obj1[3]);
+			scg.setOffset((Integer) obj1[4]);
 			
-			if(!collectionProtocolEvents.contains(specimenCollectionGroup.getCollectionProtocolEvent()))
-			{	
-				collectionProtocolEvents.add(specimenCollectionGroup.getCollectionProtocolEvent());
+			CollectionProtocolEvent cpe = new CollectionProtocolEvent();
+			cpe.setId((Long) obj1[5]);
+			cpe.setStudyCalendarEventPoint((Double)obj1[6]);
+			cpe.setCollectionPointLabel((String)obj1[7]);
+			
+			CollectionProtocolEvent tempCpe = collectionProtocolEventsIdMap.get(cpe.getId());
+			
+			if(tempCpe==null)
+			{
+				Collection<SpecimenCollectionGroup>specimenCollectionGroupCollection = new HashSet<SpecimenCollectionGroup>();
+				specimenCollectionGroupCollection.add(scg);
+				cpe.setSpecimenCollectionGroupCollection(specimenCollectionGroupCollection);
+				collectionProtocolEventsIdMap.put(cpe.getId(), cpe);
 				
 			}
-			
-			if(!Constants.ACTIVITY_STATUS_DISABLED.equals(specimenCollectionGroup.getActivityStatus()))
-			{	
-				if(collectionProtocolEventsIdAndSCGMap.containsKey(specimenCollectionGroup.getCollectionProtocolEvent().getId()))
-				  {
-						List specColGroupList = (List)collectionProtocolEventsIdAndSCGMap.get(
-								specimenCollectionGroup.getCollectionProtocolEvent().getId());
-						specColGroupList.add(specimenCollectionGroup);
-						
-										
-				  } else {
-						List specColGroupList = new ArrayList();
-						specColGroupList.add(specimenCollectionGroup);
-						collectionProtocolEventsIdAndSCGMap.put(specimenCollectionGroup.getCollectionProtocolEvent().getId(), 
-								specColGroupList);
-						
-				 }
+			else
+			{
+				tempCpe.getSpecimenCollectionGroupCollection().add(scg);
 			}
-					
+			scg.setCollectionProtocolEvent(cpe);
 		}
 		
-		
+		/**
+		 * Get the distinct collectionprotocolevnt object from the Map
+		 * Sort the Event objects
+		 */
+				
+		List collectionProtocolEvents = new ArrayList(collectionProtocolEventsIdMap.values());
 		CollectionProtocolEventComparator comparator = new CollectionProtocolEventComparator();
 		Collections.sort(collectionProtocolEvents,comparator);
 		
-					
+		/**
+		 * Iterate over CPE obects
+		 * Get SCGCollection
+		 * Sort SCG list of the CPE.
+		 * Create XML node
+		 */
 		Iterator collectionProtocolEventsItr = collectionProtocolEvents.iterator();
-		
 		Date eventLastDate = new Date();
 		while(collectionProtocolEventsItr.hasNext())
 		{
 			CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent) collectionProtocolEventsItr.next();
-			List scgList = (List)collectionProtocolEventsIdAndSCGMap.get(collectionProtocolEvent.getId());
+			List scgList = new ArrayList<SpecimenCollectionGroup>(collectionProtocolEvent.getSpecimenCollectionGroupCollection());
+			DomainBeanIdentifierComparator idComparator = new DomainBeanIdentifierComparator();
+			Collections.sort(scgList,idComparator);
 			if (scgList != null && !scgList.isEmpty())
 			{
 				eventLastDate = createTreeNodeForExistngSCG(xmlString, collectionProtocolEvent.getStudyCalendarEventPoint()
@@ -1515,6 +1538,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	throws DAOException, ClassNotFoundException
 	{
 	Date eventLastDate = null;
+
 	for (int i = 0; i < scgList.size(); i++)
 	{
 		SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup)scgList.get(i);
@@ -1588,54 +1612,83 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	}
 	return eventLastDate;
 	}
-	
+	/**
+	 * 1. Get all specimens attributes of given scg id
+	 * 2. Iterate over a specimen attribute
+	 * 		2.1 create specimen object
+	 *    	2.3 Add specimen in the TreeMap where key is parentId and value is List of SpeicmenObjects
+	 * 3. Get List of Speicmen Object from TreeMap where parentID =0 i.e. speicmen having no parent.
+	 * 4. Iterate over above list
+	 * 		4.1 Call createXML of specimen
+	 * 			4.1.1 Generate xml of specimen
+	 * 			4.1.2 Get childSpeicmen from TreeMap
+	 * 			4.1.3 recursively call createXML on childSpecimens 
+	 * @param xmlString
+	 * @param specimenCollectionGroup
+	 * @throws DAOException
+	 * @throws ClassNotFoundException
+	 */
 	private void addSpecimenNodesToSCGTree(StringBuffer xmlString,SpecimenCollectionGroup specimenCollectionGroup) throws DAOException, ClassNotFoundException
 	{
-	
-		
-		List specimenList = new ArrayList();
-		specimenList.addAll(specimenCollectionGroup.getSpecimenCollection());
-		//Mandar 20aug08--start
-		SpecimenComparator comparator = new SpecimenComparator();
-		Collections.sort(specimenList,comparator);
-		//Mandar 20Aug08--end		
-		List finalList = new ArrayList();
-		
+		/**
+		 * TreeMap to store key as parentSpecimeniD and Child as List of child specimens
+		 */
+		TreeMap<Long, List<Specimen>> specimenChildrenMap = new TreeMap<Long, List<Specimen>>();
 
-		// Stack
-		Stack spStack = new Stack();
-
-		// Here iterate over specimenList to separate out Specimens and child
-		// Specimens
-		for (int i = 0; i < specimenList.size(); i++)
+		String hql = "select sp.id,sp.label,sp.parentSpecimen.id,sp.activityStatus,sp.specimenType,sp.collectionStatus	from " + Specimen.class.getName()
+		+ " as sp where sp.specimenCollectionGroup.id = " + specimenCollectionGroup.getId() + " and sp.activityStatus <> '" + Constants.ACTIVITY_STATUS_DISABLED
+		+ "' order by sp.label";
+		
+		List list =  executeQuery(hql); 
+		
+		/**
+		 * Iterate over a resultlist the  output after this iteration is a TreeMap populated with key = parentSpecimenID
+		 * and value = List of SpecimenObject which is child of Parentkey
+		 * IF specimen has no parent then parent key is store as Long(0)
+		 */
+		for(int i=0;i<list.size();i++)
 		{
-			Specimen specimen = (Specimen)specimenList.get(i);
+			Object[] obj = (Object[]) list.get(i);
+			Specimen specimen = new Specimen();
+			specimen.setId((Long) obj[0]);
+			specimen.setLabel((String) obj[1]);
+			specimen.setActivityStatus((String) obj[3]);
+			specimen.setSpecimenType((String) obj[4]);
+			specimen.setCollectionStatus((String) obj[5]);
+			Long parentSpecimenId = (Long) obj[2];
 			
-			if(!Constants.ACTIVITY_STATUS_DISABLED.equals(specimen.getActivityStatus()))
-			{	
-			
-				// Long peekSpecimenId = null;
-				if (specimen.getId() != null)
-				{
-					if (specimen.getParentSpecimen()==null)
-					{
-						// if parentSpecimenId is null then it's going to be parent
-						// specimen
-						finalList.add(specimenList.get(i));
-					}
-				}
+			if(parentSpecimenId==null)
+			{
+				parentSpecimenId= new Long(0);
+			}
+
+			List<Specimen> l = specimenChildrenMap.get(parentSpecimenId);
+			if(l==null)
+			{
+				l = new ArrayList<Specimen>();
+				l.add(specimen);
+				specimenChildrenMap.put(parentSpecimenId, l);
+			}
+			else
+			{
+				l.add(specimen);
 			}
 		}
-		for (int i = 0; i < finalList.size(); i++)
+		/**
+		 * Start creating a node of those specimns having no parent 
+		 */
+		if(!specimenChildrenMap.keySet().isEmpty())
 		{
-			Specimen specimen = (Specimen)finalList.get(i);
-			createSpecimenXML(xmlString,specimen);
-			
+			List<Specimen> specList = specimenChildrenMap.get(new Long(0));
+			for(Specimen spec : specList)
+			{
+				createSpecimenXML(xmlString,spec,specimenChildrenMap);
+			}
 		}
 		
 	}
 	
-	private void createSpecimenXML(StringBuffer xmlString,Specimen specimen)
+	private void createSpecimenXML(StringBuffer xmlString,Specimen specimen,TreeMap<Long, List<Specimen>> specimenChildrenMap) throws DAOException, ClassNotFoundException
 	{
 		Long spId = specimen.getId();
 		String spLabel1 = specimen.getLabel();
@@ -1646,32 +1699,34 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		// Added later for toolTip text for specimens
 		String toolTipText = "Label : " + spLabel1 + " ; Type : " + type;
 		
-		List collectionEventPara = (List)getCollectionEventParameters(specimen.getSpecimenEventCollection());
-		/*String hqlCon = "select colEveParam.container from " + CollectionEventParameters.class.getName()
+		//List collectionEventPara = (List)getCollectionEventParameters(specimen.getSpecimenEventCollection());
+		String hqlCon = "select colEveParam.container from " + CollectionEventParameters.class.getName()
 				+ " as colEveParam where colEveParam.specimen.id = " + spId;
 
 		List container = executeQuery(hqlCon);
-*/			for (int k = 0; k < collectionEventPara.size(); k++)
+			for (int k = 0; k < container.size(); k++)
 		{
-            CollectionEventParameters collectionEventParameters = (CollectionEventParameters)collectionEventPara.get(k);
-           	String con = (String) collectionEventParameters.getContainer();
+            //CollectionEventParameters collectionEventParameters = (CollectionEventParameters)collectionEventPara.get(k);
+           	String con = (String) container.get(k);
 			toolTipText += " ; Container : " + con;
 		}
 		xmlString.append("<node id=\"" + Constants.SPECIMEN + "_" + spId.toString() + "\" " + "name=\"" + spLabel1 + "\" " + "toolTip=\""
 				+ toolTipText + "\" " + "type=\"" + Constants.SPECIMEN + "\" " + "collectionStatus=\"" + spCollectionStatus + "\">");
-		Collection childrenSpecimen = specimen.getChildSpecimenCollection();
 		
-		SpecimenComparator comparator = new SpecimenComparator();
-		List childSpecimen = new ArrayList();
-		childSpecimen.addAll(childrenSpecimen);
-		Collections.sort(childSpecimen,comparator);
+		//Collection childrenSpecimen = specimen.getChildSpecimenCollection();
 		
-		Iterator<AbstractSpecimen> childSpecimenIterator = childSpecimen.iterator();
-		while(childSpecimenIterator.hasNext())
+		// Get childrens of curretn specimen from TreeMap
+		List<Specimen> childrenSpecimen = (List)specimenChildrenMap.get(spId);
+		if(childrenSpecimen!=null)
 		{
-			Specimen childSpecimenOfSpecimen = (Specimen)childSpecimenIterator.next();
-			if(!Constants.ACTIVITY_STATUS_DISABLED.equals(childSpecimenOfSpecimen.getActivityStatus()))
-				createSpecimenXML(xmlString,childSpecimenOfSpecimen);
+			SpecimenComparator comparator = new SpecimenComparator();
+			Collections.sort(childrenSpecimen,comparator);
+			for(Specimen childSpecimen :childrenSpecimen)
+			{
+				if(!Constants.ACTIVITY_STATUS_DISABLED.equals(childSpecimen.getActivityStatus()))
+					createSpecimenXML(xmlString,childSpecimen,specimenChildrenMap);
+			}
+
 		}
 		xmlString.append("</node>");
 	}
