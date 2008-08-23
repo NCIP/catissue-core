@@ -233,7 +233,7 @@ public class CaTissuePrivilegeUtility
 		{
 			hibernateDao.openSession(null);
 			cp = (CollectionProtocol) hibernateDao.retrieve(CollectionProtocol.class.getName(), id);
-			validUserIds.add(cp.getPrincipalInvestigator().getId());
+			
 			
 			if(cp.getAssignedProtocolUserCollection()!=null)
 			{
@@ -242,14 +242,7 @@ public class CaTissuePrivilegeUtility
 					validUserIds.add(user.getId());
 				}
 			}
-			if(cp.getCoordinatorCollection()!=null)
-			{
-				for(User user : (Collection<User>) cp.getCoordinatorCollection())
-				{
-					validUserIds.add(user.getId());
-				}
-			}
-			
+			validUserIds.remove(cp.getPrincipalInvestigator().getId());
 			for (NameValueBean nmv : Variables.privilegeGroupingMap.get("CP"))
 			{
 				String privilegeName = nmv.getName();
