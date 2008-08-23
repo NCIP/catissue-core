@@ -8,11 +8,7 @@
 <script src="jss/ajax.js"></script>	   
 <script type="text/javascript" src="jss/dhtmlwindow.js"></script>
 <script type="text/javascript" src="jss/modal.js"></script>
-
-<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
-	<%=messageKey%>
-</html:messages>
-<html:errors/>
+<link rel="stylesheet" type="text/css" href="css/catissue_suite.css" />
 
 <head>
 <%
@@ -374,8 +370,7 @@ function checkQuantityforAll(count)
     </table>
     <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
     <tr>
-       <td align="left" class=" grey_ar_s">&nbsp;<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
-			<bean:message key="commonRequiredField.message" />
+       <td align="left" class=" bottomtd"><%@ include file="/pages/content/common/ActionErrors.jsp" %>
 		</td>
         </tr>
         <tr>

@@ -88,10 +88,7 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 	</script>
 </head>
 
-		<html:errors />
-		<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
-			<%=messageKey%>
-		</html:messages>
+<%@ include file="/pages/content/common/ActionErrors.jsp" %>
 	<div id="summary">	
 		<html:form action="<%=formAction%>" onsubmit="showhide()">		
 		<table summary="" cellpadding="3" cellspacing="0" border="0" bgcolor="#FFFFFF" width="100%">

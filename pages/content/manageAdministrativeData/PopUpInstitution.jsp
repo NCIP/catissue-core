@@ -60,12 +60,7 @@ function cancelWindow()
 <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
 <tr>
           <td> <div id="errorDiv"> </div></td>
-	    </tr>
-		<html:errors/> 
-<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
-	<%=messageKey%>
-</html:messages>
-   
+	    </tr>		
 	<html:form action='/InstitutionAdd.do' onsubmit="return addInstitution()"> 
 	<html:hidden property="operation" />
 				<html:hidden property="submittedFor"/>
@@ -73,7 +68,7 @@ function cancelWindow()
   <tr>
     <td align="left"><table width="100%" border="0" cellpadding="3" cellspacing="0">
       <tr>
-        <td><span class=" grey_ar_s">&nbsp;<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />&nbsp; <bean:message key="commonRequiredField.message" /></span></td>
+        <td><%@ include file="/pages/content/common/ActionErrors.jsp" %></td>
       </tr>
     </table></td>
   </tr>

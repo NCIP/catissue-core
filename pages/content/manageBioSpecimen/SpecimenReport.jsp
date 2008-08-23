@@ -51,13 +51,10 @@
 	
 </head>
 
-<%@ include file="/pages/content/common/ActionErrors.jsp" %>
-
 <%Collection specimenCollection = (Collection) request
 					.getAttribute(Constants.SAVED_SPECIMEN_COLLECTION);
 %>
-
-<html:errors />
+<%@ include file="/pages/content/common/ActionErrors.jsp" %>
 
 <html:form action="<%=Constants.ALIQUOT_ACTION%>">
 
