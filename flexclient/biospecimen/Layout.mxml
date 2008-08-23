@@ -358,12 +358,18 @@
 	    var bean : NameValueBean = null;
 		tempCollection = pevent.result as ArrayCollection;
 		var isRefresTree:Boolean = false;
+		pCombo.dataProvider = tempCollection;
+		pCombo.validateNow();
 	    if(tempCollection.length != 0)
 		{
 			if(previouslySelectedParticipantId==null)
 			{
 				// Sachin : this case occurs if user selects the particpant on UI ie. onPartcipantClick()
-				bean = tempCollection[selectedParticipantIndex] as NameValueBean;
+				if(selectedParticipantIndex<tempCollection.length)
+				{
+					bean = tempCollection[selectedParticipantIndex] as NameValueBean;
+					isRefresTree=true;		
+				}	
 		    }
 		    else
 		    {
