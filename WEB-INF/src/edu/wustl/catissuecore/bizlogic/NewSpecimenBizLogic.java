@@ -1344,8 +1344,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	 * @throws SMException Security related exception
 	 */
 	private void setStorageLocationToNewSpecimen(DAO dao, Specimen specimen,
-			SessionDataBean sessionDataBean, boolean partOfMultipleSpecimen) throws DAOException,
-			SMException
+			SessionDataBean sessionDataBean, boolean partOfMultipleSpecimen) throws DAOException
 	{
 		if (specimen.getSpecimenPosition() != null && specimen.getSpecimenPosition().getStorageContainer() != null)
 		{
@@ -1411,10 +1410,17 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			}
 			StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) BizLogicFactory
 					.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
-			storageContainerBizLogic.checkContainer(dao, storageContainerObj.getId().toString(),
-					specimen.getSpecimenPosition().getPositionDimensionOne().toString(), specimen.getSpecimenPosition()
-							.getPositionDimensionTwo().toString(), sessionDataBean,
-					partOfMultipleSpecimen);
+			try
+			{
+				storageContainerBizLogic.checkContainer(dao, storageContainerObj.getId().toString(),
+						specimen.getSpecimenPosition().getPositionDimensionOne().toString(), specimen.getSpecimenPosition()
+								.getPositionDimensionTwo().toString(), sessionDataBean,
+						partOfMultipleSpecimen);
+			}
+			catch (SMException e)
+			{
+				throw new DAOException(e);
+			}
 	//		specimen.setStorageContainer(storageContainerObj);
 		}
 	}
@@ -1426,7 +1432,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	 * @throws DAOException Database related exception
 	 */
 	private void validateUserForContainer(SessionDataBean sessionDataBean,
-			Container storageContainerObj) throws SMException, DAOException
+			Container storageContainerObj) throws DAOException
 	{
 		Container parentStorageContainer = null;
 		ContainerPosition cntPos = storageContainerObj.getLocatedAtPosition();
@@ -1493,7 +1499,11 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		{
 			return (StorageContainer) list.get(0);
 		}
-		return null;
+		else
+		{
+			throw new DAOException("Please Select correct storage container");
+		}
+		
 	}
 
 	/**
@@ -1506,9 +1516,10 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	 * @throws SMException
 	 */
 	private void setSpecimenStorageRecursively(Specimen newSpecimen, DAO dao,
-			SessionDataBean sessionDataBean, boolean partOfMultipleSpecimen) throws DAOException,
-			SMException
+			SessionDataBean sessionDataBean, boolean partOfMultipleSpecimen) throws DAOException
+			
 	{
+		
 		setStorageLocationToNewSpecimen(dao, newSpecimen, sessionDataBean, true);
 		if (newSpecimen.getChildSpecimenCollection() != null)
 		{
@@ -2526,9 +2537,13 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			}
 			postInsert(newSpecimenCollection, dao, sessionDataBean);
 		}
-		catch (Exception exception)
+		catch (DAOException exception)
 		{
-			throw new DAOException("Failed to update multiple specimen " + exception.getMessage());
+			throw exception;
+		}
+		catch (UserNotAuthorizedException ex)
+		{
+			throw new DAOException(ex);
 		}
 		finally
 		{
