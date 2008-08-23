@@ -22,14 +22,14 @@
 					src="images/uIEnhancementImages/ic_mail.gif" alt="Summary"
 					width="16" height="12" hspace="3" vspace="0" border="0" />
 				<bean:message key="app.contactUs" /></a>&nbsp; <a
-					href="/catissuecore/Summary.do" class="white"> <img
+					href="Summary.do" class="white"> <img
 					src="images/uIEnhancementImages/ic_summary.gif" alt="Summary"
 					width="10" height="10" hspace="3" vspace="0" border="0" />
 				<bean:message key="app.summary" /></a></td>
 
 				<logic:notEmpty scope="session" name="<%=Constants.SESSION_DATA%>">
 					<td width="14%" align="right" valign="top"><a
-						href="/catissuecore/Logout.do"> <img
+						href="Logout.do"> <img
 						src="images/uIEnhancementImages/logout_button1.gif" name="Image1"
 						width="86" height="19" id="Image1"
 						onmouseover="MM_swapImage('Image1','','images/uIEnhancementImages/logout_button.gif',1)"
@@ -37,7 +37,7 @@
 				</logic:notEmpty>
 				<logic:empty scope="session" name="<%=Constants.SESSION_DATA%>">
 					<td width="14%" valign="middle" align="right"><a
-						href="/catissuecore/Home.do" class="white"> <bean:message
+						href="Home.do" class="white"> <bean:message
 						key="app.loginMessage" /> </a> <img
 						src="images/uIEnhancementImages/spacer.gif" width="10" height="10"
 						align="absmiddle" /></td>
