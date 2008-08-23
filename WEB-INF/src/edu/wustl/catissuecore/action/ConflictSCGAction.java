@@ -10,40 +10,22 @@
 package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import edu.wustl.catissuecore.actionForm.ConflictCommonForm;
-import edu.wustl.catissuecore.actionForm.ConflictDetailsForm;
 import edu.wustl.catissuecore.actionForm.ConflictSCGForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.ReportLoaderQueueBizLogic;
-import edu.wustl.catissuecore.caties.util.CaTIESConstants;
-import edu.wustl.catissuecore.caties.util.Utility;
 import edu.wustl.catissuecore.caties.util.ViewSPRUtil;
-import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
-import edu.wustl.catissuecore.domain.Participant;
-import edu.wustl.catissuecore.domain.Site;
-import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
-import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.ReportLoaderQueue;
-import edu.wustl.catissuecore.domain.pathology.SurgicalPathologyReport;
-import edu.wustl.catissuecore.domain.pathology.TextContent;
-import edu.wustl.catissuecore.reportloader.HL7Parser;
-import edu.wustl.catissuecore.reportloader.HL7ParserUtil;
-import edu.wustl.catissuecore.reportloader.IdentifiedReportGenerator;
-import edu.wustl.catissuecore.reportloader.ReportLoaderUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
-import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.util.dbManager.DAOException;
 
 
