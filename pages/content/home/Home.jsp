@@ -72,7 +72,7 @@ table#browserDetailsContainer
 							</tr>
 							<tr>
 								<td style="padding-bottom:16px;"><a
-									href="/catissuecore/RedirectToHelp.do" class="view"><span class="wh_ar_b"></span><bean:message
+									href="RedirectToHelp.do" class="view"><span class="wh_ar_b"></span><bean:message
 									key="app.help" /></a></td>
 							</tr>
 							</logic:empty>
