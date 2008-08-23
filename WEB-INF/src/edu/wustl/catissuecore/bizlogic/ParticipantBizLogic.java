@@ -1311,14 +1311,20 @@ public class ParticipantBizLogic extends DefaultBizLogic
 					Logger.out.error(e.getMessage(), e);
 				}
 				Collection<CollectionProtocol> cpCollection = user.getAssignedProtocolCollection();
-				for(CollectionProtocol cp : cpCollection)
-				{
-					if(privilegeCache.hasPrivilege(CollectionProtocol.class.getName()+"_"+cp.getId(), privilegeName))
-					{
-						isAuthorized = true;
-						break;
-					}
-				}
+                if (cpCollection != null && !cpCollection.isEmpty())
+                {
+    				for(CollectionProtocol cp : cpCollection)
+    				{
+    					if(privilegeCache.hasPrivilege(CollectionProtocol.class.getName()+"_"+cp.getId(), privilegeName))
+    					{
+    						isAuthorized = true;
+    						break;
+    					}
+    				}
+                } else
+                {
+                    isAuthorized = edu.wustl.catissuecore.util.global.Utility.checkForAllCurrentAndFutureCPs(dao,privilegeName, sessionDataBean, null);
+                }
 		} 
 		else
 		{

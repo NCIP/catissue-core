@@ -41,6 +41,7 @@ import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolRegistrationBizLogic;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
+import edu.wustl.catissuecore.bizlogic.SiteBizLogic;
 import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.bizlogic.querysuite.QueryOutputSpreadsheetBizLogic;
@@ -86,7 +87,6 @@ import edu.wustl.common.dao.JDBCDAO;
 import edu.wustl.common.dao.QuerySessionData;
 import edu.wustl.common.dao.queryExecutor.PagenatedResultData;
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.security.PrivilegeCache;
 import edu.wustl.common.security.PrivilegeManager;
 import edu.wustl.common.security.PrivilegeUtility;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
@@ -1684,7 +1684,25 @@ public class Utility extends edu.wustl.common.util.Utility {
     	boolean allowOperation = false;
     	
     	String privilegeNames[] = privilegeName.split(",");
-    	Collection<Site> siteCollection = new CollectionProtocolBizLogic().getRelatedSites(Long.valueOf(cpId));
+        Collection<Site> siteCollection = null;
+        if (cpId != null && cpId.trim().length()!=0)
+        {
+            siteCollection = new CollectionProtocolBizLogic().getRelatedSites(Long.valueOf(cpId));
+        } else 
+        {
+            Set<Long> siteIds = new UserBizLogic().getRelatedSiteIds(sessionDataBean.getUserId());
+            if (siteIds != null && !siteIds.isEmpty())
+            {
+                siteCollection = new ArrayList<Site>();
+                for (Long siteId : siteIds)
+                {   
+                    Site site = new Site();
+                    site.setId(siteId);
+                    siteCollection.add(site);
+                   
+                }
+            }
+        }
     	Set<Long> idSet = new HashSet<Long>();
     	
     	for(Site site : siteCollection)

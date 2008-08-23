@@ -115,7 +115,7 @@ public class CollectionProtocolAuthorization implements edu.wustl.catissuecore.u
 				// user = siteUserRolePrivilegeBean.getUser();
 				// userCollection.add(user);
 				String defaultRole = siteUserRolePrivilegeBean.getRole().getValue();
-				if (defaultRole != null && (defaultRole.equalsIgnoreCase("-1") || defaultRole.equalsIgnoreCase("0")) )
+				if (defaultRole != null && (defaultRole.equalsIgnoreCase("-1") || defaultRole.equalsIgnoreCase("0") || defaultRole.equalsIgnoreCase(Constants.NON_ADMIN_USER)) )
 				{
 					roleName = Constants.getCPRoleName(collectionProtocol.getId(), user.getCsmUserId(), defaultRole);
 				} else

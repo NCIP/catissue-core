@@ -3293,7 +3293,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 				SpecimenPosition specimenPosition = null;
 				Specimen specimen = (Specimen) domainObject;
 				
-				if(specimen.getLineage().equals(Constants.DERIVED_SPECIMEN) || specimen.getLineage().equals(Constants.ALIQUOT))
+				if(specimen.getLineage() != null && (specimen.getLineage().equals(Constants.DERIVED_SPECIMEN) || specimen.getLineage().equals(Constants.ALIQUOT)))
 				{
 					List<Specimen> list = null;
 					try 
