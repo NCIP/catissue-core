@@ -289,7 +289,7 @@ function updateSCDetails(msg)
 	</script>
 </logic:equal>
 
-		<html:errors />
+		<%@ include file="/pages/content/common/ActionErrors.jsp" %>
 		<logic:notEmpty name="messageKey">
 		<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
 			${requestScope.messageKey}
