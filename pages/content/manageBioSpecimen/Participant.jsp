@@ -489,7 +489,7 @@ tr#hiddenCombo
 			}
 			else
 			{
-		    	var action="<%=Constants.VIEW_SPR_ACTION%>?operation=viewSPR&pageOf=<%=pageOf%>&id="+reportId;
+		    	var action="<%=Constants.VIEW_SPR_ACTION%>?operation=viewSPR&pageOf=<%=pageOf%>&reportId="+reportId;
 				document.forms[0].action=action;
 				document.forms[0].submit();
 			}

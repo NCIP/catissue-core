@@ -58,6 +58,8 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 		String submittedFor=viewSPR.getSubmittedFor();
 		String forwardTo=viewSPR.getForwardTo();
 		String strId =(String)request.getParameter(Constants.SYSTEM_IDENTIFIER);
+		String reportIdStr=(String)request.getParameter("reportId");
+		Long reportId=Long.valueOf(reportIdStr);
 		
 		Long id=null;
 		if(strId!=null)
@@ -73,9 +75,9 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 			viewSPR.setId(identifier);
 			retriveFromReportId(identifier, request, viewSPR);
 		}
-		if(id!=null && id!=0 && operation.equalsIgnoreCase(Constants.VIEW_SURGICAL_PATHOLOGY_REPORT))
+		if(reportId!=null && reportId!=0 && operation.equalsIgnoreCase(Constants.VIEW_SURGICAL_PATHOLOGY_REPORT))
         {
-            retrieveAndSetObject(pageOf, id, request, viewSPR);
+            retrieveAndSetObject(pageOf, reportId, request, viewSPR);
         }
 		String aliasName = "";
 		request.setAttribute(Constants.PARTICIPANTIDFORREPORT, viewSPR.getParticipantIdForReport());
@@ -136,9 +138,8 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 	 * @throws DAOException exception occured while DB handling
 	 * @throws BizLogicException
 	 */
-	private void retrieveAndSetObject(String pageOf, long id, HttpServletRequest request, ViewSurgicalPathologyReportForm viewSPR) throws DAOException
+	private void retrieveAndSetObject(String pageOf, Long reportId, HttpServletRequest request, ViewSurgicalPathologyReportForm viewSPR) throws DAOException
 	{
-		Long reportId=id;
 		if(pageOf.equalsIgnoreCase(Constants.PAGEOF_PARTICIPANT) || pageOf.equalsIgnoreCase(Constants.PAGE_OF_PARTICIPANT_CP_QUERY))
 		{
 			
