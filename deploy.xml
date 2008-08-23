@@ -1384,6 +1384,13 @@
 	
 	<!--Send mail to user-->
 	<target name="send_mail">
+	    <condition property="protocol" value="https" else="http">
+			<equals arg1="${jboss.container.secure}" arg2="yes" />
+		</condition>
+		<condition property="jbossServerHost" value="localhost" else="${jboss.server.host}">
+			<equals arg1="${jboss.server.host}" arg2="" />
+		</condition>
+		<echo message="jboss.container.secure property is set to: ${jboss.container.secure} protocol set to: ${protocol}" />
 		<echo message="Sending mail to: ${email.administrative.emailAddress}" />
 		<echo message="Sending mail from: ${email.sendEmailFrom.emailAddress}" />
 		<mail mailhost="${email.mailServer}" subject="caTissueSuite v1.1 Successfully Deployed" encoding="plain" failonerror="false">
@@ -1401,7 +1408,7 @@ guide (caTissueSuite v1.1 Deployment Guide.doc).
 
 	Once you have completed deployment, you should be able to login with the following 
 details:			
-URL: http://localhost:${jboss.server.port}/catissuecore 
+URL: ${protocol}://${jbossServerHost}:${jboss.server.port}/catissuecore 
 Username:${first.admin.emailAddress}
 Password:${first.admin.password}
 
@@ -1599,8 +1606,7 @@ Thanking You,
 		<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
 			<include name="*.cfg.xml" />
 			<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}" />
-			<replacefilter token="@@DATABASE_PASSWORD@@" value="${database.password}" />
-			<!--<replacefilter token="@@DATABASE_NAME@@" value="${database.name}"/>  -->
+			<replacefilter token="${token.database.password}" value="${database.password}" />
 		</replace>
 
 		<java classname="edu.wustl.catissuecore.annotations.xmi.ImportXmi" fork="true">
@@ -1673,7 +1679,6 @@ Thanking You,
 			<include name="*.cfg.xml" />
 			<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}" />
 			<replacefilter token="${token.database.password}" value="${database.password}" />
-			<!--<replacefilter token="@@DATABASE_NAME@@" value="${database.name}"/>  -->
 		</replace>
 
 		<java classname="edu.wustl.catissuecore.annotations.xmi.XMIExporter" fork="true" maxmemory="1024m">
@@ -1841,7 +1846,7 @@ Thanking You,
 		<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
 			<include name="*.cfg.xml" />
 			<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}"/>
-			<replacefilter token="@@DATABASE_PASSWORD@@" value="${database.password}"/>
+			<replacefilter token="${token.database.password}" value="${database.password}"/>
 		</replace>
 				
 		<java classname="edu.wustl.catissuecore.annotations.xmi.CategoryIntegration" fork="true" maxmemory="1024M">		
@@ -1862,7 +1867,7 @@ Thanking You,
 			<fileset dir="${temp.dir}/catissuecore">
 				<include name="**/*" />					
 			</fileset>
-		</delete>				
+		</delete>			
 	</target>
 				
 	<target name="import_permissible_values">
@@ -1903,7 +1908,7 @@ Thanking You,
 		<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
 			<include name="*.cfg.xml" />
 			<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}"/>
-			<replacefilter token="@@DATABASE_PASSWORD@@" value="${database.password}"/>
+			<replacefilter token="${token.database.password}" value="${database.password}"/>
 		</replace>		
 					
 		<java classname="edu.common.dynamicextensions.util.parser.ImportPermissibleValues" fork="true" maxmemory="1024M">		
