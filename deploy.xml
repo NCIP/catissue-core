@@ -704,7 +704,6 @@
 	</target>
 	
 	<target name="CopyCAModelWars">
-		<!--
 		<antcall target="modifyDEWars">
 			<param name="warName" value="CA"/>
 		</antcall>
@@ -718,7 +717,6 @@
 		<antcall target="modifyDEWars">
 			<param name="warName" value="deintegration"/>
 		</antcall>
-		-->
 	</target>
 	
 	<target name="modifyDEWars">
@@ -1023,13 +1021,18 @@
 		</sql>
 	</target>
 
-	<!--Target for Database Upgrade from 1.2 to suite-->
+	<!--Target for Application and Database Upgrade from Suite 1.0  to Suite 1.1-->
 	<target name="upgrade_all" depends="upgrade_app, upgrade_db">
 	</target>
+
+	<!--Target for Application and Database Upgrade from caTissueCore v1.2.2  to Suite 1.1-->
+	<target name="upgrade_all_from_core_1.2.2" depends="upgrade_app, upgrade_db_from_core_1.2.2_to_suite_1.1">
+	</target>
+
 	
 	<target name="upgrade_app" depends="deploy_app">
 	</target>
-	
+
 	<target name="upgrade_db">
 		<antcall target="upgrade_from_Suite1.0_to_1.1" />
 		<antcall target="update_metadata_for_model_changes" />
