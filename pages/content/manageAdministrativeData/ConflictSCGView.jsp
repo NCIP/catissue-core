@@ -10,12 +10,12 @@
 
 <%
 	boolean readOnlyValue=true;
-	String divHeight="330";
+	String divHeight="220";
 
 %>
 
 <%@ include file="/pages/content/common/ActionErrors.jsp" %>
-<table summary="" cellpadding="0" cellspacing="" border="0" width="100%" style="table-layout:fixed" height="40%">	
+<table summary="" cellpadding="0" cellspacing="" border="0" width="100%" >	
 	<tr>
 		<td width="50%" class="formFieldNoBordersBold">
 			<bean:message key="caTies.conflict.existing.report"/>:
@@ -28,13 +28,13 @@
 	<tr>
 		<td width="50%">
 		 	
-				<div style="height:<%=divHeight%>;width:100%;; overflow:auto;;border: 1px solid #111;"><PRE><bean:write name="conflictSCGForm" property="existingConflictedReport"/></PRE>
+				<div style="height:<%=divHeight%>;width:100%; overflow:auto;border: 1px solid #111;"><PRE><bean:write name="conflictSCGForm" property="existingConflictedReport"/></PRE>
 				</div>
 		
 		 </td>
 		 <td width="50%">
 		 	
-				<div style="height:<%=divHeight%>;width:100%; overflow:auto;;border: 1px solid #111; "><PRE><bean:write name="conflictSCGForm" property="newConflictedReport"/></PRE>
+				<div style="height:<%=divHeight%>;width:100%; overflow:auto;border: 1px solid #111; "><PRE><bean:write name="conflictSCGForm" property="newConflictedReport"/></PRE>
 				</div>
 		 </td>	
 	</tr>

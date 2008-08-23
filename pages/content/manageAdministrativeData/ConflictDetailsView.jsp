@@ -65,6 +65,7 @@ window.onload = function()
 						setFrameHeight('<%=Constants.CONFLICT_COMMON_VIEW%>', .31,slope);
 						setFrameHeight('<%=Constants.CONFLICT_TREE_VIEW%>', .42,slope);
 						setFrameHeight('<%=Constants.CONFLICT_DATA_VIEW%>', .42,slope); 
+						setFrameHeight('conflictSCG', .42,slope); 
 				}
 
 window.onresize = function() 
@@ -72,6 +73,7 @@ window.onresize = function()
 					setFrameHeight('<%=Constants.CONFLICT_COMMON_VIEW%>', .31,slope); 
 					setFrameHeight('<%=Constants.CONFLICT_TREE_VIEW%>', .42,slope);
 					setFrameHeight('<%=Constants.CONFLICT_DATA_VIEW%>', .42,slope);
+					setFrameHeight('conflictSCG', .42,slope);
 				}
 </script>
 
@@ -112,7 +114,7 @@ window.onresize = function()
 					 <%if(conflictStatus.equals(CaTIESConstants.STATUS_SCG_CONFLICT))
 						{
 					%>
-						<iframe name="" src="ConflictSCGAction.do?reportQueueId=<%=reportQueueId%>" scrolling="no" frameborder="0" width="100%" >
+						<iframe id="conflictSCG" name="" src="ConflictSCGAction.do?reportQueueId=<%=reportQueueId%>" scrolling="no" frameborder="0" width="100%" >
 									<bean:message key="errors.browser.not.supports.iframe"/>
 						</iframe>
 
