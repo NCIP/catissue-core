@@ -40,16 +40,14 @@ import edu.wustl.common.querysuite.metadata.path.IPath;
 import edu.wustl.common.querysuite.queryobject.ArithmeticOperator;
 import edu.wustl.common.querysuite.queryobject.DSInterval;
 import edu.wustl.common.querysuite.queryobject.IArithmeticOperand;
-import edu.wustl.common.querysuite.queryobject.IExpressionAttribute;
 import edu.wustl.common.querysuite.queryobject.ICondition;
 import edu.wustl.common.querysuite.queryobject.IConnector;
 import edu.wustl.common.querysuite.queryobject.IConstraints;
 import edu.wustl.common.querysuite.queryobject.ICustomFormula;
+import edu.wustl.common.querysuite.queryobject.IDateLiteral;
 import edu.wustl.common.querysuite.queryobject.IDateOffsetLiteral;
 import edu.wustl.common.querysuite.queryobject.IExpression;
-import edu.wustl.common.querysuite.queryobject.IExpressionOperand;
-import edu.wustl.common.querysuite.queryobject.IDateLiteral;
-import edu.wustl.common.querysuite.queryobject.IDateOffsetAttribute;
+import edu.wustl.common.querysuite.queryobject.IExpressionAttribute;
 import edu.wustl.common.querysuite.queryobject.IJoinGraph;
 import edu.wustl.common.querysuite.queryobject.IOutputTerm;
 import edu.wustl.common.querysuite.queryobject.IQuery;
@@ -458,7 +456,6 @@ public class DAGPanel {
 		}
 		String tqColumnName = customColumnName + " (" + timeIntervalName +"/s)";
 		outputTerm.setName(tqColumnName);
-		//query.getOutputTerms().clear(); 
 		query.getOutputTerms().add(outputTerm);
 	}
 	
@@ -542,22 +539,6 @@ public class DAGPanel {
 			CustomFormulaUIBean customFormulaUIBean = TQUIMap.get(id);
 			customFormula = customFormulaUIBean.getCf();
 		}
-		/*IQuery query = m_queryObject.getQuery();
-		IConstraints c = query.getConstraints();
-		ICustomFormula customFormula = null;
-		for(IExpression expression2 : c)
-		{
-			int numberOfOperands = expression2.numberOfOperands();
-			for(int i=0;i<numberOfOperands;i++)
-			{
-				IExpressionOperand operand = expression2.getOperand(i);
-				if(operand instanceof ICustomFormula)
-				{
-					customFormula = (ICustomFormula) operand;
-					break;
-				}
-			}
-		}*/
 		return customFormula;
 	}
 		
@@ -743,13 +724,6 @@ public class DAGPanel {
 				}
 			}
         }
-		
-		//Adding "Today" as default attribute and id is null and type is Date
-		/*destNodeList = new ArrayList<String>();
-		destNodeList.add(0,null);
-		destNodeList.add(1,"Date");
-		destNodeAttributesMap.put("today",destNodeList);
-	       */  	
 	}
 	private List<String> getTimeIntervals()
 	{
@@ -812,39 +786,33 @@ public class DAGPanel {
 	 */
 	public void removeCustomFormula(String customNodeId)	
 	{
+		IQuery query = m_queryObject.getQuery();
 		HttpServletRequest request = flex.messaging.FlexContext.getHttpRequest();
 		HttpSession session = request.getSession();
 		Map<String,CustomFormulaUIBean> TQUIMap = (Map<String,CustomFormulaUIBean>)session.getAttribute("TQUIMap");
 		if(TQUIMap != null)
-		{
+		{ 
 			CustomFormulaUIBean customFormulaUIBean = TQUIMap.get(customNodeId);
 			ICustomFormula cf = customFormulaUIBean.getCf();
-			IQuery query = m_queryObject.getQuery();
 			IConstraints c = query.getConstraints();
+			List<IOutputTerm> outputTerms = query.getOutputTerms();
+			IOutputTerm termToDelete = null;
+			for(IOutputTerm term :outputTerms)
+			{
+				if(customFormulaUIBean.getCf().getLhs().equals(term.getTerm()))
+				{
+					termToDelete = term;
+					break;
+				}
+			}
+			if(termToDelete != null)
+				query.getOutputTerms().remove(termToDelete);
 			for(IExpression expression2 : c) 
 			{
 				expression2.removeOperand(cf);
 			}
-			customFormulaUIBean.setCf(null);
-			customFormulaUIBean.setSingleNode(null);
-			customFormulaUIBean.setTwoNode(null);
+			TQUIMap.remove(customNodeId);
 		}
-		/*IQuery query = m_queryObject.getQuery();
-		IConstraints c = query.getConstraints();
-		for(IExpression expression2 : c) 
-		{
-			int numberOfOperands = expression2.numberOfOperands();
-			for(int i=0;i<numberOfOperands;i++)
-			{
-				IExpressionOperand operand = expression2.getOperand(i);
-				if(operand instanceof ICustomFormula)
-				{
-					expression2.removeOperand(i);
-					session.removeAttribute(Constants.OUTPUT_TERMS_COLUMNS);
-					break;
-				}
-			}
-		}*/
 	}
 	/**
 	 * Link 2 nodes
@@ -1023,7 +991,7 @@ public class DAGPanel {
 			{
 				Set<ICustomFormula> customFormulas = QueryUtility.getCustomFormulas(exp);
 				if(!customFormulas.isEmpty())
-				{
+				{ 
 					for(ICustomFormula c: customFormulas)
 					{
 						Set keySet = TQUIMap.keySet();
@@ -1044,10 +1012,7 @@ public class DAGPanel {
 									if(singleNodeCF != null)
 									{
 										singleNodeCF.setName(key);
-										String customColumnName = setCustomColumnName(query);
-										singleNodeCF.setCustomColumnName(customColumnName);
 										singleNodeCF.setOperation(DAGConstant.REPAINT_OPERATION);
-
 										SNcustomNodeList.add(singleNodeCF);
 									}
 								}
@@ -1062,37 +1027,12 @@ public class DAGPanel {
 									if(customNode != null)
 									{
 										customNode.setName(key);
-										String customColumnName = setCustomColumnName(query);
-										customNode.setCustomColumnName(customColumnName);
 										customNode.setOperation(DAGConstant.REPAINT_OPERATION);
 										customNodeList.add(customNode);
-
 									}
 								}
 							}
-							/*CustomFormulaUIBean beanObj = (CustomFormulaUIBean)TQUIMap.get(key);
-						    if(beanObj.getCf().equals(c))
-						    {
-						    	System.out.println("Custom Formulas Are Equal");
-						    }*/
 						}
-						
-						/*CustomFormulaNode customNode = populateCustomNodeInfo(c,constraints,exp);
-						if(customNode != null)
-						{
-							//Setting the custom Column Name
-							String customColumnName = setCustomColumnName(query);
-							customNode.setCustomColumnName(customColumnName);
-							customNode.setOperation(DAGConstant.REPAINT_OPERATION);
-							customNodeList.add(customNode);
-						} else
-						{
-							SingleNodeCustomFormulaNode singleNodeCF = populateSingleNodeInfo(c,constraints,exp);
-							String customColumnName = setCustomColumnName(query);
-							singleNodeCF.setCustomColumnName(customColumnName);
-							singleNodeCF.setOperation(DAGConstant.REPAINT_OPERATION);
-							SNcustomNodeList.add(singleNodeCF);
-						}*/
 					}
 				}
 			}
@@ -1103,8 +1043,8 @@ public class DAGPanel {
 		return nodeMap;
 
 	}
-	
-	private SingleNodeCustomFormulaNode populateSingleNodeInfo(ICustomFormula c, IConstraints constraints, IExpression exp)
+
+	/*private SingleNodeCustomFormulaNode populateSingleNodeInfo(ICustomFormula c, IConstraints constraints, IExpression exp)
 	{
 		// TODO Auto-generated method stub
 		SingleNodeCustomFormulaNode singleCNode = new SingleNodeCustomFormulaNode();
@@ -1177,19 +1117,8 @@ public class DAGPanel {
 			}
 		}
 		return singleCNode;
-	}
-	private String setCustomColumnName(IQuery query)
-	{
-		List <IOutputTerm>outputTermList = query.getOutputTerms();
-		IOutputTerm outputTerm = outputTermList.get(0);
-		
-		String columnName  = outputTerm.getName();
-		//As custom column name consists of column Name , ( and Time Interval ), so we need to parse it to get the exact column name
-		int index = columnName.lastIndexOf("(");
-		String customColumnName  = columnName.substring(0,index);
-		return customColumnName;
-		
-	}
+	}*/
+
 	private CustomFormulaNode populateCustomNodeInfo(ICustomFormula c, IConstraints constraints, IExpression srcExp)
 	{
 		CustomFormulaNode cNode = new CustomFormulaNode();
