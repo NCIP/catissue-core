@@ -76,14 +76,15 @@
     </table>
 
 
-		<logic:equal name="isParticipantReg" value="true">
-			<b style="color: red; margin-left: 20px">
-				User can not Add/edit Events and Specimen Requirements
-			</b>
-		</logic:equal>
+		
       <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
         <tr>
           <td colspan="2" align="left">
+          <logic:equal name="isParticipantReg" value="true">
+			<span class="messagetexterror">
+				User can not Add/edit Events and Specimen Requirements
+			</span>
+		</logic:equal>
 				<%@ include file="/pages/content/common/ActionErrors.jsp" %>
 		  </td>
         </tr>
