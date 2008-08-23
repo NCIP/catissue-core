@@ -17,6 +17,9 @@ import java.util.Set;
 
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Site;
+import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.SpecimenPosition;
+import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -88,7 +91,19 @@ public class SiteBizLogic extends DefaultBizLogic
 			checkStatus(dao, site.getCoordinator(), "Coordinator");
 
 		setCordinator(dao, site);
-
+//Mandar : 21Aug08 ----start
+		if(Constants.ACTIVITY_STATUS_CLOSED.equals(site.getActivityStatus()))
+		{
+			if(isSiteOccupied(dao, site))
+			{
+				throw new DAOException("Site contains specimens in the associated containers. Cannot close a site containing specimens.");
+			}
+//			else 
+//			{
+//				closeContainers(dao, site);
+//			}
+		}
+//Mandar : 21Aug08 ----end
 		dao.update(site.getAddress(), sessionDataBean, true, true, false);
 		dao.update(site, sessionDataBean, true, true, false);
 
@@ -97,6 +112,39 @@ public class SiteBizLogic extends DefaultBizLogic
 		dao.audit(site.getAddress(), oldSite.getAddress(), sessionDataBean, true);
 		dao.audit(obj, oldObj, sessionDataBean, true);
 	}
+	
+	private boolean isSiteOccupied(DAO dao, Site site) throws DAOException
+	{
+		boolean result = false;
+		try
+		{
+			String hql = "select specimen from " + Specimen.class.getName() +" as specimen where specimen.activityStatus='Active' and specimen.specimenPosition in (select specimenPosition from " +SpecimenPosition.class.getName()+" as specimenPosition where specimenPosition.storageContainer in (select sc from " +StorageContainer.class.getName()+" as sc where sc.site.id =" +site.getId()+" ) )";
+			List specimenList = executeQuery(hql);
+
+			if(!specimenList.isEmpty())
+			{
+				result = true;
+			}
+		}
+		catch(Exception excp)
+		{
+			throw new DAOException("Error while checking site for presence of specimens");
+		}
+		
+		return result;
+	}
+//	private void closeContainers(DAO dao, Site site) throws DAOException
+//	{
+//		try
+//		{
+//			;
+//		}
+//		catch(Exception excp)
+//		{
+//			;
+//		}
+//	}
+
 
 	// This method sets the cordinator for a particular site.
 	private void setCordinator(DAO dao, Site site) throws DAOException

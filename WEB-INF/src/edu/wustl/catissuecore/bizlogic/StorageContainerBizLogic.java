@@ -3336,14 +3336,23 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 
 		dao.openSession(null);
 		start = System.currentTimeMillis();
-		String queryStr = "SELECT t1.IDENTIFIER, t1.NAME FROM CATISSUE_CONTAINER t1 WHERE "
-				+ "t1.IDENTIFIER IN (SELECT t4.STORAGE_CONTAINER_ID FROM CATISSUE_ST_CONT_ST_TYPE_REL t4 "
-				+ "WHERE t4.STORAGE_TYPE_ID = '"
-				+ type_id
-				+ "' OR t4.STORAGE_TYPE_ID='1') AND "
-				+ "t1.ACTIVITY_STATUS='"
-				+ Constants.ACTIVITY_STATUS_ACTIVE + "' order by IDENTIFIER";
+//		String queryStr = "SELECT t1.IDENTIFIER, t1.NAME FROM CATISSUE_CONTAINER t1 WHERE "
+//				+ "t1.IDENTIFIER IN (SELECT t4.STORAGE_CONTAINER_ID FROM CATISSUE_ST_CONT_ST_TYPE_REL t4 "
+//				+ "WHERE t4.STORAGE_TYPE_ID = '"
+//				+ type_id
+//				+ "' OR t4.STORAGE_TYPE_ID='1') AND "
+//				+ "t1.ACTIVITY_STATUS='"
+//				+ Constants.ACTIVITY_STATUS_ACTIVE + "' order by IDENTIFIER";
 
+			String queryStr = "SELECT t1.IDENTIFIER, t1.NAME FROM CATISSUE_CONTAINER t1 WHERE "
+			+ "t1.IDENTIFIER IN (SELECT t4.STORAGE_CONTAINER_ID FROM CATISSUE_ST_CONT_ST_TYPE_REL t4 "
+			+ "WHERE t4.STORAGE_TYPE_ID = '"
+			+ type_id
+			+ "' OR t4.STORAGE_TYPE_ID='1' and t4.STORAGE_CONTAINER_ID not in (select IDENTIFIER from catissue_storage_container where site_id in (select IDENTIFIER from catissue_site s1 where s1.ACTIVITY_STATUS='Closed'))) AND "
+			+ "t1.ACTIVITY_STATUS='"
+			+ Constants.ACTIVITY_STATUS_ACTIVE + "' order by IDENTIFIER";
+		
+		
 		Logger.out.debug("Storage Container query......................"
 				+ queryStr);
 		List list = new ArrayList();
@@ -3556,7 +3565,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 
 		String equalToFour = " = 4 ";
 		String notEqualToFour = " !=4 ";
-		String endQry = " and t1.IDENTIFIER = t6.STORAGE_CONTAINER_ID  "
+		String endQry = " and t1.IDENTIFIER = t6.STORAGE_CONTAINER_ID  and t1.IDENTIFIER = t7.IDENTIFIER"
 				+ " group by t6.STORAGE_CONTAINER_ID, t1.NAME "
 				+ " order by co asc ";
 
