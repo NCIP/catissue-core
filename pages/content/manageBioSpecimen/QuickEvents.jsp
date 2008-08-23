@@ -44,6 +44,18 @@
 			document.forms[0].submit();		
 		}		
 		
+	//code for auto height of iframe
+	if ( document.getElementById && !(document.all) ) 
+	{
+		var slope=-10;
+	}
+	else
+	{
+		var slope=-30;
+	}
+
+window.onload = function() { setFrameHeight('newEventFrame', .5,slope);}
+window.onresize = function() { setFrameHeight('newEventFrame', .5,slope); }
 	</script>
 </head>
 <html:form method='POST' action="<%=Constants.QUICKEVENTS_ACTION%>">
@@ -85,7 +97,7 @@ session.setAttribute("EventOrigin", "QuickEvents");
     </table>
       <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
         <tr>
-          <td align="left"><%@ include file="/pages/content/common/ActionErrors.jsp" %></td>
+          <td align="left" class="bottomtd"><%@ include file="/pages/content/common/ActionErrors.jsp" %></td>
         </tr>
         <tr>
           <td align="left" class="tr_bg_blue1"><span class="blue_ar_b"> &nbsp;<bean:message key="mylist.label.specimenEvent"/></span></td>
@@ -164,7 +176,7 @@ session.setAttribute("EventOrigin", "QuickEvents");
 		%>
 		<tr>
               <td align="left" class="black_ar" >
-					<iframe name="newEventFrame" id="newEventFrame" src="<%=iframeSrc %>" width="100%" height="281" frameborder="0" scrolling="auto">
+					<iframe name="newEventFrame" id="newEventFrame" src="<%=iframeSrc %>" width="100%" frameborder="0" scrolling="auto">
 					</iframe>	
 			  </td>
         </tr>
