@@ -40,6 +40,7 @@ import edu.wustl.common.querysuite.metadata.path.IPath;
 import edu.wustl.common.querysuite.queryobject.ArithmeticOperator;
 import edu.wustl.common.querysuite.queryobject.DSInterval;
 import edu.wustl.common.querysuite.queryobject.IArithmeticOperand;
+import edu.wustl.common.querysuite.queryobject.IExpressionAttribute;
 import edu.wustl.common.querysuite.queryobject.ICondition;
 import edu.wustl.common.querysuite.queryobject.IConnector;
 import edu.wustl.common.querysuite.queryobject.IConstraints;
@@ -47,7 +48,9 @@ import edu.wustl.common.querysuite.queryobject.ICustomFormula;
 import edu.wustl.common.querysuite.queryobject.IDateLiteral;
 import edu.wustl.common.querysuite.queryobject.IDateOffsetLiteral;
 import edu.wustl.common.querysuite.queryobject.IExpression;
-import edu.wustl.common.querysuite.queryobject.IExpressionAttribute;
+import edu.wustl.common.querysuite.queryobject.IExpressionOperand;
+import edu.wustl.common.querysuite.queryobject.IDateLiteral;
+import edu.wustl.common.querysuite.queryobject.IDateOffsetAttribute;
 import edu.wustl.common.querysuite.queryobject.IJoinGraph;
 import edu.wustl.common.querysuite.queryobject.IOutputTerm;
 import edu.wustl.common.querysuite.queryobject.IQuery;
@@ -71,7 +74,8 @@ import edu.wustl.common.util.logger.Logger;
  *@author aniket_pandit
  */
 
-public class DAGPanel {
+public class DAGPanel 
+{
 
 	private IClientQueryBuilderInterface m_queryObject;
 	private IPathFinder m_pathFinder;
@@ -810,7 +814,7 @@ public class DAGPanel {
 		HttpSession session = request.getSession();
 		Map<String,CustomFormulaUIBean> TQUIMap = (Map<String,CustomFormulaUIBean>)session.getAttribute("TQUIMap");
 		if(TQUIMap != null)
-		{ 
+		{
 			CustomFormulaUIBean customFormulaUIBean = TQUIMap.get(customNodeId);
 			ICustomFormula cf = customFormulaUIBean.getCf();
 			IConstraints c = query.getConstraints();
@@ -932,6 +936,54 @@ public class DAGPanel {
 		}		
 		return status.getErrorCode();
 	}
+	private  boolean isKeySetContainsNodeName(String customNodeName, Set keySet)
+	{
+		boolean isContains = false;
+		Iterator keySetItr = keySet.iterator();
+		while(keySetItr.hasNext())
+		{
+		    String key = (String)keySetItr.next();
+		    if(customNodeName.equals(key))
+		    {
+		    	isContains = true;
+		    	break;
+		    }
+		}
+		return isContains;
+	}
+	
+	private String getCustomNodeName(String nodeName, Map<String,CustomFormulaUIBean> TQUIMap)
+	{
+		String customNodeName = " "; 
+		int customNodeNumber = 1;
+		boolean isContains =  false;
+		Set keySet = TQUIMap.keySet();
+		
+		if(keySet.size() == 0)
+		{
+			//This is the Initial case
+			customNodeName = nodeName + "_" + customNodeNumber;
+		}
+		else
+		{
+			while(customNodeNumber <=keySet.size())
+			{
+				customNodeName = nodeName + "_" + customNodeNumber;
+			 	isContains = isKeySetContainsNodeName(customNodeName,keySet);
+			 	if(isContains)
+			 	{
+			 		customNodeNumber ++;
+			 	}
+			}
+		}
+		if(customNodeNumber == (keySet.size()+1) && isContains)
+		{
+			//By this time, customNodeNumber already exceeds the length of the KeySet, so new  customNodeName is
+			customNodeName = nodeName + "_" + customNodeNumber;
+		}
+	   return customNodeName;	
+	}
+	
 	/**
 	 * Repaints DAG
 	 * @return
@@ -994,12 +1046,35 @@ public class DAGPanel {
 				dagNode.setOperatorList(operator.toUpperCase());
 			}
 			nodeList.add(dagNode);
-			Map<String,CustomFormulaUIBean> TQUIMap = (Map<String,CustomFormulaUIBean>)session.getAttribute(DAGConstant.TQUIMap);
+		
+		 //From here i startted to Modifty 
+		}	
+		Map<String,CustomFormulaUIBean> TQUIMap = (Map<String,CustomFormulaUIBean>)session.getAttribute(DAGConstant.TQUIMap);
+	    if(TQUIMap == null)
+		{
+			repaintFromSavedQuery(customNodeList, SNcustomNodeList, session, query, constraints, visibleExpression);
+		}
+		else
+		{
+			repaintFromSessionQuery(customNodeList, SNcustomNodeList, query, constraints, visibleExpression, TQUIMap);
+		}
+		nodeMap.put(DAGConstant.DAG_NODE_LIST,nodeList);
+		nodeMap.put(DAGConstant.CUSTOM_FORMULA_NODE_LIST,customNodeList);
+		nodeMap.put(DAGConstant.SINGLE_NODE_CUSTOM_FORMULA_NODE_LIST,SNcustomNodeList);
+		return nodeMap;
+
+	}
+	private void repaintFromSessionQuery(List<CustomFormulaNode> customNodeList, List<SingleNodeCustomFormulaNode> SNcustomNodeList, IQuery query, IConstraints constraints, HashSet<Integer> visibleExpression, Map<String, CustomFormulaUIBean> TQUIMap)
+	{
+		//This is the case of session query , So populate the lists fron Map
+		for(Integer expressionId:visibleExpression)
+		{
+			IExpression exp = constraints.getExpression(expressionId.intValue());
 			if(exp.containsCustomFormula())
 			{
 				Set<ICustomFormula> customFormulas = QueryUtility.getCustomFormulas(exp);
 				if(!customFormulas.isEmpty())
-				{ 
+				{
 					for(ICustomFormula c: customFormulas)
 					{
 						Set keySet = TQUIMap.keySet();
@@ -1012,53 +1087,119 @@ public class DAGPanel {
 							String id2 = ids[1];
 							if(id1.equals(id2))
 							{
-								//This is the case for Single node TQ 
-								CustomFormulaUIBean beanObj = (CustomFormulaUIBean)TQUIMap.get(key);
-								if(beanObj.getCf().equals(c))
-								{
-									SingleNodeCustomFormulaNode singleNodeCF = beanObj.getSingleNode();
-									if(singleNodeCF != null)
-									{
-										singleNodeCF.setName(key);
-										singleNodeCF.setOperation(DAGConstant.REPAINT_OPERATION);
-										SNcustomNodeList.add(singleNodeCF);
-									}
-								}
+								sessionQSingleNodeCNode(SNcustomNodeList, query, TQUIMap, c, key);
 							}
 							else
 							{
-								//This is the case for Multiple Node TQ 
-								CustomFormulaUIBean beanObj = (CustomFormulaUIBean)TQUIMap.get(key);
-								if(beanObj.getCf().equals(c))
-								{
-									CustomFormulaNode customNode = beanObj.getTwoNode();
-									if(customNode != null)
-									{
-										customNode.setName(key);
-										customNode.setOperation(DAGConstant.REPAINT_OPERATION);
-										customNodeList.add(customNode);
-									}
-								}
+								sessionQTwoNodesCNode(customNodeList, query, TQUIMap, c, key);
 							}
+						}
+							
+					}
+				}
+			}
+		}
+	}
+	private void sessionQTwoNodesCNode(List<CustomFormulaNode> customNodeList, IQuery query, Map<String, CustomFormulaUIBean> TQUIMap, ICustomFormula c, String key)
+	{
+		//This is the case for Multiple Node TQ 
+		CustomFormulaUIBean beanObj = (CustomFormulaUIBean)TQUIMap.get(key);
+		if(beanObj.getCf().equals(c))
+		{
+			CustomFormulaNode customNode = beanObj.getTwoNode();
+			if(customNode != null)
+			{
+				customNode.setName(key);
+				String customColumnName = setCustomColumnName(query);
+				customNode.setCustomColumnName(customColumnName);
+				customNode.setOperation(DAGConstant.REPAINT_OPERATION);
+				customNodeList.add(customNode);
+			}
+		}
+	}
+	private void sessionQSingleNodeCNode(List<SingleNodeCustomFormulaNode> SNcustomNodeList, IQuery query, Map<String, CustomFormulaUIBean> TQUIMap, ICustomFormula c, String key)
+	{
+		//This is the case for Single node TQ 
+		CustomFormulaUIBean beanObj = (CustomFormulaUIBean)TQUIMap.get(key);
+		if(beanObj.getCf().equals(c))
+		{
+			SingleNodeCustomFormulaNode singleNodeCF = beanObj.getSingleNode();
+			if(singleNodeCF != null)
+			{
+				singleNodeCF.setName(key);
+				String customColumnName = setCustomColumnName(query);
+				singleNodeCF.setCustomColumnName(customColumnName);
+				singleNodeCF.setOperation(DAGConstant.REPAINT_OPERATION);
+
+				SNcustomNodeList.add(singleNodeCF);
+			}
+		}
+	}
+	private void repaintFromSavedQuery(List<CustomFormulaNode> customNodeList, List<SingleNodeCustomFormulaNode> SNcustomNodeList, HttpSession session, IQuery query, IConstraints constraints, HashSet<Integer> visibleExpression)
+	{
+		Map<String, CustomFormulaUIBean> TQUIMap;
+		//Then this is the case of saved Query, so populate the map with Saved Query   
+		TQUIMap = new HashMap<String,CustomFormulaUIBean>();
+		for(Integer expressionId:visibleExpression)
+		{
+			IExpression exp = constraints.getExpression(expressionId.intValue());
+			if(exp.containsCustomFormula())
+			{
+				Set<ICustomFormula> customFormulas = QueryUtility.getCustomFormulas(exp);
+				if(!customFormulas.isEmpty())
+				{
+					for(ICustomFormula c: customFormulas)
+					{
+						CustomFormulaNode customNode = populateCustomNodeInfo(c,constraints,exp);
+						if(customNode != null)
+						{
+							savedQTwoNodesCNode(customNodeList, query, TQUIMap, c, customNode);
+						} else
+						{
+							savedQSingleNodeCNode(SNcustomNodeList, query, constraints, TQUIMap, exp, c);
 						}
 					}
 				}
 			}
 		}
-		nodeMap.put(DAGConstant.DAG_NODE_LIST,nodeList);
-		nodeMap.put(DAGConstant.CUSTOM_FORMULA_NODE_LIST,customNodeList);
-		nodeMap.put(DAGConstant.SINGLE_NODE_CUSTOM_FORMULA_NODE_LIST,SNcustomNodeList);
-		return nodeMap;
-
+		session.setAttribute(DAGConstant.TQUIMap,TQUIMap);
 	}
-
-	/*private SingleNodeCustomFormulaNode populateSingleNodeInfo(ICustomFormula c, IConstraints constraints, IExpression exp)
+	private void savedQSingleNodeCNode(List<SingleNodeCustomFormulaNode> SNcustomNodeList, IQuery query, IConstraints constraints, Map<String, CustomFormulaUIBean> TQUIMap, IExpression exp, ICustomFormula c)
+	{
+		SingleNodeCustomFormulaNode singleNodeCF = populateSingleNodeInfo(c,constraints,exp);
+		String singleNodeName = getCustomNodeName(singleNodeCF.getName(),TQUIMap);
+		singleNodeCF.setName(singleNodeName);
+		
+		//Setting the node In the Map
+		CustomFormulaUIBean bean = createTQUIBean(c,null,singleNodeCF);
+		TQUIMap.put(singleNodeName,bean);
+		
+		String customColumnName = setCustomColumnName(query);
+		singleNodeCF.setCustomColumnName(customColumnName);
+		singleNodeCF.setOperation(DAGConstant.REPAINT_OPERATION);
+		SNcustomNodeList.add(singleNodeCF);
+	}
+	private void savedQTwoNodesCNode(List<CustomFormulaNode> customNodeList, IQuery query, Map<String, CustomFormulaUIBean> TQUIMap, ICustomFormula c, CustomFormulaNode customNode)
+	{
+		//Setting the custom Column Name
+		String customColumnName = setCustomColumnName(query);
+		String name = getCustomNodeName(customNode.getName(),TQUIMap);
+		customNode.setName(name);
+		
+		//Setting the node In the Map
+		CustomFormulaUIBean bean = createTQUIBean(c,customNode,null);
+		TQUIMap.put(name,bean);
+		customNode.setCustomColumnName(customColumnName);
+		customNode.setOperation(DAGConstant.REPAINT_OPERATION);
+		customNodeList.add(customNode);
+	}
+	
+	private SingleNodeCustomFormulaNode populateSingleNodeInfo(ICustomFormula c, IConstraints constraints, IExpression exp)
 	{
 		// TODO Auto-generated method stub
 		SingleNodeCustomFormulaNode singleCNode = new SingleNodeCustomFormulaNode();
-		Set<IExpression> containingExpressions = QueryUtility.getExpressionsInFormula(c);
 		//See how the name set is done
-		singleCNode.setName(exp.getExpressionId()+"_"+exp.getExpressionId()+"_"+1);
+		singleCNode.setName(exp.getExpressionId()+"_"+exp.getExpressionId());
 		singleCNode.setNodeExpressionId(exp.getExpressionId());
 		//Setting the Entity Name
 		String fullyQualifiedEntityName = exp.getQueryEntity().getDynamicExtensionsEntity().getName();
@@ -1125,8 +1266,19 @@ public class DAGPanel {
 			}
 		}
 		return singleCNode;
-	}*/
-
+	}
+	private String setCustomColumnName(IQuery query)
+	{
+		List <IOutputTerm>outputTermList = query.getOutputTerms();
+		IOutputTerm outputTerm = outputTermList.get(0);
+		
+		String columnName  = outputTerm.getName();
+		//As custom column name consists of column Name , ( and Time Interval ), so we need to parse it to get the exact column name
+		int index = columnName.lastIndexOf("(");
+		String customColumnName  = columnName.substring(0,index);
+		return customColumnName;
+		
+	}
 	private CustomFormulaNode populateCustomNodeInfo(ICustomFormula c, IConstraints constraints, IExpression srcExp)
 	{
 		CustomFormulaNode cNode = new CustomFormulaNode();
@@ -1402,7 +1554,7 @@ public class DAGPanel {
 			m_queryObject.removeAssociation(sourceexpressionId, destexpressionId);
 		} else {
 			for (int i = 0; i < expressions.size(); i++) {
-				m_queryObject.removeExpression(expressions.get(i).getExpressionId());
+				m_queryObject.removeExpression(expression.getExpressionId());
 			}
 		}
 

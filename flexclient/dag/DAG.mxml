@@ -116,11 +116,6 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	private var associatedDAGNodes : Object = new Object;
 	
 	private var associatedSingleDagNodes : Object = new Object;
-	
-	//operation is stroing information about node creation / edit 
-	[Bindable]
-	public var operation:String="";	
-	
 	/**
 	* Timer handler  to check container has been initialized.	
 	*/
@@ -1535,7 +1530,6 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	   dagNodesList.addItemAt(dagNode1,0);
 	   dagNodesList.addItemAt(dagNode2,1);
 	   associatedDAGNodes[customNodeName] = dagNodesList;
-	   
 	   return customNodeName;
 	}
 	
@@ -1544,7 +1538,6 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	public function createAndPopulate(resultMap :Object, operation : String, currentCustomNode : CustomFormulaNode) : void
 	{
 		queryDataMap = resultMap;
-		
 		//rpcService.removeEventListener(ResultEvent.RESULT,editNodeHandler);
 		rpcService.removeEventListener(ResultEvent.RESULT,populateDataHandler);
 	    
@@ -1730,16 +1723,17 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	 public function addSingleNodeCustomNode(node : SingleNodeCustomFormulaNode) : void
 	 {
 	 	var operation : String = node.getOperation();
+	 	
 	 	var dagNode : DAGNode = null;
 	 	var customNodeName : String = "";
 	 	var nodeList : ArrayCollection = null;
 	 	var nodeName : String = node.name;  
 	 	 var existingCustomNode : SingleNodeCustomFormulaNode = null;
 	 	//Handling the DAG Nodes
-	 	if(operation == "create")
+	 	if((operation == "create") || (operation == "rePaintCreate"))
 	 	{
             dagNode = DAGNode(mainPanel.getChildByName(node1));
-           customNodeName = node.name;
+            customNodeName = node.name;
 	 	}
 	 	else if(operation == "edit")
 	 	{
@@ -1751,7 +1745,17 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	 	{
 	 		//This is the case of repaint, so get the DAG Node from singleRepaintDAG Node Map
 	 		nodeList = singleRepaintDAGNodeMap.getValue(nodeName);
-	 		dagNode = nodeList.getItemAt(0) as DAGNode;
+	 		if((nodeList != null) && (nodeList.length >0))
+	 		{
+	 			dagNode = nodeList.getItemAt(0) as DAGNode;
+	 		}
+	 		else if((operation == "rePaintEdit") && (node != null))
+	 		{
+	 			//This is the case when any node is added for Redefine Query and then it is edited
+            	//So in that case get that node from  associatedDAGNodes Map as node is created aftre repaint and Edited
+	 			nodeList = associatedSingleDagNodes[nodeName];
+	 	   		dagNode = nodeList.getItemAt(0) as DAGNode;
+	 		}	
 	 		singleNodecustomFormulaString = node.getLhsTimeValue() + "\n" + node.getSelectedArithmeticOp() + "\n" + node.getEntityName()+ "."+ node.getAtributeName() + "\n" + node.getSelectedLogicalOp()+ "  "+ node.getTimeValue() + " " + node.getTimeInterval(); 
 	 	}
 	 	
@@ -1830,7 +1834,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
            // var dagNodesList : ArrayCollection  = new ArrayCollection();
             
             //Initializing the DAG NOdes
-            if(operation == "create")
+            if((operation == "create") ||(operation == "rePaintCreate"))
             {
             	//This is the case of creating custom node first time
             	dagNode1 = DAGNode(mainPanel.getChildByName(node1));
@@ -1841,11 +1845,25 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
             {
             	//var nodeName  : String= node.name;
             	nodeList = repaintDAGNodeMap.getValue(nodeName);
-                dagNode1 = nodeList.getItemAt(0) as DAGNode;
-                dagNode2 = nodeList.getItemAt(1) as DAGNode;
+            	if((nodeList != null) && (nodeList.length > 0))
+            	{
+            		dagNode1 = nodeList.getItemAt(0) as DAGNode;
+                    dagNode2 = nodeList.getItemAt(1) as DAGNode;
+            	}
+            	else
+            	{
+            		//This is the case when any node is added for Redefine Query and then it is edited
+            		//So in that case get that node from  associatedDAGNodes Map as node is created aftre repaint and Edited
+            		if((operation == "rePaintEdit") && (node != null))
+            		{
+			            nodeList = associatedDAGNodes[nodeName]; 
+			            dagNode1 = nodeList.getItemAt(0) as DAGNode;
+			            dagNode2 = nodeList.getItemAt(1) as DAGNode;
+            		}
+            	}	
                 customFormulaString = node.getFirstNodeName()+"."+node.getFirstSelectedAttrName() +"\n" + node.getSelectedArithmeticOp() + "\n"+node.getSecondNodeName()+"."+node.getSecondSelectedAttrName() +"\n"+ node.getSelectedLogicalOp()+" " + node.getTimeValue() + " " + node.getTimeInterval();
             }
-            else
+            else if(operation == "edit")
             {
             	//This is the case of EDIT
             	nodeList = associatedDAGNodes[nodeName]; 
