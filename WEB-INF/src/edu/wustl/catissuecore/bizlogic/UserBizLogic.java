@@ -400,7 +400,7 @@ public class UserBizLogic extends DefaultBizLogic
 	{
 		Set<Site> siteCollection = new HashSet<Site>();
 		Set<CollectionProtocol> cpCollection = new HashSet<CollectionProtocol>();
-		
+        Set<CollectionProtocol> removedCpCollection = new HashSet<CollectionProtocol>();
 		for (Iterator<String> mapItr = userRowIdMap.keySet().iterator(); mapItr.hasNext(); )
 		{
 			String key = mapItr.next();
@@ -411,6 +411,10 @@ public class UserBizLogic extends DefaultBizLogic
 			{
 				cpCollection.add(cp);
 			}
+            else if (cp!= null && siteUserRolePrivilegeBean.isRowDeleted())
+            {
+                removedCpCollection.add(cp);
+            }
 			
 			List<Site> siteList = null;
 			
@@ -436,22 +440,58 @@ public class UserBizLogic extends DefaultBizLogic
 	                    }
 	                }
 				}
-			}
-			
-			
+			} 
 		}
 		
 		user1.getSiteCollection().clear();
 		user1.getSiteCollection().addAll(siteCollection);
-		
-		user1.getAssignedProtocolCollection().clear();
-
-		user1.getAssignedProtocolCollection().addAll(cpCollection);
-		
+		updateCollectionProtocolCollection(user1,cpCollection,removedCpCollection);
 	}
 
 	
-	private void insertSitePrivileges(User user1, Vector authorizationData, Map<String, SiteUserRolePrivilegeBean> sitePrivilegeMap) 
+	private void updateCollectionProtocolCollection(User user1, Set<CollectionProtocol> cpCollection, Set<CollectionProtocol> removedCpCollection)
+    {
+        Collection<CollectionProtocol> tempCollection = new HashSet<CollectionProtocol>();
+        tempCollection.addAll(user1.getAssignedProtocolCollection());
+        for (CollectionProtocol newCp : cpCollection)
+        {
+            boolean isPresent = false;
+            for (CollectionProtocol cp: user1.getAssignedProtocolCollection())
+            {
+                if (newCp.getId().equals(cp.getId()))
+                {
+                    isPresent = true;
+                }
+            }
+            if (!isPresent)
+            {
+                user1.getAssignedProtocolCollection().add(newCp);
+            }
+        }
+        for (CollectionProtocol removedCp : removedCpCollection)
+        {
+            boolean isPresent = false;
+            for (CollectionProtocol cp: cpCollection)
+            {
+                if (removedCp.getId().equals(cp.getId()))
+                {
+                    isPresent = true;
+                }
+            }
+            if (!isPresent)
+            {
+                for (CollectionProtocol existingCp: tempCollection)
+                {
+                    if (existingCp.getId().equals(removedCp.getId()))
+                    {
+                        user1.getAssignedProtocolCollection().remove(existingCp);
+                    }
+                }
+            }
+        }
+    }
+
+    private void insertSitePrivileges(User user1, Vector authorizationData, Map<String, SiteUserRolePrivilegeBean> sitePrivilegeMap) 
 	{
 		String roleName = "";
 		
