@@ -326,4 +326,122 @@ public class CaTissuePrivilegeUtility
 		return result;
 	}
 
+    /**
+     * get a map of the privileges all the users have on a given CP.
+     * 
+     * @param id of the CP
+     * @return a map of login name and list of name value beans representing privilege name and privilege id 
+     * @throws CSException 
+     */
+    public static Map<String, SiteUserRolePrivilegeBean> getAllCurrentAndFuturePrivilegeUsersOnSite(Long siteId, Long cpId)
+    {
+        Map<String, SiteUserRolePrivilegeBean> result = new HashMap<String, SiteUserRolePrivilegeBean>();
+
+        String objectId = Constants.getCurrentAndFuturePGAndPEName(siteId);
+
+        AbstractDAO hibernateDao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+        CollectionProtocol cp = null;
+        // Added by Ravindra - contains user ids of those users who are asso. to the CP
+        // viz. PI of CP, co-ords of CP, users having explicit privileges on the CP (users in cp.assignedProtocolUserCollection)
+        Set<Long> invalidUserIds = new HashSet<Long>();
+        
+        try
+        {
+            hibernateDao.openSession(null);
+            if (cpId != null)
+            {
+                cp = (CollectionProtocol) hibernateDao.retrieve(CollectionProtocol.class.getName(), cpId);
+                
+                
+                if(cp.getAssignedProtocolUserCollection()!=null)
+                {
+                    for(User user : cp.getAssignedProtocolUserCollection())
+                    {
+                        invalidUserIds.add(user.getId());
+                    }
+                }
+                invalidUserIds.add(cp.getPrincipalInvestigator().getId());
+            }
+            for (NameValueBean nmv : Variables.privilegeGroupingMap.get("CP"))
+            {
+                String privilegeName = nmv.getName();
+                Set<String> users = PrivilegeManager.getInstance().getAccesibleUsers(objectId,
+                        privilegeName);
+
+                for (String userName : users)
+                {
+                    User user = Utility.getUser(userName);
+                    // Added by Ravindra 
+                    // show Privileges of only those users who are associated to that CP
+                    if(invalidUserIds.contains(user.getId()))
+                    {
+                        continue;
+                    }
+                    SiteUserRolePrivilegeBean bean = result.get(user.getId().toString());
+                    //if no privilege was so far detected for this user
+                    if (bean == null)
+                    {
+                        bean = new SiteUserRolePrivilegeBean();
+                        List<NameValueBean> privileges = new ArrayList<NameValueBean>();
+                        privileges.add(nmv);
+
+                        NameValueBean role = new NameValueBean();
+                        role.setName("Custom Role");
+                        role.setValue("-1");
+                        bean.setRole(role);
+                        Set<Long> siteSet = new UserBizLogic().getRelatedSiteIds(user.getId());
+                        List<Site> siteList = new ArrayList<Site>();
+                        if (siteSet == null || siteSet.isEmpty())
+                        {
+                            continue;
+                        }
+
+                        hibernateDao.openSession(null);
+                        for (Long sId : siteSet)
+                        {
+                            Site site = (Site) hibernateDao.retrieve(Site.class.getName(), sId);
+                            siteList.add(site);
+                        }
+
+                        bean.setSiteList(siteList);
+
+                        bean.setPrivileges(privileges);
+                        
+                        // Added by Ravindra to handle bean for EDIT mode
+                        bean.setRowEdited(false);
+                        
+                        bean.setUser(user);
+                        result.put(user.getId().toString(), bean);
+                    }
+                    //else simply add the current privilege to the existing set
+                    else
+                    {
+                        List<NameValueBean> privileges = bean.getPrivileges();
+                        if (!privileges.contains(nmv))
+                        {
+                            privileges.add(nmv);
+                        }
+                    }
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+        finally
+        {
+            try
+            {
+                hibernateDao.closeSession();
+            }
+            catch (DAOException e)
+            {
+                e.printStackTrace();
+            }
+        }
+
+        return result;
+    }
 }
