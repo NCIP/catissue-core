@@ -197,7 +197,7 @@
 				qtyPerAliquotTextBox.disabled = true;
 				countForDerive.style.display="block";
 				countForAliquot.style.display="none";
-			}
+			}   
 			else
 			{
 				childSpecimenCount.disabled = true;
@@ -260,7 +260,7 @@
 					popupWindow("<%=consentTier.size()%>");
 				<%}else{%>
 					onNormalSubmit();
-				<%}%>		
+				<%}%>
 				}
 			}
 		}
@@ -388,14 +388,11 @@
 						actionToCall = "NewSpecimenEdit.do";
 						if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
 						{
-						
 							actionToCall = Constants.CP_QUERY_SPECIMEN_EDIT_ACTION;
-
 						}%>
 						confirmDisable('<%=actionToCall%>',document.forms[0].activityStatus);
 					}
 				}
-						
 			}
 		}
 
@@ -466,7 +463,7 @@
 		}
 		//FUNCTION CALLED FOR RESETTING THE SELECT BOX TO VIRTUAL
 		function resetVirtualLocated()
-		{	
+		{			
 			document.getElementById("stContSelection").value=1;
 			document.getElementById("autoDiv").style.display="none";
 			document.getElementById("manualDiv").style.display="none";
@@ -789,8 +786,8 @@
 		
     	   //  container.style.width=tempWidth-50;
         }
-  
-    function showConsent()
+
+	function showConsent()
         {
          
 		   <%		   
@@ -817,7 +814,7 @@
             }
             %>  
 	 }
-	   function consentTab()
+		function consentTab()
 		{
 			<%
 				if(form.getConsentTierCounter()>0)			
@@ -834,7 +831,7 @@
 				}
 			%>
 		}
-	//Function called on storage position change
+		//Function called on storage position change
     function onStorageRadioClickInSpecimen(element)
 	{
 		var autoDiv=document.getElementById("autoDiv");
@@ -844,17 +841,38 @@
 		{
 			autoDiv.style.display = 'none';
 			manualDiv.style.display = 'none';
+			document.forms[0].selectedContainerName.disabled = true;
+			document.forms[0].pos1.disabled = true;
+			document.forms[0].pos2.disabled = true;
+			document.forms[0].containerMap.disabled = true;
+			document.forms[0].customListBox_1_0.disabled = true;
+			document.forms[0].customListBox_1_1.disabled = true;
+			document.forms[0].customListBox_1_2.disabled = true;
 		}
 		else if(element.value==2)
 		{
 			autoDiv.style.display = 'block';
 			manualDiv.style.display = 'none';
+			document.forms[0].selectedContainerName.disabled = true;
+			document.forms[0].pos1.disabled = true;
+			document.forms[0].pos2.disabled = true;
+			document.forms[0].containerMap.disabled = true;
+			document.forms[0].customListBox_1_0.disabled = false;
+			document.forms[0].customListBox_1_1.disabled = false;
+			document.forms[0].customListBox_1_2.disabled = false;
 			onCollOrClassChange();
 		}
 		else
 		{
 			autoDiv.style.display = 'none';
 			manualDiv.style.display = 'block';
+			document.forms[0].selectedContainerName.disabled = false;
+			document.forms[0].pos1.disabled = false;
+			document.forms[0].pos2.disabled = false;
+			document.forms[0].containerMap.disabled = false;
+			document.forms[0].customListBox_1_0.disabled = true;
+			document.forms[0].customListBox_1_1.disabled = true;
+			document.forms[0].customListBox_1_2.disabled = true;
 			onCollOrClassChange();
 		}
 	}
@@ -879,7 +897,6 @@
 			
 		}
 	
-
 	</script>
 	<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
 	<link href="css/styleSheet.css" rel="stylesheet" type="text/css" />
@@ -952,13 +969,7 @@
 				String specimenCollectionGroupName = (String)request.getAttribute("SpecimenCollectionGroupName");
 	%>
 
-
-<!-----------------------------------new----------------------------------------->
-
-
-
-
-	    						<html:hidden property="operation" value="<%=operation%>"/>
+								<html:hidden property="operation" value="<%=operation%>"/>
 								<html:hidden property="submittedFor" value="<%=submittedFor%>"/>
 								<%						
 								if(form.getForwardTo().equalsIgnoreCase("orderDetails"))
@@ -981,7 +992,7 @@
 								<html:hidden property="positionInStorageContainer" />
 								<html:hidden property="parentPresent" />
 								<html:hidden property="specimenCollectionGroupId"/>
-<!------------------------------------------------------------------------------->
+
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
 <logic:equal name="<%=Constants.PAGEOF%>" value="pageOfNewSpecimen">
 <tr>
@@ -1510,7 +1521,7 @@
 										{
 											initValues = (String[])initValuesList.get(0);
 										}
-										//System.out.println("NewSpecimen :: "+initValues[0]+"<>"+initValues[1]+"<>"+initValues[2]);			
+										
 										String rowNumber = "1";
 										String styClass = "formFieldSized5";
 										String tdStyleClass = "customFormField";
@@ -1549,18 +1560,22 @@
 										String manualDisplayStyle=null;
 										if(radioSelected == 1)
 										{
+											dropDownDisable = true;
+											textBoxDisable = true;
 											autoDisplayStyle = "display:none";
 											manualDisplayStyle = "display:none";
 										}
 										else if(radioSelected == 2)
 										{									
+											textBoxDisable = true;
 											autoDisplayStyle = "display:block";
 											manualDisplayStyle = "display:none";
 										}
 										else if(radioSelected == 3)
 										{
+											dropDownDisable = true;	
 											autoDisplayStyle = "display:none";
-											manualDisplayStyle = "display:block";							
+											manualDisplayStyle = "display:block";
 										}
 										
 										
@@ -1576,26 +1591,26 @@
 					<!-------Select Box Begins----->
 
 								<table border="0" cellpadding="3" cellspacing="0" width="100%">
-					<%
+								<%
 												NewSpecimenForm newSpecimenForm=(NewSpecimenForm)request.getAttribute("newSpecimenForm");
 												String showContainer = (String) request.getAttribute("showContainer");
-					%>
-<% if( operation.equals("add") || (showContainer!=null&&showContainer.equals("Pending")))
-{%>
-
-								<tr >
-								<td width="20%">
+												
+												
+								%>
 								
-								<html:select property="stContSelection" styleClass="black_new"
+								<% if( operation.equals("add") || (showContainer!=null&&showContainer.equals("Pending")))
+						{%>
+								<tr >
+							<td width="20%">
+									<html:select property="stContSelection" styleClass="black_new"
 											styleId="stContSelection" size="1"	onmouseover="showTip(this.id)"
 											onmouseout="hideTip(this.id)" onchange="onStorageRadioClickInSpecimen(this)">
 											<html:options collection="storageList"
 														labelProperty="name" property="value" />
-			</html:select> 
-			
-		</td>
-		<td width="80%" >
-			<div Style="<%=autoDisplayStyle%>" id="autoDiv" >
+									</html:select> 
+								</td>
+								<td width="80%" >
+			<div  id="autoDiv" Style="<%=autoDisplayStyle%>">
 									<ncombo:nlevelcombo dataMap="<%=dataMap%>" 
 														attributeNames="<%=attrNames%>" 
 														tdStyleClassArray="<%=tdStyleClassArray%>"
@@ -1606,25 +1621,25 @@
 														rowNumber="<%=rowNumber%>" 
 														onChange = "<%=onChange%>"
 														formLabelStyle="nComboGroup"
-														disabled = "false"
+														disabled = "<%=dropDownDisable%>"
 														noOfEmptyCombos = "<%=noOfEmptyCombos%>"/>
 														</tr>
 														</table>
 			</div>
-			<div style="<%=manualDisplayStyle%>" id="manualDiv">
+			<div  id="manualDiv" style="<%=manualDisplayStyle%>"">
 				<table cellpadding="0" cellspacing="0" border="0" >
 						<tr>
 							<td class="groupelements">
-								<html:text styleClass="black_ar"  size="20" styleId="selectedContainerName" onmouseover="showTip(this.id)" property="selectedContainerName" disabled= "false"/>
+								<html:text styleClass="black_ar"  size="20" styleId="selectedContainerName" onmouseover="showTip(this.id)" property="selectedContainerName" disabled= "<%=textBoxDisable%>"/>
 							</td>
 							<td class="groupelements">
-								<html:text styleClass="black_ar"  size="2" styleId="pos1" property="pos1" disabled= "false"/>
+								<html:text styleClass="black_ar"  size="2" styleId="pos1" property="pos1" disabled= "<%=textBoxDisable%>"/>
 							</td>
 							<td class="groupelements">
-								<html:text styleClass="black_ar"  size="2" styleId="pos2" property="pos2" disabled= "false"/>
+								<html:text styleClass="black_ar"  size="2" styleId="pos2" property="pos2" disabled= "<%=textBoxDisable%>"/>
 							</td>
 							<td class="groupelements">
-								<html:button styleClass="blue_ar" property="containerMap" onclick="<%=buttonOnClicked%>" disabled= "false">
+								<html:button styleClass="blue_ar" property="containerMap" onclick="<%=buttonOnClicked%>" disabled= "<%=textBoxDisable%>">
 											<bean:message key="buttons.map"/>
 								</html:button>
 							</td>
@@ -1633,12 +1648,11 @@
 			</div>
 		</td>
 		</tr>
-		
-<%}%>
-
+											
+		<%}%>	
 											<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">		
 											
-										<% if(showContainer!=null&&showContainer.equals("Pending"))
+											<% if(showContainer!=null&&showContainer.equals("Pending"))
 										{
 										}
 										else{%>
@@ -1649,12 +1663,12 @@
 														<td class="black_ar" colspan="2">																			
 														<bean:message key="specimen.virtualLocation" />										
 													</td>
-												</tr>		
+												</tr>
 													<%
 												}
 													else{
-													%>																
-													<tr>											
+												%>
+												<tr>											
 														<td colspan="2">
 														<table cellpadding="0" cellspacing="0" border="0" >
 						<tr>
@@ -1668,7 +1682,7 @@
 															<html:text styleClass="black_ar"  size="2" styleId="positionDimensionTwo" property="positionDimensionTwo" readonly= "true" style="text-align:right"/>
 													</td>
 							<td class="groupelements">
-															<html:button styleClass="blue_ar_g" property="containerMap" onclick="<%=buttonOnClicked%>" disabled= "true">
+															<html:button styleClass="black_ar" property="containerMap" onclick="<%=buttonOnClicked%>" disabled= "true">
 																<bean:message key="buttons.map"/>
 															</html:button>
 													</td>
@@ -1676,8 +1690,10 @@
 											</table>
 														</td>
 
-													</tr>		
-													<% }
+													</tr>										
+												<%
+												}
+												
 										}%>
 											
 											</logic:notEqual>	
