@@ -538,8 +538,27 @@ public class DAGPanel {
 		{
 			CustomFormulaUIBean customFormulaUIBean = TQUIMap.get(id);
 			customFormula = customFormulaUIBean.getCf();
+			deleteOutputTerm(customFormulaUIBean);
 		}
 		return customFormula;
+	}
+	/**
+	 * @param customFormulaUIBean
+	 */
+	private void deleteOutputTerm(CustomFormulaUIBean customFormulaUIBean) {
+		IQuery query = m_queryObject.getQuery();
+		List<IOutputTerm> outputTerms = query.getOutputTerms();
+		IOutputTerm termToDelete = null;
+		for(IOutputTerm term :outputTerms)
+		{
+			if(customFormulaUIBean.getCf().getLhs().equals(term.getTerm()))
+			{
+				termToDelete = term;
+				break;
+			}
+		}
+		if(termToDelete != null)
+			query.getOutputTerms().remove(termToDelete);
 	}
 		
 	private RelationalOperator getRelationalOperator(String relationalOp)
@@ -795,18 +814,7 @@ public class DAGPanel {
 			CustomFormulaUIBean customFormulaUIBean = TQUIMap.get(customNodeId);
 			ICustomFormula cf = customFormulaUIBean.getCf();
 			IConstraints c = query.getConstraints();
-			List<IOutputTerm> outputTerms = query.getOutputTerms();
-			IOutputTerm termToDelete = null;
-			for(IOutputTerm term :outputTerms)
-			{
-				if(customFormulaUIBean.getCf().getLhs().equals(term.getTerm()))
-				{
-					termToDelete = term;
-					break;
-				}
-			}
-			if(termToDelete != null)
-				query.getOutputTerms().remove(termToDelete);
+			deleteOutputTerm(customFormulaUIBean);
 			for(IExpression expression2 : c) 
 			{
 				expression2.removeOperand(cf);
