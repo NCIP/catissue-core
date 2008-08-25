@@ -3320,7 +3320,15 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 					{
 						try 
 						{
-							sc = (StorageContainer) dao.retrieve(StorageContainer.class.getName(), specimen.getSpecimenPosition().getStorageContainer().getId());
+							if(sc.getId()!=null)
+							{
+								sc = (StorageContainer) dao.retrieve(StorageContainer.class.getName(), specimen.getSpecimenPosition().getStorageContainer().getId());
+							}
+							else
+							{
+								List scList = dao.retrieve(StorageContainer.class.getName(), Constants.NAME, sc.getName());
+								sc = (StorageContainer) scList.get(0);
+							}
 						} 
 						catch (DAOException e) 
 						{
