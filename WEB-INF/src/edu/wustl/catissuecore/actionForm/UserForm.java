@@ -122,7 +122,7 @@ public class UserForm extends AbstractActionForm
 	/**
 	 * Role of the user.
 	 * */
-	private String role=Constants.NON_ADMIN_USER;
+	private String role= "";
 
 	/**
 	 * Cancer Research Group of the user.  
@@ -512,10 +512,6 @@ public class UserForm extends AbstractActionForm
 		{
 			this.role = Constants.NON_ADMIN_USER;
 		}
-        else if (role != null && role.equalsIgnoreCase(Constants.ADMIN_USER))
-        {
-            this.role = Constants.SUPER_ADMIN_USER;
-        }
         else
         {
             this.role = role;
@@ -684,7 +680,7 @@ public class UserForm extends AbstractActionForm
 					this.comments = user.getComments();
 				}
 
-				this.setRole(user.getRoleId());
+				this.setUserRole(user.getRoleId());
 
 				if (getFormId() == Constants.APPROVE_USER_FORM_ID)
 				{
@@ -747,6 +743,15 @@ public class UserForm extends AbstractActionForm
 		Logger.out.debug("this.role" + this.role);
 		Logger.out.debug("this.status" + this.status);
 		Logger.out.debug("this.csmUserid" + this.csmUserId);
+	}
+
+	private void setUserRole(String roleId) 
+	{
+		this.role = "";
+		if (roleId != null && roleId.equalsIgnoreCase(Constants.ADMIN_USER))
+        {
+            this.role = Constants.SUPER_ADMIN_USER;
+        }
 	}
 
 	/**
