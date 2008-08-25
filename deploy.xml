@@ -82,7 +82,7 @@
 				</if>
 				
 				<condition property="isOracleBinDirSetInPath">
-				<contains string="${path}" substring="${oracle_home.bin}" casesensitive="true" />
+				<contains string="${path}" substring="${oracle_home.bin}" casesensitive="false" />
 				</condition>
 				<if>	
 					<equals arg1="true" arg2="${isOracleBinDirSetInPath}" />
