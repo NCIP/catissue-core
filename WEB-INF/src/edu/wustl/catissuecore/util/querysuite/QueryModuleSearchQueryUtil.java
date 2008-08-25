@@ -221,6 +221,7 @@ public class QueryModuleSearchQueryUtil
 		try
 		{
 			session.setAttribute(Constants.SAVE_GENERATED_SQL, sqlGenerator.generateSQL(query));
+			session.setAttribute(Constants.OUTPUT_TERMS_COLUMNS,sqlGenerator.getOutputTermsColumns());
 		}
 		catch(MultipleRootsException e)
 		{
