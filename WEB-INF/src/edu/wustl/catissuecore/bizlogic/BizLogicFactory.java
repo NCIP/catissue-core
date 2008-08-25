@@ -12,6 +12,7 @@ package edu.wustl.catissuecore.bizlogic;
 import edu.wustl.catissuecore.bizlogic.bulkOperations.BulkOperationsBizlogic;
 import edu.wustl.catissuecore.bizlogic.querysuite.CatissuecoreQueryBizLogic;
 import edu.wustl.catissuecore.bizlogic.shippingtracking.ShipmentBizLogic;
+import edu.wustl.catissuecore.bizlogic.shippingtracking.ShipmentReceivingBizLogic;
 import edu.wustl.catissuecore.bizlogic.shippingtracking.ShipmentRequestBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.bizlogic.CDEBizLogic;
@@ -229,6 +230,9 @@ public class BizLogicFactory //extends AbstractBizLogicFactory
             	break;
     		case edu.wustl.catissuecore.util.shippingtracking.Constants.SHIPMENT_REQUEST_FORM_ID:
             	bizLogic = new ShipmentRequestBizLogic();
+            	break;
+    		case edu.wustl.catissuecore.util.shippingtracking.Constants.SHIPMENT_RECEIVING_FORM_ID:
+            	bizLogic = new ShipmentReceivingBizLogic();
             	break;
     		//END
     		case Constants.DEFAULT_BIZ_LOGIC:

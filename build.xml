@@ -1169,4 +1169,25 @@
 			         </mxmlc>
 		     </target>
 	<!-- flex related target finish -->
+	
+	<!-- shippingtracking - start -->
+	<target name="build_client_jar_for_st">
+		<jar taskname="buildClientJar" jarfile="${temp.dir}/catissuecore.jar">
+			<fileset dir="${target.dir}">
+				<include name="**/edu/wustl/catissuecore/domain/**"/>
+				<include name="**/edu/wustl/catissuecore/actionForm/**"/>
+				<include name="**/edu/wustl/catissuecore/util/**"/>
+				<include name="**/edu/wustl/catissuecore/client/**"/>
+				<include name="**/edu/wustl/catissuecore/bean/**"/>
+				<include name="**/edu/wustl/catissuecore/namegenerator/**"/>
+				<include name="**/edu/wustl/catissuecore/caties/**"/>
+				<include name="**/edu/wustl/catissuecore/hbm/**"/>
+				<include name="**/edu/wustl/catissuecore/bizlogic/**"/>
+				
+				<exclude name="**/CVS*" />
+				<exclude name="**/java.policy.applet*" />
+			</fileset>
+		</jar>
+	</target>
+	<!-- shippingtracking - end -->
 </project>

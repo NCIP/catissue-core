@@ -199,6 +199,7 @@ public class DomainObjectFactory extends AbstractDomainObjectFactory
 				className = QuarantineEventParameter.class.getName();
 				break;
 			case edu.wustl.catissuecore.util.shippingtracking.Constants.SHIPMENT_FORM_ID:
+			case edu.wustl.catissuecore.util.shippingtracking.Constants.SHIPMENT_RECEIVING_FORM_ID:
 				className=Shipment.class.getName();
 				break;
 			case edu.wustl.catissuecore.util.shippingtracking.Constants.SHIPMENT_REQUEST_FORM_ID:
@@ -409,6 +410,7 @@ public class DomainObjectFactory extends AbstractDomainObjectFactory
 				abstractDomain = new QuarantineEventParameter(form);
 				break;
 			case edu.wustl.catissuecore.util.shippingtracking.Constants.SHIPMENT_FORM_ID:
+			case edu.wustl.catissuecore.util.shippingtracking.Constants.SHIPMENT_RECEIVING_FORM_ID:
 				abstractDomain=new Shipment(form);
 				 break;
 			case edu.wustl.catissuecore.util.shippingtracking.Constants.SHIPMENT_REQUEST_FORM_ID:
