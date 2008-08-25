@@ -53,7 +53,7 @@
 												</td>
 -->
 		
-			<html:button
+			|&nbsp;<html:button
 				styleClass="blue_ar_c" property="moreButton"
 				title="<%=Constants.SPECIMEN_BUTTON_TIPS[3]%>"
 				value="<%=Constants.SPECIMEN_FORWARD_TO_LIST[3][0]%>"
@@ -67,7 +67,7 @@
 		
 		
 		
-		<html:button
+		|&nbsp;<html:button
 				styleClass="blue_ar_c" property="addToCart"
 				title="<%=Constants.SPECIMEN_BUTTON_TIPS[0]%>"
 				onclick="onAddToCart()">
