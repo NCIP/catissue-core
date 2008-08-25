@@ -238,7 +238,7 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
         {
             Role role = (Role) iterator.next();
             NameValueBean nameValueBean = new NameValueBean();
-            if(! ("pageOfUserAdmin").equalsIgnoreCase(pageOf))
+            if(! ("pageOfUserAdmin").equalsIgnoreCase(pageOf) && ! ("pageOfApproveUser").equalsIgnoreCase(pageOf))
             {
             	if(!(("SUPERADMINISTRATOR").equals(role.getName()))&&!(("Administrator").equals(role.getName())))
             	{
