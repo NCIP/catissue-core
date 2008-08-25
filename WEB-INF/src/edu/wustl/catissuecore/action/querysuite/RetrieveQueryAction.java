@@ -20,6 +20,7 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
 import edu.wustl.catissuecore.actionForm.querysuite.SaveQueryForm;
+import edu.wustl.catissuecore.flex.dag.DAGConstant;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.querysuite.queryobject.IParameterizedQuery;
@@ -48,6 +49,7 @@ public class RetrieveQueryAction extends BaseAction
 			session.removeAttribute(Constants.MAIN_ENTITY_MAP);
 			session.removeAttribute(Constants.EXPORT_DATA_LIST);
 			session.removeAttribute(Constants.ENTITY_IDS_MAP);
+			session.removeAttribute(DAGConstant.TQUIMap);
 			SaveQueryForm saveQueryForm = (SaveQueryForm) actionForm;
 			Collection<IParameterizedQuery> parameterizedQueryCollection = (Collection<IParameterizedQuery>) HibernateUtility
 					.executeHQL(HibernateUtility.GET_PARAMETERIZED_QUERIES_DETAILS);
