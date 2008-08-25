@@ -1165,6 +1165,7 @@
 				</fileset>
 			</classpath>
 		</sql>
+		<antcall target="temp_update_metadata_for_clob_support_oracle" />
 		<antcall target="upgrade_db_demodel_oracle" />
 
 	</target>
