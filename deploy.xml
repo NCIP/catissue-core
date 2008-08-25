@@ -84,7 +84,7 @@
 				<condition property="isOracleBinDirSetInPath">
 				<contains string="${path}" substring="${oracle_home.bin}" casesensitive="false" />
 				</condition>
-				<if>	
+				<!-- <if>	
 					<equals arg1="true" arg2="${isOracleBinDirSetInPath}" />
 					<then>
 						<echo>Oracle bin present in path... </echo>
@@ -93,6 +93,7 @@
 						<fail message="ORACLE_HOME is not set in path,please set it" />
 					</else>	
 				</if>
+				-->
 				<available file="${sqlldr}" property="issqlldrPresentInBin"/>		
 				<if>	
 					<equals arg1="true" arg2="${issqlldrPresentInBin}" />			
