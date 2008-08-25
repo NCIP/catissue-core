@@ -151,14 +151,14 @@ public class ConsentUtil
 	 */
 	private static void withdrawResponse(Specimen specimen, String consentWithdrawalOption,  DAO dao, SessionDataBean sessionDataBean)
 	{
-		if(consentWithdrawalOption.equalsIgnoreCase(Constants.WITHDRAW_RESPONSE_DISCARD))
+		if(Constants.WITHDRAW_RESPONSE_DISCARD.equalsIgnoreCase(consentWithdrawalOption)||Constants.WITHDRAW_RESPONSE_RETURN.equalsIgnoreCase(consentWithdrawalOption))
 		{
 			addDisposalEvent(specimen, dao, sessionDataBean);
 		}
-		else if(consentWithdrawalOption.equalsIgnoreCase(Constants.WITHDRAW_RESPONSE_RETURN))
+		/*else if(consentWithdrawalOption.equalsIgnoreCase(Constants.WITHDRAW_RESPONSE_RETURN))
 		{
 			addReturnEvent(specimen, dao, sessionDataBean);
-		}
+		}*/
 		//only if consentWithdrawalOption is not reset or noaction.
 		if(!consentWithdrawalOption.equalsIgnoreCase(Constants.WITHDRAW_RESPONSE_RESET) && !consentWithdrawalOption.equalsIgnoreCase(Constants.WITHDRAW_RESPONSE_NOACTION) )
 		{

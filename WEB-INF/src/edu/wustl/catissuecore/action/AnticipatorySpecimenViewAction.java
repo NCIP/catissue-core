@@ -147,7 +147,15 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 		// sorting of specimen collection accoding to id 
 
 		List<Specimen> specimenList = new ArrayList<Specimen>();
-		specimenList.addAll(specimencollectionGroup.getSpecimenCollection());
+		Iterator itr = specimencollectionGroup.getSpecimenCollection().iterator();
+		while (itr.hasNext())
+		{
+			Specimen specimen = (Specimen) itr.next();
+			if(!Constants.ACTIVITY_STATUS_DISABLED.equals(specimen.getActivityStatus()))
+			{
+			specimenList.addAll(specimencollectionGroup.getSpecimenCollection());
+			}
+		}
 		Comparator spIdComp = new IdComparator();
 		Collections.sort(specimenList, spIdComp);
 		eventBean.setSpecimenRequirementbeanMap(getSpecimensMap(specimenList, cpId));
@@ -389,10 +397,13 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 			while (itr.hasNext())
 			{
 				Specimen specimen = (Specimen) itr.next();
-				if (specimen.getId().equals(specimenId)
-						|| (specimen.getParentSpecimen() != null && specimen.getParentSpecimen().getId().equals(specimenId)))
+				if(!Constants.ACTIVITY_STATUS_DISABLED.equals(specimen.getActivityStatus()))
 				{
-					specimenList.add(specimen);
+					if (specimen.getId().equals(specimenId)
+							|| (specimen.getParentSpecimen() != null && specimen.getParentSpecimen().getId().equals(specimenId)))
+					{
+						specimenList.add(specimen);
+					}
 				}
 			}
 		}

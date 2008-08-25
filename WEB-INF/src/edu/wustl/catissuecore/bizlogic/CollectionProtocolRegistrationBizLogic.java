@@ -938,7 +938,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 		persistentCPR.setRegistrationDate(collectionProtocolRegistration.getRegistrationDate());
 		persistentCPR.setActivityStatus(collectionProtocolRegistration.getActivityStatus());
 		persistentCPR.setBarcode(collectionProtocolRegistration.getBarcode());
-		//persistentCPR.setSpecimenCollectionGroupCollection(collectionProtocolRegistration.getSpecimenCollectionGroupCollection());
+		persistentCPR.setSpecimenCollectionGroupCollection(collectionProtocolRegistration.getSpecimenCollectionGroupCollection());
 		/* for offset 27th Dec 2007 */
 		// Check if Offset is present.If it is present then all the below
 		// hierarchy protocols are shifted according to the Offset.Integer offsetOld=oldCollectionProtocolRegistration.getOffset();
@@ -976,7 +976,8 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 
 		// Disable all specimen Collection group under this registration.
 		Logger.out.debug("collectionProtocolRegistration.getActivityStatus() " + collectionProtocolRegistration.getActivityStatus());
-		if (!collectionProtocolRegistration.getConsentWithdrawalOption().equalsIgnoreCase(Constants.WITHDRAW_RESPONSE_NOACTION))
+		if (collectionProtocolRegistration.getConsentWithdrawalOption().equalsIgnoreCase(Constants.WITHDRAW_RESPONSE_RETURN)
+				||collectionProtocolRegistration.getConsentWithdrawalOption().equalsIgnoreCase(Constants.WITHDRAW_RESPONSE_DISCARD))
 		{
 			Logger.out.debug("collectionProtocolRegistration.getActivityStatus() " + collectionProtocolRegistration.getActivityStatus());
 			Long collectionProtocolRegistrationIDArr[] = {collectionProtocolRegistration.getId()};

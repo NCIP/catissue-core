@@ -583,7 +583,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		scg = new SpecimenCollectionGroupBizLogic().retrieveSCG(dao, scg);
 		consentTierStatusCollection = ((SpecimenCollectionGroup) scg)
 					.getConsentTierStatusCollection();
-			setConsentTierStatus(specimen, consentTierStatusCollection);
+		setConsentTierStatus(specimen, consentTierStatusCollection);
 		specimen.setSpecimenCollectionGroup(scg);
 		scg.getSpecimenCollection().add(specimen);
 	}
@@ -1305,8 +1305,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			Collection<ConsentTierStatus> consentTierStatusCollection)
 	{
 		Collection<ConsentTierStatus> consentTierStatusCollectionForSpecimen = new HashSet<ConsentTierStatus>();
-		if (consentTierStatusCollection != null
-				&& specimen.getConsentTierStatusCollection() == null)
+		if (consentTierStatusCollection != null)
 		{
 			Iterator<ConsentTierStatus> itr = consentTierStatusCollection.iterator();
 			while (itr.hasNext())
