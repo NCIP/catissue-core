@@ -2,7 +2,6 @@ package edu.wustl.catissuecore.querysuite.metadata;
 
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -147,6 +146,8 @@ public class AddCuratedPath
 		entityList.add("edu.wustl.catissuecore.domain.OrderDetails,edu.wustl.catissuecore.domain.Distribution,edu.wustl.catissuecore.domain.FluidSpecimen");
 		entityList.add("edu.wustl.catissuecore.domain.OrderDetails,edu.wustl.catissuecore.domain.Distribution,edu.wustl.catissuecore.domain.MolecularSpecimen");
 		entityList.add("edu.wustl.catissuecore.domain.OrderDetails,edu.wustl.catissuecore.domain.Distribution,edu.wustl.catissuecore.domain.TissueSpecimen");
+		
+		entityList.add("edu.wustl.catissuecore.domain.CollectionProtocol,edu.wustl.catissuecore.domain.CollectionProtocolRegistration,edu.wustl.catissuecore.domain.Participant");
 	}
 	
 	public AddCuratedPath(Connection connection)
