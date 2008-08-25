@@ -121,7 +121,7 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
     /**
      * Role id of the user.
      */
-    protected String roleId=Constants.NON_ADMIN_USER;
+    protected String roleId= "";
     
     /**
      * Set of collection protocol.
@@ -552,7 +552,18 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
      */
     public void setRoleId(String roleId)
     {
-        this.roleId = roleId;
+    	if (roleId != null && roleId.equalsIgnoreCase("-1")) 
+		{
+			this.roleId = Constants.NON_ADMIN_USER;
+		}
+        else if (roleId != null && roleId.equalsIgnoreCase(Constants.ADMIN_USER))
+        {
+            this.roleId = Constants.SUPER_ADMIN_USER;
+        }
+        else
+        {
+            this.roleId = roleId;
+        }
     }
     
     /**
