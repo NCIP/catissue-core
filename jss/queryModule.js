@@ -562,11 +562,48 @@
 		}
 		hideCursor();
 	}
+
+	function createQueryStringForSavedTQ (nameOfFormToPost,totalCFCount)
+	{
+      	var strToCreateTQObject = "";
+		for(i=0;i<totalCFCount;i++)
+		{
+		  var isTimestampFielsId = "isTimeStamp_"+i;
+		  var tQpId = i+"_combobox";
+		  var tQtextboxId = i+"_textbox";
+		  var tQunitId = i+"_combobox1";
+		  var tQchkBoxId = i+"_checkbox";
+		  var tQchkBox = document.getElementById(tQchkBoxId).checked;
+             if(tQchkBox==true)
+					 
+			{
+				alert('yes');
+		 	  
+		   var isTimestamp = document.getElementById(isTimestampFielsId).value;
+		   alert('isTimestamp'+isTimestamp);
+		  		   
+	       var tQop = document.getElementById(tQpId).value;
+		   
+	       var tQtextbox = document.getElementById(tQtextboxId).value;
+		 
+           
+	       strToCreateTQObject = strToCreateTQObject+"@#condition#@"+i+"##"+tQop+"##"+tQtextbox;
+		   if(isTimestamp == 'false')
+		    {
+		      var tQunit = document.getElementById(tQunitId).value;
+			   strToCreateTQObject = strToCreateTQObject + "##"+tQunit;
+			  alert(strToCreateTQObject);
+			  
+		    }
+	     }
+		}
+		 alert(strToCreateTQObject);
+		return strToCreateTQObject;
+	}
 	
 	function createQueryStringForSavedQuery(nameOfFormToPost, entityName , attributesList,callingFrom)
 	{
 		waitCursor();
-		
 		var strToCreateQueyObject ="";
 		var attribute = attributesList.split(";");
 		for(i=1; i<attribute.length; i++)
@@ -711,6 +748,7 @@
 				strToCreateQueyObject =  strToCreateQueyObject + "@#condition#@"+ attribute[i] + "!*=*!" + op +";";
 			}
 		}
+		
            return strToCreateQueyObject;
 	}
 	
@@ -964,10 +1002,12 @@
 	function produceSavedQuery()
 	{
 		var totalentities = document.getElementById("totalentities").value;
+		var totalCFCount = document.getElementById("totalCF").value;
+		//alert(''+totalCFCount);
 		var numberOfEntities = totalentities.split(";");
         var strquery='';
         var count = numberOfEntities.length;
-        
+         
     	for(i=0;i<count-1 ;i++)
 		{
 			var entityName = numberOfEntities[i];
@@ -983,13 +1023,21 @@
 					strquery = strquery + checkboxes[j] +";" ;                             
             }
 		} 
+		
 		var strvalu = document.getElementById('queryString');
         strvalu.value =  strquery;
         var entityName="";
         var frmName = document.forms[0].name;
         var list = document.getElementById('attributesList').value;
     	var buildquerystr =  createQueryStringForSavedQuery(frmName, entityName , list,frmName);
+		if(totalCFCount != 0)
+		{
+			var buildTQstr = createQueryStringForSavedTQ(frmName,totalCFCount);
+			alert(document.getElementById('strToFormTQ').value);
+			document.getElementById('strToFormTQ').value = buildTQstr;
+		}
         document.getElementById('conditionList').value = buildquerystr;
+		
         // Save query
         document.getElementById('saveQueryForm').submit();
 	}
@@ -997,13 +1045,51 @@
 	function ExecuteSavedQuery()
 	{
 		  showWaitPage();
+		
 	   	  var entityName="";
 		  var frmName = document.forms[0].name;
           var list = document.getElementById('attributesList').value;
     	  var buildquerystr =  createQueryString(frmName, entityName , list,frmName);
           document.getElementById('conditionList').value = buildquerystr;
+
+          var totalCFCount = document.getElementById("totalCF").value;
+		  if(totalCFCount != 0)
+		   {
+			var buildTQStr = createQueryStringForExcecuteSavedTQ(frmName,totalCFCount);
+			document.getElementById('strToFormTQ').value = buildTQStr;
+		   }
 		  document.forms[0].submit();
     }
+    
+    function createQueryStringForExcecuteSavedTQ (nameOfFormToPost,totalCFCount)
+	{
+      	var strToCreateTQObject = "";
+		for(i=0;i<totalCFCount;i++)
+		{
+		  var isTimestampFielsId = "isTimeStamp_"+i;
+		  var tQpId = i+"_combobox";
+		  var tQtextboxId = i+"_textbox";
+		  var tQunitId = i+"_combobox1";
+		  var isTimestamp = document.getElementById(isTimestampFielsId).value;
+		  alert('isTimestamp'+isTimestamp);
+		  		   
+	       var tQop = document.getElementById(tQpId).value;
+		   
+	       var tQtextbox = document.getElementById(tQtextboxId).value;
+		 
+           
+	       strToCreateTQObject = strToCreateTQObject+"@#condition#@"+i+"##"+tQop+"##"+tQtextbox;
+		   if(isTimestamp == 'false')
+		    {
+		      var tQunit = document.getElementById(tQunitId).value;
+			   strToCreateTQObject = strToCreateTQObject + "##"+tQunit;
+			  alert(strToCreateTQObject);
+			  
+		    }
+	     }
+		 alert(strToCreateTQObject);
+		return strToCreateTQObject;
+	}
 	
 	function enableDisplayField(frm, textfield)
 	{

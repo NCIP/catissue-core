@@ -31,6 +31,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.querysuite.QueryModuleError;
 import edu.wustl.catissuecore.util.querysuite.QueryModuleSearchQueryUtil;
 import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
+import edu.wustl.catissuecore.util.querysuite.TemporalQueryUtility;
 import edu.wustl.common.querysuite.exceptions.CyclicException;
 import edu.wustl.common.querysuite.exceptions.MultipleRootsException;
 import edu.wustl.common.querysuite.factory.QueryObjectFactory;
@@ -66,6 +67,7 @@ import edu.wustl.common.querysuite.queryobject.impl.Rule;
 import edu.wustl.common.querysuite.queryobject.locator.Position;
 import edu.wustl.common.querysuite.queryobject.locator.QueryNodeLocator;
 import edu.wustl.common.querysuite.utils.QueryUtility;
+import edu.wustl.common.util.Collections;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.logger.Logger;
 /**
@@ -673,9 +675,9 @@ public class DAGPanel
 		Collection<AttributeInterface> nodeAttributeCollection = getAttributeCollection(sourceExpId);
 		populateMap(nodeAttributesMap, nodeAttributeCollection);
 		
-		List<String> timeIntervalList = getTimeIntervals();
+		List<String> timeIntervalList = TemporalQueryUtility.getTimeIntervals();
 		List<String> arithmeticOperaorsList = getArithmeticOperators();
-		List<String> relationalOperatorsList = getRelationalOperators();
+		List<String> relationalOperatorsList = TemporalQueryUtility.getRelationalOperators();
 
 		queryDataMap.put(Constants.ARITHMETIC_OPERATORS, arithmeticOperaorsList);
 		queryDataMap.put(Constants.SECOND_NODE_ATTRIBUTES, nodeAttributesMap);
@@ -695,10 +697,10 @@ public class DAGPanel
 		populateMap(sourceNodeAttributesMap, sourceAttributeCollection);
 
 		Collection<AttributeInterface> destAttributeCollection = getAttributeCollection(destExpId);
-		List<String> timeIntervalList = getTimeIntervals();
+		List<String> timeIntervalList = TemporalQueryUtility.getTimeIntervals();
 		populateMap(destNodeAttributesMap, destAttributeCollection);
 		List<String> arithmeticOperaorsList = getArithmeticOperators();
-		List<String> relationalOperatorsList = getRelationalOperators();
+		List<String> relationalOperatorsList = TemporalQueryUtility.getRelationalOperators();
 		queryDataMap.put(Constants.FIRST_NODE_ATTRIBUTES, sourceNodeAttributesMap);
 		queryDataMap.put(Constants.ARITHMETIC_OPERATORS, arithmeticOperaorsList);
 		queryDataMap.put(Constants.SECOND_NODE_ATTRIBUTES, destNodeAttributesMap);
@@ -748,45 +750,7 @@ public class DAGPanel
 			}
         }
 	}
-	private List<String> getTimeIntervals()
-	{
-		List <String>timeIntervalList = new ArrayList<String>(); 
-		/**
-		 * Getting all days time Intervals
-		 */
-		for(DSInterval timeInterval : DSInterval.values())
-		{
-			timeIntervalList.add(timeInterval.name()+"s");
-		}
-		
-		for(YMInterval timeInterval1 : YMInterval.values())
-		{
-			timeIntervalList.add(timeInterval1.name()+"s");
-		}
-		return timeIntervalList;
-	}
-	private List<String> getRelationalOperators()
-	{
-		/**
-		 * Getting relational operators excluding those deals with Strings
-		 */
-		 List <String>relationalOperatorsList = new ArrayList<String>(); 
-		for(RelationalOperator operator : RelationalOperator.values())
-		{
-			if((!operator.getStringRepresentation().equals(Constants.Contains)) &&
-					(!operator.getStringRepresentation().equals(Constants.STRATS_WITH)) &&
-					(!operator.getStringRepresentation().equals(Constants.ENDS_WITH)) && 
-					(!operator.getStringRepresentation().equals(Constants.In)) &&
-					(!operator.getStringRepresentation().equals(Constants.Between)) &&
-					(!operator.getStringRepresentation().equals(Constants.Not_In)) &&
-					(!operator.getStringRepresentation().equalsIgnoreCase(Constants.IS_NULL)) &&
-					(!operator.getStringRepresentation().equalsIgnoreCase(Constants.IS_NOT_NULL)))
-			{
-				relationalOperatorsList.add(operator.getStringRepresentation());	
-			}
-		}
-		return relationalOperatorsList;
-	}
+	
 	private List<String> getArithmeticOperators()
 	{
 		List <String>arithmeticOperaorsList =  new ArrayList<String>();
@@ -1468,7 +1432,7 @@ public class DAGPanel
 		EntityInterface entity = expression.getQueryEntity().getDynamicExtensionsEntity();
 		GenerateHtmlForAddLimitsBizLogic generateHTMLBizLogic = new GenerateHtmlForAddLimitsBizLogic();
 		Rule rule = ((Rule) (expression.getOperand(0)));
-		List<ICondition> conditions = rule.getConditions();
+		List<ICondition> conditions = Collections.list(rule);
 		String html = generateHTMLBizLogic.generateHTML(entity, conditions);
 		map.put(DAGConstant.HTML_STR, html);
 		map.put(DAGConstant.EXPRESSION, expression);

@@ -30,6 +30,7 @@ import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractBizLogicFactory;
 import edu.wustl.common.hibernate.HibernateCleanser;
+import edu.wustl.common.querysuite.queryobject.ICustomFormula;
 import edu.wustl.common.querysuite.queryobject.IOutputAttribute;
 import edu.wustl.common.querysuite.queryobject.IParameterizedQuery;
 import edu.wustl.common.querysuite.queryobject.IQuery;
@@ -51,7 +52,7 @@ public class SaveQueryAction extends BaseAction
 
 	protected ActionForward executeAction(ActionMapping actionMapping, ActionForm actionForm,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
-	{ 
+	{     
 		HttpSession session = request.getSession();
 		IQuery query = (IQuery) session.getAttribute(AppletConstants.QUERY_OBJECT);
 		String target = Constants.FAILURE;
@@ -153,7 +154,7 @@ public class SaveQueryAction extends BaseAction
 	 */
 	private IParameterizedQuery populateParameterizedQueryData(IQuery query, ActionForm actionForm,
 			HttpServletRequest request)
-	{
+	{ 
 		SaveQueryForm saveActionForm = (SaveQueryForm) actionForm;
 		String error = "";
 		
@@ -188,13 +189,18 @@ public class SaveQueryAction extends BaseAction
 		else
 		{
 			parameterizedQuery.setDescription("");
-		}
-		
+		} 
+		 
 		CreateQueryObjectBizLogic bizLogic = new CreateQueryObjectBizLogic();
 		String conditionList = request.getParameter(Constants.CONDITIONLIST);
+		String cfRHSList = request.getParameter("strToFormTQ");
+		Map<Integer,ICustomFormula> customFormulaIndexMap = (Map<Integer,ICustomFormula>)session.getAttribute("customFormulaIndexMap");
+		session.removeAttribute("customFormulaIndexMap");
+		//request.getParameter("0_displayName");
 		Map<String, String> displayNameMap = getDisplayNamesForConditions(saveActionForm, request);
 		error = bizLogic.setInputDataToQuery(conditionList, parameterizedQuery.getConstraints(),
-				displayNameMap);
+				displayNameMap,parameterizedQuery);
+		error = bizLogic.setInputDataToTQ(parameterizedQuery, Constants.SAVE_QUERY_PAGE, cfRHSList,customFormulaIndexMap);
 		if (error != null && error.trim().length() > 0)
 		{
 			setActionError(request, error);
@@ -207,7 +213,8 @@ public class SaveQueryAction extends BaseAction
 		{
 			selectedOutputAttributeList = selectedColumnsMetadata.getSelectedOutputAttributeList();
 		}
-     	parameterizedQuery.setOutputTerms(query.getOutputTerms()); 
+		parameterizedQuery.getOutputTerms().clear();
+     	parameterizedQuery.getOutputTerms().addAll(query.getOutputTerms()); 
 		parameterizedQuery.setOutputAttributeList(selectedOutputAttributeList);
 		return parameterizedQuery;
 	}

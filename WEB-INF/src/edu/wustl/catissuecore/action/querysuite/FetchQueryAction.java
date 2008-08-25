@@ -2,6 +2,7 @@
 package edu.wustl.catissuecore.action.querysuite;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,8 +22,8 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.factory.AbstractBizLogicFactory;
+import edu.wustl.common.querysuite.queryobject.ICustomFormula;
 import edu.wustl.common.querysuite.queryobject.IExpression;
-import edu.wustl.common.querysuite.queryobject.IParameterizedCondition;
 import edu.wustl.common.querysuite.queryobject.IParameterizedQuery;
 import edu.wustl.common.querysuite.queryobject.impl.ParameterizedQuery;
 import edu.wustl.common.querysuite.utils.QueryUtility;
@@ -74,19 +75,21 @@ public class FetchQueryAction extends BaseAction
 					IParameterizedQuery parameterizedQuery = queryList.get(0);
 					request.getSession().setAttribute(AppletConstants.QUERY_OBJECT,
 							parameterizedQuery);
-					Map<IExpression, Collection<IParameterizedCondition>> expressionIdConditionCollectionMap = QueryUtility
-							.getAllParameterizedConditions(parameterizedQuery);
+//					Map<IExpression, Collection<IParameterizedCondition>> expressionIdConditionCollectionMap = QueryUtility
+//							.getAllParameterizedConditions(parameterizedQuery);
 
-					if (expressionIdConditionCollectionMap.isEmpty())
+					if (parameterizedQuery.getParameters().isEmpty())
 					{
 						target = Constants.EXECUTE_QUERY;
 					}
 					else
 					{
+						Map<Integer,ICustomFormula> customFormulaIndexMap = new HashMap<Integer, ICustomFormula>();
 						String htmlContents = new GenerateHtmlForAddLimitsBizLogic()
 								.getHTMLForSavedQuery(parameterizedQuery, false,
-										Constants.EXECUTE_QUERY_PAGE);
+										Constants.EXECUTE_QUERY_PAGE,customFormulaIndexMap);
 						request.setAttribute(Constants.HTML_CONTENTS, htmlContents);
+						request.getSession().setAttribute("customFormulaIndexMap", customFormulaIndexMap);
 						saveQueryForm.setQueryString(htmlContents);
 						target = Constants.SUCCESS;
 					}

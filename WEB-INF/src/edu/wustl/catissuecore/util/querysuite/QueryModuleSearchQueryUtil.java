@@ -219,7 +219,7 @@ public class QueryModuleSearchQueryUtil
 		SqlGenerator sqlGenerator = new CatissueSqlGenerator();
 		QueryModuleException queryModExp;
 		try
-		{
+		{ 
 			session.setAttribute(Constants.SAVE_GENERATED_SQL, sqlGenerator.generateSQL(query));
 			session.setAttribute(Constants.OUTPUT_TERMS_COLUMNS,sqlGenerator.getOutputTermsColumns());
 		}
@@ -227,6 +227,7 @@ public class QueryModuleSearchQueryUtil
 		{
 			queryModExp = new QueryModuleException(e.getMessage(), QueryModuleError.MULTIPLE_ROOT);
 			throw queryModExp;
+			
 		}
 		catch(SqlException e)
 		{
@@ -271,7 +272,7 @@ public class QueryModuleSearchQueryUtil
 	    queryResultObjDataBeanMap.put(node.getId(), queryResulObjectDataBean);
 	    QueryOutputSpreadsheetBizLogic outputSpreadsheetBizLogic  = new QueryOutputSpreadsheetBizLogic();
 	    try
-	    {	// deepti change
+	    { 	// deepti change
 	    	SqlGenerator sqlGenerator = (SqlGenerator) SqlGeneratorFactory.getInstance();
 	    	Map<String, IOutputTerm> outputTermsColumns = sqlGenerator.getOutputTermsColumns();
 			if(outputTermsColumns == null)

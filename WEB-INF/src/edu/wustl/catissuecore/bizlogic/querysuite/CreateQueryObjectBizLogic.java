@@ -1,11 +1,14 @@
 
 package edu.wustl.catissuecore.bizlogic.querysuite;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
@@ -16,15 +19,31 @@ import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.catissuecore.util.querysuite.QueryModuleConstants;
+import edu.wustl.catissuecore.util.querysuite.TemporalQueryUtility;
 import edu.wustl.common.querysuite.factory.QueryObjectFactory;
+import edu.wustl.common.querysuite.queryobject.ArithmeticOperator;
+import edu.wustl.common.querysuite.queryobject.DSInterval;
+import edu.wustl.common.querysuite.queryobject.IArithmeticOperand;
 import edu.wustl.common.querysuite.queryobject.ICondition;
 import edu.wustl.common.querysuite.queryobject.IConstraints;
+import edu.wustl.common.querysuite.queryobject.ICustomFormula;
+import edu.wustl.common.querysuite.queryobject.IDateLiteral;
+import edu.wustl.common.querysuite.queryobject.IDateOffsetLiteral;
 import edu.wustl.common.querysuite.queryobject.IExpression;
 import edu.wustl.common.querysuite.queryobject.IExpressionOperand;
-import edu.wustl.common.querysuite.queryobject.IParameterizedCondition;
+import edu.wustl.common.querysuite.queryobject.IParameter;
+import edu.wustl.common.querysuite.queryobject.IParameterizable;
+import edu.wustl.common.querysuite.queryobject.IQuery;
 import edu.wustl.common.querysuite.queryobject.IRule;
+import edu.wustl.common.querysuite.queryobject.ITerm;
+import edu.wustl.common.querysuite.queryobject.LogicalOperator;
 import edu.wustl.common.querysuite.queryobject.RelationalOperator;
-import edu.wustl.common.querysuite.queryobject.impl.ParameterizedCondition;
+import edu.wustl.common.querysuite.queryobject.TermType;
+import edu.wustl.common.querysuite.queryobject.TimeInterval;
+import edu.wustl.common.querysuite.queryobject.impl.DateOffsetLiteral;
+import edu.wustl.common.querysuite.queryobject.impl.ParameterizedQuery;
+import edu.wustl.common.querysuite.utils.QueryUtility;
+import edu.wustl.common.util.Collections;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
@@ -184,12 +203,9 @@ public class CreateQueryObjectBizLogic
 				
 				if (validator.convertToLong(enteredValue) == null)
 				{
-					if(!"".equals(enteredValue))
-					{
-						errorMessages = errorMessages + ApplicationProperties
-						.getValue("simpleQuery.intvalue.required");
-						Logger.out.debug(enteredValue + " is not a valid integer");
-					}
+					errorMessages = errorMessages + ApplicationProperties
+					.getValue("simpleQuery.intvalue.required");
+					Logger.out.debug(enteredValue + " is not a valid integer");
 				}
 				else if (!validator.isPositiveNumeric(enteredValue, QueryModuleConstants.ARGUMENT_ZERO))
 				{
@@ -347,8 +363,8 @@ public class CreateQueryObjectBizLogic
 	 * @return String Message
 	 */
 	public String setInputDataToQuery(String queryInputString, IConstraints constraints,
-			Map<String, String> displayNamesMap)
-	{
+			Map<String, String> displayNamesMap,IQuery query )
+	{   
 		String errorMessage = "";
 		Map<String, String[]> newConditions = null;
 		if (queryInputString != null)
@@ -370,8 +386,8 @@ public class CreateQueryObjectBizLogic
 					{
 						int expId = expression.getExpressionId();
 						errorMessage = componentValues(displayNamesMap, errorMessage,
-							newConditions, expId,  ((IRule) operand).getConditions());
-						if(displayNamesMap == null && ((IRule) operand).getConditions().size()==0)
+							newConditions, expId,  Collections.list((IRule) operand),query);
+							if(displayNamesMap == null && (Collections.list((IRule) operand)).size()==0)
 						{
 							IRule rule = (IRule) operand;
 							IExpression expression1 = rule.getContainingExpression();
@@ -388,6 +404,98 @@ public class CreateQueryObjectBizLogic
 			}
 		}
 		return errorMessage;
+	}
+	 
+	public String setInputDataToTQ(IQuery query,String pageOf,String rhsList,Map<Integer,ICustomFormula> customFormulaIndexMap)
+	{ 
+		String errorMsg = "";
+		if(customFormulaIndexMap!=null)
+		{   
+		
+		Map<String, String[]> newRHSMap = getNewRHSMap(rhsList);
+	    ParameterizedQuery pQuery = null;
+		if (query instanceof ParameterizedQuery)
+		{
+			pQuery = (ParameterizedQuery) query;
+			 
+		}
+		for (String key : newRHSMap.keySet())
+		{
+			String[] newRHSValues = newRHSMap.get(key);
+			ICustomFormula customFormula = customFormulaIndexMap.get(Integer.parseInt(key));
+			String value = "";
+			if(customFormula!=null)
+			{
+			ITerm rhsTerm = QueryObjectFactory.createTerm();
+			if((customFormula.getLhs().getTermType()).equals(TermType.DSInterval))
+			 {
+				IDateOffsetLiteral rhsDateOffsetLiteral = QueryObjectFactory.createDateOffsetLiteral(newRHSValues[2],TemporalQueryUtility.getTimeInterval(newRHSValues[3]));
+				rhsTerm.addOperand(rhsDateOffsetLiteral);
+				value = newRHSValues[2];
+			 }
+			else if((customFormula.getLhs().getTermType()).equals(TermType.Timestamp)&& newRHSValues.length!=2)
+			{
+				Date date;
+				try
+				{
+					date = Utility.parseDate(newRHSValues[2], "MM/dd/yyyy");
+					IDateLiteral rhsDateLiteral = QueryObjectFactory.createDateLiteral(new java.sql.Date(date.getTime()));
+					rhsTerm.addOperand(rhsDateLiteral);
+					value = newRHSValues[2];
+				}
+				catch (ParseException e)
+				{
+					e.printStackTrace();
+					errorMsg = e.getMessage();
+				}
+				
+			}
+			customFormula.setOperator(TemporalQueryUtility.getRelationalOperator(newRHSValues[1]));
+			if(pageOf.equalsIgnoreCase(Constants.EXECUTE_QUERY_PAGE))
+			{
+			Collection<ICustomFormula> allParameterizedCustomFormulas = QueryUtility.getAllParameterizedCustomFormulas(pQuery);
+			for(ICustomFormula cf :allParameterizedCustomFormulas)
+			{
+				if(cf.getId().equals(customFormula.getId()))
+				{
+					Set<IExpression> expressionsInFormula = QueryUtility.getExpressionsInFormula(cf);
+					for(IExpression exp : expressionsInFormula)
+					{
+						boolean removeOperand = exp.removeOperand(cf);
+						if(removeOperand && !value.equals(""))
+							exp.addOperand(QueryObjectFactory.createLogicalConnector(LogicalOperator.And),customFormula);
+					}
+				}
+			}
+			}
+			customFormula.getAllRhs().clear();
+			customFormula.addRhs(rhsTerm);
+			
+			if(pageOf.equalsIgnoreCase(Constants.SAVE_QUERY_PAGE))
+			{
+				if(query instanceof ParameterizedQuery)
+				{
+					pQuery = (ParameterizedQuery)query;
+				}
+				IParameter<ICustomFormula> parameter = QueryObjectFactory.createParameter(customFormula, null);
+				pQuery.getParameters().add(parameter);
+			}
+		  }
+		}
+		}
+		return errorMsg;
+	}
+	
+	private Map<String,String[]> getNewRHSMap(String rhsList)
+	{ 
+		Map<String,String[]> newRHSMap = new HashMap<String, String[]>();
+		String[] rhsArray = rhsList.split(QueryModuleConstants.QUERY_CONDITION_DELIMITER);
+		for (int i = 1; i <rhsArray.length; i++)
+		{
+			String[] split = rhsArray[i].split("##");
+			newRHSMap.put(split[0], split);
+		}
+		return newRHSMap;
 	}
 	
 	/**
@@ -429,13 +537,18 @@ public class CreateQueryObjectBizLogic
 	 * @return String Message
 	 */
 	private String componentValues(Map<String, String> displayNamesMap, String errorMessage,
-			Map<String, String[]> newConditions, int expId, List<ICondition> conditions)
-	{
+			Map<String, String[]> newConditions, int expId, List<ICondition> conditions,IQuery query)
+	{ 
 		ICondition condition;
 		String componentName;
 		ArrayList<ICondition> removalList = new ArrayList<ICondition>();
 		List<ICondition> deafultConditions = new ArrayList<ICondition>();
-		int size = conditions.size();
+		int size = conditions.size(); 
+		ParameterizedQuery pQuery = null;
+		if(query instanceof ParameterizedQuery)
+		{
+			pQuery = (ParameterizedQuery)query;
+		}
 		for (int j = 0; j < size; j++)
 		{
 			condition = conditions.get(j);
@@ -459,17 +572,35 @@ public class CreateQueryObjectBizLogic
 			if((!newConditions.containsKey(componentName)) && (displayNamesMap == null))
 			{
 				removalList.add(condition);
-				if(!(condition instanceof IParameterizedCondition))
+				if(query instanceof ParameterizedQuery)
 				{
-					deafultConditions.add(condition);
+					pQuery = (ParameterizedQuery)query;
+					List<IParameter<?>> parameterList = pQuery.getParameters();
+					//IParameter parameter = isParameterized(condition,parameterList);
+					boolean isparameter = false;
+					if(parameterList !=null)
+					{
+					 for (IParameter<?> parameter : parameterList) 
+					 {
+				            if (parameter.getParameterizedObject() instanceof ICondition) 
+				            {
+				            	ICondition paramCondition = (ICondition) parameter.getParameterizedObject();
+				                if(paramCondition.getId()==condition.getId())
+				                	isparameter = true;
+				             }
+				        }
+					}
+					if(isparameter)
+							{
+								deafultConditions.add(condition);
+							}
 				}
 			}
 			if (displayNamesMap != null && displayNamesMap.containsKey(componentName))
 			{
-				IParameterizedCondition iparameterizedCondition
-				= new ParameterizedCondition(condition);
-				iparameterizedCondition.setName(displayNamesMap.get(componentName));
-				conditions.set(j, iparameterizedCondition);
+				
+				IParameter<ICondition> parameter = QueryObjectFactory.createParameter(condition, displayNamesMap.get(componentName));
+				pQuery.getParameters().add(parameter);
 			}
 		}
 		for(ICondition removalEntity : removalList)
@@ -479,6 +610,24 @@ public class CreateQueryObjectBizLogic
 		}
 		return errorMessage;
 	}
+	
+	
+//	private IParameter<?> isParameterized(ICondition condition, List<IParameter<?>> parameterList)
+//	{
+//		if(parameterList !=null)
+//		{
+//		 for (IParameter<?> parameter : parameterList) 
+//		 {
+//	            if (parameter.getParameterizedObject() instanceof ICondition) 
+//	            {
+//	            	ICondition paramCondition = (ICondition) parameter.getParameterizedObject();
+//	                if(paramCondition.getId()==condition.getId())
+//	                    return parameter;
+//	             }
+//	        }
+//		}
+//		return null;
+//	}
 
 	/**
 	 * This Method generates component name as expressionId_attributeId.
@@ -487,4 +636,5 @@ public class CreateQueryObjectBizLogic
 		String componentId = expressionId + QueryModuleConstants.UNDERSCORE + attribute.getId().toString();
 		return componentId;
 	}
+	
 }

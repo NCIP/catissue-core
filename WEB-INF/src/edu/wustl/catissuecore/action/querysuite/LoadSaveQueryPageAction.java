@@ -1,6 +1,9 @@
 
 package edu.wustl.catissuecore.action.querysuite;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -13,9 +16,11 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.querysuite.SaveQueryForm;
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.bizlogic.querysuite.GenerateHtmlForAddLimitsBizLogic;
+import edu.wustl.catissuecore.flex.dag.CustomFormulaUIBean;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.querysuite.queryobject.IConstraints;
+import edu.wustl.common.querysuite.queryobject.ICustomFormula;
 import edu.wustl.common.querysuite.queryobject.IExpression;
 import edu.wustl.common.querysuite.queryobject.IQuery;
 import edu.wustl.common.querysuite.queryobject.impl.ParameterizedQuery;
@@ -48,8 +53,10 @@ public class LoadSaveQueryPageAction extends BaseAction
 		{
 			boolean isShowAll = request.getParameter(Constants.SHOW_ALL) == null ? false : true;
 			GenerateHtmlForAddLimitsBizLogic htmlGenerator = new GenerateHtmlForAddLimitsBizLogic();
+			Map<Integer,ICustomFormula> customFormulaIndexMap = new HashMap<Integer, ICustomFormula>();
 			String htmlContents = htmlGenerator.getHTMLForSavedQuery(queryObject, isShowAll,
-					Constants.SAVE_QUERY_PAGE);
+					Constants.SAVE_QUERY_PAGE,customFormulaIndexMap);
+			request.getSession().setAttribute("customFormulaIndexMap", customFormulaIndexMap);
 			request.setAttribute(Constants.HTML_CONTENTS, htmlContents);
 			String showAllLink = isShowAll
 					? Constants.SHOW_SELECTED_ATTRIBUTE

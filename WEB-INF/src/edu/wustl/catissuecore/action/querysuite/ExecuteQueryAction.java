@@ -4,6 +4,8 @@
 
 package edu.wustl.catissuecore.action.querysuite;
 
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -20,6 +22,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.hibernate.HibernateCleanser;
+import edu.wustl.common.querysuite.queryobject.ICustomFormula;
 import edu.wustl.common.querysuite.queryobject.IParameterizedQuery;
 import edu.wustl.common.util.ObjectCloner;
 
@@ -35,7 +38,7 @@ public class ExecuteQueryAction extends BaseAction
 	 */
 	protected ActionForward executeAction(ActionMapping actionMapping, ActionForm actionForm,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
-	{
+	{ 
 		String target = Constants.FAILURE;        
 		//request.setAttribute(Constants.IS_SAVED_QUERY, Constants.TRUE);
 		HttpSession session = request.getSession();
@@ -46,12 +49,15 @@ public class ExecuteQueryAction extends BaseAction
 		IParameterizedQuery parameterizedQuery1 = ObjectCloner.clone(parameterizedQuery);
 		
 		String conditionstr = request.getParameter("conditionList");
+		String rhsList = request.getParameter("strToFormTQ");
 		session.setAttribute(Constants.IS_SAVED_QUERY, Constants.TRUE);
-		
+		Map<Integer,ICustomFormula> customFormulaIndexMap = (Map<Integer,ICustomFormula>)session.getAttribute("customFormulaIndexMap");
+		session.removeAttribute("customFormulaIndexMap");
 		if (conditionstr != null) 
 		{
 			CreateQueryObjectBizLogic bizLogic = new CreateQueryObjectBizLogic();
-			String errorMessage = bizLogic.setInputDataToQuery(conditionstr, parameterizedQuery1.getConstraints(), null);
+			String errorMessage = bizLogic.setInputDataToQuery(conditionstr, parameterizedQuery1.getConstraints(), null,parameterizedQuery);
+			errorMessage = bizLogic.setInputDataToTQ(parameterizedQuery1, Constants.EXECUTE_QUERY_PAGE, rhsList,customFormulaIndexMap);
 			if (errorMessage.trim().length()>0)
 			{
 				ActionErrors errors = new ActionErrors();
@@ -62,7 +68,6 @@ public class ExecuteQueryAction extends BaseAction
 				request.setAttribute("queryId", parameterizedQuery.getId());
 				return actionMapping.findForward(target);
 			}
-			
 		}
 		
 		String errorMessage = QueryModuleUtil.executeQuery(request, parameterizedQuery1);
