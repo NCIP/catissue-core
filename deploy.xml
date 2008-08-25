@@ -94,7 +94,7 @@
 					</else>	
 				</if>
 				-->
-				<available file="${sqlldr}" property="issqlldrPresentInBin"/>		
+				<!--<available file="${sqlldr}" property="issqlldrPresentInBin"/>		
 				<if>	
 					<equals arg1="true" arg2="${issqlldrPresentInBin}" />			
 					<then>
@@ -103,7 +103,7 @@
 					<else>
 						<fail message="${sqlldr} file is not present." />
 					</else>
-				</if>
+				</if> -->
 			</then>
 		</if>				
 		<if>
