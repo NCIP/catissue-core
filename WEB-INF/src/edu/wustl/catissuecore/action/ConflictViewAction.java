@@ -19,6 +19,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -28,6 +30,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.dao.QuerySessionData;
 import edu.wustl.common.dao.queryExecutor.PagenatedResultData;
 import edu.wustl.common.util.XMLPropertyHandler;
@@ -50,6 +53,17 @@ public class ConflictViewAction extends SecureAction
 		ConflictViewForm conflictViewForm = (ConflictViewForm) form;
 		int selectedFilter =  Integer.parseInt(conflictViewForm.getSelectedFilter());
 				
+		// Added by Ravindra to disallow Non Super Admin users to view Conflicting Reports
+		SessionDataBean sessionDataBean = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
+		if(!sessionDataBean.isAdmin())
+		{
+			ActionErrors errors = new ActionErrors();
+	        ActionError error = new ActionError("access.execute.action.denied");
+	        errors.add(ActionErrors.GLOBAL_ERROR, error);
+	        saveErrors(request, errors);
+
+	        return mapping.findForward(Constants.ACCESS_DENIED);
+		}
 		String[] retrieveFilterList = Constants.CONFLICT_FILTER_LIST;
 		List filterList = new ArrayList();
 		for(int i=0;i<retrieveFilterList.length;i++)
