@@ -26,6 +26,10 @@
 				{
 					document.write("<div id='gridbox' width='100%' height='125px' border='0' style='background-color:#d7d7d7;overflow:hidden'></div>");
 				}
+				else if(useFunction == "goToConflictDetails") 
+				{
+                      document.write("<div id='gridbox' width='100%' height='325px' style='background-color:#d7d7d7;overflow:hidden'></div>");
+				}
 				else
 				{
 					document.write("<div id='gridbox' width='100%' height='340px' style='background-color:#d7d7d7;overflow:hidden'></div>");
@@ -81,7 +85,7 @@ function init_grid()
 
 	if(useFunction == "goToConflictDetails" )
 	{
-		colWidth = "33.2,0,33,34,0,0,0";
+		colWidth = "33.3,0,33,34,0,0,0";
 	}
 	
 	//document.write("<hr>"+colWidth+"<hr>");

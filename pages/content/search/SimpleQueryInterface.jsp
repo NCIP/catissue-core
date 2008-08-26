@@ -6,6 +6,7 @@
 	import="edu.wustl.catissuecore.util.global.Constants,edu.wustl.common.actionForm.SimpleQueryInterfaceForm,java.util.List,edu.wustl.common.beans.NameValueBean"%>
 <%@ page import="edu.wustl.common.query.Operator"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
+<%@ page import="edu.wustl.common.util.global.ApplicationProperties"%>
 <%@ page import="java.util.*"%>
 
 
@@ -191,7 +192,11 @@ function vieMapTabSelected(){
     <td class="td_color_bfdcf3"><table border="0" cellpadding="0" cellspacing="0">
       <tr>
         <td class="td_table_head"><span class="wh_ar_b"><bean:message key="<%=header%>" /></span></td>
-        <td align="right"><img src="images/uIEnhancementImages/table_title_corner2.gif" alt="Search Page Title" width="31" height="24" /></td>
+      <% 
+	       String pageTitle= "Page Title - "+ApplicationProperties.getValue(header);
+	  %> 	   
+		
+		<td align="right"><img src="images/uIEnhancementImages/table_title_corner2.gif" alt="<%=pageTitle%>"  width="31" height="24" /></td>
       </tr>
     </table></td>
   </tr>

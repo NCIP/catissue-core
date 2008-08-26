@@ -29,7 +29,7 @@
         <td class="td_tab_bg" ><img src="images/uIEnhancementImages/spacer.gif" alt="spacer" width="50" height="1"></td>
         <td valign="bottom" ><html:link page="/User.do?operation=add&pageOf=pageOfUserAdmin&menuSelected=1"><img src="images/uIEnhancementImages/tab_add_notSelected.jpg" alt="Add" width="57" height="22" border="0" /></html:link><a href="#"></a></td>
         <td valign="bottom"><html:link page="/SimpleQueryInterface.do?pageOf=pageOfUserAdmin&aliasName=User&menuSelected=1"><img src="images/uIEnhancementImages/tab_edit_notSelected.jpg" alt="Edit" width="59" height="22" border="0" /></html:link><a href="#"></a></td>
-        <td valign="bottom"><img src="images/uIEnhancementImages/tab_approve_user1.jpg" alt="Approve New Users" width="146" height="22" border="0" /></td>
+        <td valign="bottom"><img src="images/uIEnhancementImages/tab_approve_user1.jpg" alt="Approve New Users" width="139" height="22" border="0" /></td>
         <td width="90%" valign="bottom" class="td_tab_bg" >&nbsp;</td>
       </tr>
     </table>

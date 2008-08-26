@@ -32,7 +32,7 @@
     <td class="td_color_bfdcf3"><table border="0" cellpadding="0" cellspacing="0">
       <tr>
         <td class="td_table_head" nowrap="nowrap"><span class="wh_ar_b"><bean:message key="app.reportProblem" /></span></td>
-        <td><img src="images/uIEnhancementImages/table_title_corner2.gif" width="31" height="24" alt="Page Title"/></td>
+        <td><img src="images/uIEnhancementImages/table_title_corner2.gif" width="31" height="24" alt="Page Title - Report Problems"/></td>
       </tr>
     </table></td>
   </tr>

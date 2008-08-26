@@ -57,7 +57,7 @@
     <td class="td_color_bfdcf3"><table border="0" cellpadding="0" cellspacing="0">
       <tr>
         <td nowrap="nowrap" class="td_table_head"><span class="wh_ar_b"><bean:message key="app.reportedConflicts"/></span></td>
-        <td><img src="images/uIEnhancementImages/table_title_corner2.gif" alt="Page Title" width="31" height="24" /></td>
+        <td><img src="images/uIEnhancementImages/table_title_corner2.gif" alt="Page Title - Conflicting Reports" width="31" height="24" /></td>
       </tr>
     </table></td>
   </tr>
@@ -70,7 +70,7 @@
       <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
       
       <tr>
-        <td colspan="2" align="left">
+        <td colspan="2" align="left" class="bottomtd">
 			<%@ include file="/pages/content/common/ActionErrors.jsp" %>
 		</td>
       </tr>

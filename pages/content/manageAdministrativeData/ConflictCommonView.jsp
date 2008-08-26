@@ -45,9 +45,9 @@
               <td width="25%" ><bean:write name="conflictCommonForm" property="participantName"/></td>
               <td width="22%" ><strong><bean:message key="caTies.conflict.report.spn"/></strong></td>
               <td width="35%" ><bean:write name="conflictCommonForm" property="surgicalPathologyNumber"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						 <a href="javascript:reportPage()">
-								<span class="view" ><b><bean:message key="caTies.conflict.view.report"/></b></span>
-						</a></td>
+						<html:link href="#" styleClass="view" styleId="viewReport" onclick="reportPage();">
+						<bean:message key="caTies.conflict.view.report"/></span>
+						</html:link></td>
             </tr>
             <tr>
               <td nowrap="nowrap" ><strong><bean:message key="participant.birthDate"/></strong></td>

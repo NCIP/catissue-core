@@ -12,7 +12,7 @@
         <td class="td_table_head"><span class="wh_ar_b">
 									<bean:message key="ReportedProblems.header" /> </span></td>
         <td align="right"><img src="images/uIEnhancementImages/table_title_corner2.gif"
-										width="31" height="24" /></td>
+								alt="Page Title - Reported Problem"		width="31" height="24" /></td>
 								</tr>
     </table></td>
   </tr>

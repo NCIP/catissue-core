@@ -15,17 +15,15 @@
 				<td width="86%" align="right" valign="top"><a
 					href="ReportProblem.do?operation=add" class="white"> <img
 					src="images/uIEnhancementImages/ic_report.gif" width="15"
-					height="12" hspace="3" vspace="0"><bean:message
+					height="12" hspace="2" vspace="0"><bean:message
 					key="app.reportedProblems" /> </a> &nbsp;<a
 					href="ContactUs.do?PAGE_TITLE_KEY=app.contactUs&FILE_NAME_KEY=app.contactUs.file"
-					class="white"> <img
+					class="white"><img
 					src="images/uIEnhancementImages/ic_mail.gif" alt="Summary"
-					width="16" height="12" hspace="3" vspace="0" border="0" />
-				<bean:message key="app.contactUs" /></a>&nbsp; <a
+					width="16" height="12" hspace="3" vspace="0" border="0" /><bean:message key="app.contactUs" /></a>&nbsp; <a
 					href="Summary.do" class="white"> <img
 					src="images/uIEnhancementImages/ic_summary.gif" alt="Summary"
-					width="10" height="10" hspace="3" vspace="0" border="0" />
-				<bean:message key="app.summary" /></a></td>
+					width="10" height="10" hspace="5" vspace="0" border="0" /><bean:message key="app.summary" /></a></td>
 
 				<logic:notEmpty scope="session" name="<%=Constants.SESSION_DATA%>">
 					<td width="14%" align="right" valign="top"><a
