@@ -963,10 +963,11 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 	/**
 	 * (non-Javadoc)
 	 * @throws UserNotAuthorizedException 
+	 * @throws DAOException 
 	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#isAuthorized(edu.wustl.common.dao.AbstractDAO, java.lang.Object, edu.wustl.common.beans.SessionDataBean)
 	 * 
 	 */
-	public boolean isAuthorized(AbstractDAO dao, Object domainObject, SessionDataBean sessionDataBean) throws UserNotAuthorizedException  
+	public boolean isAuthorized(AbstractDAO dao, Object domainObject, SessionDataBean sessionDataBean) throws UserNotAuthorizedException, DAOException  
 	{
 		boolean isAuthorized = false;
 		boolean validOperation;
@@ -1023,7 +1024,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 		return isAuthorized;			
 	}
 
-	private void checkPrivilegeOnDestinationSite(AbstractDAO dao, Object domainObject, SessionDataBean sessionDataBean) throws UserNotAuthorizedException 
+	private void checkPrivilegeOnDestinationSite(AbstractDAO dao, Object domainObject, SessionDataBean sessionDataBean) throws UserNotAuthorizedException, DAOException 
 	{
 		TransferEventParameters tep = (TransferEventParameters) domainObject;
 		StorageContainer sc = null;
@@ -1032,17 +1033,14 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 		{
 			return; // Case when To & FROM Storage containers are the same
 		}
-		
-		try 
+		List list = null;
+		list = dao.retrieve(StorageContainer.class.getName(), Constants.NAME, tep.getToStorageContainer().getName());
+		if(list.isEmpty())
 		{
-			List list = dao.retrieve(StorageContainer.class.getName(), Constants.NAME, tep.getToStorageContainer().getName());
-			sc = (StorageContainer) list.get(0);
-		} 
-		catch (DAOException e) 
-		{
-			Logger.out.debug(e.getMessage(), e);
+			throw new DAOException(ApplicationProperties.getValue("sc.unableToFindContainer"));
 		}
-
+		sc = (StorageContainer) list.get(0);
+		
 		Site site = sc.getSite();
 		Set<Long> siteIdSet = new UserBizLogic().getRelatedSiteIds(sessionDataBean.getUserId());
 		
