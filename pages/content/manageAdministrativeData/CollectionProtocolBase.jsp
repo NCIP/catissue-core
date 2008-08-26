@@ -48,6 +48,7 @@
         formId.submit();
 	}
 
+
 </script>
 
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
@@ -60,7 +61,7 @@
     </table></td>
   </tr>
   <tr>
-    <td class="tablepadding"><table width="100%" border="0" cellpadding="0" cellspacing="0">
+    <td ><table width="100%" border="0" cellpadding="0" cellspacing="0">
       <tr>
         <td class="td_tab_bg" ><img src="images/spacer.gif" alt="spacer" width="50" height="1"></td>
         <logic:equal parameter="operation"	value='add'>
@@ -78,55 +79,55 @@
 
 		
       <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
+	  <logic:equal name="isParticipantReg" value="true">
         <tr>
           <td colspan="2" align="left">
-          <logic:equal name="isParticipantReg" value="true">
+          
 			<span class="messagetexterror">
 				User can not Add/edit Events and Specimen Requirements
 			</span>
-		</logic:equal>
+		
 				<%@ include file="/pages/content/common/ActionErrors.jsp" %>
 		  </td>
         </tr>
+		</logic:equal>
        		<tr>
-				<td width="20%"  valign="top" height="100%">
-					<iframe id="CPTreeView" src="ShowCollectionProtocol.do?operation=${requestScope.operation}" scrolling="auto" frameborder="0" width="100%" name="CPTreeView" height="410" >
+				<td width="20%"  valign="top">
+					<iframe id="CPTreeView" src="ShowCollectionProtocol.do?operation=${requestScope.operation}" scrolling="auto" frameborder="0" width="100%" name="CPTreeView" height="400" >
 							<bean:message key="errors.browser.not.supports.iframe"/>
 					</iframe>
 				</td>
-							 <td width="80%" colspan="3" valign="top" height="100%">
+							 <td width="80%" valign="top" >
 							 <logic:equal name="operation" value="add">
-								<iframe name="SpecimenRequirementView"	src="CollectionProtocol.do?operation=add&pageOf=pageOfCollectionProtocol" scrolling="auto" frameborder="0" width="100%" height="410" >
+								<iframe name="SpecimenRequirementView"	id="SpecimenRequirementView" src="CollectionProtocol.do?operation=add&pageOf=pageOfCollectionProtocol" scrolling="auto" frameborder="0" width="100%" height="400" >
 									<bean:message key="errors.browser.not.supports.iframe"/>
 								</iframe>
 							</logic:equal>
 							 <logic:equal name="operation" value="edit">
-								<iframe name="SpecimenRequirementView"	src="CollectionProtocol.do?operation=edit&pageOf=pageOfCollectionProtocol&invokeFunction=cp" scrolling="auto" frameborder="0" width="100%" height="410" >
+								<iframe name="SpecimenRequirementView"	src="CollectionProtocol.do?operation=edit&pageOf=pageOfCollectionProtocol&invokeFunction=cp" scrolling="auto" frameborder="0" width="100%" height="400" >
 									<bean:message key="errors.browser.not.supports.iframe"/>
 								</iframe>
 							 </logic:equal>	
 							 </td>
 						</tr>
 					
-		</table>
-	</td>
- </tr>
+		
  <tr>
-		 <td class="tablepadding">
+		 <td colspan="2">
 		    <table width="100%" border="0" cellpadding="0" cellspacing="0">
-			 <tr>
-
+			 <tr >
+					<td class="buttonbg" >
 					<logic:equal name="isParticipantReg" value="true">
 						   &nbsp;
 					</logic:equal>
 					<logic:notEqual name="isParticipantReg" value="true">
-						<td class="buttonbg" >
+						
 						<html:button styleClass="blue_ar_b" property="forwardPage" onclick="openEventPage()" >
 							Add Events >>
 						</html:button>
-						
+						&nbsp;|&nbsp;
 					</logic:notEqual>
-					&nbsp;|&nbsp;
+					
 					
 					 <html:button styleClass="blue_ar_b" property="forwardPage" value="Save Collection Protocol" onclick="submitCP()">
 					</html:button>
@@ -135,4 +136,7 @@
 				   </table>
 				   </td>
 				</tr>
+				</table>
+	</td>
+ </tr>
 </table>
