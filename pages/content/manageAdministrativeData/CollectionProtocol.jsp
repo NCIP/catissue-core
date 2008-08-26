@@ -145,10 +145,10 @@ function updateCPTree()
 						</tr>
 					</logic:equal>
 					   </table>
-					   &nbsp;
+					  
 					  <table cellpadding="0" cellspacing="0" border="0" width = "100%" id="submittable">
                       <tr>
-                        <td colspan="3" class="black_ar"><br><label><html:checkbox property="aliqoutInSameContainer"><bean:message key="aliquots.storeAllAliquotes" /></html:checkbox></label><br><br></td>
+                        <td class="black_ar"><label><html:checkbox property="aliqoutInSameContainer"><bean:message key="aliquots.storeAllAliquotes" /></html:checkbox></label><br><br></td>
                       </tr>
                       </table>
 					<%@ include file="/pages/content/ConsentTracking/DefineConsent.jsp" %>
