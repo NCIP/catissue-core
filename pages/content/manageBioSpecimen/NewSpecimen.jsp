@@ -1639,7 +1639,7 @@
 								<html:text styleClass="black_ar"  size="2" styleId="pos2" property="pos2" disabled= "<%=textBoxDisable%>"/>
 							</td>
 							<td class="groupelements">
-								<html:button styleClass="blue_ar" property="containerMap" onclick="<%=buttonOnClicked%>" disabled= "<%=textBoxDisable%>">
+								<html:button styleClass="black_ar" property="containerMap" onclick="<%=buttonOnClicked%>" disabled= "<%=textBoxDisable%>">
 											<bean:message key="buttons.map"/>
 								</html:button>
 							</td>
