@@ -5,11 +5,14 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.catissuecore.bean.OrderSpecimenBean;
 import edu.wustl.catissuecore.util.global.Constants;
 
 public class OrderBiospecimenArrayForm extends AbstractActionForm 
@@ -168,6 +171,8 @@ public class OrderBiospecimenArrayForm extends AbstractActionForm
 	{
 
 		ActionErrors errors = new ActionErrors();
+		HttpSession session = request.getSession();
+		Map dataMap = (Map) session.getAttribute(Constants.REQUESTED_BIOSPECIMENS);
 
 		if (selectedItems != null) 
 		{
@@ -183,6 +188,22 @@ public class OrderBiospecimenArrayForm extends AbstractActionForm
 					String disSiteKey = "OrderSpecimenBean:" + cnt + "_distributionSite";
 					String key = "OrderSpecimenBean:" + cnt + "_requestedQuantity";
 					
+					//to check for site:Only those specimen Array can be ordered which belongs to same site
+					if (dataMap!=null && dataMap.containsKey("None"))
+					{
+						List orderItems = (List) dataMap.get("None");
+						if(!orderItems.isEmpty() && orderItems.size()>0)
+						{	
+							OrderSpecimenBean orderSpecimenBean = (OrderSpecimenBean) orderItems.get(0);
+							if(!orderSpecimenBean.getDistributionSite().equals(values.get(disSiteKey)))
+							{
+								errors.add("values", new ActionError("errors.same.distributionSite"));
+								values.clear();
+								break;
+							}
+						}
+						
+					}
 					
 					if((values.get(disSiteKey)) == null || !isSameSite())
 					{

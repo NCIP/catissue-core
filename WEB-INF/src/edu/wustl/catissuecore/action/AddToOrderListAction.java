@@ -320,6 +320,7 @@ public class AddToOrderListAction  extends BaseAction
 			arrayMap.put("OrderSpecimenBean:"+strSelectedItems[j]+"_isDerived",orderArrayFormObject.getTypeOfArray());
 			arrayMap.put("OrderSpecimenBean:"+strSelectedItems[j]+"_typeOfItem",tempOrderArrayFormObjectMap.get("OrderSpecimenBean:"+strSelectedItems[j]+"_typeOfItem"));
 			arrayMap.put("OrderSpecimenBean:"+strSelectedItems[j]+"_arrayName","None");
+			arrayMap.put("OrderSpecimenBean:"+strSelectedItems[j]+"_distributionSite", tempOrderArrayFormObjectMap.get("OrderSpecimenBean:"+strSelectedItems[j]+"_distributionSite"));
 			if(orderArrayFormObject.getTypeOfArray().equals("false"))
 			{
 				arrayMap.put("OrderSpecimenBean:"+strSelectedItems[j]+"_unitRequestedQuantity", " ");
