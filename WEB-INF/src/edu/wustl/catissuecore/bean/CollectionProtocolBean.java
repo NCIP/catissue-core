@@ -1,7 +1,7 @@
 package edu.wustl.catissuecore.bean;
 
 import java.io.Serializable;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import edu.wustl.common.util.global.Constants;
@@ -63,7 +63,7 @@ public class CollectionProtocolBean implements Serializable
 	/**
 	 * Map for Storing Values of Consent Tiers.
 	 */
-	private Map consentValues = new HashMap();
+	private Map consentValues = new LinkedHashMap();//bug 8905
 	
 	/**
 	 * No of Consent Tier
