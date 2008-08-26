@@ -480,13 +480,14 @@ public class DistributionBizLogic extends DefaultBizLogic
 				else
 				{
 					SpecimenArray specimenArrayObj = distributedItem.getSpecimenArray();
-					specimenArrayObj = (SpecimenArray) HibernateMetaData.getProxyObjectImpl(specimenArrayObj);
-					Object object = dao.retrieve(SpecimenArray.class.getName(), specimenArrayObj.getId());
-					if (object == null)
+					//specimenArrayObj = (SpecimenArray) HibernateMetaData.getProxyObjectImpl(specimenArrayObj);
+					//TODO : no need to retrieve the complete specimenArray object ....retrieve only activity status using hql 
+					specimenArrayObj = (SpecimenArray)dao.retrieve(SpecimenArray.class.getName(), specimenArrayObj.getId());
+					if (specimenArrayObj == null)
 					{
 						throw new DAOException(ApplicationProperties.getValue("errors.distribution.specimenArrayNotFound"));
 					}
-					else if (!((SpecimenArray) object).getActivityStatus().equals(edu.wustl.common.util.global.Constants.ACTIVITY_STATUS_ACTIVE))
+					else if (!((SpecimenArray) specimenArrayObj).getActivityStatus().equals(edu.wustl.common.util.global.Constants.ACTIVITY_STATUS_ACTIVE))
 					{
 						throw new DAOException(ApplicationProperties.getValue("errors.distribution.closedOrDisableSpecimenArray"));
 					}

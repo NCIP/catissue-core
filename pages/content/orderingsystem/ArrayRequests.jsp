@@ -215,22 +215,17 @@
 								 	<bean:message key="requestdetails.header.RequestedSpecimenDetails" />
 							</strong>
 								 	</td>
-								 	<td class="tableheading" scope="col" align="left" width="10%" valign="top" rowspan="2" scope="col">
-										<strong>
-										<bean:message key='requestdetails.datatable.label.AvailableQty'/>
-										</strong>
-									</td>
-								
+								 	
 									<!-- th class="dataTableHeader" scope="col" align="left" width="10%" rowspan="2" scope="col">
 										<bean:message key='requestdetails.datatable.label.AssignQty'/>
 									</th-->
 								
-									<td class="tableheading" scope="col" align="left" width="20%" rowspan="2" valign="top" >
+									<td class="tableheading" scope="col" align="left" width="25%" rowspan="2" valign="top" >
 										<strong>
 										<bean:message key='requestdetails.datatable.label.AssignStatus'/>
 										</strong>
 									</td>
-									<td class="tableheading" width="20%" scope="col" align="left" rowspan="2" valign="top">
+									<td class="tableheading" width="25%" scope="col" align="left" rowspan="2" valign="top">
 									<strong>
 										<bean:message key="requestdetails.header.label.Comments" />
 									</strong>
@@ -241,16 +236,19 @@
 										<bean:message key='requestdetails.datatable.label.RequestItem'/>
 									</td>
 								
+									
+									<td class="subtd" scope="col" align="left" width="12%" nowrap="nowrap"
+									>
+										<bean:message key='orderingSystem.tableheader.label.type'/>,
+										<bean:message key='requestdetails.datatable.label.RequestedQty'/>
+									</td>
+
 									<td class="subtd" scope="col" align="left" width="16%">
 										<bean:message key='requestdetails.datatable.label.RequestFor'/>
 									</td>
-									<td class="subtd" scope="col" align="left" width="12%" nowrap="nowrap"
-									>
-										Class, Type
-									</td>
 								
 									<td class="subtd" scope="col" align="left" width="4%">
-										<bean:message key='requestdetails.datatable.label.RequestedQty'/>
+										<bean:message key='requestdetails.datatable.label.AvailableQty'/>
 									</td>
 		 		  </tr>
 		
@@ -301,6 +299,8 @@
 
 							}
 							%>
+
+
 						
 							
 						<%	//This is to update available qty for the specimen selected from requestFor drop down.
@@ -327,6 +327,8 @@
 							<html:hidden name="requestDetailsForm" property="<%=spType %>"/>
 							<html:hidden name="requestDetailsForm" property="<%= actualSpecimenClass %>" />	
 							<html:hidden name="requestDetailsForm" property="<%= actualSpecimenType %>" />	
+							<html:hidden name="requestDetailsForm" property="<%=assignStatusArray%>"  />
+							
 									
 										 	
 								 	<td class="<%=rowStyle%>" colspan="2">						 			<% 
@@ -334,7 +336,7 @@
 									   {
 									%>			
 										<%-- Display derivative icon for child specimens --%>								
-										<img src="images/uIEnhancementImages/Distribution.GIF" border="0"/>
+										<img src="images/Distribution.GIF" border="0"/>
 									<% }
 									   else if(((String)(requestDetailsForm.getValue("DefinedArrayDetailsBean:"+rowNumber+"_instanceOf"))).trim().equalsIgnoreCase("DerivedPathological")
 												|| ((String)(requestDetailsForm.getValue("DefinedArrayDetailsBean:"+rowNumber+"_instanceOf"))).trim().equalsIgnoreCase("Pathological"))
@@ -345,13 +347,30 @@
 										<bean:write name="requestDetailsForm" property="<%=rqstdItem %>" />
 									</span>
 								 	</td>
+
+									<%
+									 	//if(!(((String)(requestDetailsForm.getValue("DefinedArrayDetailsBean:"+rowNumber+"_assignedStatus"))).trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_READY_FOR_ARRAY_PREPARATION)))
+									 	//{
+									 	//	disableArrayOrderItemRow=false;												
+									 	//}
+									 	String orderItemClassNameInArray = ((String)(requestDetailsForm.getValue("DefinedArrayDetailsBean:"+rowNumber+"_className")));
+									 	String orderItemtypeInArray = ((String)(requestDetailsForm.getValue("DefinedArrayDetailsBean:"+rowNumber+"_type")));
+									 %>
 								 	
-								 	<%
-									 		//if(((String)(requestDetailsForm.getValue("DefinedArrayDetailsBean:"+rowNumber+"_instanceOf"))).trim().equalsIgnoreCase("Existing"))
-									 		//{
-									 		//	disableArrayOrderItemRow=true;
-									 		//}
-									%>
+								 	
+								 	
+									<td class="<%=rowStyle%>" >
+									 		<bean:write name="requestDetailsForm" property="<%= spClass %>" />
+									
+								 			<bean:write name="requestDetailsForm" property="<%=requestedQuantity %>" />
+								 			<span>		
+												<script>
+													var orderItemUnitInArray = getUnit('<%= orderItemClassNameInArray %>','<%= orderItemtypeInArray %>');
+													document.write(orderItemUnitInArray);
+												</script>
+											</span>
+								 	</td>
+
 								 	<td class="<%=rowStyle%>">
 								 	<%if(!((String)(requestDetailsForm.getValue("DefinedArrayDetailsBean:"+rowNumber+"_instanceOf"))).trim().equalsIgnoreCase("Existing"))
 									 			{%>
@@ -390,7 +409,7 @@
 												<img src="images/uIEnhancementImages/ic_cl_diag.gif" border="0" width="24" height="18" title="<%= ApplicationProperties.getValue("requestdetails.tooltip.specimenTreeTooltip") %>">
 											</a>
 											<!-- Displaying add new link if specimen does not exist -->
-												<% if(((requestDetailsForm.getRequestFor("RequestForDropDownListArray:"+rowNumber)) == null) || (((List)(requestDetailsForm.getRequestFor("RequestForDropDownListArray:"+rowNumber))).size() == 0))
+												<% if(((requestDetailsForm.getRequestFor("RequestForDropDownListArray:"+rowNumber)) == null) || (((List)(requestDetailsForm.getRequestFor("RequestForDropDownListArray:"+rowNumber))).size() <= 1))
 													{
 														if((((String)(requestDetailsForm.getValue("DefinedArrayDetailsBean:"+rowNumber+"_instanceOf"))).trim().equalsIgnoreCase("DerivedPathological")) || (((String)(requestDetailsForm.getValue("DefinedArrayDetailsBean:"+rowNumber+"_instanceOf"))).trim().equalsIgnoreCase("Pathological")))
 												 		{												 			
@@ -415,27 +434,8 @@
 												</span>
 									      <%}%> 
 							 		</td>
-								 	<td class="<%=rowStyle%>" >
-									 		<bean:write name="requestDetailsForm" property="<%= spClass %>" />, <bean:write name="requestDetailsForm" property="<%= spType %>" />
-									 </td>
-								 	<%
-									 	//if(!(((String)(requestDetailsForm.getValue("DefinedArrayDetailsBean:"+rowNumber+"_assignedStatus"))).trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_READY_FOR_ARRAY_PREPARATION)))
-									 	//{
-									 	//	disableArrayOrderItemRow=false;												
-									 	//}
-									 	String orderItemClassNameInArray = ((String)(requestDetailsForm.getValue("DefinedArrayDetailsBean:"+rowNumber+"_className")));
-									 	String orderItemtypeInArray = ((String)(requestDetailsForm.getValue("DefinedArrayDetailsBean:"+rowNumber+"_type")));
-									 %>
 								 	
-								 	<td class="<%=rowStyle%>" >
-								 			<bean:write name="requestDetailsForm" property="<%=requestedQuantity %>" />
-								 			<span>		
-												<script>
-													var orderItemUnitInArray = getUnit('<%= orderItemClassNameInArray %>','<%= orderItemtypeInArray %>');
-													document.write(orderItemUnitInArray);
-												</script>
-											</span>
-								 	</td>
+								 
 								 	
 								 	<td class="<%=rowStyle%>" >
 									 		<div id="<%=updateAvaiQtyForItemInArray%>">
@@ -607,10 +607,11 @@
 								disableExistingArrayOrderItem = true;
 							%>
 							<html:hidden name="requestDetailsForm" property="<%=assignedStatus%>"  />
-							<html:hidden name="requestDetailsForm" property="<%= description %>" />							
+							<html:hidden name="requestDetailsForm" property="<%= description %>" />				
 							<%
 							}
 					 		%>
+							
 					 		
 					 		<td class="<%=fontStyle%>">
 					 			<!-- bean:write name="existingArrayRequestObj" property="bioSpecimenArrayName" /-->

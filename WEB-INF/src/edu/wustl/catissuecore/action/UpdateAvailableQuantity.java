@@ -21,7 +21,10 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.bizlogic.OrderBizLogic;
 import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 
 
@@ -47,20 +50,18 @@ public class UpdateAvailableQuantity extends BaseAction
 		String specimenId = (String)request.getParameter("selectedSpecimen");
 		//The row number.
 		String finalSpecimenListId = (String)request.getParameter("finalSpecimenListId");
-		//The list containing Specimen Objects.
-		List specimenList = (ArrayList)request.getSession().getAttribute("finalSpecimenList");
+		OrderBizLogic orderBizLogic = (OrderBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
 		
-		Iterator iter = specimenList.iterator();
+	
 		String quantity = "";
-		while(iter.hasNext())
+		Specimen specimen = null;
+		if(specimenId != null && !specimenId.equals(""))
 		{
-			Specimen specimen = (Specimen)iter.next();
-			if(specimen.getId().compareTo(new Long(specimenId)) == 0)
-			{
-				quantity = specimen.getAvailableQuantity().toString();
-				break;
-			}				
-		}		
+			Long specId =  Long.parseLong(specimenId);
+			specimen = orderBizLogic.getSpecimenObject(specId);
+			quantity = specimen.getAvailableQuantity().toString();
+						
+		}
 		//Writing to response
 		PrintWriter out = response.getWriter();		
 		out.print(quantity);

@@ -40,7 +40,9 @@ import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.SpecimenArrayOrderItem;
+import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.SpecimenOrderItem;
 import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.User;
@@ -195,7 +197,7 @@ public class OrderBizLogic extends DefaultBizLogic
 		while (iter.hasNext())
 		{
 			OrderItem orderItem = (OrderItem) iter.next();
-			if (orderItem.getDistributedItem() != null)
+			/*if (orderItem.getDistributedItem() != null)
 			{
 				if (orderItem.getStatus().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED)
 						||orderItem.getStatus().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE))
@@ -211,7 +213,7 @@ public class OrderBizLogic extends DefaultBizLogic
 						throw new DAOException(ApplicationProperties.getValue("orderdistribution.quantity.format.errmsg"));
 					}
 				}
-			}
+			}*/
 			Collection oldOrderItemColl = oldOrder.getOrderItemCollection();
 			Iterator oldOrderItemCollIter = oldOrderItemColl.iterator();
 			while (oldOrderItemCollIter.hasNext())
@@ -235,8 +237,10 @@ public class OrderBizLogic extends DefaultBizLogic
 						}
 						else if (oldorderItem instanceof NewSpecimenArrayOrderItem)
 						{
-							NewSpecimenArrayOrderItem newSpecimenArrayOrderItem = (NewSpecimenArrayOrderItem) oldorderItem;
-							if (newSpecimenArrayOrderItem.getSpecimenArray() == null)
+							SpecimenArray  specimenArray = (SpecimenArray)getSpecimenArray(oldorderItem.getId(),dao);
+							NewSpecimenArrayOrderItem newSpecimenArrayOrderItem = (NewSpecimenArrayOrderItem)oldorderItem;
+							newSpecimenArrayOrderItem.setSpecimenArray(specimenArray);
+							if( newSpecimenArrayOrderItem.getSpecimenArray() == null)
 							{
 								throw new DAOException(ApplicationProperties.getValue("orderdistribution.distribution.arrayNotCreated.errmsg"));
 							}
@@ -348,7 +352,7 @@ public class OrderBizLogic extends DefaultBizLogic
 		//		Adding items inside New Defined Array in oldOrderItemColl
 		Collection tempNewOrderItemSet = new HashSet();
 		Iterator tempNewItemIter = newOrderItemSet.iterator();
-		while (tempNewItemIter.hasNext())
+		/*while (tempNewItemIter.hasNext())
 		{
 			OrderItem tempNewOrderItem = (OrderItem) tempNewItemIter.next();
 
@@ -365,7 +369,7 @@ public class OrderBizLogic extends DefaultBizLogic
 					}
 				}
 			}
-		}
+		}*/
 		if (tempNewOrderItemSet.size() > 0)
 		{
 			newOrderItemSet.addAll(tempNewOrderItemSet);
@@ -1204,6 +1208,15 @@ public class OrderBizLogic extends DefaultBizLogic
 		
 	}
 	
+	/**
+	 * @param request
+	 * @param attr
+	 * @param className
+	 * @param pathologicalCaseList
+	 * @param bizLogic
+	 * @param dao
+	 * @throws DAOException
+	 */
 	private void getList(HttpServletRequest request , String attr , String className , List pathologicalCaseList,
 			IBizLogic bizLogic,AbstractDAO dao)throws DAOException
 	{
@@ -1220,6 +1233,11 @@ public class OrderBizLogic extends DefaultBizLogic
 		
 	}
 	
+	/**
+	 * @param request
+	 * @return
+	 * @throws Exception
+	 */
 	public List getDistributionProtocol(HttpServletRequest request) throws Exception
 	{
 //		to get the distribution protocol name
@@ -1236,6 +1254,13 @@ public class OrderBizLogic extends DefaultBizLogic
 		return protocolList;
 	}
 	
+	/**
+	 * @param orderNew
+	 * @param sessionDataBean
+	 * @param dao
+	 * @throws UserNotAuthorizedException
+	 * @throws DAOException
+	 */
 	private void disposeSpecimen(OrderDetails orderNew,
 			SessionDataBean sessionDataBean, DAO dao) throws UserNotAuthorizedException, DAOException {
 		
@@ -1288,6 +1313,13 @@ public class OrderBizLogic extends DefaultBizLogic
 		}
 	}
 
+	/**
+	 * @param specimenArray
+	 * @param dao
+	 * @param sessionDataBean
+	 * @throws DAOException
+	 * @throws UserNotAuthorizedException
+	 */
 	private void updateSpecimenArray(SpecimenArray specimenArray, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException {
 		
 		SpecimenArrayBizLogic specimenArrayBizLogic=new SpecimenArrayBizLogic();
@@ -1350,6 +1382,11 @@ public class OrderBizLogic extends DefaultBizLogic
 		return specimen;
 	}
 	
+	/**
+	 * It retrieves the SCG
+	 * @param scgId
+	 * @return
+	 */
 	public SpecimenCollectionGroup retrieveSCG(Long scgId)
 	{
 		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
@@ -1374,6 +1411,104 @@ public class OrderBizLogic extends DefaultBizLogic
 		}
 		
 		return scg;
+	}
+	/**
+	 * It retrieves the NewSpecimenArrayOrder Item
+	 * @param newSpecimenArrayId
+	 * @return
+	 */
+	public NewSpecimenArrayOrderItem retrieveNewSpecimenArrayOrderItem(Long newSpecimenArrayId)
+	{
+		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+		NewSpecimenArrayOrderItem newSpecimenArrayOrderItem = null;
+		try {
+			dao.openSession(null);
+			newSpecimenArrayOrderItem = (NewSpecimenArrayOrderItem)dao.retrieve(NewSpecimenArrayOrderItem.class.getName(),	newSpecimenArrayId);
+			newSpecimenArrayOrderItem.setSpecimenArray((SpecimenArray)getSpecimenArray(newSpecimenArrayOrderItem.getId(), dao));
+		
+		
+		} catch (DAOException e) {
+			
+			e.printStackTrace();
+		}finally
+		{
+			try
+			{
+				dao.closeSession();
+			}
+			catch(DAOException daoEx)
+			{
+				Logger.out.error(daoEx.getMessage(), daoEx);
+				
+			}
+		}
+		
+		return newSpecimenArrayOrderItem;
+	}
+	
+	/**
+	 * It retrieves the SpecimenOrderItem 
+	 * @param specimenOrderItemId
+	 * @return
+	 */
+	public SpecimenOrderItem retrieveSpecimenOrderItem(Long specimenOrderItemId)
+	{
+		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+		SpecimenOrderItem specimenOrderItem = null;
+		try {
+			dao.openSession(null);
+			specimenOrderItem = (SpecimenOrderItem)dao.retrieve(SpecimenOrderItem.class.getName(),	specimenOrderItemId);
+			NewSpecimenArrayOrderItem newSpecimenArrayOrderItem = (NewSpecimenArrayOrderItem)specimenOrderItem.getNewSpecimenArrayOrderItem();
+			specimenOrderItem.setNewSpecimenArrayOrderItem(newSpecimenArrayOrderItem);
+			
+		} catch (DAOException e) {
+			
+			e.printStackTrace();
+		}finally
+		{
+			try
+			{
+				dao.closeSession();
+			}
+			catch(DAOException daoEx)
+			{
+				Logger.out.error(daoEx.getMessage(), daoEx);
+				
+			}
+		}
+		
+		return specimenOrderItem;
+	}
+	
+	/**
+	 * To retreive the specimenArray
+	 * @param orderItemId
+	 * @param dao
+	 * @return
+	 * @throws DAOException
+	 */
+	private SpecimenArray getSpecimenArray(Long orderItemId,DAO dao) throws DAOException
+	{
+		SpecimenArray specimenArray = null;
+		try {
+			if(orderItemId!=null )
+				{
+					String hql =" select newSpecimenArrayOrderItem.specimenArray " +//,elements(specimenArray.specimenArrayContentCollection)" +
+					" from edu.wustl.catissuecore.domain.NewSpecimenArrayOrderItem as newSpecimenArrayOrderItem " +
+					" where newSpecimenArrayOrderItem.id = "+orderItemId;
+						
+					List specimenArrayList = dao.executeQuery(hql, null, false, null);
+					if(specimenArrayList!=null && !specimenArrayList.isEmpty())
+					{
+						specimenArray	=(SpecimenArray)specimenArrayList.get(0);
+					}
+				}
+			} catch (ClassNotFoundException e) {
+				
+				e.printStackTrace();
+			}
+		
+			return specimenArray;
 	}
 	
 	

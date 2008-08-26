@@ -631,27 +631,47 @@ public class RequestDetailsForm extends AbstractActionForm
 			//}
 			
 			List allSpecimen = new ArrayList();
-			allSpecimen = OrderingSystemUtil.getAllSpecimen(derivedSpecimenOrderItem.getParentSpecimen());
+			if(derivedSpecimenOrderItem.getNewSpecimenArrayOrderItem()!=null)
+			{
+				Collection childrenSpecimenList = OrderingSystemUtil.getAllChildrenSpecimen(derivedSpecimenOrderItem.getParentSpecimen().getChildSpecimenCollection());
+				allSpecimen = OrderingSystemUtil.getChildrenSpecimenForClassAndType(childrenSpecimenList, derivedSpecimenOrderItem
+						.getSpecimenClass(), derivedSpecimenOrderItem.getSpecimenType());
+								
+			} else {
+				
+				allSpecimen = OrderingSystemUtil.getAllSpecimen(derivedSpecimenOrderItem.getParentSpecimen());
+				
+			}
+			
 			SpecimenComparator comparator = new SpecimenComparator();
 			Collections.sort(allSpecimen, comparator);
-						
-			List childrenSpecimenListToDisplay = OrderingSystemUtil.getNameValueBeanList(allSpecimen,null);
-			
+			List childrenSpecimenListToDisplay  = OrderingSystemUtil.getNameValueBeanList(allSpecimen,null);
 			values.put(availableQty, derivedSpecimenOrderItem.getParentSpecimen().getAvailableQuantity().toString());
 			values.put(selectedSpecimenTypeKey,"NA");
 			
+			if (orderItem.getStatus().equals(Constants.ORDER_REQUEST_STATUS_NEW))
+				values.put(assignStatus, Constants.ORDER_REQUEST_STATUS_PENDING_FOR_DISTRIBUTION);
 			
-			if (childrenSpecimenListToDisplay.size() != 0)
+			if (!allSpecimen.isEmpty())
 			{
 				values.put(availableQty, (((Specimen) allSpecimen.get(0)).getAvailableQuantity().toString()));
-				if (orderItem.getStatus().equals(Constants.ORDER_REQUEST_STATUS_NEW))
-					values.put(assignStatus, Constants.ORDER_REQUEST_STATUS_PENDING_FOR_DISTRIBUTION);
+				
 			}
 			else
 			{
-				values.put(availableQty, "NA");//derivedSpecimenorderItem.getSpecimen().getAvailableQuantity().getValue().toString()
+				values.put(availableQty, "");//derivedSpecimenorderItem.getSpecimen().getAvailableQuantity().getValue().toString()
 
 			}
+			
+			
+			if(allSpecimen.size() != 0  && derivedSpecimenOrderItem.getNewSpecimenArrayOrderItem()!=null)
+			{
+					Specimen spec = ((Specimen)allSpecimen.get(0));
+					values.put(requestFor, spec.getId());
+			} else {
+					values.put(requestFor, "#");
+			}
+			
 			
 			if(derivedSpecimenOrderItem.getStatus().equals(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED)
 					||derivedSpecimenOrderItem.getStatus().equals(assignStatus.equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE)))
@@ -675,7 +695,7 @@ public class RequestDetailsForm extends AbstractActionForm
 				values.put(assignQty, derivedSpecimenOrderItem.getDistributedItem().getQuantity().toString());
 				
 			}
-			values.put(requestFor, "#");
+			
 			values.put(actualSpecimenClass, derivedSpecimenOrderItem.getParentSpecimen().getSpecimenClass());
 			values.put(actualSpecimenType, derivedSpecimenOrderItem.getParentSpecimen().getSpecimenType());
 			requestForDropDownMap.put(specimenList, childrenSpecimenListToDisplay);
