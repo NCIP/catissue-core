@@ -67,7 +67,7 @@ window.onresize = function() { setFrameHeight('cpFrameNew', .9,slope); setFrameH
 		</td>
 		<!--P.G. - Start 24May07:Bug 4291:Added source as initial action for blank screen-->
 		<td width="72.5%" valign="top">
-			<iframe id="cpFrameNew" name="<%=Constants.DATA_DETAILS_VIEW%>" src="<%=Constants.BLANK_SCREEN_ACTION%>" scrolling="auto" frameborder="1" width="99.9%" >
+			<iframe id="cpFrameNew" name="<%=Constants.DATA_DETAILS_VIEW%>" src="<%=Constants.BLANK_SCREEN_ACTION%>" scrolling="auto" frameborder="1" width="99%" >
 				Your Browser doesn't support IFrames.
 			</iframe>
 		</td>
