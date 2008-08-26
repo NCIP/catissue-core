@@ -156,18 +156,19 @@ public class UserBizLogic extends DefaultBizLogic
 			//	 {
 			//		 securityManager.assignRoleToUser(csmUser.getUserId().toString(),"1");
 			//	 }
+				String role = "";
 				if (user.getRoleId() != null)
 				{
                     if (user.getRoleId().equalsIgnoreCase(Constants.SUPER_ADMIN_USER))
                     {
-                        user.setRoleId(Constants.ADMIN_USER);
+                        role = Constants.ADMIN_USER;
                     }
                     else
                     {
-                    	user.setRoleId(Constants.NON_ADMIN_USER);
+                    	role = Constants.NON_ADMIN_USER;
                     }
                   
-					SecurityManager.getInstance(UserBizLogic.class).assignRoleToUser(csmUser.getUserId().toString(), user.getRoleId());
+					SecurityManager.getInstance(UserBizLogic.class).assignRoleToUser(csmUser.getUserId().toString(), role);
 				}
 
 				user.setCsmUserId(csmUser.getUserId());
@@ -1872,7 +1873,8 @@ public class UserBizLogic extends DefaultBizLogic
 			}
 			if(userRowIdMap==null)
 			{
-				return Constants.siteIsRequired;
+				if((user.getSiteCollection().isEmpty()) || user.getRoleId()==null)
+					return Constants.siteIsRequired;
 			}
 			
 			if(userRowIdMap != null)
