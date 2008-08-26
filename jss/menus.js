@@ -36,10 +36,6 @@ Ext.onReady(function(){
                        }
                     ]
                 }
-            },
-            {
-           		text: 'Assign Privileges',
-                href:'AssignPrivilegesPage.do?pageOf=pageOfAssignPrivilegesPage'
             }
         ]
     });
@@ -167,7 +163,7 @@ Ext.onReady(function(){
                             text: 'Edit',
                              href:'SimpleQueryInterface.do?pageOf=pageOfStorageContainer&aliasName=StorageContainer'
                         }, {
-                            text: 'ViewMap',
+                            text: 'View Map',
                              href:'OpenStorageContainer.do?operation=showEditAPageAndMap&pageOf=pageOfStorageContainer'
                         }
                     ]
@@ -265,8 +261,8 @@ Ext.onReady(function(){
                 href:'ReportedProblemShow.do?pageNum=1'
             },
 			{
-                text: 'Conflicting Reports',
-				tooltip:'Shows Conflicting Reports',
+                text: 'Conflicting SPRs',
+				tooltip:'Shows Conflicting Surgical Pathology Reports',
                 href:'ConflictView.do?pageNum=1'
             }
 		]
@@ -404,32 +400,22 @@ Ext.onReady(function(){
 				tooltip:'Saved Queries',
 			    href : 'RetrieveQueryAction.do'                       
             },
-            {
-                text: 'Search',
+			{
+                text: 'Simple',
 				tooltip:'Simple Search',
-				href:'SimpleQueryInterface.do?pageOf=pageOfSimpleQueryInterface',
-                menu: {        // <-- submenu by nested config object
-                    items: [
-                        // stick any markup in a menu
-                       {
-                            text: 'Simple',
-                            href:'SimpleQueryInterface.do?pageOf=pageOfSimpleQueryInterface'
-                        }, {
-                            text: 'Advanced',
-						    href : 'QueryWizard.do?'
-                           }
-                    ]
-                }
+			    href : 'SimpleQueryInterface.do?pageOf=pageOfSimpleQueryInterface'                       
             },
-
-              {
-
+			{
+                text: 'Advanced',
+				tooltip:'Advanced Search',
+			    href : 'QueryWizard.do?'                       
+            },
+            {
                 text: 'My List View',
 				tooltip:'My List View',
                 href:'ViewCart.do?operation=view'
             }
         ]
-
     });
 
 	//For Help Tab
