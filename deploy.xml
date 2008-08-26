@@ -604,7 +604,7 @@
 				<include name="DAOConfig.xml" />
 			</fileset>
 		</copy>
-		<delete file="${jboss.server.url}/lib/oracledriver.jar" casesensitive="false"/>
+		<delete file="${jboss.server.url}/lib/oracleDriver.jar" casesensitive="false"/>
 	</target>
 	
 	<!--Target call for both fresh deployment and database creation-->
