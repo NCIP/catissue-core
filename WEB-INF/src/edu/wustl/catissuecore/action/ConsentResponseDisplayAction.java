@@ -11,11 +11,14 @@ package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,23 +31,14 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.ConsentResponseForm;
 import edu.wustl.catissuecore.bean.ConsentBean;
 import edu.wustl.catissuecore.bean.ConsentResponseBean;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
-import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
-import edu.wustl.catissuecore.bizlogic.CollectionProtocolRegistrationBizLogic;
-import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.ConsentTier;
-import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
-import edu.wustl.catissuecore.domain.StorageContainer;
-import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.ConsentUtil;
+import edu.wustl.catissuecore.util.IdComparator;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
-import edu.wustl.common.bizlogic.IBizLogic;
-import edu.wustl.common.util.dbManager.DAOException;
 
 public class ConsentResponseDisplayAction extends BaseAction
 {
@@ -136,11 +130,20 @@ public class ConsentResponseDisplayAction extends BaseAction
 	 * @param isMapExist
 	 * @return
 	 */
-	private Map getConsentResponseMap(Collection consentResponse , boolean isMapExist){
+	private Map getConsentResponseMap(Collection consentResponse , boolean isMapExist)
+	{
 		Map consentResponseMap = new LinkedHashMap();
-		if(consentResponse != null){
+		Set consentResponseMapSorted = new LinkedHashSet();
+		//bug 8905
+		List idList = new ArrayList();
+		idList.addAll(consentResponse);
+		Collections.sort(idList,new IdComparator());
+		consentResponseMapSorted.addAll(idList);		
+//		bug 8905
+		if(consentResponseMapSorted != null)
+		{
 			int i=0;
-			Iterator consentResponseIter = consentResponse.iterator();
+			Iterator consentResponseIter = consentResponseMapSorted.iterator();
 			String idKey=null;
 			String statementKey=null;
 			String responsekey =null;
@@ -151,7 +154,7 @@ public class ConsentResponseDisplayAction extends BaseAction
 				statementKey="ConsentBean:"+i+"_statement";
 				responsekey = "ConsentBean:"+i+"_participantResponse";
 				participantResponceIdKey="ConsentBean:"+i+"_participantResponseID";
-				
+
 				if(isMapExist){
 					ConsentBean consentBean=(ConsentBean)consentResponseIter.next();
 					consentResponseMap.put(idKey, consentBean.getConsentTierID());
@@ -169,9 +172,10 @@ public class ConsentResponseDisplayAction extends BaseAction
 				}
 				i++;
 			}
+
 			consentCounter=i;
 		}
 		return consentResponseMap;
 	}
-	
+
 }

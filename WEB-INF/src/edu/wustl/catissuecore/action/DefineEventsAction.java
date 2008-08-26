@@ -1,5 +1,7 @@
 package edu.wustl.catissuecore.action;
 
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -10,6 +12,7 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.CollectionProtocolForm;
 import edu.wustl.catissuecore.bean.CollectionProtocolBean;
+import edu.wustl.catissuecore.util.CollectionProtocolUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 
@@ -66,9 +69,13 @@ public class DefineEventsAction extends BaseAction
 		cpBean.setIrbID(cpForm.getIrbID());
 		cpBean.setActivityStatus(cpForm.getActivityStatus());
 		cpBean.setAliqoutInSameContainer(cpForm.isAliqoutInSameContainer());
-		//For Consent Tab
+		//For Consent Tab		
 		cpBean.setConsentTierCounter(cpForm.getConsentTierCounter());
-		cpBean.setConsentValues(cpForm.getConsentValues());
+		Map consentMap = CollectionProtocolUtil.sortConsentMap(cpForm.getConsentValues());//bug 8905
+		//cpBean.setConsentValues(cpForm.getConsentValues());
+		cpBean.setConsentValues(consentMap);//bug 8905
 		cpBean.setUnsignedConsentURLName(cpForm.getUnsignedConsentURLName());
 	}
+	
+	
 }

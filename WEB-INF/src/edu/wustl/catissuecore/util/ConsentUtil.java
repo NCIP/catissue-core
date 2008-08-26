@@ -9,9 +9,13 @@ package edu.wustl.catissuecore.util;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -25,12 +29,10 @@ import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.ConsentTier;
 import edu.wustl.catissuecore.domain.ConsentTierResponse;
 import edu.wustl.catissuecore.domain.ConsentTierStatus;
-import edu.wustl.catissuecore.domain.DisposalEventParameters;
 import edu.wustl.catissuecore.domain.ReturnEventParameters;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenPosition;
-import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
@@ -620,13 +622,21 @@ public class ConsentUtil
     public static Map prepareSCGResponseMap(Collection statusResponseCollection,
     		Collection partiResponseCollection,String statusResponse, String statusResponseId)
 	   {
-	    	Map tempMap = new HashMap();
+	    	//Map tempMap = new HashMap();
+    	    Map tempMap = new LinkedHashMap();//8905
+	    	Set sortedStatusSet = new LinkedHashSet();
+	    	List sortStatus = new ArrayList();
+	    	//bug 8905
+	    	sortStatus.addAll(statusResponseCollection);
+	    	Collections.sort(sortStatus,new IdComparator());
+	    	sortedStatusSet.addAll(sortStatus);
+//	    	bug 8905
 	    	Long consentTierID;
 			Long consentID;
-			if(partiResponseCollection!=null ||statusResponseCollection!=null)
+			if(partiResponseCollection!=null ||sortedStatusSet!=null)
 			{
 				int i = 0;
-				Iterator statusResponsIter = statusResponseCollection.iterator();			
+				Iterator statusResponsIter = sortedStatusSet.iterator();			
 				while(statusResponsIter.hasNext())
 				{
 					ConsentTierStatus consentTierstatus=(ConsentTierStatus)statusResponsIter.next();
@@ -671,6 +681,7 @@ public class ConsentUtil
 	 */
 	public static void createConsentResponseColl(Collection consentTierResponseCollection, Iterator iter)
 	{
+		List<ConsentTierResponse> consentsList = new ArrayList<ConsentTierResponse>();
 		while(iter.hasNext())
 		{
 			ConsentBean consentBean = (ConsentBean)iter.next();
@@ -686,7 +697,18 @@ public class ConsentUtil
 			consentTier.setId(Long.parseLong(consentBean.getConsentTierID()));
 			consentTier.setStatement(consentBean.getStatement());
 			consentTierResponse.setConsentTier(consentTier);
-			consentTierResponseCollection.add(consentTierResponse);
+			//consentTierResponseCollection.add(consentTierResponse);
+			consentsList.add(consentTierResponse);
 		}
+//	      bug 8905
+		Comparator consentTierComparator = new IdComparator();
+		Collections.sort(consentsList, consentTierComparator);
+		Iterator iterList = consentsList.iterator();
+		while(iterList.hasNext())
+        {
+        	ConsentTierResponse consentTierResponse = (ConsentTierResponse)iterList.next();
+        	consentTierResponseCollection.add(consentTierResponse);
+        }				
+//		bug 8905		
 	}
 }

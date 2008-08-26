@@ -21,6 +21,7 @@ import java.util.Map;
 
 import edu.wustl.catissuecore.actionForm.CollectionProtocolForm;
 import edu.wustl.catissuecore.bean.ConsentBean;
+import edu.wustl.catissuecore.util.CollectionProtocolUtil;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.bizlogic.IActivityStatus;
@@ -401,9 +402,11 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
     public Collection prepareConsentTierCollection(Map consentTierMap) throws Exception 
     {
     	final MapDataParser mapdataParser = new MapDataParser("edu.wustl.catissuecore.bean");
-    	final Collection beanObjColl = mapdataParser.generateData(consentTierMap);
+    	Map consentMap = CollectionProtocolUtil.sortConsentMap(consentTierMap);//bug 8905
+    	final Collection beanObjColl = mapdataParser.generateData(consentMap);//consentTierMap
     	
-    	Collection<ConsentTier> consentStatementColl = new HashSet<ConsentTier>();
+    	//Collection<ConsentTier> consentStatementColl = new HashSet<ConsentTier>();
+    	Collection<ConsentTier> consentStatementColl = new LinkedHashSet<ConsentTier>();//bug 8905
     	Iterator iter = beanObjColl.iterator();        
     	while(iter.hasNext())
     	{

@@ -1,5 +1,6 @@
 package edu.wustl.catissuecore.util;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -12,10 +13,9 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
+import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.bean.CollectionProtocolBean;
 import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
@@ -23,7 +23,6 @@ import edu.wustl.catissuecore.bean.GenericSpecimen;
 import edu.wustl.catissuecore.bean.SpecimenRequirementBean;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
-import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.CellSpecimenRequirement;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
@@ -889,5 +888,31 @@ public class CollectionProtocolUtil {
 			
 		}
 		return null;
+	}
+	//bug 8905
+	/**
+	 * This method is used to sort consents according to id
+	 * @param consents Map
+	 * @return sorted map
+	 */
+	public static Map sortConsentMap(Map consentsMap)
+	{
+		Set keys = consentsMap.keySet();
+		List<String> idList = new ArrayList<String>();
+		Iterator it = keys.iterator();
+		while(it.hasNext())
+		{
+			String key = (String)it.next();
+			idList.add(key);
+		}
+		Collections.sort(idList,new IdComparator());
+		Map idMap = new LinkedHashMap();
+		Iterator idIterator = idList.iterator();
+		while(idIterator.hasNext())
+		{
+			String id = (String)idIterator.next();
+			idMap.put(id,consentsMap.get(id));
+		}
+		return idMap;
 	}
 }
