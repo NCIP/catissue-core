@@ -70,7 +70,7 @@ function participantRegRow(subdivtag)
 			cprParticipantId.className="black_ar";
 			sname="";
 			name = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:" + (cprSize+1) + "_protocolParticipantIdentifier)";
-			sname="<input type='text' name='" + name + "' maxlength='30' size='15' class='black_ar' id='" + name + "'>";
+			sname="<input type='text' name='" + name + "' maxlength='30' size='10' class='black_ar' id='" + name + "'>";
 			cprParticipantId.innerHTML="" + sname;
 			cellNo +=1;
 			
@@ -82,7 +82,7 @@ function participantRegRow(subdivtag)
 			cprBarcode.className="black_ar";
 			sname="";
 			name = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:" + (cprSize+1) + "_barcode)";
-			sname="<input type='text' name='" + name + "' maxlength='30' size='15' class='black_ar' id='" + name + "'>";
+			sname="<input type='text' name='" + name + "' maxlength='30' size='10' class='black_ar' id='" + name + "'>";
 			cprBarcode.innerHTML="" + sname;
 			cellNo +=1;
 			<%}%>
@@ -682,7 +682,7 @@ function participantRegRow(subdivtag)
 						</a></td>
 			</tr>
 			<tr>
-				<td colspan="2" class="showhide1">
+				<td colspan="2">
 				
 				<logic:equal name="<%=Constants.OPERATION%>"
 						value="<%=Constants.EDIT%>">
@@ -696,22 +696,22 @@ function participantRegRow(subdivtag)
 
 
 					<tr class="tableheading">
-						<td width="8%" align="left" class="black_ar_b">Select</td>
-						<td width="24%" align="left" class="black_ar_b"><bean:message
+						<td width="3%" align="left" class="black_ar_b">Select</td>
+						<td width="18%" align="left" class="black_ar_b"><bean:message
 							key="participant.collectionProtocolReg.protocolTitle" /></td>
-						<td width="20%" align="left" class="black_ar_b"><bean:message
+						<td width="13%" align="left" class="black_ar_b"><bean:message
 							key="participant.collectionProtocolReg.participantProtocolID" />
 						</td>
 						<%if((!Variables.isSpecimenCollGroupBarcodeGeneratorAvl) || operation.equals(Constants.EDIT))
 						{%>
-							<td width="20%" align="left" class="black_ar_b"><bean:message
+							<td width="13%" align="left" class="black_ar_b"><bean:message
 								key="participant.collectionProtocolReg.barcode" />
 							</td>
 						<%}%>
-						<td width="16%" align="left" class="black_ar_b"><bean:message
+						<td width="18%" align="left" class="black_ar_b"><bean:message
 							key="participant.collectionProtocolReg.participantRegistrationDate" />
 						</td>
-						<td width="16%" align="left" class="black_ar_b"><bean:message
+						<td width="18%" align="left" class="black_ar_b"><bean:message
 							key="participant.activityStatus" /></td>
 						<td width="16%" align="left" class="black_ar_b"><bean:message
 							key="participant.collectionProtocolReg.consent" /></td>
@@ -792,7 +792,7 @@ function participantRegRow(subdivtag)
 								<%=CollectionProtocolRegCondition%>
 								onClick="javascript:enableButton(document.forms[0].deleteParticipantRegistrationValue,document.forms[0].collectionProtocolRegistrationValueCounter,'CollectionProtocolRegistrationChk_')">
 							</td>
-							<td width="24%" align="left" nowrap class="black_ar">
+							<td align="left" nowrap class="black_ar">
 							<%
 									if (CollectionProtocolRegConditionBoolean) {
 									%> <html:text styleClass="black_ar" maxlength="50"
@@ -816,13 +816,13 @@ function participantRegRow(subdivtag)
  %>
 							</td>
 							<td align="left" class="black_ar"><html:text
-								styleClass="black_ar" size="15" maxlength="50"
+								styleClass="black_ar" size="10" maxlength="50"
 								styleId="<%=collectionProtocolParticipantId%>"
 								property="<%=collectionProtocolParticipantId%>" /></td>
 							<%if((!Variables.isSpecimenCollGroupBarcodeGeneratorAvl) || operation.equals(Constants.EDIT)) 
 							{%>
 								<td align="left" class="black_ar"><html:text
-								styleClass="black_ar" size="15" maxlength="50"
+								styleClass="black_ar" size="10" maxlength="50"
 								styleId="<%=barcode%>"
 								property="<%=barcode%>" /></td>
 							<%}%>
@@ -871,19 +871,19 @@ function participantRegRow(subdivtag)
 					</tbody>
 
 					<tr>
-						<td align="left" class="black_ar"><html:button
+						<td align="left" class="black_ar" colspan="3"><html:button
 							property="addKeyValue" styleClass="black_ar"
 							onclick="participantRegRow('addMoreParticipantRegistration')">
 							<bean:message key="buttons.addMore" />
-						</html:button></td>
-						<td class="black_ar"><html:button
+						</html:button>
+						&nbsp;<html:button
 							property="deleteParticipantRegistrationValue"
 							styleClass="black_ar"
 							onclick="deleteChecked('addMoreParticipantRegistration','Participant.do?operation=<%=operation%>&pageOf=<%=pageOf%>&status=true&deleteRegistration=true',document.forms[0].collectionProtocolRegistrationValueCounter,'CollectionProtocolRegistrationChk_',false)"
 							disabled="true">
 							<bean:message key="buttons.delete" />
 						</html:button></td>
-						<td class="black_ar">&nbsp;</td>
+						<td class="black_ar" >&nbsp;</td>
 						<td class="black_ar">&nbsp;</td>
 						<td class="black_ar">&nbsp;</td>
 						<td class="black_ar">&nbsp;</td>
