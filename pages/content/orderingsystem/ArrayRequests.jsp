@@ -341,7 +341,7 @@
 									   else if(((String)(requestDetailsForm.getValue("DefinedArrayDetailsBean:"+rowNumber+"_instanceOf"))).trim().equalsIgnoreCase("DerivedPathological")
 												|| ((String)(requestDetailsForm.getValue("DefinedArrayDetailsBean:"+rowNumber+"_instanceOf"))).trim().equalsIgnoreCase("Pathological"))
 										{%>
-											<img src="images/uIEnhancementImages/Participant.GIF" border="0"/>
+										 <img src="images/Participant.GIF" border="0"/>
 										<%}String toolTipTypeClass = "Class:"+((String)(requestDetailsForm.getValue("DefinedArrayDetailsBean:"+rowNumber+"_actualSpecimenClass")))+", Type:"+((String)(requestDetailsForm.getValue("DefinedArrayDetailsBean:"+rowNumber+"_actualSpecimenType"))); %>
 							 		<span title="<%= toolTipTypeClass %>">									
 										<bean:write name="requestDetailsForm" property="<%=rqstdItem %>" />

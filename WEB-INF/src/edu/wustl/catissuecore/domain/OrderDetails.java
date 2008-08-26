@@ -972,18 +972,21 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 		OrderItem orderItem = null;
 		ExistingSpecimenOrderItem existingSpecimenOrderItem = null;
 		DerivedSpecimenOrderItem derivedSpecimenOrderItem = null;
-		specOrderItem = (SpecimenOrderItem)orderBizLogic.
-			retrieveSpecimenOrderItem(new Long(definedArrayDetailsBean.getOrderItemId()));
+		PathologicalCaseOrderItem pathologicalCaseOrderItem = null;
+		specOrderItem = (SpecimenOrderItem)orderBizLogic.retrieveSpecimenOrderItem(Long.parseLong(definedArrayDetailsBean.getOrderItemId()));
 		
 		if (specOrderItem instanceof ExistingSpecimenOrderItem) {
 		
 			existingSpecimenOrderItem = (ExistingSpecimenOrderItem)specOrderItem;
 			orderItem = existingSpecimenOrderItem;
 			
-		} else {// For derived specimen.
+		} else if (specOrderItem instanceof DerivedSpecimenOrderItem) {// For derived specimen.
 			
 			derivedSpecimenOrderItem = (DerivedSpecimenOrderItem)specOrderItem;
 			orderItem = derivedSpecimenOrderItem;
+		}else {
+			pathologicalCaseOrderItem = (PathologicalCaseOrderItem)specOrderItem;
+			orderItem = pathologicalCaseOrderItem;
 		}
 				
 	

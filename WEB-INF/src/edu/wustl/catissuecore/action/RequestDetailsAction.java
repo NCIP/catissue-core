@@ -686,13 +686,13 @@ private OrderItem getOrderItem(OrderDetails orderDetails , Long orderItemId )
 		}
 		arrayDetailsBean.setRequestedQuantity(pathologicalCaseOrderItem.getRequestedQuantity().toString());
 		//Displaying the quantity of the first specimen in the request for drop down.
-		if (childrenSpecimenListToDisplay.size() != 0)
+		if (childrenSpecimenListToDisplay.size() > 1)
 		{
-			arrayDetailsBean.setAvailableQuantity(((Specimen) totalChildrenSpecimenColl.get(0)).getAvailableQuantity().toString());
+			arrayDetailsBean.setAvailableQuantity(((Specimen) totalChildrenSpecimenColl.get(1)).getAvailableQuantity().toString());
 		}
 		else
 		{
-			arrayDetailsBean.setAvailableQuantity("-");
+			arrayDetailsBean.setAvailableQuantity("");
 		}
 		//Assigned Quantity
 		if (pathologicalCaseOrderItem.getDistributedItem() != null)
