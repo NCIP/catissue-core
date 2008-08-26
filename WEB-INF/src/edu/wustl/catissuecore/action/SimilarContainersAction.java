@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.Vector;
 
@@ -29,6 +30,7 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.StorageContainerForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
+import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
@@ -39,6 +41,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
@@ -92,7 +95,30 @@ public class SimilarContainersAction extends SecureAction
 		//		Populating the Site Array
 		String[] siteDisplayField = {"name"};
 		String valueField = "id";
-		List list = ibizLogic.getList(Site.class.getName(), siteDisplayField, valueField, true);
+		
+		// Added by Ravindra : Non Admin users should see only those sites to which they are associated
+		List<NameValueBean> list = null;
+		SessionDataBean sessionDataBean = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
+		list = ibizLogic.getList(Site.class.getName(), siteDisplayField, valueField, true);
+		
+		List<NameValueBean> tempList = new ArrayList<NameValueBean>();
+		tempList.addAll(list);
+		
+		if(sessionDataBean!=null && !sessionDataBean.isAdmin())
+		{
+			Set<Long> idSet = new UserBizLogic().getRelatedSiteIds(sessionDataBean.getUserId());
+			for(NameValueBean nmv : list)
+			{
+				if(!idSet.contains(Long.valueOf(nmv.getValue())))
+				{
+					if(nmv.getValue().equalsIgnoreCase("-1"))
+						continue;
+					tempList.remove(nmv);
+				}
+			}
+		}
+		
+		list = tempList;
 		request.setAttribute(Constants.SITELIST, list);
 
 		// get the Specimen class and type from the cde
