@@ -47,7 +47,7 @@
               <td align="center" valign="top"><table width="260" border="0" cellspacing="0" cellpadding="4">
                 <tr>
                   <td rowspan="2" valign="top"><img src="images/uIEnhancementImages/ic_user_guide.gif" alt="User Guide" width="46" height="46"></td>
-                  <td><a href="<%=userGuide%>" target="_NEW" class="blue_ar_b"><bean:message key="app.userguide"/></a></td>
+                  <td><a href="<%=userGuide%>" target="_NEW" class="viewhelp"><bean:message key="app.userguide"/></a></td>
                 </tr>
                 <tr>
                   <td class="black_ar" height="70" align="justify"><bean:message key="app.userguide.message"/></td>
@@ -57,7 +57,7 @@
               <td align="center" valign="top"><table width="260" border="0" cellspacing="0" cellpadding="4">
                 <tr>
                   <td rowspan="2" valign="top"><img src="images/uIEnhancementImages/ic_tech_guide.gif" alt="Technical Guide" width="46" height="46"></td>
-                  <td><a href="<%=technicalGuide%>" target="_NEW" class="blue_ar_b"><bean:message key="app.technicalguide"/></a></td>
+                  <td><a href="<%=technicalGuide%>" target="_NEW" class="viewhelp"><bean:message key="app.technicalguide"/></a></td>
                 </tr>
                 <tr>
                   <td class="black_ar" align="justify"><bean:message key="app.technicalguide.message"/></td>
@@ -67,7 +67,7 @@
               <td align="center" valign="top"><table width="260" border="0" cellspacing="0" cellpadding="4">
                 <tr>
                   <td rowspan="2" valign="top"><img src="images/uIEnhancementImages/ic_training.gif" alt="Training" width="46" height="46"></td>
-                  <td><a href="<%=trainingGuide%>" target="_NEW" class="blue_ar_b" ><bean:message key="app.training"/></a></td>
+                  <td><a href="<%=trainingGuide%>" target="_NEW" class="viewhelp" ><bean:message key="app.training"/></a></td>
                 </tr>
                 <tr>
                   <td class="black_ar" align="justify"><bean:message key="app.training.message"/></td>
@@ -91,7 +91,7 @@
               <td align="center" valign="top"><table width="260" border="0" cellspacing="0" cellpadding="4">
                 <tr>
                   <td rowspan="2" valign="top"><img src="images/uIEnhancementImages/ic_uml_model.gif" alt="UML Model" width="46" height="46"></td>
-                  <td><a href="<%=umlmodelGuide%>" target="_NEW" class="blue_ar_b"><bean:message key="app.umlmodel"/></a></td>
+                  <td><a href="<%=umlmodelGuide%>" target="_NEW" class="viewhelp"><bean:message key="app.umlmodel"/></a></td>
                 </tr>
                 <tr>
                   <td class="black_ar" align="justify"><bean:message key="app.umlmodel.message"/></td>
@@ -101,7 +101,7 @@
               <td align="center" valign="top"><table width="260" border="0" cellspacing="0" cellpadding="4">
                 <tr>
                   <td rowspan="2" valign="top"><img src="images/uIEnhancementImages/ic_gforge.gif" alt="Knowledge Center Forum" width="46" height="46"></td>
-                  <td><a href="<%=knowledgecenterForum%>" target="_NEW" class="blue_ar_b"><bean:message key="app.knowledgecenterForum"/></a></td>
+                  <td><a href="<%=knowledgecenterForum%>" target="_NEW" class="viewhelp"><bean:message key="app.knowledgecenterForum"/></a></td>
                 </tr>
                 <tr>
                   <td class="black_ar" align="justify"><bean:message key="app.knowledgecenterForum.message"/></td>
@@ -111,7 +111,7 @@
               <td align="center" valign="top"><table width="260" border="0" cellspacing="0" cellpadding="4">
                 <tr>
                   <td rowspan="2" valign="top"><img src="images/uIEnhancementImages/ic_wiki.gif" alt="Wiki" width="46" height="46"></td>
-                  <td><a href="<%=knowledgecenterGuide%>" target="_NEW" class="blue_ar_b"><bean:message key="app.knowledgecenter"/></a></td>
+                  <td><a href="<%=knowledgecenterGuide%>" target="_NEW" class="viewhelp"><bean:message key="app.knowledgecenter"/></a></td>
                 </tr>
                 <tr>
                   <td class="black_ar" align="justify"><bean:message key="app.knowledgecenter.message"/></td>
