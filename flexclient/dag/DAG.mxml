@@ -116,6 +116,11 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	private var associatedDAGNodes : Object = new Object;
 	
 	private var associatedSingleDagNodes : Object = new Object;
+	
+	//operation is stroing information about node creation / edit 
+	[Bindable]
+	public var operation:String="";	
+	
 	/**
 	* Timer handler  to check container has been initialized.	
 	*/
@@ -466,8 +471,15 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	*/
 	private function repaintHandler(event: ResultEvent):void
 	{
-		var nodeMap : Object =  event.result as Object ;
+		if(view=="Result"){
+			TQBtn.label = "Calculate Query";
+			TQBtn.toolTip = "Calculate query on selected nodes"
+		}else if(view=="AddLimit"){		
+			TQBtn.label = "Temporal Query";
+			TQBtn.toolTip = "Create temporal query on selected nodes"		
+		}else{}
 		
+		var nodeMap : Object =  event.result as Object ;		
 		var customNodeList : ArrayCollection = nodeMap["customFormulaNodeList"];
 		var nodeList:ArrayCollection = nodeMap["dagNodeList"];
 		var singleCustomNodeList : ArrayCollection = nodeMap["singleNodeCFList"];
@@ -1341,6 +1353,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	private function nodeValidityHandler(event : ResultEvent):void
 	{
 		var areNodesValid : Boolean = event.result as Boolean;
+		trace("areNodesValid " + areNodesValid);
 		if(areNodesValid == true)
 		{
 		     rpcService.removeEventListener(ResultEvent.RESULT,nodeValidityHandler);
@@ -1431,9 +1444,9 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
                  //Setting the node name
                  singleNodeTQPope.customNodeName = customNode.name;
                
-               //Setting the custom column Name
-               singleNodeTQPope.customColumnName.text = customNode.getCustomColumnName();
-               
+                //Setting the custom column name and time interval
+	        	singleNodeTQPope.customColumnName.text = customNode.getCustomColumnName();
+	        	
                //Handling LHS DatePickers and Text Inputs
                if(customNode.getLhsTimeInterval() != "null")
                {
@@ -1635,9 +1648,9 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	        popUp.cb2.selectedItem = currentCustomNode.getSelectedArithmeticOp();
 	        popUp.cb3.selectedItem = currentCustomNode.getSecondSelectedAttrName();
 	        popUp.cb4.selectedItem = currentCustomNode.getSelectedLogicalOp();  
-	        
-	        //Setting the custom column name
-	        popUp.customColumnName.text = currentCustomNode.getCustomColumnName();
+	             
+	        //Setting the custom column name and time interval        	
+        	popUp.customColumnName.text = currentCustomNode.getCustomColumnName();        	
 	        
 	        //If the selected Logical Operators are isNull or IsNotNull
 	        if((currentCustomNode.getSelectedLogicalOp() == "Is Null") || (currentCustomNode.getSelectedLogicalOp() == "Is Not Null"))
@@ -1721,19 +1734,19 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	 }
 	 
 	 public function addSingleNodeCustomNode(node : SingleNodeCustomFormulaNode) : void
-	 {
+	 {	 	
 	 	var operation : String = node.getOperation();
-	 	
 	 	var dagNode : DAGNode = null;
 	 	var customNodeName : String = "";
 	 	var nodeList : ArrayCollection = null;
 	 	var nodeName : String = node.name;  
-	 	 var existingCustomNode : SingleNodeCustomFormulaNode = null;
+	 	var existingCustomNode : SingleNodeCustomFormulaNode = null;
+	 	 
 	 	//Handling the DAG Nodes
 	 	if((operation == "create") || (operation == "rePaintCreate"))
 	 	{
             dagNode = DAGNode(mainPanel.getChildByName(node1));
-            customNodeName = node.name;
+           customNodeName = node.name;
 	 	}
 	 	else if(operation == "edit")
 	 	{
@@ -1834,7 +1847,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
            // var dagNodesList : ArrayCollection  = new ArrayCollection();
             
             //Initializing the DAG NOdes
-            if((operation == "create") ||(operation == "rePaintCreate"))
+            if((operation == "create") || (operation == "rePaintCreate"))
             {
             	//This is the case of creating custom node first time
             	dagNode1 = DAGNode(mainPanel.getChildByName(node1));
@@ -2112,11 +2125,11 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 
 <mx:VBox width="100%" height="100%" backgroundColor="#f9e886" horizontalGap="0" verticalGap="0">
 		<mx:VBox backgroundColor="white" id="mainPanelx" verticalGap="0" width="100%" height="100%" fontSize="11">
-			<mx:Label text="Diagrammatic View" fontSize="11" fontWeight="bold" x="0" y="0"/>
+			<mx:Label text="Diagrammatic View" fontSize="11" fontWeight="bold" x="0" y="0" width="150"/>
 			<mx:ApplicationControlBar top="0" dock="true" height="5%" width="100%" fillAlphas="[1.0, 1.0]" fillColors="[#f9e886, #f9e886]">
 				<mx:Button label="Add Link" click="drawLine()" fontSize="9" toolTip="Add Link to nodes"/>
 				<mx:Button label="Clear All Paths" click="clearPaths()" fontSize="9" toolTip="Clear All Paths"/>
-				<mx:Button label="Temporal Query" click="openTQPopUp()" fontSize="9" toolTip="Create temporal query on selected nodes"/>				
+				<mx:Button label="Temporal Query" id="TQBtn" click="openTQPopUp()" fontSize="9" toolTip="Create temporal query on selected nodes"/>				
 			</mx:ApplicationControlBar>
 			<mx:Canvas id="mainPanel" width="100%" height="95%" borderStyle="none">
 			</mx:Canvas>

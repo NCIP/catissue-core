@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="700" height="200"
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="700" height="240"
 	 showCloseButton="true" close="removeMe();" borderColor="#0000FF" backgroundColor="white" 
 	 left="0" right="0" borderThicknessLeft="2" borderThicknessRight="2" borderThicknessBottom="2" 
-	 borderThicknessTop="5">
+	 borderThicknessTop="5" creationComplete="removeComponent()">
 	 <mx:Script>
 	 	<![CDATA[
 	 		import mx.events.ValidationResultEvent;
@@ -146,6 +146,10 @@
            	  }
            	  else
            	  {
+           	  	 if(this.parentApplication.view == "Result"){
+           	  	   customFormulaNode.setTimeValue("null");
+           	  	   customFormulaNode.setTimeInterval(cb6.selectedItem.toString());
+           	  	 }else{
            	  	   //Get the value of  text box and value of dropdown
            	  	   existingTimeIntervalCb = myBox.getChildByName("timeIntervalCb") as ComboBox;   
            	  	   if((existingTextBox.enabled == true) && (existingTimeIntervalCb != null) && (existingTimeIntervalCb.enabled == true))
@@ -160,6 +164,7 @@
            	  	   	  customFormulaNode.setTimeValue("null");
            	  	   	  customFormulaNode.setTimeInterval("null");
            	  	   }
+           	  	 }
            	  }
            	  
            	//Getting the left and right operands
@@ -177,40 +182,42 @@
             
             //Setting the selected Arithmetic Operator
             customFormulaNode.setSelectedArithmeticOp(cb2.selectedItem.toString());
-             
-            //Setting theselected logical operator
-            customFormulaNode.setSelectedLogicalOp(cb4.selectedItem.toString());  
-             
-             if(timeIntervalValue != null)
-             {
-             	customFormulaString = firstEntityName+"."+cb1.selectedItem + "\n "+ cb2.selectedItem + " \n" +secondEntityName+"."+cb3.selectedItem + "\n" + cb4.selectedItem + " " + timeValue + " " +  timeIntervalValue;
-             } 
-             else
-             {
-              	customFormulaString =  firstEntityName+"."+cb1.selectedItem+ " \n"+ cb2.selectedItem + "\n " + secondEntityName+"."+cb3.selectedItem  + "\n" + cb4.selectedItem + " " + timeValue ;
-             }
-             
-             //Setting the first selected DAG Nodes Properties
-             customFormulaNode.setFirstNodeName(firstEntityName); 
-             customFormulaNode.setFirstNodeExpId(firstEntityExpId); 
-              
-            //Setting the second selected DAG Nodes Properties
-            customFormulaNode.setSecondNodeName(secondEntityName);
-            customFormulaNode.setSecondNodeExpId(secondEntityExpId);
             
-            customFormulaNode.name = nodeName;
+            trace("this.parentApplication.view" + this.parentApplication.view);
             
-            //Setting custom column Name with time Interval            
-            customFormulaNode.setCustomColumnName(customColumnName.text);
+            //Setting the first selected DAG Nodes Properties
+	            customFormulaNode.setFirstNodeName(firstEntityName); 
+	            customFormulaNode.setFirstNodeExpId(firstEntityExpId); 
+	              
+	            //Setting the second selected DAG Nodes Properties
+	            customFormulaNode.setSecondNodeName(secondEntityName);
+	            customFormulaNode.setSecondNodeExpId(secondEntityExpId);
+	            
+	            customFormulaNode.name = nodeName;
+            if(this.parentApplication.view == "Result"){
+            	customFormulaNode.setSelectedLogicalOp("null");
+             	customFormulaString = firstEntityName+"."+cb1.selectedItem + "\n "+ cb2.selectedItem + " \n" +secondEntityName+"."+cb3.selectedItem;
+            }else{ 
+	            //Setting theselected logical operator
+	            customFormulaNode.setSelectedLogicalOp(cb4.selectedItem.toString());  
+	             
+	            if(timeIntervalValue != null){
+	             	customFormulaString = firstEntityName+"."+cb1.selectedItem + "\n "+ cb2.selectedItem + " \n" +secondEntityName+"."+cb3.selectedItem + "\n" + cb4.selectedItem + " " + timeValue + " " +  timeIntervalValue;
+	            }else{
+	              	customFormulaString =  firstEntityName+"."+cb1.selectedItem+ " \n"+ cb2.selectedItem + "\n " + secondEntityName+"."+cb3.selectedItem  + "\n" + cb4.selectedItem + " " + timeValue ;
+	            }     
+            }
             
-            
+            //Setting custom column Name      
+	        customFormulaNode.setCustomColumnName(customColumnName.text);
+	        
             parentApplication.customFormulaString = customFormulaString;
              
             this.parentApplication.rpcService.addEventListener(FaultEvent.FAULT, faultHandler);
 
             if(submitButton.label == "OK")
             {
-             	//rpcService.formTemporalQuery(customFormulaNode, "add");
+              trace("customFormulaNode :" + customFormulaNode);	 
               this.parentApplication.rpcService.removeEventListener(ResultEvent.RESULT,editCustomNodeHandler);
               this.parentApplication.rpcService.addEventListener(ResultEvent.RESULT, resultHandler);
               customFormulaNode.setOperation("create");
@@ -371,7 +378,7 @@
            	 		}
            	 		else
            	 		{
-           	 	    		destroyBigTip();
+           	 	    	destroyBigTip();
            	 	    	//here any of the operand is Date and another is Integer, we should use DatePicker
            	 	    	arithmeticOperand= cb2.selectedItem.toString();
            	 	   	 	if((arithmeticOperand == "/") || (arithmeticOperand == "*") )
@@ -383,61 +390,63 @@
            	 	    	else
            	 	    	{
            	 	    		destroyBigTip();
-           	 	    		//Removing text Box
-           	 	    		existingTextBox = myBox.getChildByName("txtInput") as TextInput;
-           	   				var value : String =  null;
-           	   				if(existingTextBox != null)
-           	   				{
-           	   	 	    		value = existingTextBox.text;
-           	   	   				myBox.removeChild(existingTextBox);
-           	   	   				
-           	   	   				//Remove the Time Value Label
-	           	 	        	existingValueLabel = labelHBox.getChildByName("label5") as Label;
-	           	 	        	if(existingValueLabel != null)
+           	 	    		if(this.parentApplication.view != "Result"){          	 	    		
+	           	 	    		//Removing text Box
+	           	 	    		existingTextBox = myBox.getChildByName("txtInput") as TextInput;
+	           	   				var value : String =  null;
+	           	   				if(existingTextBox != null)
+	           	   				{
+	           	   	 	    		value = existingTextBox.text;
+	           	   	   				myBox.removeChild(existingTextBox);
+	           	   	   				
+	           	   	   				//Remove the Time Value Label
+		           	 	        	existingValueLabel = labelHBox.getChildByName("label5") as Label;
+		           	 	        	if(existingValueLabel != null)
+		           	 	        	{
+		           	 	        		labelHBox.removeChild(existingValueLabel);
+		           	 	        	}
+	           	        		}
+	           	        	
+	           	        		//Removing time interval ComboBox
+	           	        		existingTimeIntervalCb = myBox.getChildByName("timeIntervalCb") as ComboBox; 
+	           	       			if(existingTimeIntervalCb != null)
+	           	       			{
+	           	       				myBox.removeChild(existingTimeIntervalCb);
+	           	       				
+	           	       				//Remove the Time Interval Label
+	           	       				existingIntervalLabel = labelHBox.getChildByName("label6") as Label;
+	           	       				if(existingIntervalLabel != null)
+	           	       				{
+	           	       				   labelHBox.removeChild(existingIntervalLabel);	
+	           	       				}
+	           	       			}
+	           	       		
+	           	       			//Creating the DatePicker
+	           	       			existingDatePicker= myBox.getChildByName("datePicker") as DateField;
+	           	 	        	if(existingDatePicker == null)
 	           	 	        	{
-	           	 	        		labelHBox.removeChild(existingValueLabel);
-	           	 	        	}
-           	        		}
-           	        	
-           	        		//Removing time interval ComboBox
-           	        		existingTimeIntervalCb = myBox.getChildByName("timeIntervalCb") as ComboBox; 
-           	       			if(existingTimeIntervalCb != null)
-           	       			{
-           	       				myBox.removeChild(existingTimeIntervalCb);
-           	       				
-           	       				//Remove the Time Interval Label
-           	       				existingIntervalLabel = labelHBox.getChildByName("label6") as Label;
-           	       				if(existingIntervalLabel != null)
-           	       				{
-           	       				   labelHBox.removeChild(existingIntervalLabel);	
-           	       				}
-           	       			}
-           	       		
-           	       			//Creating the DatePicker
-           	       			existingDatePicker= myBox.getChildByName("datePicker") as DateField;
-           	 	        	if(existingDatePicker == null)
-           	 	        	{
-           	 	        		var datePicker : DateField =  new DateField();
-	           	       			datePicker.id = "datePicker";
-	           	       			datePicker.name = "datePicker";
-	           	       			datePicker.width = 200;
-	           	       			datePicker.focusEnabled = true;
-	           	       			datePicker.formatString = "MM/DD/YYYY";
-	           	            	datePicker.showToday = true;
-	           	              
-	           	       			//Adding datePicket as childs
-	           	 	   			myBox.addChild(datePicker); 
-	           	 	     	}
-	           	 	     	//Creating the DatePicker Label
-	           	 	     	existingPickerLabel = labelHBox.getChildByName("datePickerLabel") as Label;
-           	 	    	   if(existingPickerLabel == null)
-           	 	    	   {
-           	 	    	   	  var pickerLabel : Label = new Label();
-           	 	    	   	  pickerLabel.name = "datePickerLabel";
-           	 	    	   	  pickerLabel.text = "Select Date";
-           	 	    	   	  
-           	 	    	   	  labelHBox.addChild(pickerLabel);
-           	 	    	   }
+	           	 	        		var datePicker : DateField =  new DateField();
+		           	       			datePicker.id = "datePicker";
+		           	       			datePicker.name = "datePicker";
+		           	       			datePicker.width = 200;
+		           	       			datePicker.focusEnabled = true;
+		           	       			datePicker.formatString = "MM/DD/YYYY";
+		           	            	datePicker.showToday = true;
+		           	              
+		           	       			//Adding datePicket as childs
+		           	 	   			myBox.addChild(datePicker); 
+		           	 	     	}
+		           	 	     	//Creating the DatePicker Label
+		           	 	     	existingPickerLabel = labelHBox.getChildByName("datePickerLabel") as Label;
+	           	 	    	   if(existingPickerLabel == null)
+	           	 	    	   {
+	           	 	    	   	  var pickerLabel : Label = new Label();
+	           	 	    	   	  pickerLabel.name = "datePickerLabel";
+	           	 	    	   	  pickerLabel.text = "Select Date";
+	           	 	    	   	  
+	           	 	    	   	  labelHBox.addChild(pickerLabel);
+	           	 	    	   }
+	           	 	    	}
            	 	    	}
            	 		}
         	  	}
@@ -510,10 +519,8 @@
     			here if a dropdown list contains only on item then it will show in comboBox as selected item
     			if item length is more than 1 then i will show prompt like "-select-" and store item text to myToolTip variable for further refrence.    			 
     		*/ 		
-    		public function validateComboboxText():void{
-    			if(this.parentApplication.operation==""){     				
-    				this.parentApplication.operation="edit"; 
-    				 
+    		public function validateComboboxText():void{    			
+    			if(this.parentApplication.operation==""){ 
 					 if(myArray1.length <= 1){
 		    			 cb1.selectedIndex = 0;
 		    			 cb1.toolTip=cb1.selectedLabel.toString();
@@ -585,6 +592,30 @@
 		      submitButton.errorString="";		      
 		      
 		    }
+		    /**
+		       for calculare query remove component
+		    */
+		    private function removeComponent():void {
+		      if(this.parentApplication.view=="Result"){
+		      	cb4.visible = false;
+		      	cb5.visible = false;
+		      	txtInput.visible = false;
+		      	lb4.visible = false;
+		      	lb5.visible = false;
+		      	lb6.visible = false;
+		      	cb6.visible = true;
+		      	lb7.visible = true;
+		      }else{
+		      	cb4.visible = true;
+		      	cb5.visible = true;
+		      	txtInput.visible = true;
+		      	lb4.visible = true;
+		      	lb5.visible = true;
+		      	lb6.visible = true;
+		      	cb6.visible = false;
+		      	lb7.visible = false;
+		      }
+		    }
     		    	  
 	 	]]>
 	 </mx:Script>
@@ -629,10 +660,15 @@
         	rowCount="10" toolTip=""/>
        <!-- <mx:Panel  id="p1" height="20" width="100" /> -->
       </mx:HBox> 
-      	 
+     <mx:Spacer height="5"/> 	 
 	 <mx:HBox x="20" horizontalGap="6" width="100%">
-         <mx:Label id="columnLabel" width="330" text="Please Enter Column Name To Be Displayed in Results:"/>
-         <mx:TextInput id="customColumnName" width="300" restrict="0-9 A-Z a-z" borderColor="blue" focusOut="validate()"/>
+         <mx:Label id="columnLabel" width="170" text="Please Enter Column Name :" paddingTop="0"/>
+         <mx:TextInput id="customColumnName" width="250" restrict="0-9 A-Z a-z" borderColor="blue" focusOut="validate()"/>
+         <mx:ComboBox id="cb6" name="timeIntervalCb6" dataProvider="{myArray5}" width="100"  borderThickness="0" 
+         	borderColor="blue" prompt="--Select--" itemRenderer="mx.controls.Label" close="truncateLongText(event)"
+         	rowCount="10" toolTip="" visible="false"/>
+         <mx:Label id="lb7" name="label6" width="100"  height="50" color="blue" text="{timeIntrvalLabel}" 
+         	fontStyle="normal" fontWeight="bold" paddingTop="0" visible="false"/>
 	 </mx:HBox>
 	  
 	  <mx:HBox x="20" y="50">

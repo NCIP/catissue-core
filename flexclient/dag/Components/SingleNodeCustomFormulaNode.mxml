@@ -301,15 +301,23 @@
        {
        	   var node : SingleNodeCustomFormulaNode = this;
        	   currentCustomNode = node;
+       	   this.parentApplication.operation="edit"; //to get popwindow fields values
        	   this.parentApplication.rpcService.getSingleNodeEditData(node);
        	   this.parentApplication.rpcService.addEventListener(ResultEvent.RESULT,editNodeHandler);  
 		   this.parentApplication.rpcService.addEventListener(FaultEvent.FAULT, faultHandler);  	   
        }
+       private function changeBgColor() : void{
+       	if(this.parentApplication.view=="Result"){
+       		sNodeFormula.setStyle("backgroundColor","#e7ddfa");
+       	}else{
+       		sNodeFormula.setStyle("backgroundColor","#FFFFFF");
+       	}       		
+       } 
         			
 		]]>
 	</mx:Script>
 	
-  <mx:HBox height="100%" width="100%" textAlign="center" horizontalGap="0">
+  <mx:HBox id="sNodeFormula" height="100%" width="100%" textAlign="center" horizontalGap="0" creationComplete="changeBgColor()">
      <mx:Label id="formulaLabel" text="{customFormulaString}" height="100%" width="95%"/>
   	 <mx:VBox height="100%" verticalAlign="middle">
   	 	<mx:Button  label=">" width="5%" click="createMyMenu(event)"/>	

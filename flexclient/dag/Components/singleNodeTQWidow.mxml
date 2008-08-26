@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="700" height="200"
-	showCloseButton="true" close="removeMe();" borderColor="#0000FF" backgroundColor="white" left="0" right="0" borderThicknessLeft="2" borderThicknessRight="2" borderThicknessBottom="2" borderThicknessTop="5">
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="700" height="240"
+	showCloseButton="true" close="removeMe();" borderColor="#0000FF" backgroundColor="white" 
+	left="0" right="0" borderThicknessLeft="2" borderThicknessRight="2" borderThicknessBottom="2"
+	borderThicknessTop="5" creationComplete="removeComponent()">
 	<mx:Script>
 		<![CDATA[
 			import mx.events.ValidationResultEvent;
@@ -118,80 +120,107 @@
              var attributeDataList : ArrayCollection = entityDp[attributesCb.selectedItem.toString()];
              singleNodeCustomFormula.setAttributeType(String(attributeDataList.getItemAt(1)));
              singleNodeCustomFormula.setAttributeID(String(attributeDataList.getItemAt(0)));
-              		    
+             trace("entityName :" + entityName + " entityExpressionId: " + entityExpressionId); 		    
              //Setting the Entity Datails
              singleNodeCustomFormula.setEntityName(entityName);
              singleNodeCustomFormula.setNodeExpressionId(entityExpressionId);
              
-             //Setting the relational Op
-             singleNodeCustomFormula.setSelectedLogicalOp(relationalOpsCb.selectedItem.toString());
+             if(this.parentApplication.view == "Result"){
+	             //Setting the relational Op blank for calculate query
+	             singleNodeCustomFormula.setSelectedLogicalOp("null");
+             }else{
+             	//Setting the relational Op
+	             singleNodeCustomFormula.setSelectedLogicalOp(relationalOpsCb.selectedItem.toString());
+             }
              
              //Handling RHS time value and Intervals
              existingTextBox = myBox.getChildByName("timeInputBox") as TextInput;
              if(existingTextBox != null)
              {
-             	//Means there exists the Time Intervals also
-             	rhsTimeValue = existingTextBox.text;
-             	singleNodeCustomFormula.setTimeValue(rhsTimeValue);
-             	existingTimeIntervalCb = myBox.getChildByName("timeIntervalCb") as ComboBox;
-               	if(existingTimeIntervalCb != null)
-                {
-                   rhsTimeIntervalValue = existingTimeIntervalCb.selectedItem.toString();
-                   singleNodeCustomFormula.setTimeInterval(rhsTimeIntervalValue);
-                }
-                else
-                {
-                	//This condition should not exist if text Input is there 
-                	singleNodeCustomFormula.setTimeInterval("null");
+             	if(this.parentApplication.view == "Result"){
+             		singleNodeCustomFormula.setTimeValue("null");
+             		singleNodeCustomFormula.setTimeInterval(timeIntervalCb6.selectedItem.toString());
+             	}else{
+	             	//Means there exists the Time Intervals also
+	             	rhsTimeValue = existingTextBox.text;
+	             	singleNodeCustomFormula.setTimeValue(rhsTimeValue);
+	             	existingTimeIntervalCb = myBox.getChildByName("timeIntervalCb") as ComboBox;
+	               	if(existingTimeIntervalCb != null)
+	                {
+	                   rhsTimeIntervalValue = existingTimeIntervalCb.selectedItem.toString();
+	                   singleNodeCustomFormula.setTimeInterval(rhsTimeIntervalValue);
+	                }
+	                else
+	                {
+	                	//This condition should not exist if text Input is there 
+	                	singleNodeCustomFormula.setTimeInterval("null");
+	                }	                
                 }
              }
              else
              {
-             	//Means there exists the Date Picker, so get the Date Picker
-             	existingRHSDatePicker = myBox.getChildByName("rhsDatePicker") as DateField;
-                if(existingRHSDatePicker != null)
-                {
-                	month = (existingRHSDatePicker.selectedDate.getMonth()+1).toString();
-           	 	 	if(month.length == 1)
-           	 	 	{
-           	 	    	month = "0"+month;
-           	 	 	}
-           	 	    
-           	 	 	day = existingRHSDatePicker.selectedDate.getDate().toString();
-           	 	 	if(day.length == 1)
-           	 	 	{
-           	 	    	 day = "0"+day;
-           	 	 	}
-           	 	 
-           	 	 	rhsTimeValue = month + "/" + day +"/" + existingRHSDatePicker.selectedDate.getFullYear();
-           	 	 	
-           	 	 	singleNodeCustomFormula.setTimeValue(rhsTimeValue);
-           	 	 	singleNodeCustomFormula.setTimeInterval("null");
+             	if(this.parentApplication.view == "Result"){
+           	  	   singleNodeCustomFormula.setTimeValue("null");
+           	  	   singleNodeCustomFormula.setTimeInterval(timeIntervalCb6.selectedItem.toString());
+           	  	}else{
+	             	//Means there exists the Date Picker, so get the Date Picker
+	             	existingRHSDatePicker = myBox.getChildByName("rhsDatePicker") as DateField;
+	                if(existingRHSDatePicker != null)
+	                {
+	                	month = (existingRHSDatePicker.selectedDate.getMonth()+1).toString();
+	           	 	 	if(month.length == 1)
+	           	 	 	{
+	           	 	    	month = "0"+month;
+	           	 	 	}
+	           	 	    
+	           	 	 	day = existingRHSDatePicker.selectedDate.getDate().toString();
+	           	 	 	if(day.length == 1)
+	           	 	 	{
+	           	 	    	 day = "0"+day;
+	           	 	 	}
+	           	 	 
+	           	 	 	rhsTimeValue = month + "/" + day +"/" + existingRHSDatePicker.selectedDate.getFullYear();
+	           	 	 	
+	           	 	 	singleNodeCustomFormula.setTimeValue(rhsTimeValue);
+	           	 	 	singleNodeCustomFormula.setTimeInterval("null");
+	                }
                 }             	
              	
              }
              
-             var lhsTime :  String = "";
-             //Creating custom Formula String 
-             if(lhsTimeIntervalValue != null && lhsTimeIntervalValue != "")
-             {
-             	lhsTime = lhsTimeValue + "\n" +  lhsTimeIntervalValue;
-             }
-             else
-             {
-             	lhsTime = lhsTimeValue;
-             }
+            
+	             var lhsTime :  String = "";
+	             //Creating custom Formula String 
+	             if(lhsTimeIntervalValue != null && lhsTimeIntervalValue != "")
+	             {
+	             	lhsTime = lhsTimeValue + "\n" +  lhsTimeIntervalValue;
+	             }
+	             else
+	             {
+	             	lhsTime = lhsTimeValue;
+	             }
+	             
+	             if(this.parentApplication.view != "Result") 
+	             {
+		             var rhsTime : String = "";
+		             if(rhsTimeIntervalValue != null && rhsTimeIntervalValue != "")
+		             {
+		             	rhsTime = rhsTimeValue + rhsTimeIntervalValue;
+		             }
+		             else
+		             {
+		             	rhsTime = rhsTimeValue;
+		             }
+		             customFormulaString =  lhsTimeValue + "\n" + arithmaticOpsCb.selectedItem.toString() + "\n" 
+		             +  entityName + "." + attributesCb.selectedItem.toString() + "\n" + relationalOpsCb.selectedItem.toString() 
+		             + "\n" + rhsTime;
+	             
+	             }
+	             else
+	             {
+	             	customFormulaString = lhsTimeValue + "\n" + arithmaticOpsCb.selectedItem.toString() + "\n" +entityName;
+	             }
              
-             var rhsTime : String = "";
-             if(rhsTimeIntervalValue != null && rhsTimeIntervalValue != "")
-             {
-             	rhsTime = rhsTimeValue + rhsTimeIntervalValue;
-             }
-             else
-             {
-             	rhsTime = rhsTimeValue;
-             }
-             customFormulaString =  lhsTimeValue + "\n" + arithmaticOpsCb.selectedItem.toString() + "\n" +  entityName + "." + attributesCb.selectedItem.toString() + "\n" + relationalOpsCb.selectedItem.toString() + "\n" + rhsTime;
              this.parentApplication.singleNodecustomFormulaString = customFormulaString;
              singleNodeCustomFormula.setCustomFormulaString(customFormulaString);
               
@@ -202,12 +231,13 @@
              //Setting node Type
              singleNodeCustomFormula.setNodeType("singleNodeCustomNode");
              
-             //Setting the custom Column Name
+             //Setting the custom Column Name             
              singleNodeCustomFormula.setCustomColumnName(customColumnName.text);
              
              //Invoking the RPC Method
              if(submitButton1.label == "OK")
              {
+             	
              	this.parentApplication.rpcService.addEventListener(ResultEvent.RESULT, createCustomNodeHandler);
              	singleNodeCustomFormula.setOperation("create");
              	this.parentApplication.rpcService.formSingleNodeFormula(singleNodeCustomFormula, "add");
@@ -228,7 +258,7 @@
 		}
 		
 		private function createCustomNodeHandler(event : ResultEvent) : void
-		{
+		{					
 			var node  : SingleNodeCustomFormulaNode = event.result as SingleNodeCustomFormulaNode;
             this.parentApplication.rpcService.removeEventListener(ResultEvent.RESULT, createCustomNodeHandler);
             this.parentApplication.addSingleNodeCustomNode(node);
@@ -251,18 +281,20 @@
 			    {
 			    	if(operandType == "Date" && arithmaticOpsCb.selectedItem.toString() == "-")
 				    {
-					    //Selected attribute type is of Date type , then on LHS it should be a text Input and TimeInterval drop down 
-					    addTextAndTimeIntervals();    
-					
+				    	if(this.parentApplication.view != "Result"){
+						    //Selected attribute type is of Date type , then on LHS it should be a text Input and TimeInterval drop down 
+						    addTextAndTimeIntervals();    
+				    	}
 				    }
 				    else
 				    {
 					 	//If Selected attribute type is not of Date type
                     	//Removing the Text boxes and Time Intervals 
                     	removeLHSTxtAndIntervals();
-                    
-                    	//Add Date Picker for RHS 
-                    	addRHSDatePicker();
+                    	if(this.parentApplication.view != "Result"){
+	                    	//Add Date Picker for RHS 
+	                    	addRHSDatePicker();
+                    	}
 					}
 			    }
 			    else
@@ -427,10 +459,8 @@
     			here if a dropdown list contains only on item then it will show in comboBox as selected item
     			if item length is more than 1 then i will show prompt like "-select-" and store item text to myToolTip variable for further refrence.    			 
     		*/ 		
-    		public function validateComboboxText():void{
-    			if(this.parentApplication.operation==""){     				
-    				this.parentApplication.operation="edit"; 
-    				 	     			   			
+    		public function validateComboboxText():void{    			
+    			if(this.parentApplication.operation==""){ 	     			   			
 	    			 if(arithmeticOpDp.length <= 1){
 		    			 arithmaticOpsCb.selectedIndex = 0;
 		    			 arithmaticOpsCb.toolTip=arithmaticOpsCb.selectedLabel.toString();
@@ -494,6 +524,30 @@
 		      submitButton1.errorString="";		      
 		      
 		    }
+		    /**
+		       for calculare query remove component
+		    */
+		    private function removeComponent():void {
+		      if(this.parentApplication.view=="Result"){
+		      	relationalOpsCb.visible = false;
+		      	timeIntervalCb.visible = false;
+		      	timeInputBox.visible = false;
+		      	relationalOpsLabel.visible = false;
+		      	lb5.visible = false;
+		      	lb6.visible = false;
+		      	timeIntervalCb6.visible = true;
+		      	lb7.visible = true;
+		      }else{
+		      	relationalOpsCb.visible = true;
+		      	timeIntervalCb.visible = true;
+		      	timeInputBox.visible = true;
+		      	relationalOpsLabel.visible = true;
+		      	lb5.visible = true;
+		      	lb6.visible = true;
+		      	timeIntervalCb6.visible = false;
+		      	lb7.visible = false;
+		      }
+		    }
 			
 		]]>
 	</mx:Script>
@@ -510,7 +564,7 @@
        </mx:HBox>
 	
 		<!--Specifying Controls -->
-		<mx:HBox id ="myBox" x="20" y="60" width="100%">
+		<mx:HBox id ="myBox" x="20" y="60" creationComplete="validateComboboxText()" width="100%" >
 			<mx:DateField id="datePicker" name="leftDatePicker" width="100" showToday="true" 
 				formatString="MM/DD/YYYY" />
 			<mx:ComboBox id="arithmaticOpsCb" dataProvider="{arithmeticOpDp}" width="100"  textAlign="center" 
@@ -527,11 +581,16 @@
 	    		width="100"  borderThickness="0" borderColor="blue" prompt="--Select--" 
 	    		itemRenderer="mx.controls.Label" rowCount="10" close="truncateLongText(event)" toolTip=""/>
         </mx:HBox>
-        <mx:Spacer height="5"/>   
+        <mx:Spacer height="5"/>          
 	    <mx:HBox x="20" horizontalGap="6" width="100%">
-         <mx:Label id="columnLabel" width="330" text="Please Enter Column Name To Be Displayed in Results:"/>
+         <mx:Label id="columnLabel" width="170" text="Please Enter Column Name :"/>
               
-         <mx:TextInput id="customColumnName" width="300" restrict="0-9 A-Z a-z" borderColor="blue" focusOut="validateColumnName()"/>
+         <mx:TextInput id="customColumnName" width="250" restrict="0-9 A-Z a-z" borderColor="blue" focusOut="validateColumnName()"/>
+         <mx:ComboBox id="timeIntervalCb6" name="timeIntervalCb6" dataProvider="{timeIntervalsDp}" 
+         	width="100"  borderThickness="0" borderColor="blue" prompt="--Select--" 
+         	itemRenderer="mx.controls.Label" rowCount="10" close="truncateLongText(event)" toolTip="" visible="false"/>
+         <mx:Label id="lb7" name="label6" width="100"  height="50" color="blue" text="{timeIntrvalLabel}" fontStyle="normal" 
+         	fontWeight="bold" paddingTop="0" visible="false"/>
 	   </mx:HBox>
 	 
 	   <mx:HBox x="20" y="50">

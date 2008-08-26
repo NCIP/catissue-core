@@ -334,6 +334,7 @@
   	   {
 			var node : CustomFormulaNode = this;
 			currentCustomNode = node;
+			this.parentApplication.operation="edit"; //to get popwindow fields values 
 			this.parentApplication.rpcService.retrieveEditQueryData(node);
 			this.parentApplication.rpcService.removeEventListener(ResultEvent.RESULT,nodeRemoveHandler);
 			this.parentApplication.rpcService.addEventListener(ResultEvent.RESULT,editNodeHandler);  
@@ -349,13 +350,20 @@
   	   	  this.parentApplication.rpcService.removeEventListener(ResultEvent.RESULT,editNodeHandler);
   	   	  this.parentApplication.createAndPopulate(event.result as Object, "edit", currentCustomNode);
   	   }
+  	   private function changeBgColor() : void{
+       	if(this.parentApplication.view=="Result"){
+       		dNodeFormula.setStyle("backgroundColor","#e7ddfa");
+       	}else{
+       		dNodeFormula.setStyle("backgroundColor","#FFFFFF");
+       	}       		
+       } 
   	]]>
   </mx:Script>
  
   <!--<mx:RemoteObject id="rpcService" destination="cdeService">
  </mx:RemoteObject> -->
   
-  <mx:HBox height="100%" width="100%" textAlign="center" horizontalGap="0">
+  <mx:HBox id="dNodeFormula" height="100%" width="100%" textAlign="center" horizontalGap="0" creationComplete="changeBgColor()">
      <mx:Label id="formulaLabel" text="{customFormula}" height="100%" width="95%"/>
   	
      <mx:VBox height="100%" verticalAlign="middle">
