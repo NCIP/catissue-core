@@ -230,6 +230,35 @@ A.view:hover{
 	text-decoration: none;
 }
 
+A.viewhelp:link{
+	text-decoration:underline;
+	font-family: verdana;
+	font-size: 12px;
+	color: #000000;
+	font-weight: bold;
+}
+A.viewhelp:visited{
+	text-decoration:underline;
+	font-family: verdana;
+	font-size: 12px;
+	color: #000000;
+	font-weight: bold;
+}
+A.viewhelp:active{
+	text-decoration:underline;
+	font-family: verdana;
+	font-size: 12px;
+	color: #000000;
+	font-weight: bold;
+}
+A.viewhelp:hover{
+	text-decoration:none;
+	font-family: verdana;
+	font-size: 12px;
+	color: #000000;
+	font-weight: bold;
+}
+
 /*End link css*/
 
 
