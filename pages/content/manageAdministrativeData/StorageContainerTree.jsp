@@ -53,7 +53,7 @@ if ( document.getElementById && !(document.all) )
 }
 else
 {
-	var slope=10;
+	var slope=-10;
 }
 
 window.onload = function() { setFrameHeight('treeboxbox_tree', 1.0,slope);}

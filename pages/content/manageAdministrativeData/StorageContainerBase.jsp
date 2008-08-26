@@ -131,7 +131,7 @@ window.onresize = function() { setFrameHeight('SCTreeView', .7,slope); setFrameH
         <tr>
 							<logic:equal parameter="operation"	value='showEditAPageAndMap'>
 							<td width="25%"  valign="top">
-								<iframe id="SCTreeView" src="ShowFramedPage.do?pageOf=pageOfStorageContainer&storageType=-1&operation=${requestScope.operation}" scrolling="auto" frameborder="0" width="100%" name="SCTreeView" >
+								<iframe id="SCTreeView" src="ShowFramedPage.do?pageOf=pageOfStorageContainer&storageType=-1&operation=${requestScope.operation}" scrolling="no" frameborder="0" width="100%" name="SCTreeView" >
 									Your Browser doesn't support IFrames.
 								</iframe>
 							 </td>

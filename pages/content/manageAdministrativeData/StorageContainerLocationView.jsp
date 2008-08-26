@@ -50,7 +50,7 @@
 //Set the alope for the IFrame
 if ( document.getElementById && !(document.all) ) 
 {
-	var slope=10;
+	var slope=0;
 }
 else
 {
@@ -70,7 +70,7 @@ window.onresize = function() { setFrameHeight('<%=Constants.DATA_VIEW_FRAME%>', 
 			-->
 			<!--  changed by Pallavi Mistry -->
 			<!-- treeNodeDataAction  added for DHTMLX tree view-->
-			<iframe id="<%=Constants.APPLET_VIEW_FRAME%>" src="<%=treeNodeDataAction%>" scrolling="yes" frameborder="1" width="99%" >
+			<iframe id="<%=Constants.APPLET_VIEW_FRAME%>" src="<%=treeNodeDataAction%>" scrolling="no" frameborder="1" width="99%" >
 				Your Browser doesn't support IFrames.
 			</iframe>
 		</td>
