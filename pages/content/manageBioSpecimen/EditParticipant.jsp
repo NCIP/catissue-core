@@ -886,7 +886,7 @@ function participantRegRow(subdivtag)
 						<td class="black_ar" >&nbsp;</td>
 						<td class="black_ar">&nbsp;</td>
 						<td class="black_ar">&nbsp;</td>
-						<td class="black_ar">&nbsp;</td>
+						
 					</tr>
 
 
