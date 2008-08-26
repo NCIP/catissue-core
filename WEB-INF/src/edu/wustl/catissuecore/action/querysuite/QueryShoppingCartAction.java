@@ -67,10 +67,11 @@ abstract public class QueryShoppingCartAction extends BaseAction
 				return;
 			}
 		}
-		ActionErrors errors = new ActionErrors();
-		ActionError error = new ActionError("ShoppingCart.emptyCartTitle");
-		errors.add(ActionErrors.GLOBAL_ERROR, error);
-		saveErrors(request, errors);
+		//List Empty Message added in QueryShoppingCart.jsp page
+//		ActionErrors errors = new ActionErrors();
+//		ActionError error = new ActionError("ShoppingCart.emptyCartTitle");
+//		errors.add(ActionErrors.GLOBAL_ERROR, error);
+//		saveErrors(request, errors);
 	}
 	
 	/**
