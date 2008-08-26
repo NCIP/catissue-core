@@ -108,7 +108,7 @@ public class UserBizLogic extends DefaultBizLogic
 		{
 			user = (User) obj;            
 		}
-		// Method to populate rowIdMap in case, Add Privilege button is not clicked
+      	// Method to populate rowIdMap in case, Add Privilege button is not clicked
         userRowIdMap = getUserRowIdMap(user, userRowIdMap);
 		gov.nih.nci.security.authorization.domainobjects.User csmUser = new gov.nih.nci.security.authorization.domainobjects.User();
 
@@ -262,7 +262,7 @@ public class UserBizLogic extends DefaultBizLogic
         {
             if (userRowIdMap == null || userRowIdMap.isEmpty() && user.getSiteCollection() != null && !user.getSiteCollection().isEmpty())
             {
-                List<NameValueBean> list = new AssignPrivilegePageBizLogic().getActionsForSelRole(user.getRoleId());
+                List<NameValueBean> list = new AssignPrivilegePageBizLogic().getActionsList(user.getRoleId());
                 NameValueBean roleBean = new NameValueBean();
                 try
                 {
