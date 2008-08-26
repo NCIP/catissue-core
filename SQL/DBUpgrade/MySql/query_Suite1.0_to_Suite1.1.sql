@@ -87,9 +87,8 @@ where expr.QUERY_EXPRESSIONID_ID = sub.identifier);
 
 create table tmp_expressionId (select * from QUERY_SUBEXPR_OPERAND);
 /* incorrect rows */
-delete QUERY_SUBEXPR_OPERAND exprId, opnd 
-from QUERY_SUBEXPR_OPERAND exprId, QUERY_OPERAND opnd
-where exprId.identifier = opnd.identifier and opnd.position is null;
+delete from QUERY_SUBEXPR_OPERAND where identifier in (select identifier from QUERY_OPERAND where position is null);
+delete from QUERY_OPERAND where position is null;
 
 /* expression */
 create table QUERY_EXPRESSION (IDENTIFIER bigint not null, IS_IN_VIEW BOOLEAN, IS_VISIBLE BOOLEAN, UI_EXPR_ID integer, QUERY_ENTITY_ID bigint, primary key (IDENTIFIER));
@@ -141,7 +140,7 @@ join tmp_expressionId sub on (sub.identifier = entry.SOURCE_EXPRESSIONID_ID or s
 
 alter table commons_graph_edge add column OLD_ENTRY_ID bigint;
 insert into commons_graph_edge (SOURCE_VERTEX_CLASS, SOURCE_VERTEX_ID, TARGET_VERTEX_CLASS, TARGET_VERTEX_ID, EDGE_CLASS, EDGE_ID, OLD_ENTRY_ID)
-(select distinct 'edu.wustl.common.querysuite.queryobject.impl.Expression', srcExpr.expression_id,
+(select 'edu.wustl.common.querysuite.queryobject.impl.Expression', srcExpr.expression_id,
 'edu.wustl.common.querysuite.queryobject.impl.Expression', targetExpr.expression_id,
 'edu.wustl.common.querysuite.metadata.associations.impl.IntraModelAssociation', assoc.identifier,
 entry.identifier
@@ -153,7 +152,7 @@ join tmp_expressionId targetExpr on (targetExpr.identifier = entry.TARGET_EXPRES
 join QUERY_INTRA_MODEL_ASSOCIATION assoc on (assoc.identifier = entry.QUERY_MODEL_ASSOCIATION_ID));
 
 insert into commons_graph_edge (SOURCE_VERTEX_CLASS, SOURCE_VERTEX_ID, TARGET_VERTEX_CLASS, TARGET_VERTEX_ID, EDGE_CLASS, EDGE_ID, OLD_ENTRY_ID)
-(select distinct 'edu.wustl.common.querysuite.queryobject.impl.Expression', srcExpr.expression_id,
+(select 'edu.wustl.common.querysuite.queryobject.impl.Expression', srcExpr.expression_id,
 'edu.wustl.common.querysuite.queryobject.impl.Expression', targetExpr.expression_id,
 'edu.wustl.common.querysuite.metadata.associations.impl.InterModelAssociation', assoc.identifier,
 entry.identifier
