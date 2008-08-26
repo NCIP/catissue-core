@@ -775,7 +775,6 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		specimenCollectionGroup.setCollectionProtocolRegistration(cpr);
 		specimenCollectionGroup.getCollectionProtocolRegistration().getSpecimenCollectionGroupCollection()
 		.add(specimenCollectionGroup);
-		specimenCollectionGroup.setConsentTierStatusCollectionFromCPR(cpr);
 	}
 
 	/**
