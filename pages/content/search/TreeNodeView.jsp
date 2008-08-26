@@ -46,7 +46,7 @@
 <script language="javascript">
 if ( document.getElementById && !(document.all) ) 
 {
-	var slope=-1;
+	var slope=15;
 }
 else
 {
