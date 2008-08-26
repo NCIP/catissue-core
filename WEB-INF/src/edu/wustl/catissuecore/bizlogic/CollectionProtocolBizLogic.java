@@ -59,6 +59,7 @@ import edu.wustl.common.security.PrivilegeCache;
 import edu.wustl.common.security.PrivilegeManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
+import edu.wustl.common.util.Permissions;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.dbManager.DBUtil;
 import edu.wustl.common.util.global.ApplicationProperties;
@@ -1596,5 +1597,16 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			session.close();
 		}
 		return siteCollection;
+	}
+	
+	@Override
+	public boolean isReadDeniedTobeChecked() {
+		return true;
+	}
+	
+	@Override
+	public String getReadDeniedPrivilegeName()
+	{
+		return Permissions.READ_DENIED;
 	}
 }

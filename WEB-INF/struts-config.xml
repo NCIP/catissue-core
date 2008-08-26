@@ -1105,6 +1105,7 @@ PUBLIC
 			<forward name="pageOfParticipant" path="/Participant.do?operation=edit&amp;pageOf=pageOfParticipant&amp;menuSelected=12"/>
 			<forward name="pageOfSelectedParticipant" path="/ParticipantEdit.do?operation=edit"/>
 			<forward name="failure" path="/Participant.do?operation=edit&amp;pageOf=pageOfParticipant&amp;menuSelected=12"/>
+			<forward name="access_denied" path="/ManageAdministrativeData.do" />	
 		</action>
 
 		<action path="/ViewParticipantSPR"
@@ -1174,6 +1175,7 @@ PUBLIC
 			scope="request">
 			<forward name="pageOfCollectionProtocolRegistration" path="/CollectionProtocolRegistration.do?operation=edit&amp;pageOf=pageOfCollectionProtocolRegistration&amp;menuSelected=13&amp;showConsents=yes"/>
 			<forward name="failure" path="/CollectionProtocolRegistration.do?operation=edit&amp;pageOf=pageOfCollectionProtocolRegistration&amp;menuSelected=13&amp;showConsents=yes"/>
+			<forward name="access_denied" path="/ManageAdministrativeData.do" />	
 		</action>    
 		<!-- Collection Protocol Registration Actions Ends -->
 		
@@ -1543,6 +1545,7 @@ PUBLIC
 			scope="request">
 			<forward name="pageOfCollectionProtocol" path="/CollectionProtocol.do?operation=edit&amp;pageOf=pageOfCollectionProtocol&amp;menuSelected=9"/>
 			<forward name="failure" path="/CollectionProtocol.do?operation=edit&amp;pageOf=pageOfCollectionProtocol&amp;menuSelected=9"/>
+			<forward name="access_denied" path="/ManageAdministrativeData.do" />	
 		</action>    
 		<!-- CollectionProtocol Actions Ends-->
 		
@@ -1802,6 +1805,7 @@ PUBLIC
 			<forward name="pageOfSpecimenCollectionGroup" path="/SpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroup&amp;menuSelected=14&amp;showConsents=yes"/>
 			<forward name="failure" path="/SpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroup&amp;menuSelected=14&amp;showConsents=yes"/>
 			<forward name="pageOfSpecimenCollectionGroupCPQuery" path="/SpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroupCPQuery&amp;menuSelected=14&amp;showConsents=yes"/>			
+			<forward name="access_denied" path="/ManageAdministrativeData.do" />	
 		</action>
 		
 		<action path="/ViewSpecimenCollectionGroupSPR"
@@ -1925,6 +1929,7 @@ PUBLIC
 			<forward name="pageOfNewSpecimenCPQuery" path="/NewSpecimen.do?operation=edit&amp;pageOf=pageOfNewSpecimenCPQuery&amp;menuSelected=15&amp;showConsents=yes&amp;tableId4=disable"/>			
 			<forward name="createNew" path="/CreateSpecimen.do?operation=add&amp;pageOf=&amp;menuSelected=15" />
 			<forward name="pageOfListSpecimenEventParametersCPQuery" path="/NewSpecimen.do?operation=edit&amp;pageOf=pageOfListSpecimenEventParametersCPQuery&amp;menuSelected=15&amp;showConsents=yes"/>
+			<forward name="access_denied" path="/ManageAdministrativeData.do" />	
 		</action>
 
 		<action path="/ViewNewSpecimenSPR"
@@ -2006,6 +2011,7 @@ PUBLIC
 			scope="request">
 			<forward name="success" path="/CreateSpecimen.do?operation=edit&amp;pageOf=&amp;menuSelected=15"/>
 			<forward name="failure" path="/CreateSpecimen.do?operation=edit&amp;pageOf=&amp;menuSelected=15"/>
+			<forward name="access_denied" path="/ManageAdministrativeData.do" />	
 		</action>
 		<!--Create Specimen Actions Ends-->
 				
@@ -3290,6 +3296,7 @@ PUBLIC
 			scope="request">
 			<forward name="pageOfCollectionProtocolQueryEdit" path="/QueryCollectionProtocol.do?operation=edit&amp;pageOf=query"/>
 			<forward name="failure" path="/QueryCollectionProtocol.do?pageOf=query"/>
+			<forward name="access_denied" path="/ManageAdministrativeData.do" />	
 		</action>
 		
 		<action path="/QueryCollectionProtocolEdit"
@@ -3325,6 +3332,7 @@ PUBLIC
 			<forward name="pageOfSpecimenCollectionGroupCPQueryEdit" path="/QuerySpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroupCPQuery"/>			
 			<forward name="pageOfSpecimenCollectionGroupAdd" path="/QuerySpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroupCPQuery"/>
 			<forward name="failure" path="/QuerySpecimenCollectionGroup.do?pageOf=query"/>
+			<forward name="access_denied" path="/ManageAdministrativeData.do" />	
 		</action>
 		<action path="/QuerySpecimenCollectionGroupAdd"
 			type="edu.wustl.common.action.CommonAddEditAction"
@@ -3380,6 +3388,7 @@ PUBLIC
 			<forward name="pageOfSpecimenQueryEdit" path="/QuerySpecimen.do?operation=edit&amp;pageOf=query"/>
 			<forward name="pageOfNewSpecimenCPQuery" path="/QuerySpecimen.do?operation=edit&amp;pageOf=pageOfNewSpecimenCPQuery"/> 	
 			<forward name="failure" path="/QuerySpecimen.do?pageOf=query"/>
+			<forward name="access_denied" path="/ManageAdministrativeData.do" />	
 		</action>
 			
 		<action path="/QuerySpecimenArraySearch"
@@ -4291,6 +4300,7 @@ PUBLIC
 		<forward name="pageOfParticipantQueryEdit" path="/QueryParticipant.do?operation=edit&amp;pageOf=query"/>
 		<forward name="pageOfParticipantCPQueryEdit" path="/QueryParticipant.do?operation=edit&amp;pageOf=pageOfParticipantCPQuery&amp;refresh=false"/>
 		<forward name="failure" path="/QueryParticipant.do?pageOf=query"/>
+		<forward name="access_denied" path="/ManageAdministrativeData.do" />	
 	</action>
 	<action path="/CPQueryParticipantAdd"
 		type="edu.wustl.common.action.CommonAddEditAction"
@@ -4593,6 +4603,7 @@ PUBLIC
 		scope="request">
 		<forward name="pageOfCollectionProtocolRegistrationCPQuery" path="/CPQueryCollectionProtocolRegistration.do?operation=edit&amp;pageOf=pageOfCollectionProtocolRegistrationCPQuery&amp;menuSelected=13"/>
 		<forward name="failure" path="/CPQueryCollectionProtocolRegistration.do?operation=edit&amp;pageOf=pageOfCollectionProtocolRegistrationCPQuery&amp;menuSelected=13"/>
+		<forward name="access_denied" path="/ManageAdministrativeData.do" />	
 	</action>    
 	<!-- Collection Protocol Registration Actions Ends -->
 

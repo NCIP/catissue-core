@@ -49,6 +49,7 @@ import edu.wustl.common.security.PrivilegeCache;
 import edu.wustl.common.security.PrivilegeManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
+import edu.wustl.common.util.Permissions;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -1367,4 +1368,15 @@ public class ParticipantBizLogic extends DefaultBizLogic
         }
 		return isAuthorized;		
 	}
+
+	@Override
+	public boolean isReadDeniedTobeChecked() {
+		return true;
+	}
+	
+	@Override
+	public String getReadDeniedPrivilegeName()
+	{
+		return Permissions.PHI;
+	}	
 }

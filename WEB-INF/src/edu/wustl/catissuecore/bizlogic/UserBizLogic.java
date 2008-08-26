@@ -152,10 +152,6 @@ public class UserBizLogic extends DefaultBizLogic
 
 				SecurityManager.getInstance(UserBizLogic.class).createUser(csmUser);
 
-			//	 if (user.getAdminuser())
-			//	 {
-			//		 securityManager.assignRoleToUser(csmUser.getUserId().toString(),"1");
-			//	 }
 				String role = "";
 				if (user.getRoleId() != null)
 				{

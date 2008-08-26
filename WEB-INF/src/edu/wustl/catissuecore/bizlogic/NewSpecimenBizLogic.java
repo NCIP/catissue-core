@@ -3394,4 +3394,15 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
         }
 		return isAuthorized;			
 	}
+	
+	@Override
+	public boolean isReadDeniedTobeChecked() {
+		return true;
+	}
+	
+	@Override
+	public String getReadDeniedPrivilegeName()
+	{
+		return Permissions.READ_DENIED;
+	}	
 }

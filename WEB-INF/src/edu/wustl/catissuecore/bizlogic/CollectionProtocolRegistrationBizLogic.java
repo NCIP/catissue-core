@@ -47,6 +47,7 @@ import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exceptionformatter.DefaultExceptionFormatter;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
+import edu.wustl.common.util.Permissions;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
@@ -1799,11 +1800,15 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 	}
 	/* offset changes finish */
 
+	@Override
+	public boolean isReadDeniedTobeChecked() {
+		return true;
+	}
 	
-	
-	
-	
-	
-	
+	@Override
+	public String getReadDeniedPrivilegeName()
+	{
+		return Permissions.READ_DENIED;
+	}	
 	
 }

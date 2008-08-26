@@ -18,6 +18,7 @@ import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
+import edu.wustl.common.util.Permissions;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
@@ -127,5 +128,16 @@ public class IdentifiedSurgicalPathologyReportBizLogic  extends DefaultBizLogic
 		return report;
 
 	}
+	
+	@Override
+	public boolean isReadDeniedTobeChecked() {
+		return true;
+	}
+	
+	@Override
+	public String getReadDeniedPrivilegeName()
+	{
+		return Permissions.READ_DENIED;
+	}	
 }
 
