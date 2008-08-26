@@ -102,6 +102,12 @@ function showEvents()
    }
 }
 
+function gotoAdvanceQuery()
+{
+	var action = "QueryWizard.do?";
+	document.forms[0].action = action;
+	document.forms[0].submit();
+}
 
 function onSubmit()
 {
@@ -290,10 +296,7 @@ function checkAll(element)
 </html:messages>
 <html:form action="AddDeleteCart.do">
 
-<%
-   if(dataList!=null && dataList.size()!=0)
-   {
-%>
+
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
   <tr>
     <td class="td_color_bfdcf3"><table border="0" cellpadding="0" cellspacing="0">
@@ -313,7 +316,9 @@ function checkAll(element)
    <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
       
      <tr>
-        <td colspan="2" align="left" class="toptd"></td>
+        <td colspan="2" align="left" class="toptd">
+		<%@ include file="/pages/content/common/ActionErrors.jsp" %>
+		</td>
       </tr>
       
 	  <tr>
@@ -321,11 +326,15 @@ function checkAll(element)
       </tr>
      
       <tr>
-        <td colspan="2"><table width="99%" border="0" align="center" cellpadding="0" cellspacing="0">
+        <td colspan="2">
+		<%
+   if(dataList!=null && dataList.size()!=0)
+   {
+%><table width="99%" border="0" align="center" cellpadding="0" cellspacing="0">
            
 			<tr >
 	<td class="formFieldNoBordersSimple" align="left">
-		<input type='checkbox' name='checkAll1' id='checkAll1' onClick='checkAll(this)'>
+		<input type='checkbox' name='checkAll1' id='checkAll1' property="" onClick='checkAll(this)'>
 				<bean:message key="buttons.checkAll" />
 		</td>
 		<!--  **************  Code for New Grid  *********************** -->	
@@ -418,14 +427,30 @@ function checkAll(element)
       </tr>
 	
    </table></td></tr>
- <%}else{
-			%>
-     <table summary="" cellpadding="0" cellspacing="0" border="0" width="100%">
-     <tr >
-		<td > <html:errors/></td>
-
+	<%
+	    }
+		else
+		{
+	%>
+     <tr>
+		<td class="bottomtd"></td>
 	</tr>
-	</table>
+	 <tr>
+		<td class="messagetextsuccess">&nbsp;<bean:message key="ShoppingCart.emptyCartTitle"/>
+		&nbsp;<bean:message key="shoppingCart.emptyCartTitle.message"/></td>
+	</tr>
+	<tr>
+		<td class="bottomtd"></td>
+	</tr>
+	<tr>
+		<td class="buttonbg">
+			<html:button styleClass="blue_ar_b" property="" onclick="gotoAdvanceQuery()">
+				<bean:message key="buttons.advanceQuery"/>	
+			</html:button>
+			&nbsp|&nbsp <html:link page="/ManageAdministrativeData.do" styleClass="cancellink">
+		<bean:message key="buttons.cancel" /> </html:link>
+		</td>
+	</tr>	
  <%}%>
   </table>
 	</body>
