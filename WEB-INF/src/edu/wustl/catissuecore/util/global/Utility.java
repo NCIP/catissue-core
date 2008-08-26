@@ -1671,11 +1671,10 @@ public class Utility extends edu.wustl.common.util.Utility {
 		
 		storagePositionTypeList.add(new NameValueBean(Constants.SITE, 
 							Constants.SITE));
-		storagePositionTypeList.add(new NameValueBean(Constants.STORAGE_TYPE_POSITION_AUTO, 
-				Constants.STORAGE_TYPE_POSITION_AUTO));
-		storagePositionTypeList.add(new NameValueBean(Constants.STORAGE_TYPE_POSITION_MANUAL, 
-				Constants.STORAGE_TYPE_POSITION_MANUAL));
-		
+		storagePositionTypeList.add(new NameValueBean(Constants.CDE_NAME_CONTAINER+" ("+
+				Constants.STORAGE_TYPE_POSITION_AUTO+")", Constants.STORAGE_TYPE_POSITION_AUTO));
+		storagePositionTypeList.add(new NameValueBean(Constants.CDE_NAME_CONTAINER+" ("+
+				Constants.STORAGE_TYPE_POSITION_MANUAL+")", Constants.STORAGE_TYPE_POSITION_MANUAL));		
 		return storagePositionTypeList;		
 	}
     
