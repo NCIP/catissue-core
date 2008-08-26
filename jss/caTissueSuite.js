@@ -12,7 +12,8 @@ function setFocusOnFirstElement()
                               frm.elements[i].focus();      
                               break;
                         } 
-                        else {
+                        else
+                        {
                               continue;
                         }
                   }
@@ -48,7 +49,7 @@ function setFocusOnFirstElement()
 function openInstitutionWindow()
 {
       institutionwindow=dhtmlmodal.open('Institution', 'iframe', 'Institution.do?operation=add&pageOf=pageOfPopUpInstitution','Administrative Data', 'width=530px,height=175px,center=1,resize=0,scrolling=1')
-    institutionwindow.onclose=function()
+   	  institutionwindow.onclose=function()
       { 
             return true;
       }
@@ -73,7 +74,7 @@ function openCRGWindow()
 }
 
 // function for storage container to view map
-      function showStorageContainerMap()
+    function showStorageContainerMap()
     { 
         var frameUrl='ShowFramedPage.do?pageOf=pageOfSpecimen&storageType=-1';      
             platform = navigator.platform.toLowerCase();
@@ -98,7 +99,7 @@ function openCRGWindow()
 
       var request;
 
-   function sendRequestsWithData(url,data,cpOperation)
+   function sendRequestsWithData(url,data,cpOperation,pageOf)
    {
      request=newXMLHTTPReq();
      request.onreadystatechange = function requestHandler()
@@ -115,100 +116,89 @@ function openCRGWindow()
                 if(jsonResponse.locations!=null)
                 {
                    var num = jsonResponse.locations.length; 
-				   
-                   // To clear the User List
-                   var selectedEditableUserId="";
-				  
-                   if((cpOperation == "getUsersForThisSites")||(cpOperation == "editRow"))
-                   {
-                       var eleOfUserSelBox = document.getElementById('userIds');
-                       while(eleOfUserSelBox.length > 0)
-                       {
-                      	   if((eleOfUserSelBox.options[eleOfUserSelBox.length - 1].selected)==true)
-                      	   {
-                      	       selectedEditableUserId= eleOfUserSelBox.options[eleOfUserSelBox.length - 1].value
-                           }
-                           eleOfUserSelBox.remove(eleOfUserSelBox.length - 1);
-                       }
-                   }     
-                    // To clear the CP List
-                   var selectedEditableCPId="";
-                   if((cpOperation == "getCPsForThisSites")||(cpOperation == "editRowForUserPage"))
-                   {
-                      var eleOfCPSelBox = document.getElementById('cpIds');
-                      while(eleOfCPSelBox.length > 0)
-                       {
-                           if((eleOfCPSelBox.options[eleOfCPSelBox.length - 1].selected)==true){
-                       		    selectedEditableCPId= eleOfCPSelBox.options[eleOfCPSelBox.length - 1].value
-                           }
-                           eleOfCPSelBox.remove(eleOfCPSelBox.length - 1);
-                        }
-                   }     
-						
-                   // To Deselect privileges
-                   if((cpOperation == "editRow")||(cpOperation == "addPrivilege")||(cpOperation == "addPrivOnUserPage")||(cpOperation == "editRowForUserPage"))
-                   {
-                        var eleOfActionSelBox = document.getElementById('actionIds');     
-                        for(var opt=0; opt<eleOfActionSelBox.length; opt++)
-                        {
-                            eleOfActionSelBox.options[opt].selected=false;
-                        }
-                   }
-                    // To clear Privileges
-                  if((cpOperation == "getActionsForThisRole")||(cpOperation == "editRow")||(cpOperation == "editRowForUserPage")){
-					  var eleOfActionSelBox = document.getElementById('actionIds');
-                      clearSelBoxList(eleOfActionSelBox);
-                  }
-  
-                  // To Deselect Sites
-
-                  if((cpOperation == "editRow")||(cpOperation == "editRowForUserPage")||(cpOperation == "addPrivilege")||(cpOperation == "addPrivOnUserPage"))
-                   {
-                      var eleOfSiteSelBox = document.getElementById('siteIds');      
-                      for(var opt=0; opt<eleOfSiteSelBox.length; opt++)
-                      {
-                           eleOfSiteSelBox.options[opt].selected=false;
-                      }
-                   }
-
-                   // To Deselect Users and Roles 
-                   if(cpOperation == "addPrivilege")
-                    {
-                       var eleOfUserSelBox = document.getElementById('userIds');      
-                       for(var opt=0; opt<eleOfUserSelBox.length; opt++){
-                            eleOfUserSelBox.options[opt].selected=false;
-                       }
-                       var eleOfRoleSelBox = document.getElementById('roleIds');
-                       eleOfRoleSelBox.options[0].selected=true;
-                    }
-
-                    // To Deselect CPs and Roles 
-                    if(cpOperation == "addPrivOnUserPage")
-                    {
-                        var eleOfCPSelBox = document.getElementById('cpIds'); 
-                        for(var opt=0; opt<eleOfCPSelBox.length; opt++){
-                             eleOfCPSelBox.options[opt].selected=false;
-                         }
-                        var eleOfRoleSelBox = document.getElementById('roleIds');
-                        eleOfRoleSelBox.options[0].selected=true;
-                     }
-                    if(cpOperation == "getActionsForThisCPs")
-                     {
+                   
+                   var eleOfUserSelBox = document.getElementById('userIds');
+                   var eleOfCPSelBox = document.getElementById('cpIds');
+	               var eleOfActionSelBox = document.getElementById('actionIds'); 
+	               var eleOfSiteSelBox = document.getElementById('siteIds');
+	               var eleOfRoleSelBox = document.getElementById('roleIds');
 					
-						var actionSelBox = document.getElementById('actionIds');
-                       	clearSelBoxList(actionSelBox);
-                     }
-                      if((cpOperation == "getCPsForThisSites")&& num==0)
+					if(cpOperation == "getUsersForThisSites")
+                    {
+                        var selectedEditableUserId="";
+                        
+		                selectedEditableUserId = clearListForUserCP(eleOfUserSelBox);    			
+              		}
+              		
+              		else if(cpOperation == "getCPsForThisSites")
+                    {
+						var selectedEditableCPId="";
+						
+						selectedEditableCPId = clearListForUserCP(eleOfCPSelBox);           		
+              		}
+              		
+              		else if(cpOperation == "getActionsForThisRole")
+                    {
+	                    clearSelBoxList(eleOfActionSelBox);     		
+              		}
+              		
+              		else if(cpOperation == "getActionsForThisCPs")
+                    {
+              			clearSelBoxList(eleOfActionSelBox);
+              		}
+              		
+              		else if(cpOperation == "getActionsForThisSites")
+                    {
+              			clearSelBoxList(eleOfActionSelBox);
+              		}
+              		
+              		else if(cpOperation == "editRow")
+                    {
+              			clearSelBoxList(eleOfActionSelBox);
+                    			 
+                    	deselectAllOptsOfSelBox(eleOfSiteSelBox);
+                    	
+                    	if(pageOf=="pageOfAssignPrivilegePage")
+	                    {
+	                    	 var selectedEditableUserId="";
+	                          	 
+                    		 selectedEditableUserId = clearListForUserCP(eleOfUserSelBox);
+						}
+	                    else if(pageOf!=null)
+	                    {
+	                    	 var selectedEditableCPId="";
+	                          	 
+	                    	 selectedEditableCPId = clearListForUserCP(eleOfCPSelBox);
+						}
+              		}
+              		
+              		else if(cpOperation == "addPrivilege")
+                    {
+						deselectAllOptsOfSelBox(eleOfActionSelBox);
+				                       
+						eleOfRoleSelBox.options[0].selected=true;
+				                       
+		                deselectAllOptsOfSelBox(eleOfSiteSelBox);
+		                
+		                if(pageOf!=null && pageOf=="pageOfAssignPrivilegePage")
+	                          {
+	                          	 clearSelBoxList(eleOfUserSelBox);
+	                          }
+	                          else if(pageOf!=null)
+	                          {
+	                          	 deselectAllOptsOfSelBox(eleOfCPSelBox );
+	                          }
+              		}
+                    else if((cpOperation == "getCPsForThisSites")&& num==0)
 					{
-						 getActionsForThisCPs('cpIds','siteIds','roleIds','cpCheckId');
+						getActionsForThisCPs('cpIds','siteIds','roleIds','cpCheckId');
 					}
-
-                     
+					
                     for(i=0;i<num;i++)
                      {     
                       // User List for Selected Sites                             
                         if(cpOperation == "getUsersForThisSites")
-                        {     
+                        {    
                             theValue  = jsonResponse.locations[i].locationId;
                             theText = jsonResponse.locations[i].locationName;
                              var myNewOption = new Option(theText,theValue); 
@@ -218,766 +208,232 @@ function openCRGWindow()
                                  document.getElementById('userIds').options[i].selected=true;
                             }
                         }
-
+						
+						else if(cpOperation == "getCPsForThisSites")
+                        {     
+                            theValue  = jsonResponse.locations[i].locationId;
+                            theText = jsonResponse.locations[i].locationName;
+                            var myNewOption = new Option(theText,theValue); 
+                            document.getElementById('cpIds').options[i] = myNewOption;
+                            if((selectedEditableCPId!=null)&&(theValue==selectedEditableCPId))
+                            {
+                            	document.getElementById('cpIds').options[i].selected=true;
+                            }
+                            if(i==(num-1))
+                            {
+                            	getActionsForThisCPs('cpIds','siteIds','roleIds','cpCheckId');
+                            	break;
+                            }
+                        }
+                        
                      // Privileges List for Selected Roles
                         else if(cpOperation == "getActionsForThisRole")
                         {     
-                             var roleId=document.getElementById('roleIds');                                            
                              var eleOfActionSelBox = document.getElementById('actionIds');
-                             var numOfSelPrivilges=jsonResponse.locations[i].selectedActionArray.length;
-                             var totalPrivileges=jsonResponse.locations[i].actionJsonArray.length;
-                      //--for scientist
-                            if((roleId.value)=='7')
-                            {
-                               for(var actionCounter=0;actionCounter<numOfSelPrivilges;actionCounter++)
-                                {
-                                    theValue = jsonResponse.locations[i].selectedActionArray[actionCounter].locationId;
-                                    theText  =jsonResponse.locations[i].selectedActionArray[actionCounter].locationName;
-                                    var myNewOption = new Option(theText,theValue);
-                                    eleOfActionSelBox.options[i] = myNewOption;
-                                 //   eleOfActionSelBox.options[i].selected=true;
-                                }                         
-                            }
-                            //--for others
-                            else
-                            {
-                                for(var counter1=0;counter1<totalPrivileges;counter1++)
-                                {
-                                    theValue = jsonResponse.locations[i].actionJsonArray[counter1].locationId;
-                                    theText  =jsonResponse.locations[i].actionJsonArray[counter1].locationName;
-                                    var myNewOption = new Option(theText,theValue);
-                                    eleOfActionSelBox.options[counter1] = myNewOption;
-                                    for(var counter2=0;counter2<numOfSelPrivilges;counter2++)
-                                    {
-                                        var selActionVal=jsonResponse.locations[i].selectedActionArray[counter2].locationId;
-                                        if(eleOfActionSelBox.options[counter1].value == selActionVal)
-                                        {
-                                           eleOfActionSelBox.options[counter1].selected=true;
-                                        break;
-                                      }
-                                    }
-                                 }
-                             }
+                             
+                             var optsList=jsonResponse.locations[i].actionJsonArray;
+							 var selOptsList=jsonResponse.locations[i].selectedActionArray;
+							 
+                             selectedOptsList(eleOfActionSelBox,optsList,selOptsList);
                          }
-
+                         
+						 else if(cpOperation == "getActionsForThisCPs")
+                         {
+							 var optsList=jsonResponse.locations[i].actionJsonArray;
+							 var selOptsList=jsonResponse.locations[i].selectedActionArray;
+	                         var actionSelBox = document.getElementById('actionIds');
+	                                	
+	                         selectedOptsList(actionSelBox,optsList,selOptsList);
+                         }
+						
+						 else if(cpOperation == "getActionsForThisSites")
+						 {
+						 	 var actionSelBox = document.getElementById('actionIds');
+                             var optsList=jsonResponse.locations[i].actionJsonArray;
+                             var selOptsList=jsonResponse.locations[i].selectedActionArray;
+	                         selectedOptsList(actionSelBox,optsList,selOptsList);
+                         }
              		 // Edit Row
                          else if(cpOperation == "editRow")
-                          {
-                           var selectedUserId=jsonResponse.locations[i].selectedUserId;
-                           var usersList=jsonResponse.locations[i].userJsonArray;
-                           var roleId=jsonResponse.locations[i].roleId; 
-                           var sites=jsonResponse.locations[i].siteJsonArray;
-                           var actions=jsonResponse.locations[i].actionJsonArray;
-                           var selActions=jsonResponse.locations[i].selActionJsonArray;
-                           // --for sites
- 
-                           var siteSelBox = document.getElementById('siteIds');
-                           for(var len=0;len<sites.length;len++){
-                                for(var opt=0; opt<siteSelBox.length; opt++){
-                                     if(siteSelBox.options[opt].value==sites[len]){
-                                        siteSelBox.options[opt].selected=true;
-                                         break;
-                                     }
-                               }
-                           }
-                           //-- for user
-                          for(var opt=0; opt<usersList.length; opt++)
-                          {
-                              theValue  = jsonResponse.locations[i].userJsonArray[opt].locationId;
-                              theText = jsonResponse.locations[i].userJsonArray[opt].locationName;
-                              var myNewOption = new Option(theText,theValue);     
-                              document.getElementById('userIds').options[opt] = myNewOption;
-                          }
-                          var numOfUser=document.getElementById('userIds').length;
-                          var userSelBox = document.getElementById('userIds');
-                          for(var i=0;i<numOfUser;i++){
-                              if(userSelBox.options[i].value==selectedUserId){
-                                  document.getElementById('userIds').options[i].selected=true;
-                                  var selectedUserName=userSelBox.options[i].text;
-                                  break;
-                              }
-                          }
-
-                          //-- for role     
-                          var roleSelBox = document.getElementById('roleIds');
-                          for(var opt=0; opt<roleSelBox.length; opt++){
-                               if(roleSelBox.options[opt].value==roleId){
-                                   roleSelBox.options[opt].selected=true;
-                                   break;
-                               }
-                          }
-
-                          // --for Privileges
-
-                           var eleOfActionSelBox = document.getElementById('actionIds');
-                           var numOfSelPrivilges=selActions.length;
-                           var totalPrivileges=actions.length;
-                                          //--for scientist
-                          if((roleId)=='7')
-                          {
-                             for(var actionCounter=0;actionCounter<numOfSelPrivilges;actionCounter++)
-                             {
-                                theValue = selActions[actionCounter].actionId;
-                                theText  =selActions[actionCounter].actionName;
-                                var myNewOption = new Option(theText,theValue);
-                                eleOfActionSelBox.options[i] = myNewOption;
-                             }                         
-                          }
-                         //--for others
-                          else
                          {
-                              for(var counter1=0;counter1<totalPrivileges;counter1++)
+	                          if(pageOf!=null && pageOf=="pageOfAssignPrivilegePage")
+	                          {
+	                          	 editRowForCPPage(jsonResponse,i);
+	                          }
+	                          else if(pageOf!=null)
+	                          {
+	                          	 editRowForUserPage(jsonResponse,i);
+	                          }
+                         }
+           				  // Add Privileges
+                          else if(cpOperation == "addPrivilege")
+                          {
+							  var tableId="summaryTableId";
+							  var rowId=jsonResponse.locations[i].rowId; 
+                              var roleName=jsonResponse.locations[i].roleName; 
+                              var sites=jsonResponse.locations[i].sites;
+                              var actions = jsonResponse.locations[i].actions;
+                              
+                              // for update table after response
+                              var selectedRowId=document.getElementById(rowId);
+                              if(selectedRowId!=null)
                               {
-                                theValue = actions[counter1].locationId;
-                                theText  =actions[counter1].locationName;
-                                 var myNewOption = new Option(theText,theValue);
-                                 eleOfActionSelBox.options[counter1] = myNewOption;
-                                for(var counter2=0;counter2<numOfSelPrivilges;counter2++)
-                                {
-                                    var selActionVal=selActions[counter2];
-	                               	if(eleOfActionSelBox.options[counter1].value == selActionVal)
-	                                  {
-	                                     eleOfActionSelBox.options[counter1].selected=true;
-	                                    break;
-	                                }
-                              	}
-                         	 }
-                          }
-
-                                    // To display edit Message
-                                          var editMessageDiv=document.getElementById("editMessageDivId");
-                                          editMessageDiv.style.display='block';
-                                          var message="<span class='black_ar'><strong>&nbsp;Edit Privilege For "+ selectedUserName+"</strong> </span></td></tr>";;
-                                          editMessageDiv.innerHTML=message;   
-                                    }
-
-           							 // Add Privileges
-                                    else if(cpOperation == "addPrivilege")
-                                    {
-                                          var tableId="summaryTableId";
-                                          var rowId=jsonResponse.locations[i].rowId; 
-                                          var userName=jsonResponse.locations[i].userName;
-                                          var userId=jsonResponse.locations[i].userId;
-                                          var roleName=jsonResponse.locations[i].roleName; 
-                                          var sites=jsonResponse.locations[i].sites;
-                                          var actions = jsonResponse.locations[i].actionName;
-                                          // for update table after response
-                                          var selectedRowId=document.getElementById(rowId);
-                                                if(selectedRowId!=null)
-                                                {
-                                                      // replace row to table
-                                                      var opt="updateRow";
-                                                }
-                                                else
-                                                {
-                                                      // add row to table
-                                                      var opt="addRow";
-                                                }
-                                                addOrUpdateRowToTable(opt,tableId,rowId,userName,userId,sites,roleName,actions);
-                                    }
-                                    else if(cpOperation == "getCPsForThisSites")
-                                    {     
-									
-                                          theValue  = jsonResponse.locations[i].locationId;
-                                          theText = jsonResponse.locations[i].locationName;
-                                          var myNewOption = new Option(theText,theValue); 
-                                          document.getElementById('cpIds').options[i] = myNewOption;
-                                          if((selectedEditableCPId!=null)&&(theValue==selectedEditableCPId))
-                                          {
-                                                document.getElementById('cpIds').options[i].selected=true;
-                                          }
-                                          if(i==(num-1))
-                                          {
-                                       	 	 getActionsForThisCPs('cpIds','siteIds','roleIds','cpCheckId');
-                                       	  break;
-                                          }
-                                    }
-                            	  // Edit Row "editRowForUserPage"
-
-                                    else if(cpOperation == "editRowForUserPage")
-
-                                    {
-										
-                                          var selectedCPId=jsonResponse.locations[i].selectedCPId;
-                                          var cpList=jsonResponse.locations[i].cpJsonArray;
-                                          var roleId=jsonResponse.locations[i].roleId; 
-                                          var sites=jsonResponse.locations[i].siteJsonArray;
-                                          var actions=jsonResponse.locations[i].actionJsonArray;
-                                          var selActions=jsonResponse.locations[i].selActionJsonArray;
-										  
-                                          // --for sites
-                                          var siteSelBox = document.getElementById('siteIds');
-                                          for(var len=0;len<sites.length;len++){
-                                                for(var opt=0; opt<siteSelBox.length; opt++){
-                                                      if(siteSelBox.options[opt].value==sites[len]){
-                                                            siteSelBox.options[opt].selected=true;
-                                                            break;
-                                                      }
-                                                }
-                                          }
-
-                                          //-- for role     
-
-                                          var roleSelBox = document.getElementById('roleIds');
-                                          for(var opt=0; opt<roleSelBox.length; opt++){
-                                                if(roleSelBox.options[opt].value==roleId){
-                                                      roleSelBox.options[opt].selected=true;
-                                                      break;
-                                                }
-                                          }
-
-                                          // --for Privileges
-
-                                    //    var roleId=document.getElementById('roleIds');                                            
-
-                                          var eleOfActionSelBox = document.getElementById('actionIds');
-
-                                          var numOfSelPrivilges=selActions.length;
-                                          var totalPrivileges=actions.length;
-
-                                          //--for scientist
-
-
-                                          if((roleId)=='7')
-                                          {
-                                                for(var actionCounter=0;actionCounter<numOfSelPrivilges;actionCounter++)
-                                                {
-													
-                                                      theValue = selActions[actionCounter].actionId;
-                                                      theText  =selActions[actionCounter].actionName;
-                                                      var myNewOption = new Option(theText,theValue);
-                                                      eleOfActionSelBox.options[i] = myNewOption;
-                                                }                         
-                                          }
-
-                                          //--for others
-
-                                          else
-                                          {
-											  selectedOptsList(eleOfActionSelBox,actions,selActions);
-                                       /*         for(var counter1=0;counter1<totalPrivileges;counter1++)
-                                                {
-                                                      theValue = actions[counter1].actionId;
-                                                      theText  =actions[counter1].actionName;
-                                                      var myNewOption = new Option(theText,theValue);
-                                                      eleOfActionSelBox.options[counter1] = myNewOption;
-                                                      for(var counter2=0;counter2<numOfSelPrivilges;counter2++)
-                                                      {
-                                                            var selActionVal=selActions[counter2];
-                                                            if(eleOfActionSelBox.options[counter1].value == selActionVal)
-                                                            {
-                                                                  eleOfActionSelBox.options[counter1].selected=true;
-                                                                  break;
-                                                            }
-                                                      }
-                                                }*/
-                                          }
-                              //-- for CP
-
-                                          for(var opt=0; opt<cpList.length; opt++)
-                                          {
-                                                theValue  = jsonResponse.locations[i].cpJsonArray[opt].locationId;
-                                                theText = jsonResponse.locations[i].cpJsonArray[opt].locationName;
-                                                var myNewOption = new Option(theText,theValue);     
-                                                document.getElementById('cpIds').options[opt] = myNewOption;
-                                          }
-                                          var numOfCP=document.getElementById('cpIds').length;
-                                          var cpSelBox = document.getElementById('cpIds');
-                                          for(var i=0;i<numOfCP;i++){
-                                                if(cpSelBox.options[i].value==selectedCPId){
-                                                      document.getElementById('cpIds').options[i].selected=true;
-                                                      var selectedCPName=cpSelBox.options[i].text;
-                                                      break;
-                                                }
-                                          }
-
-                                          
-
-                  /*                // To display edit Message
-
-                                          var editMessageDiv=document.getElementById("editMessageDivId");
-
-                                          editMessageDiv.style.display='block';
-
-                                                                                          
-
-                                          var message="<span class='black_ar'><strong>&nbsp;Edit Privilege For "+ selectedUserName+"</strong> </span></td></tr>";;
-
-                                          editMessageDiv.innerHTML=message;   
-
-                  */                
-
-                                    }
-                                    else if(cpOperation == "addPrivOnUserPage")
-                                    {
-                                          var tableId="summaryTableId";
-                                          var rowId=jsonResponse.locations[i].rowId; 
-                                          var cpName=jsonResponse.locations[i].cpName;
-                                          var cpId=jsonResponse.locations[i].cpId;
-                                          var roleName=jsonResponse.locations[i].roleName; 
-                                          var sites=jsonResponse.locations[i].sites;
-                                          var actions = jsonResponse.locations[i].actionName;
-                                          // for update table after response
-
-                                          var selectedRowId=document.getElementById(rowId);
-                                                if(selectedRowId!=null)
-                                                {
-                                                      // replace row to table
-                                                      var opt="updateRow";
-                                                }
-                                                else
-                                                {
-                                                      // add row to table
-                                                      var opt="addRow";
-                                                }
-                                                addOrUpdateRowToTableForUesrPage(opt,tableId,rowId,cpName,cpId,sites,roleName,actions);
-
-                                    }
-                                    else if(cpOperation == "getActionsForThisCPs")
-
-                            		{
-										var optsList=jsonResponse.locations[i].actionJsonArray;
-										var selOptsList=jsonResponse.locations[i].selectedActionArray;
-	                                	var actionSelBox = document.getElementById('actionIds');
-	                                	
-	                                	selectedOptsList(actionSelBox,optsList,selOptsList);
-	                               
-                             		 }
-                             		                                   
-										 else if(cpOperation == "getActionsForThisSites")
-
-                            		{
-                            			var optsList=jsonResponse.locations[i].actionJsonArray;
-                            			var selOptsList=jsonResponse.locations[i].selectedActionArray;
-                            			 var actionSelBox = document.getElementById('actionIds');
-										 clearSelBoxList(actionSelBox);
-	                                	 selectedOptsList(actionSelBox,optsList,selOptsList);
-	                                	 
-                             		 }
-                                    
+                              // replace row to table
+                              		var opt="updateRow";
                               }
-
+                              else
+                              {
+                              // add row to table
+                               		var opt="addRow";
+                              }
+                               
+                              if(pageOf!=null && pageOf=="pageOfAssignPrivilegePage")
+	                          {
+	                          	  var userName=jsonResponse.locations[i].userName;
+	                          	  addOrUpdateRowToTable(opt,tableId,rowId,roleName,userName,sites,actions,pageOf);
+	                          }
+	                          else if(pageOf!=null)
+	                          {
+	                          	  var cpName=jsonResponse.locations[i].cpName;
+		                          addOrUpdateRowToTable(opt,tableId,rowId,roleName,cpName,sites,actions,pageOf);
+	                          }
+                          }   
                         }
-
+                   }
               }
-
           }
-
       };
-
             request.open("POST",url,true);
-
             request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
-
             request.send(data);
-
-      }
-
-   // Function to send request to get Users for selected sites.
-      function getUsersForThisSites(siteObject)
-      {     
-         var cpOperation="getUsersForThisSites";
-         var selectedSiteIds = new Array();
-         var count=0;
-         for (var i = 0; i < siteObject.options.length; i++)
-         {
-             if (siteObject.options[ i ].selected)
-             {
-                  selectedSiteIds[count]=(siteObject.options[i].value);
-                  count=count+1;
-             }
-         }
-        var url="ShowAssignPrivilegePage.do";
-        var data="cpOperation="+cpOperation+"&selectedSiteIds="+selectedSiteIds;
-        sendRequestsWithData(url,data,cpOperation);
-      }
-
-       // Function to send request to get CPs for selected sites.
-      function getCPsForThisSites(siteObject)
-      {     
-         var cpOperation="getCPsForThisSites";
-         var selectedSiteIds = new Array();
-         var count=0;
-         for (var i = 0; i < siteObject.options.length; i++)
-         {
-             if (siteObject.options[ i ].selected)
-             {
-                 selectedSiteIds[count]=(siteObject.options[i].value);
-                 count=count+1;
-             }
-         }
-         var url="ShowAssignPrivilegePage.do?pageOf=pageOfUserAdmin";
-         var data="cpOperation="+cpOperation+"&selectedSiteIds="+selectedSiteIds;
-         sendRequestsWithData(url,data,cpOperation);
-      }
-
-    
-   // Function to send request to get Privileges Summary.
-
-      function getUserPrivilegeSummary(operation)
-
-      {
-
-            var cpOperation="addPrivilege";     
-
-            siteListCtrl=document.getElementById("siteIds");
-
-            userListCtrl=document.getElementById("userIds");
-
-            roleListCtrl=document.getElementById("roleIds");
-
-            actionListCtrl=document.getElementById("actionIds");
-
-             var selectedSiteIds = new Array();
-
-             var selectedUserIds = new Array();
-
-             var selectedRoleIds = new Array();
-
-             var selectedActionIds = new Array();  
-
-                  if(siteListCtrl.options.length>0){
-
-                        for (var i = 0; i < siteListCtrl.options.length; i++)
-
-                        {
-
-                              if (siteListCtrl.options[ i ].selected){
-
-                                  selectedSiteIds.push(siteListCtrl.options[ i ].value);
-
-                              }
-
-                        }
-
-                  }
-
-                  if(userListCtrl.options.length>0){
-
-            
-
-                        for (var i = 0; i < userListCtrl.options.length; i++)
-
-                        {
-
-                              if (userListCtrl.options[ i ].selected){
-
-                                  selectedUserIds.push(userListCtrl.options[ i ].value);
-
-                              }
-
-                        }
-
-                  }
-
-                  if(roleListCtrl.options.length>0){
-
-                  for (var i = 0; i < roleListCtrl.options.length; i++)
-
-                  {
-
-                        if (roleListCtrl.options[ i ].selected){
-
-                            selectedRoleIds.push(roleListCtrl.options[ i ].value);
-
-                        }
-
-                  }  
-
-                  }
-
-                  if(actionListCtrl.options.length>0){
-
-            
-
-                        for (var i = 0; i < actionListCtrl.options.length; i++)
-
-                        {
-
-                              if (actionListCtrl.options[ i ].selected){
-
-                                  selectedActionIds.push(actionListCtrl.options[ i ].value);
-
-                              }
-
-                        }     
-
-                  }
-
-            
-
-                  var errorFlagForSite=false;
-
-                  var errorFlagForUser=false;
-
-                  var errorFlagForAction=false;
-
-                  var errorFlagForRole=false;
-
-            
-
-                  if(selectedSiteIds.length=='0'){
-
-                        errorFlagForSite=true;
-
-                  }
-
-                  if(selectedUserIds.length=='0'){
-
-                        errorFlagForUser=true;
-
-                  }
-
-                  if(selectedActionIds.length=='0'){
-
-                        errorFlagForAction=true;
-
-                  }
-
-                  if(selectedRoleIds[0]=='-1'){
-		
-                        errorFlagForRole=true;
-
-                  }
-
-                  
-
-                  var divId=document.getElementById("errorMess");
-
-                  divId.style.display="none";
-
-                  if(errorFlagForSite==true||errorFlagForUser==true||errorFlagForAction==true||errorFlagForRole==true){
-
-                        validateMethod(divId,errorFlagForSite,errorFlagForUser,errorFlagForRole,errorFlagForAction);
-
-                  }
-
-                  else{
-
-                        var url="ShowAssignPrivilegePage.do";
-
-                        var data="cpOperation="+cpOperation+"&selectedSiteIds="+selectedSiteIds+"&selectedUserIds="+selectedUserIds+"&selectedRoleIds="+selectedRoleIds+"&selectedActionIds="+selectedActionIds+"&operation="+operation;               
-
-                        sendRequestsWithData(url,data,cpOperation);
-
-                  }
-
       }
 
    // Function to Add or Update  a Row
 
-      function addOrUpdateRowToTable(opt,tableId,rowId,userName,userId,sites,roleName, actions)
-
+      function addOrUpdateRowToTable(opt,tableId,rowId,roleName,tempName,sites,actions,pageOf)
       {
-
             var tb = document.getElementById(tableId);
-
             var rows = new Array(); 
-
             rows = tb.rows;
-
             var noOfRows = rows.length;   
+            
+            if(pageOf!=null && pageOf=="pageOfAssignPrivilegePage")
+			{
+			   var tempStringSize = 40;
+			}
+			else if(pageOf!=null)
+			{
+				var tempStringSize = 50;
+			}
 
             if(opt=="addRow")
-
             {
-
                   var row = document.getElementById(tableId).insertRow(noOfRows);
-
                   row.setAttribute("id",rowId);
-
- 
 
                   if(noOfRows%2!=0){
-
                         row.className="tabletd1";
-
                   }
-
                   var chkName="chk_"+noOfRows;
-
- 
-
-                  
-
             }
-
             else if(opt=="updateRow")
-
             {
-
                   var row = document.getElementById(rowId);
-
                   for(counter=0;counter<row.cells.length;)
-
                   {
-
                         if(row.cells[counter].getElementsByTagName("INPUT")!=null){
-
                               if(row.cells[counter].getElementsByTagName("INPUT")[0]!=null){
-
                                     if(row.cells[counter].getElementsByTagName("INPUT")[0].nodeName=="INPUT"){
-
                                           chkName=row.cells[counter].getElementsByTagName("INPUT")[0].id;
-
                                     }
-
                               }
-
                         }
-
                          row.removeChild(row.cells[counter]);
-
                   }
-
- 
-
                   row.setAttribute("id",rowId);
-
             }
-
               // first cell
 
                   var aprCheckb=row.insertCell(0);
-
                   aprCheckb.className="black_ar";                 
-
                   aprCheckb.width="6%";               
-
                   sname="<input type='checkbox' name='" + chkName +"' id='" + chkName +"'/>";            
-
                   aprCheckb.onclick=function(){enableDeleteButton('summaryTableId','deleteButtonId');} ;
-
                   aprCheckb.innerHTML=""+sname;
-
- 
-
                   // Second Cell
 
                   var str=""+sites;
-
                   var newSites = "" ;
-
                   if(str.length>30){
-
                         newSites=str.substring(0,27)+"...";
-
                   }
-
                   else{
-
                         newSites=str;
-
                   }
-
                   var aprSites=row.insertCell(1);
-
                   aprSites.className="black_ar";
-
                   aprSites.width="21%";
-
             //    aprSites.innerHTML="<div style='word-wrap:break-word;width=24%;'>"+sites+"</div>";
-
                   aprSites.innerHTML="<span>"+newSites+"</span>";
-
                   aprSites.onmouseover=function(){Tip(sites,WIDTH,200);} ;
 
                               //third Cell
-
-                  var aprUser=row.insertCell(2);
-
-                  aprUser.className="black_ar";
-
-                  aprUser.width="20%";
-
-                  aprUser.innerHTML="<span>"+userName+"</span>";
-
- 
-
+                  var apr=row.insertCell(2);
+	              apr.className="black_ar";
+	              apr.width="20%";
+	              apr.innerHTML="<span>"+tempName+"</span>";
+				 
                   //fourth Cell
 
                   var aprRole=row.insertCell(3);
-
                   aprRole.className="black_ar";
-
                   aprRole.width="15%";
-
             //    ctrl=document.getElementById('roleIds');
 
             //    sname=ctrl.options[ctrl.selectedIndex].text;
 
             //    aprRole.innerHTML="<span>"+sname+"</span>";
 
-            aprRole.innerHTML="<span>"+roleName+"</span>";
-
-                  
-
-                  
+            	  aprRole.innerHTML="<span>"+roleName+"</span>";
 
                   var actionString = "" + actions;
-
                   var newActionsString="";
-
-                  if(actionString.length>40){
-
-                        newActionsString=actionString.substring(0,37)+"...";
-
-                  }
-
-                  else{
-
-                        newActionsString=actionString;;
-
-                  }
-
-                  //Fifth Cell
-
-                  var aprActions=row.insertCell(4);
-
-                  aprActions.className="black_ar";
-
-                  aprActions.width="33%";
-
-                  aprActions.innerHTML="<span>"+newActionsString+"</span>";
-
-                  aprActions.onmouseover=function(){Tip(actions,WIDTH,200);} ;
-
-                  //Sixth Cell
-
-                  var aprEdit=row.insertCell(5);
-
-            //    aprEdit.className="view";
-
-                  aprEdit.align="left";
-
-                  aprEdit.width="5%";
-
-                  aprEdit.innerHTML="<a href='#' class='view'>Edit</a>";
-
-                  aprEdit.onclick=function(){editRow(rowId);} ;
-
                   
-
+                  if(actionString.length>tempStringSize)
+                  {
+                        newActionsString=actionString.substring(0,(tempStringSize-3))+"...";
+                  }
+                  else
+                  {
+                        newActionsString=actionString;;
+                  }
+                  
+                  //Fifth Cell
+                  var aprActions=row.insertCell(4);
+                  aprActions.className="black_ar";
+                  aprActions.width="33%";
+                  aprActions.innerHTML="<span>"+newActionsString+"</span>";
+                  aprActions.onmouseover=function(){Tip(actions,WIDTH,200);} ;
+                  
+                  //Sixth Cell
+                  var aprEdit=row.insertCell(5);
+                  aprEdit.align="left";
+                  aprEdit.width="5%";
+                  aprEdit.innerHTML="<a href='#' class='view'>Edit</a>";
+                  aprEdit.onclick=function(){editRow(rowId);} ;
       }
 
    // Function to send request to edit Row.     
 
  function editRow(rowId)
-
  {
-
- 
-
-       var cpOperation="editRow";
-
+ 	   var cpOperation="editRow";
+ 	   var form=document.forms[0];
+       var pageOf = form.pageOf.value; 
        var url="ShowAssignPrivilegePage.do";
-
-                  var data="cpOperation="+cpOperation+"&selectedRow="+rowId;
-
-            
-
-                  sendRequestsWithData(url,data,cpOperation);
-
+       var data="cpOperation="+cpOperation+"&selectedRow="+rowId+"&pageOf="+pageOf;
+       
+       sendRequestsWithData(url,data,cpOperation,pageOf);
  }
 
  // Function to enable delete button on select a checkBob
@@ -1012,7 +468,7 @@ function openCRGWindow()
  }
 
 // Validate method  to display Error messages
-
+/*
 function validateMethod(divId,errorFlagForSite,errorFlagForUser,errorFlagForRole,errorFlagForAction)
 {
       var message="";
@@ -1040,7 +496,7 @@ function validateMethod(divId,errorFlagForSite,errorFlagForUser,errorFlagForRole
             divId.innerHTML=message;
       }
 }
-
+*/
 //-- end Assign Privilege
 
 function deleteCheckedRows(operation,tableId,deleteButtonId)
@@ -1378,405 +834,129 @@ function consentPage()
 	 }
      else
      {	
-		
 		 document.getElementById(cpCheckId).disabled=false;
-/*		 if(document.getElementById(cpCheckId).checked==false)
+		 if(document.getElementById('cpIds').disabled==false)
 		 {
-			 document.getElementById('cpIds').disabled=false;
+			document.getElementById(cpCheckId).checked=false;
 		 }
-		 else
-		 {
 		
-			document.getElementById('cpIds').disabled=true;
-		 }*/
-		 document.getElementById(cpCheckId).checked=true;
-		 document.getElementById('cpIds').disabled=true;
-		 deselectAllOptsOfSelBox( document.getElementById('cpIds'));
      	getActionsForThisRole(roleObject,'siteIds','cpIds','cpCheckId')
      }
 
  }
- 
-
- 
 
 // end here
 
+ // Edit Row for CP Page
  
-
- 
-
- 
-
- 
-
-// for user privilege--
-
- 
-
-
-
- 
-
-  // Function to send request to get Privileges Summary.
-
-      function getUserPagePrivSummary(operation)
-      {
-            var cpOperation="addPrivOnUserPage";      
-            checkBoxCtrl=document.getElementById("cpCheckId");
-            siteListCtrl=document.getElementById("siteIds");
-            cpListCtrl=document.getElementById("cpIds");
-            roleListCtrl=document.getElementById("roleIds");
-            actionListCtrl=document.getElementById("actionIds");
-            
-            var isAllCPChecked=false;
-            if(checkBoxCtrl.checked==true)
-            {
-             isAllCPChecked=true;
-              
-            }
-            
-             var selectedSiteIds = new Array();
-             var selectedCPIds = new Array();
-             var selectedRoleIds = new Array();
-             var selectedActionIds = new Array();  
-             
-             var errorFlagForSite=false;
-             var errorFlagForCP=false;
-             var errorFlagForAction=false;
-             var errorFlagForRole=false;
-             var flagForSite=false;
-
-                  if(siteListCtrl.options.length>0){
-                        for (var i = 0; i < siteListCtrl.options.length; i++)
-                        {
-                              if (siteListCtrl.options[ i ].selected){
-                                  selectedSiteIds.push(siteListCtrl.options[ i ].value);
-                              }
-                        }
-                  }
-
-                  if(cpListCtrl.options.length>0){
-                        for (var i = 0; i < cpListCtrl.options.length; i++)
-                        {
-                              if (cpListCtrl.options[ i ].selected){
-                                  selectedCPIds.push(cpListCtrl.options[ i ].value);
-                              }
-                        }
-                  }
-
-                  if(roleListCtrl.options.length>0)
-                  {
-                  for (var i = 0; i < roleListCtrl.options.length; i++)
-                  {
-                        if (roleListCtrl.options[ i ].selected){
-                            selectedRoleIds.push(roleListCtrl.options[ i ].value);
-                        }
-                  }  
-
-                  }
-
-                  if(actionListCtrl.options.length>0){
-                        for (var i = 0; i < actionListCtrl.options.length; i++)
-                        {
-                              if (actionListCtrl.options[ i ].selected){
-                                  selectedActionIds.push(actionListCtrl.options[ i ].value);
-                              }
-                              if(actionListCtrl.options[ i ].value=="12")
-                              {                              		
-                              		flagForSite=true;	
-                              		if(selectedCPIds.length==0)
-                              		{
-                              			errorFlagForCP=true;
-                              		}	
-                              }
-                        }     
-                  }
-
-                 
-
-                  if(selectedSiteIds.length=='0'&& !flagForSite)
-                  {
-                        errorFlagForSite=true;
-                  }
-
-                //  if(selectedCPIds.length=='0'){
-
-                 //       errorFlagForCP=true;
-
-               //   }
-
-                  if(selectedActionIds.length=='0'){
-                        errorFlagForAction=true;
-                  }
-
-                  if(selectedRoleIds[0]=='-1'){
-                        errorFlagForRole=true;
-                  }
-                  
-          //        if(selectedActionIds.length>0)
-          //        {
-          //        	for(var x=0;x<selectedActionIds.length;x++)
-         //         	{
-           //       	alert(selectedActionIds[x]);
-           //       	 	alert(selectedActionIds[x]=="30");
-           //       		if(selectedActionIds[x]=="30")
-          //        		{
-          ///       		
-           //       		}
-          //        	}
-         //         }
-
-                  var divId=document.getElementById("errorMess");
-                  divId.style.display="none";
-                  if(errorFlagForSite==true||errorFlagForAction==true||errorFlagForRole==true||errorFlagForCP==true)
-                  {
-                        validateMethodForUserPriv(divId,errorFlagForSite,errorFlagForRole,errorFlagForAction,errorFlagForCP);
-                  }
-
-                  else{
-                 
-                        var url="ShowAssignPrivilegePage.do";
-                        var data="cpOperation="+cpOperation+"&selectedSiteIds="+selectedSiteIds+"&selectedCPIds="+selectedCPIds+"&selectedRoleIds="+selectedRoleIds+"&selectedActionIds="+selectedActionIds+"&isAllCPChecked="+isAllCPChecked+"&operation="+operation;                                     
-                       
-                        sendRequestsWithData(url,data,cpOperation);
-                  }
-
-      }
-
-   // Function to Add or Update  a Row
-
-      function addOrUpdateRowToTableForUesrPage(opt,tableId,rowId,cpName,cpId,sites,roleName, actions)
-      {
-            var tb = document.getElementById(tableId);
-            var rows = new Array(); 
-            rows = tb.rows;
-            var noOfRows = rows.length;  
- 
-            if(opt=="addRow")
-            {
-                  var row = document.getElementById(tableId).insertRow(noOfRows);
-                  row.setAttribute("id",rowId);
-                  if(noOfRows%2!=0){
-                        row.className="tabletd1";
-                  }
-                  var chkName="chk_"+noOfRows;
-            }
-            else if(opt=="updateRow")
-            {
-                  var row = document.getElementById(rowId);
-                  for(counter=0;counter<row.cells.length;)
-                  {
-                        if(row.cells[counter].getElementsByTagName("INPUT")!=null){
-                              if(row.cells[counter].getElementsByTagName("INPUT")[0]!=null){
-                                    if(row.cells[counter].getElementsByTagName("INPUT")[0].nodeName=="INPUT"){
-                                          chkName=row.cells[counter].getElementsByTagName("INPUT")[0].id;
-                                    }
-                              }
-                        }
-                         row.removeChild(row.cells[counter]);
-                  }
-                  row.setAttribute("id",rowId);
-            }
-
-              // first cell
-                  var aprCheckb=row.insertCell(0);
-                  aprCheckb.className="black_ar";                 
-                  aprCheckb.width="6%";               
-                  sname="<input type='checkbox' name='" + chkName +"' id='" + chkName +"'/>";            
-                  aprCheckb.onclick=function(){enableDeleteButton('summaryTableId','deleteButtonId');} ;
-                  aprCheckb.innerHTML=""+sname;
-
-                  // Second Cell
-                  var str=""+sites;
-                  var newSites = "" ;
-                  if(str.length>30){
-                        newSites=str.substring(0,27)+"...";
-                  }
-                  else{
-                        newSites=str;
-                  }
-
-                  var aprSites=row.insertCell(1);
-                  aprSites.className="black_ar";
-                  aprSites.width="21%";
-            //    aprSites.innerHTML="<div style='word-wrap:break-word;width=24%;'>"+sites+"</div>";
-                  aprSites.innerHTML="<span>"+newSites+"</span>";
-                  aprSites.onmouseover=function(){Tip(sites,WIDTH,200);} ;
-                              //third Cell
-
-                  var aprCP=row.insertCell(2);
-                  aprCP.className="black_ar";
-                  aprCP.width="20%";
-                  aprCP.innerHTML="<span>"+cpName+"</span>";
-                  //fourth Cell
-
-                  var aprRole=row.insertCell(3);
-                  aprRole.className="black_ar";
-                  aprRole.width="15%";
-            //    ctrl=document.getElementById('roleIds');
-
-            //    sname=ctrl.options[ctrl.selectedIndex].text;
-
-            //    aprRole.innerHTML="<span>"+sname+"</span>";
-
-           		  aprRole.innerHTML="<span>"+roleName+"</span>";
-
-                  var actionString = "" + actions;
-                  var newActionsString="";
-                  if(actionString.length>50){
-                        newActionsString=actionString.substring(0,47)+"...";
-                  }
-                  else{
-                        newActionsString=actionString;;
-                  }
-
-                  //Fifth Cell
-
-                  var aprActions=row.insertCell(4);
-                  aprActions.className="black_ar";
-                  aprActions.width="33%";
-                  aprActions.innerHTML="<span>"+newActionsString+"</span>";
-                  aprActions.onmouseover=function(){Tip(actions,WIDTH,200);} ;
-
-                  //Sixth Cell
-
-                  var aprEdit=row.insertCell(5);
-            //    aprEdit.className="view";
-                  aprEdit.align="left";
-                  aprEdit.width="5%";
-                  aprEdit.innerHTML="<a href='#' class='view'>Edit</a>";
-                  aprEdit.onclick=function(){editRowForUserPage(rowId);} ;
-      }
-
-      function validateMethodForUserPriv(divId,errorFlagForSite,errorFlagForRole,errorFlagForAction,errorFlagForCP)
-      {
-	      var message="";
-	      if(errorFlagForSite){
-	            message =   "<li> <font color='red'>Site is required.</font> </li>";
-	      }
-	      if(errorFlagForCP){
-	            message =   "<li> <font color='red'>Collection Protocol is required.</font> </li>";
-	      }
-	      if(errorFlagForRole){
-	            message = message+"<li> <font color='red'>Role is required.</font> </li>";
-	      }
-	      if(errorFlagForAction){
-	            message = message+"<li> <font color='red'>Privileges is required.</font> </li>";
-	      }
-	      if(message!=null){
-	            divId.style.display = 'block';
-	            divId.innerHTML=message;
-	      }
-	   }
-
-  // Function to send request to get Privileges for selected Roles.
-      function getActionsForThisRole(roleObject,siteSelBoxId,cpSelBoxId,cpCheckId)
-      {         
-		  var siteObject=document.getElementById(siteSelBoxId);
-          var cpObject=document.getElementById(cpSelBoxId);
-          var form=document.forms[0];
-          var pageOf = form.pageOf.value; 
-          var selectedSiteIds= null;
-          var selectedCPIds= null; 
-		  var isAllCPChecked=false;
-	            
-	      if(pageOf !="pageOfUserAdmin")
-		  {
-	//			 var cpOperation="getActionsForThisRoleForUser"; 
-			  selectedSiteIds= new Array();
-			  selectedCPIds= new Array();
-		  }
-		  else
-		  {
-			 if(cpCheckId!=null&& cpCheckId!=undefined)
-			 {
-				 var cpCheckBoxObj=document.getElementById(cpCheckId);
-				 if(cpCheckBoxObj.checked==true)
-				 {
-					isAllCPChecked=true;
-				 }
-			  }
-	//			 var cpOperation="getActionsForThisRole"; 
-		     selectedSiteIds = getSelElementsList(siteObject);
-		     selectedCPIds = getSelElementsList(cpObject);
-		  }  
-		
-           var cpOperation="getActionsForThisRole";      
-  //         var selectedRoleType = roleObject.options[roleObject.selectedIndex].text;                           
-           var selectedRoleIds = roleObject.options[roleObject.selectedIndex].value;  
-   //        var selectedRoleIds= getSelElementsList(roleObject); 
-           var url="ShowAssignPrivilegePage.do?pageOf="+pageOf;   
-           var data="cpOperation="+cpOperation+"&selectedRoleIds="+selectedRoleIds+"&selectedSiteIds="+selectedSiteIds+"&selectedCPIds="+selectedCPIds+"&isAllCPChecked="+isAllCPChecked;                    
-		   sendRequestsWithData(url,data,cpOperation);
-      }
-
-function editRowForUserPage(rowId)
+ function editRowForCPPage(jsonResponse,i)
  {
-       var cpOperation="editRowForUserPage";
-       var url="ShowAssignPrivilegePage.do";
-       var data="cpOperation="+cpOperation+"&selectedRow="+rowId;
-       sendRequestsWithData(url,data,cpOperation);
- }
- 
- function getCustomRole(roleSelBoxId,actionSelBoxObj)
- {	
-	 var flagForScientist=false;
-	 for(var i=0;i<actionSelBoxObj.length;i++)
+     var selectedUserId=jsonResponse.locations[i].selectedUserId;
+     var usersList=jsonResponse.locations[i].userJsonArray;
+     var roleId=jsonResponse.locations[i].roleId; 
+     var sites=jsonResponse.locations[i].siteJsonArray;
+     var actions=jsonResponse.locations[i].actionJsonArray;
+     var selActions=jsonResponse.locations[i].selActionJsonArray;
+     
+      // --for sites
+     var siteSelBox = document.getElementById('siteIds');
+     for(var len=0;len<sites.length;len++)
+     {
+          showEleSelectedOfSelBox(siteSelBox,sites[len]);
+     }
+     
+	    //-- for user
+	  for(var opt=0; opt<usersList.length; opt++)
+	  {
+	  	  theValue  = jsonResponse.locations[i].userJsonArray[opt].locationId;
+	   	  theText = jsonResponse.locations[i].userJsonArray[opt].locationName;
+	      var myNewOption = new Option(theText,theValue);     
+	      document.getElementById('userIds').options[opt] = myNewOption;
+	  }
+	  var userSelBox = document.getElementById('userIds');
+	  
+  	  for(var i=0;i<userSelBox.length;i++)
+  	  {
+     	  if(userSelBox.options[i].value==selectedUserId)
+     	  {
+          	 document.getElementById('userIds').options[i].selected=true;
+             var selectedUserName=userSelBox.options[i].text;
+             break;
+          }
+     }
+
+	   //-- for role     
+	   var roleSelBox = document.getElementById('roleIds');
+	   
+	   showEleSelectedOfSelBox(roleSelBox,roleId);
+
+       // --for Privileges
+	  var eleOfActionSelBox = document.getElementById('actionIds');
+          
+      selectedOptsList(eleOfActionSelBox,actions,selActions);
+                          
+	 // To display edit Message
+	if(document.getElementById("errorMessImgDiv")!=null)
 	 {
-		 if(actionSelBoxObj.options[i].value=="12")
-		 {
-		 	flagForScientist=true;
-		 }
+		document.getElementById("errorMessImgDiv").style.display='none';
 	 }
- 	
- 	if(!flagForScientist)
- 	{
-	     var roleSelBoxObj = document.getElementById(roleSelBoxId);
-		 var len = roleSelBoxObj.options.length;
-		 for(var x=0; x<len;x++)
-		 {
-			 if(roleSelBoxObj.options[x].value=="0")
-			 {
-				  roleSelBoxObj.options[ x ].selected=true;
-				  break;
-			 }
-		 }
+	 if(document.getElementById("errorMess")!=null)
+	 {
+		document.getElementById("errorMess").style.display='none';
 	 }
+	 var editMessageDiv=document.getElementById("editMessageDivId");
+	 editMessageDiv.style.display='block';
+	 var message="<span class='black_ar'><strong>&nbsp;Edit Privilege For "+ selectedUserName+"</strong> </span></td></tr>";;
+	 editMessageDiv.innerHTML=message;   
  }
- /*
- function getActionsForThisSites(siteSelBoxObject,roleSelBoxId,cpSelBoxId)
+ 
+ // Edit Row for User Page
+ 
+ function editRowForUserPage(jsonResponse,i)
  {
-    var cpOperation="getActionsForThisSites";
- 	var selectedSiteIds = new Array();
-    var selectedRoleId="";
-    var count=0;
+     var selectedCPId=jsonResponse.locations[i].selectedCPId;
+     var cpList=jsonResponse.locations[i].cpJsonArray;
+     var roleId=jsonResponse.locations[i].roleId; 
+     var sites=jsonResponse.locations[i].siteJsonArray;
+     var actions=jsonResponse.locations[i].actionJsonArray;
+     var selActions=jsonResponse.locations[i].selActionJsonArray;
+					  
+      // --for sites
+     var siteSelBox = document.getElementById('siteIds');
+     for(var len=0;len<sites.length;len++)
+     {
+         showEleSelectedOfSelBox(siteSelBox,sites[len]);
+     }
 
-	var cpSelBoxObj= document.getElementById(cpSelBoxId);
-	var selectedCPIds= getSelElementsList(cpSelBoxObj);
-	if(selectedCPIds!=null)
-	{
-		cpOperation="getActionsForThisCPs";
-		var url="ShowAssignPrivilegePage.do";
-		var data="cpOperation="+cpOperation+"&selectedCPIds="+selectedCPIds;
-		sendRequestsWithData(url,data,cpOperation);
-	}
-	else
-	{
-		var roleSelBoxObj=document.getElementById(roleSelBoxId);
-    
-		selectedRoleId=  getSelElementsList(roleSelBoxObj);
-	
-   		selectedSiteIds= getSelElementsList(siteSelBoxObject);
-    
-   		var url="ShowAssignPrivilegePage.do";
-		var data="cpOperation="+cpOperation+"&selectedSiteIds="+selectedSiteIds+"&selectedRoleId="+selectedRoleId;
-		sendRequestsWithData(url,data,cpOperation);
-	}
+    //-- for role     
+     var roleSelBox = document.getElementById('roleIds');
+     
+     showEleSelectedOfSelBox(roleSelBox,roleId);
+
+     // --for Privileges
+	 var eleOfActionSelBox = document.getElementById('actionIds');
+
+     selectedOptsList(eleOfActionSelBox,actions,selActions);
+                                           
+     //-- for CP
+      for(var opt=0; opt<cpList.length; opt++)
+      {
+           theValue  = jsonResponse.locations[i].cpJsonArray[opt].locationId;
+           theText = jsonResponse.locations[i].cpJsonArray[opt].locationName;
+           var myNewOption = new Option(theText,theValue);     
+           document.getElementById('cpIds').options[opt] = myNewOption;
+      }
+      var cpSelBox = document.getElementById('cpIds');
+      
+      for(var i=0;i<cpSelBox.length;i++)
+      {
+      	  if(cpSelBox.options[i].value==selectedCPId){
+         		document.getElementById('cpIds').options[i].selected=true;
+                var selectedCPName=cpSelBox.options[i].text;
+                break;
+          }
+      }
  }
- 
- */
- 
  
  // function is used for both site and cp
  function getActionsForThisCPs(cpSelBoxId,siteSelBoxId,roleSelBoxId,checkBoxId)
@@ -1793,9 +973,9 @@ function editRowForUserPage(rowId)
 	var cpSelBoxObj= document.getElementById(cpSelBoxId);
 	var siteSelBoxObj= document.getElementById(siteSelBoxId);
 	 		
-   	var	selectedSiteIds= getSelElementsList(siteSelBoxObj);
-	var selectedRoleIds= getSelElementsList(roleSelBoxObj);
-	var selectedCPIds= getSelElementsList(cpSelBoxObj);
+   	var	selectedSiteIds = getSelElementsList(siteSelBoxObj);
+	var selectedRoleIds = getSelElementsList(roleSelBoxObj);
+	var selectedCPIds = getSelElementsList(cpSelBoxObj);
 	
 	if(selectedCPIds!=null&&(selectedCPIds.length>0))
 	{
@@ -1825,9 +1005,319 @@ function editRowForUserPage(rowId)
 	}
  }
  
+  // Function to send request to get Privileges for selected Roles.
+      function getActionsForThisRole(roleObject,siteSelBoxId,cpSelBoxId,cpCheckId)
+      {         
+		  var siteObject=document.getElementById(siteSelBoxId);
+          var cpObject=document.getElementById(cpSelBoxId);
+          var form=document.forms[0];
+          var pageOf = form.pageOf.value; 
+          var selectedSiteIds= null;
+          var selectedCPIds= null; 
+		  var isAllCPChecked=false;
+	            
+	      if(pageOf =="pageOfAssignPrivilegePage")
+		  {
+	//			 var cpOperation="getActionsForThisRoleForUser"; 
+			  selectedSiteIds= new Array();
+			  selectedCPIds= new Array();
+		  }
+		  else if(pageOf!=null)
+		  {
+			 if(cpCheckId!=null&& cpCheckId!=undefined)
+			 {
+				 var cpCheckBoxObj=document.getElementById(cpCheckId);
+				 if(cpCheckBoxObj.checked==true)
+				 {
+					isAllCPChecked=true;
+				 }
+			  }
+	//			 var cpOperation="getActionsForThisRole"; 
+		     selectedSiteIds = getSelElementsList(siteObject);
+		     selectedCPIds = getSelElementsList(cpObject);
+		  }  
+		
+           var cpOperation="getActionsForThisRole";      
+  //         var selectedRoleType = roleObject.options[roleObject.selectedIndex].text;                           
+           var selectedRoleIds = roleObject.options[roleObject.selectedIndex].value;  
+   //        var selectedRoleIds= getSelElementsList(roleObject); 
+           var url="ShowAssignPrivilegePage.do?pageOf="+pageOf;   
+           var data="cpOperation="+cpOperation+"&selectedRoleIds="+selectedRoleIds+"&selectedSiteIds="+selectedSiteIds+"&selectedCPIds="+selectedCPIds+"&isAllCPChecked="+isAllCPChecked;                    
+		   sendRequestsWithData(url,data,cpOperation);
+      }
+ 
+ function getCustomRole(roleSelBoxId,actionSelBoxObj)
+ {	
+	 var flagForScientist=false;
+	 for(var i=0;i<actionSelBoxObj.length;i++)
+	 {
+		 if(actionSelBoxObj.options[i].value=="12")
+		 {
+		 	flagForScientist=true;
+		 }
+	 }
+ 	
+ 	if(!flagForScientist)
+ 	{
+	     var roleSelBoxObj = document.getElementById(roleSelBoxId);
+		 var len = roleSelBoxObj.options.length;
+		 for(var x=0; x<len;x++)
+		 {
+			 if(roleSelBoxObj.options[x].value=="0")
+			 {
+				  roleSelBoxObj.options[ x ].selected=true;
+				  break;
+			 }
+		 }
+	 }
+ }
+ 
+   // Function to send request to get Users for selected sites.
+      function getUsersForThisSites(siteObject)
+      {     
+         var cpOperation="getUsersForThisSites";
+         var selectedSiteIds = new Array();
+         var count=0;
+         for (var i = 0; i < siteObject.options.length; i++)
+         {
+             if (siteObject.options[ i ].selected)
+             {
+                  selectedSiteIds[count]=(siteObject.options[i].value);
+                  count=count+1;
+             }
+         }
+        var url="ShowAssignPrivilegePage.do";
+        var data="cpOperation="+cpOperation+"&selectedSiteIds="+selectedSiteIds;
+        sendRequestsWithData(url,data,cpOperation);
+      }
+
+       // Function to send request to get CPs for selected sites.
+      function getCPsForThisSites(siteObject)
+      {     
+         var cpOperation="getCPsForThisSites";
+         var form=document.forms[0];
+         var pageOf = form.pageOf.value; 
+         var selectedSiteIds = new Array();
+         var count=0;
+         for (var i = 0; i < siteObject.options.length; i++)
+         {
+             if (siteObject.options[ i ].selected)
+             {
+                 selectedSiteIds[count]=(siteObject.options[i].value);
+                 count=count+1;
+             }
+         }
+                 
+         var url="ShowAssignPrivilegePage.do?pageOf="+pageOf;
+         var data="cpOperation="+cpOperation+"&selectedSiteIds="+selectedSiteIds;
+         sendRequestsWithData(url,data,cpOperation);
+      }
+    
+   // Function to send request to get Privileges Summary.
+   
+      function getUserPrivilegeSummary(operation)
+      {
+            var cpOperation="addPrivilege";  
+            var form=document.forms[0];
+      		var pageOf = form.pageOf.value; 
+      		
+      		var isErrors=false;
+      		 
+            siteListCtrl=document.getElementById("siteIds");
+            roleListCtrl=document.getElementById("roleIds");
+            actionListCtrl=document.getElementById("actionIds");
+            
+            var selectedSiteIds = new Array();
+            var selectedRoleIds = new Array();
+            var selectedActionIds = new Array();
+            var url="ShowAssignPrivilegePage.do?pageOf="+pageOf;
+            var data="";
+            
+        	selectedSiteIds = getSelElementsList(siteListCtrl);
+            selectedRoleIds = getSelElementsList(roleListCtrl);
+            selectedActionIds = getSelElementsList(actionListCtrl);
+             
+            if(pageOf!=null && pageOf=="pageOfAssignPrivilegePage")
+			{
+				userListCtrl=document.getElementById("userIds");
+				var selectedUserIds = new Array();
+				
+				selectedUserIds = getSelElementsList(userListCtrl);
+				
+				data="cpOperation="+cpOperation+"&selectedSiteIds="+selectedSiteIds+"&selectedUserIds="+selectedUserIds+"&selectedRoleIds="+selectedRoleIds+"&selectedActionIds="+selectedActionIds+"&operation="+operation;               
+			}
+			else if(pageOf!=null)
+			{
+				cpListCtrl=document.getElementById("cpIds");
+				checkBoxCtrl=document.getElementById("cpCheckId");
+				
+				var selectedCPIds = new Array();
+				var isAllCPChecked=false;
+				
+	            if(checkBoxCtrl!=null && checkBoxCtrl.checked==true)
+	            {
+	             	isAllCPChecked=true;
+	            }
+	            
+	            selectedCPIds = getSelElementsList(cpListCtrl);
+	            
+	            var data="cpOperation="+cpOperation+"&selectedSiteIds="+selectedSiteIds+"&selectedCPIds="+selectedCPIds+"&selectedRoleIds="+selectedRoleIds+"&selectedActionIds="+selectedActionIds+"&isAllCPChecked="+isAllCPChecked+"&operation="+operation;                                     
+			}
+			
+			isErrors = validateMethodForPriv(pageOf,selectedSiteIds,selectedRoleIds,selectedActionIds,selectedUserIds,selectedCPIds,isAllCPChecked);
+			
+			if(!isErrors)
+			{
+				sendRequestsWithData(url,data,cpOperation,pageOf);
+			}
+			
+      }
+	function validateMethodForPriv(pageOf,selectedSiteIds,selectedRoleIds,selectedActionIds,selectedUserIds,selectedCPIds,isAllCPChecked)
+    {
+    	var isErrors=false;
+    	var errorFlagForSite=false;
+        var errorFlagForCP=false;
+        var errorFlagForUser=false;
+        var errorFlagForAction=false;
+        var errorFlagForRole=false;
+        var flagForSite=false;
+             
+    	if(pageOf!=null && pageOf=="pageOfAssignPrivilegePage")
+		{
+             if(selectedSiteIds.length=='0')
+             {
+             	 errorFlagForSite=true;
+             }
+             if(selectedUserIds.length=='0')
+             {
+             	 errorFlagForUser=true;
+             }
+             if(selectedActionIds.length=='0')
+             {
+              	 errorFlagForAction=true;
+             }
+             if(selectedRoleIds[0]=='-1')
+             {
+                 errorFlagForRole=true;
+             }
+             
+                  var divId=document.getElementById("errorMess");
+                  divId.style.display="none";
+				   document.getElementById("errorMessImgDiv").style.display="none";
+				   if(document.getElementById("editMessageDivId")!=null)
+			{
+				   document.getElementById("editMessageDivId").style.display="none";
+			}
+
+                  if(errorFlagForSite==true||errorFlagForUser==true||errorFlagForAction==true||errorFlagForRole==true)
+                  {
+						isErrors = true;
+						
+                        displayErrorMessForPriv(pageOf,divId,errorFlagForSite,errorFlagForRole,errorFlagForAction,errorFlagForCP,errorFlagForUser);
+                  }
+		}
+		else if(pageOf!=null)
+		{
+			for(var x=0;x<selectedRoleIds.length;x++)
+			{
+				if(selectedRoleIds[x]=="7")
+                {   
+                	flagForSite=true;	
+                    if(selectedCPIds==null||selectedCPIds.length==0)
+                    {
+                    	errorFlagForCP=true;
+                    }	
+                }
+			}
+		    if(selectedSiteIds.length=='0'&& !flagForSite)
+            {
+                errorFlagForSite=true;
+            }
+                  if(selectedActionIds.length=='0')
+                  {
+                        errorFlagForAction=true;
+                  }
+
+                  if(selectedRoleIds[0]=='-1')
+                  {
+                        errorFlagForRole=true;
+                  }
+                  
+				  var divId=document.getElementById("errorMess");
+				  if(document.getElementById("errorMessImgDiv")!=null)
+			{
+				  document.getElementById("errorMessImgDiv").style.display="none";
+			}
+                  divId.style.display="none";
+				  
+                  if(errorFlagForSite==true||errorFlagForAction==true||errorFlagForRole==true||errorFlagForCP==true)
+                  {
+                	  isErrors = true;
+                      displayErrorMessForPriv(pageOf,divId,errorFlagForSite,errorFlagForRole,errorFlagForAction,errorFlagForCP,errorFlagForUser);
+                  }
+		}
+    
+	     return isErrors;
+	   }
+ 	function displayErrorMessForPriv(pageOf,divId,errorFlagForSite,errorFlagForRole,errorFlagForAction,errorFlagForCP,errorFlagForUser)
+    {
+	      var message="";
+		  
+	      if(errorFlagForSite){
+	            message = "<li>"+errorMessForSite+"</li>";
+	      }
+	      if(errorFlagForRole)
+		  {
+	            message = message+"<li>"+errorMessForRole+"</li>";
+	      }
+	      if(errorFlagForAction){
+	            message = message+"<li>"+errorMessForPriv+"</li>";
+	      }
+	       if(pageOf!=null && pageOf=="pageOfAssignPrivilegePage" && errorFlagForUser)
+		  {
+	            message =   message+"<li>"+errorMessForUser+"</li>";
+	      }
+	      else if(pageOf!=null && errorFlagForCP)
+		  {
+	            message =   message+"<li>"+errorMessForCP+"</li>";
+	      }
+	      
+		  if(message!=null)
+		  {
+	            divId.style.display = 'block';
+				if(document.getElementById("errorMessImgDiv")!=null)
+				{
+				document.getElementById("errorMessImgDiv").style.display='block'
+				}
+				divId.innerHTML = "<tr><td width='16'>&nbsp;</td><td>"+message+"</td></tr>";
+	      }
+		  
+		 
+	   }
+
+ // To clear the list and returns the selected option as it. 
+ function clearListForUserCP(selBoxObj)
+ {
+ 	var selectedEditableObjId= null;
+ 	if(selBoxObj!=null)
+ 	{
+	  	while(selBoxObj.length > 0)
+	  	{
+	        if((selBoxObj.options[selBoxObj.length - 1].selected)==true)
+	        {
+	               selectedEditableObjId = selBoxObj.options[selBoxObj.length - 1].value
+	        }
+	        selBoxObj.remove(selBoxObj.length - 1);
+	    }
+    }
+    return selectedEditableObjId;
+ }
+ 
  // To deselect All options of List
  function deselectAllOptsOfSelBox(selBoxObj)
  {
+ 	if(selBoxObj!=null)
+ 	{
  	var len=selBoxObj.options.length;
  	for(var count=0;count<len;count++)
  	{
@@ -1836,41 +1326,66 @@ function editRowForUserPage(rowId)
  			selBoxObj.options[count].selected=false;
  		}
  	}
+ 	}
  }
  
  // Add new options to select box and shows specified options as selected.
  function selectedOptsList(selBoxObj,optsList,selOptsList)
  {
- 	var numOfOpts=optsList.length;
- 	var numOfSelOpts= selOptsList.length;
- 	for(var count=0;count<numOfOpts;count++)
+ 	if(selBoxObj!=null)
  	{
- 	    theValue  = optsList[count].locationId;
- 	    theText = optsList[count].locationName;
- 	    var myNewOption = new Option(theText,theValue); 
- 	    selBoxObj.options[count] = myNewOption;
- 	    
- 	    for(var count1=0;count1<numOfSelOpts;count1++)
- 		{
- 			selectedValue  = selOptsList[count1].locationId;
- 	   		selectedText = selOptsList[count1].locationName;
-	 	    if(selBoxObj.options[count].value==selectedValue)
+	if(optsList!=null)
+	{
+	 	var numOfOpts=optsList.length;
+	 	for(var count=0;count<numOfOpts;count++)
+	 	{
+	 	    theValue  = optsList[count].locationId;
+	 	    theText = optsList[count].locationName;
+	 	    var myNewOption = new Option(theText,theValue); 
+	 	    selBoxObj.options[count] = myNewOption;
+	 	    
+	 	    if(selOptsList!=null)
 	 	    {
-	 	       selBoxObj.options[count].selected=true;
-	 	       break;
-	 	    }
+		 	    for(var count1=0;count1<selOptsList.length;count1++)
+		 		{
+		 			selectedValue  = selOptsList[count1].locationId;
+		 	   		selectedText = selOptsList[count1].locationName;
+			 	    if(selBoxObj.options[count].value==selectedValue)
+			 	    {
+			 	       selBoxObj.options[count].selected=true;
+			 	       break;
+			 	    }
+			 	}
+			}
 	 	}
+ 	}
  	}
  }
  
  // To clear select Box List
   function clearSelBoxList(selBoxObj)
   {
- 	while(selBoxObj.length> 0)
+  	if(selBoxObj!=null)
  	{
- 		 selBoxObj.remove(selBoxObj.length - 1);
+	 	while(selBoxObj.length> 0)
+	 	{
+	 		 selBoxObj.remove(selBoxObj.length - 1);
+	    }
     }
   }
+ 
+ // To show element selected of a given select Box based on given slected input Id.
+ function showEleSelectedOfSelBox(selBoxObj,selectedId)
+ {
+        for(var opt=0; opt<selBoxObj.length; opt++)
+        {
+     		if(selBoxObj.options[opt].value==selectedId)
+     		{
+       			selBoxObj.options[opt].selected=true;
+      			break;
+       		}
+ 		}
+ } 
  
  //  disabling and enabling of selectBox on checkbox click and get Actions for Sites and role based on
  //  condition whether they are selected or not.
@@ -1906,16 +1421,21 @@ function eventOnChkBoxClick(checkBoxId,cpSelBoxId,siteSelBoxId,roleSelBoxId)
 function getSelElementsList(selectBoxObj)
 {
 	var selectedElementIds= new Array();
-	 var count=0;
-	var len= selectBoxObj.options.length;
+	var count=0;
+	if(selectBoxObj!=null)
+ 	{
+		var len= selectBoxObj.options.length;
 	
-	 for(var i=0;i<len;i++)
-	 {
-	 	if (selectBoxObj.options[ i ].selected)
-        {
-            selectedElementIds[count]=(selectBoxObj.options[i].value);
-            count=count+1;
-        }
+		 for(var i=0;i<len;i++)
+		 {
+		 	if (selectBoxObj.options[ i ].selected)
+	        {
+	            selectedElementIds[count]=(selectBoxObj.options[i].value);
+	       //     selectedElementIds.push(selectBoxObj.options[i].value);
+	            count=count+1;
+	        }
+		 }
 	 }
 	 return selectedElementIds;
 }
+
