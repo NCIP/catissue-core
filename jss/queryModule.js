@@ -577,10 +577,10 @@
              if(tQchkBox==true)
 					 
 			{
-				alert('yes');
+			
 		 	  
 		   var isTimestamp = document.getElementById(isTimestampFielsId).value;
-		   alert('isTimestamp'+isTimestamp);
+		
 		  		   
 	       var tQop = document.getElementById(tQpId).value;
 		   
@@ -592,12 +592,12 @@
 		    {
 		      var tQunit = document.getElementById(tQunitId).value;
 			   strToCreateTQObject = strToCreateTQObject + "##"+tQunit;
-			  alert(strToCreateTQObject);
+			
 			  
 		    }
 	     }
 		}
-		 alert(strToCreateTQObject);
+	
 		return strToCreateTQObject;
 	}
 	
@@ -1033,7 +1033,6 @@
 		if(totalCFCount != 0)
 		{
 			var buildTQstr = createQueryStringForSavedTQ(frmName,totalCFCount);
-			alert(document.getElementById('strToFormTQ').value);
 			document.getElementById('strToFormTQ').value = buildTQstr;
 		}
         document.getElementById('conditionList').value = buildquerystr;
@@ -1071,7 +1070,7 @@
 		  var tQtextboxId = i+"_textbox";
 		  var tQunitId = i+"_combobox1";
 		  var isTimestamp = document.getElementById(isTimestampFielsId).value;
-		  alert('isTimestamp'+isTimestamp);
+
 		  		   
 	       var tQop = document.getElementById(tQpId).value;
 		   
@@ -1083,11 +1082,11 @@
 		    {
 		      var tQunit = document.getElementById(tQunitId).value;
 			   strToCreateTQObject = strToCreateTQObject + "##"+tQunit;
-			  alert(strToCreateTQObject);
+
 			  
 		    }
 	     }
-		 alert(strToCreateTQObject);
+
 		return strToCreateTQObject;
 	}
 	
