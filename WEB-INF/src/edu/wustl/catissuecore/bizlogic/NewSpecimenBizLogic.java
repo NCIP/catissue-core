@@ -2563,27 +2563,30 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	{
 		try
 		{
-			Object object = dao.retrieve(Specimen.class.getName(), newSpecimen.getId());
-			if (object != null)
+			Specimen specimenDO = null;
+			if(isAuthorized((AbstractDAO)dao, newSpecimen, sessionDataBean))
 			{
-				Specimen specimenDO = (Specimen) object;
-				updateSpecimenDomainObject(dao, newSpecimen, specimenDO, sessionDataBean);
-				if (updateChildrens)
+				Object object = dao.retrieve(Specimen.class.getName(), newSpecimen.getId());
+				if (object != null)
 				{
-					updateChildrenSpecimens(dao, newSpecimen, specimenDO, sessionDataBean);
+					specimenDO = (Specimen) object;
+					updateSpecimenDomainObject(dao, newSpecimen, specimenDO, sessionDataBean);
+					if (updateChildrens)
+					{
+						updateChildrenSpecimens(dao, newSpecimen, specimenDO, sessionDataBean);
+					}
+					dao.update(specimenDO, sessionDataBean, false, false, false);
 				}
-				dao.update(specimenDO, sessionDataBean, false, false, false);
-				return specimenDO;
+				else
+				{
+					throw new DAOException("Invalid Specimen with label" + newSpecimen.getLabel());
+				}
 			}
-			else
-			{
-				throw new DAOException("Invalid Specimen with label" + newSpecimen.getLabel());
-			}
+			return specimenDO;
 		}
 		catch (UserNotAuthorizedException authorizedException)
 		{
-			throw new DAOException("User not authorized to update specimens"
-					+ authorizedException.getMessage());
+			throw new DAOException("User not authorized to update specimens");
 
 		}
 		catch (SMException exception)
@@ -3259,10 +3262,11 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	/**
 	 * (non-Javadoc)
 	 * @throws UserNotAuthorizedException 
+	 * @throws DAOException 
 	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#isAuthorized(edu.wustl.common.dao.AbstractDAO, java.lang.Object, edu.wustl.common.beans.SessionDataBean)
 	 * 
 	 */
-	public boolean isAuthorized(AbstractDAO dao, Object domainObject, SessionDataBean sessionDataBean) throws UserNotAuthorizedException  
+	public boolean isAuthorized(AbstractDAO dao, Object domainObject, SessionDataBean sessionDataBean) throws UserNotAuthorizedException, DAOException  
 	{
 		boolean isAuthorized = false;
 		String protectionElementName = null;
@@ -3295,14 +3299,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 				if(specimen.getLineage() != null && (specimen.getLineage().equals(Constants.DERIVED_SPECIMEN) || specimen.getLineage().equals(Constants.ALIQUOT)))
 				{
 					List<Specimen> list = null;
-					try 
-					{
-						list = dao.retrieve(Specimen.class.getName(), "label", specimen.getParentSpecimen().getLabel());
-					} 
-					catch (DAOException e) 
-					{
-						Logger.out.debug(e.getMessage(), e);
-					}
+					list = dao.retrieve(Specimen.class.getName(), "label", specimen.getParentSpecimen().getLabel());
 					specimen = (Specimen) list.get(0); 
 
 					if(specimen.getSpecimenPosition()!=null)
@@ -3318,21 +3315,18 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 					}
 					if(specimen.getSpecimenPosition()!=null && specimen.getSpecimenPosition().getStorageContainer().getSite() == null)
 					{
-						try 
+						if(sc.getId()!=null)
 						{
-							if(sc.getId()!=null)
-							{
-								sc = (StorageContainer) dao.retrieve(StorageContainer.class.getName(), specimen.getSpecimenPosition().getStorageContainer().getId());
-							}
-							else
-							{
-								List scList = dao.retrieve(StorageContainer.class.getName(), Constants.NAME, sc.getName());
-								sc = (StorageContainer) scList.get(0);
-							}
-						} 
-						catch (DAOException e) 
+							sc = (StorageContainer) dao.retrieve(StorageContainer.class.getName(), specimen.getSpecimenPosition().getStorageContainer().getId());
+						}
+						else
 						{
-							Logger.out.debug(e.getMessage(), e);
+							List scList = dao.retrieve(StorageContainer.class.getName(), Constants.NAME, sc.getName());
+							if(scList.isEmpty())
+							{
+								throw new DAOException(ApplicationProperties.getValue("sc.unableToFindContainer"));
+							}
+							sc = (StorageContainer) scList.get(0);
 						}
 					}
 				}
