@@ -139,10 +139,14 @@ public class CollectionProtocolUtil {
 
 	public static Map prepareConsentTierMap(Collection consentTierColl)
 	{
-		Map tempMap = new HashMap();
+		Map tempMap = new LinkedHashMap();//bug 8905
+		List<ConsentTier> consentsList = new ArrayList<ConsentTier>();
 		if(consentTierColl!=null)
 		{
-			Iterator consentTierCollIter = consentTierColl.iterator();			
+			consentsList.addAll(consentTierColl);//bug 8905
+			Collections.sort(consentsList,new IdComparator());//bug 8905
+			//Iterator consentTierCollIter = consentTierColl.iterator();
+			Iterator consentTierCollIter = consentsList.iterator();//bug 8905
 			int i = 0;
 			while(consentTierCollIter.hasNext())
 			{
