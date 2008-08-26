@@ -509,9 +509,9 @@
                 <td width="12%" align="left" nowrap="nowrap" class="black_ar_b" ><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0"/>&nbsp;<bean:message key="itemrecord.quantity"/>&nbsp;
 				</td>
 
-                <td width="41%" nowrap="nowrap" class="black_ar_b" align="left" colspan=${requestScope.colspanValue1}><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0"/>&nbsp;<bean:message key="cpbasedentry.storagelocation"/>
+                <td width="43%" nowrap="nowrap" class="black_ar_b" align="left" colspan=${requestScope.colspanValue1}><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0"/>&nbsp;<bean:message key="cpbasedentry.storagelocation"/>
 				</td>
-<td align="right">
+<td align="right" width="19%">
 	<input type="button" name="option1" class="black_ar" value="Apply first to all" size="3" onclick="applyFirstToAll(this)" onmouseover="Tip(' Apply first location to all')"
 />
 	<span align="right" class="black_ar_b" >
