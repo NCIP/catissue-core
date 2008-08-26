@@ -36,86 +36,52 @@ public class MSRUtil {
 	public ActionForward onFirstTimeLoad(ActionMapping mapping, HttpServletRequest request) throws BizLogicException
 	{
 			final AssignPrivilegePageBizLogic apBizLogic=getAssignPrivilegePageBizLogic();
-			HttpSession session=request.getSession();
+			final HttpSession session=request.getSession();
 			final String pageOf = (String) request.getParameter(Constants.PAGE_OF);
-			if(!("pageOfUserAdmin").equalsIgnoreCase(pageOf))
+			List<String[]> list=null;
+			List<NameValueBean> actionList=null;
+			Map<String, SiteUserRolePrivilegeBean> map = null;
+			
+			ErrorsMesssagesForPriv(request);
+			
+			//if(!(Constants.PAGE_OF_USER).equalsIgnoreCase(pageOf)&&!(Constants.PAGEOF_USER_PROFILE).equals(pageOf))
+			if(pageOf!=null && (Constants.PAGEOF_ASSIGN_PRIVILEGE).equalsIgnoreCase(pageOf))
 			{
-				Map<String, SiteUserRolePrivilegeBean> rowIdBeanMap = (Map<String, SiteUserRolePrivilegeBean>) session.getAttribute(Constants.ROW_ID_OBJECT_BEAN_MAP);
 				if (session.getAttribute(Constants.ROW_ID_OBJECT_BEAN_MAP) != null)
 				{
-					List<String[]> list;
-					list = apBizLogic.privilegeDataOnTabSwitch(rowIdBeanMap,pageOf);
-					
-					request.setAttribute(Constants.PRIVILEGE_DATA_LIST_ONLOAD, list);
+					map = (Map<String, SiteUserRolePrivilegeBean>) session.getAttribute(Constants.ROW_ID_OBJECT_BEAN_MAP);
 				}
-				
+				actionList = apBizLogic.getActionList(false);
 				final List<NameValueBean> userList=new ArrayList<NameValueBean>();
-			//	final List<NameValueBean> userList = apBizLogic.getUserList(false);
-				final List actionList = apBizLogic.getActionList(false);
 				
 				request.setAttribute(Constants.USERLIST, userList);
-				request.setAttribute(Constants.ACTIONLIST, actionList);
 			}
 			else
 			{
-				Map<String, SiteUserRolePrivilegeBean> rowIdBeanMapForUserPage = (Map<String, SiteUserRolePrivilegeBean>) session.getAttribute("rowIdBeanMapForUserPage");
-				if (session.getAttribute("rowIdBeanMapForUserPage") != null)
+				if (session.getAttribute(Constants.USER_ROW_ID_BEAN_MAP) != null)
 				{
-					List<String[]> list;
-					list = apBizLogic.privilegeDataOnTabSwitch(rowIdBeanMapForUserPage,pageOf);
-					request.setAttribute(Constants.PRIVILEGE_DATA_LIST_ONLOAD, list);
+					map = (Map<String, SiteUserRolePrivilegeBean>) session.getAttribute(Constants.USER_ROW_ID_BEAN_MAP);
 				}
-			//	final List<NameValueBean> cpList = new ArrayList<NameValueBean>();
+				actionList = apBizLogic.getActionListForUserPage(false);
 				final List<NameValueBean> cpList = apBizLogic.getCPList(false);
-				final List<NameValueBean> actionList = apBizLogic.getActionListForUserPage(false);
 				
 				request.setAttribute(Constants.CPLIST, cpList);
-				request.setAttribute(Constants.ACTIONLIST, actionList);
 			}
-			SessionDataBean sessionDataBean = (SessionDataBean) session.getAttribute(Constants.SESSION_DATA);
+			
+			final SessionDataBean sessionDataBean = (SessionDataBean) session.getAttribute(Constants.SESSION_DATA);
 			final List<NameValueBean> siteList = apBizLogic.getSiteList(false, sessionDataBean);
 			final List roleList = apBizLogic.getRoleList(pageOf);
-			request.setAttribute(Constants.SITELIST, siteList);
-			request.setAttribute(Constants.ROLELIST, roleList);
 			
-		return mapping.findForward(Constants.SUCCESS);
-	}
-	
-	/**
-	 * Gets lists og sites,users,actions,and roles from database and sets in request.  
-	 * @param mapping
-	 * @param request
-	 * @return ActionForward
-	 */
-	/*
-	public ActionForward onFirstTimeLoadForUser(ActionMapping mapping, HttpServletRequest request) throws BizLogicException
-	{
-			final AssignPrivilegePageBizLogic apBizLogic=getAssignPrivilegePageBizLogic();
-			HttpSession session=request.getSession();
-			Map<String, SiteUserRolePrivilegeBean> rowIdBeanMap = (Map<String, SiteUserRolePrivilegeBean>) session.getAttribute(Constants.ROW_ID_OBJECT_BEAN_MAP);
-			if (session.getAttribute(Constants.ROW_ID_OBJECT_BEAN_MAP) != null)
-			{
-				List<String[]> list;
-					list = apBizLogic.privilegeDataOnTabSwitch(rowIdBeanMap);
-					request.setAttribute(Constants.PRIVILEGE_DATA_LIST_ONLOAD, list);
-			}
-		
-			final List<NameValueBean> siteList = apBizLogic.getSiteList(false);
-			final List<NameValueBean> roleList = apBizLogic.getRoleList();
-		
-			final List<NameValueBean> cpList = apBizLogic.getCPList(false);
-//			final List<NameValueBean> userList = apBizLogic.getUserList(false);
+			list = apBizLogic.privilegeDataOnTabSwitch(map,pageOf);
 			
-			request.setAttribute(Constants.SITELIST, siteList);
-			request.setAttribute(Constants.CPLIST, cpList);
-			request.setAttribute(Constants.ROLELIST, roleList);
+			request.setAttribute(Constants.PRIVILEGE_DATA_LIST_ONLOAD, list);
 			request.setAttribute(Constants.ACTIONLIST, actionList);
-	//		request.setAttribute(Constants.USERLIST, userList);
+			request.setAttribute(Constants.SITELIST, siteList);
+			request.setAttribute(Constants.ROLELIST, roleList);
 			
 		return mapping.findForward(Constants.SUCCESS);
 	}
 	
-*/	
 	/**
 	 * Handles Ajax requests 
 	 * @param request
@@ -127,174 +93,263 @@ public class MSRUtil {
 	 */
 	public ActionForward setAJAXResponse(HttpServletRequest request, HttpServletResponse response, String cpOperation) throws IOException, JSONException,BizLogicException, CSException  
 	{
-		final HttpSession session = request.getSession();
-		final AssignPrivilegePageBizLogic apBizLogic=getAssignPrivilegePageBizLogic();
-		if (Constants.OPERATION_GET_USER_FORTHIS_SITES.equals(cpOperation)) 
+		if (Constants.OPERATION_GET_USERS_FORTHIS_SITES.equals(cpOperation)) 
 		{
-			final String siteIds = (String) request.getParameter(Constants.SELECTED_SITE_IDS);
-			
-		    final List<Long> listOfSiteIds = apBizLogic.getSiteData(siteIds);
-		    final List<JSONObject> listOfUsers = apBizLogic.getUsersForThisSites(listOfSiteIds);
-			setResponse(response, listOfUsers);
-			
+			usersForSelSitesMethod(request, response);
 		}
-		else if (("getCPsForThisSites").equals(cpOperation)) 
+		else if ((Constants.OPERATION_GET_CPS_FORTHIS_SITES).equals(cpOperation)) 
 		{
-			final String siteIds = (String) request.getParameter(Constants.SELECTED_SITE_IDS);
-			
-		    final List<Long> listOfSiteIds = apBizLogic.getSiteData(siteIds);
-		    final List<JSONObject> listOfCPs = apBizLogic.getCPsForThisSites(listOfSiteIds);
-			setResponse(response, listOfCPs);
-			
+			cpsForSelSitesMethod(request, response);
 		}
-		else if (Constants.OPERATION_GET_ACTION_FORTHIS_ROLE.equals(cpOperation))
+		else if (Constants.OPERATION_GET_ACTIONS_FORTHIS_ROLE.equals(cpOperation))
 		{
-			final String role = (String) request.getParameter(Constants.SELECTED_ROLE_IDS);
-			final String pageOf = (String) request.getParameter(Constants.PAGE_OF);
-			final String siteIds = (String) request.getParameter(Constants.SELECTED_SITE_IDS);
-			final String cpIds = (String) request.getParameter("selectedCPIds");
-			final boolean isAllCPChecked = new Boolean(request.getParameter("isAllCPChecked"));
-			
-		    final List<Long> selectedSiteIds = apBizLogic.getSiteData(siteIds);
-		    final List<Long> selectedCPIds = apBizLogic.getCPData(cpIds);
-		    
-			final List<JSONObject> listOfAction = apBizLogic.getActionsForThisRole(role,pageOf,selectedSiteIds,selectedCPIds,isAllCPChecked);
-			setResponse(response, listOfAction);
-			
+			actionsForSelRoleMethod(request, response);
 		}
 		else if (Constants.OPERATION_ADD_PRIVILEGE.equals(cpOperation))
 		{
-			final String siteIds = (String) request.getParameter(Constants.SELECTED_SITE_IDS);
-			final String actionIds = (String) request.getParameter(Constants.SELECTED_ACTION_IDS);
-			final String userIds = (String) request.getParameter(Constants.SELECTED_USER_IDS);
- 			final String roleId = (String) request.getParameter(Constants.SELECTED_ROLE_IDS);
- 			final String operation = (String) request.getParameter("operation");
- 			
- 			Map<String, SiteUserRolePrivilegeBean> rowIdBeanMap= new HashMap<String, SiteUserRolePrivilegeBean>();
- 			if (session.getAttribute(Constants.ROW_ID_OBJECT_BEAN_MAP) != null) 
- 			{
- 				rowIdBeanMap = (Map<String, SiteUserRolePrivilegeBean>) session.getAttribute(Constants.ROW_ID_OBJECT_BEAN_MAP);
- 			}	
- 			
-			final List<JSONObject> listForUPSummary =apBizLogic.addPrivilege(rowIdBeanMap,userIds,siteIds,roleId,actionIds,operation );
-			session.setAttribute(Constants.ROW_ID_OBJECT_BEAN_MAP,	rowIdBeanMap);
-			setResponse(response, listForUPSummary);
-			
+			addPrivilegeMethod(request, response);
 		}
 		else if (Constants.OPERATION_DELETE_ROW.equals(cpOperation))
 		{
-			final String deletedRowsArray = (String) request.getParameter("deletedRowsArray");
-			final String operation = (String) request.getParameter("operation");
-			final String pageOf = (String)request.getParameter(Constants.PAGE_OF);
-			 String temp="";
-			
-			Map<String, SiteUserRolePrivilegeBean> rowIdBeanMap= new HashMap<String, SiteUserRolePrivilegeBean>();
-			
-			if (!("pageOfUserAdmin").equals(pageOf)&& (session.getAttribute(Constants.ROW_ID_OBJECT_BEAN_MAP) != null))
-			{
-				rowIdBeanMap = (Map<String, SiteUserRolePrivilegeBean>) session.getAttribute(Constants.ROW_ID_OBJECT_BEAN_MAP);
-				temp=Constants.ROW_ID_OBJECT_BEAN_MAP;
-			}
-			else if(session.getAttribute("rowIdBeanMapForUserPage")!=null)
-			{
-				rowIdBeanMap =(Map<String, SiteUserRolePrivilegeBean>)session.getAttribute("rowIdBeanMapForUserPage");
-				temp="rowIdBeanMapForUserPage";
-			}
-			
-			rowIdBeanMap=apBizLogic.deletePrivilege(rowIdBeanMap,deletedRowsArray,operation);
-			session.setAttribute(temp,	rowIdBeanMap);
-			
-			final List<JSONObject> nullList=null;
-			setResponse(response, nullList);
-			
+			deleteRowMethod(request, response);
 		}
 		else if (Constants.OPERATION_EDIT_ROW.equals(cpOperation))
 		{
-			final String selectedRow = (String) request.getParameter("selectedRow");
-			
-			Map<String, SiteUserRolePrivilegeBean> rowIdBeanMap= new HashMap<String, SiteUserRolePrivilegeBean>();
-			if (session.getAttribute(Constants.ROW_ID_OBJECT_BEAN_MAP) != null) {
-				rowIdBeanMap = (Map<String, SiteUserRolePrivilegeBean>) session.getAttribute(Constants.ROW_ID_OBJECT_BEAN_MAP);
-			}
-			
-			final List<JSONObject> privilegeList=apBizLogic.editPrivilege(rowIdBeanMap,selectedRow);
-		//	session.setAttribute(Constants.ROW_ID_OBJECT_BEAN_MAP,	rowIdBeanMap);
-			
-	//		final List<JSONObject> nullList=null;
-			setResponse(response, privilegeList);
+			editRowMethod(request, response);
 		}
-		else if (("editRowForUserPage").equals(cpOperation))
+		else if ((Constants.OPERATION_GET_ACTIONS_FORTHIS_CPS).equals(cpOperation))
 		{
-			final String selectedRow = (String) request.getParameter("selectedRow");
-			
-			Map<String, SiteUserRolePrivilegeBean> rowIdBeanMap= new HashMap<String, SiteUserRolePrivilegeBean>();
-			if (session.getAttribute("rowIdBeanMapForUserPage") != null) {
-				rowIdBeanMap = (Map<String, SiteUserRolePrivilegeBean>) session.getAttribute("rowIdBeanMapForUserPage");
-			}
-			
-			final List<JSONObject> privilegeList=apBizLogic.editPrivilegeForUserPage(rowIdBeanMap,selectedRow);
-			setResponse(response, privilegeList);
+			actionsForSelCPsMethod(request, response);	
 		}
-		
-		// for user page---
-		
-		else if (("addPrivOnUserPage").equals(cpOperation))
+		else if ((Constants.OPERATION_GET_ACTIONS_FORTHIS_SITES).equals(cpOperation))
 		{
-			final String siteIds = (String) request.getParameter(Constants.SELECTED_SITE_IDS);
-			final String actionIds = (String) request.getParameter(Constants.SELECTED_ACTION_IDS);
-			final String cpIds = (String) request.getParameter("selectedCPIds");
- 			final String roleId = (String) request.getParameter(Constants.SELECTED_ROLE_IDS);
- 			final boolean isAllCPChecked = new Boolean(request.getParameter("isAllCPChecked"));
- 			final String operation = (String) request.getParameter("operation");
- 			
- 			Map<String, SiteUserRolePrivilegeBean> rowIdBeanMap= new HashMap<String, SiteUserRolePrivilegeBean>();
- 			if (session.getAttribute("rowIdBeanMapForUserPage") != null) 
- 			{
- 				rowIdBeanMap = (Map<String, SiteUserRolePrivilegeBean>) session.getAttribute("rowIdBeanMapForUserPage");
- 			}	
- 			
-			final List<JSONObject> listForUPSummary =apBizLogic.addPrivilegeForUserPage(rowIdBeanMap,cpIds,siteIds,roleId,actionIds,isAllCPChecked,operation );
-			session.setAttribute("rowIdBeanMapForUserPage",	rowIdBeanMap);
-			setResponse(response, listForUPSummary);
-	
-		}
-		
-		else if (("getActionsForThisCPs").equals(cpOperation))
-		{
-	//		final String cpIds = (String) request.getParameter("selectedCPIds");
-	//		final String siteIds = (String) request.getParameter("selectedSiteIds");
-			final String selectedRoleId = (String) request.getParameter(Constants.SELECTED_ROLE_IDS);
-			List<JSONObject> listOfAction=new ArrayList<JSONObject>();
-			
-			
-//			if(cpIds!=null && ! ("").equalsIgnoreCase(cpIds))
-//			{
-	//			final List<Long> selectedCPIds = apBizLogic.getCPData(cpIds);
-				listOfAction = apBizLogic.getActionsForThisCPs(selectedRoleId);
-	//		}
-//			else
-	//		{
-	//			 final List<Long> selectedSiteIds = apBizLogic.getSiteData(siteIds);
-//				 listOfAction = apBizLogic.getActionsForThisSites(selectedSiteIds,selectedRoleId);
-	//		}
-			setResponse(response, listOfAction);	
-		}
-		else if (("getActionsForThisSites").equals(cpOperation))
-		{
-	//		final String siteIds = (String) request.getParameter("selectedSiteIds");
-			final String selectedRoleId = (String) request.getParameter(Constants.SELECTED_ROLE_IDS);
-			final boolean isAllCPChecked = new Boolean(request.getParameter("isAllCPChecked"));
-			
-//		    final List<Long> selectedSiteIds = apBizLogic.getSiteData(siteIds);
-		    final List<JSONObject> listOfAction = apBizLogic.getActionsForThisSites(selectedRoleId,isAllCPChecked);
-	//	    final List<JSONObject> listOfAction = apBizLogic.getActionsForThisRole(roleId, pageOf, selectedSiteIds);
-		    setResponse(response, listOfAction);
+			actionsForSelSitesMethod(request, response);
 		}
 		return null;
 	}
+
+	/**
+	 * @param request
+	 * @param response
+	 * @throws BizLogicException
+	 * @throws JSONException
+	 * @throws IOException
+	 */
+	private void actionsForSelSitesMethod(HttpServletRequest request, HttpServletResponse response) throws BizLogicException, JSONException, IOException {
+		final AssignPrivilegePageBizLogic apBizLogic = getAssignPrivilegePageBizLogic();
+		final String selectedRoleId = (String) request.getParameter(Constants.SELECTED_ROLE_IDS);
+		final boolean isAllCPChecked =Boolean.parseBoolean(request.getParameter(Constants.IS_ALL_CP_CHECKED));
+		
+		final List<JSONObject> listOfAction = apBizLogic.getActionsForThisSites(selectedRoleId,isAllCPChecked);
+		setResponse(response, listOfAction);
+	}
+
+	/**
+	 * @param request
+	 * @param response
+	 * @throws BizLogicException
+	 * @throws JSONException
+	 * @throws IOException
+	 */
+	private void actionsForSelCPsMethod(HttpServletRequest request, HttpServletResponse response) throws BizLogicException, JSONException, IOException {
+		final AssignPrivilegePageBizLogic apBizLogic = getAssignPrivilegePageBizLogic();
+		final String selectedRoleId = (String) request.getParameter(Constants.SELECTED_ROLE_IDS);
+		List<JSONObject> listOfAction=new ArrayList<JSONObject>();
+		
+		listOfAction = apBizLogic.getActionsForThisCPs(selectedRoleId);
+		setResponse(response, listOfAction);
+	}
+
+	/**
+	 * @param request
+	 * @param response
+	 * @throws BizLogicException
+	 * @throws JSONException
+	 * @throws IOException
+	 */
+	private void editRowMethod(HttpServletRequest request, HttpServletResponse response) throws BizLogicException, JSONException, IOException {
+		final HttpSession session = request.getSession();
+		final AssignPrivilegePageBizLogic apBizLogic = getAssignPrivilegePageBizLogic();
+		final String selectedRow = (String) request.getParameter("selectedRow");
+		final String pageOf = (String) request.getParameter(Constants.PAGE_OF);
+		
+		List<JSONObject> privilegeList = null;
+		Map<String, SiteUserRolePrivilegeBean> rowIdBeanMap= new HashMap<String, SiteUserRolePrivilegeBean>();
+		if(!(Constants.PAGE_OF_USER).equals(pageOf))
+		{
+			if (session.getAttribute(Constants.ROW_ID_OBJECT_BEAN_MAP) != null) 
+			{
+				rowIdBeanMap = (Map<String, SiteUserRolePrivilegeBean>) session.getAttribute(Constants.ROW_ID_OBJECT_BEAN_MAP);
+			}
+		
+			privilegeList=apBizLogic.editPrivilege(rowIdBeanMap,selectedRow);
+		}
+		else
+		{
+			if (session.getAttribute(Constants.USER_ROW_ID_BEAN_MAP) != null)
+			{
+				rowIdBeanMap = (Map<String, SiteUserRolePrivilegeBean>) session.getAttribute(Constants.USER_ROW_ID_BEAN_MAP);
+			}
+			
+			privilegeList=apBizLogic.editPrivilegeForUserPage(rowIdBeanMap,selectedRow);
+		}
+		setResponse(response, privilegeList);
+	}
+
+	/**
+	 * @param request
+	 * @param response
+	 * @throws BizLogicException
+	 * @throws IOException
+	 * @throws JSONException
+	 */
+	private void deleteRowMethod(HttpServletRequest request, HttpServletResponse response) throws BizLogicException, IOException, JSONException {
+		final HttpSession session = request.getSession();
+		final AssignPrivilegePageBizLogic apBizLogic = getAssignPrivilegePageBizLogic();
+		final String deletedRowsArray = (String) request.getParameter("deletedRowsArray");
+		final String operation = (String) request.getParameter(Constants.OPERATION);
+		final String pageOf = (String)request.getParameter(Constants.PAGE_OF);
+		 String temp="";
+		
+		Map<String, SiteUserRolePrivilegeBean> rowIdBeanMap= new HashMap<String, SiteUserRolePrivilegeBean>();
+		
+		//if (!(Constants.PAGE_OF_USER).equals(pageOf)&& (session.getAttribute(Constants.ROW_ID_OBJECT_BEAN_MAP) != null))
+		if (pageOf!=null && (Constants.PAGEOF_ASSIGN_PRIVILEGE).equals(pageOf)&& (session.getAttribute(Constants.ROW_ID_OBJECT_BEAN_MAP) != null))
+		{
+			rowIdBeanMap = (Map<String, SiteUserRolePrivilegeBean>) session.getAttribute(Constants.ROW_ID_OBJECT_BEAN_MAP);
+			temp=Constants.ROW_ID_OBJECT_BEAN_MAP;
+		}
+		else if(pageOf!=null && session.getAttribute(Constants.USER_ROW_ID_BEAN_MAP)!=null)
+		{
+			rowIdBeanMap =(Map<String, SiteUserRolePrivilegeBean>)session.getAttribute(Constants.USER_ROW_ID_BEAN_MAP);
+			temp=Constants.USER_ROW_ID_BEAN_MAP;
+		}
+		
+		rowIdBeanMap=apBizLogic.deletePrivilege(rowIdBeanMap,deletedRowsArray,operation);
+		session.setAttribute(temp,	rowIdBeanMap);
+		
+		final List<JSONObject> nullList=null;
+		setResponse(response, nullList);
+	}
+
+	/**
+	 * @param request
+	 * @param response
+	 * @throws BizLogicException
+	 * @throws JSONException
+	 * @throws CSException
+	 * @throws IOException
+	 */
+	private void addPrivilegeMethod(HttpServletRequest request, HttpServletResponse response) throws BizLogicException, JSONException, CSException, IOException {
+		final HttpSession session = request.getSession();
+		final AssignPrivilegePageBizLogic apBizLogic = getAssignPrivilegePageBizLogic();
+		final String pageOf = (String) request.getParameter(Constants.PAGE_OF);
+		final String siteIds = (String) request.getParameter(Constants.SELECTED_SITE_IDS);
+		final String actionIds = (String) request.getParameter(Constants.SELECTED_ACTION_IDS);
+		final String roleId = (String) request.getParameter(Constants.SELECTED_ROLE_IDS);
+		final String operation = (String) request.getParameter(Constants.OPERATION);
+		final String userIds = (String) request.getParameter(Constants.SELECTED_USER_IDS);
+		final String cpIds = (String) request.getParameter(Constants.SELECTED_CP_IDS);
+		final boolean isAllCPChecked = Boolean.parseBoolean(request.getParameter(Constants.IS_ALL_CP_CHECKED));
+		
+		String temp="";
+		
+		List<JSONObject> listForUPSummary = new ArrayList<JSONObject>();
+		
+		Map<String, SiteUserRolePrivilegeBean> rowIdBeanMap= new HashMap<String, SiteUserRolePrivilegeBean>();
+		
+		if (pageOf!=null && ! pageOf.equals("") && (Constants.PAGEOF_ASSIGN_PRIVILEGE).equals(pageOf))
+		{
+			if(session.getAttribute(Constants.ROW_ID_OBJECT_BEAN_MAP) != null)
+			{
+				rowIdBeanMap = (Map<String, SiteUserRolePrivilegeBean>) session.getAttribute(Constants.ROW_ID_OBJECT_BEAN_MAP);
+			}
+			listForUPSummary =apBizLogic.addPrivilege(rowIdBeanMap,userIds,siteIds,roleId,actionIds,operation );
+			
+			temp = Constants.ROW_ID_OBJECT_BEAN_MAP;
+		}
+		else if(pageOf!=null && ! pageOf.equals(""))
+		{
+			if(session.getAttribute(Constants.USER_ROW_ID_BEAN_MAP) != null)
+			{
+				rowIdBeanMap =(Map<String, SiteUserRolePrivilegeBean>)session.getAttribute(Constants.USER_ROW_ID_BEAN_MAP);
+			}
+			listForUPSummary =apBizLogic.addPrivilegeForUserPage(rowIdBeanMap,cpIds,siteIds,roleId,actionIds,isAllCPChecked,operation );
+		
+			temp = Constants.USER_ROW_ID_BEAN_MAP;
+		}
+		session.setAttribute(temp,rowIdBeanMap);
+		setResponse(response, listForUPSummary);
+	}
+
+	/**
+	 * @param request
+	 * @param response
+	 * @throws BizLogicException
+	 * @throws JSONException
+	 * @throws IOException
+	 */
+	private void actionsForSelRoleMethod(HttpServletRequest request, HttpServletResponse response) throws BizLogicException, JSONException, IOException {
+		final AssignPrivilegePageBizLogic apBizLogic = getAssignPrivilegePageBizLogic();
+		final String role = (String) request.getParameter(Constants.SELECTED_ROLE_IDS);
+		final String pageOf = (String) request.getParameter(Constants.PAGE_OF);
+		final String siteIds = (String) request.getParameter(Constants.SELECTED_SITE_IDS);
+		final String cpIds = (String) request.getParameter(Constants.SELECTED_CP_IDS);
+		final boolean isAllCPChecked = Boolean.parseBoolean(request.getParameter(Constants.IS_ALL_CP_CHECKED));
+		
+		final List<Long> selectedSiteIds = apBizLogic.getInputData(siteIds);
+		final List<Long> selectedCPIds = apBizLogic.getInputData(cpIds);
+		
+		final List<JSONObject> listOfAction = apBizLogic.getActionsForThisRole(role,pageOf,selectedSiteIds,selectedCPIds,isAllCPChecked);
+		setResponse(response, listOfAction);
+	}
+
+	/**
+	 * @param request
+	 * @param response
+	 * @throws BizLogicException
+	 * @throws JSONException
+	 * @throws IOException
+	 */
+	private void cpsForSelSitesMethod(HttpServletRequest request, HttpServletResponse response) throws BizLogicException, JSONException, IOException {
+		final AssignPrivilegePageBizLogic apBizLogic = getAssignPrivilegePageBizLogic();
+		final String siteIds = (String) request.getParameter(Constants.SELECTED_SITE_IDS);
+		
+		final List<Long> listOfSiteIds = apBizLogic.getInputData(siteIds);
+		final List<JSONObject> listOfCPs = apBizLogic.getCPsForThisSites(listOfSiteIds);
+		setResponse(response, listOfCPs);
+	}
+
+	/**
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 * @throws JSONException
+	 */
+	private void usersForSelSitesMethod(HttpServletRequest request, HttpServletResponse response) throws BizLogicException,IOException,JSONException 
+	{
+		final AssignPrivilegePageBizLogic apBizLogic = getAssignPrivilegePageBizLogic();
+		final String siteIds = (String) request.getParameter(Constants.SELECTED_SITE_IDS);
+		
+		final List<Long> listOfSiteIds = apBizLogic.getInputData(siteIds);
+		final List<JSONObject> listOfUsers = apBizLogic.getUsersForThisSites(listOfSiteIds);
+		setResponse(response, listOfUsers);
+	}
 	
-	
-	
+	public void ErrorsMesssagesForPriv (HttpServletRequest request)
+	{
+		final String  errorMessForRole = ApplicationProperties.getValue("errors.assignPrivileges.role");
+		final String  errorMessForSite = ApplicationProperties.getValue("errors.assignPrivileges.site");
+		final String  errorMessForUser = ApplicationProperties.getValue("errors.assignPrivileges.user");
+		final String  errorMessForPriv = ApplicationProperties.getValue("errors.assignPrivileges.privilege");
+		final String  errorMessForCP = ApplicationProperties.getValue("errors.assignPrivileges.collectionProtocol");
+		
+		request.setAttribute(Constants.ERROR_MESSAGE_FOR_ROLE, errorMessForRole);
+		request.setAttribute(Constants.ERROR_MESSAGE_FOR_SITE, errorMessForSite);
+		request.setAttribute(Constants.ERROR_MESSAGE_FOR_ACTION, errorMessForPriv);
+		request.setAttribute(Constants.ERROR_MESSAGE_FOR_CP, errorMessForCP);
+		request.setAttribute(Constants.ERROR_MESSAGE_FOR_USER, errorMessForUser);
+	}
 	/**
 	 * Sets  response to the Ajax requests.
 	 * @param response
