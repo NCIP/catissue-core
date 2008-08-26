@@ -346,6 +346,26 @@ public class SingalNodeTemporalQuery
 		this.attributeById = attributeById;
 	}
 	
+	public void createOnlyLHS()
+	{
+		lhsTerm = QueryObjectFactory.createTerm();
+	    //Updating lhsTerm
+	    if(lhsDateLiteral != null)
+        {
+        	//if DatePicker exists on LHS
+        	lhsTerm.addOperand(lhsDateLiteral);
+        	addSecondLhsOperand();
+       }
+        else
+        {
+        	//If DatePicker doesn't exists on LHS
+        	lhsTerm.addOperand(lhsDateOffSetLiteral);
+        	addSecondLhsOperand();
+        }
+
+		
+	}
+	
 	public void createLHSAndRHS()
 	{
 		lhsTerm = QueryObjectFactory.createTerm();
@@ -411,6 +431,14 @@ public class SingalNodeTemporalQuery
 		}
 	}
 	
+	public void createRhsDateOffSetLiteral(String rhsTimeInterval)
+	{
+		if((!rhsTimeInterval.equals("null")))
+		{
+			this.rhsTimeInterval = getTimeInterval(rhsTimeInterval);
+			rhsDateOffSetLiteral = QueryObjectFactory.createDateOffsetLiteral(this.rhsTimeInterval);
+		}
+	}
 	/**
 	 * 
 	 * @param rhsTimeValue
@@ -476,7 +504,7 @@ public class SingalNodeTemporalQuery
 	 * @param timeIntervalValue
 	 * @return
 	 */
-	private TimeInterval getTimeInterval(String timeIntervalValue)
+	public TimeInterval getTimeInterval(String timeIntervalValue)
 	{
 		TimeInterval timeInterval = null;
 		for(TimeInterval time: TimeInterval.values())

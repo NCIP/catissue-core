@@ -316,27 +316,42 @@ public class DAGPanel
 	    //Creating HHS Literals
 	    singalNodeTq.createLeftLiterals(node.getLhsTimeValue(),node.getLhsTimeInterval());
 	    
-	    //Creating RHS Literals
-	    singalNodeTq.createRightLiterals(node.getTimeValue(), node.getTimeInterval());
 	    
 	    //Create Expressions
 	    singalNodeTq.createExpressions();
 	    
-	    //Create LHS Terms and RHS Terms
-	    singalNodeTq.createLHSAndRHS();
-	    
-	    ICustomFormula customFormula = createSingleNodeCustomFormula(singalNodeTq, operation,node.getName());
-		//**** Note Single node First removing custom formula
-//		removeCustomFormula(node.getName());
-	    CustomFormulaUIBean bean = createTQUIBean(customFormula,null,node);
-		populateUIMap(node.getName(),bean);
+	    if((node.getSelectedLogicalOp().equals("null")) && (node.getTimeValue().equals("null")) && (!node.getTimeInterval().equals("null")))
+	    {
+	    	//singalNodeTq.createRhsDateOffSetLiteral(node.getTimeInterval());
+	    	singalNodeTq.createOnlyLHS();
+	    	
+	    	IOutputTerm outputTerm = QueryObjectFactory.createOutputTerm();
+			outputTerm.setTerm(singalNodeTq.getLhsTerm());
+			
+			singalNodeTq.setRhsTimeInterval(singalNodeTq.getTimeInterval(node.getTimeInterval()));
+			outputTerm.setTimeInterval(singalNodeTq.getRhsTimeInterval());
+			
+			String tqColumnName = node.getCustomColumnName() + " (" + node.getTimeInterval() +"/s)";
+			outputTerm.setName(tqColumnName);
+			
+			query.getOutputTerms().add(outputTerm);
+			
+	    }
+	    else
+	    {
+		    //Creating RHS Literals
+		    singalNodeTq.createRightLiterals(node.getTimeValue(), node.getTimeInterval());
 
-		entityExpression.addOperand(getAndConnector(),customFormula);
-		entityExpression.setInView(true);
-		
-		addOutputTermsToQuery(query, customFormula, node.getCustomColumnName());
-		
-		//Make sure for operations......they are not set yet
+		    //Create LHS Terms and RHS Terms
+		    singalNodeTq.createLHSAndRHS();
+		    ICustomFormula customFormula = createSingleNodeCustomFormula(singalNodeTq, operation,node.getName());
+		    CustomFormulaUIBean bean = createTQUIBean(customFormula,null,node);
+			populateUIMap(node.getName(),bean);
+
+			entityExpression.addOperand(getAndConnector(),customFormula);
+			entityExpression.setInView(true);
+			addOutputTermsToQuery(query, customFormula, node.getCustomColumnName());
+	    }
 		String oprs = setOperation(node.getOperation());
 	    if(oprs != null)
 	    {
@@ -379,29 +394,44 @@ public class DAGPanel
         //Creating all expressions
 		tqBean.createExpressions();
 		tqBean.setICon(QueryObjectFactory.createArithmeticConnector(tqBean.getArithOp()));	
-		if((node.getTimeValue().equals("null")) && (node.getTimeInterval().equals("null")))
+		if((node.getSelectedLogicalOp().equals("null")) && (node.getTimeValue().equals("null")) && (!node.getTimeInterval().equals("null")))
 		{
+			//This will create only LHS
 			tqBean.createOnlyLHS();
+			
+			IOutputTerm outputTerm = QueryObjectFactory.createOutputTerm();
+			outputTerm.setTerm(tqBean.getLhsTerm());
+			tqBean.setTimeInterval(node.getTimeInterval());
+			outputTerm.setTimeInterval(tqBean.getTimeInterval());
+			String tqColumnName = node.getCustomColumnName() + " (" + node.getTimeInterval() +"/s)";
+			outputTerm.setName(tqColumnName);
+			
+			query.getOutputTerms().add(outputTerm);
+
+			//Create rhs (Date Offset Literal)Using only time Interval
+			//tqBean.createDateOffsetLiteral(node.getTimeInterval()); 
+			//tqBean.createOnlyRHS(); 
 		}
 		else
 		{
 			tqBean.createLiterals(node.getTimeInterval(), node.getTimeValue());
 		    tqBean.createLHSAndRHS();
+			ICustomFormula customFormula = createCustomFormula(tqBean,operation,node.getName());
+			//First removing custom formula
+			//removeCustomFormula(node.getName());
+			CustomFormulaUIBean bean = createTQUIBean(customFormula,node,null);
+			populateUIMap(node.getName(),bean);
+			
+			srcIExpression.addOperand(getAndConnector(),customFormula);
+			srcIExpression.setInView(true);
+			addOutputTermsToQuery(query, customFormula, node.getCustomColumnName());
+			String oprs = setOperation(node.getOperation());
+		    if(oprs != null)
+		    {
+		    	node.setOperation(oprs);
+		    }
+
 		}
-		ICustomFormula customFormula = createCustomFormula(tqBean,operation,node.getName());
-		//First removing custom formula
-		//removeCustomFormula(node.getName());
-		CustomFormulaUIBean bean = createTQUIBean(customFormula,node,null);
-		populateUIMap(node.getName(),bean);
-		
-		srcIExpression.addOperand(getAndConnector(),customFormula);
-		srcIExpression.setInView(true);
-		addOutputTermsToQuery(query, customFormula, node.getCustomColumnName());
-		String oprs = setOperation(node.getOperation());
-	    if(oprs != null)
-	    {
-	    	node.setOperation(oprs);
-	    }
 		return node;
 	}
 	private CustomFormulaUIBean createTQUIBean(ICustomFormula cf,CustomFormulaNode twoNode, SingleNodeCustomFormulaNode singleNode)

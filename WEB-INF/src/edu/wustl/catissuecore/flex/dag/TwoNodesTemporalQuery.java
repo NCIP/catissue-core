@@ -444,7 +444,7 @@ public class TwoNodesTemporalQuery
 		}
 	}
 
-	private void setTimeInterval(String timeIntervalValue)
+	public void setTimeInterval(String timeIntervalValue)
 	{
 		for(TimeInterval time: TimeInterval.values())
 		{
@@ -455,7 +455,17 @@ public class TwoNodesTemporalQuery
 			}
 		}
 	}
+	public void createDateOffsetLiteral(String timeIntervalValue)
+	{
+		setTimeInterval(timeIntervalValue);
+	 	dateOffSetLiteral = QueryObjectFactory.createDateOffsetLiteral(timeInterval);
+	}
     
+	public void createOnlyRHS()
+	{
+		 rhsTerm = 	QueryObjectFactory.createTerm();
+		 rhsTerm.addOperand(dateOffSetLiteral);
+	}
 	
 	public void createLHSAndRHS()
 	{
