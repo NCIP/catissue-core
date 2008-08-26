@@ -859,17 +859,34 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	// Assign Privilege Constants.
 	public static final boolean PRIVILEGE_DEASSIGN = false;
 	public static final String OPERATION_DISALLOW = "Disallow";
+	public static final String SUPERADMINISTRATOR = "Super Administrator";
+	public static final String ALL_CURRENT_AND_FUTURE = "All Current and Future";
+	public static final String NA = "N/A";
+	public static final String IS_ALL_CP_CHECKED = "isAllCPChecked";
+	public static final String CUSTOM_ROLE = "Custom";
 	public static final String ROW_ID_OBJECT_BEAN_MAP = "rowIdObjectBeanMap";
-	public static final String OPERATION_GET_USER_FORTHIS_SITES = "getUsersForThisSites";
-	public static final String OPERATION_GET_ACTION_FORTHIS_ROLE = "getActionsForThisRole";
+	public static final String OPERATION_GET_CPS_FORTHIS_SITES = "getCPsForThisSites";
+	public static final String OPERATION_GET_USERS_FORTHIS_SITES = "getUsersForThisSites";
+	public static final String OPERATION_GET_ACTIONS_FORTHIS_SITES = "getActionsForThisSites";
+	public static final String OPERATION_GET_ACTIONS_FORTHIS_ROLE = "getActionsForThisRole";
+	public static final String OPERATION_GET_ACTIONS_FORTHIS_CPS = "getActionsForThisCPs";
+	public static final String OPERATION_EDIT_ROW_FOR_USERPAGE = "editRowForUserPage";
 	public static final String OPERATION_ADD_PRIVILEGE = "addPrivilege";
+	public static final String OPERATION_ADD_PRIVILEGE_ON_USERPAGE = "addPrivOnUserPage";
 	public static final String OPERATION_DELETE_ROW = "deleteRow";
+	public static final String OPERATION_EDIT_ROW = "editRow";
 	public static final String SELECTED_ACTION_IDS = "selectedActionIds";
 	public static final String SELECTED_USER_IDS= "selectedUserIds";
 	public static final String SELECTED_SITE_IDS = "selectedSiteIds";
 	public static final String SELECTED_ROLE_IDS = "selectedRoleIds";
-	public static final String OPERATION_EDIT_ROW = "editRow";
-	public static final String ROW_ID_BEAN_MAP_FOR_USERPAGE ="rowIdBeanMapForUserPage";
+	public static final String SELECTED_CP_IDS = "selectedCPIds";
+	public static final String ERROR_MESSAGE_FOR_ROLE = "errorMessageForRole";
+	public static final String ERROR_MESSAGE_FOR_SITE = "errorMessageForSite";
+	public static final String ERROR_MESSAGE_FOR_USER = "errorMessageForUser";
+	public static final String ERROR_MESSAGE_FOR_CP = "errorMessageForCP";
+	public static final String ERROR_MESSAGE_FOR_ACTION = "errorMessageForPrivilege";
+	public static final String PAGEOF_ASSIGN_PRIVILEGE = "pageOfAssignPrivilegePage";
+	
 	
 	//Constants for default column names to be shown for query result.
 	public static final String[] DEFAULT_SPREADSHEET_COLUMNS = {
