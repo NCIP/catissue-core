@@ -643,8 +643,7 @@ function checkQuantityforAll(count)
 										<img src="images/Participant.GIF" border="0"/>
 					<%				}
 										String toolTipTypeClass = "Type:"+((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_actualSpecimenType")))+", Quantity:"+((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_availableQty")).toString()); %>
-									 	<span title="<%= toolTipTypeClass %>">
-									 		
+									 										 		
 					<%				if(((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim().equalsIgnoreCase("DerivedPathological")
 												|| ((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim().equalsIgnoreCase("Pathological")) 
 									{
@@ -656,6 +655,7 @@ function checkQuantityforAll(count)
 									else
 									{
 					%>
+									<span title="<%= toolTipTypeClass %>">
 										<html:link href="#" styleClass="view" styleId="label" onclick="<%=viewSpecimenDetailsFunction%>">
 									 		<bean:write name="requestDetailsForm" property="<%= requestedItem %>" />	
 										</html:link>

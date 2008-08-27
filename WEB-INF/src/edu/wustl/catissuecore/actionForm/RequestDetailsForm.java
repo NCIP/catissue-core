@@ -759,6 +759,7 @@ public class RequestDetailsForm extends AbstractActionForm
 				values.put(canDistributeKey, Constants.FALSE);
 				values.put(rowStatuskey, "enable");
 			}
+			values.put(availableQty, "");
 		}
 	}
 
