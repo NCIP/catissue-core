@@ -4749,7 +4749,7 @@ PUBLIC
 			<forward name="pageOfSpecimenCollectionGroup" path=".catissuecore.viewSpecimenCollectionGroupAnnotation"/>
 			<forward name="pageOfSpecimenCollectionGroupCPQuery" path=".catissuecore.viewSpecimenCollectionGroupAnnotation"/>
 			<forward name="pageOfListSpecimenEventParametersCPQuery" path=".catissuecore.viewSpecimenAnnotationCPQuery"/>	
-			
+			<forward name="access_denied" path="/ManageAdministrativeData.do" />	
 		</action>
 		
 		<action path="/LoadAnnotationDataEntryPage"
