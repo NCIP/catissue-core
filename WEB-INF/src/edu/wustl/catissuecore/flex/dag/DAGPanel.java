@@ -1221,7 +1221,10 @@ public class DAGPanel
 			}else if(operand instanceof IDateLiteral)
 			{
 				IDateLiteral dateLit = (IDateLiteral)operand;
-				singleCNode.setTimeValue(getDateInGivenFormat(dateLit.getDate()));
+				if(dateLit.getDate()!=null)
+				  singleCNode.setTimeValue(getDateInGivenFormat(dateLit.getDate()));
+				else
+				  singleCNode.setTimeValue("");
 			} else
 			{
 				throw new RuntimeException("Should not occur.....");
@@ -1298,7 +1301,14 @@ public class DAGPanel
 			}else if(operand instanceof IDateLiteral)
 			{
 				IDateLiteral dateLit = (IDateLiteral)operand;
-				cNode.setTimeValue(getDateInGivenFormat(dateLit.getDate()));
+				if(dateLit.getDate()!=null)
+				{
+					cNode.setTimeValue(getDateInGivenFormat(dateLit.getDate()));
+				}
+				else
+				{
+				  cNode.setTimeValue("");
+				}
 			} else
 			{
 				throw new RuntimeException("Should not occur.....");
