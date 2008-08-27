@@ -1121,6 +1121,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 					.getId(), dao);
 			specimen.setSpecimenCollectionGroup(scg);
 		}
+	   validateCollectionStatus(specimen );
 	}
 
 	/**
@@ -2532,6 +2533,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			while (iterator.hasNext())
 			{
 				Specimen newSpecimen = (Specimen) iterator.next();
+//				validateCollectionStatus(newSpecimen );
 				updateSingleSpecimen(dao, newSpecimen, sessionDataBean, updateChildrens);
 			}
 			postInsert(newSpecimenCollection, dao, sessionDataBean);
@@ -3405,4 +3407,14 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	{
 		return Permissions.READ_DENIED;
 	}	
+	
+	private void validateCollectionStatus(Specimen specimen ) throws DAOException
+	{
+		Specimen parent = (Specimen)specimen.getParentSpecimen();
+		
+		if(parent !=null && !Constants.COLLECTION_STATUS_COLLECTED.equals(parent.getCollectionStatus()) && (Constants.COLLECTION_STATUS_COLLECTED.equals(specimen.getCollectionStatus())))
+		{
+			throw new DAOException("Child specimen can not be collected without collecting the parent specimen.");
+		}
+	}
 }
