@@ -32,6 +32,10 @@
 		<logic:equal name="PAGE_TITLE" value='app.accessibility'>	
 		<img src="images/uIEnhancementImages/accessibility_icon.gif" alt="Disclaimer" width="24" height="24" />
 		</logic:equal>
+
+		<logic:equal name="PAGE_TITLE" value='app.contactUs'>	
+		<img src="images/uIEnhancementImages/contactus_icon.gif" alt="Contact Us" width="24" height="24" />
+		</logic:equal>
 		</td>
         <td width="97%" align="left" class="tr_bg_blue1"><span class="blue_ar_b"><bean:message key="<%=pageName%>"/></span></td>
       </tr>
