@@ -39,6 +39,8 @@ import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.Validator;
 
 /**
  * @author virender_mehta
@@ -68,7 +70,19 @@ public class CreateAliquotAction extends BaseAction
 		//Create ParentSpecimen Object
 		Specimen parentSpecimen = createParentSpecimen(aliquotForm);
 		//Create Specimen Map
-		specimenCollection = createAliquotDomainObject(aliquotForm, scg, parentSpecimen);
+		try
+		{
+			specimenCollection = createAliquotDomainObject(aliquotForm, scg, parentSpecimen);
+		}
+		catch (BizLogicException e)
+		{
+		    ActionErrors actionErrors = new ActionErrors();
+			actionErrors.add(actionErrors.GLOBAL_MESSAGE, new ActionError("errors.item",e.getMessage()));
+			saveErrors(request, actionErrors);
+			saveToken(request);
+			return mapping.findForward(Constants.FAILURE);
+		}
+		
 		//Insert Specimen Map
 		insertAliquotSpecimen = insertAliquotSpecimen(request, sessionDataBean, specimenCollection);
 		//Convert Specimen HashSet to List
@@ -254,7 +268,7 @@ public class CreateAliquotAction extends BaseAction
 	 * @return
 	 */
 	private Collection<AbstractDomainObject> createAliquotDomainObject(AliquotForm aliquotForm, SpecimenCollectionGroup scg,
-			Specimen parentSpecimen)
+			Specimen parentSpecimen) throws BizLogicException
 	{
 		Collection<AbstractDomainObject> specimenCollection = new LinkedHashSet<AbstractDomainObject>();
 		boolean disposeParentSpecimen = aliquotForm.getDisposeParentSpecimen();
@@ -270,6 +284,7 @@ public class CreateAliquotAction extends BaseAction
 			
 			String quantityKey = null;
 			String containerIdKey = null;
+			String containerNameKey = null;
 			String posDim1Key = null;
 			String posDim2Key = null;
 			String radioButton = (String)aliquotMap.get("radio_"+i);
@@ -285,15 +300,54 @@ public class CreateAliquotAction extends BaseAction
 			{
 				// Container selected from Map button
 				containerIdKey = specimenKey + i + "_StorageContainer_id"+fromMapsuffixKey;
+				containerNameKey = specimenKey + i + "_StorageContainer_name"+fromMapsuffixKey;
 				posDim1Key = specimenKey + i + "_positionDimensionOne"+fromMapsuffixKey;
 				posDim2Key = specimenKey + i + "_positionDimensionTwo"+fromMapsuffixKey;
 			}
-			
+			Validator validator = new Validator();
 			String quantity = (String) aliquotMap.get(quantityKey);
 			String containerId  = (String) aliquotMap.get(containerIdKey);
+			Long storageContainerId = null;
+			if(validator.isEmpty(containerId))
+			{
+				containerId=null;
+			}
+			else if(containerId != null)
+			{
+				storageContainerId = new Long(containerId);
+			}		
+			String containername = (String) aliquotMap.get(containerNameKey);
 			String posDim1  = (String) aliquotMap.get(posDim1Key);
 			String posDim2  = (String) aliquotMap.get(posDim2Key);
-
+			
+			/**
+			 * validate the the container name,id,pos1 and pos2 is not empty 
+			 * dependeing on Auto,virtual,manula selection
+			 */
+			if(radioButton!=null)
+			{
+				if(radioButton.equals("2"))
+				{
+					if(validator.isEmpty(containerId))
+					{
+						throw new BizLogicException(ApplicationProperties.getValue("errors.item.format", ApplicationProperties.getValue("specimen.storageContainer")));
+					}
+				}
+				if(radioButton.equals("3"))
+				{
+					if(validator.isEmpty(containername))
+					{
+						throw new BizLogicException(ApplicationProperties.getValue("errors.item.format", ApplicationProperties.getValue("specimen.storageContainer")));
+					}
+				}
+				if(!radioButton.equals("1"))
+				{
+					if(validator.isEmpty(posDim1)||validator.isEmpty(posDim2))
+					{
+						throw new BizLogicException(ApplicationProperties.getValue("errors.item.format", ApplicationProperties.getValue("specimen.positionInStorageContainer")));
+					}
+				}
+			}	
 			aliquotSpecimen.setSpecimenClass(aliquotForm.getClassName());
 			aliquotSpecimen.setSpecimenType(aliquotForm.getType());
 			aliquotSpecimen.setPathologicalStatus(aliquotForm.getPathologicalStatus());
@@ -303,12 +357,14 @@ public class CreateAliquotAction extends BaseAction
 			
 			
 			
-			if (containerId != null && posDim1 != null && posDim2 != null)
+			if ((containerId != null||containername!=null) && posDim1 != null && posDim2 != null )
 			{
 				SpecimenPosition specPos = new SpecimenPosition();
+			
 				specPos.setPositionDimensionOne(new Integer(posDim1));
-				specPos.setPositionDimensionTwo(new Integer(posDim2));				
-				sc.setId(new Long(containerId));
+				specPos.setPositionDimensionTwo(new Integer(posDim2));
+				sc.setId(storageContainerId);
+				sc.setName(containername);
 				specPos.setStorageContainer(sc);
 				specPos.setSpecimen(aliquotSpecimen);
 				aliquotSpecimen.setSpecimenPosition(specPos);
