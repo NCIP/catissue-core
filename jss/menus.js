@@ -23,19 +23,14 @@ Ext.onReady(function(){
         id: 'menuHome',
          items: [
 			{
-                text: 'User Profile',
-                menu: {        // <-- submenu by nested config object
-                    items: [
-						{
-                           text: 'Edit',
-                    	   handler: editUserProfile
-                       },
-                       {
-                           text: 'Change Password',
-                           href :'ChangePassword.do?operation=edit&pageOf=pageOfChangePassword'
-                       }
-                    ]
-                }
+                text: 'My Profile',
+				tooltip:'Saved Queries',
+				 handler: editUserProfile
+			},
+			{
+                text: 'Change Password',
+				tooltip:'Change Password',
+			    href :'ChangePassword.do?operation=edit&pageOf=pageOfChangePassword'                      
             }
         ]
     });
