@@ -24,12 +24,14 @@ import edu.wustl.catissuecore.actionForm.querysuite.SaveQueryForm;
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.bizlogic.querysuite.CreateQueryObjectBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.querysuite.QueryModuleConstants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractBizLogicFactory;
 import edu.wustl.common.hibernate.HibernateCleanser;
+import edu.wustl.common.querysuite.factory.QueryObjectFactory;
 import edu.wustl.common.querysuite.queryobject.ICustomFormula;
 import edu.wustl.common.querysuite.queryobject.IOutputAttribute;
 import edu.wustl.common.querysuite.queryobject.IParameterizedQuery;
@@ -48,11 +50,11 @@ import edu.wustl.common.util.logger.Logger;
  * @created Sep 11, 2007, 3:50:16 PM
  */
 public class SaveQueryAction extends BaseAction
-{
+{ 
 
 	protected ActionForward executeAction(ActionMapping actionMapping, ActionForm actionForm,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
-	{     
+	{      
 		HttpSession session = request.getSession();
 		IQuery query = (IQuery) session.getAttribute(AppletConstants.QUERY_OBJECT);
 		String target = Constants.FAILURE;
@@ -76,16 +78,6 @@ public class SaveQueryAction extends BaseAction
 				IBizLogic bizLogic = AbstractBizLogicFactory.getBizLogic(ApplicationProperties
 						.getValue("app.bizLogicFactory"), "getBizLogic",
 						Constants.CATISSUECORE_QUERY_INTERFACE_ID);
-//				if (query.getId() != null && query instanceof ParameterizedQuery)
-//				{
-//					bizLogic.update(parameterizedQuery, Constants.HIBERNATE_DAO);
-//					Logger.out.info(ApplicationProperties.getValue("query.update.info"));
-//				}
-//				else
-//				{
-//					bizLogic.insert(parameterizedQuery, Constants.HIBERNATE_DAO);
-//					Logger.out.info(ApplicationProperties.getValue("query.saved.info"));
-//				}
                 IParameterizedQuery queryClone = ObjectCloner.clone(parameterizedQuery);
                 new HibernateCleanser(queryClone).clean();
                 bizLogic.insert(queryClone, Constants.HIBERNATE_DAO);
@@ -154,7 +146,7 @@ public class SaveQueryAction extends BaseAction
 	 */
 	private IParameterizedQuery populateParameterizedQueryData(IQuery query, ActionForm actionForm,
 			HttpServletRequest request)
-	{ 
+	{    
 		SaveQueryForm saveActionForm = (SaveQueryForm) actionForm;
 		String error = "";
 		
@@ -166,12 +158,12 @@ public class SaveQueryAction extends BaseAction
 		 * See also: 1-4 
 		 * Description : Creating IParameterizedQuery's new instance only if it new query else type casting IQuery to IParameterizedQuery. 
 		 */
-		
+		 
 		IParameterizedQuery parameterizedQuery = (IParameterizedQuery)query;
 		
 		if (query.getId() == null)
 		{
-			parameterizedQuery = new ParameterizedQuery(query);
+			parameterizedQuery = QueryObjectFactory.createParameterizedQuery(query);
 		}
 		
 		HttpSession session = request.getSession();
@@ -190,13 +182,18 @@ public class SaveQueryAction extends BaseAction
 		{
 			parameterizedQuery.setDescription("");
 		} 
-		 
+		
+//		if(parameterizedQuery.getOutputTerms()!=null)
+//		{
+//			parameterizedQuery.getOutputTerms().clear();
+//	     	parameterizedQuery.getOutputTerms().addAll(query.getOutputTerms());
+//		}
+		
 		CreateQueryObjectBizLogic bizLogic = new CreateQueryObjectBizLogic();
 		String conditionList = request.getParameter(Constants.CONDITIONLIST);
-		String cfRHSList = request.getParameter("strToFormTQ");
-		Map<Integer,ICustomFormula> customFormulaIndexMap = (Map<Integer,ICustomFormula>)session.getAttribute("customFormulaIndexMap");
-		session.removeAttribute("customFormulaIndexMap");
-		//request.getParameter("0_displayName");
+		String cfRHSList = request.getParameter(QueryModuleConstants.STR_TO_FORM_TQ);
+		Map<Integer,ICustomFormula> customFormulaIndexMap = (Map<Integer,ICustomFormula>)session.getAttribute(QueryModuleConstants.CUSTOM_FORMULA_INDEX_MAP);
+		session.removeAttribute(QueryModuleConstants.CUSTOM_FORMULA_INDEX_MAP);
 		Map<String, String> displayNameMap = getDisplayNamesForConditions(saveActionForm, request);
 		error = bizLogic.setInputDataToQuery(conditionList, parameterizedQuery.getConstraints(),
 				displayNameMap,parameterizedQuery);
@@ -213,8 +210,8 @@ public class SaveQueryAction extends BaseAction
 		{
 			selectedOutputAttributeList = selectedColumnsMetadata.getSelectedOutputAttributeList();
 		}
-		parameterizedQuery.getOutputTerms().clear();
-     	parameterizedQuery.getOutputTerms().addAll(query.getOutputTerms()); 
+		//parameterizedQuery.getOutputTerms().clear();
+     	parameterizedQuery.getOutputTerms();//.addAll(query.getOutputTerms()); 
 		parameterizedQuery.setOutputAttributeList(selectedOutputAttributeList);
 		return parameterizedQuery;
 	}

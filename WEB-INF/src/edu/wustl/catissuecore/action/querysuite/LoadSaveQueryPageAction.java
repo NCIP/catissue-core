@@ -18,6 +18,7 @@ import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.bizlogic.querysuite.GenerateHtmlForAddLimitsBizLogic;
 import edu.wustl.catissuecore.flex.dag.CustomFormulaUIBean;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.querysuite.QueryModuleConstants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.querysuite.queryobject.IConstraints;
 import edu.wustl.common.querysuite.queryobject.ICustomFormula;
@@ -56,7 +57,7 @@ public class LoadSaveQueryPageAction extends BaseAction
 			Map<Integer,ICustomFormula> customFormulaIndexMap = new HashMap<Integer, ICustomFormula>();
 			String htmlContents = htmlGenerator.getHTMLForSavedQuery(queryObject, isShowAll,
 					Constants.SAVE_QUERY_PAGE,customFormulaIndexMap);
-			request.getSession().setAttribute("customFormulaIndexMap", customFormulaIndexMap);
+			request.getSession().setAttribute(QueryModuleConstants.CUSTOM_FORMULA_INDEX_MAP, customFormulaIndexMap);
 			request.setAttribute(Constants.HTML_CONTENTS, htmlContents);
 			String showAllLink = isShowAll
 					? Constants.SHOW_SELECTED_ATTRIBUTE

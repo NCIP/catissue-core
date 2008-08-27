@@ -19,6 +19,7 @@ import edu.wustl.catissuecore.actionForm.querysuite.SaveQueryForm;
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.bizlogic.querysuite.GenerateHtmlForAddLimitsBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.querysuite.QueryModuleConstants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.factory.AbstractBizLogicFactory;
@@ -43,12 +44,12 @@ public class FetchQueryAction extends BaseAction
 	 */
 	protected ActionForward executeAction(ActionMapping actionMapping, ActionForm actionForm,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
-	{
+	{      
 		String target = Constants.FAILURE;
 		Long queryId = null;
 		SaveQueryForm saveQueryForm = (SaveQueryForm) actionForm;
 		if (request.getAttribute("queryId") == null)
-		{
+		{ 
 			queryId = saveQueryForm.getQueryId();
 		}
 		else
@@ -70,7 +71,7 @@ public class FetchQueryAction extends BaseAction
 			{
 				List<IParameterizedQuery> queryList = bizLogic.retrieve(ParameterizedQuery.class
 						.getName(), "id", queryId);
-				if (!queryList.isEmpty())
+				if (queryList!=null && !queryList.isEmpty())
 				{
 					IParameterizedQuery parameterizedQuery = queryList.get(0);
 					request.getSession().setAttribute(AppletConstants.QUERY_OBJECT,
@@ -89,7 +90,7 @@ public class FetchQueryAction extends BaseAction
 								.getHTMLForSavedQuery(parameterizedQuery, false,
 										Constants.EXECUTE_QUERY_PAGE,customFormulaIndexMap);
 						request.setAttribute(Constants.HTML_CONTENTS, htmlContents);
-						request.getSession().setAttribute("customFormulaIndexMap", customFormulaIndexMap);
+						request.getSession().setAttribute(QueryModuleConstants.CUSTOM_FORMULA_INDEX_MAP, customFormulaIndexMap);
 						saveQueryForm.setQueryString(htmlContents);
 						target = Constants.SUCCESS;
 					}

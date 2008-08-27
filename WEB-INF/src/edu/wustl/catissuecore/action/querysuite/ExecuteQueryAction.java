@@ -19,6 +19,7 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.bizlogic.querysuite.CreateQueryObjectBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.querysuite.QueryModuleConstants;
 import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.hibernate.HibernateCleanser;
@@ -49,10 +50,10 @@ public class ExecuteQueryAction extends BaseAction
 		IParameterizedQuery parameterizedQuery1 = ObjectCloner.clone(parameterizedQuery);
 		
 		String conditionstr = request.getParameter("conditionList");
-		String rhsList = request.getParameter("strToFormTQ");
+		String rhsList = request.getParameter(QueryModuleConstants.STR_TO_FORM_TQ);
 		session.setAttribute(Constants.IS_SAVED_QUERY, Constants.TRUE);
-		Map<Integer,ICustomFormula> customFormulaIndexMap = (Map<Integer,ICustomFormula>)session.getAttribute("customFormulaIndexMap");
-		session.removeAttribute("customFormulaIndexMap");
+		Map<Integer,ICustomFormula> customFormulaIndexMap = (Map<Integer,ICustomFormula>)session.getAttribute(QueryModuleConstants.CUSTOM_FORMULA_INDEX_MAP);
+		session.removeAttribute(QueryModuleConstants.CUSTOM_FORMULA_INDEX_MAP);
 		if (conditionstr != null) 
 		{
 			CreateQueryObjectBizLogic bizLogic = new CreateQueryObjectBizLogic();

@@ -32,6 +32,7 @@ import edu.wustl.cab2b.common.util.AttributeInterfaceComparator;
 import edu.wustl.cab2b.common.util.PermissibleValueComparator;
 import edu.wustl.catissuecore.flex.dag.CustomFormulaUIBean;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.querysuite.QueryModuleConstants;
 import edu.wustl.catissuecore.util.querysuite.TemporalQueryUtility;
 import edu.wustl.common.querysuite.queryobject.IArithmeticOperand;
 import edu.wustl.common.querysuite.queryobject.ICondition;
@@ -164,7 +165,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 			String cssClass = "";
 			String componentId = String.valueOf(i);
 			boolean isTimeStamp = false;
-			
+			  
         	generateHTML.append("\n<tr>");
         	if(forPage.equalsIgnoreCase(Constants.SAVE_QUERY_PAGE))
         	{
@@ -187,7 +188,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 								+ customformulaColumNameMap.get(customFormula) + " ");
 				generateHTML.append("</td>");
 			}
-        	
+        	 
         	TermType termType = customFormula.getLhs().getTermType();
 			List<String> operatorList = TemporalQueryUtility.getRelationalOperators();
 			
@@ -212,14 +213,17 @@ public class GenerateHtmlForAddLimitsBizLogic
 				
         	}else if(termType.equals(TermType.Timestamp))
         	{
-        		DateLiteral operand = (DateLiteral)term.getOperand(0);
+        				DateLiteral operand = (DateLiteral)term.getOperand(0);
         		String textBoxId = componentId + "_textBox";
     			String calendarId = componentId + "_calendar";
-    			 
+    			  
     			generateHTML.append("<td valign=\"top\">");
     			SimpleDateFormat format =
-    	            new SimpleDateFormat("MM/dd/yyyy");
-					generateHTML.append("<input style=\"width:150px; display:block;\" value= '"+format.format(operand.getDate())+"'type=\"text\" name=\""
+    	            new SimpleDateFormat(QueryModuleConstants.DATE_FORMAT);
+    			String date = "";
+    			if(operand.getDate()!=null)
+    				date = format.format(operand.getDate());
+					generateHTML.append("<input style=\"width:150px; display:block;\" value= '"+date+"'type=\"text\" name=\""
 							+  componentId + "\" id=\"" +componentId+"_textbox"  + "\">");
     			generateHTML.append("</td>");
     			
@@ -294,7 +298,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 	 * @return
 	 */
 	private Map<ICustomFormula, String> getCustomFormulaColumnNameMap(IQuery queryObject,String forPage)
-	{ 
+	{   
 		Map<ICustomFormula, String> customformulaColumNameMap = new HashMap<ICustomFormula, String>();
 		List<IOutputTerm> outputTerms = queryObject.getOutputTerms();
 		Set<ICustomFormula> customFormulas = null;
