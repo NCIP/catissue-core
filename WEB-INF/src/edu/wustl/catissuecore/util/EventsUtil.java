@@ -8,6 +8,7 @@
  * @version 1.00
  * 20th April, 2007
  */
+
 package edu.wustl.catissuecore.util;
 
 import java.text.ParseException;
@@ -48,63 +49,66 @@ import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
-
 /**
  * @author ashish_gupta
  *
  */
 public class EventsUtil
 {
-	public static void validateCollectionEvent(ActionErrors errors, Validator validator, long collectionEventUserId, String collectionEventdateOfEvent,String collectionEventCollectionProcedure,String collectionTime )
+	public static void validateCollectionEvent(ActionErrors errors, Validator validator, long collectionEventUserId,
+			String collectionEventdateOfEvent, String collectionEventCollectionProcedure, String collectionTime)
 	{
-       	if ((collectionEventUserId) == -1L)
-        {
-       		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required","Collection Event's user"));
-        }
-       	if (!validator.checkDate(collectionEventdateOfEvent) )
-       	{
-       		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.invalid","Collection Event's date"));
-       	}
+		/*	if ((collectionEventUserId) == -1L)
+		 {
+		 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required","Collection Event's user"));
+		 }*/
+		if (!validator.checkDate(collectionEventdateOfEvent))
+		{
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.invalid", "Collection Event's date"));
+		}
 
-     	// checks the collectionProcedure
-      	if (!validator.isValidOption( collectionEventCollectionProcedure ) )
-        {
-       		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectioneventparameters.collectionprocedure")));
-        }
-        /* Bug id: 4179
-			patch id: 4179_1*/    
-      	if(!validator.isValidTime(collectionTime, Constants.TIME_PATTERN_HH_MM_SS))
-      	{
-			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",
-					ApplicationProperties.getValue("collectionEvent.invalidTime")));
-      	}
-		
+		// checks the collectionProcedure
+		/*if (!validator.isValidOption( collectionEventCollectionProcedure ) )
+		 {
+		 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectioneventparameters.collectionprocedure")));
+		 }*/
+		/* Bug id: 4179
+		 patch id: 4179_1*/
+		if (!validator.isValidTime(collectionTime, Constants.TIME_PATTERN_HH_MM_SS))
+		{
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected", ApplicationProperties
+					.getValue("collectionEvent.invalidTime")));
+		}
 
 	}
-	public static void validateReceivedEvent(ActionErrors errors, Validator validator,long receivedEventUserId,String receivedEventDateOfEvent, String receivedEventReceivedQuality,String receivedTime )
-	{
-       	if ((receivedEventUserId) == -1L)
-        {
-       		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required","Received Event's user"));
-        }
-       	if (!validator.checkDate(receivedEventDateOfEvent) )
-       	{
-       		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.invalid","Received Event's date"));
-       	}
 
-     	// checks the collectionProcedure
-      	if (!validator.isValidOption( receivedEventReceivedQuality ) )
-        {
-       		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("receivedeventparameters.receivedquality")));
-        }
-        /* Bug id: 4179
-			patch id: 4179_2*/  
-      	if(!validator.isValidTime(receivedTime, Constants.TIME_PATTERN_HH_MM_SS))
-      	{
-			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",
-					ApplicationProperties.getValue("receivedTime.invalidTime")));
-      	}
+	public static void validateReceivedEvent(ActionErrors errors, Validator validator, long receivedEventUserId, String receivedEventDateOfEvent,
+			String receivedEventReceivedQuality, String receivedTime)
+	{
+		/* 	if ((receivedEventUserId) == -1L)
+		 {
+		 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required","Received Event's user"));
+		 }*/
+		if (!validator.checkDate(receivedEventDateOfEvent))
+		{
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.invalid", "Received Event's date"));
+		}
+
+		// checks the collectionProcedure
+		/*if (!validator.isValidOption( receivedEventReceivedQuality ) )
+		 {
+		 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("receivedeventparameters.receivedquality")));
+		 }*/
+		/* Bug id: 4179
+		 patch id: 4179_2*/
+		if (!validator.isValidTime(receivedTime, Constants.TIME_PATTERN_HH_MM_SS))
+		{
+			errors
+					.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected", ApplicationProperties
+							.getValue("receivedTime.invalidTime")));
+		}
 	}
+
 	/**
 	 * 
 	 * @param userList Collection
@@ -125,13 +129,14 @@ public class EventsUtil
 		}
 		return -1;
 	}
+
 	/**
 	 * @param eventObject
 	 * @param validator
 	 * @throws DAOException
 	 * validating events from bizlogic
 	 */
-	public static void validateEventsObject(Object eventObject,Validator validator)throws DAOException
+	public static void validateEventsObject(Object eventObject, Validator validator) throws DAOException
 	{
 		if (eventObject instanceof CollectionEventParameters)
 		{
@@ -139,44 +144,54 @@ public class EventsUtil
 			AbstractSpecimen specimen = collectionEventParameters.getSpecimen();
 			collectionEventParameters.getUser();
 			/* Bug id: 4179
-			patch id: 4179_3*/  
+			 patch id: 4179_3*/
 			//Collector validation
-			if (collectionEventParameters.getUser() == null || collectionEventParameters.getUser().getId() == null || collectionEventParameters.getUser().getId() == 0)
+			if (collectionEventParameters.getUser() != null &&( collectionEventParameters.getUser().getId() == null
+					|| collectionEventParameters.getUser().getId() == 0))
 			{
 				String message = ApplicationProperties.getValue("specimen.collection.event.user");
 				throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
 			}
-			if(specimen!=null)
+			if (specimen != null)
 			{
 				//Date validation
 				if (!validator.checkDate(Utility.parseDateToString(collectionEventParameters.getTimestamp(), Constants.DATE_PATTERN_MM_DD_YYYY)))
 				{
-	
+
 					String message = ApplicationProperties.getValue("specimen.collection.event.date");
 					throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
 				}
 			}
 			// checks the collectionProcedure
-			if (!validator.isValidOption(collectionEventParameters.getCollectionProcedure()))
+			if (collectionEventParameters.getCollectionProcedure() == null || !collectionEventParameters.getCollectionProcedure().equals(""))
 			{
-				String message = ApplicationProperties.getValue("collectioneventparameters.collectionprocedure");
-				throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
-			}			
-			List procedureList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_COLLECTION_PROCEDURE, null);
-			if (!Validator.isEnumeratedValue(procedureList, collectionEventParameters.getCollectionProcedure()))
-			{
-				throw new DAOException(ApplicationProperties.getValue("events.collectionProcedure.errMsg"));
+				if (!validator.isValidOption(collectionEventParameters.getCollectionProcedure()))
+				{
+					String message = ApplicationProperties.getValue("collectioneventparameters.collectionprocedure");
+					throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+				}
+
+				List procedureList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_COLLECTION_PROCEDURE, null);
+
+				if (!Validator.isEnumeratedValue(procedureList, collectionEventParameters.getCollectionProcedure()))
+				{
+					throw new DAOException(ApplicationProperties.getValue("events.collectionProcedure.errMsg"));
+				}
 			}
+
 			//Container validation
-			if (!validator.isValidOption(collectionEventParameters.getContainer()))
+			if (collectionEventParameters.getContainer() == null || !collectionEventParameters.getContainer().equals(""))
 			{
-				String message = ApplicationProperties.getValue("collectioneventparameters.container");
-				throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
-			}
-			List containerList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_CONTAINER, null);
-			if (!Validator.isEnumeratedValue(containerList, collectionEventParameters.getContainer()))
-			{
-				throw new DAOException(ApplicationProperties.getValue("events.container.errMsg"));
+				if (!validator.isValidOption(collectionEventParameters.getContainer()))
+				{
+					String message = ApplicationProperties.getValue("collectioneventparameters.container");
+					throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+				}
+				List containerList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_CONTAINER, null);
+				if (!Validator.isEnumeratedValue(containerList, collectionEventParameters.getContainer()))
+				{
+					throw new DAOException(ApplicationProperties.getValue("events.container.errMsg"));
+				}
 			}
 
 		}
@@ -186,13 +201,14 @@ public class EventsUtil
 			ReceivedEventParameters receivedEventParameters = (ReceivedEventParameters) eventObject;
 			AbstractSpecimen specimen = receivedEventParameters.getSpecimen();
 			/* Bug id: 4179
-			patch id: 4179_4*/  
-			if (receivedEventParameters.getUser() == null || receivedEventParameters.getUser().getId() == null || receivedEventParameters.getUser().getId() == 0)
+			 patch id: 4179_4*/
+			if (receivedEventParameters.getUser() != null &&( receivedEventParameters.getUser().getId() == null
+					|| receivedEventParameters.getUser().getId() == 0))
 			{
 				String message = ApplicationProperties.getValue("specimen.recieved.event.user");
 				throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
 			}
-			if(specimen!=null)
+			if (specimen != null)
 			{
 				if (!validator.checkDate(Utility.parseDateToString(receivedEventParameters.getTimestamp(), Constants.DATE_PATTERN_MM_DD_YYYY)))
 				{
@@ -200,18 +216,22 @@ public class EventsUtil
 					throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
 				}
 			}
-			if (!validator.isValidOption(receivedEventParameters.getReceivedQuality()))
+			if (receivedEventParameters.getReceivedQuality() == null || !receivedEventParameters.getReceivedQuality().equals(""))
 			{
-				String message = ApplicationProperties.getValue("collectioneventparameters.receivedquality");
-				throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
-			}
-			List qualityList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_RECEIVED_QUALITY, null);
-			if (!Validator.isEnumeratedValue(qualityList, receivedEventParameters.getReceivedQuality()))
-			{
-				throw new DAOException(ApplicationProperties.getValue("events.receivedQuality.errMsg"));
+				if (!validator.isValidOption(receivedEventParameters.getReceivedQuality()))
+				{
+					String message = ApplicationProperties.getValue("collectioneventparameters.receivedquality");
+					throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+				}
+				List qualityList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_RECEIVED_QUALITY, null);
+				if (!Validator.isEnumeratedValue(qualityList, receivedEventParameters.getReceivedQuality()))
+				{
+					throw new DAOException(ApplicationProperties.getValue("events.receivedQuality.errMsg"));
+				}
 			}
 		}
 	}
+
 	/**
 	 * @param dateOfEvent
 	 * @param timeInHrs
@@ -219,25 +239,25 @@ public class EventsUtil
 	 * @return
 	 * Setting the timestamp
 	 */
-	public static Date setTimeStamp(String dateOfEvent,String timeInHrs,String timeInMinutes)
+	public static Date setTimeStamp(String dateOfEvent, String timeInHrs, String timeInMinutes)
 	{
 		Date timestamp = null;
-		if (dateOfEvent != null && dateOfEvent.trim().length()!=0  )
+		if (dateOfEvent != null && dateOfEvent.trim().length() != 0)
 		{
-			Calendar calendar = Calendar.getInstance();			
+			Calendar calendar = Calendar.getInstance();
 			try
 			{
-				Date date = Utility.parseDate(dateOfEvent,Utility.datePattern(dateOfEvent));
+				Date date = Utility.parseDate(dateOfEvent, Utility.datePattern(dateOfEvent));
 				calendar.setTime(date);
-				timestamp = calendar.getTime();  
-				calendar.set(Calendar.HOUR_OF_DAY,Integer.parseInt(timeInHrs));
-				calendar.set(Calendar.MINUTE,Integer.parseInt(timeInMinutes));
-				timestamp = calendar.getTime();		
+				timestamp = calendar.getTime();
+				calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(timeInHrs));
+				calendar.set(Calendar.MINUTE, Integer.parseInt(timeInMinutes));
+				timestamp = calendar.getTime();
 			}
 			catch (ParseException e)
 			{
 				Logger.out.debug("Exception in Parsing Date" + e);
-			}			
+			}
 		}
 		else
 		{
@@ -245,6 +265,7 @@ public class EventsUtil
 		}
 		return timestamp;
 	}
+
 	/**
 	 * @param specimen
 	 * @param user
@@ -253,9 +274,9 @@ public class EventsUtil
 	 */
 	public static CollectionEventParameters populateCollectionEventParameters(User user)
 	{
-//		Collection Events
+		//		Collection Events
 		CollectionEventParameters collectionEventParameters = new CollectionEventParameters();
-		
+
 		collectionEventParameters.setUser(user);
 		collectionEventParameters.setTimestamp(new Date(System.currentTimeMillis()));
 		collectionEventParameters.setCollectionProcedure(Constants.NOT_SPECIFIED);
@@ -263,6 +284,7 @@ public class EventsUtil
 		collectionEventParameters.setContainer(Constants.NOT_SPECIFIED);
 		return collectionEventParameters;
 	}
+
 	/**
 	 * @param specimen
 	 * @param user
@@ -271,96 +293,96 @@ public class EventsUtil
 	 */
 	public static ReceivedEventParameters populateReceivedEventParameters(User user)
 	{
-//		Received Events
+		//		Received Events
 		ReceivedEventParameters receivedEventParameters = new ReceivedEventParameters();
 		receivedEventParameters.setComment("");
 		receivedEventParameters.setReceivedQuality(Constants.NOT_SPECIFIED);
-		
+
 		receivedEventParameters.setTimestamp(new Date(System.currentTimeMillis()));
 		receivedEventParameters.setUser(user);
 		return receivedEventParameters;
 	}
-	
+
 	public static String[] getEvent(SpecimenEventParameters eventParameters)
 	{
-			String [] events = new String[2];
-					
-			if(eventParameters instanceof CellSpecimenReviewParameters)
-			{
-				events[0] = "Cell Specimen Review";
-				events[1] = "pageOfCellSpecimenReviewParameters";
-			}
-			else if(eventParameters instanceof CheckInCheckOutEventParameter)
-			{
-				events[0] = "Check In Check Out";
-				events[1] = "pageOfCheckInCheckOutEventParameters";
-			}
-			else if(eventParameters instanceof CollectionEventParameters)
-			{
-				events[0] = "Collection";
-				events[1] = "pageOfCollectionEventParameters";
-			}
-			else if(eventParameters instanceof DisposalEventParameters)
-			{
-				events[0] = "Disposal";
-				events[1] = "pageOfDisposalEventParameters";
-			}
-			else if(eventParameters instanceof EmbeddedEventParameters)
-			{
-				events[0] = "Embedded";
-				events[1] = "pageOfEmbeddedEventParameters";
-			}
-			else if(eventParameters instanceof FixedEventParameters)
-			{
-				events[0] = "Fixed";
-				events[1] = "pageOfFixedEventParameters";
-			}
-			else if(eventParameters instanceof FluidSpecimenReviewEventParameters)
-			{
-				events[0] = "Fluid Specimen Review";
-				events[1] = "pageOfFluidSpecimenReviewParameters";
-			}
-			else if(eventParameters instanceof FrozenEventParameters)
-			{
-				events[0] = "Frozen";
-				events[1] = "pageOfFrozenEventParameters";
-			}
-			else if(eventParameters instanceof MolecularSpecimenReviewParameters)
-			{
-				events[0] = "Molecular Specimen Review";
-				events[1] = "pageOfMolecularSpecimenReviewParameters";
-			}
-			else if(eventParameters instanceof ProcedureEventParameters)
-			{
-				events[0] = "Procedure Event";
-				events[1] = "pageOfProcedureEventParameters";
-			}
-			else if(eventParameters instanceof ReceivedEventParameters)
-			{
-				events[0] = "Received Event";
-				events[1] = "pageOfReceivedEventParameters";
-			}
-			else if(eventParameters instanceof SpunEventParameters)
-			{
-				events[0] = "Spun";
-				events[1] = "pageOfSpunEventParameters";
-			}
-			else if(eventParameters instanceof ThawEventParameters)
-			{
-				events[0] = "Thaw";
-				events[1] = "pageOfThawEventParameters";
-			}
-			else if(eventParameters instanceof TissueSpecimenReviewEventParameters)
-			{
-				events[0] = "Tissue Specimen Review";
-				events[1] = "pageOfTissueSpecimenReviewParameters";
-			}
-			else if(eventParameters instanceof TransferEventParameters)
-			{
-				events[0] = "Transfer";
-				events[1] = "pageOfTransferEventParameters";
-			}
-		
-			return events;
+		String[] events = new String[2];
+
+		if (eventParameters instanceof CellSpecimenReviewParameters)
+		{
+			events[0] = "Cell Specimen Review";
+			events[1] = "pageOfCellSpecimenReviewParameters";
+		}
+		else if (eventParameters instanceof CheckInCheckOutEventParameter)
+		{
+			events[0] = "Check In Check Out";
+			events[1] = "pageOfCheckInCheckOutEventParameters";
+		}
+		else if (eventParameters instanceof CollectionEventParameters)
+		{
+			events[0] = "Collection";
+			events[1] = "pageOfCollectionEventParameters";
+		}
+		else if (eventParameters instanceof DisposalEventParameters)
+		{
+			events[0] = "Disposal";
+			events[1] = "pageOfDisposalEventParameters";
+		}
+		else if (eventParameters instanceof EmbeddedEventParameters)
+		{
+			events[0] = "Embedded";
+			events[1] = "pageOfEmbeddedEventParameters";
+		}
+		else if (eventParameters instanceof FixedEventParameters)
+		{
+			events[0] = "Fixed";
+			events[1] = "pageOfFixedEventParameters";
+		}
+		else if (eventParameters instanceof FluidSpecimenReviewEventParameters)
+		{
+			events[0] = "Fluid Specimen Review";
+			events[1] = "pageOfFluidSpecimenReviewParameters";
+		}
+		else if (eventParameters instanceof FrozenEventParameters)
+		{
+			events[0] = "Frozen";
+			events[1] = "pageOfFrozenEventParameters";
+		}
+		else if (eventParameters instanceof MolecularSpecimenReviewParameters)
+		{
+			events[0] = "Molecular Specimen Review";
+			events[1] = "pageOfMolecularSpecimenReviewParameters";
+		}
+		else if (eventParameters instanceof ProcedureEventParameters)
+		{
+			events[0] = "Procedure Event";
+			events[1] = "pageOfProcedureEventParameters";
+		}
+		else if (eventParameters instanceof ReceivedEventParameters)
+		{
+			events[0] = "Received Event";
+			events[1] = "pageOfReceivedEventParameters";
+		}
+		else if (eventParameters instanceof SpunEventParameters)
+		{
+			events[0] = "Spun";
+			events[1] = "pageOfSpunEventParameters";
+		}
+		else if (eventParameters instanceof ThawEventParameters)
+		{
+			events[0] = "Thaw";
+			events[1] = "pageOfThawEventParameters";
+		}
+		else if (eventParameters instanceof TissueSpecimenReviewEventParameters)
+		{
+			events[0] = "Tissue Specimen Review";
+			events[1] = "pageOfTissueSpecimenReviewParameters";
+		}
+		else if (eventParameters instanceof TransferEventParameters)
+		{
+			events[0] = "Transfer";
+			events[1] = "pageOfTransferEventParameters";
+		}
+
+		return events;
 	}
 }

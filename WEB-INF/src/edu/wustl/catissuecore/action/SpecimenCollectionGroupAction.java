@@ -718,7 +718,8 @@ public class SpecimenCollectionGroupAction extends SecureAction
 			throws DAOException
 	{
 		setDateParameters(specimenCollectionGroupForm, request);
-		if (specimenCollectionGroupForm.getCollectionEventCollectionProcedure() == null)
+		
+		/*if (specimenCollectionGroupForm.getCollectionEventCollectionProcedure() == null)
 		{
 			specimenCollectionGroupForm.setCollectionEventCollectionProcedure((String) DefaultValueManager
 					.getDefaultValue(Constants.DEFAULT_COLLECTION_PROCEDURE));
@@ -731,10 +732,10 @@ public class SpecimenCollectionGroupAction extends SecureAction
 		{
 			specimenCollectionGroupForm.setReceivedEventReceivedQuality((String) DefaultValueManager
 					.getDefaultValue(Constants.DEFAULT_RECEIVED_QUALITY));
-		}
+		}*/
 		//setting the collector and receiver drop downs
 		Utility.setUserInForm(request, operation);
-		long collectionEventUserId = Utility.setUserInForm(request,operation);
+		/*long collectionEventUserId = Utility.setUserInForm(request,operation);
 		if(specimenCollectionGroupForm.getCollectionEventUserId() == 0)
 		{
 			specimenCollectionGroupForm.setCollectionEventUserId(collectionEventUserId);
@@ -742,7 +743,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 		if(specimenCollectionGroupForm.getReceivedEventUserId() == 0)
 		{
 			specimenCollectionGroupForm.setReceivedEventUserId(collectionEventUserId);
-		}
+		}*/
 		//Setting the List for drop downs
 		setEventsListInRequest(request);
 	}

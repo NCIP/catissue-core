@@ -301,6 +301,12 @@
 			var receivedEventReceivedQualityForm = document.getElementById("receivedEventReceivedQualityForm").value;
 			var receivedEventCommentsForm = document.getElementById("receivedEventCommentsForm").value;
 			
+			if(collectionEventUserId == "")
+			  collectionEventUserId = "0";
+			
+			if(receivedEventUserId == "")
+			   receivedEventUserId = "0";
+			     
 			//alert("collectionEventdateOfEvent "+collectionEventdateOfEvent+" collectionEventdateOfEventForm"+collectionEventdateOfEventForm);
 			//alert("collectionEventUserIdForm "+collectionEventUserIdForm+" collectionEventUserId"+collectionEventUserId);
 			//alert("collectionEventTimeInHoursForm"+collectionEventTimeInHoursForm+" collectionEventTimeInHours"+collectionEventTimeInHours);
@@ -328,7 +334,7 @@
 				|| (collectionEventComments != collectionEventCommentsForm)
 				|| (receivedEventComments != receivedEventCommentsForm))
 			{	
-				var appResources = "You have edited the event's data. Click OK to propagate this change to all the specimens of this Specimen Collection Group.";
+				var appResources = "The collected and received events data that you have entered will be propagated to all specimens under this Specimen Collection Group and override any existing data. Do you want to continue?";
 				var answer = confirm(appResources);
 				if(answer)
 				{
