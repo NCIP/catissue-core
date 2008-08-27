@@ -46,7 +46,33 @@ public class DistributionProtocolTestCases extends CaTissueBaseTestCase{
 	          catch (Exception e) {
 	           	Logger.out.error(e.getMessage(),e);
 	           	e.printStackTrace();
-	           	assertFalse("Does not find Domain Object", true);
+	       	 assertFalse("could not add object", true);
+		 		
+	          }
+	}
+	
+	public void testSearchDistributionProtocolWithspecimenRequirment()
+	{
+		try {		
+		    DistributionProtocol distributionProtocol = new DistributionProtocol();
+		
+	   
+	       
+	     	DistributionSpecimenRequirement distributionSpecimenRequirement =BaseTestCaseUtility.initDistributionSpecimenRequirement();
+			Collection<DistributionSpecimenRequirement> distributionSpecimenRequirementCollection = new HashSet<DistributionSpecimenRequirement>();
+			distributionSpecimenRequirementCollection.add(distributionSpecimenRequirement);
+			distributionProtocol.setDistributionSpecimenRequirementCollection(distributionSpecimenRequirementCollection);
+
+		     List resultList = appService.search(DistributionProtocol.class,distributionProtocol);
+	         	if(resultList.size()==1)
+	         	{
+	         		assertTrue("Distribution protocol search successfully",true);
+	         	}
+			}
+	          catch (Exception e) {
+	           	Logger.out.error(e.getMessage(),e);
+	           	e.printStackTrace();
+	           	assertFalse("Does not find Distribution protocol Object",true);
 		 		
 	          }
 	}
