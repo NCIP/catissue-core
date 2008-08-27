@@ -1351,16 +1351,19 @@ public class ParticipantBizLogic extends DefaultBizLogic
 		else
 		// Check for ALL CURRENT & FUTURE CASE
 		{
-			String protectionElementNames[] = protectionElementName.split("_");
-			
-			Long cpId = Long.valueOf(protectionElementNames[1]);
-			Set<Long> cpIdSet = new UserBizLogic().getRelatedCPIds(sessionDataBean.getUserId(), false);
-			
-			if(cpIdSet.contains(cpId))
+			if(!protectionElementName.equals(Constants.ADD_GLOBAL_PARTICIPANT))
 			{
-				throw edu.wustl.catissuecore.util.global.Utility.getUserNotAuthorizedException(privilegeName, protectionElementName);    
+				String protectionElementNames[] = protectionElementName.split("_");
+				
+				Long cpId = Long.valueOf(protectionElementNames[1]);
+				Set<Long> cpIdSet = new UserBizLogic().getRelatedCPIds(sessionDataBean.getUserId(), false);
+				
+				if(cpIdSet.contains(cpId))
+				{
+					throw edu.wustl.catissuecore.util.global.Utility.getUserNotAuthorizedException(privilegeName, protectionElementName);    
+				}
+				isAuthorized = edu.wustl.catissuecore.util.global.Utility.checkForAllCurrentAndFutureCPs(dao,privilegeName, sessionDataBean, protectionElementNames[1]);
 			}
-			isAuthorized = edu.wustl.catissuecore.util.global.Utility.checkForAllCurrentAndFutureCPs(dao,privilegeName, sessionDataBean, protectionElementNames[1]);
 		}
 		if (!isAuthorized)
         {

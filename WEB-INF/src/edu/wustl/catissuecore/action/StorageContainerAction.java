@@ -279,12 +279,17 @@ public class StorageContainerAction extends SecureAction
 		
 		//List list = bizLogic.getSiteList(Site.class.getName(), siteDisplayField, valueField,activityStatusArray, false);
 		List list = bizLogic.getSiteList(siteDisplayField,valueField,activityStatusArray,sessionDataBean.getUserId());
-		NameValueBean nvbForSelect=(NameValueBean) list.get(0);
-		if(!"-1".equals(nvbForSelect.getValue()))
-		{	
-			NameValueBean nvb= new NameValueBean ("--Select--","-1");
-			list.add(0,nvb);
-		}	
+		NameValueBean nvbForSelect = null;
+		if(list!=null && !list.isEmpty())
+		{
+			nvbForSelect=(NameValueBean) list.get(0);
+
+			if(!"-1".equals(nvbForSelect.getValue()))
+			{	
+				NameValueBean nvb= new NameValueBean ("--Select--","-1");
+				list.add(0,nvb);
+			}	
+		}
 		request.setAttribute(Constants.SITELIST, list);
 		//get the Specimen class and type from the cde
 		List specimenClassTypeList = Utility.getSpecimenClassTypeListWithAny();
