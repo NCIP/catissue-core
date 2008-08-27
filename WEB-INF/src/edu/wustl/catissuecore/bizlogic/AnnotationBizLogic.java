@@ -230,16 +230,21 @@ public class AnnotationBizLogic extends DefaultBizLogic
                 EntityInterface staticEntity = EntityCache.getInstance().getEntityById(entityMap.getStaticEntityId());
                 
                 Collection<AssociationInterface> associationCollection = staticEntity.getAssociationCollection();
-                AssociationInterface associationInterface = null;
-                for (AssociationInterface association : associationCollection)
+				do
                 {
-                    if (association.getTargetEntity().equals(dynamicEntity))
-                    {
-                        associationInterface = association;
-                        break;
-                    }
-                }
-                entityManager.associateEntityRecords(associationInterface,staticEntityRecordId,dynamicEntityRecordId);
+        	            AssociationInterface associationInterface = null;
+    		            for (AssociationInterface association : associationCollection)
+    		            {
+    		                if (association.getTargetEntity().equals(dynamicEntity))
+    		                {
+    		                    associationInterface = association;
+    		                    break;
+    		                }
+    		            }
+    		            entityManager.associateEntityRecords(associationInterface,
+    		                    staticEntityRecordId, dynamicEntityRecordId);
+    		            dynamicEntity = dynamicEntity.getParentEntity();
+                }while(dynamicEntity != null);
             }
             catch (DynamicExtensionsSystemException e)
             {
