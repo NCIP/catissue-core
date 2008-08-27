@@ -205,7 +205,7 @@ public class CollectionProtocolAuthorization implements edu.wustl.catissuecore.u
 		return siteCollection;
 	}
 
-	protected void insertCoordinatorPrivileges(CollectionProtocol collectionProtocol,
+	public void insertCoordinatorPrivileges(CollectionProtocol collectionProtocol,
 			Vector<SecurityDataBean> authorizationData) throws SMException
 	{
 		Collection<User> coordinators = collectionProtocol.getCoordinatorCollection();
@@ -231,7 +231,7 @@ public class CollectionProtocolAuthorization implements edu.wustl.catissuecore.u
 		authorizationData.add(userGroupRoleProtectionGroupBean);
 	}
 
-	private void inserPIPrivileges(CollectionProtocol collectionProtocol,
+	public void inserPIPrivileges(CollectionProtocol collectionProtocol,
 			Vector<SecurityDataBean> authorizationData) throws SMException
 	{
 		HashSet<gov.nih.nci.security.authorization.domainobjects.User> group = new HashSet<gov.nih.nci.security.authorization.domainobjects.User>();

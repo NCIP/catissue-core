@@ -299,9 +299,13 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		  {
 		  // Vector authorizationData = new Vector();
 		  PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
-			
-		  new CollectionProtocolAuthorization().insertCpUserPrivilegs(collectionProtocol, authorizationData, rowIdMap);
+		  
+		  CollectionProtocolAuthorization cpAuthorization = new CollectionProtocolAuthorization();
+		  cpAuthorization.insertCpUserPrivilegs(collectionProtocol, authorizationData, rowIdMap);
 		  // insertCPSitePrivileges(user, authorizationData, userRowIdMap);
+		  collectionProtocol.getAssignedProtocolUserCollection().add(collectionProtocol.getPrincipalInvestigator());
+		  cpAuthorization.inserPIPrivileges(collectionProtocol, authorizationData);
+		  cpAuthorization.insertCoordinatorPrivileges(collectionProtocol, authorizationData);
 		  privilegeManager.insertAuthorizationData(authorizationData, null, null, collectionProtocol.getObjectId());
 		  // new CollectionProtocolAuthorization().insertCpUserPrivilegs(collectionProtocol, authorizationData, rowIdMap);
 		  } 
