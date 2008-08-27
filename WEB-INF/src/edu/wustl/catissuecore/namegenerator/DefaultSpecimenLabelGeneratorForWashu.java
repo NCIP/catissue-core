@@ -154,7 +154,8 @@ public class DefaultSpecimenLabelGeneratorForWashu implements LabelGenerator
 			
 		}
 		
-		specimenObject.setLabel(prefix + parentSpecimenLabel + "_" + (++aliquotChildCount) );
+	//	specimenObject.setLabel(prefix + parentSpecimenLabel + "_" + (++aliquotChildCount) );
+		specimenObject.setLabel(parentSpecimenLabel + "_" + (++aliquotChildCount) );
 		labelTreeMap.put(parentObject.getLabel(),aliquotChildCount);	
 		
 		return labelTreeMap;
@@ -166,9 +167,17 @@ public class DefaultSpecimenLabelGeneratorForWashu implements LabelGenerator
 	synchronized Long setNextAvailableDeriveSpecimenlabel(Specimen parentObject, 
 			Specimen specimenObject, Long labelCtr,String prefix) {
 	    
-		labelCtr= labelCtr+1;
-		specimenObject.setLabel(prefix + labelCtr.toString());
-		labelCountTreeMap.put(specimenObject,0);
+		 labelCtr= labelCtr+1;
+		 if ((Constants.COLLECTION_STATUS_COLLECTED).equals(specimenObject.getCollectionStatus()))
+		{ 
+			 specimenObject.setLabel(labelCtr.toString());
+		}
+		 else 
+		 {
+			 specimenObject.setLabel(prefix + "_" + labelCtr.toString());
+		 }
+	   
+	    labelCountTreeMap.put(specimenObject,0);
 		return labelCtr;
 	}
 	
@@ -181,17 +190,22 @@ public class DefaultSpecimenLabelGeneratorForWashu implements LabelGenerator
 		Long temporaryLabel= null;
 		Specimen objSpecimen = (Specimen)obj;
 		
+		/*if (objSpecimen.getIsCollectionProtocolRequirement())
+		{
+			return;
+		}*/
 	   if ((Constants.COLLECTION_STATUS_COLLECTED).equals(objSpecimen.getCollectionStatus()))
 		{
-			currentLabel = generateLabel(objSpecimen,currentLabel,"");
+		//	currentLabel = generateLabel(objSpecimen,currentLabel,"");
+		   tmpLabel = generateLabel(objSpecimen,tmpLabel,"");
 		}
 		else
 		{
 			if(objSpecimen.getLabel() == null)
 			{
-				tmpLabel = generateLabel(objSpecimen,tmpLabel, String.valueOf(objSpecimen.getClassName().charAt(0)));
+				tmpLabel = generateLabel(objSpecimen,tmpLabel, objSpecimen.getSpecimenType());
 			}
-		}
+		} 
 
 		if(objSpecimen.getChildSpecimenCollection().size()>0)
 		{
@@ -208,24 +222,35 @@ public class DefaultSpecimenLabelGeneratorForWashu implements LabelGenerator
 	
 	private Long generateLabel(Specimen objSpecimen, Long labelCtr, String prefix )
 	{
-		Specimen parentSpecimen = (Specimen)objSpecimen.getParentSpecimen();
-		if(!labelCountTreeMap.containsKey(objSpecimen) && objSpecimen.getLineage().equals(Constants.NEW_SPECIMEN))				
+       if(!labelCountTreeMap.containsKey(objSpecimen) && objSpecimen.getLineage().equals(Constants.NEW_SPECIMEN))				
 		{
-    	   	labelCtr= labelCtr+1;
-			objSpecimen.setLabel(prefix + labelCtr.toString());
-			labelCountTreeMap.put(objSpecimen.getLabel(),0);
+    		if(objSpecimen.getLabel()== null)
+    	   	{
+    	   		labelCtr = labelCtr+1;
+    	   		if ((Constants.COLLECTION_STATUS_COLLECTED).equals(objSpecimen.getCollectionStatus()))
+    			{
+    	   			objSpecimen.setLabel(labelCtr.toString());
+    			}
+    	   		else {
+    	   			objSpecimen.setLabel(prefix + "_" + labelCtr.toString());
+    	   		}
+    	 	}
+    	 
+		    labelCountTreeMap.put(objSpecimen.getLabel(),0);
 			tmpLabelCountTreeMap.put(objSpecimen.getLabel(),0);
 		}
-	   else if(!labelCountTreeMap.containsKey(objSpecimen) && objSpecimen.getLineage().equals(Constants.ALIQUOT))				
+       
+       else if(!labelCountTreeMap.containsKey(objSpecimen) && objSpecimen.getLineage().equals(Constants.ALIQUOT))				
 		{
-			setNextAvailableAliquotSpecimenlabel(parentSpecimen,objSpecimen,prefix);
+			setNextAvailableAliquotSpecimenlabel((Specimen)objSpecimen.getParentSpecimen(),objSpecimen,prefix);
 		}
-	
-	
+       
 	   else if(!labelCountTreeMap.containsKey(objSpecimen) && objSpecimen.getLineage().equals(Constants.DERIVED_SPECIMEN))				
 		{
-		   labelCtr = setNextAvailableDeriveSpecimenlabel(parentSpecimen,objSpecimen, labelCtr,prefix);
-		}
+    	  if(objSpecimen.getLabel() == null) {
+    		  labelCtr = setNextAvailableDeriveSpecimenlabel((Specimen)objSpecimen.getParentSpecimen(),objSpecimen, labelCtr,prefix);
+    	  }
+       }
 		
 		return labelCtr;
 	}
