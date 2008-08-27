@@ -1763,7 +1763,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 
 		String hql = "select sp.id,sp.label,sp.parentSpecimen.id,sp.activityStatus,sp.specimenType,sp.collectionStatus	from "
 				+ Specimen.class.getName() + " as sp where sp.specimenCollectionGroup.id = " + specimenCollectionGroup.getId()
-				+ " and sp.activityStatus <> '" + Constants.ACTIVITY_STATUS_DISABLED + "' order by sp.label";
+				+ " and sp.activityStatus <> '" + Constants.ACTIVITY_STATUS_DISABLED + "' order by sp.id";
 
 		List list = executeQuery(hql);
 
@@ -1806,6 +1806,8 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		if (!specimenChildrenMap.keySet().isEmpty())
 		{
 			List<Specimen> specList = specimenChildrenMap.get(new Long(0));
+			SpecimenComparator comparator = new SpecimenComparator();
+			Collections.sort(specList,comparator);
 			for (Specimen spec : specList)
 			{
 				createSpecimenXML(xmlString, spec, specimenChildrenMap);
@@ -1878,6 +1880,10 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 
 		List specimenList = new ArrayList();
 		specimenList.addAll(specimenCollectionGroup.getSpecimenCollection());
+//		Mandar 27aug08--start
+		SpecimenComparator comparator = new SpecimenComparator();
+		Collections.sort(specimenList,comparator);
+//		Mandar 27Aug08--end		
 
 		List finalList = new ArrayList();
 		List childrenList = new ArrayList();
