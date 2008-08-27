@@ -28,6 +28,7 @@ public class SpecimenArrayTestCases extends CaTissueBaseTestCase
 		}
 	}
 	
+	
 	 public void testSearchSpecimenArray()
 	 {
     	try 
