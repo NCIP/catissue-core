@@ -157,14 +157,15 @@ public class SimilarContainersAction extends SecureAction
 				siteId = site.getId().longValue();
 			}
 		}
-		else
+		//Suman: for bug 8904
+		else if (Constants.STORAGE_TYPE_POSITION_MANUAL.equals(selectedParentContainer))
 		{
 			Logger.out.debug("Long.parseLong(request.getParameter(parentContainerId)......................."
 					+ request.getParameter("parentContainerId"));
 			Logger.out.debug("similarContainerForm.getTypeId()......................." + similarContainersForm.getTypeId());
 			String parentContId = request.getParameter("parentContainerId");
-
-			if (similarContainersForm.getParentContainerId() == 0)
+			//commented for bug:8904
+			//if (similarContainersForm.getParentContainerId() == 0)
 			{
 
 				String containerName = similarContainersForm.getSelectedContainerName();
