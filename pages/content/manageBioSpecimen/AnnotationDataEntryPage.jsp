@@ -61,7 +61,7 @@ var myData = [<%int i;%><%for (i=0;i<(dataList.size()-1);i++){%>
 	annotationsGrid = new dhtmlXGridObject('definedAnnotationsGrid');
 	annotationsGrid.setImagePath("dhtml_comp/imgs/");
 	annotationsGrid.setHeader("Annotation,Last Updated,Updated By");
-	annotationsGrid.setInitWidthsP("35,30,35");
+	annotationsGrid.setInitWidthsP("35,29,35");
 	annotationsGrid.setSkin("light");
 	annotationsGrid.enableAlterCss("even","uneven");
 	annotationsGrid.enableRowsHover(true,'grid_hover');
@@ -110,7 +110,7 @@ var myData = [<%int i;%><%for (i=0;i<(dataList.size()-1);i++){%>
 
 	if ( document.getElementById && !(document.all) ) 
 	{
-		var slope=-10;
+		var slope=-30;
 	}
 	else
 	{

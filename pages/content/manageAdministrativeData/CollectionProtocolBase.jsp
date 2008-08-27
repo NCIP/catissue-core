@@ -79,18 +79,18 @@
 
 		
       <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
-	  <logic:equal name="isParticipantReg" value="true">
+	  
         <tr>
           <td colspan="2" align="left">
-          
+          <logic:equal name="isParticipantReg" value="true">
 			<span class="messagetexterror">
 				User can not Add/edit Events and Specimen Requirements
 			</span>
-		
+		</logic:equal>
 				<%@ include file="/pages/content/common/ActionErrors.jsp" %>
 		  </td>
         </tr>
-		</logic:equal>
+		
        		<tr>
 				<td width="20%"  valign="top">
 					<iframe id="CPTreeView" src="ShowCollectionProtocol.do?operation=${requestScope.operation}" scrolling="auto" frameborder="0" width="100%" name="CPTreeView" height="400" >
