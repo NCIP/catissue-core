@@ -15,6 +15,8 @@ import javax.servlet.http.HttpSession;
 
 import net.sf.ehcache.CacheException;
 
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -37,6 +39,9 @@ import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.security.PrivilegeCache;
+import edu.wustl.common.security.PrivilegeManager;
+import edu.wustl.common.util.Permissions;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
@@ -60,8 +65,30 @@ public class DisplayAnnotationDataEntryPageAction extends BaseAction
         request.setAttribute("entityRecordId",request.getParameter("entityRecordId"));
         request.setAttribute(Constants.ID,request.getParameter(Constants.ID));
         request.setAttribute("staticEntityName",request.getParameter("staticEntityName"));
-
-
+        
+        SessionDataBean sessionDataBean = getSessionData(request);
+        
+        List cpIdsList = new ArrayList();
+		cpIdsList = edu.wustl.common.util.Utility.getCPIdsList(request.getParameter("staticEntityName"), Long.valueOf(request.getParameter("entityRecordId")), sessionDataBean, cpIdsList);
+		
+		PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(sessionDataBean.getUserName());
+		StringBuffer sb = new StringBuffer();
+		sb.append(Constants.COLLECTION_PROTOCOL_CLASS_NAME).append("_");
+		for (Object cpId : cpIdsList)
+		{
+			boolean hasPrivilege = ((privilegeCache.hasPrivilege(sb.toString()+cpId.toString(), Permissions.REGISTRATION)) ||
+							(privilegeCache.hasPrivilege(sb.toString()+cpId.toString(), Permissions.SPECIMEN_PROCESSING)));				
+			if(!hasPrivilege)
+			{
+				ActionErrors errors = new ActionErrors();
+		        ActionError error = new ActionError("access.view.action.denied");
+		        errors.add(ActionErrors.GLOBAL_ERROR, error);
+		        saveErrors(request, errors);
+		        return mapping.findForward(Constants.ACCESS_DENIED);
+				// throw new DAOException("Access denied ! User does not have privilege to view/edit this information.");
+			}
+		}
+		
         return mapping.findForward(request.getParameter("pageOf"));
 	}
 
