@@ -471,12 +471,10 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	*/
 	private function repaintHandler(event: ResultEvent):void
 	{
-		if(view=="Result"){
-			TQBtn.label = "Calculate Query";
-			TQBtn.toolTip = "Calculate query on selected nodes"
+		if(view=="Result"){			
+			TQBtn.visible =false;
 		}else if(view=="AddLimit"){		
-			TQBtn.label = "Temporal Query";
-			TQBtn.toolTip = "Create temporal query on selected nodes"		
+			TQBtn.visible =true;		
 		}else{}
 		
 		var nodeMap : Object =  event.result as Object ;		
