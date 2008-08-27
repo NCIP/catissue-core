@@ -1527,6 +1527,7 @@ public SiteUserRolePrivilegeBean setUserPrivilegeSummaryForUserPage(CollectionPr
 	if((Constants.EDIT).equals(operation))
 	{
 		surp.setRowDeleted(true);
+        surp.setRowAddedInEditMode(true);
 	}
 	
 	return surp;
