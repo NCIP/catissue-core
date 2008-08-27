@@ -24,7 +24,7 @@ Ext.onReady(function(){
          items: [
 			{
                 text: 'My Profile',
-				tooltip:'Saved Queries',
+				tooltip:'My Profile',
 				 handler: editUserProfile
 			},
 			{
