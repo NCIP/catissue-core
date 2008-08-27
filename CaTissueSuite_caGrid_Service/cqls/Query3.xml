@@ -2,10 +2,18 @@
 <CQLQuery xmlns="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery">
  <Target name="edu.wustl.catissuecore.domain.TissueSpecimen">
 	<Group logicRelation="AND">
-		<Association roleName="specimenEventCollection" name="edu.wustl.catissuecore.domain.ThawEventParameters">	
-			<Attribute name="id"  predicate="IS_NOT_NULL"/>
-		</Association>
-		 <Attribute name="id"  predicate="IS_NOT_NULL"/>
+		<Association roleName="specimenEventCollection" name="edu.wustl.catissuecore.domain.FixedEventParameters">	
+				<Group logicRelation="AND">
+					<Attribute name="id"  predicate="IS_NOT_NULL"/>
+					<Attribute name="durationInMinutes" value="30" predicate="LESS_THAN_EQUAL_TO"/>
+				</Group>
+		</Association>	
+		<Association roleName="specimenEventCollection" name="edu.wustl.catissuecore.domain.EmbeddedEventParameters">	
+				<Group logicRelation="AND">
+					<Attribute name="id"  predicate="IS_NOT_NULL"/>
+					<Attribute name="embeddingMedium" value="Low Melting Point Paraffin" predicate="EQUAL_TO"/>
+				</Group>
+		</Association>	
 	</Group>
  </Target>
 </CQLQuery>

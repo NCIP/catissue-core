@@ -1,27 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CQLQuery xmlns="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery">
-<Target name="edu.wustl.catissuecore.domain.MolecularSpecimen">
+<Target name="edu.wustl.catissuecore.domain.CellSpecimen">
 	<Group logicRelation="AND">
 		<Attribute name="id"  predicate="IS_NOT_NULL"/>
-		<Association roleName="parentSpecimen" name="edu.wustl.catissuecore.domain.FluidSpecimen">	
-			<Attribute name="id"  predicate="IS_NOT_NULL"/>
-		</Association>
 		<Association roleName="specimenCollectionGroup" name="edu.wustl.catissuecore.domain.SpecimenCollectionGroup">	
 			<Group logicRelation="AND">
 				<Attribute name="id"  predicate="IS_NOT_NULL"/>			
 				<Association roleName="collectionProtocolRegistration" name="edu.wustl.catissuecore.domain.CollectionProtocolRegistration">	
 					<Group logicRelation="AND">
 						<Attribute name="id"  predicate="IS_NOT_NULL"/>
-						<Association roleName="collectionProtocol" name="edu.wustl.catissuecore.domain.CollectionProtocol">
+						<Association roleName="participant" name="edu.wustl.catissuecore.domain.Participant">
 							<Group logicRelation="AND">
 								<Attribute name="id"  predicate="IS_NOT_NULL"/>
-								<Attribute name="title" value="%Prostate%" predicate="LIKE"/>
+								<Attribute name="gender" value="Male Gender" predicate="EQUAL_TO"/>
 							</Group>
 						</Association>
+						<Attribute name="protocolParticipantIdentifier" value="12345" predicate="EQUAL_TO"/>
 					</Group>
 				</Association>
 			</Group>
-		</Association>
+		</Association>	
 	</Group>
- </Target>
+</Target>
 </CQLQuery>
+
+
+
+	
+				
