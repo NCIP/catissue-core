@@ -5,7 +5,9 @@
 package edu.wustl.catissuecore.action.annotations;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
@@ -69,10 +71,10 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 
                 .getParameter(WebUIManager.getOperationStatusParameterName()) != null)
         {
-            //Return from dynamic extensions
-
-            processResponseFromDynamicExtensions(request);
+            //Return from dynamic extensions           
             staticEntityId = (String) request.getSession().getAttribute(AnnotationConstants.SELECTED_STATIC_ENTITYID);
+            String dynEntContainerId = request.getParameter("containerId");
+            processResponseFromDynamicExtensions(request, staticEntityId, dynEntContainerId);
             staticEntityRecordId = (String) request.getSession().getAttribute(AnnotationConstants.SELECTED_STATIC_ENTITY_RECORDID);
             if (annotationDataEntryForm.getSelectedStaticEntityId() == null)
             {
@@ -253,7 +255,7 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
      * @throws CacheException
      * @throws BizLogicException
      */
-    private void processResponseFromDynamicExtensions(HttpServletRequest request) throws CacheException, BizLogicException
+    private void processResponseFromDynamicExtensions(HttpServletRequest request, String staticEntityId, String dynEntContainerId) throws CacheException, BizLogicException
     {
         String operationStatus = request.getParameter(WebUIManager
                 .getOperationStatusParameterName());
@@ -265,7 +267,7 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
                     .getRecordIdentifierParameterName());
             Logger.out
                     .info("Dynamic Entity Record Id [" + dynExtRecordId + "]");
-            insertEntityMapRecord(request, dynExtRecordId);
+            insertEntityMapRecord(request, dynExtRecordId, staticEntityId, dynEntContainerId);
         }
     }
 
@@ -276,11 +278,11 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
      * @throws BizLogicException
      */
     private void insertEntityMapRecord(HttpServletRequest request,
-            String dynExtRecordId) throws CacheException, BizLogicException
+            String dynExtRecordId, String staticEntityId, String dynEntContainerId) throws CacheException, BizLogicException
     {
         EntityMapRecord entityMapRecord = getEntityMapRecord(request,
-                dynExtRecordId);
-        if (entityMapRecord != null)
+                dynExtRecordId, staticEntityId, dynEntContainerId);
+        if (entityMapRecord != null && entityMapRecord.getId() == null)
         {
             AnnotationBizLogic annotationBizLogic = new AnnotationBizLogic();
             try
@@ -294,6 +296,11 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
                 e.printStackTrace();
             }
         }
+        else
+        {//Edit
+        	AnnotationBizLogic annotationBizLogic = new AnnotationBizLogic();            
+            annotationBizLogic.updateEntityRecord(entityMapRecord);           
+        }
     }
 
     /**
@@ -303,7 +310,7 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
      * @throws CacheException
      */
     private EntityMapRecord getEntityMapRecord(HttpServletRequest request,
-            String dynExtRecordId) throws CacheException
+            String dynExtRecordId, String staticEntityId, String dynEntContainerId) throws CacheException
     {
         EntityMapRecord entityMapRecord = null;
         String staticEntityRecordId = (String) request.getSession().getAttribute(AnnotationConstants.SELECTED_STATIC_ENTITY_RECORDID);
@@ -326,6 +333,43 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
                 entityMapRecord.setCreatedDate(new Date());
             }
             entityMapRecord.setLinkStatus(AnnotationConstants.STATUS_ATTACHED);
+        }
+        else
+        {
+        	if(dynEntContainerId != null && !dynEntContainerId.equals(""))
+        	{
+	        	AnnotationBizLogic bizLogic = new AnnotationBizLogic();
+	        	Collection<EntityMap> entityMapColl = new HashSet<EntityMap>();
+				try {
+					entityMapColl = bizLogic.getEntityMapsForContainer(new Long(dynEntContainerId));
+				} catch (NumberFormatException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (DAOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+	        	for(EntityMap entityMap : entityMapColl)
+	        	{
+	        		FormContext formContext = getFormContext(entityMap.getId());
+	        		Collection<EntityMapRecord> recordColl = formContext.getEntityMapRecordCollection();
+	        		for(EntityMapRecord eMR : recordColl)
+	        		{
+	        			if(eMR.getDynamicEntityRecordId().longValue() == Utility.toLong(dynExtRecordId).longValue())
+	        			{
+	        				 SessionDataBean sessionDataBean = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
+			                 if (sessionDataBean != null)
+			                 {
+			                	 eMR.setCreatedBy(sessionDataBean.getLastName() + "," + sessionDataBean.getFirstName());
+			                	 eMR.setCreatedDate(new Date());
+			                     entityMapRecord = eMR;
+			                     break;
+			                 }
+	        			}
+	        		}
+	        		break;
+	        	}
+        	}
         }
         return entityMapRecord;
     }
