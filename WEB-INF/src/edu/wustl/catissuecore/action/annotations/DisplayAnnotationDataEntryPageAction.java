@@ -74,18 +74,21 @@ public class DisplayAnnotationDataEntryPageAction extends BaseAction
 		PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(sessionDataBean.getUserName());
 		StringBuffer sb = new StringBuffer();
 		sb.append(Constants.COLLECTION_PROTOCOL_CLASS_NAME).append("_");
-		for (Object cpId : cpIdsList)
+		if(!sessionDataBean.isAdmin())
 		{
-			boolean hasPrivilege = ((privilegeCache.hasPrivilege(sb.toString()+cpId.toString(), Permissions.REGISTRATION)) ||
-							(privilegeCache.hasPrivilege(sb.toString()+cpId.toString(), Permissions.SPECIMEN_PROCESSING)));				
-			if(!hasPrivilege)
+			for (Object cpId : cpIdsList)
 			{
-				ActionErrors errors = new ActionErrors();
-		        ActionError error = new ActionError("access.view.action.denied");
-		        errors.add(ActionErrors.GLOBAL_ERROR, error);
-		        saveErrors(request, errors);
-		        return mapping.findForward(Constants.ACCESS_DENIED);
-				// throw new DAOException("Access denied ! User does not have privilege to view/edit this information.");
+				boolean hasPrivilege = ((privilegeCache.hasPrivilege(sb.toString()+cpId.toString(), Permissions.REGISTRATION)) ||
+								(privilegeCache.hasPrivilege(sb.toString()+cpId.toString(), Permissions.SPECIMEN_PROCESSING)));				
+				if(!hasPrivilege)
+				{
+					ActionErrors errors = new ActionErrors();
+			        ActionError error = new ActionError("access.view.action.denied");
+			        errors.add(ActionErrors.GLOBAL_ERROR, error);
+			        saveErrors(request, errors);
+			        return mapping.findForward(Constants.ACCESS_DENIED);
+					// throw new DAOException("Access denied ! User does not have privilege to view/edit this information.");
+				}
 			}
 		}
 		
