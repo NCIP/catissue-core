@@ -360,6 +360,7 @@ public class UserBizLogic extends DefaultBizLogic
 		 return;
 		}
 		
+        
 		Map<String, SiteUserRolePrivilegeBean> cpPrivilegeMap = new HashMap<String, SiteUserRolePrivilegeBean>();
 		Map<String, SiteUserRolePrivilegeBean> sitePrivilegeMap = new HashMap<String, SiteUserRolePrivilegeBean>();
 		
@@ -368,7 +369,7 @@ public class UserBizLogic extends DefaultBizLogic
 		{
 			String key = mapKey.toString();
 			SiteUserRolePrivilegeBean siteUserRolePrivilegeBean = userRowIdMap.get(key);
-			
+            siteUserRolePrivilegeBean.setUser(user1);
 			if(siteUserRolePrivilegeBean.isAllCPChecked())
 			{
 				Map<String, SiteUserRolePrivilegeBean> map = Utility.splitBeanData(siteUserRolePrivilegeBean);

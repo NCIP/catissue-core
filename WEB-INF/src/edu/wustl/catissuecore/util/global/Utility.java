@@ -1780,13 +1780,17 @@ public class Utility extends edu.wustl.common.util.Utility {
 	    
 	    bean1.setSiteList(siteList);
 	    bean1.setRole(role);
+        bean1.setUser(siteUserRolePrivBean.getUser());
 	    bean1.setPrivileges(sitePrivileges);
-	    
+	    bean1.setRowDeleted(siteUserRolePrivBean.isRowDeleted());
+        bean1.setRowEdited(siteUserRolePrivBean.isRowEdited());
 	    bean2.setSiteList(siteList);
+        bean2.setUser(siteUserRolePrivBean.getUser());
 	    bean2.setRole(role);
 	    bean2.setPrivileges(cpPrivileges);
 	    bean2.setAllCPChecked(true);
-	    
+        bean2.setRowEdited(siteUserRolePrivBean.isRowEdited());
+        bean2.setRowDeleted(siteUserRolePrivBean.isRowDeleted());
 	    rowIdMap.put("SITE", bean1);
 	    rowIdMap.put("CP", bean2);
 	    
