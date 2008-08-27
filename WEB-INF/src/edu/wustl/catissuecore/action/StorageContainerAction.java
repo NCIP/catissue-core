@@ -74,6 +74,8 @@ public class StorageContainerAction extends SecureAction
 		String containerId=request.getParameter("containerIdentifier"); 
 		String isPageFromStorageType=(String)session.getAttribute("isPageFromStorageType");
 		String isSiteChanged=(String)request.getParameter("isSiteChanged");
+		SessionDataBean sessionDataBean = getSessionData(request);
+		
 		if (storageContainerForm.getSpecimenOrArrayType() == null)
 		{
 			storageContainerForm.setSpecimenOrArrayType("Specimen");
@@ -121,7 +123,7 @@ public class StorageContainerAction extends SecureAction
 		if (storageContainerForm.getTypeId() != -1)
 		{
 			long start = System.currentTimeMillis();
-			containerMap = bizLogic.getAllocatedContaienrMapForContainer(storageContainerForm.getTypeId(), exceedingMaxLimit, null);
+			containerMap = bizLogic.getAllocatedContaienrMapForContainer(storageContainerForm.getTypeId(), exceedingMaxLimit, null, sessionDataBean);
 			long end = System.currentTimeMillis();
 			
 			System.out.println("Time taken for getAllocatedMapForCOntainer:"+(end-start));
@@ -135,7 +137,7 @@ public class StorageContainerAction extends SecureAction
 			StorageType storageType = (StorageType)storageContaineriBzLogic.retrieveAttribute(name,long1, "storageType");
         	Long typeId= storageType.getId();
         	long start = System.currentTimeMillis();
-        	containerMap = bizLogic.getAllocatedContaienrMapForContainer(typeId, exceedingMaxLimit, null);
+        	containerMap = bizLogic.getAllocatedContaienrMapForContainer(typeId, exceedingMaxLimit, null, sessionDataBean);
         	long end = System.currentTimeMillis();
         	System.out.println("Time taken for getAllocatedMapForCOntainer:"+(end-start));
         }

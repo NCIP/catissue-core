@@ -22,6 +22,8 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.Vector;
 
+import org.hibernate.Session;
+
 import net.sf.ehcache.CacheException;
 import edu.wustl.catissuecore.domain.Capacity;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
@@ -34,7 +36,6 @@ import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
-import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.namegenerator.BarcodeGenerator;
 import edu.wustl.catissuecore.namegenerator.BarcodeGeneratorFactory;
 import edu.wustl.catissuecore.namegenerator.LabelGenerator;
@@ -66,13 +67,12 @@ import edu.wustl.common.tree.TreeNode;
 import edu.wustl.common.tree.TreeNodeImpl;
 import edu.wustl.common.util.NameValueBeanRelevanceComparator;
 import edu.wustl.common.util.NameValueBeanValueComparator;
-import edu.wustl.common.util.Permissions;
 import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.dbManager.DBUtil;
 import edu.wustl.common.util.dbManager.HibernateMetaData;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
-import edu.wustl.common.util.global.Variables;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -3326,7 +3326,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 	}
 
 	public TreeMap getAllocatedContaienrMapForContainer(long type_id,
-			String exceedingMaxLimit, String selectedContainerName)
+			String exceedingMaxLimit, String selectedContainerName, SessionDataBean sessionDataBean)
 			throws DAOException {
 		long start = 0;
 		long end = 0;
@@ -3368,6 +3368,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 		dao.closeSession();
 
 		Map containerMapFromCache = null;
+		Set<Long> siteIds = new UserBizLogic().getRelatedSiteIds(sessionDataBean.getUserId());
 
 		try {
 			containerMapFromCache = StorageContainerUtil
@@ -3383,6 +3384,16 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 			while (itr.hasNext()) {
 				List list1 = (List) itr.next();
 				String Id = (String) list1.get(0);
+				
+				Long siteId = getSiteIdForStorageContainerId(Long.valueOf(Id));
+				if(!sessionDataBean.isAdmin())
+				{
+					if(!siteIds.contains(siteId))
+					{
+						continue;
+					}
+				}
+				
 				String name = (String) list1.get(1);
 				NameValueBean nvb = new NameValueBean(name, Id, new Long(Id));
 				if (selectedContainerName != null && flag) {
@@ -3419,8 +3430,35 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 		return containerMap;
 
 	}
-
 	/* temp function end */
+
+	
+	private Long getSiteIdForStorageContainerId(Long scId) 
+	{
+		Session session = null;
+		Long siteId = null;
+		try 
+		{
+			session = DBUtil.getCleanSession();
+
+			StorageContainer sc = (StorageContainer) session.load(StorageContainer.class.getName(), scId);
+			if(sc != null)
+			{
+				Site site = sc.getSite();
+				siteId = site.getId();
+			}
+		}
+		catch (BizLogicException e1) 
+		{
+			Logger.out.debug(e1.getMessage(), e1);
+		}
+		finally
+		{
+			session.close();
+		}
+		return siteId;
+	}
+
 
 	public TreeMap getAllocatedContaienrMapForSpecimen(long cpId,
 			String specimenClass, int aliquotCount, String exceedingMaxLimit,
@@ -3714,7 +3752,9 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 		Logger.out.debug("SPECIMEN ARRAY QUERY ......................"
 				+ queryStr);
 		List list = new ArrayList();
-
+		
+		Set<Long> siteIds = new UserBizLogic().getRelatedSiteIds(sessionData.getUserId());
+		
 		try {
 			list = dao.executeQuery(queryStr, null, false, null);
 		} catch (Exception ex) {
@@ -3740,6 +3780,15 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 				List list1 = (List) itr.next();
 				String Id = (String) list1.get(0);
 
+				Long siteId = getSiteIdForStorageContainerId(Long.valueOf(Id));
+				if(!sessionData.isAdmin())
+				{
+					if(!siteIds.contains(siteId))
+					{
+						continue;
+					}
+				}
+				
 				String Name = (String) list1.get(1);
 				NameValueBean nvb = new NameValueBean(Name, Id);
 				Map positionMap = (TreeMap) containerMapFromCache.get(nvb);
