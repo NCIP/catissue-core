@@ -611,7 +611,7 @@ ${aliquotBean.jsScript}
 			<html:checkbox property="aliqoutInSameContainer" onclick="onCheckboxClicked()">
 		<bean:message key="aliquots.storeAllAliquotes" />
 		</html:checkbox>
-
+		&nbsp;&nbsp;
 		<html:checkbox property="disposeParentSpecimen" >
 		<bean:message key="aliquots.disposeParentSpecimen" />
 		</html:checkbox>
