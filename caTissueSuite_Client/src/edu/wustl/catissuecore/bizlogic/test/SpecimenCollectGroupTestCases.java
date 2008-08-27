@@ -214,6 +214,31 @@ public class SpecimenCollectGroupTestCases extends CaTissueBaseTestCase
     	
 	}
 	
+	public void testUpdateSCGWithDuplicateName()
+	{
+		
+		try{
+			SpecimenCollectionGroup scg = (SpecimenCollectionGroup)BaseTestCaseUtility.initSCG();		    
+		    	
+		  //  TestCaseUtility.setObjectMap(scg, SpecimenCollectionGroup.class);
+		    SpecimenCollectionGroup duplicateSCG = (SpecimenCollectionGroup)BaseTestCaseUtility.initSCG();
+		    duplicateSCG.setName(scg.getName());
+		    scg = (SpecimenCollectionGroup)appService.createObject(scg);
+		    duplicateSCG = (SpecimenCollectionGroup)appService.createObject(duplicateSCG);
+		    duplicateSCG.setName(((SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class)).getName());
+		    duplicateSCG=(SpecimenCollectionGroup)appService.updateObject(duplicateSCG);
+		    fail("Update should fails since same name already exist");
+		}
+		 catch(Exception e){
+			Logger.out.error(e.getMessage(),e);
+			e.printStackTrace();
+			
+			assertTrue("Should throw Exception", true);
+			 
+		 }
+    	
+	}
+	
 	public void testUpdateSCGWithClosedActivityStatus()
 	{
 		

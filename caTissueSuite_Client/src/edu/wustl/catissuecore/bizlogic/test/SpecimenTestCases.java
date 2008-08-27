@@ -123,6 +123,57 @@ public class SpecimenTestCases extends CaTissueBaseTestCase {
 			assertFalse("Failed to create Domain Object", true);
 		}
 	}
+	public void testAddTissueSpecimenWithDuplicateLabel()
+	{
+	   try {
+		   TissueSpecimen specimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
+		   SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
+		   System.out.println("SpecimenTestCases.testAddTissueSpecimen(): "+scg);
+		   specimenObj.setSpecimenCollectionGroup(scg);
+		   specimenObj.setLabel(((TissueSpecimen) TestCaseUtility.getObjectMap(TissueSpecimen.class)).getLabel());
+		   Logger.out.info("Inserting domain object------->"+specimenObj);
+		   System.out.println("Before Creating Tissue Specimen");
+		   specimenObj =  (TissueSpecimen) appService.createObject(specimenObj);
+		   
+		   assertFalse("Lable generator is active so specimen creation wiht same label should fail", true);
+		}
+		catch(Exception e)
+		{
+			assertTrue("Domain Object is successfully added ---->As Label generator is active",true);		
+			System.out.println("Exception thrown");
+			System.out.println(e);
+			Logger.out.error(e.getMessage(),e);
+			e.printStackTrace();
+			
+		}
+	}
+	public void testUpdateTissueSpecimenWithDuplicateLabel()
+	{
+	   try {
+		   TissueSpecimen specimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
+		   SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
+		   System.out.println("SpecimenTestCases.testAddTissueSpecimen(): "+scg);
+		   specimenObj.setSpecimenCollectionGroup(scg);
+		 
+		   Logger.out.info("Inserting domain object------->"+specimenObj);
+		   System.out.println("Before Creating Tissue Specimen");
+		   specimenObj =  (TissueSpecimen) appService.createObject(specimenObj);
+		   specimenObj.setLabel(((TissueSpecimen) TestCaseUtility.getObjectMap(TissueSpecimen.class)).getLabel());
+		   specimenObj.setLabel(((TissueSpecimen) TestCaseUtility.getObjectMap(TissueSpecimen.class)).getLabel());
+		   specimenObj=(TissueSpecimen) appService.updateObject(specimenObj);
+		   
+		   assertFalse("Lable generator is active so specimen creation wiht same label should fail", true);
+		}
+		catch(Exception e)
+		{
+			assertTrue("Domain Object is successfully added ---->As Label generator is active",true);		
+			System.out.println("Exception thrown");
+			System.out.println(e);
+			Logger.out.error(e.getMessage(),e);
+			e.printStackTrace();
+			
+		}
+	}
 	
 	
 	

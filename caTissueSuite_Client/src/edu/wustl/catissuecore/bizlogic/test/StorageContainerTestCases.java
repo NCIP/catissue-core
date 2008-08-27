@@ -54,6 +54,44 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 			 assertFalse("could not add object", true);
 		 }
 	}
+	
+	public void testAddStorageContaierWithDuplicateName()
+	{
+
+		try{
+			StorageContainer storageContainer= BaseTestCaseUtility.initStorageContainer();			
+			storageContainer.setName(((StorageContainer)TestCaseUtility.getObjectMap(StorageContainer.class)).getName());
+			storageContainer = (StorageContainer) appService.createObject(storageContainer); 
+			 assertTrue("Add container with new Label ass label generator is active", true);
+			
+		 }
+		 catch(Exception e){
+			 e.printStackTrace();
+			 System.out.println("Can not create Container as container with same name already exist");
+			 assertFalse("could not add object", true);
+			
+		 }
+	}
+	
+	public void testUpdatedStorageContaierWithDuplicateName()
+	{
+
+		try{
+			StorageContainer storageContainer= BaseTestCaseUtility.initStorageContainer();			
+			
+			storageContainer = (StorageContainer) appService.createObject(storageContainer); 
+			storageContainer.setName(((StorageContainer)TestCaseUtility.getObjectMap(StorageContainer.class)).getName());
+			storageContainer=(StorageContainer) appService.updateObject(storageContainer);
+			assertFalse("could not add object", true);
+			
+		 }
+		 catch(Exception e){
+			 e.printStackTrace();
+			 System.out.println("Can not create Container as container with same name already exist");
+			 
+			 assertTrue("Add container with new Label ass label generator is active", true);
+		 }
+	}
 	/**
 	 * Test case to edit the capacity of the Storage Container
 	 */
@@ -774,6 +812,36 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 				fail("Failed to add Domain Object");
 			}
 		}
+	 
+	 public void testUpdateSpecimenArrayWithDuplicateName()
+		{
+			try
+			{
+				SpecimenArray specimenArray =  BaseTestCaseUtility.initSpecimenArray();
+		    	Logger.out.info("Inserting domain object------->"+specimenArray);
+		    	specimenArray =  (SpecimenArray) appService.createObject(specimenArray);
+
+	    		SpecimenArray specimenArray1 = new SpecimenArray();
+	    		specimenArray1.setId(1L);
+		     	Logger.out.info(" searching domain object");		    	
+		    	List resultList = appService.search(SpecimenArray.class,specimenArray1);
+	        	for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) 
+	        	{
+	        		SpecimenArray returnedSpecimenArray = (SpecimenArray)resultsIterator.next();
+	        		specimenArray.setName(returnedSpecimenArray.getName());
+	            }
+	        	specimenArray=(SpecimenArray)appService.updateObject(specimenArray);
+	        	fail("Updating specimen array to an existing name should fail");
+			}
+			catch(Exception e)
+			{
+				Logger.out.error(e.getMessage(),e);
+				e.printStackTrace();
+				assertTrue("fails since specimen array with the same label exist",true);
+				
+			}
+		}
+		
 	 /**
 	  * Add Tissue specimen at given container position 
 	  *
@@ -1253,5 +1321,5 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 				
 			}
 		}
-		
+	
 }
