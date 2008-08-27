@@ -242,7 +242,9 @@ public class UpdateMetadata
 		deleteEntity.setEntityNameToDelete("edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup");
 		deleteEntitySQL = deleteEntity.deleteEntity();
 		UpdateMetadataUtil.executeSQLs(deleteEntitySQL, connection.createStatement(), true);
-		/**  delete entity statements  end **/		
+		/**  delete entity statements  end **/	
+		
+		
 	}
 
 	private static void addMetadata() throws SQLException, IOException
@@ -400,6 +402,9 @@ public class UpdateMetadata
 		
 		//CSM changes related to query
 		dbUpdateSQL.add("update dyextn_role set association_type = 'ASSOCIATION' where identifier in (294,324,322,320,318,316,328,330,332,334,336,312,310,308,306,304,302,314,20)");
+		
+		//Delete initial curated path between OrderDetails and TissueSpecimen which is invalid
+		dbUpdateSQL.add("delete from path where FIRST_ENTITY_ID in (select identifier from dyextn_abstract_metadata where NAME='edu.wustl.catissuecore.domain.OrderDetails') and LAST_ENTITY_ID= (select identifier from dyextn_abstract_metadata where NAME='edu.wustl.catissuecore.domain.TissueSpecimen')");
 		return dbUpdateSQL;
 	}
 	
