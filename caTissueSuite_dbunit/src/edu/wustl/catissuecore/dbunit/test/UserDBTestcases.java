@@ -26,29 +26,37 @@ import edu.wustl.common.util.global.Constants;
 public class UserDBTestcases extends DefaultCatissueDBUnitTestCase
 {
 
-	public UserDBTestcases()
+	public UserDBTestcases() throws Exception
 	{
 		super();
 		
 	}
 
-//	public void testUserCreate()
-//	{
-//		try
-//		{
-//			User user = initUser();
-//			insert(user);
-//			assertTrue("UserCreated", user.getId()<=0);
-//		}catch(Exception e)
-//		{
-//			fail("failed to insert user");
-//		}
-//	}
+	public void testUserCreate()
+	{
+		try
+		{
+			insertObjectsOf(User.class);
+			assertTrue("UserCreated",true);
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+			fail("failed to insert user");
+			
+		}
+	}
 	public void testUserUpdate()
 	{
-		User user = initUser();
-		user.setId(Long.valueOf(1));
-		assertTrue("UserUpdated", user.getId()==1);
+		try
+		{
+	
+			UpdateObjects(User.class);
+			assertTrue("UserUpdated", true);
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+			fail("failed to insert user");
+		}
 	}
 
 	public static User initUser()

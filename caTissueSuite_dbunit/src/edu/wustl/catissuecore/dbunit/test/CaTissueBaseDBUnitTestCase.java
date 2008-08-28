@@ -46,10 +46,14 @@ import edu.wustl.common.util.logger.Logger;
 public abstract class CaTissueBaseDBUnitTestCase extends JdbcBasedDBTestCase
 {
 
+	/**
+	 * 
+	 */
+	protected static final String DEFAULT_OBJECTS_XML_FILE = "defaultObjects.xml";
 	private Properties props = null;
 	protected static final DatabaseOperation CATISSUE_INSERT = new CatissueDBUnitOperation();
 	private Map<String, List<AbstractDomainObject>> objectMap = null;
-	private String objectxmlFile="defaultObjects.xml";
+	private String objectxmlFile=DEFAULT_OBJECTS_XML_FILE;
 	/* (non-Javadoc)
 	 * @see org.dbunit.DatabaseTestCase#getDataSet()
 	 */
@@ -60,10 +64,18 @@ public abstract class CaTissueBaseDBUnitTestCase extends JdbcBasedDBTestCase
 		return new FlatXmlDataSet( new FileInputStream("TestDataSet.xml"));
 	}
 
-	public CaTissueBaseDBUnitTestCase()
+	public CaTissueBaseDBUnitTestCase() throws Exception
 	{
 		super();
 		initTestData();
+		String filename = getObjectFile();
+		if(filename!=null)
+		{
+			objectxmlFile = filename;
+		}
+		
+		initializeObjectMap();
+
 	}
 
 	/**
@@ -87,13 +99,6 @@ public abstract class CaTissueBaseDBUnitTestCase extends JdbcBasedDBTestCase
 	protected DatabaseOperation getSetUpOperation() 
 	  throws Exception {
 //		initTestData();
-		String filename = getObjectFile();
-		if(filename!=null)
-		{
-			objectxmlFile = filename;
-		}
-		
-		initializeObjectMap();
 		return CATISSUE_INSERT;
 	   
 	 }
@@ -123,13 +128,12 @@ public abstract class CaTissueBaseDBUnitTestCase extends JdbcBasedDBTestCase
 	}
 	protected DatabaseOperation getTearDownOperation()
 	  throws Exception {
-		isTrearedDown = true;
 	   return DatabaseOperation.NONE;
 	}
 
-	public void testDummyCate()
+	public void testDummyCase()
 	{
-		
+
 		assertTrue("Dummy test case", true);
 	}
 	/* (non-Javadoc)
@@ -233,13 +237,13 @@ public abstract class CaTissueBaseDBUnitTestCase extends JdbcBasedDBTestCase
 	   }
 
 	
-	public Map<String, AbstractDomainObject> getObjectMap()
+	public Map<String, List<AbstractDomainObject>> getObjectMap()
 	{
 		return objectMap;
 	}
 
 	
-	private void setObjectMap(Map<String, AbstractDomainObject> objectMap)
+	private void setObjectMap(Map<String, List<AbstractDomainObject>> objectMap)
 	{
 		this.objectMap = objectMap;
 	}

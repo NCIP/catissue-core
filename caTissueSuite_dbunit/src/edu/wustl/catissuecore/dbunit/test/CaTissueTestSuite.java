@@ -14,7 +14,7 @@ public class CaTissueTestSuite
 
 	public static junit.framework.Test suite() 
 	{
-		TestSuite suite = new TestSuite("Test for edu.wustl.catissuecore.bizlogic.test");
+		TestSuite suite = new TestSuite("Test for edu.wustl.catissuecore.dbunit.test");
 		//$JUnit-BEGIN$
 		suite.addTestSuite(CaTissueBaseDBUnitTestCase.class);
 		suite.addTestSuite(UserDBTestcases.class);

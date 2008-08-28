@@ -5,6 +5,9 @@
  */
 package edu.wustl.catissuecore.dbunit.test;
 
+import java.util.Iterator;
+import java.util.List;
+
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.operation.DatabaseOperation;
 
@@ -13,6 +16,8 @@ import edu.wustl.catissuecore.domain.CancerResearchGroup;
 import edu.wustl.catissuecore.domain.Department;
 import edu.wustl.catissuecore.domain.Institution;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.global.Constants;
 
 
@@ -22,7 +27,7 @@ import edu.wustl.common.util.global.Constants;
  */
 public class DefaultCatissueDBUnitTestCase extends CaTissueBaseDBUnitTestCase
 {
-	public DefaultCatissueDBUnitTestCase()
+	public DefaultCatissueDBUnitTestCase() throws Exception
 	{
 		super();
 		
@@ -37,6 +42,34 @@ public class DefaultCatissueDBUnitTestCase extends CaTissueBaseDBUnitTestCase
 		// TODO Auto-generated method stub
 		return null;
 	}
+	/* (non-Javadoc)
+	 * @see edu.wustl.catissuecore.dbunit.test.CaTissueBaseDBUnitTestCase#getObjectFile()
+	 */
+	public String getObjectFile()
+	{
+		return DEFAULT_OBJECTS_XML_FILE;
+	}
 
+	public void insertObjectsOf(Class clazz) throws BizLogicException
+	{
+		List<AbstractDomainObject> objectList = getObjectList(clazz);
+		Iterator<AbstractDomainObject> iterator = objectList.iterator();
+		while(iterator.hasNext())
+		{
+			AbstractDomainObject object = iterator.next();
+			insert(object);
+		}
+	}
+
+	public void UpdateObjects(Class clazz) throws BizLogicException
+	{
+		List<AbstractDomainObject> objectList = getObjectList(clazz);
+		Iterator<AbstractDomainObject> iterator = objectList.iterator();
+		while(iterator.hasNext())
+		{
+			AbstractDomainObject object = iterator.next();
+			update(object);
+		}
+	}
 
 }
