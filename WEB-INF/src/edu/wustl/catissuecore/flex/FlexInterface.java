@@ -54,6 +54,7 @@ import edu.wustl.catissuecore.flex.dag.DAGPath;
 import edu.wustl.catissuecore.util.CollectionProtocolUtil;
 import edu.wustl.catissuecore.util.ParticipantRegistrationCacheManager;
 import edu.wustl.catissuecore.util.SpecimenAutoStorageContainer;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
@@ -179,7 +180,8 @@ public class FlexInterface
 
 	public List<String> getTissueSitePVList()
 	{
-		List<NameValueBean> aList = CDEManager.getCDEManager().getPermissibleValueList("Tissue Site", null);
+		List<NameValueBean> aList = Utility.tissueSiteList();
+		/*List<NameValueBean> aList = CDEManager.getCDEManager().getPermissibleValueList("Tissue Site", null);*/
 		return toStrList(aList);
 	}
 
