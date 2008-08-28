@@ -265,9 +265,9 @@ public class GenerateHtmlForAddLimitsBizLogic
 			comboboxId = "_combobox1";
 		String comboboxName = componentId+comboboxId;
 		if (operatorList != null && operatorList.size() != 0)
-		{
-			generateHTML.append("\n<td width='15%' class=" + cssClass + " valign='top' >");
-			generateHTML.append("\n<select   class=" + cssClass
+		{  
+			generateHTML.append("\n<td width='15%'  valign='top' >");
+			generateHTML.append("\n<select "
 								+ " style=\"width:150px; display:block;\" name=\"" + comboboxName
 								+ "\" id = '"+comboboxName+"'onChange=\"operatorChanged('" + componentId
 								+ "','true')\">");
@@ -278,12 +278,12 @@ public class GenerateHtmlForAddLimitsBizLogic
 				String operator = iter.next().toString();
 				if (operator.equalsIgnoreCase(op))
 				{
-					generateHTML.append("\n<option  class=" + cssClass + " value=\"" + operator
+					generateHTML.append("\n<option   value=\"" + operator
 							+ "\" SELECTED>" + operator + "</option>");
 				}
 				else
 				{
-					generateHTML.append("\n<option  class=" + cssClass + " value=\"" + operator + "\">"
+					generateHTML.append("\n<option   value=\"" + operator + "\">"
 							+ operator + "</option>");
 				}
 			}
