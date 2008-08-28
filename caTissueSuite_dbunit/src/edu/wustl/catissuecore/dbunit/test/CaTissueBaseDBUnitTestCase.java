@@ -8,7 +8,12 @@ package edu.wustl.catissuecore.dbunit.test;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import org.dbunit.JdbcBasedDBTestCase;
@@ -17,6 +22,7 @@ import org.dbunit.dataset.xml.FlatXmlDataSet;
 import org.dbunit.operation.DatabaseOperation;
 
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.dbunit.util.DecodeUtility;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.catissuecore.util.listener.CatissueCoreServletContextListener;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
@@ -37,13 +43,13 @@ import edu.wustl.common.util.logger.Logger;
  * @author abhijit_naik
  *
  */
-public class CaTissueBaseDBUnitTestCase extends JdbcBasedDBTestCase
+public abstract class CaTissueBaseDBUnitTestCase extends JdbcBasedDBTestCase
 {
 
-	private static boolean isTrearedDown = false;
 	private Properties props = null;
-	private static boolean initComplete = false;
 	protected static final DatabaseOperation CATISSUE_INSERT = new CatissueDBUnitOperation();
+	private Map<String, List<AbstractDomainObject>> objectMap = null;
+	private String objectxmlFile="defaultObjects.xml";
 	/* (non-Javadoc)
 	 * @see org.dbunit.DatabaseTestCase#getDataSet()
 	 */
@@ -81,9 +87,40 @@ public class CaTissueBaseDBUnitTestCase extends JdbcBasedDBTestCase
 	protected DatabaseOperation getSetUpOperation() 
 	  throws Exception {
 //		initTestData();
-	   return CATISSUE_INSERT;
+		String filename = getObjectFile();
+		if(filename!=null)
+		{
+			objectxmlFile = filename;
+		}
+		
+		initializeObjectMap();
+		return CATISSUE_INSERT;
+	   
 	 }
-	
+	abstract public String getObjectFile();
+	private void initializeObjectMap() throws Exception
+	{
+		Collection objectColl = DecodeUtility.getObjectListFromFile(objectxmlFile);
+		Iterator objectIterator = objectColl.iterator();
+		objectMap = new HashMap<String, List<AbstractDomainObject>>();
+		while(objectIterator.hasNext())
+		{
+
+			AbstractDomainObject object = (AbstractDomainObject) objectIterator.next();
+			String keyClassName = object.getClass().getName();
+			if (!objectMap.containsKey(keyClassName))
+			{
+
+				objectMap.put(keyClassName, new ArrayList<AbstractDomainObject>());
+			}
+			objectMap.get(keyClassName).add(object);
+			
+		}
+	}
+	public List<AbstractDomainObject> getObjectList(Class classObject)
+	{
+		return objectMap.get(classObject.getName());
+	}
 	protected DatabaseOperation getTearDownOperation()
 	  throws Exception {
 		isTrearedDown = true;
@@ -194,4 +231,16 @@ public class CaTissueBaseDBUnitTestCase extends JdbcBasedDBTestCase
 			   }
 		   }
 	   }
+
+	
+	public Map<String, AbstractDomainObject> getObjectMap()
+	{
+		return objectMap;
+	}
+
+	
+	private void setObjectMap(Map<String, AbstractDomainObject> objectMap)
+	{
+		this.objectMap = objectMap;
+	}
 }

@@ -53,7 +53,7 @@ public class InitCatissueAppParameters
 		    		Variables.propertiesDirPath= Variables.propertiesDirPath.substring(beginIndex);
 		    	}
 	
-				//init.initCatissueParams();
+				init.initCatissueParams();
 			}
 	}
 
