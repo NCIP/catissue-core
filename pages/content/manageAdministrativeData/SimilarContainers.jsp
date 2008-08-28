@@ -42,6 +42,7 @@
 		{
 			form = (StorageContainerForm)request.getAttribute("storageContainerForm");
 		}
+		int rowCounter=	(int)form.getNoOfContainers();
 %>
 <head>
 	<script language="JavaScript" type="text/javascript" src="jss/Hashtable.js"></script>
@@ -209,20 +210,16 @@
 			}
 		}
 		
-	function onStorageRadioClickInAliquot(element)
-	{		
-		var index1 =  element.name.lastIndexOf('_');
-		var index2 =  element.name.lastIndexOf(')');
-		//rowNumber of the element
-		var i = (element.name).substring(index1+1,index2);
-		//alert("inside the javascript"+i);
-		var st1 = "container_" + i + "_0";
-		var pos1 = "pos1_" + i + "_1";
-		var pos2 = "pos2_" + i + "_2";
-		var st2="customListBox_" + i + "_0";
-		var pos11="customListBox_" + i + "_1";
-		var pos12="customListBox_" + i + "_2";
-		var mapButton="mapButton_" + i ;
+	//function containing the common code for enable and disable of auto/manual text boxes	
+	function commonShowHideCode(rowNo,menuSelectedValue)
+	{
+		var st1 = "container_" + rowNo + "_0";
+		var pos1 = "pos1_" + rowNo + "_1";
+		var pos2 = "pos2_" + rowNo + "_2";
+		var st2="customListBox_" + rowNo + "_0";
+		var pos11="customListBox_" + rowNo + "_1";
+		var pos12="customListBox_" + rowNo + "_2";
+		var mapButton="mapButton_" + rowNo ;
 		var stContainerNameFromMap = document.getElementById(st1);
 		var pos1FromMap = document.getElementById(pos1);
 		var pos2FromMap = document.getElementById(pos2);    		    		
@@ -231,7 +228,10 @@
 		var pos2FromDropdown = document.getElementById(pos12);    		    		
 		var containerMapButton =  document.getElementById(mapButton);
 
-		 if(element.value == 1)
+		var autoDiv = document.getElementById("auto_"+rowNo);
+		var manualDiv = document.getElementById("manual_"+rowNo);
+
+		if(menuSelectedValue == 1)
 		{
 			stContainerNameFromMap.disabled = true;
 			pos1FromMap.disabled = true;
@@ -242,8 +242,10 @@
 			pos1FromDropdown.disabled = false;
 			pos2FromDropdown.disabled = false;
 
+			manualDiv.style.display='none';
+			autoDiv.style.display  = 'block';
 		}
-		else
+		else if(menuSelectedValue == 2)
 		{
 			stContainerNameFromMap.disabled = false;
 			pos1FromMap.disabled = false;
@@ -253,9 +255,32 @@
 			stContainerNameFromDropdown.disabled = true;
 			pos1FromDropdown.disabled = true;
 			pos2FromDropdown.disabled = true;
+
+			autoDiv.style.display  = 'none';	
+			manualDiv.style.display = 'block';	
 		}
+	}
+
+	function onStorageRadioClickInAliquot(element)
+	{		
+		elementId=element.id;
+		var index1 =  elementId.lastIndexOf('_');
+		var index2 =  elementId.lastIndexOf(')');
+		//rowNumber of the element
+		var i = (elementId).substring(index1+1,index2);
+		commonShowHideCode(i,element.value);		
 	}		
 	
+	//onload function for assigning the storagetype same as they were earlier prior when submit pressed
+	function setPositionsOnLoad()
+	{
+		<% for(int i=1;i<=rowCounter;i++)
+		{%>
+			var selectBox = document.getElementById("similarContainerMapValue(radio_<%=i%>)");
+			commonShowHideCode(<%=i%>,selectBox.value);			
+		<%}%>
+	}
+
 	function mapButtonClickedInAliquot(frameUrl,count)
 	{
 	   	var storageContainer = document.getElementById("container_" + count + "_0").value;
@@ -264,11 +289,12 @@
 		openPopupWindow(frameUrl,'similarContainerPage');
     }	
 	</script>
+
 </head>
 <link href="css/catissue_suite.css" rel="stylesheet" type="text/css" /> 
 <link href="css/styleSheet.css" rel="stylesheet" type="text/css" />
 <%@ include file="/pages/content/common/ActionErrors.jsp" %>
-<body>
+<body onload="setPositionsOnLoad()">
 <script type="text/javascript" src="jss/wz_tooltip.js"></script>
 <html:form action="<%=Constants.SIMILAR_CONTAINERS_ADD_ACTION%>">
 
@@ -432,16 +458,15 @@
 						 <td colspan="6">
 				          <table width="100%" border="0" cellspacing="0" cellpadding="3">
                             <tr>
-								<td width="1%" class="tabletd1">&nbsp;</td>
+								<td colspan="2"  width="7%" class="tabletd1">#</td>
 							 <% if(!Variables.isStorageContainerLabelGeneratorAvl ) {
-				    	     %>
-                              
-							   <td  class="tabletd1"><strong><bean:message key="storageContainer.containerName"/></strong></td>
+				    	     %>                              
+							   <td class="tabletd1"><strong><bean:message key="storageContainer.containerName"/></strong></td>
 							  <%
 							} %>
 							<% if(!Variables.isStorageContainerBarcodeGeneratorAvl ) {
 				    		%>
-                             <td  class="tabletd1"><strong><bean:message key="storageContainer.barcode"/></strong></td>
+                             <td class="tabletd1"><strong><bean:message key="storageContainer.barcode"/></strong></td>
                              <%}%>
 						     <% int colspanValue =0 ;
 								if(Variables.isStorageContainerLabelGeneratorAvl ) {
@@ -452,7 +477,7 @@
           						}						    
 						   %>
 						   
-							 <td  class="tabletd1"><strong>
+							 <td class="tabletd1"><strong>
 							<logic:equal name="storageContainerForm" property="parentContainerSelected" value="Site">
 							<bean:message key="storageContainer.site"/>
 							</logic:equal>
@@ -599,7 +624,9 @@
 				   %>
 	  
 						<tr>
-                           <td class="black_ar_t" align="left"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="5" /></td>
+						<td width="5%" class="black_ar"><%=i%>
+						</td>
+                           <td class="black_ar" align="left"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="5" /></td>
 						    <% if(!Variables.isStorageContainerLabelGeneratorAvl ) {
 				    		%>
 				    	
@@ -656,13 +683,26 @@
 							<logic:notEqual name="storageContainerForm" property="parentContainerSelected" value="Site">	
 							  <table border="0"  cellpadding="2" cellspacing="0">
 								<tr>
-								<td class="black_ar_t"><html:radio value="1" onclick="onStorageRadioClickInAliquot(this)" styleId="<%=stContSelection%>" property="<%=stContSelection%>"/></td>
+								<td>
+								
+								<!--<html:radio value="1" onclick="onStorageRadioClickInAliquot(this)" styleId="<%=stContSelection%>" property="<%=stContSelection%>"/>-->
+
+								<html:select property="<%=stContSelection%>" styleClass="black_ar"
+											styleId="<%=stContSelection%>" size="1"	onmouseover="showTip(this.id)"
+											onmouseout="hideTip(this.id)" onchange= "onStorageRadioClickInAliquot(this)">
+										<html:options collection="storageListForTransferEvent"
+														labelProperty="name" property="value" />
+								</html:select>
+								&nbsp;&nbsp;
+								</td>
 								<html:hidden styleId="<%=containerIdStyle%>" property="<%=containerIdFromMapKey%>"/>
-								<td colspan="2" align="left" class="black_ar_t">
+								<td align="left" class="black_ar">
+								
+								<div id="auto_<%=i%>" style="display:block" >
 									<ncombo:nlevelcombo dataMap="<%=dataMap%>" 
 										attributeNames="<%=attrNames%>" 
 										initialValues="<%=initValues%>"  
-										styleClass = "<%=styClass%>" 
+										styleClass = "black_ar" 
 										tdStyleClass = "<%=tdStyleClass%>" 
 										labelNames="<%=labelNames%>" 
 										rowNumber="<%=rowNumber%>" 
@@ -673,17 +713,23 @@
 										noOfEmptyCombos = "<%=noOfEmptyCombos%>"/>
 								    	</tr>
 										</table>
+								</div>
 								</td>
-							</tr>
-							<tr>
-								<td class="black_ar_t"><html:radio value="2" onclick="onStorageRadioClickInAliquot(this)" styleId="<%=stContSelection%>" property="<%=stContSelection%>"/></td>
-								<td colspan="3" align="left" class="black_ar">
-									<html:text styleClass="black_ar"  size="30" styleId="<%=containerStyle%>" property="<%=containerNameFromMapKey%>" disabled = "<%=textBoxDisable%>"/>
+							
+								<!--<td>
+								<html:radio value="2" onclick="onStorageRadioClickInAliquot(this)" styleId="<%=stContSelection%>" property="<%=stContSelection%>"/>
+								</td>-->
+								<td align="left" class="black_ar">
+								
+								<div id="manual_<%=i%>" style="display:none" >
+									<html:text styleClass="black_ar"  size="25" styleId="<%=containerStyle%>" property="<%=containerNameFromMapKey%>" disabled = "<%=textBoxDisable%>"/>
 									<html:text styleClass="black_ar"  size="5" styleId="<%=pos1Style%>" property="<%=pos1FromMapKey%>" disabled = "<%=textBoxDisable%>"/>
 									<html:text styleClass="black_ar"  size="5" styleId="<%=pos2Style%>" property="<%=pos2FromMapKey%>" disabled = "<%=textBoxDisable%>"/>
 									<html:button styleClass="black_ar" styleId = "<%=containerMapStyle%>" property="<%=containerMap%>" onclick="<%=buttonOnClicked%>" disabled = "<%=textBoxDisable%>">
 										<bean:message key="buttons.map"/>
 									</html:button>
+								</div>
+
 								</td>
 							</tr>
 						</table>
@@ -704,7 +750,7 @@
 					  %>
 
 			<tr>
-                <td colspan="4" class="buttonbg"><html:submit styleClass="blue_ar_b" onclick="onClick(this)"><bean:message key="buttons.submit"/></html:submit>&nbsp;|&nbsp; <span><a href="#" class="cancellink"><bean:message key="buttons.cancel" /></a></span></td>
+                <td colspan="4" class="buttonbg"><html:submit styleClass="blue_ar_b" onclick="onClick(this)"><bean:message key="buttons.submit"/></html:submit>&nbsp; |&nbsp; <span><a href="#" class="cancellink"><bean:message key="buttons.cancel" /></a></span></td>
 	    	 </tr>			  	
 					  
 					</table>
