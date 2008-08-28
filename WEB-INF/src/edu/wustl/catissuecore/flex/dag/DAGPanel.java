@@ -1558,7 +1558,7 @@ public class DAGPanel
 			m_queryObject.removeAssociation(sourceexpressionId, destexpressionId);
 		} else {
 			for (int i = 0; i < expressions.size(); i++) {
-				m_queryObject.removeExpression(expression.getExpressionId());
+				m_queryObject.removeExpression(expressions.get(i).getExpressionId());
 			}
 		}
 
