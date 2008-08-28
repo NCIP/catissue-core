@@ -1,5 +1,5 @@
 /*
- * $Name: 1.41.2.29 $
+ * $Name: 1.41.2.30 $
  *
  * */
 package edu.wustl.catissuecore.util.listener;
@@ -86,23 +86,11 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 	    	Variables.applicationHome = sce.getServletContext().getRealPath("");
 	    	Logger.configDefaultLogger(servletContext);
 	        ApplicationProperties.initBundle(servletContext.getInitParameter("resourcebundleclass"));
-	        addDefaultProtectionGroupsToMap();
-	    	setGlobalVariable();
-			Class.forName(DBUtil.class.getName());
-	        Variables.databaseName=HibernateMetaData.getDataBaseName();
-	        QueryBizLogic.initializeQueryData();
-	        logApplnInfo();
-	        setDBFunctionNamesConstants();
-	        createAliasAndPageOfMap();
-	        initCDEManager();
-	    	DefaultValueManager.validateAndInitDefaultValueMap();
-	    	LabelAndBarcodeGeneratorInitializer.init();
-	        initCatissueCache();
-			initEntityCache();
-
-			Utility.initializePrivilegesMap();
-//			initTitliIndex();
-			edu.wustl.common.querysuite.security.utility.Utility.setReadDeniedAndEntitySqlMap();
+			setGlobalVariable();
+	        initCatissueParams();
+			logApplnInfo();
+			initCDEManager();
+			DefaultValueManager.validateAndInitDefaultValueMap();
 			logger.info("Initialization complete");
     	}
     	catch(Exception e)
@@ -112,6 +100,31 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 
     	}
     }
+
+	/**
+	 * @throws Exception
+	 * @throws ClassNotFoundException
+	 * @throws DAOException
+	 */
+	public void initCatissueParams() throws Exception, ClassNotFoundException, DAOException
+	{
+		addDefaultProtectionGroupsToMap();
+
+		Class.forName(DBUtil.class.getName());
+		Variables.databaseName=HibernateMetaData.getDataBaseName();
+		QueryBizLogic.initializeQueryData();
+		setDBFunctionNamesConstants();
+		createAliasAndPageOfMap();
+
+		LabelAndBarcodeGeneratorInitializer.init();
+		initCatissueCache();
+		initEntityCache();
+		Utility.initializePrivilegesMap();
+//		initTitliIndex();
+		initCDEManager();
+		edu.wustl.common.querysuite.security.utility.Utility.setReadDeniedAndEntitySqlMap();
+
+	}
 
 	/**
 	 * @throws Exception
@@ -195,7 +208,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 	 * @throws Exception
 	 * @throws ClassNotFoundException
 	 */
-	private void initCatissueCache() throws DAOException, Exception, ClassNotFoundException
+	public void initCatissueCache() throws DAOException, Exception, ClassNotFoundException
 	{
 		StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 		Map storageContainersMap = storageContainerBizLogic.getAllocatedContainerMap();
@@ -214,6 +227,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 		}
 		catch (CacheException e)
 		{
+			System.out.println("exception  "+ e.getMessage());
 			logger.debug("Exception occured while creating instance of CatissueCoreCacheManager");
 			e.printStackTrace();
 		}
