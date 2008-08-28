@@ -72,19 +72,10 @@ public class MSRBaseTestCase extends CaTissueBaseTestCase
 		User user = null;
 		try
 		{
-			user = BaseTestCaseUtility.initUser();
-			
-			//TODO how to make it site admin ?
-			user.setRoleId("1");
-			user.setActivityStatus("Active");
-			user.setPageOf(Constants.PAGEOF_USER_ADMIN);
-			user.getSiteCollection().clear();
-			user.getSiteCollection().add(site);
-			
-			user = (User)appService.createObject(user);
-			user.setNewPassword(password);
-			user = (User)appService.updateObject(user);
-				
+           List siteList = new ArrayList();
+           siteList.add(site);
+           
+            user = createNewUserWithGivenRoleOnGivenSite(Constants.ADMIN_USER,siteList);
 			
 		}
 		catch(Exception e)
@@ -96,7 +87,90 @@ public class MSRBaseTestCase extends CaTissueBaseTestCase
 		
 		return user;
 	}
-	
+    
+    protected User createNewSiteSupervisor(List siteList)
+    {
+        User user = null;
+        try
+        {
+            user = createNewUserWithGivenRoleOnGivenSite("2",siteList);
+            
+        }
+        catch(Exception e)
+        {
+            System.out.println("MSRBaseTestCase.createNewSiteSupervisor() : "+ e.getMessage());
+            e.printStackTrace();
+            assertFalse("could not create site admin", true);
+        }
+        
+        return user;
+    }
+
+    protected User createNewSiteTechnician(List siteList)
+    {
+        User user = null;
+        try
+        {
+            user = createNewUserWithGivenRoleOnGivenSite("3",siteList);
+            
+        }
+        catch(Exception e)
+        {
+            System.out.println("MSRBaseTestCase.createNewSiteTechnician() : "+ e.getMessage());
+            e.printStackTrace();
+            assertFalse("could not create site admin", true);
+        }
+        
+        return user;
+    }
+    
+    protected User createNewScientist()
+    {
+        User user = null;
+        try
+        {
+            user = createNewUserWithGivenRoleOnGivenSite("7",new ArrayList());
+            
+        }
+        catch(Exception e)
+        {
+            System.out.println("MSRBaseTestCase.createNewScientist() : "+ e.getMessage());
+            e.printStackTrace();
+            assertFalse("could not create site admin", true);
+        }
+        
+        return user;
+    }
+    
+    protected User createNewUserWithGivenRoleOnGivenSite(String roleId, List siteList)
+    {
+        User user = null;
+        try
+        {
+            user = BaseTestCaseUtility.initUser();
+            
+            //TODO how to make it site admin ?
+            user.setRoleId(roleId);
+            user.setActivityStatus("Active");
+            user.setPageOf(Constants.PAGEOF_USER_ADMIN);
+            user.getSiteCollection().clear();
+            user.getSiteCollection().addAll(siteList);
+            
+            user = (User)appService.createObject(user);
+            user.setNewPassword(password);
+            user = (User)appService.updateObject(user);
+                
+            
+        }
+        catch(Exception e)
+        {
+            System.out.println("MSRBaseTestCase.createNewSiteAdmin() : "+ e.getMessage());
+            e.printStackTrace();
+            assertFalse("could not create site admin", true);
+        }
+        
+        return user;
+    }
 	
 	protected StorageContainer createNewSC(Site site) throws ApplicationException 
 	{
