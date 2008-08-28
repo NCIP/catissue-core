@@ -99,6 +99,11 @@ public class OrderSpecimenBean implements Serializable
 	private String distributionSite;
 	
 	/**
+	 * This indicates SPR Collection Protocol 
+	 * 
+	 */
+	private String collectionProtocol;
+	/**
 	 * This indicates biospecimens collection status
 	 * 
 	 */
@@ -374,6 +379,14 @@ public class OrderSpecimenBean implements Serializable
 
 	public void setIsAvailable(String isAvailable) {
 		this.isAvailable = isAvailable;
+	}
+
+	public String getCollectionProtocol() {
+		return collectionProtocol;
+	}
+
+	public void setCollectionProtocol(String collectionProtocol) {
+		this.collectionProtocol = collectionProtocol;
 	}
 
 	

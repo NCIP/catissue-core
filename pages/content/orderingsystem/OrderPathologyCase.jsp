@@ -112,35 +112,62 @@ function showDerivative(objectenabled,objectdisabled,element)
 
 function checkAl(element)
 {
-	var len=<%=pathologyCase.size()%>;
-	if(document.getElementById("checked").checked==false)
+	var isValidTodistribute = true;
+	for(var i=0;i<document.forms[0].selectedItems.length;i++)
 	{
-		if(len=="1")
-			document.OrderPathologyCase.selectedItems.checked=false;
-		else
-		{
-			for(var i=0;i<document.OrderPathologyCase.selectedItems.length;i++)
-			{
-				document.OrderPathologyCase.selectedItems[i].checked=false;
-			}
-		}
-		document.OrderPathologyCase.orderButton.disabled=true;
-		document.OrderPathologyCase.submitButton.disabled=true;
+			    var collectionProtocolId = "value(OrderSpecimenBean:"+i+"_collectionProtocol)";
+				var collectionProtocol =  document.getElementById(collectionProtocolId).value;
+				
+				for(var j=0;j<document.forms[0].selectedItems.length;j++)
+				{
+					 var collectionProtocolIdInner = "value(OrderSpecimenBean:"+j+"_collectionProtocol)";
+					 var collectionProtocolValueInner =  document.getElementById(collectionProtocolIdInner).value;
+					 if(collectionProtocol != collectionProtocolValueInner)
+					 {
+						isValidTodistribute = false;
+						showErrorMessage("SPR from multiple collection protocol exist,you can place an order from only one CP at a time.")
+						break;
+					}
+				}
+				if(isValidTodistribute == false)
+				{
+					break;
+				}
 	}
-	else
+
+	if(isValidTodistribute == true)
 	{
-		if(len=="1")
-			document.OrderPathologyCase.selectedItems.checked=true;
+		enableCheckBox();
+		var len=<%=pathologyCase.size()%>;
+		if(document.getElementById("checked").checked==false)
+		{
+			if(len=="1")
+				document.OrderPathologyCase.selectedItems.checked=false;
+			else
+			{
+				for(var i=0;i<document.OrderPathologyCase.selectedItems.length;i++)
+				{
+					document.OrderPathologyCase.selectedItems[i].checked=false;
+				}
+			}
+			document.OrderPathologyCase.orderButton.disabled=true;
+			document.OrderPathologyCase.submitButton.disabled=true;
+		}
 		else
 		{
-			for(var i=0;i<len;i++)
-			{
+			if(len=="1")
 				document.OrderPathologyCase.selectedItems.checked=true;
-				document.OrderPathologyCase.selectedItems[i].checked=true;
+			else
+			{
+				for(var i=0;i<len;i++)
+				{
+					document.OrderPathologyCase.selectedItems.checked=true;
+					document.OrderPathologyCase.selectedItems[i].checked=true;
+				}
 			}
+			document.OrderPathologyCase.orderButton.disabled=false;
+			document.OrderPathologyCase.submitButton.disabled=false;
 		}
-		document.OrderPathologyCase.orderButton.disabled=false;
-		document.OrderPathologyCase.submitButton.disabled=false;
 	}
 }
 
@@ -239,8 +266,11 @@ function orderToList()
 }
 
 //for enabling and disabling the AddToOrderList button
-function onCheck()
+function onCheck(element)
 {
+
+	var collectionProtocolId = "value(OrderSpecimenBean:"+element.value+"_collectionProtocol)";
+	var collectionProtocol =  document.getElementById(collectionProtocolId).value;
 	var cnt=0;
 	var len=<%=pathologyCase.size()%>;
 	if(len=="1")
@@ -252,6 +282,14 @@ function onCheck()
 	{
 		for(var i=0;i<document.OrderPathologyCase.selectedItems.length;i++)
 		{
+			var checkBoxId = "checkBox_"+i;
+			
+			var colprotId = "value(OrderSpecimenBean:"+i+"_collectionProtocol)";
+			var colprotValue =  document.getElementById(colprotId).value;
+
+			if(colprotValue != collectionProtocol)
+				document.getElementById(checkBoxId).disabled=true;	
+
 			if(document.OrderPathologyCase.selectedItems[i].checked==true)
 			{
 				cnt++;
@@ -267,6 +305,20 @@ function onCheck()
 	{
 		document.OrderPathologyCase.orderButton.disabled=true;
 		document.OrderPathologyCase.submitButton.disabled=true;
+		enableCheckBox();
+	}
+}
+
+function enableCheckBox()
+{
+	for(var i=0;i<document.OrderPathologyCase.selectedItems.length;i++)
+	{
+			var checkBoxId = "checkBox_"+i;
+			document.getElementById(checkBoxId).disabled=false;	
+			if(document.OrderPathologyCase.selectedItems[i].checked==true)
+			{
+				document.OrderPathologyCase.orderButton.disabled=false;
+			}
 	}
 }
 </script>
@@ -542,7 +594,9 @@ function onCheck()
 								String specimenId="value(OrderSpecimenBean:"+i+"_specimenId)";
 								String typeOfItem="value(OrderSpecimenBean:"+i+"_typeOfItem)";
 								String specimenCollectionGroup="value(OrderSpecimenBean:"+i+"_specimenCollectionGroup)";
+								String collectionProtocolId="value(OrderSpecimenBean:"+i+"_collectionProtocol)";
 								String collectionProtocol = "";
+								String checkBoxId = "checkBox_"+i;
 								SpecimenCollectionGroup speccollgrp;
 								if (obj instanceof IdentifiedSurgicalPathologyReport) {
 									speccollgrp =(SpecimenCollectionGroup)obj.getSpecimenCollectionGroup();
@@ -564,7 +618,7 @@ function onCheck()
 							%>
 							<tr>
 								<td valign="top">
-									<html:multibox property="selectedItems" value="<%=cnt%>" onclick="onCheck()"/>
+									<html:multibox property="selectedItems" styleId="<%=checkBoxId%>"  value="<%=cnt%>" onclick="onCheck(this)"/>
 								</td> <!--for chk box -->
 								<td class="black_ar_t">
 											<%=obj.getSpecimenCollectionGroup().getSurgicalPathologyNumber()%>
@@ -576,6 +630,8 @@ function onCheck()
 								</td>
 								<td class="black_ar_t">
 									<%=collectionProtocol%>
+									<html:hidden property="<%=collectionProtocolId%>" styleId="<%=collectionProtocolId%>" 
+									value="<%=collectionProtocol%>"/>
 								</td>
 								<td class="black_ar_t">
 										<html:text styleClass="black_ar" maxlength="8"  size="5"  styleId="<%=requestedQuantityId%>" property="<%=requestedQuantity%>" style="text-align:right"/>

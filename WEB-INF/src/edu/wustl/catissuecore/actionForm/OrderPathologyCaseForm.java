@@ -12,6 +12,7 @@ import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.bean.OrderSpecimenBean;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
@@ -378,7 +379,7 @@ public class OrderPathologyCaseForm extends AbstractActionForm
 			DefineArrayForm defineArrayFormObj = null;
 			int capacity = 0;
 			
-			if (defineArrayFormList != null)
+		    if (defineArrayFormList != null)
 			{
 				defineArrayFormObj = (DefineArrayForm) searchDefineArrayList(defineArrayFormList,
 						addToArray);
@@ -463,6 +464,26 @@ public class OrderPathologyCaseForm extends AbstractActionForm
 					cnt = selectedItems[i];
 					String key="OrderSpecimenBean:" + cnt
 					+ "_requestedQuantity";
+					String colprotKey = "OrderSpecimenBean:" + cnt + "_collectionProtocol";
+					
+//					to check for Same CP:Only those SPR can be ordered which belongs to same CP
+					if (dataMap!=null && dataMap.containsKey("None"))
+					{
+						List orderItems = (List) dataMap.get("None");
+						if(!orderItems.isEmpty() && orderItems.size()>0)
+						{	
+							OrderSpecimenBean orderSpecimenBean = (OrderSpecimenBean) orderItems.get(0);
+							if(!orderSpecimenBean.getCollectionProtocol().equals(values.get(colprotKey)))
+							{
+								errors.add("values", new ActionError("errors.same.collectionProtocol"));
+								values.clear();
+								break;
+							}
+						}
+						
+					}
+					
+					
 					if ((values.get(key)) == null
 							|| (values.get(key)).equals("")) 
 					{

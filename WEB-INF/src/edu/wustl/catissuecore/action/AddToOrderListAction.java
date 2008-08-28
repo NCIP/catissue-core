@@ -355,6 +355,7 @@ public class AddToOrderListAction  extends BaseAction
 			pathologyMap.put("OrderSpecimenBean:"+strSelectedItems[j]+"_requestedQuantity", tempOrderPathologyFormObjectMap.get("OrderSpecimenBean:"+strSelectedItems[j]+"_requestedQuantity"));
 			pathologyMap.put("OrderSpecimenBean:"+strSelectedItems[j]+"_description", tempOrderPathologyFormObjectMap.get("OrderSpecimenBean:"+strSelectedItems[j]+"_description"));
 			pathologyMap.put("OrderSpecimenBean:"+strSelectedItems[j]+"_specimenCollectionGroup", tempOrderPathologyFormObjectMap.get("OrderSpecimenBean:"+strSelectedItems[j]+"_specimenCollectionGroup"));
+			pathologyMap.put("OrderSpecimenBean:"+strSelectedItems[j]+"_collectionProtocol", tempOrderPathologyFormObjectMap.get("OrderSpecimenBean:"+strSelectedItems[j]+"_collectionProtocol"));
 			
 			pathologyMap.put("OrderSpecimenBean:"+strSelectedItems[j]+"_isDerived",pathologyFormObject.getTypeOfCase());
     		
