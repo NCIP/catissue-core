@@ -17,7 +17,7 @@
     <td class="td_color_bfdcf3"><table border="0" cellpadding="0" cellspacing="0">
       <tr>
         <td class="td_table_head"><span class="wh_ar_b"><bean:message key="Biohazard.header" /></span></td>
-        <td align="right"><img src="images/uIEnhancementImages/table_title_corner2.gif" alt="Page Title" width="31" height="24" /></td>
+        <td align="right"><img src="images/uIEnhancementImages/table_title_corner2.gif" alt="Page Title - Biohazard" width="31" height="24" /></td>
       </tr>
     </table></td>
   </tr>
@@ -38,7 +38,7 @@
     </table>
       <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
       <tr>
-        <td align="left">
+        <td align="left" class="bottomtd">
 			<%@ include file="/pages/content/common/ActionErrors.jsp" %>
 		</td>
       </tr>
@@ -51,28 +51,26 @@
             
               <tr>
                 <td width="1%" align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
-                <td width="16%" align="left" class="black_ar"><bean:message key="biohazard.name"/>  </td>
-                <td width="18%" align="left"><html:text styleClass="black_ar"  maxlength="255"  styleId="name" property="name" style="width:100%;"/></td>
-				<td  width="65%">&nbsp;</td>
+                <td width="15%" align="left" class="black_ar"><bean:message key="biohazard.name"/>  </td>
+                <td width="84%" align="left"><html:text styleClass="black_ar"  maxlength="255" size="30" styleId="name" property="name" /></td>
+				
               </tr>
               <tr>
-                <td align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
-                <td align="left" class="black_ar"><bean:message key="biohazard.type"/></td>
-                <td align="left"><html:select property="type" styleClass="formFieldSizedNew" styleId="type" size="1" style="width:100%;" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)"><html:options collection='${requestScope.biohazard_Type_List}' labelProperty="name" property="value"/></html:select></td>
-				<td>&nbsp;</td>
+                <td width="1%" align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
+                <td width="15%" align="left" class="black_ar"><bean:message key="biohazard.type"/></td>
+                <td width="84%"align="left"><html:select property="type" styleClass="formFieldSizedNew" styleId="type" size="1"  onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)"><html:options collection='${requestScope.biohazard_Type_List}' labelProperty="name" property="value"/></html:select></td>
 			  </tr>
               <tr>
-                <td>&nbsp;</td>
-                <td align="left" valign="top" class="black_ar"><bean:message key="biohazard.comments"/> </td>
-                <td align="left"><html:textarea styleClass="black_ar" property="comments" styleId="comments"  rows="3" style="width:100%;"/></textarea></td>
+                <td width="1%">&nbsp;</td>
+                <td width="15%" align="left" valign="top" class="black_ar_t"><bean:message key="biohazard.comments"/> </td>
+                <td align="left" width="84%"><html:textarea styleClass="black_ar" cols="70" rows="3"  styleId="comments" property="comments"/></td>
 				<td>&nbsp;</td>
 			  </tr>
            
         </table></td>
       </tr>
       <tr>
-        <td class="buttonbg"><html:submit styleClass="blue_ar_b" accesskey="Enter"><bean:message key="buttons.submit"/></html:submit>
-          &nbsp;| &nbsp;<span ><html:link page="/ManageAdministrativeData.do" styleClass="cancellink"><bean:message key="buttons.cancel" /></html:link></span></td>
+        <td class="buttonbg"><html:submit styleClass="blue_ar_b" accesskey="Enter"><bean:message key="buttons.submit"/></html:submit>&nbsp;|&nbsp;<span ><html:link page="/ManageAdministrativeData.do" styleClass="cancellink"><bean:message key="buttons.cancel" /></html:link></span></td>
       </tr>
     </table></td>
   </tr>
