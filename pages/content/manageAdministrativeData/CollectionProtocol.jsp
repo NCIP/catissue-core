@@ -116,7 +116,7 @@ function updateCPTree()
                       <tr>
                         <td align="center" class="black_ar">&nbsp;</td>
                         <td align="left" class="black_ar"><label for="consentWaived"><bean:message key="consent.consentwaived" /></label></td>
-                        <td align="left" class="black_ar"><label for="consentWaived"><bean:message key="consent.consentwaivedyes" /></label><html:radio property="consentWaived" styleId="consentWaived" value="true"/><label for="consentWaived"><bean:message key="consent.consentwaivedno" /></label><html:radio property="consentWaived" styleId="consentWaived" value="false"/></label></td>
+                        <td align="left" class="black_ar"><label for="consentWaived"><bean:message key="consent.consentwaivedyes" /></label><html:radio property="consentWaived" styleId="consentWaived" value="true"/>&nbsp;&nbsp;<label for="consentWaived"><bean:message key="consent.consentwaivedno" /></label><html:radio property="consentWaived" styleId="consentWaived" value="false"/></label></td>
                       </tr>
                       <tr>
                         <td align="center" class="black_ar">&nbsp;</td>
