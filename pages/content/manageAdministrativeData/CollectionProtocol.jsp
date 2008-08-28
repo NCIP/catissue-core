@@ -13,6 +13,7 @@
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/caTissueSuite.js"></script>
 <script src="jss/calendarComponent.js" language="JavaScript" type="text/javascript"></script>
+<LINK href="css/catissue_suite.css" type=text/css rel=stylesheet>
 
 <SCRIPT>var imgsrc="images/";</SCRIPT>
 <script>

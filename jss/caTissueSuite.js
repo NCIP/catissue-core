@@ -567,56 +567,32 @@ function deleteCheckedRows(operation,tableId,deleteButtonId)
 
       //This Function will add more consent Tier 
 
-      function addConsentTier()
-
-      {           
-
+    function addConsentTier()
+{           
             var val = parseInt(document.forms[0].consentTierCounter.value);
-
             val = val + 1;
-
             document.forms[0].consentTierCounter.value = val;
-
             var rowCount = document.getElementById('innertable').rows.length;
-
             var createRow = document.getElementById('innertable').insertRow(1);
-
             if(rowCount % 2 ==0)
-
+		  {
                   createRow.className="tabletd1";
-
-            
-
+		  }
+		  else
+		  {
+			  createRow.className="black_ar";
+		  }
           var createCheckBox=createRow.insertCell(0);
-
             var createTextArea=createRow.insertCell(1);
-
-            
-
-            
-
             var iCount = rowCount-1;
-
             var consentName="consentValue(ConsentBean:"+iCount+"_statement)";
-
             var consentKey="consentValue(ConsentBean:"+iCount+"_consentTierID)";
-
-                  
-
             createCheckBox.className="black_ar";
-
             createCheckBox.setAttribute('align','center');
-
-            createTextArea.className="link";
-
-                        
-
+            createTextArea.className="black_ar";
             var sname = "<input type='hidden' id='" + consentKey + "'>";                        
-
-            createCheckBox.innerHTML="<input type='checkbox'class=black_ar name='consentcheckBoxs'id='check"+iCount+"'>";
-
-            createTextArea.innerHTML= sname+"<textarea rows='2'class='formFieldSized' style='width:90%;' name="+consentName+"></textarea>";
-
+            createCheckBox.innerHTML="<input type='checkbox' class='black_ar' name='consentcheckBoxs'id='check"+iCount+"'>";
+            createTextArea.innerHTML= sname+"<textarea rows='2' class='black_ar' value='2'style='width:90%;' name="+consentName+"></textarea>";
       }
 
       
