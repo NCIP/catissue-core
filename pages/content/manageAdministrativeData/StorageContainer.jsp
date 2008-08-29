@@ -705,27 +705,27 @@ function addNewTypeAction(action)
 					  <td><html:select  styleClass="formFieldSizedNew" property="parentContainerSelected" size="1"	onchange= "parentContainerTypeChanged(this)"><html:options collection="parentContainerTypeList"labelProperty="name" property="value" /></html:select></td>
 					  <td colspan="4" align="left" class="black_ar">
 					  
-					  <div id="parentContainerSite" style="display:block">
-					  <table width="100%" border="0" cellpadding="0" cellspacing="0" class="groupElements">
-						<tr>				
-							<label>
+					  <div id="parentContainerSite"  style="display:block">
+					    <table width="100%" border="0" cellpadding="0" cellspacing="0" >
+						<tr><td>
+						  <label>
 							<html:select property="siteId" styleClass="formFieldSizedNew" styleId="siteId" size="1" onchange="onSiteChange()"
 							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 								<html:options collection="<%=Constants.SITELIST%>" labelProperty="name" property="value"/>
 							</html:select>
-							</label>						
+							</label>						   	
 							&nbsp;
 							<html:link href="#" styleId="newSite"  styleClass="view" onclick="addNewAction('StorageContainerAddNew.do?addNewForwardTo=site&forwardTo=storageContainer&addNewFor=site')">
 								<bean:message key="buttons.addNew" />
-							</html:link>
-							</tr>
-                         </table>
+							</html:link>	
+					    </td></tr></table>
 						 </div>
 					 
 					
 					<div id="parentContainerAuto" style="display:none">
-					  <table width="100%" border="0" cellpadding="0" cellspacing="0" class="groupElements">
-						<tr>
+					  <table width="100%" border="0" cellpadding="0" cellspacing="0" >
+					  <tr>
+						
 							<ncombo:nlevelcombo dataMap="<%=dataMap%>" 
 											attributeNames="<%=attrNames%>" 
 											initialValues="<%=initValues%>"  
@@ -737,19 +737,19 @@ function addNewTypeAction(action)
 											onChange = "<%=onChange%>"
 											formLabelStyle="nComboGroup"
 											noOfEmptyCombos = "<%=noOfEmptyCombos%>"/>
-											</tr>
-
-						</tr>
+											
+                       
+					     </tr>  
                          </table>
 						 </div>
 						 
 						<div id="parentContainerManual" style="display:none">
-    					  <table width="64%" border="0" cellpadding="0" cellspacing="0" class="groupElements">
+    					  <table width="59%" border="0" cellpadding="0" cellspacing="0" class="groupElements">
 						<tr>
 							 <td width="24%"><html:text styleClass="grey_ar"   size="30" styleId="selectedContainerName" onmouseover="showTip(this.id)" property="selectedContainerName"/></td>
 							 <td width="13%"><html:text styleClass="black_ar_s"  size="5" styleId="pos1" property="pos1"/> </td>	
 							 <td width="13%"><html:text styleClass="black_ar_s" size="5" styleId="pos2" property="pos2"/></td>	
-							 <td width="14%"><html:button styleClass="grey_ar"  property="containerMap" onclick="mapButtonClicked()"><bean:message key="buttons.map"/></html:button> </td>
+							 <td width="14%"><html:button styleClass="black_ar"  property="containerMap" onclick="mapButtonClicked()"><bean:message key="buttons.map"/></html:button> </td>
 							 
 						</tr>
                          </table>
@@ -957,16 +957,11 @@ function addNewTypeAction(action)
 						   		%>
 						   			<html:button styleClass="blue_ar_b" property="submitPage" onclick="<%=action%>">
 						   				<bean:message key="buttons.submit"/>
-						   			</html:button>&nbsp;
-						   		
-						   		   <logic:equal name="<%=Constants.OPERATION%>" value="edit">
-									|&nbsp;<html:button styleClass="blue_ar_c" property="deletePage"
+						   			</html:button>&nbsp;<logic:equal name="<%=Constants.OPERATION%>" value="edit">|&nbsp;<html:button styleClass="blue_ar_c" property="deletePage"
 									onclick="<%=deleteAction%>">
 										<bean:message key="buttons.delete"/>&nbsp;
 									</html:button>
-					          		</logic:equal>
-						   		
-									|&nbsp; <a href="ManageAdministrativeData.do" class="cancellink" target="_top">Cancel</a></td>
+					          		</logic:equal>|&nbsp;<a href="ManageAdministrativeData.do" class="cancellink" target="_top"><bean:message key="buttons.cancel" /></a></td>
 				   		</td>
 						
 					</tr>
