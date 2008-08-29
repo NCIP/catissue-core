@@ -1324,7 +1324,7 @@ public class SpecimenTestCases extends CaTissueBaseTestCase {
 		childSpecimen1.setParentSpecimen(ts);
 		childSpecimen1.setSpecimenCollectionGroup(scg);
 		childSpecimen1.setLineage("Aliquot");
-		Double quantity = new Double(10.0);
+		Double quantity = new Double(2.0);
 		childSpecimen1.setInitialQuantity(quantity);
 		childSpecimen1.setAvailableQuantity(quantity);
 		childSpecimen1.setLabel("TisSpec_child1"+UniqueKeyGeneratorUtil.getUniqueKey());
