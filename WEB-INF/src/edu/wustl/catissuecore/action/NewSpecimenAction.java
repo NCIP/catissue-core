@@ -42,12 +42,14 @@ import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.client.CaCoreAppServicesDelegator;
 import edu.wustl.catissuecore.domain.Biohazard;
+import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.ConsentTier;
 import edu.wustl.catissuecore.domain.ConsentTierResponse;
 import edu.wustl.catissuecore.domain.ConsentTierStatus;
+import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.StorageContainer;
@@ -484,11 +486,14 @@ public class NewSpecimenAction extends SecureAction
 	 * Patch ID: 2741_12	 
 	 * Description: Propagating events from scg to multiple specimens
 	*/
+		if(operation.equals(Constants.ADD))
+			populateEventsFromScg(specimenCollectionGroup,specimenForm);
+		
 		Object scgForm = request.getAttribute("scgForm");
 		if(scgForm != null)
 		{
 			SpecimenCollectionGroupForm specimenCollectionGroupForm = (SpecimenCollectionGroupForm)scgForm;
-			populateEventsFromScg(specimenCollectionGroupForm,specimenForm);
+			//populateEventsFromScg(specimenCollectionGroupForm,specimenForm);
 		}
 		else
 		{
@@ -1154,7 +1159,7 @@ public class NewSpecimenAction extends SecureAction
 		 * @param specimenCollectionGroupForm instance of SpecimenCollectionGroupForm
 		 * @param specimenForm instance of NewSpecimenForm
 		 */
-		public static void populateEventsFromScg(SpecimenCollectionGroupForm specimenCollectionGroupForm,NewSpecimenForm specimenForm)
+	/*	public static void populateEventsFromScg(SpecimenCollectionGroupForm specimenCollectionGroupForm,NewSpecimenForm specimenForm)
 		{
 			specimenForm.setCollectionEventUserId(specimenCollectionGroupForm.getCollectionEventUserId());		
 			specimenForm.setReceivedEventUserId(specimenCollectionGroupForm.getReceivedEventUserId());	
@@ -1167,6 +1172,44 @@ public class NewSpecimenAction extends SecureAction
 			specimenForm.setReceivedEventDateOfEvent(specimenCollectionGroupForm.getReceivedEventDateOfEvent());	
 			specimenForm.setReceivedEventTimeInHours(specimenCollectionGroupForm.getReceivedEventTimeInHours());	
 			specimenForm.setReceivedEventTimeInMinutes(specimenCollectionGroupForm.getReceivedEventTimeInMinutes());		
+		}*/
+	 public static void populateEventsFromScg(SpecimenCollectionGroup specimenCollectionGroup,NewSpecimenForm specimenForm)
+		{
+			Calendar calender = Calendar.getInstance();
+			Collection scgEventColl = specimenCollectionGroup.getSpecimenEventParametersCollection();
+			if(scgEventColl != null && !scgEventColl.isEmpty())
+			{
+				Iterator itr = scgEventColl.iterator();
+				while(itr.hasNext())
+				{
+					Object specimenEventParameter = itr.next();
+					if(specimenEventParameter instanceof CollectionEventParameters)
+					{
+						CollectionEventParameters scgCollEventParam = (CollectionEventParameters) specimenEventParameter;
+
+						calender.setTime(scgCollEventParam.getTimestamp());
+						
+						specimenForm.setCollectionEventUserId(scgCollEventParam.getUser().getId().longValue());		
+						specimenForm.setCollectionEventCollectionProcedure(scgCollEventParam.getCollectionProcedure());	
+						specimenForm.setCollectionEventContainer(scgCollEventParam.getContainer());	
+						specimenForm.setCollectionEventdateOfEvent(Utility.parseDateToString(scgCollEventParam.getTimestamp(),Constants.DATE_PATTERN_MM_DD_YYYY));
+						specimenForm.setCollectionEventTimeInHours(Utility.toString(Integer.toString(calender.get(Calendar.HOUR_OF_DAY))));	
+						specimenForm.setCollectionEventTimeInMinutes(Utility.toString(Integer.toString(calender.get(Calendar.MINUTE))));
+					}
+					if(specimenEventParameter instanceof ReceivedEventParameters)
+					{
+						ReceivedEventParameters scgReceivedEventParam = (ReceivedEventParameters) specimenEventParameter;
+						calender.setTime(scgReceivedEventParam.getTimestamp());
+						
+						specimenForm.setReceivedEventUserId(scgReceivedEventParam.getUser().getId().longValue());		
+						specimenForm.setReceivedEventReceivedQuality(scgReceivedEventParam.getReceivedQuality());	
+						specimenForm.setReceivedEventDateOfEvent(Utility.parseDateToString(scgReceivedEventParam.getTimestamp(),Constants.DATE_PATTERN_MM_DD_YYYY));
+						specimenForm.setReceivedEventTimeInHours(Utility.toString(Integer.toString(calender.get(Calendar.HOUR_OF_DAY))));	
+						specimenForm.setReceivedEventTimeInMinutes(Utility.toString(Integer.toString(calender.get(Calendar.MINUTE))));
+						
+					}
+				}
+			}
 		}
     /**
 	 * This function adds the columns to the List
