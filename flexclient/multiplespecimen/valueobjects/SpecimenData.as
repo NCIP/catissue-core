@@ -160,6 +160,7 @@ package valueobjects
 			if(attributeList.contains(Constants.TYPE))
 			{
 				this.specimenType = spData.specimenType;
+				this.unit = spData.unit;
 			}
 			if(attributeList.contains(Constants.TISSUE_SITE))
 			{
@@ -352,7 +353,8 @@ package valueobjects
 			}
 			else if (specimenClass == Constants.TISSUE)
 			{
-				
+				if(specimenType == Constants.SELECT)
+					return;
 				if (specimenType == Constants.FIXED_TISSUE_BLOCK  || 
 					specimenType == Constants.FROZEN_TISSUE_BLOCK || 
 					specimenType == Constants.FIXED_TISSUE_SLIDE  ||
