@@ -16,9 +16,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
-
-import net.sf.ehcache.CacheException;
 
 import edu.wustl.catissuecore.domain.ContainerPosition;
 import edu.wustl.catissuecore.domain.Site;
@@ -29,13 +26,10 @@ import edu.wustl.catissuecore.namegenerator.NameGeneratorException;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.dao.AbstractDAO;
 import edu.wustl.common.dao.DAO;
-import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.security.PrivilegeManager;
-import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.tree.TreeDataInterface;
@@ -351,7 +345,53 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 	 */
 	public String getObjectId(AbstractDAO dao, Object domainObject) 
 	{
-		return new StorageContainerBizLogic().getObjectId(dao, domainObject);
+		StringBuffer sb = new StringBuffer();
+		sb.append(Site.class.getName());
+		
+		if (domainObject instanceof StorageContainer)
+		{
+			StorageContainer storageContainer = (StorageContainer) domainObject;
+			Map similarContainerMap = storageContainer.getSimilarContainerMap();
+			Object keys[] = similarContainerMap.keySet().toArray();
+			Set<Long> scIds = new HashSet<Long>();
+			Set<Long> siteIds = new HashSet<Long>();
+			
+			for(Object key : keys)
+			{
+				if(key.toString().contains("parentContainerId"))
+				{
+					scIds.add(Long.valueOf(similarContainerMap.get(key).toString()));
+				}
+			}
+			
+			for(Long scId : scIds)
+			{
+				Site site = null;
+	            Object object = null;
+				try 
+				{
+					object = dao.retrieve(StorageContainer.class.getName(),scId);
+				} 
+				catch (DAOException e) 
+				{
+					e.printStackTrace();
+				}
+	            if (object != null)
+	            {
+	                StorageContainer parentContainer = (StorageContainer) object;
+	                site = parentContainer.getSite();
+	            }
+				if (site != null)
+				{
+					if(!siteIds.contains(site.getId()))
+					{
+						sb.append("_"+site.getId().toString());
+					}
+					siteIds.add(site.getId());
+				}
+			}
+		}
+		return sb.toString(); 
 	}
 	
 	/**
