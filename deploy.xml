@@ -190,7 +190,7 @@
 					<if>
 						<equals arg1="mysql" arg2="${database.type}" />
 						<then>							
-							<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" onerror="continue">
+							<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}">
 									<transaction>select 1;</transaction>
 									<transaction>commit;</transaction>
 									<classpath>
@@ -203,7 +203,7 @@
 						<elseif >					
 							<equals arg1="oracle" arg2="${database.type}" />					
 							<then>				
-								<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle">
+								<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">
 									<transaction>select sysdate from dual;</transaction>
 									<transaction>commit;</transaction>
 										<classpath>
@@ -823,7 +823,7 @@
 	<!--MySQL Database Creation -->
 	<target name="deploy_db_mysql">
 		<echo message="Initializing MySQL Database for caTissue Suite v1.1 Application..." />
-		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" onerror="continue">
+		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}">
 			<transaction src="${mysql.sql.dir}/catissuecore.sql" />
 			<transaction src="${mysql.sql.dir}/InitDB_CreateTable.sql" />
 			<transaction src="${common.sql.dir}/initDB_Insert_Common.sql" />
@@ -854,7 +854,7 @@
 	
 	<target name="temp_update_metadata_for_clob_support_mysql">
 		<echo message="Upgrading MySQL Database for supporting query on clob type attributes..." />
-		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" onerror="continue">
+		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}">
 			<transaction src="${mysql.sql.dir}/query/temp_update_metadata.sql" />
 			<transaction>commit;</transaction>
 			<classpath>
@@ -867,7 +867,7 @@
 	
 	<target name="temp_update_metadata_for_clob_support_oracle">
 		<echo message="Upgrading Oracle Database for supporting query on clob type attributes..." />
-		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle">
+		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">
 			<transaction src="${oracle.sql.dir}/query/temp_update_metadata.sql" />
 			<transaction>commit;</transaction>
 			<classpath>
@@ -881,7 +881,7 @@
 	<!--Oracle Database Creation -->
 	<target name="deploy_db_oracle">
 		<echo message="Initializing Oracle Database for caTissue Suite v1.1 Application..." />
-		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle">
+		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">
 			<transaction src="${oracle.sql.dir}/catissuecore.sql" />
 			<transaction src="${oracle.sql.dir}/InitDB_CreateTable.sql" />
 			<transaction src="${common.sql.dir}/initDB_Insert_Common.sql" />
@@ -904,7 +904,7 @@
 
 		<antcall target="insertQueryMetadata" />   
 
-		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle" delimiter="/" delimitertype="row">
+		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle" delimiter="/" delimitertype="row">
 			<transaction src="${oracle.sql.dir}/CSM_Trigger_Oracle.sql" />
 			<transaction src="${oracle.sql.dir}/DBUtility.sql" />
 			<classpath>
@@ -913,7 +913,7 @@
 				</fileset>
 			</classpath>
 		</sql>
-		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle">
+		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">
 			<transaction src="${oracle.sql.dir}/CSM_InsertData_Oracle.sql" />
 			<transaction src="${oracle.sql.dir}/CSM_AddConstraints_Oracle.sql" />
 			<transaction>commit;</transaction>
@@ -926,7 +926,7 @@
 		<antcall target="temp_update_metadata_for_clob_support_oracle" />
 		<antcall target="upgrade_db_demodel_oracle" />
 		<antcall target="update_metadata_for_model_changes" />
-		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle">
+		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">
 			<transaction src="${oracle.sql.dir}/query/dropDESequence.SQL" />
 			<transaction>commit;</transaction>
 			<classpath>
@@ -935,7 +935,7 @@
 				</fileset>
 			</classpath>
 		</sql>		
-		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" delimiter="/" delimitertype="row" keepformat="yes" rdbms="oracle">
+		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" delimiter="/" delimitertype="row" keepformat="yes" rdbms="oracle">
 			<transaction src="${oracle.sql.dir}/query/resetDESequence.SQL" />
 			<classpath>
 				<fileset dir="${lib.dir}">
@@ -947,7 +947,7 @@
 	</target>
 
 	<target name="insertQueryMetadata">
-		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle">
+		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">
 			<transaction  src="${dbupgrade.sql.dir}/Oracle/CAModel.sql"/>
 			<transaction src="${oracle.sql.dir}/query/DisableConstraints.sql" />
 			<transaction>commit;</transaction>
@@ -966,7 +966,7 @@
 		
 		<antcall target="CAModel_import_data" />
 		
-		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle">	
+		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">	
 			<transaction src="${oracle.sql.dir}/query/enableCons.sql" />
 			<transaction src="${oracle.sql.dir}/query/UpdateTable.sql" />
 			<!-- <transaction src="${oracle.sql.dir}/query/csm_oracle.sql" /> -->
@@ -978,7 +978,7 @@
 			</classpath>
 		</sql>
 		
-		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle">
+		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">
 			<transaction>
 			DROP SEQUENCE DE_ATTR_REC_SEQ ;                              
 			DROP SEQUENCE DE_COLL_ATTR_REC_VALUES_SEQ ;        
@@ -1012,7 +1012,7 @@
 				</fileset>
 			</classpath>
 		</sql>
-		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" delimiter="/" delimitertype="row" keepformat="yes" rdbms="oracle">
+		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" delimiter="/" delimitertype="row" keepformat="yes" rdbms="oracle">
 			<classpath>
 				<fileset dir="${lib.dir}">
 					<include name="*.jar" />
@@ -1042,7 +1042,7 @@
 	<target name="upgrade_db_from_core_1.2.2_to_suite_1.0_mysql">
 	
 		<echo message="Upgrading MySQL Database from 1.2.2 to 1.0 ..." />
-			<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" onerror="continue">
+			<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" >
 							
 				<transaction src="${dbupgrade.sql.dir}/MySql/DBUpgrade_1.2_to_CatissueSuite.sql" />
 				<transaction src="${dbupgrade.sql.dir}/MySql/SCG_DB_changes.sql" />
@@ -1063,7 +1063,7 @@
 	<target name="upgrade_db_from_core_1.2.2_to_suite_1.0_oracle">
 	
 		<echo message="Upgrading Oracle Database from 1.2.2 to 1.0 ..." />
-			<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle">
+			<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">
 				<transaction src="${dbupgrade.sql.dir}/Oracle/DBUpgrade_1.2_to_CatissueSuite.sql" />
 				<transaction src="${dbupgrade.sql.dir}/Oracle/SCG_DB_changes.sql" />
 				<transaction src="${oracle.sql.dir}/dynamicextension.sql" />
@@ -1133,7 +1133,7 @@
 	<!--MySQL Database Upgradation -->
 	<target name="upgrade_mysql_from_Suite1.0_to_1.1">
 		<echo message="Upgrading MySQL Database for caTISSUE Suite Application ..." />
-		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" onerror="continue">
+		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" >
 			<transaction src="${dbupgrade.sql.dir}/MySql/DBUpgrade_Suite_1.0_to_1.1.sql" />
 			<transaction>commit;</transaction>
 
@@ -1160,7 +1160,7 @@
 	<!--Oracle Database Upgradation -->
 	<target name="upgrade_oracle_from_Suite1.0_to_1.1">
 		<echo message="Upgrading Oracle Database for caTISSUE Suite Application ..." />
-		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle">
+		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">
 			<transaction src="${dbupgrade.sql.dir}/Oracle/DBUpgrade_Suite_1.0_to_1.1.sql" />
 			<transaction>commit;</transaction>
 
@@ -1487,7 +1487,7 @@ Thanking You,
 				<replacefilter token="@@first.admin.emailAddress@@" value="${first.admin.emailAddress}"/>
 				<replacefilter token="@@first.admin.encodedPassword@@" value="${first.admin.encodedPassword}"/>
 			</replace>
-			<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle">					
+			<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">					
 					<transaction src="${temp.dir}/createUser.sql" />
 					<transaction>commit;</transaction>
 					<classpath>
@@ -1527,7 +1527,7 @@ Thanking You,
 				<replacefilter token="@@first.admin.emailAddress@@" value="${first.admin.emailAddress}"/>
 				<replacefilter token="@@first.admin.encodedPassword@@" value="${first.admin.encodedPassword}"/>
 			</replace>
-			<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" onerror="continue">
+			<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" >
 							<transaction src="${temp.dir}/createUser.sql" />
 							<transaction>commit;</transaction>
 							<classpath>
@@ -1784,7 +1784,7 @@ Thanking You,
 			<!--MySQL Database Upgradation -->
 	<target name="upgrade_db_demodel_mysql">
 		<echo message="Upgrading MySQL Database for DE model Application ..." />
-		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" onerror="continue">
+		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" >
 			<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/MySql/dropdeconstraints.sql" />
 			<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/MySql/createnewtable.sql" />
 			<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/MySql/alterqueries.sql" /> 
@@ -1800,7 +1800,7 @@ Thanking You,
 	<!--Oracle Database Upgradation -->
 	<target name="upgrade_db_demodel_oracle">
 		<echo message="Upgrading Oracle Database for DE model Application ..." />
-		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle">
+		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">
 			<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/Oracle/dropdeconstraints.sql" />
 			<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/Oracle/createnewtable.sql" />
 			<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/Oracle/alterqueries.sql" />
@@ -1811,7 +1811,7 @@ Thanking You,
 				</fileset>
 			</classpath>
 		</sql>
-		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" delimiter="/" delimitertype="row" keepformat="yes" rdbms="oracle">
+		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" delimiter="/" delimitertype="row" keepformat="yes" rdbms="oracle">
 			<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/Oracle/addsequence.sql" />
 			<classpath>
 				<fileset dir="${lib.dir}">
@@ -2070,7 +2070,7 @@ Thanking You,
 	
 	<!-- Deploying shippingtracking db for mysql -->
 	<target name="st_deploy_db_mysql">
-		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" onerror="continue">
+		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" >
 			<transaction src="${temp.dir}/shippingtracking/SQL/MYSQL/shippingtracking.sql" />
 			
 			<transaction>commit;</transaction>
@@ -2084,7 +2084,7 @@ Thanking You,
 	
 	<!-- Deploying shippingtracking db for oracle -->
 	<target name="st_deploy_db_oracle">
-		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle">
+		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">
 			<transaction src="${temp.dir}/shippingtracking/SQL/oracle/shippingtracking.sql" />
 						
 			<transaction>commit;</transaction>
