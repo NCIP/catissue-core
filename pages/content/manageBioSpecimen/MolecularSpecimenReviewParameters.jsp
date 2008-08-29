@@ -152,7 +152,7 @@
                 
                 <tr>
                   <td align="center" class="black_ar">&nbsp;</td>
-                  <td align="left" valign="top" class="black_ar"><bean:message key="eventparameters.comments"/> </td><td colspan="4" align="left"><html:textarea styleClass="black_ar" cols="73" rows="4"  styleId="comments" property="comments" /></td>
+                  <td align="left" valign="top" class="black_ar_t"><bean:message key="eventparameters.comments"/> </td><td colspan="4" align="left"><html:textarea styleClass="black_ar" cols="73" rows="4"  styleId="comments" property="comments" /></td>
                 </tr>
                
  </td>

@@ -217,7 +217,7 @@ function toStoragePositionChange(element)
 <!-- comments -->		
 		<tr>
                   <td align="center" class="black_ar">&nbsp;</td>
-                  <td align="left" valign="top" class="black_ar">
+                  <td align="left" valign="top" class="black_ar_t">
 						<bean:message key="eventparameters.comments"/></td>
                   <td colspan="5" align="left">
 						<html:textarea styleClass="black_ar"  styleId="comments" property="comments" cols="73" rows="4"/>

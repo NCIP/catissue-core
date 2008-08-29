@@ -92,7 +92,7 @@ function handleStatus(status)
 						key="user.name" /></span></td>
 					<td align="right"><img
 						src="images/uIEnhancementImages/table_title_corner2.gif"
-						alt="Page Title" width="31" height="24" /></td>
+						alt="Page Title - User" width="31" height="24" /></td>
 				</tr>
 			</table>
 			</td>
@@ -128,7 +128,7 @@ function handleStatus(status)
 								<td valign="bottom"><html:link
 									page="/ApproveUserShow.do?pageNum=1&menuSelected=1">
 									<img src="images/uIEnhancementImages/tab_approve_user.jpg"
-										alt="Approve New Users" width="146" height="22" border="0" />
+										alt="Approve New Users" width="139" height="22" border="0" />
 								</html:link><a href="#"></a></td>
 							</logic:notEqual>
 						</logic:equal>
@@ -145,7 +145,7 @@ function handleStatus(status)
 								<td valign="bottom"><html:link
 									page="/ApproveUserShow.do?pageNum=1&menuSelected=1">
 									<img src="images/uIEnhancementImages/tab_approve_user.jpg"
-										alt="Approve New Users" width="146" height="22" border="0" />
+										alt="Approve New Users" width="139" height="22" border="0" />
 								</html:link><a href="#"></a></td>
 							</logic:notEqual>
 						</logic:equal>
@@ -187,9 +187,8 @@ function handleStatus(status)
 				</tr>
 				<tr>
 					<td colspan="2" align="left" class="tr_bg_blue1"><span
-						class="blue_ar_b">&nbsp; <logic:equal name="operation"
-						value='${requestScope.addforJSP}'>
-						<bean:message key="user.details.title" />
+						class="blue_ar_b">&nbsp;<logic:equal name="operation"
+						value='${requestScope.addforJSP}'><bean:message key="user.details.title" />
 					</logic:equal> <logic:equal name="operation" value='${requestScope.editforJSP}'>
 						<bean:message key="user.editTitle" />
 					</logic:equal> </span></td>
@@ -449,7 +448,7 @@ function handleStatus(status)
 							<td colspan="2" class="bottomtd"></td>
 						</tr>
 						<tr>
-							<td colspan="1" align="left" class="tr_bg_blue1"><span
+							<td colspan="2" align="left" class="tr_bg_blue1"><span
 								class="blue_ar_b">&nbsp;<bean:message
 								key="assignPrivileges.privilegeDetails" /></span></td>
 							<td colspan="1" align="right" class="tr_bg_blue1">&nbsp;</td>
@@ -483,7 +482,7 @@ function handleStatus(status)
 										key="assignPrivileges.privilege(s)" /></td>
 									<td rowspan="2" width="17%" align="center" class="black_ar_t"
 										valign="top"><select class="formFieldSizedNew"
-										id="actionIds" size="4"
+										id="actionIds" size="5"
 										onchange="getCustomRole('roleIds',this)" multiple="multiple">
 										<%
 											String actionName = "";
@@ -533,12 +532,12 @@ function handleStatus(status)
 											value="${requestScope.operation}" />')</c:set>
 									<jsp:useBean id="functionName1" type="java.lang.String" />
 
-									<td colspan="7" width="97%" align="right" class="dividerline">&nbsp;
+									<td colspan="7" width="97%" align="right" >&nbsp;
 									<html:button property="addKeyValue" styleClass="black_ar"
 										onclick="<%=functionName1%>">
 										<bean:message key="buttons.addPrivilege" />
 									</html:button></td>
-									<td width="3%" class="dividerline">&nbsp;</td>
+									<td width="3%" >&nbsp;</td>
 								</tr>
 								<tr class="td_color_F7F7F7">
 									<td height="25" colspan="8" align="left"><span
@@ -775,13 +774,13 @@ function handleStatus(status)
 									</td>
 								</tr>
 								<tr>
-									<td colspan="2" class="toptd"></td>
+									<td colspan="2" class="bottomtd"></td>
 								</tr>
 								<tr>
 									<td colspan="2" class="buttonbg"><html:submit
 										styleClass="blue_ar_b">
 										<bean:message key="buttons.submit" />
-									</html:submit> &nbsp;|<logic:notEqual name="pageOf"
+									</html:submit>&nbsp;|<logic:notEqual name="pageOf"
 										value='${requestScope.pageOfSignUp}'>
 										<logic:notEqual parameter="openInCPFrame" value='yes'>
 											<html:link onclick="closeUserWindow()"

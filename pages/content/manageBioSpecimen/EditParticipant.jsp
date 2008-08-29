@@ -358,7 +358,7 @@ function participantRegRow(subdivtag)
 			class="whitetable_bg">
 					
 			<tr>
-				<td colspan="2" align="left"><%@ include file="/pages/content/common/ActionErrors.jsp" %></td>
+				<td colspan="2" align="left" class="bottomtd"><%@ include file="/pages/content/common/ActionErrors.jsp" %></td>
 			</tr>
 			
 			<tr>
@@ -1011,7 +1011,7 @@ function participantRegRow(subdivtag)
 
 						<logic:equal name="<%=Constants.PAGEOF%>"
 							value="<%=Constants.PAGE_OF_PARTICIPANT_CP_QUERY%>">
-						<td nowrap class="buttonbg">
+						<td nowrap >
 							<html:button
 								styleClass="blue_ar_b" property="registratioPage"
 								title="Register Participant"

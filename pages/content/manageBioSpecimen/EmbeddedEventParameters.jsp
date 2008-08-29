@@ -98,7 +98,7 @@
                 
                 <tr>
                   <td align="center" class="black_ar">&nbsp;</td>
-                  <td align="left" valign="top" class="black_ar"><bean:message key="eventparameters.comments"/></td><td align="left" colspan="4"><html:textarea styleClass="black_ar"  styleId="comments" property="comments" cols="73" rows="4"/></td>
+                  <td align="left" valign="top" class="black_ar_t"><bean:message key="eventparameters.comments"/></td><td align="left" colspan="4"><html:textarea styleClass="black_ar"  styleId="comments" property="comments" cols="73" rows="4"/></td>
                 </tr>
 
           </table></td>

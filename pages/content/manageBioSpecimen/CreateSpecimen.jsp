@@ -245,7 +245,7 @@
 	</logic:equal>
       <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
         <tr>
-          <td colspan="3" align="left"><%@ include file="/pages/content/common/ActionErrors.jsp" %></td>
+          <td colspan="3" align="left" class="bottomtd"><%@ include file="/pages/content/common/ActionErrors.jsp" %></td>
         </tr>
         <tr>
           <td colspan="3" align="left" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;<bean:message key="parent.specimen.details.label"/></span></td>
@@ -257,10 +257,11 @@
               <td width="17%" align="left" class="black_ar"><bean:message key="parent.specimen.details.label"/></td>
               <td colspan="4" align="left" valign="middle" nowrap><table width="55%" border="0" cellspacing="0" cellpadding="0" >
                   <tr class="groupElements">
-                    <td valign="middle" nowrap><span class="black_ar">
+                    <td valign="middle" nowrap>
                       <html:radio styleClass="" styleId="checkedButton" property="checkedButton" value="1"
 								onclick="onRadioButtonClick(this)">
 							</html:radio>
+                      <span class="black_ar">
                       <bean:message key="specimen.label"/>&nbsp;
                       <logic:equal name="createSpecimenForm" property="checkedButton" value="1">
 								<html:text styleClass="black_ar"  maxlength="50"  size="20" styleId="parentSpecimenLabel" 
@@ -270,11 +271,12 @@
 				 				<html:text styleClass="black_ar"  maxlength="50"  size="20" styleId="parentSpecimenLabel" 
 									property="parentSpecimenLabel" disabled="true" />
 						    </logic:equal>
-						&nbsp;&nbsp; </span>
-                        <span class="black_ar">
+						&nbsp;&nbsp; </span> </td>
+                      <td align="left" valign="middle" nowrap="nowrap" >
                         <html:radio styleClass="" styleId="checkedButton" property="checkedButton" value="2" 
 								onclick="onRadioButtonClick(this)">
 					        </html:radio>
+						<span class="black_ar">	
                           <bean:message key="storageContainer.barcode"/>&nbsp;
                         <logic:equal name="createSpecimenForm" property="checkedButton" value="1">
 							    <html:text styleClass="black_ar"  maxlength="50"  size="20" styleId="parentSpecimenBarcode"
@@ -286,8 +288,7 @@
 						</logic:equal>
                       </span></td>
                   </tr>
-                </table>
-                  <label></label>
+                </table>              
               </tr>
 
 			  <tr>
@@ -449,7 +450,7 @@
 
             <tr>
               <td align="center" class="black_ar">&nbsp;</td>
-              <td align="left" valign="top" class="black_ar"><bean:message key="specimen.comments"/></td>
+              <td align="left" valign="top" class="black_ar_t"><bean:message key="specimen.comments"/></td>
               <td colspan="4" align="left"><html:textarea styleClass="black_ar" cols="67" rows="4" styleId="comments" property="comments" 
 			readonly="${requestScope.readOnlyForAll}"/></td>
             </tr>

@@ -238,7 +238,7 @@ function vieMapTabSelected(){
       <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
       
       <tr>
-        <td colspan="2" align="left" class="toptd"><%@ include file="/pages/content/common/ActionErrors.jsp" %></td>
+        <td colspan="2" align="left" class="bottomtd"><%@ include file="/pages/content/common/ActionErrors.jsp" %></td>
       </tr>
       <tr>
         <td colspan="2" align="left" class="tr_bg_blue1"><span class="blue_ar_b"> &nbsp;<bean:message key="<%=title%>" /></span></td>
@@ -631,8 +631,7 @@ function vieMapTabSelected(){
 									%> <html:button styleClass="blue_ar_b" property="searchButton"
 										onclick="<%=searchAction%>">
 										<bean:message key="buttons.search" />
-									</html:button>
-          &nbsp;&nbsp;|&nbsp; <html:link page="/ManageAdministrativeData.do" styleClass="cancellink">
+									</html:button>&nbsp;|&nbsp;<html:link page="/ManageAdministrativeData.do" styleClass="cancellink">
 										<bean:message key="buttons.cancel" />
 									</html:link></td>
       </tr>

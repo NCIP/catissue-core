@@ -134,12 +134,12 @@ function confirmAction(form)
 					<tr>
                
                   <td align="center" class="black_ar">&nbsp;</td>
-                  <td align="left" valign="top" class="black_ar"><LABEL for="type"><bean:message key="disposaleventparameters.reason"/></LABEL></td>
+                  <td align="left" valign="top" class="black_ar_t"><LABEL for="type"><bean:message key="disposaleventparameters.reason"/></LABEL></td>
                   <td align="left"  class="black_ar" ><html:textarea styleClass="black_ar" cols="32" rows="4" styleId="reason" property="reason" />
 				  </td>
                 
                   <td align="center" class="black_ar">&nbsp;</td>
-                  <td align="left" valign="top" class="black_ar" width="8%"><bean:message key="eventparameters.comments"/></td><td align="left" ><html:textarea styleClass="black_ar" cols="32" rows="4" styleId="comments" property="comments" /></td>
+                  <td align="left" valign="top" class="black_ar_t" width="8%"><bean:message key="eventparameters.comments"/></td><td align="left" ><html:textarea styleClass="black_ar" cols="32" rows="4" styleId="comments" property="comments" /></td>
                 </tr>
 
           </table></td>

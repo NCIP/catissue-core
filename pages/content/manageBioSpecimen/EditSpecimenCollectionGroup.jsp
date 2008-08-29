@@ -125,8 +125,8 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 				 </tr>
 				 <!--Collection Protocol -->
 				 <tr>
-			     	<td width="1%" class="black_ar_t"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></span></td>
-				   <td width="10%" align="left" valign="top" class="black_ar"><LABEL for="collectionProtocolId"><bean:message key="specimenCollectionGroup.protocolTitle"/></LABEL></td> 
+			     	<td width="1%" class="black_ar_t"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="3" /></span></td>
+				   <td width="10%" align="left" valign="top" class="black_ar_t"><LABEL for="collectionProtocolId"><bean:message key="specimenCollectionGroup.protocolTitle"/></LABEL></td> 
 					
 					<td width="34%" align="left" valign="top"><span class="black_ar_t"><%=form.getCollectionProtocolName()%></span>
 	
@@ -356,7 +356,7 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 	<!-- For Multiple Specimen-----Ashish -->
 		<div id="multiplespecimenTable">
 		<tr>		
-		<td colspan="3" class="tr_bg_blue1"><span class="blue_ar_b"><bean:message key="multipleSpecimen.mainTitle" /> </span></td>
+		<td colspan="3" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;<bean:message key="multipleSpecimen.mainTitle" /> </span></td>
 		</tr>
 		<tr>
           <td colspan="3"><table width="100%" border="0" cellpadding="3" cellspacing="0">
@@ -365,7 +365,7 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 					 <td width="34%" align="left" class="black_ar">&nbsp;<bean:message key="multipleSpecimen.numberOfSpecimen" /></td>
 					 <td width="65%" align="left" nowrap>
 						<!-- html:text styleClass="formFieldSized5" maxlength="50" size="30" styleId="numberOfSpecimen" property="numberOfSpecimen"  /-->
-						<html:text styleClass="black_ar" maxlength="50" size="20" styleId="numberOfSpecimen" property="numberOfSpecimens" />
+						<html:text styleClass="black_ar" style="text-align:right" maxlength="50" size="20" styleId="numberOfSpecimen" property="numberOfSpecimens" />
 					</td>
 			</tr>			
 			</table></td>

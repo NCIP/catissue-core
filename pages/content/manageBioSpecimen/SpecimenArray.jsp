@@ -177,20 +177,20 @@ function checkStotagePosition()
                 <td align="left" valign="top">&nbsp;</td>
               </tr>
 			  <tr>
-                <td align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
-                <td align="left" class="black_ar">
+                <td align="center" class="black_ar_t"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="3" /></span></td>
+                <td align="left" class="black_ar_t">
 					<label for="specimenClass">
 						<bean:message key="arrayType.specimenClass" />
 					</label>
 				</td>
-				<td align="left" nowrap class="black_new">
+				<td align="left" nowrap class="black_ar_t">
 					<html:select property="specimenClass" styleClass="formFieldSizedNew" styleId="state" size="1" disabled="true">
 						<html:options collection="<%=Constants.SPECIMEN_CLASS_LIST%>" labelProperty="name" property="value"/>
 					</html:select>
 				</td>
-				<td align="left" class="black_ar">&nbsp;</td>
-                <td align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
-                <td align="left" class="black_ar">
+				<td align="left" class="black_ar_t">&nbsp;</td>
+                <td align="center" class="black_ar_t"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="3" /></span></td>
+                <td align="left" class="black_ar_t">
 					<label for="specimenType">
 						<bean:message key="arrayType.specimenType" />
 					</label>

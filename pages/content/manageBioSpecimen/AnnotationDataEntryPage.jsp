@@ -156,7 +156,7 @@ window.onresize = function() { setFrameHeight('definedAnnotationsGrid', .8,slope
 					<td colspan="3" align="left" class="black_ar">
 					<table width="100%" border="0" cellpadding="3" cellspacing="0">
 						<tr>
-							<td width="17%" align="left" class="black_ar"><LABEL><bean:message
+							<td width="17%" align="left" class="black_ar"><LABEL>&nbsp;&nbsp;<bean:message
 								key="app.annotationFormsList" /></LABEL></td>
 							<td align="left" colspan="2"><html:select
 								property="selectedAnnotation" styleId="selectedAnnotation"
@@ -179,7 +179,7 @@ window.onresize = function() { setFrameHeight('definedAnnotationsGrid', .8,slope
 				<tr>
 					<td colspan="3" valign="middle" class="showhide">
 
-					<div id="definedAnnotationsGrid" valign="top" width="99%"
+					<div id="definedAnnotationsGrid" valign="top" width="100%"
 						height="200" style="background-color:#d7d7d7;overflow:hidden;" />
 					<script>
 							initAnnotationGrid();

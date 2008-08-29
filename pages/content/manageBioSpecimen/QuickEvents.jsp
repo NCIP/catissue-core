@@ -111,10 +111,11 @@ session.setAttribute("EventOrigin", "QuickEvents");
               <td align="left" valign="middle" width="84%">
 				<table width="53%" border="0" cellspacing="0" cellpadding="0" >
                   <tr class="groupElements">
-                    <td valign="middle" nowrap><span class="black_ar">
+                    <td valign="middle" nowrap>
                       <html:radio styleClass="" styleId="checkedButton" property="checkedButton" value="1"
 								onclick="onRadioButtonClick(this)">
 							</html:radio>
+							<span class="black_ar">
                       <bean:message key="specimen.label"/>&nbsp;
                       <logic:equal name="quickEventsForm" property="checkedButton" value="1">
 								<html:text styleClass="black_ar"  maxlength="50"  size="20" styleId="specimenLabel" 
@@ -124,11 +125,12 @@ session.setAttribute("EventOrigin", "QuickEvents");
 				 				<html:text styleClass="black_ar"  maxlength="50"  size="20" styleId="specimenLabel" 
 									property="specimenLabel" disabled="true" />
 						    </logic:equal>
-						&nbsp;&nbsp; </span>
-                        <span class="black_ar">
+						&nbsp;&nbsp; </span></td>
+                        <td align="left" valign="middle" nowrap="nowrap" >
                         <html:radio styleClass="" styleId="checkedButton" property="checkedButton" value="2" 
 								onclick="onRadioButtonClick(this)">
 					        </html:radio>
+							<span class="black_ar">
                           <bean:message key="storageContainer.barcode"/>&nbsp;
                         <logic:equal name="quickEventsForm" property="checkedButton" value="1">
 							    <html:text styleClass="black_ar"  maxlength="50"  size="20" styleId="barcode"
