@@ -357,38 +357,7 @@ function updateSCDetails(msg)
 		</TR>
 		</logic:empty>				
 		</logic:empty>
-		<logic:notEmpty name="viewSpecimenSummaryForm" property="aliquotList" >
-		<TR>
-			<TD colspan="2" align="left" class="tr_bg_blue1">
-				<span class="blue_ar_b">	
-				<bean:message key="anticipatorySpecimen.AliquotDetails"/> 
-				</span>
-			</TD>
-		</TR>
-		<TR>
-			<TD colspan="2" class="showhide">
-				<table border="0" cellpadding="3" cellspacing="0" width="100%">
-                  <tr class="tableheading">
-                    <td width="11%" class="black_ar_b"><label for="delete" align="center"><bean:message key="anticipatorySpecimen.Parent"/></label></td>
-                    <logic:equal name="labelShow" value="true">
-                    <td width="11%" class="black_ar_b"><bean:message key="specimen.label"/></td>
-                    </logic:equal>
-                    <logic:equal name="barcodeShow" value="true">
-                    <td width="11%" class="black_ar_b"><bean:message key="specimen.barcode"/></td>
-                    </logic:equal>
-                    <td width="14%" class="black_ar_b"><bean:message key="specimen.subType"/></td>
-                    <td width="7%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Quantity"/></td>
-                    <td width="7%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Concentration"/></td>
-                    <td width="30%" class="black_ar_b" nowrap><bean:message key="anticipatorySpecimen.Location"/><input id="chkAliquot" type="checkbox" onClick="ApplyToAll(this,'aliquot')"/><span class="black_ar_s">Apply First to All</span> </td>
-					<td><input type="checkbox" value="check" id="aliquotCheckBox" checked="true" onclick="applyToAlquots()"/></td>
-                    <td width="10%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Collected"/></td>
-                  </tr>
-					<md:genericSpecimenDetails columnHeaderListName="subSpecimenColHeaderList" formName="viewSpecimenSummaryForm" dataListName="aliquotList" dataListType="Aliquot" columnListName="columnListName" isReadOnly="false" displayColumnListName="dispColumnsList" />
-				<%-- custom tag for specimen list by mandar --- Aliquot  --%>						
-				</table>				
-			</TD>
-		</TR>
-		</logic:notEmpty>
+		
 		<logic:notEmpty name="viewSpecimenSummaryForm" property="derivedList" >
 		<TR>
 			<TD colspan="2" align="left" class="tr_bg_blue1">
@@ -418,6 +387,38 @@ function updateSCDetails(msg)
 					<md:genericSpecimenDetails columnHeaderListName="subSpecimenColHeaderList" formName="viewSpecimenSummaryForm" dataListName="derivedList" dataListType="Derived" columnListName="columnListName" isReadOnly="false" displayColumnListName="dispColumnsList" />
 					<%-- custom tag for specimen list by mandar --- Derived --%>	
 				</table>
+			</TD>
+		</TR>
+		</logic:notEmpty>
+		<logic:notEmpty name="viewSpecimenSummaryForm" property="aliquotList" >
+		<TR>
+			<TD colspan="2" align="left" class="tr_bg_blue1">
+				<span class="blue_ar_b">	
+				<bean:message key="anticipatorySpecimen.AliquotDetails"/> 
+				</span>
+			</TD>
+		</TR>
+		<TR>
+			<TD colspan="2" class="showhide">
+				<table border="0" cellpadding="3" cellspacing="0" width="100%">
+                  <tr class="tableheading">
+                    <td width="11%" class="black_ar_b"><label for="delete" align="center"><bean:message key="anticipatorySpecimen.Parent"/></label></td>
+                    <logic:equal name="labelShow" value="true">
+                    <td width="11%" class="black_ar_b"><bean:message key="specimen.label"/></td>
+                    </logic:equal>
+                    <logic:equal name="barcodeShow" value="true">
+                    <td width="11%" class="black_ar_b"><bean:message key="specimen.barcode"/></td>
+                    </logic:equal>
+                    <td width="14%" class="black_ar_b"><bean:message key="specimen.subType"/></td>
+                    <td width="7%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Quantity"/></td>
+                    <td width="7%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Concentration"/></td>
+                    <td width="30%" class="black_ar_b" nowrap><bean:message key="anticipatorySpecimen.Location"/><input id="chkAliquot" type="checkbox" onClick="ApplyToAll(this,'aliquot')"/><span class="black_ar_s">Apply First to All</span> </td>
+					<td><input type="checkbox" value="check" id="aliquotCheckBox" checked="true" onclick="applyToAlquots()"/></td>
+                    <td width="10%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Collected"/></td>
+                  </tr>
+					<md:genericSpecimenDetails columnHeaderListName="subSpecimenColHeaderList" formName="viewSpecimenSummaryForm" dataListName="aliquotList" dataListType="Aliquot" columnListName="columnListName" isReadOnly="false" displayColumnListName="dispColumnsList" />
+				<%-- custom tag for specimen list by mandar --- Aliquot  --%>						
+				</table>				
 			</TD>
 		</TR>
 		</logic:notEmpty>
