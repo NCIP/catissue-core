@@ -56,21 +56,21 @@
     <td class="td_color_bfdcf3"><table border="0" cellpadding="0" cellspacing="0">
       <tr>
         <td class="td_table_head"><span class="wh_ar_b"><bean:message key="app.collectionProtocol"/></span></td>
-        <td align="right"><img src="images/uIEnhancementImages/table_title_corner2.gif" alt="Page Title" width="31" height="24" /></td>
+        <td align="right"><img src="images/uIEnhancementImages/table_title_corner2.gif" alt="Page Title - Collection Protocol" width="31" height="24" /></td>
       </tr>
     </table></td>
   </tr>
   <tr>
-    <td ><table width="100%" border="0" cellpadding="0" cellspacing="0">
+    <td class="tablepadding"><table width="100%" border="0" cellpadding="0" cellspacing="0">
       <tr>
         <td class="td_tab_bg" ><img src="images/spacer.gif" alt="spacer" width="50" height="1"></td>
         <logic:equal parameter="operation"	value='add'>
-				      <td width="6%" valign="bottom" background="images/uIEnhancementImages/tab_bg.gif" ><img src="images/uIEnhancementImages/tab_add_selected.jpg" alt="Add" width="57" height="22" /></td>
-                    <td width="6%" valign="bottom" background="images/uIEnhancementImages/tab_bg.gif"><html:link page="/SimpleQueryInterface.do?pageOf=pageOfCollectionProtocol&aliasName=CollectionProtocol"><img src="images/uIEnhancementImages/tab_edit_notSelected.jpg" alt="Edit" width="59" height="22" border="0" /></html:link></td>
+				      <td width="5%" valign="bottom" background="images/uIEnhancementImages/tab_bg.gif" ><img src="images/uIEnhancementImages/tab_add_selected.jpg" alt="Add" width="57" height="22" /></td>
+                    <td width="5%" valign="bottom" background="images/uIEnhancementImages/tab_bg.gif"><html:link page="/SimpleQueryInterface.do?pageOf=pageOfCollectionProtocol&aliasName=CollectionProtocol"><img src="images/uIEnhancementImages/tab_edit_notSelected.jpg" alt="Edit" width="59" height="22" border="0" /></html:link></td>
 					</logic:equal>
 					<logic:equal parameter="operation"	value='edit'>
-					<td width="6%" valign="bottom" background="images/uIEnhancementImages/tab_bg.gif" ><html:link page="/OpenCollectionProtocol.do?pageOf=pageOfmainCP&operation=add"><img src="images/uIEnhancementImages/tab_add_notSelected.jpg" alt="Add" width="57" height="22" /></html:link></td>
-                    <td width="6%" valign="bottom" background="images/uIEnhancementImages/tab_bg.gif"><img src="images/uIEnhancementImages/tab_edit_selected.jpg" alt="Edit" width="59" height="22" border="0" /></td>
+					<td width="5%" valign="bottom" background="images/uIEnhancementImages/tab_bg.gif" ><html:link page="/OpenCollectionProtocol.do?pageOf=pageOfmainCP&operation=add"><img src="images/uIEnhancementImages/tab_add_notSelected.jpg" alt="Add" width="57" height="22" /></html:link></td>
+                    <td width="5%" valign="bottom" background="images/uIEnhancementImages/tab_bg.gif"><img src="images/uIEnhancementImages/tab_edit_selected.jpg" alt="Edit" width="59" height="22" border="0" /></td>
 					</logic:equal>
         <td width="90%" valign="bottom" class="td_tab_bg">&nbsp;</td>
       </tr>
@@ -81,7 +81,7 @@
       <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
 	  
         <tr>
-          <td colspan="2" align="left">
+          <td colspan="2" align="left" class="bottomtd">
           <logic:equal name="isParticipantReg" value="true">
 			<span class="messagetexterror">
 				User can not Add/edit Events and Specimen Requirements
@@ -113,10 +113,8 @@
 					
 		
  <tr>
-		 <td colspan="2">
-		    <table width="100%" border="0" cellpadding="0" cellspacing="0">
-			 <tr >
-					<td class="buttonbg" >
+		 <td colspan="2" class="buttonbg">
+		    
 					<logic:equal name="isParticipantReg" value="true">
 						   &nbsp;
 					</logic:equal>
@@ -131,9 +129,7 @@
 					
 					 <html:button styleClass="blue_ar_b" property="forwardPage" value="Save Collection Protocol" onclick="submitCP()">
 					</html:button>
-				   </td>
-				   </tr>
-				   </table>
+				   
 				   </td>
 				</tr>
 				</table>
