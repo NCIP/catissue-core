@@ -84,7 +84,7 @@
 				<condition property="isOracleBinDirSetInPath">
 				<contains string="${path}" substring="${oracle_home.bin}" casesensitive="false" />
 				</condition>
-				<!-- <if>	
+				<if>	
 					<equals arg1="true" arg2="${isOracleBinDirSetInPath}" />
 					<then>
 						<echo>Oracle bin present in path... </echo>
@@ -93,8 +93,8 @@
 						<fail message="ORACLE_HOME is not set in path,please set it" />
 					</else>	
 				</if>
-				-->
-				<!--<available file="${sqlldr}" property="issqlldrPresentInBin"/>		
+				
+				<available file="${sqlldr}" property="issqlldrPresentInBin"/>		
 				<if>	
 					<equals arg1="true" arg2="${issqlldrPresentInBin}" />			
 					<then>
@@ -103,7 +103,7 @@
 					<else>
 						<fail message="${sqlldr} file is not present." />
 					</else>
-				</if> -->
+				</if>
 			</then>
 		</if>				
 		<if>
@@ -2084,7 +2084,7 @@ Thanking You,
 	
 	<!-- Deploying shippingtracking db for oracle -->
 	<target name="st_deploy_db_oracle">
-		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">
+		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle" onerror="continue">
 			<transaction src="${temp.dir}/shippingtracking/SQL/oracle/shippingtracking.sql" />
 						
 			<transaction>commit;</transaction>
