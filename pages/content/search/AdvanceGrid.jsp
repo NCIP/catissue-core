@@ -185,7 +185,7 @@ function setEditableChkbox(checkAllPages)
 		
 	function viewSPR(id)
 	{	
-		var url = "<%=Constants.VIEW_SPR_ACTION%>?operation=viewSPR&pageOf=gridViewReport&id="+id+"&flow=viewReport";
+		var url = "<%=Constants.VIEW_SPR_ACTION%>?operation=viewSPR&pageOf=gridViewReport&reportId="+id+"&flow=viewReport";
 			platform = navigator.platform.toLowerCase();
 		    if (platform.indexOf("mac") != -1)
 			{
