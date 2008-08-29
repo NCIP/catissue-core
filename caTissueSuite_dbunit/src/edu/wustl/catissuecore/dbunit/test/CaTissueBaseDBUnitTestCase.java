@@ -5,9 +5,7 @@
  */
 package edu.wustl.catissuecore.dbunit.test;
 
-import java.io.File;
 import java.io.FileInputStream;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -20,11 +18,12 @@ import org.dbunit.JdbcBasedDBTestCase;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSet;
 import org.dbunit.operation.DatabaseOperation;
+import org.hibernate.Session;
 
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.dbunit.util.DecodeUtility;
-import edu.wustl.catissuecore.util.global.Variables;
-import edu.wustl.catissuecore.util.listener.CatissueCoreServletContextListener;
+import edu.wustl.catissuecore.domain.User;
+import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.dao.DAOFactory;
@@ -32,11 +31,8 @@ import edu.wustl.common.dao.HibernateDAO;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
-import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.dbManager.DAOException;
-import edu.wustl.common.util.dbManager.DBUtil;
 import edu.wustl.common.util.global.Constants;
-import edu.wustl.common.util.logger.Logger;
 
 
 /**
@@ -54,6 +50,7 @@ public abstract class CaTissueBaseDBUnitTestCase extends JdbcBasedDBTestCase
 	protected static final DatabaseOperation CATISSUE_INSERT = new CatissueDBUnitOperation();
 	private Map<String, List<AbstractDomainObject>> objectMap = null;
 	private String objectxmlFile=DEFAULT_OBJECTS_XML_FILE;
+	private Long userId = Long.valueOf(1);
 	/* (non-Javadoc)
 	 * @see org.dbunit.DatabaseTestCase#getDataSet()
 	 */
@@ -64,7 +61,7 @@ public abstract class CaTissueBaseDBUnitTestCase extends JdbcBasedDBTestCase
 		return new FlatXmlDataSet( new FileInputStream("TestDataSet.xml"));
 	}
 
-	public CaTissueBaseDBUnitTestCase() throws Exception
+	public CaTissueBaseDBUnitTestCase() 
 	{
 		super();
 		initTestData();
@@ -103,23 +100,29 @@ public abstract class CaTissueBaseDBUnitTestCase extends JdbcBasedDBTestCase
 	   
 	 }
 	abstract public String getObjectFile();
-	private void initializeObjectMap() throws Exception
+	private void initializeObjectMap()
 	{
-		Collection objectColl = DecodeUtility.getObjectListFromFile(objectxmlFile);
-		Iterator objectIterator = objectColl.iterator();
-		objectMap = new HashMap<String, List<AbstractDomainObject>>();
-		while(objectIterator.hasNext())
+		try
 		{
-
-			AbstractDomainObject object = (AbstractDomainObject) objectIterator.next();
-			String keyClassName = object.getClass().getName();
-			if (!objectMap.containsKey(keyClassName))
+			Collection objectColl = DecodeUtility.getObjectListFromFile(objectxmlFile);
+			Iterator objectIterator = objectColl.iterator();
+			objectMap = new HashMap<String, List<AbstractDomainObject>>();
+			while(objectIterator.hasNext())
 			{
-
-				objectMap.put(keyClassName, new ArrayList<AbstractDomainObject>());
+	
+				AbstractDomainObject object = (AbstractDomainObject) objectIterator.next();
+				String keyClassName = object.getClass().getName();
+				if (!objectMap.containsKey(keyClassName))
+				{
+	
+					objectMap.put(keyClassName, new ArrayList<AbstractDomainObject>());
+				}
+				objectMap.get(keyClassName).add(object);
+				
 			}
-			objectMap.get(keyClassName).add(object);
-			
+		}catch(Exception e){
+			e.printStackTrace();
+			fail("Test failed in initialize object map");
 		}
 	}
 	public List<AbstractDomainObject> getObjectList(Class classObject)
@@ -177,9 +180,10 @@ public abstract class CaTissueBaseDBUnitTestCase extends JdbcBasedDBTestCase
 	   {
 		try
 		{
+			SessionDataBean sessionDataBean = getSessionDataBean();
 			IBizLogic bizLogic =BizLogicFactory.getInstance()
 						.getBizLogic(object.getClass().getName());
-			bizLogic.insert(object, Constants.HIBERNATE_DAO);
+			bizLogic.insert(object,sessionDataBean, Constants.HIBERNATE_DAO);
 		}
 		catch(UserNotAuthorizedException authorizedException)
 		{
@@ -209,10 +213,11 @@ public abstract class CaTissueBaseDBUnitTestCase extends JdbcBasedDBTestCase
 							.getBizLogic(object.getClass().getName());
 				Long oldObjectId = ((AbstractDomainObject) object).getId();
 				dao=(HibernateDAO) DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+				SessionDataBean sessionDataBean = getSessionDataBean();
 				dao.openSession(null);
 
 				Object oldObject = dao.retrieve(object.getClass().getName(), oldObjectId);
-				bizLogic.update(object,oldObject, Constants.HIBERNATE_DAO,null);
+				bizLogic.update(object,oldObject, Constants.HIBERNATE_DAO,sessionDataBean);
 
 		   }
 		   catch(UserNotAuthorizedException authorizedException)
@@ -246,5 +251,41 @@ public abstract class CaTissueBaseDBUnitTestCase extends JdbcBasedDBTestCase
 	private void setObjectMap(Map<String, List<AbstractDomainObject>> objectMap)
 	{
 		this.objectMap = objectMap;
+	}
+
+	
+	public Long getUserId()
+	{
+		return userId;
+	}
+
+	
+	public void setUserId(Long userId)
+	{
+		this.userId = userId;
+	}
+	
+	public SessionDataBean getSessionDataBean()
+	{
+		SessionDataBean sessionDataBean = null;;
+		try
+		{
+			DefaultBizLogic bizLogic = new DefaultBizLogic();
+			User user = (User)bizLogic.retrieve(User.class.getName(),userId);
+			sessionDataBean = new SessionDataBean();
+			sessionDataBean.setAdmin(true);
+			sessionDataBean.setCsmUserId(String.valueOf(user.getCsmUserId()));
+			sessionDataBean.setFirstName(user.getFirstName());
+			sessionDataBean.setIpAddress("localhost");
+			sessionDataBean.setLastName(user.getLastName());
+			sessionDataBean.setUserId(userId);
+			sessionDataBean.setUserName(user.getEmailAddress());
+		}
+		catch(DAOException e){
+			e.printStackTrace();
+			fail("failed to retrieve user id " + userId);
+		}
+		
+		return sessionDataBean;
 	}
 }

@@ -9,7 +9,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import edu.wustl.catissuecore.dbunit.test.DefaultCatissueDBUnitTestCase;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.common.exception.BizLogicException;
@@ -30,6 +29,7 @@ public class MSRMigrationTestCases extends DefaultCatissueDBUnitTestCase
 	 * 3. Iterate over users, identify supervisors and technicians and add all sites to their site collection 
 	 * 4. We are not processing admins and scientists for the time being
 	 */
+	
 	public void testMigrate()
 	{
 		List users = null;

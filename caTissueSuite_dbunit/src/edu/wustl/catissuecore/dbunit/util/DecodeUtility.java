@@ -9,17 +9,12 @@ import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
 import java.util.HashSet;
 
-import edu.wustl.catissuecore.bizlogic.test.BaseTestCaseUtility;
-import edu.wustl.catissuecore.bizlogic.test.TestCaseUtility;
-import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
 
@@ -46,40 +41,40 @@ public class DecodeUtility
 		sp1.setBarcode("12");
 		sp1.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
 		set.add(sp1);
-		addObjectToSet(set,BaseTestCaseUtility.initUser());
-
-		addObjectToSet(set,BaseTestCaseUtility.initBioHazard());
-		addObjectToSet(set,BaseTestCaseUtility.initCancerResearchGrp());
-		addObjectToSet(set,BaseTestCaseUtility.initCellSpecimen());
-		addObjectToSet(set,BaseTestCaseUtility.initCollectionProtocol());
-		addObjectToSet(set,BaseTestCaseUtility.initCollectionProtocolEvent());
-		Participant participant = BaseTestCaseUtility.initParticipant();
-		set.add(participant);
-		addObjectToSet(set,BaseTestCaseUtility.initCollectionProtocolRegistration(participant));
-		addObjectToSet(set,BaseTestCaseUtility.initDepartment());
-		addObjectToSet(set,BaseTestCaseUtility.initDistribution());
-		addObjectToSet(set,BaseTestCaseUtility.initDistributionProtocol());
-		addObjectToSet(set,BaseTestCaseUtility.initDistributionSpecimenRequirement());
-		addObjectToSet(set,BaseTestCaseUtility.initFluidSpecimen());
-
-		addObjectToSet(set,BaseTestCaseUtility.initInstitution());
-		addObjectToSet(set,BaseTestCaseUtility.initMolecularSpecimen());
-		addObjectToSet(set,BaseTestCaseUtility.initOrder());
-		addObjectToSet(set,BaseTestCaseUtility.initParticipantWithCPR());
-		addObjectToSet(set,BaseTestCaseUtility.initSCG());
-		addObjectToSet(set,BaseTestCaseUtility.initSite());
-
-		addObjectToSet(set,BaseTestCaseUtility.initSpecimenArray());
-		addObjectToSet(set,BaseTestCaseUtility.initSpecimenCollectionGroup());
-		addObjectToSet(set,BaseTestCaseUtility.initSpecimenSpecimenArrayType());
-		addObjectToSet(set,BaseTestCaseUtility.initStorageContainer());
-
-		addObjectToSet(set,BaseTestCaseUtility.initStorageContainerHoldsTissueSpec());
-		addObjectToSet(set,BaseTestCaseUtility.initStorageType());
-		addObjectToSet(set,BaseTestCaseUtility.initTissueSpecimen());
-		addObjectToSet(set,BaseTestCaseUtility.initTissueStorageType());
-		addObjectToSet(set,BaseTestCaseUtility.initIdentifiedSurgicalPathologyReport());
-		addObjectToSet(set,BaseTestCaseUtility.initDeIdentifiedSurgicalPathologyReport());
+//		addObjectToSet(set,BaseTestCaseUtility.initUser());
+//
+//		addObjectToSet(set,BaseTestCaseUtility.initBioHazard());
+//		addObjectToSet(set,BaseTestCaseUtility.initCancerResearchGrp());
+//		addObjectToSet(set,BaseTestCaseUtility.initCellSpecimen());
+//		addObjectToSet(set,BaseTestCaseUtility.initCollectionProtocol());
+//		addObjectToSet(set,BaseTestCaseUtility.initCollectionProtocolEvent());
+//		Participant participant = BaseTestCaseUtility.initParticipant();
+//		set.add(participant);
+//		addObjectToSet(set,BaseTestCaseUtility.initCollectionProtocolRegistration(participant));
+//		addObjectToSet(set,BaseTestCaseUtility.initDepartment());
+//		addObjectToSet(set,BaseTestCaseUtility.initDistribution());
+//		addObjectToSet(set,BaseTestCaseUtility.initDistributionProtocol());
+//		addObjectToSet(set,BaseTestCaseUtility.initDistributionSpecimenRequirement());
+//		addObjectToSet(set,BaseTestCaseUtility.initFluidSpecimen());
+//
+//		addObjectToSet(set,BaseTestCaseUtility.initInstitution());
+//		addObjectToSet(set,BaseTestCaseUtility.initMolecularSpecimen());
+//		addObjectToSet(set,BaseTestCaseUtility.initOrder());
+//		addObjectToSet(set,BaseTestCaseUtility.initParticipantWithCPR());
+//		addObjectToSet(set,BaseTestCaseUtility.initSCG());
+//		addObjectToSet(set,BaseTestCaseUtility.initSite());
+//
+//		addObjectToSet(set,BaseTestCaseUtility.initSpecimenArray());
+//		addObjectToSet(set,BaseTestCaseUtility.initSpecimenCollectionGroup());
+//		addObjectToSet(set,BaseTestCaseUtility.initSpecimenSpecimenArrayType());
+//		addObjectToSet(set,BaseTestCaseUtility.initStorageContainer());
+//
+//		addObjectToSet(set,BaseTestCaseUtility.initStorageContainerHoldsTissueSpec());
+//		addObjectToSet(set,BaseTestCaseUtility.initStorageType());
+//		addObjectToSet(set,BaseTestCaseUtility.initTissueSpecimen());
+//		addObjectToSet(set,BaseTestCaseUtility.initTissueStorageType());
+//		addObjectToSet(set,BaseTestCaseUtility.initIdentifiedSurgicalPathologyReport());
+//		addObjectToSet(set,BaseTestCaseUtility.initDeIdentifiedSurgicalPathologyReport());
 
 		String s = encodeCollection(set);
 		System.out.println(s);
@@ -88,11 +83,11 @@ public class DecodeUtility
 		
 	}
 	
-	private static void addObjectToSet(Collection cl,AbstractDomainObject domainObject)
-	{
-		cl.add(domainObject);
-		TestCaseUtility.setObjectMap(domainObject, domainObject.getClass());
-	}
+//	private static void addObjectToSet(Collection cl,AbstractDomainObject domainObject)
+//	{
+//		cl.add(domainObject);
+//		TestCaseUtility.setObjectMap(domainObject, domainObject.getClass());
+//	}
 	/**
 	 * @param set
 	 * @return
@@ -116,7 +111,7 @@ public class DecodeUtility
 	}
 	public static Collection getObjectListFromFile(String xmlFile) throws Exception
 	{
-		InputStream fis=  DecodeUtility.class.getResourceAsStream(xmlFile);
+		InputStream fis=  DecodeUtility.class.getClassLoader().getResourceAsStream(xmlFile);
 		return decodeObject(fis);
 		
 	}
