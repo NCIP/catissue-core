@@ -3,20 +3,31 @@ package edu.wustl.catissuecore.bizlogic.test;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 
 import edu.wustl.catissuecore.domain.Capacity;
 import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.CellSpecimenReviewParameters;
 import edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter;
+import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.DisposalEventParameters;
 import edu.wustl.catissuecore.domain.EmbeddedEventParameters;
 import edu.wustl.catissuecore.domain.FixedEventParameters;
 import edu.wustl.catissuecore.domain.FluidSpecimen;
+import edu.wustl.catissuecore.domain.FluidSpecimenReviewEventParameters;
+import edu.wustl.catissuecore.domain.FrozenEventParameters;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
+import edu.wustl.catissuecore.domain.MolecularSpecimenReviewParameters;
+import edu.wustl.catissuecore.domain.ProcedureEventParameters;
+import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenPosition;
+import edu.wustl.catissuecore.domain.SpunEventParameters;
 import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.catissuecore.domain.ThawEventParameters;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
+import edu.wustl.catissuecore.domain.TissueSpecimenReviewEventParameters;
 import edu.wustl.catissuecore.domain.TransferEventParameters;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -271,6 +282,32 @@ public class SpecimenEventTestCases extends CaTissueBaseTestCase
 			
 		}
 	}
+	/**
+	 * Test case for Insert Dispose Specimen Event
+	 */
+	public void testUpdateDisposeSpecimenEvent()
+	 {
+		try
+		{
+			DisposalEventParameters disposalEvent = (DisposalEventParameters)TestCaseUtility.getObjectMap(DisposalEventParameters.class);
+			 disposalEvent.setActivityStatus(Constants.ACTIVITY_STATUS_DISABLED);
+			 disposalEvent = (DisposalEventParameters)appService.updateObject(disposalEvent);
+			if(Constants.ACTIVITY_STATUS_DISABLED.equals(disposalEvent.getActivityStatus()))
+			{
+				assertTrue("Disposed event sucessfully fired" + disposalEvent , true);  
+			}
+			else
+			{
+				assertFalse("Disposed event Failed:", true);
+			}
+		}
+		catch(Exception e)
+		{
+			System.out.println("SpecimenEventTestCases.testUpdateDisposeSpecimenEvent()");
+			e.printStackTrace();
+			assertFalse("Disposed event Failed:" +e.getMessage(), true);  
+		}
+	}
 
 	/**
 	 * Test case for Insert Dispose Specimen Event
@@ -281,7 +318,7 @@ public class SpecimenEventTestCases extends CaTissueBaseTestCase
 		 {
 			   TissueSpecimen tSpecimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
 			   SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
-			   
+			  		   
 			   StorageContainer storageContainer =  BaseTestCaseUtility.initStorageContainer();
 			   Collection collectionProtocolCollection = new HashSet();
 			   storageContainer.setCollectionProtocolCollection(collectionProtocolCollection);
@@ -357,7 +394,7 @@ public class SpecimenEventTestCases extends CaTissueBaseTestCase
 		 {
 			   TissueSpecimen tSpecimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
 			   SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
-			   
+			  		   
 			   StorageContainer storageContainer =  BaseTestCaseUtility.initStorageContainer();
 			   Collection collectionProtocolCollection = new HashSet();
 			   storageContainer.setCollectionProtocolCollection(collectionProtocolCollection);
@@ -421,6 +458,79 @@ public class SpecimenEventTestCases extends CaTissueBaseTestCase
 			assertFalse("Check In Check Out event Failed:" +e.getMessage(), true);  
 		}
 	}
+	/**
+	 * Test case for Insert Collection Event
+	 */
+	public void testInsertCollectionEvent()
+	 {
+		 try
+		 {
+			   TissueSpecimen tSpecimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
+			   SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
+			  			   
+			   StorageContainer storageContainer =  BaseTestCaseUtility.initStorageContainer();
+			   Collection collectionProtocolCollection = new HashSet();
+			   storageContainer.setCollectionProtocolCollection(collectionProtocolCollection);
+			   storageContainer = (StorageContainer) appService.createObject(storageContainer);
+		   
+			   SpecimenPosition pos1 = new SpecimenPosition();
+			   pos1.setPositionDimensionOne(1);
+			   pos1.setPositionDimensionTwo(1);
+			   pos1.setStorageContainer(storageContainer);
+			   tSpecimenObj.setSpecimenPosition(pos1);
+			   tSpecimenObj.setSpecimenCollectionGroup(scg);
+			   System.out.println("Before Creating Specimen object");
+			   tSpecimenObj = (TissueSpecimen) appService.createObject(tSpecimenObj);
+			   System.out.println("After Creating Specimen object");
+			   			   
+			   CollectionEventParameters collectionEventParameter = new CollectionEventParameters();
+			   collectionEventParameter.setSpecimen(tSpecimenObj);
+			   collectionEventParameter.setTimestamp(new Date(System.currentTimeMillis()));
+			   User user = new User();
+		       user.setId(1l);//admin
+		       collectionEventParameter.setUser(user);
+		       collectionEventParameter.setComment("CollectionEvent");
+		       collectionEventParameter.setCollectionProcedure("Lavage");
+		       collectionEventParameter.setContainer("EDTA Vacutainer");
+		       collectionEventParameter = (CollectionEventParameters) appService.createObject(collectionEventParameter);
+		       TestCaseUtility.setObjectMap(collectionEventParameter, CollectionEventParameters.class);
+		       assertTrue("Collection event sucessfully fired" + collectionEventParameter , true);
+		}
+		catch(Exception e)
+		{
+			System.out.println("SpecimenEventTestCases.testInsertCollectionEvent()");
+			e.printStackTrace();
+			assertFalse("Collection event Failed:" +e.getMessage(), true);  
+			
+		}
+	}
+	
+	/**
+	 * Test case for updating Collection event
+	 */
+	public void testUpdateCollectionEvent()
+	{
+		try
+		{
+			CollectionEventParameters collectionEventParameter = (CollectionEventParameters)TestCaseUtility.getObjectMap(CollectionEventParameters.class);
+			 collectionEventParameter.setCollectionProcedure("Needle Core Biopsy");
+			collectionEventParameter = (CollectionEventParameters)appService.updateObject(collectionEventParameter);
+			if("Needle Core Biopsy".equals(collectionEventParameter.getCollectionProcedure()))
+			{
+				assertTrue("Collection event sucessfully fired" + collectionEventParameter , true);  
+			}
+			else
+			{
+				assertFalse("Collection event Failed:", true);
+			}
+		}
+		catch(Exception e)
+		{
+			System.out.println("SpecimenEventTestCases.testUpdateCollectionEvent()");
+			e.printStackTrace();
+			assertFalse("CollectionEventParameters Failed:" +e.getMessage(), true);  
+		}
+	}
 	
 	/**
 	 * Test case for Insert Embedded Event
@@ -431,7 +541,7 @@ public class SpecimenEventTestCases extends CaTissueBaseTestCase
 		 {
 			   TissueSpecimen tSpecimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
 			   SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
-			   
+			  			   
 			   StorageContainer storageContainer =  BaseTestCaseUtility.initStorageContainer();
 			   Collection collectionProtocolCollection = new HashSet();
 			   storageContainer.setCollectionProtocolCollection(collectionProtocolCollection);
@@ -454,7 +564,7 @@ public class SpecimenEventTestCases extends CaTissueBaseTestCase
 		       user.setId(1l);//admin
 		       embeddedEventParameters.setUser(user);
 		       embeddedEventParameters.setEmbeddingMedium("Plastic");
-		       embeddedEventParameters.setComment("CheckInCheckOutEventParameter");
+		       embeddedEventParameters.setComment("EmbeddedEventParameters");
 		       embeddedEventParameters = (EmbeddedEventParameters) appService.createObject(embeddedEventParameters);
 		       TestCaseUtility.setObjectMap(embeddedEventParameters, EmbeddedEventParameters.class);
 		       assertTrue("EmbeddedEventParameters sucessfully fired" + embeddedEventParameters , true);
@@ -505,7 +615,7 @@ public class SpecimenEventTestCases extends CaTissueBaseTestCase
 		 {
 			   TissueSpecimen tSpecimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
 			   SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
-			   
+			 			   
 			   StorageContainer storageContainer =  BaseTestCaseUtility.initStorageContainer();
 			   Collection collectionProtocolCollection = new HashSet();
 			   storageContainer.setCollectionProtocolCollection(collectionProtocolCollection);
@@ -567,6 +677,748 @@ public class SpecimenEventTestCases extends CaTissueBaseTestCase
 					.println("SpecimenEventTestCases.testUpdateFixedEvent()");
 			e.printStackTrace();
 			assertFalse("Fixed Event Parameters Failed:" +e.getMessage(), true);  
+		}
+	}
+	
+	/**
+	 * Test case for Insert Fluid Specimen Review Event
+	 */
+	public void testInsertFluidSpecimenReview()
+	 {
+		 try
+		 {
+			   TissueSpecimen tSpecimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
+			   SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
+			   			   
+			   StorageContainer storageContainer =  BaseTestCaseUtility.initStorageContainer();
+			   Collection collectionProtocolCollection = new HashSet();
+			   storageContainer.setCollectionProtocolCollection(collectionProtocolCollection);
+			   storageContainer = (StorageContainer) appService.createObject(storageContainer);
+		   
+			   SpecimenPosition pos1 = new SpecimenPosition();
+			   pos1.setPositionDimensionOne(1);
+			   pos1.setPositionDimensionTwo(1);
+			   pos1.setStorageContainer(storageContainer);
+			   tSpecimenObj.setSpecimenPosition(pos1);
+			   tSpecimenObj.setSpecimenCollectionGroup(scg);
+			   System.out.println("Before Creating Specimen object");
+			   tSpecimenObj = (TissueSpecimen) appService.createObject(tSpecimenObj);
+			   System.out.println("After Creating Specimen object");
+			   			   
+			   FluidSpecimenReviewEventParameters fluidSpecimenReviewEventParameters = new FluidSpecimenReviewEventParameters();
+			   
+			   fluidSpecimenReviewEventParameters.setSpecimen(tSpecimenObj);
+			   fluidSpecimenReviewEventParameters.setTimestamp(new Date(System.currentTimeMillis()));
+			   fluidSpecimenReviewEventParameters.setCellCount(20D);
+			   User user = new User();
+		       user.setId(1l);//admin
+		       fluidSpecimenReviewEventParameters.setUser(user);
+		      
+		       fluidSpecimenReviewEventParameters.setComment("Fluid Specimen Review Event");
+		       fluidSpecimenReviewEventParameters = (FluidSpecimenReviewEventParameters) appService.createObject(fluidSpecimenReviewEventParameters);
+		       TestCaseUtility.setObjectMap(fluidSpecimenReviewEventParameters, FluidSpecimenReviewEventParameters.class);
+		       assertTrue("fluidSpecimenReviewEventParameters sucessfully fired" + fluidSpecimenReviewEventParameters , true);
+		}
+		catch(Exception e)
+		{
+			System.out.println("SpecimenEventTestCases.testInsertFluidSpecimenReview()");
+			e.printStackTrace();
+			assertFalse("fluidSpecimenReviewEventParameters Failed:" +e.getMessage(), true);  
+			
+		}
+	}
+	
+	/**
+	 * Test case for updating fluid SpecimenReview Event Parameters
+	 */
+	public void testUpdateFluidSpecimenReviewEventParameters()
+	{
+		try
+		{
+			FluidSpecimenReviewEventParameters fluidSpecimenReviewEventParameters = (FluidSpecimenReviewEventParameters)TestCaseUtility.getObjectMap(FluidSpecimenReviewEventParameters.class);
+			fluidSpecimenReviewEventParameters.setCellCount(40D);
+			fluidSpecimenReviewEventParameters = (FluidSpecimenReviewEventParameters)appService.updateObject(fluidSpecimenReviewEventParameters);
+			
+			FluidSpecimenReviewEventParameters fSRE = new FluidSpecimenReviewEventParameters();
+			fSRE.setId(fluidSpecimenReviewEventParameters.getId());
+			try 
+			{
+	        	 List resultList = appService.search(FluidSpecimenReviewEventParameters.class,fSRE);
+	        	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) 
+	        	 {
+	        		 fSRE = (FluidSpecimenReviewEventParameters) resultsIterator.next();
+	             }
+	        }
+			catch (Exception e) 
+			{
+	           System.out.println("Error in Search");
+				e.printStackTrace();
+	           	assertFalse("Does not find Domain Object", true);
+			}
+			
+			if(40D == fSRE.getCellCount())
+			{
+				assertTrue("FluidSpecimenReviewEventParameters sucessfully fired" + fSRE , true);  
+			}
+			else
+			{
+				assertFalse("FluidSpecimenReviewEventParameters Failed to update :", true);
+			}
+		}
+		catch(Exception e)
+		{
+		System.out.println("SpecimenEventTestCases.testUpdateFluidSpecimenReviewEventParameters()");
+			e.printStackTrace();
+			assertFalse("FluidSpecimenReviewEventParameters Failed to update " +e.getMessage(), true);  
+		}
+	}
+	
+	
+	/**
+	 * Test case for Insert Frozen Specimen Review event
+	 */
+	public void testInsertFrozenSpecimenReviewEvent()
+	 {
+		 try
+		 {
+			   TissueSpecimen tSpecimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
+			   SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
+			  
+			   StorageContainer storageContainer =  BaseTestCaseUtility.initStorageContainer();
+			   Collection collectionProtocolCollection = new HashSet();
+			   storageContainer.setCollectionProtocolCollection(collectionProtocolCollection);
+			   storageContainer = (StorageContainer) appService.createObject(storageContainer);
+		   
+			   SpecimenPosition pos1 = new SpecimenPosition();
+			   pos1.setPositionDimensionOne(1);
+			   pos1.setPositionDimensionTwo(1);
+			   pos1.setStorageContainer(storageContainer);
+			   tSpecimenObj.setSpecimenPosition(pos1);
+			   tSpecimenObj.setSpecimenCollectionGroup(scg);
+			   System.out.println("Before Creating Specimen object");
+			   tSpecimenObj = (TissueSpecimen) appService.createObject(tSpecimenObj);
+			   System.out.println("After Creating Specimen object");
+			   			   
+			   FrozenEventParameters frozenEventParameters = new FrozenEventParameters();
+			   
+			   frozenEventParameters.setSpecimen(tSpecimenObj);
+			   frozenEventParameters.setTimestamp(new Date(System.currentTimeMillis()));
+			   frozenEventParameters.setMethod("Cryostat");
+			   User user = new User();
+		       user.setId(1l);//admin
+		       frozenEventParameters.setUser(user);
+		      
+		       frozenEventParameters.setComment("Frozen Event");
+		       frozenEventParameters = (FrozenEventParameters) appService.createObject(frozenEventParameters);
+		       TestCaseUtility.setObjectMap(frozenEventParameters, FrozenEventParameters.class);
+		       assertTrue("Frozen Event Parameters sucessfully fired" + frozenEventParameters , true);
+		}
+		catch(Exception e)
+		{
+			System.out.println("SpecimenEventTestCases.testInsertFrozenSpecimenReviewEvent()");
+			e.printStackTrace();
+			assertFalse("frozenEventParameters Failed:" +e.getMessage(), true);  
+			
+		}
+	}
+	
+	/**
+	 * Test case for updating Frozen SpecimenReviewEventParameters
+	 */
+	public void testUpdateFrozenSpecimenReviewEventParameters()
+	{
+		try
+		{
+			FrozenEventParameters frozenEventParameters = (FrozenEventParameters)TestCaseUtility.getObjectMap(FrozenEventParameters.class);
+			frozenEventParameters.setMethod("Cryobath");
+			frozenEventParameters = (FrozenEventParameters)appService.updateObject(frozenEventParameters);
+			
+			FrozenEventParameters frozenSRE = new FrozenEventParameters();
+			frozenSRE.setId(frozenEventParameters.getId());
+			try 
+			{
+	        	 List resultList = appService.search(FrozenEventParameters.class,frozenSRE);
+	        	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) 
+	        	 {
+	        		 frozenSRE = (FrozenEventParameters) resultsIterator.next();
+	             }
+	        }
+			catch (Exception e) 
+			{
+	           System.out.println("Error in Search");
+				e.printStackTrace();
+	           	assertFalse("Does not find Domain Object", true);
+			}
+			
+			if("Cryobath".equals(frozenSRE.getMethod()))
+			{
+				assertTrue("Frozen Specimen ReviewEventParameters sucessfully fired" + frozenSRE , true);  
+			}
+			else
+			{
+				assertFalse("Frozen Specimen Review Event Parameters Failed to update :", true);
+			}
+		}
+		catch(Exception e)
+		{
+		System.out
+				.println("SpecimenEventTestCases.testUpdateFrozenSpecimenReviewEventParameters()");
+			e.printStackTrace();
+			assertFalse("Frozen Specimen Review Event Failed to update " +e.getMessage(), true);  
+		}
+	}
+	
+	/**
+	 *  Test case for Insert Spun Event
+	 */
+	public void testInsertSpunSpecimenEvent()
+	 {
+		 try
+		 {
+			   TissueSpecimen tSpecimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
+			   SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
+			   
+			   System.out.println("after Creating scg");
+			   StorageContainer storageContainer =  BaseTestCaseUtility.initStorageContainer();
+			   Collection collectionProtocolCollection = new HashSet();
+			   storageContainer.setCollectionProtocolCollection(collectionProtocolCollection);
+			   storageContainer = (StorageContainer) appService.createObject(storageContainer);
+		   
+			   SpecimenPosition pos1 = new SpecimenPosition();
+			   pos1.setPositionDimensionOne(1);
+			   pos1.setPositionDimensionTwo(1);
+			   pos1.setStorageContainer(storageContainer);
+			   System.out.println("after Creating storageContainer");
+			   tSpecimenObj.setSpecimenPosition(pos1);
+			   tSpecimenObj.setSpecimenCollectionGroup(scg);
+			   System.out.println("Before Creating Specimen object");
+			   tSpecimenObj = (TissueSpecimen) appService.createObject(tSpecimenObj);
+			   System.out.println("After Creating Specimen object");
+			   			   
+			   SpunEventParameters spunEventParameters = new SpunEventParameters();			   
+			   spunEventParameters.setSpecimen(tSpecimenObj);
+			   spunEventParameters.setTimestamp(new Date(System.currentTimeMillis()));
+			   User user = new User();
+		       user.setId(1l);//admin
+		       spunEventParameters.setUser(user);		      
+		       spunEventParameters.setComment("Spun Specimen Event");
+		       spunEventParameters.setGravityForce(10D);
+		       spunEventParameters = (SpunEventParameters) appService.createObject(spunEventParameters);
+		       TestCaseUtility.setObjectMap(spunEventParameters, SpunEventParameters.class);
+		       assertTrue("spunSpecimenEventParameters sucessfully fired" + spunEventParameters , true);
+		}
+		catch(Exception e)
+		{
+			System.out.println("SpecimenEventTestCases.testInsertSpunSpecimenEvent()");
+			e.printStackTrace();
+			assertFalse("spunSpecimenEventParameters Failed:" +e.getMessage(), true);  
+			
+		}
+	}
+	
+	/**
+	 * Test case for updating Spun Event
+	 */
+	public void testUpdatetestInsertSpunSpecimenEvent()
+	{
+		try
+		{
+			SpunEventParameters spunEventParameters = (SpunEventParameters)TestCaseUtility.getObjectMap(SpunEventParameters.class);
+			spunEventParameters.setGravityForce(20D);
+			spunEventParameters = (SpunEventParameters)appService.updateObject(spunEventParameters);
+			
+			SpunEventParameters spunEP = new SpunEventParameters();
+			spunEP.setId(spunEventParameters.getId());
+			try 
+			{
+	        	 List resultList = appService.search(SpunEventParameters.class,spunEP);
+	        	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) 
+	        	 {
+	        		 spunEP = (SpunEventParameters) resultsIterator.next();
+	             }
+	        }
+			catch (Exception e) 
+			{
+	           System.out.println("Error in Search");
+				e.printStackTrace();
+	           	assertFalse("Does not find Domain Object", true);
+			}
+			
+			if(20D == spunEP.getGravityForce())
+			{
+				assertTrue("SpunSpecimenEventParameters sucessfully fired" + spunEP , true);  
+			}
+			else
+			{
+				assertFalse("SpunSpecimenEventParameters Failed to update :", true);
+			}
+		}
+		catch(Exception e)
+		{
+		System.out.println("SpecimenEventTestCases.testUpdatetestInsertSpunSpecimenEvent()");
+			e.printStackTrace();
+			assertFalse("SpunSpecimenEventParameters Failed to update " +e.getMessage(), true);  
+		}
+	}
+	/**
+	 *  Test case for Insert Thaw Event
+	 */
+	public void testInsertThawSpecimenEvent()
+	 {
+		 try
+		 {
+			   TissueSpecimen tSpecimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
+			   SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
+			   
+			   System.out.println("after Creating scg");
+			   StorageContainer storageContainer =  BaseTestCaseUtility.initStorageContainer();
+			   Collection collectionProtocolCollection = new HashSet();
+			   storageContainer.setCollectionProtocolCollection(collectionProtocolCollection);
+			   storageContainer = (StorageContainer) appService.createObject(storageContainer);
+		   
+			   SpecimenPosition pos1 = new SpecimenPosition();
+			   pos1.setPositionDimensionOne(1);
+			   pos1.setPositionDimensionTwo(1);
+			   pos1.setStorageContainer(storageContainer);
+			   System.out.println("after Creating storageContainer");
+			   tSpecimenObj.setSpecimenPosition(pos1);
+			   tSpecimenObj.setSpecimenCollectionGroup(scg);
+			   System.out.println("Before Creating Specimen object");
+			   tSpecimenObj = (TissueSpecimen) appService.createObject(tSpecimenObj);
+			   System.out.println("After Creating Specimen object");
+			   			   
+			   ThawEventParameters thawEventParameters = new ThawEventParameters();			   
+			   thawEventParameters.setSpecimen(tSpecimenObj);
+			   thawEventParameters.setTimestamp(new Date(System.currentTimeMillis()));
+			   User user = new User();
+		       user.setId(1l);//admin
+		       thawEventParameters.setUser(user);		      
+		       thawEventParameters.setComment("Thaw Specimen Event");
+		       thawEventParameters = (ThawEventParameters) appService.createObject(thawEventParameters);
+		       TestCaseUtility.setObjectMap(thawEventParameters, ThawEventParameters.class);
+		       assertTrue("ThawSpecimenEventParameters sucessfully fired" + thawEventParameters , true);
+		}
+		catch(Exception e)
+		{
+			System.out.println("SpecimenEventTestCases.testInsertThawSpecimenEvent()");
+			e.printStackTrace();
+			assertFalse("ThawSpecimenEventParameters Failed:" +e.getMessage(), true);  
+			
+		}
+	}
+	
+	/**
+	 * Test case for updating Thaw Event
+	 */
+	public void testUpdateThawSpecimenEvent()
+	{
+		try
+		{
+			ThawEventParameters thawEventParameters = (ThawEventParameters)TestCaseUtility.getObjectMap(ThawEventParameters.class);
+			String comment = "update Thaw Specimen Event";
+			thawEventParameters.setComment(comment);
+			thawEventParameters = (ThawEventParameters)appService.updateObject(thawEventParameters);
+			
+			ThawEventParameters thawEP = new ThawEventParameters();
+			thawEP.setId(thawEventParameters.getId());
+			try 
+			{
+	        	 List resultList = appService.search(ThawEventParameters.class,thawEP);
+	        	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) 
+	        	 {
+	        		 thawEP = (ThawEventParameters) resultsIterator.next();
+	             }
+	        }
+			catch (Exception e) 
+			{
+	           System.out.println("Error in Search");
+				e.printStackTrace();
+	           	assertFalse("Does not find Domain Object", true);
+			}
+			if(comment.equals(thawEP.getComment()))
+			{
+				assertTrue("ThawSpecimenEventParameters sucessfully fired" + thawEP , true);  
+			}
+			else
+			{
+				assertFalse("ThawSpecimenEventParameters Failed to update :", true);
+			}
+		}
+		catch(Exception e)
+		{
+		System.out.println("SpecimenEventTestCases.testUpdateThawSpecimenEvent()");
+			e.printStackTrace();
+			assertFalse("ThawSpecimenEventParameters Failed to update " +e.getMessage(), true);  
+		}
+	}
+
+	/**
+	 *  Test case for Insert TissueSpecimenReview Event
+	 */
+	public void testInsertTissueSpecimenReviewEvent()
+	 {
+		 try
+		 {
+			   TissueSpecimen tSpecimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
+			   SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
+			   
+			   StorageContainer storageContainer =  BaseTestCaseUtility.initStorageContainer();
+			   Collection collectionProtocolCollection = new HashSet();
+			   storageContainer.setCollectionProtocolCollection(collectionProtocolCollection);
+			   storageContainer = (StorageContainer) appService.createObject(storageContainer);
+		   
+			   SpecimenPosition pos1 = new SpecimenPosition();
+			   pos1.setPositionDimensionOne(1);
+			   pos1.setPositionDimensionTwo(1);
+			   pos1.setStorageContainer(storageContainer);
+			   System.out.println("after Creating storageContainer");
+			   tSpecimenObj.setSpecimenPosition(pos1);
+			   tSpecimenObj.setSpecimenCollectionGroup(scg);
+			   System.out.println("Before Creating Specimen object");
+			   tSpecimenObj = (TissueSpecimen) appService.createObject(tSpecimenObj);
+			   System.out.println("After Creating Specimen object");
+			   			   
+			   TissueSpecimenReviewEventParameters tsReviewEventParameters = new TissueSpecimenReviewEventParameters();			   
+			   tsReviewEventParameters.setSpecimen(tSpecimenObj);
+			   tsReviewEventParameters.setTimestamp(new Date(System.currentTimeMillis()));
+			   User user = new User();
+		       user.setId(1l);//admin
+		       tsReviewEventParameters.setUser(user);		      
+		       tsReviewEventParameters.setComment("TissueSpecimenReview Specimen Event");
+		       tsReviewEventParameters.setHistologicalQuality("Excellent- Definable Nuclear Detail"); 
+		       tsReviewEventParameters.setNecrosisPercentage(10D);
+		       tsReviewEventParameters = (TissueSpecimenReviewEventParameters) appService.createObject(tsReviewEventParameters);
+		       TestCaseUtility.setObjectMap(tsReviewEventParameters, TissueSpecimenReviewEventParameters.class);
+		       assertTrue("TissueSpecimenReviewEventParameters sucessfully fired" + tsReviewEventParameters , true);
+		}
+		catch(Exception e)
+		{
+			System.out.println("SpecimenEventTestCases.testInsertTissueSpecimenReviewEvent()");
+			e.printStackTrace();
+			assertFalse("TissueSpecimenReviewEventParameters Failed:" +e.getMessage(), true);			
+		}
+	}
+	
+	/**
+	 * Test case for updating TissueSpecimenReview Event
+	 */
+	public void testUpdateTissueSpecimenReviewEvent()
+	{
+		try
+		{
+			TissueSpecimenReviewEventParameters tsReviewEventParameters = (TissueSpecimenReviewEventParameters)TestCaseUtility.getObjectMap(TissueSpecimenReviewEventParameters.class);
+			tsReviewEventParameters.setNecrosisPercentage(20D);
+			tsReviewEventParameters = (TissueSpecimenReviewEventParameters)appService.updateObject(tsReviewEventParameters);
+			
+			TissueSpecimenReviewEventParameters tissueSpecimenEP = new TissueSpecimenReviewEventParameters();
+			tissueSpecimenEP.setId(tsReviewEventParameters.getId());
+			try 
+			{
+	        	 List resultList = appService.search(TissueSpecimenReviewEventParameters.class,tissueSpecimenEP);
+	        	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) 
+	        	 {
+	        		 tissueSpecimenEP = (TissueSpecimenReviewEventParameters) resultsIterator.next();
+	             }
+	        }
+			catch (Exception e) 
+			{
+	           System.out.println("Error in Search");
+				e.printStackTrace();
+	           	assertFalse("Does not find Domain Object", true);
+			}
+			if(20D == tissueSpecimenEP.getNecrosisPercentage())
+			{
+				assertTrue("TissueSpecimenReviewEventParameters sucessfully fired" + tissueSpecimenEP , true);  
+			}
+			else
+			{
+				assertFalse("TissueSpecimenReviewEventParameters Failed to update :", true);
+			}
+		}
+		catch(Exception e)
+		{
+		System.out.println("SpecimenEventTestCases.testUpdateTissueSpecimenReviewEvent()");
+			e.printStackTrace();
+			assertFalse("TissueSpecimenReviewEventParameters Failed to update " +e.getMessage(), true);  
+		}
+	}
+	/**
+	 *  Test case for Insert ReceivedSpecimen Event
+	 */
+	public void testInsertReceivedSpecimenEvent()
+	 {
+		 try
+		 {
+			   TissueSpecimen tSpecimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
+			   SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
+			   
+			   System.out.println("after Creating scg");
+			   StorageContainer storageContainer =  BaseTestCaseUtility.initStorageContainer();
+			   Collection collectionProtocolCollection = new HashSet();
+			   storageContainer.setCollectionProtocolCollection(collectionProtocolCollection);
+			   storageContainer = (StorageContainer) appService.createObject(storageContainer);
+		   
+			   SpecimenPosition pos1 = new SpecimenPosition();
+			   pos1.setPositionDimensionOne(1);
+			   pos1.setPositionDimensionTwo(1);
+			   pos1.setStorageContainer(storageContainer);
+			   System.out.println("after Creating storageContainer");
+			   tSpecimenObj.setSpecimenPosition(pos1);
+			   tSpecimenObj.setSpecimenCollectionGroup(scg);
+			   System.out.println("Before Creating Specimen object");
+			   tSpecimenObj = (TissueSpecimen) appService.createObject(tSpecimenObj);
+			   System.out.println("After Creating Specimen object");
+			   			   
+			   ReceivedEventParameters receivedEventParameters = new ReceivedEventParameters();			   
+			   receivedEventParameters.setSpecimen(tSpecimenObj);
+			   receivedEventParameters.setTimestamp(new Date(System.currentTimeMillis()));
+			   User user = new User();
+		       user.setId(1l);//admin
+		       receivedEventParameters.setUser(user);		      
+		       receivedEventParameters.setComment("Received Specimen Event");
+		       receivedEventParameters.setReceivedQuality("Cauterized");
+		       receivedEventParameters = (ReceivedEventParameters) appService.createObject(receivedEventParameters);
+		       TestCaseUtility.setObjectMap(receivedEventParameters, ReceivedEventParameters.class);
+		       assertTrue("ReceivedEventParameters sucessfully fired" + receivedEventParameters , true);
+		}
+		catch(Exception e)
+		{
+			System.out.println("SpecimenEventTestCases.testInsertReceivedSpecimenEvent()");
+			e.printStackTrace();
+			assertFalse("ReceivedEventParameters Failed:" +e.getMessage(), true);  
+			
+		}
+	}
+	
+	/**
+	 * Test case for updating ReceivedSpecimen Event
+	 */
+	public void testUpdateReceivedSpecimenEvent()
+	{
+		try
+		{
+			ReceivedEventParameters receivedEventParameters = (ReceivedEventParameters)TestCaseUtility.getObjectMap(ReceivedEventParameters.class);
+			receivedEventParameters.setReceivedQuality("Acceptable");
+			receivedEventParameters = (ReceivedEventParameters)appService.updateObject(receivedEventParameters);
+			
+			ReceivedEventParameters receivedEP = new ReceivedEventParameters();
+			receivedEP.setId(receivedEventParameters.getId());
+			try 
+			{
+	        	 List resultList = appService.search(ReceivedEventParameters.class,receivedEP);
+	        	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) 
+	        	 {
+	        		 receivedEP = (ReceivedEventParameters) resultsIterator.next();
+	             }
+	        }
+			catch (Exception e) 
+			{
+	           System.out.println("Error in Search");
+				e.printStackTrace();
+	           	assertFalse("Does not find Domain Object", true);
+			}
+			
+			if("Acceptable".equals(receivedEP.getReceivedQuality()))
+			{
+				assertTrue("ReceivedEventParameters sucessfully fired" + receivedEP , true);  
+			}
+			else
+			{
+				assertFalse("ReceivedEventParameters Failed to update :", true);
+			}
+		}
+		catch(Exception e)
+		{
+		System.out.println("SpecimenEventTestCases.testUpdateReceivedSpecimenEvent()");
+			e.printStackTrace();
+			assertFalse("ReceivedEventParameters Failed to update " +e.getMessage(), true);  
+		}
+	}
+	
+	/**
+	 *  Test case for Insert ProcedureSpecimen Event
+	 */
+	public void testInsertProcedureSpecimenEvent()
+	 {
+		 try
+		 {
+			   TissueSpecimen tSpecimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
+			   SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
+			   
+			   System.out.println("after Creating scg");
+			   StorageContainer storageContainer =  BaseTestCaseUtility.initStorageContainer();
+			   Collection collectionProtocolCollection = new HashSet();
+			   storageContainer.setCollectionProtocolCollection(collectionProtocolCollection);
+			   storageContainer = (StorageContainer) appService.createObject(storageContainer);
+		   
+			   SpecimenPosition pos1 = new SpecimenPosition();
+			   pos1.setPositionDimensionOne(1);
+			   pos1.setPositionDimensionTwo(1);
+			   pos1.setStorageContainer(storageContainer);
+			   System.out.println("after Creating storageContainer");
+			   tSpecimenObj.setSpecimenPosition(pos1);
+			   tSpecimenObj.setSpecimenCollectionGroup(scg);
+			   System.out.println("Before Creating Specimen object");
+			   tSpecimenObj = (TissueSpecimen) appService.createObject(tSpecimenObj);
+			   System.out.println("After Creating Specimen object");
+			   			   
+			   ProcedureEventParameters procEventParameters = new ProcedureEventParameters();			   
+			   procEventParameters.setSpecimen(tSpecimenObj);
+			   procEventParameters.setTimestamp(new Date(System.currentTimeMillis()));
+			   User user = new User();
+		       user.setId(1l);//admin
+		       procEventParameters.setUser(user);		      
+		       procEventParameters.setComment("Procedure Specimen Event");
+		       procEventParameters.setName("ProcedureEvent");
+		       procEventParameters.setUrl("http://localhost:8080/catissuecore/");
+		       procEventParameters = (ProcedureEventParameters) appService.createObject(procEventParameters);
+		       TestCaseUtility.setObjectMap(procEventParameters, ProcedureEventParameters.class);
+		       assertTrue("ProcedureEventParameters sucessfully fired" + procEventParameters , true);
+		}
+		catch(Exception e)
+		{
+			System.out.println("SpecimenEventTestCases.testInsertProcedureSpecimenEvent()");
+			e.printStackTrace();
+			assertFalse("ProcedureEventParameters Failed:" +e.getMessage(), true);  
+			
+		}
+	}
+	
+	/**
+	 * Test case for updating ProcedureSpecimen Event
+	 */
+	public void testUpdateProcedureSpecimenEvent()
+	{
+		try
+		{
+			ProcedureEventParameters procEventParameters = (ProcedureEventParameters)TestCaseUtility.getObjectMap(ProcedureEventParameters.class);
+			procEventParameters.setName("NewProcedureEvent");
+			procEventParameters = (ProcedureEventParameters)appService.updateObject(procEventParameters);
+			
+			ProcedureEventParameters procEP = new ProcedureEventParameters();
+			procEP.setId(procEventParameters.getId());
+			try 
+			{
+	        	 List resultList = appService.search(ProcedureEventParameters.class,procEP);
+	        	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) 
+	        	 {
+	        		 procEP = (ProcedureEventParameters) resultsIterator.next();
+	             }
+	        }
+			catch (Exception e) 
+			{
+	           System.out.println("Error in Search");
+				e.printStackTrace();
+	           	assertFalse("Does not find Domain Object", true);
+			}
+			
+			if("NewProcedureEvent".equals(procEP.getName()))
+			{
+				assertTrue("ProcedureEventParameters sucessfully fired" + procEP , true);  
+			}
+		    else
+			{
+				assertFalse("ProcedureEventParameters Failed to update :", true);
+			}
+		}
+		catch(Exception e)
+		{
+		System.out.println("SpecimenEventTestCases.testUpdateProcedureSpecimenEvent()");
+			e.printStackTrace();
+			assertFalse("ProcedureEventParameters Failed to update " +e.getMessage(), true);  
+		}
+	}
+	
+	/**
+	 *  Test case for Insert MolecularSpecimenReviewParameters Event
+	 */
+	public void testInsertMolecularSpecimenReviewEvent()
+	 {
+		 try
+		 {
+			   TissueSpecimen tSpecimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
+			   SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
+			   System.out.println("after Creating scg");
+			   StorageContainer storageContainer =  BaseTestCaseUtility.initStorageContainer();
+			   Collection collectionProtocolCollection = new HashSet();
+			   storageContainer.setCollectionProtocolCollection(collectionProtocolCollection);
+			   storageContainer = (StorageContainer) appService.createObject(storageContainer);
+		   
+			   SpecimenPosition pos1 = new SpecimenPosition();
+			   pos1.setPositionDimensionOne(1);
+			   pos1.setPositionDimensionTwo(1);
+			   pos1.setStorageContainer(storageContainer);
+			   System.out.println("after Creating storageContainer");
+			   tSpecimenObj.setSpecimenPosition(pos1);
+			   tSpecimenObj.setSpecimenCollectionGroup(scg);
+			   System.out.println("Before Creating Specimen object");
+			   tSpecimenObj = (TissueSpecimen) appService.createObject(tSpecimenObj);
+			   System.out.println("After Creating Specimen object");
+			   			   
+			   MolecularSpecimenReviewParameters molecularSpecEventParameters = new MolecularSpecimenReviewParameters();			   
+			   molecularSpecEventParameters.setSpecimen(tSpecimenObj);
+			   molecularSpecEventParameters.setTimestamp(new Date(System.currentTimeMillis()));
+			   User user = new User();
+		       user.setId(1l);//admin
+		       molecularSpecEventParameters.setUser(user);		      
+		       molecularSpecEventParameters.setComment("MolecularSpecimenReview Specimen Event");
+		       molecularSpecEventParameters.setLaneNumber("12");
+		       molecularSpecEventParameters.setQualityIndex("1");
+		       molecularSpecEventParameters = (MolecularSpecimenReviewParameters) appService.createObject(molecularSpecEventParameters);
+		       TestCaseUtility.setObjectMap(molecularSpecEventParameters, MolecularSpecimenReviewParameters.class);
+		       assertTrue("MolecularSpecimenReview sucessfully fired" + molecularSpecEventParameters , true);
+		}
+		catch(Exception e)
+		{
+			System.out.println("SpecimenEventTestCases.testInsertMolecularSpecimenReviewEvent()");
+			e.printStackTrace();
+			assertFalse("MolecularSpecimenReview Failed:" +e.getMessage(), true);  
+			
+		}
+	}
+	
+	/**
+	 * Test case for updating MolecularSpecimenReviewParameters Event
+	 */
+	public void testUpdateMolecularSpecimenReviewEvent()
+	{
+		try
+		{
+			MolecularSpecimenReviewParameters molecularSpecEventParameters = (MolecularSpecimenReviewParameters)TestCaseUtility.getObjectMap(MolecularSpecimenReviewParameters.class);
+			 molecularSpecEventParameters.setLaneNumber("13");
+			molecularSpecEventParameters = (MolecularSpecimenReviewParameters)appService.updateObject(molecularSpecEventParameters);
+			
+			MolecularSpecimenReviewParameters molecularEP = new MolecularSpecimenReviewParameters();
+			molecularEP.setId(molecularSpecEventParameters.getId());
+			try 
+			{
+	        	 List resultList = appService.search(MolecularSpecimenReviewParameters.class,molecularEP);
+	        	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) 
+	        	 {
+	        		 molecularEP = (MolecularSpecimenReviewParameters) resultsIterator.next();
+	             }
+	        }
+			catch (Exception e) 
+			{
+	           System.out.println("Error in Search");
+				e.printStackTrace();
+	           	assertFalse("Does not find Domain Object", true);
+			}
+			
+			if("13".equals(molecularEP.getLaneNumber()))
+			{
+				assertTrue("MolecularSpecimenReviewParameters sucessfully fired" + molecularEP , true);  
+			}
+		    else
+			{
+				assertFalse("MolecularSpecimenReviewParameters Failed to update :", true);
+			}
+		}
+		catch(Exception e)
+		{
+		System.out.println("SpecimenEventTestCases.testUpdateMolecularSpecimenReviewEvent()");
+			e.printStackTrace();
+			assertFalse("MolecularSpecimenReviewParameters Failed to update " +e.getMessage(), true);  
 		}
 	}
 
