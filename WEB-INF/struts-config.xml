@@ -4873,7 +4873,7 @@ PUBLIC
 					<forward name="failure" path="/pages/AnticipatorySpecimens.jsp" />
 					<forward name="multipleSpWithMenuFaliure" path=".catissuecore.viewSpecimenSummary" />
 					<forward name="printMultiple" path="/printMultiple.do" />
-					<forward name="addMltipleSpecimenToCart" path="/AddMltipleSpecimenToCart.do" />	
+					<forward name="addMltipleSpecimenToCart" path="/AddMltipleSpecimenToCart.do?pageOf=success" />	
        </action>    
 	   <action path="/printMultiple"
 			type="edu.wustl.catissuecore.action.PrintAction"
