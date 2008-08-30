@@ -62,7 +62,7 @@ public class ApproveUserBizLogic extends DefaultBizLogic
 	{
 		User user = null;        
 		UserDTO userDTO = null;
-		
+
 		if(obj instanceof UserDTO)
 		{
 			userDTO = (UserDTO) obj;
@@ -72,6 +72,8 @@ public class ApproveUserBizLogic extends DefaultBizLogic
 		{
 			user = (User) obj;
 		}
+		UserBizLogic objUserBizlogic = new UserBizLogic();
+		objUserBizlogic.validate(user, dao, Constants.EDIT);
 		/**
 		 * Start: Change for API Search   --- Jitendra 06/10/2006
 		 * In Case of Api Search, previoulsy it was failing since there was default class level initialization 
@@ -182,7 +184,6 @@ public class ApproveUserBizLogic extends DefaultBizLogic
 		{
 			csmUser.setPassword(generatedPassword);
 		}
-
 
 		SecurityManager.getInstance(ApproveUserBizLogic.class).createUser(csmUser);
 
