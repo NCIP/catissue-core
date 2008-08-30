@@ -159,8 +159,9 @@ public class SpecimenCollectionGroupAction extends SecureAction
 		}
 		else
 		{
-			radioButtonSelected = (int) specimenCollectionGroupForm.getRadioButtonForParticipant();
-			if (radioButtonSelected == 1)
+//			radioButtonSelected = (int) specimenCollectionGroupForm.getRadioButtonForParticipant();
+//			if (radioButtonSelected == 1)
+			if(specimenCollectionGroupForm.getParticipantId() >0 )
 			{
 				selectedParticipantOrPPIdentifier_id = Long.toString(specimenCollectionGroupForm.getParticipantId());
 				radioButtonSelectedForType = Constants.PARTICIPANT_ID;
