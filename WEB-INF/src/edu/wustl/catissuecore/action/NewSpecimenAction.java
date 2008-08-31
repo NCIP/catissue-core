@@ -52,6 +52,7 @@ import edu.wustl.catissuecore.domain.ConsentTierStatus;
 import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
@@ -488,12 +489,11 @@ public class NewSpecimenAction extends SecureAction
 	*/
 		if(operation.equals(Constants.ADD))
 			populateEventsFromScg(specimenCollectionGroup,specimenForm);
-		
 		Object scgForm = request.getAttribute("scgForm");
 		if(scgForm != null)
 		{
 			SpecimenCollectionGroupForm specimenCollectionGroupForm = (SpecimenCollectionGroupForm)scgForm;
-			//populateEventsFromScg(specimenCollectionGroupForm,specimenForm);
+			
 		}
 		else
 		{
@@ -1159,7 +1159,7 @@ public class NewSpecimenAction extends SecureAction
 		 * @param specimenCollectionGroupForm instance of SpecimenCollectionGroupForm
 		 * @param specimenForm instance of NewSpecimenForm
 		 */
-	/*	public static void populateEventsFromScg(SpecimenCollectionGroupForm specimenCollectionGroupForm,NewSpecimenForm specimenForm)
+		/*public static void populateEventsFromScg1(SpecimenCollectionGroupForm specimenCollectionGroupForm,NewSpecimenForm specimenForm)
 		{
 			specimenForm.setCollectionEventUserId(specimenCollectionGroupForm.getCollectionEventUserId());		
 			specimenForm.setReceivedEventUserId(specimenCollectionGroupForm.getReceivedEventUserId());	
@@ -1173,7 +1173,8 @@ public class NewSpecimenAction extends SecureAction
 			specimenForm.setReceivedEventTimeInHours(specimenCollectionGroupForm.getReceivedEventTimeInHours());	
 			specimenForm.setReceivedEventTimeInMinutes(specimenCollectionGroupForm.getReceivedEventTimeInMinutes());		
 		}*/
-	 public static void populateEventsFromScg(SpecimenCollectionGroup specimenCollectionGroup,NewSpecimenForm specimenForm)
+		
+		public static void populateEventsFromScg(SpecimenCollectionGroup specimenCollectionGroup,NewSpecimenForm specimenForm)
 		{
 			Calendar calender = Calendar.getInstance();
 			Collection scgEventColl = specimenCollectionGroup.getSpecimenEventParametersCollection();
@@ -1210,6 +1211,18 @@ public class NewSpecimenAction extends SecureAction
 					}
 				}
 			}
+			
+		/*	specimenForm.setCollectionEventUserId(specimenCollectionGroupForm.getCollectionEventUserId());		
+			specimenForm.setReceivedEventUserId(specimenCollectionGroupForm.getReceivedEventUserId());	
+			specimenForm.setCollectionEventCollectionProcedure("Not Specified");	
+			specimenForm.setCollectionEventContainer("Not Specified");	
+			specimenForm.setReceivedEventReceivedQuality("Not Specified");	
+			specimenForm.setCollectionEventdateOfEvent(specimenCollectionGroupForm.getCollectionEventdateOfEvent());	
+			specimenForm.setCollectionEventTimeInHours(specimenCollectionGroupForm.getCollectionEventTimeInHours());	
+			specimenForm.setCollectionEventTimeInMinutes(specimenCollectionGroupForm.getCollectionEventTimeInMinutes());	
+			specimenForm.setReceivedEventDateOfEvent(specimenCollectionGroupForm.getReceivedEventDateOfEvent());	
+			specimenForm.setReceivedEventTimeInHours(specimenCollectionGroupForm.getReceivedEventTimeInHours());	
+			specimenForm.setReceivedEventTimeInMinutes(specimenCollectionGroupForm.getReceivedEventTimeInMinutes());	*/	
 		}
     /**
 	 * This function adds the columns to the List

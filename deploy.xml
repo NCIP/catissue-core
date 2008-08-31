@@ -38,9 +38,7 @@
 	<property name="catissue.tiles.def.file" value="tiles-defs.xml" />
 	
 	<property name="oracle_home" value="${env.ORACLE_HOME}"/>
-	<property name="oracle_home.bin" value="${oracle_home}\bin" />
-	<property name="sqlldr" value="${oracle_home.bin}\sqlldr.exe" />
-	<property name="path" value="${env.Path}" />
+	
 	<!-- Check for required properties -->
 	<target name="assert">
 		<if>
@@ -80,30 +78,14 @@
 						<fail message="ORACLE_HOME is not set on your server. For windows set oracle_home as environment variable or in linux set in .bash_profile file." />
 					</then>
 				</if>
-				
-				<condition property="isOracleBinDirSetInPath">
-				<contains string="${path}" substring="${oracle_home.bin}" casesensitive="false" />
-				</condition>
-				<if>	
-					<equals arg1="true" arg2="${isOracleBinDirSetInPath}" />
-					<then>
-						<echo>Oracle bin present in path... </echo>
-					</then>
-					<else>
-						<fail message="ORACLE_HOME is not set in path,please set it" />
-					</else>	
-				</if>
-				
-				<available file="${sqlldr}" property="issqlldrPresentInBin"/>		
-				<if>	
-					<equals arg1="true" arg2="${issqlldrPresentInBin}" />			
-					<then>
-						<echo>${sqlldr} file exists. </echo>
-					</then>								
-					<else>
-						<fail message="${sqlldr} file is not present." />
-					</else>
-				</if>
+				<trycatch>
+					<try>
+						<exec executable="sqlldr" failonerror="true" logerror="off"/>
+				 	</try>
+					<catch>
+						<fail message="'sqlldr' file not found in path. Please make sure this file must be in path." />
+					</catch>
+				</trycatch>	
 			</then>
 		</if>				
 		<if>
@@ -926,6 +908,7 @@
 		<antcall target="temp_update_metadata_for_clob_support_oracle" />
 		<antcall target="upgrade_db_demodel_oracle" />
 		<antcall target="update_metadata_for_model_changes" />
+		<antcall target="alter_CA_model_Tables" />	
 		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">
 			<transaction src="${oracle.sql.dir}/query/dropDESequence.SQL" />
 			<transaction>commit;</transaction>
@@ -1057,8 +1040,6 @@
 					</fileset>
 				</classpath>
 			</sql>
-		<antcall target="CAModel_import_data" />
-		<antcall target="temp_update_metadata_for_clob_support_mysql" />
 	
 	</target>
 	
@@ -1080,9 +1061,6 @@
 					</fileset>
 				</classpath>
 			</sql>
-	
-		 <antcall target="CAModel_import_data" />
-		 <antcall target="temp_update_metadata_for_clob_support_mysql" />
 	
 	</target>
 	
@@ -1151,6 +1129,7 @@
 				</fileset>
 			</classpath>
 		</sql>
+		<antcall target="temp_update_metadata_for_clob_support_mysql" />
 		<antcall target="upgrade_db_demodel_mysql" />
 
 	</target>
@@ -1178,8 +1157,9 @@
 				</fileset>
 			</classpath>
 		</sql>
+		<antcall target="temp_update_metadata_for_clob_support_oracle" />
 		<antcall target="upgrade_db_demodel_oracle" />
-
+		<antcall target="alter_CA_model_Tables" />
 	</target>
 
 
@@ -2100,5 +2080,17 @@ Thanking You,
 	</target>
 	
 	<!--  ShippingTracking - end -->
+	<target name="alter_CA_model_Tables">
+		<echo message="Upgrading Oracle Database for DE model Application ..." />
+		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle">
+			<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/Oracle/modify_annotation_PV.sql" />
+			
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</sql>			
+	</target>
 	
 </project>
