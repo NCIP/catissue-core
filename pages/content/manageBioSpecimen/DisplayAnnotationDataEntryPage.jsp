@@ -8,11 +8,11 @@
 <script>
 if ( document.getElementById && !(document.all) ) 
 	{
-		var slope=-40;
+		var slope=5;
 	}
 	else
 	{
-		var slope=-40;
+		var slope=0;
 	}
 
 window.onload = function() { setFrameHeight('dynamicExtensionsFrame', .9,slope);}
@@ -42,7 +42,7 @@ window.onresize = function() { setFrameHeight('dynamicExtensionsFrame', .9,slope
 
 	
 	%><table width="100%" border="0" cellpadding="0" cellspacing="0"><tr><td>
-	<iframe src = "<%=url%>" scrolling="no" height = "380" width = "99%" name = "dynamicExtensionsFrame" id = "dynamicExtensionsFrame" frameborder="0" marginheight="0" marginwidth="0">
+	<iframe src = "<%=url%>" scrolling="no" height = "400" width = "99%" name = "dynamicExtensionsFrame" id = "dynamicExtensionsFrame" frameborder="0" marginheight="0" marginwidth="0">
 	</iframe>
 	</td></tr></table>
 
