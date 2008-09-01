@@ -45,10 +45,10 @@ public class FrozenEventParametersAction extends SpecimenEventParametersAction
         else
         {
             formName = Constants.FROZEN_EVENT_PARAMETERS_ADD_ACTION;
-			specimenId = (String) request.getAttribute(Constants.SPECIMEN_ID);
             readOnlyValue = false;
         }
-
+        specimenId = (String) request.getAttribute(Constants.SPECIMEN_ID);
+        
         String changeAction = "setFormAction('" + formName + "');";
 	    request.setAttribute("formName", formName);
 		request.setAttribute("readOnlyValue", readOnlyValue);
