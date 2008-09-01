@@ -2069,7 +2069,7 @@ Thanking You,
 	
 	<!-- Deploying shippingtracking db for mysql -->
 	<target name="st_deploy_db_mysql">
-		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" >
+		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" onerror="continue">
 			<transaction src="${temp.dir}/shippingtracking/SQL/MYSQL/shippingtracking.sql" />
 			
 			<transaction>commit;</transaction>
