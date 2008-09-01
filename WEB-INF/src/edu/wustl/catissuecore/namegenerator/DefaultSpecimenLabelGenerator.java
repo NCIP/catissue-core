@@ -129,6 +129,7 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 		{
 			// biz logic 
 			aliquotChildCount = parentObject.getChildSpecimenCollection().size();	
+			aliquotChildCount--;
 			
 		}
 		
