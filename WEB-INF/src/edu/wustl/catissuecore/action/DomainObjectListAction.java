@@ -23,6 +23,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.actionForm.UserForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
@@ -61,7 +62,7 @@ public class DomainObjectListAction extends SecureAction
         
         // Added by Ravindra to disallow Non Super Admin users to View Reported Problems
 		SessionDataBean sessionDataBean = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
-		if(!sessionDataBean.isAdmin())
+		if(!sessionDataBean.isAdmin() && !(abstractForm instanceof UserForm))
 		{
 			ActionErrors errors = new ActionErrors();
 	        ActionError error = new ActionError("access.execute.action.denied");
