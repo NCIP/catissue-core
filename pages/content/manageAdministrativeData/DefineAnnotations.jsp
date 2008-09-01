@@ -132,7 +132,16 @@ var myData = [<%int i;%><%for (i=0;i<(groupList.size()-1);i++){%>
 			//		gridForGroups.enableAutoHeigth(false);  //on safari
 			gridForGroups.enableAutoHeigth(true);  //for mozilla, IE
 			gridForGroups.setHeader("Group");
-			gridForGroups.setInitWidthsP("100");
+
+			if (document.all)
+			{
+				gridForGroups.setInitWidthsP("100");
+			}
+			else
+			{
+				gridForGroups.setInitWidthsP("98.5");
+			}
+			
 			gridForGroups.setColAlign("left");
 			gridForGroups.setColTypes("ro");	
 			gridForGroups.setOnRowSelectHandler(groupSelected);
@@ -160,10 +169,11 @@ var myData = [<%int i;%><%for (i=0;i<(groupList.size()-1);i++){%>
 
 		</script>
 	</head>
+	<body onload = "initializeAnnotationsForm()">
 	<%@ include file="/pages/content/common/ActionErrors.jsp" %>
 	<html:form styleId='annotationForm' action='/DefineAnnotations'>
 	
-	<body onload = "initializeAnnotationsForm()">
+
 	 <html:hidden property="deoperation" value="<%=strDEOperation%>"/>
  	<%if (strDEOperation.equals("add") || ( link!=null && link.equals("editCondn") ))
 		{ 		
@@ -261,25 +271,24 @@ var myData = [<%int i;%><%for (i=0;i<(groupList.size()-1);i++){%>
   </table>
 
 	<%}%>
-   <table valign="top" border="0" height="80%" width = "600" cellspacing="0" cellpadding="3">
+   <table valign="top" border="0" height="450" width = "100%" cellspacing="0" cellpadding="3">
 	
    	<%if (link==null && strDEOperation.equals("edit")){ 
 
 	%>
 
-	<tr valign="top" height = "80%">
-	 <td  width="2%"></td>	
+	<tr valign="top" height = "100%">
        <td>
-				<table valign="top" width="100%" border='0' height="80%" cellspacing="0" cellpadding="0" >
+				<table valign="top" width="100%" border='0' height="100%" cellspacing="0" cellpadding="0" >
 			<!-- Main Page heading -->				    
-				 <tr height="2%">
-					   <td class="formTitle" height="25" colspan="3">
+				 <tr height="*">
+					   <td class="formTitle" colspan="3">
 						  <bean:message key="app.availableGrp"/> 
 						</td>
 				 </tr>
 					<tr valign="top" width="100%" height="100%">
 						<td  align="left">
-							<table  class = "tbBordersAllbordersBlack" border="1" cellspacing="0" cellpadding="0" valign="top" width="100%" height="80%">						
+							<table  class = "tbBordersAllbordersBlack" border="1" cellspacing="0" cellpadding="0" valign="top" width="100%" height="100%">						
 								<tr height="100%" valign="top">								
 									<td align="left" width="18%" height="100%" valign="top" rowspan="2">
 										<!--Groups list-->
@@ -297,12 +306,13 @@ var myData = [<%int i;%><%for (i=0;i<(groupList.size()-1);i++){%>
 			  </table>
 	   </td>	 
 	</tr>
-	
+	  
+
 	<%}%>
 		
 </table>
 
 	<html:hidden styleId="selectedStaticEntityId" property="selectedStaticEntityId" value=""/>
-	</body>
 	</html:form>
+	</body>
 </html>
