@@ -1080,14 +1080,25 @@ public class GenerateHtmlForAddLimitsBizLogic
 				valueStr = values.toString();
 				valueStr = valueStr.replace("[", "");
 				valueStr = valueStr.replace("]", "");
+				if(values.get(0) == null)
+					valueStr = "";
 				html.append("<input style=\"width:150px; display:block;\" type=\"text\" name=\""
 						+ textBoxId + "\" id=\"" + textBoxId + "\" value=\"" + valueStr + "\">");
 			}
 			else
 			{
-				html.append("<input style=\"width:150px; display:block;\" type=\"text\" name=\""
+				if(values.get(0) == null)
+				{
+					html.append("<input style=\"width:150px; display:block;\" type=\"text\" name=\""
+							+ textBoxId + "\" id=\"" + textBoxId + "\" value=\"" + "" 
+							+ "\">");
+				}
+				else
+				{
+					html.append("<input style=\"width:150px; display:block;\" type=\"text\" name=\""
 						+ textBoxId + "\" id=\"" + textBoxId + "\" value=\"" + values.get(0)
 						+ "\">");
+				}
 			}
 		}
 		html.append("\n</td>");
@@ -1113,8 +1124,16 @@ public class GenerateHtmlForAddLimitsBizLogic
 			}
 			else
 			{
-				html.append("<input type=\"text\" name=\"" + textBoxId1 + "\" id=\"" + textBoxId1
+				if(values.get(1) == null)
+				{
+					html.append("<input type=\"text\" name=\"" + textBoxId1 + "\" id=\"" + textBoxId1
+							+ "\" value=\"" + "" + "\" style=\"display:block\">");
+				}
+				else
+				{
+					html.append("<input type=\"text\" name=\"" + textBoxId1 + "\" id=\"" + textBoxId1
 						+ "\" value=\"" + values.get(1) + "\" style=\"display:block\">");
+				}
 			}
 		}
 		else
@@ -1330,27 +1349,41 @@ public class GenerateHtmlForAddLimitsBizLogic
 		}
 		else
 		{
-			if (values.get(0).equalsIgnoreCase("true"))
+			if(values.get(0) != null)
 			{
-				html.append("\n<input type='radio' id = '" + componentId
-						+ "_true' value='true' onclick=\"resetOptionButton('" + radioButtonTrueId
-					+ "',this)\" name='" + componentName + "' checked><font  class='"
-						+ cssClass + "'>True</font>");
-				html.append("\n<input type='radio' id = '" + componentId
-						+ "_false' value='false' onclick=\"resetOptionButton('" + radioButtonFalseId
-						+ "',this)\" name='" + componentName + "'><font class='"
-						+ cssClass + "'>False</font>");
-			}
-			else if(values.get(0).equalsIgnoreCase("false"))
-			{
-				html.append("\n<input type='radio' id = '" + componentId
-						+ "_true' value='true' onclick=\"resetOptionButton('" + radioButtonTrueId
-					+ "',this)\" name='" + componentName + "' ><font class='"
-						+ cssClass + "'>True</font>");
-				html.append("\n<input type='radio' id = '" + componentId
-						+ "_false' value='false' onclick=\"resetOptionButton('" + radioButtonFalseId
-					+ "',this)\" name='" + componentName
-						+ "'  checked><font class='" + cssClass + "'>False</font>");
+				if (values.get(0).equalsIgnoreCase("true"))
+				{
+					html.append("\n<input type='radio' id = '" + componentId
+							+ "_true' value='true' onclick=\"resetOptionButton('" + radioButtonTrueId
+						+ "',this)\" name='" + componentName + "' checked><font  class='"
+							+ cssClass + "'>True</font>");
+					html.append("\n<input type='radio' id = '" + componentId
+							+ "_false' value='false' onclick=\"resetOptionButton('" + radioButtonFalseId
+							+ "',this)\" name='" + componentName + "'><font class='"
+							+ cssClass + "'>False</font>");
+				}
+				else if(values.get(0).equalsIgnoreCase("false"))
+				{
+					html.append("\n<input type='radio' id = '" + componentId
+							+ "_true' value='true' onclick=\"resetOptionButton('" + radioButtonTrueId
+						+ "',this)\" name='" + componentName + "' ><font class='"
+							+ cssClass + "'>True</font>");
+					html.append("\n<input type='radio' id = '" + componentId
+							+ "_false' value='false' onclick=\"resetOptionButton('" + radioButtonFalseId
+						+ "',this)\" name='" + componentName
+							+ "'  checked><font class='" + cssClass + "'>False</font>");
+				}
+				else
+				{
+					html.append("\n<input type='radio' id = '" + componentId
+							+ "_true' value='true' onclick=\"resetOptionButton('" + radioButtonTrueId
+						+ "',this)\" name='" + componentName + "' ><font class='"
+							+ cssClass + "'>True</font>");
+					html.append("\n<input type='radio' id = '" + componentId
+							+ "_false' value='false' onclick=\"resetOptionButton('" + radioButtonFalseId
+						+ "',this)\" name='" + componentName
+							+ "'><font class='" + cssClass + "'>False</font>");
+				}
 			}
 			else
 			{
