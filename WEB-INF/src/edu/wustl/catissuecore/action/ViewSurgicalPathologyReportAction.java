@@ -59,7 +59,7 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 		//If reportId is null in request then retrieved from form. For Review/Quarantine event param. Bug id: 9260
 		if(reportIdStr==null)
 		{
-			reportIdStr = viewSPR.getReportId();
+			reportIdStr = viewSPR.getIdentifiedReportId();
 		}
 		Long reportId=Long.valueOf(reportIdStr);
 		
