@@ -88,15 +88,13 @@
 
 	function checkBoxClicked()
 	{
-		document.getElementById("deidentifiedReportText").innerHTML="<table style='table-layout: fixed;'>"+
-			"<tr><td><PRE class='pre'>"+document.getElementById("deidText").innerHTML+"</PRE></td></tr></table>";
+		document.getElementById("deidentifiedReportText").innerHTML="<span class="+"pre"+"><PRE class='pre'>"+document.getElementById("deidText").innerHTML+"</PRE></span>";
 		for(i=0;i<conceptName.length;i++)
-		{	
+		{
 			selectByOffset(document.getElementById("select"+i),startOff[i],endOff[i],colours[i],conceptName[i]);	
 		}		
 	}
 	</script>
-	
 </head>
 <%
 if(!hasAccess)
@@ -346,9 +344,8 @@ if(!hasAccess)
         </tr>
         <tr>
           <td colspan="5" style="padding-left:6px; padding-right:6px;" class="black_ar">
-           		<div id="identifiedReportText" class="pre" style="overflow:auto;height:125px;width:100%;border:2px solid #eef5fb;" onmousemove='scrollInSync();'><table  style="table-layout: fixed;"><tr><td><PRE class="pre" ><logic:notEmpty name="viewSurgicalPathologyReportForm" property="identifiedReportTextContent" ><%=formSPR.getIdentifiedReportTextContent()%></logic:notEmpty>
-				</PRE></td></tr></table>
-				</div>
+           		<div id="identifiedReportText" class="pre" style="overflow:auto;height:125px;width:650px;border:2px solid #eef5fb;" onmousemove='scrollInSync();'><table  style="table-layout: fixed;"><tr><td><PRE class="pre"><logic:notEmpty name="viewSurgicalPathologyReportForm" property="identifiedReportTextContent" ><%=formSPR.getIdentifiedReportTextContent()%></logic:notEmpty>
+				</PRE></td></tr></table></div>
           </td>
         </tr>
 		</table>
@@ -402,9 +399,8 @@ if(!hasAccess)
 			</tr>
 			<tr>
 				<td class="black_ar" style="padding-left:6px; padding-right:6px;">
-					<div id="deidentifiedReportText" class="pre" style="overflow:auto;height:125px;width:100%;border:2px solid #eef5fb;" onmousemove='scrollInSync();'><table style="table-layout: fixed;"><tr><td><PRE class="pre" ><logic:notEmpty name="viewSurgicalPathologyReportForm" property="deIdentifiedReportTextContent" ><%=formSPR.getDeIdentifiedReportTextContent()%></logic:notEmpty>
-					</PRE></td></tr></table>
-					</div>
+					<div id="deidentifiedReportText" class="pre" style="overflow:auto;height:125px;width:650px;border: 2px solid #eef5fb;"><table style="table-layout: fixed;"><tr><td><PRE class="pre"><logic:notEmpty name="viewSurgicalPathologyReportForm" property="deIdentifiedReportTextContent" ><%=formSPR.getDeIdentifiedReportTextContent()%></logic:notEmpty></PRE></td></tr></table>
+				</div>
 				</td>
 			</tr>
 		</table>
@@ -475,8 +471,7 @@ if(!hasAccess)
         </tr>
 		<tr>
 		<td colspan="2">
-			<div id="deidText" class="pre" style="overflow:auto;height:125px;width:100%;border:2px solid #eef5fb;display:none;"><table style="table-layout: fixed;"><tr><td><PRE class="pre" >
-			<%=deidText%></PRE></td></tr></table></div>
+			<span id="deidText" class="pre" style="display:none;width:650px;"><PRE class="pre"><%=deidText%></PRE></span>
 		</td>
 	</tr>
     </table>
