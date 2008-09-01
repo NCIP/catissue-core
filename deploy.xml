@@ -908,6 +908,7 @@
 		<antcall target="temp_update_metadata_for_clob_support_oracle" />
 		<antcall target="upgrade_db_demodel_oracle" />
 		<antcall target="update_metadata_for_model_changes" />
+		<antcall target="alter_CA_model_Tables" />	
 		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">
 			<transaction src="${oracle.sql.dir}/query/dropDESequence.SQL" />
 			<transaction>commit;</transaction>
@@ -1161,7 +1162,7 @@
 			</classpath>
 		</sql>
 		<antcall target="upgrade_db_demodel_oracle" />
-
+		<antcall target="alter_CA_model_Tables" />
 	</target>
 
 
@@ -2082,5 +2083,17 @@ Thanking You,
 	</target>
 	
 	<!--  ShippingTracking - end -->
+	<target name="alter_CA_model_Tables">
+		<echo message="Upgrading Oracle Database for DE model Application ..." />
+		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle">
+			<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/Oracle/modify_annotation_PV.sql" />
+			
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</sql>			
+	</target>
 	
 </project>
