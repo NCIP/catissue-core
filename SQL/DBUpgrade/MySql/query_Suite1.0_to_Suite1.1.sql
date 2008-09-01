@@ -189,8 +189,9 @@ insert into QUERY_PARAMETER(NAME, OBJECT_CLASS, OBJECT_ID)
 (select CONDITION_NAME, 'edu.wustl.common.querysuite.queryobject.impl.Condition', identifier
 from query_parameterized_condition);
 
-insert into QUERY_TO_PARAMETERS(query_id, parameter_id, position)
-(select query.identifier, param.identifier, condition_index
+/* catissue had condition_index as null; so generate parameter.position */
+create table tmp_param
+(select query.identifier as query_id, param.identifier as param_id, cond.identifier as cond_id
 from query_parameterized_query query 
 join query q on query.identifier = q.identifier
 join query_constraints c on q.constraints_id = c.identifier
@@ -202,6 +203,16 @@ join query_rule_cond ruleCond on opnd.identifier = ruleCond.rule_id
 join query_parameterized_condition cond on cond.identifier = ruleCond.condition_id
 join QUERY_PARAMETER param on param.object_id = cond.identifier);
 
+insert into QUERY_TO_PARAMETERS(query_id, parameter_id, position)
+(select t.query_id, t.param_id, find_in_set(t.cond_id, sub.list) - 1
+from
+	tmp_param t,
+	(select query_id, group_concat(cond_id order by cond_id) list
+	from tmp_param t 
+	group by query_id) as sub
+where sub.query_id = t.query_id);	
+
+drop table tmp_param;
 drop table query_parameterized_condition;
 
 /* output attributes */

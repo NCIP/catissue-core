@@ -169,8 +169,10 @@ insert into QUERY_PARAMETER(IDENTIFIER, NAME, OBJECT_CLASS, OBJECT_ID)
 (select QUERY_PARAMETER_SEQ.NEXTVAL, CONDITION_NAME, 'edu.wustl.common.querysuite.queryobject.impl.Condition', identifier
 from query_parameterized_condition);
 
+-- catissue had condition_index as null; so generate parameter.position 
+
 insert into QUERY_TO_PARAMETERS(query_id, parameter_id, position)
-(select query.identifier, param.identifier, condition_index
+(select query.identifier, param.identifier, row_number() over (partition by query.identifier order by cond.identifier)
 from query_parameterized_query query 
 join query q on query.identifier = q.identifier
 join query_constraints c on q.constraints_id = c.identifier
