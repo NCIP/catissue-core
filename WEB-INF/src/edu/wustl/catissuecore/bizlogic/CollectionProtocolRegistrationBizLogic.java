@@ -1808,7 +1808,12 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 	@Override
 	public String getReadDeniedPrivilegeName()
 	{
-		return Permissions.READ_DENIED;
-	}	
+		return Permissions.PHI+","+Permissions.READ_DENIED;
+	}
+	
+	public boolean hasPrivilegeToView(String objName, Long identifier, SessionDataBean sessionDataBean)
+	{
+		return edu.wustl.catissuecore.util.global.Utility.hasPrivilegeToView(objName, identifier, sessionDataBean, getReadDeniedPrivilegeName());
+	}
 	
 }

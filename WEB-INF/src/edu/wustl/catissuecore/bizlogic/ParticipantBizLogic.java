@@ -1380,6 +1380,11 @@ public class ParticipantBizLogic extends DefaultBizLogic
 	@Override
 	public String getReadDeniedPrivilegeName()
 	{
-		return Permissions.PHI;
-	}	
+		return Permissions.PHI+","+Permissions.READ_DENIED;
+	}
+	
+	public boolean hasPrivilegeToView(String objName, Long identifier, SessionDataBean sessionDataBean)
+	{
+		return edu.wustl.catissuecore.util.global.Utility.hasPrivilegeToView(objName, identifier, sessionDataBean, getReadDeniedPrivilegeName());
+	}
 }
