@@ -24,31 +24,6 @@ alter table QUERY_GRAPH_ENTRY drop foreign key FKF055E4EAD3C625EA, drop index FK
 alter table QUERY_GRAPH_ENTRY drop foreign key FKF055E4EA7A5E6479, drop index FKF055E4EA7A5E6479;
 alter table QUERY_GRAPH_ENTRY drop foreign key FKF055E4EAEE560703, drop index FKF055E4EAEE560703;
 alter table QUERY_EXPRESSIONID drop foreign key FK6662DBEABC7298A9, drop index FK6662DBEABC7298A9;
-/**********************************/
-/* cab2b
-alter table QUERY drop foreign key FK49D20A84B0F861E, drop index FK49D20A84B0F861E;
-alter table QUERY_CONDITION drop foreign key FKACCE6242DCE1896, drop index FKACCE6242DCE1896;
-alter table QUERY_CONDITION_VALUES drop foreign key FK9997379D4D1598FE, drop index FK9997379D4D1598FE;
-alter table QUERY_CONSTRAINTS drop foreign key FKE364FCFF1C7EBF3B, drop index FKE364FCFF1C7EBF3B;
-alter table QUERY_EXPRESSION drop foreign key FK1B473A8F526D4561, drop index FK1B473A8F526D4561;
-alter table QUERY_EXPRESSION drop foreign key FK1B473A8FCF83E189, drop index FK1B473A8FCF83E189;
-alter table QUERY_EXPRESSION drop foreign key FK1B473A8F3FB1E956, drop index FK1B473A8F3FB1E956;
-alter table QUERY_EXPRESSIONID drop foreign key FK6662DBEA62E3EDC7, drop index FK6662DBEA62E3EDC7;
-alter table QUERY_EXPRESSION_OPERAND drop foreign key FKA3B976F9180A6E16, drop index FKA3B976F9180A6E16;
-alter table QUERY_GRAPH_ENTRY drop foreign key FKF055E4EAB2B42E5B, drop index FKF055E4EAB2B42E5B;
-alter table QUERY_GRAPH_ENTRY drop foreign key FKF055E4EA346832A9, drop index FKF055E4EA346832A9;
-alter table QUERY_GRAPH_ENTRY drop foreign key FKF055E4EA1C7EBF3B, drop index FKF055E4EA1C7EBF3B;
-alter table QUERY_GRAPH_ENTRY drop foreign key FKF055E4EAC070901F, drop index FKF055E4EAC070901F;
-alter table QUERY_INTER_MODEL_ASSOCIATION drop foreign key FKD70658D15F5AB67E, drop index FKD70658D15F5AB67E;
-alter table QUERY_INTRA_MODEL_ASSOCIATION drop foreign key FKF1EDBDD35F5AB67E, drop index FKF1EDBDD35F5AB67E;
-alter table QUERY_LOGICAL_CONNECTOR drop foreign key FKCF304780180A6E16, drop index FKCF304780180A6E16;
-alter table QUERY_OUTPUT_ATTRIBUTE drop foreign key FK22C9DB75509C0ACD, drop index FK22C9DB75509C0ACD;
-alter table QUERY_OUTPUT_ATTRIBUTE drop foreign key FK22C9DB75604D4BDA, drop index FK22C9DB75604D4BDA;
-alter table QUERY_PARAMETERIZED_CONDITION drop foreign key FK9BE75A3E4B9044D1, drop index FK9BE75A3E4B9044D1;
-alter table QUERY_PARAMETERIZED_QUERY drop foreign key FKA272176B76177EFE, drop index FKA272176B76177EFE;
-alter table QUERY_RULE drop foreign key FK14A65033180A6E16, drop index FK14A65033180A6E16;
-alter table QUERY_RULE drop foreign key FK14A6503362E3EDC7, drop index FK14A6503362E3EDC7;
-*/
 
 /* rename of columns */
 alter table query_condition_values change value_list VALUE varchar(255);
