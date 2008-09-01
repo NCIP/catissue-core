@@ -1611,4 +1611,64 @@ public class SpecimenTestCases extends CaTissueBaseTestCase {
 		
 	}
 	
+	public void testCheckLabelOfChildASpecimens()
+	{
+	   try {
+		   TissueSpecimen specimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
+		   SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
+		   System.out.println("SpecimenTestCases.testAddTissueSpecimen(): "+scg);
+		   specimenObj.setSpecimenCollectionGroup(scg);
+		   specimenObj.setCollectionStatus("Collected");
+		   Logger.out.info("Inserting domain object------->"+specimenObj);
+		   System.out.println("Before Creating Tissue Specimen");
+		   specimenObj.setLabel(null);
+		   specimenObj =  (TissueSpecimen) appService.createObject(specimenObj);
+		  
+		   TissueSpecimen childSpecimen1 =(TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
+		    childSpecimen1.setParentSpecimen(specimenObj);
+		    childSpecimen1.setLabel(null);
+		    childSpecimen1.setLineage("Aliquot");
+			System.out.println("Befor creating Tissue Specimen");
+		
+			try
+			{
+				childSpecimen1 = (TissueSpecimen) appService.createObject(childSpecimen1);
+			}
+			catch(Exception e)
+			{
+				assertFalse("Failed to create specimen child1", true);
+			}
+			
+			   TissueSpecimen childSpecimen2 =(TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
+			    childSpecimen2.setParentSpecimen(specimenObj);
+			    childSpecimen2.setLabel(null);
+			    childSpecimen2.setLineage("Aliquot");
+				System.out.println("Befor creating Tissue Specimen");
+			
+				try
+				{
+					childSpecimen2= (TissueSpecimen) appService.createObject(childSpecimen2);
+				}
+				catch(Exception e)
+				{
+					assertFalse("Failed to create specimen child1", true);
+				}
+		   
+		   System.out.println("Parent label"+specimenObj.getLabel());
+		   System.out.println("Child Specimen label"+childSpecimen1.getLabel());
+		   System.out.println("Child Specimen label"+childSpecimen2.getLabel());
+		   if(childSpecimen1.getLabel().equals(specimenObj.getLabel()+"_1")&&childSpecimen2.getLabel().equals(specimenObj.getLabel()+"_2"))
+		   assertTrue(" Domain Object is successfully added ---->    Name:: " + specimenObj.getLabel(), true);
+		   
+		}
+		catch(Exception e)
+		{
+			System.out.println("Exception thrown");
+			System.out.println(e);
+			Logger.out.error(e.getMessage(),e);
+			e.printStackTrace();
+			assertFalse("Failed to create Domain Object", true);
+		}
+	}
+	
 }
