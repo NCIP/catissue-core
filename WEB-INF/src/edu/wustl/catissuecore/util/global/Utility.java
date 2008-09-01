@@ -41,7 +41,6 @@ import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolRegistrationBizLogic;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
-import edu.wustl.catissuecore.bizlogic.SiteBizLogic;
 import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.bizlogic.querysuite.QueryOutputSpreadsheetBizLogic;
@@ -87,6 +86,7 @@ import edu.wustl.common.dao.JDBCDAO;
 import edu.wustl.common.dao.QuerySessionData;
 import edu.wustl.common.dao.queryExecutor.PagenatedResultData;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.security.PrivilegeCache;
 import edu.wustl.common.security.PrivilegeManager;
 import edu.wustl.common.security.PrivilegeUtility;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
@@ -1958,5 +1958,60 @@ public class Utility extends edu.wustl.common.util.Utility {
              ex.setBaseObjectIdentifier(arr[1]);
          }
          return ex;
+	}
+	
+	public static boolean hasPrivilegeToView(String objName, Long identifier, SessionDataBean sessionDataBean, String privilegeName)
+	{
+		if(sessionDataBean != null && sessionDataBean.isAdmin())
+		{
+			return true;
+		}
+		
+		List cpIdsList = new ArrayList();
+		Set<Long> cpIds = new HashSet<Long>();
+		
+		cpIdsList = Utility.getCPIdsList(objName, identifier, sessionDataBean, cpIdsList);
+		
+		if(cpIdsList == null)
+		{
+			return false;
+		}
+		
+		for(Object cpId : cpIdsList)
+		{
+			cpId = cpIdsList.get(0);
+			cpIds.add(Long.valueOf(cpId.toString()));
+		}
+		
+		PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(sessionDataBean.getUserName());
+		StringBuffer sb = new StringBuffer();
+		sb.append(Constants.COLLECTION_PROTOCOL_CLASS_NAME).append("_");
+		boolean isPresent = false;
+		
+		for (Long cpId : cpIds)
+		{
+			String [] privilegeNames = privilegeName.split(",");
+			if(privilegeNames.length > 1)
+			{	
+				isPresent = privilegeCache.hasPrivilege(sb.toString()+cpId.toString(), privilegeNames[0]);
+				
+				if(!isPresent)
+				{
+					isPresent = checkForAllCurrentAndFutureCPs(null, privilegeNames[0], sessionDataBean, cpId.toString());
+				}
+				
+				if(isPresent)
+				{
+					isPresent = privilegeCache.hasPrivilege(sb.toString()+cpId.toString(), privilegeNames[1]);
+					isPresent = !isPresent;
+				}
+			}
+			
+			if (!isPresent)
+			{
+				return false;
+			} 
+		}
+    	return true;
 	}
 }
