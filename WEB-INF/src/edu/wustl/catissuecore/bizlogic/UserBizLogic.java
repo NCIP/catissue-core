@@ -1960,7 +1960,10 @@ public class UserBizLogic extends DefaultBizLogic
 				}
 				else
 				{
-					throw new DAOException(ApplicationProperties.getValue("user.siteIsRequired"));
+//					if(user.getRoleId()==null || user.getRoleId().equals("") || user.getSiteCollection().isEmpty())
+//					{	
+						throw new DAOException(ApplicationProperties.getValue("user.siteIsRequired"));
+//					}
 				}
 			}
 			if(user.getPageOf().equalsIgnoreCase("pageOfChangePassword"))

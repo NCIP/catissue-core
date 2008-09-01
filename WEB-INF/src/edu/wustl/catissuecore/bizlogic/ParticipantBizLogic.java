@@ -1324,7 +1324,10 @@ public class ParticipantBizLogic extends DefaultBizLogic
     				}
                 } else
                 {
-                    isAuthorized = edu.wustl.catissuecore.util.global.Utility.checkForAllCurrentAndFutureCPs(dao,privilegeName, sessionDataBean, null);
+                	if(!protectionElementName.equals(Constants.ADD_GLOBAL_PARTICIPANT))
+                	{
+                		isAuthorized = edu.wustl.catissuecore.util.global.Utility.checkForAllCurrentAndFutureCPs(dao,privilegeName, sessionDataBean, null);
+                	}
                 }
 		} 
 		else

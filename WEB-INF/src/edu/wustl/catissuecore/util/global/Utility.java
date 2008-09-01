@@ -1704,6 +1704,11 @@ public class Utility extends edu.wustl.common.util.Utility {
         }
     	Set<Long> idSet = new HashSet<Long>();
     	
+    	if(siteCollection == null)
+    	{
+    		return false;
+    	}
+    	
     	for(Site site : siteCollection)
     	{
     		idSet.add(site.getId());
