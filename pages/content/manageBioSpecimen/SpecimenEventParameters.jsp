@@ -172,17 +172,17 @@
 		}
 	}
 
-	/*if ( document.getElementById && !(document.all) ) 
+	if ( document.getElementById && !(document.all) ) 
 {
-	var slope=10;
+	var slope=-37;
 }
 else
 {
-	var slope=-10;
+	var slope=-42;
 }
 
-window.onload = function() { setFrameHeight('newEventFrame', .5,slope);}
-window.onresize = function() { setFrameHeight('newEventFrame', .5,slope); }*/
+window.onload = function() { setFrameHeight('test', .1,slope);}
+window.onresize = function() { setFrameHeight('test', .1,slope); }
 </script>
 <!-- Mandar : 434 : for tooltip -->
 
@@ -281,8 +281,20 @@ window.onresize = function() { setFrameHeight('newEventFrame', .5,slope); }*/
         </tr>
 		<tr>
 	<td class="whitetable_bg" colspan="3">
+	<%
+	if(dataList!=null && dataList.size() != 0)
+	{%>
 		<iframe name="newEventFrame" id="newEventFrame" src="<%=iframeSrc %>" width="100%" height="200" frameborder="0" scrolling="auto">
 		</iframe>
+	<%}
+	else
+	{%>
+	<iframe name="newEventFrame" id="newEventFrame" src="<%=iframeSrc %>" width="100%" height="320" frameborder="0" scrolling="no">
+		</iframe>
+	<iframe name="test" id="test" width="100%" frameborder="0" scrolling="no">
+		</iframe>
+	<%}%>
+
 	</td>
 </tr>
                
