@@ -402,7 +402,7 @@
 			<include name="jboss-client.jar" /> 
 			<include name="junit-3.8.1.jar" /> 
 			<include name="mockobjects-core-0.09.jar" /> 
-			<include name="mysql-connector-java-5.0.8-bin.jar" /> 
+			<!--include name="mysql-connector-java-5.0.8-bin.jar" / --> 
 			<include name="openide-util.jar" /> 
 			<include name="acrobat-core.jar" />
 		</fileset>		
