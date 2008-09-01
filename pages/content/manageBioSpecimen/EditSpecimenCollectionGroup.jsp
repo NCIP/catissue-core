@@ -92,7 +92,7 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 		 }
 			</script>
 	<div style="width:100%">	
-	 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="whitetable_bg" id="Container">
+	 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="whitetable_bg" id="">
 		<!-- NEW SPECIMEN COLLECTION GROUP REGISTRATION BEGINS-->
 		 <tr>
           <td colspan="3" align="left"></td>
@@ -340,7 +340,7 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 			<td colspan="3">
 				<div >
 				<%@ include file="CollAndRecEvents.jsp" %>
-				<div>
+				</div>
 			</td>
 		</tr>
 		 <tr><td colspan="3" class="bottomtd"></td></tr>
@@ -398,7 +398,7 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 			<html:hidden styleId="buttonType" property="buttonType"/>
 			
 		</tr>
-	<div>
+	</div>
 	
 	<%@ include file="SpecimenCollectionGroupPageButtons.jsp" %>
 	</table>
