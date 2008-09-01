@@ -56,6 +56,11 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 		String forwardTo=viewSPR.getForwardTo();
 		String strId =(String)request.getParameter(Constants.SYSTEM_IDENTIFIER);
 		String reportIdStr=(String)request.getParameter("reportId");
+		//If reportId is null in request then retrieved from form. For Review/Quarantine event param. Bug id: 9260
+		if(reportIdStr==null)
+		{
+			reportIdStr = viewSPR.getReportId();
+		}
 		Long reportId=Long.valueOf(reportIdStr);
 		
 		Long id=null;
