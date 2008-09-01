@@ -62,6 +62,9 @@ public class SimilarContainersAction extends SecureAction
 			throws Exception
 	{
 		Logger.out.debug("SimilarContainersAction : executeSecureAction() form: type " + form.getClass());
+		
+		List<NameValueBean> storagePositionListForTransferEvent = Utility.getStoragePositionTypeListForTransferEvent();
+		request.setAttribute("storageListForTransferEvent", storagePositionListForTransferEvent);
 
 		StorageContainerForm similarContainersForm = (StorageContainerForm) form;
 		//boolean to indicate whether the suitable containers to be shown in dropdown 
