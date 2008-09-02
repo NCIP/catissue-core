@@ -269,6 +269,14 @@ public class UserAction extends SecureAction {
 		Logger.out.debug("pageOf :---------- " + pageOf);
 
 		// For Privilege
+		String roleId = userForm.getRole();
+		boolean flagForSARole = false;
+		if((Constants.SUPER_ADMIN_USER).equals(roleId))
+		{
+			flagForSARole = true;
+		}
+		request.setAttribute("flagForSARole", flagForSARole);
+
 		msrUtil.onFirstTimeLoad(mapping, request);
 
 		final String cpOperation = (String) request.getParameter("cpOperation");
