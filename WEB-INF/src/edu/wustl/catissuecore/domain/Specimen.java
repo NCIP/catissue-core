@@ -498,6 +498,15 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 				if (abstractForm instanceof NewSpecimenForm)
 				{
 					NewSpecimenForm form = (NewSpecimenForm) abstractForm;
+				    if(!(form.getSpecimenCollectionGroupId()==null &&form.getSpecimenCollectionGroupId().equals("")))
+					{
+						this.specimenCollectionGroup.id=new Long(form.getSpecimenCollectionGroupId());
+					}
+					
+					if(!(form.getSpecimenCollectionGroupName()==null &&form.getSelectedContainerName().equals("")))
+					{
+						this.specimenCollectionGroup.name=form.getSelectedContainerName();
+					}
 					/**For Migration End**/
 					this.activityStatus = form.getActivityStatus();
 					if (form.isAddOperation())
@@ -872,6 +881,7 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 					}
 				}
 			}
+			
 		}
 		catch (Exception excp)
 		{
