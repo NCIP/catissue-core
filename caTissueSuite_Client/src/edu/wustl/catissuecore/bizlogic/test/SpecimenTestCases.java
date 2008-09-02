@@ -1671,4 +1671,31 @@ public class SpecimenTestCases extends CaTissueBaseTestCase {
 		}
 	}
 	
+	public void testAddChildSpecimenOnSearchedParent()
+	{
+		try {
+			   TissueSpecimen specimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
+			   SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
+			   specimenObj.setSpecimenCollectionGroup(scg);
+			   specimenObj.setCollectionStatus("Collected");
+			   specimenObj =  (TissueSpecimen) appService.createObject(specimenObj);
+	
+			   TissueSpecimen  parentSpecimen =new TissueSpecimen();
+			   parentSpecimen.setId(specimenObj.getId());
+			   parentSpecimen=(TissueSpecimen)appService.search(TissueSpecimen.class, parentSpecimen).iterator().next();
+			  
+			   TissueSpecimen childSpecimen1 =(TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
+			   childSpecimen1.setParentSpecimen(parentSpecimen);
+			   childSpecimen1.setLineage("Aliquot");
+			   childSpecimen1 = (TissueSpecimen) appService.createObject(childSpecimen1);
+				System.out.println("Child label is "+childSpecimen1.getLabel());
+			}	
+				
+			catch(Exception e)
+			{
+				System.out.println(e.getMessage());
+				assertFalse("Failed to create specimen child1", true);
+			}
+				
+	}
 }
