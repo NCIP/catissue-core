@@ -65,7 +65,7 @@
 			</else>
 		</if>
 		
-		<!-- Validation for ORACLE_HOME and path-->
+		<!-- Validation for ORACLE_HOME ,tns name and sqlldr if database is oracle-->
 		<if>
 		<equals arg1="oracle" arg2="${database.type}" />
 			<then>				
@@ -78,9 +78,26 @@
 						<fail message="ORACLE_HOME is not set on your server. For windows set oracle_home as environment variable or in linux set in .bash_profile file." />
 					</then>
 				</if>
+				
+				<if>
+					<equals arg1="" arg2="${oracle.tns.name}" />
+					<then>
+						<fail message="The property 'oracle.tns.name' can not be empty" />
+					</then>
+				</if>
 				<trycatch>
 					<try>
-						<exec executable="sqlldr" failonerror="true" logerror="off"/>
+						<exec executable="tnsping" failonerror="true" >
+							<arg value="${oracle.tns.name}"/>					
+						</exec>
+					</try>
+					<catch>
+						<fail message="'${oracle.tns.name}' is not a valid tns name. Please set valid tns name for property 'oracle.tns.name'." />
+					</catch>
+				</trycatch>					
+				<trycatch>
+					<try>
+						<exec executable="sqlldr" failonerror="true"/>
 				 	</try>
 					<catch>
 						<fail message="'sqlldr' file not found in path. Please make sure this file must be in path." />
