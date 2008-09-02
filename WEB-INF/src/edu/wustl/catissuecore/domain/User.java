@@ -533,7 +533,7 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
     	
         try 
         {
-        	if(id!= null && id!=0 && csmUserId != null)
+        	if(roleId.equals("") && id!= null && id!=0 && csmUserId != null)
         	{
         		Role role = SecurityManager.getInstance(User.class).getUserRole(csmUserId);
         		roleId = role.getId().toString();
