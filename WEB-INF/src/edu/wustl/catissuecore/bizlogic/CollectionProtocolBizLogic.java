@@ -840,7 +840,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 				{
 					String key = mapKey.toString();
 					SiteUserRolePrivilegeBean bean = rowIdMap.get(key);
-					if(piAndCoOrdIds.contains(bean.getUser().getId()))
+					if(bean.isCustChecked() && piAndCoOrdIds.contains(bean.getUser().getId()))
 					{
 						// throw new DAOException(ApplicationProperties.getValue("cp.cannotChangePrivilegesOfPIOrCoord"));
 					}
