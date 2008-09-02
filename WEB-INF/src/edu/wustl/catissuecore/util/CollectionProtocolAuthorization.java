@@ -105,6 +105,16 @@ public class CollectionProtocolAuthorization implements edu.wustl.catissuecore.u
 			SiteUserRolePrivilegeBean siteUserRolePrivilegeBean = rowIdMap.get(key);
 			User user = siteUserRolePrivilegeBean.getUser();
 			
+			if(!siteUserRolePrivilegeBean.isCustChecked())
+			{
+				List<Site> siteList = siteUserRolePrivilegeBean.getSiteList();
+				if(siteList != null && !siteList.isEmpty())
+				{
+					siteCollection.add(siteList.get(0));
+				}
+				continue;
+			}
+			
 			if(siteUserRolePrivilegeBean.isRowDeleted())
 			{
 				Utility.processDeletedPrivilegesOnCPPage(siteUserRolePrivilegeBean, collectionProtocol.getId());

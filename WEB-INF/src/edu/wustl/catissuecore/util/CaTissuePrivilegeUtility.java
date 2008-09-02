@@ -243,6 +243,11 @@ public class CaTissuePrivilegeUtility
 				}
 			}
 			validUserIds.remove(cp.getPrincipalInvestigator().getId());
+			
+			// To show details of Sites having Default functionality on CP
+			Collection<Site> siteCollection = cp.getSiteCollection();
+			Set<Long> siteIdSetSpecific = new HashSet<Long>(); 
+			
 			for (NameValueBean nmv : Variables.privilegeGroupingMap.get("CP"))
 			{
 				String privilegeName = nmv.getName();
@@ -282,6 +287,7 @@ public class CaTissuePrivilegeUtility
 						{
 							Site site = (Site) hibernateDao.retrieve(Site.class.getName(), siteId);
 							siteList.add(site);
+							siteIdSetSpecific.add(siteId);
 						}
 
 						bean.setSiteList(siteList);
@@ -290,7 +296,7 @@ public class CaTissuePrivilegeUtility
 						
 						// Added by Ravindra to handle bean for EDIT mode
 						bean.setRowEdited(false);
-						
+						bean.setCustChecked(true);
 						bean.setUser(user);
 						result.put(user.getId().toString(), bean);
 					}
@@ -301,6 +307,21 @@ public class CaTissuePrivilegeUtility
 						if (!privileges.contains(nmv))
 						{
 							privileges.add(nmv);
+						}
+					}
+				}
+				
+				if(siteCollection != null && !siteCollection.isEmpty())
+				{
+					for(Site site : siteCollection)
+					{
+						if(!siteIdSetSpecific.contains(site.getId()))
+						{
+							SiteUserRolePrivilegeBean siteUserRolePrivilegeBean = new SiteUserRolePrivilegeBean();
+							List<Site> siteList = new ArrayList<Site>();
+							siteList.add(site);
+							siteUserRolePrivilegeBean.setSiteList(siteList);
+							result.put("SITE_"+site.getId(), siteUserRolePrivilegeBean);
 						}
 					}
 				}
@@ -328,16 +349,15 @@ public class CaTissuePrivilegeUtility
 
     /**
      * get a map of the privileges all the users have on a given CP.
+     * @param rowIdBeanMap 
      * 
      * @param id of the CP
      * @return a map of login name and list of name value beans representing privilege name and privilege id 
      * @throws CSException 
      */
-    public static Map<String, SiteUserRolePrivilegeBean> getAllCurrentAndFuturePrivilegeUsersOnSite(Long siteId, Long cpId)
+    public static Map<String, SiteUserRolePrivilegeBean> getAllCurrentAndFuturePrivilegeUsersOnSite(Long siteId, Long cpId, Map<String, SiteUserRolePrivilegeBean> result)
     {
-        Map<String, SiteUserRolePrivilegeBean> result = new HashMap<String, SiteUserRolePrivilegeBean>();
-
-        String objectId = Constants.getCurrentAndFuturePGAndPEName(siteId);
+    	String objectId = Constants.getCurrentAndFuturePGAndPEName(siteId);
 
         AbstractDAO hibernateDao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
         CollectionProtocol cp = null;
@@ -348,6 +368,9 @@ public class CaTissuePrivilegeUtility
         try
         {
             hibernateDao.openSession(null);
+            List siteList = new ArrayList();
+            Site site = (Site) hibernateDao.retrieve(Site.class.getName(), siteId);
+            siteList.add(site);
             if (cpId != null)
             {
                 cp = (CollectionProtocol) hibernateDao.retrieve(CollectionProtocol.class.getName(), cpId);
@@ -362,6 +385,7 @@ public class CaTissuePrivilegeUtility
                 }
                 invalidUserIds.add(cp.getPrincipalInvestigator().getId());
             }
+            hibernateDao.openSession(null);
             for (NameValueBean nmv : Variables.privilegeGroupingMap.get("CP"))
             {
                 String privilegeName = nmv.getName();
@@ -384,32 +408,15 @@ public class CaTissuePrivilegeUtility
                         bean = new SiteUserRolePrivilegeBean();
                         List<NameValueBean> privileges = new ArrayList<NameValueBean>();
                         privileges.add(nmv);
-
+                        
                         NameValueBean role = new NameValueBean();
                         role.setName("Custom Role");
                         role.setValue("-1");
                         bean.setRole(role);
-                        Set<Long> siteSet = new UserBizLogic().getRelatedSiteIds(user.getId());
-                        List<Site> siteList = new ArrayList<Site>();
-                        if (siteSet == null || siteSet.isEmpty())
-                        {
-                            continue;
-                        }
-
-                        hibernateDao.openSession(null);
-                        for (Long sId : siteSet)
-                        {
-                            Site site = (Site) hibernateDao.retrieve(Site.class.getName(), sId);
-                            siteList.add(site);
-                        }
-
                         bean.setSiteList(siteList);
-
                         bean.setPrivileges(privileges);
-                        
                         // Added by Ravindra to handle bean for EDIT mode
                         bean.setRowEdited(false);
-                        
                         bean.setUser(user);
                         result.put(user.getId().toString(), bean);
                     }
@@ -420,6 +427,18 @@ public class CaTissuePrivilegeUtility
                         if (!privileges.contains(nmv))
                         {
                             privileges.add(nmv);
+                        }
+                        boolean isPresent = false;
+                        for (Site site1 : bean.getSiteList())
+                        {
+                        	if (site1.getId().equals(site.getId()))
+                        	{
+                        		isPresent = true;
+                        	}
+                        }
+                        if (!isPresent)
+                        {
+                       bean.getSiteList().add(site);
                         }
                     }
                 }

@@ -251,6 +251,7 @@ public class MSRUtil {
 		final String userIds = (String) request.getParameter(Constants.SELECTED_USER_IDS);
 		final String cpIds = (String) request.getParameter(Constants.SELECTED_CP_IDS);
 		final boolean isAllCPChecked = Boolean.parseBoolean(request.getParameter(Constants.IS_ALL_CP_CHECKED));
+		final boolean isCustChecked = Boolean.parseBoolean(request.getParameter("isCustChecked"));
 		
 		String temp="";
 		
@@ -264,7 +265,7 @@ public class MSRUtil {
 			{
 				rowIdBeanMap = (Map<String, SiteUserRolePrivilegeBean>) session.getAttribute(Constants.ROW_ID_OBJECT_BEAN_MAP);
 			}
-			listForUPSummary =apBizLogic.addPrivilege(rowIdBeanMap,userIds,siteIds,roleId,actionIds,operation );
+			listForUPSummary =apBizLogic.addPrivilege(rowIdBeanMap,userIds,siteIds,roleId,actionIds,isCustChecked,operation );
 			
 			temp = Constants.ROW_ID_OBJECT_BEAN_MAP;
 		}
@@ -300,7 +301,7 @@ public class MSRUtil {
 		final List<Long> selectedSiteIds = apBizLogic.getInputData(siteIds);
 		final List<Long> selectedCPIds = apBizLogic.getInputData(cpIds);
 		
-		final List<JSONObject> listOfAction = apBizLogic.getActionsForThisRole(role,pageOf,selectedSiteIds,selectedCPIds,isAllCPChecked);
+ 		final List<JSONObject> listOfAction = apBizLogic.getActionsForThisRole(role,pageOf,selectedSiteIds,selectedCPIds,isAllCPChecked);
 		setResponse(response, listOfAction);
 	}
 

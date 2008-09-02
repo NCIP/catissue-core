@@ -863,6 +863,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String ALL_CURRENT_AND_FUTURE = "All Current and Future";
 	public static final String NA = "N/A";
 	public static final String IS_ALL_CP_CHECKED = "isAllCPChecked";
+	public static final String IS_CUSTOM_CHECKBOX_CHECKED = "isCustChecked";
+	
 	public static final String CUSTOM_ROLE = "Custom";
 	public static final String ROW_ID_OBJECT_BEAN_MAP = "rowIdObjectBeanMap";
 	public static final String OPERATION_GET_CPS_FORTHIS_SITES = "getCPsForThisSites";
@@ -885,7 +887,10 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String ERROR_MESSAGE_FOR_USER = "errorMessageForUser";
 	public static final String ERROR_MESSAGE_FOR_CP = "errorMessageForCP";
 	public static final String ERROR_MESSAGE_FOR_ACTION = "errorMessageForPrivilege";
+	public static final String DEFAULT_ROLE = "Default role";
 	public static final String PAGEOF_ASSIGN_PRIVILEGE = "pageOfAssignPrivilegePage";
+	public static final String ALL_DEFAULT_PRIVILEGES= "All Default Privileges";
+	public static final String ALL_DEFAULT_USERS = "All Default Users";
 	
 	
 	//Constants for default column names to be shown for query result.

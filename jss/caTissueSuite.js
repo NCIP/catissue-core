@@ -157,6 +157,7 @@ function openCRGWindow()
               			clearSelBoxList(eleOfActionSelBox);
                     			 
                     	deselectAllOptsOfSelBox(eleOfSiteSelBox);
+						deselectAllOptsOfSelBox(eleOfRoleSelBox);
                     	
                     	if(pageOf=="pageOfAssignPrivilegePage")
 	                    {
@@ -235,6 +236,20 @@ function openCRGWindow()
 							 var selOptsList=jsonResponse.locations[i].selectedActionArray;
 							 
                              selectedOptsList(eleOfActionSelBox,optsList,selOptsList);
+                             
+                             var cpSelBox = document.getElementById('cpIds');
+                             var cpList=jsonResponse.locations[i].cpJsonArray;
+                            
+                             if(cpList!=null)
+                             {
+	                             for(var opt=0; opt<cpList.length; opt++)
+							      {
+							           theValue  = jsonResponse.locations[i].cpJsonArray[opt].locationId;
+							           theText = jsonResponse.locations[i].cpJsonArray[opt].locationName;
+							           var myNewOption = new Option(theText,theValue);     
+							           cpSelBox.options[opt] = myNewOption;
+							      }
+						     }
                          }
                          
 						 else if(cpOperation == "getActionsForThisCPs")
@@ -806,17 +821,23 @@ function consentPage()
 	 	 document.getElementById(cpCheckId).checked=false;
 	 	 document.getElementById('cpIds').disabled=false;
 		 document.getElementById('siteIds').disabled=true;
+
 		 getActionsForThisRole(roleObject,'siteIds','cpIds','cpCheckId')
 	 }
      else
      {	
-		 document.getElementById(cpCheckId).disabled=false;
+		/* document.getElementById(cpCheckId).disabled=false;
 		 if(document.getElementById('cpIds').disabled==false)
 		 {
 			document.getElementById(cpCheckId).checked=false;
-		 }
+		 }*/
 		
-     	getActionsForThisRole(roleObject,'siteIds','cpIds','cpCheckId')
+		 deselectAllOptsOfSelBox(document.getElementById('cpIds'));
+     	 document.getElementById(cpCheckId).disabled=false;
+		 document.getElementById(cpCheckId).checked=true;
+		 document.getElementById('cpIds').disabled=true;
+
+     	 getActionsForThisRole(roleObject,'siteIds','cpIds','cpCheckId')
      }
 
  }
@@ -833,9 +854,32 @@ function consentPage()
      var sites=jsonResponse.locations[i].siteJsonArray;
      var actions=jsonResponse.locations[i].actionJsonArray;
      var selActions=jsonResponse.locations[i].selActionJsonArray;
+     var isCustChecked=jsonResponse.locations[i].isCustChecked;
+     
+     var siteSelBox = document.getElementById('siteIds');
+     var userSelBox = document.getElementById('userIds');
+     var roleSelBox = document.getElementById('roleIds');
+     var eleOfActionSelBox = document.getElementById('actionIds');
+     var checkBoxObj = document.getElementById('customizeChkId');
+
+     // -- for customize checkbox
+    
+     checkBoxObj.checked =isCustChecked;
+     if(isCustChecked)
+     {
+     	userSelBox.disabled = false;
+     	roleSelBox.disabled = false;
+     	eleOfActionSelBox.disabled = false;
+     }
+     else
+     {
+     	userSelBox.disabled = true;
+     	roleSelBox.disabled = true;
+     	eleOfActionSelBox.disabled = true;
+     }
+     
      
       // --for sites
-     var siteSelBox = document.getElementById('siteIds');
      for(var len=0;len<sites.length;len++)
      {
           showEleSelectedOfSelBox(siteSelBox,sites[len]);
@@ -847,28 +891,25 @@ function consentPage()
 	  	  theValue  = jsonResponse.locations[i].userJsonArray[opt].locationId;
 	   	  theText = jsonResponse.locations[i].userJsonArray[opt].locationName;
 	      var myNewOption = new Option(theText,theValue);     
-	      document.getElementById('userIds').options[opt] = myNewOption;
+	      //document.getElementById('userIds').options[opt] = myNewOption;
+	      userSelBox.options[opt] = myNewOption;
 	  }
-	  var userSelBox = document.getElementById('userIds');
 	  
   	  for(var i=0;i<userSelBox.length;i++)
   	  {
      	  if(userSelBox.options[i].value==selectedUserId)
      	  {
-          	 document.getElementById('userIds').options[i].selected=true;
+          	// document.getElementById('userIds').options[i].selected=true;
+          	 userSelBox.options[i].selected=true;
              var selectedUserName=userSelBox.options[i].text;
              break;
           }
      }
 
 	   //-- for role     
-	   var roleSelBox = document.getElementById('roleIds');
-	   
 	   showEleSelectedOfSelBox(roleSelBox,roleId);
 
        // --for Privileges
-	  var eleOfActionSelBox = document.getElementById('actionIds');
-          
       selectedOptsList(eleOfActionSelBox,actions,selActions);
                           
 	 // To display edit Message
@@ -915,19 +956,20 @@ function consentPage()
      selectedOptsList(eleOfActionSelBox,actions,selActions);
                                            
      //-- for CP
+	 var cpSelBox = document.getElementById('cpIds');
       for(var opt=0; opt<cpList.length; opt++)
       {
            theValue  = jsonResponse.locations[i].cpJsonArray[opt].locationId;
            theText = jsonResponse.locations[i].cpJsonArray[opt].locationName;
            var myNewOption = new Option(theText,theValue);     
-           document.getElementById('cpIds').options[opt] = myNewOption;
+           cpSelBox.options[opt] = myNewOption;
       }
-      var cpSelBox = document.getElementById('cpIds');
+      
       
       for(var i=0;i<cpSelBox.length;i++)
       {
       	  if(cpSelBox.options[i].value==selectedCPId){
-         		document.getElementById('cpIds').options[i].selected=true;
+         		cpSelBox.options[i].selected=true;
                 var selectedCPName=cpSelBox.options[i].text;
                 break;
           }
@@ -1098,6 +1140,8 @@ function consentPage()
       		var pageOf = form.pageOf.value; 
       		
       		var isErrors=false;
+			var isAllCPChecked=false;
+			var isCustChecked=false;
       		 
             siteListCtrl=document.getElementById("siteIds");
             roleListCtrl=document.getElementById("roleIds");
@@ -1115,12 +1159,19 @@ function consentPage()
              
             if(pageOf!=null && pageOf=="pageOfAssignPrivilegePage")
 			{
+				chkBoxObj=document.getElementById("customizeChkId");
+				if(chkBoxObj.checked==true)
+				{
+					isCustChecked=true;
+				}
+				
 				userListCtrl=document.getElementById("userIds");
+
 				var selectedUserIds = new Array();
-				
+							
 				selectedUserIds = getSelElementsList(userListCtrl);
-				
-				data="cpOperation="+cpOperation+"&selectedSiteIds="+selectedSiteIds+"&selectedUserIds="+selectedUserIds+"&selectedRoleIds="+selectedRoleIds+"&selectedActionIds="+selectedActionIds+"&operation="+operation;               
+								
+				data="cpOperation="+cpOperation+"&selectedSiteIds="+selectedSiteIds+"&selectedUserIds="+selectedUserIds+"&selectedRoleIds="+selectedRoleIds+"&selectedActionIds="+selectedActionIds+"&isCustChecked="+isCustChecked+"&operation="+operation;               
 			}
 			else if(pageOf!=null)
 			{
@@ -1128,8 +1179,7 @@ function consentPage()
 				checkBoxCtrl=document.getElementById("cpCheckId");
 				
 				var selectedCPIds = new Array();
-				var isAllCPChecked=false;
-				
+								
 	            if(checkBoxCtrl!=null && checkBoxCtrl.checked==true)
 	            {
 	             	isAllCPChecked=true;
@@ -1140,7 +1190,7 @@ function consentPage()
 	            var data="cpOperation="+cpOperation+"&selectedSiteIds="+selectedSiteIds+"&selectedCPIds="+selectedCPIds+"&selectedRoleIds="+selectedRoleIds+"&selectedActionIds="+selectedActionIds+"&isAllCPChecked="+isAllCPChecked+"&operation="+operation;                                     
 			}
 			
-			isErrors = validateMethodForPriv(pageOf,selectedSiteIds,selectedRoleIds,selectedActionIds,selectedUserIds,selectedCPIds,isAllCPChecked);
+			isErrors = validateMethodForPriv(pageOf,selectedSiteIds,selectedRoleIds,selectedActionIds,selectedUserIds,selectedCPIds,isAllCPChecked,isCustChecked);
 			
 			if(!isErrors)
 			{
@@ -1148,7 +1198,7 @@ function consentPage()
 			}
 			
       }
-	function validateMethodForPriv(pageOf,selectedSiteIds,selectedRoleIds,selectedActionIds,selectedUserIds,selectedCPIds,isAllCPChecked)
+	function validateMethodForPriv(pageOf,selectedSiteIds,selectedRoleIds,selectedActionIds,selectedUserIds,selectedCPIds,isAllCPChecked,isCustChecked)
     {
     	var isErrors=false;
     	var errorFlagForSite=false;
@@ -1160,23 +1210,28 @@ function consentPage()
              
     	if(pageOf!=null && pageOf=="pageOfAssignPrivilegePage")
 		{
-             if(selectedSiteIds.length=='0')
+			chkBoxObj=document.getElementById("customizeChkId");
+			
+			if(selectedSiteIds.length=='0')
              {
              	 errorFlagForSite=true;
              }
-             if(selectedUserIds.length=='0')
-             {
-             	 errorFlagForUser=true;
-             }
-             if(selectedActionIds.length=='0')
-             {
-              	 errorFlagForAction=true;
-             }
-             if(selectedRoleIds[0]=='-1')
-             {
-                 errorFlagForRole=true;
-             }
-             
+			if(isCustChecked)
+			{
+				if(selectedUserIds.length=='0')
+				 {
+					 errorFlagForUser=true;
+				 }
+				 if(selectedActionIds.length=='0')
+				 {
+					 errorFlagForAction=true;
+				 }
+				 if(selectedRoleIds[0]=='-1')
+				 {
+					 errorFlagForRole=true;
+				 }
+			}
+			             
                   var divId=document.getElementById("errorMess");
                   divId.style.display="none";
 				   document.getElementById("errorMessImgDiv").style.display="none";
@@ -1240,22 +1295,22 @@ function consentPage()
 	      var message="";
 		  
 	      if(errorFlagForSite){
-	            message = "<li>"+errorMessForSite+"</li>";
+	            message = "<dt>"+errorMessForSite+"</dt>";
 	      }
 	      if(errorFlagForRole)
 		  {
-	            message = message+"<li>"+errorMessForRole+"</li>";
+	            message = message+"<dt>"+errorMessForRole+"</dt>";
 	      }
 	      if(errorFlagForAction){
-	            message = message+"<li>"+errorMessForPriv+"</li>";
+	            message = message+"<dt>"+errorMessForPriv+"</dt>";
 	      }
 	       if(pageOf!=null && pageOf=="pageOfAssignPrivilegePage" && errorFlagForUser)
 		  {
-	            message =   message+"<li>"+errorMessForUser+"</li>";
+	            message =   message+"<dt>"+errorMessForUser+"</dt>";
 	      }
 	      else if(pageOf!=null && errorFlagForCP)
 		  {
-	            message =   message+"<li>"+errorMessForCP+"</li>";
+	            message =   message+"<dt>"+errorMessForCP+"</dt>";
 	      }
 	      
 		  if(message!=null)
@@ -1267,8 +1322,6 @@ function consentPage()
 				}
 				divId.innerHTML = "<tr><td width='16'>&nbsp;</td><td>"+message+"</td></tr>";
 	      }
-		  
-		 
 	   }
 
  // To clear the list and returns the selected option as it. 
@@ -1294,14 +1347,14 @@ function consentPage()
  {
  	if(selBoxObj!=null)
  	{
- 	var len=selBoxObj.options.length;
- 	for(var count=0;count<len;count++)
- 	{
- 		if(selBoxObj.options[count].selected==true)
- 		{
- 			selBoxObj.options[count].selected=false;
- 		}
- 	}
+	 	var len=selBoxObj.options.length;
+	 	for(var count=0;count<len;count++)
+	 	{
+	 		if(selBoxObj.options[count].selected==true)
+	 		{
+	 			selBoxObj.options[count].selected=false;
+	 		}
+	 	}
  	}
  }
  
@@ -1370,6 +1423,31 @@ function eventOnChkBoxClick(checkBoxId,cpSelBoxId,siteSelBoxId,roleSelBoxId)
 {
 	disableSelBoxOnChk(checkBoxId,cpSelBoxId);
 	getActionsForThisCPs(cpSelBoxId,siteSelBoxId,roleSelBoxId,checkBoxId);
+}
+
+// function for customize checkbox
+function onChkBoxClickForCP(customizeChkId,userSelBoxId,siteSelBoxId,roleSelBoxId,actionSelBoxId)
+{
+	var checkBoxObj=document.getElementById(customizeChkId);
+	var roleSelBoxObj=document.getElementById(roleSelBoxId);
+	var userSelBoxObj= document.getElementById(userSelBoxId);
+	var siteSelBoxObj= document.getElementById(siteSelBoxId);
+	var actionSelBoxObj= document.getElementById(actionSelBoxId);
+	if(checkBoxObj.checked==false)
+	{
+		deselectAllOptsOfSelBox(userSelBoxObj);
+		deselectAllOptsOfSelBox(actionSelBoxObj);
+		deselectAllOptsOfSelBox(roleSelBoxObj);
+		userSelBoxObj.disabled=true;
+		roleSelBoxObj.disabled=true;
+		actionSelBoxObj.disabled=true;
+	}
+	else
+	{
+		userSelBoxObj.disabled=false;
+		roleSelBoxObj.disabled=false;
+		actionSelBoxObj.disabled=false;
+	}
 }
 
  // disabling and enabling of selectBox on checkbox click.

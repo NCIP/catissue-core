@@ -24,14 +24,15 @@ public class SiteUserRolePrivilegeBean
     private boolean isAllCPChecked = false;
     private boolean isRowDeleted = false;
     private boolean isRowEdited = true;
-    private boolean isRowAddedInEditMode= false;
+//    private boolean isRowAddedInEditMode= false;
+    private boolean isCustChecked= false;
     
-	public boolean isRowAddedInEditMode() {
-		return isRowAddedInEditMode;
-	}
-	public void setRowAddedInEditMode(boolean isRowAddedInEditMode) {
-		this.isRowAddedInEditMode = isRowAddedInEditMode;
-	}
+//	public boolean isRowAddedInEditMode() {
+//		return isRowAddedInEditMode;
+//	}
+//	public void setRowAddedInEditMode(boolean isRowAddedInEditMode) {
+//		this.isRowAddedInEditMode = isRowAddedInEditMode;
+//	}
 	public CollectionProtocol getCollectionProtocol() {
 		return collectionProtocol;
 	}
@@ -79,5 +80,11 @@ public class SiteUserRolePrivilegeBean
 	}
 	public void setRowEdited(boolean isRowEdited) {
 		this.isRowEdited = isRowEdited;
+	}
+	public boolean isCustChecked() {
+		return isCustChecked;
+	}
+	public void setCustChecked(boolean isCustChecked) {
+		this.isCustChecked = isCustChecked;
 	}
 }

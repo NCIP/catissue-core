@@ -79,8 +79,8 @@ function updateCPTree()
 					property="consentValue(ConsentBean:${counter}_consentTierID)" />
 			</c:forEach>
 		</logic:notEqual>
-		
-				
+
+
 
 		<tr>
 			<td valign="bottom" colspan="2">
@@ -115,37 +115,37 @@ function updateCPTree()
 						style="padding-top:5px; padding-bottom:10px;">
 					<table width="100%" border="0" cellpadding="4" cellspacing="0"
 						style="background-color:#FFFFFF">
-					<div id="editMessageDivId"	style="display:none; padding-bottom:10px"></div>
-					<tr>
-					<td colspan="6" class="messagetexterror">
-					<div id="errorMessImgDiv" style="display:none">
-
-					<table>
-						<tr>	<td valign="top"><img
+						<div id="editMessageDivId"
+							style="display:none; padding-bottom:10px"></div>
+						<tr>
+							<td colspan="7" class="messagetexterror">
+							<div id="errorMessImgDiv" style="display:none">
+							<table>
+								<tr>
+									<td valign="top"><img
 										src="images/uIEnhancementImages/alert-icon.gif"
 										alt="error messages" width="16" vspace="0" hspace="0"
 										height="18" valign="top"></td>
 									<td class="messagetexterror" align="left"><strong><bean:message
 										key="errors.title" /></strong></td>
-								
+								</tr>
+							</table>
+							</div>
+							<div id="errorMess" style="display:none"></div>
+							</td>
 						</tr>
-					</table>
-					</div>
-					<div id="errorMess" style="display:none"></div>
-					</td>
-				</tr>
-				<tr class="td_color_F7F7F7">
-					<td colspan="6" align="left" class="bottomtd"></td>
-				</tr>
+						<tr class="td_color_F7F7F7">
+							<td colspan="7" align="left" class="bottomtd"></td>
+						</tr>
 						<tr>
 							<td width="6%" align="right" class="black_ar_t"><img
 								src="images/uIEnhancementImages/star.gif" alt="Mandatory"
 								width="6" height="6" hspace="0" vspace="0" align="absmiddle" />&nbsp;<img
 								src="images/uIEnhancementImages/number_1.gif" alt="Number 1"
 								width="18" height="18" align="absmiddle"></td>
-							<td width="8%" align="left" class="black_ar_t"><bean:message
+							<td width="7%" align="left" class="black_ar_t"><bean:message
 								key="Site.header" /></td>
-							<td width="36%" align="left"><select
+							<td width="28%" align="left"><select
 								class="formFieldSizedNew" id="siteIds" size="4"
 								multiple="multiple" onchange="getUsersForThisSites(this)">
 								<%
@@ -164,6 +164,10 @@ function updateCPTree()
 									}
 								%>
 							</select></td>
+							<td width="15%" class="black_ar_t"><input type="checkbox"
+								 id="customizeChkId"
+								onclick="onChkBoxClickForCP('customizeChkId','userIds','siteIds','roleIds','actionIds')"><bean:message
+								key="assignPrivileges.customize" /></td>
 							<td width="6%" align="right" class="black_ar_t"><img
 								src="images/uIEnhancementImages/star.gif" alt="Mandatory"
 								width="6" height="6" hspace="0" vspace="0" align="absmiddle" />&nbsp;<img
@@ -172,8 +176,8 @@ function updateCPTree()
 
 							<td width="10%" align="left" class="black_ar_t"><bean:message
 								key="User.header" /></td>
-							<td width="34%"><select class="formFieldSizedNew"
-								id="userIds" size="4" multiple="multiple">
+							<td width="28%"><select class="formFieldSizedNew"
+								id="userIds" size="4" multiple="multiple" disabled="true">
 								<%
 									String userName = "";
 									String userValue = "";
@@ -204,7 +208,7 @@ function updateCPTree()
 							<td align="left" class="black_ar_t"><select
 								class="formFieldSizedNew" id="roleIds"
 								onchange="getActionsForThisRole(this,'siteIds','cpIds')"
-								onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+								onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" disabled="true">
 								<%
 									String roleName = "";
 									String roleValue = "";
@@ -224,6 +228,7 @@ function updateCPTree()
 									}
 								%>
 							</select></td>
+							<td width="10%">&nbsp;</td>
 							<td align="right" class="black_ar_t"><img
 								src="images/uIEnhancementImages/star.gif" alt="Mandatory"
 								width="6" height="6" hspace="0" vspace="0" align="absmiddle" />&nbsp;<img
@@ -233,7 +238,7 @@ function updateCPTree()
 								key="app.Privileges" /></td>
 							<td><select class="formFieldSizedNew" id="actionIds"
 								size="4" onchange="getCustomRole('roleIds',this)"
-								multiple="multiple">
+								multiple="multiple" disabled="true">
 								<%
 									String actionName = "";
 									String actionValue = "";
@@ -264,7 +269,7 @@ function updateCPTree()
 					<td width="97%" align="right" class="dividerline">&nbsp;<html:button
 						property="addKeyValue" styleClass="black_ar"
 						onclick="<%=functionName1%>">
-						<bean:message key="buttons.addPrivilege" />
+						<bean:message key="buttons.addPrivileges" />
 					</html:button></td>
 					<td width="3%" class="dividerline">&nbsp;</td>
 				</tr>
