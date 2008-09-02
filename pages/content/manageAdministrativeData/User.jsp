@@ -217,11 +217,11 @@ function handleStatus(status)
 								<td width="17%" align="left"><label
 									for="confirmEmailAddress" class="black_ar"><bean:message
 									key="user.confirmemailAddress" /></label></td>
-								<td width="17%" align="left"><html:text
+								<td width="19%" align="left"><html:text
 									styleClass="black_ar" maxlength="255" size="30"
 									styleId="confirmEmailAddress" property="confirmEmailAddress"
 									readonly='${requestScope.readOnlyEmail}' /></td>
-								<td width="14%" align="left" valign="top">&nbsp;</td>
+								<td width="13%" align="left" valign="top">&nbsp;</td>
 							</logic:notEqual>
 							<logic:equal name="pageOf"
 								value='${requestScope.pageOfUserProfile}'>
@@ -399,30 +399,46 @@ function handleStatus(status)
 							<logic:notEqual name="pageOf"
 								value='${requestScope.pageOfUserProfile}'>
 								<tr>
-									<td width="1%" align="center" class="black_ar_t"><span
+									<td width="1%" align="center" class="black_ar"><span
 										class="blue_ar_b"><img
 										src="images/uIEnhancementImages/star.gif" alt="Mandatory"
 										width="6" height="6" hspace="0" vspace="0" /></span></td>
-									<td width="17%" align="left" class="black_ar_t"><label><bean:message
+									<td width="17%" align="left" class="black_ar"><label><bean:message
 										key="user.role" /></label></td>
-									<td width="19%" class="black_ar_t">
-										<html:select property = "role" styleId= "roleIds" styleClass = "formFieldSizedNew" onchange="preEventsOnRoleSelect(this,'cpCheckId')">
-											<html:options collection  = "roleList" labelProperty = "name" property = "value" />
-										</html:select></td>
+									<td width="19%" class="black_ar"><html:select
+										property="role" styleId="roleIds"
+										styleClass="formFieldSizedNew"
+										onchange="preEventsOnRoleSelect(this,'cpCheckId')">
+										<html:options collection="roleList" labelProperty="name"
+											property="value" />
+									</html:select></td>
 									<td width="13%" align="left" valign="top">&nbsp;</td>
-									<td width="1%" align="center" class="black_ar_t"><span
+									<td width="1%" align="center" class="black_ar"><span
 										class="blue_ar_b"><img
 										src="images/uIEnhancementImages/star.gif" alt="Mandatory"
 										width="6" height="6" hspace="0" vspace="0" /></span></td>
-									<td width="17%" align="left" class="black_ar_t"><bean:message
+									<td width="17%" align="left" class="black_ar"><bean:message
 										key="assignPrivileges.site(s)" /></td>
-									<td rowspan="3" width="17%" align="left" class="black_ar_t">
-										<html:select property = "siteIds" styleId= "siteIds" size = "4" styleClass = "formFieldSizedNew" multiple="multiple" onchange="getCPsForThisSites(this)">
-											<html:options collection  = "siteList" labelProperty = "name" property = "value" />
+									<td rowspan="3" width="19%" align="left" class="black_ar">
+									<logic:equal name="true" value='${requestScope.flagForSARole}'>
+										<html:select property="siteIds" styleId="siteIds" size="4"
+											styleClass="formFieldSizedNew" multiple="multiple"
+											onchange="getCPsForThisSites(this)" disabled="true">
+											<html:options collection="siteList" labelProperty="name"
+												property="value" />
 										</html:select>
-									</td>
-									<td width="14%" align="left" valign="top" class="black_ar_t">&nbsp;</td>
+									</logic:equal> <logic:notEqual name="true"
+										value='${requestScope.flagForSARole}'>
+										<html:select property="siteIds" styleId="siteIds" size="4"
+											styleClass="formFieldSizedNew" multiple="multiple"
+											onchange="getCPsForThisSites(this)">
+											<html:options collection="siteList" labelProperty="name"
+												property="value" />
+										</html:select>
+									</logic:notEqual></td>
+									<td width="13%" align="left" valign="top" class="black_ar_t">&nbsp;</td>
 								</tr>
+								<tr><td colspan="4" rowspan="2">&nbsp;</td></tr>
 							</logic:notEqual>
 						</logic:notEqual>
 
@@ -458,7 +474,7 @@ function handleStatus(status)
 
 					<tr>
 						<td colspan="2">
-							<logic:notEqual name="pageOf"
+						<logic:notEqual name="pageOf"
 							value='${requestScope.pageOfUserProfile}'>
 							<div id="privilegesDiv" style="display:none">
 							<table width="100%" border="0" cellpadding="3" cellspacing="0">
@@ -480,11 +496,18 @@ function handleStatus(status)
 										width="6" height="6" hspace="0" vspace="0" /></span></td>
 									<td width="17%" align="left" class="black_ar"><bean:message
 										key="assignPrivileges.privilege(s)" /></td>
-									<td rowspan="2" width="17%" align="center" class="black_ar_t"
-										valign="top"><select class="formFieldSizedNew"
-										id="actionIds" size="5"
-										onchange="getCustomRole('roleIds',this)" multiple="multiple">
-										<%
+									<td rowspan="2" width="19%" align="center" class="black_ar_t"
+										valign="top"><logic:equal name="true"
+										value='${requestScope.flagForSARole}'>
+
+										<select class="formFieldSizedNew" id="actionIds" size="5"
+											onchange="getCustomRole('roleIds',this)" multiple="multiple"
+											disabled="true">
+									</logic:equal> <logic:notEqual name="true"
+										value='${requestScope.flagForSARole}'>
+										<select class="formFieldSizedNew" id="actionIds" size="4"
+											onchange="getCustomRole('roleIds',this)" multiple="multiple">
+									</logic:notEqual> <%
 											String actionName = "";
 											String actionValue = "";
 											if ((actionList != null) && !(actionList.isEmpty())) {
@@ -494,13 +517,12 @@ function handleStatus(status)
 													actionValue = ""
 													+ ((NameValueBean) actionList.get(i)).getValue();
 										%>
-										<option value="<%=actionValue%>"><%=actionName%></option>
-										<%
+									<option value="<%=actionValue%>"><%=actionName%></option>
+									<%
 											}
 											}
-										%>
-									</select></td>
-									<td width="14%" align="left" valign="top">&nbsp;</td>
+										%> </select></td>
+									<td width="13%" align="left" valign="top">&nbsp;</td>
 								</tr>
 								<tr>
 									<td width="1%" align="center" class="black_ar">&nbsp;</td>
@@ -510,6 +532,7 @@ function handleStatus(status)
 										multiple="multiple"
 										onchange="getActionsForThisCPs(this.id,'siteIds','roleIds','cpCheckId')"
 										disabled="true">
+
 										<%
 											String cpActionName = "";
 											String cpActionValue = "";
@@ -535,7 +558,7 @@ function handleStatus(status)
 									<td colspan="7" width="97%" align="right" >&nbsp;
 									<html:button property="addKeyValue" styleClass="black_ar"
 										onclick="<%=functionName1%>">
-										<bean:message key="buttons.addPrivilege" />
+										<bean:message key="buttons.addPrivileges" />
 									</html:button></td>
 									<td width="3%" >&nbsp;</td>
 								</tr>
@@ -717,10 +740,10 @@ function handleStatus(status)
 													<td width="17%" align="left" class="black_ar_t"><label
 														for="comments"> <bean:message key="user.comments" />
 													</label></td>
-													<td width="17%" colspan="1" align="left" valign="top"><label>
+													<td width="19%" colspan="1" align="left" valign="top"><label>
 													<html:textarea styleClass="black_ar_s" cols="33" rows="3"
 														styleId="comments" property="comments" /> </label></td>
-													<td width="14%" align="left">&nbsp;</td>
+													<td width="13%" align="left">&nbsp;</td>
 												</tr>
 											</logic:equal>
 										</logic:equal>
@@ -749,10 +772,10 @@ function handleStatus(status)
 												<td width="17%" align="left" class="black_ar_t"><label
 													for="comments"> <bean:message key="user.comments" />
 												</label></td>
-												<td width="17%" colspan="1" align="left" valign="top"><label>
+												<td width="19%" colspan="1" align="left" valign="top"><label>
 												<html:textarea styleClass="black_ar_s" cols="33" rows="3"
 													styleId="comments" property="comments" /> </label></td>
-												<td width="14%" align="left">&nbsp;</td>
+												<td width="13%" align="left">&nbsp;</td>
 											</tr>
 										</logic:equal>
 										<logic:equal name="pageOf"
@@ -763,10 +786,10 @@ function handleStatus(status)
 													<td width="1%" height="25" align="left" class="black_ar_t">&nbsp;</td>
 													<td width="17%" align="left" class="black_ar_t"><bean:message
 														key="user.comments" /></td>
-													<td width="30%" colspan="2" align="left" valign="top"><label>
+													<td width="82%" colspan="6" align="left" valign="top"><label>
 													<html:textarea styleClass="black_ar_s" cols="90" rows="3"
 														styleId="comments" property="comments" /> </label></td>
-													<td width="52%" colspan="4" align="left">&nbsp;</td>
+
 												</tr>
 											</logic:notEqual>
 										</logic:equal>
