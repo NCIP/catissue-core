@@ -247,7 +247,7 @@ public class QueryShoppingCartBizLogic
 		boolean isSpecimenValid = true;
 		Specimen specimen =(Specimen) dao.retrieve(Specimen.class.getName(), specimenId);
 		
-		if(!specimen.getCollectionStatus().equals(Constants.COLLECTION_STATUS_COLLECTED))
+		if(specimen.getCollectionStatus()==null || !specimen.getCollectionStatus().equals(Constants.COLLECTION_STATUS_COLLECTED))
 		{
 			isSpecimenValid = false;
 		}
