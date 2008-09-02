@@ -111,7 +111,7 @@ function checkStotagePosition()
     </table>
     <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
         <tr>
-          <td colspan="2" align="left"><%@ include file="/pages/content/common/ActionErrors.jsp" %></td>
+          <td colspan="2" align="left" class="bottomtd"><%@ include file="/pages/content/common/ActionErrors.jsp" %></td>
         </tr>
         <tr>
           <td colspan="2" align="left" class="tr_bg_blue1"><span class="blue_ar_b"> &nbsp;

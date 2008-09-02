@@ -49,7 +49,7 @@
     </table>
       <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
         <tr>
-          <td align="left"><%@ include file="/pages/content/common/ActionErrors.jsp" %></td>
+          <td align="left" class="bottomtd"><%@ include file="/pages/content/common/ActionErrors.jsp" %></td>
         </tr>
         <tr>
           <td align="left" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;<logic:equal name="operation" value='${requestScope.operationAdd}'><bean:message key="site.title" /></logic:equal><logic:equal name="operation" value='${requestScope.operationEdit}'><bean:message key="site.editTitle" /></logic:equal></span></td>

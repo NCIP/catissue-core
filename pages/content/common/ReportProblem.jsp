@@ -45,7 +45,7 @@
       <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
       
       <tr>
-        <td align="left"><%@ include file="/pages/content/common/ActionErrors.jsp" %></td>
+        <td align="left" class="bottomtd"><%@ include file="/pages/content/common/ActionErrors.jsp" %></td>
       </tr>
 	  <logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
 	  <tr>

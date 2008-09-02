@@ -27,7 +27,7 @@
         <td align="left" class=" grey_ar_s">&nbsp; <bean:message  key="forgotpassword.subtitle" /></td>
       </tr>
 	  <tr>
-        <td align="left" ><%@ include file="/pages/content/common/ActionErrors.jsp" %></td>
+        <td align="left" class="bottomtd"><%@ include file="/pages/content/common/ActionErrors.jsp" %></td>
       </tr>
       <tr>
         <td align="left" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;<bean:message key="forgotpassword.title"/></span></td>
