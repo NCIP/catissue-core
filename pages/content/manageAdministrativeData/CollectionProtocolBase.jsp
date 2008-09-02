@@ -5,10 +5,11 @@
 <%@ page language="java" isELIgnored="false"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
+<script src="jss/javaScript.js" type="text/javascript"></script>
 <script>
 	function openEventPage()
 	{
-		var formId=window.frames['SpecimenRequirementView'].document.getElementById('CollectionProtocolForm');
+		var formId=window.frames['SpecimenRequirementView'].document.getElementById('CollectionProtocolForm');		
 		if(formId!=null)
 		{
 		    var action="DefineEvents.do?pageOf=pageOfDefineEvents&operation=add";
@@ -27,10 +28,10 @@
 	    formId.submit();
 	}
 
-	function submitCP()
+	function saveCP()
 	{
 		var formId=window.frames['SpecimenRequirementView'].document.getElementById('CollectionProtocolForm');
-		if(formId!=null)
+	    if(formId!=null)
 		{
 			var action="DefineEvents.do?Event_Id=dummyId&pageOf=submitSpecimen&operation=${requestScope.operation}";
 		}
@@ -48,7 +49,22 @@
         formId.submit();
 	}
 
-
+    function submitCP()
+	{
+		
+		
+       var actvity = window.frames['SpecimenRequirementView'].document.getElementById('activityStatus');
+	   if((actvity!=null) && (actvity.value != undefined) && (actvity.value == "Disabled")){
+         var go = confirmDialogForDisable();
+	     if (go==true){
+	 	   saveCP();
+	     } 
+	   }
+       else{
+	    saveCP();
+   }
+  	
+  }
 </script>
 
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
