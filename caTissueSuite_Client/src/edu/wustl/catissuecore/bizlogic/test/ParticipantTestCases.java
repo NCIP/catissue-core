@@ -672,25 +672,34 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
 			
 			Participant participant3=new Participant();
 			participant3.setId(participant.getId());
-			participant3=(Participant)appService.search(Participant.class, participant3);
+			participant3=(Participant)appService.search(Participant.class, participant3).iterator().next();
 			
 			Collection pmiCollection=participant3.getParticipantMedicalIdentifierCollection();
-			if(pmiCollection.isEmpty())
+			if(!pmiCollection.isEmpty())
 			{
-				System.out.println("Chitra");
-				ParticipantMedicalIdentifier pmIdentifier = (ParticipantMedicalIdentifier) pmiCollection.iterator().next();
-				System.out.println("Chitra");
-				if(pmIdentifier.getMedicalRecordNumber().equals(mrn)&&pmIdentifier.getSite().getId().equals(site.getId()))
+				Iterator<ParticipantMedicalIdentifier> pmiIterator=  pmiCollection.iterator();
 				
+				while(pmiIterator.hasNext())
 				{
-					System.out.println("Succecfully updated");
+					ParticipantMedicalIdentifier pmIdentifier=pmiIterator.next();
+				
+					if(pmIdentifier.getMedicalRecordNumber()!=null&&pmIdentifier.getSite().getId()!=null)
+					{
+						if(pmIdentifier.getMedicalRecordNumber().equals(mrn)&&pmIdentifier.getSite().getId().equals(site.getId()))
+						{
+								
+							System.out.println("Succecfully updated");
+							assertTrue("Participant wiht medical identifier updated successfully ", true);
+									
+						}
+					}
 				}
 			}
-			assertTrue("Participant wiht medical identifier updated successfully ", true);
 		
 		}
 		catch (Exception e) {
 			System.out.println(e.getMessage());
+			e.printStackTrace();
 			assertFalse("Can not update ", true);
 			
 		}
