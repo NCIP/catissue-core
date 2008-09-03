@@ -70,6 +70,10 @@ public class DisplayAnnotationDataEntryPageAction extends BaseAction
         
         List cpIdsList = new ArrayList();
 		cpIdsList = edu.wustl.common.util.Utility.getCPIdsList(request.getParameter("staticEntityName"), Long.valueOf(request.getParameter("entityRecordId")), sessionDataBean, cpIdsList);
+		if(cpIdsList.size()>1)
+		{
+			cpIdsList.remove(1);
+		}
 		
 		PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(sessionDataBean.getUserName());
 		StringBuffer sb = new StringBuffer();
@@ -79,7 +83,13 @@ public class DisplayAnnotationDataEntryPageAction extends BaseAction
 			for (Object cpId : cpIdsList)
 			{
 				boolean hasPrivilege = ((privilegeCache.hasPrivilege(sb.toString()+cpId.toString(), Permissions.REGISTRATION)) ||
-								(privilegeCache.hasPrivilege(sb.toString()+cpId.toString(), Permissions.SPECIMEN_PROCESSING)));				
+								(privilegeCache.hasPrivilege(sb.toString()+cpId.toString(), Permissions.SPECIMEN_PROCESSING)));
+				
+				if(!hasPrivilege)
+				{
+					hasPrivilege = Utility.checkForAllCurrentAndFutureCPs(null, Permissions.REGISTRATION+","+Permissions.SPECIMEN_PROCESSING, sessionDataBean, cpId.toString());
+				}
+				
 				if(!hasPrivilege)
 				{
 					ActionErrors errors = new ActionErrors();
