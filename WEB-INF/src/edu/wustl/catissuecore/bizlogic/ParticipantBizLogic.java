@@ -213,27 +213,30 @@ public class ParticipantBizLogic extends DefaultBizLogic
 			cpId = collectionProtocolRegistration.getCollectionProtocol().getId();
 
 			//getting Old cpr
-			oldCollectionProtocolRegistration = getCollectionProtocolRegistrationOld(cpId, oldcollectionProtocolRegistrationCollection);
-			if (oldCollectionProtocolRegistration == null)
+			if(cpId!=null)
 			{
-				participantId = collectionProtocolRegistration.getParticipant().getId();
-				protocolParticipantId = collectionProtocolRegistration.getProtocolParticipantIdentifier();
-
-				if (protocolParticipantId == null)
-					protocolParticipantId = "";
-
-				if (collectionProtocolRegistration.getActivityStatus().equals(Constants.ACTIVITY_STATUS_DISABLED))
+				oldCollectionProtocolRegistration = getCollectionProtocolRegistrationOld(cpId, oldcollectionProtocolRegistrationCollection);
+				if (oldCollectionProtocolRegistration == null)
 				{
-					participantRegCacheManager.deRegisterParticipant(cpId, participantId, protocolParticipantId);
+					participantId = collectionProtocolRegistration.getParticipant().getId();
+					protocolParticipantId = collectionProtocolRegistration.getProtocolParticipantIdentifier();
+
+					if (protocolParticipantId == null)
+						protocolParticipantId = "";
+
+					if (collectionProtocolRegistration.getActivityStatus().equals(Constants.ACTIVITY_STATUS_DISABLED))
+					{
+						participantRegCacheManager.deRegisterParticipant(cpId, participantId, protocolParticipantId);
+					}
+					else
+					{
+					participantRegCacheManager.registerParticipant(cpId, participantId, protocolParticipantId);
+					}
 				}
 				else
 				{
-					participantRegCacheManager.registerParticipant(cpId, participantId, protocolParticipantId);
+					cprBizLogic.postUpdate(dao, collectionProtocolRegistration, oldCollectionProtocolRegistration, sessionDataBean);
 				}
-			}
-			else
-			{
-				cprBizLogic.postUpdate(dao, collectionProtocolRegistration, oldCollectionProtocolRegistration, sessionDataBean);
 			}
 		}
 
@@ -365,7 +368,14 @@ public class ParticipantBizLogic extends DefaultBizLogic
 			//End:-  Change for API Search 
 
 			pmIdentifier.setParticipant(participant);
-			//dao.update(pmIdentifier, sessionDataBean, true, true, false);
+			if(pmIdentifier.getId()!=null)
+			{
+				dao.update(pmIdentifier, sessionDataBean, true, true, false);
+			}
+			else if(pmIdentifier.getId()==null||pmIdentifier.getId().equals(""))
+			{
+				dao.insert(pmIdentifier, sessionDataBean, true, true);
+			}
 
 			//Audit of ParticipantMedicalIdentifier.
 			ParticipantMedicalIdentifier oldPmIdentifier = (ParticipantMedicalIdentifier) getCorrespondingOldObject(
@@ -388,20 +398,22 @@ public class ParticipantBizLogic extends DefaultBizLogic
 
 			ApiSearchUtil.setCollectionProtocolRegistrationDefault(collectionProtReg);
 
-			collectionProtReg.setParticipant(participant);
+			if(collectionProtReg.getCollectionProtocol().getId()!=null&&!collectionProtReg.equals(""))
+			{
+				collectionProtReg.setParticipant(participant);
 
 			//Audit of CollectionProtocolRegistration.
-			CollectionProtocolRegistration oldcollectionProtocolRegistration = (CollectionProtocolRegistration) getCorrespondingOldObject(
+				CollectionProtocolRegistration oldcollectionProtocolRegistration = (CollectionProtocolRegistration) getCorrespondingOldObject(
 					oldCollectionProtocolRegistrationCollection, collectionProtReg.getId());
 
-			if (collectionProtReg.getId() == null) // If Collection Protocol Registration is not happened for given participant
-			{
-				collectionProtReg.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
-				cprBizLogic.insert(collectionProtReg, dao, sessionDataBean);
-				continue;
+				if (collectionProtReg.getId() == null) // If Collection Protocol Registration is not happened for given participant
+				{
+					collectionProtReg.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+					cprBizLogic.insert(collectionProtReg, dao, sessionDataBean);
+					continue;
+				}
+				cprBizLogic.update(dao, collectionProtReg, oldcollectionProtocolRegistration, sessionDataBean);
 			}
-
-			cprBizLogic.update(dao, collectionProtReg, oldcollectionProtocolRegistration, sessionDataBean);
 		}
 
 		//Disable the associate collection protocol registration
@@ -496,14 +508,18 @@ public class ParticipantBizLogic extends DefaultBizLogic
 		{
 			CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) itCollectionProtocolRegistrationCollection
 					.next();
-			long collectionProtocolId = collectionProtocolRegistration.getCollectionProtocol().getId().longValue();
-			if (isCollectionProtocolExist(newCollectionProtocolRegistrationCollection, collectionProtocolId))
+			if(collectionProtocolRegistration.getCollectionProtocol()!=null&&!collectionProtocolRegistration.equals(""))
 			{
+				long collectionProtocolId = collectionProtocolRegistration.getCollectionProtocol().getId().longValue();
+				if (isCollectionProtocolExist(newCollectionProtocolRegistrationCollection, collectionProtocolId))
+				{
 				return true;
-			}
-			else
-			{
-				newCollectionProtocolRegistrationCollection.add(collectionProtocolRegistration);
+				}
+				else
+				{
+					newCollectionProtocolRegistrationCollection.add(collectionProtocolRegistration);
+				}
+			
 			}
 		}
 		return false;
@@ -671,13 +687,17 @@ public class ParticipantBizLogic extends DefaultBizLogic
 			{
 				CollectionProtocolRegistration collectionProtocolRegistrationIdentifier = (CollectionProtocolRegistration) itrCollectionProtocolRegistration
 						.next();
-				long collectionProtocolTitle = collectionProtocolRegistrationIdentifier.getCollectionProtocol().getId().longValue();
-				String collectionProtocolRegistrationDate = Utility.parseDateToString(collectionProtocolRegistrationIdentifier.getRegistrationDate(),
-						Constants.DATE_PATTERN_MM_DD_YYYY);
-				String errorKey = validator.validateDate(collectionProtocolRegistrationDate, true);
-				if (collectionProtocolTitle <= 0 || errorKey.trim().length() > 0)
+				if(collectionProtocolRegistrationIdentifier.getCollectionProtocol()!=null&&!collectionProtocolRegistrationIdentifier.equals(""))
 				{
-					throw new DAOException(ApplicationProperties.getValue("errors.participant.collectionProtocolRegistration.missing"));
+					long collectionProtocolTitle = collectionProtocolRegistrationIdentifier.getCollectionProtocol().getId().longValue();
+					String collectionProtocolRegistrationDate = Utility.parseDateToString(collectionProtocolRegistrationIdentifier.getRegistrationDate(),
+						Constants.DATE_PATTERN_MM_DD_YYYY);
+					String errorKey = validator.validateDate(collectionProtocolRegistrationDate, true);
+					if (collectionProtocolTitle <= 0 || errorKey.trim().length() > 0)
+					{
+						throw new DAOException(ApplicationProperties.getValue("errors.participant.collectionProtocolRegistration.missing"));
+					}
+					
 				}
 				//				check the activity status of all the specimens associated to the collection protocol registration
 				if (collectionProtocolRegistrationIdentifier.getActivityStatus() != null

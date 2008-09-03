@@ -617,7 +617,85 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
 	}
 	
 	
+	public void testUpdateParticipantWithoutCollectionProtocol()
+	{
+		try
+		{
+			Participant participant=new Participant();
+			participant.setFirstName("fisrtname"+UniqueKeyGeneratorUtil.getUniqueKey());
+			participant.setLastName("lastName"+UniqueKeyGeneratorUtil.getUniqueKey());
+			participant.setActivityStatus("Active");
+			
+			Collection participantMedicalIdentifierCollection = new HashSet();
+			participant.setParticipantMedicalIdentifierCollection(participantMedicalIdentifierCollection);
+			participant=(Participant)appService.createObject(participant);
+			participant.setParticipantMedicalIdentifierCollection(participantMedicalIdentifierCollection);
+			participant=(Participant) appService.updateObject(participant);
+			assertTrue("Participant wihtout CPR updated successfully ", true);
+		}
+		catch (Exception e) {
+			System.out.println(e.getMessage());
+			assertFalse("Can not update ", true);
+		}
+		
+	}
 	
+	public void testUpdateParticipantWithPMI()
+	{
+		try
+		{
+			Participant participant=new Participant();
+			participant.setFirstName("fisrtname"+UniqueKeyGeneratorUtil.getUniqueKey());
+			participant.setLastName("lastName"+UniqueKeyGeneratorUtil.getUniqueKey());
+			participant.setActivityStatus("Active");
+			
+			participant.setParticipantMedicalIdentifierCollection(new HashSet());
+			participant=(Participant)appService.createObject(participant);
+			
+			Participant participant2=new Participant();
+			participant2.setId(participant.getId());
+			participant2=(Participant)appService.search(Participant.class, participant2).iterator().next();
+			
+			Collection participantMedicalIdentifierCollection = new HashSet();
+			ParticipantMedicalIdentifier pmi = new ParticipantMedicalIdentifier();
+			Site site =(Site)  TestCaseUtility.getObjectMap(Site.class);
+			pmi.setSite(site);
+			
+			System.out.println("Site is "+site.getName());
+			String mrn="mrn"+UniqueKeyGeneratorUtil.getUniqueKey();
+			pmi.setMedicalRecordNumber(mrn);
+			pmi.setParticipant(participant2);
+			pmi.setParticipant(participant2);
+			participantMedicalIdentifierCollection.add(pmi);
+			participant2.setParticipantMedicalIdentifierCollection(participantMedicalIdentifierCollection);	
+			participant2=(Participant) appService.updateObject(participant2);
+			
+			Participant participant3=new Participant();
+			participant3.setId(participant.getId());
+			participant3=(Participant)appService.search(Participant.class, participant3);
+			
+			Collection pmiCollection=participant3.getParticipantMedicalIdentifierCollection();
+			if(pmiCollection.isEmpty())
+			{
+				System.out.println("Chitra");
+				ParticipantMedicalIdentifier pmIdentifier = (ParticipantMedicalIdentifier) pmiCollection.iterator().next();
+				System.out.println("Chitra");
+				if(pmIdentifier.getMedicalRecordNumber().equals(mrn)&&pmIdentifier.getSite().getId().equals(site.getId()))
+				
+				{
+					System.out.println("Succecfully updated");
+				}
+			}
+			assertTrue("Participant wiht medical identifier updated successfully ", true);
+		
+		}
+		catch (Exception e) {
+			System.out.println(e.getMessage());
+			assertFalse("Can not update ", true);
+			
+		}
+		
+	}
 	
 /*	public void testInvalidParticipantActivityStatus()
 	{

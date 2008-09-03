@@ -678,11 +678,14 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 		}
 		else // Setting default response to collection protocol
 		{
+			if(collectionProtocolRegistration.getCollectionProtocol()!=null)
+			{
 			String cpIDcollectionProtocolRegistration = collectionProtocolRegistration.getCollectionProtocol().getId().toString();
 			Collection consentTierCollection = getConsentList(cpIDcollectionProtocolRegistration);
 			
 			Collection consentTierResponseCollection = prepareConsentTierResponseCollection(consentTierCollection,false);
 			collectionProtocolRegistration.setConsentTierResponseCollection(consentTierResponseCollection);
+			}
 		}
 	}
 	
