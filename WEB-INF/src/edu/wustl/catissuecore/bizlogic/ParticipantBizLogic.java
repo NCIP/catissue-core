@@ -1324,10 +1324,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
     				}
                 } else
                 {
-                	if(!protectionElementName.equals(Constants.ADD_GLOBAL_PARTICIPANT))
-                	{
-                		isAuthorized = edu.wustl.catissuecore.util.global.Utility.checkForAllCurrentAndFutureCPs(dao,privilegeName, sessionDataBean, null);
-                	}
+                	isAuthorized = edu.wustl.catissuecore.util.global.Utility.checkForAllCurrentAndFutureCPs(dao,privilegeName, sessionDataBean, null);
                 }
 		} 
 		else
