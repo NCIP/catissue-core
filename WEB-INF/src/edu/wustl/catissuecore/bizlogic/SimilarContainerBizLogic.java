@@ -362,6 +362,10 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 				{
 					scIds.add(Long.valueOf(similarContainerMap.get(key).toString()));
 				}
+				if(key.toString().contains("siteId"))
+				{
+					siteIds.add(Long.valueOf(similarContainerMap.get(key).toString()));
+				}
 			}
 			
 			for(Long scId : scIds)
@@ -389,6 +393,11 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 					}
 					siteIds.add(site.getId());
 				}
+			}
+			
+			for(Long siteId : siteIds)
+			{
+				sb.append("_"+siteId.toString());
 			}
 		}
 		return sb.toString(); 
