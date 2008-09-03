@@ -1184,7 +1184,6 @@
 
 			<transaction src="${dbupgrade.sql.dir}/Oracle/query_Suite1.0_to_Suite1.1.sql" />
 	   		<transaction>commit;</transaction>
-
 				
 			<classpath>
 				<fileset dir="${lib.dir}">
@@ -1192,6 +1191,15 @@
 				</fileset>
 			</classpath>
 		</sql>
+		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle" delimiter="/">		
+			<transaction src="${dbupgrade.sql.dir}/Oracle/query_Suite1.0_to_Suite1.1_seqChange.sql" />
+	   		<transaction>commit/</transaction>
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</sql>			
 		<antcall target="upgrade_db_demodel_oracle" />
 		<antcall target="alter_CA_model_Tables" />
 	</target>
