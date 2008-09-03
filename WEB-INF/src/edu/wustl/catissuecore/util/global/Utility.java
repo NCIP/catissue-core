@@ -68,6 +68,7 @@ import edu.wustl.catissuecore.domain.TransferEventParameters;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.dto.CollectionProtocolDTO;
 import edu.wustl.catissuecore.multiRepository.bean.SiteUserRolePrivilegeBean;
+import edu.wustl.catissuecore.util.CSMValidator;
 import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.QueryResultObjectData;
@@ -1980,6 +1981,11 @@ public class Utility extends edu.wustl.common.util.Utility {
 		if(cpIdsList == null)
 		{
 			return false;
+		}
+		
+		if(cpIdsList.isEmpty())
+		{
+			return new CSMValidator().hasPrivilegeToViewGlobalParticipant(sessionDataBean);
 		}
 		
 		for(Object cpId : cpIdsList)
