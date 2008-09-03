@@ -303,7 +303,7 @@
 				<include name="caTissue_Suite_User_Manual.pdf" />
 	    		<exclude name="**/WEB-INF/classes/**/namegenerator/*"/>
 				
-				
+				<exclude name="**/pages/subMenu/**" />
 				<exclude name="**/WEB-INF/src*/**" />
 				<exclude name="**/WEB-INF/lib/*.zip" />
 				<exclude name="**/WEB-INF/lib/ant*.jar" />
