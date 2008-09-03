@@ -213,6 +213,11 @@ public class ApproveUserBizLogic extends DefaultBizLogic
 		Set protectionObjects=new HashSet();
 		protectionObjects.add(user);
 
+		if(userRowIdMap != null && !userRowIdMap.isEmpty())
+		{
+			new UserBizLogic().updateUserDetails(user,userRowIdMap);
+		}
+		
 		privilegeManager.insertAuthorizationData(
 				getAuthorizationData(user, userRowIdMap), protectionObjects, null, user.getObjectId());
 

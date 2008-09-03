@@ -394,7 +394,7 @@ public class UserBizLogic extends DefaultBizLogic
 	}
 	
 	
-	private void updateUserDetails(User user1, Map<String, SiteUserRolePrivilegeBean> userRowIdMap) 
+	public void updateUserDetails(User user1, Map<String, SiteUserRolePrivilegeBean> userRowIdMap) 
 	{
 		Set<Site> siteCollection = new HashSet<Site>();
 		Set<CollectionProtocol> cpCollection = new HashSet<CollectionProtocol>();
