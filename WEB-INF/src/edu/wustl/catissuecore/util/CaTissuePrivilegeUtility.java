@@ -27,6 +27,7 @@ import edu.wustl.common.dao.DAO;
 import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.security.PrivilegeCache;
 import edu.wustl.common.security.PrivilegeManager;
+import edu.wustl.common.util.Permissions;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.Variables;
 import gov.nih.nci.security.authorization.domainobjects.Role;
@@ -248,7 +249,11 @@ public class CaTissuePrivilegeUtility
 			Collection<Site> siteCollection = cp.getSiteCollection();
 			Set<Long> siteIdSetSpecific = new HashSet<Long>(); 
 			
-			for (NameValueBean nmv : Variables.privilegeGroupingMap.get("CP"))
+			List<NameValueBean> cpPrivilegeGroupingMap = new ArrayList<NameValueBean>();
+			cpPrivilegeGroupingMap.addAll(Variables.privilegeGroupingMap.get("CP"));
+			cpPrivilegeGroupingMap.addAll(Variables.privilegeGroupingMap.get("SCIENTIST"));
+			
+			for (NameValueBean nmv : cpPrivilegeGroupingMap)
 			{
 				String privilegeName = nmv.getName();
 				Set<String> users = PrivilegeManager.getInstance().getAccesibleUsers(objectId,
