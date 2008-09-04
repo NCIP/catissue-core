@@ -128,7 +128,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			{
 			    checkParentSpecimenDisposal(sessionDataBean,specimen, dao);
 			}
-			allocatePositionForSpecimen(specimen);
+			//allocatePositionForSpecimen(specimen);
 			setStorageLocationToNewSpecimen(dao, specimen, sessionDataBean, true);
 			setSpecimenAttributes(dao, specimen, sessionDataBean);
 			generateLabel(specimen);
@@ -1820,6 +1820,10 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		validateFields(specimen, dao, operation, partOfMulipleSpecimen);
 		validateEnumeratedData(specimen, operation, validator);
 		validateSpecimenCharacterstics(specimen);
+		if (operation.equals(Constants.ADD))
+		{
+			allocateSpecimenPostionsRecursively(specimen);
+		}
 		return true;
 	}
 
@@ -2060,17 +2064,20 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			while (itr.hasNext())
 			{
 				extIdentifier = (ExternalIdentifier) itr.next();
-				if (validator.isEmpty(extIdentifier.getName()))
+				if(extIdentifier.getName() !=null || extIdentifier.getValue() != null)
 				{
-					String message = ApplicationProperties.getValue("specimen.msg");
-					throw new DAOException(ApplicationProperties.getValue(
-							"errors.specimen.externalIdentifier.missing", message));
-				}
-				if (validator.isEmpty(extIdentifier.getValue()))
-				{
-					String message = ApplicationProperties.getValue("specimen.msg");
-					throw new DAOException(ApplicationProperties.getValue(
-							"errors.specimen.externalIdentifier.missing", message));
+					if (validator.isEmpty(extIdentifier.getName()))
+					{
+						String message = ApplicationProperties.getValue("specimen.msg");
+						throw new DAOException(ApplicationProperties.getValue(
+								"errors.specimen.externalIdentifier.missing", message));
+					}
+					if (validator.isEmpty(extIdentifier.getValue()))
+					{
+						String message = ApplicationProperties.getValue("specimen.msg");
+						throw new DAOException(ApplicationProperties.getValue(
+								"errors.specimen.externalIdentifier.missing", message));
+					}
 				}
 			}
 		}
@@ -3301,10 +3308,18 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 				if(specimen.getLineage() != null && (specimen.getLineage().equals(Constants.DERIVED_SPECIMEN) || specimen.getLineage().equals(Constants.ALIQUOT)))
 				{
 					List<Specimen> list = null;
-					list = dao.retrieve(Specimen.class.getName(), "label", specimen.getParentSpecimen().getLabel());
-					specimen = (Specimen) list.get(0); 
+					if(specimen.getParentSpecimen().getLabel() != null)
+					{
+						list = dao.retrieve(Specimen.class.getName(), "label", specimen.getParentSpecimen().getLabel());
+					}
+					else
+					{
+						list = dao.retrieve(Specimen.class.getName(), Constants.ID, specimen.getParentSpecimen().getId());
+					}
+					if(list != null && !list.isEmpty())
+						specimen = (Specimen) list.get(0); 
 
-					if(specimen.getSpecimenPosition()!=null)
+					if(specimen != null && specimen.getSpecimenPosition()!=null)
 					{
 						sc = specimen.getSpecimenPosition().getStorageContainer();
 					}
