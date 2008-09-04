@@ -1177,7 +1177,8 @@ public class ParticipantBizLogic extends DefaultBizLogic
 	
 	public List getCPForUserWithRegistrationAcess(long userId) throws BizLogicException
 	{
-		List<NameValueBean> cpList = new ArrayList<NameValueBean>(); 
+		List<NameValueBean> cpList = new ArrayList<NameValueBean>();
+		Set<Long> cpIds = new HashSet<Long>();
 		cpList.add(new NameValueBean(Constants.SELECT_OPTION, "-1"));
 		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
 		try 
@@ -1199,38 +1200,41 @@ public class ParticipantBizLogic extends DefaultBizLogic
 					if (hasPrivilege)
 					{
 						cpList.add(new NameValueBean(cp.getShortTitle(),cp.getId()));
+						cpIds.add(cp.getId());
 					}
 				}
 			}
-			else
+			
+			UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.USER_FORM_ID);
+			Set<Long> siteIds = userBizLogic.getRelatedSiteIds(userId);
+			dao.openSession(null);
+			if (siteIds != null && !siteIds.isEmpty())
 			{
-				UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.USER_FORM_ID);
-				Set<Long> siteIds = userBizLogic.getRelatedSiteIds(userId);
-				dao.openSession(null);
-				if (siteIds != null && !siteIds.isEmpty())
+				SiteBizLogic siteBizLogic = (SiteBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.SITE_FORM_ID);
+				for (Long siteId : siteIds)
 				{
-					SiteBizLogic siteBizLogic = (SiteBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.SITE_FORM_ID);
-					for (Long siteId : siteIds)
+					String peName = Constants.getCurrentAndFuturePGAndPEName(siteId);
+					if (privilegeCache.hasPrivilege(peName,Variables.privilegeDetailsMap.get(Constants.CP_BASED_VIEW_FILTRATION)))
 					{
-						String peName = Constants.getCurrentAndFuturePGAndPEName(siteId);
-						if (privilegeCache.hasPrivilege(peName,Variables.privilegeDetailsMap.get(Constants.CP_BASED_VIEW_FILTRATION)))
+						Collection<CollectionProtocol> cp1Collection = siteBizLogic.getRelatedCPs(siteId);
+						 dao.openSession(null);
+						if (cp1Collection != null && !cp1Collection.isEmpty())
 						{
-							Collection<CollectionProtocol> cp1Collection = siteBizLogic.getRelatedCPs(siteId);
-							 dao.openSession(null);
-							if (cp1Collection != null && !cp1Collection.isEmpty())
+							List<NameValueBean> list = new ArrayList<NameValueBean>();
+							for (CollectionProtocol cp1 : cp1Collection)
 							{
-								List<NameValueBean> list = new ArrayList<NameValueBean>();
-								for (CollectionProtocol cp1 : cp1Collection)
+								if(!cpIds.contains(cp1.getId()))
 								{
 									list.add(new NameValueBean(cp1.getShortTitle(),cp1.getId()));
 								}
-								cpList.addAll(list);
 							}
-									
+							cpList.addAll(list);
 						}
+								
 					}
 				}
 			}
+			
 
 		} catch (DAOException e) {
 			throw new BizLogicException("Couldn't get CP for user", e);
