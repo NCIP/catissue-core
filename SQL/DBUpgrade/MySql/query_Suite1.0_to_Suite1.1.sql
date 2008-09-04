@@ -1,7 +1,7 @@
-/* remove old indexes */
-/* this may be app specific */
+-- remove old indexes 
+-- this may be app specific 
 
-/* catissue */
+-- catissue 
 alter table QUERY_PARAMETERIZED_QUERY drop foreign key FKA272176BBC7298A9, drop index FKA272176BBC7298A9;
 alter table QUERY_INTRA_MODEL_ASSOCIATION drop foreign key FKF1EDBDD3BC7298A9, drop index FKF1EDBDD3BC7298A9;
 alter table QUERY_CONSTRAINTS drop foreign key FKE364FCFFD3C625EA, drop index FKE364FCFFD3C625EA;
@@ -25,25 +25,25 @@ alter table QUERY_GRAPH_ENTRY drop foreign key FKF055E4EA7A5E6479, drop index FK
 alter table QUERY_GRAPH_ENTRY drop foreign key FKF055E4EAEE560703, drop index FKF055E4EAEE560703;
 alter table QUERY_EXPRESSIONID drop foreign key FK6662DBEABC7298A9, drop index FK6662DBEABC7298A9;
 
-/* rename of columns */
+-- rename of columns 
 alter table query_condition_values change value_list VALUE varchar(255);
 alter table query_condition_values change query_condition_id CONDITION_ID bigint;
 alter table query change query_constraints_id CONSTRAINTS_ID bigint;
 alter table QUERY_LOGICAL_CONNECTOR change logical_operator OPERATOR varchar(255);
 alter table QUERY_EXPRESSION change QUERY_QUERY_ENTITY_ID QUERY_ENTITY_ID varchar(255);
-/* expression */
+-- expression 
 alter table QUERY_EXPRESSION rename QUERY_BASE_EXPRESSION;
 alter table QUERY_BASE_EXPRESSION add column EXPR_TYPE varchar(255);
 update QUERY_BASE_EXPRESSION set EXPR_TYPE = 'expr';
 
-/* operand */
+-- operand 
 alter table QUERY_EXPRESSION_OPERAND rename QUERY_OPERAND;
 alter table QUERY_OPERAND add column OPND_TYPE varchar(255);
 
 update query_operand set OPND_TYPE='rule' where identifier in (select identifier from query_rule);
 update query_operand set OPND_TYPE='expr' where identifier in (select identifier from query_expressionid);
 
-/* rule */
+-- rule 
 create table QUERY_RULE_COND (RULE_ID bigint not null, CONDITION_ID bigint not null, POSITION integer not null, primary key (RULE_ID, POSITION));
 
 insert into QUERY_RULE_COND(RULE_ID, CONDITION_ID, POSITION) 
@@ -52,7 +52,7 @@ alter table QUERY_CONDITION drop column query_rule_id;
 alter table QUERY_CONDITION drop column position;
 drop table QUERY_RULE;
 
-/* sub expr opnd*/
+-- sub expr opnd
 alter table QUERY_EXPRESSIONID rename QUERY_SUBEXPR_OPERAND;
 alter table QUERY_SUBEXPR_OPERAND add column EXPRESSION_ID bigint;
 
@@ -61,11 +61,11 @@ update QUERY_SUBEXPR_OPERAND sub set EXPRESSION_ID =
 where expr.QUERY_EXPRESSIONID_ID = sub.identifier);
 
 create table tmp_expressionId (select * from QUERY_SUBEXPR_OPERAND);
-/* incorrect rows */
+-- incorrect rows 
 delete from QUERY_SUBEXPR_OPERAND where identifier in (select identifier from QUERY_OPERAND where position is null);
 delete from QUERY_OPERAND where position is null;
 
-/* expression */
+-- expression 
 create table QUERY_EXPRESSION (IDENTIFIER bigint not null, IS_IN_VIEW BOOLEAN, IS_VISIBLE BOOLEAN, UI_EXPR_ID integer, QUERY_ENTITY_ID bigint, primary key (IDENTIFIER));
 insert into QUERY_EXPRESSION(IDENTIFIER, IS_IN_VIEW, IS_VISIBLE, QUERY_ENTITY_ID) 
 (select IDENTIFIER, IS_IN_VIEW, IS_VISIBLE, QUERY_ENTITY_ID from QUERY_BASE_EXPRESSION);
@@ -92,7 +92,7 @@ from QUERY_BASE_EXPRESSION expr join QUERY_CONSTRAINTS c on expr.QUERY_CONSTRAIN
 
 alter table QUERY_BASE_EXPRESSION drop column QUERY_CONSTRAINT_ID;
 
-/* graph */
+-- graph 
 create table COMMONS_GRAPH (IDENTIFIER bigint not null auto_increment, primary key (IDENTIFIER));
 create table COMMONS_GRAPH_EDGE (IDENTIFIER bigint not null auto_increment, SOURCE_VERTEX_CLASS varchar(255), SOURCE_VERTEX_ID bigint, TARGET_VERTEX_CLASS varchar(255), TARGET_VERTEX_ID bigint, EDGE_CLASS varchar(255), EDGE_ID bigint, primary key (IDENTIFIER));
 create table COMMONS_GRAPH_TO_EDGES (GRAPH_ID bigint not null, EDGE_ID bigint not null unique, primary key (GRAPH_ID, EDGE_ID));
@@ -147,7 +147,7 @@ join commons_graph_edge edge on edge.old_entry_id = entry.identifier);
 
 alter table commons_graph_edge drop column OLD_ENTRY_ID;
 drop table query_graph_entry;
-/* connectors */
+-- connectors 
 create table QUERY_BASEEXPR_TO_CONNECTORS (BASE_EXPRESSION_ID bigint not null, CONNECTOR_ID bigint not null, POSITION integer not null, primary key (BASE_EXPRESSION_ID, POSITION));
 alter table QUERY_LOGICAL_CONNECTOR rename QUERY_CONNECTOR;
 insert into QUERY_BASEEXPR_TO_CONNECTORS(BASE_EXPRESSION_ID, CONNECTOR_ID, POSITION)
@@ -156,7 +156,7 @@ from QUERY_BASE_EXPRESSION expr join QUERY_CONNECTOR conn on conn.QUERY_EXPRESSI
 alter table QUERY_CONNECTOR drop column QUERY_EXPRESSION_ID;
 alter table QUERY_CONNECTOR drop column POSITION;
 
-/* parameterized conditions */
+-- parameterized conditions 
 create table QUERY_PARAMETER (IDENTIFIER bigint not null auto_increment, NAME varchar(255), OBJECT_CLASS varchar(255), OBJECT_ID bigint, primary key (IDENTIFIER));
 create table QUERY_TO_PARAMETERS (QUERY_ID bigint not null, PARAMETER_ID bigint not null unique, POSITION integer not null, primary key (QUERY_ID, POSITION));
 
@@ -164,7 +164,7 @@ insert into QUERY_PARAMETER(NAME, OBJECT_CLASS, OBJECT_ID)
 (select CONDITION_NAME, 'edu.wustl.common.querysuite.queryobject.impl.Condition', identifier
 from query_parameterized_condition);
 
-/* catissue had condition_index as null; so generate parameter.position */
+-- catissue had condition_index as null; so generate parameter.position 
 create table tmp_param
 (select query.identifier as query_id, param.identifier as param_id, cond.identifier as cond_id
 from query_parameterized_query query 
@@ -190,7 +190,7 @@ where sub.query_id = t.query_id);
 drop table tmp_param;
 drop table query_parameterized_condition;
 
-/* output attributes */
+-- output attributes 
 alter table query_output_attribute add column EXPRESSION_ID bigint;
 update query_output_attribute outAttr set EXPRESSION_ID = 
 (select sub.expression_id 
@@ -198,14 +198,14 @@ from tmp_expressionId sub where sub.identifier = outAttr.expressionid_id);
 alter table query_output_attribute drop column EXPRESSIONID_ID;
 
 drop table tmp_expressionId;
-/* new tables */
+-- new tables 
 create table QUERY_TO_OUTPUT_TERMS (QUERY_ID bigint not null, OUTPUT_TERM_ID bigint not null unique, POSITION integer not null, primary key (QUERY_ID, POSITION));
 create table QUERY_OUTPUT_TERM (IDENTIFIER bigint not null auto_increment, NAME varchar(255), TIME_INTERVAL varchar(255), TERM_ID bigint, primary key (IDENTIFIER));
 create table QUERY_FORMULA_RHS (CUSTOM_FORMULA_ID bigint not null, RHS_TERM_ID bigint not null, POSITION integer not null, primary key (CUSTOM_FORMULA_ID, POSITION));
 create table QUERY_CUSTOM_FORMULA (IDENTIFIER bigint not null, OPERATOR varchar(255), LHS_TERM_ID bigint, primary key (IDENTIFIER));
 create table QUERY_ARITHMETIC_OPERAND (IDENTIFIER bigint not null, LITERAL varchar(255), TERM_TYPE varchar(255), DATE_LITERAL date, TIME_INTERVAL varchar(255), DE_ATTRIBUTE_ID bigint, EXPRESSION_ID bigint, primary key (IDENTIFIER));
 
-/* new indexes */
+-- new indexes 
 alter table COMMONS_GRAPH_TO_EDGES add index FKA6B0D8BAA0494B1D (GRAPH_ID), add constraint FKA6B0D8BAA0494B1D foreign key (GRAPH_ID) references COMMONS_GRAPH (IDENTIFIER);
 alter table COMMONS_GRAPH_TO_EDGES add index FKA6B0D8BAFAEF80D (EDGE_ID), add constraint FKA6B0D8BAFAEF80D foreign key (EDGE_ID) references COMMONS_GRAPH_EDGE (IDENTIFIER);
 alter table COMMONS_GRAPH_TO_VERTICES add index FK2C4412F5A0494B1D (GRAPH_ID), add constraint FK2C4412F5A0494B1D foreign key (GRAPH_ID) references COMMONS_GRAPH (IDENTIFIER);
@@ -242,8 +242,8 @@ alter table QUERY_TO_OUTPUT_TERMS add index FK8A70E25691051647 (QUERY_ID), add c
 alter table QUERY_TO_PARAMETERS add index FK8060DAD7F84B9027 (PARAMETER_ID), add constraint FK8060DAD7F84B9027 foreign key (PARAMETER_ID) references QUERY_PARAMETER (IDENTIFIER);
 alter table QUERY_TO_PARAMETERS add index FK8060DAD739F0A314 (QUERY_ID), add constraint FK8060DAD739F0A314 foreign key (QUERY_ID) references QUERY_PARAMETERIZED_QUERY (IDENTIFIER);
 
-/* enum values modified */
-/* rel oper */
+-- enum values modified 
+-- rel oper 
 update query_condition set RELATIONAL_OPERATOR = 'NotEquals' where RELATIONAL_OPERATOR = 'Not Equals';
 update query_condition set RELATIONAL_OPERATOR = 'IsNull' where RELATIONAL_OPERATOR = 'Is Null';
 update query_condition set RELATIONAL_OPERATOR = 'IsNotNull' where RELATIONAL_OPERATOR = 'Is Not Null';
@@ -254,6 +254,6 @@ update query_condition set RELATIONAL_OPERATOR = 'GreaterThanOrEquals' where REL
 update query_condition set RELATIONAL_OPERATOR = 'StartsWith' where RELATIONAL_OPERATOR = 'Starts With';
 update query_condition set RELATIONAL_OPERATOR = 'EndsWith' where RELATIONAL_OPERATOR = 'Ends With';
 update query_condition set RELATIONAL_OPERATOR = 'NotIn' where RELATIONAL_OPERATOR = 'Not In';
-/* logical oper */
+-- logical oper 
 update query_connector set OPERATOR = 'And' where OPERATOR = 'AND';
 update query_connector set OPERATOR = 'Or' where OPERATOR = 'OR';
