@@ -64,7 +64,9 @@ public abstract class CaTissueBaseDBUnitTestCase extends JdbcBasedDBTestCase
 	public CaTissueBaseDBUnitTestCase() 
 	{
 		super();
+		System.out.println("sssssssssss constructor is called...");
 		initTestData();
+		System.out.println("After init testdata() is called...");
 		String filename = getObjectFile();
 		if(filename!=null)
 		{
@@ -72,7 +74,7 @@ public abstract class CaTissueBaseDBUnitTestCase extends JdbcBasedDBTestCase
 		}
 		
 		initializeObjectMap();
-
+		System.out.println("After initializeObjectMAp is called...");
 	}
 
 	/**
@@ -181,9 +183,12 @@ public abstract class CaTissueBaseDBUnitTestCase extends JdbcBasedDBTestCase
 		try
 		{
 			SessionDataBean sessionDataBean = getSessionDataBean();
+			System.out.println("............"+sessionDataBean);
 			IBizLogic bizLogic =BizLogicFactory.getInstance()
 						.getBizLogic(object.getClass().getName());
+			System.out.println("............"+object);
 			bizLogic.insert(object,sessionDataBean, Constants.HIBERNATE_DAO);
+			System.out.println(".......inserted.....");
 		}
 		catch(UserNotAuthorizedException authorizedException)
 		{

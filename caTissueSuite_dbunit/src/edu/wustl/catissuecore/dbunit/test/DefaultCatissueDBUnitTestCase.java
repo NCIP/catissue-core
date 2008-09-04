@@ -21,11 +21,11 @@ import edu.wustl.common.exception.BizLogicException;
  */
 public class DefaultCatissueDBUnitTestCase extends CaTissueBaseDBUnitTestCase
 {
-	public DefaultCatissueDBUnitTestCase()
+	/*public DefaultCatissueDBUnitTestCase()
 	{
 		super();
 		
-	}
+	}*/
 	protected final DatabaseOperation getSetUpOperation() 
 	  throws Exception {
 	   return DatabaseOperation.NONE;
@@ -47,12 +47,18 @@ public class DefaultCatissueDBUnitTestCase extends CaTissueBaseDBUnitTestCase
 	public void insertObjectsOf(Class clazz) throws BizLogicException
 	{
 		List<AbstractDomainObject> objectList = getObjectList(clazz);
+		System.out.println( ".....   " + objectList.size() );
+		for ( int i = 0; i < objectList.size(); i++ ) 
+	         System.out.println( "   " + objectList.get( i ) );
+		//System.out.println("---2222"+objectList);
 		Iterator<AbstractDomainObject> iterator = objectList.iterator();
 		while(iterator.hasNext())
 		{
 			AbstractDomainObject object = iterator.next();
 			insert(object);
+			System.out.println(".....  inserted.....");
 		}
+		System.out.println( ".....  inserted... ");
 	}
 
 	public void UpdateObjects(Class clazz) throws BizLogicException
