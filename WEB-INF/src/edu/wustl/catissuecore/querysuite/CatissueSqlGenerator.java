@@ -1,4 +1,5 @@
 package edu.wustl.catissuecore.querysuite;
+
 import edu.wustl.common.querysuite.factory.QueryObjectFactory;
 import edu.wustl.common.querysuite.queryengine.impl.SqlGenerator;
 import edu.wustl.common.querysuite.queryobject.ArithmeticOperator;
@@ -105,8 +106,10 @@ public class CatissueSqlGenerator extends SqlGenerator {
             res.getLhs().addOperand(lhsDate);
             res.getLhs().addOperand(conn(lhsOper), lhsOffset);
 
-            if (relOper == RelationalOperator.Equals) {
-                res.setOperator(RelationalOperator.Between);
+            if (relOper == RelationalOperator.Equals || relOper == RelationalOperator.NotEquals) {
+                res.setOperator(relOper == RelationalOperator.Equals
+                        ? RelationalOperator.Between
+                        : RelationalOperator.NotBetween);
                 res.addRhs(rhsLower());
                 res.addRhs(rhsUpper());
                 return res;
@@ -139,7 +142,8 @@ public class CatissueSqlGenerator extends SqlGenerator {
         private ITerm rhsTerm() {
             ITerm term = QueryObjectFactory.createTerm();
             term.addOperand(rhsDate);
-//            term.addOperand(conn(ArithmeticOperator.Unknown), roundingOffset());
+            // term.addOperand(conn(ArithmeticOperator.Unknown),
+            // roundingOffset());
             return term;
         }
 
