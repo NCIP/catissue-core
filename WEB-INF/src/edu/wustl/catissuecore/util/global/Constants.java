@@ -2444,6 +2444,7 @@ public static final String ADD_MULTIPLE_SPECIMEN_TO_CART="addMltipleSpecimenToCa
 	public static final String ADD_GLOBAL_PARTICIPANT="ADD_GLOBAL_PARTICIPANT";
 	public static final String cannotCreateSuperAdmin = "cannotCreateSuperAdmin";
 	public static final String siteIsRequired = "siteIsRequired";
+	public static final String roleIsRequired = "roleIsRequired";
 	
 	public static final String getCurrentAndFuturePGAndPEName(long siteId)
 	{

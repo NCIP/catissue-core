@@ -604,14 +604,14 @@ public class UserBizLogic extends DefaultBizLogic
 						CollectionProtocol cp = siteUserRolePrivilegeBean.getCollectionProtocol();
 						String defaultRole = siteUserRolePrivilegeBean.getRole().getValue();
 						
-						if (defaultRole != null && (defaultRole.equalsIgnoreCase("0") || defaultRole.equalsIgnoreCase("-1") || defaultRole.equalsIgnoreCase("7")))
-						{
+//						if (defaultRole != null && (defaultRole.equalsIgnoreCase("0") || defaultRole.equalsIgnoreCase("-1") || defaultRole.equalsIgnoreCase("7")))
+//						{
 							roleName = Constants.getCPRoleName(cp.getId(), user1.getCsmUserId(), defaultRole);
-						}
-						else
+//						}
+						/*else
 						{
 							roleName = siteUserRolePrivilegeBean.getRole().getName();
-						}
+						}*/
 
 						protectionGroupName = Constants.getCollectionProtocolPGName(cp.getId());
 						createProtectionGroup(protectionGroupName, cp, false);
@@ -1870,8 +1870,18 @@ public class UserBizLogic extends DefaultBizLogic
 			}
 			if(userRowIdMap==null)
 			{
-				if((user.getSiteCollection().isEmpty()) || user.getRoleId()==null)
+				if(user.getRoleId()==null || user.getRoleId().equals("") || user.getSiteCollection()==null || user.getSiteCollection().isEmpty())
+				{
 					return Constants.siteIsRequired;
+				}
+				try 
+				{
+					userRowIdMap = getUserRowIdMap(user, userRowIdMap);
+				} 
+				catch (DAOException e) 
+				{
+					e.printStackTrace();
+				}
 			}
 			
 			if(userRowIdMap != null)
@@ -1960,10 +1970,14 @@ public class UserBizLogic extends DefaultBizLogic
 				}
 				else
 				{
-//					if(user.getRoleId()==null || user.getRoleId().equals("") || user.getSiteCollection().isEmpty())
-//					{	
+					if(user.getRoleId().equals(Constants.NON_ADMIN_USER))
+					{
+						throw new DAOException(ApplicationProperties.getValue("user.cannotCreateScientist"));
+					}
+					if(user.getRoleId()==null || user.getRoleId().equals("") || user.getSiteCollection()==null || user.getSiteCollection().isEmpty())
+					{	
 						throw new DAOException(ApplicationProperties.getValue("user.siteIsRequired"));
-//					}
+					}
 				}
 			}
 			if(user.getPageOf().equalsIgnoreCase("pageOfChangePassword"))

@@ -510,7 +510,8 @@ public class UserForm extends AbstractActionForm
 	{
 		if (role != null && role.equalsIgnoreCase("-1")) 
 		{
-			this.role = Constants.NON_ADMIN_USER;
+			// this.role = Constants.NON_ADMIN_USER;
+			this.role = "";
 		}
         else
         {
@@ -833,7 +834,11 @@ public class UserForm extends AbstractActionForm
 //							
 //						}
 						
-						
+						if (siteIds.length>0 && validator.isEmpty(role))
+						{
+							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
+									.getValue("user.roleIsRequired")));
+						}
 						if (validator.isEmpty(emailAddress))
 						{
 							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
