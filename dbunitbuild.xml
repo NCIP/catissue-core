@@ -66,7 +66,7 @@
 	</target>
 	
 	<target name ="clean_db">
-		<sql driver="${database.driver}" password="${database.password}" url="${database.jdbc.url}" userid="${database.username}">
+		<sql driver="${database.driver}" password="${database.password}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}">
 			<classpath path="${lib.dir}/mysql*.jar" > 
 				<fileset dir="${lib.dir}">
 					<include name="*.jar"/>
@@ -80,6 +80,7 @@
 	</target>
 	<target name="RunTestCases" depends="catissue_compile, clean_db, initialize_data, RundbUnit" />
 	<target name="RunTestCasesFromClean" depends="deploy_all, RunTestCases" />
+	
 	<target name="initialize_data" depends="configure_properties">
 		<antcall target="runJUnit"  >
 			<param name="classNames" value="**/CaTissueBaseDBUnitTestCase.java" />
