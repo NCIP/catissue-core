@@ -26,6 +26,7 @@ import org.apache.struts.action.ActionMessages;
 import edu.wustl.catissuecore.actionForm.SpecimenArrayAliquotForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.SpecimenArrayAliquotsBizLogic;
+import edu.wustl.catissuecore.bizlogic.SpecimenArrayBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
@@ -36,6 +37,8 @@ import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
+import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.util.global.ApplicationProperties;
 
 
 /**
@@ -221,7 +224,7 @@ public class SpecimenArrayAliquotAction extends SecureAction
 	 * @return String
 	 * @throws Exception
 	 */
-	private String checkForSpecimenArray(HttpServletRequest request, SpecimenArrayAliquotForm form) throws Exception
+	private String checkForSpecimenArray(HttpServletRequest request, SpecimenArrayAliquotForm form) throws BizLogicException,Exception
 	{	
 		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);		
 		List specimenArrayList = new ArrayList();
@@ -257,6 +260,14 @@ public class SpecimenArrayAliquotAction extends SecureAction
 			 * Retriving specimenArrayTypeObject
 			 * replaced SpecimenArrayType arrayType = specimenArray.getSpecimenArrayType();
 			 */
+			if(Constants.ACTIVITY_STATUS_DISABLED.equals(specimenArray.getActivityStatus()))
+			{
+				ActionErrors errors = getActionErrors(request);
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.specimenArrayAliquots.disabled","Parent Specimen Array"));
+				saveErrors(request,errors);
+				return Constants.PAGEOF_SPECIMEN_ARRAY_ALIQUOT;
+				//throw BizLogicException("Fail to create Aliquots, Parent SpecimenArray" + " " + ApplicationProperties.getValue("error.object.disabled"));
+			}
 			SpecimenArrayType arrayType = (SpecimenArrayType)bizLogic.retrieveAttribute(SpecimenArray.class.getName(),specimenArray.getId(),"specimenArrayType");
 			form.setSpecimenArrayType(arrayType.getName());	
 			form.setSpecimenClass(arrayType.getSpecimenClass());
