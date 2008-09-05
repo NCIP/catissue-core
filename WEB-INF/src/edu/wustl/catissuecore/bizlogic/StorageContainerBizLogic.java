@@ -799,6 +799,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 			ContainerPosition cntPos = persistentobject.getLocatedAtPosition();
 			if (cntPos == null) {
 				cntPos = new ContainerPosition();
+				persistentobject.setLocatedAtPosition(cntPos);
 			}
 			cntPos.setPositionDimensionOne(newObject.getLocatedAtPosition()
 					.getPositionDimensionOne());
@@ -3957,16 +3958,16 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 
 		while (itr.hasNext()) {
 			NameValueBean key = (NameValueBean) itr.next();
-			NameValueBean key1 = new NameValueBean(key.getName(), key
-					.getValue());
+			NameValueBean key1 = new NameValueBean(new Integer(key.getName()), new Integer(key
+					.getValue()));
 			List value = (ArrayList) positionMap.get(key);
 			List value1 = new ArrayList();
 			Iterator itr1 = value.iterator();
 
 			while (itr1.hasNext()) {
 				NameValueBean ypos = (NameValueBean) itr1.next();
-				NameValueBean ypos1 = new NameValueBean(ypos.getName(), ypos
-						.getValue());
+				NameValueBean ypos1 = new NameValueBean(new Integer(ypos.getName()), new Integer(ypos
+						.getValue()));
 				value1.add(ypos1);
 
 			}
