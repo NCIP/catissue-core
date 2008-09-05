@@ -416,10 +416,10 @@ final public  class QueryModuleUtil
 		 switch (errorCode)
 		 {
 			 case EMPTY_DAG :
-				 errorMessage = ApplicationProperties.getValue("query.empty.dag");
+				 errorMessage = "<li><font color='blue' family='arial,helvetica,verdana,sans-serif'>" + ApplicationProperties.getValue("query.empty.dag")+ "</font></li>";
 				 break;
 			 case MULTIPLE_ROOT :
-				 errorMessage = ApplicationProperties.getValue("errors.executeQuery.multipleRoots");
+				 errorMessage = "<li><font color='red'> " + ApplicationProperties.getValue("errors.executeQuery.multipleRoots") + "</font></li>";
 				 break;
 			 case NO_RESULT_PRESENT :
 				 errorMessage = ApplicationProperties.getValue("query.zero.records.present");

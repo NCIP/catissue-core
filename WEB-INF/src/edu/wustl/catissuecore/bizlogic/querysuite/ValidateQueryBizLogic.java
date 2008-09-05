@@ -104,20 +104,19 @@ public class ValidateQueryBizLogic {
 		catch (MultipleRootsException e)
 		{
 			Logger.out.error(e);
-			validationMessage = ApplicationProperties.getValue("errors.executeQuery.multipleRoots");
+			validationMessage = "<li><font color='red'> " + ApplicationProperties.getValue("errors.executeQuery.multipleRoots") + "</font></li>";
 		}
 		catch (SqlException e)
 		{
 			Logger.out.error(e);
-			validationMessage = ApplicationProperties.getValue("errors.executeQuery.genericmessage");
+			validationMessage = "<li><font color='red'> " + ApplicationProperties.getValue("errors.executeQuery.genericmessage") + "</font></li>";
 		}
 		catch (RuntimeException e)
 		{
 			Logger.out.error(e);
-			validationMessage = ApplicationProperties.getValue("errors.executeQuery.genericmessage");
+			validationMessage = "<li><font color='red'> " + ApplicationProperties.getValue("errors.executeQuery.genericmessage") + "</font></li>";
 			e.printStackTrace();
 		}
-		
 		return validationMessage;
 	}
 

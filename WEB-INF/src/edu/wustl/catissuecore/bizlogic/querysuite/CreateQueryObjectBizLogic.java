@@ -191,13 +191,13 @@ public class CreateQueryObjectBizLogic
 		String errorMessages = "";
 		for(String enteredValue : attrvalues)
 		{
-			if (Constants.MISSING_TWO_VALUES.equals(enteredValue))
+			if (Constants.MISSING_TWO_VALUES.equalsIgnoreCase(enteredValue))
 			{
 				errorMessages = getErrorMessageForBetweenOperator(errorMessages, enteredValue);
 			}
-			else if ((QueryModuleConstants.BIG_INT.equals(dataType) 
-					|| QueryModuleConstants.INTEGER.equals(dataType))
-					|| QueryModuleConstants.LONG.equals(dataType))
+			else if ((QueryModuleConstants.BIG_INT.equalsIgnoreCase(dataType) 
+					|| QueryModuleConstants.INTEGER.equalsIgnoreCase(dataType))
+					|| QueryModuleConstants.LONG.equalsIgnoreCase(dataType))
 			{
 				Logger.out.debug(" Check for integer");
 				
@@ -213,27 +213,27 @@ public class CreateQueryObjectBizLogic
 				}
 
 			}// integer
-			else if ((QueryModuleConstants.DOUBLE.equals(dataType)) && !validator
+			else if ((QueryModuleConstants.DOUBLE.equalsIgnoreCase(dataType)) && !validator
 					.isDouble(enteredValue, false))
 			{
 				errorMessages = errorMessages + ApplicationProperties
 				.getValue("simpleQuery.decvalue.required");
 			} // double
-			else if (QueryModuleConstants.TINY_INT.equals(dataType))
+			else if (QueryModuleConstants.TINY_INT.equalsIgnoreCase(dataType))
 			{
-				if (!QueryModuleConstants.BOOLEAN_YES.equals(enteredValue.trim())
-						&& !QueryModuleConstants.BOOLEAN_NO.equals(enteredValue.trim()))
+				if (!QueryModuleConstants.BOOLEAN_YES.equalsIgnoreCase(enteredValue.trim())
+						&& !QueryModuleConstants.BOOLEAN_NO.equalsIgnoreCase(enteredValue.trim()))
 				{
 					errorMessages = errorMessages + ApplicationProperties
 					.getValue("simpleQuery.tinyint.format");
 				}
 			}
-			else if (Constants.FIELD_TYPE_TIMESTAMP_TIME.equals(dataType))
+			else if (Constants.FIELD_TYPE_TIMESTAMP_TIME.equalsIgnoreCase(dataType))
 			{
 				errorMessages = getErrorMessageForTimeFormat(validator, errorMessages, enteredValue);
 			}
-			else if (Constants.FIELD_TYPE_DATE.equals(dataType)
-					|| Constants.FIELD_TYPE_TIMESTAMP_DATE.equals(dataType))
+			else if (Constants.FIELD_TYPE_DATE.equalsIgnoreCase(dataType)
+					|| Constants.FIELD_TYPE_TIMESTAMP_DATE.equalsIgnoreCase(dataType))
 			{
 				errorMessages = getErrorMessageForDateFormat(validator, errorMessages, enteredValue);
 			}
@@ -249,8 +249,8 @@ public class CreateQueryObjectBizLogic
 	 */
 	private String getErrorMessageForPositiveNum(String errorMessages, String enteredValue)
 	{
-		errorMessages = errorMessages + ApplicationProperties
-		.getValue("simpleQuery.intvalue.poisitive.required");
+		errorMessages = errorMessages + "<li><font color\\='red'>" + ApplicationProperties
+		.getValue("simpleQuery.intvalue.poisitive.required")+"</font></li>";
 		Logger.out.debug(enteredValue + " is not a positive integer");
 		return errorMessages;
 	}
@@ -263,7 +263,7 @@ public class CreateQueryObjectBizLogic
 	 */
 	private String getErrorMessageForBetweenOperator(String errorMessages, String enteredValue)
 	{
-		errorMessages = errorMessages + ApplicationProperties.getValue("simpleQuery.twovalues.required");
+		errorMessages = errorMessages + "<li><font color\\='red'>" + ApplicationProperties.getValue("simpleQuery.twovalues.required")+"</font></li>";
 		Logger.out.debug(enteredValue + " two values required for 'Between' operator ");
 		return errorMessages;
 	}
@@ -279,7 +279,7 @@ public class CreateQueryObjectBizLogic
 	{
 		if (!validator.isValidTime(enteredValue, Constants.TIME_PATTERN_HH_MM_SS))
 		{
-			errorMessages = errorMessages + ApplicationProperties.getValue("simpleQuery.time.format");
+			errorMessages = errorMessages + "<li><font color\\='red'>" +ApplicationProperties.getValue("simpleQuery.time.format")+"</font></li>";
 		}
 		return errorMessages;
 	}
@@ -295,7 +295,7 @@ public class CreateQueryObjectBizLogic
 	{
 		if (!validator.checkDate(enteredValue))
 		{
-			errorMessages = errorMessages + ApplicationProperties.getValue("simpleQuery.date.format");
+			errorMessages = errorMessages + "<li><font color\\='red'>" + ApplicationProperties.getValue("simpleQuery.date.format")+"</font></li>";
 		}
 		return errorMessages;
 	}
