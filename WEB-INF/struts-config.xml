@@ -157,6 +157,11 @@ PUBLIC
 					type="edu.wustl.catissuecore.action.ForwardAction">
 					<forward name="success" path=".catissuecore.manageAdminDataHomeDef" />
 		</action>
+	
+		<action path="/StorageContainerDelete"
+					type="edu.wustl.catissuecore.action.ForwardAction">
+					<forward name="success" path="/pages/content/manageAdministrativeData/Home.jsp" />
+		</action>	
 		
 		<action path="/Home"
 					type="edu.wustl.catissuecore.action.ForwardAction">

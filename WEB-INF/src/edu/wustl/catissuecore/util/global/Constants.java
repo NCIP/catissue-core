@@ -2519,4 +2519,6 @@ public static final String ADD_MULTIPLE_SPECIMEN_TO_CART="addMltipleSpecimenToCa
 	public static final String SPECIMEN_LABELS_LIST = "specimenLabelName";
 	public static final String CONTAINER_NAMES_LIST = "containerNames";
 	
+	public static final String CONTAINER_DELETE_MAPPING="/StorageContainerDelete.do";
+	
 }

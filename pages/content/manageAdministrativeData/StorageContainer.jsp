@@ -16,6 +16,7 @@
 <script src="jss/script.js" type="text/javascript"></script>
 <%
 		//StorageContainerForm form = (StorageContainerForm)request.getAttribute("storageContainerForm");
+		String strCheckStatusForCont = "checkActivityStatus(this,'" + Constants.CONTAINER_DELETE_MAPPING + "')";
 		String pageOf = request.getParameter(Constants.PAGEOF);
         String operation = (String) request.getAttribute(Constants.OPERATION);
 		//String containerNumber=(String)request.getAttribute("ContainerNumber");
@@ -826,7 +827,7 @@ function addNewTypeAction(action)
                          <td align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="3" /></span></td>
 						 <td align="left" class="black_ar"><bean:message key="site.activityStatus" /></td>
 						 <td align="left" nowrap>
-							<html:select property="activityStatus" styleClass="formFieldSizedNew" styleId="activityStatus" size="1" onchange="<%=strCheckStatus%>"
+							<html:select property="activityStatus" styleClass="formFieldSizedNew" styleId="activityStatus" size="1" onchange="<%=strCheckStatusForCont%>"
 							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 								<html:options name="<%=Constants.ACTIVITYSTATUSLIST%>" labelName="<%=Constants.ACTIVITYSTATUSLIST%>" />
 							</html:select>
@@ -947,7 +948,7 @@ function addNewTypeAction(action)
 					<!-- delete button added for disabling the objects :Nitesh 
 						<td colspan="3" class="buttonbg"></td> -->
 						<%
-							String deleteAction="deleteStorageContainer('" + formName +"','" + Constants.ADMINISTRATIVE + "')";
+							String deleteAction="deleteStorageContainer('" + formName +"','" + Constants.CONTAINER_DELETE_MAPPING + "')";
 						%>
 								
 						
