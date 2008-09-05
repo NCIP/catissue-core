@@ -97,6 +97,7 @@ public class CollectionProtocolAuthorization implements edu.wustl.catissuecore.u
 		int noOfUsers = rowIdMap.size();
 		Set<Site> siteCollection = new HashSet<Site>();
 		Set<User> userCollection = new HashSet<User>();
+		Set<Long> siteIds = new HashSet<Long>();
 		String roleName = "";
 		
 		for (Iterator<String> mapItr = rowIdMap.keySet().iterator(); mapItr.hasNext(); )
@@ -110,7 +111,11 @@ public class CollectionProtocolAuthorization implements edu.wustl.catissuecore.u
 				List<Site> siteList = siteUserRolePrivilegeBean.getSiteList();
 				if(siteList != null && !siteList.isEmpty())
 				{
-					siteCollection.add(siteList.get(0));
+					if(!siteIds.contains(siteList.get(0).getId()))
+					{
+						siteCollection.add(siteList.get(0));
+						siteIds.add(siteList.get(0).getId());
+					}
 				}
 				continue;
 			}

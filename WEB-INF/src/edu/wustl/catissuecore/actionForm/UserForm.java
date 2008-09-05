@@ -753,6 +753,10 @@ public class UserForm extends AbstractActionForm
         {
             this.role = Constants.SUPER_ADMIN_USER;
         }
+		if (roleId != null && roleId.equalsIgnoreCase(Constants.SUPER_ADMIN_USER))
+        {
+            this.role = Constants.SUPER_ADMIN_USER;
+        }
 	}
 
 	/**

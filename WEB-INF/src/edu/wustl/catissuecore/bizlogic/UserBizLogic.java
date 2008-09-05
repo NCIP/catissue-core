@@ -883,21 +883,21 @@ public class UserBizLogic extends DefaultBizLogic
 				// Assign Role only if the page is of Administrative user edit.
 				if ((Constants.PAGEOF_USER_PROFILE.equals(user.getPageOf()) == false)
 						&& (Constants.PAGEOF_CHANGE_PASSWORD.equals(user.getPageOf()) == false))
-				{
+				{	
+					String role = "";
 					if (user.getRoleId() != null)
 					{
 	                    if (user.getRoleId().equalsIgnoreCase(Constants.SUPER_ADMIN_USER))
 	                    {
-	                        user.setRoleId(Constants.ADMIN_USER);
+	                        role = Constants.ADMIN_USER;
 	                    }
 	                    else
 	                    {
-	                    	user.setRoleId(Constants.NON_ADMIN_USER);
+	                    	role = Constants.NON_ADMIN_USER;
 	                    }
 	                  
-						SecurityManager.getInstance(UserBizLogic.class).assignRoleToUser(csmUser.getUserId().toString(), user.getRoleId());
+						SecurityManager.getInstance(UserBizLogic.class).assignRoleToUser(csmUser.getUserId().toString(), role);
 					}
-					// SecurityManager.getInstance(UserBizLogic.class).assignRoleToUser(csmUser.getUserId().toString(), user.getRoleId());
 				}
 				
 				// Set protectionObjects = new HashSet();
