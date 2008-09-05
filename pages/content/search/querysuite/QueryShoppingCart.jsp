@@ -262,16 +262,35 @@ function addToOrderList()
 
 function createShipmentRequest()
 {
-	var action = "BulkCart.do?operation=createShipmentRequest";
-	document.forms[0].action = action;
-	document.forms[0].submit();
+		var isChecked = updateHiddenFields();
+		    
+		    if(isChecked == "true")
+		    {
+				var action = "BulkCart.do?operation=createShipmentRequest";
+				document.forms[0].action = action;
+				document.forms[0].submit();
+			}
+			else
+			{
+				alert("Please select at least one checkbox");
+			}
 }
 
 function createShipment()
 {
-	var action = "BulkCart.do?operation=createShipment";
-	document.forms[0].action = action;
-	document.forms[0].submit();
+		var isChecked = updateHiddenFields();
+		    
+		    if(isChecked == "true")
+		    {
+				var action = "BulkCart.do?operation=createShipment";
+				document.forms[0].action = action;
+				document.forms[0].submit();
+			}
+			else
+			{
+				alert("Please select at least one checkbox");
+			}
+	
 }
 
 function checkAll(element)
