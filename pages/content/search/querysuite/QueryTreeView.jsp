@@ -142,7 +142,7 @@ treeNo = treeNo + 1;
 			String divId = "treebox"+i;
 			%>
 
-				<div id="<%=divId%>"  style="background-color:white;overflow:-moz-scrollbars-vertical;overflow:-moz-scrollbars-horizontal;overflow-x:auto;overflow-y:hidden;">
+				<div id="<%=divId%>"  style="width:100%;background-color:white;overflow:auto;">
 				</div>
 			<% } %>
 		</td>
