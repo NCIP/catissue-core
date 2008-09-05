@@ -39,13 +39,6 @@
 		<td valign="top"  width="100"></td>
 	</tr>
 
-	<!--tr >
-		<td width="1px">&nbsp;	</td>
-		<td valign="top" colspan="8" width="100%" >
-		<bean:message key="query.select.attributes.for.view.header"/>
-		</td>
-	</tr--> 
-
 	<tr >
 		<td width="1px">&nbsp;	</td>
 		<td valign="top" colspan="8" width="100%" >
