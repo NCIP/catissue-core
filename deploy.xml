@@ -1048,7 +1048,7 @@
 				<transaction src="${dbupgrade.sql.dir}/MySql/DBUpgrade_1.2_to_CatissueSuite.sql" />
 				<transaction src="${dbupgrade.sql.dir}/MySql/SCG_DB_changes.sql" />
 				<transaction src="${mysql.sql.dir}/dynamicextension.sql" />
-				<transaction src="${mysql.sql.dir}/query/query_schema_script.sql" />
+				<transaction src="${mysql.sql.dir}/query/query_core1.2.2_to_suite1.0.sql" />
 				<transaction src="${mysql.sql.dir}/query/caB2B Table Generation Script.sql" />
 				<transaction src="${mysql.sql.dir}/query/metadata_schema_script.sql" />
 				<transaction  src="${dbupgrade.sql.dir}/MySql/CAModel.sql"/>
@@ -1072,7 +1072,7 @@
 				<transaction src="${dbupgrade.sql.dir}/Oracle/SCG_DB_changes.sql" />
 				<transaction src="${oracle.sql.dir}/dynamicextension.sql" />
 				<transaction src="${oracle.sql.dir}/query/metadata_schema_script.sql" /> 
-				<transaction src="${oracle.sql.dir}/query/query_schema_script.sql" />
+				<transaction src="${oracle.sql.dir}/query/query_core1.2.2_to_suite1.0.sql" />
 				<transaction src="${oracle.sql.dir}/query/caB2B Table Generation Script.sql" />
 				<transaction  src="${dbupgrade.sql.dir}/Oracle/CAModel.sql"/>
 				
