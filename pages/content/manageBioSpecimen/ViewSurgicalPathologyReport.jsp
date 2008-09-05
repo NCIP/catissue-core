@@ -88,13 +88,13 @@
 
 	function checkBoxClicked()
 	{
-		document.getElementById("deidentifiedReportText").innerHTML="<span class="+"pre"+"><PRE class='pre'>"+document.getElementById("deidText").innerHTML+"</PRE></span>";
+		document.getElementById("deidentifiedReportText").innerHTML="<span class="+"black_ar"+"<PRE class='pre'>"+document.getElementById("deidText").innerHTML+"</PRE></span>";
 		for(i=0;i<conceptName.length;i++)
-		{
+		{	
 			selectByOffset(document.getElementById("select"+i),startOff[i],endOff[i],colours[i],conceptName[i]);	
 		}		
 	}
-	</script>
+	</script>	
 </head>
 <%
 if(!hasAccess)
@@ -317,8 +317,7 @@ if(!hasAccess)
           <td></td>
         </tr>
 
-		
-
+        
         <tr>
           <td colspan="2" align="left">
 	<table border="0" cellpadding="5" cellspacing="0" width="100%" id="identifiedReportInfo" >
@@ -343,10 +342,11 @@ if(!hasAccess)
           </table></td>
         </tr>
         <tr>
-          <td colspan="5" style="padding-left:6px; padding-right:6px;" class="black_ar">
-           		<div id="identifiedReportText" class="pre" style="overflow:auto;height:125px;width:650px;border:2px solid #eef5fb;" onmousemove='scrollInSync();'><table  style="table-layout: fixed;"><tr><td><PRE class="pre"><logic:notEmpty name="viewSurgicalPathologyReportForm" property="identifiedReportTextContent" ><%=formSPR.getIdentifiedReportTextContent()%></logic:notEmpty>
-				</PRE></td></tr></table></div>
-          </td>
+          <td colspan="5" style="padding-left:6px; padding-right:6px;"><span class="black_ar">
+           		<div id="identifiedReportText" class="black_ar" style="overflow:auto;height:125px;width:650px;border: 2px solid #eef5fb;"" onmousemove='scrollInSync();'><PRE class="pre"><logic:notEmpty name="viewSurgicalPathologyReportForm" property="identifiedReportTextContent" ><%=formSPR.getIdentifiedReportTextContent()%></logic:notEmpty>
+				</PRE></div>
+
+          </span></td>
         </tr>
 		</table>
 
@@ -398,16 +398,17 @@ if(!hasAccess)
 				</td>
 			</tr>
 			<tr>
-				<td class="black_ar" style="padding-left:6px; padding-right:6px;">
-					<div id="deidentifiedReportText" class="pre" style="overflow:auto;height:125px;width:650px;border: 2px solid #eef5fb;"><table style="table-layout: fixed;"><tr><td><PRE class="pre"><logic:notEmpty name="viewSurgicalPathologyReportForm" property="deIdentifiedReportTextContent" ><%=formSPR.getDeIdentifiedReportTextContent()%></logic:notEmpty></PRE></td></tr></table>
+				<td class="black_ar">
+					<div id="deidentifiedReportText" class="black_ar" style="overflow:auto;height:125px;width:650px;border: 2px solid #eef5fb;"><PRE class="pre"><logic:notEmpty name="viewSurgicalPathologyReportForm" property="deIdentifiedReportTextContent" ><%=formSPR.getDeIdentifiedReportTextContent()%></logic:notEmpty></PRE>
 				</div>
+
 				</td>
 			</tr>
 		</table>
 		</td></tr>
 		
         <tr>
-          <td colspan="2" class="bottomtd"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+          <td colspan="2"><table width="100%" border="0" cellspacing="0" cellpadding="0">
               <tr>
                 <td width="20%" valign="top" class="black_ar">&nbsp;<bean:message key="viewSPR.label.comment"/></td>
                 <td width="80%" valign="top">
@@ -415,7 +416,7 @@ if(!hasAccess)
               </tr>
           </table></td>
         </tr>
-
+        
         <tr>
           <td colspan="2" class="buttonbg"><%
 	pageOf=request.getParameter(Constants.PAGEOF);
@@ -471,7 +472,7 @@ if(!hasAccess)
         </tr>
 		<tr>
 		<td colspan="2">
-			<span id="deidText" class="pre" style="display:none;width:650px;"><PRE class="pre"><%=deidText%></PRE></span>
+			<span id="deidText" class="black_ar" style="display:none;"><PRE class="pre"><%=deidText%></PRE></span>
 		</td>
 	</tr>
     </table>

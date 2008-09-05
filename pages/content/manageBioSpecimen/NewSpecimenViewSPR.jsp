@@ -72,9 +72,6 @@ function showEvent()
 
 	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
 		  <tr>
-		    <td class="td_color_bfdcf3"></td>
-		  </tr>
-		  <tr>
 			<td class="tablepadding">
 				<table width="100%" border="0" cellpadding="0" cellspacing="0">
 				<tr>
@@ -87,9 +84,10 @@ function showEvent()
 					<img src="images/uIEnhancementImages/tab_consents2.gif" border="0" alt="Consents" width="76" height="22"></a></td>
 		        <td width="90%" valign="bottom" class="td_tab_bg">&nbsp;</td>
 		</tr>
-
-			<tr>
-				<td colspan="7">
+		</table>
+		<table width="100%" border="0" cellpadding="0" cellspacing="0">
+		<tr>
+			<td colspan="0">
 				<%@include file="ViewSurgicalPathologyReport.jsp" %>
 				</td>
 			</tr>

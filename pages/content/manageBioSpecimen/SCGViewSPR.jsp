@@ -75,25 +75,25 @@ function showAnnotations()
 				<table width="100%" border="0" cellpadding="0" cellspacing="0">
 				<tr>				
 			
-	<td class="td_tab_bg" ><img src="images/spacer.gif" alt="spacer" width="50" border="0" height="1"></td>
-	<td valign="bottom" ><a href="#" onclick="editSCG()"><img src="images/uIEnhancementImages/tab_edit_collection2.gif" border="0" alt="Edit SCG" width="216" height="22" border="0"></a></td><td valign="bottom"><img src="images/uIEnhancementImages/tab_view_surgical1.gif" alt="View Surgical Pathology Report" width="216" height="22"></td>
-	<td valign="bottom"><a href="#" onClick="showAnnotations()"><img src="images/uIEnhancementImages/tab_view_annotation2.gif" border="0" alt="View Annotation" width="116" height="22"></a></td><td valign="bottom"><a href="#" id="consentTab" onClick="consentPage()"><img src="images/uIEnhancementImages/tab_consents2.gif" border="0" alt="Consents" width="76" height="22"></a></td><td width="90%" valign="bottom" class="td_tab_bg">&nbsp;</td>
-	</tr>
+				<td class="td_tab_bg" ><img src="images/spacer.gif" alt="spacer" width="50" border="0" height="1" vspace="0" hspace="0"></td>
+				<td valign="bottom" ><a href="#" onclick="editSCG()"><img src="images/uIEnhancementImages/tab_edit_collection2.gif" border="0" alt="Edit SCG" width="216" height="22" border="0" vspace="0" hspace="0"></a></td><td valign="bottom"><img src="images/uIEnhancementImages/tab_view_surgical1.gif" alt="View Surgical Pathology Report" width="216" height="22" vspace="0" hspace="0"></td>
+				<td valign="bottom"><a href="#" onClick="showAnnotations()"><img src="images/uIEnhancementImages/tab_view_annotation2.gif" border="0" alt="View Annotation" width="116" height="22" vspace="0" hspace="0"></a></td><td valign="bottom"><a href="#" id="consentTab" onClick="consentPage()"><img src="images/uIEnhancementImages/tab_consents2.gif" border="0" alt="Consents" width="76" height="22" vspace="0" hspace="0"></a></td><td width="90%" valign="bottom" class="td_tab_bg">&nbsp;</td>
+				</tr>
+				</table>
+				<table width="100%" border="0" cellpadding="0" cellspacing="0" class="whitetable_bg">
+				<tr>
+				<td>
+					<%@ include file="/pages/content/common/ActionErrors.jsp" %>
+				</td>
+				</tr>
 
-	<tr>
-	<td.
-		<%@ include file="/pages/content/common/ActionErrors.jsp" %>
-	</td>
-	</tr>
-
-	<tr>
-	<td colspan="6">
-		<%@include file="ViewSurgicalPathologyReport.jsp" %>
-	</td>
-	</tr>
-	</table>
-	
-			</td>
-		</tr>
-	</table>		
+				<tr>
+				<td colspan="0">
+					<%@include file="ViewSurgicalPathologyReport.jsp" %>
+				<!--</td>
+				</tr>
+				</table>-->
+				</td>
+			</tr>
+		</table>		
 </html:form>
