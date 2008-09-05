@@ -36,6 +36,10 @@ public class AddAssociation
 		entityName = "edu.wustl.catissuecore.domain.Site";
 	    targetEntityName = "edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup";
 	    addAssociations.addAssociation(entityName,targetEntityName,"site_abstractSCG","ASSOCIATION","abstractSpecimenCollectionGroupCollection",false,null,null,"SITE_ID",2,1,"BI_DIRECTIONAL");
+	    
+	    entityName = "edu.wustl.catissuecore.domain.OrderItem";
+	    targetEntityName = "edu.wustl.catissuecore.domain.DistributedItem";
+	    addAssociations.addAssociation(entityName,targetEntityName,"CATISSUE_ORDER_ITEM","ASSOCIATION","edu.wustl.catissuecore.domain.OrderItem",true,"distributedItem",null,"DISTRIBUTED_ITEM_ID",1,1,"SRC_DESTINATION");
 	}
 
 	public AddAssociation(Connection connection) throws SQLException

@@ -60,6 +60,7 @@ public class UpdateMetadata
 			addCurratedPath();
 			deletePermissibleValue();
 			addPermissibleValue();
+			cleanUpMetadata();
 		}
 		finally
 		{
@@ -78,6 +79,13 @@ public class UpdateMetadata
 		}
 	}
 	
+	private static void cleanUpMetadata() throws SQLException, IOException
+	{
+		CleanUpMetadata cleanUpMetadata = new CleanUpMetadata(connection);
+		List<String> deleteSQLList = cleanUpMetadata.cleanMetadata();
+		UpdateMetadataUtil.executeSQLs(deleteSQLList, connection.createStatement(), true);
+	}
+
 	private static void addPermissibleValue() throws SQLException, IOException
 	{
 		AddPermissibleValue addPermissibleValue = new AddPermissibleValue(connection);
@@ -405,6 +413,7 @@ public class UpdateMetadata
 		
 		//Delete initial curated path between OrderDetails and TissueSpecimen which is invalid
 		dbUpdateSQL.add("delete from path where FIRST_ENTITY_ID in (select identifier from dyextn_abstract_metadata where NAME='edu.wustl.catissuecore.domain.OrderDetails') and LAST_ENTITY_ID= (select identifier from dyextn_abstract_metadata where NAME='edu.wustl.catissuecore.domain.TissueSpecimen')");
+		
 		return dbUpdateSQL;
 	}
 	

@@ -154,6 +154,12 @@ public class AddCuratedPath
 		entityList.add("edu.wustl.catissuecore.domain.CollectionProtocol,edu.wustl.catissuecore.domain.CollectionProtocolEvent,edu.wustl.catissuecore.domain.FluidSpecimenRequirement");
 		entityList.add("edu.wustl.catissuecore.domain.CollectionProtocol,edu.wustl.catissuecore.domain.CollectionProtocolEvent,edu.wustl.catissuecore.domain.MolecularSpecimenRequirement");
 		entityList.add("edu.wustl.catissuecore.domain.CollectionProtocol,edu.wustl.catissuecore.domain.CollectionProtocolEvent,edu.wustl.catissuecore.domain.TissueSpecimenRequirement");
+		
+		entityList.add("edu.wustl.catissuecore.domain.OrderItem,edu.wustl.catissuecore.domain.DistributedItem,edu.wustl.catissuecore.domain.Specimen");
+		entityList.add("edu.wustl.catissuecore.domain.OrderItem,edu.wustl.catissuecore.domain.DistributedItem,edu.wustl.catissuecore.domain.CellSpecimen");
+		entityList.add("edu.wustl.catissuecore.domain.OrderItem,edu.wustl.catissuecore.domain.DistributedItem,edu.wustl.catissuecore.domain.FluidSpecimen");
+		entityList.add("edu.wustl.catissuecore.domain.OrderItem,edu.wustl.catissuecore.domain.DistributedItem,edu.wustl.catissuecore.domain.MolecularSpecimen");
+		entityList.add("edu.wustl.catissuecore.domain.OrderItem,edu.wustl.catissuecore.domain.DistributedItem,edu.wustl.catissuecore.domain.TissueSpecimen");
 	}
 	
 	public AddCuratedPath(Connection connection)
