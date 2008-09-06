@@ -388,6 +388,15 @@ public class DeleteAssociation
 		deleteSQL.addAll(deleteAssociation("edu.wustl.catissuecore.domain.MolecularSpecimen","edu.wustl.catissuecore.domain.DisposalEventParameters"));
 		deleteSQL.addAll(deleteAssociation("edu.wustl.catissuecore.domain.TissueSpecimen","edu.wustl.catissuecore.domain.DisposalEventParameters"));
 		
+		deleteSQL.addAll(deleteAssociation("edu.wustl.catissuecore.domain.SpecimenOrderItem","edu.wustl.catissuecore.domain.DistributedItem"));
+		deleteSQL.addAll(deleteAssociation("edu.wustl.catissuecore.domain.SpecimenArrayOrderItem","edu.wustl.catissuecore.domain.DistributedItem"));
+		deleteSQL.addAll(deleteAssociation("edu.wustl.catissuecore.domain.ExistingSpecimenOrderItem","edu.wustl.catissuecore.domain.DistributedItem"));
+		deleteSQL.addAll(deleteAssociation("edu.wustl.catissuecore.domain.NewSpecimenOrderItem","edu.wustl.catissuecore.domain.DistributedItem"));
+		deleteSQL.addAll(deleteAssociation("edu.wustl.catissuecore.domain.DerivedSpecimenOrderItem","edu.wustl.catissuecore.domain.DistributedItem"));
+		deleteSQL.addAll(deleteAssociation("edu.wustl.catissuecore.domain.PathologicalCaseOrderItem","edu.wustl.catissuecore.domain.DistributedItem"));
+		deleteSQL.addAll(deleteAssociation("edu.wustl.catissuecore.domain.NewSpecimenArrayOrderItem","edu.wustl.catissuecore.domain.DistributedItem"));
+		deleteSQL.addAll(deleteAssociation("edu.wustl.catissuecore.domain.ExistingSpecimenArrayOrderItem","edu.wustl.catissuecore.domain.DistributedItem"));
+		
 		return deleteSQL;
 	}
 }

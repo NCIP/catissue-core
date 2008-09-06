@@ -81,6 +81,22 @@ public class AddPath
 	    associationsList = new ArrayList<String>();
 	    associationsList.add("edu.wustl.catissuecore.domain.AbstractSpecimen");
 	    superClassAndAssociationsMap.put("edu.wustl.catissuecore.domain.SpecimenEventParameters", associationsList);
+	    
+	    subClassesList = new ArrayList<String>();
+	    subClassesList.add("edu.wustl.catissuecore.domain.SpecimenOrderItem");
+	    subClassesList.add("edu.wustl.catissuecore.domain.SpecimenArrayOrderItem");
+	    subClassesList.add("edu.wustl.catissuecore.domain.ExistingSpecimenOrderItem");
+	    subClassesList.add("edu.wustl.catissuecore.domain.NewSpecimenOrderItem");
+	    subClassesList.add("edu.wustl.catissuecore.domain.DerivedSpecimenOrderItem");
+	    subClassesList.add("edu.wustl.catissuecore.domain.PathologicalCaseOrderItem");
+	    subClassesList.add("edu.wustl.catissuecore.domain.NewSpecimenArrayOrderItem");
+	    subClassesList.add("edu.wustl.catissuecore.domain.ExistingSpecimenArrayOrderItem");
+	    superClassAndSubClassesMap.put("edu.wustl.catissuecore.domain.OrderItem", subClassesList);
+	    
+	    associationsList = new ArrayList<String>();
+	    associationsList.add("edu.wustl.catissuecore.domain.DistributedItem");
+	    superClassAndAssociationsMap.put("edu.wustl.catissuecore.domain.OrderItem", associationsList);
+	    
 	 }
 	 
 	 public List<String> getInsertPathStatements(Statement stmt, Connection connection,boolean flag)throws SQLException
