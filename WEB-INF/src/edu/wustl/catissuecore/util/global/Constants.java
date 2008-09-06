@@ -2521,5 +2521,5 @@ public static final String ADD_MULTIPLE_SPECIMEN_TO_CART="addMltipleSpecimenToCa
 	public static final String CONTAINER_NAMES_LIST = "containerNames";
 	
 	public static final String CONTAINER_DELETE_MAPPING="/StorageContainerDelete.do";
-	
+	public static final String CONTAINER_ERROR_MSG="The specimen {0} cannot be placed in container {1} since the position {2}:{3} is not free";
 }
