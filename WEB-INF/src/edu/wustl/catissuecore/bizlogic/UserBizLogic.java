@@ -814,7 +814,7 @@ public class UserBizLogic extends DefaultBizLogic
 			String oldPassword = user.getOldPassword();
 			// If the page is of change password, 
 			// update the password of the user in csm and catissue tables. 
-			if (user.getPageOf().equals(Constants.PAGEOF_CHANGE_PASSWORD))
+			if (Constants.PAGEOF_CHANGE_PASSWORD.equals(user.getPageOf()))
 			{
 				if (!oldPassword.equals(csmUser.getPassword()))
 				{
@@ -848,7 +848,7 @@ public class UserBizLogic extends DefaultBizLogic
 			}
 			
 			//Bug-1516: Jitendra Administartor should be able to edit the password 
-			else if(user.getPageOf().equals(Constants.PAGEOF_USER_ADMIN) && !user.getNewPassword().equals(csmUser.getPassword()))
+			else if(Constants.PAGEOF_USER_ADMIN.equals(user.getPageOf()) && !user.getNewPassword().equals(csmUser.getPassword()))
 			{				
 				Validator validator = new Validator();
 				if (!validator.isEmpty(user.getNewPassword()))
@@ -922,7 +922,7 @@ public class UserBizLogic extends DefaultBizLogic
 				dao.audit(user.getAddress(), oldUser.getAddress(), sessionDataBean, true);
 			}
 			
-			if (user.getPageOf().equals(Constants.PAGEOF_CHANGE_PASSWORD)) 
+			if (Constants.PAGEOF_CHANGE_PASSWORD.equals(user.getPageOf())) 
 			{
 			    user.setFirstTimeLogin(new Boolean(false));
 			}
@@ -1475,6 +1475,7 @@ public class UserBizLogic extends DefaultBizLogic
 			{
 			if (checkPwdUpdatedOnSameDay(lastestUpdateDate))
 			{
+
 				Logger.out.debug("Password is not valid returning FAIL_CHANGED_WITHIN_SOME_DAY");
 				return FAIL_CHANGED_WITHIN_SOME_DAY;
 			}
