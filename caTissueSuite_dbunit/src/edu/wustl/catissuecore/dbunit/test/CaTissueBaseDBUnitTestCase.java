@@ -18,6 +18,7 @@ import org.dbunit.JdbcBasedDBTestCase;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSet;
 import org.dbunit.operation.DatabaseOperation;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
@@ -32,6 +33,7 @@ import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.dbManager.DBUtil;
 import edu.wustl.common.util.global.Constants;
 
 
@@ -102,6 +104,7 @@ public abstract class CaTissueBaseDBUnitTestCase extends JdbcBasedDBTestCase
 	   
 	 }
 	abstract public String getObjectFile();
+	
 	private void initializeObjectMap()
 	{
 		try
@@ -211,17 +214,16 @@ public abstract class CaTissueBaseDBUnitTestCase extends JdbcBasedDBTestCase
 	   protected void update(Object object) throws BizLogicException
 	   {
 
-		   HibernateDAO dao = null;
+		   Session session = null;
 		   try
 		   {
 				IBizLogic bizLogic =BizLogicFactory.getInstance()
 							.getBizLogic(object.getClass().getName());
 				Long oldObjectId = ((AbstractDomainObject) object).getId();
-				dao=(HibernateDAO) DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
 				SessionDataBean sessionDataBean = getSessionDataBean();
-				dao.openSession(null);
+				session = DBUtil.getCleanSession();
 
-				Object oldObject = dao.retrieve(object.getClass().getName(), oldObjectId);
+				Object oldObject = session.get(object.getClass().getName(), oldObjectId);
 				bizLogic.update(object,oldObject, Constants.HIBERNATE_DAO,sessionDataBean);
 
 		   }
@@ -229,7 +231,7 @@ public abstract class CaTissueBaseDBUnitTestCase extends JdbcBasedDBTestCase
 		   {
 			   throw new BizLogicException(authorizedException.getMessage(),authorizedException);
 		   }
-		   catch(DAOException exception)
+		   catch(HibernateException exception)
 		   {
 			   throw new BizLogicException(exception.getMessage(),exception);
 		   }
@@ -237,9 +239,9 @@ public abstract class CaTissueBaseDBUnitTestCase extends JdbcBasedDBTestCase
 		   {
 			   try
 			   {
-				   dao.closeSession();
+				   session.close();
 			   }
-			   catch(DAOException exception)
+			   catch(HibernateException exception)
 			   {
 				   System.out.println(exception.getMessage());
 			   }
