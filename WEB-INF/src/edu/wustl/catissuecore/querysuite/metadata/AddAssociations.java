@@ -150,9 +150,18 @@ public class AddAssociations
 			}
 			else
 			{
-				sql = "insert into dyextn_constraint_properties (IDENTIFIER,SOURCE_ENTITY_KEY,TARGET_ENTITY_KEY,ASSOCIATION_ID) values("
+				if(srcAssociationId == null)
+				{
+					sql = "insert into dyextn_constraint_properties (IDENTIFIER,SOURCE_ENTITY_KEY,TARGET_ENTITY_KEY,ASSOCIATION_ID) values("
+						+ nextIdOfDBProperties + ",'"+targetAssociationId+"',"+srcAssociationId+","
+						+ nextIdOfAbstractMetadata + ")";
+				}
+				else
+				{
+					sql = "insert into dyextn_constraint_properties (IDENTIFIER,SOURCE_ENTITY_KEY,TARGET_ENTITY_KEY,ASSOCIATION_ID) values("
 					+ nextIdOfDBProperties + ",'"+targetAssociationId+"','"+srcAssociationId+"',"
 					+ nextIdOfAbstractMetadata + ")";
+				}
 			}
 			UpdateMetadataUtil.executeInsertSQL(sql, connection.createStatement());
 		}
