@@ -47,6 +47,7 @@
 			
 			<fileset dir="${base.dir}/WEB-INF/src">
 				<include name="**/*hbm.xml"/>
+				<include name="PermissionMapDetails.xml"/>
 			</fileset>
 			
 
