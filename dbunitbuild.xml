@@ -30,16 +30,28 @@
 				</fileset>
 			</classpath>
 		</javac>
+		<copy todir="${db_temp.dir}/suite" overwrite="true">
+			<fileset dir="${base.dir}/WEB-INF/src" >
+				<include name="SecurityManager.properties"/>
+			</fileset>
+			
+			<fileset dir="${base.dir}/catissuecore-properties">
+				<include name="*.Properties"/>
+			</fileset>
+		</copy>
+		
 		<jar destfile="${db_lib.dir}/catissue.jar">
 			<fileset dir="${db_temp.dir}/suite">
-				<include name="**/*.class"/>
+				<include name="**/*.*"/>
 			</fileset>
+			
 			<fileset dir="${base.dir}/WEB-INF/src">
 				<include name="**/*hbm.xml"/>
 			</fileset>
+			
 
 		</jar>
-		<delete dir="${db_temp.dir}/suite" />
+		<!-- delete dir="${db_temp.dir}/suite" / -->
 	</target>	
 
 	<target name="db_compile" depends="init">
@@ -89,7 +101,7 @@
 	
 	<target name="RundbUnit" depends="configure_properties" >
 		<antcall target="runJUnit">
-			<param name="classNames" value="**/UserDBTestcases.java" />
+			<param name="classNames" value="**/MSRMigrationTestCases.java" />
 		</antcall>
 		<antcall target="clean"></antcall>
 	</target>
@@ -104,6 +116,7 @@
 			<antcall target="generate_hibernate_cfg">
 				<param name ="DestFile" value="test_hibernate.cfg.xml"/>
 				<param name ="SrcFile" value="hibernate.cfg.xml"/>
+				<param name ="SrcDir"  value="${base.dir}/WEB-INF/src"/>
 			</antcall>
 			
 			<antcall target="replaceDBParams">
@@ -113,8 +126,28 @@
 			<antcall target="generate_hibernate_cfg">
 					<param name ="DestFile" value="test_DEHibernate.cfg.xml"/>
 					<param name ="SrcFile" value="DynamicExtensionsHibernate.cfg.xml"/>
+					<param name ="SrcDir"  value="${base.dir}/WEB-INF/src"/>
 			</antcall>
-				
+
+			<antcall target="generate_hibernate_cfg">
+					<param name ="DestFile" value="catissuecore.hibernate.cfg.xml"/>
+					<param name ="SrcFile" value="catissuecore.hibernate.cfg.xml"/>
+					<param name ="SrcDir"  value="${base.dir}/catissuecore-properties"/>
+			</antcall>
+			<copy todir="${db_src.dir}">
+				<fileset dir = "${base.dir}/catissuecore-properties">
+					<include name="caTissueCore_Properties.xml"/>
+					<include name="ApplicationSecurityConfig.xml"/>
+				</fileset>
+			</copy>
+			<antcall target="replaceDBParams">
+				<param name="SourceFile" value="${db_src.dir}/catissuecore.hibernate.cfg.xml" />
+			</antcall>
+
+			<replace file="${db_src.dir}/ApplicationSecurityConfig.xml" token="@@hibernate-config-file@@" value="${db_src.dir}/catissuecore.hibernate.cfg.xml" />
+			<replace file="${db_src.dir}/ApplicationSecurityConfig.xml" token="\" value="/" />
+
+		<replace file="${db_src.dir}/caTissueDBUnit.properties" token="\" value="/"  />
 			<antcall target="replaceDBParams">
 				<param name="SourceFile" value="${db_src.dir}/test_DEHibernate.cfg.xml" />
 			</antcall>
@@ -157,10 +190,10 @@
 		
 			<replacefilter 
 				token="@@gov.nih.nci.security.configFile@@" 
-				value="file:///${jboss.server.url}/catissuecore-properties/ApplicationSecurityConfig.xml"/>
+				value="${db_src.dir}/ApplicationSecurityConfig.xml"/>
 			<replacefilter 
 				token="@@app.propertiesFile@@" 
-				value="file:///${jboss.server.url}/catissuecore-properties/caTissueCore_Properties.xml"/>
+				value="file:///${db_src.dir}/caTissueCore_Properties.xml"/>
 			<replacefilter 
 				token="@@DATABASE_USER@@" 
 				value="${database.username}"/>
@@ -233,7 +266,7 @@
 		</concat>
 		
 		<concat destfile="${db_src.dir}/tmpMappings.cfg.xml" encoding="utf-8" >
-			<filelist dir="${base.dir}/WEB-INF/src"  files="${SrcFile}" />
+			<filelist dir="${SrcDir}"  files="${SrcFile}" />
 			<filterchain>
 				<linecontains>
 					<contains value="mapping resource" />
