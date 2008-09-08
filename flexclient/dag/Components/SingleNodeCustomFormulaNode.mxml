@@ -29,8 +29,7 @@
 			{label: "Edit", type: "radio", toggled: false,enabled:false},
 			{label: "Delete", type: "radio", toggled: false,enable:true}
 		];
-
-		
+		 
 		//private var  nodeName : String = "";
 		
 		//tHIS IS TO DISTINGUISH  WHEATHER IT'S SINGLE NODE TQ OR TWO NODE TQ 
@@ -48,8 +47,19 @@
         private var lhsTimeInterval : String = "";
         private var operation : String = "";
         private var customColumnName : String = "";
+        private var qAttrInterval: String = "";
         
        // private var customFormulaString : String = "";
+        
+        public function setQAttrInterval(qAttrInterval : String) : void
+        {
+        	this.qAttrInterval = qAttrInterval;
+        }
+        
+        public function getQAttrInterval () : String
+        {
+        	return this.qAttrInterval;
+        }
         
         public function setCustomFormulaString(customFormulaString : String) : void
         {
@@ -218,6 +228,7 @@
   			operation = input.readUTF();
   			customColumnName = input.readUTF();
   			customFormulaString = input.readUTF();
+  			qAttrInterval = input.readUTF();
   		} 
   		
        public function writeExternal(out:IDataOutput):void 
@@ -238,6 +249,7 @@
        	  out.writeUTF(operation);
        	  out.writeUTF(customColumnName);
        	  out.writeUTF(customFormulaString);
+       	  out.writeUTF(qAttrInterval);
        }
        
        private function createMyMenu(event:MouseEvent):void
@@ -301,10 +313,10 @@
        {
        	   var node : SingleNodeCustomFormulaNode = this;
        	   currentCustomNode = node;
-       	   this.parentApplication.operation="edit"; //to get popwindow fields values
+       	   this.parentApplication.operationforView="edit"; //to get popwindow fields values
        	   this.parentApplication.rpcService.getSingleNodeEditData(node);
        	   this.parentApplication.rpcService.addEventListener(ResultEvent.RESULT,editNodeHandler);  
-		   this.parentApplication.rpcService.addEventListener(FaultEvent.FAULT, faultHandler);  	   
+		   this.parentApplication.rpcService.addEventListener(FaultEvent.FAULT, faultHandler);
        }
        private function changeBgColor() : void{
        	if(this.parentApplication.view=="Result"){

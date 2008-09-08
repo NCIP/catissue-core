@@ -55,6 +55,30 @@
         private var operation : String = null;
         private var customColumnName : String = "";
         
+        private var qAttrInterval1: String = "";
+        private var qAttrInterval2: String = "";
+        
+        
+        public function setQAttrInterval1(qAttrInterval1 : String) : void
+        {
+        	this.qAttrInterval1 = qAttrInterval1;
+        }
+        
+        public function getQAttrInterval1 () : String
+        {
+        	return this.qAttrInterval1;
+        }
+        
+        public function setQAttrInterval2(qAttrInterval2 : String) : void
+        {
+        	this.qAttrInterval2 = qAttrInterval2;
+        }
+        
+        public function getQAttrInterval2 () : String
+        {
+        	return this.qAttrInterval2;
+        }
+                
         public function setCustomColumnName(customColumnName : String) : void
         {
         	this.customColumnName = customColumnName;
@@ -249,6 +273,9 @@
 			 customColumnName = input.readUTF();
 			 this.x = input.readInt();
 			 this.y = input.readInt();
+			 
+			 qAttrInterval1 = input.readUTF();	
+			 qAttrInterval2 = input.readUTF();
 		}	
 
         
@@ -276,6 +303,8 @@
         	out.writeUTF(customColumnName);
         	out.writeInt(this.x);
         	out.writeInt(this.y);
+        	out.writeUTF(qAttrInterval1);
+        	out.writeUTF(qAttrInterval2);
         }    		
   		
   		
@@ -333,12 +362,13 @@
   	   private function editCustomFormula() : void
   	   {
 			var node : CustomFormulaNode = this;
+			trace("Redefined custom formula :"+node);
 			currentCustomNode = node;
-			this.parentApplication.operation="edit"; //to get popwindow fields values 
+			this.parentApplication.operationforView="edit"; //to get popwindow fields values 
 			this.parentApplication.rpcService.retrieveEditQueryData(node);
 			this.parentApplication.rpcService.removeEventListener(ResultEvent.RESULT,nodeRemoveHandler);
 			this.parentApplication.rpcService.addEventListener(ResultEvent.RESULT,editNodeHandler);  
-			this.parentApplication.rpcService.addEventListener(FaultEvent.FAULT, faultHandler);  	   
+			this.parentApplication.rpcService.addEventListener(FaultEvent.FAULT, faultHandler);  
   	   }
   	  private function faultHandler (event:FaultEvent):void
 	  {
@@ -351,19 +381,21 @@
   	   	  this.parentApplication.createAndPopulate(event.result as Object, "edit", currentCustomNode);
   	   }
   	   private function changeBgColor() : void{
-       	if(this.parentApplication.view=="Result"){
+       	if((this.parentApplication.view=="Result") && ((this.parentApplication.operationforView == "create") || (this.parentApplication.operationforView == "rePaintCreate"))){
        		dNodeFormula.setStyle("backgroundColor","#e7ddfa");
        	}else{
        		dNodeFormula.setStyle("backgroundColor","#FFFFFF");
        	}       		
-       } 
+       }        
+       
   	]]>
   </mx:Script>
  
   <!--<mx:RemoteObject id="rpcService" destination="cdeService">
  </mx:RemoteObject> -->
   
-  <mx:HBox id="dNodeFormula" height="100%" width="100%" textAlign="center" horizontalGap="0" creationComplete="changeBgColor()">
+  <mx:HBox id="dNodeFormula" height="100%" width="100%" textAlign="center" horizontalGap="0" creationComplete="changeBgColor()" 
+  	backgroundColor="#FFFFFF">
      <mx:Label id="formulaLabel" text="{customFormula}" height="100%" width="95%"/>
   	
      <mx:VBox height="100%" verticalAlign="middle">
