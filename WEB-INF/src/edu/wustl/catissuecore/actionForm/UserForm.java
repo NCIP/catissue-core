@@ -838,7 +838,7 @@ public class UserForm extends AbstractActionForm
 //							
 //						}
 						
-						if (siteIds.length>0 && validator.isEmpty(role))
+						if (siteIds!=null && siteIds.length>0 && validator.isEmpty(role))
 						{
 							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
 									.getValue("user.roleIsRequired")));
