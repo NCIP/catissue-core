@@ -1422,7 +1422,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 		generatedHTML.append("\n"
 				+ generateHTMLForOperators(attribute, operatorsList, null,
 						"PermissibleValuesQuery"));
-		if (!permissibleValues.isEmpty())
+		if (!permissibleValues.isEmpty() && permissibleValues.size() < 5000)
 		{
 			generatedHTML.append("\n"
 					+ generateHTMLForEnumeratedValues(attribute, permissibleValues,
@@ -1483,7 +1483,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 				{
 					isBetween = false;
 				}
-				if (!permissibleValues.isEmpty())
+				if (!permissibleValues.isEmpty() && permissibleValues.size() < 5000)
 				{
 					generatedHTML.append("\n"
 							+ generateHTMLForEnumeratedValues(attribute, permissibleValues,
