@@ -1,7 +1,13 @@
 package edu.wustl.catissuecore.flex.dag;
 
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import org.apache.taglibs.standard.lang.jstl.IntegerLiteral;
+
+import quicktime.app.image.QTTransition;
 
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -14,9 +20,11 @@ import edu.wustl.common.querysuite.queryobject.IDateOffsetLiteral;
 import edu.wustl.common.querysuite.queryobject.IExpression;
 import edu.wustl.common.querysuite.queryobject.IExpressionAttribute;
 import edu.wustl.common.querysuite.queryobject.ILiteral;
+import edu.wustl.common.querysuite.queryobject.INumericLiteral;
 import edu.wustl.common.querysuite.queryobject.ITerm;
 import edu.wustl.common.querysuite.queryobject.RelationalOperator;
 import edu.wustl.common.querysuite.queryobject.TimeInterval;
+import edu.wustl.common.querysuite.queryobject.impl.NumericLiteral;
 import edu.wustl.common.util.Utility;
 
 public class TwoNodesTemporalQuery
@@ -47,9 +55,42 @@ public class TwoNodesTemporalQuery
 	
 	private TimeInterval timeInterval = null;
 	
+	private TimeInterval qAttrInterval1 = null;
+	
+	private  TimeInterval qAttrInterval2 = null;
+	
+	private INumericLiteral intLiteral = null;
+	
+	private SimpleDateFormat formatter;		 
+	
 	//private String timeIntervalValue = null;
 	//private String timeValue = null; 
 	
+	public TimeInterval getQAttrInterval2() 
+	{
+		return qAttrInterval2;
+	}
+
+
+
+	public void setQAttrInterval2(TimeInterval attrInterval2) {
+		qAttrInterval2 = attrInterval2;
+	}
+
+
+
+	public TimeInterval getQAttrInterval1() {
+		return qAttrInterval1;
+	}
+
+
+
+	public void setQAttrInterval1(TimeInterval attrInterval) {
+		qAttrInterval1 = attrInterval;
+	}
+
+
+
 	/**
 	 * @return Returns the firstAttributeType.
 	 */
@@ -378,12 +419,23 @@ public class TwoNodesTemporalQuery
 			if(firstAttributeType.equals(Constants.DATE_TYPE))
 			{
 				IExpression1 = QueryObjectFactory.createExpressionAttribute(srcIExpression,srcAttributeById);
+				if(qAttrInterval2 !=null)
+				{
+					dateOffsetAttr2 = QueryObjectFactory.createDateOffsetAttribute(destIExpression,destAttributeById,qAttrInterval2);
+				}
+				else
 				dateOffsetAttr2 = QueryObjectFactory.createDateOffsetAttribute(destIExpression,destAttributeById,TimeInterval.Day);
 			}
 			else
 			{
 				IExpression2 = QueryObjectFactory.createExpressionAttribute(destIExpression,destAttributeById);
+				if(qAttrInterval1 != null)
+				{
+					dateOffsetAttr1 = QueryObjectFactory.createDateOffsetAttribute(srcIExpression,srcAttributeById,qAttrInterval1);
+				}
+				else
 				dateOffsetAttr1 = QueryObjectFactory.createDateOffsetAttribute(srcIExpression,srcAttributeById,TimeInterval.Day);
+				
 			}
 		}
 	}
@@ -430,16 +482,29 @@ public class TwoNodesTemporalQuery
 		}
 		else
 		{
-			if(!timeValue.equals("null"))
+			if((firstAttributeType.equals("Integer")) && (secondAttributeType.equals("Integer")))
 			{
-				try 
-				{
-					Date date = Utility.parseDate(timeValue, "MM/dd/yyyy");
-					dateLiteral = QueryObjectFactory.createDateLiteral(new java.sql.Date(date.getTime()));
-				} catch (ParseException e) 
-				{
-				    throw new RuntimeException("Cann't Occur");
-				}
+                intLiteral = QueryObjectFactory.createNumericLiteral(timeValue);
+			}
+			else if(!timeValue.equals("null"))
+			{
+				//Date date = Utility.parseDate(timeValue, "MM/dd/yyyy HH:MM:SS");					
+				Date date=null;
+				String pattern="";
+				try {
+					if((firstAttributeType.equals("DateTime")) && (secondAttributeType.equals("DateTime")))
+						pattern = "MM/dd/yyyy HH:mm:ss";
+					else
+						pattern = "MM/dd/yyyy";
+					System.out.println("Date Pattern:" + pattern);
+					formatter = new SimpleDateFormat(pattern);						
+					date = formatter.parse(timeValue);
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}				
+				
+				dateLiteral = QueryObjectFactory.createDateLiteral(new java.sql.Date(date.getTime()));
 			}
 		}
 	}
@@ -455,6 +520,31 @@ public class TwoNodesTemporalQuery
 			}
 		}
 	}
+	public void setQAttrTInterval1(String timeIntervalValue)
+	{
+		qAttrInterval1 = getTInterval(timeIntervalValue);
+	}
+	
+	public void setQAttrTInterval2(String timeIntervalValue)
+	{
+		qAttrInterval2 = getTInterval(timeIntervalValue);
+	}	
+	
+	 private TimeInterval getTInterval(String timeIntervalValue)
+	 {
+		 TimeInterval t = null;
+		 for(TimeInterval time: TimeInterval.values())
+		 {
+			if(timeIntervalValue.equals(time.name() + "s"))
+			{
+               t = time;
+                break;
+			}
+		}
+		 return t;
+	 }
+	 
+	
 	public void createDateOffsetLiteral(String timeIntervalValue)
 	{
 		setTimeInterval(timeIntervalValue);
@@ -464,7 +554,15 @@ public class TwoNodesTemporalQuery
 	public void createOnlyRHS()
 	{
 		 rhsTerm = 	QueryObjectFactory.createTerm();
-		 rhsTerm.addOperand(dateOffSetLiteral);
+		 if(dateOffSetLiteral != null)
+		 {
+			 rhsTerm.addOperand(dateOffSetLiteral);
+		 }
+		 else if(intLiteral != null)
+		 {
+			 rhsTerm.addOperand(intLiteral);
+		 }
+		 
 	}
 	
 	public void createLHSAndRHS()
@@ -475,7 +573,15 @@ public class TwoNodesTemporalQuery
 		{
 			lhsTerm.addOperand(IExpression1);
 		    lhsTerm.addOperand(iCon,IExpression2);
-		    rhsTerm.addOperand(dateOffSetLiteral);
+		    if(dateOffSetLiteral != null)
+		    {
+		    	rhsTerm.addOperand(dateOffSetLiteral);
+		    }
+		    else if(intLiteral != null)
+		    {
+		    	 rhsTerm.addOperand(intLiteral);
+		    }
+		    
 		}
 	    else
 	    {

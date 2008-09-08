@@ -1,6 +1,7 @@
 package edu.wustl.catissuecore.flex.dag;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
@@ -43,7 +44,18 @@ public class SingalNodeTemporalQuery
 	private String attributeType = null;
 	private TimeInterval rhsTimeInterval = null;
     private TimeInterval lhsTimeInterval = null;
+    
+    private TimeInterval qAttrInterval = null;
+	private SimpleDateFormat formatter;
 	
+	public TimeInterval getQAttrInterval() {
+		return qAttrInterval;
+	}
+
+	public void setQAttrInterval(TimeInterval attrInterval) {
+		qAttrInterval = attrInterval;
+	}
+
 	/**
 	 * @return Returns the arithOp.
 	 */
@@ -421,12 +433,18 @@ public class SingalNodeTemporalQuery
 	{
 		if(attributeType.equals(Constants.DATE_TYPE))
 		{
-			//Means Attribute is of Date type , then it is Expresion attribute
-			attributeIExpression = QueryObjectFactory.createExpressionAttribute(entityIExpression,attributeById);
+			//Means Attribute is of Date type , then it is Expression attribute
+			attributeIExpression = QueryObjectFactory.createExpressionAttribute(entityIExpression,attributeById);			
 		}
 		else
 		{
 			//It will be DateOffSetLiteral
+//			dateOffsetAttr = QueryObjectFactory.createDateOffsetAttribute(entityIExpression,attributeById,TimeInterval.Day);
+			if(qAttrInterval !=null)
+			{
+				dateOffsetAttr = QueryObjectFactory.createDateOffsetAttribute(entityIExpression,attributeById,qAttrInterval);
+			}
+			else
 			dateOffsetAttr = QueryObjectFactory.createDateOffsetAttribute(entityIExpression,attributeById,TimeInterval.Day);
 		}
 	}
@@ -457,9 +475,18 @@ public class SingalNodeTemporalQuery
 			if((!rhsTimeValue.equals("null")) && (rhsTimeInterval.equals("null")))
 			{
 				//It  means there exists TextInput and Time Intervals on LHS, so create dateOffSetLiteral
+				Date date=null;
+				String pattern="";
 				try 
 				{
-					Date date = Utility.parseDate(rhsTimeValue, "MM/dd/yyyy");
+					//Date date = Utility.parseDate(rhsTimeValue, "MM/dd/yyyy HH:MM:SS");
+					if(attributeType.equals("DateTime"))
+						pattern = "MM/dd/yyyy HH:mm:ss";
+					else
+						pattern = "MM/dd/yyyy";
+					
+					formatter = new SimpleDateFormat(pattern);						
+					date = formatter.parse(rhsTimeValue);
 					rhsDateLiteral = QueryObjectFactory.createDateLiteral(new java.sql.Date(date.getTime()));
 				} catch (ParseException e) 
 				{
@@ -486,9 +513,9 @@ public class SingalNodeTemporalQuery
 		{
 			if((!lhsTimeValue.equals("null")) && (lhsTimeInterval.equals("null")))
 			{
-				//This is the case when there exists DataPicker on LHS, so cretae only Date Literal
+				//This is the case when there exists DataPicker on LHS, so create only Date Literal
 				try 
-				{
+				{					
 					Date date = Utility.parseDate(lhsTimeValue, "MM/dd/yyyy");
 					lhsDateLiteral = QueryObjectFactory.createDateLiteral(new java.sql.Date(date.getTime()));
 				} catch (ParseException e) 

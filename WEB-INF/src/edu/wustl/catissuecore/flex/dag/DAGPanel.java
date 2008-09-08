@@ -345,11 +345,17 @@ public class DAGPanel
 		    //Create LHS Terms and RHS Terms
 		    singalNodeTq.createLHSAndRHS();
 		    ICustomFormula customFormula = createSingleNodeCustomFormula(singalNodeTq, operation,node.getName());
-		    CustomFormulaUIBean bean = createTQUIBean(customFormula,null,node);
-			populateUIMap(node.getName(),bean);
-
-			entityExpression.addOperand(getAndConnector(),customFormula);
-			entityExpression.setInView(true);
+		    if(operation.equals(Constants.ADD))
+		    {
+		    	CustomFormulaUIBean bean = createTQUIBean(customFormula,null,node);
+				populateUIMap(node.getName(),bean);
+				entityExpression.addOperand(getAndConnector(),customFormula);
+				entityExpression.setInView(true);
+		    }
+		    else if (operation.equals(Constants.EDIT))
+		    {
+		    	updateSingleNodeCN(node);
+		    }
 			addOutputTermsToQuery(query, customFormula, node.getCustomColumnName());
 	    }
 		String oprs = setOperation(node.getOperation());
@@ -358,6 +364,24 @@ public class DAGPanel
 	    	node.setOperation(oprs);
 	    }
 		return node;
+	}
+	private void  updateSingleNodeCN(SingleNodeCustomFormulaNode node)
+	{
+		String id = node.getName();
+		HttpServletRequest request = flex.messaging.FlexContext.getHttpRequest();
+		HttpSession session = request.getSession();
+		Map<String,CustomFormulaUIBean> TQUIMap = (Map<String,CustomFormulaUIBean>)session.getAttribute(DAGConstant.TQUIMap);
+        if(TQUIMap != null)
+        {
+        	CustomFormulaUIBean uiBean = TQUIMap.get(id);
+        	if(uiBean != null)
+        	{
+        		if(uiBean.getSingleNode()!= null)
+        		{
+        			uiBean.setSingleNode(node);
+        		}
+        	}
+        }	
 	}
 	
 	/**
@@ -391,6 +415,25 @@ public class DAGPanel
 		//Setting the Relational Ops
 		tqBean.setRelOp(getRelationalOperator(node.getSelectedLogicalOp()));
 		
+		//Setting the qAttrInterval1 
+		if(node.getQAttrInterval1().equals("null"))
+		{
+			tqBean.setQAttrInterval1(null);
+		}
+		else
+		{
+			tqBean.setQAttrTInterval1(node.getQAttrInterval1());
+		}
+		//Setting the qAttrInterval2
+		if(node.getQAttrInterval2().equals("null"))
+		{
+			tqBean.setQAttrInterval2(null);
+		}
+		else
+		{
+			tqBean.setQAttrTInterval2(node.getQAttrInterval2());
+		}
+		
         //Creating all expressions
 		tqBean.createExpressions();
 		tqBean.setICon(QueryObjectFactory.createArithmeticConnector(tqBean.getArithOp()));	
@@ -398,41 +441,56 @@ public class DAGPanel
 		{
 			//This will create only LHS
 			tqBean.createOnlyLHS();
-			
 			IOutputTerm outputTerm = QueryObjectFactory.createOutputTerm();
 			outputTerm.setTerm(tqBean.getLhsTerm());
 			tqBean.setTimeInterval(node.getTimeInterval());
 			outputTerm.setTimeInterval(tqBean.getTimeInterval());
 			String tqColumnName = node.getCustomColumnName() + " (" + node.getTimeInterval() +"/s)";
 			outputTerm.setName(tqColumnName);
-			
 			query.getOutputTerms().add(outputTerm);
-
-			//Create rhs (Date Offset Literal)Using only time Interval
-			//tqBean.createDateOffsetLiteral(node.getTimeInterval()); 
-			//tqBean.createOnlyRHS(); 
 		}
 		else
 		{
 			tqBean.createLiterals(node.getTimeInterval(), node.getTimeValue());
 		    tqBean.createLHSAndRHS();
 			ICustomFormula customFormula = createCustomFormula(tqBean,operation,node.getName());
-			//First removing custom formula
-			//removeCustomFormula(node.getName());
-			CustomFormulaUIBean bean = createTQUIBean(customFormula,node,null);
-			populateUIMap(node.getName(),bean);
-			
-			srcIExpression.addOperand(getAndConnector(),customFormula);
-			srcIExpression.setInView(true);
+			if(operation.equals(Constants.ADD))
+			{
+				CustomFormulaUIBean bean = createTQUIBean(customFormula,node,null);
+				populateUIMap(node.getName(),bean);
+				srcIExpression.addOperand(getAndConnector(),customFormula);
+				srcIExpression.setInView(true);
+			}
+			else if(operation.equals(Constants.EDIT))
+			{
+				updateTwoNodesCN(node);
+			}
 			addOutputTermsToQuery(query, customFormula, node.getCustomColumnName());
 			String oprs = setOperation(node.getOperation());
 		    if(oprs != null)
 		    {
 		    	node.setOperation(oprs);
 		    }
-
 		}
 		return node;
+	}
+	private  void updateTwoNodesCN(CustomFormulaNode node)
+	{
+		String id = node.getName();
+		HttpServletRequest request = flex.messaging.FlexContext.getHttpRequest();
+		HttpSession session = request.getSession();
+		Map<String,CustomFormulaUIBean> TQUIMap = (Map<String,CustomFormulaUIBean>)session.getAttribute(DAGConstant.TQUIMap);
+        if(TQUIMap != null)
+        {
+        	CustomFormulaUIBean uiBean = TQUIMap.get(id);
+        	if(uiBean != null)
+        	{
+        		if(uiBean.getTwoNode() != null)
+        		{
+        			uiBean.setTwoNode(node);
+        		}
+        	}
+        }
 	}
 	private CustomFormulaUIBean createTQUIBean(ICustomFormula cf,CustomFormulaNode twoNode, SingleNodeCustomFormulaNode singleNode)
 	{
@@ -1143,15 +1201,21 @@ public class DAGPanel
 				if(!customFormulas.isEmpty())
 				{
 					for(ICustomFormula c: customFormulas)
-					{
-						CustomFormulaNode customNode = populateCustomNodeInfo(c,constraints,exp);
-						if(customNode != null)
 						{
-							savedQTwoNodesCNode(customNodeList, query, TQUIMap, c, customNode);
-						} else
-						{
-							savedQSingleNodeCNode(SNcustomNodeList, query, constraints, TQUIMap, exp, c);
-						}
+						   Set<IExpression> expressionsInFormula = QueryUtility.getExpressionsInFormula(c);
+						   if(expressionsInFormula.size() == 2)
+						   {
+							   CustomFormulaNode customNode = populateCustomNodeInfo(c,constraints,exp);
+							   if(customNode != null)
+							   {
+								   savedQTwoNodesCNode(customNodeList, query, TQUIMap, c, customNode);
+							   }
+						   }	
+						  else if(expressionsInFormula.size() == 1)
+						  {
+							  //Here Size should be only.....This is the case of Single NOde TQ 
+							  savedQSingleNodeCNode(SNcustomNodeList, query, constraints, TQUIMap, exp, c);
+						  }
 					}
 				}
 			}
@@ -1336,10 +1400,26 @@ public class DAGPanel
 					cNode.setSecondSelectedAttrName(attribute.getName());
 					cNode.setSecondSelectedAttrType(dataType);
 				}
-			}else 
+			}else if(element instanceof IDateOffsetAttribute)
 			{
-				//throw new RuntimeException("Not yet supported...");
-				return null;
+				IDateOffsetAttribute dateOffSetAttr = (IDateOffsetAttribute)element;
+				AttributeInterface attribute = dateOffSetAttr.getAttribute();
+				String dataType = getAttributeDataType(attribute);
+				if(dateOffSetAttr.getExpression().getExpressionId() == srcExp.getExpressionId())
+				{
+					cNode.setFirstSelectedAttrId(attribute.getId().toString());
+					cNode.setFirstSelectedAttrName(attribute.getName());
+					cNode.setFirstSelectedAttrType(dataType);
+					cNode.setQAttrInterval1(dateOffSetAttr.getTimeInterval().name()+"s"); 
+				}
+				else
+				{
+					cNode.setSecondSelectedAttrId(attribute.getId().toString());
+					cNode.setSecondSelectedAttrName(attribute.getName());
+					cNode.setSecondSelectedAttrType(dataType);
+					cNode.setQAttrInterval2(dateOffSetAttr.getTimeInterval().name()+"s"); 					
+				}
+				
 			}
 				
 		}

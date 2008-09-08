@@ -31,7 +31,7 @@ public class CustomFormulaNode implements Externalizable
 	
 	private String selectedArithmeticOp = "";
 	private String selectedLogicalOp = "";
-		
+
 	private String timeValue = "";
 	private String timeInterval = "";
 	
@@ -41,10 +41,29 @@ public class CustomFormulaNode implements Externalizable
 	private int x;
 	private int y;
 	
+	private String qAttrInterval1 = "";
+	private String qAttrInterval2 = "";
 	
+	public String getQAttrInterval1() {
+		return qAttrInterval1;
+	}
+
+	public void setQAttrInterval1(String attrInterval) {
+		qAttrInterval1 = attrInterval;
+	}
 	
-	
-	
+
+	public String getQAttrInterval2() {
+		return qAttrInterval2;
+	}
+
+	public void setQAttrInterval2(String attrInterval2) {
+		qAttrInterval2 = attrInterval2;
+	}
+
+
+
+
 	/**
 	 * @return Returns the customColumnName.
 	 */
@@ -398,6 +417,8 @@ public class CustomFormulaNode implements Externalizable
 		customColumnName = in.readUTF();
 	    x = in.readInt();
 	    y = in.readInt();
+	    qAttrInterval1 = in.readUTF();
+	    qAttrInterval2 = in.readUTF();
 	}
 	
 	/**
@@ -424,6 +445,8 @@ public class CustomFormulaNode implements Externalizable
 		out.writeUTF(customColumnName);
 		out.writeInt(x);
 		out.writeInt(y);
+		out.writeUTF(qAttrInterval1);
+		out.writeUTF(qAttrInterval2);
 	}
 
 

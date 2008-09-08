@@ -28,6 +28,26 @@ public class SingleNodeCustomFormulaNode implements Externalizable
 	
 	private String customFormulaString = "";
 	
+	private String qAttrInterval = "";
+	
+	
+	/**
+	 * @return Returns the customFormulaString.
+	 */
+	public String getQAttrInterval()
+	{
+		return qAttrInterval;
+	}
+
+	
+	/**
+	 * @param customFormulaString The customFormulaString to set.
+	 */
+	public void setQAttrInterval(String qAttrInterval)
+	{
+		this.qAttrInterval = qAttrInterval;
+	}
+	
 	/**
 	 * @return Returns the customFormulaString.
 	 */
@@ -334,6 +354,7 @@ public class SingleNodeCustomFormulaNode implements Externalizable
        	  out.writeUTF(operation);
        	  out.writeUTF(customColumnName);
        	  out.writeUTF(customFormulaString);
+       	  out.writeUTF(qAttrInterval);
 
 	}
 	
@@ -355,6 +376,7 @@ public class SingleNodeCustomFormulaNode implements Externalizable
   			operation = input.readUTF();
   			customColumnName = input.readUTF();
   			customFormulaString = input.readUTF();
+  			qAttrInterval = input.readUTF();
 	}
 
 }
