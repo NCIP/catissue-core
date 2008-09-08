@@ -22,13 +22,16 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
+import edu.wustl.common.bizlogic.IActivityStatus;
 import edu.wustl.common.dao.AbstractDAO;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.dao.DAOFactory;
+import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.dbManager.HibernateMetaData;
+import edu.wustl.common.util.global.ApplicationProperties;
 
 
 /**
@@ -103,7 +106,7 @@ public class SpecimenArrayAliquotsBizLogic extends DefaultBizLogic
 			if (parentSpecimenArray != null)
 			{
 				//check for closed ParentSpecimenArray
-				checkStatus(dao, parentSpecimenArray, "Parent SpecimenArray");
+				checkStatus(dao, parentSpecimenArray, "Fail to create Aliquots, Parent SpecimenArray");
 		//		cntPos.setOccupiedContainer(aliquotSpecimenArray);
 				
 		//		aliquotSpecimenArray.setParent(parentSpecimenArray);
@@ -381,6 +384,31 @@ public class SpecimenArrayAliquotsBizLogic extends DefaultBizLogic
 		}
 
 	}
+	protected void checkStatus(DAO dao, IActivityStatus ado, String errorName) throws DAOException
+	{
+		if (ado != null)
+		{
+			Long identifier = ((AbstractDomainObject)ado).getId();
+			if (identifier != null)
+			{
+				String className = ado.getClass().getName();
+				String activityStatus = ado.getActivityStatus();
+				if(activityStatus==null)
+				{
+					activityStatus = getActivityStatus(dao, className, identifier);
+				}
+				if (activityStatus.equals(Constants.ACTIVITY_STATUS_CLOSED))
+				{
+					throw new DAOException(errorName + " " + ApplicationProperties.getValue("error.object.closed"));
+				}
+				if (activityStatus.equals(Constants.ACTIVITY_STATUS_DISABLED))
+				{
+					throw new DAOException(errorName + " " + ApplicationProperties.getValue("error.object.disabled"));
+				}
+			}
+		}
+	}
+
 	
 	
 }

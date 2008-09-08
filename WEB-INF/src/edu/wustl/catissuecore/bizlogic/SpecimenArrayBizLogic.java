@@ -9,6 +9,7 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -16,6 +17,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+
+import net.sf.ehcache.CacheException;
 
 import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
@@ -34,6 +37,7 @@ import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
+import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
@@ -103,11 +107,12 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 			{
 
 				Map containerMap = StorageContainerUtil.getContainerMapFromCache();
-//				if(specimenArray.getLocatedAtPosition() != null)
-//				{
-					StorageContainerUtil.deleteSinglePositionInContainerMap((StorageContainer)specimenArray.getLocatedAtPosition().getParentContainer(), containerMap, specimenArray.getLocatedAtPosition()
-						.getPositionDimensionOne().intValue(), specimenArray.getLocatedAtPosition().getPositionDimensionTwo().intValue());
-//				}
+				//				if(specimenArray.getLocatedAtPosition() != null)
+				//				{
+				StorageContainerUtil.deleteSinglePositionInContainerMap((StorageContainer) specimenArray.getLocatedAtPosition().getParentContainer(),
+						containerMap, specimenArray.getLocatedAtPosition().getPositionDimensionOne().intValue(), specimenArray.getLocatedAtPosition()
+								.getPositionDimensionTwo().intValue());
+				//				}
 
 			}
 		}
@@ -117,39 +122,79 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 		}
 
 	}
-	
+
 	public void postUpdate(DAO dao, Object currentObj, Object oldObj, SessionDataBean sessionDataBean) throws BizLogicException,
-	UserNotAuthorizedException
+			UserNotAuthorizedException
 	{
-	try
-	{
-		Map containerMap = StorageContainerUtil.getContainerMapFromCache();
-		SpecimenArray specimenArrayCurrentObject = (SpecimenArray) currentObj;
-		SpecimenArray specimenArrayOldObject = (SpecimenArray) oldObj;
-		int xOld = specimenArrayOldObject.getLocatedAtPosition().getPositionDimensionOne().intValue();
-		int xNew = specimenArrayCurrentObject.getLocatedAtPosition().getPositionDimensionOne().intValue();
-		int yOld = specimenArrayOldObject.getLocatedAtPosition().getPositionDimensionTwo().intValue();
-		int yNew = specimenArrayCurrentObject.getLocatedAtPosition().getPositionDimensionTwo().intValue();
-		long containerIdOld = specimenArrayCurrentObject.getLocatedAtPosition().getParentContainer().getId().longValue();
-		long containerIdNew = specimenArrayOldObject.getLocatedAtPosition().getParentContainer().getId().longValue();
-		if (xNew != xOld || yNew != yOld || containerIdOld!=containerIdNew)
+		try
 		{
-			Container container = (Container)specimenArrayOldObject.getLocatedAtPosition().getParentContainer();
-			container = (Container)HibernateMetaData.getProxyObjectImpl(container);
-			StorageContainerUtil.insertSinglePositionInContainerMap(container, containerMap, xOld,yOld);
-			StorageContainerUtil.deleteSinglePositionInContainerMap(container, containerMap, xNew,yNew);
+			Map containerMap = StorageContainerUtil.getContainerMapFromCache();
+			SpecimenArray specimenArrayCurrentObject = (SpecimenArray) currentObj;
+			SpecimenArray specimenArrayOldObject = (SpecimenArray) oldObj;
+
+			if (specimenArrayOldObject != null
+					&& specimenArrayOldObject.getLocatedAtPosition() != null
+					&& specimenArrayOldObject.getLocatedAtPosition().getParentContainer() != null) {
+				Container oldParentCont = (Container) HibernateMetaData
+						.getProxyObjectImpl(specimenArrayOldObject.getLocatedAtPosition()
+								.getParentContainer());
+				StorageContainerUtil.insertSinglePositionInContainerMap(
+						oldParentCont, containerMap, specimenArrayOldObject
+								.getLocatedAtPosition()
+								.getPositionDimensionOne().intValue(),
+								specimenArrayOldObject.getLocatedAtPosition()
+								.getPositionDimensionTwo().intValue());
+			}
+			if (specimenArrayCurrentObject != null
+					&& specimenArrayCurrentObject.getLocatedAtPosition() != null
+					&& specimenArrayCurrentObject.getLocatedAtPosition()
+							.getParentContainer() != null) {
+				Container currentParentCont = (Container) specimenArrayCurrentObject
+						.getLocatedAtPosition().getParentContainer();
+				StorageContainerUtil.deleteSinglePositionInContainerMap(
+						currentParentCont, containerMap, specimenArrayCurrentObject
+								.getLocatedAtPosition()
+								.getPositionDimensionOne().intValue(),
+								specimenArrayCurrentObject.getLocatedAtPosition()
+								.getPositionDimensionTwo().intValue());
+			}
+		
+			if (Constants.ACTIVITY_STATUS_DISABLED.equals(specimenArrayCurrentObject.getActivityStatus()))
+			{
+				Map disabledConts = getContForDisabledSpecimenArrayFromCache();
+
+				Set keySet = disabledConts.keySet();
+				Iterator itr = keySet.iterator();
+				while (itr.hasNext())
+				{
+					String Id = (String) itr.next();
+					Map disabledContDetails = (TreeMap) disabledConts.get(Id);
+					String contNameKey = "StorageContName";
+					//String contIdKey = "StorageContIdKey";
+					String pos1Key = "pos1";
+					String pos2Key = "pos2";
+
+					StorageContainer cont = new StorageContainer();
+					cont.setId(new Long(Id));
+					cont.setName((String) disabledContDetails.get(contNameKey));
+					int x = ((Integer) disabledContDetails.get(pos1Key)).intValue();
+					int y = ((Integer) disabledContDetails.get(pos2Key)).intValue();
+
+					StorageContainerUtil.insertSinglePositionInContainerMap(cont, containerMap, x, y);
+				}
+
+			}
+		}
+		catch (Exception e)
+		{
+			throw new BizLogicException("Failed to Update Storage Container Positions");
 		}
 	}
-	catch (Exception e)
-	{
-		throw new BizLogicException("Failed to Update Storage Container Positions"); 
-	}
-}
 
 	/**
 	 * @see edu.wustl.common.bizlogic.AbstractBizLogic#update(edu.wustl.common.dao.DAO, java.lang.Object, java.lang.Object, edu.wustl.common.beans.SessionDataBean)
 	 */
-	
+
 	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
 		SpecimenArray specimenArray = (SpecimenArray) obj;
@@ -166,11 +211,14 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 		//		}
 
 		boolean flag = true;
-		if (specimenArray.getLocatedAtPosition().getParentContainer().getId().longValue() == oldSpecimenArray.getLocatedAtPosition().getParentContainer().getId().longValue()
-			//	&& specimenArray.getLocatedAtPosition() != null 
+		if (specimenArray.getLocatedAtPosition().getParentContainer().getId().longValue() == oldSpecimenArray.getLocatedAtPosition()
+				.getParentContainer().getId().longValue()
+				//	&& specimenArray.getLocatedAtPosition() != null 
 				&& oldSpecimenArray.getLocatedAtPosition() != null
-				&& specimenArray.getLocatedAtPosition().getPositionDimensionOne().longValue() == oldSpecimenArray.getLocatedAtPosition().getPositionDimensionOne().longValue()
-				&& specimenArray.getLocatedAtPosition().getPositionDimensionTwo().longValue() == oldSpecimenArray.getLocatedAtPosition().getPositionDimensionTwo().longValue())
+				&& specimenArray.getLocatedAtPosition().getPositionDimensionOne().longValue() == oldSpecimenArray.getLocatedAtPosition()
+						.getPositionDimensionOne().longValue()
+				&& specimenArray.getLocatedAtPosition().getPositionDimensionTwo().longValue() == oldSpecimenArray.getLocatedAtPosition()
+						.getPositionDimensionTwo().longValue())
 		{
 			flag = false;
 		}
@@ -182,11 +230,12 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 				StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(
 						Constants.STORAGE_CONTAINER_FORM_ID);
 				//check for all validations on the storage container.
-//				if(specimenArray.getLocatedAtPosition() != null)
-//				{
-					storageContainerBizLogic.checkContainer(dao, specimenArray.getLocatedAtPosition().getParentContainer().getId().toString(), specimenArray.getLocatedAtPosition()
-						.getPositionDimensionOne().toString(), specimenArray.getLocatedAtPosition().getPositionDimensionTwo().toString(), sessionDataBean, false);
-//				}
+				//				if(specimenArray.getLocatedAtPosition() != null)
+				//				{
+				storageContainerBizLogic.checkContainer(dao, specimenArray.getLocatedAtPosition().getParentContainer().getId().toString(),
+						specimenArray.getLocatedAtPosition().getPositionDimensionOne().toString(), specimenArray.getLocatedAtPosition()
+								.getPositionDimensionTwo().toString(), sessionDataBean, false);
+				//				}
 			}
 			catch (SMException sme)
 			{
@@ -195,6 +244,7 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 			}
 		}
 		doUpdateSpecimenArrayContents(specimenArray, oldSpecimenArray, dao, sessionDataBean, false);
+
 		dao.update(specimenArray.getCapacity(), sessionDataBean, true, false, false);
 		dao.update(specimenArray, sessionDataBean, true, false, false);
 		SpecimenArrayContent specimenArrayContent = null;
@@ -228,6 +278,55 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 			else
 			{
 				dao.update(specimenArrayContent, sessionDataBean, true, false, false);
+			}
+		}
+
+		if (Constants.ACTIVITY_STATUS_DISABLED.equals(specimenArray.getActivityStatus()))
+		{
+			Map disabledCont = null;
+			try
+			{
+				disabledCont = getContForDisabledSpecimenArrayFromCache();
+			}
+			catch (Exception e1)
+			{
+				e1.printStackTrace();
+			}
+			if (disabledCont == null)
+			{
+				disabledCont = new TreeMap();
+			}
+			Object objectContainer = null;
+			if (specimenArray.getLocatedAtPosition() != null && specimenArray.getLocatedAtPosition().getOccupiedContainer() != null
+					&& specimenArray.getLocatedAtPosition().getOccupiedContainer().getId() != null)
+			{
+				objectContainer = dao.retrieve(StorageContainer.class.getName(), specimenArray.getLocatedAtPosition().getOccupiedContainer().getId());
+			}
+			if (objectContainer != null)
+			{
+
+				SpecimenArray storageContainer = (SpecimenArray) objectContainer;
+				addEntriesInDisabledMap(specimenArray, storageContainer, disabledCont);
+			}
+
+			ContainerPosition prevPosition = specimenArray.getLocatedAtPosition();
+			
+			specimenArray.setLocatedAtPosition(null);
+			dao.update(specimenArray, sessionDataBean, true, false, false);
+			
+			if(prevPosition!=null)
+			{
+				dao.delete(prevPosition);
+			}	
+
+			try
+			{
+				CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager.getInstance();
+				catissueCoreCacheManager.addObjectToCache(Constants.MAP_OF_CONTAINER_FOR_DISABLED_SPECIENARRAY, (Serializable) disabledCont);
+			}
+			catch (CacheException e)
+			{
+
 			}
 		}
 	}
@@ -300,8 +399,7 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 		{
 			double quantity = 0.0;
 			// fetch array type to check specimen class
-			Object object = dao.retrieve(SpecimenArrayType.class.getName(), specimenArray.getSpecimenArrayType()
-					.getId());
+			Object object = dao.retrieve(SpecimenArrayType.class.getName(), specimenArray.getSpecimenArrayType().getId());
 			SpecimenArrayType arrayType = null;
 
 			if (object != null)
@@ -402,7 +500,8 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 			{
 				SpecimenArrayContent oldSpecimenArrayContent = (SpecimenArrayContent) itr.next();
 				SpecimenArrayContent newSpecimenArrayContent = checkExistSpecimenArrayContent(oldSpecimenArrayContent, specimenArrayContentCollection);
-				if (newSpecimenArrayContent == null || newSpecimenArrayContent.getSpecimen().getLabel() == null || newSpecimenArrayContent.getSpecimen().getLabel().equals(""))
+				if (newSpecimenArrayContent == null || newSpecimenArrayContent.getSpecimen().getLabel() == null
+						|| newSpecimenArrayContent.getSpecimen().getLabel().equals(""))
 				{
 					Specimen oldSpecimen = getSpecimen(dao, oldSpecimenArrayContent);
 					if (oldSpecimen != null && oldSpecimen instanceof MolecularSpecimen)
@@ -410,7 +509,7 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 						Double oldQuantity = oldSpecimenArrayContent.getInitialQuantity();
 						Double quantity = oldSpecimen.getAvailableQuantity();
 						double newQuantity = quantity.doubleValue() + oldQuantity.doubleValue();
-						quantity= newQuantity;
+						quantity = newQuantity;
 						oldSpecimen.setAvailableQuantity(quantity);
 						dao.update(oldSpecimen, sessionDataBean, true, false, false);
 					}
@@ -427,15 +526,16 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 		{
 			retriveScId(dao, specimenArray);
 			retriveScName(specimenArray, dao);
-			StorageContainer storageContainerObj = (StorageContainer)specimenArray.getLocatedAtPosition().getParentContainer();
+			StorageContainer storageContainerObj = (StorageContainer) specimenArray.getLocatedAtPosition().getParentContainer();
 			//check for closed Storage Container
 			checkStatus(dao, storageContainerObj, "Storage Container");
 			StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(
 					Constants.STORAGE_CONTAINER_FORM_ID);
 			// --- check for all validations on the storage container.
-			storageContainerBizLogic.checkContainer(dao, storageContainerObj.getId().toString(), specimenArray.getLocatedAtPosition().getPositionDimensionOne().toString(),
-					specimenArray.getLocatedAtPosition().getPositionDimensionTwo().toString(), sessionDataBean, false);
-			specimenArray.getLocatedAtPosition().setParentContainer((Container)storageContainerObj);
+			storageContainerBizLogic.checkContainer(dao, storageContainerObj.getId().toString(), specimenArray.getLocatedAtPosition()
+					.getPositionDimensionOne().toString(), specimenArray.getLocatedAtPosition().getPositionDimensionTwo().toString(),
+					sessionDataBean, false);
+			specimenArray.getLocatedAtPosition().setParentContainer((Container) storageContainerObj);
 		}
 	}
 
@@ -533,7 +633,7 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 				 * Reviewer: Prafull
 				 * Calling Domain object from Proxy Object
 				 */
-				specimen = (Specimen)HibernateMetaData.getProxyObjectImpl(specimen);
+				specimen = (Specimen) HibernateMetaData.getProxyObjectImpl(specimen);
 				String activityStatus = specimen.getActivityStatus();
 				//Bug: 2872:-  User should not able to add close/disable specimen in Specimen Array.
 				if (!activityStatus.equals(Constants.ACTIVITY_STATUS_ACTIVE))
@@ -624,8 +724,8 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 		}
 
 		Validator validator = new Validator();
-		
-		if(specimenArray.getActivityStatus() == null)
+
+		if (specimenArray.getActivityStatus() == null)
 		{
 			specimenArray.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
 		}
@@ -663,8 +763,8 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 		 || !validator.isNumeric(String.valueOf(specimenArray.getPositionDimensionOne()), 1)
 		 || !validator.isNumeric(String.valueOf(specimenArray.getPositionDimensionTwo()), 1)
 		 || (!validator.isNumeric(String.valueOf(specimenArray.getStorageContainer().getId()), 1) && validator.isEmpty(specimenArray.getStorageContainer().getName())))*/
-		if ((!validator.isNumeric(String.valueOf(specimenArray.getLocatedAtPosition().getParentContainer().getId()), 1) && validator.isEmpty(specimenArray.
-				getLocatedAtPosition().getParentContainer().getName())))
+		if ((!validator.isNumeric(String.valueOf(specimenArray.getLocatedAtPosition().getParentContainer().getId()), 1) && validator
+				.isEmpty(specimenArray.getLocatedAtPosition().getParentContainer().getName())))
 		{
 			message = ApplicationProperties.getValue("array.positionInStorageContainer");
 			throw new DAOException(ApplicationProperties.getValue("errors.item.format", message));
@@ -674,10 +774,10 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 		{
 			retriveScId(dao, specimenArray);
 		}
-	
-		Integer xPos = null; 
+
+		Integer xPos = null;
 		Integer yPos = null;
-		if(specimenArray.getLocatedAtPosition() != null)
+		if (specimenArray.getLocatedAtPosition() != null)
 		{
 			xPos = specimenArray.getLocatedAtPosition().getPositionDimensionOne();
 			yPos = specimenArray.getLocatedAtPosition().getPositionDimensionTwo();
@@ -694,7 +794,7 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 			containerMapFromCache = (TreeMap) StorageContainerUtil.getContainerMapFromCache();
 			isContainerFull = setPositions(specimenArray, isContainerFull, containerMapFromCache);
 			xPos = specimenArray.getLocatedAtPosition().getPositionDimensionOne();
-			yPos = specimenArray.getLocatedAtPosition().getPositionDimensionTwo();			
+			yPos = specimenArray.getLocatedAtPosition().getPositionDimensionTwo();
 		}
 
 		if (isContainerFull)
@@ -753,19 +853,23 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 			}
 		}
 		/*Bug no. 7810
-		Bug Description : Incompatible specimen gets added to the specimen array*/
+		 Bug Description : Incompatible specimen gets added to the specimen array*/
 		Collection specimenArrayContentCollection = specimenArray.getSpecimenArrayContentCollection();
-		if(!specimenArrayContentCollection.isEmpty()) {
+		if (!specimenArrayContentCollection.isEmpty())
+		{
 			Iterator iterator = specimenArrayContentCollection.iterator();
-			while(iterator.hasNext()) {
-				SpecimenArrayContent tempSpecimenArrayContent = (SpecimenArrayContent)iterator.next();
-				Specimen tempSpecimen = getSpecimen(dao , tempSpecimenArrayContent);
-				if(specimenClass != null && tempSpecimen != null && !specimenClass.equalsIgnoreCase(tempSpecimen.getClassName())) {
+			while (iterator.hasNext())
+			{
+				SpecimenArrayContent tempSpecimenArrayContent = (SpecimenArrayContent) iterator.next();
+				Specimen tempSpecimen = getSpecimen(dao, tempSpecimenArrayContent);
+				if (specimenClass != null && tempSpecimen != null && !specimenClass.equalsIgnoreCase(tempSpecimen.getClassName()))
+				{
 					message = getMessage(tempSpecimenArrayContent);
 					throw new DAOException(ApplicationProperties.getValue("class.name.different", message));
 				}
-				if(specimenTypes != null && !specimenTypes.isEmpty() && tempSpecimen != null) {
-					if(!specimenTypes.contains(tempSpecimen.getSpecimenType()))
+				if (specimenTypes != null && !specimenTypes.isEmpty() && tempSpecimen != null)
+				{
+					if (!specimenTypes.contains(tempSpecimen.getSpecimenType()))
 					{
 						message = getMessage(tempSpecimenArrayContent);
 						throw new DAOException(ApplicationProperties.getValue("type.different", message));
@@ -773,7 +877,8 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 				}
 			}
 		}
-		else {
+		else
+		{
 			throw new DAOException("Specimen Array for uploading is null");
 		}
 		return true;
@@ -785,8 +890,7 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 	 * @param containerMapFromCache
 	 * @return
 	 */
-	private boolean setPositions(SpecimenArray specimenArray, boolean isContainerFull,
-			Map containerMapFromCache)
+	private boolean setPositions(SpecimenArray specimenArray, boolean isContainerFull, Map containerMapFromCache)
 	{
 		if (containerMapFromCache != null)
 		{
@@ -821,10 +925,12 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 	private void retriveScId(DAO dao, SpecimenArray specimenArray) throws DAOException
 	{
 		String message = null;
-		if (specimenArray.getLocatedAtPosition() != null && specimenArray.getLocatedAtPosition().getParentContainer() != null && specimenArray.getLocatedAtPosition().getParentContainer().getName() != null)
+		if (specimenArray.getLocatedAtPosition() != null && specimenArray.getLocatedAtPosition().getParentContainer() != null
+				&& specimenArray.getLocatedAtPosition().getParentContainer().getName() != null)
 		{
-			
-			StorageContainer storageContainerObj = (StorageContainer)HibernateMetaData.getProxyObjectImpl(specimenArray.getLocatedAtPosition().getParentContainer());
+
+			StorageContainer storageContainerObj = (StorageContainer) HibernateMetaData.getProxyObjectImpl(specimenArray.getLocatedAtPosition()
+					.getParentContainer());
 			String sourceObjectName = StorageContainer.class.getName();
 			String[] selectColumnName = {"id"};
 			String[] whereColumnName = {"name"};
@@ -868,7 +974,7 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 		String[] selectColumnName = {"max(IDENTIFIER) as MAX_IDENTIFIER"};
 		return Utility.getNextUniqueNo(sourceObjectName, selectColumnName);
 	}
-	
+
 	/**
 	 * @param tempSpecimenArrayContent
 	 * @return the message to be displayed when exception occurs
@@ -881,32 +987,31 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 		{
 			if ((specimen.getLabel() != null) && (!specimen.getLabel().trim().equals("")))
 			{
-				msg = "label "+specimen.getLabel();
+				msg = "label " + specimen.getLabel();
 			}
 			else if ((specimen.getBarcode() != null) && (!specimen.getBarcode().trim().equals("")))
 			{
-				msg = "barcode "+specimen.getBarcode();
+				msg = "barcode " + specimen.getBarcode();
 			}
 		}
 		return msg;
 	}
-	
+
 	/*
-	* T
-	*/
+	 * T
+	 */
 	public NewSpecimenArrayOrderItem getNewSpecimenArrayOrderItem(Long orderItemId)
 	{
-		
-		
+
 		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
 
-		NewSpecimenArrayOrderItem newSpecimenArrayOrderItem = null; 
-		
+		NewSpecimenArrayOrderItem newSpecimenArrayOrderItem = null;
+
 		try
 		{
 			dao.openSession(null);
-			newSpecimenArrayOrderItem  =(NewSpecimenArrayOrderItem) dao.retrieve(NewSpecimenArrayOrderItem.class.getName(),orderItemId);
-			
+			newSpecimenArrayOrderItem = (NewSpecimenArrayOrderItem) dao.retrieve(NewSpecimenArrayOrderItem.class.getName(), orderItemId);
+
 		}
 		catch (DAOException daoExp)
 		{
@@ -914,150 +1019,153 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 		}
 		finally
 		{
-			try {
+			try
+			{
 				dao.closeSession();
-			} catch (DAOException e) {
-			
+			}
+			catch (DAOException e)
+			{
+
 				e.printStackTrace();
 			}
 		}
 
 		return newSpecimenArrayOrderItem;
-		
-		
+
 	}
+
 	//END
-	
+
 	/**
 	 * Called from DefaultBizLogic to get ObjectId for authorization check
 	 * (non-Javadoc)
 	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getObjectId(edu.wustl.common.dao.AbstractDAO, java.lang.Object)
 	 */
-	public String getObjectId(AbstractDAO dao, Object domainObject) 
+	public String getObjectId(AbstractDAO dao, Object domainObject)
 	{
-        SpecimenArray specimenArray = null;
-        Specimen specimen = null;
-        StringBuffer sb = new StringBuffer();
-        sb.append(Constants.COLLECTION_PROTOCOL_CLASS_NAME);
-        
-        if(domainObject instanceof SpecimenArray)
-        {
-            specimenArray = (SpecimenArray) domainObject;
-        }
-        
-        Collection<SpecimenArrayContent> specimenArrayContentCollection = specimenArray.getSpecimenArrayContentCollection();
-        
-        for(SpecimenArrayContent specimenArrayContent : specimenArrayContentCollection)
-        {
-        	try 
-        	{
+		SpecimenArray specimenArray = null;
+		Specimen specimen = null;
+		StringBuffer sb = new StringBuffer();
+		sb.append(Constants.COLLECTION_PROTOCOL_CLASS_NAME);
+
+		if (domainObject instanceof SpecimenArray)
+		{
+			specimenArray = (SpecimenArray) domainObject;
+		}
+
+		Collection<SpecimenArrayContent> specimenArrayContentCollection = specimenArray.getSpecimenArrayContentCollection();
+
+		for (SpecimenArrayContent specimenArrayContent : specimenArrayContentCollection)
+		{
+			try
+			{
 				specimen = getSpecimen(dao, specimenArrayContent);
-			} 
-        	catch (DAOException e) 
-        	{
+			}
+			catch (DAOException e)
+			{
 				Logger.out.debug(e.getMessage(), e);
 			}
-        	
-        	if(specimen!=null)
-        	{
-	        	SpecimenCollectionGroup scg = specimen.getSpecimenCollectionGroup();
-	        	CollectionProtocolRegistration cpr = scg.getCollectionProtocolRegistration();
-	        	sb.append(Constants.UNDERSCORE).append(cpr.getCollectionProtocol().getId());
-        	}
-        }
-        return sb.toString();
+
+			if (specimen != null)
+			{
+				SpecimenCollectionGroup scg = specimen.getSpecimenCollectionGroup();
+				CollectionProtocolRegistration cpr = scg.getCollectionProtocolRegistration();
+				sb.append(Constants.UNDERSCORE).append(cpr.getCollectionProtocol().getId());
+			}
+		}
+		return sb.toString();
 	}
-	
+
 	/**
 	 * To get PrivilegeName for authorization check from 'PermissionMapDetails.xml'
 	 * (non-Javadoc)
 	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getPrivilegeName(java.lang.Object)
 	 */
 	protected String getPrivilegeKey(Object domainObject)
-    {
-    	return edu.wustl.catissuecore.util.global.Constants.ADD_EDIT_SPECIMEN_ARRAY;
-    }
-	
-	
+	{
+		return edu.wustl.catissuecore.util.global.Constants.ADD_EDIT_SPECIMEN_ARRAY;
+	}
+
 	/**
 	 * (non-Javadoc)
 	 * @throws UserNotAuthorizedException 
 	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#isAuthorized(edu.wustl.common.dao.AbstractDAO, java.lang.Object, edu.wustl.common.beans.SessionDataBean)
 	 * 
 	 */
-	public boolean isAuthorized(AbstractDAO dao, Object domainObject, SessionDataBean sessionDataBean) throws UserNotAuthorizedException  
+	public boolean isAuthorized(AbstractDAO dao, Object domainObject, SessionDataBean sessionDataBean) throws UserNotAuthorizedException
 	{
 		boolean isAuthorized = false;
 		String protectionElementName = null;
 		SpecimenArray specimenArray = null;
-	    Specimen specimen = null;
-	    SpecimenPosition specimenPosition = null;
-		
-		if(sessionDataBean != null && sessionDataBean.isAdmin())
+		Specimen specimen = null;
+		SpecimenPosition specimenPosition = null;
+
+		if (sessionDataBean != null && sessionDataBean.isAdmin())
 		{
 			return true;
 		}
-		
+
 		//	Get the base object id against which authorization will take place 
 		protectionElementName = getObjectId(dao, domainObject);
 		Site site = null;
 		StorageContainer sc = null;
 		//	Handle for SERIAL CHECKS, whether user has access to source site or not
-		if(domainObject instanceof SpecimenArray)
-        {
-            specimenArray = (SpecimenArray) domainObject;
-        }
-			
+		if (domainObject instanceof SpecimenArray)
+		{
+			specimenArray = (SpecimenArray) domainObject;
+		}
+
 		Collection<SpecimenArrayContent> specimenArrayContentCollection = specimenArray.getSpecimenArrayContentCollection();
-        
-        for(SpecimenArrayContent specimenArrayContent : specimenArrayContentCollection)
-        {
-        	try 
-        	{
+
+		for (SpecimenArrayContent specimenArrayContent : specimenArrayContentCollection)
+		{
+			try
+			{
 				specimen = getSpecimen(dao, specimenArrayContent);
-        	
-				if(specimen == null)
+
+				if (specimen == null)
 				{
 					continue;
 				}
-	        	if(specimen.getSpecimenPosition()!=null)
-	    		{
-	    			sc = specimen.getSpecimenPosition().getStorageContainer();
-	    		}
-	        	
-	        	if(specimen.getSpecimenPosition()!=null && specimen.getSpecimenPosition().getStorageContainer().getSite() == null)
-	    		{
-	    			sc = (StorageContainer) dao.retrieve(StorageContainer.class.getName(), specimen.getSpecimenPosition().getStorageContainer().getId());
-	    		}
-	        	
-	        	specimenPosition = specimen.getSpecimenPosition();
-	    		
-	    		if(specimenPosition != null) // Specimen is NOT Virtually Located
-	    		{
-	    			site = sc.getSite();
-	    			Set<Long> siteIdSet = new UserBizLogic().getRelatedSiteIds(sessionDataBean.getUserId());
-	    			
-	    			if(!siteIdSet.contains(site.getId()))
-	    			{
-	    				throw Utility.getUserNotAuthorizedException(Constants.Association, site.getObjectId()); 
-	    			}
-	    		}
-        	} 
-        	catch (DAOException e) 
-        	{
+				if (specimen.getSpecimenPosition() != null)
+				{
+					sc = specimen.getSpecimenPosition().getStorageContainer();
+				}
+
+				if (specimen.getSpecimenPosition() != null && specimen.getSpecimenPosition().getStorageContainer().getSite() == null)
+				{
+					sc = (StorageContainer) dao.retrieve(StorageContainer.class.getName(), specimen.getSpecimenPosition().getStorageContainer()
+							.getId());
+				}
+
+				specimenPosition = specimen.getSpecimenPosition();
+
+				if (specimenPosition != null) // Specimen is NOT Virtually Located
+				{
+					site = sc.getSite();
+					Set<Long> siteIdSet = new UserBizLogic().getRelatedSiteIds(sessionDataBean.getUserId());
+
+					if (!siteIdSet.contains(site.getId()))
+					{
+						throw Utility.getUserNotAuthorizedException(Constants.Association, site.getObjectId());
+					}
+				}
+			}
+			catch (DAOException e)
+			{
 				Logger.out.debug(e.getMessage(), e);
 			}
-        }
-			
+		}
+
 		//Get the required privilege name which we would like to check for the logged in user.
 		String privilegeName = getPrivilegeName(domainObject);
 		PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(sessionDataBean.getUserName());
-		
+
 		// Checking whether the logged in user has the required privilege on the given protection element
-		String [] prArray = protectionElementName.split("_");
+		String[] prArray = protectionElementName.split("_");
 		String baseObjectId = prArray[0];
 		String objId = "";
-		for (int i = 1 ; i < prArray.length;i++)
+		for (int i = 1; i < prArray.length; i++)
 		{
 			objId = baseObjectId + "_" + prArray[i];
 			isAuthorized = privilegeCache.hasPrivilege(objId, privilegeName);
@@ -1066,8 +1174,8 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 				break;
 			}
 		}
-		
-		if(isAuthorized)
+
+		if (isAuthorized)
 		{
 			return isAuthorized;
 		}
@@ -1075,20 +1183,46 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 		// Check for ALL CURRENT & FUTURE CASE
 		{
 			String protectionElementNames[] = protectionElementName.split("_");
-			
+
 			Long cpId = Long.valueOf(protectionElementNames[1]);
 			Set<Long> cpIdSet = new UserBizLogic().getRelatedCPIds(sessionDataBean.getUserId(), false);
-			
-			if(cpIdSet.contains(cpId))
+
+			if (cpIdSet.contains(cpId))
 			{
-				throw Utility.getUserNotAuthorizedException(privilegeName, protectionElementName);    
+				throw Utility.getUserNotAuthorizedException(privilegeName, protectionElementName);
 			}
-			isAuthorized = edu.wustl.catissuecore.util.global.Utility.checkForAllCurrentAndFutureCPs(dao,privilegeName, sessionDataBean, protectionElementNames[1]);
+			isAuthorized = edu.wustl.catissuecore.util.global.Utility.checkForAllCurrentAndFutureCPs(dao, privilegeName, sessionDataBean,
+					protectionElementNames[1]);
 		}
 		if (!isAuthorized)
-        {
-			throw Utility.getUserNotAuthorizedException(privilegeName, protectionElementName);    
-        }
-		return isAuthorized;			
+		{
+			throw Utility.getUserNotAuthorizedException(privilegeName, protectionElementName);
+		}
+		return isAuthorized;
 	}
+
+	public Map getContForDisabledSpecimenArrayFromCache() throws Exception
+	{
+
+		CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager.getInstance();
+		Map disabledconts = (TreeMap) catissueCoreCacheManager.getObjectFromCache(Constants.MAP_OF_CONTAINER_FOR_DISABLED_SPECIENARRAY);
+		return disabledconts;
+	}
+
+	private void addEntriesInDisabledMap(SpecimenArray specimenarray, SpecimenArray container, Map disabledConts)
+	{
+		String contNameKey = "StorageContName";
+		String contIdKey = "StorageContIdKey";
+		String pos1Key = "pos1";
+		String pos2Key = "pos2";
+		Map containerDetails = new TreeMap();
+		containerDetails.put(contNameKey, container.getName());
+		containerDetails.put(contIdKey, container.getId());
+		containerDetails.put(pos1Key, specimenarray.getLocatedAtPosition().getPositionDimensionOne());
+		containerDetails.put(pos2Key, specimenarray.getLocatedAtPosition().getPositionDimensionTwo());
+
+		disabledConts.put(specimenarray.getId().toString(), containerDetails);
+
+	}
+
 }

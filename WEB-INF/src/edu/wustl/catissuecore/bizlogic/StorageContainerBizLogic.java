@@ -727,7 +727,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 				 */
 				List<StorageContainer> disabledContainerList = new ArrayList<StorageContainer>();
 				disabledContainerList.add(persistentOldContainerForChange);
-				persistentOldContainerForChange.setLocatedAtPosition(null);
+				//persistentOldContainerForChange.setLocatedAtPosition(null);
 
 				addEntriesInDisabledMap(persistentOldContainerForChange,
 						disabledConts);
@@ -742,11 +742,16 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 
 				disableSubStorageContainer(dao, sessionDataBean,
 						disabledContainerList);
-
+				ContainerPosition prevPosition = persistentOldContainerForChange.getLocatedAtPosition(); 
 				persistentOldContainerForChange.setLocatedAtPosition(null);
 
 				dao.update(persistentOldContainerForChange, sessionDataBean,
 						true, true, false);
+				
+				if(prevPosition!=null)
+				{
+					dao.delete(prevPosition);
+				}	
 
 				try {
 					CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager
