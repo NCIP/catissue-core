@@ -2638,7 +2638,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	@Override
 	public String getReadDeniedPrivilegeName()
 	{
-		return Permissions.PHI+","+Permissions.READ_DENIED;
+		return Permissions.REGISTRATION+","+Permissions.READ_DENIED;
 	}
 	
 	public boolean hasPrivilegeToView(String objName, Long identifier, SessionDataBean sessionDataBean)
