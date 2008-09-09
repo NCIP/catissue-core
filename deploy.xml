@@ -38,6 +38,7 @@
 	<property name="catissue.tiles.def.file" value="tiles-defs.xml" />
 	
 	<property name="oracle_home" value="${env.ORACLE_HOME}"/>
+	<property name="jboss.bin.run.jar" value="${jboss.home.dir}/bin/run.jar"/>
 	
 	<!-- Check for required properties -->
 	<target name="assert">
@@ -46,6 +47,17 @@
 			<then>
 				<fail message="The property 'jboss.home.dir' can not be empty" />
 			</then>
+			<else>
+				<available file="${jboss.bin.run.jar}" property="isJbossValid"/>
+				<if>
+					<not>
+						<equals arg1="true" arg2="${isJbossValid}" />
+					</not>
+					<then>
+						<fail message="'${jboss.home.dir}' is not valid jboss home. Please set valid path for jboss server." />
+					</then>				
+				</if>
+			</else>
 		</if>
 		<if>
 			<equals arg1="" arg2="${jboss.server.name}" />
