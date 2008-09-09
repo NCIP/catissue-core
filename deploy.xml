@@ -878,7 +878,7 @@
 	</target>
 	<target name="insert_entity_group_metadata_oracle">
 		<echo message="Inserting entity group metadata for Oracle" />
-		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}">
+		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">
 			<transaction src="${oracle.sql.dir}/query/entity_group_metadata.sql" />
 			<transaction>commit;</transaction>
 			<classpath>
