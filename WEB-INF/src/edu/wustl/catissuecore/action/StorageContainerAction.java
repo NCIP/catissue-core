@@ -228,32 +228,6 @@ public class StorageContainerAction extends SecureAction
 
 	}
 
-	private void setCollectionProtocolList(HttpServletRequest request,Long siteId) throws DAOException
-	{
-		SiteBizLogic siteBizLogic = (SiteBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.SITE_FORM_ID);
-		Collection<CollectionProtocol> cpCollection = null;
-		if(siteId == -1)
-		{
-			cpCollection = new ArrayList<CollectionProtocol>();
-		}
-		else
-		{
-			cpCollection = siteBizLogic.getRelatedCPs(siteId);
-		}
-		List<NameValueBean> cpList = new ArrayList<NameValueBean>();
-		Map<Long,String> cpTitleMap = new HashMap<Long,String>();
-		if (cpCollection != null && !cpCollection.isEmpty())
-		{
-			for (CollectionProtocol cp : cpCollection)
-			{
-				cpList.add(new NameValueBean(cp.getShortTitle(),cp.getId()));
-				cpTitleMap.put(cp.getId(),cp.getTitle());
-			}
-		}
-		request.setAttribute(Constants.PROTOCOL_LIST, cpList);
-		request.setAttribute(Constants.CP_ID_TITLE_MAP, cpTitleMap);
-	}
-
 	private void setRequestAttributes(HttpServletRequest request) throws DAOException
 	{
 		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
