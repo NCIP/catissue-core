@@ -1,13 +1,8 @@
 package edu.wustl.catissuecore.flex.dag;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import org.apache.taglibs.standard.lang.jstl.IntegerLiteral;
-
-import quicktime.app.image.QTTransition;
 
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -24,8 +19,6 @@ import edu.wustl.common.querysuite.queryobject.INumericLiteral;
 import edu.wustl.common.querysuite.queryobject.ITerm;
 import edu.wustl.common.querysuite.queryobject.RelationalOperator;
 import edu.wustl.common.querysuite.queryobject.TimeInterval;
-import edu.wustl.common.querysuite.queryobject.impl.NumericLiteral;
-import edu.wustl.common.util.Utility;
 
 public class TwoNodesTemporalQuery
 {
