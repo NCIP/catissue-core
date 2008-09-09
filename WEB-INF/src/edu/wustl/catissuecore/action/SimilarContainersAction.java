@@ -31,7 +31,6 @@ import edu.wustl.catissuecore.actionForm.StorageContainerForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
-import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.domain.StorageContainer;
@@ -78,12 +77,9 @@ public class SimilarContainersAction extends SecureAction
 		}
 		Logger.out.info(" Map:---------------" + similarContainersForm.getSimilarContainersMap());
 		IBizLogic ibizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
-
-		//    	populating collection protocol list.
-		List list1 = ibizLogic.retrieve(CollectionProtocol.class.getName());
-		List collectionProtocolList = Utility.getCollectionProtocolList(list1);
-		request.setAttribute(Constants.PROTOCOL_LIST, collectionProtocolList);
-
+		
+		request = Utility.setCollectionProtocolList(request,similarContainersForm.getSiteId());
+		
 		//Gets the Storage Type List and sets it in request 
 		List list2 = ibizLogic.retrieve(StorageType.class.getName());
 		List storageTypeListWithAny = Utility.getStorageTypeList(list2, true);

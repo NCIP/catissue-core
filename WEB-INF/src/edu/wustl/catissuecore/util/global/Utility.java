@@ -41,6 +41,7 @@ import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolRegistrationBizLogic;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
+import edu.wustl.catissuecore.bizlogic.SiteBizLogic;
 import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.bizlogic.querysuite.QueryOutputSpreadsheetBizLogic;
@@ -2024,5 +2025,40 @@ public class Utility extends edu.wustl.common.util.Utility {
 			} 
 		}
     	return true;
+	}
+	
+	/**
+	 * This method will retrive the collection protocol for a Specific site identifier
+	 * @param request request object
+	 * @param siteId Site identifier
+	 * @return req	uest
+	 * @throws DAOException Databse related exception
+	 */
+
+	public static HttpServletRequest setCollectionProtocolList(HttpServletRequest request,Long siteId) throws DAOException
+	{
+		SiteBizLogic siteBizLogic = (SiteBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.SITE_FORM_ID);
+		Collection<CollectionProtocol> cpCollection = null;
+		if(siteId == -1)
+		{
+			cpCollection = new ArrayList<CollectionProtocol>();
+		}
+		else
+		{
+			cpCollection = siteBizLogic.getRelatedCPs(siteId);
+		}
+		List<NameValueBean> cpList = new ArrayList<NameValueBean>();
+		Map<Long,String> cpTitleMap = new HashMap<Long,String>();
+		if (cpCollection != null && !cpCollection.isEmpty())
+		{
+			for (CollectionProtocol cp : cpCollection)
+			{
+				cpList.add(new NameValueBean(cp.getShortTitle(),cp.getId()));
+				cpTitleMap.put(cp.getId(),cp.getTitle());
+			}
+		}
+		request.setAttribute(Constants.PROTOCOL_LIST, cpList);
+		request.setAttribute(Constants.CP_ID_TITLE_MAP, cpTitleMap);
+		return request;
 	}
 }

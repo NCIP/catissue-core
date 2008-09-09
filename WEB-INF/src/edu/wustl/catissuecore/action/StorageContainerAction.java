@@ -14,12 +14,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
 import java.util.Vector;
 
@@ -34,13 +31,11 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.StorageContainerForm;
 import edu.wustl.catissuecore.bean.StorageContainerBean;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
-import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
 import edu.wustl.catissuecore.bizlogic.SiteBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageTypeBizLogic;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Container;
-import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
@@ -115,8 +110,7 @@ public class StorageContainerAction extends SecureAction
 		//    	 ---- chetan 15-06-06 ----
 		if (isSiteChanged != null && isSiteChanged.equals("true"))
 		{
-			setCollectionProtocolList(request,storageContainerForm.getSiteId());
-
+			request = Utility.setCollectionProtocolList(request,storageContainerForm.getSiteId());
 		}
 		
 		TreeMap containerMap = new TreeMap();
@@ -160,6 +154,7 @@ public class StorageContainerAction extends SecureAction
 			storagetypeList.add(nvb);
 			request.setAttribute(Constants.STORAGETYPELIST, storagetypeList);
 			SetParentStorageCOntainersForEdit(containerMap, storageContainerForm, request);
+			request = Utility.setCollectionProtocolList(request,storageContainerForm.getSiteId());
 		}
 		request.setAttribute("storageContainerIdentifier", storageContainerForm.getId());
 		request.setAttribute(Constants.EXCEEDS_MAX_LIMIT, exceedingMaxLimit);
@@ -236,7 +231,15 @@ public class StorageContainerAction extends SecureAction
 	private void setCollectionProtocolList(HttpServletRequest request,Long siteId) throws DAOException
 	{
 		SiteBizLogic siteBizLogic = (SiteBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.SITE_FORM_ID);
-		Collection<CollectionProtocol> cpCollection = siteBizLogic.getRelatedCPs(siteId);
+		Collection<CollectionProtocol> cpCollection = null;
+		if(siteId == -1)
+		{
+			cpCollection = new ArrayList<CollectionProtocol>();
+		}
+		else
+		{
+			cpCollection = siteBizLogic.getRelatedCPs(siteId);
+		}
 		List<NameValueBean> cpList = new ArrayList<NameValueBean>();
 		Map<Long,String> cpTitleMap = new HashMap<Long,String>();
 		if (cpCollection != null && !cpCollection.isEmpty())
@@ -248,10 +251,7 @@ public class StorageContainerAction extends SecureAction
 			}
 		}
 		request.setAttribute(Constants.PROTOCOL_LIST, cpList);
-		//Map<Long, String> cpIDTitleMap = Utility.getCPIDTitleMap();
 		request.setAttribute(Constants.CP_ID_TITLE_MAP, cpTitleMap);
-		
-
 	}
 
 	private void setRequestAttributes(HttpServletRequest request) throws DAOException
