@@ -214,6 +214,8 @@
 		
 			if(document.getElementById("deriveChk").checked == true)
 			{
+				document.forms[0].derivedClicked.value=true;
+				document.forms[0].checkedButton.value=false;
 				if(document.getElementById("numberOfSpecimens").value > 1)
 				{
 					if(operation == "add")
@@ -249,9 +251,11 @@
 			else
 			{
 				if(operation =="add")
-			onNormalSubmit();
+					onNormalSubmit();
 				else
 				{
+				document.forms[0].checkedButton.value=false;
+				document.forms[0].derivedClicked.value=false;
 				<%	ConsentTierData consentForm =(ConsentTierData)form;
 				List consentTier=(List)consentForm.getConsentTiers();
 				
@@ -268,11 +272,13 @@
 		function onNormalSubmit()
 		{
 			var operation = document.forms[0].operation.value;
-			
+			document.forms[0].checkedButton.value=false;
+			document.forms[0].derivedClicked.value=false;
 			var checked = false;
 			if(document.getElementById("aliquotChk").checked == true)
 			{
 			   checked = true;
+			   document.forms[0].checkedButton.value=true;
 			}
 			
            
@@ -992,6 +998,8 @@
 								<html:hidden property="positionInStorageContainer" />
 								<html:hidden property="parentPresent" />
 								<html:hidden property="specimenCollectionGroupId"/>
+								<html:hidden property="checkedButton"/>
+								<html:hidden property="derivedClicked"/>
 
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
 <logic:equal name="<%=Constants.PAGEOF%>" value="pageOfNewSpecimen">

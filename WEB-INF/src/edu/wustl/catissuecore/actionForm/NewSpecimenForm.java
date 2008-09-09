@@ -136,7 +136,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData
     /**
      * A number that tells how many aliquots to be created.
      */
-    private String noOfAliquots;
+    private String noOfAliquots = null;
     
     /**
      * Initial quantity per aliquot.
@@ -148,6 +148,11 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData
 	 *
 	 */    	
 	private boolean checkedButton;
+	/**
+	 * When derived radio button is clicked
+	 *
+	 */    	
+	private boolean derivedClicked;
 	
 	/**
      * If true then this specimen is an aliquot else false.
@@ -203,7 +208,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData
 	
 	private String nextForwardTo;
 	
-	private int numberOfSpecimens;
+	private String numberOfSpecimens = null;
 	public String getNextForwardTo() {
 		return nextForwardTo;
 	}
@@ -390,20 +395,13 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData
  //   	this.parentPresent = false;
     }
     
-  
-    
-    /**
-	 * @return Returns the numberOfSpecimens.
-	 */
-	public int getNumberOfSpecimens()
+  	public String getNumberOfSpecimens()
 	{
 		return numberOfSpecimens;
 	}
 
-	/**
-	 * @param numberOfSpecimens The numberOfSpecimens to set.
-	 */
-	public void setNumberOfSpecimens(int numberOfSpecimens)
+	
+	public void setNumberOfSpecimens(String numberOfSpecimens)
 	{
 		this.numberOfSpecimens = numberOfSpecimens;
 	}
@@ -604,7 +602,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData
              	//Validation for aliquot quantity, resolved bug# 4040 (Virender)	
              	if(checkedButton)
              	{
-             		if(!validator.isNumeric(noOfAliquots))
+             		if(!validator.isNumeric(noOfAliquots , 1))
                     {
                     	errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.format",ApplicationProperties.getValue("aliquots.noOfAliquots")));
                     }
@@ -613,20 +611,30 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData
                     {
             			if(Utility.isQuantityDouble(className,type))
             			{
-            		        if(!validator.isDouble(quantityPerAliquot.trim()))
+            		        if(!validator.isDouble(quantityPerAliquot.trim(), true))
             		        {
             		        	errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.format",ApplicationProperties.getValue("aliquots.qtyPerAliquot")));
             		        }
             			}
             			else
             			{
-            				if(!validator.isNumeric(quantityPerAliquot.trim()))
+            				if(!validator.isNumeric(quantityPerAliquot.trim(), 1))
             		        {
             		        	errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.format",ApplicationProperties.getValue("aliquots.qtyPerAliquot")));
             		        }
             			}
                     }
              	}
+             	
+             	if(derivedClicked)
+             	{
+	         		//For Derived Specimen             	
+	             	if(!validator.isNumeric(numberOfSpecimens , 1))
+	                {
+	             		errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.format",ApplicationProperties.getValue("aliquots.derivedCount")));
+	                }
+             	}
+         		
              	//Validations for Biohazard Add-More Block
                 String className = "Biohazard:";
                 String key1 = "_type";
@@ -798,8 +806,22 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData
 		this.checkedButton = checkedButton;
 	}
 
+	
+	
 	// Mandar: 10-july-06 AutoEvents : Collection Event start
 			
+			
+	public boolean isDerivedClicked()
+	{
+		return derivedClicked;
+	}
+
+	
+	public void setDerivedClicked(boolean derivedClicked)
+	{
+		this.derivedClicked = derivedClicked;
+	}
+
 			/**
 			 * @return Returns the collectionEventCollectionProcedure.
 			 */
