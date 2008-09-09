@@ -376,8 +376,16 @@ public class UserBizLogic extends DefaultBizLogic
 				SiteUserRolePrivilegeBean bean1 = map.get("SITE");
 				SiteUserRolePrivilegeBean bean2 = map.get("CP");
 				userRowIdMap.remove(key);
+				if(bean1.getPrivileges().isEmpty())
+				{
+					bean1.setPrivileges(bean2.getPrivileges());
+				}
 				userRowIdMap.put(key, bean1);
-				userRowIdMap.put(key+"All_CurrentnFuture_CPs", bean2);			
+				if(bean2.getPrivileges().isEmpty())
+				{
+					bean2.setPrivileges(bean1.getPrivileges());
+				}
+				userRowIdMap.put(key+"All_CurrentnFuture_CPs", bean2);
 			}
 		}
 		
@@ -2020,11 +2028,11 @@ public class UserBizLogic extends DefaultBizLogic
 			String privilegeName = getPrivilegeName(domainObject);
 			String protectionElementName = getObjectId(dao, domainObject);
 			
-			if(protectionElementName.equals(Constants.cannotCreateSuperAdmin))
+			if(Constants.cannotCreateSuperAdmin.equals(protectionElementName))
 			{
 				throw new DAOException(ApplicationProperties.getValue("user.cannotCreateSuperAdmin"));
 			}
-			if(protectionElementName.equals(Constants.siteIsRequired))
+			if(Constants.siteIsRequired.equals(protectionElementName))
 			{
 				throw new DAOException(ApplicationProperties.getValue("user.siteIsRequired"));
 			}
