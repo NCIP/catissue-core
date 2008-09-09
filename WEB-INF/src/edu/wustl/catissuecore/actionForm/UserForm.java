@@ -628,7 +628,7 @@ public class UserForm extends AbstractActionForm
 			this.id = user.getId().longValue();
 			this.lastName = user.getLastName();
 			this.firstName = user.getFirstName();
-			if (user.getSiteCollection() != null && !user.getSiteCollection().isEmpty())
+			/*if (user.getSiteCollection() != null && !user.getSiteCollection().isEmpty())
 			{ 
 				siteIds = new String [user.getSiteCollection().size()];
 				int i = 0;
@@ -637,7 +637,7 @@ public class UserForm extends AbstractActionForm
 					siteIds[i] = site.getId().toString();
 					i++;
 				}
-			}
+			}*/
 			// Check for null entries (for admin)
 			if (!edu.wustl.common.util.Utility.isNull(user.getInstitution()))
 			{
