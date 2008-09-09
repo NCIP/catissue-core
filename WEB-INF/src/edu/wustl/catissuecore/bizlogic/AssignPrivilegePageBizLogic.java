@@ -536,7 +536,14 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 				{
 					actionList = getActionListForUserPage(false);
 				}
-				selectedActionsList = getActionsList(roleId);
+				if(!"0".equals(roleId))
+				{
+					selectedActionsList = getActionsList(roleId);
+				}
+				else
+				{
+					selectedActionsList=new ArrayList<NameValueBean>();
+				}
 			}
 		}
 	//	 selectedActionsList = getActionsList(roleId);
