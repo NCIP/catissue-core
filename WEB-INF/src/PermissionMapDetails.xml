@@ -73,7 +73,7 @@
 	<PrivilegeMapping key="ADD_EDIT_BIOHAZARD" value="GENERAL_ADMINISTRATION"/>
 	<PrivilegeMapping key="ADD_EDIT_CP" value="PROTOCOL_ADMINISTRATION"/>
 	<PrivilegeMapping key="ADD_EDIT_DP" value="PROTOCOL_ADMINISTRATION"/>	
-	
+	<PrivilegeMapping key="ADD_EDIT_SHIPMENT" value="SHIPMENT_PROCESSING"/>
 	<!-- 			Objects in BIO-SPECIMEN TAB		--> 
 	<PrivilegeMapping key="ADD_EDIT_PARTICIPANT" value="REGISTRATION"/>
 	<PrivilegeMapping key="ADD_EDIT_SPECIMEN" value="SPECIMEN_PROCESSING,REGISTRATION"/>
