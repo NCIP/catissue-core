@@ -31,7 +31,7 @@ function confirmAction(form)
 			if(confirm("Are you sure you want to disable the specimen ?"))
 			{
 				form.action='${requestScope.formName}?disposal=true';
-				document.forms[0].onSubmit.value="success";
+				document.forms[0].onSubmit.value="/pages/content/manageBioSpecimen/RedirectSpecimenEventParameters.jsp";
 				form.submit();
 			}
 			else
