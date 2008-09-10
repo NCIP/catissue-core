@@ -1,4 +1,12 @@
-								<%			
+<script type="text/javascript" src="jss/ext-base.js"></script>
+<script type="text/javascript" src="jss/ext-all.js"></script>
+<script type="text/javascript" src="jss/combos.js"></script>
+<script type="text/javascript" src="jss/examples.js"></script>
+<link rel="stylesheet" type="text/css" href="css/ext-all.css" />
+<link rel="stylesheet" type="text/css" href="css/xtheme-gray.css" />
+<link rel="stylesheet" type="text/css" href="css/combo.css" />
+<link rel="stylesheet" type="text/css" href="css/examples.css" />
+<%			
 /**
  			* Name : Ashish Gupta
  			* Reviewer Name : Sachin Lale 
@@ -99,8 +107,7 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
         </tr>
 	    <tr>
           <td colspan="3" align="left" valign="top" class="showhide"><table width="100%" border="0" cellpadding="3" cellspacing="0" id="scgTable">
-				 <tr>
-					<td>
+				 
 						<html:hidden property="<%=Constants.OPERATION%>" value="<%=operation%>"/>
 						<html:hidden property="submittedFor" value="<%=submittedFor%>"/>
 						<html:hidden property="forwardTo" value=""/>
@@ -113,30 +120,25 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 						<html:hidden property="participantName"/>
 						<html:hidden property="collectionProtocolName"/>
 						<html:hidden property="protocolParticipantIdentifier"/>
-						
-				
-				 
-				
-					<html:hidden property="id"/>
-					<html:hidden property="onSubmit"/>
-					<html:hidden property="redirectTo" value="<%=reqPath%>"/>
-					<html:hidden property="withdrawlButtonStatus"/>
-					</td>
-				 </tr>
+						<html:hidden property="id"/>
+						<html:hidden property="onSubmit"/>
+						<html:hidden property="redirectTo" value="<%=reqPath%>"/>
+						<html:hidden property="withdrawlButtonStatus"/>
+					
 				 <!--Collection Protocol -->
 				 <tr>
 			     	<td width="1%" class="black_ar_t"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="3" /></span></td>
-				   <td width="10%" align="left" valign="top" class="black_ar_t"><LABEL for="collectionProtocolId"><bean:message key="specimenCollectionGroup.protocolTitle"/></LABEL></td> 
+				   <td width="12%" align="left" valign="top" class="black_ar_t"><LABEL for="collectionProtocolId"><bean:message key="specimenCollectionGroup.protocolTitle"/></LABEL></td> 
 					
-					<td width="34%" align="left" valign="top"><span class="black_ar_t"><%=form.getCollectionProtocolName()%></span>
+					<td width="36%" align="left" valign="top"><span class="black_ar_t"><%=form.getCollectionProtocolName()%></span>
 	
 						<input type="hidden" id="collectionProtocolId" value="<%=form.getCollectionProtocolId()%>" />
 						<input type="hidden" id="collectionProtocolName" value="<%=form.getCollectionProtocolName()%>" />
 					
 		        	</td>
 				    <td width="1%" class="black_ar_t" nowrap><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="3" /> </td>           
-                    <td width="19%" align="left" class="black_ar_t"><bean:message key="specimenCollectionGroup.participantNameWitProtocolId" /></td>
-					<td width="35%" align="left" nowrap class="black_ar_t"><%=form.getParticipantNameWithProtocolId()%></td> 
+                    <td width="18%" align="left" class="black_ar_t"><bean:message key="specimenCollectionGroup.participantNameWitProtocolId" /></td>
+					<td width="32%" align="left" nowrap class="black_ar_t"><%=form.getParticipantNameWithProtocolId()%></td> 
 					<html:hidden property="participantName"/>
 					<html:hidden property="protocolParticipantIdentifier"/>
 				</tr>
@@ -200,19 +202,29 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 				 <tr>
 				     <td align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>
 				     <td align="left" valign="top" class="black_ar"><bean:message key="specimenCollectionGroup.clinicalDiagnosis"/></td>
-					 <td align="left" class="black_ar">
-                             <autocomplete:AutoCompleteTag property="clinicalDiagnosis"
+					 <td align="left" class="black_ar" colspan="1">
+                             <!--<autocomplete:AutoCompleteTag property="clinicalDiagnosis"
 										  optionsList = "<%=request.getAttribute(Constants.CLINICAL_DIAGNOSIS_LIST)%>"
 										  initialValue="<%=form.getClinicalDiagnosis()%>"
 										  styleClass="formFieldSizedAutoSCG"
 										  
-					        />
-							
-						<%
-						String url = "ShowFramedPage.do?pageOf=pageOfTissueSite&propertyName=clinicalDiagnosis&cdeName=Clinical%20Diagnosis";			
-						%>
-						<!-- // Patch ID: Bug#3090_22 -->
-						<a href="#" onclick="javascript:NewWindow('<%=url%>','name','360','525','no');return false"><span class="black_ar"><img src="images/uIEnhancementImages/ic_cl_diag.gif" border="0" width="16" height="16" title='CLinical Diagnosis Selector'></span></a></td>
+					        />-->
+							<!---->
+							<table border="0" cellspacing="0" cellpadding="0">
+								<tr>
+									<td>
+										<div>
+										<input property="clinicalDiagnosis" type="text" id="clinicaldiagnosis" name="clinicalDiagnosis" 
+										value="<%=request.getAttribute("clinicalDiagnosis")%>" onmouseover="showTip(this.id)"/>
+										</div>
+									</td>			
+									<td>
+									<%
+										String url = "ShowFramedPage.do?pageOf=pageOfTissueSite&propertyName=clinicalDiagnosis&cdeName=Clinical%20Diagnosis";
+										%>
+									<!-- // Patch ID: Bug#3090_22 -->
+									&nbsp;<a href="#" onclick="javascript:NewWindow('<%=url%>','name','360','525','no');return false"><span class="black_ar"><img src="images/uIEnhancementImages/ic_cl_diag.gif" border="0" width="16" height="16" title='CLinical Diagnosis Selector'></span></a></td></tr></table>
+								</td>
 				     <td align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>
 				     <td align="left" class="black_ar"><bean:message key="specimenCollectionGroup.clinicalStatus"/></td>
 					 <td align="left" class="black_ar">					 
