@@ -349,26 +349,24 @@ public class StorageContainerAction extends SecureAction
 		}
 		else if ("Manual".equals(storageContainerForm.getParentContainerSelected()))
 		{
-			Site site = bizLogic.getRelatedSiteForManual(storageContainerForm.getSelectedContainerName());
-			if(site!=null)
+			String containerName = storageContainerForm.getSelectedContainerName();
+
+			if(containerName!=null && !containerName.equals(""))
 			{
-				request = Utility.setCollectionProtocolList(request, site.getId());
+				Site site = bizLogic.getRelatedSiteForManual(containerName);
+				if(site!=null)
+				{
+					request = Utility.setCollectionProtocolList(request, site.getId());
+				}
+			}
+			else
+			{
+				List<NameValueBean> cpList = new ArrayList<NameValueBean>();
+				Map<Long,String> cpTitleMap = new HashMap<Long,String>();
+				request.setAttribute(Constants.PROTOCOL_LIST, cpList);
+				request.setAttribute(Constants.CP_ID_TITLE_MAP, cpTitleMap);
 			}
 		}
-		
-//		Map<Long, String> cpIDTitleMap = new HashMap<Long, String>();
-//		List<NameValueBean> cpWithShortTitleList = new ArrayList<NameValueBean>();
-//		
-//		if(storageContainerForm!=null)
-//		{
-//			long[] cpIds = storageContainerForm.getCollectionIds();
-//			cpWithShortTitleList = bizLogic.getCPNameValueList(cpIds);
-//		}
-//		request.setAttribute(Constants.PROTOCOL_LIST, cpWithShortTitleList);
-		
-		//Map<Long, String> cpIDTitleMap = Utility.getCPIDTitleMap();
-//		request.setAttribute(Constants.CP_ID_TITLE_MAP, cpIDTitleMap);
-		//setCollectionProtocolList(request);
 	}
 	
 
