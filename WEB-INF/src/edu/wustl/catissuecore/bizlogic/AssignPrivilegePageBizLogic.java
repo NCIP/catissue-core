@@ -650,7 +650,7 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 			selectedActionsList = new ArrayList<NameValueBean>();
 			actionList = getReformedNameValueBeanList(Variables.privilegeGroupingMap.get("CP"));
 		
-			if(selectedRoleId!=null&& selectedRoleId!=""&& ! selectedRoleId.equalsIgnoreCase("-1"))
+			if(selectedRoleId!=null&& selectedRoleId!=""&& ! selectedRoleId.equalsIgnoreCase("-1") && ! selectedRoleId.equalsIgnoreCase("0"))
 			{
 				List<NameValueBean> actionsListForSelRole = getActionsList(selectedRoleId);
 				
