@@ -14,6 +14,7 @@
 <%@ page language="java" isELIgnored="false"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <script src="jss/script.js" type="text/javascript"></script>
+	
 <%
 		//StorageContainerForm form = (StorageContainerForm)request.getAttribute("storageContainerForm");
 		String strCheckStatusForCont = "checkActivityStatus(this,'" + Constants.CONTAINER_DELETE_MAPPING + "')";
@@ -104,6 +105,7 @@
 	<script language="JavaScript" type="text/javascript" src="jss/Hashtable.js"></script>
 	<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 	<script language="JavaScript" type="text/javascript" src="jss/ajax.js"></script>
+	<script language="JavaScript" type="text/javascript" src="jss/caTissueSuite.js"></script>
 	<script language="JavaScript">
 		function checkNoOfContainers(action,formField)
 		{
@@ -134,7 +136,7 @@
 			confirmDisable(action,formField);
 		}
 
-		function onRadioButtonClick(element)
+	/*	function onRadioButtonClick(element)
 		{
 			var radioArray = document.getElementsByName("stContSelection");		 
 			//if site radio button is selected.
@@ -191,21 +193,101 @@
 				//window.location.reload();
 			}
 		}
-		
+	*/	
 		function onTypeChange(element)
 		{
 			var action = "StorageContainer.do?operation="+document.forms[0].operation.value+"&pageOf=pageOfStorageContainer&typeChange=true";
 			document.forms[0].action = action;
 			document.forms[0].submit();
 		}
-		function onSiteChange()
+		// vipin :- without ajax
+	/*	function onSiteChange(dd)
 		{
 			var siteElement = document.getElementById("siteId");
 			document.forms[0].siteName.value = siteElement.options[siteElement.selectedIndex].text;
 			var action = "StorageContainer.do?operation="+document.forms[0].operation.value+"&pageOf=pageOfStorageContainer&isSiteChanged=true";
 			document.forms[0].action = action;
 			document.forms[0].submit();
+		}*/
+		
+	/*	function onChangeGetCPs(element)
+		{
+			var contElement = document.forms[0].customListBox_1_0;
+		//	document.forms[0].parentContainerId.value = contElement.options[contElement.selectedIndex].text;
+			var action = "StorageContainer.do?operation="+document.forms[0].operation.value+"&pageOf=pageOfStorageContainer&isContainerChanged=true";
+			document.forms[0].action = action;
+			document.forms[0].submit();
 		}
+		function onContManualChange()
+		{
+			var contElement = document.forms[0].selectedContainerName;
+			document.forms[0].selectedContainerName.value = contElement.options[contElement.selectedIndex].text;
+			var action = "StorageContainer.do?operation="+document.forms[0].operation.value+"&pageOf=pageOfStorageContainer&isContainerChanged=true";
+			document.forms[0].action = action;
+			document.forms[0].submit();
+		}*/
+		// vipin:- with ajax
+		function onChangeGetCPs(data,parentEleType)
+		{
+			
+			var request = newXMLHTTPReq();
+			request.onreadystatechange = function requestHandler()
+			{
+				 if(request.readyState == 4)
+				 {       //When response is loaded
+					if(request.status == 200)
+					{   
+						var response = request.responseText; 
+							
+						var jsonResponse = eval('('+ response+')');
+						var hasValue = false;
+
+						if(jsonResponse.locations!=null)
+						{
+						   var num = jsonResponse.locations.length; 
+							 var cpSelBoxObj =document.getElementById('collectionIds');
+								 clearSelBoxList(cpSelBoxObj);// from catissueSuite.js
+								 for(var i=0; i<num;i++)
+								{
+								   var cpName =jsonResponse.locations[i].cpName;
+								   var cpId =jsonResponse.locations[i].cpValue;
+									
+								   var myNewOption = new Option(cpName,cpId);     
+								   cpSelBoxObj.options[i] = myNewOption;
+								}
+						  }
+
+					   }
+				    }
+			}
+			request.open("POST","StorageContainer.do",true);
+            request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+            request.send(data);
+		}
+		function onParentlocationChange(element)
+		{
+			var parentEleType ="";
+			
+			if(element.name == "siteId")
+			{
+				parentEleType ="parentContSite"  ;
+				var data="operation="+document.forms[0].operation.value+"&pageOf=pageOfStorageContainer&&isContainerChanged=true&parentEleType="+parentEleType+"&siteId="+element.value;
+			}
+			else if(element.name == "parentContainerId")
+			{
+				parentEleType ="parentContAuto"  ;
+				var data="operation="+document.forms[0].operation.value+"&pageOf=pageOfStorageContainer&&isContainerChanged=true&parentEleType="+parentEleType+"&parentContainerId="+element.value;
+			}
+			else if(element.name == "selectedContainerName")
+			{
+				parentEleType ="parentContManual"  ;
+				var data="operation="+document.forms[0].operation.value+"&pageOf=pageOfStorageContainer&&isContainerChanged=true&parentEleType="+parentEleType+"&selectedContainerName="+element.value;
+			}
+         
+         
+         onChangeGetCPs(data,parentEleType);
+		}
+		
 		function onParentContainerChange(element)
 		{
 			//out of three drop downs if first dropdown that is the storage container name drop is changed
@@ -222,7 +304,7 @@
 	
 
     /***  code using ajax :gets the default cps without refreshing the whole page  ***/
-	function onParentContainerChange1(element)
+/*	function onParentContainerChange1(element)
 	{
 		if(element.name == "parentContainerId")
 		{ 
@@ -241,8 +323,8 @@
 			request.send(action);
 		}
 	}
-
-	function onResponseUpdate(collectionIdsStr) 
+*/
+/*	function onResponseUpdate(collectionIdsStr) 
 	{
 
 		var collectionIds = document.getElementById("collectionIds");
@@ -267,7 +349,7 @@
 		
 		
 	}
-
+*/
 	/*** code using ajax  ***/
 
 		
@@ -478,6 +560,7 @@ function refresh_tree()
 {	
 	window.parent.frames['SCTreeView'].location="<%=Constants.TREE_NODE_DATA_ACTION%>?<%=Constants.PAGEOF%>=<%=pageOf%>&<%=Constants.RELOAD%>=true&<%=Constants.TREE_NODE_ID%>=${requestScope.storageContainerIdentifier}";
 }
+
 function parentContainerTypeChanged(element)
 {	
 	var selectedParentSite=document.getElementById("parentContainerSite");
@@ -489,20 +572,34 @@ function parentContainerTypeChanged(element)
 		selectedParentSite.style.display="block"; 	
 		selectedParentAuto.style.display="none";
 		selectedParentManual.style.display="none";
+	//	document.getElementById("siteId").value=-1;
+		document.forms[0].siteId.value=-1;
+	
 	}
 	else if(element.value == "Auto")
 	{
 		selectedParentSite.style.display="none"; 	
 		selectedParentAuto.style.display="block";
 		selectedParentManual.style.display="none";
+		document.forms[0].customListBox_1_0.value=-1;
+		document.forms[0].customListBox_1_1.value = -1;
+		document.forms[0].customListBox_1_2.value = -1;		
+
 	}
 	else if(element.value == "Manual")
 	{
 		selectedParentSite.style.display="none"; 	
 		selectedParentAuto.style.display="none";
 		selectedParentManual.style.display="block";
+		document.forms[0].selectedContainerName.value = "";
+		document.forms[0].pos1.value = "";
+		document.forms[0].pos2.value = "";
+		
 	}
+	clearSelBoxList(document.getElementById('collectionIds'));
+	
 }
+
 // Patch ID: Bug#3090_11
 window.parent.selectTab('${requestScope.operation}');
 
@@ -643,7 +740,7 @@ function addNewTypeAction(action)
 							String tdStyleClass = "black_ar";
 							boolean disabled = true;
 							String onChange = "";
-							onChange = "onCustomListBoxChange(this),onParentContainerChange1(this)";
+							onChange = "onCustomListBoxChange(this),onParentlocationChange(this)";
 							//String onChange = "onCustomListBoxChange(this);onParentContainerChange()";
 							boolean buttonDisabled = true;
 							//String buttonOnClicked  = "javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen','name','810','320','yes');return false";							
@@ -685,18 +782,18 @@ function addNewTypeAction(action)
 						<%=ScriptGenerator.getJSForOutermostDataTable()%>
 						<%=ScriptGenerator.getJSEquivalentFor(dataMap,rowNumber)%>
 					
-						<script language="JavaScript" type="text/javascript" src="jss/CustomListBox.js"></script>
+					<script language="JavaScript" type="text/javascript" src="jss/CustomListBox.js"></script>
 					<tr>
                       <td class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
                       <td align="left" class="black_ar">Parent Location Details</td>
-					  <td><html:select  styleClass="formFieldSizedNew" property="parentContainerSelected" size="1"	onchange= "parentContainerTypeChanged(this)"><html:options collection="parentContainerTypeList"labelProperty="name" property="value" /></html:select></td>
+					  <td><html:select  styleClass="formFieldSizedNew" property="parentContainerSelected" size="1"	onchange= "parentContainerTypeChanged(this)"><html:options collection="parentContainerTypeList"labelProperty="name" property="value"  /></html:select></td>
 					  <td colspan="4" align="left" class="black_ar">
 					  
 					  <div id="parentContainerSite"  style="display:block">
 					    <table width="100%" border="0" cellpadding="0" cellspacing="0" >
 						<tr><td>
 						  <label>
-							<html:select property="siteId" styleClass="formFieldSizedNew" styleId="siteId" size="1" onchange="onSiteChange()"
+							<html:select property="siteId" styleClass="formFieldSizedNew" styleId="siteId" size="1" onchange="onParentlocationChange(this)"
 							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 								<html:options collection="<%=Constants.SITELIST%>" labelProperty="name" property="value"/>
 							</html:select>
@@ -733,7 +830,7 @@ function addNewTypeAction(action)
 						<div id="parentContainerManual" style="display:none">
     					  <table width="59%" border="0" cellpadding="0" cellspacing="0" class="groupElements">
 						<tr>
-							 <td width="24%"><html:text styleClass="grey_ar"   size="30" styleId="selectedContainerName" onmouseover="showTip(this.id)" property="selectedContainerName"/></td>
+							 <td width="24%"><html:text styleClass="grey_ar"   size="30" styleId="selectedContainerName" onmouseover="showTip(this.id)" onblur="onParentlocationChange(this)" property="selectedContainerName"/></td>
 							 <td width="13%"><html:text styleClass="black_ar_s"  size="5" styleId="pos1" property="pos1"/> </td>	
 							 <td width="13%"><html:text styleClass="black_ar_s" size="5" styleId="pos2" property="pos2"/></td>	
 							 <td width="14%"><html:button styleClass="black_ar"  property="containerMap" onclick="mapButtonClicked()"><bean:message key="buttons.map"/></html:button> </td>
