@@ -78,7 +78,7 @@
 					   optionsList = '${requestScope.hourList}'
 					   initialValue='${embeddedEventParametersForm.timeInHours}'
 					  styleClass="black_ar"
-					  staticField="false" size="3" />                    &nbsp;<bean:message key="eventparameters.timeinminutes"/>&nbsp;&nbsp;
+					  staticField="false" size="3" />                    &nbsp;<bean:message key="eventparameters.timeinhours"/>&nbsp;&nbsp;
                     <autocomplete:AutoCompleteTag property="timeInMinutes"
 						   optionsList = '${requestScope.minutesList}'
 						  initialValue='${embeddedEventParametersForm.timeInMinutes}'
