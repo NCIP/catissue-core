@@ -78,7 +78,27 @@ public class SimilarContainersAction extends SecureAction
 		Logger.out.info(" Map:---------------" + similarContainersForm.getSimilarContainersMap());
 		IBizLogic ibizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 		
-		request = Utility.setCollectionProtocolList(request,similarContainersForm.getSiteId());
+		//request = Utility.setCollectionProtocolList(request,similarContainersForm.getSiteId());
+		if ("Site".equals(similarContainersForm.getParentContainerSelected()))
+		{
+			request = Utility.setCollectionProtocolList(request, similarContainersForm.getSiteId());
+		}
+		else if ("Auto".equals(similarContainersForm.getParentContainerSelected()))
+		{
+			Site site = bizLogic.getRelatedSite(similarContainersForm.getParentContainerId());
+			if(site!=null)
+			{
+				request = Utility.setCollectionProtocolList(request, site.getId());
+			}
+		}
+		else if ("Manual".equals(similarContainersForm.getParentContainerSelected()))
+		{
+			Site site = bizLogic.getRelatedSiteForManual(similarContainersForm.getSelectedContainerName());
+			if(site!=null)
+			{
+				request = Utility.setCollectionProtocolList(request, site.getId());
+			}
+		}
 		
 		//Gets the Storage Type List and sets it in request 
 		List list2 = ibizLogic.retrieve(StorageType.class.getName());
