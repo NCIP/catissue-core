@@ -31,7 +31,7 @@
 	<property name="mysql.driver.string" value="org.gjt.mm.mysql.Driver" />
 
 	<property name="mysql.lib" value="mysql-connector-java-5.0.8-bin.jar" />
-	<property name="oracle.lib" value="oracleDriver.jar" />
+	<property name="oracle.lib" value="ojdbc14.jar" />
 	
 	<property name="catissue.struts.config.file" value="struts-config.xml" />
 	<property name="catissue.hibernate.config.file" value="hibernate.cfg.xml" />
@@ -479,7 +479,10 @@
 		<copy file="${temp.dir}/dynamicExtensions.jar" todir="${temp.dir}/catissuecore/Applet" overwrite="true" />
 		<copy file="${temp.dir}/dynamicExtensions.jar" todir="${temp.dir}/catissuecore/WEB-INF/Applet" overwrite="true" />
 		
-		<!-- antcall target="copydeletedjars"/ -->
+		<antcall target="copydeletedjars">
+			<param name="delPath" value="${temp.dir}/catissuecore/WEB-INF/lib"/>
+		</antcall>
+
 		<war destfile="${temp.dir}/catissuecore.war" 
 			webxml="${temp.dir}/catissuecore/WEB-INF/web.xml" manifest="${base.dir}/MANIFEST.MF">
 			<fileset dir="${temp.dir}/catissuecore">
@@ -498,6 +501,10 @@
 		</war>
 
 		<copy file="${temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsHibernate.cfg.xml" todir="${temp.dir}/dynamicExtensions/WEB-INF/classes" overwrite="true" />
+
+		<antcall target="copydeletedjars">
+			<param name="delPath" value="${temp.dir}/dynamicExtensions/WEB-INF/lib"/>
+		</antcall>
 
 		<war destfile="${temp.dir}/dynamicExtensions.war" webxml="${temp.dir}/dynamicExtensions/WEB-INF/web.xml">
 			<fileset dir="${temp.dir}/dynamicExtensions">
@@ -526,7 +533,7 @@
 	<target name="copydeletedjars">
 	<delete >  
 
-		<fileset dir="${temp.dir}/catissuecore/WEB-INF/lib">
+		<fileset dir="${delPath}">
 			<include name="backport-util-concurrent-3.0.jar" /> 
 			<include name="c3p0-0.8.4.5.jar" />
 			<include name="c3p0-0.8.5.2.jar" /> 
@@ -568,7 +575,7 @@
 			<include name="caGrid-1.0-ServiceSecurityProvider-common.jar" /> 
 			<include name="jboss-common-jdbc-wrapper.jar"/>
 			<include name="mysql-connector-java-3.1.13-bin.jar"/>
-			<include name="ojdbc14.jar"/>
+			<include name="oracleDriver.jar"/>
 			<include name="boot.jar" /> 
 			<include name="c3p0-0.9.0.jar" /> 
 			<include name="catissuecore-client.jar" /> 
