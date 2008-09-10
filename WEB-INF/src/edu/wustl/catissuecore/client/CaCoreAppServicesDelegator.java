@@ -13,15 +13,17 @@ package edu.wustl.catissuecore.client;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import org.hibernate.Session;
+
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.bizlogic.CollectionProtocolRegistrationBizLogic;
+import edu.wustl.catissuecore.bizlogic.IdentifiedSurgicalPathologyReportBizLogic;
+import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
-import edu.wustl.catissuecore.bizlogic.UserBizLogic;
+import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.Specimen;
@@ -36,6 +38,7 @@ import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.bizlogic.QueryBizLogic;
 import edu.wustl.common.domain.AbstractDomainObject;
@@ -43,6 +46,7 @@ import edu.wustl.common.security.PrivilegeCache;
 import edu.wustl.common.security.PrivilegeManager;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
+import edu.wustl.common.util.Permissions;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.dbManager.DBUtil;
 import edu.wustl.common.util.dbManager.HibernateMetaData;
@@ -264,6 +268,7 @@ public class CaCoreAppServicesDelegator
 	{
 	    Logger.out.debug("In Filter Objects ......" );
 	    
+	    SessionDataBean sessionDataBean = getSessionDataBean(userName);
 	    // boolean that indicates whether user has READ_DENIED privilege on the main object.
 		boolean hasReadDeniedForMain = false;
 		
@@ -282,68 +287,59 @@ public class CaCoreAppServicesDelegator
 		{
 		    
 		    Object abstractDomainObject = (Object) iterator.next();//objectList.get(i);
-		    
-		    //Get identifier of the object. 
-		    Object identifier = getFieldObject(abstractDomainObject, "id");
-		    Logger.out.debug("object Identifier......................: "+identifier);
+		    Class classObject = abstractDomainObject.getClass();
+		    String objectName = classObject.getName();
+		    Long identifier = (Long)getFieldObject(abstractDomainObject, "id");;
+		 
 		    
             String aliasName = getAliasName(abstractDomainObject);
             
-            // Check the permission of the user on the main object.
-			// Call to SecurityManager.checkPermission bypassed &
-			// instead, call redirected to privilegeCache.hasPrivilege            
-        //     hasReadDeniedForMain = privilegeCache.hasPrivilege((AbstractDomainObject)abstractDomainObject, Permissions.READ_DENIED);
+            /** Check the permission of the user on the main object.
+             *  Call to SecurityManager.checkPermission bypassed &
+             *  instead, call redirected to privilegeCache.hasPrivilege
+             *  Check readDenied permission on particpant,SCG,CPR,Specimen,IdentifiedSPR 
+             *  If the user has READ_DENIED privilege on the object, remove that object from the list. 
+             */
+			 
+            hasReadDeniedForMain = true;
+
+            if (classObject.equals(Participant.class)||
+    		classObject.equals(SpecimenCollectionGroup.class)||
+    		classObject.getSuperclass().equals(Specimen.class)||
+    		classObject.equals(CollectionProtocolRegistration.class)||
+    		classObject.equals(IdentifiedSurgicalPathologyReport.class))
+    		{
+    			
+    			if(classObject.getSuperclass().equals(Specimen.class))
+    			{
+    				objectName = Specimen.class.getName();
+    			}
+    			hasReadDeniedForMain = edu.wustl.catissuecore.util.global.Utility.hasPrivilegeToView(objectName, identifier, sessionDataBean, Permissions.READ_DENIED);
+    		}
             
-            /*
-			 * this issue, as to whose privileges are to be checked, will be resolved later
-			 */
-			hasReadDeniedForMain = false;
             
-//		    hasReadDeniedForMain = SecurityManager.getInstance(CaCoreAppServicesDelegator.class)
-//		    							.checkPermission(userName, aliasName,
-//		    							        identifier, Permissions.READ_DENIED);
-		    
 		    Logger.out.debug("Main object:" + aliasName + " Has READ_DENIED privilege:" + hasReadDeniedForMain);
 		    
-		    // If the user has READ_DENIED privilege on the object, remove that object from the list. 
-/*		    if (hasReadDeniedForMain)
+		    /**
+		     *  In case of no READ_DENIED privilege, check for privilege on identified data.
+		     */
+		    if (hasReadDeniedForMain) 
 		    {
-//		        Logger.out.debug("Removing Object >>>>>>>>>>>>>>>>>>>>>>>>"+identifier);
-////	            iterator.remove();
-//		        toBeRemoved.add(abstractDomainObject);
-		    } else
-*/		  
-		    if (!hasReadDeniedForMain)// In case of no READ_DENIED privilege, check for privilege on identified data. 
-		    {
-		        //Check the permission of the user on the identified data of the object.
-				// Call to SecurityManager.checkPermission bypassed &
-				// instead, call redirected to privilegeCache.hasPrivilege		    	
-		  //  	hasPrivilegeOnIdentifiedData = privilegeCache.
-		  //  					hasPrivilege((AbstractDomainObject)abstractDomainObject, Permissions.IDENTIFIED_DATA_ACCESS);
-		    	
-		    	/*
-				 * this issue, as to whose privileges are to be checked, will be resolved later
-				 */
-				hasPrivilegeOnIdentifiedData = true;
-		    	
-//		        hasPrivilegeOnIdentifiedData = SecurityManager.getInstance(CaCoreAppServicesDelegator.class) 
-//													.checkPermission(userName, aliasName,
-//													     identifier, Permissions.IDENTIFIED_DATA_ACCESS);
-		        
-				Logger.out.debug("hasPrivilegeOnIdentifiedData:" + hasPrivilegeOnIdentifiedData);
-				// If has no read privilege on identified data, set the identified attributes as NULL. 
-				if (hasPrivilegeOnIdentifiedData == false)
-				{
-					// commented because of lazy initialization problem
-				    removeIdentifiedDataFromObject(abstractDomainObject);
-				}
-				
-				filteredObjects.add(abstractDomainObject);
+		        /**Check the permission of the user on the identified data of the object.
+		         * Call to SecurityManager.checkPermission bypassed &
+		         * instead, call redirected to privilegeCache.hasPrivilege
+		         * call remove identified data
+		         * If has no read privilege on identified data, set the identified attributes as NULL.
+		    	**/
+
+		    	removeIdentifiedDataFromObject(abstractDomainObject,objectName,identifier,sessionDataBean);
+
+		    	filteredObjects.add(abstractDomainObject);
 				Logger.out.debug("Intermediate Size of filteredObjects .............."+filteredObjects.size());
 			}
 		}
 		
-//		Logger.out.debug("To Be Removed......................"+toBeRemoved.size());
+
 		Logger.out.debug("Before Final Objects >>>>>>>>>>>>>>>>>>>>>>>>>"+filteredObjects.size());
 //		boolean status = objectList.removeAll(toBeRemoved);
 //		Logger.out.debug("Remove Status>>>>>>>>>>>>>>>>>>>>>>>>"+status);
@@ -354,6 +350,40 @@ public class CaCoreAppServicesDelegator
 //		Logger.out.debug("Final Objects >>>>>>>>>>>>>>>>>>>>>>>>>"+finalFilteredObjects.size());
 		
 		return filteredObjects;
+	}
+	
+	private void  removeIdentifiedDataFromObject(Object abstractDomainObject,String objectName,Long identifier,SessionDataBean sessionDataBean) throws DAOException
+	{
+		Class classObject = abstractDomainObject.getClass();
+		
+		/**
+		 * Check if user is having PHI access of this object 
+		 * else set PHI values to null of respective object
+		 */
+		boolean hasPHIAccess = edu.wustl.catissuecore.util.global.Utility.hasPrivilegeToView(objectName, identifier, sessionDataBean, Permissions.PHI);
+		if(!hasPHIAccess)
+		{
+			if (classObject.equals(Participant.class))
+		    {
+	        	removeParticipantIdentifiedData(abstractDomainObject);
+		    }
+		    else if (classObject.equals(SpecimenCollectionGroup.class))
+		    {
+	        	removeSpecimenCollectionGroupIdentifiedData(abstractDomainObject);
+		    }
+		    else if (classObject.getSuperclass().equals(Specimen.class))
+		    {
+	        	removeSpecimenIdentifiedData(abstractDomainObject);
+		    }
+		    else if (classObject.equals(CollectionProtocolRegistration.class))
+		    {
+	        	removeCollectionProtocolRegistrationIdentifiedData(abstractDomainObject);
+		    }
+		    else if (classObject.equals(IdentifiedSurgicalPathologyReport.class))
+		    {
+	       		removeIdentifiedReportIdentifiedData(abstractDomainObject);
+		    }
+		}
 	}
 	
 	/**
@@ -431,7 +461,6 @@ public class CaCoreAppServicesDelegator
 		 * Description : Because of lazy initialization problem retrieved the object.
 		 */
 	    SpecimenCollectionGroup specimenCollGrp = (SpecimenCollectionGroup) object;
-	    Logger.out.info("specimenCollGrp getClinicalDiagnosis : " + specimenCollGrp.getClinicalDiagnosis());
 	    specimenCollGrp.setSurgicalPathologyNumber(null);
 	    
 		IBizLogic bizLogic=getBizLogic(SpecimenCollectionGroup.class.getName());
@@ -439,6 +468,7 @@ public class CaCoreAppServicesDelegator
 		if (identifiedSurgicalPathologyReport != null)
 		{	
 			removeIdentifiedReportIdentifiedData(identifiedSurgicalPathologyReport);
+			specimenCollGrp.setIdentifiedSurgicalPathologyReport(identifiedSurgicalPathologyReport);
 		}	
 	}
 	
@@ -468,6 +498,7 @@ public class CaCoreAppServicesDelegator
 		}
 	    
 		removeSpecimenCollectionGroupIdentifiedData(specimenCollectionGroup);
+		specimen.setSpecimenCollectionGroup(specimenCollectionGroup);
 	    	
 	}
 	
@@ -480,7 +511,8 @@ public class CaCoreAppServicesDelegator
 	{
 	    IBizLogic bizlogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 		CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) object;
-	    collectionProtocolRegistration.setRegistrationDate(null);
+		collectionProtocolRegistration.setBarcode(null);
+		collectionProtocolRegistration.setRegistrationDate(null);
 	    collectionProtocolRegistration.setSignedConsentDocumentURL(null);
 	    collectionProtocolRegistration.setConsentSignatureDate(null);
 	    collectionProtocolRegistration.setConsentWitness(null);
@@ -490,111 +522,6 @@ public class CaCoreAppServicesDelegator
 	    	removeParticipantIdentifiedData(participant);
 	    }	
 	}
-	
-	/**
-	 * Sets value of the identified data fields as null in the passed domain object. 
-	 * Checks the type of the object and calls the respective method which filters the identified data.
-	 * @param object The domain object whose identified data is to be removed.
-	 * @throws DAOException 
-	 */
-	private void removeIdentifiedDataFromObject(Object object) throws DAOException
-	{
-	    Class classObject = object.getClass();
-	    Logger.out.debug("Identified Class>>>>>>>>>>>>>>>>>>>>>>"+classObject.getName());
-	    if (classObject.equals(Participant.class))
-	    {
-	        removeParticipantIdentifiedData(object);
-	    }
-	    else if (classObject.equals(SpecimenCollectionGroup.class))
-	    {
-	        removeSpecimenCollectionGroupIdentifiedData(object);
-	    }
-	    else if (classObject.getSuperclass().equals(Specimen.class))
-	    {
-	    	Logger.out.info(" Label :: " + ((Specimen) object).getLabel());
-	        removeSpecimenIdentifiedData(object);
-	    }
-	    else if (classObject.equals(CollectionProtocolRegistration.class))
-	    {
-	        removeCollectionProtocolRegistrationIdentifiedData(object);
-	    }
-	    else if (classObject.equals(IdentifiedSurgicalPathologyReport.class))
-	    {
-	        removeIdentifiedReportIdentifiedData(object);
-	    }
-//	    if (Client.identifiedClassNames.contains(classObject.getName()) 
-//	            || Client.identifiedFieldsMap.containsKey(classObject.getName()))
-//	    {
-//	        Vector identifiedFields = (Vector)Client.identifiedFieldsMap.get(classObject.getName());
-//	        for (Iterator iterator = identifiedFields.iterator();iterator.hasNext();)
-//	        {
-//	            try
-//	            {
-//		            String fieldName = (String) iterator.next();
-////		            Logger.out.debug("Field Name######################"+fieldName);
-//		            Field identifiedField = classObject.getDeclaredField(fieldName);
-//	                setFieldValue(object, fieldName, null, identifiedField.getType());
-//	            }
-//	            catch(NoSuchFieldException noFieldExp)
-//	            {
-//	                Logger.out.debug(noFieldExp.getMessage(), noFieldExp);
-//	            }
-//	        }
-//	        
-//	        Field allFields[] = classObject.getDeclaredFields();
-//	        for (int i = 0; i<allFields.length; i++)
-//	        {
-//	            Logger.out.debug("Field Type$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"+allFields[i].getType().getName());
-//	            if (Client.identifiedClassNames.contains(allFields[i].getType().getName()) 
-//	    	            || Client.identifiedFieldsMap.containsKey(allFields[i].getType().getName()))
-//	            {
-//                    AbstractDomainObject childObject 
-//                				= (AbstractDomainObject)
-//                						getFieldObject(object, allFields[i].getName());
-//                    removeIdentifiedDataFromObject(childObject);
-//	            }
-//	            else if (allFields[i].getType().getName().equals(Collection.class.getName()))
-//	            {
-//	                Collection objectCollection 
-//	                    		= (Collection)
-//	                    			getFieldObject(object, allFields[i].getName());
-//	                
-//	                for (Iterator iterator = objectCollection.iterator(); iterator.hasNext();)
-//	                {
-//	                    AbstractDomainObject objectInCollection 
-//	                    				= (AbstractDomainObject)iterator.next();
-//	                    removeIdentifiedDataFromObject(objectInCollection);
-//	                }
-//	            }
-//	        }
-//	    }
-	}
-	
-//	private void setFieldValue(AbstractDomainObject object, String methodName, String value, Class fieldType)
-//	{
-//	    methodName = "set" + methodName.substring(0,1).toUpperCase() 
-//		   + methodName.substring(1);
-//	    Class [] parameterTypes = {fieldType};
-//	    
-//	    try
-//        {
-//	        Object [] parameterValues = {value};
-//            object.getClass().getMethod(methodName, parameterTypes)
-//        					.invoke(object, parameterValues);
-//        }
-//        catch(NoSuchMethodException noMetExp)
-//        {
-//            Logger.out.debug(noMetExp.getMessage(), noMetExp);
-//        }
-//        catch(IllegalAccessException illAccExp)
-//        {
-//            Logger.out.debug(illAccExp.getMessage(), illAccExp);
-//        }
-//        catch(InvocationTargetException invoTarExp)
-//        {
-//            Logger.out.debug(invoTarExp.getMessage(), invoTarExp);
-//        }
-//	}
 	
 	/**
 	 * Returns the field object from the class object and field name passed.
@@ -748,6 +675,13 @@ public class CaCoreAppServicesDelegator
     private void  removeIdentifiedReportIdentifiedData(Object object)
     {
     	IdentifiedSurgicalPathologyReport identiPathologyReport=(IdentifiedSurgicalPathologyReport)object;
+//    	identiPathologyReport.setActivityStatus(null);
+//    	identiPathologyReport.setCollectionDateTime(null);
+//    	identiPathologyReport.setId(null);
+//    	identiPathologyReport.setReportSource(null);
+//    	identiPathologyReport.setReportStatus(null);
+//    	identiPathologyReport.setIsFlagForReview(null);
+//    	identiPathologyReport.setSpecimenCollectionGroup(null);
     	if(identiPathologyReport.getTextContent()!=null)
     	{
     		identiPathologyReport.getTextContent().setData(null);

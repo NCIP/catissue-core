@@ -31,6 +31,7 @@ public class ScientistRoleTestCases extends CaTissueBaseTestCase {
 		  public void setUp(){
 			appService = ApplicationServiceProvider.getApplicationService();
 			ClientSession cs = ClientSession.getInstance();
+			//System.setProperty("javax.net.ssl.trustStore", "E://jboss//server//default//conf//chap8.keystore");
 			try
 			{ 
 				cs.startSession("scientist@admin.com", "Test123");
@@ -44,7 +45,96 @@ public class ScientistRoleTestCases extends CaTissueBaseTestCase {
 				System.exit(1);
 			}		
 		}
-	    
+		 /**
+		  * Search all particpant and check if PHI data is visible
+		  *
+		  */ 
+		  public void testSearchParticipantWithScientistLogin()
+		  {
+			try{
+				Participant p = new Participant();
+				List l = appService.search(Participant.class.getName(), p);
+				System.out.println("Size : "+l.size());
+				for(int i=0;i<l.size();i++)
+				{
+					Participant retutnParticpant = (Participant)l.get(i);
+					if(retutnParticpant.getFirstName()!=null||retutnParticpant.getLastName()!=null||
+							retutnParticpant.getMiddleName()!=null||retutnParticpant.getBirthDate()!=null||
+							retutnParticpant.getSocialSecurityNumber()!=null)
+					{
+						fail("Participant PHI data is visible to scientist");
+					}
+						
+				}
+				
+			 }
+			 catch(Exception e){
+				 System.out
+						.println("ScientistRoleTestCases.testAddDepartmentWithScientistLogin() "+e.getMessage());
+			     Logger.out.error(e.getMessage(),e);
+				 e.printStackTrace();
+				 assertFalse("Test failed. to search Particpant", true);
+			 }
+		  }
+		  /**
+			  * Search all scg and check if PHI data is visible
+			  *
+			  */ 
+			  public void testSearchProtocolRegistrationWithScientistLogin()
+			  {
+				try{
+					CollectionProtocolRegistration reg = new CollectionProtocolRegistration();
+					List l = appService.search(CollectionProtocolRegistration.class.getName(), reg);
+					System.out.println("Size : "+l.size());
+					for(int i=0;i<l.size();i++)
+					{
+						CollectionProtocolRegistration returnedReg = (CollectionProtocolRegistration)l.get(i);
+						if(returnedReg.getBarcode()!=null||returnedReg.getRegistrationDate()!=null||
+								returnedReg.getSignedConsentDocumentURL()!=null||returnedReg.getConsentSignatureDate()!=null||
+								returnedReg.getConsentWitness()!=null)
+						{
+							fail("CollectionProtocolRegistration PHI data is visible to scientist");
+						}
+					}
+				 }
+				 catch(Exception e){
+					 System.out
+							.println("ScientistRoleTestCases.testSearchProtocolRegistrationWithScientistLogin() "+e.getMessage());
+				     Logger.out.error(e.getMessage(),e);
+					 e.printStackTrace();
+					 assertFalse("Test failed. to search SpecimenCollectionGroup", true);
+				 }
+			  }
+		  /**
+			  * Search all scg and check if PHI data is visible
+			  *
+			  */ 
+			  public void testSearchSpecimenCollectionGroupWithScientistLogin()
+			  {
+				try{
+					SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
+					List l = appService.search(SpecimenCollectionGroup.class.getName(), scg);
+					System.out.println("Size : "+l.size());
+					for(int i=0;i<l.size();i++)
+					{
+						SpecimenCollectionGroup returnedSCG = (SpecimenCollectionGroup)l.get(i);
+						if(returnedSCG.getSurgicalPathologyNumber()!=null)
+						{
+							fail("SpecimenCollectionGroup PHI data is visible to scientist");
+						}
+					}
+				 }
+				 catch(Exception e){
+					 System.out
+							.println("ScientistRoleTestCases.testSearchSpecimenCollectionGroupWithScientistLogin() "+e.getMessage());
+				     Logger.out.error(e.getMessage(),e);
+					 e.printStackTrace();
+					 assertFalse("Test failed. to search SpecimenCollectionGroup", true);
+				 }
+			  }
+	  
+		  
+/*
 	  public void testAddDepartmentWithScientistLogin()
 		  {
 			try{
@@ -54,11 +144,14 @@ public class ScientistRoleTestCases extends CaTissueBaseTestCase {
 				assertFalse("Test failed.Dept successfully added", true);
 			 }
 			 catch(Exception e){
+				 System.out
+						.println("ScientistRoleTestCases.testAddDepartmentWithScientistLogin() "+e.getMessage());
 			     Logger.out.error(e.getMessage(),e);
 				 e.printStackTrace();
 				 assertTrue("Access denied: You are not authorized to perform this operation. ", true);
 			 }
 		  }
+
 	  public void testUpdateDepartmentWithScientistLogin()
 		{ 	
 		    try 
@@ -503,6 +596,7 @@ public class ScientistRoleTestCases extends CaTissueBaseTestCase {
 		 		
 	        }
 		}*/
+/*		  
 	public void testSearchCollectionProtocolWithScientistLogin()
 		{
 	  	CollectionProtocol collectionProtocol = new CollectionProtocol();
@@ -751,5 +845,5 @@ public class ScientistRoleTestCases extends CaTissueBaseTestCase {
 		        }
 	
 		  }
-		
+*/		
 	}

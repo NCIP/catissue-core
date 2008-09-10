@@ -92,6 +92,7 @@ import edu.wustl.common.security.PrivilegeCache;
 import edu.wustl.common.security.PrivilegeManager;
 import edu.wustl.common.security.PrivilegeUtility;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
+import edu.wustl.common.util.Permissions;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
@@ -2015,6 +2016,14 @@ public class Utility extends edu.wustl.common.util.Utility {
 				if(isPresent)
 				{
 					isPresent = privilegeCache.hasPrivilege(sb.toString()+cpId.toString(), privilegeNames[1]);
+					isPresent = !isPresent;
+				}
+			}
+			else
+			{
+				isPresent = privilegeCache.hasPrivilege(sb.toString()+cpId.toString(), privilegeName);
+				if (privilegeName != null && privilegeName.equalsIgnoreCase(Permissions.READ_DENIED))
+				{
 					isPresent = !isPresent;
 				}
 			}

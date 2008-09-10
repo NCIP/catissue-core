@@ -3,8 +3,12 @@ package edu.wustl.catissuecore.bizlogic.test;
 import java.util.Iterator;
 import java.util.List;
 import edu.wustl.catissuecore.domain.Address;
+import edu.wustl.catissuecore.domain.CancerResearchGroup;
+import edu.wustl.catissuecore.domain.Department;
+import edu.wustl.catissuecore.domain.Institution;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
 
 
@@ -163,7 +167,7 @@ public class UserTestCases extends CaTissueBaseTestCase {
 	 * Add a User with its Role as Scientist
 	 * @return void
 	 */
-	 /*public void testAddScientist()
+	 public void testAddScientist()
 	 {
 		try{
 			User userObj = new User();
@@ -217,7 +221,7 @@ public class UserTestCases extends CaTissueBaseTestCase {
 		 }
 	 } 
 	
-	*/
+	
 	/**
 	 * Search a User in caTISSUE core system
 	 * @return void
