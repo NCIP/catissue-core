@@ -5066,9 +5066,9 @@ PUBLIC
 			<forward name="printAntiSuccess" path=".catissuecore.viewSpecimenSummary" />	
 			<forward name="multipleSpWithMenu" path=".catissuecore.viewSpecimenSummary" />			
 	   </action>
-       
-	
-		
+	   
+	   <action path="/ComboDataAction" type="edu.wustl.catissuecore.action.ComboDataAction" scope="request"/>					
+
 	</action-mappings>
 	
 	<controller processorClass="edu.wustl.common.struts.ApplicationRequestProcessor" />
