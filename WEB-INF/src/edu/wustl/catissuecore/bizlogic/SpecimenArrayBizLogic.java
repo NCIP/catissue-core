@@ -1047,13 +1047,29 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 		Specimen specimen = null;
 		StringBuffer sb = new StringBuffer();
 		sb.append(Constants.COLLECTION_PROTOCOL_CLASS_NAME);
+		Collection<SpecimenArrayContent> specimenArrayContentCollection = null;
 
 		if (domainObject instanceof SpecimenArray)
 		{
 			specimenArray = (SpecimenArray) domainObject;
 		}
 
-		Collection<SpecimenArrayContent> specimenArrayContentCollection = specimenArray.getSpecimenArrayContentCollection();
+		if(specimenArray.getSpecimenArrayContentCollection().isEmpty())
+		{
+			try 
+			{
+				specimenArray = (SpecimenArray) dao.retrieve(SpecimenArray.class.getName(), specimenArray.getId());
+			} 
+			catch (DAOException e) 
+			{
+				e.printStackTrace();
+			}
+			specimenArrayContentCollection = specimenArray.getSpecimenArrayContentCollection();
+		}
+		else
+		{
+			specimenArrayContentCollection = specimenArray.getSpecimenArrayContentCollection();
+		}
 
 		for (SpecimenArrayContent specimenArrayContent : specimenArrayContentCollection)
 		{

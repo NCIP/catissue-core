@@ -201,8 +201,15 @@ public class SpecimenArrayAliquotsBizLogic extends DefaultBizLogic
 			aliquotSpecimenArray.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
 			//aliquotSpecimenArray.setLineage(Constants.ALIQUOT);
 
-			//Inserting an aliquot in the database			
-			specimenArrayBizLogic.insert(aliquotSpecimenArray, dao, sessionDataBean);	
+			//Inserting an aliquot in the database
+			if (isAuthorized((AbstractDAO)dao, obj, sessionDataBean))
+	        {
+				specimenArrayBizLogic.insert(aliquotSpecimenArray, dao, sessionDataBean);
+	        }
+			else
+		    {
+				throw new UserNotAuthorizedException();
+		    }
 			//postInsert(aliquotSpecimenArray, dao, sessionDataBean);
 			
 			// set ID of Specimen array inserted to be used in Aliqut summary page
@@ -213,8 +220,15 @@ public class SpecimenArrayAliquotsBizLogic extends DefaultBizLogic
 		if (parentSpecimenArray != null)
 		{	
 			SpecimenArray oldSpecimenArray = (SpecimenArray) dao.retrieve(SpecimenArray.class.getName(), specimenArray.getId());;
-			updateParentSpecimenArray(parentSpecimenArray);			
-			specimenArrayBizLogic.update(dao, parentSpecimenArray, oldSpecimenArray, sessionDataBean);	
+			updateParentSpecimenArray(parentSpecimenArray);
+			if (isAuthorized((AbstractDAO)dao, obj, sessionDataBean))
+			{
+				specimenArrayBizLogic.update(dao, parentSpecimenArray, oldSpecimenArray, sessionDataBean);
+			}
+			else
+		    {
+				throw new UserNotAuthorizedException();
+		    }
 		}
 		
 		//Populate aliquot map with parent specimenArray's data
@@ -409,6 +423,27 @@ public class SpecimenArrayAliquotsBizLogic extends DefaultBizLogic
 		}
 	}
 
+	/**
+	 * Called from DefaultBizLogic to get ObjectId for authorization check
+	 * (non-Javadoc)
+	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getObjectId(edu.wustl.common.dao.AbstractDAO, java.lang.Object)
+	 */
+	public String getObjectId(AbstractDAO dao, Object domainObject)
+	{
+		SpecimenArrayBizLogic specimenArrayBizLogic = (SpecimenArrayBizLogic) BizLogicFactory
+		.getInstance().getBizLogic(Constants.SPECIMEN_ARRAY_FORM_ID);
+		return specimenArrayBizLogic.getObjectId(dao, domainObject);
+	}
 	
-	
+	/**
+	 * (non-Javadoc)
+	 * @throws UserNotAuthorizedException 
+	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#isAuthorized(edu.wustl.common.dao.AbstractDAO, java.lang.Object, edu.wustl.common.beans.SessionDataBean)
+	 */
+	public boolean isAuthorized(AbstractDAO dao, Object domainObject, SessionDataBean sessionDataBean) throws UserNotAuthorizedException
+	{
+		SpecimenArrayBizLogic specimenArrayBizLogic = (SpecimenArrayBizLogic) BizLogicFactory
+		.getInstance().getBizLogic(Constants.SPECIMEN_ARRAY_FORM_ID);
+		return specimenArrayBizLogic.isAuthorized(dao, domainObject, sessionDataBean);
+	}
 }
