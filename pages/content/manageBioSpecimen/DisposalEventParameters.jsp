@@ -31,6 +31,7 @@ function confirmAction(form)
 			if(confirm("Are you sure you want to disable the specimen ?"))
 			{
 				form.action='${requestScope.formName}?disposal=true';
+				document.forms[0].onSubmit.value="success";
 				form.submit();
 			}
 			else

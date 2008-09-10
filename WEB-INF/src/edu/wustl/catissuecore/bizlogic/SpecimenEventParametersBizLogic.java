@@ -429,37 +429,28 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 	{
 		SpecimenEventParameters specimenEventParameters = (SpecimenEventParameters) obj;
 		SpecimenEventParameters oldSpecimenEventParameters = (SpecimenEventParameters) oldObj;
-
-		//Check for Closed Specimen
-		//checkStatus(dao, specimenEventParameters.getSpecimen(), "Specimen" );
-
 		// Check for different User
 		if (!specimenEventParameters.getUser().getId().equals(oldSpecimenEventParameters.getUser().getId()))
 		{
 			checkStatus(dao, specimenEventParameters.getUser(), "User");
 		}
-
-		// check for transfer event
-		//			if (specimenEventParameters.getSpecimen() != null)
-		//			{
-		//			    if (specimenEventParameters instanceof TransferEventParameters)
-		//			    {
-		//			        TransferEventParameters transferEventParameters = (TransferEventParameters)specimenEventParameters;
-		//			        TransferEventParameters oldTransferEventParameters = (TransferEventParameters)oldSpecimenEventParameters;
-		//				    
-		//				    StorageContainer storageContainer = transferEventParameters.getToStorageContainer();
-		//				    StorageContainer oldstorageContainer = oldTransferEventParameters.getToStorageContainer();
-		//				    Logger.out.debug("StorageContainer match : " + storageContainer.equals(oldstorageContainer ) );
-		//				    
-		//				    // check for closed StorageContainer
-		//				    if(!storageContainer.getId().equals(oldstorageContainer.getId()) )
-		//				    	checkStatus(dao, storageContainer, "Storage Container" );
-		//			    }
-		//			}
-
+		Specimen specimen = (Specimen)HibernateMetaData.getProxyObjectImpl(specimenEventParameters.getSpecimen());
+		if (specimenEventParameters instanceof DisposalEventParameters)
+		{
+			
+			SpecimenPosition prevPosition = specimen.getSpecimenPosition(); 
+			specimen.setSpecimenPosition(null);
+			specimen.setIsAvailable(new Boolean(false));
+			specimen.setActivityStatus(((DisposalEventParameters)specimenEventParameters).getActivityStatus());
+			//Update Specimen
+			dao.update(specimen, sessionDataBean, true, true, false);
+			if(prevPosition!=null)
+			{
+				dao.delete(prevPosition);
+			}
+		}
 		//Update registration
 		dao.update(specimenEventParameters, sessionDataBean, true, true, false);
-
 		//Audit.
 		dao.audit(obj, oldObj, sessionDataBean, true);
 	}
