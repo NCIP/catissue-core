@@ -3,14 +3,14 @@ package edu.wustl.catissuecore.bizlogic;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.bizlogic.CDEBizLogic;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.cde.CDE;
 import edu.wustl.common.cde.CDEManager;
-import edu.wustl.catissuecore.util.global.Constants;
 
 /**
  * 
@@ -25,8 +25,8 @@ public class ComboDataBizLogic extends DefaultBizLogic
 	 */
 	private List getClinicalDiagnosisList()
 	{
-		CDE cde = CDEManager.getCDEManager().getCDE(Constants.CDE_NAME_CLINICAL_DIAGNOSIS);
 		//populating clinical Diagnosis field 
+		CDE cde = CDEManager.getCDEManager().getCDE(Constants.CDE_NAME_CLINICAL_DIAGNOSIS);
 		CDEBizLogic cdeBizLogic = (CDEBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.CDE_FORM_ID);
 		List clinicalDiagnosisList = new ArrayList();
 		clinicalDiagnosisList.add(new NameValueBean(Constants.SELECT_OPTION, "" + Constants.SELECT_OPTION_VALUE));

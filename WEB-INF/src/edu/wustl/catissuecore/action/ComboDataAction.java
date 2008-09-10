@@ -8,7 +8,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.bizlogic.ComboDataBizLogic;
 import edu.wustl.common.action.BaseAction;
-import net.sf.json.JSONObject;
+import org.json.JSONObject;
 
 public class ComboDataAction extends BaseAction {
 
