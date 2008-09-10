@@ -114,10 +114,17 @@ function viewSpecimenDetails(id)
 
 function createAliquots(id)
 {
+
 	var id = "requestFor"+id;
 	var objId = document.getElementById(id).value;
-    var url = 'createAliquotSpecimen.do?specimenId='+objId;
-	window.parent.location.href=url;
+	if(objId != "#")
+	{
+		var url = 'createAliquotSpecimen.do?specimenId='+objId;
+		window.parent.location.href=url;
+	} else {
+
+		alert("No specimen selected : Select specimen to create Aliquot");
+	}
 	//showNewPage('createAliquotSpecimen.do?pageOf=pageOfCreateAliquot&operation=add&id=' + objId );
 }
 
@@ -125,9 +132,14 @@ function createDerivatives(id)
 {
 	var id = "requestFor"+id;
 	var objId = document.getElementById(id).value;
-	var url = 'createDerivedSpecimen.do?specimenId='+objId;
-	
-	window.parent.location.href=url;
+	if(objId != "#")
+	{
+		var url = 'createDerivedSpecimen.do?specimenId='+objId;
+		window.parent.location.href=url;
+	} else {
+
+		alert("No specimen selected : Select specimen to create derivative");
+	}
 	//showNewPage('createDerivedSpecimen.do?rowNumber='+1);
 //	showNewPage('CreateSpecimen.do?pageOf=success&operation=add&id=' + objId );
 }
