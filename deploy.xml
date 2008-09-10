@@ -254,7 +254,7 @@
 		<copy todir="${temp.dir}/catissuecore-properties" overwrite="true">
 			<fileset dir="${base.dir}/catissuecore-properties" />
 		</copy>
-		<copy file="${base.dir}/caTIES_conf/SectionHeaderConfig.txt" todir="${temp.dir}/catissuecore-properties" overwrite="true" />
+		<copy file="${base.dir}/CaTIES_conf/SectionHeaderConfig.txt" todir="${temp.dir}/catissuecore-properties" overwrite="true" />
 		<copy file="catissuecore-ds.xml" todir="${temp.dir}" overwrite="true" />
 
 		<copy file="${temp.dir}/catissuecore/WEB-INF/classes/DAOConfig.xml" todir="${temp.dir}" />
