@@ -635,6 +635,8 @@ public class UserBizLogic extends DefaultBizLogic
 						privileges.add(privilege.getValue());
 					}
 					
+					Utility.processRole(roleName);
+					
 					PrivilegeManager.getInstance().createRole(roleName,
 								privileges);
 					
@@ -703,9 +705,9 @@ public class UserBizLogic extends DefaultBizLogic
 			pg.setProtectionElements(peSet);
 			new PrivilegeUtility().getUserProvisioningManager().createProtectionGroup(pg);	  
 		} 
-		catch (CSException e) 
+		catch (Exception e) 
 		{
-			Logger.out.error(e.getMessage(), e);
+			Logger.out.debug(e.getMessage(), e);
 		}
 			
 	}

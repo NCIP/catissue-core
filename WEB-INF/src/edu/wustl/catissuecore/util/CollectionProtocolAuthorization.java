@@ -25,11 +25,13 @@ import edu.wustl.common.beans.SecurityDataBean;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.security.PrivilegeManager;
+import edu.wustl.common.security.PrivilegeUtility;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.util.Roles;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
+import gov.nih.nci.security.authorization.domainobjects.Role;
 import gov.nih.nci.security.exceptions.CSException;
 
 /**
@@ -145,6 +147,8 @@ public class CollectionProtocolAuthorization implements edu.wustl.catissuecore.u
 				{
 					privileges.add(privilege.getValue());
 				}
+				
+				Utility.processRole(roleName);
 				
 				PrivilegeManager.getInstance().createRole(roleName,
 						privileges);

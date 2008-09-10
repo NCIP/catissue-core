@@ -99,6 +99,7 @@ import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 import gov.nih.nci.security.authorization.domainobjects.Group;
 import gov.nih.nci.security.authorization.domainobjects.ProtectionGroup;
+import gov.nih.nci.security.authorization.domainobjects.Role;
 import gov.nih.nci.security.dao.GroupSearchCriteria;
 import gov.nih.nci.security.dao.ProtectionGroupSearchCriteria;
 import gov.nih.nci.security.exceptions.CSException;
@@ -1840,7 +1841,7 @@ public class Utility extends edu.wustl.common.util.Utility {
 		
 		List<Group> grpList = new ArrayList<Group>();
 		List<ProtectionGroup> pgList = new ArrayList<ProtectionGroup>();
-		
+			
 		if(bean.getCollectionProtocol()!=null)
 		{
 			groupName = Constants.getCPUserGroupName(cp.getId(), user.getCsmUserId());
@@ -2069,5 +2070,32 @@ public class Utility extends edu.wustl.common.util.Utility {
 		request.setAttribute(Constants.PROTOCOL_LIST, cpList);
 		request.setAttribute(Constants.CP_ID_TITLE_MAP, cpTitleMap);
 		return request;
+	}
+	
+	/**
+	 * This method is used to process Roles in case Custom role is added / edited
+	 * On User and CP page
+	 * @param roleName Role name
+	 */
+	public static void processRole(String roleName)
+	{
+		if(roleName.startsWith("0"))
+		{
+			PrivilegeUtility privilegeUtility = new PrivilegeUtility();
+			Role role=null;
+			try
+			{
+				role = privilegeUtility.getRole(roleName);
+			
+				if(role!= null && role.getId()!=null)
+				{
+					privilegeUtility.getUserProvisioningManager().removeRole(role.getId().toString());
+				}
+			}
+			catch(Exception e)
+			{
+				Logger.out.debug(e.getMessage(), e);
+			}
+		}
 	}
 }
