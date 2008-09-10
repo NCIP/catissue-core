@@ -7,7 +7,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
@@ -17,15 +16,10 @@ import edu.common.dynamicextensions.domaininterface.AttributeInterface;
  * @author deepti_shelar
  *
  */
-public class DeletePermissibleValueAttribute 
+public class DeletePermissibleValueAttribute extends DeleteBaseMetadata
 {
 	private Connection connection = null;
 	private Statement stmt = null;
-	private HashMap<Long, List<AttributeInterface>> entityIDAttributeListMap = new HashMap<Long, List<AttributeInterface>>();
-	private HashMap<String, List<String>> entityAttributesToDelete = new HashMap<String, List<String>>();
-	private HashMap<String, String> attributeDatatypeMap = new HashMap<String, String>();
-	private List<String> entityNameList = new ArrayList<String>();
-	private Map<String, Long> entityIDMap = new HashMap<String, Long>();
 
 	public List<String> deletePermissibleValue() throws SQLException
 	{
@@ -217,7 +211,6 @@ public class DeletePermissibleValueAttribute
 	
 	public DeletePermissibleValueAttribute(Connection connection) throws SQLException
 	{
-		super();
 		this.connection = connection;
 		this.stmt = connection.createStatement();
 	}

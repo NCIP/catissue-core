@@ -116,8 +116,16 @@ public class AddAssociations
 			+ ",'"+associationType+"',"+maxCardinality+",0,'"+roleName+"')";
 			UpdateMetadataUtil.executeInsertSQL(sql, connection.createStatement());
 
-			sql = "insert into dyextn_role values (" + roleId
-			+ ",'ASSOCIATION',1,0,'"+roleNameTable+"')";
+			if(isSystemGenerated == 0)
+			{
+				sql = "insert into dyextn_role values (" + roleId
+				+ ",'ASSOCIATION',2,0,'"+roleNameTable+"')";
+			}
+			else
+			{
+				sql = "insert into dyextn_role values (" + roleId
+				+ ",'ASSOCIATION',1,0,'"+roleNameTable+"')";
+			}
 			UpdateMetadataUtil.executeInsertSQL(sql, connection.createStatement());
 		}
 
@@ -131,9 +139,18 @@ public class AddAssociations
 		} 
 		else 
 		{
-			sql = "insert into dyextn_association values ("
-				+ nextIdOfAbstractMetadata + ",'"+direction+"',"
-				+ associatedEntityId + "," + roleId + "," + nextIdOfDERole + ",1)";
+			if(isSystemGenerated == 0)
+			{
+				sql = "insert into dyextn_association values ("
+					+ nextIdOfAbstractMetadata + ",'"+direction+"',"
+					+ associatedEntityId + "," + roleId + "," + nextIdOfDERole + ",0)";
+			}
+			else
+			{
+				sql = "insert into dyextn_association values ("
+					+ nextIdOfAbstractMetadata + ",'"+direction+"',"
+					+ associatedEntityId + "," + roleId + "," + nextIdOfDERole + ",1)";
+			}
 		}
 		UpdateMetadataUtil.executeInsertSQL(sql, connection.createStatement());
 		sql = "insert into dyextn_database_properties values ("

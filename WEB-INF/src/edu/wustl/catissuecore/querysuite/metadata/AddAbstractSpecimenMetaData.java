@@ -5,18 +5,12 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
-public class AddAbstractSpecimenMetaData 
+public class AddAbstractSpecimenMetaData extends BaseMetadata
 {
 	private Connection connection = null;
 	private Statement stmt = null;
-	private static HashMap<String, List<String>> entityNameAttributeNameMap = new HashMap<String, List<String>>();
-	private static HashMap<String, String> attributeColumnNameMap = new HashMap<String, String>();
-	private static HashMap<String, String> attributeDatatypeMap = new HashMap<String, String>();
-	private static HashMap<String, String> attributePrimarkeyMap = new HashMap<String, String>();
-	private static List<String> entityList = new ArrayList<String>();
 	
 	public void addAbstractPositionMetaData() throws SQLException, IOException
 	{
@@ -67,7 +61,6 @@ public class AddAbstractSpecimenMetaData
 		}
 		public AddAbstractSpecimenMetaData(Connection connection) throws SQLException
 		{
-			super();
 			this.connection = connection;
 			this.stmt = connection.createStatement();
 		}

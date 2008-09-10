@@ -11,15 +11,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-public class AddAttribute 
+public class AddAttribute extends BaseMetadata
 {
 	private Connection connection = null;
 	private Statement stmt = null;
-	private HashMap<String, List<String>> entityNameAttributeNameMap = new HashMap<String, List<String>>();
-	private HashMap<String, String> attributeColumnNameMap = new HashMap<String, String>();
-	private HashMap<String, String> attributeDatatypeMap = new HashMap<String, String>();
-	private HashMap<String, String> attributePrimarkeyMap = new HashMap<String, String>();
-	private List<String> entityList = new ArrayList<String>();
 	
 	public void addAttribute() throws SQLException, IOException
 	{
@@ -202,7 +197,6 @@ public class AddAttribute
 
 	public AddAttribute(Connection connection) throws SQLException
 	{
-		super();
 		this.connection = connection;
 		this.stmt = connection.createStatement();
 			
@@ -220,7 +214,6 @@ public class AddAttribute
 			HashMap<String, String> attributePrimarkeyMap,
 			List<String> entityList) 
 	{
-		super();
 		this.connection = connection;
 		this.entityNameAttributeNameMap = entityNameAttributeNameMap;
 		this.attributeColumnNameMap = attributeColumnNameMap;

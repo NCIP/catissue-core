@@ -2,7 +2,6 @@ package edu.wustl.catissuecore.querysuite.metadata;
 
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -15,7 +14,7 @@ import java.util.Set;
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 
 
-public class AddPermissibleValue 
+public class AddPermissibleValue
 {
 	private Connection connection = null;
 	private HashMap<Long, List<AttributeInterface>> entityIDAttributeListMap = new HashMap<Long, List<AttributeInterface>>();

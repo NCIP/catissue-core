@@ -5,22 +5,16 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 /**
  * 
  * @author deepti_shelar
  * Class to add metadata for Race and participant
  */
-public class AddRaceMetadata 
+public class AddRaceMetadata extends BaseMetadata
 {
 	private Connection connection = null;
 	private Statement stmt = null;
-	private HashMap<String, List<String>> entityNameAttributeNameMap = new HashMap<String, List<String>>();
-	private HashMap<String, String> attributeColumnNameMap = new HashMap<String, String>();
-	private HashMap<String, String> attributeDatatypeMap = new HashMap<String, String>();
-	private HashMap<String, String> attributePrimarkeyMap = new HashMap<String, String>();
-	private List<String> entityList = new ArrayList<String>();
 	
 	public void addRaceMetadata() throws SQLException, IOException
 	{
@@ -76,7 +70,6 @@ public class AddRaceMetadata
 
 	public AddRaceMetadata(Connection connection) throws SQLException
 	{
-		super();
 		this.connection = connection;
 		this.stmt = connection.createStatement();
 	}

@@ -148,7 +148,6 @@ public class UpdateMetadata
 			url = "jdbc:oracle:thin:@" + DATABASE_SERVER_NAME + ":" + DATABASE_SERVER_PORT_NUMBER
 					+ ":" + DATABASE_NAME;
 		}
-		//System.out.println("URL : " + url);
 		connection = DriverManager.getConnection(url, DATABASE_USERNAME, DATABASE_PASSWORD);
 		return connection;
 	}
@@ -251,8 +250,6 @@ public class UpdateMetadata
 		deleteEntitySQL = deleteEntity.deleteEntity();
 		UpdateMetadataUtil.executeSQLs(deleteEntitySQL, connection.createStatement(), true);
 		/**  delete entity statements  end **/	
-		
-		
 	}
 
 	private static void addMetadata() throws SQLException, IOException
@@ -265,15 +262,6 @@ public class UpdateMetadata
 		AddAbstractPositionMetadata addAbstractPositionMetaData = new AddAbstractPositionMetadata(connection);
 		addAbstractPositionMetaData.addContainerMetadata();
 		
-		AddContainerPositionMetaData addContainerPositionMetaData = new AddContainerPositionMetaData(connection);
-		addContainerPositionMetaData.addContainerPositionMetaData();
-		
-		AddSpecimenPositionMetaData addSpecimenPositionMetaData=new AddSpecimenPositionMetaData(connection);
-		addSpecimenPositionMetaData.addSpecimenPositionMetaData();
-		
-		AddAssociation addAssociation = new AddAssociation(connection);
-		addAssociation.addAssociation();
-		
 		AddAbstractSpecimenMetaData addAbstractSpecimenMetaData = new AddAbstractSpecimenMetaData(connection);
 		addAbstractSpecimenMetaData.addAbstractPositionMetaData();
 		
@@ -283,12 +271,17 @@ public class UpdateMetadata
 		AddSpecimenClassAttributeMetadata addSpecimenClassAttributeMetadata = new AddSpecimenClassAttributeMetadata(connection);
 		addSpecimenClassAttributeMetadata.addSpecimenClass();
 		
-		AddRequirementSpecimenSubClassesMetaData addRequirementSpecimenSubClassesMetaData = new AddRequirementSpecimenSubClassesMetaData(connection);
-		addRequirementSpecimenSubClassesMetaData.addSpecimenMetadata();
+		AddSAndTMetadata addSAndTMetadata = new AddSAndTMetadata(connection);
+		addSAndTMetadata.addSAndTMetadata();
+		
+		AddSubClassesMetaData addSubClassesMetaData = new AddSubClassesMetaData(connection);
+		addSubClassesMetaData.addSubClassesMetadata();
+		
+		AddAssociation addAssociation = new AddAssociation(connection);
+		addAssociation.addAssociation();
 		
 		AddAttribute addAttribute = new AddAttribute(connection);
 		addAttribute.addAttribute();	
-		
 	}
 
 	private static List<String> getUpdateSQL() throws SQLException, IOException

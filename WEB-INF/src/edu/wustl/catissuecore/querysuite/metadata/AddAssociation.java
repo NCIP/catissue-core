@@ -40,6 +40,25 @@ public class AddAssociation
 	    entityName = "edu.wustl.catissuecore.domain.OrderItem";
 	    targetEntityName = "edu.wustl.catissuecore.domain.DistributedItem";
 	    addAssociations.addAssociation(entityName,targetEntityName,"CATISSUE_ORDER_ITEM","ASSOCIATION","edu.wustl.catissuecore.domain.OrderItem",true,"distributedItem",null,"DISTRIBUTED_ITEM_ID",1,1,"SRC_DESTINATION");
+	    
+	    entityName = "edu.wustl.catissuecore.domain.Container";
+		targetEntityName = "edu.wustl.catissuecore.domain.ContainerPosition";
+		addAssociations.addAssociation(entityName,targetEntityName,"container_containerPosition","CONTAINTMENT","occupiedPositions",true,"occupiedContainer","PARENT_CONTAINER_ID",null,2,1,"BI_DIRECTIONAL");
+		addAssociations.addAssociation(targetEntityName,entityName,"containerPosition_container","ASSOCIATION","occupiedContainer",false,"","PARENT_CONTAINER_ID",null,2,1,"BI_DIRECTIONAL");
+		
+		entityName = "edu.wustl.catissuecore.domain.StorageContainer";
+		targetEntityName = "edu.wustl.catissuecore.domain.SpecimenPosition";
+		addAssociations.addAssociation(entityName,targetEntityName,"storageContainer_specimenPosition","CONTAINTMENT","specimenPositionCollection",true,"storageContainer","CONTAINER_ID",null,2,1,"BI_DIRECTIONAL");
+		addAssociations.addAssociation(targetEntityName,entityName,"specimenPosition_storageContainer","ASSOCIATION","storageContainer",false,"","CONTAINER_ID",null,2,1,"BI_DIRECTIONAL");
+	    
+	    entityName = "edu.wustl.catissuecore.domain.shippingtracking.Shipment";
+	    targetEntityName = "edu.wustl.catissuecore.domain.shippingtracking.ShipmentRequest";
+	    addAssociations.addAssociation(entityName,targetEntityName,"CATISSUE_SHIPMENT","ASSOCIATION","edu.wustl.catissuecore.domain.shippingtracking.Shipment",true,"shipmentRequest",null,"SHIPMENT_REQUEST_ID",1,1,"SRC_DESTINATION");
+	    
+	    entityName = "edu.wustl.catissuecore.domain.shippingtracking.ShipmentRequest";
+	    targetEntityName = "edu.wustl.catissuecore.domain.Specimen";
+	    addAssociations.addAssociation(entityName,targetEntityName,"CATISSUE_SPECI_SHIPMNT_REQ_REL","ASSOCIATION","edu.wustl.catissuecore.domain.shippingtracking.ShipmentRequest",true,"specimenCollection","SPECIMEN_ID","SHIPMENT_REQ_ID",2,0,"SRC_DESTINATION");
+	    
 	}
 
 	public AddAssociation(Connection connection) throws SQLException

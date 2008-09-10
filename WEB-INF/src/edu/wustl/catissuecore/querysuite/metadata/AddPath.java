@@ -15,6 +15,7 @@ public class AddPath
 {
 	static Map <String,List<String>> superClassAndSubClassesMap = new HashMap<String, List<String>>();
 	static Map <String,List<String>> superClassAndAssociationsMap = new HashMap<String, List<String>>();
+	static Map <String, List<String>> eventParametersSubClassesMap = new HashMap<String, List<String>>();
 	int identifier=0;
 	
 	 public static void initData()
@@ -77,6 +78,7 @@ public class AddPath
 	    subClassesList.add("edu.wustl.catissuecore.domain.MolecularSpecimenReviewParameters");
 	    subClassesList.add("edu.wustl.catissuecore.domain.DisposalEventParameters");
 	    superClassAndSubClassesMap.put("edu.wustl.catissuecore.domain.SpecimenEventParameters", subClassesList);
+	    eventParametersSubClassesMap.put("edu.wustl.catissuecore.domain.SpecimenEventParameters", subClassesList);
 	    
 	    associationsList = new ArrayList<String>();
 	    associationsList.add("edu.wustl.catissuecore.domain.AbstractSpecimen");
@@ -97,33 +99,25 @@ public class AddPath
 	    associationsList.add("edu.wustl.catissuecore.domain.DistributedItem");
 	    superClassAndAssociationsMap.put("edu.wustl.catissuecore.domain.OrderItem", associationsList);
 	    
+	    subClassesList = new ArrayList<String>();
+	    subClassesList.add("edu.wustl.catissuecore.domain.shippingtracking.ShipmentRequest");
+	    subClassesList.add("edu.wustl.catissuecore.domain.shippingtracking.Shipment");
+	    superClassAndSubClassesMap.put("edu.wustl.catissuecore.domain.shippingtracking.BaseShipment", subClassesList);
+	    
+	    associationsList = new ArrayList<String>();
+	    associationsList.add("edu.wustl.catissuecore.domain.User");
+	    associationsList.add("edu.wustl.catissuecore.domain.Site");
+	    associationsList.add("edu.wustl.catissuecore.domain.StorageContainer");
+	    superClassAndAssociationsMap.put("edu.wustl.catissuecore.domain.shippingtracking.BaseShipment", associationsList);
+	    
 	 }
 	 
 	 public List<String> getInsertPathStatements(Statement stmt, Connection connection,boolean flag)throws SQLException
 	 {
 		 if(flag == false)
 		 {
-			 superClassAndSubClassesMap = new HashMap<String, List<String>>();
+			 superClassAndSubClassesMap = new HashMap<String, List<String>>(eventParametersSubClassesMap);
 			 superClassAndAssociationsMap = new HashMap<String, List<String>>();
-			 
-			 List<String> subClassesList = new ArrayList<String>();
-			 subClassesList.add("edu.wustl.catissuecore.domain.CollectionEventParameters");
-			 subClassesList.add("edu.wustl.catissuecore.domain.FrozenEventParameters");
-			 subClassesList.add("edu.wustl.catissuecore.domain.FixedEventParameters");
-			 subClassesList.add("edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter");
-			 subClassesList.add("edu.wustl.catissuecore.domain.ProcedureEventParameters");
-			 subClassesList.add("edu.wustl.catissuecore.domain.SpunEventParameters");
-			 subClassesList.add("edu.wustl.catissuecore.domain.TransferEventParameters");
-			 subClassesList.add("edu.wustl.catissuecore.domain.ReceivedEventParameters");
-			 subClassesList.add("edu.wustl.catissuecore.domain.EmbeddedEventParameters");
-			 subClassesList.add("edu.wustl.catissuecore.domain.ThawEventParameters");
-			 subClassesList.add("edu.wustl.catissuecore.domain.ReviewEventParameters");
-			 subClassesList.add("edu.wustl.catissuecore.domain.CellSpecimenReviewParameters");
-			 subClassesList.add("edu.wustl.catissuecore.domain.TissueSpecimenReviewEventParameters");
-			 subClassesList.add("edu.wustl.catissuecore.domain.FluidSpecimenReviewEventParameters");
-			 subClassesList.add("edu.wustl.catissuecore.domain.MolecularSpecimenReviewParameters");
-			 subClassesList.add("edu.wustl.catissuecore.domain.DisposalEventParameters");
-			 superClassAndSubClassesMap.put("edu.wustl.catissuecore.domain.SpecimenEventParameters", subClassesList);
 			    
 			 List<String> associationsList = new ArrayList<String>();
 			 associationsList.add("edu.wustl.catissuecore.domain.Specimen");
@@ -142,7 +136,6 @@ public class AddPath
 		 {
 		 	identifier = rs.getInt(1)+1;
 		 }
-		 //stmt.close();
 		 String sql;
 		 String entityId=null;
 		 String associatedEntityId = null;

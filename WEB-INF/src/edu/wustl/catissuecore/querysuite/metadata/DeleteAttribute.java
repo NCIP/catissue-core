@@ -7,7 +7,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
@@ -17,15 +16,10 @@ import edu.common.dynamicextensions.domaininterface.AttributeInterface;
  * @author deepti_shelar
  *
  */
-public class DeleteAttribute 
+public class DeleteAttribute extends DeleteBaseMetadata
 {
 	private Connection connection = null;
 	private Statement stmt = null;
-	private HashMap<Long, List<AttributeInterface>> entityIDAttributeListMap = new HashMap<Long, List<AttributeInterface>>();
-	private HashMap<String, List<String>> entityAttributesToDelete = new HashMap<String, List<String>>();
-	private HashMap<String, String> attributeDatatypeMap = new HashMap<String, String>();
-	private List<String> entityNameList = new ArrayList<String>();
-	private Map<String, Long> entityIDMap = new HashMap<String, Long>();
 
 	public List<String> deleteAttribute() throws SQLException
 	{
@@ -60,7 +54,6 @@ public class DeleteAttribute
 
 	private List<String> deleteAttribute(Long identifier, AttributeInterface attribute) throws SQLException
 	{
-		//System.out.println("/*----- SQL Statements to delete Attribute: "+attribute.getName()+" -------*/");
 		List<String> deleteSQL = new ArrayList<String>();
 		String sql;
 		sql = "delete from dyextn_column_properties where identifier = "+attribute.getColumnProperties().getId();
@@ -122,15 +115,16 @@ public class DeleteAttribute
 
 	private boolean isAttributeToDelete(String entityName, String name)
 	{
+		boolean isDelete = false;
 		List<String> attributesTodeleteList = entityAttributesToDelete.get(entityName);
 		for(String attributeName  : attributesTodeleteList)
 		{
 			if(attributeName.equals(name))
 			{
-				return true;
+				isDelete = true;
 			}
 		}
-		return false;
+		return isDelete;
 	}
 
 	private String getDataTypeOfAttribute(String attr) 
@@ -212,7 +206,6 @@ public class DeleteAttribute
 
 	public DeleteAttribute(Connection connection) throws SQLException
 	{
-		super();
 		this.connection = connection;
 		this.stmt = connection.createStatement();
 	}
