@@ -91,8 +91,10 @@ public class SpecimenCollectionGroupAction extends SecureAction
 		//changes made by Baljeet
 		String treeRefresh = request.getParameter("refresh");
 		request.setAttribute("refresh", treeRefresh);
-		
+		String test = (String)request.getParameter("clinicalDiagnosis");
 		SpecimenCollectionGroupForm specimenCollectionGroupForm = (SpecimenCollectionGroupForm) form;
+		request.setAttribute("clinicalDiagnosis", specimenCollectionGroupForm.getClinicalDiagnosis());
+		specimenCollectionGroupForm.setClinicalDiagnosis(test);
 		IBizLogic bizLogicObj = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 		Logger.out.debug("SCGA : " + specimenCollectionGroupForm.getId());
 		String nodeId = null;
@@ -315,12 +317,13 @@ public class SpecimenCollectionGroupAction extends SecureAction
 		}
 
 		// populating clinical Diagnosis field 
-		CDE cde = CDEManager.getCDEManager().getCDE(Constants.CDE_NAME_CLINICAL_DIAGNOSIS);
-		CDEBizLogic cdeBizLogic = (CDEBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.CDE_FORM_ID);
-		List clinicalDiagnosisList = new ArrayList();
-		clinicalDiagnosisList.add(new NameValueBean(Constants.SELECT_OPTION, "" + Constants.SELECT_OPTION_VALUE));
-		cdeBizLogic.getFilteredCDE(cde.getPermissibleValues(), clinicalDiagnosisList);
-		request.setAttribute(Constants.CLINICAL_DIAGNOSIS_LIST, clinicalDiagnosisList);
+//		CDE cde = CDEManager.getCDEManager().getCDE(Constants.CDE_NAME_CLINICAL_DIAGNOSIS);
+//		CDEBizLogic cdeBizLogic = (CDEBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.CDE_FORM_ID);
+//		List clinicalDiagnosisList = new ArrayList();
+//		clinicalDiagnosisList.add(new NameValueBean(Constants.SELECT_OPTION, "" + Constants.SELECT_OPTION_VALUE));
+//		cdeBizLogic.getFilteredCDE(cde.getPermissibleValues(), clinicalDiagnosisList);
+//		request.setAttribute(Constants.CLINICAL_DIAGNOSIS_LIST, clinicalDiagnosisList);
+		//request.getSession().setAttribute(Constants.CLINICAL_DIAGNOSIS_LIST, clinicalDiagnosisList);
 
 		// populating clinical Status field
 		//		NameValueBean undefinedVal = new NameValueBean(Constants.UNDEFINED,Constants.UNDEFINED);
