@@ -398,44 +398,30 @@ function insRow(subdivtag)
 
 function validate(action,formField)
 {
-	/*if(document.forms[0].checkedButton[1].checked==true)
-	{
-		if(document.forms[0].customListBox_1_0.value == -1 || document.forms[0].customListBox_1_1.value == -1 || document.forms[0].customListBox_1_2.value == -1)
-		{
-			alert("Please enter valid Parent Container");
-			return false;
-		}
-	}*/
 	
-	if(validateAny(document.forms[0].collectionIds)==false)
+	if(validateAny(document.forms[0].holdsStorageTypeIds)==false)
 	{
-		alert("Please select valid Collection Protocols");
+		alert("Selecting All and Other Container Type is not allowed");
 	}
 	else
-	{
-		if(validateAny(document.forms[0].holdsStorageTypeIds)==false)
+	{	
+		if(validateAny(document.forms[0].holdsSpecimenClassTypes)==false)
 		{
-			alert("Selecting All and Other Container Type is not allowed");
+			alert("Selecting All and Other Specimen Class is not allowed");
 		}
 		else
-		{	
-			if(validateAny(document.forms[0].holdsSpecimenClassTypes)==false)
-			{
-				alert("Selecting All and Other Specimen Class is not allowed");
+		{
+			if(validateAny(document.forms[0].holdsSpecimenArrTypeIds)==false)
+			{	
+				alert("Selecting All and Other Specimen Array Type is not allowed");
 			}
 			else
-			{
-				if(validateAny(document.forms[0].holdsSpecimenArrTypeIds)==false)
-				{	
-					alert("Selecting All and Other Specimen Array Type is not allowed");
-				}
-				else
-				{	
-					checkNoOfContainers(action,formField);
-				}
+			{	
+				checkNoOfContainers(action,formField);
 			}
 		}
-	}	
+	}
+		
 }
 
 function onRadioButtonClickOfSpecimen(element)
