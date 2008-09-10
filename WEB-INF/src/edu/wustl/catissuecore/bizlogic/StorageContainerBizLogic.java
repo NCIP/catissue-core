@@ -22,9 +22,10 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.Vector;
 
+import net.sf.ehcache.CacheException;
+
 import org.hibernate.Session;
 
-import net.sf.ehcache.CacheException;
 import edu.wustl.catissuecore.domain.Capacity;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Container;
@@ -4284,5 +4285,133 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
     {
     	return Constants.ADD_EDIT_STORAGE_CONTAINER;
     }
+	
+	/**Gives the Site Object related to given container
+	 * @param containerId
+	 * @return Site
+	 */
+	public Site getRelatedSite(Long containerId)
+	{
+		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+		StorageContainer storageContainer = null;
+		try 
+		{
+			dao.openSession(null);
+			storageContainer = (StorageContainer) dao.retrieve(StorageContainer.class.getName(), containerId);		
+		} 
+		catch (DAOException e) 
+		{
+			Logger.out.debug(e.getMessage(), e);
+		}
+		finally
+		{
+			try
+			{
+				dao.closeSession();
+			}
+			catch (DAOException e)
+			{
+				Logger.out.error(e.getMessage(), e);
+			}
+		}
+		Site site = null;
+		if(storageContainer!=null)
+		{
+			site = storageContainer.getSite();
+		}
+		return site;
+	}
+	
+	/**
+	 * Gives the Site Object related to given container whose name is given.
+	 * @param containerName
+	 * @return Site
+	 */
+	public Site getRelatedSiteForManual(String containerName)
+	{
+		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+		StorageContainer storageContainer = null;
+		String[] strArray = {containerName};
+		List contList = null;
+		
+		try 
+		{
+			dao.openSession(null);
+			if(strArray!=null)
+			{
+				contList = dao.retrieve(StorageContainer.class.getName(),Constants.NAME,containerName);
+			}
+			if(contList!=null && !contList.isEmpty())
+			{
+				storageContainer =(StorageContainer)contList.get(0);
+			}
+		} 
+		catch (DAOException e) 
+		{
+			Logger.out.debug(e.getMessage(), e);
+		}
+		finally
+		{
+			try
+			{
+				dao.closeSession();
+			}
+			catch (DAOException e)
+			{
+				Logger.out.error(e.getMessage(), e);
+			}
+		}
+		Site site = null;
+		if(storageContainer != null)
+		{
+			site = storageContainer.getSite();
+		}
+		return site;
+	}
+	
+/**
+ * Gives List of NameValueBean of CP for given cpIds array.
+ * @param cpIds
+ * @return NameValueBean
+ */
+	public List<NameValueBean> getCPNameValueList(long[] cpIds)
+	{
+		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+		List<NameValueBean> cpNameValueList = new ArrayList<NameValueBean>();
+		
+		NameValueBean cpNameValueBean;
+		for(long cpId:cpIds)
+		{
+			if(cpId!=-1)
+			{
+			CollectionProtocol cp = new CollectionProtocol();
+			try 
+			{
+				dao.openSession(null);
+				cp = (CollectionProtocol) dao.retrieve(CollectionProtocol.class.getName(), cpId);		
+			} 
+			catch (DAOException e) 
+			{
+				Logger.out.debug(e.getMessage(), e);
+			}
+			finally
+			{
+				try
+				{
+					dao.closeSession();
+				}
+				catch (DAOException e)
+				{
+					Logger.out.error(e.getMessage(), e);
+				}
+			}
+			String cpShortTitle = cp.getShortTitle();
+			cpNameValueBean = new NameValueBean(cpShortTitle,cpId);
+			cpNameValueList.add(cpNameValueBean);
+			}
+		}
+		
+		return cpNameValueList;
+	}
 	
 }
