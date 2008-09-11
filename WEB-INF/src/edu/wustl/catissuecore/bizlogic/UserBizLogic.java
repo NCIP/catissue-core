@@ -1468,7 +1468,7 @@ public class UserBizLogic extends DefaultBizLogic
 		{
 			//Check new password is equal to last n password if value
 			String encryptedPassword = PasswordManager.encrypt(newPassword);
-			if (checkPwdNotSameAsLastN(newPassword, oldPwdList))
+			if (checkPwdNotSameAsLastN(encryptedPassword, oldPwdList))
 			{
 				Logger.out.debug("Password is not valid returning FAIL_SAME_AS_LAST_N");
 				return FAIL_SAME_AS_LAST_N;
@@ -1574,7 +1574,7 @@ public class UserBizLogic extends DefaultBizLogic
 			noOfPwdNotSameAsLastN = Math.max(0, noOfPwdNotSameAsLastN);
 		}
 
-		boolean isSameFound = false;
+		boolean isSameFound = false; 
 		int loopCount = Math.min(oldPwdList.size(), noOfPwdNotSameAsLastN);
 		for (int i = 0; i < loopCount; i++)
 		{
@@ -1594,7 +1594,7 @@ public class UserBizLogic extends DefaultBizLogic
 		//Get difference in days between last password update date and current date.
 		long dayDiff = validator.getDateDiff(lastUpdateDate, new Date());
 		int dayDiffConstant = Integer.parseInt(XMLPropertyHandler.getValue("daysCount"));
-		if (dayDiff <= dayDiffConstant)
+		if (dayDiff < dayDiffConstant)
 		{
 			Logger.out.debug("Password is not valid returning FAIL_CHANGED_WITHIN_SOME_DAY");
 			return true;
@@ -1612,7 +1612,7 @@ public class UserBizLogic extends DefaultBizLogic
 		switch (errorCode)
 		{
 			case FAIL_SAME_AS_LAST_N :
-				List parameters = new ArrayList();
+				List<String> parameters = new ArrayList<String>();
 				String dayCount = "" + Integer.parseInt(XMLPropertyHandler.getValue("password.not_same_as_last_n"));
 				parameters.add(dayCount);				
 				errMsg = ApplicationProperties.getValue("errors.newPassword.sameAsLastn",parameters);
@@ -1624,7 +1624,13 @@ public class UserBizLogic extends DefaultBizLogic
 				errMsg = ApplicationProperties.getValue("errors.changePassword.expire");
 				break;
 			case FAIL_CHANGED_WITHIN_SOME_DAY :
-				errMsg = ApplicationProperties.getValue("errors.changePassword.afterSomeDays");
+				parameters = new ArrayList<String>();
+				Integer daysCount = Integer.parseInt(XMLPropertyHandler.getValue("daysCount"));
+				parameters.add(daysCount.toString());
+				if(daysCount.intValue() == 1)
+					errMsg = ApplicationProperties.getValue("errors.changePassword.sameDay");
+				else
+					errMsg = ApplicationProperties.getValue("errors.changePassword.afterSomeDays",parameters);
 				break;
 			case FAIL_SAME_NAME_SURNAME_EMAIL :
 				errMsg = ApplicationProperties.getValue("errors.changePassword.sameAsNameSurnameEmail");
