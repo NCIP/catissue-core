@@ -50,10 +50,18 @@ function setTextBoxValue(elementId,elementValue)
 
 function closeFramedWindow()
 {
+	var eventFlag = parent.opener.document.getElementById('eventOnSelectedContainerNameObj');
+	if(eventFlag!=null||eventFlag!=undefined)
+	{
+		var parentContainerObj = parent.opener.document.getElementById('selectedContainerName');
+		if(parentContainerObj!=null)
+		{
+			parentContainerObj.onchange();
+		}
+	
+	}
 	top.window.close();
 }
-
-
 function refresh_tree(nodeId)
 {	
 	window.parent.<%=Constants.APPLET_VIEW_FRAME%>.location="<%=Constants.TREE_NODE_DATA_ACTION%>?<%=Constants.PAGEOF%>=<%=pageOf%>&<%=Constants.RELOAD%>=true&<%=Constants.TREE_NODE_ID%>="+nodeId;
@@ -169,8 +177,6 @@ function refresh_tree(nodeId)
               </table>
 			 </td>
           </tr>
-	
-	
 	<tr>
 	 <td width="5" valign="bottom">&nbsp;</td>
 		<td class="cp_tabtable" width="100%">
