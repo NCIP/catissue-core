@@ -3,7 +3,6 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp"%>
 
-
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
@@ -420,22 +419,24 @@ function handleStatus(status)
 									<td width="17%" align="left" class="black_ar"><bean:message
 										key="assignPrivileges.site(s)" /></td>
 									<td rowspan="3" width="19%" align="left" class="black_ar">
-									<logic:equal name="true" value='${requestScope.flagForSARole}'>
+								
+									<c:if test='${requestScope.flagForSARole==true}'>
 										<html:select property="siteIds" styleId="siteIds" size="4"
 											styleClass="formFieldSizedNew" multiple="multiple"
 											onchange="getCPsForThisSites(this)" disabled="true">
 											<html:options collection="siteList" labelProperty="name"
 												property="value" />
 										</html:select>
-									</logic:equal> <logic:notEqual name="true"
-										value='${requestScope.flagForSARole}'>
+									</c:if>
+									<c:if test='${requestScope.flagForSARole!=true}'>
 										<html:select property="siteIds" styleId="siteIds" size="4"
 											styleClass="formFieldSizedNew" multiple="multiple"
 											onchange="getCPsForThisSites(this)">
 											<html:options collection="siteList" labelProperty="name"
 												property="value" />
 										</html:select>
-									</logic:notEqual></td>
+									</c:if>
+									</td>
 									<td width="13%" align="left" valign="top" class="black_ar_t">&nbsp;</td>
 								</tr>
 								<tr><td colspan="4" rowspan="2">&nbsp;</td></tr>
@@ -497,17 +498,15 @@ function handleStatus(status)
 									<td width="17%" align="left" class="black_ar"><bean:message
 										key="assignPrivileges.privilege(s)" /></td>
 									<td rowspan="2" width="19%" align="center" class="black_ar_t"
-										valign="top"><logic:equal name="true"
-										value='${requestScope.flagForSARole}'>
+										valign="top"><c:if test='${requestScope.flagForSARole==true}'>
 
 										<select class="formFieldSizedNew" id="actionIds" size="5"
 											onchange="getCustomRole('roleIds',this)" multiple="multiple"
 											disabled="true">
-									</logic:equal> <logic:notEqual name="true"
-										value='${requestScope.flagForSARole}'>
+									</c:if> <c:if test='${requestScope.flagForSARole!=true}'>
 										<select class="formFieldSizedNew" id="actionIds" size="4"
 											onchange="getCustomRole('roleIds',this)" multiple="multiple">
-									</logic:notEqual> <%
+									</c:if> <%
 											String actionName = "";
 											String actionValue = "";
 											if ((actionList != null) && !(actionList.isEmpty())) {
