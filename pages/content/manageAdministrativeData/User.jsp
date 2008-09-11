@@ -3,6 +3,7 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp"%>
 
+
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
@@ -394,9 +395,26 @@ function handleStatus(status)
 								</html:link>
 							</logic:notEqual></a></td>
 						</tr>
-						<logic:notEqual name="pageOf" value='${requestScope.pageOfSignUp}'>
-							<logic:notEqual name="pageOf"
-								value='${requestScope.pageOfUserProfile}'>
+						
+					</table>
+					</td>
+				</tr>
+				<logic:notEqual name="pageOf" value='${requestScope.pageOfSignUp}'>
+						<tr>
+							<td colspan="2" class="bottomtd"></td>
+						</tr>
+						<tr>
+							<td colspan="2" align="left" class="tr_bg_blue1"><span
+								class="blue_ar_b">&nbsp;<bean:message
+								key="assignPrivileges.privilegeDetails" /></span></td>
+							<td colspan="1" align="right" class="tr_bg_blue1">&nbsp;</td>
+						</tr>
+					<tr>
+						<td colspan="2">
+						<logic:notEqual name="pageOf"
+							value='${requestScope.pageOfUserProfile}'>
+						<!--	<div id="privilegesDiv" style="display:none">  -->
+							<table width="100%" border="0" cellpadding="3" cellspacing="0">
 								<tr>
 									<td width="1%" align="center" class="black_ar"><span
 										class="blue_ar_b"><img
@@ -418,7 +436,7 @@ function handleStatus(status)
 										width="6" height="6" hspace="0" vspace="0" /></span></td>
 									<td width="17%" align="left" class="black_ar"><bean:message
 										key="assignPrivileges.site(s)" /></td>
-									<td rowspan="3" width="19%" align="left" class="black_ar">
+									<td rowspan="2" width="19%" align="left" class="black_ar">
 								
 									<c:if test='${requestScope.flagForSARole==true}'>
 										<html:select property="siteIds" styleId="siteIds" size="4"
@@ -439,46 +457,7 @@ function handleStatus(status)
 									</td>
 									<td width="13%" align="left" valign="top" class="black_ar_t">&nbsp;</td>
 								</tr>
-								<tr><td colspan="4" rowspan="2">&nbsp;</td></tr>
-							</logic:notEqual>
-						</logic:notEqual>
-
-					</table>
-					</td>
-				</tr>
-				<logic:notEqual name="pageOf" value='${requestScope.pageOfSignUp}'>
-					<logic:notEqual name="pageOf"
-						value='${requestScope.pageOfUserProfile}'>
-						<tr onclick="showHide('privilegesDiv')">
-							<td colspan="1" align="left" class="tr_bg_blue1"><span
-								class="blue_ar_b">&nbsp;<bean:message
-								key="assignPrivileges.privilegeDetails" /></span></td>
-							<td colspan="1" align="right" class="tr_bg_blue1"><a
-								href="#" id="imgArrow_privilegesDiv"><img
-								src="images/uIEnhancementImages/dwn_arrow1.gif"
-								alt="Show Details" width="80" height="9" hspace="10" border="0" /></a></td>
-						</tr>
-					</logic:notEqual>
-					<logic:equal name="pageOf"
-						value='${requestScope.pageOfUserProfile}'>
-						<tr>
-							<td colspan="2" class="bottomtd"></td>
-						</tr>
-						<tr>
-							<td colspan="2" align="left" class="tr_bg_blue1"><span
-								class="blue_ar_b">&nbsp;<bean:message
-								key="assignPrivileges.privilegeDetails" /></span></td>
-							<td colspan="1" align="right" class="tr_bg_blue1">&nbsp;</td>
-						</tr>
-
-					</logic:equal>
-
-					<tr>
-						<td colspan="2">
-						<logic:notEqual name="pageOf"
-							value='${requestScope.pageOfUserProfile}'>
-							<div id="privilegesDiv" style="display:none">
-							<table width="100%" border="0" cellpadding="3" cellspacing="0">
+								<tr><td colspan="4" rowspan="1">&nbsp;</td></tr>
 								<tr>
 									<td width="1%" align="center" class="black_ar"><span
 										class="blue_ar_b"><img
@@ -709,7 +688,7 @@ function handleStatus(status)
 										</tr>
 									</table>
 
-									</div>
+								<!--	</div>-->
 									</logic:notEqual></td>
 								</tr>
 								</logic:notEqual>
