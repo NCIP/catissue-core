@@ -1000,6 +1000,7 @@
 								<html:hidden property="specimenCollectionGroupId"/>
 								<html:hidden property="checkedButton"/>
 								<html:hidden property="derivedClicked"/>
+								<html:hidden property="storageContainer"/>
 
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
 <logic:equal name="<%=Constants.PAGEOF%>" value="pageOfNewSpecimen">
