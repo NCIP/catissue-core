@@ -779,7 +779,7 @@
 				</fileset>
 			</war>
 		<echo>Copying ${warName}.war....</echo>
-		    <copy todir="${jboss.server.url}/deploy" file="${temp.dir}/${warName}.war" overwrite="true" />
+		    <copy todir="${base.dir}/caTissueSuite_Client" file="${temp.dir}/${warName}.war" overwrite="true" />
 			<delete file="${temp.dir}/${warName}.war" />
 			<delete includeemptydirs="true">
 				<fileset dir="${temp.dir}/${warName}">
