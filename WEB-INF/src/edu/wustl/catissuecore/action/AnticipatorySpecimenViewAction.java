@@ -103,7 +103,9 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 			cpId = specimencollectionGroup.getCollectionProtocolRegistration().getCollectionProtocol().getId();
 
 			if (!isFromSpecimenEditPage)
+			{
 				addSCGSpecimensToSession(session, specimencollectionGroup);
+			}
 			else
 			{
 				Collection scgSpecimenList = specimencollectionGroup.getSpecimenCollection();
@@ -143,26 +145,22 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 		CollectionProtocolEventBean eventBean = new CollectionProtocolEventBean();
 
 		eventBean.setUniqueIdentifier(String.valueOf(specimencollectionGroup.getId().longValue()));
-
 		// sorting of specimen collection accoding to id 
-
 		List<Specimen> specimenList = new ArrayList<Specimen>();
-		Iterator itr = specimencollectionGroup.getSpecimenCollection().iterator();
+		Iterator<Specimen> itr = specimencollectionGroup.getSpecimenCollection().iterator();
 		while (itr.hasNext())
 		{
 			Specimen specimen = (Specimen) itr.next();
 			if(!Constants.ACTIVITY_STATUS_DISABLED.equals(specimen.getActivityStatus()))
 			{
-			specimenList.addAll(specimencollectionGroup.getSpecimenCollection());
+				specimenList.add(specimen);
 			}
 		}
 		Comparator spIdComp = new IdComparator();
 		Collections.sort(specimenList, spIdComp);
 		eventBean.setSpecimenRequirementbeanMap(getSpecimensMap(specimenList, cpId));
-
 		//eventBean.setSpecimenRequirementbeanMap(getSpecimensMap(
-		//	specimencollectionGroup.getSpecimenCollection(),cpId ));
-
+		//specimencollectionGroup.getSpecimenCollection(),cpId ));
 		String globalSpecimenId = "E" + eventBean.getUniqueIdentifier() + "_";
 		cpEventMap.put(globalSpecimenId, eventBean);
 		session.removeAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
