@@ -227,7 +227,7 @@
 			document.forms[0].submit();
 		}*/
 		// vipin:- with ajax
-		function onChangeGetCPs(data,parentEleType)
+		function onChangeGetCPs(data)
 		{
 			
 			var request = newXMLHTTPReq();
@@ -267,7 +267,6 @@
 		function onParentlocationChange(element)
 		{
 			var parentEleType ="";
-			
 			if(element.name == "siteId")
 			{
 				parentEleType ="parentContSite"  ;
@@ -283,11 +282,12 @@
 				parentEleType ="parentContManual"  ;
 				var data="operation="+document.forms[0].operation.value+"&pageOf=pageOfStorageContainer&&isContainerChanged=true&parentEleType="+parentEleType+"&selectedContainerName="+element.value;
 			}
-         
-         
-         onChangeGetCPs(data,parentEleType);
+
+         onChangeGetCPs(data);
 		}
 		
+		
+
 		function onParentContainerChange(element)
 		{
 			//out of three drop downs if first dropdown that is the storage container name drop is changed
@@ -581,10 +581,11 @@ function parentContainerTypeChanged(element)
 		selectedParentSite.style.display="none"; 	
 		selectedParentAuto.style.display="block";
 		selectedParentManual.style.display="none";
-		document.forms[0].customListBox_1_0.value=-1;
+	/*	document.forms[0].customListBox_1_0.value=-1;
 		document.forms[0].customListBox_1_1.value = -1;
 		document.forms[0].customListBox_1_2.value = -1;		
-
+		*/
+		onParentlocationChange(document.forms[0].customListBox_1_0);
 	}
 	else if(element.value == "Manual")
 	{
@@ -647,6 +648,8 @@ function addNewTypeAction(action)
 <%@ include file="/pages/content/common/ActionErrors.jsp" %>
 <body >
 <script type="text/javascript" src="jss/wz_tooltip.js"></script>
+<input type="hidden" name="eventOnSelectedContainerNameObj" id="eventOnSelectedContainerNameObj" value="onchange"/>
+
 <html:form action="<%=formName%>" method="post">	
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
  <tr>
@@ -830,10 +833,10 @@ function addNewTypeAction(action)
 						<div id="parentContainerManual" style="display:none">
     					  <table width="59%" border="0" cellpadding="0" cellspacing="0" class="groupElements">
 						<tr>
-							 <td width="24%"><html:text styleClass="grey_ar"   size="30" styleId="selectedContainerName" onmouseover="showTip(this.id)" onblur="onParentlocationChange(this)" property="selectedContainerName"/></td>
+							 <td width="24%"><html:text styleClass="grey_ar"   size="30" styleId="selectedContainerName" onmouseover="showTip(this.id)" onchange="onParentlocationChange(this)" property="selectedContainerName"/></td>
 							 <td width="13%"><html:text styleClass="black_ar_s"  size="5" styleId="pos1" property="pos1"/> </td>	
 							 <td width="13%"><html:text styleClass="black_ar_s" size="5" styleId="pos2" property="pos2"/></td>	
-							 <td width="14%"><html:button styleClass="black_ar"  property="containerMap" onclick="mapButtonClicked()"><bean:message key="buttons.map"/></html:button> </td>
+							 <td width="14%"><html:button styleClass="black_ar"  property="containerMap" styleId="containerMap" onclick="mapButtonClicked()"><bean:message key="buttons.map"/></html:button> </td>
 							 
 						</tr>
                          </table>
