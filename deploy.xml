@@ -1073,7 +1073,9 @@
 	</target>
 
 	<!--Target for Application and Database Upgrade from caTissueCore v1.2.2  to Suite 1.1-->
-	<target name="upgrade_all_from_core_1.2.2" depends="upgrade_app, upgrade_db_from_core_1.2.2_to_suite_1.1">
+	<target name="upgrade_all_from_core_1.2.2" depends="core_1.2.2_upgrade_check">
+		<antcall target="upgrade_app" />
+		<antcall target="upgrade_db_from_core_1.2.2_to_suite_1.1" />
 	</target>
 
 	
@@ -1109,43 +1111,7 @@
 	
 	</target>
 	
-	<target name="upgrade_db_from_core_1.2.2_to_suite_1.0_oracle">
-	
-		<echo message="Upgrading Oracle Database from 1.2.2 to 1.0 ..." />
-		 <sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">
-				<transaction src="${dbupgrade.sql.dir}/Oracle/DBUpgrade_1.2_to_CatissueSuite.sql" />
-				<transaction src="${dbupgrade.sql.dir}/Oracle/SCG_DB_changes.sql" />
-				<transaction src="${oracle.sql.dir}/dynamicextension.sql" />
-				<transaction src="${oracle.sql.dir}/query/metadata_schema_script.sql" /> 
-				<transaction src="${oracle.sql.dir}/query/query_core1.2.2_to_suite1.0.sql" />
-				<transaction src="${oracle.sql.dir}/query/caB2B Table Generation Script.sql" />
-				<transaction  src="${dbupgrade.sql.dir}/Oracle/CAModel.sql"/>
-				
-				<transaction>commit;</transaction>
-				<classpath>
-					<fileset dir="${lib.dir}">
-						<include name="*.jar" />
-					</fileset>
-				</classpath>
-		 </sql>
-	
-		 <antcall target="CAModel_import_data" />
-		 <antcall target="insertQueryMetadata" />
 
-		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle" delimiter="/" delimitertype="row">
-				<transaction src="${oracle.sql.dir}/DBUtility.sql" />
-				<!--transaction  src="${oracle.sql.dir}/DESeqChangeForDataDump.sql"/-->
-				<classpath>
-					<fileset dir="${lib.dir}">
-						<include name="*.jar" />
-					</fileset>
-				</classpath>
-		</sql>
-		<antcall target="temp_update_metadata_for_clob_support_oracle" />
-	
-	</target>
-	
-	
 	<target name="upgrade_db_from_core_1.2.2_to_suite_1.0">
 		<if>
 			<equals arg1="mysql" arg2="${database.type}" />
@@ -1155,12 +1121,21 @@
 			<elseif>
 				<equals arg1="oracle" arg2="${database.type}" />
 				<then>
-					<antcall target="upgrade_db_from_core_1.2.2_to_suite_1.0_oracle" />
+					<antcall target="core_1.2.2_upgrade_check" />
 				</then>
 			</elseif>
 			<else>
 				<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
 			</else>
+		</if>
+	</target>
+	
+	<target name="core_1.2.2_upgrade_check">
+		<if>
+			<equals arg1="oracle" arg2="${database.type}" />
+			<then>
+				<fail message="Oracle database upgrade from caTissueCore v1.2.2 is not supported"/>
+			</then>
 		</if>
 	</target>
 	
