@@ -1000,7 +1000,6 @@
 								<html:hidden property="specimenCollectionGroupId"/>
 								<html:hidden property="checkedButton"/>
 								<html:hidden property="derivedClicked"/>
-								<html:hidden property="storageContainer"/>
 
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
 <logic:equal name="<%=Constants.PAGEOF%>" value="pageOfNewSpecimen">
@@ -1043,7 +1042,7 @@
 			<td class="td_tab_bg" ><img src="images/uIEnhancementImages/spacer.gif" alt="spacer" width="50" height="1"></td>
 			<td valign="bottom"><a onclick="newSpecimenTab()" id="newSpecimenTab" href="#"><img src="images/uIEnhancementImages/new_specimen_selected.gif" alt="Specimen Details"  width="115" height="22" border="0"></a></td><td onClick="newConsentTab()" valign="bottom" ><a id="newConsentTab" href="#" onClick="consentTab()"><img src="images/uIEnhancementImages/tab_consents2.gif" alt="Consents" width="76" height="22" border="0" ></a></td><td width="90%" class="td_tab_bg" >&nbsp;</td></tr>
 		</table>
-			
+		
 	<%
 	}
 	%>
@@ -1666,7 +1665,7 @@
 										}
 										else{%>
 												<%	
-												if((newSpecimenForm.getStorageContainer().equals("")||newSpecimenForm.getStorageContainer().equals("-1"))&&newSpecimenForm.getCollectionStatus().equals("Collected"))
+												if((newSpecimenForm.getSelectedContainerName().equals("")||newSpecimenForm.getStorageContainer().equals("-1"))&&newSpecimenForm.getCollectionStatus().equals("Collected"))
 												{%>
 												<tr>
 														<td class="black_ar" colspan="2">																			
