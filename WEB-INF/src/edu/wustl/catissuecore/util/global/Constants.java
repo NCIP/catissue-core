@@ -1710,6 +1710,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String Contains = "Contains";
 	public static final String STRATS_WITH = "Starts With";
 	public static final String ENDS_WITH = "Ends With";
+	public static final String NOT_BETWEEN  = "Not Between";
 	
 	// Used in array action 
 	public static final String ARRAY_TYPE_ANY_VALUE = "2";
