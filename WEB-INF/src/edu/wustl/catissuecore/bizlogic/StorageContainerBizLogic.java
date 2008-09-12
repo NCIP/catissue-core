@@ -4292,32 +4292,35 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 	 */
 	public Site getRelatedSite(Long containerId)
 	{
-		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
-		StorageContainer storageContainer = null;
-		try 
+		Site site =null;
+		if(containerId >=1)
 		{
-			dao.openSession(null);
-			storageContainer = (StorageContainer) dao.retrieve(StorageContainer.class.getName(), containerId);		
-		} 
-		catch (DAOException e) 
-		{
-			Logger.out.debug(e.getMessage(), e);
-		}
-		finally
-		{
-			try
+			AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+			StorageContainer storageContainer = null;
+			try 
 			{
-				dao.closeSession();
-			}
-			catch (DAOException e)
+				dao.openSession(null);
+				storageContainer = (StorageContainer) dao.retrieve(StorageContainer.class.getName(), containerId);		
+			} 
+			catch (DAOException e) 
 			{
-				Logger.out.error(e.getMessage(), e);
+				Logger.out.debug(e.getMessage(), e);
 			}
-		}
-		Site site = null;
-		if(storageContainer!=null)
-		{
-			site = storageContainer.getSite();
+			finally
+			{
+				try
+				{
+					dao.closeSession();
+				}
+				catch (DAOException e)
+				{
+					Logger.out.error(e.getMessage(), e);
+				}
+			}
+			if(storageContainer!=null)
+			{
+				site = storageContainer.getSite();
+			}
 		}
 		return site;
 	}
@@ -4329,42 +4332,46 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 	 */
 	public Site getRelatedSiteForManual(String containerName)
 	{
-		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
-		StorageContainer storageContainer = null;
-		String[] strArray = {containerName};
-		List contList = null;
-		
-		try 
-		{
-			dao.openSession(null);
-			if(strArray!=null)
-			{
-				contList = dao.retrieve(StorageContainer.class.getName(),Constants.NAME,containerName);
-			}
-			if(contList!=null && !contList.isEmpty())
-			{
-				storageContainer =(StorageContainer)contList.get(0);
-			}
-		} 
-		catch (DAOException e) 
-		{
-			Logger.out.debug(e.getMessage(), e);
-		}
-		finally
-		{
-			try
-			{
-				dao.closeSession();
-			}
-			catch (DAOException e)
-			{
-				Logger.out.error(e.getMessage(), e);
-			}
-		}
 		Site site = null;
-		if(storageContainer != null)
+		if(containerName!=null&&!("").equals(containerName))
 		{
-			site = storageContainer.getSite();
+			AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+			StorageContainer storageContainer = null;
+			String[] strArray = {containerName};
+			List contList = null;
+			
+			try 
+			{
+				dao.openSession(null);
+				if(strArray!=null)
+				{
+					contList = dao.retrieve(StorageContainer.class.getName(),Constants.NAME,containerName);
+				}
+				if(contList!=null && !contList.isEmpty())
+				{
+					storageContainer =(StorageContainer)contList.get(0);
+				}
+			} 
+			catch (DAOException e) 
+			{
+				Logger.out.debug(e.getMessage(), e);
+			}
+			finally
+			{
+				try
+				{
+					dao.closeSession();
+				}
+				catch (DAOException e)
+				{
+					Logger.out.error(e.getMessage(), e);
+				}
+			}
+			
+			if(storageContainer != null)
+			{
+				site = storageContainer.getSite();
+			}
 		}
 		return site;
 	}
