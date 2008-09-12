@@ -2049,7 +2049,7 @@ public class Utility extends edu.wustl.common.util.Utility {
 	{
 		SiteBizLogic siteBizLogic = (SiteBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.SITE_FORM_ID);
 		Collection<CollectionProtocol> cpCollection = null;
-		if(siteId == -1)
+		if(siteId <= 0)
 		{
 			cpCollection = new ArrayList<CollectionProtocol>();
 		}
