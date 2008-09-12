@@ -9,9 +9,11 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import javax.naming.LinkLoopException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -146,7 +148,7 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 
 		eventBean.setUniqueIdentifier(String.valueOf(specimencollectionGroup.getId().longValue()));
 		// sorting of specimen collection accoding to id 
-		List<Specimen> specimenList = new ArrayList<Specimen>();
+		LinkedList<Specimen> specimenList = new LinkedList<Specimen>();
 		Iterator<Specimen> itr = specimencollectionGroup.getSpecimenCollection().iterator();
 		while (itr.hasNext())
 		{
@@ -179,6 +181,8 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 			if (specimen.getParentSpecimen() == null)
 			{
 				GenericSpecimenVO specBean = getSpecimenBean(specimen, null);
+				addToSpToAutoCont(specBean);
+				setChildren(specimen, specBean);
 				specBean.setUniqueIdentifier(SPECIMEN_KEY_PREFIX + specimen.getId());
 				specBean.setCollectionProtocolId(collectionProtocolId);
 				specimenMap = getOrderedMap(specimenMap, specimen.getId(), specBean, SPECIMEN_KEY_PREFIX);
@@ -198,6 +202,8 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 			if (specimen.getId() != null && specimen.getId() == specimenId)
 			{
 				GenericSpecimenVO specBean = getSpecimenBean(specimen, null);
+				addToSpToAutoCont(specBean);
+				setChildren(specimen, specBean);
 				specBean.setUniqueIdentifier("S_" + specimen.getId());
 				specBean.setCollectionProtocolId(collectionProtocolId);
 				specimenMap.put("S_" + specimen.getId(), specBean);
@@ -251,6 +257,8 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 			String lineage = childSpecimen.getLineage();
 
 			GenericSpecimenVO specimenBean = getSpecimenBean(childSpecimen, specimen.getLabel());
+			//addToSpToAutoCont(specimenBean);
+			setChildren(childSpecimen, specimenBean);
 			String prefix = lineage + specimen.getId() + "_";
 			specimenBean.setUniqueIdentifier(prefix + childSpecimen.getId());
 
@@ -265,6 +273,30 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 			specimenBean.setCollectionProtocolId(cpId);
 
 		}
+		if(aliquotMap != null && !aliquotMap.isEmpty())
+		{
+		
+			Iterator aliquotItr = aliquotMap.keySet().iterator();
+			while(aliquotItr.hasNext())
+			{
+				String key = (String) aliquotItr.next();
+				GenericSpecimenVO sp = (GenericSpecimenVO) aliquotMap.get(key);
+				addToSpToAutoCont((GenericSpecimenVO)sp);
+				
+			}
+		}
+		
+		if(derivedMap != null && !derivedMap.isEmpty())
+		{
+			Iterator derivedItr = derivedMap.keySet().iterator();
+			while(derivedItr.hasNext())
+			{
+				String key = (String) derivedItr.next();
+				GenericSpecimenVO sp = (GenericSpecimenVO) derivedMap.get(key);
+				addToSpToAutoCont((GenericSpecimenVO)sp);
+			}
+		}
+		
 		parentSpecimenVO.setAliquotSpecimenCollection(aliquotMap);
 		parentSpecimenVO.setDeriveSpecimenCollection(derivedMap);
 	}
@@ -333,16 +365,24 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 			specimenDataBean.setStorageContainerForSpecimen(storageType);
 
 		}
-		if ("Auto".equals(storageType))
+		/*if ("Auto".equals(storageType))
 		{
 			autoStorageContainer.addSpecimen(specimenDataBean, specimenDataBean.getClassName());
-		}
-		setChildren(specimen, specimenDataBean);
+		}*/
+		//setChildren(specimen, specimenDataBean);
 		//specimenDataBean.setAliquotSpecimenCollection(getChildren(specimen, Constants.ALIQUOT));
 		//specimenDataBean.setDeriveSpecimenCollection(getChildren(specimen, Constants.ALIQUOT));
 		return specimenDataBean;
 	}
 
+	private void addToSpToAutoCont(GenericSpecimenVO specimenDataBean)
+	{
+		if ("Auto".equals(specimenDataBean.getStorageContainerForSpecimen()))
+		{
+			autoStorageContainer.addSpecimen(specimenDataBean, specimenDataBean.getClassName());
+		}
+		
+	}
 	private String getStorageType(Specimen specimen)
 	{
 		String storageType;

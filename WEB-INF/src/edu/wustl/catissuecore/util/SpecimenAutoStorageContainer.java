@@ -1,15 +1,12 @@
 package edu.wustl.catissuecore.util;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
-
-import net.sf.ehcache.CacheException;
 
 import edu.wustl.catissuecore.bean.GenericSpecimen;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
@@ -29,11 +26,11 @@ import edu.wustl.common.util.dbManager.DAOException;
  */
 public class SpecimenAutoStorageContainer {
 
-	private HashMap<String, ArrayList<GenericSpecimen>> specimenMap = 
-		new HashMap<String, ArrayList<GenericSpecimen>> ();
+	private LinkedHashMap<String, LinkedList<GenericSpecimen>> specimenMap = 
+		new LinkedHashMap<String, LinkedList<GenericSpecimen>> ();
 	private Long cpId = null;
-	private HashMap<Long, HashMap<String, ArrayList<GenericSpecimen>>> collectionProtocolSpecimenMap = 
-						new HashMap<Long, HashMap<String,ArrayList<GenericSpecimen>>> ();
+	private LinkedHashMap<Long, LinkedHashMap<String, LinkedList<GenericSpecimen>>> collectionProtocolSpecimenMap = 
+						new LinkedHashMap<Long, LinkedHashMap<String,LinkedList<GenericSpecimen>>> ();
 	private ArrayList<String> storageContainerIds = new ArrayList<String>();
 	
 	public void setCollectionProtocol(Long cpId)
@@ -51,19 +48,19 @@ public class SpecimenAutoStorageContainer {
 	{ 
 		if (collectionProtocolSpecimenMap.get(collectionProtocolId) == null)
 		{ 
-			collectionProtocolSpecimenMap.put(collectionProtocolId, new HashMap<String, ArrayList<GenericSpecimen>> ());
+			collectionProtocolSpecimenMap.put(collectionProtocolId, new LinkedHashMap<String, LinkedList<GenericSpecimen>> ());
 		}
-		HashMap<String, ArrayList<GenericSpecimen>> targetMap = collectionProtocolSpecimenMap.get(collectionProtocolId);
+		LinkedHashMap<String, LinkedList<GenericSpecimen>> targetMap = collectionProtocolSpecimenMap.get(collectionProtocolId);
 		addToMap(specimen, className, targetMap);
 	}
 	
-	private void addToMap (GenericSpecimen specimen, String className, HashMap<String, ArrayList<GenericSpecimen>> targetMap)
+	private void addToMap (GenericSpecimen specimen, String className, LinkedHashMap<String, LinkedList<GenericSpecimen>> targetMap)
 	{
 		if( targetMap.get(className) == null)
 		{
-			targetMap.put(className, new ArrayList<GenericSpecimen>());
+			targetMap.put(className, new LinkedList<GenericSpecimen>());
 		}
-		ArrayList<GenericSpecimen> specimenList = targetMap.get(className);
+		LinkedList<GenericSpecimen> specimenList = targetMap.get(className);
 		specimenList.add(specimen);		
 	}
 
@@ -87,7 +84,7 @@ public class SpecimenAutoStorageContainer {
 		{
 			Long collectionProtocolId = keySetIterator.next();
 			
-			HashMap<String, ArrayList<GenericSpecimen>> autoSpecimenMap =
+			LinkedHashMap<String, LinkedList<GenericSpecimen>> autoSpecimenMap =
 				collectionProtocolSpecimenMap.get(collectionProtocolId);
 			
 			setAutoStoragePositions(autoSpecimenMap, sessionDataBean,
@@ -100,7 +97,7 @@ public class SpecimenAutoStorageContainer {
 	 * @throws DAOException
 	 */
 	private void setAutoStoragePositions(
-			HashMap<String, ArrayList<GenericSpecimen>> autoSpecimenMap, 
+			LinkedHashMap<String, LinkedList<GenericSpecimen>> autoSpecimenMap, 
 			SessionDataBean sessionDataBean, Long collectionProtocolId)
 			throws DAOException {
 		
@@ -112,14 +109,14 @@ public class SpecimenAutoStorageContainer {
 			while(keySetIterator.hasNext())
 			{
 				String key = keySetIterator.next();
-				ArrayList<GenericSpecimen> specimenList =
+				LinkedList<GenericSpecimen> specimenList =
 					autoSpecimenMap.get(key);
 				setSpecimenStorageDetails(specimenList,key, sessionDataBean, collectionProtocolId);
 			}
 		}
 	}
 	
-	protected void setSpecimenStorageDetails(List<GenericSpecimen> specimenDataBeanList, 
+	protected void setSpecimenStorageDetails(LinkedList<GenericSpecimen> specimenDataBeanList, 
 			String className, SessionDataBean bean, Long collectionProtocolId ) throws DAOException
 	{
  
@@ -141,7 +138,7 @@ public class SpecimenAutoStorageContainer {
 		
 	}
 	
-	protected void populateStorageLocations(List specimenDataBeanList, 
+	protected void populateStorageLocations(LinkedList specimenDataBeanList, 
 							Long collectionProtocolId, Map containerMap, 
 							SessionDataBean bean, String classType)
 			throws SMException,DAOException
@@ -186,7 +183,7 @@ public class SpecimenAutoStorageContainer {
 	 * @param xDimMap
 	 * @return
 	 */
-	private int populateStoragePositions(List specimenDataBeanList, int counter,
+	private int populateStoragePositions(LinkedList specimenDataBeanList, int counter,
 			StorageContainer sc, Map xDimMap)
 	{
 		
@@ -233,7 +230,7 @@ public class SpecimenAutoStorageContainer {
 		while(keyItr.hasNext())
 		{
 			String key = (String)keyItr.next();
-			ArrayList speciList = (ArrayList)specimenMap.get(key);
+			LinkedList speciList = (LinkedList)specimenMap.get(key);
 			Iterator speciListItr = speciList.iterator();
 			while(speciListItr.hasNext())
 			{
