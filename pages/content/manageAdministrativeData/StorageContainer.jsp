@@ -937,9 +937,9 @@ function addNewTypeAction(action)
 					</table>
                       </td>
                     </tr>
-					<tr>
+					<tr onclick="showHide('add_id')">
 					    <td align="left" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;<bean:message key="storageContainer.restrictions" /></span></td>
-						<td align="right" class="tr_bg_blue1"><a href="javascript:showHide('add_id')" id="imgArrow_add_id"><img src="images/uIEnhancementImages/up_arrow.gif" alt="Show Details" border="0" width="80" height="9" hspace="10" vspace="0"/></a></td>
+						<td align="right" class="tr_bg_blue1"><a href="#" id="imgArrow_add_id"><img src="images/uIEnhancementImages/up_arrow.gif" alt="Show Details" border="0" width="80" height="9" hspace="10" vspace="0"/></a></td>
 					</tr>
 					<tr>
 					   <td colspan="5" class="showhide"><div id="add_id" style="display:block" >
@@ -982,9 +982,9 @@ function addNewTypeAction(action)
 					</tr>
 					</table></td>
                     </tr>
-					 <tr >
+					 <tr onclick="javascript:showHide('cap_id')">
                         <td align="left" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;<bean:message key="storageContainer.capacity" /></span></td>
-						<td align="right" class="tr_bg_blue1"><a href="javascript:showHide('cap_id')" id="imgArrow_cap_id"><img src="images/uIEnhancementImages/up_arrow.gif" alt="Show Details" border="0" width="80" height="9" hspace="10" vspace="0"/></a></td>
+						<td align="right" class="tr_bg_blue1"><a href="#" id="imgArrow_cap_id"><img src="images/uIEnhancementImages/up_arrow.gif" alt="Show Details" border="0" width="80" height="9" hspace="10" vspace="0"/></a></td>
 					</tr>
 					  <td colspan="2" class="showhide1"><div id="cap_id" style="display:block" >
                         <table width="100%" border="0" cellpadding="3" cellspacing="0">
