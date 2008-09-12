@@ -241,7 +241,7 @@
 		<unwar src="${base.dir}/dynamicExtensions.war" dest="${temp.dir}/dynamicExtensions" />
 		<unwar src="${base.dir}/caTissuePrintWebService.war" dest="${temp.dir}/caTissuePrintWebService" />
 		<unjar src="${temp.dir}/catissuecore/WEB-INF/lib/DynamicExtensions.jar" dest="${temp.dir}/dynamicExtensionsjar" />
-		<copy  todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true">
+		<copy  todir="${temp.dir}/catissuecore-properties" overwrite="true">
 			<fileset dir="${base.dir}">
 				<include name="log4j.properties"/>
 			</fileset>
@@ -264,7 +264,7 @@
 	</target>
 	
 	<target name="configure_log4j">
-		<replace dir="${temp.dir}/catissuecore/WEB-INF/classes" propertyfile="caTissueInstall.properties"> 
+		<replace dir="${temp.dir}/catissuecore-properties" propertyfile="caTissueInstall.properties"> 
 			<include name ="log4j.properties"/>
 			<replacefilter token="@@jbosshome@@" value="${jboss.server.url}"/>
 		</replace>
