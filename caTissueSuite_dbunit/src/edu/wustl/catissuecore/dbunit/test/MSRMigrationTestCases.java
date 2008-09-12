@@ -4,13 +4,13 @@
 
 package edu.wustl.catissuecore.dbunit.test;
 
-import java.util.Collection;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.exception.BizLogicException;
 
 /**
@@ -22,7 +22,6 @@ import edu.wustl.common.exception.BizLogicException;
  */
 public class MSRMigrationTestCases extends DefaultCatissueDBUnitTestCase
 {
-
 	/**
 	 * 1. Get collection of all users in the database
 	 * 2. Get collection of all sites in the database
@@ -32,37 +31,50 @@ public class MSRMigrationTestCases extends DefaultCatissueDBUnitTestCase
 	
 	public void testMigrate()
 	{
-		List users = null;
-		List sites = null;
+		Variables.isPhoneNumberToBeValidated = false;
+		List<User> userList = null;
+		List<Site> siteList = null;
 
+		int noOfSupervisorsOrTechnicians = 0;
+		
 		try
 		{
-			users = search(User.class);
-			sites = search(Site.class);
+			userList = search(User.class);
+			siteList = getRepositorySites();
 		}
 		catch (BizLogicException e)
 		{
 			fail("failed to retrieve all the users and sites");
 		}
-
-		for (Object o : users)
+		
+		for (User user1 : userList)
 		{
-			User user = (User) o;
-			if (user.getRoleId().equals("2") || user.getRoleId().equals("3"))
+			User user = (User) user1;
+			try
 			{
-				user.getSiteCollection().clear();
-				user.getSiteCollection().addAll(sites);
-				try
+				if (user.getRoleId().equals("2") || user.getRoleId().equals("3"))
 				{
-					update(user);
+					System.out.println("#####  INSIDE GET ROLE ID  ##########");
+					System.out.println("SITE COLLECTION "+user.getSiteCollection());
+					user.getSiteCollection().clear();
+					user.getSiteCollection().addAll(siteList);
+					System.out.println("BEFORE UPDATE USER");
+						update(user);
+					System.out.println("AFTER UPDATE");
+						noOfSupervisorsOrTechnicians++;
 				}
-				catch (BizLogicException e)
-				{
-					fail("failed to update User with email id " + user.getEmailAddress());
-				}
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+				fail("failed to update User with email id " + user.getEmailAddress());
 			}
 
 		}
+		System.out.println();
+		System.out.println("######## NO OF NON ADMIN USERS :: "+noOfSupervisorsOrTechnicians+"      #############");
+		System.out.println();
+		Variables.isPhoneNumberToBeValidated = true;
 	}
 	
 	/**
@@ -71,45 +83,64 @@ public class MSRMigrationTestCases extends DefaultCatissueDBUnitTestCase
 	 * 2. the site collection for each technician and supervisor equals the set of all sites in the database
 	 * 
 	 */
-	
-	public void testVerifyMigration()
-	{
-		
-		List users = null;
-		Set sites = null;
+	/*public void testVerifyMigration()
+	{	
+		List userList = null;
+		List siteList = null;
 
 		try
 		{
-			users = search(User.class);
-			sites = new HashSet(search(Site.class));
+			userList = search(User.class);
+			siteList = getRepositorySites();
 		}
 		catch (BizLogicException e)
 		{
 			fail("failed to retrieve all the users and sites");
 		}
-
+		
 		int techsOrSups = 0;
-		for (Object o : users)
+		for (Object o : userList)
 		{
 			User user = (User) o;
 			if (user.getRoleId().equals("2") || user.getRoleId().equals("3"))
 			{
 				techsOrSups++;
 				
-				if(!CompareSiteSets(sites, user.getSiteCollection()))
+				if(!CompareSiteLists(siteList, user.getSiteCollection()))
 				{
 					fail();
 				}
 			}
-			
 		}
-		
 		
 		if(techsOrSups==0)
 		{
 			fail();
 		}
+	}*/
 
+	private List<Site> getRepositorySites() 
+	{
+		List<Site> siteList = new ArrayList<Site>();
+		List<Site> repositorySiteList = new ArrayList<Site>();
+		
+		try 
+		{
+			siteList = search(Site.class);
+			
+			for(Site site : siteList)
+			{
+				if(Constants.REPOSITORY.equals(site.getType()))
+				{
+					repositorySiteList.add(site);
+				}
+			}
+		} 
+		catch (BizLogicException e) 
+		{
+			e.printStackTrace();
+		}
+		return repositorySiteList;
 	}
 
 	/**
@@ -118,31 +149,29 @@ public class MSRMigrationTestCases extends DefaultCatissueDBUnitTestCase
 	 * 
 	 * @return true if they are equal
 	 */
-	private boolean CompareSiteSets(Set sites, Collection<Site> siteCollection)
+	/*private boolean CompareSiteLists(List<Site> siteList, Collection<Site> siteCollection)
 	{
-		if(siteCollection.size()!=sites.size())
+		Set<Long> siteSet = new HashSet<Long>();
+		
+		for(Site site : siteList)
+		{
+			siteSet.add(site.getId());
+		}
+		
+		if(siteCollection.size()!=siteSet.size())
 		{
 			return false;
 		}
 		
-		Set<Long> siteIds = new HashSet<Long>(siteCollection.size());
-		
-		for(Site site : siteCollection)
-		{
-			siteIds.add(site.getId());
-		}
-		
-		for(Object o : sites)
+		for(Object o : siteCollection)
 		{
 			Long id = ((Site) o).getId();
-			if(!siteIds.contains(id))
+			if(!siteSet.contains(id))
 			{
 				return false;
 			}
 		}
 		
 		return true;
-
-	}
-	
+	}*/
 }
