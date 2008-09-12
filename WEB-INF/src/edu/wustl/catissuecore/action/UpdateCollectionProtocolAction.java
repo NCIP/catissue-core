@@ -23,6 +23,7 @@ import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
+import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 
 public class UpdateCollectionProtocolAction extends BaseAction {
 
@@ -66,6 +67,35 @@ public class UpdateCollectionProtocolAction extends BaseAction {
 		catch (Exception exception)
 		{
 			ActionErrors actionErrors = new ActionErrors();
+			
+			if(exception instanceof UserNotAuthorizedException)
+			{
+	            UserNotAuthorizedException ex = (UserNotAuthorizedException) exception;
+				SessionDataBean sessionDataBean = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
+	            String userName = "";
+	        	
+	            if(sessionDataBean != null)
+	        	{
+	        	    userName = sessionDataBean.getUserName();
+	        	}
+	            String className = Constants.COLLECTION_PROTOCOL;
+	            String decoratedPrivilegeName = Utility.getDisplayLabelForUnderscore(ex.getPrivilegeName());
+	            String baseObject = "";
+	            if (ex.getBaseObject() != null && ex.getBaseObject().trim().length() != 0)
+	            {
+	                baseObject = ex.getBaseObject();
+	            } else 
+	            {
+	                baseObject = className;
+	            }
+	                
+	            ActionError error = new ActionError("access.addedit.object.denied", userName, className,decoratedPrivilegeName,baseObject);
+	            actionErrors.add(ActionErrors.GLOBAL_ERROR, error);
+	        	saveErrors(request, actionErrors);
+	        	target = Constants.FAILURE;
+	        	return (mapping.findForward(target));
+			}
+			
 			actionErrors.add(actionErrors.GLOBAL_MESSAGE, new ActionError(
 					"errors.item",exception.getMessage()));
 			saveErrors(request, actionErrors);						

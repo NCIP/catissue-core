@@ -110,32 +110,13 @@ public class SubmitUserAction extends Action
 		} 
 		catch (UserNotAuthorizedException e) 
 		{
-			
+			SessionDataBean sessionDataBean = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
 			ActionErrors errors = new ActionErrors();
-            SessionDataBean sessionDataBean = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
-            String userName = "";
-        	
-            if(sessionDataBean != null)
-        	{
-        	    userName = sessionDataBean.getUserName();
-        	}
-            String className = new CommonAddEditAction().getActualClassName(abstractDomain.getClass().getName());
-            String decoratedPrivilegeName = Utility.getDisplayLabelForUnderscore(e.getPrivilegeName());
-            String baseObject = "";
-            if (e.getBaseObject() != null && e.getBaseObject().trim().length() != 0)
-            {
-                baseObject = e.getBaseObject();
-            } else 
-            {
-                baseObject = className;
-            }
-                
-            ActionError error = new ActionError("access.addedit.object.denied", userName, className,decoratedPrivilegeName,baseObject);
-        	errors.add(ActionErrors.GLOBAL_ERROR, error);
+            getUserNotAuthorizedException(abstractDomain, e, sessionDataBean,
+					errors);
         	saveErrors(request, errors);
         	target = Constants.FAILURE;
         	return (mapping.findForward(target));
-            		
 		}
 
 		//	Attributes to decide AddNew action
@@ -244,6 +225,36 @@ public class SubmitUserAction extends Action
        return mapping.findForward(target);
 	}
 	
+	/**
+	 * Used to return UserNotAuthorizedException in case of add as well as edit user
+	 * @param abstractDomain User Object
+	 * @param e User Not Authorized Exception
+	 * @param sessionDataBean Session related data
+	 * @param errors
+	 */
+	private void getUserNotAuthorizedException(
+			AbstractDomainObject abstractDomain, UserNotAuthorizedException e,
+			SessionDataBean sessionDataBean, ActionErrors errors) {
+		String userName = "";
+		
+		if(sessionDataBean != null)
+		{
+		    userName = sessionDataBean.getUserName();
+		}
+		String className = new CommonAddEditAction().getActualClassName(abstractDomain.getClass().getName());
+		String decoratedPrivilegeName = Utility.getDisplayLabelForUnderscore(e.getPrivilegeName());
+		String baseObject = "";
+		if (e.getBaseObject() != null && e.getBaseObject().trim().length() != 0)
+		{
+		    baseObject = e.getBaseObject();
+		} else 
+		{
+		    baseObject = className;
+		}
+		    
+		ActionError error = new ActionError("access.addedit.object.denied", userName, className,decoratedPrivilegeName,baseObject);
+		errors.add(ActionErrors.GLOBAL_ERROR, error);
+	}
 	
 	 private ActionForward executeEditUser(ActionMapping mapping, HttpServletRequest request, AbstractActionForm abstractForm) throws DAOException, BizLogicException, AssignDataException 
 	    {
@@ -284,22 +295,13 @@ public class SubmitUserAction extends Action
 				} 
 	            catch (UserNotAuthorizedException e) 
 	    		{
-	    			
-	    			ActionErrors errors = new ActionErrors();
+	            	ActionErrors errors = new ActionErrors();
 	                SessionDataBean sessionDataBean = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
-	                String userName = "";
-	            	
-	                if(sessionDataBean != null)
-	            	{
-	            	    userName = sessionDataBean.getUserName();
-	            	}
-	                
-	            	ActionError error = new ActionError("access.addedit.object.denied", userName, abstractDomain.getClass().getName());
-	            	errors.add(ActionErrors.GLOBAL_ERROR, error);
+	                getUserNotAuthorizedException(abstractDomain, e, sessionDataBean,
+	    					errors);
 	            	saveErrors(request, errors);
 	            	target = Constants.FAILURE;
-	                Logger.out.error(e.getMessage(), e);
-	    			
+	            	return (mapping.findForward(target));
 	    		}
 	            
 	            try
