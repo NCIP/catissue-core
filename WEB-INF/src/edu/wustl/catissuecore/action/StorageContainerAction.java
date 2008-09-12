@@ -341,23 +341,27 @@ public class StorageContainerAction extends SecureAction
 		}
 		else if ("Auto".equals(storageContainerForm.getParentContainerSelected()))
 		{
-			Site site = bizLogic.getRelatedSite(storageContainerForm.getParentContainerId());
+			long parentContId = storageContainerForm.getParentContainerId();
+			Site site = bizLogic.getRelatedSite(parentContId);
 			if(site!=null)
 			{
 				request = Utility.setCollectionProtocolList(request, site.getId());
+			}
+			else
+			{
+				List<NameValueBean> cpList = new ArrayList<NameValueBean>();
+				Map<Long,String> cpTitleMap = new HashMap<Long,String>();
+				request.setAttribute(Constants.PROTOCOL_LIST, cpList);
+				request.setAttribute(Constants.CP_ID_TITLE_MAP, cpTitleMap);
 			}
 		}
 		else if ("Manual".equals(storageContainerForm.getParentContainerSelected()))
 		{
 			String containerName = storageContainerForm.getSelectedContainerName();
-
-			if(containerName!=null && !containerName.equals(""))
+			Site site = bizLogic.getRelatedSiteForManual(containerName);
+			if(site!=null)
 			{
-				Site site = bizLogic.getRelatedSiteForManual(containerName);
-				if(site!=null)
-				{
-					request = Utility.setCollectionProtocolList(request, site.getId());
-				}
+				request = Utility.setCollectionProtocolList(request, site.getId());
 			}
 			else
 			{
