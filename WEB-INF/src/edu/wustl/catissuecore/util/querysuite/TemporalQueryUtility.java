@@ -35,7 +35,9 @@ public class TemporalQueryUtility
 					(!operator.getStringRepresentation().equals(Constants.Between)) &&
 					(!operator.getStringRepresentation().equals(Constants.Not_In)) &&
 					(!operator.getStringRepresentation().equalsIgnoreCase(Constants.IS_NULL)) &&
-					(!operator.getStringRepresentation().equalsIgnoreCase(Constants.IS_NOT_NULL)))
+					(!operator.getStringRepresentation().equalsIgnoreCase(Constants.IS_NOT_NULL))&&
+					(!operator.getStringRepresentation().equalsIgnoreCase(Constants.NOT_BETWEEN)))
+				
 			{
 				relationalOperatorsList.add(operator.getStringRepresentation());	
 			}
