@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.bizlogic.querysuite.DefineGridViewBizLogic;
@@ -111,15 +113,15 @@ public class QueryModuleSearchQueryUtil
 		int initialValue = 0;
 		QueryModuleException queryModExp;
 		try
-		{
+		{ 
 			for (OutputTreeDataNode outnode : queryDetailsObj.getRootOutputTreeNodeList())
-			{
-				List<QueryTreeNodeData> treeData= null;			
+			{ 
+				Vector<QueryTreeNodeData> treeData= null;			
 				treeData = outputTreeBizLogic.createDefaultOutputTreeData(initialValue, outnode, 
 						hasCondOnIdentifiedField, queryDetailsObj);
 				initialValue = setTreeData(option, initialValue, treeData);
 			}
-		}
+		} 
 		catch (DAOException e)
 		{
 				queryModExp = new QueryModuleException(e.getMessage(), QueryModuleError.DAO_EXCEPTION);
@@ -146,7 +148,7 @@ public class QueryModuleSearchQueryUtil
 	 * @throws QueryModuleException 
 	 */
 	private int setTreeData(String option, int initialValue,
-			List<QueryTreeNodeData> treeData) throws QueryModuleException
+			Vector<QueryTreeNodeData> treeData) throws QueryModuleException
 	{		
 		int resultsSize = treeData.size();
 		if(option == null)
@@ -167,8 +169,10 @@ public class QueryModuleSearchQueryUtil
 		}
 		else if(Constants.VIEW_LIMITED_RECORDS.equals(option))
 		{
-			treeData = setLimitedTreeDataInSession(treeData
-					.subList(0, Variables.maximumTreeNodeLimit+1));
+			List<QueryTreeNodeData> limitedRecordsList = treeData.subList(0, Variables.maximumTreeNodeLimit+1);
+			Vector<QueryTreeNodeData> limitedTreeData = new Vector<QueryTreeNodeData>();
+			limitedTreeData.addAll(limitedRecordsList);
+			treeData = limitedTreeData;
 		}
 		session.setAttribute(Constants.TREE_DATA + Constants.UNDERSCORE + initialValue, treeData);
 				initialValue += 1;
@@ -221,6 +225,8 @@ public class QueryModuleSearchQueryUtil
 		try
 		{ 
 			session.setAttribute(Constants.SAVE_GENERATED_SQL, sqlGenerator.generateSQL(query));
+			Map<AttributeInterface, String> attributeColumnNameMap = sqlGenerator.getAttributeColumnNameMap();
+			session.setAttribute(Constants.ATTRIBUTE_COLUMN_NAME_MAP, attributeColumnNameMap);
 			session.setAttribute(Constants.OUTPUT_TERMS_COLUMNS,sqlGenerator.getOutputTermsColumns());
 		}
 		catch(MultipleRootsException e)
@@ -407,17 +413,5 @@ public class QueryModuleSearchQueryUtil
 				selectedColumnsMetadata.setDefinedView(true);
 			}
 		}
-	}
-	
-	/**
-	 * This will set the limited tree data in session.
-	 * @param limitedRecordsList
-	 * @return
-	 */
-	public List<QueryTreeNodeData> setLimitedTreeDataInSession(List<QueryTreeNodeData> limitedRecordsList)
-	{
-		ArrayList<QueryTreeNodeData> limitedTreeData = new ArrayList<QueryTreeNodeData>();
-		limitedTreeData.addAll(limitedRecordsList);
-		return limitedTreeData;
 	}
 }
