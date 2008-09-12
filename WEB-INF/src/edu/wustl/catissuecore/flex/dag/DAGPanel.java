@@ -1006,35 +1006,40 @@ public class DAGPanel
 	
 	private String getCustomNodeName(String nodeName, Map<String,CustomFormulaUIBean> TQUIMap)
 	{
-		String customNodeName = " "; 
-		int customNodeNumber = 1;
-		boolean isContains =  false;
-		Set keySet = TQUIMap.keySet();
-		
-		if(keySet.size() == 0)
-		{
-			//This is the Initial case
-			customNodeName = nodeName + "_" + customNodeNumber;
-		}
-		else
-		{
-			while(customNodeNumber <=keySet.size())
+			String customNodeName = " "; 
+			int customNodeNumber = 1;
+			boolean isContains =  false;
+			Set keySet = TQUIMap.keySet();
+			
+			if(keySet.size() == 0)
 			{
+				//This is the Initial case
 				customNodeName = nodeName + "_" + customNodeNumber;
-			 	isContains = isKeySetContainsNodeName(customNodeName,keySet);
-			 	if(isContains)
-			 	{
-			 		customNodeNumber ++;
-			 	}
 			}
-		}
-		if(customNodeNumber == (keySet.size()+1) && isContains)
-		{
-			//By this time, customNodeNumber already exceeds the length of the KeySet, so new  customNodeName is
-			customNodeName = nodeName + "_" + customNodeNumber;
-		}
-	   return customNodeName;	
+			else
+			{
+				while(customNodeNumber <=keySet.size())
+				{
+					customNodeName = nodeName + "_" + customNodeNumber;
+				 	isContains = isKeySetContainsNodeName(customNodeName,keySet);
+				 	if(isContains)
+				 	{
+				 		customNodeNumber ++;
+				 	}
+				 	else
+				 	{
+				 		break;
+				 	}
+				}
+			}
+			if(customNodeNumber == (keySet.size()+1) && isContains)
+			{
+				//By this time, customNodeNumber already exceeds the length of the KeySet, so new  customNodeName is
+				customNodeName = nodeName + "_" + customNodeNumber;
+			}
+		   return customNodeName;	
 	}
+
 	
 	/**
 	 * Repaints DAG
