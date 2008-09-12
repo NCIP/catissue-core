@@ -26,10 +26,10 @@ public class AddPermissibleValue
 	
 	public List<String> addPermissibleValue() throws SQLException, IOException
 	{
-		List<String> deleteAttributeSQL=new ArrayList<String>();
-		List<String> deleteSQL;
+		List<String> addAttributeSQL=new ArrayList<String>();
+		List<String> addSQL;
 		populateEntityList();
-		populateAttributesToDeleteMap();
+		populateAttributesToAddMap();
 		populatePermissibleValueToAddMap();
 		populateEntityIDList();
 		entityIDAttributeListMap = UpdateMetadataUtil.populateEntityAttributeMap(connection, entityIDMap);
@@ -44,18 +44,17 @@ public class AddPermissibleValue
 			{
 				if(isAttributeToAdd(key, attribute.getName()))
 				{
-					deleteSQL = addPermissibleValue(identifier, attribute);
-					deleteAttributeSQL.addAll(deleteSQL);
+					addSQL = addPermissibleValue(identifier, attribute);
+					addAttributeSQL.addAll(addSQL);
 				}
 			}
 		}
-		return deleteAttributeSQL;
+		return addAttributeSQL;
 	}
 
 	private List<String> addPermissibleValue(Long identifier, AttributeInterface attribute) throws SQLException, IOException
 	{
 		List<String> deleteSQL = new ArrayList<String>();
-		String sql;
 				
 		String dataType = getDataTypeOfAttribute(attribute.getName());
 		String tableName=null;
@@ -99,22 +98,36 @@ public class AddPermissibleValue
 		}
 		stmt.close();
 		
-		sql = "select max(IDENTIFIER) from dyextn_data_element";
+		sql = "select IDENTIFIER from dyextn_data_element where ATTRIBUTE_TYPE_INFO_ID = "+attribute.getAttributeTypeInformation().getDataElement().getId();
 		stmt = connection.createStatement();
 		rs = stmt.executeQuery(sql);
 		if(rs.next())
 		{
-			dataElementId = rs.getLong(1)+1;
+			dataElementId = rs.getLong(1);
 		}
 		stmt.close();
 		
+		if(dataElementId==0)
+		{
+			stmt = connection.createStatement();
+			sql = "select max(IDENTIFIER) from dyextn_data_element";
+			stmt = connection.createStatement();
+			rs = stmt.executeQuery(sql);
+			if(rs.next())
+			{
+				dataElementId = rs.getLong(1)+1;
+			}
+			stmt.close();
+			
+			sql = "insert into dyextn_data_element values ("+dataElementId+","+attribute.getAttributeTypeInformation().getDataElement().getId()+",null)";
+			UpdateMetadataUtil.executeInsertSQL(sql, connection.createStatement());
+		
+			sql = "insert into dyextn_userdefined_de values ("+dataElementId+")";
+			UpdateMetadataUtil.executeInsertSQL(sql, connection.createStatement());
+		}
+		
 		List permissibleValueList = permissibleValueToAddMap.get(attribute.getName());
 		
-		sql = "insert into dyextn_data_element values ("+dataElementId+","+attribute.getAttributeTypeInformation().getDataElement().getId()+",null)";
-		UpdateMetadataUtil.executeInsertSQL(sql, connection.createStatement());
-		
-		sql = "insert into dyextn_userdefined_de values ("+dataElementId+")";
-		UpdateMetadataUtil.executeInsertSQL(sql, connection.createStatement());
 		for(Object value : permissibleValueList)
 		{
 			if (value  instanceof String)
@@ -155,32 +168,41 @@ public class AddPermissibleValue
 	private void populatePermissibleValueToAddMap()
 	{
 		List permissibleValueList = new ArrayList();
-		permissibleValueList = new ArrayList();
 		permissibleValueList.add("Cell");
 		permissibleValueList.add("Fluid");
 		permissibleValueList.add("Molecular");
-		permissibleValueList.add("Tissue");
-		
+		permissibleValueList.add("Tissue");	
 		permissibleValueToAddMap.put("specimenClass", permissibleValueList);
+		
+		permissibleValueList = new ArrayList();
+		permissibleValueList.add("CPT");
+		permissibleValueList.add("Paxgene");
+		permissibleValueToAddMap.put("container", permissibleValueList);
 	}
 	
-	private void populateAttributesToDeleteMap()
+	private void populateAttributesToAddMap()
 	{
-		List<String> attributeToDelete =  new ArrayList<String>();
+		List<String> attributeToAdd =  new ArrayList<String>();
 		
-		attributeToDelete =  new ArrayList<String>();
-		attributeToDelete.add("specimenClass");
-		entityAttributesToAdd.put("edu.wustl.catissuecore.domain.AbstractSpecimen",attributeToDelete);
+		attributeToAdd =  new ArrayList<String>();
+		attributeToAdd.add("specimenClass");
+		entityAttributesToAdd.put("edu.wustl.catissuecore.domain.AbstractSpecimen",attributeToAdd);
+		
+		attributeToAdd =  new ArrayList<String>();
+		attributeToAdd.add("container");
+		entityAttributesToAdd.put("edu.wustl.catissuecore.domain.CollectionEventParameters",attributeToAdd);
 	}
 
 	private void populateAttributeDatatypeMap() 
 	{
 		attributeDatatypeMap.put("specimenClass", "string");
+		attributeDatatypeMap.put("container", "string");
 	}
 
 	private void populateEntityList() 
 	{
 		entityNameList.add("edu.wustl.catissuecore.domain.AbstractSpecimen");
+		entityNameList.add("edu.wustl.catissuecore.domain.CollectionEventParameters");
 	}
 	
 	private void populateEntityIDList() throws SQLException 
