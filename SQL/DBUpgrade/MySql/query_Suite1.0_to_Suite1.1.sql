@@ -2,6 +2,8 @@
 -- this may be app specific 
 
 -- catissue 
+SET storage_engine=InnoDB
+
 alter table QUERY_PARAMETERIZED_QUERY drop foreign key FKA272176BBC7298A9, drop index FKA272176BBC7298A9;
 alter table QUERY_INTRA_MODEL_ASSOCIATION drop foreign key FKF1EDBDD3BC7298A9, drop index FKF1EDBDD3BC7298A9;
 alter table QUERY_CONSTRAINTS drop foreign key FKE364FCFFD3C625EA, drop index FKE364FCFFD3C625EA;
