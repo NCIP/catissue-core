@@ -39,6 +39,8 @@ public class Variables extends edu.wustl.common.util.global.Variables
     public static boolean isSpecimenCollGroupBarcodeGeneratorAvl = false;
     public static boolean isCollectionProtocolRegistrationBarcodeGeneratorAvl = false;
     
+    public static boolean isPhoneNumberToBeValidated = true;
+    
 	// Patch ID: SimpleSearchEdit_7
     public static Map<String, String> aliasAndPageOfMap = new HashMap<String, String>();
     

@@ -1375,19 +1375,25 @@ public class UserBizLogic extends DefaultBizLogic
 		}
 		else 
 		{
-			if (!validator.isValidPhoneNumber(user.getAddress().getPhoneNumber()))
+			if(edu.wustl.catissuecore.util.global.Variables.isPhoneNumberToBeValidated)
 			{
-				message = ApplicationProperties.getValue("user.phoneNumber");
-				throw new DAOException(ApplicationProperties.getValue("error.phonenumber.format",message));	
+				if (!validator.isValidPhoneNumber(user.getAddress().getPhoneNumber()))
+				{
+					message = ApplicationProperties.getValue("user.phoneNumber");
+					throw new DAOException(ApplicationProperties.getValue("error.phonenumber.format",message));	
+				}
 			}
 		}
 		
-		if (!validator.isEmpty(user.getAddress().getFaxNumber()))
+		if(edu.wustl.catissuecore.util.global.Variables.isPhoneNumberToBeValidated)
 		{
-			if (!validator.isValidPhoneNumber(user.getAddress().getFaxNumber()))
+			if (!validator.isEmpty(user.getAddress().getFaxNumber()))
 			{
-				message = ApplicationProperties.getValue("user.faxNumber");
-				throw new DAOException(ApplicationProperties.getValue("error.faxnumber.format",message));	
+				if (!validator.isValidPhoneNumber(user.getAddress().getFaxNumber()))
+				{
+					message = ApplicationProperties.getValue("user.faxNumber");
+					throw new DAOException(ApplicationProperties.getValue("error.faxnumber.format",message));	
+				}
 			}
 		}
 		//Bug #4349 ends
