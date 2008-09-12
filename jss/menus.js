@@ -363,25 +363,8 @@ Ext.onReady(function(){
             },
             {
                 text: 'Shipping And Tracking',
-				tooltip:'Shipping And Tracking',
-				href:'ShowDashboardAction.do',
-                menu: {        // <-- submenu by nested config object
-                    items: [
-                        // stick any markup in a menu
-						{
-                            text: 'Dashboard',
-                            href:'ShowDashboardAction.do'
-                        },
-                       {
-                            text: 'Create Shipment',
-                            href:'BaseShipment.do'
-                        }, 
-						{
-                            text: 'Create Shipment Request',
-                             href:'ShipmentRequestAction.do'
-                        }
-                    ]
-                }
+				tooltip:'Shipping And Tracking Dashboard',
+				href : 'ShowDashboardAction.do'
             }
         ]
     });
