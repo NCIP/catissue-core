@@ -1,6 +1,9 @@
 /*
- * $Name: C2
+ * $Name: RC1
  * $Log: ApplicationVersionInfo.txt,v $
+ * Revision 1.2.8.19  2008/09/12 12:53:04  sachin_lale
+ * RC1
+ *
  * Revision 1.2.8.18  2008/08/31 10:31:18  abhijit_naik
  * merged from branch caTISSUE_SUITE_V1_1_C2_28_AUG_2008_BRANCH
  *
