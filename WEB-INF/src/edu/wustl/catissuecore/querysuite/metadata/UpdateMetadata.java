@@ -403,6 +403,7 @@ public class UpdateMetadata
 		
 		//CSM changes related to query
 		dbUpdateSQL.add("update dyextn_role set association_type = 'ASSOCIATION' where identifier in (294,324,322,320,318,316,328,330,332,334,336,312,310,308,306,304,302,314,20)");
+		dbUpdateSQL.add("UPDATE dyextn_primitive_attribute SET IS_IDENTIFIED =1 where IDENTIFIER in (839,855,853,851,850,847,846,947,394,681,682,683,684,646,647,648,649,22,102,114,175,180,188,194,201,243,271,315,351,412,422,432,444,455,465,479,493,504,515,531,544,557,569,580,591,602,614,625,635,667,693,759,767,917,928,1239,1240,1251,1285,1873,1876,1918)");
 		
 		//Delete initial curated path between OrderDetails and TissueSpecimen which is invalid
 		dbUpdateSQL.add("delete from path where FIRST_ENTITY_ID in (select identifier from dyextn_abstract_metadata where NAME='edu.wustl.catissuecore.domain.OrderDetails') and LAST_ENTITY_ID= (select identifier from dyextn_abstract_metadata where NAME='edu.wustl.catissuecore.domain.TissueSpecimen')");
