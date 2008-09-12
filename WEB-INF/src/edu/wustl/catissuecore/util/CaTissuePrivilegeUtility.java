@@ -267,6 +267,22 @@ public class CaTissuePrivilegeUtility
 					validSiteIds.add(site.getId());
 				}
 			}
+			
+			if(siteCollection != null && !siteCollection.isEmpty())
+			{
+				for(Site site : siteCollection)
+				{
+//					if(!siteIdSetSpecific.contains(site.getId()))
+//					{
+						SiteUserRolePrivilegeBean siteUserRolePrivilegeBean = new SiteUserRolePrivilegeBean();
+						List<Site> siteList = new ArrayList<Site>();
+						siteList.add(site);
+						siteUserRolePrivilegeBean.setSiteList(siteList);
+						result.put("SITE_"+site.getId(), siteUserRolePrivilegeBean);
+//					}
+				}
+			}
+			
 			Set<Long> siteIdSetSpecific = new HashSet<Long>(); 
 			
 			List<NameValueBean> cpPrivilegeGroupingMap = new ArrayList<NameValueBean>();
@@ -339,24 +355,10 @@ public class CaTissuePrivilegeUtility
 					}
 				}
 			}
-			if(siteCollection != null && !siteCollection.isEmpty())
-			{
-				for(Site site : siteCollection)
-				{
-					if(!siteIdSetSpecific.contains(site.getId()))
-					{
-						SiteUserRolePrivilegeBean siteUserRolePrivilegeBean = new SiteUserRolePrivilegeBean();
-						List<Site> siteList = new ArrayList<Site>();
-						siteList.add(site);
-						siteUserRolePrivilegeBean.setSiteList(siteList);
-						result.put("SITE_"+site.getId(), siteUserRolePrivilegeBean);
-					}
-				}
-			}
 		}
 		catch (Exception e)
 		{
-			return null;
+			// return null;
 		}
 		finally
 		{
