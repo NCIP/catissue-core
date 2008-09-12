@@ -294,18 +294,16 @@ function updateCPTree()
 						<tr class="tableheading">
 							<td width="6%" class="black_ar_b"><label for="delete"
 								align="left"><bean:message key="app.select" /></label></td>
-							<td width="21%" class="black_ar_b" align="left"><bean:message
+							<td width="27%" class="black_ar_b" align="left"><bean:message
 								key="assignPrivileges.site(s)" /></td>
-							<td width="20%" class="black_ar_b" align="left"><bean:message
+							<td width="22%" class="black_ar_b" align="left"><bean:message
 								key="user.name" /></td>
-							<td width="15%" class="black_ar_b" align="left"><bean:message
-								key="user.role" /></td>
-							<td width="33%" class="black_ar_b" align="left"><bean:message
+							<td width="40%" class="black_ar_b" align="left"><bean:message
 								key="app.Privileges" /></td>
 							<td width="5%" class="black_ar_b">&nbsp;</td>
 						</tr>
 						<tr>
-							<td colspan="6" width="100%">
+							<td colspan="5" width="100%">
 							<div
 								style="height: 80px; background-color: #ffffff;overflow: auto;">
 							<table border="0" width="100%" cellspacing="0" cellpadding="0">
@@ -335,7 +333,7 @@ function updateCPTree()
 										<td width="6%" class="black_ar"><input type='checkbox'
 											name='<%=chkName %>' id='<%=chkName %>'
 											onclick="enableDeleteButton('summaryTableId','deleteButtonId')" /></td>
-										<td width="21%" class="black_ar"
+										<td width="27%" class="black_ar"
 											onmouseover="Tip('<%=arr[1]%>',WIDTH,200)">
 										<%
 												if (arr[1].length() > 30) {
@@ -343,15 +341,13 @@ function updateCPTree()
 													}
 										%><span><%=arr[1]%></span></td>
 
-										<td width="20%" class="black_ar"><span><%=arr[0]%></span></td>
-										<td width="15%" class="black_ar"><span><%=arr[2]%></span>
-										</td>
-
-										<td width="33%" class="black_ar"
+										<td width="22%" class="black_ar"><span><%=arr[0]%></span></td>
+										
+										<td width="40%" class="black_ar"
 											onmouseover="Tip('<%=arr[3]%>',WIDTH,200)">
 										<%
-												if (arr[3].length() > 40) {
-												arr[3] = arr[3].substring(0, 37) + "...";
+												if (arr[3].length() > 45) {
+												arr[3] = arr[3].substring(0, 42) + "...";
 													}
 										%> <span><%=arr[3]%></span></td>
 

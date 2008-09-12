@@ -554,27 +554,26 @@ function handleStatus(status)
 													align="left"><bean:message key="app.select" /></label></td>
 											</logic:notEqual>
 
-											<td width="21%" class="black_ar_b" align="left"><bean:message
+											<td width="27%" class="black_ar_b" align="left"><bean:message
 												key="assignPrivileges.site(s)" /></td>
-											<td width="20%" class="black_ar_b" align="left"><bean:message
+											<td width="22%" class="black_ar_b" align="left"><bean:message
 												key="assignPrivileges.collectionProtocol(s)" /></td>
-											<td width="15%" class="black_ar_b" align="left"><bean:message
-												key="user.role" /></td>
+											
 											<logic:notEqual name="pageOf"
 												value='${requestScope.pageOfUserProfile}'>
-												<td width="33%" class="black_ar_b" align="left"><bean:message
+												<td width="40%" class="black_ar_b" align="left"><bean:message
 													key="app.Privileges" /></td>
 
 												<td width="5%" class="black_ar_b">&nbsp;</td>
 											</logic:notEqual>
 											<logic:equal name="pageOf"
 												value='${requestScope.pageOfUserProfile}'>
-												<td colspan="3" width="44%" class="black_ar_b" align="left"><bean:message
+												<td colspan="3" width="51%" class="black_ar_b" align="left"><bean:message
 													key="app.Privileges" /></td>
 											</logic:equal>
 										</tr>
 										<tr>
-											<td colspan="6" width="100%">
+											<td colspan="5" width="100%">
 											<div
 												style="height: 80px; background-color: #ffffff;overflow: auto;">
 											<logic:notEqual name="pageOf"
@@ -617,7 +616,7 @@ function handleStatus(status)
 																			id='<%=chkName %>'
 																			onclick="enableDeleteButton('summaryTableId','deleteButtonId')" /></td>
 																	</logic:notEqual>
-																	<td width="21%" class="black_ar"
+																	<td width="27%" class="black_ar"
 																		onmouseover="Tip('<%=arr[1]%>',WIDTH,200)">
 																	<%
 																			if (arr[1].length() > 20) {
@@ -625,17 +624,16 @@ function handleStatus(status)
 																				}
 																	%><span><%=arr[1]%></span></td>
 
-																	<td width="20%" class="black_ar"><span><%=arr[0]%></span></td>
-																	<td width="15%" class="black_ar"><span><%=arr[2]%></span>
-																	</td>
+																	<td width="22%" class="black_ar"><span><%=arr[0]%></span></td>
+																	
 																	<logic:notEqual name="pageOf"
 																		value='${requestScope.pageOfUserProfile}'>
 
-																		<td width="33%" class="black_ar"
+																		<td width="40%" class="black_ar"
 																			onmouseover="Tip('<%=arr[3]%>',WIDTH,200)">
 																		<%
-																				if (arr[3].length() > 40) {
-																				arr[3] = arr[3].substring(0, 37) + "...";
+																				if (arr[3].length() > 60) {
+																				arr[3] = arr[3].substring(0, 57) + "...";
 																					}
 																		%> <span><%=arr[3]%></span></td>
 
@@ -650,11 +648,11 @@ function handleStatus(status)
 
 																	<logic:equal name="pageOf"
 																		value='${requestScope.pageOfUserProfile}'>
-																		<td colspan="2" width="44%" class="black_ar"
+																		<td colspan="2" width="51%" class="black_ar"
 																			onmouseover="Tip('<%=arr[3]%>',WIDTH,200)">
 																		<%
-																				if (arr[3].length() > 50) {
-																				arr[3] = arr[3].substring(0, 47) + "...";
+																				if (arr[3].length() > 65) {
+																				arr[3] = arr[3].substring(0, 62) + "...";
 																					}
 																		%> <span><%=arr[3]%></span></td>
 																	</logic:equal>
@@ -796,7 +794,7 @@ function handleStatus(status)
 												<bean:message key="buttons.cancel" />
 											</html:link>
 										</logic:equal>
-									</logic:notEqual> <logic:equal name="pageOf"
+									</logic:notEqual> <logic:equal name="pageOf" 
 										value='${requestScope.pageOfSignUp}'>
 										<a href="#" class="cancellink"><html:link
 											page="/RedirectHome.do" styleClass="cancellink">
