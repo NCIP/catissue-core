@@ -1,5 +1,5 @@
 /*
- * $Name: 1.41.2.30 $
+ * $Name: 1.41.2.31 $
  *
  * */
 package edu.wustl.catissuecore.util.listener;
@@ -87,6 +87,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 	    	Logger.configDefaultLogger(servletContext);
 	        ApplicationProperties.initBundle(servletContext.getInitParameter("resourcebundleclass"));
 			setGlobalVariable();
+			logger =Logger.getLogger(CatissueCoreServletContextListener.class);
 	        initCatissueParams();
 			logApplnInfo();
 			initCDEManager();
