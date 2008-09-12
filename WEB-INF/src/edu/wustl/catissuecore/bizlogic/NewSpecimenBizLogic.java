@@ -51,6 +51,7 @@ import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.SpecimenPosition;
+import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.namegenerator.BarcodeGenerator;
@@ -407,6 +408,12 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	 */
 	private void setSpecimenEvents(Specimen specimen, SessionDataBean sessionDataBean)
 	{
+		if(specimen.getCollectionStatus() != null && Constants.COLLECTION_STATUS_PENDING.equals(specimen.getCollectionStatus()))
+		{
+			specimen.setSpecimenEventCollection(null);
+		}
+		else
+		{
 		Specimen parentSpecimen = (Specimen)specimen.getParentSpecimen();
 		if (specimen.getParentSpecimen() == null)
 		{
@@ -422,6 +429,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		{
 			specimen.setSpecimenEventCollection(populateDeriveSpecimenEventCollection(parentSpecimen
 					, specimen));
+		}
 		}
 	}
 
@@ -1173,9 +1181,22 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			generateLabel(persistentSpecimen);
 			generateBarCode(persistentSpecimen);
 		}
+		addSpecimenEvents(persistentSpecimen,specimen,sessionDataBean,oldStatus);
+		
 		setExternalIdentifier(dao, sessionDataBean, specimen, specimenOld, persistentSpecimen);
 	}
-
+	
+	private void addSpecimenEvents(Specimen persistentSpecimen,Specimen specimen,SessionDataBean sessionDataBean,String oldStatus)
+	{
+		if(Constants.COLLECTION_STATUS_PENDING.equals(oldStatus) && Constants.COLLECTION_STATUS_COLLECTED.equals(specimen.getCollectionStatus()))
+		{	
+			SpecimenRequirement reqSpecimen  = persistentSpecimen.getSpecimenRequirement();
+			if (reqSpecimen != null && !reqSpecimen.getSpecimenEventCollection().isEmpty() && reqSpecimen.getSpecimenEventCollection() != null)
+			{
+				persistentSpecimen.setPropogatingSpecimenEventCollection(reqSpecimen.getSpecimenEventCollection(), sessionDataBean.getUserId());
+			}
+		}
+	}
 	/**
 	 * @param dao DAO object
 	 * @param sessionDataBean Session data
@@ -2004,7 +2025,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		}
 		else
 		{
-			if (specimen.getParentSpecimen() == null && (specimen.getCollectionStatus()==null || !specimen.getCollectionStatus().equals("Pending")))
+			if (specimen.getParentSpecimen() == null && (specimen.getCollectionStatus()==null))
 			{
 				throw new DAOException(ApplicationProperties.getValue("error.specimen.noevents"));
 			}
@@ -2750,7 +2771,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			((MolecularSpecimen) specimenDO)
 					.setConcentrationInMicrogramPerMicroliter(concentration);
 		}
-
+		addSpecimenEvents(specimenDO,specimenVO,sessionDataBean,oldStatus);
 	}
 
 	/**
