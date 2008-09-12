@@ -501,10 +501,11 @@
 		</war>
 
 		<copy file="${temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsHibernate.cfg.xml" todir="${temp.dir}/dynamicExtensions/WEB-INF/classes" overwrite="true" />
-
+		<!-- commenting this target for DE war 
 		<antcall target="copydeletedjars">
 			<param name="delPath" value="${temp.dir}/dynamicExtensions/WEB-INF/lib"/>
 		</antcall>
+		-->
 
 		<war destfile="${temp.dir}/dynamicExtensions.war" webxml="${temp.dir}/dynamicExtensions/WEB-INF/web.xml">
 			<fileset dir="${temp.dir}/dynamicExtensions">
