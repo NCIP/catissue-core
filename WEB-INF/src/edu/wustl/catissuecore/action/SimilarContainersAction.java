@@ -8,6 +8,7 @@
 package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -85,18 +86,36 @@ public class SimilarContainersAction extends SecureAction
 		}
 		else if ("Auto".equals(similarContainersForm.getParentContainerSelected()))
 		{
-			Site site = bizLogic.getRelatedSite(similarContainersForm.getParentContainerId());
+			long parentContId = similarContainersForm.getParentContainerId();
+			
+			Site site = bizLogic.getRelatedSite(parentContId);
 			if(site!=null)
 			{
 				request = Utility.setCollectionProtocolList(request, site.getId());
 			}
+			else
+			{
+				List<NameValueBean> cpList = new ArrayList<NameValueBean>();
+				Map<Long,String> cpTitleMap = new HashMap<Long,String>();
+				request.setAttribute(Constants.PROTOCOL_LIST, cpList);
+				request.setAttribute(Constants.CP_ID_TITLE_MAP, cpTitleMap);
+			}
 		}
 		else if ("Manual".equals(similarContainersForm.getParentContainerSelected()))
 		{
-			Site site = bizLogic.getRelatedSiteForManual(similarContainersForm.getSelectedContainerName());
+			String selectedContName = similarContainersForm.getSelectedContainerName();
+			
+			Site site = bizLogic.getRelatedSiteForManual(selectedContName);
 			if(site!=null)
 			{
 				request = Utility.setCollectionProtocolList(request, site.getId());
+			}
+			else
+			{
+				List<NameValueBean> cpList = new ArrayList<NameValueBean>();
+				Map<Long,String> cpTitleMap = new HashMap<Long,String>();
+				request.setAttribute(Constants.PROTOCOL_LIST, cpList);
+				request.setAttribute(Constants.CP_ID_TITLE_MAP, cpTitleMap);
 			}
 		}
 		
