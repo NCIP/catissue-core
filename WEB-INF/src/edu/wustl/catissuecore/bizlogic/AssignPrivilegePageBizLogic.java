@@ -497,7 +497,7 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 				actionList = getReformedNameValueBeanList(scientistPrivilegesList);
 				selectedActionsList=new ArrayList<NameValueBean>();
 				
-				cpList = getCPList(false);
+				// cpList = getCPList(false);
 			}
 			else
 			{
