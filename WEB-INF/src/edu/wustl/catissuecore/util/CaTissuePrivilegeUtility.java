@@ -30,6 +30,7 @@ import edu.wustl.common.security.PrivilegeManager;
 import edu.wustl.common.util.Permissions;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.Variables;
+import edu.wustl.common.util.logger.Logger;
 import gov.nih.nci.security.authorization.domainobjects.Role;
 import gov.nih.nci.security.exceptions.CSException;
 
@@ -99,6 +100,16 @@ public class CaTissuePrivilegeUtility
 					// Added by Ravindra to handle bean for EDIT mode
 					bean.setRowEdited(false);
 	
+					List<NameValueBean> privList = bean.getPrivileges();
+					if(!privList.isEmpty())
+					{
+						NameValueBean nmv1 = privList.get(0);
+						if(Permissions.READ_DENIED.equals(nmv1.getName()))
+						{
+							bean.setSiteList(new ArrayList<Site>());
+						}
+					}
+					
 					map.put("CP_"+cp.getId(), bean);
 				}
 			}
@@ -247,6 +258,15 @@ public class CaTissuePrivilegeUtility
 			
 			// To show details of Sites having Default functionality on CP
 			Collection<Site> siteCollection = cp.getSiteCollection();
+			Set<Long> validSiteIds = new HashSet<Long>();
+			
+			if(siteCollection !=null)
+			{
+				for(Site site : siteCollection)
+				{
+					validSiteIds.add(site.getId());
+				}
+			}
 			Set<Long> siteIdSetSpecific = new HashSet<Long>(); 
 			
 			List<NameValueBean> cpPrivilegeGroupingMap = new ArrayList<NameValueBean>();
@@ -291,7 +311,10 @@ public class CaTissuePrivilegeUtility
 						for (Long siteId : siteSet)
 						{
 							Site site = (Site) hibernateDao.retrieve(Site.class.getName(), siteId);
-							siteList.add(site);
+							if(validSiteIds.contains(siteId))
+							{
+								siteList.add(site);
+							}
 							siteIdSetSpecific.add(siteId);
 						}
 
@@ -315,26 +338,24 @@ public class CaTissuePrivilegeUtility
 						}
 					}
 				}
-				
-				if(siteCollection != null && !siteCollection.isEmpty())
+			}
+			if(siteCollection != null && !siteCollection.isEmpty())
+			{
+				for(Site site : siteCollection)
 				{
-					for(Site site : siteCollection)
+					if(!siteIdSetSpecific.contains(site.getId()))
 					{
-						if(!siteIdSetSpecific.contains(site.getId()))
-						{
-							SiteUserRolePrivilegeBean siteUserRolePrivilegeBean = new SiteUserRolePrivilegeBean();
-							List<Site> siteList = new ArrayList<Site>();
-							siteList.add(site);
-							siteUserRolePrivilegeBean.setSiteList(siteList);
-							result.put("SITE_"+site.getId(), siteUserRolePrivilegeBean);
-						}
+						SiteUserRolePrivilegeBean siteUserRolePrivilegeBean = new SiteUserRolePrivilegeBean();
+						List<Site> siteList = new ArrayList<Site>();
+						siteList.add(site);
+						siteUserRolePrivilegeBean.setSiteList(siteList);
+						result.put("SITE_"+site.getId(), siteUserRolePrivilegeBean);
 					}
 				}
 			}
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
 			return null;
 		}
 		finally
@@ -345,7 +366,7 @@ public class CaTissuePrivilegeUtility
 			}
 			catch (DAOException e)
 			{
-				e.printStackTrace();
+				Logger.out.debug(e.getMessage(), e);
 			}
 		}
 
