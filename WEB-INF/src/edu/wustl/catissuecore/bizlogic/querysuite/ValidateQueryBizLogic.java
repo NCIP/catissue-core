@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.wustl.catissuecore.querysuite.CatissueSqlGenerator;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -76,30 +77,33 @@ public class ValidateQueryBizLogic {
 		}
 		try 
 		{
-		SqlGenerator sqlGenerator = new CatissueSqlGenerator();
-		String selectSql = sqlGenerator.generateSQL(query);
-		Map<String, IOutputTerm> outputTermsColumns = sqlGenerator.getOutputTermsColumns();
-		HttpSession session = request.getSession(); 
-		QueryDetails queryDetailsObj = new QueryDetails(session);
-		session.setAttribute(Constants.OUTPUT_TERMS_COLUMNS,outputTermsColumns);
-		session.setAttribute(Constants.SAVE_GENERATED_SQL,selectSql);
-		List<OutputTreeDataNode> rootOutputTreeNodeList = sqlGenerator
-		.getRootOutputTreeNodeList();
-		session.setAttribute(Constants.SAVE_TREE_NODE_LIST, rootOutputTreeNodeList);
-		Map<String, OutputTreeDataNode> uniqueIdNodesMap = QueryObjectProcessor
-		.getAllChildrenNodes(rootOutputTreeNodeList);
-		queryDetailsObj.setUniqueIdNodesMap(uniqueIdNodesMap);
-		//This method will check if main objects for all the dependant objects are present in query or not.
-		Map<EntityInterface, List<EntityInterface>> mainEntityMap = QueryCSMUtil.setMainObjectErrorMessage(
-				query, session, queryDetailsObj);
-		session.setAttribute(Constants.ID_NODES_MAP, uniqueIdNodesMap);
-		// if no main object is present in the map show the error message set in the session.
-		if(mainEntityMap == null)
-		{
-			//return NO_MAIN_OBJECT_IN_QUERY;
-			validationMessage = (String)session.getAttribute(Constants.NO_MAIN_OBJECT_IN_QUERY);
-			validationMessage = "<li><font color='blue' family='arial,helvetica,verdana,sans-serif'>"+validationMessage+"</font></li>";
-		}
+			HttpSession session = request.getSession(); 
+			SqlGenerator sqlGenerator = new CatissueSqlGenerator();
+			String selectSql = sqlGenerator.generateSQL(query);
+			Map<AttributeInterface, String> attributeColumnNameMap = sqlGenerator.getAttributeColumnNameMap();
+			session.setAttribute(Constants.ATTRIBUTE_COLUMN_NAME_MAP, attributeColumnNameMap);
+			Map<String, IOutputTerm> outputTermsColumns = sqlGenerator.getOutputTermsColumns();
+
+			QueryDetails queryDetailsObj = new QueryDetails(session);
+			session.setAttribute(Constants.OUTPUT_TERMS_COLUMNS,outputTermsColumns);
+			session.setAttribute(Constants.SAVE_GENERATED_SQL,selectSql);
+			List<OutputTreeDataNode> rootOutputTreeNodeList = sqlGenerator
+			.getRootOutputTreeNodeList();
+			session.setAttribute(Constants.SAVE_TREE_NODE_LIST, rootOutputTreeNodeList);
+			Map<String, OutputTreeDataNode> uniqueIdNodesMap = QueryObjectProcessor
+			.getAllChildrenNodes(rootOutputTreeNodeList);
+			queryDetailsObj.setUniqueIdNodesMap(uniqueIdNodesMap);
+			//This method will check if main objects for all the dependant objects are present in query or not.
+			Map<EntityInterface, List<EntityInterface>> mainEntityMap = QueryCSMUtil.setMainObjectErrorMessage(
+					query, session, queryDetailsObj);
+			session.setAttribute(Constants.ID_NODES_MAP, uniqueIdNodesMap);
+			// if no main object is present in the map show the error message set in the session.
+			if(mainEntityMap == null)
+			{
+				//return NO_MAIN_OBJECT_IN_QUERY;
+				validationMessage = (String)session.getAttribute(Constants.NO_MAIN_OBJECT_IN_QUERY);
+				validationMessage = "<li><font color='blue' family='arial,helvetica,verdana,sans-serif'>"+validationMessage+"</font></li>";
+			}
 		}
 		catch (MultipleRootsException e)
 		{

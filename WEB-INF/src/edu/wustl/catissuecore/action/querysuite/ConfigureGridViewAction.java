@@ -93,9 +93,10 @@ public class ConfigureGridViewAction extends BaseAction
 			//defineGridViewBizLogic.getSelectedColumnsMetadata(categorySearchForm, queryDetailsObj,selectedColumnsMetadata);
 			defineGridViewBizLogic.getSelectedColumnsMetadata(categorySearchForm, queryDetailsObj, selectedColumnsMetadata,query.getConstraints());
 			StringBuffer selectedColumnNames = new StringBuffer();
+			String nodeData = getClickedNodeData(sql);
 			definedColumnsList = defineGridViewBizLogic.getSelectedColumnList(categorySearchForm,
 					selectedColumnsMetadata.getSelectedAttributeMetaDataList(), selectedColumnNames,
-						queryResultObjecctDataMap, queryDetailsObj, outputTermsColumns);
+						queryResultObjecctDataMap, queryDetailsObj, outputTermsColumns,nodeData);
 			spreadSheetDataMap.put(Constants.SPREADSHEET_COLUMN_LIST, definedColumnsList);
 			QueryShoppingCart cart = (QueryShoppingCart)session.getAttribute(Constants.QUERY_SHOPPING_CART);
 			// gets the message and sets it in the session.
@@ -136,9 +137,10 @@ public class ConfigureGridViewAction extends BaseAction
 			StringBuffer selectedColumnNames = new StringBuffer();
 			//Restoring to the default view.
 			selectedColumnsMetadata.setSelectedOutputAttributeList(new ArrayList<IOutputAttribute>());
+			String nodeData = getClickedNodeData(sql);
 			definedColumnsList = defineGridViewBizLogic.getSelectedColumnList(categorySearchForm, 
 					selectedColumnsMetadata.getSelectedAttributeMetaDataList(), selectedColumnNames,
-					queryResultObjecctDataMap, queryDetailsObj,outputTermsColumns);
+					queryResultObjecctDataMap, queryDetailsObj,outputTermsColumns,nodeData);
 			String SqlForSelectedColumns = defineGridViewBizLogic.createSQLForSelectedColumn(selectedColumnNames.toString(), sql);
 			spreadSheetDataMap.put(Constants.SPREADSHEET_COLUMN_LIST, definedColumnsList);
 			querySessionData = queryOutputSpreadsheetBizLogic.getQuerySessionData(queryDetailsObj,
@@ -157,5 +159,16 @@ public class ConfigureGridViewAction extends BaseAction
 		spreadSheetDataMap.put(Constants.MAIN_ENTITY_MAP, queryDetailsObj.getMainEntityMap());
 		QueryModuleUtil.setGridData(request, spreadSheetDataMap);
 		return mapping.findForward(Constants.SUCCESS);
+	}
+
+	private String getClickedNodeData(String sql) {
+		
+		int index = sql.lastIndexOf("=");
+		String clickedData = "";
+		if(index != -1)
+		{
+			clickedData = sql.substring(index +1,sql.length());
+		}
+		return clickedData;
 	}
 }

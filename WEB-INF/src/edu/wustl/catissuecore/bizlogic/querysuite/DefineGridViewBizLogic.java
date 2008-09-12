@@ -282,13 +282,14 @@ public class DefineGridViewBizLogic
 	 * @param selectedAttributeMetaDataList
 	 * @param selectedColumnNames
 	 * @param queryResultObjecctDataMap
+	 * @param nodeData 
 	 * @param mainEntityMap
 	 * @param uniqueIdNodesMap
 	 * @return
 	 */
 	public List<String> getSelectedColumnList(CategorySearchForm categorySearchForm,
 			List<QueryOutputTreeAttributeMetadata> selectedAttributeMetaDataList, StringBuffer selectedColumnNames,
-			Map<Long, QueryResultObjectDataBean> queryResultObjecctDataMap, QueryDetails queryDetailsObj,Map<String, IOutputTerm> outputTermsColumns)
+			Map<Long, QueryResultObjectDataBean> queryResultObjecctDataMap, QueryDetails queryDetailsObj,Map<String, IOutputTerm> outputTermsColumns, String nodeData)
 	{
 		queryResultObjecctDataMap.clear();
 		List<String> definedColumnsList = new ArrayList<String>();
@@ -356,12 +357,15 @@ public class DefineGridViewBizLogic
 		{
 			sql = selectedColumnNames.substring(0, selectedColumnNames.lastIndexOf(Constants.DELIMETER));
 		}
-		QueryOutputSpreadsheetBizLogic gridBizLogic = new QueryOutputSpreadsheetBizLogic();
-		TemporalColumnUIBean temporalColumnUIBean = new TemporalColumnUIBean(null, sql, definedColumnsList, outputTermsColumns,columnIndex);
-		gridBizLogic.modifySqlForTemporalColumns(temporalColumnUIBean);
-		sql = temporalColumnUIBean.getSql();
-		columnIndex = temporalColumnUIBean.getColumnIndex();
-
+		if(!outputTermsColumns.isEmpty())
+		{
+			QueryOutputSpreadsheetBizLogic gridBizLogic = new QueryOutputSpreadsheetBizLogic();
+			IConstraints constraints = queryDetailsObj.getQuery().getConstraints();
+			TemporalColumnUIBean temporalColumnUIBean = new TemporalColumnUIBean(null, sql, definedColumnsList, outputTermsColumns,columnIndex,constraints);
+			gridBizLogic.modifySqlForTemporalColumns(temporalColumnUIBean,queryDetailsObj,nodeData);
+			sql = temporalColumnUIBean.getSql();
+			columnIndex = temporalColumnUIBean.getColumnIndex();
+		}
 		selectedColumnNames.replace(0, selectedColumnNames.length(), sql);
 		while(mapItr.hasNext())
 		{

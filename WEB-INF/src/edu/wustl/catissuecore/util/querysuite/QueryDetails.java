@@ -5,9 +5,13 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
+import edu.wustl.common.querysuite.queryobject.IOutputTerm;
+import edu.wustl.common.querysuite.queryobject.IQuery;
 import edu.wustl.common.querysuite.queryobject.impl.OutputTreeDataNode;
 
 /**
@@ -15,26 +19,48 @@ import edu.wustl.common.querysuite.queryobject.impl.OutputTreeDataNode;
  *
  */
 public class QueryDetails  {
-	
+
 	//private QueryDetails(){}	
 	private List<OutputTreeDataNode> rootOutputTreeNodeList;
 	private Map<String, OutputTreeDataNode> uniqueIdNodesMap;
 	private Map<EntityInterface, List<EntityInterface>> mainEntityMap;
 	private SessionDataBean sessionData;
 	private String randomNumber;
+	
+	private Map <AttributeInterface,String> attributeColumnNameMap; 
+	private Map<String, IOutputTerm> outputTermsColumns ;
+	private IQuery query;
 	//private HttpSession session;
-		
+
 	public QueryDetails(HttpSession session)
 	{
 		//this.session = session;
 		rootOutputTreeNodeList = (List<OutputTreeDataNode>)session.getAttribute(Constants.SAVE_TREE_NODE_LIST);
 		uniqueIdNodesMap = (Map<String, OutputTreeDataNode>)session.getAttribute(Constants.ID_NODES_MAP);
 		mainEntityMap = (Map<EntityInterface, List<EntityInterface>>)session
-						.getAttribute(Constants.MAIN_ENTITY_MAP);
+		.getAttribute(Constants.MAIN_ENTITY_MAP);
 		sessionData = (SessionDataBean)session.getAttribute(Constants.SESSION_DATA);
 		this.randomNumber = QueryModuleUtil.generateRandomNumber(session);
+		attributeColumnNameMap = (Map<AttributeInterface,String>) session.getAttribute(Constants.ATTRIBUTE_COLUMN_NAME_MAP);
+		outputTermsColumns = (Map<String, IOutputTerm>)session.getAttribute(Constants.OUTPUT_TERMS_COLUMNS);
+		query = (IQuery)session.getAttribute(AppletConstants.QUERY_OBJECT);
 	}		
-	
+	/**
+	 * 
+	 * @return
+	 */
+	public Map<AttributeInterface, String> getAttributeColumnNameMap() {
+		return attributeColumnNameMap;
+	}
+	/**
+	 * 
+	 * @param attributeColumnNameMap
+	 */
+	public void setAttributeColumnNameMap(
+			Map<AttributeInterface, String> attributeColumnNameMap) {
+		this.attributeColumnNameMap = attributeColumnNameMap;
+	}
+
 	/**
 	 * @return the rootOutputTreeNodeList
 	 */
@@ -97,5 +123,29 @@ public class QueryDetails  {
 	public void setUniqueIdNodesMap(Map<String, OutputTreeDataNode> uniqueIdNodesMap) {
 		this.uniqueIdNodesMap = uniqueIdNodesMap;
 	}
-
+	/**
+	 * @return the outputTermsColumns
+	 */
+	public Map<String, IOutputTerm> getOutputTermsColumns() {
+		return outputTermsColumns;
+	}
+	/**
+	 * @param outputTermsColumns the outputTermsColumns to set
+	 */
+	public void setOutputTermsColumns(Map<String, IOutputTerm> outputTermsColumns) {
+		this.outputTermsColumns = outputTermsColumns;
+	}
+	/**
+	 * @return the query
+	 */
+	public IQuery getQuery() {
+		return query;
+	}
+	/**
+	 * @param query the query to set
+	 */
+	public void setQuery(IQuery query) {
+		this.query = query;
+	}
 }
+

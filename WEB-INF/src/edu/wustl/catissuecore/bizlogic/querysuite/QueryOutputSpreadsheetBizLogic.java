@@ -28,6 +28,7 @@ import edu.wustl.common.dao.QuerySessionData;
 import edu.wustl.common.dao.queryExecutor.PagenatedResultData;
 import edu.wustl.common.querysuite.queryengine.impl.SqlGenerator;
 import edu.wustl.common.querysuite.queryobject.IConstraints;
+import edu.wustl.common.querysuite.queryobject.ICustomFormula;
 import edu.wustl.common.querysuite.queryobject.IExpression;
 import edu.wustl.common.querysuite.queryobject.IOutputAttribute;
 import edu.wustl.common.querysuite.queryobject.IOutputTerm;
@@ -388,7 +389,7 @@ public class QueryOutputSpreadsheetBizLogic
 		{
 			queryResultObjectDataBeanMap.clear();
 			selectSql = getSQLForSelectedColumns(spreadSheetDataMap, queryResultObjectDataBeanMap,
-					queryDetailsObj,outputTermsColumns);
+					queryDetailsObj,outputTermsColumns,parentData);
 			columnsList = (List<String>)spreadSheetDataMap.get(Constants.SPREADSHEET_COLUMN_LIST);
 		} 
 		if(parentData != null && parentData.equals(Constants.HASHED_NODE_ID) && false)
@@ -399,10 +400,13 @@ public class QueryOutputSpreadsheetBizLogic
 	 
 		if(!selectedColumnMetaData.isDefinedView() )
 		{ 
-			TemporalColumnUIBean temporalColumnUIBean = new TemporalColumnUIBean(node, selectSql, columnsList, outputTermsColumns,columnIndex);
-			modifySqlForTemporalColumns(temporalColumnUIBean); 
-			selectSql = temporalColumnUIBean.getSql();
-			columnIndex = temporalColumnUIBean.getColumnIndex();
+			if(!outputTermsColumns.isEmpty())
+			{
+				TemporalColumnUIBean temporalColumnUIBean = new TemporalColumnUIBean(node, selectSql, columnsList, outputTermsColumns,columnIndex,constraints);
+				modifySqlForTemporalColumns(temporalColumnUIBean,queryDetailsObj,parentData); 
+				selectSql = temporalColumnUIBean.getSql();
+				columnIndex = temporalColumnUIBean.getColumnIndex();
+			}
 			if(queryResultObjectDataBean.getMainEntityIdentifierColumnId()==-1)
 			{
 				Map<EntityInterface, Integer> entityIdIndexMap =new HashMap<EntityInterface, Integer>();
@@ -442,17 +446,54 @@ public class QueryOutputSpreadsheetBizLogic
 	}
 	/**
 	 * 
-	 * @param temporalColumnUIBean
+	 * @param expression
+	 * @param attributeColumnNameMap
+	 * @return
 	 */
-	public void modifySqlForTemporalColumns(TemporalColumnUIBean temporalColumnUIBean) 
+	private String getIdColumnName(IExpression expression,
+			Map<AttributeInterface, String> attributeColumnNameMap) 
+	{
+		AttributeInterface idAttribute = expression.getQueryEntity().getDynamicExtensionsEntity().getAttributeByName(Constants.ID);
+		String columnName = attributeColumnNameMap.get(idAttribute);
+		return columnName;
+	}
+	
+	/**
+	 * 
+	 * @param clickedExpression
+	 * @return
+	 */
+	private IExpression getAnotherExpressionInCF(IExpression clickedExpression) {
+		Set<ICustomFormula> customFormulas = QueryUtility.getCustomFormulas(clickedExpression);
+		for(ICustomFormula cf : customFormulas)
+		{
+			Set<IExpression> expressionsInFormula = QueryUtility.getExpressionsInFormula(cf);
+			for(IExpression exp :expressionsInFormula)
+			{
+				if(!clickedExpression.equals(exp))
+				{
+					return exp;
+				}
+			}
+		}
+		return null;
+	}
+	/**
+	 * 
+	 * @param temporalColumnUIBean
+	 * @param queryDetailsObj 
+	 * @param parentData 
+	 */
+	public void modifySqlForTemporalColumns(TemporalColumnUIBean temporalColumnUIBean, QueryDetails queryDetailsObj, String parentData) 
 	{
 		OutputTreeDataNode node = temporalColumnUIBean.getNode();
+		
 		Map<String, IOutputTerm> outputTermsColumns = temporalColumnUIBean.getOutputTermsColumns();
 		Set<String> keySet = outputTermsColumns.keySet();
-		Iterator<String> iterator = keySet.iterator();
-		while (iterator.hasNext())
+		Iterator<String> iterator1 = keySet.iterator();
+		while (iterator1.hasNext())
 		{
-			String columnName = (String) iterator.next();
+			String columnName = (String) iterator1.next();
 			IOutputTerm outputTerm = outputTermsColumns.get(columnName);
 			String displayColumnName = outputTerm.getName();
 			ITerm term = outputTerm.getTerm();
@@ -462,12 +503,93 @@ public class QueryOutputSpreadsheetBizLogic
 			{
 				modifyTemporalColumnBean(temporalColumnUIBean,displayColumnName,columnName);
 			}
-			else if(isContainingExpressionInTQ(node, expressionsInTerm) && isValidAssociationForTQ(node, expressionsInTerm))
+			else if(isContainingExpressionInTQ(node, expressionsInTerm))
 			{
-				modifyTemporalColumnBean(temporalColumnUIBean,displayColumnName,columnName);
+				boolean  isValidCardinality= isValidCardinality(temporalColumnUIBean, queryDetailsObj, parentData,
+						node);
+				if(isValidCardinality)
+					modifyTemporalColumnBean(temporalColumnUIBean,displayColumnName,columnName);
 			}
 		}
 	}
+	/**
+	 * 
+	 * @param temporalColumnUIBean
+	 * @param queryDetailsObj
+	 * @param parentData
+	 * @param node
+	 * @return
+	 */
+	private boolean isValidCardinality(TemporalColumnUIBean temporalColumnUIBean,
+			QueryDetails queryDetailsObj, String parentData,
+			OutputTreeDataNode node) {
+		String tableName = Constants.TEMP_OUPUT_TREE_TABLE_NAME + queryDetailsObj
+		.getSessionData().getUserId()+ queryDetailsObj.getRandomNumber();
+		IConstraints constraints = temporalColumnUIBean.getConstraints();
+		IExpression clickedExpression = constraints.getExpression(node.getExpressionId());
+		IExpression anotherExpressionInCF = getAnotherExpressionInCF(clickedExpression);
+		if(anotherExpressionInCF == null)
+		{
+			Set<ICustomFormula> customFormulasInQuery = QueryUtility.getCustomFormulas(queryDetailsObj.getQuery());
+			for(ICustomFormula cf : customFormulasInQuery)
+			{
+				Set<IExpression> expressionsInFormula = QueryUtility.getExpressionsInFormula(cf);
+				if(expressionsInFormula.contains(clickedExpression))
+				{
+					for(IExpression exp : expressionsInFormula)
+					{
+						if(!exp.equals(clickedExpression))
+						{
+							anotherExpressionInCF = exp;
+							break;
+						}
+					}
+				}
+			}
+		}
+		String anotherExpIdColumn = getIdColumnName(anotherExpressionInCF,queryDetailsObj.getAttributeColumnNameMap());
+		String clickedExpIdColumn = getIdColumnName(clickedExpression,queryDetailsObj.getAttributeColumnNameMap());
+		String sqlTofindOutCardinality ="";
+		if(parentData == null)
+		{
+			sqlTofindOutCardinality = "select count(*) from (select "+clickedExpIdColumn + ", count(distinct "+anotherExpIdColumn+") as card from "+tableName+" group by "+ clickedExpIdColumn+" having card >1) x ";
+			int intCount = executeSqlToGetCount(sqlTofindOutCardinality);
+			if(intCount == 1 || intCount ==0)
+			{
+				return true;
+			}
+		}
+		else
+		{
+			sqlTofindOutCardinality = "select count(distinct "+anotherExpIdColumn + ") from "+tableName + " where "+clickedExpIdColumn +"= "+parentData;
+			int intCount = executeSqlToGetCount(sqlTofindOutCardinality);
+			if(intCount == 1 || intCount == 0)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	private int executeSqlToGetCount(String sqlTofindOutCardinality) {
+		List<List<String>> list = new ArrayList<List<String>>();
+		int intCount =-1;
+		try {
+			list = QueryBizLogic.executeSQL(sqlTofindOutCardinality);
+		} catch (DAOException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		Iterator iterator = list.iterator();
+		while (iterator.hasNext())
+		{
+			List<String> row = (List<String>) iterator.next();
+			String count = row.get(0);
+			intCount = Integer.parseInt(count);
+		}
+		return intCount;
+	}
+		
 	/**
 	 * @param node
 	 * @param expressionsInTerm
@@ -535,6 +657,21 @@ public class QueryOutputSpreadsheetBizLogic
 			}
 			return false;
 		}
+		/**
+		 * @param node
+		 * @param expressionsInTerm
+		 * @return
+		 */
+		private boolean getOtherExpressionInTQ(OutputTreeDataNode node, Set<IExpression> expressionsInTerm) {
+			for(IExpression ex :expressionsInTerm)
+			{
+				if(node.getExpressionId() == ex.getExpressionId())
+				{
+					return true;
+				}
+			}
+			return false;
+		}
 
 			/**
 			 * @param spreadSheetDataMap
@@ -554,13 +691,14 @@ public class QueryOutputSpreadsheetBizLogic
 			/**
 			 * @param spreadSheetDataMap map to store data list
 			 * @param queryResultObjectDataBeanMap 
+			 * @param parentData 
 			 * @param mainEntityMap 
 			 * @param idNodesMap 
 			 * @return String sql
 			 */
 			private String getSQLForSelectedColumns(Map spreadSheetDataMap,
 					Map<Long, QueryResultObjectDataBean> queryResultObjectDataBeanMap,
-					QueryDetails queryDetailsObj, Map<String, IOutputTerm> outputTermsColumns)
+					QueryDetails queryDetailsObj, Map<String, IOutputTerm> outputTermsColumns, String parentData)
 			{ 
 				String selectSql = "";
 				List<String> definedColumnsList = new ArrayList<String>();
@@ -633,19 +771,22 @@ public class QueryOutputSpreadsheetBizLogic
 				this.selectedColumnMetaData.setSelectedColumnNameValueBeanList(selectedColumnNameValue);
 				int lastindexOfComma = sqlColumnNames.lastIndexOf(",");
 				String sql = sqlColumnNames.toString();
-				TemporalColumnUIBean temporalColumnUIBean = new TemporalColumnUIBean(null, selectSql, definedColumnsList, outputTermsColumns,columnIndex);
-				modifySqlForTemporalColumns(temporalColumnUIBean);
-				String selectTQSql = temporalColumnUIBean.getSql();
-				columnIndex = temporalColumnUIBean.getColumnIndex();
-
-				if (lastindexOfComma != -1 || selectTQSql.equals(""))
+				if(!outputTermsColumns.isEmpty())
+				{
+					IConstraints constraints = queryDetailsObj.getQuery().getConstraints();
+					TemporalColumnUIBean temporalColumnUIBean = new TemporalColumnUIBean(null, selectSql, definedColumnsList, outputTermsColumns,columnIndex,constraints);
+					modifySqlForTemporalColumns(temporalColumnUIBean,queryDetailsObj,parentData);
+					selectSql = temporalColumnUIBean.getSql();
+					columnIndex = temporalColumnUIBean.getColumnIndex();
+				}
+				if (lastindexOfComma != -1 || selectSql.equals(""))
 				{
 					String columnsInSql = "";
 					if (lastindexOfComma != -1)
 						columnsInSql = sql.substring(0, lastindexOfComma).toString();
-					if(!selectTQSql.equals(""))
+					if(!selectSql.equals(""))
 					{
-						columnsInSql = columnsInSql + selectTQSql;
+						columnsInSql = columnsInSql + selectSql;
 					}
 					Map<EntityInterface, Integer> entityIdIndexMap = new HashMap<EntityInterface, Integer>();
 					columnsInSql = QueryCSMUtil.updateEntityIdIndexMap(null, columnIndex, columnsInSql,
@@ -910,17 +1051,22 @@ public class QueryOutputSpreadsheetBizLogic
 				{
 					spreadSheetDataMap.put(Constants.SPREADSHEET_COLUMN_LIST, columnsList);
 					selectSql = selectSql.substring(0, selectSql.lastIndexOf(","));
-					TemporalColumnUIBean temporalColumnUIBean = new TemporalColumnUIBean(node, selectSql, columnsList, outputTermsColumns,columnIndex);
-					modifySqlForTemporalColumns(temporalColumnUIBean);
-					selectSql = temporalColumnUIBean.getSql();
-					columnIndex = temporalColumnUIBean.getColumnIndex();
+					if(!outputTermsColumns.isEmpty())
+					{
+						IConstraints constraints = queryDetailsObj.getQuery().getConstraints();
+						TemporalColumnUIBean temporalColumnUIBean = new TemporalColumnUIBean(node, 
+								selectSql, columnsList, outputTermsColumns,columnIndex,constraints); 
+						modifySqlForTemporalColumns(temporalColumnUIBean,queryDetailsObj,parentData);
+						selectSql = temporalColumnUIBean.getSql();
+						columnIndex = temporalColumnUIBean.getColumnIndex();
+					}
 					selectedColumnMetaData.setSelectedAttributeMetaDataList(attributes);
 				}
 				else 
 				{
 					queryResultObjectDataBeanMap = new HashMap<Long, QueryResultObjectDataBean>();
 					selectSql = getSQLForSelectedColumns(spreadSheetDataMap, queryResultObjectDataBeanMap,
-							queryDetailsObj, outputTermsColumns);
+							queryDetailsObj, outputTermsColumns,parentData);
 					columnsList = (List<String>)spreadSheetDataMap.get(Constants.SPREADSHEET_COLUMN_LIST);
 				}
 				if(!selectedColumnMetaData.isDefinedView() && queryResultObjectDataBean
