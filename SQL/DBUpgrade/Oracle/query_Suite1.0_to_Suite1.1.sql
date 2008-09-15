@@ -2,6 +2,74 @@
 -- this may be app specific 
 
 -- catissue 
+-- correcting incorrect expression_id's in join graph entry
+delete from query_graph_entry where query_join_graph_id is null;
+
+-- target expr ids
+create table tmp_wrong_tgt_expr_id(wrong_id number(19,0), constraints_id number(19,0));
+
+insert into tmp_wrong_tgt_expr_id(wrong_id, constraints_id) 
+(
+select target_expressionid_id as wrong_id, c.identifier as constraints_id 
+from query_graph_entry entry
+join query_join_graph graph
+on entry.query_join_graph_id = graph.identifier
+join query_constraints c
+on graph.identifier = c.query_join_graph_id
+where target_expressionid_id
+not in (select query_expressionid_id from query_expression)
+);
+
+update query_graph_entry entry set target_expressionid_id =
+(select correct.identifier
+from query_expressionid correct
+join query_expression expr
+on correct.identifier = expr.QUERY_EXPRESSIONID_ID
+join tmp_wrong_tgt_expr_id tmp_wrong
+on expr.query_constraint_id = tmp_wrong.constraints_id
+join query_expressionid wrong
+on tmp_wrong.wrong_id = wrong.identifier and wrong.SUB_EXPRESSION_ID = correct.SUB_EXPRESSION_ID
+where entry.target_expressionid_id = wrong.identifier
+)
+where target_expressionid_id in 
+(select wrong_id from tmp_wrong_tgt_expr_id);
+
+-- source expr ids
+create table tmp_wrong_src_expr_id(wrong_id number(19,0), constraints_id number(19,0));
+
+insert into tmp_wrong_src_expr_id(wrong_id, constraints_id) 
+(
+select source_expressionid_id as wrong_id, c.identifier as constraints_id 
+from query_graph_entry entry
+join query_join_graph graph
+on entry.query_join_graph_id = graph.identifier
+join query_constraints c
+on graph.identifier = c.query_join_graph_id
+where source_expressionid_id
+not in (select query_expressionid_id from query_expression)
+);
+
+update query_graph_entry entry set source_expressionid_id =
+(select correct.identifier
+from query_expressionid correct
+join query_expression expr
+on correct.identifier = expr.QUERY_EXPRESSIONID_ID
+join tmp_wrong_src_expr_id tmp_wrong
+on expr.query_constraint_id = tmp_wrong.constraints_id
+join query_expressionid wrong
+on tmp_wrong.wrong_id = wrong.identifier and wrong.SUB_EXPRESSION_ID = correct.SUB_EXPRESSION_ID
+where entry.source_expressionid_id = wrong.identifier
+)
+where source_expressionid_id in 
+(select wrong_id from tmp_wrong_src_expr_id);
+
+delete from query_expressionid where identifier in (select wrong_id from tmp_wrong_tgt_expr_id);
+drop table tmp_wrong_tgt_expr_id;
+
+delete from query_expressionid where identifier in (select wrong_id from tmp_wrong_src_expr_id);
+drop table tmp_wrong_src_expr_id;
+
+-- upgrade begins
 alter table QUERY_PARAMETERIZED_QUERY drop constraint FKA272176BBC7298A9;
 alter table QUERY_INTRA_MODEL_ASSOCIATION drop constraint FKF1EDBDD3BC7298A9;
 alter table QUERY_CONSTRAINTS drop constraint FKE364FCFFD3C625EA;
