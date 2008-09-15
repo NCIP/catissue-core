@@ -258,38 +258,13 @@ public class CaTissuePrivilegeUtility
 			
 			// To show details of Sites having Default functionality on CP
 			Collection<Site> siteCollection = cp.getSiteCollection();
-			Set<Long> validSiteIds = new HashSet<Long>();
-			
-			if(siteCollection !=null)
-			{
-				for(Site site : siteCollection)
-				{
-					validSiteIds.add(site.getId());
-				}
-			}
-			
-			if(siteCollection != null && !siteCollection.isEmpty())
-			{
-				for(Site site : siteCollection)
-				{
-//					if(!siteIdSetSpecific.contains(site.getId()))
-//					{
-						SiteUserRolePrivilegeBean siteUserRolePrivilegeBean = new SiteUserRolePrivilegeBean();
-						List<Site> siteList = new ArrayList<Site>();
-						siteList.add(site);
-						siteUserRolePrivilegeBean.setSiteList(siteList);
-						result.put("SITE_"+site.getId(), siteUserRolePrivilegeBean);
-//					}
-				}
-			}
-			
 			Set<Long> siteIdSetSpecific = new HashSet<Long>(); 
 			
-			List<NameValueBean> cpPrivilegeGroupingMap = new ArrayList<NameValueBean>();
-			cpPrivilegeGroupingMap.addAll(Variables.privilegeGroupingMap.get("CP"));
-			cpPrivilegeGroupingMap.addAll(Variables.privilegeGroupingMap.get("SCIENTIST"));
+			List<NameValueBean> allPrivileges = new ArrayList<NameValueBean>();
+			allPrivileges.addAll(Variables.privilegeGroupingMap.get("CP"));
+			allPrivileges.addAll(Variables.privilegeGroupingMap.get("SCIENTIST"));
 			
-			for (NameValueBean nmv : cpPrivilegeGroupingMap)
+			for (NameValueBean nmv : allPrivileges)
 			{
 				String privilegeName = nmv.getName();
 				Set<String> users = PrivilegeManager.getInstance().getAccesibleUsers(objectId,
@@ -327,10 +302,7 @@ public class CaTissuePrivilegeUtility
 						for (Long siteId : siteSet)
 						{
 							Site site = (Site) hibernateDao.retrieve(Site.class.getName(), siteId);
-							if(validSiteIds.contains(siteId))
-							{
-								siteList.add(site);
-							}
+							siteList.add(site);
 							siteIdSetSpecific.add(siteId);
 						}
 
@@ -353,12 +325,27 @@ public class CaTissuePrivilegeUtility
 							privileges.add(nmv);
 						}
 					}
+				}				
+			}
+			if(siteCollection != null && !siteCollection.isEmpty())
+			{
+				for(Site site : siteCollection)
+				{
+					if(!siteIdSetSpecific.contains(site.getId()))
+					{
+						SiteUserRolePrivilegeBean siteUserRolePrivilegeBean = new SiteUserRolePrivilegeBean();
+						List<Site> siteList = new ArrayList<Site>();
+						siteList.add(site);
+						siteUserRolePrivilegeBean.setSiteList(siteList);
+						result.put("SITE_"+site.getId(), siteUserRolePrivilegeBean);
+					}
 				}
 			}
 		}
 		catch (Exception e)
 		{
-			// return null;
+			Logger.out.debug(e.getMessage(), e);
+			return null;
 		}
 		finally
 		{
