@@ -69,20 +69,29 @@ public class DisplayAnnotationDataEntryPageAction extends BaseAction
         SessionDataBean sessionDataBean = getSessionData(request);
         
         List cpIdsList = new ArrayList();
+        boolean matchingParticipantCase = false;
 		cpIdsList = edu.wustl.common.util.Utility.getCPIdsList(request.getParameter("staticEntityName"), Long.valueOf(request.getParameter("entityRecordId")), sessionDataBean, cpIdsList);
-		if(cpIdsList.size()>1)
+		if(cpIdsList.size()>1 && Constants.PARTICIPANT_CLASS_NAME.equals(request.getParameter("staticEntityName")))
 		{
-			cpIdsList.remove(1);
+			matchingParticipantCase = true;
+		}
+		else
+		{
+			if(cpIdsList.size()>1)
+			{
+				cpIdsList.remove(1);
+			}
 		}
 		
 		PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(sessionDataBean.getUserName());
 		StringBuffer sb = new StringBuffer();
+		boolean hasPrivilege = false;
 		sb.append(Constants.COLLECTION_PROTOCOL_CLASS_NAME).append("_");
 		if(!sessionDataBean.isAdmin())
 		{
 			for (Object cpId : cpIdsList)
 			{
-				boolean hasPrivilege = ((privilegeCache.hasPrivilege(sb.toString()+cpId.toString(), Permissions.REGISTRATION)) ||
+				hasPrivilege = ((privilegeCache.hasPrivilege(sb.toString()+cpId.toString(), Permissions.REGISTRATION)) ||
 								(privilegeCache.hasPrivilege(sb.toString()+cpId.toString(), Permissions.SPECIMEN_PROCESSING)));
 				
 				if(!hasPrivilege)
@@ -90,15 +99,19 @@ public class DisplayAnnotationDataEntryPageAction extends BaseAction
 					hasPrivilege = Utility.checkForAllCurrentAndFutureCPs(null, Permissions.REGISTRATION+","+Permissions.SPECIMEN_PROCESSING, sessionDataBean, cpId.toString());
 				}
 				
-				if(!hasPrivilege)
+				if(matchingParticipantCase && hasPrivilege)
 				{
-					ActionErrors errors = new ActionErrors();
-			        ActionError error = new ActionError("access.view.action.denied");
-			        errors.add(ActionErrors.GLOBAL_ERROR, error);
-			        saveErrors(request, errors);
-			        return mapping.findForward(Constants.ACCESS_DENIED);
-					// throw new DAOException("Access denied ! User does not have privilege to view/edit this information.");
+					break;
 				}
+			}
+			if(!hasPrivilege)
+			{
+				ActionErrors errors = new ActionErrors();
+		        ActionError error = new ActionError("access.view.action.denied");
+		        errors.add(ActionErrors.GLOBAL_ERROR, error);
+		        saveErrors(request, errors);
+		        return mapping.findForward(Constants.ACCESS_DENIED);
+				// throw new DAOException("Access denied ! User does not have privilege to view/edit this information.");
 			}
 		}
 		
