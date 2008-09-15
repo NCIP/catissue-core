@@ -56,6 +56,7 @@ import edu.wustl.catissuecore.domain.FixedEventParameters;
 import edu.wustl.catissuecore.domain.FluidSpecimen;
 import edu.wustl.catissuecore.domain.FrozenEventParameters;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
+import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
@@ -1991,10 +1992,17 @@ public class Utility extends edu.wustl.common.util.Utility {
 			return new CSMValidator().hasPrivilegeToViewGlobalParticipant(sessionDataBean);
 		}
 		
-		for(Object cpId : cpIdsList)
+		if(cpIdsList.size()>1 && objName.equals(Participant.class.getName()))
 		{
-			cpId = cpIdsList.get(0);
-			cpIds.add(Long.valueOf(cpId.toString()));
+			return hasPrivilegeToViewMatchingParticipant(cpIdsList, sessionDataBean, privilegeName);
+		}
+		else
+		{
+			for(Object cpId : cpIdsList)
+			{
+				cpId = cpIdsList.get(0);
+				cpIds.add(Long.valueOf(cpId.toString()));
+			}
 		}
 		
 		PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(sessionDataBean.getUserName());
@@ -2037,6 +2045,49 @@ public class Utility extends edu.wustl.common.util.Utility {
     	return true;
 	}
 	
+	private static boolean hasPrivilegeToViewMatchingParticipant(
+			List cpIdsList, SessionDataBean sessionDataBean, String privilegeName) 
+	{
+		PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(sessionDataBean.getUserName());
+		StringBuffer sb = new StringBuffer();
+		sb.append(Constants.COLLECTION_PROTOCOL_CLASS_NAME).append("_");
+		boolean isPresent = false;
+		
+		for (Object cpId : cpIdsList)
+		{
+			String [] privilegeNames = privilegeName.split(",");
+			if(privilegeNames.length > 1)
+			{	
+				isPresent = privilegeCache.hasPrivilege(sb.toString()+cpId.toString(), privilegeNames[0]);
+				
+				if(!isPresent)
+				{
+					isPresent = checkForAllCurrentAndFutureCPs(null, privilegeNames[0], sessionDataBean, cpId.toString());
+				}
+				
+				if(isPresent)
+				{
+					isPresent = privilegeCache.hasPrivilege(sb.toString()+cpId.toString(), privilegeNames[1]);
+					isPresent = !isPresent;
+				}
+			}
+			else
+			{
+				isPresent = privilegeCache.hasPrivilege(sb.toString()+cpId.toString(), privilegeName);
+				if (privilegeName != null && privilegeName.equalsIgnoreCase(Permissions.READ_DENIED))
+				{
+					isPresent = !isPresent;
+				}
+			}
+			
+			if (isPresent)
+			{
+				return true;
+			} 
+		}
+    	return false;
+	}
+
 	/**
 	 * This method will retrive the collection protocol for a Specific site identifier
 	 * @param request request object

@@ -34,6 +34,7 @@ import edu.common.dynamicextensions.util.DynamicExtensionsUtility;
 import edu.common.dynamicextensions.util.global.Constants;
 import edu.wustl.catissuecore.actionForm.AnnotationDataEntryForm;
 import edu.wustl.catissuecore.bizlogic.AnnotationBizLogic;
+import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
@@ -71,7 +72,7 @@ public class DisplayAnnotationDataEntryPageAction extends BaseAction
         List cpIdsList = new ArrayList();
         boolean matchingParticipantCase = false;
 		cpIdsList = edu.wustl.common.util.Utility.getCPIdsList(request.getParameter("staticEntityName"), Long.valueOf(request.getParameter("entityRecordId")), sessionDataBean, cpIdsList);
-		if(cpIdsList.size()>1 && Constants.PARTICIPANT_CLASS_NAME.equals(request.getParameter("staticEntityName")))
+		if(cpIdsList.size()>1 && Participant.class.getName().equals(request.getParameter("staticEntityName")))
 		{
 			matchingParticipantCase = true;
 		}
