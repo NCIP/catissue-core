@@ -1,6 +1,3 @@
--- remove old indexes 
--- this may be app specific 
-
 -- catissue 
 SET storage_engine=InnoDB;
 
@@ -72,6 +69,8 @@ delete from query_expressionid where identifier in (select wrong_id from tmp_wro
 drop table tmp_wrong_src_expr_id;
 
 -- upgrade begins
+-- remove old indexes 
+-- this may be app specific 
 alter table QUERY_PARAMETERIZED_QUERY drop foreign key FKA272176BBC7298A9, drop index FKA272176BBC7298A9;
 alter table QUERY_INTRA_MODEL_ASSOCIATION drop foreign key FKF1EDBDD3BC7298A9, drop index FKF1EDBDD3BC7298A9;
 alter table QUERY_CONSTRAINTS drop foreign key FKE364FCFFD3C625EA, drop index FKE364FCFFD3C625EA;
@@ -217,6 +216,25 @@ join commons_graph_edge edge on edge.old_entry_id = entry.identifier);
 
 alter table commons_graph_edge drop column OLD_ENTRY_ID;
 drop table query_graph_entry;
+
+insert into commons_graph_to_vertices(graph_id, vertex_class, vertex_id)
+(
+select cg.identifier, 'edu.wustl.common.querysuite.queryobject.impl.Expression', ctoex.expression_id
+from commons_graph cg
+join query_join_graph jg
+on cg.identifier = jg.commons_graph_id
+join query_constraints c
+on jg.identifier = c.query_join_graph_id
+join 
+(select constraint_id
+from query_constraint_to_expr
+group by constraint_id
+having count(*) = 1
+) singleExCon
+on c.identifier = singleExCon.constraint_id
+join query_constraint_to_expr ctoex
+on ctoex.constraint_Id = c.identifier
+);
 -- connectors 
 create table QUERY_BASEEXPR_TO_CONNECTORS (BASE_EXPRESSION_ID bigint not null, CONNECTOR_ID bigint not null, POSITION integer not null, primary key (BASE_EXPRESSION_ID, POSITION));
 alter table QUERY_LOGICAL_CONNECTOR rename QUERY_CONNECTOR;
