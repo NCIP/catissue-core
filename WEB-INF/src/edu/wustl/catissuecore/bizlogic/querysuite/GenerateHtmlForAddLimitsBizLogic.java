@@ -922,7 +922,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 			String dataType = attributeInterface.getDataType();
 			UserDefinedDE userDefineDE = (UserDefinedDE) attributeInterface
 					.getAttributeTypeInformation().getDataElement();
-			if (userDefineDE != null && userDefineDE.getPermissibleValueCollection().size() < 500)
+			if (userDefineDE != null && userDefineDE.getPermissibleValueCollection().size() < 1000)
 			{
 				if (dataType.equalsIgnoreCase("long") || dataType.equalsIgnoreCase("double")
 						|| dataType.equalsIgnoreCase("short")
@@ -1422,7 +1422,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 		generatedHTML.append("\n"
 				+ generateHTMLForOperators(attribute, operatorsList, null,
 						"PermissibleValuesQuery"));
-		if (!permissibleValues.isEmpty() && permissibleValues.size() < 500)
+		if (!permissibleValues.isEmpty() && permissibleValues.size() < 1000)
 		{
 			generatedHTML.append("\n"
 					+ generateHTMLForEnumeratedValues(attribute, permissibleValues,
@@ -1483,7 +1483,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 				{
 					isBetween = false;
 				}
-				if (!permissibleValues.isEmpty() && permissibleValues.size() < 500)
+				if (!permissibleValues.isEmpty() && permissibleValues.size() < 1000)
 				{
 					generatedHTML.append("\n"
 							+ generateHTMLForEnumeratedValues(attribute, permissibleValues,
