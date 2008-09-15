@@ -47,6 +47,7 @@ import edu.wustl.common.security.PrivilegeManager;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.util.Permissions;
+import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.dbManager.DBUtil;
 import edu.wustl.common.util.dbManager.HibernateMetaData;
@@ -69,6 +70,7 @@ public class CaCoreAppServicesDelegator
 	 * @return the sessionID of user if he/she has successfullyy logged in else null
 	 * @throws Exception 
 	 */
+	int noPHIAccessDataCounter =0;
     public Boolean delegateLogin(String userName,String password) throws Exception
 	{
     	User validUser = Utility.getUser(userName);
@@ -338,7 +340,23 @@ public class CaCoreAppServicesDelegator
 				Logger.out.debug("Intermediate Size of filteredObjects .............."+filteredObjects.size());
 			}
 		}
-		
+		/**
+		 * Bug 5938
+		 * Get the limit list from caTisscore_properties.xml
+		 * if the number of filtered objects is less than the configured limit and all objects 
+		 * are filter for no PHI access then return empty result
+		 * This is a fix for scientis querying on phi data such as Give particpant where lastName is something
+		 *  
+		 */
+		String objectLimit = XMLPropertyHandler.getValue(Constants.API_FILTERED_OBJECT_LIMIT);
+		if(objectLimit!=null)
+		{
+			int removeFilteredObjectLimit = Integer.parseInt(objectLimit);  
+			if(filteredObjects.size()<=removeFilteredObjectLimit&&filteredObjects.size()==noPHIAccessDataCounter)
+			{
+				filteredObjects = new ArrayList();
+			}
+		}
 
 		Logger.out.debug("Before Final Objects >>>>>>>>>>>>>>>>>>>>>>>>>"+filteredObjects.size());
 //		boolean status = objectList.removeAll(toBeRemoved);
@@ -366,22 +384,27 @@ public class CaCoreAppServicesDelegator
 			if (classObject.equals(Participant.class))
 		    {
 	        	removeParticipantIdentifiedData(abstractDomainObject);
+	        	noPHIAccessDataCounter++;
 		    }
 		    else if (classObject.equals(SpecimenCollectionGroup.class))
 		    {
 	        	removeSpecimenCollectionGroupIdentifiedData(abstractDomainObject);
+	        	noPHIAccessDataCounter++;
 		    }
 		    else if (classObject.getSuperclass().equals(Specimen.class))
 		    {
-	        	removeSpecimenIdentifiedData(abstractDomainObject);
+		    	removeSpecimenIdentifiedData(abstractDomainObject);
+		    	noPHIAccessDataCounter++;
 		    }
 		    else if (classObject.equals(CollectionProtocolRegistration.class))
 		    {
 	        	removeCollectionProtocolRegistrationIdentifiedData(abstractDomainObject);
+	        	noPHIAccessDataCounter++;
 		    }
 		    else if (classObject.equals(IdentifiedSurgicalPathologyReport.class))
 		    {
 	       		removeIdentifiedReportIdentifiedData(abstractDomainObject);
+	       		noPHIAccessDataCounter++;
 		    }
 		}
 	}

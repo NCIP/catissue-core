@@ -2524,4 +2524,7 @@ public static final String ADD_MULTIPLE_SPECIMEN_TO_CART="addMltipleSpecimenToCa
 	
 	public static final String CONTAINER_DELETE_MAPPING="/StorageContainerDelete.do";
 	public static final String CONTAINER_ERROR_MSG="The specimen {0} cannot be placed in container {1} since the position {2},{3} is not free";
+	
+	// COnstant for API
+	public static final String API_FILTERED_OBJECT_LIMIT= "apiFilteredObjectLimit";
 }

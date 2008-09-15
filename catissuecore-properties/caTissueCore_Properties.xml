@@ -413,4 +413,9 @@
 		<name>knowledgecenterforum.link</name>
 		<value>https://cabig-kc.nci.nih.gov/Biospecimen/forums/</value>
 	</property>
+
+	<property>
+		<name>apiFilteredObjectLimit</name>
+		<value>2</value>
+	</property>
 </properties>
