@@ -461,19 +461,16 @@ public class QueryOutputSpreadsheetBizLogic
 	/**
 	 * 
 	 * @param clickedExpression
+	 * @param expressionsInTerm 
 	 * @return
 	 */
-	private IExpression getAnotherExpressionInCF(IExpression clickedExpression) {
-		Set<ICustomFormula> customFormulas = QueryUtility.getCustomFormulas(clickedExpression);
-		for(ICustomFormula cf : customFormulas)
+	private IExpression getAnotherExpressionInCF(IExpression clickedExpression, Set<IExpression> expressionsInTerm) {
+		
+		for(IExpression exp : expressionsInTerm)
 		{
-			Set<IExpression> expressionsInFormula = QueryUtility.getExpressionsInFormula(cf);
-			for(IExpression exp :expressionsInFormula)
+			if(!exp.equals(clickedExpression))
 			{
-				if(!clickedExpression.equals(exp))
-				{
-					return exp;
-				}
+				return exp;
 			}
 		}
 		return null;
@@ -506,7 +503,7 @@ public class QueryOutputSpreadsheetBizLogic
 			else if(isContainingExpressionInTQ(node, expressionsInTerm))
 			{
 				boolean  isValidCardinality= isValidCardinality(temporalColumnUIBean, queryDetailsObj, parentData,
-						node);
+						node,expressionsInTerm);
 				if(isValidCardinality)
 					modifyTemporalColumnBean(temporalColumnUIBean,displayColumnName,columnName);
 			}
@@ -518,35 +515,18 @@ public class QueryOutputSpreadsheetBizLogic
 	 * @param queryDetailsObj
 	 * @param parentData
 	 * @param node
+	 * @param expressionsInTerm 
 	 * @return
 	 */
 	private boolean isValidCardinality(TemporalColumnUIBean temporalColumnUIBean,
 			QueryDetails queryDetailsObj, String parentData,
-			OutputTreeDataNode node) {
+			OutputTreeDataNode node, Set<IExpression> expressionsInTerm) {
 		String tableName = Constants.TEMP_OUPUT_TREE_TABLE_NAME + queryDetailsObj
 		.getSessionData().getUserId()+ queryDetailsObj.getRandomNumber();
 		IConstraints constraints = temporalColumnUIBean.getConstraints();
 		IExpression clickedExpression = constraints.getExpression(node.getExpressionId());
-		IExpression anotherExpressionInCF = getAnotherExpressionInCF(clickedExpression);
-		if(anotherExpressionInCF == null)
-		{
-			Set<ICustomFormula> customFormulasInQuery = QueryUtility.getCustomFormulas(queryDetailsObj.getQuery());
-			for(ICustomFormula cf : customFormulasInQuery)
-			{
-				Set<IExpression> expressionsInFormula = QueryUtility.getExpressionsInFormula(cf);
-				if(expressionsInFormula.contains(clickedExpression))
-				{
-					for(IExpression exp : expressionsInFormula)
-					{
-						if(!exp.equals(clickedExpression))
-						{
-							anotherExpressionInCF = exp;
-							break;
-						}
-					}
-				}
-			}
-		}
+		IExpression anotherExpressionInCF = getAnotherExpressionInCF(clickedExpression,expressionsInTerm);
+		
 		String anotherExpIdColumn = getIdColumnName(anotherExpressionInCF,queryDetailsObj.getAttributeColumnNameMap());
 		String clickedExpIdColumn = getIdColumnName(clickedExpression,queryDetailsObj.getAttributeColumnNameMap());
 		String sqlTofindOutCardinality ="";
@@ -554,7 +534,7 @@ public class QueryOutputSpreadsheetBizLogic
 		{
 			sqlTofindOutCardinality = "select count(*) from (select "+clickedExpIdColumn + ", count(distinct "+anotherExpIdColumn+") as card from "+tableName+" group by "+ clickedExpIdColumn+" having card >1) x ";
 			int intCount = executeSqlToGetCount(sqlTofindOutCardinality);
-			if(intCount == 1 || intCount ==0)
+			if(intCount == 0)
 			{
 				return true;
 			}
@@ -563,7 +543,7 @@ public class QueryOutputSpreadsheetBizLogic
 		{
 			sqlTofindOutCardinality = "select count(distinct "+anotherExpIdColumn + ") from "+tableName + " where "+clickedExpIdColumn +"= "+parentData;
 			int intCount = executeSqlToGetCount(sqlTofindOutCardinality);
-			if(intCount == 1 || intCount == 0)
+			if(intCount <= 1)
 			{
 				return true;
 			}
