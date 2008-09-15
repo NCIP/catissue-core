@@ -266,26 +266,6 @@ public class SiteBizLogic extends DefaultBizLogic
 				throw new DAOException(ApplicationProperties.getValue("errors.item.format",message));	
 			}
 		}
-		
-//		bug #4349
-		if (!validator.isEmpty(site.getAddress().getPhoneNumber()))
-		{
-			if (!validator.isValidPhoneNumber(site.getAddress().getPhoneNumber()))
-			{
-				message = ApplicationProperties.getValue("site.phoneNumber");
-				throw new DAOException(ApplicationProperties.getValue("error.phonenumber.format",message));	
-			}				
-		}
-				
-		if (!validator.isEmpty(site.getAddress().getFaxNumber()))
-		{
-			if (!validator.isValidPhoneNumber(site.getAddress().getFaxNumber()))
-			{
-				message = ApplicationProperties.getValue("site.faxNumber");
-				throw new DAOException(ApplicationProperties.getValue("error.faxnumber.format",message));	
-			}
-		}
-		//bug #4349 ends
 
 		if (operation.equals(Constants.EDIT) && !validator.isValidOption(site.getActivityStatus()))
 		{

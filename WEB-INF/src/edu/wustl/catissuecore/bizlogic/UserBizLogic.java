@@ -1367,37 +1367,12 @@ public class UserBizLogic extends DefaultBizLogic
 			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
 		}
 
-		//Bug #4349
 		if (validator.isEmpty(user.getAddress().getPhoneNumber()))
 		{
 			message = ApplicationProperties.getValue("user.phoneNumber");
 			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
 		}
-		else 
-		{
-			if(edu.wustl.catissuecore.util.global.Variables.isPhoneNumberToBeValidated)
-			{
-				if (!validator.isValidPhoneNumber(user.getAddress().getPhoneNumber()))
-				{
-					message = ApplicationProperties.getValue("user.phoneNumber");
-					throw new DAOException(ApplicationProperties.getValue("error.phonenumber.format",message));	
-				}
-			}
-		}
-		
-		if(edu.wustl.catissuecore.util.global.Variables.isPhoneNumberToBeValidated)
-		{
-			if (!validator.isEmpty(user.getAddress().getFaxNumber()))
-			{
-				if (!validator.isValidPhoneNumber(user.getAddress().getFaxNumber()))
-				{
-					message = ApplicationProperties.getValue("user.faxNumber");
-					throw new DAOException(ApplicationProperties.getValue("error.faxnumber.format",message));	
-				}
-			}
-		}
-		//Bug #4349 ends
-		
+				
 		if (user.getInstitution().getId()==null || user.getInstitution().getId().longValue()<=0)
 		{
 			message = ApplicationProperties.getValue("user.institution");
