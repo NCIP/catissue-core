@@ -213,7 +213,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 				
         	}else if(termType.equals(TermType.Timestamp))
         	{
-        				DateLiteral operand = (DateLiteral)term.getOperand(0);
+        		DateLiteral operand = (DateLiteral)term.getOperand(0);
         		String textBoxId = componentId + "_textBox";
     			String calendarId = componentId + "_calendar";
     			  
@@ -236,6 +236,13 @@ public class GenerateHtmlForAddLimitsBizLogic
     			generateHTML.append(innerStr);
     			
     			isTimeStamp = true;
+        	}else if(termType.equals(TermType.Numeric))
+        	{
+        		generateHTML.append("\n<td valign=\"top\">");
+        		String val = term.getStringRepresentation();
+        		generateHTML.append("\n<input style=\"width:150px; display:block;\" value= '" + val +"' type=\"text\" name=\""
+						+  componentId + "\" id=\"" +componentId+"_textbox"  + "\">");
+        		generateHTML.append("\n</td>");
         	}
         	generateHTML.append("<td valign=\"top\">");
         	generateHTML.append("</td>");

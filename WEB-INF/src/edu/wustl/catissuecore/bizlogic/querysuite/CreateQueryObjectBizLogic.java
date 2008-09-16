@@ -31,6 +31,7 @@ import edu.wustl.common.querysuite.queryobject.IDateLiteral;
 import edu.wustl.common.querysuite.queryobject.IDateOffsetLiteral;
 import edu.wustl.common.querysuite.queryobject.IExpression;
 import edu.wustl.common.querysuite.queryobject.IExpressionOperand;
+import edu.wustl.common.querysuite.queryobject.INumericLiteral;
 import edu.wustl.common.querysuite.queryobject.IParameter;
 import edu.wustl.common.querysuite.queryobject.IParameterizable;
 import edu.wustl.common.querysuite.queryobject.IQuery;
@@ -453,7 +454,16 @@ public class CreateQueryObjectBizLogic
 					errorMsg = e.getMessage();
 				}
 				
-			}     
+			} else if(customFormula.getLhs().getTermType().equals(TermType.Numeric))
+			{
+				value = "";
+				if(newRHSValues.length == 3)
+				{
+					value = newRHSValues[QueryModuleConstants.INDEX_PARAM_TWO];
+				}
+				INumericLiteral numericLiteral = QueryObjectFactory.createNumericLiteral(value);
+				rhsTerm.addOperand(numericLiteral);
+			}
 			customFormula.setOperator(TemporalQueryUtility.getRelationalOperator(newRHSValues[QueryModuleConstants.INDEX_PARAM_ONE]));
 			customFormula.getAllRhs().clear();
 			customFormula.addRhs(rhsTerm);

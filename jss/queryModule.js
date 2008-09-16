@@ -574,7 +574,7 @@
 		  var tQunitId = i+"_combobox1";
 		  var tQchkBoxId = i+"_checkbox";
 		  var tQchkBox = document.getElementById(tQchkBoxId).checked;
-             if(tQchkBox==true)
+           if(tQchkBox==true)
 					 
 			{
 			
@@ -583,16 +583,17 @@
 		
 		  		   
 	       var tQop = document.getElementById(tQpId).value;
-		   
 	       var tQtextbox = document.getElementById(tQtextboxId).value;
 		 
            
 	       strToCreateTQObject = strToCreateTQObject+"@#condition#@"+i+"##"+tQop+"##"+tQtextbox;
 		   if(isTimestamp == 'false')
 		    {
-		      var tQunit = document.getElementById(tQunitId).value;
-			   strToCreateTQObject = strToCreateTQObject + "##"+tQunit;
-			
+			   if( document.getElementById(tQunitId))
+				{
+			       var tQunit = document.getElementById(tQunitId).value;
+				   strToCreateTQObject = strToCreateTQObject + "##"+tQunit;
+				}
 			  
 		    }
 	     }
@@ -1083,8 +1084,11 @@
 	       strToCreateTQObject = strToCreateTQObject+"@#condition#@"+i+"##"+tQop+"##"+tQtextbox;
 		   if(isTimestamp == 'false')
 		    {
-		      var tQunit = document.getElementById(tQunitId).value;
-			   strToCreateTQObject = strToCreateTQObject + "##"+tQunit;
+			   if(document.getElementById(tQunitId))
+				{
+				  var tQunit = document.getElementById(tQunitId).value;
+				  strToCreateTQObject = strToCreateTQObject + "##"+tQunit;
+				}
 
 			  
 		    }

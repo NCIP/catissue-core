@@ -39,20 +39,18 @@ import edu.wustl.common.querysuite.metadata.associations.IAssociation;
 import edu.wustl.common.querysuite.metadata.associations.IIntraModelAssociation;
 import edu.wustl.common.querysuite.metadata.path.IPath;
 import edu.wustl.common.querysuite.queryobject.ArithmeticOperator;
-import edu.wustl.common.querysuite.queryobject.DSInterval;
 import edu.wustl.common.querysuite.queryobject.IArithmeticOperand;
-import edu.wustl.common.querysuite.queryobject.IExpressionAttribute;
 import edu.wustl.common.querysuite.queryobject.ICondition;
 import edu.wustl.common.querysuite.queryobject.IConnector;
 import edu.wustl.common.querysuite.queryobject.IConstraints;
 import edu.wustl.common.querysuite.queryobject.ICustomFormula;
 import edu.wustl.common.querysuite.queryobject.IDateLiteral;
+import edu.wustl.common.querysuite.queryobject.IDateOffsetAttribute;
 import edu.wustl.common.querysuite.queryobject.IDateOffsetLiteral;
 import edu.wustl.common.querysuite.queryobject.IExpression;
-import edu.wustl.common.querysuite.queryobject.IExpressionOperand;
-import edu.wustl.common.querysuite.queryobject.IDateLiteral;
-import edu.wustl.common.querysuite.queryobject.IDateOffsetAttribute;
+import edu.wustl.common.querysuite.queryobject.IExpressionAttribute;
 import edu.wustl.common.querysuite.queryobject.IJoinGraph;
+import edu.wustl.common.querysuite.queryobject.INumericLiteral;
 import edu.wustl.common.querysuite.queryobject.IOutputTerm;
 import edu.wustl.common.querysuite.queryobject.IQuery;
 import edu.wustl.common.querysuite.queryobject.IQueryEntity;
@@ -60,7 +58,6 @@ import edu.wustl.common.querysuite.queryobject.ITerm;
 import edu.wustl.common.querysuite.queryobject.LogicalOperator;
 import edu.wustl.common.querysuite.queryobject.RelationalOperator;
 import edu.wustl.common.querysuite.queryobject.TimeInterval;
-import edu.wustl.common.querysuite.queryobject.YMInterval;
 import edu.wustl.common.querysuite.queryobject.impl.Expression;
 import edu.wustl.common.querysuite.queryobject.impl.JoinGraph;
 import edu.wustl.common.querysuite.queryobject.impl.Rule;
@@ -1378,10 +1375,10 @@ public class DAGPanel
 				{
 				  cNode.setTimeValue("");
 				}
-			} else
+			} else if(operand instanceof INumericLiteral)
 			{
-				throw new RuntimeException("Should not occur.....");
-				//return null;
+				INumericLiteral numLit = (INumericLiteral)operand;
+				cNode.setTimeValue(numLit.getNumber());
 			}
 		}
 	
