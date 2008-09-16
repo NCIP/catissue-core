@@ -1665,7 +1665,7 @@
 										}
 										else{%>
 												<%	
-												if((newSpecimenForm.getSelectedContainerName().equals("")||newSpecimenForm.getStorageContainer().equals("-1"))&&newSpecimenForm.getCollectionStatus().equals("Collected"))
+												if((newSpecimenForm.getSelectedContainerName()!= null && newSpecimenForm.getSelectedContainerName().equals("")||newSpecimenForm.getStorageContainer().equals("-1"))&&newSpecimenForm.getCollectionStatus().equals("Collected"))
 												{%>
 												<tr>
 														<td class="black_ar" colspan="2">																			
