@@ -492,10 +492,12 @@ TextInput
 	{
 		if(view=="Result"){
 			TQBtn.label = "Calculated Parameters";
-			TQBtn.toolTip = "Calculated Parameters on selected nodes"			
+			TQBtn.toolTip = "Calculated Parameters on selected nodes";
+			TQBtn.visible = false;
 		}else if(view=="AddLimit"){		
 			TQBtn.label = "Temporal Query";
-			TQBtn.toolTip = "Create temporal query on selected nodes"
+			TQBtn.toolTip = "Create temporal query on selected nodes";
+			TQBtn.visible = true;
 		}
 		
 		var nodeMap : Object =  event.result as Object ;		
