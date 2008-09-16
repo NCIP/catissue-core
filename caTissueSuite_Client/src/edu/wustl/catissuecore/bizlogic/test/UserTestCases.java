@@ -522,7 +522,7 @@ public class UserTestCases extends CaTissueBaseTestCase {
 	 * It will check for the invalid phone number format of the User.
 	 * @return void
 	 */
-	public void testAddUserWithInvalidPhoneNumber()
+	/*public void testAddUserWithInvalidPhoneNumber()
 	{
 		try
 		 {
@@ -549,13 +549,13 @@ public class UserTestCases extends CaTissueBaseTestCase {
 			 assertTrue("Cannot enter a User without Invalid Phone Number Format," +
 			 		" correct format is XXX-XXX-XXXX", true);			 
 		 }		
-	}	
+	}	*/
 	
 	/**
 	 * It will check for the Invalid Fax Number Format of the User.
 	 * @return void
 	 */
-	public void testAddUserWithInvalidFaxNumber()
+	/*public void testAddUserWithInvalidFaxNumber()
 	{
 		try
 		 {
@@ -581,7 +581,7 @@ public class UserTestCases extends CaTissueBaseTestCase {
 			 assertTrue("Cannot enter a User without Invalid Phone Number Format," +
 			 		" correct format is XXX-XXX-XXXX", true);			 
 		 }		
-	}
+	}*/
 	
 	/**
 	 * Add a user without its Phone Number 
