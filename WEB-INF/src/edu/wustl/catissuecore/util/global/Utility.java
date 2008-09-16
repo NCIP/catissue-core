@@ -2031,7 +2031,7 @@ public class Utility extends edu.wustl.common.util.Utility {
 			else
 			{
 				isPresent = privilegeCache.hasPrivilege(sb.toString()+cpId.toString(), privilegeName);
-				if(!isPresent && Permissions.REGISTRATION.equals(privilegeName));
+				if(!isPresent && Permissions.REGISTRATION.equals(privilegeName))
 				{
 					isPresent = checkForAllCurrentAndFutureCPs(null, privilegeName, sessionDataBean, cpId.toString());
 				}
