@@ -378,7 +378,7 @@ public class CaCoreAppServicesDelegator
 		 * Check if user is having PHI access of this object 
 		 * else set PHI values to null of respective object
 		 */
-		boolean hasPHIAccess = edu.wustl.catissuecore.util.global.Utility.hasPrivilegeToView(objectName, identifier, sessionDataBean, Permissions.PHI);
+		boolean hasPHIAccess = edu.wustl.catissuecore.util.global.Utility.hasPrivilegeToView(objectName, identifier, sessionDataBean, Permissions.REGISTRATION);
 		if(!hasPHIAccess)
 		{
 			if (classObject.equals(Participant.class))
