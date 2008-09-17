@@ -1281,6 +1281,10 @@ public class ParticipantBizLogic extends DefaultBizLogic
 					{
 						if (cpr.getId()==null)
 						{
+							if(cpr.getCollectionProtocol()==null)
+							{
+								return objectId;
+							}
 							sb.append("_").append(cpr.getCollectionProtocol().getId());
 							isNewCPRPresent = true;
 						}
