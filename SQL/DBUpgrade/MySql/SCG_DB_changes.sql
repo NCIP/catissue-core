@@ -471,10 +471,6 @@ alter table Catissue_Abs_Speci_coll_Group drop column COLLECTION_PROTOCOL_EVENT_
 alter table CatIssue_Abs_Speci_coll_Group drop column COLLECTION_PROTOCOL_REG_ID;
 
 alter table `CatIssue_Abs_Speci_coll_Group` drop column `CLINICAL_REPORT_ID`;
-
-update CATISSUE_INTERFACE_COLUMN_DATA set TABLE_ID = 92 where IDENTIFIER = 330; 
-delete from CATISSUE_INTERFACE_COLUMN_DATA where IDENTIFIER = 331; 
-
 /*alter table `CatIssue_Abs_Speci_coll_Group` drop column `SURGICAL_PATHOLOGY_NUMBER`;*/
 
 UPDATE CATISSUE_SPECIMEN_PROTOCOL SET ENROLLMENT=0 WHERE ENROLLMENT IS NULL;
