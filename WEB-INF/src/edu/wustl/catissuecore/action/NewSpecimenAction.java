@@ -674,14 +674,16 @@ public class NewSpecimenAction extends SecureAction
 						ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
 						if (containerMap.isEmpty()) 
 						{
-						
-							if (errors == null || errors.size() == 0)
+							if(specimenForm.getSelectedContainerName()==null || "".equals(specimenForm.getSelectedContainerName()))
 							{
-								errors = new ActionErrors();
+								if (errors == null || errors.size() == 0)
+								{
+									errors = new ActionErrors();
+								}
+								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("storageposition.not.available"));
+								saveErrors(request, errors);
 							}
-							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("storageposition.not.available"));
-							saveErrors(request, errors);
-							}
+						}
 							Logger.out.debug("calling checkForInitialValues() function from NewSpecimenAction---");
 							if (errors == null || errors.size() == 0)
 							{
