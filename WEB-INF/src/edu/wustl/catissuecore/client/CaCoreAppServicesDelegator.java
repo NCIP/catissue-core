@@ -485,6 +485,8 @@ public class CaCoreAppServicesDelegator
 		 * Description : Because of lazy initialization problem retrieved the object.
 		 */
 	    SpecimenCollectionGroup specimenCollGrp = (SpecimenCollectionGroup) object;
+	    CollectionProtocolRegistration cpr = specimenCollGrp.getCollectionProtocolRegistration();
+	    removeCollectionProtocolRegistrationIdentifiedData(cpr);
 	    specimenCollGrp.setSurgicalPathologyNumber(null);
 	    
 		IBizLogic bizLogic=getBizLogic(SpecimenCollectionGroup.class.getName());
