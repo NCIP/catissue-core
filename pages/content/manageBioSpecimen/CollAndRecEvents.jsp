@@ -29,7 +29,12 @@
         <html:hidden property="collectionEventId" />
 						<html:hidden property="collectionEventSpecimenId" />
 		<td width="1%" align="center" >
-							<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
+		<logic:equal name="showStar" value="false">
+			&nbsp;
+		</logic:equal>
+		<logic:notEqual name="showStar" value="false">
+		<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
+		</logic:notEqual>
 		</td>
         <td align="left" class="black_ar">
 							<label for="user">
@@ -126,7 +131,12 @@
       </tr>
       <tr>
         <td width="1%" align="center">
-							<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
+			<logic:equal name="showStar" value="false">
+			&nbsp;
+			</logic:equal>
+			<logic:notEqual name="showStar" value="false">
+				<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
+			</logic:notEqual>
 		</td>
         <td align="left" class="black_ar">
 							<label for="collectionprocedure">
@@ -143,7 +153,12 @@
       </tr>
       <tr>
         <td width="1%" align="center" >
-							<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
+			<logic:equal name="showStar" value="false">
+			&nbsp;
+			</logic:equal>
+			<logic:notEqual name="showStar" value="false">
+				<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
+			</logic:notEqual>
 		</td>
         <td align="left" class="black_ar" >
 								<label for="container">
@@ -174,8 +189,13 @@
       <tr>
         <html:hidden property="receivedEventId" />
 						<html:hidden property="receivedEventSpecimenId" />
-						<td width="1%" align="center">
-							<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
+		<td width="1%" align="center">
+			<logic:equal name="showStar" value="false">
+				&nbsp;
+			</logic:equal>
+			<logic:notEqual name="showStar" value="false">
+				<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
+			</logic:notEqual>
 		</td>
         <td align="left" class="black_ar">
 							<label for="type">
@@ -270,7 +290,12 @@
       </tr>
       <tr>
         <td  width="1%" align="center" >
-							<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
+			<logic:equal name="showStar" value="false">
+				&nbsp;
+			</logic:equal>
+			<logic:notEqual name="showStar" value="false">
+				<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
+			</logic:notEqual>
 		</td>
         <td align="left" class="black_ar" >
 							<label for="quality">

@@ -351,6 +351,9 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 		<tr>
 			<td colspan="3">
 				<div >
+				<%
+					request.setAttribute("showStar","false");
+				%>
 				<%@ include file="CollAndRecEvents.jsp" %>
 				</div>
 			</td>
