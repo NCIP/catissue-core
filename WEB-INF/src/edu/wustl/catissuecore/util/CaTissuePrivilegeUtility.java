@@ -13,7 +13,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 
-import edu.emory.mathcs.backport.java.util.Collections;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Site;
@@ -23,7 +22,6 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.dao.AbstractDAO;
-import edu.wustl.common.dao.DAO;
 import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.security.PrivilegeCache;
 import edu.wustl.common.security.PrivilegeManager;
@@ -31,7 +29,6 @@ import edu.wustl.common.util.Permissions;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.Variables;
 import edu.wustl.common.util.logger.Logger;
-import gov.nih.nci.security.authorization.domainobjects.Role;
 import gov.nih.nci.security.exceptions.CSException;
 
 /**
@@ -258,6 +255,15 @@ public class CaTissuePrivilegeUtility
 			
 			// To show details of Sites having Default functionality on CP
 			Collection<Site> siteCollection = cp.getSiteCollection();
+			Set<Long> validSiteIds = new HashSet<Long>();
+			
+			if(siteCollection !=null)
+			{
+				for(Site site : siteCollection)
+				{
+					validSiteIds.add(site.getId());
+				}
+			}
 			Set<Long> siteIdSetSpecific = new HashSet<Long>(); 
 			
 			List<NameValueBean> allPrivileges = new ArrayList<NameValueBean>();
@@ -302,7 +308,10 @@ public class CaTissuePrivilegeUtility
 						for (Long siteId : siteSet)
 						{
 							Site site = (Site) hibernateDao.retrieve(Site.class.getName(), siteId);
-							siteList.add(site);
+							if(validSiteIds.contains(siteId))
+							{
+								siteList.add(site);
+							}
 							siteIdSetSpecific.add(siteId);
 						}
 
@@ -345,7 +354,7 @@ public class CaTissuePrivilegeUtility
 		catch (Exception e)
 		{
 			Logger.out.debug(e.getMessage(), e);
-			return null;
+			// return null;
 		}
 		finally
 		{
