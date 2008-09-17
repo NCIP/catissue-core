@@ -42,6 +42,7 @@ public class ViewCartAction extends QueryShoppingCartAction
 		request.setAttribute(Constants.EVENT_PARAMETERS_LIST,Constants.EVENT_PARAMETERS);
 		setCartView(request, cart);
 		target = new String(Constants.VIEW);
+		session.removeAttribute(Constants.HYPERLINK_COLUMN_MAP);
 		return mapping.findForward(target);
 	}
 }
