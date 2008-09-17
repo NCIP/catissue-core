@@ -531,6 +531,8 @@ public class UserBizLogic extends DefaultBizLogic
 						privileges.add(privilege.getValue());
 					}
 					
+					Utility.processRole(roleName);
+					
 					PrivilegeManager.getInstance().createRole(roleName,
 								privileges);
 					
