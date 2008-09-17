@@ -72,18 +72,24 @@ public class RequestToOrderAction extends BaseAction
 		String sourceObjectName = DistributionProtocol.class.getName();
 		String[] displayName = {"title"};
 		String valueFieldCol = Constants.ID;
+	
+		
 
 		// checking for the role. if role is admin / supervisor then show all the distribution protocols.
 		if (roleName.equals(Constants.ADMINISTRATOR) || roleName.equals(Constants.SUPERVISOR))
 		{
-			distributionProtocolList = bizLogic.getList(sourceObjectName, displayName, valueFieldCol, true);
+			String[] whereColNames ={Constants.ACTIVITY_STATUS};
+			String[] whereColCond = {"!="};
+			Object[] whereColVal = {Constants.ACTIVITY_STATUS_CLOSED};	
+			String separatorBetweenFields = "";
+			distributionProtocolList = bizLogic.getList(sourceObjectName, displayName, valueFieldCol, whereColNames,whereColCond,whereColVal,Constants.AND_JOIN_CONDITION,separatorBetweenFields,true);
 		}
 		else
 		{
-			String[] whereColumnName = {"principalInvestigator.id"};
-			String[] colCondition = {"="};
-			Object[] whereColumnValue = {piID};
-			String joinCondition = null;
+			String[] whereColumnName = {"principalInvestigator.id",Constants.ACTIVITY_STATUS};
+			String[] colCondition = {"=","!="};
+			Object[] whereColumnValue = {piID,Constants.ACTIVITY_STATUS_CLOSED};
+			String joinCondition = Constants.AND_JOIN_CONDITION;
 			String separatorBetweenFields = "";
 			boolean isToExcludeDisabled = true;
 

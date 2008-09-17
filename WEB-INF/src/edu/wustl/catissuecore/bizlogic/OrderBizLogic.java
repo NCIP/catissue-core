@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.hibernate.Session;
+import org.omg.CosNaming.IstringHelper;
 
 import edu.wustl.catissuecore.bean.RequestViewBean;
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
@@ -145,8 +146,6 @@ public class OrderBizLogic extends DefaultBizLogic
 		this.validate(obj, oldObj, dao, Constants.EDIT);
 		OrderDetails orderImplObj = (OrderDetails) HibernateMetaData.getProxyObjectImpl(oldObj);
 		OrderDetails orderNew = updateObject(orderImplObj, obj, dao, sessionDataBean);
-		
-
 		dao.update(orderNew, sessionDataBean, true, true, false);
 		disposeSpecimen(orderNew, sessionDataBean, dao);
 		//Sending Email only if atleast one order item is updated.
@@ -168,7 +167,7 @@ public class OrderBizLogic extends DefaultBizLogic
 	{
 		OrderDetails order = (OrderDetails) obj;
 		OrderDetails oldOrder = (OrderDetails) oldObj;
-		Validator validator = new Validator();
+		checkDistributionPtorocol(order,dao);
 		if ((oldOrder.getStatus().trim().equalsIgnoreCase("Pending") && order.getStatus().trim().equalsIgnoreCase("New"))
 				|| (oldOrder.getStatus().trim().equalsIgnoreCase("Rejected") && (order.getStatus().trim().equalsIgnoreCase("New") || order
 						.getStatus().trim().equalsIgnoreCase("Pending")))
@@ -1509,6 +1508,24 @@ public class OrderBizLogic extends DefaultBizLogic
 			}
 		
 			return specimenArray;
+	}
+	
+	private void checkDistributionPtorocol(OrderDetails order,DAO dao) throws DAOException
+	{
+		String[] selectColNames = {"distributionProtocol"};
+		String[] whereColNames = {Constants.SYSTEM_IDENTIFIER};
+		String[] whereColConditions = {"="};
+		Object[] whereColVal = {order.getId()};
+		List list = dao.retrieve(OrderDetails.class.getName(),selectColNames,whereColNames,whereColConditions,whereColVal,Constants.AND_JOIN_CONDITION);
+		if(list != null && !list.isEmpty())
+		{
+			DistributionProtocol dist = (DistributionProtocol) list.get(0);
+			if(dist != null)
+			{
+				checkStatus(dao,dist,"Distribution Protocol");
+			}
+		}
+		
 	}
 	
 	

@@ -17,6 +17,7 @@ import java.util.Map;
 import edu.wustl.catissuecore.actionForm.DistributionProtocolForm;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
+import edu.wustl.common.bizlogic.IActivityStatus;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.logger.Logger;
 
@@ -26,7 +27,7 @@ import edu.wustl.common.util.logger.Logger;
  * @hibernate.joined-subclass-key column="IDENTIFIER" 
  * @author Mandar Deshmukh
  */
-public class DistributionProtocol extends SpecimenProtocol implements java.io.Serializable
+public class DistributionProtocol extends SpecimenProtocol implements java.io.Serializable,IActivityStatus
 {
 	private static final long serialVersionUID = 1234567890L;
 
