@@ -1627,21 +1627,31 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	 * @param specimenEventParaCol
 	 * @return
 	 */
-	private Collection getCollectionEventParameters(Collection specimenEventParaCol)
+	private Collection getCollectionEventParameters(SpecimenCollectionGroup specimenCollGroup) throws ClassNotFoundException,DAOException
 	{
 		Collection collectionEventParameters = new ArrayList();
-
-		Iterator specimenEventParaColItr = specimenEventParaCol.iterator();
-		while (specimenEventParaColItr.hasNext())
+		if(specimenCollGroup.getSpecimenEventParametersCollection() == null || specimenCollGroup.getSpecimenEventParametersCollection().isEmpty())
 		{
-			SpecimenEventParameters specimenEventParameters = (SpecimenEventParameters) specimenEventParaColItr.next();
-			if (specimenEventParameters instanceof CollectionEventParameters)
-			{
-				collectionEventParameters.add(specimenEventParameters);
-			}
+			String hql = "select  scg.specimenEventParametersCollection from " + SpecimenCollectionGroup.class.getName()
+			+ " as scg where scg.id= " + specimenCollGroup.getId().toString();
 
+			List scgEventList = executeQuery(hql);
+			specimenCollGroup.setSpecimenEventParametersCollection(scgEventList);
 		}
+		if (specimenCollGroup.getSpecimenEventParametersCollection() != null && !specimenCollGroup.getSpecimenEventParametersCollection().isEmpty())
+		{
 
+			Iterator specimenEventParaColItr = specimenCollGroup.getSpecimenEventParametersCollection().iterator();
+			while (specimenEventParaColItr.hasNext())
+			{
+				SpecimenEventParameters specimenEventParameters = (SpecimenEventParameters) specimenEventParaColItr.next();
+				if (specimenEventParameters instanceof CollectionEventParameters)
+				{
+					collectionEventParameters.add(specimenEventParameters);
+				}
+
+			}
+		}
 		return collectionEventParameters;
 	}
 
@@ -1682,7 +1692,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 			if (specimenCollectionGroup.getId() != null && specimenCollectionGroup.getId() > 0)
 			{
 
-				Collection eventsColl = getCollectionEventParameters(specimenCollectionGroup.getSpecimenEventParametersCollection());
+				Collection eventsColl = getCollectionEventParameters(specimenCollectionGroup);
 
 				if (eventsColl != null && !eventsColl.isEmpty())
 				{
@@ -1859,368 +1869,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		xmlString.append("</node>");
 	}
 
-	/**
-	 * Add specimens to xmlString
-	 * @param xmlString
-	 * @param specimenCollectionGroup
-	 * @throws DAOException
-	 * @throws ClassNotFoundException
-	 */
-	private void addSpecNodesToSCGTree(StringBuffer xmlString, SpecimenCollectionGroup specimenCollectionGroup) throws DAOException,
-			ClassNotFoundException
-	{
-		/**
-		 * kalpana Bug #5906 Reviewer : vaishali To display the children
-		 * specimens of the specimen in acending order. changed to order by
-		 * specimen label.
-		 */
-
-		Map childSpecimenMap = new HashMap();
-
-		List specimenList = new ArrayList();
-		specimenList.addAll(specimenCollectionGroup.getSpecimenCollection());
-//		Mandar 27aug08--start
-		SpecimenComparator comparator = new SpecimenComparator();
-		Collections.sort(specimenList,comparator);
-//		Mandar 27Aug08--end		
-
-		List finalList = new ArrayList();
-		List childrenList = new ArrayList();
-
-		// Stack
-		Stack spStack = new Stack();
-
-		// Here iterate over specimenList to separate out Specimens and child
-		// Specimens
-		for (int i = 0; i < specimenList.size(); i++)
-		{
-			Specimen specimen = (Specimen) specimenList.get(i);
-
-			if (!Constants.ACTIVITY_STATUS_DISABLED.equals(specimen.getActivityStatus()))
-			{
-
-				// Long peekSpecimenId = null;
-				if (specimen.getId() != null)
-				{
-					if (specimen.getParentSpecimen() == null)
-					{
-						// if parentSpecimenId is null then it's going to be parent
-						// specimen
-						finalList.add(specimenList.get(i));
-					}
-					else
-					{
-						childrenList.add(specimenList.get(i));
-					}
-				}
-			}
-		}
-
-		/**
-		 * kalpana Bug #5906 Reviewer : vaishali To display the children
-		 * specimens of the specimen in acending order. Map hold parent specimen
-		 * id and the count of all the childern under that parent specimen.
-		 */
-
-		Map countOfChildSpecimenMap = new HashMap<Long, Integer>();
-		Integer countOfChildSpecimen = 1;
-
-		for (int i = 0; i < childrenList.size(); i++)
-		{
-			Specimen specimen = (Specimen) childrenList.get(i);
-
-			/*
-			 * fetching the count of children specimen if it's parent specimen
-			 * Id is there in the Map else setting it to 1.
-			 */
-
-			if (countOfChildSpecimenMap.containsKey(specimen.getParentSpecimen().getId()))
-			{
-				countOfChildSpecimen = (Integer) countOfChildSpecimenMap.get(specimen.getParentSpecimen().getId());
-			}
-			else
-			{
-				countOfChildSpecimen = 1;
-			}
-
-			for (int j = 0; j < finalList.size(); j++)
-			{
-				Specimen specimenParent = (Specimen) finalList.get(j);
-
-				// This if statement is not working.......convert Long objects
-				// to long values
-				if (specimen.getParentSpecimen().getId().longValue() == specimenParent.getId().longValue())
-				{
-
-					finalList.add(j + countOfChildSpecimen, childrenList.get(i));
-					countOfChildSpecimen++;
-					countOfChildSpecimenMap.put(specimen.getParentSpecimen().getId(), countOfChildSpecimen);
-
-					/*
-					 * kalpana Update the children specimen count of all the
-					 * parent specimens accept the immediate parent
-					 */
-					updateChildSpecimenCount(finalList, (Specimen) specimenParent.getParentSpecimen(), countOfChildSpecimenMap, countOfChildSpecimen);
-					break;
-					// Here break is important ....once parent is found
-				}
-			}
-		}
-
-		// Here create XML String rep. of parent/child specimen tree from
-		// finalList
-		for (int i = 0; i < finalList.size(); i++)
-		{
-
-			Specimen specimen = (Specimen) finalList.get(i);
-			Long spId = specimen.getId();
-			Long parentId = null;
-			if (specimen.getParentSpecimen() != null)
-			{
-				parentId = specimen.getParentSpecimen().getId();
-			}
-			String spLabel1 = specimen.getLabel();
-			// String spActivityStatus = (String) specimens[3];
-			String type = specimen.getSpecimenType();
-			String spCollectionStatus = specimen.getCollectionStatus();
-
-			// Added later for toolTip text for specimens
-			String toolTipText = "Label : " + spLabel1 + " ; Type : " + type;
-
-			List collectionEventPara = (List) getCollectionEventParameters(specimen.getSpecimenEventCollection());
-			/*String hqlCon = "select colEveParam.container from " + CollectionEventParameters.class.getName()
-			 + " as colEveParam where colEveParam.specimen.id = " + spId;
-
-			 List container = executeQuery(hqlCon);
-			 */for (int k = 0; k < collectionEventPara.size(); k++)
-			{
-				CollectionEventParameters collectionEventParameters = (CollectionEventParameters) collectionEventPara.get(k);
-				String con = (String) collectionEventParameters.getContainer();
-				toolTipText += " ; Container : " + con;
-			}
-
-			// If parent id is null, then it's going to be a new specimens
-			if (parentId == null)
-			{
-				while (!spStack.isEmpty()) // closes all specimens node
-				// when a new specimens starts
-				{
-					spStack.pop();
-					xmlString.append("</node>");
-				}
-
-				if (i == finalList.size() - 1) // If last element & parent
-				// specimen
-				{
-					xmlString.append("<node id=\"" + Constants.SPECIMEN + "_" + spId.toString() + "\" " + "name=\"" + spLabel1 + "\" " + "toolTip=\""
-							+ toolTipText + "\" " + "type=\"" + Constants.SPECIMEN + "\" " + "collectionStatus=\"" + spCollectionStatus + "\">");
-					xmlString.append("</node>");
-				}
-				else
-				// If not the last element and parent specimen
-				{
-					xmlString.append("<node id=\"" + Constants.SPECIMEN + "_" + spId.toString() + "\" " + "name=\"" + spLabel1 + "\" " + "toolTip=\""
-							+ toolTipText + "\" " + "type=\"" + Constants.SPECIMEN + "\" " + "collectionStatus=\"" + spCollectionStatus + "\">");
-					spStack.push((Specimen) finalList.get(i));
-				}
-			}
-
-			else
-			{
-				Specimen previousSp = (Specimen) finalList.get(i - 1);
-				Long previousSpId = previousSp.getId();
-
-				// If immediate prevoius node is parent of current node
-				if (parentId.longValue() == previousSpId.longValue())
-				{
-					if (i != finalList.size() - 1) // if not the last element
-					// in specimen list
-					{
-						Specimen nextSp = (Specimen) finalList.get(i + 1); // Getting
-						// next
-						// sp
-						Long nextSpPid = null;
-						if (nextSp.getParentSpecimen() != null)
-							nextSpPid = nextSp.getParentSpecimen().getId();
-
-						if (nextSpPid != null)
-						{
-							// Check if current specimen have children
-							// specimens
-							if (spId.longValue() == nextSpPid.longValue())
-							{
-								xmlString.append("<node id=\"" + Constants.SPECIMEN + "_" + spId.toString() + "\" " + "name=\"" + spLabel1 + "\" "
-										+ "toolTip=\"" + toolTipText + "\" " + "type=\"" + Constants.SPECIMEN + "\" " + "collectionStatus=\""
-										+ spCollectionStatus + "\">");
-								spStack.push((Specimen) finalList.get(i));
-							}
-							else
-							// if current specimen doesn't have
-							// children specimens
-							{
-								xmlString.append("<node id=\"" + Constants.SPECIMEN + "_" + spId.toString() + "\" " + "name=\"" + spLabel1 + "\" "
-										+ "toolTip=\"" + toolTipText + "\" " + "type=\"" + Constants.SPECIMEN + "\" " + "collectionStatus=\""
-										+ spCollectionStatus + "\"></node> ");
-							}
-						}
-						else
-						{
-							xmlString.append("<node id=\"" + Constants.SPECIMEN + "_" + spId.toString() + "\" " + "name=\"" + spLabel1 + "\" "
-									+ "toolTip=\"" + toolTipText + "\" " + "type=\"" + Constants.SPECIMEN + "\" " + "collectionStatus=\""
-									+ spCollectionStatus + "\"></node> ");
-						}
-					}
-
-					else
-					// last element in specimen List
-					{
-						xmlString.append("<node id=\"" + Constants.SPECIMEN + "_" + spId.toString() + "\" " + "name=\"" + spLabel1 + "\" "
-								+ "toolTip=\"" + toolTipText + "\" " + "type=\"" + Constants.SPECIMEN + "\" " + "collectionStatus=\""
-								+ spCollectionStatus + "\"></node> ");
-						while (!spStack.isEmpty())
-						{
-							spStack.pop();
-							xmlString.append("</node>");
-						}
-					}
-				}
-				else
-				// current node has parent but not the immediate
-				// prevoius node. Parent may be on the stack
-				{
-					Long peekSpecimenId2 = null;
-					do
-					{
-						Specimen peekSp = (Specimen) spStack.peek(); // Retrieving
-						// the
-						// peek
-						// element
-						// at
-						// stack
-						Long peekSpId = (Long) peekSp.getId();
-						if (parentId.longValue() == peekSpId.longValue())// If
-						// current
-						// node
-						// has
-						// parent
-						// as
-						// peek
-						// (last)
-						// element
-						// at
-						// stack
-						{
-							if (i != finalList.size() - 1) // if not the last
-							// element
-							{
-								Specimen nextSp = (Specimen) finalList.get(i + 1);
-
-								Long nextSpPid = null;
-								if (nextSp.getParentSpecimen() != null)
-									nextSpPid = nextSp.getParentSpecimen().getId();
-
-								// Here nextSpPid may be null
-								if (nextSpPid != null)
-								{
-									// If it has children
-									if (spId.longValue() == nextSpPid.longValue())
-									{
-										xmlString.append("<node id=\"" + Constants.SPECIMEN + "_" + spId.toString() + "\" " + "name=\"" + spLabel1
-												+ "\" " + "toolTip=\"" + toolTipText + "\" " + "type=\"" + Constants.SPECIMEN + "\" "
-												+ "collectionStatus=\"" + spCollectionStatus + "\">");
-										spStack.push((Specimen) finalList.get(i));
-									}
-									else
-									// if it doesn't has children
-									{
-										xmlString.append("<node id=\"" + Constants.SPECIMEN + "_" + spId.toString() + "\" " + "name=\"" + spLabel1
-												+ "\" " + "toolTip=\"" + toolTipText + "\" " + "type=\"" + Constants.SPECIMEN + "\" "
-												+ "collectionStatus=\"" + spCollectionStatus + "\"></node> ");
-										break; // Note this break is imp
-									}
-
-								}
-								else
-								// next node parent id is null then
-								// , then it's parent specimen
-								{
-									xmlString.append("<node id=\"" + Constants.SPECIMEN + "_" + spId.toString() + "\" " + "name=\"" + spLabel1
-											+ "\" " + "toolTip=\"" + toolTipText + "\" " + "type=\"" + Constants.SPECIMEN + "\" "
-											+ "collectionStatus=\"" + spCollectionStatus + "\"></node> ");
-									break;
-								}
-
-							}
-							else
-							// If last element
-							{
-								xmlString.append("<node id=\"" + Constants.SPECIMEN + "_" + spId.toString() + "\" " + "name=\"" + spLabel1 + "\" "
-										+ "toolTip=\"" + toolTipText + "\" " + "type=\"" + Constants.SPECIMEN + "\" " + "collectionStatus=\""
-										+ spCollectionStatus + "\"></node> ");
-								while (!spStack.isEmpty())
-								{
-									spStack.pop();
-									xmlString.append("</node>");
-								}
-
-								break; // If last element,& stack is empty,
-								// simply break
-							}
-
-						}
-						else
-						// If node has parent but at peek element of
-						// stack
-						{
-							// So iterate till, node has parent element at
-							// stack
-							Long peekSpecimenId1 = null;
-							do
-							{
-
-								if (!spStack.isEmpty())
-								{
-									spStack.pop();
-									xmlString.append("</node>");
-
-									Specimen peekSp1 = null;
-									if (!spStack.isEmpty())
-									{
-										peekSp1 = (Specimen) spStack.peek(); // Retrieving
-									}
-									// the
-									// peek
-									// element
-									// at
-									// stack
-									if (peekSp1 != null)
-										peekSpecimenId1 = (Long) peekSp1.getId();
-								}
-
-							}
-							while (peekSpecimenId1 != null && parentId.longValue() != peekSpecimenId1.longValue() && !spStack.isEmpty());
-						}
-
-						if (!spStack.empty())
-						{
-							Specimen peekSp2 = (Specimen) spStack.peek(); // Retrieving
-							// the
-							// peek
-							// element
-							// at
-							// stack
-							peekSpecimenId2 = (Long) peekSp2.getId();
-						}
-					}
-					while (peekSpecimenId2 != null && parentId.longValue() == peekSpecimenId2.longValue() && !spStack.empty());
-
-				}
-
-			}
-
-		}
-	}
-
+	
 	/**
 	 * kalpana Bug #5906 Reviewer : vaishali Update the children specimen count
 	 * of all the parent specimens accept the immediate parent
