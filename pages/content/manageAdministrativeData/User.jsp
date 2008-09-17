@@ -33,25 +33,6 @@
 	var errorMessForCP='${requestScope.errorMessageForCP}';	
 	var errorMessForPriv='${requestScope.errorMessageForPrivilege}';	
 </script>
-<SCRIPT LANGUAGE="JavaScript">
-function handleStatus(status)
-{
-	document.forms[0].role.value='${requestScope.SELECT_OPTION_VALUE}';
-	document.forms[0].role.readOnly=true;
-	document.getElementById("displayrole").readOnly=true;
-	if (status.value == '${requestScope.Approve}')
-	{
-    	document.forms[0].role.readOnly=false;
-	   	document.getElementById("displayrole").readOnly=false;
-	}
-	else
-	{
-		document.getElementById("displayrole").value="";
-		document.getElementById("role").value="";
-	}
-	
-}
-</SCRIPT>
 
 </head>
 
@@ -737,7 +718,6 @@ function handleStatus(status)
 												<td width="19%" colspan="1" align="left" valign="top"
 													class="black_ar_t"><html:select property="status"
 													styleClass="formFieldSizedNew" styleId="status" size="1"
-													onchange="javascript:handleStatus(this)"
 													onmouseover="showTip(this.id)"
 													onmouseout="hideTip(this.id)">
 													<html:options name="statusList" labelName="statusList" />
