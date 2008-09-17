@@ -183,7 +183,7 @@ public class ConsentVerificationAction extends BaseAction
 		{
 			e.printStackTrace();
 		}
-		CollectionProtocolRegistration cprObject = (CollectionProtocolRegistration)collProtObject.get(0);
+		CollectionProtocolRegistration cprObject = collectionProtocolRegistration;//(CollectionProtocolRegistration)collProtObject.get(0);
         //Getting WitnessName,Consent Date,Signed Url using collectionProtocolRegistration object
 		String witnessName="";
 		String getConsentDate="";

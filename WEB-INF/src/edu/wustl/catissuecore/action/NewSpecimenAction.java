@@ -227,7 +227,7 @@ public class NewSpecimenAction extends SecureAction
 			String userName = Utility.toString(sessionDataBean.getUserName());	
 			List collProtObject = caCoreAppServicesDelegator.delegateSearchFilter(userName,cprObjectList);
 			CollectionProtocolRegistration cprObject =null;
-			cprObject = (CollectionProtocolRegistration)collProtObject.get(0);
+			cprObject = collectionProtocolRegistration;//(CollectionProtocolRegistration)collProtObject.get(0);
 			
 			String witnessName="";
 			String getConsentDate="";
