@@ -59,7 +59,7 @@ public class ViewSpecimenSummaryAction extends Action {
 //			Mandar : 5Aug08 ----------- end
 			String eventId = summaryForm.getEventId();
 			session.setAttribute(Constants.TREE_NODE_ID,(String)request.getParameter("nodeId"));
-			String event_id=(String)request.getParameter("Event_Id");
+			
 			Object obj = request.getAttribute("SCGFORM");
 			request.setAttribute("SCGFORM", obj);
 			target =request.getParameter("target");
@@ -165,9 +165,13 @@ public class ViewSpecimenSummaryAction extends Action {
 			request.setAttribute(Constants.PAGEOF,pageOf);
 			
 			//Mandar: 16May2008 : For specimenDetails customtag --- start ---
-			if("anticipatory".equalsIgnoreCase(target) || "pageOfMultipleSpWithMenu".equalsIgnoreCase(target))
+			if("anticipatory".equalsIgnoreCase(target) )
 			{
-				SpecimenDetailsTagUtil.setAnticipatorySpecimenDetails(request, summaryForm);
+				SpecimenDetailsTagUtil.setAnticipatorySpecimenDetails(request, summaryForm, false);
+			}
+			else if ("pageOfMultipleSpWithMenu".equalsIgnoreCase(target))
+			{
+				SpecimenDetailsTagUtil.setAnticipatorySpecimenDetails(request, summaryForm, true);
 			}
 			else 
 			{
@@ -185,15 +189,19 @@ public class ViewSpecimenSummaryAction extends Action {
 
 			return mapping.findForward(target);
 		} catch (Exception exception) {
-			exception.printStackTrace();
+//			exception.printStackTrace();
 			ActionErrors actionErrors = new ActionErrors();
 			actionErrors.add(actionErrors.GLOBAL_MESSAGE, new ActionError(
 					"errors.item",exception.getMessage()));
 			saveErrors(request, actionErrors);		
 			//Mandar: 17JULY2008 : For specimenDetails customtag --- start ---
-			if("anticipatory".equalsIgnoreCase(target) || "pageOfMultipleSpWithMenu".equalsIgnoreCase(target))
+			if("anticipatory".equalsIgnoreCase(target) )
 			{
-				SpecimenDetailsTagUtil.setAnticipatorySpecimenDetails(request, summaryForm);
+				SpecimenDetailsTagUtil.setAnticipatorySpecimenDetails(request, summaryForm, false);
+			}
+			else if ("pageOfMultipleSpWithMenu".equalsIgnoreCase(target))
+			{
+				SpecimenDetailsTagUtil.setAnticipatorySpecimenDetails(request, summaryForm, true);
 			}
 			else 
 			{

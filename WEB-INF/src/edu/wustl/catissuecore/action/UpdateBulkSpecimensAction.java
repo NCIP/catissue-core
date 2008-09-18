@@ -91,7 +91,7 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 			//	return mapping.findForward(request.getParameter("pageOf"));
 			
 			//19May08 : Mandar : For GenericSpecimen
-			SpecimenDetailsTagUtil.setAnticipatorySpecimenDetails(request, specimenSummaryForm);
+			SpecimenDetailsTagUtil.setAnticipatorySpecimenDetails(request, specimenSummaryForm, true);
 			if(request.getAttribute("printflag")!=null && request.getAttribute("printflag").equals("1"))
 			{
 				HashMap forwardToPrintMap = new HashMap();
@@ -122,7 +122,7 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 		catch(Exception exception)
 		{
 			//11July08 : Mandar : For GenericSpecimen
-			SpecimenDetailsTagUtil.setAnticipatorySpecimenDetails(request, specimenSummaryForm);
+			SpecimenDetailsTagUtil.setAnticipatorySpecimenDetails(request, specimenSummaryForm, true);
 		   
 			ActionErrors actionErrors = new ActionErrors();
 			

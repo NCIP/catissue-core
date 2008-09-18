@@ -56,11 +56,12 @@ public class MultipleSpecimenViewAction extends BaseAction
 				summaryForm.setShowParentStorage(false);
 				summaryForm.setShowbarCode(true);
 				summaryForm.setShowLabel(true);
+				summaryForm.setMultipleSpEditMode(true);
 				
 			}
 			request.setAttribute("RequestType","");
 			if(pageOf != null)
-				return mapping.findForward(pageOf);
+			{	return mapping.findForward(pageOf); }
 			return mapping.findForward(Constants.SUCCESS);
 		}
 		catch(Exception e)

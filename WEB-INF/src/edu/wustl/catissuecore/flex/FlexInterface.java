@@ -991,7 +991,6 @@ public class FlexInterface
 		}
 		if (sp.getSpecimenPosition() != null && sp.getSpecimenPosition().getStorageContainer() != null)
 		{
-			specimenDataBean.setStorageContainerForSpecimen(sp.getSpecimenPosition().getStorageContainer().getName());
 			specimenDataBean.setSelectedContainerName(sp.getSpecimenPosition().getStorageContainer().getName());
 			if(sp.getSpecimenPosition() != null)
 			{

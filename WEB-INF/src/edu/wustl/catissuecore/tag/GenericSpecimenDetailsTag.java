@@ -72,6 +72,10 @@ public class GenericSpecimenDetailsTag extends TagSupport
 	"specimen.pathologicalStatus"
 	};
 
+	private final String TR_OPEN = "<tr>";
+	private final String TR_CLOSE = "</tr>";
+	private final String TD_OPEN = "<td>";
+	private final String TD_CLOSE = "</td>";
 	//--------------- TAG Attribute Section start [Will be provided by the user of the tag thru the TAG.]------------
 	private String displayColumnListName = "";
 	private String columnHeaderListName = "";
@@ -280,12 +284,12 @@ public class GenericSpecimenDetailsTag extends TagSupport
 		{
 			columnHeaderList = new ArrayList();
 			if(dataListType.equalsIgnoreCase(dataListTypes[0]))
-				columnHeaderList.add("");
+				{ columnHeaderList.add(""); }
 			else
-				columnHeaderList.add("anticipatorySpecimen.Parent");
+				{ columnHeaderList.add("anticipatorySpecimen.Parent"); }
 
 			for(int i=0;i< GenericSpecimenDetailsTag.COLUMN_LABELS.length; i++)
-				columnHeaderList.add(GenericSpecimenDetailsTag.COLUMN_LABELS[i]);				// 0
+			{	columnHeaderList.add(GenericSpecimenDetailsTag.COLUMN_LABELS[i]); }				// 0
 			
 		}
 		if(!dataListType.equalsIgnoreCase(dataListTypes[0]))
@@ -312,9 +316,9 @@ public class GenericSpecimenDetailsTag extends TagSupport
 			if(dataListType.equalsIgnoreCase(dataListTypes[cnt]))
 			{
 				if(dataListTypes[0].equalsIgnoreCase(dataListTypes[cnt]))
-					elementPrefixPart1 = "specimen[";
+				{	elementPrefixPart1 = "specimen[";	}
 				else
-					elementPrefixPart1 = dataListTypes[cnt].toLowerCase().trim()+"[";
+				{	elementPrefixPart1 = dataListTypes[cnt].toLowerCase().trim()+"[";}
 				result = true;
 			}
 		}
@@ -330,11 +334,11 @@ public class GenericSpecimenDetailsTag extends TagSupport
 			if(specimenSummaryForm != null)
 			{
 				if(dataListType.equalsIgnoreCase(dataListTypes[0]))
-					l = specimenSummaryForm.getSpecimenList();
+				{	l = specimenSummaryForm.getSpecimenList(); }
 				else if(dataListType.equalsIgnoreCase(dataListTypes[1]))
-					l = specimenSummaryForm.getAliquotList();
+				{	l = specimenSummaryForm.getAliquotList(); }
 				else if(dataListType.equalsIgnoreCase(dataListTypes[2]))
-					l = specimenSummaryForm.getDerivedList();
+				{	l = specimenSummaryForm.getDerivedList(); }
 			}
 		}
 		else	// get the list from ViewSpecimenSummaryForm based on list type
@@ -376,11 +380,11 @@ public class GenericSpecimenDetailsTag extends TagSupport
 		for(int cnt=0;cnt < columnHeaderList.size(); cnt++ )
 		{
 				if(((String)columnHeaderList.get(cnt)).trim().length()>0)
-					sb.append("<td class=\"black_ar_b\" scope=\"col\">"+ApplicationProperties.getValue((String)columnHeaderList.get(cnt))+"</th>");
+				{	sb.append("<td class=\"black_ar_b\" scope=\"col\">"+ApplicationProperties.getValue((String)columnHeaderList.get(cnt))+"</th>"); }
 				else
-					sb.append("<td class=\"black_ar_b\" scope=\"col\">&nbsp;</th>");
+				{	sb.append("<td class=\"black_ar_b\" scope=\"col\">&nbsp;</th>"); }
 		}
-		sb.append("</tr>");
+		sb.append(TR_CLOSE);
 		
 		String output =sb.toString();		
 		return output;
@@ -409,7 +413,7 @@ public class GenericSpecimenDetailsTag extends TagSupport
 	{
 		if(list == null){list = new ArrayList();}
 		for(int i=0;i< GenericSpecimenDetailsTag.COLUMN_NAMES.length; i++)
-			list.add(GenericSpecimenDetailsTag.COLUMN_NAMES[i]);				
+		{	list.add(GenericSpecimenDetailsTag.COLUMN_NAMES[i]); }				
 	}
 
 	/*
@@ -438,7 +442,7 @@ public class GenericSpecimenDetailsTag extends TagSupport
 		
 		private void addEditableRow(StringBuffer sb,int counter,GenericSpecimen specimen)
 		{
-			 sb.append("<tr>");
+			 sb.append(TR_OPEN);
 			 StringBuffer hiddenElements = new StringBuffer();
 			 hiddenElements.append("");
 			 String elementNamePrefix = elementPrefixPart1+counter+"].";
@@ -457,8 +461,8 @@ public class GenericSpecimenDetailsTag extends TagSupport
 			 sb.append("<td class=\"black_ar\" width='0'>");
 			 sb.append(hiddenElements.toString());
 			 addRemainingSpecimenElements(sb, elementNamePrefix, specimen);
-			 sb.append("</td>");
-			 sb.append("</tr>");
+			 sb.append(TD_CLOSE);
+			 sb.append(TR_CLOSE);
 		}
 		private void getHiddenElement(int counter, StringBuffer hiddenFields, GenericSpecimen specimen, String elementNamePrefix)
 		{
@@ -466,10 +470,10 @@ public class GenericSpecimenDetailsTag extends TagSupport
 			if(nameValue.length > 2)
 			{
 				for(int i=0; i<nameValue.length; i+=2)
-					hiddenFields.append("<input type=\"hidden\" name=\""+nameValue[i]+"\" value=\""+nameValue[i+1]+"\">");
+				{	hiddenFields.append("<input type=\"hidden\" name=\""+nameValue[i]+"\" value=\""+nameValue[i+1]+"\">"); }
 			}
 			else
-				hiddenFields.append("<input type=\"hidden\" name=\""+nameValue[0]+"\" value=\""+nameValue[1]+"\">");
+			{	hiddenFields.append("<input type=\"hidden\" name=\""+nameValue[0]+"\" value=\""+nameValue[1]+"\">"); }
 		}
 		// TODO	// ------- To work here
 		private String getElement(int counter, GenericSpecimen specimen, String elementNamePrefix)
@@ -635,7 +639,7 @@ public class GenericSpecimenDetailsTag extends TagSupport
 		{
 			 sb.append("<td class=\"black_ar\" >"); 
 			 sb.append("<input type=\"text\" name=\""+nameValue[0]+"\" value=\""+nameValue[1]+"\" class=\""+styleClass+"\" size=\""+size+"\">");
-			 sb.append("</td>");
+			 sb.append(TD_CLOSE);
 		}
 		
 		private void createStorageComponent(StringBuffer sb, String[] nameValue, GenericSpecimen specimen)
@@ -663,26 +667,26 @@ public class GenericSpecimenDetailsTag extends TagSupport
 			  int scSize=12 +xtra;
 			 
 				 sb.append("<table style=\"font-size:1em\" size=\"100%\">");
-				 	sb.append("<tr>");
-				 		sb.append("<td>");
+				 	sb.append(TR_OPEN);
+				 		sb.append(TD_OPEN);
 				 			sb.append("<input type=\"text\" name=\""+nameValue[0]+"\" value=\"" + nameValue[1]+"\" size=\""+scSize+"\" class=\"black_ar\" onmouseover=\"showTip(this.id)\" id=\""+selectedContainerName+"\" >");
-				 		sb.append("</td>");
-				 		sb.append("<td>");
+				 		sb.append(TD_CLOSE);
+				 		sb.append(TD_OPEN);
 				 			sb.append("<input type=\"text\" name=\""+nameValue[2]+"\" value=\"" + nameValue[3]+"\" size=\"2\" class=\"black_ar\" id=\""+positionDimensionOne+"\" >");
-				 		sb.append("</td>");
-				 		sb.append("<td>");
+				 		sb.append(TD_CLOSE);
+				 		sb.append(TD_OPEN);
 				 			sb.append("<input type=\"text\" name=\""+nameValue[4]+"\" value=\"" + nameValue[5]+"\" size=\"2\" class=\"black_ar\" id=\""+positionDimensionTwo+"\" >");
-				 		sb.append("</td>");
-				 		sb.append("<td>");
+				 		sb.append(TD_CLOSE);
+				 		sb.append(TD_OPEN);
 				 			sb.append("<a href=\"#\" onclick=\""+functionCall+"\">");
 				 			sb.append("<img src=\"images/Tree.gif\" border=\"0\" width=\"13\" height=\"15\" title=\'View storage locations\'>");
 				 			sb.append("</a>");
 				 			sb.append("<input type=\"hidden\" name=\""+nameValue[6]+"\" value=\""+nameValue[7]+"\" id=\""+containerId+"\">");
-				 		sb.append("</td>");
-				 	sb.append("</tr>");										
+				 		sb.append(TD_CLOSE);
+				 	sb.append(TR_CLOSE);										
 				 sb.append("</table>");
 				 
-				 sb.append("</td>");
+				 sb.append(TD_CLOSE);
 		}
 
 		private void createVirtualStorageComponent(StringBuffer sb, String[] nameValue)
@@ -690,14 +694,14 @@ public class GenericSpecimenDetailsTag extends TagSupport
 			 sb.append("<td class=\"black_ar\" >");
 			 sb.append(getHTMLFormattedValue(nameValue[1]));
 			 sb.append("<input type=\"hidden\" name=\""+nameValue[0]+"\" value=\""+nameValue[1]+"\">");
-			 sb.append("</td>");
+			 sb.append(TD_CLOSE);
 		}
 		
 		private void addRemainingSpecimenElements(StringBuffer sb, String elementNamePrefix, GenericSpecimen specimen)
 		{
 			String nameValue[][] = getRemainingSpecimenElementsData(specimen, elementNamePrefix);
 			for(int i =0; i<nameValue.length; i++)
-			 sb.append("<input type=\"hidden\" name=\""+nameValue[i][0]+"\" value=\""+nameValue[i][1]+"\">");
+			{ sb.append("<input type=\"hidden\" name=\""+nameValue[i][0]+"\" value=\""+nameValue[i][1]+"\">"); }
 		}
 		
 		private String[][] getRemainingSpecimenElementsData(GenericSpecimen specimen, String elementNamePrefix)
@@ -712,7 +716,7 @@ public class GenericSpecimenDetailsTag extends TagSupport
 
 		private void addReadOnlyRow(StringBuffer sb,int counter,GenericSpecimen specimen)
 		{
-			 sb.append("<tr>");
+			 sb.append(TR_OPEN);
 			 StringBuffer hiddenElements = new StringBuffer();
 			 hiddenElements.append("");
 			 String elementNamePrefix = elementPrefixPart1+counter+"].";
@@ -728,8 +732,8 @@ public class GenericSpecimenDetailsTag extends TagSupport
 			 sb.append("<td class=\"black_ar\" width='0' >");
 			 sb.append(hiddenElements.toString());
 			 addRemainingSpecimenElements(sb, elementNamePrefix, specimen);
-			 sb.append("</td>");
-			 sb.append("</tr>");
+			 sb.append(TD_CLOSE);
+			 sb.append(TR_CLOSE);
 		}
 
 		private String getTextElement(int counter, GenericSpecimen specimen, String elementNamePrefix)
@@ -744,7 +748,7 @@ public class GenericSpecimenDetailsTag extends TagSupport
 					 {
 							sb.append("<td class=\"black_ar\" >");
 							sb.append(getHTMLFormattedValue(nameValue[1]));	
-							sb.append("</td>");
+							sb.append(TD_CLOSE);
 					 }
 					 else{createEmptyCell(sb);}
 			}
@@ -759,7 +763,7 @@ public class GenericSpecimenDetailsTag extends TagSupport
 				{
 					sb.append("<td class=\"black_ar\" >");
 						sb.append(getHTMLFormattedValue(nameValue[1]));
-					sb.append("</td>");
+					sb.append(TD_CLOSE);
 				}
 			}
 			else if(GenericSpecimenDetailsTag.COLUMN_NAMES[7].equalsIgnoreCase(columnList.get(counter).toString()))
@@ -791,7 +795,7 @@ public class GenericSpecimenDetailsTag extends TagSupport
 				{
 					sb.append(getHTMLFormattedValue(nameValue[1]));
 				}
-				sb.append("</td>");
+				sb.append(TD_CLOSE);
 			}
 			return sb.toString();
 		}
@@ -801,21 +805,21 @@ public class GenericSpecimenDetailsTag extends TagSupport
 		{
 			 sb.append("<td class=\"dataCellText\" >");
 			 if(specimenSummaryForm.getSelectedSpecimenId().equalsIgnoreCase(nameValue[1]))
-				 sb.append("<input type=\"radio\" name=\"selectedSpecimenId\" value=\""+nameValue[1]+"\" checked=\"checked\" onclick=\" form.action=\'GenericSpecimenSummary.do\'; submit()\">");	 
+			 {  sb.append("<input type=\"radio\" name=\"selectedSpecimenId\" value=\""+nameValue[1]+"\" checked=\"checked\" onclick=\" form.action=\'GenericSpecimenSummary.do\'; submit()\">"); }	 
 			 else
-				 sb.append("<input type=\"radio\" name=\"selectedSpecimenId\" value=\""+nameValue[1]+"\" onclick=\" form.action=\'GenericSpecimenSummary.do\'; submit()\">");	 
-			 sb.append("</td>");
+			 {	 sb.append("<input type=\"radio\" name=\"selectedSpecimenId\" value=\""+nameValue[1]+"\" onclick=\" form.action=\'GenericSpecimenSummary.do\'; submit()\">"); }	 
+			 sb.append(TD_CLOSE);
 		}
 
 		private void createParentRadioComponent(StringBuffer sb, String[] nameValue)
 		{
 			 sb.append("<td class=\"black_ar\" >");
 			 if(specimenSummaryForm.getSelectedSpecimenId().equalsIgnoreCase(nameValue[1]))
-				 sb.append("<input type=\"radio\" name=\"selectedSpecimenId\" value=\""+nameValue[1]+"\" checked=\"checked\" onclick=\"onParentRadioBtnClick()\">");	 
+			 {	 sb.append("<input type=\"radio\" name=\"selectedSpecimenId\" value=\""+nameValue[1]+"\" checked=\"checked\" onclick=\"onParentRadioBtnClick()\">"); }	 
 			 else
-				 sb.append("<input type=\"radio\" name=\"selectedSpecimenId\" value=\""+nameValue[1]+"\" onclick=\"onParentRadioBtnClick()\">");
+			 { sb.append("<input type=\"radio\" name=\"selectedSpecimenId\" value=\""+nameValue[1]+"\" onclick=\"onParentRadioBtnClick()\">"); }
 //			 sb.append(nameValue[0]);
-			 sb.append("</td>");
+			 sb.append(TD_CLOSE);
 		}
 
 		private void createCollectedComponent(StringBuffer sb, String[] nameValue, String calledFrom)
@@ -830,21 +834,24 @@ public class GenericSpecimenDetailsTag extends TagSupport
 				 else
 				 {
 					 if(Constants.TRUE.equalsIgnoreCase(nameValue[1]))
-						 sb.append("<input type=\"checkbox\" name=\""+nameValue[0]+"\" value=\"on\" checked=\"checked\" "+functionCall+">");
+					 {	 sb.append("<input type=\"checkbox\" name=\""+nameValue[0]+"\" value=\"on\" checked=\"checked\" "+functionCall+">"); }
 					 else
-						 sb.append("<input type=\"checkbox\" name=\""+nameValue[0]+"\" value=\"on\" "+functionCall+">");
+					 { sb.append("<input type=\"checkbox\" name=\""+nameValue[0]+"\" value=\"on\" "+functionCall+">"); }
 				}
 			 }
 			 else
-	 			 sb.append(getHTMLFormattedValue(""));
- 			 sb.append("</td>");
+			 {
+				 //sb.append(getHTMLFormattedValue(""));
+				 createHiddenElement( sb,  nameValue);
+			 }
+ 			 sb.append(TD_CLOSE);
 		}
 
 		private void createEmptyCell(StringBuffer sb)
 		{
 			 sb.append("<td class=\"black_ar\" >"); 
 			 sb.append("&nbsp;");
-			 sb.append("</td>");
+			 sb.append(TD_CLOSE);
 		}
 		
 		private void createNewStorageComponent(StringBuffer sb, String[] nameValue, GenericSpecimen specimen)
@@ -874,8 +881,8 @@ public class GenericSpecimenDetailsTag extends TagSupport
 	 			String isDisabled = ""; 
 			  
 				 sb.append("<table style=\"font-size:1em\" size=\"100%\">");
-				 	sb.append("<tr>");
-				 		sb.append("<td>");
+				 	sb.append(TR_OPEN);
+				 		sb.append(TD_OPEN);
 				 			sb.append("");
 
 				 			sb.append("<select name=\""+nameValue[8]+"\" size=\"1\" onchange=\"scForSpecimen(this,'"+ sid +"','"+specimenClassName+"')\" class=\"black_new\" id=\""+nameValue[9]+"\">");
@@ -906,28 +913,36 @@ public class GenericSpecimenDetailsTag extends TagSupport
 								  sb.append("<option value=\"Manual\">Manual</option>");
 							  }
 							  sb.append("</select>");  
-				 		sb.append("</td>");
+				 		sb.append(TD_CLOSE);
 
-				 		sb.append("<td>");
+				 		sb.append(TD_OPEN);
 				 			sb.append("<input type=\"text\" name=\""+nameValue[0]+"\" value=\"" + nameValue[1]+"\" size=\""+scSize+"\" class=\"black_ar\" onmouseover=\" showTip(this.id)\"  id=\""+selectedContainerName+"\" "+ isDisabled +" >");
-				 		sb.append("</td>");
-				 		sb.append("<td>");
+				 		sb.append(TD_CLOSE);
+				 		sb.append(TD_OPEN);
 				 			sb.append("<input type=\"text\" name=\""+nameValue[2]+"\" value=\"" + nameValue[3]+"\" size=\"2\" class=\"black_ar\" id=\""+positionDimensionOne+"\" "+ isDisabled +" >");
-				 		sb.append("</td>");
-				 		sb.append("<td>");
+				 		sb.append(TD_CLOSE);
+				 		sb.append(TD_OPEN);
 				 			sb.append("<input type=\"text\" name=\""+nameValue[4]+"\" value=\"" + nameValue[5]+"\" size=\"2\" class=\"black_ar\" id=\""+positionDimensionTwo+"\" "+ isDisabled +" >");
-				 		sb.append("</td>");
-				 		sb.append("<td>");
+				 		sb.append(TD_CLOSE);
+				 		sb.append(TD_OPEN);
 				 			sb.append("<a href=\"#\" onclick=\""+functionCall+"\">");
 				 			sb.append("<img src=\"images/Tree.gif\" border=\"0\" width=\"13\" height=\"15\" title=\'View storage locations\'>");
 				 			sb.append("</a>");
 				 			sb.append("<input type=\"hidden\" name=\""+nameValue[6]+"\" value=\""+nameValue[7]+"\" id=\""+containerId+"\">");
-				 		sb.append("</td>");
-				 	sb.append("</tr>");										
+				 		sb.append(TD_CLOSE);
+				 	sb.append(TR_CLOSE);										
 				 sb.append("</table>");
 				 
-				 sb.append("</td>");
+				 sb.append(TD_CLOSE);
 		}
+
+		private void createHiddenElement(StringBuffer sb, String[] nameValue)
+		{
+//			 sb.append("<td class=\"black_ar\" >");
+			 sb.append("<input type=\"hidden\" name=\""+nameValue[0]+"\" value=\""+nameValue[1]+"\">");
+//			 sb.append(TD_CLOSE);
+		}
+		
 
 }
 

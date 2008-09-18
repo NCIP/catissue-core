@@ -67,7 +67,7 @@ public class UpdateSpecimenStatusAction extends BaseAction
 			Object obj = session.getAttribute("SCGFORM");
 
 			//11July08 : Mandar : For GenericSpecimen
-			SpecimenDetailsTagUtil.setAnticipatorySpecimenDetails(request, specimenSummaryForm);
+			SpecimenDetailsTagUtil.setAnticipatorySpecimenDetails(request, specimenSummaryForm, false);
 			if (specimenSummaryForm.getPrintCheckbox() != null && specimenSummaryForm.getPrintCheckbox().equals("true"))
 			{
 				//By Falguni Sachde
@@ -119,7 +119,7 @@ public class UpdateSpecimenStatusAction extends BaseAction
 		catch (Exception exception)
 		{
 			//11July08 : Mandar : For GenericSpecimen
-			SpecimenDetailsTagUtil.setAnticipatorySpecimenDetails(request, specimenSummaryForm);
+			SpecimenDetailsTagUtil.setAnticipatorySpecimenDetails(request, specimenSummaryForm, false);
 			// Suman-For bug #8228
 			String s = "";
 			if (exception.getMessage().equals("Failed to update multiple specimen Stroage location already in use")
