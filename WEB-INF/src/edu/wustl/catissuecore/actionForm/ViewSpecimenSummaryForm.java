@@ -52,7 +52,18 @@ public class ViewSpecimenSummaryForm extends ActionForm implements SpecimenDetai
 	private boolean showLabel = true;
 	private boolean readOnly = false;
 	private String printCheckbox; 
-       
+    
+	private boolean multipleSpEditMode = false;
+	
+	
+	public boolean isMultipleSpEditMode() {
+		return multipleSpEditMode;
+	}
+
+	public void setMultipleSpEditMode(boolean multipleSpEditMode) {
+		this.multipleSpEditMode = multipleSpEditMode;
+	}
+
 	public boolean getReadOnly(){
 		return this.readOnly;
 	}

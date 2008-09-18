@@ -53,12 +53,12 @@ public class SpecimenDetailsTagUtil
 	 * @param request
 	 * @param summaryForm
 	 */
-	public static void setAnticipatorySpecimenDetails(HttpServletRequest request, ViewSpecimenSummaryForm summaryForm)
+	public static void setAnticipatorySpecimenDetails(HttpServletRequest request, ViewSpecimenSummaryForm summaryForm, boolean showSCLoc)
 	{
 		List <String>colHeaderList = new ArrayList<String>();
 		List <String>subSpecimenColHeaderList = new ArrayList<String>();
 		List <String>dispColumnsList = new ArrayList<String>();
-		
+		List <String>subSpecdispColumnsList = new ArrayList<String>();
 		boolean showLabel = false;
 		boolean showBarcode = false;
 		//columnHeaderList											DisplayColumn List
@@ -89,6 +89,18 @@ public class SpecimenDetailsTagUtil
 		
 		subSpecimenColHeaderList.addAll(colHeaderList);
 		subSpecimenColHeaderList.set(0,"anticipatorySpecimen.Parent");
+		subSpecdispColumnsList.addAll(dispColumnsList);
+		if(showSCLoc && summaryForm.isMultipleSpEditMode())
+		{
+			colHeaderList.remove(CH_LOC);
+			dispColumnsList.remove(LOCATION);
+			request.setAttribute("fromMultipleSpecimen","true");
+		}
+		else
+		{
+			request.setAttribute("fromMultipleSpecimen","false");
+		}
+
 		
 		request.setAttribute("specimenList",summaryForm.getSpecimenList());
 		request.setAttribute("aliquotList",summaryForm.getAliquotList());
@@ -97,6 +109,7 @@ public class SpecimenDetailsTagUtil
 		request.setAttribute("columnHeaderList",colHeaderList);
 		request.setAttribute("subSpecimenColHeaderList",subSpecimenColHeaderList);
 		request.setAttribute("dispColumnsList",dispColumnsList);
+		request.setAttribute("subSpecdispColumnsList",subSpecdispColumnsList);
 		request.setAttribute("labelShow",showLabel);
 		request.setAttribute("barcodeShow",showBarcode);
 		

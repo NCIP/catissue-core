@@ -326,7 +326,9 @@ function updateSCDetails(msg)
                     <td width="19%" class="black_ar_b"><bean:message key="specimen.subType"/></td>
                     <td width="7%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Quantity"/></td>
                     <td width="7%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Concentration"/></td>
+                    <logic:equal name="fromMultipleSpecimen" value="false">
                     <td width="30%" class="black_ar_b" nowrap><bean:message key="anticipatorySpecimen.Location"/><input id="chkSpecimen" type="checkbox" onClick="ApplyToAll(this,'specimen')"/><span class="black_ar_s">Apply First to All</span></td>
+                    </logic:equal>
                     <td width="11%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Collected"/></td>
                   </tr>
 					<md:genericSpecimenDetails columnHeaderListName="columnHeaderList" formName="viewSpecimenSummaryForm" dataListName="specimenList" dataListType="Parent" columnListName="columnListName" isReadOnly="false" displayColumnListName="dispColumnsList" />
@@ -384,7 +386,7 @@ function updateSCDetails(msg)
 						<td><input type="checkbox" value="check" id="derivedCheckBox" checked="true" onclick="applyToDerived()"/></td>
 						<td width="10%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Collected"/></td>
 					</tr>
-					<md:genericSpecimenDetails columnHeaderListName="subSpecimenColHeaderList" formName="viewSpecimenSummaryForm" dataListName="derivedList" dataListType="Derived" columnListName="columnListName" isReadOnly="false" displayColumnListName="dispColumnsList" />
+					<md:genericSpecimenDetails columnHeaderListName="subSpecimenColHeaderList" formName="viewSpecimenSummaryForm" dataListName="derivedList" dataListType="Derived" columnListName="columnListName" isReadOnly="false" displayColumnListName="subSpecdispColumnsList" />
 					<%-- custom tag for specimen list by mandar --- Derived --%>	
 				</table>
 			</TD>
@@ -416,7 +418,7 @@ function updateSCDetails(msg)
 					<td><input type="checkbox" value="check" id="aliquotCheckBox" checked="true" onclick="applyToAlquots()"/></td>
                     <td width="10%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Collected"/></td>
                   </tr>
-					<md:genericSpecimenDetails columnHeaderListName="subSpecimenColHeaderList" formName="viewSpecimenSummaryForm" dataListName="aliquotList" dataListType="Aliquot" columnListName="columnListName" isReadOnly="false" displayColumnListName="dispColumnsList" />
+					<md:genericSpecimenDetails columnHeaderListName="subSpecimenColHeaderList" formName="viewSpecimenSummaryForm" dataListName="aliquotList" dataListType="Aliquot" columnListName="columnListName" isReadOnly="false" displayColumnListName="subSpecdispColumnsList" />
 				<%-- custom tag for specimen list by mandar --- Aliquot  --%>						
 				</table>				
 			</TD>
@@ -447,6 +449,7 @@ function updateSCDetails(msg)
 		<html:hidden property="readOnly" />
 		<html:hidden property="showParentStorage" />
 		<html:hidden property="forwardTo" />
+		<html:hidden property="multipleSpEditMode" />
 		<logic:equal name="viewSpecimenSummaryForm" property="readOnly" value="false">
 		<tr>					
 			<td class="formFieldNoBorders" colspan="5"  height="20" >
