@@ -561,7 +561,7 @@ public class RequestDetailsForm extends AbstractActionForm
 			values.put(specimenId, existingSpecimenOrderItem.getSpecimen().getId().toString());
 			values.put(instanceOf, "Existing");
 			if(existingSpecimenOrderItem.getStatus().equals(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED)
-					||existingSpecimenOrderItem.getStatus().equals(assignStatus.equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE)))
+					||existingSpecimenOrderItem.getStatus().equals(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE))
 			{
 				values.put(canDistributeKey, Constants.TRUE);
 				values.put(rowStatuskey, "disable");

@@ -257,7 +257,7 @@ function checkQuantity(index)
 	var canDistribute = "value(RequestDetailsBean:"+index+"_canDistribute)";
 	var answer;
 			
-	if(status == "<%=Constants.ORDER_REQUEST_STATUS_DISTRIBUTED%>")
+	if(status == "<%=Constants.ORDER_REQUEST_STATUS_DISTRIBUTED%>" || status == "<%=Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE%>" )
 	{
 
 		if(availableQty > requiredQty)
@@ -290,7 +290,7 @@ function checkQuantityforAll(count)
 	var canDistribute;
 	var answer;
 
-	if(status == "<%=Constants.ORDER_REQUEST_STATUS_DISTRIBUTED%>")
+	if(status == "<%=Constants.ORDER_REQUEST_STATUS_DISTRIBUTED%>" || status == "<%=Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE%>")
 	{
 		for(i=0;i<count;i++)
 		{
@@ -586,7 +586,7 @@ function checkQuantityforAll(count)
 							//added for consent page:	
 							String showNewConsentPageFunction = "showNewConsentPage("+requestDetailsBeanObj.getSpecimenId()+")";
 							boolean disableRow = false;
-							if((((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_assignedStatus"))).trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED))
+							if(((((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_assignedStatus"))).trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED)) || (((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_assignedStatus"))).trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE)))
 							&& (!((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_distributedItemId"))).trim().equals("")))
 							{
 										disableRow=true;
