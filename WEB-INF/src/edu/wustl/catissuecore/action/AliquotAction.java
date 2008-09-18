@@ -952,6 +952,11 @@ public class AliquotAction extends SecureAction
 		
 		List<String> aliquotLabels = abstractSpecimenGenerator.getNextAvailableAliquotSpecimenlabel(inputMap, aliquotCount);
 		*/
+		long totalAliquotCount = 0;
+		if(!edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl && form.getSpecimenLabel() != null)
+		{
+			totalAliquotCount = getTotalNoOfAliquotSpecimen(Long.valueOf(form.getSpecimenID()));
+		}	
 		for (int i = 1; i <= aliquotCount; i++)
 		{
 			String qtyKey = "Specimen:" + i + "_quantity";
@@ -959,10 +964,9 @@ public class AliquotAction extends SecureAction
 			//bug no. 8081 & 8083
 			if(!edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl && form.getSpecimenLabel() != null)
 			{
-			long totalAliquotCount = getTotalNoOfAliquotSpecimen(Long.valueOf(form.getSpecimenID()));
-		String labelKey = "Specimen:" + i + "_label";
+					String labelKey = "Specimen:" + i + "_label";
 //			aliquotMap.put(labelKey,"Abc");
-		aliquotMap.put(labelKey, form.getSpecimenLabel()+"_"+totalAliquotCount++);
+					aliquotMap.put(labelKey, form.getSpecimenLabel()+"_"+ ++totalAliquotCount);
 			}
 			
 		}

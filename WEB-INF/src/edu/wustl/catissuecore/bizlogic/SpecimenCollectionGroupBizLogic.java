@@ -1834,6 +1834,9 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		String type = specimen.getSpecimenType();
 		String spCollectionStatus = specimen.getCollectionStatus();
 
+		if(spLabel1 == null){
+			spLabel1 = type;
+		}
 		// Added later for toolTip text for specimens
 		String toolTipText = "Label : " + spLabel1 + " ; Type : " + type;
 
