@@ -167,10 +167,14 @@
 					<include name="*.jar"/>
 				</fileset>
 
-				<fileset dir="${base.dir}/third_party_lib/WEB-INF/lib">
+				<!--  fileset dir="${base.dir}/third_party_lib/WEB-INF/lib">
+					<include name="*.jar"/>
+				</fileset -->
+				<fileset dir="${jboss.server.url}/lib">
 					<include name="*.jar"/>
 				</fileset>
-					
+
+				
 				<fileset dir="${db_lib.dir}">
 					<include name="*.jar"/>
 				</fileset>	
