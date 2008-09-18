@@ -15,6 +15,7 @@
 	
 	<property name="base.dir" value="." />
 	<property name="temp.dir" value="./deploytempCatissuecore" />
+	<property name="camodel.dir" value="${base.dir}/ca_model" />
 	<property name="csm.dir" value="${temp.dir}/tempcsm" />
 	<property name="lib.dir" value="${base.dir}/lib" />
 	<property name="mysql.sql.dir" value="${base.dir}/SQL/MySql" />
@@ -626,6 +627,13 @@
 		</copy>
 		<delete file="${jboss.server.url}/lib/oracleDriver.jar" casesensitive="false"/>
 	</target>
+	<target name="deploy_ca_model_war">
+		<copy todir="${jboss.server.url}/deploy" overwrite="true" >
+		<fileset dir="${camodel.dir}">
+				<include name="**.*" />
+		</fileset>
+		</copy>
+	</target>	
 	
 	<!--Target call for both fresh deployment and database creation-->
 	<target name="deploy_all">
@@ -780,7 +788,7 @@
 				</fileset>
 			</war>
 		<echo>Copying ${warName}.war....</echo>
-		    <copy todir="${base.dir}/caTissueSuite_Client" file="${temp.dir}/${warName}.war" overwrite="true" />
+		    <copy todir="${camodel.dir}" file="${temp.dir}/${warName}.war" overwrite="true" />
 			<delete file="${temp.dir}/${warName}.war" />
 			<delete includeemptydirs="true">
 				<fileset dir="${temp.dir}/${warName}">
