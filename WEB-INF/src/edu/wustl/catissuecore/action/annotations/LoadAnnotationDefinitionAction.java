@@ -261,85 +261,88 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 			String dynExtContainerId, String[] staticRecordIds) throws BizLogicException,
 			UserNotAuthorizedException, CacheException, DAOException, DynamicExtensionsSystemException, DynamicExtensionsApplicationException
 	{
-		if ((staticEntityId != null) && (dynExtContainerId != null))
+		if (dynExtContainerId != null)
 		{
-			EntityMap entityMap = getEntityMap(request, staticEntityId, dynExtContainerId,
-					staticRecordIds);
-			AnnotationBizLogic annotationBizLogic = new AnnotationBizLogic();
-			annotationBizLogic.insertEntityMap(entityMap);
-		}
-		else if (dynExtContainerId != null)
-		{
-			//Getting the static entity id
 			DefaultBizLogic defaultBizLogic = BizLogicFactory.getDefaultBizLogic();
 			List<EntityMap> entityMapList = defaultBizLogic.retrieve(EntityMap.class.getName(), "containerId", Long.parseLong(dynExtContainerId));
-			EntityMap baseLevelEntityMap = entityMapList.get(0);
-			staticEntityId = baseLevelEntityMap.getStaticEntityId().toString();
-
 			
-			//Retrieving the container
-			Session session = null;
-			try
-			{
-				session = DBUtil.currentSession();
-			}
-			catch (HibernateException e1)
-			{
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-				throw new BizLogicException("", e1);
-			}
-			ContainerInterface dynamicContainer = null;
-			EntityInterface staticEntity = null;
-			try
-			{
-				staticEntity = (EntityInterface) session.load(Entity.class, new Long(staticEntityId));
-				dynamicContainer = (Container) session.load(Container.class,new Long(dynExtContainerId));
-
-				AssociationInterface association = getAssociationForEntity(staticEntity,dynamicContainer.getAbstractEntity());
-				//	Get entitygroup that is used by caB2B for path finder purpose.
-//				Commented this line since performance issue for Bug 6433
-				//EntityGroupInterface entityGroupInterface = edu.wustl.cab2b.common.util.Utility.getEntityGroup(staticEntity);
-				//List<EntityInterface> processedEntityList = new ArrayList<EntityInterface>();
-
-				//edu.wustl.catissuecore.bizlogic.AnnotationUtil.addCatissueGroup(dynamicContainer.getEntity(), entityGroupInterface, processedEntityList);
-//				staticEntity = EntityManager.getInstance().persistEntityMetadataForAnnotation(
-//						staticEntity, true, false, association);
-
-				Set<PathObject> processedPathList = new HashSet<PathObject>();
-				//Adding paths from second level as first level paths between static entity and top level dynamic entity have already been added
-				addQueryPathsForEntityHierarchy((EntityInterface)dynamicContainer.getAbstractEntity(), staticEntity,
-						association.getId(), staticEntity.getId(), processedPathList);
-
-				String deletedAssociationIds = request.getParameter("deletedAssociationIds");
-				String[] deletedAssociationIdArray = null;
-				if (deletedAssociationIds != null && deletedAssociationIds.length() > 0)
-				{
-					deletedAssociationIdArray = deletedAssociationIds.split("_");
-				}
-				//Added by Rajesh to remove deleted associations from query tables.
-				removeQueryPathsForEntityHierarchy(deletedAssociationIdArray);
-
-				edu.wustl.catissuecore.bizlogic.AnnotationUtil.addEntitiesToCache(false,
-						(EntityInterface)dynamicContainer.getAbstractEntity(), staticEntity);
-			}
-			catch (HibernateException e1)
-			{
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-				throw new BizLogicException("", e1);
-			}
-			finally
-			{
+			if(entityMapList == null || entityMapList.size() == 0)
+			{//If entity map is not present then Add case
+				EntityMap entityMap = getEntityMap(request, staticEntityId, dynExtContainerId,
+						staticRecordIds);
+				AnnotationBizLogic annotationBizLogic = new AnnotationBizLogic();
+				annotationBizLogic.insertEntityMap(entityMap);
+			}		
+			else
+			{//if entity map is present then Edit case
+				//Getting the static entity id
+				EntityMap baseLevelEntityMap = entityMapList.get(0);
+				staticEntityId = baseLevelEntityMap.getStaticEntityId().toString();
+					
+				//Retrieving the container
+				Session session = null;
 				try
 				{
-					DBUtil.closeSession();
+					session = DBUtil.currentSession();
 				}
-				catch (HibernateException e)
+				catch (HibernateException e1)
 				{
 					// TODO Auto-generated catch block
-					e.printStackTrace();
-					throw new BizLogicException("", e);
+					e1.printStackTrace();
+					throw new BizLogicException("", e1);
+				}
+				ContainerInterface dynamicContainer = null;
+				EntityInterface staticEntity = null;
+				try
+				{
+					staticEntity = (EntityInterface) session.load(Entity.class, new Long(staticEntityId));
+					dynamicContainer = (Container) session.load(Container.class,new Long(dynExtContainerId));
+	
+					AssociationInterface association = getAssociationForEntity(staticEntity,dynamicContainer.getAbstractEntity());
+					//	Get entitygroup that is used by caB2B for path finder purpose.
+	//				Commented this line since performance issue for Bug 6433
+					//EntityGroupInterface entityGroupInterface = edu.wustl.cab2b.common.util.Utility.getEntityGroup(staticEntity);
+					//List<EntityInterface> processedEntityList = new ArrayList<EntityInterface>();
+	
+					//edu.wustl.catissuecore.bizlogic.AnnotationUtil.addCatissueGroup(dynamicContainer.getEntity(), entityGroupInterface, processedEntityList);
+	//				staticEntity = EntityManager.getInstance().persistEntityMetadataForAnnotation(
+	//						staticEntity, true, false, association);
+	
+					Set<PathObject> processedPathList = new HashSet<PathObject>();
+					//Adding paths from second level as first level paths between static entity and top level dynamic entity have already been added
+					addQueryPathsForEntityHierarchy((EntityInterface)dynamicContainer.getAbstractEntity(), staticEntity,
+							association.getId(), staticEntity.getId(), processedPathList);
+	
+					String deletedAssociationIds = request.getParameter("deletedAssociationIds");
+					String[] deletedAssociationIdArray = null;
+					if (deletedAssociationIds != null && deletedAssociationIds.length() > 0)
+					{
+						deletedAssociationIdArray = deletedAssociationIds.split("_");
+					}
+					//Added by Rajesh to remove deleted associations from query tables.
+					removeQueryPathsForEntityHierarchy(deletedAssociationIdArray);
+	
+					edu.wustl.catissuecore.bizlogic.AnnotationUtil.addEntitiesToCache(false,
+							(EntityInterface)dynamicContainer.getAbstractEntity(), staticEntity);
+				}
+				catch (HibernateException e1)
+				{
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+					throw new BizLogicException("", e1);
+				}
+				finally
+				{
+					try
+					{
+						DBUtil.closeSession();
+					}
+					catch (HibernateException e)
+					{
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						throw new BizLogicException("", e);
+					}
 				}
 			}
 		}
@@ -556,7 +559,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 	{
 		AnnotationUtil util = new AnnotationUtil();
 		Collection formContextCollection = new HashSet();
-
+		
 		EntityMap entityMapObj = new EntityMap();
 		entityMapObj.setContainerId(Utility.toLong(dynExtContainerId));
 		entityMapObj.setStaticEntityId(Utility.toLong(staticEntityId));
