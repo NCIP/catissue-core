@@ -146,6 +146,7 @@ public class AddAttribute extends BaseMetadata
 		List<String> attributes = new ArrayList<String>();
 		attributes.add("quantity");
 		entityNameAttributeNameMap.put("edu.wustl.catissuecore.domain.DistributionSpecimenRequirement",attributes);
+		entityNameAttributeNameMap.put("edu.wustl.catissuecore.domain.DistributedItem",attributes);
 
 		attributes = new ArrayList<String>();
 		attributes.add("unsignedConsentDocumentURL");
@@ -155,7 +156,7 @@ public class AddAttribute extends BaseMetadata
 		attributes.add("signedConsentDocumentURL");
 		attributes.add("consentSignatureDate");
 		//attributes.add("barcode");
-		entityNameAttributeNameMap.put("edu.wustl.catissuecore.domain.CollectionProtocolRegistration",attributes);	
+		entityNameAttributeNameMap.put("edu.wustl.catissuecore.domain.CollectionProtocolRegistration",attributes);
 		
 		/*attributes = new ArrayList<String>();
 		attributes.add("barcode");
@@ -192,6 +193,7 @@ public class AddAttribute extends BaseMetadata
 		entityList.add("edu.wustl.catissuecore.domain.DistributionSpecimenRequirement");
 		entityList.add("edu.wustl.catissuecore.domain.CollectionProtocol");
 		entityList.add("edu.wustl.catissuecore.domain.CollectionProtocolRegistration");
+		entityList.add("edu.wustl.catissuecore.domain.DistributedItem");
 		//entityList.add("edu.wustl.catissuecore.domain.SpecimenCollectionGroup");
 	}
 
