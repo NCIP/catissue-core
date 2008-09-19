@@ -654,3 +654,16 @@ UPDATE CATISSUE_SPECIMEN_PROTOCOL SET ENROLLMENT = '0' where ENROLLMENT is null;
 /**Resolved Bug# 7862 **/
 INSERT INTO CATISSUE_PERMISSIBLE_VALUE (IDENTIFIER, VALUE, PARENT_IDENTIFIER, PUBLIC_ID) VALUES(5014,'CPT',NULL,'2003997');
 INSERT INTO CATISSUE_PERMISSIBLE_VALUE (IDENTIFIER, VALUE, PARENT_IDENTIFIER, PUBLIC_ID) VALUES(5015,'Paxgene',NULL,'2003997');
+
+/* to remove unnecessary protection elements */
+delete  
+
+FROM csm_protection_element
+
+WHERE regexp_like(object_id,   '_[[:digit:]]')
+
+      AND NOT regexp_like(object_id,   'Site_[[:digit:]]')
+      AND NOT regexp_like(object_id,   'CollectionProtocol_[[:digit:]]')
+      AND NOT regexp_like(object_id,   'User_[[:digit:]]')
+      AND NOT regexp_like(object_id,   'StorageContainer_[[:digit:]]');
+
