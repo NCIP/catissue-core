@@ -1956,6 +1956,13 @@ td.formFieldNoBordersQuery{ /* for the cell that contains the form elements */
 	width:16em;
 }
 
+.formFieldSized51{ /* for the autocomplete tag */
+	font-family:verdana;
+	border:1px solid #6E81A6; 
+  font-size:11px;
+	width:51em;
+}
+
 .formFieldSized11{ /* for the autocomplete tag */
 	font-family:verdana;
 	border:1px solid #6E81A6; 

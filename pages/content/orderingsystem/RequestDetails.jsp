@@ -876,7 +876,7 @@ function checkQuantityforAll(count)
 						<bean:message key='requestlist.dataTabel.label.Site'/> 
  					</td>
 					<td valign="top" class="black_new">
-						<html:select property="site" name="requestDetailsForm" styleClass="formFieldSized12" styleId="siteId" size="1" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+						<html:select property="site" name="requestDetailsForm" styleClass="formFieldSized51" styleId="siteId" size="1" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 							<html:options collection="<%= Constants.SITE_LIST_OBJECT  %>" labelProperty="name" property="value"/>		
 						</html:select> 						
 					</td>
