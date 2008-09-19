@@ -1,4 +1,12 @@
 <project basedir="." name="caTissue_DBUnit" default="RunTestCasesFromClean" >
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
+		<classpath>
+			<pathelement location="./lib/ant-contrib.jar" />
+		</classpath>
+	</taskdef>
+	
+	<property environment="env" />	
+	<import file="build-properties.xml"/>
 
 	<property name="db_unit.dir" value="${basedir}/caTissueSuite_dbunit" />
 	<property name="db_src.dir" value="${db_unit.dir}/src" />
@@ -6,23 +14,36 @@
 	<property name="db_temp.dir" value="${db_unit.dir}/tmp" />
 	<property name="db_lib.dir" value="${db_unit.dir}/lib" />
 	<property name="base.dir" value="." />
-	<property name="lib.dir" value="${base.dir}/WEB-INF/lib" />
-	<import file="deploy.xml"/>
+	<property name="tmp.catissuewar" value="${base.dir}/tempwardir" />
+	<property name="lib.dir" value="${tmp.catissuewar}/WEB-INF/lib" />
+
 	<target name="init" depends = "clean">
 		<delete dir="${db_unit.dir}/Build_Report"/>
 		<mkdir dir="${db_temp.dir}"/>
 		<mkdir dir="${db_temp.dir}/Nightly_Build_Report"/>
 		<mkdir dir="${db_unit.dir}/Build_Report"/>
+		<mkdir dir="${tmp.catissuewar}"/>
+		<available file="${tmp.catissuewar}/CDEConfig.xml" property="file.exists" value="true" />
+		<if>
+			<not>
+			   <isset property="file.exists"/>
+			</not>
+			<then>
+				<echo message="temp war not already present"/>
+				<unwar src="${base.dir}/catissuecore.war" dest="${tmp.catissuewar}" />
+			</then>
+		</if>
 	</target>
 	
 	<target name="clean">
 		<deltree dir="${db_temp.dir}"/>
-		
+		<!-- deltree dir="${tmp.catissuewar}"/ -->
 	</target>
 	
-	<target name="catissue_compile">
+	<!-- target name="catissue_compile">
 		<delete dir="${db_temp.dir}/suite" />
 		<mkdir dir="${db_temp.dir}/suite"/>
+		
 		<javac destdir="${db_temp.dir}/suite" srcdir="${base.dir}/WEB-INF/src" includes="**/*.java">
 			<classpath>
 				<fileset dir="${lib.dir}">
@@ -52,10 +73,19 @@
 			
 
 		</jar>
-		<!-- delete dir="${db_temp.dir}/suite" / -->
-	</target>	
+
+	</target -->	
 
 	<target name="db_compile" depends="init">
+
+		<delete file="${db_lib.dir}/catissue.jar"/>
+		<jar destfile="${db_lib.dir}/catissue.jar" duplicate="preserve">
+			<fileset dir="${tmp.catissuewar}/WEB-INF/classes">
+				<include name="**/*.*"/>
+				<exclude name ="dbutil.properties"/>
+			</fileset>			
+		</jar>
+
 		<javac destdir="${db_temp.dir}" srcdir="${db_src.dir}" includes="**/*">
 			<classpath id="DbUnit_classpath2">
 				<fileset dir="${lib.dir}">
@@ -65,8 +95,10 @@
 				<fileset dir="${db_lib.dir}">
 					<include name="*.jar"/>
 				</fileset>	
+				<!--pathelement path="${tmp.catissuewar}/WEB-INF/classes/"/ -->
 			</classpath>
 		</javac>
+		
 		<copy todir="${db_temp.dir}">
 			<fileset dir="${db_unit.dir}/src" >
 				<include name ="*.xml"/>
@@ -88,11 +120,9 @@
 		<transaction>drop database ${database.name}</transaction>
 		<transaction>create database ${database.name}</transaction>
 		</sql>
-			
-		<antcall target="deploy_db" />
 	</target>
-	<target name="RunTestCases" depends="catissue_compile, clean_db, initialize_data, RundbUnit" />
-	<target name="RunTestCasesFromClean" depends="deploy_all, RunTestCases" />
+	<target name="RunTestCases" depends="clean_db, initialize_data, RundbUnit" />
+	<target name="RunTestCasesFromClean" depends="RunTestCases" />
 	
 	<target name="initialize_data" depends="configure_properties">
 		<antcall target="runJUnit"  >
@@ -112,12 +142,12 @@
 		 forceoverwrite="true"/>		
 		
 		<antcall target="replaceDBParams">
-		<param name="SourceFile" value="${db_src.dir}/caTissueDBUnit.properties" />
+			<param name="SourceFile" value="${db_src.dir}/caTissueDBUnit.properties" />
 		</antcall>		
 			<antcall target="generate_hibernate_cfg">
 				<param name ="DestFile" value="test_hibernate.cfg.xml"/>
 				<param name ="SrcFile" value="hibernate.cfg.xml"/>
-				<param name ="SrcDir"  value="${base.dir}/WEB-INF/src"/>
+				<param name ="SrcDir"  value="${tmp.catissuewar}/WEB-INF/classes/"/>
 			</antcall>
 			
 			<antcall target="replaceDBParams">
@@ -127,16 +157,16 @@
 			<antcall target="generate_hibernate_cfg">
 					<param name ="DestFile" value="test_DEHibernate.cfg.xml"/>
 					<param name ="SrcFile" value="DynamicExtensionsHibernate.cfg.xml"/>
-					<param name ="SrcDir"  value="${base.dir}/WEB-INF/src"/>
+					<param name ="SrcDir"  value="${tmp.catissuewar}/WEB-INF/classes/"/>
 			</antcall>
 
 			<antcall target="generate_hibernate_cfg">
 					<param name ="DestFile" value="catissuecore.hibernate.cfg.xml"/>
 					<param name ="SrcFile" value="catissuecore.hibernate.cfg.xml"/>
-					<param name ="SrcDir"  value="${base.dir}/catissuecore-properties"/>
+					<param name ="SrcDir"  value="${tmp.catissuewar}/WEB-INF/classes/"/>
 			</antcall>
 			<copy todir="${db_src.dir}">
-				<fileset dir = "${base.dir}/catissuecore-properties">
+				<fileset dir = "${base.dir}/catissuecore-properties/">
 					<include name="caTissueCore_Properties.xml"/>
 					<include name="ApplicationSecurityConfig.xml"/>
 				</fileset>
@@ -167,17 +197,22 @@
 					<include name="*.jar"/>
 				</fileset>
 
-				<!--  fileset dir="${base.dir}/third_party_lib/WEB-INF/lib">
-					<include name="*.jar"/>
-				</fileset -->
 				<fileset dir="${jboss.server.url}/lib">
-					<include name="*.jar"/>
+					<include name="jboss-j2ee.jar"/>
+					<include name="dom4j.jar"/>					
+					<include name="servlet-api.jar"/>
+
 				</fileset>
 
 				
 				<fileset dir="${db_lib.dir}">
 					<include name="*.jar"/>
 				</fileset>	
+
+				<!-- fileset dir="${tmp.catissuewar}/WEB-INF/classes">
+					<include name="**/*"/>
+				</fileset -->	
+
 				<pathelement path="${db_temp.dir}"/>
 			</classpath>
 			<batchtest todir="${db_unit.dir}/Build_Report">
