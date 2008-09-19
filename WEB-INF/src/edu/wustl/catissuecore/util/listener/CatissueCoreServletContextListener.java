@@ -1,5 +1,5 @@
 /*
- * $Name: 1.41.2.31 $
+ * $Name: 1.41.2.32 $
  *
  * */
 package edu.wustl.catissuecore.util.listener;
@@ -176,15 +176,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 	{
 		try
 		{
-            //Added for initializing PathFinder and EntityCache
-			InitialContext ctx = new InitialContext();
-	        DataSource ds = (DataSource)ctx.lookup(DATASOURCE_JNDI_NAME);
-	        Connection conn = ds.getConnection();
-			PathFinder.getInstance(conn);
-
-            logger.debug("Entity Cache is initialised");
-            CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager.getInstance();
-            logger.debug("Entity Cache is initialised");
+			CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager.getInstance();
             //Stores the list of system entities into the cache.-- Vishvesh.
             AnnotationUtil.getSystemEntityList();
             //Stores the ids in the cache
@@ -197,10 +189,19 @@ public class CatissueCoreServletContextListener implements ServletContextListene
             Long cpEntityId = edu.wustl.catissuecore.bizlogic.AnnotationUtil.getEntityId(AnnotationConstants.ENTITY_NAME_COLLECTION_PROTOCOL);
             catissueCoreCacheManager.addObjectToCache(AnnotationConstants.COLLECTION_PROTOCOL_ENTITY_ID,cpEntityId);
 
+            //Added for initializing PathFinder and EntityCache
+			InitialContext ctx = new InitialContext();
+	        DataSource ds = (DataSource)ctx.lookup(DATASOURCE_JNDI_NAME);
+	        Connection conn = ds.getConnection();
+			PathFinder.getInstance(conn);
+
+            logger.debug("Entity Cache is initialised");
+
 		}
 		catch (Exception e)
 		{
 			logger.debug("Exception occured while initialising entity cache");
+    		throw new RuntimeException( e.getLocalizedMessage(), e);
 		}
 	}
 
