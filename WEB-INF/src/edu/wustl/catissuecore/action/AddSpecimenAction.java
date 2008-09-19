@@ -60,7 +60,7 @@ public class AddSpecimenAction extends SecureAction
 		Object[] whereColumnValue = new Object[1];
 	
 		// checks whether label or barcode is selected
-		if (createForm.getCheckedButton().equals("1"))
+		if (createForm.getRadioButton().equals("1"))
 		{
 			whereColumnName[0] = Constants.SYSTEM_LABEL;
 			whereColumnValue[0] = createForm.getParentSpecimenLabel().trim();

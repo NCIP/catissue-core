@@ -57,7 +57,7 @@
 			{
 			   classChangeForMultipleSpecimen();
 			}
-		    var radioArray = document.getElementsByName("checkedButton");
+		    var radioArray = document.getElementsByName("radioButton");
 		 	var flag = "0";
  			if (radioArray[0].checked) 
 			{
@@ -258,31 +258,31 @@
               <td colspan="4" align="left" valign="middle" nowrap><table width="55%" border="0" cellspacing="0" cellpadding="0" >
                   <tr class="groupElements">
                     <td valign="middle" nowrap>
-                      <html:radio styleClass="" styleId="checkedButton" property="checkedButton" value="1"
+                      <html:radio styleClass="" styleId="checkedButton" property="radioButton" value="1"
 								onclick="onRadioButtonClick(this)">
 							</html:radio>
                       <span class="black_ar">
                       <bean:message key="specimen.label"/>&nbsp;
-                      <logic:equal name="createSpecimenForm" property="checkedButton" value="1">
+                      <logic:equal name="createSpecimenForm" property="radioButton" value="1">
 								<html:text styleClass="black_ar"  maxlength="50"  size="20" styleId="parentSpecimenLabel" 
 									property="parentSpecimenLabel" disabled="false" />
 					        </logic:equal>
-						    <logic:equal name="createSpecimenForm" property="checkedButton" value="2">
+						    <logic:equal name="createSpecimenForm" property="radioButton" value="2">
 				 				<html:text styleClass="black_ar"  maxlength="50"  size="20" styleId="parentSpecimenLabel" 
 									property="parentSpecimenLabel" disabled="true" />
 						    </logic:equal>
 						&nbsp;&nbsp; </span> </td>
                       <td align="left" valign="middle" nowrap="nowrap" >
-                        <html:radio styleClass="" styleId="checkedButton" property="checkedButton" value="2" 
+                        <html:radio styleClass="" styleId="checkedButton" property="radioButton" value="2" 
 								onclick="onRadioButtonClick(this)">
 					        </html:radio>
 						<span class="black_ar">	
                           <bean:message key="storageContainer.barcode"/>&nbsp;
-                        <logic:equal name="createSpecimenForm" property="checkedButton" value="1">
+                        <logic:equal name="createSpecimenForm" property="radioButton" value="1">
 							    <html:text styleClass="black_ar"  maxlength="50"  size="20" styleId="parentSpecimenBarcode"
 									property="parentSpecimenBarcode" disabled="true" />
 						</logic:equal>
-						<logic:equal name="createSpecimenForm" property="checkedButton" value="2">
+						<logic:equal name="createSpecimenForm" property="radioButton" value="2">
 						    <html:text styleClass="black_ar"  maxlength="50"  size="20" styleId="parentSpecimenBarcode" 
 								property="parentSpecimenBarcode" disabled="false" />
 						</logic:equal>

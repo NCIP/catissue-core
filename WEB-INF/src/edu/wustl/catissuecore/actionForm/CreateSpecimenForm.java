@@ -48,7 +48,7 @@ public class CreateSpecimenForm extends SpecimenForm implements Cloneable
 	 /**
 	 * Radio button to choose barcode/specimen identifier
 	 */
-	private String checkedButton = "1";
+	private String radioButton = "1";
 	
 	/**
 	 *  Decides the calling of reset
@@ -135,7 +135,7 @@ public class CreateSpecimenForm extends SpecimenForm implements Cloneable
              {
              	if(request.getParameter("retainForm")==null)
              	{
-             	if(this.getCheckedButton().equals("1")) 
+             	if(this.getRadioButton().equals("1")) 
              	{
              	 	if (validator.isEmpty(parentSpecimenLabel))
                  {
@@ -165,16 +165,16 @@ public class CreateSpecimenForm extends SpecimenForm implements Cloneable
 	/**
 	 * @return Returns the checkedButton.
 	 */
-	public String getCheckedButton()
+	public String getRadioButton()
 	{
-		return checkedButton;
+		return radioButton;
 	}
 	/**
 	 * @param checkedButton The checkedButton to set.
 	 */
-	public void setCheckedButton(String checkedButton)
+	public void setRadioButton(String radioButton)
 	{
-		this.checkedButton = checkedButton;
+		this.radioButton = radioButton;
 	}
 	/**
 	 * @return Returns the parentSpecimenBarcode.

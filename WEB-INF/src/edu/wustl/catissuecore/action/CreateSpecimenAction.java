@@ -166,9 +166,9 @@ public class CreateSpecimenAction extends SecureAction
 					//createForm.setLabel(abstractSpecimenGenerator.getNextAvailableDeriveSpecimenlabel(inputMap));
 				}
 				
-				if (forwardToHashMap == null && ((createForm.getCheckedButton().equals("1") && createForm
+				if (forwardToHashMap == null && ((createForm.getRadioButton().equals("1") && createForm
 						.getParentSpecimenLabel() != null && !createForm.getParentSpecimenLabel().equals(""))
-						|| (createForm.getCheckedButton().equals("2") && createForm
+						|| (createForm.getRadioButton().equals("2") && createForm
 								.getParentSpecimenBarcode() != null && !createForm.getParentSpecimenBarcode().equals(""))))
 				{
 					String errorString = null;
@@ -176,7 +176,7 @@ public class CreateSpecimenAction extends SecureAction
 					Object []columnValue = new String[1];
 
 					// checks whether label or barcode is selected
-					if (createForm.getCheckedButton().equals("1"))
+					if (createForm.getRadioButton().equals("1"))
 					{
 						columnName[0] = Constants.SYSTEM_LABEL; 
 						columnValue[0] = createForm.getParentSpecimenLabel().trim();
