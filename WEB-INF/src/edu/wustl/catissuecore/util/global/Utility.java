@@ -1835,6 +1835,11 @@ public class Utility extends edu.wustl.common.util.Utility {
 		SiteUserRolePrivilegeBean bean = siteUserRolePrivilegeBean;
 		String groupName = null;
 		String pgName = null;
+		if(bean.getSiteList().isEmpty())
+		{
+			processDeletedPrivilegesOnCPPage(siteUserRolePrivilegeBean, bean.getCollectionProtocol().getId());
+			return;
+		}
 		Site site = bean.getSiteList().get(0);
 		User user = bean.getUser();
 		CollectionProtocol cp = bean.getCollectionProtocol();
