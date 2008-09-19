@@ -289,6 +289,7 @@ function checkQuantityforAll(count)
 	var requiredQty ;
 	var canDistribute;
 	var answer;
+	var isQuantityValid = true;
 
 	if(status == "<%=Constants.ORDER_REQUEST_STATUS_DISTRIBUTED%>" || status == "<%=Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE%>")
 	{
@@ -298,6 +299,7 @@ function checkQuantityforAll(count)
 			requiredQty = document.getElementById("requestedQtyId" + i).value;	
 			if(availableQty != requiredQty) {
 				answer= confirm("Some of the specimens have Available Quantity greater then or less then the Ordered Quantity : Select Ok if you still want to distribute the specimen");
+				isQuantityValid = false;
 				break;
 			}
 		
@@ -311,6 +313,10 @@ function checkQuantityforAll(count)
 				updateAllStatus();
 
 			}
+		}
+		if(isQuantityValid)
+		{
+			updateAllStatus();
 		}
 	} else {
 		updateAllStatus();
