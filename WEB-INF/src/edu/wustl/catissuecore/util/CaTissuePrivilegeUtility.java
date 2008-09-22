@@ -79,15 +79,26 @@ public class CaTissuePrivilegeUtility
 
 					CollectionProtocol cp = (CollectionProtocol) dao.retrieve(
 							CollectionProtocol.class.getName(), id);
-					for (Site site : cp.getSiteCollection())
-					{
-						Long temp = site.getId();
-
+					
+					Set<Long> siteIds = new HashSet<Long>();
+					List<Site> siteList = new ArrayList<Site>();
+					for (Site site : user.getSiteCollection())
+					{	
+						siteIds.add(site.getId());
 					}
 
+					for(Site site : cp.getSiteCollection())
+					{
+						if(siteIds.contains(site.getId()))
+						{
+							siteList.add(site);
+						}
+					}
+					
 					bean.setCollectionProtocol(cp);
 					bean.setUser(user);
-					bean.setSiteList(new ArrayList<Site>(cp.getSiteCollection()));
+					// bean.setSiteList(new ArrayList<Site>(cp.getSiteCollection()));
+					bean.setSiteList(siteList);
 					NameValueBean nmv = new NameValueBean();
 					nmv.setName("Custom role");
 					nmv.setValue("-1");
