@@ -83,6 +83,8 @@
 			<fileset dir="${tmp.catissuewar}/WEB-INF/classes">
 				<include name="**/*.*"/>
 				<exclude name ="dbutil.properties"/>
+				<exclude name ="log4j.properties"/>
+				<exclude name="**/ApplicationSecurityConfig.xml" />
 			</fileset>			
 		</jar>
 
@@ -163,13 +165,15 @@
 			<antcall target="generate_hibernate_cfg">
 					<param name ="DestFile" value="catissuecore.hibernate.cfg.xml"/>
 					<param name ="SrcFile" value="catissuecore.hibernate.cfg.xml"/>
-					<param name ="SrcDir"  value="${tmp.catissuewar}/WEB-INF/classes/"/>
+					<param name ="SrcDir"  value="${base.dir}/catissuecore-properties/"/>
 			</antcall>
 			<copy todir="${db_src.dir}">
 				<fileset dir = "${base.dir}/catissuecore-properties/">
 					<include name="caTissueCore_Properties.xml"/>
 					<include name="ApplicationSecurityConfig.xml"/>
 				</fileset>
+
+				
 			</copy>
 			<antcall target="replaceDBParams">
 				<param name="SourceFile" value="${db_src.dir}/catissuecore.hibernate.cfg.xml" />
