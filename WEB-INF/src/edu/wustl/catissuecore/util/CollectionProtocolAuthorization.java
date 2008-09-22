@@ -185,6 +185,7 @@ public class CollectionProtocolAuthorization implements edu.wustl.catissuecore.u
 					if (!isPresent)
 					{
 						siteCollection.add(site);
+						siteIds.add(site.getId());
 					}
 				}
 			}
