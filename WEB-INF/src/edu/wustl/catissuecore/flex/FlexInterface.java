@@ -1302,7 +1302,7 @@ public class FlexInterface
 
 	}
 
-	private CollectionEventParameters getCollectionEventParameters(EventParamtersBean collectionEvent)
+	private CollectionEventParameters getCollectionEventParameters(EventParamtersBean collectionEvent) throws DAOException
 	{
 		CollectionEventParameters event = new CollectionEventParameters();
 		//setCommomParam(event);
@@ -1310,18 +1310,16 @@ public class FlexInterface
 		event.setCollectionProcedure(collectionEvent.collectionProcedure);
 		event.setContainer(collectionEvent.container);
 		event.setComment(collectionEvent.comment);
-		User user = new User();
-		user.setId(1L);
+		User user = getUser(collectionEvent.userName);
 		event.setUser(user);
 		return event;
 	}
 
-	private ReceivedEventParameters getReceivedEventParameters(EventParamtersBean receivedEvent)
+	private ReceivedEventParameters getReceivedEventParameters(EventParamtersBean receivedEvent) throws DAOException
 	{
 		ReceivedEventParameters event = new ReceivedEventParameters();
 		event.setTimestamp(getTimeStamp(receivedEvent.eventdDate, receivedEvent.eventHour, receivedEvent.eventMinute));
-		User user = new User();
-		user.setId(1L);
+		User user = getUser(receivedEvent.userName);
 		event.setUser(user);
 		event.setComment(receivedEvent.comment);
 		//setCommomParam(event);
@@ -1347,6 +1345,25 @@ public class FlexInterface
 	 user.setId(1L);
 	 event.setUser(user);
 	 }*/
+	
+	private User getUser(String userName) throws DAOException
+	{
+		User user = new User(); 
+		int index = userName.indexOf(",");
+		String lastName = userName.substring(0,index);
+		String firstName = userName.substring(index+2);
+		UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.USER_FORM_ID);
+		String sourceObjName = User.class.getName();
+		String[] whereColName = {Constants.LASTNAME,Constants.FIRSTNAME};
+		String[] whereColCond = {"=","="};
+		Object[] whereColVal = {lastName,firstName};
+		
+		List list = userBizLogic.retrieve(sourceObjName,whereColName,whereColCond,whereColVal,Constants.AND_JOIN_CONDITION);
+		if(list != null && !list.isEmpty())
+			user = (User)list.get(0);
+		return user;
+		
+	}
 	//--------------DAG-----------------------------
 	public void restoreQueryObject()
 	{
