@@ -301,7 +301,7 @@
 				
 				// if first attribute is birth/death date then time interval dataprovider should be Year only
 				existingTimeIntervalCb = myBox.getChildByName("timeIntervalCb") as ComboBox;
-				if((existingTimeIntervalCb!= null) && (attributesCb.selectedItem.toString() == "birthDate" || attributesCb.selectedItem.toString() == "deathDate"))
+				if((existingTimeIntervalCb!= null) && (attributesCb.selectedItem.toString() == "birthDate" ))
 				{					
 					timeIntervalCb.dataProvider = timeIntervalsBDateDp;
 					timeIntervalCb.selectedIndex = 0;

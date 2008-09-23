@@ -1466,7 +1466,7 @@ TextInput
 	            }
 	            // if first attribute is birth/death date then time interval dataprovider should be Year only
 		    existingTimeIntervalCb = singleNodeTQPope.myBox.getChildByName("timeIntervalCb") as ComboBox;
-		    if((existingTimeIntervalCb!= null) && (customNode.getAtributeName() == "birthDate" || customNode.getAtributeName() == "deathDate"))
+		    if((existingTimeIntervalCb!= null) && (customNode.getAtributeName() == "birthDate"))
 		    {					
 		    	singleNodeTQPope.timeIntervalCb.dataProvider = timeIntervalsBDateDp;
 		    	singleNodeTQPope.timeIntervalCb.selectedIndex = 0;
@@ -1710,7 +1710,7 @@ TextInput
 	        }
 	        // if first attribute is birth/death date then time interval dataprovider should be Year only
 		existingTimeIntervalCb = popUp.myBox.getChildByName("timeIntervalCb") as ComboBox;
-		if((existingTimeIntervalCb!= null) && (currentCustomNode.getFirstSelectedAttrName() == "birthDate" || currentCustomNode.getFirstSelectedAttrName() == "deathDate"))
+		if((existingTimeIntervalCb!= null) && (currentCustomNode.getFirstSelectedAttrName() == "birthDate"))
 		{					
 			popUp.cb5.dataProvider = timeIntervalsBDateDp;
 			popUp.cb5..selectedIndex = 0;
@@ -1735,7 +1735,7 @@ TextInput
 	        }
 	         // if first attribute is birth/death date then time interval dataprovider should be Year only
 		existingTimeIntervalCb = popUp.myBox.getChildByName("timeIntervalCb") as ComboBox;
-		if((existingTimeIntervalCb!= null) && (currentCustomNode.getSecondSelectedAttrName() == "birthDate" || currentCustomNode.getSecondSelectedAttrName() == "deathDate"))
+		if((existingTimeIntervalCb!= null) && (currentCustomNode.getSecondSelectedAttrName() == "birthDate"))
 		{					
 			popUp.cb5.dataProvider = timeIntervalsBDateDp;
 			popUp.cb5.selectedIndex = 0;
