@@ -10,7 +10,6 @@
 
 	<property name="db_unit.dir" value="${basedir}/caTissueSuite_dbunit" />
 	<property name="db_src.dir" value="${db_unit.dir}/src" />
-	<property file="${db_src.dir}/caTissueInstall.properties" />
 	<property name="db_temp.dir" value="${db_unit.dir}/tmp" />
 	<property name="db_lib.dir" value="${db_unit.dir}/lib" />
 	<property name="base.dir" value="." />
@@ -38,6 +37,13 @@
 	<target name="clean">
 		<deltree dir="${db_temp.dir}"/>
 		<!-- deltree dir="${tmp.catissuewar}"/ -->
+		<delete  >
+    	<fileset dir="${db_src.dir}">
+
+    		<include name="test_*.*"/>
+    	</fileset>
+		</delete>
+
 	</target>
 	
 	<!-- target name="catissue_compile">
@@ -136,7 +142,7 @@
 		<antcall target="runJUnit">
 			<param name="classNames" value="**/MSRMigrationTestCases.java" />
 		</antcall>
-		<antcall target="clean"></antcall>
+		<antcall target="clean" />
 	</target>
 	
 	<target name="configure_properties" >
@@ -146,20 +152,23 @@
 		<antcall target="replaceDBParams">
 			<param name="SourceFile" value="${db_src.dir}/caTissueDBUnit.properties" />
 		</antcall>		
-			<antcall target="generate_hibernate_cfg">
-				<param name ="DestFile" value="test_hibernate.cfg.xml"/>
-				<param name ="SrcFile" value="hibernate.cfg.xml"/>
-				<param name ="SrcDir"  value="${tmp.catissuewar}/WEB-INF/classes/"/>
-			</antcall>
-			
-			<antcall target="replaceDBParams">
-			<param name="SourceFile" value="${db_src.dir}/test_hibernate.cfg.xml" />
-			</antcall>
+				<antcall target="generate_hibernate_cfg">
+					<param name ="DestFile" value="test_hibernate.cfg.xml"/>
+					<param name ="SrcFile" value="hibernate.cfg.xml"/>
+					<param name ="SrcDir"  value="${tmp.catissuewar}/WEB-INF/classes/"/>
+				</antcall>
+				
+				<antcall target="replaceDBParams">
+				<param name="SourceFile" value="${db_src.dir}/test_hibernate.cfg.xml" />
+				</antcall>
 			
 			<antcall target="generate_hibernate_cfg">
 					<param name ="DestFile" value="test_DEHibernate.cfg.xml"/>
 					<param name ="SrcFile" value="DynamicExtensionsHibernate.cfg.xml"/>
 					<param name ="SrcDir"  value="${tmp.catissuewar}/WEB-INF/classes/"/>
+			</antcall>
+			<antcall target="replaceDBParams">
+				<param name="SourceFile" value="${db_src.dir}/test_DEHibernate.cfg.xml" />
 			</antcall>
 
 			<antcall target="generate_hibernate_cfg">
@@ -167,6 +176,7 @@
 					<param name ="SrcFile" value="catissuecore.hibernate.cfg.xml"/>
 					<param name ="SrcDir"  value="${base.dir}/catissuecore-properties/"/>
 			</antcall>
+		
 			<copy todir="${db_src.dir}">
 				<fileset dir = "${base.dir}/catissuecore-properties/">
 					<include name="caTissueCore_Properties.xml"/>
@@ -183,9 +193,6 @@
 			<replace file="${db_src.dir}/ApplicationSecurityConfig.xml" token="\" value="/" />
 
 		<replace file="${db_src.dir}/caTissueDBUnit.properties" token="\" value="/"  />
-			<antcall target="replaceDBParams">
-				<param name="SourceFile" value="${db_src.dir}/test_DEHibernate.cfg.xml" />
-			</antcall>
 			
 
 	</target>
