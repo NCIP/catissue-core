@@ -12,6 +12,7 @@
 	
 	<property environment="env" />	
 	<import file="build-properties.xml"/>
+	<import file="dbunit_temp.xml"/>
 	
 	<property name="base.dir" value="." />
 	<property name="temp.dir" value="./deploytempCatissuecore" />
@@ -1115,6 +1116,7 @@
 	<target name="upgrade_db">
 		<antcall target="upgrade_from_Suite1.0_to_1.1" />
 		<antcall target="update_metadata_for_model_changes" />
+		<antcall target="runMigration" />
 	</target>
 	
 	<target name="upgrade_db_from_core_1.2.2_to_suite_1.0_mysql">
@@ -2203,4 +2205,72 @@ Thanking You,
 		</sql>			
 	</target>
 	
+	<!-- MSR Migration - start -->
+	<target name="runMigration">
+		<property name="tempMSR" value="${basedir}/tempMSR"></property>
+		<delete dir="${tempMSR}"></delete>
+		<unwar src="${base.dir}/catissuecore.war" dest="${tempMSR}" />
+		<delete file="${tempMSR}/WEB-INF/classes/ApplicationSecurityConfig.xml"></delete>
+		<replace file="${tempMSR}/WEB-INF/classes/dbutil.properties" token=", DynamicExtensionsHibernate.cfg.xml"
+					value=""/>
+		<antcall target="generate_hibernate_cfg">
+						<param name ="DestFile" value="hibernate.cfg.xml"/>
+						<param name ="SrcFile" value="hibernate.cfg.xml"/>
+						<param name ="SrcDir"  value="${tempMSR}/WEB-INF/classes/"/>
+						<param name ="DestPath" value="${tempMSR}"/>
+		</antcall>
+		<antcall target="replaceDBParams">
+					<param name="SourceFile" value="${tempMSR}/hibernate.cfg.xml" />
+					<param name="srcDir" value="${tempMSR}" />
+		</antcall>
+		
+		<antcall target="generate_hibernate_cfg">
+						<param name ="DestFile" value="catissuecore.hibernate.cfg.xml"/>
+						<param name ="SrcFile" value="catissuecore.hibernate.cfg.xml"/>
+						<param name ="SrcDir"  value="${basedir}/catissuecore-properties"/>
+						<param name ="DestPath" value="${tempMSR}/WEB-INF/classes"/>
+		</antcall>
+		<antcall target="replaceDBParams">
+					<param name="SourceFile" value="${tempMSR}/WEB-INF/classes/catissuecore.hibernate.cfg.xml" />
+					<param name="srcDir" value="${tempMSR}" />
+		</antcall>
+		<copy file="${tempMSR}/hibernate.cfg.xml" todir="${tempMSR}/WEB-INF/classes/"/>
+		<copy file="${basedir}/catissuecore-properties/ApplicationSecurityConfig.xml" todir="${tempMSR}" overwrite="true" />
+		
+		<replace file="${tempMSR}/ApplicationSecurityConfig.xml" token="@@hibernate-config-file@@" value="${tempMSR}/WEB-INF/classes/catissuecore.hibernate.cfg.xml" />
+		
+
+		<delete file="${tempMSR}/msrtest.jar"> </delete>
+		<jar destfile="${tempMSR}/msrtest.jar">
+					<fileset dir="${tempMSR}/WEB-INF/classes">
+						<include name="**/*.*"/>
+					</fileset>			
+		</jar>
+				<echo message="Running User Migration....." />
+			
+				<java classname="MSRMigration"  fork="true" failonerror="true">
+					<arg value="${tempMSR}/ApplicationSecurityConfig.xml" />
+					<arg value="${basedir}/catissuecore-properties/caTissueCore_Properties.xml" />
+					<arg value="${first.admin.emailAddress}" />
+					<sysproperty key="log4j.configuration"
+													value="${tempMSR}/WEB-INF/classes/log4j.properties"/>
+					<classpath>
+											
+						<fileset dir="${tempMSR}/WEB-INF/lib">
+							<include name="*.jar"/>
+						</fileset>
+						
+						<fileset dir="${tempMSR}">
+							<include name="msrtest.jar"/>
+						</fileset>
+						<fileset dir="${jboss.server.url}/lib">
+									 <include name="jboss-j2ee.jar"/>
+									 <include name="dom4j.jar"/>					
+									 <include name="servlet-api.jar"/> 
+						</fileset>
+					</classpath>
+			</java>
+	</target>
+	<!-- MSR Migration - end -->
+		
 </project>

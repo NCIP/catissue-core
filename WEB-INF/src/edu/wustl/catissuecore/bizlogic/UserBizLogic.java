@@ -747,6 +747,17 @@ public class UserBizLogic extends DefaultBizLogic
 		return user;
 	}
 	
+	/**
+	 * @param obj The object to be updated
+	 * @param oldObj The old object
+	 * @param sessionDataBean The session in which the object is saved.
+	 * @throws DAOException
+	 * @throws UserNotAuthorizedException
+	 */
+	public void updateUser(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
+	{
+		update(dao, obj, oldObj, sessionDataBean);
+	}
 	
 	/**
 	 * Updates the persistent object in the database.
@@ -774,7 +785,7 @@ public class UserBizLogic extends DefaultBizLogic
 		User oldUser = (User) oldObj;
 		
 		boolean isLoginUserUpdate = false;
-		if(sessionDataBean.getUserName().equals(oldUser.getLoginName())) 
+		if(oldUser.getLoginName().equals(sessionDataBean.getUserName())) 
 		{
 			isLoginUserUpdate = true;
 		}

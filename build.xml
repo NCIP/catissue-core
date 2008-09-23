@@ -534,7 +534,8 @@
 		<copy todir="${zip.dir}/caTissueSuite_dbunit" overwrite="true">
 					<fileset dir="${base.dir}/caTissueSuite_dbunit" />
 		</copy -->
-
+	
+		<copy file="dbunit_temp.xml" todir="${zip.dir}" overwrite="true" />
 		<copy todir="${zip.dir}/lib" overwrite="true">
 			<fileset file="${base.dir}/extra_lib/ant-contrib.jar" />
 			<fileset file="${base.dir}/WEB-INF/lib/mysql-connector-java-5.0.8-bin.jar" />
