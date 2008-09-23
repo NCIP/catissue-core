@@ -108,17 +108,17 @@
 	
 	<property>
 		<name>email.administrative.emailAddress</name>
-		<value>catissue@persistent.co.in</value>
+		<value>@@ADMIN-EMAILADDRESS@@</value>
 	</property>
 	
 	<property>
 		<name>email.sendEmailFrom.emailAddress</name>
-		<value>catissue@persistent.co.in</value>
+		<value>@@SENDEMAILFROM-EMAILADDRESS@@</value>
 	</property>
 	
 	<property>
 		<name>email.mailServer</name>
-		<value>mail.persistent.co.in</value>
+		<value>@@MAILSERVER-EMAILADDRESS@@</value>
 	</property>
 	
 	 <!-- Constants for LookUp algo start -->
