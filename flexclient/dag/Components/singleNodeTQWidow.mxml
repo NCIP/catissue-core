@@ -68,6 +68,8 @@
 		private var existingTimeStampText : TextInput = null;
 		private var existingTimeLabel : Label = null;
 		
+		public var timeIntervalsBDateDp : Array = ['Years'];
+		
 		public function removeMe():void 
 	 	{
            PopUpManager.removePopUp(this);
@@ -296,6 +298,17 @@
 		 		operand  =  attributesCb.selectedItem.toString();
 				nodeList = entityDp[operand];
 				operandType = String(nodeList.getItemAt(1));
+				
+				// if first attribute is birth/death date then time interval dataprovider should be Year only
+				existingTimeIntervalCb = myBox.getChildByName("timeIntervalCb") as ComboBox;
+				if((existingTimeIntervalCb!= null) && (attributesCb.selectedItem.toString() == "birthDate" || attributesCb.selectedItem.toString() == "deathDate"))
+				{					
+					timeIntervalCb.dataProvider = timeIntervalsBDateDp;
+					timeIntervalCb.selectedIndex = 0;
+				}else
+				{
+					timeIntervalCb.dataProvider = timeIntervalsDp;					
+				}
        		}       		
        		           		
        	 	if(operandType == "Integer") 

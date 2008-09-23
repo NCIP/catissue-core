@@ -135,12 +135,13 @@ TextInput
 	//operation is stroing information about node creation / edit 
 	[Bindable]
 	public var operationforView:String="";	
+	public var timeIntervalsBDateDp : Array = ['Years'];
 	
 	//creating comboBox for integer attribute Type
 	private var existingfirstOpComboBox : ComboBox = null;
 	private var existingSecondOpComboBox : ComboBox = null;
 	private var existingOpComboBox : ComboBox = null;
-	
+	private var existingTimeIntervalCb : ComboBox = null;
 	/**
 	* Timer handler  to check container has been initialized.	
 	*/
@@ -1463,6 +1464,13 @@ TextInput
 	    	   			singleNodeTQPope.firstComboPlace.addChild(firstOpComboBox);       	 	   			 
 		     		}		        	
 	            }
+	            // if first attribute is birth/death date then time interval dataprovider should be Year only
+		    existingTimeIntervalCb = singleNodeTQPope.myBox.getChildByName("timeIntervalCb") as ComboBox;
+		    if((existingTimeIntervalCb!= null) && (customNode.getAtributeName() == "birthDate" || customNode.getAtributeName() == "deathDate"))
+		    {					
+		    	singleNodeTQPope.timeIntervalCb.dataProvider = timeIntervalsBDateDp;
+		    	singleNodeTQPope.timeIntervalCb.selectedIndex = 0;
+		    }
                	singleNodeTQPope.relationalOpsCb.selectedItem = customNode.getSelectedLogicalOp();
                 
                 //Setting the Expression Id as it is used for creating the node name
@@ -1700,6 +1708,13 @@ TextInput
     	   			popUp.firstComboPlace.addChild(firstOpComboBox);       	 	   			 
 	     		}		        	
 	        }
+	        // if first attribute is birth/death date then time interval dataprovider should be Year only
+		existingTimeIntervalCb = popUp.myBox.getChildByName("timeIntervalCb") as ComboBox;
+		if((existingTimeIntervalCb!= null) && (currentCustomNode.getFirstSelectedAttrName() == "birthDate" || currentCustomNode.getFirstSelectedAttrName() == "deathDate"))
+		{					
+			popUp.cb5.dataProvider = timeIntervalsBDateDp;
+			popUp.cb5..selectedIndex = 0;
+		}
 	        popUp.cb2.selectedItem = currentCustomNode.getSelectedArithmeticOp();
 	        popUp.cb3.selectedItem = currentCustomNode.getSecondSelectedAttrName();
 	        if(currentCustomNode.getSecondSelectedAttrType() == "Integer"){
@@ -1718,6 +1733,13 @@ TextInput
     	   			popUp.secondComboPlace.addChild(secondOpComboBox);       	 	   			 
 	     		}	
 	        }
+	         // if first attribute is birth/death date then time interval dataprovider should be Year only
+		existingTimeIntervalCb = popUp.myBox.getChildByName("timeIntervalCb") as ComboBox;
+		if((existingTimeIntervalCb!= null) && (currentCustomNode.getSecondSelectedAttrName() == "birthDate" || currentCustomNode.getSecondSelectedAttrName() == "deathDate"))
+		{					
+			popUp.cb5.dataProvider = timeIntervalsBDateDp;
+			popUp.cb5.selectedIndex = 0;
+		}
 	        popUp.cb4.selectedItem = currentCustomNode.getSelectedLogicalOp();  
 	        //Setting the custom column name and time interval        	
         	popUp.customColumnName.text = currentCustomNode.getCustomColumnName();        	
