@@ -713,3 +713,7 @@ WHERE object_id regexp '_[[:digit:]]'
     AND object_id NOT regexp 'User_[[:digit:]]'
     AND object_id NOT regexp 'StorageContainer_[[:digit:]]';
 
+
+/** To resolve bug #9654 **/
+UPDATE CATISSUE_TABLE_RELATION SET CHILD_TABLE_ID=100 WHERE RELATIONSHIP_ID=52;
+UPDATE CATISSUE_SEARCH_DISPLAY_DATA SET COL_ID=337 WHERE RELATIONSHIP_ID=52 AND COL_ID=191;
