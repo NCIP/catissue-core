@@ -595,7 +595,11 @@
 	<!--Copy WAR and Configuration Files to JBOSS Directory-->
 	<target name="copy_files">
 		<echo message="Copying caTISSUECore Application Components..." />
-
+		<replace file="${temp.dir}/catissuecore-properties/caTissueCore_Properties.xml">
+			<replacefilter token="@@ADMIN-EMAILADDRESS@@" value="${email.administrative.emailAddress}" />
+			<replacefilter token="@@SENDEMAILFROM-EMAILADDRESS@@" value="${email.sendEmailFrom.emailAddress}" />
+			<replacefilter token="@@MAILSERVER-EMAILADDRESS@@" value="${email.mailServer}" />
+		</replace>
 		<copy todir="${jboss.server.url}/catissuecore-properties" overwrite="true">
 			<fileset dir="${temp.dir}/catissuecore-properties">
 				<include name="**/*" />
