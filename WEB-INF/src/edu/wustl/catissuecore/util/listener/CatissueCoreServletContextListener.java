@@ -1,5 +1,5 @@
 /*
- * $Name: 1.41.2.34 $
+ * $Name: 1.41.2.35 $
  *
  * */
 package edu.wustl.catissuecore.util.listener;
@@ -109,6 +109,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 	 */
 	public void initCatissueParams() throws Exception, ClassNotFoundException, DAOException
 	{
+		edu.wustl.common.querysuite.security.utility.Utility.setReadDeniedAndEntitySqlMap();
 		addDefaultProtectionGroupsToMap();
 
 		Class.forName(DBUtil.class.getName());
@@ -123,7 +124,6 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 		Utility.initializePrivilegesMap();
 //		initTitliIndex();
 		initCDEManager();
-		edu.wustl.common.querysuite.security.utility.Utility.setReadDeniedAndEntitySqlMap();
 
 	}
 

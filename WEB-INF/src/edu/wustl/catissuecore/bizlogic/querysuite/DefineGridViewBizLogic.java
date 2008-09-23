@@ -357,12 +357,13 @@ public class DefineGridViewBizLogic
 		{
 			sql = selectedColumnNames.substring(0, selectedColumnNames.lastIndexOf(Constants.DELIMETER));
 		}
+		List tqColumnMetadataList = null;
 		if(!outputTermsColumns.isEmpty())
 		{
 			QueryOutputSpreadsheetBizLogic gridBizLogic = new QueryOutputSpreadsheetBizLogic();
 			IConstraints constraints = queryDetailsObj.getQuery().getConstraints();
 			TemporalColumnUIBean temporalColumnUIBean = new TemporalColumnUIBean(null, sql, definedColumnsList, outputTermsColumns,columnIndex,constraints);
-			gridBizLogic.modifySqlForTemporalColumns(temporalColumnUIBean,queryDetailsObj,nodeData);
+			tqColumnMetadataList = gridBizLogic.modifySqlForTemporalColumns(temporalColumnUIBean,queryDetailsObj,nodeData);
 			sql = temporalColumnUIBean.getSql();
 			columnIndex = temporalColumnUIBean.getColumnIndex();
 		}
@@ -372,6 +373,7 @@ public class DefineGridViewBizLogic
 		queryResulObjectDataBean = queryResultObjecctDataMap.get(mapItr.next());
 		if(queryResulObjectDataBean.getMainEntityIdentifierColumnId()==-1)
 		{
+			queryResulObjectDataBean.setTqColumnMetadataList(tqColumnMetadataList);
 			Map<EntityInterface, Integer> entityIdIndexMap = new HashMap<EntityInterface, Integer>();
 			sql = QueryCSMUtil.updateEntityIdIndexMap(queryResulObjectDataBean, columnIndex,
 					sql, defineViewNodeList, entityIdIndexMap, queryDetailsObj);
@@ -389,6 +391,8 @@ public class DefineGridViewBizLogic
 						  .getEntityIdIndexMap().get(mainEntity));
 			}
 		}
+		else
+		queryResulObjectDataBean.setTqColumnMetadataList(tqColumnMetadataList);
 		}
 		categorySearchForm.setSelectedColumnNameValueBeanList(selectedColumnNameValue);
 		return definedColumnsList;

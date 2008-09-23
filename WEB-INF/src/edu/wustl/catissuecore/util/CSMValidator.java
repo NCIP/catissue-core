@@ -1,14 +1,19 @@
 package edu.wustl.catissuecore.util;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.hibernate.Session;
 
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.querysuite.TemporalColumnMetada;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.querysuite.queryobject.TermType;
+import edu.wustl.common.querysuite.queryobject.YMInterval;
 import edu.wustl.common.querysuite.security.utility.IValidator;
 import edu.wustl.common.security.PrivilegeCache;
 import edu.wustl.common.security.PrivilegeManager;
@@ -65,6 +70,41 @@ public class CSMValidator implements IValidator {
 		}
 		
 		return hasPrivilege;
-	}
+	} 
 
+	public boolean hasPrivilegeToViewTemporalColumn(List tqColumnMetadataList,
+			List<String> row,boolean isAuthorizedUser) {
+		boolean removeRow = false;
+		for (Object object : tqColumnMetadataList) 
+		{ 
+			TemporalColumnMetada tqMetadata = (TemporalColumnMetada) object;
+			String ageString = row.get(tqMetadata.getColumnIndex() - 1);
+			long age = 0;
+						if (tqMetadata.getTermType().equals(TermType.Timestamp) || !isAuthorizedUser) {
+				row.set(tqMetadata.getColumnIndex() - 1, "##");
+			} else if (tqMetadata.getTermType().equals(TermType.DSInterval)) {
+				if (tqMetadata.getPHIDate() != null && tqMetadata.isBirthDate()) {
+					java.util.Date todaysDate = new java.util.Date();
+					int year = tqMetadata.getPHIDate().getDate().getYear();
+					age = todaysDate.getYear()
+							- year
+							+ Long.parseLong(row.get(tqMetadata
+									.getColumnIndex() - 1));
+
+				} //else if (!tqMetadata.isBirthDate()) {
+					age = Long.parseLong(ageString);
+					if (!tqMetadata.getTimeInterval().name().equals(
+							YMInterval.Year.name())) {
+						age = Math.round((age * tqMetadata.getTimeInterval()
+								.numSeconds())
+								/ YMInterval.Year.numSeconds());
+					}
+				//}
+				if (Math.abs(age) > 89)
+					row.set(tqMetadata.getColumnIndex() - 1, "90+ Years");
+			}
+		}
+		return removeRow;
+	} 
+	
 }

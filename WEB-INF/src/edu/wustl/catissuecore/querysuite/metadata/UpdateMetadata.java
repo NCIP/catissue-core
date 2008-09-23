@@ -407,6 +407,7 @@ public class UpdateMetadata
 		
 		//Delete initial curated path between OrderDetails and TissueSpecimen which is invalid
 		dbUpdateSQL.add("delete from path where FIRST_ENTITY_ID in (select identifier from dyextn_abstract_metadata where NAME='edu.wustl.catissuecore.domain.OrderDetails') and LAST_ENTITY_ID= (select identifier from dyextn_abstract_metadata where NAME='edu.wustl.catissuecore.domain.TissueSpecimen')");
+		dbUpdateSQL.add("insert into dyextn_tagged_value select Max(IDENTIFIER)+1, 'IS_BIRTH_DATE','true',847 from dyextn_tagged_value");
 		
 		return dbUpdateSQL;
 	}

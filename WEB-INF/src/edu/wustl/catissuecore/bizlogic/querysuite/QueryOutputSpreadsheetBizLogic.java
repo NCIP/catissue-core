@@ -20,6 +20,7 @@ import edu.wustl.catissuecore.util.listener.CatissueCoreServletContextListener;
 import edu.wustl.catissuecore.util.querysuite.QueryCSMUtil;
 import edu.wustl.catissuecore.util.querysuite.QueryDetails;
 import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
+import edu.wustl.catissuecore.util.querysuite.TemporalColumnMetada;
 import edu.wustl.catissuecore.util.querysuite.TemporalColumnUIBean;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.QueryResultObjectDataBean;
@@ -27,14 +28,19 @@ import edu.wustl.common.bizlogic.QueryBizLogic;
 import edu.wustl.common.dao.QuerySessionData;
 import edu.wustl.common.dao.queryExecutor.PagenatedResultData;
 import edu.wustl.common.querysuite.queryengine.impl.SqlGenerator;
+import edu.wustl.common.querysuite.queryobject.IArithmeticOperand;
 import edu.wustl.common.querysuite.queryobject.IConstraints;
 import edu.wustl.common.querysuite.queryobject.ICustomFormula;
+import edu.wustl.common.querysuite.queryobject.IDateLiteral;
 import edu.wustl.common.querysuite.queryobject.IExpression;
+import edu.wustl.common.querysuite.queryobject.IExpressionAttribute;
 import edu.wustl.common.querysuite.queryobject.IOutputAttribute;
 import edu.wustl.common.querysuite.queryobject.IOutputTerm;
 import edu.wustl.common.querysuite.queryobject.ITerm;
 import edu.wustl.common.querysuite.queryobject.LogicalOperator;
 import edu.wustl.common.querysuite.queryobject.RelationalOperator;
+import edu.wustl.common.querysuite.queryobject.TermType;
+import edu.wustl.common.querysuite.queryobject.TimeInterval;
 import edu.wustl.common.querysuite.queryobject.impl.OutputAttribute;
 import edu.wustl.common.querysuite.queryobject.impl.OutputTreeDataNode;
 import edu.wustl.common.querysuite.queryobject.impl.metadata.QueryOutputTreeAttributeMetadata;
@@ -253,7 +259,7 @@ public class QueryOutputSpreadsheetBizLogic
 			queryResultObjectDataBeanMap, boolean hasConditionOnIdentifiedField,
 			IConstraints constraints, Map<String, IOutputTerm> outputTermsColumns)
 			throws DAOException, ClassNotFoundException
-	{
+	{ 
 		this.selectedColumnMetaData = selectedColumnsMetadata;
 		Map spreadSheetDataMap = updateSpreadsheetData(queryDetailsObj, parentData, node,
 				recordsPerPage, queryResultObjectDataBeanMap, 
@@ -314,7 +320,7 @@ public class QueryOutputSpreadsheetBizLogic
 			OutputTreeDataNode node,
 			Map<Long, QueryResultObjectDataBean> queryResultObjectDataBeanMap,
 			QueryDetails queryDetailsObj, IConstraints constraints,Map<String, IOutputTerm> outputTermsColumns)
-	{     
+	{      
 		String selectSql = "";
 		String idColumnOfCurrentNode = "";
 		List<String> columnsList = new ArrayList<String>();
@@ -399,11 +405,12 @@ public class QueryOutputSpreadsheetBizLogic
 		}
 	 
 		if(!selectedColumnMetaData.isDefinedView() )
-		{ 
+		{  
 			if(!outputTermsColumns.isEmpty())
-			{
+			{  
 				TemporalColumnUIBean temporalColumnUIBean = new TemporalColumnUIBean(node, selectSql, columnsList, outputTermsColumns,columnIndex,constraints);
-				modifySqlForTemporalColumns(temporalColumnUIBean,queryDetailsObj,parentData); 
+				List tqColumnMetadataList = modifySqlForTemporalColumns(temporalColumnUIBean,queryDetailsObj,parentData);
+				queryResultObjectDataBean.setTqColumnMetadataList(tqColumnMetadataList);
 				selectSql = temporalColumnUIBean.getSql();
 				columnIndex = temporalColumnUIBean.getColumnIndex();
 			}
@@ -481,33 +488,63 @@ public class QueryOutputSpreadsheetBizLogic
 	 * @param queryDetailsObj 
 	 * @param parentData 
 	 */
-	public void modifySqlForTemporalColumns(TemporalColumnUIBean temporalColumnUIBean, QueryDetails queryDetailsObj, String parentData) 
+	public List modifySqlForTemporalColumns(TemporalColumnUIBean temporalColumnUIBean, QueryDetails queryDetailsObj, String parentData) 
 	{
 		OutputTreeDataNode node = temporalColumnUIBean.getNode();
 		
 		Map<String, IOutputTerm> outputTermsColumns = temporalColumnUIBean.getOutputTermsColumns();
 		Set<String> keySet = outputTermsColumns.keySet();
 		Iterator<String> iterator1 = keySet.iterator();
+		List tQColumnMetataDataList = new ArrayList();
 		while (iterator1.hasNext())
 		{
 			String columnName = (String) iterator1.next();
 			IOutputTerm outputTerm = outputTermsColumns.get(columnName);
 			String displayColumnName = outputTerm.getName();
 			ITerm term = outputTerm.getTerm();
+			TimeInterval<?> timeInterval = outputTerm.getTimeInterval();
 			Set<IExpression> expressionsInTerm = QueryUtility.getExpressionsInTerm(term);
 
 			if(node == null || (expressionsInTerm.size() == 1 && isContainingExpressionInTQ(node, expressionsInTerm)))
 			{
 				modifyTemporalColumnBean(temporalColumnUIBean,displayColumnName,columnName);
+				setTQColumnMetadata(temporalColumnUIBean.getColumnIndex(),
+						tQColumnMetataDataList, term,timeInterval);
 			}
 			else if(isContainingExpressionInTQ(node, expressionsInTerm))
 			{
 				boolean  isValidCardinality= isValidCardinality(temporalColumnUIBean, queryDetailsObj, parentData,
 						node,expressionsInTerm);
 				if(isValidCardinality)
+				{
 					modifyTemporalColumnBean(temporalColumnUIBean,displayColumnName,columnName);
+					setTQColumnMetadata(temporalColumnUIBean.getColumnIndex(),
+							tQColumnMetataDataList, term,timeInterval);
+				}
 			}
 		}
+		return  tQColumnMetataDataList;
+	}
+	
+	public void setTQColumnMetadata(int columnIndex,
+			List tQColumnMetataDataList, ITerm term, TimeInterval<?> timeInterval) {
+		TemporalColumnMetada temporalColumnMetada = new TemporalColumnMetada();
+		temporalColumnMetada.setColumnIndex(columnIndex);
+		temporalColumnMetada.setTimeInterval(timeInterval);
+		temporalColumnMetada.setTermType(term.getTermType());
+		for (int i = 0; i < term.numberOfOperands(); i++) {
+			IArithmeticOperand operand = term.getOperand(i);
+			if (operand instanceof IExpressionAttribute) {
+				IExpressionAttribute expressionAttribute = (IExpressionAttribute) operand;
+					temporalColumnMetada.setBirthDate(edu.wustl.common.querysuite.security.utility.Utility
+							.getIsBirthDate(expressionAttribute.getAttribute()));
+			}else if (operand instanceof IDateLiteral)
+			{
+				IDateLiteral date = (IDateLiteral)term.getOperand(i);
+				temporalColumnMetada.setPHIDate(date);
+			}
+		}
+		tQColumnMetataDataList.add(temporalColumnMetada);
 	}
 	/**
 	 * 
@@ -751,11 +788,12 @@ public class QueryOutputSpreadsheetBizLogic
 				this.selectedColumnMetaData.setSelectedColumnNameValueBeanList(selectedColumnNameValue);
 				int lastindexOfComma = sqlColumnNames.lastIndexOf(",");
 				String sql = sqlColumnNames.toString();
+				List tqColumnMetadataList = null;
 				if(!outputTermsColumns.isEmpty())
 				{
 					IConstraints constraints = queryDetailsObj.getQuery().getConstraints();
 					TemporalColumnUIBean temporalColumnUIBean = new TemporalColumnUIBean(null, selectSql, definedColumnsList, outputTermsColumns,columnIndex,constraints);
-					modifySqlForTemporalColumns(temporalColumnUIBean,queryDetailsObj,parentData);
+					tqColumnMetadataList = modifySqlForTemporalColumns(temporalColumnUIBean,queryDetailsObj,parentData);
 					selectSql = temporalColumnUIBean.getSql();
 					columnIndex = temporalColumnUIBean.getColumnIndex();
 				}
@@ -776,6 +814,7 @@ public class QueryOutputSpreadsheetBizLogic
 					while (iterator.hasNext())
 					{
 						QueryResultObjectDataBean elem = (QueryResultObjectDataBean) iterator.next();
+						elem.setTqColumnMetadataList(tqColumnMetadataList);
 						if (elem.getMainEntityIdentifierColumnId() == -1)
 						{
 							if (!elem.isMainEntity())
@@ -1036,7 +1075,8 @@ public class QueryOutputSpreadsheetBizLogic
 						IConstraints constraints = queryDetailsObj.getQuery().getConstraints();
 						TemporalColumnUIBean temporalColumnUIBean = new TemporalColumnUIBean(node, 
 								selectSql, columnsList, outputTermsColumns,columnIndex,constraints); 
-						modifySqlForTemporalColumns(temporalColumnUIBean,queryDetailsObj,parentData);
+						List tqColumnMetadataList = modifySqlForTemporalColumns(temporalColumnUIBean,queryDetailsObj,parentData);
+						queryResultObjectDataBean.setTqColumnMetadataList(tqColumnMetadataList);
 						selectSql = temporalColumnUIBean.getSql();
 						columnIndex = temporalColumnUIBean.getColumnIndex();
 					}
