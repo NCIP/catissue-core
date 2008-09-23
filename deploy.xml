@@ -40,7 +40,11 @@
 	
 	<property name="oracle_home" value="${env.ORACLE_HOME}"/>
 	<property name="jboss.bin.run.jar" value="${jboss.home.dir}/bin/run.jar"/>
-	
+	<!--import file="dbunitbuild.xml"/>
+	<target name="dbunit_testcases">
+		<antcall target="RundbUnit" />
+	</target -->
+
 	<!-- Check for required properties -->
 	<target name="assert">
 		<if>
