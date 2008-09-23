@@ -72,7 +72,7 @@ final public class QueryModuleSqlUtil {
 			{
 				Logger.out.error(e);
 	//			e.printStackTrace();
-	//			throw e;
+				throw e;
 			}
 			finally
 			{

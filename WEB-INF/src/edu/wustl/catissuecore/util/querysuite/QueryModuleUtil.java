@@ -414,7 +414,7 @@ final public  class QueryModuleUtil
 			 errorCode = QueryModuleError.EMPTY_DAG;
 		 }	
 		 switch (errorCode)
-		 {
+		 { 
 			 case EMPTY_DAG :
 				 errorMessage = "<li><font color='blue' family='arial,helvetica,verdana,sans-serif'>" + ApplicationProperties.getValue("query.empty.dag")+ "</font></li>";
 				 break;
@@ -425,9 +425,11 @@ final public  class QueryModuleUtil
 				 errorMessage = ApplicationProperties.getValue("query.zero.records.present");
 				 break;
 			 case SQL_EXCEPTION :
-			 case DAO_EXCEPTION :
 			 case CLASS_NOT_FOUND :
-				 errorMessage = ApplicationProperties.getValue("errors.executeQuery.genericmessage");
+				 errorMessage = "<li><font color='red'> " + ApplicationProperties.getValue("errors.executeQuery.genericmessage") + "</font></li>";
+				 break;
+			 case DAO_EXCEPTION :
+				 errorMessage = "<li><font color='red'> " + ApplicationProperties.getValue("errors.upgradequery.message") + "</font></li>";
 				 break;
 			 case RESULTS_MORE_THAN_LIMIT :
 				 errorMessage = Constants.TREE_NODE_LIMIT_EXCEEDED_RECORDS;
