@@ -529,11 +529,11 @@
 			<fileset dir="${base.dir}/catissuecore-properties" />
 		</copy>
 
-		<copy file="dbunitbuild.xml" todir="${zip.dir}" overwrite="true" />
+		<!--copy file="dbunitbuild.xml" todir="${zip.dir}" overwrite="true" />
 		<copy file="CDEConfig.xml" todir="${zip.dir}" overwrite="true" />
 		<copy todir="${zip.dir}/caTissueSuite_dbunit" overwrite="true">
 					<fileset dir="${base.dir}/caTissueSuite_dbunit" />
-		</copy>
+		</copy -->
 
 		<copy todir="${zip.dir}/lib" overwrite="true">
 			<fileset file="${base.dir}/extra_lib/ant-contrib.jar" />
