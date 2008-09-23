@@ -1749,7 +1749,7 @@ public class FlexInterface
 		if (cpId != null && pId != null)
 		{
 			SpecimenCollectionGroupBizLogic bizLogic = new SpecimenCollectionGroupBizLogic();
-			CollectionProtocolRegistration cpr = bizLogic.chkParticipantRegisteredToCP(new Long(pId), new Long(cpId),edu.wustl.catissuecore.util.global.Constants.ARM_CP_TYPE);
+			CollectionProtocolRegistration cpr = bizLogic.chkParticipantRegisteredToCP(new Long(pId), new Long(cpId));
 			if (cpr == null)
 			{
 				Long parentCPId = null;

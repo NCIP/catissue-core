@@ -1341,34 +1341,35 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		long startTime = System.currentTimeMillis();
 		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
 		try
+		{	
+			
+			offsetForCPOrEvent = null;
+		Logger.out.debug("Start of getSCGTreeForCPBasedView");
+
+		Date regDate = null;
+		Integer offset = null;
+		String hql1 = "select cpr.registrationDate,cpr.offset from " + CollectionProtocolRegistration.class.getName()
+				+ " as cpr where cpr.collectionProtocol.id = " + cpId.toString() + " and cpr.participant.id = " + participantId.toString();
+		List list = executeQuery(hql1);
+		if (list != null && list.size() > 0)
 		{
-			dao.openSession(null);
-			Date regDate = null;
-			Integer offset = null;
-			CollectionProtocolRegistration cpr = null;
-			Logger.out.debug("Start of getSCGTreeForCPBasedView");
-			String hql1 = "select cpr.id,cpr.registrationDate,cpr.offset from " + CollectionProtocolRegistration.class.getName()
-					+ " as cpr where cpr.collectionProtocol.id = " + cpId.toString() + " and cpr.participant.id = " + participantId.toString();
-			List list = executeQuery(hql1);
-			if (list != null && list.size() > 0)
-			{
-				Object[] obj = (Object[]) list.get(0);
-				cpr = new CollectionProtocolRegistration();
-				cpr.setId((Long) obj[0]);
-				cpr.setRegistrationDate((Date) obj[1]);
-				cpr.setOffset((Integer) obj[2]);
+			Object[] obj = (Object[]) list.get(0);
+			regDate = (Date) obj[0];
+			offset = (Integer) obj[1];
 
-			}
-
-			StringBuffer xmlString = new StringBuffer();
-			xmlString.append("<node>");
-			childCPtree(xmlString, participantId, cpr, cpId);
-			xmlString.append("</node>");
-
-			long endTime = System.currentTimeMillis();
-			Logger.out.info("EXECUTE TIME FOR RETRIEVE IN EDIT FOR DB (SpecimenCollectionGroupBizlogic)-  : " + (endTime - startTime));
-			return xmlString.toString();
 		}
+		offsetForCPOrEvent = offset;
+		// creating XML String rep of SCGs,specimens & child specimens ::Addded
+		// by baljeet
+		StringBuffer xmlString = new StringBuffer();
+
+		xmlString.append("<node>");
+
+		childCPtree(xmlString, cpId, participantId, regDate,offsetForCPOrEvent);
+		xmlString.append("</node>");
+		long endTime = System.currentTimeMillis();
+			Logger.out.info("EXECUTE TIME FOR RETRIEVE IN EDIT FOR DB (SpecimenCollectionGroupBizlogic)-  : " + (endTime - startTime));
+		return xmlString.toString();}
 		catch (DAOException e)
 		{
 			Logger.out.error(e.getMessage(), e);
@@ -1397,11 +1398,10 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	 * @throws DAOException
 	 * @throws ClassNotFoundException
 	 */
-	public void childCPtree(StringBuffer xmlString, Long participantId, CollectionProtocolRegistration collectionProtocolRegistration, Long cpId)
-			throws DAOException, ClassNotFoundException
+	public void childCPtree(StringBuffer xmlString, Long cpId, Long participantId, Date regDate, Integer parentOffset) throws DAOException, ClassNotFoundException	
 	{
 		//done
-		Date evtLastDate = SCGTreeFrCPBasedView(xmlString, collectionProtocolRegistration);
+		Date evtLastDate = SCGTreeForCPBasedView(xmlString, cpId, participantId, regDate,parentOffset);
 
 		String hql = "select  cp." + Constants.CHILD_COLLECTION_PROTOCOL_COLLECTION + " from " + CollectionProtocol.class.getName()
 				+ " as cp where cp.id= " + cpId.toString();
@@ -1417,8 +1417,9 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 				CollectionProtocol colProt = (CollectionProtocol) cpchildList.get(count);
 
 				String dispName = colProt.getShortTitle();
-				Date participantRegDate = getPartRegDateForCP(colProt, participantId, collectionProtocolRegistration.getRegistrationDate(),
-						evtLastDate, collectionProtocolRegistration.getOffset());
+				
+				Date participantRegDate = getPartRegDateForCP(colProt, participantId, regDate, evtLastDate,parentOffset);
+				
 				String anticipatoryDate = "";
 				if (participantRegDate != null)
 				{
@@ -1427,7 +1428,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 					dispName = colProt.getShortTitle() + ":" + anticipatoryDate;
 
 				}
-				CollectionProtocolRegistration cpr = getCollectionProtocolReg(colProt, participantId);
+				CollectionProtocolRegistration cpr = chkParticipantRegisteredToCP(participantId, colProt.getId());
 				String participantRegStatus = "Pending";
 				if (cpr != null)
 					participantRegStatus = "Registered";
@@ -1440,7 +1441,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 					if (cpr.getOffset() != null)
 						addOffset(cpr.getOffset());
 				}
-				childCPtree(xmlString, participantId, collectionProtocolRegistration, colProt.getId());
+				childCPtree(xmlString, colProt.getId(), participantId, participantRegDate,offsetForCPOrEvent);
 				xmlString.append("</node>");
 			}
 
@@ -1460,16 +1461,16 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	 * @throws DAOException
 	 * @throws ClassNotFoundException
 	 */
-	public Date SCGTreeFrCPBasedView(StringBuffer xmlString, CollectionProtocolRegistration collectionProtocolRegistration) throws DAOException,
-			ClassNotFoundException
-	{
-		/** 
+	public Date SCGTreeForCPBasedView(StringBuffer xmlString, Long cpId, Long participantId, Date regDate,Integer parentOffset) throws DAOException,
+	ClassNotFoundException
+{
+		/**  
 		 * replaced get SCGColelction call with HQL.  
 		 */
 		String hql = "select scg.id,scg.name,scg.activityStatus,scg.collectionStatus,scg.offset,"
 				+ "scg.collectionProtocolEvent.id,scg.collectionProtocolEvent.studyCalendarEventPoint,"
 				+ "scg.collectionProtocolEvent.collectionPointLabel from " + SpecimenCollectionGroup.class.getName()
-				+ " as scg where scg.collectionProtocolRegistration.id = " + collectionProtocolRegistration.getId() + " and scg.activityStatus <> '"
+				+ " as scg where scg.collectionProtocolRegistration.collectionProtocol.id = " + cpId.toString()+" and scg.collectionProtocolRegistration.participant.id = " +participantId.toString()+ " and scg.activityStatus <> '"
 				+ Constants.ACTIVITY_STATUS_DISABLED + "' order by scg.collectionProtocolEvent.studyCalendarEventPoint";
 
 		List list = executeQuery(hql);
@@ -1541,8 +1542,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 			if (scgList != null && !scgList.isEmpty())
 			{
 				eventLastDate = createTreeNodeForExistngSCG(xmlString, collectionProtocolEvent.getStudyCalendarEventPoint(), collectionProtocolEvent
-						.getCollectionPointLabel(), scgList, collectionProtocolRegistration.getRegistrationDate(), collectionProtocolRegistration
-						.getOffset());
+						.getCollectionPointLabel(), scgList, regDate, parentOffset);
 			}
 		}
 		return eventLastDate;
@@ -1554,7 +1554,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	 * @param participantId
 	 * @return
 	 */
-	private CollectionProtocolRegistration getCollectionProtocolReg(CollectionProtocol colProt, Long participantId)
+	 /*private CollectionProtocolRegistration getCollectionProtocolReg(CollectionProtocol colProt, Long participantId)
 	{
 		CollectionProtocolRegistration collectionProtocolRegistration = null;
 
@@ -1567,6 +1567,37 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 				return collectionProtocolRegistration;
 			}
 		}
+		return collectionProtocolRegistration;
+
+	}*/
+	private CollectionProtocolRegistration getCollectionProtocolReg(CollectionProtocol colProt, Long participantId) throws DAOException, ClassNotFoundException
+	{
+		CollectionProtocolRegistration collectionProtocolRegistration = null;
+		String hql = "select cpr.id,cpr.registrationDate from "+CollectionProtocolRegistration.class.getName()+" as cpr where cpr.collectionProtocol.id="+colProt.getId()+" and cpr.participant.id="+participantId.toString();
+		List list = executeQuery(hql);
+		if(list != null && !list.isEmpty())
+		{
+			collectionProtocolRegistration = new CollectionProtocolRegistration();
+			Object[] obj = (Object[])list.get(0);
+			collectionProtocolRegistration.setId((Long)obj[0]);
+			collectionProtocolRegistration.setRegistrationDate((Date)obj[1]);
+			
+			
+		}
+		
+		
+		/*if(colProt.getCollectionProtocolRegistrationCollection() != null && !colProt.getCollectionProtocolRegistrationCollection().isEmpty())
+		{
+		Iterator collectionProtocolRegistrationCollItr = colProt.getCollectionProtocolRegistrationCollection().iterator();
+		while (collectionProtocolRegistrationCollItr.hasNext())
+		{
+			collectionProtocolRegistration = (CollectionProtocolRegistration) collectionProtocolRegistrationCollItr.next();
+			if (collectionProtocolRegistration.getParticipant().getId().equals(participantId))
+			{
+				return collectionProtocolRegistration;
+			}
+		}
+		}*/
 		return collectionProtocolRegistration;
 
 	}
@@ -1589,8 +1620,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 
 		Double eventPoint = colProt.getStudyCalendarEventPoint();
 		CollectionProtocolRegistration cpr = getCollectionProtocolReg(colProt, participantId);
-
-		if (cpr == null)
+		 if (cpr == null)
 		{
 			if (colProt.getSequenceNumber() != null)
 			{
@@ -1621,6 +1651,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		}
 
 		return participantRegDate;
+		
 	}
 
 	/**
@@ -2156,7 +2187,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		return absScg;
 	}
 
-	public CollectionProtocolRegistration chkParticipantRegisteredToCP(Long participantId, Long collectionProtocolId, String type)
+	public CollectionProtocolRegistration chkParticipantRegisteredToCP(Long participantId, Long collectionProtocolId)
 			throws ClassNotFoundException, DAOException
 	{
 		//Date regDate = null;
