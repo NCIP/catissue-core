@@ -22,6 +22,7 @@ public class CaTissueTestSuite
 		suite.addTestSuite(SiteTestCases.class);
 		suite.addTestSuite(BioHazardTestCases.class);
 		suite.addTestSuite(CollectionProtocolTestCases.class);
+		//suite.addTestSuite(ComplexCollectionProtocolTestCases.class);
 		suite.addTestSuite(ParticipantTestCases.class);
 		suite.addTestSuite(SpecimenCollectGroupTestCases.class);
 		suite.addTestSuite(DistributionProtocolTestCases.class);

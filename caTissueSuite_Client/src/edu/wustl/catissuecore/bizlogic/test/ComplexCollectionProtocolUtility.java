@@ -25,11 +25,7 @@ public class ComplexCollectionProtocolUtility
 		CollectionProtocol collectionProtocol = createComplexCollectionProtocolObject();
 		return collectionProtocol;
 	}
-	public static CollectionProtocol initComplexCollectionProtocol1()
-	{
-		CollectionProtocol collectionProtocol = createComplexCollectionProtocolObject1();
-		return collectionProtocol;
-	}
+
 	
 	private static CollectionProtocol createComplexCollectionProtocolObject()
 	{
@@ -49,331 +45,7 @@ public class ComplexCollectionProtocolUtility
 		
 		
 	}
-	private static CollectionProtocol createComplexCollectionProtocolObject1()
-	{
-		CollectionProtocol collectionProtocol = new CollectionProtocol();
-	    collectionProtocol.setSequenceNumber(new Integer(0));
-	    collectionProtocol.setStudyCalendarEventPoint(new Double(0));
-		
-		String title = "ALL-1";
-		String shortTitle = "ALL-1";
-		collectionProtocol = setAttributesOfCP(collectionProtocol,title,shortTitle,"Parent",null);
-		
-		List specimenEventList = new ArrayList();
-		List studyCalEvtPointList = new ArrayList();
-		collectionProtocol = setCollectionProtocolEventList(collectionProtocol,specimenEventList,studyCalEvtPointList);
-		collectionProtocol = createParentChild1(collectionProtocol);
-		return collectionProtocol;
-		
-		
-	}
-	private static CollectionProtocol createParentChild1(CollectionProtocol collectionProtocol)
-	{
-		Collection childCPCollection = new LinkedHashSet();
-		
-		String title = null;
-		String shortTitle = null;
-		List specimenEventList = null;
-		List studyCalEvtPointList = null;
-		//Phase 1
-		CollectionProtocol phaseCP1 = new CollectionProtocol();
-		phaseCP1.setSequenceNumber(new Integer(0));
-		title = "Study Entry";
-		shortTitle = "Study Entry";
-		phaseCP1 = setAttributesOfCP(phaseCP1,title,shortTitle,"Phase","0");
-		specimenEventList = new ArrayList();
-		studyCalEvtPointList = new ArrayList();
-		phaseCP1 = setCollectionProtocolEventList(phaseCP1,specimenEventList,studyCalEvtPointList);
-		phaseCP1.setParentCollectionProtocol(collectionProtocol);
-		childCPCollection.add(phaseCP1);
-		
-		
-		Collection childPhse1Collection = new LinkedHashSet();
-		
-		CollectionProtocol arm1 = new CollectionProtocol();
-		arm1.setSequenceNumber(new Integer(0));
-		title = "DC Induction";
-		shortTitle = "DC Induction";
-		arm1 = setAttributesOfCP(arm1,title,shortTitle,"Arm","7");
-		specimenEventList = new ArrayList();
-		specimenEventList.add("Wk 1");
-		specimenEventList.add("Wk 2");
-		
-		studyCalEvtPointList = new ArrayList();
-		studyCalEvtPointList.add("5");
-		studyCalEvtPointList.add("6");
-		
-		arm1 = setCollectionProtocolEventList(arm1,specimenEventList,studyCalEvtPointList);
-		arm1.setParentCollectionProtocol(phaseCP1);
-		childPhse1Collection.add(arm1);
-		
-		CollectionProtocol arm2 = new CollectionProtocol();
-		arm2.setSequenceNumber(new Integer(0));
-		title = "DH Induction";
-		shortTitle = "DH Induction";
-		arm2 = setAttributesOfCP(arm2,title,shortTitle,"Arm","7");
-		specimenEventList = new ArrayList();
-		specimenEventList.add("Wk 1");
-		specimenEventList.add("Wk 2");
-		
-		studyCalEvtPointList = new ArrayList();
-		studyCalEvtPointList.add("12");
-		studyCalEvtPointList.add("13");
-		arm2 = setCollectionProtocolEventList(arm2,specimenEventList,studyCalEvtPointList);
-		arm2.setParentCollectionProtocol(phaseCP1);
-		childPhse1Collection.add(arm2);
-		
-		CollectionProtocol arm3 = new CollectionProtocol();
-		arm3.setSequenceNumber(new Integer(0));
-		title = "PC Induction";
-		shortTitle = "PC Induction";
-		arm3 = setAttributesOfCP(arm3,title,shortTitle,"Arm","7");
-		specimenEventList = new ArrayList();
-		specimenEventList.add("Wk 1");
-		specimenEventList.add("Wk 2");
-		
-		studyCalEvtPointList = new ArrayList();
-		studyCalEvtPointList.add("12");
-		studyCalEvtPointList.add("16");
-		arm3 = setCollectionProtocolEventList(arm3,specimenEventList,studyCalEvtPointList);
-		arm3.setParentCollectionProtocol(phaseCP1);
-		childPhse1Collection.add(arm3);
-		
-		
-		CollectionProtocol arm4 = new CollectionProtocol();
-		arm4.setSequenceNumber(new Integer(0));
-		title = "PH Induction";
-		shortTitle = "PH Induction";
-		arm4 = setAttributesOfCP(arm4,title,shortTitle,"Arm","7");
-		specimenEventList = new ArrayList();
-		specimenEventList.add("Wk 1");
-		specimenEventList.add("Wk 2");
-		
-		studyCalEvtPointList = new ArrayList();
-		studyCalEvtPointList.add("12");
-		studyCalEvtPointList.add("16");
-		arm4 = setCollectionProtocolEventList(arm4,specimenEventList,studyCalEvtPointList);
-		arm4.setParentCollectionProtocol(phaseCP1);
-		childPhse1Collection.add(arm4);
-		
-		CollectionProtocol phaseCP2 = new CollectionProtocol();
-		phaseCP2.setSequenceNumber(new Integer(1));
-		title = "Evaluation";
-		shortTitle = "Evaluation";
-		phaseCP2 = setAttributesOfCP(phaseCP2,title,shortTitle,"Phase","7");
-		specimenEventList = new ArrayList();
-		studyCalEvtPointList = new ArrayList();
-		phaseCP2 = setCollectionProtocolEventList(phaseCP2,specimenEventList,studyCalEvtPointList);
-		phaseCP2.setParentCollectionProtocol(collectionProtocol);
-		childCPCollection.add(phaseCP2);
-
-		Collection childPhse2Collection = new LinkedHashSet();
-			
-			CollectionProtocol arm21 = new CollectionProtocol();
-			arm21.setSequenceNumber(new Integer(0));
-			title = "Negative D29 NO MLL RER";
-			shortTitle = "Negative D29 NO MLL RER";
-			arm21 = setAttributesOfCP(arm21,title,shortTitle,"Arm","7");
-			specimenEventList = new ArrayList();
-			specimenEventList.add("Wk 1");
-			specimenEventList.add("Wk 3");
-			specimenEventList.add("Wk 4");
-			studyCalEvtPointList = new ArrayList();
-			studyCalEvtPointList.add("5");
-			studyCalEvtPointList.add("6");
-			studyCalEvtPointList.add("7");
-			arm21 = setCollectionProtocolEventList(arm21,specimenEventList,studyCalEvtPointList);
-			arm21.setParentCollectionProtocol(phaseCP2);
-			childPhse2Collection.add(arm21);
-			
-			CollectionProtocol arm22 = new CollectionProtocol();
-			arm22.setSequenceNumber(new Integer(0));
-			title = "Negative D29 YES MLL RER";
-			shortTitle = "Negative D29 YES MLL RER";
-			arm22 = setAttributesOfCP(arm22,title,shortTitle,"Arm","7");
-			specimenEventList = new ArrayList();
-			specimenEventList.add("Wk 1");
-			specimenEventList.add("Wk 4");
-			specimenEventList.add("Wk 5");
-			studyCalEvtPointList = new ArrayList();
-			studyCalEvtPointList.add("12");
-			studyCalEvtPointList.add("13");
-			studyCalEvtPointList.add("14");
-			arm22 = setCollectionProtocolEventList(arm22,specimenEventList,studyCalEvtPointList);
-			arm22.setParentCollectionProtocol(phaseCP2);
-			childPhse2Collection.add(arm22);
-			
-			CollectionProtocol arm23 = new CollectionProtocol();
-			arm23.setSequenceNumber(new Integer(0));
-			title = "Positive D29 NO MLL RER";
-			shortTitle = "Positive D29 NO MLL RER";
-			arm23 = setAttributesOfCP(arm23,title,shortTitle,"Arm","7");
-			specimenEventList = new ArrayList();
-			specimenEventList.add("Wk 1");
-			specimenEventList.add("Wk 4");
-			specimenEventList.add("Wk 5");
-			studyCalEvtPointList = new ArrayList();
-			studyCalEvtPointList.add("12");
-			studyCalEvtPointList.add("16");
-			studyCalEvtPointList.add("17");
-			arm23 = setCollectionProtocolEventList(arm23,specimenEventList,studyCalEvtPointList);
-			arm23.setParentCollectionProtocol(phaseCP2);
-			childPhse2Collection.add(arm23);
-			
-			
-			
-		CollectionProtocol phaseCP3 = new CollectionProtocol();
-		phaseCP3.setSequenceNumber(new Integer(2));
-		title = "Consolidation";
-		shortTitle = "Consolidation";
-		phaseCP3 = setAttributesOfCP(phaseCP3,title,shortTitle,"Phase","27");
-		specimenEventList = new ArrayList();
-		specimenEventList.add("Wk 1");
-		specimenEventList.add("Wk 6");
-		specimenEventList.add("Wk 7");
-		specimenEventList.add("Wk 10");
-		studyCalEvtPointList = new ArrayList();
-		studyCalEvtPointList.add("3");
-		studyCalEvtPointList.add("6");
-		studyCalEvtPointList.add("9");
-		studyCalEvtPointList.add("10");
-		phaseCP3 = setCollectionProtocolEventList(phaseCP3,specimenEventList,studyCalEvtPointList);
-		phaseCP3.setParentCollectionProtocol(collectionProtocol);
-		childCPCollection.add(phaseCP3);	
-		
-		CollectionProtocol phaseCP4 = new CollectionProtocol();
-		phaseCP4.setSequenceNumber(new Integer(3));
-		title = "Interim Maintainance";
-		shortTitle = "Interim Maintainance";
-		phaseCP4 = setAttributesOfCP(phaseCP4,title,shortTitle,"Phase","30");
-		specimenEventList = new ArrayList();
-		specimenEventList.add("Wk 11");
-		specimenEventList.add("Wk 12");
-		specimenEventList.add("Wk 13");
-		specimenEventList.add("Wk 14");
-		specimenEventList.add("Wk 15");
-		studyCalEvtPointList = new ArrayList();
-		studyCalEvtPointList.add("2");
-		studyCalEvtPointList.add("3");
-		studyCalEvtPointList.add("4");
-		studyCalEvtPointList.add("5");
-		studyCalEvtPointList.add("6");
-		
-		phaseCP4 = setCollectionProtocolEventList(phaseCP4,specimenEventList,studyCalEvtPointList);
-		phaseCP4.setParentCollectionProtocol(collectionProtocol);
-		childCPCollection.add(phaseCP4);
-		
-		
-		CollectionProtocol phaseCP5 = new CollectionProtocol();
-		phaseCP5.setSequenceNumber(new Integer(4));
-		title = "Treatment";
-		shortTitle = "Treatment";
-		phaseCP5 = setAttributesOfCP(phaseCP5,title,shortTitle,"Phase","30");
-		specimenEventList = new ArrayList();
-		studyCalEvtPointList = new ArrayList();
-		phaseCP5 = setCollectionProtocolEventList(phaseCP5,specimenEventList,studyCalEvtPointList);
-		phaseCP5.setParentCollectionProtocol(collectionProtocol);
-		childCPCollection.add(phaseCP5);
-		
-		Collection childPhse5Collection = new LinkedHashSet();
-		
-		CollectionProtocol arm51 = new CollectionProtocol();
-		arm51.setSequenceNumber(new Integer(0));
-		title = "Capizzi";
-		shortTitle = "Capizzi";
-		arm51 = setAttributesOfCP(arm51,title,shortTitle,"Arm","7");
-		specimenEventList = new ArrayList();
-		specimenEventList.add("Wk 1");
-		specimenEventList.add("Wk 2");
-		specimenEventList.add("Wk 3");
-		specimenEventList.add("Wk 4");
-		studyCalEvtPointList = new ArrayList();
-		studyCalEvtPointList.add("1");
-		studyCalEvtPointList.add("2");
-		studyCalEvtPointList.add("3");
-		studyCalEvtPointList.add("4");
-		arm51 = setCollectionProtocolEventList(arm51,specimenEventList,studyCalEvtPointList);
-		arm51.setParentCollectionProtocol(phaseCP5);
-		childPhse5Collection.add(arm51);
-		
-		CollectionProtocol arm52 = new CollectionProtocol();
-		arm52.setSequenceNumber(new Integer(0));
-		title = "HD";
-		shortTitle = "HD";
-		arm52 = setAttributesOfCP(arm52,title,shortTitle,"Arm","7");
-		specimenEventList = new ArrayList();
-		specimenEventList.add("Wk 1");
-		specimenEventList.add("Wk 2");
-		specimenEventList.add("Wk 3");
-		specimenEventList.add("Wk 4");
-		studyCalEvtPointList = new ArrayList();
-		studyCalEvtPointList.add("1");
-		studyCalEvtPointList.add("2");
-		studyCalEvtPointList.add("3");
-		studyCalEvtPointList.add("4");
-		arm52 = setCollectionProtocolEventList(arm52,specimenEventList,studyCalEvtPointList);
-		arm52.setParentCollectionProtocol(phaseCP5);
-		childPhse5Collection.add(arm52);
-		
-		
-		
-		CollectionProtocol phaseCP6 = new CollectionProtocol();
-		phaseCP6.setSequenceNumber(new Integer(5));
-		title = "Delayed Intensification";
-		shortTitle = "Delayed Intensification";
-		phaseCP6 = setAttributesOfCP(phaseCP6,title,shortTitle,"Phase","30");
-		specimenEventList = new ArrayList();
-		specimenEventList.add("Wk 1");
-		specimenEventList.add("Wk 5");
-		specimenEventList.add("Wk 10");
-		specimenEventList.add("Wk 15");
-		studyCalEvtPointList = new ArrayList();
-		studyCalEvtPointList.add("2");
-		studyCalEvtPointList.add("3");
-		studyCalEvtPointList.add("4");
-		studyCalEvtPointList.add("5");
-				
-		phaseCP6 = setCollectionProtocolEventList(phaseCP6,specimenEventList,studyCalEvtPointList);
-		phaseCP6.setParentCollectionProtocol(collectionProtocol);
-		childCPCollection.add(phaseCP6);
-		
-		
-		
-		CollectionProtocol phaseCP7 = new CollectionProtocol();
-		phaseCP7.setSequenceNumber(null);
-		title = "POST";
-		shortTitle = "POST";
-		phaseCP7 = setAttributesOfCP(phaseCP7,title,shortTitle,"Phase","30");
-		specimenEventList = new ArrayList();
-		specimenEventList.add("Wk 1");
-		specimenEventList.add("Wk 5");
-		specimenEventList.add("Wk 10");
-		specimenEventList.add("Wk 15");
-		studyCalEvtPointList = new ArrayList();
-		studyCalEvtPointList.add("2");
-		studyCalEvtPointList.add("3");
-		studyCalEvtPointList.add("4");
-		studyCalEvtPointList.add("5");
-				
-		phaseCP7 = setCollectionProtocolEventList(phaseCP7,specimenEventList,studyCalEvtPointList);
-		phaseCP7.setParentCollectionProtocol(collectionProtocol);
-		childCPCollection.add(phaseCP7);
-		
-		
-		
-		
-		
-		
-		
-		
-		phaseCP1.setChildCollectionProtocolCollection(childPhse1Collection);
-		phaseCP2.setChildCollectionProtocolCollection(childPhse2Collection);
-		phaseCP5.setChildCollectionProtocolCollection(childPhse5Collection);
-		collectionProtocol.setChildCollectionProtocolCollection(childCPCollection);
-		return collectionProtocol;
-	}
-	
-	private static CollectionProtocol createParentChild(CollectionProtocol collectionProtocol)
+		private static CollectionProtocol createParentChild(CollectionProtocol collectionProtocol)
 	{
 		Collection childCPCollection = new LinkedHashSet();
 		
@@ -769,13 +441,17 @@ public class ComplexCollectionProtocolUtility
 		collectionProtocolEvent.setStudyCalendarEventPoint(new Double(studyCalEvtPoint));
 		collectionProtocolEvent.setCollectionPointLabel(collectionPointLabel);
 		collectionProtocolEvent.setClinicalStatus("Operative");		
+		//SpecimenCollectionRequirementGroup specimenCollectionRequirementGroup = new SpecimenCollectionRequirementGroup();
+		//specimenCollectionRequirementGroup.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+		//specimenCollectionRequirementGroup.setClinicalDiagnosis("Abdominal fibromatosis");
+		//specimenCollectionRequirementGroup.setClinicalStatus("Operative");
+		//collectionProtocolEvent.setRequiredCollectionSpecimenGroup(specimenCollectionRequirementGroup);
 		collectionProtocolEvent.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
 		collectionProtocolEvent.setClinicalDiagnosis("Abdominal fibromatosis");
-
+		collectionProtocolEvent.setClinicalStatus("Operative");
 		Collection specimenCollection =null;
 		CollectionProtocolEventBean cpEventBean = new CollectionProtocolEventBean();
 		SpecimenRequirementBean specimenRequirementBean = createSpecimenBean();
-		
 		cpEventBean.addSpecimenRequirementBean(specimenRequirementBean);
 		Map specimenMap =(Map)cpEventBean.getSpecimenRequirementbeanMap();
 		if (specimenMap!=null && !specimenMap.isEmpty())
@@ -785,6 +461,7 @@ public class ComplexCollectionProtocolUtility
 					,null, collectionProtocolEvent);	
 		}
 		collectionProtocolEvent.setSpecimenRequirementCollection(specimenCollection);
+	
 	}
 	
 	private static SpecimenRequirementBean createSpecimenBean()
@@ -885,4 +562,334 @@ public class ComplexCollectionProtocolUtility
 		return consentTierColl;
 		
 	}
+	public static CollectionProtocol initComplexCollectionProtocol1()
+	{
+		CollectionProtocol collectionProtocol = createComplexCollectionProtocolObject1();
+		return collectionProtocol;
+	}
+	private static CollectionProtocol createComplexCollectionProtocolObject1()
+	{
+		CollectionProtocol collectionProtocol = new CollectionProtocol();
+	    collectionProtocol.setSequenceNumber(new Integer(0));
+	    collectionProtocol.setStudyCalendarEventPoint(new Double(0));
+		
+		String title = "ALL-1";
+		String shortTitle = "ALL-1";
+		collectionProtocol = setAttributesOfCP(collectionProtocol,title,shortTitle,"Parent",null);
+		
+		List specimenEventList = new ArrayList();
+		List studyCalEvtPointList = new ArrayList();
+		collectionProtocol = setCollectionProtocolEventList(collectionProtocol,specimenEventList,studyCalEvtPointList);
+		collectionProtocol = createParentChild1(collectionProtocol);
+		return collectionProtocol;
+		
+		
+	}
+	private static CollectionProtocol createParentChild1(CollectionProtocol collectionProtocol)
+	{
+		Collection childCPCollection = new LinkedHashSet();
+		
+		String title = null;
+		String shortTitle = null;
+		List specimenEventList = null;
+		List studyCalEvtPointList = null;
+		//Phase 1
+		CollectionProtocol phaseCP1 = new CollectionProtocol();
+		phaseCP1.setSequenceNumber(new Integer(0));
+		title = "Study Entry";
+		shortTitle = "Study Entry";
+		phaseCP1 = setAttributesOfCP(phaseCP1,title,shortTitle,"Phase","0");
+		specimenEventList = new ArrayList();
+		studyCalEvtPointList = new ArrayList();
+		phaseCP1 = setCollectionProtocolEventList(phaseCP1,specimenEventList,studyCalEvtPointList);
+		phaseCP1.setParentCollectionProtocol(collectionProtocol);
+		childCPCollection.add(phaseCP1);
+		
+		
+		Collection childPhse1Collection = new LinkedHashSet();
+		
+		CollectionProtocol arm1 = new CollectionProtocol();
+		arm1.setSequenceNumber(new Integer(0));
+		title = "DC Induction";
+		shortTitle = "DC Induction";
+		arm1 = setAttributesOfCP(arm1,title,shortTitle,"Arm","7");
+		specimenEventList = new ArrayList();
+		specimenEventList.add("Wk 1");
+		specimenEventList.add("Wk 2");
+		
+		studyCalEvtPointList = new ArrayList();
+		studyCalEvtPointList.add("5");
+		studyCalEvtPointList.add("6");
+		
+		arm1 = setCollectionProtocolEventList(arm1,specimenEventList,studyCalEvtPointList);
+		arm1.setParentCollectionProtocol(phaseCP1);
+		childPhse1Collection.add(arm1);
+		
+		CollectionProtocol arm2 = new CollectionProtocol();
+		arm2.setSequenceNumber(new Integer(0));
+		title = "DH Induction";
+		shortTitle = "DH Induction";
+		arm2 = setAttributesOfCP(arm2,title,shortTitle,"Arm","7");
+		specimenEventList = new ArrayList();
+		specimenEventList.add("Wk 1");
+		specimenEventList.add("Wk 2");
+		
+		studyCalEvtPointList = new ArrayList();
+		studyCalEvtPointList.add("12");
+		studyCalEvtPointList.add("13");
+		arm2 = setCollectionProtocolEventList(arm2,specimenEventList,studyCalEvtPointList);
+		arm2.setParentCollectionProtocol(phaseCP1);
+		childPhse1Collection.add(arm2);
+		
+		CollectionProtocol arm3 = new CollectionProtocol();
+		arm3.setSequenceNumber(new Integer(0));
+		title = "PC Induction";
+		shortTitle = "PC Induction";
+		arm3 = setAttributesOfCP(arm3,title,shortTitle,"Arm","7");
+		specimenEventList = new ArrayList();
+		specimenEventList.add("Wk 1");
+		specimenEventList.add("Wk 2");
+		
+		studyCalEvtPointList = new ArrayList();
+		studyCalEvtPointList.add("12");
+		studyCalEvtPointList.add("16");
+		arm3 = setCollectionProtocolEventList(arm3,specimenEventList,studyCalEvtPointList);
+		arm3.setParentCollectionProtocol(phaseCP1);
+		childPhse1Collection.add(arm3);
+		
+		
+		CollectionProtocol arm4 = new CollectionProtocol();
+		arm4.setSequenceNumber(new Integer(0));
+		title = "PH Induction";
+		shortTitle = "PH Induction";
+		arm4 = setAttributesOfCP(arm4,title,shortTitle,"Arm","7");
+		specimenEventList = new ArrayList();
+		specimenEventList.add("Wk 1");
+		specimenEventList.add("Wk 2");
+		
+		studyCalEvtPointList = new ArrayList();
+		studyCalEvtPointList.add("12");
+		studyCalEvtPointList.add("16");
+		arm4 = setCollectionProtocolEventList(arm4,specimenEventList,studyCalEvtPointList);
+		arm4.setParentCollectionProtocol(phaseCP1);
+		childPhse1Collection.add(arm4);
+		
+		CollectionProtocol phaseCP2 = new CollectionProtocol();
+		phaseCP2.setSequenceNumber(new Integer(1));
+		title = "Evaluation";
+		shortTitle = "Evaluation";
+		phaseCP2 = setAttributesOfCP(phaseCP2,title,shortTitle,"Phase","7");
+		specimenEventList = new ArrayList();
+		studyCalEvtPointList = new ArrayList();
+		phaseCP2 = setCollectionProtocolEventList(phaseCP2,specimenEventList,studyCalEvtPointList);
+		phaseCP2.setParentCollectionProtocol(collectionProtocol);
+		childCPCollection.add(phaseCP2);
+
+		Collection childPhse2Collection = new LinkedHashSet();
+			
+			CollectionProtocol arm21 = new CollectionProtocol();
+			arm21.setSequenceNumber(new Integer(0));
+			title = "Negative D29 NO MLL RER";
+			shortTitle = "Negative D29 NO MLL RER";
+			arm21 = setAttributesOfCP(arm21,title,shortTitle,"Arm","7");
+			specimenEventList = new ArrayList();
+			specimenEventList.add("Wk 1");
+			specimenEventList.add("Wk 3");
+			specimenEventList.add("Wk 4");
+			studyCalEvtPointList = new ArrayList();
+			studyCalEvtPointList.add("5");
+			studyCalEvtPointList.add("6");
+			studyCalEvtPointList.add("7");
+			arm21 = setCollectionProtocolEventList(arm21,specimenEventList,studyCalEvtPointList);
+			arm21.setParentCollectionProtocol(phaseCP2);
+			childPhse2Collection.add(arm21);
+			
+			CollectionProtocol arm22 = new CollectionProtocol();
+			arm22.setSequenceNumber(new Integer(0));
+			title = "Negative D29 YES MLL RER";
+			shortTitle = "Negative D29 YES MLL RER";
+			arm22 = setAttributesOfCP(arm22,title,shortTitle,"Arm","7");
+			specimenEventList = new ArrayList();
+			specimenEventList.add("Wk 1");
+			specimenEventList.add("Wk 4");
+			specimenEventList.add("Wk 5");
+			studyCalEvtPointList = new ArrayList();
+			studyCalEvtPointList.add("12");
+			studyCalEvtPointList.add("13");
+			studyCalEvtPointList.add("14");
+			arm22 = setCollectionProtocolEventList(arm22,specimenEventList,studyCalEvtPointList);
+			arm22.setParentCollectionProtocol(phaseCP2);
+			childPhse2Collection.add(arm22);
+			
+			CollectionProtocol arm23 = new CollectionProtocol();
+			arm23.setSequenceNumber(new Integer(0));
+			title = "Positive D29 NO MLL RER";
+			shortTitle = "Positive D29 NO MLL RER";
+			arm23 = setAttributesOfCP(arm23,title,shortTitle,"Arm","7");
+			specimenEventList = new ArrayList();
+			specimenEventList.add("Wk 1");
+			specimenEventList.add("Wk 4");
+			specimenEventList.add("Wk 5");
+			studyCalEvtPointList = new ArrayList();
+			studyCalEvtPointList.add("12");
+			studyCalEvtPointList.add("16");
+			studyCalEvtPointList.add("17");
+			arm23 = setCollectionProtocolEventList(arm23,specimenEventList,studyCalEvtPointList);
+			arm23.setParentCollectionProtocol(phaseCP2);
+			childPhse2Collection.add(arm23);
+			
+			
+			
+		CollectionProtocol phaseCP3 = new CollectionProtocol();
+		phaseCP3.setSequenceNumber(new Integer(2));
+		title = "Consolidation";
+		shortTitle = "Consolidation";
+		phaseCP3 = setAttributesOfCP(phaseCP3,title,shortTitle,"Phase","27");
+		specimenEventList = new ArrayList();
+		specimenEventList.add("Wk 1");
+		specimenEventList.add("Wk 6");
+		specimenEventList.add("Wk 7");
+		specimenEventList.add("Wk 10");
+		studyCalEvtPointList = new ArrayList();
+		studyCalEvtPointList.add("3");
+		studyCalEvtPointList.add("6");
+		studyCalEvtPointList.add("9");
+		studyCalEvtPointList.add("10");
+		phaseCP3 = setCollectionProtocolEventList(phaseCP3,specimenEventList,studyCalEvtPointList);
+		phaseCP3.setParentCollectionProtocol(collectionProtocol);
+		childCPCollection.add(phaseCP3);	
+		
+		CollectionProtocol phaseCP4 = new CollectionProtocol();
+		phaseCP4.setSequenceNumber(new Integer(3));
+		title = "Interim Maintainance";
+		shortTitle = "Interim Maintainance";
+		phaseCP4 = setAttributesOfCP(phaseCP4,title,shortTitle,"Phase","30");
+		specimenEventList = new ArrayList();
+		specimenEventList.add("Wk 11");
+		specimenEventList.add("Wk 12");
+		specimenEventList.add("Wk 13");
+		specimenEventList.add("Wk 14");
+		specimenEventList.add("Wk 15");
+		studyCalEvtPointList = new ArrayList();
+		studyCalEvtPointList.add("2");
+		studyCalEvtPointList.add("3");
+		studyCalEvtPointList.add("4");
+		studyCalEvtPointList.add("5");
+		studyCalEvtPointList.add("6");
+		
+		phaseCP4 = setCollectionProtocolEventList(phaseCP4,specimenEventList,studyCalEvtPointList);
+		phaseCP4.setParentCollectionProtocol(collectionProtocol);
+		childCPCollection.add(phaseCP4);
+		
+		
+		CollectionProtocol phaseCP5 = new CollectionProtocol();
+		phaseCP5.setSequenceNumber(new Integer(4));
+		title = "Treatment";
+		shortTitle = "Treatment";
+		phaseCP5 = setAttributesOfCP(phaseCP5,title,shortTitle,"Phase","30");
+		specimenEventList = new ArrayList();
+		studyCalEvtPointList = new ArrayList();
+		phaseCP5 = setCollectionProtocolEventList(phaseCP5,specimenEventList,studyCalEvtPointList);
+		phaseCP5.setParentCollectionProtocol(collectionProtocol);
+		childCPCollection.add(phaseCP5);
+		
+		Collection childPhse5Collection = new LinkedHashSet();
+		
+		CollectionProtocol arm51 = new CollectionProtocol();
+		arm51.setSequenceNumber(new Integer(0));
+		title = "Capizzi";
+		shortTitle = "Capizzi";
+		arm51 = setAttributesOfCP(arm51,title,shortTitle,"Arm","7");
+		specimenEventList = new ArrayList();
+		specimenEventList.add("Wk 1");
+		specimenEventList.add("Wk 2");
+		specimenEventList.add("Wk 3");
+		specimenEventList.add("Wk 4");
+		studyCalEvtPointList = new ArrayList();
+		studyCalEvtPointList.add("1");
+		studyCalEvtPointList.add("2");
+		studyCalEvtPointList.add("3");
+		studyCalEvtPointList.add("4");
+		arm51 = setCollectionProtocolEventList(arm51,specimenEventList,studyCalEvtPointList);
+		arm51.setParentCollectionProtocol(phaseCP5);
+		childPhse5Collection.add(arm51);
+		
+		CollectionProtocol arm52 = new CollectionProtocol();
+		arm52.setSequenceNumber(new Integer(0));
+		title = "HD";
+		shortTitle = "HD";
+		arm52 = setAttributesOfCP(arm52,title,shortTitle,"Arm","7");
+		specimenEventList = new ArrayList();
+		specimenEventList.add("Wk 1");
+		specimenEventList.add("Wk 2");
+		specimenEventList.add("Wk 3");
+		specimenEventList.add("Wk 4");
+		studyCalEvtPointList = new ArrayList();
+		studyCalEvtPointList.add("1");
+		studyCalEvtPointList.add("2");
+		studyCalEvtPointList.add("3");
+		studyCalEvtPointList.add("4");
+		arm52 = setCollectionProtocolEventList(arm52,specimenEventList,studyCalEvtPointList);
+		arm52.setParentCollectionProtocol(phaseCP5);
+		childPhse5Collection.add(arm52);
+		
+		
+		
+		CollectionProtocol phaseCP6 = new CollectionProtocol();
+		phaseCP6.setSequenceNumber(new Integer(5));
+		title = "Delayed Intensification";
+		shortTitle = "Delayed Intensification";
+		phaseCP6 = setAttributesOfCP(phaseCP6,title,shortTitle,"Phase","30");
+		specimenEventList = new ArrayList();
+		specimenEventList.add("Wk 1");
+		specimenEventList.add("Wk 5");
+		specimenEventList.add("Wk 10");
+		specimenEventList.add("Wk 15");
+		studyCalEvtPointList = new ArrayList();
+		studyCalEvtPointList.add("2");
+		studyCalEvtPointList.add("3");
+		studyCalEvtPointList.add("4");
+		studyCalEvtPointList.add("5");
+				
+		phaseCP6 = setCollectionProtocolEventList(phaseCP6,specimenEventList,studyCalEvtPointList);
+		phaseCP6.setParentCollectionProtocol(collectionProtocol);
+		childCPCollection.add(phaseCP6);
+		
+		
+		
+		CollectionProtocol phaseCP7 = new CollectionProtocol();
+		phaseCP7.setSequenceNumber(null);
+		title = "POST";
+		shortTitle = "POST";
+		phaseCP7 = setAttributesOfCP(phaseCP7,title,shortTitle,"Phase","30");
+		specimenEventList = new ArrayList();
+		specimenEventList.add("Wk 1");
+		specimenEventList.add("Wk 5");
+		specimenEventList.add("Wk 10");
+		specimenEventList.add("Wk 15");
+		studyCalEvtPointList = new ArrayList();
+		studyCalEvtPointList.add("2");
+		studyCalEvtPointList.add("3");
+		studyCalEvtPointList.add("4");
+		studyCalEvtPointList.add("5");
+				
+		phaseCP7 = setCollectionProtocolEventList(phaseCP7,specimenEventList,studyCalEvtPointList);
+		phaseCP7.setParentCollectionProtocol(collectionProtocol);
+		childCPCollection.add(phaseCP7);
+		
+		
+		
+		
+		
+		
+		
+		
+		phaseCP1.setChildCollectionProtocolCollection(childPhse1Collection);
+		phaseCP2.setChildCollectionProtocolCollection(childPhse2Collection);
+		phaseCP5.setChildCollectionProtocolCollection(childPhse5Collection);
+		collectionProtocol.setChildCollectionProtocolCollection(childCPCollection);
+		return collectionProtocol;
+	}
+	
+
 }
