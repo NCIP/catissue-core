@@ -657,13 +657,10 @@ INSERT INTO CATISSUE_PERMISSIBLE_VALUE (IDENTIFIER, VALUE, PARENT_IDENTIFIER, PU
 
 /* to remove unnecessary protection elements */
 delete  
-
 FROM csm_protection_element
-
 WHERE regexp_like(object_id,   '_[[:digit:]]')
-
-      AND NOT regexp_like(object_id,   'Site_[[:digit:]]')
-      AND NOT regexp_like(object_id,   'CollectionProtocol_[[:digit:]]')
-      AND NOT regexp_like(object_id,   'User_[[:digit:]]')
-      AND NOT regexp_like(object_id,   'StorageContainer_[[:digit:]]');
+   AND NOT regexp_like(object_id,   'Site_[[:digit:]]')
+   AND NOT regexp_like(object_id,   'CollectionProtocol_[[:digit:]]')
+   AND NOT regexp_like(object_id,   'User_[[:digit:]]')
+   AND NOT regexp_like(object_id,   'StorageContainer_[[:digit:]]');
 
