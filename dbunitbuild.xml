@@ -14,9 +14,9 @@
 	<property name="db_lib.dir" value="${db_unit.dir}/lib" />
 	<property name="base.dir" value="." />
 	<property name="tmp.catissuewar" value="${base.dir}/tempwardir" />
-	<property name="lib.dir" value="${tmp.catissuewar}/WEB-INF/lib" />
+	<property name="web_lib.dir" value="${tmp.catissuewar}/WEB-INF/lib" />
 
-	<target name="init" depends = "clean">
+	<target name="dbinit">
 		<delete dir="${db_unit.dir}/Build_Report"/>
 		<mkdir dir="${db_temp.dir}"/>
 		<mkdir dir="${db_temp.dir}/Nightly_Build_Report"/>
@@ -34,7 +34,7 @@
 		</if>
 	</target>
 	
-	<target name="clean">
+	<target name="dbclean">
 		<deltree dir="${db_temp.dir}"/>
 		<!-- deltree dir="${tmp.catissuewar}"/ -->
 		<delete  >
@@ -52,7 +52,7 @@
 		
 		<javac destdir="${db_temp.dir}/suite" srcdir="${base.dir}/WEB-INF/src" includes="**/*.java">
 			<classpath>
-				<fileset dir="${lib.dir}">
+				<fileset dir="${web_lib.dir}">
 					<include name="*.jar"/>
 				</fileset>
 			</classpath>
@@ -82,7 +82,7 @@
 
 	</target -->	
 
-	<target name="db_compile" depends="init">
+	<target name="db_compile">
 
 		<delete file="${db_lib.dir}/catissue.jar"/>
 		<jar destfile="${db_lib.dir}/catissue.jar" duplicate="preserve">
@@ -96,7 +96,7 @@
 
 		<javac destdir="${db_temp.dir}" srcdir="${db_src.dir}" includes="**/*">
 			<classpath id="DbUnit_classpath2">
-				<fileset dir="${lib.dir}">
+				<fileset dir="${web_lib.dir}">
 					<include name="*.jar"/>
 				</fileset>
 					
@@ -120,8 +120,8 @@
 	
 	<target name ="clean_db">
 		<sql driver="${database.driver}" password="${database.password}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}">
-			<classpath path="${lib.dir}/mysql*.jar" > 
-				<fileset dir="${lib.dir}">
+			<classpath path="${web_lib.dir}/mysql*.jar" > 
+				<fileset dir="${web_lib.dir}">
 					<include name="*.jar"/>
 				</fileset> 
 			</classpath>
@@ -138,7 +138,7 @@
 		</antcall>
 	</target>
 	
-	<target name="RundbUnit" depends="configure_properties" >
+	<target name="RundbUnit" depends="dbclean, dbinit, configure_properties" >
 		<antcall target="runJUnit">
 			<param name="classNames" value="**/MSRMigrationTestCases.java" />
 		</antcall>
@@ -204,7 +204,7 @@
 		<junit printsummary="yes" haltonfailure="yes">
 			  <formatter type="xml"/>
 			<classpath>
-				<fileset dir="${lib.dir}">
+				<fileset dir="${web_lib.dir}">
 					<include name="*.jar"/>
 				</fileset>
 
