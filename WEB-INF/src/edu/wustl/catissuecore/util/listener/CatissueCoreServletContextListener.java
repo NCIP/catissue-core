@@ -1,5 +1,5 @@
 /*
- * $Name: 1.41.2.33 $
+ * $Name: 1.41.2.34 $
  *
  * */
 package edu.wustl.catissuecore.util.listener;
@@ -190,8 +190,9 @@ public class CatissueCoreServletContextListener implements ServletContextListene
             catissueCoreCacheManager.addObjectToCache(AnnotationConstants.COLLECTION_PROTOCOL_ENTITY_ID,cpEntityId);
 
             //Added for initializing PathFinder and EntityCache
-            
-	        Connection conn = DBUtil.getConnection();
+			InitialContext ctx = new InitialContext();
+	        DataSource ds = (DataSource)ctx.lookup(DATASOURCE_JNDI_NAME);
+	        Connection conn = ds.getConnection();
 			PathFinder.getInstance(conn);
 
             logger.debug("Entity Cache is initialised");
