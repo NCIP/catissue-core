@@ -2253,7 +2253,7 @@ Thanking You,
 					<arg value="${basedir}/catissuecore-properties/caTissueCore_Properties.xml" />
 					<arg value="${first.admin.emailAddress}" />
 					<sysproperty key="log4j.configuration"
-													value="${tempMSR}/WEB-INF/classes/log4j.properties"/>
+													value="${basedir}/log4j.properties"/>
 					<classpath>
 											
 						<fileset dir="${tempMSR}/WEB-INF/lib">
