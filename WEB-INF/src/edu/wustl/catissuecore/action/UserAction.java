@@ -37,6 +37,8 @@ import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.cde.CDEManager;
+import edu.wustl.common.dao.DAOFactory;
+import edu.wustl.common.dao.HibernateDAO;
 import edu.wustl.common.security.PrivilegeCache;
 import edu.wustl.common.security.PrivilegeManager;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -267,6 +269,24 @@ public class UserAction extends SecureAction {
 		}
 
 		Logger.out.debug("pageOf :---------- " + pageOf);
+		
+		// To show Role as Scientist
+		HibernateDAO dao = (HibernateDAO) DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+		dao.openSession(sessionDataBean);
+		List<User> userList = dao.retrieve(User.class.getName(), "emailAddress" , userForm.getEmailAddress());
+		if(!userList.isEmpty())
+		{
+			User user = userList.get(0);
+			
+			if(!user.getRoleId().equals(Constants.ADMIN_USER))
+			{
+				if(user.getSiteCollection().isEmpty())
+				{
+					userForm.setRole(Constants.NON_ADMIN_USER);
+				}
+			}
+		}
+		dao.closeSession();
 
 		// For Privilege
 		String roleId = userForm.getRole();
