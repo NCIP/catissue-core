@@ -1116,7 +1116,7 @@
 	<target name="upgrade_db">
 		<antcall target="upgrade_from_Suite1.0_to_1.1" />
 		<antcall target="update_metadata_for_model_changes" />
-		<antcall target="runMigration" />
+		<antcall target="runMigration" />		
 	</target>
 	
 	<target name="upgrade_db_from_core_1.2.2_to_suite_1.0_mysql">
@@ -1224,7 +1224,7 @@
 
 	<target name="upgrade_db_mysql">
 		<antcall target="upgrade_from_Suite1.0_to_1.1" />
-		<antcall target="update_metadata_for_model_changes" />
+		<antcall target="update_metadata_for_model_changes" />		
 	</target>
 	
 	
@@ -1332,7 +1332,8 @@
 			<arg value="${database.username}"/>
 			<arg value="${database.password}"/>
 			<arg value="${oracle.driver.string}"/>
-		</java>
+		</java>		
+		<antcall target="reset_sequences" />
 	</target>
 	
 	<!--Data import for CAModel -->
