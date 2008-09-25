@@ -54,7 +54,13 @@ public class CaTissuePrivilegeUtility
 
 		//TODO remove the DB call
 		User user = Utility.getUser(privilegeCache.getLoginName());
-
+		
+		// User is NULL for InActive / Closed users
+		if(user == null)
+		{
+			return map;
+		}
+		
 		Map<String, List<NameValueBean>> privileges = privilegeCache
 				.getPrivilegesforPrefix(CollectionProtocol.class.getName() + "_");
 
@@ -146,6 +152,12 @@ public class CaTissuePrivilegeUtility
 
 		//TODO remove the DB call
 		User user = Utility.getUser(privilegeCache.getLoginName());
+		
+		// User is NULL for InActive / Closed users
+		if(user == null)
+		{
+			return map;
+		}
 
 		Map<String, List<NameValueBean>> privileges = privilegeCache
 				.getPrivilegesforPrefix(Site.class.getName() + "_");
@@ -436,6 +448,12 @@ public class CaTissuePrivilegeUtility
                 for (String userName : users)
                 {
                     User user = Utility.getUser(userName);
+                    
+                    // User is NULL for InActive / Closed users
+					if(user == null)
+					{
+						continue;
+					}
                     // Added by Ravindra 
                     // show Privileges of only those users who are associated to that CP
                     if(invalidUserIds.contains(user.getId()))
