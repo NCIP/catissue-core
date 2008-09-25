@@ -1,4 +1,4 @@
-<ns1:DomainModel projectShortName="caTissueSuite" projectVersion="1.1" xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice">
+<ns1:DomainModel projectDescription="caTissue Suite version 1.1" projectLongName="caTissue_Suite" projectShortName="caTissue_Suite" projectVersion="1.1" xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice">
  <ns1:exposedUMLAssociationCollection>
   <ns1:UMLAssociation bidirectional="false">
    <ns1:targetUMLAssociationEdge>
@@ -1154,7 +1154,7 @@
   </ns1:UMLAssociation>
  </ns1:exposedUMLAssociationCollection>
  <ns1:exposedUMLClassCollection>
-  <ns1:UMLClass allowableAsTarget="true" className="Address" id="EAID_009DB5F9_3A9D_44d0_88BD_C98AFB101185" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="Address" id="EAID_009DB5F9_3A9D_44d0_88BD_C98AFB101185" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns2:umlAttributeCollection xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns2:UMLAttribute dataTypeName="java.lang.String" name="city" publicID="-1141172464" version="1.0"/>
     <ns2:UMLAttribute dataTypeName="java.lang.String" name="country" publicID="-1141172463" version="1.0"/>
@@ -1166,7 +1166,7 @@
     <ns2:UMLAttribute dataTypeName="java.lang.String" name="zipCode" publicID="-1141172457" version="1.0"/>
    </ns2:umlAttributeCollection>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="CollectionEventParameters" id="EAID_01FC8C25_4699_46b6_8BED_E7A56759AF36" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="CollectionEventParameters" id="EAID_01FC8C25_4699_46b6_8BED_E7A56759AF36" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns3:umlAttributeCollection xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns3:UMLAttribute dataTypeName="java.lang.String" name="collectionProcedure" publicID="-1851892382" version="1.0"/>
     <ns3:UMLAttribute dataTypeName="java.lang.String" name="container" publicID="-1851892381" version="1.0"/>
@@ -1175,7 +1175,7 @@
     <ns3:UMLAttribute dataTypeName="java.util.Date" name="timestamp" publicID="245697741" version="1.0"/>
    </ns3:umlAttributeCollection>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="SpecimenProtocol" id="EAID_04B35B84_5533_49f2_B817_D0101A93A06C" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="SpecimenProtocol" id="EAID_04B35B84_5533_49f2_B817_D0101A93A06C" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns4:umlAttributeCollection xmlns:ns4="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns4:UMLAttribute dataTypeName="java.lang.String" name="activityStatus" publicID="-806407781" version="1.0"/>
     <ns4:UMLAttribute dataTypeName="java.lang.String" name="descriptionURL" publicID="-806407780" version="1.0"/>
@@ -1188,7 +1188,7 @@
     <ns4:UMLAttribute dataTypeName="java.lang.String" name="title" publicID="-806407773" version="1.0"/>
    </ns4:umlAttributeCollection>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="FluidSpecimenReviewEventParameters" id="EAID_04EED8B6_0421_474f_8733_4E23177707BC" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="FluidSpecimenReviewEventParameters" id="EAID_04EED8B6_0421_474f_8733_4E23177707BC" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns5:umlAttributeCollection xmlns:ns5="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns5:UMLAttribute dataTypeName="java.lang.Double" name="cellCount" publicID="-337597097" version="1.0"/>
     <ns5:UMLAttribute dataTypeName="java.lang.String" name="comment" publicID="245697739" version="1.0"/>
@@ -1196,7 +1196,7 @@
     <ns5:UMLAttribute dataTypeName="java.util.Date" name="timestamp" publicID="245697741" version="1.0"/>
    </ns5:umlAttributeCollection>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="TissueSpecimenRequirement" id="EAID_05B7D399_255E_47b9_944F_A34FFD365C85" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="TissueSpecimenRequirement" id="EAID_05B7D399_255E_47b9_944F_A34FFD365C85" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns6:umlAttributeCollection xmlns:ns6="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns6:UMLAttribute dataTypeName="java.lang.String" name="storageType" publicID="-1333848804" version="1.0"/>
     <ns6:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="-321862258" version="1.0"/>
@@ -1213,7 +1213,7 @@
     <ns6:UMLAttribute dataTypeName="java.lang.String" name="specimenType" publicID="-321862253" version="1.0"/>
    </ns6:umlAttributeCollection>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="ProcedureEventParameters" id="EAID_0B0659E9_BC45_4b50_972F_1A5A283E6332" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="ProcedureEventParameters" id="EAID_0B0659E9_BC45_4b50_972F_1A5A283E6332" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns7:umlAttributeCollection xmlns:ns7="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns7:UMLAttribute dataTypeName="java.lang.String" name="name" publicID="1848736749" version="1.0"/>
     <ns7:UMLAttribute dataTypeName="java.lang.String" name="url" publicID="1848736750" version="1.0"/>
@@ -1222,7 +1222,7 @@
     <ns7:UMLAttribute dataTypeName="java.util.Date" name="timestamp" publicID="245697741" version="1.0"/>
    </ns7:umlAttributeCollection>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="CellSpecimenReviewParameters" id="EAID_108155D7_0C52_45aa_9C31_A6437D747FC5" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="CellSpecimenReviewParameters" id="EAID_108155D7_0C52_45aa_9C31_A6437D747FC5" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns8:umlAttributeCollection xmlns:ns8="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns8:UMLAttribute dataTypeName="java.lang.Double" name="neoplasticCellularityPercentage" publicID="1641846667" version="1.0"/>
     <ns8:UMLAttribute dataTypeName="java.lang.Double" name="viableCellPercentage" publicID="1641846668" version="1.0"/>
@@ -1231,7 +1231,7 @@
     <ns8:UMLAttribute dataTypeName="java.util.Date" name="timestamp" publicID="245697741" version="1.0"/>
    </ns8:umlAttributeCollection>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="NewSpecimenOrderItem" id="EAID_1B70F2B0_558C_4ad8_93C8_4DEE74EF8D6F" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="NewSpecimenOrderItem" id="EAID_1B70F2B0_558C_4ad8_93C8_4DEE74EF8D6F" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns9:umlAttributeCollection xmlns:ns9="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns9:UMLAttribute dataTypeName="java.lang.String" name="specimenClass" publicID="-538097171" version="1.0">
      <ns9:SemanticMetadata conceptCode="C25346" conceptDefinition="A grouping of things based on shared common attributes." conceptName="Class" order="0"/>
@@ -1257,7 +1257,7 @@
    <ns12:SemanticMetadata conceptCode="C19157" conceptDefinition="ken for examination or diagnosis." conceptName="Specimen" order="2" xmlns:ns12="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
    <ns13:SemanticMetadata conceptCode="C25586" conceptDefinition="Having no previous example or precedent or parallel; of a kind not seen before." conceptName="New" order="3" xmlns:ns13="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="SpecimenCollectionGroup" id="EAID_1BAE9080_1361_485b_A319_A430A89C7D62" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="SpecimenCollectionGroup" id="EAID_1BAE9080_1361_485b_A319_A430A89C7D62" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns14:umlAttributeCollection xmlns:ns14="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns14:UMLAttribute dataTypeName="java.lang.String" name="barcode" publicID="1689506864" version="1.0"/>
     <ns14:UMLAttribute dataTypeName="java.lang.String" name="collectionStatus" publicID="1689506865" version="1.0">
@@ -1288,13 +1288,13 @@
     <ns14:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="-123107105" version="1.0"/>
    </ns14:umlAttributeCollection>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="Institution" id="EAID_1D67DB3C_7A13_4f1a_A986_F47D64BBA4F8" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="Institution" id="EAID_1D67DB3C_7A13_4f1a_A986_F47D64BBA4F8" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns15:umlAttributeCollection xmlns:ns15="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns15:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="-188548297" version="1.0"/>
     <ns15:UMLAttribute dataTypeName="java.lang.String" name="name" publicID="-188548296" version="1.0"/>
    </ns15:umlAttributeCollection>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="OrderDetails" id="EAID_21368A84_973F_4b96_B0DC_AD166B797CD5" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="OrderDetails" id="EAID_21368A84_973F_4b96_B0DC_AD166B797CD5" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns16:umlAttributeCollection xmlns:ns16="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns16:UMLAttribute dataTypeName="java.lang.String" name="comment" publicID="400486110" version="1.0">
      <ns16:SemanticMetadata conceptCode="C25393" conceptDefinition="A written explanation, observation or criticism added to textual material." conceptName="Comment" order="0"/>
@@ -1314,7 +1314,7 @@
    <ns17:SemanticMetadata conceptCode="C25480" conceptDefinition="Particulars considered individually and in relation to a whole." conceptName="Details" order="0" xmlns:ns17="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
    <ns18:SemanticMetadata conceptCode="C48906" conceptDefinition="The act of requesting that person, business, or organization supply something in return for payment." conceptName="Order" order="1" xmlns:ns18="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="StorageType" id="EAID_21CF6351_BC53_4d65_A924_8C759E4420EA" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="StorageType" id="EAID_21CF6351_BC53_4d65_A924_8C759E4420EA" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns19:umlAttributeCollection xmlns:ns19="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns19:UMLAttribute dataTypeName="java.lang.Double" name="defaultTempratureInCentigrade" publicID="-1825881256" version="1.0"/>
     <ns19:UMLAttribute dataTypeName="Collection" name="holdsSpecimenClassCollection" publicID="-1825881255" version="1.0"/>
@@ -1326,7 +1326,7 @@
     <ns19:UMLAttribute dataTypeName="java.lang.String" name="twoDimensionLabel" publicID="-1661475644" version="1.0"/>
    </ns19:umlAttributeCollection>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="ReviewEventParameters" id="EAID_292D1623_954E_4358_BA5A_82EAEC977C62" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="ReviewEventParameters" id="EAID_292D1623_954E_4358_BA5A_82EAEC977C62" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns20:umlAttributeCollection xmlns:ns20="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns20:UMLAttribute dataTypeName="java.lang.String" name="comment" publicID="245697739" version="1.0"/>
     <ns20:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="245697740" version="1.0"/>
@@ -1336,7 +1336,7 @@
    <ns22:SemanticMetadata conceptCode="C25499" conceptDefinition="Something that happens at a given place and time." conceptName="Event" order="1" xmlns:ns22="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
    <ns23:SemanticMetadata conceptCode="C42729" conceptDefinition="The act of appraisal, evaluation, or analysis." conceptName="Review" order="2" xmlns:ns23="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="ConsentTierResponse" id="EAID_2994FF47_1DC0_44e7_AA26_23C3CFE5B3D1" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="ConsentTierResponse" id="EAID_2994FF47_1DC0_44e7_AA26_23C3CFE5B3D1" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns24:umlAttributeCollection xmlns:ns24="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns24:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="2099911276" version="1.0"/>
     <ns24:UMLAttribute dataTypeName="java.lang.String" name="response" publicID="2099911277" version="1.0">
@@ -1346,7 +1346,7 @@
    <ns25:SemanticMetadata conceptCode="C25755" conceptDefinition="Any act or phenomena, or behavior, constituting a reply or reaction of a living organism or its part to some foregoing stimulus or agent." conceptName="Response" order="0" xmlns:ns25="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
    <ns26:SemanticMetadata conceptCode="C25460" conceptDefinition="Permission to do something." conceptName="Consent" order="1" xmlns:ns26="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="MolecularSpecimen" id="EAID_30B4B368_8DA2_4716_9BEA_D7104BDBE2CE" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="MolecularSpecimen" id="EAID_30B4B368_8DA2_4716_9BEA_D7104BDBE2CE" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns27:umlAttributeCollection xmlns:ns27="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns27:UMLAttribute dataTypeName="java.lang.Double" name="concentrationInMicrogramPerMicroliter" publicID="-1373132179" version="1.0"/>
     <ns27:UMLAttribute dataTypeName="java.lang.String" name="activityStatus" publicID="267670147" version="1.0"/>
@@ -1368,14 +1368,14 @@
     <ns27:UMLAttribute dataTypeName="java.lang.String" name="specimenType" publicID="-321862253" version="1.0"/>
    </ns27:umlAttributeCollection>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="ExternalIdentifier" id="EAID_30CFB075_E8FF_4325_97FA_3D9CA07E9F74" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="ExternalIdentifier" id="EAID_30CFB075_E8FF_4325_97FA_3D9CA07E9F74" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns28:umlAttributeCollection xmlns:ns28="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns28:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="-1318873061" version="1.0"/>
     <ns28:UMLAttribute dataTypeName="java.lang.String" name="name" publicID="-1318873060" version="1.0"/>
     <ns28:UMLAttribute dataTypeName="java.lang.String" name="value" publicID="-1318873059" version="1.0"/>
    </ns28:umlAttributeCollection>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="SpecimenOrderItem" id="EAID_334C4C74_DA01_45d9_9F5E_838C2A93152F" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="SpecimenOrderItem" id="EAID_334C4C74_DA01_45d9_9F5E_838C2A93152F" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns29:umlAttributeCollection xmlns:ns29="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns29:UMLAttribute dataTypeName="java.lang.String" name="description" publicID="-1881114725" version="1.0">
      <ns29:SemanticMetadata conceptCode="C25365" conceptDefinition="A written or verbal account, representation, statement, or explanation of something." conceptName="Description" order="0"/>
@@ -1390,7 +1390,7 @@
    <ns31:SemanticMetadata conceptCode="C48906" conceptDefinition="The act of requesting that person, business, or organization supply something in return for payment." conceptName="Order" order="1" xmlns:ns31="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
    <ns32:SemanticMetadata conceptCode="C19157" conceptDefinition="ken for examination or diagnosis." conceptName="Specimen" order="2" xmlns:ns32="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="AbstractSpecimenCollectionGroup" id="EAID_36DBED86_0E6E_4208_B9E8_8ED38FF17034" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="AbstractSpecimenCollectionGroup" id="EAID_36DBED86_0E6E_4208_B9E8_8ED38FF17034" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns33:umlAttributeCollection xmlns:ns33="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns33:UMLAttribute dataTypeName="java.lang.String" name="activityStatus" publicID="-123107108" version="1.0">
      <ns33:SemanticMetadata conceptCode="C25688" conceptDefinition="A condition or state at a particular time." conceptName="Status" order="0"/>
@@ -1410,7 +1410,7 @@
    <ns36:SemanticMetadata conceptCode="C19157" conceptDefinition="ken for examination or diagnosis." conceptName="Specimen" order="2" xmlns:ns36="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
    <ns37:SemanticMetadata conceptCode="C42874" conceptDefinition="A concept or idea not associated with any specific instance." conceptName="Abstract" order="3" xmlns:ns37="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="ExistingSpecimenArrayOrderItem" id="EAID_38E6D203_142E_4d67_B16D_E17C93BB6E07" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="ExistingSpecimenArrayOrderItem" id="EAID_38E6D203_142E_4d67_B16D_E17C93BB6E07" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns38:umlAttributeCollection xmlns:ns38="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns38:UMLAttribute dataTypeName="java.lang.String" name="description" publicID="-1881114725" version="1.0">
      <ns38:SemanticMetadata conceptCode="C25365" conceptDefinition="A written or verbal account, representation, statement, or explanation of something." conceptName="Description" order="0"/>
@@ -1427,7 +1427,7 @@
    <ns42:SemanticMetadata conceptCode="C19157" conceptDefinition="A part of a thing, or of several things, taken to demonstrate or to determine the character of the whole, e.g. a substance, or portion of material obtained for use in testing, examination, or study; particularly, a preparation of tissue or bodily fluid ta" conceptName="Specimen" order="3" xmlns:ns42="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
    <ns43:SemanticMetadata conceptCode="C25626" conceptDefinition="Being or existing in a specified place or at the specified time." conceptName="Present" order="4" xmlns:ns43="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="OrderItem" id="EAID_3DC95B09_1115_413d_A7F5_241DC2443B5D" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="OrderItem" id="EAID_3DC95B09_1115_413d_A7F5_241DC2443B5D" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns44:umlAttributeCollection xmlns:ns44="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns44:UMLAttribute dataTypeName="java.lang.String" name="description" publicID="-1881114725" version="1.0">
      <ns44:SemanticMetadata conceptCode="C25365" conceptDefinition="A written or verbal account, representation, statement, or explanation of something." conceptName="Description" order="0"/>
@@ -1441,20 +1441,20 @@
    <ns45:SemanticMetadata conceptCode="C45281" conceptDefinition="Something perceptible by one or more of the senses, especially by vision or touch; a material thing. (dictionary.com)" conceptName="Object" order="0" xmlns:ns45="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
    <ns46:SemanticMetadata conceptCode="C48906" conceptDefinition="The act of requesting that person, business, or organization supply something in return for payment." conceptName="Order" order="1" xmlns:ns46="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="Capacity" id="EAID_418A3D4B_C6E3_46e3_8EE4_BEFD169DA8A6" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="Capacity" id="EAID_418A3D4B_C6E3_46e3_8EE4_BEFD169DA8A6" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns47:umlAttributeCollection xmlns:ns47="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns47:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="1509110636" version="1.0"/>
     <ns47:UMLAttribute dataTypeName="java.lang.Integer" name="oneDimensionCapacity" publicID="1509110637" version="1.0"/>
     <ns47:UMLAttribute dataTypeName="java.lang.Integer" name="twoDimensionCapacity" publicID="1509110638" version="1.0"/>
    </ns47:umlAttributeCollection>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="CancerResearchGroup" id="EAID_435D78AB_E46F_4bc2_A69F_5E2B2C48DE9E" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="CancerResearchGroup" id="EAID_435D78AB_E46F_4bc2_A69F_5E2B2C48DE9E" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns48:umlAttributeCollection xmlns:ns48="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns48:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="-1785805851" version="1.0"/>
     <ns48:UMLAttribute dataTypeName="java.lang.String" name="name" publicID="-1785805850" version="1.0"/>
    </ns48:umlAttributeCollection>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="SpunEventParameters" id="EAID_43F30E9B_3AE6_4380_BC52_6E7DEB945900" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="SpunEventParameters" id="EAID_43F30E9B_3AE6_4380_BC52_6E7DEB945900" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns49:umlAttributeCollection xmlns:ns49="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns49:UMLAttribute dataTypeName="java.lang.Integer" name="durationInMinutes" publicID="-1869761580" version="1.0"/>
     <ns49:UMLAttribute dataTypeName="java.lang.Double" name="gravityForce" publicID="-1869761579" version="1.0"/>
@@ -1463,13 +1463,13 @@
     <ns49:UMLAttribute dataTypeName="java.util.Date" name="timestamp" publicID="245697741" version="1.0"/>
    </ns49:umlAttributeCollection>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="ParticipantMedicalIdentifier" id="EAID_46B14781_77F7_472f_B72E_8E29E1C93AFC" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="ParticipantMedicalIdentifier" id="EAID_46B14781_77F7_472f_B72E_8E29E1C93AFC" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns50:umlAttributeCollection xmlns:ns50="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns50:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="-1904357533" version="1.0"/>
     <ns50:UMLAttribute dataTypeName="java.lang.String" name="medicalRecordNumber" publicID="-1904357532" version="1.0"/>
    </ns50:umlAttributeCollection>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="DistributionSpecimenRequirement" id="EAID_5104D4FD_4922_4ab3_85FC_2A6D44536A4B" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="DistributionSpecimenRequirement" id="EAID_5104D4FD_4922_4ab3_85FC_2A6D44536A4B" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns51:umlAttributeCollection xmlns:ns51="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns51:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="-104256936" version="1.0"/>
     <ns51:UMLAttribute dataTypeName="java.lang.String" name="pathologyStatus" publicID="-104256935" version="1.0"/>
@@ -1479,7 +1479,7 @@
     <ns51:UMLAttribute dataTypeName="java.lang.String" name="tissueSite" publicID="-104256931" version="1.0"/>
    </ns51:umlAttributeCollection>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="TissueSpecimenReviewEventParameters" id="EAID_5106AB56_577F_41ac_B099_0F5CB5066F63" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="TissueSpecimenReviewEventParameters" id="EAID_5106AB56_577F_41ac_B099_0F5CB5066F63" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns52:umlAttributeCollection xmlns:ns52="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns52:UMLAttribute dataTypeName="java.lang.String" name="histologicalQuality" publicID="-1289839130" version="1.0"/>
     <ns52:UMLAttribute dataTypeName="java.lang.Double" name="lymphocyticPercentage" publicID="-1289839129" version="1.0"/>
@@ -1491,7 +1491,7 @@
     <ns52:UMLAttribute dataTypeName="java.util.Date" name="timestamp" publicID="245697741" version="1.0"/>
    </ns52:umlAttributeCollection>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="Site" id="EAID_51DB7939_63B9_4809_9168_A79FC2774271" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="Site" id="EAID_51DB7939_63B9_4809_9168_A79FC2774271" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns53:umlAttributeCollection xmlns:ns53="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns53:UMLAttribute dataTypeName="java.lang.String" name="activityStatus" publicID="704162754" version="1.0"/>
     <ns53:UMLAttribute dataTypeName="java.lang.String" name="emailAddress" publicID="704162755" version="1.0"/>
@@ -1500,7 +1500,7 @@
     <ns53:UMLAttribute dataTypeName="java.lang.String" name="type" publicID="704162758" version="1.0"/>
    </ns53:umlAttributeCollection>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="FluidSpecimenRequirement" id="EAID_5628658F_4A24_48e1_98D3_A861B1AF1392" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="FluidSpecimenRequirement" id="EAID_5628658F_4A24_48e1_98D3_A861B1AF1392" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns54:umlAttributeCollection xmlns:ns54="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns54:UMLAttribute dataTypeName="java.lang.String" name="storageType" publicID="-1333848804" version="1.0"/>
     <ns54:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="-321862258" version="1.0"/>
@@ -1517,7 +1517,7 @@
     <ns54:UMLAttribute dataTypeName="java.lang.String" name="specimenType" publicID="-321862253" version="1.0"/>
    </ns54:umlAttributeCollection>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="SpecimenArrayType" id="EAID_5DCAE48D_5EDF_4533_8426_AAA11DE09E99" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="SpecimenArrayType" id="EAID_5DCAE48D_5EDF_4533_8426_AAA11DE09E99" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns55:umlAttributeCollection xmlns:ns55="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns55:UMLAttribute dataTypeName="java.lang.String" name="specimenClass" publicID="-1260035607" version="1.0"/>
     <ns55:UMLAttribute dataTypeName="Collection" name="specimenTypeCollection" publicID="-1260035606" version="1.0"/>
@@ -1529,7 +1529,7 @@
     <ns55:UMLAttribute dataTypeName="java.lang.String" name="twoDimensionLabel" publicID="-1661475644" version="1.0"/>
    </ns55:umlAttributeCollection>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="PathologicalCaseOrderItem" id="EAID_648F248B_4757_4d42_88CD_7C43E257884D" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="PathologicalCaseOrderItem" id="EAID_648F248B_4757_4d42_88CD_7C43E257884D" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns56:umlAttributeCollection xmlns:ns56="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns56:UMLAttribute dataTypeName="java.lang.String" name="pathologicalStatus" publicID="773892354" version="1.0">
      <ns56:SemanticMetadata conceptCode="C25688" conceptDefinition="A condition or state at a particular time." conceptName="Status" order="0"/>
@@ -1571,14 +1571,14 @@
    <ns59:SemanticMetadata conceptCode="C49152" conceptDefinition="isease processes. Informally used to mean the result of such an examination." conceptName="Case" order="2" xmlns:ns59="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
    <ns60:SemanticMetadata conceptCode="C18189" conceptDefinition="The medical science, and specialty practice, concerned with all aspects of disease, but with special reference to the essential nature, causes, and development of abnormal conditions, as well as the structural and functional changes that result from the d" conceptName="Pathology" order="3" xmlns:ns60="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="SpecimenPosition" id="EAID_64904863_E447_4428_9FAE_121A9F14EBE8" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="SpecimenPosition" id="EAID_64904863_E447_4428_9FAE_121A9F14EBE8" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns61:umlAttributeCollection xmlns:ns61="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns61:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="872245247" version="1.0"/>
     <ns61:UMLAttribute dataTypeName="java.lang.Integer" name="positionDimensionOne" publicID="872245248" version="1.0"/>
     <ns61:UMLAttribute dataTypeName="java.lang.Integer" name="positionDimensionTwo" publicID="872245249" version="1.0"/>
    </ns61:umlAttributeCollection>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="AbstractSpecimen" id="EAID_65339132_A935_4b5a_AC9F_9158AB0122B5" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="AbstractSpecimen" id="EAID_65339132_A935_4b5a_AC9F_9158AB0122B5" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns62:umlAttributeCollection xmlns:ns62="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns62:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="-321862258" version="1.0"/>
     <ns62:UMLAttribute dataTypeName="java.lang.Double" name="initialQuantity" publicID="-321862257" version="1.0"/>
@@ -1588,7 +1588,7 @@
     <ns62:UMLAttribute dataTypeName="java.lang.String" name="specimenType" publicID="-321862253" version="1.0"/>
    </ns62:umlAttributeCollection>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="TissueSpecimen" id="EAID_6684CBFA_5F80_4a59_B4F1_6BDF76944550" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="TissueSpecimen" id="EAID_6684CBFA_5F80_4a59_B4F1_6BDF76944550" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns63:umlAttributeCollection xmlns:ns63="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns63:UMLAttribute dataTypeName="java.lang.String" name="activityStatus" publicID="267670147" version="1.0"/>
     <ns63:UMLAttribute dataTypeName="java.lang.Double" name="availableQuantity" publicID="267670148" version="1.0"/>
@@ -1618,7 +1618,7 @@
    <ns65:SemanticMetadata conceptCode="C19157" conceptDefinition="A part of a thing, or of several things, taken to demonstrate or to determine the character of the whole, e.g. a substance, or portion of material obtained for use in testing, examination, or study; particularly, a preparation of tissue or bodily fluid ta" conceptName="Specimen" order="1" xmlns:ns65="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
    <ns66:SemanticMetadata conceptCode="C12801" conceptDefinition="An anatomical structure consisting of similarly specialized cells and intercellular matrix, aggregated according to genetically determined spatial relationships, performing a specific function." conceptName="Tissue" order="2" xmlns:ns66="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="MolecularSpecimenReviewParameters" id="EAID_6847637D_29D4_40bf_A18F_814F301E1804" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="MolecularSpecimenReviewParameters" id="EAID_6847637D_29D4_40bf_A18F_814F301E1804" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns67:umlAttributeCollection xmlns:ns67="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns67:UMLAttribute dataTypeName="java.lang.Double" name="absorbanceAt260" publicID="1623057497" version="1.0"/>
     <ns67:UMLAttribute dataTypeName="java.lang.Double" name="absorbanceAt280" publicID="1623057498" version="1.0"/>
@@ -1632,7 +1632,7 @@
     <ns67:UMLAttribute dataTypeName="java.util.Date" name="timestamp" publicID="245697741" version="1.0"/>
    </ns67:umlAttributeCollection>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="Biohazard" id="EAID_6EC6C74E_E063_4f4d_885F_39E1491C61C2" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="Biohazard" id="EAID_6EC6C74E_E063_4f4d_885F_39E1491C61C2" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns68:umlAttributeCollection xmlns:ns68="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns68:UMLAttribute dataTypeName="java.lang.String" name="comment" publicID="1426754586" version="1.0"/>
     <ns68:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="1426754587" version="1.0"/>
@@ -1640,7 +1640,7 @@
     <ns68:UMLAttribute dataTypeName="java.lang.String" name="type" publicID="1426754589" version="1.0"/>
    </ns68:umlAttributeCollection>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="ConsentTier" id="EAID_6F92538D_F8DE_493e_8535_91A050372732" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="ConsentTier" id="EAID_6F92538D_F8DE_493e_8535_91A050372732" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns69:umlAttributeCollection xmlns:ns69="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns69:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="-445362951" version="1.0"/>
     <ns69:UMLAttribute dataTypeName="java.lang.String" name="statement" publicID="-445362950" version="1.0">
@@ -1649,7 +1649,7 @@
    </ns69:umlAttributeCollection>
    <ns70:SemanticMetadata conceptCode="C25460" conceptDefinition="Permission to do something." conceptName="Consent" order="0" xmlns:ns70="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="CheckInCheckOutEventParameter" id="EAID_70AD65DB_0A0A_426f_8622_5341D49AA9B7" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="CheckInCheckOutEventParameter" id="EAID_70AD65DB_0A0A_426f_8622_5341D49AA9B7" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns71:umlAttributeCollection xmlns:ns71="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns71:UMLAttribute dataTypeName="java.lang.String" name="storageStatus" publicID="-1525879905" version="1.0"/>
     <ns71:UMLAttribute dataTypeName="java.lang.String" name="comment" publicID="245697739" version="1.0"/>
@@ -1657,7 +1657,7 @@
     <ns71:UMLAttribute dataTypeName="java.util.Date" name="timestamp" publicID="245697741" version="1.0"/>
    </ns71:umlAttributeCollection>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="DistributionProtocol" id="EAID_713AD559_689B_4649_A111_125E72935256" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="DistributionProtocol" id="EAID_713AD559_689B_4649_A111_125E72935256" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns72:umlAttributeCollection xmlns:ns72="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns72:UMLAttribute dataTypeName="java.lang.String" name="activityStatus" publicID="-806407781" version="1.0"/>
     <ns72:UMLAttribute dataTypeName="java.lang.String" name="descriptionURL" publicID="-806407780" version="1.0"/>
@@ -1675,7 +1675,7 @@
    <ns76:SemanticMetadata conceptCode="C70817" conceptDefinition="The formal plan of an experiment or research activity, including the objective, rationale, design, materials and methods for the conduct of the study; intervention description, and method of data analysis." conceptName="Study Protocol" order="3" xmlns:ns76="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
    <ns77:SemanticMetadata conceptCode="C45273" conceptDefinition="The act of distributing or spreading or apportioning." conceptName="Distribution" order="4" xmlns:ns77="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="ConsentTierStatus" id="EAID_720E3E4A_32EF_493b_94C0_56F5017693AD" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="ConsentTierStatus" id="EAID_720E3E4A_32EF_493b_94C0_56F5017693AD" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns78:umlAttributeCollection xmlns:ns78="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns78:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="-456723745" version="1.0"/>
     <ns78:UMLAttribute dataTypeName="java.lang.String" name="status" publicID="-456723744" version="1.0">
@@ -1685,7 +1685,7 @@
    <ns79:SemanticMetadata conceptCode="C25688" conceptDefinition="A condition or state at a particular time." conceptName="Status" order="0" xmlns:ns79="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
    <ns80:SemanticMetadata conceptCode="C25460" conceptDefinition="Permission to do something." conceptName="Consent" order="1" xmlns:ns80="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="SpecimenEventParameters" id="EAID_733019BB_1F5C_4119_A5DA_D638E836A105" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="SpecimenEventParameters" id="EAID_733019BB_1F5C_4119_A5DA_D638E836A105" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns81:umlAttributeCollection xmlns:ns81="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns81:UMLAttribute dataTypeName="java.lang.String" name="comment" publicID="245697739" version="1.0"/>
     <ns81:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="245697740" version="1.0"/>
@@ -1695,7 +1695,7 @@
    <ns83:SemanticMetadata conceptCode="C70699" conceptDefinition="Any material sample taken from a biological entity for testing, diagnostic, propagation, treatment or research purposes, including a sample obtained from a living organism or taken from the biological object after halting of all its life functions. Biospe" conceptName="Biospecimen" order="1" xmlns:ns83="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
    <ns84:SemanticMetadata conceptCode="C19157" conceptDefinition="ken for examination or diagnosis." conceptName="Specimen" order="2" xmlns:ns84="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="CollectionProtocolRegistration" id="EAID_75657152_8BF2_4c6f_8118_44C708727771" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="CollectionProtocolRegistration" id="EAID_75657152_8BF2_4c6f_8118_44C708727771" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns85:umlAttributeCollection xmlns:ns85="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns85:UMLAttribute dataTypeName="java.lang.String" name="activityStatus" publicID="-293261019" version="1.0"/>
     <ns85:UMLAttribute dataTypeName="java.lang.String" name="barcode" publicID="-293261018" version="1.0"/>
@@ -1718,7 +1718,7 @@
     </ns85:UMLAttribute>
    </ns85:umlAttributeCollection>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="SpecimenArrayContent" id="EAID_763757D3_38F1_401a_B452_FDCFBE3F340D" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="SpecimenArrayContent" id="EAID_763757D3_38F1_401a_B452_FDCFBE3F340D" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns86:umlAttributeCollection xmlns:ns86="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns86:UMLAttribute dataTypeName="java.lang.Double" name="concentrationInMicrogramPerMicroliter" publicID="987884100" version="1.0"/>
     <ns86:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="987884101" version="1.0"/>
@@ -1727,7 +1727,7 @@
     <ns86:UMLAttribute dataTypeName="java.lang.Integer" name="positionDimensionTwo" publicID="987884104" version="1.0"/>
    </ns86:umlAttributeCollection>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="MolecularSpecimenRequirement" id="EAID_7A0FF9A8_6BCF_4755_91FF_FA34BA85F661" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="MolecularSpecimenRequirement" id="EAID_7A0FF9A8_6BCF_4755_91FF_FA34BA85F661" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns87:umlAttributeCollection xmlns:ns87="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns87:UMLAttribute dataTypeName="java.lang.Double" name="concentrationInMicrogramPerMicroliter" publicID="94498977" version="1.0"/>
     <ns87:UMLAttribute dataTypeName="java.lang.String" name="storageType" publicID="-1333848804" version="1.0"/>
@@ -1739,7 +1739,7 @@
     <ns87:UMLAttribute dataTypeName="java.lang.String" name="specimenType" publicID="-321862253" version="1.0"/>
    </ns87:umlAttributeCollection>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="DistributedItem" id="EAID_7C9D7DA4_E959_4cb9_A4D9_643E98943736" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="DistributedItem" id="EAID_7C9D7DA4_E959_4cb9_A4D9_643E98943736" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns88:umlAttributeCollection xmlns:ns88="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns88:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="605475493" version="1.0"/>
     <ns88:UMLAttribute dataTypeName="java.lang.Double" name="quantity" publicID="605475494" version="1.0"/>
@@ -1747,7 +1747,7 @@
    <ns89:SemanticMetadata conceptCode="C51070" conceptDefinition="An independently existing thing (living or nonliving)." conceptName="Entity" order="0" xmlns:ns89="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
    <ns90:SemanticMetadata conceptCode="C45273" conceptDefinition="The act of distributing or spreading or apportioning." conceptName="Distribution" order="1" xmlns:ns90="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="CollectionProtocolEvent" id="EAID_7CC50F13_BFB4_42ce_82AD_6DDB40854D85" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="CollectionProtocolEvent" id="EAID_7CC50F13_BFB4_42ce_82AD_6DDB40854D85" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns91:umlAttributeCollection xmlns:ns91="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns91:UMLAttribute dataTypeName="java.lang.String" name="collectionPointLabel" publicID="1509710861" version="1.0"/>
     <ns91:UMLAttribute dataTypeName="java.lang.Double" name="studyCalendarEventPoint" publicID="1509710862" version="1.0"/>
@@ -1765,7 +1765,7 @@
     <ns91:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="-123107105" version="1.0"/>
    </ns91:umlAttributeCollection>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="Specimen" id="EAID_7D51A3F5_59B9_4d5a_9FA3_1484C7C44E7A" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="Specimen" id="EAID_7D51A3F5_59B9_4d5a_9FA3_1484C7C44E7A" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns92:umlAttributeCollection xmlns:ns92="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns92:UMLAttribute dataTypeName="java.lang.String" name="activityStatus" publicID="267670147" version="1.0"/>
     <ns92:UMLAttribute dataTypeName="java.lang.Double" name="availableQuantity" publicID="267670148" version="1.0"/>
@@ -1786,7 +1786,7 @@
     <ns92:UMLAttribute dataTypeName="java.lang.String" name="specimenType" publicID="-321862253" version="1.0"/>
    </ns92:umlAttributeCollection>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="FluidSpecimen" id="EAID_7E11C1F7_D5AA_4e37_97C4_ADBCFCEAD2D5" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="FluidSpecimen" id="EAID_7E11C1F7_D5AA_4e37_97C4_ADBCFCEAD2D5" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns93:umlAttributeCollection xmlns:ns93="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns93:UMLAttribute dataTypeName="java.lang.String" name="activityStatus" publicID="267670147" version="1.0"/>
     <ns93:UMLAttribute dataTypeName="java.lang.Double" name="availableQuantity" publicID="267670148" version="1.0"/>
@@ -1810,7 +1810,7 @@
    <ns95:SemanticMetadata conceptCode="C19157" conceptDefinition="A part of a thing, or of several things, taken to demonstrate or to determine the character of the whole, e.g. a substance, or portion of material obtained for use in testing, examination, or study; particularly, a preparation of tissue or bodily fluid ta" conceptName="Specimen" order="1" xmlns:ns95="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
    <ns96:SemanticMetadata conceptCode="C25278" conceptDefinition="A continuous amorphous substance that tends to flow and to conform to the outline of its container (i.e., a liquid or a gas).  Also used as an adjective to describe something with properties like that of a fluid." conceptName="Fluid" order="2" xmlns:ns96="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="ExistingSpecimenOrderItem" id="EAID_84030D6F_F2AF_4986_BC68_9B291FD28A92" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="ExistingSpecimenOrderItem" id="EAID_84030D6F_F2AF_4986_BC68_9B291FD28A92" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns97:umlAttributeCollection xmlns:ns97="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns97:UMLAttribute dataTypeName="java.lang.String" name="description" publicID="-1881114725" version="1.0">
      <ns97:SemanticMetadata conceptCode="C25365" conceptDefinition="A written or verbal account, representation, statement, or explanation of something." conceptName="Description" order="0"/>
@@ -1826,14 +1826,14 @@
    <ns100:SemanticMetadata conceptCode="C19157" conceptDefinition="ken for examination or diagnosis." conceptName="Specimen" order="2" xmlns:ns100="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
    <ns101:SemanticMetadata conceptCode="C25626" conceptDefinition="Being or existing in a specified place or at the specified time." conceptName="Present" order="3" xmlns:ns101="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="SpecimenCharacteristics" id="EAID_8D277A62_E003_48b0_8C2C_8E6DCB421095" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="SpecimenCharacteristics" id="EAID_8D277A62_E003_48b0_8C2C_8E6DCB421095" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns102:umlAttributeCollection xmlns:ns102="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns102:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="1179874281" version="1.0"/>
     <ns102:UMLAttribute dataTypeName="java.lang.String" name="tissueSide" publicID="1179874282" version="1.0"/>
     <ns102:UMLAttribute dataTypeName="java.lang.String" name="tissueSite" publicID="1179874283" version="1.0"/>
    </ns102:umlAttributeCollection>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="User" id="EAID_96A8E1AE_7086_4b38_ACFC_F6EF8E81673E" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="User" id="EAID_96A8E1AE_7086_4b38_ACFC_F6EF8E81673E" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns103:umlAttributeCollection xmlns:ns103="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns103:UMLAttribute dataTypeName="java.lang.String" name="activityStatus" publicID="-222492190" version="1.0"/>
     <ns103:UMLAttribute dataTypeName="java.lang.String" name="comments" publicID="-222492189" version="1.0"/>
@@ -1846,7 +1846,7 @@
     <ns103:UMLAttribute dataTypeName="java.util.Date" name="startDate" publicID="-222492182" version="1.0"/>
    </ns103:umlAttributeCollection>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="FixedEventParameters" id="EAID_9C01C40C_8FE9_4b08_9FC1_A4B59642C1D0" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="FixedEventParameters" id="EAID_9C01C40C_8FE9_4b08_9FC1_A4B59642C1D0" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns104:umlAttributeCollection xmlns:ns104="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns104:UMLAttribute dataTypeName="java.lang.Integer" name="durationInMinutes" publicID="-1038307717" version="1.0"/>
     <ns104:UMLAttribute dataTypeName="java.lang.String" name="fixationType" publicID="-1038307716" version="1.0"/>
@@ -1855,7 +1855,7 @@
     <ns104:UMLAttribute dataTypeName="java.util.Date" name="timestamp" publicID="245697741" version="1.0"/>
    </ns104:umlAttributeCollection>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="ReturnEventParameters" id="EAID_A0C95C9C_8C97_4f50_AEB2_8772157544CF" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="ReturnEventParameters" id="EAID_A0C95C9C_8C97_4f50_AEB2_8772157544CF" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns105:umlAttributeCollection xmlns:ns105="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns105:UMLAttribute dataTypeName="java.lang.String" name="comment" publicID="245697739" version="1.0"/>
     <ns105:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="245697740" version="1.0"/>
@@ -1866,13 +1866,13 @@
    <ns108:SemanticMetadata conceptCode="C71900" conceptDefinition="ken for examination or diagnosis." conceptName="Return" order="2" xmlns:ns108="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
    <ns109:SemanticMetadata conceptCode="C19157" conceptDefinition="A part of a thing, or of several things, taken to demonstrate or to determine the character of the whole, e.g. a substance, or portion of material obtained for use in testing, examination, or study; particularly, a preparation of tissue or bodily fluid ta" conceptName="Specimen" order="3" xmlns:ns109="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="Department" id="EAID_A6005778_0E97_4205_B709_D89917F6BAFF" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="Department" id="EAID_A6005778_0E97_4205_B709_D89917F6BAFF" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns110:umlAttributeCollection xmlns:ns110="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns110:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="50653706" version="1.0"/>
     <ns110:UMLAttribute dataTypeName="java.lang.String" name="name" publicID="50653707" version="1.0"/>
    </ns110:umlAttributeCollection>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="ReportedProblem" id="EAID_A65FC794_EBBA_41cc_B612_E9B4F4653398" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="ReportedProblem" id="EAID_A65FC794_EBBA_41cc_B612_E9B4F4653398" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns111:umlAttributeCollection xmlns:ns111="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns111:UMLAttribute dataTypeName="java.lang.String" name="activityStatus" publicID="-1049252342" version="1.0"/>
     <ns111:UMLAttribute dataTypeName="java.lang.String" name="affiliation" publicID="-1049252341" version="1.0"/>
@@ -1885,7 +1885,7 @@
     <ns111:UMLAttribute dataTypeName="java.lang.String" name="subject" publicID="-1049252334" version="1.0"/>
    </ns111:umlAttributeCollection>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="SpecimenArray" id="EAID_A7642E05_6FF9_493e_8F43_01119DA59EA7" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="SpecimenArray" id="EAID_A7642E05_6FF9_493e_8F43_01119DA59EA7" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns112:umlAttributeCollection xmlns:ns112="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns112:UMLAttribute dataTypeName="java.lang.Boolean" name="available" publicID="1924296045" version="1.0"/>
     <ns112:UMLAttribute dataTypeName="java.lang.String" name="activityStatus" publicID="707445638" version="1.0"/>
@@ -1896,7 +1896,7 @@
     <ns112:UMLAttribute dataTypeName="java.lang.String" name="name" publicID="707445643" version="1.0"/>
    </ns112:umlAttributeCollection>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="TransferEventParameters" id="EAID_ACDFD93C_8019_41d9_8216_5EDBAD4C69FD" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="TransferEventParameters" id="EAID_ACDFD93C_8019_41d9_8216_5EDBAD4C69FD" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns113:umlAttributeCollection xmlns:ns113="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns113:UMLAttribute dataTypeName="java.lang.Integer" name="fromPositionDimensionOne" publicID="1083378933" version="1.0"/>
     <ns113:UMLAttribute dataTypeName="java.lang.Integer" name="fromPositionDimensionTwo" publicID="1083378934" version="1.0"/>
@@ -1907,7 +1907,7 @@
     <ns113:UMLAttribute dataTypeName="java.util.Date" name="timestamp" publicID="245697741" version="1.0"/>
    </ns113:umlAttributeCollection>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="CollectionProtocol" id="EAID_AEB894FE_BE0E_49e4_94B1_FB908108EFFB" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="CollectionProtocol" id="EAID_AEB894FE_BE0E_49e4_94B1_FB908108EFFB" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns114:umlAttributeCollection xmlns:ns114="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns114:UMLAttribute dataTypeName="java.lang.Boolean" name="aliquotInSameContainer" publicID="1316884367" version="1.0"/>
     <ns114:UMLAttribute dataTypeName="java.lang.Boolean" name="consentsWaived" publicID="1316884368" version="1.0">
@@ -1945,13 +1945,13 @@
     <ns114:UMLAttribute dataTypeName="java.lang.String" name="title" publicID="-806407773" version="1.0"/>
    </ns114:umlAttributeCollection>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="Race" id="EAID_B4604FB5_B58D_450f_B2E7_FAEDAB8155AE" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="Race" id="EAID_B4604FB5_B58D_450f_B2E7_FAEDAB8155AE" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns115:umlAttributeCollection xmlns:ns115="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns115:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="-1079531498" version="1.0"/>
     <ns115:UMLAttribute dataTypeName="java.lang.String" name="raceName" publicID="-1079531497" version="1.0"/>
    </ns115:umlAttributeCollection>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="DisposalEventParameters" id="EAID_BD2E86F0_D12A_47f9_A978_E9536DD54187" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="DisposalEventParameters" id="EAID_BD2E86F0_D12A_47f9_A978_E9536DD54187" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns116:umlAttributeCollection xmlns:ns116="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns116:UMLAttribute dataTypeName="java.lang.String" name="reason" publicID="171271555" version="1.0"/>
     <ns116:UMLAttribute dataTypeName="java.lang.String" name="comment" publicID="245697739" version="1.0"/>
@@ -1959,14 +1959,14 @@
     <ns116:UMLAttribute dataTypeName="java.util.Date" name="timestamp" publicID="245697741" version="1.0"/>
    </ns116:umlAttributeCollection>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="Password" id="EAID_CBD63FAD_07AC_4228_9F84_B9883E7A73B2" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="Password" id="EAID_CBD63FAD_07AC_4228_9F84_B9883E7A73B2" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns117:umlAttributeCollection xmlns:ns117="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns117:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="1372932367" version="1.0"/>
     <ns117:UMLAttribute dataTypeName="java.lang.String" name="password" publicID="1372932368" version="1.0"/>
     <ns117:UMLAttribute dataTypeName="java.util.Date" name="updateDate" publicID="1372932369" version="1.0"/>
    </ns117:umlAttributeCollection>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="CellSpecimen" id="EAID_CFDE73E7_86D4_44b3_8FB1_927C7E61845C" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="CellSpecimen" id="EAID_CFDE73E7_86D4_44b3_8FB1_927C7E61845C" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns118:umlAttributeCollection xmlns:ns118="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns118:UMLAttribute dataTypeName="java.lang.String" name="activityStatus" publicID="267670147" version="1.0"/>
     <ns118:UMLAttribute dataTypeName="java.lang.Double" name="availableQuantity" publicID="267670148" version="1.0"/>
@@ -1993,7 +1993,7 @@
    <ns123:SemanticMetadata conceptCode="C48694" conceptDefinition="Any small compartment." conceptName="Cell" order="4" xmlns:ns123="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
    <ns124:SemanticMetadata conceptCode="C60787" conceptDefinition="A hand-held mobile radiotelephone for use in an area divided into small sections (cells), each with its own short-range transmitter/receiver" conceptName="Cellular Telephone" order="5" xmlns:ns124="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="CellSpecimenRequirement" id="EAID_D0A4ABD6_5594_408b_B35C_89DC9EEF37AC" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="CellSpecimenRequirement" id="EAID_D0A4ABD6_5594_408b_B35C_89DC9EEF37AC" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns125:umlAttributeCollection xmlns:ns125="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns125:UMLAttribute dataTypeName="java.lang.String" name="storageType" publicID="-1333848804" version="1.0"/>
     <ns125:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="-321862258" version="1.0"/>
@@ -2010,7 +2010,7 @@
     <ns125:UMLAttribute dataTypeName="java.lang.String" name="specimenType" publicID="-321862253" version="1.0"/>
    </ns125:umlAttributeCollection>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="Participant" id="EAID_D0B6E701_BDC7_4ecf_9071_B959D569EA7E" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="Participant" id="EAID_D0B6E701_BDC7_4ecf_9071_B959D569EA7E" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns126:umlAttributeCollection xmlns:ns126="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns126:UMLAttribute dataTypeName="java.lang.String" name="activityStatus" publicID="-544767984" version="1.0"/>
     <ns126:UMLAttribute dataTypeName="java.util.Date" name="birthDate" publicID="-544767983" version="1.0"/>
@@ -2026,21 +2026,21 @@
     <ns126:UMLAttribute dataTypeName="java.lang.String" name="vitalStatus" publicID="292061760" version="1.0"/>
    </ns126:umlAttributeCollection>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="AbstractPosition" id="EAID_DC100813_9C29_4726_A486_8DB37C65C853" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="AbstractPosition" id="EAID_DC100813_9C29_4726_A486_8DB37C65C853" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns127:umlAttributeCollection xmlns:ns127="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns127:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="872245247" version="1.0"/>
     <ns127:UMLAttribute dataTypeName="java.lang.Integer" name="positionDimensionOne" publicID="872245248" version="1.0"/>
     <ns127:UMLAttribute dataTypeName="java.lang.Integer" name="positionDimensionTwo" publicID="872245249" version="1.0"/>
    </ns127:umlAttributeCollection>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="ContainerPosition" id="EAID_E12B8C7F_CFC1_4c5b_839E_D86362A1D91B" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="ContainerPosition" id="EAID_E12B8C7F_CFC1_4c5b_839E_D86362A1D91B" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns128:umlAttributeCollection xmlns:ns128="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns128:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="872245247" version="1.0"/>
     <ns128:UMLAttribute dataTypeName="java.lang.Integer" name="positionDimensionOne" publicID="872245248" version="1.0"/>
     <ns128:UMLAttribute dataTypeName="java.lang.Integer" name="positionDimensionTwo" publicID="872245249" version="1.0"/>
    </ns128:umlAttributeCollection>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="SpecimenRequirement" id="EAID_E2BD4A53_A2EE_4796_8A23_748BB04691A7" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="SpecimenRequirement" id="EAID_E2BD4A53_A2EE_4796_8A23_748BB04691A7" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns129:umlAttributeCollection xmlns:ns129="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns129:UMLAttribute dataTypeName="java.lang.String" name="storageType" publicID="-1333848804" version="1.0"/>
     <ns129:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="-321862258" version="1.0"/>
@@ -2051,7 +2051,7 @@
     <ns129:UMLAttribute dataTypeName="java.lang.String" name="specimenType" publicID="-321862253" version="1.0"/>
    </ns129:umlAttributeCollection>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="ReceivedEventParameters" id="EAID_E462AFF3_2977_482e_BAE3_13F67EB96637" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="ReceivedEventParameters" id="EAID_E462AFF3_2977_482e_BAE3_13F67EB96637" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns130:umlAttributeCollection xmlns:ns130="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns130:UMLAttribute dataTypeName="java.lang.String" name="receivedQuality" publicID="-958585133" version="1.0"/>
     <ns130:UMLAttribute dataTypeName="java.lang.String" name="comment" publicID="245697739" version="1.0"/>
@@ -2059,7 +2059,7 @@
     <ns130:UMLAttribute dataTypeName="java.util.Date" name="timestamp" publicID="245697741" version="1.0"/>
    </ns130:umlAttributeCollection>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="Distribution" id="EAID_E509AC6A_B7FA_4619_9A19_D6504934B84A" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="Distribution" id="EAID_E509AC6A_B7FA_4619_9A19_D6504934B84A" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns131:umlAttributeCollection xmlns:ns131="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns131:UMLAttribute dataTypeName="java.lang.String" name="activityStatus" publicID="1384247549" version="1.0"/>
     <ns131:UMLAttribute dataTypeName="java.lang.String" name="comment" publicID="1384247550" version="1.0"/>
@@ -2067,7 +2067,7 @@
     <ns131:UMLAttribute dataTypeName="java.util.Date" name="timestamp" publicID="1384247552" version="1.0"/>
    </ns131:umlAttributeCollection>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="SpecimenArrayOrderItem" id="EAID_E5BF74C7_2001_449a_93FE_AA125C835DC8" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="SpecimenArrayOrderItem" id="EAID_E5BF74C7_2001_449a_93FE_AA125C835DC8" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns132:umlAttributeCollection xmlns:ns132="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns132:UMLAttribute dataTypeName="java.lang.String" name="description" publicID="-1881114725" version="1.0">
      <ns132:SemanticMetadata conceptCode="C25365" conceptDefinition="A written or verbal account, representation, statement, or explanation of something." conceptName="Description" order="0"/>
@@ -2083,7 +2083,7 @@
    <ns135:SemanticMetadata conceptCode="C26358" conceptDefinition="ken for examination or diagnosis." conceptName="Array" order="2" xmlns:ns135="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
    <ns136:SemanticMetadata conceptCode="C19157" conceptDefinition="A part of a thing, or of several things, taken to demonstrate or to determine the character of the whole, e.g. a substance, or portion of material obtained for use in testing, examination, or study; particularly, a preparation of tissue or bodily fluid ta" conceptName="Specimen" order="3" xmlns:ns136="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="Container" id="EAID_E8A1EEEA_84EF_4676_A136_35A9F4694B28" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="Container" id="EAID_E8A1EEEA_84EF_4676_A136_35A9F4694B28" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns137:umlAttributeCollection xmlns:ns137="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns137:UMLAttribute dataTypeName="java.lang.String" name="activityStatus" publicID="707445638" version="1.0"/>
     <ns137:UMLAttribute dataTypeName="java.lang.String" name="barcode" publicID="707445639" version="1.0"/>
@@ -2093,7 +2093,7 @@
     <ns137:UMLAttribute dataTypeName="java.lang.String" name="name" publicID="707445643" version="1.0"/>
    </ns137:umlAttributeCollection>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="StorageContainer" id="EAID_EAEEECDE_C17B_4d07_8BE6_3DEDA6E3817C" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="StorageContainer" id="EAID_EAEEECDE_C17B_4d07_8BE6_3DEDA6E3817C" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns138:umlAttributeCollection xmlns:ns138="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns138:UMLAttribute dataTypeName="Collection" name="holdsSpecimenClassCollection" publicID="-345713106" version="1.0"/>
     <ns138:UMLAttribute dataTypeName="java.lang.Double" name="tempratureInCentigrade" publicID="-345713105" version="1.0"/>
@@ -2105,7 +2105,7 @@
     <ns138:UMLAttribute dataTypeName="java.lang.String" name="name" publicID="707445643" version="1.0"/>
    </ns138:umlAttributeCollection>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="NewSpecimenArrayOrderItem" id="EAID_EB45CBC9_044F_45fc_B9B8_742380EDA613" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="NewSpecimenArrayOrderItem" id="EAID_EB45CBC9_044F_45fc_B9B8_742380EDA613" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns139:umlAttributeCollection xmlns:ns139="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns139:UMLAttribute dataTypeName="java.lang.String" name="name" publicID="995916914" version="1.0">
      <ns139:SemanticMetadata conceptCode="C42614" conceptDefinition="The words or language units by which a thing is known." conceptName="Name" order="0"/>
@@ -2125,7 +2125,7 @@
    <ns143:SemanticMetadata conceptCode="C19157" conceptDefinition="A part of a thing, or of several things, taken to demonstrate or to determine the character of the whole, e.g. a substance, or portion of material obtained for use in testing, examination, or study; particularly, a preparation of tissue or bodily fluid ta" conceptName="Specimen" order="3" xmlns:ns143="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
    <ns144:SemanticMetadata conceptCode="C25586" conceptDefinition="Having no previous example or precedent or parallel; of a kind not seen before." conceptName="New" order="4" xmlns:ns144="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="ThawEventParameters" id="EAID_EDCE5D04_9C4D_485e_8FBD_30EFD6312397" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="ThawEventParameters" id="EAID_EDCE5D04_9C4D_485e_8FBD_30EFD6312397" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns145:umlAttributeCollection xmlns:ns145="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns145:UMLAttribute dataTypeName="java.lang.String" name="comment" publicID="245697739" version="1.0"/>
     <ns145:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="245697740" version="1.0"/>
@@ -2135,7 +2135,7 @@
    <ns147:SemanticMetadata conceptCode="C25499" conceptDefinition="Something that happens at a given place and time." conceptName="Event" order="1" xmlns:ns147="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
    <ns148:SemanticMetadata conceptCode="C48165" conceptDefinition="The process whereby heat changes something from a solid to a liquid." conceptName="Thaw" order="2" xmlns:ns148="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="DerivedSpecimenOrderItem" id="EAID_F6EF06F1_FBF0_413c_9EAF_6FE6B082EE2D" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="DerivedSpecimenOrderItem" id="EAID_F6EF06F1_FBF0_413c_9EAF_6FE6B082EE2D" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns149:umlAttributeCollection xmlns:ns149="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns149:UMLAttribute dataTypeName="java.lang.String" name="specimenClass" publicID="-538097171" version="1.0">
      <ns149:SemanticMetadata conceptCode="C25346" conceptDefinition="A grouping of things based on shared common attributes." conceptName="Class" order="0"/>
@@ -2161,7 +2161,7 @@
    <ns152:SemanticMetadata conceptCode="C19157" conceptDefinition="ken for examination or diagnosis." conceptName="Specimen" order="2" xmlns:ns152="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
    <ns153:SemanticMetadata conceptCode="C42885" conceptDefinition="To take, obtain, or receive from a source; having been determined by mathematical computation." conceptName="Derived" order="3" xmlns:ns153="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="EmbeddedEventParameters" id="EAID_F6FA97CC_4763_4b87_8837_016F9D40C2B1" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="EmbeddedEventParameters" id="EAID_F6FA97CC_4763_4b87_8837_016F9D40C2B1" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns154:umlAttributeCollection xmlns:ns154="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns154:UMLAttribute dataTypeName="java.lang.String" name="embeddingMedium" publicID="-1726269120" version="1.0"/>
     <ns154:UMLAttribute dataTypeName="java.lang.String" name="comment" publicID="245697739" version="1.0"/>
@@ -2169,7 +2169,7 @@
     <ns154:UMLAttribute dataTypeName="java.util.Date" name="timestamp" publicID="245697741" version="1.0"/>
    </ns154:umlAttributeCollection>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="FrozenEventParameters" id="EAID_FA2AA57C_B45A_431c_91D9_D88FE3E40193" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="FrozenEventParameters" id="EAID_FA2AA57C_B45A_431c_91D9_D88FE3E40193" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns155:umlAttributeCollection xmlns:ns155="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns155:UMLAttribute dataTypeName="java.lang.String" name="method" publicID="-2072430174" version="1.0"/>
     <ns155:UMLAttribute dataTypeName="java.lang.String" name="comment" publicID="245697739" version="1.0"/>
@@ -2177,7 +2177,7 @@
     <ns155:UMLAttribute dataTypeName="java.util.Date" name="timestamp" publicID="245697741" version="1.0"/>
    </ns155:umlAttributeCollection>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="ContainerType" id="EAID_FE47DD67_C116_488a_92B3_32AB2CF96EBD" packageName="edu.wustl.catissuecore.domain" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="ContainerType" id="EAID_FE47DD67_C116_488a_92B3_32AB2CF96EBD" packageName="edu.wustl.catissuecore.domain" projectName="caTissue_Suite" projectVersion="1.1">
    <ns156:umlAttributeCollection xmlns:ns156="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns156:UMLAttribute dataTypeName="java.lang.String" name="activityStatus" publicID="-1661475649" version="1.0"/>
     <ns156:UMLAttribute dataTypeName="java.lang.String" name="comment" publicID="-1661475648" version="1.0"/>
@@ -2187,7 +2187,7 @@
     <ns156:UMLAttribute dataTypeName="java.lang.String" name="twoDimensionLabel" publicID="-1661475644" version="1.0"/>
    </ns156:umlAttributeCollection>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="XMLContent" id="EAID_12420A4B_6997_436f_AFFC_B9FE986DB880" packageName="edu.wustl.catissuecore.domain.pathology" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="XMLContent" id="EAID_12420A4B_6997_436f_AFFC_B9FE986DB880" packageName="edu.wustl.catissuecore.domain.pathology" projectName="caTissue_Suite" projectVersion="1.1">
    <ns157:umlAttributeCollection xmlns:ns157="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns157:UMLAttribute dataTypeName="java.lang.String" name="data" publicID="-825476618" version="1.0">
      <ns157:SemanticMetadata conceptCode="C25474" conceptDefinition="A collection or single item of factual information, derived from measurement or research, from which conclusions may be drawn." conceptName="Data" order="0"/>
@@ -2198,7 +2198,7 @@
    <ns159:SemanticMetadata conceptCode="C45967" conceptDefinition="A general-purpose markup language for creating special-purpose markup languages. It is capable of describing many different kinds of data. Its primary purpose is to facilitate the sharing of data across different systems, particularly systems connected vi" conceptName="Extensible Markup Language" order="1" xmlns:ns159="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
    <ns160:SemanticMetadata conceptDefinition="a the Internet." xmlns:ns160="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="ConceptReferent" id="EAID_14E448AE_7602_4591_8F4D_28C70FDCD68D" packageName="edu.wustl.catissuecore.domain.pathology" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="ConceptReferent" id="EAID_14E448AE_7602_4591_8F4D_28C70FDCD68D" packageName="edu.wustl.catissuecore.domain.pathology" projectName="caTissue_Suite" projectVersion="1.1">
    <ns161:umlAttributeCollection xmlns:ns161="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns161:UMLAttribute dataTypeName="java.lang.Long" name="endOffset" publicID="-1093471080" version="1.0">
      <ns161:SemanticMetadata conceptCode="C47923" conceptDefinition="The distance between a point and a fixed reference point; difference between a set point and the actual reading." conceptName="Offset" order="0"/>
@@ -2224,7 +2224,7 @@
    <ns165:SemanticMetadata conceptDefinition="hips between concepts called Roles, binary relations between concepts that provide a machine-interpretable definition of a concept and the means for discrimination of sibling concepts. A concept may also include Properties, named slots that allow attachme" xmlns:ns165="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
    <ns166:SemanticMetadata conceptDefinition="nt of external information to concepts." xmlns:ns166="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="SemanticType" id="EAID_4EE64D0E_50F8_4eef_8364_12668C258047" packageName="edu.wustl.catissuecore.domain.pathology" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="SemanticType" id="EAID_4EE64D0E_50F8_4eef_8364_12668C258047" packageName="edu.wustl.catissuecore.domain.pathology" projectName="caTissue_Suite" projectVersion="1.1">
    <ns167:umlAttributeCollection xmlns:ns167="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns167:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="-1238099308" version="1.0"/>
     <ns167:UMLAttribute dataTypeName="java.lang.String" name="label" publicID="-1238099307" version="1.0">
@@ -2233,7 +2233,7 @@
    </ns167:umlAttributeCollection>
    <ns168:SemanticMetadata conceptCode="C42732" conceptDefinition="The semantic type describes the sort of thing or category to which a concept belongs in the context of the UMLS semantic network." conceptName="Semantic_Type" order="0" xmlns:ns168="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="TextContent" id="EAID_50EECDA6_3B1F_486d_A880_1D09FF470830" packageName="edu.wustl.catissuecore.domain.pathology" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="TextContent" id="EAID_50EECDA6_3B1F_486d_A880_1D09FF470830" packageName="edu.wustl.catissuecore.domain.pathology" projectName="caTissue_Suite" projectVersion="1.1">
    <ns169:umlAttributeCollection xmlns:ns169="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns169:UMLAttribute dataTypeName="java.lang.String" name="data" publicID="-825476618" version="1.0">
      <ns169:SemanticMetadata conceptCode="C25474" conceptDefinition="A collection or single item of factual information, derived from measurement or research, from which conclusions may be drawn." conceptName="Data" order="0"/>
@@ -2243,7 +2243,7 @@
    <ns170:SemanticMetadata conceptCode="C44476" conceptDefinition="Everything that is included in a collection, container, or communication." conceptName="Content" order="0" xmlns:ns170="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
    <ns171:SemanticMetadata conceptCode="C25704" conceptDefinition="The words of something written." conceptName="Text" order="1" xmlns:ns171="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="QuarantineEventParameter" id="EAID_60D6EB9B_2FEA_4dda_A6C7_6CD4E7CDB8F5" packageName="edu.wustl.catissuecore.domain.pathology" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="QuarantineEventParameter" id="EAID_60D6EB9B_2FEA_4dda_A6C7_6CD4E7CDB8F5" packageName="edu.wustl.catissuecore.domain.pathology" projectName="caTissue_Suite" projectVersion="1.1">
    <ns172:umlAttributeCollection xmlns:ns172="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns172:UMLAttribute dataTypeName="java.lang.String" name="comment" publicID="26976978" version="1.0"/>
     <ns172:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="26976979" version="1.0"/>
@@ -2260,7 +2260,7 @@
    <ns174:SemanticMetadata conceptCode="C25499" conceptDefinition="Something that happens at a given place and time." conceptName="Event" order="1" xmlns:ns174="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
    <ns175:SemanticMetadata conceptCode="C71902" conceptDefinition="Place into enforced isolation." conceptName="Quarantine" order="2" xmlns:ns175="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="DeidentifiedSurgicalPathologyReport" id="EAID_60F32265_98CE_434b_AC57_D9CDE5202D2A" packageName="edu.wustl.catissuecore.domain.pathology" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="DeidentifiedSurgicalPathologyReport" id="EAID_60F32265_98CE_434b_AC57_D9CDE5202D2A" packageName="edu.wustl.catissuecore.domain.pathology" projectName="caTissue_Suite" projectVersion="1.1">
    <ns176:umlAttributeCollection xmlns:ns176="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns176:UMLAttribute dataTypeName="java.lang.String" name="isQuarantined" publicID="208328075" version="1.0">
      <ns176:SemanticMetadata conceptCode="C43578" conceptDefinition="An indicator that can be set or unset in order to signal whether a particular condition is true." conceptName="Flag" order="0"/>
@@ -2287,7 +2287,7 @@
    <ns177:SemanticMetadata conceptCode="C45260" conceptDefinition="A pathology report based upon samples obtained by or during surgery." conceptName="Surgical Pathology Report" order="0" xmlns:ns177="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
    <ns178:SemanticMetadata conceptCode="C45970" conceptDefinition="Removal of text elements that would make data individually identifiable." conceptName="Deidentification" order="1" xmlns:ns178="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="IdentifiedSurgicalPathologyReport" id="EAID_628BFEB5_8385_47c5_8CFE_D5D1174E985A" packageName="edu.wustl.catissuecore.domain.pathology" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="IdentifiedSurgicalPathologyReport" id="EAID_628BFEB5_8385_47c5_8CFE_D5D1174E985A" packageName="edu.wustl.catissuecore.domain.pathology" projectName="caTissue_Suite" projectVersion="1.1">
    <ns179:umlAttributeCollection xmlns:ns179="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns179:UMLAttribute dataTypeName="java.lang.String" name="activityStatus" publicID="-2082254000" version="1.0">
      <ns179:SemanticMetadata conceptCode="C25688" conceptDefinition="A condition or state at a particular time." conceptName="Status" order="0"/>
@@ -2310,7 +2310,7 @@
    <ns180:SemanticMetadata conceptCode="C45260" conceptDefinition="A pathology report based upon samples obtained by or during surgery." conceptName="Surgical Pathology Report" order="0" xmlns:ns180="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
    <ns181:SemanticMetadata conceptCode="C25737" conceptDefinition="The procedure of having an identity established." conceptName="Identification" order="1" xmlns:ns181="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="ReportSection" id="EAID_70CFD7DE_28B0_4bcc_9773_81B0580C74A3" packageName="edu.wustl.catissuecore.domain.pathology" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="ReportSection" id="EAID_70CFD7DE_28B0_4bcc_9773_81B0580C74A3" packageName="edu.wustl.catissuecore.domain.pathology" projectName="caTissue_Suite" projectVersion="1.1">
    <ns182:umlAttributeCollection xmlns:ns182="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns182:UMLAttribute dataTypeName="java.lang.String" name="documentFragment" publicID="1676971123" version="1.0">
      <ns182:SemanticMetadata conceptCode="C48295" conceptDefinition="A part of a larger entity." conceptName="Fragment" order="0"/>
@@ -2332,7 +2332,7 @@
    <ns183:SemanticMetadata conceptCode="C54091" conceptDefinition="One of several parts or pieces that fit with others to constitute a whole object; a self-contained part of a larger composition (written or musical)." conceptName="Section" order="0" xmlns:ns183="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
    <ns184:SemanticMetadata conceptCode="C25375" conceptDefinition="A short textual account; having provided a short account." conceptName="Report" order="1" xmlns:ns184="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="ConceptReferentClassification" id="EAID_94493CE5_0162_40e4_A376_F9EC102A00D0" packageName="edu.wustl.catissuecore.domain.pathology" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="ConceptReferentClassification" id="EAID_94493CE5_0162_40e4_A376_F9EC102A00D0" packageName="edu.wustl.catissuecore.domain.pathology" projectName="caTissue_Suite" projectVersion="1.1">
    <ns185:umlAttributeCollection xmlns:ns185="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns185:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="-1277855457" version="1.0"/>
     <ns185:UMLAttribute dataTypeName="java.lang.String" name="name" publicID="-1277855456" version="1.0">
@@ -2345,7 +2345,7 @@
    <ns189:SemanticMetadata conceptDefinition="hips between concepts called Roles, binary relations between concepts that provide a machine-interpretable definition of a concept and the means for discrimination of sibling concepts. A concept may also include Properties, named slots that allow attachme" xmlns:ns189="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
    <ns190:SemanticMetadata conceptDefinition="nt of external information to concepts." xmlns:ns190="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="ReportContent" id="EAID_A2858D34_3E9A_413c_BF72_152AE293DFE9" packageName="edu.wustl.catissuecore.domain.pathology" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="ReportContent" id="EAID_A2858D34_3E9A_413c_BF72_152AE293DFE9" packageName="edu.wustl.catissuecore.domain.pathology" projectName="caTissue_Suite" projectVersion="1.1">
    <ns191:umlAttributeCollection xmlns:ns191="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns191:UMLAttribute dataTypeName="java.lang.String" name="data" publicID="-825476618" version="1.0">
      <ns191:SemanticMetadata conceptCode="C25474" conceptDefinition="A collection or single item of factual information, derived from measurement or research, from which conclusions may be drawn." conceptName="Data" order="0"/>
@@ -2355,7 +2355,7 @@
    <ns192:SemanticMetadata conceptCode="C44476" conceptDefinition="Everything that is included in a collection, container, or communication." conceptName="Content" order="0" xmlns:ns192="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
    <ns193:SemanticMetadata conceptCode="C25375" conceptDefinition="A short textual account; having provided a short account." conceptName="Report" order="1" xmlns:ns193="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="BinaryContent" id="EAID_AA610361_AED5_430c_8795_90374358DF9A" packageName="edu.wustl.catissuecore.domain.pathology" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="BinaryContent" id="EAID_AA610361_AED5_430c_8795_90374358DF9A" packageName="edu.wustl.catissuecore.domain.pathology" projectName="caTissue_Suite" projectVersion="1.1">
    <ns194:umlAttributeCollection xmlns:ns194="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns194:UMLAttribute dataTypeName="java.lang.String" name="data" publicID="-825476618" version="1.0">
      <ns194:SemanticMetadata conceptCode="C25474" conceptDefinition="A collection or single item of factual information, derived from measurement or research, from which conclusions may be drawn." conceptName="Data" order="0"/>
@@ -2365,7 +2365,7 @@
    <ns195:SemanticMetadata conceptCode="C44476" conceptDefinition="Everything that is included in a collection, container, or communication." conceptName="Content" order="0" xmlns:ns195="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
    <ns196:SemanticMetadata conceptCode="C45969" conceptDefinition="Consisting of two (e.g., units, components, elements, terms, possibilities) or based on two." conceptName="Binary" order="1" xmlns:ns196="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="SurgicalPathologyReport" id="EAID_CA2CA930_A6D6_4262_8708_59C80B32ED77" packageName="edu.wustl.catissuecore.domain.pathology" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="SurgicalPathologyReport" id="EAID_CA2CA930_A6D6_4262_8708_59C80B32ED77" packageName="edu.wustl.catissuecore.domain.pathology" projectName="caTissue_Suite" projectVersion="1.1">
    <ns197:umlAttributeCollection xmlns:ns197="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns197:UMLAttribute dataTypeName="java.lang.String" name="activityStatus" publicID="-2082254000" version="1.0">
      <ns197:SemanticMetadata conceptCode="C25688" conceptDefinition="A condition or state at a particular time." conceptName="Status" order="0"/>
@@ -2387,7 +2387,7 @@
    </ns197:umlAttributeCollection>
    <ns198:SemanticMetadata conceptCode="C45260" conceptDefinition="A pathology report based upon samples obtained by or during surgery." conceptName="Surgical Pathology Report" order="0" xmlns:ns198="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="PathologyReportReviewParameter" id="EAID_EA57CB35_E610_47e2_9D88_81D25BA2786D" packageName="edu.wustl.catissuecore.domain.pathology" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="PathologyReportReviewParameter" id="EAID_EA57CB35_E610_47e2_9D88_81D25BA2786D" packageName="edu.wustl.catissuecore.domain.pathology" projectName="caTissue_Suite" projectVersion="1.1">
    <ns199:umlAttributeCollection xmlns:ns199="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns199:UMLAttribute dataTypeName="java.lang.String" name="comment" publicID="-1538617249" version="1.0"/>
     <ns199:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="-1538617248" version="1.0"/>
@@ -2404,7 +2404,7 @@
    <ns201:SemanticMetadata conceptCode="C42729" conceptDefinition="The act of appraisal, evaluation, or analysis." conceptName="Review" order="1" xmlns:ns201="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
    <ns202:SemanticMetadata conceptCode="C28277" conceptDefinition="te of the cancer and describes the extent to which it has spread." conceptName="Pathology Report" order="2" xmlns:ns202="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="Concept" id="EAID_FC28B604_D056_4043_9168_3352BCC3B272" packageName="edu.wustl.catissuecore.domain.pathology" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="Concept" id="EAID_FC28B604_D056_4043_9168_3352BCC3B272" packageName="edu.wustl.catissuecore.domain.pathology" projectName="caTissue_Suite" projectVersion="1.1">
    <ns203:umlAttributeCollection xmlns:ns203="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns203:UMLAttribute dataTypeName="java.lang.String" name="conceptUniqueIdentifier" publicID="775793951" version="1.0">
      <ns203:SemanticMetadata conceptCode="C43516" conceptDefinition="A concept unique identifier within the NCI Enterprise Vocabulary Service's NCI Thesaurus." conceptName="NCI Concept Code" order="0"/>
@@ -2420,7 +2420,7 @@
    <ns207:SemanticMetadata conceptDefinition="hips between concepts called Roles, binary relations between concepts that provide a machine-interpretable definition of a concept and the means for discrimination of sibling concepts. A concept may also include Properties, named slots that allow attachme" xmlns:ns207="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
    <ns208:SemanticMetadata conceptDefinition="nt of external information to concepts." xmlns:ns208="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="Shipment" id="EAID_00A7DE8A_E836_49f2_8290_2AF547C0F55F" packageName="edu.wustl.catissuecore.domain.shippingtracking" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="Shipment" id="EAID_00A7DE8A_E836_49f2_8290_2AF547C0F55F" packageName="edu.wustl.catissuecore.domain.shippingtracking" projectName="caTissue_Suite" projectVersion="1.1">
    <ns209:umlAttributeCollection xmlns:ns209="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns209:UMLAttribute dataTypeName="java.lang.String" name="barcode" publicID="-1510675056" version="1.0"/>
     <ns209:UMLAttribute dataTypeName="java.lang.String" name="activityStatus" publicID="-1499334940" version="1.0"/>
@@ -2432,7 +2432,7 @@
     <ns209:UMLAttribute dataTypeName="java.lang.String" name="senderComments" publicID="-1499334934" version="1.0"/>
    </ns209:umlAttributeCollection>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="ShipmentRequest" id="EAID_4AD04796_2036_4cac_AFD5_FD5E4C7AFE28" packageName="edu.wustl.catissuecore.domain.shippingtracking" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="ShipmentRequest" id="EAID_4AD04796_2036_4cac_AFD5_FD5E4C7AFE28" packageName="edu.wustl.catissuecore.domain.shippingtracking" projectName="caTissue_Suite" projectVersion="1.1">
    <ns210:umlAttributeCollection xmlns:ns210="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns210:UMLAttribute dataTypeName="java.lang.String" name="activityStatus" publicID="-1499334940" version="1.0"/>
     <ns210:UMLAttribute dataTypeName="java.util.Date" name="createdDate" publicID="-1499334939" version="1.0"/>
@@ -2443,7 +2443,7 @@
     <ns210:UMLAttribute dataTypeName="java.lang.String" name="senderComments" publicID="-1499334934" version="1.0"/>
    </ns210:umlAttributeCollection>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="BaseShipment" id="EAID_61DFA5E9_E996_4e22_84A2_C415E7761A32" packageName="edu.wustl.catissuecore.domain.shippingtracking" projectName="caTissueSuite" projectVersion="1.1">
+  <ns1:UMLClass allowableAsTarget="true" className="BaseShipment" id="EAID_61DFA5E9_E996_4e22_84A2_C415E7761A32" packageName="edu.wustl.catissuecore.domain.shippingtracking" projectName="caTissue_Suite" projectVersion="1.1">
    <ns211:umlAttributeCollection xmlns:ns211="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns211:UMLAttribute dataTypeName="java.lang.String" name="activityStatus" publicID="-1499334940" version="1.0"/>
     <ns211:UMLAttribute dataTypeName="java.util.Date" name="createdDate" publicID="-1499334939" version="1.0"/>
