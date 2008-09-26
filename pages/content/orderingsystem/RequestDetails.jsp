@@ -304,20 +304,16 @@ function checkQuantityforAll(count)
 			}
 		
 		}
-		if(answer)
+		if(answer || isQuantityValid)
 		{
 			for(i=0;i<count;i++)
 			{
 				canDistribute = "value(RequestDetailsBean:"+i+"_canDistribute)";
 				document.getElementById(canDistribute).value="true";
-				updateAllStatus();
-
 			}
-		}
-		if(isQuantityValid)
-		{
 			updateAllStatus();
 		}
+		
 	} else {
 		updateAllStatus();
 	}
