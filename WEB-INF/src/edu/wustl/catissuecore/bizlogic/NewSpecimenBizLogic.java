@@ -3456,4 +3456,22 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			throw new DAOException("Child specimen can not be collected without collecting the parent specimen.");
 		}
 	}
+	
+	 /**
+	  * This method called from orderbizlogic to distribute and close specimen
+	 * @param sessionDataBean
+	 * @param specimen
+	 * @param dao
+	 * @throws DAOException
+	 * @throws UserNotAuthorizedException
+	 * @throws BizLogicException
+	 */
+	public void disposeAndCloseSpecimen(SessionDataBean sessionDataBean, AbstractSpecimen specimen, DAO dao)
+     throws DAOException, UserNotAuthorizedException, BizLogicException
+	 {
+		 if(!Constants.ACTIVITY_STATUS_CLOSED.equals(specimen.getActivityStatus())){
+			 disposeSpecimen(sessionDataBean,specimen,dao);
+		 }
+     }
+	
 }

@@ -1262,16 +1262,17 @@ public class OrderBizLogic extends DefaultBizLogic
 	 */
 	private void disposeSpecimen(OrderDetails orderNew,
 			SessionDataBean sessionDataBean, DAO dao) throws UserNotAuthorizedException, DAOException {
-		
+
 		NewSpecimenBizLogic newSpecimenBizLogic=new NewSpecimenBizLogic();
 		Collection orderItemCollection = orderNew.getOrderItemCollection();
 
 		Iterator orderItemIterator = orderItemCollection.iterator();
 
 		while (orderItemIterator.hasNext()) {
-			if (((OrderItem) orderItemIterator.next()).getStatus().equals(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE)) {
+			OrderItem orderItem = (OrderItem) orderItemIterator.next();
+			if ((orderItem).getStatus().equals(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE)) {
 				Collection distributionCollection = orderNew
-						.getDistributionCollection();
+				.getDistributionCollection();
 
 				Iterator iterator = distributionCollection.iterator();
 
@@ -1279,36 +1280,37 @@ public class OrderBizLogic extends DefaultBizLogic
 					Distribution disrt = (Distribution) iterator.next();
 
 					Collection distributedItemCollection = disrt
-							.getDistributedItemCollection();
+					.getDistributedItemCollection();
 
 					Iterator iter = distributedItemCollection.iterator();
 
 					while (iter.hasNext()) {
 						DistributedItem distributionItem = (DistributedItem) iter
-								.next();
+						.next();
+						if(orderItem.getDistributedItem().equals(distributionItem)){
 
-						Specimen specimen = distributionItem.getSpecimen();
-						SpecimenArray specimenArray= distributionItem.getSpecimenArray();
-					
-						if(specimen!=null){
-							
-							try {
-								newSpecimenBizLogic.disposeSpecimen(sessionDataBean,specimen,dao);
-							} catch (BizLogicException e) {
-								
-								throw new DAOException(e);
+							Specimen specimen = distributionItem.getSpecimen();
+							SpecimenArray specimenArray= distributionItem.getSpecimenArray();
+
+							if(specimen!=null){
+
+								try {
+									newSpecimenBizLogic.disposeAndCloseSpecimen(sessionDataBean,specimen,dao);
+								} catch (BizLogicException e) {
+
+									throw new DAOException(e);
+								}
+							}
+							else if(specimenArray!=null)
+							{
+								updateSpecimenArray(specimenArray,dao,sessionDataBean);
+
 							}
 						}
-						else if(specimenArray!=null)
-						{
-							updateSpecimenArray(specimenArray,dao,sessionDataBean);
-							
-						}
-
 					}
 				}
 			}
-			
+
 		}
 	}
 
