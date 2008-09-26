@@ -138,7 +138,10 @@ public class DefaultSpecimenBarcodeGenerator implements BarcodeGenerator
 			
 		}
 		
-		specimenObject.setBarcode( parentSpecimenBarcode + "_" + (++aliquotChildCount) );
+		if(parentSpecimenBarcode!=null)
+		{
+			specimenObject.setBarcode( parentSpecimenBarcode + "_" + (++aliquotChildCount) );
+		}
 		barcodeCountTreeMap.put(parentObject,aliquotChildCount);	
 		barcodeCountTreeMap.put(specimenObject,0);
 	}
