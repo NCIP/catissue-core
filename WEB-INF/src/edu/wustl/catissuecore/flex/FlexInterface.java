@@ -919,6 +919,8 @@ public class FlexInterface
 		 scg.setName("scg1");
 		 sp.setSpecimenCollectionGroup(scg);*/
 
+		if (edu.wustl.catissuecore.util.global.Constants.NEW_SPECIMEN_TYPE.equals(spBean.parentType))
+		{
 		Set<SpecimenEventParameters> eventSet = new HashSet<SpecimenEventParameters>();
 		CollectionEventParameters collectionEvent = getCollectionEventParameters(spBean.collectionEvent);
 		//collectionEvent.setSpecimen(sp);
@@ -929,7 +931,7 @@ public class FlexInterface
 		eventSet.add(receEvent);
 
 		specimenDataBean.setSpecimenEventCollection(eventSet);
-
+		}
 		/*specimenDataBean.setStorageContainer(null);
 		 sp.setPositionDimensionOne(null);
 		 sp.setPositionDimensionTwo(null);*/
