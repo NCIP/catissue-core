@@ -55,7 +55,12 @@ public class CSMValidator implements IValidator {
 						break;
 					}
 				}
-	        } else
+				if(!hasPrivilege)
+				{
+					hasPrivilege = edu.wustl.catissuecore.util.global.Utility.checkForAllCurrentAndFutureCPs(null,Permissions.REGISTRATION, sessionDataBean, null);
+				}
+	        } 
+			else
 	        {
 	        	hasPrivilege = edu.wustl.catissuecore.util.global.Utility.checkForAllCurrentAndFutureCPs(null,Permissions.REGISTRATION, sessionDataBean, null);
 	        }
