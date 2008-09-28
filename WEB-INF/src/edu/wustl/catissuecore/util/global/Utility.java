@@ -33,6 +33,7 @@ import org.apache.struts.Globals;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
+import org.hibernate.Session;
 
 import edu.common.dynamicextensions.entitymanager.EntityManagerConstantsInterface;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
@@ -89,12 +90,14 @@ import edu.wustl.common.dao.JDBCDAO;
 import edu.wustl.common.dao.QuerySessionData;
 import edu.wustl.common.dao.queryExecutor.PagenatedResultData;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.security.PrivilegeCache;
 import edu.wustl.common.security.PrivilegeManager;
 import edu.wustl.common.security.PrivilegeUtility;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.Permissions;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.dbManager.DBUtil;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
@@ -1686,6 +1689,36 @@ public class Utility extends edu.wustl.common.util.Utility {
     public static boolean checkForAllCurrentAndFutureCPs(AbstractDAO dao, String privilegeName, SessionDataBean sessionDataBean, String cpId)
     {
     	boolean allowOperation = false;
+    	Session session = null;
+    	Collection<CollectionProtocol> cpCollection = null;
+    	try 
+		{
+	    	session = DBUtil.getCleanSession();
+			Set<Long> cpIds = new HashSet<Long>();
+			User user = (User) session.load(User.class.getName(), sessionDataBean.getUserId());
+			cpCollection = user.getAssignedProtocolCollection();
+			
+			if(cpCollection!= null && !cpCollection.isEmpty())
+			{	
+				for(CollectionProtocol cp : cpCollection)
+				{
+					cpIds.add(cp.getId());
+				}
+			}
+			// Check for Over-ridden privileges
+			if(cpId!=null && cpIds.contains(Long.valueOf(cpId)))
+			{
+				return false;
+			}
+		}
+    	catch (BizLogicException e) 
+		{
+			Logger.out.debug(e.getMessage(), e);
+		}
+		finally
+		{
+			session.close();
+		}
     	
     	String privilegeNames[] = privilegeName.split(",");
         Collection<Site> siteCollection = null;
@@ -1703,7 +1736,6 @@ public class Utility extends edu.wustl.common.util.Utility {
                     Site site = new Site();
                     site.setId(siteId);
                     siteCollection.add(site);
-                   
                 }
             }
         }
@@ -2017,34 +2049,8 @@ public class Utility extends edu.wustl.common.util.Utility {
 		
 		for (Long cpId : cpIds)
 		{
-			String [] privilegeNames = privilegeName.split(",");
-			if(privilegeNames.length > 1)
-			{	
-				isPresent = privilegeCache.hasPrivilege(sb.toString()+cpId.toString(), privilegeNames[0]);
-				
-				if(!isPresent)
-				{
-					isPresent = checkForAllCurrentAndFutureCPs(null, privilegeNames[0], sessionDataBean, cpId.toString());
-				}
-				
-				if(isPresent)
-				{
-					isPresent = privilegeCache.hasPrivilege(sb.toString()+cpId.toString(), privilegeNames[1]);
-					isPresent = !isPresent;
-				}
-			}
-			else
-			{
-				isPresent = privilegeCache.hasPrivilege(sb.toString()+cpId.toString(), privilegeName);
-				if(!isPresent && Permissions.REGISTRATION.equals(privilegeName))
-				{
-					isPresent = checkForAllCurrentAndFutureCPs(null, privilegeName, sessionDataBean, cpId.toString());
-				}
-				if (privilegeName != null && privilegeName.equalsIgnoreCase(Permissions.READ_DENIED))
-				{
-					isPresent = !isPresent;
-				}
-			}
+			isPresent = returnHasPrivilege(sessionDataBean, privilegeName,
+					privilegeCache, sb, cpId);
 			
 			if (!isPresent)
 			{
@@ -2064,16 +2070,54 @@ public class Utility extends edu.wustl.common.util.Utility {
 		
 		for (Object cpId : cpIdsList)
 		{
+			isPresent = returnHasPrivilege(sessionDataBean, privilegeName,
+					privilegeCache, sb, cpId);
+			
+			if (isPresent)
+			{
+				return true;
+			} 
+		}
+    	return false;
+	}
+
+	private static boolean returnHasPrivilege(SessionDataBean sessionDataBean,
+			String privilegeName, PrivilegeCache privilegeCache,
+			StringBuffer sb, Object cpId) 
+	{
+		Session session = null;
+		boolean isPresent = false;
+		Collection<CollectionProtocol> cpCollection = null;
+		
+		try 
+		{
+	    	session = DBUtil.getCleanSession();
+			Set<Long> cpIds = new HashSet<Long>();
+			User user = (User) session.load(User.class.getName(), sessionDataBean.getUserId());
+			cpCollection = user.getAssignedProtocolCollection();
+			
+			if(cpCollection!= null && !cpCollection.isEmpty())
+			{	
+				for(CollectionProtocol cp : cpCollection)
+				{
+					cpIds.add(cp.getId());
+				}
+			}
+			
 			String [] privilegeNames = privilegeName.split(",");
 			if(privilegeNames.length > 1)
 			{	
 				isPresent = privilegeCache.hasPrivilege(sb.toString()+cpId.toString(), privilegeNames[0]);
 				
+				// Check for Over-ridden privileges
+				if(!isPresent && cpIds.contains(cpId))
+				{
+					return false;
+				}
 				if(!isPresent)
 				{
 					isPresent = checkForAllCurrentAndFutureCPs(null, privilegeNames[0], sessionDataBean, cpId.toString());
 				}
-				
 				if(isPresent)
 				{
 					isPresent = privilegeCache.hasPrivilege(sb.toString()+cpId.toString(), privilegeNames[1]);
@@ -2092,13 +2136,17 @@ public class Utility extends edu.wustl.common.util.Utility {
 					isPresent = !isPresent;
 				}
 			}
-			
-			if (isPresent)
-			{
-				return true;
-			} 
+		} 
+		catch (BizLogicException e) 
+		{
+			Logger.out.debug(e.getMessage(), e);
 		}
-    	return false;
+		finally
+		{
+			session.close();
+		}
+		
+		return isPresent;
 	}
 
 	/**
@@ -2161,5 +2209,104 @@ public class Utility extends edu.wustl.common.util.Utility {
 				Logger.out.debug(e.getMessage(), e);
 			}
 		}
+	}
+	
+	/**
+	 * Common Code - return authorization info depending upon Privileges
+	 * @param sessionDataBean Session Data Bean
+	 * @param privilegeName Privilege Name
+	 * @param protectionElementName Protection Element Name
+	 * @return
+	 * @throws UserNotAuthorizedException
+	 */
+	public static boolean returnIsAuthorized(SessionDataBean sessionDataBean,
+			String privilegeName, String protectionElementName)
+			throws UserNotAuthorizedException 
+	{
+		boolean isAuthorized = false;
+		PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(sessionDataBean.getUserName());
+		
+		if (protectionElementName != null)
+		{
+			String [] prArray = protectionElementName.split(Constants.UNDERSCORE);
+			String baseObjectId = prArray[0];
+			String objId = null;
+			boolean isAuthorized1 = false;
+			
+			for (int i = 1 ; i < prArray.length;i++)
+			{
+				objId = baseObjectId+Constants.UNDERSCORE+prArray[i];
+				isAuthorized1 = privilegeCache.hasPrivilege(objId.toString(),privilegeName);
+				if (!isAuthorized1)
+				{
+					break;
+				}
+			}	
+		   
+			isAuthorized = isAuthorized1;
+		} 
+		else
+		{
+			isAuthorized = false;
+		}
+		if (!isAuthorized)
+        {
+			throw Utility.getUserNotAuthorizedException(privilegeName, protectionElementName);  
+        }
+		return isAuthorized;
+	}
+	
+	
+	public static boolean checkPrivilegeOnCP(AbstractDAO dao, Object domainObject, String protectionElementName, String privilegeName, SessionDataBean sessionDataBean) throws UserNotAuthorizedException 
+	{
+		boolean isAuthorized = false;
+		
+		if(protectionElementName.equals(Constants.allowOperation))
+		{
+			return true;
+		}
+		
+		PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(sessionDataBean.getUserName());
+		//Checking whether the logged in user has the required privilege on the given protection element
+		isAuthorized = privilegeCache.hasPrivilege(protectionElementName,privilegeName);
+		
+		if(isAuthorized)
+		{
+			return isAuthorized;
+		}
+		else
+		// Check for ALL CURRENT & FUTURE CASE
+		{
+			String protectionElementNames[] = protectionElementName.split("_");
+			
+			Long cpId = Long.valueOf(protectionElementNames[1]);
+			Set<Long> cpIdSet = new UserBizLogic().getRelatedCPIds(sessionDataBean.getUserId(), false);
+			
+			if(cpIdSet.contains(cpId))
+			{
+				throw Utility.getUserNotAuthorizedException(privilegeName, protectionElementName);    
+			}
+			isAuthorized = edu.wustl.catissuecore.util.global.Utility.checkForAllCurrentAndFutureCPs(dao,privilegeName, sessionDataBean, protectionElementNames[1]);
+		}
+		return isAuthorized;
+	}
+	
+	public static boolean checkOnCurrentAndFuture(AbstractDAO dao,
+			SessionDataBean sessionDataBean, String protectionElementName,
+			String privilegeName) throws UserNotAuthorizedException 
+	{
+		boolean isAuthorized = false;
+		String protectionElementNames[] = protectionElementName.split("_");
+
+		Long cpId = Long.valueOf(protectionElementNames[1]);
+		Set<Long> cpIdSet = new UserBizLogic().getRelatedCPIds(sessionDataBean.getUserId(), false);
+
+		if (cpIdSet.contains(cpId))
+		{
+			throw Utility.getUserNotAuthorizedException(privilegeName, protectionElementName);
+		}
+		isAuthorized = edu.wustl.catissuecore.util.global.Utility.checkForAllCurrentAndFutureCPs(dao, privilegeName, sessionDataBean,
+				protectionElementNames[1]);
+		return isAuthorized;
 	}
 }
