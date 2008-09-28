@@ -341,36 +341,9 @@ public class ApproveUserBizLogic extends DefaultBizLogic
 		
 		String privilegeName = getPrivilegeName(domainObject);
 		String protectionElementName = getObjectId(dao, domainObject);
-		PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(sessionDataBean.getUserName());
-		 
-		if (protectionElementName != null)
-		{
-			String [] prArray = protectionElementName.split(Constants.UNDERSCORE);
-			String baseObjectId = prArray[0];
-			String objId = null;
-			boolean isAuthorized1 = false;
-			
-    		for (int i = 1 ; i < prArray.length;i++)
-    		{
-    			objId = baseObjectId+Constants.UNDERSCORE+prArray[i];
-    			isAuthorized1 = privilegeCache.hasPrivilege(objId.toString(),privilegeName);
-    			if (!isAuthorized1)
-    			{
-    				break;
-    			}
-    		}
-    		
-    		isAuthorized = isAuthorized1;		
-		}
-		else
-		{
-			isAuthorized = false;
-		}
-		if (!isAuthorized)
-        {
-			throw Utility.getUserNotAuthorizedException(privilegeName, protectionElementName);    
-        }
-		return isAuthorized;
+		
+		return Utility.returnIsAuthorized(sessionDataBean, privilegeName,
+				protectionElementName);
 	}
 
 

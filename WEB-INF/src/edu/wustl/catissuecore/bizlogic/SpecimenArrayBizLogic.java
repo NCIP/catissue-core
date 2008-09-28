@@ -1198,17 +1198,7 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 		else
 		// Check for ALL CURRENT & FUTURE CASE
 		{
-			String protectionElementNames[] = protectionElementName.split("_");
-
-			Long cpId = Long.valueOf(protectionElementNames[1]);
-			Set<Long> cpIdSet = new UserBizLogic().getRelatedCPIds(sessionDataBean.getUserId(), false);
-
-			if (cpIdSet.contains(cpId))
-			{
-				throw Utility.getUserNotAuthorizedException(privilegeName, protectionElementName);
-			}
-			isAuthorized = edu.wustl.catissuecore.util.global.Utility.checkForAllCurrentAndFutureCPs(dao, privilegeName, sessionDataBean,
-					protectionElementNames[1]);
+			isAuthorized = Utility.checkOnCurrentAndFuture(dao, sessionDataBean, protectionElementName, privilegeName);
 		}
 		if (!isAuthorized)
 		{

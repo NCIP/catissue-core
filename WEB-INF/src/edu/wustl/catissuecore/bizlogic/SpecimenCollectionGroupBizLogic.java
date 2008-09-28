@@ -2274,36 +2274,10 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		{
 			protectionElementName = getObjectId(dao, domainObject);
 		}
-
-		if (protectionElementName.equals(Constants.allowOperation))
-		{
-			return true;
-		}
 		//Get the required privilege name which we would like to check for the logged in user.
 		String privilegeName = getPrivilegeName(domainObject);
-		PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(sessionDataBean.getUserName());
-		//Checking whether the logged in user has the required privilege on the given protection element
-		isAuthorized = privilegeCache.hasPrivilege(protectionElementName, privilegeName);
-
-		if (isAuthorized)
-		{
-			return isAuthorized;
-		}
-		else
-		// Check for ALL CURRENT & FUTURE CASE
-		{
-			String protectionElementNames[] = protectionElementName.split("_");
-
-			Long cpId = Long.valueOf(protectionElementNames[1]);
-			Set<Long> cpIdSet = new UserBizLogic().getRelatedCPIds(sessionDataBean.getUserId(), false);
-
-			if (cpIdSet.contains(cpId))
-			{
-				throw Utility.getUserNotAuthorizedException(privilegeName, protectionElementName);
-			}
-			isAuthorized = edu.wustl.catissuecore.util.global.Utility.checkForAllCurrentAndFutureCPs(dao, privilegeName, sessionDataBean,
-					protectionElementNames[1]);
-		}
+		isAuthorized = Utility.checkPrivilegeOnCP(dao, domainObject, protectionElementName, privilegeName, sessionDataBean);
+		
 		if (!isAuthorized)
 		{
 			throw Utility.getUserNotAuthorizedException(privilegeName, protectionElementName);

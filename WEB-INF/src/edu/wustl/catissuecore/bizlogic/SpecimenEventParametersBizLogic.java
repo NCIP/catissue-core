@@ -15,9 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-
 import org.hibernate.Session;
-
 import net.sf.ehcache.CacheException;
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter;
@@ -52,8 +50,6 @@ import edu.wustl.common.dao.DAO;
 import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.dao.JDBCDAO;
 import edu.wustl.common.exception.BizLogicException;
-import edu.wustl.common.security.PrivilegeCache;
-import edu.wustl.common.security.PrivilegeManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -985,7 +981,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 				protectionElementName = getObjectId(dao, domainObject2);
 				checkPrivilegeOnSourceSite(dao, domainObject2, sessionDataBean);
 				privilegeName = getPrivilegeName(domainObject2);
-				validOperation = checkPrivilegeOnCP(dao, domainObject2, protectionElementName, sessionDataBean);
+				validOperation = Utility.checkPrivilegeOnCP(dao, domainObject2, protectionElementName, privilegeName, sessionDataBean);
 				if(!validOperation)
 				{
 					isAuthorized = false;
@@ -1007,7 +1003,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 			checkPrivilegeOnSourceSite(dao, domainObject, sessionDataBean);
 			privilegeName = getPrivilegeName(domainObject);
 			protectionElementName = getObjectId(dao, domainObject);
-			isAuthorized = checkPrivilegeOnCP(dao, domainObject, protectionElementName, sessionDataBean);
+			isAuthorized = Utility.checkPrivilegeOnCP(dao, domainObject, protectionElementName, privilegeName, sessionDataBean);
 		}
 
 		if (!isAuthorized)
@@ -1048,41 +1044,6 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 		{
 			throw Utility.getUserNotAuthorizedException(Constants.Association, site.getObjectId());
 		}	
-	}
-
-	private boolean checkPrivilegeOnCP(AbstractDAO dao, Object domainObject, String protectionElementName, SessionDataBean sessionDataBean) throws UserNotAuthorizedException 
-	{
-		boolean isAuthorized = false;
-		
-		if(protectionElementName.equals(Constants.allowOperation))
-		{
-			return true;
-		}
-		//Get the required privilege name which we would like to check for the logged in user.
-		String privilegeName = getPrivilegeName(domainObject);
-		PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(sessionDataBean.getUserName());
-		//Checking whether the logged in user has the required privilege on the given protection element
-		isAuthorized = privilegeCache.hasPrivilege(protectionElementName,privilegeName);
-		
-		if(isAuthorized)
-		{
-			return isAuthorized;
-		}
-		else
-		// Check for ALL CURRENT & FUTURE CASE
-		{
-			String protectionElementNames[] = protectionElementName.split("_");
-			
-			Long cpId = Long.valueOf(protectionElementNames[1]);
-			Set<Long> cpIdSet = new UserBizLogic().getRelatedCPIds(sessionDataBean.getUserId(), false);
-			
-			if(cpIdSet.contains(cpId))
-			{
-				throw Utility.getUserNotAuthorizedException(privilegeName, protectionElementName);    
-			}
-			isAuthorized = edu.wustl.catissuecore.util.global.Utility.checkForAllCurrentAndFutureCPs(dao,privilegeName, sessionDataBean, protectionElementNames[1]);
-		}
-		return isAuthorized;
 	}
 
 	private void checkPrivilegeOnSourceSite(AbstractDAO dao, Object domainObject, SessionDataBean sessionDataBean) throws UserNotAuthorizedException 
