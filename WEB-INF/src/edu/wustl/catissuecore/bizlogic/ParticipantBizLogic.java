@@ -1350,6 +1350,10 @@ public class ParticipantBizLogic extends DefaultBizLogic
     						break;
     					}
     				}
+    				if(!isAuthorized)
+    				{
+    					isAuthorized = edu.wustl.catissuecore.util.global.Utility.checkForAllCurrentAndFutureCPs(dao,privilegeName, sessionDataBean, null);
+    				}
                 } else
                 {
                 	isAuthorized = edu.wustl.catissuecore.util.global.Utility.checkForAllCurrentAndFutureCPs(dao,privilegeName, sessionDataBean, null);
