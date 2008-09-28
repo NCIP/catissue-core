@@ -50,6 +50,9 @@ public class DomainObjectDetailsAction extends SecureAction
         HttpSession session = request.getSession();
         List list = (List)session.getAttribute(Constants.ORIGINAL_DOMAIN_OBJECT_LIST);
         
+        // To show empty summary in case of Approve User scenario
+        request.getSession(true).setAttribute(Constants.USER_ROW_ID_BEAN_MAP, null);
+        
         long identifier = Long.parseLong(request.getParameter(Constants.SYSTEM_IDENTIFIER));
         Iterator iterator = list.iterator();
         
