@@ -303,7 +303,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		  CollectionProtocolAuthorization cpAuthorization = new CollectionProtocolAuthorization();
 		  cpAuthorization.insertCpUserPrivilegs(collectionProtocol, authorizationData, rowIdMap);
 		  // insertCPSitePrivileges(user, authorizationData, userRowIdMap);
-		  collectionProtocol.getAssignedProtocolUserCollection().add(collectionProtocol.getPrincipalInvestigator());
+		  // collectionProtocol.getAssignedProtocolUserCollection().add(collectionProtocol.getPrincipalInvestigator());
 		  cpAuthorization.inserPIPrivileges(collectionProtocol, authorizationData);
 		  cpAuthorization.insertCoordinatorPrivileges(collectionProtocol, authorizationData);
 		  privilegeManager.insertAuthorizationData(authorizationData, null, null, collectionProtocol.getObjectId());
@@ -705,7 +705,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		{
 			User pi = (User) obj;//list.get(0);
 			collectionProtocol.setPrincipalInvestigator(pi);
-			collectionProtocol.getAssignedProtocolUserCollection().add(pi);
+			// collectionProtocol.getAssignedProtocolUserCollection().add(pi);
 			System.out.println();
 		}
 	}
@@ -741,8 +741,8 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 					}
 
 					coordinatorColl.add(coordinator);
-					coordinator.getCollectionProtocolCollection().add(collectionProtocol);
-					collectionProtocol.getAssignedProtocolUserCollection().add(coordinator);
+					// coordinator.getCollectionProtocolCollection().add(collectionProtocol);
+					// collectionProtocol.getAssignedProtocolUserCollection().add(coordinator);
 				}
 			}
 		}
@@ -1500,38 +1500,11 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		
 		String privilegeName = getPrivilegeName(domainObject);
 		String protectionElementName = getObjectId(dao, domainObject);
-		PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(sessionDataBean.getUserName());
 		
-		if (protectionElementName != null)
-		{
-			String [] prArray = protectionElementName.split(Constants.UNDERSCORE);
-			String baseObjectId = prArray[0];
-			String objId = null;
-			boolean isAuthorized1 = false;
-			
-			for (int i = 1 ; i < prArray.length;i++)
-			{
-				objId = baseObjectId+Constants.UNDERSCORE+prArray[i];
-				isAuthorized1 = privilegeCache.hasPrivilege(objId.toString(),privilegeName);
-				if (!isAuthorized1)
-				{
-					break;
-				}
-			}	
-		   
-			isAuthorized = isAuthorized1;
-		} 
-		else
-		{
-			isAuthorized = false;
-		}
-		if (!isAuthorized)
-        {
-			throw Utility.getUserNotAuthorizedException(privilegeName, protectionElementName);  
-        }
-		return isAuthorized;
+		return Utility.returnIsAuthorized(sessionDataBean, privilegeName,
+				protectionElementName);
 	}
-	
+
 	
 	private boolean checkCP(Object domainObject, SessionDataBean sessionDataBean) throws DAOException 
 	{
