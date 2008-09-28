@@ -48,25 +48,25 @@ public class CaTissuePrivilegeUtility
 	 * @throws DAOException
 	 */
 	public static Map<String, SiteUserRolePrivilegeBean> getCPPrivileges(
-			PrivilegeCache privilegeCache) throws DAOException
+			PrivilegeCache privilegeCache)
 	{
 		Map<String, SiteUserRolePrivilegeBean> map = new HashMap<String, SiteUserRolePrivilegeBean>();
-
-		//TODO remove the DB call
-		User user = Utility.getUser(privilegeCache.getLoginName());
-		
-		// User is NULL for InActive / Closed users
-		if(user == null)
-		{
-			return map;
-		}
-		
-		Map<String, List<NameValueBean>> privileges = privilegeCache
-				.getPrivilegesforPrefix(CollectionProtocol.class.getName() + "_");
-
 		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+
 		try
 		{
+			//TODO remove the DB call
+			User user = Utility.getUser(privilegeCache.getLoginName());
+			
+			// User is NULL for InActive / Closed users
+			if(user == null)
+			{
+				return map;
+			}
+			
+			Map<String, List<NameValueBean>> privileges = privilegeCache
+					.getPrivilegesforPrefix(CollectionProtocol.class.getName() + "_");
+	
 			dao.openSession(null);
 			user = (User) dao.retrieve(User.class.getName(), user.getId());
 
@@ -82,7 +82,7 @@ public class CaTissuePrivilegeUtility
 				if (scanner.hasNextLong())
 				{
 					id = new Long(scanner.nextLong());
-
+					
 					CollectionProtocol cp = (CollectionProtocol) dao.retrieve(
 							CollectionProtocol.class.getName(), id);
 					
@@ -128,10 +128,20 @@ public class CaTissuePrivilegeUtility
 				}
 			}
 		}
-
+		catch(DAOException e)
+    	{
+    		Logger.out.debug(e.getMessage(), e);
+    	}
 		finally
 		{
-			dao.closeSession();
+			try 
+			{
+				dao.closeSession();
+			} 
+			catch (DAOException e) 
+			{
+				Logger.out.debug(e.getMessage(), e);
+			}
 		}
 
 		return map;
