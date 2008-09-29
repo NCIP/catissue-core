@@ -331,7 +331,7 @@ public class DefineGridViewBizLogic
 				else
 					queryResulObjectDataBean.setEntityId(columnIndex);
 			}
-			if(Constants.FILE.equals(element.getAttribute().getDataType()))
+			if(Constants.FILE_TYPE.equalsIgnoreCase(element.getAttribute().getDataType()))
 			{
 				queryResulObjectDataBean.setClobeType(true);
 				Map beanMetadataMap = queryResulObjectDataBean.getFileTypeAtrributeIndexMetadataMap();
