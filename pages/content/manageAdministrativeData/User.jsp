@@ -457,7 +457,7 @@
 										width="6" height="6" hspace="0" vspace="0" /></span></td>
 									<td width="17%" align="left" class="black_ar"><bean:message
 										key="assignPrivileges.privilege(s)" /></td>
-									<td rowspan="2" width="19%" align="center" class="black_ar_t"
+									<td rowspan="2" class="black_ar_t"
 										valign="top"><c:if test='${requestScope.flagForSARole==true}'>
 
 										<select class="formFieldSizedNew" id="actionIds" size="5"
