@@ -1557,6 +1557,10 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		try 
 		{
 			session = DBUtil.getCleanSession();
+			if(cpId==null || cpId==0)
+			{
+				return null;
+			}
 			cp = (CollectionProtocol) session.load(CollectionProtocol.class.getName(), cpId);		
 	
 			if(cp == null)
