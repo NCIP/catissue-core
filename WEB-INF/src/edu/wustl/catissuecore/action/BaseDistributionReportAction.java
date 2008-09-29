@@ -120,17 +120,25 @@ public abstract class BaseDistributionReportAction extends BaseAction
     		Specimen specimen = item.getSpecimen();
     		//Logger.out.debug("Specimen "+specimen);
     		//Logger.out.debug("Specimen "+specimen.getId());
-    		specimenIds[i] = specimen.getId().toString();
-    		if(listOfSpecimenId.equals(""))
+    		if(specimen != null)
     		{
-    			listOfSpecimenId= "(" + specimenIds[i];
-    		}
-    		else
-    		{
-    			listOfSpecimenId= listOfSpecimenId+"," + specimenIds[i];
-    		}
+	    		specimenIds[i] = specimen.getId().toString();
+	    		if(listOfSpecimenId.equals(""))
+	    		{
+	    			listOfSpecimenId= "(" + specimenIds[i];
+	    		}
+	    		else
+	    		{
+	    			listOfSpecimenId= listOfSpecimenId+"," + specimenIds[i];
+	    		}
     		i++;
+    		}
     	}
+    	if(listOfSpecimenId.length() == 0 )
+		{
+    		return listOfData ;
+			
+		}
     	listOfSpecimenId = listOfSpecimenId + ")";
     	String action = configForm.getNextAction();
     	

@@ -38,6 +38,7 @@ public class DistributionReportAction extends BaseDistributionReportAction
 															HttpServletResponse response) throws Exception
 	{
 		ConfigureResultViewForm configForm = (ConfigureResultViewForm)form;
+		String forward = "Success";
 		
 		//Retrieve the distribution ID which is set in CommonAddEdit Action 
 		Long distributionId = (Long)request.getAttribute(Constants.DISTRIBUTION_ID);
@@ -81,6 +82,10 @@ public class DistributionReportAction extends BaseDistributionReportAction
     	DistributionReportForm distributionReportForm = getDistributionReportForm(dist);
     	SessionDataBean sessionData = getSessionData(request);
     	List listOfData = getListOfData(dist, configForm,sessionData) ;
+    	if(listOfData.isEmpty())
+    	{
+    		forward = Constants.PAGE_OF_DISTRIBUTION_ARRAY;
+    	}
     	
     	//Set the columns for Distribution report
 		String action = configForm.getNextAction();
@@ -96,6 +101,6 @@ public class DistributionReportAction extends BaseDistributionReportAction
     	String pageOf = request.getParameter(Constants.PAGEOF);
 		request.setAttribute(Constants.PAGEOF, pageOf);
 
-		return (mapping.findForward("Success"));
+		return (mapping.findForward(forward));
 	}
 }
