@@ -294,6 +294,8 @@ public class UserAction extends SecureAction {
 		if((Constants.SUPER_ADMIN_USER).equals(roleId))
 		{
 			flagForSARole = true;
+			// To show empty summary in case User is Super Administrator
+	        request.getSession(true).setAttribute(Constants.USER_ROW_ID_BEAN_MAP, null);
 		}
 		request.setAttribute("flagForSARole", flagForSARole);
 
