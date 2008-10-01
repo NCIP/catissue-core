@@ -267,7 +267,7 @@ function checkQuantity(index)
 
 		}else if(availableQty < requiredQty)
 		{
-			answer= confirm("Available Quantity is less then the Ordered Quantity :Select OK if you still want to distribute the specimen");
+			answer= confirm("Available Quantity is less than the Ordered Quantity :Select OK if you still want to distribute the specimen");
 		}
 
 		if(availableQty == requiredQty || answer)
