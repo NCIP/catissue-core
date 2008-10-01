@@ -1689,6 +1689,12 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String SPECIMEN_ARRAY_CLASSNAME = "edu.wustl.catissuecore.domain.SpecimenArray";
 	public static final String SPECIMEN_CLASSNAME = "edu.wustl.catissuecore.domain.Specimen";
 	public static final String SPECIMEN_ARRAY_TYPE_CLASSNAME = "edu.wustl.catissuecore.domain.SpecimenArrayType";
+	public static final String TISSUE_SPECIMEN = "edu.wustl.catissuecore.domain.TissueSpecimen";
+	public static final String MOLECULAR_SPECIMEN  = "edu.wustl.catissuecore.domain.MolecularSpecimen";
+	public static final String FLUID_SPECIMEN  = "edu.wustl.catissuecore.domain.FluidSpecimen";
+	public static final String CELL_SPECIMEN = "edu.wustl.catissuecore.domain.CellSpecimen";
+	
+	
 	// End
 	
 	// Common Applet Constants

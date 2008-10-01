@@ -286,6 +286,11 @@ public class BulkCartAction extends QueryShoppingCartAction
 							.contains(attribute.getEntity().getName()))
 			{
 				String entityName = attribute.getEntity().getName();
+				if(Constants.TISSUE_SPECIMEN.equals(entityName) ||Constants.MOLECULAR_SPECIMEN.equals(entityName) ||
+					Constants.FLUID_SPECIMEN.equals(entityName) || Constants.CELL_SPECIMEN.equals(entityName))
+				{
+					entityName = Constants.SPECIMEN_CLASSNAME;
+				}
 				
 				Set<String> tempEntityIdsList = bizLogic.getEntityIdsList(cart,
 						Arrays.asList(entityName), chkBoxValues);
