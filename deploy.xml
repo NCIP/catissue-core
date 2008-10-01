@@ -854,6 +854,9 @@
 		<antcall target="firstUser" />	
 		<!-- shippingtracking db -->
 		<antcall target="st_deploy_db" />
+		<antcall target="import_permissible_values">			
+			<param name="permissibleValuesFile" value="${dbupgrade.sql.dir}/Common/CAModelCSVs/LOINC_PV.csv"/>
+		</antcall>
 		
 	</target>
 	
@@ -887,7 +890,7 @@
 		<antcall target="temp_update_metadata_for_clob_support_mysql" />
 		<antcall target="insert_entity_group_metadata_mysql" />
 		<antcall target="upgrade_db_demodel_mysql" />
-		<antcall target="update_metadata_for_model_changes" />
+		<antcall target="update_metadata_for_model_changes" />				
 	</target>
 	<target name="insert_entity_group_metadata_mysql">
 		<echo message="Inserting entity group metadata for Mysql" />
@@ -1117,6 +1120,9 @@
 		<antcall target="upgrade_from_Suite1.0_to_1.1" />
 		<antcall target="update_metadata_for_model_changes" />
 		<antcall target="runMigration" />		
+		<antcall target="import_permissible_values">			
+			<param name="permissibleValuesFile" value="${dbupgrade.sql.dir}/Common/CAModelCSVs/LOINC_PV_Upgrade.csv"/>
+		</antcall>
 	</target>
 	
 	<target name="upgrade_db_from_core_1.2.2_to_suite_1.0_mysql">
