@@ -103,7 +103,17 @@ function showSpecimenDetails(id)
 {
 	var id = "requestFor"+id;
 	var objId = document.getElementById(id).value;
-	showNewPage('SearchObject.do?pageOf=pageOfNewSpecimen&operation=search&target=orderDetails&id=' + objId );
+	
+	if(objId != "#")
+	{
+		showNewPage('SearchObject.do?pageOf=pageOfNewSpecimen&operation=search&target=orderDetails&id=' + objId );
+		
+	} else {
+
+		alert("No specimen selected : Select specimen to view details.");
+	}
+	
+	
 }
 
 function viewSpecimenDetails(id)
