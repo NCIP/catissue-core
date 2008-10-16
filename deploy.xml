@@ -590,7 +590,8 @@
 			<!-- include name="jboss-client.jar" /--> 
 			<include name="junit-3.8.1.jar" /> 
 			<include name="mockobjects-core-0.09.jar" /> 
-			<include name="mysql-connector-java-5.0.8-bin.jar" /> 
+			<include name="mysql-connector-java-5.0.8-bin.jar" />
+			<include name="ojdbc14.jar" />
 			<include name="openide-util.jar" /> 
 			<include name="acrobat-core.jar" />
 		</fileset>		
@@ -626,7 +627,7 @@
 		<copy todir="${jboss.server.url}/lib" overwrite="true">
 			<fileset dir="${lib.dir}">
 				<include name="${mysql.lib}" />
-				<!-- include name="${oracle.lib}" / -->
+				<include name="${oracle.lib}" />
 			</fileset>
 		</copy>
 		<copy todir="${jboss.home.dir}/bin" overwrite="true">
