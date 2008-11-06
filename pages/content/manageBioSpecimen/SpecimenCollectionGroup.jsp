@@ -405,7 +405,7 @@
 			}
 			else
 			{			
-				submitButton.disabled = false;
+				submitButton.disabled = true;
 				submitAndAddButton.disabled = false;
 				submitAndAddMultipleButton.disabled = false;
 			}
