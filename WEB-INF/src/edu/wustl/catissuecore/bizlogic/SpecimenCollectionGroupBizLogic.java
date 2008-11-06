@@ -120,7 +120,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 			specimenCollectionGroup.setCollectionProtocolEvent(cpe);
 			//check added  for Bug #8533
 			//Patch: 8533_6
-			if(Constants.TRUE.equals(specimenCollectionGroup.getRestrictSCGCheckbox()))
+			if(specimenCollectionGroup.getIsCPBasedSpecimenEntryChecked())
 			{
 				specimenCollection = getCollectionSpecimen(specimenCollectionGroup, cpe, userId );
 			}			

@@ -150,6 +150,29 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 	protected String barcode;
 
 	protected Date encounterTimestamp;
+	
+	/**
+	 * 
+	 */
+	protected boolean isCPBasedSpecimenEntryChecked = true;
+
+	
+	/**
+	 * @return the isCPBasedSpecimenEntryChecked
+	 */
+	public boolean getIsCPBasedSpecimenEntryChecked()
+	{
+		return isCPBasedSpecimenEntryChecked;
+	}
+
+	
+	/**
+	 * @param isCPBasedSpecimenEntryChecked the isCPBasedSpecimenEntryChecked to set
+	 */
+	public void setIsCPBasedSpecimenEntryChecked(boolean isCPBasedSpecimenEntryChecked)
+	{
+		this.isCPBasedSpecimenEntryChecked = isCPBasedSpecimenEntryChecked;
+	}
 
 	/**
 	 * Returns the required specimen collection event 
@@ -391,6 +414,10 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 		{
 			this.setName(form.getName());
 			this.barcode = form.getBarcode();
+			if(Constants.TRUE.equals(form.getRestrictSCGCheckbox()))
+				this.isCPBasedSpecimenEntryChecked = true;
+			else
+				this.isCPBasedSpecimenEntryChecked = false;
 
 			// Bug no. 7390
 			// adding the collection status in the add specimen collection group page
