@@ -156,8 +156,13 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 
 			insertCollectionProtocolEvent(dao, sessionDataBean, collectionProtocolEvent);
 
-			insertSpecimens(bizLogic, dao, reqSpecimenCollection, sessionDataBean,
+			//check for null added for Bug #8533
+			//Patch: 8533_4
+			if(reqSpecimenCollection != null)
+			{
+				insertSpecimens(bizLogic, dao, reqSpecimenCollection, sessionDataBean,
 					collectionProtocolEvent);
+			}
 		}
 	}
 
@@ -1013,8 +1018,10 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 							SpecimenRequirement SpecimenRequirement = reqIterator.next();
 							if (SpecimenRequirement == null)
 							{
-								throw new DAOException(ApplicationProperties
-										.getValue("protocol.spReqEmpty.errMsg"));
+								//check removed for Bug #8533
+								//Patch: 8533_2
+								//throw new DAOException(ApplicationProperties
+								//		.getValue("protocol.spReqEmpty.errMsg"));
 							}
 							ApiSearchUtil.setReqSpecimenDefault(SpecimenRequirement);
 							String specimenClass = SpecimenRequirement.getClassName();
@@ -1048,11 +1055,13 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 						}
 
 					}
-					else
-					{
-						throw new DAOException(ApplicationProperties
-								.getValue("protocol.spReqEmpty.errMsg"));
-					}
+					//check removed for Bug #8533
+					//Patch: 8533_3
+//					else
+//					{
+//						throw new DAOException(ApplicationProperties
+//								.getValue("protocol.spReqEmpty.errMsg"));
+//					}
 				}
 			}
 		}

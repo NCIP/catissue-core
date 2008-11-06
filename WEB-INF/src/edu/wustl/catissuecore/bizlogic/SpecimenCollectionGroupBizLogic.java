@@ -118,7 +118,12 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 			// check for closed CollectionProtocol
 			checkStatus(dao, cpe.getCollectionProtocol(), "Collection Protocol");
 			specimenCollectionGroup.setCollectionProtocolEvent(cpe);
-			specimenCollection = getCollectionSpecimen(specimenCollectionGroup, cpe, userId );
+			//check added  for Bug #8533
+			//Patch: 8533_6
+			if(Constants.TRUE.equals(specimenCollectionGroup.getRestrictSCGCheckbox()))
+			{
+				specimenCollection = getCollectionSpecimen(specimenCollectionGroup, cpe, userId );
+			}			
 		}
 		setCollectionProtocolRegistration(dao, specimenCollectionGroup, null);
 		generateSCGLabel(specimenCollectionGroup);

@@ -87,7 +87,6 @@ public class SpecimenCollectionGroupAction extends SecureAction
 			final HttpServletResponse response)
 			throws Exception
 	{
-
 		//changes made by Baljeet
 		String treeRefresh = request.getParameter("refresh");
 		request.setAttribute("refresh", treeRefresh);
@@ -986,7 +985,9 @@ public class SpecimenCollectionGroupAction extends SecureAction
 				joinCondition, separatorBetweenFields, false);
 
 		request.setAttribute(Constants.STUDY_CALENDAR_EVENT_POINT_LIST, list);
-		if (list.size() > 1 && form.getCollectionProtocolEventId() <= 0)
+		//Bug #8533
+		//Patch: 8533_5
+		if (list.size() >= 2 && form.getCollectionProtocolEventId() <= 0)
 		{
 			form.setCollectionProtocolEventId(new Long(((NameValueBean) list.get(1)).getValue()));
 		}

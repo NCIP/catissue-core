@@ -93,39 +93,44 @@ public class RequirementSpecimenBizLogic extends DefaultBizLogic
 			CollectionProtocolEvent collectionProtocolEvent) throws DAOException,
 			UserNotAuthorizedException
 	{
-		Iterator<SpecimenRequirement> srIt = collectionProtocolEvent
-				.getSpecimenRequirementCollection().iterator();
-		Collection<SpecimenRequirement> oldReqspecimenCollection = null;
-		if (oldCollectionProtocolEvent != null)
-		{
-			oldReqspecimenCollection = oldCollectionProtocolEvent
-					.getSpecimenRequirementCollection();
-		}
-		while (srIt.hasNext())
-		{
-			SpecimenRequirement specimenRequirement = srIt.next();
-			if (specimenRequirement.getCollectionProtocolEvent().getId()==null) 
+		//check for null added for Bug #8533
+		//Patch: 8533_1
+		if(collectionProtocolEvent.getSpecimenRequirementCollection() != null)
+		{	
+			Iterator<SpecimenRequirement> srIt = collectionProtocolEvent
+					.getSpecimenRequirementCollection().iterator();
+			Collection<SpecimenRequirement> oldReqspecimenCollection = null;
+			if (oldCollectionProtocolEvent != null)
 			{
-				specimenRequirement.setCollectionProtocolEvent(collectionProtocolEvent);
+				oldReqspecimenCollection = oldCollectionProtocolEvent
+						.getSpecimenRequirementCollection();
 			}
-			if (specimenRequirement.getId() == null || specimenRequirement.getId() <= 0)
+			while (srIt.hasNext())
 			{
-				specimenRequirement.setCollectionProtocolEvent(collectionProtocolEvent);
-				insert(specimenRequirement, dao, sessionDataBean);
-			}
-			else
-			{
-				if(specimenRequirement.getSpecimenCharacteristics().getId() ==null ||
-						specimenRequirement.getSpecimenCharacteristics().getId() <= 0)
+				SpecimenRequirement specimenRequirement = srIt.next();
+				if (specimenRequirement.getCollectionProtocolEvent().getId()==null) 
 				{
-					dao.insert(specimenRequirement.getSpecimenCharacteristics(), sessionDataBean, false, false);
+					specimenRequirement.setCollectionProtocolEvent(collectionProtocolEvent);
 				}
-				dao.update(specimenRequirement, sessionDataBean, true, false, false);
-				if(oldReqspecimenCollection!=null)
+				if (specimenRequirement.getId() == null || specimenRequirement.getId() <= 0)
 				{
-					SpecimenRequirement oldRequirementSpecimen = (SpecimenRequirement) getCorrespondingOldObject(
-							oldReqspecimenCollection, specimenRequirement.getId());
-					dao.audit(specimenRequirement, oldRequirementSpecimen, sessionDataBean, true);
+					specimenRequirement.setCollectionProtocolEvent(collectionProtocolEvent);
+					insert(specimenRequirement, dao, sessionDataBean);
+				}
+				else
+				{
+					if(specimenRequirement.getSpecimenCharacteristics().getId() ==null ||
+							specimenRequirement.getSpecimenCharacteristics().getId() <= 0)
+					{
+						dao.insert(specimenRequirement.getSpecimenCharacteristics(), sessionDataBean, false, false);
+					}
+					dao.update(specimenRequirement, sessionDataBean, true, false, false);
+					if(oldReqspecimenCollection!=null)
+					{
+						SpecimenRequirement oldRequirementSpecimen = (SpecimenRequirement) getCorrespondingOldObject(
+								oldReqspecimenCollection, specimenRequirement.getId());
+						dao.audit(specimenRequirement, oldRequirementSpecimen, sessionDataBean, true);
+					}
 				}
 			}
 		}
