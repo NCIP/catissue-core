@@ -2277,6 +2277,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String SPECIMEN_COLL_GROUP_LABEL_GENERATOR_PROPERTY_NAME="speicmenCollectionGroupLabelGeneratorClass";
 	public static final String SPECIMEN_COLL_GROUP_BARCODE_GENERATOR_PROPERTY_NAME="speicmenCollectionGroupBarcodeGeneratorClass";
 	public static final String COLL_PROT_REG_BARCODE_GENERATOR_PROPERTY_NAME="collectionProtocolRegistrationBarcodeGeneratorClass";
+	public static final String PROTOCOL_PARTICIPANT_IDENTIFIER_LABEL_GENERATOR_PROPERTY_NAME="protocolParticipantIdentifierLabelGeneratorClass";
 	
 	
 	

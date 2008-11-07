@@ -547,10 +547,14 @@ public class ParticipantAction extends SecureAction
 		//ParticipantBizLogic bizLogic = (ParticipantBizLogic) BizLogicFactory.getInstance().getBizLogic(Participant.class.getName());
 		Collection collectionProtocolRegistrationCollection=(Collection)bizLogic.retrieveAttribute(Participant.class.getName(), participantId, "elements(collectionProtocolRegistrationCollection)");
 		Iterator iter=collectionProtocolRegistrationCollection.iterator();
-		
+		int count = 1;
 		while(iter.hasNext())
 		{
 			CollectionProtocolRegistration cpri=(CollectionProtocolRegistration)iter.next();
+			//poplulate the Protocol Participant Id in map of Participant Form
+			map.put("CollectionProtocolRegistration:" + count + "_protocolParticipantIdentifier",
+						cpri.getProtocolParticipantIdentifier());
+			count++;
 			for(int i=1;i<=cprCount;i++)
 			{
 				if(cpri.getCollectionProtocol()!=null)

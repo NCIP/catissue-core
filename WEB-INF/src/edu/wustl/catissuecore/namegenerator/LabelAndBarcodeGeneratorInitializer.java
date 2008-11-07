@@ -22,6 +22,7 @@ public class LabelAndBarcodeGeneratorInitializer {
 		LabelGenerator specimenGeneratorInstance;
 		LabelGenerator storageContainerGeneratorInstance;
 		LabelGenerator specimenCollectionGroupLableGeneratorInstance;
+		LabelGenerator protocolParticipantIdentifierLabelGeneratorInstance;
 		BarcodeGenerator specimenBarcodeGeneratorInstance;
 		BarcodeGenerator storageContainerBarcodeGeneratorInstance;
 		BarcodeGenerator specimenCollectionGroupBarcodeGeneratorInstance;
@@ -41,6 +42,12 @@ public class LabelAndBarcodeGeneratorInitializer {
 			{
 				Variables.isStorageContainerLabelGeneratorAvl = true;
 			}
+			
+			protocolParticipantIdentifierLabelGeneratorInstance = LabelGeneratorFactory.getInstance(Constants.PROTOCOL_PARTICIPANT_IDENTIFIER_LABEL_GENERATOR_PROPERTY_NAME);
+			if(protocolParticipantIdentifierLabelGeneratorInstance != null)
+			{
+				Variables.isProtocolParticipantIdentifierLabelGeneratorAvl = true;
+			}				
     	
 			specimenBarcodeGeneratorInstance = BarcodeGeneratorFactory.getInstance(Constants.SPECIMEN_BARCODE_GENERATOR_PROPERTY_NAME);
 			if(specimenBarcodeGeneratorInstance!=null)
