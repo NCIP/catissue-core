@@ -686,15 +686,17 @@ function participantRegRow(subdivtag)
 				
 				<logic:equal name="<%=Constants.OPERATION%>"
 						value="<%=Constants.EDIT%>">
-						<div id="add_participant_registeration" style="display:block">
+						<div id="add_participant_registeration" style="display:none">
 				</logic:equal>
 				<logic:notEqual name="<%=Constants.OPERATION%>"
 						value="<%=Constants.EDIT%>">
-						<div id="add_participant_registeration" style="display:none">
+						<div id="add_participant_registeration" style="display:block">
 				</logic:notEqual>
 				<table width="100%" border="0" cellspacing="0" cellpadding="3">
 
 
+				<logic:equal name="<%=Constants.OPERATION%>"
+						value="<%=Constants.EDIT%>">
 					<tr class="tableheading">
 						<td width="3%" align="left" class="black_ar_b">Select</td>
 						<td width="18%" align="left" class="black_ar_b"><bean:message
@@ -716,6 +718,23 @@ function participantRegRow(subdivtag)
 						<td width="16%" align="left" class="black_ar_b"><bean:message
 							key="participant.collectionProtocolReg.consent" /></td>
 					</tr>
+				</logic:equal>
+				<logic:notEqual name="<%=Constants.OPERATION%>"
+						value="<%=Constants.EDIT%>">
+					<tr class="tableheading">
+						<td width="3%" align="left" class="black_ar_b">Select</td>
+						<td width="25%" align="left" class="black_ar_b"><bean:message
+							key="participant.collectionProtocolReg.protocolTitle" /></td>
+						
+						<td width="25%" align="left" class="black_ar_b"><bean:message
+							key="participant.collectionProtocolReg.participantRegistrationDate" />
+						</td>
+						<td width="25%" align="left" class="black_ar_b"><bean:message
+							key="participant.activityStatus" /></td>
+						<td width="22%" align="left" class="black_ar_b"><bean:message
+							key="participant.collectionProtocolReg.consent" /></td>
+					</tr>
+				</logic:notEqual>
 					<script> document.forms[0].collectionProtocolRegistrationValueCounter.value = <%=noOrRowsCollectionProtocolRegistration%> </script>
 					<tbody id="addMoreParticipantRegistration">
 						<%
@@ -815,12 +834,17 @@ function participantRegRow(subdivtag)
  }
  %>
 							</td>
+							<%if((!Variables.isProtocolParticipantIdentifierLabelGeneratorAvl) 
+									|| operation.equals(Constants.EDIT))
+							{%>
 							<td align="left" class="black_ar"><html:text
 								styleClass="black_ar" size="10" maxlength="50"
 								styleId="<%=collectionProtocolParticipantId%>"
 								property="<%=collectionProtocolParticipantId%>" /></td>
-							<%if((!Variables.isSpecimenCollGroupBarcodeGeneratorAvl) || operation.equals(Constants.EDIT)) 
-							{%>
+							<%}%>
+							<%if((!Variables.isCollectionProtocolRegistrationBarcodeGeneratorAvl) 
+									|| operation.equals(Constants.EDIT))
+								{%>
 								<td align="left" class="black_ar"><html:text
 								styleClass="black_ar" size="10" maxlength="50"
 								styleId="<%=barcode%>"

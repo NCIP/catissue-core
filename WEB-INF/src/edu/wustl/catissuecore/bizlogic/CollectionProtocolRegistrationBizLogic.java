@@ -18,7 +18,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.Vector;
-
+import edu.wustl.catissuecore.TaskTimeCalculater;
+import edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
@@ -29,6 +30,8 @@ import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.namegenerator.BarcodeGenerator;
 import edu.wustl.catissuecore.namegenerator.BarcodeGeneratorFactory;
+import edu.wustl.catissuecore.namegenerator.LabelGenerator;
+import edu.wustl.catissuecore.namegenerator.LabelGeneratorFactory;
 import edu.wustl.catissuecore.namegenerator.NameGeneratorException;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.CollectionProtocolSeqComprator;
@@ -108,6 +111,9 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 
 		String barcode = collectionProtocolRegistration.getBarcode();
 		generateCPRBarcode(collectionProtocolRegistration);
+		//Label generator for Protocol Participant Identifier
+		generateProtocolParticipantIdentifierLabel(collectionProtocolRegistration);
+		
 		if((barcode!=collectionProtocolRegistration.getBarcode()) && barcode!=null)
 		{
 			collectionProtocolRegistration.setBarcode(barcode);
@@ -1816,4 +1822,38 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 		return edu.wustl.catissuecore.util.global.Utility.hasPrivilegeToView(objName, identifier, sessionDataBean, getReadDeniedPrivilegeName());
 	}
 	
+	/**
+	 * @param CollectionProtocolRegistration Object
+	 * @throws DAOException Database related Exception
+	 */
+	private void generateProtocolParticipantIdentifierLabel(CollectionProtocolRegistration 
+			collectionProtocolRegistration)	throws DAOException
+	{
+		/**
+		 * Call Protocol Participant Identifier label generator if automatic generation is specified
+		 */
+		if (edu.wustl.catissuecore.util.global.Variables.isProtocolParticipantIdentifierLabelGeneratorAvl)
+		{
+			try
+			{
+				TaskTimeCalculater labelGen = TaskTimeCalculater.startTask(
+						"Time required for label Generator", CollectionProtocolRegistration.class);
+				LabelGenerator spLblGenerator = LabelGeneratorFactory
+						.getInstance(Constants.PROTOCOL_PARTICIPANT_IDENTIFIER_LABEL_GENERATOR_PROPERTY_NAME);
+				spLblGenerator.setLabel(collectionProtocolRegistration);
+				TaskTimeCalculater.endTask(labelGen);
+			}
+			catch (NameGeneratorException e)
+			{
+				throw new DAOException(e.getMessage());
+			}
+		}
+		else
+		{
+			if (collectionProtocolRegistration.getProtocolParticipantIdentifier() == null)
+			{
+				collectionProtocolRegistration.setProtocolParticipantIdentifier(null);
+			}
+		}
+	}	
 }
