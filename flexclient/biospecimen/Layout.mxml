@@ -802,54 +802,60 @@
   	]]>
   </mx:Script>
 
-  <mx:RemoteObject id="remoteObj" destination="cdeService" showBusyCursor="true" >
+	<mx:RemoteObject id="remoteObj" destination="cdeService" showBusyCursor="true" >
 		<mx:method name="getParticipantsList" result="participantHandler(event)"/>
 		<mx:method name="getTreeData" result="treeHandler(event)"/>
 		<mx:method name="getCpList" result="cpEventHandler(event)"/>
 		<mx:method name="chkArmShifting" result="armChkHandler(event)"/>
-
 	</mx:RemoteObject>
 	
-  <mx:RemoteObject id="remoteObj1" destination="cdeService" showBusyCursor="true">
+	<mx:RemoteObject id="remoteObj1" destination="cdeService" showBusyCursor="true">
 		<mx:method name="getParticipantsList" result="tempHandler(event)"/>
 	</mx:RemoteObject>
 
-     <mx:Box direction="vertical" borderThickness="10" borderSides="#000000" borderStyle="solid" paddingTop="0" paddingRight="0" paddingLeft="0" paddingBottom="0" height="100%">
-      	<mx:VBox backgroundAlpha="0.1" height="5%" backgroundColor="#FFFFFF"  >
-             <mx:Label text="Collection Protocol:" width="100%" height="14" color="black" fontWeight="bold"/>
+	<mx:Box direction="vertical" borderThickness="10" borderSides="#000000" borderStyle="solid" paddingTop="0" paddingRight="0" 
+		paddingLeft="0" paddingBottom="0" height="99%" width="98%">
 
-              <mx:ComboBox id="cpCombo"  width="260" dataProvider="{cpCollection}"  labelField="name" change="onCpChange()" prompt="--Select--" dropdownFactory="{myDropdownFactory}" creationComplete="initClassFactory()"/>
-        </mx:VBox>
-        
-        <mx:VBox width="50%" height="95%">
-            <mx:VDividedBox width="100%" height="100%">
-                <mx:VBox width="100%" height="30%" id="pVbox" borderSides="black">
-                   	<mx:HBox backgroundColor="#FFFFFF" width="100%"> 
-                     	<mx:Label text="Participant (Protocol ID):" color="black" fontWeight="bold" height="15"/> 	
-                     	<mx:Button toolTip="Click to  register new Participant" label="Register New" color="black" click="addNewParticipant();" height="15"/>
-                   	 
-                   	 </mx:HBox>
-                   	 <mx:List id="pCombo" width="100%" rowCount="1" height="100%"  labelField="name" click="onParticipantClick()"/>
-                 </mx:VBox>
-        	     <mx:VBox height="70%" width="100%" id="spDetailVbox">
-                   	<mx:Label id="spDetailsLabel" text="{title}" color="black" width="100%" height="15" fontWeight="bold" />
-                   	<mx:Tree id="specimenTree" labelField="@name" width="100%" height="100%" itemClick="onNodeClick()" folderClosedIcon="@Embed(source='/images/Specimen.gif')" folderOpenIcon="@Embed(source='/images/Specimen.gif')" 
-                   		 defaultLeafIcon="@Embed(source='/images/Specimen.gif')" disclosureClosedIcon="@Embed(source='/images/nolines_plus.gif')" disclosureOpenIcon="@Embed(source='/images/nolines_minus.gif')" showDataTips="true" dataTipFunction="addToolTip"/>
-                 </mx:VBox>
-                </mx:VDividedBox>    
-         </mx:VBox>
-    	
-    </mx:Box> 
+		<mx:VBox backgroundAlpha="0.1" width="100%" height="5%" backgroundColor="#FFFFFF">
+			<mx:Label text="Collection Protocol:" width="100%" height="70%" color="black" fontWeight="bold"/>
+			<mx:ComboBox id="cpCombo" width="100%" height="30%" dataProvider="{cpCollection}" labelField="name" change="onCpChange()" 
+				prompt="--Select--" dropdownFactory="{myDropdownFactory}" creationComplete="initClassFactory()"/>
+		</mx:VBox>
 
-   <mx:Style>
-		    Tree{
-              folderClosedIcon:Embed(source='/images/Specimen.gif'); 
-			  folderOpenIcon:Embed(source='/images/Specimen.gif');
-			  defaultLeafIcon:Embed(source='/images/Specimen.gif');
-			  disclosureClosedIcon:Embed(source='/images/nolines_plus.gif');
-              
-			  disclosureOpenIcon:Embed(source='/images/nolines_minus.gif');
-		   }
-		 </mx:Style>
-		 
+		<mx:VBox width="100%" height="94%">			
+			<mx:VDividedBox width="100%" height="100%">
+				<mx:VBox width="100%" height="30%" id="pVbox" borderSides="black">
+					<mx:HBox backgroundColor="#FFFFFF" width="100%">
+						<mx:Label text="Participant (Protocol ID):" color="black" fontWeight="bold" 
+							height="15"/>				
+						<mx:Button toolTip="Click to  register new Participant" label="Register New" 
+							color="black" click="addNewParticipant();" height="15"/>
+					</mx:HBox>
+					<mx:List id="pCombo" width="100%" rowCount="1" height="100%"  labelField="name"
+						click="onParticipantClick()"/>
+				</mx:VBox>
+				<mx:VBox height="70%" width="100%" id="spDetailVbox">
+		                   	<mx:Label id="spDetailsLabel" text="{title}" color="black" width="100%" height="15" 
+						fontWeight="bold" />
+				   	<mx:Tree id="specimenTree" labelField="@name" width="100%" height="100%" itemClick="onNodeClick()" 
+						folderClosedIcon="@Embed(source='/images/Specimen.gif')" folderOpenIcon="@Embed(source='/images/Specimen.gif')" 
+                   				defaultLeafIcon="@Embed(source='/images/Specimen.gif')" disclosureClosedIcon="@Embed(source='/images/nolines_plus.gif')"
+						disclosureOpenIcon="@Embed(source='/images/nolines_minus.gif')" showDataTips="true" dataTipFunction="addToolTip"/>
+				</mx:VBox>
+			</mx:VDividedBox>
+		</mx:VBox>
+
+	</mx:Box>
+
+	<mx:Style>
+		Tree
+		{
+			folderClosedIcon:Embed(source='/images/Specimen.gif'); 
+			folderOpenIcon:Embed(source='/images/Specimen.gif');
+			defaultLeafIcon:Embed(source='/images/Specimen.gif');
+			disclosureClosedIcon:Embed(source='/images/nolines_plus.gif');
+			disclosureOpenIcon:Embed(source='/images/nolines_minus.gif');
+		}
+	</mx:Style>
+
 </mx:Application>
