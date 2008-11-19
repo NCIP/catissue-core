@@ -346,7 +346,6 @@ public class CollectionProtocolTestCases extends CaTissueBaseTestCase
 	
 	public void testCollectionProtocolWithInvalidActivityStatus()
 	{
-		    	
 	    try 
 	  	{
 	    	CollectionProtocol collectionProtocol =  BaseTestCaseUtility.initCollectionProtocol();
@@ -375,12 +374,16 @@ public class CollectionProtocolTestCases extends CaTissueBaseTestCase
 		//Setting collection point label
 		collectionProtocolEvent.setCollectionPointLabel("User entered value");
 		
+		SpecimenRequirement specimenRequirement = new SpecimenRequirement();
+		specimenRequirement.setSpecimenClass("XXXXX");
+		specimenRequirementCollection.add(specimenRequirement);
+		collectionProtocolEvent.setSpecimenRequirementCollection(specimenRequirementCollection);
+		
 		collectionProtocolEventCollectionSet.add(collectionProtocolEvent);
 		collectionProtocol.setCollectionProtocolEventCollection(collectionProtocolEventCollectionSet);
     	
 	    try 
 	  	{
-
 			collectionProtocol = (CollectionProtocol) appService.createObject(collectionProtocol);
 	    	Logger.out.info("Collection Protocol object with invalid specimen class ---->"+collectionProtocol);
 	       //assertFalse("Collection Protocol should throw exception ---->"+collectionProtocol, true);
@@ -398,21 +401,27 @@ public class CollectionProtocolTestCases extends CaTissueBaseTestCase
 		CollectionProtocol collectionProtocol = BaseTestCaseUtility.initCollectionProtocol();
 		Collection collectionProtocolEventCollectionSet = new HashSet();
 	 
-		CollectionProtocolEvent collectionProtocolEvent = BaseTestCaseUtility.initCollectionProtocolEvent();		
+		CollectionProtocolEvent collectionProtocolEvent = BaseTestCaseUtility.initCollectionProtocolEvent();
+		Collection specimenRequirementCollection = new HashSet();
 			 
 		//Setting collection point label
 		collectionProtocolEvent.setCollectionPointLabel("User entered value");
+		
+		SpecimenRequirement specimenRequirement = new SpecimenRequirement();
+		specimenRequirement.setSpecimenClass("Tissue");
+		specimenRequirement.setSpecimenType("XXXXX");
+		specimenRequirementCollection.add(specimenRequirement);
+		collectionProtocolEvent.setSpecimenRequirementCollection(specimenRequirementCollection);
 		
 		collectionProtocolEventCollectionSet.add(collectionProtocolEvent);
 		collectionProtocol.setCollectionProtocolEventCollection(collectionProtocolEventCollectionSet);
     	
 	    try 
 	  	{
-
 			collectionProtocol = (CollectionProtocol) appService.createObject(collectionProtocol);
 	    	Logger.out.info("Collection Protocol object with invalid specimen class ---->"+collectionProtocol);
-	       	//assertFalse("Collection Protocol should throw exception ---->"+collectionProtocol, true); 
-	       	fail("Collection Protocol should throw exception");
+	       	//assertFalse("Collection Protocol should throw exception ---->"+collectionProtocol, true);
+			fail("Collection Protocol should throw exception");
 	    } 
 	    catch (Exception e) {
 	       	Logger.out.error(e.getMessage(),e);
@@ -428,21 +437,30 @@ public class CollectionProtocolTestCases extends CaTissueBaseTestCase
 
 		Collection collectionProtocolEventCollectionSet = new HashSet();
 	 
-		CollectionProtocolEvent collectionProtocolEvent = BaseTestCaseUtility.initCollectionProtocolEvent();		
+		CollectionProtocolEvent collectionProtocolEvent = BaseTestCaseUtility.initCollectionProtocolEvent();
+		Collection specimenRequirementCollection = new HashSet();
 			 
 		//Setting collection point label
 		collectionProtocolEvent.setCollectionPointLabel("User entered value");
+		
+		SpecimenRequirement specimenRequirement = new SpecimenRequirement();
+		specimenRequirement.setSpecimenClass("Tissue");
+		specimenRequirement.setSpecimenType("Not Specified");
+		SpecimenCharacteristics specimenCharacteristics = new SpecimenCharacteristics();
+		specimenCharacteristics.setTissueSite("XXXXXX");
+		specimenRequirement.setSpecimenCharacteristics(specimenCharacteristics);
+		specimenRequirementCollection.add(specimenRequirement);
+		collectionProtocolEvent.setSpecimenRequirementCollection(specimenRequirementCollection);
 		
 		collectionProtocolEventCollectionSet.add(collectionProtocolEvent);
 		collectionProtocol.setCollectionProtocolEventCollection(collectionProtocolEventCollectionSet);
     	
 	    try 
 	  	{
-
 			collectionProtocol = (CollectionProtocol) appService.createObject(collectionProtocol);
 	    	Logger.out.info("Collection Protocol object with invalid specimen class ---->"+collectionProtocol);
 	      // 	assertFalse("Collection Protocol should throw exception ---->"+collectionProtocol, true); 
-	       	fail("Collection Protocol should throw exception");
+	    	fail("Collection Protocol should throw exception");
 	    } 
 	    catch (Exception e) {
 	       	Logger.out.error(e.getMessage(),e);
@@ -458,9 +476,14 @@ public class CollectionProtocolTestCases extends CaTissueBaseTestCase
 		Collection collectionProtocolEventCollectionSet = new HashSet();
 	 
 		CollectionProtocolEvent collectionProtocolEvent = BaseTestCaseUtility.initCollectionProtocolEvent();		
-			 
+		Collection specimenRequirementCollection = new HashSet();	 
 		//Setting collection point label
 		collectionProtocolEvent.setCollectionPointLabel("User entered value");
+		
+		SpecimenRequirement specimenRequirement = new SpecimenRequirement();
+		specimenRequirement.setPathologicalStatus("XXXXX");
+		specimenRequirementCollection.add(specimenRequirement);
+		collectionProtocolEvent.setSpecimenRequirementCollection(specimenRequirementCollection);
 		
 		collectionProtocolEventCollectionSet.add(collectionProtocolEvent);
 		collectionProtocol.setCollectionProtocolEventCollection(collectionProtocolEventCollectionSet);
