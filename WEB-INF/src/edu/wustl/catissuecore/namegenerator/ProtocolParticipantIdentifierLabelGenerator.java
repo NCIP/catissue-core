@@ -36,10 +36,13 @@ public class ProtocolParticipantIdentifierLabelGenerator implements LabelGenerat
 	{
 		CollectionProtocolRegistration collectionProtocolRegistration = 
 			(CollectionProtocolRegistration) object;
-		
-		collectionProtocolRegistration.setProtocolParticipantIdentifier(
-			collectionProtocolRegistration.getCollectionProtocol().getId() + "_" + 
-			collectionProtocolRegistration.getParticipant().getId());
+		if(collectionProtocolRegistration.getProtocolParticipantIdentifier() == null
+				|| Constants.DOUBLE_QUOTES.equals(collectionProtocolRegistration.getProtocolParticipantIdentifier()))
+		{
+			collectionProtocolRegistration.setProtocolParticipantIdentifier(
+					collectionProtocolRegistration.getCollectionProtocol().getId() + "_" + 
+					collectionProtocolRegistration.getParticipant().getId());
+		}		
 	}
 
 	/**
