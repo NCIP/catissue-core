@@ -592,8 +592,13 @@
 			<include name="mockobjects-core-0.09.jar" /> 
 			<include name="mysql-connector-java-5.0.8-bin.jar" />
 			<include name="ojdbc14.jar" />
-			<include name="openide-util.jar" /> 
+			<include name="openide-util.jar" />
 			<include name="acrobat-core.jar" />
+			<!-- removed to work printwebservice -->
+			<include name="jaxrpc.jar" /> 
+			<include name="saaj.jar" /> 
+			<include name="jboss-jaxws.jar" /> 		        
+			
 		</fileset>		
 
 	</delete>
@@ -636,13 +641,22 @@
 			</fileset>
 		</copy>
 		<delete file="${jboss.server.url}/lib/oracleDriver.jar" casesensitive="false"/>
+		<!-- added for printwebservice -->
+		<copy todir="${jboss.home.dir}/server/default/lib" overwrite="true">
+		   <fileset dir="${jboss.home.dir}/client">
+				<include name="policy.jar" />
+				<include name="jbossws-client.jar" />
+				<include name="wsdl4j.jar" />
+		        <include name="jboss-common-client.jar" />
+		   </fileset>
+		</copy>
 	</target>
 	<target name="deploy_ca_model_war">
 		<copy todir="${jboss.server.url}/deploy" overwrite="true" >
 		<fileset dir="${camodel.dir}">
 				<include name="**.*" />
 		</fileset>
-		</copy>
+		</copy>		
 	</target>	
 	
 	<!--Target call for both fresh deployment and database creation-->

@@ -344,13 +344,15 @@
 				{
 						<%
 						String cpChildSubmitAction = "NewSpecimenEdit.do";
+						actionToCall = "NewSpecimenEdit.do";
 						if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
 						{
-							cpChildSubmitAction = Constants.CP_QUERY_SPECIMEN_EDIT_ACTION;
+							actionToCall = Constants.CP_QUERY_SPECIMEN_EDIT_ACTION;
+							cpChildSubmitAction = "CPQueryPrintSpecimenEdit";//Constants.CP_QUERY_SPECIMEN_EDIT_ACTION;
                     
 						}%>
 						setSubmitted("ForwardTo","<%=cpChildSubmitAction%>","cpChildSubmit");
-						confirmDisable("<%=cpChildSubmitAction%>","document.forms[0].activityStatus");
+						confirmDisable("<%=actionToCall%>","document.forms[0].activityStatus");
 				}
 				else
 				{

@@ -1,23 +1,21 @@
 package edu.wustl.catissuecore.printservicemodule;
 
 import java.io.StringWriter;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 
+import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.rpc.ParameterMode;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.apache.axis.client.Call;
-import org.apache.axis.client.Service;
-import org.apache.axis.encoding.XMLType;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Comment;
 import org.w3c.dom.Document;
@@ -25,6 +23,9 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import edu.wustl.catissuecore.printserviceclient.PropertyHandler;
+import edu.wustl.webservice.catissuecore.print.PrintService;
+import edu.wustl.webservice.catissuecore.print.PrintWebService;
+
 /**
  * This class used to generate the xml document of given Object and calling print webservice as per configuration. 
  * @author falguni_sachde
@@ -37,40 +38,28 @@ public class PrintServiceInputXMLParser implements PrintServiceInputParserInterf
 	String value = null;
 
 	String key = null;
-
 	
+
 	public boolean callPrintService(Object listData) throws Exception 
 	{
 		try
 		{
+			System.setProperty("org.apache.xerces.xni.parser.XMLParserConfiguration", "org.apache.xerces.parsers.XIncludeAwareParserConfiguration");
 			Document doc = this.generateXMLDoc((ArrayList)listData);		
 			String strXMLData = this.getStringFromDocument(doc);
 			String endpointURL = PropertyHandler.getValue("printWebServiceEndPoint");
-			//If endpoint URL is mentioned in printservicemodule,it indicates webservice is configured for printing.
-			if(endpointURL!=null)
-			{
-				String method = "print";
-	
-				// Make the call
-				Service service = new Service();
-				Call call = (Call) service.createCall();
-				call.setTargetEndpointAddress(new java.net.URL(endpointURL));
-				call.setOperationName(method);
-				call.addParameter("op1", XMLType.XSD_STRING, ParameterMode.IN);
-				call.setReturnType(XMLType.XSD_STRING);
-				String returnValue = (String) call.invoke(new Object[] {strXMLData});
-				System.out.println("Webservice returns...."+returnValue);
-				
-			}
+			PrintWebService p = new PrintWebService(new URL(endpointURL),new QName("http://print.catissuecore.webservice.wustl.edu/", "PrintWebService"));
+			PrintService pservice = p.getPrintServicePort();
+			pservice.print(strXMLData);
 			return true;
 		}
 		catch(Exception e)
 		{
-			return false;	
-			
+			e.printStackTrace();
+			return false;				
 		}
 	}
-	
+
 	/**
 	 * @param doc
 	 * @return String
@@ -198,5 +187,15 @@ public class PrintServiceInputXMLParser implements PrintServiceInputParserInterf
 
 		return property;
 	}
-
+	public static void main(String[] args) throws Exception 
+	{
+		 PrintServiceInputXMLParser print = new PrintServiceInputXMLParser();
+		 LinkedHashMap map = new LinkedHashMap();
+		map.put("class", "Specimen");
+		map.put("id", "12");
+		ArrayList l = new ArrayList();
+		l.add(map);
+		print.callPrintService(l);		
+		
+	}
 }

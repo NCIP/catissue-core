@@ -131,9 +131,9 @@
 				<include name="**/printservicemodule/*"/>	
 				<exclude name="**/printservicemodule/PrintServiceImplementor.properties"/>	
 			</fileset>
-			<fileset dir="${target.dir}/edu/wustl/catissuecore/printservicemodule" >
+			<!--<fileset dir="${target.dir}/edu/wustl/catissuecore/printservicemodule" >
 						<include  name="PrintServiceImplementor.properties" />
-			</fileset>
+			</fileset>-->
 		</jar>
 		</target>
 
@@ -400,12 +400,16 @@
 			<include name="c3p0-0.9.0.jar" /> 
 			<include name="catissuecore-client.jar" /> 
 			<include name="experiment-client.jar" /> 
-			<include name="jboss-client.jar" /> 
+			<!--<include name="jboss-client.jar" />--> 
 			<include name="junit-3.8.1.jar" /> 
 			<include name="mockobjects-core-0.09.jar" /> 
 			<!--include name="mysql-connector-java-5.0.8-bin.jar" / --> 
 			<include name="openide-util.jar" /> 
 			<include name="acrobat-core.jar" />
+			<!-- removed to work printwebservice -->
+			<include name="jaxrpc.jar" /> 
+			<include name="saaj.jar" /> 
+			<include name="jboss-jaxws.jar" /> 	
 		</fileset>		
 
 	</delete>

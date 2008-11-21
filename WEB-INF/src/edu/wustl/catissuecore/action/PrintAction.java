@@ -127,7 +127,8 @@ public class PrintAction extends Action
 		        	setStatusMessage(printStauts,request);
 				}
 		    	
-		    	nextforwardTo = printAliquotLabel(form, request, nextforwardTo,objBean);
+		    	//nextforwardTo = printAliquotLabel(form, request, nextforwardTo,objBean);
+		    	//nextforwardTo - coming null now CPQueryPrintSpecimenEdit
 		    	//For multiple specimen page
 		    	if(forwardToPrintMap != null &&  forwardToPrintMap.size() >0  && request.getAttribute("printMultiple")!=null  &&   request.getAttribute("printMultiple").equals("1"))
 		    	{
@@ -230,7 +231,7 @@ public class PrintAction extends Action
 		}
 	  	printStauts = labelPrinter.printLabel(listofAliquot, objBean.getIpAddress(), objUser);	
 	   	setStatusMessage(printStauts,request);
-	   	nextforwardTo = (String)request.getAttribute("forwardTo");
+	   	nextforwardTo = (String)request.getParameter("forwardTo");
 		
 		return nextforwardTo;
 	}

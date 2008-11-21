@@ -6,12 +6,12 @@
 
 
     <servlet>
-        <servlet-name>PrintServiceImpl</servlet-name>
-        <servlet-class>edu.wustl.webservice.catissuecore.print.PrintServiceImpl</servlet-class>
+        <servlet-name>PrintService</servlet-name>
+        <servlet-class>edu.wustl.webservice.catissuecore.print.PrintService</servlet-class>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>PrintServiceImpl</servlet-name>
+        <servlet-name>PrintService</servlet-name>
         <url-pattern>/Print</url-pattern>
     </servlet-mapping>
     

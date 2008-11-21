@@ -1,6 +1,11 @@
 package edu.wustl.catissuecore.printserviceclient;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.Properties;
+
+import edu.wustl.catissuecore.util.global.Variables;
 
 /**
  * This class has functions to read PrintServiceImplementor Properties file.
@@ -21,9 +26,16 @@ public class PropertyHandler {
 	 */
 	public static void init(String path) throws Exception
 	{
-		try{
+		try
+		{
+			String absolutePath=Variables.propertiesDirPath +File.separator+path;
+			InputStream inpurStream= new FileInputStream(new File(absolutePath));
 			printimplClassProperties = new Properties();
-			printimplClassProperties.load(PropertyHandler.class.getClassLoader().getResourceAsStream(path));					
+			printimplClassProperties.load(inpurStream);
+			
+			/*printimplClassProperties = new Properties();
+			
+			printimplClassProperties.load(PropertyHandler.class.getClassLoader().getResourceAsStream(path));*/					
 				
 		}
 		catch(Exception e)
