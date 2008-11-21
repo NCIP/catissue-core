@@ -229,8 +229,11 @@ public class PrintAction extends Action
 			e.printStackTrace();
 			throw new Exception("Error Printing label");
 		}
-	  	printStauts = labelPrinter.printLabel(listofAliquot, objBean.getIpAddress(), objUser);	
-	   	setStatusMessage(printStauts,request);
+		if(listofAliquot!=null)
+		{
+	  	  printStauts = labelPrinter.printLabel(listofAliquot, objBean.getIpAddress(), objUser);
+		}
+		setStatusMessage(printStauts,request);
 	   	nextforwardTo = (String)request.getParameter("forwardTo");
 		
 		return nextforwardTo;
