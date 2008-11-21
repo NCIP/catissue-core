@@ -1,5 +1,5 @@
 /*
- * $Name: 1.41.2.35 $
+ * $Name: 1.41.2.36 $
  *
  * */
 package edu.wustl.catissuecore.util.listener;
@@ -19,6 +19,11 @@ import javax.servlet.ServletContextListener;
 import javax.sql.DataSource;
 
 import net.sf.ehcache.CacheException;
+import titli.controller.Name;
+import titli.controller.interfaces.TitliInterface;
+import titli.model.Titli;
+import titli.model.TitliException;
+import titli.model.util.IndexUtility;
 import edu.wustl.cab2b.server.path.PathFinder;
 import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.catissuecore.annotations.AnnotationUtil;
@@ -122,7 +127,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 		initCatissueCache();
 		initEntityCache();
 		Utility.initializePrivilegesMap();
-//		initTitliIndex();
+		initTitliIndex();
 		initCDEManager();
 
 	}
@@ -148,25 +153,29 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 	 */
 	private void initTitliIndex()
 	{
-//		try
-//		{
-//			TitliInterface titli = Titli.getInstance();
-//
+		try
+		{
+			TitliInterface titli = Titli.getInstance();
+
 //			String dbName = titli.getDatabases().keySet().toArray(new String[0])[0];
-//
-//			File dbIndexLocation = IndexUtility.getIndexDirectoryForDatabase(dbName);
-//
-//			if(!dbIndexLocation.exists())
-//			{
-//				titli.index();
-//			}
-//
-//		}
-//		catch (TitliException e)
-//		{
-//			logger.debug("Exception occured while initialising TiTLi Search");
-//			e.printStackTrace();
-//		}
+//			Name name = new Name(dbName);
+//			File dbIndexLocation = IndexUtility.getIndexDirectoryForDatabase(name);
+			
+			Name dbName = titli.getDatabases().keySet().toArray(new Name[0])[0];
+			File dbIndexLocation = IndexUtility.getIndexDirectoryForDatabase(dbName);
+
+
+			if(!dbIndexLocation.exists())
+			{
+				titli.index();
+			}
+
+		}
+		catch (TitliException e)
+		{
+			logger.debug("Exception occured while initialising TiTLi Search");
+			e.printStackTrace();
+		}
 	}
 
 	/**
