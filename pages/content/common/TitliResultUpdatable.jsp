@@ -52,6 +52,13 @@
 			this.grid.setColSorting("str,str") ;
 			this.grid.setEditable(false);
 			
+			this.grid.enableAutoHeigth(false);
+			this.grid.setEditable("FALSE");
+			this.grid.enableAutoHeigth(false);
+			this.grid.setSkin("light");
+			this.grid.enableAlterCss("even","uneven");
+			this.grid.enableRowsHover(true,'grid_hover')
+
 			//mygrid.enableDragAndDrop(true);
 			//mygrid.setDropHandler(dropFn);
 			
@@ -79,45 +86,96 @@
 		}
 		
 	</script>
-
+	
 </head>
+
+<table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
+<tr>
+		<td class="td_color_bfdcf3">
+			<table border="0" cellpadding="0" cellspacing="0">
+		      <tr>
+				<td class="td_table_head">
+					<span class="wh_ar_b">
+						Titli Search Results
+					</span>
+				</td>
+		        <td>
+					<img src="images/uIEnhancementImages/table_title_corner2.gif" alt="Page Title - Search Results" width="31" height="24" hspace="0" vspace="0" />
+				</td>
+		      </tr>
+		    </table>
+	<tr>
+	  <td class="tablepadding">
+		<table width="100%" border="0" cellpadding="0" cellspacing="0">
+		  <td class="td_tab_bg" ><img src="images/uIEnhancementImages/spacer.gif" alt="spacer" width="50" height="1"></td>
+	</tr>
+	</table>
 
 <body>
 <form name="editForm" id = "editForm" action="TitliFetch.do">
-	<table>
 	
-	
+	<table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg"> 
+      <tr>
+        <td align="left" class="toptd"></td>
+      </tr>
 		<tr>
-			
-			<td>
-			<span class = "message">
-				<font size="3"><b>
-				<c:out value="Search String : "/> <bold><c:out value="${titliSearchForm.searchString}" /></bold></br>
+			<!--<td>
+			<span class = "message">-->
+				<td align="left" class="tr_bg_blue1"><span class="blue_ar_b"> &nbsp;
+				Search String : <bold><c:out value="'${titliSearchForm.searchString}'" /></bold>&nbsp;
 				<c:out value="${titliSearchForm.displayStats}" />
-				</b></font>
-				</span>
-								
-				<input type = "hidden" id = "selectedLabel" name = "selectedLabel" />
-								
-			</td>
-			
+				</span>					
+				<input type = "hidden" id = "selectedLabel" name = "selectedLabel" />					
+			</td>	
 		</tr>
 		
 		<tr>
 			<td>
-				<div id="gridbox" style="width:400;height:400"></div>				
+				<div id='gridbox' width='100%' height='340px' style='background-color:#d7d7d7;overflow:hidden'></div>						
 				<script language="JavaScript" type="text/javascript">  
 				 	//grid1 is still acccessible in other script tags !
 				 	var grid1 = new MyGrid();
 					grid1.init();
-					
-					<c:forEach items="${titliSearchForm.titliResultMap}" var="groupEntry" >
-												
+						var scg = "false";
+						var specimen = "false";
+						<c:forEach items="${titliSearchForm.titliResultMap}" var="groupEntry" >	
+							<c:choose>
+								<c:when test='${groupEntry.value.label=="Specimen"}'>
+								specimen = "true";
+								</c:when>
+								<c:when test='${groupEntry.value.label=="Specimen Collection Group"}'>
+								scg = "true";
+								</c:when>
+							</c:choose>
+						</c:forEach>	
+
+					<c:forEach items="${titliSearchForm.titliResultMap}" var="groupEntry" >		
+						<c:choose>
+						<c:when test='${groupEntry.value.label=="Abstract Specimen"}'>
+							if(specimen!="true")
+							{
+								grid1.addRow("<c:out value="Specimen" /> ,<c:out value="${groupEntry.value.nativeGroup.numberOfMatches}" />");
+								specimen="true";
+							}
+						</c:when>
+						<c:when test='${groupEntry.value.label=="Specimen Characteristics"}'>
+							if(specimen!="true")
+							{
+								grid1.addRow("<c:out value="Specimen" /> ,<c:out value="${groupEntry.value.nativeGroup.numberOfMatches}" />");
+								specimen="true";
+							}
+						</c:when>
+						<c:when test='${groupEntry.value.label=="Abstract Specimen Collection Group"}'>
+							if(scg!="true")
+							{
+								grid1.addRow("<c:out value="Specimen Collection Group" /> ,<c:out value="${groupEntry.value.nativeGroup.numberOfMatches}" />");
+							}
+						</c:when>
+						<c:otherwise>
 						grid1.addRow("<c:out value="${groupEntry.value.label}" /> ,<c:out value="${groupEntry.value.nativeGroup.numberOfMatches}" />");
-						
-					</c:forEach>
-						
-					
+						</c:otherwise>
+						</c:choose>	
+					</c:forEach>	
 				
 		 		</script>
 		 		
@@ -127,5 +185,7 @@
 
 </form>
 </body>
-
+</td>
+ </tr>
+</table>
 </html>

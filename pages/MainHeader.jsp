@@ -3,6 +3,8 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
 
+<script src="jss/titli.js"></script>
+
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
 	<tr>
 		<td width="5%" valign="top"><img
@@ -12,7 +14,10 @@
 			style="background-repeat:repeat-x;">
 		<table width="100%" border="0" cellpadding="0" cellspacing="0">
 			<tr>
-				<td width="86%" align="right" valign="top"><a
+				<td width="86%" align="right" valign="top">
+					<input style = "font-size:0.6em" value = "TiTLi Search" onclick = "this.value = ''" onblur = "if(this.value=='') {this.value = 'TiTLi Search';}" type ="text" name = "searchString" id = "searchString" onkeypress="return titliOnEnter(event, this, document.getElementById('go'))" />
+				<a class = "white"  id="go" href ="TitliInitialiseSearch.do" onclick = "this.href= this.href + '?searchString='+document.getElementById('searchString').value">TiTLi Search</a>&nbsp;
+					<a
 					href="ReportProblem.do?operation=add" class="white"> <img
 					src="images/uIEnhancementImages/ic_report.gif" width="15"
 					height="12" hspace="2" vspace="0"><bean:message

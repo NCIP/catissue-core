@@ -724,7 +724,7 @@
 			</elseif>
 		</if>
 		<!-- configure titli.properties -->
-		<!-- <antcall target="configure_titli" /> -->
+		 <antcall target="configure_titli" /> 
 		
 		<!-- Integrate shippingtracking application, if shippingtracking.zip present in root -->
 		<antcall target="st_integrate_app" />
