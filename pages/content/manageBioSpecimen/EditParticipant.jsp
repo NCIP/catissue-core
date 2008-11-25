@@ -666,7 +666,7 @@ function participantRegRow(subdivtag)
 					<logic:equal name="<%=Constants.OPERATION%>"
 						value="<%=Constants.EDIT%>">
 										
-							<img src="images/uIEnhancementImages/up_arrow.gif" alt="Hide Details"
+							<img src="images/uIEnhancementImages/dwn_arrow1.gif" alt="Show Details"
 					width="80" height="9" hspace="10" border="0" />
 
 					</logic:equal>
@@ -674,7 +674,7 @@ function participantRegRow(subdivtag)
 					<logic:notEqual name="<%=Constants.OPERATION%>"
 						value="<%=Constants.EDIT%>">
 
-						<img src="images/uIEnhancementImages/dwn_arrow1.gif" alt="Show Details"
+						<img src="images/uIEnhancementImages/up_arrow.gif" alt="Hide Details"
 					width="80" height="9" hspace="10" border="0" />		
 												
 					</logic:notEqual>
@@ -725,6 +725,12 @@ function participantRegRow(subdivtag)
 						<td width="3%" align="left" class="black_ar_b">Select</td>
 						<td width="25%" align="left" class="black_ar_b"><bean:message
 							key="participant.collectionProtocolReg.protocolTitle" /></td>
+							<%if(!Variables.isProtocolParticipantIdentifierLabelGeneratorAvl) 
+							{%>
+							<td width="13%" align="left" class="black_ar_b"><bean:message
+							key="participant.collectionProtocolReg.participantProtocolID" />
+							</td>
+							<%}%>
 						
 						<td width="25%" align="left" class="black_ar_b"><bean:message
 							key="participant.collectionProtocolReg.participantRegistrationDate" />
