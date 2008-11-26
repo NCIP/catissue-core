@@ -139,8 +139,8 @@ public class ForwardToProcessor extends AbstractForwardToProcessor
 				return forwardToHashMap;
 			}
 
-
-			if(actionForm.getForwardTo().equals(Constants.CP_CHILD_SUBMIT))
+             //updated to solve printing issue in case of "Create Aliquot/Derived Specimen as per CP"
+			if(actionForm.getForwardTo().equals(Constants.CP_CHILD_SUBMIT)|| actionForm.getForwardTo().equals("CPQueryPrintSpecimenAdd")||actionForm.getForwardTo().equals("CPQueryPrintSpecimenEdit"))
 			{
 				forwardToHashMap.put("specimenCollectionGroupId", specimen.getSpecimenCollectionGroup().getId());
 				forwardToHashMap.put("specimenId", specimen.getId());
