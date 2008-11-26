@@ -1697,6 +1697,7 @@ PUBLIC
 			<forward name="pageOfCreateAliquot" path="/CPQueryCreateAliquots.do?pageOf=pageOfCreateAliquot&amp;operation=add&amp;menuSelected=15&amp;buttonClicked=submit&amp;parentSpecimenId=-1&amp;CPQuery=CPQuery" />
 			<forward name="distribution" path="/CPQueryDistribution.do?operation=add&amp;pageOf=pageOfDistributionCPQuery&amp;menuSelected=16" />
 			<forward name="deriveMultiple" path="/MultipleSpecimenFlexInitAction.do?operation=add&amp;pageOf=pageOfMultipleSpWithoutMenu&amp;parentType=Derived_Specimen"/>
+			<forward name="cpChildSubmit" path="/AnticipatorySpecimenView.do" />
 		</action>
 		<action path="/CPQueryPrintDeriveSpecimen"
 			type="edu.wustl.catissuecore.action.PrintAction"
@@ -1707,7 +1708,8 @@ PUBLIC
 			<forward name="distribution" path="/CPQueryDistribution.do?operation=add&amp;pageOf=pageOfDistributionCPQuery&amp;menuSelected=15" />
 			<forward name="pageOfAliquot" path="/CPQueryAliquots.do?pageOf=pageOfAliquot&amp;CPQuery=true&amp;menuSelected=15" />
 			<forward name="pageOfCreateAliquot" path="/CPQueryCreateAliquots.do?pageOf=pageOfCreateAliquot&amp;operation=add&amp;menuSelected=15&amp;buttonClicked=submit&amp;parentSpecimenId=-1&amp;CPQuery=CPQuery" />
-			<forward name="sameCollectionGroup" path="/QuerySpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimenCPQuery&amp;menuSelected=15" />						
+			<forward name="sameCollectionGroup" path="/QuerySpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimenCPQuery&amp;menuSelected=15" />
+			<forward name="newSpecimenEdit" path="/QuerySpecimenSearch.do?operation=search&amp;pageOf=pageOfNewSpecimenCPQuery&amp;id=0" />						
 		</action>		
 
 		<action path="/CPQueryPrintAliquotSummary"
@@ -1728,6 +1730,7 @@ PUBLIC
 			<forward name="pageOfCreateAliquot" path="/CreateAliquots.do?pageOf=pageOfCreateAliquot&amp;operation=add&amp;menuSelected=15&amp;buttonClicked=submit" />
 			<forward name="sameCollectionGroup" path="/NewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimen&amp;menuSelected=15" />
 			<forward name="orderDetails" path="/RequestDetails.do" />
+			<forward name="newSpecimenEdit" path="/QuerySpecimenSearch.do?operation=search&amp;pageOf=pageOfNewSpecimenCPQuery&amp;id=0" />
 		</action>
 				
 		<!--print Actions ends-->
@@ -1920,6 +1923,7 @@ PUBLIC
 			<forward name="distribution" path="/Distribution.do?operation=add&amp;pageOf=pageOfDistribution&amp;menuSelected=16" />
 			<forward name="orderDetails" path="/RequestDetails.do" />
 			<forward name="addSpecimenToCart" path="/AddSpecimenToCart.do?pageOf=pageOfEditSpecimen" />	
+			<forward name="CPQueryPrintSpecimenEdit" path="/CPQueryPrintSpecimenEdit.do"/>
 			
 		</action>
 		
