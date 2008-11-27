@@ -172,15 +172,15 @@
  </script> 
 
 </head>
-<body>
+<body onLoad="f1()">
 <%@ include file="/pages/content/common/ActionErrors.jsp" %>   
- <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" id="Layout" width="100%" height="99.9%">
+ <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" id="Layout" width="100%" height="100%">
 		<param name=movie value="flexclient/biospecimen/Layout.swf"> 
 		<param name=quality value=high>
 		<param name="swliveconnect" value="true">
 		<param name="wmode" value="transparent" />				 
 		<embed src="flexclient/biospecimen/Layout.swf" quality="high" bgcolor="#ffffff"
-			width="100%" height="99.9%" id="Layout" name="Layout" align="middle"
+			width="100%" height="100%" id="Layout" name="Layout" align="middle"
 			play="true"
 			loop="false"
 			quality="high"
@@ -191,6 +191,17 @@
 		</embed>
    
    </object>
+   <script>
+   function f1()
+   {
+	var t=setTimeout("f2()",100);
+   }
+   function f2()
+   {
+	   var t=setTimeout("window.resizeBy(-1,-1)",100);
+	   var t=setTimeout("window.resizeBy(1,1)",100);
+   }
+   </script>
    <!-- <input type="hidden" name="participantId" id="participantId"/>
 	<input type="hidden" name="cpId" id="cpId"/>
     -->

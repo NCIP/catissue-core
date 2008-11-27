@@ -350,3 +350,21 @@ function decrementCounter()
 {
 	document.forms[0].counter.value = parseInt(document.forms[0].counter.value) - 1;
 } 
+
+function mdFrmResizer(frmId,pcnt)
+{
+	if(pcnt >100 || pcnt <= 0)
+	{
+		pcnt=35;
+	}
+//	alert(screen.width + "*" + screen.height);
+	var ht = screen.height;
+	var frmHt = Math.round(ht * pcnt/100);
+	//alert(frmHt);
+	if((screen.height > 1000) && (pcnt >50))frmHt=frmHt+75;
+	if(frmHt < 220)frmHt=270;
+	if(document.getElementById(frmId) != null)
+	{ 
+		document.getElementById(frmId).height=frmHt+" px"	;
+	}
+}

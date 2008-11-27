@@ -106,8 +106,8 @@ if(!hasAccess)
 %>
 <html:form action="<%=Constants.VIEW_SPR_ACTION%>">
 <!-- ------------------------------------- -->
-
-      <table width="100%" border="0" cellpadding="3" cellspacing="0" id="reportTable" class="whitetable_bg">
+<!-- Mandar : 21Nov08 to adjust height -->
+      <table width="100%" border="0" cellpadding="2" cellspacing="0" id="reportTable" class="whitetable_bg" height="100%">
         <tr>
           <td colspan="2" align="left" class="toptd"></td>
         </tr>
@@ -156,7 +156,7 @@ if(!hasAccess)
 		  <% 
 	if(hasAccess)
 	{
-	%>	
+	%>	<!-- Mandar : 21Nov08 to adjust height -->
                 <tr>
                   <td width="27%" align="left" class="black_ar_t"><input type=radio name="review" value="abc1" checked="checked" onClick="clickOnLinkReport()" />
 							<bean:message key="viewSPR.identifiedReport" /></td>

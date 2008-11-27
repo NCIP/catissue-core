@@ -726,7 +726,7 @@ function editSCG()
 					<%@ include file="/pages/content/common/ActionErrors.jsp" %>
 				</td>
 			</tr>
-			</table>
+			</table><!-- Mandar 31Oct08 -->
 				<%@ include file="EditSpecimenCollectionGroup.jsp" %>
 			
 				

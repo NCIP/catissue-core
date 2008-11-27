@@ -134,8 +134,6 @@ function editSCG()
  <tr>
     <td class="tablepadding">
 		<table width="100%" border="0" cellpadding="0" cellspacing="0">
-		
-
 			<tr>
 				<td class="td_tab_bg" >
 					<img src="images/uIEnhancementImages/spacer.gif" alt="spacer" width="50" height="1" border="0"></td>
@@ -153,12 +151,11 @@ function editSCG()
 				<td width="90%" align="left" valign="bottom" class="td_tab_bg" >&nbsp;
 					</td>
 			</tr>
-			<tr >
-				<td  colspan="6">
+			<tr>
+				<td colspan="6">
 					<%@   include file="DisplayAnnotationDataEntryPage.jsp" %>
 				</td>
 			</tr>
-			
 		</table>
 		</td>
 			</tr>

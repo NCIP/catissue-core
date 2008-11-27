@@ -109,7 +109,7 @@ function checkStotagePosition()
         <td width="90%" valign="bottom" class="td_tab_bg">&nbsp;</td>
       </tr>
     </table>
-    <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
+    <table width="100%" border="0" cellpadding="2" cellspacing="0" class="whitetable_bg">
         <tr>
           <td colspan="2" align="left" class="bottomtd"><%@ include file="/pages/content/common/ActionErrors.jsp" %></td>
         </tr>
@@ -379,10 +379,13 @@ function checkStotagePosition()
             </tr>
           </table></td>
         </tr>
-		 <tr  >
-          <td colspan="2" class="bottomtd"></td>
+		<!-- Mandar: 19Nov08  -->
+<!--
+		<tr>
+          <td colspan="2" class="bottomtd">&nbsp;</td>
         </tr>
-        <tr  >
+-->
+        <tr>
           <td align="left" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;
 			<label for="addspecimens">
 									<bean:message key="array.addspecimens" />
@@ -451,9 +454,12 @@ function checkStotagePosition()
 					
           </table></td>
         </tr>
-		<tr  >
-          <td colspan="2" class="bottomtd"></td>
+		<!-- Mandar: 19Nov08  -->
+<!--
+		<tr>
+          <td colspan="2" class="bottomtd">&nbsp;</td>
         </tr>
+-->
         <tr  ><html:hidden property="onSubmit" />
           <td colspan="2" class="buttonbg">
 			<html:button property="uploadSpecimenArrayButton" styleClass="blue_ar_b"						onclick="doUploadSpecimenArray();" disabled="<%=disabled%>" accesskey="Enter">

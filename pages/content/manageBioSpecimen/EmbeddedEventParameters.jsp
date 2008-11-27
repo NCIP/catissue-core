@@ -10,9 +10,6 @@
 <head>
 <!-- Mandar : 434 : for tooltip -->
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
-	<script language="javascript">
-		
-	</script>
 <!-- Mandar 21-Aug-06 : For calendar changes -->
 <script src="jss/calendarComponent.js"></script>
 <SCRIPT>var imgsrc="images/";</SCRIPT>
@@ -21,19 +18,16 @@
 <!-- Mandar 21-Aug-06 : calendar changes end -->
 
 </head>
-	
-
         			
 <%@ include file="/pages/content/common/ActionErrors.jsp" %>
     
-<table width="100%" border="0" cellpadding="0" cellspacing="0" >
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
 
 <html:form action='${requestScope.formName}'>
 
 <html:hidden property="operation" />
 <html:hidden property="id" />
 <html:hidden property="specimenId" value='${requestScope.specimenId}'/>
-
 		 <tr>
           <td align="left" class="tr_bg_blue1" >
 			<span class="blue_ar_b">&nbsp;<bean:message  key="eventparameters"/> &quot;<em><bean:message key="embeddedeventparameters"/></em>&quot;</span></td>
@@ -41,8 +35,8 @@
 		<tr>
           <td  class="showhide1"></td>
         </tr>
-        <tr >
-          <td class="showhide"><table width="100%" border="0" cellpadding="3" cellspacing="0">
+        <tr>
+          <td colspan="4" class="showhide"><table width="100%" border="0" cellpadding="1" cellspacing="0">
                <tr>
                   <td width="1%" align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>
                   <td width="15%" align="left" nowrap class="black_ar"><bean:message key="eventparameters.user"/></td>
@@ -98,7 +92,7 @@
                 
                 <tr>
                   <td align="center" class="black_ar">&nbsp;</td>
-                  <td align="left" valign="top" class="black_ar_t"><bean:message key="eventparameters.comments"/></td><td align="left" colspan="4"><html:textarea styleClass="black_ar"  styleId="comments" property="comments" cols="73" rows="4"/></td>
+                  <td align="left" valign="top" class="black_ar_t"><bean:message key="eventparameters.comments"/></td><td align="left" colspan="5"><html:textarea styleClass="black_ar"  styleId="comments" property="comments" cols="73" rows="4"/></td>
                 </tr>
 
           </table></td>

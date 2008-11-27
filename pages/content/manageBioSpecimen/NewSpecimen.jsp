@@ -1048,7 +1048,7 @@
 	<%
 	}
 	%>
-		    <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg" >
+		    <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
 			<tr>
 			<td><div id="mainTable"style="display:block"><table width="100%"  border="0" cellpadding="3" cellspacing="0" >
 				<tr>
@@ -1755,7 +1755,7 @@
 							</td></tr>
 							
 		<tr>
-		<td >
+		<td>
 							<%@ include file="BioHazards.jsp" %>
 							</td>
 							</tr>
@@ -1764,26 +1764,29 @@
 							</td>
 							</tr>
 							<!--  Consent Tracking Module Virender mehta	 -->								<tr>
-							<td class="bottomtd">
+							<td class="bottomtd"><div id="consentTable" style="display:none">
 								<%
 								List requestParticipantResponse = (List)request.getAttribute(Constants.SPECIMEN_RESPONSELIST);	
 								if(requestParticipantResponse!=null&&form.getConsentTierCounter()>0)
 								{
-								%><div id="consentTable" style="display:none">
+								%>
 								    <%@ include file="/pages/content/ConsentTracking/ConsentTracking.jsp" %> 
-									</div>
 								<%
 								}
 								%>
+								</div></td>
 							<!--  Consent Tracking Module Virender mehta	 -->										
-			 				</tr></td>
+			 				</tr>
 					
         <tr>
           <td valign="middle" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;<bean:message key="childSpecimen.label" /></span></td>
         </tr>
 					
 								<tr>
+								<!--
           <td valign="middle" class="black_ar" >
+		  -->
+		  <td valign="top">
 		  <table width="100%" border="0" cellpadding="3" cellspacing="0">
              
                 <tr>
@@ -1867,12 +1870,12 @@
 							
 <!-- NEW SPECIMEN REGISTRATION ends-->
 				</table>
-
-<!--  Consent Tracking Module Virender mehta	 -->
-
-<!--  Consent Tracking Module Virender mehta	 -->
 			</td>
 		</tr>
+		<tr>
+			<td height="*">&nbsp;</td>	
+		</tr>
+
 		</table>
 								</td>
 								</tr>
@@ -1881,17 +1884,6 @@
 <html:hidden property="stContSelection"/>
 <html:hidden property="lineage"/>
 <html:hidden property="nextForwardTo" />
-<!--
-	Patch ID: Bug#3184_8
--->
 <html:hidden property="restrictSCGCheckbox"/>
 </html:form>
 </body>
-<!-- 
- Name : Virender Mehta
- Reviewer: Sachin Lale
- Bug ID: 4231
--->
-<script language="JavaScript">
-	//onCheckboxButtonClick(document.getElementById("aliquotChk"));
-</script>

@@ -1317,6 +1317,25 @@ var window_Viewport = {
 /////////////////////////
 /////////////////////////
 
+function setFrameHeight(frameId, h ,slope) 
+{
+	if ( document.getElementById && !(document.all) ) {
+	var frameObj = document.getElementById(frameId);
+	if (frameObj) {
+		window_Viewport.getWinHeight();
+		frameObj.style.height = "100%";
+	}
+	}
+	else{
+	var frameObj = document.getElementById(frameId);
+	if (frameObj) {
+		window_Viewport.getWinHeight();
+		frameObj.style.height = "100%";
+	}
+	}
+
+}
+/*
 function setFrameHeight(frameId, h ,slope) {
     if ( document.getElementById && !(document.all) ) {
         var frameObj = document.getElementById(frameId);
@@ -1334,5 +1353,4 @@ function setFrameHeight(frameId, h ,slope) {
         }
 	}
 }
-
-
+*/

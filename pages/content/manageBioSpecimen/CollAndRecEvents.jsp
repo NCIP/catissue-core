@@ -10,9 +10,9 @@
 <script language="JavaScript" type="text/javascript" src="jss/script.js"></script>
 
 <table width="100%" border="0" cellspacing="0" cellpadding="0" id="collectionEvent">
-	<tr>
+	<tr onclick="showHide('event')">
 	<td width="50%" align="left" class="tr_bg_blue1" ><span class="blue_ar_b">&nbsp;Events</span></td>
-	<td width="50%"align="right" class="tr_bg_blue1" ><a href="#" id="imgArrow_event" onclick="showHide('event')"><img src="images/uIEnhancementImages/up_arrow.gif" alt="Show Details" width="80" height="9" hspace="10" border="0"/></a></td>
+	<td width="50%"align="right" class="tr_bg_blue1" ><a href="#" id="imgArrow_event" ><img src="images/uIEnhancementImages/up_arrow.gif" alt="Show Details" width="80" height="9" hspace="10" border="0"/></a></td>
 	</tr>
 	<tr>
 	  <td colspan="2" class="showhide1"><div id="event" style="display:block" >

@@ -49,29 +49,20 @@ window.onresize = function() { setFrameHeight('cpFrameNew', .9,slope); setFrameH
 </script>
 <script language="JavaScript" type="text/javascript" src="jss/caTissueSuite.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
-<body >
-<table border="0" width="100%" cellpadding="0" cellspacing="0">
-	<tr >
-		<td width="27%" valign="top">
-			<table border="0" width="100%" >
-				<tr>
-					<td valign="top" >
-					<iframe id="<%=Constants.CP_AND_PARTICIPANT_VIEW%>" name="<%=Constants.CP_AND_PARTICIPANT_VIEW%>" src="<%=Constants.SHOW_CP_AND_PARTICIPANTS_ACTION%>?pageOf=<%=Constants.PAGE_OF_CP_QUERY_RESULTS%>" scrolling="no" frameborder="0" width="100%" height="524" marginheight=0 marginwidth=0>
+<body>
+<!-- Mandar : 25Nov08  -->
+		<TABLE border=1 width="100%" height="100%" cellpadding="0" cellspacing="0">
+		<TR>
+			<TD width="30%" valign="top">
+				<iframe id="<%=Constants.CP_AND_PARTICIPANT_VIEW%>" name="<%=Constants.CP_AND_PARTICIPANT_VIEW%>" src="<%=Constants.SHOW_CP_AND_PARTICIPANTS_ACTION%>?pageOf=<%=Constants.PAGE_OF_CP_QUERY_RESULTS%>" scrolling="no" frameborder="0" width="100%" height="100%">
 						Your Browser doesn't support IFrames.
-					</iframe>
+				</iframe>
 
-					</td>
-				</tr>	
-				
-			</table>	
-		</td>
-		<!--P.G. - Start 24May07:Bug 4291:Added source as initial action for blank screen-->
-		<td width="72.5%" valign="top">
-			<iframe id="cpFrameNew" name="<%=Constants.DATA_DETAILS_VIEW%>" src="<%=Constants.BLANK_SCREEN_ACTION%>" scrolling="auto" frameborder="1" width="99%" >
+			</td><td width="70%" valign="top">
+				<iframe id="cpFrameNew" name="<%=Constants.DATA_DETAILS_VIEW%>" src="<%=Constants.BLANK_SCREEN_ACTION%>" scrolling="auto" frameborder="0" width="100%" height="100%">
 				Your Browser doesn't support IFrames.
 			</iframe>
-		</td>
-		<!--P.G. - End -->
-	</tr>
-</table>			
+			</TD>
+		</TR>
+		</TABLE>
 </body>

@@ -62,12 +62,15 @@ function callUpdateSpecimen()
 </script>
 </head>
 <body>
-<%@ include file="/pages/content/common/ActionErrors.jsp" %>
-
 	<table border="1" width="100%" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF" height="100%" bordercolorlight="#000000">
+	<tr>
+		<td>
+			<%@ include file="/pages/content/common/ActionErrors.jsp" %>
+		</td>
+	</tr>
 		<tr>
-			<td height="700px">											
-				<div id="multiplespeId" style="overflow:auto;height:700px;width:100%">
+			<td height="100%">											
+				<div id="multiplespeId" style="overflow:auto;height:100%;width:100%">
 					<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
 						id="MultipleSpecimen" width="100%" height="100%"
 						codebase="http://fpdownload.macromedia.com/get/flashplayer/current/swflash.cab">
@@ -89,9 +92,12 @@ function callUpdateSpecimen()
 						</object>
 			</td>
 		</tr>
+		<tr>
+			<td>
+				<html:form action="GenericSpecimenSummary.do">
+				</html:form>
+			</td>
+		</tr>
 	</table>
-
 </body>
-<html:form action="GenericSpecimenSummary.do">
-</html:form>
 </html> 

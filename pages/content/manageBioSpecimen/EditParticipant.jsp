@@ -280,7 +280,7 @@ function participantRegRow(subdivtag)
 
 
 <table width="100%" border="0" cellpadding="0" cellspacing="0"
-	class="maintable">
+	class="maintable" height="100%"><!-- Mandar 6Nov08 -->
 	<tr>
 		<td><input type="hidden" name="participantId"
 			value="<%=participantId%>" /> <input type="hidden" name="cpId"
@@ -317,7 +317,7 @@ function participantRegRow(subdivtag)
 		</logic:notEqual>
 	
 
-	<tr>
+	<tr height="98%">
 		<td class="tablepadding">
 		<logic:equal name="operation" value="add">
 			<logic:notEqual name="<%=Constants.PAGEOF%>"
@@ -355,7 +355,7 @@ function participantRegRow(subdivtag)
 					<td valign="bottom" ><html:link href="#" onclick="showAnnotations()"><img src="images/uIEnhancementImages/tab_view_annotation2.gif" alt="View Annotation" width="116" height="22"  border="0"></html:link></td><td width="90%" valign="bottom" class="td_tab_bg">&nbsp;</td></tr></table>
 			</logic:equal>
 		<table width="100%" border="0" cellpadding="3" cellspacing="0"
-			class="whitetable_bg">
+			class="whitetable_bg" height="95%">
 					
 			<tr>
 				<td colspan="2" align="left" class="bottomtd"><%@ include file="/pages/content/common/ActionErrors.jsp" %></td>
@@ -367,8 +367,8 @@ function participantRegRow(subdivtag)
 					key="participant.details" /></span></td>
 			</tr>
 			<tr>
-				<td colspan="2" align="left" class="showhide">
-				<table width="100%" border="0" cellspacing="0" cellpadding="3">
+				<td colspan="2" align="left" class="showhide" height="100%">
+				<table width="100%" border="0" cellspacing="0" cellpadding="3" height="100%">
 					<tr>
 						<td width="1%" align="center" class="black_ar">&nbsp;</td>
 						<td width="17%"><label for="socialSecurityNumber"

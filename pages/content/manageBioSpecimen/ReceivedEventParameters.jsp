@@ -11,9 +11,6 @@
 <head>
 <!-- Mandar : 434 : for tooltip -->
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
-	<script language="javascript">
-		
-	</script>
 <!-- Mandar 21-Aug-06 : For calendar changes -->
 <script src="jss/calendarComponent.js"></script>
 <SCRIPT>var imgsrc="images/";</SCRIPT>
@@ -37,7 +34,7 @@
           <td colspan="4" class="showhide1"></td>
         </tr>
         <tr>
-          <td colspan="4" class="showhide"><table width="100%" border="0" cellpadding="3" cellspacing="0">
+          <td colspan="4" class="showhide"><table width="100%" border="0" cellpadding="1" cellspacing="0">
                 <tr>
                   <td width="1%" align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>
                   <td width="15%" align="left" nowrap class="black_ar"><bean:message key="eventparameters.user"/></td>
@@ -104,7 +101,7 @@
 <!-- Mandar : For receivedQuality End -->
                 <tr>
                   <td align="center" class="black_ar">&nbsp;</td>
-                  <td align="left" valign="top" class="black_ar_t"><bean:message key="eventparameters.comments"/></td><td align="left" colspan="4"><html:textarea styleClass="black_ar" cols="73" rows="4" styleId="comments" property="comments" /></td>
+                  <td align="left" valign="top" class="black_ar_t"><bean:message key="eventparameters.comments"/></td><td align="left" colspan="5"><html:textarea styleClass="black_ar" cols="73" rows="4" styleId="comments" property="comments" /></td>
                 </tr>
           </table></td>
         </tr>

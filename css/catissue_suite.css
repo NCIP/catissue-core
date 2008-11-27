@@ -633,3 +633,11 @@ color: #000000;
 	 _white-space: pre;
 	font-family: verdana; font-size : 11;
 }
+.black_ar_md {
+	font-family: verdana;
+	font-size: 11px;
+	color: #171717;
+	vertical-align:top;
+	margin:0px;
+	
+}

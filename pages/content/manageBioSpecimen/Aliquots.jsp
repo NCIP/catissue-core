@@ -267,8 +267,8 @@
         <td width="90%" class="td_tab_bg">&nbsp;</td>
       </tr>
     </table>
-
-	<table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
+<!-- Mandar : 14Nov08 table with data -->
+	<table width="100%" border="0" height="98%" cellpadding="3" cellspacing="0" class="whitetable_bg">
         <tr>
           <td align="left" class="bottomtd"><%@ include file="/pages/content/common/ActionErrors.jsp" %></td>
         </tr>

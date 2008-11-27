@@ -20,11 +20,8 @@
 <LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
 <link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
 <!-- Mandar 21-Aug-06 : calendar changes end -->
-
 </head>
 	
-
-			
 <%@ include file="/pages/content/common/ActionErrors.jsp" %>
     
 <table border="0" cellpadding="0" cellspacing="0" width="100%"> 
@@ -32,16 +29,14 @@
 	<html:hidden property="operation" />
 	<html:hidden property="id" />
 	<html:hidden property="specimenId" value='${requestScope.specimenId}'/>        
-        
         <tr>
           <td align="left" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;<bean:message  key="eventparameters"/>  &quot;<em><bean:message key="thaweventparameters"/></em>&quot;</span></td>
         </tr>
-        <tr>
+<!--         <tr>
           <td colspan="4" class="showhide1"></td>
         </tr>
-        <tr >
+ -->        <tr>
           <td colspan="4" class="showhide"><table width="100%" border="0" cellpadding="3" cellspacing="0">
-
                 <tr>
                   <td width="1%" align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>
                   <td width="15%" align="left" nowrap class="black_ar"><bean:message key="eventparameters.user"/></td>
@@ -61,7 +56,7 @@
 				  <logic:notEmpty name="currentEventParametersDate">
 					<ncombo:DateTimeComponent name="dateOfEvent"
 							 id="dateOfEvent"
-							 formName="thawEventParametersForm"
+ 							formName="thawEventParametersForm"
 			                  month='${requestScope.eventParametersMonth}'
 							  year='${requestScope.eventParametersYear}'
 							  day='${requestScope.eventParametersDay}'
@@ -90,28 +85,21 @@
 							  staticField="false" size="3" />	                  
 							  &nbsp;<bean:message key="eventparameters.timeinminutes"/></span></td>
                 </tr>         
-                
-                
                 <tr>
                   <td align="center" class="black_ar">&nbsp;</td>
                   <td align="left" valign="top" class="black_ar_t"><bean:message key="eventparameters.comments"/></td><td align="left" colspan="4"><html:textarea styleClass="black_ar" cols="73" rows="4" styleId="comments" property="comments" /></td>
                 </tr>
-              
           </table></td>
         </tr>
         <tr >
           <td class="buttonbg">
-
-		 
 		  <html:submit styleClass="blue_ar_b" value="Submit" onclick='${requestScope.changeAction}' />
 
             &nbsp;|&nbsp;
 			<html:link	page="/QueryManageBioSpecimen.do" styleClass="cancellink">
 				<bean:message key="buttons.cancel" />
 			</html:link>
-			
 			</td>
-
         </tr>
       </table></td>
   </tr>
