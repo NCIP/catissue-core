@@ -1235,6 +1235,17 @@ public class AliquotAction extends SecureAction
 			action3 = Constants.CP_QUERY_CREATE_ALIQUOT_ACTION + "?pageOf=" + Constants.PAGEOF_CREATE_ALIQUOT + 
 			"&operation=add&menuSelected=15&buttonClicked=checkbox&"+Constants.PARENT_SPECIMEN_ID+"="+psid+"&"+Constants.CP_QUERY+"="+CPQuery;
 		}
+		else
+		{
+			action1 =  Constants.CREATE_ALIQUOT_ACTION + "?pageOf=" + Constants.PAGEOF_CREATE_ALIQUOT + 
+			"&operation=add&menuSelected=15&buttonClicked=submit&" +Constants.PARENT_SPECIMEN_ID+"="+psid;
+			
+			action2 = Constants.CREATE_ALIQUOT_ACTION + "?pageOf=" + Constants.PAGEOF_CREATE_ALIQUOT + 
+			"&operation=add&menuSelected=15&buttonClicked=create&"+Constants.PARENT_SPECIMEN_ID+"="+psid;
+
+			action3 = Constants.CREATE_ALIQUOT_ACTION + "?pageOf=" + Constants.PAGEOF_CREATE_ALIQUOT + 
+			"&operation=add&menuSelected=15&buttonClicked=checkbox&"+Constants.PARENT_SPECIMEN_ID+"="+psid;
+		}
 		request.setAttribute("action1",action1);
 		request.setAttribute("action2",action2);
 		request.setAttribute("action3",action3);
@@ -1361,7 +1372,6 @@ public class AliquotAction extends SecureAction
 		}
 	
 	    return aliquotChildCount;
-
 	}
 
 }
