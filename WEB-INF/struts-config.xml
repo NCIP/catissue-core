@@ -734,8 +734,8 @@ PUBLIC
 			name="newSpecimenForm"
 			validate="false"
 			scope="request">
-			<forward name="pageOfNewSpecimen" path="/QuerySpecimenSearch.do?pageOf=pageOfNewSpecimenCPQuery" />
-			<forward name="pageOfEditSpecimen" path="/NewSpecimen.do?pageOf=pageOfNewSpecimen" />
+			<forward name="pageOfNewSpecimenCPQuery" path="/QuerySpecimenSearch.do?pageOf=pageOfNewSpecimenCPQuery" />
+			<forward name="pageOfNewSpecimen" path="/NewSpecimenSearch.do?pageOf=pageOfNewSpecimen" />
 		</action>
 		
 		<action path="/AddScgToCart"
@@ -751,7 +751,7 @@ PUBLIC
 			name="viewSpecimenSummaryForm"
 			validate="false"
 			scope="request">
-			<forward name="success" path="/pages/AnticipatorySpecimens.jsp" />	
+			<forward name="success" path="/pages/AnticipatorySpecimens.jsp" />
 			<forward name="multipleSpWithMenu" path=".catissuecore.viewSpecimenSummary" />	
 			<forward name="failure" path="/pages/AnticipatorySpecimens.jsp" />
 			<forward name="multipleSpWithMenuFaliure" path=".catissuecore.viewSpecimenSummary" />
@@ -763,7 +763,8 @@ PUBLIC
 			name="createSpecimenForm"
 			validate="false"
 			scope="request">
-			<forward name="pageOfNewSpecimen" path="/QuerySpecimenSearch.do?operation=search&amp;pageOf=pageOfNewSpecimenCPQuery&amp;id=0" />
+			<forward name="pageOfNewSpecimen" path="/NewSpecimenSearch.do?operation=search&amp;pageOf=pageOfNewSpecimen&amp;id=0" />
+			<forward name="pageOfNewSpecimenCPQuery" path="/QuerySpecimenSearch.do?operation=search&amp;pageOf=pageOfNewSpecimenCPQuery&amp;id=0" />
 		</action>
 		
 		<action path="/AddAliquotSpecimenToCart"
@@ -771,7 +772,8 @@ PUBLIC
 			name="aliquotForm"
 			validate="false"
 			scope="request">
-			<forward name="pageOfNewSpecimen" path=".catissuecore.aliquotSummaryCpQueryDef" />
+			<forward name="pageOfNewSpecimen" path=".catissuecore.aliquotSummaryDef" />
+			<forward name="pageOfNewSpecimenCPQuery" path=".catissuecore.aliquotSummaryCpQueryDef" />
 		</action>
 		
 		<action path="/QueryMessageAction"
@@ -1922,7 +1924,7 @@ PUBLIC
 			<forward name="pageOfCreateAliquot" path="/CreateAliquots.do?pageOf=pageOfCreateAliquot&amp;operation=add&amp;menuSelected=15&amp;buttonClicked=submit" />
 			<forward name="distribution" path="/Distribution.do?operation=add&amp;pageOf=pageOfDistribution&amp;menuSelected=16" />
 			<forward name="orderDetails" path="/RequestDetails.do" />
-			<forward name="addSpecimenToCart" path="/AddSpecimenToCart.do?pageOf=pageOfEditSpecimen" />	
+			<forward name="addSpecimenToCart" path="/AddSpecimenToCart.do?pageOf=pageOfNewSpecimen" />	
 			<forward name="CPQueryPrintSpecimenEdit" path="/CPQueryPrintSpecimenEdit.do"/>
 			
 		</action>
@@ -1999,6 +2001,7 @@ PUBLIC
 			<forward name="sameCollectionGroup" path="/NewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimen&amp;menuSelected=15" />
 			<forward name="orderDetails" path="/RequestDetails.do" />
 			<forward name="printDeriveSpecimen" path="/printDeriveSpecimen.do" />
+			<forward name="addSpecimenToCart" path="/AddDeriveSpecimenToCart.do?pageOf=pageOfNewSpecimen" />
 		</action>
 		
 		<action path="/CreateSpecimenEdit"
@@ -3787,6 +3790,7 @@ PUBLIC
 		scope="request">
 		<forward name="success" path=".catissuecore.aliquotSummaryDef" />
 		<forward name="orderDetails" path="/RequestDetails.do" />
+		<forward name="addSpecimenToCart" path="/AddAliquotSpecimenToCart.do?pageOf=pageOfNewSpecimen" />
 		<forward name="failure" path="/Aliquots.do?pageOf=pageOfCreateAliquot&amp;menuSelected=15" />
 	</action>
 	
@@ -4240,7 +4244,7 @@ PUBLIC
 		<forward name="sameCollectionGroup" path="/QuerySpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimenCPQuery&amp;menuSelected=15" />
 		<forward name="printDeriveSpecimen" path="/printDeriveSpecimen.do" />
 		<forward name="newSpecimenEdit" path="/QuerySpecimenSearch.do?operation=search&amp;pageOf=pageOfNewSpecimenCPQuery&amp;id=0" />
-		<forward name="addSpecimenToCart" path="/AddDeriveSpecimenToCart.do?pageOf=pageOfNewSpecimen" />
+		<forward name="addSpecimenToCart" path="/AddDeriveSpecimenToCart.do?pageOf=pageOfNewSpecimenCPQuery" />
 	</action>
 
 	<action path="/CPQueryAddSpecimen"
@@ -4425,7 +4429,7 @@ PUBLIC
 		<forward name="pageOfCreateAliquot" path="/CPQueryCreateAliquots.do?pageOf=pageOfCreateAliquot&amp;operation=add&amp;menuSelected=15&amp;buttonClicked=submit&amp;parentSpecimenId=-1&amp;CPQuery=CPQuery" />
 		<forward name="distribution" path="/CPQueryDistribution.do?operation=add&amp;pageOf=pageOfDistributionCPQuery&amp;menuSelected=16" />
 		<forward name="deriveMultiple" path="/MultipleSpecimenFlexInitAction.do?operation=add&amp;pageOf=pageOfMultipleSpWithoutMenu&amp;parentType=Derived_Specimen"/>
-		<forward name="addSpecimenToCart" path="/AddSpecimenToCart.do?pageOf=pageOfNewSpecimen" />
+		<forward name="addSpecimenToCart" path="/AddSpecimenToCart.do?pageOf=pageOfNewSpecimenCPQuery" />
 	</action>
 		
 			
@@ -4447,7 +4451,7 @@ PUBLIC
 		<forward name="pageOfCreateAliquot" path="/CPQueryCreateAliquots.do?pageOf=pageOfCreateAliquot&amp;operation=add&amp;menuSelected=15&amp;buttonClicked=submit&amp;parentSpecimenId=-1&amp;CPQuery=CPQuery" />
 		<forward name="distribution" path="/CPQueryDistribution.do?operation=add&amp;pageOf=pageOfDistributionCPQuery&amp;menuSelected=16" />
 		<forward name="deriveMultiple" path="/MultipleSpecimenFlexInitAction.do?operation=add&amp;pageOf=pageOfMultipleSpWithoutMenu&amp;parentType=Derived_Specimen"/>
-		<forward name="addSpecimenToCart" path="/AddSpecimenToCart.do?pageOf=pageOfNewSpecimen" />	
+		<forward name="addSpecimenToCart" path="/AddSpecimenToCart.do?pageOf=pageOfNewSpecimenCPQuery" />	
 	</action>
 
 	<action path="/CPQuerySpecimenCollectionGroupAddNew"
@@ -4506,7 +4510,7 @@ PUBLIC
 		scope="request">
 		<forward name="success" path=".catissuecore.aliquotSummaryCpQueryDef" />
 		<forward name="failure" path="/CPQueryAliquots.do?pageOf=pageOfCreateAliquot&amp;CPQuery=true&amp;menuSelected=15" />
-		<forward name="addSpecimenToCart" path="/AddAliquotSpecimenToCart.do?pageOf=pageOfNewSpecimen" />		
+		<forward name="addSpecimenToCart" path="/AddAliquotSpecimenToCart.do?pageOf=pageOfNewSpecimenCPQuery" />		
 	</action>
 			
 	<action path="/CPQueryAliquotSummary"
