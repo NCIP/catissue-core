@@ -23,6 +23,7 @@
 	<property name="dbupgrade.sql.dir" value="${base.dir}/SQL/DBUpgrade" />
 	<property name="oracle.sql.dir" value="${base.dir}/SQL/Oracle" />
 	<property name="common.sql.dir" value="${base.dir}/SQL/Common" />
+	<property name="mssqlserver.sql.dir" value="${base.dir}/SQL/MsSqlServer" />
 	<property name="oracle.dialect.string" value="org.hibernate.dialect.Oracle9Dialect" />
 	<property name="mysql.dialect.string" value="org.hibernate.dialect.MySQLDialect" />
 	<property name="catissue.datasource" value="java:/catissuecore" />
@@ -32,9 +33,11 @@
 
 	<property name="oracle.driver.string" value="oracle.jdbc.driver.OracleDriver" />
 	<property name="mysql.driver.string" value="org.gjt.mm.mysql.Driver" />
+	<property name="mssqlserver.driver.string" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
 
 	<property name="mysql.lib" value="mysql-connector-java-5.0.8-bin.jar" />
 	<property name="oracle.lib" value="ojdbc14.jar" />
+	<property name="mssqlserver.lib" value="sqljdbc.jar" />
 
 	<property name="catissue.struts.config.file" value="struts-config.xml" />
 	<property name="catissue.hibernate.config.file" value="hibernate.cfg.xml" />
@@ -863,6 +866,13 @@
 				<equals arg1="oracle" arg2="${database.type}" />
 				<then>
 					<antcall target="deploy_db_oracle" />
+				</then>
+			</elseif>
+			<!-- mssqlserver db --> 
+			<elseif>
+				<equals arg1="mssqlserver" arg2="${database.type}" />
+				<then>
+					<antcall target="deploy_db_mssqlserver" />
 				</then>
 			</elseif>
 			<else>
@@ -2558,5 +2568,48 @@ Thanking You,
 			</java>
 	</target>
 	<!-- MSR Migration - end -->
-
+	
+	<!-- ACORN - mssqlserver migration - start -->
+	
+	<!--MsSQLServer Database Creation -->
+	<target name="deploy_db_mssqlserver">
+		<echo message="Initializing MsSQLServer Database for caTissue Suite v1.1 Application..." />
+		<sql driver="${mssqlserver.driver.string}" url="jdbc:sqlserver://${database.host}:${database.port};databaseName=${database.name};" userid="${database.username}" password="${database.password}">
+			<transaction src="${mssqlserver.sql.dir}/catissuecore.sql" />
+			<transaction src="${mssqlserver.sql.dir}/InitDB_CreateTable.sql" />
+			<!--
+			<transaction src="${common.sql.dir}/initDB_Insert_Common.sql" />
+			<transaction src="${common.sql.dir}/AlterTable.sql" />
+			<transaction src="${common.sql.dir}/CDE_DummyData_Common.sql" />
+			<transaction src="${mssqlserver.sql.dir}/csm_catissuecore.sql" />
+			<transaction src="${common.sql.dir}/insert_default_data.sql" />
+			<transaction src="${common.sql.dir}/indexes.sql" />
+			-->
+			<transaction src="${mssqlserver.sql.dir}/dynamicextension.sql" />
+			<!--
+			<transaction src="${mssqlserver.sql.dir}/query/metadata_schema_script.sql" />
+			<transaction src="${mssqlserver.sql.dir}/query/query_schema_script.sql" />
+			<transaction src="${mssqlserver.sql.dir}/query/caB2B Table Generation Script.sql" />
+			<transaction src="${dbupgrade.sql.dir}/MySql/CAModel.sql"/>
+			-->
+			<!--
+			<transaction>commit;</transaction>
+			-->
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</sql>
+		<!--
+		<antcall  target="Export_Clinical_diagnosis_mysql"/>
+		<antcall target="CAModel_import_data" />
+		<antcall target="temp_update_metadata_for_clob_support_mysql" />
+		<antcall target="insert_entity_group_metadata_mysql" />
+		<antcall target="upgrade_db_demodel_mysql" />
+		<antcall target="update_metadata_for_model_changes" />
+		<antcall target="update_metadata_for_CA_model_changes" />
+		-->
+	</target>
+	<!-- ACORN - mssqlserver migration - end -->
 </project>
