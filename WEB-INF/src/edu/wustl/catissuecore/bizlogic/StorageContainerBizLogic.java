@@ -2108,14 +2108,15 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 	private String createSql(Long identifier, String parentId) {
 		String sql;
 		if (!Constants.ZERO_ID.equals(parentId)) {
-			sql = "SELECT cn.IDENTIFIER, cn.name, pos.PARENT_CONTAINER_ID,count(sc3.IDENTIFIER) "
+			sql = "SELECT cn.IDENTIFIER, cn.name, pos.PARENT_CONTAINER_ID,COUNT(sc3.IDENTIFIER) "
 					+ "FROM CATISSUE_CONTAINER cn join CATISSUE_STORAGE_CONTAINER sc ON sc.IDENTIFIER=cn.IDENTIFIER "
 					+ "left outer join catissue_container_position pos on pos.CONTAINER_ID=cn.IDENTIFIER left outer join "
 					+ "catissue_container_position con_pos on con_pos.PARENT_CONTAINER_ID=cn.IDENTIFIER left outer join "
 					+ "CATISSUE_STORAGE_CONTAINER sc3 on con_pos.CONTAINER_ID=sc3.IDENTIFIER "
 					+ "WHERE pos.PARENT_CONTAINER_ID= "
 					+ identifier
-					+ " AND cn.ACTIVITY_STATUS!='Disabled' GROUP BY cn.IDENTIFIER, cn.NAME,pos.PARENT_CONTAINER_ID";
+					+ " AND cn.ACTIVITY_STATUS!='Disabled' GROUP BY cn.IDENTIFIER, cn.NAME,pos.PARENT_CONTAINER_ID"
+					+ " ORDER BY cn.IDENTIFIER ";
 		} else {
 			sql = "SELECT cn.IDENTIFIER, cn.NAME,site.identifier,COUNT(sc3.IDENTIFIER) "
 					+ "FROM CATISSUE_CONTAINER cn join CATISSUE_STORAGE_CONTAINER sc "
@@ -2126,7 +2127,8 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 					+ "WHERE site.identifier="
 					+ identifier
 					+ " AND cn.ACTIVITY_STATUS!='Disabled' AND cn.IDENTIFIER NOT IN (SELECT p2.CONTAINER_ID FROM CATISSUE_CONTAINER_POSITION p2) "
-					+ "GROUP BY cn.IDENTIFIER, cn.NAME,site.identifier ";
+					+ "GROUP BY cn.IDENTIFIER, cn.NAME,site.identifier " 
+					+ "ORDER BY cn.IDENTIFIER ";
 
 		}
 		return sql;

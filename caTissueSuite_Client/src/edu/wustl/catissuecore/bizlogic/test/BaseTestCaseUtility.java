@@ -144,7 +144,7 @@ public class BaseTestCaseUtility {
 		collectionProtocolEvent.setCollectionPointLabel("PreStudy1"+ Math.random());
 		collectionProtocolEvent.setClinicalStatus("Operative");		
 		collectionProtocolEvent.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
-		collectionProtocolEvent.setClinicalDiagnosis("Abdominal fibromatosis");
+		collectionProtocolEvent.setClinicalDiagnosis("Abdominal fibromatosis (disorder)");
 		Collection specimenCollection =null;
 		CollectionProtocolEventBean cpEventBean = new CollectionProtocolEventBean();
 		SpecimenRequirementBean specimenRequirementBean = createSpecimenBean();

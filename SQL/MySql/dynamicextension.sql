@@ -367,7 +367,7 @@ create table DYEXTN_CONTAINMENT_CONTROL (
 );
 create table DYEXTN_CONTROL (
    IDENTIFIER bigint not null auto_increment,
-   CAPTION varchar(255),
+   CAPTION varchar(800),
    CSS_CLASS varchar(255),
    HIDDEN tinyint(1) default NULL,
    NAME varchar(255),
@@ -459,7 +459,7 @@ create table DYEXTN_SHORT_TYPE_INFO (
 create table DYEXTN_CONTAINER (
    IDENTIFIER bigint not null auto_increment,
    BUTTON_CSS varchar(255),
-   CAPTION varchar(255),
+   CAPTION varchar(800),
    ENTITY_ID bigint,
    MAIN_TABLE_CSS varchar(255),
    REQUIRED_FIELD_INDICATOR varchar(255),

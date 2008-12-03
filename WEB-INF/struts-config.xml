@@ -1926,7 +1926,7 @@ PUBLIC
 			<forward name="orderDetails" path="/RequestDetails.do" />
 			<forward name="addSpecimenToCart" path="/AddSpecimenToCart.do?pageOf=pageOfNewSpecimen" />	
 			<forward name="CPQueryPrintSpecimenEdit" path="/CPQueryPrintSpecimenEdit.do"/>
-			
+			<forward name="deriveMultiple" path="/MultipleSpecimenFlexInitAction.do?operation=add&amp;pageOf=pageOfMultipleSpWithMenu&amp;parentType=Derived_Specimen"/>	
 		</action>
 		
 		<action path="/NewSpecimenSearch"

@@ -45,7 +45,11 @@ public class HL7ParserUtil
 		   {
 			   if(reportMap.containsKey(CaTIESConstants.OBX) && reportMap.get(CaTIESConstants.OBX)!=null)
 			   {
-				   isValid=true;
+				   String surgicalPathologyNumber = HL7ParserUtil.getSurgicalPathologyNumber(HL7ParserUtil.getReportDataFromReportMap(reportMap, CaTIESConstants.OBR));
+				   if(!(surgicalPathologyNumber==null || surgicalPathologyNumber.equals("")))
+				   {
+					   isValid=true;
+				   }
 			   }
 		   }
 	   }
@@ -254,7 +258,7 @@ public class HL7ParserUtil
 				medicalId.setSite(site);
 			}
 		}
-		Logger.out.info("Participant Created having Name="+participant.getLastName()+","+participant.getFirstName());
+		Logger.out.info("Participant Object Created ");
 		return participant;
 	}
 

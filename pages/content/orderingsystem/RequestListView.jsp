@@ -69,8 +69,7 @@
               <td width="2%"><bean:message key="requestlist.dataTabel.serialNo.label" /></td>
               <td width="20%"><strong><bean:message key='requestlist.dataTabel.OrderName.label'/></strong></td>
               <td width="18%"><strong><bean:message key='requestlist.dataTabel.DistributionProtocol.label'/></strong></td>
-              <td width="15%"><strong><bean:message key='requestlist.dataTabel.label.RequestedBy'/></strong></td>
-              <td width="18%"><strong><bean:message key='requestlist.dataTabel.label.Email'/></strong><span class="grey_ar"></span></td>
+              <td width="15%"><strong><bean:message key='requestlist.dataTabel.label.PIOfDP'/></strong></td>
               <td width="15%"><strong><bean:message key='requestlist.dataTabel.label.RequestDate'/></strong></td>
               <td width="12%"><strong><bean:message key='requestlist.dataTabel.label.Status'/></strong></td>
             </tr>
@@ -87,7 +86,6 @@
                     <td ><a  class="view"  href="RequestDetails.do?id=<bean:write name='rowDataString' property='requestId'/>&menuSelected=17"><bean:write name="rowDataString" property="orderName"/></a></td>
                     <td  ><span class="black_ar"><bean:write name="rowDataString" property="distributionProtocol"/></span></td>
 					<td ><bean:write name="rowDataString" property="requestedBy"/></td>
-                    <td > <a  class="view" href='mailto:<bean:write name="rowDataString" property="email"/>' ><bean:write name="rowDataString" property="email"/> <a/></td>
                     <td ><bean:write name="rowDataString" property="requestedDate"/></td>
                     <td ><bean:write name="rowDataString" property="status"/></td>
             </tr>

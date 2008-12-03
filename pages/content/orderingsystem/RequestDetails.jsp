@@ -112,8 +112,6 @@ function showSpecimenDetails(id)
 
 		alert("No specimen selected : Select specimen to view details.");
 	}
-	
-	
 }
 
 function viewSpecimenDetails(id)
@@ -200,11 +198,19 @@ function showAllSpecimen(count)
 	
 		if(status=="<%=Constants.VIEW_CONSENTS%>"||status=="<%=Constants.VERIFIED%>" && statusValue!="disable")
 		{
-			var specimenkey= "value(RequestDetailsBean:"+i+"_specimenId)";
-			var specimenObj= document.getElementById(specimenkey);
-			speciemnIdValue= speciemnIdValue+document.getElementById(specimenkey).value;
-			labelIndexCount=labelIndexCount+i;
-			if(i!=count)
+			//var specimenkey= "value(RequestDetailsBean:"+i+"_specimenId)";
+			//var specimenObj= document.getElementById(specimenkey);
+
+			var id = "requestFor"+i;
+        	var specimenIdentifier = document.getElementById(id).value;
+			
+			if(specimenIdentifier != "#") 
+			{
+			  speciemnIdValue= speciemnIdValue+specimenIdentifier;
+			  labelIndexCount=labelIndexCount+i;
+            } 
+			
+			if(i!=count && specimenIdentifier != "#")
 			{
 				speciemnIdValue=speciemnIdValue+"|";
 				labelIndexCount=labelIndexCount+"|";
@@ -221,41 +227,59 @@ function showAllSpecimen(count)
 		}
 	
 	}
-	if(count==(iCount))
+
+	if(speciemnIdValue == "")
 	{
-		alert("No consents available");
-	}
-	else
+		alert("No specimen selected : Select specimen to view consents");
+	} else 
 	{
-		var url= 'ConsentVerification.do?operation=&pageOf=pageOfOrdering&specimenConsents=yes&verifiedRows='+verifiedRows+'&noOfRows='+count+'&speciemnIdValue='+speciemnIdValue+'&labelIndexCount='+labelIndexCount;
-		
-		//model window popup
-		allConsentWindow=dhtmlmodal.open('Institution', 'iframe', url,'Consent Form', 'width=600px,height=300px,center=1,resize=0,scrolling=1')
-		allConsentWindow.onclose=function()
-      { 
-            return true;
-      }
-	  
+
+		if(count==(iCount))
+		{
+			alert("No consents available");
+		}
+		else
+		{
+			var url= 'ConsentVerification.do?operation=&pageOf=pageOfOrdering&specimenConsents=yes&verifiedRows='+verifiedRows+'&noOfRows='+count+'&speciemnIdValue='+speciemnIdValue+'&labelIndexCount='+labelIndexCount;
+			
+			//model window popup
+			allConsentWindow=dhtmlmodal.open('Institution', 'iframe', url,'Consent Form', 'width=600px,height=300px,center=1,resize=0,scrolling=1')
+			allConsentWindow.onclose=function()
+		  { 
+				return true;
+		  }
+		  
+		}
 	}
 }
 //This function called to view the consent page
-function showNewConsentPage(specimenIdentifierkey,labelStatus,consentVerificationkey)
+function showNewConsentPage(specimenIdentifierkey,labelStatus,consentVerificationkey,id)
 {	
 	var status = document.getElementById(consentVerificationkey).value;
-	var specimenIdentifier= document.getElementById(specimenIdentifierkey).value;
+	var id = "requestFor"+id;
+	var specimenIdentifier = document.getElementById(id).value;
+
 	var url ='ConsentVerification.do?operation=&pageOf=pageOfOrdering&status='+status+'&labelStatusId='+labelStatus+'&consentVerificationkey='+consentVerificationkey+'&showConsents=yes&specimenId='+specimenIdentifier;
 
-	if(status!="No Consents")
+	if(specimenIdentifier != "#")
 	{
+		if(status!="No Consents")
+		{
+			
+		  consentWindow=dhtmlmodal.open('Institution', 'iframe', url,'Consent Form', 'width=600px,height=260px,center=1,resize=0,scrolling=1')
+		  consentWindow.onclose=function()
+		  { 
+				return true;
+		  }
+		}
 		
+	} else {
+
+		alert("No specimen selected : Select specimen to view consents");
+	}
+
+
 	
-//model window popup
-	consentWindow=dhtmlmodal.open('Institution', 'iframe', url,'Consent Form', 'width=600px,height=260px,center=1,resize=0,scrolling=1')
-    consentWindow.onclose=function()
-      { 
-            return true;
-      }
-	  }
 }
 
 function checkQuantity(index)
@@ -351,14 +375,25 @@ function checkQuantityforAll(count)
 	function onResponseUpdate(response) 
 	{
 		var values = response.split("#@#");
-		var availableQtyId = "availableQtyId" + values[0];	
-		document.getElementById(availableQtyId).value	= values[1];
-
+		
 		var selectedSpecimenTypeId = "selectedSpecimenTypeId" +  values[0];
+		var availableQtyId = "availableQtyId" + values[0];	
+        var specimenQuantityUnitId = "specimenQuantityUnitId" +  values[0];
+		
 		document.getElementById(selectedSpecimenTypeId).value	= values[2];
-
-		var specimenQuantityUnitId = "specimenQuantityUnitId" +  values[0];
-		document.getElementById(specimenQuantityUnitId).value	= values[3];
+		if(values[2] != "NA")
+		{
+			document.getElementById(availableQtyId).value	= values[1];
+			document.getElementById(specimenQuantityUnitId).value	= values[3];
+		} else {
+			document.getElementById(availableQtyId).value	= "";
+			document.getElementById(specimenQuantityUnitId).value	= "";
+		}
+		
+		var consentVerificationkey= "value(RequestDetailsBean:"+values[0]+"_consentVerificationkey)";
+		var labelStatus="labelStatus"+values[0];
+		var parentId=window.parent.document.getElementById(labelStatus);
+		parentId.innerHTML="View"+"<input type='hidden' name='" + consentVerificationkey + "' value='View' id='" + consentVerificationkey + "'/>";
 
 
 	}
@@ -779,7 +814,7 @@ function checkQuantityforAll(count)
 
 											
 				<%																							
-					        if(((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim().equalsIgnoreCase("Derived") ||
+					        if(
 							((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim().equalsIgnoreCase("Pathological") ||((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim().equalsIgnoreCase("DerivedPathological"))
 							{
 					
@@ -791,7 +826,7 @@ function checkQuantityforAll(count)
 				%>
 
 				<%																																
-							if(((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim().equalsIgnoreCase("Existing"))
+							if(((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim().equalsIgnoreCase("Derived") ||((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim().equalsIgnoreCase("Existing"))
 							{
 				%>
 
@@ -804,7 +839,7 @@ function checkQuantityforAll(count)
 											<html:hidden property="<%=consentVerificationkey%>" styleId="<%=consentVerificationkey%>"  value="<%=Constants.NO_CONSENTS%>"/>
 									</logic:equal>
 									<logic:notEqual name="requestDetailsForm" property="<%=consentVerificationkey%>" value="<%=Constants.NO_CONSENTS%>">
-											<a  id="<%=labelStatus%>" class="view" href="javascript:showNewConsentPage('<%=specimenIdInMap%>','<%=labelStatus%>','<%=consentVerificationkey%>')">
+											<a  id="<%=labelStatus%>" class="view" href="javascript:showNewConsentPage('<%=specimenIdInMap%>','<%=labelStatus%>','<%=consentVerificationkey%>','<%=i%>')">
 									<logic:notEmpty name="requestDetailsForm" property="<%=consentVerificationkey%>">
 												<bean:write name="requestDetailsForm" property="<%=consentVerificationkey%>"/>
 									</logic:notEmpty>
@@ -908,7 +943,7 @@ function checkQuantityforAll(count)
 					<input type="button" class="blue_ar_c" value="Submit And Notify" onclick="submitAndNotify()">
 					 &nbsp;|&nbsp; 
 						
-							<html:link page="/ManageAdministrativeData.do" styleClass="cancellink">
+							<html:link page="/RequestListView.do?pageNum=1&menuSelected=17" styleClass="cancellink">
 								<bean:message key="orderingsystem.button.cancel" />
 				            </html:link>
 						

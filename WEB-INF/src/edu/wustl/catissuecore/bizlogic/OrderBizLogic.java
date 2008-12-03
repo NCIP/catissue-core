@@ -16,17 +16,11 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.hibernate.Session;
-import org.omg.CosNaming.IstringHelper;
-
 import edu.wustl.catissuecore.bean.RequestViewBean;
-import edu.wustl.catissuecore.domain.AbstractSpecimen;
-import edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.DerivedSpecimenOrderItem;
 import edu.wustl.catissuecore.domain.DistributedItem;
 import edu.wustl.catissuecore.domain.Distribution;
@@ -40,8 +34,6 @@ import edu.wustl.catissuecore.domain.PathologicalCaseOrderItem;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArray;
-import edu.wustl.catissuecore.domain.SpecimenArrayOrderItem;
-import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenOrderItem;
 import edu.wustl.catissuecore.domain.SpecimenPosition;
@@ -53,6 +45,7 @@ import edu.wustl.catissuecore.domain.pathology.SurgicalPathologyReport;
 import edu.wustl.catissuecore.util.EmailHandler;
 import edu.wustl.catissuecore.util.OrderingSystemUtil;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
@@ -64,12 +57,11 @@ import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.security.PrivilegeCache;
 import edu.wustl.common.security.PrivilegeManager;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
+import edu.wustl.common.util.Permissions;
 import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.dbManager.DAOException;
-import edu.wustl.common.util.dbManager.DBUtil;
 import edu.wustl.common.util.dbManager.HibernateMetaData;
 import edu.wustl.common.util.global.ApplicationProperties;
-import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.global.Variables;
 import edu.wustl.common.util.logger.Logger;
 
@@ -540,7 +532,7 @@ public class OrderBizLogic extends DefaultBizLogic
 			else if (orderItem instanceof PathologicalCaseOrderItem)
 			{
 				PathologicalCaseOrderItem pathologicalCaseOrderItem = (PathologicalCaseOrderItem) orderItem;
-			    emailBody = emailBody + serialNo + ". " + pathologicalCaseOrderItem.getDistributedItem().getDistribution().getOrderDetails().getName()  + ": "
+				emailBody = emailBody + serialNo + ". " + pathologicalCaseOrderItem.getSpecimenCollectionGroup().getSurgicalPathologyNumber()  + ": "
 				+ pathologicalCaseOrderItem.getStatus() + "\n   Order Description: "+ pathologicalCaseOrderItem.getDescription() + "\n\n";
 				
 				serialNo++; 
@@ -757,7 +749,10 @@ public class OrderBizLogic extends DefaultBizLogic
 			{
 				OrderDetails orderDetails = (OrderDetails)orderListFromDBIterator.next();
 				boolean hasDributionPrivilegeOnSite = isOrderItemValidTodistribute(orderDetails.getOrderItemCollection(),siteIdsList,dao);
-				boolean hasDistributionPrivilegeOnCp = checkDistributionPrivilegeOnCP(user,privilegeCache,orderDetails.getOrderItemCollection());
+				SessionDataBean sdb = new SessionDataBean();
+				sdb.setUserId(userId);
+				sdb.setUserName(userName);
+				boolean hasDistributionPrivilegeOnCp = checkDistributionPrivilegeOnCP(user,privilegeCache,orderDetails.getOrderItemCollection(), sdb);
 				if(isSuperAdmin(user) || hasDributionPrivilegeOnSite || hasDistributionPrivilegeOnCp)
 				{
 					orderList.add(orderDetails);
@@ -888,7 +883,7 @@ public class OrderBizLogic extends DefaultBizLogic
 	 * @return
 	 * @throws DAOException
 	 */
-	public boolean checkDistributionPrivilegeOnCP(User user,PrivilegeCache privilegeCache,Collection orderItemCollection) throws DAOException 
+	public boolean checkDistributionPrivilegeOnCP(User user,PrivilegeCache privilegeCache,Collection orderItemCollection, SessionDataBean sessionDataBean) throws DAOException 
 	{
 	
 		boolean hasDistributionPrivilege = false; 
@@ -908,9 +903,15 @@ public class OrderBizLogic extends DefaultBizLogic
 						.getCollectionProtocol().getId();
 						String objectId = Constants.COLLECTION_PROTOCOL_CLASS_NAME+"_"+cpId;
 						boolean isAuthorized = privilegeCache.hasPrivilege(objectId, Variables.privilegeDetailsMap.get(Constants.DISTRIBUTE_SPECIMENS));
+						if(!isAuthorized)
+						{
+							isAuthorized = Utility.checkForAllCurrentAndFutureCPs(null, Permissions.DISTRIBUTION, sessionDataBean, cpId.toString());
+						}
+						
 						if(isAuthorized)
 						{
 							hasDistributionPrivilege = true;
+							break;
 						}
 					}
 				}
@@ -1265,7 +1266,12 @@ public class OrderBizLogic extends DefaultBizLogic
 
 		NewSpecimenBizLogic newSpecimenBizLogic=new NewSpecimenBizLogic();
 		Collection orderItemCollection = orderNew.getOrderItemCollection();
-
+		StringBuffer disposalReason = new StringBuffer();
+		disposalReason.append("Specimen distributed to distribution protocol ");
+		disposalReason.append(orderNew.getDistributionProtocol().getTitle());
+		disposalReason.append(" via order ");
+		disposalReason.append(orderNew.getName());
+		
 		Iterator orderItemIterator = orderItemCollection.iterator();
 
 		while (orderItemIterator.hasNext()) {
@@ -1294,10 +1300,12 @@ public class OrderBizLogic extends DefaultBizLogic
 
 							if(specimen!=null){
 
-								try {
-									newSpecimenBizLogic.disposeAndCloseSpecimen(sessionDataBean,specimen,dao);
-								} catch (BizLogicException e) {
-
+								try
+								{
+									newSpecimenBizLogic.disposeAndCloseSpecimen(sessionDataBean,specimen,dao,disposalReason.toString());
+								}
+								catch (BizLogicException e) 
+								{
 									throw new DAOException(e);
 								}
 							}

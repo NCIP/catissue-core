@@ -1,23 +1,14 @@
 package edu.wustl.catissuecore.action;
-
+import edu.wustl.catissuecore.bizlogic.AnnotationUtil;
 import java.util.Collection;
-import edu.wustl.cab2b.client.metadatasearch.MetadataSearch;
-import edu.wustl.cab2b.common.beans.MatchedClass;
-import edu.wustl.cab2b.common.util.Constants;
-
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import org.apache.struts.Globals;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
@@ -25,41 +16,31 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
-import edu.common.dynamicextensions.domain.Entity;
-import edu.common.dynamicextensions.domaininterface.AbstractAttributeInterface;
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
-import edu.common.dynamicextensions.domaininterface.EntityInterface;
-import edu.common.dynamicextensions.entitymanager.EntityManager;
+import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationException;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
-import edu.wustl.cab2b.client.metadatasearch.MetadataSearch;
-import edu.wustl.cab2b.common.beans.MatchedClass;
 import edu.wustl.cab2b.common.exception.CheckedException;
 import edu.wustl.cab2b.server.cache.EntityCache;
+import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.catissuecore.actionForm.AliquotForm;
-import edu.wustl.catissuecore.actionForm.CategorySearchForm;
-import edu.wustl.catissuecore.actionForm.CreateSpecimenForm;
-import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.SpecimenForm;
 import edu.wustl.catissuecore.actionForm.ViewSpecimenSummaryForm;
-import edu.wustl.catissuecore.annotations.AnnotationUtil;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.querysuite.QueryShoppingCartBizLogic;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.querysuite.QueryShoppingCart;
+import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.querysuite.EntityCacheFactory;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.dbManager.DAOException;
-import gate.security.Session;
-import edu.wustl.common.bizlogic.IBizLogic;
-
 
 public class NewShopingCartAction extends BaseAction {
 	
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response) throws DAOException,DynamicExtensionsSystemException, CheckedException {
+			HttpServletRequest request, HttpServletResponse response) throws DAOException,DynamicExtensionsSystemException, CheckedException, DynamicExtensionsApplicationException {
 		
 		List<List<String>> cartnew = new ArrayList<List<String>>();
 		HttpSession session = request.getSession();
@@ -73,28 +54,39 @@ public class NewShopingCartAction extends BaseAction {
 		List<String> columnList=new ArrayList<String>();
 		String pageOf = request.getParameter(edu.wustl.catissuecore.util.global.Constants.PAGEOF);
 		
-		int[] searchTarget = prepareSearchTarget();
-		int basedOn = 0;
+		//int[] searchTarget = prepareSearchTarget();
+		//int basedOn = 0;
 		
-		Set<EntityInterface> entityCollection = new HashSet<EntityInterface>();
-		String[] searchString  ={"specimen"};
+		//Set<EntityInterface> entityCollection = new HashSet<EntityInterface>();
+		//String[] searchString  ={"specimen"};
 		Collection<AttributeInterface> attributeCollection=new ArrayList<AttributeInterface>();
 		EntityCache cache = EntityCacheFactory.getInstance();
-		MetadataSearch advancedSearch = new MetadataSearch(cache);
-		MatchedClass matchedClass = advancedSearch.search(searchTarget, searchString, basedOn);
-		entityCollection = matchedClass.getEntityCollection();
-		List resultList = new ArrayList(entityCollection);
-		for (int i = 0; i < resultList.size(); i++)
+		//MetadataSearch advancedSearch = new MetadataSearch(cache);
+		Long specimenEntityId = (Long) CatissueCoreCacheManager.getInstance().getObjectFromCache("specimenEntityId");
+
+		if (CatissueCoreCacheManager.getInstance().getObjectFromCache("specimenEntityId") != null)
 		{
-			EntityInterface entity = (EntityInterface) resultList.get(i);
-			String fullyQualifiedEntityName = entity.getName();
-			if(fullyQualifiedEntityName.equals(Specimen.class.getName()))
-			{
-				attributeCollection=entity.getEntityAttributesForQuery();
-				break;
-			}
-					
+			specimenEntityId = (Long) CatissueCoreCacheManager.getInstance().getObjectFromCache("specimenEntityId");
 		}
+		else
+		{
+			specimenEntityId = AnnotationUtil.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN);
+			CatissueCoreCacheManager.getInstance().addObjectToCache("specimenEntityId",specimenEntityId);		
+		}	
+		attributeCollection = cache.getEntityById(specimenEntityId).getEntityAttributesForQuery();
+//		MatchedClass matchedClass = advancedSearch.search(searchTarget, searchString, basedOn);
+//		entityCollection = matchedClass.getEntityCollection();
+//		List resultList = new ArrayList(entityCollection);
+//		for (int i = 0; i < resultList.size(); i++)
+//		{
+//			EntityInterface entity = (EntityInterface) resultList.get(i);
+//			String fullyQualifiedEntityName = entity.getName();
+//			if(fullyQualifiedEntityName.equals(Specimen.class.getName()))
+//			{
+//				attributeCollection=entity.getEntityAttributesForQuery();
+//				break;
+//			}	
+//		}
 		Iterator<AttributeInterface> attributreItr=attributeCollection.iterator();
 		
 		String[] selectColumnName = new String[attributeCollection.size()];
@@ -331,19 +323,19 @@ public class NewShopingCartAction extends BaseAction {
 		target = new String(edu.wustl.catissuecore.util.global.Constants.DIFFERENT_VIEW_IN_CART);
 	}
 	
-	private int[] prepareSearchTarget()
-	{
-		List<Integer> target = new ArrayList<Integer>();
-		System.out.println();
-		target.add(new Integer(Constants.CLASS));
-		target.add(new Integer(Constants.ATTRIBUTE));
-		target.add(new Integer(Constants.PV));
-		int[] searchTarget = new int[target.size()];
-		
-		for (int i = 0; i < target.size(); i++)
-		{
-			searchTarget[i] = ((Integer) (target.get(i))).intValue();
-		}
-		return searchTarget;
-	}
+//	private int[] prepareSearchTarget()
+//	{
+//		List<Integer> target = new ArrayList<Integer>();
+//		System.out.println();
+//		target.add(new Integer(Constants.CLASS));
+//		target.add(new Integer(Constants.ATTRIBUTE));
+//		target.add(new Integer(Constants.PV));
+//		int[] searchTarget = new int[target.size()];
+//		
+//		for (int i = 0; i < target.size(); i++)
+//		{
+//			searchTarget[i] = ((Integer) (target.get(i))).intValue();
+//		}
+//		return searchTarget;
+//	}
 }

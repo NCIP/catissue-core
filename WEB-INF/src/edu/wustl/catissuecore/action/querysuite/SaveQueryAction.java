@@ -36,12 +36,11 @@ import edu.wustl.common.querysuite.queryobject.ICustomFormula;
 import edu.wustl.common.querysuite.queryobject.IOutputAttribute;
 import edu.wustl.common.querysuite.queryobject.IParameterizedQuery;
 import edu.wustl.common.querysuite.queryobject.IQuery;
-import edu.wustl.common.querysuite.queryobject.impl.ParameterizedQuery;
 import edu.wustl.common.querysuite.queryobject.impl.metadata.SelectedColumnsMetadata;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
-import edu.wustl.common.util.ObjectCloner;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.metadata.util.DyExtnObjectCloner;
 
 /**
  * This class saves the Query in Dag into database.
@@ -78,7 +77,7 @@ public class SaveQueryAction extends BaseAction
 				IBizLogic bizLogic = AbstractBizLogicFactory.getBizLogic(ApplicationProperties
 						.getValue("app.bizLogicFactory"), "getBizLogic",
 						Constants.CATISSUECORE_QUERY_INTERFACE_ID);
-                IParameterizedQuery queryClone = ObjectCloner.clone(parameterizedQuery);
+                IParameterizedQuery queryClone = new DyExtnObjectCloner().clone(parameterizedQuery);
                 new HibernateCleanser(queryClone).clean();
                 bizLogic.insert(queryClone, Constants.HIBERNATE_DAO);
 				target = Constants.SUCCESS;

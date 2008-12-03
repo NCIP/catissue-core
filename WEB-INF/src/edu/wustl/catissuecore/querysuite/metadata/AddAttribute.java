@@ -15,7 +15,7 @@ public class AddAttribute extends BaseMetadata
 {
 	private Connection connection = null;
 	private Statement stmt = null;
-	
+
 	public void addAttribute() throws SQLException, IOException
 	{
 		Statement stmt = connection.createStatement();
@@ -67,11 +67,11 @@ public class AddAttribute extends BaseMetadata
 				sql = "INSERT INTO dyextn_attribute values ("
 					+ nextIdOfAbstractMetadata + "," + entityId + ")";
 				UpdateMetadataUtil.executeInsertSQL(sql, connection.createStatement());
-				String primaryKey = attributePrimarkeyMap.get(attr); 
-				sql = "insert into dyextn_primitive_attribute (IDENTIFIER,IS_COLLECTION,IS_IDENTIFIED,IS_PRIMARY_KEY,IS_NULLABLE)"
+				String primaryKey = attributePrimarkeyMap.get(attr);
+				sql = "insert into dyextn_primitive_attribute (IDENTIFIER,IS_IDENTIFIED,IS_PRIMARY_KEY,IS_NULLABLE)"
 					+ " values ("
 					+ nextIdOfAbstractMetadata
-					+ ",0,NULL,"+primaryKey+",1)";
+					+ ",NULL,"+primaryKey+",1)";
 				UpdateMetadataUtil.executeInsertSQL(sql, connection.createStatement());
 
 				sql = "insert into dyextn_attribute_type_info (IDENTIFIER,PRIMITIVE_ATTRIBUTE_ID) values ("
@@ -128,20 +128,20 @@ public class AddAttribute extends BaseMetadata
 					+ nextIdOfAbstractMetadata + ")";
 				UpdateMetadataUtil.executeInsertSQL(sql, connection.createStatement());
 			}
-		}		
+		}
 	}
 
 	private String getColumnNameOfAttribue(String attr, HashMap<String, String> attributeColumnNameMap)
 	{
 		return attributeColumnNameMap.get(attr);
 	}
-	
+
 	private String getDataTypeOfAttribute(String attr, HashMap<String, String> attributeDatatypeMap)
 	{
 		return attributeDatatypeMap.get(attr);
 	}
-	
-	private void populateEntityAttributeMap() 
+
+	private void populateEntityAttributeMap()
 	{
 		List<String> attributes = new ArrayList<String>();
 		attributes.add("quantity");
@@ -157,7 +157,7 @@ public class AddAttribute extends BaseMetadata
 		attributes.add("consentSignatureDate");
 		//attributes.add("barcode");
 		entityNameAttributeNameMap.put("edu.wustl.catissuecore.domain.CollectionProtocolRegistration",attributes);
-		
+
 		/*attributes = new ArrayList<String>();
 		attributes.add("barcode");
 		entityNameAttributeNameMap.put("edu.wustl.catissuecore.domain.SpecimenCollectionGroup",attributes);*/
@@ -180,7 +180,7 @@ public class AddAttribute extends BaseMetadata
 		attributeDatatypeMap.put("consentSignatureDate", "date");
 		//attributeDatatypeMap.put("barcode", "string");
 	}
-	private void populateAttributePrimaryKeyMap() 
+	private void populateAttributePrimaryKeyMap()
 	{
 		attributePrimarkeyMap.put("quantity", "0");
 		attributePrimarkeyMap.put("unsignedConsentDocumentURL", "0");
@@ -201,7 +201,7 @@ public class AddAttribute extends BaseMetadata
 	{
 		this.connection = connection;
 		this.stmt = connection.createStatement();
-			
+
 		populateEntityList();
 		populateEntityAttributeMap();
 		populateAttributeColumnNameMap();
@@ -214,7 +214,7 @@ public class AddAttribute extends BaseMetadata
 			HashMap<String, String> attributeColumnNameMap,
 			HashMap<String, String> attributeDatatypeMap,
 			HashMap<String, String> attributePrimarkeyMap,
-			List<String> entityList) 
+			List<String> entityList)
 	{
 		this.connection = connection;
 		this.entityNameAttributeNameMap = entityNameAttributeNameMap;

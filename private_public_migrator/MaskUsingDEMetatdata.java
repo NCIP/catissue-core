@@ -65,6 +65,10 @@ public class MaskUsingDEMetatdata
 					{
 						maskDate(attribute.getColumnProperties().getName(),entity.getTableProperties().getName(), session);
 					}
+					else if(isCommentFiled(attribute))
+					{
+						maskString(attribute.getColumnProperties().getName(),entity.getTableProperties().getName(), session);
+					}
                 }
             }
 			
@@ -80,6 +84,28 @@ public class MaskUsingDEMetatdata
 			sqlString="truncate table CATISSUE_REPORT_PARTICIP_REL";
 			executeQuery(sqlString, session);
 			
+			/* Delete audit related tables starts */
+			
+			disableAuditTablesOracleConstraints(session);
+			
+			sqlString="truncate table catissue_audit_event_details";
+			executeQuery(sqlString, session);
+
+			sqlString="truncate table catissue_audit_event_query_log";
+			executeQuery(sqlString, session);
+			
+			sqlString="truncate table catissue_audit_event_log";
+			executeQuery(sqlString, session);
+			
+			sqlString="update catissue_audit_event set USER_ID=null";
+			executeQuery(sqlString, session);
+			sqlString="truncate table catissue_audit_event";
+			executeQuery(sqlString, session);
+			
+			enableAuditTablesOracleConstraints(session);
+			
+			/* Delete audit related tables ends */
+			
 			maskReportText(session);
 			
 			tx.commit();
@@ -90,21 +116,64 @@ public class MaskUsingDEMetatdata
 			System.out.println(e);
 		}
 	}
-
-	private void maskDate(String columnName, String tableName, Session session) throws SQLException
+	private void disableAuditTablesOracleConstraints(Session session) throws SQLException
 	{
-		String sqlString=null;
 		String dbType=session.connection().getMetaData().getDatabaseProductName();
 
 		if(dbType.equalsIgnoreCase("oracle"))
 		{
-			sqlString="update "+tableName+" set "+columnName+"=add_months("+columnName+", -"+randomNumber+")";
+			String sqlString="ALTER TABLE catissue_audit_event_details DISABLE CONSTRAINT FK5C07745D34FFD77F";
+			executeQuery(sqlString, session);
+
+			sqlString="ALTER TABLE catissue_audit_event_query_log DISABLE CONSTRAINT FK62DC439DBC7298A9";
+			executeQuery(sqlString, session);
+			
+			sqlString="ALTER TABLE CATISSUE_AUDIT_EVENT_LOG DISABLE CONSTRAINT FK8BB672DF77F0B904";
+			executeQuery(sqlString, session);
+			
+			sqlString="ALTER TABLE CATISSUE_AUDIT_EVENT DISABLE CONSTRAINT FKACAF697A2206F20F";
+			executeQuery(sqlString, session);
+			
 		}
-		if(dbType.equalsIgnoreCase("mysql"))
+	}
+	private void enableAuditTablesOracleConstraints(Session session) throws SQLException
+	{
+		String dbType=session.connection().getMetaData().getDatabaseProductName();
+
+		if(dbType.equalsIgnoreCase("oracle"))
 		{
-			sqlString="update "+tableName+" set "+columnName+"=date_add("+columnName+", INTERVAL -"+randomNumber+" MONTH);";
+			String sqlString="ALTER TABLE catissue_audit_event_details ENABLE CONSTRAINT FK5C07745D34FFD77F";
+			executeQuery(sqlString, session);
+
+			sqlString="ALTER TABLE catissue_audit_event_query_log ENABLE CONSTRAINT FK62DC439DBC7298A9";
+			executeQuery(sqlString, session);
+			
+			sqlString="ALTER TABLE CATISSUE_AUDIT_EVENT_LOG ENABLE CONSTRAINT FK8BB672DF77F0B904";
+			executeQuery(sqlString, session);
+			
+			sqlString="ALTER TABLE CATISSUE_AUDIT_EVENT ENABLE CONSTRAINT FKACAF697A2206F20F";
+			executeQuery(sqlString, session);
+			
 		}
-		executeQuery(sqlString, session);
+		
+	}
+	private void maskDate(String columnName, String tableName, Session session) throws SQLException
+	{
+		String sqlString=null;
+		if(!tableName.equalsIgnoreCase("CATISSUE_PASSWORD"))
+		{
+			String dbType=session.connection().getMetaData().getDatabaseProductName();
+	
+			if(dbType.equalsIgnoreCase("oracle"))
+			{
+				sqlString="update "+tableName+" set "+columnName+"=add_months("+columnName+", -"+randomNumber+")";
+			}
+			if(dbType.equalsIgnoreCase("mysql"))
+			{
+				sqlString="update "+tableName+" set "+columnName+"=date_add("+columnName+", INTERVAL -"+randomNumber+" MONTH);";
+			}
+			executeQuery(sqlString, session);
+		}		
 	}
 
 	private void maskString(String columnName, String tableName, Session session) 
@@ -143,5 +212,19 @@ public class MaskUsingDEMetatdata
 			System.out.println("Error in maskString ");
 			e.printStackTrace();
 		}
+	}
+	
+	private boolean isCommentFiled(AttributeInterface attribute)
+	{
+		boolean flag = false;
+		if(attribute.getEntity().getName().equals("edu.wustl.catissuecore.domain.Specimen") && attribute.getName().equals("comment"))
+		{
+			flag = true;
+		}
+		else if(attribute.getEntity().getName().equals("edu.wustl.catissuecore.domain.SpecimenCollectionGroup") && attribute.getName().equals("comment"))
+		{
+			flag = true;
+		}
+		return flag;
 	}
 }

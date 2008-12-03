@@ -12,6 +12,7 @@ import org.hibernate.criterion.Restrictions;
 import edu.wustl.catissuecore.caties.util.CaCoreAPIService;
 import edu.wustl.catissuecore.caties.util.CaTIESConstants;
 import edu.wustl.catissuecore.caties.util.CaTIESProperties;
+import edu.wustl.catissuecore.caties.util.SiteInfoHandler;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
@@ -31,7 +32,7 @@ import gov.nih.nci.system.applicationservice.ApplicationException;
 
 /**
  * @author sandeep_ranade
- * Represents a data loader which loades the report data into datastore. 
+ * Represents a data loader which loads the report data into datastore. 
  */
 
 public class ReportLoader 
@@ -62,6 +63,7 @@ public class ReportLoader
 	 */
 	private String surgicalPathologyNumber;
 	
+	private static final String defaultSiteName = SiteInfoHandler.getDefaultSiteName();
 	/**
 	 * Constructor
 	 * @param p participant 
@@ -112,18 +114,33 @@ public class ReportLoader
 			// check for existing specimen collection group(scg)
 			if(this.scg==null || this.scg.getId()==0)
 			{
-				// if scg is null create new scg
-				Logger.out.debug("Null SCG found in ReportLoader, Creating New SCG");
-				this.scg=createNewSpecimenCollectionGroup();
-				this.scg=(SpecimenCollectionGroup)CaCoreAPIService.createObject(this.scg);
-				this.identifiedReport.setSpecimenCollectionGroup(this.scg);
-				CaCoreAPIService.createObject(this.identifiedReport);
+				//check for exactly matching SCG
+				Logger.out.info("Checking for Matching SCG. Default site name:"+defaultSiteName+ " :" +this.site.getName());
+				if(this.site.getName().equalsIgnoreCase(defaultSiteName))
+				{
+					Logger.out.info("Inside if");
+					scg = (SpecimenCollectionGroup)CaCoreAPIService.getObject(SpecimenCollectionGroup.class, "surgicalPathologyNumber", surgicalPathologyNumber);
+				//	scg=ReportLoaderUtil.getExactMatchingSCG(this.site, surgicalPathologyNumber);
+				}
+				if(this.scg==null || this.scg.getId()==0)
+				{
+					// if scg is null create new scg
+					Logger.out.debug("Null SCG found in ReportLoader, Creating New SCG");
+					this.scg=createNewSpecimenCollectionGroup();
+					this.scg=(SpecimenCollectionGroup)CaCoreAPIService.createObject(this.scg);
+					this.identifiedReport.setSpecimenCollectionGroup(this.scg);
+					CaCoreAPIService.createObject(this.identifiedReport);
+				}
+				else
+				{
+					// use existing scg
+					retrieveAndSetSCG();
+				}
 			}
 			else
 			{
 				// use existing scg
 				retrieveAndSetSCG();
-				CaCoreAPIService.createObject(this.identifiedReport);
 			}	
 			Logger.out.info("Processing finished for Report ");
 		}
@@ -181,8 +198,17 @@ public class ReportLoader
 				collProtocolReg=new CollectionProtocolRegistration();
 				collProtocolReg.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
 				collProtocolReg.setRegistrationDate(new Date());
-				collProtocolReg.setParticipant(participant);	
-				collProtocolReg.setCollectionProtocol(collectionProtocol);
+				
+				Participant transientParticipant = new Participant();
+				transientParticipant.setId(participant.getId());
+				
+				CollectionProtocol transientCP = new CollectionProtocol();
+				transientCP.setId(collectionProtocol.getId());
+				transientCP.setTitle(collectionProtocol.getTitle());
+				
+				collProtocolReg.setParticipant(transientParticipant);
+				collProtocolReg.setCollectionProtocol(transientCP);
+				collProtocolReg.setProtocolParticipantIdentifier(Constants.REGISTRATION_FOR_REPORT_LOADER);
 				try
 				{
 					collProtocolReg=(CollectionProtocolRegistration)CaCoreAPIService.createObject(collProtocolReg);
@@ -196,7 +222,8 @@ public class ReportLoader
 			scg.setCollectionProtocolEvent(collProtocolEvent);
 			scg.setCollectionProtocolRegistration(collProtocolReg);
 			scg.setSpecimenEventParametersCollection(getDefaultEvents(scg));
-			scg.setName("SPR_"+CaCoreAPIService.getSpecimenCollectionGroupLabel(scg));
+			scg.setName(Constants.REPORT_LOADER_SCG+CaCoreAPIService.getSpecimenCollectionGroupLabel(scg));
+			scg.setBarcode(Constants.REPORT_LOADER_SCG);
 		}
 		else
 		{
@@ -272,6 +299,10 @@ public class ReportLoader
 	{
 
 		this.scg=(SpecimenCollectionGroup)CaCoreAPIService.getObject(SpecimenCollectionGroup.class, Constants.SYSTEM_IDENTIFIER, scg.getId());
+		if(this.scg.getSpecimenCollectionSite()==null)
+		{
+			this.scg.setSpecimenCollectionSite(this.site);
+		}
 		CollectionProtocolRegistration collectionProtocolRegistration=(CollectionProtocolRegistration)CaCoreAPIService.getObject(CollectionProtocolRegistration.class, Constants.SYSTEM_IDENTIFIER, this.scg.getCollectionProtocolRegistration().getId());
 		this.scg.setCollectionProtocolRegistration(collectionProtocolRegistration);
 		// set identified report
@@ -281,22 +312,22 @@ public class ReportLoader
 			Logger.out.info("inside"+this.scg.getIdentifiedSurgicalPathologyReport().getId());
 			
 			IdentifiedSurgicalPathologyReport existingReport=(IdentifiedSurgicalPathologyReport)CaCoreAPIService.getObject(IdentifiedSurgicalPathologyReport.class, Constants.SYSTEM_IDENTIFIER, this.scg.getIdentifiedSurgicalPathologyReport().getId());
+			DeidentifiedSurgicalPathologyReport existingDeidReport=null;
 			if(this.scg.getDeIdentifiedSurgicalPathologyReport()!=null)
 			{
-				DeidentifiedSurgicalPathologyReport existingDeidReport=(DeidentifiedSurgicalPathologyReport)CaCoreAPIService.getObject(DeidentifiedSurgicalPathologyReport.class, Constants.SYSTEM_IDENTIFIER, this.scg.getDeIdentifiedSurgicalPathologyReport().getId());
-				existingReport.setDeIdentifiedSurgicalPathologyReport(existingDeidReport);
+				existingDeidReport=(DeidentifiedSurgicalPathologyReport)CaCoreAPIService.getObject(DeidentifiedSurgicalPathologyReport.class, Constants.SYSTEM_IDENTIFIER, this.scg.getDeIdentifiedSurgicalPathologyReport().getId());
+				existingReport.setDeIdentifiedSurgicalPathologyReport(null);
 			}
-			existingReport.setSpecimenCollectionGroup(null);
-			this.scg.setIdentifiedSurgicalPathologyReport(null);
-			this.scg.setDeIdentifiedSurgicalPathologyReport(null);
+			existingReport.getTextContent().setData(this.identifiedReport.getTextContent().getData());
+			
 			try 
 			{
 				existingReport=(IdentifiedSurgicalPathologyReport)CaCoreAPIService.updateObject(existingReport);
 				Logger.out.info("existingReport updated:"+existingReport.getId());
-				if(existingReport.getDeIdentifiedSurgicalPathologyReport()!=null)
+				if(existingDeidReport!=null)
 				{
-					existingReport.getDeIdentifiedSurgicalPathologyReport().setSpecimenCollectionGroup(null);
-					DeidentifiedSurgicalPathologyReport deidreport=(DeidentifiedSurgicalPathologyReport)CaCoreAPIService.updateObject(existingReport.getDeIdentifiedSurgicalPathologyReport());
+					existingDeidReport.setSpecimenCollectionGroup(null);
+					DeidentifiedSurgicalPathologyReport deidreport=(DeidentifiedSurgicalPathologyReport)CaCoreAPIService.updateObject(existingDeidReport);
 					Logger.out.info("deid report updated: "+deidreport.getId());
 				}
 			}
@@ -305,18 +336,15 @@ public class ReportLoader
 				Logger.out.error("Error while updating old report!",ex);
 				throw new Exception(ex.getMessage());
 			}
-			/*}
-			else
-			{
-				this.scg.setIdentifiedSurgicalPathologyReport(this.identifiedReport);
-				this.identifiedReport.setSpecimenCollectionGroup(this.scg);
-			}*/
 		}
-		
-			Logger.out.info("inside else");
+		else
+		{
+			Logger.out.info("No associated report with SCG");
 			this.scg.setIdentifiedSurgicalPathologyReport(this.identifiedReport);
 			this.identifiedReport.setSpecimenCollectionGroup(this.scg);
-		
-			this.scg.setSurgicalPathologyNumber(this.surgicalPathologyNumber);
+			CaCoreAPIService.createObject(this.identifiedReport);
+		}
+		this.scg.setSurgicalPathologyNumber(this.surgicalPathologyNumber);
+		CaCoreAPIService.updateObject(this.scg);
 	}
 }

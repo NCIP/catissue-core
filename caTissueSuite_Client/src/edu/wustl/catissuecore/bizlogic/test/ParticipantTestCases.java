@@ -48,6 +48,8 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
 			assertTrue("Object added successfully", true);
 		 }
 		 catch(Exception e){
+			 System.out
+					.println("ParticipantTestCases.testAddParticipantWithCPR()"+e.getMessage());
 			 e.printStackTrace();
 			 assertFalse("could not add object", true);
 		 }
@@ -97,6 +99,7 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
           } 
           catch (Exception e) {
            	Logger.out.error(e.getMessage(),e);
+           	System.out.println("ParticipantTestCases.testSearchParticipant()"+e.getMessage());
            	e.printStackTrace();
            	assertFalse("Does not find Domain Object", true);
 	 		
@@ -116,6 +119,8 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
 			
 		}catch(Exception e)
 		{
+			System.out.println("testMatchingParticipant"+ e.getMessage());
+			e.printStackTrace();
 			assertFalse("Not able to retrieve mating participant list using API", true);
 		}
 		
@@ -136,6 +141,7 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
 	    } 
 	    catch (Exception e) {
 	       	Logger.out.error(e.getMessage(),e);
+	       	System.out.println("ParticipantTestCases.testUpdateParticipant()"+e.getMessage());
 	 		e.printStackTrace();
 	 		assertFalse("failed to update Object", true);
 	    }
@@ -163,6 +169,8 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
 	    } 
 	    catch (Exception e) {
 	       	Logger.out.error(e.getMessage(),e);
+	       	System.out
+					.println("ParticipantTestCases.testUpdateCPRWithBarcode()"+e.getMessage());
 	 		e.printStackTrace();
 	 		assertFalse("failed to update Object", true);
 	    }
@@ -190,6 +198,8 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
 	    } 
 	    catch (Exception e) {
 	       	Logger.out.error(e.getMessage(),e);
+	       	System.out
+					.println("ParticipantTestCases.testUpdateCPRWithCaseSensitiveBarcode()"+e.getMessage());
 	 		e.printStackTrace();
 	 		assertFalse("failed to update Object", true);
 	    }
@@ -211,6 +221,8 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
 	    } 
 	    catch (Exception e) {
 	       	Logger.out.error(e.getMessage(),e);
+	       	System.out
+					.println("ParticipantTestCases.testUpdateCPRWithCaseSensitiveBarcode()"+e.getMessage());
 	 		e.printStackTrace();
 	 		assertFalse("failed to update Object", true);
 	    }
@@ -344,7 +356,9 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
 			participant = (Participant) appService.createObject(participant);
 		 }
 		 	catch(Exception e){
-			 e.printStackTrace();			 
+			 e.printStackTrace();
+			 System.out
+					.println("ParticipantTestCases.testAddParticipantRegistrationWithUniquePMI() 1"+e.getMessage());
 			 assertFalse("Unable to create participant", true);
 		 }
 			CollectionProtocolRegistration collectionProtocolRegistration = new CollectionProtocolRegistration();
@@ -400,6 +414,8 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
 		 catch(Exception e)
 		 {
 		 	 e.printStackTrace();
+		 	 System.out
+					.println("ParticipantTestCases.testAddParticipantRegistrationWithUniquePMI()"+e.getMessage());
 			 assertFalse("could not add object", true);
 		 }
 	}

@@ -66,7 +66,8 @@ public class CollectionProtocolTestCases extends CaTissueBaseTestCase
 		
 		CollectionProtocolEvent collectionProtocolEvent = new CollectionProtocolEvent();		
 		collectionProtocolEvent.setClinicalStatus("New Diagnosis");
-		collectionProtocolEvent.setStudyCalendarEventPoint(new Double(1));		
+		collectionProtocolEvent.setStudyCalendarEventPoint(new Double(1));
+		collectionProtocolEvent.setLabelFormat("Label Format");
 	 
 
 		Collection specimenRequirementCollection = new HashSet();

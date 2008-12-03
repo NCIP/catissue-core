@@ -55,7 +55,7 @@ public class UpdateAvailableQuantity extends BaseAction
 	
 		String quantity = "";
 		Specimen specimen = null;
-		if(specimenId != null && !specimenId.equals(""))
+		if(specimenId != null && !specimenId.equals("") && !specimenId.equals("#"))
 		{
 			Long specId =  Long.parseLong(specimenId);
 			specimen = orderBizLogic.getSpecimenObject(specId);

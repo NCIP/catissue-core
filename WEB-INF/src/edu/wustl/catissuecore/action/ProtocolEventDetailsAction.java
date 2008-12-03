@@ -31,7 +31,7 @@ public class ProtocolEventDetailsAction extends BaseAction
 		ProtocolEventDetailsForm protocolEventDetailsForm =(ProtocolEventDetailsForm)form;
 		String operation = (String)request.getParameter(Constants.OPERATION);
 		HttpSession session = request.getSession();
-		
+
 		//Event Key when flow is form Specimen Requirement Page
 		String key = (String)request.getParameter(Constants.EVENT_KEY);
 		String eventKey=null;
@@ -76,7 +76,9 @@ public class ProtocolEventDetailsAction extends BaseAction
 			protocolEventDetailsForm.setStudyCalendarEventPoint(1D);
 			protocolEventDetailsForm.setCollectionPointLabel("");
 			protocolEventDetailsForm.setClinicalStatus((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_CLINICAL_STATUS));
+			//removed as value not in cache  and chnaged default to empty
 			protocolEventDetailsForm.setClinicalDiagnosis((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_CLINICAL_DIAGNOSIS));
+			//request.setAttribute("clinicalDiagnosis","");
 			protocolEventDetailsForm.setCollectionEventCollectionProcedure((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_COLLECTION_PROCEDURE));
 			protocolEventDetailsForm.setCollectionEventContainer((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_CONTAINER));
 			protocolEventDetailsForm.setReceivedEventReceivedQuality((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_RECEIVED_QUALITY));
@@ -88,10 +90,13 @@ public class ProtocolEventDetailsAction extends BaseAction
 		{
 			protocolEventDetailsForm.setCollectionProtocolEventkey(key);
 		}
+		request.setAttribute("clinicalDiagnosis", protocolEventDetailsForm.getClinicalDiagnosis());
 		List clinicalStatusList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_CLINICAL_STATUS,null);
-		List clinicalDiagnosisList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_CLINICAL_DIAGNOSIS,null);
+		//removed as value not in cache 
+		//List clinicalDiagnosisList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_CLINICAL_DIAGNOSIS,null);
     	request.setAttribute(Constants.CLINICAL_STATUS_LIST, clinicalStatusList);
-    	request.setAttribute(Constants.CLINICAL_DIAGNOSIS_LIST, clinicalDiagnosisList);
+    	//removed as value not in cache  and chnaged default to empty
+    	//request.setAttribute(Constants.CLINICAL_DIAGNOSIS_LIST, clinicalDiagnosisList);
 
     	//setting the procedure
 		List procedureList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_COLLECTION_PROCEDURE, null);

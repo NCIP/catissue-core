@@ -22,8 +22,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Stack;
 import java.util.TreeMap;
+
+import org.apache.commons.lang.StringUtils;
 
 import edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
@@ -56,9 +57,11 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.catissuecore.util.global.Variables;
+import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.cde.CDEManager;
+import edu.wustl.common.cde.PermissibleValueImpl;
 import edu.wustl.common.dao.AbstractDAO;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.dao.DAOFactory;
@@ -66,8 +69,6 @@ import edu.wustl.common.dao.HibernateDAO;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.exception.BizLogicException;
-import edu.wustl.common.security.PrivilegeCache;
-import edu.wustl.common.security.PrivilegeManager;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
@@ -98,6 +99,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
 		SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) obj;
+		boolean reportLoaderFlag = false;
 		if (specimenCollectionGroup.getSpecimenCollectionSite() != null)
 		{
 			Object siteObj = dao.retrieve(Site.class.getName(), specimenCollectionGroup.getSpecimenCollectionSite().getId());
@@ -126,6 +128,12 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 			}			
 		}
 		setCollectionProtocolRegistration(dao, specimenCollectionGroup, null);
+		if(Constants.REPORT_LOADER_SCG.equals(specimenCollectionGroup.getBarcode())
+				&& specimenCollectionGroup.getName().startsWith(Constants.REPORT_LOADER_SCG))
+		{
+			reportLoaderFlag = true;
+			specimenCollectionGroup.setBarcode(null);
+		}
 		generateSCGLabel(specimenCollectionGroup);
 		String barcode=specimenCollectionGroup.getName();
 		generateSCGBarcode(specimenCollectionGroup);
@@ -136,11 +144,10 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		//This check is added if empty values added by UI tnen shud add default values in parameters
 		checkSCGEvents(specimenCollectionGroup.getSpecimenEventParametersCollection(),sessionDataBean);
 		dao.insert(specimenCollectionGroup, sessionDataBean, true, true);
-		if (specimenCollection != null)
+		if (specimenCollection != null && reportLoaderFlag == false)
 		{
 			new NewSpecimenBizLogic().insertMultiple(specimenCollection, (AbstractDAO)dao, sessionDataBean);
 		}
-
 	}
 
 	/**
@@ -457,7 +464,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 				SpecimenEventParameters newEvent = (SpecimenEventParameters) getCorrespondingObject(spEventColl, event.getClass());
 				updateEvent(event, newEvent, sessionDataBean);
 				//spEventColl.remove(newEvent);
-
+				
 			}
 		}
 		// Check for different closed site
@@ -669,19 +676,33 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	{
 		User user = new User();
 		user.setId(sessionDataBean.getUserId());
+		String collProcedure = null;
+		String collContainer = null;
+		String recQty = null;
 		if (event instanceof CollectionEventParameters)
 		{
 			CollectionEventParameters toChangeCollectionEventParameters = (CollectionEventParameters) event;
 			CollectionEventParameters newCollectionEventParameters = (CollectionEventParameters) newEvent;
+			collProcedure = newCollectionEventParameters.getCollectionProcedure();
+			collContainer = newCollectionEventParameters.getContainer();
 			if (newCollectionEventParameters.getUser() != null)
+			{
 				toChangeCollectionEventParameters.setUser(newCollectionEventParameters.getUser());
+			}
 			toChangeCollectionEventParameters.setTimestamp(newCollectionEventParameters.getTimestamp());
-			if (!newCollectionEventParameters.getCollectionProcedure().equals(""))
+			
+			if (!StringUtils.isBlank(collProcedure)&& !collProcedure.equals(Constants.CP_DEFAULT))
+			{
 				toChangeCollectionEventParameters.setCollectionProcedure(newCollectionEventParameters.getCollectionProcedure());
-			if (!newCollectionEventParameters.getComment().equals(""))
+			}
+			if (newCollectionEventParameters.getComment()!=null && !newCollectionEventParameters.getComment().equals(""))
+			{
 				toChangeCollectionEventParameters.setComment(newCollectionEventParameters.getComment());
-			if (!newCollectionEventParameters.getContainer().equals(""))
+			}
+			if (!StringUtils.isBlank(collContainer)&& !collContainer.equals(Constants.CP_DEFAULT))
+			{
 				toChangeCollectionEventParameters.setContainer(newCollectionEventParameters.getContainer());
+			}
 
 			if (toChangeCollectionEventParameters.getUser() == null)
 			{
@@ -702,14 +723,21 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		{
 			ReceivedEventParameters toChanagereceivedEventParameters = (ReceivedEventParameters) event;
 			ReceivedEventParameters newreceivedEventParameters = (ReceivedEventParameters) newEvent;
-			if (!newreceivedEventParameters.getComment().equals(""))
+			recQty = newreceivedEventParameters.getReceivedQuality();
+			if (newreceivedEventParameters.getComment()!=null && !newreceivedEventParameters.getComment().equals(""))
+			{
 				toChanagereceivedEventParameters.setComment(newreceivedEventParameters.getComment());
-			if (!newreceivedEventParameters.getReceivedQuality().equals(""))
+			}
+			if (!StringUtils.isBlank(recQty) && !recQty.equals(Constants.CP_DEFAULT))
+			{
 				toChanagereceivedEventParameters.setReceivedQuality(newreceivedEventParameters.getReceivedQuality());
+			}
 
 			toChanagereceivedEventParameters.setTimestamp(newreceivedEventParameters.getTimestamp());
 			if (newreceivedEventParameters.getUser() != null)
+			{
 				toChanagereceivedEventParameters.setUser(newreceivedEventParameters.getUser());
+			}
 
 			if (toChanagereceivedEventParameters.getUser() == null)
 			{
@@ -758,7 +786,6 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	{
 		CollectionEventParameters scgCollectionEventParameters = null;
 		ReceivedEventParameters scgReceivedEventParameters = null;
-		//Collection newEventColl = specimenCollectionGroup.getSpecimenEventParametersCollection();
 		if (newEventColl != null && !newEventColl.isEmpty())
 		{
 			Iterator newEventCollIter = newEventColl.iterator();
@@ -821,35 +848,50 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	private CollectionEventParameters populateCollectionEventParameters(Object eventObj, CollectionEventParameters scgCollectionEventParameters,
 			CollectionEventParameters collectionEventParameters)
 	{
-		// CollectionEventParameters newcollectionEventParameters =
-		// collectionEventParameters;
+		String collProcedure = scgCollectionEventParameters.getCollectionProcedure();
+		String collContainer = scgCollectionEventParameters.getContainer();
 		CollectionEventParameters newcollectionEventParameters = new CollectionEventParameters();
-		if (scgCollectionEventParameters.getCollectionProcedure() != null && !scgCollectionEventParameters.getCollectionProcedure().equals(""))
+		if (collProcedure != null && !collProcedure.equals("")&& !collProcedure.equals(Constants.CP_DEFAULT))
+		{
 			newcollectionEventParameters.setCollectionProcedure(scgCollectionEventParameters.getCollectionProcedure());
+		}
 		else
+		{
 			newcollectionEventParameters.setCollectionProcedure(collectionEventParameters.getCollectionProcedure());
+		}
 
-		if (scgCollectionEventParameters.getContainer() != null && !scgCollectionEventParameters.getContainer().equals(""))
+		if (collContainer != null && !collContainer.equals("") && !collContainer.equals(Constants.CP_DEFAULT))
+		{
 			newcollectionEventParameters.setContainer(scgCollectionEventParameters.getContainer());
+		}
 		else
+		{
 			newcollectionEventParameters.setContainer(collectionEventParameters.getContainer());
+		}
 
 		newcollectionEventParameters.setTimestamp(scgCollectionEventParameters.getTimestamp());
 
 		if (scgCollectionEventParameters.getUser() != null && !scgCollectionEventParameters.getUser().getId().equals(""))
+		{
 			newcollectionEventParameters.setUser(scgCollectionEventParameters.getUser());
+		}
 		else
+		{
 			newcollectionEventParameters.setUser(collectionEventParameters.getUser());
+		}
 
 		if (scgCollectionEventParameters.getComment() != null && !scgCollectionEventParameters.getComment().equals(""))
+		{
 			newcollectionEventParameters.setComment(scgCollectionEventParameters.getComment());
+		}
 		else
+		{
 			newcollectionEventParameters.setComment(collectionEventParameters.getComment());
+		}
 
 		newcollectionEventParameters.setSpecimen(collectionEventParameters.getSpecimen());
 		newcollectionEventParameters.setSpecimenCollectionGroup(collectionEventParameters.getSpecimenCollectionGroup());
 		newcollectionEventParameters.setId(collectionEventParameters.getId());
-
 		return newcollectionEventParameters;
 	}
 
@@ -861,13 +903,16 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	private ReceivedEventParameters populateReceivedEventParameters(ReceivedEventParameters receivedEventParameters,
 			ReceivedEventParameters scgReceivedEventParameters)
 	{
-		// ReceivedEventParameters newReceivedEventParameters =
-		// receivedEventParameters;
+		String recQty = scgReceivedEventParameters.getReceivedQuality();
 		ReceivedEventParameters newReceivedEventParameters = new ReceivedEventParameters();
-		if (scgReceivedEventParameters.getReceivedQuality() != null && !scgReceivedEventParameters.getReceivedQuality().equals(""))
+		if (recQty!= null && !recQty.equals("")&& !recQty.equals(Constants.CP_DEFAULT))
+		{
 			newReceivedEventParameters.setReceivedQuality(scgReceivedEventParameters.getReceivedQuality());
+		}
 		else
+		{
 			newReceivedEventParameters.setReceivedQuality(receivedEventParameters.getReceivedQuality());
+		}
 
 		newReceivedEventParameters.setTimestamp(scgReceivedEventParameters.getTimestamp());
 
@@ -1219,7 +1264,23 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 
 		// END
 
-		List clinicalDiagnosisList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_CLINICAL_DIAGNOSIS, null);
+		//TO DO FOR 6756
+		String sourceObjectName =PermissibleValueImpl.class.getName();
+		String[] selectColumnName ={ "value"};
+		String[] whereColumnName ={"cde.publicId"}; // "storageContainer."+Constants.SYSTEM_IDENTIFIER
+		String[] whereColumnCondition =  {"=" };
+		Object[] whereColumnValue ={"Clinical_Diagnosis_PID"};
+		String joinCondition = null;
+		Iterator<String> iterator =dao.retrieve(sourceObjectName,selectColumnName,whereColumnName, whereColumnCondition,whereColumnValue, joinCondition).iterator();
+		List clinicalDiagnosisList=new ArrayList();
+		while(iterator.hasNext())
+		{
+			 String clinicaDiagnosisvalue=iterator.next();
+			 clinicalDiagnosisList.add(new NameValueBean(clinicaDiagnosisvalue,clinicaDiagnosisvalue));
+			 
+		}
+
+		//List clinicalDiagnosisList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_CLINICAL_DIAGNOSIS, null);
 		if (!Validator.isEnumeratedValue(clinicalDiagnosisList, group.getClinicalDiagnosis()))
 		{
 			throw new DAOException(ApplicationProperties.getValue("spg.clinicalDiagnosis.errMsg"));
@@ -1227,6 +1288,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 
 		// NameValueBean undefinedVal = new
 		// NameValueBean(Constants.UNDEFINED,Constants.UNDEFINED);
+		
 		List clinicalStatusList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_CLINICAL_STATUS, null);
 		if (!Validator.isEnumeratedValue(clinicalStatusList, group.getClinicalStatus()))
 		{

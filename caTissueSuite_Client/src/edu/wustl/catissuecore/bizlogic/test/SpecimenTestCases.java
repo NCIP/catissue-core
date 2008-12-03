@@ -452,6 +452,8 @@ public class SpecimenTestCases extends CaTissueBaseTestCase {
 		}
 		catch(Exception e){
 			Logger.out.error(e.getMessage(),e);
+			System.out
+					.println("SpecimenTestCases.testVerifyConsentResponseAndConsentStatusAtSCG() 1"+e.getMessage());
            	e.printStackTrace();
            	assertFalse("Failed to create collection protocol", true);
 		}
@@ -502,6 +504,8 @@ public class SpecimenTestCases extends CaTissueBaseTestCase {
 		}
 		catch(Exception e){
 			Logger.out.error(e.getMessage(),e);
+			System.out
+					.println("SpecimenTestCases.testVerifyConsentResponseAndConsentStatusAtSCG()"+e.getMessage());
            	e.printStackTrace();
 			assertFalse("Failed to create", true);
 		}
@@ -515,6 +519,8 @@ public class SpecimenTestCases extends CaTissueBaseTestCase {
 		}
 		catch(Exception e){
 			Logger.out.error(e.getMessage(),e);
+			System.out
+					.println("SpecimenTestCases.testVerifyConsentResopnseAndConsentStatusForUpadatedCP()"+e.getMessage());
            	e.printStackTrace();
            	assertFalse("Failed to create collection protocol", true);
 		}
@@ -536,6 +542,8 @@ public class SpecimenTestCases extends CaTissueBaseTestCase {
 		}
 		catch(Exception e){
 			Logger.out.error(e.getMessage(),e);
+			System.out
+					.println("SpecimenTestCases.testVerifyConsentResopnseAndConsentStatusForUpadatedCP()"+e.getMessage());
            	e.printStackTrace();
 			assertFalse("Failed to create", true);
 		}
@@ -727,6 +735,8 @@ public class SpecimenTestCases extends CaTissueBaseTestCase {
 		}
 		catch(Exception e){
 			Logger.out.error(e.getMessage(),e);
+			System.out
+					.println("SpecimenTestCases.testVerifyConsentsWithdrawnWithReturnOption()"+e.getMessage());
            	e.printStackTrace();
            	assertFalse("Failed to create collection protocol", true);
 		}
@@ -738,6 +748,8 @@ public class SpecimenTestCases extends CaTissueBaseTestCase {
 		}
 		catch(Exception e){
 			Logger.out.error(e.getMessage(),e);
+			System.out
+					.println("SpecimenTestCases.testVerifyConsentsWithdrawnWithReturnOption() 2"+e.getMessage());
            	e.printStackTrace();
            	assertFalse("Failed to create collection protocol", true);
 		}

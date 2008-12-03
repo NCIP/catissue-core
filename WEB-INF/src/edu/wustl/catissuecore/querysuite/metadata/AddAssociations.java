@@ -9,9 +9,9 @@ import java.sql.Statement;
 import edu.wustl.common.util.dbManager.DBUtil;
 
 public class AddAssociations
-{	
+{
 	private Connection connection = null;
-	
+
 	AddAssociations(Connection connection)
 	{
 		this.connection = connection;
@@ -21,7 +21,7 @@ public class AddAssociations
 		Connection connection = DBUtil.getConnection();
 		connection.setAutoCommit(true);
 	}
-	
+
 	public void addAssociation(String entityName,String associatedEntityName,String associationName,String associationType, String roleName,boolean isSwap,String roleNameTable,String srcAssociationId,String targetAssociationId,int maxCardinality,int isSystemGenerated,String direction) throws SQLException, IOException
 	{
 		Statement stmt = connection.createStatement();
@@ -135,21 +135,21 @@ public class AddAssociations
 			int idOfDERole =nextIdOfDERole -1;
 			sql = "insert into dyextn_association values ("
 				+ nextIdOfAbstractMetadata + ",'"+direction+"',"
-				+ associatedEntityId + "," + lastIdOfDERole + "," + idOfDERole + ","+isSystemGenerated+")";
-		} 
-		else 
+				+ associatedEntityId + "," + lastIdOfDERole + "," + idOfDERole + ","+isSystemGenerated+",0)";
+		}
+		else
 		{
 			if(isSystemGenerated == 0)
 			{
 				sql = "insert into dyextn_association values ("
 					+ nextIdOfAbstractMetadata + ",'"+direction+"',"
-					+ associatedEntityId + "," + roleId + "," + nextIdOfDERole + ",0)";
+					+ associatedEntityId + "," + roleId + "," + nextIdOfDERole + ",0,0)";
 			}
 			else
 			{
 				sql = "insert into dyextn_association values ("
 					+ nextIdOfAbstractMetadata + ",'"+direction+"',"
-					+ associatedEntityId + "," + roleId + "," + nextIdOfDERole + ",1)";
+					+ associatedEntityId + "," + roleId + "," + nextIdOfDERole + ",1,0)";
 			}
 		}
 		UpdateMetadataUtil.executeInsertSQL(sql, connection.createStatement());

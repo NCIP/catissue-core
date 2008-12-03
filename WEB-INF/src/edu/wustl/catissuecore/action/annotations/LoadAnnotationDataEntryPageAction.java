@@ -833,8 +833,7 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
     	{
     		EntityManagerInterface entityManager = EntityManager.getInstance();
     		Long categoryEntityId = entityManager.getEntityIdByContainerId(deContainerId);
-            AnnotationBizLogic annotationBizLogic = new AnnotationBizLogic(); 
-            containerName = annotationBizLogic.getCategoryTitle(categoryEntityId);
+            containerName = entityManager.getCategoryCaption(categoryEntityId);
     	}
     	return containerName;
     }

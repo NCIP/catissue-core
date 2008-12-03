@@ -149,6 +149,10 @@ public class DeletePermissibleValueAttribute extends DeleteBaseMetadata
 		attributeToDelete.add("clinicalStatus");
 		attributeToDelete.add("activityStatus");
 		entityAttributesToDelete.put("edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup",attributeToDelete);
+		
+		attributeToDelete =  new ArrayList<String>();
+		attributeToDelete.add("clinicalDiagnosis");
+		entityAttributesToDelete.put("edu.wustl.catissuecore.domain.SpecimenCollectionGroup",attributeToDelete);
 	}
 
 	private void populateAttributeDatatypeMap() 
@@ -169,6 +173,8 @@ public class DeletePermissibleValueAttribute extends DeleteBaseMetadata
 		entityNameList.add("edu.wustl.catissuecore.domain.TissueSpecimen");
 		
 		entityNameList.add("edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup");
+		
+		entityNameList.add("edu.wustl.catissuecore.domain.SpecimenCollectionGroup");
 	}
 	
 	private void populateEntityIDList() throws SQLException 

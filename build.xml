@@ -1,7 +1,7 @@
 <?xml version ="1.0"?>
 
 <!--Ant Script for create Build for caTISSUE Core-->
-<project name="caTissue Core" default="compile">
+<project name="caTissue Suite" default="compile">
 	<import file="build-properties.xml"/>	
 	<!--define require dir and Properties for <if> </if> tag-->	
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
@@ -12,7 +12,6 @@
 	
 
 	<!--define require dir and Properties -->
-	
 	<property file="JMeterTest.properties" />
 	<property name="base.dir" value="." />
 	<property name="src.dir" value="${base.dir}/WEB-INF/src" />
@@ -301,6 +300,9 @@
 				<include name="client-config.wsdd" />
 				<include name="Applet/**" />
 				<include name="caTissue_Suite_User_Manual.pdf" />
+				<include name="caTissue_Suite_User_Manual.doc" />
+				<include name="caTissueSuiteV11_Technical_Guide.doc" />
+				<include name="caTissueSuiteV11_UML.zip" />
 	    		<exclude name="**/WEB-INF/classes/**/namegenerator/*"/>
 				
 				<exclude name="**/pages/subMenu/**" />
@@ -523,6 +525,7 @@
 		
 		<copy file="allTokens.properties" todir="${zip.dir}" overwrite="true" />
 		<copy file="caTissueInstall.properties" todir="${zip.dir}" overwrite="true" />
+		<copy file="Show_Hide_Forms.csv" todir="${zip.dir}" overwrite="true" />
 		<copy file="build-properties.xml" todir="${zip.dir}" overwrite="true" />
 		<copy file="MANIFEST.MF" todir="${zip.dir}" overwrite="true" />
 		<copy file="deploy.xml" todir="${zip.dir}" overwrite="true" />
@@ -544,7 +547,7 @@
 		<copy todir="${zip.dir}/lib" overwrite="true">
 			<fileset file="${base.dir}/extra_lib/ant-contrib.jar" />
 			<fileset file="${base.dir}/WEB-INF/lib/mysql-connector-java-5.0.8-bin.jar" />
-			<fileset file="${base.dir}/WEB-INF/lib/oracleDriver.jar" />
+			<fileset file="${base.dir}/WEB-INF/lib/ojdbc14.jar" />
 			<fileset file="${base.dir}/lib/dom4j-1.6.jar" />
 			<fileset file="${base.dir}/lib/j2ee.jar" />
 			<fileset file="${base.dir}/lib/log4j-1.2.9.jar" />
@@ -567,11 +570,17 @@
 		<copy todir="${zip.dir}/images" overwrite="true">
 			<fileset file="${base.dir}/images/InstitutionLogo.gif" />
 		</copy>
+		<copy todir="${zip.dir}/images/uIEnhancementImages" overwrite="true">
+			<fileset file="${base.dir}/images/uIEnhancementImages/siteman_logo.gif" />
+		</copy>
 		<copy todir="${zip.dir}/catissue_de_integration_client" overwrite="true">
 					<fileset dir="${base.dir}/catissue_de_integration_client" />
 				</copy>
 		<copy todir="${zip.dir}/caTissueSuite_Client" overwrite="true">
 			<fileset dir="${base.dir}/caTissueSuite_Client" />
+		</copy>
+		<copy todir="${zip.dir}/minimalDataSharing" overwrite="true">
+			<fileset dir="${base.dir}/minimalDataSharing" />
 		</copy>
 		<copy todir="${zip.dir}/CaTissueSuite_caGrid_Service" overwrite="true">
 			<fileset dir="${base.dir}/CaTissueSuite_caGrid_Service" />

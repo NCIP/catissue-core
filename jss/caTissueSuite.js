@@ -182,13 +182,15 @@ function openCRGWindow()
 		                deselectAllOptsOfSelBox(eleOfSiteSelBox);
 		                
 		                if(pageOf!=null && pageOf=="pageOfAssignPrivilegePage")
-	                          {
-	                          	 clearSelBoxList(eleOfUserSelBox);
-	                          }
-	                          else if(pageOf!=null)
-	                          {
-	                          	 deselectAllOptsOfSelBox(eleOfCPSelBox );
-	                          }
+	                    {
+	                      	 clearSelBoxList(eleOfUserSelBox);
+	                    }
+	                    else if(pageOf!=null)
+	                    {
+	                      	 deselectAllOptsOfSelBox(eleOfCPSelBox );
+	 						 document.getElementById('cpCheckId').checked=true;
+							 eleOfCPSelBox.disabled = true;
+	                    }
               		}
                     else if((cpOperation == "getCPsForThisSites")&& num==0)
 					{
@@ -927,7 +929,14 @@ function consentPage()
      var sites=jsonResponse.locations[i].siteJsonArray;
      var actions=jsonResponse.locations[i].actionJsonArray;
      var selActions=jsonResponse.locations[i].selActionJsonArray;
-					  
+	 var isAllCPChecked=jsonResponse.locations[i].isAllCPChecked;
+	 
+	 // --for checkBox
+	
+	 var cpCheckBoxObj=document.getElementById('cpCheckId');
+	 cpCheckBoxObj.checked = isAllCPChecked;
+	 disableSelBoxOnChk('cpCheckId','cpIds');
+		  
       // --for sites
      var siteSelBox = document.getElementById('siteIds');
      for(var len=0;len<sites.length;len++)

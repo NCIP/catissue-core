@@ -1,4 +1,12 @@
 <jsp:directive.page import="edu.wustl.common.util.global.ApplicationProperties"/>
+<script type="text/javascript" src="jss/ext-base.js"></script>
+<script type="text/javascript" src="jss/ext-all.js"></script>
+<script type="text/javascript" src="jss/combos.js"></script>
+<script type="text/javascript" src="jss/examples.js"></script>
+<link rel="stylesheet" type="text/css" href="css/ext-all.css" />
+<link rel="stylesheet" type="text/css" href="css/xtheme-gray.css" />
+<link rel="stylesheet" type="text/css" href="css/combo.css" />
+<link rel="stylesheet" type="text/css" href="css/examples.css" />
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
@@ -114,6 +122,7 @@ window.parent.frames['CPTreeView'].location="ShowCollectionProtocol.do?pageOf=sp
                         <td align="left" class="black_ar"><bean:message key="collectionprotocol.collectionpointlabel" /></td>
                         <td align="left"><html:text styleClass="black_ar" size="30" styleId="collectionPointLabel" maxlength="255"property="collectionPointLabel"/></td>
                       </tr>
+					  <!--
                       <tr>
                         <td align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></td>
                         <td align="left" class="black_ar"><bean:message key="specimenCollectionGroup.clinicalDiagnosis"/></td>
@@ -127,7 +136,16 @@ window.parent.frames['CPTreeView'].location="ShowCollectionProtocol.do?pageOf=sp
 						<a href="#" onclick="javascript:NewWindow('<%=url%>','name','360','525','no');return false">
 						<img title='Clinical Diagnosis Selector' src="images/uIEnhancementImages/ic_cl_diag.gif" alt="Clinical Diagnosis" width="16" height="16" border="0"></a></span></td>
                       </tr>
-					 
+					-->
+					 <tr>
+                        <td align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></td>
+                        <td align="left" class="black_ar"><bean:message key="specimenCollectionGroup.clinicalDiagnosis"/></td>
+						<td align="left" class="black_ar">
+							<input property="clinicalDiagnosis" type="text" id="clinicaldiagnosis" name="clinicalDiagnosis" value="<%=request.getAttribute("clinicalDiagnosis")%>" onmouseover="showTip(this.id)"/>
+						</td>
+						
+					</tr>
+
                       <tr>
                         <td align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></td>
                         <td align="left" class="black_ar"><bean:message key="specimenCollectionGroup.clinicalStatus"/></td>
@@ -138,6 +156,7 @@ window.parent.frames['CPTreeView'].location="ShowCollectionProtocol.do?pageOf=sp
 							  size="27"/>
 						</td>
                       </tr>
+                    
                       <tr>
                         <td align="center">&nbsp;</td>
                         <td>&nbsp;</td>

@@ -133,7 +133,7 @@ public class SiteInfoHandler
 	 * Description:This method takes the property siteName as String argument and
 	 * returns the abbreviation value as String. 
 	 * </p>
-	 * @param abbr abbriviated site name
+	 * @param abbr abbreviated site name
 	 * @return pValue associated site name
 	 * @throws Exception generic exception
 	 */
@@ -182,4 +182,42 @@ public class SiteInfoHandler
 		return null;
 	}
 	
+	
+	/**
+	 * <p>
+	 * Description:This method returns the default site name value. 
+	 * </p>
+	 * @return pValue default site name
+	 */
+	public static String getDefaultSiteName()
+	{
+		try
+		{
+			// it gives the rootNode of the xml file
+			Element root = document.getDocumentElement();
+	
+			NodeList children = root.getChildNodes();
+			for (int i = 0; i < children.getLength(); i++)
+			{
+				Node child = children.item(i);
+	
+				if (child instanceof Element)
+				{
+					//Logger.out.debug("subchildNodes : "+subChildNodes.getLength()); 
+					Logger.out.info("subnodeName : "+child.getNodeName());
+					if (child.getNodeName().equals(CaTIESConstants.DEFAULT_SITE_NAME))
+					{
+						String pName = (String) child.getFirstChild().getNodeValue();
+						Logger.out.info("sitename:"+pName);
+						return pName;
+					}
+				}
+			}
+		}
+		catch (Exception ex) 
+		{
+			Logger.out.error("Error occured while", ex);
+		}
+		return null;
+	}
 }

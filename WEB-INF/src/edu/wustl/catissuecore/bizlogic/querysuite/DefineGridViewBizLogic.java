@@ -357,7 +357,7 @@ public class DefineGridViewBizLogic
 		{
 			sql = selectedColumnNames.substring(0, selectedColumnNames.lastIndexOf(Constants.DELIMETER));
 		}
-		List tqColumnMetadataList = null;
+		List tqColumnMetadataList = new ArrayList();
 		if(!outputTermsColumns.isEmpty())
 		{
 			QueryOutputSpreadsheetBizLogic gridBizLogic = new QueryOutputSpreadsheetBizLogic();

@@ -51,7 +51,6 @@ import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.Permissions;
 import edu.wustl.common.util.Utility;
-import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
@@ -878,10 +877,10 @@ public class ParticipantBizLogic extends DefaultBizLogic
 	 * @return - List 
 	 * @throws Exception
 	 */
-	public List getListOfMatchingParticipants(Participant participant) throws Exception
+	public List getListOfMatchingParticipants(Participant participant,LookupLogic lookupLogic) throws Exception
 	{
 		// getting the instance of ParticipantLookupLogic class
-		LookupLogic participantLookupLogic = (LookupLogic) Utility.getObject(XMLPropertyHandler.getValue(Constants.PARTICIPANT_LOOKUP_ALGO));
+		//	LookupLogic participantLookupLogic = (LookupLogic) Utility.getObject(XMLPropertyHandler.getValue(Constants.PARTICIPANT_LOOKUP_ALGO));
 
 		// Creating the DefaultLookupParameters object to pass as argument to lookup function
 		// This object contains the Participant with which matching participant are to be found and the cutoff value.
@@ -900,7 +899,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 
 		//calling thr lookup function which returns the List of ParticipantResuld objects.
 		//ParticipantResult object contains the matching participant and the probablity.
-		List matchingParticipantList = participantLookupLogic.lookup(params);
+	List matchingParticipantList = lookupLogic.lookup(params);
 
 		return matchingParticipantList;
 

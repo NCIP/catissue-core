@@ -11,21 +11,14 @@
 
 package edu.wustl.catissuecore.actionForm;
 
-import java.sql.Clob;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import edu.wustl.catissuecore.domain.Participant;
-import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
-import edu.wustl.catissuecore.domain.Site;
-import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
-import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
-import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
+import edu.wustl.catissuecore.domain.Race;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.actionForm.AbstractActionForm;
@@ -317,9 +310,11 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 			Iterator raceIter=tempRaceColl.iterator();
 			this.race="";
 			StringBuffer tempStr=new StringBuffer();
+			Race raceObj=null;
 			while(raceIter.hasNext())
 			{
-				tempStr.append((String)raceIter.next()+", ");
+				raceObj =(Race) raceIter.next();
+				tempStr.append(raceObj.getRaceName()+", ");
 			}
 			this.race=tempStr.toString();
 			this.gender=participant.getGender();

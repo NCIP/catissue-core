@@ -336,7 +336,8 @@
 		<copy file="${basedir}/caTIES_conf/SectionHeaderConfig.txt" todir="${report.loader.installation.dir}/caTIES_conf" overwrite="true" />
 		<copy file="${basedir}/caTIES_conf/sites_configuration.xml" todir="${report.loader.installation.dir}/caTIES_conf" overwrite="true" />
 		<copy file="${basedir}/caTIES_conf/logger.properties" todir="${report.loader.installation.dir}" overwrite="true" />
-		<copy file="${temp.caties.dir}/caTIES_conf/build.xml" todir="${report.loader.installation.dir}" overwrite="true" />	
+		<copy file="${temp.caties.dir}/caTIES_conf/build.xml" todir="${report.loader.installation.dir}" overwrite="true" />
+		<copy file="./catissuecore-properties/caTissueCore_Properties.xml" todir="${report.loader.installation.dir}/caTIES_conf" overwrite="true" />		
 		<copy file="${temp.caties.dir}/caties.jar" todir="${report.loader.installation.dir}" overwrite="true" />	
 	</target>
 

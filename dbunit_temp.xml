@@ -1,4 +1,4 @@
-<project basedir="." name="caTissue_DBUnit" default="RunTestCasesFromClean" >
+<project basedir="." name="caTissue_DBUnit" default="generate_hibernate_cfg" >
 <taskdef resource="net/sf/antcontrib/antcontrib.properties">
 		<classpath>
 			<pathelement location="./lib/ant-contrib.jar" />

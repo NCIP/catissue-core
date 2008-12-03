@@ -3,7 +3,7 @@ create table CATISSUE_PERMISSIBLE_VALUE (
    CONCEPT_CODE varchar(40),
    DEFINITION varchar2(500),
    PARENT_IDENTIFIER number(19,0),
-   VALUE varchar(100),
+   VALUE varchar(225),
    PUBLIC_ID varchar(30),
    primary key (IDENTIFIER)
 );
@@ -489,6 +489,7 @@ create table CATISSUE_COLL_PROT_EVENT (
    COLLECTION_POINT_LABEL varchar(255),
    STUDY_CALENDAR_EVENT_POINT double precision,
    COLLECTION_PROTOCOL_ID number(19,0),
+   LABELFORMAT varchar(255) default NULL,
    primary key (IDENTIFIER),
    unique (COLLECTION_PROTOCOL_ID,COLLECTION_POINT_LABEL),
    CONSTRAINT FK7AE7715948304401 FOREIGN KEY (COLLECTION_PROTOCOL_ID) REFERENCES catissue_collection_protocol,

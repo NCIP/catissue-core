@@ -17,6 +17,7 @@ import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.IdentifiedSurgicalPathologyReportBizLogic;
 import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
 import edu.wustl.catissuecore.caties.util.ViewSPRUtil;
+import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
@@ -26,6 +27,7 @@ import edu.wustl.catissuecore.domain.pathology.QuarantineEventParameter;
 import edu.wustl.catissuecore.domain.pathology.SurgicalPathologyReport;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
@@ -83,7 +85,7 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
         }
 		String aliasName = "";
 		request.setAttribute(Constants.PARTICIPANTIDFORREPORT, viewSPR.getParticipantIdForReport());
-		viewSPR.setHasAccess(isAuthorized(getSessionBean(request), id, aliasName));
+		viewSPR.setHasAccess(isAuthorized(getSessionBean(request), viewSPR.getCollectionProtocolId(), aliasName));
 		// If request is from Query to view Deidentfied report
 		if (viewSPR.getIdentifiedReportId() == null || viewSPR.getIdentifiedReportId() == "")
 		{
@@ -295,7 +297,7 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 	 * @return
 	 * @throws Exception
 	 */
-	private boolean isAuthorized(SessionDataBean sessionBean, Object identifier, String aliasName) throws Exception
+	private boolean isAuthorized(SessionDataBean sessionBean, long identifier, String aliasName) throws Exception
 	{ 
 		String userName = sessionBean.getUserName();
 		
@@ -303,25 +305,29 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 		// Singleton instance of PrivilegeManager, requires User LoginName		
 		PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
 		PrivilegeCache privilegeCache = privilegeManager.getPrivilegeCache(userName);
-		
+		boolean isAuthorized = true;
 		if(sessionBean.isSecurityRequired())
 		{
 			SecurityManager sm=SecurityManager.getInstance(this.getClass());
-			aliasName = SurgicalPathologyReport.class.getName();
+			aliasName =CollectionProtocol.class.getName(); 
 			
 //			String userName = sessionBean.getUserName();
 			
 			// Call to SecurityManager.checkPermission bypassed &
 			// instead, call redirected to privilegeCache.hasPrivilege			
-			boolean isAuthorized  = privilegeCache.hasPrivilege(aliasName+"_"+String.valueOf(identifier), Permissions.READ_DENIED);
+			isAuthorized  = privilegeCache.hasPrivilege(aliasName+"_"+String.valueOf(identifier), Permissions.READ_DENIED);
 //			boolean isAuthorized  = SecurityManager.getInstance(ViewSurgicalPathologyReportAction.class).
 //			checkPermission(userName, aliasName, identifier, Permissions.READ_DENIED, PrivilegeType.ObjectLevel);
 			if(!isAuthorized)
 			{
 				//Check the permission of the user on the identified data of the object.
 				// Call to SecurityManager.checkPermission bypassed &
-				// instead, call redirected to privilegeCache.hasPrivilege				
-				boolean hasPrivilegeOnIdentifiedData  = privilegeCache.hasPrivilege(aliasName+"_"+identifier, Permissions.IDENTIFIED_DATA_ACCESS); 
+				// instead, call redirected to privilegeCache.hasPrivilege	
+				boolean hasPrivilegeOnIdentifiedData  = privilegeCache.hasPrivilege(aliasName+"_"+identifier, Permissions.REGISTRATION);
+				if(!hasPrivilegeOnIdentifiedData)
+				{
+					hasPrivilegeOnIdentifiedData = Utility.checkForAllCurrentAndFutureCPs(null,  Permissions.REGISTRATION, sessionBean, String.valueOf(identifier));
+				}
 //				boolean hasPrivilegeOnIdentifiedData  = SecurityManager.getInstance(ViewSurgicalPathologyReportAction.class).
 //				checkPermission(userName, aliasName, identifier, Permissions.IDENTIFIED_DATA_ACCESS, PrivilegeType.ObjectLevel); 
 
@@ -329,11 +335,13 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 				{
 					isAuthorized = false;
 				}
+				else
+				{
+					isAuthorized = true;
+				}
 			}
-					
-			return isAuthorized;
 		}
-		return true;
+		return isAuthorized;
 	}
 }
 

@@ -1,6 +1,18 @@
 /*
- * $Name: RC1
+ * $Name: pcaTissue
  * $Log: ApplicationVersionInfo.txt,v $
+ * Revision 1.2.8.20  2008/12/03 06:57:14  sachin_lale
+ * Merge from Suite11 RC1 branch
+ *
+ * Revision 1.2.8.19.4.3  2008/11/24 06:06:08  virender_mehta
+ * Added RC4
+ *
+ * Revision 1.2.8.19.4.2  2008/11/10 13:12:34  virender_mehta
+ * RC2 - RC3
+ *
+ * Revision 1.2.8.19.4.1  2008/10/17 08:57:24  sachin_lale
+ * RC3
+ *
  * Revision 1.2.8.19  2008/09/12 12:53:04  sachin_lale
  * RC1
  *

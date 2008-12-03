@@ -30,7 +30,18 @@
 String link = request.getParameter("link");
 String containerId = request.getParameter("containerId");
 String selectedStaticEntityId=request.getParameter("selectedStaticEntityId");
-String strDEOperation = (String) session.getAttribute("deoperation");
+System.out.println("request parameter:"+request.getParameter("op"));
+String strDEOperation = (String) request.getParameter("op");
+if(strDEOperation!=null)
+{
+	System.out.println("setting in session "+strDEOperation);
+	session.setAttribute("deoperation",strDEOperation);
+}
+else
+{
+	strDEOperation = (String) session.getAttribute("deoperation");
+	System.out.println("getting frm session "+strDEOperation);
+}
 
 List groupList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_GROUP);
 

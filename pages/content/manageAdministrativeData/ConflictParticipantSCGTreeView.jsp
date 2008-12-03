@@ -12,8 +12,8 @@
 
 <%
 
-	String divHeight = "360";
-	String divWidth = "300";
+	String divHeight = "100%";
+	String divWidth = "278";
 	String partId ="";
 	String conflictStatus = (String)request.getParameter(Constants.CONFLICT_STATUS);
 	String reportQueueId = (String)request.getParameter(Constants.REPORT_ID);
@@ -37,7 +37,7 @@
 	<table border="0" cellpadding="0" cellspacing="0">
 			<tr>
 				<td align="left">
-					<div id="treeboxbox_tree" style="height:<%=divHeight%>;background-color:#f5f5f5; overflow:auto;width:<%=divWidth%>;"/>
+					<div id="treeboxbox_tree" style="background-color:#f5f5f5; overflow:auto;width:<%=divWidth%>;" height=<%=divHeight%>/>
 				</td>
 			</tr>
 	</table>

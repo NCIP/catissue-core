@@ -142,9 +142,9 @@ public class ConflictResolverAction extends BaseAction
 			//System.out.println("Error Occurred !!!!!");
 			errorMessage = ApplicationProperties.getValue("errors.caTies.conflict.genericmessage");
 			//Setting the status to NEW
-			reportLoaderQueue.setParticipantCollection(null);
-			reportLoaderQueue.setStatus(CaTIESConstants.PARTICIPANT_CREATION_ERROR);
-			updateReportLoaderQueue(reportLoaderQueue,request);
+//			reportLoaderQueue.setParticipantCollection(null);
+//			reportLoaderQueue.setStatus(CaTIESConstants.PARTICIPANT_CREATION_ERROR);
+//			updateReportLoaderQueue(reportLoaderQueue,request);
 			return errorMessage;
 		}
 		

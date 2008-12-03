@@ -202,7 +202,7 @@ public abstract class SpecimenEventParameters extends AbstractDomainObject imple
 	
 	public Object clone() throws CloneNotSupportedException
 	{
-		return clone();
+		return super.clone();
 	}
 	
 	 /**

@@ -128,7 +128,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			//bug no. 4265
 			if(specimen.getLineage()!=null && specimen.getLineage().equalsIgnoreCase("Derived") && specimen.getDisposeParentSpecimen()==true)
 			{
-			    checkParentSpecimenDisposal(sessionDataBean,specimen, dao);
+			    checkParentSpecimenDisposal(sessionDataBean,specimen, dao, Constants.DERIVED_SPECIMEN_DISPOSAL_REASON);
 			}
 			//allocatePositionForSpecimen(specimen);
 			setStorageLocationToNewSpecimen(dao, specimen, sessionDataBean, true);
@@ -139,7 +139,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			{
 				dao.insert(specimen.getSpecimenCharacteristics(), sessionDataBean, false, false);
 			}
-			dao.insert(specimen, sessionDataBean, false, false);
+			dao.insert(specimen, sessionDataBean, true, false);
 			insertChildSpecimens(specimen, dao, sessionDataBean);
 		}
 		catch (SMException e)
@@ -312,10 +312,10 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
      * @throws UserNotAuthorizedException User is not Authorized
      * @throws BizLogicException 
      */
-    public void disposeSpecimen(SessionDataBean sessionDataBean, AbstractSpecimen specimen)
+    public void disposeSpecimen(SessionDataBean sessionDataBean, AbstractSpecimen specimen, String disposalReason)
                 throws DAOException, UserNotAuthorizedException, BizLogicException
     {
-          DisposalEventParameters disposalEvent = createDisposeEvent(sessionDataBean, specimen);
+          DisposalEventParameters disposalEvent = createDisposeEvent(sessionDataBean, specimen, disposalReason);
           SpecimenEventParametersBizLogic specimenEventParametersBizLogic = new SpecimenEventParametersBizLogic();
           specimenEventParametersBizLogic.insert(disposalEvent, sessionDataBean,  Constants.HIBERNATE_DAO);
           ((Specimen)specimen).setIsAvailable(new Boolean(false));
@@ -330,10 +330,10 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
      * @throws UserNotAuthorizedException User is not Authorized
      * @throws BizLogicException 
      */
-    public void disposeSpecimen(SessionDataBean sessionDataBean, AbstractSpecimen specimen, DAO dao)
+    public void disposeSpecimen(SessionDataBean sessionDataBean, AbstractSpecimen specimen, DAO dao, String disposalReason)
                 throws DAOException, UserNotAuthorizedException, BizLogicException
     {
-          DisposalEventParameters disposalEvent = createDisposeEvent(sessionDataBean, specimen);
+          DisposalEventParameters disposalEvent = createDisposeEvent(sessionDataBean, specimen,disposalReason);
           SpecimenEventParametersBizLogic specimenEventParametersBizLogic = new SpecimenEventParametersBizLogic();
           specimenEventParametersBizLogic.insert(disposalEvent, dao, sessionDataBean);
           ((Specimen)specimen).setIsAvailable(new Boolean(false));
@@ -349,11 +349,11 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
      */
 
     private DisposalEventParameters createDisposeEvent(SessionDataBean sessionDataBean,
-                AbstractSpecimen specimen)
+                AbstractSpecimen specimen, String disposalReason)
     {
           DisposalEventParameters disposalEvent = new DisposalEventParameters();
           disposalEvent.setSpecimen(specimen);
-          disposalEvent.setReason("Specimen is Aliquoted");
+          disposalEvent.setReason(disposalReason);
           disposalEvent.setTimestamp(new Date(System.currentTimeMillis()));
           User user = new User();
           user.setId(sessionDataBean.getUserId());
@@ -570,11 +570,18 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	 */
 	private Specimen getParentSpecimenByLabel(DAO dao, Specimen parentSpecimen) throws DAOException
 	{
-		String parentLabel = parentSpecimen.getLabel();
-		List parentSpecimenList = dao.retrieve(Specimen.class.getName(), "label", parentLabel);
+		List parentSpecimenList = null;
+		String value = parentSpecimen.getLabel();
+		String column ="label";
+		if((value==null)||(value!=null&&value.equals("")))
+		{
+			column="barcode";
+			value = parentSpecimen.getBarcode();
+		}
+		parentSpecimenList = dao.retrieve(Specimen.class.getName(), column, value);
 		if (parentSpecimenList == null || parentSpecimenList.isEmpty())
 		{
-			throw new DAOException("Invalid Label for Parent Specimen :" + parentLabel);
+			throw new DAOException("Invalid Label or Barcode for Parent Specimen :" + value);
 		}
 		parentSpecimen = (Specimen) parentSpecimenList.get(0);
 		return parentSpecimen;
@@ -958,7 +965,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 				dao.update(persistentSpecimen, sessionDataBean, true, false, false);
 				updateChildAttributes(specimen, specimenOld);
 				//Audit of Specimen
-				dao.audit(persistentSpecimen, oldObj, sessionDataBean, true);
+				dao.audit(persistentSpecimen, specimenOld, sessionDataBean, true);
 				//Audit of Specimen Characteristics
 				dao.audit(persistentSpecimen.getSpecimenCharacteristics(), specimenOld
 				.getSpecimenCharacteristics(), sessionDataBean, true);
@@ -1191,9 +1198,21 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		if(Constants.COLLECTION_STATUS_PENDING.equals(oldStatus) && Constants.COLLECTION_STATUS_COLLECTED.equals(specimen.getCollectionStatus()))
 		{	
 			SpecimenRequirement reqSpecimen  = persistentSpecimen.getSpecimenRequirement();
-			if (reqSpecimen != null && !reqSpecimen.getSpecimenEventCollection().isEmpty() && reqSpecimen.getSpecimenEventCollection() != null)
+			
+			if(reqSpecimen != null && reqSpecimen.getParentSpecimen() == null)
 			{
-				persistentSpecimen.setPropogatingSpecimenEventCollection(reqSpecimen.getSpecimenEventCollection(), sessionDataBean.getUserId());
+				if (reqSpecimen != null && !reqSpecimen.getSpecimenEventCollection().isEmpty() && reqSpecimen.getSpecimenEventCollection() != null)
+				{
+					persistentSpecimen.setPropogatingSpecimenEventCollection(reqSpecimen.getSpecimenEventCollection(), sessionDataBean.getUserId(), specimen);
+				}
+				if (reqSpecimen != null && reqSpecimen.getSpecimenEventCollection() != null && reqSpecimen.getSpecimenEventCollection().isEmpty())
+				{
+					persistentSpecimen.setDefaultSpecimenEventCollection(sessionDataBean.getUserId());
+				}
+			}
+			else if(persistentSpecimen.getParentSpecimen() != null)
+			{
+				persistentSpecimen.setSpecimenEventCollection(populateDeriveSpecimenEventCollection((Specimen)persistentSpecimen.getParentSpecimen(), persistentSpecimen));
 			}
 		}
 	}
@@ -2254,14 +2273,13 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		SpecimenEventParameters deriveSpecimenEventParameters = null;
 		try
 		{
-			if (parentSpecimeneventCollection != null && deriveSpecimen.getSpecimenEventCollection() == null)
+			if (parentSpecimeneventCollection != null && (deriveSpecimen.getSpecimenEventCollection() == null || deriveSpecimen.getSpecimenEventCollection().isEmpty()))
 			{
 				for (Iterator<SpecimenEventParameters> iter = parentSpecimeneventCollection
 						.iterator(); iter.hasNext();)
 				{
 					specimenEventParameters = (SpecimenEventParameters) iter.next();
-					deriveSpecimenEventParameters = (SpecimenEventParameters) specimenEventParameters
-							.clone();
+					deriveSpecimenEventParameters = (SpecimenEventParameters) specimenEventParameters.clone();
 					deriveSpecimenEventParameters.setId(null);
 					deriveSpecimenEventParameters.setSpecimen(deriveSpecimen);
 					deriveEventCollection.add(deriveSpecimenEventParameters);
@@ -2512,6 +2530,12 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	
 	private void allocateSpecimenPostionsRecursively(Specimen newSpecimen) throws DAOException
 	{
+		StorageContainer sc = getStorageContainer(newSpecimen);
+		if(sc!= null && sc.getName()!=null)
+		{
+			sc.setId(null);
+		}
+		
 		allocatePositionForSpecimen(newSpecimen);
 		if (newSpecimen.getChildSpecimenCollection() != null)
 		{
@@ -2527,6 +2551,16 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		}
 	}
 	
+	private StorageContainer getStorageContainer(Specimen specimen)
+	{
+		StorageContainer sc = null;
+		SpecimenPosition specimenPosition = specimen.getSpecimenPosition();
+		if (specimenPosition != null)
+		{
+			sc = specimenPosition.getStorageContainer();
+		}
+		return sc;
+	}
 	/**
 	 * @param dao DAO object
 	 * @param newSpecimenCollection Specimen Collection
@@ -3187,14 +3221,14 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	 * @throws UserNotAuthorizedException
 	 * @throws DAOException
 	 */
-	public void checkParentSpecimenDisposal(SessionDataBean sessionDataBean, Specimen specimen, DAO dao) throws UserNotAuthorizedException, DAOException
+	public void checkParentSpecimenDisposal(SessionDataBean sessionDataBean, Specimen specimen, DAO dao, String disposalReason) throws UserNotAuthorizedException, DAOException
 	{
 		if(specimen.getParentSpecimen()!=null)
 		{
 			try
 			{
 				AbstractSpecimen parentSp = specimen.getParentSpecimen();
-				disposeSpecimen(sessionDataBean, parentSp, dao);
+				disposeSpecimen(sessionDataBean, parentSp, dao,disposalReason);
 			}
 			catch(BizLogicException ex)
 			{
@@ -3328,13 +3362,17 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			{
 				SpecimenPosition specimenPosition = null;
 				Specimen specimen = (Specimen) domainObject;
-				
+				Specimen parentSpecimen = (Specimen)specimen.getParentSpecimen(); 
 				if(specimen.getLineage() != null && (specimen.getLineage().equals(Constants.DERIVED_SPECIMEN) || specimen.getLineage().equals(Constants.ALIQUOT)))
 				{
 					List<Specimen> list = null;
-					if(specimen.getParentSpecimen().getLabel() != null)
+					if(specimen.getParentSpecimen().getLabel() != null&&!specimen.getParentSpecimen().getLabel().equals(""))
 					{
 						list = dao.retrieve(Specimen.class.getName(), "label", specimen.getParentSpecimen().getLabel());
+					}
+					else if(parentSpecimen.getBarcode()!= null&&!parentSpecimen.getBarcode().equals(""))
+					{
+						list = dao.retrieve(Specimen.class.getName(), "barcode", parentSpecimen.getBarcode());	
 					}
 					else
 					{
@@ -3457,11 +3495,11 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	 * @throws UserNotAuthorizedException
 	 * @throws BizLogicException
 	 */
-	public void disposeAndCloseSpecimen(SessionDataBean sessionDataBean, AbstractSpecimen specimen, DAO dao)
+	public void disposeAndCloseSpecimen(SessionDataBean sessionDataBean, AbstractSpecimen specimen, DAO dao,String disposalReason)
      throws DAOException, UserNotAuthorizedException, BizLogicException
 	 {
 		 if(!Constants.ACTIVITY_STATUS_CLOSED.equals(specimen.getActivityStatus())){
-			 disposeSpecimen(sessionDataBean,specimen,dao);
+			 disposeSpecimen(sessionDataBean,specimen,dao,disposalReason);
 		 }
      }
 	

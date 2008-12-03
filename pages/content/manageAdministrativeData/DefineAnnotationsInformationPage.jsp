@@ -1,10 +1,10 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
 <%
 			String operation = request.getParameter("operation");
-			session.setAttribute("deoperation",operation);
+			
 
 %>
-<form id="thisform" name="thisform">
+<form id="thisform" name="thisform"  METHOD="GET" >
 	<p>&nbsp;</p>
 	<p><table summary="" cellpadding="5" cellspacing="0" border="0" width="620" height="160">
 		<tr>
@@ -21,21 +21,12 @@
 
 		<tr>
 			<td align="right" height="*" width="50%" bgcolor="#F4F4F5">
-				<input type="button" class="actionButton" value="Back" onClick="setAction('thisform', 'ManageAdministrativeData.do?dummy=dummy')"/>
+				<input  type="button" class="actionButton" value="Back"  onclick="document.location.href='ManageAdministrativeData.do?dummy=dummy'" />
 			</td>
 			<td align="left" height="*" width="50%" bgcolor="#F4F4F5">
-				<input type="button" class="actionButton" value="Next" onClick="setAction('thisform', 'DefineAnnotations.do')"/>
+				<input type="button" class="actionButton" value="Next" onClick="document.location.href='DefineAnnotations.do?op=<%=operation%>'" />
 			</td>
 		</tr>
 	</table>
 	</p>
-</form>
-
-
-<script>
-	function setAction(formId, url) {
-	    var form = document.getElementById(formId);
-	    form.action = url;
-	    form.submit();
-	}
-</script>
+</form> 

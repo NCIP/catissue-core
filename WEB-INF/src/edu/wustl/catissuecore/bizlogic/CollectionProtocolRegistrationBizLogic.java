@@ -654,20 +654,24 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 	public void insertCPR(CollectionProtocolRegistration collectionProtocolRegistration, DAO dao, SessionDataBean sessionDataBean)
 			throws DAOException, UserNotAuthorizedException
 	{
-		registerParticipantAndProtocol(dao, collectionProtocolRegistration, sessionDataBean);
-
-		// insertConsentTiers(collectionProtocolRegistration.getConsentTierResponseCollection(),dao,sessionDataBean);
-		dao.insert(collectionProtocolRegistration, sessionDataBean, true, true);
+		boolean reportLoaderFlag = false;
+		if(Constants.REGISTRATION_FOR_REPORT_LOADER.equals(collectionProtocolRegistration.getProtocolParticipantIdentifier()))
+		{
+			reportLoaderFlag = true;
+			collectionProtocolRegistration.setProtocolParticipantIdentifier(null);
+		}
 		
+		dao.insert(collectionProtocolRegistration, sessionDataBean, true, true);		
 		if (armFound == false)
 		{
-			createSCG(collectionProtocolRegistration, dao, sessionDataBean);
-
-			chkForChildCP(collectionProtocolRegistration, dao, sessionDataBean);
+			if(reportLoaderFlag==false)
+			{
+				createSCG(collectionProtocolRegistration, dao, sessionDataBean);
+				chkForChildCP(collectionProtocolRegistration, dao, sessionDataBean);
+			}
 		}
 		collectionProtocolRegistration.getCollectionProtocol().getCollectionProtocolRegistrationCollection().
 		add(collectionProtocolRegistration);
-
 	}
 
 	/** In this method if parent CP has any child which can be automatically registered,then these child are registered
@@ -780,6 +784,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 	private void createSCG(CollectionProtocolRegistration collectionProtocolRegistration, DAO dao, SessionDataBean sessionDataBean)
 			throws DAOException, UserNotAuthorizedException
 	{
+		registerParticipantAndProtocol(dao, collectionProtocolRegistration, sessionDataBean);
 		dateOfLastEvent = collectionProtocolRegistration.getRegistrationDate();
 		cntOfStudyCalEventPnt = 0;
 

@@ -29,8 +29,8 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import org.apache.commons.lang.StringUtils;
 import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
-import edu.wustl.catissuecore.actionForm.ParticipantForm;
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
 import edu.wustl.catissuecore.bizlogic.AnnotationUtil;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
@@ -60,9 +60,7 @@ import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.beans.NameValueBean;
-import edu.wustl.common.bizlogic.CDEBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
-import edu.wustl.common.cde.CDE;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
@@ -721,24 +719,26 @@ public class SpecimenCollectionGroupAction extends SecureAction
 			throws DAOException
 	{
 		setDateParameters(specimenCollectionGroupForm, request);
+		String collProcedure = (String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_COLLECTION_PROCEDURE);
+		String collEventContainer = (String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_CONTAINER);
+		String recQuantity = (String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_RECEIVED_QUALITY);
 		
-		/*if (specimenCollectionGroupForm.getCollectionEventCollectionProcedure() == null)
+		if (specimenCollectionGroupForm.getCollectionEventCollectionProcedure() == null)
 		{
-			specimenCollectionGroupForm.setCollectionEventCollectionProcedure((String) DefaultValueManager
-					.getDefaultValue(Constants.DEFAULT_COLLECTION_PROCEDURE));
+			specimenCollectionGroupForm.setCollectionEventCollectionProcedure(Constants.CP_DEFAULT);
+			
 		}
 		if (specimenCollectionGroupForm.getCollectionEventContainer() == null)
 		{
-			specimenCollectionGroupForm.setCollectionEventContainer((String) DefaultValueManager.getDefaultValue(Constants.DEFAULT_CONTAINER));
+			specimenCollectionGroupForm.setCollectionEventContainer(Constants.CP_DEFAULT);
 		}
 		if (specimenCollectionGroupForm.getReceivedEventReceivedQuality() == null)
 		{
-			specimenCollectionGroupForm.setReceivedEventReceivedQuality((String) DefaultValueManager
-					.getDefaultValue(Constants.DEFAULT_RECEIVED_QUALITY));
-		}*/
+			specimenCollectionGroupForm.setReceivedEventReceivedQuality(Constants.CP_DEFAULT);
+		}
 		//setting the collector and receiver drop downs
 		Utility.setUserInForm(request, operation);
-		/*long collectionEventUserId = Utility.setUserInForm(request,operation);
+		long collectionEventUserId = Utility.setUserInForm(request,operation);
 		if(specimenCollectionGroupForm.getCollectionEventUserId() == 0)
 		{
 			specimenCollectionGroupForm.setCollectionEventUserId(collectionEventUserId);
@@ -746,7 +746,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 		if(specimenCollectionGroupForm.getReceivedEventUserId() == 0)
 		{
 			specimenCollectionGroupForm.setReceivedEventUserId(collectionEventUserId);
-		}*/
+		}
 		//Setting the List for drop downs
 		setEventsListInRequest(request);
 	}
@@ -767,11 +767,10 @@ public class SpecimenCollectionGroupAction extends SecureAction
 		List qualityList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_RECEIVED_QUALITY, null);
 		request.setAttribute(Constants.RECEIVED_QUALITY_LIST, qualityList);
 
-		//		Sets the hourList attribute to be used in the Add/Edit FrozenEventParameters Page.
+		//Sets the hourList attribute to be used in the Add/Edit FrozenEventParameters Page.
 		request.setAttribute(Constants.HOUR_LIST, Constants.HOUR_ARRAY);
 		//Sets the minutesList attribute to be used in the Add/Edit FrozenEventParameters Page.
 		request.setAttribute(Constants.MINUTES_LIST, Constants.MINUTES_ARRAY);
-
 	}
 	/**
 	 * @param specimenForm

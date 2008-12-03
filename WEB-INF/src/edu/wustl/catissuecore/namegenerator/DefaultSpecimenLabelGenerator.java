@@ -123,14 +123,22 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 		long aliquotChildCount = 0;
 		if(labelCountTreeMap.containsKey(parentObject))
 		{
-			 aliquotChildCount= Long.parseLong(labelCountTreeMap.get(parentObject).toString());	
+				 aliquotChildCount = Long.parseLong(labelCountTreeMap.get(parentObject).toString());
 		}
 		else
 		{
-			// biz logic 
-			aliquotChildCount = parentObject.getChildSpecimenCollection().size();	
-			aliquotChildCount--;
-			
+				// biz logic 
+				aliquotChildCount = parentObject.getChildSpecimenCollection().size();
+				Iterator itr = parentObject.getChildSpecimenCollection().iterator();
+				while(itr.hasNext())
+				{
+					Specimen spec = (Specimen)itr.next();
+					if(spec.getLineage().equals(Constants.DERIVED_SPECIMEN))
+						aliquotChildCount--;
+				}
+				
+				aliquotChildCount--;
+				
 		}
 		
 		specimenObject.setLabel( parentSpecimenLabel + "_" + (++aliquotChildCount) );

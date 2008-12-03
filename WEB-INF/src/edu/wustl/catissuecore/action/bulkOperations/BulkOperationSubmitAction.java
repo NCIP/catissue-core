@@ -13,7 +13,8 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import edu.wustl.catissuecore.actionForm.BulkEventOperationsForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.bulkOperations.BulkOperationsBizlogic;
@@ -59,24 +60,30 @@ public class BulkOperationSubmitAction extends BaseAction
 								.getDateOfEvent(), bulkEventOperationsForm.getTimeInHours(),
 						bulkEventOperationsForm.getTimeInMinutes(), bulkEventOperationsForm.getComments(), bulkEventOperationsForm.getEventSpecificData());
 				
-				ActionErrors errors = new ActionErrors();
-				ActionError error = null;
+				ActionMessages messages = null;
+				ActionErrors errors = null;
 				if (specimenIds != null && specimenIds.size() > 0)
 				{
 					if(bulkEventOperationsForm.getOperation().equals(Constants.BULK_TRANSFERS))
 					{
-						error = new ActionError("bulk.operations.success", "transfer ");
+						messages = new ActionMessages();
+						messages.add(ActionErrors.GLOBAL_MESSAGE,
+								new ActionMessage("bulk.operations.success", "transfer "));
 					}
 					else
 					{
-						error = new ActionError("bulk.operations.success", "disposal ");
+						messages = new ActionMessages();
+						messages.add(ActionErrors.GLOBAL_MESSAGE,
+								new ActionMessage("bulk.operations.success", "disposal "));
 					}
 				}
 				else
 				{
-					error = new ActionError("specimen.cart.size.zero");
+					errors = new ActionErrors();
+					errors.add(ActionErrors.GLOBAL_MESSAGE, 
+							new ActionError("specimen.cart.size.zero"));
 				}
-				errors.add(ActionErrors.GLOBAL_ERROR, error);
+				saveMessages(request, messages);
 				saveErrors(request, errors);
 			}
 		}

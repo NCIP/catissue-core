@@ -593,7 +593,7 @@ if(form != null)
 								</td>
                               </tr>
                               <tr>
-                               <td align="center" class="black_ar">&nbsp;</td>
+                               <td align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
                               <td align="left" class="black_ar"><bean:message key="cpbasedentry.collectionprocedure"/></td>
                                 <td align="left" class="black_ar">
 									<autocomplete:AutoCompleteTag property="collectionEventCollectionProcedure"

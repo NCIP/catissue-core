@@ -68,6 +68,7 @@ public abstract class CaTIESConstants
 	//constants for Site info
 	public static final String SITE_NAME="SITE_NAME";
 	public static final String SITE_ABBRIVIATION="SITE_ABBRIVIATION";
+	public static final String DEFAULT_SITE_NAME="DEFAULT_SITE_NAME";
 	
 	//constants for tag names in de-identified report elelment
 	public static final String REPORT="Report";
@@ -131,6 +132,7 @@ public abstract class CaTIESConstants
 	public static final String PROCESSED_FILE_DIR="processFileDir";
 	public static final String POLLER_SLEEPTIME="filePollerSleepTime";
 	public static final String SITE_INFO_FILENAME="siteInfoFilename";
+	public static final String XML_PROPERTY_FILENAME = "xmlPropertyFilename";
 	public static final String FILE_POLLER_PORT="filePollerPort";
 	public static final String COLLECTION_PROTOCOL_TITLE="collectionProtocolTitle";
 	public static final String SITE_NAME_FROM_PROPERTIES="siteName";
@@ -139,6 +141,7 @@ public abstract class CaTIESConstants
 	public static final String PASSWORD="password";
 	public static final String KEYSTORE_FILE_PATH="keystoreFilePath";
 	public static final String DEIDENTIFIER_CLASSNAME="deidentifierClassName";
+	public static final String PARTICIPANT_LOOKUP_CUTTOFF = "participantLookupCutOff";
 	
 	public static final String DEID_HOME="deidHome";
 	public static final String DEID_DCTIONARY_FOLDER="deidDnyFolder";

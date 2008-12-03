@@ -220,7 +220,7 @@ public class ConsentUtil
 			Collection eventCollection = specimen.getSpecimenEventCollection();
 			if(!isEventAdded(eventCollection, "DisposalEventParameters"))
 			{
-				new NewSpecimenBizLogic().disposeSpecimen(sessionDataBean, specimen, dao);
+				new NewSpecimenBizLogic().disposeSpecimen(sessionDataBean, specimen, dao, Constants.SPECIMEN_DISCARD_DISPOSAL_REASON);
 			}
 		}
 		catch(Exception excp)

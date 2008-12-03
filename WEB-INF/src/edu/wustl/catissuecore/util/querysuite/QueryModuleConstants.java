@@ -29,5 +29,7 @@ public class QueryModuleConstants
 	public static final String DATE_FORMAT = "MM/dd/yyyy";
 	public static final String QUERY_PARAMETER_DELIMITER = "##";
 	
-
+	//Constants for TQ
+	public static final String HASHED_OUT = "##";
+	public static final String PHI_AGE = "90+ Years";
 }

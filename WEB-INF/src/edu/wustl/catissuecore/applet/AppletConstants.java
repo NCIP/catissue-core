@@ -230,6 +230,7 @@ public interface AppletConstants
 	
 	// Dagviewapplet constants
 	public static final String QUERY_OBJECT = "queryObject";
+	public static final String PARAMETERIZED_QUERY = "parameterizedQuery";
 	public static final String SESSION_ID = "session_id";
 	public static final String STR_TO_CREATE_QUERY_OBJ = "strToCreateQueryObject";
 	public static final String ENTITY_NAME = "entityName";

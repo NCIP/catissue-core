@@ -11,6 +11,7 @@ import java.util.Map;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
+import edu.wustl.catissuecore.domain.pathology.SurgicalPathologyReport;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.actionForm.AbstractActionForm;
@@ -144,6 +145,29 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	 * boolean to set user has access on identified data or not 
 	 */
 	private boolean hasAccess;
+	/**
+	 * CollectionProtocol Identifier
+	 */
+	private long collectionProtocolId;
+	
+	/**
+	 * Return CP id
+	 * @return collectionProtocolId CP identifier
+	 */
+	public long getCollectionProtocolId()
+	{
+		return collectionProtocolId;
+	}
+
+	/**
+	 * Setting CP id
+	 * @param collectionProtocolId CP Id
+	 */
+	public void setCollectionProtocolId(long collectionProtocolId)
+	{
+		this.collectionProtocolId = collectionProtocolId;
+	}
+
 	/**
 	 * This is the method to get date of birth of particicpant
 	 * @return birthDate Date of Birth of participant
@@ -421,6 +445,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 				DeidentifiedSurgicalPathologyReport deidReport=(DeidentifiedSurgicalPathologyReport)abstractDomain;
 				setDeIdentifiedReport(deidReport);
 			}
+			this.setCollectionProtocolId(((SurgicalPathologyReport)abstractDomain).getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getId().longValue());
 			this.comments=null;
 			this.hasAccess=false;
 			

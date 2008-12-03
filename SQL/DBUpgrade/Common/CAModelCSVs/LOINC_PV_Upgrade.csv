@@ -1,5 +1,4 @@
 Entity_Group
 clinical_annotation
 override_pv=true
-LabAnnotation:LabTestName,Permissible_Values_File~./SQL/DBUpgrade/Common/CAModelCSVs/LOINC.txt
-
+LabAnnotation:labTestName,Permissible_Values_File~./SQL/DBUpgrade/Common/CAModelCSVs/LOINC.txt

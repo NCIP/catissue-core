@@ -26,14 +26,14 @@ Ext.onReady(function(){
         store: ds,
         displayField:'excerpt',
         typeAhead: true,
-		width: 168,
+		width: 200,
 	    pageSize:15,
 		forceSelection: true  ,	
 		queryParam : 'query',
 		mode: 'remote', 
         triggerAction: 'all',
 		minChars : 1,	
-        emptyText:'Select ...',
+        
         selectOnFocus:true,
         applyTo: 'clinicaldiagnosis'
    });

@@ -39,7 +39,12 @@ public class OpenDecisionMakingPageAction extends BaseAction
 	{
 		CategorySearchForm actionForm = (CategorySearchForm)form;
 		HttpSession session = request.getSession();
-		IQuery query = (IQuery)session.getAttribute(AppletConstants.QUERY_OBJECT);
+		IQuery query = null;
+		if(session.getAttribute(AppletConstants.PARAMETERIZED_QUERY) == null)
+			 query = (IQuery)session.getAttribute(AppletConstants.QUERY_OBJECT);
+		else
+			 query = (IQuery)session.getAttribute(AppletConstants.PARAMETERIZED_QUERY);
+		
 		String noOfResults = (String)session.getAttribute(Constants.TREE_NODE_LIMIT_EXCEEDED_RECORDS);
 		String option = actionForm.getOptions();
 		QueryModuleSearchQueryUtil QMSearchQuery = new QueryModuleSearchQueryUtil(request, query);

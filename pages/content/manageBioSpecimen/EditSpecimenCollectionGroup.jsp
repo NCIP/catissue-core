@@ -223,7 +223,7 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 										String url = "ShowFramedPage.do?pageOf=pageOfTissueSite&propertyName=clinicalDiagnosis&cdeName=Clinical%20Diagnosis";
 										%>
 									<!-- // Patch ID: Bug#3090_22 -->
-									&nbsp;<a href="#" onclick="javascript:NewWindow('<%=url%>','name','360','525','no');return false"><span class="black_ar"><img src="images/uIEnhancementImages/ic_cl_diag.gif" border="0" width="16" height="16" title='CLinical Diagnosis Selector'></span></a></td></tr></table>
+									&nbsp;<!--  <a href="#" onclick="javascript:NewWindow('<%=url%>','name','360','525','no');return false"><span class="black_ar"><img src="images/uIEnhancementImages/ic_cl_diag.gif" border="0" width="16" height="16" title='CLinical Diagnosis Selector'></span></a>--></td></tr></table>
 								</td>
 				     <td align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>
 				     <td align="left" class="black_ar"><bean:message key="specimenCollectionGroup.clinicalStatus"/></td>
@@ -351,9 +351,6 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 		<tr>
 			<td colspan="3">
 				<div >
-				<%
-					request.setAttribute("showStar","false");
-				%>
 				<%@ include file="CollAndRecEvents.jsp" %>
 				</div>
 			</td>

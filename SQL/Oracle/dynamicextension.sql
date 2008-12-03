@@ -295,7 +295,7 @@ create table DYEXTN_CONTAINMENT_CONTROL (
 );
 create table DYEXTN_CONTROL (
    IDENTIFIER number(19,0) not null,
-   CAPTION varchar2(255),
+   CAPTION varchar2(800),
    CSS_CLASS varchar2(255),
    HIDDEN number(1,0),
    NAME varchar2(255),
@@ -387,7 +387,7 @@ create table DYEXTN_SHORT_TYPE_INFO (
 create table DYEXTN_CONTAINER (
    IDENTIFIER number(19,0) not null,
    BUTTON_CSS varchar2(255),
-   CAPTION varchar2(255),
+   CAPTION varchar2(800),
    ENTITY_ID number(19,0),
    MAIN_TABLE_CSS varchar2(255),
    REQUIRED_FIELD_INDICATOR varchar2(255),

@@ -77,7 +77,7 @@ public class StorageContainer extends Container implements IActivityStatus
 		//this.setParent(oldContainer.getLocatedAtPosition().getParentContainer());
 		//this.setNumber(oldContainer.getNumber());
 		this.setName(oldContainer.getName());
-				
+		this.setBarcode(oldContainer.barcode);
 		if(oldContainer.getLocatedAtPosition() != null)
 		{
 			if(this.locatedAtPosition == null)

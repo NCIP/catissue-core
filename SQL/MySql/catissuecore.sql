@@ -133,7 +133,7 @@ create table CATISSUE_PERMISSIBLE_VALUE (
    CONCEPT_CODE varchar(40),
    DEFINITION text,
    PARENT_IDENTIFIER bigint,
-   VALUE varchar(100),
+   VALUE varchar(225),
    PUBLIC_ID varchar(30),
    primary key (IDENTIFIER)
 );
@@ -494,7 +494,8 @@ CREATE TABLE `catissue_coll_prot_event`
     `CLINICAL_STATUS` varchar(50) default NULL,                                                                                                                 
     `COLLECTION_POINT_LABEL` varchar(255) default NULL,                                                                                                         
     `STUDY_CALENDAR_EVENT_POINT` double default NULL,                                                                                                           
-    `COLLECTION_PROTOCOL_ID` bigint(20) default NULL,                                                                                                           
+    `COLLECTION_PROTOCOL_ID` bigint(20) default NULL,
+    `LABELFORMAT` varchar(255) default NULL,                                                                                                           
     PRIMARY KEY  (`IDENTIFIER`),                                                                                                                                
     UNIQUE KEY `COLLECTION_PROTOCOL_ID` (`COLLECTION_PROTOCOL_ID`,`COLLECTION_POINT_LABEL`),                                                                    
     KEY `FK7AE7715948304401` (`COLLECTION_PROTOCOL_ID`),                                                                                                        

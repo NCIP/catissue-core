@@ -410,14 +410,14 @@ public class OrderPathologyCaseForm extends AbstractActionForm
 			if (typeOfCase.equals("false")) 
 			{
 				if (className.equals("-1")
-						|| className.equals("-- Select --")) 
+						|| className.equals("-- Select --") || className.equals("") ) 
 				{
 					errors.add("specimenClass", new ActionError(
 							"errors.specimenClass.required"));
 					values.clear();
 
 				}
-				if (type.equals("-1") || type.equals("-- Select --"))
+				if (type.equals("-1") || type.equals("-- Select --") || type.equals("") )
 				{
 					errors.add("type", new ActionError(
 							"errors.specimenType.required"));

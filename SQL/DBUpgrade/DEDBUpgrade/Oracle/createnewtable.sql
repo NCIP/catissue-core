@@ -34,11 +34,11 @@ create table DYEXTN_CATEGORY_ASSOCIATION (
 );
 create table DYEXTN_CATEGORY_ATTRIBUTE (
    IDENTIFIER number(19,0) not null,
-   ATTRIBUTE_ID number(19,0),
+   ABSTRACT_ATTRIBUTE_ID number(19,0),
    CATEGORY_ENTIY_ID number(19,0),
    CATEGORY_ENTITY_ID number(19,0),
    IS_VISIBLE number(1,0),
-   IS_RELATTRIBUTE number(1,0),	
+   IS_RELATTRIBUTE number(1,0),
    primary key (IDENTIFIER)
 );
 create table DYEXTN_CATEGORY_ENTITY (
@@ -50,7 +50,7 @@ create table DYEXTN_CATEGORY_ENTITY (
    CATEGORY_ASSOCIATION_ID number(19,0),
    PARENT_CATEGORY_ENTITY_ID number(19,0),
    REL_ATTR_CAT_ENTITY_ID number(19,0),
-   IS_CREATETABLE number(1,0),   
+   IS_CREATETABLE number(1,0),
    primary key (IDENTIFIER)
 );
 create table DYEXTN_ID_GENERATOR (

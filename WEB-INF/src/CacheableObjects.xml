@@ -161,6 +161,7 @@
 		<!-- <ObjectType pattern="edu.wustl.catissuecore.domain.User*" /> -->
 		<ObjectType pattern="edu.wustl.catissuecore.domain.Site*"/>
 		<ObjectType pattern="edu.wustl.catissuecore.domain.CollectionProtocol*"/> 
+	<!--  Pattern "SITE*" created for MSR authorization checks for All Current & Future functionality -->
 		<ObjectType pattern="SITE*"/> 
 	</Objects>
 </CacheableObjects>

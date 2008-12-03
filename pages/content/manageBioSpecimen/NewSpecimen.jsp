@@ -1419,7 +1419,8 @@
 						if(form.getClassName().equals("Molecular") && !Constants.ALIQUOT.equals(form.getLineage()))
 						{
 								concentrationDisabled = false;
-								readOnlyForAll = true;	
+								// Fix for bug #9950
+								// readOnlyForAll = true;	
 						}
 					%>
 									<html:text styleClass="black_ar" maxlength="10"  size="10" styleId="concentration" property="concentration" style="text-align:right"

@@ -10,6 +10,7 @@ import edu.wustl.catissuecore.caties.util.CaTIESProperties;
 import edu.wustl.catissuecore.caties.util.SiteInfoHandler;
 import edu.wustl.catissuecore.caties.util.StopServer;
 import edu.wustl.catissuecore.caties.util.Utility;
+import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.logger.Logger;
 /**
  * Represents a poller which picks up the report files
@@ -36,6 +37,7 @@ public class FilePoller implements Observable
 			Utility.init();
 			// initializing SiteInfoHandler to read site names from site configuration file
 			SiteInfoHandler.init(CaTIESProperties.getValue(CaTIESConstants.SITE_INFO_FILENAME));
+			XMLPropertyHandler.init(CaTIESProperties.getValue(CaTIESConstants.XML_PROPERTY_FILENAME));
 			// Configuring CSV logger
 			CSVLogger.configure(CaTIESConstants.LOGGER_FILE_POLLER);
 			//Initializing caCoreAPI instance

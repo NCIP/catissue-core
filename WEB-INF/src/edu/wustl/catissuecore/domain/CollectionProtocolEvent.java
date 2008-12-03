@@ -57,6 +57,11 @@ public class CollectionProtocolEvent extends AbstractSpecimenCollectionGroup imp
 	protected Collection specimenCollectionGroupCollection;
 	
 	/**
+	 * For SCG labeling,this will be exposed through API and not in the model
+	 */
+	private String labelFormat;
+	
+	/**
 	 * Returns the id.
 	 * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
 	 * unsaved-value="null" generator-class="native"
@@ -207,6 +212,18 @@ public class CollectionProtocolEvent extends AbstractSpecimenCollectionGroup imp
 	{
 		// TODO Auto-generated method stub
 		
+	}
+
+	
+	public String getLabelFormat()
+	{
+		return labelFormat;
+	}
+
+	
+	public void setLabelFormat(String labelFormat)
+	{
+		this.labelFormat = labelFormat;
 	}
 	
 }

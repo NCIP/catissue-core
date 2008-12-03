@@ -15,6 +15,7 @@ import org.apache.struts.action.ActionMapping;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import edu.wustl.catissuecore.actionForm.UserForm;
 import edu.wustl.catissuecore.bizlogic.AssignPrivilegePageBizLogic;
 import edu.wustl.catissuecore.multiRepository.bean.SiteUserRolePrivilegeBean;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -28,7 +29,7 @@ import gov.nih.nci.security.exceptions.CSException;
 public class MSRUtil {
 	
 	/**
-	 * Gets lists og sites,users,actions,and roles from database and sets in request.  
+	 * Gets lists of sites,users,actions,and roles from database and sets in request.  
 	 * @param mapping
 	 * @param request
 	 * @return ActionForward
@@ -63,8 +64,32 @@ public class MSRUtil {
 					map = (Map<String, SiteUserRolePrivilegeBean>) session.getAttribute(Constants.USER_ROW_ID_BEAN_MAP);
 				}
 				actionList = apBizLogic.getActionListForUserPage(false);
-				final List<NameValueBean> cpList = apBizLogic.getCPList(false);
-				
+				List<NameValueBean> cpList =null;
+				if(request.getAttribute("userForm")==null)
+				{
+					cpList = apBizLogic.getCPList(false);
+				}
+				else
+				{
+					UserForm userForm = null;
+					userForm = (UserForm)request.getAttribute("userForm");
+					if(userForm.getSiteIds()!=null && (userForm.getSiteIds()).length>0)
+					{
+						String[] siteIdsArray = null;
+						siteIdsArray = userForm.getSiteIds();
+						List<Long> selectedSitesList = null;
+						selectedSitesList = new ArrayList<Long>(); 
+						for(String siteId:siteIdsArray)
+						{
+							selectedSitesList.add(Long.valueOf(siteId));
+						}
+						cpList = apBizLogic.getCPsForSelectedSites(selectedSitesList);
+					}
+					else
+					{
+						cpList = apBizLogic.getCPList(false);
+					}
+				}
 				request.setAttribute(Constants.CPLIST, cpList);
 			}
 			

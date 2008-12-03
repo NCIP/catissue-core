@@ -652,14 +652,28 @@ public class RequestDetailsForm extends AbstractActionForm
 			if (orderItem.getStatus().equals(Constants.ORDER_REQUEST_STATUS_NEW))
 				values.put(assignStatus, Constants.ORDER_REQUEST_STATUS_PENDING_FOR_DISTRIBUTION);
 			
+			
+			Collection col = derivedSpecimenOrderItem.getParentSpecimen().getConsentTierStatusCollection();
+			Iterator itr = col.iterator();
+					
 			if (!allSpecimen.isEmpty())
 			{
 				values.put(availableQty, (((Specimen) allSpecimen.get(0)).getAvailableQuantity().toString()));
+				if(itr.hasNext())
+				{	
+					values.put(consentVerificationkey, Constants.VIEW_CONSENTS);
+				}	
+				else
+				{
+					values.put(consentVerificationkey,Constants.NO_CONSENTS);
+				}
 				
 			}
 			else
 			{
 				values.put(availableQty, "");//derivedSpecimenorderItem.getSpecimen().getAvailableQuantity().getValue().toString()
+				
+				values.put(consentVerificationkey,Constants.NO_CONSENTS);
 
 			}
 			
@@ -718,6 +732,17 @@ public class RequestDetailsForm extends AbstractActionForm
 			if (totalSpecimenColl.size() != 0)
 			{
 				Specimen spec = ((Specimen)totalSpecimenColl.get(0));
+				
+				Collection col = spec.getConsentTierStatusCollection();
+				Iterator itr = col.iterator();
+				if(itr.hasNext())
+				{	
+					values.put(consentVerificationkey, Constants.VIEW_CONSENTS);
+				}else
+				{
+					values.put(consentVerificationkey,Constants.NO_CONSENTS);
+				}
+				
 				values.put(requestFor, spec.getId());
 				values.put(selectedSpecimenTypeKey,spec.getSpecimenType());
 				values.put(selectedSpecimenQuantityUnit,OrderingSystemUtil.getUnit(spec));
@@ -726,6 +751,7 @@ public class RequestDetailsForm extends AbstractActionForm
 			} else {
 				values.put(requestFor, "#");
 				values.put(selectedSpecimenTypeKey,"NA");
+				values.put(consentVerificationkey,Constants.NO_CONSENTS);
 			}
 			if (specimenListToDisplay.isEmpty()
 					|| (pathologicalCaseOrderItem.getSpecimenClass() != null && pathologicalCaseOrderItem.getSpecimenType() != null

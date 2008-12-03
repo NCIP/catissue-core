@@ -83,6 +83,16 @@
             length="255"
         />
         
+        
+        <property
+            name="labelFormat"
+            type="string"
+            update="true"
+            insert="true"
+            column="LABELFORMAT"
+            length="255"
+        />
+        
         <property
             name="studyCalendarEventPoint"
             type="double"

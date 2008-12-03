@@ -55,7 +55,6 @@ import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.dao.JDBCDAO;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exceptionformatter.DefaultExceptionFormatter;
-import edu.wustl.common.security.PrivilegeCache;
 import edu.wustl.common.security.PrivilegeManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
@@ -335,27 +334,33 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	private void modifyCPObject(DAO dao, SessionDataBean sessionDataBean,
 			CollectionProtocol collectionProtocol) throws DAOException, UserNotAuthorizedException
 	{
-		
 		CollectionProtocol collectionProtocolOld;
 		Session session = null;
 		try
 		{
 			session = DBUtil.getCleanSession();
 			collectionProtocolOld = getOldCollectionProtocol(session, collectionProtocol.getId());
-			setCPRCollection(collectionProtocol);
-			if (collectionProtocolOld.getCollectionProtocolRegistrationCollection().size() > 0
-					&& collectionProtocol.getActivityStatus().equals(Constants.ACTIVITY_STATUS_ACTIVE))
+			
+			if(!Constants.ACTIVITY_STATUS_ACTIVE.equals(collectionProtocol.getActivityStatus()))
 			{
 				setCPEventCollection(collectionProtocol);
 				editCPObj(dao, sessionDataBean, collectionProtocol, collectionProtocolOld);
 			}
-			else
-			{			
-				Collection<ConsentTier> oldConsentTierCollection = collectionProtocolOld.getConsentTierCollection();
-				Collection<ConsentTier> newConsentTierCollection = collectionProtocol.getConsentTierCollection();
-				checkConsents(dao, oldConsentTierCollection,newConsentTierCollection);
-				editEvents(dao, sessionDataBean, collectionProtocol, collectionProtocolOld);
-				editCPObj(dao, sessionDataBean, collectionProtocol, collectionProtocolOld);
+			else {
+				setCPRCollection(collectionProtocol);
+				if (collectionProtocolOld.getCollectionProtocolRegistrationCollection().size() > 0)
+				{
+					setCPEventCollection(collectionProtocol);
+					editCPObj(dao, sessionDataBean, collectionProtocol, collectionProtocolOld);
+				}
+				else
+				{			
+					Collection<ConsentTier> oldConsentTierCollection = collectionProtocolOld.getConsentTierCollection();
+					Collection<ConsentTier> newConsentTierCollection = collectionProtocol.getConsentTierCollection();
+					checkConsents(dao, oldConsentTierCollection,newConsentTierCollection);
+					editEvents(dao, sessionDataBean, collectionProtocol, collectionProtocolOld);
+					editCPObj(dao, sessionDataBean, collectionProtocol, collectionProtocolOld);
+				}
 			}
 		}
 		catch (BizLogicException e)

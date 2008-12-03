@@ -76,17 +76,17 @@
 				    </td>
 				</tr>
 				<tr >
-				 	<td class="nonedittext" >
+				 	<td class="nonedittext" valign="top">
 				     	<b><bean:message key="participant.race"/></label></b>
 					</td>
-					<td class="nonedittext"  >
+					<td class="nonedittext"  valign="top">
 				    	<bean:message key="caTies.conflict.symbol"/>&nbsp;
 				    	<bean:write name="conflictParticipantDataDetailsForm" property="race"/>	
 				    </td>
-				 	<td class="nonedittext">
+				 	<td class="nonedittext" valign="top">
 				     	<b><bean:message key="participant.ethnicity"/></b>
 					 </td>
-					<td class="nonedittext"  >
+					<td class="nonedittext"  valign="top">
 				       	<bean:message key="caTies.conflict.symbol"/>&nbsp;
 				       	<bean:write name="conflictParticipantDataDetailsForm" property="ethinicity"/>
 				    </td>

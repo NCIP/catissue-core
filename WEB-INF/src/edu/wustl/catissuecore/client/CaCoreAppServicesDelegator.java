@@ -11,19 +11,22 @@
 
 package edu.wustl.catissuecore.client;
 
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+
+import oracle.sql.CLOB;
 
 import org.hibernate.Session;
 
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
-import edu.wustl.catissuecore.bizlogic.CollectionProtocolRegistrationBizLogic;
-import edu.wustl.catissuecore.bizlogic.IdentifiedSurgicalPathologyReportBizLogic;
-import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
-import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.Specimen;
@@ -38,10 +41,12 @@ import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.bizlogic.QueryBizLogic;
+import edu.wustl.common.dao.DAOFactory;
+import edu.wustl.common.dao.JDBCDAO;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.lookup.LookupLogic;
 import edu.wustl.common.security.PrivilegeCache;
 import edu.wustl.common.security.PrivilegeManager;
 import edu.wustl.common.security.SecurityManager;
@@ -213,14 +218,16 @@ public class CaCoreAppServicesDelegator
 		{
 			throw new Exception("Please enter valid domain object for search operation!!");			
 		}
-		return searchObjects;
+		List nonDisbaledObjectList = filterDisabledObjects(searchObjects);
+		return nonDisbaledObjectList;
 	}
 	
 	public List delegateSearchFilter(String userName,List list) throws Exception
 	{
-	    Logger.out.debug("User Name : "+userName);
-	    Logger.out.debug("list obtained from ApplicationService Search************** : "+list.getClass().getName());
-	    Logger.out.debug("Super Class ApplicationService Search************** : "+list.getClass().getSuperclass().getName());
+		List nonDisbaledObjectList = filterDisabledObjects(list);
+		Logger.out.debug("User Name : "+userName);
+	    Logger.out.debug("list obtained from ApplicationService Search************** : "+nonDisbaledObjectList.getClass().getName());
+	    Logger.out.debug("Super Class ApplicationService Search************** : "+nonDisbaledObjectList.getClass().getSuperclass().getName());
 	    List filteredObjects = null;//new ArrayList();
 	    User validUser = Utility.getUser(userName);
 	    String reviewerRole=null;
@@ -240,13 +247,13 @@ public class CaCoreAppServicesDelegator
         }
         if(reviewerRole!=null && (reviewerRole.equalsIgnoreCase(Constants.ADMINISTRATOR)))
         {
-        	filteredObjects=list;
+        	filteredObjects=nonDisbaledObjectList;
         }
         else
         {
         	try
     	    {
-    	        filteredObjects = filterObjects(userName, list);
+    	        filteredObjects = filterObjects(userName, nonDisbaledObjectList);
     	    }
     	    catch (Exception exp)
     	    {
@@ -256,8 +263,53 @@ public class CaCoreAppServicesDelegator
         }
         
 		return filteredObjects;
-	}	
-	
+	}
+	/**
+	 * Method to filter out AbstractDomain objects of which activityStatus is disabled
+	 * @param list
+	 * @return
+	 */
+	private List filterDisabledObjects(List list)
+	{
+		long st = System.currentTimeMillis(); 
+		List result = new ArrayList();
+		for(int i=0;i<list.size();i++)
+		{
+			Object object = list.get(i);
+			/**
+			 * Chech if object is of type AbstractDomainObject if not add it to final list
+			 * else check call getActivityStatus of object and check if value is Disabled. 
+			 */
+			if(object instanceof AbstractDomainObject)
+			{
+				AbstractDomainObject abstractDomainObject = (AbstractDomainObject)object;
+				 try
+			     {
+					 Method activityStatusMethod = abstractDomainObject.getClass().getMethod("getActivityStatus", null);
+					 String activityStatus = (String)activityStatusMethod.invoke(abstractDomainObject, null);
+					 if(!Constants.DISABLED.equalsIgnoreCase(activityStatus))
+					 {
+						 result.add(abstractDomainObject);
+					 }
+			     }
+				 catch (Exception ex) 
+			     {
+					 // Exception occured if Domain Oject is not having ActivityStatus field
+					 Logger.out.error("in CaCoreAppServicesDelegator"+ex.getMessage());
+					 result.add(abstractDomainObject);
+			     }
+			}
+			else
+			{
+				// Add object to list as it is nit caTissue domain objectFor 
+				//e.g Admin user queries on get id from domain object 
+				result.add(object);
+			}
+		}
+		long et = System.currentTimeMillis();
+		Logger.out.info("Time to filer disable objects:"+(et-st)/1000);
+		return result;
+	}
 	/**
 	 * Filters the list of objects returned by the search depending on the privilege of the user on the objects.
 	 * Also sets the identified data to null if the user doesn'r has privilege to see the identified data. 
@@ -661,12 +713,17 @@ public class CaCoreAppServicesDelegator
 		AbstractDomainObject abstractDomainObject = (AbstractDomainObject) domainObject;
 		// not null check for Id
 		//checkNullObject(abstractDomainObject.getId(),"Identifier");
-		matchingObjects = bizLogic.getListOfMatchingParticipants((Participant)domainObject);
+		LookupLogic participantLookupLogicForSPR = (LookupLogic)Utility.getObject(XMLPropertyHandler.getValue(Constants.PARTICIPANT_LOOKUP_ALGO_FOR_SPR));
+		matchingObjects = bizLogic.getListOfMatchingParticipants((Participant)domainObject,participantLookupLogicForSPR);
 		/*bug 7561*/
 		List filteredMatchingObjects=null;
 		if(matchingObjects!=null)
 		{
 			filteredMatchingObjects=delegateSearchFilter(userName, matchingObjects);
+		}
+		else
+		{
+			filteredMatchingObjects = new ArrayList();
 		}
 		return filteredMatchingObjects;
 		//return matchingObjects;
@@ -715,4 +772,164 @@ public class CaCoreAppServicesDelegator
     		identiPathologyReport.getTextContent().setData(null);
     	}
     }
+    public void auditAPIQuery(String queryObject, String userName) throws Exception
+    {
+    	SessionDataBean sessionDataBean = getSessionDataBean(userName);
+    	insertQuery(queryObject, sessionDataBean);
+    }
+
+    /***
+	 * Copy paste from Query Bizlogic class to insert API query Log
+	 * @param sqlQuery
+	 * @param sessionData
+	 * @throws DAOException
+	 * @throws ClassNotFoundException
+	 */
+	private void insertQuery(String sqlQuery, SessionDataBean sessionData) throws Exception
+	{
+
+		JDBCDAO jdbcDAO = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
+		try
+		{
+
+			String sqlQuery1 = sqlQuery.replaceAll("'", "''");
+			long no = 1;
+
+			jdbcDAO.openSession(null);
+
+			SimpleDateFormat fSDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String timeStamp = fSDateFormat.format(new Date());
+
+			String ipAddr = sessionData.getIpAddress();
+
+			String userId = sessionData.getUserId().toString();
+			String comments = "APIQueryLog";
+
+			if (Variables.databaseName.equals(Constants.MYSQL_DATABASE))
+			{
+				String sqlForAudiEvent = "insert into catissue_audit_event(IP_ADDRESS,EVENT_TIMESTAMP,USER_ID ,COMMENTS) values ('"
+						+ ipAddr + "','" + timeStamp + "','" + userId + "','" + comments + "')";
+				jdbcDAO.executeUpdate(sqlForAudiEvent);
+
+				String sql = "select max(identifier) from catissue_audit_event where USER_ID='"
+						+ userId + "'";
+
+				List list = jdbcDAO.executeQuery(sql, null, false, null);
+
+				if (!list.isEmpty())
+				{
+
+					List columnList = (List) list.get(0);
+					if (!columnList.isEmpty())
+					{
+						String str = (String) columnList.get(0);
+						if (!str.equals(""))
+						{
+							no = Long.parseLong(str);
+
+						}
+					}
+				}
+
+				String sqlForQueryLog = "insert into catissue_audit_event_query_log(QUERY_DETAILS,AUDIT_EVENT_ID) values ('"
+						+ sqlQuery1 + "','" + no + "')";
+				Logger.out.debug("sqlForQueryLog:" + sqlForQueryLog);
+				jdbcDAO.executeUpdate(sqlForQueryLog);
+				jdbcDAO.commit();
+			}
+			else
+			{
+				String sql = "select CATISSUE_AUDIT_EVENT_PARAM_SEQ.nextVal from dual";
+
+				List list = jdbcDAO.executeQuery(sql, null, false, null);
+
+				if (!list.isEmpty())
+				{
+
+					List columnList = (List) list.get(0);
+					if (!columnList.isEmpty())
+					{
+						String str = (String) columnList.get(0);
+						if (!str.equals(""))
+						{
+							no = Long.parseLong(str);
+
+						}
+					}
+				}
+				String sqlForAudiEvent = "insert into catissue_audit_event(IDENTIFIER,IP_ADDRESS,EVENT_TIMESTAMP,USER_ID ,COMMENTS) values ('"
+						+ no
+						+ "','"
+						+ ipAddr
+						+ "',to_date('"
+						+ timeStamp
+						+ "','yyyy-mm-dd HH24:MI:SS'),'" + userId + "','" + comments + "')";
+				Logger.out.info("sqlForAuditLog:" + sqlForAudiEvent);
+				jdbcDAO.executeUpdate(sqlForAudiEvent);
+
+				long queryNo = 1;
+				sql = "select CATISSUE_AUDIT_EVENT_QUERY_SEQ.nextVal from dual";
+
+				list = jdbcDAO.executeQuery(sql, null, false, null);
+
+				if (!list.isEmpty())
+				{
+
+					List columnList = (List) list.get(0);
+					if (!columnList.isEmpty())
+					{
+						String str = (String) columnList.get(0);
+						if (!str.equals(""))
+						{
+							queryNo = Long.parseLong(str);
+
+						}
+					}
+				}
+				String sqlForQueryLog = "insert into catissue_audit_event_query_log(IDENTIFIER,QUERY_DETAILS,AUDIT_EVENT_ID) "
+						+ "values (" + queryNo + ",EMPTY_CLOB(),'" + no + "')";
+				jdbcDAO.executeUpdate(sqlForQueryLog);
+				String sql1 = "select QUERY_DETAILS from catissue_audit_event_query_log where IDENTIFIER="+queryNo+" for update";
+				list = jdbcDAO.executeQuery(sql1, null, false, null);
+
+				CLOB clob=null;
+				
+				if (!list.isEmpty())
+				{
+
+					List columnList = (List) list.get(0);
+					if (!columnList.isEmpty())
+					{
+						clob = (CLOB)columnList.get(0);
+					}
+				}
+//				get output stream from the CLOB object
+				OutputStream os = clob.getAsciiOutputStream();
+				OutputStreamWriter osw = new OutputStreamWriter(os);
+				
+//			use that output stream to write character data to the Oracle data store
+				osw.write(sqlQuery1.toCharArray());
+				//write data and commit
+				osw.flush();
+				osw.close();
+				os.close();
+				jdbcDAO.commit();
+				Logger.out.info("sqlForQueryLog:" + sqlForQueryLog);
+
+
+			}
+		}
+		catch(Exception e)
+		{
+			throw new Exception(e.getMessage());
+		}
+		finally
+		{
+			jdbcDAO.closeSession();
+		}
+		/*String sqlForQueryLog = "insert into catissue_audit_event_query_log(IDENTIFIER,QUERY_DETAILS) values ('"
+		 + no + "','" + sqlQuery1 + "')";
+		 jdbcDAO.executeUpdate(sqlForQueryLog);*/
+
+	}
 }

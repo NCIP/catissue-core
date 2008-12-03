@@ -204,6 +204,68 @@
 	</property>
 	
 	 <!-- Constants for LookUp algo end -->
+	 <!-- start-->
+	 <property>
+		<name>SPRCutoff</name>
+		<value>-140</value>
+	</property>
+	 <property>
+		<name>ParticipantLookupAlgoForSPR</name>
+		<value>edu.wustl.catissuecore.bizlogic.ParticipantLookupLogicForSPR</value>
+	</property>
+	<property>
+		<name>SPRSSNExact</name>
+		<value>40</value>
+	</property>
+	<property>
+		<name>SPRSSNPartial</name>
+		<value>-140</value>
+	</property>
+	<property>
+		<name>SPRPMIExact</name>
+		<value>40</value>
+	</property>
+	<property>
+		<name>SPRPMIPartial</name>
+		<value>-140</value>
+	</property>
+	<property>
+		<name>SPRDOBExact</name>
+		<value>30</value>
+	</property>
+	<property>
+		<name>SPRDOBPartial</name>
+		<value>-140</value>
+	</property>
+	<property>
+		<name>SPRLastNameExact</name>
+		<value>20</value>
+	</property>
+	<property>
+		<name>SPRLastNamePartial</name>
+		<value>-140</value>
+	</property>
+	<property>
+		<name>SPRNameExact</name>
+		<value>10</value>
+	</property>
+	<property>
+		<name>SPRNamePartial</name>
+		<value>-140</value>
+	</property>
+	<property>
+		<name>SPRTotalPoints</name>
+		<value>105</value>
+	</property>
+	<property>
+		<name>SPRThreshold1</name>
+		<value>60</value>
+	</property>
+	<property>
+		<name>SPRThreshold2</name>
+		<value>0</value>
+	</property>
+	 <!-- end -->
 	 
 	  <!-- Constants for Password validations start -->
 		
@@ -386,22 +448,22 @@
 	<!--  property for the help page links/icons -->
 	<property>
 		<name>userguide.link</name>
-		<value>https://gforge.nci.nih.gov/docman/view.php/18/13148/Suite1_1_UserManual_C1.doc</value>
+		<value>caTissue_Suite_User_Manual.doc</value>
 	</property>
 	
 	<property>
 		<name>technicalguide.link</name>
-		<value>https://gforge.nci.nih.gov/docman/view.php/18/13150/caTissueSuiteV11_Technical_Guide.doc</value>
+		<value>caTissueSuiteV11_Technical_Guide.doc</value>
 	</property>
 	
 	<property>
 		<name>trainingguide.link</name>
-		<value>http://59.163.69.22:8888/</value>
+		<value>http://cabigtrainingdocs.nci.nih.gov/caTissue/index.html</value>
 	</property>
 	
 	<property>
 		<name>umlmodel.link</name>
-		<value>https://gforge.nci.nih.gov/docman/view.php/18/13775/caTissueSuite_v1_1.zip</value>
+		<value>caTissueSuiteV11_UML.zip</value>
 	</property>
 	
 	<property>

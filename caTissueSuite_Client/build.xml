@@ -104,20 +104,7 @@
 		</junit>
 	</target>
 	
-  <target name= "createJavaDoc">
-  	<javadoc destdir="${report.dir}/JavaDoc"
-  	  	           			author="true"
-  	  	           			version="true"
-  	  	           			use="true"
-  	  	           			windowtitle="JavaDoc">
-
-  			  	 	<fileset dir="${project.src.domain}">
-  			  	 		<include name="**/*.java" />
-  			  	    </fileset>
-  	  	    </javadoc>
-  </target>	
-	
-  <target name="runNightlyBuild" depends="runJunitTestCases,createJavaDoc">
+  <target name="runNightlyBuild" depends="runJunitTestCases">
 		
 		<junitreport todir="${report.dir}/Nightly_Build_Report">
 			<fileset dir="${report.dir}/Nightly_Build_Report">

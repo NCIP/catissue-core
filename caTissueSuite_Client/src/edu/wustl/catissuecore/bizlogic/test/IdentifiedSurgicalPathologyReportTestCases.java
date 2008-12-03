@@ -29,6 +29,8 @@ public class IdentifiedSurgicalPathologyReportTestCases extends CaTissueBaseTest
 		 }
 		 catch(Exception e){
 			 e.printStackTrace();
+			 System.out
+					.println("IdentifiedSurgicalPathologyReportTestCases.testAddIdentifiedSurgicalPathologyReport()"+e.getMessage());
 			 assertFalse("could not add object", true);
 		 }
 	}
@@ -46,6 +48,8 @@ public class IdentifiedSurgicalPathologyReportTestCases extends CaTissueBaseTest
 	    } 
 	    catch (Exception e) {
 	       	Logger.out.error(e.getMessage(),e);
+	       	System.out
+					.println("IdentifiedSurgicalPathologyReportTestCases.testUpdateIdentifiedSurgicalPathologyReport()"+e.getMessage());
 	 		e.printStackTrace();
 	 		assertFalse("failed to update Object", true);
 	    }

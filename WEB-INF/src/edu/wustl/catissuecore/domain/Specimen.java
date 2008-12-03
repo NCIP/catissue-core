@@ -1278,28 +1278,62 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 	{
 		this.specimenRequirement = requirementSpecimen;
 	}
+	
 	//bug no. 7690
-	public void setPropogatingSpecimenEventCollection(Collection specimenEventColl, Long userId)
+	public void setPropogatingSpecimenEventCollection(Collection specimenEventColl, Long userId, Specimen specimen)
 	{
+		User user = new User();
+		user.setId(userId);
+		String collProcedure = Constants.CP_DEFAULT;
+		String collContainer = Constants.CP_DEFAULT;
+		String recQty = Constants.CP_DEFAULT;
+		Date collTimestamp =  new Date(System.currentTimeMillis()) ;
+		Date recTimestamp =  new Date(System.currentTimeMillis());
+		User collEventUser = user;
+		User recEventUser = user;
+		
+		Iterator eventCollItr = specimen.getSpecimenCollectionGroup().getSpecimenEventParametersCollection().iterator();
+		while(eventCollItr.hasNext())
+		{
+			SpecimenEventParameters eventParam = (SpecimenEventParameters)eventCollItr.next();
+			if(eventParam instanceof CollectionEventParameters)
+			{
+				collProcedure = ((CollectionEventParameters)eventParam).getCollectionProcedure();
+				collContainer = ((CollectionEventParameters)eventParam).getContainer();
+				collTimestamp = ((CollectionEventParameters)eventParam).getTimestamp();
+				collEventUser = ((CollectionEventParameters)eventParam).getUser();
+			}
+			if(eventParam instanceof ReceivedEventParameters)
+			{
+				recQty 	= ((ReceivedEventParameters)eventParam).getReceivedQuality();
+				recTimestamp = ((ReceivedEventParameters)eventParam).getTimestamp();
+				recEventUser = ((ReceivedEventParameters)eventParam).getUser();
+			}
+		}
+		
 		Collection specimenEventCollection = new HashSet();
 		Iterator itr = specimenEventColl.iterator();
 		while(itr.hasNext())
 		{
 			SpecimenEventParameters eventParam = (SpecimenEventParameters)itr.next();
-			/*User user = new User();
-			user.setId(userId);*/
-			User user = (User) HibernateMetaData
-			.getProxyObjectImpl(eventParam.getUser());
 			if(eventParam instanceof CollectionEventParameters)
 			{
 				CollectionEventParameters collEventParam = (CollectionEventParameters) eventParam;
 				if(collEventParam != null)
 				{
-				CollectionEventParameters collectionEventParameters = new CollectionEventParameters(collEventParam);
-				collectionEventParameters.setSpecimen(this);
-				collectionEventParameters.setTimestamp(new Date(System.currentTimeMillis()));
-				collectionEventParameters.setUser(user);
-				specimenEventCollection.add(collectionEventParameters);
+					CollectionEventParameters collectionEventParameters = new CollectionEventParameters(collEventParam);
+					collectionEventParameters.setSpecimen(this);
+					collectionEventParameters.setTimestamp(collTimestamp);
+					collectionEventParameters.setUser(collEventUser);
+					if(!Constants.CP_DEFAULT.equals(collProcedure))
+					{
+						collectionEventParameters.setCollectionProcedure(collProcedure);
+					}
+					if(!Constants.CP_DEFAULT.equals(collContainer))
+					{
+						collectionEventParameters.setContainer(collContainer);
+					}
+					specimenEventCollection.add(collectionEventParameters);
 				}
 				
 			}
@@ -1310,8 +1344,12 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 				{
 					ReceivedEventParameters receivedEventParameters = new ReceivedEventParameters(recEventParam);
 					receivedEventParameters.setSpecimen(this);
-					receivedEventParameters.setTimestamp(new Date(System.currentTimeMillis()));
-					receivedEventParameters.setUser(user);
+					receivedEventParameters.setTimestamp(recTimestamp);
+					receivedEventParameters.setUser(recEventUser);
+					if(!Constants.CP_DEFAULT.equals(recQty))
+					{
+						receivedEventParameters.setReceivedQuality(recQty);
+					}
 					specimenEventCollection.add(receivedEventParameters);
 				}
 				

@@ -36,7 +36,7 @@ create table DYEXTN_CATEGORY_ASSOCIATION (
 );
 create table DYEXTN_CATEGORY_ATTRIBUTE (
    IDENTIFIER bigint not null,
-   ATTRIBUTE_ID bigint,
+   ABSTRACT_ATTRIBUTE_ID bigint,
    CATEGORY_ENTIY_ID bigint,
    CATEGORY_ENTITY_ID bigint,
    IS_VISIBLE bigint,
@@ -52,7 +52,7 @@ create table DYEXTN_CATEGORY_ENTITY (
    CATEGORY_ASSOCIATION_ID bigint,
    PARENT_CATEGORY_ENTITY_ID bigint,
    REL_ATTR_CAT_ENTITY_ID bigint,
-   IS_CREATETABLE boolean,  
+   IS_CREATETABLE boolean,
    primary key (IDENTIFIER)
 );
 

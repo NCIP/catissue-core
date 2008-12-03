@@ -788,7 +788,7 @@ public class QueryOutputSpreadsheetBizLogic
 				this.selectedColumnMetaData.setSelectedColumnNameValueBeanList(selectedColumnNameValue);
 				int lastindexOfComma = sqlColumnNames.lastIndexOf(",");
 				String sql = sqlColumnNames.toString();
-				List tqColumnMetadataList = null;
+				List tqColumnMetadataList = new ArrayList();
 				if(!outputTermsColumns.isEmpty())
 				{
 					IConstraints constraints = queryDetailsObj.getQuery().getConstraints();

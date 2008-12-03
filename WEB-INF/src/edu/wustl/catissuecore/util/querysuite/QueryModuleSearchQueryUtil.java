@@ -227,6 +227,7 @@ public class QueryModuleSearchQueryUtil
 			session.setAttribute(Constants.SAVE_GENERATED_SQL, sqlGenerator.generateSQL(query));
 			Map<AttributeInterface, String> attributeColumnNameMap = sqlGenerator.getAttributeColumnNameMap();
 			session.setAttribute(Constants.ATTRIBUTE_COLUMN_NAME_MAP, attributeColumnNameMap);
+			queryDetailsObj.setAttributeColumnNameMap(attributeColumnNameMap);
 			session.setAttribute(Constants.OUTPUT_TERMS_COLUMNS,sqlGenerator.getOutputTermsColumns());
 		}
 		catch(MultipleRootsException e)

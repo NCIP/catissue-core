@@ -26,6 +26,7 @@ import edu.wustl.common.hibernate.HibernateCleanser;
 import edu.wustl.common.querysuite.queryobject.ICustomFormula;
 import edu.wustl.common.querysuite.queryobject.IParameterizedQuery;
 import edu.wustl.common.util.ObjectCloner;
+import edu.wustl.metadata.util.DyExtnObjectCloner;
 
 /**
  * @author chetan_patil
@@ -46,8 +47,9 @@ public class ExecuteQueryAction extends BaseAction
 		session.removeAttribute(Constants.SELECTED_COLUMN_META_DATA);
 		session.removeAttribute(Constants.EXPORT_DATA_LIST);
 		session.removeAttribute(Constants.ENTITY_IDS_MAP);
+		session.removeAttribute(Constants.ATTRIBUTE_COLUMN_NAME_MAP);
 		IParameterizedQuery parameterizedQuery = (IParameterizedQuery) session.getAttribute(AppletConstants.QUERY_OBJECT);
-		IParameterizedQuery parameterizedQuery1 = ObjectCloner.clone(parameterizedQuery);
+		IParameterizedQuery parameterizedQuery1 = new DyExtnObjectCloner().clone(parameterizedQuery);
 		
 		String conditionstr = request.getParameter("conditionList");
 		String rhsList = request.getParameter(QueryModuleConstants.STR_TO_FORM_TQ);
@@ -72,10 +74,12 @@ public class ExecuteQueryAction extends BaseAction
 		}
 		
 		String errorMessage = QueryModuleUtil.executeQuery(request, parameterizedQuery1);
+		session.setAttribute(AppletConstants.PARAMETERIZED_QUERY, parameterizedQuery1);
 		session.setAttribute(AppletConstants.QUERY_OBJECT, parameterizedQuery);
 		
 		if (errorMessage == null)
 		{
+			session.setAttribute(AppletConstants.PARAMETERIZED_QUERY, null);
 			target = Constants.SUCCESS;
 		}
 		else if(errorMessage.equalsIgnoreCase(Constants.TREE_NODE_LIMIT_EXCEEDED_RECORDS))

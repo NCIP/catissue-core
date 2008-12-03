@@ -34,6 +34,7 @@ import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.SpecimenDetailsTagUtil;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
@@ -129,8 +130,28 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 			// To delegate UserNotAuthorizedException forward
 			if(exception instanceof UserNotAuthorizedException)
 			{
-				ActionError error = new ActionError("access.addedit.object.denied", sessionDataBean.getUserName(), Specimen.class.getName());
-	        	actionErrors.add(ActionErrors.GLOBAL_ERROR, error);
+	            UserNotAuthorizedException ex = (UserNotAuthorizedException) exception;
+	            String userName = "";
+	        	
+	            if(sessionDataBean != null)
+	        	{
+	        	    userName = sessionDataBean.getUserName();
+	        	}
+	            String className = Constants.SPECIMEN;
+	            String decoratedPrivilegeName = Utility.getDisplayLabelForUnderscore(ex.getPrivilegeName());
+	            String baseObject = "";
+	            if (ex.getBaseObject() != null && ex.getBaseObject().trim().length() != 0)
+	            {
+	                baseObject = ex.getBaseObject();
+	            } else 
+	            {
+	                baseObject = className;
+	            }
+	                
+	            ActionError error = new ActionError("access.addedit.object.denied", userName, className,decoratedPrivilegeName,baseObject);
+	            actionErrors.add(ActionErrors.GLOBAL_ERROR, error);
+	        	saveErrors(request, actionErrors);
+	        	return (mapping.findForward("multipleSpWithMenuFaliure"));
 			}
 			exception.printStackTrace();
 			actionErrors.add(actionErrors.GLOBAL_MESSAGE, new ActionError(

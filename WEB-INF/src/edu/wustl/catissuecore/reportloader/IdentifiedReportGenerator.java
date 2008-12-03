@@ -14,6 +14,7 @@ import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport
 import edu.wustl.catissuecore.domain.pathology.ReportSection;
 import edu.wustl.catissuecore.domain.pathology.TextContent;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.util.logger.Logger;
 
 public class IdentifiedReportGenerator 
@@ -48,6 +49,20 @@ public class IdentifiedReportGenerator
 		}
 		// synthesize report text
 		textContent.setData(IdentifiedReportGenerator.synthesizeSPRText(reportSectionSet, abbrToHeader));
+		
+		//for oracle
+		//if(Variables.databaseName.equalsIgnoreCase(Constants.ORACLE_DATABASE))
+		//{
+			for(ReportSection tempReportSection: reportSectionSet)
+			{
+				if(tempReportSection.getDocumentFragment().length()>3900)
+				{
+					Logger.out.info("*****************for trim");
+					tempReportSection.setDocumentFragment(tempReportSection.getDocumentFragment().substring(0,3900));
+					Logger.out.info("*****************trim completed");
+				}
+			}
+		//}
 		// set textContent to report
 		report.setTextContent(textContent);
 		textContent.setSurgicalPathologyReport(report);

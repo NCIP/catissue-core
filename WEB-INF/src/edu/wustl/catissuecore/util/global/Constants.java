@@ -1205,6 +1205,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String FROZEN_TISSUE_SLIDE = "Frozen Tissue Slide";	// SLIDE	 
 	public static final String FIXED_TISSUE_BLOCK = "Fixed Tissue Block";	// PARAFFIN BLOCK	 
 	public static final String NOT_SPECIFIED = "Not Specified";
+	
 	public static final String WITHDRAWN = "Withdrawn";
 	// tissue types with unit= g
 	public static final String FRESH_TISSUE = "Fresh Tissue";			 
@@ -1443,6 +1444,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	
 	
 	//Constants required in ParticipantLookupAction
+	public static final String PARTICIPANT_LOOKUP_ALGO_FOR_SPR="ParticipantLookupAlgoForSPR";
 	public static final String PARTICIPANT_LOOKUP_PARAMETER="ParticipantLookupParameter";
 	public static final String PARTICIPANT_LOOKUP_CUTOFF="lookup.cutoff";
 	public static final String PARTICIPANT_LOOKUP_ALGO="ParticipantLookupAlgo";
@@ -1481,6 +1483,24 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String PARTICIPANT_TOTAL_POINTS="TotalPoints";
 	public static final String PARTICIPANT_MATCH_CHARACTERS_FOR_LAST_NAME="MatchCharactersForLastName";
 	
+	// Constants for SPR
+	public static final String SPR_LOOKUP_PARAMETER="SPRLookupParameter";
+	public static final String SPR_SSN_EXACT="SPRSSNExact";
+	public static final String SPR_SSN_PARTIAL="SPRSSNPartial";
+	public static final String SPR_PMI_EXACT="SPRPMIExact";
+	public static final String SPR_PMI_PARTIAL="SPRPMIPartial";
+	public static final String SPR_DOB_EXACT="SPRDOBExact";
+	public static final String SPR_DOB_PARTIAL="SPRDOBPartial";
+	public static final String SPR_LAST_NAME_EXACT="SPRLastNameExact";
+	public static final String SPR_LAST_NAME_PARTIAL="SPRLastNamePartial";
+	public static final String SPR_FIRST_NAME_EXACT="SPRNameExact";
+	public static final String SPR_FIRST_NAME_PARTIAL="SPRNamePartial";
+	public static final String SPR_CUT_OFF="SPRCutoff";
+	
+	public static final String SPR_THRESHOLD1="SPRThreshold1";
+	public static final String SPR_THRESHOLD2="SPRThreshold2";
+	
+	// end here
 	
 	//Constants for integration of caTies and CAE with caTissue Core
 	public static final String LINKED_DATA = "linkedData";
@@ -2377,6 +2397,12 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String NODE_NAME = "nodeName";
 	public static final String CONTAINER_IDENTIFIER = "containerId";
 	public static final String PARENT_IDENTIFIER = "parentId";
+	public static final String COLLECTION_PROTOCOL = "edu.wustl.catissuecore.domain.CollectionProtocol";
+	public static final String ENTITY_GROUP = "EntityGroup";
+	public static final String ENTITY = "Entity";
+	public static final String FORM = "Form";
+	public static final String CATEGORY = "Category";
+
 	/**
 	 * 
 	 * Constant required for Specimen Array Delete Action
@@ -2534,4 +2560,11 @@ public static final String ADD_MULTIPLE_SPECIMEN_TO_CART="addMltipleSpecimenToCa
 	
 	// COnstant for API
 	public static final String API_FILTERED_OBJECT_LIMIT= "apiFilteredObjectLimit";
+	public static final String CP_DEFAULT ="Use CP Defaults";
+	public static final String REGISTRATION_FOR_REPORT_LOADER = "REGISTRATION_FOR_REPORT_LOADER";
+	public static final String REPORT_LOADER_SCG = "SurgPReport_";
+	public static final String DISPOSAL_REASON = "Specimen was Distributed";
+	public static final String SPECIMEN_DISPOSAL_REASON = "Specimen was Aliquoted";
+	public static final String DERIVED_SPECIMEN_DISPOSAL_REASON = "Specimen was Derived";
+	public static final String SPECIMEN_DISCARD_DISPOSAL_REASON = "Specimen was Discarded";
 }

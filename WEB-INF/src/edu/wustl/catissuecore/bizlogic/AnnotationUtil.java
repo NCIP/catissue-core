@@ -738,12 +738,7 @@ public class AnnotationUtil
 		if (entityName != null)
 		{
 			EntityManagerInterface entityManager = EntityManager.getInstance();
-			EntityInterface entity;
-			entity = entityManager.getEntityByName(entityName);
-			if (entity != null)
-			{
-				return entity.getId();
-			}
+			return entityManager.getEntityId(entityName);
 		}
 		return new Long(0);
 	}

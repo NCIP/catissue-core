@@ -13,60 +13,73 @@
 	
 	<property name="base.dir" value="."/>	
 	<property name="classes.dir" value="./classes" />
+	<tstamp>
+		<format property="TODAY" pattern="ddMMyyyy_hhmmss" />
+	</tstamp>
+  
+	<property name="drop.oracle.staging.db" value="sqlplus ${stagingSystemUserName}/${stagingSystemPassword}@${stagingDBName}  @.//sql//drop_staging_db_oracle.sql" />
+	<property name="create.oracle.staging.db" value="impdp ${stagingSystemUserName}/${stagingSystemPassword}@${stagingDBName} remap_schema=${privateDBUserName}:${stagingDBUserName} directory=data_pump_dir dumpfile=catissue_${TODAY}.dmp logfile=imp parallel=4 transform=oid:n @@TABLESPACE@@" />
+	<property name="create.oracle.private.dump" value="expdp ${stagingSystemUserName}/${stagingSystemPassword}@${stagingDBName} schemas=${privateDBUserName} directory=data_pump_dir dumpfile=catissue_${TODAY}.dmp logfile=catissueexp.log" />
 	
-	<property name="drop.oracle.staging.db" value="sqlplus ${stagingDBAUserName}/${stagingDBAPassword}@${privateDBName} as sysdba @.//sql//drop_staging_db_oracle.sql" />
-	<property name="create.oracle.staging.db" value="impdp ${stagingDBUserName}/${stagingDBPassword}@${stagingDBName} remap_schema=${privateDBUserName}:${stagingDBUserName} directory=data_pump_dir dumpfile=catissue.dmp logfile=imp parallel=4 transform=oid:n remap_tablespace=catissuecore:users remap_tablespace=catissuecore_indx:users" />
-	<property name="create.oracle.private.dump" value="expdp ${privateDBUserName}/${privateDBPassword}@${privateDBName} schemas=${privateDBUserName} directory=data_pump_dir dumpfile=catissue.dmp logfile=catissueexp.log" />
+	<property name="drop.mysql.staging.db" value="cmd /c mysql -u ${privateDBUserName} -p${privateDBPassword} -h ${privateDBHost} -P ${privateDBPort} &lt;./sql/drop_staging_db_mysql.sql" />
+	<property name="create.mysql.staging.db" value="cmd /c mysql -u ${stagingDBUserName} -p${stagingDBPassword} -h ${privateDBHost} -P ${privateDBPort} ${stagingDBName}&lt;privatedump_${TODAY}.sql" />
+	<property name="create.mysql.private.dump" value="cmd /c mysqldump -u ${privateDBUserName} -p${privateDBPassword} -h ${privateDBHost} -P ${privateDBPort} ${privateDBName}&gt;privatedump_${TODAY}.sql" />
 	
-	<property name="drop.mysql.staging.db" value="cmd /c mysql -u ${privateDBUserName} -p${privateDBPassword} -h ${privateDBHost} &lt;./sql/drop_staging_db_mysql.sql" />
-	<property name="create.mysql.staging.db" value="cmd /c mysql -u ${stagingDBUserName} -p${stagingDBPassword} -h ${stagingDBHost}  ${stagingDBName}&lt;privatedump.sql" />
-	<property name="create.mysql.private.dump" value="cmd /c mysqldump -u ${privateDBUserName} -p${privateDBPassword} ${privateDBName}&gt;privatedump.sql" />
+	<property name="drop.oracle.public.db" value="sqlplus ${publicSystemUserName}/${publicSystemPassword}@${publicDBTNSName} @.//sql//drop_public_db_oracle.sql" />
+	<property name="create.oracle.public.db" value="imp ${publicSystemUserName}/${publicSystemPassword}@${publicDBTNSName} fromuser=${stagingDBUserName} touser=${publicDBUserName} file=public_${TODAY}.dmp" />
+	<property name="create.oracle.public.dump" value="exp ${stagingSystemUserName}/${stagingSystemPassword}@${stagingDBName} owner=${stagingDBUserName} file=public_${TODAY}.dmp" />
 	
-	<property name="drop.oracle.public.db" value="sqlplus ${publicDBAUserName}/${publiceDBAPassword}@${publicDBName} as sysdba @.//sql//drop_public_db_oracle.sql" />
-	<property name="create.oracle.public.db" value="impdp ${publicDBUserName}/${publicDBPassword}@${publicDBName} remap_schema=${stagingDBUserName}:${publicDBUserName} directory=data_pump_dir dumpfile=public.dmp logfile=impcatissue.log parallel=4 transform=oid:n remap_tablespace=catissuecore:users remap_tablespace=catissuecore_indx:users" />
-	<property name="create.oracle.public.dump" value="expdp ${stagingDBUserName}/${stagingDBPassword}@${stagingDBName} schemas=${stagingDBUserName} directory=data_pump_dir dumpfile=public.dmp logfile=privateexp.log" />
-	
-	<property name="drop.mysql.public.db" value="cmd /c mysql -u ${publicDBUserName} -p${publicDBPassword} -h ${publicDBHost} &lt;./sql/drop_public_db_mysql.sql" />
-	<property name="create.mysql.public.db" value="cmd /c mysql -u ${publicDBUserName} -p${publicDBPassword} -h ${publicDBHost}  ${publicDBName}&lt;publicdump.sql" />
-	<property name="create.mysql.public.dump" value="cmd /c mysqldump -u ${stagingDBUserName} -p${stagingDBPassword} -h ${stagingDBHost} ${stagingDBName}&gt;publicdump.sql" />
+	<property name="drop.mysql.public.db" value="cmd /c mysql -u ${publicDBUserName} -p${publicDBPassword} -h ${publicDBHost} -P ${publicDBPort} &lt;./sql/drop_public_db_mysql.sql" />
+	<property name="create.mysql.public.db" value="cmd /c mysql -u ${publicDBUserName} -p${publicDBPassword} -h ${publicDBHost} -P ${publicDBPort} ${publicDBName}&lt;publicdump_${TODAY}.sql" />
+	<property name="create.mysql.public.dump" value="cmd /c mysqldump -u ${stagingDBUserName} -p${stagingDBPassword} -h ${privateDBHost} -P ${privateDBPort} ${stagingDBName}&gt;publicdump_${TODAY}.sql" />
 	
 	
 	<target name="generate_command_file" depends="replaceToken">
 		<copy file="./conf/commands.properties" todir="${basedir}" overwrite="true"/>
 		<if>
-			<equals arg1="${privateDBType}" arg2="oracle" />
+			<equals arg1="${databaseType}" arg2="oracle" />
 			<then>
 				<replace file="${basedir}/commands.properties">
 					<replacefilter token="@@DROP_STAGING_DB@@" value="${drop.oracle.staging.db}" />
 					<replacefilter token="@@CREATE_PRIVATE_DUMP@@" value="${create.oracle.private.dump}" />
 					<replacefilter token="@@CREATE_STAGING_DB@@" value="${create.oracle.staging.db}" />
+					
+					<replacefilter token="@@DROP_PUBLIC_DB@@" value="${drop.oracle.public.db}" />
+					<replacefilter token="@@CREATE_STAGING_DUMP@@" value="${create.oracle.public.dump}" />
+					<replacefilter token="@@CREATE_PUBLIC_DB@@" value="${create.oracle.public.db}" />
+					
 				</replace>
+				<if>
+					<equals arg1="${privateDBTablespace}" arg2="${privateDBIndexTablespace}" />
+					<then>
+						<replace file="${basedir}/commands.properties">
+							<replacefilter token="@@TABLESPACE@@" value=" remap_tablespace=${privateDBTablespace}:users " />
+						</replace>
+					</then>
+					<else>
+						<replace file="${basedir}/commands.properties">
+							<replacefilter token="@@TABLESPACE@@" value=" remap_tablespace=${privateDBTablespace}:users remap_tablespace=${privateDBIndexTablespace}:users " />
+						</replace>
+					</else>
+				</if>
+				<if>
+					<equals arg1="${databaseType}" arg2="mysql" />
+					<then>
+						<replace file="${basedir}/commands.properties">
+							
+						</replace>
+					</then>
+				</if>
 			</then>
 		</if>
 		<if>
-			<equals arg1="${privateDBType}" arg2="mysql" />
+			<equals arg1="${databaseType}" arg2="mysql" />
 			<then>
 				<replace file="${basedir}/commands.properties">
 					<replacefilter token="@@DROP_STAGING_DB@@" value="${drop.mysql.staging.db}" />
 					<replacefilter token="@@CREATE_PRIVATE_DUMP@@" value="${create.mysql.private.dump}" />
 					<replacefilter token="@@CREATE_STAGING_DB@@" value="${create.mysql.staging.db}" />
-				</replace>
-			</then>
-		</if>
-		<if>
-			<equals arg1="${publicDBType}" arg2="oracle" />
-			<then>
-				<replace file="${basedir}/commands.properties">
-					<replacefilter token="@@DROP_PUBLIC_DB@@" value="${drop.oracle.public.db}" />
-					<replacefilter token="@@CREATE_STAGING_DUMP@@" value="${create.oracle.public.dump}" />
-					<replacefilter token="@@CREATE_PUBLIC_DB@@" value="${create.oracle.public.db}" />
-				</replace>
-			</then>
-		</if>
-		<if>
-			<equals arg1="${publicDBType}" arg2="mysql" />
-			<then>
-				<replace file="${basedir}/commands.properties">
+					
 					<replacefilter token="@@DROP_PUBLIC_DB@@" value="${drop.mysql.public.db}" />
 					<replacefilter token="@@CREATE_STAGING_DUMP@@" value="${create.mysql.public.dump}" />
 					<replacefilter token="@@CREATE_PUBLIC_DB@@" value="${create.mysql.public.db}" />
@@ -93,7 +106,7 @@
 	</path>
 
 	<target name="migrate" depends="compile" > 
-		<java classname="PrivateToPublicMigrator" fork="true">
+		<java classname="PrivateToPublicMigrator" maxmemory="1024m" fork="true">
 			<classpath>
 				<pathelement location="${classes.dir}"/>
 				<pathelement location="."/>
@@ -105,13 +118,13 @@
 	<target name="replaceToken" >
 		<copy file="./conf/hibernate.cfg.xml" todir="${classes.dir}" overwrite="true" />
 		<copy file="./conf/DynamicExtensionsHibernate.cfg.xml" todir="${classes.dir}" overwrite="true" />
-		<echo message="${stagingDBType}" />
+		
 		<if>
-			<equals arg1="${stagingDBType}" arg2="mysql"/>
+			<equals arg1="${databaseType}" arg2="mysql"/>
 			<then>
 				<replace dir="${classes.dir}">
 						<replacefilter token="@@JDBC_DRIVER@@" value="com.mysql.jdbc.Driver" />
-						<replacefilter token="@@CONNECTION_URL@@" value="jdbc:mysql://${stagingDBHost}:${stagingDBPort}/${stagingDBName}" />
+						<replacefilter token="@@CONNECTION_URL@@" value="jdbc:mysql://${privateDBHost}:${privateDBPort}/${stagingDBName}" />
 						<replacefilter token="@@USER_NAME@@" value="${stagingDBUserName}" />
 						<replacefilter token="@@PASSWORD@@" value="${stagingDBPassword}" />
 				</replace>
@@ -119,16 +132,16 @@
 				<copy file="./conf/drop_public_db_mysql.sql" todir="${basedir}/sql" overwrite="true" />
 			</then>
 		</if>
-		<echo message="${stagingDBType}" />
+		
 		<mkdir dir="${basedir}/sql"/>
 		<if>
-			<equals arg1="${stagingDBType}" arg2="oracle"/>
+			<equals arg1="${databaseType}" arg2="oracle"/>
 			
 			<then>
 				<replace dir="${classes.dir}">
 						<replacefilter token="org.hibernate.dialect.MySQLDialect" value="org.hibernate.dialect.Oracle9Dialect" />
 						<replacefilter token="@@JDBC_DRIVER@@" value="oracle.jdbc.driver.OracleDriver" />
-						<replacefilter token="@@CONNECTION_URL@@" value="jdbc:oracle:thin:@${stagingDBHost}:${stagingDBPort}:${stagingDBName}" />
+						<replacefilter token="@@CONNECTION_URL@@" value="jdbc:oracle:thin:@${privateDBHost}:${privateDBPort}:${stagingDBName}" />
 						<replacefilter token="@@USER_NAME@@" value="${stagingDBUserName}" />
 						<replacefilter token="@@PASSWORD@@" value="${stagingDBPassword}" />
 				</replace>

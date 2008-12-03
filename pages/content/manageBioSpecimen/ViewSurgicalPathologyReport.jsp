@@ -331,9 +331,9 @@ if(!hasAccess)
 			<table width="100%" border="0" cellspacing="0" cellpadding="3" >
               <tr>
                 <td width="27%" class="noneditable"><label for="type"><strong><bean:message key="viewSPR.reportInfo.spn" /></strong></label></td>
-                <td width="20%" colspan="3" class="noneditable">-  <logic:notEmpty name="viewSurgicalPathologyReportForm" property="surgicalPathologyNumber" >
+                <td width="20%" colspan="3" class="noneditable">- <SPAN id="surgicalPathologyNumber"> <logic:notEmpty name="viewSurgicalPathologyReportForm" property="surgicalPathologyNumber" >
 				     		<%=formSPR.getSurgicalPathologyNumber()%>
-						</logic:notEmpty></td>
+						</logic:notEmpty></SPAN></td>
                 <td width="25%" class="noneditable"><span><strong><bean:message key="specimenCollectionGroup.site"/></strong></span></td>
                 <td width="28%" class="noneditable">- <SPAN id="identifiedReportSite"><logic:notEmpty name="viewSurgicalPathologyReportForm" property="identifiedReportSite" >
 				     		<%=formSPR.getIdentifiedReportSite()%>
@@ -476,4 +476,12 @@ if(!hasAccess)
 		</td>
 	</tr>
     </table>
-</html:form>
+</html:form>	
+<%
+if(!hasAccess)
+{
+%>
+	</body>
+<%
+}
+%>

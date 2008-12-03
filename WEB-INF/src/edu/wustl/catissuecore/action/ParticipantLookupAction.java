@@ -34,7 +34,9 @@ import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.factory.AbstractDomainObjectFactory;
 import edu.wustl.common.factory.MasterFactory;
 import edu.wustl.common.lookup.DefaultLookupResult;
+import edu.wustl.common.lookup.LookupLogic;
 import edu.wustl.common.util.Utility;
+import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.logger.Logger;
 
 public class ParticipantLookupAction extends BaseAction
@@ -83,7 +85,8 @@ public class ParticipantLookupAction extends BaseAction
 		if(isCallToLookupLogicNeeded)
 		{
 			ParticipantBizLogic bizlogic = (ParticipantBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.PARTICIPANT_FORM_ID);
-			List matchingParticipantList = bizlogic.getListOfMatchingParticipants(participant);
+			LookupLogic participantLookupLogic = (LookupLogic)Utility.getObject(XMLPropertyHandler.getValue(Constants.PARTICIPANT_LOOKUP_ALGO));
+			List matchingParticipantList = bizlogic.getListOfMatchingParticipants(participant,participantLookupLogic);
 			if (matchingParticipantList!=null && matchingParticipantList.size() > 0)
 			{
 				messages=new ActionMessages();

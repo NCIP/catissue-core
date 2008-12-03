@@ -13,6 +13,7 @@ import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.common.lookup.DefaultLookupResult;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * @author sandeep_ranade
@@ -25,18 +26,17 @@ public class ReportLoaderUtil
 	 * @return number of matching participants
 	 * @throws Exception throws exception 
 	 */
-	public static Set<Participant> checkForParticipant(Participant participant)throws Exception
+	public static Set<Participant> getParticipantList(List defaultLookUPResultList)throws Exception
 	{
 		Set<Participant> result=null;
-		List participantList=(List)CaCoreAPIService.getParticipantMatchingObects(participant);
 		// check for matching participant list
-   		if(participantList!=null && participantList.size()>0)
+   		if(defaultLookUPResultList!=null && defaultLookUPResultList.size()>0)
 		{
    			result=new HashSet<Participant>();
    			// prepare list of participant object out of DefaultLookupResult List
-   			for(int i=0;i < participantList.size();i++)
+   			for(int i=0;i < defaultLookUPResultList.size();i++)
    			{
-				DefaultLookupResult participantResult=(DefaultLookupResult)participantList.get(i);
+				DefaultLookupResult participantResult=(DefaultLookupResult)defaultLookUPResultList.get(i);
 				result.add((Participant)participantResult.getObject());
 			}
 		}
@@ -133,13 +133,34 @@ public class ReportLoaderUtil
 		" and scg.surgicalPathologyNumber='"+surgicalPathologyNumber+"'";
 		
 		List resultList=(List)CaCoreAPIService.executeQuery(scgHql, SpecimenCollectionGroup.class.getName());
+		
+		Logger.out.info("-------------"+scgHql+"   "+resultList.size());
 		if(resultList!=null && resultList.size()==1)
 		{
 			return (SpecimenCollectionGroup)resultList.get(0);
 		}
 		return null;
 	}
-	
+	public static boolean isPartialMatchingSCG(Participant participant, Site site) throws Exception
+	{
+		String scgHql = "select scg"+
+	    " from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg, " +
+		" edu.wustl.catissuecore.domain.CollectionProtocolRegistration as cpr,"+
+		" edu.wustl.catissuecore.domain.Participant as p "+
+		" where p.id = " +participant.getId()+ 
+		" and p.id = cpr.participant.id " +
+		" and scg.id in elements(cpr.specimenCollectionGroupCollection)" +
+		" and scg.specimenCollectionSite.name='"+site.getName()+"' "+
+		" and (scg.surgicalPathologyNumber="+null+
+		" or scg.surgicalPathologyNumber='')";
+		
+		List resultList=(List)CaCoreAPIService.executeQuery(scgHql, SpecimenCollectionGroup.class.getName());
+		if(resultList!=null && resultList.size()>0)
+		{
+			return true;
+		}
+		return false;
+	}
 	/**
 	 * This method returns the respective participant to which SCG is associated with
 	 * @param scgId

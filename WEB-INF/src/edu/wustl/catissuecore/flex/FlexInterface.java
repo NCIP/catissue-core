@@ -46,12 +46,13 @@ import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.flex.dag.CustomFormulaNode;
-import edu.wustl.catissuecore.flex.dag.SingleNodeCustomFormulaNode;
 import edu.wustl.catissuecore.flex.dag.DAGConstant;
 import edu.wustl.catissuecore.flex.dag.DAGNode;
 import edu.wustl.catissuecore.flex.dag.DAGPanel;
 import edu.wustl.catissuecore.flex.dag.DAGPath;
+import edu.wustl.catissuecore.flex.dag.SingleNodeCustomFormulaNode;
 import edu.wustl.catissuecore.util.CollectionProtocolUtil;
+import edu.wustl.catissuecore.util.ParticipantComparator;
 import edu.wustl.catissuecore.util.ParticipantRegistrationCacheManager;
 import edu.wustl.catissuecore.util.SpecimenAutoStorageContainer;
 import edu.wustl.catissuecore.util.global.Utility;
@@ -429,6 +430,9 @@ public class FlexInterface
 		session = flex.messaging.FlexContext.getHttpRequest().getSession();
 		LinkedHashMap specimenMap = (LinkedHashMap) session.getAttribute(edu.wustl.catissuecore.util.global.Constants.SPECIMEN_LIST_SESSION_MAP);
 		Iterator itr = specimenMap.values().iterator();
+		
+		SpecimenAutoStorageContainer speicmenAutoStorageCont = new SpecimenAutoStorageContainer();
+		
 		while (itr.hasNext())
 		{
 			SpecimenDataBean spDataBean = (SpecimenDataBean) itr.next();
@@ -486,7 +490,6 @@ public class FlexInterface
 						{
 							if (spBean.derivedColl != null && !spBean.derivedColl.isEmpty())
 							{
-								SpecimenAutoStorageContainer speicmenAutoStorageCont = new SpecimenAutoStorageContainer();
 								int i = 1;
 								LinkedHashMap<String, GenericSpecimen> derivedMap = new LinkedHashMap<String, GenericSpecimen>();
 
@@ -503,16 +506,12 @@ public class FlexInterface
 
 								}
 								spDataBean.setDeriveSpecimenCollection(derivedMap);
-								SessionDataBean sdb = (SessionDataBean) session.getAttribute(Constants.SESSION_DATA);
-								speicmenAutoStorageCont.setCollectionProtocolSpecimenStoragePositions(sdb);
 							}
 						}
 						catch (DAOException e)
 						{
 							System.out.println("Error while derived:" + e.getMessage());
 						}
-
-						//break;
 					}
 
 				}
@@ -520,6 +519,17 @@ public class FlexInterface
 			}
 
 		}
+		
+		try
+		{
+			SessionDataBean sdb = (SessionDataBean) session.getAttribute(Constants.SESSION_DATA);
+			speicmenAutoStorageCont.setCollectionProtocolSpecimenStoragePositions(sdb);
+		}
+		catch (DAOException e)
+		{
+			System.out.println("Error while derived:" + e.getMessage());
+		}
+		
 		/*LinkedHashSet<Specimen> specimenSet = new LinkedHashSet<Specimen>();
 		 if (spBeanList != null && spBeanList.size() > 0)
 		 {
@@ -947,6 +957,7 @@ public class FlexInterface
 
 				derivedBean.collectionEvent = spBean.collectionEvent;
 				derivedBean.receivedEvent = spBean.receivedEvent;
+				derivedBean.parentType = edu.wustl.catissuecore.util.global.Constants.DERIVED_SPECIMEN_TYPE;
 				SpecimenDataBean derivedDataBean = prepareGenericSpecimen(derivedBean, speicmenAutoStorageCont);
 				derivedDataBean.setCollectionProtocolId(specimenDataBean.getCollectionProtocolId());
 				derivedDataBean.setLineage(edu.wustl.catissuecore.util.global.Constants.DERIVED_SPECIMEN);
@@ -1716,7 +1727,8 @@ public class FlexInterface
 			System.out.println("The participants list is empty");
 		}
 		//Sorting the participants
-		//Collections.sort(participantsList);
+		ParticipantComparator partComp = new ParticipantComparator();
+		Collections.sort(participantsList,partComp);
 		return participantsList;
 	}
 

@@ -126,14 +126,14 @@ window.onresize = function()
 							<tr>
 								<td width="30%"  valign="top">		
 			
-								<iframe id="<%=Constants.CONFLICT_TREE_VIEW%>" name="<%=Constants.CONFLICT_TREE_VIEW%>" src="<%=Constants.CONFLICT_TREE_VIEW_ACTION%>?reportQueueId=<%=reportQueueId%>&conflictStatus=<%=conflictStatus%>" scrolling="no" frameborder="0" width="100%" marginheight=0 marginwidth=0 valign="top">
+								<iframe id="<%=Constants.CONFLICT_TREE_VIEW%>" name="<%=Constants.CONFLICT_TREE_VIEW%>" src="<%=Constants.CONFLICT_TREE_VIEW_ACTION%>?reportQueueId=<%=reportQueueId%>&conflictStatus=<%=conflictStatus%>" scrolling="auto" frameborder="0" width="100%" height="100%" marginheight=0 marginwidth=0 valign="top">
 									<bean:message key="errors.browser.not.supports.iframe"/>
 								</iframe>
 			
 								</td>
 							
 								<td width="70%" valign="top" >				
-									<iframe id="<%=Constants.CONFLICT_DATA_VIEW%>" name="<%=Constants.CONFLICT_DATA_VIEW%>" src="<%=Constants.BLANK_SCREEN_ACTION%>" scrolling="no" frameborder="0" width="100%" >
+									<iframe id="<%=Constants.CONFLICT_DATA_VIEW%>" name="<%=Constants.CONFLICT_DATA_VIEW%>" src="<%=Constants.BLANK_SCREEN_ACTION%>" scrolling="auto" frameborder="0" width="100%" >
 									<bean:message key="errors.browser.not.supports.iframe"/>
 									</iframe>
 								</td>

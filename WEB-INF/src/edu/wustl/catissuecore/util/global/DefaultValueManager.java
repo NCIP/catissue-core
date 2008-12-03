@@ -2,9 +2,13 @@ package edu.wustl.catissuecore.util.global;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.bizlogic.DefaultBizLogic;
+import edu.wustl.common.bizlogic.IBizLogic;
+import edu.wustl.common.cde.PermissibleValueImpl;
 import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.logger.Logger;
 
@@ -71,6 +75,34 @@ public class DefaultValueManager
     			//Get the Specimen Type List. 
     			permissibleValueList = Utility.getSpecimenTypes(specimenClassName);
     		}
+    		if((Constants.defaultValueKeys[iCount][0]).equals(Constants.DEFAULT_CLINICAL_DIAGNOSIS))
+    		{
+    			String sourceObjectName =PermissibleValueImpl.class.getName();
+        		String[] selectColumnName ={ "value"};
+        		// String[] whereColumnName ={ "value" };
+        		// String[] whereColumnCondition =  { "=" };
+        		// Object[] whereColumnValue ={Constants.SPECIMEN_TYPE_NOT_SPECIFIED};
+        		
+        		String[] whereColumnName ={ "value" ,"cde.publicId"}; 
+        		String[] whereColumnCondition =  { "=","=" };
+        		Object[] whereColumnValue ={Constants.NOT_SPECIFIED,"Clinical_Diagnosis_PID"};
+        		
+        		String joinCondition = null;
+        		List clinicalDiagnosisList = new ArrayList();
+        		IBizLogic bizLogic = new DefaultBizLogic();
+        		try {
+        			Iterator<String> iterator = bizLogic.retrieve(sourceObjectName,selectColumnName,whereColumnName, whereColumnCondition,whereColumnValue, joinCondition).iterator();
+        			
+        			if(iterator.hasNext())
+        			{
+        				String clinicaDiagnosisvalue=iterator.next();
+        				permissibleValueList.add(new NameValueBean(clinicaDiagnosisvalue,clinicaDiagnosisvalue));
+        			}
+        		}
+        		catch (Exception e) {
+    				e.printStackTrace();
+    			}
+    		}
     		else
     		{
     			permissibleValueList = Utility.getListFromCDE(Constants.defaultValueKeys[iCount][1]);
@@ -85,6 +117,7 @@ public class DefaultValueManager
     		 	DefaultValueManager.setDefaultValue(Constants.defaultValueKeys[iCount][0],"");
     		   	Logger.out.error("Default Value set for '"+Constants.defaultValueKeys[iCount][0]+"' is not in the CDEList");
     		}
+    		
     	}
     }
 }

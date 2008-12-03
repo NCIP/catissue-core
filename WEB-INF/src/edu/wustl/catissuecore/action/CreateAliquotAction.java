@@ -167,7 +167,7 @@ public class CreateAliquotAction extends BaseAction
 		try
 		{
 			new NewSpecimenBizLogic().insert(specimenCollection, sessionDataBean,Constants.HIBERNATE_DAO , false);
-			disposeParentSpecimen(sessionDataBean, specimenCollection);
+			disposeParentSpecimen(sessionDataBean, specimenCollection,Constants.SPECIMEN_DISPOSAL_REASON);
 		}
 		catch (BizLogicException e)
 		{
@@ -226,14 +226,14 @@ public class CreateAliquotAction extends BaseAction
 	 * @throws BizLogicException 
 	 */
 	private void disposeParentSpecimen(SessionDataBean sessionDataBean,
-			Collection<AbstractDomainObject> specimenCollection)
+			Collection<AbstractDomainObject> specimenCollection, String specimenDisposeReason)
 			throws DAOException, UserNotAuthorizedException, BizLogicException
 	{
 		Iterator<AbstractDomainObject> spItr = specimenCollection.iterator();
 		Specimen specimen =(Specimen)spItr.next();
 		if(specimen!=null && specimen.getDisposeParentSpecimen())
 		{
-			new NewSpecimenBizLogic().disposeSpecimen(sessionDataBean, specimen.getParentSpecimen());
+			new NewSpecimenBizLogic().disposeSpecimen(sessionDataBean, specimen.getParentSpecimen(), specimenDisposeReason);
 		}
 	}
 
@@ -246,7 +246,13 @@ public class CreateAliquotAction extends BaseAction
 	{
 		Specimen parentSpecimen = (Specimen) new SpecimenObjectFactory().getDomainObject(aliquotForm.getClassName());
 		parentSpecimen.setId(new Long(aliquotForm.getSpecimenID()));
-		parentSpecimen.setLabel(aliquotForm.getSpecimenLabel());
+		String label = aliquotForm.getSpecimenLabel();
+		if(label!=null&&label.equals(""))
+		{
+			label=null;
+		}
+		parentSpecimen.setLabel(label);
+		parentSpecimen.setBarcode(aliquotForm.getBarcode());
 		return parentSpecimen;
 	}
 

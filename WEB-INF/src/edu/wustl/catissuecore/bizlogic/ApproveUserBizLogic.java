@@ -187,18 +187,19 @@ public class ApproveUserBizLogic extends DefaultBizLogic
 
 		SecurityManager.getInstance(ApproveUserBizLogic.class).createUser(csmUser);
 
+		String role = "";
 		if (user.getRoleId() != null)
 		{
             if (user.getRoleId().equalsIgnoreCase(Constants.SUPER_ADMIN_USER))
             {
-                user.setRoleId(Constants.ADMIN_USER);
+            	role = Constants.ADMIN_USER;
             }
             else
             {
-            	user.setRoleId(Constants.NON_ADMIN_USER);
+            	role = Constants.NON_ADMIN_USER;
             }
             
-			SecurityManager.getInstance(ApproveUserBizLogic.class).assignRoleToUser(csmUser.getUserId().toString(), user.getRoleId());
+			SecurityManager.getInstance(ApproveUserBizLogic.class).assignRoleToUser(csmUser.getUserId().toString(), role);
 		}
 
 		user.setCsmUserId(csmUser.getUserId());

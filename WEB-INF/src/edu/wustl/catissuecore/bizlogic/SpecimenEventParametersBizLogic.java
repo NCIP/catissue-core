@@ -289,7 +289,8 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 				}
 
 			}
-
+			
+			specimen.getSpecimenEventCollection().add(specimenEventParametersObject);
 			dao.insert(specimenEventParametersObject, sessionDataBean, true, true);
 		}
 		catch (SMException e)

@@ -8,7 +8,6 @@
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
 <link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
 
-<%@ include file="/pages/content/common/ActionErrors.jsp" %>
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
  <html:hidden property="operation" />
   <tr>
@@ -28,7 +27,9 @@
       <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
       
       <tr>
-        <td width="1%"  align="left" class="toptd"></td>
+        <td width="1%"  align="left" class="bottomtd">
+        	<%@ include file="/pages/content/common/ActionErrors.jsp" %>
+		</td>
       </tr>
       <tr>
         <td  align="left" class="tr_bg_blue1"><span class="blue_ar_b"> &nbsp;<logic:equal name="bulkEventOperationsForm" property="operation" value="<%=Constants.BULK_TRANSFERS%>">

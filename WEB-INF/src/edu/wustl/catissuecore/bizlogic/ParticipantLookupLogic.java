@@ -3,6 +3,7 @@ package edu.wustl.catissuecore.bizlogic;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -11,11 +12,13 @@ import java.util.List;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Race;
+import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.lookup.DefaultLookupParameters;
 import edu.wustl.common.lookup.DefaultLookupResult;
 import edu.wustl.common.lookup.LookupLogic;
 import edu.wustl.common.lookup.LookupParameters;
+import edu.wustl.common.lookup.MatchingStatus;
 import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.global.ApplicationProperties;
 
@@ -31,45 +34,27 @@ public class ParticipantLookupLogic implements LookupLogic
 {
 
 	// Getting points from the xml file in static variables
-	private static final int pointsForSSNExact = Integer.parseInt(XMLPropertyHandler
-			.getValue(Constants.PARTICIPANT_SSN_EXACT));
-	private static final int pointsForSSNPartial = Integer.parseInt(XMLPropertyHandler
-			.getValue(Constants.PARTICIPANT_SSN_PARTIAL));
-	private static final int pointsForPMIExact = Integer.parseInt(XMLPropertyHandler
-			.getValue(Constants.PARTICIPANT_PMI_EXACT));
-	private static final int pointsForPMIPartial = Integer.parseInt(XMLPropertyHandler
-			.getValue(Constants.PARTICIPANT_PMI_PARTIAL));
-	private static final int pointsForDOBExact = Integer.parseInt(XMLPropertyHandler
-			.getValue(Constants.PARTICIPANT_DOB_EXACT));
-	private static final int pointsForDOBPartial = Integer.parseInt(XMLPropertyHandler
-			.getValue(Constants.PARTICIPANT_DOB_PARTIAL));
-	private static final int pointsForLastNameExact = Integer.parseInt(XMLPropertyHandler
-			.getValue(Constants.PARTICIPANT_LAST_NAME_EXACT));
-	private static final int pointsForLastNamePartial = Integer.parseInt(XMLPropertyHandler
-			.getValue(Constants.PARTICIPANT_LAST_NAME_PARTIAL));
-	private static final int pointsForFirstNameExact = Integer.parseInt(XMLPropertyHandler
-			.getValue(Constants.PARTICIPANT_FIRST_NAME_EXACT));
-	private static final int pointsForFirstNamePartial = Integer.parseInt(XMLPropertyHandler
-			.getValue(Constants.PARTICIPANT_FIRST_NAME_PARTIAL));
-	private static final int pointsForMiddleNameExact = Integer.parseInt(XMLPropertyHandler
-			.getValue(Constants.PARTICIPANT_MIDDLE_NAME_EXACT));
-	private static final int pointsForMiddleNamePartial = Integer.parseInt(XMLPropertyHandler
-			.getValue(Constants.PARTICIPANT_MIDDLE_NAME_PARTIAL));
-	private static final int pointsForRaceExact = Integer.parseInt(XMLPropertyHandler
-			.getValue(Constants.PARTICIPANT_RACE_EXACT));
-	private static final int pointsForRacePartial = Integer.parseInt(XMLPropertyHandler
-			.getValue(Constants.PARTICIPANT_RACE_PARTIAL));
-	private static final int pointsForGenderExact = Integer.parseInt(XMLPropertyHandler
-			.getValue(Constants.PARTICIPANT_GENDER_EXACT));
-	private static final int bonusPoints = Integer.parseInt(XMLPropertyHandler
-			.getValue(Constants.PARTICIPANT_BONUS));
+	private static final int pointsForSSNExact = Integer.parseInt(XMLPropertyHandler.getValue(Constants.PARTICIPANT_SSN_EXACT));
+	private static final int pointsForSSNPartial = Integer.parseInt(XMLPropertyHandler.getValue(Constants.PARTICIPANT_SSN_PARTIAL));
+	private static final int pointsForPMIExact = Integer.parseInt(XMLPropertyHandler.getValue(Constants.PARTICIPANT_PMI_EXACT));
+	private static final int pointsForPMIPartial = Integer.parseInt(XMLPropertyHandler.getValue(Constants.PARTICIPANT_PMI_PARTIAL));
+	private static final int pointsForDOBExact = Integer.parseInt(XMLPropertyHandler.getValue(Constants.PARTICIPANT_DOB_EXACT));
+	private static final int pointsForDOBPartial = Integer.parseInt(XMLPropertyHandler.getValue(Constants.PARTICIPANT_DOB_PARTIAL));
+	private static final int pointsForLastNameExact = Integer.parseInt(XMLPropertyHandler.getValue(Constants.PARTICIPANT_LAST_NAME_EXACT));
+	private static final int pointsForLastNamePartial = Integer.parseInt(XMLPropertyHandler.getValue(Constants.PARTICIPANT_LAST_NAME_PARTIAL));
+	private static final int pointsForFirstNameExact = Integer.parseInt(XMLPropertyHandler.getValue(Constants.PARTICIPANT_FIRST_NAME_EXACT));
+	private static final int pointsForFirstNamePartial = Integer.parseInt(XMLPropertyHandler.getValue(Constants.PARTICIPANT_FIRST_NAME_PARTIAL));
+	private static final int pointsForMiddleNameExact = Integer.parseInt(XMLPropertyHandler.getValue(Constants.PARTICIPANT_MIDDLE_NAME_EXACT));
+	private static final int pointsForMiddleNamePartial = Integer.parseInt(XMLPropertyHandler.getValue(Constants.PARTICIPANT_MIDDLE_NAME_PARTIAL));
+	private static final int pointsForRaceExact = Integer.parseInt(XMLPropertyHandler.getValue(Constants.PARTICIPANT_RACE_EXACT));
+	private static final int pointsForRacePartial = Integer.parseInt(XMLPropertyHandler.getValue(Constants.PARTICIPANT_RACE_PARTIAL));
+	private static final int pointsForGenderExact = Integer.parseInt(XMLPropertyHandler.getValue(Constants.PARTICIPANT_GENDER_EXACT));
+	private static final int bonusPoints = Integer.parseInt(XMLPropertyHandler.getValue(Constants.PARTICIPANT_BONUS));
 	private static final int matchCharactersForLastName = Integer.parseInt(XMLPropertyHandler
 			.getValue(Constants.PARTICIPANT_MATCH_CHARACTERS_FOR_LAST_NAME));
-	private static final int cutoffPointsFromProperties = Integer.parseInt(XMLPropertyHandler
-			.getValue(Constants.PARTICIPANT_LOOKUP_CUTOFF));
-	private static final int totalPointsFromProperties = pointsForFirstNameExact
-			+ pointsForMiddleNameExact + pointsForLastNameExact + pointsForDOBExact
-			+ pointsForSSNExact + pointsForGenderExact + pointsForRaceExact;
+	private static final int cutoffPointsFromProperties = Integer.parseInt(XMLPropertyHandler.getValue(Constants.PARTICIPANT_LOOKUP_CUTOFF));
+	private static final int totalPointsFromProperties = pointsForFirstNameExact + pointsForMiddleNameExact + pointsForLastNameExact
+			+ pointsForDOBExact + pointsForSSNExact + pointsForGenderExact + pointsForRaceExact;
 	private int cutoffPoints;
 	private int totalPoints;
 	private boolean isSSNOrPMI = false;
@@ -112,7 +97,7 @@ public class ParticipantLookupLogic implements LookupLogic
 		{
 			return null;
 		}
-
+		
 		// calling the searchMatchingParticipant to filter the participant list according to given cutoff value
 		List participants = searchMatchingParticipant(participant, listOfParticipants);
 
@@ -144,8 +129,7 @@ public class ParticipantLookupLogic implements LookupLogic
 		{
 			totalPointsForParticipant += pointsForLastNameExact;
 		}
-		if (participant.getSocialSecurityNumber() != null
-				&& !participant.getSocialSecurityNumber().trim().equals(""))
+		if(participant.getSocialSecurityNumber() != null && !participant.getSocialSecurityNumber().trim().equals(""))
 		{
 			totalPointsForParticipant += pointsForSSNExact;
 		}
@@ -153,8 +137,7 @@ public class ParticipantLookupLogic implements LookupLogic
 		{
 			totalPointsForParticipant += pointsForGenderExact;
 		}
-		if (participant.getRaceCollection() != null
-				&& participant.getRaceCollection().isEmpty() == false)
+		if (participant.getRaceCollection() != null && participant.getRaceCollection().isEmpty() == false)
 		{
 			totalPointsForParticipant += pointsForRaceExact;
 		}
@@ -181,8 +164,7 @@ public class ParticipantLookupLogic implements LookupLogic
 	 * @param cutoff - is the value such that the participants above the cutoff values are stored in List.
 	 * @return list - List of matching Participants. 
 	 */
-	private List searchMatchingParticipant(Participant userParticipant, List listOfParticipants)
-			throws Exception
+	private List searchMatchingParticipant(Participant userParticipant, List listOfParticipants) throws Exception
 	{
 		List participants = new ArrayList();
 		Iterator itr = listOfParticipants.iterator();
@@ -234,9 +216,7 @@ public class ParticipantLookupLogic implements LookupLogic
 			Participant existingParticipant = (Participant) itr.next();
 
 			// Check for the participant only in case its Activity Status = active
-			if (existingParticipant.getActivityStatus() != null
-					&& existingParticipant.getActivityStatus().equals(
-							Constants.ACTIVITY_STATUS_ACTIVE))
+			if (existingParticipant.getActivityStatus() != null && (existingParticipant.getActivityStatus().equals(Constants.ACTIVITY_STATUS_ACTIVE) || existingParticipant.getActivityStatus().equals(Constants.ACTIVITY_STATUS_CLOSED)))
 			{
 
 				/**
@@ -247,8 +227,8 @@ public class ParticipantLookupLogic implements LookupLogic
 						&& existingParticipant.getSocialSecurityNumber() != null
 						&& !existingParticipant.getSocialSecurityNumber().trim().equals(""))
 				{
-					socialSecurityNumberWeight = checkNumber(SSNLowerCase, existingParticipant
-							.getSocialSecurityNumber().trim().toLowerCase(), true);
+					socialSecurityNumberWeight = checkSSN(userParticipant.getSocialSecurityNumber().trim().toLowerCase(),
+							existingParticipant.getSocialSecurityNumber().trim().toLowerCase());
 					weight = socialSecurityNumberWeight;
 				}
 
@@ -301,7 +281,7 @@ public class ParticipantLookupLogic implements LookupLogic
 				/**
 				 * The first and last names are first parsed to determine if multiple names exist in either field separated by a space, dash or comma.  
 				 * If so they are split and placed in the appropriate fields.  We also do a flip of the first and last names and try that because 
-				 * sometimes people don’t enter them correctly (put last name in first name field and viceversa).
+				 * sometimes people don’t enter them correctly (put last name in first name field and vice-versa).
 				 * This check is applied only when none of name or surname of user entered participant completely or partially matches with name and surname.
 				 */
 
@@ -310,8 +290,9 @@ public class ParticipantLookupLogic implements LookupLogic
 					weight += checkFlipped(firstNameLowerCase, lastNameLowerCase,
 							existingParticipant.getFirstName(), existingParticipant.getLastName());
 				}
-
-				weight += checkParticipantMedicalIdentifier(PMICollection, existingParticipant);
+				
+				weight += checkParticipantMedicalIdentifier(userParticipant.getParticipantMedicalIdentifierCollection(), existingParticipant.getParticipantMedicalIdentifierCollection());
+				
 
 				/**
 				 *  check whether weight will ever reach cutoff, if it will never reach the cutoff, skip this 
@@ -358,24 +339,6 @@ public class ParticipantLookupLogic implements LookupLogic
 
 					DefaultLookupResult result = new DefaultLookupResult();
 
-					/**
-					 *  Removed probability after discussion with Mark -- bug number 558
-					 */
-
-					// Finding the probablity.
-					/*	if(totalPoints!=0)
-					 {
-					 
-					 Double probablity = new Double((100 * weight) / totalPoints);
-
-					 // Calculated points might be greater than total points because of BONUS points
-					 if (probablity.intValue() > 100)
-					 {
-					 probablity = new Double(100);
-					 } 
-					 result.setProbablity(probablity);	
-					 } */
-
 					result.setObject(existingParticipant);
 					participants.add(result);
 					if (participants.size() == 100) // Return when matching participant list size becomes 100
@@ -401,14 +364,43 @@ public class ParticipantLookupLogic implements LookupLogic
 	 * @return int - points for complete, partial or no match
 	 */
 
-	private int checkNumber(String userNumber, String existingNumber, boolean ssnOrPMI)
+	private int  checkSSN(String userNumber, String existingNumber)
 	{
-		isSSNOrPMI = false;
+		MatchingStatus  status = checkNumber(userNumber, existingNumber);
+		isSSNOrPMI=false;
+		switch (status) 
+		{
+			case EXACT:
+				isSSNOrPMI=true;
+				return pointsForSSNExact;
+			case PARTIAL:
+				return pointsForSSNPartial;
+			case NOMATCH:
+				return 0;
+		}
+		return 0;
+	}
+	private int checkPMI(String userNumber, String existingNumber)
+	{
+		MatchingStatus status = checkNumber(userNumber, existingNumber);
+		switch (status) 
+		{
+		case EXACT:
+			return pointsForPMIExact;
+		case PARTIAL:
+			return pointsForPMIPartial;
+		case NOMATCH:
+			return 0;
+		}
+		return 0;
+	}
+	private MatchingStatus checkNumber(String userNumber, String existingNumber)
+	{
+		isSSNOrPMI=false;
 		// complete match
 		if (existingNumber.equals(userNumber))
 		{
-			isSSNOrPMI = true;
-			return pointsForSSNorPMI(ssnOrPMI);
+			return MatchingStatus.EXACT;
 		}
 		else
 		// partial match
@@ -425,8 +417,7 @@ public class ParticipantLookupLogic implements LookupLogic
 					{
 						if (temp == -1)
 						{
-							if (isDifferenceOne == false
-									&& Math.abs(userNumber.charAt(i) - existingNumber.charAt(i)) == 1)
+							if (isDifferenceOne == false && Math.abs(userNumber.charAt(i) - existingNumber.charAt(i)) == 1)
 							{
 								isDifferenceOne = true;
 							}
@@ -455,35 +446,13 @@ public class ParticipantLookupLogic implements LookupLogic
 			 * pair of digits are transposed it is considered a partial match.  
 			 * Only one occurrence of either of these is considered.
 			 */
-			if (count == 1 && isDifferenceOne == true || areConsecutiveDigitsTransposed == true
-					&& count == 2)
+			if (count == 1 && isDifferenceOne == true || areConsecutiveDigitsTransposed == true && count == 2)
 			{
-				return pointsForSSNorPMI(ssnOrPMI);
-			}
-			/*this else loop is for neglecting the special characters (-,_) from the MNR*/
-			else
-			{
-				String newUserNumber = modifyMNR(userNumber);
-				String newExistingNumber = modifyMNR(existingNumber);
-				if(!newUserNumber.equalsIgnoreCase(userNumber) || !newExistingNumber.equals(existingNumber))
-				{
-				return checkNumber(newUserNumber, newExistingNumber, false);
-				}
+				return MatchingStatus.PARTIAL;
 			}
 
 		}
-		return 0;
-	}
-
-	private int pointsForSSNorPMI(boolean ssnOrPMI) {
-		if (ssnOrPMI)
-		{
-			return pointsForSSNExact;
-		}
-		else
-		{
-			return pointsForPMIExact;
-		}
+		return MatchingStatus.NOMATCH;
 	}
 
 	public String modifyMNR(String userNumber)
@@ -548,8 +517,7 @@ public class ParticipantLookupLogic implements LookupLogic
 			return pointsForLastNameExact;
 		}
 		// partial match --> Checks whether first 5 digits or metaphones of two last names are equal
-		else if (userLastName.regionMatches(true, 0, existingLastName, 0,
-				matchCharactersForLastName))
+		else if (userLastName.regionMatches(true, 0, existingLastName, 0, matchCharactersForLastName))
 		{
 			return pointsForLastNamePartial;
 		}
@@ -602,16 +570,6 @@ public class ParticipantLookupLogic implements LookupLogic
 		{
 			existingNameBlank = true;
 		}
-
-		/**
-		 *  Removed this condition after discussion with Mark -- bug number 558
-		 */
-		// partial match in case one is present and other is not.
-		/*		if (userNameBlank == true && existingNameBlank == false || userNameBlank == false && existingNameBlank == true)
-		 {
-		 return pointsForMiddleNamePartial;
-		 }   */
-
 		if (userNameBlank == false && existingNameBlank == false)
 		{
 			// complete match
@@ -644,10 +602,6 @@ public class ParticipantLookupLogic implements LookupLogic
 		if (userRace != null && userRace.isEmpty() == false && existingRace != null
 				&& existingRace.isEmpty() == false)
 		{
-			/*if (userRace.equals(existingRace))
-			{
-				return pointsForRaceExact;
-			}*/
 			if(userRace.size() == existingRace.size())
 			{
 				Iterator<Race> existingRaceIterator = existingRace.iterator();
@@ -663,24 +617,15 @@ public class ParticipantLookupLogic implements LookupLogic
 				}
 				if(existingRaceNameSet.containsAll(raceNameSet))
 				{
-				return pointsForRaceExact;
+					return pointsForRaceExact;
 				}
 			}
 		}
-		/**
-		 *  Removed this condition after discussion with Mark -- bug number 558
-		 */
-		/*	// partial match
-		 if ((userRace.isEmpty() == false && existingRace.isEmpty() == true || userRace.isEmpty() == true && existingRace.isEmpty() == false))
-		 {
-		 return pointsForRacePartial;
-		 }*/
-
 		return 0;
 	}
 
 	/**
-	 * Name : Virender Mehta
+	 * Name : Vipin Bansal
 	 * This function compares the two ParticipantMedicalIdentifier. 
 	 * The criteria used for partial match is --> A partial is considered if one is missing and the other is there.
 	 *  (eg, missing from the input data but in the database or vice versa).
@@ -689,51 +634,188 @@ public class ParticipantLookupLogic implements LookupLogic
 	 * @param existingParticipantMedicalIdentifier - Race of Participant from database
 	 * @return int - points for complete, partial or no match
 	 */
-	private int checkParticipantMedicalIdentifier(Collection newMedIdentifier,
-			Participant existingParticipant)
+	
+	private int checkParticipantMedicalIdentifier(final Collection<ParticipantMedicalIdentifier> userParticipantMedicalIdentifier, final Collection<ParticipantMedicalIdentifier> existingParticipantMedicalIdentifier)
 	{
-		//List pmiList = new ArrayList();
-		Collection oldMedIdentifier = existingParticipant.getParticipantMedicalIdentifierCollection();
-		//existingParticipant.setParticipantMedicalIdentifierCollection(null);
-		int medIdWeight = 0;
-		if (newMedIdentifier != null && oldMedIdentifier != null)
+		int participantMedicalIdentifierWeight = 0;
+		int tempParticipantMedicalIdentifierWeight = 0;
+		boolean exactMatchFlag = false;
+		boolean partialMatchFlag = false;
+		boolean noMatchFlag = false;
+		List<ParticipantMedicalIdentifier> tempExistingParticipantMedicalIdentifier = new ArrayList<ParticipantMedicalIdentifier>();
+		if(existingParticipantMedicalIdentifier.size()>0)
 		{
-			Iterator oldMedIdentifierItr = oldMedIdentifier.iterator();
-			while (oldMedIdentifierItr.hasNext())
+			for(ParticipantMedicalIdentifier pmi : existingParticipantMedicalIdentifier)
 			{
-				ParticipantMedicalIdentifier participantMedicalIdentifier =(ParticipantMedicalIdentifier) oldMedIdentifierItr.next();
-				if(participantMedicalIdentifier.getSite() != null && participantMedicalIdentifier.getSite().getId() != null)
+				tempExistingParticipantMedicalIdentifier.add(pmi);
+			}
+		}
+		if(!(isPMICollectionEmpty(userParticipantMedicalIdentifier))&& ! isPMICollectionEmpty(tempExistingParticipantMedicalIdentifier))
+		{
+			int len1 = tempExistingParticipantMedicalIdentifier.size();
+			int len2 = userParticipantMedicalIdentifier.size();
+			if(len1!=len2)
+			{
+				for(ParticipantMedicalIdentifier userPMidentifier : userParticipantMedicalIdentifier)
 				{
-					String existingmedicalRecordNo = participantMedicalIdentifier.getMedicalRecordNumber();
-					String existingSiteId = participantMedicalIdentifier.getSite().getId().toString();
-					//String existingSiteId = (String) existingParticipantMedicalIdentifierItr.next();
-					Iterator newMedIdentifierItr = newMedIdentifier.iterator();
-					while (newMedIdentifierItr.hasNext())
+					if(userPMidentifier.getSite() != null && userPMidentifier.getSite().getId() != null)
 					{
-						ParticipantMedicalIdentifier participantIdentifier = (ParticipantMedicalIdentifier) newMedIdentifierItr
-						.next();
-						if(participantIdentifier.getSite() != null && participantIdentifier.getSite().getId()!= null)
+						String medicalRecordNo = userPMidentifier.getMedicalRecordNumber();
+						String siteId = userPMidentifier.getSite().getId().toString();
+						int maxTempPMIW =0;
+						for(ParticipantMedicalIdentifier existingPMidentifier: tempExistingParticipantMedicalIdentifier)
 						{
-							String siteId = participantIdentifier.getSite().getId().toString();
-							String medicalRecordNo = participantIdentifier.getMedicalRecordNumber();
-
-							if ( siteId.equals(existingSiteId) && existingmedicalRecordNo != null)
+							if(existingPMidentifier.getSite() != null && existingPMidentifier.getSite().getId()!= null)
 							{
-								medIdWeight = medIdWeight
-								+ checkNumber(medicalRecordNo, existingmedicalRecordNo, false);
-								//pmiList.add(existingmedicalRecordNo);
-								//pmiList.add(existingSiteId);
-								//existingParticipant.setParticipantMedicalIdentifierCollection(pmiList);
+								String existingSiteId = existingPMidentifier.getSite().getId().toString();
+								String existingMedicalRecordNo = existingPMidentifier.getMedicalRecordNumber();
+
+								if ( existingSiteId.equals(siteId) && medicalRecordNo != null)
+								{
+									tempParticipantMedicalIdentifierWeight = checkPMI(existingMedicalRecordNo,medicalRecordNo);
+									if(maxTempPMIW < tempParticipantMedicalIdentifierWeight)
+									{
+										maxTempPMIW = tempParticipantMedicalIdentifierWeight;
+									}
+								}
+							}
+						}
+						if(maxTempPMIW > 0)
+						{
+							noMatchFlag = false;
+							partialMatchFlag = true;
+							exactMatchFlag = false;
+							break;
+						}
+						else
+						{
+							noMatchFlag = true;
+							partialMatchFlag = false;
+							exactMatchFlag = false;
+							continue;
+						}
+					}
+				}
+			}
+			else
+			{
+				for(ParticipantMedicalIdentifier userPMidentifier : userParticipantMedicalIdentifier)
+				{
+					if(userPMidentifier.getSite() != null && userPMidentifier.getSite().getId() != null)
+					{
+						String medicalRecordNo = userPMidentifier.getMedicalRecordNumber();
+						String siteId = userPMidentifier.getSite().getId().toString();
+						int maxTempPMIW =0;
+						for(ParticipantMedicalIdentifier existingPMidentifier: tempExistingParticipantMedicalIdentifier)
+						{
+							if(existingPMidentifier.getSite() != null && existingPMidentifier.getSite().getId()!= null)
+							{
+								String existingSiteId = existingPMidentifier.getSite().getId().toString();
+								String existingMedicalRecordNo = existingPMidentifier.getMedicalRecordNumber();
+
+								if ( existingSiteId.equals(siteId) && medicalRecordNo != null)
+								{
+									tempParticipantMedicalIdentifierWeight = checkPMI(existingMedicalRecordNo,medicalRecordNo);
+									
+									if(maxTempPMIW < tempParticipantMedicalIdentifierWeight)
+									{
+										maxTempPMIW = tempParticipantMedicalIdentifierWeight;
+									}
+									if(tempParticipantMedicalIdentifierWeight==pointsForPMIExact)
+									{
+										tempExistingParticipantMedicalIdentifier.remove(existingPMidentifier);
+										break;
+									}
+								}
+							}							
+						}
+						if(maxTempPMIW == pointsForPMIPartial)
+						{
+							noMatchFlag = false;
+							partialMatchFlag = true;
+							exactMatchFlag = false;
+							break;
+						}
+						else if(maxTempPMIW == pointsForPMIExact)
+						{
+							if(noMatchFlag)
+							{
+								noMatchFlag = false;
+								partialMatchFlag = true;
+								exactMatchFlag = false;
+								break;
+							}
+							else
+							{
+								exactMatchFlag = true;
+								partialMatchFlag = false;
+								noMatchFlag = false;
+								continue;
+							}
+						}
+						else if(maxTempPMIW == 0)
+						{
+							if(exactMatchFlag)
+							{
+								noMatchFlag = false;
+								partialMatchFlag = true;
+								exactMatchFlag = false;
+								break;
+							}
+							else
+							{
+								exactMatchFlag = false;
+								partialMatchFlag = false;
+								noMatchFlag = true;
+								continue;
 							}
 						}
 					}
 				}
 			}
-			return medIdWeight;
+			
+			if(exactMatchFlag)
+			{
+				participantMedicalIdentifierWeight = pointsForPMIExact;
+				isSSNOrPMI = true;
+			}
+			else if (partialMatchFlag)
+			{
+				participantMedicalIdentifierWeight = pointsForPMIPartial;
+			}
+			else if(noMatchFlag)
+			{
+				participantMedicalIdentifierWeight = 0;
+			}
 		}
-		return 0;
+		else
+		{
+			participantMedicalIdentifierWeight=0;
+		}
+		
+		return participantMedicalIdentifierWeight;
 	}
-
+		
+	private boolean isPMICollectionEmpty(Collection<ParticipantMedicalIdentifier> pmiCollection)
+	{
+		boolean flag= false;
+		
+		if(pmiCollection != null && pmiCollection.size()>0)
+		{
+			ParticipantMedicalIdentifier participantMedicalIdentifier = pmiCollection.iterator().next();
+			String mrn = participantMedicalIdentifier.getMedicalRecordNumber();
+			Site site = participantMedicalIdentifier.getSite();
+			if(site==null && (mrn==null || mrn.equals("")))
+			{
+				flag=true;
+			}
+		}
+		else
+		{
+			flag =true;
+		}
+		return flag;
+	}
 	/**
 	 * This function compares the two Genders. 
 	 * 

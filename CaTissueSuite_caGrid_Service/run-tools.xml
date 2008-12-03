@@ -1,5 +1,5 @@
 <project name="run-tools file" basedir="." default="runClient">
-     <property name="service.url" value="https://host:port//wsrf/services/cagrid/CaTissueSuite" />
+     <property name="service.url" value="https://host:port/wsrf/services/cagrid/CaTissueSuite" />
 
 <target name="runAll" depends="runQuery1,runQuery2,runQuery3,runQuery4,runQuery5,runQuery6,runQuery7,runQuery8,runQuery9,runQuery10,runQuery11,runQuery12" description="Run the sample Client">
 </target>

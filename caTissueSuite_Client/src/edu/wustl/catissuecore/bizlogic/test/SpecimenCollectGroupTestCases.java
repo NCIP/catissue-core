@@ -42,6 +42,8 @@ public class SpecimenCollectGroupTestCases extends CaTissueBaseTestCase
 		{
 			assertFalse("Specimen Collection Group Not Updated", true);
 			Logger.out.error(e.getMessage(),e);
+			System.out
+					.println("SpecimenCollectGroupTestCases.testUpdateSpecimenCollectionGroupWithConsents()"+e.getMessage());
 			e.printStackTrace();
 			fail("Failed to add Domain Object");
 		}
@@ -116,6 +118,8 @@ public class SpecimenCollectGroupTestCases extends CaTissueBaseTestCase
           } 
           catch (Exception e) {
         	Logger.out.error(e.getMessage(),e);
+        	System.out
+					.println("SpecimenCollectGroupTestCases.testSearchSpecimenCollectionGroup()"+e.getMessage());
 	 		e.printStackTrace();
 	 		assertFalse("Couldnot found Specimen", true);  
           }
@@ -133,6 +137,8 @@ public class SpecimenCollectGroupTestCases extends CaTissueBaseTestCase
           } 
           catch (Exception e) {
         	Logger.out.error(e.getMessage(),e);
+        	System.out
+					.println("SpecimenCollectGroupTestCases.testUpdateSpecimenCollectionGroupWithBarcode()"+e.getMessage());
 	 		e.printStackTrace();
 	 		assertFalse("Couldnot found Specimen", true);  
           }
@@ -155,6 +161,8 @@ public class SpecimenCollectGroupTestCases extends CaTissueBaseTestCase
   		}
   		 catch(Exception e){
   			Logger.out.error(e.getMessage(),e);
+  			System.out
+					.println("SpecimenCollectGroupTestCases.testUpdateSCGWithCaseSensitiveBarcode()"+e.getMessage());
   			e.printStackTrace();
   			assertTrue("Can not update case sensitive scg" , true);
   			
@@ -182,6 +190,8 @@ public class SpecimenCollectGroupTestCases extends CaTissueBaseTestCase
           } 
           catch (Exception e) {
         	Logger.out.error(e.getMessage(),e);
+        	System.out
+					.println("SpecimenCollectGroupTestCases.testSearchScgWithBarcode()"+e.getMessage());
 	 		e.printStackTrace();
 	 		assertFalse("Could not found SCG", true);  
           }
@@ -206,6 +216,8 @@ public class SpecimenCollectGroupTestCases extends CaTissueBaseTestCase
 		}
 		 catch(Exception e){
 			Logger.out.error(e.getMessage(),e);
+			System.out
+					.println("SpecimenCollectGroupTestCases.testAddSCGWithDuplicateName()"+e.getMessage());
 			e.printStackTrace();
 			fail("Test Failed. Duplicate SCG name should not throw exception");
 			
@@ -232,7 +244,8 @@ public class SpecimenCollectGroupTestCases extends CaTissueBaseTestCase
 		 catch(Exception e){
 			Logger.out.error(e.getMessage(),e);
 			e.printStackTrace();
-			
+			System.out
+					.println("SpecimenCollectGroupTestCases.testUpdateSCGWithDuplicateName()"+e.getMessage());
 			assertTrue("Should throw Exception", true);
 			 
 		 }
@@ -259,6 +272,8 @@ public class SpecimenCollectGroupTestCases extends CaTissueBaseTestCase
 		}
 		 catch(Exception e){
 			Logger.out.error(e.getMessage(),e);
+			System.out
+					.println("SpecimenCollectGroupTestCases.testUpdateSCGWithClosedActivityStatus()"+e.getMessage());
 			e.printStackTrace();			
 			assertFalse("While adding SCG Activity status should be Active" , true);
 		 }
@@ -332,6 +347,8 @@ public class SpecimenCollectGroupTestCases extends CaTissueBaseTestCase
 		}
 		catch(Exception e){
 			Logger.out.error(e.getMessage(),e);
+			System.out
+					.println("SpecimenCollectGroupTestCases.testAddSCGWithNameAndEvents() 1"+e.getMessage());
            	e.printStackTrace();
            	assertFalse("Failed to create collection protocol", true);
 		}
@@ -343,6 +360,8 @@ public class SpecimenCollectGroupTestCases extends CaTissueBaseTestCase
 		}
 		catch(Exception e){
 			Logger.out.error(e.getMessage(),e);
+			System.out
+					.println("SpecimenCollectGroupTestCases.testAddSCGWithNameAndEvents() 2"+e.getMessage());
            	e.printStackTrace();
            	assertFalse("Failed to create collection protocol", true);
 		}
@@ -478,6 +497,8 @@ public class SpecimenCollectGroupTestCases extends CaTissueBaseTestCase
 		}catch(Exception e)
 		{
 			Logger.out.error(e.getMessage(),e);
+			System.out
+					.println("SpecimenCollectGroupTestCases.testAddSCGWithNameAndEvents()"+e.getMessage());
 			e.printStackTrace();
 			assertFalse("SCG Name and Other parameters are not retained", true);
 		}

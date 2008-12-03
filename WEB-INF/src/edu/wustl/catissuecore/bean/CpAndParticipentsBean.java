@@ -76,4 +76,9 @@ public class CpAndParticipentsBean implements Externalizable
 		out.writeUTF(value);
 		
 	}
+	
+	public String toString()
+	{
+		return new String("name:" + name.toString() + " value:" + value.toString());
+	}
 }

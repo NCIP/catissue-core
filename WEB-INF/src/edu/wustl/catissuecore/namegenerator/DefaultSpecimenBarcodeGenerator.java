@@ -135,6 +135,14 @@ public class DefaultSpecimenBarcodeGenerator implements BarcodeGenerator
 		{
 			// biz logic 
 			aliquotChildCount = parentObject.getChildSpecimenCollection().size();	
+			Iterator itr = parentObject.getChildSpecimenCollection().iterator();
+			while(itr.hasNext())
+			{
+				Specimen spec = (Specimen)itr.next();
+				if(spec.getLineage().equals(Constants.DERIVED_SPECIMEN))
+					aliquotChildCount--;
+			}
+			aliquotChildCount--;
 			
 		}
 		

@@ -271,7 +271,12 @@ function ReplaceTags(xStr)
 			{	
 				var xmlDocument = getDocumentElementForXML(responseString); 
 				
-				var surgicalPathologyNumber = xmlDocument.getElementsByTagName('SurgicalPathologyNumber')[0].firstChild.nodeValue;	
+				var surgicalPathologyNumber ="";
+						
+				if(xmlDocument.getElementsByTagName('SurgicalPathologyNumber')[0].firstChild!=null)
+				{
+				  surgicalPathologyNumber = xmlDocument.getElementsByTagName('SurgicalPathologyNumber')[0].firstChild.nodeValue;	
+				}
 				var reportSite = xmlDocument.getElementsByTagName('IdentifiedReportSite')[0].firstChild.nodeValue;			
 				var identifierReportText = xmlDocument.getElementsByTagName('IdentifiedReportTextContent')[0].firstChild.nodeValue;
 				var deIdentifierReportText;
@@ -282,8 +287,8 @@ function ReplaceTags(xStr)
 				
 				document.getElementById("surgicalPathologyNumber").innerHTML = surgicalPathologyNumber;
 				document.getElementById("identifiedReportSite").innerHTML = reportSite;
-				document.getElementById("identifiedReportText").innerHTML = "<PRE>"+identifierReportText+"</PRE>";
-				document.getElementById("deidentifiedReportText").innerHTML = "<PRE>"+deIdentifierReportText+"</PRE>";
+				document.getElementById("identifiedReportText").innerHTML = "<PRE class='pre'>"+identifierReportText+"</PRE>";
+				document.getElementById("deidentifiedReportText").innerHTML = "<PRE class='pre'>"+deIdentifierReportText+"</PRE>";
 				document.getElementById("deidText").innerHTML = "<PRE>"+deIdentifierReportText+"</PRE>";
 				
 				conceptName=new Array();
@@ -354,6 +359,8 @@ function scrollInSync()
 // Function to set intial UI based on Access right
 function setUI()
 {
+	hide('identifiedReportInfo');
+	hide('participantTable');
 	show('deidReportInfo');
 }
 

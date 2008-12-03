@@ -1,0 +1,76 @@
+<?xml version ="1.0"?>
+
+<project name="MinimalDataSharing" default="runMDSClient" >
+	<property name="base.dir" value="."/>
+	<property name="target.dir" value="./mds_classes" />
+	<property name="conf.dir" value="conf" />
+	<property name="lib.dir" value="lib" />
+	<property name="test.src.dir" value="${base.dir}/mds_src" />
+	<property name="test.class.dir" value="${base.dir}/mds_classes" />
+	<property name="report.dir" value="." />
+	
+	<path id="cp">
+		<fileset dir="lib">
+			<include name="**/*.jar"/>
+		</fileset>
+		<pathelement path="${conf.dir}"/>
+	</path>
+    
+	
+	<path id="app.classpath">
+		<fileset dir="${base.dir}">
+			<include name="*.jar"/>
+		</fileset>
+	</path>
+	
+	<property name="test.classes.dir" value="${base.dir}/mds_classes" />
+	<target name="compile">
+		<delete dir="${test.classes.dir}" />
+		<mkdir dir="${test.classes.dir}" />	
+	        <javac destdir="${test.classes.dir}" includes="**/*.java" includeAntRuntime="false">
+	            <src path="${test.src.dir}"/>
+	            <classpath>
+	       		  <fileset dir="${lib.dir}">
+	        			<include name="**/*.jar"/>
+	        	  </fileset>
+	            </classpath>
+	        </javac>
+	</target>
+	
+
+	<target name="runMDSTestCases" depends="compile">
+		<mkdir dir="${report.dir}/MDS_Report" />
+		<mkdir dir="${report.dir}/MDS_Report/Html_reports" />
+		<junit printsummary="yes" fork="yes" haltonfailure="no">
+			<formatter type="xml" />
+			<classpath>				
+				<pathelement path="${base.dir}/conf" />
+				<fileset dir="./lib">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+
+			<classpath>
+				<pathelement path="${test.src.dir}" />
+				<pathelement path= "${test.classes.dir}" />
+			</classpath>
+
+			<batchtest todir="${report.dir}/MDS_Report">
+				<fileset dir="${test.src.dir}">
+					<include name="**/MDSTestSuite.java" />
+				</fileset>				
+			</batchtest>
+		</junit>
+	</target>
+
+	<target name="runMDSClient" depends="runMDSTestCases">
+			<junitreport todir="${report.dir}/MDS_Report">
+				<fileset dir="${report.dir}/MDS_Report">
+					<include name="TEST-*.xml" />
+				</fileset>
+				<report todir="${report.dir}/MDS_Report/Html_reports" />
+			</junitreport>
+	</target>
+	
+	
+</project>

@@ -1750,6 +1750,10 @@ public List<JSONObject> editPrivilegeForUserPage (Map<String, SiteUserRolePrivil
 	JSONObject jsonObject=new JSONObject();
 	long selectedCPId=0;
 	
+	// for checkBox
+	boolean isAllCPChecked = surp.isAllCPChecked();
+	jsonObject.put("isAllCPChecked",isAllCPChecked );
+	
 	// for site
 	JSONArray siteJsonArray=new JSONArray();
 	
@@ -1807,7 +1811,21 @@ public List<JSONObject> editPrivilegeForUserPage (Map<String, SiteUserRolePrivil
 	}
 	else
 	{
-		actionList = getActionListForUserPage(false);
+		if(selectedCPId>0)
+		{
+			actionList = getReformedNameValueBeanList(Variables.privilegeGroupingMap.get("CP"));
+		}
+		else if(surp.getSiteList()!=null&&!(surp.getSiteList()).isEmpty())
+		{
+			if(isAllCPChecked)
+			{
+				actionList = getActionListForUserPage(false);
+			}
+			else
+			{
+				actionList = getReformedNameValueBeanList(Variables.privilegeGroupingMap.get("SITE"));
+			}
+		}
 	}
 	
 	selActionJsonArray = getJSONObjListOfNameValue(privileges);
@@ -1846,7 +1864,7 @@ public List<NameValueBean> getPrivilegesNameValueBeanList(List<String> actionIds
 	return actionBeanList;
 }
 
-// To remove "Select" opteion from list.
+// To remove "Select" option from list.
 public List<NameValueBean> removeSelect(List<NameValueBean> list) 
 {
 	if(list != null && !list.isEmpty()&& list.size()>0)
@@ -1916,137 +1934,5 @@ public List<NameValueBean> getCommonElesList(List<NameValueBean> list1,List<Name
 	}
 	return resultList;
 }
-/*
-//Takes String having cpIds concatenated by ',' and returns List of CP ids.
-public List<Long> getCPData(String cpIds) 
-{
-	long cpId;
-	List<Long> cpIdsList = new ArrayList<Long>();
-	
-	StringTokenizer tokenizer = new StringTokenizer("" + cpIds, ",");
-	while (tokenizer.hasMoreTokens())
-	{
-		cpId = Long.parseLong(tokenizer.nextToken());
-		cpIdsList.add(cpId);
-	}
-	return cpIdsList;
-}
-*/
-/**
- * Gets list of actions when page is loaded
- * @param isToExcludeDisabled
- * @return List of user NameVAlueBean objects.
- * @throws BizLogicException
- */
-/*
-public List<NameValueBean> getAllPrivilegeList(boolean isToExcludeDisabled) throws BizLogicException
-{     
-	List<NameValueBean> privilegeNameValueBeanList = Utility.getAllPrivileges();
-	for (int i=0;i<privilegeNameValueBeanList.size();i++)
-	{
-		NameValueBean bean=(NameValueBean)privilegeNameValueBeanList.get(i);
-		
-		NameValueBean privilegeNameValueBean = new NameValueBean(Utility.getDisplayLabelForUnderscore(bean.getName()),bean.getValue());
-		privilegeNameValueBeanList.add(privilegeNameValueBean);
-	}
-	return privilegeNameValueBeanList;
-}
-*/
-/*	
-public List<NameValueBean> getActionsForSelSites() 
-{
-	List<NameValueBean> tempList=Variables.privilegeGroupingMap.get("SITE");
-	List<NameValueBean> actionsListForSelSites=new ArrayList<NameValueBean>();
-	NameValueBean nameValueBean=null;
-	
-	for(int i=0;i<tempList.size();i++)
-	{
-		nameValueBean=new NameValueBean();
-		String privilegeName=((NameValueBean)tempList.get(i)).getName();
-		String privilegeValue=((NameValueBean)tempList.get(i)).getValue();
-		nameValueBean.setName(Utility.getDisplayLabelForUnderscore(privilegeName));
-		nameValueBean.setValue(privilegeValue);
-		actionsListForSelSites.add(nameValueBean);
-	}
-	return actionsListForSelSites;
-}
-public List<NameValueBean> getActionsForSelCPs() 
-{
-	List<NameValueBean> tempList=Variables.privilegeGroupingMap.get("CP");
-	List<NameValueBean> actionsListForSelSites=new ArrayList<NameValueBean>();
-	NameValueBean nameValueBean=null;
-	
-	for(int i=0;i<tempList.size();i++)
-	{
-		nameValueBean=new NameValueBean();
-		String privilegeName=((NameValueBean)tempList.get(i)).getName();
-		String privilegeValue=((NameValueBean)tempList.get(i)).getValue();
-		nameValueBean.setName(Utility.getDisplayLabelForUnderscore(privilegeName));
-		nameValueBean.setValue(privilegeValue);
-		actionsListForSelSites.add(nameValueBean);
-	}
-	return actionsListForSelSites;
-}
 
-
-*/
-
-/*public List<NameValueBean> getPrivilegesForScientist() 
-{
-	List<NameValueBean> list=new ArrayList<NameValueBean>();
-	
-	NameValueBean valueBean=new NameValueBean();
-    valueBean.setName("View Data");
-    valueBean.setValue("30");
-    list.add(valueBean);
-    return list;
-}*/
-
-
-/**
- *Create the List of siteIds from request data
- * @param assignPrivilegePageBizLogic
- * @param request
- * @return List<Integer> list of siteIds 
- */
-/*
-public List<Long> getSiteData(String siteIds)
-{
-	
-	List<Long> siteIdsList = new ArrayList<Long>();
-	if(!("").equalsIgnoreCase(siteIds)&& siteIds!=null)
-	{
-		long siteId;
-		StringTokenizer tokenizer = new StringTokenizer("" + siteIds, ",");
-		while (tokenizer.hasMoreTokens()) {
-			siteId = Long.parseLong(tokenizer.nextToken());
-			siteIdsList.add(siteId);
-		}
-	}
-	return siteIdsList;
-}
-
-*/
-
-/**
- * Create the List of userIds from request data
- * @param assignPrivilegePageBizLogic
- * @param request
- * @return List<Long> list of userIds
- */
-/*
-public List<Long> getUserData(String userIds) 
-{
-	long userId;
-	List<Long> userIdsList = new ArrayList<Long>();
-	
-	StringTokenizer tokenizer = new StringTokenizer("" + userIds, ",");
-	while (tokenizer.hasMoreTokens())
-	{
-		userId = Long.parseLong(tokenizer.nextToken());
-		userIdsList.add(userId);
-	}
-	return userIdsList;
-}
-*/
 }
