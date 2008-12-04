@@ -1,5 +1,5 @@
 /*
- * $Name: 1.41.2.37 $
+ * $Name: 1.41.2.38 $
  *
  * */
 package edu.wustl.catissuecore.util.listener;
@@ -63,6 +63,7 @@ import edu.wustl.common.util.dbManager.DBUtil;
 import edu.wustl.common.util.dbManager.HibernateMetaData;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.common.util.TitliResultGroup;
 
 
 /**
@@ -193,7 +194,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 		try
 		{
 			TitliInterface titli = Titli.getInstance();
-
+			TitliResultGroup.isTitliConfigured = true;
 //			String dbName = titli.getDatabases().keySet().toArray(new String[0])[0];
 //			Name name = new Name(dbName);
 //			File dbIndexLocation = IndexUtility.getIndexDirectoryForDatabase(name);

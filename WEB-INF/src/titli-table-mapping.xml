@@ -16,10 +16,7 @@
 		<mapping table="catissue_participant" label="Participant" pageOf="pageOfParticipant" />
 		<mapping table="catissue_specimen" label="Specimen" pageOf="pageOfNewSpecimen" />
 		<mapping table="catissue_specimen_coll_group" label="Specimen Collection Group" pageOf="pageOfSpecimenCollectionGroup" />
-		<mapping table="catissue_specimen_array_type" label="Specimen Array Type" pageOf="pageOfSpecimenArrayType" />
-		<mapping table="catissue_abs_speci_coll_group" label="Abstract Specimen Collection Group" pageOf="pageOfSpecimenCollectionGroup" />
-		<mapping table="catissue_abstract_specimen" label="Abstract Specimen" pageOf="pageOfNewSpecimen" />
-		<mapping table="catissue_specimen_char" label="Specimen Characteristics" pageOf="pageOfNewSpecimen" />
+		<mapping table="catissue_specimen_array" label="Specimen Array" pageOf="pageOfSpecimenArray"/>
 	</label-mapping>
 	
 	<table-relation-mapping>
@@ -28,40 +25,8 @@
 			<related table="catissue_fluid_specimen" label="Fluid Specimen" />
 			<related table="catissue_molecular_specimen" label="Molecular Specimen" />
 			<related table="catissue_tissue_specimen" label="Tissue Specimen" />
-			<related table="catissue_abstract_specimen" label="Abstract Specimen" />
-			<related table="catissue_specimen_char" label="Specimen Characteristics" />
-		</main>
-		<main table="catissue_specimen_coll_group" label="Specimen Collection Group">
-			<related table="catissue_abs_speci_coll_group" label="Abstract Specimen Collection Group" />
-		</main>
-		<main table="catissue_specimen_array_type" label="Specimen Array Type">
-			<related table="catissue_container_type" label="Container Type" />
 		</main>
 	</table-relation-mapping>
-	
-	<table-refresh-mapping>
-		<table forTable="catissue_cell_specimen">
-			<refresh tableName="catissue_specimen" />
-		</table>
-		<table forTable="catissue_fluid_specimen">
-			<refresh tableName="catissue_specimen" />
-		</table>
-		<table forTable="catissue_molecular_specimen">
-			<refresh tableName="catissue_specimen" />
-		</table>
-		<table forTable="catissue_tissue_specimen">
-			<refresh tableName="catissue_specimen" />
-		</table>
-		<table forTable="catissue_specimen">
-			<refresh tableName="catissue_abstract_specimen" />
-			<refresh tableName="catissue_specimen_char" />
-			<refresh tableName="catissue_specimen" />
-		</table>
-		<table forTable="catissue_specimen_coll_group">
-			<refresh tableName="catissue_abs_speci_coll_group" />
-			<refresh tableName="catissue_specimen_coll_group" />
-		</table>
-	</table-refresh-mapping>
 	
 </mappings>
 

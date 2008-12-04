@@ -45,7 +45,7 @@
 			//mygrid.attachToObject(document.body);
 			 
 			this.grid.setImagePath("dhtml_comp/imgs/"); 
-			this.grid.setHeader("ENTITY,Matches"); 
+			this.grid.setHeader("Entity,Matches"); 
 			this.grid.setInitWidths("300,100"); 
 			this.grid.setColAlign("left,left"); 
 			this.grid.setColTypes("ro,ro"); 
@@ -136,49 +136,12 @@
 				 	//grid1 is still acccessible in other script tags !
 				 	var grid1 = new MyGrid();
 					grid1.init();
-						var scg = "false";
-						var specimen = "false";
-						<c:forEach items="${titliSearchForm.titliResultMap}" var="groupEntry" >	
-							<c:choose>
-								<c:when test='${groupEntry.value.label=="Specimen"}'>
-								specimen = "true";
-								</c:when>
-								<c:when test='${groupEntry.value.label=="Specimen Collection Group"}'>
-								scg = "true";
-								</c:when>
-							</c:choose>
-						</c:forEach>	
-
+						
 					<c:forEach items="${titliSearchForm.titliResultMap}" var="groupEntry" >		
-						<c:choose>
-						<c:when test='${groupEntry.value.label=="Abstract Specimen"}'>
-							if(specimen!="true")
-							{
-								grid1.addRow("<c:out value="Specimen" /> ,<c:out value="${groupEntry.value.nativeGroup.numberOfMatches}" />");
-								specimen="true";
-							}
-						</c:when>
-						<c:when test='${groupEntry.value.label=="Specimen Characteristics"}'>
-							if(specimen!="true")
-							{
-								grid1.addRow("<c:out value="Specimen" /> ,<c:out value="${groupEntry.value.nativeGroup.numberOfMatches}" />");
-								specimen="true";
-							}
-						</c:when>
-						<c:when test='${groupEntry.value.label=="Abstract Specimen Collection Group"}'>
-							if(scg!="true")
-							{
-								grid1.addRow("<c:out value="Specimen Collection Group" /> ,<c:out value="${groupEntry.value.nativeGroup.numberOfMatches}" />");
-							}
-						</c:when>
-						<c:otherwise>
 						grid1.addRow("<c:out value="${groupEntry.value.label}" /> ,<c:out value="${groupEntry.value.nativeGroup.numberOfMatches}" />");
-						</c:otherwise>
-						</c:choose>	
 					</c:forEach>	
 				
 		 		</script>
-		 		
 			</td>	
 		</tr>
 	</table>
