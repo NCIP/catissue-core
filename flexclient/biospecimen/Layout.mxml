@@ -1,7 +1,10 @@
 <?xml version="1.0"?>
-<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" preinitialize="preInit()" height="90%" backgroundColor="#FFFFFF" creationComplete="initApp();">
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" preinitialize="preInit()" click="closeDropDownList(event);"
+	height="90%" backgroundColor="#FFFFFF" creationComplete="initApp();" xmlns:Components="Components.*">
   <mx:Script>
   	<![CDATA[
+  		
+  		import mx.managers.PopUpManager;  		  	  				
 		import util.Utility;
   		import mx.messaging.channels.SecureAMFChannel;
   		import mx.messaging.channels.AMFChannel;
@@ -20,19 +23,22 @@
 		import flash.utils.getQualifiedClassName;
 	        import mx.collections.XMLListCollection;
 		import flash.xml.*;
-		import mx.events.FlexEvent;
+		
 
     [Bindable]
 		public var cpCollection:ArrayCollection = new ArrayCollection();
        
-	        public var pCollection:ArrayCollection = new ArrayCollection(); 
+		[Bindable]       
+	    public var pCollection:ArrayCollection = new ArrayCollection(); 
         
 	        private var xmlString:XML = new XML();
         
 	       private var treeData:XMLListCollection = new XMLListCollection();
 
        [Bindable]
-     		private var myDropdownFactory:ClassFactory;
+		private var newRegisteration:Boolean=false;
+ /*       [Bindable]
+     		private var myDropdownFactory:ClassFactory; */
 
       [Bindable]
                  [Embed(source='/images/nolines_minus.gif')]
@@ -213,17 +219,18 @@
        This method is invoked from javaScript function when a new Participant is registered 
      
      */
-   
+    [Bindable]
+    public var cpCombo:Object;
     public function refreshParticipants():void
     {
 		//Alert.show("In refresh Participants Method");    	
 		var selectedCp : NameValueBean = new NameValueBean();
-		selectedCp =  cpCombo.selectedItem as NameValueBean;
+		selectedCp =  cpCombo as NameValueBean;
 		var cpId :String = selectedCp.value;
 		if(cpId == "-1")
 		{
               Alert.show("Please select valid Collection Protocol");
-              pCombo.dataProvider = null;
+//              pCombo.dataProvider = null;
 		}
 		else
 		{
@@ -249,11 +256,11 @@
 	    } 
 	    else
 	    {
-	    	selectedParticipant = pCombo.selectedItem as NameValueBean;
+	    	selectedParticipant = spCombo as NameValueBean;
 	    }
 	
         var selectedCp : NameValueBean = new NameValueBean();
-	    selectedCp =  cpCombo.selectedItem as NameValueBean;
+	    selectedCp =  cpCombo as NameValueBean;
 		if(selectedParticipant != null && selectedCp != null)
 		{
         var selectedParticipantId :String = selectedParticipant.value; 
@@ -325,12 +332,12 @@
   	public function onCpChange():void
 	{
 		var selectedCp : NameValueBean = new NameValueBean();
-		selectedCp =  cpCombo.selectedItem as NameValueBean;
+		selectedCp =  cpCombo as NameValueBean;
 		var cpId :String = selectedCp.value;
 		if(cpId == "-1")
 		{
 			Alert.show("Please select valid Collection Protocol");
-			pCombo.dataProvider = null;
+//			pCombo.dataProvider = null;
 		}
 		else
 		{
@@ -348,7 +355,7 @@
 	{
 	    var bean : NameValueBean = new NameValueBean();
 		pCollection = pevent.result as ArrayCollection;	
-		pCombo.dataProvider = pCollection;
+//		pCombo.dataProvider = pCollection;
 	}
 	/*
 	  Event Handler for Temp Collection
@@ -358,8 +365,8 @@
 	    var bean : NameValueBean = null;
 		tempCollection = pevent.result as ArrayCollection;
 		var isRefresTree:Boolean = false;
-		pCombo.dataProvider = tempCollection;
-		pCombo.validateNow();
+//		pCombo.dataProvider = tempCollection;
+//		pCombo.validateNow();
 	    if(tempCollection.length != 0)
 		{
 			if(previouslySelectedParticipantId==null)
@@ -385,33 +392,43 @@
 	 				}
 	 			}
 		    }
-		    pCombo.dataProvider = tempCollection;
-		    pCombo.validateNow();
+		    // Jignesh : this case will ocur when user edit or register particpant so refresh dataprovider
+		    if(pCollection.length == tempCollection.length){
+		    	isRefresTree= false;
+		    }
+		    pCollection=null;
+		    pCollection = tempCollection;
+		   
+//		    pCombo.dataProvider = tempCollection;
+//		    pCombo.validateNow();
 		    if(bean!=null)
 		    {
 				// Sachin : select particpant in the list and scorl the list position
-				pCombo.selectedItem = bean;
-				pCombo.scrollToIndex(selectedParticipantIndex);
+				spCombo = bean;				
+//				pCombo.scrollToIndex(selectedParticipantIndex);
+				
 				if(isRefresTree)
 				{
 					previouslySelectedParticipantBean=bean;
 					spDetailsLabel.text = title+"  "+previouslySelectedParticipantBean.name;
 					// nodeIdToSelect is obtainer from editParticipant() fucntion
 					refreshTree(nodeIdToSelect);
+					Sp.inputArea.text = previouslySelectedParticipantBean.name;
 				}	
-			}	
-			pCombo.validateNow();
+			}				
+//			pCombo.validateNow();
 		}
 			
 	}
     /*
       This mehtod invoked when a Participant is clicked
     */
-   
+    [Bindable]public var spCombo:Object;
+    [Bindable]public var spComboSelectedIndex:Number=0;
     public function onParticipantClick():void
 	{
 	    var selectedParticipant:NameValueBean= new NameValueBean();
-	    selectedParticipant = pCombo.selectedItem as NameValueBean
+	    selectedParticipant = spCombo as NameValueBean
 		if(selectedParticipant != null)
 		{
 	 	   var selectedParticipantId :String = selectedParticipant.value; 
@@ -422,9 +439,9 @@
 	 	   previouslySelectednodeId=null;
 	  	 
 	  	   var selectedCp : NameValueBean = new NameValueBean();
-	  	  	selectedCp =  cpCombo.selectedItem as NameValueBean;
+	  	  	selectedCp =  cpCombo as NameValueBean;
 		    var selectedCpId :String = selectedCp.value;
-    	    selectedParticipantIndex = pCombo.selectedIndex;
+    	    selectedParticipantIndex = spComboSelectedIndex;
 	  
 		   // title  = title +" "+selectedParticipant.name;
 		     spDetailsLabel.text = title+"  "+selectedParticipant.name;
@@ -542,18 +559,20 @@
     	nodeIdToSelect=treeNodeId;
     	
     	var selectedCp : NameValueBean = new NameValueBean();
- 		selectedCp =  cpCombo.selectedItem as NameValueBean;
+ 		selectedCp =  cpCombo as NameValueBean;
 		var cpId :String = selectedCp.value;
 		if(cpId == "-1")
 		{
              Alert.show("Please select valid Collection Protocol");
-             pCombo.dataProvider = null;
+//             pCombo.dataProvider = null;
 		}
 		else
 		{
-	
-			remoteObj1.getParticipantsList(selectedCp.value,selectedCp.name)
-   
+			//Jignesh : tree and list will not be populate when registering a New Participant to CP 
+			if(newRegisteration!=false){
+				remoteObj1.getParticipantsList(selectedCp.value,selectedCp.name);								
+			} 
+			newRegisteration=true;  
         }       
         
     }
@@ -563,10 +582,9 @@
   	 */
 	 private function addNewParticipant():void
 	 {
-            
-	     var selectedCp : NameValueBean = new NameValueBean();       
-	 
-	     selectedCp =  cpCombo.selectedItem as NameValueBean;
+         newRegisteration=false;   
+	     var selectedCp : NameValueBean = new NameValueBean();
+	     selectedCp =  cpCombo as NameValueBean;
 	     if(selectedCp != null)
 	     {
 	     
@@ -581,7 +599,11 @@
 	    else
 	    {
 	    	 Alert.show("Please select valid Collection Protocol");
-    	 }
+    	}
+    	//Jignesh : on click Register Participant button on flex the participant box and Tree should get clear
+    	specimenTree.dataProvider = null;
+	 	Sp.inputArea.text="";
+	 	spDetailsLabel.text = title;
 	 }
 
          /*
@@ -603,10 +625,10 @@
 		 	    previouslySelectednodeId=id;
 				//Selected CP and selected participants
 		 	   var selectedParticipant:NameValueBean= new NameValueBean();
-	    	   selectedParticipant = pCombo.selectedItem as NameValueBean
+	    	   selectedParticipant = spCombo as NameValueBean
 		  	   var selectedParticipantId :String = selectedParticipant.value; 
 		   	   var selectedCp : NameValueBean = new NameValueBean();
-	    	   selectedCp =  cpCombo.selectedItem as NameValueBean;
+	    	   selectedCp =  cpCombo as NameValueBean;
 			   var selectedCpId :String = selectedCp.value;
 				//display name of selected tree node
 		    	var displayName : String = specimenTree.selectedItem.@name;
@@ -628,7 +650,7 @@
 	    previouslySelectednodeId=id;
 		 //Selected CP and selected participants
 		var selectedParticipant:NameValueBean= new NameValueBean();
-	    selectedParticipant = pCombo.selectedItem as NameValueBean
+	    selectedParticipant = spCombo as NameValueBean
 		var selectedParticipantId :String = selectedParticipant.value; 
 	   	var type:String = specimenTree.selectedItem.@type;
 		var selectedCpId:String = "-1";
@@ -671,11 +693,11 @@
 			var id : String = specimenTree.selectedItem.@id;
 		    //Selected CP and selected participants
 		    var selectedParticipant:NameValueBean= new NameValueBean();
-	    	selectedParticipant = pCombo.selectedItem as NameValueBean
+	    	selectedParticipant = spCombo as NameValueBean
 		    var selectedParticipantId :String = selectedParticipant.value; 
 
 			 var selectedParentCp : NameValueBean = new NameValueBean();
-	    	 selectedParentCp =  cpCombo.selectedItem as NameValueBean;
+	    	 selectedParentCp =  cpCombo as NameValueBean;
 			  var selectedParentCpId :String = selectedParentCp.value;
 	    	var type:String = specimenTree.selectedItem.@type;
 			var selectedCpId:String = "-1";
@@ -777,16 +799,14 @@
        	 }
        	
     }
-
-    private function initClassFactory():void
-    {
 	/**
 	  Creating the Drop down factory
 	*/
-				
+/*  private function initClassFactory():void
+    {			
 	myDropdownFactory = new ClassFactory(List);
 	myDropdownFactory.properties = {showDataTips:true, dataTipFunction:myDataTipFunction};
-    }
+    } */
 	
     private function myDataTipFunction(item:Object):String
     {
@@ -797,8 +817,22 @@
 	//Alert.show("The tooltip lenght is:"+name.length);
 	//return nameValueBean.name.slice(0,40);
 	return toolTopString1 + "\n" +toolTopString2;
-   }
-  		
+    } 
+    
+    /**
+   	 	closeDropDownList function is traping MouseEvent for dropdownlist close.   			 	
+   	*/
+    private function closeDropDownList(event:Event):void{
+    	if(event.target.className != "ScrollThumb" && event.target.className != "ApplicationControlBar" && event.target.className != "UITextField" && event.target.className != "Button"){   
+	    	if(Cp.dropList != null){
+	    		PopUpManager.removePopUp(Cp.dropList);
+	    		Cp.dropList=null;
+	    	}else if(Sp.dropList != null){
+	    		PopUpManager.removePopUp(Sp.dropList);
+	    		Sp.dropList=null;
+	    	}
+    	}
+    }  
   	]]>
   </mx:Script>
 
@@ -813,34 +847,30 @@
 		<mx:method name="getParticipantsList" result="tempHandler(event)"/>
 	</mx:RemoteObject>
 
-	<mx:Box direction="vertical" borderThickness="10" borderSides="#000000" borderStyle="solid" paddingTop="0" paddingRight="0" 
-		paddingLeft="0" paddingBottom="0" height="99%" width="98%">
-
-		<mx:VBox backgroundAlpha="0.1" width="100%" height="5%" backgroundColor="#FFFFFF">
-			<mx:Label text="Collection Protocol:" width="100%" height="70%" color="black" fontWeight="bold"/>
-			<mx:ComboBox id="cpCombo" width="100%" height="30%" dataProvider="{cpCollection}" labelField="name" change="onCpChange()" 
-				prompt="--Select--" dropdownFactory="{myDropdownFactory}" creationComplete="initClassFactory()"/>
-		</mx:VBox>
-
-		<mx:VBox width="100%" height="94%">			
-			<mx:VDividedBox width="100%" height="100%">
-				<mx:VBox width="100%" height="30%" id="pVbox" borderSides="black">
-					<mx:HBox backgroundColor="#FFFFFF" width="100%">
-						<mx:Label text="Participant (Protocol ID):" color="black" fontWeight="bold" 
-							height="15"/>				
-						<mx:Button toolTip="Click to  register new Participant" label="Register New" 
-							color="black" click="addNewParticipant();" height="15"/>
-					</mx:HBox>
-					<mx:List id="pCombo" width="100%" rowCount="1" height="100%"  labelField="name"
-						click="onParticipantClick()"/>
-				</mx:VBox>
-				<mx:VBox height="70%" width="100%" id="spDetailVbox">
-		                   	<mx:Label id="spDetailsLabel" text="{title}" color="black" width="100%" height="15" 
-						fontWeight="bold" />
-				   	<mx:Tree id="specimenTree" labelField="@name" width="100%" height="100%" itemClick="onNodeClick()" 
-						folderClosedIcon="@Embed(source='/images/Specimen.gif')" folderOpenIcon="@Embed(source='/images/Specimen.gif')" 
-                   				defaultLeafIcon="@Embed(source='/images/Specimen.gif')" disclosureClosedIcon="@Embed(source='/images/nolines_plus.gif')"
-						disclosureOpenIcon="@Embed(source='/images/nolines_minus.gif')" showDataTips="true" dataTipFunction="addToolTip"/>
+     <mx:Box direction="vertical" borderThickness="10" borderSides="#000000" borderStyle="solid" paddingTop="0" paddingRight="0" paddingLeft="0" paddingBottom="0" height="100%" width="100%">
+      	<mx:VBox backgroundAlpha="0.1" height="5%" backgroundColor="#FFFFFF" width="100%"  >
+             <mx:Label text="Collection Protocol:" width="100%" color="black" fontWeight="bold"/>
+             <!-- Jignesh: AutoCompeleteDropDown component -->
+			 <Components:AutoCompeleteDropDownList id="Cp" name="compCp" width="100%" height="5%" cDataProvider="{cpCollection.toArray()}" parentInstance="Cp"/>              
+        </mx:VBox>
+        
+        <mx:VBox width="100%" height="95%">
+            <mx:VDividedBox width="100%" height="100%">
+                <mx:VBox width="100%" id="pVbox" borderSides="black">
+                   	<mx:HBox backgroundColor="#FFFFFF" width="100%"> 
+                     	<mx:Label text="Participant (Protocol ID):" color="black" fontWeight="bold" height="15"/> 	
+                     	<mx:Button toolTip="Click to  register new Participant" label="Register New" color="black" click="addNewParticipant();" height="15"/>
+                   	 </mx:HBox>
+                   	 <!-- Jignesh: AutoCompeleteDropDown component -->                   	
+					<Components:AutoCompeleteDropDownList id="Sp" name="compSpec" width="100%" height="5%" cDataProvider="{pCollection.toArray()}" parentInstance="Sp"/>					
+                 </mx:VBox>
+        	     <mx:VBox height="70%" width="100%" id="spDetailVbox">
+                   	<mx:Label id="spDetailsLabel" text="{title}" color="black" width="250" height="15" fontWeight="bold" />
+                   	<mx:Tree id="specimenTree" labelField="@name" width="100%" height="100%" itemClick="onNodeClick()" 
+                   		folderClosedIcon="@Embed(source='/images/Specimen.gif')" folderOpenIcon="@Embed(source='/images/Specimen.gif')" 
+                   		 defaultLeafIcon="@Embed(source='/images/Specimen.gif')" disclosureClosedIcon="@Embed(source='/images/nolines_plus.gif')" 
+                   		 disclosureOpenIcon="@Embed(source='/images/nolines_minus.gif')" showDataTips="true" 
+                   		 dataTipFunction="addToolTip" />
 				</mx:VBox>
 			</mx:VDividedBox>
 		</mx:VBox>
