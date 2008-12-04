@@ -262,6 +262,12 @@ function setSubmittedForPrint(submittedFor,forwardTo,nextForwardTo)
 	
 	
 }
+function setSubmittedForAddToMyList(forwardTo,forward,nextForwardTo)
+{ 
+	document.forms[0].submittedFor.value = forwardTo;
+	document.forms[0].forwardTo.value    = forward;
+	document.forms[0].nextForwardTo.value   = nextForwardTo;
+}
 
 //this function is used in Specimen and Events page for non functional tabs 
 function featureNotSupported()
