@@ -85,7 +85,7 @@ public class ForwardToProcessor extends AbstractForwardToProcessor
 			}
 			//end of fix for bug no.7439
 			//Derive New from This Specimen
-			if (actionForm.getForwardTo().equals("createNew") || actionForm.getForwardTo().equals("CPQueryPrintSpecimenAdd")||actionForm.getForwardTo().equals("CPQueryPrintSpecimenEdit"))
+			if (actionForm.getForwardTo().equals("createNew") || actionForm.getForwardTo().equals("CPQueryPrintSpecimenAdd")||actionForm.getForwardTo().equals("CPQueryPrintSpecimenEdit") || actionForm.getForwardTo().equals("addSpecimenToCartForwardtoDerive"))
 			{
 				forwardToHashMap.put("parentSpecimenId", domainObject.getId());
 				forwardToHashMap.put(Constants.SPECIMEN_LABEL, specimen.getLabel());
@@ -122,7 +122,7 @@ public class ForwardToProcessor extends AbstractForwardToProcessor
 			 * Reviewer: Sachin Lale
 			 * "ParentSpecimenID" added to forwardMap when page is "pageOfCreateAliquot"
 			 */
-			else if (actionForm.getForwardTo().equals("pageOfAliquot") || actionForm.getForwardTo().equals("pageOfCreateAliquot") )
+			else if (actionForm.getForwardTo().equals("pageOfAliquot") || actionForm.getForwardTo().equals("pageOfCreateAliquot") || actionForm.getForwardTo().equals("addSpecimenToCartForwardtoAliquot"))
 			{
 				forwardToHashMap.put("parentSpecimenId", domainObject.getId().toString());
 				forwardToHashMap.put(Constants.SPECIMEN_LABEL, specimen.getLabel());
@@ -140,7 +140,7 @@ public class ForwardToProcessor extends AbstractForwardToProcessor
 			}
 
              //updated to solve printing issue in case of "Create Aliquot/Derived Specimen as per CP"
-			if(actionForm.getForwardTo().equals(Constants.CP_CHILD_SUBMIT)|| actionForm.getForwardTo().equals("CPQueryPrintSpecimenAdd")||actionForm.getForwardTo().equals("CPQueryPrintSpecimenEdit"))
+			if(actionForm.getForwardTo().equals(Constants.CP_CHILD_SUBMIT)|| actionForm.getForwardTo().equals("CPQueryPrintSpecimenAdd")||actionForm.getForwardTo().equals("CPQueryPrintSpecimenEdit") || actionForm.getForwardTo().equals("addSpecimenToCartForwardtoCpChild"))
 			{
 				forwardToHashMap.put("specimenCollectionGroupId", specimen.getSpecimenCollectionGroup().getId());
 				forwardToHashMap.put("specimenId", specimen.getId());
