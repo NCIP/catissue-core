@@ -783,9 +783,9 @@
 			else
 			{
 			  setSubmittedFor(forwardTo,nextforwardTo);
-			}
-		
+			}		
 		}
+		
 	    function setSize()
 	    {
 	
@@ -885,25 +885,32 @@
 		}
 	}
 	function onAddToCart()
+	{
+	    <% String actionToCall1 = "NewSpecimenEdit.do";%>
+	  	 if(document.getElementById("aliquotChk").checked == true)
+		 {
+			 setSubmittedFor("ForwardTo",'addSpecimenToCartForwardtoAliquot');					   
+		 }
+		else if(document.getElementById("deriveChk").checked == true)
 		{
-			document.forms[0].forwardTo.value="addSpecimenToCart";
-			
-			
-			//document.forms[0].submit();
-			//var checked = false;
-				
-				<% String actionToCall4 ="NewSpecimenEdit.do";
-				
-					if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
-					{
-				  		actionToCall4 = Constants.CP_QUERY_SPECIMEN_ADD_ACTION;
-				  	}
-				%>
-				
-				confirmDisable('<%=actionToCall4%>',document.forms[0].activityStatus);
-				setSubmittedFor("ForwardTo",'addSpecimenToCart');
-			
+			 setSubmittedForAddToMyList("ForwardTo",'addSpecimenToCartForwardtoDerive','success');
 		}
+		else if(document.getElementById("createCpChildCheckBox").checked == true)
+		{
+			setSubmittedForAddToMyList("ForwardTo",'addSpecimenToCartForwardtoCpChild','success');
+		}
+		else
+		{
+			setSubmittedFor("ForwardTo",'addSpecimenToCart');
+		}	
+		<%
+		if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
+		{
+			actionToCall1 = Constants.CP_QUERY_SPECIMEN_EDIT_ACTION;	                    
+		}%>
+		confirmDisable('<%=actionToCall1%>',document.forms[0].activityStatus);				
+	}
+	
 	
 	</script>
 	<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
