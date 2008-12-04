@@ -125,9 +125,7 @@ IF EXISTS(SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'c
 IF EXISTS(SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'catissue_mol_req_specimen') DROP TABLE catissue_mol_req_specimen;
 IF EXISTS(SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'catissue_molecular_specimen') DROP TABLE catissue_molecular_specimen;
 
-GO
 
-BEGIN TRANSACTION
 create table CATISSUE_PERMISSIBLE_VALUE (
    IDENTIFIER numeric(19,0) not null identity,
    CONCEPT_CODE varchar(40),
@@ -145,9 +143,6 @@ create table CATISSUE_CDE (
    LAST_UPDATED datetime,
    primary key (PUBLIC_ID)
 );
-
-
-
 create table CATISSUE_AUDIT_EVENT (
    IDENTIFIER numeric(19,0) not null identity,
    IP_ADDRESS varchar(20),
@@ -164,9 +159,6 @@ create table CATISSUE_AUDIT_EVENT_LOG (
    AUDIT_EVENT_ID numeric(19,0),
    primary key (IDENTIFIER)
 );
-
-
-
 create table CATISSUE_AUDIT_EVENT_DETAILS (
    IDENTIFIER numeric(19,0) not null identity,
    ELEMENT_NAME varchar(150),
@@ -185,10 +177,6 @@ create table CATISSUE_CANCER_RESEARCH_GROUP (
    NAME varchar(255) not null unique,
    primary key (IDENTIFIER)
 );
-
-
-
-
 create table CATISSUE_COLLECTION_PROTOCOL (
    IDENTIFIER numeric(19,0) not null,
    ALIQUOT_IN_SAME_CONTAINER numeric(1,0),
@@ -219,12 +207,6 @@ create table CATISSUE_STOR_CONT_SPEC_CLASS (
    STORAGE_CONTAINER_ID numeric(19,0) not null,
    SPECIMEN_CLASS varchar(50)
 );
-
-
-
-
-
-
 create table CATISSUE_COLL_EVENT_PARAM (
    IDENTIFIER numeric(19,0) not null,
    COLLECTION_PROCEDURE varchar(50),
@@ -259,11 +241,6 @@ create table CATISSUE_STORAGE_TYPE (
    DEFAULT_TEMPERATURE DOUBLE PRECISION,
    primary key (IDENTIFIER)
 );
-
-
-
-
-
 create table CATISSUE_CONTAINER (
    IDENTIFIER numeric(19,0) not null identity,
    ACTIVITY_STATUS varchar(50),
@@ -318,10 +295,6 @@ create table CATISSUE_INSTITUTION (
    NAME varchar(255) not null unique,
    primary key (IDENTIFIER)
 );
-
-
-
-
 create table CATISSUE_ST_CONT_ST_TYPE_REL (
    STORAGE_CONTAINER_ID numeric(19,0) not null,
    STORAGE_TYPE_ID numeric(19,0) not null,
@@ -332,19 +305,16 @@ create table CATISSUE_STOR_TYPE_HOLDS_TYPE (
    HOLDS_STORAGE_TYPE_ID numeric(19,0) not null,
    primary key (STORAGE_TYPE_ID, HOLDS_STORAGE_TYPE_ID)
 );
-
 create table CATISSUE_STORTY_HOLDS_SPARRTY (
    STORAGE_TYPE_ID numeric(19,0) not null,
    SPECIMEN_ARRAY_TYPE_ID numeric(19,0) not null,
    primary key (STORAGE_TYPE_ID, SPECIMEN_ARRAY_TYPE_ID)
 );
-
 create table CATISSUE_CONT_HOLDS_SPARRTYPE (
    STORAGE_CONTAINER_ID numeric(19,0) not null,
    SPECIMEN_ARRAY_TYPE_ID numeric(19,0) not null,
    primary key (STORAGE_CONTAINER_ID, SPECIMEN_ARRAY_TYPE_ID)
 );
-
 create table CATISSUE_SPECIMEN_PROTOCOL (
    IDENTIFIER numeric(19,0) not null identity,
    PRINCIPAL_INVESTIGATOR_ID numeric(19,0),
@@ -485,10 +455,6 @@ create table CATISSUE_STOR_TYPE_SPEC_CLASS (
    STORAGE_TYPE_ID numeric(19,0) not null,
    SPECIMEN_CLASS varchar(50)
 );
-
-
-
-
 create table CATISSUE_CONTAINER_TYPE (
    IDENTIFIER numeric(19,0) not null identity,
    CAPACITY_ID numeric(19,0),
@@ -1238,5 +1204,5 @@ ALTER TABLE CATISSUE_USER_CP ADD CONSTRAINT FK6 FOREIGN KEY (COLLECTION_PROTOCOL
 
 /** MSR changes : End **/
 
-commit;
+
 
