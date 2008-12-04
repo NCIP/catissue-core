@@ -133,7 +133,7 @@ create table CATISSUE_PERMISSIBLE_VALUE (
    CONCEPT_CODE varchar(40),
    DEFINITION varchar(500),
    PARENT_IDENTIFIER numeric(19,0),
-   VALUE varchar(100),
+   VALUE varchar(225),
    PUBLIC_ID varchar(30),
    primary key (IDENTIFIER)
 );
@@ -145,6 +145,9 @@ create table CATISSUE_CDE (
    LAST_UPDATED datetime,
    primary key (PUBLIC_ID)
 );
+
+
+
 create table CATISSUE_AUDIT_EVENT (
    IDENTIFIER numeric(19,0) not null identity,
    IP_ADDRESS varchar(20),
@@ -161,6 +164,9 @@ create table CATISSUE_AUDIT_EVENT_LOG (
    AUDIT_EVENT_ID numeric(19,0),
    primary key (IDENTIFIER)
 );
+
+
+
 create table CATISSUE_AUDIT_EVENT_DETAILS (
    IDENTIFIER numeric(19,0) not null identity,
    ELEMENT_NAME varchar(150),
@@ -179,6 +185,10 @@ create table CATISSUE_CANCER_RESEARCH_GROUP (
    NAME varchar(255) not null unique,
    primary key (IDENTIFIER)
 );
+
+
+
+
 create table CATISSUE_COLLECTION_PROTOCOL (
    IDENTIFIER numeric(19,0) not null,
    ALIQUOT_IN_SAME_CONTAINER numeric(1,0),
@@ -209,6 +219,12 @@ create table CATISSUE_STOR_CONT_SPEC_CLASS (
    STORAGE_CONTAINER_ID numeric(19,0) not null,
    SPECIMEN_CLASS varchar(50)
 );
+
+
+
+
+
+
 create table CATISSUE_COLL_EVENT_PARAM (
    IDENTIFIER numeric(19,0) not null,
    COLLECTION_PROCEDURE varchar(50),
@@ -243,6 +259,11 @@ create table CATISSUE_STORAGE_TYPE (
    DEFAULT_TEMPERATURE DOUBLE PRECISION,
    primary key (IDENTIFIER)
 );
+
+
+
+
+
 create table CATISSUE_CONTAINER (
    IDENTIFIER numeric(19,0) not null identity,
    ACTIVITY_STATUS varchar(50),
@@ -297,6 +318,10 @@ create table CATISSUE_INSTITUTION (
    NAME varchar(255) not null unique,
    primary key (IDENTIFIER)
 );
+
+
+
+
 create table CATISSUE_ST_CONT_ST_TYPE_REL (
    STORAGE_CONTAINER_ID numeric(19,0) not null,
    STORAGE_TYPE_ID numeric(19,0) not null,
@@ -461,6 +486,9 @@ create table CATISSUE_STOR_TYPE_SPEC_CLASS (
    SPECIMEN_CLASS varchar(50)
 );
 
+
+
+
 create table CATISSUE_CONTAINER_TYPE (
    IDENTIFIER numeric(19,0) not null identity,
    CAPACITY_ID numeric(19,0),
@@ -619,6 +647,7 @@ create table CATISSUE_COLL_PROT_EVENT (
    COLLECTION_POINT_LABEL varchar(255),
    STUDY_CALENDAR_EVENT_POINT double precision,
    COLLECTION_PROTOCOL_ID numeric(19,0),
+   LABELFORMAT varchar(255) default NULL,
    primary key (IDENTIFIER),
    unique (COLLECTION_PROTOCOL_ID,COLLECTION_POINT_LABEL),
    CONSTRAINT FK7AE7715948304401 FOREIGN KEY (COLLECTION_PROTOCOL_ID) REFERENCES catissue_collection_protocol,
