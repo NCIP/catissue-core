@@ -82,7 +82,7 @@ PUBLIC
 		<form-bean name="multipleSpecimenForm" type="edu.wustl.catissuecore.actionForm.MultipleSpecimenForm"/>
 		<form-bean name="multipleSpecimenStorageLocationForm" type="edu.wustl.catissuecore.actionForm.MultipleSpecimenStorageLocationForm"/>
 		<form-bean name="cpSearchForm" type="edu.wustl.catissuecore.actionForm.CPSearchForm"/>
-		<form-bean name="titliSearchForm" type="edu.wustl.common.actionForm.TitliSearchForm"/>
+		<form-bean name="titliSearchForm" type="edu.wustl.catissuecore.actionForm.TitliSearchForm"/>
 		
 		<form-bean name="annotationForm" type="edu.wustl.catissuecore.actionForm.AnnotationForm"/>
 		<form-bean name="annotationDataEntryForm" type="edu.wustl.catissuecore.actionForm.AnnotationDataEntryForm"/>
@@ -121,7 +121,7 @@ PUBLIC
 	<action-mappings>
 	
 		<action path="/TitliInitialiseSearch"
-			type="edu.wustl.common.action.TitliInitialiseSearchAction"
+			type="edu.wustl.catissuecore.action.TitliInitialiseSearchAction"
 			name="titliSearchForm"
 			validate="false"
 			scope="request">
@@ -129,7 +129,7 @@ PUBLIC
 		</action>
 	
 		<action path="/TitliSearch"
-			type="edu.wustl.common.action.TitliSearchAction"
+			type="edu.wustl.catissuecore.action.TitliSearchAction"
 			name="titliSearchForm"
 			validate="false"
 			scope="request">
@@ -137,7 +137,7 @@ PUBLIC
 		</action>
 				
 		<action path="/TitliFetch"
-			type="edu.wustl.common.action.TitliFetchAction"
+			type="edu.wustl.catissuecore.action.TitliFetchAction"
 			name="titliSearchForm"
 			validate="false"
 			scope="request">

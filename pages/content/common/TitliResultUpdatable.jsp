@@ -2,10 +2,10 @@
 <%@ taglib prefix="c" uri="/WEB-INF/c.tld" %>
 <%@ taglib prefix="html" uri="/WEB-INF/struts-html.tld" %>
 
-<%@ page import="edu.wustl.common.util.TitliResultGroup" %>
+<%@ page import="titli.model.util.TitliResultGroup" %>
 <%@ page import="titli.controller.interfaces.SortedResultMapInterface" %>
-<%@ page import="edu.wustl.common.actionForm.TitliSearchForm" %>
-<%@ page import="edu.wustl.common.util.TitliTableMapper" %>
+<%@ page import="edu.wustl.catissuecore.actionForm.TitliSearchForm" %>
+<%@ page import="titli.model.util.TitliTableMapper" %>
 
 
 <html>

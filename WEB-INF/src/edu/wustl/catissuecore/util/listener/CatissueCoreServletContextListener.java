@@ -1,5 +1,5 @@
 /*
- * $Name: 1.41.2.38 $
+ * $Name: 1.41.2.39 $
  *
  * */
 package edu.wustl.catissuecore.util.listener;
@@ -63,7 +63,7 @@ import edu.wustl.common.util.dbManager.DBUtil;
 import edu.wustl.common.util.dbManager.HibernateMetaData;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
-import edu.wustl.common.util.TitliResultGroup;
+import titli.model.util.TitliResultGroup;
 
 
 /**
