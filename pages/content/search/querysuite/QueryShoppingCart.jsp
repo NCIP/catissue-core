@@ -417,9 +417,9 @@ function checkAll(element)
 			
 		   <td class="black_ar" width="33%">
 		 	   <div id="eventlist1" style="display:none">
-			   
+			
 			   <autocomplete:AutoCompleteTag  property="specimenEventParameter" 
-						  optionsList = "<%=Constants.EVENT_PARAMETERS%>" styleClass="black_ar" size="27"
+						  optionsList = "<%=request.getAttribute("eventArray")%>" styleClass="black_ar" size="27"
 						  initialValue="Transfer"/>
 				 </div> 
 		     
