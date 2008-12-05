@@ -11,7 +11,7 @@
 		<mapping table="catissue_storage_container" label="Storage Container" pageOf="pageOfStorageContainer" />
 		<mapping table="catissue_specimen_array_type" label="Specimen Array Type" pageOf="pageOfSpecimenArrayType" />
 		<mapping table="catissue_biohazard" label="Biohazard" pageOf="pageOfBioHazard" />
-		<mapping table="catissue_collection_protocol" label="Collection Protocol" pageOf="pageOfCollectionProtocol" />
+		<mapping table="catissue_collection_protocol" label="Collection Protocol" pageOf="pageOfCollectionProtocolForTitli" />
 		<mapping table="catissue_distribution_protocol" label="Distribution Protocol" pageOf="pageOfDistributionProtocol" />
 		<mapping table="catissue_participant" label="Participant" pageOf="pageOfParticipant" />
 		<mapping table="catissue_specimen" label="Specimen" pageOf="pageOfNewSpecimen" />

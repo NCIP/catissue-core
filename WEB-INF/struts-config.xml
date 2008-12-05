@@ -3254,6 +3254,7 @@ PUBLIC
 			<forward name="pageOfParticipantCPQuery" path="/ParticipantSearch.do"/>
 			<forward name="pageOfSpecimenCollectionGroupCPQuery" path="/SpecimenCollectionGroupSearch.do"/>			
 			<forward name="failure" path="/QueryParticipant.do?operation=view&amp;pageOf=query"/>
+			<forward name="pageOfCollectionProtocolForTitli" path="/RetrieveCollectionProtocol.do"/>
 		</action>
 		
 		<action path="/SimpleSearchEdit"
