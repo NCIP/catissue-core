@@ -150,6 +150,7 @@
 <head>
 
 	<%
+	
 	String refreshTree = (String)request.getAttribute("refresh");
 	strCheckStatus= "checkActivityStatus(this,'" + Constants.CP_QUERY_BIO_SPECIMEN + "')";
 	if(pageOf.equals(Constants.PAGE_OF_SCG_CP_QUERY) && (refreshTree==null || !(refreshTree.equalsIgnoreCase("false"))))
@@ -159,13 +160,13 @@
 		<script language="javascript">
 		//Added by Falguni to refresh participant tree 
 		var nodeid =  "<%=nodeId%>";
-		top.frames["cpAndParticipantView"].editParticipant(<%=participantId%>,nodeid);
-/*		
+	//	top.frames["cpAndParticipantView"].editParticipant(<%=participantId%>,nodeid);
+		
 		if(nodeid!=""&&nodeid!="1")
 		{
 		alert("nodeid: "+nodeid);	refreshTree('<%=Constants.CP_AND_PARTICIPANT_VIEW%>','<%=Constants.CP_TREE_VIEW%>','<%=Constants.CP_SEARCH_CP_ID%>','<%=Constants.CP_SEARCH_PARTICIPANT_ID%>','<%=nodeId%>');	
 		}
-*/
+
 		</script>
 	<%}
 	
