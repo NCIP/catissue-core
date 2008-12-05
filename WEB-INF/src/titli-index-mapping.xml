@@ -49,5 +49,9 @@
 					</leftjoin>	
 			</join>
 		</table>
+		<table name="catissue_site" alias="st" keyColumn="IDENTIFIER" selectColumns="NAME,TYPE,EMAIL_ADDRESS" activityStatus="ACTIVITY_STATUS">
+			<leftJoin tableName="catissue_address" alias="ad" keyColumn="IDENTIFIER" joinColumn="ADDRESS_ID" selectColumns="STREET,CITY,STATE,COUNTRY,ZIPCODE,PHONE_NUMBER">
+			</leftJoin>
+		</table>
 	</tablejoinmapping>
 </titli>
