@@ -197,7 +197,17 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 				 	 <td align="center" nowrap>&nbsp;</td>   
 					 <td align="left" class="black_ar"><bean:message key="specimenCollectionGroup.offset" /></td>  
 					 <td align="left" nowrap class="black_ar"><html:text styleClass="formFieldSizedSCG" size="10"  maxlength="10" styleId="offset" property="offset" onblur="registrationDateChange(this)"/></td>
-					 <td align="center" nowrap colspan="3">&nbsp;</td>  
+					 <td align="center" nowrap>&nbsp;</td>
+					<td align="left" class="black_ar"><bean:message key="specimenCollectionGroup.surgicalPathologyNumber"/></td>  
+					<td align="left" nowrap class="black_ar">
+				     	<html:text styleClass="formFieldSizedSC" size="30"  maxlength="50"  styleId="surgicalPathologyNumber" property="surgicalPathologyNumber" readonly="<%=readOnlyForAll%>"/>
+					     	<!-- This feature will be implemented in next release
+							&nbsp;
+							<html:submit styleClass="actionButton" disabled="true">
+								<bean:message key="buttons.getPathologyReport"/>
+							</html:submit>
+							-->
+				    </td>  
 				</tr>
 				 <tr>
 				     <td align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>
@@ -237,20 +247,23 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 		        	  </td>
 				 </tr>
 				 
-				 <tr>
+			<!--	 <tr>
 			     	<td align="center" class="black_ar">&nbsp;</td>
 					<td align="left" class="black_ar"><bean:message key="specimenCollectionGroup.medicalRecordNumber"/></td>
 				     <td align="left" nowrap>
    						<logic:equal name="specimenCollectionGroupForm" property="radioButtonForParticipant" value="1">
+				-->
 <!-- Mandar : 434 : for tooltip -->   						
-				     		<html:select property="participantsMedicalIdentifierId" styleClass="formFieldSizedSCG" styleId="participantsMedicalIdentifierId" size="1" disabled="<%=readOnlyForAll%>"
+				  <!--   		<html:select property="participantsMedicalIdentifierId" styleClass="formFieldSizedSCG" styleId="participantsMedicalIdentifierId" size="1" disabled="<%=readOnlyForAll%>"
 				     		 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
                          		<html:options collection="<%=Constants.PARTICIPANT_MEDICAL_IDNETIFIER_LIST%>" labelProperty="name" property="value"/>
 							</html:select>
 						</logic:equal>
 						<logic:equal name="specimenCollectionGroupForm" property="radioButtonForParticipant" value="2">
+
+				-->
 <!-- Mandar : 434 : for tooltip -->					     	
-					     	<html:select property="participantsMedicalIdentifierId" styleClass="formFieldSizedSCG" styleId="participantsMedicalIdentifierId" size="1" disabled="true"
+				<!--	     	<html:select property="participantsMedicalIdentifierId" styleClass="formFieldSizedSCG" styleId="participantsMedicalIdentifierId" size="1" disabled="true"
 					     	 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
                 	         	<html:options collection="<%=Constants.PARTICIPANT_MEDICAL_IDNETIFIER_LIST%>" labelProperty="name" property="value"/>
 							</html:select>
@@ -260,15 +273,16 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 					<td align="left" class="black_ar"><bean:message key="specimenCollectionGroup.surgicalPathologyNumber"/></td>  
 					<td align="left" nowrap class="black_ar">
 				     	<html:text styleClass="formFieldSizedSC" size="30"  maxlength="50"  styleId="surgicalPathologyNumber" property="surgicalPathologyNumber" readonly="<%=readOnlyForAll%>"/>
-					     	<!-- This feature will be implemented in next release
+					-->     	<!-- This feature will be implemented in next release
 							&nbsp;
 							<html:submit styleClass="actionButton" disabled="true">
 								<bean:message key="buttons.getPathologyReport"/>
 							</html:submit>
 							-->
-				    </td>
+				<!--    </td>
 				
 				 </tr>
+				 -->
 				 <!--comments -->
 				 <!-- 
 				 * Name: Shital Lawhale
