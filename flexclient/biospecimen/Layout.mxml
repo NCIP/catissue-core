@@ -21,7 +21,7 @@
 		import mx.rpc.remoting.RemoteObject;
 		import mx.validators.ValidationResult;
 		import flash.utils.getQualifiedClassName;
-	        import mx.collections.XMLListCollection;
+	    import mx.collections.XMLListCollection;
 		import flash.xml.*;
 		
 
@@ -823,16 +823,18 @@
    	 	closeDropDownList function is traping MouseEvent for dropdownlist close.   			 	
    	*/
     private function closeDropDownList(event:Event):void{
-    	if(event.target.className != "ScrollThumb" && event.target.className != "ApplicationControlBar" && event.target.className != "UITextField" && event.target.className != "Button"){   
-	    	if(Cp.dropList != null){
-	    		PopUpManager.removePopUp(Cp.dropList);
-	    		Cp.dropList=null;
-	    	}else if(Sp.dropList != null){
-	    		PopUpManager.removePopUp(Sp.dropList);
-	    		Sp.dropList=null;
+	    if(String(event.target.name.toString()).search("SpriteAsset") == -1){    
+	    	if(event.target.className != "ScrollThumb" && event.target.className != "ApplicationControlBar" && event.target.className != "UITextField" && event.target.className != "Button"){   
+		    	if(Cp.dropList != null){
+		    		PopUpManager.removePopUp(Cp.dropList);
+		    		Cp.dropList=null;
+		    	}else if(Sp.dropList != null){
+		    		PopUpManager.removePopUp(Sp.dropList);
+		    		Sp.dropList=null;
+		    	}
 	    	}
-    	}
-    }  
+	    }
+    }
   	]]>
   </mx:Script>
 
