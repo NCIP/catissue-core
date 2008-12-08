@@ -1,5 +1,5 @@
 /*
- * $Name: 1.41.2.39 $
+ * $Name: 1.41.2.40 $
  *
  * */
 package edu.wustl.catissuecore.util.listener;
@@ -116,8 +116,6 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 	 */
 	public void initCatissueParams() throws Exception, ClassNotFoundException, DAOException
 	{
-		validateConnection();
-		validateDEConnection();
 		edu.wustl.common.querysuite.security.utility.Utility.setReadDeniedAndEntitySqlMap();
 		addDefaultProtectionGroupsToMap();
 
@@ -136,40 +134,6 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 
 	}
 	
-	private void validateConnection()
-    {
-		try
-		{
-		   InitialContext ctx = new InitialContext();
-	       DataSource ds = (DataSource)ctx.lookup(CATISSUE_DATASOURCE_JNDI_NAME);
-	       Connection conn = ds.getConnection();
-	       conn.createStatement();
-	    }
-	    catch(Exception e)
-	    {
-	    	Logger.out.debug("************* In Validate Connection ************");
-	    	Logger.out.debug("first time validate connection failed for Oracle");
-	    }
-    }
-	
-	private void validateDEConnection()
-    {
-		try
-		{
-		   InitialContext ctx = new InitialContext();
-	       DataSource ds = (DataSource)ctx.lookup(DE_DATASOURCE_JNDI_NAME);
-	       Connection conn = ds.getConnection();
-	       conn.createStatement();
-	    }
-	    catch(Exception e)
-	    {
-	    	Logger.out.debug("************* In Validate Connection ************");
-	    	Logger.out.debug("first time validate connection failed for Oracle");
-	    }
-    }
-
-
-
 	/**
 	 * @throws Exception
 	 */
