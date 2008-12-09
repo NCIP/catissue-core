@@ -127,10 +127,10 @@ IF EXISTS(SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'c
 
 
 create table CATISSUE_PERMISSIBLE_VALUE (
-   IDENTIFIER numeric(19,0) not null identity,
+   IDENTIFIER bigint not null identity,
    CONCEPT_CODE varchar(40),
    DEFINITION varchar(500),
-   PARENT_IDENTIFIER numeric(19,0),
+   PARENT_IDENTIFIER bigint,
    VALUE varchar(225),
    PUBLIC_ID varchar(30),
    primary key (IDENTIFIER)
@@ -143,90 +143,92 @@ create table CATISSUE_CDE (
    LAST_UPDATED datetime,
    primary key (PUBLIC_ID)
 );
+
+
+
 create table CATISSUE_AUDIT_EVENT (
-   IDENTIFIER numeric(19,0) not null identity,
+   IDENTIFIER bigint not null identity,
    IP_ADDRESS varchar(20),
    EVENT_TIMESTAMP datetime,
-   USER_ID numeric(19,0),
+   USER_ID bigint,
    COMMENTS varchar(500),
    primary key (IDENTIFIER)
 );
 create table CATISSUE_AUDIT_EVENT_LOG (
-   IDENTIFIER numeric(19,0) not null identity,
-   OBJECT_IDENTIFIER numeric(19,0),
+   IDENTIFIER bigint not null identity,
+   OBJECT_IDENTIFIER bigint,
    OBJECT_NAME varchar(50),
    EVENT_TYPE varchar(50),
-   AUDIT_EVENT_ID numeric(19,0),
+   AUDIT_EVENT_ID bigint,
    primary key (IDENTIFIER)
 );
 create table CATISSUE_AUDIT_EVENT_DETAILS (
-   IDENTIFIER numeric(19,0) not null identity,
+   IDENTIFIER bigint not null identity,
    ELEMENT_NAME varchar(150),
    PREVIOUS_VALUE varchar(150),
    CURRENT_VALUE varchar(500),
-   AUDIT_EVENT_LOG_ID numeric(19,0),
+   AUDIT_EVENT_LOG_ID bigint,
    primary key (IDENTIFIER)
 );
 create table CATISSUE_COLL_COORDINATORS (
-   COLLECTION_PROTOCOL_ID numeric(19,0) not null,
-   USER_ID numeric(19,0) not null,
+   COLLECTION_PROTOCOL_ID numeric(20) not null,
+   USER_ID bigint not null,
    primary key (COLLECTION_PROTOCOL_ID, USER_ID)
 );
 create table CATISSUE_CANCER_RESEARCH_GROUP (
-   IDENTIFIER numeric(19,0) not null identity,
+   IDENTIFIER bigint not null identity,
    NAME varchar(255) not null unique,
    primary key (IDENTIFIER)
 );
 create table CATISSUE_COLLECTION_PROTOCOL (
-   IDENTIFIER numeric(19,0) not null,
+   IDENTIFIER numeric(20) not null,
    ALIQUOT_IN_SAME_CONTAINER numeric(1,0),
    UNSIGNED_CONSENT_DOC_URL varchar(500),
    CONSENTS_WAIVED numeric(1,0),
    CP_TYPE varchar(50) default NULL,
-   PARENT_CP_ID numeric(19,0) default NULL,
+   PARENT_CP_ID numeric(20) default NULL,
    SEQUENCE_NUMBER integer,	
    STUDY_CALENDAR_EVENT_POINT DOUBLE PRECISION default NULL,
    primary key (IDENTIFIER)
 );
-
 create table CATISSUE_EVENT_PARAM (
-   IDENTIFIER numeric(19,0) not null,
+   IDENTIFIER bigint not null,
    primary key (IDENTIFIER)
 );
 create table CATISSUE_TRANSFER_EVENT_PARAM (
-   IDENTIFIER numeric(19,0) not null,
+   IDENTIFIER bigint not null,
    FROM_POSITION_DIMENSION_ONE integer,
    FROM_POSITION_DIMENSION_TWO integer,
    TO_POSITION_DIMENSION_ONE integer,
    TO_POSITION_DIMENSION_TWO integer,
-   TO_STORAGE_CONTAINER_ID numeric(19,0),
-   FROM_STORAGE_CONTAINER_ID numeric(19,0),
+   TO_STORAGE_CONTAINER_ID bigint,
+   FROM_STORAGE_CONTAINER_ID bigint,
    primary key (IDENTIFIER)
 );
 create table CATISSUE_STOR_CONT_SPEC_CLASS (
-   STORAGE_CONTAINER_ID numeric(19,0) not null,
+   STORAGE_CONTAINER_ID bigint not null,
    SPECIMEN_CLASS varchar(50)
 );
 create table CATISSUE_COLL_EVENT_PARAM (
-   IDENTIFIER numeric(19,0) not null,
+   IDENTIFIER bigint not null,
    COLLECTION_PROCEDURE varchar(50),
    CONTAINER varchar(50),
    primary key (IDENTIFIER)
 );
 create table CATISSUE_PASSWORD (
-   IDENTIFIER numeric(19,0) not null identity,
+   IDENTIFIER bigint not null identity,
    PASSWORD varchar(255),
    UPDATE_DATE datetime,
-   USER_ID numeric(19,0),
+   USER_ID bigint,
    primary key (IDENTIFIER)
 );
 create table CATISSUE_SPECIMEN_BIOHZ_REL (
-   BIOHAZARD_ID numeric(19,0) not null,
-   SPECIMEN_ID numeric(19,0) not null,
+   BIOHAZARD_ID bigint not null,
+   SPECIMEN_ID numeric(20) not null,
    primary key (SPECIMEN_ID, BIOHAZARD_ID)
 );
 create table CATISSUE_MOL_SPE_REVIEW_PARAM (
-   IDENTIFIER numeric(19,0) not null,
+   IDENTIFIER bigint not null,
    GEL_IMAGE_URL varchar(255),
    QUALITY_INDEX varchar(50),
    LANE_NUMBER varchar(50),
@@ -237,87 +239,90 @@ create table CATISSUE_MOL_SPE_REVIEW_PARAM (
    primary key (IDENTIFIER)
 );
 create table CATISSUE_STORAGE_TYPE (
-   IDENTIFIER numeric(19,0) not null,
+   IDENTIFIER bigint not null,
    DEFAULT_TEMPERATURE DOUBLE PRECISION,
    primary key (IDENTIFIER)
 );
 create table CATISSUE_CONTAINER (
-   IDENTIFIER numeric(19,0) not null identity,
+   IDENTIFIER bigint not null identity,
    ACTIVITY_STATUS varchar(50),
    BARCODE varchar(255) unique,
-   CAPACITY_ID numeric(19,0),
+   CAPACITY_ID bigint,
    COMMENTS varchar(500),
 --   FULL numeric(1,0),
    NAME varchar(255) unique not null,
    primary key (IDENTIFIER)
 );
 create table CATISSUE_SITE (
-   IDENTIFIER numeric(19,0) not null identity,
+   IDENTIFIER numeric(20) not null identity,
    NAME varchar(255) not null unique,
    TYPE varchar(50),
    EMAIL_ADDRESS varchar(255),
-   USER_ID numeric(19,0),
+   USER_ID bigint,
    ACTIVITY_STATUS varchar(50),
-   ADDRESS_ID numeric(19,0),
+   ADDRESS_ID bigint,
    primary key (IDENTIFIER)
 );
 create table CATISSUE_EMBEDDED_EVENT_PARAM (
-   IDENTIFIER numeric(19,0) not null,
+   IDENTIFIER bigint not null,
    EMBEDDING_MEDIUM varchar(50),
    primary key (IDENTIFIER)
 );
 create table CATISSUE_IN_OUT_EVENT_PARAM (
-   IDENTIFIER numeric(19,0) not null,
+   IDENTIFIER bigint not null,
    STORAGE_STATUS varchar(100) not null,
    primary key (IDENTIFIER)
 );
 create table CATISSUE_COLL_DISTRIBUTION_REL (
-   COLLECTION_PROTOCOL_ID numeric(19,0) not null,
-   DISTRIBUTION_PROTOCOL_ID numeric(19,0) not null,
+   COLLECTION_PROTOCOL_ID numeric(20) not null,
+   DISTRIBUTION_PROTOCOL_ID numeric(20) not null,
    primary key (COLLECTION_PROTOCOL_ID, DISTRIBUTION_PROTOCOL_ID)
 );
 create table CATISSUE_DISPOSAL_EVENT_PARAM (
-   IDENTIFIER numeric(19,0) not null,
+   IDENTIFIER bigint not null,
    REASON varchar(255),
    primary key (IDENTIFIER)
 );
 create table CATISSUE_SPECIMEN_REQUIREMENT (
-   IDENTIFIER numeric(19,0) not null identity,
+   IDENTIFIER bigint not null identity,
    SPECIMEN_CLASS varchar(255) not null,
    SPECIMEN_TYPE varchar(50),
    TISSUE_SITE varchar(150),
    PATHOLOGY_STATUS varchar(50),
-   QUANTITY_ID numeric(19,0),
+   QUANTITY_ID bigint,
    primary key (IDENTIFIER)
 );
 create table CATISSUE_INSTITUTION (
-   IDENTIFIER numeric(19,0) not null identity,
+   IDENTIFIER bigint not null identity,
    NAME varchar(255) not null unique,
    primary key (IDENTIFIER)
 );
 create table CATISSUE_ST_CONT_ST_TYPE_REL (
-   STORAGE_CONTAINER_ID numeric(19,0) not null,
-   STORAGE_TYPE_ID numeric(19,0) not null,
+   STORAGE_CONTAINER_ID bigint not null,
+   STORAGE_TYPE_ID bigint not null,
    primary key (STORAGE_CONTAINER_ID, STORAGE_TYPE_ID)
 );
 create table CATISSUE_STOR_TYPE_HOLDS_TYPE (
-   STORAGE_TYPE_ID numeric(19,0) not null,
-   HOLDS_STORAGE_TYPE_ID numeric(19,0) not null,
+   STORAGE_TYPE_ID bigint not null,
+   HOLDS_STORAGE_TYPE_ID bigint not null,
    primary key (STORAGE_TYPE_ID, HOLDS_STORAGE_TYPE_ID)
 );
+
 create table CATISSUE_STORTY_HOLDS_SPARRTY (
-   STORAGE_TYPE_ID numeric(19,0) not null,
-   SPECIMEN_ARRAY_TYPE_ID numeric(19,0) not null,
+   STORAGE_TYPE_ID bigint not null,
+   SPECIMEN_ARRAY_TYPE_ID bigint not null,
    primary key (STORAGE_TYPE_ID, SPECIMEN_ARRAY_TYPE_ID)
 );
+
 create table CATISSUE_CONT_HOLDS_SPARRTYPE (
-   STORAGE_CONTAINER_ID numeric(19,0) not null,
-   SPECIMEN_ARRAY_TYPE_ID numeric(19,0) not null,
+   STORAGE_CONTAINER_ID bigint not null,
+   SPECIMEN_ARRAY_TYPE_ID bigint not null,
    primary key (STORAGE_CONTAINER_ID, SPECIMEN_ARRAY_TYPE_ID)
 );
+
 create table CATISSUE_SPECIMEN_PROTOCOL (
-   IDENTIFIER numeric(19,0) not null identity,
-   PRINCIPAL_INVESTIGATOR_ID numeric(19,0),
+   IDENTIFIER numeric(20) not null identity,
+   PRINCIPAL_INVESTIGATOR_ID bigint,
    TITLE varchar(255) not null unique,
    SHORT_TITLE varchar(255),
    IRB_IDENTIFIER varchar(255),
@@ -329,56 +334,56 @@ create table CATISSUE_SPECIMEN_PROTOCOL (
    primary key (IDENTIFIER)
 );
 create table CATISSUE_FLUID_SPE_EVENT_PARAM (
-   IDENTIFIER numeric(19,0) not null,
+   IDENTIFIER bigint not null,
    CELL_COUNT double precision,
    primary key (IDENTIFIER)
 );
 create table CATISSUE_BIOHAZARD (
-   IDENTIFIER numeric(19,0) not null identity,
+   IDENTIFIER bigint not null identity,
    NAME varchar(255) not null unique,
    COMMENTS varchar(500),
    TYPE varchar(50),
    primary key (IDENTIFIER)
 );
 create table CATISSUE_QUANTITY (
-   IDENTIFIER numeric(19,0) not null identity,
+   IDENTIFIER bigint not null identity,
    QUANTITY double precision,
    primary key (IDENTIFIER)
 );
 create table CATISSUE_SPUN_EVENT_PARAMETERS (
-   IDENTIFIER numeric(19,0) not null,
+   IDENTIFIER bigint not null,
    GFORCE double precision,
    DURATION_IN_MINUTES integer,
    primary key (IDENTIFIER)
 );
 create table CATISSUE_RECEIVED_EVENT_PARAM (
-   IDENTIFIER numeric(19,0) not null,
+   IDENTIFIER bigint not null,
    RECEIVED_QUALITY varchar(255),
    primary key (IDENTIFIER)
 );
 create table CATISSUE_RACE (
-   IDENTIFIER numeric(19,0) not null identity,
-   PARTICIPANT_ID numeric(19,0) not null,
+   IDENTIFIER bigint not null identity,
+   PARTICIPANT_ID bigint not null,
    RACE_NAME varchar(50),
    primary key (IDENTIFIER)
 );
 /*create table CATISSUE_COLL_SPECIMEN_REQ (
-   COLLECTION_PROTOCOL_EVENT_ID numeric(19,0) not null,
-   SPECIMEN_REQUIREMENT_ID numeric(19,0) not null,
+   COLLECTION_PROTOCOL_EVENT_ID bigint not null,
+   SPECIMEN_REQUIREMENT_ID bigint not null,
    primary key (COLLECTION_PROTOCOL_EVENT_ID, SPECIMEN_REQUIREMENT_ID)
 );*/
 create table CATISSUE_SPECI_ARRAY_CONTENT (
-   IDENTIFIER numeric(19,0) not null identity,
+   IDENTIFIER bigint not null identity,
    CONC_IN_MICROGM_PER_MICROLTR double precision,
    INITIAL_QUANTITY double precision,
    POSITION_DIMENSION_ONE integer,
    POSITION_DIMENSION_TWO integer,
-   SPECIMEN_ID numeric(19,0),
-   SPECIMEN_ARRAY_ID numeric(19,0),
+   SPECIMEN_ID numeric(20),
+   SPECIMEN_ARRAY_ID bigint,
    primary key (IDENTIFIER)
 );
 create table CATISSUE_ADDRESS (
-   IDENTIFIER numeric(19,0) not null identity,
+   IDENTIFIER bigint not null identity,
    STREET varchar(255),
    CITY varchar(50),
    STATE varchar(50),
@@ -389,7 +394,7 @@ create table CATISSUE_ADDRESS (
    primary key (IDENTIFIER)
 );
 create table CATISSUE_REPORTED_PROBLEM (
-   IDENTIFIER numeric(19,0) not null identity,
+   IDENTIFIER bigint not null identity,
    AFFILIATION varchar(255) not null,
    NAME_OF_REPORTER varchar(255) not null,
    REPORTERS_EMAIL_ID varchar(255) not null,
@@ -401,27 +406,27 @@ create table CATISSUE_REPORTED_PROBLEM (
    primary key (IDENTIFIER)
 );
 create table CATISSUE_SPECIMEN_ARRAY (
-   IDENTIFIER numeric(19,0) not null,
-   CREATED_BY_ID numeric(19,0),
-   SPECIMEN_ARRAY_TYPE_ID numeric(19,0),
-   DISTRIBUTION_ID numeric(19,0),
+   IDENTIFIER bigint not null,
+   CREATED_BY_ID bigint,
+   SPECIMEN_ARRAY_TYPE_ID bigint,
+   DISTRIBUTION_ID bigint,
    AVAILABLE numeric(1,0),
    primary key (IDENTIFIER)
 );
 create table CATISSUE_SPECIMEN_ARRAY_TYPE (
-   IDENTIFIER numeric(19,0) not null,
+   IDENTIFIER bigint not null,
    SPECIMEN_CLASS varchar(50),
    primary key (IDENTIFIER)
 );
 create table CATISSUE_DISTRIBUTED_ITEM (
-   IDENTIFIER numeric(19,0) not null identity,
+   IDENTIFIER bigint not null identity,
    QUANTITY double precision,
-   SPECIMEN_ID numeric(19,0),
-   DISTRIBUTION_ID numeric(19,0),
+   SPECIMEN_ID numeric(20),
+   DISTRIBUTION_ID bigint,
    primary key (IDENTIFIER)
 );
 create table CATISSUE_PARTICIPANT (
-   IDENTIFIER numeric(19,0) not null identity,
+   IDENTIFIER bigint not null identity,
    LAST_NAME varchar(255),
    FIRST_NAME varchar(255),
    MIDDLE_NAME varchar(255),
@@ -436,28 +441,28 @@ create table CATISSUE_PARTICIPANT (
    primary key (IDENTIFIER)
 );
 create table CATISSUE_SPECIMEN_CHAR (
-   IDENTIFIER numeric(19,0) not null identity,
+   IDENTIFIER numeric(20) not null identity,
    TISSUE_SITE varchar(150),
    TISSUE_SIDE varchar(50),
    primary key (IDENTIFIER)
 );
 /*Ashish Gupta Bug id 2741---Added Association between SCG and Events*/
 create table CATISSUE_SPECIMEN_EVENT_PARAM (
-   IDENTIFIER numeric(19,0) not null identity,
-   SPECIMEN_COLL_GRP_ID numeric(19,0),
-   SPECIMEN_ID numeric(19,0),
+   IDENTIFIER bigint not null identity,
+   SPECIMEN_COLL_GRP_ID numeric(20),
+   SPECIMEN_ID numeric(20),
    EVENT_TIMESTAMP datetime,
-   USER_ID numeric(19,0),
+   USER_ID bigint,
    COMMENTS varchar(500),
    primary key (IDENTIFIER)
 );
 create table CATISSUE_STOR_TYPE_SPEC_CLASS (
-   STORAGE_TYPE_ID numeric(19,0) not null,
+   STORAGE_TYPE_ID bigint not null,
    SPECIMEN_CLASS varchar(50)
 );
 create table CATISSUE_CONTAINER_TYPE (
-   IDENTIFIER numeric(19,0) not null identity,
-   CAPACITY_ID numeric(19,0),
+   IDENTIFIER bigint not null identity,
+   CAPACITY_ID bigint,
    NAME varchar(255) unique,
    ONE_DIMENSION_LABEL varchar(255),
    TWO_DIMENSION_LABEL varchar(255),
@@ -466,125 +471,125 @@ create table CATISSUE_CONTAINER_TYPE (
    primary key (IDENTIFIER)
 );
 create table CATISSUE_CAPACITY (
-   IDENTIFIER numeric(19,0) not null identity,
+   IDENTIFIER bigint not null identity,
    ONE_DIMENSION_CAPACITY integer,
    TWO_DIMENSION_CAPACITY integer,
    primary key (IDENTIFIER)
 );
 create table CATISSUE_PART_MEDICAL_ID (
-   IDENTIFIER numeric(19,0) not null identity,
+   IDENTIFIER bigint not null identity,
    MEDICAL_RECORD_NUMBER varchar(255),
-   SITE_ID numeric(19,0),
-   PARTICIPANT_ID numeric(19,0),
+   SITE_ID numeric(20),
+   PARTICIPANT_ID bigint,
    primary key (IDENTIFIER)
 );
 create table CATISSUE_STORAGE_CONTAINER (
-   IDENTIFIER numeric(19,0) not null,
-   SITE_ID numeric(19,0),
+   IDENTIFIER bigint not null,
+   SITE_ID numeric(20),
    TEMPERATURE double precision,
-   STORAGE_TYPE_ID numeric(19,0),
+   STORAGE_TYPE_ID bigint,
    primary key (IDENTIFIER)
 );
 create table CATISSUE_CELL_SPE_REVIEW_PARAM (
-   IDENTIFIER numeric(19,0) not null,
+   IDENTIFIER bigint not null,
    NEOPLASTIC_CELLULARITY_PER double precision,
    VIABLE_CELL_PERCENTAGE double precision,
    primary key (IDENTIFIER)
 );
 create table CATISSUE_DISTRIBUTION (
-   IDENTIFIER numeric(19,0) not null identity,
-   TO_SITE_ID numeric(19,0),
-   DISTRIBUTION_PROTOCOL_ID numeric(19,0),
+   IDENTIFIER bigint not null identity,
+   TO_SITE_ID numeric(20),
+   DISTRIBUTION_PROTOCOL_ID numeric(20),
    ACTIVITY_STATUS varchar(50),
-   SPECIMEN_ID numeric(19,0),
+   SPECIMEN_ID numeric(20),
    EVENT_TIMESTAMP datetime,
-   USER_ID numeric(19,0),
+   USER_ID bigint,
    COMMENTS varchar(500),
    primary key (IDENTIFIER)
 );
 create table CATISSUE_PROCEDURE_EVENT_PARAM (
-   IDENTIFIER numeric(19,0) not null,
+   IDENTIFIER bigint not null,
    URL varchar(255) not null,
    NAME varchar(255) not null,
    primary key (IDENTIFIER)
 );
 create table CATISSUE_DISTRIBUTION_PROTOCOL (
-   IDENTIFIER numeric(19,0) not null,
+   IDENTIFIER numeric(20) not null,
    primary key (IDENTIFIER)
 );
 create table CATISSUE_DISTRIBUTION_SPEC_REQ (
-   IDENTIFIER numeric(19,0) not null identity,
+   IDENTIFIER bigint not null identity,
    SPECIMEN_CLASS varchar(255) not null,
    SPECIMEN_TYPE varchar(50),
    TISSUE_SITE varchar(150),
    PATHOLOGY_STATUS varchar(50),
    QUANTITY double precision,
-   DISTRIBUTION_PROTOCOL_ID numeric(19,0),
+   DISTRIBUTION_PROTOCOL_ID numeric(20),
    primary key (IDENTIFIER),
    CONSTRAINT FK_DISTRIBUTION_PROTOCOL FOREIGN KEY (DISTRIBUTION_PROTOCOL_ID) REFERENCES CATISSUE_DISTRIBUTION_PROTOCOL
 );
 create table CATISSUE_EXTERNAL_IDENTIFIER (
-   IDENTIFIER numeric(19,0) not null identity,
+   IDENTIFIER bigint not null identity,
    NAME varchar(255),
    VALUE varchar(255),
-   SPECIMEN_ID numeric(19,0),
+   SPECIMEN_ID numeric(20),
    primary key (IDENTIFIER)
 );
 
 create table CATISSUE_DEPARTMENT (
-   IDENTIFIER numeric(19,0) not null identity,
+   IDENTIFIER bigint not null identity,
    NAME varchar(255) not null unique,
    primary key (IDENTIFIER)
 );
 create table CATISSUE_FIXED_EVENT_PARAM (
-   IDENTIFIER numeric(19,0) not null,
+   IDENTIFIER bigint not null,
    FIXATION_TYPE varchar(50) not null,
    DURATION_IN_MINUTES integer,
    primary key (IDENTIFIER)
 );
 create table CATISSUE_THAW_EVENT_PARAMETERS (
-   IDENTIFIER numeric(19,0) not null,
+   IDENTIFIER bigint not null,
    primary key (IDENTIFIER)
 );
 create table CATISSUE_COLL_PROT_REG (
-   IDENTIFIER numeric(19,0) not null identity,
+   IDENTIFIER numeric(20) not null identity,
    PROTOCOL_PARTICIPANT_ID varchar(255),
    REGISTRATION_DATE datetime,
-   PARTICIPANT_ID numeric(19,0),
-   COLLECTION_PROTOCOL_ID numeric(19,0),
+   PARTICIPANT_ID bigint,
+   COLLECTION_PROTOCOL_ID numeric(20),
    ACTIVITY_STATUS varchar(50),
    CONSENT_SIGN_DATE datetime,
    CONSENT_DOC_URL varchar(500),
-   CONSENT_WITNESS numeric(19,0),
+   CONSENT_WITNESS bigint,
    BARCODE varchar(255) unique,
    DATE_OFFSET integer,	
    primary key (IDENTIFIER)
 );
 create table CATISSUE_FROZEN_EVENT_PARAM (
-   IDENTIFIER numeric(19,0) not null,
+   IDENTIFIER bigint not null,
    METHOD varchar(50),
    primary key (IDENTIFIER)
 );
 
 create table CATISSUE_USER (
-   IDENTIFIER numeric(19,0) not null identity,
+   IDENTIFIER bigint not null identity,
    EMAIL_ADDRESS varchar(255),
    FIRST_NAME varchar(255),
    LAST_NAME varchar(255),
    LOGIN_NAME varchar(255) not null unique,
    START_DATE datetime,
    ACTIVITY_STATUS varchar(50),
-   DEPARTMENT_ID numeric(19,0),
-   CANCER_RESEARCH_GROUP_ID numeric(19,0),
-   INSTITUTION_ID numeric(19,0),
-   ADDRESS_ID numeric(19,0),
-   CSM_USER_ID numeric(19,0),
+   DEPARTMENT_ID bigint,
+   CANCER_RESEARCH_GROUP_ID bigint,
+   INSTITUTION_ID bigint,
+   ADDRESS_ID bigint,
+   CSM_USER_ID bigint,
    STATUS_COMMENT varchar(500),
    FIRST_TIME_LOGIN numeric(1,0) default 1,
    primary key (IDENTIFIER)
 );
 create table CATISSUE_TIS_SPE_EVENT_PARAM (
-   IDENTIFIER numeric(19,0) not null,
+   IDENTIFIER bigint not null,
    NEOPLASTIC_CELLULARITY_PER double precision,
    NECROSIS_PERCENTAGE double precision,
    LYMPHOCYTIC_PERCENTAGE double precision,
@@ -593,26 +598,26 @@ create table CATISSUE_TIS_SPE_EVENT_PARAM (
    primary key (IDENTIFIER)
 );
 create table CATISSUE_ST_CONT_COLL_PROT_REL (
-   STORAGE_CONTAINER_ID numeric(19,0) not null,
-   COLLECTION_PROTOCOL_ID numeric(19,0) not null,
+   STORAGE_CONTAINER_ID bigint not null,
+   COLLECTION_PROTOCOL_ID numeric(20) not null,
    primary key (STORAGE_CONTAINER_ID, COLLECTION_PROTOCOL_ID)
 );
 
 create table CATISSUE_ABS_SPECI_COLL_GROUP (
-   IDENTIFIER numeric(19,0) not null identity,
+   IDENTIFIER numeric(20) not null identity,
    CLINICAL_DIAGNOSIS varchar(150),
    CLINICAL_STATUS varchar(50),
    ACTIVITY_STATUS varchar(50),
-   SITE_ID numeric(19,0),
+   SITE_ID numeric(20),
    primary key (IDENTIFIER)
 );
 
 create table CATISSUE_COLL_PROT_EVENT (
-   IDENTIFIER numeric(19,0) not null identity,
+   IDENTIFIER numeric(20) not null identity,
    CLINICAL_STATUS varchar(50),
    COLLECTION_POINT_LABEL varchar(255),
    STUDY_CALENDAR_EVENT_POINT double precision,
-   COLLECTION_PROTOCOL_ID numeric(19,0),
+   COLLECTION_PROTOCOL_ID numeric(20),
    LABELFORMAT varchar(255) default NULL,
    primary key (IDENTIFIER),
    unique (COLLECTION_PROTOCOL_ID,COLLECTION_POINT_LABEL),
@@ -621,31 +626,29 @@ create table CATISSUE_COLL_PROT_EVENT (
 );
 
 create table CATISSUE_SPECIMEN_COLL_GROUP (
-   IDENTIFIER numeric(19,0) not null identity,
+   IDENTIFIER numeric(20) not null identity,
    NAME varchar(255) unique, 
    BARCODE varchar(255) unique, 
    COMMENTS varchar(2000),
    ENCOUNTER_TIMESTAMP datetime,
-   COLLECTION_PROTOCOL_REG_ID numeric(19,0),
+   COLLECTION_PROTOCOL_REG_ID numeric(20),
    SURGICAL_PATHOLOGY_NUMBER varchar(50),
-   COLLECTION_PROTOCOL_EVENT_ID numeric(19,0),
+   COLLECTION_PROTOCOL_EVENT_ID numeric(20),
    COLLECTION_STATUS varchar(50),
    DATE_OFFSET integer, 	
    primary key (IDENTIFIER),
    CONSTRAINT fkDebaf1677e07c4ac FOREIGN KEY( Collection_Protocol_reg_Id ) REFERENCES CATISSUE_COLL_PROT_REG( IdentIfier ),
    CONSTRAINT fk_Parent_spec_coll_Group FOREIGN KEY( IdentIfier ) REFERENCES CATISSUE_ABS_SPECI_COLL_GROUP( IdentIfier )
 );
-
-
 CREATE TABLE CATISSUE_ABSTRACT_SPECIMEN
 (                                                                                                                 
-      IDENTIFIER numeric(19,0) NOT NULL identity,    
+      IDENTIFIER numeric(20) NOT NULL identity,    
 	  SPECIMEN_CLASS varchar(50) NOT NULL,         
       SPECIMEN_TYPE varchar(50),                                                                                                                
       LINEAGE varchar(50),                                                                                                              
       PATHOLOGICAL_STATUS varchar(50),                                                                                                  
-      PARENT_SPECIMEN_ID numeric(19,0),                                                                                                    
-      SPECIMEN_CHARACTERISTICS_ID numeric(19,0),                                                                                      
+      PARENT_SPECIMEN_ID numeric(20),                                                                                                    
+      SPECIMEN_CHARACTERISTICS_ID numeric(20),                                                                                      
       INITIAL_QUANTITY double precision,                                                                                                        
       PRIMARY KEY  (IDENTIFIER),                                                                                                                     
       CONSTRAINT FK1674810456906F39 FOREIGN KEY (SPECIMEN_CHARACTERISTICS_ID) REFERENCES catissue_specimen_char                 
@@ -653,53 +656,52 @@ CREATE TABLE CATISSUE_ABSTRACT_SPECIMEN
 
 CREATE TABLE CATISSUE_CP_REQ_SPECIMEN
  (                                                                                                                 
-     IDENTIFIER numeric(19,0) NOT NULL identity,         
+     IDENTIFIER numeric(20) NOT NULL identity,         
      STORAGE_TYPE varchar(255) NOT NULL,      
-	 COLLECTION_PROTOCOL_EVENT_ID numeric(19,0),
+	 COLLECTION_PROTOCOL_EVENT_ID numeric(20),
 	 LABELFORMAT varchar(255) default NULL,
      PRIMARY KEY  (IDENTIFIER),                                                                                                                     
      CONSTRAINT FK111110456906F39 FOREIGN KEY (COLLECTION_PROTOCOL_EVENT_ID) REFERENCES catissue_coll_prot_event,
 	 CONSTRAINT FK_PARENT_CP_REQ_SPECIMEN FOREIGN KEY (IDENTIFIER) REFERENCES CATISSUE_ABSTRACT_SPECIMEN
  ); 
  
- 
  CREATE TABLE CATISSUE_MOL_REQ_SPECIMEN
  (                                                                                                                 
-     IDENTIFIER numeric(19,0) NOT NULL identity,   
+     IDENTIFIER numeric(20) NOT NULL identity,   
 	 CONCENTRATION double precision,
      PRIMARY KEY  (IDENTIFIER),                                                                                                                     
      CONSTRAINT FK_MOL_REQ_SPECIMEN FOREIGN KEY (IDENTIFIER) REFERENCES CATISSUE_CP_REQ_SPECIMEN                
  );
 CREATE TABLE CATISSUE_FLUID_REQ_SPECIMEN
 (                                                                                                                 
-     IDENTIFIER numeric(19,0) NOT NULL identity,       
+     IDENTIFIER numeric(20) NOT NULL identity,       
      PRIMARY KEY  (IDENTIFIER),                                                                                                                     
      CONSTRAINT FK_FLUID_REQ_SPECIMEN FOREIGN KEY (IDENTIFIER) REFERENCES CATISSUE_CP_REQ_SPECIMEN
 );
 CREATE TABLE CATISSUE_CELL_REQ_SPECIMEN
 (                                                                                                                 
-     IDENTIFIER numeric(19,0) NOT NULL identity,       
+     IDENTIFIER numeric(20) NOT NULL identity,       
       PRIMARY KEY  (IDENTIFIER),                                                                                                                     
       CONSTRAINT FK_CELL_REQ_SPECIMEN FOREIGN KEY (IDENTIFIER) REFERENCES CATISSUE_CP_REQ_SPECIMEN
                 
 );
 CREATE TABLE CATISSUE_TISSUE_REQ_SPECIMEN
 (                                                                                                                 
-     IDENTIFIER numeric(19,0) NOT NULL identity,       
+     IDENTIFIER numeric(20) NOT NULL identity,       
       PRIMARY KEY  (IDENTIFIER),                                                                                                                     
       CONSTRAINT FK_TISSUE_REQ_SPECIMEN FOREIGN KEY (IDENTIFIER) REFERENCES CATISSUE_CP_REQ_SPECIMEN               
 );
 
 CREATE TABLE CATISSUE_SPECIMEN
 (                                                                                                                 
-     IDENTIFIER numeric(19,0) NOT NULL identity,
+     IDENTIFIER numeric(20) NOT NULL identity,
      LABEL varchar(255) unique,                                                                                                               
      AVAILABLE numeric(1,0),                                                                                                         
      BARCODE varchar(255) unique,
      COMMENTS varchar(500),
      ACTIVITY_STATUS varchar(50),                                                                                              
-     SPECIMEN_COLLECTION_GROUP_ID numeric(19,0),     
-     REQ_SPECIMEN_ID numeric(19,0),     
+     SPECIMEN_COLLECTION_GROUP_ID numeric(20),     
+     REQ_SPECIMEN_ID numeric(20),     
      AVAILABLE_QUANTITY double precision,                                                                                                        
      CREATED_ON_DATE datetime ,                                                                                                             
      COLLECTION_STATUS varchar(50),                                                                                                    
@@ -711,7 +713,7 @@ CREATE TABLE CATISSUE_SPECIMEN
    
    CREATE TABLE CATISSUE_MOLECULAR_SPECIMEN
    (                                                                                                                 
-     IDENTIFIER numeric(19,0) NOT NULL identity,  
+     IDENTIFIER numeric(20) NOT NULL identity,  
      CONCENTRATION double precision,     
      PRIMARY KEY  (IDENTIFIER),                                                                                                                     
      CONSTRAINT FK_MOLECULAR_SPECIMEN FOREIGN KEY (IDENTIFIER) REFERENCES CATISSUE_SPECIMEN             
@@ -719,30 +721,30 @@ CREATE TABLE CATISSUE_SPECIMEN
 
 CREATE TABLE CATISSUE_FLUID_SPECIMEN
 (                                                                                                                 
-     IDENTIFIER numeric(19,0) NOT NULL identity,       
+     IDENTIFIER numeric(20) NOT NULL identity,       
       PRIMARY KEY  (IDENTIFIER),                                                                                                                     
       CONSTRAINT FK_FLUID_SPECIMEN FOREIGN KEY (IDENTIFIER) REFERENCES CATISSUE_SPECIMEN                
 );
 CREATE TABLE CATISSUE_CELL_SPECIMEN
 (                                                                                                                 
-     IDENTIFIER numeric(19,0) NOT NULL identity,       
+     IDENTIFIER numeric(20) NOT NULL identity,       
       PRIMARY KEY  (IDENTIFIER),                                                                                                                     
       CONSTRAINT FK_CELL_SPECIMEN FOREIGN KEY (IDENTIFIER) REFERENCES CATISSUE_SPECIMEN
 );
 CREATE TABLE CATISSUE_TISSUE_SPECIMEN
 (                                                                                                                 
-     IDENTIFIER numeric(19,0) NOT NULL identity,       
+     IDENTIFIER numeric(20) NOT NULL identity,       
       PRIMARY KEY  (IDENTIFIER),                                                                                                                     
       CONSTRAINT FK_TISSUE_SPECIMEN FOREIGN KEY (IDENTIFIER) REFERENCES CATISSUE_SPECIMEN
 );
 create table CATISSUE_SPECIMEN_TYPE (
-   SPECIMEN_ARRAY_TYPE_ID numeric(19,0) not null,
+   SPECIMEN_ARRAY_TYPE_ID bigint not null,
    SPECIMEN_TYPE varchar(50)
 );
 create table CATISSUE_AUDIT_EVENT_QUERY_LOG (
-   IDENTIFIER numeric(19,0) not null identity,
+   IDENTIFIER bigint not null identity,
    QUERY_DETAILS varchar(max),  
-   AUDIT_EVENT_ID numeric(19,0),
+   AUDIT_EVENT_ID bigint,
    primary key (IDENTIFIER)
 );
 
@@ -838,24 +840,24 @@ alter table CATISSUE_COLL_PROT_REG add constraint FK5EB25F13A0FF79D4 foreign key
 /* Consent Tracking related drop, create and add foreign key scripts. */
 
 create table CATISSUE_CONSENT_TIER_RESPONSE (
-   IDENTIFIER numeric(19,0) not null identity,
+   IDENTIFIER bigint not null identity,
    RESPONSE varchar(255),
-   CONSENT_TIER_ID numeric(19,0),
-   COLL_PROT_REG_ID numeric(19,0),
+   CONSENT_TIER_ID bigint,
+   COLL_PROT_REG_ID numeric(20),
    primary key (IDENTIFIER)
 );
 create table CATISSUE_CONSENT_TIER_STATUS (
-   IDENTIFIER numeric(19,0) not null identity,
-   CONSENT_TIER_ID numeric(19,0),
+   IDENTIFIER bigint not null identity,
+   CONSENT_TIER_ID bigint,
    STATUS varchar(255),
-   SPECIMEN_ID numeric(19,0),
-   SPECIMEN_COLL_GROUP_ID numeric(19,0),
+   SPECIMEN_ID numeric(20),
+   SPECIMEN_COLL_GROUP_ID numeric(20),
    primary key (IDENTIFIER)
 );
 create table CATISSUE_CONSENT_TIER (
-   IDENTIFIER numeric(19,0) not null identity,
+   IDENTIFIER bigint not null identity,
    STATEMENT varchar(500),
-   COLL_PROTOCOL_ID numeric(19,0),
+   COLL_PROTOCOL_ID numeric(20),
    primary key (IDENTIFIER)
 );
 
@@ -869,72 +871,72 @@ alter table CATISSUE_CONSENT_TIER  add constraint FK51725303E36A4B4F foreign key
 /* Specimen Order */
 
 create table CATISSUE_PATH_CASE_ORDER_ITEM (
-   IDENTIFIER numeric(19,0) not null,
+   IDENTIFIER bigint not null,
    PATHOLOGICAL_STATUS varchar(255),
    TISSUE_SITE varchar(255),
-   SPECIMEN_COLL_GROUP_ID numeric(19,0),
+   SPECIMEN_COLL_GROUP_ID numeric(20),
    primary key (IDENTIFIER)
 );
 
 create table CATISSUE_DERIEVED_SP_ORD_ITEM (
-   IDENTIFIER numeric(19,0) not null,
-   SPECIMEN_ID numeric(19,0),
+   IDENTIFIER bigint not null,
+   SPECIMEN_ID numeric(20),
    primary key (IDENTIFIER)
 );
 
 
 create table CATISSUE_NEW_SPEC_ORD_ITEM (
-   IDENTIFIER numeric(19,0) not null,
+   IDENTIFIER bigint not null,
    SPECIMEN_CLASS varchar(255),
    SPECIMEN_TYPE varchar(255),
    primary key (IDENTIFIER)
 );
 
 create table CATISSUE_EXISTING_SP_ORD_ITEM (
-   IDENTIFIER numeric(19,0) not null,
-   SPECIMEN_ID numeric(19,0),
+   IDENTIFIER bigint not null,
+   SPECIMEN_ID numeric(20),
    primary key (IDENTIFIER)
 );
 
 create table CATISSUE_SPECIMEN_ORDER_ITEM (
-   IDENTIFIER numeric(19,0) not null,
-   ARRAY_ORDER_ITEM_ID numeric(19,0),
+   IDENTIFIER bigint not null,
+   ARRAY_ORDER_ITEM_ID bigint,
    primary key (IDENTIFIER)
 );
 
 create table CATISSUE_EXIST_SP_AR_ORD_ITEM (
-   IDENTIFIER numeric(19,0) not null,
-   SPECIMEN_ARRAY_ID numeric(19,0),
+   IDENTIFIER bigint not null,
+   SPECIMEN_ARRAY_ID bigint,
    primary key (IDENTIFIER)
 );
 
 create table CATISSUE_NEW_SP_AR_ORDER_ITEM (
-   IDENTIFIER numeric(19,0) not null,
-   ARRAY_TYPE_ID numeric(19,0),
+   IDENTIFIER bigint not null,
+   ARRAY_TYPE_ID bigint,
    NAME varchar(255),
-   SPECIMEN_ARRAY_ID numeric(19,0),
+   SPECIMEN_ARRAY_ID bigint,
    primary key (IDENTIFIER)
 );
 
 create table CATISSUE_SP_ARRAY_ORDER_ITEM (
-   IDENTIFIER numeric(19,0) not null,
+   IDENTIFIER bigint not null,
    primary key (IDENTIFIER)
 );
 
 create table CATISSUE_ORDER_ITEM (
-   IDENTIFIER numeric(19,0) not null identity,
+   IDENTIFIER bigint not null identity,
    DESCRIPTION varchar(500),
-   DISTRIBUTED_ITEM_ID numeric(19,0),
+   DISTRIBUTED_ITEM_ID bigint,
    STATUS varchar(50),
    REQUESTED_QUANTITY double precision,
-   ORDER_ID numeric(19,0),
+   ORDER_ID bigint,
    primary key (IDENTIFIER)
 );
 
 create table CATISSUE_ORDER (
-   IDENTIFIER numeric(19,0) not null identity,
+   IDENTIFIER bigint not null identity,
    COMMENTS varchar(500),
-   DISTRIBUTION_PROTOCOL_ID numeric(19,0),
+   DISTRIBUTION_PROTOCOL_ID numeric(20),
    NAME varchar(500),
    REQUESTED_DATE datetime,
    STATUS varchar(50),
@@ -943,8 +945,8 @@ create table CATISSUE_ORDER (
 
 
 /* extra for catissue_distribution */
- alter table catissue_distribution add ORDER_ID numeric(19,0);
- alter table catissue_distributed_item add  SPECIMEN_ARRAY_ID numeric(19,0);    
+ alter table catissue_distribution add ORDER_ID bigint;
+ alter table catissue_distributed_item add  SPECIMEN_ARRAY_ID bigint;    
 /* extra finished */
 
 alter table CATISSUE_PATH_CASE_ORDER_ITEM add constraint FKBD5029D5F69249F7 foreign key (SPECIMEN_COLL_GROUP_ID) references CATISSUE_SPECIMEN_COLL_GROUP (IDENTIFIER);
@@ -980,7 +982,7 @@ alter table CATISSUE_DISTRIBUTED_ITEM add constraint FKA7C3ED4BC4A3C438 foreign 
 
 
 create table CATISSUE_SPECIMEN_LABEL_COUNT (
-   LABEL_COUNT numeric(19,0) not null,
+   LABEL_COUNT bigint not null,
    primary key (LABEL_COUNT)
 );
 INSERT INTO CATISSUE_SPECIMEN_LABEL_COUNT (LABEL_COUNT) VALUES ('0');
@@ -988,118 +990,118 @@ INSERT INTO CATISSUE_SPECIMEN_LABEL_COUNT (LABEL_COUNT) VALUES ('0');
 /****caTIES Realated Tables - start**********/
 
 create table CATISSUE_REPORT_TEXTCONTENT (
-   IDENTIFIER numeric(19,0) not null,
-   REPORT_ID numeric(19,0),
+   IDENTIFIER bigint not null,
+   REPORT_ID bigint,
    primary key (IDENTIFIER)
 );
 create table CATISSUE_IDENTIFIED_REPORT (
-   IDENTIFIER numeric(19,0) not null,
-   DEID_REPORT numeric(19,0),
-   SCG_ID numeric(19,0),
+   IDENTIFIER bigint not null,
+   DEID_REPORT bigint,
+   SCG_ID numeric(20),
    primary key (IDENTIFIER)
 );
 create table CATISSUE_CONCEPT_REFERENT (
-   IDENTIFIER numeric(19,0) not null identity,
-   CONCEPT_ID numeric(19,0),
-   CONCEPT_CLASSIFICATION_ID numeric(19,0),
-   DEIDENTIFIED_REPORT_ID numeric(19,0),
-   END_OFFSET numeric(19,0),
+   IDENTIFIER bigint not null identity,
+   CONCEPT_ID bigint,
+   CONCEPT_CLASSIFICATION_ID bigint,
+   DEIDENTIFIED_REPORT_ID bigint,
+   END_OFFSET bigint,
    IS_MODIFIER numeric(1,0),
    IS_NEGATED numeric(1,0),
-   START_OFFSET numeric(19,0),
+   START_OFFSET bigint,
    primary key (IDENTIFIER)
 );
 create table CATISSUE_REPORT_CONTENT (
-   IDENTIFIER numeric(19,0) not null identity,
+   IDENTIFIER bigint not null identity,
    REPORT_DATA varchar(max),
    primary key (IDENTIFIER)
 );
 create table CATISSUE_REVIEW_PARAMS (
-   IDENTIFIER numeric(19,0) not null identity,
+   IDENTIFIER bigint not null identity,
    REVIEWER_ROLE varchar(100),
-   REPORT_ID numeric(19,0),
+   REPORT_ID bigint,
    EVENT_TIMESTAMP timestamp,
-   USER_ID numeric(19,0),
+   USER_ID bigint,
    COMMENTS varchar(4000),
    STATUS varchar(100),
    primary key (IDENTIFIER)
 );
 create table CATISSUE_REPORT_BICONTENT (
-   IDENTIFIER numeric(19,0) not null,
-   REPORT_ID numeric(19,0),
+   IDENTIFIER bigint not null,
+   REPORT_ID bigint,
    primary key (IDENTIFIER)
 );
 create table CATISSUE_REPORT_SECTION (
-   IDENTIFIER numeric(19,0) not null identity,
+   IDENTIFIER bigint not null identity,
    DOCUMENT_FRAGMENT varchar(4000),
    END_OFFSET integer,
    NAME varchar(100),
    START_OFFSET integer,
-   TEXT_CONTENT_ID numeric(19,0),
+   TEXT_CONTENT_ID bigint,
    primary key (IDENTIFIER)
 );
 create table CATISSUE_DEIDENTIFIED_REPORT (
-   IDENTIFIER numeric(19,0) not null,
+   IDENTIFIER bigint not null,
    STATUS varchar(100),
-   SCG_ID numeric(19,0),
+   SCG_ID numeric(20),
    primary key (IDENTIFIER)
 );
 create table CATISSUE_QUARANTINE_PARAMS (
-   IDENTIFIER numeric(19,0) not null identity,
-   DEID_REPORT_ID numeric(19,0),
+   IDENTIFIER bigint not null identity,
+   DEID_REPORT_ID bigint,
    IS_QUARANTINED numeric(1),
    EVENT_TIMESTAMP timestamp,
-   USER_ID numeric(19,0),
+   USER_ID bigint,
    COMMENTS varchar(4000),
    STATUS varchar(100),
    primary key (IDENTIFIER)
 );
 create table CATISSUE_PATHOLOGY_REPORT (
-   IDENTIFIER numeric(19,0) not null identity,
+   IDENTIFIER bigint not null identity,
    ACTIVITY_STATUS varchar(100),
    REVIEW_FLAG numeric(1),
-   SOURCE_ID numeric(19,0),
+   SOURCE_ID numeric(20),
    REPORT_STATUS varchar(100),
    COLLECTION_DATE_TIME datetime,
    primary key (IDENTIFIER)
 );
 create table CATISSUE_REPORT_XMLCONTENT (
-   IDENTIFIER numeric(19,0) not null,
-   REPORT_ID numeric(19,0),
+   IDENTIFIER bigint not null,
+   REPORT_ID bigint,
    primary key (IDENTIFIER)
 );
 create table CATISSUE_REPORT_QUEUE (
-   IDENTIFIER numeric(19,0) not null identity,
+   IDENTIFIER bigint not null identity,
    STATUS varchar(50),
    SURGICAL_PATHOLOGY_NUMBER varchar(50),
    PARTICIPANT_NAME varchar(255),
    SITE_NAME varchar(255),
    REPORT_LOADED_DATE datetime,
    REPORT_TEXT varchar(max),
-   SPECIMEN_COLL_GRP_ID numeric(19,0),
+   SPECIMEN_COLL_GRP_ID numeric(20),
    REPORT_COLLECTION_DATE datetime,
    primary key (IDENTIFIER)
 );
 create table CATISSUE_REPORT_PARTICIP_REL(
-   PARTICIPANT_ID numeric(19,0),
-   REPORT_ID numeric(19,0)
+   PARTICIPANT_ID bigint,
+   REPORT_ID bigint
 );
 create table CATISSUE_CONCEPT (
-   IDENTIFIER numeric(19,0) not null identity,
+   IDENTIFIER bigint not null identity,
    CONCEPT_UNIQUE_ID varchar(30),
    NAME varchar(500),
-   SEMANTIC_TYPE_ID numeric(19,0),
+   SEMANTIC_TYPE_ID bigint,
    primary key (IDENTIFIER)
 );
 
 create table CATISSUE_SEMANTIC_TYPE (
-   IDENTIFIER numeric(19,0) not null identity,
+   IDENTIFIER bigint not null identity,
    LABEL varchar(500),
    primary key (IDENTIFIER)
 );
 
 create table CATISSUE_CONCEPT_CLASSIFICATN (
-   IDENTIFIER numeric(19,0) not null identity,
+   IDENTIFIER bigint not null identity,
    NAME varchar(500),
    primary key (IDENTIFIER)
 );
@@ -1132,16 +1134,16 @@ alter table CATISSUE_CONCEPT_REFERENT add constraint FK799CCA7E72C371DD foreign 
 
 /* Suite 1.1 model changes */
 create table CATISSUE_ABSTRACT_POSITION (
-	IDENTIFIER numeric(19,0) NOT NULL identity,
+	IDENTIFIER bigint NOT NULL identity,
 	POSITION_DIMENSION_ONE INTEGER,
 	POSITION_DIMENSION_TWO INTEGER,
 	primary key (IDENTIFIER)
 );
 
 create table CATISSUE_SPECIMEN_POSITION(
-	IDENTIFIER numeric(19,0) NOT NULL identity,
-	SPECIMEN_ID numeric(19,0),
-	CONTAINER_ID numeric(19,0),
+	IDENTIFIER bigint NOT NULL identity,
+	SPECIMEN_ID numeric(20),
+	CONTAINER_ID bigint,
 	primary key (IDENTIFIER),
 	CONSTRAINT FK_SPECIMEN_POSITION FOREIGN KEY (IDENTIFIER) REFERENCES CATISSUE_ABSTRACT_POSITION,
 	CONSTRAINT FK_SPECIMEN FOREIGN KEY (SPECIMEN_ID) REFERENCES CATISSUE_SPECIMEN,
@@ -1149,9 +1151,9 @@ create table CATISSUE_SPECIMEN_POSITION(
 );
 
 create table CATISSUE_CONTAINER_POSITION(
-	IDENTIFIER numeric(19,0) NOT NULL identity,
-	PARENT_CONTAINER_ID numeric(19,0),
-	CONTAINER_ID numeric(19,0),
+	IDENTIFIER bigint NOT NULL identity,
+	PARENT_CONTAINER_ID bigint,
+	CONTAINER_ID bigint,
 	primary key (IDENTIFIER),
 	CONSTRAINT FK_CONTAINER_POSITION FOREIGN KEY (IDENTIFIER) REFERENCES CATISSUE_ABSTRACT_POSITION,
 	CONSTRAINT FK_CONTAINER FOREIGN KEY (CONTAINER_ID) REFERENCES CATISSUE_CONTAINER,
@@ -1163,11 +1165,11 @@ create table CATISSUE_CONTAINER_POSITION(
 /**Added a workaround so that edit of Container,specimen should work. NEED TO REMOVE **/
 ALTER TABLE CATISSUE_SPECIMEN ADD POSITION_DIMENSION_ONE integer;
 ALTER TABLE CATISSUE_SPECIMEN ADD POSITION_DIMENSION_TWO integer;
-ALTER TABLE CATISSUE_SPECIMEN ADD STORAGE_CONTAINER_IDENTIFIER numeric(19,0);
+ALTER TABLE CATISSUE_SPECIMEN ADD STORAGE_CONTAINER_IDENTIFIER bigint;
 ALTER TABLE CATISSUE_CONTAINER ADD POSITION_DIMENSION_ONE integer;
 ALTER TABLE CATISSUE_CONTAINER ADD POSITION_DIMENSION_TWO integer;
-ALTER TABLE CATISSUE_CONTAINER ADD PARENT_CONTAINER_ID numeric(19,0);
-ALTER TABLE CATISSUE_SPECIMEN_ARRAY ADD STORAGE_CONTAINER_ID numeric(19,0);
+ALTER TABLE CATISSUE_CONTAINER ADD PARENT_CONTAINER_ID bigint;
+ALTER TABLE CATISSUE_SPECIMEN_ARRAY ADD STORAGE_CONTAINER_ID bigint;
 
 /* For specimen Model change*/
 
@@ -1176,20 +1178,20 @@ ALTER TABLE CATISSUE_SPECIMEN_ARRAY ADD STORAGE_CONTAINER_ID numeric(19,0);
 /** MSR changes : Start **/
 
 CREATE TABLE CATISSUE_SITE_USERS (
-   SITE_ID numeric(19,0) ,
-   USER_ID numeric(19,0) ,
+   SITE_ID numeric(20) ,
+   USER_ID bigint ,
    PRIMARY KEY (SITE_ID, USER_ID)
 );
 
 CREATE TABLE CATISSUE_SITE_CP(
-   SITE_ID numeric(19,0) ,
-   COLLECTION_PROTOCOL_ID numeric(19,0) ,
+   SITE_ID numeric(20) ,
+   COLLECTION_PROTOCOL_ID numeric(20) ,
    PRIMARY KEY (SITE_ID,COLLECTION_PROTOCOL_ID)
  );
 
 CREATE TABLE CATISSUE_USER_CP(
-  USER_ID numeric(19,0) ,
-  COLLECTION_PROTOCOL_ID numeric(19,0) ,
+  USER_ID bigint ,
+  COLLECTION_PROTOCOL_ID numeric(20) ,
   PRIMARY KEY (USER_ID,COLLECTION_PROTOCOL_ID)
  );
 
@@ -1203,6 +1205,5 @@ ALTER TABLE CATISSUE_USER_CP ADD CONSTRAINT FK5 FOREIGN KEY (USER_ID) REFERENCES
 ALTER TABLE CATISSUE_USER_CP ADD CONSTRAINT FK6 FOREIGN KEY (COLLECTION_PROTOCOL_ID) REFERENCES CATISSUE_COLLECTION_PROTOCOL (IDENTIFIER);
 
 /** MSR changes : End **/
-
 
 
