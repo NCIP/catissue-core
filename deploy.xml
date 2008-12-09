@@ -2173,23 +2173,6 @@ Thanking You,
 		</if>
 	</target>
 	
-	<!--MsSQL server Database Upgradation -->
-	<target name="upgrade_db_demodel_mssqlserver">
-	<echo message="Upgrading MySQL Database for DE model Application ..." />
-	<sql driver="${mssqlserver.driver.string}" url="jdbc:sqlserver://${database.host}:${database.port};databaseName=${database.name};" userid="${database.username}" password="${database.password}">
-		<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/MsSqlServer/dropdeconstraints.sql" />
-		<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/MsSqlServer/createnewtable.sql" />
-		<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/MsSqlServer/alterqueries.sql" />
-		<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/MsSqlServer/addconstraints.sql" />
-		<!--<transaction>commit;</transaction>-->
-		<classpath>
-			<fileset dir="${lib.dir}">
-				<include name="*.jar" />
-			</fileset> 
-		</classpath>
-	</sql>
-	</target>
-	
 	<!--MySQL Database Upgradation -->
 	<target name="upgrade_db_demodel_mysql">
 		<echo message="Upgrading MySQL Database for DE model Application ..." />
@@ -2617,8 +2600,8 @@ Thanking You,
 			</classpath>
 		</sql>
 		
-		<!--
 		<antcall  target="Export_Clinical_diagnosis_mssqlserver"/>
+		<!--
 		<antcall target="CAModel_import_data" />
 		<antcall target="temp_update_metadata_for_clob_support_mysql" />
 		<antcall target="insert_entity_group_metadata_mysql" />
@@ -2629,5 +2612,42 @@ Thanking You,
 		<antcall target="update_metadata_for_CA_model_changes" />
 		-->
 	</target>
+	
+	<target name="Export_Clinical_diagnosis_mssqlserver">
+		<echo message="Exporting data of Clinical diagnosis ..." />
+		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
+		<java classname="edu.wustl.common.util.global.AutomateImport" fork="false">
+			<classpath refid="temp.classpath" />
+			<arg value="${database.host}"/>
+			<arg value="${database.port}"/>
+			<arg value="${database.type}"/>
+			<arg value="${database.name}"/>
+			<arg value="${database.username}"/>
+			<arg value="${database.password}"/>
+			<arg value="${mssqlserver.driver.string}"/>
+			<arg value="import"/>
+			<arg value="${basedir}/SQL/Permissible_values/dumpFileColumnInfo.txt"/>
+			<arg value="${basedir}/SQL/Permissible_values/"/>
+		</java>
+		<delete dir="${temp.dir}" />
+	</target>
+	
+	<!--MsSQL server Database Upgradation -->
+	<target name="upgrade_db_demodel_mssqlserver">
+		<echo message="Upgrading MsSQLServer Database for DE model Application ..." />
+		<sql driver="${mssqlserver.driver.string}" url="jdbc:sqlserver://${database.host}:${database.port};databaseName=${database.name};" userid="${database.username}" password="${database.password}">
+			<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/MsSqlServer/dropdeconstraints.sql" />
+			<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/MsSqlServer/createnewtable.sql" />
+			<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/MsSqlServer/alterqueries.sql" />
+			<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/MsSqlServer/addconstraints.sql" />
+			<!--<transaction>commit;</transaction>-->
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset> 
+			</classpath>
+		</sql>
+	</target>
+	
 	<!-- ACORN - mssqlserver migration - end -->
 </project>
