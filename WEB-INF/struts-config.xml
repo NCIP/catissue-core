@@ -3124,6 +3124,7 @@ PUBLIC
 			<forward name="pageOfDistribution" path=".catissuecore.editBioSpecimenSearchResultsDef"/>
 			<forward name="pageOfArrayDistribution" path=".catissuecore.editBioSpecimenSearchResultsDef"/>
 			<forward name="pageOfSpecimenArrayType" path=".catissuecore.editSearchResultsDef"/>
+			<forward name="pageOfCollectionProtocolForTitli" path=".catissuecore.editSearchResultsDef"/>
 			<!--  array search result page def (biospecimen tab) -->
 			<forward name="pageOfSpecimenArray" path=".catissuecore.editBioSpecimenSearchResultsDef"/>
 			<forward name="failure" path=".catissuecore.simpleSearchResultsDef" />
