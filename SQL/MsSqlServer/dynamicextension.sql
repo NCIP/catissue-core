@@ -78,7 +78,7 @@ create table DYEXTN_OBJECT_TYPE_INFO (
 );
 create table DYEXTN_COLUMN_PROPERTIES (
    IDENTIFIER bigint not null,
-   PRIMITIVE_ATTRIBUTE_ID bigint,
+   PRIMITIVE_ATTRIBUTE_ID numeric(20),
    primary key (IDENTIFIER)
 );
 create table DYEXTN_USERDEFINED_DE (
@@ -89,7 +89,7 @@ create table DYEXTN_CONSTRAINT_PROPERTIES (
    IDENTIFIER bigint not null,
    SOURCE_ENTITY_KEY varchar(255),
    TARGET_ENTITY_KEY varchar(255),
-   ASSOCIATION_ID bigint,
+   ASSOCIATION_ID numeric(20),
    primary key (IDENTIFIER)
 );
 create table DYEXTN_PERMISSIBLE_VALUE (
@@ -105,11 +105,11 @@ create table DYEXTN_CHECK_BOX (
 );
 create table DYEXTN_TABLE_PROPERTIES (
    IDENTIFIER bigint not null,
-   ENTITY_ID bigint,
+   ENTITY_ID numeric(20),
    primary key (IDENTIFIER)
 );
 create table DYEXTN_ENTITY_MAP_CONDNS (
-   IDENTIFIER bigint not null identity,
+   IDENTIFIER numeric(20) not null identity,
    STATIC_RECORD_ID bigint,
    TYPE_ID bigint,
    FORM_CONTEXT_ID bigint,
@@ -143,7 +143,7 @@ create table DE_FILE_ATTR_RECORD_VALUES (
    primary key (IDENTIFIER)
 );
 create table DYEXTN_ABSTRACT_METADATA (
-   IDENTIFIER bigint not null identity,
+   IDENTIFIER numeric(20) not null identity,
    CREATED_DATE datetime,
    DESCRIPTION text,
    LAST_UPDATED datetime,
@@ -175,10 +175,10 @@ create table DYEXTN_BARR_CONCEPT_VALUE (
    primary key (IDENTIFIER)
 );
 create table DYEXTN_ENTITY (
-   IDENTIFIER bigint not null,
+   IDENTIFIER numeric(20) not null,
    DATA_TABLE_STATE integer,
    IS_ABSTRACT tinyint default NULL,
-   PARENT_ENTITY_ID bigint,
+   PARENT_ENTITY_ID numeric(20),
    INHERITANCE_STRATEGY integer,
    DISCRIMINATOR_COLUMN_NAME varchar(255),
    DISCRIMINATOR_VALUE varchar(255),
@@ -192,7 +192,7 @@ create table DYEXTN_TAGGED_VALUE (
    IDENTIFIER bigint not null identity,
    T_KEY varchar(255),
    T_VALUE varchar(255),
-   ABSTRACT_METADATA_ID bigint,
+   ABSTRACT_METADATA_ID numeric(20),
    primary key (IDENTIFIER)
 );
 create table DE_OBJECT_ATTR_RECORD_VALUES (
@@ -211,21 +211,25 @@ create table DYEXTN_CADSR_VALUE_DOMAIN_INFO (
    DATATYPE varchar(255),
    NAME varchar(255),
    TYPE varchar(255),
-   PRIMITIVE_ATTRIBUTE_ID bigint,
+   PRIMITIVE_ATTRIBUTE_ID numeric(20),
    primary key (IDENTIFIER)
 );
+
+
 create table DYEXTN_PRIMITIVE_ATTRIBUTE (
-   IDENTIFIER bigint not null,
-   IS_COLLECTION tinyint default NULL,
+   IDENTIFIER numeric(20) not null,
+   IS_COLLECTION tinyint CONSTRAINT [DF_DYEXTN_PRIMITIVE_ATTRIBUTE_IS_COLLECTION] DEFAULT (NULL),
    IS_IDENTIFIED tinyint default NULL,
    IS_PRIMARY_KEY tinyint default NULL,
    IS_NULLABLE tinyint default NULL,
    primary key (IDENTIFIER)
 );
+
+
 create table DYEXTN_ASSOCIATION (
-   IDENTIFIER bigint not null,
+   IDENTIFIER numeric(20) not null,
    DIRECTION varchar(255),
-   TARGET_ENTITY_ID bigint,
+   TARGET_ENTITY_ID numeric(20),
    SOURCE_ROLE_ID bigint,
    TARGET_ROLE_ID bigint,
    IS_SYSTEM_GENERATED tinyint default NULL,
@@ -235,7 +239,7 @@ create table DYEXTN_ENTITY_MAP (
    IDENTIFIER bigint not null identity,
    CONTAINER_ID bigint,
    STATUS varchar(10),
-   STATIC_ENTITY_ID bigint,
+   STATIC_ENTITY_ID numeric(20),
    CREATED_DATE datetime,
    CREATED_BY varchar(255),
    primary key (IDENTIFIER)
@@ -255,8 +259,8 @@ create table DYEXTN_SELECT_CONTROL (
    primary key (IDENTIFIER)
 );
 create table DYEXTN_ENTITY_GROUP_REL (
-   ENTITY_GROUP_ID bigint not null,
-   ENTITY_ID bigint not null,
+   ENTITY_GROUP_ID numeric(20) not null,
+   ENTITY_ID numeric(20) not null,
    primary key (ENTITY_ID, ENTITY_GROUP_ID)
 );
 create table DYEXTN_DATABASE_PROPERTIES (
@@ -302,7 +306,7 @@ create table DYEXTN_ROLE (
 create table DYEXTN_RULE (
    IDENTIFIER bigint not null identity,
    NAME varchar(255),
-   ATTRIBUTE_ID bigint,
+   ATTRIBUTE_ID numeric(20),
    primary key (IDENTIFIER)
 );
 create table DYEXTN_DATE_TYPE_INFO (
@@ -312,7 +316,7 @@ create table DYEXTN_DATE_TYPE_INFO (
 );
 create table DYEXTN_ATTRIBUTE_TYPE_INFO (
    IDENTIFIER bigint not null identity,
-   PRIMITIVE_ATTRIBUTE_ID bigint,
+   PRIMITIVE_ATTRIBUTE_ID numeric(20),
    primary key (IDENTIFIER)
 );
 create table DYEXTN_ENTITY_MAP_RECORD (
@@ -329,7 +333,7 @@ create table DYEXTN_ENTITY_MAP_RECORD (
 create table DYEXTN_ASSO_DISPLAY_ATTR (
    IDENTIFIER bigint not null identity,
    SEQUENCE_NUMBER integer,
-   DISPLAY_ATTRIBUTE_ID bigint,
+   DISPLAY_ATTRIBUTE_ID numeric(20),
    SELECT_CONTROL_ID bigint,
    primary key (IDENTIFIER)
 );
@@ -340,7 +344,7 @@ create table DYEXTN_TEXTAREA (
    primary key (IDENTIFIER)
 );
 create table DYEXTN_ENTITY_GROUP (
-   IDENTIFIER bigint not null,
+   IDENTIFIER numeric(20) not null,
    LONG_NAME varchar(255),
    SHORT_NAME varchar(255),
    VERSION varchar(255),
@@ -364,19 +368,19 @@ create table DYEXTN_LIST_BOX (
 );
 create table DYEXTN_CONTAINMENT_CONTROL (
    IDENTIFIER bigint not null,
-   DISPLAY_CONTAINER_ID bigint,
+   DISPLAY_CONTAINER_ID numeric(20),
    primary key (IDENTIFIER)
 );
 create table DYEXTN_CONTROL (
    IDENTIFIER bigint not null identity,
-   CAPTION varchar(800),
+   CAPTION varchar(255),
    CSS_CLASS varchar(255),
    HIDDEN tinyint default NULL,
    NAME varchar(255),
    SEQUENCE_NUMBER integer,
    TOOLTIP varchar(255),
-   ABSTRACT_ATTRIBUTE_ID bigint,
-   CONTAINER_ID bigint,
+   ABSTRACT_ATTRIBUTE_ID numeric(20),
+   CONTAINER_ID numeric(20),
    primary key (IDENTIFIER)
 );
 create table DYEXTN_LONG_CONCEPT_VALUE (
@@ -393,8 +397,8 @@ create table DYEXTN_FORM_CONTEXT (
    primary key (IDENTIFIER)
 );
 create table DYEXTN_ATTRIBUTE (
-   IDENTIFIER bigint not null,
-   ENTIY_ID bigint,
+   IDENTIFIER numeric(20) not null,
+   ENTIY_ID numeric(20),
    primary key (IDENTIFIER)
 );
 create table DYEXTN_RULE_PARAMETER (
@@ -426,14 +430,14 @@ create table DYEXTN_SEMANTIC_PROPERTY (
    THESAURAS_NAME varchar(255),
    SEQUENCE_NUMBER integer,
    CONCEPT_DEFINITION varchar(255),
-   ABSTRACT_METADATA_ID bigint,
+   ABSTRACT_METADATA_ID numeric(20),
    ABSTRACT_VALUE_ID bigint,
    primary key (IDENTIFIER)
 );
 create table DYEXTN_ATTRIBUTE_RECORD (
    IDENTIFIER bigint not null identity,
-   ENTITY_ID bigint,
-   ATTRIBUTE_ID bigint,
+   ENTITY_ID numeric(20),
+   ATTRIBUTE_ID numeric(20),
    RECORD_ID bigint,
    primary key (IDENTIFIER)
 );
@@ -459,16 +463,16 @@ create table DYEXTN_SHORT_TYPE_INFO (
    primary key (IDENTIFIER)
 );
 create table DYEXTN_CONTAINER (
-   IDENTIFIER bigint not null identity,
+   IDENTIFIER numeric(20) not null identity,
    BUTTON_CSS varchar(255),
-   CAPTION varchar(800),
-   ENTITY_ID bigint,
+   CAPTION varchar(255),
+   ENTITY_ID numeric(20),
    MAIN_TABLE_CSS varchar(255),
    REQUIRED_FIELD_INDICATOR varchar(255),
    REQUIRED_FIELD_WARNING_MESSAGE varchar(255),
    TITLE_CSS varchar(255),
-   BASE_CONTAINER_ID bigint,
-   ENTITY_GROUP_ID bigint,
+   BASE_CONTAINER_ID numeric(20),
+   ENTITY_GROUP_ID numeric(20),
    VIEW_ID bigint,
    primary key (IDENTIFIER)
 );
