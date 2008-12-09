@@ -2172,7 +2172,25 @@ Thanking You,
 		</else>
 		</if>
 	</target>
-			<!--MySQL Database Upgradation -->
+	
+	<!--MsSQL server Database Upgradation -->
+	<target name="upgrade_db_demodel_mssqlserver">
+	<echo message="Upgrading MySQL Database for DE model Application ..." />
+	<sql driver="${mssqlserver.driver.string}" url="jdbc:sqlserver://${database.host}:${database.port};databaseName=${database.name};" userid="${database.username}" password="${database.password}">
+		<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/MsSqlServer/dropdeconstraints.sql" />
+		<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/MsSqlServer/createnewtable.sql" />
+		<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/MsSqlServer/alterqueries.sql" />
+		<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/MsSqlServer/addconstraints.sql" />
+		<!--<transaction>commit;</transaction>-->
+		<classpath>
+			<fileset dir="${lib.dir}">
+				<include name="*.jar" />
+			</fileset> 
+		</classpath>
+	</sql>
+	</target>
+	
+	<!--MySQL Database Upgradation -->
 	<target name="upgrade_db_demodel_mysql">
 		<echo message="Upgrading MySQL Database for DE model Application ..." />
 		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" >
@@ -2577,22 +2595,19 @@ Thanking You,
 		<sql driver="${mssqlserver.driver.string}" url="jdbc:sqlserver://${database.host}:${database.port};databaseName=${database.name};" userid="${database.username}" password="${database.password}">
 			<transaction src="${mssqlserver.sql.dir}/catissuecore.sql" />
 			<transaction src="${mssqlserver.sql.dir}/InitDB_CreateTable.sql" />
-			<!--
-			<transaction src="${common.sql.dir}/initDB_Insert_Common.sql" />
-			<transaction src="${common.sql.dir}/AlterTable.sql" />
-			<transaction src="${common.sql.dir}/CDE_DummyData_Common.sql" />
+			<transaction src="${mssqlserver.sql.dir}/Common/initDB_Insert_Common.sql" />
+			<transaction src="${mssqlserver.sql.dir}/Common/AlterTable.sql" />
+			<transaction src="${mssqlserver.sql.dir}/Common/CDE_DummyData_Common.sql" />
 			<transaction src="${mssqlserver.sql.dir}/csm_catissuecore.sql" />
-			<transaction src="${common.sql.dir}/insert_default_data.sql" />
-			<transaction src="${common.sql.dir}/indexes.sql" />
-			-->
+			<transaction src="${mssqlserver.sql.dir}/Common/insert_default_data.sql" />
+			<transaction src="${mssqlserver.sql.dir}/Common/indexes.sql" />
 			<transaction src="${mssqlserver.sql.dir}/dynamicextension.sql" />
-			<!--
 			<transaction src="${mssqlserver.sql.dir}/query/metadata_schema_script.sql" />
 			<transaction src="${mssqlserver.sql.dir}/query/query_schema_script.sql" />
 			<transaction src="${mssqlserver.sql.dir}/query/caB2B Table Generation Script.sql" />
-			<transaction src="${dbupgrade.sql.dir}/MySql/CAModel.sql"/>
-			-->
-			<!--
+			<transaction src="${dbupgrade.sql.dir}/MsSqlServer/CAModel.sql"/>
+
+			<!-- 
 			<transaction>commit;</transaction>
 			-->
 			<classpath>
@@ -2601,12 +2616,15 @@ Thanking You,
 				</fileset>
 			</classpath>
 		</sql>
+		
 		<!--
-		<antcall  target="Export_Clinical_diagnosis_mysql"/>
+		<antcall  target="Export_Clinical_diagnosis_mssqlserver"/>
 		<antcall target="CAModel_import_data" />
 		<antcall target="temp_update_metadata_for_clob_support_mysql" />
 		<antcall target="insert_entity_group_metadata_mysql" />
-		<antcall target="upgrade_db_demodel_mysql" />
+		-->
+		<antcall target="upgrade_db_demodel_mssqlserver" />
+		<!--
 		<antcall target="update_metadata_for_model_changes" />
 		<antcall target="update_metadata_for_CA_model_changes" />
 		-->
