@@ -1586,6 +1586,12 @@
 					<antcall target="CAModel_import_data_oracle" />
 				</then>
 			</elseif>
+			<elseif>
+				<equals arg1="mssqlserver" arg2="${database.type}" />
+				<then>
+					<antcall target="CAModel_import_data_mssqlserver" />
+				</then>
+			</elseif>
 			<else>
 				<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
 			</else>
@@ -2601,8 +2607,8 @@ Thanking You,
 		</sql>
 		
 		<antcall  target="Export_Clinical_diagnosis_mssqlserver"/>
-		<!--
 		<antcall target="CAModel_import_data" />
+		<!--
 		<antcall target="temp_update_metadata_for_clob_support_mysql" />
 		<antcall target="insert_entity_group_metadata_mysql" />
 		-->
@@ -2652,5 +2658,24 @@ Thanking You,
 		</sql>
 	</target>
 	
+	<target name="CAModel_import_data_mssqlserver">
+		<echo message="Importing CA models data for caTISSUE Suite Application to MsSQLSever Database ..." />
+		<java classname="edu.wustl.catissuecore.util.global.AutomateImportSS"  fork="true" maxmemory="512m">
+			<classpath refid="temp.classpath" />
+			<classpath>
+				<pathelement location="${temp.dir}/catissuecore/WEB-INF/classes/"/>
+			</classpath>
+			<arg value="${database.host}"/>
+			<arg value="${database.port}"/>
+			<arg value="${database.type}"/>
+			<arg value="${database.name}"/>
+			<arg value="${database.username}"/>
+			<arg value="${database.password}"/>
+			<arg value="${mssqlserver.driver.string}"/>
+			<arg value="import"/>
+			<arg value="${dbupgrade.sql.dir}/Common/dumpFileColumnInfo.txt"/>
+			<arg value="${basedir}/SQL/DBUpgrade/Common/CAModelCSVs/"/>
+		</java>
+	</target>
 	<!-- ACORN - mssqlserver migration - end -->
 </project>
