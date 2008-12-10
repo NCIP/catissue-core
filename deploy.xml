@@ -2616,8 +2616,11 @@ Thanking You,
 	<target name="Export_Clinical_diagnosis_mssqlserver">
 		<echo message="Exporting data of Clinical diagnosis ..." />
 		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
-		<java classname="edu.wustl.common.util.global.AutomateImport" fork="false">
+		<java classname="edu.wustl.catissuecore.util.global.AutomateImportSS" fork="false">
 			<classpath refid="temp.classpath" />
+			<classpath>
+				<pathelement location="${temp.dir}/catissuecore/WEB-INF/classes/"/>
+			</classpath>
 			<arg value="${database.host}"/>
 			<arg value="${database.port}"/>
 			<arg value="${database.type}"/>

@@ -2567,4 +2567,8 @@ public static final String ADD_MULTIPLE_SPECIMEN_TO_CART="addMltipleSpecimenToCa
 	public static final String SPECIMEN_DISPOSAL_REASON = "Specimen was Aliquoted";
 	public static final String DERIVED_SPECIMEN_DISPOSAL_REASON = "Specimen was Derived";
 	public static final String SPECIMEN_DISCARD_DISPOSAL_REASON = "Specimen was Discarded";
+	
+	// Constants for ACORN
+	public static final String MSSQLSERVER_DATABASE = "MSSQLSERVER";
+	public static final String FORMAT_FILE_EXTENTION = "_FormatFile.txt";
 }
