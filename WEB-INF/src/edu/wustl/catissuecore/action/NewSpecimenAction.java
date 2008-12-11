@@ -323,6 +323,7 @@ public class NewSpecimenAction extends SecureAction
 				SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
 				Specimen specimen = bizLogic.getSpecimen(specimenID,specimenDetails, sessionData);
 				//Added by Falguni=To set Specimen label in Form.
+				specimenForm.setCreatedDate(Utility.parseDateToString(specimen.getCreatedOn(), Constants.DATE_PATTERN_MM_DD_YYYY));
 				specimenForm.setLabel(specimen.getLabel());
 				specimenForm.setBarcode(specimen.getBarcode());
 				List columnList=columnNames();

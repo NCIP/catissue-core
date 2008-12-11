@@ -830,7 +830,9 @@ public class FlexInterface
 	private SpecimenDataBean prepareGenericSpecimen(SpecimenBean spBean, SpecimenAutoStorageContainer speicmenAutoStorageCont) throws DAOException
 	{
 		SpecimenDataBean specimenDataBean = new SpecimenDataBean();
-
+		Specimen corresSpecimen= new Specimen();
+		corresSpecimen.setCreatedOn(spBean.creationDate);
+		specimenDataBean.setCorresSpecimen(corresSpecimen);
 		specimenDataBean.setType(spBean.specimenType);
 		specimenDataBean.setStorageContainerForSpecimen(spBean.storage);
 		//specimenDataBean.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);

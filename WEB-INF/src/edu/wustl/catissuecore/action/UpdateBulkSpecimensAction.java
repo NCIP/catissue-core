@@ -187,7 +187,10 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 
 		specimen.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
 		specimen.setComment(specimenDataBean.getComment());
-		specimen.setCreatedOn(new Date());
+		if(specimen.getCreatedOn()==null)
+		{
+			specimen.setCreatedOn(new Date());
+		}
 		specimen.setCollectionStatus(Constants.SPECIMEN_COLLECTED);
 		genericSpecimen.setCheckedSpecimen(true);
 		specimenDataBean.setCorresSpecimen(specimen);
@@ -226,6 +229,7 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 		specimen.setExternalIdentifierCollection(specimenDataBean.getExternalIdentifierCollection());
 		specimen.setBiohazardCollection(specimenDataBean.getBiohazardCollection());
 		specimen.setSpecimenCollectionGroup(specimenDataBean.getSpecimenCollectionGroup());
+		specimen.setCreatedOn(specimenDataBean.getCorresSpecimen().getCreatedOn());
 		
 		specimenDataBean.setCorresSpecimen(specimen);
 	}

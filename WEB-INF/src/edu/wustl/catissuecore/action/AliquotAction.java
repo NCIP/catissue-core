@@ -94,10 +94,12 @@ public class AliquotAction extends SecureAction
           * See also: 1_1 to 1_5
           * Description : set current date to aliquot
           */ 
-         if(((AliquotForm)form).getCreatedDate() == null)
-         {
+      //   if(((AliquotForm)form).getCreatedDate() == null||)
+    	   if((((AliquotForm)form).getNextForwardTo()!=null)&&(((AliquotForm)form).getNextForwardTo()).equals(""))
+           {
              ((AliquotForm)form).setCreatedDate(Utility.parseDateToString(Calendar.getInstance().getTime(), Constants.DATE_PATTERN_MM_DD_YYYY));
-         }      
+           }
+     
 		return invokeMethod(methodName, mapping, form, request, response);
 
 	}

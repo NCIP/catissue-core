@@ -1,5 +1,8 @@
 package edu.wustl.catissuecore.action;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
@@ -21,7 +24,6 @@ import org.apache.struts.action.ActionMessages;
 
 import edu.wustl.catissuecore.actionForm.AliquotForm;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
-import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
@@ -392,7 +394,16 @@ public class CreateAliquotAction extends BaseAction
 				}
 			}
 			Date currentDate = new Date();
-			aliquotSpecimen.setCreatedOn(currentDate);
+			DateFormat myDateFormat = new SimpleDateFormat(Constants.DATE_PATTERN_MM_DD_YYYY);
+			Date myDate = null;
+			try {
+			     myDate = myDateFormat.parse(aliquotForm.getCreatedDate());
+			     
+			} catch (ParseException e) {
+			     System.out.println("Invalid Date Parser Exception ");
+			     e.printStackTrace();
+			}
+			aliquotSpecimen.setCreatedOn(myDate);
 			aliquotSpecimen.setParentSpecimen(parentSpecimen);
 			aliquotSpecimen.setSpecimenCollectionGroup(scg);
 			aliquotSpecimen.setLineage(Constants.ALIQUOT);

@@ -12,6 +12,7 @@ package edu.wustl.catissuecore.bizlogic;
 import java.text.DecimalFormat;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -377,7 +378,10 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			}
 			else
 			{
-				specimen.setCreatedOn(parentSpecimen.getCreatedOn());
+				if(parentSpecimen.getCreatedOn()!=null)
+				{
+					specimen.setCreatedOn(Calendar.getInstance().getTime());
+				}
 			}
 		}
 	}
@@ -1201,7 +1205,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			
 			if(reqSpecimen != null && reqSpecimen.getParentSpecimen() == null)
 			{
-				if (reqSpecimen != null && !reqSpecimen.getSpecimenEventCollection().isEmpty() && reqSpecimen.getSpecimenEventCollection() != null)
+				if (reqSpecimen != null && reqSpecimen.getSpecimenEventCollection() != null && !reqSpecimen.getSpecimenEventCollection().isEmpty() )
 				{
 					persistentSpecimen.setPropogatingSpecimenEventCollection(reqSpecimen.getSpecimenEventCollection(), sessionDataBean.getUserId(), specimen);
 				}
@@ -1214,6 +1218,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			{
 				persistentSpecimen.setSpecimenEventCollection(populateDeriveSpecimenEventCollection((Specimen)persistentSpecimen.getParentSpecimen(), persistentSpecimen));
 			}
+			setSpecimenCreatedOnDate(persistentSpecimen);
 		}
 	}
 	/**
