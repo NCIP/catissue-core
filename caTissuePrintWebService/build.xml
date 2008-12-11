@@ -69,10 +69,15 @@
 	<target name="compile">
 				<javac destdir="${target.dir}" includes="**/*.*" includeAntRuntime="false" debug="yes" target="1.5">
 					<src path="${base.dir}/src/edu"/>
-					 <classpath refid="wsprovide.path" />			
+					<classpath>
+						<fileset dir="${base.dir}/WEB-INF/lib">
+							<include name="*.jar" />
+						</fileset>
+					</classpath>
+					<classpath refid="wsprovide.path" />			
 				</javac>
 			</target>
-
+	
 	<target name="wsprovide" depends="compile" description="wsprovide task for JBoss-4.2.2.GA">
 			  <taskdef name="wsprovide" classname="org.jboss.wsf.spi.tools.ant.WSProvideTask">
 			  	 <classpath refid="wsprovide.path" />	
