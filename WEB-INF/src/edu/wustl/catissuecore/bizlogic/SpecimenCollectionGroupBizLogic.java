@@ -114,6 +114,13 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 				.getCollectionProtocolEvent().getId());
 		Collection specimenCollection = null;
 		Long userId = Utility.getUserID(dao, sessionDataBean);
+		if(Constants.REPORT_LOADER_SCG.equals(specimenCollectionGroup.getBarcode())
+				&& specimenCollectionGroup.getName().startsWith(Constants.REPORT_LOADER_SCG))
+		{
+			reportLoaderFlag = true;
+			specimenCollectionGroup.setBarcode(null);
+		}
+		generateSCGLabel(specimenCollectionGroup);
 		if (collectionProtocolEventObj != null)
 		{
 			CollectionProtocolEvent cpe = (CollectionProtocolEvent) collectionProtocolEventObj;
@@ -128,13 +135,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 			}			
 		}
 		setCollectionProtocolRegistration(dao, specimenCollectionGroup, null);
-		if(Constants.REPORT_LOADER_SCG.equals(specimenCollectionGroup.getBarcode())
-				&& specimenCollectionGroup.getName().startsWith(Constants.REPORT_LOADER_SCG))
-		{
-			reportLoaderFlag = true;
-			specimenCollectionGroup.setBarcode(null);
-		}
-		generateSCGLabel(specimenCollectionGroup);
+		
 		String barcode=specimenCollectionGroup.getName();
 		generateSCGBarcode(specimenCollectionGroup);
 		if((barcode!=specimenCollectionGroup.getName())&&barcode!=null)
