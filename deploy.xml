@@ -2614,10 +2614,8 @@ Thanking You,
 		
 		<antcall  target="Export_Clinical_diagnosis_mssqlserver"/>
 		<antcall target="CAModel_import_data" />
-		<!--
-		<antcall target="temp_update_metadata_for_clob_support_mysql" />
-		<antcall target="insert_entity_group_metadata_mysql" />
-		-->
+		<antcall target="temp_update_metadata_for_clob_support_mssqlserver" />
+		<antcall target="insert_entity_group_metadata_mssqlserver" />
 		<antcall target="upgrade_db_demodel_mssqlserver" />
 		<antcall target="update_metadata_for_model_changes" />
 		<!--
@@ -2698,6 +2696,32 @@ Thanking You,
 			<arg value="${database.password}"/>
 			<arg value="${mssqlserver.driver.string}"/>
 		</java>
+	</target>
+	
+	<target name="temp_update_metadata_for_clob_support_mssqlserver">
+		<echo message="Upgrading MsSQLServer Database for supporting query on clob type attributes..." />
+		<sql driver="${mssqlserver.driver.string}" url="jdbc:sqlserver://${database.host}:${database.port};databaseName=${database.name};" userid="${database.username}" password="${database.password}">
+			<transaction src="${mssqlserver.sql.dir}/query/temp_update_metadata.sql" />
+			<!-- <transaction>commit;</transaction> -->
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</sql>
+	</target>
+	
+	<target name="insert_entity_group_metadata_mssqlserver">
+		<echo message="Inserting entity group metadata for MsSqlServer..." />
+		<sql driver="${mssqlserver.driver.string}" url="jdbc:sqlserver://${database.host}:${database.port};databaseName=${database.name};" userid="${database.username}" password="${database.password}">
+			<transaction src="${mssqlserver.sql.dir}/query/entity_group_metadata.sql" />
+			<!-- <transaction>commit;</transaction> -->
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</sql>
 	</target>
 	<!-- ACORN - mssqlserver migration - end -->
 </project>
