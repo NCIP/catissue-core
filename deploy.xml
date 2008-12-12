@@ -1380,6 +1380,12 @@
 					<antcall target="update_metadata_for_model_changes_oracle" />
 				</then>
 			</elseif>
+			<elseif>
+				<equals arg1="mssqlserver" arg2="${database.type}" />
+				<then>
+					<antcall target="update_metadata_for_model_changes_mssqlserver" />
+				</then>
+			</elseif>
 			<else>
 				<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
 			</else>
@@ -2613,8 +2619,8 @@ Thanking You,
 		<antcall target="insert_entity_group_metadata_mysql" />
 		-->
 		<antcall target="upgrade_db_demodel_mssqlserver" />
-		<!--
 		<antcall target="update_metadata_for_model_changes" />
+		<!--
 		<antcall target="update_metadata_for_CA_model_changes" />
 		-->
 	</target>
@@ -2675,6 +2681,22 @@ Thanking You,
 			<arg value="import"/>
 			<arg value="${dbupgrade.sql.dir}/Common/dumpFileColumnInfo.txt"/>
 			<arg value="${basedir}/SQL/DBUpgrade/Common/CAModelCSVs/"/>
+		</java>
+	</target>
+
+	<target name="update_metadata_for_model_changes_mssqlserver">
+		<echo message="Updating DE Metadata for model changes (mssqlserver)....." />
+		<java classname="edu.wustl.catissuecore.querysuite.metadata.UpdateMetadata"  fork="true" maxmemory="512m">
+			<classpath location="${temp.dir}/catissuecore/WEB-INF/classes" />
+			<classpath refid="temp.classpath" />
+
+			<arg value="${database.host}"/>
+			<arg value="${database.port}"/>
+			<arg value="${database.type}"/>
+			<arg value="${database.name}"/>
+			<arg value="${database.username}"/>
+			<arg value="${database.password}"/>
+			<arg value="${mssqlserver.driver.string}"/>
 		</java>
 	</target>
 	<!-- ACORN - mssqlserver migration - end -->
