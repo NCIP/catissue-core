@@ -229,7 +229,7 @@ public class DeleteAssociation
 		for(String entityName : entityNameListDelete)
 		{
 			Entity entity = new Entity();
-			sql = "select identifier,name from dyextn_abstract_metadata where NAME='"+entityName+"'";
+			sql = "select identifier,name from dyextn_abstract_metadata where NAME "+UpdateMetadataUtil.getDBCompareModifier()+"'"+entityName+"'";
 			rs = stmt.executeQuery(sql);
 			if(rs.next())
 			{

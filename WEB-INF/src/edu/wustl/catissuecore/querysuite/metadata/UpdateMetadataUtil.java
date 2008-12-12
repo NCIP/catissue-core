@@ -21,6 +21,7 @@ import edu.common.dynamicextensions.domain.UserDefinedDE;
 import edu.common.dynamicextensions.domain.databaseproperties.ColumnProperties;
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.common.dynamicextensions.domaininterface.AttributeTypeInformationInterface;
+import edu.wustl.catissuecore.util.global.Constants;
 
 public class UpdateMetadataUtil
 {
@@ -219,5 +220,18 @@ public class UpdateMetadataUtil
 		
 		sql = "delete from dyextn_abstract_metadata where identifier = "+attribute.getId();
 		deleteSQL.add(sql);
+	}
+	
+	
+	public static String getDBCompareModifier()
+	{
+		if(UpdateMetadata.DATABASE_TYPE.equalsIgnoreCase(Constants.MSSQLSERVER_DATABASE))
+		{
+			return " like ";
+		}
+		else
+		{
+			return " = ";
+		}
 	}
 }

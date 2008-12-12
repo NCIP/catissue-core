@@ -152,7 +152,7 @@ public class DeleteEntity
 		stmt = connection.createStatement();
 		ResultSet rs;
 
-		sql = "select identifier,name from dyextn_abstract_metadata where NAME='"+entityNameToDelete+"'";
+		sql = "select identifier,name from dyextn_abstract_metadata where NAME " +UpdateMetadataUtil.getDBCompareModifier()+"'"+entityNameToDelete+"'";
 		rs = stmt.executeQuery(sql);
 		if(rs.next())
 		{

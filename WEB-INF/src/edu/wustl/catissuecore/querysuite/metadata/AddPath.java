@@ -145,7 +145,7 @@ public class AddPath
 		 while(iterator.hasNext())
 		 {
 			 String key = iterator.next();
-			 sql = "Select IDENTIFIER from dyextn_abstract_metadata where NAME = '"+key+"'";
+			 sql = "Select IDENTIFIER from dyextn_abstract_metadata where NAME "+UpdateMetadataUtil.getDBCompareModifier()+"'"+key+"'";
 			 stmt = connection.createStatement();
 			 rs = stmt.executeQuery(sql);
 			 if(rs.next())
@@ -155,7 +155,7 @@ public class AddPath
 				 List<String> associationsList = superClassAndAssociationsMap.get(key);
 			 	 for(String associatedEntityName:associationsList)
 			 	 {
-					 sql = "Select IDENTIFIER from dyextn_abstract_metadata where NAME = '"+associatedEntityName+"'";
+					 sql = "Select IDENTIFIER from dyextn_abstract_metadata where NAME "+UpdateMetadataUtil.getDBCompareModifier()+"'"+associatedEntityName+"'";
 					 Statement stmt4 = connection.createStatement();
 					 rs = stmt4.executeQuery(sql);
 					 if(rs.next())
@@ -174,7 +174,7 @@ public class AddPath
 							{
 								 String subClassEntityId;
 								 Statement stmt1 = connection.createStatement();
-								 sql = "Select IDENTIFIER from dyextn_abstract_metadata where NAME = '"+subClassEntity+"'";
+								 sql = "Select IDENTIFIER from dyextn_abstract_metadata where NAME "+UpdateMetadataUtil.getDBCompareModifier()+"'"+subClassEntity+"'";
 								 ResultSet rs1 = stmt.executeQuery(sql);
 								 if(rs1.next())
 								 {
@@ -201,7 +201,7 @@ public class AddPath
 								 {
 									 String subClassEntityId;
 									 Statement stmt3 = connection.createStatement();
-									 sql = "Select IDENTIFIER from dyextn_abstract_metadata where NAME = '"+subClassEntity+"'";
+									 sql = "Select IDENTIFIER from dyextn_abstract_metadata where NAME "+UpdateMetadataUtil.getDBCompareModifier()+"'"+subClassEntity+"'";
 									 ResultSet rs1 = stmt3.executeQuery(sql);
 									 if(rs1.next())
 									 {

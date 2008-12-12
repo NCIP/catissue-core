@@ -251,7 +251,7 @@ public class DeletePermissibleValue extends DeleteBaseMetadata
 		String sql;
 		for(String entityName : entityNameList)
 		{
-			sql = "select identifier from dyextn_abstract_metadata where name='"+entityName+"'";
+			sql = "select identifier from dyextn_abstract_metadata where name "+UpdateMetadataUtil.getDBCompareModifier()+"'"+entityName+"'";
 			ResultSet rs = executeQuery(sql);
 			if (rs.next()) 
 			{
