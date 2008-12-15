@@ -18,7 +18,8 @@ public interface LabelPrinter {
 	 * @param userObj This is the User object of the current loggedin User.
 	 * @return boolean
 	 */
-	public boolean printLabel(AbstractDomainObject abstractDomainObject, String ipAddress, User userObj);	
+	//public boolean printLabel(AbstractDomainObject abstractDomainObject, String ipAddress, User userObj);	
+	public boolean printLabel(AbstractDomainObject abstractDomainObject, String ipAddress, User userObj,String printerType,String printerLocation);
 	
 	/**
 	 * This method has implemenation for printing  list of AbstractDomainObject .
@@ -27,5 +28,7 @@ public interface LabelPrinter {
 	 * @param userObj This is the User object of the current loggedin User.
 	 * @return boolean
 	 */
-	public boolean printLabel(List<AbstractDomainObject> abstractDomainObject, String ipAddress, User userObj);	
+	//public boolean printLabel(List<AbstractDomainObject> abstractDomainObject, String ipAddress, User userObj);	
+	
+	public boolean printLabel(List<AbstractDomainObject> abstractDomainObject, String ipAddress, User userObj,String printerType,String printerLocation);	
 }
