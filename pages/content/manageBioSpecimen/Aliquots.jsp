@@ -2,6 +2,7 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
+<%@ taglib uri="/WEB-INF/AutoCompleteTag.tld" prefix="autocomplete" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
@@ -10,9 +11,12 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
 <%@ page import="java.util.*"%>
+<%@ page import="java.io.*"%>
 <%@ page import="edu.wustl.common.util.tag.ScriptGenerator" %>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 <%@ page language="java" isELIgnored="false" %>
+<%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
+<% AliquotForm form = (AliquotForm)request.getAttribute("aliquotForm");%>
 <head>
 <script src="jss/script.js"></script>
 <script src="jss/calendarComponent.js"></script>
@@ -226,6 +230,15 @@
 
 		</logic:iterate>
 	}
+//  Added for printing functionality
+	   function showPriterTypeLocation(){
+			if(document.getElementById('printCheckbox').checked == true){
+				document.getElementById('printerSelection').style.display="";
+			}else{
+				document.getElementById('printerSelection').style.display="none";
+				setSubmittedForPrint("","","");
+			}
+	   }
 </script>
 </head>
 <body onload="checkForStoragePosition()">
@@ -617,13 +630,62 @@ ${aliquotBean.jsScript}
 		</html:checkbox>
 		</td>
 		</tr>	
+        <tr>
+		<td colspan="3" align="left" class="dividerline">
+			<span class="black_ar">
+		</td>
+		</tr>
+		
 		<tr>
-          <td align="left" class="dividerline"><span class="black_ar">
-				<html:checkbox styleId="printCheckbox" property="printCheckbox" value="true" onclick="">
-		<bean:message key="print.checkboxLabel"/>
-	</html:checkbox>
-	</td>
-</tr>
+          <td valign="center" align="left">
+		  <table border="0"><tr><td nowrap>
+		  							<html:checkbox styleId="printCheckbox" property="printCheckbox" value="true" onclick="showPriterTypeLocation()">
+									<span class="black_ar">
+										<bean:message key="print.checkboxLabel"/>
+									</span>
+								</html:checkbox>
+								<td>
+								<td id="plcol2">
+								<div  id="printerSelection" style="display:none">
+									<table border="0">
+						 				<tr>
+						    			<td align="left" class="black_ar" width="8%">
+									<label for="printerType">
+										<bean:message key="print.printerTypeLabel"/>
+									</label>
+								</td>
+												<td align="left" class="black_new"> 
+									<autocomplete:AutoCompleteTag property="printerType"
+										optionsList="<%=Variables.printerTypeList%>"
+										initialValue="<%=form.getPrinterType()%>"
+										styleClass="black_ar"
+										 size="23"
+										/>
+					        	    </td>
+						   					<!--</td>-->
+											<td>&nbsp;&nbsp; </td>
+							   				 <td align="left" class="black_ar" width="10%">
+									           <label for="printerLocation">
+										        <bean:message key="print.printerLocationLabel"/>
+									          </label>
+								           </td>
+												<td align="left" class="black_new"> 
+									<autocomplete:AutoCompleteTag property="printerLocation"
+										optionsList="<%=Variables.printerLocationList%>"
+										initialValue="<%=form.getPrinterLocation()%>"
+										styleClass="black_ar"
+										 size="23"
+										/>
+					        	    </td>
+						   				</tr>
+									</table>
+								</div>
+								</td>
+		               </tr></table>
+								
+			 				  </td>
+		   				</tr>	
+			<!--  End : Displaying   printer type and location -->
 <tr>
           <td class="toptd"></td>
         </tr>

@@ -1,3 +1,5 @@
+<%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
+<%@ page import="edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm"%>
 <!-- action buttons begins -->
 							<div id="scgPageButtons">
 								
@@ -18,12 +20,52 @@
 												</td>
 											</tr>
 											<tr>
-												<td colspan="3" align="left" class="black_ar">
-													<html:checkbox styleId="printCheckbox" property="printCheckbox" value="true" onclick="">
+													<td colspan="1" valign="center" nowrap>
+													<html:checkbox styleId="printCheckbox" property="printCheckbox" value="true" onclick="showPriterTypeLocation()">
+														<span class="black_ar">
 															<bean:message key="print.checkboxLabel"/>
+														</span>
 														</html:checkbox>
-												</td>
-											</tr>
+											        </td>
+												     <td>
+															<div  id="printerSelection" style="display:none">
+																<table border="0">
+																	<tr>
+																		<td align="center" class="black_ar" width="8%">
+																<label for="printerType">
+																	<bean:message key="print.printerTypeLabel"/>
+																</label>
+															</td>
+																			<td align="left" class="black_new"> 
+																<autocomplete:AutoCompleteTag property="printerType"
+																	optionsList="<%=Variables.printerTypeList%>"
+																	initialValue="<%=form.getPrinterType()%>"
+																	styleClass="black_ar"
+																	 size="23"
+																	/>
+																</td>
+																		<!--</td>-->
+																		<td>&nbsp;&nbsp; </td>
+																		 <td align="center" class="black_ar" width="9%">
+																		   <label for="printerLocation">
+																			<bean:message key="print.printerLocationLabel"/>
+																		  </label>
+																	   </td>
+																			<td align="left" class="black_new"> 
+																<autocomplete:AutoCompleteTag property="printerLocation"
+																	optionsList="<%=Variables.printerLocationList%>"
+																	initialValue="<%=form.getPrinterLocation()%>"
+																	styleClass="black_ar"
+																	 size="23"
+																	/>
+																</td>
+																	</tr>
+																</table>
+															</div>
+														 </td>
+														</tr>	
+										<!--  End : Displaying   printer type and location -->	
+							
 											 <tr>
 												<td colspan="3" class="bottomtd"></td>
 											</tr>

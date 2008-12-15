@@ -10,6 +10,8 @@
 <%@ page import="edu.wustl.catissuecore.actionForm.NewSpecimenForm"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
 <%@ page import="java.util.*"%>
+<%@ page import="java.io.*"%>
+<%@ page import="edu.wustl.common.util.global.ApplicationProperties" %>
 <%@ page import="edu.wustl.common.util.tag.ScriptGenerator" %>
 <%@ page import="edu.wustl.catissuecore.bean.ConsentBean"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
@@ -910,7 +912,16 @@
 		}%>
 		confirmDisable('<%=actionToCall1%>',document.forms[0].activityStatus);				
 	}
-	
+
+	//Added for showing printer location and type
+	function showPriterTypeLocation(){
+		if(document.getElementById('printCheckbox').checked == true){
+			document.getElementById('printerSelection').style.display="";
+		}else{
+			document.getElementById('printerSelection').style.display="none";
+			setSubmittedForPrint("","","");
+		}
+	}
 	
 	</script>
 	<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
@@ -1820,7 +1831,7 @@
 								<tr><td colspan="2"></td></tr>
 								
 								<tr>
-								<td class="black_ar" width="25%" >
+								<td class="black_ar" width="18%" nowrap>
 										 <div style="display:none" id="derivedDiv">
 										 <bean:message key="summary.page.count" />&nbsp;
 										<html:text styleClass="black_ar" styleId="numberOfSpecimens" size="10" property="numberOfSpecimens" style="text-align:right"/></div>
@@ -1848,21 +1859,62 @@
 											</td>
 								</tr>					-->
 								
-								
-								<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">	
+ 							      
+ 							       <tr>
+								<td class="dividerline" colspan="3"><span class="black_ar"></td>
+								</tr>
 								<tr>
-											<td class="dividerline" colspan="2" valign="center">
-													<html:checkbox styleId="printCheckbox" property="printCheckbox" value="true" onclick="">
+								<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">	
+								
+											<td colspan="1" valign="center">
+													<html:checkbox styleId="printCheckbox" property="printCheckbox" value="true" onclick="showPriterTypeLocation()">
 														<span class="black_ar">
 															<bean:message key="print.checkboxLabel"/>
 														</span>
 														</html:checkbox>
 											</td>
-								</tr>					
+												
 								</logic:notEqual>
-								 
-							
-							
+	<!--  Added for displaying  printer type and location -->
+									
+					  			<td>
+					   			<div  id="printerSelection" style="display:none">
+									<table border="0">
+						 				<tr>
+						    				<td align="left" class="black_ar"  width="8%">
+									<label for="printerType">
+										<bean:message key="print.printerTypeLabel"/>
+									</label>
+								</td>
+												<td align="left" class="black_new"> 
+									<autocomplete:AutoCompleteTag property="printerType"
+										optionsList="<%=Variables.printerTypeList%>"
+										initialValue="<%=form.getPrinterType()%>"
+										styleClass="black_ar"
+										 size="23"
+										/>
+					        	    </td>
+						   					<!--</td>-->
+											<td>&nbsp;&nbsp; </td>
+							   				 <td align="left" class="black_ar"  width="9%">
+									           <label for="printerLocation">
+										        <bean:message key="print.printerLocationLabel"/>
+									          </label>
+								           </td>
+												<td align="left" class="black_new"> 
+									<autocomplete:AutoCompleteTag property="printerLocation"
+										optionsList="<%=Variables.printerLocationList%>"
+										initialValue="<%=form.getPrinterLocation()%>"
+										styleClass="black_ar"
+										 size="23"
+										/>
+					        	    </td>
+						   				</tr>
+									</table>
+								</div>
+			 				 </td>
+							</tr>	
+			<!--  End : Displaying   printer type and location -->	
 							<tr>
           <td class="bottomtd"></td>
         </tr>
