@@ -652,7 +652,16 @@ function editSCG()
 			}
 		
 		}
-		
+        //added for printing
+		function showPriterTypeLocation(){
+			if(document.getElementById('printCheckbox').checked == true){
+				document.getElementById('printerSelection').style.display="";
+			}else{
+				document.getElementById('printerSelection').style.display="none";
+				setSubmittedForPrint("","","");
+			}
+		}
+				
  </script>
 </head>
 			<!-- 
