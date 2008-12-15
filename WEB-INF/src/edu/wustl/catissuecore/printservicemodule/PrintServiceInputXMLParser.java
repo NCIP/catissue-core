@@ -38,6 +38,7 @@ public class PrintServiceInputXMLParser implements PrintServiceInputParserInterf
 	String value = null;
 
 	String key = null;
+	public static final String PRINT_FAILED = "Printing Failed";
 	
 
 	public boolean callPrintService(Object listData) throws Exception 
@@ -50,7 +51,11 @@ public class PrintServiceInputXMLParser implements PrintServiceInputParserInterf
 			String endpointURL = PropertyHandler.getValue("printWebServiceEndPoint");
 			PrintWebService p = new PrintWebService(new URL(endpointURL),new QName("http://print.catissuecore.webservice.wustl.edu/", "PrintWebService"));
 			PrintService pservice = p.getPrintServicePort();
-			pservice.print(strXMLData);
+			String msg = pservice.print(strXMLData);
+			if(msg.equals(PRINT_FAILED))
+			{
+				return false;
+			}
 			return true;
 		}
 		catch(Exception e)
