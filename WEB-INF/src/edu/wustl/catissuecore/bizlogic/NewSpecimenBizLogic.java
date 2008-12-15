@@ -3508,4 +3508,41 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		 }
      }
 	
+	@ Override
+	public void refreshTitliSearchIndex(String operation, Object obj)
+	{
+		List result = null;
+		super.refreshTitliSearchIndex(operation, obj);
+		Specimen specimen = (Specimen)obj;
+		String selectColumnName[] = {"id"};
+		String whereColumnName[] = {"parentSpecimen.id"};
+		String whereColumnCondition[] = {"="};
+		Object whereColumnValue[] = {specimen.getId()};
+		
+		try 
+		{
+
+			result = retrieve(obj.getClass().getName(), selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, null);
+		}
+		catch (DAOException e) 
+		{
+			Logger.out.error(e.getMessage(),e);
+		} 
+		if(result != null)
+		{
+			Iterator itr = result.iterator();
+			while(itr.hasNext())
+			{
+				Object id = (Object)itr.next();
+				if(id != null)
+				{
+					String idString = String.valueOf(id);
+					Long idLong = new Long(idString);
+					Specimen childSpecimen = (Specimen)obj;
+					childSpecimen.setId(idLong);
+					refreshTitliSearchIndex(operation,childSpecimen);
+				}
+			}
+		}
+	}
 }

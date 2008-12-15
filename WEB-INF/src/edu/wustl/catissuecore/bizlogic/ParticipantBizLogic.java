@@ -27,6 +27,8 @@ import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Race;
 import edu.wustl.catissuecore.domain.Site;
+import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
@@ -63,6 +65,7 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class ParticipantBizLogic extends DefaultBizLogic
 {
+	private List<Long> cprIdList = new ArrayList<Long>();
 
 	/**
 	 * Saves the Participant object in the database.
@@ -146,6 +149,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 			cpr.setParticipant(participant);
 			cpr.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
 			cprBizLogic.insert(cpr, dao, sessionDataBean);
+			cprIdList.add(cpr.getId());
 		}
 	}
 
@@ -409,6 +413,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 				{
 					collectionProtReg.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
 					cprBizLogic.insert(collectionProtReg, dao, sessionDataBean);
+					cprIdList.add(collectionProtReg.getId());
 					continue;
 				}
 				cprBizLogic.update(dao, collectionProtReg, oldcollectionProtocolRegistration, sessionDataBean);
@@ -1417,5 +1422,47 @@ public class ParticipantBizLogic extends DefaultBizLogic
 	public boolean hasPrivilegeToView(String objName, Long identifier, SessionDataBean sessionDataBean)
 	{
 		return edu.wustl.catissuecore.util.global.Utility.hasPrivilegeToView(objName, identifier, sessionDataBean, getReadDeniedPrivilegeName());
+	}
+	
+	@Override
+	public void refreshTitliSearchIndex(String operation, Object obj)
+	{
+		super.refreshTitliSearchIndex(operation, obj);
+		Participant participant = (Participant) obj;
+		Collection collectionProtocolRegistrationCollection = participant.getCollectionProtocolRegistrationCollection();
+		if(collectionProtocolRegistrationCollection != null)
+		{
+			Iterator itcprCollection = collectionProtocolRegistrationCollection.iterator();
+	
+			while (itcprCollection.hasNext())
+			{
+				CollectionProtocolRegistration cpr = (CollectionProtocolRegistration) itcprCollection.next();
+				if(cprIdList.contains(cpr.getId()))
+				{
+					Collection specimenCollectionGroupCollection=cpr.getSpecimenCollectionGroupCollection();
+					
+					if(specimenCollectionGroupCollection != null)
+					{
+						Iterator itscgCollection = specimenCollectionGroupCollection.iterator();
+						while(itscgCollection.hasNext())
+						{
+							SpecimenCollectionGroup scg = (SpecimenCollectionGroup)itscgCollection.next();
+							super.refreshTitliSearchIndex(operation, scg);
+							Collection specimenCollection = scg.getSpecimenCollection();
+							
+							if(specimenCollection != null)
+							{
+								Iterator itspecimenCollection = specimenCollection.iterator();
+								while(itspecimenCollection.hasNext())
+								{
+									Specimen specimen = (Specimen)itspecimenCollection.next();
+									super.refreshTitliSearchIndex(operation, specimen);
+								}
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 }
