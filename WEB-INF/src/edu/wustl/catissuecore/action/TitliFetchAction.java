@@ -90,6 +90,7 @@ public class TitliFetchAction extends Action
 		
 		try
 		{
+			request.getSession().setAttribute(edu.wustl.common.util.global.Constants.IS_SIMPLE_SEARCH, Constants.TRUE);
 			
 			//if there is only one record in the selected group, go directly to the edit page
 			if(dataList.size()==1)
