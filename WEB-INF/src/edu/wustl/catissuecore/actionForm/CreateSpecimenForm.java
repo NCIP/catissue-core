@@ -62,6 +62,10 @@ public class CreateSpecimenForm extends SpecimenForm implements Cloneable
 	 * print checkbox
 	 */
 	private String printCheckbox; 
+	
+	private String printerType;
+
+	private String printerLocation;
 	/**
 	 * bug no. 4265
 	 * indicates that the parent specimen is set for disposal or not
@@ -256,5 +260,20 @@ public class CreateSpecimenForm extends SpecimenForm implements Cloneable
 
 	public void setDisposeParentSpecimen(boolean disposeParentSpecimen) {
 		this.disposeParentSpecimen = disposeParentSpecimen;
+	}
+	public String getPrinterLocation() {
+		return printerLocation;
+	}
+
+	public void setPrinterLocation(String printerLocation) {
+		this.printerLocation = printerLocation;
+	}
+
+	public String getPrinterType() {
+		return printerType;
+	}
+
+	public void setPrinterType(String printerType) {
+		this.printerType = printerType;
 	}
 }

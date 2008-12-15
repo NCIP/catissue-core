@@ -153,6 +153,11 @@ public class AliquotForm extends AbstractActionForm
 	 */
 	private String printCheckbox; 
 	
+	private String printerType;
+
+	private String printerLocation;
+	
+	
 	private List<AbstractDomainObject> specimenList = new LinkedList<AbstractDomainObject>();
     
     public String getNextForwardTo() 
@@ -717,5 +722,20 @@ public class AliquotForm extends AbstractActionForm
 	public void setScgName(String scgName)
 	{
 		this.scgName = scgName;
+	}
+	public String getPrinterLocation() {
+		return printerLocation;
+	}
+
+	public void setPrinterLocation(String printerLocation) {
+		this.printerLocation = printerLocation;
+	}
+
+	public String getPrinterType() {
+		return printerType;
+	}
+
+	public void setPrinterType(String printerType) {
+		this.printerType = printerType;
 	}
 }

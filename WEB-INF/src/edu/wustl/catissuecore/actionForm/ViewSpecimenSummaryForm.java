@@ -52,6 +52,8 @@ public class ViewSpecimenSummaryForm extends ActionForm implements SpecimenDetai
 	private boolean showLabel = true;
 	private boolean readOnly = false;
 	private String printCheckbox; 
+	private String printerType;
+	private String printerLocation;
     
 	private boolean multipleSpEditMode = false;
 	
@@ -343,5 +345,20 @@ public class ViewSpecimenSummaryForm extends ActionForm implements SpecimenDetai
 	 */
 	public void setForwardTo(String forwardTo) {
 		this.forwardTo = forwardTo;
+	}
+	public String getPrinterLocation() {
+		return printerLocation;
+	}
+
+	public void setPrinterLocation(String printerLocation) {
+		this.printerLocation = printerLocation;
+	}
+
+	public String getPrinterType() {
+		return printerType;
+	}
+
+	public void setPrinterType(String printerType) {
+		this.printerType = printerType;
 	}
 }

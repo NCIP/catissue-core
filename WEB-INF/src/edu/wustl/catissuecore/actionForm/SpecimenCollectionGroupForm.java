@@ -234,6 +234,11 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm implements C
 	
 	private String printCheckbox;
 	
+	private String printerType;
+
+	private String printerLocation;
+	
+	
 	private String nextForwardTo;
 	/**
 	 * @return the buttonType
@@ -1516,5 +1521,21 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm implements C
 	public void setBarcode(String barcode)
 	{
 		this.barcode = barcode;
+	}
+	
+	public String getPrinterLocation() {
+		return printerLocation;
+	}
+
+	public void setPrinterLocation(String printerLocation) {
+		this.printerLocation = printerLocation;
+	}
+
+	public String getPrinterType() {
+		return printerType;
+	}
+
+	public void setPrinterType(String printerType) {
+		this.printerType = printerType;
 	}
 }

@@ -204,6 +204,11 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData
 	
 	private String printCheckbox; 
 	
+	//added by printer properties
+	private String printerType;
+
+	private String printerLocation;
+	
 	private String createCpChildCheckBox;
 	
 	private String nextForwardTo;
@@ -1341,5 +1346,21 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData
 
 	public void setCollectionStatus(String collectionStatus) {
 		this.collectionStatus = collectionStatus;
+	}
+	
+	public String getPrinterLocation() {
+		return printerLocation;
+	}
+
+	public void setPrinterLocation(String printerLocation) {
+		this.printerLocation = printerLocation;
+	}
+
+	public String getPrinterType() {
+		return printerType;
+	}
+
+	public void setPrinterType(String printerType) {
+		this.printerType = printerType;
 	}
 }
