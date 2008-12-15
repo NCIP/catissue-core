@@ -59,6 +59,8 @@ public class PrintAction extends Action
     {
 
     	String nextforwardTo = request.getParameter("nextForwardTo");
+    	String printerType = request.getParameter("printerType");
+    	String printerLocation=request.getParameter("printerLocation");
     	SessionDataBean objBean = (SessionDataBean) request.getSession().getAttribute("sessionData");
     	String strIpAddress = objBean.getIpAddress();
     	try 
@@ -83,7 +85,7 @@ public class PrintAction extends Action
     					}
     					
     					LabelPrinter  labelPrinter= LabelPrinterFactory.getInstance("specimencollectiongroup");
-    					printStauts = labelPrinter.printLabel(objSCG, strIpAddress, objUser);
+    					printStauts = labelPrinter.printLabel(objSCG, strIpAddress, objUser,printerType,printerLocation);
         				
     				}
     				catch (DAOException exception)
@@ -112,7 +114,7 @@ public class PrintAction extends Action
     					Specimen objSpecimen = (Specimen)dao.retrieve(Specimen.class.getName(), new Long(specimenId));
 
     					LabelPrinter  labelPrinter= LabelPrinterFactory.getInstance("specimen");
-    		        	printStauts = labelPrinter.printLabel(objSpecimen, strIpAddress, objUser);
+    		        	printStauts = labelPrinter.printLabel(objSpecimen, strIpAddress, objUser,printerType,printerLocation);
         				
     				}
     				catch (DAOException exception)
@@ -145,7 +147,7 @@ public class PrintAction extends Action
 		    				    			
 		    		 }
 		    		LabelPrinter  labelPrinter= LabelPrinterFactory.getInstance("specimen");
-			        boolean printStauts = labelPrinter.printLabel(specimenList, strIpAddress, objUser);
+			        boolean printStauts = labelPrinter.printLabel(specimenList, strIpAddress, objUser,printerType,printerLocation);
 			    	setStatusMessage(printStauts,request);
 			        
 			        if(request.getAttribute("pageOf")!=null)
@@ -164,12 +166,10 @@ public class PrintAction extends Action
 		    		while (iterator.hasNext()) 
 		    		  {
 		    			Specimen objSpecimen = (Specimen) iterator.next();
-		    			specimenList.add(objSpecimen);
-//		    			
-		    				    			
+		    			specimenList.add(objSpecimen);		    				    			
 		    		 }
 		    		LabelPrinter  labelPrinter= LabelPrinterFactory.getInstance("specimen");
-			        boolean printStauts = labelPrinter.printLabel(specimenList, strIpAddress, objUser);
+			        boolean printStauts = labelPrinter.printLabel(specimenList, strIpAddress, objUser,printerType,printerLocation);
 			    	setStatusMessage(printStauts,request);
 			        
 			       	nextforwardTo = "printAntiSuccess";
@@ -231,14 +231,16 @@ public class PrintAction extends Action
 		}
 		if(listofAliquot!=null)
 		{
-	  	  printStauts = labelPrinter.printLabel(listofAliquot, objBean.getIpAddress(), objUser);
+			String printerType = request.getParameter("printerType");
+	    	String printerLocation=request.getParameter("printerLocation");
+	  	    printStauts = labelPrinter.printLabel(listofAliquot, objBean.getIpAddress(), objUser,printerType,printerLocation);
 		}
 		setStatusMessage(printStauts,request);
 	   	nextforwardTo = (String)request.getParameter("forwardTo");
 		
 		return nextforwardTo;
 	}
-   
+	
     /**
      * @param printStauts
      * @param request
