@@ -20,10 +20,11 @@ public class SpecimenLabelPrinterImpl implements LabelPrinter {
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.printserviceclient.LabelPrinter#printLabel(edu.wustl.common.domain.AbstractDomainObject, java.lang.String, gov.nih.nci.security.authorization.domainobjects.User)
 	 */
-	public boolean printLabel(AbstractDomainObject abstractDomainObject, String ipAddress, User userObj) {
+	public boolean printLabel(AbstractDomainObject abstractDomainObject, String ipAddress, User userObj,String printerType,String printerLocation) {
 		
 		ArrayList listMap = new ArrayList ();
-		createObjectMap(abstractDomainObject,listMap);		
+		//createObjectMap(abstractDomainObject,listMap);
+		createObjectMap(abstractDomainObject,listMap,printerType,printerLocation);
 		try
 		{
 			  PrintServiceInputParserInterface objParser = new PrintServiceInputXMLParser();
@@ -36,44 +37,39 @@ public class SpecimenLabelPrinterImpl implements LabelPrinter {
 			
 		}
 		
-	}
-	
+	}	
 
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.print.LabelPrinter#printLabel(java.util.List, java.lang.String, gov.nih.nci.security.authorization.domainobjects.User)
 	 */
-	public boolean printLabel(List<AbstractDomainObject> abstractDomainObjectList, String ipAddress, User userObj) {
+	public boolean printLabel(List<AbstractDomainObject> abstractDomainObjectList, String ipAddress, User userObj,String printerType,String printerLocation)
+	{
 		//Iterate through all objects in List ,crate map of each object.
 		ArrayList listMap = new ArrayList ();
+
 		for(int cnt=0;cnt < abstractDomainObjectList.size();cnt++)
 		{
 			AbstractDomainObject abstractDomainObject = abstractDomainObjectList.get(cnt); 
-			createObjectMap(abstractDomainObject,listMap);
-			
+			//createObjectMap(abstractDomainObject,listMap);
+			createObjectMap(abstractDomainObject,listMap,printerType,printerLocation);
 		}
 		try
 		{
-			 PrintServiceInputParserInterface objParser = new PrintServiceInputXMLParser();
-			 return objParser.callPrintService(listMap);
-			
+			PrintServiceInputParserInterface objParser = new PrintServiceInputXMLParser();
+			return objParser.callPrintService(listMap);
 		}
 		catch(Exception exp)
 		{
-			return false;
-			
+			exp.printStackTrace();
+			return false;	
 		}
-		
-		
 	}
-	
 	/**
 	 * @param abstractDomainObject Specimen Object
 	 * @param listMap List of Specimen details including all child specimen.
 	 */
-	void createObjectMap(AbstractDomainObject abstractDomainObject,ArrayList listMap)
+	void createObjectMap(AbstractDomainObject abstractDomainObject,ArrayList listMap,String printerType,String printerLocation)
 	{
-		
-		
 		
 		if(abstractDomainObject instanceof Specimen)
 		{
@@ -91,10 +87,20 @@ public class SpecimenLabelPrinterImpl implements LabelPrinter {
 				String label= obj.getLabel();
 				String barcode = obj.getBarcode();
 		
-				dataMap.put("class", obj.getClassName());
+				dataMap.put("class",obj.getClassName());
 				dataMap.put("id",obj.getId().toString());
-				dataMap.put("label", label);
+				dataMap.put("label",label);
 				dataMap.put("barcode",barcode);
+				if(printerType.equals(""))
+				{
+					printerType = " ";				   
+				}
+				dataMap.put("printerType",printerType);
+				if(printerLocation.equals(""))
+				{
+					printerLocation = " ";				    
+				}
+				dataMap.put("printerLocation",printerLocation);
 				listMap.add(dataMap);
 			}
 		}

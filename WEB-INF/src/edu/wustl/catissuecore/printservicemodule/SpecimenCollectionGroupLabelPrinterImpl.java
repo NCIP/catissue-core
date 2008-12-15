@@ -16,45 +16,37 @@ import gov.nih.nci.security.authorization.domainobjects.User;
  */
 public class SpecimenCollectionGroupLabelPrinterImpl implements LabelPrinter {
 
+	public boolean printLabel(AbstractDomainObject abstractDomainObject, String ipAddress,
+			User userObj, String printerType, String printerLocation)
+	{
+		ArrayList listMap = (ArrayList) createObjectMap(abstractDomainObject,printerType,printerLocation);
 
-	/* (non-Javadoc)
-	 * @see edu.wustl.catissuecore.printserviceclient.LabelPrinter#printLabel(edu.wustl.common.domain.AbstractDomainObject, java.lang.String, gov.nih.nci.security.authorization.domainobjects.User)
-	 */
-	public boolean printLabel(AbstractDomainObject abstractDomainObject, String ipAddress, User userObj) {
-		
-		ArrayList listMap = (ArrayList) createObjectMap(abstractDomainObject);
-		
 		try
 		{
-			  PrintServiceInputParserInterface objParser = new PrintServiceInputXMLParser();
-			  return objParser.callPrintService(listMap);
-			
+			PrintServiceInputParserInterface objParser = new PrintServiceInputXMLParser();
+			return objParser.callPrintService(listMap);
+
 		}
 		catch(Exception exp)
 		{
 			return false;
-			
-		}
-		
-	}
-	
 
-	/* (non-Javadoc)
-	 * @see edu.wustl.catissuecore.print.LabelPrinter#printLabel(java.util.List, java.lang.String, gov.nih.nci.security.authorization.domainobjects.User)
-	 */
-	public boolean printLabel(List<AbstractDomainObject> abstractDomainObjectList, String ipAddress, User userObj) {
-		
-		//No list of scg
-		return false;
-		
+		}
 	}
-	
+
+
+	public boolean printLabel(List<AbstractDomainObject> abstractDomainObject, String ipAddress,
+			User userObj, String printerType, String printerLocation)
+	{
+		// TODO Auto-generated method stub
+		return false;
+	}	
 	
 	/**
 	 * @param abstractDomainObject Specimen Collection group
 	 * @return List List of all Specimen including child Specimen
 	 */
-	List createObjectMap(AbstractDomainObject abstractDomainObject)
+	List createObjectMap(AbstractDomainObject abstractDomainObject,String printerType,String printerLocation)
 	{
 		ArrayList listMap = new ArrayList ();
 		if(abstractDomainObject instanceof SpecimenCollectionGroup)
@@ -82,11 +74,23 @@ public class SpecimenCollectionGroupLabelPrinterImpl implements LabelPrinter {
 				dataMap.put("id",obj.getId().toString());
 				dataMap.put("label", label);
 				dataMap.put("barcode",barcode);
+				if(printerType.equals(""))
+				{
+					printerType = " ";				   
+				}
+				dataMap.put("printerType",printerType);
+				if(printerLocation.equals(""))
+				{
+					printerLocation = " ";				    
+				}
+				dataMap.put("printerLocation",printerLocation);
 				listMap.add(dataMap);
 			}
 
 		}
 		return listMap;
-	}	
+	}
+
+	
 	
 }
