@@ -5,6 +5,10 @@
 <%@ taglib uri="/WEB-INF/specimenDetails.tld" prefix="md" %>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.bean.GenericSpecimen"%>
+<%@ page import="java.io.*"%>
+<%@ page import="java.util.*"%>
+<%@ page import="edu.wustl.common.util.global.ApplicationProperties" %>
+<%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 <%@ page language="java" isELIgnored="false" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
@@ -343,6 +347,15 @@ function updateSCDetails(msg)
 	t3.disabled = false;
 
 }
+//Added  for printing functionality
+function showPriterTypeLocation(){
+		if(document.getElementById('printCheckbox').checked == true){
+			document.getElementById('printerSelection').style.display="";
+		}else{
+			document.getElementById('printerSelection').style.display="none";
+			setSubmittedForPrint("","","");
+		}
+}
 	</script>
 </head>
 <body onload="UpdateCheckBoxStatus()">
@@ -524,11 +537,49 @@ function updateSCDetails(msg)
 		<html:hidden property="multipleSpEditMode" />
 		<logic:equal name="viewSpecimenSummaryForm" property="readOnly" value="false">
 		<tr>					
-			<td class="formFieldNoBorders" colspan="5"  height="20" >
-				<html:checkbox styleId="printCheckbox" property="printCheckbox" value="true" onclick="">
+			<td class="formFieldNoBorders" colspan="5"  height="20" nowrap>
+				<html:checkbox styleId="printCheckbox" property="printCheckbox" value="true" onclick="showPriterTypeLocation()">
 				<bean:message key="print.checkboxLabel"/>
 				</html:checkbox>
 			</td>
+              <!--  Added for displaying  printer type and location -->
+					 			<td>
+					   			<div  id="printerSelection" style="display:none">
+									<table>
+						 				<tr>
+						    				<td align="left" class="black_ar" width="8%">
+									          <label for="printerType">
+										         <bean:message key="print.printerTypeLabel"/>
+									          </label>
+								            </td>
+											<td align="left" class="black_new"> 
+											<autocomplete:AutoCompleteTag property="printerType"
+												optionsList="<%=Variables.printerTypeList%>"
+										        initialValue="<%=Variables.printerTypeList.get(0).getName()%>"
+												styleClass="black_ar"
+												 size="23"
+												/>
+					        				</td>
+						   					<td>&nbsp;&nbsp; </td>
+							   				<td align="left" class="black_ar" width="10%">
+									           <label for="printerLocation">
+										        <bean:message key="print.printerLocationLabel"/>
+									        </label>
+								             </td>
+											<td align="left" class="black_new"> 
+											<autocomplete:AutoCompleteTag property="printerLocation"
+												optionsList="<%=Variables.printerLocationList%>"
+										        initialValue="<%=Variables.printerLocationList.get(0).getName()%>"
+												styleClass="black_ar"
+												 size="23"
+												/>
+					        				</td>
+						   				</tr>
+									 </table>
+								</div>
+			 				  </td>
+							
+			<!--  End : Displaying   printer type and location -->								
 			<td>
 			<input class="blue_ar_b" type="button" value="Submit" onclick="pageSubmit()" />
 			<input class="blue_ar_b" type="button" value="Add To My List" onclick="onAddToCart()" />
