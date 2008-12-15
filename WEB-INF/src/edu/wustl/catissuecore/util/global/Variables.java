@@ -8,14 +8,21 @@
  */ 
 package edu.wustl.catissuecore.util.global;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Vector;
 
+import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 
 /**
@@ -41,6 +48,8 @@ public class Variables extends edu.wustl.common.util.global.Variables
     public static boolean isProtocolParticipantIdentifierLabelGeneratorAvl = false;
     
     public static boolean isPhoneNumberToBeValidated = true;
+    public static List<NameValueBean> printerLocationList=null;
+    public static List<NameValueBean> printerTypeList=null;
     
 	// Patch ID: SimpleSearchEdit_7
     public static Map<String, String> aliasAndPageOfMap = new HashMap<String, String>();
@@ -89,6 +98,44 @@ public class Variables extends edu.wustl.common.util.global.Variables
     	}
     	return colType;
     }
+    
+ 
+    public static void setPrinterInfo(String absolutePath)
+    {
+    	printerTypeList = new ArrayList<NameValueBean>();
+    	printerLocationList = new ArrayList<NameValueBean>();
+    	    	
+    	InputStream inputStream = null;
+		try
+		{
+			inputStream = new FileInputStream(new File(absolutePath));
+			Properties printerProp = new Properties();
+			printerProp.load(inputStream);
+			String printerTypes = printerProp.getProperty(Constants.PRINTER_TYPE);
+			String[] printerTypesArr = printerTypes.split(",");
+			for(String type : printerTypesArr)
+			{
+				printerTypeList.add(new NameValueBean(type,type));
+			}
+			
+			String printerLocationsStr = printerProp.getProperty(Constants.PRINTER_LOCATION);
+			String[] printerLocationArr = printerLocationsStr.split(",");	
+			for(String location : printerLocationArr)
+			{
+				printerLocationList.add(new NameValueBean(location,location));
+			}
+		}
+		catch (FileNotFoundException e)
+		{
+			e.printStackTrace();
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}		
+		
+    }
+    
     
     public static void main(String[] args)
 	{
