@@ -54,7 +54,7 @@ public class ParticipantLookupLogic implements LookupLogic
 			.getValue(Constants.PARTICIPANT_MATCH_CHARACTERS_FOR_LAST_NAME));
 	private static final int cutoffPointsFromProperties = Integer.parseInt(XMLPropertyHandler.getValue(Constants.PARTICIPANT_LOOKUP_CUTOFF));
 	private static final int totalPointsFromProperties = pointsForFirstNameExact + pointsForMiddleNameExact + pointsForLastNameExact
-			+ pointsForDOBExact + pointsForSSNExact + pointsForGenderExact + pointsForRaceExact;
+			+ pointsForDOBExact + pointsForSSNExact + pointsForGenderExact + pointsForRaceExact + pointsForPMIExact;
 	private int cutoffPoints;
 	private int totalPoints;
 	private boolean isSSNOrPMI = false;
@@ -133,13 +133,16 @@ public class ParticipantLookupLogic implements LookupLogic
 		{
 			totalPointsForParticipant += pointsForSSNExact;
 		}
-		if (participant.getGender() != null && !participant.getGender().trim().equals(""))
+		if (participant.getGender() != null && !participant.getGender().trim().equals("") && (!participant.getGender().equals("Unspecified")))
 		{
 			totalPointsForParticipant += pointsForGenderExact;
 		}
 		if (participant.getRaceCollection() != null && participant.getRaceCollection().isEmpty() == false)
 		{
-			totalPointsForParticipant += pointsForRaceExact;
+			Iterator<Race> raceIterator = participant.getRaceCollection().iterator();
+			Race race = raceIterator.next();
+			if(!race.getRaceName().equals("Unknown"))
+				totalPointsForParticipant += pointsForRaceExact;
 		}
 		return totalPointsForParticipant;
 	}
@@ -316,7 +319,7 @@ public class ParticipantLookupLogic implements LookupLogic
 				 *  If user has Gender and it is present in the participant from database as well,
 				 *  check for match between the two.
 				 */
-				if (gender != null && existingParticipant.getGender() != null)
+				if (gender != null && (!gender.equals("Unspecified")) && existingParticipant.getGender() != null)
 				{
 					weight += checkGender(gender, existingParticipant.getGender());
 				}
@@ -325,6 +328,7 @@ public class ParticipantLookupLogic implements LookupLogic
 				 *  If user has entered Race and it is present in the participant from database as well,
 				 *  check for match between the two.
 				 */
+				
 				weight += checkRace(raceCollection, existingParticipant.getRaceCollection());
 
 				/**
@@ -612,10 +616,12 @@ public class ParticipantLookupLogic implements LookupLogic
 				{
 					Race existingRaceTemp = existingRaceIterator.next();
 					Race race = raceIterator.next();
+					if(race.getRaceName().equals("Unknown") && existingRaceTemp.getRaceName().equals("Unknown") )
+						continue;
 					existingRaceNameSet.add(existingRaceTemp.getRaceName());
 					raceNameSet.add(race.getRaceName());
 				}
-				if(existingRaceNameSet.containsAll(raceNameSet))
+				if(existingRaceNameSet.size() != 0 && raceNameSet.size() != 0 && existingRaceNameSet.containsAll(raceNameSet))
 				{
 					return pointsForRaceExact;
 				}
