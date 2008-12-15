@@ -104,6 +104,7 @@ public class SpecimenDataBean implements GenericSpecimen
 	private boolean showBarcode = true;
 	private boolean showLabel = true;
 
+	private boolean readOnly = false;
 	public GenericSpecimen getFormSpecimenVo()
 	{
 		return this.formSpecimenVo;
@@ -485,7 +486,7 @@ public class SpecimenDataBean implements GenericSpecimen
 	
 	public boolean getReadOnly() {
 		// TODO Auto-generated method stub
-		return false;
+		return readOnly;
 	}
 
 	
@@ -560,7 +561,7 @@ public class SpecimenDataBean implements GenericSpecimen
 	
 	public void setReadOnly(boolean readOnly) {
 		// TODO Auto-generated method stub
-		
+		this.readOnly = readOnly;
 	}
 
 	

@@ -61,6 +61,11 @@ public class SpecimenDetailsTagUtil
 		List <String>subSpecdispColumnsList = new ArrayList<String>();
 		boolean showLabel = false;
 		boolean showBarcode = false;
+		int fwdt = 50;
+		int lwdt = 12;
+		int sfwdt = 48;
+		int slwdt = 12;
+
 		//columnHeaderList											DisplayColumn List
 		colHeaderList.add("");									dispColumnsList.add(PARENT);	
 		
@@ -101,7 +106,19 @@ public class SpecimenDetailsTagUtil
 			request.setAttribute("fromMultipleSpecimen","false");
 		}
 
-		
+		if(!summaryForm.getShowLabel() && !(summaryForm.getShowbarCode()))
+		{
+			fwdt = 40;
+			lwdt = 20;
+			sfwdt = 42;
+			slwdt = 18;
+			
+		}
+		request.setAttribute("fCol",new Integer(fwdt));
+		request.setAttribute("lCol",new Integer(lwdt));
+		request.setAttribute("sfCol",new Integer(sfwdt));
+		request.setAttribute("slCol",new Integer(slwdt));
+
 		request.setAttribute("specimenList",summaryForm.getSpecimenList());
 		request.setAttribute("aliquotList",summaryForm.getAliquotList());
 		request.setAttribute("derivedList",summaryForm.getDerivedList());

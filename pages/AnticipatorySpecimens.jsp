@@ -16,36 +16,88 @@
 <script language="JavaScript" type="text/javascript" src="jss/antiSpecAjax.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/GenericSpecimenDetailsTag.js"></script>
 <script language="JavaScript" type="text/javascript">
-	window.parent.frames['SpecimenEvents'].location="ShowCollectionProtocol.do?pageOf=specimenEventsPage&operation=ViewSummary";
+	//window.parent.frames['SpecimenEvents'].location="ShowCollectionProtocol.do?pageOf=specimenEventsPage&operation=ViewSummary";
 	function ApplyToAll(object,type)
 		{
-			if(object.checked )
+			MDApplyToAll(object,type);
+		}
+
+//Mandar : 15Dec08 ---
+function getCountByType(type)
+{
+	var count=0;
+	var fields = document.getElementsByTagName("select");
+	for (i=0; i<fields.length;i++)
+	{
+		var fid = fields[i].id;
+		if(fid.indexOf(type+"[")>=0)
+			count = count+1;
+	}
+
+	return count;
+}
+function getElement(name)
+{
+	var fields = document.getElementsByName(name);
+	if(fields.length > 0)
+		return fields[0];
+	else
+		return "";
+}
+function updateField(type,i,isDis,valueToSet)
+{
+	elemName = type+"["+i+"]"+".selectedContainerName";
+	getElement(elemName).disabled =isDis;
+
+	elemName = type+"["+i+"]"+".positionDimensionOne";
+	getElement(elemName).disabled =isDis;
+	elemName = type+"["+i+"]"+".positionDimensionTwo";
+	getElement(elemName).disabled =isDis;
+
+	elemName = type+"["+i+"]"+".selectedContainerName";
+	getElement(elemName).value =valueToSet;
+
+	elemName = type+"["+i+"]"+".positionDimensionOne";
+	getElement(elemName).value = "";
+	elemName = type+"["+i+"]"+".positionDimensionTwo";
+	getElement(elemName).value ="";
+
+}
+	function MDApplyToAll(object,type)
+		{
+//			if(object.checked )
 			{
-				var fields = document.getElementsByTagName("input");
-				var i =0;
-				var text="";
-				var valueToSet = "";
-				var isFirstField = true;
+				var cnt = getCountByType(type);
 				
-				for (i=0; i<fields.length;i++)
+				var elemId = type+"[0]"+".storageContainerForSpecimen";
+				var ele0 = document.getElementById(elemId);
+				if(ele0.selectedIndex > 0)	// not virtual
 				{
-					text = fields[i].name;
-					if(text.indexOf(type)>=0 && text.indexOf(".selectedContainerName")>=0)
+					elemName = type+"[0]"+".selectedContainerName";
+					var valueToSet = getElement(elemName).value;
+
+					for(i=1;i<cnt;i++)	// change values for all remaining
 					{
-						if(isFirstField)
-						{
-							valueToSet = fields[i].value;
-							isFirstField = false;
-						}
-							fields[i].value = valueToSet;
+						elemId = type+"["+i+"]"+".storageContainerForSpecimen";
+						document.getElementById(elemId).selectedIndex = ele0.selectedIndex;
+						updateField(type,i,false,valueToSet);
 					}
-					else if(text.indexOf(type)>=0 && text.indexOf("[0]")<0 &&(text.indexOf(".positionDimensionOne")>=0 || text.indexOf(".positionDimensionTwo")>=0))
+				}
+				else	// for virtual
+				{
+					for(i=1;i<cnt;i++)	
 					{
-					 fields[i].value = "";
+						elemId = type+"["+i+"]"+".storageContainerForSpecimen";
+						document.getElementById(elemId).selectedIndex = ele0.selectedIndex;
+						updateField(type,i,true,"");
+						
 					}
+
 				}
 			}
 		}
+
+
 
 		function saveCollectionProtocol()
 		{
@@ -87,6 +139,14 @@
 					if (element.disabled == false)
 					{
 						element.checked = chkInstance.checked;
+						//Mandar : for event propagation
+						if(type == "specimen" && element.onclick)
+						{
+							if(document.all)
+								element.fireEvent("onclick"); 
+							else
+								element.onclick(); 
+						}
 					}
 					ctr++;
 				}
@@ -184,9 +244,11 @@ function scForSpecimen(element,spid)
 	var name= element.name;
 	var prefix = name.substring(0,name.indexOf('.'));
 	var cpidName = prefix+".collectionProtocolId";
-	var cpid = document.getElementsByName(cpidName)[0].value;
+	//var cpid = document.getElementsByName(cpidName)[0].value;
+	var cpid = document.getElementById(cpidName).value;
 	var className = prefix+".className";
-	var cName = document.getElementsByName(className)[0].value;
+//	var cName = document.getElementsByName(className)[0].value;
+	var cName = document.getElementById(className).value;
 	
 	//alert(prefix+" : " + cpid + " : " + cName);
 	if(element.value == "Auto")
@@ -220,15 +282,19 @@ function updateSCFields(sid, isDisabled)
 	var scName = "selectedContainerName_"+sid;
 	var scPos1 = "positionDimensionOne_"+sid;
 	var scPos2 = "positionDimensionTwo_"+sid;
+	var scCntr = "containerId_"+sid;
 	var t1 = document.getElementById(scName);
 	var t2 = document.getElementById(scPos1);
 	var t3 = document.getElementById(scPos2);
+	var t4 = document.getElementById(scCntr);
 	t1.value="";
 	t2.value="";
 	t3.value="";
+	t4.value="";
 	t1.disabled = isDisabled;
 	t2.disabled = isDisabled;
 	t3.disabled = isDisabled;
+	t4.disabled = isDisabled;
 }
 
 
@@ -295,44 +361,46 @@ function updateSCDetails(msg)
 			${requestScope.messageKey}
 		</html:messages>
 		</logic:notEmpty>
+
 		<html:form action="${requestScope.formAction}">		
 		<!-- Mandar : New Table design starts -->
 		<TABLE width="100%">
 		<TR>
-			<TD colspan="2" align="left" class="tr_bg_blue1">
+		<TD align="left" class="tr_bg_blue1" width="100%" colspan=3>
+		<TABLE width="100%">
+		<TR>
+			<TD align="left" class="tr_bg_blue1" width="${requestScope.sfCol}%">
 			<span class="blue_ar_b">
-				<bean:write name="viewSpecimenSummaryForm" property="title" /></span>
+				<bean:write name="viewSpecimenSummaryForm" property="title" />
+			</span>
 			</TD>
+			<TD class="tr_bg_blue1"  width=40%><span class="blue_ar_b">
+			<INPUT TYPE="button" value="Location: Apply First to All" onClick="ApplyToAll(this,'specimen')">
+			</TD>
+			<td class="tr_bg_blue1" scope="col" width="${requestScope.slCol}%">&nbsp;
+			<logic:equal name="viewSpecimenSummaryForm" property="showCheckBoxes" value="true">
+					<input type="checkbox" name="chkAllSpecimen" onclick="ChangeCheckBoxStatus('specimen',this)"/>
+					<span class="blue_ar_b">
+					<bean:message key="anticipatorySpecimen.Created"/>
+					</span>
+			</logic:equal>	
+			</td>
 		</TR>
+		</TABLE>
+		</TD>
+		</TR>
+
 		<logic:empty name="viewSpecimenSummaryForm" property="specimenList" >
 			<tr>
-				<td class="dataTableWhiteCenterHeader">  
+				<td class="dataTableWhiteCenterHeader" colspan="3">  
 					No specimens to display for current action!!
 				</td>
 			</tr>		
 		</logic:empty>
 		<TR>
-			<TD colspan="2" class="showhide">
-				<table border="0" cellpadding="3" cellspacing="0" width="100%">
-				<logic:notEmpty name="viewSpecimenSummaryForm" property="specimenList" >	
-                  <tr class="tableheading">
-                    <td width="4%" class="black_ar_b"><label for="delete" align="center"></label></td>
-                    <logic:equal name="labelShow" value="true">
-                    <td width="11%" class="black_ar_b"><bean:message key="specimen.label"/></td>
-                    </logic:equal>
-                    <logic:equal name="barcodeShow" value="true">
-                    <td width="11%" class="black_ar_b"><bean:message key="specimen.barcode"/></td>
-                    </logic:equal>
-                    <td width="19%" class="black_ar_b"><bean:message key="specimen.subType"/></td>
-                    <td width="7%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Quantity"/></td>
-                    <td width="7%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Concentration"/></td>
-                    <logic:equal name="fromMultipleSpecimen" value="false">
-                    <td width="30%" class="black_ar_b" nowrap><bean:message key="anticipatorySpecimen.Location"/><input id="chkSpecimen" type="checkbox" onClick="ApplyToAll(this,'specimen')"/><span class="black_ar_s">Apply First to All</span></td>
-                    </logic:equal>
-                    <td width="11%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Collected"/></td>
-                  </tr>
-					<md:genericSpecimenDetails columnHeaderListName="columnHeaderList" formName="viewSpecimenSummaryForm" dataListName="specimenList" dataListType="Parent" columnListName="columnListName" isReadOnly="false" displayColumnListName="dispColumnsList" />
-				<%-- custom tag for specimen list by mandar ---  --%>	</logic:notEmpty>
+			<TD colspan="3" class="showhide">
+				<table border=0 width="100%">
+					<md:specDetFormat4  columnHeaderListName="columnHeaderList" formName="viewSpecimenSummaryForm" dataListName="specimenList" dataListType="Parent" columnListName="columnListName" isReadOnly="false" displayColumnListName="dispColumnsList" />
 				</table>
 				<logic:notEmpty name="viewSpecimenSummaryForm" property="eventId">
 					<html:hidden property="eventId"  />
@@ -346,7 +414,7 @@ function updateSCDetails(msg)
 		<logic:empty name="viewSpecimenSummaryForm" property="aliquotList" >
 		<logic:empty name="viewSpecimenSummaryForm" property="derivedList" >
 		<TR>
-			<TD>
+			<TD colspan="3">
 				<table>
 					<tr>
 						<td class="dataTablePrimaryLabel" colspan="6" height="20">  
@@ -362,65 +430,69 @@ function updateSCDetails(msg)
 		
 		<logic:notEmpty name="viewSpecimenSummaryForm" property="derivedList" >
 		<TR>
-			<TD colspan="2" align="left" class="tr_bg_blue1">
+		<TD align="left" class="tr_bg_blue1" width="100%" colspan=3>
+		<TABLE width="100%">
+		<TR>
+
+			<TD colspan="1" align="left" class="tr_bg_blue1" width="${requestScope.fCol}%">
 				<span class="blue_ar_b">	
 				<bean:message key="anticipatorySpecimen.DerivativeDetails"/>
 				</span>
 			</TD>
+			<TD class="tr_bg_blue1"  width=38%>
+			<INPUT TYPE="button" value="Location: Apply First to All" onClick="ApplyToAll(this,'derived')">
+			</TD>
+			<td class="tr_bg_blue1" scope="col" width="${requestScope.lCol}%">&nbsp;
+			<logic:equal name="viewSpecimenSummaryForm" property="showCheckBoxes" value="true">
+					<input type="checkbox" name="chkAllDerived" onclick="ChangeCheckBoxStatus('derived',this)"/>
+					<span class="blue_ar_b">
+					<bean:message key="anticipatorySpecimen.Created"/>
+					</span>
+			</logic:equal>	
+			</td>
+		</TR>
+		</TABLE>
+		</TD>
 		</TR>
 		<TR>
-			<TD colspan="2" class="showhide">
-				<table border="0" cellpadding="3" cellspacing="0" width="100%">
-					<tr class="tableheading">
-						<td width="11%" class="black_ar_b"><label for="delete" align="center"><bean:message key="anticipatorySpecimen.Parent"/></label></td>
-	                    <logic:equal name="labelShow" value="true">
-						<td width="11%" class="black_ar_b"><bean:message key="specimen.label"/></td>
-						</logic:equal>
-	                    <logic:equal name="barcodeShow" value="true">
-						<td width="11%" class="black_ar_b"><bean:message key="specimen.barcode"/></td>
-						</logic:equal>
-						<td width="14%" class="black_ar_b"><bean:message key="specimen.subType"/></td>
-						<td width="7%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Quantity"/></td>
-						<td width="7%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Concentration"/></td>
-						<td width="30%" class="black_ar_b" nowrap><bean:message key="anticipatorySpecimen.Location"/><input id="chkDrived" type="checkbox" onClick="ApplyToAll(this,'derived')"/><span class="black_ar_s">Apply First to All</span></td>
-						<td><input type="checkbox" value="check" id="derivedCheckBox" checked="true" onclick="applyToDerived()"/></td>
-						<td width="10%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Collected"/></td>
-					</tr>
-					<md:genericSpecimenDetails columnHeaderListName="subSpecimenColHeaderList" formName="viewSpecimenSummaryForm" dataListName="derivedList" dataListType="Derived" columnListName="columnListName" isReadOnly="false" displayColumnListName="subSpecdispColumnsList" />
-					<%-- custom tag for specimen list by mandar --- Derived --%>	
+			<TD colspan="3" class="showhide">
+				<table border=0 width="100%">
+					<md:specDetFormat4  columnHeaderListName="subSpecimenColHeaderList" formName="viewSpecimenSummaryForm" dataListName="derivedList" dataListType="Derived" columnListName="columnListName" isReadOnly="false" displayColumnListName="subSpecdispColumnsList" />
 				</table>
 			</TD>
 		</TR>
 		</logic:notEmpty>
 		<logic:notEmpty name="viewSpecimenSummaryForm" property="aliquotList" >
 		<TR>
-			<TD colspan="2" align="left" class="tr_bg_blue1">
+		<TD align="left" class="tr_bg_blue1" width="100%" colspan=3>
+		<TABLE width="100%">
+		<TR>
+			<TD colspan="1" align="left" class="tr_bg_blue1" width="${requestScope.fCol}%">
 				<span class="blue_ar_b">	
 				<bean:message key="anticipatorySpecimen.AliquotDetails"/> 
 				</span>
 			</TD>
+			<TD class="tr_bg_blue1"  width=38%>
+			<INPUT TYPE="button" value="Location: Apply First to All"  onClick="ApplyToAll(this,'aliquot')">
+			</TD>
+
+			<td class="tr_bg_blue1" scope="col" width="${requestScope.lCol}%">&nbsp;
+			<logic:equal name="viewSpecimenSummaryForm" property="showCheckBoxes" value="true">
+					<input type="checkbox" name="chkAllAliquot" onclick="ChangeCheckBoxStatus('aliquot',this)"/>
+					<span class="blue_ar_b">
+					<bean:message key="anticipatorySpecimen.Created"/>
+					</span>
+			</logic:equal>	
+			</td>
+		</TR>
+		</TABLE>
+		</TD>
 		</TR>
 		<TR>
-			<TD colspan="2" class="showhide">
-				<table border="0" cellpadding="3" cellspacing="0" width="100%">
-                  <tr class="tableheading">
-                    <td width="11%" class="black_ar_b"><label for="delete" align="center"><bean:message key="anticipatorySpecimen.Parent"/></label></td>
-                    <logic:equal name="labelShow" value="true">
-                    <td width="11%" class="black_ar_b"><bean:message key="specimen.label"/></td>
-                    </logic:equal>
-                    <logic:equal name="barcodeShow" value="true">
-                    <td width="11%" class="black_ar_b"><bean:message key="specimen.barcode"/></td>
-                    </logic:equal>
-                    <td width="14%" class="black_ar_b"><bean:message key="specimen.subType"/></td>
-                    <td width="7%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Quantity"/></td>
-                    <td width="7%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Concentration"/></td>
-                    <td width="30%" class="black_ar_b" nowrap><bean:message key="anticipatorySpecimen.Location"/><input id="chkAliquot" type="checkbox" onClick="ApplyToAll(this,'aliquot')"/><span class="black_ar_s">Apply First to All</span> </td>
-					<td><input type="checkbox" value="check" id="aliquotCheckBox" checked="true" onclick="applyToAlquots()"/></td>
-                    <td width="10%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Collected"/></td>
-                  </tr>
-					<md:genericSpecimenDetails columnHeaderListName="subSpecimenColHeaderList" formName="viewSpecimenSummaryForm" dataListName="aliquotList" dataListType="Aliquot" columnListName="columnListName" isReadOnly="false" displayColumnListName="subSpecdispColumnsList" />
-				<%-- custom tag for specimen list by mandar --- Aliquot  --%>						
-				</table>				
+			<TD colspan="3" class="showhide">
+				<table border=0 width="100%">
+					<md:specDetFormat4  columnHeaderListName="subSpecimenColHeaderList" formName="viewSpecimenSummaryForm" dataListName="aliquotList" dataListType="Aliquot" columnListName="columnListName" isReadOnly="false" displayColumnListName="subSpecdispColumnsList" />
+				</table>
 			</TD>
 		</TR>
 		</logic:notEmpty>

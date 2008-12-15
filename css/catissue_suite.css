@@ -639,5 +639,14 @@ color: #000000;
 	color: #171717;
 	vertical-align:top;
 	margin:0px;
-	
+}
+
+/* *********  Mandar : 5Dec08  For AntiSpecimen ******** */
+.tr_anti_bg_blue {
+	background-color: #eef5fb;
+	vertical-align:middle;
+}
+.tr_anti_bg_gray {
+	background-color: #F6F6F6;
+	vertical-align:middle;
 }
