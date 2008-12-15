@@ -1,5 +1,5 @@
 /*
- * $Name: 1.41.2.40 $
+ * $Name: 1.41.2.41 $
  *
  * */
 package edu.wustl.catissuecore.util.listener;
@@ -131,6 +131,9 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 		Utility.initializePrivilegesMap();
 		initTitliIndex();
 		initCDEManager();
+		//added to set printer related information
+		String absolutePath=Variables.propertiesDirPath +File.separator+"PrintServiceImplementor.properties";
+		Variables.setPrinterInfo(absolutePath);
 
 	}
 	
