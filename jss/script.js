@@ -357,6 +357,31 @@ function decrementCounter()
 	document.forms[0].counter.value = parseInt(document.forms[0].counter.value) - 1;
 } 
 
+
+
+function macRelated()
+{
+	if(navigator.userAgent.indexOf('Mac') >=0)
+	{
+		//alert(window.height);
+		var frms = document.frames;
+		for(i=0;i<frms.length; i++)
+		{
+			frms[i].height=window.innerHeight*.70;
+		}
+	}
+}
+
+function macEleHt(eleid,ht)
+{
+	if(navigator.userAgent.indexOf('Mac') >=0)
+	{
+//		alert((window.innerHeight*ht/100));
+		var ele = document.getElementById(eleid);
+		ele.height=(window.innerHeight*ht/100);
+	}
+}
+
 function mdFrmResizer(frmId,pcnt)
 {
 	if(pcnt >100 || pcnt <= 0)

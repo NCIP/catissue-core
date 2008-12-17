@@ -59,6 +59,11 @@ function callUpdateSpecimen()
 	document.forms[0].submit();
 	
 }
+if(navigator.userAgent.indexOf('Mac')>=0)
+{
+	window.onload = function() {document.getElementById("td1").height=700;document.getElementById("multiplespeId").height=700; }
+	window.onresize = function() {document.getElementById("td1").height=700;document.getElementById("multiplespeId").height=700; }
+}
 </script>
 </head>
 <body>
@@ -69,8 +74,22 @@ function callUpdateSpecimen()
 		</td>
 	</tr>
 		<tr>
-			<td height="100%">											
+<%
+      Object os = request.getHeader("user-agent");
+      if(os!=null && os.toString().toLowerCase().indexOf("mac")!=-1)
+      {
+%>
+			<td id="td1" height=700>											
+				<div id="multiplespeId" style="overflow:auto;height:700;width:100%">
+
+<%
+      }else{
+%>
+			<td id="td1" height=100%>											
 				<div id="multiplespeId" style="overflow:auto;height:100%;width:100%">
+<%
+}
+%>
 					<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
 						id="MultipleSpecimen" width="100%" height="100%"
 						codebase="http://fpdownload.macromedia.com/get/flashplayer/current/swflash.cab">
@@ -90,6 +109,7 @@ function callUpdateSpecimen()
 								pluginspage="http://www.adobe.com/go/getflashplayer">
 							</embed>
 						</object>
+					</div>
 			</td>
 		</tr>
 		<tr>
