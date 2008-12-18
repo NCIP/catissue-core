@@ -62,6 +62,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String DEFAULT_COUNTRY ="defaultCountry";
 	public static final String DEFAULT_HISTOLOGICAL_QUALITY="defaultHistologicalQuality";
 	public static final String DEFAULT_VITAL_STATUS ="defaultVitalStatus";
+	public static final String DEFAULT_PRINTER_TYPE ="defaultPrinterType";
+	public static final String DEFAULT_PRINTER_LOCATION ="defaultPrinterLocation";
 	
 	  //Consent tracking
 	public static final String 	SHOW_CONSENTS="showConsents";
@@ -150,7 +152,9 @@ public class Constants extends edu.wustl.common.util.global.Constants
 		{Constants.DEFAULT_STATES, Constants.CDE_NAME_STATE_LIST},
 		{Constants.DEFAULT_COUNTRY, Constants.CDE_NAME_COUNTRY_LIST},
 		{Constants.DEFAULT_HISTOLOGICAL_QUALITY, Constants.CDE_NAME_HISTOLOGICAL_QUALITY},
-		{Constants.DEFAULT_VITAL_STATUS, Constants.CDE_VITAL_STATUS}
+		{Constants.DEFAULT_VITAL_STATUS, Constants.CDE_VITAL_STATUS},
+		{Constants.DEFAULT_PRINTER_LOCATION,Constants.DEFAULT_PRINTER_LOCATION},
+		{Constants.DEFAULT_PRINTER_TYPE,Constants.DEFAULT_PRINTER_TYPE}
    };
    
 	//Constants added for Catissuecore V1.2
