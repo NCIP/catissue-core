@@ -44,7 +44,6 @@ import edu.wustl.catissuecore.client.CaCoreAppServicesDelegator;
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
-import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.ConsentTier;
 import edu.wustl.catissuecore.domain.ConsentTierResponse;
@@ -52,7 +51,6 @@ import edu.wustl.catissuecore.domain.ConsentTierStatus;
 import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
-import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
@@ -66,7 +64,6 @@ import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.cde.CDE;
 import edu.wustl.common.cde.CDEManager;
@@ -1149,7 +1146,20 @@ public class NewSpecimenAction extends SecureAction
 		{
 			specimenForm.setPathologicalStatus((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_PATHOLOGICAL_STATUS));
 		}
+		setDefaultPrinterTypeLocation(specimenForm);
 	}
+	//added for bug 10750
+	 private void setDefaultPrinterTypeLocation(NewSpecimenForm form)
+	 {
+		 if(form.getPrinterLocation() == null)
+		 {
+		   form.setPrinterLocation((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_PRINTER_LOCATION));
+		 }
+		 if(form.getPrinterType() == null)
+		 {
+		   form.setPrinterType((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_PRINTER_TYPE));
+		 }
+	 }
 	
 	 /**
 		 * Name : Ashish Gupta

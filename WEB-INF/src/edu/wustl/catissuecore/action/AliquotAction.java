@@ -33,12 +33,10 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
 import edu.wustl.catissuecore.actionForm.AliquotForm;
-import edu.wustl.catissuecore.actionForm.ParticipantForm;
 import edu.wustl.catissuecore.bean.AliquotBean;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
-import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
@@ -46,6 +44,7 @@ import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.action.SecureAction;
@@ -224,6 +223,7 @@ public class AliquotAction extends SecureAction
 		String pageOf = request.getParameter(Constants.PAGEOF);
 		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 		SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
+		setDefaultPrinterTypeLocation(aliquotForm);
 		/**
 		 *  Following code ensures that 
 		 *  1. Label/Barcode, Aliquot Count, Quantity per Aliquot submitted on click of Submit button 
@@ -596,7 +596,18 @@ public class AliquotAction extends SecureAction
 		setPageData(request, pageOf,aliquotForm);
 		return mapping.findForward(pageOf);
 	}
-
+	//added for bug 10750
+	private void setDefaultPrinterTypeLocation(AliquotForm form)
+	{
+		if(form.getPrinterLocation() == null)
+		 {
+		   form.setPrinterLocation((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_PRINTER_LOCATION));
+		 }
+		 if(form.getPrinterType() == null)
+		 {
+		   form.setPrinterType((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_PRINTER_TYPE));
+		 }
+	}
 	/**
 	 * This method checks whether the specimen with given label exists or not.
 	 * @param request object of HttpServletRequest

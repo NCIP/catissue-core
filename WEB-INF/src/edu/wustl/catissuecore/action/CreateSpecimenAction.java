@@ -38,6 +38,7 @@ import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.action.SecureAction;
@@ -456,7 +457,7 @@ public class CreateSpecimenAction extends SecureAction
 	{
 		
 		setConstantValues(request);
-		
+		setDefaultPrinterTypeLocation(form);
 		String pageOf = (String)request.getAttribute(Constants.PAGEOF);
 		setPageData1(request,  form);
 		setPageData2(request, form, pageOf);
@@ -465,7 +466,18 @@ public class CreateSpecimenAction extends SecureAction
 		setNComboData(request, form);
 		setXterIdData(request, form);
 	}
-	
+	//added for bug 10750
+	private void setDefaultPrinterTypeLocation(CreateSpecimenForm form)
+	{
+		if(form.getPrinterLocation() == null)
+		 {
+		   form.setPrinterLocation((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_PRINTER_LOCATION));
+		 }
+		 if(form.getPrinterType() == null)
+		 {
+		   form.setPrinterType((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_PRINTER_TYPE));
+		 }
+	}
 	private void setPageData1(HttpServletRequest request, CreateSpecimenForm form)
 	{
 		String operation = (String)request.getAttribute(Constants.OPERATION);
