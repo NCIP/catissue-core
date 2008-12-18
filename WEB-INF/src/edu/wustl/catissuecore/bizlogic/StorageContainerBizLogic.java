@@ -151,7 +151,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 										.getPositionDimensionOne().toString(),
 								container.getLocatedAtPosition()
 										.getPositionDimensionTwo().toString(),
-								sessionDataBean, false);
+								sessionDataBean, false,null);
 
 					} catch (SMException sme) {
 						sme.printStackTrace();
@@ -632,7 +632,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 							.getLocatedAtPosition().getPositionDimensionOne()
 							.toString(), container.getLocatedAtPosition()
 							.getPositionDimensionTwo().toString(),
-							sessionDataBean, false);
+							sessionDataBean, false,null);
 				}
 			} catch (SMException sme) {
 				sme.printStackTrace();
@@ -2618,7 +2618,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 
 	// Will check only for Position is used or not.
 	protected boolean isPositionAvailable(DAO dao,
-			StorageContainer storageContainer, String posOne, String posTwo) {
+			StorageContainer storageContainer, String posOne, String posTwo,Specimen specimen) {
 		try {
 			String sourceObjectName = Specimen.class.getName();
 			String[] selectColumnName = { "id" };
@@ -2638,8 +2638,18 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 					+ storageContainer.getId());
 			// check if Specimen exists with the given storageContainer
 			// information
-			if (list.size() != 0) {
+			
+			if (list.size() != 0) 
+			{
 				Object obj = list.get(0);
+				boolean isPosAvail=false;
+				if(specimen!=null)
+				{
+					if((!((specimen.getLineage()).equalsIgnoreCase("New")))&&((Long)obj).longValue()==specimen.getId().longValue())
+					{
+						isPosAvail= true;
+					}
+				}
 				Logger.out
 						.debug("**************IN isPositionAvailable : obj::::::: --------------- "
 								+ obj);
@@ -2647,8 +2657,10 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 				// Logger.out.debug((Integer)obj[1]);
 				// Logger.out.debug((Integer )obj[2]);
 
-				return false;
-			} else {
+				return isPosAvail;
+			}
+			else 
+			{
 				sourceObjectName = StorageContainer.class.getName();
 				String[] whereColumnName1 = {
 						"locatedAtPosition.positionDimensionOne",
@@ -2697,7 +2709,9 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 					}
 				}
 			}
+			
 			return true;
+			
 		} catch (Exception e) {
 			Logger.out.debug("Error in isPositionAvailable : " + e);
 			return false;
@@ -2707,7 +2721,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 	// -- storage container validation for specimen
 	public void checkContainer(DAO dao, String storageContainerID,
 			String positionOne, String positionTwo,
-			SessionDataBean sessionDataBean, boolean multipleSpecimen)
+			SessionDataBean sessionDataBean, boolean multipleSpecimen,Specimen specimen)
 			throws DAOException, SMException {
 		// List list = dao.retrieve(StorageContainer.class.getName(),
 		// "id",storageContainerID );
@@ -2776,7 +2790,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 				 * try {
 				 */
 				canUsePosition = isPositionAvailable(dao, pc, positionOne,
-						positionTwo);
+						positionTwo,specimen);
 				/*
 				 * } catch (Exception e) {
 				 * 

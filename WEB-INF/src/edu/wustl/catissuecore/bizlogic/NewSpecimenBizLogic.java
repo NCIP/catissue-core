@@ -67,6 +67,7 @@ import edu.wustl.catissuecore.util.MultipleSpecimenValidationUtil;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
@@ -1461,7 +1462,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 				storageContainerBizLogic.checkContainer(dao, storageContainerObj.getId().toString(),
 						specimen.getSpecimenPosition().getPositionDimensionOne().toString(), specimen.getSpecimenPosition()
 								.getPositionDimensionTwo().toString(), sessionDataBean,
-						partOfMultipleSpecimen);
+						partOfMultipleSpecimen,specimen);
 			}
 			catch (SMException e)
 			{
@@ -1598,7 +1599,8 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 				Integer pos1 = specimen.getSpecimenPosition().getPositionDimensionOne();
 				Integer pos2 = specimen.getSpecimenPosition().getPositionDimensionTwo();
 				String containerName = specimen.getSpecimenPosition().getStorageContainer().getName();
-				if(id!=null)
+				
+			/*	if(id!=null)
 				{
 					storageValue = StorageContainerUtil.getStorageValueKey(null, id.toString(), pos1, pos2);
 				}
@@ -1615,7 +1617,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 					Object[] arguments = {specimen.getLabel(),containerName,pos1,pos2};
 					String errorMsg=Constants.CONTAINER_ERROR_MSG;
 					throw new DAOException(MessageFormat.format(errorMsg, arguments));
-				}
+				}*/
 			}
 		}
 	}
@@ -1788,8 +1790,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	 */
 	protected boolean validate(Object obj, DAO dao, String operation) throws DAOException
 	{
-		boolean result;
-
+		boolean result=false;
 		if (obj instanceof LinkedHashSet)
 		{
 			//bug no. 8081 and 8083
@@ -1811,6 +1812,10 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		else
 		{
 			result = validateSingleSpecimen((Specimen) obj, dao, operation, false);
+		/*	if (operation.equals(Constants.ADD))
+			{
+				allocateSpecimenPostionsRecursively((Specimen) obj);
+			}*/
 		}
 		return result;
 	}
@@ -1868,13 +1873,48 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		validateFields(specimen, dao, operation, partOfMulipleSpecimen);
 		validateEnumeratedData(specimen, operation, validator);
 		validateSpecimenCharacterstics(specimen);
-		if (operation.equals(Constants.ADD))
-		{
-			allocateSpecimenPostionsRecursively(specimen);
-		}
+		//new method call added.
+		validateDerivedSpecimens(specimen,dao,operation);
 		return true;
 	}
+	
+	private void validateDerivedSpecimens(Specimen specimen,DAO dao,String operation) throws DAOException
+	{
+		boolean result = false;
+		Collection derivedSpecimens = specimen.getChildSpecimenCollection();
+		if (derivedSpecimens!= null)
+		{
+			Iterator it = derivedSpecimens.iterator();
+			//validate derived specimens
+			int i = 0;
+			while(it.hasNext())
+			{
+				Specimen derivedSpecimen = (Specimen)it.next();
+				derivedSpecimen.setSpecimenCharacteristics(specimen.getSpecimenCharacteristics());
+				derivedSpecimen.setSpecimenCollectionGroup(specimen.getSpecimenCollectionGroup());
+				derivedSpecimen.setPathologicalStatus(specimen.getPathologicalStatus());
+				derivedSpecimen.getParentSpecimen().setId(specimen.getId());
+				try
+				{
+					validateSingleSpecimen(derivedSpecimen, dao, operation,false);
+				}
+				catch (DAOException daoException)
+				{
+					int j = i + 1;
+					String message = daoException.getMessage();
+					message += " (This message is for Derived Specimen " + j + " of Parent Specimen number )";
+					daoException.setMessage(message);
+					throw daoException;
+				}
 
+			/*	if (!result)
+				{
+					break;
+				}*/
+				i++;
+			}
+		}
+	}
 	/**
 	 * @param specimen Specimen to validate
 	 * @param operation Add/Edit
@@ -1957,12 +1997,15 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
             String message = ApplicationProperties.getValue("specimen.specimenCollectionGroup");
             throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
         }
-        if (specimen.getParentSpecimen() != null && ((Specimen) specimen.getParentSpecimen()).getLabel() == null
-                && specimen.getParentSpecimen().getId() == null)
-        {
-            String message = ApplicationProperties.getValue("createSpecimen.parent");
-            throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
-        }
+	    if(!Variables.isSpecimenLabelGeneratorAvl)
+	    {
+	        if (specimen.getParentSpecimen() != null && ((Specimen) specimen.getParentSpecimen()).getLabel() == null
+	                && specimen.getParentSpecimen().getId() == null)
+	        {
+	            String message = ApplicationProperties.getValue("createSpecimen.parent");
+	            throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+	        }
+	    }
         if (validator.isEmpty(specimen.getSpecimenClass()))
         {
             String message = ApplicationProperties.getValue("specimen.type");
@@ -2210,7 +2253,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		 * This method gives first valid storage position to a specimen if it is not given
 		 * If storage position is given it validates the storage position
 		 **/
-		StorageContainerUtil.validateStorageLocationForSpecimen(specimen);
+		StorageContainerUtil.validateStorageLocationForSpecimen(specimen,storageContainerIds);
 	}
 
 	/**
