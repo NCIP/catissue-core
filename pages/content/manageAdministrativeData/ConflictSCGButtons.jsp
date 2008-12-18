@@ -28,14 +28,8 @@
 						value="Ignore New Report" 
 						onclick="submitValue('ignoreNewReport')">
 		 
-		    </html:button> &nbsp;|&nbsp;
-
-			<html:link	page="/ManageAdministrativeData.do" styleClass="cancellink">
-					<bean:message key="buttons.cancel" />
-			</html:link>
-
-
-		</td>
+		    </html:button> 
+    	</td>
 	</tr>
 </table>
 

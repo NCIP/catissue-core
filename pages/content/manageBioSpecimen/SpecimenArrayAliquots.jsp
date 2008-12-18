@@ -484,10 +484,7 @@ function mapButtonClickedInAliquot(frameUrl,count)
 				<html:button styleClass="blue_ar_b" property="submitButton" onclick="onCreate()" accesskey="Enter">
 						<bean:message key="buttons.create"/>
 				</html:button>
-				| <html:link page="/ManageAdministrativeData.do" styleClass="cancellink">
-					<bean:message key="buttons.cancel" />
-				  </html:link>
-		</td>				  
+			</td>				  
 	</tr>				
 </table>	
 </td>

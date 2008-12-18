@@ -759,14 +759,15 @@
 									<td colspan="2" class="buttonbg"><html:submit
 										styleClass="blue_ar_b">
 										<bean:message key="buttons.submit" />
-									</html:submit>&nbsp;|<logic:notEqual name="pageOf"
+									</html:submit>
+<!-- &nbsp;|<logic:notEqual name="pageOf"
 										value='${requestScope.pageOfSignUp}'>
 										<logic:notEqual parameter="openInCPFrame" value='yes'>
 											<html:link onclick="closeUserWindow()"
 												page="/ManageAdministrativeData.do" styleClass="cancellink">
 												<bean:message key="buttons.cancel" />
 											</html:link>
-										</logic:notEqual>
+										</logic:notEqual>  
 										<logic:equal parameter="openInCPFrame" value='yes'>
 											<html:link
 												page="/CollectionProtocol.do?operation=add&pageOf=pageOfCollectionProtocol"
@@ -780,7 +781,8 @@
 											page="/RedirectHome.do" styleClass="cancellink">
 											<bean:message key="buttons.cancel" />
 										</html:link></a>
-									</logic:equal></td>
+									</logic:equal>-->
+									</td>
 								</tr>
 							</table></td>
 					</tr>

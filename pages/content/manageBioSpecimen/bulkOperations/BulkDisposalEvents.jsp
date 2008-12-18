@@ -84,8 +84,9 @@
       </tr>
         
       <tr>
-        <td colspan="3" class="buttonbg"><html:submit styleClass="blue_ar_b"/>&nbsp; | &nbsp;<html:link page="/ManageAdministrativeData.do" styleClass="cancellink">
-		<bean:message key="buttons.cancel"/></html:link></td>
+        <td colspan="3" class="buttonbg">
+        <html:submit styleClass="blue_ar_b"/>
+        </td>
       </tr>
     </table></td>
   </tr>

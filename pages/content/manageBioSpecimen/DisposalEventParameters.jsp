@@ -150,14 +150,6 @@ function confirmAction(form)
 			<html:submit styleClass="blue_ar_b" value="Submit" property="Submit" onclick="return confirmAction(this.form)"/>
 						 &nbsp;|&nbsp;
 		  <html:button styleClass="blue_ar_b" value="Delete" property="disable" onclick='${requestScope.deleteAction}'/>
-
-		  
-
-            &nbsp;|&nbsp;
-			<html:link	page="/QueryManageBioSpecimen.do" styleClass="cancellink">
-				<bean:message key="buttons.cancel" />
-			</html:link>
-			
 			</td>
 
         </tr>

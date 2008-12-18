@@ -941,12 +941,6 @@ function checkQuantityforAll(count)
           <td class="buttonbg" style="padding:6px;">
 					<input type="button" class="blue_ar_b" value="Submit" onclick="submitPage()" accesskey="Enter">
 					<input type="button" class="blue_ar_c" value="Submit And Notify" onclick="submitAndNotify()">
-					 &nbsp;|&nbsp; 
-						
-							<html:link page="/RequestListView.do?pageNum=1&menuSelected=17" styleClass="cancellink">
-								<bean:message key="orderingsystem.button.cancel" />
-				            </html:link>
-						
 					</td>
 				</tr>
       </table>

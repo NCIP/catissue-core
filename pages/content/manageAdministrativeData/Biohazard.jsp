@@ -70,7 +70,8 @@
         </table></td>
       </tr>
       <tr>
-        <td class="buttonbg"><html:submit styleClass="blue_ar_b" accesskey="Enter"><bean:message key="buttons.submit"/></html:submit>&nbsp;|&nbsp;<span ><html:link page="/ManageAdministrativeData.do" styleClass="cancellink"><bean:message key="buttons.cancel" /></html:link></span></td>
+        <td class="buttonbg"><html:submit styleClass="blue_ar_b" accesskey="Enter"><bean:message key="buttons.submit"/></html:submit>
+   </td>
       </tr>
     </table></td>
   </tr>

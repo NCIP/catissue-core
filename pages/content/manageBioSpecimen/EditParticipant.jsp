@@ -1067,10 +1067,7 @@ function participantRegRow(subdivtag)
 									|&nbsp;<html:button styleClass="blue_ar_c" property="disableRecord"
 										title="Delete" value="Delete" onclick="<%=deleteAction%>">
 									</html:button>
-								</logic:equal>|&nbsp;<html:link page="/ManageAdministrativeData.do"
-								styleClass="cancellink">
-								<bean:message key="buttons.cancel" />
-								</html:link>
+								</logic:equal>
 							</td>
 						</logic:notEqual>
 

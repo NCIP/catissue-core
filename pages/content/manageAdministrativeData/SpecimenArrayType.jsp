@@ -241,10 +241,7 @@
           <td colspan="2" class="buttonbg"><html:submit styleClass="blue_ar_b">
 						<bean:message  key="buttons.submit" />
 					</html:submit>
-            &nbsp;| <html:link
-										page="/ManageAdministrativeData.do" styleClass="cancellink">
-										<bean:message key="buttons.cancel" />
-									</html:link></td>
+            </td>
         </tr>
       </table></td>
   </tr>

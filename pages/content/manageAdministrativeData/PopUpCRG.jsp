@@ -106,9 +106,7 @@ function cancelWindow()
       <html:button property="clickButton" onclick="addCRG()"  styleClass="blue_ar_b">
 	      <bean:message  key="buttons.submit" /> 
       </html:button>
-      &nbsp;| <html:link href="#" styleClass="cancellink" onclick= "cancelWindow();">
-													<bean:message key="buttons.cancel" />
-												</html:link></td>
+     </td>
   </tr>
   </html:form>
 </table>

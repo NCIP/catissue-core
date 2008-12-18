@@ -750,7 +750,10 @@
 					  %>
 
 			<tr>
-                <td colspan="4" class="buttonbg"><html:submit styleClass="blue_ar_b" onclick="onClick(this)"><bean:message key="buttons.submit"/></html:submit>&nbsp; |&nbsp; <span><a href="#" class="cancellink"><bean:message key="buttons.cancel" /></a></span></td>
+                <td colspan="4" class="buttonbg">
+                <html:submit styleClass="blue_ar_b" onclick="onClick(this)">
+                <bean:message key="buttons.submit"/></html:submit>
+                </td>
 	    	 </tr>			  	
 					  
 					</table>

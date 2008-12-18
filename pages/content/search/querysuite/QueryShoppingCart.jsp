@@ -441,8 +441,7 @@ function checkAll(element)
 <tr>
        <td colspan="2" class="buttonbg"> <html:button styleClass="blue_ar_b" property="proceed" onclick="onSubmit()" disabled="<%=disabledButton%>" >
 				<bean:message key="buttons.submit"/>	
-			</html:button>&nbsp|&nbsp <html:link page="/ManageAdministrativeData.do" styleClass="cancellink">
-		<bean:message key="buttons.cancel" /> </html:link></td>
+			</html:button></td>
       </tr>
 	
    </table></td></tr>
@@ -466,9 +465,7 @@ function checkAll(element)
 			<html:button styleClass="blue_ar_b" property="" onclick="gotoAdvanceQuery()">
 				<bean:message key="buttons.advanceQuery"/>	
 			</html:button>
-			&nbsp|&nbsp <html:link page="/ManageAdministrativeData.do" styleClass="cancellink">
-		<bean:message key="buttons.cancel" /> </html:link>
-		</td>
+			</td>
 	</tr>	
  <%}%>
   </table>

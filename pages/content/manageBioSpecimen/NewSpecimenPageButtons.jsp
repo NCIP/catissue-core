@@ -72,17 +72,7 @@
 				title="<%=Constants.SPECIMEN_BUTTON_TIPS[0]%>"
 				onclick="onAddToCart()">
 				<bean:message key="buttons.addToCart"/>
-		</html:button>&nbsp;| 
-		<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_SPECIMEN_CP_QUERY%>">
-		<html:link page="/ManageAdministrativeData.do" styleClass="cancellink">
-		<bean:message key="buttons.cancel" />
-		</html:link>
-		</logic:notEqual>
-		<logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_SPECIMEN_CP_QUERY%>">
-		<html:link page="/QueryManageBioSpecimen.do" styleClass="cancellink">
-		<bean:message key="buttons.cancel" />
-		</html:link>
-		</logic:equal>
+		</html:button> 
 		</td>
 	</tr>
 </table>

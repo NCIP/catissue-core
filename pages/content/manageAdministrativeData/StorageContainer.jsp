@@ -1048,10 +1048,9 @@ function addNewTypeAction(action)
 									onclick="<%=deleteAction%>">
 										<bean:message key="buttons.delete"/>&nbsp;
 									</html:button>
-					          		</logic:equal>|&nbsp;<a href="ManageAdministrativeData.do" class="cancellink" target="_top"><bean:message key="buttons.cancel" /></a></td>
-				   		</td>
-						
-					</tr>
+					          		</logic:equal>
+                           </td>
+				   		</tr>
 				</table>
 				
 			<!-- /td-->

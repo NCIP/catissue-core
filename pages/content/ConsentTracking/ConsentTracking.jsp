@@ -752,10 +752,7 @@ function popupWindow(nofConsentTiers)
 						{%>
 
 						<input type="button" name="doneButton" class="blue_ar_b" value="Ok" onclick="submitAllResponses()"/>
-						&nbsp;|&nbsp;
-						<html:link href="#" styleClass="cancellink" onclick= "cancelWindow();">
-													<bean:message key="buttons.cancel" />
-												</html:link>
+						
 					<%	}
 			if(operation.equals(Constants.EDIT))
 				{

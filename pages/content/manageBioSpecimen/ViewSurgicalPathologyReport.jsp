@@ -461,10 +461,7 @@ if(!hasAccess)
 					</html:button> &nbsp;|&nbsp;
 					<html:button property="action2" styleClass="blue_ar_c" onclick="<%=submitQuarantineComments%>" disabled="<%=isQuarantineDisabled.booleanValue()%>" >
 						<bean:message key="viewSPR.button.requestForQuarantine" />
-					</html:button> &nbsp;|&nbsp;
-					<html:link	page="/QueryManageBioSpecimen.do" styleClass="cancellink">
-						<bean:message key="buttons.cancel" />
-					</html:link>
+					</html:button> 
 <%
 	}
 %>

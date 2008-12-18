@@ -633,9 +633,7 @@ function vieMapTabSelected(){
 									%> <html:button styleClass="blue_ar_b" property="searchButton"
 										onclick="<%=searchAction%>">
 										<bean:message key="buttons.search" />
-									</html:button>&nbsp;|&nbsp;<html:link page="/ManageAdministrativeData.do" styleClass="cancellink">
-										<bean:message key="buttons.cancel" />
-									</html:link></td>
+									</html:button></td>
       </tr>
     </table></td>
   </tr>

@@ -120,10 +120,7 @@
 
 		  <html:submit styleClass="blue_ar_b" value="Submit" property="Submit" onclick='${requestScope.changeAction}'/>
 
-            &nbsp;|&nbsp;
-			<html:link	page="/QueryManageBioSpecimen.do" styleClass="cancellink">
-				<bean:message key="buttons.cancel" />
-			</html:link></td>
+           </td>
         </tr>
       
   

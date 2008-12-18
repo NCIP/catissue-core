@@ -58,9 +58,8 @@
         <tr>
           <td class="buttonbg"><html:submit styleClass="blue_ar_b">
 			<bean:message  key="buttons.submit" />
-		</html:submit>&nbsp;|&nbsp;<html:link page="/ManageAdministrativeData.do"  onclick="closeUserWindow()" styleClass="cancellink">
-													<bean:message key="buttons.cancel" />
-												</html:link></td>
+		</html:submit>
+		</td>
         </tr>
       </table></td>
   </tr>

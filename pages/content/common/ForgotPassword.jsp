@@ -48,9 +48,7 @@
         <td align="left" class="buttonbg"><html:submit styleClass="blue_ar_b" accesskey="Enter">
 						<bean:message  key="buttons.submit" />
 					</html:submit>
-          &nbsp;&nbsp;|&nbsp; <html:link page="/RedirectHome.do" styleClass="cancellink">
-							<bean:message key="buttons.cancel" />
-				</html:link></td>
+          </td>
       </tr>
     </table></td>
   </tr>

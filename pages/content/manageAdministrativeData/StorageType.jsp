@@ -244,9 +244,7 @@
                       <html:button styleClass="blue_ar_b" property="storageContainerPage"		title="Submit and Add Container" value='${requestScope.addContainer}'			
 					  					onclick='${requestScope.forwardToSubmit}' accesskey="Enter">
 									</html:button>
-            &nbsp;|&nbsp; <html:link page="/ManageAdministrativeData.do" styleClass="cancellink" >
-											<bean:message key="buttons.cancel" />
-										</html:link></td>
+           </td>
         </tr>
       </table></td>
   </tr>

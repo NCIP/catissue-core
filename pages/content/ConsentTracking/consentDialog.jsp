@@ -268,7 +268,7 @@ var useFunction = "derivedSpecimenGrid";
 		}
 		%>
 
-| <a href="javascript:cancelWindow()" class="cancellink"><bean:message key="buttons.cancel"/> </a></td>
+</td>
 
 
 

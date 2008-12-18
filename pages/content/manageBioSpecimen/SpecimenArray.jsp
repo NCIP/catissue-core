@@ -475,12 +475,7 @@ function checkStotagePosition()
 									<bean:message key="buttons.delete"/>
 								</html:button>&nbsp;
 					</logic:equal>
-								|&nbsp;
-					<html:link page="/ManageAdministrativeData.do" styleClass="cancellink">
-						<bean:message key="buttons.cancel" />
-					</html:link>
-							
-		  </td>
+				  </td>
         </tr>
     </table></td>
   </tr>

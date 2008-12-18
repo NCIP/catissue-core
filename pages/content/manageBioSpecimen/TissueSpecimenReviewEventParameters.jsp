@@ -149,9 +149,7 @@
    <tr>
           <td class="buttonbg">
 		  <html:submit styleClass="blue_ar_b" value="Submit" accesskey="Enter" onclick='${requestScope.changeAction}' />
-            &nbsp;|&nbsp;<html:link  page="/QueryManageBioSpecimen.do" styleClass="cancellink">
-                        <bean:message key="buttons.cancel" />
-                  </html:link></td>
+        </td>
     </tr>
 
  </html:form>

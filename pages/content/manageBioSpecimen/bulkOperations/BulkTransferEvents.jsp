@@ -124,7 +124,10 @@ String collectionProtocolId =(String) request.getAttribute(Constants.COLLECTION_
 
 String buttonOnClicked = "mapButtonClickedOnSpecimen('"+url+"','transferEvents','"+selContainerId+"')";	%> <html:button styleClass="actionButton" property="containerMap" onclick="<%=buttonOnClicked%>"> <bean:message key="buttons.map"/> </html:button> </td-->
 
-</tr></div> </logic:iterate> </table></td> </tr> </table> <tr> <td colspan="3" class="buttonbg"><html:submit styleClass="blue_ar_b"/>&nbsp; | &nbsp;<html:link page="/ManageAdministrativeData.do" styleClass="cancellink"> <bean:message key="buttons.cancel" /> </html:link></td> </tr> </table></td>
+</tr></div> </logic:iterate> </table></td> </tr> </table> <tr> 
+<td colspan="3" class="buttonbg">
+<html:submit styleClass="blue_ar_b"/>
+</td> </tr> </table></td>
 
 </tr>
 

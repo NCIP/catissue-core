@@ -70,12 +70,7 @@
 	     	</html:button>
 
 		<%}%>
-		 &nbsp;|&nbsp;
-		 <html:link	page="/ManageAdministrativeData.do" styleClass="cancellink">
-				<bean:message key="buttons.cancel" />
-		</html:link>
-
-	    </td>
+		</td>
 		
 	</tr>
 </table>
