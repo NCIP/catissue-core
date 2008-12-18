@@ -98,7 +98,7 @@ public class Variables extends edu.wustl.common.util.global.Variables
     	}
     	return colType;
     }
-    
+     
  
     public static void setPrinterInfo(String absolutePath)
     {
@@ -112,17 +112,22 @@ public class Variables extends edu.wustl.common.util.global.Variables
 			Properties printerProp = new Properties();
 			printerProp.load(inputStream);
 			String printerTypes = printerProp.getProperty(Constants.PRINTER_TYPE);
-			String[] printerTypesArr = printerTypes.split(",");
-			for(String type : printerTypesArr)
+			if(printerTypes.length()!=0)
 			{
-				printerTypeList.add(new NameValueBean(type,type));
-			}
-			
+				String[] printerTypesArr = printerTypes.split(",");
+				for(String type : printerTypesArr)
+				{
+					printerTypeList.add(new NameValueBean(type,type));
+				}
+			}			
 			String printerLocationsStr = printerProp.getProperty(Constants.PRINTER_LOCATION);
-			String[] printerLocationArr = printerLocationsStr.split(",");	
-			for(String location : printerLocationArr)
+			if(printerTypes.length()!=0)
 			{
-				printerLocationList.add(new NameValueBean(location,location));
+				String[] printerLocationArr = printerLocationsStr.split(",");
+				for(String location : printerLocationArr)
+				{
+					printerLocationList.add(new NameValueBean(location,location));
+				}
 			}
 		}
 		catch (FileNotFoundException e)
