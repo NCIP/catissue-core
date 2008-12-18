@@ -155,12 +155,12 @@ public class AddAttribute extends BaseMetadata
 		attributes = new ArrayList<String>();
 		attributes.add("signedConsentDocumentURL");
 		attributes.add("consentSignatureDate");
-		//attributes.add("barcode");
+		attributes.add("barcode");
 		entityNameAttributeNameMap.put("edu.wustl.catissuecore.domain.CollectionProtocolRegistration",attributes);
 
-		/*attributes = new ArrayList<String>();
+		attributes = new ArrayList<String>();
 		attributes.add("barcode");
-		entityNameAttributeNameMap.put("edu.wustl.catissuecore.domain.SpecimenCollectionGroup",attributes);*/
+		entityNameAttributeNameMap.put("edu.wustl.catissuecore.domain.SpecimenCollectionGroup",attributes);
 	}
 
 	private void populateAttributeColumnNameMap()
@@ -169,7 +169,7 @@ public class AddAttribute extends BaseMetadata
 		attributeColumnNameMap.put("unsignedConsentDocumentURL", "UNSIGNED_CONSENT_DOC_URL");
 		attributeColumnNameMap.put("signedConsentDocumentURL", "CONSENT_DOC_URL");
 		attributeColumnNameMap.put("consentSignatureDate", "CONSENT_SIGN_DATE");
-		//attributeColumnNameMap.put("barcode", "BARCODE");
+		attributeColumnNameMap.put("barcode", "BARCODE");
 	}
 
 	private void populateAttributeDatatypeMap()
@@ -178,7 +178,7 @@ public class AddAttribute extends BaseMetadata
 		attributeDatatypeMap.put("unsignedConsentDocumentURL", "string");
 		attributeDatatypeMap.put("signedConsentDocumentURL", "string");
 		attributeDatatypeMap.put("consentSignatureDate", "date");
-		//attributeDatatypeMap.put("barcode", "string");
+		attributeDatatypeMap.put("barcode", "string");
 	}
 	private void populateAttributePrimaryKeyMap()
 	{
@@ -186,7 +186,7 @@ public class AddAttribute extends BaseMetadata
 		attributePrimarkeyMap.put("unsignedConsentDocumentURL", "0");
 		attributePrimarkeyMap.put("signedConsentDocumentURL", "0");
 		attributePrimarkeyMap.put("consentSignatureDate", "0");
-		//attributePrimarkeyMap.put("barcode", "0");
+		attributePrimarkeyMap.put("barcode", "0");
 	}
 	private void populateEntityList()
 	{
@@ -194,7 +194,7 @@ public class AddAttribute extends BaseMetadata
 		entityList.add("edu.wustl.catissuecore.domain.CollectionProtocol");
 		entityList.add("edu.wustl.catissuecore.domain.CollectionProtocolRegistration");
 		entityList.add("edu.wustl.catissuecore.domain.DistributedItem");
-		//entityList.add("edu.wustl.catissuecore.domain.SpecimenCollectionGroup");
+		entityList.add("edu.wustl.catissuecore.domain.SpecimenCollectionGroup");
 	}
 
 	public AddAttribute(Connection connection) throws SQLException
