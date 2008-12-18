@@ -234,7 +234,7 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 				//				{
 				storageContainerBizLogic.checkContainer(dao, specimenArray.getLocatedAtPosition().getParentContainer().getId().toString(),
 						specimenArray.getLocatedAtPosition().getPositionDimensionOne().toString(), specimenArray.getLocatedAtPosition()
-								.getPositionDimensionTwo().toString(), sessionDataBean, false);
+								.getPositionDimensionTwo().toString(), sessionDataBean, false,null);
 				//				}
 			}
 			catch (SMException sme)
@@ -534,7 +534,7 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 			// --- check for all validations on the storage container.
 			storageContainerBizLogic.checkContainer(dao, storageContainerObj.getId().toString(), specimenArray.getLocatedAtPosition()
 					.getPositionDimensionOne().toString(), specimenArray.getLocatedAtPosition().getPositionDimensionTwo().toString(),
-					sessionDataBean, false);
+					sessionDataBean, false,null);
 			specimenArray.getLocatedAtPosition().setParentContainer((Container) storageContainerObj);
 		}
 	}

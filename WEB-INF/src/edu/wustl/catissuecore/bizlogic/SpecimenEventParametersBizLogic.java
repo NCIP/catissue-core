@@ -189,7 +189,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 	
 						// --- check for all validations on the storage container.
 						storageContainerBizLogic.checkContainer(dao, storageContainerObj.getId().toString(), transferEventParameters
-								.getToPositionDimensionOne().toString(), transferEventParameters.getToPositionDimensionTwo().toString(), sessionDataBean,false);
+								.getToPositionDimensionOne().toString(), transferEventParameters.getToPositionDimensionTwo().toString(), sessionDataBean,false,null);
 						
 					
 						//storageContainerObj.setHoldsSpecimenClassCollection(storageContainerBizLogic.getSpecimenClassList(storageContainerObj.getId().toString()));

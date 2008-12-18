@@ -127,7 +127,7 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 				try
 				{
 					//check for all validations on the storage container.
-					storageContainerBizLogic.checkContainer(dao, parentContainer.getId().toString(), posOne, posTwo, sessionDataBean, false);
+					storageContainerBizLogic.checkContainer(dao, parentContainer.getId().toString(), posOne, posTwo, sessionDataBean, false,null);
 				}
 				catch (SMException sme)
 				{
