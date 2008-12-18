@@ -462,13 +462,14 @@ public class StorageContainerUtil
 	 * @param specimen
 	 * @throws DAOException
 	 */
-	public static void validateStorageLocationForSpecimen(Specimen specimen) throws DAOException
+	public static void validateStorageLocationForSpecimen(Specimen specimen,HashSet<String> allocatedPositions) throws DAOException
 	{
+		Integer xPos = null;
+		Integer yPos = null;
 		if (specimen.getSpecimenPosition() != null && specimen.getSpecimenPosition().getStorageContainer() != null)
 		{
-			//Long storageContainerId = specimen.getStorageContainer().getId();
-			Integer xPos = null;
-			Integer yPos = null;
+			StorageContainer storageContainer=specimen.getSpecimenPosition().getStorageContainer();
+			String containerValue = null;
 			if(specimen.getSpecimenPosition() != null)
 			{
 				xPos = specimen.getSpecimenPosition().getPositionDimensionOne();
@@ -495,40 +496,65 @@ public class StorageContainerUtil
 			
 				if (containerMapFromCache != null)
 				{
-					Iterator itr = containerMapFromCache.keySet().iterator();
-					
-					while (itr.hasNext())
+					NameValueBean storageContainerId = new NameValueBean(storageContainer.getName(), storageContainer.getId());
+					TreeMap storageContainerMap = (TreeMap) containerMapFromCache.get(storageContainerId);
+			
+					Iterator containerPosIterator = storageContainerMap.keySet().iterator();
+					boolean positionAllottedFlag= false;
+					while (containerPosIterator.hasNext()&& !positionAllottedFlag)
 					{
-						NameValueBean nvb = (NameValueBean) itr.next();
-						if(nvb.getValue().toString().equals(specimen.getSpecimenPosition().getStorageContainer().getId().toString()))
+				
+						NameValueBean nvb = (NameValueBean) containerPosIterator.next();
+						xPos = new Integer(nvb.getValue());
+						List yposValues = (List) storageContainerMap.get(nvb);
+						Iterator yposIterator = yposValues.iterator();
+				
+						while(yposIterator.hasNext())
 						{
-						
-							Map tempMap = (Map) containerMapFromCache.get(nvb);
-							Iterator tempIterator = tempMap.keySet().iterator();;
-							NameValueBean nvb1 = (NameValueBean) tempIterator.next();
+							nvb =(NameValueBean) yposIterator.next();
+							yPos= new Integer(nvb.getValue());
 							
-							List list = (List) tempMap.get(nvb1);
-							NameValueBean nvb2 = (NameValueBean) list.get(0);
-									
-							SpecimenPosition specPos = specimen.getSpecimenPosition();							
-							specPos.setPositionDimensionOne(new Integer(nvb1.getValue()));
-						    specPos.setPositionDimensionTwo(new Integer(nvb2.getValue()));
-						  
-						    specPos.setSpecimen(specimen);
-						    
-						    isContainerFull = false;
-						    break;
-						}
-						
+							Long containerId = storageContainer.getId();
+					//		if(containerId!=null)
+					//		{
+					//			containerValue = StorageContainerUtil.getStorageValueKey(null, containerId.toString(), xPos, yPos);
+					//		}
+					//		else 
+					//		{
+								containerValue = StorageContainerUtil.getStorageValueKey(storageContainer.getName(),null,xPos, yPos);
+					//		}
+							if (!allocatedPositions.contains(containerValue))
+							{
+								SpecimenPosition specPos = specimen.getSpecimenPosition();							
+								specPos.setPositionDimensionOne(xPos);
+							    specPos.setPositionDimensionTwo(yPos);
+							  
+							    specPos.setSpecimen(specimen);
+							    
+							    isContainerFull = false;
+							    positionAllottedFlag = true;
+							    allocatedPositions.add(containerValue);
+							    break;
+							}
+						}			
 					}
 				}
-				if(specimen.getSpecimenPosition() != null)
+			}
+			if(containerValue==null)
+			{
+				containerValue = StorageContainerUtil.getStorageValueKey(storageContainer.getName(),null,xPos, yPos);
+				if (!allocatedPositions.contains(containerValue))
 				{
-					xPos = specimen.getSpecimenPosition().getPositionDimensionOne();
-					yPos = specimen.getSpecimenPosition().getPositionDimensionTwo();
+					allocatedPositions.add(containerValue);
+				}
+				else
+				{
+					throw new DAOException(
+							ApplicationProperties
+									.getValue("errors.storageContainer.Multiple.inUse"));
 				}
 			}
-
+		
 			if(isContainerFull)
 			{
 				throw new DAOException("The Storage Container you specified is full");
