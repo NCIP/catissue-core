@@ -357,6 +357,23 @@ function decrementCounter()
 	document.forms[0].counter.value = parseInt(document.forms[0].counter.value) - 1;
 } 
 
+function elementHt(eleid,ht)
+{
+	//alert(ht);
+		var ele = document.getElementById(eleid);
+		if(ele)
+		{
+			var newHt=0;
+			if(document.all && document.documentElement && document.documentElement.clientHeight )
+				newHt=(document.documentElement.clientHeight*ht/100);
+			else if(window.innerHeight)
+				newHt=(window.innerHeight*ht/100);
+			else if(document.body && document.body.clientHeight)
+				newHt=(document.body.clientHeight*ht/100);
+			ele.height=newHt;
+	//		alert(newHt);
+		}
+}
 
 
 function macRelated()

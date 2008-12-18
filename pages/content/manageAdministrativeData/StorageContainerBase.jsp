@@ -88,10 +88,20 @@ else
 {
 	var slope=15;
 }
+var pcnt=70;
+var mac1=3;
+if(navigator.userAgent.indexOf('Mac')<0)
+{
+	mac1=0;
+	pcnt=65;
+}
+window.onload = function() { elementHt('SCTreeView',(pcnt+mac1)); elementHt('StorageContainerView', (pcnt+mac1)); }
+window.onresize = function() { elementHt('SCTreeView',(pcnt+mac1)); elementHt('StorageContainerView', (pcnt+mac1)); }
 
+/*
 window.onload = function() { setFrameHeight('SCTreeView', .7,slope);setFrameHeight('StorageContainerView', .7,slope); }
 window.onresize = function() { setFrameHeight('SCTreeView', .7,slope); setFrameHeight('StorageContainerView', .7,slope); }
-
+*/
 </script>
 <table width="100%"  border="0" cellpadding="0" cellspacing="0" class="maintable">
     <tr>
@@ -143,11 +153,21 @@ window.onresize = function() { setFrameHeight('SCTreeView', .7,slope); setFrameH
 								</iframe>
 								</logic:equal>
 								<logic:equal parameter="operation"	value='edit'>
+								<SCRIPT LANGUAGE="JavaScript">
+								<!--
+								pcnt=pcnt+2;
+								//-->
+								</SCRIPT>
 								<iframe name="StorageContainerView"	id="StorageContainerView" src="StorageContainer.do?operation=edit&pageOf=pageOfStorageContainer" scrolling="auto" frameborder="0" width="100%" >
 									Your Browser doesn't support IFrames.
 								</iframe>
 								</logic:equal>
 								<logic:equal parameter="operation"	value='showEditAPageAndMap'>
+								<SCRIPT LANGUAGE="JavaScript">
+								<!--
+								pcnt=pcnt+5;
+								//-->
+								</SCRIPT>
 								 <iframe name="StorageContainerView"	id="StorageContainerView" src="storageContainerEditMessageScreen.do" scrolling="auto" frameborder="0" width="100%" >
 									Your Browser doesn't support IFrames.
 								</iframe>
