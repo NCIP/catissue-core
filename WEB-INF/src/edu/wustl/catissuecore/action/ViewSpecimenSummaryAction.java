@@ -497,7 +497,7 @@ public class ViewSpecimenSummaryAction extends Action {
 	 * @param summaryForm
 	 * @param specimenMap
 	 */
-	private void populateSpecimenSummaryForm(
+	public void populateSpecimenSummaryForm(
 			ViewSpecimenSummaryForm summaryForm,
 			LinkedHashMap<String, GenericSpecimen> specimenMap) {
 				
