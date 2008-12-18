@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,25 +23,28 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
 import edu.wustl.catissuecore.actionForm.ViewSpecimenSummaryForm;
+import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
 import edu.wustl.catissuecore.bean.GenericSpecimen;
 import edu.wustl.catissuecore.bean.SpecimenDataBean;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
-import edu.wustl.catissuecore.domain.CollectionProtocol;
+import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
-import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.catissuecore.domain.ExternalIdentifier;
 import edu.wustl.catissuecore.util.SpecimenDetailsTagUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
+import edu.wustl.common.dao.DAOFactory;
+import edu.wustl.common.dao.HibernateDAO;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
+import edu.wustl.common.util.dbManager.DAOException;
 
 public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 {
@@ -65,7 +69,10 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 				Collection<AbstractDomainObject> specimenCollection = new LinkedHashSet<AbstractDomainObject>();
 				specimenCollection.addAll(specimenDomainCollection);
 				new NewSpecimenBizLogic().insert(specimenCollection,sessionDataBean, Constants.HIBERNATE_DAO,false);
-				setLabelBarCodesToSessionData(eventId, request, specimenDomainCollection);				
+				setLabelBarCodesToSessionData(eventId, request, specimenDomainCollection);
+				
+				updateWithNewStorageLocation(session, sessionDataBean, eventId,
+						specimenDomainCollection);
 			}
 			else
 			{
@@ -162,6 +169,42 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 				return mapping.findForward("multipleSpWithMenuFaliure");
 			return mapping.findForward(Constants.FAILURE);
 		}
+	}
+	private void updateWithNewStorageLocation(HttpSession session,
+			SessionDataBean sessionDataBean, String eventId,
+			LinkedHashSet specimenDomainCollection) throws DAOException {
+		Iterator<Specimen> specimensItr = specimenDomainCollection.iterator();
+		Map collectionProtocolEventMap = (Map) session.getAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
+
+		CollectionProtocolEventBean eventBean = (CollectionProtocolEventBean) collectionProtocolEventMap.get(eventId);
+
+		LinkedHashMap<String,GenericSpecimen> specimenMap = (LinkedHashMap) eventBean.getSpecimenRequirementbeanMap();
+		Collection<GenericSpecimen> specCollection = specimenMap.values();
+		Iterator<GenericSpecimen> iterator = specCollection.iterator();
+		HibernateDAO dao = (HibernateDAO) DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+		dao.openSession(sessionDataBean);
+		while (iterator.hasNext())
+		{
+			SpecimenDataBean specimenDataBean = (SpecimenDataBean) iterator.next();
+			Specimen specimen =specimenDataBean.getCorresSpecimen();
+			specimenDataBean.setPositionDimensionOne(String.valueOf(specimen.getSpecimenPosition().getPositionDimensionOne()));
+			specimenDataBean.setPositionDimensionTwo(String.valueOf(specimen.getSpecimenPosition().getPositionDimensionTwo()));
+
+			LinkedHashMap<String,GenericSpecimen> derivesMap=specimenDataBean.getDeriveSpecimenCollection();
+			Collection derivesCollection=derivesMap.values();
+			Iterator deriveItr = derivesCollection.iterator();
+			while(deriveItr.hasNext())
+			{
+				SpecimenDataBean deriveSpecimenDataBean =(SpecimenDataBean)deriveItr.next();
+				Specimen deriveSpec= deriveSpecimenDataBean.getCorresSpecimen();
+				deriveSpecimenDataBean.setPositionDimensionOne(String.valueOf(deriveSpec.getSpecimenPosition().getPositionDimensionOne()));
+				deriveSpecimenDataBean.setPositionDimensionTwo(String.valueOf(deriveSpec.getSpecimenPosition().getPositionDimensionTwo()));
+			}
+		}
+		dao.closeSession();
+		
+		ViewSpecimenSummaryAction viewSpecimenSummaryAction= new ViewSpecimenSummaryAction();
+		viewSpecimenSummaryAction.populateSpecimenSummaryForm(specimenSummaryForm, specimenMap);
 	}
 	/**
 	 * @param specimenVO
