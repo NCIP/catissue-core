@@ -602,7 +602,7 @@
 								<tr colspan="3">
 								<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">	
 								
-											<td colspan="1" valign="center" nowrap>
+											<td colspan="1" valign="center" nowrap  width="16%">
 													<html:checkbox styleId="printCheckbox" property="printCheckbox" value="true" onclick="showPriterTypeLocation()">
 														<span class="black_ar">
 															<bean:message key="print.checkboxLabel"/>
@@ -611,7 +611,7 @@
 											</td>
 								</logic:notEqual>
 	<!--  Added for displaying  printer type and location -->
-							 <td>
+							 <td colspan="2">
 					   			<%@ include file="/pages/content/common/PrinterLocationTypeComboboxes.jsp" %>
 			 				 </td>
         					
