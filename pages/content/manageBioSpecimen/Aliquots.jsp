@@ -230,15 +230,7 @@
 
 		</logic:iterate>
 	}
-//  Added for printing functionality
-	   function showPriterTypeLocation(){
-			if(document.getElementById('printCheckbox').checked == true){
-				document.getElementById('printerSelection').style.display="";
-			}else{
-				document.getElementById('printerSelection').style.display="none";
-				setSubmittedForPrint("","","");
-			}
-	   }
+
 </script>
 </head>
 <body onload="checkForStoragePosition()">
@@ -646,41 +638,10 @@ ${aliquotBean.jsScript}
 								</html:checkbox>
 								<td>
 								<td id="plcol2">
-								<div  id="printerSelection" style="display:none">
-									<table border="0">
-						 				<tr>
-						    			<td align="left" class="black_ar" width="8%">
-									<label for="printerType">
-										<bean:message key="print.printerTypeLabel"/>
-									</label>
-								</td>
-												<td align="left" class="black_new"> 
-									<autocomplete:AutoCompleteTag property="printerType"
-										optionsList="<%=Variables.printerTypeList%>"
-										initialValue="<%=form.getPrinterType()%>"
-										styleClass="black_ar"
-										 size="23"
-										/>
-					        	    </td>
-						   					<!--</td>-->
-											<td>&nbsp;&nbsp; </td>
-							   				 <td align="left" class="black_ar" width="10%">
-									           <label for="printerLocation">
-										        <bean:message key="print.printerLocationLabel"/>
-									          </label>
-								           </td>
-												<td align="left" class="black_new"> 
-									<autocomplete:AutoCompleteTag property="printerLocation"
-										optionsList="<%=Variables.printerLocationList%>"
-										initialValue="<%=form.getPrinterLocation()%>"
-										styleClass="black_ar"
-										 size="23"
-										/>
-					        	    </td>
-						   				</tr>
-									</table>
-								</div>
-								</td>
+								<td>
+					   			<%@ include file="/pages/content/common/PrinterLocationTypeComboboxes.jsp" %>
+			 				   </td>
+        					  	</td>
 		               </tr></table>
 								
 			 				  </td>
@@ -698,19 +659,6 @@ ${aliquotBean.jsScript}
 		<html:button styleClass="blue_ar_c"		property="submitPage" onclick="onAddToCart()">
 				<bean:message key="buttons.addToCart"/>
 		</html:button>
-		&nbsp;|&nbsp; 
-
-		<logic:empty name="CPQuery">
-		<html:link page="/ManageAdministrativeData.do" styleClass="cancellink">
-		<bean:message key="buttons.cancel" />
-		</html:link>
-		</logic:empty>
-		<logic:notEmpty name="CPQuery">
-		<html:link page="/QueryManageBioSpecimen.do" styleClass="cancellink">
-		<bean:message key="buttons.cancel" />
-		</html:link>
-		</logic:notEmpty>
-
 		</logic:notEqual>
 		</td>
         </tr>
@@ -772,5 +720,6 @@ function applyFirstToAll(object)
 
 		//}
 }
+showPriterTypeLocation();
 </script>
 <!------------------New code--------------->

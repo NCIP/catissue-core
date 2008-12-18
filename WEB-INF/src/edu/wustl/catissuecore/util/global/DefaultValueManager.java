@@ -107,6 +107,28 @@ public class DefaultValueManager
     		{
     			permissibleValueList = Utility.getListFromCDE(Constants.defaultValueKeys[iCount][1]);
     		}
+    		//added for bug 10750
+    		if((Constants.defaultValueKeys[iCount][0]).equals(Constants.DEFAULT_PRINTER_LOCATION))
+    		{
+    			permissibleValueList = new ArrayList<NameValueBean>();
+    			if(Variables.printerLocationList!=null&&Variables.printerLocationList.size()>0)
+    			{	
+    			  defaultValueBean = Variables.printerLocationList.get(0);
+    			  permissibleValueList.add(defaultValueBean); 
+    			}
+    			
+    		}
+    		//added for bug 10750
+    		if((Constants.defaultValueKeys[iCount][0]).equals(Constants.DEFAULT_PRINTER_TYPE))
+    		{
+    			permissibleValueList = new ArrayList<NameValueBean>();
+    			if(Variables.printerTypeList!=null&&Variables.printerTypeList.size()>0)
+    			{	
+    			  defaultValueBean = Variables.printerTypeList.get(0);
+    			  permissibleValueList.add(defaultValueBean); 
+    			}
+    			
+    		}
     		//If List contain default value then key,Value pair is set in default value map else empty string is set for that key
     		if(permissibleValueList!=null&&permissibleValueList.contains(defaultValueBean))
     		{

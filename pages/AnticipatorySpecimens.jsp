@@ -3,13 +3,17 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
 <%@ taglib uri="/WEB-INF/specimenDetails.tld" prefix="md" %>
+<%@ taglib uri="/WEB-INF/AutoCompleteTag.tld" prefix="autocomplete" %>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.bean.GenericSpecimen"%>
+<%@ page import="edu.wustl.catissuecore.actionForm.ViewSpecimenSummaryForm"%>
 <%@ page import="java.io.*"%>
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.common.util.global.ApplicationProperties" %>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
+<%@ include file="/pages/content/common/AutocompleterCommon.jsp" %>
 <%@ page language="java" isELIgnored="false" %>
+<% ViewSpecimenSummaryForm form = (ViewSpecimenSummaryForm)request.getAttribute("viewSpecimenSummaryForm");%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
@@ -347,16 +351,7 @@ function updateSCDetails(msg)
 	t3.disabled = false;
 
 }
-//Added  for printing functionality
-function showPriterTypeLocation(){
-		if(document.getElementById('printCheckbox').checked == true){
-			document.getElementById('printerSelection').style.display="";
-		}else{
-			document.getElementById('printerSelection').style.display="none";
-			setSubmittedForPrint("","","");
-		}
-}
-	</script>
+</script>
 </head>
 <body onload="UpdateCheckBoxStatus()">
 <script language="javascript" type="text/javascript">
@@ -537,60 +532,35 @@ function showPriterTypeLocation(){
 		<html:hidden property="multipleSpEditMode" />
 		<logic:equal name="viewSpecimenSummaryForm" property="readOnly" value="false">
 		<tr>					
-			<td class="formFieldNoBorders" colspan="5"  height="20" nowrap>
+			<td class="formFieldNoBorders" colspan="5"  height="20" nowrap width="16%">
 				<html:checkbox styleId="printCheckbox" property="printCheckbox" value="true" onclick="showPriterTypeLocation()">
 				<bean:message key="print.checkboxLabel"/>
 				</html:checkbox>
 			</td>
               <!--  Added for displaying  printer type and location -->
-					 			<td>
-					   			<div  id="printerSelection" style="display:none">
-									<table>
-						 				<tr>
-						    				<td align="left" class="black_ar" width="8%">
-									          <label for="printerType">
-										         <bean:message key="print.printerTypeLabel"/>
-									          </label>
-								            </td>
-											<td align="left" class="black_new"> 
-											<autocomplete:AutoCompleteTag property="printerType"
-												optionsList="<%=Variables.printerTypeList%>"
-										        initialValue="<%=Variables.printerTypeList.get(0).getName()%>"
-												styleClass="black_ar"
-												 size="23"
-												/>
-					        				</td>
-						   					<td>&nbsp;&nbsp; </td>
-							   				<td align="left" class="black_ar" width="10%">
-									           <label for="printerLocation">
-										        <bean:message key="print.printerLocationLabel"/>
-									        </label>
-								             </td>
-											<td align="left" class="black_new"> 
-											<autocomplete:AutoCompleteTag property="printerLocation"
-												optionsList="<%=Variables.printerLocationList%>"
-										        initialValue="<%=Variables.printerLocationList.get(0).getName()%>"
-												styleClass="black_ar"
-												 size="23"
-												/>
-					        				</td>
-						   				</tr>
-									 </table>
-								</div>
-			 				  </td>
-							
+				  <td>
+				       <%@ include file="/pages/content/common/PrinterLocationTypeComboboxes.jsp" %>
+			 	  </td>
 			<!--  End : Displaying   printer type and location -->								
-			<td>
+			</tr>
+           
+			<tr>
+			<table border="0"> <tr> <td>
 			<input class="blue_ar_b" type="button" value="Submit" onclick="pageSubmit()" />
+			</td>
+			<td>
 			<input class="blue_ar_b" type="button" value="Add To My List" onclick="onAddToCart()" />
 			</td>
+			</tr>
+			</table>
 		 </tr>
-		</logic:equal>
+          </logic:equal>
 		</table>
 		<div id="divForHiddenChild"></div>
 		</html:form>
 </body>
 <script language="JavaScript" type="text/javascript">
 identifyDisabledCheckBox();
+showPriterTypeLocation();
 </script>
 </html>

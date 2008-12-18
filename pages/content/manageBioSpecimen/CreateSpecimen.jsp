@@ -121,17 +121,7 @@
 			setSubmittedFor("ForwardTo","addSpecimenToCart");
 		}
 
-		 //  Added for printing functionality
-		function showPriterTypeLocation(){
-			if(document.getElementById('printCheckbox').checked == true){
-				document.getElementById('printerSelection').style.display="";
-			}else{
-				document.getElementById('printerSelection').style.display="none";
-				setSubmittedForPrint("","","");
-			}
-		}
-
-	</script>
+		</script>
 	<logic:equal name="showRefreshTree" value="true">
 		<script language="javascript">
 			${requestScope.refreshTree}
@@ -609,7 +599,7 @@
 								<span class="black_ar">
 								</td>
 								</tr>
-								<tr>
+								<tr colspan="3">
 								<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">	
 								
 											<td colspan="1" valign="center" nowrap>
@@ -619,45 +609,12 @@
 														</span>
 														</html:checkbox>
 											</td>
-								<!-- </tr> -->					
 								</logic:notEqual>
 	<!--  Added for displaying  printer type and location -->
-							<!-- <tr> -->
-					  			<td>
-					   			<div  id="printerSelection" style="display:none">
-									<table>
-						 				<tr>
-						    				<td align="left" class="black_ar" width="8%">
-									          <label for="printerType">
-										         <bean:message key="print.printerTypeLabel"/>
-									          </label>
-								            </td>
-											<td align="left" class="black_new"> 
-											<autocomplete:AutoCompleteTag property="printerType"
-												optionsList="<%=Variables.printerTypeList%>"
-										        initialValue="<%=form.getPrinterType()%>"
-												styleClass="black_ar"
-												 size="23"
-												/>
-					        				</td>
-						   					<td>&nbsp;&nbsp; </td>
-							   				<td align="left" class="black_ar" width="10%">
-									           <label for="printerLocation">
-										        <bean:message key="print.printerLocationLabel"/>
-									        </label>
-								             </td>
-											<td align="left" class="black_new"> 
-											<autocomplete:AutoCompleteTag property="printerLocation"
-												optionsList="<%=Variables.printerLocationList%>"
-										        initialValue="<%=form.getPrinterLocation()%>"
-												styleClass="black_ar"
-												 size="23"
-												/>
-					        				</td>
-						   				</tr>
-									 </table>
-								</div>
-			 				  </td>
+							 <td>
+					   			<%@ include file="/pages/content/common/PrinterLocationTypeComboboxes.jsp" %>
+			 				 </td>
+        					
 							</tr>	
 			<!--  End : Displaying   printer type and location -->		
 								 
@@ -675,18 +632,8 @@
 								</html:button>&nbsp;|&nbsp;
 								<html:submit styleClass="blue_ar_c" onclick="onAddToCart()">
 									<bean:message key="buttons.addToCart"/>
-								</html:submit>&nbsp;|&nbsp;
-								<logic:equal name="<%=Constants.PAGEOF%>"	value="<%=Constants.PAGE_OF_CREATE_SPECIMEN_CP_QUERY%>">
-									<html:link	page="/QueryManageBioSpecimen.do" styleClass="cancellink">
-										<bean:message key="buttons.cancel" />
-									</html:link>
-								</logic:equal>
-								<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_CREATE_SPECIMEN_CP_QUERY%>">
-									<html:link	page="/ManageAdministrativeData.do" styleClass="cancellink">
-										<bean:message key="buttons.cancel" />
-									</html:link>
-								</logic:notEqual>
-							</logic:notEqual> <!-- to verify for valid case 4 -->
+								</html:submit>
+								</logic:notEqual> <!-- to verify for valid case 4 -->
 							<logic:equal name="multipleSpecimen" value="1">
 								<html:submit styleClass="blue_ar_b" onclick="javaScript:${requestScope.changeAction3}">
 								<bean:message key="buttons.submit"/>
@@ -704,4 +651,7 @@
 			</tr>
 		</table>
 	</html:form>
+<script language="JavaScript" type="text/javascript">
+showPriterTypeLocation();
+</script>
 </body>
