@@ -145,9 +145,9 @@ create table DE_FILE_ATTR_RECORD_VALUES (
 create table DYEXTN_ABSTRACT_METADATA (
    IDENTIFIER numeric(20) not null identity,
    CREATED_DATE datetime,
-   DESCRIPTION text,
+   DESCRIPTION varchar(8000),
    LAST_UPDATED datetime,
-   NAME text,
+   NAME varchar(8000),
    PUBLIC_ID varchar(255),
    primary key (IDENTIFIER)
 );
@@ -447,7 +447,7 @@ create table DYEXTN_DATA_GRID (
 );
 create table DE_COLL_ATTR_RECORD_VALUES (
    IDENTIFIER bigint not null identity,
-   RECORD_VALUE text,
+   RECORD_VALUE varchar(8000),
    COLLECTION_ATTR_RECORD_ID bigint,
    primary key (IDENTIFIER)
 );

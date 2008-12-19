@@ -1,0 +1,11 @@
+8.0
+9
+1 SQLCHAR 0 0 "\"" 0 x Latin1_General_CI_AS
+2 SQLCHAR 0 0 "\",\"" 1 IDENTIFIER Latin1_General_CI_AS
+3 SQLCHAR 0 0 "\",\"" 2 FORM_CONTEXT_ID Latin1_General_CI_AS
+4 SQLCHAR 0 0 "\",\"" 3 STATIC_ENTITY_RECORD_ID Latin1_General_CI_AS
+5 SQLCHAR 0 0 "\",\"" 4 STATUS Latin1_General_CI_AS
+6 SQLCHAR 0 0 "\",\"" 5 DYNAMIC_ENTITY_RECORD_ID Latin1_General_CI_AS
+7 SQLCHAR 0 0 "\",\"" 6 MODIFIED_DATE Latin1_General_CI_AS
+8 SQLCHAR 0 0 "\",\"" 7 CREATED_DATE Latin1_General_CI_AS
+9 SQLCHAR 0 0 "\"\r\n" 8 CREATED_BY Latin1_General_CI_AS

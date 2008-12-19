@@ -1,0 +1,8 @@
+8.0
+6
+1 SQLCHAR 0 0 "\"" 0 x Latin1_General_CI_AS
+2 SQLCHAR 0 0 "\",\"" 1 IDENTIFIER Latin1_General_CI_AS
+3 SQLCHAR 0 0 "\",\"" 2 CONTENT_TYPE Latin1_General_CI_AS
+4 SQLCHAR 0 0 "\",\"" 3 FILE_CONTENT Latin1_General_CI_AS
+5 SQLCHAR 0 0 "\",\"" 4 FILE_NAME Latin1_General_CI_AS
+6 SQLCHAR 0 0 "\"\n" 5 RECORD_ID Latin1_General_CI_AS

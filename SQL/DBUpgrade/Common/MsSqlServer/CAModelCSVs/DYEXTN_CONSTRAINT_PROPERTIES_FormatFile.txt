@@ -1,0 +1,7 @@
+8.0
+5
+1 SQLCHAR 0 0 "\"" 0 x Latin1_General_CI_AS
+2 SQLCHAR 0 0 "\",\"" 1 IDENTIFIER Latin1_General_CI_AS
+3 SQLCHAR 0 0 "\",\"" 2 SOURCE_ENTITY_KEY Latin1_General_CI_AS
+4 SQLCHAR 0 0 "\",\"" 3 TARGET_ENTITY_KEY Latin1_General_CI_AS
+5 SQLCHAR 0 0 "\"\r\n" 4 ASSOCIATION_ID Latin1_General_CI_AS

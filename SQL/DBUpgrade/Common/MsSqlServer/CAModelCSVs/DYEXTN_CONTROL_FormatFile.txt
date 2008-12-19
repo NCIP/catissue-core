@@ -1,0 +1,12 @@
+8.0
+10
+1 SQLCHAR 0 0 "\"" 0 x Latin1_General_CI_AS
+2 SQLCHAR 0 0 "\",\"" 1 IDENTIFIER Latin1_General_CI_AS
+3 SQLCHAR 0 0 "\",\"" 2 CAPTION Latin1_General_CI_AS
+4 SQLCHAR 0 0 "\",\"" 3 CSS_CLASS Latin1_General_CI_AS
+5 SQLCHAR 0 0 "\",\"" 4 HIDDEN Latin1_General_CI_AS
+6 SQLCHAR 0 0 "\",\"" 5 NAME Latin1_General_CI_AS
+7 SQLCHAR 0 0 "\",\"" 6 SEQUENCE_NUMBER Latin1_General_CI_AS
+8 SQLCHAR 0 0 "\",\"" 7 TOOLTIP Latin1_General_CI_AS
+9 SQLCHAR 0 0 "\",\"" 8 ABSTRACT_ATTRIBUTE_ID Latin1_General_CI_AS
+10 SQLCHAR 0 0 "\"\r\n" 9 CONTAINER_ID Latin1_General_CI_AS

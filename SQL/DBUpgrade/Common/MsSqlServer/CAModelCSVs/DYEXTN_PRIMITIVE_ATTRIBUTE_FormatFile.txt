@@ -1,0 +1,8 @@
+8.0
+6
+1 SQLCHAR 0 0 "\"" 0 x Latin1_General_CI_AS
+2 SQLCHAR 0 0 "\",\"" 1 IDENTIFIER Latin1_General_CI_AS
+3 SQLCHAR 0 0 "\",\"" 2 IS_COLLECTION Latin1_General_CI_AS
+4 SQLCHAR 0 0 "\",\"" 3 IS_IDENTIFIED Latin1_General_CI_AS
+5 SQLCHAR 0 0 "\",\"" 4 IS_PRIMARY_KEY Latin1_General_CI_AS
+6 SQLCHAR 0 0 "\"\r\n" 5 IS_NULLABLE Latin1_General_CI_AS
