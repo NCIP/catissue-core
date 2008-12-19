@@ -183,7 +183,14 @@ public class UpdateMetadata
 			if(rs.next())
 			{
 				String intermediatePath = rs.getString(1);
-				UpdateMetadataUtil.executeInsertSQL("insert into path values("+pathId+", (select IDENTIFIER from dyextn_abstract_metadata where NAME "+DB_SPECIFIC_COMPARE_OPERATOR+"'edu.wustl.catissuecore.domain.Site'),'"+intermediatePath+"',(select IDENTIFIER from dyextn_abstract_metadata where name"+DB_SPECIFIC_COMPARE_OPERATOR+"'edu.wustl.catissuecore.domain.SpecimenCollectionGroup'))", connection.createStatement());
+				if(Constants.MSSQLSERVER_DATABASE.equalsIgnoreCase(DATABASE_TYPE))
+				{
+					UpdateMetadataUtil.executeInsertSQL("insert into path (PATH_ID, FIRST_ENTITY_ID, INTERMEDIATE_PATH, LAST_ENTITY_ID) select "+pathId+", (select IDENTIFIER from dyextn_abstract_metadata where NAME "+DB_SPECIFIC_COMPARE_OPERATOR+"'edu.wustl.catissuecore.domain.Site'),'"+intermediatePath+"',(select IDENTIFIER from dyextn_abstract_metadata where name"+DB_SPECIFIC_COMPARE_OPERATOR+"'edu.wustl.catissuecore.domain.SpecimenCollectionGroup')", connection.createStatement());
+				}
+				else
+				{
+					UpdateMetadataUtil.executeInsertSQL("insert into path values("+pathId+", (select IDENTIFIER from dyextn_abstract_metadata where NAME "+DB_SPECIFIC_COMPARE_OPERATOR+"'edu.wustl.catissuecore.domain.Site'),'"+intermediatePath+"',(select IDENTIFIER from dyextn_abstract_metadata where name"+DB_SPECIFIC_COMPARE_OPERATOR+"'edu.wustl.catissuecore.domain.SpecimenCollectionGroup'))", connection.createStatement());
+				}
 			}
 		}
 		stmt.close();

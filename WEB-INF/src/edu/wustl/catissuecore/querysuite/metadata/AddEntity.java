@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.List;
 
 import edu.wustl.common.util.dbManager.DBUtil;
+import edu.wustl.common.util.global.Constants;
 
 public class AddEntity 
 {
@@ -49,9 +50,13 @@ public class AddEntity
 			}
 			rs.close();
 			
-			sql = "INSERT INTO dyextn_abstract_metadata values("
+			sql = "INSERT INTO dyextn_abstract_metadata (IDENTIFIER,CREATED_DATE,DESCRIPTION,LAST_UPDATED,NAME,PUBLIC_ID) values("
 			+ nextIdOfAbstractMetadata + ",NULL,NULL,NULL,'" + entityName
-			+ "',null)";
+			+ "',null);";
+			if(Constants.MSSQLSERVER_DATABASE.equalsIgnoreCase(UpdateMetadata.DATABASE_TYPE))
+			{
+				sql = UpdateMetadataUtil.getIndentityInsertStmtForMsSqlServer(sql,"dyextn_abstract_metadata");
+			}
 			UpdateMetadataUtil.executeInsertSQL(sql, connection.createStatement());
 			sql = "INSERT INTO dyextn_abstract_entity values("+ nextIdOfAbstractMetadata + ")";
 			UpdateMetadataUtil.executeInsertSQL(sql, connection.createStatement());
@@ -70,10 +75,19 @@ public class AddEntity
 				UpdateMetadataUtil.executeInsertSQL(sql, connection.createStatement());
 			}
 		
-			sql = "INSERT INTO dyextn_database_properties values("
-			+ nextIdDatabaseproperties + ",'"+tableName+"')";
+			sql = "INSERT INTO dyextn_database_properties(IDENTIFIER,NAME) values("
+			+ nextIdDatabaseproperties + ",'"+tableName+"');";
+			if(Constants.MSSQLSERVER_DATABASE.equalsIgnoreCase(UpdateMetadata.DATABASE_TYPE))
+			{
+				sql = UpdateMetadataUtil.getIndentityInsertStmtForMsSqlServer(sql,"dyextn_database_properties");
+			}
 			UpdateMetadataUtil.executeInsertSQL(sql, connection.createStatement());
 		
+			if(Constants.MSSQLSERVER_DATABASE.equalsIgnoreCase(UpdateMetadata.DATABASE_TYPE))
+			{
+				sql = UpdateMetadataUtil.getIndentityInsertStmtForMsSqlServer(sql,"dyextn_database_properties");
+			}
+			
 			sql = "INSERT INTO dyextn_table_properties (IDENTIFIER,ABSTRACT_ENTITY_ID) values("
 			+ nextIdDatabaseproperties + "," + nextIdOfAbstractMetadata+")";
 			UpdateMetadataUtil.executeInsertSQL(sql, connection.createStatement());

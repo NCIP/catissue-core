@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import edu.wustl.common.util.dbManager.DBUtil;
+import edu.wustl.common.util.global.Constants;
 
 public class AddAssociations
 {
@@ -97,9 +98,13 @@ public class AddAssociations
 			System.out.println("Entity not found of name ");
 		}
 
-		sql = "insert into dyextn_abstract_metadata values ("
+		sql = "insert into dyextn_abstract_metadata(IDENTIFIER,CREATED_DATE,DESCRIPTION,LAST_UPDATED,NAME,PUBLIC_ID) values ("
 			+ nextIdOfAbstractMetadata
 			+ ",null,null,null,'"+associationName+"',null)";
+		if(Constants.MSSQLSERVER_DATABASE.equalsIgnoreCase(UpdateMetadata.DATABASE_TYPE))
+		{
+			sql = UpdateMetadataUtil.getIndentityInsertStmtForMsSqlServer(sql,"dyextn_abstract_metadata");
+		}
 		UpdateMetadataUtil.executeInsertSQL(sql, connection.createStatement());
 
 		sql = "INSERT INTO DYEXTN_BASE_ABSTRACT_ATTRIBUTE values("+ nextIdOfAbstractMetadata + ")";
@@ -112,19 +117,27 @@ public class AddAssociations
 		if(isSwap)
 		{
 			roleId = nextIdOfDERole +1;
-			sql = "insert into dyextn_role values (" + nextIdOfDERole
-			+ ",'"+associationType+"',"+maxCardinality+",0,'"+roleName+"')";
+			sql = "insert into dyextn_role(IDENTIFIER,ASSOCIATION_TYPE,MAX_CARDINALITY,MIN_CARDINALITY,NAME) values (" + nextIdOfDERole
+				+ ",'"+associationType+"',"+maxCardinality+",0,'"+roleName+"')";
+			if(Constants.MSSQLSERVER_DATABASE.equalsIgnoreCase(UpdateMetadata.DATABASE_TYPE))
+			{
+				sql = UpdateMetadataUtil.getIndentityInsertStmtForMsSqlServer(sql,"dyextn_role");
+			}
 			UpdateMetadataUtil.executeInsertSQL(sql, connection.createStatement());
 
 			if(isSystemGenerated == 0)
 			{
-				sql = "insert into dyextn_role values (" + roleId
+				sql = "insert into dyextn_role(IDENTIFIER,ASSOCIATION_TYPE,MAX_CARDINALITY,MIN_CARDINALITY,NAME) values (" + roleId
 				+ ",'ASSOCIATION',2,0,'"+roleNameTable+"')";
 			}
 			else
 			{
-				sql = "insert into dyextn_role values (" + roleId
+				sql = "insert into dyextn_role(IDENTIFIER,ASSOCIATION_TYPE,MAX_CARDINALITY,MIN_CARDINALITY,NAME) values (" + roleId
 				+ ",'ASSOCIATION',1,0,'"+roleNameTable+"')";
+			}
+			if(Constants.MSSQLSERVER_DATABASE.equalsIgnoreCase(UpdateMetadata.DATABASE_TYPE))
+			{
+				sql = UpdateMetadataUtil.getIndentityInsertStmtForMsSqlServer(sql,"dyextn_role");
 			}
 			UpdateMetadataUtil.executeInsertSQL(sql, connection.createStatement());
 		}
@@ -153,9 +166,13 @@ public class AddAssociations
 			}
 		}
 		UpdateMetadataUtil.executeInsertSQL(sql, connection.createStatement());
-		sql = "insert into dyextn_database_properties values ("
+		sql =  "insert into dyextn_database_properties(IDENTIFIER,NAME) values ("
 			+ nextIdOfDBProperties
 			+ ",'"+associationName+"')";
+		if(Constants.MSSQLSERVER_DATABASE.equalsIgnoreCase(UpdateMetadata.DATABASE_TYPE))
+		{
+			sql = UpdateMetadataUtil.getIndentityInsertStmtForMsSqlServer(sql,"dyextn_database_properties");
+		}
 		UpdateMetadataUtil.executeInsertSQL(sql, connection.createStatement());
 		if(isSwap)
 		{

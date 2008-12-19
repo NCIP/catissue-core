@@ -11,6 +11,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import edu.wustl.common.util.global.Constants;
+
 /**
  * @author pooja_deshpande
  * Class to add metadata for subclasses of all newly added entities
@@ -60,9 +62,13 @@ public class AddSubClassesMetaData extends BaseMetadata
 					nextIdDatabaseproperties = maxId + 1;
 				}
 				
-				sql = "INSERT INTO dyextn_abstract_metadata values("
+				sql = "INSERT INTO dyextn_abstract_metadata(IDENTIFIER,CREATED_DATE,DESCRIPTION,LAST_UPDATED,NAME,PUBLIC_ID) values("
 				+ nextIdOfAbstractMetadata + ",NULL,NULL,NULL,'" + entityName
 				+ "',null)";
+				if(Constants.MSSQLSERVER_DATABASE.equalsIgnoreCase(UpdateMetadata.DATABASE_TYPE))
+				{
+					sql = UpdateMetadataUtil.getIndentityInsertStmtForMsSqlServer(sql,"dyextn_abstract_metadata");
+				}
 				UpdateMetadataUtil.executeInsertSQL(sql, connection.createStatement());
 				sql = "INSERT INTO dyextn_abstract_entity values("+ nextIdOfAbstractMetadata + ")";
 				UpdateMetadataUtil.executeInsertSQL(sql, connection.createStatement());
@@ -72,8 +78,12 @@ public class AddSubClassesMetaData extends BaseMetadata
 				+ nextIdOfAbstractMetadata + ",3,0,"+parEId+",3,NULL,NULL,1)";
 				UpdateMetadataUtil.executeInsertSQL(sql, connection.createStatement());
 			
-				sql = "INSERT INTO dyextn_database_properties values("
+				sql = "INSERT INTO dyextn_database_properties(IDENTIFIER,NAME) values("
 				+ nextIdDatabaseproperties + ",'"+tableList.get(entityList.indexOf(entityName))+"')";
+				if(Constants.MSSQLSERVER_DATABASE.equalsIgnoreCase(UpdateMetadata.DATABASE_TYPE))
+				{
+					sql = UpdateMetadataUtil.getIndentityInsertStmtForMsSqlServer(sql,"dyextn_database_properties");
+				}
 				UpdateMetadataUtil.executeInsertSQL(sql, connection.createStatement());
 			
 				sql = "INSERT INTO dyextn_table_properties (IDENTIFIER,ABSTRACT_ENTITY_ID) values("

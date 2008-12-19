@@ -11,6 +11,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import edu.wustl.common.util.global.Constants;
+
 public class AddAttribute extends BaseMetadata
 {
 	private Connection connection = null;
@@ -56,11 +58,16 @@ public class AddAttribute extends BaseMetadata
 					nextIdDatabaseproperties = maxId + 1;
 				}
 
-				sql = "INSERT INTO dyextn_abstract_metadata values("
+				sql = "INSERT INTO dyextn_abstract_metadata "
+					+ "(IDENTIFIER,CREATED_DATE,DESCRIPTION,LAST_UPDATED,NAME,PUBLIC_ID) values("
 					+ nextIdOfAbstractMetadata + ",NULL,NULL,NULL,'" + attr
 					+ "',null)";
+				if(Constants.MSSQLSERVER_DATABASE.equalsIgnoreCase(UpdateMetadata.DATABASE_TYPE))
+				{
+					sql = UpdateMetadataUtil.getIndentityInsertStmtForMsSqlServer(sql,"dyextn_abstract_metadata");
+				}
 				UpdateMetadataUtil.executeInsertSQL(sql, connection.createStatement());
-				sql = "INSERT INTO DYEXTN_BASE_ABSTRACT_ATTRIBUTE values("+ nextIdOfAbstractMetadata + ")";
+				sql = "INSERT INTO DYEXTN_BASE_ABSTRACT_ATTRIBUTE (IDENTIFIER) values("+ nextIdOfAbstractMetadata + ")";
 				UpdateMetadataUtil.executeInsertSQL(sql, connection.createStatement());
 
 				int entityId = UpdateMetadataUtil.getEntityIdByName(entityName, connection.createStatement());
@@ -79,6 +86,10 @@ public class AddAttribute extends BaseMetadata
 					+ ","
 					+ nextIdOfAbstractMetadata
 					+ ")";
+				if(Constants.MSSQLSERVER_DATABASE.equalsIgnoreCase(UpdateMetadata.DATABASE_TYPE))
+				{
+					sql = UpdateMetadataUtil.getIndentityInsertStmtForMsSqlServer(sql,"dyextn_attribute_type_info");
+				}
 				UpdateMetadataUtil.executeInsertSQL(sql, connection.createStatement());
 
 				String dataType = getDataTypeOfAttribute(attr,attributeDatatypeMap);
@@ -120,6 +131,10 @@ public class AddAttribute extends BaseMetadata
 				String columnName = getColumnNameOfAttribue(attr,attributeColumnNameMap);
 				sql = "insert into dyextn_database_properties (IDENTIFIER,NAME) values ("
 					+ nextIdDatabaseproperties + ",'" + columnName + "')";
+				if(Constants.MSSQLSERVER_DATABASE.equalsIgnoreCase(UpdateMetadata.DATABASE_TYPE))
+				{
+					sql = UpdateMetadataUtil.getIndentityInsertStmtForMsSqlServer(sql,"dyextn_database_properties");
+				}
 				UpdateMetadataUtil.executeInsertSQL(sql, connection.createStatement());
 
 				sql = "insert into dyextn_column_properties (IDENTIFIER,PRIMITIVE_ATTRIBUTE_ID) values ("

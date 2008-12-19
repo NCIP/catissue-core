@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Set;
 
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
+import edu.wustl.common.util.global.Constants;
 
 
 public class AddPermissibleValue
@@ -119,7 +120,11 @@ public class AddPermissibleValue
 			}
 			stmt.close();
 			
-			sql = "insert into dyextn_data_element values ("+dataElementId+","+attribute.getAttributeTypeInformation().getDataElement().getId()+",null)";
+			sql = "insert into dyextn_data_element(IDENTIFIER,ATTRIBUTE_TYPE_INFO_ID,CATEGORY_ATTRIBUTE_ID) values ("+dataElementId+","+attribute.getAttributeTypeInformation().getDataElement().getId()+",null)";
+			if(Constants.MSSQLSERVER_DATABASE.equalsIgnoreCase(UpdateMetadata.DATABASE_TYPE))
+			{
+				sql = UpdateMetadataUtil.getIndentityInsertStmtForMsSqlServer(sql,"dyextn_data_element");
+			}
 			UpdateMetadataUtil.executeInsertSQL(sql, connection.createStatement());
 		
 			sql = "insert into dyextn_userdefined_de values ("+dataElementId+")";
@@ -134,7 +139,11 @@ public class AddPermissibleValue
 			{
 				value = "'"+(String) value+"'";
 			}
-			sql = "insert into dyextn_permissible_value values ("+permissibleValueId+",null,"+attribute.getAttributeTypeInformation().getDataElement().getId()+",null)";
+			sql = "insert into dyextn_permissible_value(IDENTIFIER,DESCRIPTION,ATTRIBUTE_TYPE_INFO_ID,CATEGORY_ATTRIBUTE_ID) values ("+permissibleValueId+",null,"+attribute.getAttributeTypeInformation().getDataElement().getId()+",null)";
+			if(Constants.MSSQLSERVER_DATABASE.equalsIgnoreCase(UpdateMetadata.DATABASE_TYPE))
+			{
+				sql = UpdateMetadataUtil.getIndentityInsertStmtForMsSqlServer(sql,"dyextn_permissible_value");
+			}
 			UpdateMetadataUtil.executeInsertSQL(sql, connection.createStatement());
 			sql = "insert into "+tableName+" values("+permissibleValueId+","+value+")";
 			UpdateMetadataUtil.executeInsertSQL(sql, connection.createStatement());

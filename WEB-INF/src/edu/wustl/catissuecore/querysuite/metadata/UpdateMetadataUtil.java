@@ -234,4 +234,39 @@ public class UpdateMetadataUtil
 			return " = ";
 		}
 	}
+	
+	/**
+	 * Method for setting identity insert ON before inserting rows with value to an identity column in MsSqlServer
+	 * @param tableName
+	 * @return
+	 */
+	public static String getIdentityOnStatement(String tableName)
+	{
+		String sql =  "SET IDENTITY_INSERT "+ tableName+" ON;";
+		return sql;
+	}
+	/**
+	 * Method for setting identity insert OFF after inserting rows with value to an identity column in MsSqlServer
+	 * @param tableName
+	 * @return
+	 */
+	public static String getIdentityOffStatement(String tableName)
+	{
+		String sql = " SET IDENTITY_INSERT "+ tableName+" OFF;";
+		return sql;
+	}
+	
+	
+	/**
+	 * Method that appends setting identity insert ON & OFF statements which facilitates inserting 
+	 * values into a column which is declared as identity in MsSqlServer 
+	 * @param sql
+	 * @param tableName
+	 * @return
+	 */
+	public static String getIndentityInsertStmtForMsSqlServer(String sql, String tableName)
+	{
+		sql = getIdentityOnStatement(tableName)+sql+getIdentityOffStatement(tableName);
+		return sql;
+	}
 }
