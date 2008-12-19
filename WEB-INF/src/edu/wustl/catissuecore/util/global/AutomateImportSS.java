@@ -16,6 +16,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.StringTokenizer;
 
 /**
  * This class is for import/export data to database.
@@ -67,6 +70,9 @@ public class AutomateImportSS
 			automateImport.configureDBConnection(args);
 			connection = automateImport.getConnection();
 			ArrayList<String> tableNamesList = automateImport.getTableNamesList(args[8]);
+						
+			HashMap<String,String> tableIdentityInfo=automateImport.getTableNameAndIdentityInfoList(args[8]);
+						
 			int size = tableNamesList.size();
 			String filePath = args[9].replaceAll("\\\\", "//");
 			if(Constants.ORACLE_DATABASE.equals(DATABASE_TYPE.toUpperCase()))
@@ -97,11 +103,15 @@ public class AutomateImportSS
 				}
 			} else if (Constants.MSSQLSERVER_DATABASE.equals(DATABASE_TYPE.toUpperCase())) {
 				if(args[7].toLowerCase().equals("import")) {
+					
+					Iterator<String> fileNameIterator=tableIdentityInfo.keySet().iterator();
+					
 					Statement stmt = connection.createStatement();
-					for(int i = 0 ; i < size; i++) {
-						String dumpFilePath = filePath+tableNamesList.get(i)+".csv";
-						String formatFilePath = filePath + tableNamesList.get(i) + Constants.FORMAT_FILE_EXTENTION;
-						automateImport.importDataMsSQLServer(connection,dumpFilePath,tableNamesList.get(i), formatFilePath);
+					while(fileNameIterator.hasNext()) {
+						String tableName=fileNameIterator.next().toString();
+						String dumpFilePath = filePath+tableName+".csv";
+						String formatFilePath = filePath + tableName + Constants.FORMAT_FILE_EXTENTION;
+						automateImport.importDataMsSQLServer(connection,dumpFilePath,tableName, formatFilePath,tableIdentityInfo.get(tableName));
 					}
 				} else {
 					for(int i = 0 ; i < size; i++) {
@@ -252,13 +262,19 @@ public class AutomateImportSS
 	 * @param filename
 	 * @param tableName
 	 */
-    private void importDataMsSQLServer(Connection conn,String dataFileName, String tableName, String formatFileName) throws SQLException {
+    private void importDataMsSQLServer(Connection conn,String dataFileName, String tableName, String formatFileName,String identity) throws SQLException {
         Statement stmt;
         try {
         	System.out.println("Loding File : " + dataFileName + " using FormatFile : "+ formatFileName + " to table : " + tableName);
             stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             //String query = "LOAD DATA LOCAL INFILE '"+filename+ "' INTO TABLE "+tableName+" FIELDS TERMINATED BY ',' ENCLOSED BY '\"' LINES TERMINATED BY '\\n';";
-            String query =  "BULK INSERT " + tableName + " FROM '" + dataFileName + "' WITH ( FIELDTERMINATOR  = ',' , FORMATFILE = '" + formatFileName + "' )";
+            String query=" BULK INSERT " + tableName + " FROM '" + dataFileName + "' WITH ( FIELDTERMINATOR  = ',' , FORMATFILE = '" + formatFileName + "');";
+            if(identity.equalsIgnoreCase("identity_present"))
+        	{
+            	query =  "SET IDENTITY_INSERT "+ tableName+" ON;";
+                query = query + " BULK INSERT " + tableName + " FROM '" + dataFileName + "' WITH ( FIELDTERMINATOR  = ',' , FORMATFILE = '" + formatFileName + "',KEEPIDENTITY );";
+                query = query + " SET IDENTITY_INSERT "+ tableName+" OFF;";
+        	}
             stmt.execute(query);
        	} finally {
             stmt = null;
@@ -421,6 +437,53 @@ public class AutomateImportSS
 	    		
 	    }
     }
+    
+    /**
+     * This method will retrieve the column name list with identity insert property for a given table(for MsSqlServer).
+     * @param fileName
+     * @return
+     * @throws Exception
+     */
+    public HashMap<String,String> getTableNameAndIdentityInfoList(String fileName) throws Exception
+    {
+    	HashMap<String,String> tableIdentityInfo=new HashMap<String,String>();
+    	
+    	FileReader fin=new FileReader(fileName);
+    	try
+    	{		
+			String line,identity="",tableName;
+    		BufferedReader br=new BufferedReader(fin);
+						
+    		while((line=br.readLine()) !=null)	
+    		{	
+    			StringTokenizer st=new StringTokenizer(line,",");
+    			
+    			tableName=st.nextToken();
+    			if(st.countTokens()>0)
+    			{
+    				identity=st.nextToken();
+    			}
+    			else
+    			{
+    				identity="";
+    			}
+    			tableIdentityInfo.put(tableName, identity);
+			}
+											
+    	}
+    	catch(Exception e)
+    	{
+    		throw e;
+    	}
+    	finally
+    	{
+    		fin.close();
+		}
+    	   	
+    	return tableIdentityInfo;
+    }
+    
+    
  }
 class StreamGobbler extends Thread
 {
