@@ -1817,6 +1817,12 @@ Thanking You,
 					<antcall target="firstUser_oracle"/>
 				</then>
 			</elseif>
+			<elseif>
+				<equals arg1="mssqlserver" arg2="${database.type}"/>
+				<then>
+					<antcall target="firstUser_mssqlserver"/>
+				</then>
+			</elseif>
 		</if>
 	</target>
 
@@ -2784,5 +2790,46 @@ Thanking You,
 			</classpath>
 		</sql>
 	</target>
+		
+	<target name="firstUser_mssqlserver">
+	<echo message="Encoding Password..."/>
+	<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
+	<copy file="${base.dir}/lib/j2ee.jar" tofile="${temp.dir}/catissuecore/WEB-INF/lib/j2ee.jar"/>
+	<java classname="edu.wustl.common.util.global.PasswordManager" fork="false" >
+	    <classpath refid="temp.classpath" />
+		<arg value="${base.dir}/catissuetmp.txt"/>
+		<arg value="${first.admin.password}"/>
+	</java>
+
+	<property file="${base.dir}/catissuetmp.txt"/>
+	<echo>
+		Encoded Password ${first.admin.encodedPassword}
+	</echo>
+
+	<echo message="Modifying caTISSUECore SQL file for user information..."/>
+	<copy file="${mssqlserver.sql.dir}/createUser.sql" todir="${temp.dir}" overwrite="true"/>
+			
+	<replace dir="${temp.dir}" propertyfile="caTissueInstall.properties">
+		<include name="createUser.sql"/>
+		<replacefilter token="@@first.admin.department@@" value="${first.admin.department}"/>
+		<replacefilter token="@@first.admin.institution@@" value="${first.admin.institution}"/>
+		<replacefilter token="@@first.admin.cancerresearchgroup@@" value="${first.admin.cancerresearchgroup}"/>
+		<replacefilter token="@@first.admin.emailAddress@@" value="${first.admin.emailAddress}"/>
+		<replacefilter token="@@first.admin.encodedPassword@@" value="${first.admin.encodedPassword}"/>
+	</replace>
+				
+	<sql driver="${mssqlserver.driver.string}" url="jdbc:sqlserver://${database.host}:${database.port};databaseName=${database.name};" userid="${database.username}" password="${database.password}">
+		<transaction src="${temp.dir}/createUser.sql" />
+		<!--<transaction>commit;</transaction> -->
+		<classpath>
+		<fileset dir="${lib.dir}">
+				<include name="*.jar" />
+		</fileset>
+		</classpath>
+	</sql>
+	<delete dir="${temp.dir}" />
+						
+	</target>
+		
 	<!-- ACORN - mssqlserver migration - end -->
 </project>
