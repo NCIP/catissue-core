@@ -120,13 +120,15 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 			reportLoaderFlag = true;
 			specimenCollectionGroup.setBarcode(null);
 		}
-		generateSCGLabel(specimenCollectionGroup);
+		setCollectionProtocolRegistration(dao, specimenCollectionGroup, null);
+		
 		if (collectionProtocolEventObj != null)
 		{
 			CollectionProtocolEvent cpe = (CollectionProtocolEvent) collectionProtocolEventObj;
 			// check for closed CollectionProtocol
 			checkStatus(dao, cpe.getCollectionProtocol(), "Collection Protocol");
 			specimenCollectionGroup.setCollectionProtocolEvent(cpe);
+			generateSCGLabel(specimenCollectionGroup);
 			//check added  for Bug #8533
 			//Patch: 8533_6
 			if(specimenCollectionGroup.getIsCPBasedSpecimenEntryChecked())
@@ -134,7 +136,6 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 				specimenCollection = getCollectionSpecimen(specimenCollectionGroup, cpe, userId );
 			}			
 		}
-		setCollectionProtocolRegistration(dao, specimenCollectionGroup, null);
 		
 		String barcode=specimenCollectionGroup.getName();
 		generateSCGBarcode(specimenCollectionGroup);
