@@ -187,9 +187,11 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 		{
 			SpecimenDataBean specimenDataBean = (SpecimenDataBean) iterator.next();
 			Specimen specimen =specimenDataBean.getCorresSpecimen();
-			specimenDataBean.setPositionDimensionOne(String.valueOf(specimen.getSpecimenPosition().getPositionDimensionOne()));
-			specimenDataBean.setPositionDimensionTwo(String.valueOf(specimen.getSpecimenPosition().getPositionDimensionTwo()));
-
+			if((specimen.getSpecimenPosition()!=null)&&(specimen.getSpecimenPosition().getPositionDimensionOne()!=null)&&(specimen.getSpecimenPosition().getPositionDimensionTwo()!=null))
+			{
+				specimenDataBean.setPositionDimensionOne(String.valueOf(specimen.getSpecimenPosition().getPositionDimensionOne()));
+				specimenDataBean.setPositionDimensionTwo(String.valueOf(specimen.getSpecimenPosition().getPositionDimensionTwo()));
+			}
 			LinkedHashMap<String,GenericSpecimen> derivesMap=specimenDataBean.getDeriveSpecimenCollection();
 			Collection derivesCollection=derivesMap.values();
 			Iterator deriveItr = derivesCollection.iterator();
@@ -197,8 +199,11 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 			{
 				SpecimenDataBean deriveSpecimenDataBean =(SpecimenDataBean)deriveItr.next();
 				Specimen deriveSpec= deriveSpecimenDataBean.getCorresSpecimen();
-				deriveSpecimenDataBean.setPositionDimensionOne(String.valueOf(deriveSpec.getSpecimenPosition().getPositionDimensionOne()));
-				deriveSpecimenDataBean.setPositionDimensionTwo(String.valueOf(deriveSpec.getSpecimenPosition().getPositionDimensionTwo()));
+				if((deriveSpec.getSpecimenPosition()!=null)&&(deriveSpec.getSpecimenPosition().getPositionDimensionOne()!=null)&&(deriveSpec.getSpecimenPosition().getPositionDimensionTwo()!=null))
+				{
+					deriveSpecimenDataBean.setPositionDimensionOne(String.valueOf(deriveSpec.getSpecimenPosition().getPositionDimensionOne()));
+					deriveSpecimenDataBean.setPositionDimensionTwo(String.valueOf(deriveSpec.getSpecimenPosition().getPositionDimensionTwo()));
+				}
 			}
 		}
 		dao.closeSession();

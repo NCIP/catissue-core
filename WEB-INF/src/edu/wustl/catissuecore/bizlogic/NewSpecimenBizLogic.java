@@ -1812,10 +1812,6 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		else
 		{
 			result = validateSingleSpecimen((Specimen) obj, dao, operation, false);
-		/*	if (operation.equals(Constants.ADD))
-			{
-				allocateSpecimenPostionsRecursively((Specimen) obj);
-			}*/
 		}
 		return result;
 	}
@@ -1873,8 +1869,12 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		validateFields(specimen, dao, operation, partOfMulipleSpecimen);
 		validateEnumeratedData(specimen, operation, validator);
 		validateSpecimenCharacterstics(specimen);
+		if (operation.equals(Constants.ADD))
+		{
+			validateDerivedSpecimens(specimen,dao,operation);
+		}
 		//new method call added.
-		validateDerivedSpecimens(specimen,dao,operation);
+		
 		return true;
 	}
 	
