@@ -3550,9 +3550,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			 disposeSpecimen(sessionDataBean,specimen,dao,disposalReason);
 		 }
      }
-	
-	@ Override
-	public void refreshTitliSearchIndex(String operation, Object obj)
+	private void refreshTitliSearchIndexSingle(String operation, Object obj)
 	{
 		List result = null;
 		super.refreshTitliSearchIndex(operation, obj);
@@ -3588,4 +3586,25 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			}
 		}
 	}
+
+	private void refreshTitliSearchIndexMultiple(String operation, Collection<AbstractDomainObject> objCollection)
+	{
+		for(AbstractDomainObject obj : objCollection)
+		{
+			refreshTitliSearchIndexSingle(operation, obj);
+		}
+	}
+	@ Override
+	protected void refreshTitliSearchIndex(String operation, Object obj)
+	{
+		
+		if (obj instanceof LinkedHashSet)
+		{
+			refreshTitliSearchIndexMultiple(operation,(LinkedHashSet<AbstractDomainObject>)obj);
+		}
+		else
+		{
+			refreshTitliSearchIndexSingle(operation, obj);
+		}
+	}	
 }
