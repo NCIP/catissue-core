@@ -2685,7 +2685,7 @@ Thanking You,
 		<antcall target="temp_update_metadata_for_clob_support_mssqlserver" />
 		<antcall target="insert_entity_group_metadata_mssqlserver" />
 		<antcall target="upgrade_db_demodel_mssqlserver" />
-		<!--<antcall target="update_metadata_for_model_changes" /> -->
+		<antcall target="update_metadata_for_model_changes" />
 		<antcall target="update_metadata_for_CA_model_changes" />
 		
 	</target>
