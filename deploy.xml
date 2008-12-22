@@ -81,10 +81,11 @@
 			<or>
 				<equals arg1="mysql" arg2="${database.type}" />
 				<equals arg1="oracle" arg2="${database.type}" />
+				<equals arg1="mssqlserver" arg2="${database.type}" />
 			</or>
 			<then />
 			<else>
-				<fail message="The value of property 'database.type' must be mysql or oracle" />
+				<fail message="The value of property 'database.type' must be mysql ,oracle or mssqlserver" />
 			</else>
 		</if>
 
@@ -137,7 +138,7 @@
 		<if>
 			<equals arg1="" arg2="${database.port}" />
 			<then>
-				<fail message="The property 'database.port' can not be empty. Default port for MySQL:3306 and for Oracle: 1521" />
+				<fail message="The property 'database.port' can not be empty. Default port for MySQL:3306 ,for Oracle: 1521 and for MsSqlServer: 1433" />
 			</then>
 		</if>
 		<if>
@@ -640,6 +641,7 @@
 			<fileset dir="${lib.dir}">
 				<include name="${mysql.lib}" />
 				<include name="${oracle.lib}" />
+				<include name="${mssqlserver.lib}" />
 			</fileset>
 		</copy>
 		<copy todir="${jboss.home.dir}/bin" overwrite="true">
@@ -743,6 +745,12 @@
 
 				</then>
 			</elseif>
+			<elseif>
+				<equals arg1="mssqlserver" arg2="${database.type}" />
+				<then>
+					<antcall target="mssqlserver_config" />
+				</then>
+			</elseif>
 		</if>
 		<!-- configure titli.properties -->
 		 <antcall target="configure_titli" /> 
@@ -802,6 +810,17 @@
 							<replacefilter token="@@DIALECT@@" value="${oracle.dialect.string}" />
 							<replacefilter token="@@DRIVER@@" value="${oracle.driver.string}" />
 							<replacefilter token="@@URL@@" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" />
+						</replace>
+					</then>
+				</elseif>
+				<elseif>
+					<equals arg1="mssqlserver" arg2="${database.type}" />
+					<then>
+						<replace dir="${temp.dir}/${warName}/WEB-INF/classes">
+							<include name="hibernate.properties" />
+							<replacefilter token="@@DIALECT@@" value="${mssqlserver.dialect.string}"/>
+							<replacefilter token="@@DRIVER@@" value="${mssqlserver.driver.string}"/>
+							<replacefilter token="@@URL@@" value="jdbc:sqlserver://${database.host}:${database.port};databaseName=${database.name};" />
 						</replace>
 					</then>
 				</elseif>
@@ -886,7 +905,7 @@
 		<!-- shippingtracking db -->
 		<antcall target="st_deploy_db" />
 		
-		<antcall target="create_category">
+		<!--<antcall target="create_category">
 			<param name="categoryDefinitionFilePath" value="${dbupgrade.sql.dir}/Common/CAModelCSVs/smoking.csv"/>
 		</antcall>
 		<antcall target="create_category">
@@ -897,12 +916,12 @@
 		</antcall>
 		<antcall target="create_category">
 			<param name="categoryDefinitionFilePath" value="${dbupgrade.sql.dir}/Common/CAModelCSVs/alcohol.csv"/>
-		</antcall>
+		</antcall> 
 		<antcall target="show_hide_forms">
-		</antcall>
+		</antcall> -->
 		<antcall target="import_permissible_values">
 			<param name="permissibleValuesFile" value="${dbupgrade.sql.dir}/Common/CAModelCSVs/LOINC_PV.csv"/>
-		</antcall>
+		</antcall> 
 	</target>
 
 	<!--MySQL Database Creation -->
@@ -1938,6 +1957,17 @@ Thanking You,
 					<echo message="${database.type} ${database.name}" />
 				</then>
 			</elseif>
+			<elseif>
+				<equals arg1="mssqlserver" arg2="${database.type}" />
+				<then>
+					<replace dir="${temp.dir}/catissuecore/WEB-INF/classes" propertyfile="caTissueInstall.properties">
+						<include name="titli.properties" />
+						<replacefilter token="@@databaseurl@@" value="jdbc:sqlserver://${database.host}:${database.port};databaseName=${database.name};" />
+						<replacefilter token="@@databasedriver@@" value="${mssqlserver.driver.string}" />
+					</replace>
+					<echo message="${database.type} ${database.name}" />
+				</then>
+			</elseif>
 		</if>
 	</target>
 
@@ -2291,7 +2321,7 @@ Thanking You,
 					<include name="*.cfg.xml" />
 					<replacefilter token="@@DIALECT@@" value="${mssqlserver.dialect.string}"/>
 					<replacefilter token="@@DRIVER@@" value="${mssqlserver.driver.string}"/>
-						<replacefilter token="@@URL@@" value="jdbc:sqlserver://${database.host}:${database.port};databaseName=${database.name};" />
+					<replacefilter token="@@URL@@" value="jdbc:sqlserver://${database.host}:${database.port};databaseName=${database.name};" />
 					</replace>
 				</then>
 			</elseif>
@@ -2357,6 +2387,18 @@ Thanking You,
 					</replace>
 				</then>
 			</elseif>
+			<elseif>
+				<equals arg1="mssqlserver" arg2="${database.type}"/>
+				<then>
+				<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
+					<include name="*.cfg.xml" />
+					<replacefilter token="@@DIALECT@@" value="${mssqlserver.dialect.string}"/>
+					<replacefilter token="@@DRIVER@@" value="${mssqlserver.driver.string}"/>
+					<replacefilter token="@@URL@@" value="jdbc:sqlserver://${database.host}:${database.port};databaseName=${database.name};" />
+				</replace>
+				</then>
+			</elseif>
+			
 		</if>
 		<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
 			<include name="*.cfg.xml" />
@@ -2792,44 +2834,120 @@ Thanking You,
 	</target>
 		
 	<target name="firstUser_mssqlserver">
-	<echo message="Encoding Password..."/>
-	<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
-	<copy file="${base.dir}/lib/j2ee.jar" tofile="${temp.dir}/catissuecore/WEB-INF/lib/j2ee.jar"/>
-	<java classname="edu.wustl.common.util.global.PasswordManager" fork="false" >
-	    <classpath refid="temp.classpath" />
-		<arg value="${base.dir}/catissuetmp.txt"/>
-		<arg value="${first.admin.password}"/>
-	</java>
+		<echo message="Encoding Password..."/>
+		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
+		<copy file="${base.dir}/lib/j2ee.jar" tofile="${temp.dir}/catissuecore/WEB-INF/lib/j2ee.jar"/>
+		<java classname="edu.wustl.common.util.global.PasswordManager" fork="false" >
+	   	 <classpath refid="temp.classpath" />
+			<arg value="${base.dir}/catissuetmp.txt"/>
+			<arg value="${first.admin.password}"/>
+		</java>
 
-	<property file="${base.dir}/catissuetmp.txt"/>
-	<echo>
-		Encoded Password ${first.admin.encodedPassword}
-	</echo>
+		<property file="${base.dir}/catissuetmp.txt"/>
+		<echo>
+			Encoded Password ${first.admin.encodedPassword}
+		</echo>
 
-	<echo message="Modifying caTISSUECore SQL file for user information..."/>
-	<copy file="${mssqlserver.sql.dir}/createUser.sql" todir="${temp.dir}" overwrite="true"/>
+		<echo message="Modifying caTISSUECore SQL file for user information..."/>
+		<copy file="${mssqlserver.sql.dir}/createUser.sql" todir="${temp.dir}" overwrite="true"/>
 			
-	<replace dir="${temp.dir}" propertyfile="caTissueInstall.properties">
-		<include name="createUser.sql"/>
-		<replacefilter token="@@first.admin.department@@" value="${first.admin.department}"/>
-		<replacefilter token="@@first.admin.institution@@" value="${first.admin.institution}"/>
-		<replacefilter token="@@first.admin.cancerresearchgroup@@" value="${first.admin.cancerresearchgroup}"/>
-		<replacefilter token="@@first.admin.emailAddress@@" value="${first.admin.emailAddress}"/>
-		<replacefilter token="@@first.admin.encodedPassword@@" value="${first.admin.encodedPassword}"/>
-	</replace>
+		<replace dir="${temp.dir}" propertyfile="caTissueInstall.properties">
+			<include name="createUser.sql"/>
+			<replacefilter token="@@first.admin.department@@" value="${first.admin.department}"/>
+			<replacefilter token="@@first.admin.institution@@" value="${first.admin.institution}"/>
+			<replacefilter token="@@first.admin.cancerresearchgroup@@" value="${first.admin.cancerresearchgroup}"/>
+			<replacefilter token="@@first.admin.emailAddress@@" value="${first.admin.emailAddress}"/>
+			<replacefilter token="@@first.admin.encodedPassword@@" value="${first.admin.encodedPassword}"/>
+		</replace>
 				
-	<sql driver="${mssqlserver.driver.string}" url="jdbc:sqlserver://${database.host}:${database.port};databaseName=${database.name};" userid="${database.username}" password="${database.password}">
-		<transaction src="${temp.dir}/createUser.sql" />
-		<!--<transaction>commit;</transaction> -->
-		<classpath>
-		<fileset dir="${lib.dir}">
-				<include name="*.jar" />
-		</fileset>
-		</classpath>
-	</sql>
-	<delete dir="${temp.dir}" />
+		<sql driver="${mssqlserver.driver.string}" url="jdbc:sqlserver://${database.host}:${database.port};databaseName=${database.name};" userid="${database.username}" password="${database.password}">
+			<transaction src="${temp.dir}/createUser.sql" />
+			<!--<transaction>commit;</transaction> -->
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</sql>
+		<delete dir="${temp.dir}" />
 						
 	</target>
+		
+	<!--Modify Configuration For MsSqlServer-->
+	<target name="mssqlserver_config">
+			<echo message="Modifying caTISSUECore MsSqlServer specific Configuration File..." />
+			<replace dir="${temp.dir}/catissuecore-properties" propertyfile="caTissueInstall.properties">
+				<include name="upt.hibernate.cfg.xml" />
+				<include name="catissuecore.hibernate.cfg.xml" />
+				<replacefilter token="@@dialect@@" value="${mssqlserver.dialect.string}" />
+			</replace>
+
+			<!-- added for csm orm1.cfg.xml file-->
+			<replace dir="${temp.dir}/catissuecore/WEB-INF/classes" propertyfile="caTissueInstall.properties">
+				<include name="orm1.cfg.xml" />
+				<replacefilter token="@@dialect@@" value="${mssqlserver.dialect.h3.string}" />
+			</replace>
+
+			<!-- Configuring Data Source File-->
+			<replace dir="${temp.dir}" propertyfile="caTissueInstall.properties">
+				<include name="catissuecore-ds.xml" />
+				<include name="login-config.xml" />
+				<replacefilter token="@@databaseurl@@" value="jdbc:sqlserver://${database.host}:${database.port};databaseName=${database.name};" />
+				<replacefilter token="@@username@@" value="${database.username}" />
+				<replacefilter token="@@pasword@@" value="${database.password}" />
+				<replacefilter token="@@databasedriver@@" value="${mssqlserver.driver.string}" />
+			</replace>
+
+			<!-- change ${csm.dir} to {catissuecore} because using one war only -->
+			<!-- Configuring CSM hibernate property File-->
+			<!--
+			<replace dir="${temp.dir}/catissuecore/WEB-INF" propertyfile="caTissueInstall.properties">
+				<include name="classes/hibernate.properties"/>
+				<include name="conf/hibernate.properties"/>
+				<replacefilter
+					token="hibernate.dialect org.hibernate.dialect.MySQLDialect"
+				  	value="hibernate.dialect ${oracle.dialect.h3.string}"/>
+				<replacefilter
+					token="hibernate.connection.driver_class com.mysql.jdbc.Driver"
+				  	value="hibernate.connection.driver_class ${oracle.driver.string}"/>
+
+				<replacefilter
+					token="hibernate.connection.url jdbc:mysql://ps0154:3306/catissuecore_mysql"
+				  	value="hibernate.connection.url jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}"/>
+				<replacefilter
+					token="hibernate.connection.username catissue_core"
+				  	value="hibernate.connection.username ${database.username}"/>
+				<replacefilter
+					token="hibernate.connection.password catissue_core"
+				  	value="hibernate.connection.password ${database.password}"/>
+			</replace>
+			-->
+			<replace file="${temp.dir}/catissuecore/WEB-INF/classes/hibernate.cfg.xml">
+				<replacefilter token="${mysql.dialect.string}" value="${mssqlserver.dialect.string}" />
+			</replace>
+
+			<replace file="${temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsHibernate.cfg.xml">
+				<replacefilter token="${mysql.dialect.string}" value="${mssqlserver.dialect.string}" />
+				<replacefilter token="&lt;!-- My sql settings -->" value="&lt;!-- My sql settings " />
+				<replacefilter token="&lt;!-- My sql settings end -->" value="My sql settings end -->" />
+			</replace>
+
+			<replace file="${temp.dir}/dynamicExtensions/WEB-INF/classes/DynamicExtensionsHibernate.cfg.xml">
+				<replacefilter token="${mysql.dialect.string}" value="${mssqlserver.dialect.string}" />
+				<replacefilter token="&lt;!-- My sql settings -->" value="&lt;!-- My sql settings " />
+				<replacefilter token="&lt;!-- My sql settings end -->" value="My sql settings end -->" />
+			</replace>
+
+			<replace file="${temp.dir}/dynamicExtensionsjar/DynamicExtensionsHibernate.cfg.xml">
+				<replacefilter token="${mysql.dialect.string}" value="${mssqlserver.dialect.string}" />
+				<replacefilter token="${dynamicextensions.datasource}" value="${catissue.datasource}" />
+				<replacefilter token="&lt;!-- My sql settings -->" value="&lt;!-- My sql settings " />
+				<replacefilter token="&lt;!-- My sql settings end -->" value="My sql settings end -->" />
+			</replace>
+
+
+		</target>
+	
 		
 	<!-- ACORN - mssqlserver migration - end -->
 </project>
