@@ -210,15 +210,20 @@ public class SpecimenAutoStorageContainer {
 				String posTwo = ((NameValueBean) yDimList.get(k)).getValue();
 				String storageValue = stName+":"+posOne+" ,"+posTwo; 
 
-				if(!storageContainerIds.contains(storageValue))
+				if(specimenDataBean.getReadOnly())
+				{
+					storageValue = specimenDataBean.getSelectedContainerName()+":"+specimenDataBean.getPositionDimensionOne()+" ,"+specimenDataBean.getPositionDimensionTwo();
+				}
+				else if(!storageContainerIds.contains(storageValue))
 				{													
 					specimenDataBean.setContainerId(String.valueOf(sc.getId()));
 					specimenDataBean.setSelectedContainerName(stName);
 					specimenDataBean.setPositionDimensionOne(posOne);
 					specimenDataBean.setPositionDimensionTwo(posTwo);
-					storageContainerIds.add(storageValue);
-					counter++;									
 				}
+				storageContainerIds.add(storageValue);
+				counter++;									
+
 			}
 		}
 		return counter;
