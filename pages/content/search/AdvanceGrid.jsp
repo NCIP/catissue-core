@@ -227,7 +227,7 @@ function setEditableChkbox(checkAllPages)
 	if(useFunction == "participant")
 	{
 		//alert("test");
-		mygrid.entBox.style.width="650px";
+		mygrid.entBox.style.width= wdt;					//"650px";
 		colDataTypes=colDataTypes.replace(/ch/,"ra");
 		colDataTypes=colDataTypes.replace(/int/,"ro");
 		columns=","+columns+",";

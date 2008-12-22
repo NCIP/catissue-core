@@ -983,6 +983,8 @@ function participantRegRow(subdivtag)
 					*/
 					var useDefaultRowClickHandler =2;
 					var useFunction = "participant";	
+					var wdt = getWidth(90);
+					if(wdt>1000)wdt=getWidth(63.5);
 			</script> <%@ include file="/pages/content/search/AdvanceGrid.jsp"%>
 						<!--  **************  Code for New Grid  *********************** -->
 

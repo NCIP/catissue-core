@@ -416,3 +416,17 @@ function mdFrmResizer(frmId,pcnt)
 		document.getElementById(frmId).height=frmHt+" px"	;
 	}
 }
+
+function getWidth(wd)
+{
+	var newWd=0;
+	var ie=30;
+	if(document.all && document.documentElement && document.documentElement.clientWidth )
+		newWd=(document.documentElement.clientWidth*wd/100)+ie;
+	else if(window.innerWidth)
+		newWd=(window.innerWidth*wd/100);
+	else if(document.body && document.body.clientWidth)
+		newWd=(document.body.clientWidth*wd/100)+ie;
+//	alert(newWd);
+	return newWd;
+}
