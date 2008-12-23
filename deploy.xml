@@ -905,7 +905,7 @@
 		<!-- shippingtracking db -->
 		<antcall target="st_deploy_db" />
 		
-		<!--<antcall target="create_category">
+		<antcall target="create_category">
 			<param name="categoryDefinitionFilePath" value="${dbupgrade.sql.dir}/Common/CAModelCSVs/smoking.csv"/>
 		</antcall>
 		<antcall target="create_category">
@@ -918,7 +918,7 @@
 			<param name="categoryDefinitionFilePath" value="${dbupgrade.sql.dir}/Common/CAModelCSVs/alcohol.csv"/>
 		</antcall> 
 		<antcall target="show_hide_forms">
-		</antcall> -->
+		</antcall>
 		<antcall target="import_permissible_values">
 			<param name="permissibleValuesFile" value="${dbupgrade.sql.dir}/Common/CAModelCSVs/LOINC_PV.csv"/>
 		</antcall> 
