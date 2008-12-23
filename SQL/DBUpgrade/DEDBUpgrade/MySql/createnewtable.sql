@@ -90,3 +90,10 @@ create table DYEXTN_USERDEF_DE_VALUE_REL (
    PERMISSIBLE_VALUE_ID bigint not null,
    primary key (USER_DEF_DE_ID, PERMISSIBLE_VALUE_ID)
 );
+CREATE TABLE DYEXTN_FORM_CTRL_NOTES (
+   IDENTIFIER bigint not null, 
+   NOTE varchar(255), 
+   FORM_CONTROL_ID bigint, 
+   INSERTION_ORDER integer, 
+   primary key (IDENTIFIER)
+);
