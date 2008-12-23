@@ -922,6 +922,8 @@
 		<antcall target="import_permissible_values">
 			<param name="permissibleValuesFile" value="${dbupgrade.sql.dir}/Common/CAModelCSVs/LOINC_PV.csv"/>
 		</antcall> 
+		<antcall target="show_hide_forms_based_on_CPs">
+		</antcall>
 	</target>
 
 	<!--MySQL Database Creation -->
@@ -1204,6 +1206,8 @@
 			<param name="categoryDefinitionFilePath" value="${dbupgrade.sql.dir}/Common/CAModelCSVs/alcohol.csv"/>
 		</antcall>
 		<antcall target="show_hide_forms">
+		</antcall>
+		<antcall target="show_hide_forms_based_on_CPs">
 		</antcall>
 		<antcall target="import_permissible_values">
 			<param name="permissibleValuesFile" value="${dbupgrade.sql.dir}/Common/CAModelCSVs/LOINC_PV.csv"/>
@@ -2950,4 +2954,82 @@ Thanking You,
 	
 		
 	<!-- ACORN - mssqlserver migration - end -->
+	
+	<target name="show_hide_forms_based_on_CPs">
+		<if>
+			<equals arg1="${show.hide.forms.based.on.CPs}" arg2="true" />
+			<then>
+				<echo message="Value of show_hide_forms_based_on_CPs is set to true" />
+				<antcall target="Associate_forms_to_CPs">
+					<param name="cpsEntitiesXMLFile" value="${base.dir}/Show_Hide_Forms.xml"/>
+				</antcall>
+				<echo message="Associated selected Forms with Cps..." />
+			</then>
+			<else>
+				<echo message="Value of show_hide_forms_based_on_CPs is set to false" />		
+			</else>
+		</if>
+	</target>
+		
+	<!-- Associating forms/entities with CPs  - start -->
+	<target name="Associate_forms_to_CPs">
+		<delete quiet="true" includeemptydirs="true">
+			<fileset dir="${temp.dir}/catissuecore">
+				<include name="**/*" />
+			</fileset>
+		</delete>
+
+		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore" />
+		<copy file="${base.dir}/DE_conf/hibernate.cfg.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true" />
+		<copy file="${base.dir}/DE_conf/DynamicExtensionsHibernate.cfg.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true" />
+			
+		<if>
+			<equals arg1="mysql" arg2="${database.type}" />
+			<then>
+				<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
+				<include name="*.cfg.xml" />
+				<replacefilter token="@@DIALECT@@" value="${mysql.dialect.string}" />
+				<replacefilter token="@@DRIVER@@" value="com.mysql.jdbc.Driver" />
+				<replacefilter token="@@URL@@" value="jdbc:mysql://${database.host}:${database.port}/${database.name}" />
+				</replace>
+			</then>
+			<elseif>
+				<equals arg1="oracle" arg2="${database.type}" />
+				<then>
+					<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
+					<include name="*.cfg.xml" />
+					<replacefilter token="@@DIALECT@@" value="${oracle.dialect.string}" />
+						<replacefilter token="@@DRIVER@@" value="${oracle.driver.string}" />
+						<replacefilter token="@@URL@@" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" />
+					</replace>
+				</then>
+			</elseif>
+		</if>
+		<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
+			<include name="*.cfg.xml" />
+			<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}" />
+			<replacefilter token="${token.database.password}" value="${database.password}" />
+		</replace>
+		<java classname="edu.wustl.catissuecore.util.AssociatesCps" fork="true" maxmemory="512m">
+			<arg value="${cpsEntitiesXMLFile}"/>
+			<classpath>
+				<pathelement location="${temp.dir}/catissuecore/WEB-INF/classes" />
+				<fileset dir="${temp.dir}/catissuecore/WEB-INF/lib">
+					<include name="*.jar" />
+					<exclude name="uml-1.3.jar" />
+				</fileset>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</java>	
+		<delete includeemptydirs="true">
+			<fileset dir="${temp.dir}/catissuecore">
+				<include name="**/*" />
+			</fileset>
+		</delete>
+	</target>	
+	
+		<!-- Associating forms/entities with CPs  - end -->
+		
 </project>

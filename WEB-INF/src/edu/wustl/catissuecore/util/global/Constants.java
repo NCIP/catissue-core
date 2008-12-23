@@ -257,6 +257,9 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String CLOBTYPE_ID_LIST = "clobTypeIdList"; 
 	public static final String GETREPORTID = "getReportID.do";
 	public static final String DOUBLE_QUOTES = "";
+	public static final String OVERRIDE= "override";
+	public static final String OVERRIDE_TRUE="true";
+	public static final String OVERRIDE_FALSE="false";	
 	/**
 	 * Name: Abhishek Mehta
 	 * Reviewer Name : Deepti 
