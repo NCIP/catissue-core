@@ -515,14 +515,14 @@ public class StorageContainerUtil
 							yPos= new Integer(nvb.getValue());
 							
 							Long containerId = storageContainer.getId();
-					//		if(containerId!=null)
-					//		{
-					//			containerValue = StorageContainerUtil.getStorageValueKey(null, containerId.toString(), xPos, yPos);
-					//		}
-					//		else 
-					//		{
+							if(containerId!=null)
+							{
+								containerValue = StorageContainerUtil.getStorageValueKey(null, containerId.toString(), xPos, yPos);
+							}
+							else 
+							{
 								containerValue = StorageContainerUtil.getStorageValueKey(storageContainer.getName(),null,xPos, yPos);
-					//		}
+							}
 							if (!allocatedPositions.contains(containerValue))
 							{
 								SpecimenPosition specPos = specimen.getSpecimenPosition();							
@@ -542,7 +542,14 @@ public class StorageContainerUtil
 			}
 			if(containerValue==null)
 			{
-				containerValue = StorageContainerUtil.getStorageValueKey(storageContainer.getName(),null,xPos, yPos);
+				if(storageContainer.getId()==null)
+				{
+					containerValue = StorageContainerUtil.getStorageValueKey(storageContainer.getName(),null,xPos, yPos);
+				}
+				else 
+				{
+					containerValue = StorageContainerUtil.getStorageValueKey(null, storageContainer.getId().toString(), xPos, yPos);
+				}
 				if (!allocatedPositions.contains(containerValue))
 				{
 					allocatedPositions.add(containerValue);
