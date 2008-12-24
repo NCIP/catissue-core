@@ -144,6 +144,10 @@ public class ParticipantLookupLogic implements LookupLogic
 			if(!race.getRaceName().equals("Unknown"))
 				totalPointsForParticipant += pointsForRaceExact;
 		}
+		if(participant.getParticipantMedicalIdentifierCollection()!=null && participant.getParticipantMedicalIdentifierCollection().size()>0)
+		{
+			totalPointsForParticipant +=pointsForPMIExact;
+		}
 		return totalPointsForParticipant;
 	}
 
@@ -213,6 +217,7 @@ public class ParticipantLookupLogic implements LookupLogic
 		// Iterates through all the Participants from the list 
 		while (itr.hasNext())
 		{
+			isSSNOrPMI = false;
 			int weight = 0; // used for calculation of total points.
 			int socialSecurityNumberWeight = 0; // points of social security number
 			int birthDateWeight = 0; // points of birth date
@@ -371,7 +376,7 @@ public class ParticipantLookupLogic implements LookupLogic
 	private int  checkSSN(String userNumber, String existingNumber)
 	{
 		MatchingStatus  status = checkNumber(userNumber, existingNumber);
-		isSSNOrPMI=false;
+	//	isSSNOrPMI=false;
 		switch (status) 
 		{
 			case EXACT:
@@ -390,6 +395,7 @@ public class ParticipantLookupLogic implements LookupLogic
 		switch (status) 
 		{
 		case EXACT:
+			isSSNOrPMI = true;
 			return pointsForPMIExact;
 		case PARTIAL:
 			return pointsForPMIPartial;
@@ -400,7 +406,7 @@ public class ParticipantLookupLogic implements LookupLogic
 	}
 	private MatchingStatus checkNumber(String userNumber, String existingNumber)
 	{
-		isSSNOrPMI=false;
+	//	isSSNOrPMI=false;
 		// complete match
 		if (existingNumber.equals(userNumber))
 		{
@@ -683,6 +689,11 @@ public class ParticipantLookupLogic implements LookupLogic
 									{
 										maxTempPMIW = tempParticipantMedicalIdentifierWeight;
 									}
+									if(tempParticipantMedicalIdentifierWeight==pointsForPMIExact)
+									{
+										tempExistingParticipantMedicalIdentifier.remove(existingPMidentifier);
+										break;
+									}
 								}
 							}
 						}
@@ -691,7 +702,14 @@ public class ParticipantLookupLogic implements LookupLogic
 							noMatchFlag = false;
 							partialMatchFlag = true;
 							exactMatchFlag = false;
-							break;
+							if(maxTempPMIW==pointsForPMIExact)
+							{
+								break;
+							}
+							else
+							{
+								continue;
+							}
 						}
 						else
 						{
@@ -722,7 +740,6 @@ public class ParticipantLookupLogic implements LookupLogic
 								if ( existingSiteId.equals(siteId) && medicalRecordNo != null)
 								{
 									tempParticipantMedicalIdentifierWeight = checkPMI(existingMedicalRecordNo,medicalRecordNo);
-									
 									if(maxTempPMIW < tempParticipantMedicalIdentifierWeight)
 									{
 										maxTempPMIW = tempParticipantMedicalIdentifierWeight;
@@ -740,11 +757,19 @@ public class ParticipantLookupLogic implements LookupLogic
 							noMatchFlag = false;
 							partialMatchFlag = true;
 							exactMatchFlag = false;
-							break;
+							if(exactMatchFlag)
+							{
+								break;
+							}
+							else
+							{
+								continue;
+							}
+							
 						}
 						else if(maxTempPMIW == pointsForPMIExact)
 						{
-							if(noMatchFlag)
+							if(noMatchFlag||partialMatchFlag)
 							{
 								noMatchFlag = false;
 								partialMatchFlag = true;
@@ -761,7 +786,7 @@ public class ParticipantLookupLogic implements LookupLogic
 						}
 						else if(maxTempPMIW == 0)
 						{
-							if(exactMatchFlag)
+							if(exactMatchFlag||partialMatchFlag)
 							{
 								noMatchFlag = false;
 								partialMatchFlag = true;
