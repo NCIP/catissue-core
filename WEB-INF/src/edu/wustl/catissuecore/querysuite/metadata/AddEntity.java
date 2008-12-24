@@ -52,7 +52,7 @@ public class AddEntity
 			
 			sql = "INSERT INTO dyextn_abstract_metadata (IDENTIFIER,CREATED_DATE,DESCRIPTION,LAST_UPDATED,NAME,PUBLIC_ID) values("
 			+ nextIdOfAbstractMetadata + ",NULL,NULL,NULL,'" + entityName
-			+ "',null);";
+			+ "',null)";
 			if(Constants.MSSQLSERVER_DATABASE.equalsIgnoreCase(UpdateMetadata.DATABASE_TYPE))
 			{
 				sql = UpdateMetadataUtil.getIndentityInsertStmtForMsSqlServer(sql,"dyextn_abstract_metadata");
@@ -76,7 +76,7 @@ public class AddEntity
 			}
 		
 			sql = "INSERT INTO dyextn_database_properties(IDENTIFIER,NAME) values("
-			+ nextIdDatabaseproperties + ",'"+tableName+"');";
+			+ nextIdDatabaseproperties + ",'"+tableName+"')";
 			if(Constants.MSSQLSERVER_DATABASE.equalsIgnoreCase(UpdateMetadata.DATABASE_TYPE))
 			{
 				sql = UpdateMetadataUtil.getIndentityInsertStmtForMsSqlServer(sql,"dyextn_database_properties");
