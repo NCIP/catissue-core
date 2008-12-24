@@ -127,7 +127,7 @@ public class AddPermissibleValue
 			}
 			UpdateMetadataUtil.executeInsertSQL(sql, connection.createStatement());
 		
-			sql = "insert into dyextn_userdefined_de values ("+dataElementId+")";
+			sql = "insert into dyextn_userdefined_de values (" +dataElementId +",1)";
 			UpdateMetadataUtil.executeInsertSQL(sql, connection.createStatement());
 		}
 		
