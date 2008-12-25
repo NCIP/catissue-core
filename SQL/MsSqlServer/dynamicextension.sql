@@ -144,9 +144,9 @@ create table DE_FILE_ATTR_RECORD_VALUES (
 );
 create table DYEXTN_ABSTRACT_METADATA (
    IDENTIFIER numeric(20) not null identity,
-   CREATED_DATE datetime,
+   CREATED_DATE smalldatetime,
    DESCRIPTION varchar(8000),
-   LAST_UPDATED datetime,
+   LAST_UPDATED smalldatetime,
    NAME varchar(8000),
    PUBLIC_ID varchar(255),
    primary key (IDENTIFIER)
@@ -240,7 +240,7 @@ create table DYEXTN_ENTITY_MAP (
    CONTAINER_ID bigint,
    STATUS varchar(10),
    STATIC_ENTITY_ID numeric(20),
-   CREATED_DATE datetime,
+   CREATED_DATE smalldatetime,
    CREATED_BY varchar(255),
    primary key (IDENTIFIER)
 );
@@ -325,8 +325,8 @@ create table DYEXTN_ENTITY_MAP_RECORD (
    STATIC_ENTITY_RECORD_ID bigint,
    STATUS varchar(10),
    DYNAMIC_ENTITY_RECORD_ID bigint,
-   MODIFIED_DATE datetime,
-   CREATED_DATE datetime,
+   MODIFIED_DATE smalldatetime,
+   CREATED_DATE smalldatetime,
    CREATED_BY varchar(255),
    primary key (IDENTIFIER)
 );
@@ -565,4 +565,3 @@ alter table DYEXTN_CONTAINER add constraint FK1EAB84E4992A67D7 foreign key (ENTI
 alter table DYEXTN_CONTAINER add constraint FK1EAB84E445DEFCF5 foreign key (VIEW_ID) references DYEXTN_VIEW;
 alter table DYEXTN_RADIOBUTTON add constraint FK16F5BA90BC7298A9 foreign key (IDENTIFIER) references DYEXTN_CONTROL;
 alter table DYEXTN_DATEPICKER add constraint FKFEADD199BC7298A9 foreign key (IDENTIFIER) references DYEXTN_CONTROL;
-

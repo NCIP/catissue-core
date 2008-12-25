@@ -22,8 +22,8 @@ CREATE TABLE de_e_1230
 
 CREATE TABLE de_e_1236 (
   ACTIVITY_STATUS text,
-  DE_AT_1240 datetime default NULL,
-  DE_AT_1239 datetime default NULL,
+  DE_AT_1240 smalldatetime default NULL,
+  DE_AT_1239 smalldatetime default NULL,
   DE_AT_1238 NUMERIC(38) default NULL,
   IDENTIFIER NUMERIC(38) NOT NULL default '0',
   DE_E_1230_1232_IDENTIFIER NUMERIC(38) default NULL,
@@ -59,7 +59,7 @@ CREATE TABLE de_e_1249 (
   ACTIVITY_STATUS text,
   DE_AT_1253 text,
   DE_AT_1252 text,
-  DE_AT_1251 datetime default NULL,
+  DE_AT_1251 smalldatetime default NULL,
   IDENTIFIER numeric(38) NOT NULL default '0',
   DYEXTN_AS_844_1249 numeric(38) default NULL,
   PRIMARY KEY  (IDENTIFIER)
@@ -152,7 +152,7 @@ CREATE TABLE de_e_1283 (
   DE_AT_1288 text,
   DE_AT_1287 text,
   DE_AT_1286 text,
-  DE_AT_1285 datetime default NULL,
+  DE_AT_1285 smalldatetime default NULL,
   IDENTIFIER numeric(38) NOT NULL default '0',
   DYEXTN_AS_844_1283 numeric(38) default NULL,
   PRIMARY KEY  (IDENTIFIER)

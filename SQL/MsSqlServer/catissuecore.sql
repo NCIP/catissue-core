@@ -140,7 +140,7 @@ create table CATISSUE_CDE (
    LONG_NAME varchar(200),
    DEFINITION varchar(500),
    VERSION varchar(50),
-   LAST_UPDATED datetime,
+   LAST_UPDATED smalldatetime,
    primary key (PUBLIC_ID)
 );
 
@@ -218,7 +218,7 @@ create table CATISSUE_COLL_EVENT_PARAM (
 create table CATISSUE_PASSWORD (
    IDENTIFIER bigint not null identity,
    PASSWORD varchar(255),
-   UPDATE_DATE datetime,
+   UPDATE_DATE smalldatetime,
    USER_ID bigint,
    primary key (IDENTIFIER)
 );
@@ -249,7 +249,7 @@ create table CATISSUE_CONTAINER (
    BARCODE varchar(255) unique,
    CAPACITY_ID bigint,
    COMMENTS varchar(500),
---   FULL numeric(1,0),
+   "FULL" numeric(1,0),
    NAME varchar(255) unique not null,
    primary key (IDENTIFIER)
 );
@@ -326,8 +326,8 @@ create table CATISSUE_SPECIMEN_PROTOCOL (
    TITLE varchar(255) not null unique,
    SHORT_TITLE varchar(255),
    IRB_IDENTIFIER varchar(255),
-   START_DATE datetime,
-   END_DATE datetime,
+   START_DATE smalldatetime,
+   END_DATE smalldatetime,
    ENROLLMENT integer,
    DESCRIPTION_URL varchar(255),
    ACTIVITY_STATUS varchar(50),
@@ -400,7 +400,7 @@ create table CATISSUE_REPORTED_PROBLEM (
    REPORTERS_EMAIL_ID varchar(255) not null,
    MESSAGE_BODY varchar(500) not null,
    SUBJECT varchar(255),
-   REPORTED_DATE datetime,
+   REPORTED_DATE smalldatetime,
    ACTIVITY_STATUS varchar(100),
    COMMENTS varchar(500),
    primary key (IDENTIFIER)
@@ -430,13 +430,13 @@ create table CATISSUE_PARTICIPANT (
    LAST_NAME varchar(255),
    FIRST_NAME varchar(255),
    MIDDLE_NAME varchar(255),
-   BIRTH_DATE datetime,
+   BIRTH_DATE smalldatetime,
    GENDER varchar(20),
    GENOTYPE varchar(50),
    ETHNICITY varchar(50),
    SOCIAL_SECURITY_NUMBER varchar(50) unique,
    ACTIVITY_STATUS varchar(50),
-   DEATH_DATE datetime,
+   DEATH_DATE smalldatetime,
    VITAL_STATUS varchar(50),
    primary key (IDENTIFIER)
 );
@@ -554,7 +554,7 @@ create table CATISSUE_THAW_EVENT_PARAMETERS (
 create table CATISSUE_COLL_PROT_REG (
    IDENTIFIER numeric(20) not null identity,
    PROTOCOL_PARTICIPANT_ID varchar(255),
-   REGISTRATION_DATE datetime,
+   REGISTRATION_DATE smalldatetime,
    PARTICIPANT_ID bigint,
    COLLECTION_PROTOCOL_ID numeric(20),
    ACTIVITY_STATUS varchar(50),
@@ -577,7 +577,7 @@ create table CATISSUE_USER (
    FIRST_NAME varchar(255),
    LAST_NAME varchar(255),
    LOGIN_NAME varchar(255) not null unique,
-   START_DATE datetime,
+   START_DATE smalldatetime,
    ACTIVITY_STATUS varchar(50),
    DEPARTMENT_ID bigint,
    CANCER_RESEARCH_GROUP_ID bigint,
@@ -703,7 +703,7 @@ CREATE TABLE CATISSUE_SPECIMEN
      SPECIMEN_COLLECTION_GROUP_ID numeric(20),     
      REQ_SPECIMEN_ID numeric(20),     
      AVAILABLE_QUANTITY double precision,                                                                                                        
-     CREATED_ON_DATE datetime ,                                                                                                             
+     CREATED_ON_DATE smalldatetime ,                                                                                                             
      COLLECTION_STATUS varchar(50),                                                                                                    
      PRIMARY KEY  (IDENTIFIER),                                                                                                                     
      CONSTRAINT FK1674810433BF33C5 FOREIGN KEY (SPECIMEN_COLLECTION_GROUP_ID) REFERENCES catissue_specimen_coll_group,
@@ -1020,7 +1020,7 @@ create table CATISSUE_REVIEW_PARAMS (
    IDENTIFIER bigint not null identity,
    REVIEWER_ROLE varchar(100),
    REPORT_ID bigint,
-   EVENT_TIMESTAMP timestamp,
+   EVENT_TIMESTAMP datetime,
    USER_ID bigint,
    COMMENTS varchar(4000),
    STATUS varchar(100),
@@ -1050,7 +1050,7 @@ create table CATISSUE_QUARANTINE_PARAMS (
    IDENTIFIER bigint not null identity,
    DEID_REPORT_ID bigint,
    IS_QUARANTINED numeric(1),
-   EVENT_TIMESTAMP timestamp,
+   EVENT_TIMESTAMP datetime,
    USER_ID bigint,
    COMMENTS varchar(4000),
    STATUS varchar(100),
@@ -1062,7 +1062,7 @@ create table CATISSUE_PATHOLOGY_REPORT (
    REVIEW_FLAG numeric(1),
    SOURCE_ID numeric(20),
    REPORT_STATUS varchar(100),
-   COLLECTION_DATE_TIME datetime,
+   COLLECTION_DATE_TIME smalldatetime,
    primary key (IDENTIFIER)
 );
 create table CATISSUE_REPORT_XMLCONTENT (
@@ -1076,10 +1076,10 @@ create table CATISSUE_REPORT_QUEUE (
    SURGICAL_PATHOLOGY_NUMBER varchar(50),
    PARTICIPANT_NAME varchar(255),
    SITE_NAME varchar(255),
-   REPORT_LOADED_DATE datetime,
+   REPORT_LOADED_DATE smalldatetime,
    REPORT_TEXT varchar(max),
    SPECIMEN_COLL_GRP_ID numeric(20),
-   REPORT_COLLECTION_DATE datetime,
+   REPORT_COLLECTION_DATE smalldatetime,
    primary key (IDENTIFIER)
 );
 create table CATISSUE_REPORT_PARTICIP_REL(
@@ -1205,5 +1205,4 @@ ALTER TABLE CATISSUE_USER_CP ADD CONSTRAINT FK5 FOREIGN KEY (USER_ID) REFERENCES
 ALTER TABLE CATISSUE_USER_CP ADD CONSTRAINT FK6 FOREIGN KEY (COLLECTION_PROTOCOL_ID) REFERENCES CATISSUE_COLLECTION_PROTOCOL (IDENTIFIER);
 
 /** MSR changes : End **/
-
 
