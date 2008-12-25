@@ -70,7 +70,7 @@ create table DYEXTN_PATH_ASSO_REL (
 );
 create table DYEXTN_SQL_AUDIT (
    IDENTIFIER bigint not null identity,
-   AUDIT_DATE datetime,
+   AUDIT_DATE smalldatetime,
    QUERY_EXECUTED varchar(4000),
    USER_ID bigint,
    primary key (IDENTIFIER)
@@ -84,6 +84,6 @@ CREATE TABLE DYEXTN_FORM_CTRL_NOTES (
    IDENTIFIER bigint not null, 
    NOTE varchar(255), 
    FORM_CONTROL_ID bigint, 
-   INSERTION_ORDER numeric(20), 
+   INSERTION_ORDER integer, 
    primary key (IDENTIFIER)
 );
