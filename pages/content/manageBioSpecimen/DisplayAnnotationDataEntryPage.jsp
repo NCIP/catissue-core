@@ -15,8 +15,8 @@ if ( document.getElementById && !(document.all) )
 		var slope=0;
 	}
 
-// window.onload = function() { setFrameHeight('dynamicExtensionsFrame', .9,slope);}
-// window.onresize = function() { setFrameHeight('dynamicExtensionsFrame', .9,slope); }
+// window.onload = function() { adjFrmHt('dynamicExtensionsFrame', .9,slope);}
+// window.onresize = function() { adjFrmHt('dynamicExtensionsFrame', .9,slope); }
 // <!-- Mandar 19Nov08 :  -->
 var pcnt=53.7;
 window.onresize = function() {  mdFrmResizer("dynamicExtensionsFrame",pcnt); }

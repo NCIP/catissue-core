@@ -177,8 +177,8 @@ function mdResDetector()
 	document.getElementById("newEventFrame").height=frmHt+" px"	;
 }
 window.onresize = function() { mdResDetector(); }
-//window.onload = function() { setFrameHeight('test', .1,slope);}
-//window.onresize = function() { setFrameHeight('test', .1,slope); }
+//window.onload = function() { adjFrmHt('test', .1,slope);}
+//window.onresize = function() { adjFrmHt('test', .1,slope); }
 </script>
 <!-- Mandar : 434 : for tooltip -->
 

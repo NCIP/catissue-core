@@ -49,8 +49,8 @@ else
 var ua = navigator.userAgent;
 if(navigator.userAgent.indexOf('Mac')<0)
 {
-window.onload = function() { setFrameHeight('cpFrameNew', .9,slope);setFrameHeight('<%=Constants.CP_AND_PARTICIPANT_VIEW%>', .9,slope); }
-window.onresize = function() { setFrameHeight('cpFrameNew', .9,slope); setFrameHeight('<%=Constants.CP_AND_PARTICIPANT_VIEW%>', .9,slope); }
+window.onload = function() { adjFrmHt('cpFrameNew', .9,slope);adjFrmHt('<%=Constants.CP_AND_PARTICIPANT_VIEW%>', .9,slope); }
+window.onresize = function() { adjFrmHt('cpFrameNew', .9,slope); adjFrmHt('<%=Constants.CP_AND_PARTICIPANT_VIEW%>', .9,slope); }
 }
 else
 {

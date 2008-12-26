@@ -54,8 +54,8 @@
 		var slope=-30;
 	}
 window.onresize = function() {  mdFrmResizer("newEventFrame",30); }
-//window.onload = function() { setFrameHeight('newEventFrame', .5,slope);}
-//window.onresize = function() { setFrameHeight('newEventFrame', .5,slope); }
+//window.onload = function() { adjFrmHt('newEventFrame', .5,slope);}
+//window.onresize = function() { adjFrmHt('newEventFrame', .5,slope); }
 	</script>
 </head>
 <html:form method='POST' action="<%=Constants.QUICKEVENTS_ACTION%>">

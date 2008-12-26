@@ -117,8 +117,8 @@ var myData = [<%int i;%><%for (i=0;i<(dataList.size()-1);i++){%>
 		var slope=-40;
 	}
 
-window.onload = function() { setFrameHeight('definedAnnotationsGrid', .8,slope);}
-window.onresize = function() { setFrameHeight('definedAnnotationsGrid', .8,slope); }
+window.onload = function() { adjFrmHt('definedAnnotationsGrid', .8,slope);}
+window.onresize = function() { adjFrmHt('definedAnnotationsGrid', .8,slope); }
 	</script>
 
 </head>

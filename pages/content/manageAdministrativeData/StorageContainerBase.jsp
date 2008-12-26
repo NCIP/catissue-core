@@ -94,14 +94,15 @@ if(navigator.userAgent.indexOf('Mac')<0)
 {
 	mac1=0;
 	pcnt=65;
+	window.onload = function() { setFrameHeight('SCTreeView', .7,slope);setFrameHeight('StorageContainerView', .7,slope); }
+	window.onresize = function() { setFrameHeight('SCTreeView', .7,slope); setFrameHeight('StorageContainerView', .7,slope); }
 }
-window.onload = function() { elementHt('SCTreeView',(pcnt+mac1)); elementHt('StorageContainerView', (pcnt+mac1)); }
-window.onresize = function() { elementHt('SCTreeView',(pcnt+mac1)); elementHt('StorageContainerView', (pcnt+mac1)); }
+else
+{
+	window.onload = function() { elementHt('SCTreeView',(pcnt+mac1)); elementHt('StorageContainerView', (pcnt+mac1)); }
+	window.onresize = function() { elementHt('SCTreeView',(pcnt+mac1)); elementHt('StorageContainerView', (pcnt+mac1)); }
+}
 
-/*
-window.onload = function() { setFrameHeight('SCTreeView', .7,slope);setFrameHeight('StorageContainerView', .7,slope); }
-window.onresize = function() { setFrameHeight('SCTreeView', .7,slope); setFrameHeight('StorageContainerView', .7,slope); }
-*/
 </script>
 <table width="100%"  border="0" cellpadding="0" cellspacing="0" class="maintable">
     <tr>
