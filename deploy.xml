@@ -612,6 +612,21 @@
 	</delete>
 </target>
 	<!--Copy WAR and Configuration Files to JBOSS Directory-->
+	<target name="http_connection">
+	 <if>
+	   <and>
+		 <equals arg1="" arg2="${jboss.server.host}" />	
+		 <equals arg1="" arg2="${jboss.container.secure}"/>	
+		 <equals arg1="" arg2="${jboss.server.port}"/>
+		</and>		
+	 <then>
+	 	<replace file="${temp.dir}/catissuecore-properties/PrintServiceImplementor.properties">
+		<replacefilter token="http://localhost:8080/" value="https://${jboss.server.host}:${jboss.server.port}/" />
+		</replace>	
+	</then>	 
+	</if>				
+	</target>
+				
 	<target name="copy_files">
 		<echo message="Copying caTISSUECore Application Components..." />
 		<replace file="${temp.dir}/catissuecore-properties/caTissueCore_Properties.xml">
@@ -619,6 +634,7 @@
 			<replacefilter token="@@SENDEMAILFROM-EMAILADDRESS@@" value="${email.sendEmailFrom.emailAddress}" />
 			<replacefilter token="@@MAILSERVER-EMAILADDRESS@@" value="${email.mailServer}" />
 		</replace>
+		<antcall target="http_connection"/>
 		<copy todir="${jboss.server.url}/catissuecore-properties" overwrite="true">
 			<fileset dir="${temp.dir}/catissuecore-properties">
 				<include name="**/*" />
@@ -661,11 +677,7 @@
 		</copy>
 	</target>
 	<target name="deploy_ca_model_war">
-		<copy todir="${jboss.server.url}/deploy" overwrite="true" >
-		<fileset dir="${camodel.dir}">
-				<include name="**.*" />
-		</fileset>
-		</copy>
+		<antcall target="CopyCAModelWars"/>
 	</target>
 
 	<!--Target call for both fresh deployment and database creation-->
@@ -766,12 +778,11 @@
         </replace>
 		<antcall target="send_mail" />
 		<antcall target="config_jboss_files" />
-
-		<antcall target="CopyCAModelWars"/>
 		<delete dir="${temp.dir}" />
 	</target>
 
 	<target name="CopyCAModelWars">
+		<antcall target="assert" />
 		<antcall target="modifyDEWars">
 			<param name="warName" value="CA"/>
 		</antcall>
@@ -838,16 +849,15 @@
 				</fileset>
 			</war>
 		<echo>Copying ${warName}.war....</echo>
-		    <copy todir="${camodel.dir}" file="${temp.dir}/${warName}.war" overwrite="true" />
+	
+		<copy todir="${jboss.server.url}/deploy" file="${temp.dir}/${warName}.war" overwrite="true" />
 			<delete file="${temp.dir}/${warName}.war" />
 			<delete includeemptydirs="true">
 				<fileset dir="${temp.dir}/${warName}">
 					<include name="**/*" />
 				</fileset>
 			</delete>
-
-
-			<delete dir="${temp.dir}/${warName}" />
+		<delete dir="${temp.dir}/${warName}" />
 		</target>
 
 	<!--Target for deployment with jboss config-->
