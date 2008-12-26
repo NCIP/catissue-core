@@ -23,6 +23,7 @@
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/antiSpecAjax.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/GenericSpecimenDetailsTag.js"></script>
+
 <script language="JavaScript" type="text/javascript">
 	//window.parent.frames['SpecimenEvents'].location="ShowCollectionProtocol.do?pageOf=specimenEventsPage&operation=ViewSummary";
 	function ApplyToAll(object,type)
@@ -354,6 +355,7 @@ function updateSCDetails(msg)
 </script>
 </head>
 <body onload="UpdateCheckBoxStatus()">
+<script type="text/javascript" src="jss/wz_tooltip.js"></script>
 <script language="javascript" type="text/javascript">
 	${requestScope.refreshTree}
 </script>
@@ -362,7 +364,9 @@ function updateSCDetails(msg)
 		${requestScope.refreshTree}
 	</script>
 </logic:equal>
-
+<%
+String lbl = "Apply first to all";
+%>
 		<%@ include file="/pages/content/common/ActionErrors.jsp" %>
 		<logic:notEmpty name="messageKey">
 		<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
@@ -374,18 +378,18 @@ function updateSCDetails(msg)
 		<!-- Mandar : New Table design starts -->
 		<TABLE width="100%">
 		<TR>
-		<TD align="left" class="tr_bg_blue1" width="100%" colspan=3>
+		<TD align="left" class="tr_anti_hdrbg_blue" width="100%" colspan=3>
 		<TABLE width="100%">
 		<TR>
-			<TD align="left" class="tr_bg_blue1" width="${requestScope.sfCol}%">
+			<TD align="left" class="tr_anti_hdrbg_blue" width="${requestScope.sfCol}%">
 			<span class="blue_ar_b">
 				<bean:write name="viewSpecimenSummaryForm" property="title" />
 			</span>
 			</TD>
-			<TD class="tr_bg_blue1"  width=40%><span class="blue_ar_b">
-			<INPUT TYPE="button" value="Location: Apply First to All" onClick="ApplyToAll(this,'specimen')">
+			<TD class="tr_anti_hdrbg_blue"  width=40%>
+			<A class="black_ar" name="parent" HREF="#parent" onClick="ApplyToAll(this,'specimen')" onmouseover="Tip(' Apply first location to all')"><bean:message key="applytoall"/></A>
 			</TD>
-			<td class="tr_bg_blue1" scope="col" width="${requestScope.slCol}%">&nbsp;
+			<td nowrap class="tr_anti_hdrbg_blue" scope="col" width="${requestScope.slCol}%">&nbsp;
 			<logic:equal name="viewSpecimenSummaryForm" property="showCheckBoxes" value="true">
 					<input type="checkbox" name="chkAllSpecimen" onclick="ChangeCheckBoxStatus('specimen',this)"/>
 					<span class="blue_ar_b">
@@ -438,19 +442,19 @@ function updateSCDetails(msg)
 		
 		<logic:notEmpty name="viewSpecimenSummaryForm" property="derivedList" >
 		<TR>
-		<TD align="left" class="tr_bg_blue1" width="100%" colspan=3>
+		<TD align="left" class="tr_anti_hdrbg_blue" width="100%" colspan=3>
 		<TABLE width="100%">
 		<TR>
 
-			<TD colspan="1" align="left" class="tr_bg_blue1" width="${requestScope.fCol}%">
+			<TD colspan="1" align="left" class="tr_anti_hdrbg_blue" width="${requestScope.fCol}%">
 				<span class="blue_ar_b">	
 				<bean:message key="anticipatorySpecimen.DerivativeDetails"/>
 				</span>
 			</TD>
-			<TD class="tr_bg_blue1"  width=38%>
-			<INPUT TYPE="button" value="Location: Apply First to All" onClick="ApplyToAll(this,'derived')">
+			<TD class="tr_anti_hdrbg_blue"  width=38%>
+			<A class="black_ar" name="derived" HREF="#derived" onClick="ApplyToAll(this,'derived')" onmouseover="Tip(' Apply first location to all')"><bean:message key="applytoall"/></A>
 			</TD>
-			<td class="tr_bg_blue1" scope="col" width="${requestScope.lCol}%">&nbsp;
+			<td nowrap  class="tr_anti_hdrbg_blue" scope="col" width="${requestScope.lCol}%">&nbsp;
 			<logic:equal name="viewSpecimenSummaryForm" property="showCheckBoxes" value="true">
 					<input type="checkbox" name="chkAllDerived" onclick="ChangeCheckBoxStatus('derived',this)"/>
 					<span class="blue_ar_b">
@@ -472,19 +476,18 @@ function updateSCDetails(msg)
 		</logic:notEmpty>
 		<logic:notEmpty name="viewSpecimenSummaryForm" property="aliquotList" >
 		<TR>
-		<TD align="left" class="tr_bg_blue1" width="100%" colspan=3>
+		<TD align="left" class="tr_anti_hdrbg_blue" width="100%" colspan=3>
 		<TABLE width="100%">
 		<TR>
-			<TD colspan="1" align="left" class="tr_bg_blue1" width="${requestScope.fCol}%">
+			<TD colspan="1" align="left" class="tr_anti_hdrbg_blue" width="${requestScope.fCol}%">
 				<span class="blue_ar_b">	
 				<bean:message key="anticipatorySpecimen.AliquotDetails"/> 
 				</span>
 			</TD>
-			<TD class="tr_bg_blue1"  width=38%>
-			<INPUT TYPE="button" value="Location: Apply First to All"  onClick="ApplyToAll(this,'aliquot')">
+			<TD class="tr_anti_hdrbg_blue"  width=38%>
+			<A class="black_ar" name="aliquot" HREF="#aliquot" onClick="ApplyToAll(this,'aliquot')" onmouseover="Tip(' Apply first location to all')"><bean:message key="applytoall"/></A>
 			</TD>
-
-			<td class="tr_bg_blue1" scope="col" width="${requestScope.lCol}%">&nbsp;
+			<td nowrap  class="tr_anti_hdrbg_blue" scope="col" width="${requestScope.lCol}%">&nbsp;
 			<logic:equal name="viewSpecimenSummaryForm" property="showCheckBoxes" value="true">
 					<input type="checkbox" name="chkAllAliquot" onclick="ChangeCheckBoxStatus('aliquot',this)"/>
 					<span class="blue_ar_b">

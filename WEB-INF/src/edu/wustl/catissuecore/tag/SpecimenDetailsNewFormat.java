@@ -51,7 +51,7 @@ public class SpecimenDetailsNewFormat extends TagSupport
 		"Quantity",
 		"Concentration",
 		"Location",
-		"Collected",
+		"Collected"
 	};
 
 	public static final String [] COLUMN_LABELS = {
@@ -61,7 +61,7 @@ public class SpecimenDetailsNewFormat extends TagSupport
 	"anticipatorySpecimen.Quantity", 
 	"anticipatorySpecimen.Concentration", 
 	"anticipatorySpecimen.Location", 
-	"anticipatorySpecimen.Collected", 
+	"anticipatorySpecimen.Collected" 
 	};
 
 	// ----------- Mandar : 2Dec08 for New UI format start -----------------------------
@@ -90,7 +90,7 @@ public class SpecimenDetailsNewFormat extends TagSupport
 	"anticipatorySpecimen.Quantity", 
 	"anticipatorySpecimen.Concentration", 
 	"anticipatorySpecimen.Location", 
-	"anticipatorySpecimen.Collected", 
+	"anticipatorySpecimen.Collected" 
 	};
 
 	public static final String [] H2COL_LBLS = {
@@ -929,6 +929,10 @@ public class SpecimenDetailsNewFormat extends TagSupport
 			sb.append("<input type=\"hidden\" name=\""+nV[4]+"\" value=\""+nV[5]+"\" id=\""+nV[4]+"\">");
 			sb.append("<input type=\"hidden\" name=\""+nV[6]+"\" value=\""+nV[7]+"\" id=\""+nV[6]+"\">");
 			sb.append("<input type=\"hidden\" name=\""+nV[8]+"\" value=\""+nV[9]+"\" id=\""+nV[8]+"\">");
+			
+			nV = get1EleDetAt(7,specimen,elementNamePrefix);
+			sb.append("<input type=\"hidden\" name=\""+nV[0]+"\" value=\""+nV[1]+"\" id=\""+nV[0]+"\">"); 
+
 
 		}
 	}

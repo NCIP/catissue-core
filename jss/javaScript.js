@@ -1317,7 +1317,7 @@ var window_Viewport = {
 /////////////////////////
 /////////////////////////
 
-function setFrameHeight(frameId, h ,slope) 
+function adjFrmHt(frameId, h ,slope) 
 {
 	if ( document.getElementById && !(document.all) ) {
 	var frameObj = document.getElementById(frameId);
@@ -1335,7 +1335,7 @@ function setFrameHeight(frameId, h ,slope)
 	}
 
 }
-/*
+
 function setFrameHeight(frameId, h ,slope) {
     if ( document.getElementById && !(document.all) ) {
         var frameObj = document.getElementById(frameId);
@@ -1353,4 +1353,3 @@ function setFrameHeight(frameId, h ,slope) {
         }
 	}
 }
-*/
