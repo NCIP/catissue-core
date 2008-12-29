@@ -213,17 +213,25 @@ public class SpecimenAutoStorageContainer {
 				if(specimenDataBean.getReadOnly())
 				{
 					storageValue = specimenDataBean.getSelectedContainerName()+":"+specimenDataBean.getPositionDimensionOne()+" ,"+specimenDataBean.getPositionDimensionTwo();
+					storageContainerIds.add(storageValue);
+					counter++;
 				}
-				else if(!storageContainerIds.contains(storageValue))
-				{													
-					specimenDataBean.setContainerId(String.valueOf(sc.getId()));
-					specimenDataBean.setSelectedContainerName(stName);
-					specimenDataBean.setPositionDimensionOne(posOne);
-					specimenDataBean.setPositionDimensionTwo(posTwo);
+				else
+				{
+					if(!storageContainerIds.contains(storageValue))
+					{													
+						specimenDataBean.setContainerId(String.valueOf(sc.getId()));
+						specimenDataBean.setSelectedContainerName(stName);
+						specimenDataBean.setPositionDimensionOne(posOne);
+						specimenDataBean.setPositionDimensionTwo(posTwo);
+						storageContainerIds.add(storageValue);
+						counter++;
+					}
+					else
+					{
+						continue;
+					}
 				}
-				storageContainerIds.add(storageValue);
-				counter++;									
-
 			}
 		}
 		return counter;
