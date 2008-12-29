@@ -612,7 +612,7 @@
 	</delete>
 </target>
 	<!--Copy WAR and Configuration Files to JBOSS Directory-->
-	<target name="http_connection">
+	<target name="Configure_Printservice">
 	 <if>
 	   <and>
 		 <equals arg1="" arg2="${jboss.server.host}" />	
@@ -634,7 +634,7 @@
 			<replacefilter token="@@SENDEMAILFROM-EMAILADDRESS@@" value="${email.sendEmailFrom.emailAddress}" />
 			<replacefilter token="@@MAILSERVER-EMAILADDRESS@@" value="${email.mailServer}" />
 		</replace>
-		<antcall target="http_connection"/>
+		<antcall target="Configure_Printservice"/>
 		<copy todir="${jboss.server.url}/catissuecore-properties" overwrite="true">
 			<fileset dir="${temp.dir}/catissuecore-properties">
 				<include name="**/*" />
