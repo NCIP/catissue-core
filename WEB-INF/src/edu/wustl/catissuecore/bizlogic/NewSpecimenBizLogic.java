@@ -1600,7 +1600,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 				Integer pos2 = specimen.getSpecimenPosition().getPositionDimensionTwo();
 				String containerName = specimen.getSpecimenPosition().getStorageContainer().getName();
 				
-			/*	if(id!=null)
+				if(id!=null)
 				{
 					storageValue = StorageContainerUtil.getStorageValueKey(null, id.toString(), pos1, pos2);
 				}
@@ -1617,7 +1617,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 					Object[] arguments = {specimen.getLabel(),containerName,pos1,pos2};
 					String errorMsg=Constants.CONTAINER_ERROR_MSG;
 					throw new DAOException(MessageFormat.format(errorMsg, arguments));
-				}*/
+				}
 			}
 		}
 	}
