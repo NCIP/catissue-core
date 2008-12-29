@@ -213,7 +213,7 @@ public class SpecimenAutoStorageContainer {
 				if(specimenDataBean.getReadOnly())
 				{
 					storageValue = specimenDataBean.getSelectedContainerName()+":"+specimenDataBean.getPositionDimensionOne()+" ,"+specimenDataBean.getPositionDimensionTwo();
-					storageContainerIds.add(storageValue);
+					k--;
 					counter++;
 				}
 				else
