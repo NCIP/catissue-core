@@ -277,7 +277,10 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 		specimen.setExternalIdentifierCollection(specimenDataBean.getExternalIdentifierCollection());
 		specimen.setBiohazardCollection(specimenDataBean.getBiohazardCollection());
 		specimen.setSpecimenCollectionGroup(specimenDataBean.getSpecimenCollectionGroup());
-		specimen.setCreatedOn(specimenDataBean.getCorresSpecimen().getCreatedOn());
+		if(specimenDataBean.getCorresSpecimen()!=null)
+		{
+			specimen.setCreatedOn(specimenDataBean.getCorresSpecimen().getCreatedOn());
+		}
 		
 		specimenDataBean.setCorresSpecimen(specimen);
 	}

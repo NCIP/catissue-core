@@ -450,7 +450,10 @@ public class FlexInterface
 						{
 							spDataBean.setBarCode(spBean.specimenBarcode);
 						}
-
+						if (spDataBean.getCorresSpecimen()!=null && spBean.creationDate != null )
+						{
+							spDataBean.getCorresSpecimen().setCreatedOn(spBean.creationDate);
+						}
 						if (spBean.quantity != null && !spBean.quantity.toString().equals(spDataBean.getQuantity()))
 						{
 							spDataBean.setQuantity(spBean.quantity.toString());
@@ -982,6 +985,7 @@ public class FlexInterface
 		specimenDataBean.setId(sp.getId());
 		specimenDataBean.setType(sp.getSpecimenType());
 		specimenDataBean.setStorageContainerForSpecimen("Auto");
+		specimenDataBean.setCorresSpecimen(sp); 
 		specimenDataBean.setQuantity(String.valueOf(sp.getInitialQuantity()));
 		specimenDataBean.setClassName(sp.getClassName());
 		specimenDataBean.setBarCode(sp.getBarcode());
