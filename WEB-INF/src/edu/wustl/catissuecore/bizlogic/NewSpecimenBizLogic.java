@@ -961,6 +961,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 				//To assign storage locations to anticipated specimen
 				if(specimenOld.getCollectionStatus().equals("Pending")&&specimen.getCollectionStatus().equals("Collected")&&specimen.getSpecimenPosition()!=null)
 				{
+					storageContainerIds.clear();
 					allocatePositionForSpecimen(specimen);
 					setStorageLocationToNewSpecimen(dao, specimen, sessionDataBean, true);
 					persistentSpecimen.setSpecimenPosition(specimen.getSpecimenPosition());
