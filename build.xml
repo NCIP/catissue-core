@@ -967,6 +967,7 @@
             <fileset dir="${lib.dir}">
             	<include name="commonpackage.jar"/>
             	<include name="shippingtracking.jar"/>
+            	<include name="washu-commons.jar"/>
             </fileset>
 			<fileset dir="${temp.dir}">
 	            	<include name="catissuecore.jar"/>
@@ -977,6 +978,7 @@
 	            <fileset dir="${lib.dir}">
 	            	<include name="commonpackage.jar"/>
 	            	<include name="shippingtracking.jar"/>
+					<include name="washu-commons.jar"/>
 	            </fileset>
 				<fileset dir="${temp.dir}">
 		            	<include name="catissuecore.jar"/>
@@ -987,6 +989,7 @@
             <fileset dir="${lib.dir}">
             	<include name="commonpackage.jar"/>
 				<include name="shippingtracking.jar"/>
+				<include name="washu-commons.jar"/>
             </fileset>
 			 <fileset dir="${temp.dir}">
 	            	<include name="catissuecore.jar"/>
@@ -1000,6 +1003,7 @@
 			<fileset dir="${lib.dir}">
             	<include name="commonpackage.jar"/>
 				<include name="shippingtracking.jar"/>
+				<include name="washu-commons.jar"/>
             </fileset>
         </copy>
 		
