@@ -765,7 +765,10 @@
 			</elseif>
 		</if>
 		<!-- configure titli.properties -->
-		 <antcall target="configure_titli" /> 
+		 <antcall target="configure_titli" >
+		 	<param name="tempPath" value="${temp.dir}/catissuecore/WEB-INF/classes"/>
+			<param name="mysqlDriver" value="org.gjt.mm.mysql.Driver"/>
+		</antcall>
 		
 		<!-- Integrate shippingtracking application, if shippingtracking.zip present in root -->
 		<antcall target="st_integrate_app" />
@@ -1941,7 +1944,7 @@ Thanking You,
 
 	<!-- Configure titli.properties according to properties in caTissueInstall.properties and other set properties -->
 	<target name="configure_titli">
-		<replace dir="${temp.dir}/catissuecore/WEB-INF/classes" propertyfile="caTissueInstall.properties">
+		<replace dir="${tempPath}" propertyfile="caTissueInstall.properties">
 			<include name="titli.properties" />
 			<replacefilter token="@@username@@" value="${database.username}" />
 			<replacefilter token="@@password@@" value="${database.password}" />
@@ -1953,9 +1956,9 @@ Thanking You,
 		<if>
 			<equals arg1="mysql" arg2="${database.type}" />
 			<then>
-				<replace dir="${temp.dir}/catissuecore/WEB-INF/classes" propertyfile="caTissueInstall.properties">
+				<replace dir="${tempPath}" propertyfile="caTissueInstall.properties">
 					<include name="titli.properties" />
-					<replacefilter token="@@databasedriver@@" value="${mysql.driver.string}" />
+					<replacefilter token="@@databasedriver@@" value="${mysqlDriver}" />
 					<replacefilter token="@@databaseurl@@" value="jdbc:mysql://${database.host}:${database.port}/${database.name}" />
 				</replace>
 				<echo message="${database.type} ${database.name}" />
@@ -1963,7 +1966,7 @@ Thanking You,
 			<elseif>
 				<equals arg1="oracle" arg2="${database.type}" />
 				<then>
-					<replace dir="${temp.dir}/catissuecore/WEB-INF/classes" propertyfile="caTissueInstall.properties">
+					<replace dir="${tempPath}" propertyfile="caTissueInstall.properties">
 						<include name="titli.properties" />
 						<replacefilter token="@@databaseurl@@" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" />
 						<replacefilter token="@@databasedriver@@" value="${oracle.driver.string}" />
@@ -1974,7 +1977,7 @@ Thanking You,
 			<elseif>
 				<equals arg1="mssqlserver" arg2="${database.type}" />
 				<then>
-					<replace dir="${temp.dir}/catissuecore/WEB-INF/classes" propertyfile="caTissueInstall.properties">
+					<replace dir="${tempPath}" propertyfile="caTissueInstall.properties">
 						<include name="titli.properties" />
 						<replacefilter token="@@databaseurl@@" value="jdbc:sqlserver://${database.host}:${database.port};databaseName=${database.name};" />
 						<replacefilter token="@@databasedriver@@" value="${mssqlserver.driver.string}" />
@@ -3042,4 +3045,29 @@ Thanking You,
 	
 		<!-- Associating forms/entities with CPs  - end -->
 		
+		<!-- Indexing tables for TiTLi - start-->
+	
+	<target name="runTitliIndexer" >
+		<property name="mysql.driver" value="com.mysql.jdbc.Driver" ></property>
+		<echo message="Indexing tables for TiTLi search....." />
+		<property name="tempTiTLi" value="${basedir}/tempTiTLi"></property>
+		<unwar src="${base.dir}/catissuecore.war" dest="${tempTiTLi}" />
+		
+		<antcall target="configure_titli" >
+			<param name="tempPath" value="${tempTiTLi}/WEB-INF/classes" />
+			<param name="mysqlDriver" value="${mysql.driver}" />
+		</antcall>
+		
+		<java classname="TitliIndexer"  fork="true" maxmemory="512m">
+				<classpath>
+					<pathelement location="${tempTiTLi}/WEB-INF/classes"/>
+					<fileset dir="${tempTiTLi}/WEB-INF/lib">
+							<include name="**/*.jar"/>
+					</fileset>
+				</classpath>
+		</java>
+		<delete dir="${tempTiTLi}"></delete>
+	</target>
+
+	<!-- Indexing tables for TiTLi - end-->
 </project>
