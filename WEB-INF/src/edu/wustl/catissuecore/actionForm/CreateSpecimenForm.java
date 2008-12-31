@@ -28,7 +28,7 @@ import edu.wustl.common.util.logger.Logger;
  * from Create Specimen webpage.
  * @author aniruddha_phadnis
  */
-public class CreateSpecimenForm extends SpecimenForm implements Cloneable
+public class CreateSpecimenForm extends SpecimenForm implements Cloneable,IPrinterTypeLocation
 {   
     /**
      * Identifier of the Parent Speciemen.

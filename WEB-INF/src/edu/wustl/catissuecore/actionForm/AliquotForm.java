@@ -36,7 +36,7 @@ import edu.wustl.common.util.global.Validator;
  * This Class is used to encapsulate all the request parameters passed from Aliquot.jsp page.
  * @author aniruddha_phadnis
  * */
-public class AliquotForm extends AbstractActionForm
+public class AliquotForm extends AbstractActionForm implements IPrinterTypeLocation
 {
 	/**
      * An label of a specimen.

@@ -44,7 +44,7 @@ import edu.wustl.common.util.logger.Logger;
  * all the request parameters passed from New SpecimenCollectionGroup webpage.
  * @author ajay_sharma
  */
-public class SpecimenCollectionGroupForm extends AbstractActionForm implements ConsentTierData
+public class SpecimenCollectionGroupForm extends AbstractActionForm implements ConsentTierData,IPrinterTypeLocation
 {
 	/**
      * Name : Virender Mehta

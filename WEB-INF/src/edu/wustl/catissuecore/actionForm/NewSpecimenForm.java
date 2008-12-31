@@ -42,7 +42,7 @@ import edu.wustl.common.util.logger.Logger;
  * from New Specimen webpage.
  * @author aniruddha_phadnis
  */
-public class NewSpecimenForm extends SpecimenForm implements ConsentTierData
+public class NewSpecimenForm extends SpecimenForm implements ConsentTierData,IPrinterTypeLocation
 {
 
    //Consent Tracking Module (Virender Mehta)

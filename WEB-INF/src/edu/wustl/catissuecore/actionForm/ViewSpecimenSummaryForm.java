@@ -21,7 +21,8 @@ import edu.wustl.catissuecore.bean.SpecimenDetailsInfo;
  * @author abhijit_naik
  *
  */
-public class ViewSpecimenSummaryForm extends ActionForm implements SpecimenDetailsInfo {
+public class ViewSpecimenSummaryForm extends ActionForm implements SpecimenDetailsInfo,IPrinterTypeLocation
+{
 	
 	/**
 	 * Unique Serial verson uid.
