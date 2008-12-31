@@ -91,15 +91,7 @@ public class SpecimenLabelPrinterImpl implements LabelPrinter {
 				dataMap.put("id",obj.getId().toString());
 				dataMap.put("label",label);
 				dataMap.put("barcode",barcode);
-				if(printerType.equals(""))
-				{
-					printerType = " ";				   
-				}
 				dataMap.put("printerType",printerType);
-				if(printerLocation.equals(""))
-				{
-					printerLocation = " ";				    
-				}
 				dataMap.put("printerLocation",printerLocation);
 				listMap.add(dataMap);
 			}
