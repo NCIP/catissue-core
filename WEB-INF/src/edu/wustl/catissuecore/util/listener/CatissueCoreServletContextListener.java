@@ -1,5 +1,5 @@
 /*
- * $Name: 1.41.2.41 $
+ * $Name: 1.41.2.41.2.1 $
  *
  * */
 package edu.wustl.catissuecore.util.listener;
@@ -158,29 +158,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 	 */
 	private void initTitliIndex()
 	{
-		try
-		{
-			TitliInterface titli = Titli.getInstance();
-			TitliResultGroup.isTitliConfigured = true;
-//			String dbName = titli.getDatabases().keySet().toArray(new String[0])[0];
-//			Name name = new Name(dbName);
-//			File dbIndexLocation = IndexUtility.getIndexDirectoryForDatabase(name);
-			
-			Name dbName = titli.getDatabases().keySet().toArray(new Name[0])[0];
-			File dbIndexLocation = IndexUtility.getIndexDirectoryForDatabase(dbName);
-
-
-			if(!dbIndexLocation.exists())
-			{
-				titli.index();
-			}
-
-		}
-		catch (TitliException e)
-		{
-			logger.debug("Exception occured while initialising TiTLi Search");
-			e.printStackTrace();
-		}
+		TitliResultGroup.isTitliConfigured = true;
 	}
 
 	/**
