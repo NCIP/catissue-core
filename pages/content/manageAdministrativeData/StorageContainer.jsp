@@ -9,8 +9,11 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
 <%@ page import="java.util.*"%>
+<%@ page import="java.io.*"%>
+<%@ page import="edu.wustl.common.util.global.ApplicationProperties" %>
 <%@ page import="edu.wustl.common.util.tag.ScriptGenerator" %>
 <%@ include file="/pages/content/common/AdminCommonCode.jsp" %>
+<%@ include file="/pages/content/common/AutocompleterCommon.jsp" %>
 <%@ page language="java" isELIgnored="false"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <script src="jss/script.js" type="text/javascript"></script>
@@ -22,6 +25,7 @@
         String operation = (String) request.getAttribute(Constants.OPERATION);
 		//String containerNumber=(String)request.getAttribute("ContainerNumber");
         String formName;
+        String printAction ="printStorageContainer";
 		//List siteForParent = (List)request.getAttribute("siteForParentList");
 		String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
 		String exceedsMaxLimit = (String)request.getAttribute(Constants.EXCEEDS_MAX_LIMIT);
@@ -35,6 +39,7 @@
         else
         {
             formName = Constants.STORAGE_CONTAINER_ADD_ACTION;
+            printAction ="printStorageContainer";
             readOnlyValue = false;
         }
 	
@@ -58,7 +63,8 @@
 				label1 = "Dimension One";
 				label2 = "Dimension Two";
 			}
-		}else
+		}
+		else
 		{
 			form = (StorageContainerForm)request.getAttribute("storageContainerForm");
 		}
@@ -133,7 +139,37 @@
 				}
 				/**-- Patch ends here --*/
 			}
+			//confirmDisable(action,formField);
+
+			// Added for print
+			var printFlag = document.getElementById("printCheckbox");
+			if(printFlag.checked)
+			{
+             	if(operation == "add")
+                {  
+   			    	setSubmitted('ForwardTo','<%=printAction%>','StorageContainerSearch');
+				}
+				else if(operation == "edit")
+				{
+					setSubmitted('ForwardTo','<%=printAction%>','StorageContainerEdit');
+				}
+			}
 			confirmDisable(action,formField);
+			document.getElementById('printCheckbox').checked = false;
+		}
+
+		function setSubmitted(forwardTo,printaction,nextforwardTo)
+		{
+			var printFlag = document.getElementById("printCheckbox");
+			if(printFlag.checked)
+			{	
+				setSubmittedForPrint(forwardTo,printaction,nextforwardTo);
+			}
+			else
+			{
+			  setSubmittedFor(forwardTo,nextforwardTo);
+			}
+		
 		}
 
 	/*	function onRadioButtonClick(element)
@@ -680,7 +716,8 @@ function addNewTypeAction(action)
 						<html:hidden property="submittedFor" value="<%=submittedFor%>"/>	
 						<input type="hidden" name="radioValue">
 						<html:hidden property="containerId" styleId="containerId"/>
-					
+						<html:hidden property="forwardTo" />
+						<html:hidden property="nextForwardTo" />
 				
 						<html:hidden property="id" />
 						<html:hidden property="typeName"/>
@@ -1026,10 +1063,31 @@ function addNewTypeAction(action)
 						</td>
 					</tr>
 					 </table></div></td>
-                    </tr>
-					<tr >
-                        <td colspan="5" class="bottomtd"></td>
-                     </tr>
+
+                      <tr>
+						<td class="dividerline" colspan="5"><span class="black_ar"></td>
+					</tr>
+
+                    <tr>
+                     <td> 
+					  <table>
+					    <tr>
+						  <td colspan="1" width="20%" nowrap>
+							<html:checkbox styleId="printCheckbox" property="printCheckbox" value="true" onclick="showPriterTypeLocation()">
+								<span class="black_ar">
+									<bean:message key="print.checkboxLabel"/>
+								</span>
+							</html:checkbox>
+						 </td>						
+	<!--  Added for displaying  printer type and location -->
+						 <td>
+					   	    <%@ include file="/pages/content/common/PrinterLocationTypeComboboxes.jsp" %>
+			 			 </td>
+						</tr>
+                       </table>
+                      </td> 
+					 </tr>	
+
 					<tr>                        
 					<!-- delete button added for disabling the objects :Nitesh 
 						<td colspan="3" class="buttonbg"></td> -->
@@ -1050,6 +1108,7 @@ function addNewTypeAction(action)
 									</html:button>
 					          		</logic:equal>
                            </td>
+                                   					     
 				   		</tr>
 				</table>
 				
@@ -1062,4 +1121,7 @@ function addNewTypeAction(action)
     </tr>
 	</table>
 </html:form>
+<script language="JavaScript" type="text/javascript">
+showPriterTypeLocation();
+</script>
 </body>

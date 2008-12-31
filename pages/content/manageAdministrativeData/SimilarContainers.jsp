@@ -15,13 +15,15 @@
 <%@ page import="java.util.*" %>
 <%@ page import="java.lang.Integer" %>
 <%@ page import="edu.wustl.common.util.tag.ScriptGenerator" %>
+<%@ include file="/pages/content/common/AutocompleterCommon.jsp" %>
 
 <%
         //String operation = (String) request.getAttribute(Constants.OPERATION);
 		//String containerNumber=(String)request.getAttribute("ContainerNumber");
 		//List siteForParent = (List)request.getAttribute("siteForParentList");
 		Object obj = request.getAttribute("storageContainerForm");
-		
+        //Added for printing
+		String printAction ="printStorageContainer";
 		String label1 = null;
 		String label2 = null;
 		
@@ -110,6 +112,12 @@
 			var action = document.forms[0].action; //"<%=Constants.CREATE_SIMILAR_CONTAINERS_ACTION%>";
 			action = action + "?pageOf="+"<%=Constants.PAGEOF_CREATE_SIMILAR_CONTAINERS%>"+"&operation=add&menuSelected=7";
 			document.forms[0].action = action
+			//Added for printing
+			var printFlag = document.getElementById("printCheckbox");
+			if(printFlag.checked)
+			{
+				setSubmittedForPrint('ForwardTo','<%=printAction%>','success');
+			}
 			document.forms[0].submit;			
 		}
 		
@@ -343,6 +351,9 @@
 			<html:hidden property="noOfContainers" value="<%=noOfContainers%>" />
 			<html:hidden property="typeName"/>
 	
+  			<html:hidden property="submittedFor" value=""/>	
+			<html:hidden property="forwardTo" value=""/>
+			<html:hidden property="nextForwardTo" />
   	
   	
 			<html:hidden property="similarContainerMapValue(checkedButton)" value="<%=checkButtonStatus%>"/>
@@ -737,11 +748,9 @@
 
 						</td>
 						</tr>			
-									
-								   
-								</table>	
-							</td>
-						</tr>		   
+						</table>	
+					  </td>
+					</tr>		   
 	  			
 	   	
 					  <%
@@ -749,8 +758,30 @@
 						} //For
 					  %>
 
-			<tr>
-                <td colspan="4" class="buttonbg">
+                     <tr>
+						<td class="dividerline" colspan="5"><span class="black_ar"></td>
+					</tr>
+
+                   <tr>
+                     <table>
+					   <tr>
+					    <td colspan="1" width="20%" nowrap>
+							<html:checkbox styleId="printCheckbox" property="printCheckbox" value="true" onclick="showPriterTypeLocation()">
+								<span class="black_ar">
+									<bean:message key="print.checkboxLabel"/>
+							</span>
+					       </html:checkbox>
+					    </td>							
+	<!--  Added for displaying  printer type and location -->
+					    <td>
+					   	    <%@ include file="/pages/content/common/PrinterLocationTypeComboboxes.jsp" %>
+			 		   </td>
+				     </tr>
+				   </table>
+              	  </tr>	
+
+			  <tr>
+                <td colspan="6" class="buttonbg">
                 <html:submit styleClass="blue_ar_b" onclick="onClick(this)">
                 <bean:message key="buttons.submit"/></html:submit>
                 </td>
@@ -782,4 +813,7 @@
 %>
 </table>
 </html:form>
+<script language="JavaScript" type="text/javascript">
+showPriterTypeLocation();
+</script>
 </body>

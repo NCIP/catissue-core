@@ -599,22 +599,27 @@
 								<span class="black_ar">
 								</td>
 								</tr>
-								<tr colspan="3">
-								<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">	
+								<tr>
+								<td colspan="3" valign="middle">
+								<table>
+								 <tr>
+								  <td  nowrap  width="20%" colspan="1">
+								   <logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">	
+								 		<html:checkbox styleId="printCheckbox" property="printCheckbox" value="true" onclick="showPriterTypeLocation()">
+										<span class="black_ar">
+											<bean:message key="print.checkboxLabel"/>
+										</span>
+										</html:checkbox>
+									</logic:notEqual>								
+                                 </td>
 								
-											<td colspan="1" valign="center" nowrap  width="16%">
-													<html:checkbox styleId="printCheckbox" property="printCheckbox" value="true" onclick="showPriterTypeLocation()">
-														<span class="black_ar">
-															<bean:message key="print.checkboxLabel"/>
-														</span>
-														</html:checkbox>
-											</td>
-								</logic:notEqual>
 	<!--  Added for displaying  printer type and location -->
-							 <td colspan="2">
-					   			<%@ include file="/pages/content/common/PrinterLocationTypeComboboxes.jsp" %>
-			 				 </td>
-        					
+							    <td colspan="2">
+					   			   <%@ include file="/pages/content/common/PrinterLocationTypeComboboxes.jsp" %>
+			 				    </td>
+							    </tr>
+								</table>
+        					   </td>
 							</tr>	
 			<!--  End : Displaying   printer type and location -->		
 								 
