@@ -1713,7 +1713,7 @@ PUBLIC
 			<forward name="pageOfAliquot" path="/CPQueryAliquots.do?pageOf=pageOfAliquot&amp;CPQuery=true&amp;menuSelected=15" />
 			<forward name="pageOfCreateAliquot" path="/CPQueryCreateAliquots.do?pageOf=pageOfCreateAliquot&amp;operation=add&amp;menuSelected=15&amp;buttonClicked=submit&amp;parentSpecimenId=-1&amp;CPQuery=CPQuery" />
 			<forward name="sameCollectionGroup" path="/QuerySpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimenCPQuery&amp;menuSelected=15" />
-			<forward name="newSpecimenEdit" path="/QuerySpecimenSearch.do?operation=search&amp;pageOf=pageOfNewSpecimenCPQuery&amp;id=0" />						
+			<forward name="newSpecimenEdit" path="/QuerySpecimenSearch.do?operation=search&amp;pageOf=pageOfNewSpecimenCPQuery&amp;id=0" />
 		</action>		
 
 		<action path="/CPQueryPrintAliquotSummary"
@@ -1736,7 +1736,15 @@ PUBLIC
 			<forward name="orderDetails" path="/RequestDetails.do" />
 			<forward name="newSpecimenEdit" path="/QuerySpecimenSearch.do?operation=search&amp;pageOf=pageOfNewSpecimenCPQuery&amp;id=0" />
 		</action>
-				
+		
+		<!-- Added for Storage container printing  -->
+		<action path="/printStorageContainer"
+				type="edu.wustl.catissuecore.action.PrintAction" scope="request">
+				<forward name="StorageContainerSearch" path="/StorageContainerSearch.do?pageOf=pageOfStorageContainer" />
+				<forward name="StorageContainerEdit" path="/StorageContainer.do?operation=edit&amp;pageOf=pageOfStorageContainer&amp;menuSelected=7" />
+				<forward name="success" path="/pages/content/manageAdministrativeData/SimilarContainersList.jsp" />
+		</action>			
+	
 		<!--print Actions ends-->
 		<!--Forgot Password Actions Begins-->
 		<action path="/ForgotPassword"
@@ -2054,7 +2062,7 @@ PUBLIC
 			<forward name="success" path="/StorageTypeSearch.do?pageOf=pageOfStorageType" />
 			<forward name="failure" path="/StorageType.do?operation=add&amp;pageOf=pageOfStorageType&amp;menuSelected=6" />
 			<forward name="storageContainer" path="/OpenStorageContainer.do?operation=add&amp;pageOf=pageOfStorageType" />
-		</action>
+			</action>
 		
 		<action path="/StorageTypeEdit"
 			type="edu.wustl.common.action.CommonAddEditAction"
@@ -2108,6 +2116,7 @@ PUBLIC
 			<!--forward name="success" path="/StorageContainer.do?operation=edit&amp;pageOf=pageOfStorageContainer&amp;menuSelected=7" /-->
 			<forward name="success" path="/StorageContainerSearch.do?pageOf=pageOfStorageContainer" />
 			<forward name="failure" path="/StorageContainer.do?operation=add&amp;pageOf=pageOfStorageContainer&amp;menuSelected=7" />
+			<forward name="printStorageContainer" path="/printStorageContainer.do" />
 		</action>
 		
 		<action path="/StorageContainerEdit"
@@ -2118,6 +2127,7 @@ PUBLIC
 			scope="request">
 			<forward name="success" path="/StorageContainer.do?operation=edit&amp;pageOf=pageOfStorageContainerEdit&amp;menuSelected=7" />
 			<forward name="failure" path="/StorageContainer.do?operation=edit&amp;pageOf=pageOfStorageContainerEdit&amp;menuSelected=7" />
+			<forward name="printStorageContainer" path="/printStorageContainer.do" />
 		</action>
 		
 		<action path="/StorageContainerSearch"
@@ -3999,6 +4009,8 @@ PUBLIC
 		<!--forward name="success" path="/StorageContainer.do?operation=edit&amp;pageOf=pageOfStorageContainer&amp;menuSelected=7" /--> 
 		<forward name="success" path="/pages/content/manageAdministrativeData/SimilarContainersList.jsp" />
 		<forward name="failure" path="/SimilarContainerError.do?operation=add&amp;pageOf=pageOfCreateSimilarContainers&amp;error=true&amp;menuSelected=7" />
+		<!-- Added for printing -->
+		<forward name="printStorageContainer" path="/printStorageContainer.do" />
 	</action>
 	
 	<action path="/SimilarContainerError" type="edu.wustl.catissuecore.action.SimilarContainersAction" name="storageContainerForm" validate="false">
