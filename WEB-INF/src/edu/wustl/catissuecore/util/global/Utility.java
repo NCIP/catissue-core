@@ -36,6 +36,7 @@ import org.apache.struts.action.ActionForm;
 import org.hibernate.Session;
 
 import edu.common.dynamicextensions.entitymanager.EntityManagerConstantsInterface;
+import edu.wustl.catissuecore.actionForm.IPrinterTypeLocation;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
@@ -2309,4 +2310,16 @@ public class Utility extends edu.wustl.common.util.Utility {
 				protectionElementNames[1]);
 		return isAuthorized;
 	}
+	public static void setDefaultPrinterTypeLocation(IPrinterTypeLocation form)
+	 {
+		 if(form.getPrinterLocation() == null)
+		 {
+		   form.setPrinterLocation((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_PRINTER_LOCATION));
+		 }
+		 if(form.getPrinterType() == null)
+		 {
+		   form.setPrinterType((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_PRINTER_TYPE));
+		 }
+	 }
+	
 }
