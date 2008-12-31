@@ -186,13 +186,16 @@ public class SimilarContainersAction extends SecureAction
 		
 		if(Constants.SITE.equals(selectedParentContainer))
 		{
-			Object siteObject = ibizLogic.retrieve(Site.class.getName(), new Long(similarContainersForm.getSiteId()));
-			if (siteObject != null)
+			if(siteId!=-1)
 			{
-				Site site = (Site) siteObject;
-				similarContainersForm.setSiteName(site.getName());
-				siteName = site.getName();
-				siteId = site.getId().longValue();
+				Object siteObject = ibizLogic.retrieve(Site.class.getName(), new Long(siteId));
+				if (siteObject != null)
+				{
+					Site site = (Site) siteObject;
+					similarContainersForm.setSiteName(site.getName());
+					siteName = site.getName();
+					siteId = site.getId().longValue();
+				}
 			}
 		}
 		//Suman: for bug 8904

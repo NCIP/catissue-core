@@ -457,7 +457,7 @@ public class CreateSpecimenAction extends SecureAction
 	{
 		
 		setConstantValues(request);
-		setDefaultPrinterTypeLocation(form);
+		Utility.setDefaultPrinterTypeLocation(form);
 		String pageOf = (String)request.getAttribute(Constants.PAGEOF);
 		setPageData1(request,  form);
 		setPageData2(request, form, pageOf);
@@ -465,18 +465,6 @@ public class CreateSpecimenAction extends SecureAction
 		
 		setNComboData(request, form);
 		setXterIdData(request, form);
-	}
-	//added for bug 10750
-	private void setDefaultPrinterTypeLocation(CreateSpecimenForm form)
-	{
-		if(form.getPrinterLocation() == null)
-		 {
-		   form.setPrinterLocation((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_PRINTER_LOCATION));
-		 }
-		 if(form.getPrinterType() == null)
-		 {
-		   form.setPrinterType((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_PRINTER_TYPE));
-		 }
 	}
 	private void setPageData1(HttpServletRequest request, CreateSpecimenForm form)
 	{

@@ -35,7 +35,6 @@ import edu.wustl.catissuecore.exception.CatissueException;
 import edu.wustl.catissuecore.util.IdComparator;
 import edu.wustl.catissuecore.util.SpecimenDetailsTagUtil;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
@@ -547,22 +546,9 @@ public class ViewSpecimenSummaryAction extends Action {
 		
 		summaryForm.setAliquotList(getSpecimenList(nestedAliquots));
 		summaryForm.setDerivedList(getSpecimenList(nestedDerives));
-		setDefaultPrinterTypeLocation(summaryForm);
+		Utility.setDefaultPrinterTypeLocation(summaryForm);
 		
 	}
-	//added for bug 10750
-	private void setDefaultPrinterTypeLocation(ViewSpecimenSummaryForm form)
-	{
-		if(form.getPrinterLocation() == null)
-		 {
-		   form.setPrinterLocation((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_PRINTER_LOCATION));
-		 }
-		 if(form.getPrinterType() == null)
-		 {
-		   form.setPrinterType((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_PRINTER_TYPE));
-		 }
-	}
-
 	private void getNestedChildSpecimens(Collection topChildCollection,
 			Collection nestedAliquoteCollection, Collection nestedDerivedCollection) {
 

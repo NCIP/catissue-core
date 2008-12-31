@@ -29,6 +29,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.json.JSONObject;
 
+
 import edu.wustl.catissuecore.actionForm.StorageContainerForm;
 import edu.wustl.catissuecore.bean.StorageContainerBean;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
@@ -41,6 +42,7 @@ import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
@@ -246,8 +248,10 @@ public class StorageContainerAction extends SecureAction
 		request.setAttribute("parentContainerSelected", storageContainerForm.getParentContainerSelected());
 		session.removeAttribute(Constants.STORAGE_CONTAINER_SESSION_BEAN);
 		session.removeAttribute("isPageFromStorageType");
+		Utility.setDefaultPrinterTypeLocation(storageContainerForm);
 		return mapping.findForward((String) request.getParameter(Constants.PAGEOF));
 	}
+	
 	private void setStorageType(HttpServletRequest request, StorageContainerForm storageContainerForm,HttpSession session)
 	{
 		//*************Start Bug:1938  ForwardTo implementation *************
@@ -257,7 +261,7 @@ public class StorageContainerAction extends SecureAction
 			forwardToHashMap =(HashMap)session.getAttribute("forwardToHashMap");
 			session.removeAttribute("forwardToHashMap");
 		}
-		if (forwardToHashMap != null)
+		if (forwardToHashMap != null && forwardToHashMap.size() >0)
 		{
 			Long storageTypeId = (Long) forwardToHashMap.get("storageTypeId");
 			Logger.out.debug("storageTypeId found in forwardToHashMap========>>>>>>" + storageTypeId);

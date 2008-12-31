@@ -1146,21 +1146,8 @@ public class NewSpecimenAction extends SecureAction
 		{
 			specimenForm.setPathologicalStatus((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_PATHOLOGICAL_STATUS));
 		}
-		setDefaultPrinterTypeLocation(specimenForm);
+		Utility.setDefaultPrinterTypeLocation(specimenForm);
 	}
-	//added for bug 10750
-	 private void setDefaultPrinterTypeLocation(NewSpecimenForm form)
-	 {
-		 if(form.getPrinterLocation() == null)
-		 {
-		   form.setPrinterLocation((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_PRINTER_LOCATION));
-		 }
-		 if(form.getPrinterType() == null)
-		 {
-		   form.setPrinterType((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_PRINTER_TYPE));
-		 }
-	 }
-	
 	 /**
 		 * Name : Ashish Gupta
 		 * Reviewer Name : Sachin Lale 

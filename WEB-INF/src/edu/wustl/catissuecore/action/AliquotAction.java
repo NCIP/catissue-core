@@ -223,7 +223,7 @@ public class AliquotAction extends SecureAction
 		String pageOf = request.getParameter(Constants.PAGEOF);
 		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 		SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
-		setDefaultPrinterTypeLocation(aliquotForm);
+		Utility.setDefaultPrinterTypeLocation(aliquotForm);
 		/**
 		 *  Following code ensures that 
 		 *  1. Label/Barcode, Aliquot Count, Quantity per Aliquot submitted on click of Submit button 
@@ -595,18 +595,6 @@ public class AliquotAction extends SecureAction
 		setParentSpecimenInRequest(request);
 		setPageData(request, pageOf,aliquotForm);
 		return mapping.findForward(pageOf);
-	}
-	//added for bug 10750
-	private void setDefaultPrinterTypeLocation(AliquotForm form)
-	{
-		if(form.getPrinterLocation() == null)
-		 {
-		   form.setPrinterLocation((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_PRINTER_LOCATION));
-		 }
-		 if(form.getPrinterType() == null)
-		 {
-		   form.setPrinterType((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_PRINTER_TYPE));
-		 }
 	}
 	/**
 	 * This method checks whether the specimen with given label exists or not.

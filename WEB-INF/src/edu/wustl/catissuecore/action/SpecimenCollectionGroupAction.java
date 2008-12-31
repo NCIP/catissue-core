@@ -639,7 +639,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 			CatissueCoreCacheManager.getInstance().addObjectToCache("scgEntityId", scgEntityId);
 		}
 		request.setAttribute("scgEntityId", scgEntityId);
-		setDefaultPrinterTypeLocation(specimenCollectionGroupForm);
+		Utility.setDefaultPrinterTypeLocation(specimenCollectionGroupForm);
 		/**
 		 * Name : Ashish Gupta
 		 * Reviewer Name : Sachin Lale 
@@ -752,18 +752,6 @@ public class SpecimenCollectionGroupAction extends SecureAction
 		//Setting the List for drop downs
 		setEventsListInRequest(request);
 	}
-	private void setDefaultPrinterTypeLocation(SpecimenCollectionGroupForm form)
-	{
-		if(form.getPrinterLocation() == null)
-		 {
-		   form.setPrinterLocation((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_PRINTER_LOCATION));
-		 }
-		 if(form.getPrinterType() == null)
-		 {
-		   form.setPrinterType((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_PRINTER_TYPE));
-		 }
-	}
-
 	/**
 	 * @param request
 	 */
