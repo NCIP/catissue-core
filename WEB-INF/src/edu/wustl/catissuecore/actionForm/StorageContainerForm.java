@@ -42,7 +42,7 @@ import edu.wustl.common.util.logger.Logger;
  * This Class is used to encapsulate all the request parameters passed from StorageType.jsp page.
  * @author aniruddha_phadnis
  * */
-public class StorageContainerForm extends AbstractActionForm
+public class StorageContainerForm extends AbstractActionForm implements IPrinterTypeLocation
 {
 
 	private static final long serialVersionUID = 1234567890L;
@@ -199,6 +199,16 @@ public class StorageContainerForm extends AbstractActionForm
 	private Map similarContainersMap = new HashMap();
 
 	private String specimenOrArrayType;
+	
+	private String printCheckbox;
+
+	private String printerType;
+
+	private String printerLocation;
+	
+	private String nextForwardTo;
+	
+	
 	/**
 	 * No argument constructor for StorageTypeForm class 
 	 */
@@ -1297,5 +1307,38 @@ public class StorageContainerForm extends AbstractActionForm
 	{
 		this.specimenOrArrayType = specimenOrArrayType;
 	}
+
+	public String getNextForwardTo() {
+		return nextForwardTo;
+	}
+
+	public void setNextForwardTo(String nextForwardTo) {
+		this.nextForwardTo = nextForwardTo;
+	}
+
+	public String getPrintCheckbox() {
+		return printCheckbox;
+	}
+
+	public void setPrintCheckbox(String printCheckbox) {
+		this.printCheckbox = printCheckbox;
+	}
+
+	public String getPrinterLocation() {
+		return printerLocation;
+	}
+
+	public void setPrinterLocation(String printerLocation) {
+		this.printerLocation = printerLocation;
+	}
+
+	public String getPrinterType() {
+		return printerType;
+	}
+
+	public void setPrinterType(String printerType) {
+		this.printerType = printerType;
+	}
+
 
 }

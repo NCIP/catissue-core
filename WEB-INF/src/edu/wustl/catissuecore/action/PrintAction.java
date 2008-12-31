@@ -23,9 +23,11 @@ import org.apache.struts.action.ActionMessages;
 
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.printserviceclient.LabelPrinter;
 import edu.wustl.catissuecore.printserviceclient.LabelPrinterFactory;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.dao.AbstractDAO;
 import edu.wustl.common.dao.DAOFactory;
@@ -53,146 +55,192 @@ public class PrintAction extends Action
 	 * @throws ServletException servlet exception
 	 * @return value for ActionForward object
      */
-    public ActionForward execute(ActionMapping mapping, ActionForm form,
-            HttpServletRequest request, HttpServletResponse response)
-            throws IOException, ServletException
-    {
+	public ActionForward execute(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response)
+	throws IOException, ServletException
+	{
 
-    	String nextforwardTo = request.getParameter("nextForwardTo");
-    	String printerType = request.getParameter("printerType");
-    	String printerLocation=request.getParameter("printerLocation");
-    	SessionDataBean objBean = (SessionDataBean) request.getSession().getAttribute("sessionData");
-    	String strIpAddress = objBean.getIpAddress();
-    	try 
-    	{
-    		gov.nih.nci.security.authorization.domainobjects.User objUser = getUserObject(request,objBean);
-    		HashMap forwardToPrintMap = (HashMap)request.getAttribute("forwardToPrintMap");
-    		//SCG Label printing
-    		if (forwardToPrintMap != null && forwardToPrintMap.size() >0 && forwardToPrintMap.get("specimenCollectionGroupId")!=null)
+		String nextforwardTo = request.getParameter("nextForwardTo");
+		String printerType = request.getParameter("printerType");
+		String printerLocation=request.getParameter("printerLocation");
+		if(printerType==null || printerType.equals(""))
+		{
+			printerType = " ";
+		}
+		if(printerLocation==null || printerLocation.equals(""))
+		{
+			printerLocation = " ";
+		}
+		SessionDataBean objBean = (SessionDataBean) request.getSession().getAttribute("sessionData");
+		String strIpAddress = objBean.getIpAddress();
+		try 
+		{
+			gov.nih.nci.security.authorization.domainobjects.User objUser = getUserObject(request,objBean);
+			HashMap forwardToPrintMap = (HashMap)request.getAttribute("forwardToPrintMap");
+			//SCG Label printing
+			if (forwardToPrintMap != null && forwardToPrintMap.size() >0 && forwardToPrintMap.get("specimenCollectionGroupId")!=null)
 			{
-    				String scgId = (String) forwardToPrintMap.get("specimenCollectionGroupId");
-    				AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
-    				SpecimenCollectionGroup objSCG =null;
-        			boolean printStauts  =false;
-    				try
-    				{
-    					dao.openSession(null);
-    					Object object = dao.retrieve(SpecimenCollectionGroup.class.getName(), new Long(scgId));
-
-    					if (object != null)
-    					{
-    						objSCG = (SpecimenCollectionGroup) object;
-    					}
-    					
-    					LabelPrinter  labelPrinter= LabelPrinterFactory.getInstance("specimencollectiongroup");
-    					printStauts = labelPrinter.printLabel(objSCG, strIpAddress, objUser,printerType,printerLocation);
-        				
-    				}
-    				catch (DAOException exception)
-    				{
-    					throw exception;
-    				}
-    				finally
-    				{
-    					dao.commit();
-    					dao.closeSession();
-    				}
-    				setStatusMessage(printStauts,request);
-    				
-    				
-				}
-				//For Specimen 
-    			//Check for Specimen type of object.Retrieve object based on Id and call printerimpl class
-		    	if (forwardToPrintMap != null && forwardToPrintMap.size() >0 && forwardToPrintMap.get("specimenId")!=null)
+				String scgId = (String) forwardToPrintMap.get("specimenCollectionGroupId");
+				AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+				SpecimenCollectionGroup objSCG =null;
+				boolean printStauts  =false;
+				try
 				{
-					String specimenId = (String) forwardToPrintMap.get("specimenId");
-					AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
-    				boolean printStauts  =false;
-    				try
-    				{
-    					dao.openSession(null);
-    					Specimen objSpecimen = (Specimen)dao.retrieve(Specimen.class.getName(), new Long(specimenId));
+					dao.openSession(null);
+					Object object = dao.retrieve(SpecimenCollectionGroup.class.getName(), new Long(scgId));
 
-    					LabelPrinter  labelPrinter= LabelPrinterFactory.getInstance("specimen");
-    		        	printStauts = labelPrinter.printLabel(objSpecimen, strIpAddress, objUser,printerType,printerLocation);
-        				
-    				}
-    				catch (DAOException exception)
-    				{
-    					throw exception;
-    				}
-    				finally
-    				{
-    					dao.commit();
-    					dao.closeSession();
-    				}
-		        	setStatusMessage(printStauts,request);
+					if (object != null)
+					{
+						objSCG = (SpecimenCollectionGroup) object;
+					}
+
+					LabelPrinter  labelPrinter= LabelPrinterFactory.getInstance("specimencollectiongroup");
+					printStauts = labelPrinter.printLabel(objSCG, strIpAddress, objUser,printerType,printerLocation);
+
 				}
-		    	
-		    	//nextforwardTo = printAliquotLabel(form, request, nextforwardTo,objBean);
-		    	//nextforwardTo - coming null now CPQueryPrintSpecimenEdit
-		    	//For multiple specimen page
-		    	if(forwardToPrintMap != null &&  forwardToPrintMap.size() >0  && request.getAttribute("printMultiple")!=null  &&   request.getAttribute("printMultiple").equals("1"))
-		    	{
-		    		
-	    			
-		    		LinkedHashSet specimenDomainCollection =  (LinkedHashSet) forwardToPrintMap.get("printMultipleSpecimen");
-		    		Iterator iterator = specimenDomainCollection.iterator();
-		    		List<AbstractDomainObject> specimenList = new ArrayList();
-		    		while (iterator.hasNext()) 
-		    		  {
-		    			Specimen objSpecimen = (Specimen) iterator.next();
-		    			specimenList.add(objSpecimen);
-//		    			
-		    				    			
-		    		 }
-		    		LabelPrinter  labelPrinter= LabelPrinterFactory.getInstance("specimen");
-			        boolean printStauts = labelPrinter.printLabel(specimenList, strIpAddress, objUser,printerType,printerLocation);
-			    	setStatusMessage(printStauts,request);
-			        
-			        if(request.getAttribute("pageOf")!=null)
-			        	nextforwardTo = request.getAttribute("pageOf").toString();
-			        else
-			        	nextforwardTo = Constants.SUCCESS;
-		    	}
-//		    	For Anti. specimen page
-		    	if(forwardToPrintMap != null &&  forwardToPrintMap.size() >0  && request.getAttribute("AntiSpecimen")!=null  &&   request.getAttribute("AntiSpecimen").equals("1"))
-		    	{
-		    		
-	    			
-		    		HashSet specimenDomainCollection =  (HashSet) forwardToPrintMap.get("printAntiSpecimen");
-		    		Iterator iterator = specimenDomainCollection.iterator();
-		    		List<AbstractDomainObject> specimenList = new ArrayList();
-		    		while (iterator.hasNext()) 
-		    		  {
-		    			Specimen objSpecimen = (Specimen) iterator.next();
-		    			specimenList.add(objSpecimen);		    				    			
-		    		 }
-		    		LabelPrinter  labelPrinter= LabelPrinterFactory.getInstance("specimen");
-			        boolean printStauts = labelPrinter.printLabel(specimenList, strIpAddress, objUser,printerType,printerLocation);
-			    	setStatusMessage(printStauts,request);
-			        
-			       	nextforwardTo = "printAntiSuccess";
-		    	}	    	
-		    	
-    	
-    		}
-    		catch (Exception e) 
-    		{
-    			//Any other exception
-    			//e.printStackTrace();
-        		ActionMessages messages =(ActionMessages) request.getAttribute(MESSAGE_KEY);
-        		if(messages == null)
-        		{
-        			messages = new ActionMessages();		
-        			
-        		}
-    			messages.add(ActionErrors.GLOBAL_MESSAGE, new ActionMessage("print.failure"));
-    			saveMessages(request,messages);
-    		}
-    	
-        return mapping.findForward(nextforwardTo);
-    }
+				catch (DAOException exception)
+				{
+					throw exception;
+				}
+				finally
+				{
+					dao.commit();
+					dao.closeSession();
+				}
+				setStatusMessage(printStauts,request);    				
+
+			}
+			//For Specimen 
+			//Check for Specimen type of object.Retrieve object based on Id and call printerimpl class
+			if (forwardToPrintMap != null && forwardToPrintMap.size() >0 && forwardToPrintMap.get("specimenId")!=null)
+			{
+				String specimenId = (String) forwardToPrintMap.get("specimenId");
+				AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+				boolean printStauts  =false;
+				try
+				{
+					dao.openSession(null);
+					Specimen objSpecimen = (Specimen)dao.retrieve(Specimen.class.getName(), new Long(specimenId));
+
+					LabelPrinter  labelPrinter= LabelPrinterFactory.getInstance("specimen");
+					printStauts = labelPrinter.printLabel(objSpecimen, strIpAddress, objUser,printerType,printerLocation);
+
+				}
+				catch (DAOException exception)
+				{
+					throw exception;
+				}
+				finally
+				{
+					dao.closeSession();
+				}
+				setStatusMessage(printStauts,request);
+			}
+
+			//nextforwardTo = printAliquotLabel(form, request, nextforwardTo,objBean);
+			//nextforwardTo - coming null now CPQueryPrintSpecimenEdit
+			//For multiple specimen page
+			if(forwardToPrintMap != null &&  forwardToPrintMap.size() >0  && request.getAttribute("printMultiple")!=null  &&   request.getAttribute("printMultiple").equals("1"))
+			{
+
+
+				LinkedHashSet specimenDomainCollection =  (LinkedHashSet) forwardToPrintMap.get("printMultipleSpecimen");
+				Iterator iterator = specimenDomainCollection.iterator();
+				List<AbstractDomainObject> specimenList = new ArrayList();
+				while (iterator.hasNext()) 
+				{
+					Specimen objSpecimen = (Specimen) iterator.next();
+					specimenList.add(objSpecimen);
+				}
+				LabelPrinter  labelPrinter= LabelPrinterFactory.getInstance("specimen");
+				boolean printStauts = labelPrinter.printLabel(specimenList, strIpAddress, objUser,printerType,printerLocation);
+				setStatusMessage(printStauts,request);
+
+				if(request.getAttribute("pageOf")!=null)
+					nextforwardTo = request.getAttribute("pageOf").toString();
+				else
+					nextforwardTo = Constants.SUCCESS;
+			}
+			//		    	For Anti. specimen page
+			if(forwardToPrintMap != null &&  forwardToPrintMap.size() >0  && request.getAttribute("AntiSpecimen")!=null  &&   request.getAttribute("AntiSpecimen").equals("1"))
+			{
+
+
+				HashSet specimenDomainCollection =  (HashSet) forwardToPrintMap.get("printAntiSpecimen");
+				Iterator iterator = specimenDomainCollection.iterator();
+				List<AbstractDomainObject> specimenList = new ArrayList();
+				while (iterator.hasNext()) 
+				{
+					Specimen objSpecimen = (Specimen) iterator.next();
+					specimenList.add(objSpecimen);		    				    			
+				}
+				LabelPrinter  labelPrinter= LabelPrinterFactory.getInstance("specimen");
+				boolean printStauts = labelPrinter.printLabel(specimenList, strIpAddress, objUser,printerType,printerLocation);
+				setStatusMessage(printStauts,request);
+
+				nextforwardTo = "printAntiSuccess";
+			}	
+			//added for Storage Container Printing 
+			if(forwardToPrintMap != null &&  forwardToPrintMap.size() >0 && forwardToPrintMap.get("StorageContainerObjID")!= null )
+			{
+				AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+				boolean printStauts = false;		    		
+				List similarContainerList = (List)request.getAttribute("similarContainerList");
+				LabelPrinter  labelPrinter= LabelPrinterFactory.getInstance("storagecontainer");
+				if(similarContainerList==null || similarContainerList.size()==0)
+				{
+					String containerId = (String) forwardToPrintMap.get("StorageContainerObjID");
+					if(containerId!=null)
+					{
+						NameValueBean bean = new NameValueBean(containerId,containerId);
+						similarContainerList = new ArrayList();
+						similarContainerList.add(bean);
+					} 
+				}
+				try
+				{
+					dao.openSession(null);
+					List<AbstractDomainObject> containerList = new ArrayList<AbstractDomainObject>();
+					for(int i=0;i<similarContainerList.size();i++)
+					{
+						NameValueBean bean = (NameValueBean) similarContainerList.get(i);
+						String value = bean.getValue();
+						Object object = dao.retrieve(StorageContainer.class.getName(),new Long(value));
+						if (object != null)
+						{
+							StorageContainer containerObj = (StorageContainer) object;
+							containerList.add(containerObj);
+						}
+					}
+					printStauts = labelPrinter.printLabel(containerList, strIpAddress, objUser,printerType,printerLocation);
+				}
+				catch (DAOException exception)
+				{
+					throw exception;
+				}
+				finally
+				{
+					dao.closeSession();
+				}
+				setStatusMessage(printStauts,request);
+			}    	
+		}
+		catch (Exception e) 
+		{
+			//Any other exception
+			//e.printStackTrace();
+			ActionMessages messages =(ActionMessages) request.getAttribute(MESSAGE_KEY);
+			if(messages == null)
+			{
+				messages = new ActionMessages();		
+
+			}
+			messages.add(ActionErrors.GLOBAL_MESSAGE, new ActionMessage("print.failure"));
+			saveMessages(request,messages);
+		}
+
+		return mapping.findForward(nextforwardTo);
+	}
 
 	/**
 	 * @param form
