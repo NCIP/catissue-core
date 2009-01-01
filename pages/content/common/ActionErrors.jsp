@@ -1,4 +1,5 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ page language="java" isELIgnored="false"%>
 <c:if test="${requestScope['org.apache.struts.action.ERROR'] != null }">
 	<table border="0" cellspacing="0" cellpadding="3">
 		<tr>
