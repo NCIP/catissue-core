@@ -16,7 +16,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 
 import edu.wustl.catissuecore.actionForm.CollectionProtocolRegistrationForm;
-import edu.wustl.catissuecore.bean.ConsentBean;
 import edu.wustl.catissuecore.util.ConsentUtil;
 import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.catissuecore.util.global.Constants;
