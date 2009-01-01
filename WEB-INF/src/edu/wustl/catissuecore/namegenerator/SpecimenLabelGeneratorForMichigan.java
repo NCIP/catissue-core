@@ -127,7 +127,7 @@ public class SpecimenLabelGeneratorForMichigan extends DefaultSpecimenLabelGener
 		
 		Specimen objSpecimen = (Specimen)obj;
 
-		if(!labelCountTreeMap.containsKey(objSpecimen) &&	objSpecimen.getLineage().equals(Constants.NEW_SPECIMEN))				
+		if(objSpecimen.getLineage().equals(Constants.NEW_SPECIMEN))				
 		{
 			String siteName = objSpecimen.getSpecimenCollectionGroup().getGroupName();
 			currentLabel = currentLabel + 1;
@@ -143,17 +143,16 @@ public class SpecimenLabelGeneratorForMichigan extends DefaultSpecimenLabelGener
 			//Modification suggested for Michigan only -as per catissuecore 1.2.0.1
 			String label = siteName + "_" + nextNumber;
 			objSpecimen.setLabel(label);
-			labelCountTreeMap.put(objSpecimen,0);
 		}
 	
 	
-		else if(!labelCountTreeMap.containsKey(objSpecimen) && objSpecimen.getLineage().equals(Constants.ALIQUOT))				
+		else if(objSpecimen.getLineage().equals(Constants.ALIQUOT))				
 		{
 			setNextAvailableAliquotSpecimenlabel(objSpecimen.getParentSpecimen(),objSpecimen);
 		}
 	
 	
-		else if(!labelCountTreeMap.containsKey(objSpecimen) && objSpecimen.getLineage().equals(Constants.DERIVED_SPECIMEN))				
+		else if(objSpecimen.getLineage().equals(Constants.DERIVED_SPECIMEN))				
 		{
 			setNextAvailableDeriveSpecimenlabel(objSpecimen.getParentSpecimen(),objSpecimen);
 		}
@@ -184,31 +183,27 @@ public class SpecimenLabelGeneratorForMichigan extends DefaultSpecimenLabelGener
 
 		long aliquotCount = parentObject.getChildSpecimenCollection().size();
 		specimenObject.setLabel(parentSpecimenLabel + "_" + (format((aliquotCount + 1), "00")));
-		labelCountTreeMap.put(specimenObject,0);
 	}
 
 	/**
-	 * This function is overridden as per Michgam requirement. 
+	 * This function is overridden as per Michigan requirement. 
 	 */
 	synchronized void setNextAvailableAliquotSpecimenlabel(AbstractSpecimen parentObject, Specimen specimenObject) 
 	{
 		
 		String parentSpecimenLabel = (String) ((Specimen) parentObject).getLabel();
-		long aliquotChildCount = 0;
-		if(labelCountTreeMap.containsKey(parentObject))
+		long aliquotChildCount = parentObject.getChildSpecimenCollection().size();	
+		Iterator itr = parentObject.getChildSpecimenCollection().iterator();
+		while(itr.hasNext())
 		{
-			 aliquotChildCount= Long.parseLong(labelCountTreeMap.get(parentObject).toString());	
+			Specimen spec = (Specimen)itr.next();
+			if(spec.getLabel()==null)
+			{
+				aliquotChildCount--;
+			}
 		}
-		else
-		{
-			// biz logic 
-			aliquotChildCount = parentObject.getChildSpecimenCollection().size();	
-			
-		}
-		specimenObject.setLabel( parentSpecimenLabel + "_"+ format((++aliquotChildCount), "00"));
-		labelCountTreeMap.put(parentObject,aliquotChildCount);	
-		labelCountTreeMap.put(specimenObject,0);
-		
+		aliquotChildCount++;
+		specimenObject.setLabel( parentSpecimenLabel + "_"+ format((aliquotChildCount), "00"));
 	}
 	
 }

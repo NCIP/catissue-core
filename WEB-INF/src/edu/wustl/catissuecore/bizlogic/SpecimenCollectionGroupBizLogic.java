@@ -178,12 +178,12 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 					{
 						Specimen cloneSpecimen = getCloneSpecimen(SpecimenRequirement, null, specimenCollectionGroup, userId);
 						//kalpana : bug #6224
-						if (edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl)
+					/*	if (edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl)
 						{
 							LabelGenerator specimenLableGenerator = LabelGeneratorFactory
 									.getInstance(Constants.SPECIMEN_LABEL_GENERATOR_PROPERTY_NAME);
 							specimenLableGenerator.setLabel(cloneSpecimen);
-						}
+						}*/
 						cloneSpecimen.setSpecimenCollectionGroup(specimenCollectionGroup);
 						cloneSpecimenCollection.add(cloneSpecimen);
 					}

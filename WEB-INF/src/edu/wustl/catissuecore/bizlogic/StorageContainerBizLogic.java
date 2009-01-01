@@ -100,7 +100,8 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 	 * @throws DAOException
 	 */
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean)
-			throws DAOException, UserNotAuthorizedException {
+			throws DAOException, UserNotAuthorizedException 
+	{
 		StorageContainer container = (StorageContainer) obj;
 		container.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
 
@@ -248,6 +249,10 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 				}
 			}
 			dao.insert(cont.getCapacity(), sessionDataBean, true, true);
+			if(cont.isFull()==null)
+			{
+				cont.setFull(true);
+			}
 			dao.insert(cont, sessionDataBean, true, true);
 
 			// Used for showing the success message after insert and using it

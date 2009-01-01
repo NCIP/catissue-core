@@ -14,6 +14,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
+import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.util.global.Constants;
 
@@ -130,7 +131,7 @@ public class SpecimenBarcodeGeneratorForMichigan extends DefaultSpecimenBarcodeG
 		
 		Specimen objSpecimen = (Specimen)obj;
 
-		if(!barcodeCountTreeMap.containsKey(objSpecimen) &&	objSpecimen.getLineage().equals(Constants.NEW_SPECIMEN))				
+		if(objSpecimen.getLineage().equals(Constants.NEW_SPECIMEN))				
 		{
 			String siteName = objSpecimen.getSpecimenCollectionGroup().getGroupName();
 			currentBarcode = currentBarcode + 1;
@@ -146,17 +147,16 @@ public class SpecimenBarcodeGeneratorForMichigan extends DefaultSpecimenBarcodeG
 			//Modification suggested for Michigan only -as per catissuecore 1.2.0.1
 			String barcode = siteName + "_" + nextNumber;
 			objSpecimen.setBarcode(barcode);
-			barcodeCountTreeMap.put(objSpecimen,0);
 		}
 	
 	
-		else if(!barcodeCountTreeMap.containsKey(objSpecimen) && objSpecimen.getLineage().equals(Constants.ALIQUOT))				
+		else if(objSpecimen.getLineage().equals(Constants.ALIQUOT))				
 		{
 			setNextAvailableAliquotSpecimenBarcode(objSpecimen.getParentSpecimen(),objSpecimen);
 		}
 	
 	
-		else if(!barcodeCountTreeMap.containsKey(objSpecimen) && objSpecimen.getLineage().equals(Constants.DERIVED_SPECIMEN))				
+		else if(objSpecimen.getLineage().equals(Constants.DERIVED_SPECIMEN))				
 		{
 			setNextAvailableDeriveSpecimenBarcode(objSpecimen.getParentSpecimen(),objSpecimen);
 		}
@@ -171,7 +171,7 @@ public class SpecimenBarcodeGeneratorForMichigan extends DefaultSpecimenBarcodeG
 				setBarcode(objChildSpecimen);
 			}
 			
-		}	
+		}
 		
 	}
 	
@@ -179,37 +179,32 @@ public class SpecimenBarcodeGeneratorForMichigan extends DefaultSpecimenBarcodeG
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.namegenerator.DefaultSpecimenBarcodeGenerator#setNextAvailableDeriveSpecimenBarcode(edu.wustl.catissuecore.domain.Specimen, edu.wustl.catissuecore.domain.Specimen)
 	 */
-	synchronized void setNextAvailableDeriveSpecimenBarcode(Specimen parentObject,Specimen specimenObject)
+	synchronized void setNextAvailableDeriveSpecimenBarcode(AbstractSpecimen parentObject,Specimen specimenObject)
 	{
-					
-		String parentSpecimenBarcode = (String) parentObject.getBarcode();				
+		String parentSpecimenBarcode = (String)((Specimen)parentObject).getBarcode();				
 		long aliquotCount = parentObject.getChildSpecimenCollection().size();
 		specimenObject.setBarcode(parentSpecimenBarcode + "_" + (format((aliquotCount + 1), "00")));
-		barcodeCountTreeMap.put(specimenObject,0);
 	}
 
 	/**
 	 * This function is overridden as per Michigan requirement. 
 	 */
-	synchronized void setNextAvailableAliquotSpecimenBarcode(Specimen parentObject, Specimen specimenObject) 
+	synchronized void setNextAvailableAliquotSpecimenBarcode(AbstractSpecimen parentObject, Specimen specimenObject) 
 	{
-		
-		String parentSpecimenBarcode = (String) parentObject.getBarcode();
+		String parentSpecimenBarcode = (String)((Specimen)parentObject).getBarcode();
 		long aliquotCount =  0;
-		if(barcodeCountTreeMap.containsKey(parentObject))
+		aliquotCount = parentObject.getChildSpecimenCollection().size();	
+		Iterator itr = parentObject.getChildSpecimenCollection().iterator();
+		while(itr.hasNext())
 		{
-			aliquotCount= Long.parseLong(barcodeCountTreeMap.get(parentObject).toString());	
+			Specimen spec = (Specimen)itr.next();
+			if(spec.getLabel()==null)
+			{
+				aliquotCount--;
+			}
 		}
-		else
-		{
-			// biz logic 
-			aliquotCount = parentObject.getChildSpecimenCollection().size();	
-			
-		}		
-		specimenObject.setBarcode( parentSpecimenBarcode + "_"+ format((++aliquotCount), "00"));
-		barcodeCountTreeMap.put(parentObject,aliquotCount);	
-		barcodeCountTreeMap.put(specimenObject,0);
-		
+		aliquotCount++;
+		specimenObject.setBarcode( parentSpecimenBarcode + "_"+ format((aliquotCount), "00"));
 	}
 	
 }

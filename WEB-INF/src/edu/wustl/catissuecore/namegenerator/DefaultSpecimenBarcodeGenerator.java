@@ -3,21 +3,20 @@ package edu.wustl.catissuecore.namegenerator;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
-
-import java.util.Collection;
-
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
 /**
  * This class  contains the default  implementation for Specimen Barcode generation.
  * @author falguni_sachde
@@ -110,58 +109,49 @@ public class DefaultSpecimenBarcodeGenerator implements BarcodeGenerator
         }
         return noOfRecords;
 	}
-
-	
-	
-	/**
-	 * Map of objects.
-	 */
-	Map barcodeCountTreeMap = new HashMap();
-	
 	
 	/**
 	 * @param parentObject
 	 * @param specimenObject
 	 */
-	 synchronized  void setNextAvailableAliquotSpecimenBarcode(AbstractSpecimen parentObject,Specimen specimenObject) {
-				
+	 synchronized  void setNextAvailableAliquotSpecimenBarcode(AbstractSpecimen parentObject,Specimen specimenObject) 
+	 {
 		String parentSpecimenBarcode = (String) ((Specimen)parentObject).getBarcode();
-		long aliquotChildCount = 0;
-		if(barcodeCountTreeMap.containsKey(parentObject))
-		{
-			 aliquotChildCount= Long.parseLong(barcodeCountTreeMap.get(parentObject).toString());	
-		}
-		else
-		{
-			// biz logic 
-			aliquotChildCount = parentObject.getChildSpecimenCollection().size();	
-			Iterator itr = parentObject.getChildSpecimenCollection().iterator();
-			while(itr.hasNext())
-			{
-				Specimen spec = (Specimen)itr.next();
-				if(spec.getLineage().equals(Constants.DERIVED_SPECIMEN))
-					aliquotChildCount--;
-			}
-			aliquotChildCount--;
-			
-		}
-		
+		long aliquotCount = parentObject.getChildSpecimenCollection().size();
+		aliquotCount = returnAliquotCount(parentObject, aliquotCount);
 		if(parentSpecimenBarcode!=null)
 		{
-			specimenObject.setBarcode( parentSpecimenBarcode + "_" + (++aliquotChildCount) );
+			specimenObject.setBarcode(parentSpecimenBarcode + "_" + (aliquotCount));
 		}
-		barcodeCountTreeMap.put(parentObject,aliquotChildCount);	
-		barcodeCountTreeMap.put(specimenObject,0);
+	}
+
+	/**
+	 * @param parentObject Parent Object
+	 * @param aliquotCount aliquot count
+	 * @return aliquotCount
+	 */
+	protected long returnAliquotCount(AbstractSpecimen parentObject, long aliquotCount)
+	{
+		Iterator itr = parentObject.getChildSpecimenCollection().iterator();
+		while(itr.hasNext())
+		{
+			Specimen spec = (Specimen)itr.next();
+			if(spec.getLineage().equals(Constants.DERIVED_SPECIMEN) || spec.getBarcode()==null)
+			{
+				aliquotCount--;
+			}
+		}
+		aliquotCount++;
+		return aliquotCount;
 	}
 	/**
 	 * @param parentObject
 	 * @param specimenObject
 	 */
-	synchronized void setNextAvailableDeriveSpecimenBarcode(AbstractSpecimen parentObject, Specimen specimenObject) {
-		
+	synchronized void setNextAvailableDeriveSpecimenBarcode(AbstractSpecimen parentObject, Specimen specimenObject) 
+	{
 		currentBarcode= currentBarcode+1;
 		specimenObject.setBarcode(currentBarcode.toString());
-		barcodeCountTreeMap.put(specimenObject,0);
 	}
 	
 	
@@ -169,25 +159,21 @@ public class DefaultSpecimenBarcodeGenerator implements BarcodeGenerator
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.namegenerator.BarcodeGenerator#setBarcode(edu.wustl.common.domain.AbstractDomainObject)
 	 */
-	synchronized public void setBarcode(Object obj) {
-		
+	synchronized public void setBarcode(Object obj) 
+	{
 		Specimen objSpecimen = (Specimen)obj;
-
-		if(!barcodeCountTreeMap.containsKey(objSpecimen) &&	objSpecimen.getLineage().equals(Constants.NEW_SPECIMEN))				
+		if(objSpecimen.getLineage().equals(Constants.NEW_SPECIMEN))				
 		{
 			currentBarcode= currentBarcode+1;
 			objSpecimen.setBarcode(currentBarcode.toString());
-			barcodeCountTreeMap.put(objSpecimen,0);
 		}
 	
-	
-		else if(!barcodeCountTreeMap.containsKey(objSpecimen) && objSpecimen.getLineage().equals(Constants.ALIQUOT))				
+		else if(objSpecimen.getLineage().equals(Constants.ALIQUOT))				
 		{
 			setNextAvailableAliquotSpecimenBarcode(objSpecimen.getParentSpecimen(),objSpecimen);
 		}
-	
-	
-		else if(!barcodeCountTreeMap.containsKey(objSpecimen) && objSpecimen.getLineage().equals(Constants.DERIVED_SPECIMEN))				
+		
+		else if(objSpecimen.getLineage().equals(Constants.DERIVED_SPECIMEN))				
 		{
 			setNextAvailableDeriveSpecimenBarcode(objSpecimen.getParentSpecimen(),objSpecimen);
 		}

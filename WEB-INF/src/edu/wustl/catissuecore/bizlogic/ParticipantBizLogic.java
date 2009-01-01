@@ -163,18 +163,19 @@ public class ParticipantBizLogic extends DefaultBizLogic
 	 * */
 	protected void postInsert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
-		updateCache(obj);
 		Participant participant = (Participant) obj;
 		Collection collectionProtocolRegistrationCollection = participant.getCollectionProtocolRegistrationCollection();
+		updateCache(obj);
 		Iterator itCollectionProtocolRegistrationCollection = collectionProtocolRegistrationCollection.iterator();
 		ParticipantRegistrationCacheManager participantRegCacheManager = new ParticipantRegistrationCacheManager();
 		while (itCollectionProtocolRegistrationCollection.hasNext())
 		{
 			CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) itCollectionProtocolRegistrationCollection
 					.next();
-			participantRegCacheManager.registerParticipant(collectionProtocolRegistration.getCollectionProtocol().getId(),
-					collectionProtocolRegistration.getParticipant().getId(), collectionProtocolRegistration.getProtocolParticipantIdentifier());
+			participantRegCacheManager.registerParticipant(collectionProtocolRegistration.getCollectionProtocol().getId().longValue(),
+					collectionProtocolRegistration.getParticipant().getId().longValue(), collectionProtocolRegistration.getProtocolParticipantIdentifier());
 		}
+		
 	}
 
 	/**
@@ -190,16 +191,13 @@ public class ParticipantBizLogic extends DefaultBizLogic
 			UserNotAuthorizedException
 	{
 
+		Participant participant = (Participant) currentObj;
+		Collection collectionProtocolRegistrationCollection = participant.getCollectionProtocolRegistrationCollection();
 		updateCache(currentObj);
-
 		//Added updation of Collection Protocol Registration
 		//(Abhishek Mehta)
 		CollectionProtocolRegistrationBizLogic cprBizLogic = new CollectionProtocolRegistrationBizLogic();
-
 		ParticipantRegistrationCacheManager participantRegCacheManager = new ParticipantRegistrationCacheManager();
-
-		Participant participant = (Participant) currentObj;
-		Collection collectionProtocolRegistrationCollection = participant.getCollectionProtocolRegistrationCollection();
 		Iterator itCollectionProtocolRegistrationCollection = collectionProtocolRegistrationCollection.iterator();
 
 		Participant oldparticipant = (Participant) oldObj;
@@ -213,7 +211,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 		while (itCollectionProtocolRegistrationCollection.hasNext())
 		{
 			collectionProtocolRegistration = (CollectionProtocolRegistration) itCollectionProtocolRegistrationCollection.next();
-			cpId = collectionProtocolRegistration.getCollectionProtocol().getId();
+			cpId = collectionProtocolRegistration.getCollectionProtocol().getId().longValue();
 
 			//getting Old cpr
 			if(cpId!=null)
@@ -221,7 +219,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 				oldCollectionProtocolRegistration = getCollectionProtocolRegistrationOld(cpId, oldcollectionProtocolRegistrationCollection);
 				if (oldCollectionProtocolRegistration == null)
 				{
-					participantId = collectionProtocolRegistration.getParticipant().getId();
+					participantId = collectionProtocolRegistration.getParticipant().getId().longValue();
 					protocolParticipantId = collectionProtocolRegistration.getProtocolParticipantIdentifier();
 
 					if (protocolParticipantId == null)
@@ -317,6 +315,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 						}
 					}
 				}*/
+				participant.setCollectionProtocolRegistrationCollection(null);
 				participantMap.put(participant.getId(), participant);
 			}
 		}

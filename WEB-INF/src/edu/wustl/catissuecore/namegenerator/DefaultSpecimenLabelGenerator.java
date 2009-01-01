@@ -4,15 +4,14 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
+import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
@@ -107,11 +106,6 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
         return noOfRecords;
 	}
 
-	/**
-	 * Map forr Tree base specimen entry 
-	 */
-	Map labelCountTreeMap = new HashMap();
-	
 	
 	/**
 	 * @param parentObject
@@ -120,40 +114,37 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 	synchronized  void setNextAvailableAliquotSpecimenlabel(Specimen parentObject,Specimen specimenObject) {
 				
 		String parentSpecimenLabel = (String) parentObject.getLabel();
-		long aliquotChildCount = 0;
-		if(labelCountTreeMap.containsKey(parentObject))
+		long aliquotCount = parentObject.getChildSpecimenCollection().size();
+		aliquotCount = aliquotCount(parentObject, aliquotCount);
+		specimenObject.setLabel( parentSpecimenLabel + "_" + (aliquotCount) );
+	}
+	/**
+	 * @param parentObject
+	 * @param aliquotCount
+	 * @return
+	 */
+	protected long aliquotCount(AbstractSpecimen parentObject, long aliquotCount)
+	{
+		Iterator itr = parentObject.getChildSpecimenCollection().iterator();
+		while(itr.hasNext())
 		{
-				 aliquotChildCount = Long.parseLong(labelCountTreeMap.get(parentObject).toString());
+			Specimen spec = (Specimen)itr.next();
+			if(spec.getLineage().equals(Constants.DERIVED_SPECIMEN) || spec.getLabel()==null)
+			{
+				aliquotCount--;
+			}
 		}
-		else
-		{
-				// biz logic 
-				aliquotChildCount = parentObject.getChildSpecimenCollection().size();
-				Iterator itr = parentObject.getChildSpecimenCollection().iterator();
-				while(itr.hasNext())
-				{
-					Specimen spec = (Specimen)itr.next();
-					if(spec.getLineage().equals(Constants.DERIVED_SPECIMEN))
-						aliquotChildCount--;
-				}
-				
-				aliquotChildCount--;
-				
-		}
-		
-		specimenObject.setLabel( parentSpecimenLabel + "_" + (++aliquotChildCount) );
-		labelCountTreeMap.put(parentObject,aliquotChildCount);	
-		labelCountTreeMap.put(specimenObject,0);
+		aliquotCount++;
+		return aliquotCount;
 	}
 	/**
 	 * @param parentObject
 	 * @param specimenObject
 	 */
-	synchronized void setNextAvailableDeriveSpecimenlabel(Specimen parentObject, Specimen specimenObject) {
-		
+	synchronized void setNextAvailableDeriveSpecimenlabel(Specimen parentObject, Specimen specimenObject)
+	{
 		currentLabel= currentLabel+1;
 		specimenObject.setLabel(currentLabel.toString());
-		labelCountTreeMap.put(specimenObject,0);
 	}
 	
 	
@@ -170,17 +161,16 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 			return;
 		}
 		
-		if(!labelCountTreeMap.containsKey(objSpecimen) && objSpecimen.getLineage().equals(Constants.NEW_SPECIMEN))				
+		if(objSpecimen.getLineage().equals(Constants.NEW_SPECIMEN))				
 		{
 			currentLabel ++;
 			objSpecimen.setLabel(currentLabel.toString());
-			labelCountTreeMap.put(objSpecimen,0);
 		}
-		else if(!labelCountTreeMap.containsKey(objSpecimen) && objSpecimen.getLineage().equals(Constants.ALIQUOT))				
+		else if(objSpecimen.getLineage().equals(Constants.ALIQUOT))				
 		{
 			this.setNextAvailableAliquotSpecimenlabel(parentSpecimen,objSpecimen);
 		}
-		else if(!labelCountTreeMap.containsKey(objSpecimen) && objSpecimen.getLineage().equals(Constants.DERIVED_SPECIMEN))				
+		else if(objSpecimen.getLineage().equals(Constants.DERIVED_SPECIMEN))				
 		{
 			setNextAvailableDeriveSpecimenlabel(parentSpecimen,objSpecimen);
 		}
@@ -195,7 +185,6 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 				setLabel(objChildSpecimen);
 			}
 		}	
-		
 	}
 
 	/* (non-Javadoc)

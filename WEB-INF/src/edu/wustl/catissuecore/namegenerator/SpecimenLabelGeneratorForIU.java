@@ -1,5 +1,7 @@
 package edu.wustl.catissuecore.namegenerator;
 
+import java.util.Iterator;
+
 import edu.wustl.catissuecore.domain.Specimen;
 
 /**
@@ -27,18 +29,16 @@ public class SpecimenLabelGeneratorForIU extends DefaultSpecimenLabelGenerator
 		
 
 		String parentSpecimenLabel = (String) parentObject.getLabel();
-		long aliquotChildCount = 0;
-		if(labelCountTreeMap.containsKey(parentObject))
+		long aliquotChildCount = parentObject.getChildSpecimenCollection().size();	
+		Iterator itr = parentObject.getChildSpecimenCollection().iterator();
+		while(itr.hasNext())
 		{
-			 aliquotChildCount= Long.parseLong(labelCountTreeMap.get(parentObject).toString());	
+			Specimen spec = (Specimen)itr.next();
+			if(spec.getLabel()==null)
+			{
+				aliquotChildCount--;
+			}
 		}
-		else
-		{
-		 
-			aliquotChildCount = parentObject.getChildSpecimenCollection().size();	
-			
-		}
-		
 		StringBuffer buffy = null;
 		StringBuffer prefixBuffy = new StringBuffer();
 		String sp = null;
@@ -49,17 +49,12 @@ public class SpecimenLabelGeneratorForIU extends DefaultSpecimenLabelGenerator
 			int dash = parentSpecimenLabel.lastIndexOf("-");
 			prefixBuffy.append(parentSpecimenLabel.substring(0, dash + 1));
 			sp = parentSpecimenLabel.substring(dash + 1, dash + 2);
-		
 			buffy = new StringBuffer();
 			buffy.append(prefixBuffy);
 			buffy.append(++aliquotChildCount);
 			buffy.append(determineSerumPlasma(sp, aliquotChildCount));
 			specimenObject.setLabel(buffy.toString());
-			labelCountTreeMap.put(parentObject,aliquotChildCount);	
-			labelCountTreeMap.put(specimenObject,0);	
 		}
-		
-	
 	}
 	
 	/**
