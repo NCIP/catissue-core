@@ -251,7 +251,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 			dao.insert(cont.getCapacity(), sessionDataBean, true, true);
 			if(cont.isFull()==null)
 			{
-				cont.setFull(true);
+				cont.setFull(false);
 			}
 			dao.insert(cont, sessionDataBean, true, true);
 
