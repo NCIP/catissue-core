@@ -1325,6 +1325,34 @@
 		<antcall target="st_deploy_db" />
 	</target>
 
+	<!-- Removing unnecessary PE Mysql-->
+	<target name="upgrade_mysql_from_Suite1.1_to_1.1p">
+		<echo message="Upgrading MySQL Database and removing unused Protection Element" />
+		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" >
+			<transaction src="${dbupgrade.sql.dir}/MySql/DBUpgrade_deleteStorageContainerPE.sql" />
+			<transaction>commit;</transaction>
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</sql>
+	</target>
+	
+	<!-- Removing unnecessary PE Oracle-->
+	<target name="upgrade_oracle_from_Suite1.1_to_1.1p">
+		<echo message="Upgrading Oracle Database and removing unused Protection Element" />
+			<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle" delimiter="/">
+					<transaction src="${dbupgrade.sql.dir}/Oracle/DBUpgrade_deleteStorageContainerPE.sql" />
+			   		<transaction>commit/</transaction>
+					<classpath>
+						<fileset dir="${lib.dir}">
+							<include name="*.jar" />
+						</fileset>
+					</classpath>
+			</sql>
+   </target>
+
 
 	<!--MySQL Database Upgradation -->
 	<target name="upgrade_mysql_from_Suite1.0_to_1.1">
@@ -1342,6 +1370,7 @@
 				</fileset>
 			</classpath>
 		</sql>
+		<antcall target="upgrade_mysql_from_Suite1.1_to_1.1p" />
 		<antcall target="insert_entity_group_metadata_mysql" />
 		<antcall target="upgrade_db_demodel_mysql" />
 
@@ -1380,7 +1409,7 @@
 				</fileset>
 			</classpath>
 		</sql>
-
+		<antcall target="upgrade_oracle_from_Suite1.1_to_1.1p" />
 		<antcall target="drop_and_create_sequences" />
 		<antcall target="insert_entity_group_metadata_oracle" />
 		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle" delimiter="/">
