@@ -389,7 +389,7 @@ public class SpecimenDetailsNewFormat extends TagSupport
 		}
 		if(dataListType.equalsIgnoreCase(dataListTypes[0]))
 		{	
-			xtra = 3;	
+			xtra = 6;	
 			isParentList = true;
 			pWd = 5;
 			cWd = 12;
@@ -779,7 +779,7 @@ public class SpecimenDetailsNewFormat extends TagSupport
 										+containerId +"','"+
 										specimenClassName +"','"+
 										cpId +"')" ;
-		  int scSize=12 +xtra;
+		  int scSize=16 +xtra;
 		  final String sid = specimen.getUniqueIdentifier();
 		  String isDisabled = ""; 
 		  

@@ -376,7 +376,7 @@ String lbl = "Apply first to all";
 
 		<html:form action="${requestScope.formAction}">		
 		<!-- Mandar : New Table design starts -->
-		<TABLE width="100%">
+		<TABLE width="100%" cellspacing="0" cellpadding="0">
 		<TR>
 		<TD align="left" class="tr_anti_hdrbg_blue" width="100%" colspan=3>
 		<TABLE width="100%">
@@ -387,13 +387,13 @@ String lbl = "Apply first to all";
 			</span>
 			</TD>
 			<TD class="tr_anti_hdrbg_blue"  width=40%>
-			<A class="black_ar" name="parent" HREF="#parent" onClick="ApplyToAll(this,'specimen')" onmouseover="Tip(' Apply first location to all')"><bean:message key="applytoall"/></A>
+			<A class="black_ar" name="parent" HREF="#parent" onClick="ApplyToAll(this,'specimen')" onmouseover="Tip(' Apply first location to all')"><bean:message key="aliquots.applyFirstToAll"/></A>
 			</TD>
 			<td nowrap class="tr_anti_hdrbg_blue" scope="col" width="${requestScope.slCol}%">&nbsp;
 			<logic:equal name="viewSpecimenSummaryForm" property="showCheckBoxes" value="true">
 					<input type="checkbox" name="chkAllSpecimen" onclick="ChangeCheckBoxStatus('specimen',this)"/>
 					<span class="blue_ar_b">
-					<bean:message key="anticipatorySpecimen.Created"/>
+					<bean:message key="anticipatorySpecimen.CollectAll"/>
 					</span>
 			</logic:equal>	
 			</td>
@@ -410,7 +410,7 @@ String lbl = "Apply first to all";
 			</tr>		
 		</logic:empty>
 		<TR>
-			<TD colspan="3" class="showhide">
+			<TD colspan="3">
 				<table border=0 width="100%">
 					<md:specDetFormat4  columnHeaderListName="columnHeaderList" formName="viewSpecimenSummaryForm" dataListName="specimenList" dataListType="Parent" columnListName="columnListName" isReadOnly="false" displayColumnListName="dispColumnsList" />
 				</table>
@@ -452,7 +452,7 @@ String lbl = "Apply first to all";
 				</span>
 			</TD>
 			<TD class="tr_anti_hdrbg_blue"  width=38%>
-			<A class="black_ar" name="derived" HREF="#derived" onClick="ApplyToAll(this,'derived')" onmouseover="Tip(' Apply first location to all')"><bean:message key="applytoall"/></A>
+			<A class="black_ar" name="derived" HREF="#derived" onClick="ApplyToAll(this,'derived')" onmouseover="Tip(' Apply first location to all')"><bean:message key="aliquots.applyFirstToAll"/></A>
 			</TD>
 			<td nowrap  class="tr_anti_hdrbg_blue" scope="col" width="${requestScope.lCol}%">&nbsp;
 			<logic:equal name="viewSpecimenSummaryForm" property="showCheckBoxes" value="true">
@@ -467,7 +467,7 @@ String lbl = "Apply first to all";
 		</TD>
 		</TR>
 		<TR>
-			<TD colspan="3" class="showhide">
+			<TD colspan="3">
 				<table border=0 width="100%">
 					<md:specDetFormat4  columnHeaderListName="subSpecimenColHeaderList" formName="viewSpecimenSummaryForm" dataListName="derivedList" dataListType="Derived" columnListName="columnListName" isReadOnly="false" displayColumnListName="subSpecdispColumnsList" />
 				</table>
@@ -485,7 +485,7 @@ String lbl = "Apply first to all";
 				</span>
 			</TD>
 			<TD class="tr_anti_hdrbg_blue"  width=38%>
-			<A class="black_ar" name="aliquot" HREF="#aliquot" onClick="ApplyToAll(this,'aliquot')" onmouseover="Tip(' Apply first location to all')"><bean:message key="applytoall"/></A>
+			<A class="black_ar" name="aliquot" HREF="#aliquot" onClick="ApplyToAll(this,'aliquot')" onmouseover="Tip(' Apply first location to all')"><bean:message key="aliquots.applyFirstToAll"/></A>
 			</TD>
 			<td nowrap  class="tr_anti_hdrbg_blue" scope="col" width="${requestScope.lCol}%">&nbsp;
 			<logic:equal name="viewSpecimenSummaryForm" property="showCheckBoxes" value="true">
@@ -500,7 +500,7 @@ String lbl = "Apply first to all";
 		</TD>
 		</TR>
 		<TR>
-			<TD colspan="3" class="showhide">
+			<TD colspan="3">
 				<table border=0 width="100%">
 					<md:specDetFormat4  columnHeaderListName="subSpecimenColHeaderList" formName="viewSpecimenSummaryForm" dataListName="aliquotList" dataListType="Aliquot" columnListName="columnListName" isReadOnly="false" displayColumnListName="subSpecdispColumnsList" />
 				</table>
