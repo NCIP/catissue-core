@@ -273,6 +273,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 	private synchronized void updateCache(Object obj)
 	{
 		Participant participant = (Participant) obj;
+		Participant cloneParticipant = new Participant(participant);
 		//getting instance of catissueCoreCacheManager and getting participantMap from cache
 		CatissueCoreCacheManager catissueCoreCacheManager = null;
 		//Map mapOfParticipantMedicalIdentifierCollection = new HashMap();
@@ -280,9 +281,9 @@ public class ParticipantBizLogic extends DefaultBizLogic
 		{
 			catissueCoreCacheManager = CatissueCoreCacheManager.getInstance();
 			HashMap participantMap = (HashMap) catissueCoreCacheManager.getObjectFromCache(Constants.MAP_OF_PARTICIPANTS);
-			if (participant.getActivityStatus().equalsIgnoreCase(Constants.ACTIVITY_STATUS_DISABLED))
+			if (cloneParticipant.getActivityStatus().equalsIgnoreCase(Constants.ACTIVITY_STATUS_DISABLED))
 			{
-				participantMap.remove(participant.getId());
+				participantMap.remove(cloneParticipant.getId());
 			}
 			else
 			{
@@ -315,8 +316,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 						}
 					}
 				}*/
-				participant.setCollectionProtocolRegistrationCollection(null);
-				participantMap.put(participant.getId(), participant);
+				participantMap.put(cloneParticipant.getId(), cloneParticipant);
 			}
 		}
 		catch (CacheException e)
@@ -1042,8 +1042,9 @@ public class ParticipantBizLogic extends DefaultBizLogic
 				while(participantIterator.hasNext())
 				{
 					Participant participant = (Participant)participantIterator.next();
-					Long participantId = participant.getId();
-					mapOfParticipants.put(participantId, participant);
+					Participant cloneParticipant = new Participant(participant); 
+					Long participantId = cloneParticipant.getId();
+					mapOfParticipants.put(participantId, cloneParticipant);
 				}
 			}
 		}
