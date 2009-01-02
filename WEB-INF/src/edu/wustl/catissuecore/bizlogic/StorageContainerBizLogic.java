@@ -282,23 +282,6 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 							+ positionDimensionOne);
 				} while (fullStatus[positionDimensionOne][positionDimensionTwo] != false);
 			}
-
-			// Inserting authorization data
-			Set protectionObjects = new HashSet();
-			protectionObjects.add(cont);
-			try {
-				// SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null,
-				// protectionObjects, getDynamicGroups(cont));
-
-				PrivilegeManager privilegeManager = PrivilegeManager
-						.getInstance();
-
-				privilegeManager.insertAuthorizationData(null,
-						protectionObjects, getDynamicGroups(cont), cont
-								.getObjectId());
-			} catch (SMException e) {
-				throw handleSMException(e);
-			}
 		}
 
 	}

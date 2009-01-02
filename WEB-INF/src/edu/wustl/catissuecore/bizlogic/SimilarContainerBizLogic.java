@@ -209,29 +209,6 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 			simMap.put(IdKey, cont.getId().toString());
 			//simMap.put(parentContNameKey,cont.getParent().getName());
 		}
-		Iterator itr = contList.iterator();
-		while (itr.hasNext())
-		{
-			StorageContainer cont = (StorageContainer) itr.next();
-			//        		Inserting authorization data
-			Set protectionObjects = new HashSet();
-			protectionObjects.add(cont);
-			try
-			{
-//				SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null, protectionObjects, getDynamicGroups(cont));
-				
-				PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
-
-				privilegeManager.insertAuthorizationData(null, 
-						protectionObjects, getDynamicGroups(cont), cont.getObjectId());
-			}
-			catch (SMException e)
-			{
-				throw handleSMException(e);
-			}
-		}
-		//cache handling
-
 	}
 
 	synchronized public void postInsert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
