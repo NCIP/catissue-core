@@ -11,6 +11,7 @@
 
 package edu.wustl.catissuecore.domain;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
@@ -156,30 +157,44 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 	{
 		setAllValues(form);
 	}
-	
-	
-	public Participant(Long id2, String lastName2, String firstName2, String middleName2, Date birthDate2, String gender2, String sexGenotype2, Collection raceCollection2, String ethnicity2, String socialSecurityNumber2, String activityStatus2, Date deathDate2, String vitalStatus2, Collection participantMedicalIdentifierCollection)
-	{
-		this.id = id2;
-		this.lastName = lastName2;
-		this.firstName = firstName2;
-		this.middleName = middleName2;
-		this.birthDate = birthDate2;
-		this.gender = gender2;
-		this.sexGenotype = sexGenotype2;
-		this.raceCollection = raceCollection2;
-		this.ethnicity = ethnicity2;
-		this.socialSecurityNumber = socialSecurityNumber2;
-		this.activityStatus = activityStatus2;
-		this.deathDate = deathDate2;
-		this.vitalStatus = vitalStatus2;
-		this.participantMedicalIdentifierCollection = participantMedicalIdentifierCollection; 
-	}
+	/**
+	 * Copy Constructor
+	 * @param participant Participant object
+	 */
 	public Participant(Participant participant)
 	{
-		this.id = participant.getId();
+		this.id = Long.valueOf(participant.getId().longValue());
 		this.lastName = participant.getLastName();
 		this.firstName = participant.getFirstName();
+		this.middleName = participant.getMiddleName();
+		this.birthDate = participant.getBirthDate();
+		this.gender = participant.getGender();
+		this.sexGenotype = participant.getSexGenotype();
+		this.ethnicity = participant.getEthnicity();
+		this.socialSecurityNumber = participant.getSocialSecurityNumber();
+		this.activityStatus = participant.getActivityStatus();
+		this.deathDate = participant.getDeathDate();
+		this.vitalStatus = participant.getVitalStatus();
+		
+		Collection<Race> raceCollection =  new ArrayList<Race>();
+		Iterator<Race> raceItr = participant.getRaceCollection().iterator();
+		while(raceItr.hasNext())
+		{
+			Race race = new Race(raceItr.next());
+			race.setParticipant(this);
+			raceCollection.add(race);
+		}
+		this.raceCollection = raceCollection;
+		
+		Collection<ParticipantMedicalIdentifier> pmiCollection =  new ArrayList<ParticipantMedicalIdentifier>();
+		Iterator<ParticipantMedicalIdentifier> pmiItr = pmiCollection.iterator();
+		while(pmiItr.hasNext())
+		{
+			ParticipantMedicalIdentifier pmi = new ParticipantMedicalIdentifier(pmiItr.next());
+			pmi.setParticipant(this);
+			pmiCollection.add(pmi);
+		}
+		this.participantMedicalIdentifierCollection =pmiCollection; 
 	}
 
 	/**

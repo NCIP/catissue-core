@@ -42,6 +42,24 @@ public class ParticipantMedicalIdentifier extends AbstractDomainObject implement
      * 
      */
 	protected Participant participant;
+	
+	/**
+	 * Default constructor
+	 */
+	public ParticipantMedicalIdentifier()
+	{
+		
+	}
+	/**
+	 * Copy Constructor
+	 * @param pmi ParticipantMedicalIdentifier Object
+	 */
+	public ParticipantMedicalIdentifier(ParticipantMedicalIdentifier pmi)
+	{
+		this.id = Long.valueOf(pmi.getId().longValue());
+		this.medicalRecordNumber = pmi.getMedicalRecordNumber();
+		this.site = new Site(pmi.getSite());
+	}
 
 	/**
      * Returns System generated unique identifier.

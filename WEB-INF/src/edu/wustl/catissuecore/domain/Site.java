@@ -70,9 +70,22 @@ public class Site extends AbstractDomainObject implements java.io.Serializable, 
 	private Collection<CollectionProtocol> collectionProtocolCollection = new HashSet<CollectionProtocol>();
 	
 	private Collection<User> assignedSiteUserCollection = new HashSet<User>();
-	//Default Constructor Required by hibernate
+	
+	/**
+	 * Default Constructor Required by hibernate
+	 */
 	public Site()
 	{
+	}
+	
+	/**
+	 * Copy Constructor
+	 * @param site Site object
+	 */
+	public Site(Site site)
+	{
+		this.id = Long.valueOf(site.getId().longValue());
+		this.name = site.getName();
 	}
 	
 	//Parameterized constructor

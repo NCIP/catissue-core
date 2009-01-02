@@ -11,6 +11,25 @@ public class Race extends AbstractDomainObject implements java.io.Serializable
 	protected Long id;
 	protected String raceName;
 	protected Participant participant;
+	
+	/**
+	 * Default Constructor
+	 */
+	public Race()
+	{
+		
+	}
+	
+	/**
+	 * Copy Constructor
+	 * @param race Race Object
+	 */
+	public Race(Race race)
+	{
+		this.id = Long.valueOf(race.getId().longValue());
+		this.raceName= race.getRaceName();
+	}
+	
 	@Override
 	public Long getId()
 	{
