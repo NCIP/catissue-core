@@ -1547,7 +1547,7 @@ public class BaseTestCaseUtility {
 		ts.setPathologicalStatus("Malignant");
 		
 		SpecimenCharacteristics specimenCharacteristics =  new SpecimenCharacteristics();
-		specimenCharacteristics.setId(new Long(1));
+		//specimenCharacteristics.setId(new Long(1));
 		specimenCharacteristics.setTissueSide("Left");
 		specimenCharacteristics.setTissueSite("Placenta");
 		ts.setSpecimenCharacteristics(specimenCharacteristics);
