@@ -1342,9 +1342,9 @@
 	<!-- Removing unnecessary PE Oracle-->
 	<target name="upgrade_oracle_from_Suite1.1_to_1.1p">
 		<echo message="Upgrading Oracle Database and removing unused Protection Element" />
-			<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle" delimiter="/">
+			<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">
 					<transaction src="${dbupgrade.sql.dir}/Oracle/DBUpgrade_deleteStorageContainerPE.sql" />
-			   		<transaction>commit/</transaction>
+			   		<transaction>commit;</transaction>
 					<classpath>
 						<fileset dir="${lib.dir}">
 							<include name="*.jar" />
