@@ -187,14 +187,17 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 		this.raceCollection = raceCollection;
 		
 		Collection<ParticipantMedicalIdentifier> pmiCollection =  new ArrayList<ParticipantMedicalIdentifier>();
-		Iterator<ParticipantMedicalIdentifier> pmiItr = pmiCollection.iterator();
-		while(pmiItr.hasNext())
+		if(participant.getParticipantMedicalIdentifierCollection()!=null)
 		{
-			ParticipantMedicalIdentifier pmi = new ParticipantMedicalIdentifier(pmiItr.next());
-			pmi.setParticipant(this);
-			pmiCollection.add(pmi);
-		}
-		this.participantMedicalIdentifierCollection =pmiCollection; 
+			Iterator<ParticipantMedicalIdentifier> pmiItr = participant.getParticipantMedicalIdentifierCollection().iterator();
+			while(pmiItr.hasNext())
+			{
+				ParticipantMedicalIdentifier pmi = new ParticipantMedicalIdentifier(pmiItr.next());
+				pmi.setParticipant(this);
+				pmiCollection.add(pmi);
+			}
+			this.participantMedicalIdentifierCollection =pmiCollection; 
+		}	
 	}
 
 	/**

@@ -58,7 +58,10 @@ public class ParticipantMedicalIdentifier extends AbstractDomainObject implement
 	{
 		this.id = Long.valueOf(pmi.getId().longValue());
 		this.medicalRecordNumber = pmi.getMedicalRecordNumber();
-		this.site = new Site(pmi.getSite());
+		if(pmi.getSite()!=null)
+		{
+			this.site = new Site(pmi.getSite());
+		}	
 	}
 
 	/**
