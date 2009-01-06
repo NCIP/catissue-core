@@ -34,6 +34,11 @@ public class AnnotationConstants
     public static final String AJAX_OPERATION = "operation";
     public static final String AJAX_OPERATION_SELECT_GROUP = "selectGroup";
     public static final String AJAX_OPERATION_SELECTED_GROUPID = "groupId";
+    public static final String EDIT_SELECTED_ANNOTATION = "editSelectedAnnotation";
+    public static final String SELECTED_ANNOTATION="selectedFormId";
+    public static final String OPERATION = "operation";
+    public static final String PAGE_OF_EDIT_ANNOTATION = "pageOfEditAnnotation";
+    public static final String ENTITY_NAME = "entityName";
     
     public static final String ENTITY_NAME_PARTICIPANT = "edu.wustl.catissuecore.domain.Participant";
     public static final String ENTITY_NAME_SPECIMEN = "edu.wustl.catissuecore.domain.Specimen";
@@ -62,4 +67,11 @@ public class AnnotationConstants
     public static final String STATIC_ENTITY_LIST  = "staticEntityList";
     
     public static final String NONE = "None";
+    public static final String HTML_SPACE="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+	public static final String ANNOTATION_LIST_FROM_XML  ="annotationListFromXML";
+	public static final String STATIC_ENTITY_ID="staticEntityId";
+	public static final String STATIC_ENTITY_RECORD_ID="staticEntityRecordId";
+	public static final String NULL="null";
+	public static final String RECORDS_IDs="RecordIds";
+	public static final String FULLY_QUALIFIED_NAME = "edu.wustl.catissuecore.domain.";
 }
