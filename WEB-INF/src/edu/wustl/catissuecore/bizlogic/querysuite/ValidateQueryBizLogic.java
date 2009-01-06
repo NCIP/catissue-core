@@ -1,6 +1,5 @@
 package edu.wustl.catissuecore.bizlogic.querysuite;
 
-import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 
@@ -9,14 +8,12 @@ import javax.servlet.http.HttpSession;
 
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
-import edu.wustl.catissuecore.querysuite.CatissueSqlGenerator;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.querysuite.QueryCSMUtil;
 import edu.wustl.catissuecore.util.querysuite.QueryDetails;
 import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
 import edu.wustl.common.querysuite.exceptions.MultipleRootsException;
 import edu.wustl.common.querysuite.exceptions.SqlException;
-import edu.wustl.common.querysuite.factory.SqlGeneratorFactory;
 import edu.wustl.common.querysuite.queryengine.impl.SqlGenerator;
 import edu.wustl.common.querysuite.queryobject.IConstraints;
 import edu.wustl.common.querysuite.queryobject.IExpression;
@@ -78,7 +75,7 @@ public class ValidateQueryBizLogic {
 		try 
 		{
 			HttpSession session = request.getSession(); 
-			SqlGenerator sqlGenerator = new CatissueSqlGenerator();
+			SqlGenerator sqlGenerator = new SqlGenerator();
 			String selectSql = sqlGenerator.generateSQL(query);
 			Map<AttributeInterface, String> attributeColumnNameMap = sqlGenerator.getAttributeColumnNameMap();
 			session.setAttribute(Constants.ATTRIBUTE_COLUMN_NAME_MAP, attributeColumnNameMap);

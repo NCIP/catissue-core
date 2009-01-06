@@ -15,7 +15,6 @@ import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.bizlogic.querysuite.DefineGridViewBizLogic;
 import edu.wustl.catissuecore.bizlogic.querysuite.QueryOutputSpreadsheetBizLogic;
 import edu.wustl.catissuecore.bizlogic.querysuite.QueryOutputTreeBizLogic;
-import edu.wustl.catissuecore.querysuite.CatissueSqlGenerator;
 import edu.wustl.catissuecore.querysuite.QueryShoppingCart;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
@@ -220,7 +219,7 @@ public class QueryModuleSearchQueryUtil
 	 */
 	private void processSaveQuery() throws QueryModuleException
 	{	
-		SqlGenerator sqlGenerator = new CatissueSqlGenerator();
+		SqlGenerator sqlGenerator = new SqlGenerator();
 		QueryModuleException queryModExp;
 		try
 		{ 
