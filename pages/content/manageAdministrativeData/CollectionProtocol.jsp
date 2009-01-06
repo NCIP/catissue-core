@@ -2,6 +2,7 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
+<%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp"%>
 <%@ page language="java" isELIgnored="false"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -86,19 +87,28 @@ function updateCPTree()
                       <tr>
                         <td align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0"/></td>
                         <td align="left" class="black_ar"><bean:message key="collectionprotocol.protocoltitle" /> </td>
-                        <td align="left"> <html:text styleClass="black_ar" maxlength='${requestScope.fieldWidth}'  size="30" styleId="title" property="title" readonly='${requestScope.readOnlyValue}' /></td>
+
+						<!--  Added by geeta --> 
+						<% 
+						if(Variables.isCPTitleChange){
+						%>
+							<td align="left"> <html:textarea styleClass="black_ar" cols="28" rows="3" styleId="title" property="title" readonly='${requestScope.readOnlyValue}' /></td>
+						<%}else{%>
+							<td align="left"> <html:text styleClass="black_ar" maxlength='${requestScope.fieldWidth}'  size="30" styleId="title" property="title" readonly='${requestScope.readOnlyValue}' /></td>
+						<%}%>
                       </tr>
                       <tr>
                         <td align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></td>
                         <td align="left" class="black_ar"><bean:message key="collectionprotocol.shorttitle" /> </td>
                         <td align="left"><html:text styleClass="black_ar" maxlength="50"  size="30" styleId="shortTitle" property="shortTitle" readonly='${requestScope.readOnlyValue}' /></td>
                       </tr>
-                      <tr>
+                       <tr>
                         <td align="center" class="black_ar">&nbsp;</td>
-                        <td align="left" class="black_ar"><label for="irbID"><bean:message key="collectionprotocol.irbid" /> </label></td>
-                        <td align="left"><html:text styleClass="black_ar" maxlength="50"  size="30" styleId="irbID" property="irbID" readonly='${requestScope.readOnlyValue}' />
+						 <td align="left" class="black_ar"><label for="irbID"><bean:message key="collectionprotocol.irbid"/></label></td>
+						<td align="left"><html:text styleClass="black_ar" maxlength="50"  size="30" styleId="irbID" property="irbID" readonly='${requestScope.readOnlyValue}' />
                         </td>
                       </tr>
+
                       <tr>
                         <td align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></td>
                         <td align="left" class="black_ar"><label for="startDate"><bean:message key="collectionprotocol.startdate" /> </label></td>
@@ -108,6 +118,7 @@ function updateCPTree()
 							  month= '${requestScope.collectionProtocolMonth}'
 							  year= '${requestScope.collectionProtocolYear}'
 							  day= '${requestScope.collectionProtocolDay}'
+							  pattern="<%=Variables.dateFormat %>"
 							  value='${requestScope.currentCollectionProtocolDate}'
 							  styleClass="black_ar"
 						/>

@@ -6,6 +6,7 @@ import java.util.Date;
 
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.querysuite.factory.QueryObjectFactory;
 import edu.wustl.common.querysuite.queryobject.ArithmeticOperator;
 import edu.wustl.common.querysuite.queryobject.IConnector;
@@ -481,9 +482,9 @@ public class SingalNodeTemporalQuery
 				{
 					//Date date = Utility.parseDate(rhsTimeValue, "MM/dd/yyyy HH:MM:SS");
 					if(attributeType.equals("DateTime"))
-						pattern = "MM/dd/yyyy HH:mm:ss";
+						pattern = Variables.dateFormat+" HH:mm:ss";
 					else
-						pattern = "MM/dd/yyyy";
+						pattern = Variables.dateFormat;
 					
 					formatter = new SimpleDateFormat(pattern);						
 					date = formatter.parse(rhsTimeValue);

@@ -18,6 +18,7 @@ import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.catissuecore.util.querysuite.QueryModuleConstants;
 import edu.wustl.catissuecore.util.querysuite.TemporalQueryUtility;
 import edu.wustl.common.querysuite.factory.QueryObjectFactory;
@@ -435,7 +436,7 @@ public class CreateQueryObjectBizLogic
 					IDateLiteral rhsDateLiteral = null;
 					if(newRHSValues.length!=QueryModuleConstants.INDEX_PARAM_TWO)
 					{
-								date = Utility.parseDate(newRHSValues[QueryModuleConstants.INDEX_PARAM_TWO], QueryModuleConstants.DATE_FORMAT);
+								date = Utility.parseDate(newRHSValues[QueryModuleConstants.INDEX_PARAM_TWO], Variables.dateFormat);
 								rhsDateLiteral = QueryObjectFactory
 										.createDateLiteral(new java.sql.Date(date.getTime()));
 								value = newRHSValues[QueryModuleConstants.INDEX_PARAM_TWO];

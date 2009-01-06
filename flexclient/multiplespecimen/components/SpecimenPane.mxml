@@ -19,12 +19,14 @@
 		[Bindable]	public var mspParameter:MSPParameter;
 		[Bindable]	public var specimenNo:String;
 		
+		
 		[Bindable] public var specimenClassList:ArrayCollection;
 		[Bindable] public var specimenTypeList:ArrayCollection;
 		[Bindable] public var tissueSiteList:ArrayCollection;
 		[Bindable] public var tissueSideList:ArrayCollection;
 		[Bindable] public var pathologicalStatusList:ArrayCollection;
 		[Bindable] public var prevSpecimenClassValue:String;
+		
 		
 
 
@@ -356,7 +358,7 @@
 	<mx:VBox backgroundColor="#E2EFFF" width="100%">
 
 		<components:MyCanvas id="createdOnBox">
-			<mx:DateField id="spCreatedOn" formatString="{Constants.DATE_FORMAT}" yearNavigationEnabled="true" keyDown="spCreatedOn.open()"/>
+			<mx:DateField id="spCreatedOn"  formatString="{mspParameter.dateFormat}" yearNavigationEnabled="true" keyDown="spCreatedOn.open()"/>
 		</components:MyCanvas>
 	
 		<components:MyCanvas>

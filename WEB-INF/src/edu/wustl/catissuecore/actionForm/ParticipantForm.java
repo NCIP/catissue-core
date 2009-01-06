@@ -41,6 +41,7 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -202,7 +203,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 		this.lastName = Utility.toString(participant.getLastName());
 		this.firstName = Utility.toString(participant.getFirstName());
 		this.middleName = Utility.toString(participant.getMiddleName());
-		this.birthDate = Utility.parseDateToString(participant.getBirthDate(), Constants.DATE_PATTERN_MM_DD_YYYY);
+		this.birthDate = Utility.parseDateToString(participant.getBirthDate(),Variables.dateFormat);
 		this.gender = participant.getGender();
 		this.genotype = participant.getSexGenotype();
 		setSSN(participant.getSocialSecurityNumber());
@@ -229,7 +230,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 		//        this.race = participant.getRace();
 		this.activityStatus = participant.getActivityStatus();
 		this.ethnicity = participant.getEthnicity();
-		this.deathDate = Utility.parseDateToString(participant.getDeathDate(), Constants.DATE_PATTERN_MM_DD_YYYY);
+		this.deathDate = Utility.parseDateToString(participant.getDeathDate(), Variables.dateFormat);
 		;
 		this.vitalStatus = participant.getVitalStatus();
 
@@ -309,7 +310,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 						collectionProtocolRegistrationValues.put(isConsentAvailable, Constants.PARTICIPANT_CONSENT_ENTER_RESPONSE);
 					}
 
-					String date = Utility.parseDateToString(collectionProtocolRegistration.getRegistrationDate(), Constants.DATE_PATTERN_MM_DD_YYYY);
+					String date = Utility.parseDateToString(collectionProtocolRegistration.getRegistrationDate(), Variables.dateFormat);
 
 					collectionProtocolRegistrationValues.put(collectionProtocolId, Utility.toString(collectionProtocolRegistration
 							.getCollectionProtocol().getId()));
@@ -355,7 +356,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 			}
 
 			String consentSignatureDate = Utility.parseDateToString(collectionProtocolRegistration.getConsentSignatureDate(),
-					Constants.DATE_PATTERN_MM_DD_YYYY);
+					Variables.dateFormat);
 			Collection consentResponseCollection = collectionProtocolRegistration.getConsentTierResponseCollection();
 			Collection consentResponse;
 

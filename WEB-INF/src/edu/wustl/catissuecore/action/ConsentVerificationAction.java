@@ -38,6 +38,7 @@ import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
@@ -220,7 +221,7 @@ public class ConsentVerificationAction extends BaseAction
 		}
 		else
 		{
-			getConsentDate=Utility.parseDateToString(cprObject.getConsentSignatureDate(), Constants.DATE_PATTERN_MM_DD_YYYY);
+			getConsentDate=Utility.parseDateToString(cprObject.getConsentSignatureDate(), Variables.dateFormat);
 		}
 		
 		if(cprObject.getSignedConsentDocumentURL()==null)

@@ -4,6 +4,7 @@
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.MolecularSpecimenReviewParametersForm"%>
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
 <%@ page language="java" isELIgnored="false" %>
@@ -66,6 +67,7 @@
 			                  month='${requestScope.eventParametersMonth}'
 							  year='${requestScope.eventParametersYear}'
 							  day='${requestScope.eventParametersDay}'
+							  pattern="<%=Variables.dateFormat%>"
 							  value='${requestScope.currentEventParametersDate}'
 			  styleClass="black_ar"
 					/>
@@ -74,6 +76,7 @@
 <ncombo:DateTimeComponent name="dateOfEvent"
 			  id="dateOfEvent"
 			  formName="molecularSpecimenReviewParametersForm"
+			  pattern="<%=Variables.dateFormat%>"
 			  styleClass="formDateSized10"
 					/>
 </logic:empty><span class="grey_ar_s">

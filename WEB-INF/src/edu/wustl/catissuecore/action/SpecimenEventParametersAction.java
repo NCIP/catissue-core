@@ -28,6 +28,7 @@ import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.util.logger.Logger;
@@ -98,7 +99,7 @@ public class SpecimenEventParametersAction  extends BaseAction
 			Calendar cal = Calendar.getInstance();
 			if(eventParametersForm.getDateOfEvent()==null)
 			{
-				eventParametersForm.setDateOfEvent(Utility.parseDateToString(cal.getTime(), Constants.DATE_PATTERN_MM_DD_YYYY));
+				eventParametersForm.setDateOfEvent(Utility.parseDateToString(cal.getTime(), Variables.dateFormat));
 			}
 			if(eventParametersForm.getTimeInHours()==null)
 			{

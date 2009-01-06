@@ -27,8 +27,6 @@ import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Race;
 import edu.wustl.catissuecore.domain.Site;
-import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
@@ -65,7 +63,6 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class ParticipantBizLogic extends DefaultBizLogic
 {
-	private List<Long> cprIdList = new ArrayList<Long>();
 
 	/**
 	 * Saves the Participant object in the database.
@@ -149,7 +146,6 @@ public class ParticipantBizLogic extends DefaultBizLogic
 			cpr.setParticipant(participant);
 			cpr.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
 			cprBizLogic.insert(cpr, dao, sessionDataBean);
-			cprIdList.add(cpr.getId());
 		}
 	}
 
@@ -412,7 +408,6 @@ public class ParticipantBizLogic extends DefaultBizLogic
 				{
 					collectionProtReg.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
 					cprBizLogic.insert(collectionProtReg, dao, sessionDataBean);
-					cprIdList.add(collectionProtReg.getId());
 					continue;
 				}
 				cprBizLogic.update(dao, collectionProtReg, oldcollectionProtocolRegistration, sessionDataBean);
@@ -616,7 +611,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 		String errorKeyForBirthDate = "";
 		String errorKeyForDeathDate = "";
 
-		String birthDate = Utility.parseDateToString(participant.getBirthDate(), Constants.DATE_PATTERN_MM_DD_YYYY);
+		String birthDate = Utility.parseDateToString(participant.getBirthDate(),edu.wustl.catissuecore.util.global.Variables.dateFormat);
 		if (!validator.isEmpty(birthDate))
 		{
 			errorKeyForBirthDate = validator.validateDate(birthDate, true);
@@ -627,7 +622,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 			}
 		}
 
-		String deathDate = Utility.parseDateToString(participant.getDeathDate(), Constants.DATE_PATTERN_MM_DD_YYYY);
+		String deathDate = Utility.parseDateToString(participant.getDeathDate(), edu.wustl.catissuecore.util.global.Variables.dateFormat);
 		if (!validator.isEmpty(deathDate))
 		{
 			errorKeyForDeathDate = validator.validateDate(deathDate, true);
@@ -648,8 +643,8 @@ public class ParticipantBizLogic extends DefaultBizLogic
 		if ((!validator.isEmpty(birthDate) && !validator.isEmpty(deathDate))
 				&& (errorKeyForDeathDate.trim().length() == 0 && errorKeyForBirthDate.trim().length() == 0))
 		{
-			boolean errorKey1 = validator.compareDates(Utility.parseDateToString(participant.getBirthDate(), Constants.DATE_PATTERN_MM_DD_YYYY),
-					Utility.parseDateToString(participant.getDeathDate(), Constants.DATE_PATTERN_MM_DD_YYYY));
+			boolean errorKey1 = validator.compareDates(Utility.parseDateToString(participant.getBirthDate(), edu.wustl.catissuecore.util.global.Variables.dateFormat),
+					Utility.parseDateToString(participant.getDeathDate(), edu.wustl.catissuecore.util.global.Variables.dateFormat));
 
 			if (!errorKey1)
 			{
@@ -694,7 +689,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 				{
 					long collectionProtocolTitle = collectionProtocolRegistrationIdentifier.getCollectionProtocol().getId().longValue();
 					String collectionProtocolRegistrationDate = Utility.parseDateToString(collectionProtocolRegistrationIdentifier.getRegistrationDate(),
-						Constants.DATE_PATTERN_MM_DD_YYYY);
+							edu.wustl.catissuecore.util.global.Variables.dateFormat);
 					String errorKey = validator.validateDate(collectionProtocolRegistrationDate, true);
 					if (collectionProtocolTitle <= 0 || errorKey.trim().length() > 0)
 					{
@@ -1422,47 +1417,5 @@ public class ParticipantBizLogic extends DefaultBizLogic
 	public boolean hasPrivilegeToView(String objName, Long identifier, SessionDataBean sessionDataBean)
 	{
 		return edu.wustl.catissuecore.util.global.Utility.hasPrivilegeToView(objName, identifier, sessionDataBean, getReadDeniedPrivilegeName());
-	}
-	
-	@Override
-	public void refreshTitliSearchIndex(String operation, Object obj)
-	{
-		super.refreshTitliSearchIndex(operation, obj);
-		Participant participant = (Participant) obj;
-		Collection collectionProtocolRegistrationCollection = participant.getCollectionProtocolRegistrationCollection();
-		if(collectionProtocolRegistrationCollection != null)
-		{
-			Iterator itcprCollection = collectionProtocolRegistrationCollection.iterator();
-	
-			while (itcprCollection.hasNext())
-			{
-				CollectionProtocolRegistration cpr = (CollectionProtocolRegistration) itcprCollection.next();
-				if(cprIdList.contains(cpr.getId()))
-				{
-					Collection specimenCollectionGroupCollection=cpr.getSpecimenCollectionGroupCollection();
-					
-					if(specimenCollectionGroupCollection != null)
-					{
-						Iterator itscgCollection = specimenCollectionGroupCollection.iterator();
-						while(itscgCollection.hasNext())
-						{
-							SpecimenCollectionGroup scg = (SpecimenCollectionGroup)itscgCollection.next();
-							super.refreshTitliSearchIndex(operation, scg);
-							Collection specimenCollection = scg.getSpecimenCollection();
-							
-							if(specimenCollection != null)
-							{
-								Iterator itspecimenCollection = specimenCollection.iterator();
-								while(itspecimenCollection.hasNext())
-								{
-									Specimen specimen = (Specimen)itspecimenCollection.next();
-									super.refreshTitliSearchIndex(operation, specimen);
-								}
-							}
-						}
-					}
-				}
-			}
-		}
 	}
 }

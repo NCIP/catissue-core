@@ -486,6 +486,7 @@
 		  			id="createdDate"
 		  			formName="aliquotForm"
 		  			value='${requestScope.createdDate}'
+		  			pattern="<%=Variables.dateFormat%>"
 		  			styleClass="black_ar"/>
 					<span class="grey_ar_s">
 				<bean:message key="page.dateFormat" />

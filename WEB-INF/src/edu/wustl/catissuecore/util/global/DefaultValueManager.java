@@ -36,6 +36,7 @@ public class DefaultValueManager
      */
     public static Object getDefaultValue(String defaultConstant)
 	{
+    
 		return defaultValueMap.get(defaultConstant);
 	}
     
@@ -139,7 +140,6 @@ public class DefaultValueManager
     		 	DefaultValueManager.setDefaultValue(Constants.defaultValueKeys[iCount][0],"");
     		   	Logger.out.error("Default Value set for '"+Constants.defaultValueKeys[iCount][0]+"' is not in the CDEList");
     		}
-    		
     	}
     }
 }

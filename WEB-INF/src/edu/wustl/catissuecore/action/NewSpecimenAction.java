@@ -60,6 +60,7 @@ import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.beans.NameValueBean;
@@ -261,7 +262,7 @@ public class NewSpecimenAction extends SecureAction
 			}
 			else
 			{
-				getConsentDate=Utility.parseDateToString(cprObject.getConsentSignatureDate(), Constants.DATE_PATTERN_MM_DD_YYYY);
+				getConsentDate=Utility.parseDateToString(cprObject.getConsentSignatureDate(), Variables.dateFormat);
 			}
 			
 			if(cprObject.getSignedConsentDocumentURL()==null)
@@ -320,7 +321,7 @@ public class NewSpecimenAction extends SecureAction
 				SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
 				Specimen specimen = bizLogic.getSpecimen(specimenID,specimenDetails, sessionData);
 				//Added by Falguni=To set Specimen label in Form.
-				specimenForm.setCreatedDate(Utility.parseDateToString(specimen.getCreatedOn(), Constants.DATE_PATTERN_MM_DD_YYYY));
+				specimenForm.setCreatedDate(Utility.parseDateToString(specimen.getCreatedOn(), Variables.dateFormat));
 				specimenForm.setLabel(specimen.getLabel());
 				specimenForm.setBarcode(specimen.getBarcode());
 				List columnList=columnNames();
@@ -890,7 +891,7 @@ public class NewSpecimenAction extends SecureAction
 		//Collection Event fields
 		if (specimenForm.getCollectionEventdateOfEvent() == null)
 		{
-			specimenForm.setCollectionEventdateOfEvent(Utility.parseDateToString(cal.getTime(), Constants.DATE_PATTERN_MM_DD_YYYY));
+			specimenForm.setCollectionEventdateOfEvent(Utility.parseDateToString(cal.getTime(), Variables.dateFormat));
 		}
 		if (specimenForm.getCollectionEventTimeInHours() == null)
 		{
@@ -904,7 +905,7 @@ public class NewSpecimenAction extends SecureAction
 		//ReceivedEvent Fields
 		if (specimenForm.getReceivedEventDateOfEvent() == null)
 		{
-			specimenForm.setReceivedEventDateOfEvent(Utility.parseDateToString(cal.getTime(), Constants.DATE_PATTERN_MM_DD_YYYY));
+			specimenForm.setReceivedEventDateOfEvent(Utility.parseDateToString(cal.getTime(), Variables.dateFormat));
 		}
 		if (specimenForm.getReceivedEventTimeInHours() == null)
 		{
@@ -1193,7 +1194,7 @@ public class NewSpecimenAction extends SecureAction
 						specimenForm.setCollectionEventUserId(scgCollEventParam.getUser().getId().longValue());		
 						specimenForm.setCollectionEventCollectionProcedure(scgCollEventParam.getCollectionProcedure());	
 						specimenForm.setCollectionEventContainer(scgCollEventParam.getContainer());	
-						specimenForm.setCollectionEventdateOfEvent(Utility.parseDateToString(scgCollEventParam.getTimestamp(),Constants.DATE_PATTERN_MM_DD_YYYY));
+						specimenForm.setCollectionEventdateOfEvent(Utility.parseDateToString(scgCollEventParam.getTimestamp(),Variables.dateFormat));
 						specimenForm.setCollectionEventTimeInHours(Utility.toString(Integer.toString(calender.get(Calendar.HOUR_OF_DAY))));	
 						specimenForm.setCollectionEventTimeInMinutes(Utility.toString(Integer.toString(calender.get(Calendar.MINUTE))));
 					}
@@ -1204,7 +1205,7 @@ public class NewSpecimenAction extends SecureAction
 						
 						specimenForm.setReceivedEventUserId(scgReceivedEventParam.getUser().getId().longValue());		
 						specimenForm.setReceivedEventReceivedQuality(scgReceivedEventParam.getReceivedQuality());	
-						specimenForm.setReceivedEventDateOfEvent(Utility.parseDateToString(scgReceivedEventParam.getTimestamp(),Constants.DATE_PATTERN_MM_DD_YYYY));
+						specimenForm.setReceivedEventDateOfEvent(Utility.parseDateToString(scgReceivedEventParam.getTimestamp(),Variables.dateFormat));
 						specimenForm.setReceivedEventTimeInHours(Utility.toString(Integer.toString(calender.get(Calendar.HOUR_OF_DAY))));	
 						specimenForm.setReceivedEventTimeInMinutes(Utility.toString(Integer.toString(calender.get(Calendar.MINUTE))));
 						

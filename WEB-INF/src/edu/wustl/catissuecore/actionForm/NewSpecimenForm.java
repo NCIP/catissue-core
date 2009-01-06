@@ -31,6 +31,7 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.dbManager.HibernateMetaData;
 import edu.wustl.common.util.global.ApplicationProperties;
@@ -204,10 +205,11 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData,IPr
 	
 	private String printCheckbox; 
 	
-	//added by printer properties
+ //added by printer properties
 	private String printerType;
 
 	private String printerLocation;
+	
 	
 	private String createCpChildCheckBox;
 	
@@ -507,7 +509,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData,IPr
 			this.witnessName=Utility.toString(witness.getFirstName());
 		}
 		this.signedConsentUrl=Utility.toString(specimenCollectionGroup.getCollectionProtocolRegistration().getSignedConsentDocumentURL());
-		this.consentDate=Utility.parseDateToString(specimenCollectionGroup.getCollectionProtocolRegistration().getConsentSignatureDate(), Constants.DATE_PATTERN_MM_DD_YYYY);
+		this.consentDate=Utility.parseDateToString(specimenCollectionGroup.getCollectionProtocolRegistration().getConsentSignatureDate(), Variables.dateFormat);
 		this.collectionStatus = Utility.toString(specimen.getCollectionStatus());
 	}
 	 /**
@@ -1347,7 +1349,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData,IPr
 	public void setCollectionStatus(String collectionStatus) {
 		this.collectionStatus = collectionStatus;
 	}
-	
+		
 	public String getPrinterLocation() {
 		return printerLocation;
 	}
@@ -1363,4 +1365,5 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData,IPr
 	public void setPrinterType(String printerType) {
 		this.printerType = printerType;
 	}
+	
 }

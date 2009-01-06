@@ -14,6 +14,7 @@ package util
 			mspParameter.showParentSelection = parameter.SHOW_PARENT_SELECTION;
 			mspParameter.showLabel = parameter.SHOW_LABEL;
 			mspParameter.showBarcode = parameter.SHOW_BARCODE;
+			mspParameter.dateFormat= parameter.DATE_FORMAT;
 			return mspParameter;
 		} 
 		

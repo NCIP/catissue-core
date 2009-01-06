@@ -34,6 +34,7 @@ import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.global.ApplicationProperties;
@@ -574,7 +575,7 @@ public class SpecimenForm extends AbstractActionForm
          * See also: 1_1 to 1_5
          * Description : set createdOn date from database object
          */ 
-        this.createdDate = Utility.parseDateToString(specimen.getCreatedOn(),Constants.DATE_PATTERN_MM_DD_YYYY);       
+        this.createdDate = Utility.parseDateToString(specimen.getCreatedOn(),Variables.dateFormat);       
         
 
 		if (specimen.getIsAvailable() != null)

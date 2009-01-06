@@ -36,6 +36,7 @@ import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.catissuecore.util.global.Variables;
 
 public class NewShopingCartAction extends BaseAction {
 	
@@ -296,7 +297,7 @@ public class NewShopingCartAction extends BaseAction {
 				{	
 					if(obj1[j] instanceof Date)
 					{
-						cartList[j]=Utility.parseDateToString((Date)obj1[j],  edu.wustl.common.util.global.Constants.DATE_PATTERN_MM_DD_YYYY);
+						cartList[j]=Utility.parseDateToString((Date)obj1[j],  Variables.dateFormat);
 					}
 					else
 					{

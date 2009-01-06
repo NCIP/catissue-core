@@ -463,7 +463,7 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 				 * Description : Set createdOn date for aliquot.  
 				 */
 
-				this.createdOn = Utility.parseDate(form.getCreatedDate(), Constants.DATE_PATTERN_MM_DD_YYYY);
+				this.createdOn = Utility.parseDate(form.getCreatedDate(), edu.wustl.catissuecore.util.global.Variables.dateFormat);
 
 				if (!validator.isEmpty(form.getSpecimenLabel())) // TODO
 				{
@@ -563,7 +563,7 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 						 * See also: 1_1 to 1_5
 						 * Description : Set createdOn date in edit mode for new specimen 
 						 */
-						this.createdOn = Utility.parseDate(form.getCreatedDate(), Constants.DATE_PATTERN_MM_DD_YYYY);
+						this.createdOn = Utility.parseDate(form.getCreatedDate(), edu.wustl.catissuecore.util.global.Variables.dateFormat);
 					}
 
 					Logger.out.debug("isParentChanged " + isParentChanged);
@@ -640,7 +640,7 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 						 * See also: 1_1 to 1_5
 						 * Description :createdOn should be collection event date for new specimen. 
 						 */
-						this.createdOn = Utility.parseDate(form.getCollectionEventdateOfEvent(), Constants.DATE_PATTERN_MM_DD_YYYY);
+						this.createdOn = Utility.parseDate(form.getCollectionEventdateOfEvent(), edu.wustl.catissuecore.util.global.Variables.dateFormat);
 
 						Logger.out.debug("Before specimenEventCollection.size(): " + specimenEventCollection.size());
 						specimenEventCollection.add(receivedEventParameters);
@@ -818,7 +818,7 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 					 * See also: 1_1 to 1_5
 					 * Description : Set createdOn date for derived specimen . 
 					 */
-					this.createdOn = Utility.parseDate(form.getCreatedDate(), Constants.DATE_PATTERN_MM_DD_YYYY);
+					this.createdOn = Utility.parseDate(form.getCreatedDate(), edu.wustl.catissuecore.util.global.Variables.dateFormat);
 
 					if (form.isAddOperation())
 					{

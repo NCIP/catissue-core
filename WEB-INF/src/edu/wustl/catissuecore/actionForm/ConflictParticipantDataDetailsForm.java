@@ -21,6 +21,7 @@ import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.Race;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.logger.Logger;
@@ -299,11 +300,11 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 			this.vitalStatus=participant.getVitalStatus();
 			if(participant.getBirthDate()!=null)
 			{
-				this.birthDate=Utility.parseDateToString(participant.getBirthDate(), Constants.DATE_PATTERN_MM_DD_YYYY);
+				this.birthDate=Utility.parseDateToString(participant.getBirthDate(), Variables.dateFormat);
 			}
 			if(participant.getDeathDate()!=null)
 			{
-				this.deathDate=Utility.parseDateToString(participant.getDeathDate(), Constants.DATE_PATTERN_MM_DD_YYYY);
+				this.deathDate=Utility.parseDateToString(participant.getDeathDate(), Variables.dateFormat);
 			}
 			this.ethinicity=participant.getEthnicity();
 			Collection tempRaceColl=participant.getRaceCollection();

@@ -36,6 +36,7 @@ import edu.wustl.catissuecore.actionForm.AnnotationDataEntryForm;
 import edu.wustl.catissuecore.bizlogic.AnnotationBizLogic;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
@@ -305,7 +306,9 @@ public class DisplayAnnotationDataEntryPageAction extends BaseAction
 				entityMapRecordXML.append("<cell>" + "0" +  "</cell>");
 				//entityMapRecordXML.append("<cell>" + entityMapRecord.getId() +  "</cell>");
 				entityMapRecordXML.append("<cell>" + dynamicEntity.getValue()+"^"+strURLForEditRecord+"</cell>");
-				entityMapRecordXML.append("<cell>" + Utility.parseDateToString(entityMapRecord.getCreatedDate(),Constants.TIMESTAMP_PATTERN) + "</cell>");
+				//entityMapRecordXML.append("<cell>" + Utility.parseDateToString(entityMapRecord.getCreatedDate(),Constants.TIMESTAMP_PATTERN) + "</cell>");
+				// By Date format change by geeta
+				entityMapRecordXML.append("<cell>" + Utility.parseDateToString(entityMapRecord.getCreatedDate(),Variables.dateFormat+edu.wustl.catissuecore.util.global.Constants.TIMESTAMP_PATTERN_MM_SS) + "</cell>");
 				entityMapRecordXML.append("<cell>" + entityMapRecord.getCreatedBy() + "</cell>");
 				entityMapRecordXML.append("<cell>" + "Edit" +"^"+ strURLForEditRecord+"</cell>");
 				entityMapRecordXML.append("</row>");

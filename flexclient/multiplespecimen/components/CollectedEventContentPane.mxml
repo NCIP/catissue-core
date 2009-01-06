@@ -6,8 +6,10 @@
 
 		import util.MetadataModel;
 		import util.Utility;
+		import util.Constants;
 		import valueobjects.EventBean;
 		import mx.controls.List;
+		import util.MSPParameter;
 		[Bindable]
 		public var collEvent:EventBean;
 		import mx.controls.Alert;
@@ -16,7 +18,7 @@
 			collEvent = new EventBean();
 		}*/
 
-		
+			[Bindable]	public var mspParameter:MSPParameter;
 		public function createComp():void
 		{
 	
@@ -59,7 +61,7 @@
 </mx:HBox>
 </components:MyCanvas>
 <components:MyCanvas>
-		<mx:DateField id="collectedOn" formatString="MM-DD-YYYY" yearNavigationEnabled="true"/>
+		<mx:DateField id="collectedOn" formatString="{mspParameter.dateFormat}" yearNavigationEnabled="true"/>
 </components:MyCanvas>
 <components:MyCanvas>
 		<mx:HBox>

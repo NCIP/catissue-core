@@ -1,5 +1,5 @@
 /*
- * $Name: 1.41.2.41.2.1 $
+ * $Name: 1.41.2.41.2.2 $
  *
  * */
 package edu.wustl.catissuecore.util.listener;
@@ -124,8 +124,12 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 		QueryBizLogic.initializeQueryData();
 		setDBFunctionNamesConstants();
 		createAliasAndPageOfMap();
-
+        
 		LabelAndBarcodeGeneratorInitializer.init();
+		
+//		Added By geeta 
+		InitialiseVariablesForEdinburgh();
+		
 		initCatissueCache();
 		initEntityCache();
 		Utility.initializePrivilegesMap();
@@ -384,4 +388,40 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 			e.printStackTrace();
 		}
 	 }
+public void InitialiseVariablesForEdinburgh(){
+		
+		//String isStateRequired=XMLPropertyHandler.getValue(Constants.IS_STATE_REQUIRED);
+		if(Constants.FALSE.equals(XMLPropertyHandler.getValue(Constants.IS_STATE_REQUIRED)))
+		{	
+			Variables.isStateRequired = false;
+		}
+	
+		if(Constants.TRUE.equals(XMLPropertyHandler.getValue(Constants.IS_CP_TITLE_CHANGE))){
+			Variables.isCPTitleChange=true;
+		}		
+		if(Constants.TRUE.equals(XMLPropertyHandler.getValue(Constants.IS_REMOVE_SSN))){
+			Variables.isSSNRemove=true;
+		}
+		if(Constants.TRUE.equals(XMLPropertyHandler.getValue(Constants.IS_REMOVE_SEX_GENOTYPE))){
+			Variables.isSexGenoTypeRemove=true;
+		}
+		if(Constants.TRUE.equals(XMLPropertyHandler.getValue(Constants.IS_REMOVE_RACE))){
+			Variables.isRaceRemove=true;
+		}
+		if(Constants.TRUE.equals(XMLPropertyHandler.getValue(Constants.IS_REMOVE_ETHNICITY))){
+			Variables.isEthnicityRemove=true;
+		}
+		String dateFormat=XMLPropertyHandler.getValue(Constants.DATEFORMAT);
+		if(dateFormat!=null && dateFormat!=""){
+			
+			if (Utility.isValidDateFormat(dateFormat)){
+				edu.wustl.common.util.global.Variables.dateFormat=dateFormat;
+			}else{
+				throw new RuntimeException("Invalid Date Format. Enter the format either in  dd-MM-yyyy or MM-dd-yyyy Format");
+			}
+		}else{
+			edu.wustl.common.util.global.Variables.dateFormat="MM-dd-yyyy";
+		}
+		
+	}
 }

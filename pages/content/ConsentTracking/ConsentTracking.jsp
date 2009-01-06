@@ -4,6 +4,7 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.*"%>
 <%@ page language="java" isELIgnored="false" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>	
@@ -306,6 +307,7 @@ function popupWindow(nofConsentTiers)
 									year= "<%=consentYear %>"
 									day= "<%= consentDay %>" 
 									value="<%=signedConsentDate %>"
+									pattern="<%=Variables.dateFormat %>"
 									styleClass="black_ar"
 								/>		
 								<% 
@@ -317,6 +319,7 @@ function popupWindow(nofConsentTiers)
 									id="consentDate"
 									formName="consentForm"	
 									styleClass="black_ar" 
+									pattern="<%=Variables.dateFormat %>"
 								/>		
 								<%
 								}
@@ -335,7 +338,9 @@ function popupWindow(nofConsentTiers)
 									month= "<%=consentMonth %>"
 									year= "<%=consentYear %>"
 									day= "<%= consentDay %>" 
+									pattern="<%=Variables.dateFormat %>"
 									value="<%=signedConsentDate %>"
+									
 									styleClass="black_ar"
 								/>		
 								<% 
@@ -347,6 +352,7 @@ function popupWindow(nofConsentTiers)
 									id="consentDate"
 									formName="collectionProtocolRegistrationForm"	
 									styleClass="black_ar" 
+									pattern="<%=Variables.dateFormat %>"
 								/>		
 								<%
 								}

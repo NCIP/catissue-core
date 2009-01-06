@@ -104,7 +104,7 @@ public class CreateSpecimenAction extends SecureAction
           * Description : CreatedOn date by default should be current date.
           */ 
     
-         createForm.setCreatedDate(Utility.parseDateToString(Calendar.getInstance().getTime(), Constants.DATE_PATTERN_MM_DD_YYYY));
+         createForm.setCreatedDate(Utility.parseDateToString(Calendar.getInstance().getTime(), Variables.dateFormat));
                        
          String pageOf = null;
          String tempPageOf = (String)request.getParameter("pageOf"); 

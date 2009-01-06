@@ -3,6 +3,7 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.CollectionProtocolRegistrationForm"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
 <%@ page import="java.util.*"%>	  
@@ -273,6 +274,7 @@
 									  month= "<%=registrationMonth %>"
 									  year= "<%=registrationYear %>"
 									  day= "<%= registrationDay %>" 
+									  pattern="<%=Variables.dateFormat%>"
 									  value="<%=currentRegistrationDate %>"
 									  styleClass="formDateSized10"
 											 />		
@@ -284,6 +286,7 @@
 					<ncombo:DateTimeComponent name="registrationDate"
 									  id="registrationDate"
  									  formName="collectionProtocolRegistrationForm"	
+ 									  pattern="<%=Variables.dateFormat%>"
 									  styleClass="formDateSized10" 
 											 />		
 					<%

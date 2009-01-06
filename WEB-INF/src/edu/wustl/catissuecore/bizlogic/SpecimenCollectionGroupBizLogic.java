@@ -1493,7 +1493,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 				if (participantRegDate != null)
 				{
 					//bug no:6526 date format changed to mm-dd-yyyy
-					anticipatoryDate = Utility.parseDateToString(participantRegDate, "MM-dd-yyyy");
+					anticipatoryDate = Utility.parseDateToString(participantRegDate, Variables.dateFormat);
 					dispName = colProt.getShortTitle() + ":" + anticipatoryDate;
 
 				}
@@ -1803,7 +1803,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 						CollectionEventParameters collectionEventParameters = (CollectionEventParameters) iter.next();
 						eventLastDate = collectionEventParameters.getTimestamp();
 						//bug no:6526 date format changed to mm-dd-yyyy
-						receivedDate = Utility.parseDateToString(collectionEventParameters.getTimestamp(), "MM-dd-yyyy");
+						receivedDate = Utility.parseDateToString(collectionEventParameters.getTimestamp(),Variables.dateFormat);
 						scgNodeLabel = "T" + eventPoint + ": " + collectionPointLabel + ": " + receivedDate;
 						break;
 					}
@@ -1826,7 +1826,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 					Date evtDate = Utility.getNewDateByAdditionOfDays(regDate, noOfDaysToAdd);
 					eventLastDate = evtDate;
 					//bug no:6526 date format changed to mm-dd-yyyy
-					receivedDate = Utility.parseDateToString(evtDate, "MM-dd-yyyy");
+					receivedDate = Utility.parseDateToString(evtDate, Variables.dateFormat);
 					// String toolTipText = scgNodeLabel+ ": "+scgName;//
 					scgNodeLabel = "T" + eventPoint + ": " + collectionPointLabel + ": " + receivedDate;
 				}

@@ -51,6 +51,22 @@ public class Variables extends edu.wustl.common.util.global.Variables
     public static List<NameValueBean> printerLocationList=null;
     public static List<NameValueBean> printerTypeList=null;
     
+    //Added by Geeta
+    public static boolean isStateRequired = true;
+    
+    public static boolean isCPTitleChange = false;
+      
+    public static boolean isSSNRemove = false;
+    
+    public static boolean isSexGenoTypeRemove = false;
+    
+    public static boolean isRaceRemove = false;
+    
+    public static boolean isEthnicityRemove = false;
+    
+  //  public static String dateFormat ="";
+    
+    
 	// Patch ID: SimpleSearchEdit_7
     public static Map<String, String> aliasAndPageOfMap = new HashMap<String, String>();
     

@@ -35,6 +35,7 @@ import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.util.MultipleSpecimenValidationUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.global.ApplicationProperties;
@@ -146,7 +147,7 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 			calender.setTime(distributionObject.getTimestamp());
 			this.timeInHours = Utility.toString(Integer.toString(calender.get(Calendar.HOUR_OF_DAY)));
 			this.timeInMinutes = Utility.toString(Integer.toString(calender.get(Calendar.MINUTE)));
-			this.dateOfEvent = Utility.parseDateToString(distributionObject.getTimestamp(), Constants.DATE_PATTERN_MM_DD_YYYY);
+			this.dateOfEvent = Utility.parseDateToString(distributionObject.getTimestamp(), Variables.dateFormat);
 		}
 		this.userId = distributionObject.getDistributedBy().getId().longValue();
 

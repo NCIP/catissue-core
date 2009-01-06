@@ -38,6 +38,7 @@ import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.catissuecore.util.global.Variables;
 
 /**
  * SpecimenCollectionGroupForm Class is used to encapsulate 
@@ -233,10 +234,10 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm implements C
 	private String collectionStatus;
 	
 	private String printCheckbox;
-	
-	private String printerType;
+		private String printerType;
 
 	private String printerLocation;
+	
 	
 	
 	private String nextForwardTo;
@@ -532,7 +533,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm implements C
 				this.witnessName=Utility.toString(witness.getFirstName());
 			}
 			this.signedConsentUrl=Utility.toString(specimenCollectionGroup.getCollectionProtocolRegistration().getSignedConsentDocumentURL());
-			this.consentDate=Utility.parseDateToString(specimenCollectionGroup.getCollectionProtocolRegistration().getConsentSignatureDate(), Constants.DATE_PATTERN_MM_DD_YYYY);
+			this.consentDate=Utility.parseDateToString(specimenCollectionGroup.getCollectionProtocolRegistration().getConsentSignatureDate(),  Variables.dateFormat);
 		/**
 	 * Name : Ashish Gupta
 	 * Reviewer Name : Sachin Lale 
@@ -568,7 +569,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm implements C
 					this.collectionEventUserId = collectionEventParameters.getUser().getId().longValue();					
 				
 				 	calender.setTime(collectionEventParameters.getTimestamp());
-					this.collectionEventdateOfEvent = Utility.parseDateToString(collectionEventParameters.getTimestamp(),Constants.DATE_PATTERN_MM_DD_YYYY);
+					this.collectionEventdateOfEvent = Utility.parseDateToString(collectionEventParameters.getTimestamp(), Variables.dateFormat);
 					this.collectionEventTimeInHours = Utility.toString(Integer.toString(calender.get(Calendar.HOUR_OF_DAY)));
 					this.collectionEventTimeInMinutes  = Utility.toString(Integer.toString(calender.get(Calendar.MINUTE)));
 					this.collectionEventCollectionProcedure = collectionEventParameters.getCollectionProcedure();
@@ -583,7 +584,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm implements C
 					this.receivedEventId = receivedEventParameters.getId().longValue();
 				//	this.receivedEventSpecimenId = receivedEventParameters.getSpecimen().getId().longValue();
 					this.receivedEventUserId = receivedEventParameters.getUser().getId().longValue();
-					this.receivedEventDateOfEvent = Utility.parseDateToString(receivedEventParameters.getTimestamp(),Constants.DATE_PATTERN_MM_DD_YYYY);
+					this.receivedEventDateOfEvent = Utility.parseDateToString(receivedEventParameters.getTimestamp(), Variables.dateFormat);
 					this.receivedEventTimeInHours = Utility.toString(Integer.toString(calender.get(Calendar.HOUR_OF_DAY)));
 					this.receivedEventTimeInMinutes = Utility.toString(Integer.toString(calender.get(Calendar.MINUTE)));
 					this.receivedEventReceivedQuality = receivedEventParameters.getReceivedQuality();
@@ -1522,7 +1523,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm implements C
 	{
 		this.barcode = barcode;
 	}
-	
+		
 	public String getPrinterLocation() {
 		return printerLocation;
 	}
@@ -1538,4 +1539,5 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm implements C
 	public void setPrinterType(String printerType) {
 		this.printerType = printerType;
 	}
+	
 }

@@ -127,7 +127,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final int STORAGE_TYPE_POSITION_MANUAL_VALUE = 3;	
 	public static final int STORAGE_TYPE_POSITION_AUTO_VALUE_FOR_TRANSFER_EVENT = 1;
 	public static final int STORAGE_TYPE_POSITION_MANUAL_VALUE_FOR_TRANSFER_EVENT = 2;
-	
+
 		
 	public static final String [][] defaultValueKeys= {
 		{Constants.DEFAULT_TISSUE_SITE, edu.wustl.common.util.global.Constants.CDE_NAME_TISSUE_SITE},
@@ -290,12 +290,13 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String OR_JOIN_CONDITION = "OR";
 	//Sri: Changed the format for displaying in Specimen Event list (#463)
 	public static final String TIMESTAMP_PATTERN = "MM-dd-yyyy HH:mm";
+	public static final String TIMESTAMP_PATTERN_MM_SS = "HH:mm";
 	public static final String DATE_PATTERN_YYYY_MM_DD = "yyyy-MM-dd";
 	public static final String QUERY_ID = "queryId";
 	
 	// Mandar: Used for Date Validations in Validator Class
 	public static final String DATE_SEPARATOR = "-";
-	public static final String DATE_SEPARATOR_DOT = ".";
+	public static final String DATE_SEPARATOR_DOT = ".";	
 	public static final String MIN_YEAR = "1900";
 	public static final String MAX_YEAR = "9999";
 	
@@ -2305,8 +2306,21 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String SPECIMEN_COLL_GROUP_BARCODE_GENERATOR_PROPERTY_NAME="speicmenCollectionGroupBarcodeGeneratorClass";
 	public static final String COLL_PROT_REG_BARCODE_GENERATOR_PROPERTY_NAME="collectionProtocolRegistrationBarcodeGeneratorClass";
 	public static final String PROTOCOL_PARTICIPANT_IDENTIFIER_LABEL_GENERATOR_PROPERTY_NAME="protocolParticipantIdentifierLabelGeneratorClass";
+	//Added By Geeta
+	//public static final String ECMC_LABEL_GENERATOR_PROPERTY_NAME="LabelGeneratorForECMCClass";
+	public static final String IS_STATE_REQUIRED="isStateRequired";
+	public static final String IS_POST_CODE="isPostCode";
+	public static final String CHANGE_DATE_FORMAT="changeDateFormat";
 	
+	public static final String IS_CP_TITLE_CHANGE="isCPTitleChange";
+
 	
+	public static final String IS_REMOVE_SSN="isRemoveSSN";
+	public static final String IS_REMOVE_SEX_GENOTYPE="isRemoveSexGenotype";
+	public static final String IS_REMOVE_RACE="isRemoveRace";
+	public static final String IS_REMOVE_ETHNICITY="isRemoveEthnicity";
+	public static final String IS_PHONENO_TO_BE_VALIDATED="isPhoneNumberToBeValidated";
+	public static final String DATEFORMAT="dateFormat";
 	
 	//SPECIMEN COllection Status
 	public static final String SPECIMEN_COLLECTED = "Collected";
@@ -2420,8 +2434,9 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String CP_QUERY_ALIQUOT_ADD="CPQueryAliquotAdd";
 	public static final String FROM_PRINT_ACTION="fromPrintAction";
 	public static final String PRINT_ALIQUOT="printAliquot";
-	public static final String PRINTER_TYPE="printerType";
+		public static final String PRINTER_TYPE="printerType";
 	public static final String PRINTER_LOCATION="printerLocation";
+	
 	
 	//constant required for setting the participant id on pathReport
 	public static final String PARTICIPANTIDFORREPORT="participantIdForReport";

@@ -34,6 +34,7 @@ import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.ConsentTier;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.util.MapDataParser;
@@ -118,7 +119,7 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
     	}
     	if(collectionProtocolForm.getStartDate() == null)
     	{
-    		collectionProtocolForm.setStartDate(Utility.parseDateToString(Calendar.getInstance().getTime(), Constants.DATE_PATTERN_MM_DD_YYYY));
+    		collectionProtocolForm.setStartDate(Utility.parseDateToString(Calendar.getInstance().getTime(), Variables.dateFormat));
     	}
     	//Name of delete button clicked
         String button = request.getParameter("button");

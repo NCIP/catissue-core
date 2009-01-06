@@ -369,31 +369,34 @@ function participantRegRow(subdivtag)
 			<tr>
 				<td colspan="2" align="left" class="showhide" height="100%">
 				<table width="100%" border="0" cellspacing="0" cellpadding="3" height="100%">
-					<tr>
-						<td width="1%" align="center" class="black_ar">&nbsp;</td>
-						<td width="17%"><label for="socialSecurityNumber"
-							class="black_ar"> <bean:message
-							key="participant.socialSecurityNumber" /> <br />
-						</label></td>
-						<td width="82%"><html:text styleClass="black_ar" size="3"
-							maxlength="3" styleId="socialSecurityNumberPartA"
-							property="socialSecurityNumberPartA"
-							readonly="<%=readOnlyForAll%>" onkeypress="intOnly(this);"
-							onchange="intOnly(this);"
-							onkeyup="intOnly(this);moveToNext(this,this.value,'socialSecurityNumberPartB');"
-							style="text-align:right" /> - <html:text styleClass="black_ar"
-							size="2" maxlength="2" styleId="socialSecurityNumberPartB"
-							property="socialSecurityNumberPartB"
-							readonly="<%=readOnlyForAll%>" onkeypress="intOnly(this);"
-							onchange="intOnly(this);"
-							onkeyup="intOnly(this);moveToNext(this,this.value,'socialSecurityNumberPartC');"
-							style="text-align:right" /> - <html:text styleClass="black_ar"
-							size="4" maxlength="4" styleId="socialSecurityNumberPartC"
-							property="socialSecurityNumberPartC"
-							readonly="<%=readOnlyForAll%>" onkeypress="intOnly(this);"
-							onchange="intOnly(this);" onkeyup="intOnly(this);"
-							style="text-align:right" /></td>
-					</tr>
+					<!-- Added by Geeta -->
+					<% if(!Variables.isSSNRemove) {%>
+						<tr>
+							<td width="1%" align="center" class="black_ar">&nbsp;</td>
+							<td width="17%"><label for="socialSecurityNumber"
+								class="black_ar"> <bean:message
+								key="participant.socialSecurityNumber" /> <br />
+							</label></td>
+							<td width="82%"><html:text styleClass="black_ar" size="3"
+								maxlength="3" styleId="socialSecurityNumberPartA"
+								property="socialSecurityNumberPartA"
+								readonly="<%=readOnlyForAll%>" onkeypress="intOnly(this);"
+								onchange="intOnly(this);"
+								onkeyup="intOnly(this);moveToNext(this,this.value,'socialSecurityNumberPartB');"
+								style="text-align:right" /> - <html:text styleClass="black_ar"
+								size="2" maxlength="2" styleId="socialSecurityNumberPartB"
+								property="socialSecurityNumberPartB"
+								readonly="<%=readOnlyForAll%>" onkeypress="intOnly(this);"
+								onchange="intOnly(this);"
+								onkeyup="intOnly(this);moveToNext(this,this.value,'socialSecurityNumberPartC');"
+								style="text-align:right" /> - <html:text styleClass="black_ar"
+								size="4" maxlength="4" styleId="socialSecurityNumberPartC"
+								property="socialSecurityNumberPartC"
+								readonly="<%=readOnlyForAll%>" onkeypress="intOnly(this);"
+								onchange="intOnly(this);" onkeyup="intOnly(this);"
+								style="text-align:right" /></td>
+						</tr>
+					<%}%>
 					<tr>
 						<td width="1%" align="center" class="black_ar">&nbsp;</td>
 						<td class="black_ar"><bean:message
@@ -438,11 +441,11 @@ function participantRegRow(subdivtag)
 										Integer birthDay = new Integer(Utility.getDay(currentBirthDate));
 								%> <ncombo:DateTimeComponent name="birthDate" id="birthDate"
 							formName="participantForm" month="<%=birthMonth %>"
-							year="<%=birthYear %>" day="<%= birthDay %>"
+							year="<%=birthYear %>" day="<%= birthDay %>" pattern="<%=Variables.dateFormat%>"
 							value="<%=currentBirthDate %>" styleClass="black_ar" /> <%
 									 } else {
 								%> <ncombo:DateTimeComponent name="birthDate" id="birthDate"
-							formName="participantForm" styleClass="black_ar" /> <%
+							formName="participantForm" pattern="<%=Variables.dateFormat%>" styleClass="black_ar" /> <%
 								 }
 								 %> <span class="grey_ar_s"> <bean:message
 							key="page.dateFormat" /> </span>&nbsp;</td>
@@ -486,12 +489,12 @@ function participantRegRow(subdivtag)
 										Integer deathDay = new Integer(Utility.getDay(currentDeathDate));
 								%> <ncombo:DateTimeComponent name="deathDate" id="deathDate"
 							formName="participantForm" month="<%=deathMonth %>"
-							year="<%=deathYear %>" day="<%= deathDay %>"
+							year="<%=deathYear %>" day="<%= deathDay %>" pattern="<%=Variables.dateFormat%>"
 							value="<%=currentDeathDate %>" styleClass="black_ar"
 							disabled="<%=deathDisable%>" /> <%
 									 } else {
 									 %> <ncombo:DateTimeComponent name="deathDate" id="deathDate"
-							formName="participantForm" styleClass="black_ar"
+							formName="participantForm"  pattern="<%=Variables.dateFormat%>" styleClass="black_ar"
 							disabled="<%=deathDisable%>" /> <%
 									 }
 								  %> <span class="grey_ar_s"> <bean:message
@@ -512,6 +515,7 @@ function participantRegRow(subdivtag)
 							</html:radio>&nbsp; &nbsp;
 								</logic:iterate></td>
 					</tr>
+				<%if(!Variables.isSexGenoTypeRemove) {%>
 					<tr>
 						<td width="1%" align="center" class="black_ar">&nbsp;</td>
 						<td class="black_ar"><bean:message
@@ -525,6 +529,8 @@ function participantRegRow(subdivtag)
 							styleClass="black_ar" size="27"/></label></td>
 
 					</tr>
+				<%}%>
+				<% if(!Variables.isRaceRemove) {%>
 					<tr>
 						<td width="1%" align="center" class="black_ar">&nbsp;</td>
 						<td class="black_ar_t"><bean:message
@@ -538,6 +544,8 @@ function participantRegRow(subdivtag)
 								labelProperty="name" property="value" />
 						</html:select></td>
 					</tr>
+				<%}%>
+				<% if(!Variables.isEthnicityRemove){%>
 					<tr>
 						<td width="1%" align="center" class="black_ar">&nbsp;</td>
 						<td><span class="black_ar"><bean:message
@@ -548,7 +556,7 @@ function participantRegRow(subdivtag)
 							initialValue="<%=form.getEthnicity()%>"
 							styleClass="black_ar" size="27" /></label></td>
 					</tr>
-
+			   <%}%>
 					<!-- activitystatus -->
 					<logic:equal name="<%=Constants.OPERATION%>"
 						value="<%=Constants.EDIT%>">

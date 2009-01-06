@@ -12,6 +12,7 @@
 	String SHOW_PARENT_SELECTION = (String) request.getAttribute("SHOW_PARENT_SELECTION");
 	String SHOW_LABEL = (String) request.getAttribute("SHOW_LABEL");
 	String SHOW_BARCODE = (String) request.getAttribute("SHOW_BARCODE");
+	String DATE_FORMAT = (String) request.getAttribute("DATE_FORMAT");
 	SessionDataBean bean = (SessionDataBean) session.getAttribute("sessionData");
 	String temp = (String) session.getAttribute("temp");
 %>
@@ -93,12 +94,12 @@ if(navigator.userAgent.indexOf('Mac')>=0)
 					<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
 						id="MultipleSpecimen" width="100%" height="100%"
 						codebase="http://fpdownload.macromedia.com/get/flashplayer/current/swflash.cab">
-						<param name="movie" value="flexclient/multiplespecimen/MultipleSpecimen.swf?MODE=<%=MODE%>&PARENT_TYPE=<%=PARENT_TYPE%>&PARENT_NAME=<%=PARENT_NAME%>&SP_COUNT=<%=SP_COUNT%>&SHOW_PARENT_SELECTION=<%=SHOW_PARENT_SELECTION%>&SHOW_LABEL=<%=SHOW_LABEL%>&SHOW_BARCODE=<%=SHOW_BARCODE%>"/>
+						<param name="movie" value="flexclient/multiplespecimen/MultipleSpecimen.swf?MODE=<%=MODE%>&PARENT_TYPE=<%=PARENT_TYPE%>&PARENT_NAME=<%=PARENT_NAME%>&SP_COUNT=<%=SP_COUNT%>&SHOW_PARENT_SELECTION=<%=SHOW_PARENT_SELECTION%>&SHOW_LABEL=<%=SHOW_LABEL%>&SHOW_BARCODE=<%=SHOW_BARCODE%>&DATE_FORMAT=<%=DATE_FORMAT%>"/>
 						<param name="quality" value="high" />
 						<param name="wmode" value="transparent" />						
 						<param name="bgcolor" value="#869ca7" />
 						<param name="allowScriptAccess" value="sameDomain"/>
-							<embed src="flexclient/multiplespecimen/MultipleSpecimen.swf?MODE=<%=MODE%>&PARENT_TYPE=<%=PARENT_TYPE%>&PARENT_NAME=<%=PARENT_NAME%>&SP_COUNT=<%=SP_COUNT%>&SHOW_PARENT_SELECTION=<%=SHOW_PARENT_SELECTION%>&SHOW_LABEL=<%=SHOW_LABEL%>&SHOW_BARCODE=<%=SHOW_BARCODE%>" quality="high" bgcolor="#869ca7"
+							<embed src="flexclient/multiplespecimen/MultipleSpecimen.swf?MODE=<%=MODE%>&PARENT_TYPE=<%=PARENT_TYPE%>&PARENT_NAME=<%=PARENT_NAME%>&SP_COUNT=<%=SP_COUNT%>&SHOW_PARENT_SELECTION=<%=SHOW_PARENT_SELECTION%>&SHOW_LABEL=<%=SHOW_LABEL%>&SHOW_BARCODE=<%=SHOW_BARCODE%>&DATE_FORMAT=<%=DATE_FORMAT%>" quality="high" bgcolor="#869ca7"
 								width="100%" height="100%" name="MultipleSpecimen" align="middle"
 								play="true"
 								loop="false"

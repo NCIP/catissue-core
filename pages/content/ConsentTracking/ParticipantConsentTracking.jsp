@@ -5,6 +5,7 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.ConsentResponseForm"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 
 <%@ page import="java.util.*"%>
 <%@ include file="/pages/content/common/BioSpecimenCommonCode.jsp" %>
@@ -34,7 +35,7 @@
 			form = (ConsentResponseForm)obj;
 			signedConsentDate = form.getConsentDate();
 			if(signedConsentDate == null || signedConsentDate.trim().length()==0){
-				signedConsentDate = Utility.parseDateToString(Calendar.getInstance().getTime(), Constants.DATE_PATTERN_MM_DD_YYYY);
+				signedConsentDate = Utility.parseDateToString(Calendar.getInstance().getTime(), Variables.dateFormat);
 			}
 			collectionProtocolID = form.getCollectionProtocolID();
 			

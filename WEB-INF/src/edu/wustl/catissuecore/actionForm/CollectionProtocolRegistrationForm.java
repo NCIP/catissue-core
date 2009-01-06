@@ -23,6 +23,7 @@ import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.global.ApplicationProperties;
@@ -180,7 +181,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm imple
 	  		//checkedButton = true;
 	  	}
 	  	this.participantProtocolID = Utility.toString(registration.getProtocolParticipantIdentifier());
-	  	this.registrationDate = Utility.parseDateToString(registration.getRegistrationDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
+	  	this.registrationDate = Utility.parseDateToString(registration.getRegistrationDate(),Variables.dateFormat);
        /**
 	  	 * For Consent tracking setting UI attributes
 	  	 */
@@ -190,7 +191,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm imple
 	  		this.witnessId=witness.getId();
 	  	}
 	  	this.signedConsentUrl=Utility.toString(registration.getSignedConsentDocumentURL());
-	  	this.consentDate=Utility.parseDateToString(registration.getConsentSignatureDate(), Constants.DATE_PATTERN_MM_DD_YYYY);
+	  	this.consentDate=Utility.parseDateToString(registration.getConsentSignatureDate(),Variables.dateFormat);
 	  	// Offset changes 27th Dec 2007
 //	  	this.setOffset(registration.getOffset().intValue());
 	  	this.setOffset(0);

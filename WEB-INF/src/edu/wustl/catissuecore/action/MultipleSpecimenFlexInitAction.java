@@ -18,6 +18,7 @@ import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.actionForm.AbstractActionForm;
 
@@ -56,7 +57,7 @@ public class MultipleSpecimenFlexInitAction extends SecureAction
 		{
 			showBarcode = "false";
 		}
-		setMSPRequestParame(request, mode, parentType, parentName, numberOfSpecimens, showParentSelection, showLabel, showBarcode);
+		setMSPRequestParame(request, mode, parentType, parentName, numberOfSpecimens, showParentSelection, showLabel, showBarcode,Variables.dateFormat);
 
 		String pageOf = (String) request.getParameter("pageOf");
 		if (pageOf != null)
@@ -73,7 +74,7 @@ public class MultipleSpecimenFlexInitAction extends SecureAction
 	}
 
 	private void setMSPRequestParame(HttpServletRequest request, String mode, String parentType, String parentName, String numberOfSpecimens,
-			String showParentSelection, String showLabel, String showBarcode)
+			String showParentSelection, String showLabel, String showBarcode,String  dateFormat)
 	{
 
 		request.setAttribute("MODE", mode);
@@ -83,6 +84,8 @@ public class MultipleSpecimenFlexInitAction extends SecureAction
 		request.setAttribute("SHOW_PARENT_SELECTION", showParentSelection);
 		request.setAttribute("SHOW_LABEL", showLabel);
 		request.setAttribute("SHOW_BARCODE", showBarcode);
+		request.setAttribute("DATE_FORMAT", dateFormat.toUpperCase());
+		
 	}
 
 	private String getParentName(HttpServletRequest request, String parentType)

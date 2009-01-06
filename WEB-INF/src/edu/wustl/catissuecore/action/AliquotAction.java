@@ -96,7 +96,7 @@ public class AliquotAction extends SecureAction
       //   if(((AliquotForm)form).getCreatedDate() == null||)
     	   if((((AliquotForm)form).getNextForwardTo()!=null)&&(((AliquotForm)form).getNextForwardTo()).equals(""))
            {
-             ((AliquotForm)form).setCreatedDate(Utility.parseDateToString(Calendar.getInstance().getTime(), Constants.DATE_PATTERN_MM_DD_YYYY));
+             ((AliquotForm)form).setCreatedDate(Utility.parseDateToString(Calendar.getInstance().getTime(), Variables.dateFormat));
            }
      
 		return invokeMethod(methodName, mapping, form, request, response);

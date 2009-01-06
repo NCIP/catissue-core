@@ -55,6 +55,7 @@ import edu.wustl.common.util.ParseXMLFile;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.querysuite.queryobject.TermType;
+import edu.wustl.catissuecore.util.global.Variables;
 
 /**
  * This class generates UI for 'Add Limits' and 'Edit Limits' section.
@@ -218,8 +219,9 @@ public class GenerateHtmlForAddLimitsBizLogic
     			String calendarId = componentId + "_calendar";
     			  
     			generateHTML.append("<td valign=\"top\">");
-    			SimpleDateFormat format =
-    	            new SimpleDateFormat(QueryModuleConstants.DATE_FORMAT);
+    			// Changed by Geeta
+    			//SimpleDateFormat format =new SimpleDateFormat(QueryModuleConstants.DATE_FORMAT);
+    			SimpleDateFormat format =new SimpleDateFormat(Variables.dateFormat);
     			String date = "";
     			if(operand.getDate()!=null)
     				date = format.format(operand.getDate());
@@ -228,7 +230,7 @@ public class GenerateHtmlForAddLimitsBizLogic
     			generateHTML.append("</td>");
     			
     			String imgStr = "\n<img id=\"calendarImg\" src=\"images/calendar.gif\" width=\"24\" height=\"22\"" +
-    					" border=\"0\"  onclick='scwShow("+ textBoxId + ",event);'>";
+    					" border=\"0\"  onclick=''setDateFormat(\""+Variables.dateFormat+"\");scwShow("+ textBoxId + ",event);'>";
     			
     			String innerStr = "\n<td width='3%' class='"+ cssClass +"' valign='top' id=\"" + calendarId + "\">" 
     						+ "\n" + imgStr ;
@@ -461,7 +463,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 				}
 				if (attribute.getDataType().equalsIgnoreCase(Constants.DATE))
 				{
-					String dateFormat = Constants.DATE_FORMAT;// ApplicationProperties.getValue("query.date.format");
+					String dateFormat = Variables.dateFormat;// ApplicationProperties.getValue("query.date.format");
 					generatedHTML.append("\n(" + dateFormat + ")");
 				}
 				if (forPage.equalsIgnoreCase(Constants.EXECUTE_QUERY_PAGE)
@@ -794,47 +796,48 @@ public class GenerateHtmlForAddLimitsBizLogic
 			{
 				AttributeInterface attribute = (AttributeInterface) attributes.get(i);
 				String attrName = attribute.getName();
-				String attrLabel = Utility.getDisplayLabel(attrName);
-				String componentId = generateComponentName(attribute);
-				attributesList = attributesList + ";" + componentId;
-				if (isBGColor)
-				{
-					styleSheetClass = "rowBGGreyColor1";
-				}
-				else
-				{
-					styleSheetClass = "rowBGWhiteColor";
-				}
-				isBGColor = !isBGColor;
-				generatedHTML
-						.append("\n<tr class='"
-								+ styleSheetClass
-								+ "' id=\""
-								+ componentId
-								+ "\" height=\"6%\" >\n"
-								+ "<td valign='top' align='right' class='standardLabelQuery' nowrap='nowrap' width=\"15%\">");
-				generatedHTML.append(attrLabel + " ");
-				if (attribute.getDataType().equalsIgnoreCase(Constants.DATE))
-				{
-					String dateFormat = Constants.DATE_FORMAT;//ApplicationProperties.getValue("query.date.format");
-					generatedHTML.append("\n(" + dateFormat + ")");
-				}
-				generatedHTML.append(":&nbsp;&nbsp;&nbsp;&nbsp;</td>\n");
-				List<String> operatorsList = getConditionsList(attribute);
-				boolean isBetween = false;
-				if (!operatorsList.isEmpty()
-						&& operatorsList.get(0).equalsIgnoreCase(
-								RelationalOperator.Between.toString()))
-				{
-					isBetween = true;
-				}
-				Map<String, ICondition> attributeNameConditionMap = getMapOfConditions(conditions);
-				isEditLimits = true;
-				String forPage="";
-				generateHTMLForConditions(generatedHTML, attribute, operatorsList, isBetween, conditions, attributeNameConditionMap, attrName, forPage,null);
-			
-				generatedHTML.append("\n</tr>");
-			}
+				
+						String attrLabel = Utility.getDisplayLabel(attrName);
+						String componentId = generateComponentName(attribute);
+						attributesList = attributesList + ";" + componentId;
+						if (isBGColor)
+						{
+							styleSheetClass = "rowBGGreyColor1";
+						}
+						else
+						{
+							styleSheetClass = "rowBGWhiteColor";
+						}
+						isBGColor = !isBGColor;
+						generatedHTML
+								.append("\n<tr class='"
+										+ styleSheetClass
+										+ "' id=\""
+										+ componentId
+										+ "\" height=\"6%\" >\n"
+										+ "<td valign='top' align='right' class='standardLabelQuery' nowrap='nowrap' width=\"15%\">");
+						generatedHTML.append(attrLabel + " ");
+						if (attribute.getDataType().equalsIgnoreCase(Constants.DATE))
+						{
+							String dateFormat = Variables.dateFormat;//ApplicationProperties.getValue("query.date.format");
+							generatedHTML.append("\n(" + dateFormat + ")");
+						}
+						generatedHTML.append(":&nbsp;&nbsp;&nbsp;&nbsp;</td>\n");
+						List<String> operatorsList = getConditionsList(attribute);
+						boolean isBetween = false;
+						if (!operatorsList.isEmpty()
+								&& operatorsList.get(0).equalsIgnoreCase(
+										RelationalOperator.Between.toString()))
+						{
+							isBetween = true;
+						}
+						Map<String, ICondition> attributeNameConditionMap = getMapOfConditions(conditions);
+						isEditLimits = true;
+						String forPage="";
+						generateHTMLForConditions(generatedHTML, attribute, operatorsList, isBetween, conditions, attributeNameConditionMap, attrName, forPage,null);
+					
+						generatedHTML.append("\n</tr>");
+					}
 		}
 		isTopButton = false;
 		generatedHTML.append("\n<tr>");
@@ -1229,7 +1232,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 			String textBoxId = componentId + "_textBox";
 			String calendarId = componentId + "_calendar";
 			String imgStr = "\n<img id=\"calendarImg\" src=\"images/calendar.gif\" width=\"24\" height=\"22\"" +
-					" border=\"0\" onclick='scwShow("+ textBoxId + ",event);'>";
+					" border=\"0\" onclick='setDateFormat(\""+Variables.dateFormat+"\");scwShow("+ textBoxId + ",event);'>";
 			
 			innerStr = "\n<td width='3%' class='"+ cssClass +"' valign='top' id=\"" + calendarId + "\">" 
 						+ "\n" + imgStr ;
@@ -1239,7 +1242,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 			String textBoxId1 = componentId + "_textBox1";
 			String calendarId1 = componentId + "_calendar1";
 			String imgStr = "\n<img id=\"calendarImg\" src=\"images/calendar.gif\" width=\"24\" height=\"22\" border='0'" +
-					" onclick='scwShow(" + textBoxId1 + ",event);'>";
+					" onclick='setDateFormat(\""+Variables.dateFormat+"\");scwShow(" + textBoxId1 + ",event);'>";
 			String style = "";
 			if (isBetween)
 			{

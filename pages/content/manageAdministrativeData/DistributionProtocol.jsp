@@ -8,6 +8,8 @@
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
 
 <%@ include file="/pages/content/common/AdminCommonCode.jsp" %>
 <head>
@@ -275,7 +277,14 @@ function insRow(subdivtag)
                 <tr>
                   <td align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
                   <td align="left" class="black_ar"><bean:message key="distributionprotocol.protocoltitle" /> </td>
-                  <td colspan="2" align="left"><html:text styleClass="black_ar" maxlength="255"  size="30" styleId="title" property="title" readonly="<%=readOnlyValue%>" /></td>
+                  
+				  <!--  Added by geeta --> 
+				   <%if(Variables.isCPTitleChange){%>
+						<td colspan="2" align="left"><html:textarea styleClass="black_ar" cols="28" rows="3" styleId="title" property="title" readonly="<%=readOnlyValue%>" /></td>
+				   <%}else{%>
+						<td colspan="2" align="left"><html:text styleClass="black_ar" maxlength="255"  size="30" styleId="title" property="title" readonly="<%=readOnlyValue%>" /></td>
+				   <%}%>
+
                 </tr>
                 <tr>
                   <td align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
@@ -284,45 +293,43 @@ function insRow(subdivtag)
                 </tr>
                 <tr>
                   <td align="center" class="black_ar">&nbsp;</td>
-                  <td align="left" class="black_ar"><label for="irbID"><bean:message key="distributionprotocol.irbid" /> </label></td>
-                  <td colspan="2" align="left"><html:text styleClass="black_ar" maxlength="255"  size="30" styleId="irbID" property="irbID" readonly="<%=readOnlyValue%>" />
+                   
+			       	<td align="left" class="black_ar"><label for="irbID"><bean:message key="distributionprotocol.irbid" /> </label></td>
+				  <td colspan="2" align="left"><html:text styleClass="black_ar" maxlength="255"  size="30" styleId="irbID" property="irbID" readonly="<%=readOnlyValue%>" />
                   </td>
                 </tr>
                 <tr>
                   <td align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
                   <td align="left" class="black_ar"><label for="startDate"><bean:message key="distributionprotocol.startdate" /> </label></td>
                   <td colspan="2" align="left" valign="top">
+				 
 				  <%
-							
 						if(currentDistributionProtocolDate.trim().length() > 0)
 						{
 							Integer distributionProtocolYear = new Integer(Utility.getYear(currentDistributionProtocolDate ));
 							Integer distributionProtocolMonth = new Integer(Utility.getMonth(currentDistributionProtocolDate ));
 							Integer distributionProtocolDay = new Integer(Utility.getDay(currentDistributionProtocolDate ));
-					%>
+				%>
 									<ncombo:DateTimeComponent name="startDate"
 								  		id="startDate"
 								  		formName="distributionProtocolForm"
 			  						    month= "<%= distributionProtocolMonth %>"
 								  		year= "<%= distributionProtocolYear %>"
 								  		day= "<%= distributionProtocolDay %>"
-								  		value="<%=currentDistributionProtocolDate %>"
+    									pattern="<%=Variables.dateFormat%>"
+										value="<%=currentDistributionProtocolDate%>"
 								  		styleClass="black_ar"
 									/>
-					<% 
-						}
-						else
-						{  
-					 %>
-									<ncombo:DateTimeComponent name="startDate"
+							
+						<% }else{%>
+										<ncombo:DateTimeComponent name="startDate"
 								 	 	id="startDate"
 								  		formName="distributionProtocolForm"
-								  		styleClass="black_ar"
-									/>
-					<% 
-						} 
-					%>
-						<span class="grey_ar_s"><bean:message key="page.dateFormat" /></span>
+										pattern="<%=Variables.dateFormat%>"
+								  		styleClass="black_ar"/>
+					  <%}%>
+					<span class="grey_ar_s"><bean:message key="page.dateFormat" /></span>
+					  
 					</td>
                 </tr>
 				<!-- enddate: should be displayed only in case of edit  -->	
@@ -335,18 +342,21 @@ function insRow(subdivtag)
 							Integer distributionProtocolEndDateMonth = new Integer(Utility.getMonth(distributionProtocolEndDate ));
 							Integer distributionProtocolEndDateDay = new Integer(Utility.getDay(distributionProtocolEndDate ));
 					%>
-			   				    <td colspan="2" align="left" valign="top">
-									<ncombo:DateTimeComponent name="endDate" 
-											 id="endDate"
-											 formName="distributionProtocolForm"
-											month= "<%= distributionProtocolEndDateMonth %>"
-								  			year= "<%= distributionProtocolEndDateYear %>"
-								  			day= "<%= distributionProtocolEndDateDay %>"
-								  			value="<%=distributionProtocolEndDate %>"
-								  			styleClass="black_ar"
-										/>
-									 <span class="grey_ar_s"><bean:message key="page.dateFormat" /> </span>
-								 </td>
+			   	
+							
+							<td colspan="2" align="left" valign="top">
+								<ncombo:DateTimeComponent name="endDate" 
+								 id="endDate"
+								 formName="distributionProtocolForm"
+								 month= "<%= distributionProtocolEndDateMonth %>"
+								year= "<%= distributionProtocolEndDateYear %>"
+								day= "<%= distributionProtocolEndDateDay %>"
+								pattern="<%=Variables.dateFormat%>"
+	value="<%=distributionProtocolEndDate%>"
+								styleClass="black_ar"/>
+								<span class="grey_ar_s"><bean:message key="page.dateFormat" /> </span>
+						
+								</td>
 				  			  </tr>
 				</logic:equal>
 

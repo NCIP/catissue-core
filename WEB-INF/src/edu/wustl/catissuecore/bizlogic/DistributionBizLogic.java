@@ -31,6 +31,7 @@ import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.dao.AbstractDAO;
@@ -393,7 +394,7 @@ public class DistributionBizLogic extends DefaultBizLogic
 		}
 
 		//date validation 
-		String errorKey = validator.validateDate(Utility.parseDateToString(distribution.getTimestamp(), Constants.DATE_PATTERN_MM_DD_YYYY), true);
+		String errorKey = validator.validateDate(Utility.parseDateToString(distribution.getTimestamp(),Variables.dateFormat), true);
 		if (errorKey.trim().length() > 0)
 		{
 			message = ApplicationProperties.getValue("distribution.date");

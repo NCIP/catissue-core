@@ -115,7 +115,7 @@ public class UpdateMetadata
 	 * Configuration
 	 * @param args
 	 */
-	private static void configureDBConnection(String[] args)
+	public static void configureDBConnection(String[] args)
 	{
 		if(args.length < 7)
 		{
@@ -136,7 +136,7 @@ public class UpdateMetadata
 	 * @throws ClassNotFoundException
 	 * @throws SQLException
 	 */
-	private static Connection getConnection() throws ClassNotFoundException, SQLException
+	public static Connection getConnection() throws ClassNotFoundException, SQLException
 	{
 		Connection connection = null;
 		// Load the JDBC driver
@@ -301,7 +301,6 @@ public class UpdateMetadata
 		AddAttribute addAttribute = new AddAttribute(connection);
 		addAttribute.addAttribute();	
 	}
-
 	private static List<String> getUpdateSQL() throws SQLException, IOException
 	{
 		List<String> dbUpdateSQL = new ArrayList<String>();
@@ -344,7 +343,8 @@ public class UpdateMetadata
 		dbUpdateSQL.add("update dyextn_attribute set ENTIY_ID = (Select IDENTIFIER from dyextn_abstract_metadata where name "+DB_SPECIFIC_COMPARE_OPERATOR+" 'edu.wustl.catissuecore.domain.AbstractSpecimen') where IDENTIFIER in (Select identifier from dyextn_abstract_metadata where name "+DB_SPECIFIC_COMPARE_OPERATOR+"'lineage')");
 
 		dbUpdateSQL.add("update dyextn_attribute set ENTIY_ID = (Select IDENTIFIER from dyextn_abstract_metadata where name "+DB_SPECIFIC_COMPARE_OPERATOR+" 'edu.wustl.catissuecore.domain.AbstractSpecimen') where IDENTIFIER in (Select identifier from dyextn_abstract_metadata where name "+DB_SPECIFIC_COMPARE_OPERATOR+"'initialQuantity') and ENTIY_ID in (Select identifier from dyextn_abstract_metadata where name "+DB_SPECIFIC_COMPARE_OPERATOR+"'edu.wustl.catissuecore.domain.Specimen')");
-
+		
+		
 		stmt = connection.createStatement();
 		rs = stmt.executeQuery("select IDENTIFIER from dyextn_abstract_metadata where IDENTIFIER in (Select IDENTIFIER from dyextn_attribute where ENTIY_ID in (Select IDENTIFIER from dyextn_abstract_metadata where name "+DB_SPECIFIC_COMPARE_OPERATOR+"'edu.wustl.catissuecore.domain.Specimen')) and NAME "+DB_SPECIFIC_COMPARE_OPERATOR+"'type'");
 		if(rs.next())
@@ -397,7 +397,8 @@ public class UpdateMetadata
 			dbUpdateSQL.add("update dyextn_abstract_metadata set NAME = 'isAvailable' where IDENTIFIER ="+identifier);
 		}
 		stmt.close();
-		
+	
+		 
 		dbUpdateSQL.add("update dyextn_database_properties set NAME = 'SPECIMEN_TYPE' where IDENTIFIER in (Select IDENTIFIER from dyextn_column_properties where PRIMITIVE_ATTRIBUTE_ID in (Select IDENTIFIER from dyextn_primitive_attribute where IDENTIFIER in (Select IDENTIFIER from dyextn_abstract_metadata  where IDENTIFIER in (Select IDENTIFIER from dyextn_attribute where ENTIY_ID in (Select IDENTIFIER from dyextn_abstract_metadata where name "+DB_SPECIFIC_COMPARE_OPERATOR+"'edu.wustl.catissuecore.domain.AbstractSpecimen')) and NAME "+DB_SPECIFIC_COMPARE_OPERATOR+"'specimenType')))");
 
 		dbUpdateSQL.add("update dyextn_database_properties set NAME = 'INITIAL_QUANTITY' where IDENTIFIER in (Select IDENTIFIER from dyextn_column_properties where PRIMITIVE_ATTRIBUTE_ID in (Select IDENTIFIER from dyextn_primitive_attribute where IDENTIFIER in (Select IDENTIFIER from dyextn_abstract_metadata  where IDENTIFIER in (Select IDENTIFIER from dyextn_attribute where ENTIY_ID in (Select IDENTIFIER from dyextn_abstract_metadata where name "+DB_SPECIFIC_COMPARE_OPERATOR+"'edu.wustl.catissuecore.domain.AbstractSpecimen')) and NAME "+DB_SPECIFIC_COMPARE_OPERATOR+"'initialQuantity')))");

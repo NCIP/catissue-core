@@ -91,7 +91,7 @@ public class SpecimenProtocolBizLogic extends DefaultBizLogic
         if(endDateList != null && !endDateList.isEmpty()   )
         {
          	Date tmpDate = (Date) endDateList.get(0);
-           	endDate = Utility.parseDateToString(tmpDate,Constants.DATE_PATTERN_MM_DD_YYYY); 
+           	endDate = Utility.parseDateToString(tmpDate,edu.wustl.catissuecore.util.global.Variables.dateFormat); 
         }  
         
 		return endDate ;	

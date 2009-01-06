@@ -1261,7 +1261,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
 		}
 
-		String errorKey = validator.validateDate(Utility.parseDateToString(registration.getRegistrationDate(), Constants.DATE_PATTERN_MM_DD_YYYY),
+		String errorKey = validator.validateDate(Utility.parseDateToString(registration.getRegistrationDate(), Variables.dateFormat),
 				true);
 		if (errorKey.trim().length() > 0)
 		{

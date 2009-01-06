@@ -29,6 +29,7 @@ import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.action.BaseAction;
 
 
@@ -121,7 +122,7 @@ public class ScgEventsAjaxHandlerAction extends BaseAction
 		xmlData.append("</CollectorName>");
 		
 		xmlData.append("<CollectionDate>");
-		xmlData.append(Utility.parseDateToString(collectionEventParameters.getTimestamp(),Constants.DATE_PATTERN_MM_DD_YYYY));
+		xmlData.append(Utility.parseDateToString(collectionEventParameters.getTimestamp(),Variables.dateFormat));
 		xmlData.append("</CollectionDate>");
 		
 		Calendar calender = Calendar.getInstance();
@@ -167,7 +168,7 @@ public class ScgEventsAjaxHandlerAction extends BaseAction
 		xmlData.append("</ReceiverName>");
 		
 		xmlData.append("<ReceivedDate>");
-		xmlData.append(Utility.parseDateToString(receivedEventParameters.getTimestamp(),Constants.DATE_PATTERN_MM_DD_YYYY));
+		xmlData.append(Utility.parseDateToString(receivedEventParameters.getTimestamp(),Variables.dateFormat));
 		xmlData.append("</ReceivedDate>");
 		
 		Calendar calender = Calendar.getInstance();

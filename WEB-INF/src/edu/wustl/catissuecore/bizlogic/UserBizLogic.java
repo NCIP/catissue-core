@@ -72,6 +72,7 @@ import gov.nih.nci.security.authorization.domainobjects.Role;
 import gov.nih.nci.security.dao.ProtectionElementSearchCriteria;
 import gov.nih.nci.security.exceptions.CSException;
 
+
 /**
  * UserBizLogic is used to add user information into the database using Hibernate.
  * @author kapil_kaveeshwar
@@ -1226,12 +1227,14 @@ public class UserBizLogic extends DefaultBizLogic
 		//END	
 		if (Constants.PAGEOF_CHANGE_PASSWORD.equals(user.getPageOf()) == false)
 		{
-			if (!Validator.isEnumeratedValue(CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_STATE_LIST, null), user
+			// if condition added by Geeta for ECMC 
+			if((user.getAddress().getState()!="null" && user.getAddress().getState()!="") && edu.wustl.catissuecore.util.global.Variables.isStateRequired ){
+				if (!Validator.isEnumeratedValue(CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_STATE_LIST, null), user
 					.getAddress().getState()))
-			{
-				throw new DAOException(ApplicationProperties.getValue("state.errMsg"));
+				{
+					throw new DAOException(ApplicationProperties.getValue("state.errMsg"));
+				}
 			}
-
 			if (!Validator.isEnumeratedValue(CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_COUNTRY_LIST, null), user
 					.getAddress().getCountry()))
 			{
@@ -1353,38 +1356,42 @@ public class UserBizLogic extends DefaultBizLogic
 			message = ApplicationProperties.getValue("user.city");
 			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
 		}
-
-		if (!validator.isValidOption(user.getAddress().getState()) || validator.isEmpty(user.getAddress().getState()))
-		{
-			message = ApplicationProperties.getValue("user.state");
-			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
-		}
-
-		if (validator.isEmpty(user.getAddress().getZipCode()))
-		{
-			message = ApplicationProperties.getValue("user.zipCode");
-			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
-		}
-		else
-		{
-			if (!validator.isValidZipCode(user.getAddress().getZipCode()))
+		if(edu.wustl.catissuecore.util.global.Variables.isStateRequired){
+			if (!validator.isValidOption(user.getAddress().getState()) || validator.isEmpty(user.getAddress().getState()))
 			{
-				message = ApplicationProperties.getValue("user.zipCode");
-				throw new DAOException(ApplicationProperties.getValue("errors.item.format",message));	
+				message = ApplicationProperties.getValue("user.state");
+				throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
 			}
 		}
-		
+		/*
+		 * Commented by Geeta to remove the validationnon zip code
+			if (validator.isEmpty(user.getAddress().getZipCode()))
+			{
+				message = ApplicationProperties.getValue("user.zipCode");
+				throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
+			}
+			else
+			{
+				if (!validator.isValidZipCode(user.getAddress().getZipCode()))
+				{
+					message = ApplicationProperties.getValue("user.zipCode");
+					throw new DAOException(ApplicationProperties.getValue("errors.item.format",message));	
+				}
+			}
+		*/
 		if (!validator.isValidOption(user.getAddress().getCountry()) || validator.isEmpty(user.getAddress().getCountry()))
 		{
 			message = ApplicationProperties.getValue("user.country");
 			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
 		}
-
+// Commented by Geeta 
+		/*
 		if (validator.isEmpty(user.getAddress().getPhoneNumber()))
 		{
 			message = ApplicationProperties.getValue("user.phoneNumber");
 			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
 		}
+		*/
 				
 		if (user.getInstitution().getId()==null || user.getInstitution().getId().longValue()<=0)
 		{

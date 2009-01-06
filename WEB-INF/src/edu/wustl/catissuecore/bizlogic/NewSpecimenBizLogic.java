@@ -1966,7 +1966,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 				&& !specimen.getLineage().equalsIgnoreCase(Constants.NEW_SPECIMEN))
 		{
 			String tempDate = Utility.parseDateToString(specimen.getCreatedOn(),
-					Constants.DATE_PATTERN_MM_DD_YYYY);
+					Variables.dateFormat);
 			if (!validator.checkDate(tempDate))
 			{
 				throw new DAOException(ApplicationProperties

@@ -21,6 +21,7 @@ package util
 		public var showParentSelection:String="";
 		public var showLabel:String="";
 		public var showBarcode:String="";
+		public var dateFormat:String="";
 		
 		public function toString():String
 		{

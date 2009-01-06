@@ -7,6 +7,7 @@ import java.util.Calendar;
 import edu.wustl.catissuecore.domain.Distribution;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.logger.Logger;
@@ -85,7 +86,7 @@ public class DistributionReportForm extends AbstractActionForm
  		calender.setTime(distribution.getTimestamp());
  		this.timeInHours = Utility.toString(Integer.toString( calender.get(Calendar.HOUR_OF_DAY)));
  		this.timeInMinutes = Utility.toString(Integer.toString(calender.get(Calendar.MINUTE)));
- 		this.dateOfEvent = Utility.parseDateToString(distribution.getTimestamp(),Constants.DATE_PATTERN_MM_DD_YYYY);
+ 		this.dateOfEvent = Utility.parseDateToString(distribution.getTimestamp(),Variables.dateFormat);
  		this.id = distribution.getId().longValue() ;
 		//this.fromSite = String.valueOf(distribution.getFromSite().getName());
 		this.toSite = String.valueOf(distribution.getToSite().getName());

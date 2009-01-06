@@ -3,7 +3,7 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
-
+<%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 <%@ page import="edu.wustl.common.vo.SearchFieldData"%>
 <%@ page import="edu.wustl.common.vo.AdvanceSearchUI"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
@@ -204,7 +204,9 @@
  									  formName="<%=advSearch.getFormName()%>"	
 									  styleClass="formDateSized10" 
 									  disabled="<%=isDisabled  %>" 
-									  value = "<%= firstDate %>"
+									  pattern="<%=Variables.dateFormat%>"
+				  			  		  value="<%=firstDate%>"							 
+									 
 									  onClickImage="<%=dateField1Click %>"
 											 />	
 			&nbsp;Thru&nbsp;
@@ -213,7 +215,8 @@
  									  formName="<%=advSearch.getFormName()%>"	
 									  styleClass="formDateSized10" 
 									  disabled="<%=isDisabled1 %>"
-									  value = "<%= secondDate %>"
+									  pattern="<%=Variables.dateFormat%>"
+				  			          value="<%=secondDate%>"							 
 									  onClickImage="<%=dateField2Click %>"
 											 />	
 			</td>

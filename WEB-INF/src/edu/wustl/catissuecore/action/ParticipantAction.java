@@ -44,6 +44,7 @@ import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.beans.NameValueBean;
@@ -244,7 +245,7 @@ public class ParticipantAction extends SecureAction
 						participantForm.setCollectionProtocolRegistrationValue(isConsentAvailableKey,Constants.PARTICIPANT_CONSENT_ENTER_RESPONSE);
 					}
 					participantForm.setCollectionProtocolRegistrationValue(collectionProtocolRegistrationActivityStausKey, Constants.ACTIVITY_STATUS_ACTIVE);
-					String collectionProtocolRegistrationDateValue = Utility.parseDateToString(Calendar.getInstance().getTime(), Constants.DATE_PATTERN_MM_DD_YYYY);
+					String collectionProtocolRegistrationDateValue = Utility.parseDateToString(Calendar.getInstance().getTime(), Variables.dateFormat);
 					participantForm.setCollectionProtocolRegistrationValue(collectionProtocolRegistrationDateKey, collectionProtocolRegistrationDateValue);
 					participantForm.setCollectionProtocolRegistrationValueCounter(1);
 				}
@@ -256,7 +257,7 @@ public class ParticipantAction extends SecureAction
 		{
 			String collectionProtocolRegistrationDateKey = "CollectionProtocolRegistration:1_registrationDate";
 			String collectionProtocolRegistrationActivityStausKey = "CollectionProtocolRegistration:1_activityStatus";
-			String collectionProtocolRegistrationDateValue = Utility.parseDateToString(Calendar.getInstance().getTime(), Constants.DATE_PATTERN_MM_DD_YYYY);
+			String collectionProtocolRegistrationDateValue = Utility.parseDateToString(Calendar.getInstance().getTime(), Variables.dateFormat);
 			participantForm.setDefaultCollectionProtocolRegistrationValue(collectionProtocolRegistrationDateKey, collectionProtocolRegistrationDateValue);
 			participantForm.setDefaultCollectionProtocolRegistrationValue(collectionProtocolRegistrationActivityStausKey, Constants.ACTIVITY_STATUS_ACTIVE);
 			participantForm.setCollectionProtocolRegistrationValueCounter(1);

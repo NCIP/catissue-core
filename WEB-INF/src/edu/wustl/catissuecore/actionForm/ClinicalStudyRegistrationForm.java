@@ -17,6 +17,7 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.domain.ClinicalStudyRegistration;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.global.ApplicationProperties;
@@ -88,7 +89,7 @@ public class ClinicalStudyRegistrationForm extends AbstractActionForm
             //checkedButton = true;
         }
         this.participantClinicalStudyID = Utility.toString(registration.getClinicalStudyParticipantIdentifier());
-        this.registrationDate = Utility.parseDateToString(registration.getRegistrationDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
+        this.registrationDate = Utility.parseDateToString(registration.getRegistrationDate(),Variables.dateFormat);
        }
     /**
     * @return Returns the id assigned to form bean

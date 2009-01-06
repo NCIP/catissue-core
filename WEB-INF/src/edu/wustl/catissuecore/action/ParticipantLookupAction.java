@@ -28,6 +28,7 @@ import edu.wustl.catissuecore.domain.DomainObjectFactory;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
@@ -193,8 +194,10 @@ public class ParticipantLookupAction extends BaseAction
 			participantInfo.add(Utility.toString(participant.getBirthDate()));
 			participantInfo.add(Utility.toString(participant.getDeathDate()));
 			participantInfo.add(Utility.toString(participant.getVitalStatus()));
-			participantInfo.add(Utility.toString(participant.getGender()));						
-			participantInfo.add(Utility.toString(participant.getSocialSecurityNumber()));
+			participantInfo.add(Utility.toString(participant.getGender()));	
+			if(!Variables.isSSNRemove){
+				participantInfo.add(Utility.toString(participant.getSocialSecurityNumber()));
+			}
 			if(participant.getParticipantMedicalIdentifierCollection()!=null)
 			{
 				Iterator participantMedicalIdentifierItr = participant.getParticipantMedicalIdentifierCollection().iterator();

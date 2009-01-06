@@ -184,6 +184,8 @@ public class UserAction extends SecureAction {
 				userForm.setCountry((String) DefaultValueManager
 						.getDefaultValue(Constants.DEFAULT_COUNTRY));
 			}
+			
+			
 		}
 		if (pageOf.equals(Constants.PAGEOF_SIGNUP)) {
 			userForm.setStatus(Constants.ACTIVITY_STATUS_NEW);

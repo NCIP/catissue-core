@@ -29,6 +29,7 @@ import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.util.dbManager.DAOException;
 
@@ -86,7 +87,7 @@ public class SubCollectionProtocolRegistrationAction extends SecureAction
 				}
 				if (cpform.getRegistrationDate() == null || cpform.getRegistrationDate().equals(""))
 				{
-					cpform.setRegistrationDate(Utility.parseDateToString(Calendar.getInstance().getTime(), Constants.DATE_PATTERN_MM_DD_YYYY));
+					cpform.setRegistrationDate(Utility.parseDateToString(Calendar.getInstance().getTime(), Variables.dateFormat));
 
 				}
 			}
@@ -213,7 +214,7 @@ public class SubCollectionProtocolRegistrationAction extends SecureAction
 			}
 			form.setId(id);
 			form.setRegistrationDate(regDate.toString());
-			form.setRegistrationDate(Utility.parseDateToString(regDate, Constants.DATE_PATTERN_MM_DD_YYYY));
+			form.setRegistrationDate(Utility.parseDateToString(regDate, Variables.dateFormat));
 
 			return true;
 		}
@@ -268,6 +269,7 @@ public class SubCollectionProtocolRegistrationAction extends SecureAction
 //			}
 //		}
 //	}
+
 //	private Long getImmidateParentCpId(Long collectionProtocolId) throws DAOException
 //	{
 //		CollectionProtocolRegistrationBizLogic bizLogic = (CollectionProtocolRegistrationBizLogic) BizLogicFactory.getInstance().getBizLogic(

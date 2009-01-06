@@ -8,6 +8,8 @@
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.common.query.Operator"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 
 <%@ include file="/pages/content/common/SpecimenCommonScripts.jsp" %>
 
@@ -341,7 +343,7 @@
 			var showCalValue = ""+showCal.value;
 			if(showCalValue!= null && showCalValue.length>0)
 			{
-				sname = "<div id='"+overDiv+"' style='position:absolute; visibility:hidden; z-index:1000;'></div><a href='javascript:show_calendar('"+fieldName+"',null,null,'MM-DD-YYYY');'><img src='images\calendar.gif' width=24 height=22 border=0></a>";
+				sname = "<div id='"+overDiv+"' style='position:absolute; visibility:hidden; z-index:1000;'></div><a href='javascript:show_calendar('"+fieldName+"',null,null,'<%=Variables.dateFormat%>');'><img src='images\calendar.gif' width=24 height=22 border=0></a>";
 			}
 			else
 			{
@@ -399,7 +401,7 @@
 					txtField.readOnly="";
 					calendarShow.value = "Show";
 					var innerStr = "<div id='"+ overDiv +"' style='position:absolute; visibility:hidden; z-index:1000;'></div>";
-					innerStr = innerStr + "<a href=\"javascript:show_calendar('"+fieldValue+"',null,null,'MM-DD-YYYY');\">";
+					innerStr = innerStr + "<a href=\"javascript:show_calendar('"+fieldValue+"',null,null,'<%=Variables.dateFormat%>');\">";
 					innerStr = innerStr + "<img src=\"images\\calendar.gif\" width=24 height=22 border=0>";
 					innerStr = innerStr + "</a>";
 					td.innerHTML = innerStr;
@@ -871,7 +873,8 @@
 			<ncombo:DateTimeComponent name="<%=createdDate%>"
 									  id="<%=createdDateStr + 1%>"
  									  formName="<%=formName%>"	
-									  value="<%=createdDateValue1%>"
+			    					  pattern="<%=Variables.dateFormat%>"
+           				  			  value="<%=createdDateValue1%>"							 
 									  styleClass="formDateSized10" 
 									  disabled="<%=disabled%>"
 									  onClickImage="<%=dateField1Click %>"
@@ -880,7 +883,8 @@
 			<ncombo:DateTimeComponent name="<%=createdDate2%>"
 									  id="<%=createdDateStr + 2%>"
  									  formName="<%=formName%>"	
-									  value="<%=createdDateValue2%>"
+									     pattern="<%=Variables.dateFormat%>"
+				  			  value="<%=createdDateValue2%>"						
 									  styleClass="formDateSized10" 
 									  disabled="<%=disabled2%>"
 									  onClickImage="<%=dateField2Click %>"
@@ -1014,7 +1018,7 @@
 		{
 	%>
 	<div id="<%=overDiv%>" style="position:absolute; visibility:hidden; z-index:1000;"></div>
-	<a href="javascript:show_calendar('<%=fieldName%>',null,null,'MM-DD-YYYY');">
+	<a href="javascript:show_calendar('<%=fieldName%>',null,null,'<%=Variables.dateFormat%>');">
 		<img src="images\calendar.gif" width=24 height=22 border=0>
 	</a>
 	<%		

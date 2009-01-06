@@ -105,7 +105,7 @@ public class OrderingSystemUtil
 		requestViewBean.setDistributionProtocolId(order.getDistributionProtocol().getId().toString());
 		requestViewBean.setOrderName(order.getName());
 		requestViewBean.setRequestedBy(order.getDistributionProtocol().getPrincipalInvestigator().getLastName()+", "+order.getDistributionProtocol().getPrincipalInvestigator().getFirstName());
-		requestViewBean.setRequestedDate(Utility.parseDateToString(order.getRequestedDate(), Constants.DATE_PATTERN_MM_DD_YYYY));
+		requestViewBean.setRequestedDate(Utility.parseDateToString(order.getRequestedDate(), edu.wustl.catissuecore.util.global.Variables.dateFormat));
 		requestViewBean.setEmail(order.getDistributionProtocol().getPrincipalInvestigator().getEmailAddress());
 		return requestViewBean;
 	}

@@ -59,6 +59,7 @@ import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
@@ -816,9 +817,9 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 			innerList.add(staticEntityName);
 			entityMapXML.append("<cell>"
 					+ Utility.parseDateToString(entityMapObj.getCreatedDate(),
-							Constants.DATE_PATTERN_MM_DD_YYYY) + "</cell>");
+							Variables.dateFormat) + "</cell>");
 			innerList.add(Utility.parseDateToString(entityMapObj.getCreatedDate(),
-					Constants.DATE_PATTERN_MM_DD_YYYY));
+					Variables.dateFormat));
 			entityMapXML.append("<cell>" + entityMapObj.getCreatedBy() + "</cell>");
 			String name = entityMapObj.getCreatedBy();
 			if (name==null)

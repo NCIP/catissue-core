@@ -197,6 +197,8 @@ public class UpdateMetadataUtil
 			List<String> deleteSQL) 
 	{
 		String sql;
+		
+		
 		sql = "delete from dyextn_attribute_type_info where identifier = "+attribute.getAttributeTypeInformation().getDataElement().getId();
 		deleteSQL.add(sql);
 		

@@ -56,7 +56,7 @@
                 <td width="25%" class="tableheading"><strong><bean:message key="user.loginName" /> </strong></td>
                 <td width="20%" class="tableheading"><strong><bean:message key="user.userName" /></strong></td>
                 <td width="28%" class="tableheading"><strong><bean:message key="user.emailAddress" /></strong></td>
-                <td width="25%" class="tableheading"><strong><bean:message key="approveUser.registrationDate" /> </strong> <span class="grey_ar_s">[MM-DD-YYYY] </span></td>
+                <td width="25%" class="tableheading"><strong><bean:message key="approveUser.registrationDate" /> </strong> <span class="grey_ar_s">[<bean:message key="page.dateFormat" />] </span></td>
               </tr>
 			  </c:if>
 			  <logic:empty name="showDomainObjectList">

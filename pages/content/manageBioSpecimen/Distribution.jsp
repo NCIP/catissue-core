@@ -6,6 +6,7 @@
 <%@ page import="edu.wustl.catissuecore.actionForm.DistributionForm"%>
 <%@ page import="java.util.List,java.util.Iterator"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
 <script src="jss/ajax.js"></script>	   
@@ -555,11 +556,14 @@
 %> <ncombo:DateTimeComponent name="dateOfEvent" id="dateOfEvent"
 						formName="distributionForm" month="<%= distributionMonth %>"
 						year="<%= distributionYear %>" day="<%= distributionDay %>"
+						pattern="<%=Variables.dateFormat%>"
 						value="<%=currentDistributionDate %>" styleClass="formDateSized10" />
 					<%} else {
 
 				%> <ncombo:DateTimeComponent name="dateOfEvent" id="dateOfEvent"
-						formName="distributionForm" styleClass="formDateSized10" />
+						formName="distributionForm" 
+						pattern="<%=Variables.dateFormat%>"
+						styleClass="formDateSized10" />
 					<%}
 
 				%> <bean:message key="page.dateFormat" />&nbsp;</td>

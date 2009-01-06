@@ -40,6 +40,7 @@ import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -335,7 +336,8 @@ public class ListSpecimenEventParametersAction extends SecureAction
 			rowData.add(userName);
 			
 			Date date = (Date)rowDataMap.get(Constants.EVENT_DATE);
-			String eventDate = Utility.parseDateToString(date, Constants.TIMESTAMP_PATTERN); // Sri: Changed format for bug #463
+			//String eventDate = Utility.parseDateToString(date,Constants.TIMESTAMP_PATTERN ); // Sri: Changed format for bug #463
+			String eventDate = Utility.parseDateToString(date, Variables.dateFormat+edu.wustl.catissuecore.util.global.Constants.TIMESTAMP_PATTERN_MM_SS); // Sri: Changed format for bug #463
 			rowData.add(eventDate);
 			
 			String paggeOf = (String)rowDataMap.get(Constants.PAGE_OF);

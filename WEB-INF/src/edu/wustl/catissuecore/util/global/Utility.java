@@ -753,6 +753,7 @@ public class Utility extends edu.wustl.common.util.Utility {
 		return obj;
 	}
 
+	
 	/**
 	 * This method creates a comma separated string of numbers representing
 	 * column width.

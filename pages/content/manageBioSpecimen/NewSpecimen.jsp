@@ -1384,7 +1384,9 @@
 								</td>
 								<td class="black_ar" >
 									<ncombo:DateTimeComponent name="createdDate" id="createdDate"
-			  							formName="newSpecimenForm" value='${requestScope.createdDate}'
+			  							formName="newSpecimenForm" 
+			  							pattern="<%=Variables.dateFormat%>" 
+			  							value='${requestScope.createdDate}'
 			  							styleClass="black_ar"/>
 										<span class="grey_ar_s">
 									<bean:message key="page.dateFormat" /></span>&nbsp;

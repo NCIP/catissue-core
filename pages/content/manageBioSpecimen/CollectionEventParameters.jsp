@@ -3,6 +3,7 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.CollectionEventParametersForm"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
@@ -62,12 +63,14 @@
 					 year='${requestScope.eventParametersYear}'
 					 day='${requestScope.eventParametersDay}'
 					 value='${requestScope.currentEventParametersDate}'
+					 pattern="<%=Variables.dateFormat%>"
 					 styleClass="black_ar" />
 			  </logic:notEmpty>
 			  <logic:empty name="currentEventParametersDate">
 				<ncombo:DateTimeComponent name="dateOfEvent"
 					  id="dateOfEvent"
 					  formName="collectionEventParametersForm"
+					  pattern="<%=Variables.dateFormat%>"
 					  styleClass="black_ar"	/>
 			  </logic:empty>
 			  <span class="grey_ar_s"><bean:message key="page.dateFormat" /></span></td>

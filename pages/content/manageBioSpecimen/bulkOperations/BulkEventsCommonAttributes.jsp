@@ -57,7 +57,8 @@
 							  month= "<%= Utility.getMonth(eventDate) %>"
 							  year= "<%= Utility.getYear(eventDate) %>"
 							  day= "<%= Utility.getDay(eventDate) %>"
-							  value="<%= eventDate %>"
+    		  			      pattern="<%=Variables.dateFormat%>"
+    		  			      value="<%= eventDate %>"
 							  styleClass="black_ar"
 							/><span class="grey_ar_s">
                    <bean:message key="page.dateFormat" />&nbsp</span></td>

@@ -41,6 +41,7 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.multiRepository.bean.SiteUserRolePrivilegeBean;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.util.dbManager.DAOException;
 
@@ -93,7 +94,7 @@ public class CollectionProtocolUtil {
 		collectionProtocolBean.setProtocolCoordinatorIds(protocolCoordinatorIds);
 		collectionProtocolBean.setPrincipalInvestigatorId(collectionProtocol.getPrincipalInvestigator().getId().longValue());
 		Date date = collectionProtocol.getStartDate();
-		collectionProtocolBean.setStartDate(edu.wustl.common.util.Utility.parseDateToString(date, Constants.DATE_FORMAT) );
+		collectionProtocolBean.setStartDate(edu.wustl.common.util.Utility.parseDateToString(date, edu.wustl.catissuecore.util.global.Variables.dateFormat) );
 		collectionProtocolBean.setDescriptionURL(collectionProtocol.getDescriptionURL());
 		collectionProtocolBean.setUnsignedConsentURLName(collectionProtocol.getUnsignedConsentDocumentURL());
 		collectionProtocolBean.setConsentWaived (collectionProtocol.getConsentsWaived().booleanValue());   
@@ -104,7 +105,7 @@ public class CollectionProtocolUtil {
 		collectionProtocolBean.setConsentValues(prepareConsentTierMap(collectionProtocol.getConsentTierCollection()));
 		collectionProtocolBean.setActivityStatus(collectionProtocol.getActivityStatus());
 		collectionProtocolBean.setAliqoutInSameContainer(collectionProtocol.getAliquotInSameContainer().booleanValue());
-		String endDate = Utility.parseDateToString(collectionProtocol.getEndDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
+		String endDate = Utility.parseDateToString(collectionProtocol.getEndDate(),edu.wustl.catissuecore.util.global.Variables.dateFormat);
 		collectionProtocolBean.setEndDate(endDate);
 		if(collectionProtocol.getCollectionProtocolRegistrationCollection().size() > 0)
 		{

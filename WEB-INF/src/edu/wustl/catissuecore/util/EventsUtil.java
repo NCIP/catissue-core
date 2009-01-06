@@ -153,7 +153,7 @@ public class EventsUtil
 			if (specimen != null)
 			{
 				//Date validation
-				if (!validator.checkDate(Utility.parseDateToString(collectionEventParameters.getTimestamp(), Constants.DATE_PATTERN_MM_DD_YYYY)))
+				if (!validator.checkDate(Utility.parseDateToString(collectionEventParameters.getTimestamp(), edu.wustl.catissuecore.util.global.Variables.dateFormat)))
 				{
 					String message = ApplicationProperties.getValue("specimen.collection.event.date");
 					throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
@@ -212,7 +212,7 @@ public class EventsUtil
 			}
 			if (specimen != null)
 			{
-				if (!validator.checkDate(Utility.parseDateToString(receivedEventParameters.getTimestamp(), Constants.DATE_PATTERN_MM_DD_YYYY)))
+				if (!validator.checkDate(Utility.parseDateToString(receivedEventParameters.getTimestamp(), edu.wustl.catissuecore.util.global.Variables.dateFormat)))
 				{
 					String message = ApplicationProperties.getValue("specimen.recieved.event.date");
 					throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));

@@ -43,6 +43,7 @@ import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
@@ -142,7 +143,7 @@ public class DistributionAction extends SecureAction
 			Calendar cal = Calendar.getInstance();
 			if(dForm.getDateOfEvent()==null)
 			{
-				dForm.setDateOfEvent(Utility.parseDateToString(cal.getTime(), Constants.DATE_PATTERN_MM_DD_YYYY));
+				dForm.setDateOfEvent(Utility.parseDateToString(cal.getTime(), Variables.dateFormat));
 			}
 			if(dForm.getTimeInHours()==null)
 			{
@@ -402,7 +403,7 @@ public class DistributionAction extends SecureAction
 		}
 		else
 		{
-			getConsentDate=Utility.parseDateToString(cprObject.getConsentSignatureDate(), Constants.DATE_PATTERN_MM_DD_YYYY);
+			getConsentDate=Utility.parseDateToString(cprObject.getConsentSignatureDate(),Variables.dateFormat);
 		}
 		
 		if(cprObject.getSignedConsentDocumentURL()==null)

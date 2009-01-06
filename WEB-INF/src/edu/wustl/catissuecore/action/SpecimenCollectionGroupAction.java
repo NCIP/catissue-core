@@ -58,6 +58,7 @@ import edu.wustl.catissuecore.util.ConsentUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.beans.NameValueBean;
@@ -206,7 +207,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 			specimenCollectionGroupForm.setWitnessName(witnessFullName);
 		}
 		String getConsentDate = Utility
-				.parseDateToString(collectionProtocolRegistration.getConsentSignatureDate(), Constants.DATE_PATTERN_MM_DD_YYYY);
+				.parseDateToString(collectionProtocolRegistration.getConsentSignatureDate(), Variables.dateFormat);
 		specimenCollectionGroupForm.setConsentDate(getConsentDate);
 		String getSignedConsentURL = Utility.toString(collectionProtocolRegistration.getSignedConsentDocumentURL());
 		specimenCollectionGroupForm.setSignedConsentUrl(getSignedConsentURL);
@@ -789,7 +790,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 			}
 			else
 			{
-				specimenForm.setCollectionEventdateOfEvent(Utility.parseDateToString(cal.getTime(), Constants.DATE_PATTERN_MM_DD_YYYY));
+				specimenForm.setCollectionEventdateOfEvent(Utility.parseDateToString(cal.getTime(), Variables.dateFormat));
 			}
 		}
 		if (specimenForm.getCollectionEventTimeInHours() == null)
@@ -811,7 +812,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 			}
 			else
 			{
-			specimenForm.setReceivedEventDateOfEvent(Utility.parseDateToString(cal.getTime(), Constants.DATE_PATTERN_MM_DD_YYYY));
+			specimenForm.setReceivedEventDateOfEvent(Utility.parseDateToString(cal.getTime(), Variables.dateFormat));
 			}
 		}
 		if (specimenForm.getReceivedEventTimeInHours() == null)

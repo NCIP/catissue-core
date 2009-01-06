@@ -20,6 +20,7 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.security.SecurityManager;
@@ -28,6 +29,7 @@ import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.PasswordManager;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.catissuecore.util.global.Variables;
 
 /**
  * UserForm Class is used to encapsulate all the request parameters passed 
@@ -97,18 +99,19 @@ public class UserForm extends AbstractActionForm
 	/**
 	 * The State where the user stays.
 	 */
-	private String state;
+	private String state=(String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_STATES);
 
 	/**
 	 * The Country where the user stays.
 	 */
-	private String country;
+	private String country =(String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_COUNTRY);
 
 	/**
 	 * The zip code of city where the user stays.
 	 * */
 	private String zipCode;
 
+	
 	/**
 	 * Phone number of the user.
 	 * */
@@ -904,37 +907,46 @@ public class UserForm extends AbstractActionForm
 							errors.add(ActionErrors.GLOBAL_ERROR,
 									new ActionError("errors.item.required", ApplicationProperties.getValue("user.city")));
 						}
-
 						if (!validator.isValidOption(state))
 						{
 							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
 									.getValue("user.state")));
 						}
-
+						
+						
+					/*
+					 * Commented by Geeta to remove the mask on zip code
 						if (validator.isEmpty(zipCode))
 						{
-							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
+								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
 									.getValue("user.zipCode")));
 						}
 						else
 						{
-							if (!validator.isValidZipCode(zipCode))
-							{
-								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.zipCode.format", ApplicationProperties
+								if (!validator.isValidZipCode(zipCode))
+								{
+									errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.zipCode.format", ApplicationProperties
 										.getValue("user.zipCode")));
-							}
+								}
 						}
+					*/
+						
+						
 						if (!validator.isValidOption(country))
 						{
 							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
 									.getValue("user.country")));
 						}
-
+						// Commented by Geeta to remove the mask on pnone number
+						/*
 						if (validator.isEmpty(phoneNumber))
 						{
 							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
 									.getValue("user.phoneNumber")));
 						}
+						*/
+						
+						
 						//                        else
 						//                        {
 						//                        	if(!validator.isValidPhoneNumber(phoneNumber))
@@ -1069,5 +1081,7 @@ public class UserForm extends AbstractActionForm
 			setCancerResearchGroupId(addObjectIdentifier.longValue());
 		}
 	}
+
+
 	
 }

@@ -113,7 +113,7 @@ public class DeleteAttribute extends DeleteBaseMetadata
 		return deleteSQL;	
 	}
 
-	private boolean isAttributeToDelete(String entityName, String name)
+	public boolean isAttributeToDelete(String entityName, String name)
 	{
 		boolean isDelete = false;
 		List<String> attributesTodeleteList = entityAttributesToDelete.get(entityName);
@@ -127,7 +127,7 @@ public class DeleteAttribute extends DeleteBaseMetadata
 		return isDelete;
 	}
 
-	private String getDataTypeOfAttribute(String attr) 
+	public String getDataTypeOfAttribute(String attr) 
 	{
 		return attributeDatatypeMap.get(attr);
 	}	
@@ -157,6 +157,7 @@ public class DeleteAttribute extends DeleteBaseMetadata
 		entityAttributesToDelete.put("edu.wustl.catissuecore.domain.FluidSpecimen",attributeToDelete);
 		entityAttributesToDelete.put("edu.wustl.catissuecore.domain.MolecularSpecimen",attributeToDelete);
 		entityAttributesToDelete.put("edu.wustl.catissuecore.domain.TissueSpecimen",attributeToDelete);	
+			
 	}
 	
 	private void populateAttributeDatatypeMap() 
@@ -167,7 +168,7 @@ public class DeleteAttribute extends DeleteBaseMetadata
 		attributeDatatypeMap.put("isCollectionProtocolRequirement","boolean");
 		attributeDatatypeMap.put("type", "string");
 		attributeDatatypeMap.put("raceName", "string");
-		attributeDatatypeMap.put("lineage", "string");	
+		attributeDatatypeMap.put("lineage", "string");
 	}
 
 	private void populateEntityList() 
@@ -182,7 +183,7 @@ public class DeleteAttribute extends DeleteBaseMetadata
 		entityNameList.add("edu.wustl.catissuecore.domain.TissueSpecimen");	
 	}
 
-	private void populateEntityIDList() throws SQLException 
+	public void populateEntityIDList() throws SQLException 
 	{
 		String sql;
 		for(String entityName : entityNameList)
@@ -197,7 +198,7 @@ public class DeleteAttribute extends DeleteBaseMetadata
 		}
 	}
 
-	private ResultSet executeQuery(String sql) throws SQLException
+	public ResultSet executeQuery(String sql) throws SQLException
 	{
 		stmt = connection.createStatement();
 		ResultSet rs = stmt.executeQuery(sql);

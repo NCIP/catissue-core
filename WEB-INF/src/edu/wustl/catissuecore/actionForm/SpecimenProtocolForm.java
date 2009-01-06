@@ -20,6 +20,7 @@ import edu.wustl.catissuecore.domain.DistributionSpecimenRequirement;
 import edu.wustl.catissuecore.domain.SpecimenProtocol;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.global.ApplicationProperties;
@@ -280,8 +281,8 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 		
 		this.title = Utility.toString(protocol.getTitle());
 		this.shortTitle = Utility.toString(protocol.getShortTitle());
-		this.startDate = Utility.parseDateToString(protocol.getStartDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
-		this.endDate = Utility.parseDateToString(protocol.getEndDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
+		this.startDate = Utility.parseDateToString(protocol.getStartDate(),Variables.dateFormat);
+		this.endDate = Utility.parseDateToString(protocol.getEndDate(),Variables.dateFormat);
 		this.irbID = Utility.toString(protocol.getIrbIdentifier());
 		this.enrollment = Utility.toString(protocol.getEnrollment());
 		this.descriptionURL = Utility.toString(protocol.getDescriptionURL());

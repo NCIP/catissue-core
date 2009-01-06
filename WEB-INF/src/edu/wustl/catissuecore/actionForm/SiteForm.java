@@ -25,6 +25,7 @@ import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.catissuecore.util.global.Variables;
 
 /**
  * This Class is used to encapsulate all the request parameters passed from Site.jsp page.
@@ -74,6 +75,9 @@ public class SiteForm extends AbstractActionForm
      */
     private String zipCode;
 
+    
+    
+	
     /**
      * Phone number of the site.
      * */
@@ -417,11 +421,11 @@ public class SiteForm extends AbstractActionForm
                          "errors.item.required", ApplicationProperties
                                  .getValue("site.city")));
              }
-             
              if(!validator.isValidOption(state))
-             {
-             	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("site.state")));
-             }
+			 {
+            	 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("site.state")));
+			 }
+			
              
              if(!validator.isValidOption(country))
              {
@@ -431,22 +435,25 @@ public class SiteForm extends AbstractActionForm
              
              //checkValidNumber(zipCode, "site.zipCode", errors, validator); // commented as validation is done in following code
              // added for zip code , phone and fax number validation
-             if (validator.isEmpty(zipCode))
-             {
-                 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+             /*
+              *  Commented by Geeta to remove the mask on zipcode
+            	 if (validator.isEmpty(zipCode))
+            	 {
+            		 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
                          "errors.item.required", ApplicationProperties
                                  .getValue("site.zipCode")));
-             }
-             else
-             {
-            	 if(!validator.isValidZipCode(zipCode))
-             	 {
-             		errors.add(ActionErrors.GLOBAL_ERROR,
+            	 }	
+            	 else
+            	 {
+            		 if(!validator.isValidZipCode(zipCode))
+            		 {
+            			 errors.add(ActionErrors.GLOBAL_ERROR,
                              new ActionError("errors.zipCode.format",
                                      ApplicationProperties.getValue("site.zipCode")));
-             	 }	
-             }
-             
+            		 }	
+            	 }
+         	
+             */
 //             if(!validator.isEmpty(phoneNumber)&& !validator.isValidPhoneNumber(phoneNumber))
 //         	 {
 //         		errors.add(ActionErrors.GLOBAL_ERROR,

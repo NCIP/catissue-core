@@ -297,7 +297,7 @@ N level Interrelated Cobmo Boxes plus Map Button.
 	<attribute>
 		<name>pattern</name>
 		<required>false</required>
-		<rtexprvalue>false</rtexprvalue>
+		<rtexprvalue>true</rtexprvalue>
 	</attribute>
 	
 	<attribute>

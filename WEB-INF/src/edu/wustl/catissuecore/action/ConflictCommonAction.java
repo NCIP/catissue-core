@@ -21,6 +21,7 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.ConflictCommonForm;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.util.Utility;
 
@@ -40,7 +41,7 @@ public class ConflictCommonAction extends BaseAction{
 	
 		Participant participant = (Participant) edu.wustl.catissuecore.caties.util.Utility.getParticipantFromReportLoaderQueue(reportQueueId);
 		String participantName = (String)participant.getLastName()+","+ (String)participant.getFirstName();
-		String birthDate = Utility.parseDateToString(participant.getBirthDate(), Constants.DATE_PATTERN_MM_DD_YYYY);
+		String birthDate = Utility.parseDateToString(participant.getBirthDate(), edu.wustl.common.util.global.Variables.dateFormat);
 		conflictCommonForm.setParticipantName(participantName);
 		conflictCommonForm.setBirthDate(birthDate);
 		conflictCommonForm.setSocialSecurityNumber(participant.getSocialSecurityNumber());

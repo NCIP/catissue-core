@@ -74,6 +74,7 @@
 										  month= "<%= collectionMonth %>"
 										  year= "<%= collectionYear %>"
 										  day= "<%= collectionDay %>"
+										  pattern="<%=Variables.dateFormat%>"
 										  value="<%=currentCollectionDate %>"
 										  styleClass="black_ar"
 												/>
@@ -85,6 +86,7 @@
 							<ncombo:DateTimeComponent name="collectionEventdateOfEvent"
 										  id="collectionEventdateOfEvent"
 										  formName="<%=formNameForCal %>"
+										  pattern="<%=Variables.dateFormat%>"
 										  styleClass="black_ar"
 												/>
 							<% 
@@ -233,6 +235,7 @@
 											  month= "<%= receivedMonth %>"
 											  year= "<%= receivedYear %>"
 											  day= "<%= receivedDay %>"
+											  pattern="<%=Variables.dateFormat%>"
 											  value="<%=currentReceivedDate %>"
 											  formName= "<%=formNameForCal %>"
 											  styleClass="black_ar"
@@ -245,6 +248,7 @@
 								<ncombo:DateTimeComponent name="receivedEventDateOfEvent"
 											  id="receivedEventDateOfEvent"
 											  formName="<%=formNameForCal %>"
+											  pattern="<%=Variables.dateFormat%>"
 											  styleClass="black_ar"
 													/>
 								<% 

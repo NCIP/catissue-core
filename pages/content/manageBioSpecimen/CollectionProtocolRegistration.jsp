@@ -5,6 +5,7 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.CollectionProtocolRegistrationForm"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 <%@ page import="java.util.*"%>	  
 <%@ page import="edu.wustl.catissuecore.bean.ConsentBean"%>
 <%@ include file="/pages/content/common/BioSpecimenCommonCode.jsp" %>
@@ -296,6 +297,7 @@
 									  year= "<%=registrationYear %>"
 									  day= "<%= registrationDay %>" 
 									  value="<%=currentRegistrationDate %>"
+									  pattern="<%=Variables.dateFormat%>"
 									  styleClass="formDateSized10"
 											 />		
 <% 
@@ -307,6 +309,7 @@
 									  id="registrationDate"
  									  formName="collectionProtocolRegistrationForm"	
 									  styleClass="formDateSized10" 
+									  pattern="<%=Variables.dateFormat%>"
 											 />		
 <%
 	}

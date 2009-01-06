@@ -37,6 +37,7 @@ import edu.wustl.catissuecore.annotations.AnnotationUtil;
 import edu.wustl.catissuecore.annotations.ICPCondition;
 import edu.wustl.catissuecore.bizlogic.AnnotationBizLogic;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
@@ -505,11 +506,10 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
                 innerList.add(makeURL(dynamicEntity.getValue(),strURLForEditRecord));
                 entityMapRecordXML.append("<cell>"
                         + Utility.parseDateToString(entityMapRecord
-                                .getCreatedDate(),
-                                Constants.DATE_PATTERN_MM_DD_YYYY) + "</cell>");
+                                .getCreatedDate(),Variables.dateFormat) + "</cell>");
                 innerList.add(Utility.parseDateToString(entityMapRecord
                         .getCreatedDate(),
-                        Constants.DATE_PATTERN_MM_DD_YYYY));
+                        Variables.dateFormat));
                 String creator = entityMapRecord.getCreatedBy();
                 if(creator==null || creator.equals("null"))
                     creator ="";

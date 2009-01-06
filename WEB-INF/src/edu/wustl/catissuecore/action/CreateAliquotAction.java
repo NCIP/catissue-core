@@ -33,6 +33,7 @@ import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.action.CommonAddEditAction;
 import edu.wustl.common.beans.SessionDataBean;
@@ -394,7 +395,7 @@ public class CreateAliquotAction extends BaseAction
 				}
 			}
 			Date currentDate = new Date();
-			DateFormat myDateFormat = new SimpleDateFormat(Constants.DATE_PATTERN_MM_DD_YYYY);
+			DateFormat myDateFormat = new SimpleDateFormat(Variables.dateFormat);
 			Date myDate = null;
 			try {
 			     myDate = myDateFormat.parse(aliquotForm.getCreatedDate());

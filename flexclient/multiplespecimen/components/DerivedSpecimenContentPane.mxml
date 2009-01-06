@@ -210,7 +210,7 @@
 
 	
 	<components:MyCanvas>
-		<mx:DateField id="spCreatedOn" formatString="{Constants.DATE_FORMAT}" keyDown="spCreatedOn.open()" yearNavigationEnabled="true"/>
+		<mx:DateField id="spCreatedOn" formatString="{msParamter.dateFormat}" keyDown="spCreatedOn.open()" yearNavigationEnabled="true"/>
 	</components:MyCanvas>
 	<components:MyCanvas>
 		<mx:HBox>
