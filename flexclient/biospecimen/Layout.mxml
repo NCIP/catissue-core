@@ -857,7 +857,7 @@
         </mx:VBox>
         
         <mx:VBox width="100%" height="95%">
-            <mx:VDividedBox width="100%" height="100%">
+
                 <mx:VBox width="100%" id="pVbox" borderSides="black">
                    	<mx:HBox backgroundColor="#FFFFFF" width="100%"> 
                      	<mx:Label text="Participant (Protocol ID):" color="black" fontWeight="bold" height="15"/> 	
@@ -866,7 +866,7 @@
                    	 <!-- Jignesh: AutoCompeleteDropDown component -->                   	
 					<Components:AutoCompeleteDropDownList id="Sp" name="compSpec" width="100%" height="5%" cDataProvider="{pCollection.toArray()}" parentInstance="Sp"/>					
                  </mx:VBox>
-        	     <mx:VBox height="70%" width="100%" id="spDetailVbox">
+        	     <mx:VBox height="100%" width="100%" id="spDetailVbox">
                    	<mx:Label id="spDetailsLabel" text="{title}" color="black" width="250" height="15" fontWeight="bold" />
                    	<mx:Tree id="specimenTree" labelField="@name" width="100%" height="100%" itemClick="onNodeClick()" 
                    		folderClosedIcon="@Embed(source='/images/Specimen.gif')" folderOpenIcon="@Embed(source='/images/Specimen.gif')" 
@@ -874,7 +874,7 @@
                    		 disclosureOpenIcon="@Embed(source='/images/nolines_minus.gif')" showDataTips="true" 
                    		 dataTipFunction="addToolTip" />
 				</mx:VBox>
-			</mx:VDividedBox>
+
 		</mx:VBox>
 
 	</mx:Box>
