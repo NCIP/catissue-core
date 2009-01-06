@@ -141,9 +141,12 @@ public class LoadDynamicExtentionsDataEntryPageAction extends BaseAction
 			Logger.out.info("Loading details of record id [" + request.getParameter("recordId") + "]");
 			dynExtDataEntryURL = dynExtDataEntryURL + "&" + WebUIManager.RECORD_IDENTIFIER_PARAMETER_NAME + "=" + request.getParameter("recordId");
 		}
+		String operation = request.getParameter("operation");
+		String selectedAnnotation = request.getParameter("selectedAnnotation");
+		String callbackURL=AnnotationConstants.CALLBACK_URL_PATH_ANNOTATION_DATA_ENTRY+"?"+"editOperation="+operation+"@selectedAnnotation="+selectedAnnotation;
 		//append callback url
 		dynExtDataEntryURL = dynExtDataEntryURL + "&" + WebUIManager.getCallbackURLParamName() + "=" + request.getContextPath()
-				+ AnnotationConstants.CALLBACK_URL_PATH_ANNOTATION_DATA_ENTRY + "&isAuthenticatedUser=" + isAuthenticatedUser;
+				+callbackURL  + "&isAuthenticatedUser=" + isAuthenticatedUser;
 		return dynExtDataEntryURL;
 	}
 

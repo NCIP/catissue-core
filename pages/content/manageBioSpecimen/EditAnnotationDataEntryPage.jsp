@@ -33,9 +33,9 @@
 
 <%
 	
-List annoList=(List) request.getAttribute("annotationListFromXML");
+List annoList=(List) request.getAttribute(Constants.SPREADSHEET_DATA_RECORD);
 
-	%>
+%>
 
 
 <script>
@@ -57,19 +57,11 @@ var xmlData = [<%int i;%><%for (i=0;i<(annoList.size()-1);i++){%>
 		
 </script>
 
-
-<c:set var="annotationsList"
-		value="${annotationDataEntryForm.annotationsList}" />
-	<jsp:useBean id="annotationsList" type="java.util.List"/>
-
 <script>
 
-var indexIds = [<%int i;%><%for (i=0;i<(annotationsList.size());i++){%>
-<%
-	NameValueBean annotationBean = (NameValueBean)annotationsList.get(i);
-%>
-	<%="\""%><%=annotationBean.getValue()%><%="\""%>,
-	
+<% List indexIds=(List) request.getAttribute("RecordIds");  %>
+var recordIds = [ <%int i;%><%for (i=0;i<(indexIds.size());i++){%>
+	<%="\""%><%=indexIds.get(i)%><%="\""%>,
 <% } %> ];
 
 </script>
@@ -79,32 +71,36 @@ var indexIds = [<%int i;%><%for (i=0;i<(annotationsList.size());i++){%>
 	
 	function displayAnnotationGrid()
 	{
+		var entityName = '<%=request.getAttribute("entityName")%>';
+		var rowId= '<%=request.getAttribute("entityId")%>' +":"+ '<%=request.getAttribute("staticEntityId")%>' +":"+ '<%=request.getAttribute("staticEntityRecordId")%>';
+		var div=document.getElementById('editAnnotations');
+		div.innerHTML="<br><table class=\"whitetable_bg\" style=\"font-family:verdana;font-size:0.71em;font-weight:normal;\"><th allign=\"center\"> Update Records for "+entityName+" </th></table>";
 		dannotationsGrid = new dhtmlXGridObject('displayAnnotationsGrid');
 		dannotationsGrid.setImagePath("dhtml_comp/imgs/");
-		dannotationsGrid.setHeader("Group,Form,Count,Action");
+		dannotationsGrid.enableAutoHeigth(true,500);
+		dannotationsGrid.setHeader("Record Id,Created Date,Updated By,Action");
 		dannotationsGrid.setInitWidthsP("25,25,25,24");
 		dannotationsGrid.enableAlterCss("even","uneven");
 		dannotationsGrid.setSkin("light");
 		dannotationsGrid.enableRowsHover(true,'grid_hover');
 		dannotationsGrid.setColAlign("left,left,left,left");
 		dannotationsGrid.setColTypes("ro,ro,ro,link");
-		dannotationsGrid.setColSorting("str,str,int");
-		dannotationsGrid.setOnBeforeSelect(doOnRowSelected);
-		dannotationsGrid.setOnRowDblClickedHandler(loadDynamicExtDataEntryPage);
+		dannotationsGrid.setColSorting("int,str,str");
+		dannotationsGrid.setOnRowDblClickedHandler(editAnnotation);
 		dannotationsGrid.init();
 
 		<% if (annoList != null && annoList.size() != 0)
 		{ %>
-		 for(var row=0;row<xmlData.length;row=row+1)
-			{
-				var annotationId=indexIds[row];
-				var data = xmlData[row];		        
-				dannotationsGrid.addRow(annotationId,data,row+1);
-			}
+		for(var row=0;row<xmlData.length;row=row+1)
+		{	
+			var recordId=recordIds[row];
+			var index=rowId+":"+recordId;
+			var data = xmlData[row];		        
+			dannotationsGrid.addRow(index,data,row+1);
+		}
 		
 		<% } %>
 	}
-
 	</script>
 
 </head>
@@ -121,15 +117,17 @@ var indexIds = [<%int i;%><%for (i=0;i<(annotationsList.size());i++){%>
 	<html:hidden property="id" />
 	<html:hidden property="pageOf" />
 	<html:hidden property="selectedAnnotation" styleId="selectedAnnotation"/>
+
 	<div id="editAnnotations" valign="top" width="100%"
 						height="100%" style="background-color:#FFFFFF;overflow:hidden;" >
 	</div>
-	<table height="100%" width="100%" border="0" cellpadding="0"
-		cellspacing="0" class="whitetable_bg">
-		<tr>
-			<td colspan="3" valign="top" class="showhide">
+
+	<table width="100%" border="2" cellpadding="0"
+		cellspacing="0" class="whitetable_bg" height="100%">
+		<tr height="80%">
+			<td valign="top">
 				<div id="displayAnnotationsGrid" valign="top" width="100%"
-						height="100%" style="background-color:#d7d7d7;overflow:hidden;" />
+						height="100%" border="2" style="background-color:#d7d7d7;overflow:hidden;" />
 				<script>
 					displayAnnotationGrid();
 				</script>

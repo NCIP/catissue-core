@@ -4794,6 +4794,7 @@ PUBLIC
 			validate="false"
 			scope="request">
 			<forward name="success" path="/pages/content/manageBioSpecimen/AnnotationDataEntryPage.jsp"/>
+			<forward name="pageOfEditAnnotation" path="/pages/content/manageBioSpecimen/EditAnnotationDataEntryPage.jsp"/>
 			<forward name="pageOfParticipant" path="/Participant.do?operation=viewAnnotations"/>
 			<forward name="pageOfNewSpecimen" path="/NewSpecimen.do?operation=viewAnnotations"/>
 	

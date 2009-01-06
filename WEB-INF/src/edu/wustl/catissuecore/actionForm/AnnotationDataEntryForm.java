@@ -9,8 +9,6 @@ package edu.wustl.catissuecore.actionForm;
 import java.io.Serializable;
 import java.util.List;
 
-import org.apache.struts.action.ActionForm;
-
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 
@@ -28,12 +26,13 @@ public class AnnotationDataEntryForm extends AbstractActionForm
     private static final long serialVersionUID = 5496516855615880241L;
     protected List annotationsList;
     protected String definedAnnotationsDataXML;
+	protected String definedAnnotationEntitiesXML;
     protected String selectedAnnotation;
     protected String parentEntityId;
     private String selectedRecords;
     private String selectedStaticEntityId;
     private String selectedStaticEntityRecordId;
-    
+
     public String getSelectedStaticEntityId()
     {
         return selectedStaticEntityId;
@@ -124,4 +123,21 @@ public class AnnotationDataEntryForm extends AbstractActionForm
         // TODO Auto-generated method stub
 
     }
+    /**
+	 * @return the definedAnnotationEntitiesXML
+	 */
+	public String getDefinedAnnotationEntitiesXML()
+	{
+		return definedAnnotationEntitiesXML;
+	}
+
+
+	
+	/**
+	 * @param definedAnnotationEntitiesXML the definedAnnotationEntitiesXML to set
+	 */
+	public void setDefinedAnnotationEntitiesXML(String definedAnnotationEntitiesXML)
+	{
+		this.definedAnnotationEntitiesXML = definedAnnotationEntitiesXML;
+	}
 }

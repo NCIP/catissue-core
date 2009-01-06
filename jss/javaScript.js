@@ -1187,6 +1187,70 @@ function loadDynamicExtDataEntryPage()
 		}
 }
 
+function loadDynExtDataEntryPage(event)
+{	
+	// for IE 
+	if(document.all) {
+		document.forms[0].selectedAnnotation.value=event.srcElement.name;
+	}
+	else { //mozilla
+		document.forms[0].selectedAnnotation.value=event.target.name;
+	}
+	
+	document.forms[0].action  = "/catissuecore/LoadDynamicExtentionsDataEntryPage.do";
+	document.forms[0].submit();
+}
+
+function doOnRowSelected(rowID){
+ 	document.forms[0].selectedAnnotation.value=rowID;	
+}
+
+function editAnnotation(rowID){
+	var entityId=null;
+	var staticEntityId=null;
+	var staticEntityRecordId=null;
+	var recordId=null;
+	var string =rowID.split(":");
+	for(var i=0;i<string.length;i++)
+	{
+		entityId=string[0];
+		staticEntityId=string[1];
+		staticEntityRecordId=string[2];
+		recordId=string[3];
+	}
+	document.forms[0].action  = "/catissuecore/LoadDynamicExtentionsDataEntryPage.do?selectedAnnotation="+entityId+"&selectedStaticEntityId="+staticEntityId+"&selectedStaticEntityRecordId="+staticEntityRecordId+"&recordId="+recordId+"&operation=editSelectedAnnotation";
+	document.forms[0].submit();
+}
+
+function editSelectedAnnotation(parameter)
+{	
+	var formId=null;
+	var staticEntityId=null;
+	var staticEntityRecordId=null;
+	var string =parameter.split(":");
+	for(var i=0;i<string.length;i++)
+	{
+		var str=string[i].split("=");
+		if(str[0]=="formId")
+		{
+			formId=str[1];
+		}
+		if(str[0]=="staticEntityId")
+		{
+			staticEntityId=str[1];
+		}
+		if(str[0]=="staticEntityRecordId")
+		{
+			staticEntityRecordId=str[1];
+		}
+	}
+		
+	var action="LoadAnnotationDataEntryPage.do?operation=editSelectedAnnotation&selectedFormId="+formId+"&staticEntityId="+staticEntityId+"&staticEntityRecordId="+staticEntityRecordId;
+	document.forms[0].action=action;
+	document.forms[0].submit();
+	
+}
+
 function initializeTabs(tabIds, tabNames, tabPageRefs)
 {
 	if((tabIds!=null)&&(tabNames!=null)&&(tabPageRefs!=null))
