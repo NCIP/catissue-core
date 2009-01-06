@@ -108,17 +108,17 @@
 	
 	<property>
 		<name>email.administrative.emailAddress</name>
-		<value>@@ADMIN-EMAILADDRESS@@</value>
+		<value></value>
 	</property>
 	
 	<property>
 		<name>email.sendEmailFrom.emailAddress</name>
-		<value>@@SENDEMAILFROM-EMAILADDRESS@@</value>
+		<value></value>
 	</property>
 	
 	<property>
 		<name>email.mailServer</name>
-		<value>@@MAILSERVER-EMAILADDRESS@@</value>
+		<value></value>
 	</property>
 	
 	 <!-- Constants for LookUp algo start -->
@@ -474,6 +474,41 @@
 	<property>
 		<name>knowledgecenterforum.link</name>
 		<value>https://cabig-kc.nci.nih.gov/Biospecimen/forums/</value>
+	</property>
+	
+	<property>
+		<name>isStateRequired</name>
+		<value>true</value>
+	</property>
+	
+	<property>
+		<name>isCPTitleChange</name>
+		<value>flase</value>
+	</property>
+	
+	<property>
+		<name>isRemoveSSN</name>
+		<value>false</value>
+	</property>
+	
+	<property>
+		<name>isRemoveSexGenotype</name>
+		<value>false</value>
+	</property>
+	
+	<property>
+		<name>isRemoveRace</name>
+		<value>false</value>
+	</property>
+	
+	<property>
+		<name>isRemoveEthnicity</name>
+		<value>false</value>
+	</property>
+	
+	<property>
+		<name>dateFormat</name>
+		<value>MM-dd-yyyy</value>
 	</property>
 
 </properties>
