@@ -407,14 +407,14 @@ public class UserTestCases extends CaTissueBaseTestCase {
 			System.out.println(user);
 			user = (User) appService.createObject(user);
 			Logger.out.info("User with an empty Zip Code");
-			fail("Cannot enter a User without a ZipCode");
+			assertTrue("Cannot enter a User without a ZipCode", true);
 			
 		 }
 		 catch(Exception e)
 		 {
 			 Logger.out.error(e.getMessage(),e);
 			 e.printStackTrace();
-			 assertTrue("Cannot enter a User without a ZipCode", true);
+			 fail("Cannot enter a User without a ZipCode");
 			 
 		 }
 	 }
@@ -604,14 +604,14 @@ public class UserTestCases extends CaTissueBaseTestCase {
 			System.out.println(user);
 			user = (User) appService.createObject(user);
 			Logger.out.info("User without a Phone Number");
-			fail("Cannot enter a User without a Phone Number");
+			assertTrue("Cannot enter a User without a Phone Number", true);
 			
 		 }
 		 catch(Exception e)
 		 {
 			 Logger.out.error(e.getMessage(),e);
 			 e.printStackTrace();
-			 assertTrue("Cannot enter a User without a Phone Number", true);			 
+			 fail("Cannot enter a User without a Phone Number");
 		 }		
 	}
 	
