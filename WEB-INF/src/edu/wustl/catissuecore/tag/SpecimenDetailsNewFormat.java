@@ -394,6 +394,11 @@ public class SpecimenDetailsNewFormat extends TagSupport
 			pWd = 5;
 			cWd = 12;
 		}
+		if(dataListType.equalsIgnoreCase(dataListTypes[2]))
+		{	
+			xtra = 3;	
+		}
+
 		return lst;
 	}
 	
@@ -562,11 +567,17 @@ public class SpecimenDetailsNewFormat extends TagSupport
 	private void createHeaderRow1(StringBuffer sb, String tr,GenericSpecimen specimen)
 	{
 		 sb.append(tr);
-		 
+		 int tmpd=0,tmpcwd = 0;
+		 if(dataListType.equalsIgnoreCase(dataListTypes[2]))
+		 {
+			 tmpd = 3;
+		 }
+		 tmpcwd = cWd;
 		 for(int cnt=0; cnt < columnHeaderList.size(); cnt++ )
 		 {
-			 
-			 
+			 if(cnt==5){cWd = cWd-tmpd;}
+			 else
+			 { cWd = tmpcwd;}
 				if((((String)columnHeaderList.get(cnt)).trim().length() > 0) )
 				{
 				 	// to be displayed only in case of aliquots.	|| 		
@@ -583,7 +594,7 @@ public class SpecimenDetailsNewFormat extends TagSupport
 				 	}
 				 	else if(cnt == 6)
 				 	{
-				 		sb.append("<TD colspan=3 width="+(50-pWd)+"%>");
+				 		sb.append("<TD colspan=3 width="+(50-pWd+tmpd)+"%>");
 				 		sb.append("<SPAN class=black_ar_b>"+ApplicationProperties.getValue((String)columnHeaderList.get(6))+"</SPAN>");
 				 	}
 				 	else if(cnt==7 && !specimenSummaryForm.getShowCheckBoxes())
@@ -694,12 +705,25 @@ public class SpecimenDetailsNewFormat extends TagSupport
 		return str;
 	}
 
+	private int[] sizes = {8,8,8,8,8,5,8,8,8,8};
 	private void createFieldRow(StringBuffer sb, int counter, GenericSpecimen specimen, String elementNamePrefix, boolean isTextRow)
 	{
+		 int tmpd=0,tmpcwd = 0;
+		 if(dataListType.equalsIgnoreCase(dataListTypes[2]))
+		 {
+			 tmpd = 3;
+		 }
+		 tmpcwd = cWd;
+
 		sb.append(TR_OPEN);
 			createParentComponent(sb, specimen,elementNamePrefix,isTextRow);
 			for(int columnCounter=1; columnCounter<columnList.size(); columnCounter++)
 			{
+				if(columnCounter==5)
+				{cWd = cWd-tmpd;}
+				else
+				{ cWd = tmpcwd;}
+				
 				String [] nameValue = get1EleDetAt(columnCounter, specimen, elementNamePrefix);
 			 	// to be displayed only in case of aliquots.	|| 		
 			 	if((columnCounter == 3 && !dataListType.equalsIgnoreCase(dataListTypes[1])) ||
@@ -715,7 +739,7 @@ public class SpecimenDetailsNewFormat extends TagSupport
 			 	}
 			 	else if(columnCounter == 6)
 			 	{
-			 		sb.append("<TD colspan=3 width="+(50-pWd)+"% class='"+STYLE_CLASS+"'>");
+			 		sb.append("<TD colspan=3 width="+(50-pWd+tmpd)+"% class='"+STYLE_CLASS+"'>");
 			 		if(isTextRow)
 			 		{
 						if(nameValue[1].trim().length()>0)
@@ -750,7 +774,7 @@ public class SpecimenDetailsNewFormat extends TagSupport
 			 		}
 			 		else
 			 		{	
-			 				createTextComponent(sb,nameValue,STYLE_CLASS,8);	
+			 				createTextComponent(sb,nameValue,STYLE_CLASS,sizes[columnCounter]);	
 			 		}	
 			 	}
 			 	sb.append(TD_CLOSE);
@@ -779,7 +803,7 @@ public class SpecimenDetailsNewFormat extends TagSupport
 										+containerId +"','"+
 										specimenClassName +"','"+
 										cpId +"')" ;
-		  int scSize=16 +xtra;
+		  int scSize=20 +xtra;
 		  final String sid = specimen.getUniqueIdentifier();
 		  String isDisabled = ""; 
 		  
@@ -788,7 +812,7 @@ public class SpecimenDetailsNewFormat extends TagSupport
 			 		sb.append(TD_OPEN);
 			 			sb.append("");
 
-			 			sb.append("<select name=\""+nameValue[8]+"\" size=\"1\" onchange=\"scForSpecimen(this,'"+ sid +"','"+specimenClassName+"')\" class=\"black_new\" id=\""+nameValue[8]+"\">");
+			 			sb.append("<select name=\""+nameValue[8]+"\" size=\"1\" onchange=\"scForSpecimen(this,'"+ sid +"','"+specimenClassName+"')\" class=\"black_new_md\" id=\""+nameValue[8]+"\">");
 
 						  if("Virtual".equals(specimen.getStorageContainerForSpecimen()))
 						  {
