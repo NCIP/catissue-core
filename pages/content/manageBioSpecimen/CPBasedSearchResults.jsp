@@ -65,12 +65,12 @@ else
 <!-- Mandar : 25Nov08  -->
 		<TABLE border=1 width="100%" height="100%" cellpadding="0" cellspacing="0">
 		<TR>
-			<TD width="30%" valign="top" height="100%">
+			<TD width="27%" valign="top" height="100%">
 				<iframe id="<%=Constants.CP_AND_PARTICIPANT_VIEW%>" name="<%=Constants.CP_AND_PARTICIPANT_VIEW%>" src="<%=Constants.SHOW_CP_AND_PARTICIPANTS_ACTION%>?pageOf=<%=Constants.PAGE_OF_CP_QUERY_RESULTS%>" scrolling="no" frameborder="0" width="100%" height="<%= frame3Ysize %>">
 						Your Browser doesn't support IFrames.
 				</iframe>
 
-			</td><td width="70%" valign="top" height="100%">
+			</td><td width="73%" valign="top" height="100%">
 				<iframe id="cpFrameNew" name="<%=Constants.DATA_DETAILS_VIEW%>" src="<%=Constants.BLANK_SCREEN_ACTION%>" scrolling="auto" frameborder="0" width="100%" height="100%">
 				Your Browser doesn't support IFrames.
 			</iframe>
