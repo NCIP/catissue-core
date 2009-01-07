@@ -108,17 +108,17 @@
 	
 	<property>
 		<name>email.administrative.emailAddress</name>
-		<value></value>
+		<value>@@ADMIN-EMAILADDRESS@@</value>
 	</property>
 	
 	<property>
 		<name>email.sendEmailFrom.emailAddress</name>
-		<value></value>
+		<value>@@SENDEMAILFROM-EMAILADDRESS@@</value>
 	</property>
 	
 	<property>
 		<name>email.mailServer</name>
-		<value></value>
+		<value>@@MAILSERVER-EMAILADDRESS@@</value>
 	</property>
 	
 	 <!-- Constants for LookUp algo start -->
@@ -475,7 +475,7 @@
 		<name>knowledgecenterforum.link</name>
 		<value>https://cabig-kc.nci.nih.gov/Biospecimen/forums/</value>
 	</property>
-	
+
 	<property>
 		<name>isStateRequired</name>
 		<value>true</value>
@@ -510,5 +510,6 @@
 		<name>dateFormat</name>
 		<value>MM-dd-yyyy</value>
 	</property>
+
 
 </properties>
