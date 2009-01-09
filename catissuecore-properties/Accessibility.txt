@@ -1,4 +1,4 @@
-The caTISSUE Core system is a web based application that is accessible to anyone with an internet connection and does not require additional hardware or software in order to function.
+The caTissue Suite system is a web based application that is accessible to anyone with an internet connection and does not require additional hardware or software in order to function.
 
 To register, a request must be entered into the system and approved by a system administrator. Once a request has been approved, the user can add or edit data based on their assigned role or privileges.
 

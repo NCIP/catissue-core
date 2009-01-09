@@ -50,6 +50,15 @@ table#browserDetailsContainer
 									class="view"><span class="wh_ar_b"></span><bean:message
 									key="app.ncicbHome" /></a></td>
 							</tr>
+							<!-- Mandar : 8Jan09 PSPL Info -->
+							<tr>
+							<td>
+								<a href="http://www.persistentsys.com/CompetencyCenters/LifeSciences/caTissueSupportCenter/tabid/181/Default.aspx" class="view" target="_blank"><span class="wh_ar_b"></span>
+								<bean:message key="pspl.catissue.support" />
+								</a>
+							</td>
+							</tr>
+							<!-- Mandar : 8Jan09 PSPL Info -->
 							<tr>
 								<td><a
 									href="PrivacyNotice.do?PAGE_TITLE_KEY=app.privacyNotice&FILE_NAME_KEY=app.privacyNotice.file"
@@ -100,7 +109,13 @@ table#browserDetailsContainer
 					width="5" height="5" /></td>
 			</tr>
 		</table>
-		<br />
+		<!--Mandar:7dec09 <br /> -->
+<!-- 		<p align="left">
+			<a href="http://www.persistentsys.com/CompetencyCenters/LifeSciences/caTissueSupportCenter/tabid/181/Default.aspx" class="view">
+				<span class="wh_ar_b"></span><bean:message key="pspl.catissue.support" />
+			</a>
+		</p>
+ -->		<!--Mandar:7dec09 <br /> -->
 		</td>
 		<td width="0%" rowspan="3" valign="top"><img
 			src="images/uIEnhancementImages/sep_left.gif" width="8" height="458" /></td>
@@ -213,7 +228,9 @@ table#browserDetailsContainer
 		</td>
 	</tr>
 	<tr>
-		<td align="center" valign="bottom">&nbsp;</td>
+<!-- 		<td align="center" valign="bottom">&nbsp;<img border="0" src="images/pspllogo.gif" width="75" height="71"></td>
+ -->	
+ 		<td align="center" valign="bottom">&nbsp;<A HREF="http://www.persistentsys.com"><img border="0" src="images/pspllogo.gif" width="75" height="71"></A></td>
 		<td rowspan="2" align="right" valign="bottom">
 		<table width="96%" border="0" cellspacing="0" cellpadding="0">
 			<tr>
@@ -301,5 +318,11 @@ table#browserDetailsContainer
 	<tr>
 		<td colspan="5" align="center" valign="top" bgcolor="#bcbcbc"><img
 			src="images/uIEnhancementImages/spacer.gif" alt="Spacer" width="1" height="1" /></td>
+	</tr>
+	<!-- Mandar : 7Dec09 For PSPL Info -->
+	<tr>
+		<td colspan="5" align="center" valign="top" class="bgblue_white">
+		<bean:message key="pspl.catissue.footNote" />
+		</td>
 	</tr>
 </table>
