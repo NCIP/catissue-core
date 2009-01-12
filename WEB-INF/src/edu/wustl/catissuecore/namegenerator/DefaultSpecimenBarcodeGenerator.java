@@ -4,10 +4,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -180,8 +178,8 @@ public class DefaultSpecimenBarcodeGenerator implements BarcodeGenerator
 		
 		if(objSpecimen.getChildSpecimenCollection().size()>0)
 		{
-			Collection specimenCollection = objSpecimen.getChildSpecimenCollection();
-			Iterator it = specimenCollection.iterator();
+			Collection<AbstractSpecimen> specimenCollection = objSpecimen.getChildSpecimenCollection();
+			Iterator<AbstractSpecimen> it = specimenCollection.iterator();
 			while(it.hasNext())
 			{
 				Specimen objChildSpecimen = (Specimen)it.next();

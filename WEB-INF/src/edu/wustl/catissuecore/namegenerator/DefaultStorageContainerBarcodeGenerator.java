@@ -49,7 +49,6 @@ public class DefaultStorageContainerBarcodeGenerator implements BarcodeGenerator
 		{
 			
 			currentBarcode = new Long(0);
-			String sourceObjectName = "CATISSUE_STORAGE_CONTAINER";
 			String sql = "select max(IDENTIFIER) as MAX_NAME from CATISSUE_STORAGE_CONTAINER";
 			conn = getConnection();
 			ResultSet resultSet = conn.createStatement().executeQuery(sql);

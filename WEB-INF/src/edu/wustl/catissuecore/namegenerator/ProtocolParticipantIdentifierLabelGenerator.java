@@ -1,16 +1,9 @@
 package edu.wustl.catissuecore.namegenerator;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
-import edu.wustl.cab2b.common.util.Utility;
+
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Variables;
 
 /**
  * This class which contains the default implementation for Protocol 

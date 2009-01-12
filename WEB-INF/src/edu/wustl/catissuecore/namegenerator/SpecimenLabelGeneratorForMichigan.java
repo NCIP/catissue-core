@@ -4,10 +4,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Collection;
-import java.util.Date;
 import java.util.Iterator;
 
 import javax.naming.InitialContext;
@@ -102,23 +99,7 @@ public class SpecimenLabelGeneratorForMichigan extends DefaultSpecimenLabelGener
 		DecimalFormat df = new DecimalFormat(pattern);
 		return df.format(input);
 	}
-
 	
-	/**
-	 * 
-	 */
-	private void persistLabelCount() 
-	{
-		String sql = "update CATISSUE_SPECIMEN_LABEL_COUNT SET LABEL_COUNT='"
-				+ currentLabel + "'";
-
-		try {
-			Connection conn = getConnection();
-			conn.createStatement().executeUpdate(sql);
-		} catch (Exception daoexception) {
-			daoexception.printStackTrace();
-		}
-	}
 	/**
 	 * Format for specimen: site_AutoIncrementingNumber
 	 */
@@ -131,12 +112,7 @@ public class SpecimenLabelGeneratorForMichigan extends DefaultSpecimenLabelGener
 		{
 			String siteName = objSpecimen.getSpecimenCollectionGroup().getGroupName();
 			currentLabel = currentLabel + 1;
-
-			String year = new SimpleDateFormat("yy").format(new Date());
-			String day = format(Calendar.getInstance().get(Calendar.DAY_OF_YEAR),
-					"000");
 			String nextNumber = format(currentLabel, "0000");
-
 			//TODO :Commented by Falguni because hibernate session is getting closed by calling this method. 
 			//persistLabelCount();
 			//String label = siteName + "-" + year + "-" + day + "-" + nextNumber;

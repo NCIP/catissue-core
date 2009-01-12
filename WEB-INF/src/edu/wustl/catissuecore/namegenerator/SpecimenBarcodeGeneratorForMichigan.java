@@ -4,10 +4,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Collection;
-import java.util.Date;
 import java.util.Iterator;
 
 import javax.naming.InitialContext;
@@ -127,20 +124,14 @@ public class SpecimenBarcodeGeneratorForMichigan extends DefaultSpecimenBarcodeG
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.namegenerator.DefaultSpecimenBarcodeGenerator#setBarcode(edu.wustl.common.domain.AbstractDomainObject)
 	 */
-	public void setBarcode(Object obj) {
-		
+	public void setBarcode(Object obj)
+	{
 		Specimen objSpecimen = (Specimen)obj;
-
 		if(objSpecimen.getLineage().equals(Constants.NEW_SPECIMEN))				
 		{
 			String siteName = objSpecimen.getSpecimenCollectionGroup().getGroupName();
 			currentBarcode = currentBarcode + 1;
-
-			String year = new SimpleDateFormat("yy").format(new Date());
-			String day = format(Calendar.getInstance().get(Calendar.DAY_OF_YEAR),
-					"000");
 			String nextNumber = format(currentBarcode, "0000");
-
 			//TODO :Commented by Falguni because hibernate session is getting closed by calling this method. 
 			//persistLabelCount();
 			//String label = siteName + "-" + year + "-" + day + "-" + nextNumber;

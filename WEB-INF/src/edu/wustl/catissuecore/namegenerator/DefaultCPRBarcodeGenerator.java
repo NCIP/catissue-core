@@ -10,6 +10,8 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
+import edu.wustl.catissuecore.util.listener.CatissueCoreServletContextListener;
+import edu.wustl.common.util.logger.Logger;
 
 
 /**
@@ -19,6 +21,8 @@ import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
  */
 public class DefaultCPRBarcodeGenerator implements BarcodeGenerator
 {
+	
+	private static org.apache.log4j.Logger logger =Logger.getLogger(DefaultCPRBarcodeGenerator.class);
 	/**
 	 * Current barcode 
 	 */
@@ -52,23 +56,26 @@ public class DefaultCPRBarcodeGenerator implements BarcodeGenerator
 			String sql = "select max(IDENTIFIER) as MAX_NAME from CATISSUE_COLL_PROT_REG";
 			conn = getConnection();
 			ResultSet resultSet = conn.createStatement().executeQuery(sql);
-			
 			if(resultSet.next())
+			{
 				currentBarcode = new Long (resultSet.getLong(1));
+			}
 		}
 		catch (Exception daoException) 
 		{
-			daoException.printStackTrace();
-			
-		} finally
+			logger.error(daoException.getMessage(), daoException);
+		} 
+		finally
 		{
 			if (conn != null)
 			{
-				try {
+				try 
+				{
 					conn.close();
-				} catch (SQLException exception) {
-				
-					exception.printStackTrace();
+				}
+				catch (SQLException exception) 
+				{
+					logger.error(exception.getMessage(), exception);
 				}
 			}
 		}
@@ -94,10 +101,10 @@ public class DefaultCPRBarcodeGenerator implements BarcodeGenerator
 	 */
 	public void setBarcode(Object obj )
 	{
-		CollectionProtocolRegistration objCollectionProtocolRegistration= (CollectionProtocolRegistration)obj;
+		CollectionProtocolRegistration objCPR= (CollectionProtocolRegistration)obj;
 		//TODO :Write a logic to generate barcode.
 		String barcode = "";
-		objCollectionProtocolRegistration.setBarcode(barcode);
+		objCPR.setBarcode(barcode);
 	}
 
 	/* (non-Javadoc)
@@ -107,8 +114,8 @@ public class DefaultCPRBarcodeGenerator implements BarcodeGenerator
 		
 		for(int i=0; i< collectionProtocolRegistrationList.size(); i++)
 		{
-			CollectionProtocolRegistration objCollectionProtocolRegistration = (CollectionProtocolRegistration)collectionProtocolRegistrationList.get(i);
-			setBarcode(objCollectionProtocolRegistration);
+			CollectionProtocolRegistration objCPR = (CollectionProtocolRegistration)collectionProtocolRegistrationList.get(i);
+			setBarcode(objCPR);
 			
 		}	
 	}	

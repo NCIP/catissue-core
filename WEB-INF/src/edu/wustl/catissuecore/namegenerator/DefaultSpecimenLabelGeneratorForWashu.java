@@ -187,7 +187,6 @@ public class DefaultSpecimenLabelGeneratorForWashu implements LabelGenerator
 	 * @see edu.wustl.catissuecore.namegenerator.LabelGenerator#setLabel(edu.wustl.common.domain.AbstractDomainObject)
 	 */
 	public synchronized void setLabel(Object obj) {
-		Long temporaryLabel= null;
 		Specimen objSpecimen = (Specimen)obj;
 		
 		/*if (objSpecimen.getIsCollectionProtocolRequirement())

@@ -12,7 +12,7 @@ public class BarcodeGeneratorFactory
 	/**
 	 * Singleton instance of BarcodeGenerator
      */
-    private static HashMap generatorMap = new HashMap() ;
+    private static HashMap<String,Object> generatorMap = new HashMap<String, Object>() ;
 	
 	/**
 	 * Get singleton instance of BarcodeGenerator. The class name of an instance is picked up from properties file
@@ -24,8 +24,6 @@ public class BarcodeGeneratorFactory
 	{
 		try
 		{
-			
-			
 			if(generatorMap.get(generatorType) == null)
 			{
 				String className = PropertyHandler.getValue(generatorType);
@@ -52,7 +50,9 @@ public class BarcodeGeneratorFactory
 		catch(ClassNotFoundException e)
 		{
 			throw new NameGeneratorException("Could not create BarcodeGenerator instance: " +e.getMessage());			
-		}catch(Exception ex){
+		}
+		catch(Exception ex)
+		{
 			throw new NameGeneratorException(ex.getMessage(),ex);
 		}
 	}
