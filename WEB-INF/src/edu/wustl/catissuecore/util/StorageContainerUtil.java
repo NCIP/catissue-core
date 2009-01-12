@@ -14,8 +14,6 @@ import java.util.TreeMap;
 
 import net.sf.ehcache.CacheException;
 import edu.wustl.catissuecore.actionForm.SpecimenArrayForm;
-import edu.wustl.catissuecore.actionForm.ViewSpecimenSummaryForm;
-import edu.wustl.catissuecore.bean.GenericSpecimen;
 import edu.wustl.catissuecore.bizlogic.SpecimenArrayBizLogic;
 import edu.wustl.catissuecore.domain.Container;
 import edu.wustl.catissuecore.domain.Specimen;

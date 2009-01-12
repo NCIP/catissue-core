@@ -1,6 +1,7 @@
 package edu.wustl.catissuecore.domain;
 
 import java.io.Serializable;
+
 import edu.wustl.common.domain.AbstractDomainObject;
 
 /**

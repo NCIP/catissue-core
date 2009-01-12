@@ -12,7 +12,6 @@ package edu.wustl.catissuecore.bizlogic;
 import java.util.List;
 
 import edu.wustl.catissuecore.domain.CancerResearchGroup;
-import edu.wustl.catissuecore.domain.Department;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.dao.AbstractDAO;
@@ -20,7 +19,6 @@ import edu.wustl.common.dao.DAO;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
-import edu.wustl.common.util.global.Variables;
 
 public class CancerResearchBizLogic extends DefaultBizLogic
 {

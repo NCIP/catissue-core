@@ -13,7 +13,6 @@ import edu.wustl.catissuecore.bizlogic.querysuite.ValidateQueryBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.querysuite.queryobject.IParameterizedQuery;
-import edu.wustl.common.util.global.ApplicationProperties;
 /**
  * When the user searches or saves a query , the query is checked for the conditions like DAG should not be empty , is there 
  * at least one node in view on define view page and does the query contain the main object. If all the conditions are satisfied 

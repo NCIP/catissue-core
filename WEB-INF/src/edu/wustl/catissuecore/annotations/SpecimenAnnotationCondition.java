@@ -10,7 +10,6 @@ package edu.wustl.catissuecore.annotations;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;

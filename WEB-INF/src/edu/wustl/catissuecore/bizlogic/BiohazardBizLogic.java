@@ -21,7 +21,6 @@ import edu.wustl.common.dao.DAO;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
-import edu.wustl.common.util.global.Variables;
 
 /**
  * BiohazardHDAO is used to add biohazard information into the database using Hibernate.

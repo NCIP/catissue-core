@@ -1,6 +1,7 @@
 
 package edu.wustl.catissuecore.actionForm;
 import java.util.Collection;
+
 import org.apache.struts.action.ActionForm;
 
 /**

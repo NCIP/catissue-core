@@ -2,8 +2,8 @@ package edu.wustl.catissuecore.printserviceclient;
 
 import java.util.List;
 
-import gov.nih.nci.security.authorization.domainobjects.User;
 import edu.wustl.common.domain.AbstractDomainObject;
+import gov.nih.nci.security.authorization.domainobjects.User;
 
 /**
  * This Interface is used to declare method for label printing

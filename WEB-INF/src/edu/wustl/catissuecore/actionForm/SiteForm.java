@@ -25,7 +25,6 @@ import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
-import edu.wustl.catissuecore.util.global.Variables;
 
 /**
  * This Class is used to encapsulate all the request parameters passed from Site.jsp page.

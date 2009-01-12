@@ -1,10 +1,10 @@
 package edu.wustl.catissuecore.util;
 
-import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.dto.CollectionProtocolDTO;
 import edu.wustl.catissuecore.dto.UserDTO;
+import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.dbManager.HibernateMetaData;
 
 /**

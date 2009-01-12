@@ -11,8 +11,6 @@
 
 package edu.wustl.catissuecore.actionForm;
 
-import java.util.Date;
-
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 

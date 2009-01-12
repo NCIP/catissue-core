@@ -3,7 +3,6 @@ package edu.wustl.catissuecore.applet.listener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import javax.swing.JApplet;
 import javax.swing.table.TableModel;
 
 import edu.wustl.catissuecore.applet.AppletConstants;

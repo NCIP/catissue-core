@@ -23,7 +23,6 @@ import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Constants;
 import edu.wustl.common.util.global.Validator;
-import edu.wustl.common.util.global.Variables;
 
 /**
  * <p>This class initializes the fields of SpecimenArrayTypeBizLogic.java</p>

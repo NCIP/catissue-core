@@ -2,6 +2,7 @@
 package edu.wustl.catissuecore.util;
 
 import java.util.Comparator;
+
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 
 

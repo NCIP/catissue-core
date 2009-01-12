@@ -5,9 +5,10 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
-import edu.wustl.catissuecore.printserviceclient.LabelPrinter;
+
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.printserviceclient.LabelPrinter;
 import edu.wustl.common.domain.AbstractDomainObject;
 import gov.nih.nci.security.authorization.domainobjects.User;
 /**

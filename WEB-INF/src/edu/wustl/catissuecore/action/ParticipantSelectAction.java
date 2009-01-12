@@ -9,7 +9,6 @@
 package edu.wustl.catissuecore.action;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Stack;
 
 import javax.servlet.http.HttpServletRequest;

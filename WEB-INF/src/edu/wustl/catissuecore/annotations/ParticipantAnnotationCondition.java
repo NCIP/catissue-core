@@ -14,9 +14,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
-
-import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
+import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.util.dbManager.DAOException;
 

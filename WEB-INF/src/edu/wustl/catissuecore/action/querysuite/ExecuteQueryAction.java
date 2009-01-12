@@ -22,10 +22,8 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.querysuite.QueryModuleConstants;
 import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
 import edu.wustl.common.action.BaseAction;
-import edu.wustl.common.hibernate.HibernateCleanser;
 import edu.wustl.common.querysuite.queryobject.ICustomFormula;
 import edu.wustl.common.querysuite.queryobject.IParameterizedQuery;
-import edu.wustl.common.util.ObjectCloner;
 import edu.wustl.metadata.util.DyExtnObjectCloner;
 
 /**

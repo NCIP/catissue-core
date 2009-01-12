@@ -11,8 +11,10 @@
 package edu.wustl.catissuecore.domain;
 
 import java.io.Serializable;
+
 import edu.wustl.catissuecore.actionForm.CancerResearchGroupForm;
-import edu.wustl.common.actionForm.AbstractActionForm;import edu.wustl.common.actionForm.IValueObject;
+import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
 
 /**

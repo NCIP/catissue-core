@@ -11,6 +11,7 @@ package edu.wustl.catissuecore.domain;
 
 import java.io.Serializable;
 import java.util.Date;
+
 import edu.wustl.catissuecore.actionForm.ClinicalStudyRegistrationForm;
 import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.catissuecore.util.global.Constants;

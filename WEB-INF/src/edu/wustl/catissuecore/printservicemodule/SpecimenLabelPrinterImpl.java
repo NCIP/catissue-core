@@ -1,13 +1,13 @@
 package edu.wustl.catissuecore.printservicemodule;
 
 import java.util.ArrayList;
-import edu.wustl.catissuecore.printserviceclient.LabelPrinter;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
 import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.printserviceclient.LabelPrinter;
 import edu.wustl.common.domain.AbstractDomainObject;
 import gov.nih.nci.security.authorization.domainobjects.User;
 /**

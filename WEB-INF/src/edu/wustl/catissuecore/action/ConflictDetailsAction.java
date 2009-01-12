@@ -9,38 +9,16 @@
  */
 package edu.wustl.catissuecore.action;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import edu.wustl.catissuecore.actionForm.CPSearchForm;
 import edu.wustl.catissuecore.actionForm.ConflictDetailsForm;
-import edu.wustl.catissuecore.actionForm.ConflictViewForm;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
-import edu.wustl.catissuecore.bizlogic.IdentifiedSurgicalPathologyReportBizLogic;
-import edu.wustl.catissuecore.bizlogic.ReportLoaderQueueBizLogic;
-import edu.wustl.catissuecore.caties.util.CaTIESConstants;
-import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
-import edu.wustl.catissuecore.domain.pathology.ReportLoaderQueue;
-import edu.wustl.catissuecore.reportloader.HL7Parser;
-import edu.wustl.catissuecore.reportloader.ReportLoaderUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
-import edu.wustl.common.beans.NameValueBean;
-import edu.wustl.common.bizlogic.DefaultBizLogic;
-import edu.wustl.common.util.Utility;
-import edu.wustl.common.util.XMLPropertyHandler;
-import edu.wustl.common.util.dbManager.DAOException;
 
 public class ConflictDetailsAction extends BaseAction
 {

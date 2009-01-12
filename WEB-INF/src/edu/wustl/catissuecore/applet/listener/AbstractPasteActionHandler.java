@@ -9,7 +9,6 @@ import java.util.List;
 
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
-import javax.swing.table.TableColumnModel;
 
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.applet.BaseCopyPasteValidator;

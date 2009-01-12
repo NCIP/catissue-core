@@ -4,8 +4,9 @@
 package edu.wustl.catissuecore.multiRepository.bean;
 
 import java.util.List;
-import edu.wustl.catissuecore.domain.Site;
+
 import edu.wustl.catissuecore.domain.CollectionProtocol;
+import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.common.beans.NameValueBean;
 

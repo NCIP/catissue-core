@@ -15,7 +15,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
-import edu.wustl.catissuecore.bean.DefinedArrayRequestBean;
 import edu.wustl.catissuecore.bean.RequestViewBean;
 import edu.wustl.catissuecore.domain.OrderDetails;
 import edu.wustl.catissuecore.domain.PathologicalCaseOrderItem;

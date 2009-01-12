@@ -2,10 +2,9 @@ package edu.wustl.catissuecore.action;
 
 import javax.servlet.http.HttpServletRequest;
 
-import edu.wustl.catissuecore.util.global.Constants;
-
 import edu.wustl.catissuecore.actionForm.EventParametersForm;
 import edu.wustl.catissuecore.actionForm.ThawEventParametersForm;
+import edu.wustl.catissuecore.util.global.Constants;
 
 public class ThawEventParametersAction extends SpecimenEventParametersAction
 {

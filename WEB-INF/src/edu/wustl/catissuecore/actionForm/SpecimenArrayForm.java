@@ -20,8 +20,6 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.Container;
 import edu.wustl.catissuecore.domain.SpecimenArray;
-import edu.wustl.catissuecore.domain.SpecimenArrayContent;
-import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.SpecimenArrayUtil;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.Constants;

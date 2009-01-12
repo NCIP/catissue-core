@@ -16,7 +16,6 @@ import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.querysuite.QueryDetails;
 import edu.wustl.common.beans.QueryResultObjectDataBean;
-import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.dao.JDBCDAO;
 import edu.wustl.common.querysuite.queryobject.impl.OutputTreeDataNode;

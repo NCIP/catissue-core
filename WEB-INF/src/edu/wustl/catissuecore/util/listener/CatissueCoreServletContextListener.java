@@ -1,5 +1,5 @@
 /*
- * $Name: 1.41.2.41.2.2 $
+ * $Name: 1.41.2.41.2.3 $
  *
  * */
 package edu.wustl.catissuecore.util.listener;
@@ -19,11 +19,7 @@ import javax.servlet.ServletContextListener;
 import javax.sql.DataSource;
 
 import net.sf.ehcache.CacheException;
-import titli.controller.Name;
-import titli.controller.interfaces.TitliInterface;
-import titli.model.Titli;
-import titli.model.TitliException;
-import titli.model.util.IndexUtility;
+import titli.model.util.TitliResultGroup;
 import edu.wustl.cab2b.server.path.PathFinder;
 import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.catissuecore.annotations.AnnotationUtil;
@@ -63,7 +59,6 @@ import edu.wustl.common.util.dbManager.DBUtil;
 import edu.wustl.common.util.dbManager.HibernateMetaData;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
-import titli.model.util.TitliResultGroup;
 
 
 /**

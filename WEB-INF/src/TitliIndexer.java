@@ -5,7 +5,6 @@ import titli.controller.interfaces.TitliInterface;
 import titli.model.Titli;
 import titli.model.TitliException;
 import titli.model.util.IndexUtility;
-import titli.model.util.TitliResultGroup;
 
 public class TitliIndexer 
 {

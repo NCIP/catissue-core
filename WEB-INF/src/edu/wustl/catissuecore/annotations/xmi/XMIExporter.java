@@ -5,10 +5,6 @@
  */
 package edu.wustl.catissuecore.annotations.xmi;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.PrintStream;
-
 import edu.common.dynamicextensions.domaininterface.EntityGroupInterface;
 
 /**

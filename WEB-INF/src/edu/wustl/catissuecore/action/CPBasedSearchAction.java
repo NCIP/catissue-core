@@ -9,7 +9,6 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.security.SecurityManager;
 
 /**
  * This Action is for forwarding to CPResultsView Page 

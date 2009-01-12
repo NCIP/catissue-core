@@ -4,7 +4,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import edu.wustl.catissuecore.actionForm.EventParametersForm;
 import edu.wustl.catissuecore.actionForm.ProcedureEventParametersForm;
-
 import edu.wustl.catissuecore.util.global.Constants;
 
 public class ProcedureEventParametersAction extends SpecimenEventParametersAction

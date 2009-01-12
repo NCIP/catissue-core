@@ -9,8 +9,6 @@
  */
 package edu.wustl.catissuecore.action;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 
 import edu.wustl.catissuecore.actionForm.EventParametersForm;

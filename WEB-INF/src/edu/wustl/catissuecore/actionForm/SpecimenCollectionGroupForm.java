@@ -38,7 +38,6 @@ import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
-import edu.wustl.catissuecore.util.global.Variables;
 
 /**
  * SpecimenCollectionGroupForm Class is used to encapsulate 

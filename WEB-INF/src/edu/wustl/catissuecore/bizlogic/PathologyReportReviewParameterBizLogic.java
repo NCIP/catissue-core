@@ -1,7 +1,5 @@
 package edu.wustl.catissuecore.bizlogic;
 
-import java.util.List;
-
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.domain.pathology.PathologyReportReviewParameter;
 import edu.wustl.catissuecore.util.global.Constants;

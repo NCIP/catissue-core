@@ -11,13 +11,10 @@ package edu.wustl.catissuecore.applet.util;
 
 import java.awt.Component;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.JApplet;
-import javax.swing.JComponent;
 import javax.swing.JTable;
-import javax.swing.table.TableColumnModel;
 
 import netscape.javascript.JSObject;
 import edu.wustl.catissuecore.applet.AppletConstants;

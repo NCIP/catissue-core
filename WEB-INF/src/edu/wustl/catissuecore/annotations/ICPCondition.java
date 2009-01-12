@@ -9,8 +9,6 @@ package edu.wustl.catissuecore.annotations;
 
 import java.util.List;
 
-import edu.wustl.common.beans.NameValueBean;
-
 
 
 public interface ICPCondition

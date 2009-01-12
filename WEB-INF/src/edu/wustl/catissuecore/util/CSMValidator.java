@@ -8,6 +8,7 @@ import org.hibernate.Session;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.querysuite.QueryModuleConstants;
 import edu.wustl.catissuecore.util.querysuite.TemporalColumnMetada;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.BizLogicException;
@@ -19,7 +20,6 @@ import edu.wustl.common.security.PrivilegeManager;
 import edu.wustl.common.util.Permissions;
 import edu.wustl.common.util.dbManager.DBUtil;
 import edu.wustl.common.util.logger.Logger;
-import edu.wustl.catissuecore.util.querysuite.QueryModuleConstants;
 
 public class CSMValidator implements IValidator {
 

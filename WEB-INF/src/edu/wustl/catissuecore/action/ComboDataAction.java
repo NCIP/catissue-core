@@ -1,14 +1,17 @@
 package edu.wustl.catissuecore.action;
 
 import java.io.PrintWriter;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.json.JSONObject;
+
 import edu.wustl.catissuecore.bizlogic.ComboDataBizLogic;
 import edu.wustl.common.action.BaseAction;
-import org.json.JSONObject;
 
 public class ComboDataAction extends BaseAction {
 

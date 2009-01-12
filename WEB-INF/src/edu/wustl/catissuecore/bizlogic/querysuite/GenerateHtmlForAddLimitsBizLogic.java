@@ -1,7 +1,6 @@
 
 package edu.wustl.catissuecore.bizlogic.querysuite;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,11 +29,9 @@ import edu.common.dynamicextensions.domaininterface.StringValueInterface;
 import edu.wustl.cab2b.common.exception.CheckedException;
 import edu.wustl.cab2b.common.util.AttributeInterfaceComparator;
 import edu.wustl.cab2b.common.util.PermissibleValueComparator;
-import edu.wustl.catissuecore.flex.dag.CustomFormulaUIBean;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.querysuite.QueryModuleConstants;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.catissuecore.util.querysuite.TemporalQueryUtility;
-import edu.wustl.common.querysuite.queryobject.IArithmeticOperand;
 import edu.wustl.common.querysuite.queryobject.ICondition;
 import edu.wustl.common.querysuite.queryobject.IConstraints;
 import edu.wustl.common.querysuite.queryobject.ICustomFormula;
@@ -46,6 +43,7 @@ import edu.wustl.common.querysuite.queryobject.IQuery;
 import edu.wustl.common.querysuite.queryobject.IRule;
 import edu.wustl.common.querysuite.queryobject.ITerm;
 import edu.wustl.common.querysuite.queryobject.RelationalOperator;
+import edu.wustl.common.querysuite.queryobject.TermType;
 import edu.wustl.common.querysuite.queryobject.TimeInterval;
 import edu.wustl.common.querysuite.queryobject.impl.DateLiteral;
 import edu.wustl.common.querysuite.queryobject.impl.DateOffsetLiteral;
@@ -54,8 +52,6 @@ import edu.wustl.common.querysuite.utils.QueryUtility;
 import edu.wustl.common.util.ParseXMLFile;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.ApplicationProperties;
-import edu.wustl.common.querysuite.queryobject.TermType;
-import edu.wustl.catissuecore.util.global.Variables;
 
 /**
  * This class generates UI for 'Add Limits' and 'Edit Limits' section.

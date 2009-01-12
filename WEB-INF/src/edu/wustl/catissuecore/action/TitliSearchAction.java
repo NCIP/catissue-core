@@ -20,8 +20,8 @@ import titli.controller.interfaces.SortedResultMapInterface;
 import titli.controller.interfaces.TitliInterface;
 import titli.model.Titli;
 import titli.model.TitliException;
-import edu.wustl.catissuecore.actionForm.TitliSearchForm;
 import titli.model.util.TitliTableMapper;
+import edu.wustl.catissuecore.actionForm.TitliSearchForm;
 import edu.wustl.common.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
 

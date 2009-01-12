@@ -2,12 +2,10 @@ package edu.wustl.catissuecore.deidentifier.deid;
 
 import java.text.DateFormat;
 import java.util.Collection;
-import java.util.List;
 
 import org.jdom.CDATA;
 import org.jdom.Element;
 
-import edu.wustl.catissuecore.caties.util.CaCoreAPIService;
 import edu.wustl.catissuecore.caties.util.CaTIESConstants;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;

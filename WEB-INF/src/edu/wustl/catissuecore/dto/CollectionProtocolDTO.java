@@ -4,9 +4,7 @@
 
 package edu.wustl.catissuecore.dto;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import edu.wustl.catissuecore.domain.CollectionProtocol;

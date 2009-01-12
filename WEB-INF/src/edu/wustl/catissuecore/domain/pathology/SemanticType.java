@@ -9,7 +9,6 @@
  */
 package edu.wustl.catissuecore.domain.pathology;
 
-import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;

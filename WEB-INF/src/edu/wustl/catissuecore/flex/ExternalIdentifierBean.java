@@ -6,8 +6,6 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
-import edu.wustl.catissuecore.domain.ExternalIdentifier;
-
 public class ExternalIdentifierBean implements Externalizable
 {
 	 private static final long serialVersionUID = 1234567890L;
