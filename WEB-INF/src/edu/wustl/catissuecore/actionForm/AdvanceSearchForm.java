@@ -39,6 +39,7 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class AdvanceSearchForm extends ActionForm
 {
+	private static final long serialVersionUID = 1234567890L;
 	/**
 	 * @return Returns the columnNames.
 	 */
@@ -89,17 +90,17 @@ public class AdvanceSearchForm extends ActionForm
     /**
 	 * A map that handles event parameters' data
 	 */
-    private Map eventMap = new HashMap();
+    private final Map eventMap = new HashMap();
     
     /**
 	 * Objectname of the advancedConditionNode Object
 	 */
-    private String objectName=new String();
+    private String objectName="";
     
     /**
 	 * Selected node from the query tree
 	 */
-    private String selectedNode = new String();
+    private String selectedNode = "";
     
     /**
 	 * A counter that holds the number of event parameter rows
@@ -107,7 +108,7 @@ public class AdvanceSearchForm extends ActionForm
     private int eventCounter = 1;
     
     
-    String itemNodeId = "";
+    private String itemNodeId = "";
     
     //Variables neccessary for Configuration of Advance Search Results 
     
@@ -140,6 +141,7 @@ public class AdvanceSearchForm extends ActionForm
      */
     public AdvanceSearchForm()
     {
+    	super();
         reset();
     }
 
@@ -148,7 +150,7 @@ public class AdvanceSearchForm extends ActionForm
      * @param key the key to which the object is mapped.
      * @param value the object which is mapped.
      */
-    public void setValue(String key, Object value) 
+    public void setValue(final String key, final Object value) 
     {    	
     	values.put(key, value);
     }
@@ -250,45 +252,37 @@ public class AdvanceSearchForm extends ActionForm
     public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
     {
         ActionErrors errors = new ActionErrors();
-        Validator validator = new Validator();
+        final Validator validator = new Validator();
 
-        String opConstant = "Operator:";
-        Iterator it = values.keySet().iterator();
+        final String opConstant = "Operator:";
+//        Iterator it = values.keySet().iterator();
 
-        if(objectName != null && !objectName.equals(""))
+        if(objectName != null && !"".equals(objectName))
         {
-        	Map resourceBundleMap = SearchUtil.getResourceBundleMap(objectName);
+        	final Map resourceBundleMap = SearchUtil.getResourceBundleMap(objectName);
         	
-        	Iterator iterator = resourceBundleMap.keySet().iterator();
+        	final Iterator iterator = resourceBundleMap.keySet().iterator();
         	
         	while(iterator.hasNext())
         	{
         		String valKey = (String)iterator.next(); //Value Key - ALIAS_NAME:COLUMN_NAME
-        		String opKey  = opConstant + valKey; //Operator Key - OPERATOR:ALIAS_NAME:COLUMN_NAME
+        		final String opKey  = opConstant + valKey; //Operator Key - OPERATOR:ALIAS_NAME:COLUMN_NAME
         		
-        		String opValue = (String)values.get(opKey); //Operator Value
+        		final String opValue = (String)values.get(opKey); //Operator Value
         		
         		if(validator.isOperator(opValue)) //IF the operator is a valid operator
         		{
         			String value = (String)values.get(valKey);
         			NameValueBean bean = (NameValueBean)resourceBundleMap.get(valKey);
-        			String labelName = bean.getName(); //A key in ApplicationResources.properties
+        			final String labelName = bean.getName(); //A key in ApplicationResources.properties
         			
-        			if(!validator.isValue(value)) //IF the value is a valid value
-        			{
-        				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.missing",ApplicationProperties.getValue(labelName)));
-        			}
-        			else
+        			if(validator.isValue(value)) //IF the value is a valid value
         			{
         				if(!SearchUtil.STRING.equals(bean.getValue())) //IF the datatype is not STRING
         				{
         					if(SearchUtil.DATE.equals(bean.getValue())) //IF the datatype is DATE
         					{
-        						if(!validator.checkDate(value)) //IF the start date is improper
-        						{
-									errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.date.format",ApplicationProperties.getValue(labelName)));
-        						}
-        						else
+        						if(validator.checkDate(value)) //IF the start date is improper
         						{
         							valKey = valKey + ":HLIMIT"; //Key for second field
         							value = (String)values.get(valKey);
@@ -305,38 +299,46 @@ public class AdvanceSearchForm extends ActionForm
                 						}
         							}
         						}
+        						else
+        						{
+									errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.date.format",ApplicationProperties.getValue(labelName)));
+        						}
         					}
         					else if(SearchUtil.NUMERIC.equals(bean.getValue())) //IF the datatype is NUMERIC
         					{
         						/* Aarti: Bug#1496 - '0' value should be allowed for search on fields that are double */
-        						if(!validator.isDouble(value,true)) //IF the numeric value is improper
-        						{
-        							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue(labelName)));
-        						}
-        						else
+        						if(validator.isDouble(value,true)) //IF the numeric value is improper
         						{
         							valKey = valKey + ":HLIMIT"; //Key for second field
         							value = (String)values.get(valKey);
         							
-        							if(!validator.isValue(value)) //IF the value is a valid value
-        		        			{
-        		        				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.missing",ApplicationProperties.getValue(labelName)));
-        		        			}
-        							else
+        							if(validator.isValue(value)) //IF the value is a valid value
         							{
         								if(value!= null && !validator.isDouble(value)) //IF the end value is improper
                 						{
         									errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue(labelName)));
                 						}
         							}
+        							else
+        		        			{
+        		        				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.missing",ApplicationProperties.getValue(labelName)));
+        		        			}
+        						}// if md
+        						else
+        						{
+        							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue(labelName)));
         						}
-        					}
+         					}
         				}
+        			}
+        			else
+        			{
+        				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.missing",ApplicationProperties.getValue(labelName)));
         			}
         		}
         	}
         	
-        	if(objectName.equals("Specimen"))
+        	if("Specimen".equals(objectName))
         	{
         		validateEventParameters(validator,errors);
         	}
@@ -471,17 +473,17 @@ public class AdvanceSearchForm extends ActionForm
 	private void validateEventParameters(Validator validator,ActionErrors errors)
 	{
 		//Constants for EventMap keys
-		String eventName = "EventName_";
-		String eventColumn = "EventColumnName_";
-		String eventOperator = "EventColumnOperator_";
-		String eventValue = "EventColumnValue_";
+		final String eventName = "EventName_";
+		final String eventColumn = "EventColumnName_";
+//		String eventOperator = "EventColumnOperator_";
+		final String eventValue = "EventColumnValue_";
 
-		QueryBizLogic bizLogic = (QueryBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
-		Map eventParameterDisplayNames = null;
+		final QueryBizLogic bizLogic = (QueryBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
+		Map evtPrmDspNm = null;
 		
 		try
 		{
-			eventParameterDisplayNames = SearchUtil.getEventParametersDisplayNames(bizLogic,SearchUtil.getEventParametersTables(bizLogic));
+			evtPrmDspNm = SearchUtil.getEventParametersDisplayNames(bizLogic,SearchUtil.getEventParametersTables(bizLogic));
 		}
 		catch(Exception e)
 		{
@@ -490,46 +492,43 @@ public class AdvanceSearchForm extends ActionForm
 		
 		for(int i=1;i<=eventCounter;i++)
 		{
-			String name = (String)eventMap.get(eventName + i);
-			String column = (String)eventMap.get(eventColumn + i);
+			final String name = (String)eventMap.get(eventName + i);
+			final String column = (String)eventMap.get(eventColumn + i);
 			
 			if(validator.isValidOption(name) && validator.isValidOption(column))
 			{
-				String value = (String)eventMap.get(eventValue + i);
+				final String value = (String)eventMap.get(eventValue + i);
 				
-				String fieldName = column.substring(column.indexOf(".")+1,column.lastIndexOf("."));
-				String dataType = column.substring(column.lastIndexOf(".")+1);
+				final String fieldName = column.substring(column.indexOf(".")+1,column.lastIndexOf("."));
+				final String dataType = column.substring(column.lastIndexOf(".")+1);
 				String errorKey = name + "." + fieldName;
 				
-				if(eventParameterDisplayNames != null && eventParameterDisplayNames.get(errorKey) != null)
+				if(evtPrmDspNm != null && evtPrmDspNm.get(errorKey) != null)
 				{
-					errorKey = (String)eventParameterDisplayNames.get(errorKey);
+					errorKey = (String)evtPrmDspNm.get(errorKey);
 				}
 				
 				if(value.trim().equals(""))
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.missing",errorKey));
 				}
-				else if(dataType.equals("bigint") || dataType.equals("integer"))
+				else if("bigint".equals(dataType) || "integer".equals(dataType))
 				{
 					if(!validator.isNumeric(value,0))
 					{
 						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",errorKey));
 					}
 				}
-				else if(dataType.equals("double"))
+				else if("double".equals(dataType))
 				{
 					if(!validator.isDouble(value))
 					{
 						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",errorKey));
 					}
 				}
-				else if(dataType.equals("timestamp"))
+				else if("timestamp".equals(dataType) && (!validator.checkDate(value)))
 				{
-					if(!validator.checkDate(value))
-					{
-						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",errorKey));
-					}
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",errorKey));
 				}
 			}
 		}

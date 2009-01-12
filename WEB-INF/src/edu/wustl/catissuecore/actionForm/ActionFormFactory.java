@@ -13,40 +13,41 @@
 package edu.wustl.catissuecore.actionForm;
 
 import java.lang.reflect.Method;
-import java.util.List;
+//import java.util.List;
+import edu.wustl.catissuecore.domain.*;
 
-import edu.wustl.catissuecore.domain.Biohazard;
-import edu.wustl.catissuecore.domain.CancerResearchGroup;
-import edu.wustl.catissuecore.domain.CellSpecimenReviewParameters;
-import edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter;
-import edu.wustl.catissuecore.domain.CollectionEventParameters;
-import edu.wustl.catissuecore.domain.CollectionProtocol;
-import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
-import edu.wustl.catissuecore.domain.Department;
-import edu.wustl.catissuecore.domain.DisposalEventParameters;
-import edu.wustl.catissuecore.domain.Distribution;
-import edu.wustl.catissuecore.domain.DistributionProtocol;
-import edu.wustl.catissuecore.domain.EmbeddedEventParameters;
-import edu.wustl.catissuecore.domain.FixedEventParameters;
-import edu.wustl.catissuecore.domain.FluidSpecimenReviewEventParameters;
-import edu.wustl.catissuecore.domain.FrozenEventParameters;
-import edu.wustl.catissuecore.domain.Institution;
-import edu.wustl.catissuecore.domain.MolecularSpecimenReviewParameters;
-import edu.wustl.catissuecore.domain.Participant;
-import edu.wustl.catissuecore.domain.ProcedureEventParameters;
-import edu.wustl.catissuecore.domain.ReceivedEventParameters;
-import edu.wustl.catissuecore.domain.Site;
-import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.catissuecore.domain.SpecimenArray;
-import edu.wustl.catissuecore.domain.SpecimenArrayType;
-import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
-import edu.wustl.catissuecore.domain.SpunEventParameters;
-import edu.wustl.catissuecore.domain.StorageContainer;
-import edu.wustl.catissuecore.domain.StorageType;
-import edu.wustl.catissuecore.domain.ThawEventParameters;
-import edu.wustl.catissuecore.domain.TissueSpecimenReviewEventParameters;
-import edu.wustl.catissuecore.domain.TransferEventParameters;
-import edu.wustl.catissuecore.domain.User;
+//import edu.wustl.catissuecore.domain.Biohazard;
+//import edu.wustl.catissuecore.domain.CancerResearchGroup;
+//import edu.wustl.catissuecore.domain.CellSpecimenReviewParameters;
+//import edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter;
+//import edu.wustl.catissuecore.domain.CollectionEventParameters;
+//import edu.wustl.catissuecore.domain.CollectionProtocol;
+//import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
+//import edu.wustl.catissuecore.domain.Department;
+//import edu.wustl.catissuecore.domain.DisposalEventParameters;
+//import edu.wustl.catissuecore.domain.Distribution;
+//import edu.wustl.catissuecore.domain.DistributionProtocol;
+//import edu.wustl.catissuecore.domain.EmbeddedEventParameters;
+//import edu.wustl.catissuecore.domain.FixedEventParameters;
+//import edu.wustl.catissuecore.domain.FluidSpecimenReviewEventParameters;
+//import edu.wustl.catissuecore.domain.FrozenEventParameters;
+//import edu.wustl.catissuecore.domain.Institution;
+//import edu.wustl.catissuecore.domain.MolecularSpecimenReviewParameters;
+//import edu.wustl.catissuecore.domain.Participant;
+//import edu.wustl.catissuecore.domain.ProcedureEventParameters;
+//import edu.wustl.catissuecore.domain.ReceivedEventParameters;
+//import edu.wustl.catissuecore.domain.Site;
+//import edu.wustl.catissuecore.domain.Specimen;
+//import edu.wustl.catissuecore.domain.SpecimenArray;
+//import edu.wustl.catissuecore.domain.SpecimenArrayType;
+//import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+//import edu.wustl.catissuecore.domain.SpunEventParameters;
+//import edu.wustl.catissuecore.domain.StorageContainer;
+//import edu.wustl.catissuecore.domain.StorageType;
+//import edu.wustl.catissuecore.domain.ThawEventParameters;
+//import edu.wustl.catissuecore.domain.TissueSpecimenReviewEventParameters;
+//import edu.wustl.catissuecore.domain.TransferEventParameters;
+//import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.factory.AbstractActionFormFactory;
@@ -67,17 +68,21 @@ public class ActionFormFactory extends AbstractActionFormFactory
      */
 	public AbstractActionForm getFormBean(Object object,String operation) throws Exception
 	{
+		AbstractActionForm form = null;
+		boolean  logout= false;
 		if (operation.equals(Constants.LOGIN))
 		{
-		    LoginForm loginForm = new LoginForm();
-		    edu.wustl.catissuecore.domain.User user = (edu.wustl.catissuecore.domain.User) object;
+			final LoginForm loginForm = new LoginForm();
+			final edu.wustl.catissuecore.domain.User user = (edu.wustl.catissuecore.domain.User) object;
 		    loginForm.setLoginName(user.getLoginName());
-//		    loginForm.setPassword(user.getPassword());
-		    return loginForm;
+		    form = loginForm;
+//		    return loginForm;
 		}
 		else if (operation.equals(Constants.LOGOUT))
 		{
-		    return null;
+//		    return null;
+//			form = null;
+			logout = true;
 		}
 		
 		if(object == null)
@@ -89,162 +94,180 @@ public class ActionFormFactory extends AbstractActionFormFactory
 		{
 			throw new Exception("Id field of an object should not be null");
 		}
-		
-		AbstractActionForm form = null;
 
-		if(object instanceof User)
+		if(!logout)
 		{
-			form = new UserForm();
-		}
-		else if(object instanceof Institution)
-		{
-			form = new InstitutionForm();
-		}
-		else if(object instanceof Department)
-		{
-			form = new DepartmentForm();
-		}
-		else if(object instanceof CancerResearchGroup)
-		{
-			form = new CancerResearchGroupForm();
-		}
-		else if(object instanceof Site)
-		{
-			form = new SiteForm();
-		}
-		else if(object instanceof StorageType)
-		{
-			form = new StorageTypeForm();
-		}
-		else if(object instanceof StorageContainer)
-		{
-			form = new StorageContainerForm();
-		}
-		else if(object instanceof Biohazard)
-		{
-			form = new BiohazardForm();
-		}
-		else if(object instanceof CollectionProtocol)
-		{
-			form = new CollectionProtocolForm();
-		}
-		else if(object instanceof DistributionProtocol)
-		{
-			form = new DistributionProtocolForm();
-		}
-		else if(object instanceof Participant)
-		{
-			form = new ParticipantForm();
-		}
-		else if(object instanceof CollectionProtocolRegistration)
-		{
-			form = new CollectionProtocolRegistrationForm();
-		}
-		else if(object instanceof SpecimenCollectionGroup)
-		{
-			form = new SpecimenCollectionGroupForm();
-		}
-		else if(object instanceof Specimen)
-		{
-			if(operation.equals(Constants.EDIT))
+			if(object instanceof User)
 			{
-				form = new NewSpecimenForm();
+				form = new UserForm();
 			}
-			else
+			else if(object instanceof Institution)
 			{
-				Specimen specimen = (Specimen)object;
-
-				if(specimen.getSpecimenCollectionGroup() != null)
+				form = new InstitutionForm();
+			}
+			else if(object instanceof Department)
+			{
+				form = new DepartmentForm();
+			}
+			else if(object instanceof CancerResearchGroup)
+			{
+				form = new CancerResearchGroupForm();
+			}
+			else if(object instanceof Site)
+			{
+				form = new SiteForm();
+			}
+			else if(object instanceof StorageType)
+			{
+				form = new StorageTypeForm();
+			}
+			else if(object instanceof StorageContainer)
+			{
+				form = new StorageContainerForm();
+			}
+			else if(object instanceof Biohazard)
+			{
+				form = new BiohazardForm();
+			}
+			else if(object instanceof CollectionProtocol)
+			{
+				form = new CollectionProtocolForm();
+			}
+			else if(object instanceof DistributionProtocol)
+			{
+				form = new DistributionProtocolForm();
+			}
+			else if(object instanceof Participant)
+			{
+				form = new ParticipantForm();
+			}
+			else if(object instanceof CollectionProtocolRegistration)
+			{
+				form = new CollectionProtocolRegistrationForm();
+			}
+			else if(object instanceof SpecimenCollectionGroup)
+			{
+				form = new SpecimenCollectionGroupForm();
+			}
+			else if(object instanceof Specimen)
+			{
+				if(operation.equals(Constants.EDIT))
 				{
 					form = new NewSpecimenForm();
 				}
-				else if(specimen.getParentSpecimen() != null)
-				{
-					form = new CreateSpecimenForm();
-				}
 				else
 				{
-					throw new Exception("Either Specimen Collection Group or Parent Specimen should be present.");
+					final Specimen specimen = (Specimen)object;
+
+					//--------
+					if(specimen.getSpecimenCollectionGroup() == null)
+					{
+						if(specimen.getParentSpecimen() == null)
+						{
+							throw new Exception("Either Specimen Collection Group or Parent Specimen should be present.");
+						}
+						else
+						{
+							form = new CreateSpecimenForm();
+						}
+					}
+					else
+					{
+						form = new NewSpecimenForm();
+					}
+					//--------
+//					if(specimen.getSpecimenCollectionGroup() != null)
+//					{
+//						form = new NewSpecimenForm();
+//					}
+//					else if(specimen.getParentSpecimen() != null)
+//					{
+//						form = new CreateSpecimenForm();
+//					}
+//					else
+//					{
+//						throw new Exception("Either Specimen Collection Group or Parent Specimen should be present.");
+//					}
 				}
 			}
+			else if(object instanceof Distribution)
+			{
+				form = new DistributionForm();
+			}
+			else if(object instanceof CellSpecimenReviewParameters)
+			{
+				form = new CellSpecimenReviewParametersForm();
+			}
+			else if(object instanceof CheckInCheckOutEventParameter)
+			{
+				form = new CheckInCheckOutEventParametersForm();
+			}
+			else if(object instanceof CollectionEventParameters)
+			{
+				form = new CollectionEventParametersForm();
+			}
+			else if(object instanceof DisposalEventParameters)
+			{
+				form = new DisposalEventParametersForm();
+			}
+			else if(object instanceof EmbeddedEventParameters)
+			{
+				form = new EmbeddedEventParametersForm();
+			}
+			else if(object instanceof FixedEventParameters)
+			{
+				form = new FixedEventParametersForm();
+			}
+			else if(object instanceof FluidSpecimenReviewEventParameters)
+			{
+				form = new FluidSpecimenReviewEventParametersForm();
+			}
+			else if(object instanceof FrozenEventParameters)
+			{
+				form = new FrozenEventParametersForm();
+			}
+			else if(object instanceof MolecularSpecimenReviewParameters)
+			{
+				form = new MolecularSpecimenReviewParametersForm();
+			}
+			else if(object instanceof ProcedureEventParameters)
+			{
+				form = new ProcedureEventParametersForm();
+			}
+			else if(object instanceof ReceivedEventParameters)
+			{
+				form = new ReceivedEventParametersForm();
+			}
+			else if(object instanceof SpunEventParameters)
+			{
+				form = new SpunEventParametersForm();
+			}
+			else if(object instanceof ThawEventParameters)
+			{
+				form = new ThawEventParametersForm();
+			}
+			else if(object instanceof TransferEventParameters)
+			{
+				form = new TransferEventParametersForm();
+			}
+			else if(object instanceof TissueSpecimenReviewEventParameters)
+			{
+				form = new TissueSpecimenReviewEventParametersForm();
+			} 
+			else if (object instanceof SpecimenArrayType)
+			{
+				form = new SpecimenArrayTypeForm();
+			}
+			else if (object instanceof SpecimenArray)
+			{
+				form = new SpecimenArrayForm();
+			} else
+			{
+			    throw new Exception("Invalid Object for Add/Edit Operation");
+			}
+			
+			form.setOperation(operation);
 		}
-		else if(object instanceof Distribution)
-		{
-			form = new DistributionForm();
-		}
-		else if(object instanceof CellSpecimenReviewParameters)
-		{
-			form = new CellSpecimenReviewParametersForm();
-		}
-		else if(object instanceof CheckInCheckOutEventParameter)
-		{
-			form = new CheckInCheckOutEventParametersForm();
-		}
-		else if(object instanceof CollectionEventParameters)
-		{
-			form = new CollectionEventParametersForm();
-		}
-		else if(object instanceof DisposalEventParameters)
-		{
-			form = new DisposalEventParametersForm();
-		}
-		else if(object instanceof EmbeddedEventParameters)
-		{
-			form = new EmbeddedEventParametersForm();
-		}
-		else if(object instanceof FixedEventParameters)
-		{
-			form = new FixedEventParametersForm();
-		}
-		else if(object instanceof FluidSpecimenReviewEventParameters)
-		{
-			form = new FluidSpecimenReviewEventParametersForm();
-		}
-		else if(object instanceof FrozenEventParameters)
-		{
-			form = new FrozenEventParametersForm();
-		}
-		else if(object instanceof MolecularSpecimenReviewParameters)
-		{
-			form = new MolecularSpecimenReviewParametersForm();
-		}
-		else if(object instanceof ProcedureEventParameters)
-		{
-			form = new ProcedureEventParametersForm();
-		}
-		else if(object instanceof ReceivedEventParameters)
-		{
-			form = new ReceivedEventParametersForm();
-		}
-		else if(object instanceof SpunEventParameters)
-		{
-			form = new SpunEventParametersForm();
-		}
-		else if(object instanceof ThawEventParameters)
-		{
-			form = new ThawEventParametersForm();
-		}
-		else if(object instanceof TransferEventParameters)
-		{
-			form = new TransferEventParametersForm();
-		}
-		else if(object instanceof TissueSpecimenReviewEventParameters)
-		{
-			form = new TissueSpecimenReviewEventParametersForm();
-		} 
-		else if (object instanceof SpecimenArrayType)
-		{
-			form = new SpecimenArrayTypeForm();
-		}
-		else if (object instanceof SpecimenArray)
-		{
-			form = new SpecimenArrayForm();
-		} else
-		{
-		    throw new Exception("Invalid Object for Add/Edit Operation");
-		}
-		
-		form.setOperation(operation);
 		return form;
 	}
 	
@@ -256,16 +279,18 @@ public class ActionFormFactory extends AbstractActionFormFactory
 	 */
 	private static boolean isIdNull(Object domainObject) throws Exception
 	{
-		Method getIdMethod=domainObject.getClass().getMethod("getId",new Class[]{});
-		Object object = getIdMethod.invoke(domainObject,new Object[]{});
-		
+		final Method getIdMethod=domainObject.getClass().getMethod("getId",new Class[]{});
+		final Object object = getIdMethod.invoke(domainObject,new Object[]{});
+		boolean result= false;
 		if(object == null)
 		{
-			return true;
+			result = true;
 		}
-		else
-		{
-			return false;
-		}
+//		else
+//		{
+//			result = false;
+//		}
+		return result;
 	}
+// TODO: A high number of imports can indicate a high degree of coupling within an object.
 }

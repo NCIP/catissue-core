@@ -23,7 +23,6 @@ import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
-import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.actionForm.AbstractActionForm;
@@ -38,6 +37,11 @@ import edu.wustl.common.util.global.Validator;
  * */
 public class AliquotForm extends AbstractActionForm implements IPrinterTypeLocation
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	/**
      * An label of a specimen.
      */
@@ -165,7 +169,7 @@ public class AliquotForm extends AbstractActionForm implements IPrinterTypeLocat
 		return nextForwardTo;
 	}
 
-	public void setNextForwardTo(String nextForwardTo)
+	public void setNextForwardTo(final String nextForwardTo)
 	{
 		this.nextForwardTo = nextForwardTo;
 	}
@@ -175,7 +179,7 @@ public class AliquotForm extends AbstractActionForm implements IPrinterTypeLocat
 		return printCheckbox;
 	}
 
-	public void setPrintCheckbox(String printCheckbox) 
+	public void setPrintCheckbox(final String printCheckbox) 
 	{
 		this.printCheckbox = printCheckbox;
 	}
@@ -195,7 +199,7 @@ public class AliquotForm extends AbstractActionForm implements IPrinterTypeLocat
      * @param aliquotMap A map of distinguished fields of aliquots.
      * @see #getAliquotMap()
      */
-	public void setAliquotMap(Map aliquotMap)
+	public void setAliquotMap(final Map aliquotMap)
 	{
 		this.aliquotMap = aliquotMap;
 	}
@@ -205,7 +209,7 @@ public class AliquotForm extends AbstractActionForm implements IPrinterTypeLocat
 	 * @param key the key to which the object is mapped.
 	 * @param value the object which is to be mapped.
 	 */
-	public void setValue(String key, Object value)
+	public void setValue(final String key, final Object value)
 	{
 		aliquotMap.put(key, value);
 	}
@@ -215,7 +219,7 @@ public class AliquotForm extends AbstractActionForm implements IPrinterTypeLocat
 	 * @param key the required key.
 	 * @return the object to which this map maps the specified key.
 	 */
-	public Object getValue(String key)
+	public Object getValue(final String key)
 	{
 		return aliquotMap.get(key);
 	}
@@ -235,7 +239,7 @@ public class AliquotForm extends AbstractActionForm implements IPrinterTypeLocat
      * @param availableQuantity The available quantity of parent specimen after creating aliquots.
      * @see #getAvailableQuantity()
      */
-	public void setAvailableQuantity(String availableQuantity)
+	public void setAvailableQuantity(final String availableQuantity)
 	{
 		this.availableQuantity = availableQuantity;
 	}
@@ -259,7 +263,7 @@ public class AliquotForm extends AbstractActionForm implements IPrinterTypeLocat
      * @param concentration The concentration of parent specimen.
      * @see #getConcentration()
      */
-	public void setConcentration(String concentration)
+	public void setConcentration(final String concentration)
 	{
 		this.concentration = concentration;
 	}
@@ -279,7 +283,7 @@ public class AliquotForm extends AbstractActionForm implements IPrinterTypeLocat
      * @param noOfAliquots The no. of aliquots to be created.
      * @see #getNoOfAliquots()
      */
-	public void setNoOfAliquots(String noOfAliquots)
+	public void setNoOfAliquots(final String noOfAliquots)
 	{
 		this.noOfAliquots = noOfAliquots;
 	}
@@ -339,7 +343,7 @@ public class AliquotForm extends AbstractActionForm implements IPrinterTypeLocat
      * @param className The specimen class of parent specimen.
      * @see #getClassName()
      */
-	public void setClassName(String className)
+	public void setClassName(final String className)
 	{
 		this.className = className;
 	}
@@ -359,7 +363,7 @@ public class AliquotForm extends AbstractActionForm implements IPrinterTypeLocat
      * @param specimenLabel The specimen label of parent specimen.
      * @see #getSpecimenLabel()
      */
-	public void setSpecimenLabel(String specimenLabel)
+	public void setSpecimenLabel(final String specimenLabel)
 	{
 		this.specimenLabel = specimenLabel;
 	}
@@ -379,7 +383,7 @@ public class AliquotForm extends AbstractActionForm implements IPrinterTypeLocat
      * @param tissueSide The tissue side of parent specimen.
      * @see #getTissueSide()
      */
-	public void setTissueSide(String tissueSide)
+	public void setTissueSide(final String tissueSide)
 	{
 		this.tissueSide = tissueSide;
 	}
@@ -399,7 +403,7 @@ public class AliquotForm extends AbstractActionForm implements IPrinterTypeLocat
      * @param tissueSite The tissue site of parent specimen.
      * @see #getTissueSite()
      */
-	public void setTissueSite(String tissueSite)
+	public void setTissueSite(final String tissueSite)
 	{
 		this.tissueSite = tissueSite;
 	}
@@ -419,7 +423,7 @@ public class AliquotForm extends AbstractActionForm implements IPrinterTypeLocat
      * @param type The type of parent specimen.
      * @see #getTissueSite()
      */
-	public void setType(String type)
+	public void setType(final String type)
 	{
 		this.type = type;
 	}
@@ -442,7 +446,7 @@ public class AliquotForm extends AbstractActionForm implements IPrinterTypeLocat
     
     /**
      * This method Copies the data from an Specimen object to a AliquotForm object.
-     * @param abstractDomain An object of Specimen class.  
+     * @param abstractDomain An object of Specimen class.
      */
     public void setAllValues(AbstractDomainObject abstractDomain)
     {
@@ -457,8 +461,8 @@ public class AliquotForm extends AbstractActionForm implements IPrinterTypeLocat
      */
      public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
      {
-         ActionErrors errors = new ActionErrors();
-         Validator validator = new Validator();
+    	 final ActionErrors errors = new ActionErrors();
+    	 final Validator validator = new Validator();
          
          if(Constants.PAGEOF_ALIQUOT_SUMMARY.equals(request.getParameter(Constants.PAGEOF)))
          {
@@ -470,19 +474,19 @@ public class AliquotForm extends AbstractActionForm implements IPrinterTypeLocat
              if (!validator.isEmpty(createdDate))
              {
                  
-                 String errorKeyForCreatedDate = validator.validateDate(createdDate,true);
+                final String errorKeyForCreatedDate = validator.validateDate(createdDate,true);
                  if(errorKeyForCreatedDate.trim().length() > 0)
                  {
                      errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKeyForCreatedDate,ApplicationProperties.getValue("specimen.createdDate")));
                  }
              }
              
-         	Iterator keyIterator = aliquotMap.keySet().iterator();
+             final Iterator keyIterator = aliquotMap.keySet().iterator();
          	
          	while(keyIterator.hasNext())
          	{
          		
-         		String key = (String)keyIterator.next();
+         		final String key = (String)keyIterator.next();
          		
          		if(key.endsWith("_quantity"))
          		{
@@ -517,7 +521,7 @@ public class AliquotForm extends AbstractActionForm implements IPrinterTypeLocat
          		{
          			//by Falguni
          			String value = (String)aliquotMap.get(key);
-         			System.out.println("value");
+//         			System.out.println("value");
          			if(validator.isEmpty(value))
          			{
          				errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.required",ApplicationProperties.getValue("specimen.label")));
@@ -594,7 +598,7 @@ public class AliquotForm extends AbstractActionForm implements IPrinterTypeLocat
      * @param barcode The barcode of the parent specimen.
      * @see #getBarcode()
      */
-    public void setBarcode(String barcode)
+    public void setBarcode(final String barcode)
     {
         this.barcode = barcode;
     }
@@ -614,7 +618,7 @@ public class AliquotForm extends AbstractActionForm implements IPrinterTypeLocat
      * @param checkedButton The value of selected radio button.
      * @see #getCheckedButton()
      */
-	public void setCheckedButton(String checkedButton)
+	public void setCheckedButton(final String checkedButton)
 	{
 		this.checkedButton = checkedButton;
 	}
@@ -628,7 +632,7 @@ public class AliquotForm extends AbstractActionForm implements IPrinterTypeLocat
 	/**
 	 * @param specimenID The specimenID to set.
 	 */
-	public void setSpecimenID(String specimenID)
+	public void setSpecimenID(final String specimenID)
 	{
 		this.specimenID = specimenID;
 	}
@@ -656,7 +660,7 @@ public class AliquotForm extends AbstractActionForm implements IPrinterTypeLocat
 	/**
 	 * @param buttonClicked The buttonClicked to set.
 	 */
-	public void setButtonClicked(String buttonClicked)
+	public void setButtonClicked(final String buttonClicked)
 	{
 		this.buttonClicked = buttonClicked;
 	}
@@ -692,7 +696,7 @@ public class AliquotForm extends AbstractActionForm implements IPrinterTypeLocat
       * Set create Date
       * @param createdDate
       */
-     public void setCreatedDate(String createdDate)
+     public void setCreatedDate(final String createdDate)
      {
          this.createdDate = createdDate;
      }
@@ -704,7 +708,7 @@ public class AliquotForm extends AbstractActionForm implements IPrinterTypeLocat
 	}
 
 	
-	public void setSpecimenList(List<AbstractDomainObject> specimenList)
+	public void setSpecimenList(final List<AbstractDomainObject> specimenList)
 	{
 		if(specimenList!=null)
 		{
@@ -719,7 +723,7 @@ public class AliquotForm extends AbstractActionForm implements IPrinterTypeLocat
 	}
 
 	
-	public void setScgName(String scgName)
+	public void setScgName(final String scgName)
 	{
 		this.scgName = scgName;
 	}
@@ -727,7 +731,7 @@ public class AliquotForm extends AbstractActionForm implements IPrinterTypeLocat
 		return printerLocation;
 	}
 
-	public void setPrinterLocation(String printerLocation) {
+	public void setPrinterLocation(final String printerLocation) {
 		this.printerLocation = printerLocation;
 	}
 
@@ -735,7 +739,7 @@ public class AliquotForm extends AbstractActionForm implements IPrinterTypeLocat
 		return printerType;
 	}
 
-	public void setPrinterType(String printerType) {
+	public void setPrinterType(final String printerType) {
 		this.printerType = printerType;
 	}
 }
