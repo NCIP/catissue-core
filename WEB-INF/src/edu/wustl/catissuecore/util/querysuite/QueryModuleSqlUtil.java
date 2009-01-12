@@ -82,14 +82,14 @@ final public class QueryModuleSqlUtil {
 
 	/**
 		 * @param tableName
-		 * @param columnNameIndexMap
+		 * @param columnNameIndex
 		 * @return
 		 */
-		public static String getSQLForRootNode(final String tableName, Map<String,String> columnNameIndexMap)
+		public static String getSQLForRootNode(final String tableName, Map<String,String> columnNameIndex)
 		{
 	//		Map<String,String> columnNameIndexMap = getColumnNamesForSelectpart(root,queryResulObjectDataMap,uniqueIdNodesMap2);
-			String columnNames = columnNameIndexMap.get(Constants.COLUMN_NAMES);
-			String indexStr = columnNameIndexMap.get(Constants.INDEX);
+			String columnNames = columnNameIndex.get(Constants.COLUMN_NAMES);
+			String indexStr = columnNameIndex.get(Constants.INDEX);
 			int index = -1;
 			if (indexStr!= null && !Constants.NULL.equals(indexStr))
 			{
@@ -102,7 +102,7 @@ final public class QueryModuleSqlUtil {
 			}
 	//		String selectSql = "select distinct " + columnNames + " from " + tableName + " where "
 	//				+ idColumnName + " is not null";
-			StringBuffer selectSql= new StringBuffer();
+			StringBuffer selectSql= new StringBuffer(50);
 			selectSql.append("select distinct ").append(columnNames).append(" from ")
 				.append(tableName).append(" where ").append(idColumnName).append(" is not null");
 			selectSql = selectSql.append(Constants.NODE_SEPARATOR).append(index);

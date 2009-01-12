@@ -52,14 +52,14 @@ public abstract class QueryCSMUtil
 		queryDetailsObj.setMainEntityMap(mainEntityMap);
 		
 		String errorMessg = getErrorMessage(queryDetailsObj);
-		if(!errorMessg.equals(""))
+		if("".equals(errorMessg))
 		{
-			session.setAttribute(Constants.NO_MAIN_OBJECT_IN_QUERY, errorMessg);
-			return null;
+			session.setAttribute(Constants.MAIN_ENTITY_MAP, mainEntityMap);	
 		}
 		else
 		{
-			session.setAttribute(Constants.MAIN_ENTITY_MAP, mainEntityMap);
+			session.setAttribute(Constants.NO_MAIN_OBJECT_IN_QUERY, errorMessg);
+			mainEntityMap = null;
 		}
 		return mainEntityMap;
 	}
@@ -75,6 +75,7 @@ public abstract class QueryCSMUtil
 	private static String getErrorMessage(QueryDetails queryDetailsObj)
 	{ 
 		String errorMsg = ""; 
+		Object[] arguments;
 		//iterate through the uniqueIdNodesMap and check if main entities of all the nodes are present
 		for (Iterator idMapIterator = queryDetailsObj.getUniqueIdNodesMap().entrySet().iterator(); idMapIterator.hasNext();)
 		{	
@@ -95,18 +96,21 @@ public abstract class QueryCSMUtil
 				{
 					//set the error message 
 					String mainEntityNames = "";
+					StringBuffer tempMainEntityNames = new StringBuffer();
 					for (EntityInterface entity : mainEntityList)
 					{
 						//get the names of all the main entities for the dependent entity
 						String name = entity.getName();
-						name = name.substring(name.lastIndexOf(".")+1, name.length()); //TODO: use Utility Method for getting className
-						mainEntityNames = mainEntityNames + name + " or ";
+						name = name.substring(name.lastIndexOf('.')+1, name.length()); //TODO: use Utility Method for getting className
+						tempMainEntityNames = tempMainEntityNames.append(mainEntityNames).append(name).append(" or ");
+						//mainEntityNames = mainEntityNames + name + " or ";
 					}
-					mainEntityNames = mainEntityNames.substring(0, mainEntityNames.lastIndexOf("r")-1);
+					mainEntityNames = tempMainEntityNames.toString();
+					mainEntityNames = mainEntityNames.substring(0, mainEntityNames.lastIndexOf('r')-1);
 					String message = ApplicationProperties.getValue("query.mainObjectError");
 					String entityName = mapEntity.getName();
-					entityName = entityName.substring(entityName.lastIndexOf(".")+1, entityName.length());//TODO: use Utility Method for getting className
-					Object[] arguments = new Object[]{entityName, mainEntityNames};
+					entityName = entityName.substring(entityName.lastIndexOf('.')+1, entityName.length());//TODO: use Utility Method for getting className
+					arguments = new Object[]{entityName, mainEntityNames};
 					errorMsg = MessageFormat.format(message, arguments);
 					break;
 				}
@@ -138,7 +142,9 @@ public abstract class QueryCSMUtil
 				tempMainEntityList = new ArrayList<EntityInterface>();
 				EntityInterface parentEntity = tempDynamicExtensionsEntity.getParentEntity();
 				if(parentEntity == null)
+				{
 					break;
+				}
 				else
 				{
 					tempMainEntityList = getAllMainEntities(parentEntity, tempMainEntityList);
@@ -190,15 +196,17 @@ public abstract class QueryCSMUtil
 		try
 		{
 			List<AssociationInterface> associationList = getIncomingContainmentAssociations(entity);
-			if (associationList.size() != 0)
+			if (associationList.isEmpty())
+			{
+				mainEntityList.add(entity);
+			}
+			else
 			{
 				for (AssociationInterface assocoation : associationList)
 				{
 					mainEntityList = getAllMainEntities(assocoation.getEntity(), mainEntityList);
 				}
 			}
-			else
-				mainEntityList.add(entity);
 		}
 		catch (DynamicExtensionsSystemException deExeption)
 		{
@@ -229,16 +237,15 @@ public abstract class QueryCSMUtil
 		queryResultObjectDataBean.setEntity(dynamicExtensionsEntity);
 
 		List<EntityInterface> mainEntityList = queryDetailsObj.getMainEntityMap().get(dynamicExtensionsEntity);
-		if (mainEntityList != null)
+		if (mainEntityList == null)
 		{
-			//
-			EntityInterface mainEntity = getMainEntity(mainEntityList, node);
-			queryResultObjectDataBean.setMainEntity(mainEntity);
-			entityName = mainEntity.getName();
+			entityName = dynamicExtensionsEntity.getName();			
 		}
 		else
 		{
-			entityName = dynamicExtensionsEntity.getName();
+			EntityInterface mainEntity = getMainEntity(mainEntityList, node);
+			queryResultObjectDataBean.setMainEntity(mainEntity);
+			entityName = mainEntity.getName();
 		}
 		
 		queryResultObjectDataBean.setCsmEntityName(entityName);
@@ -277,10 +284,12 @@ public abstract class QueryCSMUtil
 	 */
 	private static boolean isReadDeniedObject(String entityName)
 	{  
+		boolean isReadDenied = false;
 		if (edu.wustl.common.util.global.Variables.queryReadDeniedObjectList.contains(entityName))
-			return true;
-		else
-			return false;
+		{
+			isReadDenied = true;
+		}
+		return isReadDenied;
 	}
 
 	
@@ -296,12 +305,15 @@ public abstract class QueryCSMUtil
 		 //check if node itself is main entity
 		EntityInterface entity = null;
 		 	
-		 	
 		// check if main entity is present in parent hierarchy
 		if (node.getParent() != null)
-			entity = getMainEntityFromParentHierarchy(mainEntityList, node.getParent()); 
+		{
+			entity = getMainEntityFromParentHierarchy(mainEntityList, node.getParent());
+		}
 		if (entity != null)
-			return entity;	
+		{
+			return entity;
+		}
 		 	
 		 //check if main entity is present in child hierarchy
 		 	
@@ -320,10 +332,11 @@ public abstract class QueryCSMUtil
 	 {
 		 EntityInterface dynamicExtensionsEntity = node.getOutputEntity()
 					.getDynamicExtensionsEntity();
-		 if (mainEntityList.contains(dynamicExtensionsEntity))
-			 return dynamicExtensionsEntity;
-		 else 
-			 return null;
+		 if (!mainEntityList.contains(dynamicExtensionsEntity))
+		 {
+			 dynamicExtensionsEntity = null;
+		 }
+		 return dynamicExtensionsEntity;
 	 }
 		 
 	 /**
@@ -340,7 +353,9 @@ public abstract class QueryCSMUtil
 	 	if (entity == null)
 	 	{
 	 		if (node.getParent() != null)
+	 		{
 	 		 	return getMainEntityFromParentHierarchy(mainEntityList, node.getParent());
+	 		}
 	 	}
 	 	return entity;
 	 }
@@ -389,7 +404,9 @@ public abstract class QueryCSMUtil
 			
 			RoleInterface targetRole = associationById.getTargetRole();
 			if (associationById!=null && targetRole.getAssociationsType().getValue().equals(Constants.CONTAINTMENT_ASSOCIATION))
+			{
 				list.add(associationById);
+			}
 		}
 		return list;
 	}	
@@ -407,7 +424,16 @@ public abstract class QueryCSMUtil
 			Map<EntityInterface, Integer> entityIdIndexMap, QueryDetails queryDetailsObj)
 	{ 
 		List<String> selectSqlColumnList = getListOfSelectedColumns(selectSql);
-		if (defineViewNodeList != null)
+		if (defineViewNodeList == null)
+		{
+			OutputTreeDataNode outputTreeDataNode = getMatchingEntityNode(queryResultObjectDataBean
+					.getMainEntity(),queryDetailsObj);
+			Map sqlIndexMap = putIdColumnsInSql(columnIndex, selectSql, entityIdIndexMap,
+					selectSqlColumnList, outputTreeDataNode);
+			selectSql = (String) sqlIndexMap.get(Constants.SQL);
+			columnIndex = (Integer) sqlIndexMap.get(Constants.ID_COLUMN_ID);
+		}
+		else
 		{
 			//Map<String, OutputTreeDataNode> uniqueIdNodesMap = QueryModuleUtil.uniqueIdNodesMap;
 			Set<String> keySet = queryDetailsObj.getUniqueIdNodesMap().keySet();
@@ -425,15 +451,6 @@ public abstract class QueryCSMUtil
 					columnIndex = (Integer) sqlIndexMap.get(Constants.ID_COLUMN_ID);
 				}
 			}
-		}
-		else
-		{
-			OutputTreeDataNode outputTreeDataNode = getMatchingEntityNode(queryResultObjectDataBean
-					.getMainEntity(),queryDetailsObj);
-			Map sqlIndexMap = putIdColumnsInSql(columnIndex, selectSql, entityIdIndexMap,
-					selectSqlColumnList, outputTreeDataNode);
-			selectSql = (String) sqlIndexMap.get(Constants.SQL);
-			columnIndex = (Integer) sqlIndexMap.get(Constants.ID_COLUMN_ID);
 		}
 		if (queryResultObjectDataBean != null)
 		{
@@ -479,7 +496,7 @@ public abstract class QueryCSMUtil
 					}
 					else
 					{
-						if(selectSql.equals(""))
+						if("".equals(selectSql))
 						{
 							selectSql += sqlColumnName;
 						}
@@ -520,12 +537,16 @@ public abstract class QueryCSMUtil
 	private static OutputTreeDataNode getMatchingEntityNode(EntityInterface entity, QueryDetails queryDetailsObj)
 	{
 		Iterator<OutputTreeDataNode> iterator =  queryDetailsObj.getUniqueIdNodesMap().values().iterator(); 
+		OutputTreeDataNode tempOutputTreeDataNode = null;
 		while (iterator.hasNext())
 		{
 			OutputTreeDataNode outputTreeDataNode = (OutputTreeDataNode) iterator.next();
 			if(outputTreeDataNode.getOutputEntity().getDynamicExtensionsEntity().equals(entity))
-				return outputTreeDataNode;
+			{
+				tempOutputTreeDataNode = outputTreeDataNode;
+				break;
+			}
 		}
-		return null;
+		return tempOutputTreeDataNode;
 	}
 } 

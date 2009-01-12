@@ -8,12 +8,13 @@ import edu.wustl.common.querysuite.queryobject.IOutputTerm;
 import edu.wustl.common.querysuite.queryobject.impl.OutputTreeDataNode;
 
 public class TemporalColumnUIBean {
-	OutputTreeDataNode node;
-	String sql;
-	List<String> columnsList;
-	Map<String, IOutputTerm> outputTermsColumns;
-	int columnIndex = 0;
-	IConstraints constraints;
+	private OutputTreeDataNode node;
+	private String sql;
+	private List<String> columnsList;
+	private Map<String, IOutputTerm> outputTermColumns;
+	private int columnIndex = 0;
+	private IConstraints constraints;
+	
 	public TemporalColumnUIBean()
 	{
 		
@@ -24,7 +25,7 @@ public class TemporalColumnUIBean {
 		this.node = node;
 		this.sql = selectSql2;
 		this.columnsList = columnsList;
-		this.outputTermsColumns = outputTermsColumns;
+		this.outputTermColumns = outputTermsColumns;
 		this.columnIndex = columnIndex;
 		this.constraints = constraints;
 	}
@@ -68,13 +69,13 @@ public class TemporalColumnUIBean {
 	 * @return the outputTermsColumns
 	 */
 	public Map<String, IOutputTerm> getOutputTermsColumns() {
-		return outputTermsColumns;
+		return outputTermColumns;
 	}
 	/**
-	 * @param outputTermsColumns the outputTermsColumns to set
+	 * @param outputTermColumns the outputTermsColumns to set
 	 */
-	public void setOutputTermsColumns(Map<String, IOutputTerm> outputTermsColumns) {
-		this.outputTermsColumns = outputTermsColumns;
+	public void setOutputTermsColumns(Map<String, IOutputTerm> outputTermColumns) {
+		this.outputTermColumns = outputTermColumns;
 	}
 	/**
 	 * @return the sql

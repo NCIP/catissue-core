@@ -1,7 +1,6 @@
 package edu.wustl.catissuecore.util.querysuite;
 
 import edu.wustl.common.querysuite.queryobject.IDateLiteral;
-import edu.wustl.common.querysuite.queryobject.ITimeIntervalEnum;
 import edu.wustl.common.querysuite.queryobject.TermType;
 import edu.wustl.common.querysuite.queryobject.TimeInterval;
 

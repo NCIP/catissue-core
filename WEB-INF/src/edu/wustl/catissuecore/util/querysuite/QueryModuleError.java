@@ -26,7 +26,7 @@ public enum QueryModuleError
 	 * Default constructor for enum
 	 * @param errorCode
 	 */
-	QueryModuleError(int errorCode)
+	QueryModuleError(final int errorCode)
 	{
 		this.errorCode=errorCode;
 	}
