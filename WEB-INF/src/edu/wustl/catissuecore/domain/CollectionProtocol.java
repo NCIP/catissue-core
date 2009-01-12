@@ -1,4 +1,4 @@
-										  							   /**
+/**
  * <p>Title: CollectionProtocol Class</p>
  * <p>Description:  A set of written procedures that describe how a biospecimen is prospectively collected.</p>
  * Copyright:    Copyright (c) year
@@ -18,7 +18,6 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
-
 import edu.wustl.catissuecore.actionForm.CollectionProtocolForm;
 import edu.wustl.catissuecore.bean.ConsentBean;
 import edu.wustl.catissuecore.util.CollectionProtocolUtil;
@@ -32,13 +31,17 @@ import edu.wustl.common.util.logger.Logger;
 /**
  * A set of written procedures that describe how a biospecimen is prospectively collected.
  * @hibernate.joined-subclass table="CATISSUE_COLLECTION_PROTOCOL"
- * @hibernate.joined-subclass-key column="IDENTIFIER" 
+ * @hibernate.joined-subclass-key column="IDENTIFIER"
  * @author Mandar Deshmukh
  */
-public class CollectionProtocol extends SpecimenProtocol implements java.io.Serializable,Comparable, IActivityStatus
+public class CollectionProtocol extends SpecimenProtocol implements
+	java.io.Serializable, Comparable, IActivityStatus
 {
+	/**
+	 * Serial Version Id of the class.
+	 */
 	private static final long serialVersionUID = 1234567890L;
-	
+
 	/**
 	 * Patch Id : Collection_Event_Protocol_Order_3 (Changed From HashSet to LinkedHashSet)
 	 * Description : To get the specimen requirement in order
@@ -47,12 +50,12 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	 * Collection of studies associated with the CollectionProtocol.
 	 */
 	protected Collection distributionProtocolCollection = new LinkedHashSet();
-	
+
 	/**
 	 * Collection of users associated with the CollectionProtocol.
 	 */
 	protected Collection coordinatorCollection = new LinkedHashSet();
-	
+
 	/**
 	 * Collection of CollectionProtocolEvents associated with the CollectionProtocol.
 	 */
@@ -61,35 +64,34 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	/**
 	 *  Collection of CollectionProtocol associated with the Parent CollectionProtocol.
 	 */
-	protected Collection<CollectionProtocol> childCollectionProtocolCollection = new LinkedHashSet<CollectionProtocol>();
-	
+	protected Collection<CollectionProtocol> childCollectionProtocolCollection =
+		new LinkedHashSet<CollectionProtocol>();
+
 	/**
-	 * Parent Collection Protocol
+	 * Parent Collection Protocol.
 	 */
 	protected CollectionProtocol parentCollectionProtocol;
-	
+
 	/**
-	 * Sequence Number
+	 * Sequence Number.
 	 */
 	protected Integer sequenceNumber;
 	/**
-	 * Collection Protocol type - Arm, Cycle, Phase
+	 * Collection Protocol type - Arm, Cycle, Phase.
 	 */
 	protected String type;
-	
+
 	/**
-	 * Defines the relative time point in days
+	 * Defines the relative time point in days.
 	 */
 	protected Double studyCalendarEventPoint;
 	/**
-	
-	/**
-	 * whether Aliquote in same container
+	 * whether Aliquote in same container.
 	 */
 	protected Boolean aliquotInSameContainer;
-	
+
 	//protected Collection storageContainerCollection=new HashSet();
-	
+
 	//-----For Consent Tracking. Ashish 22/11/06
 	/**
 	 * The collection of consent tiers associated with the collection protocol.
@@ -99,31 +101,37 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	 * The unsigned document URL for the collection protocol.
 	 */
 	protected String unsignedConsentDocumentURL;
-	
+
 	/**
 	 * whether consents are waived?
 	 */
 	protected Boolean consentsWaived = new Boolean(false);
-	
+
 	/**
-     * A collection of registration of a Participant to a Collection Protocol. 
+     * A collection of registration of a Participant to a Collection Protocol.
      * */
 	protected Collection collectionProtocolRegistrationCollection = new HashSet();
-	
+
+	/**
+	 * 
+	 */
 	protected Collection<User> assignedProtocolUserCollection = new HashSet<User>();
-	
+
+	/**
+	 * 
+	 */
 	protected Collection<Site> siteCollection = new HashSet<Site>();
-	
+
 	/**
 	 * @return the unsignedConsentDocumentURL
-	 * @hibernate.property name="unsignedConsentDocumentURL" type="string" length="1000" column="UNSIGNED_CONSENT_DOC_URL"
+	 * @hibernate.property name="unsignedConsentDocumentURL" type="string"
+	 * length="1000" column="UNSIGNED_CONSENT_DOC_URL"
 	 */
 	public String getUnsignedConsentDocumentURL()
 	{
 		return unsignedConsentDocumentURL;
 	}
 
-	
 	/**
 	 * @param unsignedConsentDocumentURL the unsignedConsentDocumentURL to set
 	 */
@@ -134,15 +142,17 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 
 	/**
 	 * @return the consentTierCollection
-	 * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.ConsentTier" cascade="save-update" lazy="true"
+	 * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.ConsentTier"
+	 * cascade="save-update" lazy="true"
 	 * @hibernate.set table="CATISSUE_CONSENT_TIER" inverse="false" name="consentTierCollection"
 	 * @hibernate.collection-key column="COLL_PROTOCOL_ID"
+	 * @return collection of consent tier type.
 	 */
 	public Collection<ConsentTier> getConsentTierCollection()
 	{
 		return consentTierCollection;
 	}
-	
+
 	/**
 	 * @param consentTierCollection the consentTierCollection to set
 	 */
@@ -151,7 +161,7 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 		this.consentTierCollection = consentTierCollection;
 	}
 	//-----Consent Tracking End
-	
+
 	/**
 	 * NOTE: Do not delete this constructor. Hibernet uses this by reflection API.
 	 * */
@@ -160,7 +170,7 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 		super();
 		// Default Constructor, required for Hibernate
 	}
-	
+
 	/**
 	 *
 	 * @param form This is abstract action form
@@ -169,7 +179,7 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	{
 		setAllValues(form);
 	}
-	
+
 	/**
 	 * Returns the collection of Studies for this Protocol.
 	 * @hibernate.set name="distributionProtocolCollection" table="CATISSUE_COLL_DISTRIBUTION_REL" 
@@ -193,7 +203,7 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 
 	/**
 	 * Returns the collection of Users(ProtocolCoordinators) for this Protocol.
-	 * @hibernate.set name="coordinatorCollection" table="CATISSUE_COLL_COORDINATORS" 
+	 * @hibernate.set name="coordinatorCollection" table="CATISSUE_COLL_COORDINATORS"
 	 * cascade="none" inverse="false" lazy="false"
 	 * @hibernate.collection-key column="COLLECTION_PROTOCOL_ID"
 	 * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.User" column="USER_ID"
@@ -211,7 +221,6 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	{
 		this.coordinatorCollection = coordinatorCollection;
 	}
-
 
 	/**
 	 * Returns the collection of CollectionProtocolEvents for this Protocol.
@@ -235,7 +244,7 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	{
 		this.collectionProtocolEventCollection = collectionProtocolEventCollection;
 	}
-	
+
 	/**
 	 * Returns collection of collection protocol registrations of this collection protocol.
 	 * @return collection of collection protocol registrations of this collection protocol.
@@ -252,19 +261,22 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 
 	/**
 	 * Sets the collection protocol registrations of this participant.
-	 * @param protocolRegistrationCollection collection of collection protocol registrations of this participant.
+	 * @param protocolRegistrationCollection collection of collection protocol
+	 * registrations of this participant.
 	 * @see #getCollectionProtocolRegistrationCollection()
 	 */
-	public void setCollectionProtocolRegistrationCollection(Collection collectionProtocolRegistrationCollection)
+	public void setCollectionProtocolRegistrationCollection(Collection
+			collectionProtocolRegistrationCollection)
 	{
 		this.collectionProtocolRegistrationCollection = collectionProtocolRegistrationCollection;
 	}
 	/*
 	 * Returns the collection of Containers for this Protocol.
-	 * @hibernate.set name="storageContainerCollection" table="CATISSUE_CONTAINER_CP_REL" 
+	 * @hibernate.set name="storageContainerCollection" table="CATISSUE_CONTAINER_CP_REL"
 	 * cascade="none" inverse="false" lazy="false"
 	 * @hibernate.collection-key column="COLLECTION_PROTOCOL_ID"
-	 * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.StorageContainer" column="STORAGE_CONTAINER_ID"
+	 * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.
+	 * StorageContainer" column="STORAGE_CONTAINER_ID"
 	 * @return The collection of Storage Containers for this Protocol.*/
 	 /*
 	public Collection getStorageContainerCollection()
@@ -280,18 +292,19 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 		this.storageContainerCollection = storageContainerCollection;
 	}*/
 
-	   /**
+	/**
      * This function Copies the data from an CollectionProtocolForm object to a CollectionProtocol object.
-     * @param abstractForm An CollectionProtocolForm object containing the information about the CollectionProtocol.  
-     * */
+     * @param abstractForm An CollectionProtocolForm object containing the 
+     * information about the CollectionProtocol.  
+     */
     public void setAllValues(IValueObject abstractForm)
     {
         try
         {
         	super.setAllValues(abstractForm);
-        	
+
         	final CollectionProtocolForm cpForm = (CollectionProtocolForm) abstractForm;
-        	
+
         	coordinatorCollection.clear();
         	siteCollection.clear();
         	this.collectionProtocolEventCollection.clear();
@@ -308,7 +321,7 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	        		}
 				}
         	}
-        	
+
         	long [] siteArr = cpForm.getSiteIds();
         	if(siteArr!=null)
         	{
@@ -324,51 +337,53 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
         	}
         	aliquotInSameContainer = new Boolean(cpForm.isAliqoutInSameContainer());
 	        final Map map = cpForm.getValues();
-	        
+
 	        /**
 	         * Name : Abhishek Mehta
 	         * Reviewer Name : Poornima
 	         * Bug ID: Collection_Event_Protocol_Order
-	         * Patch ID: Collection_Event_Protocol_Order_1 
+	         * Patch ID: Collection_Event_Protocol_Order_1
 	         * See also: 1-8
-	         * Description: To get the collection event protocols in their insertion order. 
+	         * Description: To get the collection event protocols in their insertion order.
 	         */
 	        Logger.out.debug("PRE FIX MAP "+map);
 	        final Map sortedMap = sortMapOnKey(map);
 	        Logger.out.debug("POST FIX MAP "+map);
-	        
+
 	        final MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
-	        
+
 	        final ArrayList cpecList = (ArrayList)parser.generateData(sortedMap,true);
 	        for(int i = 0 ; i < cpecList.size() ; i++)
 	        {
 	        	this.collectionProtocolEventCollection.add(cpecList.get(i));
 	        }
 	        Logger.out.debug("collectionProtocolEventCollection "+this.collectionProtocolEventCollection);
-	        
+
 	        //For Consent Tracking ----Ashish 1/12/06
 	        //Setting the unsigned doc url.
 	        this.unsignedConsentDocumentURL = cpForm.getUnsignedConsentURLName();
 	        //Setting the consent tier collection.
 	        this.consentTierCollection = prepareConsentTierCollection(cpForm.getConsentValues());
-	        
+
 	        //Mandar : 25-Jan-07
 	        consentsWaived = new Boolean(cpForm.isConsentWaived());
         }
         catch (Exception excp)
         {
 	    	// use of logger as per bug 79
-	    	Logger.out.error(excp.getMessage(),excp); 
+	    	Logger.out.error(excp.getMessage(),excp);
         }
     }
-    				
-/**
-     * Patch ID: Collection_Event_Protocol_Order_2 
-     * Description: To get the collection event protocols in their insertion order. 
+
+    /**
+     * Patch ID: Collection_Event_Protocol_Order_2
+     * Description: To get the collection event protocols in their insertion order.
      */
 
 	/**
 	 * This function will sort the map based on their keys.
+	 * @param map Map.
+	 * @return LinkedHashMap.
 	 */
     private LinkedHashMap sortMapOnKey(Map map)
     {
@@ -380,10 +395,10 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
     		String key = (String)mapKeySet[i];
     		mList.add(key);
 		}
-    	
+
     	final KeyComparator keyComparator = new KeyComparator();
 		Collections.sort(mList, keyComparator);
-		
+
     	LinkedHashMap <String, String> sortedMap = new LinkedHashMap<String, String>();
 		for(int i = 0 ; i < size ; i++)
 		{
@@ -393,11 +408,11 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 		}
 		return sortedMap;
     }
-   
+
     /**
      * @param consentTierMap Consent Tier Map
      * @return consentStatementColl
-     * @throws Exception - Exception 
+     * @throws Exception - Exception
      */
     public Collection prepareConsentTierCollection(Map consentTierMap) throws Exception 
     {
@@ -407,7 +422,7 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
     	
     	//Collection<ConsentTier> consentStatementColl = new HashSet<ConsentTier>();
     	Collection<ConsentTier> consentStatementColl = new LinkedHashSet<ConsentTier>();//bug 8905
-    	Iterator iter = beanObjColl.iterator();        
+    	Iterator iter = beanObjColl.iterator();
     	while(iter.hasNext())
     	{
     		ConsentBean consentBean = (ConsentBean)iter.next();
@@ -423,16 +438,16 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
     		{
     			consentStatementColl.add(consentTier);
     		}
-    	}	
+    	}
     	return consentStatementColl;
     }
-    
+
     /**
      * Returns message label to display on success add or edit
      * @return String
      */
 	public String getMessageLabel()
-	{		
+	{
 		return this.title;
 	}
 	/**
@@ -453,7 +468,6 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
     	return equals;
     }
 	/**
-	 * 
 	 * @param object For comparing 
 	 * @return int
 	 */
@@ -487,7 +501,7 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	 * @return Returns the aliquotInSameContainer.
 	 * @hibernate.property name="aliquotInSameContainer" type="boolean" column="ALIQUOT_IN_SAME_CONTAINER"
 	 */
-	public Boolean getAliquotInSameContainer() 
+	public Boolean getAliquotInSameContainer()
 	{
 		return aliquotInSameContainer;
 	}
@@ -495,7 +509,7 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	/**
 	 * @param aliquotInSameContainer The aliquotInSameContainer to set.
 	 */
-	public void setAliquotInSameContainer(Boolean aliquotInSameContainer) 
+	public void setAliquotInSameContainer(Boolean aliquotInSameContainer)
 	{
 		this.aliquotInSameContainer = aliquotInSameContainer;
 	}
@@ -505,7 +519,7 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	 * @return Returns the consentsWaived.
 	 * @hibernate.property name="consentsWaived" type="boolean" column="CONSENTS_WAIVED"
 	 */
-	public Boolean getConsentsWaived() 
+	public Boolean getConsentsWaived()
 	{
 		return consentsWaived;
 	}
@@ -540,55 +554,56 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	{
 		this.parentCollectionProtocol = parentCollectionProtocol;
 	}
-	
 
 	public Collection getChildCollectionProtocolCollection()
 	{
 		return childCollectionProtocolCollection;
 	}
 
-
+	/**
+	 * Set the child collection protocol.
+	 * @param childCollectionProtocolCollection which is a Collection.
+	 */
 	public void setChildCollectionProtocolCollection(Collection childCollectionProtocolCollection)
 	{
 		this.childCollectionProtocolCollection = childCollectionProtocolCollection;
 	}
 
-
 	/**
 	 * @return Returns the sequenceNumber.
 	 */
-	public Integer getSequenceNumber() {
+	public Integer getSequenceNumber()
+	{
 		return sequenceNumber;
 	}
-
 
 	/**
 	 * @param sequenceNumber The sequenceNumber to set.
 	 */
-	public void setSequenceNumber(Integer sequenceNumber) {
+	public void setSequenceNumber(Integer sequenceNumber)
+	{
 		this.sequenceNumber = sequenceNumber;
 	}
-
 
 	/**
 	 * @return Returns the studyCalendarEventPoint.
 	 */
-	public Double getStudyCalendarEventPoint() {
+	public Double getStudyCalendarEventPoint()
+	{
 		return studyCalendarEventPoint;
 	}
-
 
 	/**
 	 * @param studyCalendarEventPoint The studyCalendarEventPoint to set.
 	 */
-	public void setStudyCalendarEventPoint(Double studyCalendarEventPoint) {
+	public void setStudyCalendarEventPoint(Double studyCalendarEventPoint)
+	{
 		this.studyCalendarEventPoint = studyCalendarEventPoint;
 	}
 
-
 	/**
 	 * Returns the collection of Users(ProtocolCoordinators) for this Protocol.
-	 * @hibernate.set name="coordinatorCollection" table="CATISSUE_USER_COLLECTION_PROTOCOLS" 
+	 * @hibernate.set name="coordinatorCollection" table="CATISSUE_USER_COLLECTION_PROTOCOLS"
 	 * cascade="none" inverse="false" lazy="false"
 	 * @hibernate.collection-key column="COLLECTION_PROTOCOL_ID"
 	 * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.User" column="USER_ID"
@@ -598,16 +613,19 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	{
 		return assignedProtocolUserCollection;
 	}
-	
+
+	/**
+	 * Set the assigned protocol to user collection.
+	 * @param assignedProtocolUserCollection of User type.
+	 */
 	public void setAssignedProtocolUserCollection(Collection<User> assignedProtocolUserCollection)
 	{
 		this.assignedProtocolUserCollection = assignedProtocolUserCollection;
 	}
 
-
 	/**
 	 * Returns the collection of Users(ProtocolCoordinators) for this Protocol.
-	 * @hibernate.set name="coordinatorCollection" table="CATISSUE_SITE_COLLECTION_PROTOCOLS" 
+	 * @hibernate.set name="coordinatorCollection" table="CATISSUE_SITE_COLLECTION_PROTOCOLS"
 	 * cascade="none" inverse="false" lazy="false"
 	 * @hibernate.collection-key column="COLLECTION_PROTOCOL_ID"
 	 * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.Site" column="SITE_ID"
@@ -618,11 +636,12 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 		return siteCollection;
 	}
 
-
-	
+	/**
+	 * Sets the site collection.
+	 * @param siteCollection of Site type.
+	 */
 	public void setSiteCollection(Collection<Site> siteCollection)
 	{
 		this.siteCollection = siteCollection;
 	}
-
 }

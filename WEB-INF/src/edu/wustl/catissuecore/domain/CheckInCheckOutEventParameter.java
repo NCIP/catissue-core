@@ -1,6 +1,7 @@
 /**
  * <p>Title: CheckInCheckOutEventParameter Class</p>
- * <p>Description: A binary event to indicate whether a specimen has been removed from or returned to its recorded storage location. </p>
+ * <p>Description: A binary event to indicate whether a specimen has been removed from
+ * or returned to its recorded storage location. </p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
  * @author Mandar Deshmukh
@@ -15,15 +16,18 @@ import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.util.logger.Logger;
 
 /**
- * A binary event to indicate whether a specimen has been removed from or returned to its recorded storage location.
+ * A binary event to indicate whether a specimen has been removed from or returned to
+ * its recorded storage location.
  * @hibernate.joined-subclass table="CATISSUE_IN_OUT_EVENT_PARAM"
- * @hibernate.joined-subclass-key column="IDENTIFIER" 
+ * @hibernate.joined-subclass-key column="IDENTIFIER"
  */
 public class CheckInCheckOutEventParameter extends SpecimenEventParameters
 		implements java.io.Serializable
 {
+	/**
+	 * Serial Version Id of the class.
+	 */
 	private static final long serialVersionUID = 1234567890L;
-
 	/**
 	 * Type of the movement e.g. Check-in or Check-out.
 	 */
@@ -48,28 +52,28 @@ public class CheckInCheckOutEventParameter extends SpecimenEventParameters
 	{
 		this.storageStatus = storageStatus;
 	}
-	
+
 	/**
 	 * NOTE: Do not delete this constructor. Hibernet uses this by reflection API.
-	 * */
+	 */
 	public CheckInCheckOutEventParameter()
-	{
-		
-	}
-	
-	/**	
-	 * Parameterized constructor
-	 * @param abstractForm
+	{}
+
+	/**
+	 * Parameterized constructor.
+	 * @param abstractForm AbstractActionForm.
 	 */
 	public CheckInCheckOutEventParameter(AbstractActionForm abstractForm)
 	{
 		setAllValues((IValueObject)abstractForm);
 	}
-	
+
 	/**
-     * This function Copies the data from an CheckInCheckOutEventParameterForm object to a CheckInCheckOutEventParameter object.
-     * @param checkInCheckOutEventParameterForm An CheckInCheckOutEventParameterForm object containing the information about the CheckInCheckOutEventParameter.  
-     * */
+     * This function Copies the data from an CheckInCheckOutEventParameterForm object to a
+     * CheckInCheckOutEventParameter object.
+     * @param abstractForm - checkInCheckOutEventParameterForm An CheckInCheckOutEventParameterForm object
+     * containing the information about the CheckInCheckOutEventParameter.
+     */
     public void setAllValues(IValueObject abstractForm)
     {
         try
@@ -77,7 +81,7 @@ public class CheckInCheckOutEventParameter extends SpecimenEventParameters
 //        	//call to event parameters setallvalue method
 //        	super.setAllValues(abstractForm);
         	CheckInCheckOutEventParametersForm form = (CheckInCheckOutEventParametersForm) abstractForm;
-            this.storageStatus = form.getStorageStatus(); 
+            this.storageStatus = form.getStorageStatus();
            	super.setAllValues(form);
         }
         catch (Exception excp)
@@ -85,5 +89,4 @@ public class CheckInCheckOutEventParameter extends SpecimenEventParameters
             Logger.out.error(excp.getMessage());
         }
     }
-
 }

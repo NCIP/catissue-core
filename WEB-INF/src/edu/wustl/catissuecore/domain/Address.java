@@ -20,6 +20,9 @@ import edu.wustl.common.domain.AbstractDomainObject;
  */
 public class Address extends AbstractDomainObject implements java.io.Serializable
 {
+	/**
+	 * Serial Version Id for the class.
+	 */
 	private static final long serialVersionUID = 1234567890L;
 
 	/**
@@ -31,43 +34,42 @@ public class Address extends AbstractDomainObject implements java.io.Serializabl
 	 * Multi-Line Street Address.
 	 */
 	protected String street;
-	
+
 	/**
-	 * City
+	 * City.
 	 */
 	protected String city;
 
 	/**
-	 * State
+	 * State.
 	 */
 	protected String state;
 
 	/**
-	 * Country
+	 * Country.
 	 */
 	protected String country;
 
 	/**
-	 * Zip code
+	 * Zip code.
 	 */
 	protected String zipCode;
 
 	/**
-	 * Phone number
+	 * Phone number.
 	 */
 	protected String phoneNumber;
 
 	/**
-	 * Fax number
+	 * Fax number.
 	 */
 	protected String faxNumber;
-	
+
 	/**
 	 * Returns the identifier assigned to Address.
-	 * 
 	 * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
      * unsaved-value="null" generator-class="native"
-     * @hibernate.generator-param name="sequence" value="CATISSUE_ADDRESS_SEQ" 
+     * @hibernate.generator-param name="sequence" value="CATISSUE_ADDRESS_SEQ"
 	 * @return a unique id assigned to the address.
 	 */
 	public Long getId()
@@ -76,11 +78,11 @@ public class Address extends AbstractDomainObject implements java.io.Serializabl
 	}
 
 	/**
-	 * @param id Unique identifier to be assigned to the address.
+	 * @param identifier Unique identifier to be assigned to the address.
 	 */
-	public void setId(Long id)
+	public void setId(Long identifier)
 	{
-		this.id = id;
+		this.id = identifier;
 	}
 
 	/**
@@ -208,19 +210,22 @@ public class Address extends AbstractDomainObject implements java.io.Serializabl
 	}
 
 	/**
-	 * @param faxNumber associated fax Number. 
+	 * @param faxNumber associated fax Number.
 	 * set the faxNumber of the address.
 	 */
 	public void setFaxNumber(String faxNumber)
 	{
 		this.faxNumber = faxNumber;
 	}
-	   
-    /* (non-Javadoc)
-     * @see edu.wustl.catissuecore.domain.AbstractDomainObject#setAllValues(edu.wustl.catissuecore.actionForm.AbstractActionForm)
-     */
-    public void setAllValues(IValueObject abstractForm)
-    {
 
-    }
+    /* (non-Javadoc)
+     * @see edu.wustl.catissuecore.domain.AbstractDomainObject#setAllValues
+     * (edu.wustl.catissuecore.actionForm.AbstractActionForm)
+     */
+	/**
+	 * Set all values.
+	 * @param abstractForm IValueObject.
+	 */
+    public void setAllValues(IValueObject abstractForm)
+    {}
 }

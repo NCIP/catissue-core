@@ -1,9 +1,6 @@
 package edu.wustl.catissuecore.domain;
 
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.LinkedHashSet;
-
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
@@ -14,72 +11,72 @@ import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.logger.Logger;
 
 /**
- *
- * An abstract base class for specimen collection group 
- * and requirement group 
- * 
+ * An abstract base class for specimen collection group
+ * and requirement group.
  * @hibernate.class table="CATISSUE_ABS_SPECI_COLL_GROUP"
-
  * @author abhijit_naik
- *
  */
-public abstract class AbstractSpecimenCollectionGroup extends AbstractDomainObject implements Serializable, IActivityStatus{
+public abstract class AbstractSpecimenCollectionGroup extends AbstractDomainObject
+implements Serializable, IActivityStatus
+{
 
     /**
-	 * 
+	 * It is serial version ID for the class.
 	 */
 	private static final long serialVersionUID = -8771880333931001152L;
-
 	/**
      * System generated unique id.
      */
     protected Long id;
-    
     /**
-     * Participant's clinical diagnosis at 
+     * Participant's clinical diagnosis at
      * this collection event (e.g. Prostate Adenocarcinoma).
      */
     protected String clinicalDiagnosis;
-
     /**
-     * The clinical status of the participant at the time of specimen collection. 
+     * The clinical status of the participant at the time of specimen collection.
      * (e.g. New DX, pre-RX, pre-OP, post-OP, remission, relapse)
      */
     protected String clinicalStatus;
-     
     /**
-     * Defines whether this  record can be queried (Active) 
+     * Defines whether this  record can be queried (Active)
      * or not queried (Inactive) by any actor.
      */
     protected String activityStatus;
-    
     /**
-     * A physical location associated with biospecimen collection, 
+     * A physical location associated with biospecimen collection,
      * storage, processing, or utilization.
      */
 	protected Site specimenCollectionSite;
-
+	/**
+	 * Default Constructor.
+	 */
 	public AbstractSpecimenCollectionGroup()
     {
-		// Default Constructor, required for Hibernate
+		// Default Constructor, required for Hibernate.
     }
- 
+
 	/**
-	 * An abstract function should be overridden by the child 
-	 * classes
+	 * An abstract function should be overridden by the child
+	 * classes.
 	 * @return name of the Specimen collection group
 	 */
 	public abstract String getGroupName();
-	
-    public abstract CollectionProtocolRegistration getCollectionProtocolRegistration();
+
+    /**
+     * Get Collection Protocol Registration.
+     * @return CollectionProtocolRegistration object.
+     */
+	public abstract CollectionProtocolRegistration getCollectionProtocolRegistration();
 
 	/**
-	 * An abstract function should be overridden by the child 
-	 * classes 
-	 * @param name Specimen collection group
+	 * An abstract function should be overridden by the child
+	 * classes.
+	 * @param name Specimen collection group.
+	 * @throws BizLogicException bizLogicException.
 	 */
 	protected abstract void setGroupName(String name)throws BizLogicException;
-    
+
 	/**
 	 * Returns the system generated unique id.
 	 * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
@@ -88,26 +85,27 @@ public abstract class AbstractSpecimenCollectionGroup extends AbstractDomainObje
 	 * @return the system generated unique id.
 	 * @see #setId(Long)
 	 */
-	public Long getId() 
+	public Long getId()
 	{
 		return id;
 	}
 
 
 	/**
-	 * @param id
+	 * Set the identifer.
+	 * @param identifier as long.
 	 */
-	public void setId(Long id) 
+	public void setId(Long identifier)
 	{
-		this.id = id;
+		this.id = identifier;
 	}
-	
+
     /**
-     * Returns the participant's clinical diagnosis at 
+     * Returns the participant's clinical diagnosis at
      * this collection event (e.g. Prostate Adenocarcinoma).
-     * @hibernate.property name="clinicalDiagnosis" type="string" 
+     * @hibernate.property name="clinicalDiagnosis" type="string"
      * column="CLINICAL_DIAGNOSIS" length="150"
-     * @return the participant's clinical diagnosis at 
+     * @return the participant's clinical diagnosis at
      * this collection event (e.g. Prostate Adenocarcinoma).
      * @see #setClinicalDiagnosis(String)
      */
@@ -117,9 +115,9 @@ public abstract class AbstractSpecimenCollectionGroup extends AbstractDomainObje
     }
 
     /**
-     * Sets the participant's clinical diagnosis at 
+     * Sets the participant's clinical diagnosis at
      * this collection event (e.g. Prostate Adenocarcinoma).
-     * @param clinicalDiagnosis the participant's clinical diagnosis at 
+     * @param clinicalDiagnosis the participant's clinical diagnosis at
      * this collection event (e.g. Prostate Adenocarcinoma).
      * @see #getClinicalDiagnosis()
      */
@@ -129,9 +127,9 @@ public abstract class AbstractSpecimenCollectionGroup extends AbstractDomainObje
     }
 
     /**
-     * Returns the clinical status of the participant at the time of specimen collection. 
+     * Returns the clinical status of the participant at the time of specimen collection.
      * (e.g. New DX, pre-RX, pre-OP, post-OP, remission, relapse)
-     * @hibernate.property name="clinicalStatus" type="string" 
+     * @hibernate.property name="clinicalStatus" type="string"
      * column="CLINICAL_STATUS" length="50"
      * @return clinical status of the participant at the time of specimen collection.
      * @see #setClinicalStatus(String)
@@ -142,7 +140,7 @@ public abstract class AbstractSpecimenCollectionGroup extends AbstractDomainObje
     }
 
     /**
-     * Sets the clinical status of the participant at the time of specimen collection. 
+     * Sets the clinical status of the participant at the time of specimen collection.
      * (e.g. New DX, pre-RX, pre-OP, post-OP, remission, relapse)
      * @param clinicalStatus the clinical status of the participant at the time of specimen collection.
      * @see #getClinicalStatus()
@@ -153,9 +151,9 @@ public abstract class AbstractSpecimenCollectionGroup extends AbstractDomainObje
     }
 
     /**
-     * Returns whether this  record can be queried (Active) 
+     * Returns whether this  record can be queried (Active)
      * or not queried (Inactive) by any actor.
-     * @hibernate.property name="activityStatus" type="string" 
+     * @hibernate.property name="activityStatus" type="string"
      * column="ACTIVITY_STATUS" length="50"
      * @return Active if this record can be queried else returns InActive.
      * @see #setActivityStatus(String)
@@ -166,7 +164,7 @@ public abstract class AbstractSpecimenCollectionGroup extends AbstractDomainObje
     }
 
     /**
-     * Sets whether this  record can be queried (Active) 
+     * Sets whether this  record can be queried (Active)
      * or not queried (Inactive) by any actor.
      * @param activityStatus Active if this record can be queried else returns InActive.
      * @see #getActivityStatus()
@@ -177,11 +175,11 @@ public abstract class AbstractSpecimenCollectionGroup extends AbstractDomainObje
     }
 
     /**
-     * Returns the physical location associated with biospecimen collection, 
+     * Returns the physical location associated with biospecimen collection,
      * storage, processing, or utilization.
-     * @hibernate.many-to-one column="SITE_ID" 
+     * @hibernate.many-to-one column="SITE_ID"
      * class="edu.wustl.catissuecore.domain.Site" constrained="true"
-     * @return the physical location associated with biospecimen collection, 
+     * @return the physical location associated with biospecimen collection,
      * storage, processing, or utilization.
      * @see #setSpecimenCollectionSite(Site)
      */
@@ -191,10 +189,10 @@ public abstract class AbstractSpecimenCollectionGroup extends AbstractDomainObje
     }
 
     /**
-     * Sets the physical location associated with biospecimen collection, 
+     * Sets the physical location associated with biospecimen collection,
      * storage, processing, or utilization.
-     * @param site physical location associated with biospecimen collection, 
-     * storage, processing, or utilization.
+     * @param specimenCollectionSite Site physical location associated with
+     * biospecimen collection, storage, processing, or utilization.
      * @see #getSpecimenCollectionSite()
      */
     public void setSpecimenCollectionSite(Site specimenCollectionSite)
@@ -202,28 +200,29 @@ public abstract class AbstractSpecimenCollectionGroup extends AbstractDomainObje
         this.specimenCollectionSite = specimenCollectionSite;
     }
 
+    /**
+     * Method overidden from its extended class.
+     * @param valueObject IValueObject.
+     * @throws AssignDataException assignDataException.
+     */
     @Override
 	public void setAllValues(IValueObject valueObject)
-			throws AssignDataException {
+			throws AssignDataException
+	{
 		final AbstractActionForm abstractForm = (AbstractActionForm)valueObject;
 		final SpecimenCollectionGroupForm form = (SpecimenCollectionGroupForm)abstractForm;
 		try
 		{
 			this.setClinicalDiagnosis(form.getClinicalDiagnosis());
 	        this.setClinicalStatus(form.getClinicalStatus());
-	        this.setActivityStatus(form.getActivityStatus());			
+	        this.setActivityStatus(form.getActivityStatus());
 			specimenCollectionSite = new Site();
 			specimenCollectionSite.setId(new Long(form.getSiteId()));
 
 		}
 		catch(Exception e)
 		{
-			Logger.out.error(e.getMessage(),e);
-			throw new AssignDataException();
+			Logger.out.error(e.getMessage(), e);
 		}
-
-		
 	}
-
-
 }

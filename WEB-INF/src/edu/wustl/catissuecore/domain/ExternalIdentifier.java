@@ -10,11 +10,6 @@
 
 package edu.wustl.catissuecore.domain;
 
-import java.io.Externalizable;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
-
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
@@ -25,6 +20,7 @@ import edu.wustl.common.exception.AssignDataException;
  * @hibernate.class table="CATISSUE_EXTERNAL_IDENTIFIER"
  * @author gautam_shetty
  */
+
 public class ExternalIdentifier extends AbstractDomainObject
 {
     private static final long serialVersionUID = 1234567890L;

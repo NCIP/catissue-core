@@ -7,9 +7,6 @@
  */
 package edu.wustl.catissuecore.domain;
 
-import edu.wustl.common.actionForm.AbstractActionForm;
-import edu.wustl.common.exception.AssignDataException;
-import edu.wustl.common.util.logger.Logger;
 
 /**
  * Attributes associated with return event of a specimen.

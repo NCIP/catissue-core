@@ -1,6 +1,6 @@
 /**
  * <p>Title: CellSpecimen Class>
- * <p>Description:  A biospecimen composed of purified single cells not in the 
+ * <p>Description:  A biospecimen composed of purified single cells not in the
  * context of a tissue or other biospecimen fluid.</p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
@@ -11,25 +11,32 @@
 package edu.wustl.catissuecore.domain;
 
 import java.io.Serializable;
-
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.util.logger.Logger;
 
 /**
- * A biospecimen composed of purified single cells not in the 
+ * A biospecimen composed of purified single cells not in the
  * context of a tissue or other biospecimen fluid.
  * @hibernate.subclass name="CellSpecimen" discriminator-value = "Cell"
  */
 public class CellSpecimen extends Specimen implements Serializable
 {
+	/**
+	 * Serial Version ID of the class.
+	 */
     private static final long serialVersionUID = 1234567890L;
 
+    /**
+     * Default Constructor.
+     */
     public CellSpecimen()
-    {
-    	
-    }
-    
+    {}
+
+    /**
+     * Parameterized Constructor.
+     * @param form AbstractActionForm.
+     */
     public CellSpecimen(AbstractActionForm form)
     {
     	setAllValues(form);
@@ -37,7 +44,7 @@ public class CellSpecimen extends Specimen implements Serializable
 
     /**
      * This function Copies the data from an NewSpecimenForm object to a CellSpecimen object.
-     * @param siteForm An SiteForm object containing the information about the site.  
+     * @param abstractForm - siteForm An SiteForm object containing the information about the site.
      * */
     public void setAllValues(IValueObject abstractForm)
     {
@@ -50,7 +57,11 @@ public class CellSpecimen extends Specimen implements Serializable
             Logger.out.error(excp.getMessage(),excp);
         }
     }
-    
+
+    /**
+     * Parameterized Constructor.
+     * @param cellReqSpecimen of type SpecimenRequirement.
+     */
     public CellSpecimen(SpecimenRequirement cellReqSpecimen)
     {
     	super(cellReqSpecimen);

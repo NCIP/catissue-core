@@ -1,13 +1,7 @@
-/**
- * 
- */
 package edu.wustl.catissuecore.domain;
 
 import java.io.Serializable;
-
 import edu.wustl.common.domain.AbstractDomainObject;
-
-
 
 /**
  * @author ashish_gupta
@@ -15,16 +9,27 @@ import edu.wustl.common.domain.AbstractDomainObject;
  */
 public abstract class AbstractPosition extends AbstractDomainObject implements Serializable
 {
+
+	/**
+	 * This is the serial version ID generated for the class.
+	 */
+	private static final long serialVersionUID = -9049547804972340176L;
+	/**
+	 * It is the dimension one of the storage container.
+	 */
 	protected Integer positionDimensionOne;
+	/**
+	 * It is the dimension two of the storage container.
+	 */
 	protected Integer positionDimensionTwo;
+	/**
+	 * It is the identifier of the storage container.
+	 */
 	protected Long id;
-	
-	
-	
-	
+
 	/**
 	 * @return the id
-	 *  @hibernate.id name="id" column="IDENTIFIER" type="long" length="30" 
+	 * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
 	 * unsaved-value="null" generator-class="native"
 	 * @hibernate.generator-param name="sequence" value="CATISSUE_ABS_POSITION_SEQ"
 	 */
@@ -33,13 +38,12 @@ public abstract class AbstractPosition extends AbstractDomainObject implements S
 		return id;
 	}
 
-	
 	/**
-	 * @param id the id to set
+	 * @param identifier the id to set
 	 */
-	public void setId(Long id)
+	public void setId(Long identifier)
 	{
-		this.id = id;
+		this.id = identifier;
 	}
 
 	/**
@@ -50,7 +54,7 @@ public abstract class AbstractPosition extends AbstractDomainObject implements S
 	{
 		return positionDimensionOne;
 	}
-	
+
 	/**
 	 * @param positionDimensionOne the positionDimensionOne to set
 	 */
@@ -58,7 +62,7 @@ public abstract class AbstractPosition extends AbstractDomainObject implements S
 	{
 		this.positionDimensionOne = positionDimensionOne;
 	}
-	
+
 	/**
 	 * @return the positionDimensionTwo
 	 * @hibernate.property name="positionDimensionTwo" type="int" column="POSITION_DIMENSION_TWO" length="30
@@ -67,7 +71,7 @@ public abstract class AbstractPosition extends AbstractDomainObject implements S
 	{
 		return positionDimensionTwo;
 	}
-	
+
 	/**
 	 * @param positionDimensionTwo the positionDimensionTwo to set
 	 */
@@ -75,5 +79,4 @@ public abstract class AbstractPosition extends AbstractDomainObject implements S
 	{
 		this.positionDimensionTwo = positionDimensionTwo;
 	}
-	
 }

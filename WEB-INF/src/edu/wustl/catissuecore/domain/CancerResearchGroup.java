@@ -1,6 +1,7 @@
 /**
  * <p>Title: CancerResearchGroup Class</p>
- * <p>Description: A collection of scientist and/or clinician users with a common research objective related to biospecimen collection and utilization.</p>
+ * <p>Description: A collection of scientist and/or clinician users with a common
+ * research objective related to biospecimen collection and utilization.</p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
  * @author Mandar Deshmukh
@@ -10,25 +11,27 @@
 package edu.wustl.catissuecore.domain;
 
 import java.io.Serializable;
-
 import edu.wustl.catissuecore.actionForm.CancerResearchGroupForm;
-import edu.wustl.common.actionForm.AbstractActionForm;
-import edu.wustl.common.actionForm.IValueObject;
+import edu.wustl.common.actionForm.AbstractActionForm;import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
 
 /**
- * A collection of scientist and/or clinician users with a common research objective related to biospecimen collection and utilization.
+ * A collection of scientist and/or clinician users with a common research objective related
+ * to biospecimen collection and utilization.
  * @hibernate.class table="CATISSUE_CANCER_RESEARCH_GROUP"
  */
 public class CancerResearchGroup extends AbstractDomainObject implements Serializable
 {
+	/**
+	 * Serial Id for class.
+	 */
 	private static final long serialVersionUID = 1234567890L;
 
 	/**
 	 * System generated unique id.
 	 */
 	protected Long id;
-	
+
 	/**
 	 * Name of the cancer research group.
 	 */
@@ -36,17 +39,21 @@ public class CancerResearchGroup extends AbstractDomainObject implements Seriali
 
 	/**
 	 * NOTE: Do not delete this constructor. Hibernet uses this by reflection API.
-	 * */
+	 */
 	public CancerResearchGroup()
 	{
 		// Default Constructor, required for Hibernate
 	}
-	
+
+	/**
+	 * Parameterized constructor.
+	 * @param form AbstractActionForm.
+	 */
 	public CancerResearchGroup(AbstractActionForm form)
 	{
 		setAllValues(form);
 	}
-	
+
 	/**
 	 * Returns the unique id of the cancer research group.
 	 * @hibernate.id name="id" column="IDENTIFIER" type="long"
@@ -61,11 +68,11 @@ public class CancerResearchGroup extends AbstractDomainObject implements Seriali
 
 	/**
 	 * Sets an id for the cancer research group.
-	 * @param id Unique id to be assigned to the cancer research group.
+	 * @param identfier Unique id to be assigned to the cancer research group.
 	 */
-	public void setId(Long id)
+	public void setId(Long identfier)
 	{
-		this.id = id;
+		this.id = identfier;
 	}
 
 	/**
@@ -87,21 +94,27 @@ public class CancerResearchGroup extends AbstractDomainObject implements Seriali
 	{
 		this.name = name;
 	}
-	
+
     /* (non-Javadoc)
-     * @see edu.wustl.catissuecore.domain.AbstractDomainObject#setAllValues(edu.wustl.catissuecore.actionForm.AbstractActionForm)
+     * @see edu.wustl.catissuecore.domain.AbstractDomainObject#setAllValues
+     * (edu.wustl.catissuecore.actionForm.AbstractActionForm)
      */
+	/**
+	 * Set all values on the form object.
+	 * @param abstractForm IValueObject.
+	 */
     public void setAllValues(IValueObject abstractForm)
     {
     	final CancerResearchGroupForm cancerResearchGroupForm = (CancerResearchGroupForm)abstractForm;
 		this.name = cancerResearchGroupForm.getName().trim();
     }
-    
+
     /**
-     * Returns message label to display on success add or edit
-     * @return String
+     * Returns message label to display on success add or edit.
+     * @return String type label.
      */
-	public String getMessageLabel() {		
+	public String getMessageLabel()
+	{
 		return this.name;
 	}
 }
