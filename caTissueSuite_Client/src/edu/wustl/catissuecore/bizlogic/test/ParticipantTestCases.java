@@ -111,6 +111,7 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
 		Participant  participant=new Participant();
 		try {
 			resultList1=appService.getParticipantMatchingObects(participant);
+			System.out.println("testMatchingParticipant resultList1"+ resultList1);
 			for(int i=0;i<resultList1.size();i++)
 			{
 				System.out.println(resultList1.get(i));
@@ -121,7 +122,7 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
 		{
 			System.out.println("testMatchingParticipant"+ e.getMessage());
 			e.printStackTrace();
-			assertFalse("Not able to retrieve mating participant list using API", true);
+			assertFalse("Not able to retrieve matching participant list using API", true);
 		}
 		
 	}
