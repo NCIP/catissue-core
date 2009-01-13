@@ -191,11 +191,15 @@
 				document.forms[0].concentration.disabled = false;
 				typeChange(MolecularArray);
 			}
-			unit.innerHTML = unitSpecimen;
+			if(unit!=null)
+			{
+				unit.innerHTML = unitSpecimen;
+			}
 			if(unit1!=null)
 			{
 				unit1.innerHTML = unitSpecimen;
-			}				
+			}	
+			subType.value="";
 		}
 
 // biohazard selection
