@@ -2,6 +2,7 @@ package edu.wustl.catissuecore.util;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -90,6 +91,7 @@ public class MSRUtil {
 						cpList = apBizLogic.getCPList(false);
 					}
 				}
+				Collections.sort(cpList);
 				request.setAttribute(Constants.CPLIST, cpList);
 			}
 			

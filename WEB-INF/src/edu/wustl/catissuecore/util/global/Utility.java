@@ -2181,6 +2181,9 @@ public class Utility extends edu.wustl.common.util.Utility {
 				cpTitleMap.put(cp.getId(),cp.getTitle());
 			}
 		}
+		
+		Collections.sort(cpList);
+		
 		request.setAttribute(Constants.PROTOCOL_LIST, cpList);
 		request.setAttribute(Constants.CP_ID_TITLE_MAP, cpTitleMap);
 		return request;

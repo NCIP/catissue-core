@@ -173,7 +173,7 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 		}
 
 		cpNameValueBeanList = removeSelect(cpNameValueBeanList);
-		
+		Collections.sort(cpNameValueBeanList);
 		return cpNameValueBeanList;
 	}
 	/**
@@ -349,6 +349,7 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 				list = getCommonElesList(list, userList2);
 			}
 		}
+		Collections.sort(list);
  		return list;
 	}
 	
@@ -408,7 +409,7 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 		{
 			cpsList = getCPList(false);
 		}
-		
+		Collections.sort(cpsList);
 		arrayList = getJSONObjListOfNameValue(cpsList);
 		
 		return arrayList;
@@ -433,6 +434,7 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 				list = getCommonElesList(list, cpList2);
 			}
 		}
+		Collections.sort(list);
  		return list;
 	}
 	
