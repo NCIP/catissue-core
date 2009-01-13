@@ -20,11 +20,16 @@ import edu.wustl.common.util.logger.Logger;
 public abstract class AbstractSpecimenCollectionGroup extends AbstractDomainObject
 implements Serializable, IActivityStatus
 {
-
     /**
 	 * It is serial version ID for the class.
 	 */
 	private static final long serialVersionUID = -8771880333931001152L;
+
+	/**
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(AbstractSpecimenCollectionGroup.class);
+
 	/**
      * System generated unique id.
      */
@@ -49,12 +54,13 @@ implements Serializable, IActivityStatus
      * storage, processing, or utilization.
      */
 	protected Site specimenCollectionSite;
+
 	/**
 	 * Default Constructor.
 	 */
 	public AbstractSpecimenCollectionGroup()
     {
-		// Default Constructor, required for Hibernate.
+		super();
     }
 
 	/**
@@ -218,12 +224,12 @@ implements Serializable, IActivityStatus
 	        this.setClinicalStatus(form.getClinicalStatus());
 	        this.setActivityStatus(form.getActivityStatus());
 			specimenCollectionSite = new Site();
-			specimenCollectionSite.setId(new Long(form.getSiteId()));
+			specimenCollectionSite.setId(Long.valueOf(form.getSiteId()));
 
 		}
 		catch(Exception e)
 		{
-			Logger.out.error(e.getMessage(), e);
+			logger.error(e);
 		}
 	}
 }

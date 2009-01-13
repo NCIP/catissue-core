@@ -146,7 +146,7 @@ public class ClinicalStudy extends SpecimenProtocol implements java.io.Serializa
         		   if(coordinatorsArr[i]!=-1)
                    {
         			   coordinator = new User();
-                       coordinator.setId(new Long(coordinatorsArr[i]));
+                       coordinator.setId(Long.valueOf(coordinatorsArr[i]));
                        coordinatorCollection.add(coordinator);
                    }
                }

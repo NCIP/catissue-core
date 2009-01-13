@@ -41,7 +41,9 @@ public class Capacity extends AbstractDomainObject
 	 * Default Constructor.
 	 */
 	public Capacity()
-	{}
+	{
+		super();
+	}
 
 	/**
 	 * Parameterized constructor.
@@ -49,6 +51,7 @@ public class Capacity extends AbstractDomainObject
 	 */
 	public Capacity(Capacity storageContainerCapacity)
 	{
+		super();
 		oneDimensionCapacity = storageContainerCapacity.oneDimensionCapacity;
 		twoDimensionCapacity = storageContainerCapacity.twoDimensionCapacity;
 	}

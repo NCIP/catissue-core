@@ -44,6 +44,7 @@ public class CancerResearchGroup extends AbstractDomainObject implements Seriali
 	 */
 	public CancerResearchGroup()
 	{
+		super();
 		// Default Constructor, required for Hibernate
 	}
 
@@ -53,6 +54,7 @@ public class CancerResearchGroup extends AbstractDomainObject implements Seriali
 	 */
 	public CancerResearchGroup(AbstractActionForm form)
 	{
+		super();
 		setAllValues(form);
 	}
 

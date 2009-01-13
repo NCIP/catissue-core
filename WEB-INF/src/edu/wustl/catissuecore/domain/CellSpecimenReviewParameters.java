@@ -23,6 +23,10 @@ import edu.wustl.common.util.logger.Logger;
 public class CellSpecimenReviewParameters extends ReviewEventParameters	implements java.io.Serializable
 {
 	/**
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(CellSpecimenReviewParameters.class);
+	/**
 	 * Serial Version Id for the class.
 	 */
 	private static final long serialVersionUID = 1234567890L;
@@ -84,7 +88,9 @@ public class CellSpecimenReviewParameters extends ReviewEventParameters	implemen
 	 * Default Constructor.
 	 */
 	public CellSpecimenReviewParameters()
-	{}
+	{
+		super();
+	}
 
 	/**
 	 * Parameterized Constructor.
@@ -92,6 +98,7 @@ public class CellSpecimenReviewParameters extends ReviewEventParameters	implemen
 	 */
 	public CellSpecimenReviewParameters(AbstractActionForm abstractForm)
 	{
+		super();
 		setAllValues((IValueObject)abstractForm);
 	}
 
@@ -115,7 +122,7 @@ public class CellSpecimenReviewParameters extends ReviewEventParameters	implemen
         }
         catch (Exception excp)
         {
-            Logger.out.error(excp.getMessage());
+            logger.error(excp.getMessage());
         }
     }
 

@@ -14,7 +14,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
-
 import edu.wustl.catissuecore.actionForm.CollectionProtocolRegistrationForm;
 import edu.wustl.catissuecore.util.ConsentUtil;
 import edu.wustl.catissuecore.util.SearchUtil;
@@ -35,10 +34,8 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class CollectionProtocolRegistration extends AbstractDomainObject implements Serializable, IActivityStatus
 {
-
-
 	/**
-	 * 
+	 * Serial Version ID of the class.
 	 */
 	private static final long serialVersionUID = 5075110651381259752L;
 
@@ -48,7 +45,7 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 	protected Long id;
 
 	/**
-	 * A unique number given by a User to a Participant 
+	 * A unique number given by a User to a Participant
 	 * registered to a Collection Protocol.
 	 */
 	protected String protocolParticipantIdentifier;
@@ -62,21 +59,25 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 	 * An individual from whom a specimen is to be collected.
 	 */
 	protected Participant participant = null;
-	
+
     // Change for API Search   --- Ashwin 04/10/2006
 	/**
-	 * A set of written procedures that describe how a 
+	 * A set of written procedures that describe how a
 	 * biospecimen is prospectively collected.
 	 */
 	protected CollectionProtocol collectionProtocol;
 
-	protected Collection specimenCollectionGroupCollection = new HashSet();
-	
 	/**
-	 * Defines whether this CollectionProtocolRegistration record can be queried (Active) or not queried (Inactive) by any actor
-	 * */
+	 * specimenCollectionGroupCollection.
+	 */
+	protected Collection specimenCollectionGroupCollection = new HashSet();
+
+	/**
+	 * Defines whether this CollectionProtocolRegistration record can be queried
+	 * Active) or not queried (Inactive) by any actor.
+	 */
 	protected String activityStatus;
-	
+
 	//-----For Consent Tracking. Ashish 21/11/06
 	/**
 	 * The signed consent document URL.
@@ -94,34 +95,37 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 	 * The collection of responses of multiple participants for a particular consent.
 	 */
 	protected Collection consentTierResponseCollection;
-	
-	//Mandar 15-jan-07 
-	/*
+
+	/**
 	 * To perform operation based on withdraw button clicked.
-	 * Default No Action to allow normal behaviour. 
+	 * Default No Action to allow normal behaviour.
 	 */
 	protected String consentWithdrawalOption=Constants.WITHDRAW_RESPONSE_NOACTION;
-	
-	//Abhishek Mehta
-	//Consent Availability for collection protocol
-	protected String isConsentAvailable;
-	
-	protected Integer offset;
-	
+
 	/**
-	 * barcode attribute added for Suite1.1
+	 * isConsentAvailable.
+	 */
+	protected String isConsentAvailable;
+
+	/**
+	 * offset.
+	 */
+	protected Integer offset;
+
+	/**
+	 * barcode attribute added for Suite 1.1.
 	 */
 	protected String barcode;
-	
+
 	/**
 	 * @return the consentSignatureDate
-	 * @hibernate.property name="consentSignatureDate" column="CONSENT_SIGN_DATE"  
+	 * @hibernate.property name="consentSignatureDate" column="CONSENT_SIGN_DATE"
 	 */
 	public Date getConsentSignatureDate()
 	{
 		return consentSignatureDate;
 	}
-	
+
 	/**
 	 * @param consentSignatureDate the consentSignatureDate to set
 	 */
@@ -129,7 +133,7 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 	{
 		this.consentSignatureDate = consentSignatureDate;
 	}
-	
+
 	/**
 	 * @return the signedConsentDocumentURL
 	 * @hibernate.property name="signedConsentDocumentURL" type="string" length="1000" column="CONSENT_DOC_URL"
@@ -138,7 +142,7 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 	{
 		return signedConsentDocumentURL;
 	}
-	
+
 	/**
 	 * @param signedConsentDocumentURL the signedConsentDocumentURL to set
 	 */
@@ -146,18 +150,19 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 	{
 		this.signedConsentDocumentURL = signedConsentDocumentURL;
 	}
-	
+
 	/**
 	 * @return the consentTierResponseCollection
-	 * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.ConsentTierResponse" lazy="true" cascade="save-update"
-	 * @hibernate.set name="consentTierResponseCollection" table="CATISSUE_CONSENT_TIER_RESPONSE" 
+	 * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.
+	 * ConsentTierResponse" lazy="true" cascade="save-update"
+	 * @hibernate.set name="consentTierResponseCollection" table="CATISSUE_CONSENT_TIER_RESPONSE"
 	 * @hibernate.collection-key column="COLL_PROT_REG_ID"
 	 */
 	public Collection getConsentTierResponseCollection()
 	{
 		return consentTierResponseCollection;
 	}
-	
+
 	/**
 	 * @param consentTierResponseCollection the consentTierResponseCollection to set
 	 */
@@ -165,16 +170,17 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 	{
 		this.consentTierResponseCollection = consentTierResponseCollection;
 	}
-	
+
 	/**
 	 * @return the consentWitness
-	 * @hibernate.many-to-one class="edu.wustl.catissuecore.domain.User" constrained="true" column="CONSENT_WITNESS"
+	 * @hibernate.many-to-one class="edu.wustl.catissuecore.domain.User"
+	 * constrained="true" column="CONSENT_WITNESS"
 	 */
 	public User getConsentWitness()
 	{
 		return consentWitness;
 	}
-	
+
 	/**
 	 * @param consentWitness the consentWitness to set
 	 */
@@ -182,25 +188,30 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 	{
 		this.consentWitness = consentWitness;
 	}
-	//-----Consent Tracking End
-	
-	public CollectionProtocolRegistration()
-	{
 
-	}
-
-	
 	/**
-	 * one argument constructor
-	 * @param CollectionProtocolRegistrationFrom object 
+	 * Default Constructor.
+	 */
+	public CollectionProtocolRegistration()
+	{}
+
+
+	/**
+	 * Parameterized Constructor.
+	 * @param form CollectionProtocolRegistrationFrom object.
+	 * @throws AssignDataException when problem is assignement of data.
 	 */
 	public CollectionProtocolRegistration(AbstractActionForm form) throws AssignDataException
 	{
 		setAllValues(form);
 	}
 
-	public CollectionProtocolRegistration(CollectionProtocolRegistration cpr) 
-	{  
+	/**
+	 * Parameterized Constructor.
+	 * @param cpr of CollectionProtocolRegistration type.
+	 */
+	public CollectionProtocolRegistration(CollectionProtocolRegistration cpr)
+	{
 		this.activityStatus = cpr.getActivityStatus();
 		this.collectionProtocol = cpr.getCollectionProtocol();
 		this.consentSignatureDate = cpr.getConsentSignatureDate();
@@ -213,29 +224,30 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 		this.registrationDate = cpr.getRegistrationDate();
 		this.signedConsentDocumentURL = cpr.getSignedConsentDocumentURL();
 		this.specimenCollectionGroupCollection = new HashSet();
-		//no need to carry forward the offset.
-//		this.offset=cpr.getOffset();
-		
-		
 	}
 
-	private void copyConsentResponseColl(CollectionProtocolRegistration cpr) {
-		if(cpr.getConsentTierResponseCollection() != null)
-		{ 
+	/**
+	 * Copy the consent response collection.
+	 * @param cpr of CollectionProtocolRegistration type.
+	 */
+	private void copyConsentResponseColl(CollectionProtocolRegistration cpr)
+	{
+		if(cpr.getConsentTierResponseCollection() == null)
+		{
+			this.consentTierResponseCollection = null;
+		}
+		else
+		{
 			Collection consentTierResponseCollClone = new HashSet();
 			Iterator itr = cpr.getConsentTierResponseCollection().iterator();
 			while(itr.hasNext())
 			{
 				ConsentTierResponse consentTierResponse = (ConsentTierResponse) itr.next();
-				ConsentTierResponse consentTierResponseClone = new ConsentTierResponse(consentTierResponse);
+				ConsentTierResponse consentTierResponseClone = new ConsentTierResponse
+					(consentTierResponse);
 				consentTierResponseCollClone.add(consentTierResponseClone);
 			}
-			
 			this.consentTierResponseCollection = consentTierResponseCollClone;
-		}
-		else
-		{
-			this.consentTierResponseCollection = null;
 		}
 	}
 
@@ -254,20 +266,20 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 
 	/**
 	 * Sets the system generated unique id.
-	 * @param id the system generated unique id.
+	 * @param identifier the system generated unique id.
 	 * @see #getId()
 	 * */
-	public void setId(Long id)
+	public void setId(Long identifier)
 	{
-		this.id = id;
+		this.id = identifier;
 	}
 
 	/**
-	 * Returns the unique number given by a User to a Participant 
+	 * Returns the unique number given by a User to a Participant
 	 * registered to a Collection Protocol.
 	 * @hibernate.property name="protocolParticipantIdentifier" type="string"
 	 * column="PROTOCOL_PARTICIPANT_ID" length="255"
-	 * @return the unique number given by a User to a Participant 
+	 * @return the unique number given by a User to a Participant
 	 * registered to a Collection Protocol.
 	 * @see #setProtocolParticipantIdentifier(Long)
 	 */
@@ -277,9 +289,9 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 	}
 
 	/**
-	 * Sets the unique number given by a User to a Participant 
+	 * Sets the unique number given by a User to a Participant
 	 * registered to a Collection Protocol.
-	 * @param protocolParticipantIdentifier the unique number given by a User to a Participant 
+	 * @param protocolParticipantIdentifier the unique number given by a User to a Participant
 	 * registered to a Collection Protocol.
 	 * @see #getProtocolParticipantIdentifier()
 	 */
@@ -289,10 +301,10 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 	}
 
 	/**
-	 * Returns the date on which the Participant is 
+	 * Returns the date on which the Participant is
 	 * registered to the Collection Protocol.
 	 * @hibernate.property name="registrationDate" column="REGISTRATION_DATE" type="date"
-	 * @return the date on which the Participant is 
+	 * @return the date on which the Participant is
 	 * registered to the Collection Protocol.
 	 * @see #setRegistrationDate(Date)
 	 */
@@ -302,9 +314,9 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 	}
 
 	/**
-	 * Sets the date on which the Participant is 
+	 * Sets the date on which the Participant is
 	 * registered to the Collection Protocol.
-	 * @param registrationDate the date on which the Participant is 
+	 * @param registrationDate the date on which the Participant is
 	 * registered to the Collection Protocol.
 	 * @see #getRegistrationDate()
 	 */
@@ -336,11 +348,11 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 	}
 
 	/**
-	 * Returns the set of written procedures that describe how a 
+	 * Returns the set of written procedures that describe how a
 	 * biospecimen is prospectively collected.
-	 * @hibernate.many-to-one column="COLLECTION_PROTOCOL_ID" 
+	 * @hibernate.many-to-one column="COLLECTION_PROTOCOL_ID"
 	 * class="edu.wustl.catissuecore.domain.CollectionProtocol" constrained="true"
-	 * @return the set of written procedures that describe how a 
+	 * @return the set of written procedures that describe how a
 	 * biospecimen is prospectively collected.
 	 * @see #setCollectionProtocol(CollectionProtocol)
 	 */
@@ -350,9 +362,9 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 	}
 
 	/**
-	 * Sets the set of written procedures that describe how a 
+	 * Sets the set of written procedures that describe how a
 	 * biospecimen is prospectively collected.
-	 * @param collectionProtocol the set of written procedures that describe how a 
+	 * @param collectionProtocol the set of written procedures that describe how a
 	 * biospecimen is prospectively collected.
 	 * @see #getCollectionProtocol()
 	 */
@@ -382,10 +394,11 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 	{
 		this.activityStatus = activityStatus;
 	}
-	
-	/** 
-	 * Set all values from CollectionProtocolRegistrationForm to the member variables of class
-	 * @param CollectionProtocolRegistrationForm object  
+
+	/**
+	 * Set all values from CollectionProtocolRegistrationForm to the member variables of class.
+	 * @param abstractForm of IValueObject type.
+	 * @throws AssignDataException when problem is assignment of data.
 	 */
 	public void setAllValues(IValueObject abstractForm) throws AssignDataException
 	{
@@ -393,73 +406,74 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 		try
 		{
 			this.activityStatus		 = form.getActivityStatus();
-	        // Change for API Search   --- Ashwin 04/10/2006
 	    	if (SearchUtil.isNullobject(collectionProtocol))
 	    	{
 	    		collectionProtocol = new CollectionProtocol();
 	    	}
-	    	
-	        // Change for API Search   --- Ashwin 04/10/2006	    	
 	    	if (SearchUtil.isNullobject(this.registrationDate))
 	    	{
 	    		registrationDate  = new Date();
 	    	}
+			this.collectionProtocol.setId(Long.valueOf(form.getCollectionProtocolID()));
 
-			this.collectionProtocol.setId(new Long(form.getCollectionProtocolID()));
-			
-			if(form.getParticipantID() != -1 && form.getParticipantID() != 0)
-			{
-				this.participant = new Participant();
-				this.participant.setId(new Long(form.getParticipantID()));
-			}
-			else
-				this.participant = null;
-			
+			setParticipantForTheCPR(form);
+
 			this.protocolParticipantIdentifier = form.getParticipantProtocolID().trim();
-			if(protocolParticipantIdentifier.equals(""))
+			if(Constants.DOUBLE_QUOTES.equals(protocolParticipantIdentifier))
+			{
 				this.protocolParticipantIdentifier = null;
-			
-			this.registrationDate = Utility.parseDate(form.getRegistrationDate(),Utility.datePattern(form.getRegistrationDate()));
+			}
+			this.registrationDate = Utility.parseDate(form.getRegistrationDate(),
+					Utility.datePattern(form.getRegistrationDate()));
 			this.barcode = Utility.toString(form.getBarcode());
-			
-			//For Consent Tracking ----Ashish 1/12/06
-			//Setting the consent sign date.
+
 			this.consentSignatureDate = Utility.parseDate(form.getConsentDate());
-			//Setting the signed doc url
 			this.signedConsentDocumentURL = form.getSignedConsentUrl();
-			if(signedConsentDocumentURL.equals(""))
+			if(Constants.DOUBLE_QUOTES.equals(signedConsentDocumentURL))
 			{
 				this.signedConsentDocumentURL=null;
 			}
-			//Setting the consent witness
 			if(form.getWitnessId()>0)
 			{
 				this.consentWitness = new User();
-				consentWitness.setId(new Long(form.getWitnessId()));
+				consentWitness.setId(Long.valueOf(form.getWitnessId()));
 			}
-			//Preparing  Consent tier response Collection 
+			//Preparing  Consent tier response Collection
 			this.consentTierResponseCollection = prepareParticipantResponseCollection(form);
-			
-			//Mandar: 16-jan-07 : - For withdraw options
 			this.consentWithdrawalOption = form.getWithdrawlButtonStatus();
-			// offset changes 27th 2007
-			this.setOffset(new Integer(form.getOffset()));
+			this.setOffset(Integer.valueOf(form.getOffset()));
 		}
 		catch (Exception e)
 		{
-			Logger.out.error(e.getMessage());
-			throw new AssignDataException();
+			throw new AssignDataException(e);
 		}
 	}
-	
-//Consent Tracking 	
-	 /**
-	* For Consent Tracking
-	* Setting the Domain Object 
+
+	/**
+	 * Set the participant to the CPR object.
+	 * @param form of CollectionProtocolRegistrationForm type.
+	 */
+	private void setParticipantForTheCPR(CollectionProtocolRegistrationForm form)
+	{
+		if(form.getParticipantID() == -1 && form.getParticipantID() == 0)
+		{
+			this.participant = null;
+		}
+		else
+		{
+			this.participant = new Participant();
+			this.participant.setId(Long.valueOf(form.getParticipantID()));
+		}
+	}
+
+//Consent Tracking
+	/**
+	* For Consent Tracking.
+	* Setting the Domain Object
 	* @param  form CollectionProtocolRegistrationForm
 	* @return consentResponseColl
 	*/
-	private Collection prepareParticipantResponseCollection(CollectionProtocolRegistrationForm form) 
+	private Collection prepareParticipantResponseCollection(CollectionProtocolRegistrationForm form)
 	{
 		MapDataParser mapdataParser = new MapDataParser("edu.wustl.catissuecore.bean");
         Collection beanObjColl=null;
@@ -469,7 +483,7 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			Logger.out.error(e.getMessage(), e);
 		}
         Iterator iter = beanObjColl.iterator();
         Collection consentResponseColl = new HashSet();
@@ -477,12 +491,12 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
         return consentResponseColl;
 	}
 //Consent Tracking
-	
+
 	/**
-     * Returns message label to display on success add or edit
+     * Returns message label to display on success add or edit.
      * @return String
      */
-	public String getMessageLabel() 
+	public String getMessageLabel()
 	{
 		/**
 		 * Name: Vijay Pande
@@ -490,34 +504,41 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 		 * Instead of directly accessing private variables their getter methods are called.
 		 * Direct access of variables was returning null value.
 		 */
-		
+
         // Change for API Search   --- Ashwin 04/10/2006
     	if (SearchUtil.isNullobject(collectionProtocol))
     	{
     		collectionProtocol = new CollectionProtocol();
     	}
-		String message = this.collectionProtocol.getTitle() + " ";
-		if (this.participant != null) {
-			if (this.participant.getLastName()!= null && !this.participant.getLastName().equals("") && this.participant.getFirstName() != null && !this.participant.getFirstName().equals("")) 
+		StringBuffer message = new StringBuffer();
+		message.append(this.collectionProtocol.getTitle() + " ");
+		if (this.participant != null)
+		{
+			if (this.participant.getLastName() != null &&
+					!this.participant.getLastName().equals("") &&
+					this.participant.getFirstName() != null &&
+					!this.participant.getFirstName().equals(""))
 			{
-				message = message + this.participant.getLastName() + "," + this.participant.getFirstName();
-			} 
-			else if(this.participant.getLastName()!= null && !this.participant.getLastName().equals(""))
-			{
-				message = message + this.participant.getLastName();
+				message.append(this.participant.getLastName() + "," +
+				this.participant.getFirstName());
 			}
-			else if(this.participant.getFirstName()!= null && !this.participant.getFirstName().equals(""))
+			else if(this.participant.getLastName()!= null &&
+					!this.participant.getLastName().equals(""))
 			{
-				message = message + this.participant.getFirstName();
-			}		
-		} 		
+				message.append(this.participant.getLastName());
+			}
+			else if(this.participant.getFirstName()!= null &&
+					!this.participant.getFirstName().equals(""))
+			{
+				message.append(this.participant.getFirstName());
+			}
+		}
 		else if (this.protocolParticipantIdentifier != null)
 		{
-			message = message + this.protocolParticipantIdentifier;
-		}			
-		return message;
+			message.append(this.protocolParticipantIdentifier);
+		}
+		return message.toString();
 	}
-
 
 	/**
 	 * Returns collection of specimenCollectionGroup .
@@ -532,50 +553,88 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 		return specimenCollectionGroupCollection;
 	}
 
-	
+	/**
+	 * Set the SpecimenCollectionGroup Collection.
+	 * @param specimenCollectionGroupCollection of Collection type.
+	 */
 	public void setSpecimenCollectionGroupCollection(Collection specimenCollectionGroupCollection)
 	{
 		this.specimenCollectionGroupCollection = specimenCollectionGroupCollection;
 	}
-	
-	//----------------------------Mandar 15-jan-07
-	public String getConsentWithdrawalOption() {
+
+	/**
+	 * Get the Consent Withdrawal Option.
+	 * @return String type.
+	 */
+	public String getConsentWithdrawalOption()
+	{
 		return consentWithdrawalOption;
 	}
 
-	public void setConsentWithdrawalOption(String consentWithdrawalOption) {
+	/**
+	 * Set the Consent Withdrawal Option.
+	 * @param consentWithdrawalOption of String type.
+	 */
+	public void setConsentWithdrawalOption(String consentWithdrawalOption)
+	{
 		this.consentWithdrawalOption = consentWithdrawalOption;
 	}
 
-	public String getIsConsentAvailable() {
+	/**
+	 * Get the available consent.
+	 * @return String type.
+	 */
+	public String getIsConsentAvailable()
+	{
 		return isConsentAvailable;
 	}
 
-	public void setIsConsentAvailable(String isConsentAvailable) {
+	/**
+	 * Set the available consent.
+	 * @param isConsentAvailable of String type.
+	 */
+	public void setIsConsentAvailable(String isConsentAvailable)
+	{
 		this.isConsentAvailable = isConsentAvailable;
 	}
 
-	public Integer getOffset() {
+	/**
+	 * Get the offset.
+	 * @return Integer type.
+	 */
+	public Integer getOffset()
+	{
 		return offset;
 	}
 
-	public void setOffset(Integer offset) {
+	/**
+	 * Set the offset.
+	 * @param offset of Integer type.
+	 */
+	public void setOffset(Integer offset)
+	{
 		this.offset = offset;
 	}
-	
+
+	/**
+	 * Get the barcode.
+	 * @return String type.
+	 */
 	public String getBarcode()
 	{
 		return barcode;
 	}
-	
+
+	/**
+	 * Set the barcode.
+	 * @param barcode of String type.
+	 */
 	public void setBarcode(String barcode)
 	{
 		this.barcode = barcode;
-		if ("".equals(barcode))
+		if (Constants.DOUBLE_QUOTES.equals(barcode))
 		{
 			this.barcode = null;
 		}
 	}
-
-	
 }

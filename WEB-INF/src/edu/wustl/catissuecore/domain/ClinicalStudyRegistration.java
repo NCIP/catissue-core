@@ -20,7 +20,6 @@ import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.util.Utility;
-import edu.wustl.common.util.logger.Logger;
 
 /**
  * A registration of a Participant to a Clinical Study.
@@ -218,7 +217,7 @@ public class ClinicalStudyRegistration extends AbstractDomainObject implements S
                 registrationDate  = new Date();
             }
 
-            this.clinicalStudy.setId(new Long(form.getClinicalStudyId()));
+            this.clinicalStudy.setId(Long.valueOf(form.getClinicalStudyId()));
 
             if(form.getParticipantID() == -1 && form.getParticipantID() == 0)
             {
@@ -227,7 +226,7 @@ public class ClinicalStudyRegistration extends AbstractDomainObject implements S
             else
             {
             	this.participant = new Participant();
-                this.participant.setId(new Long(form.getParticipantID()));
+                this.participant.setId(Long.valueOf(form.getParticipantID()));
             }
 
             this.clinicalStudyParticipantIdentifier = form.getParticipantClinicalStudyID().trim();
@@ -240,8 +239,7 @@ public class ClinicalStudyRegistration extends AbstractDomainObject implements S
         }
         catch (Exception e)
         {
-            Logger.out.error(e.getMessage());
-            throw new AssignDataException();
+            throw new AssignDataException(e);
         }
     }
 

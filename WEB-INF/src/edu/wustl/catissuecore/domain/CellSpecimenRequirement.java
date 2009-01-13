@@ -10,7 +10,6 @@
 package edu.wustl.catissuecore.domain;
 
 import java.io.Serializable;
-
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.util.logger.Logger;
@@ -23,6 +22,11 @@ import edu.wustl.common.util.logger.Logger;
 public class CellSpecimenRequirement extends SpecimenRequirement implements Serializable
 {
 	/**
+	 * logger Logger - Generic logger.
+	 */
+	 private static org.apache.log4j.Logger logger = Logger.getLogger(CellSpecimenRequirement.class);
+
+	/**
 	 * Serial Version Id of the class.
 	 */
 	private static final long serialVersionUID = 1232228923230L;
@@ -31,7 +35,9 @@ public class CellSpecimenRequirement extends SpecimenRequirement implements Seri
 	 * Default Constructor.
 	 */
 	public CellSpecimenRequirement()
-	{}
+	{
+		super();
+	}
 
 	/**
 	 * Parameterized Constructor.
@@ -39,6 +45,7 @@ public class CellSpecimenRequirement extends SpecimenRequirement implements Seri
 	 */
 	public CellSpecimenRequirement(AbstractActionForm form)
     {
+		super();
     	setAllValues(form);
     }
 	/**
@@ -53,7 +60,7 @@ public class CellSpecimenRequirement extends SpecimenRequirement implements Seri
         }
         catch (Exception excp)
         {
-            Logger.out.error(excp.getMessage(),excp);
+            logger.error(excp.getMessage(),excp);
         }
     }
 
@@ -62,7 +69,9 @@ public class CellSpecimenRequirement extends SpecimenRequirement implements Seri
      * @param cellRequirementSpecimen of type CellSpecimenRequirement class.
      */
     public CellSpecimenRequirement(CellSpecimenRequirement cellRequirementSpecimen)
-    {}
+    {
+    	super();
+    }
 
     /**
      * Method to create a clone object of CellSpecimenRequirement type.

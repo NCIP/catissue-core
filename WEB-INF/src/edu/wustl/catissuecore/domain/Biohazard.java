@@ -13,7 +13,6 @@ package edu.wustl.catissuecore.domain;
 
 import java.util.Collection;
 import java.util.HashSet;
-
 import edu.wustl.catissuecore.actionForm.BiohazardForm;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
@@ -32,6 +31,10 @@ public class Biohazard extends AbstractDomainObject
 	 * Serial Version Id.
 	 */
     private static final long serialVersionUID = 1234567890L;
+    /**
+     * logger Logger - Generic logger.
+     */
+    private static org.apache.log4j.Logger logger = Logger.getLogger(Biohazard.class);
 
     /**
      * System generated unique id.
@@ -69,7 +72,7 @@ public class Biohazard extends AbstractDomainObject
      */
     public Biohazard()
     {
-    	// Default Constructor, required for Hibernate
+    	super();
     }
 
     /**
@@ -78,6 +81,7 @@ public class Biohazard extends AbstractDomainObject
      */
     public Biohazard(AbstractActionForm form)
     {
+    	super();
     	setAllValues(form);
     }
 
@@ -87,6 +91,7 @@ public class Biohazard extends AbstractDomainObject
      */
     public Biohazard(Biohazard bioHazard)
     {
+    	super();
     	this.comment = bioHazard.getComment();
     	this.name = bioHazard.getName();
     	this.persisted = bioHazard.getPersisted();
@@ -222,7 +227,7 @@ public class Biohazard extends AbstractDomainObject
         }
         catch (Exception excp)
         {
-            Logger.out.error(excp.getMessage());
+        	logger.error(excp);
         }
     }
 

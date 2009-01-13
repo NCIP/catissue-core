@@ -10,11 +10,9 @@
 package edu.wustl.catissuecore.domain;
 
 import java.io.Serializable;
-
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
-
 
 /**
  * @author ashish_gupta
@@ -23,7 +21,7 @@ import edu.wustl.common.exception.AssignDataException;
 public class ConsentTier extends AbstractDomainObject implements Serializable
 {
 	/**
-	 * 
+	 * Serial Version ID of the class.
 	 */
 	private static final long serialVersionUID = 1L;
 	/**
@@ -44,7 +42,6 @@ public class ConsentTier extends AbstractDomainObject implements Serializable
 		return statement;
 	}
 
-	
 	/**
 	 * @param statement the statement to set
 	 */
@@ -53,35 +50,44 @@ public class ConsentTier extends AbstractDomainObject implements Serializable
 		this.statement = statement;
 	}
 
-
 	/**
-	 * @hibernate.id name="id" type="long" column="IDENTIFIER" length="30" unsaved-value="null" generator-class="native"
+	 * @hibernate.id name="id" type="long" column="IDENTIFIER" length="30" unsaved-value="null"
+	 * generator-class="native"
 	 * @hibernate.generator-param name="sequence" value="CATISSUE_CONSENT_TIER_SEQ"
+	 * @return Long type.
 	 */
 	public Long getId()
-	{		
+	{
 		return id;
 	}
 
-
-	
+	/**
+	 * Set all values.
+	 * @param abstractForm of IValueObject type.
+	 * @throws AssignDataException assignDataException.
+	 */
 	public void setAllValues(IValueObject abstractForm) throws AssignDataException
+	{}
+
+	/**
+	 * Set Id.
+	 * @param identifier of Long type.
+	 */
+	public void setId(Long identifier)
 	{
-		// TODO Auto-generated method stub
-		
+		this.id = identifier;
 	}
 
-
-	
-	public void setId(Long id)
-	{
-		this.id = id;		
-	}
-	
+	/**
+	 * Default Constructor.
+	 */
 	public ConsentTier()
-	{
-		
-	}
+	{}
+
+	/**
+	 * Parameterized Constructor.
+	 * @param consentTier of ConsentTier type.
+	 */
 	public ConsentTier(ConsentTier consentTier)
 	{
 		if(consentTier.getId() != null && consentTier.getId().toString().trim().length() > 0)

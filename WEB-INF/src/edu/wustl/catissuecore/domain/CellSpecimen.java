@@ -29,10 +29,17 @@ public class CellSpecimen extends Specimen implements Serializable
     private static final long serialVersionUID = 1234567890L;
 
     /**
+     * logger Logger - Generic logger.
+     */
+    private static org.apache.log4j.Logger logger = Logger.getLogger(CellSpecimen.class);
+
+    /**
      * Default Constructor.
      */
     public CellSpecimen()
-    {}
+    {
+    	super();
+    }
 
     /**
      * Parameterized Constructor.
@@ -40,6 +47,7 @@ public class CellSpecimen extends Specimen implements Serializable
      */
     public CellSpecimen(AbstractActionForm form)
     {
+    	super();
     	setAllValues(form);
     }
 
@@ -55,7 +63,7 @@ public class CellSpecimen extends Specimen implements Serializable
         }
         catch (Exception excp)
         {
-            Logger.out.error(excp.getMessage(),excp);
+        	logger.error(excp.getMessage(),excp);
         }
     }
 

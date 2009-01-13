@@ -25,6 +25,10 @@ public class CheckInCheckOutEventParameter extends SpecimenEventParameters
 		implements java.io.Serializable
 {
 	/**
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(CheckInCheckOutEventParameter.class);
+	/**
 	 * Serial Version Id of the class.
 	 */
 	private static final long serialVersionUID = 1234567890L;
@@ -57,7 +61,9 @@ public class CheckInCheckOutEventParameter extends SpecimenEventParameters
 	 * NOTE: Do not delete this constructor. Hibernet uses this by reflection API.
 	 */
 	public CheckInCheckOutEventParameter()
-	{}
+	{
+		super();
+	}
 
 	/**
 	 * Parameterized constructor.
@@ -65,6 +71,7 @@ public class CheckInCheckOutEventParameter extends SpecimenEventParameters
 	 */
 	public CheckInCheckOutEventParameter(AbstractActionForm abstractForm)
 	{
+		super();
 		setAllValues((IValueObject)abstractForm);
 	}
 
@@ -86,7 +93,7 @@ public class CheckInCheckOutEventParameter extends SpecimenEventParameters
         }
         catch (Exception excp)
         {
-            Logger.out.error(excp.getMessage());
+            logger.error(excp.getMessage());
         }
     }
 }

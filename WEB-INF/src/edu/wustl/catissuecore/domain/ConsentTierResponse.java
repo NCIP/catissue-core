@@ -10,11 +10,9 @@
 package edu.wustl.catissuecore.domain;
 
 import java.io.Serializable;
-
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
-
 
 /**
  * @author ashish_gupta
@@ -23,7 +21,9 @@ import edu.wustl.common.exception.AssignDataException;
  */
 public class ConsentTierResponse extends AbstractDomainObject implements Serializable
 {
-	
+	/**
+	 * Serial Version ID of the class.
+	 */
 	private static final long serialVersionUID = -5511144004426312668L;
 	/**
 	 * System Identifier.
@@ -37,28 +37,33 @@ public class ConsentTierResponse extends AbstractDomainObject implements Seriali
 	 * The consent tier for this response.
 	 */
 	protected ConsentTier consentTier;
-	
+
 	/**
-	 * @return the response
+	 * Parameterized Constructor.
 	 * @hibernate.property name="response" type="string" length="10" column="RESPONSE"
+	 * @param consentTierResponse of type ConsentTierResponse.
 	 */
-	public ConsentTierResponse(ConsentTierResponse consentTierResponse) 
+	public ConsentTierResponse(ConsentTierResponse consentTierResponse)
 	{
 		this.response = consentTierResponse.getResponse();
-		this.consentTier = consentTierResponse.getConsentTier();	
-		
+		this.consentTier = consentTierResponse.getConsentTier();
 	}
-	public ConsentTierResponse() 
-	{
-	}
-	
-	
+
+	/**
+	 * Default Constructor.
+	 */
+	public ConsentTierResponse()
+	{}
+
+	/**
+	 * Get Response.
+	 * @return String type.
+	 */
 	public String getResponse()
 	{
 		return response;
 	}
 
-	
 	/**
 	 * @param response the response to set
 	 */
@@ -70,32 +75,39 @@ public class ConsentTierResponse extends AbstractDomainObject implements Seriali
 	/**
 	 * @hibernate.id unsaved-value="null" generator-class="native" type="long" column="IDENTIFIER"
 	 * @hibernate.generator-param name="sequence" value="CATISSUE_CONSENT_TIER_RES_SEQ"
-	 * 
+	 * @return Long type.
 	 */
 	public Long getId()
-	{		
+	{
 		return id;
-	}	
-	public void setAllValues(IValueObject abstractForm) throws AssignDataException
-	{
-		// TODO Auto-generated method stub
-		
-	}	
-	
-	public void setId(Long id)
-	{
-		this.id = id;		
 	}
-	
+
+	/**
+	 * Set All VAlues.
+	 * @param abstractForm of IValueObject type.
+	 * @throws AssignDataException assignDataException.
+	 */
+	public void setAllValues(IValueObject abstractForm) throws AssignDataException
+	{}
+
+	/**
+	 * Set the id.
+	 * @param identifier of Long type.
+	 */
+	public void setId(Long identifier)
+	{
+		this.id = identifier;
+	}
+
 	/**
 	 * @return the consentTier
-	 * @hibernate.many-to-one column="CONSENT_TIER_ID" class="edu.wustl.catissuecore.domain.ConsentTier" 
+	 * @hibernate.many-to-one column="CONSENT_TIER_ID" class="edu.wustl.catissuecore.domain.ConsentTier"
 	 */
 	public ConsentTier getConsentTier()
 	{
 		return consentTier;
 	}
-	
+
 	/**
 	 * @param consentTier the consentTier to set
 	 */
