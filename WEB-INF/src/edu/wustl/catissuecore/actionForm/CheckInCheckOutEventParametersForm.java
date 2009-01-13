@@ -29,6 +29,7 @@ import edu.wustl.common.util.logger.Logger;
 */
 public class CheckInCheckOutEventParametersForm extends SpecimenEventParametersForm
 {
+	private static final long serialVersionUID = 1L;
 	/**
 	 * Type of the movement e.g. Check-in or Check-out.
 	 */
@@ -47,7 +48,7 @@ public class CheckInCheckOutEventParametersForm extends SpecimenEventParametersF
 	/**
 	 * @param storageStatus The storageStatus to set.
 	 */
-	public void setStorageStatus(String storageStatus)
+	public void setStorageStatus(final String storageStatus)
 	{
 		this.storageStatus = storageStatus;
 	}
@@ -72,7 +73,7 @@ public class CheckInCheckOutEventParametersForm extends SpecimenEventParametersF
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
 		super.setAllValues(abstractDomain);
-		CheckInCheckOutEventParameter checkInCheckOutEventParameterObject = (CheckInCheckOutEventParameter)abstractDomain ;
+		final CheckInCheckOutEventParameter checkInCheckOutEventParameterObject = (CheckInCheckOutEventParameter)abstractDomain ;
 		this.storageStatus = Utility.toString(checkInCheckOutEventParameterObject.getStorageStatus()); 
 	}
 	
@@ -85,8 +86,8 @@ public class CheckInCheckOutEventParametersForm extends SpecimenEventParametersF
      public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
      {
      	 
-         ActionErrors errors = super.validate(mapping, request);
-         Validator validator = new Validator();
+    	 final  ActionErrors errors = super.validate(mapping, request);
+    	 final  Validator validator = new Validator();
          
          try
          {

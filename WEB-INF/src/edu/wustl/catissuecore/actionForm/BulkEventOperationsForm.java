@@ -7,18 +7,18 @@ import edu.wustl.catissuecore.util.global.Constants;
 
 public class BulkEventOperationsForm extends EventParametersForm
 {
-	
+	private static final long serialVersionUID = 1L;
 	
 	private final Map<String, String> eventSpecificData= new HashMap<String, String>(); 
 	private final Map<String, String> specimenIds= new HashMap<String, String>(); 
 	private String operation;
 
-	public String getFieldValue(String key)
+	public String getFieldValue(final String key)
 	{
 		return eventSpecificData.get(key);
 	}
 	
-	public void setFieldValue(String key, String value)
+	public void setFieldValue(final String key, final String value)
 	{
 		eventSpecificData.put(key, value);
 	}
@@ -39,12 +39,12 @@ public class BulkEventOperationsForm extends EventParametersForm
 		return specimenIds;
 	}
 	
-	public String getSpecimenId(String key)
+	public String getSpecimenId(final String key)
 	{
 		return specimenIds.get(key);
 	}
 	
-	public void setSpecimenId(String key, String value)
+	public void setSpecimenId(final String key, final String value)
 	{
 		specimenIds.put(key, value);
 	}
@@ -54,10 +54,19 @@ public class BulkEventOperationsForm extends EventParametersForm
 		return operation;
 	}
 
-	public void setOperation(String operation)
+	public void setOperation(final String operation)
 	{
 		this.operation = operation;
 	}
-	
+
+//	/**
+//	 * 
+//	 */
+//	public BulkEventOperationsForm()
+//	{
+//		super();
+//		// TODO Auto-generated constructor stub
+//	}
+//	
 	
 }

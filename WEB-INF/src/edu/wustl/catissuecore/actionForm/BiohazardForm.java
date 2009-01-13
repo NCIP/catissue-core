@@ -31,6 +31,7 @@ import edu.wustl.common.util.logger.Logger;
  * */
 public class BiohazardForm extends AbstractActionForm
 {
+	private static final long serialVersionUID = 1L;
 
     /**
      * A string containing the type of Biohazard.
@@ -52,6 +53,7 @@ public class BiohazardForm extends AbstractActionForm
      */
     public BiohazardForm()
     {
+    	super();
         reset();
     }
 
@@ -83,7 +85,7 @@ public class BiohazardForm extends AbstractActionForm
      * @param type String type of the storage to be set.
      * @see #getType()
      */
-    public void setType(String type)
+    public void setType(final String type)
     {
         this.type = type;
     }
@@ -103,7 +105,7 @@ public class BiohazardForm extends AbstractActionForm
 	 * @param comments the comments.
 	 * @see #getComments(String)
 	 */
-	public void setComments(String comments)
+	public void setComments(final String comments)
 	{
 		this.comments = comments;
 	}
@@ -123,7 +125,7 @@ public class BiohazardForm extends AbstractActionForm
 	 * @param name the name of the biohazard.
 	 * @see #getName(String)
 	 */
-	public void setName(String name)
+	public void setName(final String name)
 	{
 		this.name = name;
 	}
@@ -145,7 +147,7 @@ public class BiohazardForm extends AbstractActionForm
      * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#setActivityStatus(java.lang.String)
      * @param activityStatus Setting Activity Status
      */
-    public void setActivityStatus(String activityStatus)
+    public void setActivityStatus(final String activityStatus)
     {
         // TODO Auto-generated method stub
 
@@ -157,7 +159,7 @@ public class BiohazardForm extends AbstractActionForm
      * */
     public boolean isAddOperation()
     {
-        return(getOperation().equals(Constants.ADD));
+        return getOperation().equals(Constants.ADD);
     }
     
     /**
@@ -195,8 +197,8 @@ public class BiohazardForm extends AbstractActionForm
 	 */
     public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
     {
-        ActionErrors errors = new ActionErrors();
-        Validator validator = new Validator();
+        final ActionErrors errors = new ActionErrors();
+        final Validator validator = new Validator();
         
         try
         {

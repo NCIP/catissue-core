@@ -31,6 +31,7 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class CellSpecimenReviewParametersForm extends SpecimenEventParametersForm
 {
+	private static final long serialVersionUID = 1L;
 	/**
      * Percentage of histologically evident neoplastic cells present in the specimen.
      */
@@ -98,7 +99,7 @@ public class CellSpecimenReviewParametersForm extends SpecimenEventParametersFor
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
 		super.setAllValues(abstractDomain);
-		CellSpecimenReviewParameters cellSpecimenReviewParametersObject = (CellSpecimenReviewParameters)abstractDomain ;
+		final CellSpecimenReviewParameters cellSpecimenReviewParametersObject = (CellSpecimenReviewParameters)abstractDomain ;
 		this.neoplasticCellularityPercentage =Utility.toString(cellSpecimenReviewParametersObject.getNeoplasticCellularityPercentage()) ;
 		this.viableCellPercentage = Utility.toString(cellSpecimenReviewParametersObject.getViableCellPercentage()) ; 
 	}
@@ -111,8 +112,8 @@ public class CellSpecimenReviewParametersForm extends SpecimenEventParametersFor
 	 */
      public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
      {
-     	ActionErrors errors = super.validate(mapping, request);
-         Validator validator = new Validator();
+    	 final ActionErrors errors = super.validate(mapping, request);
+    	 final Validator validator = new Validator();
          
          try
          {

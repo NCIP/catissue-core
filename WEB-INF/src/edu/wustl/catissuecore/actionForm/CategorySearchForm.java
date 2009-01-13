@@ -17,6 +17,7 @@ import edu.wustl.common.beans.NameValueBean;
 
 public class CategorySearchForm extends ActionForm
 {
+	private static final long serialVersionUID = 1L;
 	/**
 	 * String to store the text field value.
 	 */
@@ -100,7 +101,7 @@ public class CategorySearchForm extends ActionForm
 	/**
 	 * @param currentPage the currentPage to set
 	 */
-	public void setCurrentPage(String currentPage)
+	public void setCurrentPage(final String currentPage)
 	{
 		this.currentPage = currentPage;
 	}
@@ -114,7 +115,7 @@ public class CategorySearchForm extends ActionForm
 	/**
 	 * @param nextOperation the nextOperation to set
 	 */
-	public void setNextOperation(String nextOperation)
+	public void setNextOperation(final String nextOperation)
 	{
 		this.nextOperation = nextOperation;
 	}
@@ -128,7 +129,7 @@ public class CategorySearchForm extends ActionForm
 	/**
 	 * @param searchButton the searchButton to set
 	 */
-	public void setSearchButton(String searchButton)
+	public void setSearchButton(final String searchButton)
 	{
 		this.searchButton = searchButton;
 	}
@@ -142,7 +143,7 @@ public class CategorySearchForm extends ActionForm
 	/**
 	 * @param errors the errors to set
 	 */
-	public void setErrors(List errors)
+	public void setErrors(final List errors)
 	{
 		this.errors = errors;
 	}
@@ -170,7 +171,7 @@ public class CategorySearchForm extends ActionForm
 	/**
 	 * @param selected the selected to set
 	 */
-	public void setSelected(String selected)
+	public void setSelected(final String selected)
 	{
 		this.selected = selected;
 	}
@@ -184,7 +185,7 @@ public class CategorySearchForm extends ActionForm
 	/**
 	 * @param textField the textField to set
 	 */
-	public void setTextField(String textField)
+	public void setTextField(final String textField)
 	{
 		this.textField = textField;
 	}
@@ -198,7 +199,7 @@ public class CategorySearchForm extends ActionForm
 	/**
 	 * @param attributeChecked the attributeChecked to set
 	 */
-	public void setAttributeChecked(String attributeChecked)
+	public void setAttributeChecked(final String attributeChecked)
 	{
 		this.attributeChecked = attributeChecked;
 	}
@@ -212,7 +213,7 @@ public class CategorySearchForm extends ActionForm
 	/**
 	 * @param classChecked the classChecked to set
 	 */
-	public void setClassChecked(String classChecked)
+	public void setClassChecked(final String classChecked)
 	{
 		this.classChecked = classChecked;
 	}
@@ -240,7 +241,7 @@ public class CategorySearchForm extends ActionForm
 	/**
 	 * @param entityName the entityName to set
 	 */
-	public void setEntityName(String entityName)
+	public void setEntityName(final String entityName)
 	{
 		this.entityName = entityName;
 	}
@@ -254,7 +255,7 @@ public class CategorySearchForm extends ActionForm
 	/**
 	 * @param nodeId the nodeId to set
 	 */
-	public void setNodeId(String nodeId)
+	public void setNodeId(final String nodeId)
 	{
 		this.nodeId = nodeId;
 	}
@@ -268,7 +269,7 @@ public class CategorySearchForm extends ActionForm
 	/**
 	 * @param booleanAttribute the booleanAttribute to set
 	 */
-	public void setBooleanAttribute(String booleanAttribute)
+	public void setBooleanAttribute(final String booleanAttribute)
 	{
 		this.booleanAttribute = booleanAttribute;
 	}
@@ -290,7 +291,7 @@ public class CategorySearchForm extends ActionForm
 	/**
 	 * @param columnNames the columnNames to set
 	 */
-	public void setColumnNames(String[] columnNames)
+	public void setColumnNames(final String[] columnNames)
 	{
 		this.columnNames = columnNames;
 	}
@@ -360,7 +361,7 @@ public class CategorySearchForm extends ActionForm
 	/**
 	 * @param options the options to set
 	 */
-	public void setOptions(String options)
+	public void setOptions(final String options)
 	{
 		this.options = options;
 	}

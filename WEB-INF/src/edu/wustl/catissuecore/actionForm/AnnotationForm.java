@@ -51,7 +51,7 @@ public class AnnotationForm extends AbstractActionForm implements Serializable {
 		return conditionVal;
 	}
 
-	public void setConditionVal(String[] conditionVal) {
+	public void setConditionVal(final String[] conditionVal) {
 		this.conditionVal = conditionVal;
 	}
 
@@ -110,7 +110,7 @@ public class AnnotationForm extends AbstractActionForm implements Serializable {
 		this.conditionalInstancesList = conditionalInstancesList;
 	}
 
-	public void setDeoperation(String deoperation) {
+	public void setDeoperation(final String deoperation) {
 		this.deoperation = deoperation;
 	}
 
@@ -120,15 +120,14 @@ public class AnnotationForm extends AbstractActionForm implements Serializable {
 
 	public ActionErrors validate(ActionMapping mapping,
 			HttpServletRequest request) {
-		ActionErrors errors = new ActionErrors();
-		Validator validator = new Validator();
+		final ActionErrors errors = new ActionErrors();
+		final Validator validator = new Validator();
 		try {
-			if (deoperation != null && deoperation.equals("add")) {
-				if (validator.isValidOption(String
-						.valueOf(selectedStaticEntityId)) == false) {
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-							"errors.item.required", ApplicationProperties
-									.getValue("anno.Entity")));
+			if ((deoperation != null && "add".equals(deoperation)) && (validator.isValidOption(String.valueOf(selectedStaticEntityId)) == false))
+			{
+//				if (validator.isValidOption(String.valueOf(selectedStaticEntityId)) == false) 
+				{
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties.getValue("anno.Entity")));
 				}
 
 			}

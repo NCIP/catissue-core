@@ -18,11 +18,11 @@ import edu.wustl.common.domain.AbstractDomainObject;
  * To change the template for this generated type comment go to
  * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
-public class AnnotationDataEntryForm extends AbstractActionForm
-        implements
-            Serializable
+public class AnnotationDataEntryForm extends AbstractActionForm implements Serializable
 {
 
+	
+	
     private static final long serialVersionUID = 5496516855615880241L;
     protected List annotationsList;
     protected String definedAnnotationsDataXML;
@@ -61,7 +61,7 @@ public class AnnotationDataEntryForm extends AbstractActionForm
         return selectedRecords;
     }
 
-    public void setSelectedRecords(String selectedRecords)
+    public void setSelectedRecords(final String selectedRecords)
     {
         this.selectedRecords = selectedRecords;
     }
@@ -81,7 +81,7 @@ public class AnnotationDataEntryForm extends AbstractActionForm
         return this.annotationsList;
     }
 
-    public void setAnnotationsList(List annotationsList)
+    public void setAnnotationsList(final List annotationsList)
     {
         this.annotationsList = annotationsList;
     }
@@ -101,7 +101,7 @@ public class AnnotationDataEntryForm extends AbstractActionForm
         return this.parentEntityId;
     }
 
-    public void setParentEntityId(String parentEntityId)
+    public void setParentEntityId(final String parentEntityId)
     {
         this.parentEntityId = parentEntityId;
     }
@@ -140,4 +140,14 @@ public class AnnotationDataEntryForm extends AbstractActionForm
 	{
 		this.definedAnnotationEntitiesXML = definedAnnotationEntitiesXML;
 	}
+
+
+//	/**
+//	 * 
+//	 */
+//	public AnnotationDataEntryForm()
+//	{
+//		super();
+//		// TODO Auto-generated constructor stub
+//	}
 }
