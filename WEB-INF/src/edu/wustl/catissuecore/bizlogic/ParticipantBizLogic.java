@@ -1078,7 +1078,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 
 	}
 
-	public List getColumnList(List columnList) throws DAOException
+	public List getColumnList(List columnList,StringBuffer partMRNColName) throws DAOException
 	{
 		List displayList = new ArrayList();
 		try
@@ -1108,6 +1108,10 @@ public class ParticipantBizLogic extends DefaultBizLogic
 					Logger.out.debug("colName2------------------------" + colName2);
 					if (colName1.equals(colName2))
 					{
+						if(colName1.equals(Constants.PARTICIPANT_MEDICAL_RECORD_NO))
+						{
+							partMRNColName.append((String) rowList.get(1)); 
+						}
 						displayList.add((String) rowList.get(1));
 					}
 				}

@@ -27,6 +27,7 @@ import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
 import edu.wustl.catissuecore.domain.DomainObjectFactory;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
+import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.action.BaseAction;
@@ -38,6 +39,7 @@ import edu.wustl.common.lookup.DefaultLookupResult;
 import edu.wustl.common.lookup.LookupLogic;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.XMLPropertyHandler;
+import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
 public class ParticipantLookupAction extends BaseAction
@@ -55,9 +57,9 @@ public class ParticipantLookupAction extends BaseAction
             HttpServletRequest request, HttpServletResponse response)
             throws Exception 
 	{
-		AbstractDomainObject abstractDomain = null;
 		ActionMessages messages=null;
 		String target=null;
+		final StringBuffer partMRNColName= new StringBuffer("");
 		
 		AbstractActionForm abstractForm = (AbstractActionForm) form;
 		
@@ -65,7 +67,7 @@ public class ParticipantLookupAction extends BaseAction
 				.getFactory(DomainObjectFactory.class.getName());
 		
 		
-		abstractDomain = abstractDomainObjectFactory.getDomainObject(abstractForm.getFormId(),
+		AbstractDomainObject abstractDomain = abstractDomainObjectFactory.getDomainObject(abstractForm.getFormId(),
 				abstractForm);
 		Participant participant = (Participant) abstractDomain;
 		
@@ -93,11 +95,12 @@ public class ParticipantLookupAction extends BaseAction
 				messages=new ActionMessages();
 				messages.add(ActionMessages.GLOBAL_MESSAGE,new ActionMessage("participant.lookup.success","Submit was not successful because some matching participants found."));
 	   			//Creating the column headings for Data Grid
-				List columnList = getColumnHeadingList(bizlogic);
+				List columnList = getColumnHeadingList(bizlogic,partMRNColName);
 				request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST, columnList);
+				request.setAttribute(Constants.PARTICIPANT_MRN_COL_NAME, partMRNColName);
 				
 				//Getitng the Participant List in Data Grid Format
-				List participantDisplayList=getParticipantDisplayList(matchingParticipantList);
+				List participantDisplayList=getParticipantDisplayList(matchingParticipantList,bizlogic);
 				request.setAttribute(Constants.SPREADSHEET_DATA_LIST, participantDisplayList);
 				
 				target=Constants.PARTICIPANT_LOOKUP_SUCCESS;
@@ -154,10 +157,10 @@ public class ParticipantLookupAction extends BaseAction
 	 * @throws Exception generic exception
 	 * @return List Column List
 	 */
-	private List getColumnHeadingList(ParticipantBizLogic bizlogic) throws Exception
+	private List getColumnHeadingList(ParticipantBizLogic bizlogic,StringBuffer partMRNColName) throws Exception
 	{
 		//Creating the column list which is used in Data grid to display column headings
-		String[] columnHeaderList = new String[]{Constants.PARTICIPANT_LAST_NAME,Constants.PARTICIPANT_FIRST_NAME,Constants.PARTICIPANT_MIDDLE_NAME,Constants.PARTICIPANT_BIRTH_DATE,Constants.PARTICIPANT_DEATH_DATE,Constants.PARTICIPANT_VITAL_STATUS,Constants.PARTICIPANT_GENDER,Constants.PARTICIPANT_SOCIAL_SECURITY_NUMBER,Constants.PARTICIPANT_MEDICAL_RECORD_NO};
+		String[] columnHeaderList = new String[]{Constants.PARTICIPANT_MEDICAL_RECORD_NO,Constants.PARTICIPANT_GENDER,Constants.PARTICIPANT_BIRTH_DATE,Constants.PARTICIPANT_SOCIAL_SECURITY_NUMBER,Constants.PARTICIPANT_DEATH_DATE,Constants.PARTICIPANT_VITAL_STATUS};
 		List columnList = new ArrayList();
 		Logger.out.info("column List header size ;"+columnHeaderList.length);	
 		for (int i = 0; i < columnHeaderList.length; i++)
@@ -165,57 +168,106 @@ public class ParticipantLookupAction extends BaseAction
 			columnList.add(columnHeaderList[i]);
 		}
 		Logger.out.info("column List size ;"+columnList.size());
-		List displayList=bizlogic.getColumnList(columnList);
+		List displayList=bizlogic.getColumnList(columnList,partMRNColName);
+	
+		displayList.add(0, Constants.PARTICIPANT_NAME_HEADERLABEL);
 	//	displayList.add(0,Constants.PARTICIPANT_PROBABLITY_MATCH);
 		return displayList;
 	}
-	
-	/**
-	 * This functions creates Particpant List with each participant informaton  with the match probablity 
+    /**
+	 * This functions creates Particpant List with each participant informaton  with the match probablity
 	 * @param participantList list of participant
+	 * @param bizLogic : ParticipantBizLogic
 	 * @return List of Participant Information  List
+	 * @throws DAOException : db exception
 	 */
-	private List getParticipantDisplayList(List participantList)
+	private List getParticipantDisplayList(List participantList,
+			ParticipantBizLogic bizLogic)throws DAOException
 	{
 		List participantDisplayList=new ArrayList();
-		Iterator itr=participantList.iterator();
-		String medicalRecordNo="";
-		String siteId = "";
+		Iterator<DefaultLookupResult> itr=participantList.iterator();
 		while(itr.hasNext())
 		{
 			DefaultLookupResult result=(DefaultLookupResult)itr.next();
 			Participant participant=(Participant)result.getObject();
-			
-			List participantInfo=new ArrayList();
-		
-			participantInfo.add(Utility.toString(participant.getLastName()));
-			participantInfo.add(Utility.toString(participant.getFirstName()));
-			participantInfo.add(Utility.toString(participant.getMiddleName()));
-			participantInfo.add(Utility.toString(participant.getBirthDate()));
-			participantInfo.add(Utility.toString(participant.getDeathDate()));
-			participantInfo.add(Utility.toString(participant.getVitalStatus()));
-			participantInfo.add(Utility.toString(participant.getGender()));	
-			if(!Variables.isSSNRemove){
-				participantInfo.add(Utility.toString(participant.getSocialSecurityNumber()));
-			}
-			if(participant.getParticipantMedicalIdentifierCollection()!=null)
-			{
-				Iterator participantMedicalIdentifierItr = participant.getParticipantMedicalIdentifierCollection().iterator();
-				while(participantMedicalIdentifierItr.hasNext())
-				{
-					ParticipantMedicalIdentifier participantMedicalIdentifier = (ParticipantMedicalIdentifier)participantMedicalIdentifierItr.next();
-					if(participantMedicalIdentifier.getSite() != null && participantMedicalIdentifier.getSite().getId() != null)
-					{
-					medicalRecordNo = participantMedicalIdentifier.getMedicalRecordNumber();
-					siteId = participantMedicalIdentifier.getSite().getId().toString();
-					}
-				}
-			}
-			participantInfo.add(Utility.toString(medicalRecordNo));
-			participantInfo.add(participant.getId());
+			List participantInfo = getParticipantInfo(bizLogic, participant);
 			participantDisplayList.add(participantInfo);
-			
 		}
 		return participantDisplayList;
+	}
+
+
+	/**
+	 *  To get participant info
+	 * @param bizLogic :ParticipantBizLogic
+	 * @param participant :Participant
+	 * @return List of particcipant info
+	 * @throws DAOException :db exception
+	 */
+	private List getParticipantInfo(ParticipantBizLogic bizLogic, Participant participant)
+			throws DAOException
+	{
+		StringBuffer participantName = new StringBuffer();
+		List participantInfo = new ArrayList();
+		String partLastName = Utility.toString(participant.getLastName());
+		String partFirstName = Utility.toString(participant.getFirstName());
+		participantName.append(partLastName);
+		if(partLastName!=null &&!(("").equals(partLastName))&&
+				partFirstName!=null &&!("").equals(partFirstName))
+		{
+			String stringCharAppend = "~";
+			participantName.append(stringCharAppend);
+		}
+		participantName.append(partFirstName);
+		participantInfo.add(participantName.toString());
+		String mrn= getParticipantMrnDisplay(bizLogic, participant);
+		participantInfo.add(Utility.toString(mrn));
+		participantInfo.add(Utility.toString(participant.getGender()));
+		participantInfo.add(Utility.toString(participant.getBirthDate()));
+		if(!Variables.isSSNRemove)
+		{
+			participantInfo.add(Utility.toString(participant.getSocialSecurityNumber()));
+		}
+		participantInfo.add(Utility.toString(participant.getDeathDate()));
+		participantInfo.add(Utility.toString(participant.getVitalStatus()));
+		participantInfo.add(participant.getId());
+		return participantInfo;
+	}
+
+/**
+ * Method to get MRNs related to a participant.
+ * @param bizLogic  ParticipantBizLogic
+ * @param participant :participant
+ * @return String
+ * @throws DAOException : db exception
+ */
+	private String getParticipantMrnDisplay(ParticipantBizLogic bizLogic,
+			Participant participant)throws DAOException
+	{
+		StringBuffer mrn = new StringBuffer();
+		Long siteId;
+		String siteName;
+		if(participant.getParticipantMedicalIdentifierCollection()!=null)
+		{
+			Iterator<ParticipantMedicalIdentifier> pmiItr =
+				participant.getParticipantMedicalIdentifierCollection().iterator();
+			while(pmiItr.hasNext())
+			{
+				ParticipantMedicalIdentifier participantMedicalIdentifier =pmiItr.next();
+				if(participantMedicalIdentifier.getSite()!=null&&
+						participantMedicalIdentifier.getSite().getId() != null)
+				{
+					siteId = participantMedicalIdentifier.getSite().getId();
+					Site site = (Site)bizLogic.retrieve(Site.class.getName(), siteId);
+					siteName= site.getName();
+					mrn.append(siteName);
+					String stringCharAppend=":";
+					mrn.append(stringCharAppend);
+					mrn.append(participantMedicalIdentifier.getMedicalRecordNumber());
+					mrn.append("\n"+"<br>");
+				}
+			}
+		}
+		return mrn.toString();
 	}
 }

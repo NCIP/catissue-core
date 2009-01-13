@@ -1452,6 +1452,9 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	
 	
 	//Constants required in ParticipantLookupAction
+	public static final String PARTICIPANT_MRN_COL_NAME="partMRNColName";
+	public static final String PARTICIPANT_NAME_SEPARATOR="~";
+	public static final String PARTICIPANT_NAME_HEADERLABEL="Name";
 	public static final String PARTICIPANT_LOOKUP_ALGO_FOR_SPR="ParticipantLookupAlgoForSPR";
 	public static final String PARTICIPANT_LOOKUP_PARAMETER="ParticipantLookupParameter";
 	public static final String PARTICIPANT_LOOKUP_CUTOFF="lookup.cutoff";

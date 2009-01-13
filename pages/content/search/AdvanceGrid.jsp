@@ -2,6 +2,7 @@
 <link rel="STYLESHEET" type="text/css" href="dhtml_comp/css/dhtmlXGrid.css"/>
 <link rel="stylesheet" type="text/css" href="css/catissue_suite.css" />
 
+<script type="text/javascript" src="jss/wz_tooltip.js"></script>
 <script  src="dhtml_comp/js/dhtmlXCommon.js"></script>
 <script  src="dhtml_comp/js/dhtmlXGrid.js"></script>		
 <script  src="dhtml_comp/js/dhtmlXGridCell.js"></script>
@@ -226,7 +227,6 @@ function setEditableChkbox(checkAllPages)
 
 	if(useFunction == "participant")
 	{
-		//alert("test");
 		mygrid.entBox.style.width= wdt;					//"650px";
 		colDataTypes=colDataTypes.replace(/ch/,"ra");
 		colDataTypes=colDataTypes.replace(/int/,"ro");
@@ -242,7 +242,8 @@ function setEditableChkbox(checkAllPages)
 		document.write("<hr>colWidth : "+colWidth+"<hr>");
 		*/
 	}
-
+	
+	mygrid.setEditable("true");
 	mygrid.setHeader(columns);
 	//mygrid.setEditable("FALSE");
 	mygrid.enableAutoHeigth(false);
@@ -257,7 +258,6 @@ function setEditableChkbox(checkAllPages)
 	mygrid.setSkin("light");
 	mygrid.enableAlterCss("even","uneven");
 
-    mygrid.setEditable(true);
 	<% if(checkAllPagesSession != null && checkAllPagesSession.equals("true")){ %>
 			mygrid.setEditable(false);
 	<% 
@@ -311,16 +311,114 @@ function setEditableChkbox(checkAllPages)
 
 	if(useFunction == "participant")
 	{
-		
 		mygrid.setColumnHidden(mygrid.getColumnCount()-1,true);
 		/** Patch ID: 4149_1 
          * See also: 1-2
          * Description: on participant page initialy grid displayed with some spacing between column header and column data.
          * For this foloowing function is called which resizes the grid properly.
-         */
+		 */
 		mygrid.setSizes();
+		
+		var totalRows = mygrid.getRowsNum();
+		var totalColumns = mygrid.getColumnCount();
+
+		var ToolTipsFlagList ="";
+
+		<%String partMRNConstStr = "";
+
+		if(request.getAttribute(Constants.PARTICIPANT_MRN_COL_NAME)!=null)
+		{
+			partMRNConstStr = request.getAttribute(Constants.PARTICIPANT_MRN_COL_NAME).toString();
+		}%> 
+			
+		var partMRNConst = "<%=partMRNConstStr%>";
+		
+		<%String partNameConst = Constants.PARTICIPANT_NAME_HEADERLABEL;%>
+		var partNameConst = "<%= partNameConst%>";
+		
+		for(var i=1;i<=totalRows;i++)
+		{
+			for(var j=0; j<totalColumns;j++)
+			{	
+			
+				if((mygrid.hdrLabels[j])== partNameConst)
+				{
+					var partName = mygrid.cells(i,j).getValue();
+					
+					var str= getNewString(partName);
+						
+					mygrid.cells(i,j).setValue(str);
+				}
+			}
+		}
+
+		for(var k=0;k<mygrid.hdrLabels.length;k++)
+		{
+			
+			if(k!=0)
+			{
+				if((mygrid.hdrLabels[k])==partMRNConst)
+				{
+					ToolTipsFlagList=ToolTipsFlagList+",false";
+				}
+				else
+				{
+					
+					ToolTipsFlagList=ToolTipsFlagList+",true";
+				}
+			}
+			else
+			{
+				if((mygrid.hdrLabels[k])==partMRNConst)
+				{
+					ToolTipsFlagList="false";
+				}
+				else
+				{
+					ToolTipsFlagList="true";
+				}
+			}
+		}
+		
+		mygrid.enableTooltips(ToolTipsFlagList);
+		
+		for(var i=1;i<=totalRows;i++)
+		{
+			for(var j=0; j<totalColumns;j++)
+			{	
+				if((mygrid.hdrLabels[j])==partMRNConst)
+				{
+					var cellMrn = mygrid.cells(i,j);
+					
+					var str1 = "Tip(\""+cellMrn.getValue()+"\",WIDTH,300)";
+					var str="<span onmouseover='"+str1+"'>"+cellMrn.getValue()+"</span>";
+						
+					cellMrn.setValue(str);
+				}
+			}
+		}
+	}
+	// for participant--
+	function getNewString(oldStr)
+	{
+		var newStr = "";
+		if(oldStr!=null && oldStr!="")
+		{
+			var strTokens = oldStr.split("~");
+
+			for ( var i = 0; i < strTokens.length; i++ )
+			{
+				if(i!=0)
+				{
+					 newStr = newStr +",";
+				}
+				newStr = newStr + strTokens[ i ] ;
+			}
+		}
+		return newStr;
 	}
 
+	// end here
  		/**
         * Name : Vijay Pande
         * Bug ID: 4149
