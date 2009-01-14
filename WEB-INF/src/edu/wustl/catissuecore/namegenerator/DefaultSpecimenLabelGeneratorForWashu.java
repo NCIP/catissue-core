@@ -59,6 +59,11 @@ public class DefaultSpecimenLabelGeneratorForWashu implements LabelGenerator
 				currentLabel = getLastAvailableSpecimenLabel(Constants.ORACLE_NUM_TO_STR_FUNCTION_NAME_FOR_LABEL_GENRATION);
 				tmpLabel= getLastAvailableSpecimenLabel("identifier");			
 			}
+			else if (Constants.MSSQLSERVER_DATABASE.equals(Variables.databaseName))
+			{
+				currentLabel = getLastAvailableSpecimenLabel(Constants.MSSQLSERVER_NUM_TO_STR_FUNCTION_NAME_FOR_LABEL_GENRATION);
+				tmpLabel= getLastAvailableSpecimenLabel("identifier");
+			}
 			else
 			{
 				currentLabel = getLastAvailableSpecimenLabel(Constants.MYSQL_NUM_TO_STR_FUNCTION_NAME_FOR_LABEL_GENRATION);
