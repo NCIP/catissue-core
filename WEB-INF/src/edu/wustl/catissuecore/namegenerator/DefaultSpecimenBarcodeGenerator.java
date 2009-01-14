@@ -53,6 +53,10 @@ public class DefaultSpecimenBarcodeGenerator implements BarcodeGenerator
 			{
 				currentBarcode = getLastAvailableSpecimenBarcode(Constants.ORACLE_MAX_BARCODE_COL);
 			}
+			else if (Constants.MSSQLSERVER_DATABASE.equals(Variables.databaseName))
+			{
+				currentBarcode = getLastAvailableSpecimenBarcode(Constants.MSSQLSERVER_MAX_BARCODE_COL);
+			}
 			else
 			{
 				currentBarcode = getLastAvailableSpecimenBarcode(Constants.MYSQL_MAX_BARCODE_COL);
