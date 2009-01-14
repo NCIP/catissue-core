@@ -33,6 +33,14 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class CollectionEventParametersForm extends SpecimenEventParametersForm
 {
+	private static final long serialVersionUID = 1L;
+
+
+	/**
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(CollectionEventParametersForm.class);
+
 	/**
      * Name : Virender Mehta
      * Reviewer: Sachin Lale
@@ -107,7 +115,7 @@ public class CollectionEventParametersForm extends SpecimenEventParametersForm
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
 		super.setAllValues(abstractDomain);
-		CollectionEventParameters collectionEventParameterObject = (CollectionEventParameters)abstractDomain ;
+		final CollectionEventParameters collectionEventParameterObject = (CollectionEventParameters)abstractDomain ;
 		this.collectionProcedure =  Utility.toString(collectionEventParameterObject.getCollectionProcedure()) ;
 		this.container = Utility.toString(collectionEventParameterObject.getContainer());
 	}
@@ -122,8 +130,8 @@ public class CollectionEventParametersForm extends SpecimenEventParametersForm
      public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
      {
      	 
-         ActionErrors errors = super.validate(mapping, request);
-         Validator validator = new Validator();
+    	 final ActionErrors errors = super.validate(mapping, request);
+    	 final Validator validator = new Validator();
          
          try
          {
@@ -137,7 +145,7 @@ public class CollectionEventParametersForm extends SpecimenEventParametersForm
          }
          catch(Exception excp)
          {
-             Logger.out.error(excp.getMessage());
+             logger.error(excp.getMessage());
          }
          return errors;
       }

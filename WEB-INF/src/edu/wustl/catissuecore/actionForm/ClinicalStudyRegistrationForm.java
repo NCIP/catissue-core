@@ -28,10 +28,17 @@ import edu.wustl.common.util.logger.Logger;
 
 public class ClinicalStudyRegistrationForm extends AbstractActionForm 
 {   
-    
+	private static final long serialVersionUID = 1L;
     /**
      * System generated unique collection protocol Identifier
      */
+	
+	/**
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(ClinicalStudyRegistrationForm.class);
+	
+	
     private long clinicalStudyId;
     
     /**
@@ -63,6 +70,7 @@ public class ClinicalStudyRegistrationForm extends AbstractActionForm
 
     public ClinicalStudyRegistrationForm()
     {
+    	super();
         //reset();
     }           
     
@@ -72,14 +80,14 @@ public class ClinicalStudyRegistrationForm extends AbstractActionForm
      */ 
     public void setAllValues(AbstractDomainObject abstractDomain)
     {
-        ClinicalStudyRegistration registration = (ClinicalStudyRegistration)abstractDomain;
+    	final ClinicalStudyRegistration registration = (ClinicalStudyRegistration)abstractDomain;
         this.id = registration.getId().longValue();
         this.activityStatus = registration.getActivityStatus();
         this.clinicalStudyId = registration.getClinicalStudy().getId().longValue();
-        String firstName = Utility.toString(registration.getParticipant().getFirstName());
-        String lastName = Utility.toString(registration.getParticipant().getLastName());
-        String birthDate = Utility.toString(registration.getParticipant().getBirthDate());
-        String ssn = Utility.toString(registration.getParticipant().getSocialSecurityNumber());
+        final String firstName = Utility.toString(registration.getParticipant().getFirstName());
+        final String lastName = Utility.toString(registration.getParticipant().getLastName());
+        final String birthDate = Utility.toString(registration.getParticipant().getBirthDate());
+        final String ssn = Utility.toString(registration.getParticipant().getSocialSecurityNumber());
             
         if((registration.getParticipant() != null) && (firstName.trim().length()>0 || lastName.trim().length()>0 || birthDate.trim().length()>0 || ssn.trim().length()>0))
         {
@@ -119,7 +127,7 @@ public class ClinicalStudyRegistrationForm extends AbstractActionForm
      * registered to the Collection Protocol.
      * @see #getRegistrationDate()
      */
-    public void setRegistrationDate(String registrationDate)
+    public void setRegistrationDate(final String registrationDate)
     {
         this.registrationDate = registrationDate;
     }
@@ -135,7 +143,7 @@ public class ClinicalStudyRegistrationForm extends AbstractActionForm
     /**
      * @param participantID sets unique participant ID 
      */
-    public void setParticipantID(long participantID) {
+    public void setParticipantID(final long participantID) {
         this.participantID = participantID;
     }
 
@@ -160,8 +168,8 @@ public class ClinicalStudyRegistrationForm extends AbstractActionForm
    public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
    {
     
-       ActionErrors errors = new ActionErrors();
-       Validator validator = new Validator();
+	   final ActionErrors errors = new ActionErrors();
+	   final Validator validator = new Validator();
        try
        {
             setRedirectValue(validator);        
@@ -170,15 +178,11 @@ public class ClinicalStudyRegistrationForm extends AbstractActionForm
             {
                 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocolregistration.protocoltitle")));
             }           
-            if (validator.isEmpty(participantClinicalStudyID))
+            if (validator.isEmpty(participantClinicalStudyID) && (participantID == -1 || participantID == 0))
             {
-                if (participantID == -1 || participantID == 0)
-                {
-                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.collectionprotocolregistration.atleast"));
-                }
-                
+            	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.collectionprotocolregistration.atleast"));
             }           
-            String errorKey = validator.validateDate(registrationDate,true ); 
+            final String errorKey = validator.validateDate(registrationDate,true ); 
             if(errorKey.trim().length() >0  )
             {
                 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKey,ApplicationProperties.getValue("collectionprotocolregistration.date")));
@@ -190,7 +194,7 @@ public class ClinicalStudyRegistrationForm extends AbstractActionForm
        }
        catch(Exception excp)
        {
-           Logger.out.error(excp.getMessage(),excp);
+    	   logger.error(excp.getMessage(),excp);
        }
        return errors;
     }
@@ -231,11 +235,11 @@ public class ClinicalStudyRegistrationForm extends AbstractActionForm
      */
     public void setAddNewObjectIdentifier(String addNewFor, Long addObjectIdentifier)
      {
-         if(addNewFor.equals("clinicalStudyId"))
+         if("clinicalStudyId".equals(addNewFor))
          {
              setClinicalStudyId(addObjectIdentifier.longValue());
          }
-         else if(addNewFor.equals("participantId"))
+         else if("participantId".equals(addNewFor))
          {
              setParticipantID(addObjectIdentifier.longValue());
              //setCheckedButton(true);
@@ -247,7 +251,7 @@ public class ClinicalStudyRegistrationForm extends AbstractActionForm
         return participantName;
     }
     
-    public void setParticipantName(String participantName)
+    public void setParticipantName(final String participantName)
     {
         this.participantName = participantName;
     }
@@ -261,7 +265,7 @@ public class ClinicalStudyRegistrationForm extends AbstractActionForm
     }
 
     
-    public void setClinicalStudyId(long clinicalStudyId)
+    public void setClinicalStudyId(final long clinicalStudyId)
     {
         this.clinicalStudyId = clinicalStudyId;
     }

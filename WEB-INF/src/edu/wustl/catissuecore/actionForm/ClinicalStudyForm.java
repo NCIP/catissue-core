@@ -36,6 +36,8 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class ClinicalStudyForm extends SpecimenProtocolForm
 {       
+	private static final long serialVersionUID = 1L;
+	
     protected long []protocolCoordinatorIds;
 
     
@@ -70,7 +72,7 @@ public class ClinicalStudyForm extends SpecimenProtocolForm
     /**
      * @param innerLoopValues the innerLoopValues to set
      */
-    public void setInnerLoopValues(Map innerLoopValues)
+    public void setInnerLoopValues(final Map innerLoopValues)
     {
         this.innerLoopValues = innerLoopValues;
     }
@@ -88,7 +90,7 @@ public class ClinicalStudyForm extends SpecimenProtocolForm
     /**
      * @param outerCounter the outerCounter to set
      */
-    public void setOuterCounter(int outerCounter)
+    public void setOuterCounter(final int outerCounter)
     {
         this.outerCounter = outerCounter;
     }
@@ -99,7 +101,7 @@ public class ClinicalStudyForm extends SpecimenProtocolForm
      * @param key the key to which the object is mapped.
      * @param value the object which is mapped.
      */
-    public void setIvl(String key, Object value)///changes here
+    public void setIvl(final String key, final Object value)///changes here
     {
         if (isMutable())
         {
@@ -113,7 +115,7 @@ public class ClinicalStudyForm extends SpecimenProtocolForm
      * @param key the required key.
      * @return the object to which this map maps the specified key.
      */
-    public Object getIvl(String key)
+    public Object getIvl(final String key)
     {
         return innerLoopValues.get(key);
     }
@@ -149,16 +151,16 @@ public class ClinicalStudyForm extends SpecimenProtocolForm
     {
         super.setAllValues(abstractDomain);     
         
-        ClinicalStudy clinicalStudy = (ClinicalStudy)abstractDomain;        
-        Collection userCollection = clinicalStudy.getCoordinatorCollection();       
+        final  ClinicalStudy clinicalStudy = (ClinicalStudy)abstractDomain;        
+        final Collection userCollection = clinicalStudy.getCoordinatorCollection();       
         if(userCollection != null)
         {
             protocolCoordinatorIds = new long[userCollection.size()];
             int i=0;
-            Iterator iterator = userCollection.iterator();
+            final  Iterator iterator = userCollection.iterator();
             while(iterator.hasNext())
             {
-                User user = (User)iterator.next();
+            	final  User user = (User)iterator.next();
                 protocolCoordinatorIds[i] = user.getId().longValue();
                 i++;
             }
@@ -177,7 +179,7 @@ public class ClinicalStudyForm extends SpecimenProtocolForm
     public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
     {       
         ActionErrors errors = super.validate(mapping, request);     
-        Validator validator = new Validator();
+        final Validator validator = new Validator();
         try
         {
             if(this.protocolCoordinatorIds != null && this.principalInvestigatorId!=-1)
@@ -197,9 +199,9 @@ public class ClinicalStudyForm extends SpecimenProtocolForm
                 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("clinicalstudy.irbid")));
             }
             
-            System.out.println("Values Map: "+values);
+//            System.out.println("Values Map: "+values);
             
-            Iterator iter = this.values.keySet().iterator();
+            final Iterator iter = this.values.keySet().iterator();
             if(values.isEmpty())
             {
                 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.one.item.required",ApplicationProperties.getValue("clinicalStudyEvent.eventTitle")));
@@ -217,8 +219,8 @@ public class ClinicalStudyForm extends SpecimenProtocolForm
             
             while (iter.hasNext())
             {
-                String key = (String)iter.next();
-                String value = (String)values.get(key);
+            	final String key = (String)iter.next();
+            	final String value = (String)values.get(key);
                                 
                 if(key.indexOf("collectionPointLabel")!=-1 && validator.isEmpty(value))
                 {
@@ -238,7 +240,7 @@ public class ClinicalStudyForm extends SpecimenProtocolForm
                     }
                     else
                     {
-                        if (value.equals("#"))
+                        if ("#".equals(value))
                             values.put(key, "-1");
                     }
                 }
@@ -336,13 +338,13 @@ public class ClinicalStudyForm extends SpecimenProtocolForm
      */
     public void setAddNewObjectIdentifier(String addNewFor, Long addObjectIdentifier)
     {
-        if(addNewFor.equals("principalInvestigator"))
+        if("principalInvestigator".equals(addNewFor))
         {
             setPrincipalInvestigatorId(addObjectIdentifier.longValue());
         }
-        else if(addNewFor.equals("protocolCoordinator"))
+        else if("protocolCoordinator".equals(addNewFor))
         {
-            long []pcoordIDs = {Long.parseLong(addObjectIdentifier.toString())};           
+        	final  long []pcoordIDs = {Long.parseLong(addObjectIdentifier.toString())};           
             setProtocolCoordinatorIds(pcoordIDs);
         } 
     }   

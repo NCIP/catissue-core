@@ -31,7 +31,7 @@ import edu.wustl.common.util.logger.Logger;
  * */
 public class CancerResearchGroupForm extends AbstractActionForm
 {
-    
+	private static final long serialVersionUID = 1L;
     /**
      * Name of the CancerResearchGroup.
      */
@@ -42,6 +42,7 @@ public class CancerResearchGroupForm extends AbstractActionForm
      */
     public CancerResearchGroupForm()
     {
+    	super();
         reset();
     }
 
@@ -62,14 +63,14 @@ public class CancerResearchGroupForm extends AbstractActionForm
      */
     public String getName()
     {
-        return (this.name);
+        return this.name;
     }
 
     /**
      * Sets the name of this CancerResearchGroup
      * @param name Name of the CancerResearchGroup.
      */
-    public void setName(String name)
+    public void setName(final String name)
     {
         this.name = name;
     }
@@ -80,7 +81,7 @@ public class CancerResearchGroupForm extends AbstractActionForm
      * */
     public boolean isAddOperation()
     {
-        return(getOperation().equals(Constants.ADD));
+        return getOperation().equals(Constants.ADD);
     }
     
     /**
@@ -108,8 +109,8 @@ public class CancerResearchGroupForm extends AbstractActionForm
 	 */
     public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
     {
-        ActionErrors errors = new ActionErrors();
-        Validator validator = new Validator();
+        final ActionErrors errors = new ActionErrors();
+        final Validator validator = new Validator();
         try
         {
             if (validator.isEmpty(name))
