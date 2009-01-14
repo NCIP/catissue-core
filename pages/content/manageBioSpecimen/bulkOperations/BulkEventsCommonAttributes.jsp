@@ -5,7 +5,9 @@
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
+
 <link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
 
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
