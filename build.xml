@@ -515,6 +515,7 @@
 		<copy file="Default_label_barcode_gen.jar" todir="${zip.dir}" overwrite="true" />
 		<copy file="printservice_module.jar" todir="${zip.dir}" overwrite="true" />
 		<copy file="printservice_client.jar" todir="${zip.dir}" overwrite="true" />
+		<copy file="PrintCatissueCore_Client.jar" todir="${zip.dir}" overwrite="true" />
 		<copy file="dynamicExtensions.war" todir="${zip.dir}" overwrite="true" />
 		<copy file="caTissuePrintWebService.war" todir="${zip.dir}" overwrite="true" />
 		<copy file="shippingtracking.zip" todir="${zip.dir}" overwrite="true" />
