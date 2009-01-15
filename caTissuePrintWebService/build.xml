@@ -133,4 +133,13 @@
 		<delete file="${base.dir}/caTissuePrintWebService.war"/>
 	</target>	
 	
+	<target name="Build_PrintCatissueCore_Client" description="Created jar of all classes generated from wsconsume">
+	   	<jar destfile="PrintCatissueCore_Client.jar">
+			<fileset dir="${base.dir}/outputclient" >
+				 <include name="**/*.java" />
+				 <include name="**/*.class"/>	
+			</fileset>		
+		</jar>
+	</target>
+	
 	</project>
