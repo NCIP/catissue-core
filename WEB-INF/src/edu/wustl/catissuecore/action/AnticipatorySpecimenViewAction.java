@@ -34,6 +34,7 @@ import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.catissuecore.util.CollectionProtocolUtil;
 import edu.wustl.catissuecore.util.IdComparator;
 import edu.wustl.catissuecore.util.SpecimenAutoStorageContainer;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -239,13 +240,16 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 	protected void setChildren(Specimen specimen, GenericSpecimen parentSpecimenVO) throws DAOException
 	{
 		Collection<AbstractSpecimen> specimenChildren = specimen.getChildSpecimenCollection();
+		List<AbstractSpecimen> specimenChildrenCollection =
+			new LinkedList<AbstractSpecimen>(specimenChildren);
+		CollectionProtocolUtil.getSortedCPEventList(specimenChildrenCollection);
 
-		if (specimenChildren == null || specimenChildren.isEmpty())
+		if (specimenChildrenCollection == null || specimenChildrenCollection.isEmpty())
 		{
 			return;
 		}
 
-		Iterator<AbstractSpecimen> iterator = specimenChildren.iterator();
+		Iterator<AbstractSpecimen> iterator = specimenChildrenCollection.iterator();
 
 		LinkedHashMap<String, GenericSpecimen> aliquotMap = new LinkedHashMap<String, GenericSpecimen>();
 		LinkedHashMap<String, GenericSpecimen> derivedMap = new LinkedHashMap<String, GenericSpecimen>();

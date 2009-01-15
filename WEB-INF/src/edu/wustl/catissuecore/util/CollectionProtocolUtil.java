@@ -24,6 +24,7 @@ import edu.wustl.catissuecore.bean.GenericSpecimen;
 import edu.wustl.catissuecore.bean.SpecimenRequirementBean;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
+import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.CellSpecimenRequirement;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
@@ -202,6 +203,11 @@ public class CollectionProtocolUtil {
 				{
 					identifier1 = ((SpecimenRequirement)object1).getId();
 					identifier2 = ((SpecimenRequirement)object2).getId();
+				}
+				else if (object1 instanceof AbstractSpecimen)
+				{
+					identifier1 = ((AbstractSpecimen) object1).getId();
+					identifier2 = ((AbstractSpecimen) object2).getId();
 				}
 				
 				if(identifier1!= null && identifier2 != null)

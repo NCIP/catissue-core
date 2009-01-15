@@ -1381,13 +1381,13 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			Integer pos1 = specimen.getSpecimenPosition().getPositionDimensionOne();
 			Integer pos2 = specimen.getSpecimenPosition().getPositionDimensionTwo();
 			String containerName = specimen.getSpecimenPosition().getStorageContainer().getName();
-			if (id != null)
+			if (containerName != null)
 			{
-				storageValue = StorageContainerUtil.getStorageValueKey(null, id.toString(), pos1, pos2);
+				storageValue = StorageContainerUtil.getStorageValueKey(containerName, null, pos1, pos2);
 			}
 			else
 			{
-				storageValue = StorageContainerUtil.getStorageValueKey(containerName, null, pos1, pos2);
+				storageValue = StorageContainerUtil.getStorageValueKey(null, id.toString(), pos1, pos2);
 			}
 			if (!storageContainerIds.contains(storageValue))
 			{

@@ -278,13 +278,13 @@ public class StorageContainerUtil
 				//bug 8294
 				String containerValue = null;
 				Long containerId = storageContainer.getId();
-				if(containerId!=null)
+				if(containerName != null)
 				{
-					containerValue = StorageContainerUtil.getStorageValueKey(null, containerId.toString(), xpos, ypos);
+					containerValue = StorageContainerUtil.getStorageValueKey(containerName,null,xpos, ypos);
 				}
 				else 
 				{
-					containerValue = StorageContainerUtil.getStorageValueKey(containerName,null,xpos, ypos);
+					containerValue = StorageContainerUtil.getStorageValueKey(null, containerId.toString(), xpos, ypos);
 				}
 				if (!allocatedPositions.contains(containerValue))
 				{

@@ -246,7 +246,7 @@ public class UpdateSpecimenStatusAction extends BaseAction
 	//Abhishek Mehta : Performance related Changes
 	private Collection getChildrenSpecimens(GenericSpecimen specimenVO, Specimen parentSpecimen) throws BizLogicException
 	{
-		HashSet childrenSpecimens = new HashSet();
+		LinkedHashSet childrenSpecimens = new LinkedHashSet();
 		LinkedHashMap aliquotMap = specimenVO.getAliquotSpecimenCollection();
 
 		if (aliquotMap != null && !aliquotMap.isEmpty())
