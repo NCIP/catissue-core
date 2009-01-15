@@ -917,12 +917,36 @@ function addNewTypeAction(action)
 					}
 					%>
 					<% if(!Variables.isStorageContainerBarcodeGeneratorAvl || operation.equals(Constants.EDIT))
-					{
-					%>		
+					{%>		
 						<td width="10%" align="left" class="black_ar">&nbsp;</td>
                         <td  align="left" class="black_ar"><bean:message key="storageContainer.barcode" /></td>
-						<td width="30%" align="left"><html:text styleClass="formFieldSized10" maxlength="255"  size="30" styleId="barcode" property="barcode"/></td>
-						<td width="10%" align="left" class="black_ar">&nbsp;</td>
+						<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>" >
+							<td width="18%" align="left" class="black_ar_t">
+							<logic:equal name="storageContainerForm" property="isBarcodeEditable" value="<%=Constants.FALSE%>">
+							<%
+							if(form.getBarcode()!=null)
+							{%>
+								<label for="barcode">
+									<%=form.getBarcode()%>
+								</label>
+							<%}
+							else
+							{%>
+								<label for="barcode">
+								</label>
+							<%}%>
+							<html:hidden property="barcode"/>
+							</logic:equal>
+							<logic:notEqual name="storageContainerForm" property="isBarcodeEditable" value="<%=Constants.FALSE%>">
+							<html:text styleClass="formFieldSized10" maxlength="255"  size="30" styleId="barcode" property="barcode"/>
+							</logic:notEqual>
+							</td>
+							<td width="10%" align="left" class="black_ar">&nbsp;</td>
+						</tr>
+						</logic:equal>
+						<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>" >
+							<td width="30%" align="left"><html:text styleClass="formFieldSized10" maxlength="255"  size="30" styleId="barcode" property="barcode"/></td>
+						</logic:notEqual>
 					</tr>
 					<%
 					}

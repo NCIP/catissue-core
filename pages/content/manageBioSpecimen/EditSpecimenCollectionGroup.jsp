@@ -155,9 +155,32 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 				{%>
 					<td class="black_ar_t">&nbsp;</td>
 					<td align="left" valign="top" class="black_ar_t"><bean:message key="specimenCollectionGroup.barcode" /></td>
-					<td align="left" valign="top" nowrap><html:text styleClass="formFieldSizedSCG" size="30"  maxlength="255" styleId="barcode" property="barcode" /></td>
-								
-				<%}%>
+					<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>" >
+						<logic:equal name ="specimenCollectionGroupForm" property="isBarcodeEditable" value="<%=Constants.FALSE%>">	
+						<td width="18%" align="left" class="black_ar_t">
+							<%
+							if(form.getBarcode()!=null)
+							{%>
+								<label for="barcode">
+									<%=form.getBarcode()%>
+								</label>
+							<%}
+							else
+							{%>
+								<label for="barcode">
+								</label>
+							<%}%>
+						<html:hidden property="barcode"/>
+						</td>
+						</logic:equal>
+						<logic:notEqual name ="specimenCollectionGroupForm" property="isBarcodeEditable" value="<%=Constants.FALSE%>">
+						<td align="left" valign="top" nowrap><html:text styleClass="formFieldSizedSCG" size="30"  maxlength="255" styleId="barcode" property="barcode" /></td>
+						</logic:notEqual>			
+					</logic:equal>
+					<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>" >
+						<td align="left" valign="top" nowrap><html:text styleClass="formFieldSizedSCG" size="30"  maxlength="255" styleId="barcode" property="barcode" /></td>
+					</logic:notEqual>
+					<%}%>
 				</tr>
 				
 				<tr>

@@ -1009,7 +1009,7 @@
 								<html:hidden property="specimenCollectionGroupId"/>
 								<html:hidden property="checkedButton"/>
 								<html:hidden property="derivedClicked"/>
-
+								
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
 <logic:equal name="<%=Constants.PAGEOF%>" value="pageOfNewSpecimen">
 <tr>
@@ -1161,9 +1161,37 @@
 									<bean:message key="specimen.barcode"/>
 								</label>
 							</td>
-							<td align="left">
-								<html:text styleClass="black_ar" maxlength="255"  size="30" styleId="barcode" property="barcode" />
-							</td>
+							<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>" >
+								<logic:equal name="newSpecimenForm" property="isBarcodeEditable" value="<%=Constants.FALSE%>" >
+								<td width="34%" align="left" class="black_ar">
+								<%
+								if(form.getBarcode()!=null)
+								{
+								%>
+									<label for="barcode">
+										<%=form.getBarcode()%>
+									</label>
+								<%
+								}
+								else
+								{%>
+									<label for="barcode">
+									</label>
+								<%}%>
+								<html:hidden property="barcode" />
+								</td>
+								</logic:equal>
+								<logic:notEqual name="newSpecimenForm" property="isBarcodeEditable" value="<%=Constants.FALSE%>">
+								<td align="left">
+									<html:text styleClass="black_ar" maxlength="255"  size="30" styleId="barcode" property="barcode" />
+								</td>
+								</logic:notEqual>
+							</logic:equal>
+							<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>" >
+								<td align="left">
+									<html:text styleClass="black_ar" maxlength="255"  size="30" styleId="barcode" property="barcode" />
+								</td>
+							</logic:notEqual>
 						</tr>
 						
 				<%}
@@ -1281,7 +1309,7 @@
 										  optionsList = "<%=request.getAttribute(Constants.SPECIMEN_TYPE_MAP)%>"
 										  initialValue="<%=form.getType()%>" onChange="<%=subTypeFunctionName%>"
 										  readOnly="<%=readOnlyForAliquot%>" dependsOn="<%=form.getClassName()%>"
-										  size="27"
+										  size="25"
 										  styleClass="black_ar"
 										/>
 								</td>
@@ -1332,7 +1360,7 @@
 										optionsList = "<%=request.getAttribute(Constants.TISSUE_SIDE_LIST)%>"
 										initialValue="<%=form.getTissueSide()%>" readOnly="<%=readOnlyForAliquot%>"
 										styleClass="black_ar"
-										size="27"
+										size="25"
 										/>
 								</td>
 							</tr>
