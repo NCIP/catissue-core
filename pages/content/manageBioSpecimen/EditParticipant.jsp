@@ -733,12 +733,10 @@ function participantRegRow(subdivtag)
 						<td width="3%" align="left" class="black_ar_b">Select</td>
 						<td width="25%" align="left" class="black_ar_b"><bean:message
 							key="participant.collectionProtocolReg.protocolTitle" /></td>
-							<%if(!Variables.isProtocolParticipantIdentifierLabelGeneratorAvl) 
-							{%>
+							
 							<td width="13%" align="left" class="black_ar_b"><bean:message
 							key="participant.collectionProtocolReg.participantProtocolID" />
 							</td>
-							<%}%>
 						
 						<td width="25%" align="left" class="black_ar_b"><bean:message
 							key="participant.collectionProtocolReg.participantRegistrationDate" />
@@ -761,6 +759,8 @@ function participantRegRow(subdivtag)
 										+ i + "_protocolParticipantIdentifier)";
 										String barcode = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:"
 											+ i + "_barcode)";
+										String barcodeKey = "CollectionProtocolRegistration:"
+											+ i + "_barcode";
 										String collectionProtocolRegistrationDate = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:"
 										+ i + "_registrationDate)";
 										String collectionProtocolIdentifier = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:"
@@ -849,7 +849,7 @@ function participantRegRow(subdivtag)
  %>
 							</td>
 							<%if((!Variables.isProtocolParticipantIdentifierLabelGeneratorAvl) 
-									|| operation.equals(Constants.EDIT))
+									|| operation.equals(Constants.EDIT) || operation.equals(Constants.ADD))
 							{%>
 							<td align="left" class="black_ar"><html:text
 								styleClass="black_ar" size="10" maxlength="50"
@@ -858,12 +858,36 @@ function participantRegRow(subdivtag)
 							<%}%>
 							<%if((!Variables.isCollectionProtocolRegistrationBarcodeGeneratorAvl) 
 									|| operation.equals(Constants.EDIT))
-								{%>
-								<td align="left" class="black_ar"><html:text
-								styleClass="black_ar" size="10" maxlength="50"
-								styleId="<%=barcode%>"
-								property="<%=barcode%>" /></td>
-							<%}%>
+								{
+									if(operation.equals(Constants.EDIT))
+									{%>
+										<td align="left" class="black_ar">
+										<logic:equal name="participantForm" property="isBarcodeEditable" value="<%=Constants.FALSE%>">	
+										<%
+										if(form.getCollectionProtocolRegistrationValue(barcodeKey)!=null)
+										{%>
+											<label for="barcode" >
+											<%=form.getCollectionProtocolRegistrationValue(barcodeKey)%>
+											</label>									
+										<%}
+										else
+										{%>
+											<label for="barcode" >
+											</label>
+										<%}%>
+										<html:hidden property="<%=barcode%>" />
+										
+										</logic:equal>
+										<logic:notEqual name="participantForm" property="isBarcodeEditable" value="<%=Constants.FALSE%>">
+										<html:text styleClass="black_ar" size="10" maxlength="50" styleId="<%=barcode%>" property="<%=barcode%>" />
+										</logic:notEqual>
+										</td>
+									<%}
+									else
+									{%>
+										<td align="left" class="black_ar"><html:text styleClass="black_ar" size="10" maxlength="50" styleId="<%=barcode%>" property="<%=barcode%>" /></td>
+									<%}
+							}%>
 							<td align="left" class="black_ar"><html:text
 								styleClass="black_ar" size="10" maxlength="50"
 								styleId="<%=collectionProtocolRegistrationDate%>"
