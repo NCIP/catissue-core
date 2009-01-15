@@ -154,7 +154,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 		{Constants.DEFAULT_HISTOLOGICAL_QUALITY, Constants.CDE_NAME_HISTOLOGICAL_QUALITY},
 		{Constants.DEFAULT_VITAL_STATUS, Constants.CDE_VITAL_STATUS},
 		{Constants.DEFAULT_PRINTER_LOCATION,Constants.DEFAULT_PRINTER_LOCATION},
-		{Constants.DEFAULT_PRINTER_TYPE,Constants.DEFAULT_PRINTER_TYPE}
+		{Constants.DEFAULT_PRINTER_TYPE,Constants.DEFAULT_PRINTER_TYPE},
+		{Constants.IS_BARCODE_EDITABLE,Constants.NULL}
    };
    
 	//Constants added for Catissuecore V1.2
@@ -2601,4 +2602,7 @@ public static final String ADD_MULTIPLE_SPECIMEN_TO_CART="addMltipleSpecimenToCa
 	public static final String FORMAT_FILE_EXTENTION = "_FormatFile.txt";
 	public static final String MSSQLSERVER_NUM_TO_STR_FUNCTION_NAME_FOR_LABEL_GENRATION="CAST(label as numeric(19))";
 	public static final String MSSQLSERVER_MAX_BARCODE_COL="CAST(barcode as numeric(19))";
+	
+	//Constants for barcode editable
+	public static final String IS_BARCODE_EDITABLE = "barcode.isEditable";
 }
