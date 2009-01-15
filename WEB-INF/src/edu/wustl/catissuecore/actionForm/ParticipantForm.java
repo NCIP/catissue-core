@@ -94,6 +94,10 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 	protected String genotype = (String) DefaultValueManager.getDefaultValue(Constants.DEFAULT_GENOTYPE);
 
 	/**
+	 * The string to determine if barcode field is editable
+	 */
+	private String isBarcodeEditable = (String) DefaultValueManager.getDefaultValue(Constants.IS_BARCODE_EDITABLE);
+	/**
 	 * Social Security Number of the Participant.
 	 */
 	protected String socialSecurityNumberPartA = "";
@@ -203,7 +207,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 		this.lastName = Utility.toString(participant.getLastName());
 		this.firstName = Utility.toString(participant.getFirstName());
 		this.middleName = Utility.toString(participant.getMiddleName());
-		this.birthDate = Utility.parseDateToString(participant.getBirthDate(),Variables.dateFormat);
+		this.birthDate = Utility.parseDateToString(participant.getBirthDate(), Variables.dateFormat);
 		this.gender = participant.getGender();
 		this.genotype = participant.getSexGenotype();
 		setSSN(participant.getSocialSecurityNumber());
@@ -220,7 +224,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 				Race race = (Race) it.next();
 				if (race != null)
 				{
-				//	String raceName = race.getRaceName();
+					//	String raceName = race.getRaceName();
 					this.raceTypes[i] = race.getRaceName();
 					i++;
 				}
@@ -230,8 +234,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 		//        this.race = participant.getRace();
 		this.activityStatus = participant.getActivityStatus();
 		this.ethnicity = participant.getEthnicity();
-		this.deathDate = Utility.parseDateToString(participant.getDeathDate(), Variables.dateFormat);
-		;
+		this.deathDate = Utility.parseDateToString(participant.getDeathDate(), Variables.dateFormat);;
 		this.vitalStatus = participant.getVitalStatus();
 
 		//Populating the map with the participant medical identifiers data 
@@ -355,8 +358,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 				witnessId = consentWitness.getId();
 			}
 
-			String consentSignatureDate = Utility.parseDateToString(collectionProtocolRegistration.getConsentSignatureDate(),
-					Variables.dateFormat);
+			String consentSignatureDate = Utility.parseDateToString(collectionProtocolRegistration.getConsentSignatureDate(), Variables.dateFormat);
 			Collection consentResponseCollection = collectionProtocolRegistration.getConsentTierResponseCollection();
 			Collection consentResponse;
 
@@ -1100,14 +1102,38 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 		return consentResponseBeanCollection;
 	}
 
+	/**
+	 * 
+	 * @param consentResponseBeanCollection Consent Response Collection entered by the user
+	 */
 	public void setConsentResponseBeanCollection(Collection<ConsentResponseBean> consentResponseBeanCollection)
 	{
 		this.consentResponseBeanCollection = consentResponseBeanCollection;
 	}
 
+	/**
+	 * 
+	 * @param consentResponseHashTable Consent Response HashTable entered by the user
+	 */
 	public void setConsentResponseHashTable(Hashtable consentResponseHashTable)
 	{
 		this.consentResponseHashTable = consentResponseHashTable;
+	}
+
+	/**
+	 * @return isBarcodeEditable
+	 */
+	public String getIsBarcodeEditable()
+	{
+		return isBarcodeEditable;
+	}
+
+	/** 
+	 * @param isBarcodeEditable Setter method for isBarcodeEditable
+	 */
+	public void setIsBarcodeEditable(String isBarcodeEditable)
+	{
+		this.isBarcodeEditable = isBarcodeEditable;
 	}
 
 }
