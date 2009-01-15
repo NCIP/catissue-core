@@ -15,6 +15,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -38,53 +39,36 @@ public class PrintXMLParser {
 	
 	/*return the LinkedHashMap of the XML data that is send by the client*/
 	
-	public LinkedHashMap getPrintMap(String  xml)throws Exception
+	public Map getPrintMap(final String xml) throws SAXException,IOException,ParserConfigurationException
 	{
 	   
 		PrintXMLParser.init(xml);
-		LinkedHashMap objMap = PrintXMLParser.getMap();
+		Map objMap = PrintXMLParser.getMap();
 		return objMap;
 		
 	}
-	public static void init(String xml) throws Exception
+	public static void init(final String xml) throws SAXException,IOException,ParserConfigurationException
 	{
+
+		final DocumentBuilderFactory dbfactory = DocumentBuilderFactory.newInstance();
+		final StringBuffer StringBuffer1 = new StringBuffer(xml);
+		final ByteArrayInputStream Bis1 = new ByteArrayInputStream(StringBuffer1.toString().getBytes("UTF-8"));
+		DocumentBuilder dbuilder = dbfactory.newDocumentBuilder();// throws
+		// ParserConfigurationException
+		if (xml != null)
+		{
+			document = dbuilder.parse(Bis1);
+			// throws SAXException,IOException,IllegalArgumentException(if path is null
+		}
 		
-		DocumentBuilderFactory dbfactory = DocumentBuilderFactory.newInstance();
-		try
-		{
-			StringBuffer StringBuffer1 = new StringBuffer(xml);
-			ByteArrayInputStream Bis1 = new ByteArrayInputStream(StringBuffer1.toString().getBytes("UTF-8"));
-			DocumentBuilder dbuilder = dbfactory.newDocumentBuilder();// throws
-			// ParserConfigurationException
-			if (xml != null)
-			{
-				document = dbuilder.parse(Bis1);
-				// throws SAXException,IOException,IllegalArgumentException(if path is null
-			}
-		}
-		catch (SAXException e)
-		{
-			
-			throw e;
-		}
-		catch (IOException e)
-		{
-			
-			throw e;
-		}
-		catch (ParserConfigurationException e)
-		{
-			
-			throw e;
-		}
 	}
 
 	
 
-	public static LinkedHashMap getMap()
+	public static Map getMap()
 	{
 		
-		LinkedHashMap objMap = new LinkedHashMap();
+		Map objMap = new LinkedHashMap();
 		
 		// it gives the rootNode of the xml file
 		Element root = document.getDocumentElement();
@@ -110,13 +94,15 @@ public class PrintXMLParser {
 				    for (int k=0; k<numAttrs; k++) 
 				    {
 				        Attr attr = (Attr)map.item(k);	
-				        System.out.println(attr);
-				      
 				        String attrValue = attr.getNodeValue();
 				        if(mapKey!=null)
+				        {
 				        	mapKey = mapKey+"_"+attrValue;
+				        }
 				        else
+				        {
 				        	mapKey = attrValue;
+				        }
 				    }
 				    
 				}
