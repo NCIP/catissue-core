@@ -11,7 +11,7 @@
 package edu.wustl.catissuecore.webservice.client;
 
 import java.util.LinkedHashMap;
-
+import java.util.Map;
 import edu.wustl.webservice.catissuecore.print.PrintServiceClient;
 import edu.wustl.webservice.catissuecore.print.PrintXMLParser;
 
@@ -26,21 +26,19 @@ public class WashUPrintServiceClient implements PrintServiceClient{
 	{
 		try 
 		{
-			LinkedHashMap objMap = pxp.getPrintMap(xmlFormat);
+			Map objMap = pxp.getPrintMap(xmlFormat);
 			printDomainObject(objMap);
 			return "--from WS--Printing Successfully ---";
 
 		}
 		catch (Exception e) 
 		{
-		
-		
 			return "Printing Failed";
 		}
 	}
 
 	
-	void printDomainObject(LinkedHashMap obj) {
+	void printDomainObject(Map obj) {
 		System.out.println(obj);
 		// class =spe
 		// id=12
