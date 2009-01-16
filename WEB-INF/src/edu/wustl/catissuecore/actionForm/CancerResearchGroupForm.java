@@ -32,6 +32,11 @@ import edu.wustl.common.util.logger.Logger;
 public class CancerResearchGroupForm extends AbstractActionForm
 {
 	private static final long serialVersionUID = 1L;
+	/**
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(ClinicalStudyRegistrationForm.class);
+
     /**
      * Name of the CancerResearchGroup.
      */
@@ -120,7 +125,7 @@ public class CancerResearchGroupForm extends AbstractActionForm
         }
         catch(Exception excp)
         {
-            Logger.out.error(excp.getMessage(),excp);
+            logger.error(excp.getMessage(),excp);
         }
         return errors;
      }

@@ -33,6 +33,11 @@ public class CellSpecimenReviewParametersForm extends SpecimenEventParametersFor
 {
 	private static final long serialVersionUID = 1L;
 	/**
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(ClinicalStudyRegistrationForm.class);
+
+	/**
      * Percentage of histologically evident neoplastic cells present in the specimen.
      */
 	protected String neoplasticCellularityPercentage;
@@ -130,7 +135,7 @@ public class CellSpecimenReviewParametersForm extends SpecimenEventParametersFor
          }
          catch(Exception excp)
          {
-             Logger.out.error(excp.getMessage());
+             logger.error(excp.getMessage());
          }
          return errors;
       }

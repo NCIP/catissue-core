@@ -34,7 +34,11 @@ public class CheckInCheckOutEventParametersForm extends SpecimenEventParametersF
 	 * Type of the movement e.g. Check-in or Check-out.
 	 */
 	protected String storageStatus;
-	
+	/**
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(ClinicalStudyRegistrationForm.class);
+
 	
 	
 	/**
@@ -100,7 +104,7 @@ public class CheckInCheckOutEventParametersForm extends SpecimenEventParametersF
          }
          catch(Exception excp)
          {
-             Logger.out.error(excp.getMessage());
+             logger.error(excp.getMessage());
          }
          return errors;
       }
