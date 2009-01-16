@@ -858,9 +858,7 @@ function participantRegRow(subdivtag)
 							<%}%>
 							<%if((!Variables.isCollectionProtocolRegistrationBarcodeGeneratorAvl) 
 									|| operation.equals(Constants.EDIT))
-								{
-									if(operation.equals(Constants.EDIT))
-									{%>
+								{%>
 										<td align="left" class="black_ar">
 										<logic:equal name="participantForm" property="isBarcodeEditable" value="<%=Constants.FALSE%>">	
 										<%
@@ -882,11 +880,7 @@ function participantRegRow(subdivtag)
 										<html:text styleClass="black_ar" size="10" maxlength="50" styleId="<%=barcode%>" property="<%=barcode%>" />
 										</logic:notEqual>
 										</td>
-									<%}
-									else
-									{%>
-										<td align="left" class="black_ar"><html:text styleClass="black_ar" size="10" maxlength="50" styleId="<%=barcode%>" property="<%=barcode%>" /></td>
-									<%}
+									<%
 							}%>
 							<td align="left" class="black_ar"><html:text
 								styleClass="black_ar" size="10" maxlength="50"
