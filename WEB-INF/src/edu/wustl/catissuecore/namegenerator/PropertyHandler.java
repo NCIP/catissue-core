@@ -1,6 +1,3 @@
-/**
- * 
- */
 package edu.wustl.catissuecore.namegenerator;
 
 import java.io.File;
@@ -15,34 +12,34 @@ import edu.wustl.catissuecore.util.global.Variables;
  * @author abhijit_naik
  *
  */
-public class PropertyHandler {
-
+public class PropertyHandler
+{
+	/**
+	 * Name generator properties.
+	 */
 	private static Properties nameGeneratorProperties = null;
-
 
 	/**
 	 * Load the Properties file.
-	 * @param path
-	 * @throws Exception
+	 * @param path Path
+	 * @throws Exception Generic exception
 	 */
 	public static void init(String path) throws Exception
 	{
-		String absolutePath=Variables.propertiesDirPath +File.separator+path;
-		InputStream inpurStream= new FileInputStream(new File(absolutePath));
+		String absolutePath = Variables.propertiesDirPath + File.separator + path;
+		InputStream inpurStream = new FileInputStream(new File(absolutePath));
 		nameGeneratorProperties = new Properties();
-		nameGeneratorProperties.load(inpurStream);		
+		nameGeneratorProperties.load(inpurStream);
 	}
-	
 
 	/**
 	 * Description:This method takes the property name as String argument and
-	 * returns the properties value as String. 
-	 * 
-	 * @param propertyName
+	 * returns the properties value as String.
+	 * @param propertyName Property Name
 	 * @return String
-	 * @throws Exception
+	 * @throws Exception Generic exception
 	 */
-	 
+
 	public static String getValue(String propertyName) throws Exception
 	{
 
@@ -50,7 +47,7 @@ public class PropertyHandler {
 		{
 			init("LabelGenerator.Properties");
 		}
-		return (String)nameGeneratorProperties.get(propertyName);
+		return (String) nameGeneratorProperties.get(propertyName);
 
 	}
 }

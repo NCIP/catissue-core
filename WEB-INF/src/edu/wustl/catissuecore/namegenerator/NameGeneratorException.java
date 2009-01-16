@@ -1,29 +1,33 @@
-/**
- * 
- */
 package edu.wustl.catissuecore.namegenerator;
 
 /**
- * This is the Exception clas related to NameGenerator. 
+ * This is the Exception class related to NameGenerator.
  * @author abhijit_naik
  *
  */
-public class NameGeneratorException extends Exception {
+public class NameGeneratorException extends Exception
+{
 
 	/**
-	 * @param string
+	 * Serial Version UID.
 	 */
-	public NameGeneratorException(String string) {
+	private static final long serialVersionUID = 2047363018172163498L;
+
+	/**
+	 * @param string String
+	 */
+	public NameGeneratorException(String string)
+	{
 		super(string);
 	}
-	
+
 	/**
-	 * @param string
-	 * @param th
+	 * @param string String
+	 * @param th Class that is superclass of all errors
 	 */
-	public NameGeneratorException(String string, Throwable th) {
-		super(string,th);
+	public NameGeneratorException(String string, Throwable th)
+	{
+		super(string, th);
 	}
-	
-	
+
 }

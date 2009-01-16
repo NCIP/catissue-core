@@ -1,61 +1,68 @@
+
 package edu.wustl.catissuecore.namegenerator;
 
 import java.util.HashMap;
 
 /**
- * This is the factory Class to retrieve singleton instance of LabelGenerator
- * 
+ * This is the factory Class to retrieve singleton instance of LabelGenerator.
  * @author Falguni_Sachde
  */
-public class LabelGeneratorFactory 
+public class LabelGeneratorFactory
 {
-	
+
 	/**
-	 * Singleton instance of SpecimenLabelGenerator
-     */
-	 private static HashMap labelgeneratorMap = new HashMap() ;
-	
+	 * Singleton instance of SpecimenLabelGenerator.
+	 */
+	private static HashMap<String,Object> labelgeneratorMap = new HashMap<String, Object>();
+
 	/**
-	 * Get singleton instance of SpecimenLabelGenerator. The class name of an instance is picked up from properties file
-	 * @param generatorType Property key name for specific Object's  Label generator class (eg.specimenLabelGeneratorClass)
+	 * Get singleton instance of SpecimenLabelGenerator.
+	 * The class name of an instance is picked up from properties file
+	 * @param generatorType Property key name for specific Object's
+	 * Label generator class (eg.specimenLabelGeneratorClass)
 	 * @return LabelGenerator
-	 * @throws NameGeneratorException
+	 * @throws NameGeneratorException NameGeneratorException
 	 */
 	public static LabelGenerator getInstance(String generatorType) throws NameGeneratorException
 	{
 		try
 		{
 
-			if(labelgeneratorMap.get(generatorType) == null)
+			if (labelgeneratorMap.get(generatorType) == null)
 			{
-				
+
 				String className = PropertyHandler.getValue(generatorType);
-				if(className!=null)
+				if (className != null)
 				{
-					labelgeneratorMap.put(generatorType,Class.forName(className).newInstance());
+					labelgeneratorMap.put
+					(generatorType, Class.forName(className).newInstance());
 				}
 				else
-				{	
+				{
 					return null;
 				}
 			}
-			
-			return (LabelGenerator)labelgeneratorMap.get(generatorType);
+
+			return (LabelGenerator) labelgeneratorMap.get(generatorType);
 		}
-		catch(IllegalAccessException e)
+		catch (IllegalAccessException e)
 		{
-			throw new NameGeneratorException("Could not create LabelGenerator instance: " +e.getMessage());			
+			throw new NameGeneratorException
+			("Could not create LabelGenerator instance: "+ e.getMessage());
 		}
-		catch(InstantiationException e)
+		catch (InstantiationException e)
 		{
-			throw new NameGeneratorException("Could not create LabelGenerator instance: " +e.getMessage());			
+			throw new NameGeneratorException
+			("Could not create LabelGenerator instance: "+ e.getMessage());
 		}
-		catch(ClassNotFoundException e)
+		catch (ClassNotFoundException e)
 		{
-			throw new NameGeneratorException("Could not create LabelGenerator instance: " +e.getMessage());			
-		}catch(Exception ex)
+			throw new NameGeneratorException
+			("Could not create LabelGenerator instance: "+ e.getMessage());
+		}
+		catch (Exception ex)
 		{
-			throw new NameGeneratorException(ex.getMessage(),ex);
+			throw new NameGeneratorException(ex.getMessage(), ex);
 		}
 	}
 }

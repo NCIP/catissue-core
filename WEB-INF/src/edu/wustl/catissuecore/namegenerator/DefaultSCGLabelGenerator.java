@@ -16,31 +16,31 @@ import edu.wustl.catissuecore.util.global.Constants;
 
 
 /**
- * This  class contains the default implementation for SpecimenCollectionGroup Label generation.  
+ * This  class contains the default implementation for SpecimenCollectionGroup Label generation.
  * @author Abhijit_Naik
  */
 public class DefaultSCGLabelGenerator implements LabelGenerator
 {
 	/**
-	 * Current label 
+	 * Current label.
 	 */
 	protected Long currentLabel;
 	/**
-	 * Datasource Name
+	 * Datasource Name.
 	 */
 	String DATASOURCE_JNDI_NAME = "java:/catissuecore";
 	/**
-	 * Default Constructor
+	 * Default Constructor.
 	 */
 	public DefaultSCGLabelGenerator()
 	{
 		super();
 		init();
 	}
-	
+
 	/**
-	 * This is a init() function it is called from the default constructor of Base class.When getInstance of base class
-	 * called then this init function will be called.
+	 * This is a init() function it is called from the default constructor of Base class.
+	 * When getInstance of base class called then this init function will be called.
 	 * This method will first check the Datatbase Name and then set function name that will convert
 	 * lable from int to String
 	 */
@@ -48,13 +48,11 @@ public class DefaultSCGLabelGenerator implements LabelGenerator
 	{
 		currentLabel = getLastAvailableSCGLabel(null);
 	}
-	
-	
 	/**
-	 * @param databaseConstant
+	 * @param databaseConstant databaseConstant
 	 * @return noOfRecords
 	 */
-	private Long getLastAvailableSCGLabel(String databaseConstant)  
+	private Long getLastAvailableSCGLabel(String databaseConstant)
 	{
 		Long noOfRecords = new Long("0");
 		String sql = "Select max(IDENTIFIER) as MAX_IDENTIFIER from CATISSUE_ABS_SPECI_COLL_GROUP";
@@ -65,14 +63,14 @@ public class DefaultSCGLabelGenerator implements LabelGenerator
         	DataSource ds = (DataSource)ctx.lookup(DATASOURCE_JNDI_NAME);
         	conn = ds.getConnection();
         	ResultSet resultSet= conn.createStatement().executeQuery(sql);
-        	
         	if(resultSet.next())
         	{
         		return new Long (resultSet.getLong(1));
-        	}	        
+        	}
 
-		}	
-        catch(NamingException e){
+		}
+        catch(NamingException e)
+        {
         	e.printStackTrace();
         }
         catch(SQLException ex)
@@ -83,54 +81,56 @@ public class DefaultSCGLabelGenerator implements LabelGenerator
         {
         	if (conn!=null)
         	{
-        		try {
+        		try
+        		{
 					conn.close();
-				} catch (SQLException exception) {
-					
+				}
+        		catch (SQLException exception)
+        		{
 					exception.printStackTrace();
 				}
         	}
         }
- 
+
 		return noOfRecords;
 	}
-
-	
-	/* (non-Javadoc)
-	 * @see edu.wustl.catissuecore.namegenerator.LabelGenerator#setLabel(java.lang.Object)
+	/**
+	 * Set label.
+	 * @param obj SCG barcode
 	 */
-	public void setLabel(Object obj) 
+	public void setLabel(Object obj)
 	{
-		SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup)obj;
-		CollectionProtocolRegistration collectionProtocolRegistration = specimenCollectionGroup.getCollectionProtocolRegistration();
-		CollectionProtocol collectionProtocol = collectionProtocolRegistration.getCollectionProtocol();
-		long participantId = collectionProtocolRegistration.getParticipant().getId();
-		String collectionProtocolTitle=collectionProtocol.getTitle();
-		String maxCollTitle = collectionProtocolTitle;
-		if(collectionProtocolTitle.length()>Constants.COLLECTION_PROTOCOL_TITLE_LENGTH)
+		SpecimenCollectionGroup scg = (SpecimenCollectionGroup)obj;
+		CollectionProtocolRegistration cpr = scg.getCollectionProtocolRegistration();
+		CollectionProtocol collectionProtocol = cpr.getCollectionProtocol();
+		long participantId = cpr.getParticipant().getId();
+		String cpTitle=collectionProtocol.getTitle();
+		String maxCollTitle = cpTitle;
+		if(cpTitle.length()>Constants.COLLECTION_PROTOCOL_TITLE_LENGTH)
 		{
-			maxCollTitle = collectionProtocolTitle.substring(0,Constants.COLLECTION_PROTOCOL_TITLE_LENGTH-1);
+			maxCollTitle = cpTitle.substring(0,Constants.COLLECTION_PROTOCOL_TITLE_LENGTH-1);
 		}
 		currentLabel++;
-		specimenCollectionGroup.setName(maxCollTitle+"_"+participantId+"_"+currentLabel);
+		scg.setName(maxCollTitle+"_"+participantId+"_"+currentLabel);
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.wustl.catissuecore.namegenerator.LabelGenerator#setLabel(java.util.List)
+	/**
+	 * Setting label.
+	 * @param objSpecimenList scg obj list
 	 */
-	public void setLabel(List objSpecimenList) {
-
+	public void setLabel(List objSpecimenList)
+	{
 		//Not required in case of SCG -As only individual SCG will be labelled.
 	}
-	
 	/**
-	 * Returns label for the given domain object
+	 * Returns label for the given domain object.
+	 * @return scg name
+	 * @param obj SCG Object
 	 */
-	public String getLabel(Object obj) 
+	public String getLabel(Object obj)
 	{
 		SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup)obj;
 		setLabel(specimenCollectionGroup);
-		
 		return (specimenCollectionGroup.getName());
-	}	
+	}
 }

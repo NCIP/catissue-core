@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.namegenerator;
 
 import java.sql.Connection;
@@ -23,23 +24,27 @@ import edu.wustl.catissuecore.util.global.Variables;
  */
 public class DefaultSpecimenLabelGenerator implements LabelGenerator
 {
+
 	/**
-	 * Current label 
+	 * Current label.
 	 */
 	protected Long currentLabel;
 	/**
-	 * Datasource Name
+	 * Datasource Name.
 	 */
 	String DATASOURCE_JNDI_NAME = "java:/catissuecore";
+
 	/**
-	 * Default Constructor
+	 * Default Constructor.
 	 */
 	public DefaultSpecimenLabelGenerator()
 	{
 		init();
-	}	
+	}
+
 	/**
-	 * This is a init() function it is called from the default constructor of Base class.When getInstance of base class
+	 * This is a init() function it is called from the
+	 * default constructor of Base class.When getInstance of base class
 	 * called then this init function will be called.
 	 * This method will first check the Datatbase Name and then set function name that will convert
 	 * lable from int to String
@@ -48,9 +53,10 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 	{
 		try
 		{
-			if(Constants.ORACLE_DATABASE.equals(Variables.databaseName))
+			if (Constants.ORACLE_DATABASE.equals(Variables.databaseName))
 			{
-				currentLabel = getLastAvailableSpecimenLabel(Constants.ORACLE_NUM_TO_STR_FUNCTION_NAME_FOR_LABEL_GENRATION);
+				currentLabel = getLastAvailableSpecimenLabel
+				(Constants.ORACLE_NUM_TO_STR_FUNCTION_NAME_FOR_LABEL_GENRATION);
 			}
 			else if (Constants.MSSQLSERVER_DATABASE.equals(Variables.databaseName))
 			{
@@ -58,82 +64,90 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 			}
 			else
 			{
-				currentLabel = getLastAvailableSpecimenLabel(Constants.MYSQL_NUM_TO_STR_FUNCTION_NAME_FOR_LABEL_GENRATION);
+				currentLabel = getLastAvailableSpecimenLabel
+				(Constants.MYSQL_NUM_TO_STR_FUNCTION_NAME_FOR_LABEL_GENRATION);
 			}
-		}catch(Exception ex)
+		}
+		catch (Exception ex)
 		{
 			ex.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * This method will retrive unique specimen Lable.
-	 * @param databaseConstant
+	 * @param databaseConstant constant
 	 * @return noOfRecords
 	 */
-	private Long getLastAvailableSpecimenLabel(String databaseConstant)  
+	private Long getLastAvailableSpecimenLabel(String databaseConstant)
 	{
-		String sql = "select MAX("+databaseConstant+") from CATISSUE_SPECIMEN";
- 		Connection conn = null;
-        Long noOfRecords = new Long("0");
-        try
+		String sql = "select MAX(" + databaseConstant + ") from CATISSUE_SPECIMEN";
+		Connection conn = null;
+		Long noOfRecords = new Long("0");
+		try
 		{
-        	InitialContext ctx = new InitialContext();
-        	DataSource ds = (DataSource)ctx.lookup(DATASOURCE_JNDI_NAME);
-        	conn = ds.getConnection();
-        	ResultSet resultSet= conn.createStatement().executeQuery(sql);
-        	
-        	if(resultSet.next())
-        	{
-        		return new Long (resultSet.getLong(1));
-        	}	        
+			InitialContext ctx = new InitialContext();
+			DataSource ds = (DataSource) ctx.lookup(DATASOURCE_JNDI_NAME);
+			conn = ds.getConnection();
+			ResultSet resultSet = conn.createStatement().executeQuery(sql);
+
+			if (resultSet.next())
+			{
+				return new Long(resultSet.getLong(1));
+			}
 		}
-        catch(NamingException e){
-        	e.printStackTrace();
-        }
-        catch(SQLException ex)
-        {
-        	ex.printStackTrace();
-        }
-        finally
-        {
-        	if (conn!=null)
-        	{
-        		try {
+		catch (NamingException e)
+		{
+			e.printStackTrace();
+		}
+		catch (SQLException ex)
+		{
+			ex.printStackTrace();
+		}
+		finally
+		{
+			if (conn != null)
+			{
+				try
+				{
 					conn.close();
-				} catch (SQLException exception) {
+				}
+				catch (SQLException exception)
+				{
 					// TODO Auto-generated catch block
 					exception.printStackTrace();
 				}
-        	}
-        }
-        return noOfRecords;
+			}
+		}
+		return noOfRecords;
 	}
 
-	
 	/**
-	 * @param parentObject
-	 * @param specimenObject
+	 * @param parentObject parent object
+	 * @param specimenObject specimen obj
 	 */
-	synchronized  void setNextAvailableAliquotSpecimenlabel(Specimen parentObject,Specimen specimenObject) {
-				
+	synchronized void setNextAvailableAliquotSpecimenlabel(Specimen parentObject,
+			Specimen specimenObject)
+	{
+
 		String parentSpecimenLabel = (String) parentObject.getLabel();
 		long aliquotCount = parentObject.getChildSpecimenCollection().size();
 		aliquotCount = aliquotCount(parentObject, aliquotCount);
-		specimenObject.setLabel( parentSpecimenLabel + "_" + (aliquotCount) );
+		specimenObject.setLabel(parentSpecimenLabel + "_" + (aliquotCount));
 	}
+
 	/**
-	 * @param parentObject
-	 * @param aliquotCount
-	 * @return
+	 * @param parentObject parent object
+	 * @param aliquotCount aliquot count
+	 * @return aliquotCount
 	 */
 	protected long aliquotCount(AbstractSpecimen parentObject, long aliquotCount)
 	{
-		Iterator itr = parentObject.getChildSpecimenCollection().iterator();
-		while(itr.hasNext())
+		Iterator<AbstractSpecimen> itr = parentObject.getChildSpecimenCollection().iterator();
+		while (itr.hasNext())
 		{
-			Specimen spec = (Specimen)itr.next();
-			if(spec.getLineage().equals(Constants.DERIVED_SPECIMEN) || spec.getLabel()==null)
+			Specimen spec = (Specimen) itr.next();
+			if (spec.getLineage().equals(Constants.DERIVED_SPECIMEN) || spec.getLabel() == null)
 			{
 				aliquotCount--;
 			}
@@ -141,78 +155,83 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 		aliquotCount++;
 		return aliquotCount;
 	}
+
 	/**
-	 * @param parentObject
-	 * @param specimenObject
+	 * @param parentObject parent obj
+	 * @param specimenObject specimen obj
 	 */
-	synchronized void setNextAvailableDeriveSpecimenlabel(Specimen parentObject, Specimen specimenObject)
+	synchronized void setNextAvailableDeriveSpecimenlabel(Specimen parentObject,
+			Specimen specimenObject)
 	{
-		currentLabel= currentLabel+1;
+		currentLabel = currentLabel + 1;
 		specimenObject.setLabel(currentLabel.toString());
 	}
-	
-	
-	
-	/* (non-Javadoc)
-	 * @see edu.wustl.catissuecore.namegenerator.LabelGenerator#setLabel(edu.wustl.common.domain.AbstractDomainObject)
+
+	/**
+	 * Setting label.
+	 * @param obj Specimen object
 	 */
-	public synchronized void setLabel(Object obj) {
-		
-		Specimen objSpecimen = (Specimen)obj;
-		Specimen parentSpecimen = (Specimen)objSpecimen.getParentSpecimen();
+	public synchronized void setLabel(Object obj)
+	{
+
+		Specimen objSpecimen = (Specimen) obj;
+		Specimen parentSpecimen = (Specimen) objSpecimen.getParentSpecimen();
 		if (objSpecimen.getLabel() != null)
 		{
 			return;
 		}
-		
-		if(objSpecimen.getLineage().equals(Constants.NEW_SPECIMEN))				
+
+		if (objSpecimen.getLineage().equals(Constants.NEW_SPECIMEN))
 		{
-			currentLabel ++;
+			currentLabel++;
 			objSpecimen.setLabel(currentLabel.toString());
 		}
-		else if(objSpecimen.getLineage().equals(Constants.ALIQUOT))				
+		else if (objSpecimen.getLineage().equals(Constants.ALIQUOT))
 		{
-			this.setNextAvailableAliquotSpecimenlabel(parentSpecimen,objSpecimen);
+			this.setNextAvailableAliquotSpecimenlabel(parentSpecimen, objSpecimen);
 		}
-		else if(objSpecimen.getLineage().equals(Constants.DERIVED_SPECIMEN))				
+		else if (objSpecimen.getLineage().equals(Constants.DERIVED_SPECIMEN))
 		{
-			setNextAvailableDeriveSpecimenlabel(parentSpecimen,objSpecimen);
+			setNextAvailableDeriveSpecimenlabel(parentSpecimen, objSpecimen);
 		}
-		
-		if(objSpecimen.getChildSpecimenCollection().size()>0)
+
+		if (objSpecimen.getChildSpecimenCollection().size() > 0)
 		{
-			Collection specimenCollection = objSpecimen.getChildSpecimenCollection();
-			Iterator it = specimenCollection.iterator();
-			while(it.hasNext())
+			Collection<AbstractSpecimen> specimenCollection = objSpecimen.getChildSpecimenCollection();
+			Iterator<AbstractSpecimen> it = specimenCollection.iterator();
+			while (it.hasNext())
 			{
-				Specimen objChildSpecimen = (Specimen)it.next();
+				Specimen objChildSpecimen = (Specimen) it.next();
 				setLabel(objChildSpecimen);
 			}
-		}	
+		}
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.wustl.catissuecore.namegenerator.LabelGenerator#setLabel(java.util.List)
+	/**
+	 * Setting Label.
+	 * @param objSpecimenList Specimen object list
 	 */
-	public synchronized void setLabel(List objSpecimenList) {
+	public synchronized void setLabel(List objSpecimenList)
+	{
 
 		List specimenList = objSpecimenList;
-		for (int index=0;index <specimenList.size();index++) 
+		for (int index = 0; index < specimenList.size(); index++)
 		{
-			Specimen objSpecimen = (Specimen)specimenList.get(index);
+			Specimen objSpecimen = (Specimen) specimenList.get(index);
 			setLabel(objSpecimen);
 		}
-		
+
 	}
-	
+
 	/**
-	 * Returns label for the given domain object
+	 * Returns label for the given domain object.
+	 * @param obj Specimen obj
+	 * @return label
 	 */
-	public String getLabel(Object obj) 
+	public String getLabel(Object obj)
 	{
-		Specimen objSpecimen = (Specimen)obj;
+		Specimen objSpecimen = (Specimen) obj;
 		setLabel(objSpecimen);
-		
 		return (objSpecimen.getLabel());
-	}	
+	}
 }

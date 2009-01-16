@@ -2,23 +2,24 @@ package edu.wustl.catissuecore.namegenerator;
 
 import java.util.HashMap;
 /**
- * This is the factory Class to retrieve singleton instance of BarcodeGenerator 
- * 
+ * This is the factory Class to retrieve singleton instance of BarcodeGenerator.
+ *
  * @author Falguni_Sachde
  */
-public class BarcodeGeneratorFactory 
+public class BarcodeGeneratorFactory
 {
-	
 	/**
-	 * Singleton instance of BarcodeGenerator
+	 * Singleton instance of BarcodeGenerator.
      */
     private static HashMap<String,Object> generatorMap = new HashMap<String, Object>() ;
-	
+
 	/**
-	 * Get singleton instance of BarcodeGenerator. The class name of an instance is picked up from properties file
-	 * @param generatorType  Property key name for specific Object's  Barcode generator class (eg.specimenBarcodeGeneratorClass)
-	 * @return BarcodeGenerator
-	 * @throws NameGeneratorException 
+	 * Get singleton instance of BarcodeGenerator.
+	 * The class name of an instance is picked up from properties file
+	 * @param generatorType  Property key name for specific Object's
+	 * Barcode generator class (eg.specimenBarcodeGeneratorClass)
+	 * @return BarcodeGenerator BarcodeGenerator
+	 * @throws NameGeneratorException  NameGeneratorException
 	 */
 	public static BarcodeGenerator getInstance(String generatorType) throws NameGeneratorException
 	{
@@ -32,7 +33,7 @@ public class BarcodeGeneratorFactory
 					generatorMap.put(generatorType,Class.forName(className).newInstance());
 				}
 				else
-				{	
+				{
 					return null;
 				}
 			}
@@ -41,15 +42,17 @@ public class BarcodeGeneratorFactory
 		catch(IllegalAccessException e)
 		{
 			throw new NameGeneratorException
-			("Could not create BarcodeGenerator instance: " +e.getMessage());			
+			("Could not create BarcodeGenerator instance: " +e.getMessage());
 		}
 		catch(InstantiationException e)
 		{
-			throw new NameGeneratorException("Could not create BarcodeGenerator instance: " +e.getMessage());			
+			throw new NameGeneratorException
+			("Could not create BarcodeGenerator instance: " +e.getMessage());
 		}
 		catch(ClassNotFoundException e)
 		{
-			throw new NameGeneratorException("Could not create BarcodeGenerator instance: " +e.getMessage());			
+			throw new NameGeneratorException
+			("Could not create BarcodeGenerator instance: " +e.getMessage());
 		}
 		catch(Exception ex)
 		{

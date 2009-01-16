@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.namegenerator;
 
 import java.sql.Connection;
@@ -11,7 +12,6 @@ import javax.sql.DataSource;
 
 import edu.wustl.catissuecore.domain.StorageContainer;
 
-
 /**
  * This  class which contains the default StorageContainer barcode implementation.
  * @author falguni_sachde
@@ -19,25 +19,28 @@ import edu.wustl.catissuecore.domain.StorageContainer;
  */
 public class DefaultStorageContainerBarcodeGenerator implements BarcodeGenerator
 {
+
 	/**
-	 * Current label 
+	 * Current label.
 	 */
-	protected Long currentBarcode ;
+	protected Long currentBarcode;
 	/**
-	 * Datasource Name
+	 * Datasource Name.
 	 */
 	String DATASOURCE_JNDI_NAME = "java:/catissuecore";
+
 	/**
-	 * Default Constructor
+	 * Default Constructor.
 	 */
 	public DefaultStorageContainerBarcodeGenerator()
 	{
 		super();
 		init();
 	}
-	
+
 	/**
-	 * This is a init() function it is called from the default constructor of Base class.When getInstance of base class
+	 * This is a init() function it is called from the
+	 * default constructor of Base class.When getInstance of base class
 	 * called then this init function will be called.
 	 * This method will first check the Datatbase Name and then set function name that will convert
 	 * lable from int to String
@@ -45,75 +48,82 @@ public class DefaultStorageContainerBarcodeGenerator implements BarcodeGenerator
 	protected void init()
 	{
 		Connection conn = null;
-		try 
+		try
 		{
-			
+
 			currentBarcode = new Long(0);
 			String sql = "select max(IDENTIFIER) as MAX_NAME from CATISSUE_STORAGE_CONTAINER";
 			conn = getConnection();
 			ResultSet resultSet = conn.createStatement().executeQuery(sql);
-			
-			if(resultSet.next())
-				currentBarcode = new Long (resultSet.getLong(1));
+
+			if (resultSet.next())
+			{
+				currentBarcode = new Long(resultSet.getLong(1));
+			}
 		}
-		catch (Exception daoException) 
+		catch (Exception daoException)
 		{
 			daoException.printStackTrace();
-			
-		} finally
+
+		}
+		finally
 		{
 			if (conn != null)
 			{
-				try {
+				try
+				{
 					conn.close();
-				} catch (SQLException exception) {
-				
+				}
+				catch (SQLException exception)
+				{
+
 					exception.printStackTrace();
 				}
 			}
 		}
-		
-		
+
 	}
 
-	
 	/**
 	 * @return connection
-	 * @throws NamingException
-	 * @throws SQLException
+	 * @throws NamingException NamingException
+	 * @throws SQLException SQLException
 	 */
-	private Connection getConnection() throws NamingException, SQLException {
+	private Connection getConnection() throws NamingException, SQLException
+	{
 		Connection conn;
 		InitialContext ctx = new InitialContext();
-		DataSource ds = (DataSource)ctx.lookup(DATASOURCE_JNDI_NAME);
+		DataSource ds = (DataSource) ctx.lookup(DATASOURCE_JNDI_NAME);
 		conn = ds.getConnection();
 		return conn;
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.wustl.catissuecore.namegenerator.LabelGenerator#setLabel(edu.wustl.common.domain.AbstractDomainObject)
+	/**
+	 * Set barcode.
+	 * @param obj SC obj
 	 */
-	public void setBarcode(Object obj )
+	public void setBarcode(Object obj)
 	{
-		StorageContainer objStorageContainer = (StorageContainer)obj;
+		StorageContainer objStorageContainer = (StorageContainer) obj;
 		//TODO :Write a logic to generate barcode.
 		String barcode = "";
 		objStorageContainer.setBarcode(barcode);
 
-		
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.wustl.catissuecore.namegenerator.LabelGenerator#setLabel(java.util.List)
+	/**
+	 * Set barcode.
+	 * @param storageContainerList SC objList
 	 */
-	public void setBarcode(List storageContainerList) {
-		
-		for(int i=0; i< storageContainerList.size(); i++)
+	public void setBarcode(List storageContainerList)
+	{
+
+		for (int i = 0; i < storageContainerList.size(); i++)
 		{
-			StorageContainer objStorageContainer = (StorageContainer)storageContainerList.get(i);
+			StorageContainer objStorageContainer = (StorageContainer) storageContainerList.get(i);
 			setBarcode(objStorageContainer);
-			
-		}	
-		
-	}	
+
+		}
+
+	}
 }

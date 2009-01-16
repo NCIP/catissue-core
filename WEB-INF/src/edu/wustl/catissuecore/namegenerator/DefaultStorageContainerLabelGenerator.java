@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.namegenerator;
 
 import java.sql.Connection;
@@ -11,7 +12,6 @@ import javax.sql.DataSource;
 
 import edu.wustl.catissuecore.domain.StorageContainer;
 
-
 /**
  * This class contains the default  Storage container label  implementation.
  * @author falguni_sachde
@@ -19,25 +19,28 @@ import edu.wustl.catissuecore.domain.StorageContainer;
  */
 public class DefaultStorageContainerLabelGenerator implements LabelGenerator
 {
+
 	/**
-	 * Current label 
+	 * Current label.
 	 */
-	protected Long currentLabel ;
+	protected Long currentLabel;
 	/**
-	 * Datasource Name
+	 * Datasource Name.
 	 */
 	String DATASOURCE_JNDI_NAME = "java:/catissuecore";
+
 	/**
-	 * Default Constructor
+	 * Default Constructor.
 	 */
 	public DefaultStorageContainerLabelGenerator()
 	{
 		super();
 		init();
 	}
-	
+
 	/**
-	 * This is a init() function it is called from the default constructor of Base class.When getInstance of base class
+	 * This is a init() function it is called from the
+	 * default constructor of Base class.When getInstance of base class
 	 * called then this init function will be called.
 	 * This method will first check the Datatbase Name and then set function name that will convert
 	 * lable from int to String
@@ -45,58 +48,67 @@ public class DefaultStorageContainerLabelGenerator implements LabelGenerator
 	protected void init()
 	{
 		Connection conn = null;
-		try 
+		try
 		{
-			
+
 			currentLabel = new Long(0);
 			String sql = "select max(IDENTIFIER) as MAX_NAME from CATISSUE_STORAGE_CONTAINER";
 			conn = getConnection();
 			ResultSet resultSet = conn.createStatement().executeQuery(sql);
-			
-			if(resultSet.next())
-			currentLabel = new Long (resultSet.getLong(1));
+
+			if (resultSet.next())
+			{
+				currentLabel = new Long(resultSet.getLong(1));
+			}
 		}
-		catch (Exception daoException) 
+		catch (Exception daoException)
 		{
 			daoException.printStackTrace();
-			
-		} finally
+
+		}
+		finally
 		{
 			if (conn != null)
 			{
-				try {
+				try
+				{
 					conn.close();
-				} catch (SQLException exception) {
+				}
+				catch (SQLException exception)
+				{
 					// TODO Auto-generated catch block
 					exception.printStackTrace();
 				}
 			}
 		}
-		
+
 	}
 
 	/**
 	 * @return connection
-	 * @throws NamingException
-	 * @throws SQLException
+	 * @throws NamingException NamingException
+	 * @throws SQLException SQLException
 	 */
-	private Connection getConnection() throws NamingException, SQLException {
+	private Connection getConnection() throws NamingException, SQLException
+	{
 		Connection conn;
 		InitialContext ctx = new InitialContext();
-		DataSource ds = (DataSource)ctx.lookup(DATASOURCE_JNDI_NAME);
+		DataSource ds = (DataSource) ctx.lookup(DATASOURCE_JNDI_NAME);
 		conn = ds.getConnection();
 		return conn;
 	}
-	/* (non-Javadoc)
-	 * @see edu.wustl.catissuecore.namegenerator.LabelGenerator#setLabel(edu.wustl.common.domain.AbstractDomainObject)
+
+	/**
+	 * set label.
+	 * @param obj SC object
 	 */
-	public void setLabel(Object obj )
+	public void setLabel(Object obj)
 	{
-		StorageContainer objStorageContainer = (StorageContainer)obj;
-		currentLabel= currentLabel+1;
+		StorageContainer objStorageContainer = (StorageContainer) obj;
+		currentLabel = currentLabel + 1;
 		String containerName = "";
 		String maxSiteName = objStorageContainer.getSite().getName();
-		String maxTypeName =  objStorageContainer.getStorageType().getName();
+		String maxTypeName = objStorageContainer.getStorageType().getName();
 		if (maxSiteName.length() > 40)
 		{
 			maxSiteName = maxSiteName.substring(0, 39);
@@ -107,32 +119,36 @@ public class DefaultStorageContainerLabelGenerator implements LabelGenerator
 		}
 
 		containerName = maxSiteName + "_" + maxTypeName + "_" + String.valueOf(currentLabel);
-		
-		objStorageContainer.setName(containerName);	
+
+		objStorageContainer.setName(containerName);
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.wustl.catissuecore.namegenerator.LabelGenerator#setLabel(java.util.List)
+	/**
+	 * set label.
+	 * @param storageContainerList SC object list
 	 */
-	public void setLabel(List storageContainerList) {
-		
-		for(int i=0; i< storageContainerList.size(); i++)
+	public void setLabel(List storageContainerList)
+	{
+
+		for (int i = 0; i < storageContainerList.size(); i++)
 		{
-			StorageContainer objStorageContainer = (StorageContainer)storageContainerList.get(i);
+			StorageContainer objStorageContainer = (StorageContainer) storageContainerList.get(i);
 			setLabel(objStorageContainer);
-			
-		}	
-		
-	}	
+
+		}
+
+	}
 
 	/**
-	 * Returns label for the given domain object
+	 * Returns label for the given domain object.
+	 * @param obj SC object
+	 * @return sc name
 	 */
-	public String getLabel(Object obj) 
+	public String getLabel(Object obj)
 	{
-		StorageContainer objStorageContainer = (StorageContainer)obj;
+		StorageContainer objStorageContainer = (StorageContainer) obj;
 		setLabel(objStorageContainer);
-		
+
 		return (objStorageContainer.getName());
-	}	
+	}
 }

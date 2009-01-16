@@ -20,37 +20,40 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class DefaultCPRBarcodeGenerator implements BarcodeGenerator
 {
-	
-	private static org.apache.log4j.Logger logger =Logger.getLogger(DefaultCPRBarcodeGenerator.class);
 	/**
-	 * Current barcode 
+	 * Creating Logger instance.
+	 */
+	private static org.apache.log4j.Logger logger =Logger.getLogger(DefaultCPRBarcodeGenerator.class);
+
+	/**
+	 * Current barcode.
 	 */
 	protected Long currentBarcode;
+
 	/**
-	 * Datasource Name
+	 * Datasource Name.
 	 */
 	String DATASOURCE_JNDI_NAME = "java:/catissuecore";
 	/**
-	 * Default Constructor
+	 * Default Constructor.
 	 */
 	public DefaultCPRBarcodeGenerator()
 	{
 		super();
 		init();
 	}
-	
+
 	/**
-	 * This is a init() function it is called from the default constructor of Base class.When getInstance of base class
-	 * called then this init function will be called.
+	 * This is a init() function it is called from the default constructor of Base class.
+	 * When getInstance of base class called then this init function will be called.
 	 * This method will first check the Datatbase Name and then set function name that will convert
 	 * barcode from int to String
 	 */
 	protected void init()
 	{
 		Connection conn = null;
-		try 
+		try
 		{
-			
 			currentBarcode = new Long(0);
 			String sql = "select max(IDENTIFIER) as MAX_NAME from CATISSUE_COLL_PROT_REG";
 			conn = getConnection();
@@ -60,19 +63,19 @@ public class DefaultCPRBarcodeGenerator implements BarcodeGenerator
 				currentBarcode = new Long (resultSet.getLong(1));
 			}
 		}
-		catch (Exception daoException) 
+		catch (Exception daoException)
 		{
 			logger.error(daoException.getMessage(), daoException);
-		} 
+		}
 		finally
 		{
 			if (conn != null)
 			{
-				try 
+				try
 				{
 					conn.close();
 				}
-				catch (SQLException exception) 
+				catch (SQLException exception)
 				{
 					logger.error(exception.getMessage(), exception);
 				}
@@ -80,13 +83,13 @@ public class DefaultCPRBarcodeGenerator implements BarcodeGenerator
 		}
 	}
 
-	
+
 	/**
 	 * @return connection
-	 * @throws NamingException
-	 * @throws SQLException
+	 * @throws NamingException NamingException
+	 * @throws SQLException SQLException
 	 */
-	private Connection getConnection() throws NamingException, SQLException 
+	private Connection getConnection() throws NamingException, SQLException
 	{
 		Connection conn;
 		InitialContext ctx = new InitialContext();
@@ -95,10 +98,11 @@ public class DefaultCPRBarcodeGenerator implements BarcodeGenerator
 		return conn;
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.wustl.catissuecore.namegenerator.BarcodeGenerator#setBarcode(edu.wustl.common.domain.AbstractDomainObject)
+	/**
+	 * Setting Barcode.
+	 * @param obj CPR object
 	 */
-	public void setBarcode(Object obj )
+	public void setBarcode(Object obj)
 	{
 		CollectionProtocolRegistration objCPR= (CollectionProtocolRegistration)obj;
 		//TODO :Write a logic to generate barcode.
@@ -106,16 +110,16 @@ public class DefaultCPRBarcodeGenerator implements BarcodeGenerator
 		objCPR.setBarcode(barcode);
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.wustl.catissuecore.namegenerator.BarcodeGenerator#setBarcode(java.util.List)
+	/**
+	 * Setting barcode.
+	 * @param cprList CPR obj list.
 	 */
-	public void setBarcode(List collectionProtocolRegistrationList) {
-		
-		for(int i=0; i< collectionProtocolRegistrationList.size(); i++)
+	public void setBarcode(List cprList)
+	{
+		for(int i=0; i< cprList.size(); i++)
 		{
-			CollectionProtocolRegistration objCPR = (CollectionProtocolRegistration)collectionProtocolRegistrationList.get(i);
+			CollectionProtocolRegistration objCPR = (CollectionProtocolRegistration)cprList.get(i);
 			setBarcode(objCPR);
-			
-		}	
-	}	
+		}
+	}
 }

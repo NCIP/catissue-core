@@ -20,24 +20,25 @@ import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 public class DefaultSCGBarcodeGenerator implements BarcodeGenerator
 {
 	/**
-	 * Current barcode
+	 * Current barcode.
 	 */
 	protected Long currentBarcode;
 	/**
-	 * Datasource Name
+	 * Datasource Name.
 	 */
 	String DATASOURCE_JNDI_NAME = "java:/catissuecore";
 	/**
-	 * Default Constructor
+	 * Default Constructor.
 	 */
 	public DefaultSCGBarcodeGenerator()
 	{
 		super();
 		init();
 	}
-	
+
 	/**
-	 * This is a init() function it is called from the default constructor of Base class.When getInstance of base class
+	 * This is a init() function it is called from
+	 * the default constructor of Base class.When getInstance of base class
 	 * called then this init function will be called.
 	 * This method will first check the Datatbase Name and then set function name that will convert
 	 * barcode from int to String
@@ -45,42 +46,44 @@ public class DefaultSCGBarcodeGenerator implements BarcodeGenerator
 	protected void init()
 	{
 		Connection conn = null;
-		try 
+		try
 		{
-			
 			currentBarcode = new Long(0);
 			String sql = "select max(IDENTIFIER) as MAX_NAME from CATISSUE_SPECIMEN_COLL_GROUP";
 			conn = getConnection();
 			ResultSet resultSet = conn.createStatement().executeQuery(sql);
-			
 			if(resultSet.next())
+			{
 				currentBarcode = new Long (resultSet.getLong(1));
+			}
 		}
-		catch (Exception daoException) 
+		catch (Exception daoException)
 		{
 			daoException.printStackTrace();
-			
-		} finally
+		}
+		finally
 		{
 			if (conn != null)
 			{
-				try {
+				try
+				{
 					conn.close();
-				} catch (SQLException exception) {
-				
+				}
+				catch (SQLException exception)
+				{
 					exception.printStackTrace();
 				}
 			}
 		}
 	}
 
-	
+
 	/**
-	 * @return connection
-	 * @throws NamingException
-	 * @throws SQLException
+	 * @return connection connection
+	 * @throws NamingException NamingException
+	 * @throws SQLException SQLException
 	 */
-	private Connection getConnection() throws NamingException, SQLException 
+	private Connection getConnection() throws NamingException, SQLException
 	{
 		Connection conn;
 		InitialContext ctx = new InitialContext();
@@ -89,10 +92,11 @@ public class DefaultSCGBarcodeGenerator implements BarcodeGenerator
 		return conn;
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.wustl.catissuecore.namegenerator.BarcodeGenerator#setBarcode(edu.wustl.common.domain.AbstractDomainObject)
+	/**
+	 * Setting barcode.
+	 * @param obj SCG object
 	 */
-	public void setBarcode(Object obj )
+	public void setBarcode(Object obj)
 	{
 		SpecimenCollectionGroup objSpecimenCollectionGroup = (SpecimenCollectionGroup)obj;
 		//TODO :Write a logic to generate barcode.
@@ -100,16 +104,16 @@ public class DefaultSCGBarcodeGenerator implements BarcodeGenerator
 		objSpecimenCollectionGroup.setBarcode(barcode);
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.wustl.catissuecore.namegenerator.BarcodeGenerator#setBarcode(java.util.List)
+	/**
+	 * Setting barcode.
+	 * @param scgList SCG object list
 	 */
-	public void setBarcode(List specimenCollectionGroupList) {
-		
-		for(int i=0; i< specimenCollectionGroupList.size(); i++)
+	public void setBarcode(List scgList)
+	{
+		for(int i=0; i< scgList.size(); i++)
 		{
-			SpecimenCollectionGroup objSpecimenCollectionGroup = (SpecimenCollectionGroup)specimenCollectionGroupList.get(i);
-			setBarcode(objSpecimenCollectionGroup);
-			
-		}	
-	}	
+			SpecimenCollectionGroup scgObj = (SpecimenCollectionGroup)scgList.get(i);
+			setBarcode(scgObj);
+		}
+	}
 }

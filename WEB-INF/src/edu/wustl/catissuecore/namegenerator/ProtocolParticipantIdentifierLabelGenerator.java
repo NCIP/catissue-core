@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.namegenerator;
 
 import java.util.List;
@@ -6,15 +7,17 @@ import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.util.global.Constants;
 
 /**
- * This class which contains the default implementation for Protocol 
+ * This class which contains the default implementation for Protocol
  * Participant label generation.
  * @author sagar_baldwa
  */
- 
+
 public class ProtocolParticipantIdentifierLabelGenerator implements LabelGenerator
 {
+
 	/**
-	 * 
+	 *@param object obj
+	 *@return null
 	 */
 	public String getLabel(Object object)
 	{
@@ -24,25 +27,27 @@ public class ProtocolParticipantIdentifierLabelGenerator implements LabelGenerat
 	/**
 	 * This method generates a label and sets it to CollectionProtocolRegistration
 	 * domain object. Label is in the format "COLLECTIONPROTOCOLID_PARTICIPANTID"
+	 * @param object Abstract domain object
 	 */
 	public void setLabel(Object object)
 	{
-		CollectionProtocolRegistration collectionProtocolRegistration = 
-			(CollectionProtocolRegistration) object;
-		if(collectionProtocolRegistration.getProtocolParticipantIdentifier() == null
-				|| Constants.DOUBLE_QUOTES.equals(collectionProtocolRegistration.getProtocolParticipantIdentifier()))
+		CollectionProtocolRegistration cpr = (CollectionProtocolRegistration) object;
+		if (cpr.getProtocolParticipantIdentifier() == null
+				|| Constants.DOUBLE_QUOTES.equals(cpr
+						.getProtocolParticipantIdentifier()))
 		{
-			collectionProtocolRegistration.setProtocolParticipantIdentifier(
-					collectionProtocolRegistration.getCollectionProtocol().getId() + "_" + 
-					collectionProtocolRegistration.getParticipant().getId());
-		}		
+			cpr.setProtocolParticipantIdentifier(cpr
+							.getCollectionProtocol().getId()
+							+ "_" + cpr.getParticipant().getId());
+		}
 	}
 
 	/**
-	 * 
+	 *Set Label.
+	 *@param object Abstract domain object
 	 */
 	public void setLabel(List object)
 	{
-		// TODO Auto-generated method stub		
+		// TODO Auto-generated method stub
 	}
 }
