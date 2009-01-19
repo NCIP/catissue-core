@@ -17,28 +17,35 @@ import edu.wustl.common.util.logger.Logger;
 /**
  * Attributes associated with a spinning event of a specimen.
  * @hibernate.joined-subclass table="CATISSUE_SPUN_EVENT_PARAMETERS"
- * @hibernate.joined-subclass-key column="IDENTIFIER" 
+ * @hibernate.joined-subclass-key column="IDENTIFIER"
  * @author Aniruddha Phadnis
  */
 public class SpunEventParameters extends SpecimenEventParameters implements java.io.Serializable
 {
+	/**
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(SpunEventParameters.class);
+	/**
+	 * Serial Version ID.
+	 */
 	private static final long serialVersionUID = 1234567890L;
 
 	/**
      * Rotational force applied to specimen.
      */
 	protected Double gravityForce;
-	
+
 	/**
      * Duration for which specimen is spun.
      */
 	protected Integer durationInMinutes;
 
 	/**
-     * Returns the rotational force applied to specimen. 
+     * Returns the rotational force applied to specimen.
      * @return The rotational force applied to specimen.
      * @see #setGravityForce(Double)
-     * @hibernate.property name="gravityForce" type="double" 
+     * @hibernate.property name="gravityForce" type="double"
      * column="GFORCE" length="30"
      */
 	public Double getGravityForce()
@@ -48,7 +55,7 @@ public class SpunEventParameters extends SpecimenEventParameters implements java
 
 	/**
      * Sets the rotational force applied to specimen.
-     * @param gForce the rotational force applied to specimen.
+     * @param gravityForce - gForce the rotational force applied to specimen.
      * @see #getGravityForce()
      */
 	public void setGravityForce(Double gravityForce)
@@ -57,10 +64,10 @@ public class SpunEventParameters extends SpecimenEventParameters implements java
 	}
 
 	/**
-     * Returns duration for which specimen is spun. 
+     * Returns duration for which specimen is spun.
      * @return Duration for which specimen is spun.
      * @see #setDurationInMinutes(Integer)
-     * @hibernate.property name="durationInMinutes" type="int" 
+     * @hibernate.property name="durationInMinutes" type="int"
      * column="DURATION_IN_MINUTES" length="30"
      */
 	public Integer getDurationInMinutes()
@@ -77,45 +84,51 @@ public class SpunEventParameters extends SpecimenEventParameters implements java
 	{
 		this.durationInMinutes = durationInMinutes;
 	}
-	
-	
+
 	/**
+	 * Default Constructor.
 	 * NOTE: Do not delete this constructor. Hibernet uses this by reflection API.
-	 * */
+	 */
 	public SpunEventParameters()
 	{
-		
+		super();
 	}
 
 	/**
-	 *  Parameterised constructor 
-	 * @param abstractForm
+	 *  Parameterised constructor.
+	 * @param abstractForm AbstractActionForm.
 	 */
 	public SpunEventParameters(AbstractActionForm abstractForm)
 	{
+		super();
 		setAllValues((IValueObject)abstractForm);
 	}
-	
+
 	/**
      * This function Copies the data from an SpunEventParametersForm object to a SpunEventParameters object.
-     * @param SpunEventParametersForm An SpunEventParametersForm object containing the information about the SpunEventParameters.  
-     * */
+     * @param abstractForm - SpunEventParametersForm An SpunEventParametersForm object
+     * containing the information about the SpunEventParameters.
+     */
     public void setAllValues(IValueObject abstractForm)
     {
         try
         {
         	SpunEventParametersForm form = (SpunEventParametersForm) abstractForm;
-        	
+
         	if(form.getGravityForce() != null && form.getGravityForce().trim().length()>0)
+        	{
         		this.gravityForce = Double.parseDouble(form.getGravityForce() );
+        	}
         	if(form.getDurationInMinutes() != null && form.getDurationInMinutes().trim().length()>0)
+        	{
         		this.durationInMinutes = Integer.parseInt(form.getDurationInMinutes() );
+        	}
 
         	super.setAllValues(form);
         }
         catch (Exception excp)
         {
-            Logger.out.error(excp.getMessage());
+            logger.error(excp.getMessage());
         }
     }
 }

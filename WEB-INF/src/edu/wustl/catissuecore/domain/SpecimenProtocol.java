@@ -11,7 +11,6 @@
 package edu.wustl.catissuecore.domain;
 
 import java.util.Date;
-
 import edu.wustl.catissuecore.actionForm.SpecimenProtocolForm;
 import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.common.actionForm.IValueObject;
@@ -20,75 +19,84 @@ import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.logger.Logger;
 
 /**
- * A set of procedures that govern the collection and/or distribution of biospecimens. 
+ * A set of procedures that govern the collection and/or distribution of biospecimens.
  * @author mandar_deshmukh
  * @hibernate.class table="CATISSUE_SPECIMEN_PROTOCOL"
  */
 public abstract class SpecimenProtocol extends AbstractDomainObject implements java.io.Serializable
 {
-    
+	/**
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(SpecimenProtocol.class);
+
+	/**
+	 * Serial Version ID.
+	 */
 	private static final long serialVersionUID = 1234567890L;
 
 	/**
 	 * System generated unique id.
 	 */
 	protected Long id = null;
-	
+
 	//Change for API Search   --- Ashwin 04/10/2006
 	/**
 	 * The current principal investigator of the protocol.
 	 */
 	protected User principalInvestigator;
-	
+
 	/**
 	 * Full title assigned to the protocol.
 	 */
 	protected String title;
-	
+
 	/**
 	 * Abbreviated title assigned to the protocol.
 	 */
 	protected String shortTitle;
-	
+
 	/**
 	 * IRB approval number.
 	 */
 	protected String irbIdentifier;
-	
+
 	/**
 	 * Date on which the protocol is activated.
 	 */
 	protected Date startDate;
-	
+
 	/**
 	 * Date on which the protocol is marked as closed.
 	 */
 	protected Date endDate;
-	
+
 	/**
 	 * Number of anticipated cases need for the protocol.
 	 */
 	protected Integer enrollment;
-	
+
 	/**
 	 * URL to the document that describes detailed information for the biospecimen protocol.
 	 */
 	protected String descriptionURL;
-	
+
 	/**
-	 * Defines whether this SpecimenProtocol record can be queried (Active) or not queried (Inactive) by any actor.
+	 * Defines whether this SpecimenProtocol record can be queried (Active) or not
+	 * queried (Inactive) by any actor.
 	 */
 	protected String activityStatus;
-	
+
 	/**
+	 * Default Constructor.
 	 * NOTE: Do not delete this constructor. Hibernet uses this by reflection API.
-	 * */
+	 */
 	public SpecimenProtocol()
 	{
 		super();
 		// Default Constructor, required for Hibernate
 	}
-	
+
 	/**
 	 * Returns the id of the protocol.
 	 * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
@@ -102,11 +110,11 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
 	}
 
 	/**
-	 * @param id The id to set.
+	 * @param identifier The id to set.
 	 */
-	public void setId(Long id)
+	public void setId(Long identifier)
 	{
-		this.id = id;
+		this.id = identifier;
 	}
 
 	/**
@@ -273,42 +281,46 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
 	{
 		this.activityStatus = activityStatus;
 	}
-	
+
+	/**
+	 * Set All Values in Form.
+	 * @param abstractForm IValueObject.
+	 */
 	public void setAllValues(IValueObject abstractForm)
 	{
-		Logger.out.debug("SpecimenProtocol: setAllValues ");
+		logger.debug("SpecimenProtocol: setAllValues ");
         try
-        {        	
+        {
         	//Change for API Search   --- Ashwin 04/10/2006
         	if (SearchUtil.isNullobject(principalInvestigator))
         	{
         		principalInvestigator = new User();
         	}
-        	
+
         	final SpecimenProtocolForm spForm = (SpecimenProtocolForm) abstractForm;
-        	
+
         	this.title = spForm.getTitle();
         	this.shortTitle = spForm.getShortTitle();
         	this.irbIdentifier = spForm.getIrbID();
-        	
-        	this.startDate = Utility.parseDate(spForm.getStartDate() ,Utility.datePattern(spForm.getStartDate()));       		
-        	this.endDate = Utility.parseDate(spForm.getEndDate(),Utility.datePattern(spForm.getEndDate()));        		
+
+        	this.startDate = Utility.parseDate(spForm.getStartDate(),
+        			Utility.datePattern(spForm.getStartDate()));
+        	this.endDate = Utility.parseDate(spForm.getEndDate(),Utility.datePattern(spForm.getEndDate()));
 
         	if(spForm.getEnrollment() != null && spForm.getEnrollment().trim().length()>0 )
         	{
-        		this.enrollment = new Integer(spForm.getEnrollment());
+        		this.enrollment = Integer.valueOf(spForm.getEnrollment());
         	}
-        	
+
         	this.descriptionURL = spForm.getDescriptionURL();
         	this.activityStatus = spForm.getActivityStatus();
-        	
+
         	principalInvestigator  = new User();
-        	this.principalInvestigator.setId(new Long(spForm.getPrincipalInvestigatorId()));
+        	this.principalInvestigator.setId(Long.valueOf(spForm.getPrincipalInvestigatorId()));
         }
         catch (Exception excp)
         {
-	    	// use of logger as per bug 79
-	    	Logger.out.error(excp.getMessage(),excp); 
+	    	logger.error(excp.getMessage(),excp);
         }
 	}
 }

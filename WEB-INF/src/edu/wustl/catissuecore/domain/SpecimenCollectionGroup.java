@@ -1,6 +1,6 @@
 /**
  * <p>Title: SpecimenCollectionGroup Class>
- * <p>Description: An event that results in the collection 
+ * <p>Description: An event that results in the collection
  * of one or more specimen from a participant.</p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
@@ -16,7 +16,6 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
-
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
 import edu.wustl.catissuecore.bean.ConsentBean;
 import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
@@ -31,20 +30,25 @@ import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.logger.Logger;
 
 /**
- * An event that results in the collection 
+ * An event that results in the collection.
  * of one or more specimen from a participant.
  * @hibernate.class table="CATISSUE_SPECIMEN_COLL_GROUP"
  * @author gautam_shetty
  */
 public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup implements Serializable
 {
+	/**
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(SpecimenCollectionGroup.class);
 
 	/**
-	 * 
+	 * Serial Version ID.
 	 */
 	private static final long serialVersionUID = 8543074529678284997L;
+
 	/**
-	 * name assigned to Specimen Collection Group
+	 * name assigned to Specimen Collection Group.
 	 */
 	protected String name;
 
@@ -54,26 +58,29 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 	protected Collection<Specimen> specimenCollection = new LinkedHashSet<Specimen>();
 
 	/**
-	 * Name : Ashish Gupta
-	 * Reviewer Name : Sachin Lale 
+	 * Name : Ashish Gupta.
+	 * Reviewer Name : Sachin Lale.
 	 * Bug ID: 2741
-	 * Patch ID: 2741_1	 
-	 * Description: Condition indicating whether to propagate collection events and received events to specimens under this scg
+	 * Patch ID: 2741_1
+	 * Description: Condition indicating whether to propagate collection events and
+	 * received events to specimens under this scg.
 	 */
 	/**
-	 * Condition indicating whether to propagate collection events and received events to specimens under this scg
+	 * Condition indicating whether to propagate collection events and received events
+	 * to specimens under this scg.
 	 */
 	protected transient boolean applyEventsToSpecimens = false;
+
 	/**
-	 * Surgical Pathology Number of the associated pathology report, erlier was Present in Clinical Report
+	 * Surgical Pathology Number of the associated pathology report, earlier was Present in Clinical Report.
 	 */
 	protected String surgicalPathologyNumber;
 
 	/**
-	 * Name: Sachin Lale 
+	 * Name: Sachin Lale.
 	 * Bug ID: 3052
 	 * Patch ID: 3052_1
-	 * See also: 1-4 
+	 * See also: 1-4
 	 * Description : A comment field at the Specimen Collection Group level.
 	 */
 	protected String comment;
@@ -81,16 +88,15 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 	 * A registration of a Participant to a Collection Protocol.
 	 */
 	protected CollectionProtocolRegistration collectionProtocolRegistration;
-	//----For Consent Tracking. Ashish 22/11/06
 
 	/**
-	 * An identified surgical pathology report associated with 
-	 * current specimen collection group  
+	 * An identified surgical pathology report associated with
+	 * current specimen collection group.
 	 */
 	protected IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReport;
 	/**
-	 * A deidentified surgical pathology report associated with 
-	 * current specimen collection group  
+	 * A deidentified surgical pathology report associated with
+	 * current specimen collection group.
 	 */
 
 	protected DeidentifiedSurgicalPathologyReport deIdentifiedSurgicalPathologyReport;
@@ -100,38 +106,34 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 	 */
 	protected Collection<ConsentTierStatus> consentTierStatusCollection;
 
-	//Mandar 15-jan-07 
-	/*
+	/**
 	 * To perform operation based on withdraw button clicked.
-	 * Default No Action to allow normal behaviour. 
+	 * Default No Action to allow normal behaviour.
 	 */
 	protected String consentWithdrawalOption = Constants.WITHDRAW_RESPONSE_NOACTION;
 
-	//Mandar 19-jan-07 
-	/*
+	/**
 	 * To apply changes to specimen based on consent status changes.
-	 * Default Apply none to allow normal behaviour. 
+	 * Default Apply none to allow normal behaviour.
 	 */
 	protected String applyChangesTo = Constants.APPLY_NONE;
 
-	//Mandar 22-jan-07 
-	/*
+	/**
 	 * To apply changes to specimen based on consent status changes.
-	 * Default empty. 
+	 * Default empty.
 	 */
-
 	protected String stringOfResponseKeys = "";
 
 	/**
-	 * Name : Ashish Gupta
-	 * Reviewer Name : Sachin Lale 
+	 * Name : Ashish Gupta.
+	 * Reviewer Name : Sachin Lale.
 	 * Bug ID: 2741
-	 * Patch ID: 2741_2	 
-	 * Description: 1 to many Association between SCG and SpecimenEventParameters
+	 * Patch ID: 2741_2.
+	 * Description: 1 to many Association between SCG and SpecimenEventParameters.
 	 */
 
 	/**
-	 * Collection and Received events associated with this SCG
+	 * Collection and Received events associated with this SCG.
 	 */
 	protected Collection specimenEventParametersCollection = new HashSet();
 
@@ -140,22 +142,31 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 	 */
 	protected CollectionProtocolEvent collectionProtocolEvent;
 
+	/**
+	 * collectionStatus.
+	 */
 	protected String collectionStatus;
+
+	/**
+	 * offset.
+	 */
 	protected Integer offset;
 
 	/**
-	 * barcode attribute added for Suite1.1
+	 * barcode attribute added for Suite 1.1.
 	 */
 	protected String barcode;
 
-	protected Date encounterTimestamp;
-	
 	/**
-	 * 
+	 * encounterTimestamp.
+	 */
+	protected Date encounterTimestamp;
+
+	/**
+	 * isCPBasedSpecimenEntryChecked.
 	 */
 	protected boolean isCPBasedSpecimenEntryChecked = true;
 
-	
 	/**
 	 * @return the isCPBasedSpecimenEntryChecked
 	 */
@@ -164,7 +175,6 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 		return isCPBasedSpecimenEntryChecked;
 	}
 
-	
 	/**
 	 * @param isCPBasedSpecimenEntryChecked the isCPBasedSpecimenEntryChecked to set
 	 */
@@ -174,11 +184,11 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 	}
 
 	/**
-	 * Returns the required specimen collection event 
+	 * Returns the required specimen collection event
 	 * associated with a Collection Protocol.
-	 * @hibernate.many-to-one column="COLLECTION_PROTOCOL_EVENT_ID" 
+	 * @hibernate.many-to-one column="COLLECTION_PROTOCOL_EVENT_ID"
 	 * class="edu.wustl.catissuecore.domain.CollectionProtocolEvent" constrained="true"
-	 * @return the required specimen collection event 
+	 * @return the required specimen collection event.
 	 * associated with a Collection Protocol.
 	 * @see #setCollectionProtocolEvent(CollectionProtocolEvent)
 	 */
@@ -188,9 +198,9 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 	}
 
 	/**
-	 * Sets the required specimen collection event 
+	 * Sets the required specimen collection event
 	 * associated with a Collection Protocol.
-	 * @param collectionProtocolEvent the required specimen collection event 
+	 * @param collectionProtocolEvent the required specimen collection event
 	 * associated with a Collection Protocol.
 	 * @see #getCollectionProtocolEvent()
 	 */
@@ -202,8 +212,9 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 	/**
 	 * @return the specimenEventParametersCollection
 	 * @hibernate.set cascade="save-update" inverse="true" table="CATISSUE_SPECIMEN_EVENT_PARAM" lazy="false"
-	 * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.SpecimenEventParameters"  
-	 * @hibernate.collection-key column="SPECIMEN_COLL_GRP_ID" 
+	 * @hibernate.collection-one-to-many
+	 * class="edu.wustl.catissuecore.domain.SpecimenEventParameters"
+	 * @hibernate.collection-key column="SPECIMEN_COLL_GRP_ID"
 	 */
 	public Collection getSpecimenEventParametersCollection()
 	{
@@ -211,7 +222,7 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 	}
 
 	/**
-	 * @param specimenEventParametersCollection the specimenEventParametersCollection to set
+	 * @param specimenEventParametersCollection the specimenEventParametersCollection to set.
 	 */
 	public void setSpecimenEventParametersCollection(Collection specimenEventParametersCollection)
 	{
@@ -220,7 +231,8 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 
 	/**
 	 * @return the consentTierStatusCollection
-	 * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.ConsentTierStatus" lazy="true" cascade="save-update"
+	 * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.ConsentTierStatus"
+	 * lazy="true" cascade="save-update"
 	 * @hibernate.set table="CATISSUE_CONSENT_TIER_STATUS" name="consentTierStatusCollection"
 	 * @hibernate.collection-key column="SPECIMEN_COLL_GROUP_ID"
 	 */
@@ -237,56 +249,83 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 		this.consentTierStatusCollection = consentTierStatusCollection;
 	}
 
-	//----Consent Tracking End
-
-	//----------------------------Mandar 15-jan-07
+	/**
+	 * Get Consent Withdrawal Option.
+	 * @return String.
+	 */
 	public String getConsentWithdrawalOption()
 	{
 		return consentWithdrawalOption;
 	}
 
+	/**
+	 * Set Consent Withdrawal Option.
+	 * @param consentWithdrawalOption of String type.
+	 */
 	public void setConsentWithdrawalOption(String consentWithdrawalOption)
 	{
 		this.consentWithdrawalOption = consentWithdrawalOption;
 	}
 
-	//------------------------- Mandar 19-Jan-07
+	/**
+	 * Get Apply Changes To.
+	 * @return String type.
+	 */
 	public String getApplyChangesTo()
 	{
 		return applyChangesTo;
 	}
 
+	/**
+	 * Set Apply Changes To.
+	 * @param applyChangesTo of String type.
+	 */
 	public void setApplyChangesTo(String applyChangesTo)
 	{
 		this.applyChangesTo = applyChangesTo;
 	}
 
-	// ------------------- Mandar : - 22-Jan-07
-
+	/**
+	 * Get String Of ResponseKeys.
+	 * @return of String type.
+	 */
 	public String getStringOfResponseKeys()
 	{
 		return stringOfResponseKeys;
 	}
 
+	/**
+	 * Set String Of ResponseKeys.
+	 * @param stringOfResponseKeys of String type.
+	 */
 	public void setStringOfResponseKeys(String stringOfResponseKeys)
 	{
 		this.stringOfResponseKeys = stringOfResponseKeys;
 	}
 
+	/**
+	 * Default Constructor.
+	 */
 	public SpecimenCollectionGroup()
 	{
-
+		super();
 	}
 
+	/**
+	 * Parameterized Constructor.
+	 * @param form of AbstractActionForm type.
+	 * @throws AssignDataException AssignDataException.
+	 */
 	public SpecimenCollectionGroup(AbstractActionForm form) throws AssignDataException
 	{
-		Logger.out.debug("<<< Before setting Values >>>");
+		super();
+		logger.debug("<<< Before setting Values >>>");
 		setAllValues(form);
 	}
 
 	/**
-	 * Returns the surgicalPathologyNumber of the report at the time of specimen collection. 
-	 * @hibernate.property name="surgicalPathologyNumber" type="string" 
+	 * Returns the surgicalPathologyNumber of the report at the time of specimen collection.
+	 * @hibernate.property name="surgicalPathologyNumber" type="string"
 	 * column="SURGICAL_PATHOLOGY_NUMBER" length="50"
 	 * @return surgical pathology number of the report at the time of specimen collection.
 	 * @see #setSurgicalPathologyNumber(String)
@@ -297,8 +336,9 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 	}
 
 	/**
-	 * Sets the surgical pathology number of the report at the time of specimen collection. 
-	 * @param surgicalPathologyNumber the surgical pathology report of the report at the time of specimen collection.
+	 * Sets the surgical pathology number of the report at the time of specimen collection.
+	 * @param surgicalPathologyNumber the surgical pathology report of
+	 * the report at the time of specimen collection.
 	 * @see #getSurgicalPathologyNumber()
 	 */
 	public void setSurgicalPathologyNumber(String surgicalPathologyNumber)
@@ -308,7 +348,7 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 
 	/**
 	 * Returns the registration of a Participant to a Collection Protocol.
-	 * @hibernate.many-to-one column="COLLECTION_PROTOCOL_REG_ID" 
+	 * @hibernate.many-to-one column="COLLECTION_PROTOCOL_REG_ID"
 	 * class="edu.wustl.catissuecore.domain.CollectionProtocolRegistration" constrained="true"
 	 * @return the registration of a Participant to a Collection Protocol.
 	 * @see #setCollectionProtocolRegistration(CollectionProtocolRegistration)
@@ -320,17 +360,18 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 
 	/**
 	 * Sets the registration of a Participant to a Collection Protocol.
-	 * @param collectionProtocolRegistration the registration of a Participant 
+	 * @param collectionProtocolRegistration the registration of a Participant
 	 * to a Collection Protocol.
 	 * @see #getCollectionProtocolRegistration()
 	 */
-	public void setCollectionProtocolRegistration(CollectionProtocolRegistration collectionProtocolRegistration)
+	public void setCollectionProtocolRegistration(CollectionProtocolRegistration
+			collectionProtocolRegistration)
 	{
 		this.collectionProtocolRegistration = collectionProtocolRegistration;
 	}
 
 	/**
-	 * Returns message label to display on success add or edit
+	 * Returns message label to display on success add or edit.
 	 * @return String
 	 */
 	public String getMessageLabel()
@@ -339,13 +380,13 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 	}
 
 	/**
-	 * Name: Sachin Lale 
+	 * Name: Sachin Lale.
 	 * Bug ID: 3052
 	 * Patch ID: 3052_2
 	 * Seea also: 1-4 and 1_1 to 1_5
 	 * Returns the Specimen Collection Group comment .
 	 * @hibernate.property name="comment" type="string" column="COMMENTS" length="2000"
-	 * @return comment.
+	 * @return comment of String type.
 	 * @see #setComment(String)
 	 */
 	public String getComment()
@@ -354,7 +395,7 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 	}
 
 	/**
-	 * @param name The name to set.
+	 * @param comment of String type.
 	 */
 	public void setComment(String comment)
 	{
@@ -362,10 +403,11 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 	}
 
 	/**
-	 * Returns deidentified surgical pathology report of the current specimen collection group
+	 * Returns deidentified surgical pathology report of the current specimen collection group.
 	 * @hibernate.one-to-one  name="deidentifiedSurgicalPathologyReport"
 	 * class="edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport"
 	 * property-ref="specimenCollectionGroup" not-null="false" cascade="save-update"
+	 * @return DeidentifiedSurgicalPathologyReport object.
 	 */
 	public DeidentifiedSurgicalPathologyReport getDeIdentifiedSurgicalPathologyReport()
 	{
@@ -373,19 +415,21 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 	}
 
 	/**
-	 * Sets the deidentified surgical pathology report associated with the specimen collection group
-	 * @param deidentifiedSurgicalPathologyReport deidentified report object
+	 * Sets the deidentified surgical pathology report associated with the specimen collection group.
+	 * @param deIdentifiedSurgicalPathologyReport deidentified report object.
 	 */
-	public void setDeIdentifiedSurgicalPathologyReport(DeidentifiedSurgicalPathologyReport deIdentifiedSurgicalPathologyReport)
+	public void setDeIdentifiedSurgicalPathologyReport(DeidentifiedSurgicalPathologyReport
+			deIdentifiedSurgicalPathologyReport)
 	{
 		this.deIdentifiedSurgicalPathologyReport = deIdentifiedSurgicalPathologyReport;
 	}
 
 	/**
-	 * Returns deidentified surgical pathology report of the current specimen collection group
+	 * Returns deidentified surgical pathology report of the current specimen collection group.
 	 * @hibernate.one-to-one  name="identifiedSurgicalPathologyReport"
 	 * class="edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport"
 	 * propertyref="specimenCollectionGroup" not-null="false" cascade="save-update"
+	 * @return IdentifiedSurgicalPathologyReport object.
 	 */
 	public IdentifiedSurgicalPathologyReport getIdentifiedSurgicalPathologyReport()
 	{
@@ -393,16 +437,23 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 	}
 
 	/**
-	 *  Sets the identified surgical pathology report associated with the specimen collection group
-	 * @param identifiedSurgicalPathologyReport identified report object
+	 * Sets the identified surgical pathology report associated with the specimen collection group.
+	 * @param identifiedSurgicalPathologyReport identified report object.
 	 */
-	public void setIdentifiedSurgicalPathologyReport(IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReport)
+	public void setIdentifiedSurgicalPathologyReport(IdentifiedSurgicalPathologyReport
+			identifiedSurgicalPathologyReport)
 	{
 		this.identifiedSurgicalPathologyReport = identifiedSurgicalPathologyReport;
 	}
 
 	/* (non-Javadoc)
-	 * @see edu.wustl.catissuecore.domain.AbstractDomainObject#setAllValues(edu.wustl.catissuecore.actionForm.AbstractActionForm)
+	 * @see edu.wustl.catissuecore.domain.AbstractDomainObject#setAllValues(
+	 * edu.wustl.catissuecore.actionForm.AbstractActionForm)
+	 */
+	/**
+	 * Set all values on form.
+	 * @param valueObject of IValueObject type.
+	 * @throws AssignDataException AssignDataException.
 	 */
 	public void setAllValues(IValueObject valueObject) throws AssignDataException
 	{
@@ -413,21 +464,25 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 		{
 			this.setName(form.getName());
 			this.barcode = form.getBarcode();
-			if(Constants.TRUE.equals(form.getRestrictSCGCheckbox()))
-				this.isCPBasedSpecimenEntryChecked = true;
+			if (Constants.TRUE.equals(form.getRestrictSCGCheckbox()))
+			{
+				this.isCPBasedSpecimenEntryChecked = Boolean.TRUE;
+			}
 			else
-				this.isCPBasedSpecimenEntryChecked = false;
+			{
+				this.isCPBasedSpecimenEntryChecked = Boolean.FALSE;
+			}
 
 			// Bug no. 7390
 			// adding the collection status in the add specimen collection group page
 			// removed the addOperation() if loop
-			if (form.getCollectionStatus() != null)
+			if (form.getCollectionStatus() == null)
 			{
-				this.setCollectionStatus(form.getCollectionStatus());
+				this.setCollectionStatus(Constants.COLLECTION_STATUS_PENDING);
 			}
 			else
 			{
-				this.setCollectionStatus(Constants.COLLECTION_STATUS_PENDING);
+				this.setCollectionStatus(form.getCollectionStatus());
 			}
 
 			/**
@@ -440,9 +495,10 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 			this.setComment(form.getComment());
 
 			collectionProtocolEvent = new CollectionProtocolEvent();
-			collectionProtocolEvent.setId(new Long(form.getCollectionProtocolEventId()));
+			collectionProtocolEvent.setId(Long.valueOf(form.getCollectionProtocolEventId()));
 
-			Logger.out.debug("form.getParticipantsMedicalIdentifierId() " + form.getParticipantsMedicalIdentifierId());
+			logger.debug("form.getParticipantsMedicalIdentifierId() " +
+					form.getParticipantsMedicalIdentifierId());
 
 			this.setSurgicalPathologyNumber(form.getSurgicalPathologyNumber());
 
@@ -451,49 +507,51 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 			/**
 			 * Name: Vijay Pande
 			 * Reviewer Name: Aarti Sharma
-			 * Variable checkedButton name is changed to radioButton hence its getter method name is changed
+			 * Variable checkedButton name is changed to radioButton hence its getter
+			 * method name is changed
 			 */
 			if (form.getRadioButtonForParticipant() == 1)
 			{
 				//value of radio button is 2 when participant name is selected
 				Participant participant = new Participant();
 				/**For Migration Start**/
-				//				form.setParticipantId(Utility.getParticipantId(form.getParticipantName()));
+				//form.setParticipantId(Utility.getParticipantId(form.getParticipantName()));
 				/**For Migration End**/
-				participant.setId(new Long(form.getParticipantId()));
+				participant.setId(Long.valueOf(form.getParticipantId()));
 				collectionProtocolRegistration.setParticipant(participant);
 				collectionProtocolRegistration.setProtocolParticipantIdentifier(null);
 
-				ParticipantMedicalIdentifier participantMedicalIdentifier = new ParticipantMedicalIdentifier();
-				participantMedicalIdentifier.setId(new Long(form.getParticipantsMedicalIdentifierId()));
+				ParticipantMedicalIdentifier participantMedicalIdentifier =
+					new ParticipantMedicalIdentifier();
+				participantMedicalIdentifier.setId(Long.valueOf(
+						form.getParticipantsMedicalIdentifierId()));
 			}
 			else
 			{
-				collectionProtocolRegistration.setProtocolParticipantIdentifier(form.getProtocolParticipantIdentifier());
+				collectionProtocolRegistration.setProtocolParticipantIdentifier(
+						form.getProtocolParticipantIdentifier());
 				collectionProtocolRegistration.setParticipant(null);
 			}
 
 			CollectionProtocol collectionProtocol = new CollectionProtocol();
-			collectionProtocol.setId(new Long(form.getCollectionProtocolId()));
+			collectionProtocol.setId(Long.valueOf(form.getCollectionProtocolId()));
 			collectionProtocolRegistration.setCollectionProtocol(collectionProtocol);
 
 			/**
-			 * Setting the consentTier responses for SCG Level. 
+			 * Setting the consentTier responses for SCG Level.
 			 * Virender Mehta
 			 */
 			this.consentTierStatusCollection = prepareParticipantResponseCollection(form);
 
-			// ----------- Mandar --15-Jan-07
 			this.consentWithdrawalOption = form.getWithdrawlButtonStatus();
-			//Mandar: 19-Jan-07 :- For applying changes to specimen
 			this.applyChangesTo = form.getApplyChangesTo();
 			this.stringOfResponseKeys = form.getStringOfResponseKeys();
 
 			/**
-			 * Name : Ashish Gupta
-			 * Reviewer Name : Sachin Lale 
+			 * Name : Ashish Gupta.
+			 * Reviewer Name : Sachin Lale.
 			 * Bug ID: 2741
-			 * Patch ID: 2741_3	 
+			 * Patch ID: 2741_3
 			 * Description: Populating events in SCG
 			 */
 			//Adding Events
@@ -503,33 +561,32 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 			{
 				applyEventsToSpecimens = true;
 			}
-			this.offset = new Integer(form.getOffset());
+			this.offset = Integer.valueOf(form.getOffset());
 		}
 		catch (Exception e)
 		{
-			Logger.out.error(e.getMessage(), e);
-			throw new AssignDataException();
+			logger.error(e.getMessage(), e);
+			throw new AssignDataException(e);
 		}
 	}
 
 	/**
-	 * Name : Ashish Gupta
-	 * Reviewer Name : Sachin Lale 
+	 * Name : Ashish Gupta.
+	 * Reviewer Name : Sachin Lale.
 	 * Bug ID: 2741
-	 * Patch ID: 2741_4	 
-	 * Description: Method to populate Events in SCG
+	 * Patch ID: 2741_4
+	 * Description: Method to populate Events in SCG.
 	 */
 	/**
-	 * @param form
-	 * This function populates all events for the given scg
+	 * @param form of SpecimenCollectionGroupForm type.
+	 * @param operation of String type.
+	 * This function populates all events for the given scg.
 	 */
 	private void setEventsFromForm(SpecimenCollectionGroupForm form, String operation)
 	{
 		CollectionEventParameters collectionEventParameters = null;
 		ReceivedEventParameters receivedEventParameters = null;
 		Collection tempColl = new HashSet();
-
-		//Collection Events
 		if (operation.equals(Constants.ADD))
 		{
 			collectionEventParameters = new CollectionEventParameters();
@@ -552,8 +609,8 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 			}
 			if (form.getCollectionEventId() != 0)
 			{
-				collectionEventParameters.setId(new Long(form.getCollectionEventId()));
-				receivedEventParameters.setId(new Long(form.getReceivedEventId()));
+				collectionEventParameters.setId(Long.valueOf(form.getCollectionEventId()));
+				receivedEventParameters.setId(Long.valueOf(form.getReceivedEventId()));
 			}
 		}
 		//creating new events when there are no events associated with the scg
@@ -578,49 +635,49 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 	}
 
 	/**
-	 * @param collectionEventParameters
-	 * @param receivedEventParameters
-	 * @param form
+	 * @param collectionEventParameters CollectionEventParameters.
+	 * @param receivedEventParameters ReceivedEventParameters.
+	 * @param form SpecimenCollectionGroupForm.
 	 */
-	private void setEventParameters(CollectionEventParameters collectionEventParameters, ReceivedEventParameters receivedEventParameters,
-			SpecimenCollectionGroupForm form)
+	private void setEventParameters(CollectionEventParameters collectionEventParameters,
+			ReceivedEventParameters receivedEventParameters, SpecimenCollectionGroupForm form)
 	{
 		collectionEventParameters.setCollectionProcedure(form.getCollectionEventCollectionProcedure());
 		collectionEventParameters.setComment(form.getCollectionEventComments());
 		collectionEventParameters.setContainer(form.getCollectionEventContainer());
-		Date timestamp = EventsUtil.setTimeStamp(form.getCollectionEventdateOfEvent(), form.getCollectionEventTimeInHours(), form
-				.getCollectionEventTimeInMinutes());
+		Date timestamp = EventsUtil.setTimeStamp(form.getCollectionEventdateOfEvent(),
+				form.getCollectionEventTimeInHours(), form.getCollectionEventTimeInMinutes());
 		collectionEventParameters.setTimestamp(timestamp);
 		User user = null;
 		if (form.getCollectionEventUserId() != 0)
 		{
 			user = new User();
-			user.setId(new Long(form.getCollectionEventUserId()));
+			user.setId(Long.valueOf(form.getCollectionEventUserId()));
 		}
 		collectionEventParameters.setUser(user);
 		collectionEventParameters.setSpecimenCollectionGroup(this);
 
-		//Received Events		
+		//Received Events
 		receivedEventParameters.setComment(form.getReceivedEventComments());
 		User receivedUser = null;
 		if (form.getReceivedEventUserId() != 0)
 		{
 			receivedUser = new User();
-			receivedUser.setId(new Long(form.getReceivedEventUserId()));
+			receivedUser.setId(Long.valueOf(form.getReceivedEventUserId()));
 		}
 		receivedEventParameters.setUser(receivedUser);
 		receivedEventParameters.setReceivedQuality(form.getReceivedEventReceivedQuality());
-		Date receivedTimestamp = EventsUtil.setTimeStamp(form.getReceivedEventDateOfEvent(), form.getReceivedEventTimeInHours(), form
-				.getReceivedEventTimeInMinutes());
+		Date receivedTimestamp = EventsUtil.setTimeStamp(form.getReceivedEventDateOfEvent(),
+				form.getReceivedEventTimeInHours(), form.getReceivedEventTimeInMinutes());
 		receivedEventParameters.setTimestamp(receivedTimestamp);
 		receivedEventParameters.setSpecimenCollectionGroup(this);
 	}
 
 	/**
-	 * For Consent Tracking
-	 * Setting the Domain Object 
-	 * @param  form CollectionProtocolRegistrationForm
-	 * @return consentResponseColl
+	 * For Consent Tracking.
+	 * Setting the Domain Object.
+	 * @param  form CollectionProtocolRegistrationForm.
+	 * @return consentResponseColl.
 	 */
 	private Collection prepareParticipantResponseCollection(SpecimenCollectionGroupForm form)
 	{
@@ -632,7 +689,7 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 		Iterator iter = beanObjColl.iterator();
 		Collection consentResponseColl = new HashSet();
@@ -643,9 +700,10 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 			//Setting response
 			consentTierstatus.setStatus(consentBean.getSpecimenCollectionGroupLevelResponse());
 			if (consentBean.getSpecimenCollectionGroupLevelResponseID() != null
-					&& consentBean.getSpecimenCollectionGroupLevelResponseID().trim().length() > 0)
+				&& consentBean.getSpecimenCollectionGroupLevelResponseID().trim().length() > 0)
 			{
-				consentTierstatus.setId(Long.parseLong(consentBean.getSpecimenCollectionGroupLevelResponseID()));
+				consentTierstatus.setId(Long.parseLong(consentBean.
+						getSpecimenCollectionGroupLevelResponseID()));
 			}
 			//Setting consent tier
 			ConsentTier consentTier = new ConsentTier();
@@ -675,6 +733,10 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup#getGroupName()
 	 */
+	/**
+	 * Get Group Name.
+	 * @return String.
+	 */
 	@Override
 	public String getGroupName()
 	{
@@ -684,29 +746,48 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup#setGroupName(java.lang.String)
 	 */
+	/**
+	 * Set Group Name.
+	 * @param gpName of String type.
+	 * @throws BizLogicException Business Logic Exception.
+	 */
 	@Override
 	protected void setGroupName(String gpName) throws BizLogicException
 	{
 
 		if (gpName == null)
 		{
-			throw new BizLogicException("group name can't be null for " + "SpecimenCollectionGroup Object");
+			throw new BizLogicException("group name can't be null for " +
+					"SpecimenCollectionGroup Object");
 		}
 		this.setName(gpName);
 	}
 
+	/**
+	 * Get CollectionStatus.
+	 * @return String.
+	 */
 	public String getCollectionStatus()
 	{
 		return collectionStatus;
 	}
 
+	/**
+	 * Set CollectionStatus.
+	 * @param collectionStatus of String type.
+	 */
 	public void setCollectionStatus(String collectionStatus)
 	{
 		this.collectionStatus = collectionStatus;
 	}
 
+	/**
+	 * Parameterized Constructor.
+	 * @param collectionProtocolEvent of CollectionProtocolEvent type.
+	 */
 	public SpecimenCollectionGroup(CollectionProtocolEvent collectionProtocolEvent)
 	{
+		super();
 		this.collectionProtocolEvent = collectionProtocolEvent;
 		this.activityStatus = collectionProtocolEvent.getActivityStatus();
 		this.clinicalDiagnosis = collectionProtocolEvent.getClinicalDiagnosis();
@@ -714,29 +795,35 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 		this.collectionStatus = Constants.COLLECTION_STATUS_PENDING;
 	}
 
-	public void setConsentTierStatusCollectionFromCPR(CollectionProtocolRegistration collectionProtocolRegistration)
+	/**
+	 * Set ConsentTier Status Collection From CPR.
+	 * @param collectionProtocolRegistration of CollectionProtocolRegistration type.
+	 */
+	public void setConsentTierStatusCollectionFromCPR(CollectionProtocolRegistration
+			collectionProtocolRegistration)
 	{
 		Collection consentTierStatusCollectionN = this.getConsentTierStatusCollection();
 		if (consentTierStatusCollectionN == null)
 		{
 			consentTierStatusCollectionN = new HashSet();
 		}
-		Collection consentTierResponseCollection = collectionProtocolRegistration.getConsentTierResponseCollection();
+		Collection consentTierResponseCollection = collectionProtocolRegistration.
+			getConsentTierResponseCollection();
 		Collection scgConsTierColl = this.getConsentTierStatusCollection();
 		boolean hasMoreConsents = false;
 
 		if (consentTierResponseCollection != null && !consentTierResponseCollection.isEmpty())
 		{
-			Iterator it = consentTierResponseCollection.iterator();
+			Iterator iterator = consentTierResponseCollection.iterator();
 			Iterator scgIterator = null;
 			if (scgConsTierColl != null)
 			{
 				scgIterator = scgConsTierColl.iterator();
 				hasMoreConsents = scgIterator.hasNext();
 			}
-			while (it.hasNext())
+			while (iterator.hasNext())
 			{
-				ConsentTierResponse consentTierResponse = (ConsentTierResponse) it.next();
+				ConsentTierResponse consentTierResponse = (ConsentTierResponse) iterator.next();
 				ConsentTierStatus consentTierstatusN;
 				if (hasMoreConsents)
 				{
@@ -756,22 +843,38 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 		this.setConsentTierStatusCollection(consentTierStatusCollectionN);
 	}
 
-	public void setDefaultSpecimenGroupName(CollectionProtocol collectionProtocol, int ParticipantId, int SCGId)
+	/**
+	 * Set Default Specimen Group Name.
+	 * @param collectionProtocol of CollectionProtocol type.
+	 * @param ParticipantId of integer type.
+	 * @param SCGId of integer type.
+	 */
+	public void setDefaultSpecimenGroupName(CollectionProtocol collectionProtocol,
+			int ParticipantId, int SCGId)
 	{
 		String collectionProtocolTitle = collectionProtocol.getTitle();
 		String maxCollTitle = collectionProtocolTitle;
 		if (collectionProtocolTitle.length() > Constants.COLLECTION_PROTOCOL_TITLE_LENGTH)
 		{
-			maxCollTitle = collectionProtocolTitle.substring(0, Constants.COLLECTION_PROTOCOL_TITLE_LENGTH - 1);
+			maxCollTitle = collectionProtocolTitle.substring(0,
+					Constants.COLLECTION_PROTOCOL_TITLE_LENGTH - 1);
 		}
 		setName(maxCollTitle + "_" + ParticipantId + "_" + SCGId);
 	}
 
+	/**
+	 * Get Offset.
+	 * @return Integer.
+	 */
 	public Integer getOffset()
 	{
 		return offset;
 	}
 
+	/**
+	 * Set Offset.
+	 * @param offset of Integer type.
+	 */
 	public void setOffset(Integer offset)
 	{
 		this.offset = offset;
@@ -821,7 +924,7 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 	}
 
 	/**
-	 * Returns the unique barcode of the Specimen Collection Group
+	 * Returns the unique barcode of the Specimen Collection Group.
 	 * @hibernate.property name="barcode" column="BARCODE" type="string" length="255"
 	 * @return the system generated unique name.
 	 * @see #setName(String)
@@ -837,17 +940,26 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 	public void setBarcode(String barcode)
 	{
 		this.barcode = barcode;
-		if ("".equals(barcode))
+		String nullString = null;
+		if (Constants.DOUBLE_QUOTES.equals(barcode))
 		{
-			this.barcode = null;
+			this.barcode = nullString;
 		}
 	}
 
+	/**
+	 * Get EncounterTimestamp.
+	 * @return Date.
+	 */
 	public Date getEncounterTimestamp()
 	{
 		return encounterTimestamp;
 	}
 
+	/**
+	 * Set EncounterTimestamp.
+	 * @param encounterTimestamp of Date type.
+	 */
 	public void setEncounterTimestamp(Date encounterTimestamp)
 	{
 		this.encounterTimestamp = encounterTimestamp;

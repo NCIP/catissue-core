@@ -6,73 +6,103 @@ import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
 
 /**
- * @author gautam_shetty
- * @author Ashwin Gupta 
+ * @author gautam_shetty.
+ * @author Ashwin Gupta.
  * @hibernate.class table="CATISSUE_SPECI_ARRAY_CONTENT"
  */
-public class SpecimenArrayContent extends AbstractDomainObject 
+public class SpecimenArrayContent extends AbstractDomainObject
 {
-    
-    protected Long id;
-    
+    /**
+	 * Serial Version ID.
+	 */
+	private static final long serialVersionUID = 5033957277093287851L;
+
+	/**
+	 * System generated id.
+	 */
+	protected Long id;
+
+	/**
+	 * concentrationInMicrogramPerMicroliter.
+	 */
 	protected Double concentrationInMicrogramPerMicroliter;
-	
+
+	/**
+	 * positionDimensionOne.
+	 */
 	protected Integer positionDimensionOne;
-	
+
+	/**
+	 * positionDimensionTwo.
+	 */
 	protected Integer positionDimensionTwo;
-	
-	//Change for API Search   --- Ashwin 04/10/2006
+
+	/**
+	 * initialQuantity.
+	 */
 	protected Double initialQuantity;
-	
-	//Change for API Search   --- Ashwin 04/10/2006
+
+	/**
+	 * specimenArray.
+	 */
 	protected SpecimenArray specimenArray;
-	
-	//Change for API Search   --- Ashwin 04/10/2006
+
+	/**
+	 * specimen.
+	 */
 	protected Specimen specimen;
-	
+
+	/**
+	 * Default Constructor.
+	 */
 	public SpecimenArrayContent()
 	{
+		super();
 	}
-	
+
 	/**
+	 * Set Id.
+	 * @param identifier Identifier.
      * (non-Javadoc)
      * @see edu.wustl.common.domain.AbstractDomainObject#setId(java.lang.Long)
      */
-    public void setId(Long id)
+    public void setId(Long identifier)
     {
-        this.id = id;
+        this.id = identifier;
     }
-    
+
     /**
+     * Set Id.
      * (non-Javadoc)
      * @see edu.wustl.common.domain.AbstractDomainObject#getId()
      * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
-     * unsaved-value="null" generator-class="native" 
+     * unsaved-value="null" generator-class="native"
      * @hibernate.generator-param name="sequence" value="CATISSUE_SPECI_ARRAY_CNTNT_SEQ"
+     * @return Long.
      */
     public Long getId()
     {
         return this.id;
     }
-	
+
     /**
      * @return Returns the concentrationInMicrogramPerMicroliter.
-     * @hibernate.property name="concentrationInMicrogramPerMicroliter" type="double" 
+     * @hibernate.property name="concentrationInMicrogramPerMicroliter" type="double"
 	 * column="CONC_IN_MICROGM_PER_MICROLTR" length="50"
      */
     public Double getConcentrationInMicrogramPerMicroliter()
     {
         return concentrationInMicrogramPerMicroliter;
     }
-    
+
     /**
-     * @param concentrationInMicrogramPerMicroliter The concentrationInMicrogramPerMicroliter to set.
+     * @param concentration - The concentrationInMicrogramPerMicroliter to set.
      */
     public void setConcentrationInMicrogramPerMicroliter(Double concentration)
     {
         this.concentrationInMicrogramPerMicroliter = concentration;
     }
-    
+
     /**
      * @return Returns the initialQuantity.
      * @hibernate.property name="initialQuantity" type="double"
@@ -82,7 +112,7 @@ public class SpecimenArrayContent extends AbstractDomainObject
     {
         return initialQuantity;
     }
-    
+
     /**
      * @param initialQuantity The initialQuantity to set.
      */
@@ -90,7 +120,7 @@ public class SpecimenArrayContent extends AbstractDomainObject
     {
         this.initialQuantity = initialQuantity;
     }
-    
+
     /**
      * @return Returns the positionDimensionOne.
      * @hibernate.property name="positionDimensionOne" type="int" column="POSITION_DIMENSION_ONE" length="30"
@@ -99,7 +129,7 @@ public class SpecimenArrayContent extends AbstractDomainObject
     {
         return positionDimensionOne;
     }
-    
+
     /**
      * @param positionDimensionOne The positionDimensionOne to set.
      */
@@ -107,7 +137,7 @@ public class SpecimenArrayContent extends AbstractDomainObject
     {
         this.positionDimensionOne = positionDimensionOne;
     }
-    
+
     /**
      * @return Returns the positionDimensionTwo.
      * @hibernate.property name="positionDimensionTwo" type="int" column="POSITION_DIMENSION_TWO" length="30"
@@ -116,7 +146,7 @@ public class SpecimenArrayContent extends AbstractDomainObject
     {
         return positionDimensionTwo;
     }
-    
+
     /**
      * @param positionDimensionTwo The positionDimensionTwo to set.
      */
@@ -124,7 +154,7 @@ public class SpecimenArrayContent extends AbstractDomainObject
     {
         this.positionDimensionTwo = positionDimensionTwo;
     }
-    
+
     /**
      * @return Returns the specimen.
      * @hibernate.many-to-one column="SPECIMEN_ID" class="edu.wustl.catissuecore.domain.Specimen"
@@ -134,7 +164,7 @@ public class SpecimenArrayContent extends AbstractDomainObject
     {
         return specimen;
     }
-    
+
     /**
      * @param specimen The specimen to set.
      */
@@ -142,7 +172,7 @@ public class SpecimenArrayContent extends AbstractDomainObject
     {
         this.specimen = specimen;
     }
-    
+
     /**
      * @return Returns the specimenArray.
      * @hibernate.many-to-one column="SPECIMEN_ARRAY_ID" class="edu.wustl.catissuecore.domain.SpecimenArray"
@@ -152,7 +182,7 @@ public class SpecimenArrayContent extends AbstractDomainObject
     {
         return specimenArray;
     }
-    
+
     /**
      * @param specimenArray The specimenArray to set.
      */
@@ -160,11 +190,14 @@ public class SpecimenArrayContent extends AbstractDomainObject
     {
         this.specimenArray = specimenArray;
     }
-    
-    
+
     /**
+     * Set All Values.
      * (non-Javadoc)
-     * @see edu.wustl.common.domain.AbstractDomainObject#setAllValues(edu.wustl.common.actionForm.AbstractActionForm)
+     * @see edu.wustl.common.domain.AbstractDomainObject#setAllValues(
+     * edu.wustl.common.actionForm.AbstractActionForm)
+     * @param arg0 IValueObject.
+     * @throws AssignDataException AssignDataException.
      */
     public void setAllValues(IValueObject arg0)
             throws AssignDataException
@@ -174,18 +207,17 @@ public class SpecimenArrayContent extends AbstractDomainObject
     	{
     		initialQuantity = new Double(0);
     	}
-    	
+
     	//Change for API Search   --- Ashwin 04/10/2006
     	if (SearchUtil.isNullobject(specimenArray))
     	{
     		specimenArray = new SpecimenArray();
     	}
-    	
+
     	//Change for API Search   --- Ashwin 04/10/2006
     	if (SearchUtil.isNullobject(specimen))
     	{
     		 specimen = new Specimen();
     	}
     }
-    
 }
