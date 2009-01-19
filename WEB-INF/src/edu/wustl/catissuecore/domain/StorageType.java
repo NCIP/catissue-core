@@ -12,7 +12,6 @@ package edu.wustl.catissuecore.domain;
 
 import java.util.Collection;
 import java.util.HashSet;
-
 import edu.wustl.catissuecore.actionForm.StorageTypeForm;
 import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.catissuecore.util.global.Utility;
@@ -28,28 +27,58 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class StorageType extends ContainerType
 {
+	/**
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(StorageType.class);
+	/**
+	 * Serial Version ID.
+	 */
+	private static final long serialVersionUID = -1398514908633751482L;
 
+	/**
+	 * defaultTempratureInCentigrade.
+	 */
 	protected Double defaultTempratureInCentigrade;
 
+	/**
+	 * holdsStorageTypeCollection.
+	 */
 	protected Collection holdsStorageTypeCollection = new HashSet();
 
+	/**
+	 * HashSet holding SpecimenClassCollection.
+	 */
 	protected Collection holdsSpecimenClassCollection = new HashSet();
 
+	/**
+	 * HashSet holding SpecimenArrayTypeCollection.
+	 */
 	protected Collection holdsSpecimenArrayTypeCollection = new HashSet();
 
+	/**
+	 * Default Constructor.
+	 */
 	public StorageType()
 	{
+		super();
 		// Default Constructor, required for Hibernate
 	}
 
+	/**
+	 * Parameterized Constructor.
+	 * @param abstractActionForm of AbstractActionForm type.
+	 * @throws AssignDataException AssignDataException.
+	 */
 	public StorageType(AbstractActionForm abstractActionForm) throws AssignDataException
 	{
-		setAllValues((IValueObject)abstractActionForm);
+		super();
+		setAllValues((IValueObject) abstractActionForm);
 	}
 
 	/**
 	 * @return Returns the defaultTempratureInCentigrade.
-	 * @hibernate.property name="defaultTempratureInCentigrade" type="double" 
+	 * @hibernate.property name="defaultTempratureInCentigrade" type="double"
 	 * column="DEFAULT_TEMPERATURE" length="30"
 	 */
 	public Double getDefaultTempratureInCentigrade()
@@ -87,11 +116,12 @@ public class StorageType extends ContainerType
 
 	/**
 	 * @return Returns the holdsStorageTypeCollection.
-	 * Returns the collection of storage types associated with type 
+	 * Returns the collection of storage types associated with type
 	 * @hibernate.set name="holdsStorageTypeCollection" table="CATISSUE_STOR_TYPE_HOLDS_TYPE"
 	 * cascade="save-update" inverse="false" lazy="false"
 	 * @hibernate.collection-key column="STORAGE_TYPE_ID"
-	 * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.StorageType" column="HOLDS_STORAGE_TYPE_ID"
+	 * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.StorageType"
+	 * column="HOLDS_STORAGE_TYPE_ID"
 	 */
 	public Collection getHoldsStorageTypeCollection()
 	{
@@ -108,11 +138,12 @@ public class StorageType extends ContainerType
 
 	/**
 	 * @return Returns the holdsSpecimenArrayTypeCollection.
-	 * Returns the collection of specimen array types associated with type 
+	 * Returns the collection of specimen array types associated with type
 	 * @hibernate.set name="holdsSpecimenArrayTypeCollection" table="CATISSUE_STORTY_HOLDS_SPARRTY"
 	 * cascade="save-update" inverse="false" lazy="false"
 	 * @hibernate.collection-key column="STORAGE_TYPE_ID"
-	 * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.SpecimenArrayType" column="SPECIMEN_ARRAY_TYPE_ID"
+	 * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.SpecimenArrayType"
+	 * column="SPECIMEN_ARRAY_TYPE_ID"
 	 */
 	public Collection getHoldsSpecimenArrayTypeCollection()
 	{
@@ -120,7 +151,7 @@ public class StorageType extends ContainerType
 	}
 
 	/**
-	 * @param holdsSpArratTypeCollection The holdsSpecimenArrayTypeCollection to set.
+	 * @param holdsSpecimenArrayTypeCollection The holdsSpecimenArrayTypeCollection to set.
 	 */
 	public void setHoldsSpecimenArrayTypeCollection(Collection holdsSpecimenArrayTypeCollection)
 	{
@@ -128,7 +159,13 @@ public class StorageType extends ContainerType
 	}
 
 	/* (non-Javadoc)
-	 * @see edu.wustl.catissuecore.domain.ContainerType#setAllValues(edu.wustl.common.actionForm.AbstractActionForm)
+	 * @see edu.wustl.catissuecore.domain.ContainerType#
+	 * setAllValues(edu.wustl.common.actionForm.AbstractActionForm)
+	 */
+	/**
+	 * Set all values.
+	 * @throws AssignDataException AssignDataException.
+	 * @param abstractForm of IValueObject type.
 	 */
 	public void setAllValues(IValueObject abstractForm) throws AssignDataException
 	{
@@ -136,48 +173,47 @@ public class StorageType extends ContainerType
 		{
 			final StorageTypeForm storageTypeForm = (StorageTypeForm) abstractForm;
 
-			this.id = new Long(storageTypeForm.getId());
+			this.id = Long.valueOf(storageTypeForm.getId());
 			this.name = storageTypeForm.getType().trim();
 
-			if (storageTypeForm.getDefaultTemperature() != null
-					&& storageTypeForm.getDefaultTemperature().trim().length() > 0)
+			if (storageTypeForm.getDefaultTemperature() != null &&
+					storageTypeForm.getDefaultTemperature().trim().length() > 0)
 			{
-				this.defaultTempratureInCentigrade = new Double(storageTypeForm
-						.getDefaultTemperature());
+				this.defaultTempratureInCentigrade = new Double(
+						storageTypeForm.getDefaultTemperature());
 			}
 
 			this.oneDimensionLabel = storageTypeForm.getOneDimensionLabel();
 			this.twoDimensionLabel = storageTypeForm.getTwoDimensionLabel();
 
-	        // Change for API Search   --- Ashwin 04/10/2006
-	    	if (SearchUtil.isNullobject(capacity))
-	    	{
-	    		capacity = new Capacity();
-	    	}
-			
-			capacity
-					.setOneDimensionCapacity(new Integer(storageTypeForm.getOneDimensionCapacity()));
-			capacity
-					.setTwoDimensionCapacity(new Integer(storageTypeForm.getTwoDimensionCapacity()));
+			if (SearchUtil.isNullobject(capacity))
+			{
+				capacity = new Capacity();
+			}
 
-//			holdsStorageTypeCollection.clear();
+			capacity.setOneDimensionCapacity(Integer.valueOf(
+					storageTypeForm.getOneDimensionCapacity()));
+			capacity.setTwoDimensionCapacity(Integer.valueOf(
+					storageTypeForm.getTwoDimensionCapacity()));
+
+			//holdsStorageTypeCollection.clear();
 			holdsStorageTypeCollection = new HashSet();
 			long[] storageTypeArr = storageTypeForm.getHoldsStorageTypeIds();
 			if (storageTypeArr != null)
 			{
 				for (int i = 0; i < storageTypeArr.length; i++)
 				{
-					Logger.out.debug("type Id :" + storageTypeArr[i]);
+					logger.debug("type Id :" + storageTypeArr[i]);
 					if (storageTypeArr[i] != -1)
 					{
 						StorageType storageType = new StorageType();
-						storageType.setId(new Long(storageTypeArr[i]));
+						storageType.setId(Long.valueOf(storageTypeArr[i]));
 						holdsStorageTypeCollection.add(storageType);
 					}
 				}
 			}
 
-//			holdsSpecimenClassCollection.clear();
+			//holdsSpecimenClassCollection.clear();
 			holdsSpecimenClassCollection = new HashSet();
 			if (storageTypeForm.getSpecimenOrArrayType().equals("Specimen"))
 			{
@@ -187,10 +223,11 @@ public class StorageType extends ContainerType
 
 					for (int i = 0; i < specimenClassTypeArr.length; i++)
 					{
-						Logger.out.debug("type Id :" + specimenClassTypeArr[i]);
+						logger.debug("type Id :" + specimenClassTypeArr[i]);
 						if (specimenClassTypeArr[i].equals("-1"))
 						{
-							holdsSpecimenClassCollection.addAll(Utility.getSpecimenClassTypes());
+							holdsSpecimenClassCollection.addAll(
+									Utility.getSpecimenClassTypes());
 							break;
 						}
 						else
@@ -200,56 +237,71 @@ public class StorageType extends ContainerType
 					}
 				}
 			}
-//			holdsSpArrayTypeCollection.clear();
+			//			holdsSpArrayTypeCollection.clear();
 			holdsSpecimenArrayTypeCollection = new HashSet();
-			if (storageTypeForm.getSpecimenOrArrayType().equals("SpecimenArray"))
-			{
-				long[] specimenArrayTypeArr = storageTypeForm.getHoldsSpecimenArrTypeIds();
-				if (specimenArrayTypeArr != null)
-				{
-					for (int i = 0; i < specimenArrayTypeArr.length; i++)
-					{
-						Logger.out.debug("specimen array type Id :" + specimenArrayTypeArr[i]);
-						if (specimenArrayTypeArr[i] != -1)
-						{
-							SpecimenArrayType spArrayType = new SpecimenArrayType();
-							spArrayType.setId(new Long(specimenArrayTypeArr[i]));
-							holdsSpecimenArrayTypeCollection.add(spArrayType);
-						}
-					}
-				}
-			}
+			populateHoldsSpecimenArrayTypeCollection(storageTypeForm);
 			this.activityStatus = "Active";
 		}
 		catch (Exception excp)
 		{
-			Logger.out.error(excp.getMessage());
+			logger.error(excp.getMessage());
 		}
 	}
-	
+
+	/**
+	 * @param storageTypeForm of StorageTypeForm type.
+	 */
+	private void populateHoldsSpecimenArrayTypeCollection(final StorageTypeForm storageTypeForm)
+	{
+		if (storageTypeForm.getSpecimenOrArrayType().equals("SpecimenArray"))
+		{
+			long[] specimenArrayTypeArr = storageTypeForm.getHoldsSpecimenArrTypeIds();
+			if (specimenArrayTypeArr != null)
+			{
+				for (int i = 0; i < specimenArrayTypeArr.length; i++)
+				{
+					logger.debug("specimen array type Id :" + specimenArrayTypeArr[i]);
+					if (specimenArrayTypeArr[i] != -1)
+					{
+						SpecimenArrayType spArrayType = new SpecimenArrayType();
+						spArrayType.setId(Long.valueOf(specimenArrayTypeArr[i]));
+						holdsSpecimenArrayTypeCollection.add(spArrayType);
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * @param object Object.
+	 * @return Boolean.
+	 */
 	public boolean equals(Object object)
-    {
+	{
 		boolean equals = false;
-    	if((object!=null) && object instanceof StorageType)
-    	{
-    		StorageType storageType = (StorageType)object;
-    		if(this.getId().longValue() == storageType.getId().longValue())
-    		{
-    			equals = true;
-    		}
-    	}
-    	return equals;
-    }
+		if ((object != null) && object instanceof StorageType)
+		{
+			StorageType storageType = (StorageType) object;
+			if (this.getId().longValue() == storageType.getId().longValue())
+			{
+				equals = true;
+			}
+		}
+		return equals;
+	}
+
+	/**
+	 * @return integer.
+	 */
 	public int hashCode()
 	{
 		int hashCode = super.hashCode();
-		
-		if(this.getId() != null)
+
+		if (this.getId() != null)
 		{
 			hashCode = this.getId().hashCode();
 		}
-		
+
 		return hashCode;
 	}
-	
 }

@@ -13,7 +13,6 @@ package edu.wustl.catissuecore.domain;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
-
 import edu.wustl.catissuecore.actionForm.StorageContainerForm;
 import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -31,68 +30,122 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class StorageContainer extends Container implements IActivityStatus
 {
+	/**
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(StorageContainer.class);
+	/**
+	 * Serial Version ID.
+	 */
+	private static final long serialVersionUID = 7589264838581930051L;
+
+	/**
+	 * specimenPositionCollection.
+	 */
 	protected Collection<SpecimenPosition> specimenPositionCollection;
-	
+
+	/**
+	 * tempratureInCentigrade.
+	 */
 	protected Double tempratureInCentigrade;
 
+	/**
+	 * storageType.
+	 */
 	protected StorageType storageType;
 
+	/**
+	 * site.
+	 */
 	protected Site site;
 
+	/**
+	 * HashSet containing collectionProtocol.
+	 */
 	protected Collection<CollectionProtocol> collectionProtocolCollection = new HashSet<CollectionProtocol>();
 
+	/**
+	 * HashSet containing StorageType.
+	 */
 	protected Collection<StorageType> holdsStorageTypeCollection = new HashSet<StorageType>();
 
+	/**
+	 * HashSet containing String.
+	 */
 	protected Collection<String> holdsSpecimenClassCollection = new HashSet<String>();
 
+	/**
+	 * HashSet containing String.
+	 */
 	protected Collection holdsSpecimenArrayTypeCollection = new HashSet();
 
 	/**
-	 * Number of containers
+	 * startNo of containers.
 	 */
 	protected transient Integer startNo;
 
 	/**
-	 * Number of containers
+	 * Number of containers.
 	 */
 	protected transient Integer noOfContainers;
 
+	/**
+	 * Map of similarContainerMap.
+	 */
 	protected transient Map similarContainerMap;
 
+	/**
+	 * Boolean isParentChanged.
+	 */
 	protected transient boolean isParentChanged = false;
 
 	// -------- To check for changed position in the same container.
+	/**
+	 * positionChanged.
+	 */
 	private boolean positionChanged = false;
-	
-//	private Collection specimenCollection;
+
+	/**
+	 * Default Constructor.
+	 */
 	public StorageContainer()
 	{
+		super();
 	}
 
+	/**
+	 * Parameterized Constructor.
+	 * @param oldContainer of StorageContainer type.
+	 */
 	public StorageContainer(StorageContainer oldContainer)
 	{
+		super();
 		this.setId(oldContainer.getId());
 		this.setActivityStatus(oldContainer.getActivityStatus());
 		//this.setParent(oldContainer.getLocatedAtPosition().getParentContainer());
 		//this.setNumber(oldContainer.getNumber());
 		this.setName(oldContainer.getName());
 		this.setBarcode(oldContainer.barcode);
-		if(oldContainer.getLocatedAtPosition() != null)
+		if (oldContainer.getLocatedAtPosition() != null)
 		{
-			if(this.locatedAtPosition == null)
+			if (this.locatedAtPosition == null)
 			{
 				this.locatedAtPosition = new ContainerPosition();
 			}
-			this.locatedAtPosition.setParentContainer(oldContainer.getLocatedAtPosition().getParentContainer());
-			this.locatedAtPosition.setPositionDimensionOne(oldContainer.getLocatedAtPosition().getPositionDimensionOne());
-			this.locatedAtPosition.setPositionDimensionTwo(oldContainer.getLocatedAtPosition().getPositionDimensionTwo());
+			this.locatedAtPosition.setParentContainer(oldContainer.
+					getLocatedAtPosition().getParentContainer());
+			this.locatedAtPosition.setPositionDimensionOne(oldContainer.
+					getLocatedAtPosition().getPositionDimensionOne());
+			this.locatedAtPosition.setPositionDimensionTwo(oldContainer.
+					getLocatedAtPosition().getPositionDimensionTwo());
 			this.locatedAtPosition.occupiedContainer = this;
 		}
 		this.setFull(oldContainer.isFull());
-//		if ((this.locatedAtPosition != null) && (this.locatedAtPosition.parentContainer != null) && (this.locatedAtPosition.parentContainer.getChildren() != null))
-//		{			
-//			this.locatedAtPosition.parentContainer.getChildren().add(this);
-//		}
+		//if ((this.locatedAtPosition != null) && (this.locatedAtPosition.
+		//parentContainer != null) && (this.locatedAtPosition.parentContainer.getChildren() != null))
+		//{
+		//	this.locatedAtPosition.parentContainer.getChildren().add(this);
+		//}
 		this.setSite(oldContainer.getSite());
 		capacity = new Capacity(oldContainer.getCapacity());
 
@@ -104,17 +157,24 @@ public class StorageContainer extends Container implements IActivityStatus
 		this.setHoldsSpecimenArrayTypeCollection(oldContainer.getHoldsSpecimenArrayTypeCollection());
 	}
 
+	/**
+	 * Parameterized Constructor.
+	 * @param abstractActionForm of AbstractActionForm type.
+	 * @throws AssignDataException AssignDataException.
+	 */
 	public StorageContainer(AbstractActionForm abstractActionForm) throws AssignDataException
 	{
-		setAllValues((IValueObject)abstractActionForm);
+		super();
+		setAllValues((IValueObject) abstractActionForm);
 	}
 
 	/**
 	 * @return Returns the collectionProtocolCollection.
-	 * @hibernate.set name="collectionProtocolCollection" table="CATISSUE_ST_CONT_COLL_PROT_REL" 
+	 * @hibernate.set name="collectionProtocolCollection" table="CATISSUE_ST_CONT_COLL_PROT_REL"
 	 * cascade="none" inverse="false" lazy="false"
 	 * @hibernate.collection-key column="STORAGE_CONTAINER_ID"
-	 * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.CollectionProtocol" column="COLLECTION_PROTOCOL_ID"
+	 * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.CollectionProtocol"
+	 * column="COLLECTION_PROTOCOL_ID"
 	 */
 	public Collection<CollectionProtocol> getCollectionProtocolCollection()
 	{
@@ -231,10 +291,11 @@ public class StorageContainer extends Container implements IActivityStatus
 
 	/**
 	 * @return Returns the holdsStorageTypeCollection.
-	 * @hibernate.set name="holdsStorageTypeCollection" table="CATISSUE_ST_CONT_ST_TYPE_REL" 
+	 * @hibernate.set name="holdsStorageTypeCollection" table="CATISSUE_ST_CONT_ST_TYPE_REL"
 	 * cascade="none" inverse="false" lazy="false"
 	 * @hibernate.collection-key column="STORAGE_CONTAINER_ID"
-	 * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.StorageType" column="STORAGE_TYPE_ID"
+	 * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.StorageType"
+	 * column="STORAGE_TYPE_ID"
 	 */
 	public Collection getHoldsStorageTypeCollection()
 	{
@@ -251,11 +312,12 @@ public class StorageContainer extends Container implements IActivityStatus
 
 	/**
 	 * @return Returns the holdsSpArrayTypeCollection.
-	 * Returns the collection of specimen array types associated with container 
+	 * Returns the collection of specimen array types associated with container
 	 * @hibernate.set name="holdsSpecimenArrayTypeCollection" table="CATISSUE_CONT_HOLDS_SPARRTYPE"
 	 * cascade="save-update" inverse="false" lazy="false"
 	 * @hibernate.collection-key column="STORAGE_CONTAINER_ID"
-	 * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.SpecimenArrayType" column="SPECIMEN_ARRAY_TYPE_ID"
+	 * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.SpecimenArrayType"
+	 * column="SPECIMEN_ARRAY_TYPE_ID"
 	 */
 	public Collection getHoldsSpecimenArrayTypeCollection()
 	{
@@ -290,7 +352,7 @@ public class StorageContainer extends Container implements IActivityStatus
 
 	/**
 	 * @return Returns the tempratureInCentigrade.
-	 * @hibernate.property name="tempratureInCentigrade" type="double" 
+	 * @hibernate.property name="tempratureInCentigrade" type="double"
 	 * column="TEMPERATURE" length="30"
 	 */
 	public Double getTempratureInCentigrade()
@@ -325,37 +387,44 @@ public class StorageContainer extends Container implements IActivityStatus
 
 	/**
 	 * This function Copies the data from a StorageTypeForm object to a StorageType object.
-	 * @param storageTypeForm A StorageTypeForm object containing the information about the StorageType.  
-	 * */
+	 * @param abstractForm - storageTypeForm A StorageTypeForm object containing the
+	 * information about the StorageType.
+	 */
 	public void setAllValues(IValueObject abstractForm)
 	{
+		String nullString = null; //added to remove PMD.
 		try
 		{
 			StorageContainerForm form = (StorageContainerForm) abstractForm;
 			this.name = form.getContainerName();
-			this.noOfContainers = new Integer(form.getNoOfContainers());
+			this.noOfContainers = Integer.valueOf(form.getNoOfContainers());
 			if (Utility.toString(form.getDefaultTemperature()).trim().length() > 0)
 			{
 				this.tempratureInCentigrade = new Double(form.getDefaultTemperature());
 			}
 			/*if (this.noOfContainers.intValue() == 1)
 			{
-				if (!Variables.isStorageContainerBarcodeGeneratorAvl &&  form.getBarcode()!=null &&  !form.getBarcode().trim().equals(""))
+				if (!Variables.isStorageContainerBarcodeGeneratorAvl &&  form.getBarcode()!=null &&
+				!form.getBarcode().trim().equals(""))
 					this.barcode = form.getBarcode();
 				else
 					this.barcode = null;
 			}*/
-			if(form.getBarcode() != null && form.getBarcode().equals(""))
-				this.barcode = null;
+			if (form.getBarcode() != null && form.getBarcode().equals(Constants.DOUBLE_QUOTES))
+			{
+				this.barcode = nullString;
+			}
 			else
+			{
 				this.barcode = form.getBarcode();
-			this.full = new Boolean(form.getIsFull());
-			Logger.out.debug("SC Domain : " + this.full + " :-: form.getIsFull() : " + form.getIsFull());
+			}
+			this.full = Boolean.valueOf(form.getIsFull());
+			logger.debug("SC Domain : " + this.full + " :-: form.getIsFull() : " + form.getIsFull());
 			this.activityStatus = form.getActivityStatus();
-			this.noOfContainers = new Integer(form.getNoOfContainers());
+			this.noOfContainers = Integer.valueOf(form.getNoOfContainers());
 
 			storageType = new StorageType();
-			storageType.setId(new Long(form.getTypeId()));
+			storageType.setId(Long.valueOf(form.getTypeId()));
 			storageType.setOneDimensionLabel(form.getOneDimensionLabel());
 			storageType.setTwoDimensionLabel(form.getTwoDimensionLabel());
 			storageType.setName(form.getTypeName());
@@ -365,22 +434,19 @@ public class StorageContainer extends Container implements IActivityStatus
 				capacity = new Capacity();
 			}
 
-			capacity.setOneDimensionCapacity(new Integer(form.getOneDimensionCapacity()));
-			capacity.setTwoDimensionCapacity(new Integer(form.getTwoDimensionCapacity()));
+			capacity.setOneDimensionCapacity(Integer.valueOf(form.getOneDimensionCapacity()));
+			capacity.setTwoDimensionCapacity(Integer.valueOf(form.getTwoDimensionCapacity()));
 
 			//in case of edit
 			if (!form.isAddOperation())
 			{
 				//Previously Container was in a site
-				if (this.locatedAtPosition != null && this.locatedAtPosition.getParentContainer() == null)
+				if (this.locatedAtPosition != null &&
+						this.locatedAtPosition.getParentContainer() == null)
 				{
-					if (form.getStContSelection() == 1)
+					if (form.getStContSelection() == 1 && form.getParentContainerId() > 0)
 					{
-						//Put this in another container
-						if (form.getParentContainerId() > 0)
-						{
-							isParentChanged = true;
-						}
+						isParentChanged = true;
 					}
 					else
 					{
@@ -395,12 +461,14 @@ public class StorageContainer extends Container implements IActivityStatus
 				{
 					if (form.getStContSelection() == 1)
 					{
-						if (this.locatedAtPosition != null && this.locatedAtPosition.getParentContainer() != null && this.locatedAtPosition.parentContainer.getId().longValue() != form.getParentContainerId())
+						if (this.locatedAtPosition != null && this.locatedAtPosition.getParentContainer() != null
+								&& this.locatedAtPosition.parentContainer.getId().longValue() != form.getParentContainerId())
 						{
 							isParentChanged = true;
 						}
 					}
-					else if (this.locatedAtPosition != null && this.locatedAtPosition.parentContainer != null && this.locatedAtPosition.parentContainer.getId().equals(form.getContainerId()))
+					else if (this.locatedAtPosition != null && this.locatedAtPosition.parentContainer
+							!= null && this.locatedAtPosition.parentContainer.getId().equals(form.getContainerId()))
 					{
 						isParentChanged = true;
 					}
@@ -410,107 +478,115 @@ public class StorageContainer extends Container implements IActivityStatus
 					if (form.getStContSelection() == 1)
 					{
 						if ((locatedAtPosition != null && locatedAtPosition.positionDimensionOne.intValue() != form.getPositionDimensionOne())
-							|| (locatedAtPosition != null && locatedAtPosition.positionDimensionTwo.intValue() != form.getPositionDimensionOne()))
+								|| (locatedAtPosition != null && locatedAtPosition.positionDimensionTwo.intValue() != form.getPositionDimensionOne()))
 						{
 							positionChanged = true;
 						}
 					}
 					else
 					{
-						if (locatedAtPosition != null && locatedAtPosition.positionDimensionOne.equals(form.getPos1()) || locatedAtPosition.positionDimensionTwo.equals(form.getPos2()))
+						if (locatedAtPosition != null && locatedAtPosition.positionDimensionOne.equals(form.getPos1())
+							|| locatedAtPosition.positionDimensionTwo.equals(form.getPos2()))
 						{
 							positionChanged = true;
 						}
 					}
 
-				
 				}
 			}
 
-			Logger.out.debug("isParentChanged " + isParentChanged);
-			if (!Constants.SITE.equals(form.getParentContainerSelected()))
+			logger.debug("isParentChanged " + isParentChanged);
+			if (Constants.SITE.equals(form.getParentContainerSelected()))
 			{
-				if(this.locatedAtPosition == null)
+				this.locatedAtPosition = null;
+				site = new Site();
+				site.setId(Long.valueOf(form.getSiteId()));
+				site.setName(form.getSiteName());
+			}
+			else
+			{
+				if (this.locatedAtPosition == null)
 				{
 					this.locatedAtPosition = new ContainerPosition();
 				}
 				if ("Auto".equals(form.getParentContainerSelected()))
-				{					
-					
+				{
+
 					this.locatedAtPosition.parentContainer = new StorageContainer();
-					this.locatedAtPosition.parentContainer.setId(new Long(form.getParentContainerId()));
-					
-					this.locatedAtPosition.setPositionDimensionOne(new Integer(form.getPositionDimensionOne()));
-					this.locatedAtPosition.setPositionDimensionTwo(new Integer(form.getPositionDimensionTwo()));
+					this.locatedAtPosition.parentContainer.setId(Long.valueOf(
+							form.getParentContainerId()));
+
+					this.locatedAtPosition.setPositionDimensionOne(Integer.valueOf(
+							form.getPositionDimensionOne()));
+					this.locatedAtPosition.setPositionDimensionTwo(Integer.valueOf(
+							form.getPositionDimensionTwo()));
 					this.locatedAtPosition.occupiedContainer = this;
 				}
 				else
 				{
 					this.locatedAtPosition.parentContainer = new StorageContainer();
-					if (form.getContainerId() != null && !form.getContainerId().trim().equals(""))
+					if (form.getContainerId() != null &&
+						!form.getContainerId().trim().equals(Constants.DOUBLE_QUOTES))
 					{
-						this.locatedAtPosition.parentContainer.setId(new Long(form.getContainerId()));
+						this.locatedAtPosition.parentContainer.setId(Long.valueOf(
+								form.getContainerId()));
 					}
 					else
 					{
-						this.locatedAtPosition.parentContainer.setName(form.getSelectedContainerName());
+						this.locatedAtPosition.parentContainer.setName(
+								form.getSelectedContainerName());
 					}
-					if (form.getPos1() != null && !form.getPos1().trim().equals("") && form.getPos2() != null && !form.getPos2().trim().equals(""))
+					if (form.getPos1() != null && !form.getPos1().trim().
+							equals(Constants.DOUBLE_QUOTES) && form.getPos2() != null
+							&& !form.getPos2().trim().equals(Constants.DOUBLE_QUOTES))
 					{
-						if(this.locatedAtPosition == null)
+						if (this.locatedAtPosition == null)
 						{
 							this.locatedAtPosition = new ContainerPosition();
-						}						
-						this.locatedAtPosition.setPositionDimensionOne(new Integer(form.getPos1().trim()));
-						this.locatedAtPosition.setPositionDimensionTwo(new Integer(form.getPos2().trim()));
+						}
+						this.locatedAtPosition.setPositionDimensionOne(Integer.valueOf(
+								form.getPos1().trim()));
+						this.locatedAtPosition.setPositionDimensionTwo(Integer.valueOf(
+								form.getPos2().trim()));
 						this.locatedAtPosition.occupiedContainer = this;
 					}
 				}
 			}
-			else
-			{
-				this.locatedAtPosition = null;
-				
-				site = new Site();
-				site.setId(new Long(form.getSiteId()));
-				site.setName(form.getSiteName());
-				
-			}
 
-//			collectionProtocolCollection.clear();
+			//collectionProtocolCollection.clear();
 			collectionProtocolCollection = new HashSet();
 			long[] collectionProtocolArr = form.getCollectionIds();
 			if (collectionProtocolArr != null)
 			{
 				for (int i = 0; i < collectionProtocolArr.length; i++)
 				{
-					Logger.out.debug("Collection prtocoo Id :" + collectionProtocolArr[i]);
+					logger.debug("Collection prtocoo Id :" + collectionProtocolArr[i]);
 					if (collectionProtocolArr[i] != -1)
 					{
 						CollectionProtocol collectionProtocol = new CollectionProtocol();
-						collectionProtocol.setId(new Long(collectionProtocolArr[i]));
+						collectionProtocol.setId(Long.valueOf(collectionProtocolArr[i]));
 						collectionProtocolCollection.add(collectionProtocol);
 					}
 				}
 			}
-//			holdsStorageTypeCollection.clear();
-			holdsStorageTypeCollection =  new HashSet();
+			//holdsStorageTypeCollection.clear();
+			holdsStorageTypeCollection = new HashSet();
 			long[] storageTypeArr = form.getHoldsStorageTypeIds();
 			if (storageTypeArr != null)
 			{
 				for (int i = 0; i < storageTypeArr.length; i++)
 				{
-					Logger.out.debug("Storage Type Id :" + storageTypeArr[i]);
+					logger.debug("Storage Type Id :" + storageTypeArr[i]);
 					if (storageTypeArr[i] != -1)
 					{
 						StorageType storageType = new StorageType();
-						storageType.setId(new Long(storageTypeArr[i]));
+						storageType.setId(Long.valueOf(storageTypeArr[i]));
 						holdsStorageTypeCollection.add(storageType);
 					}
 				}
 			}
 
-//			holdsSpecimenClassCollection.clear();
+			//holdsSpecimenClassCollection.clear();
 			holdsSpecimenClassCollection = new HashSet();
 			if (form.getSpecimenOrArrayType().equals("Specimen"))
 			{
@@ -519,10 +595,11 @@ public class StorageContainer extends Container implements IActivityStatus
 				{
 					for (int i = 0; i < specimenClassArr.length; i++)
 					{
-						Logger.out.debug("class Id :" + specimenClassArr[i]);
+						logger.debug("class Id :" + specimenClassArr[i]);
 						if (specimenClassArr[i].equals("-1"))
 						{
-							holdsSpecimenClassCollection.addAll(Utility.getSpecimenClassTypes());
+							holdsSpecimenClassCollection.addAll(
+									Utility.getSpecimenClassTypes());
 							break;
 						}
 						else
@@ -532,7 +609,7 @@ public class StorageContainer extends Container implements IActivityStatus
 					}
 				}
 			}
-//			holdsSpArrayTypeCollection.clear();
+			//			holdsSpArrayTypeCollection.clear();
 			holdsSpecimenArrayTypeCollection = new HashSet();
 			if (form.getSpecimenOrArrayType().equals("SpecimenArray"))
 			{
@@ -541,11 +618,11 @@ public class StorageContainer extends Container implements IActivityStatus
 				{
 					for (int i = 0; i < specimenArrayTypeArr.length; i++)
 					{
-						Logger.out.debug("specimen array type Id :" + specimenArrayTypeArr[i]);
+						logger.debug("specimen array type Id :" + specimenArrayTypeArr[i]);
 						if (specimenArrayTypeArr[i] != -1)
 						{
 							SpecimenArrayType spArrayType = new SpecimenArrayType();
-							spArrayType.setId(new Long(specimenArrayTypeArr[i]));
+							spArrayType.setId(Long.valueOf(specimenArrayTypeArr[i]));
 							holdsSpecimenArrayTypeCollection.add(spArrayType);
 						}
 					}
@@ -553,18 +630,17 @@ public class StorageContainer extends Container implements IActivityStatus
 			}
 			if (this.noOfContainers.intValue() > 1)
 			{
-				Logger.out.info("--------------------------:" + form.getSimilarContainersMap());
+				logger.info("--------------------------:" + form.getSimilarContainersMap());
 				this.similarContainerMap = form.getSimilarContainersMap();
 			}
 
 		}
 		catch (Exception excp)
 		{
-			Logger.out.error(excp.getMessage(), excp);
+			logger.error(excp.getMessage(), excp);
 		}
 	}
 
-	
 	/**
 	 * @return the specimenPositionCollection
 	 */
@@ -573,7 +649,6 @@ public class StorageContainer extends Container implements IActivityStatus
 		return specimenPositionCollection;
 	}
 
-	
 	/**
 	 * @param specimenPositionCollection the specimenPositionCollection to set
 	 */
@@ -582,15 +657,11 @@ public class StorageContainer extends Container implements IActivityStatus
 		this.specimenPositionCollection = specimenPositionCollection;
 	}
 
-//	public Collection getSpecimenCollection() {
-//		return specimenCollection;
-//	}
-//
-//	public void setSpecimenCollection(Collection specimenCollection) {
-//		this.specimenCollection = specimenCollection;
-//	}
-
-	
-
-	
+	//	public Collection getSpecimenCollection() {
+	//		return specimenCollection;
+	//	}
+	//
+	//	public void setSpecimenCollection(Collection specimenCollection) {
+	//		this.specimenCollection = specimenCollection;
+	//	}
 }
