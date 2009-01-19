@@ -3,7 +3,10 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ taglib uri="/WEB-INF/PagenationTag.tld" prefix="custom"%>
 <%@ page language="java" isELIgnored="false"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ page import="java.util.*"%>
 <html:form action="/ReportedProblemShow">
 	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
   <tr>
@@ -86,8 +89,16 @@
 												name="problem" property="id" /></td>
 											<td class='${pageScope.style}'><bean:write
 												name="problem" property="from" /></td>
-											<td class='${pageScope.style}'><bean:write
-												name="problem" property="reportedDate" /></td>
+					 <c:set var="date" value='${problem.reportedDate}' scope="request" />
+					 <%
+				     // Added by Geeta for date format change
+					   Date date=(Date)request.getAttribute("date");
+					   String reportedDate=Utility.parseDateToString(date,Variables.dateFormat);
+					 %>
+
+				<!-- <td class='${pageScope.style}'><bean:write name="problem" property="reportedDate" /></td> -->
+												
+						<td class='${pageScope.style}'><%= reportedDate %></td>
 										</tr>
 										<c:set var="count" value='${pageScope.count+1}' scope="page" />
 									</logic:iterate>

@@ -5,6 +5,9 @@
 <%@ page language="java" isELIgnored="false" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <SCRIPT LANGUAGE="JavaScript" SRC="jss/javaScript.js"></SCRIPT>
+<%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
+<%@ page import="java.util.*"%>
 
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
@@ -80,7 +83,15 @@
 					<td width="21%" class='${pageScope.style}'><a href='${requestScope.userDetailsLink}${currentUser.id}' class="view"><bean:write name="currentUser" property="loginName" /></a></td>
 					<td width="20%" class='${pageScope.style}'><bean:write name="currentUser" property="lastName" /><bean:write name="currentUser" property="firstName" /></td>
 					<td width="25%" class='${pageScope.style}'><bean:write name="currentUser" property="emailAddress"/>	</td>
-					<td width="31%" class='${pageScope.style}'><bean:write name="currentUser" property="startDate" /></td>
+                    <c:set var="date" value='${currentUser.startDate}' scope="request" />
+                     <%
+                     // Added by Geeta for date format change
+					   Date date=(Date)request.getAttribute("date");
+					   String startDate=Utility.parseDateToString(date,Variables.dateFormat);
+					 %>
+					
+<!--<td width="31%" class='${pageScope.style}'><bean:write name="currentUser" property="startDate" /></td>-->
+					<td width="31%" class='${pageScope.style}'><%=startDate%></td>
 					<c:set var="count" value='${pageScope.count+1}' scope="page" />
 				</logic:iterate>
 			</logic:notEmpty>
