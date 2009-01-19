@@ -16,6 +16,7 @@ import edu.wustl.common.domain.AbstractDomainObject;
 
 public class ConflictViewForm extends AbstractActionForm
 {
+	private static final long serialVersionUID = 1L;
 	
 	/**
 	 * To retrieve the filter value

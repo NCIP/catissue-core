@@ -14,7 +14,6 @@ package edu.wustl.catissuecore.actionForm;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -25,10 +24,8 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.CollectionProtocol;
-import edu.wustl.catissuecore.domain.ConsentTier;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -40,6 +37,13 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class CollectionProtocolForm extends SpecimenProtocolForm
 {
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(CollectionProtocolForm.class);
+
 	protected long[] protocolCoordinatorIds;
 
 	/**
@@ -86,7 +90,6 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	/**
 	 * No argument constructor for CollectionProtocolForm class.
 	 */
-	
 	public CollectionProtocolForm()
 	{
 		super();
@@ -96,7 +99,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
      * @param key  Value of Key 
      * @param value Value corrosponding to the Key
      */
-    public void setValue(String key, Object value) 
+    public void setValue(final String key, final Object value) 
     {
     	if (isMutable())
    	 	{
@@ -108,7 +111,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
      * @return This is used to get corresponding Value from the Map
      * @param key This is used to get corresponding Value from the Map   
      */
-    public Object getValue(String key) 
+    public Object getValue(final String key) 
     {
         return values.get(key);
     }
@@ -132,7 +135,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	/**
 	 * @param values Set the values
 	 */
-	public void setValues(Map values) 
+	public void setValues(final Map values) 
 	{
 		this.values = values;
 	}	
@@ -147,7 +150,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	/**
 	 * @param innerLoopValues The innerLoopValues to set.
 	 */
-	public void setInnerLoopValues(Map innerLoopValues)
+	public void setInnerLoopValues(final Map innerLoopValues)
 	{
 		this.innerLoopValues = innerLoopValues;
 	}
@@ -157,7 +160,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	 * @param key the key to which the object is mapped.
 	 * @param value the object which is mapped.
 	 */
-	public void setIvl(String key, Object value)///changes here
+	public void setIvl(final String key, final Object value)///changes here
 	{
 	    if (isMutable())
 	    {
@@ -171,7 +174,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	 * @param key the required key.
 	 * @return the object to which this map maps the specified key.
 	 */
-	public Object getIvl(String key)
+	public Object getIvl(final String key)
 	{
 		return innerLoopValues.get(key);
 	}
@@ -186,7 +189,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	/**
 	 * @param outerCounter The outerCounter to set.
 	 */
-	public void setOuterCounter(int outerCounter)
+	public void setOuterCounter(final int outerCounter)
 	{
 		this.outerCounter = outerCounter;
 	}
@@ -225,7 +228,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
 		super.setAllValues(abstractDomain);
-		CollectionProtocol cProtocol = (CollectionProtocol)abstractDomain;
+		final CollectionProtocol cProtocol = (CollectionProtocol)abstractDomain;
 		if(cProtocol.getAliquotInSameContainer()!= null) 
 		{
 			aliqoutInSameContainer = cProtocol.getAliquotInSameContainer().booleanValue();
@@ -242,28 +245,28 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	 * @param consentTierColl This Containes the collection of ConsentTier
 	 * @return tempMap
 	 */
-	private Map prepareConsentTierMap(Collection consentTierColl)
-	{
-		Map tempMap = new HashMap();
-		if(consentTierColl!=null)
-		{
-			Iterator consentTierCollIter = consentTierColl.iterator();			
-			int i = 0;
-			while(consentTierCollIter.hasNext())
-			{
-				ConsentTier consent = (ConsentTier)consentTierCollIter.next();
-				String statement = "ConsentBean:"+i+"_statement";
-				String preDefinedStatementkey = "ConsentBean:"+i+"_predefinedConsents";
-				String statementkey = "ConsentBean:"+i+"_consentTierID";
-				tempMap.put(statement, consent.getStatement());
-				tempMap.put(preDefinedStatementkey, consent.getStatement());
-				tempMap.put(statementkey, consent.getId());
-				i++;
-			}
-			consentTierCounter = consentTierColl.size();
-		}
-		return tempMap;
-	}
+//	private Map prepareConsentTierMap(Collection consentTierColl)
+//	{
+//		Map tempMap = new HashMap();
+//		if(consentTierColl!=null)
+//		{
+//			Iterator consentTierCollIter = consentTierColl.iterator();			
+//			int i = 0;
+//			while(consentTierCollIter.hasNext())
+//			{
+//				ConsentTier consent = (ConsentTier)consentTierCollIter.next();
+//				String statement = "ConsentBean:"+i+"_statement";
+//				String preDefinedStatementkey = "ConsentBean:"+i+"_predefinedConsents";
+//				String statementkey = "ConsentBean:"+i+"_consentTierID";
+//				tempMap.put(statement, consent.getStatement());
+//				tempMap.put(preDefinedStatementkey, consent.getStatement());
+//				tempMap.put(statementkey, consent.getId());
+//				i++;
+//			}
+//			consentTierCounter = consentTierColl.size();
+//		}
+//		return tempMap;
+//	}
 
 	/**
 	 * Overrides the validate method of ActionForm.
@@ -273,9 +276,9 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	 */
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
-		Logger.out.debug("OPERATION : ----- : " + operation);
+		logger.debug("OPERATION : ----- : " + operation);
 		ActionErrors errors = super.validate(mapping, request);
-		Validator validator = new Validator();
+//		Validator validator = new Validator();
 		try
 		{
 				
@@ -292,13 +295,13 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 				}
 			}
 				
-			Logger.out.debug("Protocol Coordinators : " + protocolCoordinatorIds); 
+			logger.debug("Protocol Coordinators : " + protocolCoordinatorIds); 
 		}
 		catch (Exception excp)
 		{
 	    	// use of logger as per bug 79
-	    	Logger.out.error(excp.getMessage(),excp); 
-	    	Logger.out.debug(excp);
+			logger.error(excp.getMessage(),excp); 
+			logger.debug(excp);
 			errors = new ActionErrors();
 		}
 		return errors;
@@ -320,36 +323,36 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	 * @param args array of instances of the class String.
 	 * args receives any command-line arguments present when the program is executed.
 	 */
-	public static void main(String[] args)
-	{
-		int maxCount=1;
-		int maxIntCount=1;
-		
-		CollectionProtocolForm collectionProtocolForm = null;
-		
-		Object obj = new Object();//request.getAttribute("collectionProtocolForm");
-		
-		if(obj != null && obj instanceof CollectionProtocolForm)
-		{
-			collectionProtocolForm = (CollectionProtocolForm)obj;
-			maxCount = collectionProtocolForm.getOuterCounter();
-		}
-	
-		for(int counter=1;counter<=maxCount;counter++)
-		{
-			String commonLabel = "value(CollectionProtocolEvent:" + counter;
-			
-			String cid = "ivl(" + counter + ")";
-			String functionName = "insRow('" + commonLabel + "','" + cid +"')";
-			
-			if(collectionProtocolForm!=null)
-			{
-				Object o = collectionProtocolForm.getIvl(cid);
-				maxIntCount = Integer.parseInt(o.toString());
-			}
-		}
-	}
-	
+//	public static void main(String[] args)
+//	{
+//		int maxCount=1;
+////		int maxIntCount=1;
+//		
+//		CollectionProtocolForm collectionProtocolForm = null;
+//		
+//		Object obj = new Object();//request.getAttribute("collectionProtocolForm");
+//		
+//		if(obj != null && obj instanceof CollectionProtocolForm)
+//		{
+//			collectionProtocolForm = (CollectionProtocolForm)obj;
+//			maxCount = collectionProtocolForm.getOuterCounter();
+//		}
+//	
+//		for(int counter=1;counter<=maxCount;counter++)
+//		{
+//			String commonLabel = "value(CollectionProtocolEvent:" + counter;
+//			
+//			String cid = "ivl(" + counter + ")";
+//			String functionName = "insRow('" + commonLabel + "','" + cid +"')";
+//			
+//			if(collectionProtocolForm!=null)
+//			{
+//				Object o = collectionProtocolForm.getIvl(cid);
+//				maxIntCount = Integer.parseInt(o.toString());
+//			}
+//		}
+//	}
+//	
 	/**
      * This method sets Identifier of Objects inserted by AddNew activity in Form-Bean which initialized AddNew action
      * @param addNewFor - FormBean ID of the object inserted
@@ -357,13 +360,13 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
      */
     public void setAddNewObjectIdentifier(String addNewFor, Long addObjectIdentifier)
     {
-        if(addNewFor.equals("principalInvestigator"))
+        if("principalInvestigator".equals(addNewFor))
         {
             setPrincipalInvestigatorId(addObjectIdentifier.longValue());
         }
-        else if(addNewFor.equals("protocolCoordinator"))
+        else if("protocolCoordinator".equals(addNewFor))
         {
-            long[] pcoordIDs = { Long.parseLong(addObjectIdentifier.toString()) };
+        	final long[] pcoordIDs = { Long.parseLong(addObjectIdentifier.toString()) };
            
 			setProtocolCoordinatorIds(pcoordIDs); 
         } 
@@ -407,7 +410,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
      * @param key Key
      * @param value Value
      */
-    public void setConsentValue(String key, Object value) 
+    public void setConsentValue(final String key, final Object value) 
     {
    	 	if (isMutable())
    	 	{
@@ -419,7 +422,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
      * @param key Key
      * @return Statements
      */
-    public Object getConsentValue(String key) 
+    public Object getConsentValue(final String key) 
     {
         return consentValues.get(key);
     }
@@ -436,7 +439,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
     /**
      * @param consentValues Set Consents into the Map
      */
-	public void setConsentValues(Map consentValues) 
+	public void setConsentValues(final Map consentValues) 
 	{
 		this.consentValues = consentValues;
 	}
@@ -471,7 +474,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	 * If consent waived is true then no need to check consents prior to distribution
 	 * @param consentWaived If consent waived is true then no need to check consents prior to distribution
 	 */
-	public void setConsentWaived(boolean consentWaived)
+	public void setConsentWaived(final boolean consentWaived)
 	{
 		this.consentWaived = consentWaived;
 	}
@@ -484,7 +487,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	}
 
 	
-	public void setSiteIds(long[] siteIds)
+	public void setSiteIds(final long[] siteIds)
 	{
 		this.siteIds = siteIds;
 	}

@@ -21,7 +21,8 @@ import edu.wustl.common.domain.AbstractDomainObject;
 public class ConflictCommonForm extends AbstractActionForm
 {
 	
-	
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * String for participant Name
 	 */
@@ -104,7 +105,7 @@ public class ConflictCommonForm extends AbstractActionForm
 	 * This mettod is called to set the site Name
 	 * @param siteName
 	 */
-	public void setSiteName(String siteName)
+	public void setSiteName(final String siteName)
 	{
 		this.siteName = siteName;
 	}
@@ -122,7 +123,7 @@ public class ConflictCommonForm extends AbstractActionForm
 	 * This mettod is called to set the site Name
 	 * @param siteName
 	 */
-	public void setReportDate(String reportDate)
+	public void setReportDate(final String reportDate)
 	{
 		this.reportDate = reportDate;
 	}
@@ -138,7 +139,7 @@ public class ConflictCommonForm extends AbstractActionForm
 	 * This mettod is called to set the participant Name
 	 * @param participantName
 	 */
-	public void setParticipantName(String participantName) {
+	public void setParticipantName(final String participantName) {
 		this.participantName = participantName;
 	}
 
@@ -153,7 +154,7 @@ public class ConflictCommonForm extends AbstractActionForm
 	 * This mettod is called to set the birth Date
 	 * @param birthDate
 	 */
-	public void setBirthDate(String birthDate) {
+	public void setBirthDate(final String birthDate) {
 		this.birthDate = birthDate;
 	}
 

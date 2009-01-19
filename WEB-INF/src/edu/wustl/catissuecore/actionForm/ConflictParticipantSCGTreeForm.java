@@ -4,6 +4,8 @@ import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 
 public class ConflictParticipantSCGTreeForm extends AbstractActionForm{
+	private static final long serialVersionUID = 1L;
+	
 	public int getFormId()
 	{	
 		return 0;

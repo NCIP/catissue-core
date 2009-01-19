@@ -16,6 +16,7 @@ import edu.wustl.common.domain.AbstractDomainObject;
 
 public class ConflictSCGForm extends AbstractActionForm
 {
+	private static final long serialVersionUID = 1L;
 	
 	/**
 	 * This string variable is for existing Conflicted Report

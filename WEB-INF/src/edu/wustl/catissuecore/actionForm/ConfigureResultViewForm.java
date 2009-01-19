@@ -23,6 +23,8 @@ import org.apache.struts.action.ActionForm;
 
 public class ConfigureResultViewForm extends ActionForm
 {
+	private static final long serialVersionUID = 1L;
+
     private String tableName;
     private String []selectedColumnNames;
     private String []columnNames;
@@ -40,7 +42,7 @@ public class ConfigureResultViewForm extends ActionForm
 	/**
 	 * @param distributionId The distributionId to set.
 	 */
-	public void setDistributionId(Long distributionId) 
+	public void setDistributionId(final Long distributionId) 
 	{
 		this.distributionId = distributionId;
 	}
@@ -83,7 +85,7 @@ public class ConfigureResultViewForm extends ActionForm
 	/**
 	 * @param tableName The tableName to set.
 	 */
-	public void setTableName(String tableName) 
+	public void setTableName(final String tableName) 
 	{
 		this.tableName = tableName;
 	}
@@ -98,7 +100,7 @@ public class ConfigureResultViewForm extends ActionForm
 	/**
 	 * @param nextAction The nextAction to set.
 	 */
-	public void setNextAction(String nextAction) 
+	public void setNextAction(final String nextAction) 
 	{
 		this.nextAction = nextAction;
 	}
@@ -112,7 +114,7 @@ public class ConfigureResultViewForm extends ActionForm
 	/**
 	 * @param reportAction The reportAction to set.
 	 */
-	public void setReportAction(boolean reportAction) 
+	public void setReportAction(final boolean reportAction) 
 	{
 		this.reportAction = reportAction;
 	}

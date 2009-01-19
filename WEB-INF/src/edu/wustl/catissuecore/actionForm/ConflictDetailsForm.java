@@ -16,6 +16,8 @@ import edu.wustl.common.domain.AbstractDomainObject;
 
 public class ConflictDetailsForm extends AbstractActionForm
 {
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * 
 	 */
@@ -57,7 +59,7 @@ public class ConflictDetailsForm extends AbstractActionForm
 	/**
 	 * @param reportQueueId the reportQueueId to set
 	 */
-	public void setReportQueueId(String reportQueueId)
+	public void setReportQueueId(final String reportQueueId)
 	{
 		this.reportQueueId = reportQueueId;
 	}
@@ -75,7 +77,7 @@ public class ConflictDetailsForm extends AbstractActionForm
 	/**
 	 * @param participantId the participantId to set
 	 */
-	public void setParticipantId(String participantId)
+	public void setParticipantId(final String participantId)
 	{
 		this.participantId = participantId;
 	}
@@ -93,7 +95,7 @@ public class ConflictDetailsForm extends AbstractActionForm
 	/**
 	 * @param scgId the scgId to set
 	 */
-	public void setScgId(String scgId)
+	public void setScgId(final String scgId)
 	{
 		this.scgId = scgId;
 	}

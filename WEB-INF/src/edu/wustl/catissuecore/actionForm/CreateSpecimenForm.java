@@ -29,7 +29,15 @@ import edu.wustl.common.util.logger.Logger;
  * @author aniruddha_phadnis
  */
 public class CreateSpecimenForm extends SpecimenForm implements Cloneable,IPrinterTypeLocation
-{   
+{  
+	/**
+	 * serial version id
+	 */
+	private static final long serialVersionUID = 1L;
+	/**
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(CreateSpecimenForm.class);
     /**
      * Identifier of the Parent Speciemen.
      * */
@@ -162,7 +170,7 @@ public class CreateSpecimenForm extends SpecimenForm implements Cloneable,IPrint
          }
          catch(Exception excp)
          {
-             Logger.out.error(excp.getMessage());
+        	 logger.error(excp.getMessage());
          }
          return errors;
       }
@@ -233,7 +241,7 @@ public class CreateSpecimenForm extends SpecimenForm implements Cloneable,IPrint
 		}
 		catch (CloneNotSupportedException e)
 		{
-			Logger.out.error("Error in Clone method of CreateSpecimenForm:"+e);	
+			logger.error("Error in Clone method of CreateSpecimenForm:"+e);	
 		}
 		return null;
 	}

@@ -5,7 +5,10 @@ import edu.wustl.common.domain.AbstractDomainObject;
 
 public class CPSearchForm extends AbstractActionForm
 {
-
+	/**
+	 * serial version id
+	 */
+	private static final long serialVersionUID = 1L;
 	Long cpId = null;
 	Long participantId = null;
 	

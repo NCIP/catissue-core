@@ -33,6 +33,14 @@ import edu.wustl.common.util.logger.Logger;
 
 public class CollectionProtocolRegistrationForm extends AbstractActionForm implements ConsentTierData 
 {
+	private static final long serialVersionUID = 1L;
+
+
+	/**
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(CollectionProtocolRegistrationForm.class);
+
 	protected Map values = new HashMap();
 	/**
 	 * System generated unique collection protocol Identifier
@@ -123,7 +131,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm imple
 	 * @param value the object which is mapped.
 	 */
 	
-	public void setValue(String key, Object value)
+	public void setValue(final String key, final Object value)
 	{
 		if (isMutable())
 		{
@@ -136,7 +144,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm imple
 	 * @param key the required key.
 	 * @return the object to which this map maps the specified key.
 	 */
-	public Object getValue(String key)
+	public Object getValue(final String key)
 	{
 		return values.get(key);
 	}
@@ -152,7 +160,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm imple
 	/**
 	 * @param values Map
 	 */
-	public void setValues(Map values)
+	public void setValues(final Map values)
 	{
 		this.values = values;
 	}
@@ -163,14 +171,14 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm imple
 	 */	
     public void setAllValues(AbstractDomainObject abstractDomain)
     {
-		CollectionProtocolRegistration registration = (CollectionProtocolRegistration)abstractDomain;
+    	final CollectionProtocolRegistration registration = (CollectionProtocolRegistration)abstractDomain;
 		this.id = registration.getId().longValue();
 		this.activityStatus = registration.getActivityStatus();
 		this.collectionProtocolID = registration.getCollectionProtocol().getId().longValue();
-		String firstName = Utility.toString(registration.getParticipant().getFirstName());;
-		String lastName = Utility.toString(registration.getParticipant().getLastName());
-		String birthDate = Utility.toString(registration.getParticipant().getBirthDate());
-		String ssn = Utility.toString(registration.getParticipant().getSocialSecurityNumber());
+		final String firstName = Utility.toString(registration.getParticipant().getFirstName());;
+		final String lastName = Utility.toString(registration.getParticipant().getLastName());
+		final String birthDate = Utility.toString(registration.getParticipant().getBirthDate());
+		final String ssn = Utility.toString(registration.getParticipant().getSocialSecurityNumber());
 			
 		if((registration.getParticipant() != null) && (firstName.trim().length()>0 || lastName.trim().length()>0 || birthDate.trim().length()>0 || ssn.trim().length()>0))
 	  	{
@@ -185,7 +193,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm imple
        /**
 	  	 * For Consent tracking setting UI attributes
 	  	 */
-	  	User witness= registration.getConsentWitness();
+	  	final User witness= registration.getConsentWitness();
 	  	if(witness!=null)
 	  	{
 	  		this.witnessId=witness.getId();
@@ -225,7 +233,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm imple
      * registered to the Collection Protocol.
      * @see #getRegistrationDate()
      */
-    public void setRegistrationDate(String registrationDate)
+    public void setRegistrationDate(final String registrationDate)
     {
         this.registrationDate = registrationDate;
     }
@@ -272,7 +280,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm imple
 	/**
 	 * @param participantID sets unique participant ID 
 	 */
-	public void setParticipantID(long participantID) 
+	public void setParticipantID(final long participantID) 
 	{
 		this.participantID = participantID;
 	}
@@ -303,8 +311,8 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm imple
    public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
    {
    	
-	   ActionErrors errors = new ActionErrors();
-	   Validator validator = new Validator();
+	   final ActionErrors errors = new ActionErrors();
+	   final Validator validator = new Validator();
 	   try
 	   {
 	   		setRedirectValue(validator);
@@ -319,17 +327,13 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm imple
 
 			// changes as per Bugzilla Bug 287 			
 				
-			if (validator.isEmpty(participantProtocolID))
+			if (validator.isEmpty(participantProtocolID) && (participantID == -1 || participantID == 0))
 			{
-				if (participantID == -1 || participantID == 0)
-				{
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.collectionprotocolregistration.atleast"));
-				}
-				
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.collectionprotocolregistration.atleast"));
 			}
 			
 			//  date validation according to bug id 707, 722 and 730
-			String errorKey = validator.validateDate(registrationDate,true); 
+			final String errorKey = validator.validateDate(registrationDate,true); 
 			if(errorKey.trim().length() >0)
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKey,ApplicationProperties.getValue("collectionprotocolregistration.date")));
@@ -342,7 +346,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm imple
 	   }
 	   catch(Exception excp)
 	   {
-		   Logger.out.error(excp.getMessage(),excp);
+		   logger.error(excp.getMessage(),excp);
 	   }
 	   return errors;
 	}
@@ -383,11 +387,11 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm imple
      */
 	public void setAddNewObjectIdentifier(String addNewFor, Long addObjectIdentifier)
 	 {
-	     if(addNewFor.equals("collectionProtocolId"))
+	     if("collectionProtocolId".equals(addNewFor))
 	     {
 	         setCollectionProtocolID(addObjectIdentifier.longValue());
 	     }
-	     else if(addNewFor.equals("participantId"))
+	     else if("participantId".equals(addNewFor))
 	     {
 	         setParticipantID(addObjectIdentifier.longValue());
 	         //setCheckedButton(true);
@@ -405,7 +409,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm imple
 	/**
 	 * @param participantName Setting participant name
 	 */
-	public void setParticipantName(String participantName)
+	public void setParticipantName(final String participantName)
 	{
 		this.participantName = participantName;
 	}
@@ -422,7 +426,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm imple
 	/**
 	 * @param consentDate The Date on Which Consent is Signed
 	 */
-	public void setConsentDate(String consentDate) 
+	public void setConsentDate(final String consentDate) 
 	{
 		this.consentDate = consentDate;
 	}
@@ -437,7 +441,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm imple
 	/**
 	 * @param signedConsentUrl The reference to the electric signed document(eg PDF file)
 	 */	
-	public void setSignedConsentUrl(String signedConsentUrl) 
+	public void setSignedConsentUrl(final String signedConsentUrl) 
 	{
 		this.signedConsentUrl = signedConsentUrl;
 	}
@@ -453,7 +457,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm imple
 	/**
 	 * @param witnessId The name of the witness to the consent Signature(PI or coordinator of the Collection Protocol)
 	 */	
-	public void setWitnessId(long witnessId) 
+	public void setWitnessId(final long witnessId) 
 	{
 		this.witnessId = witnessId;
 	}
@@ -462,10 +466,10 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm imple
      * @param key Key prepared for saving data.
      * @param value Values correspponding to key
      */
-    public void setConsentResponseValue(String key, Object value) 
+    public void setConsentResponseValue(final String key, final Object value) 
     {
    	 if (isMutable())
-   		consentResponseValues.put(key, value);
+   		{consentResponseValues.put(key, value);}
     }
     
     /**
@@ -473,7 +477,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm imple
      * @param key Key prepared for saving data.
      * @return consentResponseValues
      */
-    public Object getConsentResponseValue(String key) 
+    public Object getConsentResponseValue(final String key) 
     {
         return consentResponseValues.get(key);
     }
@@ -542,17 +546,18 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm imple
 	 */
 	public Collection getConsentTiers()
 	{
-		Collection consentTiersList=new ArrayList();
+		final Collection consentTiersList=new ArrayList();
 		String [] strArray = null;
-		int noOfConsents =this.getConsentTierCounter();
+		final int noOfConsents =this.getConsentTierCounter();
+		final String prestr="consentResponseValue(ConsentBean:";
 		for(int counter=0;counter<noOfConsents;counter++)
 		{	
 			strArray = new String[4];
-			strArray[0]="consentResponseValue(ConsentBean:"+counter+"_consentTierID)";
-			strArray[1]="consentResponseValue(ConsentBean:"+counter+"_statement)";
+			strArray[0]=prestr+counter+"_consentTierID)";
+			strArray[1]=prestr+counter+"_statement)";
 			//strArray[1]=(String)this.consentResponseValues.get("ConsentBean:"+counter+"_statement");
-			strArray[2]="consentResponseValue(ConsentBean:"+counter+"_participantResponse)";
-			strArray[3]="consentResponseValue(ConsentBean:"+counter+"_participantResponseID)";
+			strArray[2]=prestr+counter+"_participantResponse)";
+			strArray[3]=prestr+counter+"_participantResponseID)";
 			
 			consentTiersList.add(strArray);
 		}
@@ -579,7 +584,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm imple
 	/**
 	 * @param studeCalEvtPoint The studeCalEvtPoint to set.
 	 */
-	public void setStudyCalEvtPoint(String studyCalEvtPoint) {
+	public void setStudyCalEvtPoint(final String studyCalEvtPoint) {
 		this.studyCalEvtPoint = studyCalEvtPoint;
 	}
 
@@ -593,7 +598,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm imple
 	/**
 	 * @param offset The offset to set.
 	 */
-	public void setOffset(int offset) {
+	public void setOffset(final int offset) {
 		this.offset = offset;
 	}
 
@@ -602,7 +607,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm imple
 		return barcode;
 	}
 
-	public void setBarcode(String barcode)
+	public void setBarcode(final String barcode)
 	{
 		this.barcode = barcode;
 	}

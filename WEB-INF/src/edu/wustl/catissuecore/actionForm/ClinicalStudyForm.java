@@ -37,7 +37,12 @@ import edu.wustl.common.util.logger.Logger;
 public class ClinicalStudyForm extends SpecimenProtocolForm
 {       
 	private static final long serialVersionUID = 1L;
-	
+	/**
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(ClinicalStudyRegistrationForm.class);
+
+	private final String ERROR_ITEM_REQD="errors.item.required";
     protected long []protocolCoordinatorIds;
 
     
@@ -156,13 +161,13 @@ public class ClinicalStudyForm extends SpecimenProtocolForm
         if(userCollection != null)
         {
             protocolCoordinatorIds = new long[userCollection.size()];
-            int i=0;
+            int cnt=0;
             final  Iterator iterator = userCollection.iterator();
             while(iterator.hasNext())
             {
             	final  User user = (User)iterator.next();
-                protocolCoordinatorIds[i] = user.getId().longValue();
-                i++;
+                protocolCoordinatorIds[cnt] = user.getId().longValue();
+                cnt++;
             }
         }
         setId(abstractDomain.getId());
@@ -196,7 +201,7 @@ public class ClinicalStudyForm extends SpecimenProtocolForm
             
             if (validator.isEmpty(this.irbID))
             {
-                errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("clinicalstudy.irbid")));
+                errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(ERROR_ITEM_REQD,ApplicationProperties.getValue("clinicalstudy.irbid")));
             }
             
 //            System.out.println("Values Map: "+values);
@@ -224,24 +229,24 @@ public class ClinicalStudyForm extends SpecimenProtocolForm
                                 
                 if(key.indexOf("collectionPointLabel")!=-1 && validator.isEmpty(value))
                 {
-                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("clinicalStudyEvent.label")));
+                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(ERROR_ITEM_REQD,ApplicationProperties.getValue("clinicalStudyEvent.label")));
                 }
                 
                 if(key.indexOf("studyCalendarEventPoint")!=-1 && validator.isEmpty(value))
                 {
-                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("clinicalStudyEvent.studycalendartitle")));
+                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(ERROR_ITEM_REQD,ApplicationProperties.getValue("clinicalStudyEvent.studycalendartitle")));
                 }
                 
                 if(key.indexOf("noOfEntries")!=-1 )
                 {
                     if (validator.isEmpty(value))
                     {
-                        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("clinicalStudyEvent.noOfEntries")));
+                        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(ERROR_ITEM_REQD,ApplicationProperties.getValue("clinicalStudyEvent.noOfEntries")));
                     }
                     else
                     {
                         if ("#".equals(value))
-                            values.put(key, "-1");
+                        { values.put(key, "-1");}
                     }
                 }
                 
@@ -252,7 +257,7 @@ public class ClinicalStudyForm extends SpecimenProtocolForm
                 
                 if(key.indexOf("studyFormLabel")!=-1 && validator.isEmpty(value))
                 {
-                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("clinicalStudyEvent.studyFormLabel")));
+                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(ERROR_ITEM_REQD,ApplicationProperties.getValue("clinicalStudyEvent.studyFormLabel")));
                 }
                 
                 
@@ -270,7 +275,7 @@ public class ClinicalStudyForm extends SpecimenProtocolForm
                 String eventLabelKey = Constants.CLINICAL_STUDY_EVENT + i + "_" + "_collectionPointLabel";
                 if (values.get(eventLabelKey) == null)
                 {
-                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("clinicalStudyEvent.label")));
+                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(ERROR_ITEM_REQD,ApplicationProperties.getValue("clinicalStudyEvent.label")));
                                     }
                 
                 String noOfEntriesKey = Constants.CLINICAL_STUDY_EVENT + i + "_noOfEntries";
@@ -281,7 +286,7 @@ public class ClinicalStudyForm extends SpecimenProtocolForm
                 
                 if (noOfEntriesValue != null && noOfEntriesValue.equals(""))
                 {
-                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("clinicalStudyEvent.noOfEntries")));
+                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(ERROR_ITEM_REQD,ApplicationProperties.getValue("clinicalStudyEvent.noOfEntries")));
                 }
                 if (noOfEntriesValue != null && noOfEntriesValue.equals("#"))
                 {
@@ -295,14 +300,14 @@ public class ClinicalStudyForm extends SpecimenProtocolForm
                     
                     if (values.get(studyFormIdKey).equals(Constants.SELECT_OPTION_VALUE))
                     {
-                        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("clinicalStudyEvent.studyForm")));
+                        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(ERROR_ITEM_REQD,ApplicationProperties.getValue("clinicalStudyEvent.studyForm")));
                         
                     }
                     String studyFormLabelValue = values.get(studyFormLabelKey).toString();
                     
                     if (studyFormLabelValue != null && studyFormLabelValue.equals(""))
                     {
-                        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("clinicalStudyEvent.studyFormLabel")));
+                        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(ERROR_ITEM_REQD,ApplicationProperties.getValue("clinicalStudyEvent.studyFormLabel")));
                         
                     }
                 }
@@ -314,8 +319,8 @@ public class ClinicalStudyForm extends SpecimenProtocolForm
         catch (Exception excp)
         {
             // use of logger as per bug 79
-            Logger.out.error(excp.getMessage(),excp); 
-            Logger.out.debug(excp);
+        	logger.error(excp.getMessage(),excp); 
+        	logger.debug(excp);
             errors = new ActionErrors();
         }
         return errors;

@@ -31,6 +31,11 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 {
 	
 	/**
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(ClinicalStudyRegistrationForm.class);
+
+	/**
 	 * Default serial version ID
 	 */
 	private static final long serialVersionUID = 1L;
@@ -99,7 +104,7 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	 * This is the method to set date of birth of particicpant
 	 * @param dateOfBirth Date of Birth of participant
 	 */
-	public void setBirthDate(String dateOfBirth)
+	public void setBirthDate(final String dateOfBirth)
 	{
 		this.birthDate = dateOfBirth;
 	}
@@ -117,7 +122,7 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	 * This is the method to set death date of particicpant
 	 * @param dateOfDeath Death date of participant
 	 */
-	public void setDeathDate(String dateOfDeath)
+	public void setDeathDate(final String dateOfDeath)
 	{
 		this.deathDate = dateOfDeath;
 	}
@@ -135,7 +140,7 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	 * This is the method to set ethinicity of particicpant
 	 * @param ethinicity Ethinicity participant
 	 */
-	public void setEthinicity(String ethinicity)
+	public void setEthinicity(final String ethinicity)
 	{
 		this.ethinicity = ethinicity;
 	}
@@ -153,7 +158,7 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	 * This is the method to set name of particicpant
 	 * @param firstName First name of participant
 	 */
-	public void setParticipantName(String firstName)
+	public void setParticipantName(final String firstName)
 	{
 		this.participantName = firstName;
 	}
@@ -171,7 +176,7 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	 * This is the method to set gender of particicpant
 	 * @param gender Gender of particicpant
 	 */
-	public void setGender(String gender)
+	public void setGender(final String gender)
 	{
 		this.gender = gender;
 	}
@@ -189,7 +194,7 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	 * This is the method to set vital status of particicpant
 	 * @param lastName Last name of participant
 	 */
-	public void setVitalStatus(String vitalStatus)
+	public void setVitalStatus(final String vitalStatus)
 	{
 		this.vitalStatus = vitalStatus;
 	}
@@ -225,7 +230,7 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	 * This is the method to set collection of race of particicpant
 	 * @param race Race of participant
 	 */
-	public void setRace(String race)
+	public void setRace(final String race)
 	{
 		this.race = race;
 	}
@@ -243,7 +248,7 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	 * This is the method to set sex genotype of particicpant
 	 * @param sexGenotype Sex genotype of particicpant
 	 */
-	public void setSexGenotype(String sexGenotype)
+	public void setSexGenotype(final String sexGenotype)
 	{
 		this.sexGenotype = sexGenotype;
 	}
@@ -272,7 +277,7 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	 */
 	public ConflictParticipantDataDetailsForm()
 	{
-		reset();
+//		reset();
 	}
 
 	/** 
@@ -293,7 +298,7 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	 */
 	public void setAllValues(AbstractDomainObject domainObj)
 	{
-		Participant participant =(Participant)domainObj;
+		final Participant participant =(Participant)domainObj;
 		try
 		{
 			this.participantName=participant.getLastName()+","+participant.getFirstName();
@@ -307,15 +312,16 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 				this.deathDate=Utility.parseDateToString(participant.getDeathDate(), Variables.dateFormat);
 			}
 			this.ethinicity=participant.getEthnicity();
-			Collection tempRaceColl=participant.getRaceCollection();
-			Iterator raceIter=tempRaceColl.iterator();
+			final Collection tempRaceColl=participant.getRaceCollection();
+			final Iterator raceIter=tempRaceColl.iterator();
 			this.race="";
-			StringBuffer tempStr=new StringBuffer();
+			final StringBuffer tempStr=new StringBuffer();
 			Race raceObj=null;
 			while(raceIter.hasNext())
 			{
 				raceObj =(Race) raceIter.next();
-				tempStr.append(raceObj.getRaceName()+", ");
+				tempStr.append(raceObj.getRaceName());
+				tempStr.append(", ");
 			}
 			this.race=tempStr.toString();
 			this.gender=participant.getGender();
@@ -331,7 +337,7 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 		}
 		catch(Exception ex)
 		{
-			Logger.out.error("viewSPR:Participant information is null");
+			logger.error("viewSPR:Participant information is null");
 		}
 	}
 	
@@ -342,12 +348,12 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	 * @return identifier of Form
 	 */
 	public int getFormId()
-	{	
+	{	int result = Constants.PATHOLOGY_REPORT_REVIEW_FORM_ID; 
 		if(this.submittedFor.equalsIgnoreCase("quarantine"))
 		{
-			return Constants.QUARANTINE_EVENT_PARAMETER_FORM_ID;
+			result = Constants.QUARANTINE_EVENT_PARAMETER_FORM_ID;
 		}
-		return Constants.PATHOLOGY_REPORT_REVIEW_FORM_ID;
+		return result;
 	}
 	
 	
@@ -365,7 +371,7 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	 * This is the method to set counter that is size of map for medical identifier numbers
 	 * @param counter Counter for the number of elemets in MedicalIdentifierMap
 	 */
-	public void setCounter(int counter)
+	public void setCounter(final int counter)
 	{
 		this.counter = counter;
 	}
@@ -375,9 +381,9 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	 * @param key key to set value in map
 	 * @param value object to be set as value in map
 	 */
-	public void setValue(String key, Object value) 
+	public void setValue(final String key, final Object value) 
     {
-		if (isMutable())values.put(key, value);
+		if (isMutable()){values.put(key, value);}
     }
 
 	/**
@@ -385,7 +391,7 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	 * @param key key to retrieve object from map
 	 * @return object retrieved object from map
 	 */
-	public Object getValue(String key) 
+	public Object getValue(final String key) 
     {
 		return values.get(key);
     }
@@ -403,7 +409,7 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
  	 * This is the method to add multiple key value pair to map for medical identifier numbers
  	 * @param values map of object
  	 */
- 	public void setValues(Map values)
+ 	public void setValues(final Map values)
  	{
  		this.values = values;
  	}
@@ -432,7 +438,7 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	 * @see edu.wustl.common.actionForm.AbstractActionForm#setId(long)
 	 * @param id identifier of current domain object
 	 */
-	public void setId(long id)
+	public void setId(final long id)
 	{
 		this.id = id;
 	}

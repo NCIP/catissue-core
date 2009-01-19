@@ -25,7 +25,18 @@ import edu.wustl.common.util.logger.Logger;
 
 public class CreateSpecimenTemplateForm extends AbstractActionForm
 {
-	
+	/**
+	 * serial version id
+	 */
+	private static final long serialVersionUID = 1L;
+
+
+	/**
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(CreateSpecimenTemplateForm.class);
+
+
 	/**
 	 * Display Name
 	 */
@@ -833,7 +844,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
         }
         catch(Exception excp)
         {
-            Logger.out.error(excp.getMessage());
+        	logger.error(excp.getMessage(),excp);
         }
         return errors;
      }
