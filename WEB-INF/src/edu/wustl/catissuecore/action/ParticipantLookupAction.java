@@ -223,12 +223,19 @@ public class ParticipantLookupAction extends BaseAction
 		String mrn= getParticipantMrnDisplay(bizLogic, participant);
 		participantInfo.add(Utility.toString(mrn));
 		participantInfo.add(Utility.toString(participant.getGender()));
-		participantInfo.add(Utility.toString(participant.getBirthDate()));
+		
+		//participantInfo.add(Utility.toString(participant.getBirthDate()));
+		// Added by Geeta  for date format change.
+		participantInfo.add(Utility.parseDateToString(participant.getBirthDate(),Variables.dateFormat));
+		// End by geeta  
 		if(!Variables.isSSNRemove)
 		{
 			participantInfo.add(Utility.toString(participant.getSocialSecurityNumber()));
 		}
-		participantInfo.add(Utility.toString(participant.getDeathDate()));
+		//participantInfo.add(Utility.toString(participant.getDeathDate()));
+		// Added by Geeta  for date format change.
+		participantInfo.add(Utility.parseDateToString(participant.getDeathDate(),Variables.dateFormat));
+		//End by Geeta
 		participantInfo.add(Utility.toString(participant.getVitalStatus()));
 		participantInfo.add(participant.getId());
 		return participantInfo;
