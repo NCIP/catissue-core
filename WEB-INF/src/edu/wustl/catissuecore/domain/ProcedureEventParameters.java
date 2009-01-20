@@ -1,6 +1,7 @@
 /**
  * <p>Title: ProcedureEventParameters Class</p>
- * <p>Description: Attributes associated with a customized procedure that is applied on a specimen to process it.</p>
+ * <p>Description: Attributes associated with a customized procedure that is applied
+ * on a specimen to process it.</p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
  * @author Mandar Deshmukh
@@ -17,18 +18,25 @@ import edu.wustl.common.util.logger.Logger;
 /**
  * Attributes associated with a customized procedure that is applied on a specimen to process it.
  * @hibernate.joined-subclass table="CATISSUE_PROCEDURE_EVENT_PARAM"
- * @hibernate.joined-subclass-key column="IDENTIFIER" 
+ * @hibernate.joined-subclass-key column="IDENTIFIER"
  */
-public class ProcedureEventParameters extends SpecimenEventParameters
-		implements java.io.Serializable
+public class ProcedureEventParameters extends SpecimenEventParameters implements java.io.Serializable
 {
+	/**
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(ProcedureEventParameters.class);
+
+	/**
+	 * Serial Version ID.
+	 */
 	private static final long serialVersionUID = 1234567890L;
 
 	/**
 	 * URL to the document that describes detail information of customized process.
 	 */
 	protected String url;
-	
+
 	/**
 	 * Name of the customized procedure.
 	 */
@@ -73,45 +81,45 @@ public class ProcedureEventParameters extends SpecimenEventParameters
 	{
 		this.name = name;
 	}
-	
-	
+
 	/**
 	 * NOTE: Do not delete this constructor. Hibernet uses this by reflection API.
 	 * */
 	public ProcedureEventParameters()
 	{
-		
+		super();
 	}
 
 	/**
-	 *  Parameterised constructor 
-	 * @param abstractForm
+	 *  Parameterised constructor.
+	 * @param abstractForm AbstractActionForm.
 	 */
 	public ProcedureEventParameters(AbstractActionForm abstractForm)
 	{
-		setAllValues((IValueObject)abstractForm);
+		super();
+		setAllValues((IValueObject) abstractForm);
 	}
-	
+
 	/**
-     * This function Copies the data from an ProcedureEventParametersForm object to a ProcedureEventParameters object.
-     * @param ProcedureEventParametersForm An ProcedureEventParametersForm object containing the information about the ProcedureEventParameters.  
-     * */
-    public void setAllValues(IValueObject abstractForm)
-    {
-        try
-        {
-        	ProcedureEventParametersForm form = (ProcedureEventParametersForm) abstractForm;
-        	
-        	this.url = form.getUrl();
-        	this.name = form.getName();
-        	
-        	super.setAllValues(form);
-        }
-        catch (Exception excp)
-        {
-            Logger.out.error(excp.getMessage());
-        }
-    }
-	
-	
+	 * This function Copies the data from an ProcedureEventParametersForm object to a
+	 * ProcedureEventParameters object.
+	 * @param abstractForm - ProcedureEventParametersForm An ProcedureEventParametersForm object
+	 * containing the information about the ProcedureEventParameters.
+	 * */
+	public void setAllValues(IValueObject abstractForm)
+	{
+		try
+		{
+			ProcedureEventParametersForm form = (ProcedureEventParametersForm) abstractForm;
+
+			this.url = form.getUrl();
+			this.name = form.getName();
+
+			super.setAllValues(form);
+		}
+		catch (Exception excp)
+		{
+			logger.error(excp.getMessage());
+		}
+	}
 }

@@ -7,19 +7,22 @@
  * @version 1.00
  * Created on October 16,2006
  */
+
 package edu.wustl.catissuecore.domain;
+
 /**
  * @version 1.0
  * @created 16-Oct-2006 6:25:49 PM
- * 
  * Represents  Pathology Order Item.
- * @hibernate.joined-subclass table="CATISSUE_PATH_CASE_ORDER_ITEM" 
+ * @hibernate.joined-subclass table="CATISSUE_PATH_CASE_ORDER_ITEM"
  * @hibernate.joined-subclass-key
  * column="IDENTIFIER"
  */
-public class PathologicalCaseOrderItem extends NewSpecimenOrderItem 
+public class PathologicalCaseOrderItem extends NewSpecimenOrderItem
 {
-
+	/**
+	 * Serial Version ID.
+	 */
 	private static final long serialVersionUID = -2329235774308406889L;
 	/**
 	 * The pathological Status.
@@ -39,6 +42,7 @@ public class PathologicalCaseOrderItem extends NewSpecimenOrderItem
 	 */
 	public PathologicalCaseOrderItem()
 	{
+		super();
 	}
 
 	/**
@@ -50,7 +54,6 @@ public class PathologicalCaseOrderItem extends NewSpecimenOrderItem
 		return pathologicalStatus;
 	}
 
-	
 	/**
 	 * @param pathologicalStatus the pathologicalStatus to set
 	 */
@@ -59,10 +62,10 @@ public class PathologicalCaseOrderItem extends NewSpecimenOrderItem
 		this.pathologicalStatus = pathologicalStatus;
 	}
 
-	
 	/**
 	 * The specimenCollectionGroup associated with the order item in SpecimenOrderItem.
-	 * @hibernate.many-to-one column="SPECIMEN_COLL_GROUP_ID" class="edu.wustl.catissuecore.domain.SpecimenCollectionGroup"
+	 * @hibernate.many-to-one column="SPECIMEN_COLL_GROUP_ID" class="edu.wustl.
+	 * catissuecore.domain.SpecimenCollectionGroup"
 	 * constrained="true"
 	 * @return the specimenCollectionGroup
 	 */
@@ -71,7 +74,6 @@ public class PathologicalCaseOrderItem extends NewSpecimenOrderItem
 		return specimenCollectionGroup;
 	}
 
-	
 	/**
 	 * @param specimenCollectionGroup the specimenCollectionGroup to set
 	 */
@@ -80,18 +82,16 @@ public class PathologicalCaseOrderItem extends NewSpecimenOrderItem
 		this.specimenCollectionGroup = specimenCollectionGroup;
 	}
 
-	
 	/**
 	 * @hibernate.property name="tissueSite" length="100" type="string" column="TISSUE_SITE"
 	 * @return tissueSite String.
 	 */
-	
+
 	public String getTissueSite()
 	{
 		return tissueSite;
 	}
 
-	
 	/**
 	 * @param tissueSite the tissueSite to set
 	 */
@@ -99,5 +99,4 @@ public class PathologicalCaseOrderItem extends NewSpecimenOrderItem
 	{
 		this.tissueSite = tissueSite;
 	}
-
 }

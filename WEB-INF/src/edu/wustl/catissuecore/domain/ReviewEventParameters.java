@@ -12,11 +12,22 @@ package edu.wustl.catissuecore.domain;
 /**
  * Attributes related to quality review event of a specimen.
  * @hibernate.joined-subclass table="CATISSUE_EVENT_PARAM"
- * @hibernate.joined-subclass-key column="IDENTIFIER" 
+ * @hibernate.joined-subclass-key column="IDENTIFIER"
  * @author Aniruddha Phadnis
  */
 public abstract class ReviewEventParameters extends SpecimenEventParameters
 		implements java.io.Serializable
 {
+	/**
+	 * Serial Version ID.
+	 */
 	private static final long serialVersionUID = 1234567890L;
+
+	/**
+	 * Default Constructor.
+	 */
+	public ReviewEventParameters()
+	{
+		super();
+	}
 }
