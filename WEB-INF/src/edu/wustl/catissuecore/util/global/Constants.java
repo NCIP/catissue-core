@@ -600,6 +600,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String DISPOSAL_EVENT_PARAMETERS_ADD_ACTION = "DisposalEventParametersAdd.do";
 	public static final String DISPOSAL_EVENT_PARAMETERS_EDIT_ACTION = "DisposalEventParametersEdit.do";
 	
+	//	Constants required in DisposalEventParameters
+	public static final String DISPOSAL_EVENT_PARAMETERS = "DisposalEventParameters";
 	//	Constants required in ThawEventParameters.jsp Page
 	public static final String THAW_EVENT_PARAMETERS_SEARCH_ACTION = "ThawEventParametersSearch.do";
 	public static final String THAW_EVENT_PARAMETERS_ADD_ACTION = "ThawEventParametersAdd.do";
