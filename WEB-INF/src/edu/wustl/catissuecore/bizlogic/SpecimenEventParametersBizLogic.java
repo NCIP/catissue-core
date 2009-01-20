@@ -105,14 +105,13 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 	private void insertEvent(Object obj, DAO dao, SessionDataBean sessionDataBean, NewSpecimenBizLogic newSpecimenBizLogic,List specimenIds) throws DAOException, UserNotAuthorizedException
 	{
 		try
-		{
+		{			
 			SpecimenEventParameters specimenEventParametersObject = (SpecimenEventParameters) obj;
 
 			Object object = dao.retrieve(User.class.getName(), specimenEventParametersObject.getUser().getId());
-			if (object != null)
+			if (object !=null)
 			{
 				User user = (User) object;
-
 				// check for closed User
 				checkStatus(dao, user, "User");
 
@@ -125,7 +124,14 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 			//(Specimen.class.getName(), specimenEventParametersObject.getSpecimen().getId(),Constants.SYSTEM_IDENTIFIER);
 			// check for closed Specimen
 			
-			checkStatus(dao, specimen, "Specimen");
+			if (specimenEventParametersObject instanceof DisposalEventParameters)
+			{
+				checkStatus(dao, specimen, Constants.DISPOSAL_EVENT_PARAMETERS);
+			}
+			else
+			{
+				checkStatus(dao, specimen, Constants.SPECIMEN);
+			}
 
 			if (specimen != null)
 			{
@@ -302,6 +308,37 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 		}
 	}
 
+	/**
+	 * Method overridden from DefaultBizLogic.java. This method checks for the specimens status
+	 * wheather it is closed. If the event is disposal only then it does not throws exception.
+	 * @param dao DAo object.
+	 * @param specimen Specimen object on which event is happened.
+	 * @param objectType for knowing which event is happened.
+	 * @throws DAOException DAO Exception.
+	 */
+	protected void checkStatus(DAO dao, Specimen specimen, String objectType) throws DAOException
+	{
+		if (specimen != null)
+		{
+			Long identifier = specimen.getId();
+			if (identifier != null)
+			{
+				String className = specimen.getClass().getName();
+				String activityStatus = specimen.getActivityStatus();
+				if(activityStatus == null)
+				{
+					activityStatus = getActivityStatus(dao, className, identifier);
+				}
+				
+				if (Constants.ACTIVITY_STATUS_CLOSED.equals(activityStatus) &&
+						(!Constants.DISPOSAL_EVENT_PARAMETERS.equals(objectType)))
+				{
+					throw new DAOException(objectType + " " + ApplicationProperties.getValue("error.object.closed"));
+				}
+			}
+		}
+	}
+	
 	private void addEntriesInDisabledMap(Specimen specimen, StorageContainer container, Map disabledConts)
 	{
 		String contNameKey = "StorageContName";
@@ -437,14 +474,20 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 			checkStatus(dao, specimenEventParameters.getUser(), "User");
 		}
 		Specimen specimen = (Specimen)HibernateMetaData.getProxyObjectImpl(specimenEventParameters.getSpecimen());
+		List specimenIds=new ArrayList();
 		if (specimenEventParameters instanceof DisposalEventParameters)
 		{
-			
+			DisposalEventParameters disposalEventParameters =
+				(DisposalEventParameters) specimenEventParameters;
 			SpecimenPosition prevPosition = specimen.getSpecimenPosition(); 
 			specimen.setSpecimenPosition(null);
 			specimen.setIsAvailable(new Boolean(false));
 			specimen.setActivityStatus(((DisposalEventParameters)specimenEventParameters).getActivityStatus());
 			//Update Specimen
+			if (disposalEventParameters.getActivityStatus().equals(Constants.ACTIVITY_STATUS_DISABLED))
+			{
+				disableSubSpecimens(dao, specimen.getId().toString(), specimenIds);
+			}
 			dao.update(specimen, sessionDataBean, true, true, false);
 			if(prevPosition!=null)
 			{

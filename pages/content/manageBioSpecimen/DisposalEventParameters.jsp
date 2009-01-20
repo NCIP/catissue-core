@@ -33,7 +33,8 @@ function confirmAction(form)
 			{
 				form.action='${requestScope.formName}?disposal=true';
 				document.forms[0].onSubmit.value="/pages/content/manageBioSpecimen/RedirectSpecimenEventParameters.jsp";
-				form.submit();
+				return true;
+				//form.submit();
 			}
 			else
 			{
@@ -45,7 +46,8 @@ function confirmAction(form)
 			if(confirm("Are you sure you want to close the specimen ?"))
 			{
 				form.action='${requestScope.formName}';
-				form.submit();
+				return true;
+				//form.submit();
 			}
 			else
 			{
@@ -158,5 +160,5 @@ function confirmAction(form)
         </tr>
       </table></td>
   </tr>
-  	 </html:form>
+ </html:form>
 </table>
