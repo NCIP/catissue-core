@@ -118,6 +118,12 @@ public class ProtocolEventDetailsAction extends BaseAction
 		return (mapping.findForward(Constants.SUCCESS));
 	}
 	
+	/**
+	 * 
+	 * @param mapping ActionMapping
+	 * @param protocolEventDetailsForm protocolEventDetails Form
+	 * @param request HttpServletRequest
+	 */
 	private void initSpecimenrequirementForm(ActionMapping mapping, 
 			ProtocolEventDetailsForm protocolEventDetailsForm, HttpServletRequest request)
 	{
@@ -143,6 +149,10 @@ public class ProtocolEventDetailsAction extends BaseAction
 			collectionProtocolEventKey = st.nextToken();
 		}
 		CollectionProtocolEventBean collectionProtocolEventBean = (CollectionProtocolEventBean)collectionProtocolEventMap.get(collectionProtocolEventKey);
+		if(new Long(collectionProtocolEventBean.getId())!=null && collectionProtocolEventBean.getId() > 0)
+		{
+			request.setAttribute("isPersistent", true);
+		}
 		protocolEventDetailsForm.setClinicalDiagnosis(collectionProtocolEventBean.getClinicalDiagnosis());
 		protocolEventDetailsForm.setClinicalStatus(collectionProtocolEventBean.getClinicalStatus());
 		protocolEventDetailsForm.setCollectionPointLabel(collectionProtocolEventBean.getCollectionPointLabel());

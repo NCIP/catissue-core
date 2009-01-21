@@ -2,6 +2,7 @@ package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +23,7 @@ import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
 import edu.wustl.catissuecore.bean.SpecimenRequirementBean;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
+import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.CollectionProtocolUtil;
 import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -66,6 +68,7 @@ public class CreateSpecimenTemplateAction extends BaseAction
 		}
 		if(pageOf!=null&&pageOf.equalsIgnoreCase("error"))
 		{
+			getEventAndSpecimenBean(mapkey, request);
 			mapkey=null;
 		}
 		request.setAttribute("pageOf", pageOf);
@@ -210,27 +213,14 @@ public class CreateSpecimenTemplateAction extends BaseAction
 	}
 	
 	/**
-	 * @param request
-	 * @param operation
-	 * @param specimenCollectionGroupForm
-	 * @throws DAOException
+	 * @param request HttpServletRequest
+	 * @param operation add/ edit
+	 * @param specimenCollectionGroupForm SpecimenCollectionGroup Form
+	 * @throws DAOException Database exception
 	 */
 	private void setUserInForm(HttpServletRequest request,String operation,CreateSpecimenTemplateForm createSpecimenTemplateForm) 
 	{
-		UserBizLogic userBizLogic = (UserBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.USER_FORM_ID);
-		Collection userCollection = null;
-		try
-		{
-			userCollection = userBizLogic.getUsers(operation);
-		}
-		catch (DAOException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		request.setAttribute(Constants.USERLIST, userCollection);
-
+		Collection<User> userCollection =retriveUser(request, operation);
 		SessionDataBean sessionData = getSessionData(request);
 		if (sessionData != null)
 		{
@@ -247,7 +237,37 @@ public class CreateSpecimenTemplateAction extends BaseAction
 			}
 		}
 	}
+
+	/**
+	 * @param request HttpServletRequest
+	 * @param operation operation add/edit
+	 * @return userCollection
+	 */
+	private Collection<User> retriveUser(HttpServletRequest request, String operation)
+	{
+		UserBizLogic userBizLogic = (UserBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.USER_FORM_ID);
+		Collection<User> userCollection = null;
+		try
+		{
+			userCollection = userBizLogic.getUsers(operation);
+		}
+		catch (DAOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		request.setAttribute(Constants.USERLIST, userCollection);
+		return userCollection;
+	}
 	
+	/**
+	 * 
+	 * @param keyToken String Tokenizer object
+	 * @param specimenRequirementBean Specimen req bean
+	 * @param parentKey parent key
+	 * @return specimenRequirementBean
+	 */
 	private SpecimenRequirementBean getSpecimenBeanFromMap(StringTokenizer keyToken, SpecimenRequirementBean specimenRequirementBean, String parentKey)
 	{
 		while (keyToken.hasMoreTokens()) 
@@ -273,6 +293,10 @@ public class CreateSpecimenTemplateAction extends BaseAction
 		return specimenRequirementBean;
 	}
 	
+	/**
+	 * 
+	 * @param createSpecimenTemplateForm createSpecimenTemplateForm
+	 */
 	private void clearFormOnAddSpecimenRequirement(CreateSpecimenTemplateForm createSpecimenTemplateForm)
 	{
 		createSpecimenTemplateForm.setClassName(null);
@@ -297,9 +321,94 @@ public class CreateSpecimenTemplateAction extends BaseAction
 		createSpecimenTemplateForm.setDeriveSpecimenCollection(null);
 		createSpecimenTemplateForm.setDeriveSpecimenValues(null);
 	}
-	private void initCreateSpecimenTemplateForm(CreateSpecimenTemplateForm createSpecimenTemplateForm, String mapkey, HttpServletRequest request)
+	
+	/**
+	 * 
+	 * @param createSpecimenTemplateForm  createSpecimenTemplateForm
+	 * @param mapkey event key
+	 * @param request HttpServletRequest
+	 */
+	private void initCreateSpecimenTemplateForm(CreateSpecimenTemplateForm createSpecimenTemplateForm, 
+			String mapkey, HttpServletRequest request)
 	{
+		SpecimenRequirementBean specimenRequirementBean = getEventAndSpecimenBean(mapkey, request);
+		createSpecimenTemplateForm.setDisplayName(specimenRequirementBean.getDisplayName());
+		createSpecimenTemplateForm.setLineage(specimenRequirementBean.getLineage());
+		createSpecimenTemplateForm.setClassName(specimenRequirementBean.getClassName());
+		createSpecimenTemplateForm.setType(specimenRequirementBean.getType());
+		createSpecimenTemplateForm.setTissueSide(specimenRequirementBean.getTissueSide());
+		createSpecimenTemplateForm.setTissueSite(specimenRequirementBean.getTissueSite());
+		createSpecimenTemplateForm.setPathologicalStatus(specimenRequirementBean.getPathologicalStatus());
+		createSpecimenTemplateForm.setConcentration(specimenRequirementBean.getConcentration());
+		createSpecimenTemplateForm.setQuantity(specimenRequirementBean.getQuantity());
+		createSpecimenTemplateForm.setStorageLocationForSpecimen(specimenRequirementBean.getStorageContainerForSpecimen());
+		createSpecimenTemplateForm.setCollectionEventUserId(specimenRequirementBean.getCollectionEventUserId());
+		createSpecimenTemplateForm.setReceivedEventUserId(specimenRequirementBean.getReceivedEventUserId());
 		
+		setCollAndRecEvents(createSpecimenTemplateForm, request, specimenRequirementBean);
+		//Derive
+		LinkedHashMap deriveSpecimenLinkedHashMap = null;
+		if(specimenRequirementBean.getDeriveSpecimenCollection()!=null&&!specimenRequirementBean.getDeriveSpecimenCollection().isEmpty())
+		{
+			deriveSpecimenLinkedHashMap = CollectionProtocolUtil.getDerviredObjectMap(specimenRequirementBean.getDeriveSpecimenCollection().values());
+			createSpecimenTemplateForm.setNoOfDeriveSpecimen(specimenRequirementBean.getDeriveSpecimenCollection().size());
+		}
+		else
+		{
+			createSpecimenTemplateForm.setNoOfDeriveSpecimen(0);
+		}
+		createSpecimenTemplateForm.setDeriveSpecimenValues(deriveSpecimenLinkedHashMap);
+		
+	}
+
+	/**
+	 * @param createSpecimenTemplateForm createSpecimenTemplateForm
+	 * @param request HttpServletRequest
+	 * @param specimenRequirementBean Specimen requirement bean
+	 */
+	private void setCollAndRecEvents(CreateSpecimenTemplateForm createSpecimenTemplateForm,
+			HttpServletRequest request, SpecimenRequirementBean specimenRequirementBean)
+	{
+		String collEventUser = null;
+		String recEventUser = null;
+		long collEventId = specimenRequirementBean.getCollectionEventUserId();
+		long recEventId = specimenRequirementBean.getReceivedEventUserId();
+		
+		Collection userColl =  (Collection)request.getAttribute(Constants.USERLIST);
+		Iterator itr = userColl.iterator();
+		for (int i = 0; itr.hasNext(); i++)
+		{
+			NameValueBean nameValueBean = (NameValueBean) itr.next();
+			if (String.valueOf(collEventId).equals(nameValueBean.getValue()))
+			{
+				collEventUser = nameValueBean.getName();
+				createSpecimenTemplateForm.setCollectionUserName(collEventUser);
+			}
+			if (String.valueOf(recEventId).equals(nameValueBean.getValue()))
+			{
+				recEventUser = nameValueBean.getName();
+				createSpecimenTemplateForm.setReceivedUserName(recEventUser);
+			}
+		}
+		//Collected and received events
+		createSpecimenTemplateForm.setCollectionEventContainer(specimenRequirementBean.getCollectionEventContainer());
+		createSpecimenTemplateForm.setReceivedEventReceivedQuality(specimenRequirementBean.getReceivedEventReceivedQuality());
+		createSpecimenTemplateForm.setCollectionEventCollectionProcedure(specimenRequirementBean.getCollectionEventCollectionProcedure());
+		
+		//Aliquot
+		createSpecimenTemplateForm.setNoOfAliquots(specimenRequirementBean.getNoOfAliquots());
+		createSpecimenTemplateForm.setQuantityPerAliquot(specimenRequirementBean.getQuantityPerAliquot());
+		createSpecimenTemplateForm.setStorageLocationForAliquotSpecimen(specimenRequirementBean.getStorageContainerForAliquotSpecimem());
+	}
+
+	/**
+	 * @param mapkey Key for Event
+	 * @param request HttpServletRequest
+	 * @return specimenRequirementBean
+	 */
+	private SpecimenRequirementBean getEventAndSpecimenBean(String mapkey,
+			HttpServletRequest request)
+	{
 		String eventKey=null;
 		String specimenKey=null;
 		HttpSession session = request.getSession();
@@ -315,44 +424,11 @@ public class CreateSpecimenTemplateAction extends BaseAction
 		Map specimenRequirementmaps = collectionProtocolEventBean.getSpecimenRequirementbeanMap();
 		SpecimenRequirementBean parentSpecimenRequirementBean = (SpecimenRequirementBean)specimenRequirementmaps.get(specimenKey);
 		SpecimenRequirementBean specimenRequirementBean = getSpecimenBeanFromMap(stringToken,parentSpecimenRequirementBean,specimenKey);
+		if(new Long(specimenRequirementBean.getId())!=null && specimenRequirementBean.getId() > 0)
+		{
+			request.setAttribute("isPersistent", true);
+		}
 		session.setAttribute(Constants.EDIT_SPECIMEN_REQUIREMENT_BEAN, specimenRequirementBean);
-		createSpecimenTemplateForm.setDisplayName(specimenRequirementBean.getDisplayName());
-		createSpecimenTemplateForm.setLineage(specimenRequirementBean.getLineage());
-		createSpecimenTemplateForm.setClassName(specimenRequirementBean.getClassName());
-		createSpecimenTemplateForm.setType(specimenRequirementBean.getType());
-		createSpecimenTemplateForm.setTissueSide(specimenRequirementBean.getTissueSide());
-		createSpecimenTemplateForm.setTissueSite(specimenRequirementBean.getTissueSite());
-		createSpecimenTemplateForm.setPathologicalStatus(specimenRequirementBean.getPathologicalStatus());
-		createSpecimenTemplateForm.setConcentration(specimenRequirementBean.getConcentration());
-		createSpecimenTemplateForm.setQuantity(specimenRequirementBean.getQuantity());
-		createSpecimenTemplateForm.setStorageLocationForSpecimen(specimenRequirementBean.getStorageContainerForSpecimen());
-		createSpecimenTemplateForm.setCollectionEventUserId(specimenRequirementBean.getCollectionEventUserId());
-		createSpecimenTemplateForm.setReceivedEventUserId(specimenRequirementBean.getReceivedEventUserId());
-		
-		//Collected and received events
-		createSpecimenTemplateForm.setCollectionEventContainer(specimenRequirementBean.getCollectionEventContainer());
-		createSpecimenTemplateForm.setReceivedEventReceivedQuality(specimenRequirementBean.getReceivedEventReceivedQuality());
-		createSpecimenTemplateForm.setCollectionEventCollectionProcedure(specimenRequirementBean.getCollectionEventCollectionProcedure());
-		
-		//Aliquot
-		createSpecimenTemplateForm.setNoOfAliquots(specimenRequirementBean.getNoOfAliquots());
-		createSpecimenTemplateForm.setQuantityPerAliquot(specimenRequirementBean.getQuantityPerAliquot());
-		createSpecimenTemplateForm.setStorageLocationForAliquotSpecimen(specimenRequirementBean.getStorageContainerForAliquotSpecimem());
-		
-		
-		//Derive
-		LinkedHashMap deriveSpecimenLinkedHashMap = null;
-		
-		if(specimenRequirementBean.getDeriveSpecimenCollection()!=null&&!specimenRequirementBean.getDeriveSpecimenCollection().isEmpty())
-		{
-			deriveSpecimenLinkedHashMap = CollectionProtocolUtil.getDerviredObjectMap(specimenRequirementBean.getDeriveSpecimenCollection().values());
-			createSpecimenTemplateForm.setNoOfDeriveSpecimen(specimenRequirementBean.getDeriveSpecimenCollection().size());
-		}
-		else
-		{
-			createSpecimenTemplateForm.setNoOfDeriveSpecimen(0);
-		}
-		createSpecimenTemplateForm.setDeriveSpecimenValues(deriveSpecimenLinkedHashMap);
-		
+		return specimenRequirementBean;
 	}
 }

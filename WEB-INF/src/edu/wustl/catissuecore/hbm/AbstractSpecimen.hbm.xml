@@ -280,7 +280,7 @@
             class="edu.wustl.catissuecore.domain.SpecimenRequirement"
             cascade="none"
             outer-join="auto"
-            update="true"
+            update="false"
             insert="true"
             column="REQ_SPECIMEN_ID"
             lazy="false"
@@ -334,8 +334,8 @@
             name="specimenCollection"
             table="CATISSUE_SPECIMEN"
             lazy="true"
-            inverse="false"
-            cascade="save-update"
+            inverse="true"
+            cascade="none"
             sort="unsorted"
         >
 	         <cache usage="read-write" />

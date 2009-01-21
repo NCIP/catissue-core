@@ -120,13 +120,50 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 	private long collectionEventId;																											// Mandar : CollectionEvent 10-July-06
 	private long collectionEventSpecimenId;
 	private long collectionEventUserId;
+	private String collectionUserName = null;
 		
 	
+	/**
+	 * 
+	 * @return collectionUserName
+	 */
+	public String getCollectionUserName()
+	{
+		return collectionUserName;
+	}
+
+	/**
+	 * 
+	 * @param collectionUserName collectionUserName
+	 */
+	public void setCollectionUserName(String collectionUserName)
+	{
+		this.collectionUserName = collectionUserName;
+	}
+
 	private long receivedEventId;
 	private long receivedEventSpecimenId;
 	private long receivedEventUserId;
+	private String receivedUserName = null;
 	
-	
+	/**
+	 * 
+	 * @return receivedUserName
+	 */
+	public String getReceivedUserName()
+	{
+		return receivedUserName;
+	}
+
+	/**
+	 * 
+	 * @param receivedUserName receivedUserName
+	 */
+	public void setReceivedUserName(String receivedUserName)
+	{
+		this.receivedUserName = receivedUserName;
+	}
+
 	private String collectionEventCollectionProcedure;
 	
 	private String collectionEventContainer;
@@ -618,7 +655,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 						}
 						else
 						{
-							if (!validator.isNumeric(quantityPerAliquot.trim()))
+							if (!validator.isPositiveNumeric(quantityPerAliquot.trim(),1))
 							{
 								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format", ApplicationProperties
 										.getValue("aliquots.qtyPerAliquot")));

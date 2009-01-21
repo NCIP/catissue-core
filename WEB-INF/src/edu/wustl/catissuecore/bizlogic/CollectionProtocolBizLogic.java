@@ -336,6 +336,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	{
 		CollectionProtocol collectionProtocolOld;
 		Session session = null;
+		
 		try
 		{
 			session = DBUtil.getCleanSession();
@@ -346,22 +347,19 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 				setCPEventCollection(collectionProtocol);
 				editCPObj(dao, sessionDataBean, collectionProtocol, collectionProtocolOld);
 			}
-			else {
+			else
+			{
 				setCPRCollection(collectionProtocol);
-				if (collectionProtocolOld.getCollectionProtocolRegistrationCollection().size() > 0)
+				if(collectionProtocolOld.getCollectionProtocolRegistrationCollection().size() == 0)
 				{
-					setCPEventCollection(collectionProtocol);
-					editCPObj(dao, sessionDataBean, collectionProtocol, collectionProtocolOld);
-				}
-				else
-				{			
 					Collection<ConsentTier> oldConsentTierCollection = collectionProtocolOld.getConsentTierCollection();
 					Collection<ConsentTier> newConsentTierCollection = collectionProtocol.getConsentTierCollection();
 					checkConsents(dao, oldConsentTierCollection,newConsentTierCollection);
-					editEvents(dao, sessionDataBean, collectionProtocol, collectionProtocolOld);
-					editCPObj(dao, sessionDataBean, collectionProtocol, collectionProtocolOld);
 				}
+				editEvents(dao, sessionDataBean, collectionProtocol, collectionProtocolOld);
+				editCPObj(dao, sessionDataBean, collectionProtocol, collectionProtocolOld);
 			}
+			
 		}
 		catch (BizLogicException e)
 		{
@@ -1280,7 +1278,6 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			List cpList = new ArrayList<Object>();
 			cpList.add(collectionProtocolBean);
 			cpList.add(eventMap);
-
 			return cpList;
 		}
 		

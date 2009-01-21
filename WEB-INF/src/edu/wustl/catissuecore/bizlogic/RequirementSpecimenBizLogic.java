@@ -88,11 +88,6 @@ public class RequirementSpecimenBizLogic extends DefaultBizLogic
 				}
 				else
 				{
-					if(specimenRequirement.getSpecimenCharacteristics().getId() ==null ||
-							specimenRequirement.getSpecimenCharacteristics().getId() <= 0)
-					{
-						dao.insert(specimenRequirement.getSpecimenCharacteristics(), sessionDataBean, false, false);
-					}
 					dao.update(specimenRequirement, sessionDataBean, true, false, false);
 					if(oldReqspecimenCollection!=null)
 					{

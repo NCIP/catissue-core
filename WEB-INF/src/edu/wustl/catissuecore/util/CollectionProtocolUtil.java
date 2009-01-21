@@ -167,7 +167,7 @@ public class CollectionProtocolUtil {
 			CollectionProtocolEvent collectionProtocolEvent, int counter, DAO dao) throws DAOException
 	{
 		CollectionProtocolEventBean eventBean = new CollectionProtocolEventBean();
-				
+		eventBean.setId(collectionProtocolEvent.getId().longValue());
 		eventBean.setStudyCalenderEventPoint(new Double
 				(collectionProtocolEvent.getStudyCalendarEventPoint()));
 		eventBean.setCollectionPointLabel(collectionProtocolEvent.getCollectionPointLabel());
@@ -320,6 +320,7 @@ public class CollectionProtocolUtil {
 	{
 		
 		SpecimenRequirementBean speRequirementBean = new SpecimenRequirementBean();
+		speRequirementBean.setId(reqSpecimen.getId().longValue());
 		speRequirementBean.setLineage(reqSpecimen.getLineage());
 		speRequirementBean.setUniqueIdentifier(
 				parentUniqueId + getUniqueId(reqSpecimen.getLineage(),specCtr));
@@ -449,12 +450,14 @@ public class CollectionProtocolUtil {
 	 * @param deriveCtr
 	 * @return
 	 */
-	private static StringBuffer getKeyBase(int deriveCtr) {
+	private static StringBuffer getKeyBase(int deriveCtr)
+	{
 		StringBuffer derivedSpecimenKey = new StringBuffer();
 		derivedSpecimenKey.append("DeriveSpecimenBean:");
 		derivedSpecimenKey.append(String.valueOf(deriveCtr));
 		return derivedSpecimenKey;
 	}
+	
 	private  static void setSpecimenEventParameters(SpecimenRequirement reqSpecimen, SpecimenRequirementBean specimenRequirementBean)
 	{
 		Collection eventsParametersColl = reqSpecimen.getSpecimenEventCollection();
