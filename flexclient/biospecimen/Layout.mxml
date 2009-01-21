@@ -460,7 +460,49 @@
 			navigateToURL(url,"_self");
 		}
 	}
+
+	/*
+		This mehtod invoked when a View Participant Button is clicked
+	*/
+	public function viewParticipantDetails():void
+	{
+	    var selectedParticipant:NameValueBean= new NameValueBean();
+	    selectedParticipant = spCombo as NameValueBean
+		if(selectedParticipant != null)
+		{
+	 	   var selectedParticipantId :String = selectedParticipant.value; 
+	 	 
+	 	   // Sachin : on particpant click set previosly selcetd node and participant to NULL
+	 	   previouslySelectedParticipantId = null;
+	 	   previouslySelectedParticipantBean=null;
+	 	   previouslySelectednodeId=null;
+	  	 
+	  	   var selectedCp : NameValueBean = new NameValueBean();
+	  	  	selectedCp =  cpCombo as NameValueBean;
+		    var selectedCpId :String = selectedCp.value;
+    	    selectedParticipantIndex = spComboSelectedIndex;
+	  
+		   // title  = title +" "+selectedParticipant.name;
+		     spDetailsLabel.text = title+"  "+selectedParticipant.name;
+          
+		   //Here we can get data for specimen tree details 
 	
+
+    	     var str:String = remoteObj.getTreeData(selectedCpId,selectedParticipantId);  
+
+		     var refreshParticipants:String = "false";  
+	   
+         
+	    
+		    //invoking the java script method
+	    	var url : URLRequest = new URLRequest("javascript: onParticipantClick('"+ selectedParticipantId + "','"+ selectedCpId + "','" + refreshParticipants+"')");
+			navigateToURL(url,"_self");
+		}
+		else
+		{
+			Alert.show("Please select a Participant");
+		}
+	}	
     
  /*
      Tree Handler  Method
@@ -854,19 +896,31 @@
              <mx:Label text="Collection Protocol:" width="100%" color="black" fontWeight="bold"/>
              <!-- Jignesh: AutoCompeleteDropDown component -->
 			 <Components:AutoCompeleteDropDownList id="Cp" name="compCp" width="100%" height="5%" cDataProvider="{cpCollection.toArray()}" parentInstance="Cp"/>              
-        </mx:VBox>
-        
+        </mx:VBox>        
         <mx:VBox width="100%" height="95%">
+		<mx:HBox width="100%" id="pVbox" borderSides="black">
+			<mx:VBox width="50%">
+                     		<mx:Label text="Participant (Protocol ID):" color="black" fontWeight="bold" height="15"/> 
+			</mx:VBox>
+			<mx:VBox width="50%">
+	                     	<mx:Button toolTip="Click to register new Participant" label="Register New" color="black" click="addNewParticipant();" height="15"/>
+                   	</mx:VBox>
+		</mx:HBox>
+		<mx:HBox width="100%">
+			<!-- Jignesh: AutoCompeleteDropDown component -->                   	
+			<Components:AutoCompeleteDropDownList id="Sp" name="compSpec" width="100%" height="5%" cDataProvider="{pCollection.toArray()}" parentInstance="Sp"/>
+		</mx:HBox>
+                 
+		<mx:HBox width="100%" borderSides="black">
+			<mx:VBox width="50%"> 
+                     		<mx:Label text="" color="black" fontWeight="bold" height="15"/> 
+			</mx:VBox>
+			<mx:VBox width="50%">
+                     		<mx:Button toolTip="Click to view selected Participant Details" label="View Participant" color="black" click="viewParticipantDetails();" height="15" />
+                   	</mx:VBox>                   						
+                 </mx:HBox>
 
-                <mx:VBox width="100%" id="pVbox" borderSides="black">
-                   	<mx:HBox backgroundColor="#FFFFFF" width="100%"> 
-                     	<mx:Label text="Participant (Protocol ID):" color="black" fontWeight="bold" height="15"/> 	
-                     	<mx:Button toolTip="Click to  register new Participant" label="Register New" color="black" click="addNewParticipant();" height="15"/>
-                   	 </mx:HBox>
-                   	 <!-- Jignesh: AutoCompeleteDropDown component -->                   	
-					<Components:AutoCompeleteDropDownList id="Sp" name="compSpec" width="100%" height="5%" cDataProvider="{pCollection.toArray()}" parentInstance="Sp"/>					
-                 </mx:VBox>
-        	     <mx:VBox height="100%" width="100%" id="spDetailVbox">
+		 <mx:VBox height="100%" width="100%" id="spDetailVbox">
                    	<mx:Label id="spDetailsLabel" text="{title}" color="black" width="250" height="15" fontWeight="bold" />
                    	<mx:Tree id="specimenTree" labelField="@name" width="100%" height="100%" itemClick="onNodeClick()" 
                    		folderClosedIcon="@Embed(source='/images/Specimen.gif')" folderOpenIcon="@Embed(source='/images/Specimen.gif')" 
@@ -876,7 +930,6 @@
 				</mx:VBox>
 
 		</mx:VBox>
-
 	</mx:Box>
 
 	<mx:Style>
