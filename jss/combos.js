@@ -25,15 +25,16 @@ Ext.onReady(function(){
       var combo = new Ext.form.ComboBox({
         store: ds,
         displayField:'excerpt',
-        typeAhead: true,
+        typeAhead: false,
 		width: 200,
 	    pageSize:15,
 		forceSelection: true  ,	
 		queryParam : 'query',
 		mode: 'remote', 
         triggerAction: 'all',
-		minChars : 1,	
-        
+		minChars : 3,	
+		queryDelay : 300,
+		typeAheadDelay : 900,
         selectOnFocus:true,
         applyTo: 'clinicaldiagnosis'
    });
