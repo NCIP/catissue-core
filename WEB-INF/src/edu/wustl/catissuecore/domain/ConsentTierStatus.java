@@ -88,7 +88,9 @@ public class ConsentTierStatus extends AbstractDomainObject implements Serializa
 	 * @throws AssignDataException assignDataException.
 	 */
 	public void setAllValues(IValueObject abstractForm) throws AssignDataException
-	{}
+	{
+		//
+	}
 
 	/**
 	 * Set identifier.
