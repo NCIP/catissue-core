@@ -39,6 +39,11 @@ public class CollectionProtocol extends SpecimenProtocol implements
 	java.io.Serializable, Comparable, IActivityStatus
 {
 	/**
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(CollectionProtocol.class);
+
+	/**
 	 * Serial Version Id of the class.
 	 */
 	private static final long serialVersionUID = 1234567890L;
@@ -112,7 +117,6 @@ public class CollectionProtocol extends SpecimenProtocol implements
 
 	/**
 	 * A collection of registration of a Participant to a Collection Protocol.
-	 * 
 	 */
 	protected Collection collectionProtocolRegistrationCollection = new HashSet();
 
@@ -187,6 +191,7 @@ public class CollectionProtocol extends SpecimenProtocol implements
 	 */
 	public CollectionProtocol(AbstractActionForm form)
 	{
+		super();
 		setAllValues(form);
 	}
 
@@ -348,9 +353,9 @@ public class CollectionProtocol extends SpecimenProtocol implements
 			 * Collection_Event_Protocol_Order_1 See also: 1-8 Description: To
 			 * get the collection event protocols in their insertion order.
 			 */
-			Logger.out.debug("PRE FIX MAP " + map);
+			logger.debug("PRE FIX MAP " + map);
 			final Map sortedMap = sortMapOnKey(map);
-			Logger.out.debug("POST FIX MAP " + map);
+			logger.debug("POST FIX MAP " + map);
 
 			final MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
 
@@ -359,7 +364,7 @@ public class CollectionProtocol extends SpecimenProtocol implements
 			{
 				this.collectionProtocolEventCollection.add(cpecList.get(i));
 			}
-			Logger.out.debug("collectionProtocolEventCollection " +
+			logger.debug("collectionProtocolEventCollection " +
 					this.collectionProtocolEventCollection);
 
 			// Setting the unsigned doc url.
@@ -371,7 +376,7 @@ public class CollectionProtocol extends SpecimenProtocol implements
 		}
 		catch (Exception excp)
 		{
-			Logger.out.error(excp.getMessage(), excp);
+			logger.error(excp.getMessage(), excp);
 		}
 	}
 
@@ -425,7 +430,7 @@ public class CollectionProtocol extends SpecimenProtocol implements
 	 * @param map Map.
 	 * @return LinkedHashMap.
 	 */
-	private LinkedHashMap sortMapOnKey(Map map)
+	private Map sortMapOnKey(Map map)
 	{
 		final Object[] mapKeySet = map.keySet().toArray();
 		final int size = mapKeySet.length;
@@ -485,7 +490,7 @@ public class CollectionProtocol extends SpecimenProtocol implements
 		}
 		catch (Exception excp)
 		{
-			Logger.out.error(excp.getMessage(), excp);
+			logger.error(excp.getMessage(), excp);
 		}
 		return consentStatementColl;
 	}

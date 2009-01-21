@@ -152,7 +152,7 @@ public class CollectionProtocolEvent extends AbstractSpecimenCollectionGroup
 	 */
 	public void setAllValues(IValueObject abstractForm) throws AssignDataException
 	{
-
+		//
 	}
 
 	/**
@@ -274,7 +274,9 @@ public class CollectionProtocolEvent extends AbstractSpecimenCollectionGroup
 	 */
 	@Override
 	protected void setGroupName(String name) throws BizLogicException
-	{}
+	{
+		//
+	}
 
 	/**
 	 * Get tha label format.

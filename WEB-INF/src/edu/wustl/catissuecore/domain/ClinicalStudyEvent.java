@@ -137,5 +137,7 @@ public class ClinicalStudyEvent extends AbstractDomainObject
      * @throws AssignDataException assignDataException.
      */
     public void setAllValues(IValueObject abstractForm) throws AssignDataException
-    {}
+    {
+    	//
+    }
 }

@@ -122,5 +122,7 @@ public class Capacity extends AbstractDomainObject
      */
     public void setAllValues(IValueObject ivalueObject)
             throws AssignDataException
-    {}
+    {
+    	//
+    }
 }

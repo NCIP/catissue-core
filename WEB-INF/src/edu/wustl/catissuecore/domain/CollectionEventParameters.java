@@ -24,6 +24,11 @@ public class CollectionEventParameters extends SpecimenEventParameters
 		implements java.io.Serializable
 {
 	/**
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(CollectionEventParameters.class);
+
+	/**
 	 * Serial Version Id of the class.
 	 */
 	private static final long serialVersionUID = 1234567890L;
@@ -81,7 +86,9 @@ public class CollectionEventParameters extends SpecimenEventParameters
 	 * NOTE: Do not delete this constructor. Hibernet uses this by reflection API.
 	 */
 	public CollectionEventParameters()
-	{}
+	{
+		super();
+	}
 
 	/**
 	 * Parameterized constructor.
@@ -89,6 +96,7 @@ public class CollectionEventParameters extends SpecimenEventParameters
 	 */
 	public CollectionEventParameters(AbstractActionForm abstractForm)
 	{
+		super();
 		setAllValues((IValueObject)abstractForm);
 	}
 
@@ -119,7 +127,7 @@ public class CollectionEventParameters extends SpecimenEventParameters
         }
         catch (Exception excp)
         {
-            Logger.out.error(excp.getMessage());
+            logger.error(excp.getMessage());
         }
     }
 
@@ -129,6 +137,7 @@ public class CollectionEventParameters extends SpecimenEventParameters
      */
     public CollectionEventParameters(CollectionEventParameters obj)
     {
+    	super();
     	this.collectionProcedure = obj.collectionProcedure;
     	this.container = obj.container;
     	this.comment = obj.comment;

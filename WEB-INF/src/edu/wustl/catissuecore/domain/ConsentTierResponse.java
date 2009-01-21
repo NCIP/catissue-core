@@ -45,6 +45,7 @@ public class ConsentTierResponse extends AbstractDomainObject implements Seriali
 	 */
 	public ConsentTierResponse(ConsentTierResponse consentTierResponse)
 	{
+		super();
 		this.response = consentTierResponse.getResponse();
 		this.consentTier = consentTierResponse.getConsentTier();
 	}
@@ -53,7 +54,9 @@ public class ConsentTierResponse extends AbstractDomainObject implements Seriali
 	 * Default Constructor.
 	 */
 	public ConsentTierResponse()
-	{}
+	{
+		super();
+	}
 
 	/**
 	 * Get Response.
@@ -88,7 +91,9 @@ public class ConsentTierResponse extends AbstractDomainObject implements Seriali
 	 * @throws AssignDataException assignDataException.
 	 */
 	public void setAllValues(IValueObject abstractForm) throws AssignDataException
-	{}
+	{
+		//
+	}
 
 	/**
 	 * Set the id.

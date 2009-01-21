@@ -65,7 +65,9 @@ public class ClinicalStudyRegistration extends AbstractDomainObject implements S
      * Default Constructor.
      */
     public ClinicalStudyRegistration()
-    {}
+    {
+    	super();
+    }
 
     /**
      * One argument constructor.
@@ -74,6 +76,7 @@ public class ClinicalStudyRegistration extends AbstractDomainObject implements S
      */
     public ClinicalStudyRegistration(AbstractActionForm form) throws AssignDataException
     {
+    	super();
         setAllValues(form);
     }
 
@@ -202,6 +205,7 @@ public class ClinicalStudyRegistration extends AbstractDomainObject implements S
      */
     public void setAllValues(IValueObject abstractForm) throws AssignDataException
     {
+    	String nullString = null; //added for PMD.
         ClinicalStudyRegistrationForm form = (ClinicalStudyRegistrationForm) abstractForm;
         try
         {
@@ -232,7 +236,7 @@ public class ClinicalStudyRegistration extends AbstractDomainObject implements S
             this.clinicalStudyParticipantIdentifier = form.getParticipantClinicalStudyID().trim();
             if(Constants.DOUBLE_QUOTES.equals(clinicalStudyParticipantIdentifier))
             {
-                this.clinicalStudyParticipantIdentifier = null;
+                this.clinicalStudyParticipantIdentifier = nullString;
             }
             this.registrationDate = Utility.parseDate(form.getRegistrationDate(),
             		Utility.datePattern(form.getRegistrationDate()));

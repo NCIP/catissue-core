@@ -22,6 +22,11 @@ import edu.wustl.common.util.logger.Logger;
 
 public class ClinicalStudy extends SpecimenProtocol implements java.io.Serializable
 {
+	/**
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(ClinicalStudy.class);
+
     /**
 	 * Serial Version Id of the class.
 	 */
@@ -31,7 +36,9 @@ public class ClinicalStudy extends SpecimenProtocol implements java.io.Serializa
 	 * Default Constructor.
 	 */
 	public ClinicalStudy()
-    {}
+    {
+		super();
+    }
 
 	/**
 	 * Parameterized Constructor.
@@ -39,6 +46,7 @@ public class ClinicalStudy extends SpecimenProtocol implements java.io.Serializa
 	 */
     public ClinicalStudy(AbstractActionForm form)
     {
+    	super();
         setAllValues(form);
     }
 
@@ -154,7 +162,7 @@ public class ClinicalStudy extends SpecimenProtocol implements java.io.Serializa
         }
         catch(Exception excp)
         {
-            Logger.out.error(excp.getMessage(),excp);
+            logger.error(excp.getMessage(),excp);
         }
     }
 

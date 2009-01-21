@@ -227,5 +227,7 @@ public class Address extends AbstractDomainObject implements java.io.Serializabl
 	 * @param abstractForm IValueObject.
 	 */
     public void setAllValues(IValueObject abstractForm)
-    {}
+    {
+    	//
+    }
 }

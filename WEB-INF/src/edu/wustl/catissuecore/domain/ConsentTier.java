@@ -67,7 +67,9 @@ public class ConsentTier extends AbstractDomainObject implements Serializable
 	 * @throws AssignDataException assignDataException.
 	 */
 	public void setAllValues(IValueObject abstractForm) throws AssignDataException
-	{}
+	{
+		//
+	}
 
 	/**
 	 * Set Id.
@@ -82,7 +84,9 @@ public class ConsentTier extends AbstractDomainObject implements Serializable
 	 * Default Constructor.
 	 */
 	public ConsentTier()
-	{}
+	{
+		super();
+	}
 
 	/**
 	 * Parameterized Constructor.
@@ -90,6 +94,7 @@ public class ConsentTier extends AbstractDomainObject implements Serializable
 	 */
 	public ConsentTier(ConsentTier consentTier)
 	{
+		super();
 		if(consentTier.getId() != null && consentTier.getId().toString().trim().length() > 0)
 		{
 			this.id = consentTier.getId();

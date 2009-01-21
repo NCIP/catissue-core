@@ -84,7 +84,9 @@ public abstract class AbstractSpecimen extends AbstractDomainObject implements S
 	 * @throws AssignDataException assignDataException.
 	 */
 	public void setAllValues(IValueObject valueObject) throws AssignDataException
-	{}
+	{
+		//
+	}
 	/**
 	 * It would return the Activity Status.
 	 * @return activity status of String type.
@@ -98,7 +100,9 @@ public abstract class AbstractSpecimen extends AbstractDomainObject implements S
 	 * @param activityStatus of String type
 	 */
 	public void setActivityStatus(String activityStatus)
-	{}
+	{
+		//
+	}
 	/**
 	 * It returns the identifier.
 	 * @return identifier of type Long.

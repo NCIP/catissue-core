@@ -35,6 +35,10 @@ import edu.wustl.common.util.logger.Logger;
 public class CollectionProtocolRegistration extends AbstractDomainObject implements Serializable, IActivityStatus
 {
 	/**
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(CollectionProtocolRegistration.class);
+	/**
 	 * Serial Version ID of the class.
 	 */
 	private static final long serialVersionUID = 5075110651381259752L;
@@ -193,8 +197,9 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 	 * Default Constructor.
 	 */
 	public CollectionProtocolRegistration()
-	{}
-
+	{
+		super();
+	}
 
 	/**
 	 * Parameterized Constructor.
@@ -203,6 +208,7 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 	 */
 	public CollectionProtocolRegistration(AbstractActionForm form) throws AssignDataException
 	{
+		super();
 		setAllValues(form);
 	}
 
@@ -212,6 +218,7 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 	 */
 	public CollectionProtocolRegistration(CollectionProtocolRegistration cpr)
 	{
+		super();
 		this.activityStatus = cpr.getActivityStatus();
 		this.collectionProtocol = cpr.getCollectionProtocol();
 		this.consentSignatureDate = cpr.getConsentSignatureDate();
@@ -402,6 +409,7 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 	 */
 	public void setAllValues(IValueObject abstractForm) throws AssignDataException
 	{
+		String nullString = null;
 		CollectionProtocolRegistrationForm form = (CollectionProtocolRegistrationForm) abstractForm;
 		try
 		{
@@ -421,7 +429,7 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 			this.protocolParticipantIdentifier = form.getParticipantProtocolID().trim();
 			if(Constants.DOUBLE_QUOTES.equals(protocolParticipantIdentifier))
 			{
-				this.protocolParticipantIdentifier = null;
+				this.protocolParticipantIdentifier = nullString;
 			}
 			this.registrationDate = Utility.parseDate(form.getRegistrationDate(),
 					Utility.datePattern(form.getRegistrationDate()));
@@ -431,7 +439,7 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 			this.signedConsentDocumentURL = form.getSignedConsentUrl();
 			if(Constants.DOUBLE_QUOTES.equals(signedConsentDocumentURL))
 			{
-				this.signedConsentDocumentURL=null;
+				this.signedConsentDocumentURL = nullString;
 			}
 			if(form.getWitnessId()>0)
 			{
@@ -483,7 +491,7 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 		}
 		catch (Exception e)
 		{
-			Logger.out.error(e.getMessage(), e);
+			logger.error(e.getMessage(), e);
 		}
         Iterator iter = beanObjColl.iterator();
         Collection consentResponseColl = new HashSet();
@@ -632,9 +640,10 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 	public void setBarcode(String barcode)
 	{
 		this.barcode = barcode;
+		String nullString = null;
 		if (Constants.DOUBLE_QUOTES.equals(barcode))
 		{
-			this.barcode = null;
+			this.barcode = nullString;
 		}
 	}
 }
