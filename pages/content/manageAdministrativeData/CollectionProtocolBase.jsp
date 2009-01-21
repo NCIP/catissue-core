@@ -100,7 +100,7 @@
           <td colspan="2" align="left" class="bottomtd">
           <logic:equal name="isParticipantReg" value="true">
 			<span class="messagetexterror">
-				User can not Add/edit Events and Specimen Requirements
+				User can not edit existing Events and Specimen Requirements
 			</span>
 		</logic:equal>
 				<%@ include file="/pages/content/common/ActionErrors.jsp" %>
@@ -131,17 +131,12 @@
  <tr>
 		 <td colspan="2" class="buttonbg">
 		    
-					<logic:equal name="isParticipantReg" value="true">
-						   &nbsp;
-					</logic:equal>
-					<logic:notEqual name="isParticipantReg" value="true">
-						
+				
 						<html:button styleClass="blue_ar_b" property="forwardPage" onclick="openEventPage()" >
 							Add Events >>
 						</html:button>
 						&nbsp;|&nbsp;
-					</logic:notEqual>
-					
+							
 					
 					 <html:button styleClass="blue_ar_b" property="forwardPage" value="Save Collection Protocol" onclick="submitCP()">
 					</html:button>

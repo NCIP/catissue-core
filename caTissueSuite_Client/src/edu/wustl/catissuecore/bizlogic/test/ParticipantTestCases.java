@@ -2,26 +2,22 @@ package edu.wustl.catissuecore.bizlogic.test;
 
 import java.text.ParseException;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 
-import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
+import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.ConsentTier;
 import edu.wustl.catissuecore.domain.ConsentTierResponse;
-import edu.wustl.catissuecore.domain.ConsentTierStatus;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
-import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.User;
-import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.logger.Logger;
@@ -55,7 +51,7 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
 		 }
 	}
 	
-	public void testUpdateCPRAssociatedCPWithDeleteCollectionProtocolEvent()
+	public void testUpdateCPAssociatedCPRWithDeleteCollectionProtocolEvent()
 	{
 	    try 
 		{
@@ -64,22 +60,38 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
 	    	Collection cpeCollection = collectionProtocol.getCollectionProtocolEventCollection();
 	    	Iterator itr = cpeCollection.iterator();
 	    	Collection collectionProtocolEventList = new LinkedHashSet();
-	    	collectionProtocolEventList.add(itr.next());
-	    	collectionProtocol.setCollectionProtocolEventCollection(collectionProtocolEventList);
+	    	while(itr.hasNext())
+	    	{
+	    		collectionProtocolEventList.add(itr.next());
+	    	}
+			CollectionProtocolEvent collectionProtocolEvent = null;
+			for(int specimenEventCount = 0 ;specimenEventCount<2 ;specimenEventCount++)
+			{
+				collectionProtocolEvent= new CollectionProtocolEvent();
+				BaseTestCaseUtility.setCollectionProtocolEvent(collectionProtocolEvent);
+				collectionProtocolEvent.setCollectionProtocol(collectionProtocol);
+				collectionProtocolEventList.add(collectionProtocolEvent);
+			}
+			collectionProtocol.setCollectionProtocolEventCollection(collectionProtocolEventList);
 	    	CollectionProtocol updatedCollectionProtocol = (CollectionProtocol)appService.updateObject(collectionProtocol);
 	    	Collection updatedCPECollection = updatedCollectionProtocol.getCollectionProtocolEventCollection();
-	    	if(updatedCPECollection.size()!= cpeCollection.size())
+	    	if(updatedCPECollection.size() > cpeCollection.size())
 	    	{
-	    		fail("User cannot not add/edit events");
+	    		assertTrue("User can add events after participant regestered to CP", true);
+	    		
 	    	}
-	    	assertTrue("User cannot not add/edit events", true);
+	    	else
+	    	{
+	    		fail("User can add events after participant regestered to CP");	
+			}
+	    	
 	    } 
 	    catch (Exception e)
 	    {
 	    	System.out
-	    	.println("ParticipantTestCases.testUpdateCPRAssociatedCPWithDeleteCollectionProtocolEvent()" + e.getMessage());
+	    	.println("ParticipantTestCases.testUpdateCPAssociatedCPRWithDeleteCollectionProtocolEvent()" + e.getMessage());
 	    	e.printStackTrace();
-	    	fail("User cannot not add/edit events");
+	    	fail("User can add events after participant regestered to CP");
 	    }
 	}
 	
