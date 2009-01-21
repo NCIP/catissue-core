@@ -189,40 +189,40 @@ public class ParticipantBizLogic extends DefaultBizLogic
 	protected void postUpdate(DAO dao, Object currentObj, Object oldObj, SessionDataBean sessionDataBean) throws BizLogicException,
 			UserNotAuthorizedException
 	{
-
 		Participant participant = (Participant) currentObj;
-		Collection collectionProtocolRegistrationCollection = participant.getCollectionProtocolRegistrationCollection();
+		Collection cprCollection = participant.getCollectionProtocolRegistrationCollection();
 		updateCache(currentObj);
 		//Added updation of Collection Protocol Registration
 		//(Abhishek Mehta)
 		CollectionProtocolRegistrationBizLogic cprBizLogic = new CollectionProtocolRegistrationBizLogic();
 		ParticipantRegistrationCacheManager participantRegCacheManager = new ParticipantRegistrationCacheManager();
-		Iterator itCollectionProtocolRegistrationCollection = collectionProtocolRegistrationCollection.iterator();
+		Iterator iteratorCPRCollection = cprCollection.iterator();
 
 		Participant oldparticipant = (Participant) oldObj;
-		Collection oldcollectionProtocolRegistrationCollection = oldparticipant.getCollectionProtocolRegistrationCollection();
+		Collection oldCPRCollection = oldparticipant.getCollectionProtocolRegistrationCollection();
 
 		Long cpId, participantId;
 		String protocolParticipantId;
 
 		CollectionProtocolRegistration oldCollectionProtocolRegistration;
 		CollectionProtocolRegistration collectionProtocolRegistration;
-		while (itCollectionProtocolRegistrationCollection.hasNext())
+		while (iteratorCPRCollection.hasNext())
 		{
-			collectionProtocolRegistration = (CollectionProtocolRegistration) itCollectionProtocolRegistrationCollection.next();
-			cpId = collectionProtocolRegistration.getCollectionProtocol().getId().longValue();
-
-			//getting Old cpr
-			if(cpId!=null)
+			collectionProtocolRegistration = (CollectionProtocolRegistration) iteratorCPRCollection.next();
+			if(collectionProtocolRegistration.getCollectionProtocol().getId() != null)
 			{
-				oldCollectionProtocolRegistration = getCollectionProtocolRegistrationOld(cpId, oldcollectionProtocolRegistrationCollection);
+				cpId = collectionProtocolRegistration.getCollectionProtocol().getId().longValue();
+
+				oldCollectionProtocolRegistration = getCollectionProtocolRegistrationOld(cpId, oldCPRCollection);
 				if (oldCollectionProtocolRegistration == null)
 				{
 					participantId = collectionProtocolRegistration.getParticipant().getId().longValue();
 					protocolParticipantId = collectionProtocolRegistration.getProtocolParticipantIdentifier();
 
 					if (protocolParticipantId == null)
-						protocolParticipantId = "";
+					{
+						protocolParticipantId = Constants.DOUBLE_QUOTES;
+					}
 
 					if (collectionProtocolRegistration.getActivityStatus().equals(Constants.ACTIVITY_STATUS_DISABLED))
 					{
@@ -239,7 +239,6 @@ public class ParticipantBizLogic extends DefaultBizLogic
 				}
 			}
 		}
-
 	}
 
 	/**
