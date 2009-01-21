@@ -1,7 +1,7 @@
 <?xml version ="1.0"?>
 <!--Ant Script for create Build for caTissue Suite-->
 
-<project name="caTissue Suite v1.1 Installation EDIN" default="matadata_change_for_edin">
+<project name="caTissue Suite v1.1 Installation EDIN" default="metadata_change_for_edin">
 
 	<!--define require dir and Properties -->
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
@@ -28,7 +28,7 @@
 	
 	
 	<!--Target for Database Creation-->
-	<target name="matadata_change_for_edin">
+	<target name="metadata_change_for_edin">
 		<if>
 			<equals arg1="mysql" arg2="${database.type}" />
 			<then>
