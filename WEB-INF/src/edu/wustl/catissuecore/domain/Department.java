@@ -13,12 +13,18 @@ import edu.wustl.catissuecore.actionForm.DepartmentForm;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
+
+
 /**
  * A department to which a User belongs to.
  *  * @hibernate.class table="CATISSUE_DEPARTMENT"
  */
+
 public class Department extends AbstractDomainObject implements java.io.Serializable
 {
+	/**
+	 * Serial Version ID.
+	 */
 	private static final long serialVersionUID = 1234567890L;
 
 	/**
@@ -32,15 +38,21 @@ public class Department extends AbstractDomainObject implements java.io.Serializ
 	protected String name;
 
 	/**
+	 * Default Constructor.
 	 * NOTE: Do not delete this constructor. Hibernet uses this by reflection API.
-	 * */
+	 */
 	public Department()
 	{
-		
+		super();
 	}
-	
+
+	/**
+	 * Parameterized Constructor.
+	 * @param form AbstractActionForm.
+	 */
 	public Department(AbstractActionForm form)
 	{
+		super();
 		setAllValues(form);
 	}
 
@@ -58,16 +70,15 @@ public class Department extends AbstractDomainObject implements java.io.Serializ
 
 	/**
 	 * Sets an id for the department.
-	 * @param id Unique id to be assigned to the department.
+	 * @param identifier Unique id to be assigned to the department.
 	 */
-	public void setId(Long id)
+	public void setId(Long identifier)
 	{
-		this.id = id;
+		this.id = identifier;
 	}
 
 	/**
 	 * Returns the name of the department.
-	 * 
 	 * @hibernate.property name="name" type="string" column="NAME" length="255"
 	 * not-null="true" unique="true"
 	 * @return name of the department.
@@ -79,7 +90,6 @@ public class Department extends AbstractDomainObject implements java.io.Serializ
 
 	/**
 	 * Sets the name of the department.
-	 * 
 	 * @param name Name of the department.
 	 */
 	public void setName(String name)
@@ -88,20 +98,25 @@ public class Department extends AbstractDomainObject implements java.io.Serializ
 	}
 
 	/* (non-Javadoc)
-	 * @see edu.wustl.catissuecore.domain.AbstractDomainObject#setAllValues(edu.wustl.catissuecore.actionForm.AbstractActionForm)
+	 * @see edu.wustl.catissuecore.domain.AbstractDomainObject#setAllValues(
+	 * edu.wustl.catissuecore.actionForm.AbstractActionForm)
 	 */
-	public void setAllValues(IValueObject abstractForm) 
+	/**
+	 * Set All Values.
+	 * @param abstractForm IValueObject.
+	 */
+	public void setAllValues(IValueObject abstractForm)
 	{
-		DepartmentForm departmentForm = (DepartmentForm)abstractForm;
-		
+		DepartmentForm departmentForm = (DepartmentForm) abstractForm;
 		this.name = departmentForm.getName().trim();
 	}
-	
-	 /**
-     * Returns message label to display on success add or edit
-     * @return String
-     */
-	public String getMessageLabel() {		
+
+	/**
+	* Returns message label to display on success add or edit.
+	* @return String
+	*/
+	public String getMessageLabel()
+	{
 		return this.name;
 	}
 }

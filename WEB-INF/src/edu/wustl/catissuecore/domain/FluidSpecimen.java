@@ -1,6 +1,6 @@
 /**
  * <p>Title: FluidSpecimen Class>
- * <p>Description:  A single unit of body fluid specimen that is 
+ * <p>Description:  A single unit of body fluid specimen that is
  * collected or created from a Participant.</p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
@@ -11,31 +11,47 @@
 package edu.wustl.catissuecore.domain;
 
 import java.io.Serializable;
-
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.util.logger.Logger;
 
 /**
  * A single unit of body fluid specimen that is collected or created from a Participant.
- * @hibernate.subclass name="FluidSpecimen" discriminator-value="Fluid" 
+ * @hibernate.subclass name="FluidSpecimen" discriminator-value="Fluid"
  */
 public class FluidSpecimen extends Specimen implements Serializable
 {
-    private static final long serialVersionUID = 1234567890L;
+	/**
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(FluidSpecimen.class);
 
-    public FluidSpecimen()
+	/**
+	 * Serial Version ID.
+	 */
+	private static final long serialVersionUID = 1234567890L;
+
+    /**
+     * Default Constructor.
+     */
+	public FluidSpecimen()
     {
-    	
+    	super();
     }
+
+	/**
+	 * Parameterized Constructor.
+	 * @param form AbstractActionForm.
+	 */
     public FluidSpecimen(AbstractActionForm form)
     {
+    	super();
     	setAllValues(form);
     }
-   
+
     /**
      * This function Copies the data from an NewSpecimenForm object to a FluidSpecimen object.
-     * @param siteForm An SiteForm object containing the information about the site.  
+     * @param abstractForm An SiteForm object containing the information about the site.
      * */
     public void setAllValues(IValueObject abstractForm)
     {
@@ -45,13 +61,16 @@ public class FluidSpecimen extends Specimen implements Serializable
         }
         catch (Exception excp)
         {
-            Logger.out.error(excp.getMessage());
+            logger.error(excp.getMessage());
         }
     }
-    
+
+    /**
+     * Parameterized Constructor.
+     * @param fluidReqSpecimen SpecimenRequirement.
+     */
     public FluidSpecimen(SpecimenRequirement fluidReqSpecimen)
     {
     	super(fluidReqSpecimen);
     }
-   
 }

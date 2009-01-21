@@ -17,10 +17,18 @@ import edu.wustl.common.util.logger.Logger;
 /**
  * Attributes associated with a fixation event of a specimen.
  * @hibernate.joined-subclass table="CATISSUE_FIXED_EVENT_PARAM"
- * @hibernate.joined-subclass-key column="IDENTIFIER" 
+ * @hibernate.joined-subclass-key column="IDENTIFIER"
  */
 public class FixedEventParameters extends SpecimenEventParameters implements java.io.Serializable
 {
+	/**
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(FixedEventParameters.class);
+
+	/**
+	 * Serail Version ID.
+	 */
 	private static final long serialVersionUID = 1234567890L;
 
 	/**
@@ -45,7 +53,7 @@ public class FixedEventParameters extends SpecimenEventParameters implements jav
 	}
 
 	/**
-	 * Sets the fixationType. 
+	 * Sets the fixationType.
 	 * @param fixationType fixationType of specimen.
 	 */
 	public void setFixationType(String fixationType)
@@ -64,51 +72,54 @@ public class FixedEventParameters extends SpecimenEventParameters implements jav
 	}
 
 	/**
-	 * Sets the durationInMinutes. 
+	 * Sets the durationInMinutes.
 	 * @param durationInMinutes durationInMinutes required for fixation.
 	 */
 	public void setDurationInMinutes(Integer durationInMinutes)
 	{
 		this.durationInMinutes = durationInMinutes;
 	}
-	
+
 	/**
-	 * NOTE: Do not delete this constructor. Hibernet uses this by reflection API.
-	 * */
+	 * Default Constructor.
+	 * NOTE: Do not delete this constructor. Hibernate uses this by reflection API.
+	 */
 	public FixedEventParameters()
 	{
-		
+		super();
 	}
 
 	/**
-	 *  Parameterised constructor 
-	 * @param abstractForm
+	 *  Parameterized constructor.
+	 * @param abstractForm AbstractActionForm.
 	 */
 	public FixedEventParameters(AbstractActionForm abstractForm)
 	{
+		super();
 		setAllValues(abstractForm);
 	}
-	
+
 	/**
-     * This function Copies the data from an FixedEventParametersForm object to a FixedEventParameters object.
-     * @param FixedEventParametersForm An FixedEventParametersForm object containing the information about the FixedEventParameters.  
-     * */
-    public void setAllValues(IValueObject abstractForm)
-    {
-        try
-        {
-        	FixedEventParametersForm form = (FixedEventParametersForm) abstractForm;
-        	
-        	this.fixationType = form.getFixationType();
-        	if(form.getDurationInMinutes() != null && form.getDurationInMinutes().trim().length()>0 )
-        		this.durationInMinutes = Integer.parseInt(form.getDurationInMinutes());
-        	        	
-        	super.setAllValues(form);
-        }
-        catch (Exception excp)
-        {
-            Logger.out.error(excp.getMessage());
-        }
-    }
-	
+	 * This function Copies the data from an FixedEventParametersForm object to a FixedEventParameters object.
+	 * @param abstractForm An FixedEventParametersForm object containing the
+	 * information about the FixedEventParameters.
+	 * */
+	public void setAllValues(IValueObject abstractForm)
+	{
+		try
+		{
+			FixedEventParametersForm form = (FixedEventParametersForm) abstractForm;
+
+			this.fixationType = form.getFixationType();
+			if (form.getDurationInMinutes() != null && form.getDurationInMinutes().trim().length() > 0)
+			{
+				this.durationInMinutes = Integer.parseInt(form.getDurationInMinutes());
+			}
+			super.setAllValues(form);
+		}
+		catch (Exception excp)
+		{
+			logger.error(excp.getMessage());
+		}
+	}
 }

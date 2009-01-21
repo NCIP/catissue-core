@@ -17,11 +17,19 @@ import edu.wustl.common.util.logger.Logger;
 /**
  * Attributes related to disposal event of a specimen.
  * @hibernate.joined-subclass table="CATISSUE_DISPOSAL_EVENT_PARAM"
- * @hibernate.joined-subclass-key column="IDENTIFIER" 
+ * @hibernate.joined-subclass-key column="IDENTIFIER"
  */
 public class DisposalEventParameters extends SpecimenEventParameters
 		implements java.io.Serializable
 {
+	/**
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(DisposalEventParameters.class);
+
+	/**
+	 * Serial Version ID.
+	 */
 	private static final long serialVersionUID = 1234567890L;
 
 	/**
@@ -29,10 +37,13 @@ public class DisposalEventParameters extends SpecimenEventParameters
 	 */
 	protected String reason;
 
+	/**
+	 * activityStatus.
+	 */
 	protected String activityStatus;
 	/**
 	 * Returns the reason of disposal.
-	 * @hibernate.property name="reason" type="string" column="REASON" length="255"	
+	 * @hibernate.property name="reason" type="string" column="REASON" length="255"
 	 * @return reason of disposal.
 	 */
 	public String getReason()
@@ -41,61 +52,68 @@ public class DisposalEventParameters extends SpecimenEventParameters
 	}
 
 	/**
-	 * Sets the reason. 
+	 * Sets the reason.
 	 * @param reason reason of disposal.
 	 */
 	public void setReason(String reason)
 	{
 		this.reason = reason;
 	}
-	
 
 	/**
 	 * NOTE: Do not delete this constructor. Hibernet uses this by reflection API.
 	 * */
 	public DisposalEventParameters()
 	{
-		
+		super();
 	}
 
 	/**
-	 *  Parameterised constructor 
-	 * @param abstractForm
+	 * Parameterised constructor.
+	 * @param abstractForm AbstractActionForm.
 	 */
 	public DisposalEventParameters(AbstractActionForm abstractForm)
 	{
+		super();
 		setAllValues((IValueObject)abstractForm);
 	}
-	
+
 	/**
-     * This function Copies the data from an DisposalEventParametersForm object to a DisposalEventParameters object.
-     * @param DisposalEventParametersForm An DisposalEventParametersForm object containing the information about the DisposalEventParameters.  
+     * This function Copies the data from an DisposalEventParametersForm object to
+     * a DisposalEventParameters object.
+     * @param abstractForm An DisposalEventParametersForm object containing the
+     * information about the DisposalEventParameters.
      * */
     public void setAllValues(IValueObject abstractForm)
     {
         try
         {
         	DisposalEventParametersForm form = (DisposalEventParametersForm) abstractForm;
-        	this.reason = form.getReason(); 
+        	this.reason = form.getReason();
         	this.activityStatus = form.getActivityStatus();
         	super.setAllValues(form);
         }
         catch (Exception excp)
         {
-            Logger.out.error(excp.getMessage());
+            logger.error(excp.getMessage());
         }
     }
 
-	
+    /**
+     * Get Activity Status.
+     * @return String.
+     */
 	public String getActivityStatus()
 	{
 		return activityStatus;
 	}
 
-	
+	/**
+	 * Set Activity Status.
+	 * @param activityStatus String.
+	 */
 	public void setActivityStatus(String activityStatus)
 	{
 		this.activityStatus = activityStatus;
 	}
-   
 }

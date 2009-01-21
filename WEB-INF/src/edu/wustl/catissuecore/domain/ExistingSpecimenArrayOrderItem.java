@@ -11,19 +11,21 @@ package edu.wustl.catissuecore.domain;
 
 /**
  * This is  the class indicating the existing biospecimens arrays.
- * 
- * @hibernate.joined-subclass table="CATISSUE_SP_ARRAY_ORDER_ITEM" 
+ * @hibernate.joined-subclass table="CATISSUE_SP_ARRAY_ORDER_ITEM"
  * @hibernate.joined-subclass-key
  * column="IDENTIFIER"
  */
 public class ExistingSpecimenArrayOrderItem extends SpecimenArrayOrderItem
 {
 	/**
+	 * Serial Version ID.
+	 */
+	private static final long serialVersionUID = 2990852138791973161L;
+	/**
 	 * The Specimen Array.
 	 */
 	protected SpecimenArray specimenArray;
 
-	
 	/**
 	 * The specimen array associated with the order item in SpecimenArrayOrderItem.
 	 * @hibernate.many-to-one column="SPECIMEN_ARRAY_ID" class="edu.wustl.catissuecore.domain.SpecimenArray"
@@ -35,7 +37,6 @@ public class ExistingSpecimenArrayOrderItem extends SpecimenArrayOrderItem
 		return specimenArray;
 	}
 
-	
 	/**
 	 * @param specimenArray the specimenArray to set
 	 */
@@ -43,5 +44,4 @@ public class ExistingSpecimenArrayOrderItem extends SpecimenArrayOrderItem
 	{
 		this.specimenArray = specimenArray;
 	}
-
 }

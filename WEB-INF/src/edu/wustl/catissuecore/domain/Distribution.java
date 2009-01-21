@@ -17,7 +17,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
-
 import edu.wustl.catissuecore.actionForm.DistributionForm;
 import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.common.actionForm.AbstractActionForm;
@@ -35,8 +34,19 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class Distribution extends AbstractDomainObject implements java.io.Serializable
 {
+	/**
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(Distribution.class);
+
+	/**
+	 * Serial Version ID.
+	 */
 	private static final long serialVersionUID = 1234567890L;
 
+	/**
+	 * id.
+	 */
 	protected Long id;
 	// Change for API Search   --- Ashwin 04/10/2006
 	/**
@@ -45,10 +55,9 @@ public class Distribution extends AbstractDomainObject implements java.io.Serial
 	protected Site toSite;
 
 	/**
-	 * Original location(site) of the item. 
+	 * Original location(site) of the item.
 	 */
 	//protected Site fromSite = new Site();
-	// Change for API Search   --- Ashwin 04/10/2006
 	/**
 	 * DistributionProtocol associated with this Distribution.
 	 */
@@ -60,29 +69,36 @@ public class Distribution extends AbstractDomainObject implements java.io.Serial
 	protected Collection distributedItemCollection = new HashSet();
 
 	/**
-	 * Defines whether this SpecimenProtocol record can be queried (Active) or not queried (Inactive) by any actor.
+	 * Defines whether this SpecimenProtocol record can be queried (Active) or not
+	 * queried (Inactive) by any actor.
 	 */
+
 	protected String activityStatus;
 	/**
 	 * OrderDetails associated with the order_item.
 	 */
+
 	protected OrderDetails orderDetails;
 	/**
 	 * User who performs the event.
 	 */
+
 	protected User distributedBy;
 	/**
 	 * Date and time of the event.
 	 */
+
 	protected Date timestamp;
 	/**
 	 * Text comment on event.
 	 */
+
 	protected String comment;
 
 	/**
 	 * @return the orderDetails
-	 * @hibernate.many-to-one column="ORDER_ID" class="edu.wustl.catissuecore.domain.OrderDetails" constrained="true"
+	 * @hibernate.many-to-one column="ORDER_ID" class="edu.wustl.catissuecore.
+	 * domain.OrderDetails" constrained="true"
 	 */
 	public OrderDetails getOrderDetails()
 	{
@@ -97,9 +113,12 @@ public class Distribution extends AbstractDomainObject implements java.io.Serial
 		this.orderDetails = orderDetails;
 	}
 
+	/**
+	 * Default Constructor.
+	 */
 	public Distribution()
 	{
-		// Default Constructor, required for Hibernate
+		super();
 	}
 
 	/**
@@ -108,7 +127,7 @@ public class Distribution extends AbstractDomainObject implements java.io.Serial
 	 * @see #setId(Integer)
 	 * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
 	 * unsaved-value="null" generator-class="native"
-	 * @hibernate.generator-param name="sequence" value="CATISSUE_DISTRIBUTION_SEQ" 
+	 * @hibernate.generator-param name="sequence" value="CATISSUE_DISTRIBUTION_SEQ"
 	 */
 	public Long getId()
 	{
@@ -116,16 +135,23 @@ public class Distribution extends AbstractDomainObject implements java.io.Serial
 	}
 
 	/**
+	 * Set the identifier.
 	 * (non-Javadoc)
 	 * @see edu.wustl.common.domain.AbstractDomainObject#setId(java.lang.Long)
+	 * @param identifier system identifier.
 	 */
-	public void setId(Long id)
+	public void setId(Long identifier)
 	{
-		this.id = id;
+		this.id = identifier;
 	}
 
+	/**
+	 * Parameterized Constructor.
+	 * @param form AbstractActionForm.
+	 */
 	public Distribution(AbstractActionForm form)
 	{
+		super();
 		setAllValues(form);
 	}
 
@@ -133,7 +159,7 @@ public class Distribution extends AbstractDomainObject implements java.io.Serial
 
 	/**
 	 * Returns the destination/target Site of the Distribution.
-	 * @hibernate.many-to-one column="TO_SITE_ID" 
+	 * @hibernate.many-to-one column="TO_SITE_ID"
 	 * class="edu.wustl.catissuecore.domain.Site" constrained="true"
 	 * @return the destination/target Site of the Distribution.
 	 */
@@ -185,7 +211,7 @@ public class Distribution extends AbstractDomainObject implements java.io.Serial
 
 	/**
 	 * @param distributionProtocol
-	 *  The distributionProtocol to set.
+	 * The distributionProtocol to set.
 	 */
 	public void setDistributionProtocol(DistributionProtocol distributionProtocol)
 	{
@@ -233,8 +259,6 @@ public class Distribution extends AbstractDomainObject implements java.io.Serial
 		this.distributedItemCollection = distributedItemCollection;
 	}
 
-	
-	
 	/**
 	 * @return Returns the user.
 	 */
@@ -244,7 +268,7 @@ public class Distribution extends AbstractDomainObject implements java.io.Serial
 	}
 
 	/**
-	 * @param user The user to set.
+	 * @param distributedBy The user to set.
 	 */
 	public void setDistributedBy(User distributedBy)
 	{
@@ -283,13 +307,16 @@ public class Distribution extends AbstractDomainObject implements java.io.Serial
 		this.timestamp = timestamp;
 	}
 
+	/**
+	 * Set All Values.
+	 * @param abstractForm IValueObject.
+	 */
 	public void setAllValues(IValueObject abstractForm)
 	{
 		try
 		{
 			//super.setAllValues(abstractForm);
 			//this.specimen = null;
-			// Change for API Search   --- Ashwin 04/10/2006
 			final DistributionForm form = (DistributionForm) abstractForm;
 			try
 			{
@@ -297,7 +324,6 @@ public class Distribution extends AbstractDomainObject implements java.io.Serial
 				{
 					distributedBy = new User();
 				}
-				// Change for API Search   --- Ashwin 04/10/2006
 				if (SearchUtil.isNullobject(timestamp))
 				{
 					timestamp = Calendar.getInstance().getTime();
@@ -305,28 +331,30 @@ public class Distribution extends AbstractDomainObject implements java.io.Serial
 
 				this.comment = form.getComments();
 
-				distributedBy.setId(new Long(form.getUserId()));
+				distributedBy.setId(Long.valueOf(form.getUserId()));
 
 				if (form.getDateOfEvent() != null && form.getDateOfEvent().trim().length() != 0)
 				{
 					final Calendar calendar = Calendar.getInstance();
 
-					final Date date = Utility.parseDate(form.getDateOfEvent(), Utility.datePattern(form.getDateOfEvent()));
+					final Date date = Utility.parseDate(form.getDateOfEvent(),
+							Utility.datePattern(form.getDateOfEvent()));
 					calendar.setTime(date);
 					this.timestamp = calendar.getTime();
-					calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(form.getTimeInHours()));
+					calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(
+							form.getTimeInHours()));
 					calendar.set(Calendar.MINUTE, Integer.parseInt(form.getTimeInMinutes()));
 					this.timestamp = calendar.getTime();
-					//  this.timestamp is added twice, if there is some exception in Integer.parseInt(form.getTimeInHours()) or Integer.parseInt(form.getTimeInMinutes())
-					//	current timestamp will be set
-
+					//this.timestamp is added twice, if there is some exception in
+					//Integer.parseInt(form.getTimeInHours()) or Integer.
+					//parseInt(form.getTimeInMinutes())
+					//current timestamp will be set
 				}
 			}
 			catch (Exception excp)
 			{
-				// use of logger as per bug 79
-				Logger.out.error(excp.getMessage(), excp);
-				throw new AssignDataException();
+				logger.error(excp.getMessage(), excp);
+				throw new AssignDataException(excp);
 			}
 
 			if (SearchUtil.isNullobject(toSite))
@@ -334,21 +362,20 @@ public class Distribution extends AbstractDomainObject implements java.io.Serial
 				toSite = new Site();
 			}
 
-			// Change for API Search   --- Ashwin 04/10/2006
 			if (SearchUtil.isNullobject(distributionProtocol))
 			{
 				distributionProtocol = new DistributionProtocol();
 			}
 
-			toSite.setId(new Long(form.getToSite()));
+			toSite.setId(Long.valueOf(form.getToSite()));
 			//fromSite.setId(new Long(form.getFromSite()));
-			distributionProtocol.setId(new Long(form.getDistributionProtocolId()));
+			distributionProtocol.setId(Long.valueOf(form.getDistributionProtocolId()));
 			this.activityStatus = form.getActivityStatus();
 
 			Map map = form.getValues();
-			Logger.out.debug("map " + map);
+			logger.debug("map " + map);
 			map = fixMap(map);
-			Logger.out.debug("fixedMap " + map);
+			logger.debug("fixedMap " + map);
 			final MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
 			final Collection itemCollectionMap = parser.generateData(map);
 			Collection finalItemCollecitonMap = new HashSet();
@@ -360,29 +387,32 @@ public class Distribution extends AbstractDomainObject implements java.io.Serial
 				{
 					finalItemCollecitonMap.add(distributedItem);
 				}
-				//Added by Ashish
 				if (distributedItem.getSpecimenArray() != null)
 				{
 					finalItemCollecitonMap.add(distributedItem);
 				}
 			}
 			distributedItemCollection = finalItemCollecitonMap;
-			Logger.out.debug("distributedItemCollection " + distributedItemCollection);
+			logger.debug("distributedItemCollection " + distributedItemCollection);
 		}
 		catch (Exception excp)
 		{
-			// use of logger as per bug 79
-			Logger.out.error(excp.getMessage(), excp);
+			logger.error(excp.getMessage(), excp);
 		}
 	}
 
+	/**
+	 * Fix Map.
+	 * @param orgMap Map.
+	 * @return Map.
+	 */
 	protected Map fixMap(Map orgMap)
 	{
-		Iterator it = orgMap.keySet().iterator();
+		Iterator iterator = orgMap.keySet().iterator();
 		Map newMap = new HashMap();
-		while (it.hasNext())
+		while (iterator.hasNext())
 		{
-			String key = (String) it.next();
+			String key = (String) iterator.next();
 			String value = (String) orgMap.get(key);
 			if (key.endsWith("_id") || key.endsWith("uantity"))
 			{
@@ -390,11 +420,10 @@ public class Distribution extends AbstractDomainObject implements java.io.Serial
 			}
 		}
 		return newMap;
-
 	}
 
 	/**
-	 * Returns message label to display on success add or edit
+	 * Returns message label to display on success add or edit.
 	 * @return String
 	 */
 	public String getMessageLabel()
@@ -404,26 +433,30 @@ public class Distribution extends AbstractDomainObject implements java.io.Serial
 		{
 			distributionProtocol = new DistributionProtocol();
 		}
-		String message = this.distributionProtocol.title + " ";
+		StringBuffer message = new StringBuffer();
+		message.append(this.distributionProtocol.title + " ");
 		if (this.distributedBy != null)
 		{
-			if (this.distributedBy.lastName != null && !this.distributedBy.lastName.equals("") && this.distributedBy.firstName != null && !this.distributedBy.firstName.equals(""))
+			if (this.distributedBy.lastName != null &&
+				!this.distributedBy.lastName.equals("") &&
+				this.distributedBy.firstName != null &&
+				!this.distributedBy.firstName.equals(""))
 			{
-				message = message + this.distributedBy.lastName + "," + this.distributedBy.firstName;
+				message.append(this.distributedBy.lastName + "," + this.distributedBy.firstName);
 			}
 			if (this.distributedBy.lastName != null && !this.distributedBy.lastName.equals(""))
 			{
-				message = message + this.distributedBy.lastName;
+				message.append(this.distributedBy.lastName);
 			}
 			if (this.distributedBy.firstName != null && !this.distributedBy.firstName.equals(""))
 			{
-				message = message + this.distributedBy.firstName;
+				message.append(this.distributedBy.firstName);
 			}
 		}
 		if (this.distributedBy != null)
 		{
-			message = message + this.distributedBy;
+			message.append(this.distributedBy);
 		}
-		return message;
+		return message.toString();
 	}
 }

@@ -10,7 +10,6 @@
 package edu.wustl.catissuecore.domain;
 
 import java.io.Serializable;
-
 import edu.wustl.catissuecore.actionForm.InstitutionForm;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
@@ -22,13 +21,16 @@ import edu.wustl.common.domain.AbstractDomainObject;
  */
 public class Institution extends AbstractDomainObject implements Serializable
 {
+	/**
+	 * Serial Version ID.
+	 */
 	private static final long serialVersionUID = 1234567890L;
-	
+
 	/**
 	 * System generated unique id.
 	 */
 	protected Long id;
-	
+
 	/**
 	 * Name of the Institution.
 	 */
@@ -39,14 +41,19 @@ public class Institution extends AbstractDomainObject implements Serializable
 	 * */
 	public Institution()
 	{
-		
+		super();
 	}
-	
+
+	/**
+	 * Parameterized Constructor.
+	 * @param form AbstractActionForm.
+	 */
 	public Institution(AbstractActionForm form)
 	{
+		super();
 		setAllValues(form);
 	}
-	
+
 	/**
 	 * Returns the unique id assigned to institution.
 	 * @hibernate.id name="id" column="IDENTIFIER" type="long"
@@ -62,19 +69,19 @@ public class Institution extends AbstractDomainObject implements Serializable
 
 	/**
 	 * Sets an id for the institution.
-	 * @param id Unique id to be assigned to the institution.
+	 * @param identifier Unique id to be assigned to the institution.
 	 * @see #getIdentifier()
 	 * */
-	public void setId(Long id)
+	public void setId(Long identifier)
 	{
-		this.id = id;
+		this.id = identifier;
 	}
 
 	/**
 	 * Returns the name of the institution.
-	 * @hibernate.property name="name" type="string" 
+	 * @hibernate.property name="name" type="string"
 	 * column="NAME" length="255" not-null="true" unique="true"
-	 * @return Returns the name of the institution. 
+	 * @return Returns the name of the institution.
 	 * @see #setName(String)
 	 */
 	public String getName()
@@ -91,23 +98,28 @@ public class Institution extends AbstractDomainObject implements Serializable
 	{
 		this.name = name;
 	}
-	
-	
-    /* (non-Javadoc)
-     * @see edu.wustl.catissuecore.domain.AbstractDomainObject#setAllValues(edu.wustl.catissuecore.actionForm.AbstractActionForm)
-     */
-    public void setAllValues(IValueObject abstractForm)
-    {
-		InstitutionForm instituteForm = (InstitutionForm)abstractForm;
-		
-		this.name = instituteForm.getName().trim() ;
-    }
-    
-    /**
-     * Returns message label to display on success add or edit
-     * @return String
-     */
-	public String getMessageLabel() {		
+
+	/* (non-Javadoc)
+	 * @see edu.wustl.catissuecore.domain.AbstractDomainObject#setAllValues(edu.
+	 * wustl.catissuecore.actionForm.AbstractActionForm)
+	 */
+	/**
+	 * Set All Values.
+	 * @param abstractForm IValueObject.
+	 */
+	public void setAllValues(IValueObject abstractForm)
+	{
+		InstitutionForm instituteForm = (InstitutionForm) abstractForm;
+
+		this.name = instituteForm.getName().trim();
+	}
+
+	/**
+	 * Returns message label to display on success add or edit.
+	 * @return String
+	 */
+	public String getMessageLabel()
+	{
 		return this.name;
 	}
 }

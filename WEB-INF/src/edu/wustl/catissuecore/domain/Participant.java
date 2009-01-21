@@ -18,7 +18,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Map;
-
 import edu.wustl.catissuecore.actionForm.ParticipantForm;
 import edu.wustl.catissuecore.bean.ConsentResponseBean;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
@@ -109,8 +108,8 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 	protected String socialSecurityNumber;
 
 	/**
-	 * Defines whether this participant record can be queried (Active) or not queried (Inactive) by any actor
-	 * */
+	 * Defines whether this participant record can be queried (Active) or not queried (Inactive) by any actor.
+	 */
 	protected String activityStatus;
 
 	/**
@@ -124,15 +123,18 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 	protected String vitalStatus;
 
 	/**
-	 * A collection of medical record identification number that refers to a Participant. 
+	 * A collection of medical record identification number that refers to a Participant.
 	 * */
 	protected Collection participantMedicalIdentifierCollection = new LinkedHashSet();// = new HashSet();
 
 	/**
-	 * A collection of registration of a Participant to a Collection Protocol. 
-	 * */
+	 * A collection of registration of a Participant to a Collection Protocol.
+	 */
 	protected Collection collectionProtocolRegistrationCollection = new HashSet();
 
+	/**
+	 * HashSet containing clinical Study Registration.
+	 */
 	protected Collection clinicalStudyRegistrationCollection = new HashSet();
 
 	/**
@@ -148,28 +150,40 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 		return clinicalStudyRegistrationCollection;
 	}
 
+	/**
+	 * Set ClinicalStudyRegistration Collection.
+	 * @param clinicalStudyRegistrationCollection Collection.
+	 */
 	public void setClinicalStudyRegistrationCollection(Collection clinicalStudyRegistrationCollection)
 	{
 		this.clinicalStudyRegistrationCollection = clinicalStudyRegistrationCollection;
 	}
 
-	//Default Constructor
+	/**
+	 * Default Constructor.
+	 */
 	public Participant()
 	{
 		super();
 	}
 
+	/**
+	 * Parameterized Constructor.
+	 * @param form AbstractActionForm.
+	 */
 	public Participant(AbstractActionForm form)
 	{
+		super();
 		setAllValues(form);
 	}
 
 	/**
-	 * Copy Constructor
+	 * Copy Constructor.
 	 * @param participant Participant object
 	 */
 	public Participant(Participant participant)
 	{
+		super();
 		this.id = Long.valueOf(participant.getId().longValue());
 		this.lastName = participant.getLastName();
 		this.firstName = participant.getFirstName();
@@ -193,10 +207,12 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 		}
 		this.raceCollection = raceCollection;
 
-		Collection<ParticipantMedicalIdentifier> pmiCollection = new ArrayList<ParticipantMedicalIdentifier>();
+		Collection<ParticipantMedicalIdentifier> pmiCollection =
+			new ArrayList<ParticipantMedicalIdentifier>();
 		if (participant.getParticipantMedicalIdentifierCollection() != null)
 		{
-			Iterator<ParticipantMedicalIdentifier> pmiItr = participant.getParticipantMedicalIdentifierCollection().iterator();
+			Iterator<ParticipantMedicalIdentifier> pmiItr =
+				participant.getParticipantMedicalIdentifierCollection().iterator();
 			while (pmiItr.hasNext())
 			{
 				ParticipantMedicalIdentifier pmi = new ParticipantMedicalIdentifier(pmiItr.next());
@@ -212,7 +228,7 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 	 * @return Long System generated unique id.
 	 * @see #setId(Long)
 	 * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
-	 * unsaved-value="null" generator-class="native" 
+	 * unsaved-value="null" generator-class="native"
 	 * @hibernate.generator-param name="sequence" value="CATISSUE_PARTICIPANT_SEQ"
 	 */
 	@Override
@@ -233,10 +249,10 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 	}
 
 	/**
-	 * Returns the last name of the Participant. 
+	 * Returns the last name of the Participant.
 	 * @return String representing the last name of the Participant.
 	 * @see #setLastName(String)
-	 * @hibernate.property name="lastName" type="string" 
+	 * @hibernate.property name="lastName" type="string"
 	 * column="LAST_NAME" length="255"
 	 */
 	public String getLastName()
@@ -258,7 +274,7 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 	 * Returns the first name of the Participant.
 	 * @return String representing the first name of the Participant.
 	 * @see #setFirstName(String)
-	 * @hibernate.property name="firstName" type="string" 
+	 * @hibernate.property name="firstName" type="string"
 	 * column="FIRST_NAME" length="255"
 	 */
 	public String getFirstName()
@@ -280,7 +296,7 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 	 * Returns the middle name of the Participant.
 	 * @return String representing the middle name of the Participant.
 	 * @see #setMiddleName(String)
-	 * @hibernate.property name="middleName" type="string" 
+	 * @hibernate.property name="middleName" type="string"
 	 * column="MIDDLE_NAME" length="255"
 	 */
 	public String getMiddleName()
@@ -323,7 +339,7 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 	 * Returns the gender of a participant.
 	 * @return String representing the gender of a participant.
 	 * @see #setGender(String)
-	 * @hibernate.property name="gender" type="string" 
+	 * @hibernate.property name="gender" type="string"
 	 * column="GENDER" length="20"
 	 */
 	public String getGender()
@@ -345,7 +361,7 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 	 * Returns the genotype of a participant.
 	 * @return String representing the genotype of a participant.
 	 * @see #setSexGenotype(String)
-	 * @hibernate.property name="sexGenotype" type="string" 
+	 * @hibernate.property name="sexGenotype" type="string"
 	 * column="GENOTYPE" length="50"
 	 */
 	public String getSexGenotype()
@@ -367,7 +383,7 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 	//     * Returns the race of the Participant.
 	//     * @return String representing the race of the Participant.
 	//     * @see #setRace(String)
-	//     * @hibernate.property name="race" type="string" 
+	//     * @hibernate.property name="race" type="string"
 	//     * column="RACE" length="50"
 	//     */
 	//	public String getRace()
@@ -410,7 +426,7 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 	 * @return Ethnicity of the Participant.
 	 * @see #setEthnicity(String)
 	 * @hibernate.property name="ethnicity" type="string"
-	 * column="ETHNICITY" length="50" 
+	 * column="ETHNICITY" length="50"
 	 */
 	public String getEthnicity()
 	{
@@ -432,7 +448,7 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 	 * @return String representing the Social Security Number of the Participant.
 	 * @see #setSocialSecurityNumber(String)
 	 * @hibernate.property name="socialSecurityNumber" type="string"
-	 * column="SOCIAL_SECURITY_NUMBER" length="50" unique="true" 
+	 * column="SOCIAL_SECURITY_NUMBER" length="50" unique="true"
 	 */
 	public String getSocialSecurityNumber()
 	{
@@ -441,7 +457,7 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 
 	/**
 	 * Sets the Social Security Number of the Participant.
-	 * @param birthDate String representing the Social Security Number of the Participant.
+	 * @param socialSecurityNumber - String representing the Social Security Number of the Participant.
 	 * @see #getSocialSecurityNumber()
 	 */
 	public void setSocialSecurityNumber(String socialSecurityNumber)
@@ -551,21 +567,24 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 
 	/**
 	 * Sets the collection protocol registrations of this participant.
-	 * @param protocolRegistrationCollection collection of collection protocol registrations of this participant.
+	 * @param collectionProtocolRegistrationCollection - Collection of collection
+	 * protocol registrations of this participant.
 	 * @see #getCollectionProtocolRegistrationCollection()
 	 */
-	public void setCollectionProtocolRegistrationCollection(Collection collectionProtocolRegistrationCollection)
+	public void setCollectionProtocolRegistrationCollection(Collection
+			collectionProtocolRegistrationCollection)
 	{
 		this.collectionProtocolRegistrationCollection = collectionProtocolRegistrationCollection;
 	}
 
 	/**
 	 * This function Copies the data from a StorageTypeForm object to a StorageType object.
-	 * @param storageTypeForm A StorageTypeForm object containing the information about the StorageType.  
+	 * @param abstractForm - A StorageTypeForm object containing the information about the StorageType.
 	 * */
 	@Override
 	public void setAllValues(IValueObject abstractForm)
 	{
+		String nullString = null;
 		try
 		{
 			ParticipantForm form = (ParticipantForm) abstractForm;
@@ -582,7 +601,7 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 			}
 			else
 			{
-				this.gender = null;
+				this.gender = nullString;
 			}
 
 			if (validator.isValidOption(form.getGenotype()))
@@ -591,7 +610,7 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 			}
 			else
 			{
-				this.sexGenotype = null;
+				this.sexGenotype = nullString;
 			}
 
 			if (validator.isValidOption(form.getEthnicity()))
@@ -600,7 +619,7 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 			}
 			else
 			{
-				this.ethnicity = null;
+				this.ethnicity = nullString;
 			}
 
 			//	        if(validator.isValidOption(form.getRace()) )
@@ -624,21 +643,24 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 				}
 			}
 
-			String socialSecurityNumberTemp = form.getSocialSecurityNumberPartA() + "-" + form.getSocialSecurityNumberPartB() + "-"
-					+ form.getSocialSecurityNumberPartC();
+			String socialSecurityNumberTemp = form.getSocialSecurityNumberPartA() +
+			"-" + form.getSocialSecurityNumberPartB() + "-"	+ form.getSocialSecurityNumberPartC();
 
-			if (!validator.isEmpty(socialSecurityNumberTemp) && validator.isValidSSN(socialSecurityNumberTemp))
+			if (!validator.isEmpty(socialSecurityNumberTemp) &&
+					validator.isValidSSN(socialSecurityNumberTemp))
 			{
 				this.socialSecurityNumber = socialSecurityNumberTemp;
 			}
 			else
 			{
-				this.socialSecurityNumber = null;
+				this.socialSecurityNumber = nullString;
 			}
 
-			this.birthDate = Utility.parseDate(form.getBirthDate(), Utility.datePattern(form.getBirthDate()));
+			this.birthDate = Utility.parseDate(form.getBirthDate(),
+					Utility.datePattern(form.getBirthDate()));
 
-			this.deathDate = Utility.parseDate(form.getDeathDate(), Utility.datePattern(form.getDeathDate()));
+			this.deathDate = Utility.parseDate(form.getDeathDate(),
+					Utility.datePattern(form.getDeathDate()));
 
 			if (validator.isValidOption(form.getVitalStatus()))
 			{
@@ -646,121 +668,122 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 			}
 			else
 			{
-				this.vitalStatus = null;
+				this.vitalStatus = nullString;
 			}
 
 			this.participantMedicalIdentifierCollection.clear();
 			Map map = form.getValues();
-			Logger.out.debug("Map " + map);
+			logger.debug("Map " + map);
 			MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
 			this.participantMedicalIdentifierCollection = parser.generateData(map);
 
 			//Collection Protocol Registration of the participant
 			//(Abhishek Mehta)
 			this.collectionProtocolRegistrationCollection.clear();
-			Map mapCollectionProtocolRegistrationCollection = form.getCollectionProtocolRegistrationValues();
-			Logger.out.debug("Map " + map);
-			MapDataParser parserCollectionProtocolRegistrationCollection = new MapDataParser("edu.wustl.catissuecore.domain");
-			this.collectionProtocolRegistrationCollection = parserCollectionProtocolRegistrationCollection
+			Map mapCollectionProtocolRegistrationCollection =
+				form.getCollectionProtocolRegistrationValues();
+			logger.debug("Map " + map);
+			MapDataParser parserCollectionProtocolRegistrationCollection =
+				new MapDataParser("edu.wustl.catissuecore.domain");
+			this.collectionProtocolRegistrationCollection =
+				parserCollectionProtocolRegistrationCollection
 					.generateData(mapCollectionProtocolRegistrationCollection);
-			Logger.out.debug("ParticipantMedicalIdentifierCollection " + participantMedicalIdentifierCollection);
+			logger.debug("ParticipantMedicalIdentifierCollection " +
+					participantMedicalIdentifierCollection);
 
 			setConsentsResponseToCollectionProtocolRegistration(form);
 		}
 		catch (Exception excp)
 		{
 			// use of logger as per bug 79
-			Logger.out.error(excp.getMessage(), excp);
+			logger.error(excp.getMessage(), excp);
 		}
 	}
 
-	/*
-	 * Setting Consent Response for the collection protocol
-	 * //Abhishek Mehta
+	/**
+	 * Setting Consent Response for the collection protocol.
+	 * @param form ParticipantForm.
 	 */
 	private void setConsentsResponseToCollectionProtocolRegistration(ParticipantForm form)
 	{
 		try
 		{
-			
-		
-		Collection<ConsentResponseBean> consentResponseBeanCollection = form.getConsentResponseBeanCollection();
-		Iterator itr = this.collectionProtocolRegistrationCollection.iterator();
-		while (itr.hasNext())
-		{
-			CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) itr.next();
-			setConsentResponse(collectionProtocolRegistration, consentResponseBeanCollection);
-		}
+			Collection<ConsentResponseBean> consentResponseBeanCollection =
+				form.getConsentResponseBeanCollection();
+			Iterator itr = this.collectionProtocolRegistrationCollection.iterator();
+			while (itr.hasNext())
+			{
+				CollectionProtocolRegistration collectionProtocolRegistration =
+					(CollectionProtocolRegistration) itr.next();
+				setConsentResponse(collectionProtocolRegistration, consentResponseBeanCollection);
+			}
 		}
 		catch (Exception e)
 		{
-			// TODO: handle exception
+			logger.error(e.getMessage(), e);
 		}
 	}
 
-	/*
-	 * Set Consent Response for given collection protocol
-	 *  //Abhishek Mehta
+	/**
+	 * Set Consent Response for given collection protocol.
+	 * @param collectionProtocolRegistration CollectionProtocolRegistration.
+	 * @param consentResponseBeanCollection Collection.
 	 */
 	private void setConsentResponse(CollectionProtocolRegistration collectionProtocolRegistration, Collection consentResponseBeanCollection)
 	{
 		try
 		{
-			
-		
-		if (consentResponseBeanCollection != null && !consentResponseBeanCollection.isEmpty())
-		{
-			Iterator itr = consentResponseBeanCollection.iterator();
-			while (itr.hasNext())
+			if (consentResponseBeanCollection != null && !consentResponseBeanCollection.isEmpty())
 			{
-				ConsentResponseBean consentResponseBean = (ConsentResponseBean) itr.next();
-				long cpIDcollectionProtocolRegistration = collectionProtocolRegistration.getCollectionProtocol().getId().longValue();
-				long cpIDconsentRegistrationBean = consentResponseBean.getCollectionProtocolID();
-				if (cpIDcollectionProtocolRegistration == cpIDconsentRegistrationBean)
+				Iterator itr = consentResponseBeanCollection.iterator();
+				while (itr.hasNext())
 				{
-
-					String signedConsentUrl = consentResponseBean.getSignedConsentUrl();
-					long witnessId = consentResponseBean.getWitnessId();
-					String consentDate = consentResponseBean.getConsentDate();
-					Collection consentTierResponseCollection = prepareConsentTierResponseCollection(consentResponseBean.getConsentResponse(), true);
-
-					collectionProtocolRegistration.setSignedConsentDocumentURL(signedConsentUrl);
-					if (witnessId > 0)
+					ConsentResponseBean consentResponseBean = (ConsentResponseBean) itr.next();
+					long cpIDcollectionProtocolRegistration = collectionProtocolRegistration.
+						getCollectionProtocol().getId().longValue();
+					long cpIDconsentRegistrationBean = consentResponseBean.getCollectionProtocolID();
+					if (cpIDcollectionProtocolRegistration == cpIDconsentRegistrationBean)
 					{
-						User consentWitness = new User();
-						consentWitness.setId(Long.valueOf(witnessId));
-						collectionProtocolRegistration.setConsentWitness(consentWitness);
+						String signedConsentUrl = consentResponseBean.getSignedConsentUrl();
+						long witnessId = consentResponseBean.getWitnessId();
+						String consentDate = consentResponseBean.getConsentDate();
+						Collection consentTierResponseCollection = prepareConsentTierResponseCollection(consentResponseBean.getConsentResponse(), true);
+						collectionProtocolRegistration.setSignedConsentDocumentURL(signedConsentUrl);
+						if (witnessId > 0)
+						{
+							User consentWitness = new User();
+							consentWitness.setId(Long.valueOf(witnessId));
+							collectionProtocolRegistration.setConsentWitness(consentWitness);
+						}
+						collectionProtocolRegistration.setConsentSignatureDate(Utility.parseDate(consentDate));
+						collectionProtocolRegistration.setConsentTierResponseCollection(consentTierResponseCollection);
+						collectionProtocolRegistration.setConsentWithdrawalOption(consentResponseBean.getConsentWithdrawalOption());
+						break;
 					}
-
-					collectionProtocolRegistration.setConsentSignatureDate(Utility.parseDate(consentDate));
+				}
+			}
+			else // Setting default response to collection protocol
+			{
+				if (collectionProtocolRegistration.getCollectionProtocol() != null)
+				{
+					String cpIDcollectionProtocolRegistration = collectionProtocolRegistration.getCollectionProtocol().getId().toString();
+					Collection consentTierCollection = getConsentList(cpIDcollectionProtocolRegistration);
+					Collection consentTierResponseCollection = prepareConsentTierResponseCollection(consentTierCollection, false);
 					collectionProtocolRegistration.setConsentTierResponseCollection(consentTierResponseCollection);
-					collectionProtocolRegistration.setConsentWithdrawalOption(consentResponseBean.getConsentWithdrawalOption());
-					break;
 				}
 			}
 		}
-		else
-		// Setting default response to collection protocol
-		{
-			if (collectionProtocolRegistration.getCollectionProtocol() != null)
-			{
-				String cpIDcollectionProtocolRegistration = collectionProtocolRegistration.getCollectionProtocol().getId().toString();
-				Collection consentTierCollection = getConsentList(cpIDcollectionProtocolRegistration);
-
-				Collection consentTierResponseCollection = prepareConsentTierResponseCollection(consentTierCollection, false);
-				collectionProtocolRegistration.setConsentTierResponseCollection(consentTierResponseCollection);
-			}
-		}
-		}
 		catch (Exception e)
 		{
-			// TODO: handle exception
+			logger.error(e.getMessage(), e);
 		}
 	}
 
-	/*
+	/**
 	 * Preparing consent response collection from entered response.
-	 * //Abhishek Mehta
+	 * @param consentResponse Collection.
+	 * @param isResponse boolean.
+	 * @return Collection.
 	 */
 	private Collection prepareConsentTierResponseCollection(Collection consentResponse, boolean isResponse)
 	{
@@ -788,22 +811,26 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 		return consentTierResponseCollection;
 	}
 
-	/*
-	 * Consent List for given collection protocol 
-	 * //Abhishek Mehta
+	/**
+	 * Consent List for given collection protocol.
+	 * @param collectionProtocolID String.
+	 * @return Collection.
+	 * @throws DAOException DAOException.
 	 */
 	private Collection getConsentList(String collectionProtocolID) throws DAOException
 	{
-		CollectionProtocolBizLogic collectionProtocolBizLogic = (CollectionProtocolBizLogic) BizLogicFactory.getInstance().getBizLogic(
+		CollectionProtocolBizLogic collectionProtocolBizLogic =
+			(CollectionProtocolBizLogic) BizLogicFactory.getInstance().getBizLogic(
 				Constants.COLLECTION_PROTOCOL_FORM_ID);
-		Collection consentTierCollection = (Collection) collectionProtocolBizLogic.retrieveAttribute(CollectionProtocol.class.getName(), Long
+		Collection consentTierCollection = (Collection) collectionProtocolBizLogic.
+			retrieveAttribute(CollectionProtocol.class.getName(), Long
 				.valueOf(collectionProtocolID), "elements(consentTierCollection)");
 		return consentTierCollection;
 	}
 
 	/**
-	 * Returns message label to display on success add or edit
-	 * @return String
+	 * Returns message label to display on success add or edit.
+	 * @return String.
 	 */
 	public String getMessageLabel()
 	{

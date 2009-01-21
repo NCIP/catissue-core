@@ -1,11 +1,7 @@
-/**
- * 
- */
 package edu.wustl.catissuecore.domain;
 
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.exception.AssignDataException;
-
 
 /**
  * @author ashish_gupta
@@ -15,25 +11,30 @@ import edu.wustl.common.exception.AssignDataException;
 public class ContainerPosition extends AbstractPosition
 {
 	/**
-	 * 
+	 * Serial Version ID.
 	 */
 	private static final long serialVersionUID = -4331441815323965860L;
+
+	/**
+	 * occupiedContainer.
+	 */
 	protected Container occupiedContainer;
+
+	/**
+	 * parentContainer.
+	 */
 	protected Container parentContainer;
-	
-	
-	
-	
+
 	/**
 	 * @return the parentContainer
-	 * @hibernate.many-to-one column="PARENT_CONTAINER_ID" class="edu.wustl.catissuecore.domain.Container" constrained="true"
+	 * @hibernate.many-to-one column="PARENT_CONTAINER_ID" class="edu.wustl.
+	 * catissuecore.domain.Container" constrained="true"
 	 */
 	public Container getParentContainer()
 	{
 		return parentContainer;
 	}
 
-	
 	/**
 	 * @param parentContainer the parentContainer to set
 	 */
@@ -44,13 +45,14 @@ public class ContainerPosition extends AbstractPosition
 
 	/**
 	 * @return the occupiedContainer
-	 * @hibernate.many-to-one column="OCCUPIED_CONTAINER_ID" class="edu.wustl.catissuecore.domain.Container" constrained="true"
+	 * @hibernate.many-to-one column="OCCUPIED_CONTAINER_ID" class="edu.wustl.
+	 * catissuecore.domain.Container" constrained="true"
 	 */
 	public Container getOccupiedContainer()
 	{
 		return occupiedContainer;
 	}
-	
+
 	/**
 	 * @param occupiedContainer the occupiedContainer to set
 	 */
@@ -59,13 +61,14 @@ public class ContainerPosition extends AbstractPosition
 		this.occupiedContainer = occupiedContainer;
 	}
 
-
+	/**
+	 * Set All Values.
+	 * @param arg0 IValueObject.
+	 * @throws AssignDataException AssignDataException.
+	 */
 	@Override
 	public void setAllValues(IValueObject arg0) throws AssignDataException
 	{
-		// TODO Auto-generated method stub
-		
+		//
 	}
-	
-	
 }

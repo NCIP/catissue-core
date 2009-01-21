@@ -12,29 +12,31 @@ package edu.wustl.catissuecore.domain;
 
 import java.util.Collection;
 
-
-
 /**
  * This is  abstract class indicating the order of existing biospecimens.
  * * Represents  Pathology Order Item.
- * @hibernate.joined-subclass table="CATISSUE_EXISTING_SP_ORD_ITEM" 
+ * @hibernate.joined-subclass table="CATISSUE_EXISTING_SP_ORD_ITEM"
  * @hibernate.joined-subclass-key
  * column="IDENTIFIER"
- * 
  * @author ashish_gupta
  */
-public class ExistingSpecimenOrderItem extends SpecimenOrderItem 
+public class ExistingSpecimenOrderItem extends SpecimenOrderItem
 {
-	
+	/**
+	 * Serial Version ID.
+	 */
+	private static final long serialVersionUID = 9141787148538325935L;
+
 	/**
 	 * The specimen associated with the order item.
 	 */
 	protected Specimen specimen;
-	
-	
+
+	/**
+	 * consentTierStatusCollection.
+	 */
 	private Collection consentTierStatusCollection = null;
 
-	
 	/**
 	 * The specimen associated with the order item in SpecimenOrderItem.
 	 * @hibernate.many-to-one column="SPECIMEN_ID" class="edu.wustl.catissuecore.domain.Specimen"
@@ -46,7 +48,6 @@ public class ExistingSpecimenOrderItem extends SpecimenOrderItem
 		return specimen;
 	}
 
-	
 	/**
 	 * @param specimen the specimen to get.
 	 * @see #getSpecimen()
@@ -55,16 +56,22 @@ public class ExistingSpecimenOrderItem extends SpecimenOrderItem
 	{
 		this.specimen = specimen;
 	}
-	
-	public Collection getConsentTierStatusCollection() {
+
+	/**
+	 * Get ConsentTierStatus Collection.
+	 * @return Collection.
+	 */
+	public Collection getConsentTierStatusCollection()
+	{
 		return consentTierStatusCollection;
 	}
 
-	public void setConsentTierStatusCollection(
-			Collection consentTierStatusCollection) {
+	/**
+	 * Set ConsentTierStatus Collection.
+	 * @param consentTierStatusCollection Collection.
+	 */
+	public void setConsentTierStatusCollection(Collection consentTierStatusCollection)
+	{
 		this.consentTierStatusCollection = consentTierStatusCollection;
 	}
-	
-	
-
 }

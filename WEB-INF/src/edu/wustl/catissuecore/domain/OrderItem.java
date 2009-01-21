@@ -11,14 +11,13 @@
 package edu.wustl.catissuecore.domain;
 
 import java.io.Serializable;
-
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
 
 /**
- * It identifies individual order items ordered by the user. 
+ * It identifies individual order items ordered by the user.
  * @author ashish_gupta
  * @hibernate.class table="CATISSUE_ORDER_ITEM"
  */
@@ -31,12 +30,12 @@ public class OrderItem extends AbstractDomainObject implements Serializable
 	protected Long id;
 
 	/**
-	 * String containing the description of ordered specimens
+	 * String containing the description of ordered specimens.
 	 */
 	protected String description;
 
 	/**
-	 * Integer containing the amount of requested quantity of ordered specimens
+	 * Integer containing the amount of requested quantity of ordered specimens.
 	 */
 	protected Double requestedQuantity;
 	/**
@@ -51,19 +50,19 @@ public class OrderItem extends AbstractDomainObject implements Serializable
 	 * The distributed Item associated with this OrderItem.
 	 */
 	protected DistributedItem distributedItem;
-	
+
 	/**
 	 * The form id.
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	/** 
+
+	/**
 	 * @param abstractActionForm object.
 	 * @throws  AssignDataException object.
 	 */
 	public void setAllValues(AbstractActionForm abstractActionForm) throws AssignDataException
 	{
-		
+		//
 	}
 
 	/**
@@ -81,16 +80,16 @@ public class OrderItem extends AbstractDomainObject implements Serializable
 
 	/**
 	 * Sets the system generated unique id.
-	 * @param id the system generated unique id.
+	 * @param identifier the system generated unique id.
 	 * @see #getId()
 	 */
-	public void setId(Long id)
+	public void setId(Long identifier)
 	{
-		this.id = id;
+		this.id = identifier;
 	}
 
 	/**
-	 * Returns the description entered by user for each requested orders
+	 * Returns the description entered by user for each requested orders.
 	 * @hibernate.property name="description" type="string" column="DESCRIPTION" length="1000"
 	 * @return description String containing the description of each order item.
 	 */
@@ -100,7 +99,7 @@ public class OrderItem extends AbstractDomainObject implements Serializable
 	}
 
 	/**
-	 * Sets the description entered by User. 
+	 * Sets the description entered by User.
 	 * @param description object
 	 * @see #getDescription()
 	 */
@@ -108,9 +107,9 @@ public class OrderItem extends AbstractDomainObject implements Serializable
 	{
 		this.description = description;
 	}
-	
+
 	/**
-	 * Returns the amount/quantity of requested specimens
+	 * Returns the amount/quantity of requested specimens.
 	 * @return quantity of the requested specimens
 	 */
 	public Double getRequestedQuantity()
@@ -119,17 +118,17 @@ public class OrderItem extends AbstractDomainObject implements Serializable
 	}
 
 	/**
-	 * Sets the amount/quantity of requested specimens
+	 * Sets the amount/quantity of requested specimens.
 	 * @param requestedQuantity Quantity
 	 */
 	public void setRequestedQuantity(Double requestedQuantity)
 	{
 		this.requestedQuantity = requestedQuantity;
-	}	
+	}
 
 	/**
-	 * Returns the status of the ordered specimens
-	 * @hibernate.property name="status" type="string" column="STATUS" length="50" 
+	 * Returns the status of the ordered specimens.
+	 * @hibernate.property name="status" type="string" column="STATUS" length="50"
 	 * @return Status
 	 */
 	public String getStatus()
@@ -138,7 +137,7 @@ public class OrderItem extends AbstractDomainObject implements Serializable
 	}
 
 	/**
-	 * Sets the status of the ordered derived specimens
+	 * Sets the status of the ordered derived specimens.
 	 * @param status String
 	 */
 	public void setStatus(String status)
@@ -146,10 +145,10 @@ public class OrderItem extends AbstractDomainObject implements Serializable
 		this.status = status;
 	}
 
-	
 	/**
 	 * The order id associated with the order item.
-	 * @hibernate.many-to-one column="ORDER_ID" class="edu.wustl.catissuecore.domain.OrderDetails" constrained="true"
+	 * @hibernate.many-to-one column="ORDER_ID" class="edu.wustl.catissuecore.
+	 * domain.OrderDetails" constrained="true"
 	 * @return the orderDetails
 	 */
 	public OrderDetails getOrderDetails()
@@ -157,16 +156,14 @@ public class OrderItem extends AbstractDomainObject implements Serializable
 		return orderDetails;
 	}
 
-	
 	/**
-	 * @param order the orderId to set
+	 * @param orderDetails - the orderId to set.
 	 */
 	public void setOrderDetails(OrderDetails orderDetails)
 	{
 		this.orderDetails = orderDetails;
 	}
 
-	
 	/**
 	 * @return the distributedItem
 	 * @hibernate.many-to-one column="DISTRIBUTED_ITEM_ID"
@@ -177,7 +174,6 @@ public class OrderItem extends AbstractDomainObject implements Serializable
 		return distributedItem;
 	}
 
-	
 	/**
 	 * @param distributedItem the distributedItem to set
 	 */
@@ -189,18 +185,14 @@ public class OrderItem extends AbstractDomainObject implements Serializable
 	/* (non-Javadoc)
 	 * @see edu.wustl.common.domain.AbstractDomainObject#setAllValues(edu.wustl.common.actionForm.IValueObject)
 	 */
+	/**
+	 * Set All Values.
+	 * @param valueObject IValueObject.
+	 * @throws AssignDataException AssignDataException.
+	 */
 	@Override
 	public void setAllValues(IValueObject valueObject) throws AssignDataException
 	{
-		// TODO Auto-generated method stub
-		
+		//
 	}
-
-	
-	
-
-	
-	
-
-	
 }
