@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
@@ -41,12 +42,12 @@ public class PrintServiceInputXMLParser implements PrintServiceInputParserInterf
 	public static final String PRINT_FAILED = "Printing Failed";
 	
 
-	public boolean callPrintService(Object listData) throws Exception 
+	public boolean callPrintService(Object listData) 
 	{
 		try
 		{
 			System.setProperty("org.apache.xerces.xni.parser.XMLParserConfiguration", "org.apache.xerces.parsers.XIncludeAwareParserConfiguration");
-			Document doc = this.generateXMLDoc((ArrayList)listData);		
+			Document doc = this.generateXMLDoc((List)listData);		
 			String strXMLData = this.getStringFromDocument(doc);
 			String endpointURL = PropertyHandler.getValue("printWebServiceEndPoint");
 			PrintWebService p = new PrintWebService(new URL(endpointURL),new QName("http://print.catissuecore.webservice.wustl.edu/", "PrintWebService"));
@@ -90,7 +91,7 @@ public class PrintServiceInputXMLParser implements PrintServiceInputParserInterf
 	 * @param mapList
 	 * @return Document
 	 */
-	public Document generateXMLDoc(ArrayList mapList) {
+	public Document generateXMLDoc(List mapList) {
 		
 		
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
