@@ -9,7 +9,7 @@ import java.util.List;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.printserviceclient.LabelPrinter;
 import edu.wustl.common.domain.AbstractDomainObject;
-import gov.nih.nci.security.authorization.domainobjects.User;
+import edu.wustl.catissuecore.domain.User;
 /**
  * This Class is used to define method for Specimen label printing
  * @author falguni_sachde

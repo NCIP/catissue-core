@@ -7,7 +7,7 @@ import java.util.List;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.printserviceclient.LabelPrinter;
 import edu.wustl.common.domain.AbstractDomainObject;
-import gov.nih.nci.security.authorization.domainobjects.User;
+import edu.wustl.catissuecore.domain.User;
 
 
 public class StorageContainerLabelPrinterImpl implements LabelPrinter

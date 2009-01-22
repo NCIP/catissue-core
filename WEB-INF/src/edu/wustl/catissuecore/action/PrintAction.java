@@ -24,6 +24,7 @@ import org.apache.struts.action.ActionMessages;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.printserviceclient.LabelPrinter;
 import edu.wustl.catissuecore.printserviceclient.LabelPrinterFactory;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -32,10 +33,8 @@ import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.dao.AbstractDAO;
 import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.util.dbManager.DAOException;
-import gov.nih.nci.security.authorization.domainobjects.User;
 
 
 /**
@@ -75,7 +74,7 @@ public class PrintAction extends Action
 		String strIpAddress = objBean.getIpAddress();
 		try 
 		{
-			gov.nih.nci.security.authorization.domainobjects.User objUser = getUserObject(request,objBean);
+			User objUser = getUserObject(request,objBean);
 			HashMap forwardToPrintMap = (HashMap)request.getAttribute("forwardToPrintMap");
 			//SCG Label printing
 			if (forwardToPrintMap != null && forwardToPrintMap.size() >0 && forwardToPrintMap.get("specimenCollectionGroupId")!=null)
@@ -254,12 +253,12 @@ public class PrintAction extends Action
 	public String printAliquotLabel(ActionForm form, HttpServletRequest request,
 			String nextforwardTo, SessionDataBean objBean) throws Exception
 	{
-		gov.nih.nci.security.authorization.domainobjects.User objUser = null;
+		User objUser = null;
 		try
 		{
 			objUser = getUserObject(request, objBean);
 		}
-		catch (SMException e)
+		catch (DAOException e)
 		{
 			e.printStackTrace();
 			throw new SMException("Error while Creating User Object");
@@ -323,11 +322,13 @@ public class PrintAction extends Action
 		
 	}
     
-    private User getUserObject(HttpServletRequest request,SessionDataBean objBean) throws SMException
+    private User getUserObject(HttpServletRequest request,SessionDataBean objBean) throws DAOException
     {
     	String strUserId = objBean.getUserId().toString();
-    	gov.nih.nci.security.authorization.domainobjects.User objUser  = 
-    		SecurityManager.getInstance(this.getClass()).getUserById(strUserId); 
+    	AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+    	dao.openSession(null);
+    	User objUser = (User)dao.retrieve(User.class.getName(), new Long(strUserId));		
+    	dao.closeSession();    	
     	return objUser;
     }
 
