@@ -697,7 +697,7 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 
 					if (form.isAddOperation())
 					{
-						if (this.specimenPosition == null || 
+						if (this.specimenPosition == null ||
 								this.specimenPosition.storageContainer == null)
 						{
 							this.specimenPosition = new SpecimenPosition();
@@ -1357,7 +1357,7 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 	}
 
 	/**
-	 * Get SpecimenRequirement. 
+	 * Get SpecimenRequirement.
 	 * @return SpecimenRequirement.
 	 */
 	public SpecimenRequirement getSpecimenRequirement()

@@ -525,16 +525,16 @@ public class StorageContainer extends Container implements IActivityStatus
 				else
 				{
 					this.locatedAtPosition.parentContainer = new StorageContainer();
-					if (form.getContainerId() != null &&
-						!form.getContainerId().trim().equals(Constants.DOUBLE_QUOTES))
-					{
-						this.locatedAtPosition.parentContainer.setId(Long.valueOf(
-								form.getContainerId()));
-					}
-					else
+					if (form.getContainerId() == null &&
+						form.getContainerId().trim().equals(Constants.DOUBLE_QUOTES))
 					{
 						this.locatedAtPosition.parentContainer.setName(
 								form.getSelectedContainerName());
+					}
+					else
+					{
+						this.locatedAtPosition.parentContainer.setId(Long.valueOf(
+								form.getContainerId()));
 					}
 					if (form.getPos1() != null && !form.getPos1().trim().
 							equals(Constants.DOUBLE_QUOTES) && form.getPos2() != null
