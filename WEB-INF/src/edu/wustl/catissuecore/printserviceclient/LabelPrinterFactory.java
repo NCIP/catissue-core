@@ -19,11 +19,11 @@ public class LabelPrinterFactory {
 	 * @return LabelPrinter LabelPrinter class object.
 	 * @throws Exception
 	 */
-	public static LabelPrinter getInstance(String objectType) throws Exception
+	public static LabelPrinter getInstance(final String objectType) throws Exception
 	{
 		try
 		{
-			String className = PropertyHandler.getValue(objectType);
+			final String className = PropertyHandler.getValue(objectType);
 			if(className!=null)
 			{
 				printClassMap.put(objectType,Class.forName(className).newInstance());
