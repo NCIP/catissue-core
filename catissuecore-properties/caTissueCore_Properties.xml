@@ -516,6 +516,16 @@
 		<name>barcode.isEditable</name>
 		<value>false</value>
 	</property>
+	
+	<property>
+		<name>packingSlipHeaderJsp</name>
+		<value>/pages/shippingtracking/PrintShipmentHeaderImg.jsp</value>
+	</property>
+	
+		<property>
+		<name>packingSlipFooterJsp</name>
+		<value>/pages/shippingtracking/PrintSummaryStaticText.jsp</value>
+	</property>
 
 
 </properties>
