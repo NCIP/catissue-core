@@ -30,7 +30,6 @@ import edu.wustl.catissuecore.domain.Distribution;
 import edu.wustl.catissuecore.domain.FluidSpecimen;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.util.MultipleSpecimenValidationUtil;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -48,6 +47,14 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class DistributionForm extends AbstractActionForm implements ConsentTierData
 {
+	private static final long serialVersionUID = 1L;
+
+/**
+ * logger Logger - Generic logger.
+ */
+private static org.apache.log4j.Logger logger = Logger.getLogger(DistributionForm.class);
+
+
 	private long specimenId;
 	/**
 	 * Time in hours for the Event Parameter.
@@ -134,55 +141,55 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 	{
 		//super.setAllValues(abstractDomain);
 
-		Logger.out.debug("setAllValues of DistributionForm");
+		logger.debug("setAllValues of DistributionForm");
 
-		Distribution distributionObject = (Distribution) abstractDomain;
+		final Distribution distObj = (Distribution) abstractDomain;
 
-		this.comments = Utility.toString(distributionObject.getComment());
-		this.id = distributionObject.getId().longValue();
+		this.comments = Utility.toString(distObj.getComment());
+		this.id = distObj.getId().longValue();
 
-		Calendar calender = Calendar.getInstance();
-		if (distributionObject.getTimestamp() != null)
+		final Calendar calender = Calendar.getInstance();
+		if (distObj.getTimestamp() != null)
 		{
-			calender.setTime(distributionObject.getTimestamp());
+			calender.setTime(distObj.getTimestamp());
 			this.timeInHours = Utility.toString(Integer.toString(calender.get(Calendar.HOUR_OF_DAY)));
 			this.timeInMinutes = Utility.toString(Integer.toString(calender.get(Calendar.MINUTE)));
-			this.dateOfEvent = Utility.parseDateToString(distributionObject.getTimestamp(), Variables.dateFormat);
+			this.dateOfEvent = Utility.parseDateToString(distObj.getTimestamp(), Variables.dateFormat);
 		}
-		this.userId = distributionObject.getDistributedBy().getId().longValue();
+		this.userId = distObj.getDistributedBy().getId().longValue();
 
 		/*if (distributionObject.getSpecimen() != null)
 		{
 			specimenId = distributionObject.getSpecimen().getId().longValue();
 		}*/
 
-		this.distributionProtocolId = String.valueOf(distributionObject.getDistributionProtocol().getId());
-		this.toSite = String.valueOf(distributionObject.getToSite().getId());
-		this.activityStatus = Utility.toString(distributionObject.getActivityStatus());
-		Logger.out.debug("this.activityStatus " + this.activityStatus);
+		this.distributionProtocolId = String.valueOf(distObj.getDistributionProtocol().getId());
+		this.toSite = String.valueOf(distObj.getToSite().getId());
+		this.activityStatus = Utility.toString(distObj.getActivityStatus());
+		logger.debug("this.activityStatus " + this.activityStatus);
  
-		if (distributionObject.getDistributedItemCollection().size() != 0)
+		if (distObj.getDistributedItemCollection().size() != 0)
 		{
-			Iterator itr = distributionObject.getDistributedItemCollection().iterator();
+			final Iterator itr = distObj.getDistributedItemCollection().iterator();
 			while (itr.hasNext())
 			{
-				DistributedItem distributedItem = (DistributedItem) itr.next();
-				if (distributedItem.getSpecimen() != null)
-				{
-					this.distributionType = new Integer(Constants.SPECIMEN_DISTRIBUTION_TYPE);
-					populateMapForSpecimen(distributionObject.getDistributedItemCollection());
-				}
-				else
+				final DistributedItem distributedItem = (DistributedItem) itr.next();
+				if (distributedItem.getSpecimen() == null)
 				{
 					this.distributionType = new Integer(Constants.SPECIMEN_ARRAY_DISTRIBUTION_TYPE);
 					//populateMapForArray(distributionObject.getSpecimenArrayCollection());
-
 				}
+				else
+				{
+					this.distributionType = new Integer(Constants.SPECIMEN_DISTRIBUTION_TYPE);
+					populateMapForSpecimen(distObj.getDistributedItemCollection());
+				}
+
 			}
 
 		}
 
-		Logger.out.debug("Display Map Values" + values);
+		logger.debug("Display Map Values" + values);
 
 		//At least one row should be displayed in ADD MORE therefore
 		/*		if(counter == 0)
@@ -193,60 +200,61 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 	 * Populates map for Array
 	 * @param specimenArrayCollection Collection of Specimen Array 
 	 */
-	private void populateMapForArray(Collection specimenArrayCollection)
-	{
-		if (specimenArrayCollection != null)
-		{
-			values = new HashMap();
-			Iterator it = specimenArrayCollection.iterator();
-			int i = 1;
-			while (it.hasNext())
-			{
-
-				String key1 = "SpecimenArray:" + i + "_id";
-				String key2 = "DistributedItem:" + i + "_Specimen_barcode";
-				String key3 = "DistributedItem:" + i + "_Specimen_label";
-
-				String key4 = "DistributedItem:" + i + "_quantity";
-
-				SpecimenArray array = (SpecimenArray) it.next();
-				values.put(key1, array.getId().toString());
-				values.put(key2, array.getBarcode());
-				values.put(key3, array.getName());
-				values.put(key4, "1");
-				i++;
-			}
-			counter = specimenArrayCollection.size();
-		}
-	}
+//	private void populateMapForArray(Collection specimenArrayCollection)
+//	{
+//		if (specimenArrayCollection != null)
+//		{
+//			values = new HashMap();
+//			Iterator it = specimenArrayCollection.iterator();
+//			int i = 1;
+//			while (it.hasNext())
+//			{
+//
+//				String key1 = "SpecimenArray:" + i + "_id";
+//				String key2 = "DistributedItem:" + i + "_Specimen_barcode";
+//				String key3 = "DistributedItem:" + i + "_Specimen_label";
+//
+//				String key4 = "DistributedItem:" + i + "_quantity";
+//
+//				SpecimenArray array = (SpecimenArray) it.next();
+//				values.put(key1, array.getId().toString());
+//				values.put(key2, array.getBarcode());
+//				values.put(key3, array.getName());
+//				values.put(key4, "1");
+//				i++;
+//			}
+//			counter = specimenArrayCollection.size();
+//		}
+//	}
 
 	/**
 	 * Populates Map for specimen
-	 * @param distributedItemCollection Collection of distributed items
+	 * @param distItemCol Collection of distributed items
 	 */
-	private void populateMapForSpecimen(Collection distributedItemCollection)
+	private void populateMapForSpecimen(final Collection distItemCol)
 	{
-		if (distributedItemCollection != null)
+		if (distItemCol != null)
 		{
 			values = new HashMap();
 
-			Iterator it = distributedItemCollection.iterator();
-			int i = 1;
+			final Iterator itr = distItemCol.iterator();
+			int cnt = 1;
 
-			while (it.hasNext())
+			final String  DIST_ITEM = "DistributedItem:";
+			while (itr.hasNext())
 			{
-				String key1 = "DistributedItem:" + i + "_id";
-				String key2 = "DistributedItem:" + i + "_Specimen_id";
-				String key3 = "DistributedItem:" + i + "_quantity";
-				String key9 = "DistributedItem:" + i + "_availableQty";
-				String key10 = "DistributedItem:" + i + "_previousQuantity";
-				String key12 = "DistributedItem:" + i + "_Specimen_barcode";
-				String key13 = "DistributedItem:" + i + "_Specimen_label";
+				final String key1 = DIST_ITEM + cnt + "_id";
+				final String key2 = DIST_ITEM + cnt + "_Specimen_id";
+				final String key3 = DIST_ITEM + cnt + "_quantity";
+				final String key9 = DIST_ITEM + cnt + "_availableQty";
+				final String key10 = DIST_ITEM + cnt + "_previousQuantity";
+				final String key12 = DIST_ITEM + cnt + "_Specimen_barcode";
+				final String key13 = DIST_ITEM + cnt + "_Specimen_label";
 
-				DistributedItem dItem = (DistributedItem) it.next();
-				Specimen specimen = dItem.getSpecimen();
+				final DistributedItem dItem = (DistributedItem) itr.next();
+				final Specimen specimen = dItem.getSpecimen();
 
-				Double quantity = dItem.getQuantity();
+				final Double quantity = dItem.getQuantity();
 				//dItem.setPreviousQty(quantity);
 
 				values.put(key1, Utility.toString(dItem.getId()));
@@ -256,9 +264,9 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 				values.put(key10, quantity);
 				values.put(key12, specimen.getBarcode());
 				values.put(key13, specimen.getLabel());
-				i++;
+				cnt++;
 			}
-			counter = distributedItemCollection.size();
+			counter = distItemCol.size();
 		}
 	}
 
@@ -273,8 +281,8 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 		//resolved bug# 4352
 		//ActionErrors errors = super.validate(mapping, request);
 		ActionErrors errors = new ActionErrors();
-		Validator validator = new Validator();
-		Logger.out.debug("Inside validate function");
+		final Validator validator = new Validator();
+		logger.debug("Inside validate function");
 		try
 		{
 			MultipleSpecimenValidationUtil.validateDate(errors, validator,
@@ -287,7 +295,7 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 			// Error messages should be in the same sequence as the sequence of fields on the page.
 			if (!validator.isValidOption(distributionProtocolId))
 			{
-				Logger.out.debug("dist prot");
+				logger.debug("dist prot");
 				errors.add(ActionErrors.GLOBAL_ERROR,
 						new ActionError("errors.item.required", ApplicationProperties.getValue("distribution.protocol")));
 			}
@@ -298,14 +306,14 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 			}
 
 			//  date validation according to bug id  722 and 730
-			String errorKey = validator.validateDate(dateOfEvent, true);
+			final String errorKey = validator.validateDate(dateOfEvent, true);
 			if (errorKey.trim().length() > 0)
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKey, ApplicationProperties.getValue("eventparameters.dateofevent")));
 			}
 			if (validator.isEmpty(toSite) || toSite.equalsIgnoreCase("undefined"))
 			{
-				Logger.out.debug("to site");
+				logger.debug("to site");
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.invalid", ApplicationProperties.getValue("distribution.toSite")));
 			}
 
@@ -316,11 +324,11 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 						.getValue("distribution.distributedItem")));
 			}
 
-			Iterator it = this.values.keySet().iterator();
-			while (it.hasNext())
+			final Iterator itr = this.values.keySet().iterator();
+			while (itr.hasNext())
 			{
-				String key = (String) it.next();
-				String value = (String) values.get(key);
+				final String key = (String) itr.next();
+				final String value = (String) values.get(key);
 
 				if (key.indexOf("Specimen_id") != -1 && !validator.isValidOption(value))
 				{
@@ -332,7 +340,7 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 				{
 					if ((validator.isEmpty(value)))
 					{
-						Logger.out.debug("Quantity empty**************");
+						logger.debug("Quantity empty**************");
 						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
 								.getValue("itemrecord.quantity")));
 					}
@@ -348,7 +356,7 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 		}
 		catch (Exception excp)
 		{
-			Logger.out.error(excp.getMessage());
+			logger.error(excp.getMessage());
 		}
 
 		return errors;
@@ -365,7 +373,7 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 	/**
 	 * @param specimenId The specimenId to set.
 	 */
-	public void setSpecimenId(long specimenId)
+	public void setSpecimenId(final long specimenId)
 	{
 		this.specimenId = specimenId;
 	}
@@ -381,7 +389,7 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 	/**
 	 * @param comments The comments to set.
 	 */
-	public void setComments(String comments)
+	public void setComments(final String comments)
 	{
 		this.comments = comments;
 	}
@@ -397,7 +405,7 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 	/**
 	 * @param dateOfEvent The dateOfEvent to set.
 	 */
-	public void setDateOfEvent(String dateOfEvent)
+	public void setDateOfEvent(final String dateOfEvent)
 	{
 		this.dateOfEvent = dateOfEvent;
 	}
@@ -413,7 +421,7 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 	/**
 	 * @param timeInHours The timeInHours to set.
 	 */
-	public void setTimeInHours(String timeInHours)
+	public void setTimeInHours(final String timeInHours)
 	{
 		this.timeInHours = timeInHours;
 	}
@@ -429,7 +437,7 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 	/**
 	 * @param timeInMinutes The timeInMinutes to set.
 	 */
-	public void setTimeInMinutes(String timeInMinutes)
+	public void setTimeInMinutes(final String timeInMinutes)
 	{
 		this.timeInMinutes = timeInMinutes;
 	}
@@ -445,7 +453,7 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 	/**
 	 * @param userId The userId to set.
 	 */
-	public void setUserId(long userId)
+	public void setUserId(final long userId)
 	{
 		this.userId = userId;
 	}
@@ -461,7 +469,7 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 	/**
 	 * @param distributionProtocolId The distributionProtocolId to set.
 	 */
-	public void setDistributionProtocolId(String distributionProtocolId)
+	public void setDistributionProtocolId(final String distributionProtocolId)
 	{
 		this.distributionProtocolId = distributionProtocolId;
 	}
@@ -491,7 +499,7 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 	/**
 	 * @param counter The counter to set.
 	 */
-	public void setCounter(int counter)
+	public void setCounter(final int counter)
 	{
 		this.counter = counter;
 	}
@@ -507,7 +515,7 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 	/**
 	 * @param toSite Set site
 	 */
-	public void setToSite(String toSite)
+	public void setToSite(final String toSite)
 	{
 		this.toSite = toSite;
 	}
@@ -517,10 +525,10 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 	 * @param key the key to which the object is mapped.
 	 * @param value the object which is mapped.
 	 */
-	public void setValue(String key, Object value)
+	public void setValue(final String key, final Object value)
 	{
 		if (isMutable())
-			values.put(key, value);
+			{values.put(key, value);}
 	}
 
 	/**
@@ -529,7 +537,7 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 	 * @param key the required key.
 	 * @return the object to which this map maps the specified key.
 	 */
-	public Object getValue(String key)
+	public Object getValue(final String key)
 	{
 		return values.get(key);
 	}
@@ -537,7 +545,7 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 	/**
 	 * @param values The values to set.
 	 */
-	public void setValues(Map values)
+	public void setValues(final Map values)
 	{
 		this.values = values;
 	}
@@ -575,7 +583,7 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 	/**
 	 * @param idChange The idChange to set.
 	 */
-	public void setIdChange(boolean idChange)
+	public void setIdChange(final boolean idChange)
 	{
 		this.idChange = idChange;
 	}
@@ -591,7 +599,7 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 	/**
 	 * @param rowNo The rowNo to set.
 	 */
-	public void setRowNo(int rowNo)
+	public void setRowNo(final int rowNo)
 	{
 		this.rowNo = rowNo;
 	}
@@ -657,14 +665,14 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 	 *@param specimen Specimen class instance
 	 *@return availableQuantity Quantity remaining
 	 */
-	public Object getAvailableQty(Specimen specimen)
+	public Object getAvailableQty(final Specimen specimen)
 	{
 		//Retrieve the Available quantity for the particular specimen
 		/* Aniruddha : 16/06/2006 -- TO BE DELETED --
 		 * if(specimen instanceof TissueSpecimen)
 		 {
 		 TissueSpecimen tissueSpecimen = (TissueSpecimen) specimen;
-		 Logger.out.debug("tissueSpecimenAvailableQuantityInGram "+tissueSpecimen.getAvailableQuantityInGram());
+		 logger.debug("tissueSpecimenAvailableQuantityInGram "+tissueSpecimen.getAvailableQuantityInGram());
 		 return tissueSpecimen.getAvailableQuantityInGram();
 		 
 		 }
@@ -687,8 +695,8 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 		 }*/
 
 		//Aniruddha : NEEDS TO TAKE CARE OFF CALLING METHOD
-		Double availableQuantity = specimen.getAvailableQuantity();
-		return availableQuantity;
+		
+		return specimen.getAvailableQuantity();
 
 		//return null;
 	}
@@ -698,7 +706,7 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 	 * @param specimen Base class specimen
 	 * @return specimen.getAvailableQuantity().getValue()
 	 */
-	public Object getDomainObjectAvailableQty(Specimen specimen)
+	public Object getDomainObjectAvailableQty(final Specimen specimen)
 	{
 		return specimen.getAvailableQuantity();
 	}
@@ -707,7 +715,7 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 	 * This method returns ClassName for Specimen
 	 * @param specimen Base class specimen
 	 */
-	public final String getDomainObjectClassName(Specimen specimen)
+	public final String getDomainObjectClassName(final Specimen specimen)
 	{
 		String className = null;
 
@@ -734,21 +742,21 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 	/**
 	 * This method sets Identifier of Objects inserted by AddNew activity in Form-Bean which initialized AddNew action
 	 * @param addNewFor - FormBean ID of the object inserted
-	 *  @param addObjectIdentifier - Identifier of the Object inserted 
+	 *  @param addObjId - Identifier of the Object inserted 
 	 */
-	public void setAddNewObjectIdentifier(String addNewFor, Long addObjectIdentifier)
+	public void setAddNewObjectIdentifier(final String addNewFor,final  Long addObjId)
 	{
-		if (addNewFor.equals("distributionProtocolId"))
+		if ("distributionProtocolId".equals(addNewFor))
 		{
-			setDistributionProtocolId(addObjectIdentifier.toString());
+			setDistributionProtocolId(addObjId.toString());
 		}
-		else if (addNewFor.equals("userId"))
+		else if ("userId".equals(addNewFor))
 		{
-			setUserId(addObjectIdentifier.longValue());
+			setUserId(addObjId.longValue());
 		}
-		else if (addNewFor.equals("toSite"))
+		else if ("toSite".equals(addNewFor))
 		{
-			setToSite(addObjectIdentifier.toString());
+			setToSite(addObjId.toString());
 		}
 	}
 
@@ -780,7 +788,7 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 	 * 
 	 * @param distributionType Type of Distribution
 	 */
-	public void setDistributionType(Integer distributionType)
+	public void setDistributionType(final Integer distributionType)
 	{
 		this.distributionType = distributionType;
 	}
@@ -799,7 +807,7 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 	 * For Sequence no
 	 * @param outerCounter For Sequence no
 	 */
-	public void setOuterCounter(int outerCounter)
+	public void setOuterCounter(final int outerCounter)
 	{
 		this.outerCounter = outerCounter;
 	}
@@ -815,7 +823,7 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 	/**
 	 * @param consentDate The Date on Which Consent is Signed
 	 */
-	public void setConsentDate(String consentDate)
+	public void setConsentDate(final String consentDate)
 	{
 		this.consentDate = consentDate;
 	}
@@ -831,9 +839,9 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 	/**
 	 *@param consentTierCounter  This will keep track of count of Consent Tier
 	 */
-	public void setConsentTierCounter(int consentTierCounter)
+	public void setConsentTierCounter(final int cTCounter)
 	{
-		this.consentTierCounter = consentTierCounter;
+		this.consentTierCounter = cTCounter;
 	}
 
 	/**
@@ -847,7 +855,7 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 	/**
 	 * @param signedConsentUrl The reference to the electric signed document(eg PDF file)
 	 */
-	public void setSignedConsentUrl(String signedConsentUrl)
+	public void setSignedConsentUrl(final String signedConsentUrl)
 	{
 		this.signedConsentUrl = signedConsentUrl;
 	}
@@ -863,7 +871,7 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 	/**
 	 * @param witnessName The name of the witness to the consent Signature(PI or coordinator of the Collection Protocol)
 	 */
-	public void setWitnessName(String witnessName)
+	public void setWitnessName(final String witnessName)
 	{
 		this.witnessName = witnessName;
 	}
@@ -879,26 +887,26 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 	/**
 	 * @param consentResponseForDistributionValues  The comments associated with Response at Distribution level
 	 */
-	public void setConsentResponseForDistributionValues(Map consentResponseForDistributionValues)
+	public void setConsentResponseForDistributionValues(final Map cRFDV)
 	{
-		this.consentResponseForDistributionValues = consentResponseForDistributionValues;
+		this.consentResponseForDistributionValues = cRFDV;
 	}
 
 	/**
 	 * @param key Key prepared for saving data.
 	 * @return consentResponseForDistributionValues.get(key)
 	 */
-	public void setConsentResponseForDistributionValue(String key, Object value)
+	public void setConsentResponseForDistributionValue(final String key, final Object value)
 	{
 		if (isMutable())
-			consentResponseForDistributionValues.put(key, value);
+			{consentResponseForDistributionValues.put(key, value);}
 	}
 
 	/**
 	 * @param key Key prepared for saving data.
 	 * @return consentResponseForSpecimenValues.get(key)
 	 */
-	public Object getConsentResponseForDistributionValue(String key)
+	public Object getConsentResponseForDistributionValue(final String key)
 	{
 		return consentResponseForDistributionValues.get(key);
 	}
@@ -917,18 +925,19 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 	 */
 	public Collection getConsentTiers()
 	{
-		Collection consentTiersList = new ArrayList();
+		final Collection consentTiersList = new ArrayList();
 		String[] strArray = null;
-		int noOfConsents = this.getConsentTierCounter();
+		final int noOfConsents = this.getConsentTierCounter();
+		final String CRDV = "consentResponseForDistributionValues(ConsentBean:";
 		for (int counter = 0; counter < noOfConsents; counter++)
 		{
 			strArray = new String[6];
-			strArray[0] = "consentResponseForDistributionValues(ConsentBean:" + counter + "_consentTierID)";
-			strArray[1] = "consentResponseForDistributionValues(ConsentBean:" + counter + "_statement)";
-			strArray[2] = "consentResponseForDistributionValues(ConsentBean:" + counter + "_participantResponse)";
-			strArray[3] = "consentResponseForDistributionValues(ConsentBean:" + counter + "_participantResponseID)";
-			strArray[4] = "consentResponseForDistributionValues(ConsentBean:" + counter + "_specimenLevelResponse)";
-			strArray[5] = "consentResponseForDistributionValues(ConsentBean:" + counter + "_specimenLevelResponseID)";
+			strArray[0] = CRDV + counter + "_consentTierID)";
+			strArray[1] = CRDV + counter + "_statement)";
+			strArray[2] = CRDV + counter + "_participantResponse)";
+			strArray[3] = CRDV + counter + "_participantResponseID)";
+			strArray[4] = CRDV + counter + "_specimenLevelResponse)";
+			strArray[5] = CRDV + counter + "_specimenLevelResponseID)";
 			consentTiersList.add(strArray);
 		}
 		return consentTiersList;

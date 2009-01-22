@@ -22,7 +22,6 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.global.ApplicationProperties;
-import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -32,6 +31,13 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class DisposalEventParametersForm extends SpecimenEventParametersForm
 {
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(DisposalEventParametersForm.class);
+
 	/**
      * reason for disposal of specimen it.
      */
@@ -53,7 +59,7 @@ public class DisposalEventParametersForm extends SpecimenEventParametersForm
 	/**
 	 * @param activityStatus Setting Activity Status
 	 */
-	public void setActivityStatus(String activityStatus)
+	public void setActivityStatus(final String activityStatus)
 	{
 		this.activityStatus = activityStatus;
 	}
@@ -69,7 +75,7 @@ public class DisposalEventParametersForm extends SpecimenEventParametersForm
 	/**
 	 * @param reason The reason to set.
 	 */
-	public void setReason(String reason)
+	public void setReason(final String reason)
 	{
 		this.reason = reason;
 	}
@@ -90,9 +96,9 @@ public class DisposalEventParametersForm extends SpecimenEventParametersForm
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
 		super.setAllValues(abstractDomain);
-		DisposalEventParameters disposalEventParametersObject = (DisposalEventParameters)abstractDomain ;
-		this.reason = Utility.toString(disposalEventParametersObject.getReason());
-		this.activityStatus = disposalEventParametersObject.getSpecimen().getActivityStatus(); 
+		final DisposalEventParameters disEvtPar = (DisposalEventParameters)abstractDomain ;
+		this.reason = Utility.toString(disEvtPar.getReason());
+		this.activityStatus = disEvtPar.getSpecimen().getActivityStatus(); 
 	}
 	
 	/**
@@ -103,9 +109,8 @@ public class DisposalEventParametersForm extends SpecimenEventParametersForm
 	 */
      public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
      {
-     	ActionErrors errors = super.validate(mapping, request);
-         Validator validator = new Validator();
-        
+     	final ActionErrors errors = super.validate(mapping, request);
+                
          try
          {
         	 //resolved bug# 4058	
@@ -122,7 +127,7 @@ public class DisposalEventParametersForm extends SpecimenEventParametersForm
          }
          catch(Exception excp)
          {
-             Logger.out.error(excp.getMessage());
+             logger.error(excp.getMessage());
          }
          return errors;
       }

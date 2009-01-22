@@ -16,6 +16,10 @@ import edu.wustl.common.domain.AbstractDomainObject;
 public class DefineArrayForm extends AbstractActionForm
 {
 	/**
+	 * serial version id
+	 */
+	private static final long serialVersionUID = 1L;
+	/**
 	 * A String containing name of Array
 	 */
 	private String arrayName;
