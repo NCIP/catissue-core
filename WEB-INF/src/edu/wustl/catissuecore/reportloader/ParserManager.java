@@ -6,58 +6,64 @@ import edu.wustl.common.util.logger.Logger;
 /**
  * @author sandeep_ranade
  * Represents a factory pattern for parsers. It creates particular parser instance
- * depending upon the parameter.   
+ * depending upon the parameter.
  */
 public final class ParserManager
 {
+	/**
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(ParserManager.class);
 
 	/**
-	 * ParserManager 
+	 * ParserManager.
 	 */
-	private static ParserManager parserManager=null;
-	
+	private static ParserManager parserManager = null;
+
 	/**
-	 * Constructor
+	 * Constructor.
 	 */
 	private ParserManager()
 	{
 	}
-		
+
 	/**
 	 * @return instance of ParserManager.
 	 */
 	public static synchronized ParserManager getInstance()
 	{
-		if(parserManager==null)
+		if (parserManager == null)
 		{
-			parserManager=new ParserManager();
+			parserManager = new ParserManager();
 		}
 		return parserManager;
 	}
-	
+
 	/**
-	 * @param type represents the parser type.
-	 * @return the parser depending upon the type specified as input.   
+	 * @return the parser depending upon the type specified as input.
 	 */
 	public Parser getParser()
 	{
-		Parser parser=null;
-		try 
+		Parser parser = null;
+		try
 		{
-			parser = (Parser)Class.forName(CaTIESConstants.PARSER_CLASS).newInstance();
-		} 
-		catch (InstantiationException e) 
+			parser = (Parser) Class.forName(CaTIESConstants.PARSER_CLASS).newInstance();
+		}
+		catch (InstantiationException e)
 		{
-			Logger.out.error("InstantiationException while instantiating class "+CaTIESConstants.PARSER_CLASS,e);
-		} 
-		catch (IllegalAccessException e) 
+			logger.error("InstantiationException while instantiating class " +
+					CaTIESConstants.PARSER_CLASS, e);
+		}
+		catch (IllegalAccessException e)
 		{
-			Logger.out.error("IllegalAccessException while instantiating class "+CaTIESConstants.PARSER_CLASS,e);
-		} 
-		catch (ClassNotFoundException e) 
+			logger.error("IllegalAccessException while instantiating class " +
+					CaTIESConstants.PARSER_CLASS, e);
+		}
+		catch (ClassNotFoundException e)
 		{
-			Logger.out.error("ClassNotFoundException while instantiating class "+CaTIESConstants.PARSER_CLASS,e);
-		}	
+			logger.error("ClassNotFoundException while instantiating class " +
+					CaTIESConstants.PARSER_CLASS, e);
+		}
 		return parser;
 	}
 }
