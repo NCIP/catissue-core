@@ -81,8 +81,8 @@ var indexIds = [<%int i;%><%for (i=0;i<(annotationsList.size());i++){%>
 	{
 		dannotationsGrid = new dhtmlXGridObject('displayAnnotationsGrid');
 		dannotationsGrid.setImagePath("dhtml_comp/imgs/");
-		dannotationsGrid.setHeader("Group,Form,Count,Action");
-		dannotationsGrid.setInitWidthsP("25,25,25,24");
+		dannotationsGrid.setHeader("Group,Form,Completed Forms,Action");
+		dannotationsGrid.setInitWidthsP("24,38,15,20");
 		dannotationsGrid.enableAlterCss("even","uneven");
 		dannotationsGrid.setSkin("light");
 		dannotationsGrid.enableRowsHover(true,'grid_hover');
@@ -126,8 +126,8 @@ var indexIds = [<%int i;%><%for (i=0;i<(annotationsList.size());i++){%>
 	</div>
 	<table height="100%" width="100%" border="0" cellpadding="0"
 		cellspacing="0" class="whitetable_bg">
-		<tr>
-			<td colspan="3" valign="top" class="showhide">
+		<tr height="100%">
+			<td colspan="3" valign="top" class="showhide" height="100%">
 				<div id="displayAnnotationsGrid" valign="top" width="100%"
 						height="100%" style="background-color:#d7d7d7;overflow:hidden;" />
 				<script>
