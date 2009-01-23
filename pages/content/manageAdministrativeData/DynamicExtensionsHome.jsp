@@ -12,12 +12,12 @@
 	String height = "100%";		
 	if(mac)
 	{
-	  height="450";
+	  height="100%";
     }
 %>
 <html>
 <body >
-	<iframe name = "dynamicExtensionsFrame" scrolling = "yes" id = "dynamicExtensionsFrame" width = "100%" height = "<%=height%>"  src = "<%=dynamicExtensionsURL%>" frameborder="0">
+	<iframe name = "dynamicExtensionsFrame" scrolling = "auto" id = "dynamicExtensionsFrame" width = "100%" height = "<%=height%>"  src = "<%=dynamicExtensionsURL%>" frameborder="0">
 	</iframe>
 </body>
 </html>
