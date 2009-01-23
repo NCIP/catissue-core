@@ -77,9 +77,9 @@ var recordIds = [ <%int i;%><%for (i=0;i<(indexIds.size());i++){%>
 		div.innerHTML="<br><table class=\"whitetable_bg\" style=\"font-family:verdana;font-size:0.71em;font-weight:normal;\"><th allign=\"center\"> Update Records for "+entityName+" </th></table>";
 		dannotationsGrid = new dhtmlXGridObject('displayAnnotationsGrid');
 		dannotationsGrid.setImagePath("dhtml_comp/imgs/");
-		dannotationsGrid.enableAutoHeigth(true,500);
+		dannotationsGrid.enableAutoHeigth(true,"450");
 		dannotationsGrid.setHeader("Record Id,Created Date,Updated By,Action");
-		dannotationsGrid.setInitWidthsP("25,25,25,24");
+		dannotationsGrid.setInitWidthsP("25,25,25,23");
 		dannotationsGrid.enableAlterCss("even","uneven");
 		dannotationsGrid.setSkin("light");
 		dannotationsGrid.enableRowsHover(true,'grid_hover');
@@ -122,7 +122,7 @@ var recordIds = [ <%int i;%><%for (i=0;i<(indexIds.size());i++){%>
 						height="100%" style="background-color:#FFFFFF;overflow:hidden;" >
 	</div>
 
-	<table width="100%" border="2" cellpadding="0"
+	<table width="100%" border="0" cellpadding="0"
 		cellspacing="0" class="whitetable_bg" height="100%">
 		<tr height="80%">
 			<td valign="top">
