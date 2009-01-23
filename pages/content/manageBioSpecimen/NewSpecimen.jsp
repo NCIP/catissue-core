@@ -997,7 +997,6 @@
 								<html:hidden property="virtuallyLocated"/>
 								<html:hidden property="containerId" styleId="containerId"/>
 								<html:hidden property="withdrawlButtonStatus"/>
-								<html:hidden property="activityStatus"/>
 								<html:hidden property="stringOfResponseKeys"/>
 								<html:hidden property="applyChangesTo"/>
 								<html:hidden property="consentTierCounter"/>
@@ -1525,9 +1524,21 @@
 									</label>
 								</td>
 								<td align="left" class="black_ar">
+								<logic:equal name="newSpecimenForm" property="activityStatus" 
+									value="<%=Constants.ACTIVITY_STATUS_CLOSED%>">
+										<autocomplete:AutoCompleteTag property="activityStatus"
+										  optionsList = '${requestScope.specimenActivityStatus}'
+										  onChange=''
+										  initialValue='<%=form.getActivityStatus()%>' 
+										  styleClass="black_ar" size="25"/>
+								</logic:equal>
+								<logic:notEqual name="newSpecimenForm" property="activityStatus" 
+									value="<%=Constants.ACTIVITY_STATUS_CLOSED%>">
 									<label for="activityStatus">
 										<%=form.getActivityStatus()%>
 									</label>
+									<html:hidden property="activityStatus"/>
+								</logic:notEqual>								
 								</td>
 							</tr>
 						</logic:equal>	

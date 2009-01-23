@@ -30,7 +30,8 @@ import edu.wustl.catissuecore.domain.pathology.SurgicalPathologyReport;
 
 public class Constants extends edu.wustl.common.util.global.Constants
 {
-	
+	//caTissue DataSource name added.
+	public static final String DATASOURCE = "DataSource";
 	
 	//Constants added for Catissuecore V1.2
 	public static final String PAGE_OF_ADMINISTRATOR = "pageOfAdministrator";
@@ -826,6 +827,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String ACTIVITY_STATUS_REJECT = "Reject";
 	public static final String ACTIVITY_STATUS_NEW = "New";
 	public static final String ACTIVITY_STATUS_PENDING = "Pending";
+	public static final String ACTIVITY_STATUS_ACTIVE = "Active";
+	public static final String ACTIVITY_STATUS_CLOSED = "Closed";
 	
 	//Approve User status values.
 	public static final String APPROVE_USER_APPROVE_STATUS = "Approve";
@@ -970,6 +973,11 @@ public class Constants extends edu.wustl.common.util.global.Constants
 		"Not Collected"
 	};
 	
+	public static final String [] SPECIMEN_ACTIVITY_STATUS_VALUES = {
+        SELECT_OPTION,
+        "Active",
+        "Closed"
+	};
 	public static final String [] SITE_ACTIVITY_STATUS_VALUES = {
 	        SELECT_OPTION,
 	        "Active",

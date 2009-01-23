@@ -748,6 +748,8 @@ public class NewSpecimenAction extends SecureAction
 
 		
 		request.setAttribute("createdDate", specimenForm.getCreatedDate());
+		request.setAttribute("specimenActivityStatus",
+				Constants.SPECIMEN_ACTIVITY_STATUS_VALUES);
 		return mapping.findForward(pageOf);
 	}
 	
