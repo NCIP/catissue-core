@@ -346,7 +346,7 @@ public class EmailHandler
     	String mailServer = XMLPropertyHandler.getValue("email.mailServer");
         SendEmail email = new SendEmail();
         Logger.out.info("Email body..........  \n"  + body);
-        System.out.println("Email body..........  \n"  + body);
+        Logger.out.info("Email body..........  \n"  + body);
         boolean emailStatus = email.sendmail(toEmailAddress, ccEmailAddress, bccEmailAddress,
     			fromEmailAddress, mailServer, subject, body);
     	
