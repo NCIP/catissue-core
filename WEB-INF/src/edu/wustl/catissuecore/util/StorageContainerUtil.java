@@ -26,9 +26,30 @@ import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
 
-public class StorageContainerUtil
+public final class StorageContainerUtil
 {
 
+	/*
+	 * creates a singleton object
+	 */
+	private static StorageContainerUtil storcontUtil = new StorageContainerUtil();
+	/*
+	 * Private constructor
+	 */
+	private StorageContainerUtil()
+	{
+		
+	}
+	/*
+	 * returns single object
+	 */
+	
+	public static StorageContainerUtil getInstance()
+	{
+		return storcontUtil;
+	}
+	
+	
 	/**
 	 * This functions updates the storage container map when a new position is to be added in map
 	 * @param storageContainer - Storage container whose position is freed
@@ -40,7 +61,7 @@ public class StorageContainerUtil
 	{
 		NameValueBean storageContainerId = new NameValueBean(storageContainer.getName(), (storageContainer.getId()));
 		TreeMap storageContainerMap = (TreeMap) containerMap.get(storageContainerId);
-		Integer xObj = new Integer(x);
+		Integer xObj = Integer.valueOf(x);
 
 		NameValueBean nvb = new NameValueBean(xObj, xObj);
 		if (storageContainerMap == null)
@@ -53,7 +74,7 @@ public class StorageContainerUtil
 		if (yPosList == null || yPosList.size() == 0)
 		{
 			yPosList = new ArrayList();
-			yPosList.add(new NameValueBean(new Integer(y), new Integer(y)));
+			yPosList.add(new NameValueBean(Integer.valueOf(y),Integer.valueOf(y)));
 		}
 		else
 		{
@@ -71,7 +92,7 @@ public class StorageContainerUtil
 			}
 			if (insertFlag)
 			{
-				yPosList.add(new NameValueBean(new Integer(y), new Integer(y)));
+				yPosList.add(new NameValueBean(Integer.valueOf(y),Integer.valueOf(y)));
 				Collections.sort(yPosList);
 			}
 
@@ -91,7 +112,7 @@ public class StorageContainerUtil
 		NameValueBean storageContainerId = new NameValueBean(storageContainer.getName(), storageContainer.getId());
 		TreeMap storageContainerMap = (TreeMap) continersMap.get(storageContainerId);
 
-		Integer xObj = new Integer(x);
+		Integer xObj = Integer.valueOf(x);
 
 		NameValueBean nvb = new NameValueBean(xObj, xObj);
 
@@ -231,13 +252,13 @@ public class StorageContainerUtil
 
 				for (int y = 1; y < dimY; y++)
 				{
-					list.add(new NameValueBean(new Integer(y), new Integer(y)));
+					list.add(new NameValueBean(Integer.valueOf(y),Integer.valueOf(y)));
 
 				}
 
 				if (!list.isEmpty())
 				{
-					Integer xObj = new Integer(x);
+					Integer xObj = Integer.valueOf(x);
 					NameValueBean nvb = new NameValueBean(xObj, xObj);
 					map.put(nvb, list);
 
@@ -267,14 +288,14 @@ public class StorageContainerUtil
 		{
 			
 			NameValueBean nvb = (NameValueBean) containerPosIterator.next();
-			xpos = new Integer(nvb.getValue());
+			xpos = Integer.valueOf(nvb.getValue());
 			List yposValues = (List) storageContainerMap.get(nvb);
 			Iterator yposIterator = yposValues.iterator();
 			
 			while(yposIterator.hasNext())
 			{
 				nvb =(NameValueBean) yposIterator.next();
-				ypos= new Integer(nvb.getValue());
+				ypos= Integer.valueOf(nvb.getValue());
 				//bug 8294
 				String containerValue = null;
 				Long containerId = storageContainer.getId();
@@ -315,12 +336,12 @@ public class StorageContainerUtil
 		{
 			for (int i = xOld + 1; i <= xNew; i++)
 			{
-				NameValueBean xNvb = new NameValueBean(new Integer(i), new Integer(i));
+				NameValueBean xNvb = new NameValueBean(Integer.valueOf(i),Integer.valueOf(i));
 
 				List yPosList = new ArrayList();
 				for (int j = 1; j <= yOld; j++)
 				{
-					NameValueBean yNvb = new NameValueBean(new Integer(j), new Integer(j));
+					NameValueBean yNvb = new NameValueBean(Integer.valueOf(j),Integer.valueOf(j));
 					yPosList.add(yNvb);
 
 				}
@@ -335,11 +356,11 @@ public class StorageContainerUtil
 		{
 			for (int i = 1; i <= xNew; i++)
 			{
-				NameValueBean xNvb = new NameValueBean(new Integer(i), new Integer(i));
+				NameValueBean xNvb = new NameValueBean(Integer.valueOf(i),Integer.valueOf(i));
 				List yPosList = new ArrayList();
 				for (int j = yOld + 1; j <= yNew; j++)
 				{
-					NameValueBean yNvb = new NameValueBean(new Integer(j), new Integer(j));
+					NameValueBean yNvb = new NameValueBean(Integer.valueOf(j),Integer.valueOf(j));
 
 					yPosList.add(yNvb);
 				}
@@ -360,7 +381,7 @@ public class StorageContainerUtil
 		{
 			for (int i = xNew + 1; i <= xOld; i++)
 			{
-				NameValueBean xNvb = new NameValueBean(new Integer(i), new Integer(i));
+				NameValueBean xNvb = new NameValueBean(Integer.valueOf(i), Integer.valueOf(i));
 				storageContainerMap.remove(xNvb);
 			}
 		}
@@ -369,11 +390,11 @@ public class StorageContainerUtil
 		{
 			for (int i = 1; i <= xNew; i++)
 			{
-				NameValueBean xNvb = new NameValueBean(new Integer(i), new Integer(i));
+				NameValueBean xNvb = new NameValueBean(Integer.valueOf(i),Integer.valueOf(i));
 				List yPosList = new ArrayList();
 				for (int j = yNew + 1; j <= yOld; j++)
 				{
-					NameValueBean yNvb = new NameValueBean(new Integer(j), new Integer(j));
+					NameValueBean yNvb = new NameValueBean(Integer.valueOf(j),Integer.valueOf(j));
 
 					yPosList.add(yNvb);
 				}
@@ -433,7 +454,7 @@ public class StorageContainerUtil
 		
 		if(positionMap != null && !positionMap.isEmpty())
 		{
-			NameValueBean xNvb = new NameValueBean(new Integer(x),new Integer(x));
+			NameValueBean xNvb = new NameValueBean(Integer.valueOf(x),Integer.valueOf(x));
 			List yList = (List) positionMap.get(xNvb);
 			if(yList != null && !yList.isEmpty())
 			{
@@ -503,14 +524,14 @@ public class StorageContainerUtil
 					{
 				
 						NameValueBean nvb = (NameValueBean) containerPosIterator.next();
-						xPos = new Integer(nvb.getValue());
+						xPos = Integer.valueOf(nvb.getValue());
 						List yposValues = (List) storageContainerMap.get(nvb);
 						Iterator yposIterator = yposValues.iterator();
 				
 						while(yposIterator.hasNext())
 						{
 							nvb =(NameValueBean) yposIterator.next();
-							yPos= new Integer(nvb.getValue());
+							yPos= Integer.valueOf(nvb.getValue());
 							
 							Long containerId = storageContainer.getId();
 							if(containerId!=null)
@@ -722,7 +743,7 @@ public class StorageContainerUtil
 
 				if (posDim1 == null || posDim1.trim().equals("") || posDim2 == null || posDim2.trim().equals(""))
 				{
-					positionsToBeAllocatedList.add(new Integer(iCount));
+					positionsToBeAllocatedList.add(Integer.valueOf(iCount));
 				}
 				else
 				{

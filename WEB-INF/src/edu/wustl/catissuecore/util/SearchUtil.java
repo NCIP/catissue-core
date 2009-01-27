@@ -30,8 +30,31 @@ import edu.wustl.common.vo.SearchFieldData;
 /**
  * @author aniruddha_phadnis
  */
-public class SearchUtil
+public final  class SearchUtil
 {
+	
+	/**
+	 * creates a singleton object.
+	 */
+	private static SearchUtil searchUtil= new SearchUtil();
+	
+	/*
+	 * Private constructor 
+	 */
+	private SearchUtil()
+	{
+			
+	}
+	/**
+	 * returns the single object.
+	 * @return Utility object.
+	 */
+	public static SearchUtil getInstance()
+	{
+		return searchUtil;
+	}
+	
+	
 	/**
      * Constant for datatype DATE
      */

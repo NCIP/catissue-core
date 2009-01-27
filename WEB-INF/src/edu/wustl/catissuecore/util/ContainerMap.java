@@ -8,6 +8,7 @@ import java.io.IOException;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 
+import edu.wustl.common.util.logger.Logger;
 import edu.wustl.common.util.tag.NLevelCustomCombo;
 
 /**
@@ -133,12 +134,12 @@ public class ContainerMap extends NLevelCustomCombo {
 	
 	private void print(String[] strArray)
 	{
-		System.out.println("-------------"+strArray.length+"-----------");
+		 Logger.out.info("-------------" + strArray.length + "-----------");
 		for(int i = 0; i< strArray.length; i++)
 		{
-			System.out.println(i+" : "+strArray[i]);
+			Logger.out.info(i + " : " + strArray[i]);
 		}
-		System.out.println("----------------------------------------------");
+		Logger.out.info("----------------------------------------------");
 	}
 	
 }

@@ -45,6 +45,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.logger.Logger;
 
 public class CollectionProtocolUtil {
 
@@ -63,11 +64,11 @@ public class CollectionProtocolUtil {
 		{
 			if(storageTypeArr[i].equals(type))
 			{
-				return new Integer(i);
+				return Integer.valueOf(i);
 			}
 		}
 		
-		return new Integer(0);	//default considered as 'Virtual';
+		return  Integer.valueOf(0);	//default considered as 'Virtual';
 	}
 
 	public static String getStorageTypeValue(Integer type)
@@ -87,7 +88,7 @@ public class CollectionProtocolUtil {
 		long[] protocolCoordinatorIds = null;
 		collectionProtocolBean = new CollectionProtocolBean();
 		collectionProtocolBean.setConsentTierCounter(collectionProtocol.getConsentTierCollection().size());
-		Long id = new Long (collectionProtocol.getId().longValue());
+		Long id = Long.valueOf(collectionProtocol.getId().longValue());
 		collectionProtocolBean.setIdentifier(id);
 		
 		protocolCoordinatorIds = getProtocolCordnateIds(collectionProtocol, protocolCoordinatorIds);
@@ -164,7 +165,7 @@ public class CollectionProtocolUtil {
 	}
 
 	public static CollectionProtocolEventBean getCollectionProtocolEventBean(
-			CollectionProtocolEvent collectionProtocolEvent, int counter, DAO dao) throws DAOException
+			CollectionProtocolEvent  collectionProtocolEvent, int counter, DAO dao) throws DAOException
 	{
 		CollectionProtocolEventBean eventBean = new CollectionProtocolEventBean();
 		eventBean.setId(collectionProtocolEvent.getId().longValue());
@@ -625,7 +626,7 @@ public class CollectionProtocolUtil {
 			for (int i = 0; i < coordinatorsArr.length; i++) {
 				if (coordinatorsArr[i] >= 1) {
 					User coordinator = new User();
-					coordinator.setId(new Long(coordinatorsArr[i]));
+					coordinator.setId(Long.valueOf(coordinatorsArr[i]));
 					coordinatorCollection.add(coordinator);
 				}
 			}
@@ -637,7 +638,7 @@ public class CollectionProtocolUtil {
 			for (int i = 0; i < siteArr.length; i++) {
 				if (siteArr[i] != -1) {
 					Site site = new Site();
-					site.setId(new Long(siteArr[i]));
+					site.setId(Long.valueOf(siteArr[i]));
 					siteCollection.add(site);
 				}
 			}
@@ -647,13 +648,13 @@ public class CollectionProtocolUtil {
 		collectionProtocol.setDescriptionURL(cpBean.getDescriptionURL());
 		Integer enrollmentNo=null;
 		try{
-			enrollmentNo = new Integer(cpBean.getEnrollment());
+			enrollmentNo = Integer.valueOf(cpBean.getEnrollment());
 		}catch(NumberFormatException e){
-			enrollmentNo = new Integer(0);
+			enrollmentNo = Integer.valueOf(0);
 		}
 		collectionProtocol.setEnrollment(enrollmentNo);
 		User principalInvestigator = new User();
-		principalInvestigator.setId(new Long(cpBean
+		principalInvestigator.setId(Long.valueOf(cpBean
 				.getPrincipalInvestigatorId()));
 
 		collectionProtocol.setPrincipalInvestigator(principalInvestigator);
@@ -691,7 +692,7 @@ public class CollectionProtocolUtil {
 		}
 		else
 		{
-			collectionProtocolEvent.setId(new Long(cpEventBean.getId()));
+			collectionProtocolEvent.setId(Long.valueOf(cpEventBean.getId()));
 		}
 		
 		Collection specimenCollection =null;
@@ -733,7 +734,7 @@ public class CollectionProtocolUtil {
 					long id =specimenRequirementBean.getSpecimenCharsId();
 					if(id != -1)
 					{
-						specimenCharacteristics.setId(new Long(id));
+						specimenCharacteristics.setId(Long.valueOf(id));
 					}
 					specimenCharacteristics.setTissueSide(
 							specimenRequirementBean.getTissueSide());
@@ -767,7 +768,7 @@ public class CollectionProtocolUtil {
 			if(aliquotColl!=null && !aliquotColl.isEmpty())
 			{
 				Collection aliquotCollection= specimenRequirementBean.getAliquotSpecimenCollection().values();
-				childSpecimens = 
+				childSpecimens  =  
 					getReqSpecimens(aliquotCollection, reqSpecimen, cpEvent);
 				reqSpecimenCollection.addAll(childSpecimens);
 			}
@@ -806,7 +807,7 @@ public class CollectionProtocolUtil {
 			collectionEvent.setCollectionProcedure(specimenRequirementBean.getCollectionEventCollectionProcedure());
 			collectionEvent.setContainer(specimenRequirementBean.getCollectionEventContainer());
 			User collectionEventUser = new User();
-			collectionEventUser.setId(new Long(specimenRequirementBean.getCollectionEventUserId()));
+			collectionEventUser.setId(Long.valueOf(specimenRequirementBean.getCollectionEventUserId()));
 			collectionEvent.setUser(collectionEventUser);
 			collectionEvent.setSpecimen(reqSpecimen);
 			specimenEventCollection.add(collectionEvent);
@@ -819,7 +820,7 @@ public class CollectionProtocolUtil {
 			ReceivedEventParameters receivedEvent = new ReceivedEventParameters();
 			receivedEvent.setReceivedQuality(specimenRequirementBean.getReceivedEventReceivedQuality());
 			User receivedEventUser = new User();
-			receivedEventUser.setId(new Long(specimenRequirementBean.getReceivedEventUserId()));
+			receivedEventUser.setId(Long.valueOf(specimenRequirementBean.getReceivedEventUserId()));
 			receivedEvent.setUser(receivedEventUser);
 			receivedEvent.setSpecimen(reqSpecimen);
 			specimenEventCollection.add(receivedEvent);
@@ -859,7 +860,7 @@ public class CollectionProtocolUtil {
 		} 
 		catch (Exception e1) 
 		{
-			e1.printStackTrace();
+			Logger.out.error("Error in setting Section header Priorities",e1);
 			return null;
 		}
 		
@@ -869,7 +870,7 @@ public class CollectionProtocolUtil {
 		}
 		else
 		{
-			reqSpecimen.setId(new Long(specimenRequirementBean.getId()));
+			reqSpecimen.setId(Long.valueOf(specimenRequirementBean.getId()));
 		}
 		reqSpecimen.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
 		reqSpecimen.setInitialQuantity(new Double(specimenRequirementBean.getQuantity()));
@@ -919,7 +920,7 @@ public class CollectionProtocolUtil {
 			String key = (String)it.next();
 			idList.add(key);
 		}
-		Collections.sort(idList,new IdComparator());
+		Collections.sort(idList,new IdComparator()); 
 		Map idMap = new LinkedHashMap();
 		Iterator idIterator = idList.iterator();
 		while(idIterator.hasNext())

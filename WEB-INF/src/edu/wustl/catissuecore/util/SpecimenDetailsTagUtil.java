@@ -14,8 +14,30 @@ import edu.wustl.catissuecore.util.global.Constants;
  * @author mandar_deshmukh
  *
  */
-public class SpecimenDetailsTagUtil
+public final class SpecimenDetailsTagUtil
 {
+	
+	/*
+	 * creates a singleton object
+	 */
+	private static SpecimenDetailsTagUtil speciTagutil = new SpecimenDetailsTagUtil();
+	/*
+	 * Private constructor
+	 */
+	private SpecimenDetailsTagUtil()
+	{
+		
+	}
+	
+	/*
+	 * returns single object 
+	 */
+	public static SpecimenDetailsTagUtil getInstance()
+	{
+		return speciTagutil;
+	}
+	
+	
 	private static final String PARENT = "Parent";
 	private static final String LABEL = "Label";
 	private static final String BARCODE = "Barcode";
@@ -41,11 +63,11 @@ public class SpecimenDetailsTagUtil
 	private static final String CH_LOC = "anticipatorySpecimen.Location";
 	private static final String CH_CONC = "anticipatorySpecimen.Concentration";
 	
-	
+	/*
 	public SpecimenDetailsTagUtil()
 	{
 		super();
-	}
+	}*/
 	
 	/**
 	 * 0:Parent, 1:Label, 2:Barcode, 3:SubType, 4:Qty, 5:Concentration,
@@ -114,10 +136,10 @@ public class SpecimenDetailsTagUtil
 			slwdt = 18;
 			
 		}
-		request.setAttribute("fCol",new Integer(fwdt));
-		request.setAttribute("lCol",new Integer(lwdt));
-		request.setAttribute("sfCol",new Integer(sfwdt));
-		request.setAttribute("slCol",new Integer(slwdt));
+		request.setAttribute("fCol",Integer.valueOf(fwdt));
+		request.setAttribute("lCol",Integer.valueOf(lwdt));
+		request.setAttribute("sfCol",Integer.valueOf(sfwdt));
+		request.setAttribute("slCol",Integer.valueOf(slwdt));
 
 		request.setAttribute("specimenList",summaryForm.getSpecimenList());
 		request.setAttribute("aliquotList",summaryForm.getAliquotList());

@@ -44,7 +44,7 @@ public class MSRUtil {
 			List<NameValueBean> actionList=null;
 			Map<String, SiteUserRolePrivilegeBean> map = null;
 			
-			ErrorsMesssagesForPriv(request);
+			errorsMesssagesForPriv(request);
 			
 			//if(!(Constants.PAGE_OF_USER).equalsIgnoreCase(pageOf)&&!(Constants.PAGEOF_USER_PROFILE).equals(pageOf))
 			if(pageOf!=null && (Constants.PAGEOF_ASSIGN_PRIVILEGE).equalsIgnoreCase(pageOf))
@@ -364,7 +364,7 @@ public class MSRUtil {
 		setResponse(response, listOfUsers);
 	}
 	
-	public void ErrorsMesssagesForPriv (HttpServletRequest request)
+	public void errorsMesssagesForPriv (HttpServletRequest request)
 	{
 		final String  errorMessForRole = ApplicationProperties.getValue("errors.assignPrivileges.role");
 		final String  errorMessForSite = ApplicationProperties.getValue("errors.assignPrivileges.site");

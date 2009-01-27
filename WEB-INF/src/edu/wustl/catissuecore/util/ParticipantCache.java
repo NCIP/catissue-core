@@ -105,7 +105,7 @@ public class ParticipantCache
 			StringTokenizer st = new StringTokenizer(participantInfo,":");
 			while(st.hasMoreTokens())
 			{
-				participantId = new Long(st.nextToken());
+				participantId = Long.valueOf(st.nextToken());
 				if(st.hasMoreTokens())
 					protocolParticipantId = st.nextToken();
 			}

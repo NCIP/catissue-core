@@ -12,6 +12,28 @@ import java.util.Iterator;
  */
 public final class SpecimenArrayUtil {
 	
+	/*
+	 * create a singleton object 
+	 */
+	private static SpecimenArrayUtil speciArrayUtil= new SpecimenArrayUtil();
+	
+	/*
+	 * Private constructor
+	 */
+	private SpecimenArrayUtil()
+	{
+		
+	}
+	/*
+	 * returns single object 
+	 */
+	
+	public static SpecimenArrayUtil getInsatnce()
+	{
+		return speciArrayUtil;
+	}
+	
+	
 	/**
 	 * Gets the string array of specimen types from specimen type collection.
 	 * @param specimenTypeCollection specimen type collection

@@ -29,6 +29,7 @@ import edu.wustl.common.dao.DAO;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * <p>This class initializes the fields of MultipleSpecimenValidationUtil.java</p>
@@ -109,7 +110,7 @@ public final class MultipleSpecimenValidationUtil
 			}
 
 		}
-		System.out.println("End Inside validateMultipleSpecimen() " + result);
+		Logger.out.info("End Inside validateMultipleSpecimen() " + result);
 		return result;
 	}
 	
@@ -150,9 +151,9 @@ public final class MultipleSpecimenValidationUtil
 					specimen.getSpecimenCollectionGroup().setId(scgId);
 					//TODO instantiate associated objects(CPR & CP) & set IDs
 					CollectionProtocol cp = new CollectionProtocol();
-					cp.setId(new Long(cpId));
+					cp.setId(Long.valueOf(cpId));
 					CollectionProtocolRegistration cpr = new CollectionProtocolRegistration();
-					cpr.setId(new Long(cprId));
+					cpr.setId(Long.valueOf(cprId));
 					cpr.setCollectionProtocol(cp);
 					((SpecimenCollectionGroup) specimen.getSpecimenCollectionGroup()).setCollectionProtocolRegistration(cpr);
 				}
@@ -172,7 +173,7 @@ public final class MultipleSpecimenValidationUtil
 	{
 		//Added by Ashish		
 		//Logger.out.debug("Start-Inside validate method of specimen bizlogic");
-		System.out.println("Inside validateSingleSpecimen() ");
+		Logger.out.info("Inside validateSingleSpecimen() ");
 		if (specimen == null)
 		{
 			throw new DAOException(ApplicationProperties.getValue("domain.object.null.err.msg", "Specimen"));

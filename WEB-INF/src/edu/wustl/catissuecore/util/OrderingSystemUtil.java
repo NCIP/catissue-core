@@ -28,8 +28,31 @@ import edu.wustl.common.util.dbManager.HibernateMetaData;
 
 
 
-public class OrderingSystemUtil
+public final class OrderingSystemUtil
 {
+	
+	
+		/*
+		 * creates a singleton object
+		 */
+		
+		private static OrderingSystemUtil orderingSysUtil = new OrderingSystemUtil();
+		/*
+		 * Private constructor
+		 */
+		private OrderingSystemUtil()
+		{
+			
+		}
+		/*
+		 * returns a singleton object 
+		 */
+		public static OrderingSystemUtil getInstance()
+		{
+			return orderingSysUtil;
+		}
+	
+	
 	
 	public static void getPossibleStatusForDistribution(List possibleStatusList)
 	{

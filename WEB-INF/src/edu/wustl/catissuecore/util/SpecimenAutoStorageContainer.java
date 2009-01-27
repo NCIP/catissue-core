@@ -161,7 +161,7 @@ public class SpecimenAutoStorageContainer {
 
 			String storageId = ((NameValueBean) containerId[i]).getValue();
 			StorageContainer sc = new StorageContainer();
-			sc.setId( new Long(storageId));
+			sc.setId(Long.valueOf(storageId));
 			sc.setName(((NameValueBean) containerId[i]).getName());
 			
 

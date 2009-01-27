@@ -49,7 +49,7 @@ public class ForwardToProcessor extends AbstractForwardToProcessor
 			forwardToHashMap.put("participantId", domainObject.getId());
 			if (participantForm.getCpId() != -1)
 			{
-				forwardToHashMap.put("collectionProtocolId", new Long(participantForm.getCpId()));
+				forwardToHashMap.put("collectionProtocolId",Long.valueOf(participantForm.getCpId()));
 			}
 
 		}
@@ -61,8 +61,8 @@ public class ForwardToProcessor extends AbstractForwardToProcessor
 		{
 			CollectionProtocolRegistrationForm collectionProtocolRegistrationForm = (CollectionProtocolRegistrationForm) actionForm;
 
-			forwardToHashMap.put("collectionProtocolId", new Long(collectionProtocolRegistrationForm.getCollectionProtocolID()));
-			forwardToHashMap.put("participantId", new Long(collectionProtocolRegistrationForm.getParticipantID()));
+			forwardToHashMap.put("collectionProtocolId", Long.valueOf(collectionProtocolRegistrationForm.getCollectionProtocolID()));
+			forwardToHashMap.put("participantId", Long.valueOf(collectionProtocolRegistrationForm.getParticipantID()));
 			forwardToHashMap.put("participantProtocolId", collectionProtocolRegistrationForm.getParticipantProtocolID());
 		}
 		else if (domainObject instanceof SpecimenCollectionGroup)

@@ -52,8 +52,28 @@ import edu.wustl.common.util.logger.Logger;
  * @author ashish_gupta
  *
  */
-public class EventsUtil
+public final class EventsUtil
 {
+	
+	/*
+	 * create singleton object
+	 */
+	private static EventsUtil eventUtil = new EventsUtil();
+	/*
+	 * private constructor
+	 */
+	private EventsUtil()
+	{
+		
+	}
+	/*
+	 * return the single object
+	 */
+	public static EventsUtil getInstance()
+	{
+		return eventUtil;
+	}
+	
 	public static void validateCollectionEvent(ActionErrors errors, Validator validator, long collectionEventUserId,
 			String collectionEventdateOfEvent, String collectionEventCollectionProcedure, String collectionTime)
 	{

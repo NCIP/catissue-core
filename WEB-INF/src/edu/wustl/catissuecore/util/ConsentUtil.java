@@ -49,8 +49,28 @@ import edu.wustl.common.util.dbManager.DAOException;
  *  
  */
 
-public class ConsentUtil
+public final class ConsentUtil
 {
+	/*
+	 * creates a singleton object
+	 * 
+	 */
+	private static ConsentUtil conUtil= new ConsentUtil();
+	/*
+	 * Private constructor.
+	 */
+	private ConsentUtil()
+	{
+		
+	}
+	/*
+	 *returns the single object 
+	 */
+	public static ConsentUtil getInstance()
+	{
+		return conUtil;
+	}
+	
 	/**
 	 * This method updates the SpecimenCollectionGroup instance by setting all the consent tierstatus to with 
 	 * @param scg Instance of SpecimenCollectionGroup to be updated.
@@ -165,7 +185,7 @@ public class ConsentUtil
 		if(!consentWithdrawalOption.equalsIgnoreCase(Constants.WITHDRAW_RESPONSE_RESET) && !consentWithdrawalOption.equalsIgnoreCase(Constants.WITHDRAW_RESPONSE_NOACTION) )
 		{
 			specimen.setActivityStatus(Constants.ACTIVITY_STATUS_DISABLED);
-			specimen.setIsAvailable(new Boolean(false) );
+			specimen.setIsAvailable(Boolean.FALSE);
 
 			if(specimen.getSpecimenPosition() != null && specimen.getSpecimenPosition().getStorageContainer() !=null)		// locations cleared
 			{
@@ -561,7 +581,7 @@ public class ConsentUtil
 	{		
 		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 		
-		Object object = bizLogic.retrieve(CollectionProtocol.class.getName(), new Long(collProtId));		
+		Object object = bizLogic.retrieve(CollectionProtocol.class.getName(), Long.valueOf(collProtId));		
 		CollectionProtocol collectionProtocol = (CollectionProtocol) object;
 		//Setting the consent witness
 		String witnessFullName="";
@@ -607,7 +627,7 @@ public class ConsentUtil
 	public static Collection getConsentList(String collectionProtocolID) throws DAOException
     {   	
     	CollectionProtocolBizLogic collectionProtocolBizLogic = (CollectionProtocolBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.COLLECTION_PROTOCOL_FORM_ID);
-    	Object object  = collectionProtocolBizLogic.retrieve(CollectionProtocol.class.getName(), new Long(collectionProtocolID));		
+    	Object object  = collectionProtocolBizLogic.retrieve(CollectionProtocol.class.getName(), Long.valueOf(collectionProtocolID));		
 		CollectionProtocol collectionProtocol = (CollectionProtocol) object;
 		Collection consentTierCollection = (Collection)collectionProtocolBizLogic.retrieveAttribute(CollectionProtocol.class.getName(), collectionProtocol.getId(), "elements(consentTierCollection)");
 		return consentTierCollection;

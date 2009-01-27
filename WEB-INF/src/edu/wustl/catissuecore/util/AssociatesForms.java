@@ -29,9 +29,30 @@ import edu.wustl.common.util.dbManager.DAOException;
  * @author suhas_khot
  *
  */
-public class AssociatesForms
+public  final class AssociatesForms
 {
 
+	/**
+	 * creates a singleton object.
+	 */
+	private static AssociatesForms assocateForm = new AssociatesForms();
+	
+	/*
+	 * Private constructor
+	 */
+	private AssociatesForms()
+	{
+		
+	}
+	/**
+	 * returns the single object.
+	 * 
+	 */
+	public static AssociatesForms getInstance()
+	{
+		return assocateForm;
+	}
+	
 	/**
 	 * Map for storing containers corresponding to entitiesIds
 	 */

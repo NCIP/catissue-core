@@ -33,9 +33,28 @@ import edu.wustl.common.util.dbManager.DAOException;
  * @author suhas_khot
  *
  */
-public class AssociatesCps
+public final class AssociatesCps
 {
-
+	/*
+	 * creates  a singleton object
+	 */
+	private static AssociatesCps assoCps= new AssociatesCps();
+	
+	/*
+	 * Private constructor
+	 */
+	private AssociatesCps()
+	{
+		
+	}
+	/*
+	 * returns the single object
+	 */
+	public static AssociatesCps getInstance()
+	{
+		return assoCps;
+	}
+	
 	/**
 	 * Map for storing containers corresponding to entitiesIds
 	 */
@@ -68,13 +87,13 @@ public class AssociatesCps
 		XMLParser xmlParser = new XMLParser(filePath);
 
 		//stores mapping of cpIds and corresponding entityIds
-		Map<Long, List<Long>> cpIdsVsEntityIds = xmlParser.getCpIdsVsEntityIds();
+		Map< Long, List<Long> > cpIdsVsEntityIds = xmlParser.getCpIdsVsEntityIds();
 
 		//stores mapping of cpIds and corresponding forms/Category
-		Map<Long, List<Long>> cpIdsVsFormIds = xmlParser.getCpIdsVsFormIds();
+		Map< Long, List<Long> > cpIdsVsFormIds = xmlParser.getCpIdsVsFormIds();
 
 		//stores mapping of cpIds and override option
-		Map<Long, String> cpIdsVsoverride = xmlParser.getCpIdVsOverride();
+		Map< Long, String > cpIdsVsoverride = xmlParser.getCpIdVsOverride();
 
 		Long typeId = (Long) xmlParser.getObjectIdentifier(Constants.COLLECTION_PROTOCOL,
 				AbstractMetadata.class.getName(), Constants.NAME);
@@ -127,7 +146,7 @@ public class AssociatesCps
 			}
 		}
 
-		List<String> formNameColl = defaultBizLogic.retrieve(Category.class.getName(), colName);
+		List< String > formNameColl = defaultBizLogic.retrieve(Category.class.getName(), colName);
 		for (String formName : formNameColl)
 		{
 			Long rootCatEntityId = entityManager.getRootCategoryEntityIdByCategoryName(formName);
@@ -186,9 +205,9 @@ public class AssociatesCps
 			{
 				if (containerId != null)
 				{
-					List<EntityMap> entityMapList = defaultBizLogic.retrieve(EntityMap.class
+					List< EntityMap > entityMapList = defaultBizLogic.retrieve(EntityMap.class
 							.getName(), Constants.CONTAINERID, containerId);
-					if (entityMapList != null && entityMapList.size() > 0)
+					if (entityMapList != null && entityMapList.isEmpty())
 					{
 						EntityMap entityMap = entityMapList.get(0);
 						Collection<FormContext> formContextColl = entityMap
@@ -235,7 +254,7 @@ public class AssociatesCps
 			{
 				List<EntityMap> entityMapList = defaultBizLogic.retrieve(EntityMap.class.getName(),
 						Constants.CONTAINERID, containerId);
-				if (entityMapList != null && entityMapList.size() > 0)
+				if (entityMapList != null && !entityMapList.isEmpty())
 				{
 					EntityMap entityMap = entityMapList.get(0);
 					if (cpId != 0)
@@ -260,7 +279,7 @@ public class AssociatesCps
 	private static Long getContainerId(Long entityId)
 	{
 		Long containerId = null;
-		if (entityIdsVsContId != null && entityIdsVsContId.size() > 0)
+		if (entityIdsVsContId != null && !entityIdsVsContId.isEmpty())
 		{
 			for (Long entityIdFromMap : entityIdsVsContId.keySet())
 			{
