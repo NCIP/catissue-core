@@ -1,61 +1,105 @@
+
 package edu.wustl.catissuecore.util.querysuite;
 
 import edu.wustl.common.querysuite.queryobject.IDateLiteral;
 import edu.wustl.common.querysuite.queryobject.TermType;
 import edu.wustl.common.querysuite.queryobject.TimeInterval;
 
-public class TemporalColumnMetada 
+public class TemporalColumnMetada
 {
 	private int columnIndex;
 	private TermType termType;
 	private IDateLiteral PHIDate;
-	private boolean isBirthDate;
-	private TimeInterval<?> timeInterval ;
+	private boolean birthDate;
+	private TimeInterval<?> timeInterval;
 
-	public int getColumnIndex() 
+	/**
+	 * Get the column index.
+	 * @return columnIndex columnIndex
+	 */
+	public int getColumnIndex()
 	{
 		return columnIndex;
 	}
 
-	public void setColumnIndex(int columnIndex) 
+	/**
+	 * Set column index.
+	 * @param columnIndex columnIndex
+	 */
+	public void setColumnIndex(int columnIndex)
 	{
 		this.columnIndex = columnIndex;
 	}
 
-	public TermType getTermType() 
+	/**
+	 * Get the term type.
+	 * @return termType termType
+	 */
+	public TermType getTermType()
 	{
 		return termType;
 	}
 
-	public void setTermType(TermType termType) 
+	/**
+	 * Set the term type.
+	 * @param termType termType
+	 */
+	public void setTermType(TermType termType)
 	{
 		this.termType = termType;
 	}
 
-	public IDateLiteral getPHIDate() 
+	/**
+	 * Get the PHI date.
+	 * @return PHIDate PHIDate
+	 */
+	public IDateLiteral getPHIDate()
 	{
 		return PHIDate;
 	}
 
-	public void setPHIDate(IDateLiteral date) 
+	/**
+	 * Set the PHI date..
+	 * @param date PHIDate PHIDate
+	 */
+	public void setPHIDate(IDateLiteral date)
 	{
 		PHIDate = date;
 	}
 
-	public boolean isBirthDate() {
-		return isBirthDate;
+	/**
+	 * Get the birthDate value.
+	 * @return isBirthDate isBirthDate
+	 */
+	public boolean isBirthDate()
+	{
+		return birthDate;
 	}
 
-	public void setBirthDate(boolean isBirthDate) {
-		this.isBirthDate = isBirthDate;
+	/**
+	 * Set the birthDate value.
+	 * @param isBirthDate isBirthDate
+	 */
+	public void setBirthDate(boolean isBirthDate)
+	{
+		this.birthDate = isBirthDate;
 	}
 
-	public TimeInterval<?> getTimeInterval() {
+	/**
+	 * Get the time interval.
+	 * @return timeInterval
+	 */
+	public TimeInterval<?> getTimeInterval()
+	{
 		return timeInterval;
 	}
 
-	public void setTimeInterval(TimeInterval<?> timeInterval) {
+	/**
+	 * Set the time interval.
+	 * @param timeInterval timeInterval
+	 */
+	public void setTimeInterval(TimeInterval<?> timeInterval)
+	{
 		this.timeInterval = timeInterval;
 	}
-	
 }

@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.util.querysuite;
 
 import java.util.ArrayList;
@@ -16,21 +17,26 @@ import edu.wustl.common.util.logger.Logger;
  * @author santhoshkumar_c
  *
  */
-final public class QueryModuleSqlUtil {
-	
-	private QueryModuleSqlUtil(){}
-	
+public final class QueryModuleSqlUtil
+{
+
+	/**
+	 * Constructor.
+	 */
+	private QueryModuleSqlUtil()
+	{
+	}
+
 	/**
 	 * Executes the query and returns the results.
-	 * @param selectSql sql to be executed
 	 * @param sessionData sessiondata
-	 * @param querySessionData
+	 * @param querySessionData querySessionData
 	 * @return list of results
-	 * @throws ClassNotFoundException
-	 * @throws DAOException
+	 * @throws ClassNotFoundException ClassNotFoundException
+	 * @throws DAOException DAOException
 	 */
-	public static List<List<String>> executeQuery( final SessionDataBean sessionData,
-			final QuerySessionData querySessionData) throws ClassNotFoundException, DAOException
+	public static List<List<String>> executeQuery(final SessionDataBean sessionData,
+			final QuerySessionData querySessionData)throws ClassNotFoundException, DAOException
 	{
 		JDBCDAO dao = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
 		List<List<String>> dataList = new ArrayList<List<String>>();
@@ -38,9 +44,8 @@ final public class QueryModuleSqlUtil {
 		{
 			dao.openSession(sessionData);
 			dataList = dao.executeQuery(querySessionData.getSql(), sessionData,
-					querySessionData.isSecureExecute(), querySessionData
-					.isHasConditionOnIdentifiedField(), querySessionData
-					.getQueryResultObjectDataMap());
+			querySessionData.isSecureExecute(), querySessionData.isHasConditionOnIdentifiedField(),
+			querySessionData.getQueryResultObjectDataMap());
 			dao.commit();
 		}
 		finally
@@ -51,63 +56,57 @@ final public class QueryModuleSqlUtil {
 	}
 
 	/**
-		 * Creates a new table in database. First the table is deleted if exist already.
+		 * Creates a new table in database. First the table is deleted if exists already.
 		 * @param tableName name of the table to be deleted before creating new one.
 		 * @param createTableSql sql to create table
-		 * @param sessionData session data.
-		 * @throws DAOException DAOException 
+		 * @param queryDetailsObj QueryDetails object.
+		 * @throws DAOException DAOException
 		 */
-		public static void executeCreateTable(final String tableName, final String createTableSql,
-				QueryDetails queryDetailsObj) throws DAOException
+	public static void executeCreateTable(final String tableName, final String createTableSql,
+			QueryDetails queryDetailsObj) throws DAOException
+	{
+		JDBCDAO jdbcDao = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
+		try
 		{
-		    JDBCDAO jdbcDao = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
-			try
-			{
-				jdbcDao.openSession(queryDetailsObj.getSessionData());
-				jdbcDao.delete(tableName);
-				jdbcDao.executeUpdate(createTableSql);
-				jdbcDao.commit();
-			}
-			catch (DAOException e)
-			{
-				Logger.out.error(e);
-	//			e.printStackTrace();
-				throw e;
-			}
-			finally
-			{
-				jdbcDao.closeSession();
-			}
+			jdbcDao.openSession(queryDetailsObj.getSessionData());
+			jdbcDao.delete(tableName);
+			jdbcDao.executeUpdate(createTableSql);
+			jdbcDao.commit();
 		}
+		catch (DAOException e)
+		{
+			Logger.out.error(e);
+			throw e;
+		}
+		finally
+		{
+			jdbcDao.closeSession();
+		}
+	}
 
 	/**
-		 * @param tableName
-		 * @param columnNameIndex
-		 * @return
+		 * @param tableName Name of the table (temporary table)
+		 * @param columnNameIndex Map with key->index and value->column names
+		 * @return selectSql The select query
 		 */
-		public static String getSQLForRootNode(final String tableName, Map<String,String> columnNameIndex)
+	public static String getSQLForRootNode(final String tableName, Map<String, String> columnNameIndex)
+	{
+		String columnNames = columnNameIndex.get(Constants.COLUMN_NAMES);
+		String indexStr = columnNameIndex.get(Constants.INDEX);
+		int index = -1;
+		if (indexStr != null && !Constants.NULL.equals(indexStr))
 		{
-	//		Map<String,String> columnNameIndexMap = getColumnNamesForSelectpart(root,queryResulObjectDataMap,uniqueIdNodesMap2);
-			String columnNames = columnNameIndex.get(Constants.COLUMN_NAMES);
-			String indexStr = columnNameIndex.get(Constants.INDEX);
-			int index = -1;
-			if (indexStr!= null && !Constants.NULL.equals(indexStr))
-			{
-				index = Integer.valueOf(indexStr);
-			}
-			String idColumnName = columnNames;
-			if (columnNames.indexOf(',') != -1)
-			{
-				idColumnName = columnNames.substring(0, columnNames.indexOf(','));
-			}
-	//		String selectSql = "select distinct " + columnNames + " from " + tableName + " where "
-	//				+ idColumnName + " is not null";
-			StringBuffer selectSql= new StringBuffer(50);
-			selectSql.append("select distinct ").append(columnNames).append(" from ")
-				.append(tableName).append(" where ").append(idColumnName).append(" is not null");
-			selectSql = selectSql.append(Constants.NODE_SEPARATOR).append(index);
-			//selectSql = selectSql + Constants.NODE_SEPARATOR + index;
-			return selectSql.toString();
+			index = Integer.valueOf(indexStr);
 		}
-			
+		String idColumnName = columnNames;
+		if (columnNames.indexOf(',') != -1)
+		{
+			idColumnName = columnNames.substring(0, columnNames.indexOf(','));
+		}
+		StringBuffer selectSql = new StringBuffer(QueryModuleConstants.FIFTY);
+		selectSql.append("select distinct ").append(columnNames).append(" from ")
+		.append(tableName).append(" where ").append(idColumnName).append(" is not null");
+		selectSql = selectSql.append(Constants.NODE_SEPARATOR).append(index);
+		return selectSql.toString();
+	}
 }

@@ -1,8 +1,14 @@
 
 package edu.wustl.catissuecore.util.querysuite;
 
-public class QueryModuleConstants
+/**
+ * This class contains all the query related constants.
+ *
+ */
+public final class QueryModuleConstants
 {
+	private QueryModuleConstants() {}
+	
 	//CreateQueryObjectBizLogic Constants	
 	public static final int ARGUMENT_ZERO = 0;
 	public static final int INDEX_PARAM_ZERO = 0;
@@ -17,19 +23,23 @@ public class QueryModuleConstants
 	public static final String TINY_INT = "tinyint";
 	public static final String UNDERSCORE = "_";
 	public static final String BOOLEAN_NO = "No";
-	public static final String BOOLEAN_YES = "Yes";	
-	public static final String Between = "Between";	
+	public static final String BOOLEAN_YES = "Yes";
+	public static final String Between = "Between";
 	public static final String ENTITY_SEPARATOR = ";";
 	public static final String QUERY_VALUES_DELIMITER = "&";
-	public static final String QUERY_OPERATOR_DELIMITER = "!*=*!";	
+	public static final String QUERY_OPERATOR_DELIMITER = "!*=*!";
 	public static final String QUERY_CONDITION_DELIMITER = "@#condition#@";
 	//Parameterizing TQ constants
 	public static final String CUSTOM_FORMULA_INDEX_MAP = "customFormulaIndexMap";
 	public static final String STR_TO_FORM_TQ = "strToFormTQ";
 	public static final String DATE_FORMAT = "MM/dd/yyyy";
 	public static final String QUERY_PARAMETER_DELIMITER = "##";
-	
+
 	//Constants for TQ
 	public static final String HASHED_OUT = "##";
 	public static final String PHI_AGE = "90+ Years";
+	
+	//Numeric Constants
+	public static final int TEN_THOUSAND = 100000;
+	public static final int FIFTY = 50;
 }
