@@ -14,7 +14,7 @@ import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.wustl.catissuecore.actionForm.CategorySearchForm;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.querysuite.QueryCSMUtil;
+import edu.wustl.catissuecore.util.querysuite.AbstractQueryCSMUtil;
 import edu.wustl.catissuecore.util.querysuite.QueryDetails;
 import edu.wustl.catissuecore.util.querysuite.QueryModuleConstants;
 import edu.wustl.catissuecore.util.querysuite.TemporalColumnUIBean;
@@ -312,7 +312,7 @@ public class DefineGridViewBizLogic
 			{
 				//identifiedColumnIds = new Vector<Integer>();
 				//objectColumnIds = new Vector<Integer>();
-				queryResulObjectDataBean = QueryCSMUtil.getQueryResulObjectDataBean(element
+				queryResulObjectDataBean = AbstractQueryCSMUtil.getQueryResulObjectDataBean(element
 						.getTreeDataNode(), queryDetailsObj);
 				queryResultObjecctDataMap.put(element.getTreeDataNode().getId(),
 						queryResulObjectDataBean);
@@ -375,7 +375,7 @@ public class DefineGridViewBizLogic
 		{
 			queryResulObjectDataBean.setTqColumnMetadataList(tqColumnMetadataList);
 			Map<EntityInterface, Integer> entityIdIndexMap = new HashMap<EntityInterface, Integer>();
-			sql = QueryCSMUtil.updateEntityIdIndexMap(queryResulObjectDataBean, columnIndex,
+			sql = AbstractQueryCSMUtil.updateEntityIdIndexMap(queryResulObjectDataBean, columnIndex,
 					sql, defineViewNodeList, entityIdIndexMap, queryDetailsObj);
 			selectedColumnNames.replace(QueryModuleConstants.ARGUMENT_ZERO,
 					selectedColumnNames.length(), sql);

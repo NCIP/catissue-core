@@ -17,7 +17,7 @@ import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.common.dynamicextensions.domaininterface.databaseproperties.ConstraintPropertiesInterface;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.listener.CatissueCoreServletContextListener;
-import edu.wustl.catissuecore.util.querysuite.QueryCSMUtil;
+import edu.wustl.catissuecore.util.querysuite.AbstractQueryCSMUtil;
 import edu.wustl.catissuecore.util.querysuite.QueryDetails;
 import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
 import edu.wustl.catissuecore.util.querysuite.TemporalColumnMetada;
@@ -94,7 +94,7 @@ public class QueryOutputSpreadsheetBizLogic
 		if(parentNode.contains("NULL"))
 		{
 			OutputTreeDataNode root = QueryModuleUtil.getRootNodeOfTree(queryDetailsObj,treeNo);
-			QueryResultObjectDataBean queryResulObjectDataBean = QueryCSMUtil
+			QueryResultObjectDataBean queryResulObjectDataBean = AbstractQueryCSMUtil
 			.getQueryResulObjectDataBean(root, queryDetailsObj);
 			queryResultObjectDataBeanMap = new HashMap<Long, QueryResultObjectDataBean>();
 			queryResultObjectDataBeanMap.put(root.getId(), queryResulObjectDataBean);
@@ -133,7 +133,7 @@ public class QueryOutputSpreadsheetBizLogic
 			String uniqueCurrentNodeId = treeNo+"_"+currentNodeId;
 			OutputTreeDataNode currentTreeNode = queryDetailsObj.getUniqueIdNodesMap().get(uniqueCurrentNodeId);
 
-			QueryResultObjectDataBean queryResulObjectDataBean = QueryCSMUtil
+			QueryResultObjectDataBean queryResulObjectDataBean = AbstractQueryCSMUtil
 			.getQueryResulObjectDataBean(currentTreeNode, queryDetailsObj);
 			queryResultObjectDataBeanMap = new HashMap<Long, QueryResultObjectDataBean>();
 			queryResultObjectDataBeanMap.put(currentTreeNode.getId(), queryResulObjectDataBean);
@@ -208,7 +208,7 @@ public class QueryOutputSpreadsheetBizLogic
 					 this.selectedColumnMetaData, constraints);
 		}
 		
-		QueryResultObjectDataBean queryResulObjectDataBean = QueryCSMUtil
+		QueryResultObjectDataBean queryResulObjectDataBean = AbstractQueryCSMUtil
 			.getQueryResulObjectDataBean(parentNode, queryDetailsObj);
 		Map<Long,QueryResultObjectDataBean> queryResultObjectDataBeanMap = new HashMap<Long,
 			QueryResultObjectDataBean>();
@@ -415,7 +415,7 @@ public class QueryOutputSpreadsheetBizLogic
 			if(queryResultObjectDataBean.getMainEntityIdentifierColumnId()==-1)
 			{
 				Map<EntityInterface, Integer> entityIdIndexMap =new HashMap<EntityInterface, Integer>();
-			    selectSql = QueryCSMUtil.updateEntityIdIndexMap(queryResultObjectDataBean, columnIndex,
+			    selectSql = AbstractQueryCSMUtil.updateEntityIdIndexMap(queryResultObjectDataBean, columnIndex,
 			    		selectSql, null, entityIdIndexMap, queryDetailsObj);
 			    entityIdIndexMap = queryResultObjectDataBean.getEntityIdIndexMap();
 			    if(entityIdIndexMap.get(queryResultObjectDataBean.getMainEntity())!=null)
@@ -741,7 +741,7 @@ public class QueryOutputSpreadsheetBizLogic
 
 						if (queryResultObjectDataBean==null)
 						{
-							queryResultObjectDataBean = QueryCSMUtil
+							queryResultObjectDataBean = AbstractQueryCSMUtil
 							.getQueryResulObjectDataBean(metaData
 									.getTreeDataNode(), queryDetailsObj);
 							defineViewNodeList.add(attribute.getEntity());
@@ -805,7 +805,7 @@ public class QueryOutputSpreadsheetBizLogic
 						columnsInSql = columnsInSql + selectSql;
 					}
 					Map<EntityInterface, Integer> entityIdIndexMap = new HashMap<EntityInterface, Integer>();
-					columnsInSql = QueryCSMUtil.updateEntityIdIndexMap(null, columnIndex, columnsInSql,
+					columnsInSql = AbstractQueryCSMUtil.updateEntityIdIndexMap(null, columnIndex, columnsInSql,
 							defineViewNodeList, entityIdIndexMap,queryDetailsObj);
 					Iterator<QueryResultObjectDataBean> iterator = queryResultObjectDataBeanMap.values()
 					.iterator();
@@ -1091,7 +1091,7 @@ public class QueryOutputSpreadsheetBizLogic
 						.getMainEntityIdentifierColumnId() == -1)
 				{
 					Map<EntityInterface, Integer> entityIdIndexMap = new HashMap<EntityInterface, Integer>();
-					selectSql = QueryCSMUtil.updateEntityIdIndexMap(queryResultObjectDataBean, columnIndex, 
+					selectSql = AbstractQueryCSMUtil.updateEntityIdIndexMap(queryResultObjectDataBean, columnIndex, 
 							selectSql, null, entityIdIndexMap, queryDetailsObj);
 					entityIdIndexMap = queryResultObjectDataBean.getEntityIdIndexMap();
 					if(entityIdIndexMap.get(queryResultObjectDataBean.getMainEntity())!=null)

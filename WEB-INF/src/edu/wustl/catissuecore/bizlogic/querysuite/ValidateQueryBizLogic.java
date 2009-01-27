@@ -9,7 +9,7 @@ import javax.servlet.http.HttpSession;
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.querysuite.QueryCSMUtil;
+import edu.wustl.catissuecore.util.querysuite.AbstractQueryCSMUtil;
 import edu.wustl.catissuecore.util.querysuite.QueryDetails;
 import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
 import edu.wustl.common.querysuite.exceptions.MultipleRootsException;
@@ -91,7 +91,7 @@ public class ValidateQueryBizLogic {
 			.getAllChildrenNodes(rootOutputTreeNodeList);
 			queryDetailsObj.setUniqueIdNodesMap(uniqueIdNodesMap);
 			//This method will check if main objects for all the dependant objects are present in query or not.
-			Map<EntityInterface, List<EntityInterface>> mainEntityMap = QueryCSMUtil.setMainObjectErrorMessage(
+			Map<EntityInterface, List<EntityInterface>> mainEntityMap = AbstractQueryCSMUtil.setMainObjectErrorMessage(
 					query, session, queryDetailsObj);
 			session.setAttribute(Constants.ID_NODES_MAP, uniqueIdNodesMap);
 			// if no main object is present in the map show the error message set in the session.

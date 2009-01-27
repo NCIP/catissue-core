@@ -11,7 +11,7 @@ import java.util.Vector;
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.querysuite.QueryCSMUtil;
+import edu.wustl.catissuecore.util.querysuite.AbstractQueryCSMUtil;
 import edu.wustl.catissuecore.util.querysuite.QueryDetails;
 import edu.wustl.catissuecore.util.querysuite.QueryModuleSqlUtil;
 import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
@@ -67,7 +67,7 @@ public class QueryOutputTreeBizLogic
 			{ 
 		String tableName = Constants.TEMP_OUPUT_TREE_TABLE_NAME 
 		+ queryDetailsObj.getSessionData().getUserId() + queryDetailsObj.getRandomNumber();
-		QueryResultObjectDataBean queryResulObjectDataBean = QueryCSMUtil
+		QueryResultObjectDataBean queryResulObjectDataBean = AbstractQueryCSMUtil
 			.getQueryResulObjectDataBean(root,queryDetailsObj);
 		Map<Long,QueryResultObjectDataBean> queryResultObjectDataBeanMap 
 			= new HashMap<Long, QueryResultObjectDataBean>();
@@ -328,7 +328,7 @@ public class QueryOutputTreeBizLogic
 				return "";
 			}
 			String columnNames = "";
-			QueryResultObjectDataBean queryResulObjectDataBean = QueryCSMUtil.getQueryResulObjectDataBean(currentNode, queryDetailsObj);
+			QueryResultObjectDataBean queryResulObjectDataBean = AbstractQueryCSMUtil.getQueryResulObjectDataBean(currentNode, queryDetailsObj);
 		    queryResultObjectDataBeanMap = new HashMap<Long, QueryResultObjectDataBean>();
 			queryResultObjectDataBeanMap.put(currentNode.getId(), queryResulObjectDataBean);
 			Map<String,String> columnNameIndexMap = QueryModuleUtil.getColumnNamesForSelectpart(currentNode.getAttributes(),queryDetailsObj, queryResultObjectDataBeanMap.get(currentNode.getId()));
