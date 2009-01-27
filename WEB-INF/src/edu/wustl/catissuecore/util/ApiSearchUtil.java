@@ -44,9 +44,31 @@ import edu.wustl.catissuecore.util.global.Constants;
  * This class set the default values for various domain object
  * @author jitendra_agrawal
  */
-public class ApiSearchUtil
+public final class ApiSearchUtil
 {
 	
+		/**
+		 * creates a singleton object.
+		 */
+		private static ApiSearchUtil apiUtil= new ApiSearchUtil();
+		
+		/*
+		 * Private constructor 
+		 */
+		private ApiSearchUtil()
+		{
+			
+		}
+		/**
+		 * returns the single object.
+		 * 
+		 */
+		public static ApiSearchUtil getInstance()
+		{
+			return apiUtil;
+		}
+
+		
 	public static void setUserDefault(User user)
 	{
 		if (SearchUtil.isNullobject(user.getLastName()))
@@ -91,7 +113,7 @@ public class ApiSearchUtil
     	
     	if (SearchUtil.isNullobject(user.getFirstTimeLogin()))
     	{
-    		user.setFirstTimeLogin(new Boolean(true));
+    		user.setFirstTimeLogin(Boolean.TRUE);
     	}	
     	
     	if (SearchUtil.isNullobject(user.getActivityStatus()))
@@ -99,11 +121,11 @@ public class ApiSearchUtil
     		user.setActivityStatus(Constants.ACTIVITY_STATUS_NEW);
     	}	
 	}
-	public static void setSpecimenRequirementDefault(DistributionSpecimenRequirement specimenRequirement)
+	public static void setSpecimenRequirementDefault(DistributionSpecimenRequirement specRequirement)
 	{		
-    	if (SearchUtil.isNullobject(specimenRequirement.getQuantity()))
+    	if (SearchUtil.isNullobject(specRequirement.getQuantity()))
     	{
-    		specimenRequirement.setQuantity(new Double(0));
+    		specRequirement.setQuantity(new Double(0));
     	}
 	}
 	
@@ -246,10 +268,11 @@ public class ApiSearchUtil
 	{				 
 		if(distributedItem.getSpecimenArray() == null)
 		{
-    	if (SearchUtil.isNullobject(distributedItem.getSpecimen()))
-    	{
-    		distributedItem.setSpecimen(new Specimen());
-	    	}   
+			if (SearchUtil.isNullobject(distributedItem.getSpecimen()))
+			{
+				distributedItem.setSpecimen(new Specimen());
+			}
+	    	   
     	}    	
       
     	if (SearchUtil.isNullobject(distributedItem.getDistribution()))
@@ -281,7 +304,7 @@ public class ApiSearchUtil
     	
     	if (SearchUtil.isNullobject(specimenArray.getAvailable()))
     	{
-    		specimenArray.setAvailable(new Boolean(true));
+    		specimenArray.setAvailable(Boolean.TRUE);
     	}	
 	}
 	
