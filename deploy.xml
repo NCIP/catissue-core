@@ -1341,6 +1341,9 @@
 		<antcall target="st_deploy_db" />
 	</target>
 	
+	<!--upgrade all from Suite1.1 to to 1.1p Includes upgrade app and upgrade db-->
+	<target name="upgrade_all_from_Suite1.1_to_1.1p" depends="upgrade_app,upgrade_from_Suite1.1_to_1.1p">
+	</target>
 	<!-- Removing unnecessary PE -->
 	<target name="upgrade_from_Suite1.1_to_1.1p">
 			<if>
