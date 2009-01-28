@@ -32,7 +32,10 @@ import edu.wustl.common.util.logger.Logger;
 public class BiohazardForm extends AbstractActionForm
 {
 	private static final long serialVersionUID = 1L;
-
+	/**
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(BiohazardForm.class);
     /**
      * A string containing the type of Biohazard.
      */
@@ -216,7 +219,7 @@ public class BiohazardForm extends AbstractActionForm
         }
         catch(Exception excp)
         {
-            Logger.out.error(excp.getMessage());
+        	logger.error(excp.getMessage());
         }
         return errors;
      }

@@ -46,6 +46,13 @@ import edu.wustl.common.util.logger.Logger;
 public class NewSpecimenForm extends SpecimenForm implements ConsentTierData,IPrinterTypeLocation
 {
 
+
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(NewSpecimenForm.class);
    //Consent Tracking Module (Virender Mehta)
 	/**
 	 * Map for Storing responses for Consent Tiers.
@@ -446,7 +453,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData,IPr
     	}
     	if(specimen.getParentSpecimen() != null)
     	{
-    		Logger.out.debug("ParentSpecimen : -- "+specimen.getParentSpecimen());
+    		logger.debug("ParentSpecimen : -- "+specimen.getParentSpecimen());
     		this.parentSpecimenId = String.valueOf(specimen.getParentSpecimen().getId());
     		this.parentSpecimenName = Utility.toString(((Specimen) specimen.getParentSpecimen()).getLabel());  
     		this.parentPresent = true;
@@ -685,7 +692,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData,IPr
          }
          catch(Exception excp)
          {
-             Logger.out.error(excp.getMessage());
+             logger.error(excp.getMessage());
          }
          return errors;
       }
@@ -747,7 +754,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData,IPr
     {
         if(addNewFor.equals("specimenCollectionGroupId"))
         {
-            Logger.out.debug("Setting SCG ID in NewSpecimenForm#####"+ addObjectIdentifier);
+            logger.debug("Setting SCG ID in NewSpecimenForm#####"+ addObjectIdentifier);
             
             setSpecimenCollectionGroupId(addObjectIdentifier.toString());
         }

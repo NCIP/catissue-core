@@ -37,7 +37,13 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class SpecimenArrayForm extends ContainerForm
 {
+
 	private static final long serialVersionUID = 1L;
+
+	/**
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(SpecimenArrayForm.class);
 	
 	/**
 	 * Specify the specimenArrayTypeId field 
@@ -422,7 +428,7 @@ public class SpecimenArrayForm extends ContainerForm
 		}
         catch (Exception e) 
 		{
-			Logger.out.error(e.getMessage());
+			logger.error(e.getMessage());
 		}
 		return errors;
 	}

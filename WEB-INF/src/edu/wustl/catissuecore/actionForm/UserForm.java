@@ -37,6 +37,10 @@ import edu.wustl.common.util.logger.Logger;
 public class UserForm extends AbstractActionForm
 {
 
+	/**
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(UserForm.class);
 	// public static final int PASSWORD_MIN_LENGTH=6;
 
 	/**
@@ -546,7 +550,7 @@ public class UserForm extends AbstractActionForm
 		{
 			formId = Constants.USER_FORM_ID;
 		}
-		Logger.out.debug("................formId...................." + formId);
+		logger.debug("................formId...................." + formId);
 		return formId;
 	}
 
@@ -740,11 +744,11 @@ public class UserForm extends AbstractActionForm
 			}
 		}
 
-		Logger.out.debug("this.activityStatus............." + this.activityStatus);
-		Logger.out.debug("this.comments" + this.comments);
-		Logger.out.debug("this.role" + this.role);
-		Logger.out.debug("this.status" + this.status);
-		Logger.out.debug("this.csmUserid" + this.csmUserId);
+		logger.debug("this.activityStatus............." + this.activityStatus);
+		logger.debug("this.comments" + this.comments);
+		logger.debug("this.role" + this.role);
+		logger.debug("this.status" + this.status);
+		logger.debug("this.csmUserid" + this.csmUserId);
 	}
 
 	private void setUserRole(String roleId) 
@@ -813,7 +817,7 @@ public class UserForm extends AbstractActionForm
 						{
 							// get error message of validation failure where param is result of validate() method
 						    String errorMessage = PasswordManager.getErrorMessage(result);
-							Logger.out.debug("error from Password validate " + errorMessage);
+							logger.debug("error from Password validate " + errorMessage);
 							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item", errorMessage));
 						}
 					}
@@ -822,7 +826,7 @@ public class UserForm extends AbstractActionForm
 				else
 				{
 					setRedirectValue(validator);
-					Logger.out.debug("user form ");
+					logger.debug("user form ");
 					if (operation.equals(Constants.ADD) || operation.equals(Constants.EDIT))
 					{
 						// Mandar 10-apr-06 : bugid :353 
@@ -1043,7 +1047,7 @@ public class UserForm extends AbstractActionForm
 							{
 								// get error message of validation failure where param is result of validate() method
 							    String errorMessage = PasswordManager.getErrorMessage(result);
-								Logger.out.debug("error from Password validate " + errorMessage);
+								logger.debug("error from Password validate " + errorMessage);
 								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item", errorMessage));
 							}
 						}
@@ -1054,7 +1058,7 @@ public class UserForm extends AbstractActionForm
 		}
 		catch (Exception excp)
 		{
-			Logger.out.error(excp.getMessage(), excp);
+			logger.error(excp.getMessage(), excp);
 		}
         return errors;
 	}

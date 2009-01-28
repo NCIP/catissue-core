@@ -8,13 +8,18 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
 
 public class ListSpecimenEventParametersForm extends AbstractActionForm
 {
-    
+
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(ListSpecimenEventParametersForm.class);
 	private String specimenId;
 	
 	private String specimenEventParameter;
@@ -99,13 +104,13 @@ public class ListSpecimenEventParametersForm extends AbstractActionForm
     public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
     {
         ActionErrors errors = new ActionErrors();
-        Validator validator = new Validator();
+//        Validator validator = new Validator();
         try
         {
         }
         catch(Exception excp)
         {
-            Logger.out.error(excp.getMessage(),excp);
+            logger.error(excp.getMessage(),excp);
         }
         return errors;
      }

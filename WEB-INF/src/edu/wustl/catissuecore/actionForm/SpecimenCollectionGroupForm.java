@@ -47,14 +47,13 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class SpecimenCollectionGroupForm extends AbstractActionForm implements ConsentTierData, IPrinterTypeLocation
 {
+
+	private static final long serialVersionUID = 1L;
+
 	/**
-	 * Name : Virender Mehta
-	 * Reviewer: Sachin Lale
-	 * Bug ID: defaultValueConfiguration_BugID
-	 * Patch ID:defaultValueConfiguration_BugID_7
-	 * Description: Configuration for default value for clinicalDiagnosis and clinicalStatus
-	 *
+	 * logger Logger - Generic logger.
 	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(SpecimenCollectionGroupForm.class);
 	private String clinicalDiagnosis = (String) DefaultValueManager.getDefaultValue(Constants.DEFAULT_CLINICAL_DIAGNOSIS);
 
 	private String clinicalStatus = (String) DefaultValueManager.getDefaultValue(Constants.DEFAULT_CLINICAL_STATUS);
@@ -411,7 +410,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm implements C
 		id = specimenCollectionGroup.getId().longValue();
 		name = specimenCollectionGroup.getName();
 		barcode = Utility.toString(specimenCollectionGroup.getBarcode());
-		Logger.out.debug("specimenCollectionGroup.getClinicalDiagnosis() " + specimenCollectionGroup.getClinicalDiagnosis());
+		logger.debug("specimenCollectionGroup.getClinicalDiagnosis() " + specimenCollectionGroup.getClinicalDiagnosis());
 		clinicalDiagnosis = Utility.toString(specimenCollectionGroup.getClinicalDiagnosis());
 		clinicalStatus = Utility.toString(specimenCollectionGroup.getClinicalStatus());
 		activityStatus = Utility.toString(specimenCollectionGroup.getActivityStatus());
@@ -444,7 +443,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm implements C
 
 		participantId = participant.getId();
 		/**For Migration End**/
-		Logger.out.debug("SCgForm --------- Participant : -- " + participant.toString());
+		logger.debug("SCgForm --------- Participant : -- " + participant.toString());
 		//if(participant!=null)
 		String firstName = null;
 		String lastName = null;
@@ -507,9 +506,9 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm implements C
 			radioButtonForParticipant = 2;
 		}
 
-		Logger.out.debug("participantId.................................." + participantId);
-		Logger.out.debug("protocolParticipantIdentifier........................." + protocolParticipantIdentifier);
-		Logger.out.debug("SCgForm --------- checkButton : -- " + radioButtonForParticipant);
+		logger.debug("participantId.................................." + participantId);
+		logger.debug("protocolParticipantIdentifier........................." + protocolParticipantIdentifier);
+		logger.debug("SCgForm --------- checkButton : -- " + radioButtonForParticipant);
 
 		//Abhishek Mehta If site is null
 		Site site = specimenCollectionGroup.getSpecimenCollectionSite();
@@ -853,7 +852,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm implements C
 		catch (Exception excp)
 		{
 			// use of logger as per bug 79
-			Logger.out.error(excp.getMessage(), excp);
+			logger.error(excp.getMessage(), excp);
 			errors = new ActionErrors();
 		}
 		return errors;

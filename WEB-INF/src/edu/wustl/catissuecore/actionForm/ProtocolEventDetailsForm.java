@@ -22,7 +22,13 @@ import edu.wustl.common.util.logger.Logger;
  
 public class ProtocolEventDetailsForm extends AbstractActionForm
 {
-	
+
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(ProtocolEventDetailsForm.class);
 	private String clinicalDiagnosis;
     
 	private String clinicalStatus;
@@ -373,7 +379,7 @@ public class ProtocolEventDetailsForm extends AbstractActionForm
 		catch (Exception excp)
 		{
 	    	// use of logger as per bug 79
-	    	Logger.out.error(excp.getMessage(),excp); 
+			logger.error(excp.getMessage(),excp); 
 			errors = new ActionErrors();
 		}
 		return errors;

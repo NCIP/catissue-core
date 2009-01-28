@@ -37,6 +37,10 @@ import edu.wustl.common.util.logger.Logger;
 public abstract class SpecimenProtocolForm extends AbstractActionForm
 {
 
+	/**
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(SpecimenProtocolForm.class);
 	protected long principalInvestigatorId;
 
 	protected String irbID;
@@ -347,7 +351,7 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
         		String errorKey = validator.validateDate(startDate ,false);
         		if(errorKey.trim().length() >0)
         		{
-        			Logger.out.debug("startdate errorKey : " +errorKey);
+        			logger.debug("startdate errorKey : " +errorKey);
         			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKey,ApplicationProperties.getValue("collectionprotocol.startdate")));
         		}
 
@@ -358,7 +362,7 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
     	    		errorKey = validator.validateDate(endDate ,false);
     	    		if(errorKey.trim().length() >0 && !errorKey.equals(""))
     	    		{
-            			Logger.out.debug("enddate errorKey: " + errorKey );
+            			logger.debug("enddate errorKey: " + errorKey );
     	    			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKey,ApplicationProperties.getValue("collectionprotocol.enddate")));
     	    		}
     			}
@@ -390,7 +394,7 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 		catch (Exception excp)
 		{
 	    	// use of logger as per bug 79
-	    	Logger.out.error("error in SPForm : " + excp.getMessage(),excp); 
+	    	logger.error("error in SPForm : " + excp.getMessage(),excp); 
 			errors = new ActionErrors();
 		}
 		return errors;

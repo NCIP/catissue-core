@@ -58,6 +58,11 @@ import edu.wustl.common.util.logger.Logger;
 public class ParticipantForm extends AbstractActionForm implements Serializable
 {
 
+
+	/**
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(ParticipantForm.class);
 	private static final long serialVersionUID = 1234567890L;
 
 	/**
@@ -188,7 +193,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 			}
 			catch (Exception ex)
 			{
-				Logger.out.debug(ex.getMessage(), ex);
+				logger.debug(ex.getMessage(), ex);
 				socialSecurityNumberPartA = "";
 				socialSecurityNumberPartB = "";
 				socialSecurityNumberPartC = "";
@@ -385,7 +390,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 		}
 		catch (Exception e)
 		{
-			Logger.out.debug(e.getMessage(), e);
+			logger.debug(e.getMessage(), e);
 		}
 	}
 
@@ -798,7 +803,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 		}
 		catch (Exception excp)
 		{
-			Logger.out.error(excp.getMessage());
+			logger.error(excp.getMessage());
 		}
 
 		return errors;

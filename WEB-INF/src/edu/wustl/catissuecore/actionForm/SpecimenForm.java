@@ -49,14 +49,13 @@ import edu.wustl.common.util.logger.Logger;
 public class SpecimenForm extends AbstractActionForm
 {
 
+
+	private static final long serialVersionUID = 1L;
+
 	/**
-	 * Name : Virender Mehta
-	 * Reviewer: Sachin Lale
-	 * Bug ID: defaultValueConfiguration_BugID
-	 * Patch ID:defaultValueConfiguration_BugID_9
-	 * See also:defaultValueConfiguration_BugID_10,11
-	 * Description: Configuration for default value for Specimen Class and Specimen Type
-	*/
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(SpecimenForm.class);
 
 	/**
 	 * Type of specimen. e.g. Tissue, Molecular, Cell, Fluid
@@ -595,7 +594,7 @@ public class SpecimenForm extends AbstractActionForm
 		if (specimen != null && specimen.getSpecimenPosition() != null)
 		{
 			StorageContainer container = specimen.getSpecimenPosition().getStorageContainer();
-			Logger.out.info("-----------Container while getting from domain--:" + container);
+			logger.info("-----------Container while getting from domain--:" + container);
 			this.storageContainer = String.valueOf(container.getId());
 			this.selectedContainerName = container.getName();
 			this.positionDimensionOne = String.valueOf(specimen.getSpecimenPosition().getPositionDimensionOne());
@@ -976,7 +975,7 @@ public class SpecimenForm extends AbstractActionForm
 		}
 		catch (Exception excp)
 		{
-			Logger.out.error(excp.getMessage());
+			logger.error(excp.getMessage());
 		}
 		return errors;
 	}

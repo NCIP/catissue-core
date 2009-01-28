@@ -46,6 +46,10 @@ import edu.wustl.common.util.logger.Logger;
 public class StorageContainerForm extends AbstractActionForm implements IPrinterTypeLocation
 {
 
+	/**
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(StorageContainerForm.class);
 	private static final long serialVersionUID = 1234567890L;
 	/**
 	 * An id which refers to the type of the storage.
@@ -233,7 +237,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 		this.activityStatus = Utility.toString(container.getActivityStatus());
 		this.containerName = container.getName();
 		isFull = Utility.initCap(Utility.toString(container.isFull()));
-		Logger.out.debug("isFULL />/>/> " + isFull);
+		logger.debug("isFULL />/>/> " + isFull);
 
 		this.typeId = container.getStorageType().getId().longValue();
 		this.typeName = container.getStorageType().getName();
@@ -1041,7 +1045,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 
 		try
 		{
-			Logger.out.info("No of containers---------in validate::" + this.noOfContainers);
+			logger.info("No of containers---------in validate::" + this.noOfContainers);
 			//if (this.noOfContainers == 1)
 			//{
 			if (this.typeId == -1)
@@ -1231,7 +1235,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 		}
 		catch (Exception excp)
 		{
-			Logger.out.error(excp.getMessage(), excp);
+			logger.error(excp.getMessage(), excp);
 		}
 		return errors;
 	}

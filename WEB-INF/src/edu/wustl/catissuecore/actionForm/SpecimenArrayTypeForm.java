@@ -37,11 +37,13 @@ import edu.wustl.common.util.logger.Logger;
 public class SpecimenArrayTypeForm extends AbstractActionForm
 {
 	
-	/**
-	 * default serial version ID 
-	 */
-	private static final long serialVersionUID = -4486179745074687647L;
 
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(SpecimenArrayTypeForm.class);
 	/**
 	 * name of array type  
 	 */
@@ -284,7 +286,7 @@ public class SpecimenArrayTypeForm extends AbstractActionForm
 		}
         catch (Exception e) 
         {
-			Logger.out.error(e.getMessage());
+			logger.error(e.getMessage());
 		}
 		return errors;
 	}

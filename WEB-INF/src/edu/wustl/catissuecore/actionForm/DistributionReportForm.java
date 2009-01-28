@@ -18,7 +18,11 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class DistributionReportForm extends AbstractActionForm
 {
-	
+	private static final long serialVersionUID = 1L;
+	/**
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(DistributionReportForm.class);
 	/**
      * System generated unique identifier.
      * */
@@ -80,7 +84,7 @@ public class DistributionReportForm extends AbstractActionForm
 		this.distributionProtocolTitle = String.valueOf(distribution.getDistributionProtocol().getTitle());
 		String lName = (String)distribution.getDistributedBy().getLastName();
  		String fName = (String)distribution.getDistributedBy().getFirstName();
- 		Logger.out.debug("User's name"+lName+" "+fName );
+ 		logger.debug("User's name"+lName+" "+fName );
  		this.userName = lName + ", " + fName;
  		Calendar calender = Calendar.getInstance();
  		calender.setTime(distribution.getTimestamp());

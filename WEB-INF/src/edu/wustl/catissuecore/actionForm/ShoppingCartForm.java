@@ -23,7 +23,6 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.global.Validator;
-import edu.wustl.common.util.logger.Logger;
 
 /**
  * This Class is used to encapsulate all the request parameters passed from ShoppingCart.jsp page.
@@ -31,6 +30,9 @@ import edu.wustl.common.util.logger.Logger;
  * */
 public class ShoppingCartForm extends ActionForm
 {
+
+	private static final long serialVersionUID = 1L;
+
 	/**
      * The operation(Add/Delete/Export) to be performed.
      */
@@ -135,16 +137,9 @@ public class ShoppingCartForm extends ActionForm
      public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
      {
          ActionErrors errors = new ActionErrors();
-         Validator validator = new Validator();
+//         Validator validator = new Validator();
 
-         try
-         {
-         }
-         catch(Exception excp)
-         {
-             Logger.out.error(excp.getMessage());
-         }
-        return errors;
+         return errors;
      }
      
      /**

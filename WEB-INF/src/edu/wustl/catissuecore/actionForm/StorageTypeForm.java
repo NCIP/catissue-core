@@ -37,6 +37,10 @@ import edu.wustl.common.util.logger.Logger;
 public class StorageTypeForm extends AbstractActionForm
 {
 
+	/**
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(StorageTypeForm.class);
 	private static final long serialVersionUID = 1234567890L;
 	/**
 	 * A string containing the type of the storage.
@@ -97,7 +101,7 @@ public class StorageTypeForm extends AbstractActionForm
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
 		StorageType storageType = (StorageType) abstractDomain;
-		Logger.out.info("in storege type form :"
+		logger.info("in storege type form :"
 				+ storageType.getHoldsSpecimenClassCollection().size());
 		this.id = storageType.getId().longValue();
 		this.type = storageType.getName();
@@ -166,7 +170,7 @@ public class StorageTypeForm extends AbstractActionForm
 				this.specimenOrArrayType = "SpecimenArray";
 			}
 		}
-		Logger.out.info("in form bean:----------------"+this.specimenOrArrayType);
+		logger.info("in form bean:----------------"+this.specimenOrArrayType);
 	}
 
 	/**
@@ -457,7 +461,7 @@ public class StorageTypeForm extends AbstractActionForm
 		}
 		catch (Exception excp)
 		{
-			Logger.out.error(excp.getMessage());
+			logger.error(excp.getMessage());
 		}
 		return errors;
 	}

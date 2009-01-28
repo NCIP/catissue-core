@@ -32,7 +32,13 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class ProcedureEventParametersForm extends SpecimenEventParametersForm 
 {
-	
+
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(ProcedureEventParametersForm.class);
 	private String url;
 	private String name;
 
@@ -118,7 +124,7 @@ public class ProcedureEventParametersForm extends SpecimenEventParametersForm
 		} 
 		catch (Exception excp) 
 		{
-			Logger.out.error(excp.getMessage());
+			logger.error(excp.getMessage());
 		}
 		return errors;
 	}

@@ -31,6 +31,13 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class FluidSpecimenReviewEventParametersForm extends SpecimenEventParametersForm
 {
+
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(FluidSpecimenReviewEventParametersForm.class);
 	/**
      * Cell Count.
      */
@@ -76,9 +83,9 @@ public class FluidSpecimenReviewEventParametersForm extends SpecimenEventParamet
 		super.setAllValues(abstractDomain);
 		FluidSpecimenReviewEventParameters fluidSpecimenReviewEventParametersObject = (FluidSpecimenReviewEventParameters)abstractDomain ;
 		this.cellCount = Utility.toString(fluidSpecimenReviewEventParametersObject.getCellCount()) ; 
-		Logger.out.debug("############FormObject################## : ");
-		Logger.out.debug(this.cellCount);
-		Logger.out.debug("############################## : ");
+		logger.debug("############FormObject################## : ");
+		logger.debug(this.cellCount);
+		logger.debug("############################## : ");
 	}
 	
 	/**
@@ -102,7 +109,7 @@ public class FluidSpecimenReviewEventParametersForm extends SpecimenEventParamet
          }
          catch(Exception excp)
          {
-             Logger.out.error(excp.getMessage());
+             logger.error(excp.getMessage());
          }
          return errors;
       }

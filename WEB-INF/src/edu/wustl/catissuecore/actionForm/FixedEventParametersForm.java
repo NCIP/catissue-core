@@ -33,13 +33,13 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class FixedEventParametersForm extends SpecimenEventParametersForm
 {
+
+	private static final long serialVersionUID = 1L;
+
 	/**
-     * Name : Virender Mehta
-     * Reviewer: Sachin Lale
-     * Bug ID: defaultValueConfiguration_BugID
-     * Patch ID:defaultValueConfiguration_BugID_13
-     * Description: Configuration for default value for Fixation Type
-     */
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(FixedEventParametersForm.class);
 	
 	/**
 	 * Type of the fixation.
@@ -110,7 +110,7 @@ public class FixedEventParametersForm extends SpecimenEventParametersForm
 	    }
 	    catch(Exception excp)
 	    {
-	        Logger.out.error(excp.getMessage());
+	        logger.error(excp.getMessage());
 	    }
 	}
 	
@@ -144,7 +144,7 @@ public class FixedEventParametersForm extends SpecimenEventParametersForm
 		}
 		catch (Exception excp) 
 		{
-			Logger.out.error(excp.getMessage());
+			logger.error(excp.getMessage());
 		}
         return errors;
      }

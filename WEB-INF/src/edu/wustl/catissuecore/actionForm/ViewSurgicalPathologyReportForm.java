@@ -26,12 +26,15 @@ import edu.wustl.common.util.logger.Logger;
 public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 {
 	
-	
-	protected long participantIdForReport;
-	/**
-	 * Default serial version ID
-	 */
+
 	private static final long serialVersionUID = 1L;
+
+	/**
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(ViewSurgicalPathologyReportForm.class);
+
+	protected long participantIdForReport;
 	/**
 	 * String for first name of participant
 	 */
@@ -453,7 +456,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 		}
 		catch (Exception e) 
 		{
-			Logger.out.error("Exception in setAllValues of ViewSurgicalPathologyReportForm"+e);
+			logger.error("Exception in setAllValues of ViewSurgicalPathologyReportForm"+e);
 		}
 	}
 	
@@ -473,7 +476,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 		}
 		catch(Exception ex)
 		{
-			Logger.out.error("viewSPR:De-identified Report information is null");
+			logger.error("viewSPR:De-identified Report information is null");
 			if(this.deIdentifiedReportTextContent==null)
 			{
 				this.deIdentifiedReportTextContent=Constants.DEID_REPORT_NOT_FOUND_MSG;//De-Identified Report Not Found !
@@ -496,7 +499,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 		}
 		catch(Exception ex)
 		{
-			Logger.out.error("viewSPR:Identified Report information is null");
+			logger.error("viewSPR:Identified Report information is null");
 			if(this.identifiedReportTextContent==null)
 			{
 				this.identifiedReportTextContent=Constants.IDENTIFIED_REPORT_NOT_FOUND_MSG;
@@ -546,7 +549,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 		}
 		catch(Exception ex)
 		{
-			Logger.out.error("viewSPR:Participant information is null");
+			logger.error("viewSPR:Participant information is null");
 		}
 	}
 

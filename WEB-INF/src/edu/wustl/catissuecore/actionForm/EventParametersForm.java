@@ -35,6 +35,12 @@ import edu.wustl.common.util.logger.Logger;
 public abstract class EventParametersForm extends AbstractActionForm
 {
 
+
+
+	/**
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(EventParametersForm.class);
     /**
      * Time in hours for the Event Parameter.
      * */
@@ -177,7 +183,7 @@ public abstract class EventParametersForm extends AbstractActionForm
          }
          catch(Exception excp)
          {
-             Logger.out.error(excp.getMessage());
+        	 logger.error(excp.getMessage());
          }
          return errors;
       }
@@ -204,7 +210,7 @@ public abstract class EventParametersForm extends AbstractActionForm
  	   }
  	   this.userId = eventParametersObject.getUser().getId().longValue() ;
  	   //this.dateOfEvent = (calender.get(Calendar.MONTH)+1)+"-"+calender.get(Calendar.DAY_OF_MONTH)+"-"+calender.get(Calendar.YEAR) ;
- 	   Logger.out.debug("id:"+id+" timeInHours:"+timeInHours+" timeInMinutes:"+timeInMinutes+" userId:"+userId+" dateOfEvent:"+dateOfEvent);
+ 	  logger.debug("id:"+id+" timeInHours:"+timeInHours+" timeInMinutes:"+timeInMinutes+" userId:"+userId+" dateOfEvent:"+dateOfEvent);
  	}
  	
 }

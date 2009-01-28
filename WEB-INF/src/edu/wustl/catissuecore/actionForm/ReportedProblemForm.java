@@ -33,6 +33,12 @@ import edu.wustl.common.util.logger.Logger;
 public class ReportedProblemForm extends AbstractActionForm
 {
 
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(ReportedProblemForm.class);
     /**
      * The subject of the reported problem.
      */
@@ -305,7 +311,7 @@ public class ReportedProblemForm extends AbstractActionForm
         }
         catch (Exception excp)
         {
-            Logger.out.error(excp.getMessage(), excp);
+        	logger.error(excp.getMessage(), excp);
         }
         return errors;
     }

@@ -31,6 +31,12 @@ import edu.wustl.common.util.logger.Logger;
 public class ReceivedEventParametersForm extends SpecimenEventParametersForm
 {
 
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(ReceivedEventParametersForm.class);
 	/**
 	 * Grossly evaluated quality of the received specimen.
 	 */
@@ -94,14 +100,14 @@ public class ReceivedEventParametersForm extends SpecimenEventParametersForm
          	// checks the receivedQuality
            	if (!validator.isValidOption(receivedQuality))
             {
-           	    Logger.out.debug(" not a valid option");
+           	    logger.debug(" not a valid option");
            		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("receivedeventparameters.receivedquality")));
             }
-           	Logger.out.debug(receivedQuality+" is a valid option");
+           	logger.debug(receivedQuality+" is a valid option");
          }
          catch(Exception excp)
          {
-             Logger.out.error(excp.getMessage());
+             logger.error(excp.getMessage());
          }
          return errors;
       }

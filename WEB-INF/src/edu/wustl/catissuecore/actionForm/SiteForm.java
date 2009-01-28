@@ -32,7 +32,14 @@ import edu.wustl.common.util.logger.Logger;
  * */
 public class SiteForm extends AbstractActionForm
 {
-    /**
+
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(SiteForm.class);
+	/**
      * Name of the site.
      */
     private String name;
@@ -472,7 +479,7 @@ public class SiteForm extends AbstractActionForm
          }
          catch(Exception excp)
          {
-             Logger.out.error(excp.getMessage());
+             logger.error(excp.getMessage());
          }
          return errors;
       }

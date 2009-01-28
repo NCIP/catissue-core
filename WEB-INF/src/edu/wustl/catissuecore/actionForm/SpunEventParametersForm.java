@@ -32,6 +32,13 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class SpunEventParametersForm extends SpecimenEventParametersForm
 {
+
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(SpunEventParametersForm.class);
 	/**
      * Rotational force applied to specimen.
      */
@@ -108,7 +115,7 @@ public class SpunEventParametersForm extends SpecimenEventParametersForm
 	    }
 	    catch(Exception excp)
 	    {
-	        Logger.out.error(excp.getMessage());
+	        logger.error(excp.getMessage());
 	    }
 	}
 	
@@ -154,11 +161,11 @@ public class SpunEventParametersForm extends SpecimenEventParametersForm
 							ApplicationProperties.getValue("spuneventparameters.durationinminutes")));
 				}
 			}
-        	Logger.out.info("durationInMinutes: "+ durationInMinutes);        	
+        	logger.info("durationInMinutes: "+ durationInMinutes);        	
         }
         catch(Exception excp)
         {
-            Logger.out.error(excp.getMessage());
+            logger.error(excp.getMessage());
         }
         return errors;
      }

@@ -32,6 +32,13 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class MolecularSpecimenReviewParametersForm extends SpecimenEventParametersForm
 {
+
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(MolecularSpecimenReviewParametersForm.class);
 	/**
      * A reference to the location of an electrophoretic gel image of the specimen.
      */
@@ -264,49 +271,49 @@ public class MolecularSpecimenReviewParametersForm extends SpecimenEventParamete
          try
          {
 
-         	Logger.out.info("GelImageUrl: "+ gelImageURL);
+         	logger.info("GelImageUrl: "+ gelImageURL);
 //         //	 checks the gelImageURL
 //          	if (validator.isEmpty(gelImageURL))
 //            {
 //           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("molecularspecimenreviewparameters.gelimageurl")));
 //            }
 
-          	Logger.out.info("qualityIndex: "+ qualityIndex);
+          	logger.info("qualityIndex: "+ qualityIndex);
             //	 checks the qualityIndex
 //         	if (validator.isEmpty(qualityIndex ))
 //            {
 //           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("molecularspecimenreviewparameters.qualityindex")));
 //            }
 
-          	Logger.out.info("laneNumber: "+ laneNumber);
+          	logger.info("laneNumber: "+ laneNumber);
 //            //	 checks the laneNumber
 //         	if (validator.isEmpty(laneNumber))
 //            {
 //           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("molecularspecimenreviewparameters.lanenumber")));
 //            }
 
-          	Logger.out.info("gelNumber: "+ gelNumber);
+          	logger.info("gelNumber: "+ gelNumber);
             //	 checks the gelNumber
          	if (!validator.isEmpty(gelNumber) && !validator.isNumeric(gelNumber,0))
             {
            		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("molecularspecimenreviewparameters.gelnumber")));
             }
 
-          	Logger.out.info("absorbanceAt260: "+ absorbanceAt260);
+          	logger.info("absorbanceAt260: "+ absorbanceAt260);
             //	 checks the absorbanceAt260
          	if (!validator.isEmpty(absorbanceAt260) && !validator.isDouble(absorbanceAt260,false))
             {
            		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("molecularspecimenreviewparameters.absorbanceat260")));
             }
 
-          	Logger.out.info("absorbanceAt280: "+ absorbanceAt280);
+          	logger.info("absorbanceAt280: "+ absorbanceAt280);
             //	 checks the absorbanceAt280
          	if (!validator.isEmpty(absorbanceAt280) && !validator.isDouble(absorbanceAt280,false))
             {
            		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("molecularspecimenreviewparameters.absorbanceat280")));
             }
 
-         	Logger.out.info("ratio28STo18S : "+ ratio28STo18S);
+         	logger.info("ratio28STo18S : "+ ratio28STo18S);
 //            //	 checks the ratio28STo18S 
 //         	if (!validator.isDouble(""+ratio28STo18S ))
 //            {
@@ -315,7 +322,7 @@ public class MolecularSpecimenReviewParametersForm extends SpecimenEventParamete
          }
          catch(Exception excp)
          {
-             Logger.out.error(excp.getMessage());
+             logger.error(excp.getMessage());
          }
          return errors;
       }

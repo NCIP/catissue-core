@@ -31,10 +31,13 @@ import edu.wustl.common.util.logger.Logger;
 public class SimilarContainersForm extends AbstractActionForm 
 {
 
-	/* (non-Javadoc)
-	 * @see edu.wustl.common.actionForm.AbstractActionForm#getFormId()
+
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * logger Logger - Generic logger.
 	 */
-	private static final long serialVersionUID = 1234567890L;
+	private static org.apache.log4j.Logger logger = Logger.getLogger(SimilarContainersForm.class);
 	
 	private String storageContainerId;
 	
@@ -406,7 +409,7 @@ public class SimilarContainersForm extends AbstractActionForm
 	 */
 	public void setCheckedButton(int checkedButton) 
 	{
-		Logger.out.debug("setCheckedButton ** "+checkedButton);
+		logger.debug("setCheckedButton ** "+checkedButton);
 		this.checkedButton = checkedButton;
 	}
 	
@@ -490,7 +493,7 @@ public class SimilarContainersForm extends AbstractActionForm
 	 */
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
-		Logger.out.debug("SimilarContainersForm :: validate()");
+		logger.debug("SimilarContainersForm :: validate()");
 		ActionErrors errors = new ActionErrors();
 		Validator validator = new Validator();
 		
@@ -501,7 +504,7 @@ public class SimilarContainersForm extends AbstractActionForm
 						ApplicationProperties.getValue("storageContainer.type")));
 			}
 			int noOfCont = Integer.parseInt(this.noOfContainers);
-			Logger.out.debug("simMap ^^--?? "+similarContainersMap);
+			logger.debug("simMap ^^--?? "+similarContainersMap);
 			for(int i = 1; i <= noOfCont; i++)
 			{
 				String iBarcode = (String)this.getValue("simCont:" + i + "_barcode");  //simCont:1_barcode
@@ -516,7 +519,7 @@ public class SimilarContainersForm extends AbstractActionForm
 					String parentContId = (String)getValue("simCont:"+i+"_parentContainerId");
 					String positionDimensionOne = (String)getValue("simCont:"+i+"_positionDimensionOne");
 					String positionDimensionTwo = (String)getValue("simCont:"+i+"_positionDimensionTwo");
-					Logger.out.debug(i+" parentContId "+parentContId+" positionDimensionOne "+positionDimensionOne+" positionDimensionTwo "+positionDimensionOne);
+					logger.debug(i+" parentContId "+parentContId+" positionDimensionOne "+positionDimensionOne+" positionDimensionTwo "+positionDimensionOne);
 					if(parentContId.equals("-1") || positionDimensionOne.equals("-1") || positionDimensionTwo.equals("-1"))
 					{
 						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
@@ -568,7 +571,7 @@ public class SimilarContainersForm extends AbstractActionForm
 		}
 		catch (Exception excp)
 		{
-			Logger.out.error(excp.getMessage(), excp);
+			logger.error(excp.getMessage(), excp);
 		}
 		return errors;
 	}
@@ -586,7 +589,7 @@ public class SimilarContainersForm extends AbstractActionForm
 	 */
 	public void setParentContainerId(long parentContainerId)
 	{
-		Logger.out.debug("calling ... parentContainerId "+parentContainerId);
+		logger.debug("calling ... parentContainerId "+parentContainerId);
 		this.parentContainerId = parentContainerId;
 	}
 
@@ -603,7 +606,7 @@ public class SimilarContainersForm extends AbstractActionForm
 	 */
 	public void setPositionDimensionOne(int positionDimensionOne)
 	{
-		Logger.out.debug("calling ... positionDimensionOne "+positionDimensionOne);
+		logger.debug("calling ... positionDimensionOne "+positionDimensionOne);
 		this.positionDimensionOne = positionDimensionOne;
 	}
 
@@ -620,7 +623,7 @@ public class SimilarContainersForm extends AbstractActionForm
 	 */
 	public void setPositionDimensionTwo(int positionDimensionTwo)
 	{
-		Logger.out.debug("calling ... positionDimensionTwo "+positionDimensionTwo);
+		logger.debug("calling ... positionDimensionTwo "+positionDimensionTwo);
 		this.positionDimensionTwo = positionDimensionTwo;
 	}
 

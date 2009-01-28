@@ -41,6 +41,14 @@ import edu.wustl.common.util.logger.Logger;
  * */
 public class DistributionProtocolForm extends SpecimenProtocolForm
 {
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(DistributionProtocolForm.class);
+
+
 	
 	/**
 	 * Counter that contains number of rows in the 'Add More' functionality.
@@ -154,7 +162,7 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
     			{
     				String key = (String)it.next();
     				String value = (String)values.get(key);
-    				Logger.out.debug(key+ " : " + value);
+    				logger.debug(key+ " : " + value);
     				
     				if(!bSpecimenClass)
     				{
@@ -212,7 +220,7 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
 	    						String typeKey = key.substring(0,key.indexOf("_"));
 	    						typeKey = typeKey + "_specimenType";
 	    						String typeValue = (String)getValue(typeKey);
-	    						Logger.out.debug("TypeKey : "+ typeKey  + " : Type Value : " + typeValue);
+	    						logger.debug("TypeKey : "+ typeKey  + " : Type Value : " + typeValue);
 	    						
 	    						try
 								{
@@ -250,7 +258,7 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
 		}
 		catch (Exception excp)
 		{
-	    	Logger.out.error(excp.getMessage(),excp); 
+	    	logger.error(excp.getMessage(),excp); 
 			errors = new ActionErrors();
 		}
 		return errors;

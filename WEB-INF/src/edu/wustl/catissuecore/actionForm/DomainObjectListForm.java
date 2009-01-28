@@ -33,7 +33,11 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class DomainObjectListForm extends AbstractActionForm
 {
-    
+	private static final long serialVersionUID = 1L;
+	/**
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(DomainObjectListForm.class);
     /**
      * Map of users whose registration is to be approved/rejected.
      */
@@ -150,7 +154,7 @@ public class DomainObjectListForm extends AbstractActionForm
          }
          catch(Exception excp)
          {
-             Logger.out.error(excp.getMessage(),excp);
+        	 logger.error(excp.getMessage(),excp);
          }
          return errors;
       }

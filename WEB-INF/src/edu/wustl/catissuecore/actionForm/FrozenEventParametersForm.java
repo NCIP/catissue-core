@@ -33,13 +33,13 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class FrozenEventParametersForm extends SpecimenEventParametersForm
 {
+
+	private static final long serialVersionUID = 1L;
+
 	/**
-     * Name : Virender Mehta
-     * Reviewer: Sachin Lale
-     * Bug ID: defaultValueConfiguration_BugID
-     * Patch ID:defaultValueConfiguration_BugID_14
-     * Description: Configuration for default value for Method
-     */
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(FrozenEventParametersForm.class);
 	
 	/**
      * Method applied on specimen to freeze it.
@@ -104,7 +104,7 @@ public class FrozenEventParametersForm extends SpecimenEventParametersForm
          }
          catch(Exception excp)
          {
-             Logger.out.error(excp.getMessage());
+             logger.error(excp.getMessage());
          }
          return errors;
       }

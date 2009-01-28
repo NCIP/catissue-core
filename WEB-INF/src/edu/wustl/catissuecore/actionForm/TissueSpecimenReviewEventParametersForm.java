@@ -32,6 +32,13 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class TissueSpecimenReviewEventParametersForm extends SpecimenEventParametersForm
 {
+
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(TissueSpecimenReviewEventParametersForm.class);
 	/**
      * Percentage of histologically evident neoplastic cells present in the tissue specimen.
      */
@@ -190,10 +197,10 @@ public class TissueSpecimenReviewEventParametersForm extends SpecimenEventParame
 		this.lymphocyticPercentage =Utility.toString(tissueSpecimenReviewParametersObject.getLymphocyticPercentage());
 		this.totalCellularityPercentage =Utility.toString(tissueSpecimenReviewParametersObject.getTotalCellularityPercentage());
 		this.histologicalQuality = Utility.toString(tissueSpecimenReviewParametersObject.getHistologicalQuality());
-		Logger.out.debug("this.neoplasticCellularityPercentage : "+ this.neoplasticCellularityPercentage);
-		Logger.out.debug("this.necrosisPercentage : " + this.necrosisPercentage);
-		Logger.out.debug("this.lymphocyticPercentage : " + this.lymphocyticPercentage);
-		Logger.out.debug("this.totalCellularityPercentage : " + this.totalCellularityPercentage);
+		logger.debug("this.neoplasticCellularityPercentage : "+ this.neoplasticCellularityPercentage);
+		logger.debug("this.necrosisPercentage : " + this.necrosisPercentage);
+		logger.debug("this.lymphocyticPercentage : " + this.lymphocyticPercentage);
+		logger.debug("this.totalCellularityPercentage : " + this.totalCellularityPercentage);
 	}
 	
 	/**
@@ -248,7 +255,7 @@ public class TissueSpecimenReviewEventParametersForm extends SpecimenEventParame
          }
          catch(Exception excp)
          {
-             Logger.out.error(excp.getMessage());
+             logger.error(excp.getMessage());
          }
          return errors;
       }

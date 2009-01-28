@@ -29,6 +29,14 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class TitliSearchForm extends ActionForm
 {
+
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(TitliSearchForm.class);
+	
 	private String searchString;
 	
 	private String displaySearchString;
@@ -114,7 +122,7 @@ public class TitliSearchForm extends ActionForm
 		}
 		catch(Exception e)
 		{
-			Logger.out.error("Exception in TitliSearchForm : "+ e.getMessage(), e);
+			logger.error("Exception in TitliSearchForm : "+ e.getMessage(), e);
 			
 		}
 		

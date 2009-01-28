@@ -29,6 +29,10 @@ import edu.wustl.common.util.logger.Logger;
 public class AnnotationForm extends AbstractActionForm implements Serializable {
 
 	/**
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(AnnotationForm.class);
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
@@ -132,7 +136,7 @@ public class AnnotationForm extends AbstractActionForm implements Serializable {
 
 			}
 		} catch (Exception excp) {
-			Logger.out.error(excp.getMessage(), excp);
+			logger.error(excp.getMessage(), excp);
 		}
 		return errors;
 	}

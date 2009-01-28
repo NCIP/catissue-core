@@ -33,6 +33,13 @@ import edu.wustl.common.util.logger.Logger;
 public class TransferEventParametersForm extends SpecimenEventParametersForm
 {
 
+
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(TransferEventParametersForm.class);
 	/**
 	 * Reference to dimensional position one of the specimen in previous storage container before transfer.
 	 */
@@ -278,7 +285,7 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 		}
 		catch (Exception excp)
 		{
-			Logger.out.error(excp.getMessage());
+			logger.error(excp.getMessage());
 		}
 	}
 
@@ -335,7 +342,7 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 		}
 		catch (Exception excp)
 		{
-			Logger.out.error(excp.getMessage());
+			logger.error(excp.getMessage());
 		}
 		return errors;
 	}

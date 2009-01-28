@@ -54,10 +54,13 @@ import edu.wustl.common.util.logger.Logger;
 public class RequestDetailsForm extends AbstractActionForm
 {
 
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
+
+	/**
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(RequestDetailsForm.class);
 	// The status which the user wants to update in one go.
 	private String status;
 	// The Map containg submitted values for 'assigned quantity', 'assigned status' and 'request for'. 
@@ -550,7 +553,7 @@ public class RequestDetailsForm extends AbstractActionForm
 		{
 			
 			ExistingSpecimenOrderItem existingSpecimenOrderItem = (ExistingSpecimenOrderItem) orderItem;
-			OrderBizLogic orderBizLogic = (OrderBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
+//			OrderBizLogic orderBizLogic = (OrderBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
 			existingSpecimenOrderItem = (ExistingSpecimenOrderItem)HibernateMetaData.getProxyObjectImpl(existingSpecimenOrderItem);
 				//orderBizLogic.getSpecimen(existingSpecimenOrderItem.getSpecimen().getId(),dao);			
 			values.put(requestedItem, existingSpecimenOrderItem.getSpecimen().getLabel());
@@ -874,7 +877,7 @@ public class RequestDetailsForm extends AbstractActionForm
 		}
 		catch (Exception e)
 		{
-			Logger.out.debug("in request details form: map data parser exception:" + e);
+			logger.debug("in request details form: map data parser exception:" + e);
 		}
 		Iterator iter = beanObjSet.iterator();
 

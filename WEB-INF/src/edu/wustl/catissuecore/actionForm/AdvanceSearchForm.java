@@ -41,6 +41,11 @@ public class AdvanceSearchForm extends ActionForm
 {
 	private static final long serialVersionUID = 1234567890L;
 	/**
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(AdvanceSearchForm.class);
+
+	/**
 	 * @return Returns the columnNames.
 	 */
 	public String[] getColumnNames() 
@@ -487,7 +492,7 @@ public class AdvanceSearchForm extends ActionForm
 		}
 		catch(Exception e)
 		{
-			Logger.out.debug("Exception in AdvanceSearchForm ",e);
+			logger.debug("Exception in AdvanceSearchForm ",e);
 		}
 		
 		for(int i=1;i<=eventCounter;i++)
