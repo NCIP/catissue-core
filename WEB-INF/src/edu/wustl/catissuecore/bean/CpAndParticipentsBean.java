@@ -43,7 +43,7 @@ public class CpAndParticipentsBean implements Externalizable
 	 */
 	public void setName(String name)
 	{
-        System.out.println("The name written is:"+name); 
+//        System.out.println("The name written is:"+name); 
 		this.name = name;
 	}
 

@@ -16,6 +16,9 @@ import java.util.Collection;
 import edu.wustl.catissuecore.util.global.Constants;
 
 public class ConsentResponseBean implements Serializable{
+	
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * collection protocol Id
 	 */

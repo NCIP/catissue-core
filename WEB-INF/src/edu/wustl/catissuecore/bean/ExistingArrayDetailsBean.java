@@ -17,6 +17,8 @@ import java.util.List;
 
 public class ExistingArrayDetailsBean implements Serializable
 {
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * String containing the name of existing biospecimen array
 	 */

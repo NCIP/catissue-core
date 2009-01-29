@@ -68,26 +68,7 @@ public class AliquotBean {
 	public void setAllData(String parentSPId, String collectionProtocolId, String className, String CPQuery)
 	{
 		// ------------------ used outside the bean
-		 labelKey = "value(Specimen:" + aliquotNo + "_label)";
-		 qtyKey = "value(Specimen:" + aliquotNo + "_quantity)";
-		 barKey = "value(Specimen:" + aliquotNo + "_barcode)";
-		 containerMap = "value(mapButton_" + aliquotNo + ")";
-		 containerMapStyle = "mapButton_" + aliquotNo ;
-		//Keys for container if selected from Map
-		 containerIdFromMapKey = "value(Specimen:" + aliquotNo + "_StorageContainer_id_fromMap)";
-		 containerNameFromMapKey = "value(Specimen:" + aliquotNo + "_StorageContainer_name_fromMap)";
-		 pos1FromMapKey = "value(Specimen:" + aliquotNo + "_positionDimensionOne_fromMap)";
-		 pos2FromMapKey = "value(Specimen:" + aliquotNo + "_positionDimensionTwo_fromMap)";
-		 stContSelection = "value(radio_" + aliquotNo + ")";
-		 containerStyle = "container_" + aliquotNo + "_0";
-		 containerIdStyle = "containerId_" + aliquotNo + "_0";
-		 pos1Style = "pos1_" + aliquotNo + "_1";
-		 pos2Style = "pos2_" + aliquotNo + "_2";
-		 dropDownDisable = false;
-		 textBoxDisable = false;
-		 onChange = "onCustomListBoxChangeInAliquot(this,'CreateAliquots.do?pageOf=pageOfCreateAliquot&operation=add&menuSelected=15&method=executeContainerChange')";		 
-		 initValues = new String[3] ;
-		 rowNumber = String.valueOf(aliquotNo);
+		 setOutsideData();
 		 
 		 //------- internal use only
 		 String containerKey = "value(Specimen:" + aliquotNo + "_StorageContainer_id)";
@@ -109,10 +90,7 @@ public class AliquotBean {
 		 initValues[1] = (String)aliquotMap.get("Specimen:" + aliquotNo + "_positionDimensionOne");
 		 initValues[2] = (String)aliquotMap.get("Specimen:" + aliquotNo + "_positionDimensionTwo");
 		
-		if(aliquotMap.get(rbKey)==null)
-		{
-		   aliquotMap.put(rbKey,"2");
-	    }
+		addToMap(rbKey);
 		int radioSelected = Integer.parseInt(aliquotMap.get(rbKey).toString());
 		if(radioSelected == 1)
 		{
@@ -137,6 +115,38 @@ public class AliquotBean {
 	
 	jsScript = ScriptGenerator.getJSEquivalentFor(dataMap,rowNumber);
 }
+
+	private void setOutsideData()
+	{
+		labelKey = "value(Specimen:" + aliquotNo + "_label)";
+		 qtyKey = "value(Specimen:" + aliquotNo + "_quantity)";
+		 barKey = "value(Specimen:" + aliquotNo + "_barcode)";
+		 containerMap = "value(mapButton_" + aliquotNo + ")";
+		 containerMapStyle = "mapButton_" + aliquotNo ;
+		//Keys for container if selected from Map
+		 containerIdFromMapKey = "value(Specimen:" + aliquotNo + "_StorageContainer_id_fromMap)";
+		 containerNameFromMapKey = "value(Specimen:" + aliquotNo + "_StorageContainer_name_fromMap)";
+		 pos1FromMapKey = "value(Specimen:" + aliquotNo + "_positionDimensionOne_fromMap)";
+		 pos2FromMapKey = "value(Specimen:" + aliquotNo + "_positionDimensionTwo_fromMap)";
+		 stContSelection = "value(radio_" + aliquotNo + ")";
+		 containerStyle = "container_" + aliquotNo + "_0";
+		 containerIdStyle = "containerId_" + aliquotNo + "_0";
+		 pos1Style = "pos1_" + aliquotNo + "_1";
+		 pos2Style = "pos2_" + aliquotNo + "_2";
+		 dropDownDisable = false;
+		 textBoxDisable = false;
+		 onChange = "onCustomListBoxChangeInAliquot(this,'CreateAliquots.do?pageOf=pageOfCreateAliquot&operation=add&menuSelected=15&method=executeContainerChange')";		 
+		 initValues = new String[3] ;
+		 rowNumber = String.valueOf(aliquotNo);
+	}
+
+	private void addToMap(String rbKey)
+	{
+		if(aliquotMap.get(rbKey)==null)
+		{
+		   aliquotMap.put(rbKey,"2");
+	    }
+	}
 
 	
 	public String getJsScript()

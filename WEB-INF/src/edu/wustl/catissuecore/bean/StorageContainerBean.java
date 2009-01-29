@@ -8,6 +8,8 @@ import edu.wustl.common.util.global.Constants;
 
 public class StorageContainerBean implements Serializable
 {
+	private static final long serialVersionUID = 1L;
+
 	private long typeId = -1;
 
 	private String activityStatus = Constants.ACTIVITY_STATUS_ACTIVE;

@@ -3,20 +3,24 @@ package edu.wustl.catissuecore.bean;
 import java.util.List;
 
 
+/**
+ * @author mandar_deshmukh
+ *
+ */
 public interface SpecimenDetailsInfo {
 
-	public abstract String getSelectedSpecimenId();
+	String getSelectedSpecimenId();
 
-	public abstract List<GenericSpecimen> getSpecimenList();
+	List<GenericSpecimen> getSpecimenList();
 
-	public abstract List<GenericSpecimen> getAliquotList();
+	List<GenericSpecimen> getAliquotList();
 
-	public abstract List<GenericSpecimen> getDerivedList();
+	List<GenericSpecimen> getDerivedList();
 
-	public abstract boolean getShowCheckBoxes();
+	boolean getShowCheckBoxes();
 
-	public abstract boolean getShowbarCode();
+	boolean getShowbarCode();
 
-	public abstract boolean getShowLabel();
+	boolean getShowLabel();
 
 }

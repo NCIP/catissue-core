@@ -211,11 +211,16 @@ public class SpecimenDataBean implements GenericSpecimen
 	 */
 	public long getId()
 	{
+		long num =-1;
 		if(id == null)
 		{
-			return -1;
+			num = -1;
 		}
-		return id.longValue();
+		else
+		{
+			num = id.longValue();
+		}
+		return num;
 	}
 
 	/**

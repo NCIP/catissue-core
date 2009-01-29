@@ -17,6 +17,8 @@ import java.util.List;
 
 public class RequestDetailsBean implements Serializable
 {	
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * The requested Item - Specimen, Array or Pathological case.
 	 */

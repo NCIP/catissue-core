@@ -9,6 +9,8 @@ import edu.wustl.common.util.global.Constants;
 
 public class CollectionProtocolBean implements Serializable
 {
+	private static final long serialVersionUID = 1L;
+	
 	private Long identifier =null;
 	
 	private long[] protocolCoordinatorIds;
