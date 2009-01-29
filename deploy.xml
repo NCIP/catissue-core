@@ -1368,6 +1368,8 @@
 		<echo message="Upgrading MySQL Database and removing unused Protection Element" />
 		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" >
 			<transaction src="${dbupgrade.sql.dir}/MySql/DBUpgrade_deleteStorageContainerPE.sql" />
+			<transaction src="${dbupgrade.sql.dir}/Common/upgrade_catissue_schema.sql" />
+			<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/MySql/Upgrade_DE_Schema.sql" />
 			<transaction>commit;</transaction>
 			<classpath>
 				<fileset dir="${lib.dir}">
@@ -1382,6 +1384,8 @@
 		<echo message="Upgrading Oracle Database and removing unused Protection Element" />
 			<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">
 					<transaction src="${dbupgrade.sql.dir}/Oracle/DBUpgrade_deleteStorageContainerPE.sql" />
+				    <transaction src="${dbupgrade.sql.dir}/Common/upgrade_catissue_schema.sql" />
+					<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/Oracle/Upgrade_DE_Schema.sql" />
 			   		<transaction>commit;</transaction>
 					<classpath>
 						<fileset dir="${lib.dir}">
@@ -1401,14 +1405,17 @@
 
 			<transaction src="${dbupgrade.sql.dir}/MySql/query_Suite1.0_to_Suite1.1.sql" />
      		<transaction>commit;</transaction>
-
+			
+			<transaction src="${dbupgrade.sql.dir}/MySql/DBUpgrade_deleteStorageContainerPE.sql" />
+			<transaction>commit;</transaction>
+			
 			<classpath>
 				<fileset dir="${lib.dir}">
 					<include name="*.jar" />
 				</fileset>
 			</classpath>
 		</sql>
-		<antcall target="upgrade_mysql_from_Suite1.1_to_1.1p" />
+
 		<antcall target="insert_entity_group_metadata_mysql" />
 		<antcall target="upgrade_db_demodel_mysql" />
 
@@ -1441,13 +1448,16 @@
 			<transaction src="${dbupgrade.sql.dir}/Oracle/query_Suite1.0_to_Suite1.1.sql" />
 	   		<transaction>commit;</transaction>
 
+			<transaction src="${dbupgrade.sql.dir}/Oracle/DBUpgrade_deleteStorageContainerPE.sql" />
+			<transaction>commit;</transaction>
+			
 			<classpath>
 				<fileset dir="${lib.dir}">
 					<include name="*.jar" />
 				</fileset>
 			</classpath>
 		</sql>
-		<antcall target="upgrade_oracle_from_Suite1.1_to_1.1p" />
+	
 		<antcall target="drop_and_create_sequences" />
 		<antcall target="insert_entity_group_metadata_oracle" />
 		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle" delimiter="/">

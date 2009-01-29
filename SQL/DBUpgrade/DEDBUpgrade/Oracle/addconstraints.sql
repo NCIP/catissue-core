@@ -75,7 +75,6 @@ alter table DYEXTN_FILE_UPLOAD add constraint FK2FAD41E740F198C2 foreign key (ID
 alter table DYEXTN_FLOAT_CONCEPT_VALUE add constraint FK6785309A4641D513 foreign key (IDENTIFIER) references DYEXTN_PERMISSIBLE_VALUE;
 alter table DYEXTN_FLOAT_TYPE_INFO add constraint FK7E1C0693BA4AE008 foreign key (IDENTIFIER) references DYEXTN_NUMERIC_TYPE_INFO;
 alter table DYEXTN_FORM_CONTEXT add constraint FKE56CCDB12B784475 foreign key (ENTITY_MAP_ID) references DYEXTN_ENTITY_MAP;
-alter table DYEXTN_FORM_CTRL_NOTES add constraint FK7A0DA06B41D885B1 foreign key (FORM_CONTROL_ID) references DYEXTN_CONTROL;
 alter table DYEXTN_INTEGER_CONCEPT_VALUE add constraint FKFBA33B3C4641D513 foreign key (IDENTIFIER) references DYEXTN_PERMISSIBLE_VALUE;
 alter table DYEXTN_INTEGER_TYPE_INFO add constraint FK5F9CB235BA4AE008 foreign key (IDENTIFIER) references DYEXTN_NUMERIC_TYPE_INFO;
 alter table DYEXTN_LIST_BOX add constraint FK208395A7BF67AB26 foreign key (IDENTIFIER) references DYEXTN_SELECT_CONTROL;
@@ -111,4 +110,3 @@ alter table DYEXTN_USERDEF_DE_VALUE_REL add constraint FK3EE58DCF49BDD67 foreign
 create sequence DYEXTN_PATH_ASSO_REL_SEQ;
 create sequence DYEXTN_DE_AUDIT_SEQ;
 create sequence DYEXTN_PATH_SEQ;
-create sequence DYEXTN_FRM_CONTROL_SEQ;

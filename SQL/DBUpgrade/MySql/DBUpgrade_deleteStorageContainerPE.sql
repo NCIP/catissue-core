@@ -6,5 +6,3 @@ WHERE object_id regexp '_[[:digit:]]'
  	AND object_id NOT regexp 'CollectionProtocol_[[:digit:]]'
     AND object_id NOT regexp 'User_[[:digit:]]'
     AND object_id NOT LIKE 'SITE_%';
-
-ALTER TABLE catissue_disposal_event_param MODIFY REASON varchar(350);

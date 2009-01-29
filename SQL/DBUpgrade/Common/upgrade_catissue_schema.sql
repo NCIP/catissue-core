@@ -1,0 +1,1 @@
+ALTER TABLE catissue_disposal_event_param MODIFY REASON varchar(350);
