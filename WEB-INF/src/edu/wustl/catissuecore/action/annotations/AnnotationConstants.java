@@ -74,4 +74,5 @@ public class AnnotationConstants
 	public static final String NULL="null";
 	public static final String RECORDS_IDs="RecordIds";
 	public static final String FULLY_QUALIFIED_NAME = "edu.wustl.catissuecore.domain.";
+	public static final String EDIT = "Edit";
 }
