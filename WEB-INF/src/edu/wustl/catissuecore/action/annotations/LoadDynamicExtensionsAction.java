@@ -38,13 +38,16 @@ public class LoadDynamicExtensionsAction extends BaseAction
         AnnotationForm annotationForm = (AnnotationForm)form;
         //Get static entity id and store in cache
         String staticEntityId = annotationForm.getSelectedStaticEntityId();
-        String[] conditions = new String[]{"All"};
+        String[] conditions = new String[]{"-1"};
         
         if(annotationForm.getConditionVal() != null)
+        {
           conditions = annotationForm.getConditionVal();
-        
+        }
         if(staticEntityId ==  null )
+        {
         	staticEntityId = request.getParameter("staticEntityId");
+        }
         HttpSession session = request.getSession();
         session.setAttribute(AnnotationConstants.SELECTED_STATIC_ENTITYID, staticEntityId);
         session.setAttribute(AnnotationConstants.SELECTED_STATIC_RECORDID, conditions);          

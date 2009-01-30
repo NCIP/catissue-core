@@ -18,6 +18,7 @@ import edu.common.dynamicextensions.entitymanager.EntityManagerInterface;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.wustl.catissuecore.util.AssociatesCps;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.util.dbManager.DAOException;
 
@@ -49,7 +50,7 @@ public class TestShowHideForms extends TestCase
 			//calls the main method of AssociatesCps class 
 			AssociatesCps.main(args);
 			System.out
-					.println("--------------- Test Case of ShowHideForms successful ------------");
+					.println("--------------- Test Case of ShowHideForms executed successful ------------");
 		}
 		catch (DynamicExtensionsSystemException e)
 		{
@@ -83,8 +84,7 @@ public class TestShowHideForms extends TestCase
 			DefaultBizLogic defaultBizLogic = BizLogicFactory.getDefaultBizLogic();
 			Map<Long, Long> entityIdsVsContId = new HashMap<Long, Long>();
 			//store containerIds and its Corresponding entityId
-			AssociatesCps.getAllContainers();
-			entityIdsVsContId = AssociatesCps.entityIdsVsContId;
+			entityIdsVsContId = Utility.getAllContainers();;
 			if (entityIdsVsContId != null)
 			{
 				for (Long containerId : entityIdsVsContId.values())
@@ -108,6 +108,23 @@ public class TestShowHideForms extends TestCase
 									if (!entityMapCondColl.isEmpty()
 											|| entityMapCondColl.size() > 0)
 									{
+										int count=0;
+//										throw new DynamicExtensionsSystemException(XMLFileName);
+										for(EntityMapCondition condition: entityMapCondColl)
+										{
+											if(condition.getStaticRecordId()==Long.valueOf(-1) || condition.getStaticRecordId()==-1)
+											{
+												count=count+1;
+											}
+										}
+										if(count==0)
+										{
+											throw new DynamicExtensionsSystemException(XMLFileName);
+										}
+									}
+									if (entityMapCondColl.isEmpty()
+											|| entityMapCondColl.size() <= 0)
+									{
 										throw new DynamicExtensionsSystemException(XMLFileName);
 									}
 								}
@@ -117,7 +134,7 @@ public class TestShowHideForms extends TestCase
 				}
 			}
 			System.out
-					.println("--------------- Test Case of ShowHideForms_ALL successful ------------");
+					.println("--------------- Test Case of ShowHideForms_ALL executed successful ------------");
 		}
 		catch (DynamicExtensionsSystemException e)
 		{
@@ -150,8 +167,8 @@ public class TestShowHideForms extends TestCase
 			AssociatesCps.main(args);
 			DefaultBizLogic defaultBizLogic = BizLogicFactory.getDefaultBizLogic();
 			Map<Long, Long> entityIdsVsContId = new HashMap<Long, Long>();
-			AssociatesCps.getAllContainers();
-			entityIdsVsContId = AssociatesCps.entityIdsVsContId;
+			
+			entityIdsVsContId = Utility.getAllContainers();
 			if (entityIdsVsContId != null)
 			{
 				for (Long containerId : entityIdsVsContId.values())
@@ -172,10 +189,21 @@ public class TestShowHideForms extends TestCase
 								{
 									Collection<EntityMapCondition> entityMapCondColl = formContext
 											.getEntityMapConditionCollection();
-									if (entityMapCondColl.isEmpty()
-											|| entityMapCondColl.size() <= 0)
+									if (!entityMapCondColl.isEmpty()
+											|| entityMapCondColl.size() > 0)
 									{
-										throw new DynamicExtensionsSystemException(null);
+										int count=0;
+										for(EntityMapCondition condition: entityMapCondColl)
+										{
+											if(condition.getStaticRecordId()==Long.valueOf(0) || condition.getStaticRecordId()==0)
+											{
+												count=count+1;
+											}
+										}
+										if(count==0)
+										{
+											throw new DynamicExtensionsSystemException(XMLFileName);
+										}
 									}
 								}
 							}
@@ -184,7 +212,7 @@ public class TestShowHideForms extends TestCase
 				}
 			}
 			System.out
-					.println("--------------- Test Case of AssociateNoFormsToCP successful ------------");
+					.println("--------------- Test Case of AssociateNoFormsToCP executed successful ------------");
 		}
 		catch (DynamicExtensionsSystemException e)
 		{
@@ -236,7 +264,7 @@ public class TestShowHideForms extends TestCase
 				}
 
 			}
-			System.out.println("--------------- Test Case of TestForNewCp successful ------------");
+			System.out.println("--------------- Test Case of TestForNewCp executed successful ------------");
 		}
 		catch (DynamicExtensionsSystemException e)
 		{

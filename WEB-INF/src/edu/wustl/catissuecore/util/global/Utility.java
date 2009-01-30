@@ -35,7 +35,14 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.hibernate.Session;
 
+import edu.common.dynamicextensions.domain.Category;
+import edu.common.dynamicextensions.domain.integration.EntityMap;
+import edu.common.dynamicextensions.domain.integration.EntityMapCondition;
+import edu.common.dynamicextensions.domain.integration.FormContext;
+import edu.common.dynamicextensions.entitymanager.EntityManager;
 import edu.common.dynamicextensions.entitymanager.EntityManagerConstantsInterface;
+import edu.common.dynamicextensions.entitymanager.EntityManagerInterface;
+import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.wustl.catissuecore.actionForm.IPrinterTypeLocation;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
@@ -79,6 +86,7 @@ import edu.wustl.common.beans.QueryResultObjectData;
 import edu.wustl.common.beans.QueryResultObjectDataBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.CDEBizLogic;
+import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.QueryBizLogic;
 import edu.wustl.common.cde.CDE;
 import edu.wustl.common.cde.CDEManager;
@@ -2326,4 +2334,157 @@ public class Utility extends edu.wustl.common.util.Utility {
 		 }
 	 }
 	
+	// Suhas Khot : Added for show_hide_forms
+	/**
+	 * This method is used to get Object from the DE metadata
+	 * @param whereColumnValue value of where column in the query
+	 * @param selectObjName name of object on which the query is to fire
+	 * @param whereColumnName name of where column in the query
+	 * @return the identifier of the Object
+	 * @throws DAOException fails to do database operation
+	 */
+	public static Object getObjectIdentifier(String whereColumnValue, String selectObjName,
+			String whereColumnName) throws DAOException
+	{
+		Object identifier = null;
+		DefaultBizLogic defaultBizLogic = edu.common.dynamicextensions.bizlogic.BizLogicFactory
+				.getDefaultBizLogic();
+		String[] selectColName = {edu.wustl.common.util.global.Constants.SYSTEM_IDENTIFIER};
+		String[] whereColName = {whereColumnName};
+		Object[] whereColValue = {whereColumnValue};
+		String[] whereColCondition = {Constants.EQUALS};
+		String joinCondition = Constants.AND_JOIN_CONDITION;
+		List identifierList = defaultBizLogic.retrieve(selectObjName, selectColName, whereColName,
+				whereColCondition, whereColValue, joinCondition);
+		if (identifierList != null && !identifierList.isEmpty())
+		{
+			identifier = identifierList.get(0);
+		}
+		return identifier;
+	}
+
+	/**
+	 * This method return all entityId Vs containerId map.
+	 * @param entityGroupIds entityIds Collection
+	 * @throws DynamicExtensionsSystemException
+	 * @throws DAOException if it fails to do database operation
+	 */
+	public static Map<Long, Long> getAllContainers() throws DynamicExtensionsSystemException,
+			DAOException
+	{
+		// Map for storing containers corresponding to entitiesIds
+		Map<Long, Long> entityIdsVsContId = new HashMap<Long, Long>();
+		EntityManagerInterface entityManager = EntityManager.getInstance();
+		DefaultBizLogic defaultBizLogic = edu.common.dynamicextensions.bizlogic.BizLogicFactory
+				.getDefaultBizLogic();
+		String[] colName = {Constants.NAME};
+		Collection<NameValueBean> entityGrpBeanColl = entityManager.getAllEntityGroupBeans();
+		Set<Long> entityGroupIds = new HashSet<Long>();
+		for (NameValueBean entityGrpBean : entityGrpBeanColl)
+		{
+			entityGroupIds.add(Long.parseLong(entityGrpBean.getValue()));
+		}
+		entityIdsVsContId = getAllContainers(entityGroupIds);
+		return entityIdsVsContId;
+	}
+
+	
+	/**
+	 * This method return entityId Vs containerId map for selective entityGroup and all forms.
+	 * @param entityGroupIds entityGroupIds Collection
+	 * @throws DynamicExtensionsSystemException fails to get forms,entity
+	 * @throws DAOException fail to do database operation
+	 */
+	public static Map<Long, Long> getAllContainers(Set<Long> entityGroupIds)
+			throws DynamicExtensionsSystemException, DAOException
+	{
+		// Map for storing containers corresponding to entitiesIds
+		Map<Long, Long> entityIdsVsContId = new HashMap<Long, Long>();
+		EntityManagerInterface entityManager = EntityManager.getInstance();
+		DefaultBizLogic defaultBizLogic = edu.common.dynamicextensions.bizlogic.BizLogicFactory.getDefaultBizLogic();
+		for (Long entityGroupId : entityGroupIds)
+		{
+			Collection<Long> entityIds = entityManager.getAllEntityIdsForEntityGroup(entityGroupId);
+			if (entityIds != null && !entityIds.isEmpty())
+			{
+				for (Long entityId : entityIds)
+				{
+					Long containerId = entityManager.getContainerIdFromEntityId(entityId);
+					if (containerId != null)
+					{
+						entityIdsVsContId.put(entityId, containerId);
+					}
+				}
+			}
+		}
+		String[] colName = {Constants.NAME};
+		List<String> formNameColl = defaultBizLogic.retrieve(Category.class.getName(), colName);
+		for (String formName : formNameColl)
+		{
+			Long rootCategoryEntityId = entityManager
+					.getRootCategoryEntityIdByCategoryName(formName);
+			if (rootCategoryEntityId != null)
+			{
+				Long containerId = entityManager.getContainerIdFromEntityId(rootCategoryEntityId);
+				if (containerId != null)
+				{
+					entityIdsVsContId.put(rootCategoryEntityId, containerId);
+				}
+			}
+		}
+		return entityIdsVsContId;
+	}
+	
+	/**
+	 * This method is used to set the condition on Forms/Entities
+	 * @param formContext set the object on which condition has to be set
+	 * @param conditionObjectId set the condition
+	 * @param typeId set the typeId for entityMapCondition
+	 * @return entityMapCondition object
+	 */
+	public static EntityMapCondition getEntityMapCondition(FormContext formContext,
+			Long conditionObjectId, Long typeId)
+	{
+		EntityMapCondition entityMapCond = new EntityMapCondition();
+		entityMapCond.setTypeId(((Long) typeId));
+		entityMapCond.setStaticRecordId((conditionObjectId));
+		entityMapCond.setFormContext(formContext);
+		return entityMapCond;
+	}
+	
+	/**
+	 * This method is used edit the previously added entityMapCondition
+	 * @param entityMap to get formContext
+	 * @param conditionObjectId condition on forms
+	 * @param typeId collection protocol id
+	 */
+	public static void editConditions(EntityMap entityMap, Long conditionObjectId, Long typeId)
+	{
+		Collection<FormContext> formContextColl = entityMap.getFormContextCollection();
+		if (formContextColl != null)
+		{
+			for (FormContext formContext : formContextColl)
+			{
+				Collection<EntityMapCondition> entityMapCondColl = formContext
+						.getEntityMapConditionCollection();
+
+				if (entityMapCondColl.isEmpty() || entityMapCondColl.size() <= 0)
+				{
+					EntityMapCondition entityMapCondition = Utility.getEntityMapCondition(
+							formContext, conditionObjectId, typeId);
+					entityMapCondColl.add(entityMapCondition);
+				}
+				else
+				{
+					for (EntityMapCondition entityMapCondition : entityMapCondColl)
+					{
+						entityMapCondition.setTypeId(typeId);
+						entityMapCondition.setStaticRecordId(conditionObjectId);
+						entityMapCondColl.add(entityMapCondition);
+					}
+				}
+				formContext.setEntityMapConditionCollection(entityMapCondColl);
+			}
+		}
+	}
 }

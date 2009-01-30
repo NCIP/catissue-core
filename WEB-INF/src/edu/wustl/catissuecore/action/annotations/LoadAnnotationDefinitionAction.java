@@ -212,8 +212,6 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 							}
 						}
 				}
-				if (whereColumnValue == null || whereColumnValue.length == 0)
-					whereColumnValue = new String[]{Constants.ALL};
 				annotationForm.setConditionVal(whereColumnValue);
 			}
 		}
@@ -299,7 +297,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 					catch (HibernateException e1)
 					{
 						// TODO Auto-generated catch block
-						e1.printStackTrace();
+						Logger.out.debug(e1.getMessage(), e1);
 						throw new BizLogicException("", e1);
 					}
 
@@ -331,7 +329,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 					catch (HibernateException e1)
 					{
 						// TODO Auto-generated catch block
-						e1.printStackTrace();
+						Logger.out.debug(e1.getMessage(), e1);
 						throw new BizLogicException("", e1);
 					}
 					finally
@@ -343,7 +341,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 						catch (HibernateException e)
 						{
 							// TODO Auto-generated catch block
-							e.printStackTrace();
+							Logger.out.debug(e.getMessage(), e);
 							throw new BizLogicException("", e);
 						}
 					}
@@ -352,13 +350,13 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 			catch (NumberFormatException e2)
 			{
 				// TODO Auto-generated catch block
-				e2.printStackTrace();
+				Logger.out.debug(e2.getMessage(), e2);
 				throw new BizLogicException("", e2);
 			}
 			catch (DAOException e2)
 			{
 				// TODO Auto-generated catch block
-				e2.printStackTrace();
+				Logger.out.debug(e2.getMessage(), e2);
 				throw new BizLogicException("", e2);
 			}
 			finally
@@ -866,26 +864,26 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 		return entityMapList;
 	}
 
-	/**
-	 * @param staticEntityIdsList
-	 * @return
-	 */
-	private List<EntityMap> getEntityMapList(List<Long> staticEntityIdsList)
-	{
-		List<EntityMap> entityMapList = new ArrayList<EntityMap>();
-		EntityMap entityMapObj = null;
-		if (staticEntityIdsList != null)
-		{
-			Iterator<Long> staticEntityIdIterator = staticEntityIdsList.iterator();
-			while (staticEntityIdIterator.hasNext())
-			{
-				entityMapObj = new EntityMap();
-				entityMapObj.setStaticEntityId(staticEntityIdIterator.next());
-				entityMapList.add(entityMapObj);
-			}
-		}
-		return entityMapList;
-	}
+//	/**
+//	 * @param staticEntityIdsList
+//	 * @return
+//	 */
+//	private List<EntityMap> getEntityMapList(List<Long> staticEntityIdsList)
+//	{
+//		List<EntityMap> entityMapList = new ArrayList<EntityMap>();
+//		EntityMap entityMapObj = null;
+//		if (staticEntityIdsList != null)
+//		{
+//			Iterator<Long> staticEntityIdIterator = staticEntityIdsList.iterator();
+//			while (staticEntityIdIterator.hasNext())
+//			{
+//				entityMapObj = new EntityMap();
+//				entityMapObj.setStaticEntityId(staticEntityIdIterator.next());
+//				entityMapList.add(entityMapObj);
+//			}
+//		}
+//		return entityMapList;
+//	}
 
 	/**
 	 * @param entityId
@@ -900,8 +898,6 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 		String entityName = "";
 		if (entityId != null)
 		{
-			EntityManagerInterface entityManager = EntityManager.getInstance();
-
 			List staticEntityList = (List) request.getSession().getAttribute(AnnotationConstants.STATIC_ENTITY_LIST);
 			if (staticEntityList != null && !staticEntityList.isEmpty())
 			{
@@ -962,7 +958,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 
 			List conditionalInstancesList = populateConditionalInstanceList();
 			annotationForm.setConditionalInstancesList(conditionalInstancesList);
-			annotationForm.setConditionVal(new String[]{Constants.ALL});
+			annotationForm.setConditionVal(new String[]{"-1"});
 
 		}
 	}
@@ -984,10 +980,11 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 			conditionalInstancesList = modifyName(conditionalInstancesList);
 			conditionalInstancesList.remove(0);
 			conditionalInstancesList.add(0, new NameValueBean(
-					edu.wustl.catissuecore.util.global.Constants.HOLDS_ANY, Constants.ALL));
+					edu.wustl.catissuecore.util.global.Constants.HOLDS_ANY, "-1"));
 		}
 		catch (DAOException e)
 		{
+			Logger.out.debug(e.getMessage(), e);
 		}
 		return conditionalInstancesList;
 	}
@@ -999,7 +996,6 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 	 */
 	private List modifyName(List conditionalInstancesList)
 	{
-		int j = 0;
 		List list = new ArrayList();
 		for (Object x : conditionalInstancesList)
 		{
