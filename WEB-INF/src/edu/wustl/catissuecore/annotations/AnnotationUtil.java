@@ -138,17 +138,14 @@ public class AnnotationUtil
         if(conditions!=null)    
         for (int i = 0; i < conditions.length; i++)
         {
-            
-            /*Here every time new formcontext can be created for each condition 
+			
+        	/*Here every time new formcontext can be created for each condition 
              *though form is one , just to make different formcontext as "noOfEntries" attribute
              *for form Context can change or can be assigned in future */
             formContext.setEntityMap(entityMapObj);
            boolean check = checkForAll(conditions);
            if(!check)
-            if (!conditions[i]
-                    .equals(new Integer(Constants.SELECT_OPTION_VALUE)
-                            .toString())
-                    && !conditions[i].equals(Constants.ALL))
+            if (!conditions[i].equals(Constants.ALL))
             {
                 EntityMapCondition entityMapCondition = new EntityMapCondition();
                 entityMapCondition.setFormContext(formContext);
