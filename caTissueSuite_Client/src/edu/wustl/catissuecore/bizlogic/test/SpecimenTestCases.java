@@ -47,12 +47,13 @@ public class SpecimenTestCases extends CaTissueBaseTestCase
 			sp = (Specimen) spCollection.get(0);
 			System.out.println("Get Object Sp");
 			sp.setCollectionStatus("Collected");
-			sp.setIsAvailable(true);
+			//sp.setIsAvailable(true);
 			sp.setExternalIdentifierCollection(null);
 			System.out.println(sp + ": sp");
 			sp = (Specimen) appService.updateObject(sp);
 			System.out.println(sp + ": sp After Update");
 			assertTrue(" Domain Object is successfully added ---->    Name:: " + sp, true);
+			assertEquals(sp.getIsAvailable().booleanValue(),true);
 		}
 		catch (Exception e)
 		{
