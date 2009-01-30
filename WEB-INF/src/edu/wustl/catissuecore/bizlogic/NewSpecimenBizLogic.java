@@ -103,7 +103,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	private SecurityManager securityManager = new SecurityManager(this.getClass());
 	private boolean cpbased = false;
 
-	protected void preInsert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
+	protected void preInsert(final Object obj, final DAO dao, final SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
 		storageContainerIds = new HashSet<String>();
 	}
@@ -117,7 +117,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	 * @throws UserNotAuthorizedException User Not Authorized Exception
 	 */
 
-	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
+	protected void insert(final Object obj, final DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
 		try
 		{
@@ -200,8 +200,17 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		parentSpecimen.setAvailableQuantity(availableQuantity);
 		if (availableQuantity <= 0)
 		{
-			parentSpecimen.setIsAvailable(new Boolean(false));
+			parentSpecimen.setIsAvailable(Boolean.FALSE);
 			parentSpecimen.setAvailableQuantity(new Double(0));
+		}
+		else
+		{
+			//bug 11174
+			parentSpecimen.setIsAvailable(Boolean.TRUE);
+			if (Constants.COLLECTION_STATUS_COLLECTED.equals(specimen.getCollectionStatus()))
+			{
+				specimen.setIsAvailable(Boolean.TRUE);
+			}				
 		}
 	}
 
@@ -326,7 +335,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		DisposalEventParameters disposalEvent = createDisposeEvent(sessionDataBean, specimen, disposalReason);
 		SpecimenEventParametersBizLogic specimenEventParametersBizLogic = new SpecimenEventParametersBizLogic();
 		specimenEventParametersBizLogic.insert(disposalEvent, sessionDataBean, Constants.HIBERNATE_DAO);
-		((Specimen) specimen).setIsAvailable(new Boolean(false));
+		((Specimen) specimen).setIsAvailable(Boolean.FALSE);
 		specimen.setActivityStatus(Constants.ACTIVITY_STATUS_CLOSED);
 	}
 
@@ -344,7 +353,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		DisposalEventParameters disposalEvent = createDisposeEvent(sessionDataBean, specimen, disposalReason);
 		SpecimenEventParametersBizLogic specimenEventParametersBizLogic = new SpecimenEventParametersBizLogic();
 		specimenEventParametersBizLogic.insert(disposalEvent, dao, sessionDataBean);
-		((Specimen) specimen).setIsAvailable(new Boolean(false));
+		((Specimen) specimen).setIsAvailable(Boolean.FALSE);
 		specimen.setActivityStatus(Constants.ACTIVITY_STATUS_CLOSED);
 	}
 
@@ -2840,6 +2849,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			{
 
 				newAvailQty = modifiedInitQty;
+				specimenVO.setIsAvailable(new Boolean(true));//bug 11174
 			}
 			else if (differenceQty == 0 || !specimenDO.getCollectionStatus().equals("Pending"))
 			{
@@ -3097,7 +3107,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	public Specimen getSpecimenObj(String specimenID, DAO dao) throws DAOException
 	{
 
-		Object object = dao.retrieve(Specimen.class.getName(), new Long(specimenID));
+		Object object = dao.retrieve(Specimen.class.getName(),Long.valueOf(specimenID) );//new Long(specimenID)
 
 		if (object == null)
 		{
@@ -3434,7 +3444,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 				if (id != null)
 				{
 					String idString = String.valueOf(id);
-					Long idLong = new Long(idString);
+					Long idLong = Long.valueOf(idString);//new Long(idString);
 					Specimen childSpecimen = new Specimen();
 					childSpecimen.setId(idLong);
 					refreshTitliSearchIndex(operation, childSpecimen);
