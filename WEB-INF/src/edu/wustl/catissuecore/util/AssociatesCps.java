@@ -13,7 +13,6 @@ import org.xml.sax.SAXException;
 
 import edu.common.dynamicextensions.bizlogic.BizLogicFactory;
 import edu.common.dynamicextensions.domain.AbstractMetadata;
-import edu.common.dynamicextensions.domain.Category;
 import edu.common.dynamicextensions.domain.integration.EntityMap;
 import edu.common.dynamicextensions.domain.integration.EntityMapCondition;
 import edu.common.dynamicextensions.domain.integration.FormContext;
@@ -22,7 +21,7 @@ import edu.common.dynamicextensions.entitymanager.EntityManagerInterface;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.wustl.catissuecore.bizlogic.AnnotationBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
@@ -33,28 +32,9 @@ import edu.wustl.common.util.dbManager.DAOException;
  * @author suhas_khot
  *
  */
-public final class AssociatesCps
+public class AssociatesCps
 {
-	/*
-	 * creates  a singleton object
-	 */
-	private static AssociatesCps assoCps= new AssociatesCps();
-	
-	/*
-	 * Private constructor
-	 */
-	private AssociatesCps()
-	{
-		
-	}
-	/*
-	 * returns the single object
-	 */
-	public static AssociatesCps getInstance()
-	{
-		return assoCps;
-	}
-	
+
 	/**
 	 * Map for storing containers corresponding to entitiesIds
 	 */
@@ -75,7 +55,7 @@ public final class AssociatesCps
 			BizLogicException
 	{
 		//Validates arguments
-		validate(args);
+		validateXML(args);
 		//stores filePath
 		String filePath = args[0];
 
@@ -87,17 +67,17 @@ public final class AssociatesCps
 		XMLParser xmlParser = new XMLParser(filePath);
 
 		//stores mapping of cpIds and corresponding entityIds
-		Map< Long, List<Long> > cpIdsVsEntityIds = xmlParser.getCpIdsVsEntityIds();
+		Map<Long, List<Long>> cpIdsVsEntityIds = xmlParser.getCpIdsVsEntityIds();
 
 		//stores mapping of cpIds and corresponding forms/Category
-		Map< Long, List<Long> > cpIdsVsFormIds = xmlParser.getCpIdsVsFormIds();
+		Map<Long, List<Long>> cpIdsVsFormIds = xmlParser.getCpIdsVsFormIds();
 
 		//stores mapping of cpIds and override option
-		Map< Long, String > cpIdsVsoverride = xmlParser.getCpIdVsOverride();
+		Map<Long, String> cpIdsVsoverride = xmlParser.getCpIdVsOverride();
 
-		Long typeId = (Long) xmlParser.getObjectIdentifier(Constants.COLLECTION_PROTOCOL,
+		Long typeId = (Long) Utility.getObjectIdentifier(Constants.COLLECTION_PROTOCOL,
 				AbstractMetadata.class.getName(), Constants.NAME);
-		getAllContainers();
+		entityIdsVsContId = Utility.getAllContainers();
 
 		for (Long cpId : cpIdsVsoverride.keySet())
 		{
@@ -119,54 +99,10 @@ public final class AssociatesCps
 	}
 
 	/**
-	 * @param entityGroupIds entityIds Collection
-	 * @throws DynamicExtensionsSystemException
-	 * @throws DAOException if it fails to do database operation
-	 */
-	public static void getAllContainers() throws DynamicExtensionsSystemException, DAOException
-	{
-		EntityManagerInterface entityManager = EntityManager.getInstance();
-		DefaultBizLogic defaultBizLogic = BizLogicFactory.getDefaultBizLogic();
-		String[] colName = {Constants.NAME};
-		Collection<NameValueBean> entityGrpBeanColl = entityManager.getAllEntityGroupBeans();
-		for (NameValueBean entityGrpBean : entityGrpBeanColl)
-		{
-			Collection<Long> entityIds = entityManager.getAllEntityIdsForEntityGroup(Long
-					.parseLong(entityGrpBean.getValue()));
-			if (entityIds != null && !entityIds.isEmpty())
-			{
-				for (Long entityId : entityIds)
-				{
-					Long containerId = entityManager.getContainerIdFromEntityId(entityId);
-					if (containerId != null)
-					{
-						entityIdsVsContId.put(entityId, containerId);
-					}
-				}
-			}
-		}
-
-		List< String > formNameColl = defaultBizLogic.retrieve(Category.class.getName(), colName);
-		for (String formName : formNameColl)
-		{
-			Long rootCatEntityId = entityManager.getRootCategoryEntityIdByCategoryName(formName);
-			if (rootCatEntityId != null)
-			{
-				Long containerId = entityManager.getContainerIdFromEntityId(rootCatEntityId);
-				if (containerId != null)
-				{
-					entityIdsVsContId.put(rootCatEntityId, containerId);
-				}
-			}
-		}
-
-	}
-
-	/**
 	 * @param args get command line user inputs
 	 * @throws DynamicExtensionsSystemException if CSV file path has not been mention
 	 */
-	private static void validate(String[] args) throws DynamicExtensionsSystemException
+	private static void validateXML(String[] args) throws DynamicExtensionsSystemException
 	{
 		if (args.length == 0)
 		{
@@ -186,7 +122,6 @@ public final class AssociatesCps
 			DynamicExtensionsSystemException, UserNotAuthorizedException, BizLogicException
 	{
 		AnnotationBizLogic annotation = new AnnotationBizLogic();
-		DefaultBizLogic defaultBizLogic = BizLogicFactory.getDefaultBizLogic();
 		EntityManagerInterface entityManager = EntityManager.getInstance();
 		if (cpId != 0)
 		{
@@ -201,35 +136,14 @@ public final class AssociatesCps
 		}
 		else
 		{
-			for (Long containerId : entityIdsVsContId.values())
+			Long cpObjectId = Long.valueOf(-1);
+			Collection<EntityMapCondition> entMapCondColl = entityManager
+					.getAllConditionsByStaticRecordId(cpObjectId);
+			for (EntityMapCondition entityMapCond : entMapCondColl)
 			{
-				if (containerId != null)
-				{
-					List< EntityMap > entityMapList = defaultBizLogic.retrieve(EntityMap.class
-							.getName(), Constants.CONTAINERID, containerId);
-					if (entityMapList != null && entityMapList.isEmpty())
-					{
-						EntityMap entityMap = entityMapList.get(0);
-						Collection<FormContext> formContextColl = entityMap
-								.getFormContextCollection();
-						if (formContextColl != null)
-						{
-							for (FormContext formContext : formContextColl)
-							{
-								Collection<EntityMapCondition> entityMapCondColl = formContext
-										.getEntityMapConditionCollection();
-								if (entityMapCondColl.isEmpty() || entityMapCondColl.size() <= 0)
-								{
-									EntityMapCondition entityMapCond = getEntityMapCondition(
-											formContext, Long.valueOf(0), typeId);
-									entityMapCondColl.add(entityMapCond);
-								}
-								formContext.setEntityMapConditionCollection(entityMapCondColl);
-							}
-						}
-						annotation.updateEntityMap(entityMap);
-					}
-				}
+				entityMapCond.setTypeId(typeId);
+				entityMapCond.setStaticRecordId(Long.valueOf(0));
+				annotation.update(entityMapCond, Constants.HIBERNATE_DAO);
 			}
 		}
 	}
@@ -246,15 +160,15 @@ public final class AssociatesCps
 			throws DAOException, UserNotAuthorizedException, BizLogicException
 	{
 		AnnotationBizLogic annotation = new AnnotationBizLogic();
+		DefaultBizLogic defaultBizLogic = BizLogicFactory.getDefaultBizLogic();
 		for (Long entityId : entityIds)
 		{
-			DefaultBizLogic defaultBizLogic = BizLogicFactory.getDefaultBizLogic();
 			Long containerId = getContainerId(entityId);
 			if (containerId != null)
 			{
 				List<EntityMap> entityMapList = defaultBizLogic.retrieve(EntityMap.class.getName(),
 						Constants.CONTAINERID, containerId);
-				if (entityMapList != null && !entityMapList.isEmpty())
+				if (entityMapList != null && entityMapList.size() > 0)
 				{
 					EntityMap entityMap = entityMapList.get(0);
 					if (cpId != 0)
@@ -263,7 +177,8 @@ public final class AssociatesCps
 					}
 					if (cpId == 0)
 					{
-						editConditions(entityMap);
+						Long conditionObject = Long.valueOf(-1);
+						editConditions(entityMap, conditionObject, typeId);
 					}
 					annotation.updateEntityMap(entityMap);
 				}
@@ -279,7 +194,7 @@ public final class AssociatesCps
 	private static Long getContainerId(Long entityId)
 	{
 		Long containerId = null;
-		if (entityIdsVsContId != null && !entityIdsVsContId.isEmpty())
+		if (entityIdsVsContId != null && entityIdsVsContId.size() > 0)
 		{
 			for (Long entityIdFromMap : entityIdsVsContId.keySet())
 			{
@@ -309,7 +224,7 @@ public final class AssociatesCps
 						.getEntityMapConditionCollection();
 				if (entityMapCondColl.isEmpty() || entityMapCondColl.size() <= 0)
 				{
-					EntityMapCondition entityMapCond = getEntityMapCondition(formContext,
+					EntityMapCondition entityMapCond = Utility.getEntityMapCondition(formContext,
 							conditionObjectId, typeId);
 					entityMapCondColl.add(entityMapCond);
 				}
@@ -329,7 +244,7 @@ public final class AssociatesCps
 						else if ((entityMapCondition.getStaticRecordId() != 0) && (flag == true))
 						{
 							flag = false;
-							EntityMapCondition entityMapCond = getEntityMapCondition(formContext,
+							EntityMapCondition entityMapCond = Utility.getEntityMapCondition(formContext,
 									conditionObjectId, typeId);
 							entityMapCondColl.add(entityMapCond);
 							break;
@@ -340,52 +255,4 @@ public final class AssociatesCps
 			}
 		}
 	}
-
-	/**
-	 * override to associate all CPs for this entity/form
-	 * @param entityMap to get formContext object
-	 * @throws BizLogicException fails to retrieve bizLogic object
-	 * @throws UserNotAuthorizedException user is not authenticated to perform operation
-	 */
-	private static void editConditions(EntityMap entityMap) throws UserNotAuthorizedException,
-			BizLogicException
-	{
-		Collection<FormContext> formContextColl = entityMap.getFormContextCollection();
-		if (formContextColl != null)
-		{
-			AnnotationBizLogic annotation = new AnnotationBizLogic();
-			annotation.updateEntityMap(entityMap);
-			for (FormContext formContext : formContextColl)
-			{
-				Collection<EntityMapCondition> entityMapCondColl = formContext
-						.getEntityMapConditionCollection();
-
-				if (!entityMapCondColl.isEmpty() || entityMapCondColl.size() > 0)
-				{
-					for (EntityMapCondition entityMapCondition : entityMapCondColl)
-					{
-						annotation.delete(entityMapCondition, Constants.HIBERNATE_DAO);
-					}
-				}
-				formContext.setEntityMapConditionCollection(null);
-			}
-		}
-	}
-
-	/**
-	 * @param formContext set the object on which condition has to be set
-	 * @param conditionObjectId set the condition
-	 * @param typeId set the typeId for entityMapCondition
-	 * @return entityMapCondition object
-	 */
-	private static EntityMapCondition getEntityMapCondition(FormContext formContext,
-			Long conditionObjectId, Long typeId)
-	{
-		EntityMapCondition entityMapCond = new EntityMapCondition();
-		entityMapCond.setTypeId(((Long) typeId));
-		entityMapCond.setStaticRecordId((conditionObjectId));
-		entityMapCond.setFormContext(formContext);
-		return entityMapCond;
-	}
-
 }
