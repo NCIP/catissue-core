@@ -1206,19 +1206,19 @@
 	</target>
 
 	<!--Target for Application and Database Upgrade from Suite 1.0  to Suite 1.1-->
-	<target name="upgrade_all" depends="upgrade_app, upgrade_db">
+	<target name="upgrade_all" depends="upgrade_app, upgrade_from_Suite1.1_to_1.1p">
 	</target>
 
 	<!--Target for Application and Database Upgrade from caTissueCore v1.2.2  to Suite 1.1-->
-	<target name="upgrade_all_from_core_1.2.2" depends="core_1.2.2_upgrade_check">
+	<!--<target name="upgrade_all_from_core_1.2.2" depends="core_1.2.2_upgrade_check">
 		<antcall target="upgrade_app" />
 		<antcall target="upgrade_db_from_core_1.2.2_to_suite_1.1" />
 	</target>
-
+ 	-->
 
 	<target name="upgrade_app" depends="deploy_app">
 	</target>
-
+<!--
 	<target name="upgrade_db">
 		<antcall target="upgrade_from_Suite1.0_to_1.1" />
 		<antcall target="upgrade_clinicalDiagnosis_values"/>
@@ -1248,7 +1248,7 @@
 		<antcall target="show_hide_forms_based_on_CPs">
 		</antcall>
 	</target>
-
+-->
 	<target name="show_hide_forms">
 		<if>
 			<equals arg1="${show.hide.forms}" arg2="true" />
@@ -1264,7 +1264,7 @@
 			</else>
 		</if>
 	</target>
-	
+	<!--
 	<target name="upgrade_db_from_core_1.2.2_to_suite_1.0_mysql">
 
 		<echo message="Upgrading MySQL Database from 1.2.2 to 1.0 ..." />
@@ -1288,8 +1288,8 @@
 		<antcall target="temp_update_metadata_for_clob_support_mysql" />
 
 	</target>
-
-
+-->
+<!--
 	<target name="upgrade_db_from_core_1.2.2_to_suite_1.0">
 		<if>
 			<equals arg1="mysql" arg2="${database.type}" />
@@ -1324,7 +1324,8 @@
 
 	</target>
 
-
+-->
+	<!--
 	<target name="upgrade_from_Suite1.0_to_1.1">
 		<if>
 			<equals arg1="mysql" arg2="${database.type}" />
@@ -1341,14 +1342,15 @@
 				<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
 			</else>
 		</if>
-	
+	-->
 		<!-- shippingtracking db -->
+	<!--
 		<antcall target="st_deploy_db" />
 	</target>
-	
+	-->
 	<!--upgrade all from Suite1.1 to to 1.1p Includes upgrade app and upgrade db-->
-	<target name="upgrade_all_from_Suite1.1_to_1.1p" depends="upgrade_app,upgrade_from_Suite1.1_to_1.1p">
-	</target>
+	<!--<target name="upgrade_all_from_Suite1.1_to_1.1p" depends="upgrade_app,upgrade_from_Suite1.1_to_1.1p"> -->
+	<!--</target> -->
 	<!-- Removing unnecessary PE -->
 	<target name="upgrade_from_Suite1.1_to_1.1p">
 			<if>
@@ -1402,6 +1404,7 @@
 
 
 	<!--MySQL Database Upgradation -->
+	<!--
 	<target name="upgrade_mysql_from_Suite1.0_to_1.1">
 		<echo message="Upgrading MySQL Database for caTISSUE Suite Application ..." />
 		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" >
@@ -1431,8 +1434,9 @@
 		<antcall target="update_metadata_for_model_changes" />
 	</target>
 
-
+-->
 	<!--Oracle Database Upgradation -->
+<!--
 	<target name="upgrade_oracle_from_Suite1.0_to_1.1">
 		<echo message="Upgrading Oracle Database for caTISSUE Suite Application ..." />
 
@@ -1485,7 +1489,7 @@
 		<antcall target="update_metadata_for_model_changes" />
 	</target>
 
-
+-->
 	<!-- DE Metadata Upgradation -->
 	<target name="update_metadata_for_model_changes">
 		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
@@ -1600,6 +1604,7 @@
 		<antcall target="reset_sequences" />
 	</target>
 	
+
 	<target name="Export_Clinical_diagnosis">
 		<if>
 			<equals arg1="mysql" arg2="${database.type}" />
@@ -1618,7 +1623,7 @@
 		</if>
 		<delete dir="${temp.dir}" />
 	</target>
-	
+
 	<target name="Export_Clinical_diagnosis_mysql">
 		<echo message="Exporting data of Clinical diagnosis ..." />
 		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
@@ -1658,9 +1663,7 @@
 		</java>
 		<delete dir="${temp.dir}" />
 	</target>
-	
-
-
+<!--
 	<target name="upgrade_clinicalDiagnosis_values">
 			<if>
 				<equals arg1="mysql" arg2="${database.type}" />
@@ -1714,6 +1717,8 @@
 		</java>
 		<delete dir="${temp.dir}" />
 	</target>
+-->
+	
 	<!--Data import for CAModel -->
 	<target name="CAModel_import_data">
 		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
@@ -2746,6 +2751,7 @@ Thanking You,
 	</target>
 
 	<!-- MSR Migration - start -->
+	<!--
 	<target name="runMigration">
 		<property name="tempMSR" value="${basedir}/tempMSR"></property>
 		<delete dir="${tempMSR}"></delete>
@@ -2811,6 +2817,7 @@ Thanking You,
 					</classpath>
 			</java>
 	</target>
+	-->
 	<!-- MSR Migration - end -->
 	
 	<!-- ACORN - mssqlserver migration - start -->
