@@ -483,7 +483,7 @@ public class AnnotationBizLogic extends DefaultBizLogic
 	 * Deletes an object from the database.
 	 * @param obj The object to be deleted.
 	 * @throws DAOException
-	 * @throws UserNotAuthorizedException TODO
+	 * @throws UserNotAuthorizedException
 	 */
 	protected void delete(Object obj, DAO dao) throws DAOException, UserNotAuthorizedException
 	{
@@ -495,9 +495,11 @@ public class AnnotationBizLogic extends DefaultBizLogic
 	 * @param cpIdList
 	 * @return
 	 */
-	public List getAnnotationIdsBasedOnCondition(List dynEntitiesList, List cpIdList)
+	public List getAnnotationIdsBasedOnCondition(List dynEntitiesList, List cpIdList,boolean showForAll)
 	{
 		List dynEntitiesIdList = new ArrayList();
+		List cpIdListForAll = new ArrayList();
+		cpIdListForAll.add(Long.valueOf(-1));
 		if (dynEntitiesList != null && !dynEntitiesList.isEmpty())
 		{
 			Iterator dynEntitiesIterator = dynEntitiesList.iterator();
@@ -514,15 +516,25 @@ public class AnnotationBizLogic extends DefaultBizLogic
 									.getStudyFormLabel().equals("")))
 					{
 						if (formContext.getEntityMapConditionCollection() != null
-								&& !formContext.getEntityMapConditionCollection().isEmpty())
+								&& !formContext.getEntityMapConditionCollection().isEmpty() && showForAll==false)
 						{
 							boolean check = checkStaticRecId(formContext
 									.getEntityMapConditionCollection(), cpIdList);
 							if (check)
+							{
 								dynEntitiesIdList.add(entityMap.getContainerId());
+							}
 						}
-						else
-							dynEntitiesIdList.add(entityMap.getContainerId());
+						if (formContext.getEntityMapConditionCollection() != null
+								&& !formContext.getEntityMapConditionCollection().isEmpty() && showForAll==true)
+						{
+							boolean check = checkStaticRecId(formContext
+									.getEntityMapConditionCollection(), cpIdListForAll);
+							if (check)
+							{
+								dynEntitiesIdList.add(entityMap.getContainerId());
+							}						
+						}
 					}
 				}
 			}

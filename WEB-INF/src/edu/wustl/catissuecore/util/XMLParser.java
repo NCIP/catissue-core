@@ -23,6 +23,7 @@ import edu.common.dynamicextensions.entitymanager.EntityManagerInterface;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -309,8 +310,13 @@ public class XMLParser extends DefaultHandler
 			}
 			else if ((cpName != null) && !(Constants.ALL.equalsIgnoreCase(cpName)))
 			{
-				cpId = (Long) getObjectIdentifier(cpName, CollectionProtocol.class.getName(),
+				cpId = (Long) Utility.getObjectIdentifier(cpName, CollectionProtocol.class.getName(),
 						Constants.TITLE);
+				if (cpId == null)
+				{
+					throw new DynamicExtensionsSystemException(
+							"Please enter valid Collection Protocol's name or check whether Collection Protocol is created or not");
+				}
 			}
 			entGrpVsEntities = cpVsEGWithEntities.get(cpName);
 			for (String entityGrpName : entGrpVsEntities.keySet())
@@ -374,7 +380,7 @@ public class XMLParser extends DefaultHandler
 						}
 					}
 				}
-			} 
+			}
 
 			for (String formName : cpsVsForms.get(cpName))
 			{
@@ -462,35 +468,4 @@ public class XMLParser extends DefaultHandler
 		this.cpIdVsOverride = cpIdVsOverride;
 	}
 
-	/**
-	 * @param whereColumnValue value of where column in the query
-	 * @param selectObjName name of object on which the query is to fire
-	 * @param whereColumnName name of where column in the query
-	 * @return the identifier of the Object
-	 * @throws DAOException fails to do database operation
-	 * @throws DynamicExtensionsSystemException fail to get valid Collection Protocol's name
-	 */
-	public Object getObjectIdentifier(String whereColumnValue, String selectObjName,
-			String whereColumnName) throws DAOException, DynamicExtensionsSystemException
-	{
-		Object identifier = null;
-		DefaultBizLogic defaultBizLogic = BizLogicFactory.getDefaultBizLogic();
-		String[] selectColName = {edu.wustl.common.util.global.Constants.SYSTEM_IDENTIFIER};
-		String[] whereColName = {whereColumnName};
-		Object[] whereColValue = {whereColumnValue};
-		String[] whereColCondition = {Constants.EQUALS};
-		String joinCondition = Constants.AND_JOIN_CONDITION;
-		List identifierList = defaultBizLogic.retrieve(selectObjName, selectColName, whereColName,
-				whereColCondition, whereColValue, joinCondition);
-		if (identifierList != null && identifierList.size() > 0)
-		{
-			identifier = identifierList.get(0);
-		}
-		if (identifier == null)
-		{
-			throw new DynamicExtensionsSystemException(
-					"Please enter valid Collection Protocol's name or check whether Collection Protocol is created or not");
-		}
-		return identifier;
-	}
 }
