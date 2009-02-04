@@ -657,31 +657,31 @@ public class DistributionBizLogic extends DefaultBizLogic
 	 */
 	protected void setSpecimenArrayDetails(Distribution distribution , List arrayEntries)
 	{
-		
 		distribution.getDistributedItemCollection();
 		Iterator itr = distribution.getDistributedItemCollection().iterator();
 		while (itr.hasNext())
 		{
 			DistributedItem distributedItem = (DistributedItem) itr.next();
 			SpecimenArray specimenArray = (SpecimenArray)distributedItem.getSpecimenArray();
-			List arrayDetails = new ArrayList();
-			arrayDetails.add(specimenArray.getName());
-			arrayDetails.add(Utility.toString(specimenArray.getBarcode()));
-			arrayDetails.add(Utility.toString(specimenArray.getSpecimenArrayType().getName()));
-			if(specimenArray != null && specimenArray.getLocatedAtPosition() != null)
+			if(specimenArray != null)
 			{
-				arrayDetails.add(Utility.toString(specimenArray.getLocatedAtPosition().getPositionDimensionOne()));
-				arrayDetails.add(Utility.toString(specimenArray.getLocatedAtPosition().getPositionDimensionTwo()));
+				List arrayDetails = new ArrayList();
+				arrayDetails.add(specimenArray.getName());
+				arrayDetails.add(Utility.toString(specimenArray.getBarcode()));
+				arrayDetails.add(Utility.toString(specimenArray.getSpecimenArrayType().getName()));
+				if(specimenArray != null && specimenArray.getLocatedAtPosition() != null)
+				{
+					arrayDetails.add(Utility.toString(specimenArray.getLocatedAtPosition().getPositionDimensionOne()));
+					arrayDetails.add(Utility.toString(specimenArray.getLocatedAtPosition().getPositionDimensionTwo()));
+				}
+				arrayDetails.add(Utility.toString(specimenArray.getCapacity().getOneDimensionCapacity()));
+				arrayDetails.add(Utility.toString(specimenArray.getCapacity().getTwoDimensionCapacity()));
+				arrayDetails.add(Utility.toString(specimenArray.getSpecimenArrayType().getSpecimenClass()));
+				arrayDetails.add(Utility.toString(specimenArray.getSpecimenArrayType().getSpecimenTypeCollection()));
+				arrayDetails.add(Utility.toString(specimenArray.getComment()));
+				arrayEntries.add(arrayDetails);
 			}
-			arrayDetails.add(Utility.toString(specimenArray.getCapacity().getOneDimensionCapacity()));
-			arrayDetails.add(Utility.toString(specimenArray.getCapacity().getTwoDimensionCapacity()));
-			arrayDetails.add(Utility.toString(specimenArray.getSpecimenArrayType().getSpecimenClass()));
-			arrayDetails.add(Utility.toString(specimenArray.getSpecimenArrayType().getSpecimenTypeCollection()));
-			arrayDetails.add(Utility.toString(specimenArray.getComment()));
-			arrayEntries.add(arrayDetails);
 		}
-		
-		
 	}
 	
 	/**
