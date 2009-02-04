@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 2.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping
+>
+    <class
+        name="edu.wustl.catissuecore.domain.Distribution"
+        table="CATISSUE_DISTRIBUTION"
+    >
+
+        <id
+            name="id"
+            column="IDENTIFIER"
+            type="long"
+            length="30"
+            unsaved-value="null"
+        >
+            <generator class="native">
+                <param name="sequence">CATISSUE_DISTRIBUTION_SEQ</param>
+                <param name="sequence">CATISSUE_SPEC_EVENT_PARAM_SEQ</param>
+              <!--  
+                  To add non XDoclet generator parameters, create a file named 
+                  hibernate-generator-params-Distribution.xml 
+                  containing the additional parameters and place it in your merge dir. 
+              --> 
+            </generator>
+        </id>
+
+        <many-to-one
+            name="toSite"
+            class="edu.wustl.catissuecore.domain.Site"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="TO_SITE_ID"
+        />
+
+        <many-to-one
+            name="distributionProtocol"
+            class="edu.wustl.catissuecore.domain.DistributionProtocol"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="DISTRIBUTION_PROTOCOL_ID"
+        />
+
+        <set
+            name="distributedItemCollection"
+            table="CATISSUE_DISTRIBUTED_ITEM"
+            lazy="false"
+            inverse="true"
+            cascade="save-update"
+            sort="unsorted"
+        >
+
+            <key
+                column="DISTRIBUTION_ID"
+            >
+            </key>
+
+            <one-to-many
+                  class="edu.wustl.catissuecore.domain.DistributedItem"
+            />
+
+        </set>
+
+        <property
+            name="activityStatus"
+            type="string"
+            update="true"
+            insert="true"
+            column="ACTIVITY_STATUS"
+            length="50"
+        />
+
+        <set
+            name="specimenArrayCollection"
+            table="CATISSUE_SPECIMEN_ARRAY"
+            lazy="false"
+            inverse="false"
+            cascade="none"
+            sort="unsorted"
+        >
+
+            <key
+                column="DISTRIBUTION_ID"
+            >
+            </key>
+
+            <one-to-many
+                  class="edu.wustl.catissuecore.domain.SpecimenArray"
+            />
+
+        </set>
+
+        <many-to-one
+            name="specimen"
+            class="edu.wustl.catissuecore.domain.Specimen"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="SPECIMEN_ID"
+        />
+
+        <property
+            name="timestamp"
+            type="timestamp"
+            update="true"
+            insert="true"
+            column="EVENT_TIMESTAMP"
+        />
+
+        <many-to-one
+            name="user"
+            class="edu.wustl.catissuecore.domain.User"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="USER_ID"
+        />
+
+        <property
+            name="comments"
+            type="string"
+            update="true"
+            insert="true"
+            column="COMMENTS"
+            length="500"
+        />
+        
+        <many-to-one
+            name="orderId"
+            class="edu.wustl.catissuecore.domain.OrderDetails"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="ORDER_ID"
+        />
+
+        <!--
+            To add non XDoclet property mappings, create a file named
+                hibernate-properties-Distribution.xml
+            containing the additional properties and place it in your merge dir.
+        -->
+
+    </class>
+
+</hibernate-mapping>

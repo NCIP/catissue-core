@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE web-app
+PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+"http://java.sun.com/dtd/web-app_2_3.dtd">
+    
+<web-app>
+
+   <display-name>caTISSUE Core</display-name>
+   
+  <!-- application properties file path -->
+  <context-param>
+    	<param-name>applicationproperties</param-name>
+    	<param-value>ApplicationResources.properties</param-value>
+  </context-param>
+  
+  <!-- base class for Application Resource bundle -->
+  <context-param>
+    	<param-name>resourcebundleclass</param-name>
+    	<param-value>ApplicationResources</param-value>
+  </context-param>
+ <!-- Listener Configuration -->
+  <listener>
+  	<listener-class>edu.wustl.catissuecore.util.listener.CatissueCoreServletContextListener</listener-class>
+  </listener>
+  <listener>
+  	<listener-class>edu.wustl.catissuecore.util.listener.CatissueCoreSessionListener</listener-class>
+  </listener>
+  
+ <!-- Standard Action Servlet Configuration (with debugging) -->
+
+   <servlet>
+     <servlet-name>action</servlet-name>
+     <servlet-class>org.apache.struts.action.ActionServlet</servlet-class>
+       
+     <init-param>
+      <param-name>config</param-name>
+      <param-value>/WEB-INF/struts-config.xml</param-value>
+    </init-param>
+    <init-param>
+      <param-name>debug</param-name>
+      <param-value>3</param-value>
+    </init-param>
+    <init-param>
+      <param-name>detail</param-name>
+      <param-value>2</param-value>
+    </init-param>     
+    <load-on-startup>2</load-on-startup>
+   </servlet>
+
+   <servlet>
+     <servlet-name>ResponseServlet</servlet-name>
+     <servlet-class>edu.wustl.common.struts.ResponseServlet</servlet-class>
+   </servlet>
+	
+ <!-- Standard Action Servlet Mapping -->
+  <servlet-mapping>
+     <servlet-name>action</servlet-name>
+     <url-pattern>*.do</url-pattern>
+  </servlet-mapping>
+
+	<servlet-mapping>
+     <servlet-name>ResponseServlet</servlet-name>
+     <url-pattern>/ResponseServlet</url-pattern>
+  </servlet-mapping>
+  
+	<session-config>
+	<session-timeout>30</session-timeout> |#1 </session-config>
+  
+ <!--Usual Welcome-file-list-->
+  <welcome-file-list>
+	 <welcome-file>/pages/index.jsp</welcome-file>
+  </welcome-file-list>
+
+  <taglib>
+      <taglib-uri>/WEB-INF/struts-html.tld</taglib-uri>
+      <taglib-location>/WEB-INF/struts-html.tld</taglib-location>
+  </taglib>
+
+  <taglib>
+	  <taglib-uri>/WEB-INF/struts-logic.tld</taglib-uri>
+	  <taglib-location>/WEB-INF/struts-logic.tld</taglib-location>
+  </taglib>
+  
+  <taglib>
+	  <taglib-uri>/WEB-INF/struts-bean.tld</taglib-uri>
+	  <taglib-location>/WEB-INF/struts-bean.tld</taglib-location>
+  </taglib>
+  
+  <taglib>
+	  <taglib-uri>/WEB-INF/PagenationTag.tld</taglib-uri>
+	  <taglib-location>/WEB-INF/PagenationTag.tld</taglib-location>
+  </taglib>
+  
+  <taglib>
+	  <taglib-uri>/WEB-INF/AutoCompleteTag.tld</taglib-uri>
+	  <taglib-location>/WEB-INF/AutoCompleteTag.tld</taglib-location>
+  </taglib>
+
+  <taglib>
+	  <taglib-uri>/WEB-INF/nlevelcombo.tld</taglib-uri>
+	  <taglib-location>/WEB-INF/nlevelcombo.tld</taglib-location>
+  </taglib>
+   <taglib>
+	  <taglib-uri>/WEB-INF/c.tld</taglib-uri>
+	  <taglib-location>/WEB-INF/c.tld</taglib-location>
+  </taglib>
+
+<!--  caCore like system entries -->
+	<context-param>
+       	<param-name>cacoreBeans.Properties</param-name>
+		<param-value>cacoreBeans.properties,evsBeans.properties</param-value>
+	</context-param>
+	
+	<context-param>
+	    <param-name>cacoreFormat.xsl</param-name>
+		<param-value>xslt/cacoreFormat.xsl</param-value>
+	</context-param>
+	<context-param>
+	    <param-name>evsFormat.xsl</param-name>
+		<param-value>xslt/evsFormat.xsl</param-value>
+	</context-param>
+	<context-param>
+		<param-name>rowCounter</param-name>
+		<param-value>200</param-value>
+	</context-param>
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>/WEB-INF/applicationContext.xml</param-value>
+	</context-param>
+
+	<servlet>
+		<servlet-name>context</servlet-name>
+		<servlet-class>
+			org.springframework.web.context.ContextLoaderServlet
+		</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet>
+		<servlet-name>httpinvoker</servlet-name>
+		<servlet-class>
+			org.springframework.web.servlet.DispatcherServlet
+		</servlet-class>
+		<load-on-startup>3</load-on-startup>
+	</servlet>	
+    
+    <servlet>
+    	<servlet-name>HTTPServer</servlet-name>
+    	<servlet-class>gov.nih.nci.system.proxy.HTTPServer</servlet-class>
+    	<load-on-startup>1</load-on-startup>
+    </servlet>
+    
+    <servlet>
+        <servlet-name>AxisServlet</servlet-name>
+        <display-name>Apache-Axis Servlet</display-name>
+        <servlet-class>org.apache.axis.transport.http.AxisServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>GetXML</servlet-name>
+        <servlet-class>gov.nih.nci.system.proxy.HTTPQuery</servlet-class>        	
+    </servlet>
+    <servlet>
+    	<servlet-name>GetHTML</servlet-name>
+    	<servlet-class>gov.nih.nci.system.proxy.HTTPQuery</servlet-class>        	
+    </servlet>
+	<servlet>
+    	<servlet-name>Happy</servlet-name>
+		<jsp-file>/Happy.jsp</jsp-file>     	
+    </servlet>
+    
+	<servlet-mapping>
+		<servlet-name>httpinvoker</servlet-name>
+		<url-pattern>/http/*</url-pattern>
+	</servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>HTTPServer</servlet-name>
+        <url-pattern>/server/HTTPServer</url-pattern>
+    </servlet-mapping>
+    
+    
+    <servlet-mapping>
+        <servlet-name>AxisServlet</servlet-name>
+        <url-pattern>/ws/AxisServlet</url-pattern>
+    </servlet-mapping>
+    
+    
+    <servlet-mapping>
+        <servlet-name>AxisServlet</servlet-name>
+        <url-pattern>*.jws</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>AxisServlet</servlet-name>
+        <url-pattern>/ws/*</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+    	<servlet-name>GetXML</servlet-name>
+    	<url-pattern>/GetXML</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+    	<servlet-name>GetHTML</servlet-name>
+      	<url-pattern>/GetHTML</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+    	<servlet-name>Happy</servlet-name>
+      	<url-pattern>/Happy</url-pattern>
+    </servlet-mapping>
+<!--  End caCore like system entries -->
+	
+</web-app>

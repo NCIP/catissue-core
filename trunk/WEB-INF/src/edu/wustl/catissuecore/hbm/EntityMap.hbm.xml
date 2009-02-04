@@ -1,0 +1,97 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 2.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class
+        name="edu.wustl.catissuecore.domain.EntityMap"
+        table="CATISSUE_ENTITY_MAP"
+        dynamic-update="false"
+        dynamic-insert="false"
+    >
+
+        <id
+            name="id"
+            column="IDENTIFIER"
+            type="long"
+            length="30"
+            unsaved-value="null"
+        >
+            <generator class="native">
+                <param name="sequence">CATISSUE_ENTITY_MAP_SEQ</param>
+            </generator>
+        </id>
+
+        <property
+            name="containerId"
+            type="long"
+            update="true"
+            insert="true"
+            column="CONTAINER_ID"
+            length="30"
+        />
+
+        <property
+            name="linkStatus"
+            type="string"
+            update="true"
+            insert="true"
+            column="STATUS"
+            length="10"
+        />
+
+        <property
+            name="staticEntityId"
+            type="long"
+            update="true"
+            insert="true"
+            column="STATIC_ENTITY_ID"
+            length="30"
+        />
+
+        <property
+            name="createdDate"
+            type="date"
+            update="true"
+            insert="true"
+            column="CREATED_DATE"
+        />
+
+        <property
+            name="createdBy"
+            type="string"
+            update="true"
+            insert="true"
+            column="CREATED_BY"
+            length="255"
+        />
+
+        <set
+            name="entityMapConditionCollection"
+            table="CATISSUE_ENTITY_MAP_CONDITIONS"
+            lazy="false"
+            inverse="true"
+            cascade="save-update"
+            sort="unsorted"
+        >
+
+              <key
+                  column="ENTITY_MAP_ID"
+              />
+
+              <one-to-many
+                  class="edu.wustl.catissuecore.domain.EntityMapCondition"
+              />
+        </set>
+
+        <!--
+            To add non XDoclet property mappings, create a file named
+                hibernate-properties-EntityMap.xml
+            containing the additional properties and place it in your merge dir.
+        -->
+
+    </class>
+
+</hibernate-mapping>
