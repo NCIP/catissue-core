@@ -1,0 +1,164 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 2.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class
+        name="edu.wustl.catissuecore.domain.SpecimenCollectionGroup"
+        table="CATISSUE_SPECIMEN_COLL_GROUP"
+        dynamic-update="false"
+        dynamic-insert="false"
+    >
+
+        <id
+            name="id"
+            column="IDENTIFIER"
+            type="long"
+            length="30"
+            unsaved-value="null"
+        >
+            <generator class="native">
+                <param name="sequence">CATISSUE_SPECIMEN_COLL_GRP_SEQ</param>
+            </generator>
+        </id>
+
+        <set
+            name="consentTierStatusCollection"
+            table="CATISSUE_CONSENT_TIER_STATUS"
+            lazy="false"
+            inverse="false"
+            cascade="save-update"
+            sort="unsorted"
+        >
+
+              <key
+                  column="SPECIMEN_COLL_GROUP_ID"
+              />
+
+              <one-to-many
+                  class="edu.wustl.catissuecore.domain.ConsentTierStatus"
+              />
+        </set>
+
+        <property
+            name="name"
+            type="string"
+            update="true"
+            insert="true"
+            column="NAME"
+            length="255"
+        />
+
+        <property
+            name="clinicalDiagnosis"
+            type="string"
+            update="true"
+            insert="true"
+            column="CLINICAL_DIAGNOSIS"
+            length="150"
+        />
+
+        <property
+            name="clinicalStatus"
+            type="string"
+            update="true"
+            insert="true"
+            column="CLINICAL_STATUS"
+            length="50"
+        />
+
+        <property
+            name="activityStatus"
+            type="string"
+            update="true"
+            insert="true"
+            column="ACTIVITY_STATUS"
+            length="50"
+        />
+        
+        <property
+            name="surgicalPathologyNumber"
+            type="string"
+            update="true"
+            insert="true"
+            column="SURGICAL_PATHOLOGY_NUMBER"
+            length="50"
+        />
+
+        <many-to-one
+            name="specimenCollectionSite"
+            class="edu.wustl.catissuecore.domain.Site"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="SITE_ID"
+        />
+
+        <many-to-one
+            name="collectionProtocolEvent"
+            class="edu.wustl.catissuecore.domain.CollectionProtocolEvent"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="COLLECTION_PROTOCOL_EVENT_ID"
+        />
+
+         <set
+            name="specimenCollection"
+            table="CATISSUE_SPECIMEN"
+            lazy="false"
+            inverse="true"
+            cascade="save-update"
+            sort="unsorted"
+        >
+
+              <key
+                  column="SPECIMEN_COLLECTION_GROUP_ID"
+              />
+
+              <one-to-many
+                  class="edu.wustl.catissuecore.domain.Specimen"
+              />
+        </set>
+
+        <many-to-one
+            name="collectionProtocolRegistration"
+            class="edu.wustl.catissuecore.domain.CollectionProtocolRegistration"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="COLLECTION_PROTOCOL_REG_ID"
+        />
+		
+		<one-to-one
+            name="deIdentifiedSurgicalPathologyReport"
+            class="edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport"
+            cascade="save-update"
+            outer-join="auto"
+            constrained="false"
+	     property-ref="specimenCollectionGroup"
+        />
+
+        <one-to-one
+            name="identifiedSurgicalPathologyReport"
+            class="edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport"
+            cascade="save-update"
+            outer-join="auto"
+            constrained="false"
+	     property-ref="specimenCollectionGroup"
+        />
+        
+        <!--
+            To add non XDoclet property mappings, create a file named
+                hibernate-properties-SpecimenCollectionGroup.xml
+            containing the additional properties and place it in your merge dir.
+        -->
+
+    </class>
+
+</hibernate-mapping>

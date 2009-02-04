@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 2.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping
+>
+    <class
+        name="edu.wustl.catissuecore.domain.CollectionProtocolEvent"
+        table="CATISSUE_COLL_PROT_EVENT"
+    >
+
+        <id
+            name="id"
+            column="IDENTIFIER"
+            type="long"
+            length="30"
+            unsaved-value="null"
+        >
+            <generator class="native">
+                <param name="sequence">CATISSUE_COLL_PROT_EVENT_SEQ</param>
+              <!--  
+                  To add non XDoclet generator parameters, create a file named 
+                  hibernate-generator-params-CollectionProtocolEvent.xml 
+                  containing the additional parameters and place it in your merge dir. 
+              --> 
+            </generator>
+        </id>
+
+        <property
+            name="clinicalStatus"
+            type="string"
+            update="true"
+            insert="true"
+            column="CLINICAL_STATUS"
+            length="50"
+        />
+
+        <property
+            name="studyCalendarEventPoint"
+            type="double"
+            update="true"
+            insert="true"
+            column="STUDY_CALENDAR_EVENT_POINT"
+            length="50"
+        />
+
+        <set
+            name="specimenRequirementCollection"
+            table="CATISSUE_COLL_SPECIMEN_REQ"
+            lazy="false"
+            inverse="false"
+            cascade="save-update"
+            sort="unsorted"
+        >
+
+            <key
+                column="COLLECTION_PROTOCOL_EVENT_ID"
+            >
+            </key>
+
+            <many-to-many
+                class="edu.wustl.catissuecore.domain.SpecimenRequirement"
+                column="SPECIMEN_REQUIREMENT_ID"
+                outer-join="auto"
+             />
+
+        </set>
+
+        <many-to-one
+            name="collectionProtocol"
+            class="edu.wustl.catissuecore.domain.CollectionProtocol"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="COLLECTION_PROTOCOL_ID"
+        />
+
+        <!--
+            To add non XDoclet property mappings, create a file named
+                hibernate-properties-CollectionProtocolEvent.xml
+            containing the additional properties and place it in your merge dir.
+        -->
+
+    </class>
+
+</hibernate-mapping>

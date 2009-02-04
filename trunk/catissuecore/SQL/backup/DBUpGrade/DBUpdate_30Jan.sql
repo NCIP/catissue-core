@@ -1,0 +1,7 @@
+/*Change in alias name due to identifier too long exception in advanced query*/
+insert into CATISSUE_QUERY_TABLE_DATA  ( TABLE_ID, TABLE_NAME, DISPLAY_NAME, ALIAS_NAME, PRIVILEGE_ID, FOR_SQI) values ( 44, 'CATISSUE_IN_OUT_EVENT_PARAM', 'Checkin Checkout Event Parameter', 'CheckinoutEventParam',2,2);
+insert into CATISSUE_QUERY_TABLE_DATA  ( TABLE_ID, TABLE_NAME, DISPLAY_NAME, ALIAS_NAME, PRIVILEGE_ID, FOR_SQI) values ( 46, 'CATISSUE_COLL_EVENT_PARAM', 'Collection Event Parameters', 'CollectionEventParam',2,2);
+insert into CATISSUE_QUERY_TABLE_DATA  ( TABLE_ID, TABLE_NAME, DISPLAY_NAME, ALIAS_NAME, PRIVILEGE_ID, FOR_SQI) values ( 47, 'CATISSUE_DISPOSAL_EVENT_PARAM', 'Disposal Event Parameters', 'DisposalEventParam',2,2);
+insert into CATISSUE_QUERY_TABLE_DATA  ( TABLE_ID, TABLE_NAME, DISPLAY_NAME, ALIAS_NAME, PRIVILEGE_ID, FOR_SQI) values ( 48, 'CATISSUE_EMBEDDED_EVENT_PARAM', 'Embedded Event Parameters', 'EmbeddedEventParam',2,2);
+insert into CATISSUE_QUERY_TABLE_DATA  ( TABLE_ID, TABLE_NAME, DISPLAY_NAME, ALIAS_NAME, PRIVILEGE_ID, FOR_SQI) values ( 54, 'CATISSUE_PROCEDURE_EVENT_PARAM', 'Procedure Event Parameters', 'ProcedureEventParam',2,2);
+insert into CATISSUE_QUERY_TABLE_DATA  ( TABLE_ID, TABLE_NAME, DISPLAY_NAME, ALIAS_NAME, PRIVILEGE_ID, FOR_SQI) values ( 57, 'CATISSUE_RECEIVED_EVENT_PARAM', 'Received Event Parameters', 'ReceivedEventParam',2,2);

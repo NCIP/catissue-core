@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 2.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping
+>
+    <class
+        name="edu.wustl.catissuecore.domain.SpecimenArrayContent"
+        table="CATISSUE_SPECI_ARRAY_CONTENT"
+    >
+
+        <id
+            name="id"
+            column="IDENTIFIER"
+            type="long"
+            length="30"
+            unsaved-value="null"
+        >
+            <generator class="native">
+                <param name="sequence">CATISSUE_SPECI_ARRAY_CNTNT_SEQ</param>
+              <!--  
+                  To add non XDoclet generator parameters, create a file named 
+                  hibernate-generator-params-SpecimenArrayContent.xml 
+                  containing the additional parameters and place it in your merge dir. 
+              --> 
+            </generator>
+        </id>
+
+        <property
+            name="concentrationInMicrogramPerMicroliter"
+            type="double"
+            update="true"
+            insert="true"
+            column="CONC_IN_MICROGM_PER_MICROLTR"
+            length="50"
+        />
+
+        <many-to-one
+            name="initialQuantity"
+            class="edu.wustl.catissuecore.domain.Quantity"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="INITIAL_QUANTITY_ID"
+        />
+
+        <property
+            name="positionDimensionOne"
+            type="int"
+            update="true"
+            insert="true"
+            column="POSITION_DIMENSION_ONE"
+            length="30"
+        />
+
+        <property
+            name="positionDimensionTwo"
+            type="int"
+            update="true"
+            insert="true"
+            column="POSITION_DIMENSION_TWO"
+            length="30"
+        />
+
+        <many-to-one
+            name="specimen"
+            class="edu.wustl.catissuecore.domain.Specimen"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="SPECIMEN_ID"
+        />
+
+        <many-to-one
+            name="specimenArray"
+            class="edu.wustl.catissuecore.domain.SpecimenArray"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="SPECIMEN_ARRAY_ID"
+        />
+
+        <!--
+            To add non XDoclet property mappings, create a file named
+                hibernate-properties-SpecimenArrayContent.xml
+            containing the additional properties and place it in your merge dir.
+        -->
+
+    </class>
+
+</hibernate-mapping>
