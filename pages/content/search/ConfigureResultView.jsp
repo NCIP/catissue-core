@@ -155,6 +155,10 @@
 	    {
 		    if(theSelFrom.options[i].selected)
 		    {
+		    	if("Concentration" == theSelFrom.options[i].text)
+				{
+					alert("Note: Once you select the Concentration column, only Molecular Specimen records will be displayed in the report.");
+				}
 			    selectedText[selectedCount] = theSelFrom.options[i].text;
 			    selectedValues[selectedCount] = theSelFrom.options[i].value;
 			    //deleteOption(theSelFrom, i);
