@@ -393,9 +393,10 @@
 	 			}
 		    }
 		    // Jignesh : this case will ocur when user edit or register particpant so refresh dataprovider
-		    if(pCollection.length == tempCollection.length){
-		    	isRefresTree= false;
-		    }
+		    //if(pCollection.length == tempCollection.length)
+		    //{
+		    //	isRefresTree= false;
+		    //}
 		    pCollection=null;
 		    pCollection = tempCollection;
 		   
