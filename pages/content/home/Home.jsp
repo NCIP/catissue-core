@@ -59,6 +59,16 @@ table#browserDetailsContainer
 							</td>
 							</tr>
 							<!-- Mandar : 8Jan09 PSPL Info -->
+							<!-- Mandar : 16Jan09 PSPL Info -->
+							<tr>
+							<td>
+								<a href="Aboutv11p.do" class="view"><span class="wh_ar_b"></span>
+								<bean:message key="pspl.catissue.about" />
+								</a>
+							</td>
+							</tr>
+							<!-- Mandar : 16Jan09 PSPL Info -->
+							
 							<tr>
 								<td><a
 									href="PrivacyNotice.do?PAGE_TITLE_KEY=app.privacyNotice&FILE_NAME_KEY=app.privacyNotice.file"
@@ -156,7 +166,7 @@ table#browserDetailsContainer
 										<td class="black_ar"><bean:message key="app.loginId" />
 										</td>
 										<td><html:text styleClass="black_ar" property="loginName"
-											size="20" /></td>
+											size="20"/></td>
 									</tr>
 									<tr>
 										<td class="black_ar"><bean:message key="app.password" />

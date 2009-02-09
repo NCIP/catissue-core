@@ -15,8 +15,10 @@
 		<table width="100%" border="0" cellpadding="0" cellspacing="0">
 			<tr>
 				<td width="86%" align="right" valign="top">
+				<logic:notEmpty name="<%=Constants.SESSION_DATA%>">
 					<input style = "font-size:0.6em" value = "TiTLi Search" onclick = "this.value = ''" onblur = "if(this.value=='') {this.value = 'TiTLi Search';}" type ="text" name = "searchString" id = "searchString" onkeypress="return titliOnEnter(event, this, document.getElementById('go'))" />
 				<a class = "white"  id="go" href ="TitliInitialiseSearch.do" onclick = "this.href= this.href + '?searchString='+document.getElementById('searchString').value">TiTLi Search</a>&nbsp;
+				</logic:notEmpty>
 					<a
 					href="ReportProblem.do?operation=add" class="white"> <img
 					src="images/uIEnhancementImages/ic_report.gif" width="15"

@@ -27,7 +27,13 @@
 	<definition name=".catissuecore.titliSearchResultPage" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/common/TitliResultUpdatable.jsp" />
 	</definition>
-	
+
+	<definition name=".catissuecore.staticViewDef" path="/pages/content/home/StaticLayout.jsp">
+	</definition>
+	<definition name=".catissuecore.aboutv11pDef" extends=".catissuecore.homePageDef">
+		<put name="content" value="/pages/content/home/AboutP11.html" />
+	</definition>
+
 	<definition name=".catissuecore.reportProblemDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/common/ReportProblem.jsp" />
 	</definition>

@@ -676,3 +676,54 @@ color: #000000;
 	background-color: #FFFFFF;
 	color: #888888;
 }
+/* *********  Mandar : 20c08  For AntiSpecimen ******** */
+.heading1
+{
+	font-family: verdana;
+	font-size: 12px;
+	font-weight:bold;
+	background-color: #eef5fb;
+	color:#074180;	/*   #365F91;		*/
+	width:99%;
+	padding:5px;
+}
+
+.tblborder
+{
+	background-color:#FFFFFF;
+	border-bottom:1px solid #000000;
+	border-top:1px solid #000000;
+	border-left:1px solid #000000;
+	border-right:1px solid #000000;
+}
+.cellBtmRtborder
+{
+	background-color:#FFFFFF;
+	border-bottom:1px solid #000000;
+	border-right:1px solid #000000;
+}
+.cellBtmborder
+{
+	background-color:#FFFFFF;
+	border-bottom:1px solid #000000;
+}
+.lastrowcellRtborder
+{
+	background-color:#FFFFFF;
+	border-right:1px solid #000000;
+}
+
+.black_ar_mrgn5 {
+	font-family: verdana;
+	font-size: 11px;
+	color: #171717;
+	vertical-align:middle;
+	margin:5px;
+	padding:5px;
+	width:90%;
+}
+.rowht
+{
+	height:25px;
+}
+

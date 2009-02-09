@@ -167,7 +167,10 @@ PUBLIC
 					type="edu.wustl.catissuecore.action.ForwardAction">
 		 			<forward name="success" path=".catissuecore.homePageDef" /> 
 		</action>
-		
+		<action path="/Aboutv11p"
+					type="org.apache.struts.actions.ForwardAction"
+					parameter=".catissuecore.aboutv11pDef" />
+					
 		<action path="/RedirectHome"
 					type="org.apache.struts.actions.ForwardAction"
 					parameter=".catissuecore.mainTitlePageDef" />
