@@ -23,9 +23,27 @@ import edu.wustl.common.util.dbManager.DAOException;
  * @author suhas_khot
  *
  */
-public class AssociatesForms
+public final class AssociatesForms
 {
-
+	/*
+	 * create singleton object
+	 */
+	private static AssociatesForms associatForms= new AssociatesForms();
+	/*
+	 * private constructor
+	 */
+	private AssociatesForms()
+	{
+		
+	}
+	/*
+	 * returns single object
+	 */
+	public static AssociatesForms getInstance()
+	{
+		return associatForms;
+	}
+	
 	/**
 	 * Map for storing containers corresponding to entitiesIds
 	 */
@@ -87,7 +105,7 @@ public class AssociatesForms
 			{
 				List<EntityMap> entityMapList = defaultBizLogic.retrieve(EntityMap.class.getName(),
 						Constants.CONTAINERID, containerId);
-				if (entityMapList != null && entityMapList.size() > 0)
+				if (entityMapList != null && !entityMapList.isEmpty())
 				{
 					EntityMap entityMap = entityMapList.get(0);
 					Utility.editConditions(entityMap, cpId, typeId);
@@ -113,23 +131,22 @@ public class AssociatesForms
 		for (Long entityId : entityIds)
 		{
 			Long containerId = getContainerId(entityId);
-			if (containerId != null)
+			if (containerId == null)
+			{
+				throw new DynamicExtensionsSystemException(
+				"This entity is not directly associated with the hook entity. Please enter proper entity in Show_Hide_Forms.csv file");
+			}
+			else
 			{
 				List<EntityMap> entityMapList = defaultBizLogic.retrieve(EntityMap.class.getName(),
 						Constants.CONTAINERID, containerId);
-				if (entityMapList != null && entityMapList.size() > 0)
+				if (entityMapList != null && !entityMapList.isEmpty())
 				{
 					EntityMap entityMap = entityMapList.get(0);
 					Utility.editConditions(entityMap, conditionObject, typeId);
 					annotation.updateEntityMap(entityMap);
 				}
 			}
-			if (containerId == null)
-			{
-				throw new DynamicExtensionsSystemException(
-						"This entity is not directly associated with the hook entity. Please enter proper entity in Show_Hide_Forms.csv file");
-			}
-
 		}
 	}
 
@@ -140,7 +157,7 @@ public class AssociatesForms
 	private static Long getContainerId(Long entityId)
 	{
 		Long containerId = null;
-		if (entityIdsVsContainersId != null && entityIdsVsContainersId.size() > 0)
+		if (entityIdsVsContainersId != null && !entityIdsVsContainersId.isEmpty())
 		{
 			for (Long entityIdFromMap : entityIdsVsContainersId.keySet())
 			{
