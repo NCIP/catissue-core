@@ -22,10 +22,31 @@ import edu.wustl.common.util.dbManager.DAOException;
  * @author suhas_khot
  * This class adds default entityMapConditions to the forms/Entities. 
  */
-public class AddEntityMapConditions
+public final class AddEntityMapConditions
 {
-
-	/**
+	
+	/*
+	 * create singleton object
+	 */
+	private static AddEntityMapConditions addEntityMapCond= new AddEntityMapConditions();
+	/*
+	 * Private constructor
+	 */
+	private AddEntityMapConditions()
+	{
+		
+	}
+	
+	/*
+	 * returns single object
+	 */
+	public static AddEntityMapConditions getInstance()
+	{
+		return addEntityMapCond;
+	}
+	
+	
+	/*
 	 * @param args command line inputs
 	 * @throws DAOException if fails to get Object from database
 	 * @throws DynamicExtensionsSystemException fails to get container for all entities
