@@ -101,12 +101,13 @@ public class CatissueCoreCacheManager
 	public Serializable getObjectFromCache(Serializable key) throws IllegalStateException, CacheException
 	{
 		Element element = null;
+		Serializable returnVal=null;
 		element = cache.get(key);
 		if (element != null)
 		{
-		   return element.getValue();
+		   returnVal= element.getValue();
 		}		
-	    return null;
+	    return returnVal;
 	}
 
 	public void shutdown() throws CacheException
