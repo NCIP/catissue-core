@@ -59,7 +59,7 @@ public class ListSpecimenEventParametersForm extends AbstractActionForm
      */
     public ListSpecimenEventParametersForm()
     {
-        reset();
+//        reset();
     }
 
     /**

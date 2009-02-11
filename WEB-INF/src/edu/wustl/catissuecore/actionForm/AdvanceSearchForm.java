@@ -147,7 +147,7 @@ public class AdvanceSearchForm extends ActionForm
     public AdvanceSearchForm()
     {
     	super();
-        reset();
+//        reset();
     }
 
     /**

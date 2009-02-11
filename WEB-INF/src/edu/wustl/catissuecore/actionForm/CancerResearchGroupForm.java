@@ -48,7 +48,7 @@ public class CancerResearchGroupForm extends AbstractActionForm
     public CancerResearchGroupForm()
     {
     	super();
-        reset();
+//        reset();
     }
 
     /**

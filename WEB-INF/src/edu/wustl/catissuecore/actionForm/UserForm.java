@@ -170,7 +170,7 @@ public class UserForm extends AbstractActionForm
 	 */
 	public UserForm()
 	{
-		reset();
+//		reset();
 	}
 
 	//Mandar : 24-Apr-06 : bug id : 972
@@ -633,79 +633,17 @@ public class UserForm extends AbstractActionForm
 			this.id = user.getId().longValue();
 			this.lastName = user.getLastName();
 			this.firstName = user.getFirstName();
-			/*if (user.getSiteCollection() != null && !user.getSiteCollection().isEmpty())
-			{ 
-				siteIds = new String [user.getSiteCollection().size()];
-				int i = 0;
-				for (Site site : user.getSiteCollection())
-				{
-					siteIds[i] = site.getId().toString();
-					i++;
-				}
-			}*/
-			// Check for null entries (for admin)
-			if (!edu.wustl.common.util.Utility.isNull(user.getInstitution()))
-			{
-				this.institutionId = user.getInstitution().getId().longValue();
-			}
+			setInstId(user);
 
 			this.emailAddress = user.getEmailAddress();
-			//this.adminuser = user.getRoleId();
 
 			//Mandar : 24-Apr-06 : bug id 972 : confirmEmailAddress
 			confirmEmailAddress = this.emailAddress;
 
-			if (!edu.wustl.common.util.Utility.isNull(user.getDepartment()))
-			{
-				this.departmentId = user.getDepartment().getId().longValue();
-			}
-
-			if (!edu.wustl.common.util.Utility.isNull(user.getCancerResearchGroup()))
-			{
-				this.cancerResearchGroupId = user.getCancerResearchGroup().getId().longValue();
-			}
-
-			if (!edu.wustl.common.util.Utility.isNull(user.getAddress()))
-			{
-				this.street = user.getAddress().getStreet();
-				this.city = user.getAddress().getCity();
-				this.state = user.getAddress().getState();
-				this.country = user.getAddress().getCountry();
-				this.zipCode = user.getAddress().getZipCode();
-				this.phoneNumber = user.getAddress().getPhoneNumber();
-				this.faxNumber = user.getAddress().getFaxNumber();
-			}
-
+			setDptCRG(user);
+			setAddr(user);
 			//Populate the activity status, comments and role for approve user and user edit.  
-			if ((getFormId() == Constants.APPROVE_USER_FORM_ID) || ((pageOf != null) && (Constants.PAGEOF_USER_ADMIN.equals(pageOf))))
-			{
-				this.activityStatus = user.getActivityStatus();
-
-				if (!edu.wustl.common.util.Utility.isNull(user.getComments()))
-				{
-					this.comments = user.getComments();
-				}
-
-				this.setUserRole(user.getRoleId());
-
-				if (getFormId() == Constants.APPROVE_USER_FORM_ID)
-				{
-					this.status = user.getActivityStatus();
-					if (activityStatus.equals(Constants.ACTIVITY_STATUS_ACTIVE))
-					{
-						this.status = Constants.APPROVE_USER_APPROVE_STATUS;
-					}
-					else if (activityStatus.equals(Constants.ACTIVITY_STATUS_CLOSED))
-					{
-						this.status = Constants.APPROVE_USER_REJECT_STATUS;
-					}
-					else if (activityStatus.equals(Constants.ACTIVITY_STATUS_NEW))
-					{
-						this.status = Constants.APPROVE_USER_PENDING_STATUS;
-					}
-				}
-			}
-
+			setUserData(user);
 			if (Constants.PAGEOF_USER_ADMIN.equals(pageOf))
 			{
 				//Bug-1516: Jitendra
@@ -713,42 +651,144 @@ public class UserForm extends AbstractActionForm
 				this.setCsmUserId(user.getCsmUserId());
 				try
 				{
-					if(this.csmUserId != null) //in case user not approved
-					{
-						gov.nih.nci.security.authorization.domainobjects.User csmUser = SecurityManager.getInstance(UserForm.class).getUserById(this.getCsmUserId().toString());
-						if(csmUser != null)
-			            {
-			            	this.setNewPassword(csmUser.getPassword());
-			            	this.setConfirmNewPassword(csmUser.getPassword());
-			            }
-					}
-					else
-					{
-						this.setNewPassword("");
-		            	this.setConfirmNewPassword("");
-					}
+					setPwd();
 				}
 				catch(SMException e)
 				{
-					
+					logger.error(e.getMessage(),e);
 				}                
-	            
-//				this.setNewPassword(pwd);
-//				this.setConfirmNewPassword(pwd);
-				
 			}
-
 			if (Constants.PAGEOF_USER_PROFILE.equals(pageOf))
 			{
 				this.role = user.getRoleId();
 			}
 		}
-
 		logger.debug("this.activityStatus............." + this.activityStatus);
 		logger.debug("this.comments" + this.comments);
 		logger.debug("this.role" + this.role);
 		logger.debug("this.status" + this.status);
 		logger.debug("this.csmUserid" + this.csmUserId);
+	}
+
+
+	/**
+	 * @throws SMException
+	 */
+	private void setPwd() throws SMException
+	{
+		if(this.csmUserId != null) //in case user not approved
+		{
+			gov.nih.nci.security.authorization.domainobjects.User csmUser = SecurityManager.getInstance(UserForm.class).getUserById(this.getCsmUserId().toString());
+			if(csmUser != null)
+		    {
+		    	this.setNewPassword(csmUser.getPassword());
+		    	this.setConfirmNewPassword(csmUser.getPassword());
+		    }
+		}
+		else
+		{
+			this.setNewPassword("");
+			this.setConfirmNewPassword("");
+		}
+	}
+
+
+	/**
+	 * @param user
+	 */
+	private void setUserData(User user)
+	{
+		if ((getFormId() == Constants.APPROVE_USER_FORM_ID) || ((pageOf != null) && (Constants.PAGEOF_USER_ADMIN.equals(pageOf))))
+		{
+			this.activityStatus = user.getActivityStatus();
+
+			setCmts(user);
+			this.setUserRole(user.getRoleId());
+			if (getFormId() == Constants.APPROVE_USER_FORM_ID)
+			{
+				this.status = user.getActivityStatus();
+				setStats();
+			}
+		}
+	}
+
+
+	/**
+	 * 
+	 */
+	private void setStats()
+	{
+		if (activityStatus.equals(Constants.ACTIVITY_STATUS_ACTIVE))
+		{
+			this.status = Constants.APPROVE_USER_APPROVE_STATUS;
+		}
+		else if (activityStatus.equals(Constants.ACTIVITY_STATUS_CLOSED))
+		{
+			this.status = Constants.APPROVE_USER_REJECT_STATUS;
+		}
+		else if (activityStatus.equals(Constants.ACTIVITY_STATUS_NEW))
+		{
+			this.status = Constants.APPROVE_USER_PENDING_STATUS;
+		}
+	}
+
+
+	/**
+	 * @param user
+	 */
+	private void setCmts(User user)
+	{
+		if (!edu.wustl.common.util.Utility.isNull(user.getComments()))
+		{
+			this.comments = user.getComments();
+		}
+	}
+
+
+	/**
+	 * @param user
+	 */
+	private void setAddr(User user)
+	{
+		if (!edu.wustl.common.util.Utility.isNull(user.getAddress()))
+		{
+			this.street = user.getAddress().getStreet();
+			this.city = user.getAddress().getCity();
+			this.state = user.getAddress().getState();
+			this.country = user.getAddress().getCountry();
+			this.zipCode = user.getAddress().getZipCode();
+			this.phoneNumber = user.getAddress().getPhoneNumber();
+			this.faxNumber = user.getAddress().getFaxNumber();
+		}
+	}
+
+
+	/**
+	 * @param user
+	 */
+	private void setDptCRG(User user)
+	{
+		if (!edu.wustl.common.util.Utility.isNull(user.getDepartment()))
+		{
+			this.departmentId = user.getDepartment().getId().longValue();
+		}
+
+		if (!edu.wustl.common.util.Utility.isNull(user.getCancerResearchGroup()))
+		{
+			this.cancerResearchGroupId = user.getCancerResearchGroup().getId().longValue();
+		}
+	}
+
+
+	/**
+	 * @param user
+	 */
+	private void setInstId(User user)
+	{
+		if (!edu.wustl.common.util.Utility.isNull(user.getInstitution()))
+		{
+			this.institutionId = user.getInstitution().getId().longValue();
+		}
 	}
 
 	private void setUserRole(String roleId) 
@@ -764,6 +804,14 @@ public class UserForm extends AbstractActionForm
         }
 	}
 
+	private void chkEmpty(ActionErrors errors, Validator validator, String key, String value)
+	{
+		if (validator.isEmpty(value))
+		{
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties.getValue(key)));
+		}
+
+	}
 	/**
 	 * Overrides the validate method of ActionForm.
 	 * @return error ActionErrors instance
@@ -778,280 +826,26 @@ public class UserForm extends AbstractActionForm
 		{
 			if (operation != null)
 			{
-
 				if (pageOf.equals(Constants.PAGEOF_CHANGE_PASSWORD))
 				{
-					if (validator.isEmpty(oldPassword))
-					{
-						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
-								.getValue("user.oldPassword")));
-					}
-
-					if (validator.isEmpty(newPassword))
-					{
-						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
-								.getValue("user.newPassword")));
-					}
-
-					if (validator.isEmpty(confirmNewPassword))
-					{
-						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
-								.getValue("user.confirmNewPassword")));
-					}
-
-					if (!validator.isEmpty(newPassword) && !validator.isEmpty(confirmNewPassword))
-					{
-						if (!newPassword.equals(confirmNewPassword))
-						{
-							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.confirmNewPassword.reType"));
-						}
-					}
-
-					if (!validator.isEmpty(newPassword) && !validator.isEmpty(oldPassword))
-					{
-						// Call static method PasswordManager.validatePasswordOnFormBean() where params are
-						// new password,old password,user name
-						int result = PasswordManager.validatePasswordOnFormBean(newPassword, oldPassword, request.getSession());
-							
-						if (result != PasswordManager.SUCCESS)
-						{
-							// get error message of validation failure where param is result of validate() method
-						    String errorMessage = PasswordManager.getErrorMessage(result);
-							logger.debug("error from Password validate " + errorMessage);
-							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item", errorMessage));
-						}
-					}
-				
+					chkEmpty(errors, validator, "user.oldPassword", oldPassword);
+					chkEmpty(errors, validator, "user.newPassword", newPassword);
+					chkEmpty(errors, validator, "user.confirmNewPassword", confirmNewPassword);
+					chkNwOdPwds(errors, validator);
+					chkNOPwds1(request, errors, validator);
 				}
 				else
 				{
 					setRedirectValue(validator);
 					logger.debug("user form ");
-					if (operation.equals(Constants.ADD) || operation.equals(Constants.EDIT))
-					{
-						// Mandar 10-apr-06 : bugid :353 
-						// Error messages should be in the same sequence as the sequence of fields on the page.
-						
-//						if(!pageOf.equalsIgnoreCase("pageOfSignUp"))
-//						{
-//							if (siteIds[0].equalsIgnoreCase("-1"))
-//							{
-//								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
-//										ApplicationProperties
-//												.getValue("user.site")));
-//							}
-//							
-//						}
-						
-						if (siteIds!=null && siteIds.length>0 && validator.isEmpty(role))
-						{
-							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
-									.getValue("user.roleIsRequired")));
-						}
-						if (validator.isEmpty(emailAddress))
-						{
-							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
-									.getValue("user.emailAddress")));
-						}
-						else
-						{
-							if (!validator.isValidEmailAddress(emailAddress))
-							{
-								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format", ApplicationProperties
-										.getValue("user.emailAddress")));
-							}
-						}
-
-						// Mandar : 24-Apr-06 Bugid:972 confirmEmailAddress start
-						if (!pageOf.equals(Constants.PAGEOF_USER_PROFILE))
-						{
-							if (validator.isEmpty(confirmEmailAddress))
-							{
-								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
-										.getValue("user.confirmemailAddress")));
-							}
-							else
-							{
-								if (!validator.isValidEmailAddress(confirmEmailAddress))
-								{
-									errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format", ApplicationProperties
-											.getValue("user.confirmemailAddress")));
-								}
-							}
-							if (!confirmEmailAddress.equals(emailAddress))
-							{
-								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.email.mismatch"));
-							}
-
-						}
-						//Mandar : 24-Apr-06 Bugid:972 confirmEmailAddress end
-
-						if (validator.isEmpty(lastName))
-						{
-							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
-									.getValue("user.lastName")));
-						}else if(validator.isXssVulnerable(lastName)){ //Bug:7976 & 7977: added check for xxs vulnerable
-							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.xss.invalid", ApplicationProperties
-									.getValue("user.lastName")));
-						}
-
-						if (validator.isEmpty(firstName))
-						{
-							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
-									.getValue("user.firstName")));
-						}else if(validator.isXssVulnerable(firstName)){	//Bug:7976 & 7977: added check for xxs vulnerable
-							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.xss.invalid", ApplicationProperties
-									.getValue("user.firstName")));
-						}
-
-						if (validator.isEmpty(city))
-						{
-							errors.add(ActionErrors.GLOBAL_ERROR,
-									new ActionError("errors.item.required", ApplicationProperties.getValue("user.city")));
-						}
-						if (!validator.isValidOption(state))
-						{
-							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
-									.getValue("user.state")));
-						}
-						
-						
-					/*
-					 * Commented by Geeta to remove the mask on zip code
-						if (validator.isEmpty(zipCode))
-						{
-								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
-									.getValue("user.zipCode")));
-						}
-						else
-						{
-								if (!validator.isValidZipCode(zipCode))
-								{
-									errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.zipCode.format", ApplicationProperties
-										.getValue("user.zipCode")));
-								}
-						}
-					*/
-						
-						
-						if (!validator.isValidOption(country))
-						{
-							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
-									.getValue("user.country")));
-						}
-						// Commented by Geeta to remove the mask on pnone number
-						/*
-						if (validator.isEmpty(phoneNumber))
-						{
-							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
-									.getValue("user.phoneNumber")));
-						}
-						*/
-						
-						
-						//                        else
-						//                        {
-						//                        	if(!validator.isValidPhoneNumber(phoneNumber))
-						//                        	{
-						//                        		errors.add(ActionErrors.GLOBAL_ERROR,
-						//                                        new ActionError("errors.phoneNumber.format",
-						//                                                ApplicationProperties.getValue("user.phoneNumber")));
-						//                        	}
-						//                        }
-						//                        if(!validator.isEmpty(faxNumber)&& !validator.isValidPhoneNumber(faxNumber))
-						//                        {
-						//                        	errors.add(ActionErrors.GLOBAL_ERROR,
-						//                                    new ActionError("errors.phoneNumber.format",
-						//                                            ApplicationProperties.getValue("user.faxNumber")));
-						//                        }
-
-						if (validator.isValidOption(String.valueOf(institutionId)) == false)
-						{
-							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
-									.getValue("user.institution")));
-						}
-
-						if (validator.isValidOption(String.valueOf(departmentId)) == false)
-						{
-							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
-									.getValue("user.department")));
-						}
-
-						if (validator.isValidOption(String.valueOf(cancerResearchGroupId)) == false)
-						{
-							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
-									.getValue("user.cancerResearchGroup")));
-						}
-
-						if (validator.isValidOption(activityStatus) == false)
-						{
-							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
-									.getValue("user.activityStatus")));
-						}
-					}
+					ifAddEdit(errors, validator);
 
 					if (pageOf.equals(Constants.PAGEOF_APPROVE_USER))
 					{
-						if (validator.isValidOption(status) == false)
-						{
-							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
-									.getValue("user.approveOperation")));
-						}
+						chkValOpt(errors, validator, "user.approveOperation", status);
 					}
-
-//					if ((pageOf.equals(Constants.PAGEOF_USER_ADMIN) || pageOf.equals(Constants.PAGEOF_APPROVE_USER)) && !this.operation.equalsIgnoreCase(Constants.EDIT))
-//					{
-//						if (role != null&&!role.equals("")&&role.equals("-1"))
-//						{
-//							
-//							if (validator.isValidOption(role) == false)
-//							{
-//								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
-//										.getValue("user.role")));
-//							}
-//						}
-//					}
-					
 					//Bug- 1516:  
-					if(pageOf.equals(Constants.PAGEOF_USER_ADMIN) && operation.equals(Constants.EDIT))
-					{
-						String pageFrom = request.getParameter("pageFrom");
-						if(!"ApproveUser".equals(pageFrom))
-						{
-							if (validator.isEmpty(newPassword))
-							{
-								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
-										.getValue("user.newPassword")));
-							}
-	
-							if (validator.isEmpty(confirmNewPassword))
-							{
-								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
-										.getValue("user.confirmNewPassword")));
-							}
-	
-							if (!validator.isEmpty(newPassword) && !validator.isEmpty(confirmNewPassword))
-							{
-								if (!newPassword.equals(confirmNewPassword))
-								{
-									errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.confirmNewPassword.reType"));
-								}
-							}
-							//Bug-7979
-							int result=PasswordManager.SUCCESS;
-							if(!Constants.DUMMY_PASSWORD.equals(newPassword)){
-								result = PasswordManager.validatePasswordOnFormBean(newPassword, oldPassword, request.getSession());
-							}
-							
-							if (result != PasswordManager.SUCCESS)
-							{
-								// get error message of validation failure where param is result of validate() method
-							    String errorMessage = PasswordManager.getErrorMessage(result);
-								logger.debug("error from Password validate " + errorMessage);
-								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item", errorMessage));
-							}
-						}
-					}
+					adminEdit(request, errors, validator);
 					// Mandar 10-apr-06 : bugid :353 end 
 				}
 			}
@@ -1061,6 +855,201 @@ public class UserForm extends AbstractActionForm
 			logger.error(excp.getMessage(), excp);
 		}
         return errors;
+	}
+
+
+	/**
+	 * @param errors
+	 * @param validator
+	 */
+	private void ifAddEdit(ActionErrors errors, Validator validator)
+	{
+		if (operation.equals(Constants.ADD) || operation.equals(Constants.EDIT))
+		{
+			chkSites(errors, validator);
+			chkMail(errors, validator,"user.emailAddress", emailAddress);
+
+			// Mandar : 24-Apr-06 Bugid:972 confirmEmailAddress start
+			if (!pageOf.equals(Constants.PAGEOF_USER_PROFILE))
+			{
+				chkMail(errors, validator,"user.confirmemailAddress", confirmEmailAddress);
+				compMail(errors);
+			}
+			//Mandar : 24-Apr-06 Bugid:972 confirmEmailAddress end
+
+			chkNames(errors, validator, "user.lastName" , lastName);
+			chkNames(errors, validator, "user.firstName" , firstName);
+			chkEmpty(errors, validator, "user.city", city);
+			chkValOpt(errors, validator, "user.state", state);
+			chkValOpt(errors, validator, "user.country", country);
+			chkValOpt(errors, validator, "user.institution", String.valueOf(institutionId));
+			chkValOpt(errors, validator, "user.department", String.valueOf(departmentId));
+			chkValOpt(errors, validator, "user.cancerResearchGroup", String.valueOf(cancerResearchGroupId));
+			chkValOpt(errors, validator, "user.activityStatus", activityStatus);
+		}
+	}
+
+
+	/**
+	 * @param errors
+	 * @param validator
+	 */
+	private void chkNames(ActionErrors errors, Validator validator, String key, String value)  
+	{
+		if (validator.isEmpty(value))
+		{
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
+					.getValue(key)));
+		}else if(validator.isXssVulnerable(value)){ //Bug:7976 & 7977: added check for xxs vulnerable
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.xss.invalid", ApplicationProperties
+					.getValue(key)));
+		}
+	}
+
+
+	/**
+	 * @param request
+	 * @param errors
+	 * @param validator
+	 */
+	private void adminEdit(HttpServletRequest request, ActionErrors errors, Validator validator)
+	{
+		if(pageOf.equals(Constants.PAGEOF_USER_ADMIN) && operation.equals(Constants.EDIT))
+		{
+			String pageFrom = request.getParameter("pageFrom");
+			if(!"ApproveUser".equals(pageFrom))
+			{
+				chkEmpty(errors, validator, "user.newPassword", newPassword);
+				chkEmpty(errors, validator, "user.confirmNewPassword", confirmNewPassword);
+
+				chkNwOdPwds(errors, validator);
+				//Bug-7979
+				chkPwd(request, errors);
+			}
+		}
+	}
+
+
+	/**
+	 * @param request
+	 * @param errors
+	 */
+	private void chkPwd(HttpServletRequest request, ActionErrors errors)
+	{
+		int result=PasswordManager.SUCCESS;
+		if(!Constants.DUMMY_PASSWORD.equals(newPassword)){
+			result = PasswordManager.validatePasswordOnFormBean(newPassword, oldPassword, request.getSession());
+		}
+		
+		if (result != PasswordManager.SUCCESS)
+		{
+			// get error message of validation failure where param is result of validate() method
+		    String errorMessage = PasswordManager.getErrorMessage(result);
+			logger.debug("error from Password validate " + errorMessage);
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item", errorMessage));
+		}
+	}
+
+
+	/**
+	 * @param errors
+	 * @param validator
+	 */
+	private void chkValOpt(ActionErrors errors, Validator validator, String key, String value) 
+	{
+		if (!validator.isValidOption(value))
+		{
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
+					.getValue(key)));
+		}
+	}
+
+
+	/**
+	 * @param errors
+	 */
+	private void compMail(ActionErrors errors)
+	{
+		if (!confirmEmailAddress.equals(emailAddress))
+		{
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.email.mismatch"));
+		}
+	}
+
+
+	/**
+	 * @param errors
+	 * @param validator
+	 */
+	private void chkMail(ActionErrors errors, Validator validator, String key, String value) 
+	{
+		if (validator.isEmpty(value))
+		{
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
+					.getValue(key)));
+		}
+		else
+		{
+			if (!validator.isValidEmailAddress(value))
+			{
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format", ApplicationProperties
+						.getValue(key)));
+			}
+		}
+	}
+
+
+	/**
+	 * @param errors
+	 * @param validator
+	 */
+	private void chkSites(ActionErrors errors, Validator validator)
+	{
+		if (siteIds!=null && siteIds.length>0 && validator.isEmpty(role))
+		{
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
+					.getValue("user.roleIsRequired")));
+		}
+	}
+
+
+	/**
+	 * @param request
+	 * @param errors
+	 * @param validator
+	 */
+	private void chkNOPwds1(HttpServletRequest request, ActionErrors errors, Validator validator)
+	{
+		if (!validator.isEmpty(newPassword) && !validator.isEmpty(oldPassword))
+		{
+			// Call static method PasswordManager.validatePasswordOnFormBean() where params are
+			// new password,old password,user name
+			int result = PasswordManager.validatePasswordOnFormBean(newPassword, oldPassword, request.getSession());
+				
+			if (result != PasswordManager.SUCCESS)
+			{
+				// get error message of validation failure where param is result of validate() method
+			    String errorMessage = PasswordManager.getErrorMessage(result);
+				logger.debug("error from Password validate " + errorMessage);
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item", errorMessage));
+			}
+		}
+	}
+
+
+	/**
+	 * @param errors
+	 * @param validator
+	 */
+	private void chkNwOdPwds(ActionErrors errors, Validator validator)
+	{
+		if (!validator.isEmpty(newPassword) && !validator.isEmpty(confirmNewPassword))
+		{
+			if (!newPassword.equals(confirmNewPassword))
+			{
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.confirmNewPassword.reType"));
+			}
+		}
 	}
 
 	/**

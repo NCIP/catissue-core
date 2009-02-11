@@ -68,7 +68,7 @@ public class QuickEventsForm extends AbstractActionForm
      */
     public QuickEventsForm()
     {
-        reset();
+//        reset();
     }
 
     /**

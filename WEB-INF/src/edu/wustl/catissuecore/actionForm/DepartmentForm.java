@@ -52,7 +52,7 @@ public class DepartmentForm extends AbstractActionForm
      */
     public DepartmentForm()
     {
-        reset();
+//        reset();
     }
 
     /**

@@ -57,7 +57,7 @@ public class BiohazardForm extends AbstractActionForm
     public BiohazardForm()
     {
     	super();
-        reset();
+//        reset();
     }
 
     /**

@@ -157,11 +157,6 @@ public abstract class EventParametersForm extends AbstractActionForm
      */
 	protected void reset()
 	{
-//		this.comments = null;
-//		this.dateOfEvent =null;
-//		this.timeInHours = null;
-//		this.timeInMinutes = null;
-//		this.userId = -1;
 	}
 
 	/**

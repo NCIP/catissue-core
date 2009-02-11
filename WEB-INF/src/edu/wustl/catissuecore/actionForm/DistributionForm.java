@@ -117,9 +117,9 @@ private static org.apache.log4j.Logger logger = Logger.getLogger(DistributionFor
 	private boolean idChange = false;
 	private int rowNo = 0;
 
-	private Integer distributionType = new Integer(Constants.SPECIMEN_DISTRIBUTION_TYPE);
+	private Integer distributionType =  Integer.valueOf(Constants.SPECIMEN_DISTRIBUTION_TYPE);
 
-	private Integer distributionBasedOn = new Integer(Constants.LABEL_BASED_DISTRIBUTION);
+	private Integer distributionBasedOn = Integer.valueOf(Constants.LABEL_BASED_DISTRIBUTION);
 
 	/**
 	 * Map to handle values of all Events
@@ -176,12 +176,12 @@ private static org.apache.log4j.Logger logger = Logger.getLogger(DistributionFor
 				final DistributedItem distributedItem = (DistributedItem) itr.next();
 				if (distributedItem.getSpecimen() == null)
 				{
-					this.distributionType = new Integer(Constants.SPECIMEN_ARRAY_DISTRIBUTION_TYPE);
+					this.distributionType = Integer.valueOf(Constants.SPECIMEN_ARRAY_DISTRIBUTION_TYPE);
 					//populateMapForArray(distributionObject.getSpecimenArrayCollection());
 				}
 				else
 				{
-					this.distributionType = new Integer(Constants.SPECIMEN_DISTRIBUTION_TYPE);
+					this.distributionType = Integer.valueOf(Constants.SPECIMEN_DISTRIBUTION_TYPE);
 					populateMapForSpecimen(distObj.getDistributedItemCollection());
 				}
 

@@ -48,7 +48,7 @@ public class InstitutionForm extends AbstractActionForm
      */
     public InstitutionForm()
     {
-        reset();
+//        reset();
     }
 
     /**

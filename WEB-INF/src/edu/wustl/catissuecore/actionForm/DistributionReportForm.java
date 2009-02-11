@@ -58,7 +58,7 @@ public class DistributionReportForm extends AbstractActionForm
 	private String distributionProtocolTitle;
 	private Long distributionId;
 	
-	private Integer distributionType = new Integer(Constants.SPECIMEN_DISTRIBUTION_TYPE);
+	private Integer distributionType = Integer.valueOf(Constants.SPECIMEN_DISTRIBUTION_TYPE);
 	
 	/**
 	 * @return distributionType Return type of Distribution
