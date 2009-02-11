@@ -7,7 +7,7 @@
  */
 
 Ext.onReady(function(){
-  //  Ext.QuickTips.init();
+   Ext.QuickTips.init();
 
   var ds = new Ext.data.Store({
         proxy: new Ext.data.HttpProxy({
@@ -36,6 +36,7 @@ Ext.onReady(function(){
 		queryDelay : 300,
 		typeAheadDelay : 900,
         selectOnFocus:true,
+		tpl: '<tpl for="."><div ext:qtip="{excerpt}" class="x-combo-list-item">{excerpt}</div></tpl>',
         applyTo: 'clinicaldiagnosis'
    });
 
