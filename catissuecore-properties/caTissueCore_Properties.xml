@@ -514,7 +514,7 @@
 	<!-- Property to specify whether barcode field is editable or not-->
 	<property>
 		<name>barcode.isEditable</name>
-		<value>false</value>
+		<value>true</value>
 	</property>
 	
 	<property>
