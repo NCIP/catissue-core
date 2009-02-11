@@ -32,9 +32,26 @@ import edu.wustl.common.util.dbManager.DAOException;
  * @author suhas_khot
  *
  */
-public class AssociatesCps
+public final class AssociatesCps
 {
-
+		/*
+		 * create singleton object
+		 */
+		private static AssociatesCps associateCp = new AssociatesCps();
+		/*
+		 * private constructor
+		 */
+		private AssociatesCps()
+		{
+			
+		}
+		/*
+		 * returns single object
+		 */
+		public static AssociatesCps getInstance()
+		{
+			return associateCp;
+		}
 	/**
 	 * Map for storing containers corresponding to entitiesIds
 	 */
@@ -58,36 +75,22 @@ public class AssociatesCps
 		validateXML(args);
 		//stores filePath
 		String filePath = args[0];
-
 		if (Constants.DOUBLE_QUOTES.equals(filePath))
 		{
 			throw new DynamicExtensionsSystemException("Please enter valid file path");
 		}
-
 		XMLParser xmlParser = new XMLParser(filePath);
-
 		//stores mapping of cpIds and corresponding entityIds
 		Map<Long, List<Long>> cpIdsVsEntityIds = xmlParser.getCpIdsVsEntityIds();
-
 		//stores mapping of cpIds and corresponding forms/Category
 		Map<Long, List<Long>> cpIdsVsFormIds = xmlParser.getCpIdsVsFormIds();
-
 		//stores mapping of cpIds and override option
 		Map<Long, String> cpIdsVsoverride = xmlParser.getCpIdVsOverride();
 
 		Long typeId = (Long) Utility.getObjectIdentifier(Constants.COLLECTION_PROTOCOL,
 				AbstractMetadata.class.getName(), Constants.NAME);
 		entityIdsVsContId = Utility.getAllContainers();
-
-		for (Long cpId : cpIdsVsoverride.keySet())
-		{
-			if ((cpId != null)
-					&& ((Constants.OVERRIDE_TRUE).equalsIgnoreCase(cpIdsVsoverride.get(cpId))))
-			{
-				disAssociateEntitiesForms(typeId, cpId);
-			}
-		}
-
+		dissAssociateEntitiesFormsPerCpId(cpIdsVsoverride, typeId);
 		for (Long cpId : cpIdsVsEntityIds.keySet())
 		{
 			associateEntitiesToCps(cpId, typeId, cpIdsVsEntityIds.get(cpId));
@@ -95,6 +98,30 @@ public class AssociatesCps
 		for (Long cpId : cpIdsVsFormIds.keySet())
 		{
 			associateEntitiesToCps(cpId, typeId, cpIdsVsFormIds.get(cpId));
+		}
+	}
+	
+	/**
+	 * this method dissAssociate Entities per cpId.
+	 * @param cpIdsVsoverride
+	 * @param typeId
+	 * @throws DAOException
+	 * @throws DynamicExtensionsSystemException
+	 * @throws UserNotAuthorizedException
+	 * @throws BizLogicException
+	 */
+	private static void dissAssociateEntitiesFormsPerCpId(
+			Map<Long, String> cpIdsVsoverride, Long typeId)
+			throws DAOException, DynamicExtensionsSystemException,
+			UserNotAuthorizedException, BizLogicException 
+	{
+		for (Long cpId : cpIdsVsoverride.keySet())
+		{
+			if ((cpId != null)
+					&& ((Constants.OVERRIDE_TRUE).equalsIgnoreCase(cpIdsVsoverride.get(cpId))))
+			{
+				disAssociateEntitiesForms(typeId, cpId);
+			}
 		}
 	}
 
@@ -168,23 +195,39 @@ public class AssociatesCps
 			{
 				List<EntityMap> entityMapList = defaultBizLogic.retrieve(EntityMap.class.getName(),
 						Constants.CONTAINERID, containerId);
-				if (entityMapList != null && entityMapList.size() > 0)
-				{
-					EntityMap entityMap = entityMapList.get(0);
-					if (cpId != 0)
-					{
-						editConditions(entityMap, cpId, typeId);
-					}
-					if (cpId == 0)
-					{
-						Long conditionObject = Long.valueOf(-1);
-						editConditions(entityMap, conditionObject, typeId);
-					}
-					annotation.updateEntityMap(entityMap);
-				}
+				updateEntityMap(cpId, typeId, annotation,
+						entityMapList);
 			}
 
 		}
+	}
+
+	
+	/**
+	 * method updates EntityMap after chaking entityMapList for Null.   
+	 * @param cpId
+	 * @param typeId
+	 * @param annotation
+	 * @param entityMapList
+	 */
+	private static void updateEntityMap(Long cpId,
+			Long typeId, AnnotationBizLogic annotation,
+			List<EntityMap> entityMapList)
+	{
+			if (entityMapList != null && !entityMapList.isEmpty())
+			{
+				EntityMap entityMap = entityMapList.get(0);
+				if (cpId != 0)
+				{
+					editConditions(entityMap, cpId, typeId);
+				}
+				if (cpId == 0)
+				{
+					Long conditionObject = Long.valueOf(-1);
+					editConditions(entityMap, conditionObject, typeId);
+				}
+				annotation.updateEntityMap(entityMap);
+			}
 	}
 
 	/**
@@ -194,7 +237,7 @@ public class AssociatesCps
 	private static Long getContainerId(Long entityId)
 	{
 		Long containerId = null;
-		if (entityIdsVsContId != null && entityIdsVsContId.size() > 0)
+		if (entityIdsVsContId != null && !entityIdsVsContId.isEmpty())
 		{
 			for (Long entityIdFromMap : entityIdsVsContId.keySet())
 			{
