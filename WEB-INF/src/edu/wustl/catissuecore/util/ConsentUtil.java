@@ -40,6 +40,7 @@ import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * This class is designed to contain common methods for the Consent Withdraw process.
@@ -55,7 +56,7 @@ public final class ConsentUtil
 	 * creates a singleton object
 	 * 
 	 */
-	private static ConsentUtil conUtil= new ConsentUtil();
+	private static ConsentUtil consentUtil= new ConsentUtil();
 	/*
 	 * Private constructor.
 	 */
@@ -68,7 +69,7 @@ public final class ConsentUtil
 	 */
 	public static ConsentUtil getInstance()
 	{
-		return conUtil;
+		return consentUtil;
 	}
 	
 	/**
@@ -81,7 +82,7 @@ public final class ConsentUtil
 	 * @param sessionDataBean SessionDataBean instance. Used for inserting disposal event.
 	 * @throws DAOException 
 	 */
-	public static void updateSCG(SpecimenCollectionGroup scg, SpecimenCollectionGroup oldscg, long consentTierID, String withdrawOption,  DAO dao, SessionDataBean sessionDataBean) throws DAOException
+	public static void updateSCG(SpecimenCollectionGroup scg, SpecimenCollectionGroup oldscg, long consentTierID, String withdrawOption,DAO dao, SessionDataBean sessionDataBean) throws DAOException
 	{
 		Collection newScgStatusCollection = new HashSet();
 		Collection consentTierStatusCollection =scg.getConsentTierStatusCollection();
@@ -117,8 +118,6 @@ public final class ConsentUtil
 	{
 		updateSCG(scg, scg, consentTierID,withdrawOption,dao, sessionDataBean);
 	}
-	
-	
 	/*
 	 * This method updates the specimens for the given SCG and sets the consent status to withdraw.
 	 */
@@ -171,44 +170,55 @@ public final class ConsentUtil
 	/*
 	 * This method performs an action on specimen based on user response.
 	 */
+	/**
+	 * @param specimen
+	 * @param consentWithdrawalOption
+	 * @param dao
+	 * @param sessionDataBean
+	 */
 	private static void withdrawResponse(Specimen specimen, String consentWithdrawalOption,  DAO dao, SessionDataBean sessionDataBean)
 	{
 		if(Constants.WITHDRAW_RESPONSE_DISCARD.equalsIgnoreCase(consentWithdrawalOption)||Constants.WITHDRAW_RESPONSE_RETURN.equalsIgnoreCase(consentWithdrawalOption))
 		{
 			addDisposalEvent(specimen, dao, sessionDataBean);
 		}
-		/*else if(consentWithdrawalOption.equalsIgnoreCase(Constants.WITHDRAW_RESPONSE_RETURN))
-		{
-			addReturnEvent(specimen, dao, sessionDataBean);
-		}*/
 		//only if consentWithdrawalOption is not reset or noaction.
 		if(!consentWithdrawalOption.equalsIgnoreCase(Constants.WITHDRAW_RESPONSE_RESET) && !consentWithdrawalOption.equalsIgnoreCase(Constants.WITHDRAW_RESPONSE_NOACTION) )
 		{
-			specimen.setActivityStatus(Constants.ACTIVITY_STATUS_DISABLED);
-			specimen.setIsAvailable(Boolean.FALSE);
+			updateSpecimen(specimen);
 
-			if(specimen.getSpecimenPosition() != null && specimen.getSpecimenPosition().getStorageContainer() !=null)		// locations cleared
-			{
-				Map containerMap = null;
-				try
-				{
-					containerMap = StorageContainerUtil.getContainerMapFromCache();
-				}
-				catch (Exception e)
-				{
-					e.printStackTrace();
-				}
-				StorageContainerUtil.insertSinglePositionInContainerMap(specimen.getSpecimenPosition().getStorageContainer(),containerMap,specimen.getSpecimenPosition().getPositionDimensionOne().intValue(), specimen.getSpecimenPosition().getPositionDimensionTwo().intValue()    );
-			}
-			specimen.setSpecimenPosition(null);
-//			specimen.setPositionDimensionOne(null);
-//			specimen.setPositionDimensionTwo(null);
-//			specimen.setStorageContainer(null);
-			specimen.setAvailableQuantity(null);
-			specimen.setInitialQuantity(null);
 		}
 	}
-	
+	/**
+	 * 
+	 * @param specimen
+	 */
+	private static void updateSpecimen(Specimen specimen) 
+	{
+		specimen.setActivityStatus(Constants.ACTIVITY_STATUS_DISABLED);
+		specimen.setIsAvailable(Boolean.FALSE);
+
+		if(specimen.getSpecimenPosition() != null && specimen.getSpecimenPosition().getStorageContainer() !=null)		// locations cleared
+		{
+			Map containerMap = null;
+			try
+			{
+				containerMap = StorageContainerUtil.getContainerMapFromCache();
+			}
+			catch (Exception e)
+			{
+				Logger.out.error(e);
+			}
+			StorageContainerUtil.insertSinglePositionInContainerMap(specimen.getSpecimenPosition().getStorageContainer(),containerMap,specimen.getSpecimenPosition().getPositionDimensionOne().intValue(), specimen.getSpecimenPosition().getPositionDimensionTwo().intValue()    );
+		}
+		specimen.setSpecimenPosition(null);
+		//			specimen.setPositionDimensionOne(null);
+		//			specimen.setPositionDimensionTwo(null);
+		//			specimen.setStorageContainer(null);
+		specimen.setAvailableQuantity(null);
+		specimen.setInitialQuantity(null);
+	}
+
 	private static void addReturnEvent(Specimen specimen, DAO dao, SessionDataBean sessionDataBean)
 	{
 		try
@@ -226,7 +236,7 @@ public final class ConsentUtil
 		}
 		catch(Exception excp)
 		{
-			excp.printStackTrace(); 
+			Logger.out.error(excp);
 		}
 	}
 
@@ -245,7 +255,7 @@ public final class ConsentUtil
 		}
 		catch(Exception excp)
 		{
-			excp.printStackTrace(); 
+			Logger.out.error(excp);
 		}
 	}
 	
@@ -644,7 +654,8 @@ public final class ConsentUtil
 	   {
 	    	//Map tempMap = new HashMap();
     	    Map tempMap = new LinkedHashMap();//8905
-	    	Set sortedStatusSet = new LinkedHashSet();
+    	    Map returnMap = null;
+    	    Set sortedStatusSet = new LinkedHashSet();
 	    	List sortStatus = new ArrayList();
 	    	//bug 8905
 	    	sortStatus.addAll(statusResponseCollection);
@@ -687,12 +698,9 @@ public final class ConsentUtil
 						}
 					}
 				}
-				return tempMap;
+				returnMap=tempMap;
 			}		
-			else
-			{
-				return null;
-			}
+				return returnMap;
 	   }
     
     /**
