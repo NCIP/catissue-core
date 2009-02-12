@@ -135,17 +135,19 @@ public final class EventsUtil
 	 */
 	public static long getIdFromCollection(Collection userList, String userName)
 	{
-		Iterator itr = userList.iterator();
+		Iterator<NameValueBean> itr = userList.iterator();
+		long returnId = Long.valueOf(-1);
 		for (int i = 0; itr.hasNext(); i++)
 		{
 			NameValueBean nameValueBean = (NameValueBean) itr.next();
 			if (nameValueBean.getName() != null && nameValueBean.getName().trim().equals(userName))
 			{
 				String id = nameValueBean.getValue();
-				return Long.valueOf(id).longValue();
+				returnId = Long.valueOf(id).longValue();
+				break;
 			}
 		}
-		return -1;
+		return returnId;
 	}
 
 	/**
