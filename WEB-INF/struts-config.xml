@@ -222,6 +222,14 @@ PUBLIC
         	<forward name="success" path=".catissuecore.summaryHomeDef" />
             <forward name="failure" path=".catissuecore.homePageDef" />
 		</action>
+		<!-- Mandar : 23Jan09 : For summary without login -->
+		<action path="/SummaryPage" type="edu.wustl.catissuecore.action.SummaryAction" name="summaryForm">
+        	<forward name="success" path=".catissuecore.summaryWOLODef" />
+            <forward name="failure" path=".catissuecore.homePageDef" />
+		</action>
+
+		<!-- Mandar : 27Jan09 : Common Pages without login -->
+		<!-- Mandar : 27Jan09 : Common Pages without login end -->
 				
         <action path="/Help" type="org.apache.struts.actions.ForwardAction"
                     parameter=".catissuecore.helpHomeDef" />
@@ -4785,7 +4793,7 @@ PUBLIC
 			<forward name="pageOfNewSpecimen" path=".catissuecore.viewSpecimenAnnotation"/>
 			<forward name="pageOfListSpecimenEventParameters" path=".catissuecore.viewSpecimenAnnotation"/>
 			<forward name="pageOfNewSpecimenCPQuery" path=".catissuecore.viewSpecimenAnnotationCPQuery"/>	
-			<forward name="pageOfSpecimenCollectionGroup" path=".catissuecore.viewSpecimenCollectionGroupAnnotation"/>
+			<forward name="pageOfSpecimenCollectionGroup" path=".catissuecore.viewSpecimenCollectionGroupAnnotationwithMenu"/>
 			<forward name="pageOfSpecimenCollectionGroupCPQuery" path=".catissuecore.viewSpecimenCollectionGroupAnnotation"/>
 			<forward name="pageOfListSpecimenEventParametersCPQuery" path=".catissuecore.viewSpecimenAnnotationCPQuery"/>	
 			<forward name="access_denied" path="/ManageAdministrativeData.do" />	

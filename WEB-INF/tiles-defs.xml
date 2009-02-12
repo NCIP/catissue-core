@@ -891,6 +891,11 @@
 	<definition name=".catissuecore.summaryHomeDef" extends=".catissuecore.homePageDef">		
 		<put name="content" value="/pages/content/summary/Home.jsp" />
 	</definition>
+	
+	<definition name=".catissuecore.summaryWOLODef" extends=".catissuecore.mainTitlePageDef">		
+		<put name="content" value="/pages/content/summary/Home.jsp" />
+	</definition>
+	
 	<!-- Summary tab pages definitions End -->
 	
 	<!-- Help tab pages definitions Begin -->
@@ -1227,6 +1232,12 @@
 	<definition name=".catissuecore.viewSpecimenCollectionGroupAnnotation" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/NewSpecimenCollectioGroupAnnotation.jsp" />
 	</definition>
+	
+	<!-- Mandar : new tile defination annotations with menus. -->
+	<definition name=".catissuecore.viewSpecimenCollectionGroupAnnotationwithMenu" extends=".catissuecore.homePageDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/NewSpecimenCollectioGroupAnnotation.jsp" />
+	</definition>
+	
 	<!--Annotation defs End-->
 	
 	<definition name=".catissuecore.DefineEvents" extends=".catissuecore.homePageDef">
