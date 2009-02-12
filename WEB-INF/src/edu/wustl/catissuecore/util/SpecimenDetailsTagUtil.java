@@ -93,13 +93,13 @@ public final class SpecimenDetailsTagUtil
 		
 		if(summaryForm.getShowLabel())
 		{
-		colHeaderList.add(CH_LABEL);							dispColumnsList.add(LABEL);
-		showLabel = true;
+			colHeaderList.add(CH_LABEL);							dispColumnsList.add(LABEL);
+			showLabel = true;
 		}
 		if(summaryForm.getShowbarCode())
 		{
-		colHeaderList.add(CH_BARCODE);							dispColumnsList.add(BARCODE);
-		showBarcode = true;
+			colHeaderList.add(CH_BARCODE);							dispColumnsList.add(BARCODE);
+			showBarcode = true;
 		}	
 
 		colHeaderList.add(CH_TYPE);								dispColumnsList.add(TYPE);
