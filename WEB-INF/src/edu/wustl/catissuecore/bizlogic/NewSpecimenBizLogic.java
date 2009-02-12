@@ -553,7 +553,6 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			specimen.setParentSpecimen(parentSpecimen);
 			parentSpecimen.getChildSpecimenCollection().add(specimen);
 			specimen.setSpecimenCollectionGroup(parentSpecimen.getSpecimenCollectionGroup());
-			specimen.getSpecimenCollectionGroup().getSpecimenCollection().add(specimen);
 			setParentSpecimenData(specimen);
 		}
 		checkStatus(dao, specimen.getSpecimenCollectionGroup(), "Specimen Collection Group");
@@ -597,7 +596,6 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		consentTierStatusCollection = ((SpecimenCollectionGroup) scg).getConsentTierStatusCollection();
 		setConsentTierStatus(specimen, consentTierStatusCollection);
 		specimen.setSpecimenCollectionGroup(scg);
-		scg.getSpecimenCollection().add(specimen);
 	}
 
 	/**

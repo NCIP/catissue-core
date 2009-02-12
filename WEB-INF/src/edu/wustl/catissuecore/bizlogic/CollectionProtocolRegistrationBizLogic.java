@@ -670,8 +670,6 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 				chkForChildCP(collectionProtocolRegistration, dao, sessionDataBean);
 			}
 		}
-		collectionProtocolRegistration.getCollectionProtocol().getCollectionProtocolRegistrationCollection().
-		add(collectionProtocolRegistration);
 	}
 
 	/** In this method if parent CP has any child which can be automatically registered,then these child are registered
