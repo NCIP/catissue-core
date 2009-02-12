@@ -43,8 +43,9 @@ public class SpecimenComparator implements Comparator{
 //	}
 
 	//changed the comparison from label to id
-	public int compare(Object arg0, Object arg1) {
-		
+	public int compare(Object arg0, Object arg1)
+	{
+		int returnVal = 0;
 		if((Specimen)arg0 instanceof Specimen && (Specimen)arg1 instanceof Specimen)
 		{
 			Specimen specimenFirst = (Specimen)arg0;
@@ -52,24 +53,23 @@ public class SpecimenComparator implements Comparator{
 			
 			if(specimenFirst !=null && specimenSec != null && specimenFirst.getId() != null && specimenSec.getId() != null)
 			{
-				return specimenFirst.getId().compareTo(specimenSec.getId());
+				returnVal = specimenFirst.getId().compareTo(specimenSec.getId());
 			}
-			
-			if(specimenFirst ==null && specimenSec == null)
+			else if(specimenFirst ==null && specimenSec == null)
 			{
-				return 0;
+				returnVal = 0;
 			}
-			
-			
-			if(specimenFirst ==null)
-				return 1;
-			if(specimenSec == null)
-				return -1;
-								
+			else if(specimenFirst ==null)
+			{
+				returnVal = 1;
+			}
+			else if(specimenSec == null)
+			{
+				returnVal = -1;
+			}					
 		}
 		
-		
-		return 0;
+		return returnVal;
 	}
 
 }
