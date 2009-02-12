@@ -198,19 +198,7 @@ public class EmailHandler
 			    + "\n\n" + ApplicationProperties.getValue("email.catissuecore.team");
 			
 			emailStatus = sendEmailToUser(user.getEmailAddress(), subject, body);
-			
-			if (emailStatus)
-			{
-				Logger.out.info(ApplicationProperties
-				    .getValue("user.loginDetails.email.success")
-				    + user.getLastName() + " " + user.getFirstName());
-			}
-			else
-			{
-				Logger.out.info(ApplicationProperties
-				    .getValue("user.loginDetails.email.failure")
-				    + user.getLastName() + " " + user.getFirstName());
-			}
+			logEmailStatus(user, emailStatus);
         }
         catch(SMException smExp)
         {
@@ -219,6 +207,27 @@ public class EmailHandler
         
         return emailStatus;
     }
+
+	/**
+	 * method logs email status
+	 * @param user
+	 * @param emailStatus
+	 */
+	private void logEmailStatus(User user, boolean emailStatus) 
+	{
+		if (emailStatus)
+		{
+			Logger.out.info(ApplicationProperties
+			    .getValue("user.loginDetails.email.success")
+			    + user.getLastName() + " " + user.getFirstName());
+		}
+		else
+		{
+			Logger.out.info(ApplicationProperties
+			    .getValue("user.loginDetails.email.failure")
+			    + user.getLastName() + " " + user.getFirstName());
+		}
+	}
     
     /**
      * Sends email to the administrator and the user who reported the problem.
@@ -295,7 +304,7 @@ public class EmailHandler
     }
     
     /**
-     * Sends email to the adminstrator.
+     * Sends email to the administrator.
      * Returns true if the email is successfully sent else returns false.
      * @param subject The subject of the email. 
      * @param body The body of the email.
