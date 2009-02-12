@@ -22,7 +22,6 @@ import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.security.PrivilegeCache;
 import edu.wustl.common.security.PrivilegeManager;
-import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -59,12 +58,12 @@ class ParticipantRegistrationCache
 		}
 		catch (IllegalStateException e)
 		{
-			e.printStackTrace();
+			Logger.out.error(e);
 			Logger.out.info("Error while accessing cache");
 		}
 		catch (CacheException e)
 		{
-			e.printStackTrace();
+			Logger.out.error(e);
 			Logger.out.info("Error while accessing cache");
 		}
 		return participantRegInfoList;
@@ -290,25 +289,7 @@ class ParticipantRegistrationCache
 		
 		UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.USER_FORM_ID);
 		Set cpIds = userBizLogic.getRelatedCPIds(sessionDataBean.getUserId(), true);
-			
-			
-			if(cpIds == null)
-			{
-				newList.addAll(participantRegistrationInfoList);
-			}
-			else
-			{	
-				for(int counter=0; counter<participantRegistrationInfoList.size(); counter++)
-				{
-					ParticipantRegistrationInfo participantRegistrationInfo = (ParticipantRegistrationInfo) participantRegistrationInfoList.get(counter);
-					Long cpId = participantRegistrationInfo.getCpId();
-					
-					if(cpIds.contains(cpId))
-					{
-						newList.add(participantRegistrationInfo);
-					}
-				}
-			}
+		addPartRegInfo(newList, cpIds);
 		Set<Long> siteIds = userBizLogic.getRelatedSiteIds(sessionDataBean.getUserId());
 		Set<Long> cp_Ids = userBizLogic.getRelatedCPIds(sessionDataBean.getUserId(), false);
 		
@@ -352,25 +333,68 @@ class ParticipantRegistrationCache
 			}
 			cpDetailsList.addAll(list);
 		}
+		updateCPDetailList(cpDetailsList, newList);
+		return cpDetailsList;
+	}
+
+	/**
+	 * method adds CP details by participantRegistrationInfoList
+	 * @param newList
+	 * @param cpIds
+	 */
+	private void addPartRegInfo(List newList, Set cpIds) 
+	{
+		
+		if(cpIds == null)
+		{
+			newList.addAll(participantRegistrationInfoList);
+		}
+		else
+		{	
+			
+			for(int counter=0; counter<participantRegistrationInfoList.size(); counter++)
+			{
+				ParticipantRegistrationInfo participantRegistrationInfo = (ParticipantRegistrationInfo) participantRegistrationInfoList.get(counter);
+				Long cpId = participantRegistrationInfo.getCpId();
+				
+				if(cpIds.contains(cpId))
+				{
+					newList.add(participantRegistrationInfo);
+				}
+			}
+		}
+	}
+
+	
+
+	/**
+	 * method updates CPDetailList by participantRegInfo.
+	 * @param cpDetailsList
+	 * @param iter
+	 */
+	private void updateCPDetailList(List<NameValueBean> cpDetailsList,List newList) 
+	{
+		
 		Iterator iter = newList.iterator();
 		while (iter.hasNext())
 		{
 			ParticipantRegistrationInfo participantRegInfo = (ParticipantRegistrationInfo) iter.next();
 			NameValueBean cpDetails = new NameValueBean(participantRegInfo.getCpShortTitle(), participantRegInfo.getCpId());
-            
-            boolean isPresent = false; 
-            for (NameValueBean nameValueBean : cpDetailsList)
-            {
-                if (nameValueBean.getValue().equalsIgnoreCase(participantRegInfo.getCpId().toString()))
-                {
-                    isPresent = true;
-                    break;
-                }
-            }
-            if (!isPresent)
-			cpDetailsList.add(cpDetails);
+
+			boolean isPresent = false; 
+			for (NameValueBean nameValueBean : cpDetailsList)
+			{
+				if (nameValueBean.getValue().equalsIgnoreCase(participantRegInfo.getCpId().toString()))
+				{
+					isPresent = true;
+					break;
+				}
+			}
+			if (!isPresent)
+			{
+				cpDetailsList.add(cpDetails);
+			}
 		}
-		return cpDetailsList;
 	}
 
 //	Smita changes start
