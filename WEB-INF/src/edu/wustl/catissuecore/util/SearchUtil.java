@@ -97,9 +97,9 @@ public final  class SearchUtil
     
     
 	//Function returns the list of operators as per the datatype.
-	public static List getOperatorList(int dataType)
+	public static List<NameValueBean> getOperatorList(int dataType)
 	{
-		List operatorList = new ArrayList();
+		List<NameValueBean> operatorList = new ArrayList();
 		operatorList.add(new NameValueBean(Constants.ANY,Constants.ANY));
 		
 		switch(dataType)
@@ -215,14 +215,16 @@ public final  class SearchUtil
 	private static String createKey(String tableName,String fieldName,boolean isOperator)
     {
 		//Checking whether the key is of operator field or not
+		String key="";
     	if(isOperator)
     	{
-    		return "value(Operator:" + tableName + ":" + fieldName +")";
+    		key="value(Operator:" + tableName + ":" + fieldName +")";
     	}
     	else
     	{
-    		return "value(" + tableName + ":" + fieldName + ")";
+    		key="value(" + tableName + ":" + fieldName + ")";
     	}
+    	return key;
     }
 	
 	/**
@@ -373,6 +375,7 @@ public final  class SearchUtil
 	{
 		SearchFieldData[] searchFieldData = getSearchFieldData(formId);
 		String columnDisplayName = "";
+		String colName="";
 		if(searchFieldData != null)
 		{
 			String name = createKey(tableName,columnName,false);
@@ -391,10 +394,13 @@ public final  class SearchUtil
 		if(!columnDisplayName.equals(""))
 		{
 			ResourceBundle myResources =ResourceBundle.getBundle("ApplicationResources");
-			return myResources.getString(columnDisplayName);
+			colName = myResources.getString(columnDisplayName);
 		}
 		else 
-			return columnDisplayName;
+		{
+			colName = columnDisplayName;
+		}
+		return colName;
 	}
 	
 	/**
@@ -468,12 +474,12 @@ public final  class SearchUtil
      */
 
     public static boolean isNullobject(Object object)
-    {
+    {	boolean flag = true;
 	    if (object != null)
 	    {
-	       return false;
+	       flag = false;
 	    }
-	    return true;
+	    return flag;
     }
 
 
