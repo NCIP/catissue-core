@@ -65,34 +65,7 @@ public class MSRUtil {
 					map = (Map<String, SiteUserRolePrivilegeBean>) session.getAttribute(Constants.USER_ROW_ID_BEAN_MAP);
 				}
 				actionList = apBizLogic.getActionListForUserPage(false);
-				List<NameValueBean> cpList =null;
-				if(request.getAttribute("userForm")==null)
-				{
-					cpList = apBizLogic.getCPList(false);
-				}
-				else
-				{
-					UserForm userForm = null;
-					userForm = (UserForm)request.getAttribute("userForm");
-					if(userForm.getSiteIds()!=null && (userForm.getSiteIds()).length>0)
-					{
-						String[] siteIdsArray = null;
-						siteIdsArray = userForm.getSiteIds();
-						List<Long> selectedSitesList = null;
-						selectedSitesList = new ArrayList<Long>(); 
-						for(String siteId:siteIdsArray)
-						{
-							selectedSitesList.add(Long.valueOf(siteId));
-						}
-						cpList = apBizLogic.getCPsForSelectedSites(selectedSitesList);
-					}
-					else
-					{
-						cpList = apBizLogic.getCPList(false);
-					}
-				}
-				Collections.sort(cpList);
-				request.setAttribute(Constants.CPLIST, cpList);
+				setCpListToRequest(request, apBizLogic);
 			}
 			
 			final SessionDataBean sessionDataBean = (SessionDataBean) session.getAttribute(Constants.SESSION_DATA);
@@ -107,6 +80,55 @@ public class MSRUtil {
 			request.setAttribute(Constants.ROLELIST, roleList);
 			
 		return mapping.findForward(Constants.SUCCESS);
+	}
+
+	/**
+	 * method updates CPList 
+	 * @param request
+	 * @param apBizLogic
+	 * @throws BizLogicException
+	 */
+	private void setCpListToRequest(HttpServletRequest request,
+			final AssignPrivilegePageBizLogic apBizLogic)
+			throws BizLogicException 
+	{
+		List<NameValueBean> cpList;
+		if(request.getAttribute("userForm")==null)
+		{
+			cpList = apBizLogic.getCPList(false);
+		}
+		else
+		{
+			cpList = getCPList(request, apBizLogic);
+		}
+		Collections.sort(cpList);
+		request.setAttribute(Constants.CPLIST, cpList);
+	}
+
+	private List<NameValueBean> getCPList(HttpServletRequest request,
+			final AssignPrivilegePageBizLogic apBizLogic)
+			throws BizLogicException
+	{
+		List<NameValueBean> cpList;
+		UserForm userForm = null;
+		userForm = (UserForm)request.getAttribute("userForm");
+		if(userForm.getSiteIds()!=null && (userForm.getSiteIds()).length>0)
+		{
+			String[] siteIdsArray = null;
+			siteIdsArray = userForm.getSiteIds();
+			List<Long> selectedSitesList = null;
+			selectedSitesList = new ArrayList<Long>(); 
+			for(String siteId:siteIdsArray)
+			{
+				selectedSitesList.add(Long.valueOf(siteId));
+			}
+			cpList = apBizLogic.getCPsForSelectedSites(selectedSitesList);
+		}
+		else
+		{
+			cpList = apBizLogic.getCPList(false);
+		}
+		return cpList;
 	}
 	
 	/**
@@ -230,7 +252,8 @@ public class MSRUtil {
 	 * @throws IOException
 	 * @throws JSONException
 	 */
-	private void deleteRowMethod(HttpServletRequest request, HttpServletResponse response) throws BizLogicException, IOException, JSONException {
+	private void deleteRowMethod(HttpServletRequest request, HttpServletResponse response) throws BizLogicException, IOException, JSONException 
+	{
 		final HttpSession session = request.getSession();
 		final AssignPrivilegePageBizLogic apBizLogic = getAssignPrivilegePageBizLogic();
 		final String deletedRowsArray = (String) request.getParameter("deletedRowsArray");
