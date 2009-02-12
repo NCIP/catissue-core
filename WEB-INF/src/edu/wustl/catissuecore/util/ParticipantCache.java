@@ -44,12 +44,12 @@ public class ParticipantCache
 		}
 		catch (IllegalStateException e)
 		{
-			e.printStackTrace();
+			Logger.out.error(e);
 			Logger.out.info("Error while accessing cache");
 		}
 		catch (CacheException e)
 		{
-			e.printStackTrace();
+			Logger.out.error(e);
 			Logger.out.info("Error while accessing cache");
 		}
 		return participantMap;
