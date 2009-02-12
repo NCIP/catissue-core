@@ -14,8 +14,9 @@ import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
  */
 public class CollectionProtocolEventComparator implements Comparator{
 
-	public int compare(Object arg0, Object arg1) {
-	
+	public int compare(Object arg0, Object arg1) 
+	{
+		int returnVal=0;
 		if(arg0 instanceof CollectionProtocolEvent && arg1 instanceof CollectionProtocolEvent)
 		{
 			CollectionProtocolEvent collectionProtocolEventFirst = (CollectionProtocolEvent)arg0;
@@ -31,23 +32,22 @@ public class CollectionProtocolEventComparator implements Comparator{
 				{
 					compareValue = collectionProtocolEventFirst.getId().compareTo(collectionProtocolEventSec.getId());
 				}
-				return compareValue;
+				returnVal=compareValue;
 			}
-			
-			if(collectionProtocolEventFirst ==null && collectionProtocolEventSec == null)
+			else if(collectionProtocolEventFirst ==null && collectionProtocolEventSec == null)
 			{
-				return 0;
+				returnVal=0;
 			}
-			
-			
-			if(collectionProtocolEventFirst ==null)
-				return 1;
-			if(collectionProtocolEventSec == null)
-				return -1;
-								
+			else if(collectionProtocolEventFirst ==null)
+			{
+				returnVal=1;
+			}
+			else if(collectionProtocolEventSec == null)
+			{
+				returnVal=-1;
+			}					
 		}
-		
-		return 0;
+		return returnVal;
 	}
 	
 	
