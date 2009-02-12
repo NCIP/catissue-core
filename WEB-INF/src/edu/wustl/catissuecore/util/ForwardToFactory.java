@@ -14,9 +14,28 @@ package edu.wustl.catissuecore.util;
  * ForwardToFactory is a factory that returns instance of ForwardToProcessor
  * @author Krunal Thakkar
  */
-public class ForwardToFactory 
+public final class ForwardToFactory 
 {
-    public static ForwardToProcessor getForwardToProcessor()
+	/*
+	 * create singleton object
+	 */
+	private static ForwardToFactory  fwdToFactory= new ForwardToFactory();
+	/*
+	 * Private constructor
+	 */
+	private ForwardToFactory ()
+	{
+		
+	}
+	/*
+	 * return single object
+	 */
+	public static ForwardToFactory getInstance()
+	{
+		return fwdToFactory;
+	}
+	
+	public static ForwardToProcessor getForwardToProcessor()
     {
         return new ForwardToProcessor();
     }
