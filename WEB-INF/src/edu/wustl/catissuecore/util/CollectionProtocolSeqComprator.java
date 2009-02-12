@@ -6,7 +6,10 @@ import edu.wustl.catissuecore.domain.CollectionProtocol;
 
 public class CollectionProtocolSeqComprator implements Comparator {
 
-	public int compare(Object arg0, Object arg1) {
+	public int compare(Object arg0, Object arg1)
+	{
+
+		int returnVal=0;
 		if(arg0 instanceof CollectionProtocol && arg1 instanceof CollectionProtocol)
 		{
 			CollectionProtocol cp1 = (CollectionProtocol)arg0;
@@ -16,19 +19,23 @@ public class CollectionProtocolSeqComprator implements Comparator {
 			
 			if(seq1 != null && seq2 != null)
 			{
-				return seq1.compareTo(seq2);
+				returnVal=seq1.compareTo(seq2);
 			}
-			if(seq1 == null && seq2 == null)
-				return 0;
-			
-			if(seq1 ==null)
-				return 1;
-			if(seq2 == null)
-				return -1;
-						
+			else if(seq1 == null && seq2 == null)
+			{
+				returnVal=0;
+			}
+			else if(seq1 ==null)
+			{
+				returnVal=1;
+			}
+			else if(seq2 == null)
+			{
+				returnVal=-1;
+			}			
 		}
 		// TODO Auto-generated method stub
-		return 0;
+		return returnVal;
 	}
 
 }
