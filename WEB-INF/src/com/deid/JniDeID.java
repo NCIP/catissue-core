@@ -44,7 +44,7 @@ import edu.wustl.common.util.logger.Logger;
 public class JniDeID 
 {
    /** 
-    * loadDeidLibrary maps the DeID6 library into the applications addressspace via the Windows API function LoadLibrary
+    * loadDeidLibrary maps the DeID6 library into the applications address space via the Windows API function LoadLibrary
     *  @return boolean 
     */
    public native static boolean loadDeidLibrary();
