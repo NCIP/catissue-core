@@ -87,7 +87,8 @@ public class ContainerMap extends NLevelCustomCombo {
 	 * A call back function which sets disabled attribute.
 	 * @param value
 	 */
-	public void setButtonDisabled(boolean value) {
+	public void setButtonDisabled(boolean value) 
+	{
 		this.buttonDisabled = value;
 	}
 	
@@ -126,7 +127,7 @@ public class ContainerMap extends NLevelCustomCombo {
 			out.println("</tr></table> ");
 		}catch(IOException io)
 		{
-			io.printStackTrace();
+			Logger.out.error(io);
 		}
 		// Call to NLevelCustomCombo's doEndTag();
 		return super.doEndTag();
