@@ -137,11 +137,11 @@ public final class StorageContainerUtil
 		}
 		//Logger.out.debug("deleteSinglePositionInContainerMap method after deleting :----yPosList :" + yPosList);
 
-		if (yPosList == null || yPosList.size() == 0)
+		if (yPosList == null || yPosList.isEmpty())
 		{
 			storageContainerMap.remove(nvb);
 		}
-		if (storageContainerMap == null || storageContainerMap.size() == 0)
+		if (storageContainerMap == null || storageContainerMap.isEmpty())
 		{
 			continersMap.remove(storageContainerId);
 
@@ -160,7 +160,7 @@ public final class StorageContainerUtil
 	{
 		NameValueBean storageContainerId = new NameValueBean(storageContainer.getName(), storageContainer.getId());
 		TreeMap availabelPositionsMap = (TreeMap) getAvailablePositionMapForNewContainer(storageContainer);
-		if (availabelPositionsMap != null && availabelPositionsMap.size() != 0)
+		if (availabelPositionsMap != null && !availabelPositionsMap.isEmpty())
 		{
 			continersMap.put(storageContainerId, availabelPositionsMap);
 		}
@@ -291,7 +291,7 @@ public final class StorageContainerUtil
 			xpos = Integer.valueOf(nvb.getValue());
 			List yposValues = (List) storageContainerMap.get(nvb);
 			Iterator yposIterator = yposValues.iterator();
-			
+
 			while(yposIterator.hasNext())
 			{
 				nvb =(NameValueBean) yposIterator.next();
@@ -376,7 +376,7 @@ public final class StorageContainerUtil
 
 			}
 		}
-		
+
 		if (xNew < xOld)
 		{
 			for (int i = xNew + 1; i <= xOld; i++)
@@ -385,7 +385,7 @@ public final class StorageContainerUtil
 				storageContainerMap.remove(xNvb);
 			}
 		}
-		
+
 		if (yNew < yOld)
 		{
 			for (int i = 1; i <= xNew; i++)
@@ -406,7 +406,6 @@ public final class StorageContainerUtil
 
 			}
 		}
-
 	}
 
 	public static synchronized void updateNameInCache(Map containerMap, StorageContainer currentContainer, StorageContainer oldContainer)
@@ -414,7 +413,7 @@ public final class StorageContainerUtil
 		//Using treeMap , so can't directly update the key contents.
 		Map positionMap = new TreeMap();
 		boolean keyRemoved = false;
-		Set keySet = containerMap.keySet();
+		Set<String> keySet = containerMap.keySet();
 		Iterator itr = keySet.iterator();
 		while (itr.hasNext())
 		{
@@ -438,19 +437,24 @@ public final class StorageContainerUtil
 	public static boolean chkContainerFull(String storageContainerId, String storageContainerName) throws Exception
 	{
 		Map containerMap = getContainerMapFromCache();
-
+		boolean flag;
 		NameValueBean nvb = new NameValueBean(storageContainerName, storageContainerId);
 		if (containerMap.containsKey(nvb))
-			return false;
+		{
+			flag = false;
+		}
 		else
-			return true;
-
+		{
+			flag = true;
+		}
+		return flag;
 	}
 	public static boolean isPostionAvaialble(String storageContainerId , String storageContainerName , String x , String y) throws CacheException
 	{
 		Map containerMap = getContainerMapFromCache();
 		NameValueBean nvb = new NameValueBean(storageContainerName, storageContainerId);
 		Map positionMap = (Map)containerMap.get(nvb);
+		boolean flag = true;
 		
 		if(positionMap != null && !positionMap.isEmpty())
 		{
@@ -460,18 +464,20 @@ public final class StorageContainerUtil
 			{
 				NameValueBean yNvb = new NameValueBean(y ,y);
 				if(!yList.contains(yNvb))
-					return false;
+				{
+					flag =  false;
+				}
 			}
 			else
 			{
-				return false;
+				flag = false;
 			}
 		}
 		else
 		{
-			return false;
+			flag = false;
 		}
-		return true;
+		return flag;
 		
 	}
 
@@ -510,7 +516,7 @@ public final class StorageContainerUtil
 				}
 				catch (CacheException e)
 				{
-					e.printStackTrace();
+					Logger.out.error(e);
 				}
 			
 				if (containerMapFromCache != null)
@@ -602,13 +608,15 @@ public final class StorageContainerUtil
 	 * @return
 	 */
 		
-		public static boolean checkCanReduceDimension(StorageContainer oldContainer, StorageContainer container) {
+		public static boolean checkCanReduceDimension(StorageContainer oldContainer, StorageContainer container) 
+		{
 			Integer oldContainerDimOne = oldContainer.getCapacity().getOneDimensionCapacity();
 			Integer oldContainerDimTwo = oldContainer.getCapacity().getTwoDimensionCapacity();
 			Integer newContainerDimOne = container.getCapacity().getOneDimensionCapacity();
 			Integer newContainerDimTwo = container.getCapacity().getTwoDimensionCapacity();
-			
+			boolean flag=true;
 			List deletedPositions = new ArrayList();
+			
 			if(newContainerDimOne < oldContainerDimOne)
 			{
 				for(int i=newContainerDimOne+1;i<oldContainerDimOne+1;i++)
@@ -633,8 +641,6 @@ public final class StorageContainerUtil
 				}
 			}
 			
-			
-			int count = 0;
 			Map containerMapFromCache = null;
 			try
 			{
@@ -642,47 +648,68 @@ public final class StorageContainerUtil
 			}
 			catch (CacheException e)
 			{
-				e.printStackTrace();
+				Logger.out.error(e);
 			}
 
+			int count = 0;
 			if (containerMapFromCache != null)
 			{
-				Iterator itr = containerMapFromCache.keySet().iterator();
-				while (itr.hasNext())
-				{
-					NameValueBean nvb = (NameValueBean) itr.next();
-					if (nvb.getValue().toString().equals(container.getId().toString()))
-					{
-
-						Map tempMap = (Map) containerMapFromCache.get(nvb);
-						Iterator tempIterator = tempMap.keySet().iterator();
-						while(tempIterator.hasNext())
-						{
-							
-						NameValueBean nvb1 = (NameValueBean) tempIterator.next();
-						List list = (List) tempMap.get(nvb1);
-						for(int i=0;i<list.size();i++)
-						{
-						  NameValueBean nvb2 = (NameValueBean) list.get(i);
-						  String formatedPosition = nvb1.getValue() + "@" + nvb2.getValue();
-						  if(deletedPositions.contains(formatedPosition))
-						  {
-							  count++;
-						  }
-						}
-								
-						}
-					}
-
-				}
+				
+				count = updatePosition(container,
+						deletedPositions,containerMapFromCache);
 			}
 			
 			if(count!=deletedPositions.size())
 			{
-		    	return false;
+		    	flag= false;
 			}
-			return true;
+			return flag;
 		}
+
+	
+
+	/**
+	 * @param container
+	 * @param deletedPositions
+	 * @param count
+	 * @param containerMapFromCache
+	 * @return
+	 */
+	private static int updatePosition(
+			StorageContainer container, List deletedPositions,
+			Map containerMapFromCache) 
+	{
+		Iterator itr = containerMapFromCache.keySet().iterator();
+		int count = 0;
+		while (itr.hasNext())
+		{
+			NameValueBean nvb = (NameValueBean) itr.next();
+			if (nvb.getValue().toString().equals(container.getId().toString()))
+			{
+
+				Map tempMap = (Map) containerMapFromCache.get(nvb);
+				Iterator tempIterator = tempMap.keySet().iterator();
+				while(tempIterator.hasNext())
+				{
+					
+				NameValueBean nvb1 = (NameValueBean) tempIterator.next();
+				List list = (List) tempMap.get(nvb1);
+				for(int i=0;i<list.size();i++)
+				{
+				  NameValueBean nvb2 = (NameValueBean) list.get(i);
+				  String formatedPosition = nvb1.getValue() + "@" + nvb2.getValue();
+				  if(deletedPositions.contains(formatedPosition))
+				  {
+					  count++;
+				  }
+				}
+						
+				}
+			}
+
+		}
+		return count;
+	}
 			
 		/**
 		 * @param dao
@@ -760,7 +787,7 @@ public final class StorageContainerUtil
 
 			}
 		}
-	
+
 		/**
 		 * check for initial values for storage container.
 		 * @param containerMap container map
@@ -1016,7 +1043,7 @@ public final class StorageContainerUtil
 			}
 			catch (CacheException e)
 			{
-				e.printStackTrace();
+				Logger.out.error(e);
 			}
 
 			if (containerMapFromCache != null)
@@ -1048,7 +1075,9 @@ public final class StorageContainerUtil
 								for (; j < usedPositionsList.size(); j++)
 								{
 									if (usedPositionsList.get(j).toString().equals(availaleStoragePosition))
+									{
 										break;
+									}
 								}
 								if (j==usedPositionsList.size())
 								{
@@ -1131,7 +1160,7 @@ public final class StorageContainerUtil
 			catch (ClassNotFoundException e)
 			{
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				Logger.out.error(e);
 			}
 
 		      return childrenColl;
@@ -1193,7 +1222,7 @@ public final class StorageContainerUtil
 				}
 				catch (CacheException e)
 				{
-					e.printStackTrace();
+					Logger.out.error(e);
 				}
 											
 				if (containerMapFromCache != null && !(chkContainerFull(containerId,storageContainerName)))
