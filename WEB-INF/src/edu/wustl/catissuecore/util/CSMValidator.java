@@ -47,18 +47,8 @@ public class CSMValidator implements IValidator {
 			
 			if (cpCollection != null && !cpCollection.isEmpty())
 	        {
-				for(CollectionProtocol cp : cpCollection)
-				{
-					if(privilegeCache.hasPrivilege(CollectionProtocol.class.getName()+"_"+cp.getId(), Permissions.REGISTRATION))
-					{
-						hasPrivilege = true;
-						break;
-					}
-				}
-				if(!hasPrivilege)
-				{
-					hasPrivilege = edu.wustl.catissuecore.util.global.Utility.checkForAllCurrentAndFutureCPs(null,Permissions.REGISTRATION, sessionDataBean, null);
-				}
+				hasPrivilege = checkePriviliges(sessionDataBean, privilegeCache,
+						cpCollection);
 	        } 
 			else
 	        {
@@ -74,6 +64,35 @@ public class CSMValidator implements IValidator {
 			session.close();
 		}
 		
+		return hasPrivilege;
+	}
+
+	/**
+	 * method checks priviliges and returns hasPrivilege.
+	 * @param sessionDataBean
+	 * @param hasPrivilege
+	 * @param privilegeCache
+	 * @param cpCollection
+	 * @return
+	 */
+	private boolean checkePriviliges(
+			SessionDataBean sessionDataBean, 
+			PrivilegeCache privilegeCache,
+			Collection<CollectionProtocol> cpCollection) 
+	{
+		boolean hasPrivilege = false;
+		for(CollectionProtocol cp : cpCollection)
+		{
+			if(privilegeCache.hasPrivilege(CollectionProtocol.class.getName()+"_"+cp.getId(), Permissions.REGISTRATION))
+			{
+				hasPrivilege = true;
+				break;
+			}
+		}
+		if(!hasPrivilege)
+		{
+			hasPrivilege = edu.wustl.catissuecore.util.global.Utility.checkForAllCurrentAndFutureCPs(null,Permissions.REGISTRATION, sessionDataBean, null);
+		}
 		return hasPrivilege;
 	} 
 
@@ -114,11 +133,13 @@ public class CSMValidator implements IValidator {
 									/ YMInterval.Year.numSeconds());
 					}
 					if (Math.abs(age) > 89)
+					{
 						row.set(tqMetadata.getColumnIndex() - 1, QueryModuleConstants.PHI_AGE);
+					}
 				}
 			}
 		}
 		return removeRow;
-	} 
+	}
 	
 }
