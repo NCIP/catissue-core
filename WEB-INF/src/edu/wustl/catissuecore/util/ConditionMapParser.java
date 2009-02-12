@@ -28,10 +28,10 @@ import edu.wustl.common.util.logger.Logger;
 public class ConditionMapParser
 {
 //	Given a Map, parseConditionForQuery function creates list of conditions for Advance Search query 
-	public List parseConditionForQuery(Map conditionMap) throws DAOException,ClassNotFoundException
+	public List<Condition> parseConditionForQuery(Map<String,String> conditionMap) throws DAOException,ClassNotFoundException
 	{
-		List conditionList=new ArrayList();
-		Iterator keyItr = conditionMap.keySet().iterator();
+		List<Condition> conditionList=new ArrayList<Condition>();
+		Iterator<String> keyItr = conditionMap.keySet().iterator();
 		while(keyItr.hasNext())
 		{ 
 			DataElement dataElement = new DataElement();
@@ -39,63 +39,70 @@ public class ConditionMapParser
 			//Check for the keys of operators which is in the form Operator:TableAliasName:ColumnName
 			if(key.startsWith("Operator"))
 			{
-				StringTokenizer st = new StringTokenizer(key, ":");
-				String operator=(String)conditionMap.get(key);
-				if(!operator.equals(Constants.ANY))
-				{
-					String value=new String();
-					String value2=new String();
-					String operator1=new String();
-					String operator2=new String();
-					while(st.hasMoreTokens())
-					{
-						st.nextToken();
-						String aliasName = st.nextToken();
-						//Logger.out.debug("table name in condition obj"+aliasName);
-						dataElement.setTableName(aliasName);
-						String columnName = st.nextToken();
-						value = (String)conditionMap.get(aliasName+":"+columnName);
-						//Append the Event Parameters object name to the column name in the conditions.
-						/*if(isEventParametersCondtionMap)
-							columnName = aliasName+"."+columnName;*/
-						Logger.out.debug("column name in the condition parser "+columnName);
-						dataElement.setField(columnName);
-						
-						//Create two different conditions in case of Between and Not Between operators.
-						if(operator.equals(Operator.NOT_BETWEEN))
-						{
-							operator1 = Operator.LESS_THAN_OR_EQUALS;
-							operator2 = Operator.GREATER_THAN_OR_EQUALS;
-							value2 = (String)conditionMap.get(aliasName+":"+columnName+":"+"HLIMIT");
-						}
-						else if(operator.equals(Operator.BETWEEN))
-						{
-							operator1 = Operator.GREATER_THAN_OR_EQUALS;
-							operator2 = Operator.LESS_THAN_OR_EQUALS;
-							value2 = (String)conditionMap.get(aliasName+":"+columnName+":"+"HLIMIT");
-						}
-						Logger.out.debug("After changing value of condition obj:value1-"+value+" value2-"+value2);
-					}
-					//String operatorValue = Operator.getOperator(operator);
-					Condition condition = new Condition(dataElement,new Operator(operator),value);
-					if(operator.equals(Operator.NOT_BETWEEN))
-					{
-						condition = new Condition(dataElement,new Operator(operator2),value2);
-						Condition condition1 = new Condition(dataElement,new Operator(operator1),value);
-						conditionList.add(condition1);
-					}
-					if(operator.equals(Operator.BETWEEN))
-					{
-						condition = new Condition(dataElement,new Operator(operator2),value2);
-						Condition condition1 = new Condition(dataElement,new Operator(operator1),value);
-						conditionList.add(condition1);
-					}
-					conditionList.add(condition);
-				}
+				updateConditionList(conditionMap, conditionList,
+						dataElement, key);
 			}
 		}
 		return conditionList;
 	}
+
+/**
+ * update conditionList by operator's position
+ * @param conditionMap
+ * @param conditionList
+ * @param dataElement
+ * @param key
+ */
+private void updateConditionList(Map<String,String> conditionMap, List<Condition> conditionList,
+		DataElement dataElement, String key) {
+	StringTokenizer st = new StringTokenizer(key, ":");
+	String operator=(String)conditionMap.get(key);
+	if(!operator.equals(Constants.ANY))
+	{
+		String value="";
+		String value2="";
+		String operator1="";
+		String operator2="";
+		while(st.hasMoreTokens())
+		{
+			st.nextToken();
+			String aliasName = st.nextToken();
+			//Logger.out.debug("table name in condition obj"+aliasName);
+			dataElement.setTableName(aliasName);
+			String columnName = st.nextToken();
+			value = (String)conditionMap.get(aliasName+":"+columnName);
+			//Append the Event Parameters object name to the column name in the conditions.
+			/*if(isEventParametersCondtionMap)
+				columnName = aliasName+"."+columnName;*/
+			Logger.out.debug("column name in the condition parser "+columnName);
+			dataElement.setField(columnName);
+			
+			//Create two different conditions in case of Between and Not Between operators.
+			if(operator.equals(Operator.NOT_BETWEEN))
+			{
+				operator1 = Operator.LESS_THAN_OR_EQUALS;
+				operator2 = Operator.GREATER_THAN_OR_EQUALS;
+				value2 = (String)conditionMap.get(aliasName+":"+columnName+":"+"HLIMIT");
+			}
+			else if(operator.equals(Operator.BETWEEN))
+			{
+				operator1 = Operator.GREATER_THAN_OR_EQUALS;
+				operator2 = Operator.LESS_THAN_OR_EQUALS;
+				value2 = (String)conditionMap.get(aliasName+":"+columnName+":"+"HLIMIT");
+			}
+			Logger.out.debug("After changing value of condition obj:value1-"+value+" value2-"+value2);
+		}
+		//String operatorValue = Operator.getOperator(operator);
+		Condition condition = new Condition(dataElement,new Operator(operator),value);
+		if(operator.equals(Operator.NOT_BETWEEN) && operator.equals(Operator.BETWEEN))
+		{
+			condition = new Condition(dataElement,new Operator(operator2),value2);
+			Condition condition1 = new Condition(dataElement,new Operator(operator1),value);
+			conditionList.add(condition1);
+		}
+		conditionList.add(condition);
+	}
+}
 	
 	//Given a list of conditions, creates an advancedConditionNode and adds it to the root.
 	public DefaultMutableTreeNode createAdvancedQueryObj(List list,DefaultMutableTreeNode root,String objectName,String selectedNode,Map advancedConditionNodesMap,Integer nodeId,HttpSession session) 
@@ -110,7 +117,7 @@ public class ConditionMapParser
 		while (selectedNodeTokens.hasMoreTokens())
     	{
 			//selectedNodeArray[i]=Integer.parseInt(selectedNodeTokens.nextToken());
-			selectedNodeArray[i]=new Integer(selectedNodeTokens.nextToken());
+			selectedNodeArray[i]=Integer.valueOf(selectedNodeTokens.nextToken());
 			Logger.out.debug("Selected Node after splitting :"+selectedNodeArray[i]);
 			i++;
     	}
@@ -126,21 +133,8 @@ public class ConditionMapParser
 		
 			DefaultMutableTreeNode child = createDefaultMutableTreeNode(objectName, objectConditions);
 			session.setAttribute("tempAdvConditionNode",child.getUserObject());//setting AdvancedConditionsNode of the child node in session
-
-	
-			if(root.getChildCount()==0)
-			{
-				child = createHeirarchy(child, Constants.ROOT);
-				root.add(child);
-			}
-			else
-			{
-				int nodeCount=0;
-				//addNode1(root,selectedNodeArray,nodeCount,child,objectName);
-				addNode(selectedNodeArray,child,advancedConditionNodesMap);
-				Logger.out.debug("root size"+root.getDepth());
-				
-			}
+			addChildNode(root, advancedConditionNodesMap,
+					selectedNodeArray, child);
 		}
 		//Else edit operation
 		else
@@ -150,6 +144,31 @@ public class ConditionMapParser
 			advancedConditionsNode.setObjectConditions(objectConditions);
 		}
 		return root;
+	}
+	/**
+	 * add child Node root child count is 0.
+	 * @param root
+	 * @param advancedConditionNodesMap
+	 * @param selectedNodeArray
+	 * @param child
+	 */
+	private void addChildNode(DefaultMutableTreeNode root,
+			Map advancedConditionNodesMap, Integer[] selectedNodeArray,
+			DefaultMutableTreeNode child) 
+	{
+		if(root.getChildCount()==0)
+		{
+			child = createHeirarchy(child, Constants.ROOT);
+			root.add(child);
+		}
+		else
+		{
+			//int nodeCount=0;
+			//addNode1(root,selectedNodeArray,nodeCount,child,objectName);
+			addNode(selectedNodeArray,child,advancedConditionNodesMap);
+			Logger.out.debug("root size"+root.getDepth());
+			
+		}
 	}
 	/**
 	 * To create the intermediate node heirarchy. 
@@ -203,7 +222,7 @@ public class ConditionMapParser
 		while (selectedNodeTokens.hasMoreTokens())
     	{
 			//Gets node to be deleted from Map
-			DefaultMutableTreeNode node = (DefaultMutableTreeNode)advancedConditionNodesMap.get(new Integer(selectedNodeTokens.nextToken()));
+			DefaultMutableTreeNode node = (DefaultMutableTreeNode)advancedConditionNodesMap.get(Integer.valueOf(selectedNodeTokens.nextToken()));
 			DefaultMutableTreeNode parent = (DefaultMutableTreeNode)node.getParent();
 			
 			 //Position of node to be deleted from its parent node
@@ -218,7 +237,7 @@ public class ConditionMapParser
 			 * so that the 'or' or 'pand' symbol is removed when a node is deleted and the number of children 
 			 * of the parent of the deleted node is lesser than two.
 			 */ 
-			if(childCount==1 && parent.isRoot()==false)
+			if(childCount==1 && !parent.isRoot())
 			{
 				AdvancedConditionsNode parentNode = (AdvancedConditionsNode)parent.getUserObject();
 				//Logger.out.debug("reset all siblings"+parentNode.getOperationWithChildCondition().getOperator());
@@ -234,7 +253,7 @@ public class ConditionMapParser
 
 	public static void main(String[] args) throws Exception
 	{
-		Map map = new HashMap();
+		Map<String,String> map = new HashMap<String,String>();
 		map.put("EventName_1","CellSpecimenReviewEventParameters");
 		map.put("EventColumnName_1","CellSpecimenReviewEventParameters.IDENTIFIER.bigint");
 		map.put("EventColumnOperator_1","=");
@@ -309,7 +328,7 @@ public class ConditionMapParser
 		boolean anyConditionExists = false;
 		if(selectedNode.length==0)
 		{
-			selectedAdvNode = (DefaultMutableTreeNode) advancedConditionNodesMap.get(new Integer(0));
+			selectedAdvNode = (DefaultMutableTreeNode) advancedConditionNodesMap.get(Integer.valueOf(0));
 			AdvancedConditionsNode advConditionNode = (AdvancedConditionsNode)presentNode.getUserObject();
 			if (!advConditionNode.getObjectName().equals(Constants.PARTICIPANT))
 			{
@@ -326,7 +345,7 @@ public class ConditionMapParser
 				String parentNodeName;
 				if(advConditionNode.getObjectName().equals(Constants.PARTICIPANT))
 				{
-					selectedAdvNode = (DefaultMutableTreeNode) advancedConditionNodesMap.get(new Integer(0));
+					selectedAdvNode = (DefaultMutableTreeNode) advancedConditionNodesMap.get(Integer.valueOf(0));
 					parentNodeName = Constants.ROOT;
 				}
 				else
@@ -352,10 +371,10 @@ public class ConditionMapParser
      * @param eventMap A map of specimen event parameters that is to be parsed.
      * @return Map the parsed map suitable for parseCondition().
      */
-	public static Map parseEventParameterMap(Map eventMap)
+	public static Map<String,String> parseEventParameterMap(Map<String,String> eventMap)
 	{
 		Logger.out.debug("Map of the events:"+eventMap);
-		Map newMap = new HashMap();
+		Map<String,String> newMap = new HashMap<String,String>();
 		
 		if(eventMap != null)
 		{
@@ -380,7 +399,7 @@ public class ConditionMapParser
 				
 				//Extracting alias name & column name
 				String aliasName = tokenizer.nextToken();
-				String columnName = new String();
+				String columnName = "";
 				if(tokenizer.hasMoreTokens())
 					columnName = tokenizer.nextToken();
 				
