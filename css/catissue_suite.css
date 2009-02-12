@@ -727,3 +727,48 @@ color: #000000;
 	height:25px;
 }
 
+/* ************* Mandar : 19Jan09 : For Summary Page changes *********** */
+.gray_h1_md{
+	font-family: verdana;
+	font-size: 11px;
+	font-weight:bold;
+	vertical-align:middle;
+	background-color: #cce5f1;
+	color: #074180;
+}
+
+.gray_h2_md{
+	font-family: verdana;
+	font-size: 11px;
+	font-weight:bold;
+	vertical-align:middle;
+	background-color: #cccccc;
+}
+
+.gray_h3_md{
+	font-family: verdana;
+	font-size: 11px;
+	font-weight:bold;
+	vertical-align:middle;
+	background-color: #dedede;
+}
+
+.tr_h1_bggray {
+	background-color: #cce5f1;
+	height:20px;
+}
+.tr_h2_bggray {
+	background-color: #cccccc;
+	height:20px;
+}
+.tr_h3_bggray {
+	background-color: #dedede;
+	height:20px;
+}
+
+.boldText
+{
+	font-family: verdana;
+	font-size: 11px;
+	font-weight:bold;
+}

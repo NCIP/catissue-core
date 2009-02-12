@@ -234,6 +234,10 @@ public class BizLogicFactory //extends AbstractBizLogicFactory
     		case edu.wustl.catissuecore.util.shippingtracking.Constants.SHIPMENT_RECEIVING_FORM_ID:
             	bizLogic = new ShipmentReceivingBizLogic();
             	break;
+    		case Constants.SUMMARY_BIZLOGIC_ID:
+            	bizLogic = new SummaryBizLogic();
+            	break;
+
     		//END
     		case Constants.DEFAULT_BIZ_LOGIC:
             default:

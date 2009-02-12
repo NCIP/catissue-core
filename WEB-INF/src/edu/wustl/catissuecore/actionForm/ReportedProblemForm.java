@@ -106,9 +106,13 @@ public class ReportedProblemForm extends AbstractActionForm
     public ReportedProblemForm()
     {
     	activityStatus = Constants.ACTIVITY_STATUS_PENDING;
-        reset();
+    	clear();
     }
 
+    private void clear()
+    {
+    	reset();
+    }
     /**
      * Resets all the fields.
      */
@@ -293,7 +297,7 @@ public class ReportedProblemForm extends AbstractActionForm
                     {
                         errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
                                 "reportedProblem.error.message",ApplicationProperties
-                                .getValue("fields.message"),new Integer(Constants.MESSAGE_LENGTH)));
+                                .getValue("fields.message"), Integer.valueOf(Constants.MESSAGE_LENGTH)));
                     }
                     
                 }

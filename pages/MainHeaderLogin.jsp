@@ -18,7 +18,13 @@
 					arg0="<%=ApplicationProperties.getValue("app.name")%>"
 					arg1="<%=ApplicationProperties.getValue("app.version")%>"
 					arg2="<%=Variables.applicationCvsTag%>" /> </span></td>
-				<td width="50%" align="right" valign="top"><a
+				<td width="50%" align="right" valign="top">
+				<a
+					href="Home.do?operation=add" class="white"> <img
+					src="images/uIEnhancementImages/ic_report.gif" alt="Home" width="15"
+					height="12" border="0" hspace="2" vspace="0"><bean:message
+					key="app.home" /></a>
+				<a
 					href="ReportProblem.do?operation=add" class="white"> <img
 					src="images/uIEnhancementImages/ic_report.gif" alt="Report Problems" width="15"
 					height="12" border="0" hspace="2" vspace="0"><bean:message
@@ -27,7 +33,7 @@
 					class="white"> <img
 					src="images/uIEnhancementImages/ic_mail.gif" alt="Summary"
 					width="16" height="12" hspace="3" vspace="0" border="0" /><bean:message
-					key="app.contactUs" /></a>&nbsp;<a href="/catissuecore/Summary.do"
+					key="app.contactUs" /></a>&nbsp;<a href="/catissuecore/SummaryPage.do"
 					class="white"><img
 					src="images/uIEnhancementImages/ic_summary.gif" alt="Summary"
 					width="10" height="10" hspace="4" vspace="0" border="0" /><bean:message

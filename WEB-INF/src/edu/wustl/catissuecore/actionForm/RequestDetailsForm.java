@@ -88,7 +88,7 @@ public class RequestDetailsForm extends AbstractActionForm
 	 */
 	private String specimenId;
 	
-	private Boolean mailNotification = new Boolean(false) ;
+	private Boolean mailNotification = Boolean.FALSE ;
 
 	/** Associates the specified object with the specified key in the map.
 	 * @param key the key to which the object is mapped.
@@ -923,7 +923,7 @@ public class RequestDetailsForm extends AbstractActionForm
 						
 						} else {
 							
-							specimen = (Specimen)orderBizLogic.getSpecimenObject(new Long(requestDetailsBean.getRequestFor()));
+							specimen = (Specimen)orderBizLogic.getSpecimenObject(Long.valueOf(requestDetailsBean.getRequestFor()));
 							if(!(specimen.getClassName().equals(requestDetailsBean.getClassName()) && 
 									specimen.getSpecimenType().equals(requestDetailsBean.getType())))
 							{

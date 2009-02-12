@@ -816,6 +816,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final int QUARANTINE_EVENT_PARAMETER_FORM_ID=62;
 	public static final int CONSENT_FORM_ID=63;
 	public static final int BULK_OPERATIONS_FORM_ID = 68;
+	public static final int SUMMARY_BIZLOGIC_ID= 70;
 	//Misc
 	public static final String SEPARATOR = " : ";
 	
@@ -2615,4 +2616,24 @@ public static final String ADD_MULTIPLE_SPECIMEN_TO_CART="addMltipleSpecimenToCa
 	
 	//Constants for barcode editable
 	public static final String IS_BARCODE_EDITABLE = "barcode.isEditable";
+	
+	//------- Mandar : 21Jan09 : Summary related constants ----------
+	public static final String SP_PATHSTAT = "PathStatSpec";
+	public static final String SP_TSITE =  "TSiteSpec";
+	public static final String P_BYCD =  "PbyCD";
+	public static final String P_BYCS = "PbyCS";
+	public static final String TOTAL_PART_COUNT = "TotalParticipantCount";
+	public static final String TOTAL_CP_COUNT = "TotalCPCount";
+	public static final String TOTAL_DP_COUNT = "TotalDPCount";
+	public static final String REPO_SITE_COUNT = "TotalRepoSiteCount";
+	public static final String LAB_SITE_COUNT = "TotalLabSiteCount";
+	public static final String COLL_SITE_COUNT = "TotalCollSiteCount";
+	public static final String REPO_SITE = "Repository";
+	public static final String LAB_SITE = "Laboratory";
+	public static final String COL_SITE = "Collection Site";
+	public static final String TOTAL_USER_COUNT = "TotalUserCount";
+	public static final String USER_DATA = "UserData";
+	
+	
+	
 }

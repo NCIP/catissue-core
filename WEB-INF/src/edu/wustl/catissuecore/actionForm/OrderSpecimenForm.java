@@ -384,8 +384,8 @@ public class OrderSpecimenForm extends AbstractActionForm
 						break;
 					}else
 					{
-						Boolean isAvailable = new Boolean(isAvailablekey.toString());
-						if(!isAvailable)
+//						Boolean isAvailable = Boolean.valueOf(isAvailablekey.toString());
+						if(!(Boolean.valueOf(isAvailablekey.toString())))
 						{
 							errors.add("values", new ActionError("errors.isAvailable", specimenName));
 							values.clear();
