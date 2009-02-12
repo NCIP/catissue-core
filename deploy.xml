@@ -1206,7 +1206,7 @@
 	</target>
 
 	<!--Target for Application and Database Upgrade from Suite 1.0  to Suite 1.1-->
-	<target name="upgrade_all" depends="upgrade_app, upgrade_from_Suite1.1_to_1.1p">
+	<target name="upgrade_all" depends="upgrade_app, upgrade_db">
 	</target>
 
 	<!--Target for Application and Database Upgrade from caTissueCore v1.2.2  to Suite 1.1-->
@@ -1352,6 +1352,10 @@
 	<!--<target name="upgrade_all_from_Suite1.1_to_1.1p" depends="upgrade_app,upgrade_from_Suite1.1_to_1.1p"> -->
 	<!--</target> -->
 	<!-- Removing unnecessary PE -->
+	
+	<target name="upgrade_db" depends="upgrade_from_Suite1.1_to_1.1p">
+	</target>
+	
 	<target name="upgrade_from_Suite1.1_to_1.1p">
 			<if>
 				<equals arg1="mysql" arg2="${database.type}" />
