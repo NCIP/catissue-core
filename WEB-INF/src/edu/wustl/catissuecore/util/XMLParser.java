@@ -263,9 +263,9 @@ public class XMLParser extends DefaultHandler
 			}
 			entityGrpFlag = false;
 		}
-		if (qName.equalsIgnoreCase(Constants.ENTITY))
-		{
-		}
+//		if (qName.equalsIgnoreCase(Constants.ENTITY))
+//		{
+//		}
 		if (qName.equalsIgnoreCase(Constants.FORM))
 		{
 			if (collProtFlag == true)
