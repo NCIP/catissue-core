@@ -221,9 +221,11 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 		{
 			whereColumnCondition = new String[]{"!=","!=","is not","is not"};
 			whereColumnValue = new String[]{"","",null,null};
-		}
-		else
-		{
+		} else if (Variables.databaseName.equals(Constants.MSSQLSERVER_DATABASE)){
+			// for MsSqlServer DB.
+			whereColumnCondition = new String[]{"!= '' ","!= '' ","is not null","is not null"};
+			whereColumnValue = new String[]{};
+		} else {
 			// for ORACLE
 			whereColumnCondition = new String[]{"is not null","is not null","is not null","is not null"};
 			whereColumnValue = new String[]{};
