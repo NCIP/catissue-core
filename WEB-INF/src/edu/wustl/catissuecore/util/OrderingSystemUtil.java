@@ -30,8 +30,8 @@ import edu.wustl.common.util.dbManager.HibernateMetaData;
 
 public final class OrderingSystemUtil
 {
-	
-	
+
+
 		/*
 		 * creates a singleton object
 		 */
@@ -51,10 +51,9 @@ public final class OrderingSystemUtil
 		{
 			return orderingSysUtil;
 		}
-	
-	
-	
-	public static void getPossibleStatusForDistribution(List possibleStatusList)
+
+
+	public static void getPossibleStatusForDistribution(List<NameValueBean> possibleStatusList)
 	{
 		possibleStatusList.add(new NameValueBean(Constants.ORDER_REQUEST_STATUS_PENDING_FOR_DISTRIBUTION,Constants.ORDER_REQUEST_STATUS_PENDING_FOR_DISTRIBUTION));
 		possibleStatusList.add(new NameValueBean(Constants.ORDER_REQUEST_STATUS_REJECTED_INAPPROPRIATE_REQUEST,Constants.ORDER_REQUEST_STATUS_REJECTED_INAPPROPRIATE_REQUEST));
@@ -68,9 +67,9 @@ public final class OrderingSystemUtil
 	 * @param initialStatus The initial status from Db.
 	 * @return possibleStatusList
 	 */
-	public static List getPossibleStatusList(String initialStatus)
+	public static List<NameValueBean> getPossibleStatusList(String initialStatus)
 	{
-		List possibleStatusList = new ArrayList();
+		List<NameValueBean> possibleStatusList = new ArrayList();
 		if(initialStatus.trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_NEW))
 		{
 			possibleStatusList.add(new NameValueBean(Constants.ORDER_REQUEST_STATUS_NEW,Constants.ORDER_REQUEST_STATUS_NEW));
@@ -138,29 +137,27 @@ public final class OrderingSystemUtil
 	 */
 	public static List getAllChildrenSpecimen(Collection childNodes)
 	{
+		List returnColl = null;
 		ArrayList childrenSpecimenList = new ArrayList();	
-		
 		//If no childNodes present then tree will contain only the root node.
-		if(childNodes == null)
+		if(childNodes != null)
 		{
-			return null;
+			//Otherwise
+			Iterator<Specimen> specimenItr = childNodes.iterator();
+			while(specimenItr.hasNext())
+			{
+				Specimen specimen  = (Specimen)specimenItr.next();
+				List subChildNodesList = getAllChildrenSpecimen(specimen.getChildSpecimenCollection());
+				childrenSpecimenList.add(specimen);
+			}
+			returnColl=childrenSpecimenList;
 		}
-		
-		//Otherwise
-		Iterator specimenItr = childNodes.iterator();
-		while(specimenItr.hasNext())
-		{
-			Specimen specimen  = (Specimen)specimenItr.next();
-			List subChildNodesList = getAllChildrenSpecimen(specimen.getChildSpecimenCollection());
-			childrenSpecimenList.add(specimen);
-		}
-		
-		return childrenSpecimenList;
+		return returnColl;
 	}
 	
 	public static List getAllSpecimen(Specimen specimen)
 	{
-		ArrayList allSpecimenList = new ArrayList();	
+		List allSpecimenList = new ArrayList();	
 		allSpecimenList.add(specimen);
 		
 		Iterator childSpec = specimen.getChildSpecimenCollection().iterator();
@@ -200,17 +197,20 @@ public final class OrderingSystemUtil
 	 * @param listToConvert Collection
 	 * @return List. The namevaluebean list of children specimen to display.
 	 */
-	public static List getNameValueBeanList(Collection listToConvert,Specimen requestFor)
+	public static List<NameValueBean> getNameValueBeanList(Collection listToConvert,Specimen requestFor)
 	{
-		Vector nameValueBeanList = new Vector();
-		
+		List<NameValueBean> nameValueBeanList = new ArrayList<NameValueBean>();
 		
 		if(requestFor != null)
+		{
 			nameValueBeanList.add(0,new NameValueBean(requestFor.getLabel(),requestFor.getId().toString()));
+		}
 		else 
+		{
 			nameValueBeanList.add(0,new NameValueBean(" ","#"));
+		}
 		
-		Iterator iter = listToConvert.iterator();		
+		Iterator<Specimen> iter = listToConvert.iterator();		
 		while(iter.hasNext())
 		{
 			Specimen specimen = (Specimen)iter.next();
@@ -227,9 +227,9 @@ public final class OrderingSystemUtil
 	 * @param listToConvert Collection
 	 * @return List. The namevaluebean list of children specimen to display.
 	 */
-	public static List getNameValueBean(Specimen specimen)
+	public static List<NameValueBean> getNameValueBean(Specimen specimen)
 	{
-		List nameValueBeanList = new ArrayList();
+		List<NameValueBean> nameValueBeanList = new ArrayList();
 		nameValueBeanList.add(new NameValueBean(specimen.getLabel(),specimen.getId().toString()));		
 		Iterator iter = specimen.getChildSpecimenCollection().iterator();		
 		while(iter.hasNext())
@@ -370,24 +370,7 @@ public final class OrderingSystemUtil
 		String specimenQuantityUnit="";
 		if(specimen.getSpecimenClass().equals("Tissue"))
 		{
-			if(specimen.getSpecimenType().equals(Constants.FROZEN_TISSUE_SLIDE) || specimen.getSpecimenType().equals(Constants.FIXED_TISSUE_BLOCK)
-					||specimen.getSpecimenType().equals(Constants.FROZEN_TISSUE_BLOCK) || specimen.getSpecimenType().equals(Constants.NOT_SPECIFIED)
-					|| specimen.getSpecimenType().equals(Constants.FIXED_TISSUE_SLIDE))
-			{
-				specimenQuantityUnit = Constants.UNIT_CN;
-				
-			}	
-			else 
-			{
-					if(specimen.getSpecimenType().equals(Constants.MICRODISSECTED))
-					{
-						specimenQuantityUnit = Constants.UNIT_CL;
-					}
-					else
-					{
-						specimenQuantityUnit = Constants.UNIT_GM;
-					}
-			}	
+			specimenQuantityUnit = getTissueSpecUnit(specimen);	
 		}
 		else if(specimen.getSpecimenClass().equals("Fluid"))
 		{
@@ -400,6 +383,39 @@ public final class OrderingSystemUtil
 		else if(specimen.getSpecimenClass().equals("Molecular"))
 		{
 			specimenQuantityUnit = Constants.UNIT_MG;
+		}
+		return specimenQuantityUnit;
+	}
+	/**
+	 * method returns specimenQuantityUnit for Particular specimen type.
+	 * @param specimen
+	 * @return
+	 */
+	private static String getTissueSpecUnit(Specimen specimen)
+	{
+		String specimenQuantityUnit = "";
+		if(specimen.getSpecimenType().equals(Constants.FROZEN_TISSUE_SLIDE) || specimen.getSpecimenType().equals(Constants.FIXED_TISSUE_BLOCK)
+				||specimen.getSpecimenType().equals(Constants.FROZEN_TISSUE_BLOCK) || specimen.getSpecimenType().equals(Constants.NOT_SPECIFIED)
+				|| specimen.getSpecimenType().equals(Constants.FIXED_TISSUE_SLIDE))
+		{
+			specimenQuantityUnit = Constants.UNIT_CN;
+			
+		}	
+		else 
+		{
+				specimenQuantityUnit = setSpecimenQuantityUnit(specimen);
+		}
+		return specimenQuantityUnit;
+	}
+	private static String setSpecimenQuantityUnit(Specimen specimen) {
+		String specimenQuantityUnit;
+		if(specimen.getSpecimenType().equals(Constants.MICRODISSECTED))
+		{
+			specimenQuantityUnit = Constants.UNIT_CL;
+		}
+		else
+		{
+			specimenQuantityUnit = Constants.UNIT_GM;
 		}
 		return specimenQuantityUnit;
 	}
