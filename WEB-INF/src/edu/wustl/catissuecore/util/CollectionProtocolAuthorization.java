@@ -92,7 +92,7 @@ public class CollectionProtocolAuthorization implements edu.wustl.catissuecore.u
 			Vector<SecurityDataBean> authorizationData, Map<String,SiteUserRolePrivilegeBean> rowIdMap) throws SMException,
 			CSException
 	{
-		int noOfUsers = rowIdMap.size();
+//		int noOfUsers = rowIdMap.size();
 		Set<Site> siteCollection = new HashSet<Site>();
 		Set<User> userCollection = new HashSet<User>();
 		Set<Long> siteIds = new HashSet<Long>();
@@ -124,43 +124,9 @@ public class CollectionProtocolAuthorization implements edu.wustl.catissuecore.u
 			}
 			else if(siteUserRolePrivilegeBean.isRowEdited())
 			{
-				// siteCollection.addAll(siteList);
-				// user = siteUserRolePrivilegeBean.getUser();
-				// userCollection.add(user);
-				String defaultRole = siteUserRolePrivilegeBean.getRole().getValue();
-				if (defaultRole != null && (defaultRole.equalsIgnoreCase("-1") || defaultRole.equalsIgnoreCase("0") || defaultRole.equalsIgnoreCase(Constants.NON_ADMIN_USER)) )
-				{
-					roleName = Constants.getCPRoleName(collectionProtocol.getId(), user.getCsmUserId(), defaultRole);
-				} else
-				{
-					roleName = siteUserRolePrivilegeBean.getRole().getName();
-				}
 				
-				Set<String> privileges = new HashSet<String>();
-				List<NameValueBean> privilegeList = siteUserRolePrivilegeBean.getPrivileges();
-				
-				for(NameValueBean privilege : privilegeList)
-				{
-					privileges.add(privilege.getValue());
-				}
-				
-				Utility.processRole(roleName);
-				
-				PrivilegeManager.getInstance().createRole(roleName,
-						privileges);
-				String userId = String.valueOf(user.getCsmUserId());
-				gov.nih.nci.security.authorization.domainobjects.User csmUser = getUserByID(userId);
-				HashSet<gov.nih.nci.security.authorization.domainobjects.User> group = new HashSet<gov.nih.nci.security.authorization.domainobjects.User>();
-				group.add(csmUser); 
-				String protectionGroupName = new String(Constants
-						.getCollectionProtocolPGName(collectionProtocol.getId()));
-				SecurityDataBean userGroupRoleProtectionGroupBean = new SecurityDataBean();
-				userGroupRoleProtectionGroupBean.setUser("");
-				userGroupRoleProtectionGroupBean.setRoleName(roleName);
-				userGroupRoleProtectionGroupBean.setGroupName(Constants.getCPUserGroupName(collectionProtocol.getId(), user.getCsmUserId()));
-				userGroupRoleProtectionGroupBean.setProtectionGroupName(protectionGroupName);
-				userGroupRoleProtectionGroupBean.setGroup(group);
-				authorizationData.add(userGroupRoleProtectionGroupBean);
+				updateAthurizationData(collectionProtocol,
+						authorizationData, siteUserRolePrivilegeBean, user);
 			}
 			
 			if(!siteUserRolePrivilegeBean.isRowDeleted())
@@ -168,26 +134,95 @@ public class CollectionProtocolAuthorization implements edu.wustl.catissuecore.u
 				userCollection.add(user);
 			
 				List<Site> siteList = siteUserRolePrivilegeBean.getSiteList();
-				for (Site site : siteList)
-				{ 
-					boolean isPresent = false;
-					for (Site setSite : siteCollection)
-					{
-						if (setSite.getId().equals(site.getId()))
-						{
-							isPresent = true;
-						}
-					}
-					if (!isPresent)
-					{
-						siteCollection.add(site);
-						siteIds.add(site.getId());
-					}
-				}
+				addSiteIds(siteCollection, siteIds, siteList);
 			}
 		}
 		collectionProtocol.getSiteCollection().clear();
 		collectionProtocol.getSiteCollection().addAll(siteCollection);
+		addUsers(collectionProtocol, userCollection); 
+	}
+
+	/**
+	 * method updates AthurizationData 
+	 * @param collectionProtocol
+	 * @param authorizationData
+	 * @param siteUserRolePrivilegeBean
+	 * @param user
+	 * @throws CSException
+	 * @throws SMException
+	 */
+	private void updateAthurizationData(
+			CollectionProtocol collectionProtocol,
+			Vector<SecurityDataBean> authorizationData,
+			SiteUserRolePrivilegeBean siteUserRolePrivilegeBean, User user)
+			throws CSException, SMException 
+	{
+		String roleName;
+		// siteCollection.addAll(siteList);
+		// user = siteUserRolePrivilegeBean.getUser();
+		// userCollection.add(user);
+		String defaultRole = siteUserRolePrivilegeBean.getRole().getValue();
+		roleName = setRoleNames(collectionProtocol,
+				siteUserRolePrivilegeBean, user, defaultRole);
+		
+		Set<String> privileges = new HashSet<String>();
+		List<NameValueBean> privilegeList = siteUserRolePrivilegeBean.getPrivileges();
+		
+		for(NameValueBean privilege : privilegeList)
+		{
+			privileges.add(privilege.getValue());
+		}
+		
+		Utility.processRole(roleName);
+		
+		PrivilegeManager.getInstance().createRole(roleName,
+				privileges);
+		String userId = String.valueOf(user.getCsmUserId());
+		gov.nih.nci.security.authorization.domainobjects.User csmUser = getUserByID(userId);
+		HashSet<gov.nih.nci.security.authorization.domainobjects.User> group = new HashSet<gov.nih.nci.security.authorization.domainobjects.User>();
+		group.add(csmUser); 
+		String protectionGroupName = new String(Constants
+				.getCollectionProtocolPGName(collectionProtocol.getId()));
+		SecurityDataBean userGrpRoleProtectionGrpBean = new SecurityDataBean();
+		userGrpRoleProtectionGrpBean.setUser("");
+		userGrpRoleProtectionGrpBean.setRoleName(roleName);
+		userGrpRoleProtectionGrpBean.setGroupName(Constants.getCPUserGroupName(collectionProtocol.getId(), user.getCsmUserId()));
+		userGrpRoleProtectionGrpBean.setProtectionGroupName(protectionGroupName);
+		userGrpRoleProtectionGrpBean.setGroup(group);
+		authorizationData.add(userGrpRoleProtectionGrpBean);
+	}
+
+	/**
+	 * set RolNames for getting valid authorizationData.
+	 * @param collectionProtocol
+	 * @param siteUserRolePrivilegeBean
+	 * @param user
+	 * @param defaultRole
+	 * @return
+	 */
+	private String setRoleNames(CollectionProtocol collectionProtocol,
+			SiteUserRolePrivilegeBean siteUserRolePrivilegeBean, User user,
+			String defaultRole) 
+	{
+		String roleName;
+		if (defaultRole != null && (defaultRole.equalsIgnoreCase("-1") || defaultRole.equalsIgnoreCase("0") || defaultRole.equalsIgnoreCase(Constants.NON_ADMIN_USER)) )
+		{
+			roleName = Constants.getCPRoleName(collectionProtocol.getId(), user.getCsmUserId(), defaultRole);
+		} else
+		{
+			roleName = siteUserRolePrivilegeBean.getRole().getName();
+		}
+		return roleName;
+	}
+
+	/**
+	 * add valid user.
+	 * @param collectionProtocol
+	 * @param userCollection
+	 */
+	private void addUsers(
+			CollectionProtocol collectionProtocol, Set<User> userCollection) 
+	{
 		for (User user : userCollection)
 		{
 			boolean isPresent = false;
@@ -202,7 +237,34 @@ public class CollectionProtocolAuthorization implements edu.wustl.catissuecore.u
 			{
 				collectionProtocol.getAssignedProtocolUserCollection().add(user);
 			}
-		} 
+		}
+	}
+
+	/**
+	 * add siteIds 
+	 * @param siteCollection
+	 * @param siteIds
+	 * @param siteList
+	 */
+	private void addSiteIds(Set<Site> siteCollection,
+			Set<Long> siteIds, List<Site> siteList)
+	{
+		for (Site site : siteList)
+		{ 
+			boolean isPresent = false;
+			for (Site setSite : siteCollection)
+			{
+				if (setSite.getId().equals(site.getId()))
+				{
+					isPresent = true;
+				}
+			}
+			if (!isPresent)
+			{
+				siteCollection.add(site);
+				siteIds.add(site.getId());
+			}
+		}
 	}
 
 	/**
@@ -302,32 +364,28 @@ public class CollectionProtocolAuthorization implements edu.wustl.catissuecore.u
 		List csmUserIdList = dao.retrieve(User.class.getName(), selectColumnNames,
 				whereColumnNames, whereColumnCondition, whereColumnValues,
 				Constants.AND_JOIN_CONDITION);
-		
-
-		if (csmUserIdList.isEmpty() == false)
+		Long csmId=null;
+		if (!csmUserIdList.isEmpty())
 		{
 			Long csmUserId = (Long) csmUserIdList.get(0);
-
-			return csmUserId;
+			csmId=csmUserId;
 		}
-
-		return null;
+		return csmId;
 	}
-
-	
 
 	public boolean hasCoordinator(User coordinator, CollectionProtocol collectionProtocol)
 	{
 		Iterator<User> it = collectionProtocol.getCoordinatorCollection().iterator();
+		boolean flag=false;
 		while (it.hasNext())
-		{
-			User coordinatorOld = it.next();
+		{	User coordinatorOld = it.next();
 			if (coordinator.getId().equals(coordinatorOld.getId()))
 			{
-				return true;
+				flag= true;
+				break;
 			}
 		}
-		return false;
+		return flag;
 	}
 
 	public void updatePIAndCoordinatorGroup(DAO dao, CollectionProtocol collectionProtocol,
