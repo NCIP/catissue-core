@@ -302,7 +302,7 @@ public class SummaryBizLogic extends DefaultBizLogic
 	private List getUserData() throws DAOException, ClassNotFoundException
 	{
 		final List <List>userData = new ArrayList<List>();	
-		final String sql ="SELECT concat(FIRST_NAME,',',LAST_NAME), EMAIL_ADDRESS,B.PHONE_NUMBER FROM CATISSUE_USER A, CATISSUE_ADDRESS B WHERE CSM_USER_ID  IN (SELECT USER_ID FROM CSM_USER_GROUP WHERE GROUP_ID=1) AND A.IDENTIFIER>1 AND A.ADDRESS_ID=B.IDENTIFIER  AND A"+DISABLED;
+		final String sql ="SELECT concat(FIRST_NAME,concat(',',LAST_NAME)), EMAIL_ADDRESS,B.PHONE_NUMBER FROM CATISSUE_USER A, CATISSUE_ADDRESS B WHERE CSM_USER_ID  IN (SELECT USER_ID FROM CSM_USER_GROUP WHERE GROUP_ID=1) AND A.IDENTIFIER>1 AND A.ADDRESS_ID=B.IDENTIFIER  AND A"+DISABLED;
 		try 
 		{
 			final List list = jdbcDAO.executeQuery(sql, null, false, null);
