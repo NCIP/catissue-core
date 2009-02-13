@@ -805,40 +805,8 @@ public class CaCoreAppServicesDelegator
 			String userId = sessionData.getUserId().toString();
 			String comments = "APIQueryLog";
 
-			if (Variables.databaseName.equals(Constants.MYSQL_DATABASE))
-			{
-				String sqlForAudiEvent = "insert into catissue_audit_event(IP_ADDRESS,EVENT_TIMESTAMP,USER_ID ,COMMENTS) values ('"
-						+ ipAddr + "','" + timeStamp + "','" + userId + "','" + comments + "')";
-				jdbcDAO.executeUpdate(sqlForAudiEvent);
-
-				String sql = "select max(identifier) from catissue_audit_event where USER_ID='"
-						+ userId + "'";
-
-				List list = jdbcDAO.executeQuery(sql, null, false, null);
-
-				if (!list.isEmpty())
-				{
-
-					List columnList = (List) list.get(0);
-					if (!columnList.isEmpty())
-					{
-						String str = (String) columnList.get(0);
-						if (!str.equals(""))
-						{
-							no = Long.parseLong(str);
-
-						}
-					}
-				}
-
-				String sqlForQueryLog = "insert into catissue_audit_event_query_log(QUERY_DETAILS,AUDIT_EVENT_ID) values ('"
-						+ sqlQuery1 + "','" + no + "')";
-				Logger.out.debug("sqlForQueryLog:" + sqlForQueryLog);
-				jdbcDAO.executeUpdate(sqlForQueryLog);
-				jdbcDAO.commit();
-			}
-			else
-			{
+			if (Variables.databaseName.equals(Constants.ORACLE_DATABASE))
+			{			
 				String sql = "select CATISSUE_AUDIT_EVENT_PARAM_SEQ.nextVal from dual";
 
 				List list = jdbcDAO.executeQuery(sql, null, false, null);
@@ -915,8 +883,36 @@ public class CaCoreAppServicesDelegator
 				os.close();
 				jdbcDAO.commit();
 				Logger.out.info("sqlForQueryLog:" + sqlForQueryLog);
+			}
+			else
+			{
+				String sqlForAudiEvent = "insert into catissue_audit_event(IP_ADDRESS,EVENT_TIMESTAMP,USER_ID ,COMMENTS) values ('"
+					+ ipAddr + "','" + timeStamp + "','" + userId + "','" + comments + "')";
+				jdbcDAO.executeUpdate(sqlForAudiEvent);
 
+				String sql = "select max(identifier) from catissue_audit_event where USER_ID='"
+						+ userId + "'";
 
+				List list = jdbcDAO.executeQuery(sql, null, false, null);
+
+				if (!list.isEmpty())
+				{
+					List columnList = (List) list.get(0);
+					if (!columnList.isEmpty())
+					{
+						String str = (String) columnList.get(0);
+						if (!str.equals(""))
+						{
+							no = Long.parseLong(str);
+							
+						}
+					}
+				}
+				String sqlForQueryLog = "insert into catissue_audit_event_query_log(QUERY_DETAILS,AUDIT_EVENT_ID) values ('"
+					+ sqlQuery1 + "','" + no + "')";
+				Logger.out.debug("sqlForQueryLog:" + sqlForQueryLog);
+				jdbcDAO.executeUpdate(sqlForQueryLog);
+				jdbcDAO.commit();
 			}
 		}
 		catch(Exception e)
