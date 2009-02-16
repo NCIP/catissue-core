@@ -1790,7 +1790,7 @@ div.autocomplete {
       margin:0;
       padding:2px;
 	  cursor:pointer;
-	  overflow:auto;
+	  overflow:none;
     }
     
    
