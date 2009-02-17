@@ -856,32 +856,24 @@ function participantRegRow(subdivtag)
 								styleId="<%=collectionProtocolParticipantId%>"
 								property="<%=collectionProtocolParticipantId%>" /></td>
 							<%}%>
-							<%if((!Variables.isCollectionProtocolRegistrationBarcodeGeneratorAvl) 
-									|| operation.equals(Constants.EDIT))
-								{%>
+							<%if((!Variables.isCollectionProtocolRegistrationBarcodeGeneratorAvl) || operation.equals(Constants.EDIT)){%>
 										<td align="left" class="black_ar">
 										<logic:equal name="participantForm" property="isBarcodeEditable" value="<%=Constants.FALSE%>">	
-										<%
-										if(form.getCollectionProtocolRegistrationValue(barcodeKey)!=null)
-										{%>
+										<% if(form.getCollectionProtocolRegistrationValue(barcodeKey)!=null) {%>
 											<label for="barcode" >
 											<%=form.getCollectionProtocolRegistrationValue(barcodeKey)%>
 											</label>									
-										<%}
-										else
-										{%>
+										<%}else{%>
 											<label for="barcode" >
 											</label>
 										<%}%>
 										<html:hidden property="<%=barcode%>" />
-										
 										</logic:equal>
 										<logic:notEqual name="participantForm" property="isBarcodeEditable" value="<%=Constants.FALSE%>">
 										<html:text styleClass="black_ar" size="10" maxlength="50" styleId="<%=barcode%>" property="<%=barcode%>" />
 										</logic:notEqual>
 										</td>
-									<%
-							}%>
+							<%}%>
 							<td align="left" class="black_ar"><html:text
 								styleClass="black_ar" size="10" maxlength="50"
 								styleId="<%=collectionProtocolRegistrationDate%>"
