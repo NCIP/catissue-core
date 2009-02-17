@@ -513,7 +513,7 @@
 	
 	<property>
 		<name>isLastNameNull</name>
-		<value>false</value>
+		<value>true</value>
 	</property>
 	
 	<!-- Property to specify whether barcode field is editable or not-->
