@@ -522,12 +522,14 @@
 		<value>true</value>
 	</property>
 	
+	<!-- For DFCI use PrintShipmentHeaderImg.jsp  -->	
 	<property>
 		<name>packingSlipHeaderJsp</name>
 		<value></value>
 	</property>
 	
-		<property>
+	<!-- For DFCI use PrintSummaryStaticText.jsp  -->	
+	<property>
 		<name>packingSlipFooterJsp</name>
 		<value></value>
 	</property>
