@@ -848,9 +848,7 @@ function participantRegRow(subdivtag)
  }
  %>
 							</td>
-							<%if((!Variables.isProtocolParticipantIdentifierLabelGeneratorAvl) 
-									|| operation.equals(Constants.EDIT) || operation.equals(Constants.ADD))
-							{%>
+							<%if((!Variables.isProtocolParticipantIdentifierLabelGeneratorAvl) || operation.equals(Constants.EDIT) || operation.equals(Constants.ADD)){%>
 							<td align="left" class="black_ar"><html:text
 								styleClass="black_ar" size="10" maxlength="50"
 								styleId="<%=collectionProtocolParticipantId%>"
@@ -864,7 +862,7 @@ function participantRegRow(subdivtag)
 											<%=form.getCollectionProtocolRegistrationValue(barcodeKey)%>
 											</label>									
 										<%}else{%>
-											<label for="barcode" >
+											<label for="barcode" >&nbsp;
 											</label>
 										<%}%>
 										<html:hidden property="<%=barcode%>" />
