@@ -2337,6 +2337,11 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String IS_PHONENO_TO_BE_VALIDATED="isPhoneNumberToBeValidated";
 	public static final String DATEFORMAT="dateFormat";
 	
+	
+	// Added by Geeta for DFCI
+	public static final String IS_LAST_NAME_NULL="isLastNameNull";
+
+	
 	//SPECIMEN COllection Status
 	public static final String SPECIMEN_COLLECTED = "Collected";
 	public static final String SPECIMEN_ANTICOPATED = "Anticipated";
