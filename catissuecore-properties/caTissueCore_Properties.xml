@@ -519,12 +519,12 @@
 	
 	<property>
 		<name>packingSlipHeaderJsp</name>
-		<value>/pages/shippingtracking/PrintShipmentHeaderImg.jsp</value>
+		<value></value>
 	</property>
 	
 		<property>
 		<name>packingSlipFooterJsp</name>
-		<value>/pages/shippingtracking/PrintSummaryStaticText.jsp</value>
+		<value></value>
 	</property>
 
 
