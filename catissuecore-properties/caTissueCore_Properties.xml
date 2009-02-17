@@ -511,6 +511,11 @@
 		<value>MM-dd-yyyy</value>
 	</property>
 	
+	<property>
+		<name>isLastNameNull</name>
+		<value>false</value>
+	</property>
+	
 	<!-- Property to specify whether barcode field is editable or not-->
 	<property>
 		<name>barcode.isEditable</name>
