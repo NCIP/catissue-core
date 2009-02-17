@@ -67,6 +67,9 @@ public class Variables extends edu.wustl.common.util.global.Variables
   //  public static String dateFormat ="";
     
     
+ // Added by Geeta
+    public static boolean isLastNameNull = true;
+    
 	// Patch ID: SimpleSearchEdit_7
     public static Map<String, String> aliasAndPageOfMap = new HashMap<String, String>();
     
