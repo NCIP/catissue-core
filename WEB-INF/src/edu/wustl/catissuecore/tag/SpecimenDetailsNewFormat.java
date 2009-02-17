@@ -752,7 +752,27 @@ public class SpecimenDetailsNewFormat extends TagSupport
 						}
 			 		}
 			 		else
-			 		{	createNewStorageComponent(sb,nameValue,specimen);	}
+			 		{	if(dataListTypes[0].equalsIgnoreCase(dataListType) && (specimenSummaryForm.isMultipleSpEditMode() && !specimenSummaryForm.getShowParentStorage() ))
+			 			{
+							if(nameValue[1].trim().length()>0)
+							{
+								sb.append(nameValue[1]);sb.append(":");sb.append(nameValue[3]);sb.append(",");sb.append(nameValue[5]);
+							}
+							else
+							{
+								sb.append(getHTMLFormattedValue(specimen.getStorageContainerForSpecimen()));
+							}
+							for(int ind1=0;ind1<9;ind1+=2)
+							{
+								String [] tmpAr = {nameValue[ind1],nameValue[ind1+1]};
+								createHiddenElement(sb, tmpAr);
+							}
+		 			}
+				 		else
+				 		{
+				 			createNewStorageComponent(sb,nameValue,specimen);
+				 		}
+			 		}
 			 	}
 			 	else if(columnCounter == 7)
 			 	{

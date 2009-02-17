@@ -22,5 +22,9 @@ public interface SpecimenDetailsInfo {
 	boolean getShowbarCode();
 
 	boolean getShowLabel();
+	
+	boolean getShowParentStorage();
+	
+	boolean isMultipleSpEditMode();
 
 }
