@@ -125,6 +125,10 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 //		Added By geeta 
 		InitialiseVariablesForEdinburgh();
 		
+		
+//		Added By geeta 
+		InitialiseVariablesForDFCI();
+		
 		initCatissueCache();
 		initEntityCache();
 		Utility.initializePrivilegesMap();
@@ -418,5 +422,12 @@ public void InitialiseVariablesForEdinburgh(){
 			edu.wustl.common.util.global.Variables.dateFormat="MM-dd-yyyy";
 		}
 		
+	}
+
+	public void InitialiseVariablesForDFCI(){
+		if(Constants.FALSE.equals(XMLPropertyHandler.getValue(Constants.IS_LAST_NAME_NULL)))
+		{	
+			Variables.isLastNameNull = false;
+		}
 	}
 }
