@@ -1,0 +1,50 @@
+<?xml version ="1.0"?>
+<!--Ant Script for create Build for caTissue Suite-->
+
+<project name="caTissue Suite v1.1 Installation DFCI" default="deploy_barcode_generator_for_DFCI">
+
+	<!--define require dir and Properties -->
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
+		<classpath>
+			<pathelement location="./lib/ant-contrib.jar" />
+		</classpath>
+	</taskdef>
+	
+	<import file="build-properties.xml"/>
+	<property name="base.dir" value="." />
+	<property name="lib.dir" value="${base.dir}/lib" />
+	<property name="oracle.sql.dir" value="${base.dir}/SQL/Oracle" />
+	<property name="oracle.driver.string" value="oracle.jdbc.driver.OracleDriver" />
+	
+	<path id="temp.classpath">
+			<fileset dir="${temp.dir}/catissuecore/WEB-INF/lib">
+				<include name="*.jar" />
+			</fileset>
+	</path>
+	
+	
+	<!--Target for Database Creation-->
+	<target name="deploy_barcode_generator_for_DFCI">
+		<if>
+			<equals arg1="oracle" arg2="${database.type}" />
+			<then>
+				<antcall target="deploy_db_oracle" />
+			</then>
+			<else>
+				<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
+			</else>
+		</if>
+	</target>
+	
+	<target name="deploy_db_oracle">
+		<echo message="Initializing Oracle Database for caTissue Suite v1.1 Application..." />
+		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle" delimiter="/" delimitertype="row">
+			<transaction src="${oracle.sql.dir}/barcode_generator_for_DFCI.sql" />
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</sql>
+	</target>
+</project>
