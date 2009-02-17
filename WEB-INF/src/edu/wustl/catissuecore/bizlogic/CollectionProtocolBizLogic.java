@@ -342,7 +342,8 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			session = DBUtil.getCleanSession();
 			collectionProtocolOld = getOldCollectionProtocol(session, collectionProtocol.getId());
 			
-			if(!Constants.ACTIVITY_STATUS_ACTIVE.equals(collectionProtocol.getActivityStatus()))
+			if(!Constants.ACTIVITY_STATUS_ACTIVE.equals(collectionProtocol.getActivityStatus())
+				& !Constants.ACTIVITY_STATUS_CLOSED.equals(collectionProtocol.getActivityStatus()))
 			{
 				setCPEventCollection(collectionProtocol);
 				editCPObj(dao, sessionDataBean, collectionProtocol, collectionProtocolOld);
