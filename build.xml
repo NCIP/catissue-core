@@ -535,7 +535,8 @@
 		<copy file="login-config.xml" todir="${zip.dir}" overwrite="true" />
 		<copy file="properties-service.xml" todir="${zip.dir}" overwrite="true" />
     	<copy file="deploy_uk_edin.xml" todir="${zip.dir}" overwrite="true" />
-
+		<copy file="deploy_barcode_generator_DFCI.xml" todir="${zip.dir}" overwrite="true" />
+			
 		<copy todir="${zip.dir}/catissuecore-properties" overwrite="true">
 			<fileset dir="${base.dir}/catissuecore-properties" />
 		</copy>
