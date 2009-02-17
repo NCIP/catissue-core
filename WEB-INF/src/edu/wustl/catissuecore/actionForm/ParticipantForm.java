@@ -635,6 +635,13 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 			String errorKeyForBirthDate = "";
 			String errorKeyForDeathDate = "";
 
+			// Added by Geeta for DFCI
+			if(!Variables.isLastNameNull){
+				if(validator.isEmpty(lastName)){
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.participant.lastName"));
+				   }
+			}
+			
 			if (!validator.isEmpty(birthDate))
 			{
 				// date validation according to bug id  722 and 730
