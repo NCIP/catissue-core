@@ -16,11 +16,11 @@ import edu.wustl.common.util.logger.Logger;
 public class ClinicalDiagnosisHeirarchy
 {
 
-	private static String DATABASE_SERVER_NAME;
-	private static String DATABASE_SERVER_PORT_NUMBER;
-	private static String DATABASE_TYPE;
-	private static String DATABASE_NAME;
-	private static String DATABASE_USERNAME;
+	static String DATABASE_SERVER_NAME;
+	static String DATABASE_SERVER_PORT_NUMBER;
+	static String DATABASE_TYPE;
+	static String DATABASE_NAME;
+	static String DATABASE_USERNAME;
 	static String DATABASE_PASSWORD;
 	static String DATABASE_DRIVER;
 	
@@ -46,29 +46,22 @@ public class ClinicalDiagnosisHeirarchy
 		
 		// Create a connection to the database
 		String url = "";
-		try
+		if ("MySQL".equalsIgnoreCase(DATABASE_TYPE))
 		{
-			if ("MySQL".equalsIgnoreCase(DATABASE_TYPE))
-	
-			{
-				DATABASE_DRIVER = "com.mysql.jdbc.Driver";
-				url = "jdbc:mysql://" + DATABASE_SERVER_NAME + ":" + DATABASE_SERVER_PORT_NUMBER + "/"+ DATABASE_NAME; 
-			}
-			if ("Oracle".equalsIgnoreCase(DATABASE_TYPE))
-			{
-				DATABASE_DRIVER="oracle.jdbc.driver.OracleDriver";
-				url = "jdbc:oracle:thin:@" + DATABASE_SERVER_NAME + ":" + DATABASE_SERVER_PORT_NUMBER+ ":" + DATABASE_NAME;
-			}
-			Class.forName(DATABASE_DRIVER).newInstance();
-			Logger.out.info("URL:" + url);
-			connection= DriverManager.getConnection(url, DATABASE_USERNAME, DATABASE_PASSWORD);
-			return connection;
-			
+			DATABASE_DRIVER = "com.mysql.jdbc.Driver";
+			url = "jdbc:mysql://" + DATABASE_SERVER_NAME + ":" + DATABASE_SERVER_PORT_NUMBER + "/"+ DATABASE_NAME; 
 		}
-		finally
+		if ("Oracle".equalsIgnoreCase(DATABASE_TYPE))
 		{
-			connection.close();
+			DATABASE_DRIVER="oracle.jdbc.driver.OracleDriver";
+			url = "jdbc:oracle:thin:@" + DATABASE_SERVER_NAME + ":" + DATABASE_SERVER_PORT_NUMBER+ ":" + DATABASE_NAME;
 		}
+		Class.forName(DATABASE_DRIVER).newInstance();
+		Logger.out.info("URL:" + url);
+		connection= DriverManager.getConnection(url, DATABASE_USERNAME, DATABASE_PASSWORD);
+		return connection;
+		
+		
 		
 	}
 	private List <String>populateClinicalDiagnosisHeirarchy(Connection connection) throws SQLException 
@@ -79,8 +72,6 @@ public class ClinicalDiagnosisHeirarchy
 			" PUBLIC_ID ='Clinical_Diagnosis_PID'";
 		ResultSet resultSet = null;
 		Statement statement = null;
-		try
-		{
 			statement = connection.createStatement();
 			List<String>  idList = new ArrayList< String >();
 			resultSet=statement.executeQuery(reteriveRootNode);
@@ -88,16 +79,13 @@ public class ClinicalDiagnosisHeirarchy
 			{
 				String id = resultSet.getString("IDENTIFIER");
 				idList.add(id);
+			
 				retrieveChilds(id, connection ,idList);
 			}
-			return idList;
-		}
-		finally
-		{
 			resultSet.close();
 			statement.close();
-		}
 
+		return idList;
 	}
 	private void retrieveChilds(String parentId,Connection connection, List<String> idList ) throws SQLException
 	{
@@ -106,20 +94,15 @@ public class ClinicalDiagnosisHeirarchy
 		Statement statement = null;
 		statement = connection.createStatement();	
 		resultSet = statement.executeQuery(retreiveChild);
-		try
+		
+		while(resultSet.next())
 		{
-			while(resultSet.next())
-			{
-				String id = resultSet.getString("IDENTIFIER");
-				idList.add(id);
-				retrieveChilds(id, connection ,idList);
-			}
+			String id = resultSet.getString("IDENTIFIER");
+			idList.add(id);
+			retrieveChilds(id, connection ,idList);
 		}
-		finally
-		{
-			resultSet.close();
-			statement.close();
-		}
+		resultSet.close();
+		statement.close();
 	}
 	public static void main(String[] args) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException, CatissueException
 	{	
@@ -129,22 +112,23 @@ public class ClinicalDiagnosisHeirarchy
 		Connection connection = null;
 		try
 		{
-			connection = clinicalDiagnosisHeirarchy.getConnection();
-			List<String> idList = clinicalDiagnosisHeirarchy.populateClinicalDiagnosisHeirarchy(connection);
-			clinicalDiagnosisHeirarchy.deleteClinicalDiagnosisHeirarchy(idList,connection);
-			
+		connection = clinicalDiagnosisHeirarchy.getConnection();
+		List<String> idList = clinicalDiagnosisHeirarchy.populateClinicalDiagnosisHeirarchy(connection);
+		clinicalDiagnosisHeirarchy.deleteClinicalDiagnosisHeirarchy(idList,connection);
+		
 		}
 		catch (SQLException e) 
 		{
-			Logger.out.error("SQLexception",e);
-			
+			Logger.out.error("SQLException",e);
+						
 			try 
 			{
 				connection.rollback();
 			}
 			catch (SQLException e1)
 			{
-				Logger.out.error("SQLexception",e1);
+				Logger.out.error("SQLException",e1);
+				
 			}
 		}
 		finally
@@ -155,8 +139,7 @@ public class ClinicalDiagnosisHeirarchy
 			}
 			catch (SQLException e) 
 			{
-				Logger.out.error("SQLexception",e);
-				
+				Logger.out.error("SQLException",e);
 			}
 		}
 	}
@@ -178,34 +161,27 @@ public class ClinicalDiagnosisHeirarchy
 		ids.append(")");
 		
 		String deleteOldClinicalDiagnosis = "";
-		
-		try
+		if ("MySQL".equalsIgnoreCase(DATABASE_TYPE))
 		{
-			if ("MySQL".equalsIgnoreCase(DATABASE_TYPE))
-			{
-				deleteOldClinicalDiagnosis = "Delete from catissue_permissible_value where  " +
-					"IDENTIFIER in " + ids + "order by PARENT_IDENTIFIER desc";
-				Logger.out.info(deleteOldClinicalDiagnosis);
-				statement2.executeUpdate(deleteOldClinicalDiagnosis);
-			}
-			if ("Oracle".equalsIgnoreCase(DATABASE_TYPE))
-			{
-				statement2.executeUpdate("ALTER TABLE catissue_permissible_value disable CONSTRAINT FK57DDCE153B5435E");
-				deleteOldClinicalDiagnosis = "Delete from catissue_permissible_value where  " 
-					+
-					"IDENTIFIER in " 
-					+ 
-					ids;
-				Logger.out.info(deleteOldClinicalDiagnosis);
-				statement2.executeUpdate(deleteOldClinicalDiagnosis);
-				statement2.executeUpdate("ALTER TABLE catissue_permissible_value  ENABLE  CONSTRAINT FK57DDCE153B5435E");
-			}
+			deleteOldClinicalDiagnosis = "Delete from catissue_permissible_value where  " +
+				"IDENTIFIER in " + ids + "order by PARENT_IDENTIFIER desc";
+			Logger.out.info(deleteOldClinicalDiagnosis);
+			statement2.executeUpdate(deleteOldClinicalDiagnosis);
 		}
-		finally
+		if ("Oracle".equalsIgnoreCase(DATABASE_TYPE))
 		{
-			statement2.close();		
-			Logger.out.info("All the old Clinical Diagnosis values deleted successfully");
+			statement2.executeUpdate("ALTER TABLE catissue_permissible_value disable CONSTRAINT FK57DDCE153B5435E");
+			deleteOldClinicalDiagnosis = "Delete from catissue_permissible_value where  " 
+				+
+				"IDENTIFIER in " 
+				+ 
+				ids;
+			Logger.out.info(deleteOldClinicalDiagnosis);
+			statement2.executeUpdate(deleteOldClinicalDiagnosis);
+			statement2.executeUpdate("ALTER TABLE catissue_permissible_value  ENABLE  CONSTRAINT FK57DDCE153B5435E");
 		}
+		statement2.close();		
+		Logger.out.info("All the old Clinical Diagnosis values deleted successfully");
 		
 	}
 }
