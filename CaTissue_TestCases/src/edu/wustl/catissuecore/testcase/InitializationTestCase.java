@@ -41,6 +41,8 @@ public class InitializationTestCase extends CaTissueSuiteBaseTest
 	 */
 	private DataSource getDataSource()
 	{
+		
+		//hard code your database credentials here
 		MysqlDataSource dataSource=new MysqlDataSource();
 		
 		dataSource.setDatabaseName("pcatissuesuite");
