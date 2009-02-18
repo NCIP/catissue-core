@@ -23,8 +23,8 @@ public class LoginTestCase extends CaTissueSuiteBaseTest
 	@Test
 	public void testSuccessfulLogin()
 	  {
-	    	addRequestParameter("loginName","admin@admin.com");
-	        addRequestParameter("password","admin");
+		   	addRequestParameter("loginName","admin@admin.com");
+	        addRequestParameter("password","Login1234");
 	        setRequestPathInfo("/Login.do");
 	        actionPerform();
 	        //verifyForward("/Home.do");
@@ -38,23 +38,23 @@ public class LoginTestCase extends CaTissueSuiteBaseTest
 /**
  * Test CLick Administrative->Site menu.
  */
-	@Test
-	 public void testSiteClick()
-	  {
-			addRequestParameter("operation", "add");
-			addRequestParameter("pageOf", "pageOfSite");
-			setRequestPathInfo("/Site");
-			actionPerform();
-			verifyForward("pageOfSite");
-			List stateList = (List)getRequest().getAttribute(Constants.STATELIST);
-			assertNotNull("State List should not be null",stateList);
-			actionPerform();
-			setRequestPathInfo("/Site");
-			addRequestParameter("isOnChange", "true");
-			addRequestParameter("coordinatorId", "1");
-			actionPerform();
-			verifyForward("pageOfSite");
-	  }
+//	@Test
+//	 public void testSiteClick()
+//	  {
+//			addRequestParameter("operation", "add");
+//			addRequestParameter("pageOf", "pageOfSite");
+//			setRequestPathInfo("/Site");
+//			actionPerform();
+//			verifyForward("pageOfSite");
+//			List stateList = (List)getRequest().getAttribute(Constants.STATELIST);
+//			assertNotNull("State List should not be null",stateList);
+//			actionPerform();
+//			setRequestPathInfo("/Site");
+//			addRequestParameter("isOnChange", "true");
+//			addRequestParameter("coordinatorId", "1");
+//			actionPerform();
+//			verifyForward("pageOfSite");
+//	  }
 
 //	public void testInstitutionEdit()
 //	{
@@ -74,41 +74,41 @@ public class LoginTestCase extends CaTissueSuiteBaseTest
 	/**
 	 * TEst institution add.
 	 */
-	@Test
-	public void testAddInstitution()
-	{
-		InstitutionForm form = new InstitutionForm();
-		form.setName("");
-		form.setOperation(Constants.ADD);
-		getRequest().setAttribute("institutionForm", form);
-		setRequestPathInfo("/InstitutionAdd");
-		actionPerform();
-		verifyForward("success");
-
-	}
+//	@Test
+//	public void testAddInstitution()
+//	{
+//		InstitutionForm form = new InstitutionForm();
+//		form.setName("");
+//		form.setOperation(Constants.ADD);
+//		getRequest().setAttribute("institutionForm", form);
+//		setRequestPathInfo("/InstitutionAdd");
+//		actionPerform();
+//		verifyForward("success");
+//
+//	}
 
 	/**
 	 * Test institution edit.
 	 */
-	@Test
-	public void testInstitutionEdit()
-	{
-		setRequestPathInfo("/SimpleSearch");
-		SimpleQueryInterfaceForm simpleQueryInterfaceform = new SimpleQueryInterfaceForm();
-		simpleQueryInterfaceform.setAliasName("Institution");
-		Map valueMap = new HashMap();
-		valueMap.put("SimpleConditionsNode:1_Condition_DataElement_table", "Institution");
-		valueMap.put("SimpleConditionsNode:1_Condition_DataElement_field","Institution.Name.varchar");
-		valueMap.put("SimpleConditionsNode:1_Condition_Operator_operator","Starts With");
-		valueMap.put("SimpleConditionsNode:1__Condition_value","");
-		addRequestParameter("counter","1");
-		addRequestParameter("pageOf","pageOfInstitution");
-		addRequestParameter("operation","search");
-		simpleQueryInterfaceform.setCounter("1");
-		simpleQueryInterfaceform.setValues(valueMap);
-		getRequest().setAttribute("simpleQueryInterfaceForm", simpleQueryInterfaceform);
-		actionPerform();
-
-		verifyForward("success");
-	}
+//	@Test
+//	public void testInstitutionEdit()
+//	{
+//		setRequestPathInfo("/SimpleSearch");
+//		SimpleQueryInterfaceForm simpleQueryInterfaceform = new SimpleQueryInterfaceForm();
+//		simpleQueryInterfaceform.setAliasName("Institution");
+//		Map valueMap = new HashMap();
+//		valueMap.put("SimpleConditionsNode:1_Condition_DataElement_table", "Institution");
+//		valueMap.put("SimpleConditionsNode:1_Condition_DataElement_field","Institution.Name.varchar");
+//		valueMap.put("SimpleConditionsNode:1_Condition_Operator_operator","Starts With");
+//		valueMap.put("SimpleConditionsNode:1__Condition_value","");
+//		addRequestParameter("counter","1");
+//		addRequestParameter("pageOf","pageOfInstitution");
+//		addRequestParameter("operation","search");
+//		simpleQueryInterfaceform.setCounter("1");
+//		simpleQueryInterfaceform.setValues(valueMap);
+//		getRequest().setAttribute("simpleQueryInterfaceForm", simpleQueryInterfaceform);
+//		actionPerform();
+//
+//		verifyForward("success");
+//	}
 }

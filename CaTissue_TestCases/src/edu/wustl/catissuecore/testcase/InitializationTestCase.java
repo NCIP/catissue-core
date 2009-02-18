@@ -1,6 +1,7 @@
 package edu.wustl.catissuecore.testcase;
 
 import java.io.File;
+import java.sql.SQLException;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -14,6 +15,7 @@ import org.jnp.server.NamingBeanImpl;
 import org.junit.Test;
 
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
+import oracle.jdbc.pool.OracleDataSource;
 
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
@@ -39,14 +41,34 @@ public class InitializationTestCase extends CaTissueSuiteBaseTest
 	 */
 	private DataSource getDataSource()
 	{
-		MysqlDataSource dataSource = new MysqlDataSource();
-
-		dataSource.setDatabaseName("pcatissue");
+		MysqlDataSource dataSource=new MysqlDataSource();
+		
+		dataSource.setDatabaseName("pcatissuesuite");
 		dataSource.setServerName("localhost");
 		dataSource.setPort(3306);
 		dataSource.setUser("root");
-		dataSource.setPassword("mysql123");
+		dataSource.setPassword("himanshu");
 		return dataSource;
+		
+		/*DataSource initialization incase we are using Oracle Database*/
+//		OracleDataSource dataSource=null;
+//		try 
+//		{
+//			dataSource = new OracleDataSource();
+//		} 
+//		catch (SQLException e) 
+//		{
+//			e.printStackTrace();
+//		}
+//
+//		dataSource.setDatabaseName("orcl");
+//		dataSource.setServerName("ps2078.persistent.co.in");
+//		dataSource.setPortNumber(1521);
+//      dataSource.setURL("jdbc:oracle:thin:@"+dataSource.getServerName()+":"+dataSource.getPortNumber()+":"+dataSource.getDatabaseName());
+//		dataSource.setUser("sagar");
+//		dataSource.setPassword("sagar");
+//		return dataSource;
+
 	}
 
 	/**
@@ -108,7 +130,7 @@ public class InitializationTestCase extends CaTissueSuiteBaseTest
 				System.setProperty("app.propertiesFile",
 						Variables.applicationHome+"/catissuecore-properties/caTissueCore_Properties.xml");
 				System.setProperty("java.security.auth.login.config",
-						Variables.applicationHome+"/CaTissue_TestCases/login.conf");
+						Variables.applicationHome+"/CaTissue_TestCases/test_login.conf");
 				if (!initComplete)
 				{
 					initComplete = true;
