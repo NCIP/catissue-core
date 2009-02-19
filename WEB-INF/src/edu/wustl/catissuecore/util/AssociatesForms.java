@@ -108,7 +108,7 @@ public final class AssociatesForms
 				if (entityMapList != null && !entityMapList.isEmpty())
 				{
 					EntityMap entityMap = entityMapList.get(0);
-					Utility.editConditions(entityMap, cpId, typeId);
+					Utility.editConditions(entityMap, cpId, typeId, true);
 					annotation.updateEntityMap(entityMap);
 				}
 			}
@@ -143,7 +143,7 @@ public final class AssociatesForms
 				if (entityMapList != null && !entityMapList.isEmpty())
 				{
 					EntityMap entityMap = entityMapList.get(0);
-					Utility.editConditions(entityMap, conditionObject, typeId);
+					Utility.editConditions(entityMap, conditionObject, typeId, true);
 					annotation.updateEntityMap(entityMap);
 				}
 			}
