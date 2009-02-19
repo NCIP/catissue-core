@@ -102,10 +102,10 @@ td.subMenu{ /* for the basic style of the sub-menu area */
   font-family:arial,helvetica,verdana,sans-serif;
 }
 td.subMenuPrimaryTitle{ /* for the title elements of the sub menu (left-side) */
-  font-size:0.6em;
+  font-size:0.3em;
   font-weight:bold;
-  padding-left:0.8em;
-  background-color:#5C5C5C; /* constant: dark gray */
+  padding-left:0.6em;
+  background-color:#114C88; /* constant: dark gray */
   color:#FFFFFF; /* constant: white */
   border-top:1px solid #CCCCCC; /* constant: medium gray */
   border-bottom:1px solid #CCCCCC; /* constant: medium gray */
@@ -144,18 +144,18 @@ td.subMenuPrimaryItemsWithBorderOver{ /* for the items under the sub-menu title 
   border-bottom:1px solid #CCCCCC; /* constant: medium gray */
 }
 td.subMenuSecondaryTitle{ /* for the off state of the cell for the elements (usually common among pages) below the primary items */
-  font-size:0.6em;
+  font-size:0.2em;
   font-weight:bold;
-  padding-left:0.8em;
+  padding-left:0.6em;
   background-color:#6E81A6; /* lighter */
   color:#FFFFFF; /* constant: white */
-  border-bottom:1px solid #CCCCCC; /* constant: medium gray */
-  border-right:1px solid #CCCCCC; /* constant: medium gray */
+  border-bottom:0px solid #CCCCCC; /* constant: medium gray */
+  border-right:0px solid #CCCCCC; /* constant: medium gray */
 }
 td.subMenuSecondaryTitleOver{ /* for the over state of the cell for the elements (usually common among pages) below the primary items */
-  font-size:0.6em;
+  font-size:0.3em;
   font-weight:bold;
-  padding-left:0.8em;
+  padding-left:0.6em;
   background-color:#475B82; /* darker */
   color:#FFFFFF; /* constant: white */
   border-bottom:1px solid #CCCCCC; /* constant: medium gray */
@@ -1427,7 +1427,16 @@ td.tabField{ /* for the cell that contains the form elements */
   border-bottom:1px solid #5C5C5C; /* constant: dark gray */
   background-color:#FFFFFF;  /*#797C9C;  constant: light gray */
 }
-
+td.cpPageSplitter{ /* for the title elements of the sub menu (left-side) */
+  font-size:0.6em;
+  font-weight:bold;
+  padding-left:0.8em;
+  background-color:#BFDCF3; /* constant: dark gray */
+  color:#FFFFFF; /* constant: white */
+  border-top:1px solid #CCCCCC; /* constant: medium gray */
+  border-bottom:1px solid #CCCCCC; /* constant: medium gray */
+  border-right:1px solid #CCCCCC; /* constant: medium gray */
+}
 table.tabPage{ /* for overall top style for a content page */
   margin-left:10px;
   margin-top:10px;
@@ -1790,7 +1799,7 @@ div.autocomplete {
       margin:0;
       padding:2px;
 	  cursor:pointer;
-	  overflow:none;
+	  overflow:auto;
     }
     
    
