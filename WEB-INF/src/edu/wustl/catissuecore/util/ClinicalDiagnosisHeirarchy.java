@@ -11,6 +11,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import edu.wustl.catissuecore.exception.CatissueException;
+import edu.wustl.common.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
 
 
@@ -47,17 +48,17 @@ public class ClinicalDiagnosisHeirarchy
 		
 		// Create a connection to the database
 		String url = "";
-		if ("MySQL".equalsIgnoreCase(DATABASE_TYPE))
+		if (Constants.MYSQL_DATABASE.equalsIgnoreCase(DATABASE_TYPE))
 		{
 			DATABASE_DRIVER="com.mysql.jdbc.Driver";
 			url=mysqlUrl;  
 		}
-		if ("Oracle".equalsIgnoreCase(DATABASE_TYPE))
+		if (Constants.ORACLE_DATABASE.equalsIgnoreCase(DATABASE_TYPE))
 		{
 			DATABASE_DRIVER="oracle.jdbc.driver.OracleDriver";
 			url=oracleUrl;
 		}
-		if ("MSSQLSERVER".equalsIgnoreCase(DATABASE_TYPE))
+		if (Constants.MSSQLSERVER_DATABASE.equalsIgnoreCase(DATABASE_TYPE))
 		{
 			DATABASE_DRIVER="com.microsoft.sqlserver.jdbc.SQLServerDriver";
 			url=mssqlserverUrl;
