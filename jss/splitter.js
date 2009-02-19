@@ -42,7 +42,7 @@ function initSplitterOpenStatus(splitterOpenStatusLast)
  * If the last state is true it hides the menu otherwise shows it. 
  */
 function toggleSplitterStatus()
-{	
+{
 	if (splitterOpenStatus)
 	{
 		hideMenu();
@@ -65,8 +65,8 @@ function hideMenu()
 	var td = getObj('sideMenuTd');
 
 	splitterOpenStatus = false;
-
-	td.style.display = 'none';            
+	td.style.display = 'none';   	
+	(document.getElementById("contentTd")).style.width="100%";
 	arrow.innerHTML = '<img src="images/leftPane_expandButton.gif"/>';  
 }
 
@@ -82,6 +82,9 @@ function showMenu()
 	
 	//UI adjustments
 	td.style.height = '100%';
+	(document.getElementById("cpAndParticipantView")).style.width="100%";
+	(document.getElementById("contentTd")).style.width="72%";
+	document.getElementById("cpAndParticipantView").style.display='block';
 	td.style.display = 'block';
 
 	arrow.innerHTML = '<img src="images/leftPane_collapseButton.gif"/>';  
