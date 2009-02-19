@@ -1388,6 +1388,8 @@
 					<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
 				</else>
 			</if>
+			<antcall target="add_default_conditions">
+			</antcall>
 	</target>
 
 	<!-- Removing unnecessary PE Mysql-->
