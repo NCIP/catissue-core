@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -16,13 +17,15 @@ import edu.wustl.common.util.logger.Logger;
 public class ClinicalDiagnosisHeirarchy
 {
 
-	static String DATABASE_SERVER_NAME;
-	static String DATABASE_SERVER_PORT_NUMBER;
 	static String DATABASE_TYPE;
-	static String DATABASE_NAME;
 	static String DATABASE_USERNAME;
 	static String DATABASE_PASSWORD;
 	static String DATABASE_DRIVER;
+	
+	static Object [] connectionArgs = null;
+	static final String mysqlUrl="jdbc:mysql://{0}:{1}/{2}";
+	static final String oracleUrl="jdbc:oracle:thin:@{0}:{1}:{2}";
+	static final String mssqlserverUrl="jdbc:sqlserver://{0}:{1};databaseName={2};";
 	
 	private void initDataBase(String[] args) throws CatissueException
 	{
@@ -30,12 +33,10 @@ public class ClinicalDiagnosisHeirarchy
 		{
 			 throw new CatissueException("In sufficient number of arguments");
 		}
-		DATABASE_SERVER_NAME = args[0];
-		DATABASE_SERVER_PORT_NUMBER = args[1];
 		DATABASE_TYPE = args[2];
-		DATABASE_NAME = args[3];
 		DATABASE_USERNAME = args[4];
 		DATABASE_PASSWORD = args[5];
+		connectionArgs=new Object[] {args[0],args[1],args[3]};
 		//DATABASE_DRIVER = args[6];	
 	}
 	
@@ -48,14 +49,20 @@ public class ClinicalDiagnosisHeirarchy
 		String url = "";
 		if ("MySQL".equalsIgnoreCase(DATABASE_TYPE))
 		{
-			DATABASE_DRIVER = "com.mysql.jdbc.Driver";
-			url = "jdbc:mysql://" + DATABASE_SERVER_NAME + ":" + DATABASE_SERVER_PORT_NUMBER + "/"+ DATABASE_NAME; 
+			DATABASE_DRIVER="com.mysql.jdbc.Driver";
+			url=mysqlUrl;  
 		}
 		if ("Oracle".equalsIgnoreCase(DATABASE_TYPE))
 		{
 			DATABASE_DRIVER="oracle.jdbc.driver.OracleDriver";
-			url = "jdbc:oracle:thin:@" + DATABASE_SERVER_NAME + ":" + DATABASE_SERVER_PORT_NUMBER+ ":" + DATABASE_NAME;
+			url=oracleUrl;
 		}
+		if ("MSSQLSERVER".equalsIgnoreCase(DATABASE_TYPE))
+		{
+			DATABASE_DRIVER="com.microsoft.sqlserver.jdbc.SQLServerDriver";
+			url=mssqlserverUrl;
+		}
+		url = MessageFormat.format(url, connectionArgs);
 		Class.forName(DATABASE_DRIVER).newInstance();
 		Logger.out.info("URL:" + url);
 		connection= DriverManager.getConnection(url, DATABASE_USERNAME, DATABASE_PASSWORD);
@@ -160,25 +167,24 @@ public class ClinicalDiagnosisHeirarchy
 		ids.deleteCharAt(ids.lastIndexOf(","));
 		ids.append(")");
 		
-		String deleteOldClinicalDiagnosis = "";
-		if ("MySQL".equalsIgnoreCase(DATABASE_TYPE))
+		String deleteOldClinicalDiagnosis = "Delete from catissue_permissible_value where  " +
+		"IDENTIFIER in " + ids;
+		//Logger.out.info(deleteOldClinicalDiagnosis);
+		if ("MYSQL".equalsIgnoreCase(DATABASE_TYPE))
 		{
-			deleteOldClinicalDiagnosis = "Delete from catissue_permissible_value where  " +
-				"IDENTIFIER in " + ids + "order by PARENT_IDENTIFIER desc";
-			Logger.out.info(deleteOldClinicalDiagnosis);
 			statement2.executeUpdate(deleteOldClinicalDiagnosis);
 		}
-		if ("Oracle".equalsIgnoreCase(DATABASE_TYPE))
+		if ("ORACLE".equalsIgnoreCase(DATABASE_TYPE))
 		{
 			statement2.executeUpdate("ALTER TABLE catissue_permissible_value disable CONSTRAINT FK57DDCE153B5435E");
-			deleteOldClinicalDiagnosis = "Delete from catissue_permissible_value where  " 
-				+
-				"IDENTIFIER in " 
-				+ 
-				ids;
-			Logger.out.info(deleteOldClinicalDiagnosis);
 			statement2.executeUpdate(deleteOldClinicalDiagnosis);
 			statement2.executeUpdate("ALTER TABLE catissue_permissible_value  ENABLE  CONSTRAINT FK57DDCE153B5435E");
+		}
+		if ("MSSQLSERVER".equalsIgnoreCase(DATABASE_TYPE))
+		{
+			statement2.executeUpdate("ALTER TABLE catissue_permissible_value NOCHECK CONSTRAINT FK_CAT_PERMI_VALUE_PARENT_ID");
+			statement2.executeUpdate(deleteOldClinicalDiagnosis);
+			statement2.executeUpdate("ALTER TABLE catissue_permissible_value CHECK CONSTRAINT FK_CAT_PERMI_VALUE_PARENT_ID");
 		}
 		statement2.close();		
 		Logger.out.info("All the old Clinical Diagnosis values deleted successfully");
