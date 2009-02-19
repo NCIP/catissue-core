@@ -2375,8 +2375,6 @@ public class Utility extends edu.wustl.common.util.Utility {
 		// Map for storing containers corresponding to entitiesIds
 		Map<Long, Long> entityIdsVsContId = new HashMap<Long, Long>();
 		EntityManagerInterface entityManager = EntityManager.getInstance();
-		DefaultBizLogic defaultBizLogic = edu.common.dynamicextensions.bizlogic.BizLogicFactory
-				.getDefaultBizLogic();
 		String[] colName = {Constants.NAME};
 		Collection<NameValueBean> entityGrpBeanColl = entityManager.getAllEntityGroupBeans();
 		Set<Long> entityGroupIds = new HashSet<Long>();
@@ -2458,7 +2456,7 @@ public class Utility extends edu.wustl.common.util.Utility {
 	 * @param conditionObjectId condition on forms
 	 * @param typeId collection protocol id
 	 */
-	public static void editConditions(EntityMap entityMap, Long conditionObjectId, Long typeId)
+	public static void editConditions(EntityMap entityMap, Long conditionObjectId, Long typeId, boolean editAlreadyPresentCondition)
 	{
 		Collection<FormContext> formContextColl = entityMap.getFormContextCollection();
 		if (formContextColl != null)
@@ -2474,7 +2472,7 @@ public class Utility extends edu.wustl.common.util.Utility {
 							formContext, conditionObjectId, typeId);
 					entityMapCondColl.add(entityMapCondition);
 				}
-				else
+				else if(editAlreadyPresentCondition)
 				{
 					for (EntityMapCondition entityMapCondition : entityMapCondColl)
 					{
@@ -2487,4 +2485,5 @@ public class Utility extends edu.wustl.common.util.Utility {
 			}
 		}
 	}
+
 }
