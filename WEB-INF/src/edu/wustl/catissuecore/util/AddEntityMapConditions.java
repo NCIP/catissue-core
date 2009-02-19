@@ -81,7 +81,7 @@ public final class AddEntityMapConditions
 				if (entityMapList != null && !entityMapList.isEmpty())
 				{
 					EntityMap entityMap = entityMapList.get(0);
-					Utility.editConditions(entityMap, cpId, typeId);
+					Utility.editConditions(entityMap, cpId, typeId, false);
 					annotation.updateEntityMap(entityMap);
 				}
 			}
