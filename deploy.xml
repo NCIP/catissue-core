@@ -997,7 +997,9 @@
 				</fileset>
 			</classpath>
 		</sql>
-		<antcall target="update_metadata_for_model_changes" />
+		<antcall target="update_metadata_for_model_changes">
+			 <param name="isUpgrade" value="false"/>
+		</antcall>	
 		<antcall target="update_metadata_for_CA_model_changes" />
 	</target>
 	<target name="insert_entity_group_metadata_mysql">
@@ -1178,7 +1180,9 @@
 				</fileset>
 			</classpath>
 		</sql>
-		<antcall target="update_metadata_for_model_changes" />
+		<antcall target="update_metadata_for_model_changes" >
+			 <param name="isUpgrade" value="false"/>
+		</antcall>
 		<antcall target="update_metadata_for_CA_model_changes" />
 		<antcall target="alter_CA_model_Tables" />
     	<antcall target="reset_sequences" />
@@ -1373,7 +1377,10 @@
 	</target>
 	
 	<target name="upgrade_from_Suite1.1_to_1.1p">
-			<if>
+		<antcall target="update_metadata_for_model_changes">
+				<param name="isUpgrade" value="true"/>
+		</antcall>	
+		    <if>
 				<equals arg1="mysql" arg2="${database.type}" />
 				<then>
 					<antcall target="upgrade_mysql_from_Suite1.1_to_1.1p" />
@@ -1519,18 +1526,24 @@
 		<if>
 			<equals arg1="mysql" arg2="${database.type}" />
 			<then>
-				<antcall target="update_metadata_for_model_changes_mysql" />
+				<antcall target="update_metadata_for_model_changes_mysql">
+				 <param name="isUpgrade" value="${isUpgrade}"/>
+				</antcall>
 			</then>
 			<elseif>
 				<equals arg1="oracle" arg2="${database.type}" />
 				<then>
-					<antcall target="update_metadata_for_model_changes_oracle" />
+					<antcall target="update_metadata_for_model_changes_oracle">
+						 <param name="isUpgrade" value="${isUpgrade}"/>
+					</antcall>
 				</then>
 			</elseif>
 			<elseif>
 				<equals arg1="mssqlserver" arg2="${database.type}" />
 				<then>
-					<antcall target="update_metadata_for_model_changes_mssqlserver" />
+					<antcall target="update_metadata_for_model_changes_mssqlserver">
+						 <param name="isUpgrade" value="${isUpgrade}"/>
+					</antcall>					
 				</then>
 			</elseif>
 			<else>
@@ -1606,6 +1619,7 @@
 			<arg value="${database.username}"/>
 			<arg value="${database.password}"/>
 			<arg value="${mysql.driver.string}"/>
+			<arg value="${isUpgrade}"/>
 		</java>
 	</target>
 
@@ -1622,6 +1636,7 @@
 			<arg value="${database.username}"/>
 			<arg value="${database.password}"/>
 			<arg value="${oracle.driver.string}"/>
+			<arg value="${isUpgrade}"/>
 		</java>
 		<antcall target="reset_sequences" />
 	</target>
@@ -2877,7 +2892,9 @@ Thanking You,
 		<antcall target="temp_update_metadata_for_clob_support_mssqlserver" />
 		<antcall target="insert_entity_group_metadata_mssqlserver" />
 		<antcall target="upgrade_db_demodel_mssqlserver" />
-		<antcall target="update_metadata_for_model_changes" />
+		<antcall target="update_metadata_for_model_changes" >
+			 <param name="isUpgrade" value="false"/>
+		</antcall>
 		<antcall target="update_metadata_for_CA_model_changes" />
 		
 	</target>
@@ -2954,6 +2971,7 @@ Thanking You,
 			<arg value="${database.username}"/>
 			<arg value="${database.password}"/>
 			<arg value="${mssqlserver.driver.string}"/>
+			<arg value="${isUpgrade}"/>
 		</java>
 	</target>
 	
