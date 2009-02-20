@@ -45,6 +45,8 @@ public class UpdateMetadata
 	
 	static String DB_SPECIFIC_COMPARE_OPERATOR;
 	
+	static String IS_UPGRADE = "false";
+	
 	public static void main(String[] args) throws SQLException, IOException, ClassNotFoundException
 	{
 		try
@@ -55,17 +57,24 @@ public class UpdateMetadata
 			stmt = connection.createStatement();
 			UpdateMetadataUtil.isExecuteStatement = true;
 			DB_SPECIFIC_COMPARE_OPERATOR = UpdateMetadataUtil.getDBCompareModifier();
-					
-			deleteMeatadata();
-			List<String> updateSQL = updateSQLForDistributionProtocol();
-			UpdateMetadataUtil.executeSQLs(updateSQL, connection.createStatement(), false);
 			
-			addMetadata();
-			updateMetadata();
-			addCurratedPath();
-			deletePermissibleValue();
-			addPermissibleValue();
-			cleanUpMetadata();
+			if(IS_UPGRADE.equals("true"))
+			{
+				AddAttributesForUpgrade addAttribute = new AddAttributesForUpgrade(connection);
+				addAttribute.addAttribute();	
+			}
+			else
+			{
+				deleteMeatadata();
+				List<String> updateSQL = updateSQLForDistributionProtocol();
+				UpdateMetadataUtil.executeSQLs(updateSQL, connection.createStatement(), false);
+				addMetadata();
+				updateMetadata();
+				addCurratedPath();
+				deletePermissibleValue();
+				addPermissibleValue();
+				cleanUpMetadata();
+			}
 		}
 		finally
 		{
@@ -117,7 +126,7 @@ public class UpdateMetadata
 	 */
 	public static void configureDBConnection(String[] args)
 	{
-		if(args.length < 7)
+		if(args.length < 8)
 		{
 			throw new RuntimeException("In sufficient number of arguments");
 		}
@@ -128,6 +137,7 @@ public class UpdateMetadata
 			DATABASE_USERNAME = args[4];
 			DATABASE_PASSWORD = args[5];
 			DATABASE_DRIVER = args[6];
+			IS_UPGRADE = args[7];
 	}
 	
     /**
