@@ -115,7 +115,7 @@ PUBLIC
 		<exception
 			handler="edu.wustl.common.util.CommonExceptionHandler"
 			key="" scope="request" type="java.lang.Exception"
-			path=".catissuecore.errorPageDef" />
+			path="/RedirectToProblem.do" />
 	</global-exceptions>
 	
 	<action-mappings>
@@ -765,9 +765,9 @@ PUBLIC
 			name="viewSpecimenSummaryForm"
 			validate="false"
 			scope="request">
-			<forward name="success" path="/pages/AnticipatorySpecimens.jsp" />
+			<forward name="success" path=".catissuecore.viewSpecimenSummary" />
 			<forward name="multipleSpWithMenu" path=".catissuecore.viewSpecimenSummary" />	
-			<forward name="failure" path="/pages/AnticipatorySpecimens.jsp" />
+			<forward name="failure" path=".catissuecore.viewSpecimenSummary" />
 			<forward name="multipleSpWithMenuFaliure" path=".catissuecore.viewSpecimenSummary" />
 			<forward name="printMultiple" path="/printMultiple.do" />
 		</action>
@@ -1612,6 +1612,16 @@ PUBLIC
 			<forward name="failure" path="/DistributionProtocol.do?operation=edit&amp;pageOf=pageOfDistributionProtocol&amp;menuSelected=10"/>
 		</action>    
 		<!-- DistributionProtocol Actions Ends-->
+
+<!-- Mandar : 16Feb09 : ErrorHandling Action -->
+		<action path="/RedirectToProblem"
+			type="edu.wustl.catissuecore.action.RedirectToProblemAction"
+			name="reportedProblemForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path="/ReportProblem.do?operation=add" />
+			<forward name="failure" path="/ReportProblem.do?operation=add" />
+		</action>
 		
 		<!--Report Problem Actions Begins-->
 		<action path="/ReportProblem"
@@ -4876,7 +4886,7 @@ PUBLIC
 					<forward name="success" path="/pages/SpecimenSummary.jsp" />
 					<forward name="bulkUpdateSpecimens"  path="/bulkUpdateSpecimens.do" />
 					<forward name="pageOfbulkUpdateSpecimens"  path="/bulkUpdateSpecimens.do?pageOf=multipleSpWithMenu" />
-					<forward name="anticipatory" path="/pages/AnticipatorySpecimens.jsp" />  
+					<forward name="anticipatory" path=".catissuecore.viewSpecimenSummary" />  
 					<forward name="pageOfMultipleSpWithoutMenu" path="/pages/SpecimenSummary.jsp" />
 					<forward name="updateSpecimenStatus" path="/updateSpecimenStatus.do" />
 					<forward name="pageOfMultipleSpWithMenu" path=".catissuecore.viewSpecimenSummary" />
@@ -4916,9 +4926,9 @@ PUBLIC
                 name="viewSpecimenSummaryForm"
                 validate="false"
                 scope="request">
-					<forward name="success" path="/pages/AnticipatorySpecimens.jsp" />	
+					<forward name="success" path=".catissuecore.viewSpecimenSummary" />	
 					<forward name="multipleSpWithMenu" path=".catissuecore.viewSpecimenSummary" />	
-					<forward name="failure" path="/pages/AnticipatorySpecimens.jsp" />
+					<forward name="failure" path=".catissuecore.viewSpecimenSummary" />
 					<forward name="multipleSpWithMenuFaliure" path=".catissuecore.viewSpecimenSummary" />
 					<forward name="printMultiple" path="/printMultiple.do" />
 					<forward name="addMltipleSpecimenToCart" path="/AddMltipleSpecimenToCart.do?pageOf=success" />	
@@ -4926,8 +4936,8 @@ PUBLIC
 	   <action path="/printMultiple"
 			type="edu.wustl.catissuecore.action.PrintAction"
 			scope="request">
-			<forward name="success" path="/pages/AnticipatorySpecimens.jsp" />
-			<forward name="failure" path="/pages/AnticipatorySpecimens.jsp" />	
+			<forward name="success" path=".catissuecore.viewSpecimenSummary" />
+			<forward name="failure" path=".catissuecore.viewSpecimenSummary" />	
 			<forward name="printAntiSuccess" path="/redirecttoSCG.do" />	
 			<forward name="multipleSpWithMenu" path=".catissuecore.viewSpecimenSummary" />			
 	   </action>
@@ -4938,7 +4948,7 @@ PUBLIC
                 scope="request">
 					<forward name="success" path="/redirecttoSCG.do" />	
 					<forward name="printAnticipatorySpecimens" path="/printMultiple.do" />	
-					<forward name="failure" path="/pages/AnticipatorySpecimens.jsp" />
+					<forward name="failure" path=".catissuecore.viewSpecimenSummary" />
 					<forward name="addMltipleSpecimenToCart" path="/AddScgToCart.do?pageOf=success" />
        </action>    
 

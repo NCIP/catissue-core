@@ -20,6 +20,11 @@
             formName = Constants.REPORTED_PROBLEM_ADD_ACTION;
             readOnlyValue = false;
         }
+		Boolean errmsg = Boolean.FALSE;
+		errmsg = (Boolean) request.getAttribute(Constants.EXCEPTION_OCCURED);
+		if(errmsg == null)
+		errmsg = Boolean.FALSE;
+//		System.out.println("ERROR ------------------ >>>>>>> "+errmsg);
 %>
 <!-- Mandar : 434 : for tooltip -->
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
@@ -44,9 +49,18 @@
     </table>
       <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
       
+<%
+if(errmsg){
+//System.out.println("ERROR in logic:equal ------------------ >>>>>>> "+errmsg); %>
+<tr>
+	<td align="left" class="bottomtd"><span class="blue_ar_b"><bean:message key="system.error" /></span>
+	</td>
+</tr>
+<%} else {%>
       <tr>
         <td align="left" class="bottomtd"><%@ include file="/pages/content/common/ActionErrors.jsp" %></td>
       </tr>
+<%}%>
 	  <logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
 	  <tr>
 	  <% 

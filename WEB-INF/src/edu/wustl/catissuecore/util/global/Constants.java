@@ -2639,6 +2639,7 @@ public static final String ADD_MULTIPLE_SPECIMEN_TO_CART="addMltipleSpecimenToCa
 	public static final String TOTAL_USER_COUNT = "TotalUserCount";
 	public static final String USER_DATA = "UserData";
 	
-	
+	//Mandar:16Feb09 : For  exception Handling Action
+	public static final String EXCEPTION_OCCURED = "ExceptionOccured";
 	
 }
