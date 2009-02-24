@@ -229,7 +229,8 @@ implements Serializable, IActivityStatus
 		}
 		catch(Exception e)
 		{
-			logger.error(e);
+			logger.error(e.getMessage(), e);
+			throw new AssignDataException();
 		}
 	}
 }
