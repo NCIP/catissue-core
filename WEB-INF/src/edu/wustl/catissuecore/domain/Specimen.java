@@ -958,6 +958,7 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 		catch (Exception e)
 		{
 			logger.error(e.getStackTrace());
+			e.printStackTrace();
 		}
 		Iterator iter = beanObjColl.iterator();
 		Collection consentResponseColl = new HashSet();
