@@ -237,24 +237,23 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 	 * Copy the consent response collection.
 	 * @param cpr of CollectionProtocolRegistration type.
 	 */
-	private void copyConsentResponseColl(CollectionProtocolRegistration cpr)
-	{
-		if(cpr.getConsentTierResponseCollection() == null)
-		{
-			this.consentTierResponseCollection = null;
-		}
-		else
-		{
+	private void copyConsentResponseColl(CollectionProtocolRegistration cpr) {
+		if(cpr.getConsentTierResponseCollection() != null)
+		{ 
 			Collection consentTierResponseCollClone = new HashSet();
 			Iterator itr = cpr.getConsentTierResponseCollection().iterator();
 			while(itr.hasNext())
 			{
 				ConsentTierResponse consentTierResponse = (ConsentTierResponse) itr.next();
-				ConsentTierResponse consentTierResponseClone = new ConsentTierResponse
-					(consentTierResponse);
+				ConsentTierResponse consentTierResponseClone = new ConsentTierResponse(consentTierResponse);
 				consentTierResponseCollClone.add(consentTierResponseClone);
 			}
+			
 			this.consentTierResponseCollection = consentTierResponseCollClone;
+		}
+		else
+		{
+			this.consentTierResponseCollection = null;
 		}
 	}
 
@@ -409,79 +408,76 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 	 */
 	public void setAllValues(IValueObject abstractForm) throws AssignDataException
 	{
-		String nullString = null;
 		CollectionProtocolRegistrationForm form = (CollectionProtocolRegistrationForm) abstractForm;
 		try
 		{
 			this.activityStatus		 = form.getActivityStatus();
+	        // Change for API Search   --- Ashwin 04/10/2006
 	    	if (SearchUtil.isNullobject(collectionProtocol))
 	    	{
 	    		collectionProtocol = new CollectionProtocol();
 	    	}
+	    	
+	        // Change for API Search   --- Ashwin 04/10/2006	    	
 	    	if (SearchUtil.isNullobject(this.registrationDate))
 	    	{
 	    		registrationDate  = new Date();
 	    	}
-			this.collectionProtocol.setId(Long.valueOf(form.getCollectionProtocolID()));
 
-			setParticipantForTheCPR(form);
-
+			this.collectionProtocol.setId(new Long(form.getCollectionProtocolID()));
+			
+			if(form.getParticipantID() != -1 && form.getParticipantID() != 0)
+			{
+				this.participant = new Participant();
+				this.participant.setId(new Long(form.getParticipantID()));
+			}
+			else
+				this.participant = null;
+			
 			this.protocolParticipantIdentifier = form.getParticipantProtocolID().trim();
-			if(Constants.DOUBLE_QUOTES.equals(protocolParticipantIdentifier))
-			{
-				this.protocolParticipantIdentifier = nullString;
-			}
-			this.registrationDate = Utility.parseDate(form.getRegistrationDate(),
-					Utility.datePattern(form.getRegistrationDate()));
+			if(protocolParticipantIdentifier.equals(""))
+				this.protocolParticipantIdentifier = null;
+			
+			this.registrationDate = Utility.parseDate(form.getRegistrationDate(),Utility.datePattern(form.getRegistrationDate()));
 			this.barcode = Utility.toString(form.getBarcode());
-
+			
+			//For Consent Tracking ----Ashish 1/12/06
+			//Setting the consent sign date.
 			this.consentSignatureDate = Utility.parseDate(form.getConsentDate());
+			//Setting the signed doc url
 			this.signedConsentDocumentURL = form.getSignedConsentUrl();
-			if(Constants.DOUBLE_QUOTES.equals(signedConsentDocumentURL))
+			if(signedConsentDocumentURL.equals(""))
 			{
-				this.signedConsentDocumentURL = nullString;
+				this.signedConsentDocumentURL=null;
 			}
+			//Setting the consent witness
 			if(form.getWitnessId()>0)
 			{
 				this.consentWitness = new User();
-				consentWitness.setId(Long.valueOf(form.getWitnessId()));
+				consentWitness.setId(new Long(form.getWitnessId()));
 			}
-			//Preparing  Consent tier response Collection
+			//Preparing  Consent tier response Collection 
 			this.consentTierResponseCollection = prepareParticipantResponseCollection(form);
+			
+			//Mandar: 16-jan-07 : - For withdraw options
 			this.consentWithdrawalOption = form.getWithdrawlButtonStatus();
-			this.setOffset(Integer.valueOf(form.getOffset()));
+			// offset changes 27th 2007
+			this.setOffset(new Integer(form.getOffset()));
 		}
 		catch (Exception e)
 		{
-			throw new AssignDataException(e);
+			logger.error(e.getMessage());
+			throw new AssignDataException();
 		}
 	}
 
-	/**
-	 * Set the participant to the CPR object.
-	 * @param form of CollectionProtocolRegistrationForm type.
-	 */
-	private void setParticipantForTheCPR(CollectionProtocolRegistrationForm form)
-	{
-		if(form.getParticipantID() == -1 && form.getParticipantID() == 0)
-		{
-			this.participant = null;
-		}
-		else
-		{
-			this.participant = new Participant();
-			this.participant.setId(Long.valueOf(form.getParticipantID()));
-		}
-	}
-
-//Consent Tracking
 	/**
 	* For Consent Tracking.
 	* Setting the Domain Object
 	* @param  form CollectionProtocolRegistrationForm
 	* @return consentResponseColl
 	*/
-	private Collection prepareParticipantResponseCollection(CollectionProtocolRegistrationForm form)
+	private Collection prepareParticipantResponseCollection(CollectionProtocolRegistrationForm form) 
 	{
 		MapDataParser mapdataParser = new MapDataParser("edu.wustl.catissuecore.bean");
         Collection beanObjColl=null;
@@ -491,7 +487,7 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 		}
 		catch (Exception e)
 		{
-			logger.error(e.getMessage(), e);
+			e.printStackTrace();
 		}
         Iterator iter = beanObjColl.iterator();
         Collection consentResponseColl = new HashSet();
