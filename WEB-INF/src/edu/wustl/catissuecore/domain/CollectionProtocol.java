@@ -330,95 +330,80 @@ public class CollectionProtocol extends SpecimenProtocol implements
 	 * about the CollectionProtocol.
 	 */
 	public void setAllValues(IValueObject abstractForm)
-	{
-		try
-		{
-			super.setAllValues(abstractForm);
-			final CollectionProtocolForm cpForm = (CollectionProtocolForm) abstractForm;
-
-			coordinatorCollection.clear();
-			siteCollection.clear();
-			this.collectionProtocolEventCollection.clear();
-			long[] coordinatorsArr = cpForm.getProtocolCoordinatorIds();
-			addUserToCoordinatorCollection(coordinatorsArr);
-
-			long[] siteArr = cpForm.getSiteIds();
-			addSiteToSiteCollection(siteArr);
-			aliquotInSameContainer = Boolean.valueOf(cpForm.isAliqoutInSameContainer());
-			final Map map = cpForm.getValues();
-
-			/**
-			 * Name : Abhishek Mehta Reviewer Name : Poornima Bug ID:
-			 * Collection_Event_Protocol_Order Patch ID:
-			 * Collection_Event_Protocol_Order_1 See also: 1-8 Description: To
-			 * get the collection event protocols in their insertion order.
-			 */
-			logger.debug("PRE FIX MAP " + map);
-			final Map sortedMap = sortMapOnKey(map);
-			logger.debug("POST FIX MAP " + map);
-
-			final MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
-
-			final ArrayList cpecList = (ArrayList) parser.generateData(sortedMap, true);
-			for(int i = 0; i < cpecList.size(); i++)
-			{
-				this.collectionProtocolEventCollection.add(cpecList.get(i));
-			}
-			logger.debug("collectionProtocolEventCollection " +
-					this.collectionProtocolEventCollection);
-
-			// Setting the unsigned doc url.
-			this.unsignedConsentDocumentURL = cpForm.getUnsignedConsentURLName();
-			// Setting the consent tier collection.
-			this.consentTierCollection = prepareConsentTierCollection(cpForm.getConsentValues());
-
-			consentsWaived = Boolean.valueOf(cpForm.isConsentWaived());
-		}
-		catch (Exception excp)
-		{
-			logger.error(excp.getMessage(), excp);
-		}
-	}
-
-	/**
-	 * This method adds site to a SiteCollection object.
-	 * @param siteArr of Long[] type.
-	 */
-	private void addSiteToSiteCollection(long[] siteArr)
-	{
-		if(siteArr != null)
-		{
-			for(int i = 0; i < siteArr.length; i++)
-			{
-				if(siteArr[i] != -1)
+    {
+        try
+        {
+        	super.setAllValues(abstractForm);
+        	
+        	final CollectionProtocolForm cpForm = (CollectionProtocolForm) abstractForm;
+        	
+        	coordinatorCollection.clear();
+        	siteCollection.clear();
+        	this.collectionProtocolEventCollection.clear();
+        	long [] coordinatorsArr = cpForm.getProtocolCoordinatorIds();
+        	if(coordinatorsArr!=null)
+        	{
+	        	for (int i = 0; i < coordinatorsArr.length; i++)
 				{
-					Site site = new Site();
-					site.setId(Long.valueOf(siteArr[i]));
-					siteCollection.add(site);
+	        		if(coordinatorsArr[i]!=-1)
+	        		{
+		        		User coordinator = new User();
+		        		coordinator.setId(new Long(coordinatorsArr[i]));
+		        		coordinatorCollection.add(coordinator);
+	        		}
 				}
-			}
-		}
-	}
-
-	/**
-	 * This method adds user to Coordinator Collection.
-	 * @param coordinatorsArr of Long [].
-	 */
-	private void addUserToCoordinatorCollection(long[] coordinatorsArr)
-	{
-		if(coordinatorsArr != null)
-		{
-			for(int i = 0; i < coordinatorsArr.length; i++)
-			{
-				if(coordinatorsArr[i] != -1)
+        	}
+        	
+        	long [] siteArr = cpForm.getSiteIds();
+        	if(siteArr!=null)
+        	{
+	        	for (int i = 0; i < siteArr.length; i++)
 				{
-					User coordinator = new User();
-					coordinator.setId(Long.valueOf(coordinatorsArr[i]));
-					coordinatorCollection.add(coordinator);
+	        		if(siteArr[i]!=-1)
+	        		{
+		        		Site site = new Site();
+		        		site.setId(new Long(siteArr[i]));
+		        		siteCollection.add(site);
+	        		}
 				}
-			}
-		}
-	}
+        	}
+        	aliquotInSameContainer = new Boolean(cpForm.isAliqoutInSameContainer());
+	        final Map map = cpForm.getValues();
+	        
+	        /**
+	         * Name : Abhishek Mehta
+	         * Reviewer Name : Poornima
+	         * Bug ID: Collection_Event_Protocol_Order
+	         * Patch ID: Collection_Event_Protocol_Order_1 
+	         * See also: 1-8
+	         * Description: To get the collection event protocols in their insertion order. 
+	         */
+	        logger.debug("PRE FIX MAP "+map);
+	        final Map sortedMap = sortMapOnKey(map);
+	        logger.debug("POST FIX MAP "+map);
+	        
+	        final MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
+	        
+	        final ArrayList cpecList = (ArrayList)parser.generateData(sortedMap,true);
+	        for(int i = 0 ; i < cpecList.size() ; i++)
+	        {
+	        	this.collectionProtocolEventCollection.add(cpecList.get(i));
+	        }
+	        logger.debug("collectionProtocolEventCollection "+this.collectionProtocolEventCollection);
+	        
+	        //Setting the unsigned doc url.
+	        this.unsignedConsentDocumentURL = cpForm.getUnsignedConsentURLName();
+	        //Setting the consent tier collection.
+	        this.consentTierCollection = prepareConsentTierCollection(cpForm.getConsentValues());
+	        
+	        consentsWaived = new Boolean(cpForm.isConsentWaived());
+        }
+        catch (Exception excp)
+        {
+	    	// use of logger as per bug 79
+        	logger.error(excp.getMessage(),excp); 
+        }
+    }
 
 	/**
 	 * Patch ID: Collection_Event_Protocol_Order_2 Description: To get the
@@ -459,54 +444,33 @@ public class CollectionProtocol extends SpecimenProtocol implements
 	 *            Consent Tier Map
 	 * @return consentStatementColl
 	 */
-	public Collection prepareConsentTierCollection(Map consentTierMap)
-	{
-		Collection<ConsentTier> consentStatementColl = new LinkedHashSet<ConsentTier>();// bug
-		// 8905
-		try
-		{
-			final MapDataParser mapdataParser = new MapDataParser("edu.wustl.catissuecore.bean");
-			Map consentMap = CollectionProtocolUtil.sortConsentMap(consentTierMap);// bug 8905
-			final Collection beanObjColl = mapdataParser.generateData(consentMap);// consentTierMap
-
-			// Collection<ConsentTier> consentStatementColl = new
-			// HashSet<ConsentTier>();
-
-			Iterator iter = beanObjColl.iterator();
-			while (iter.hasNext())
-			{
-				ConsentBean consentBean = (ConsentBean) iter.next();
-				ConsentTier consentTier = new ConsentTier();
-				consentTier.setStatement(consentBean.getStatement());
-				// To set ID for Edit case
-				setConsentTierId(consentBean, consentTier);
-				// Check for empty consents
-				if (consentBean.getStatement() != null &&
-						consentBean.getStatement().trim().length() > 0)
-				{
-					consentStatementColl.add(consentTier);
-				}
-			}
-		}
-		catch (Exception excp)
-		{
-			logger.error(excp.getMessage(), excp);
-		}
-		return consentStatementColl;
-	}
-
-	/**
-	 * This method compares the consent tier id and sets it accordingly.
-	 * @param consentBean of ConsentBean type.
-	 * @param consentTier of ConsentTier type.
-	 */
-	private void setConsentTierId(ConsentBean consentBean, ConsentTier consentTier)
-	{
-		if (consentBean.getConsentTierID() != null && consentBean.getConsentTierID().trim().length() > 0)
-		{
-			consentTier.setId(Long.parseLong(consentBean.getConsentTierID()));
-		}
-	}
+	public Collection prepareConsentTierCollection(Map consentTierMap) throws Exception 
+    {
+    	final MapDataParser mapdataParser = new MapDataParser("edu.wustl.catissuecore.bean");
+    	Map consentMap = CollectionProtocolUtil.sortConsentMap(consentTierMap);//bug 8905
+    	final Collection beanObjColl = mapdataParser.generateData(consentMap);//consentTierMap
+    	
+    	//Collection<ConsentTier> consentStatementColl = new HashSet<ConsentTier>();
+    	Collection<ConsentTier> consentStatementColl = new LinkedHashSet<ConsentTier>();//bug 8905
+    	Iterator iter = beanObjColl.iterator();        
+    	while(iter.hasNext())
+    	{
+    		ConsentBean consentBean = (ConsentBean)iter.next();
+    		ConsentTier consentTier = new ConsentTier();
+    		consentTier.setStatement(consentBean.getStatement());
+    		//To set ID for Edit case
+    		if(consentBean.getConsentTierID()!=null&&consentBean.getConsentTierID().trim().length()>0)
+    		{
+    			consentTier.setId(Long.parseLong(consentBean.getConsentTierID()));
+    		}
+    		//Check for empty consents
+    		if(consentBean.getStatement()!=null && consentBean.getStatement().trim().length()>0)
+    		{
+    			consentStatementColl.add(consentTier);
+    		}
+    	}	
+    	return consentStatementColl;
+    }
 
 	/**
 	 * Returns message label to display on success add or edit.
