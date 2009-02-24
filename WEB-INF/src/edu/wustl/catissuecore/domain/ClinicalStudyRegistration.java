@@ -14,12 +14,12 @@ import java.util.Date;
 
 import edu.wustl.catissuecore.actionForm.ClinicalStudyRegistrationForm;
 import edu.wustl.catissuecore.util.SearchUtil;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.util.Utility;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * A registration of a Participant to a Clinical Study.
@@ -32,6 +32,12 @@ public class ClinicalStudyRegistration extends AbstractDomainObject implements S
 	 * Serial Version ID of the class.
 	 */
 	private static final long serialVersionUID = 1234567890L;
+	
+	/**
+     * logger Logger - Generic logger.
+     */
+    private static org.apache.log4j.Logger logger = Logger.getLogger(ClinicalStudyRegistration.class);
+    
     /**
      * identifier - System generated unique id.
      */
@@ -205,17 +211,15 @@ public class ClinicalStudyRegistration extends AbstractDomainObject implements S
      */
     public void setAllValues(IValueObject abstractForm) throws AssignDataException
     {
-    	String nullString = null; //added for PMD.
         ClinicalStudyRegistrationForm form = (ClinicalStudyRegistrationForm) abstractForm;
         try
         {
-            this.activityStatus      = form.getActivityStatus();
+            this.activityStatus = form.getActivityStatus();
 
             if (SearchUtil.isNullobject(clinicalStudy))
             {
                 clinicalStudy = new ClinicalStudy();
             }
-
             if (SearchUtil.isNullobject(this.registrationDate))
             {
                 registrationDate  = new Date();
@@ -223,27 +227,28 @@ public class ClinicalStudyRegistration extends AbstractDomainObject implements S
 
             this.clinicalStudy.setId(Long.valueOf(form.getClinicalStudyId()));
 
-            if(form.getParticipantID() == -1 && form.getParticipantID() == 0)
+            if(form.getParticipantID() != -1 && form.getParticipantID() != 0)
             {
-            	this.participant = null;
+                this.participant = new Participant();
+                this.participant.setId(Long.valueOf(form.getParticipantID()));
             }
             else
             {
-            	this.participant = new Participant();
-                this.participant.setId(Long.valueOf(form.getParticipantID()));
+                this.participant = null;
             }
-
+            
             this.clinicalStudyParticipantIdentifier = form.getParticipantClinicalStudyID().trim();
-            if(Constants.DOUBLE_QUOTES.equals(clinicalStudyParticipantIdentifier))
+            if(clinicalStudyParticipantIdentifier.equals(""))
             {
-                this.clinicalStudyParticipantIdentifier = nullString;
+                this.clinicalStudyParticipantIdentifier = null;
             }
             this.registrationDate = Utility.parseDate(form.getRegistrationDate(),
             		Utility.datePattern(form.getRegistrationDate()));
         }
         catch (Exception e)
         {
-            throw new AssignDataException(e);
+        	logger.error(e.getMessage());
+            throw new AssignDataException();
         }
     }
 
