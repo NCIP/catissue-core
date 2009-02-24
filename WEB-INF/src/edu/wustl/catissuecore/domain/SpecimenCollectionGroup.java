@@ -690,6 +690,7 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 		catch (Exception e)
 		{
 			logger.error(e.getMessage());
+			e.printStackTrace();
 		}
 		Iterator iter = beanObjColl.iterator();
 		Collection consentResponseColl = new HashSet();
