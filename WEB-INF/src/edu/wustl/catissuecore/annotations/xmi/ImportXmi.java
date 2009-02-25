@@ -377,6 +377,8 @@ public class ImportXmi
 					}
 					AnnotationBizLogic annotation = new AnnotationBizLogic();
 					annotation.updateEntityMap(entityMap);
+					
+					AnnotationUtil.addNewPathsForExistingMainContainers(staticEntity.getId(), container.getId(), true);
 				}
 				else
 				{//Create new Entity Map
