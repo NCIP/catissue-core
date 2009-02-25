@@ -30,20 +30,23 @@ public class CatissueCoreSessionListener implements HttpSessionListener{
 	}
 
 	//Cleanup after session invalidates.
-	public void sessionDestroyed(HttpSessionEvent arg0) {
+	public void sessionDestroyed(HttpSessionEvent arg0) 
+	{
 		HttpSession session = arg0.getSession();
 		SessionDataBean sessionData= (SessionDataBean)session.getAttribute(Constants.SESSION_DATA);
 
 		if(sessionData!=null)
+		{
 			cleanUp(sessionData,(String)session.getAttribute(Constants.RANDOM_NUMBER));
+		}
 
 		// To remove PrivilegeCache from the session, requires user LoginName
 		// Singleton instance of PrivilegeManager
-		if(sessionData != null)
+		/*if(sessionData != null)
 		{
 			PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
 			privilegeManager.removePrivilegeCache(sessionData.getUserName());
-		}
+		}*/
 	}
 	private void cleanUp(SessionDataBean sessionData,String randomNumber)
 	{
