@@ -28,6 +28,7 @@ import org.hibernate.Session;
 import edu.common.dynamicextensions.domain.DomainObjectFactory;
 import edu.common.dynamicextensions.domain.Entity;
 import edu.common.dynamicextensions.domain.userinterface.Container;
+import edu.common.dynamicextensions.domaininterface.AbstractEntityInterface;
 import edu.common.dynamicextensions.domaininterface.AssociationInterface;
 import edu.common.dynamicextensions.domaininterface.EntityGroupInterface;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
@@ -177,6 +178,212 @@ public class AnnotationUtil
 			}
 		}
 		return association.getId();
+	}
+	
+	/**
+	 * @param staticEntityId
+	 * @param dynamicEntityId
+	 * @return
+	 * @throws DynamicExtensionsSystemException
+	 * @throws DynamicExtensionsApplicationException
+	 * @throws DynamicExtensionsSystemException
+	 * @throws BizLogicException
+	 */
+	public static synchronized Long addNewPathsForExistingMainContainers(Long staticEntityId, Long dynamicEntityId,
+			boolean isEntityFromXmi)
+			throws //DynamicExtensionsSystemException,
+			DynamicExtensionsApplicationException, DynamicExtensionsSystemException,
+			BizLogicException
+	{
+		Session session = null;
+		
+		try
+		{
+			session = DBUtil.currentSession();
+		}
+		catch (HibernateException e1)
+		{
+			e1.printStackTrace();
+			throw new BizLogicException("", e1);
+		}
+		
+		AssociationInterface association = null;
+		EntityInterface staticEntity = null;
+		EntityInterface dynamicEntity = null;
+		
+		try
+		{
+			staticEntity = (EntityInterface) session.load(Entity.class, staticEntityId);
+			dynamicEntity = (EntityInterface) ((Container) session.load(Container.class,
+					dynamicEntityId)).getAbstractEntity();
+			
+			association = getAssociationForEntity(staticEntity, dynamicEntity);
+
+			Set<PathObject> processedPathList = new HashSet<PathObject>();
+			
+			addQueryPathsForEntityHierarchy(dynamicEntity, staticEntity, association.getId(), staticEntity.getId(), processedPathList);
+
+			addEntitiesToCache(isEntityFromXmi, dynamicEntity, staticEntity);
+		}
+		catch (HibernateException e1)
+		{
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			throw new BizLogicException("", e1);
+		}
+		finally
+		{
+			try
+			{
+				DBUtil.closeSession();
+			}
+			catch (HibernateException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				throw new BizLogicException("", e);
+
+			}
+		}
+		return association.getId();
+	}
+	
+	/**
+	 * getAssociationForEntity.
+	 * @param staticEntity
+	 * @param dynamicEntity
+	 * @return
+	 */
+	public static AssociationInterface getAssociationForEntity(EntityInterface staticEntity,AbstractEntityInterface dynamicEntity)
+	{
+		Collection<AssociationInterface> associationCollection = staticEntity
+				.getAssociationCollection();
+		for (AssociationInterface associationInteface : associationCollection)
+		{
+			if (associationInteface.getTargetEntity() != null
+					&& associationInteface.getTargetEntity().equals(dynamicEntity))
+			{
+				return associationInteface;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * @param dynamicEntity
+	 * @param entityGroupInterface
+	 * @throws DynamicExtensionsSystemException
+	 * @throws DynamicExtensionsApplicationException
+	 * @throws BizLogicException
+	 */
+	public static void addQueryPathsForEntityHierarchy(EntityInterface dynamicEntity,
+			EntityInterface staticEntity, Long associationId, Long staticEntityId,
+			Set<PathObject> processedPathList) throws DynamicExtensionsSystemException,
+			DynamicExtensionsApplicationException, BizLogicException
+	{
+		PathObject pathObject = new PathObject();
+		pathObject.setSourceEntity(staticEntity);
+		pathObject.setTargetEntity(dynamicEntity);
+
+		if (processedPathList.contains(pathObject))
+		{
+			return;
+		}
+		else
+		{
+			processedPathList.add(pathObject);
+		}
+
+		Long start = new Long(System.currentTimeMillis());
+		boolean ispathAdded = isPathAdded(staticEntity.getId(),dynamicEntity.getId());
+		if(!ispathAdded)
+		{
+			if(dynamicEntity.getId() != null)
+			{
+				addPathsForQuery(staticEntity.getId(), dynamicEntity.getId(), staticEntityId, associationId);
+			}
+		}
+		Collection<AssociationInterface> associationCollection = dynamicEntity
+		.getAssociationCollection();
+		for(AssociationInterface association : associationCollection)
+		{
+			System.out.println("PERSISTING PATH");
+			addQueryPathsForEntityHierarchy(association.getTargetEntity(), dynamicEntity,
+					association.getId(), staticEntityId, processedPathList);
+		}
+		Long end = new Long(System.currentTimeMillis());
+		System.out.println("Time required to add complete paths is" + (end - start) / 1000
+				+ "seconds");
+	}
+	
+	/**
+	 * @param staticEntityId
+	 * @param dynamicEntityId
+	 * @return
+	 */
+	private static boolean isPathAdded(Long staticEntityId, Long dynamicEntityId/*, Long deAssociationId*/)
+	{
+		boolean ispathAdded = false;
+		Connection conn = null;
+
+		try
+		{
+			conn = DBUtil.getConnection();
+		}
+		catch (HibernateException e1)
+		{
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+		try
+		{
+			String checkForPathQuery = "select path_id from path where FIRST_ENTITY_ID = ? and LAST_ENTITY_ID = ?";
+			preparedStatement = conn.prepareStatement(checkForPathQuery);
+			preparedStatement.setLong(1, staticEntityId);
+
+			preparedStatement.setLong(2, dynamicEntityId);
+			resultSet = preparedStatement.executeQuery();
+			if (resultSet != null)
+			{
+				while (resultSet.next())
+				{
+					ispathAdded = true;
+					break;
+				}
+			}
+
+			System.out.println("ispathAdded  ----- " + ispathAdded);
+
+		}
+		catch (SQLException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally
+		{
+
+			try
+			{
+				resultSet.close();
+				preparedStatement.close();
+				DBUtil.closeConnection();
+			}
+			catch (HibernateException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			catch (SQLException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
+		return ispathAdded;
 	}
 
 	/**
