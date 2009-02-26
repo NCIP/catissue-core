@@ -120,7 +120,6 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
         assertEquals(form.getLabel(),"1234" );
         assertEquals(form.getBarcode(),"1234");
        
-        TestCaseUtility.setNameObjectMap("Specimen",specimen);
 	}
 	
 }
