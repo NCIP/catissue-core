@@ -1,8 +1,9 @@
-package edu.wustl.catissuecore.testcase;
+package src.edu.wustl.catissuecore.testcase;
 
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -16,6 +17,8 @@ import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.common.dao.AbstractDAO;
+import edu.wustl.common.util.dbManager.DAOException;
 /**
  * This class contains test cases for Specimen Collection Group add/edit
  * @author Himanshu Aseeja
@@ -118,14 +121,46 @@ public class SpecimenCollectionGroupTestCases extends CaTissueSuiteBaseTest
 		addRequestParameter("value(SimpleConditionsNode:1_Condition_DataElement_table)", "SpecimenCollectionGroup");
 		addRequestParameter("value(SimpleConditionsNode:1_Condition_DataElement_field)","SpecimenCollectionGroup.NAME.varchar");
 		addRequestParameter("value(SimpleConditionsNode:1_Condition_Operator_operator)","Starts With");
-		addRequestParameter("value(SimpleConditionsNode:1__Condition_value)","c");
+		addRequestParameter("value(SimpleConditionsNode:1__Condition_value)","");
 		addRequestParameter("pageOf","pageOfSpecimenCollectionGroup");
 		addRequestParameter("operation","search");
 		actionPerform();
-		verifyForward("success");
-
-        /*Specimen Collection Group Search to generate SpecimenCollectionGroupForm*/
+		
 		SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) TestCaseUtility.getNameObjectMap("SpecimenCollectionGroup");
+		AbstractDAO dao = (AbstractDAO) TestCaseUtility.getNameObjectMap("DAO");
+		List l = null;
+		try 
+		{
+			dao.openSession(null);
+			l = dao.retrieve("SpecimenCollectionGroup");
+		}
+		catch (DAOException e) 
+		{
+			e.printStackTrace();
+		}
+		
+		if(l.size() > 1)
+		{
+		    verifyForward("success");
+		}
+		else if(l.size() == 1)
+		{
+			verifyForwardPath("/SearchObject.do?pageOf=pageOfSpecimenCollectionGroup&operation=search&id=" + specimenCollectionGroup.getId());
+		}
+		else
+		{
+			verifyForward("failure");
+		}
+		try
+		{
+			dao.closeSession();
+		}
+		catch (DAOException e) 
+		{
+		    e.printStackTrace();
+		}
+		
+        /*Specimen Collection Group Search to generate SpecimenCollectionGroupForm*/
 		setRequestPathInfo("/SpecimenCollectionGroupSearch");
 		addRequestParameter("id", "" + specimenCollectionGroup.getId());
 		actionPerform();

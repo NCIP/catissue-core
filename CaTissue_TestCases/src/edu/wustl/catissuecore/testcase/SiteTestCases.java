@@ -1,4 +1,6 @@
-package edu.wustl.catissuecore.testcase;
+package src.edu.wustl.catissuecore.testcase;
+
+import java.util.List;
 
 import org.junit.Test;
 
@@ -6,6 +8,8 @@ import edu.wustl.catissuecore.actionForm.SiteForm;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.domain.Address;
+import edu.wustl.common.dao.AbstractDAO;
+import edu.wustl.common.util.dbManager.DAOException;
 
 /**
  * This class contains test cases for Site add/edit
@@ -72,15 +76,47 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
 		addRequestParameter("value(SimpleConditionsNode:1_Condition_DataElement_table)", "Site");
 		addRequestParameter("value(SimpleConditionsNode:1_Condition_DataElement_field)","Site.NAME.varchar");
 		addRequestParameter("value(SimpleConditionsNode:1_Condition_Operator_operator)","Starts With");
-		addRequestParameter("value(SimpleConditionsNode:1_Condition_value)","site");
+		addRequestParameter("value(SimpleConditionsNode:1_Condition_value)","");
 		addRequestParameter("counter","1");
 		addRequestParameter("pageOf","pageOfSite");
 		addRequestParameter("operation","search");
 		actionPerform();
-		verifyForward("success");
+				
+		Site site = (Site) TestCaseUtility.getNameObjectMap("Site");
+		AbstractDAO dao = (AbstractDAO) TestCaseUtility.getNameObjectMap("DAO");
+		List l = null;
+		try 
+		{
+			dao.openSession(null);
+			l = dao.retrieve("Site");
+		}
+		catch (DAOException e) 
+		{
+			e.printStackTrace();
+		}
+		
+		if(l.size() > 1)
+		{
+		    verifyForward("success");
+		}
+		else if(l.size() == 1)
+		{
+			verifyForwardPath("/SearchObject.do?pageOf=pageOfSite&operation=search&id=" + site.getId());
+		}
+		else
+		{
+			verifyForward("failure");
+		}
+		try
+		{
+			dao.closeSession();
+		}
+		catch (DAOException e) 
+		{
+		    e.printStackTrace();
+		}
 
 		/*Site action.Generates SiteForm*/
-		Site site = (Site) TestCaseUtility.getNameObjectMap("Site");
 		setRequestPathInfo("/SiteSearch");
 		addRequestParameter("id", "" + site.getId());
 		actionPerform();

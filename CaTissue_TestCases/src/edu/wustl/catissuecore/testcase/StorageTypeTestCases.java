@@ -1,10 +1,14 @@
-package edu.wustl.catissuecore.testcase;
+package src.edu.wustl.catissuecore.testcase;
+
+import java.util.List;
 
 import org.junit.Test;
 
 import edu.wustl.catissuecore.actionForm.StorageTypeForm;
 import edu.wustl.catissuecore.domain.Capacity;
 import edu.wustl.catissuecore.domain.StorageType;
+import edu.wustl.common.dao.AbstractDAO;
+import edu.wustl.common.util.dbManager.DAOException;
 
 /**
  * This class contains test cases for Storage Type add/edit
@@ -61,15 +65,47 @@ public class StorageTypeTestCases extends CaTissueSuiteBaseTest
 			addRequestParameter("value(SimpleConditionsNode:1_Condition_DataElement_table)", "StorageType");
 			addRequestParameter("value(SimpleConditionsNode:1_Condition_DataElement_field)","ContainerType.NAME.varchar");
 			addRequestParameter("value(SimpleConditionsNode:1_Condition_Operator_operator)","Starts With");
-			addRequestParameter("value(SimpleConditionsNode:1_Condition_value)","s");
+			addRequestParameter("value(SimpleConditionsNode:1_Condition_value)","");
 			addRequestParameter("pageOf","pageOfStorageType");
 			addRequestParameter("operation","search");
 			actionPerform();
-			verifyForward("success");
+			
+			StorageType storageType = (StorageType) TestCaseUtility.getNameObjectMap("StorageType");
+			AbstractDAO dao = (AbstractDAO) TestCaseUtility.getNameObjectMap("DAO");
+			List l = null;
+			try 
+			{
+				dao.openSession(null);
+				l = dao.retrieve("StorageType");
+			}
+			catch (DAOException e) 
+			{
+				e.printStackTrace();
+			}
+			
+			if(l.size() > 1)
+			{
+			    verifyForward("success");
+			}
+			else if(l.size() == 1)
+			{
+				verifyForwardPath("/SearchObject.do?pageOf=pageOfStorageType&operation=search&id=" + storageType.getId());
+			}
+			else
+			{
+				verifyForward("failure");
+			}
+			try
+			{
+				dao.closeSession();
+			}
+			catch (DAOException e) 
+			{
+			    e.printStackTrace();
+			}
 			
 			/*common search action.Generates StorageTypeForm*/
-			StorageType storageType = (StorageType) TestCaseUtility.getNameObjectMap("StorageType");
-		    setRequestPathInfo("/StorageTypeSearch");
+			setRequestPathInfo("/StorageTypeSearch");
 			addRequestParameter("id", "" + storageType.getId());
 			actionPerform();
 			verifyForward("pageOfStorageType");

@@ -1,4 +1,4 @@
-package edu.wustl.catissuecore.testcase;
+package src.edu.wustl.catissuecore.testcase;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -12,6 +12,7 @@ import org.junit.runners.Suite.SuiteClasses;
 		{
 	    InitializationTestCase.class,
 		LoginTestCase.class,
+		DAORetrieval.class,
 		InstitutionTestCases.class,
 		DepartmentTestCases.class,
 		CancerReaserchGroupTestCases.class,
@@ -23,7 +24,8 @@ import org.junit.runners.Suite.SuiteClasses;
 		StorageContainerTestCases.class,
 		CollectionProtocolTestCases.class,
 		ParticipantTestCases.class,
-		SpecimenCollectionGroupTestCases.class
+		SpecimenCollectionGroupTestCases.class,
+		SpecimenTestCases.class
 		})
 /**
  * Test suite

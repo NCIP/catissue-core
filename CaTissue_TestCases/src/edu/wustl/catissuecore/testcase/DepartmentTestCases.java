@@ -1,9 +1,13 @@
-package edu.wustl.catissuecore.testcase;
+package src.edu.wustl.catissuecore.testcase;
+
+import java.util.List;
 
 import org.junit.Test;
 
 import edu.wustl.catissuecore.actionForm.DepartmentForm;
 import edu.wustl.catissuecore.domain.Department;
+import edu.wustl.common.dao.AbstractDAO;
+import edu.wustl.common.util.dbManager.DAOException;
 
 
 /**
@@ -46,14 +50,47 @@ public class DepartmentTestCases extends CaTissueSuiteBaseTest
 		addRequestParameter("value(SimpleConditionsNode:1_Condition_DataElement_table)", "Department");
 		addRequestParameter("value(SimpleConditionsNode:1_Condition_DataElement_field)","Department.NAME.varchar");
 		addRequestParameter("value(SimpleConditionsNode:1_Condition_Operator_operator)","Starts With");
-		addRequestParameter("value(SimpleConditionsNode:1_Condition_value)","Dept");
+		addRequestParameter("value(SimpleConditionsNode:1_Condition_value)","");
 		addRequestParameter("pageOf","pageOfDepartment");
 		addRequestParameter("operation","search");
 		actionPerform();
-		verifyForward("success");
-
-		/*common search action.Generates department form*/
+		
 		Department dept = (Department) TestCaseUtility.getNameObjectMap("Department");
+		AbstractDAO dao = (AbstractDAO) TestCaseUtility.getNameObjectMap("DAO");
+		List l = null;
+		try 
+		{
+			dao.openSession(null);
+			l = dao.retrieve("Department");
+		}
+		catch (DAOException e) 
+		{
+			e.printStackTrace();
+		}
+		
+		if(l.size() > 1)
+		{
+		    verifyForward("success");
+		}
+		else if(l.size() == 1)
+		{
+			verifyForwardPath("/SearchObject.do?pageOf=pageOfDepartment&operation=search&id=" + dept.getId());
+		}
+		else
+		{
+			verifyForward("failure");
+		}
+		try
+		{
+			dao.closeSession();
+		}
+		catch (DAOException e) 
+		{
+		    e.printStackTrace();
+		}
+		
+		/*common search action.Generates department form*/
+		
 		setRequestPathInfo("/DepartmentSearch");
 		addRequestParameter("name", "testDepartment");
 		addRequestParameter("id", ""+dept.getId());

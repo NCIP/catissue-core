@@ -1,4 +1,4 @@
-package edu.wustl.catissuecore.testcase;
+package src.edu.wustl.catissuecore.testcase;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +24,7 @@ public class LoginTestCase extends CaTissueSuiteBaseTest
 	public void testSuccessfulLogin()
 	  {
 		   	addRequestParameter("loginName","admin@admin.com");
-	        addRequestParameter("password","Login1234");
+	        addRequestParameter("password","Test123");
 	        setRequestPathInfo("/Login.do");
 	        actionPerform();
 	        //verifyForward("/Home.do");

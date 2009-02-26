@@ -1,12 +1,15 @@
-package edu.wustl.catissuecore.testcase;
+package src.edu.wustl.catissuecore.testcase;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 
 import org.junit.Test;
 
 import edu.wustl.catissuecore.actionForm.SpecimenArrayTypeForm;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
+import edu.wustl.common.dao.AbstractDAO;
+import edu.wustl.common.util.dbManager.DAOException;
 
 /**
  * This class contains test cases for Specimen Array Type add/edit
@@ -57,15 +60,46 @@ public class SpecimenArrayTypeTestCases extends CaTissueSuiteBaseTest
 		addRequestParameter("value(SimpleConditionsNode:1_Condition_DataElement_table)", "SpecimenArrayType");
 		addRequestParameter("value(SimpleConditionsNode:1_Condition_DataElement_field)","ContainerType.NAME.varchar");
 		addRequestParameter("value(SimpleConditionsNode:1_Condition_Operator_operator)","Starts With");
-		addRequestParameter("value(SimpleConditionsNode:1_Condition_value)","a");
+		addRequestParameter("value(SimpleConditionsNode:1_Condition_value)","");
 		addRequestParameter("pageOf","pageOfSpecimenArrayType");
 		addRequestParameter("operation","search");
 		actionPerform();
-		verifyForward("success");
 
+		SpecimenArrayType arrayType = (SpecimenArrayType) TestCaseUtility.getNameObjectMap("SpecimenArrayType");
+		AbstractDAO dao = (AbstractDAO) TestCaseUtility.getNameObjectMap("DAO");
+		List l = null;
+		try 
+		{
+			dao.openSession(null);
+			l = dao.retrieve("SpecimenArrayType");
+		}
+		catch (DAOException e) 
+		{
+			e.printStackTrace();
+		}
+		
+		if(l.size() > 1)
+		{
+		    verifyForward("success");
+		}
+		else if(l.size() == 1)
+		{
+			verifyForwardPath("/SearchObject.do?pageOf=pageOfSpecimenArrayType&operation=search&id=" + arrayType.getId());
+		}
+		else
+		{
+			verifyForward("failure");
+		}
+		try
+		{
+			dao.closeSession();
+		}
+		catch (DAOException e) 
+		{
+		    e.printStackTrace();
+		}
 	
         /*SpecimenArrayType search action to generate SpecimenArrayTypeForm*/
-		SpecimenArrayType arrayType = (SpecimenArrayType) TestCaseUtility.getNameObjectMap("SpecimenArrayType");
 		setRequestPathInfo("/SpecimenArrayTypeSearch");
 		addRequestParameter("id", "" + arrayType.getId());
      	actionPerform();

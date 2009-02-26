@@ -1,12 +1,15 @@
-package edu.wustl.catissuecore.testcase;
+package src.edu.wustl.catissuecore.testcase;
 
 import java.util.Date;
+import java.util.List;
 
 import org.junit.Test;
 
 import edu.wustl.catissuecore.actionForm.DistributionProtocolForm;
 import edu.wustl.catissuecore.domain.DistributionProtocol;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.common.dao.AbstractDAO;
+import edu.wustl.common.util.dbManager.DAOException;
 
 /**
  * This class contains test cases for Distribution Protocol add/edit
@@ -67,15 +70,46 @@ public class DistributionProtocolTestCases extends CaTissueSuiteBaseTest
 		addRequestParameter("value(SimpleConditionsNode:1_Condition_DataElement_table)", "DistributionProtocol");
 		addRequestParameter("value(SimpleConditionsNode:1_Condition_DataElement_field)","SpecimenProtocol.TITLE.varchar");
 		addRequestParameter("value(SimpleConditionsNode:1_Condition_Operator_operator)","Starts With");
-		addRequestParameter("value(SimpleConditionsNode:1_Condition_value)","d");
+		addRequestParameter("value(SimpleConditionsNode:1_Condition_value)","");
 		addRequestParameter("pageOf","pageOfDistributionProtocol");
 		addRequestParameter("operation","search");
 		actionPerform();
-		verifyForward("success");
 
+		DistributionProtocol distributionProtocol = (DistributionProtocol) TestCaseUtility.getNameObjectMap("DistributionProtocol");
+		AbstractDAO dao = (AbstractDAO) TestCaseUtility.getNameObjectMap("DAO");
+		List l = null;
+		try 
+		{
+			dao.openSession(null);
+			l = dao.retrieve("DistributionProtocol");
+		}
+		catch (DAOException e) 
+		{
+			e.printStackTrace();
+		}
+		
+		if(l.size() > 1)
+		{
+		    verifyForward("success");
+		}
+		else if(l.size() == 1)
+		{
+			verifyForwardPath("/SearchObject.do?pageOf=pageOfDistributionProtocol&operation=search&id=" + distributionProtocol.getId());
+		}
+		else
+		{
+			verifyForward("failure");
+		}
+		try
+		{
+			dao.closeSession();
+		}
+		catch (DAOException e) 
+		{
+		    e.printStackTrace();
+		}
 	
         /*Distribution Protocol search action to generate DistributionProtocol form*/
-		DistributionProtocol distributionProtocol = (DistributionProtocol) TestCaseUtility.getNameObjectMap("DistributionProtocol");
 		setRequestPathInfo("/DistributionProtocolSearch");
 		addRequestParameter("id", "" + distributionProtocol.getId());
      	actionPerform();

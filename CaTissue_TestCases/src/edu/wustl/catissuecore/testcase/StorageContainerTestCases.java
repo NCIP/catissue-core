@@ -1,7 +1,8 @@
-package edu.wustl.catissuecore.testcase;
+package src.edu.wustl.catissuecore.testcase;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 
 import org.junit.Test;
 
@@ -10,6 +11,8 @@ import edu.wustl.catissuecore.domain.Capacity;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
+import edu.wustl.common.dao.AbstractDAO;
+import edu.wustl.common.util.dbManager.DAOException;
 
 /**
  * This class contains test cases for Storage Container add/edit
@@ -48,20 +51,7 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 		
 		StorageContainerForm form=(StorageContainerForm) getActionForm();
 		StorageContainer storageContainer = new StorageContainer();
-//		storageContainer.setStorageType(storageType);
-//		
-//		Container parentContainer = new Container();
-//	    parentContainer.setName(form.getContainerName());
-//				
-//		ContainerPosition locatedAtPosition = new ContainerPosition();
-//		locatedAtPosition.setId(site.getId());
-//		storageContainer.setLocatedAtPosition(locatedAtPosition);
-//		
-//	    Capacity capacity = new Capacity(); 
-//	    capacity.setOneDimensionCapacity(form.getOneDimensionCapacity());
-//	    capacity.setTwoDimensionCapacity(form.getTwoDimensionCapacity());
-//	    storageContainer.setCapacity(capacity);
-		
+	
 		storageContainer.setSite(site);
 	    Capacity capacity = new Capacity(); 
 	    capacity.setOneDimensionCapacity(form.getOneDimensionCapacity());
@@ -90,35 +80,54 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 		addRequestParameter("value(SimpleConditionsNode:1_Condition_DataElement_table)", "StorageContainer");
 		addRequestParameter("value(SimpleConditionsNode:1_Condition_DataElement_field)","Container.NAME.varchar");
 		addRequestParameter("value(SimpleConditionsNode:1_Condition_Operator_operator)","Starts With");
-		addRequestParameter("value(SimpleConditionsNode:1_Condition_value)","s");
+		addRequestParameter("value(SimpleConditionsNode:1_Condition_value)","");
 		addRequestParameter("pageOf","pageOfStorageContainer");
 		addRequestParameter("operation","search");
 		actionPerform();
-		verifyForward("success");
 
-		/*common search action.Generates StorageContainerForm*/
 		StorageContainer storageContainer = (StorageContainer) TestCaseUtility.getNameObjectMap("StorageContainer");
+		AbstractDAO dao = (AbstractDAO) TestCaseUtility.getNameObjectMap("DAO");
+		List l = null;
+		try 
+		{
+			dao.openSession(null);
+			l = dao.retrieve("StorageContainer");
+		}
+		catch (DAOException e) 
+		{
+			e.printStackTrace();
+		}
+		
+		if(l.size() > 1)
+		{
+		    verifyForward("success");
+		}
+		else if(l.size() == 1)
+		{
+			verifyForwardPath("/SearchObject.do?pageOf=pageOfStorageContainer&operation=search&id=" + storageContainer.getId());
+		}
+		else
+		{
+			verifyForward("failure");
+		}
+		try
+		{
+			dao.closeSession();
+		}
+		catch (DAOException e) 
+		{
+		    e.printStackTrace();
+		}
+		
+		/*common search action.Generates StorageContainerForm*/
 		setRequestPathInfo("/StorageContainerSearch");
 		addRequestParameter("id","" + storageContainer.getId());
-//		addRequestParameter("typeId","4");
-//		addRequestParameter("siteName", "site123");
-//		addRequestParameter("siteId", "4");
-//		addRequestParameter("noOfContainers", "1");
-//		addRequestParameter("oneDimensionCapacity", "4");
-//		addRequestParameter("twoDimensionCapacity", "2");
-//		addRequestParameter("oneDimensionLabel", "row");
-//		addRequestParameter("twoDimensionLabel", "col");
-//		addRequestParameter("defaultTemperature", "29");
-//		addRequestParameter("holdsSpecimenClassTypes", "Cell");
-//		addRequestParameter("specimenOrArrayType", "SpecimenArray");
-//		addRequestParameter("containerName","container1");
 		actionPerform();
 		verifyForward("pageOfStorageContainer");
 
 
 		/*edit operation*/
 		storageContainer.setName("container1_" + UniqueKeyGeneratorUtil.getUniqueKey());
-		
 		addRequestParameter("name",storageContainer.getName());
 		setRequestPathInfo("/StorageContainerEdit");
 		addRequestParameter("operation", "edit");

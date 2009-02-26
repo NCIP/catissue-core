@@ -1,4 +1,4 @@
-package edu.wustl.catissuecore.testcase;
+package src.edu.wustl.catissuecore.testcase;
 
 import java.util.HashMap;
 import java.util.Map;

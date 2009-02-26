@@ -1,7 +1,6 @@
-package edu.wustl.catissuecore.testcase;
+package src.edu.wustl.catissuecore.testcase;
 
 import java.io.File;
-import java.sql.SQLException;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -38,43 +37,50 @@ public class InitializationTestCase extends CaTissueSuiteBaseTest
 	/**
 	 * Create new Data source object.
 	 * @return {@link DataSource}
+	 * @author Himanshu Aseeja
 	 */
 	private DataSource getDataSource()
 	{
 		
-		//hard code your database credentials here
-		MysqlDataSource dataSource=new MysqlDataSource();
+		DataSourceFinder.setAllValues();
+		DataSource dataSource = null;
 		
-		dataSource.setDatabaseName("pcatissuesuite");
-		dataSource.setServerName("localhost");
-		dataSource.setPort(3306);
-		dataSource.setUser("root");
-		dataSource.setPassword("himanshu");
+		if(DataSourceFinder.databaseType.equals("mysql"))
+		{
+			MysqlDataSource mysqlDataSource  = new MysqlDataSource();	
+		    mysqlDataSource  = new MysqlDataSource();
+		    mysqlDataSource.setDatabaseName(DataSourceFinder.databaseName);
+		    mysqlDataSource.setServerName(DataSourceFinder.databaseHost);
+    	    mysqlDataSource.setPort(DataSourceFinder.port);
+		    mysqlDataSource.setUser(DataSourceFinder.databaseUser);
+		    mysqlDataSource.setPassword(DataSourceFinder.databasePassword);
+		    return mysqlDataSource;
+		}
+		else if(DataSourceFinder.databaseType.equals("oracle"))
+		{
+			OracleDataSource oracleDataSource = null;
+			try 
+			{
+				oracleDataSource= new OracleDataSource();
+			} 
+			catch (Exception e) 
+			{
+				e.printStackTrace();
+			}
+	
+			oracleDataSource.setDatabaseName(DataSourceFinder.databaseName);
+			oracleDataSource.setServerName(DataSourceFinder.databaseHost);
+			oracleDataSource.setPortNumber(DataSourceFinder.port);
+			oracleDataSource.setURL("jdbc:oracle:thin:@"+oracleDataSource.getServerName()+":"+oracleDataSource.getPortNumber()+":"+oracleDataSource.getDatabaseName());
+			oracleDataSource.setUser(DataSourceFinder.databaseUser);
+			oracleDataSource.setPassword(DataSourceFinder.databasePassword);
+			return oracleDataSource;
+		}
 		return dataSource;
-		
-		/*DataSource initialization incase we are using Oracle Database*/
-//		OracleDataSource dataSource=null;
-//		try 
-//		{
-//			dataSource = new OracleDataSource();
-//		} 
-//		catch (SQLException e) 
-//		{
-//			e.printStackTrace();
-//		}
-//
-//		dataSource.setDatabaseName("orcl");
-//		dataSource.setServerName("ps2078.persistent.co.in");
-//		dataSource.setPortNumber(1521);
-//      dataSource.setURL("jdbc:oracle:thin:@"+dataSource.getServerName()+":"+dataSource.getPortNumber()+":"+dataSource.getDatabaseName());
-//		dataSource.setUser("sagar");
-//		dataSource.setPassword("sagar");
-//		return dataSource;
-
 	}
 
 	/**
-	 * Initiailise and start JNP server.
+	 * Initiailize and start JNP server.
 	 */
 	private void initCaTissueSuite()
 	{

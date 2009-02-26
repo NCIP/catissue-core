@@ -1,9 +1,13 @@
-package edu.wustl.catissuecore.testcase;
+package src.edu.wustl.catissuecore.testcase;
+
+import java.util.List;
 
 import org.junit.Test;
 
 import edu.wustl.catissuecore.actionForm.BiohazardForm;
 import edu.wustl.catissuecore.domain.Biohazard;
+import edu.wustl.common.dao.AbstractDAO;
+import edu.wustl.common.util.dbManager.DAOException;
 
 /**
  * This class contains test cases for Biohazard add/edit
@@ -46,15 +50,47 @@ public class BiohazardTestCases extends CaTissueSuiteBaseTest
 		addRequestParameter("value(SimpleConditionsNode:1_Condition_DataElement_table)", "Biohazard");
 		addRequestParameter("value(SimpleConditionsNode:1_Condition_DataElement_field)","Biohazard.NAME.varchar");
 		addRequestParameter("value(SimpleConditionsNode:1_Condition_Operator_operator)","Starts With");
-		addRequestParameter("value(SimpleConditionsNode:1_Condition_value)","b");
+		addRequestParameter("value(SimpleConditionsNode:1_Condition_value)","");
 		addRequestParameter("pageOf","pageOfBioHazard");
 		addRequestParameter("operation","search");
 		actionPerform();
-		verifyForward("success");
+				
+		Biohazard biohazard = (Biohazard) TestCaseUtility.getNameObjectMap("Biohazard");
+		AbstractDAO dao = (AbstractDAO) TestCaseUtility.getNameObjectMap("DAO");
+		List l = null;
+		try 
+		{
+			dao.openSession(null);
+			l = dao.retrieve("Biohazard");
+		}
+		catch (DAOException e) 
+		{
+			e.printStackTrace();
+		}
+		
+		if(l.size() > 1)
+		{
+		    verifyForward("success");
+		}
+		else if(l.size() == 1)
+		{
+			verifyForwardPath("/SearchObject.do?pageOf=pageOfBioHazard&operation=search&id=" + biohazard.getId());
+		}
+		else
+		{
+			verifyForward("failure");
+		}
+		try
+		{
+			dao.closeSession();
+		}
+		catch (DAOException e) 
+		{
+		    e.printStackTrace();
+		}
 		
 		/*Biohazard search action to generate Biohazard form*/
 		setRequestPathInfo("/BiohazardSearch");
-		Biohazard biohazard = (Biohazard) TestCaseUtility.getNameObjectMap("Biohazard");
 		addRequestParameter("id", "" + biohazard.getId());
 		addRequestParameter("type", "Infectious");
      	actionPerform();
