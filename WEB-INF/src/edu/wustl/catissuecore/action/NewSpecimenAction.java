@@ -321,9 +321,9 @@ public class NewSpecimenAction extends SecureAction
 				SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
 				Specimen specimen = bizLogic.getSpecimen(specimenID,specimenDetails, sessionData);
 				//Added by Falguni=To set Specimen label in Form.
-				specimenForm.setCreatedDate(Utility.parseDateToString(specimen.getCreatedOn(), Variables.dateFormat));
-				specimenForm.setLabel(specimen.getLabel());
-				specimenForm.setBarcode(specimen.getBarcode());
+				/*Bug id = 11480 
+				 *Resolved by : Himanshu Aseeja
+			     */
 				List columnList=columnNames();
 				String consentResponseHql ="select elements(scg.collectionProtocolRegistration.consentTierResponseCollection)"+ 
 				" from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg," +
