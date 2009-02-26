@@ -24,7 +24,7 @@ create table CATEGORY (
    ID bigint not null identity,
    DE_ENTITY_ID bigint,
    PARENT_CATEGORY_ID bigint,
-   ROOT_CATEGORIAL_CLASS_ID bigint unique
+   ROOT_CATEGORIAL_CLASS_ID bigint
 );
 alter table CATEGORY add constraint PK_CATEGORY_ID primary key (ID);
 
