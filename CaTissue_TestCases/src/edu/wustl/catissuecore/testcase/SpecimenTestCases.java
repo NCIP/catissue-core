@@ -101,8 +101,7 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 	@Test
 	public void testLabelandBarcodeonStoragePositionChange()
 	{
-        
-		Specimen specimen = (Specimen) TestCaseUtility.getNameObjectMap("Specimen");
+       	Specimen specimen = (Specimen) TestCaseUtility.getNameObjectMap("Specimen");
 		setRequestPathInfo("/NewSpecimen");		
         addRequestParameter("operation", "edit");
         addRequestParameter("id", "" + specimen.getId());
@@ -119,7 +118,5 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
         NewSpecimenForm form= (NewSpecimenForm) getActionForm();
         assertEquals(form.getLabel(),"1234" );
         assertEquals(form.getBarcode(),"1234");
-       
-	}
-	
+  	}
 }
