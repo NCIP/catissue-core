@@ -23,7 +23,7 @@
 
 create table QUERY_PARAMETERIZED_QUERY (
    IDENTIFIER bigint not null,
-   QUERY_NAME varchar(255) unique,
+   QUERY_NAME varchar(255),
    DESCRIPTION text
 );
 alter table QUERY_PARAMETERIZED_QUERY add constraint PK_QRY_PARAMETERIZED_QRY_ID primary key (IDENTIFIER);
@@ -44,7 +44,7 @@ alter table QUERY_INTRA_MODEL_ASSOCIATION add constraint PK_QRY_INTRA_MODEL_ASSO
 
 create table QUERY_CONSTRAINTS (
    IDENTIFIER bigint not null identity,
-   QUERY_JOIN_GRAPH_ID bigint unique
+   QUERY_JOIN_GRAPH_ID bigint 
 );
 alter table QUERY_CONSTRAINTS add constraint PK_QUERY_CONSTRAINTS_ID primary key (IDENTIFIER);
 
@@ -78,7 +78,7 @@ alter table QUERY_RULE add constraint PK_QUERY_RULE_ID primary key (IDENTIFIER);
 
 create table QUERY (
    IDENTIFIER bigint not null identity,
-   QUERY_CONSTRAINTS_ID bigint unique
+   QUERY_CONSTRAINTS_ID bigint
 );
 alter table QUERY add constraint PK_QUERY_ID primary key (IDENTIFIER);
 
@@ -93,7 +93,7 @@ alter table QUERY_LOGICAL_CONNECTOR add constraint PK_QRY_LOGICAL_CONNECTOR_ID p
 
 create table QUERY_EXPRESSION (
    IDENTIFIER bigint not null identity,
-   QUERY_EXPRESSIONID_ID bigint unique,
+   QUERY_EXPRESSIONID_ID bigint,
    QUERY_QUERY_ENTITY_ID bigint not null,
    IS_IN_VIEW bit,
    IS_VISIBLE bit,
@@ -165,7 +165,7 @@ create table CATEGORY (
    ID bigint not null identity,
    DE_ENTITY_ID bigint,
    PARENT_CATEGORY_ID bigint,
-   ROOT_CATEGORIAL_CLASS_ID bigint unique
+   ROOT_CATEGORIAL_CLASS_ID bigint
 );
 alter table CATEGORY add constraint PK_CATEGORY_ID primary key (ID);
 
