@@ -42,7 +42,7 @@ alter table COMMONS_GRAPH_TO_EDGES add constraint PK_COMMONS_GPH_ID_TO_EDGES_ID 
 
 create table COMMONS_GRAPH_TO_VERTICES (GRAPH_ID bigint not null, VERTEX_CLASS varchar(255), VERTEX_ID bigint);
 
-create table QUERY (IDENTIFIER bigint not null identity, CONSTRAINTS_ID bigint unique);
+create table QUERY (IDENTIFIER bigint not null identity, CONSTRAINTS_ID bigint);
 alter table QUERY add constraint PK_QUERY_ID primary key (IDENTIFIER);
 
 create table QUERY_ARITHMETIC_OPERAND (IDENTIFIER bigint not null, LITERAL varchar(255), TERM_TYPE varchar(255), DATE_LITERAL smalldatetime, TIME_INTERVAL varchar(255), DE_ATTRIBUTE_ID bigint, EXPRESSION_ID bigint);
@@ -66,7 +66,7 @@ alter table QUERY_CONDITION_VALUES add constraint PK_QRY_COND_VALS_COND_ID_POS p
 create table QUERY_CONNECTOR (IDENTIFIER bigint not null identity, OPERATOR varchar(255), NESTING_NUMBER integer);
 alter table QUERY_CONNECTOR add constraint PK_QUERY_CONNECTOR_ID primary key (IDENTIFIER);
 
-create table QUERY_CONSTRAINTS (IDENTIFIER bigint not null identity, QUERY_JOIN_GRAPH_ID bigint unique);
+create table QUERY_CONSTRAINTS (IDENTIFIER bigint not null identity, QUERY_JOIN_GRAPH_ID bigint);
 alter table QUERY_CONSTRAINTS add constraint PK_QUERY_CONSTRAINTS_ID primary key (IDENTIFIER);
 
 create table QUERY_CONSTRAINT_TO_EXPR (CONSTRAINT_ID bigint not null, EXPRESSION_ID bigint not null unique);
@@ -105,7 +105,7 @@ alter table QUERY_OUTPUT_TERM add constraint PK_QUERY_OUTPUT_TERM_ID primary key
 create table QUERY_PARAMETER (IDENTIFIER bigint not null identity, NAME varchar(255), OBJECT_CLASS varchar(255), OBJECT_ID bigint);
 alter table QUERY_PARAMETER add constraint PK_QUERY_PARAMETER_ID primary key (IDENTIFIER);
 
-create table QUERY_PARAMETERIZED_QUERY (IDENTIFIER bigint not null, QUERY_NAME varchar(255) unique, DESCRIPTION text);
+create table QUERY_PARAMETERIZED_QUERY (IDENTIFIER bigint not null, QUERY_NAME varchar(255), DESCRIPTION text);
 alter table QUERY_PARAMETERIZED_QUERY add constraint PK_QRY_PARAMETERIZED_QRY_ID primary key (IDENTIFIER);
 
 create table QUERY_QUERY_ENTITY (IDENTIFIER bigint not null identity, ENTITY_ID bigint not null);
