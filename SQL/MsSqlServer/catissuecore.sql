@@ -244,7 +244,7 @@ create table CATISSUE_STORAGE_TYPE (
 create table CATISSUE_CONTAINER (
    IDENTIFIER bigint not null identity,
    ACTIVITY_STATUS varchar(50),
-   BARCODE varchar(255) unique,
+   BARCODE varchar(255),
    CAPACITY_ID bigint,
    COMMENTS varchar(500),
    "FULL" numeric(1,0),
@@ -424,7 +424,7 @@ create table CATISSUE_PARTICIPANT (
    GENDER varchar(20),
    GENOTYPE varchar(50),
    ETHNICITY varchar(50),
-   SOCIAL_SECURITY_NUMBER varchar(50) unique,
+   SOCIAL_SECURITY_NUMBER varchar(50),
    ACTIVITY_STATUS varchar(50),
    DEATH_DATE smalldatetime,
    VITAL_STATUS varchar(50)
@@ -461,7 +461,7 @@ create table CATISSUE_COLL_PROT_REG (
    CONSENT_SIGN_DATE datetime,
    CONSENT_DOC_URL varchar(500),
    CONSENT_WITNESS bigint,
-   BARCODE varchar(255) unique,
+   BARCODE varchar(255),
    DATE_OFFSET integer
 );
 
@@ -479,14 +479,13 @@ create table CATISSUE_COLL_PROT_EVENT (
    COLLECTION_POINT_LABEL varchar(255),
    STUDY_CALENDAR_EVENT_POINT double precision,
    COLLECTION_PROTOCOL_ID numeric(20),
-   LABELFORMAT varchar(255) default NULL,
-   unique (COLLECTION_PROTOCOL_ID,COLLECTION_POINT_LABEL)
+   LABELFORMAT varchar(255) default NULL
 );
 
 create table CATISSUE_SPECIMEN_COLL_GROUP (
    IDENTIFIER numeric(20) not null identity,
-   NAME varchar(255) unique, 
-   BARCODE varchar(255) unique, 
+   NAME varchar(255), 
+   BARCODE varchar(255), 
    COMMENTS varchar(2000),
    ENCOUNTER_TIMESTAMP datetime,
    COLLECTION_PROTOCOL_REG_ID numeric(20),
@@ -499,7 +498,7 @@ create table CATISSUE_SPECIMEN_COLL_GROUP (
 create table CATISSUE_CONTAINER_TYPE (
    IDENTIFIER bigint not null identity,
    CAPACITY_ID bigint,
-   NAME varchar(255) unique,
+   NAME varchar(255),
    ONE_DIMENSION_LABEL varchar(255),
    TWO_DIMENSION_LABEL varchar(255),
    COMMENTS varchar(500),
@@ -636,9 +635,9 @@ CREATE TABLE CATISSUE_TISSUE_REQ_SPECIMEN
 CREATE TABLE CATISSUE_SPECIMEN
 (                                                                                                                 
      IDENTIFIER numeric(20) NOT NULL identity,
-     LABEL varchar(255) unique,                                                                                                               
+     LABEL varchar(255),                                                                                                               
      AVAILABLE numeric(1,0),                                                                                                         
-     BARCODE varchar(255) unique,
+     BARCODE varchar(255),
      COMMENTS varchar(500),
      ACTIVITY_STATUS varchar(50),                                                                                              
      SPECIMEN_COLLECTION_GROUP_ID numeric(20),     
