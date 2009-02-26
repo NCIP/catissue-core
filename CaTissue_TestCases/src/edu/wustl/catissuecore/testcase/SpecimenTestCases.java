@@ -95,7 +95,8 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
    	}
 	
 	/**
-	 * Test Specimen Label and barcode after storage position change.
+	 * Test Specimen Label and Barcode after storage position changes(when page refreshes).
+	 * Bug Id : 11480
 	 */
 	@Test
 	public void testLabelandBarcodeonStoragePositionChange()
@@ -105,8 +106,8 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 		setRequestPathInfo("/NewSpecimen");		
         addRequestParameter("operation", "edit");
         addRequestParameter("id", "" + specimen.getId());
-        addRequestParameter("label", specimen.getLabel() + "123");
-        addRequestParameter("barcode", specimen.getBarcode() + "123");
+        addRequestParameter("label", "1234");
+        addRequestParameter("barcode", "1234");
         addRequestParameter("stContSelection", "2");
         
         SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) TestCaseUtility.getNameObjectMap("SpecimenCollectionGroup");
@@ -114,12 +115,12 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
         addRequestParameter("pageOf", "pageOfNewSpecimenCPQuery");
         actionPerform();
         verifyForward("pageOfNewSpecimenCPQuery");
+        
         NewSpecimenForm form= (NewSpecimenForm) getActionForm();
-        specimen.setLabel( specimen.getLabel() + "123");
-        specimen.setBarcode(specimen.getBarcode() + "123");
-        assertEquals(specimen.getLabel(), form.getLabel());
-        assertEquals(specimen.getBarcode(),form.getBarcode());
+        assertEquals(form.getLabel(),"1234" );
+        assertEquals(form.getBarcode(),"1234");
        
         TestCaseUtility.setNameObjectMap("Specimen",specimen);
 	}
+	
 }
