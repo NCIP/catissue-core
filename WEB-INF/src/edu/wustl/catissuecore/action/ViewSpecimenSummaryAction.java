@@ -1,6 +1,7 @@
 package edu.wustl.catissuecore.action;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -95,7 +96,8 @@ public class ViewSpecimenSummaryAction extends Action {
 			if (summaryForm.getSpecimenList()!= null  )
 			{
 				updateSessionBean(summaryForm, session);
-				verifyCollectedStatus(summaryForm, session);				
+				verifyCollectedStatus(summaryForm, session);	
+				this.verifyPrintStatus(summaryForm, session);//janhavi
 			}
 		
 			if(request.getParameter("save")!=null)
@@ -317,6 +319,7 @@ public class ViewSpecimenSummaryAction extends Action {
 	private void setFormValuesToSession(GenericSpecimen derivedFormVO,
 			GenericSpecimen derivedSessionVO) {
 		derivedSessionVO.setCheckedSpecimen(derivedFormVO.getCheckedSpecimen());
+		derivedSessionVO.setPrintSpecimen(derivedFormVO.getPrintSpecimen());//janhavi
 		derivedSessionVO.setDisplayName(derivedFormVO.getDisplayName());
 		derivedSessionVO.setBarCode(derivedFormVO.getBarCode());
 		//derivedSessionVO.setContainerId(derivedFormVO.getContainerId());
@@ -702,6 +705,28 @@ public class ViewSpecimenSummaryAction extends Action {
 			}
 		}
 	}
+	//bug 11169 start
+	private void verifyPrintStatus(ViewSpecimenSummaryForm summaryForm, HttpSession session)
+	{
+		Set printSpecimenSet = new HashSet();
+		List<GenericSpecimen> specimenList = new ArrayList<GenericSpecimen>();
+		specimenList.addAll(summaryForm.getAliquotList());
+		specimenList.addAll(summaryForm.getDerivedList());
+		specimenList.addAll(summaryForm.getSpecimenList());		
+		for(GenericSpecimen pSpecimen : specimenList)
+		{
+			if(pSpecimen.getPrintSpecimen()== true)
+			{
+				printSpecimenSet.add(pSpecimen);
+			}			
+		}
+		if(!printSpecimenSet.isEmpty())
+		{
+			summaryForm.setSpecimenPrintList(printSpecimenSet);
+		}
+		
+	}
+	//bug 11169 end
 	
 	private void unCheckChildSpecimens(GenericSpecimen pSpecimen)
 	{
@@ -726,7 +751,7 @@ public class ViewSpecimenSummaryAction extends Action {
 			}
 		}
 	}
-	
+
 
 	private void getAvailablePosition(HttpServletRequest request, HttpServletResponse response) throws IOException, DAOException
 	{
