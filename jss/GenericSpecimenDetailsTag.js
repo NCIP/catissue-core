@@ -43,7 +43,7 @@ function onClickCollected(Obj)
 	//this if loop decides that the checkboxes need to be checked or unchecked
 	if(Obj.checked == true)
 		{
-			type= 'aliquot';
+		   	type= 'aliquot';
 			state='checkUnableState';
 			uncheckDisable(type,state,flagOfParentCall)
 			type= 'derived';
@@ -121,10 +121,12 @@ function uncheckDisable(type,state,flagOfParentCall)
 							if(CollectedCheckBox != null && flagOfParentCall == true)
 							{
 								CollectedCheckBox.checked = false;
-								CollectedCheckBox.disabled = true;
+								//commented to solve bug 11570
+								//CollectedCheckBox.disabled = true;
 							}
 						element.checked = false;
-						element.disabled = true;
+						//commented to solve bug 11570
+						//element.disabled = true;
 						}
 						else if(state=='checkUnableState')
 						{
