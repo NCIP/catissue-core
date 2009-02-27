@@ -4,7 +4,17 @@
 	{
 		if(document.getElementById('printCheckbox').checked == true)
 		{
-			<%
+			displayPrinterTypeLocation();
+		}
+		else
+		{
+			document.getElementById('printerSelection').style.display="none";
+			setSubmittedForPrint("","","");
+		}
+	}
+	function displayPrinterTypeLocation()
+	{
+             <%
 				 int listsize = Variables.printerLocationList.size(); 
 			   %>
 			if("<%=listsize%>" == "1" || "<%=listsize%>" == "0" )
@@ -15,13 +25,8 @@
 			{
 			   document.getElementById('printerSelection').style.display="";
 			}
-		}
-		else
-		{
-			document.getElementById('printerSelection').style.display="none";
-			setSubmittedForPrint("","","");
-		}
 	}
+
 </script>
 <div  id="printerSelection" style="">
 									<table border="0">
