@@ -9,6 +9,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -80,9 +81,12 @@ public class UpdateSpecimenStatusAction extends BaseAction
 				}
 				else
 				{
-					HashSet specimenprintCollection = getSpecimensToPrint((Long) obj, sessionDataBean);
-					HashMap forwardToPrintMap = new HashMap();
-					forwardToPrintMap.put("printAntiSpecimen", specimenprintCollection);
+					//HashSet specimenprintCollection = getSpecimensToPrint((Long) obj, sessionDataBean);
+					//bug 11169
+					Set specimenprintCollection = specimenSummaryForm.getSpecimenPrintList();
+					Set domainObjSet = this.getSpecimensFromGenericSpecimens(specimenprintCollection);					
+					HashMap forwardToPrintMap = new HashMap();					
+					forwardToPrintMap.put("printAntiSpecimen", domainObjSet);
 					request.setAttribute("forwardToPrintMap", forwardToPrintMap);
 					request.setAttribute("AntiSpecimen", "1");
 					return mapping.findForward("printAnticipatorySpecimens");
@@ -99,9 +103,8 @@ public class UpdateSpecimenStatusAction extends BaseAction
 				{
 					specimenIdList.add(((Specimen) iter.next()).getId());
 				}
-				request.setAttribute("specimenIdList", specimenIdList);
+				request.setAttribute("specimenIdList", specimenIdList);				
 				saveToken(request);
-
 				return mapping.findForward(Constants.ADD_MULTIPLE_SPECIMEN_TO_CART);
 			}
 			if (request.getParameter("target") != null && request.getParameter("target").equals("viewSummary"))
@@ -141,6 +144,18 @@ public class UpdateSpecimenStatusAction extends BaseAction
 			return mapping.findForward(Constants.FAILURE);
 		}
 
+	}
+	
+	private Set getSpecimensFromGenericSpecimens(Set specimenprintCollection) throws BizLogicException
+	{
+		Set<Specimen> specimens = new HashSet<Specimen>();
+		Iterator<GenericSpecimen> it = specimenprintCollection.iterator();
+		while(it.hasNext())
+		{
+			Specimen specimen = this.createSpecimenDomainObject(it.next());
+			specimens.add(specimen);
+		}
+		return specimens;
 	}
 	// bug 8228 -suman
 	// this method checks for free locations of a container and clears the ones
