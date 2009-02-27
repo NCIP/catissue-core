@@ -2,6 +2,7 @@ package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -35,6 +36,7 @@ import edu.wustl.catissuecore.domain.SpecimenObjectFactory;
 import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.CollectionProtocolUtil;
+import edu.wustl.catissuecore.util.IdComparator;
 import edu.wustl.catissuecore.util.SpecimenDetailsTagUtil;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -85,6 +87,7 @@ public class UpdateSpecimenStatusAction extends BaseAction
 					//bug 11169
 					Set specimenprintCollection = specimenSummaryForm.getSpecimenPrintList();
 					Set domainObjSet = this.getSpecimensFromGenericSpecimens(specimenprintCollection);					
+					
 					HashMap forwardToPrintMap = new HashMap();					
 					forwardToPrintMap.put("printAntiSpecimen", domainObjSet);
 					request.setAttribute("forwardToPrintMap", forwardToPrintMap);
@@ -148,13 +151,20 @@ public class UpdateSpecimenStatusAction extends BaseAction
 	
 	private Set getSpecimensFromGenericSpecimens(Set specimenprintCollection) throws BizLogicException
 	{
-		Set<Specimen> specimens = new HashSet<Specimen>();
+		Set<Specimen> specimens = new LinkedHashSet<Specimen>();
 		Iterator<GenericSpecimen> it = specimenprintCollection.iterator();
 		while(it.hasNext())
 		{
 			Specimen specimen = this.createSpecimenDomainObject(it.next());
 			specimens.add(specimen);
 		}
+		//Bug 11509 start
+		List<Specimen> listToSort = new ArrayList<Specimen>();
+		listToSort.addAll(specimens);
+		Collections.sort(listToSort,new IdComparator());
+		//Bug 11509 end
+		specimens.removeAll(specimens);
+		specimens.addAll(listToSort);
 		return specimens;
 	}
 	// bug 8228 -suman
