@@ -2,11 +2,14 @@ package edu.wustl.catissuecore.printservicemodule;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
 import edu.wustl.catissuecore.printserviceclient.LabelPrinter;
+import edu.wustl.catissuecore.util.IdComparator;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.common.domain.AbstractDomainObject;
@@ -52,7 +55,6 @@ public class SpecimenCollectionGroupLabelPrinterImpl implements LabelPrinter {
 		List listMap = new ArrayList ();
 		if(abstractDomainObject instanceof SpecimenCollectionGroup)
 		{
-			
 			final SpecimenCollectionGroup objSCG = (SpecimenCollectionGroup)abstractDomainObject;
 			final Collection specimenCollection = objSCG.getSpecimenCollection();
 			Iterator itr = specimenCollection.iterator();
@@ -60,10 +62,10 @@ public class SpecimenCollectionGroupLabelPrinterImpl implements LabelPrinter {
 			while(itr.hasNext())
 			{
 				Specimen objSpecimen = (Specimen)itr.next();
-				specimenList.add(objSpecimen);				
-				
+				specimenList.add(objSpecimen);					
 			}
-			
+			//Bug 11509 
+			Collections.sort(specimenList,new IdComparator());
 			for(int cnt=0;cnt < specimenList.size();cnt++)
 			{
 				Specimen obj = (Specimen)specimenList.get(cnt);
