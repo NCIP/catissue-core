@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.ServletRequest;
 
@@ -55,8 +56,29 @@ public class ViewSpecimenSummaryForm extends ActionForm implements SpecimenDetai
 	private String printCheckbox; 
 	private String printerType;
 	private String printerLocation;
+	
+	private boolean isPrintSpcimen = false;
     
+	public boolean isPrintSpcimen() {
+		return isPrintSpcimen;
+	}
+
+	public void setPrintSpcimen(boolean isPrintSpcimen) {
+		this.isPrintSpcimen = isPrintSpcimen;
+	}
+
 	private boolean multipleSpEditMode = false;
+	
+	private Set specimenPrintList = null;//janhavi
+	
+	
+	public Set getSpecimenPrintList() {
+		return specimenPrintList;
+	}
+
+	public void setSpecimenPrintList(Set<GenericSpecimen> specimenPrintList) {
+		this.specimenPrintList = specimenPrintList;
+	}
 	
 	
 	public boolean isMultipleSpEditMode() {
