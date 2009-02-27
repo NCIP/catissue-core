@@ -28,6 +28,7 @@ public final class GenericSpecimenVO implements GenericSpecimen {
 	private String type = null;
 	private String uniqueIdentifier = null;
 	private boolean checkedSpecimen = false;
+	private boolean printSpecimen = false;
 	private boolean readOnly =false;
 	private String barCode;
 	private String selectedContainerName;
@@ -276,6 +277,16 @@ public final class GenericSpecimenVO implements GenericSpecimen {
 	{
 		this.showLabel = showLabel;
 		
+	}
+
+	public boolean getPrintSpecimen() {
+		// TODO Auto-generated method stub
+		return this.printSpecimen;
+	}
+
+	public void setPrintSpecimen(boolean printSpecimen) 
+	{
+		this.printSpecimen = printSpecimen;
 	}
 
 	

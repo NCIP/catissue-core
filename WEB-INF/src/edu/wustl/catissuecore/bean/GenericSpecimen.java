@@ -63,10 +63,15 @@ public interface GenericSpecimen extends Serializable
 	public void setType(String type) ;
 
 	public void setUniqueIdentifier(String uniqueIdentifier) ;
+	
 	public boolean getCheckedSpecimen() ;
-
+	
 	public void setCheckedSpecimen(boolean checkedSpecimen) ;
+	
+	public boolean getPrintSpecimen() ;//bug 11169
 
+	public void setPrintSpecimen(boolean printSpecimen) ;//bug 11169
+	
 	public boolean getReadOnly();
 
 	public void setReadOnly(boolean readOnly);

@@ -737,5 +737,14 @@ public class SpecimenRequirementBean implements Serializable, GenericSpecimen
 		
 	}
 
+	public boolean getPrintSpecimen() 
+	{
+		return false;
+	}
+
+	public void setPrintSpecimen(boolean printSpecimen) {
+		
+	}
+
 	
 }
