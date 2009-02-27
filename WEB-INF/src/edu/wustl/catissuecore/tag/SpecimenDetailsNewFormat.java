@@ -51,7 +51,8 @@ public class SpecimenDetailsNewFormat extends TagSupport
 		"Quantity",
 		"Concentration",
 		"Location",
-		"Collected"
+		"Collected",
+		"PrintLabel"		
 	};
 
 	public static final String [] COLUMN_LABELS = {
@@ -61,7 +62,8 @@ public class SpecimenDetailsNewFormat extends TagSupport
 	"anticipatorySpecimen.Quantity", 
 	"anticipatorySpecimen.Concentration", 
 	"anticipatorySpecimen.Location", 
-	"anticipatorySpecimen.Collected" 
+	"anticipatorySpecimen.Collected",
+	"specimen.printLabel"	
 	};
 
 	// ----------- Mandar : 2Dec08 for New UI format start -----------------------------
@@ -73,7 +75,8 @@ public class SpecimenDetailsNewFormat extends TagSupport
 		"Quantity",
 		"Concentration",
 		"Location",
-		"Collected"
+		"Collected",
+		"PrintLabel"
 	};
 	public static final String [] HDR2_COLS = {
 	"Type",
@@ -90,14 +93,15 @@ public class SpecimenDetailsNewFormat extends TagSupport
 	"anticipatorySpecimen.Quantity", 
 	"anticipatorySpecimen.Concentration", 
 	"anticipatorySpecimen.Location", 
-	"anticipatorySpecimen.Collected" 
+	"anticipatorySpecimen.Collected",
+	"specimen.printLabel"
 	};
 
 	public static final String [] H2COL_LBLS = {
 	"specimen.subType",
 	"specimen.pathologicalStatus",
 	"specimen.tissueSide",
-	"specimen.tissueSite" 
+	"specimen.tissueSite"
 	};
 	
 	// ----------- Mandar : 2Dec08 for New UI format end -------------------------------
@@ -322,7 +326,7 @@ public class SpecimenDetailsNewFormat extends TagSupport
 				{ columnHeaderList.add(""); }
 			else
 				{ columnHeaderList.add("anticipatorySpecimen.Parent"); }
-
+			
 			for(int i=0;i< SpecimenDetailsNewFormat.COLUMN_LABELS.length; i++)
 			{	columnHeaderList.add(SpecimenDetailsNewFormat.COLUMN_LABELS[i]); }				// 0
 			
@@ -575,9 +579,12 @@ public class SpecimenDetailsNewFormat extends TagSupport
 		 tmpcwd = cWd;
 		 for(int cnt=0; cnt < columnHeaderList.size(); cnt++ )
 		 {
-			 if(cnt==5){cWd = cWd-tmpd;}
+			 if(cnt==5)//Concentration
+			 {cWd = cWd-tmpd;}
 			 else
-			 { cWd = tmpcwd;}
+			 { 
+				 cWd = tmpcwd;
+			 }
 				if((((String)columnHeaderList.get(cnt)).trim().length() > 0) )
 				{
 				 	// to be displayed only in case of aliquots.	|| 		
@@ -592,24 +599,42 @@ public class SpecimenDetailsNewFormat extends TagSupport
 				 		sb.append(TD_1HLF+"1"+TD_2HLF);
 				 		sb.append(SPACE);		
 				 	}
-				 	else if(cnt == 6)
+				 	else if(cnt == 6)//Location
 				 	{
-				 		sb.append("<TD colspan=3 width="+(50-pWd+tmpd)+"%>");
+				 		sb.append("<TD colspan=4 width="+(50-pWd+tmpd)+"%>");// 3 35
 				 		sb.append("<SPAN class=black_ar_b>"+ApplicationProperties.getValue((String)columnHeaderList.get(6))+"</SPAN>");
 				 	}
-				 	else if(cnt==7 && !specimenSummaryForm.getShowCheckBoxes())
+				 	else if(cnt==7 && !specimenSummaryForm.getShowCheckBoxes())//Collected
 				 	{
-				 		sb.append(TD_1HLF+cWd+TD_2HLF);
+				 		sb.append(TD_1HLF+3+TD_2HLF);//bug 11169
 				 		sb.append(SPACE);	
 				 	}
+				 	else if(cnt==8)//print bug 11169
+			 		{
+				 		sb.append(TD_1HLF+3+TD_2HLF);
+				 		sb.append("<center><SPAN class=black_ar_b>"+ApplicationProperties.getValue((String)columnHeaderList.get(8))+"</SPAN></center>");
+					}
 				 	else
 				 	{
-				 		sb.append(TD_1HLF+cWd+TD_2HLF);
-				 		sb.append("<SPAN class=black_ar_b>"+ApplicationProperties.getValue((String)columnHeaderList.get(cnt))+"</SPAN>");	
-				 	}
+				 		//bug 11169 start
+				 		if(cnt==7)
+				 		{
+				 			sb.append(TD_1HLF+3+TD_2HLF);
+				 			sb.append("<center><SPAN class=black_ar_b>"+ApplicationProperties.getValue((String)columnHeaderList.get(cnt))+"</SPAN></center>");
+				 		}
+				 		else
+				 		{
+				 		   sb.append(TD_1HLF+cWd+TD_2HLF);
+				 		   sb.append("<SPAN class=black_ar_b>"+ApplicationProperties.getValue((String)columnHeaderList.get(cnt))+"</SPAN>");
+				 		}
+				 		//bug 11169 end
+				 	}			 	
+				 
 				}
 				else
-				{	sb.append(TD_1HLF+pWd+TD_2HLF);	sb.append(SPACE);	}
+				{
+					sb.append(TD_1HLF+pWd+TD_2HLF);	sb.append(SPACE);	
+				}
 			sb.append(TD_CLOSE);
 		 }
 	 	sb.append(TR_CLOSE);
@@ -687,7 +712,10 @@ public class SpecimenDetailsNewFormat extends TagSupport
 		}
 		else if(SpecimenDetailsNewFormat.HDR1_COLS[7].equalsIgnoreCase(columnList.get(counter).toString()))
 		{	str[0] = elementNamePrefix+"checkedSpecimen";	str[1] =getFormattedValue(specimen.getCheckedSpecimen()); }
-
+		//bug 11169 start
+		else if(SpecimenDetailsNewFormat.HDR1_COLS[8].equalsIgnoreCase(columnList.get(counter).toString()))
+		{	str[0] = elementNamePrefix+"printSpecimen";	str[1] =getFormattedValue(specimen.getPrintSpecimen()); }
+		//bug 11169 end
 		return str;
 	}
 	private String [] get2EleDetAt(int counter, GenericSpecimen specimen, String elementNamePrefix)
@@ -709,6 +737,7 @@ public class SpecimenDetailsNewFormat extends TagSupport
 	private void createFieldRow(StringBuffer sb, int counter, GenericSpecimen specimen, String elementNamePrefix, boolean isTextRow)
 	{
 		 int tmpd=0,tmpcwd = 0;
+		 
 		 if(dataListType.equalsIgnoreCase(dataListTypes[2]))
 		 {
 			 tmpd = 3;
@@ -739,20 +768,23 @@ public class SpecimenDetailsNewFormat extends TagSupport
 			 	}
 			 	else if(columnCounter == 6)
 			 	{
-			 		sb.append("<TD colspan=3 width="+(50-pWd+tmpd)+"% class='"+STYLE_CLASS+"'>");
+			 		
 			 		if(isTextRow)
 			 		{
-						if(nameValue[1].trim().length()>0)
+			 			sb.append("<TD colspan=4 width="+(60-pWd+tmpd)+"% class='"+STYLE_CLASS+"'>");//bug 11169
+			 			if(nameValue[1].trim().length()>0)
 						{
 							sb.append(nameValue[1]);sb.append(":");sb.append(nameValue[3]);sb.append(",");sb.append(nameValue[5]);
 						}
 						else
 						{
 							sb.append(getHTMLFormattedValue(specimen.getStorageContainerForSpecimen()));
-						}
+						}						
 			 		}
 			 		else
-			 		{	if(dataListTypes[0].equalsIgnoreCase(dataListType) && (specimenSummaryForm.isMultipleSpEditMode() && !specimenSummaryForm.getShowParentStorage() ))
+			 		{
+			 			sb.append("<TD colspan=4 width="+(50-pWd+tmpd)+"% class='"+STYLE_CLASS+"'>");//bug 11169
+			 			if(dataListTypes[0].equalsIgnoreCase(dataListType) && (specimenSummaryForm.isMultipleSpEditMode() && !specimenSummaryForm.getShowParentStorage() ))
 			 			{
 							if(nameValue[1].trim().length()>0)
 							{
@@ -776,25 +808,41 @@ public class SpecimenDetailsNewFormat extends TagSupport
 			 	}
 			 	else if(columnCounter == 7)
 			 	{
-			 		sb.append(TD_1HLF+cWd+TD_2HLF);
+			 		sb.append(TD_1HLF+3+TD_2HLF);//bug 11169
 					if(isParentList && specimenSummaryForm.getSelectedSpecimenId().equals(specimen.getUniqueIdentifier()))
 					{
 						functionCall = "onclick=\"onClickCollected(this)\"";
 					}
 					else{functionCall = "";}
 			 		createCollectedComponent(sb,nameValue,isTextRow);
+			 		//addRemainingSpecimenElements(sb,elementNamePrefix,specimen, isTextRow);
+			 	}
+			 	//bug 11169 start
+			 	else if(columnCounter == 8)
+			 	{
+			 		sb.append(TD_1HLF+3+TD_2HLF);
+					functionCall = "";
+			 		createPrintComponent(sb,nameValue);
 			 		addRemainingSpecimenElements(sb,elementNamePrefix,specimen, isTextRow);
 			 	}
+			 	//bug 11169 end
 			 	else
 			 	{
-			 		sb.append(TD_1HLF+cWd+TD_2HLF);
+			 		if(isTextRow && columnCounter == 1)
+			 		{
+			 		  sb.append(TD_1HLF+5+TD_2HLF);
+			 		}
+			 		else
+			 		{
+			 		  sb.append(TD_1HLF+cWd+TD_2HLF);
+			 		}
 			 		if(isTextRow || columnCounter == 3)
 			 		{
 			 			sb.append("<SPAN class="+STYLE_CLASS+">"+getHTMLFormattedValue(nameValue[1])+"</SPAN>");
 			 		}
 			 		else
 			 		{	
-			 				createTextComponent(sb,nameValue,STYLE_CLASS,sizes[columnCounter]);	
+			 			createTextComponent(sb,nameValue,STYLE_CLASS,sizes[columnCounter]);	
 			 		}	
 			 	}
 			 	sb.append(TD_CLOSE);
@@ -823,7 +871,7 @@ public class SpecimenDetailsNewFormat extends TagSupport
 										+containerId +"','"+
 										specimenClassName +"','"+
 										cpId +"')" ;
-		  int scSize=20 +xtra;
+		  int scSize=17 +xtra;
 		  final String sid = specimen.getUniqueIdentifier();
 		  String isDisabled = ""; 
 		  
@@ -880,6 +928,18 @@ public class SpecimenDetailsNewFormat extends TagSupport
 			 	sb.append(TR_CLOSE);										
 			 sb.append("</table>");
 	}
+	
+	private void createPrintComponent(StringBuffer sb, String[] nameValue)
+	{
+		if(specimenSummaryForm.getShowCheckBoxes())
+		 {
+			 sb.append("<center><input type=\"checkbox\" name=\""+nameValue[0]+"\" value=\"true\" checked=\"checked\"></center>");
+    	 }
+		 else
+		 {
+			createHiddenElement(sb,nameValue);
+		 }
+	}
 
 	private void createCollectedComponent(StringBuffer sb, String[] nameValue,  boolean isTextRow)
 	{
@@ -889,14 +949,14 @@ public class SpecimenDetailsNewFormat extends TagSupport
 //			 if("getTextElement".equalsIgnoreCase(calledFrom))
 			 if(isTextRow)
 			 {
-				 sb.append("<input type=\"checkbox\" name=\""+nameValue[0]+"\" value=\"true\" disabled=\"true\" checked=\"checked\">");
+				 sb.append("<center><input type=\"checkbox\" name=\""+nameValue[0]+"\" value=\"true\" disabled=\"true\" checked=\"checked\"></center>");
 			 }
 			 else
 			 {
 				 if(Constants.TRUE.equalsIgnoreCase(nameValue[1]))
-				 {	 sb.append("<input type=\"checkbox\" name=\""+nameValue[0]+"\" value=\"on\" checked=\"checked\" "+functionCall+">"); }
+				 {	 sb.append("<center><input type=\"checkbox\" name=\""+nameValue[0]+"\" value=\"on\" checked=\"checked\" "+functionCall+"></center>"); }
 				 else
-				 { sb.append("<input type=\"checkbox\" name=\""+nameValue[0]+"\" value=\"on\" "+functionCall+">"); }
+				 { sb.append("<center><input type=\"checkbox\" name=\""+nameValue[0]+"\" value=\"on\" "+functionCall+"></center>"); }
 			}
 		 }
 		 else
@@ -976,8 +1036,9 @@ public class SpecimenDetailsNewFormat extends TagSupport
 			
 			nV = get1EleDetAt(7,specimen,elementNamePrefix);
 			sb.append("<input type=\"hidden\" name=\""+nV[0]+"\" value=\""+nV[1]+"\" id=\""+nV[0]+"\">"); 
-
-
+			
+			nV = get1EleDetAt(8,specimen,elementNamePrefix);//bug 11169
+			sb.append("<input type=\"hidden\" name=\""+nV[0]+"\" value=\""+nV[1]+"\" id=\""+nV[0]+"\">");
 		}
 	}
 	
