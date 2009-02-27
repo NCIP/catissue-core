@@ -474,7 +474,7 @@ create table CATISSUE_ABS_SPECI_COLL_GROUP (
 );
 
 create table CATISSUE_COLL_PROT_EVENT (
-   IDENTIFIER numeric(20) not null identity,
+   IDENTIFIER numeric(20) not null,
    CLINICAL_STATUS varchar(50),
    COLLECTION_POINT_LABEL varchar(255),
    STUDY_CALENDAR_EVENT_POINT double precision,
@@ -483,7 +483,7 @@ create table CATISSUE_COLL_PROT_EVENT (
 );
 
 create table CATISSUE_SPECIMEN_COLL_GROUP (
-   IDENTIFIER numeric(20) not null identity,
+   IDENTIFIER numeric(20) not null,
    NAME varchar(255), 
    BARCODE varchar(255), 
    COMMENTS varchar(2000),
@@ -605,7 +605,7 @@ CREATE TABLE CATISSUE_ABSTRACT_SPECIMEN
 
 CREATE TABLE CATISSUE_CP_REQ_SPECIMEN
  (                                                                                                                 
-     IDENTIFIER numeric(20) NOT NULL identity,         
+     IDENTIFIER numeric(20) NOT NULL,         
      STORAGE_TYPE varchar(255) NOT NULL,      
      COLLECTION_PROTOCOL_EVENT_ID numeric(20),
      LABELFORMAT varchar(255) default NULL                                                                                                      
@@ -613,28 +613,28 @@ CREATE TABLE CATISSUE_CP_REQ_SPECIMEN
  
 CREATE TABLE CATISSUE_MOL_REQ_SPECIMEN
 (                                                                                                                 
-     IDENTIFIER numeric(20) NOT NULL identity,   
+     IDENTIFIER numeric(20) NOT NULL,   
      CONCENTRATION double precision                                                                                                            
 );
 
 CREATE TABLE CATISSUE_FLUID_REQ_SPECIMEN
 (                                                                                                                 
-     IDENTIFIER numeric(20) NOT NULL identity                                                                                                  
+     IDENTIFIER numeric(20) NOT NULL                                                                                                  
 );
 
 CREATE TABLE CATISSUE_CELL_REQ_SPECIMEN
 (                                                                                                                 
-     IDENTIFIER numeric(20) NOT NULL identity                                                                                                                  
+     IDENTIFIER numeric(20) NOT NULL                                                                                                                  
 );
 
 CREATE TABLE CATISSUE_TISSUE_REQ_SPECIMEN
 (                                                                                                                 
-     IDENTIFIER numeric(20) NOT NULL identity                                                                                                     
+     IDENTIFIER numeric(20) NOT NULL                                                                                                     
 );
 
 CREATE TABLE CATISSUE_SPECIMEN
 (                                                                                                                 
-     IDENTIFIER numeric(20) NOT NULL identity,
+     IDENTIFIER numeric(20) NOT NULL,
      LABEL varchar(255),                                                                                                               
      AVAILABLE numeric(1,0),                                                                                                         
      BARCODE varchar(255),
@@ -649,23 +649,23 @@ CREATE TABLE CATISSUE_SPECIMEN
 
 CREATE TABLE CATISSUE_MOLECULAR_SPECIMEN
 (                                                                                                                 
-     IDENTIFIER numeric(20) NOT NULL identity,  
+     IDENTIFIER numeric(20) NOT NULL,  
      CONCENTRATION double precision                                                                                                                   
 );
 
 CREATE TABLE CATISSUE_FLUID_SPECIMEN
 (                                                                                                                 
-     IDENTIFIER numeric(20) NOT NULL identity                                                                                                     
+     IDENTIFIER numeric(20) NOT NULL                                                                                                     
 );
 
 CREATE TABLE CATISSUE_CELL_SPECIMEN
 (                                                                                                                 
-     IDENTIFIER numeric(20) NOT NULL identity                                                                                                          
+     IDENTIFIER numeric(20) NOT NULL                                                                                                          
 );
 
 CREATE TABLE CATISSUE_TISSUE_SPECIMEN
 (                                                                                                                 
-     IDENTIFIER numeric(20) NOT NULL identity                                                                                                        
+     IDENTIFIER numeric(20) NOT NULL                                                                                                        
 );
 
 create table CATISSUE_USER (
@@ -1216,13 +1216,13 @@ create table CATISSUE_ABSTRACT_POSITION (
 );
 
 create table CATISSUE_SPECIMEN_POSITION(
-	IDENTIFIER bigint NOT NULL identity,
+	IDENTIFIER bigint NOT NULL,
 	SPECIMEN_ID numeric(20),
 	CONTAINER_ID bigint
 );
 
 create table CATISSUE_CONTAINER_POSITION(
-	IDENTIFIER bigint NOT NULL identity,
+	IDENTIFIER bigint NOT NULL,
 	PARENT_CONTAINER_ID bigint,
 	CONTAINER_ID bigint
 );
