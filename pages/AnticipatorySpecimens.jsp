@@ -13,7 +13,8 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %>
 <%@ page language="java" isELIgnored="false" %>
-<% ViewSpecimenSummaryForm form = (ViewSpecimenSummaryForm)request.getAttribute("viewSpecimenSummaryForm");%>
+<% ViewSpecimenSummaryForm form = (ViewSpecimenSummaryForm)request.getAttribute("viewSpecimenSummaryForm"); 
+  %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
@@ -25,6 +26,7 @@
 <script language="JavaScript" type="text/javascript" src="jss/GenericSpecimenDetailsTag.js"></script>
 
 <script language="JavaScript" type="text/javascript">
+ var isPrintChecked = false;
 	//window.parent.frames['SpecimenEvents'].location="ShowCollectionProtocol.do?pageOf=specimenEventsPage&operation=ViewSummary";
 	function ApplyToAll(object,type)
 		{
@@ -131,10 +133,18 @@ function updateField(type,i,isDis,valueToSet)
 			openPopupWindow(frameUrl,'newSpecimenPage');
 			//mapButtonClickedOnSpecimen(frameUrl,'newSpecimenPage');
 		}
-		
+		//bug 11169 start
 		function ChangeCheckBoxStatus(type,chkInstance)
 		{
-			var checkedSpecimen ='].checkedSpecimen';
+             onCheckBoxClick(type,chkInstance,'checkedSpecimen');			
+		}
+		function ChangePrintCheckBoxStatus(type,chkInstance)
+		{
+             onCheckBoxClick(type,chkInstance,'printSpecimen');
+		}
+		function onCheckBoxClick(type,chkInstance,prefix)
+		{
+           var checkedSpecimen ='].'+prefix;
 			var elementType = type +'[';
 			var ctr=0;
 			do
@@ -162,70 +172,95 @@ function updateField(type,i,isDis,valueToSet)
 			}while(chkCount>0);
 		}
 		
-		function UpdateCheckBoxStatus()
-		{
-			var checkedSpecimen ='].checkedSpecimen';
-			var aliquotType = "aliquot[";
-			var ctr = 0;
-			if (document.forms[0].chkAllAliquot != null)
-			{
-				document.forms[0].chkAllAliquot.disabled = true;
-				document.forms[0].chkAllAliquot.checked = true;
-				do
-				{
-					var elementName = aliquotType + ctr + checkedSpecimen;
-					var chkCount= document.getElementsByName(elementName).length;
-					if (chkCount >0)
-					{
-						var element = document.getElementsByName(elementName)[0];
-						if (element.disabled == false)
-						{
-							document.forms[0].chkAllAliquot.disabled = false;							
-						}
-						ctr++;
+	function UpdateCheckBoxStatus()
+	{
+		var checkedSpecimen = '].checkedSpecimen';
+		var aliquotType = "aliquot[";
+		var ctr = 0;
+		if (document.forms[0].chkAllAliquot != null) {
+			document.forms[0].chkAllAliquot.disabled = true;
+			document.forms[0].chkAllAliquot.checked = true;
+			do {
+				var elementName = aliquotType + ctr + checkedSpecimen;
+				var chkCount = document.getElementsByName(elementName).length;
+				if (chkCount > 0) {
+					var element = document.getElementsByName(elementName)[0];
+					if (element.disabled == false) {
+						document.forms[0].chkAllAliquot.disabled = false;
 					}
-				}while(chkCount>0);
-			}
-			
-			if (document.forms[0].chkAllAliquot != null)
-			{
-				ctr = 0;
-				var derivedType = "derived[";
-				document.forms[0].chkAllDerived.disabled = true;
-				document.forms[0].chkAllDerived.checked = true;
-				do
-				{
-					var elementName = derivedType + ctr + checkedSpecimen;
-					var chkCount= document.getElementsByName(elementName).length;
-					if (chkCount >0)
-					{
-						var element = document.getElementsByName(elementName)[0];
-						if (element.disabled == false)
-						{
-							document.forms[0].chkAllDerived.disabled = false;							
-						}
-						ctr++;
-					}
-				}while(chkCount>0);
-			}		
+					ctr++;
+				}
+			} while (chkCount > 0);
 		}
-		function pageSubmit()
-		{
-			var url = 'GenericSpecimenSummary.do?save=SCGSpecimens';
-			<%	if(request.getAttribute(Constants.PAGEOF) != null && request.getAttribute(Constants.PAGEOF).equals(Constants.CP_CHILD_SUBMIT)) {%>
+
+		
+	if (document.forms[0].chkAllDerived != null) 
+	{
+			ctr = 0;
+			var derivedType = "derived[";
+			document.forms[0].chkAllDerived.disabled = true;
+			document.forms[0].chkAllDerived.checked = true;
+			do {
+				var elementName = derivedType + ctr + checkedSpecimen;
+				var chkCount = document.getElementsByName(elementName).length;
+				if (chkCount > 0) {
+					var element = document.getElementsByName(elementName)[0];
+					if (element.disabled == false) {
+						document.forms[0].chkAllDerived.disabled = false;
+					}
+					ctr++;
+				}
+			} while (chkCount > 0);
+		}		
+	}
+	function checkPrintStatusOfAllSpecimens() {
+		checkPrintStatus('specimen');
+		if (!isPrintChecked) {
+			checkPrintStatus('aliquot');
+		}
+		if (!isPrintChecked) {
+			checkPrintStatus('derived');
+		}
+
+	}
+	function checkPrintStatus(type) {
+		var checkedSpecimen = '].printSpecimen';
+		var elementType = type + '[';
+		var ctr = 0;
+		do {
+			var elementName = elementType + ctr + checkedSpecimen;
+			var chkCount = document.getElementsByName(elementName).length;
+			if (chkCount > 0) {
+				var element = document.getElementsByName(elementName)[0];
+				if (element.checked) {
+					isPrintChecked = true;
+					break;
+				}
+				ctr++;
+			}
+		} while (chkCount > 0 && !isPrintChecked);
+	}
+	//bug 11169 end
+	function pageSubmit() {
+		checkPrintStatusOfAllSpecimens();
+		var url = 'GenericSpecimenSummary.do?save=SCGSpecimens';
+<%	if(request.getAttribute(Constants.PAGEOF) != null && request.getAttribute(Constants.PAGEOF).equals(Constants.CP_CHILD_SUBMIT)) {%>
 			 url = 	'GenericSpecimenSummaryForSpecimen.do?save=SCGSpecimens';
 			<%}%>
-			var printFlag = document.getElementById("printCheckbox");
-			if(printFlag.checked)
+			//var printFlag = document.getElementById("printCheckbox");
+			if(isPrintChecked)			
 			{
+				document.getElementById("printCheckbox").value = true;
 				document.forms[0].action = url + '&printflag=1';
-				document.forms[0].submit();			
+				document.forms[0].submit();						
 			}
 			else
 			{
+				document.getElementById("printCheckbox").value = false;
 				document.forms[0].action =url+'&printflag=0'; 
 				document.forms[0].submit();
 			}
+			
 		}
 		
 		function onAddToCart()
@@ -379,23 +414,41 @@ String lbl = "Apply first to all";
 		<TABLE width="100%" cellspacing="0" cellpadding="0">
 		<TR>
 		<TD align="left" class="tr_anti_hdrbg_blue" width="100%" colspan=3>
-		<TABLE width="100%">
+		<TABLE width="100%" border="0">
 		<TR>
-			<TD align="left" class="tr_anti_hdrbg_blue" width="${requestScope.sfCol}%">
+			<TD align="left" rowspan="2" valign="middle" class="tr_anti_hdrbg_blue" width="${requestScope.sfCol}%">
 			<span class="blue_ar_b">
 				<bean:write name="viewSpecimenSummaryForm" property="title" />
 			</span>
 			</TD>
-			<TD class="tr_anti_hdrbg_blue"  width=40%>
+			<TD class="tr_anti_hdrbg_blue" width=33% rowspan="2" valign="middle" align="left">
 			<A class="black_ar" name="parent" HREF="#parent" onClick="ApplyToAll(this,'specimen')" onmouseover="Tip(' Apply first location to all')"><bean:message key="aliquots.applyFirstToAll"/></A>
 			</TD>
-			<td nowrap class="tr_anti_hdrbg_blue" scope="col" width="${requestScope.slCol}%">&nbsp;
+			<td nowrap class="tr_anti_hdrbg_blue" scope="col" width="2%" valign="middle" align="left" onmouseover="Tip('Collect All')">
 			<logic:equal name="viewSpecimenSummaryForm" property="showCheckBoxes" value="true">
-					<input type="checkbox" name="chkAllSpecimen" onclick="ChangeCheckBoxStatus('specimen',this)"/>
-					<span class="blue_ar_b">
-					<bean:message key="anticipatorySpecimen.CollectAll"/>
-					</span>
+				<span class="blue_ar_b">
+				   <bean:message key="anticipatorySpecimen.Collected"/>
+				</span>
 			</logic:equal>	
+			</td>
+			<td nowrap class="tr_anti_hdrbg_blue" scope="col" width="2%" valign="middle" align="left" onmouseover="Tip('Print All')">
+			<logic:equal name="viewSpecimenSummaryForm" property="showCheckBoxes" value="true">
+				<span class="blue_ar_b">
+					<bean:message key="specimen.printLabel"/>
+				</span>
+			</logic:equal>	
+			</td>
+		</TR>
+		<TR>
+			<td nowrap class="tr_anti_hdrbg_blue_small" scope="col" width="2%" valign="middle" align="center">
+			<logic:equal name="viewSpecimenSummaryForm" property="showCheckBoxes" value="true">
+					<input type="checkbox" name="chkAllSpecimen" onclick="ChangeCheckBoxStatus('specimen',this)"/>	
+			</logic:equal>	
+			</td>
+			<td nowrap class="tr_anti_hdrbg_blue_small" scope="col" width="2%" valign="middle" align="center">
+				<logic:equal name="viewSpecimenSummaryForm" property="showCheckBoxes" value="true">
+				<input type="checkbox" name="printAll" checked="checked" onclick="ChangePrintCheckBoxStatus('specimen',this)"/>	
+				</logic:equal>	
 			</td>
 		</TR>
 		</TABLE>
@@ -434,7 +487,7 @@ String lbl = "Apply first to all";
 						</td>						
 					</tr>
 					<tr> <td> <br> </td> </tr>
-				</table>	
+				</table>
 			</TD>
 		</TR>
 		</logic:empty>				
@@ -442,24 +495,41 @@ String lbl = "Apply first to all";
 		
 		<logic:notEmpty name="viewSpecimenSummaryForm" property="derivedList" >
 		<TR>
-		<TD align="left" class="tr_anti_hdrbg_blue" width="100%" colspan=3>
-		<TABLE width="100%">
+		<TD align="left" valign="middle" class="tr_anti_hdrbg_blue" width="100%" colspan=3>
+		<TABLE width="100%" border="0">
 		<TR>
-
-			<TD colspan="1" align="left" class="tr_anti_hdrbg_blue" width="${requestScope.fCol}%">
+			<TD rowspan="2" align="left" class="tr_anti_hdrbg_blue" width="${requestScope.fCol}%">
 				<span class="blue_ar_b">	
 				<bean:message key="anticipatorySpecimen.DerivativeDetails"/>
 				</span>
 			</TD>
-			<TD class="tr_anti_hdrbg_blue"  width=38%>
+			<TD class="tr_anti_hdrbg_blue" width=40% rowspan="2" valign="middle" align="left">
 			<A class="black_ar" name="derived" HREF="#derived" onClick="ApplyToAll(this,'derived')" onmouseover="Tip(' Apply first location to all')"><bean:message key="aliquots.applyFirstToAll"/></A>
 			</TD>
-			<td nowrap  class="tr_anti_hdrbg_blue" scope="col" width="${requestScope.lCol}%">&nbsp;
-			<logic:equal name="viewSpecimenSummaryForm" property="showCheckBoxes" value="true">
-					<input type="checkbox" name="chkAllDerived" onclick="ChangeCheckBoxStatus('derived',this)"/>
+			<td nowrap class="tr_anti_hdrbg_blue" scope="col" width="2%" align="left" valign="middle" onmouseover="Tip('Create All')">
+				<logic:equal name="viewSpecimenSummaryForm" property="showCheckBoxes" value="true">
 					<span class="blue_ar_b">
-					<bean:message key="anticipatorySpecimen.Created"/>
-					</span>
+				   <bean:message key="anticipatorySpecimen.Collected"/>
+				</span>
+				</logic:equal>	
+			</td>
+			<td nowrap  class="tr_anti_hdrbg_blue" scope="col" width="2%" align="left" valign="middle" onmouseover="Tip('Print All')">
+				<logic:equal name="viewSpecimenSummaryForm" property="showCheckBoxes" value="true">
+					<span class="blue_ar_b">
+					<bean:message key="specimen.printLabel"/>
+				</span>
+				</logic:equal>
+			</td>
+		</TR>
+		<TR>
+			<td nowrap class="tr_anti_hdrbg_blue_small" scope="col" width="3%" align="center" valign="middle">
+			<logic:equal name="viewSpecimenSummaryForm" property="showCheckBoxes" value="true">
+				<input type="checkbox" name="chkAllDerived" onclick="ChangeCheckBoxStatus('derived',this)"/>
+			</logic:equal>	
+			</td>
+			<td nowrap class="tr_anti_hdrbg_blue_small" scope="col" width="2%" align="center" valign="middle">
+			<logic:equal name="viewSpecimenSummaryForm" property="showCheckBoxes" value="true">
+				<input type="checkbox" name="printAllDerived" checked="checked" onclick="ChangePrintCheckBoxStatus('derived',this)"/>	
 			</logic:equal>	
 			</td>
 		</TR>
@@ -476,26 +546,44 @@ String lbl = "Apply first to all";
 		</logic:notEmpty>
 		<logic:notEmpty name="viewSpecimenSummaryForm" property="aliquotList" >
 		<TR>
-		<TD align="left" class="tr_anti_hdrbg_blue" width="100%" colspan=3>
-		<TABLE width="100%">
+		<TD align="left" valign="middle" class="tr_anti_hdrbg_blue" width="100%" colspan=3>
+		<TABLE width="100%" border="0">
 		<TR>
-			<TD colspan="1" align="left" class="tr_anti_hdrbg_blue" width="${requestScope.fCol}%">
+			<TD colspan="1" rowspan="2" align="left" class="tr_anti_hdrbg_blue" width="${requestScope.fCol}%">
 				<span class="blue_ar_b">	
 				<bean:message key="anticipatorySpecimen.AliquotDetails"/> 
 				</span>
 			</TD>
-			<TD class="tr_anti_hdrbg_blue"  width=38%>
+			<TD class="tr_anti_hdrbg_blue" rowspan="2" width=47% align="left" valign="middle">
 			<A class="black_ar" name="aliquot" HREF="#aliquot" onClick="ApplyToAll(this,'aliquot')" onmouseover="Tip(' Apply first location to all')"><bean:message key="aliquots.applyFirstToAll"/></A>
 			</TD>
-			<td nowrap  class="tr_anti_hdrbg_blue" scope="col" width="${requestScope.lCol}%">&nbsp;
+			<td nowrap align="left" valign="middle" class="tr_anti_hdrbg_blue" scope="col" width="2%" onmouseover="Tip('Create All')">
 			<logic:equal name="viewSpecimenSummaryForm" property="showCheckBoxes" value="true">
-					<input type="checkbox" name="chkAllAliquot" onclick="ChangeCheckBoxStatus('aliquot',this)"/>
 					<span class="blue_ar_b">
-					<bean:message key="anticipatorySpecimen.Created"/>
-					</span>
+				   <bean:message key="anticipatorySpecimen.Collected"/>
+				</span>
+			</logic:equal>	
+			</td>
+			<td nowrap align="left" valign="middle" class="tr_anti_hdrbg_blue" scope="col" width="2%" onmouseover="Tip('Print All')">
+			<logic:equal name="viewSpecimenSummaryForm" property="showCheckBoxes" value="true">
+				<span class="blue_ar_b">
+					<bean:message key="specimen.printLabel"/>
+				</span>
 			</logic:equal>	
 			</td>
 		</TR>
+		<tr>
+			<td nowrap  class="tr_anti_hdrbg_blue" scope="col" width="2%" align="center" valign="middle">
+			<logic:equal name="viewSpecimenSummaryForm" property="showCheckBoxes" value="true">
+				<input type="checkbox" name="chkAllAliquot" onclick="ChangeCheckBoxStatus('aliquot',this)"/>	
+			</logic:equal>	
+			</td>
+			<td nowrap  class="tr_anti_hdrbg_blue" scope="col" width="2%" align="center" valign="middle">
+			<logic:equal name="viewSpecimenSummaryForm" property="showCheckBoxes" value="true">
+					<input type="checkbox" name="printAllAliquot" checked="checked" onclick="ChangePrintCheckBoxStatus('aliquot',this)"/>
+			</logic:equal>	
+			</td>
+		</tr>
 		</TABLE>
 		</TD>
 		</TR>
@@ -508,6 +596,13 @@ String lbl = "Apply first to all";
 		</TR>
 		</logic:notEmpty>
 		</TABLE>
+		<table width="100%">
+		<tr>
+			<TD align="left" valign="middle" class="tr_anti_dividerbg_blue" colspan=4>
+		 </td>
+		</tr>
+		</table>
+
 		<!-- New Table design ends -->
 		<table align="bottom">
 			<logic:equal name="viewSpecimenSummaryForm" property="requestType" value="Collection Protocol">
@@ -534,13 +629,13 @@ String lbl = "Apply first to all";
 		<html:hidden property="forwardTo" />
 		<html:hidden property="multipleSpEditMode" />
 		<logic:equal name="viewSpecimenSummaryForm" property="readOnly" value="false">
+		
 		<tr>					
-			<td class="formFieldNoBorders" colspan="5"  height="20" nowrap width="16%">
-				<html:checkbox styleId="printCheckbox" property="printCheckbox" value="true" onclick="showPriterTypeLocation()">
-				<bean:message key="print.checkboxLabel"/>
-				</html:checkbox>
-			</td>
+			<!-- <td class="formFieldNoBorders" colspan="5"  height="20" nowrap width="16%"> -->
+				<html:hidden property="printCheckbox" style="printCheckbox"/>		
+			<!-- </td> -->
               <!--  Added for displaying  printer type and location -->
+			    
 				  <td>
 				       <%@ include file="/pages/content/common/PrinterLocationTypeComboboxes.jsp" %>
 			 	  </td>
@@ -564,6 +659,6 @@ String lbl = "Apply first to all";
 </body>
 <script language="JavaScript" type="text/javascript">
 identifyDisabledCheckBox();
-showPriterTypeLocation();
+displayPrinterTypeLocation();
 </script>
 </html>
