@@ -25,6 +25,8 @@ import javax.servlet.http.HttpSession;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.catissuecore.actionForm.ParticipantForm;
@@ -53,8 +55,12 @@ import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.dao.AbstractDAO;
 import edu.wustl.common.dao.DAOFactory;
+import edu.wustl.common.factory.AbstractDomainObjectFactory;
+import edu.wustl.common.factory.MasterFactory;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.dbManager.DBUtil;
+import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -556,15 +562,27 @@ public class ParticipantAction extends SecureAction
 			{
 				if(cpri.getCollectionProtocol()!=null)
 				{
+					// Added by geeta 
+					//DFCI requirement : barcode should be same as identifier
+					List list =null;
+					String barcode=null;
+					IBizLogic bizLogic1 = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);		
+					list = bizLogic1.retrieve(CollectionProtocolRegistration.class.getName(), new String[]{"barcode"}, new String[]{"id"}, new String[]{"="}, new Long[]{cpri.getId()}, null);
+					if (list!=null && !list.isEmpty())
+					{
+						barcode = ((String)list.get(0));
+					}
 					String collectionProtocolIdKey = "CollectionProtocolRegistration:"+i+"_CollectionProtocol_id";
 					String collectionProtocolRegistrationIdKey = "CollectionProtocolRegistration:"+i+"_id";
 					String isActive = "CollectionProtocolRegistration:" + i +"_activityStatus";
+					String barcodeKey = "CollectionProtocolRegistration:" + i +"_barcode";
 					if(map.containsKey(collectionProtocolIdKey))
 					{
 						if(((String)map.get(collectionProtocolIdKey)).equalsIgnoreCase(cpri.getCollectionProtocol().getId().toString()))
 						{
 							map.put(collectionProtocolRegistrationIdKey, cpri.getId().toString());
 							map.put(isActive, cpri.getActivityStatus());
+							map.put(barcodeKey, barcode);
 							//poplulate the Protocol Participant Id in map of Participant Form
 							map.put("CollectionProtocolRegistration:" + i + "_protocolParticipantIdentifier",
 										cpri.getProtocolParticipantIdentifier());
