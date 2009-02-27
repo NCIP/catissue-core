@@ -130,6 +130,7 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 		storageContainer.setName("container1_" + UniqueKeyGeneratorUtil.getUniqueKey());
 		addRequestParameter("name",storageContainer.getName());
 		setRequestPathInfo("/StorageContainerEdit");
+		addRequestParameter("specimenOrArrayType", "SpecimenArray");
 		addRequestParameter("operation", "edit");
 		actionPerform();
 		verifyForward("success");
