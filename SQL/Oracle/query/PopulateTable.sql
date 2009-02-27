@@ -5856,7 +5856,7 @@ insert into dyextn_database_properties (IDENTIFIER,NAME) values (70,'DE_E_40');
 insert into dyextn_database_properties (IDENTIFIER,NAME) values (71,'DE_E_40');
 insert into dyextn_database_properties (IDENTIFIER,NAME) values (72,'DE_E_40');
 insert into dyextn_database_properties (IDENTIFIER,NAME) values (73,'COMMENTS');
-insert into dyextn_database_properties (IDENTIFIER,NAME) values (74,'FULL');
+insert into dyextn_database_properties (IDENTIFIER,NAME) values (74,'CONT_FULL');
 insert into dyextn_database_properties (IDENTIFIER,NAME) values (75,'BARCODE');
 insert into dyextn_database_properties (IDENTIFIER,NAME) values (76,'POSITION_DIMENSION_ONE');
 insert into dyextn_database_properties (IDENTIFIER,NAME) values (77,'POSITION_DIMENSION_TWO');
@@ -5878,7 +5878,7 @@ insert into dyextn_database_properties (IDENTIFIER,NAME) values (92,'AVAILABLE')
 insert into dyextn_database_properties (IDENTIFIER,NAME) values (93,'POSITION_DIMENSION_TWO');
 insert into dyextn_database_properties (IDENTIFIER,NAME) values (94,'POSITION_DIMENSION_ONE');
 insert into dyextn_database_properties (IDENTIFIER,NAME) values (95,'BARCODE');
-insert into dyextn_database_properties (IDENTIFIER,NAME) values (96,'FULL');
+insert into dyextn_database_properties (IDENTIFIER,NAME) values (96,'CONT_FULL');
 insert into dyextn_database_properties (IDENTIFIER,NAME) values (97,'COMMENTS');
 insert into dyextn_database_properties (IDENTIFIER,NAME) values (98,'DE_E_157');
 insert into dyextn_database_properties (IDENTIFIER,NAME) values (99,'DE_E_53');
@@ -5899,7 +5899,7 @@ insert into dyextn_database_properties (IDENTIFIER,NAME) values (113,'ACTIVITY_S
 insert into dyextn_database_properties (IDENTIFIER,NAME) values (114,'POSITION_DIMENSION_TWO');
 insert into dyextn_database_properties (IDENTIFIER,NAME) values (115,'POSITION_DIMENSION_ONE');
 insert into dyextn_database_properties (IDENTIFIER,NAME) values (116,'BARCODE');
-insert into dyextn_database_properties (IDENTIFIER,NAME) values (117,'FULL');
+insert into dyextn_database_properties (IDENTIFIER,NAME) values (117,'CONT_FULL');
 insert into dyextn_database_properties (IDENTIFIER,NAME) values (118,'COMMENTS');
 insert into dyextn_database_properties (IDENTIFIER,NAME) values (119,'TEMPERATURE');
 insert into dyextn_database_properties (IDENTIFIER,NAME) values (120,'DE_E_146');
