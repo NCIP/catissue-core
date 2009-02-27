@@ -250,7 +250,7 @@ create table CATISSUE_CONTAINER (
    BARCODE varchar(255) unique,
    CAPACITY_ID bigint,
    COMMENTS text,
-   FULL bit,
+   CONT_FULL bit,
    NAME varchar(255) unique not null, 
    primary key (IDENTIFIER)
 );
