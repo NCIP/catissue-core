@@ -174,15 +174,15 @@ function showCalendar(id,year, month, day, pattern, formName, formProperty, even
 		// IE.
 		var ofy=document.body.scrollTop;
 		var ofx=document.body.scrollLeft;			
-		document.getElementById(divId).style.left = event.clientX+ofx+10;		
-		document.getElementById(divId).style.top = event.clientY+ofy+10;
+		document.getElementById(divId).style.left = event.clientX+ofx-155;		
+		document.getElementById(divId).style.top = event.clientY+ofy+18;
 		document.getElementById(divId).style.visibility="visible";		
 		document.getElementById(calmoisId).selectedIndex= month;		
 		hideElement("SELECT",id);		
 	} else if(document.layers) {
 		// Netspace 4
-		document.elements[divId].left = e.pageX+10;
-		document.elements[divId].top = e.pageY+10;
+		document.elements[divId].left = e.pageX-155;
+		document.elements[divId].top = e.pageY+18;
 		document.elements[divId].visibility="visible";
 		document.elements[divId].document.caltitre.document.forms[0].calmois.selectedIndex=month;
 	} else {
@@ -190,8 +190,8 @@ function showCalendar(id,year, month, day, pattern, formName, formProperty, even
 		var calendrier = document.getElementById(divId);
 		var ofy=document.body.scrollTop;
 		var ofx=document.body.scrollLeft;
-		calendrier.style.left = event.clientX+ofx+10;
-		calendrier.style.top = event.clientY+ofy+10;
+		calendrier.style.left = event.clientX+ofx-155;
+		calendrier.style.top = event.clientY+ofy+18;
 		calendrier.style.visibility="visible";
 		document.getElementById(calmoisId).selectedIndex=month;
 	}	
