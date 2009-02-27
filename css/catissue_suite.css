@@ -662,6 +662,12 @@ color: #000000;
 	vertical-align:middle;
 }
 
+.tr_anti_dividerbg_blue {
+	background-color: #cce5f1;
+	height:10px;
+	vertical-align:middle;
+}
+
 .black_new_md{
 	font-family: verdana;
 	font-size: 11px;
