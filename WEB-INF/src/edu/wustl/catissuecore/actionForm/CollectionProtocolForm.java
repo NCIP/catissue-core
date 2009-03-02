@@ -236,7 +236,15 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 		
 		//For Consent Tracking 
 		this.unsignedConsentURLName = cProtocol.getUnsignedConsentDocumentURL();
-		this.consentWaived = cProtocol.getConsentsWaived().booleanValue();   
+
+		if (cProtocol.getConsentsWaived() == null)
+		{
+			this.consentWaived = false;
+		}
+		else
+		{
+			this.consentWaived = cProtocol.getConsentsWaived().booleanValue();
+		}
 		//this.consentValues = prepareConsentTierMap(cProtocol.getConsentTierCollection());
 	}
 	/**
