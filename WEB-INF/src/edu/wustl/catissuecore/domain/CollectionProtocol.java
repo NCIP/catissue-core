@@ -113,7 +113,7 @@ public class CollectionProtocol extends SpecimenProtocol implements
 	/**
 	 * whether consents are waived?
 	 */
-	protected Boolean consentsWaived = Boolean.FALSE;
+	protected Boolean consentsWaived;
 
 	/**
 	 * A collection of registration of a Participant to a Collection Protocol.
