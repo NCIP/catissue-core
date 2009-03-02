@@ -247,7 +247,7 @@ public class CollectionProtocolTestCases extends CaTissueBaseTestCase
 	{
     	CollectionProtocol collectionProtocol = new CollectionProtocol();
     	CollectionProtocol cachedCollectionProtocol = (CollectionProtocol) TestCaseUtility.getObjectMap(CollectionProtocol.class);
-    	cachedCollectionProtocol.setId((Long) cachedCollectionProtocol.getId());
+    	collectionProtocol.setId((Long) cachedCollectionProtocol.getId());
        	Logger.out.info(" searching domain object");
     	try {
         	// collectionProtocol = (CollectionProtocol) appService.createObject(collectionProtocol);
@@ -261,9 +261,37 @@ public class CollectionProtocolTestCases extends CaTissueBaseTestCase
           catch (Exception e) {
         	Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
-	 		//assertFalse("Doesnot found collection protocol", true);
 	 		fail("Doesnot found collection protocol");
           }
+	}
+	
+	public void testSearchCollectionProtocolWithConsentsWaived()
+	{
+		CollectionProtocol collectionProtocol = new CollectionProtocol();
+		Logger.out.info(" searching domain object");
+		try
+		{
+			Logger.out.info(" searching domain object");
+			List resultList = appService.search(CollectionProtocol.class, collectionProtocol);
+			int noConsentsWaivedCPListSize = resultList.size();
+
+			collectionProtocol.setConsentsWaived(false);
+
+			Logger.out.info(" searching domain object again");
+			resultList = appService.search(CollectionProtocol.class, collectionProtocol);
+			int consentsWaivedCPListSize = resultList.size();
+
+			// CP list with null consents would be a greater than or equal to 
+			// list with consents waived set to a value
+			assertTrue(" Collection Protocol search returning all records ",
+			        noConsentsWaivedCPListSize >= consentsWaivedCPListSize);
+		}
+		catch (Exception e)
+		{
+			Logger.out.error(e.getMessage(), e);
+			e.printStackTrace();
+			fail(" failed to search all Collection Protocols ");
+		}
 	}
     
 	public void testCollectionProtocolWithEmptyTitle()
