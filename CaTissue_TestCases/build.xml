@@ -23,7 +23,7 @@
 	     <property name="login-conf.file.path" value="../CaTissue_TestCases/login.conf"></property>
 	     <property name="mysql.url.string" value="jdbc:mysql://localhost:${database.port}/${database.name}"></property>
 	     <property name="oracle.url.string" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}"></property>
-
+         <property name="log4jproperties.file.path" value="../log4j.properties"></property>
 
     <target name="init">
         <copy file="${ApplicationSecurityConfig.file.path}" todir="${basedir}" overwrite="true"/>
@@ -77,6 +77,7 @@
     	    	    </replace>	
     	      </then>
     	 </if>
+    	<copy file="${log4jproperties.file.path}" todir="../catissuecore-properties" overwrite="true"/>
     </target>
     
  </project>
