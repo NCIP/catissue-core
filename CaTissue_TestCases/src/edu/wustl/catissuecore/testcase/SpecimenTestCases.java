@@ -97,6 +97,7 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test Specimen Label and Barcode after storage position changes(when page refreshes).
 	 * Bug Id : 11480
+	 * @author Himanshu Aseeja
 	 */
 	@Test
 	public void testLabelandBarcodeonStoragePositionChange()
