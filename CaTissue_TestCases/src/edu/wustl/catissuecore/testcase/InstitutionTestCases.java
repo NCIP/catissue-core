@@ -50,8 +50,7 @@ public class InstitutionTestCases extends CaTissueSuiteBaseTest
 		verifyForward("failure");
 		
 		//verify action errors
-		String errormsg[] = new String[1];
-		errormsg[0] = "errors.item"; 
+		String errormsg[] = new String[] {"errors.item"};
 		verifyActionErrors(errormsg);
 	}
 	/**
@@ -68,8 +67,7 @@ public class InstitutionTestCases extends CaTissueSuiteBaseTest
 		verifyForward("failure");
 		
 		//verify action errors
-		String errormsg[] = new String[1];
-		errormsg[0] = "errors.item.required"; 
+		String errormsg[] = new String[]{"errors.item.required"};
 		verifyActionErrors(errormsg);
 	}
 	/**
@@ -85,7 +83,7 @@ public class InstitutionTestCases extends CaTissueSuiteBaseTest
 		addRequestParameter("value(SimpleConditionsNode:1_Condition_DataElement_table)", "Institution");
 		addRequestParameter("value(SimpleConditionsNode:1_Condition_DataElement_field)","Institution.NAME.varchar");
 		addRequestParameter("value(SimpleConditionsNode:1_Condition_Operator_operator)","Starts With");
-		addRequestParameter("value(SimpleConditionsNode:1__Condition_value)","");
+		addRequestParameter("value(SimpleConditionsNode:1_Condition_value)","");
 		addRequestParameter("pageOf","pageOfInstitution");
 		addRequestParameter("operation","search");
 		actionPerform();
@@ -121,8 +119,7 @@ public class InstitutionTestCases extends CaTissueSuiteBaseTest
 		{
 			verifyForward("failure");
 			//verify action errors
-			String errorNames[] = new String[1];
-			errorNames[0] = "simpleQuery.noRecordsFound";
+			String errorNames[] = new String[]{"simpleQuery.noRecordsFound"};
 			verifyActionErrors(errorNames);
 		}
 		/*common search action.Generates institution form*/
@@ -156,15 +153,14 @@ public class InstitutionTestCases extends CaTissueSuiteBaseTest
 		addRequestParameter("value(SimpleConditionsNode:1_Condition_DataElement_table)", "Institution");
 		addRequestParameter("value(SimpleConditionsNode:1_Condition_DataElement_field)","Institution.IDENTIFIER.bigint");
 		addRequestParameter("value(SimpleConditionsNode:1_Condition_Operator_operator)","Equals");
-		addRequestParameter("value(SimpleConditionsNode:1__Condition_value)","1234");
+		addRequestParameter("value(SimpleConditionsNode:1_Condition_value)","1234");
 		addRequestParameter("pageOf","pageOfInstitution");
 		addRequestParameter("operation","search");
 		actionPerform();
-		verifyForward("failure");
+		verifyForwardPath("/SimpleQueryInterface.do?pageOf=pageOfInstitution&aliasName=Institution");
 		
 		//verify action error
-		String errormsg[] = new String[1];
-		errormsg[0] = "simpleQuery.intvalue.required"; 
+		String errormsg[] = new String[]{"simpleQuery.noRecordsFound"};
 		verifyActionErrors(errormsg);
 	}
 }
