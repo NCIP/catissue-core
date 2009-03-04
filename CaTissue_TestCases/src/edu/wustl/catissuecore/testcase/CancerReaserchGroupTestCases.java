@@ -51,8 +51,7 @@ public class CancerReaserchGroupTestCases extends CaTissueSuiteBaseTest
 		verifyForward("failure");
 		
 		//verify action error
-		String errormsg[] = new String[1];
-		errormsg[0] = "errors.item"; 
+		String errormsg[] = new String[]{"errors.item"};
 		verifyActionErrors(errormsg);
 	}
 	/**
@@ -69,8 +68,7 @@ public class CancerReaserchGroupTestCases extends CaTissueSuiteBaseTest
 		verifyForward("failure");
 		
 		//verify action error
-		String errormsg[] = new String[1];
-		errormsg[0] = "errors.item.required"; 
+		String errormsg[] = new String[]{"errors.item.required"};
 		verifyActionErrors(errormsg);
 	}
 	/**
@@ -118,8 +116,7 @@ public class CancerReaserchGroupTestCases extends CaTissueSuiteBaseTest
 			verifyForward("failure");
 			
 			//verify action errors
-			String errorNames[] = new String[1];
-			errorNames[0] = "simpleQuery.noRecordsFound";
+			String errorNames[] = new String[]{"simpleQuery.noRecordsFound"};
 			verifyActionErrors(errorNames);
 		}
 		
@@ -155,15 +152,14 @@ public class CancerReaserchGroupTestCases extends CaTissueSuiteBaseTest
 		addRequestParameter("value(SimpleConditionsNode:1_Condition_DataElement_table)", "CancerResearchGroup");
 		addRequestParameter("value(SimpleConditionsNode:1_Condition_DataElement_field)","CancerResearchGroup.IDENTIFIER.bigint");
 		addRequestParameter("value(SimpleConditionsNode:1_Condition_Operator_operator)","Equals");
-		addRequestParameter("value(SimpleConditionsNode:1__Condition_value)","1234");
+		addRequestParameter("value(SimpleConditionsNode:1_Condition_value)","1234");
 		addRequestParameter("pageOf","pageOfCancerResearchGroup");
 		addRequestParameter("operation","search");
 		actionPerform();
-		verifyForward("failure");
+		verifyForwardPath("/SimpleQueryInterface.do?pageOf=pageOfCancerResearchGroup&aliasName=CancerResearchGroup");
 		
 		//verify action error
-		String errormsg[] = new String[1];
-		errormsg[0] = "simpleQuery.intvalue.required"; 
+		String errormsg[] = new String[]{"simpleQuery.noRecordsFound"};
 		verifyActionErrors(errormsg);
 	}
 }

@@ -52,8 +52,7 @@ public class DepartmentTestCases extends CaTissueSuiteBaseTest
 		verifyForward("failure");
 		
 		//verify action error
-		String errormsg[] = new String[1];
-		errormsg[0] = "errors.item"; 
+		String errormsg[] = new String[]{"errors.item"};
 		verifyActionErrors(errormsg);
 	}
 	/**
@@ -70,8 +69,7 @@ public class DepartmentTestCases extends CaTissueSuiteBaseTest
 		verifyForward("failure");
 		
 		//verify action error
-		String errormsg[] = new String[1];
-		errormsg[0] = "errors.item.required"; 
+		String errormsg[] = new String[]{"errors.item.required"};
 		verifyActionErrors(errormsg);
 	}
 	/**
@@ -119,8 +117,7 @@ public class DepartmentTestCases extends CaTissueSuiteBaseTest
 		{
 			verifyForward("failure");
 			//verify action errors
-			String errorNames[] = new String[1];
-			errorNames[0] = "simpleQuery.noRecordsFound";
+			String errorNames[] = new String[]{"simpleQuery.noRecordsFound"};
 			verifyActionErrors(errorNames);
 		}
 		
@@ -158,15 +155,14 @@ public class DepartmentTestCases extends CaTissueSuiteBaseTest
 		addRequestParameter("value(SimpleConditionsNode:1_Condition_DataElement_table)", "Department");
 		addRequestParameter("value(SimpleConditionsNode:1_Condition_DataElement_field)","Department.IDENTIFIER.bigint");
 		addRequestParameter("value(SimpleConditionsNode:1_Condition_Operator_operator)","Equals");
-		addRequestParameter("value(SimpleConditionsNode:1__Condition_value)","1234");
+		addRequestParameter("value(SimpleConditionsNode:1_Condition_value)","1234");
 		addRequestParameter("pageOf","pageOfDepartment");
 		addRequestParameter("operation","search");
 		actionPerform();
-		verifyForward("failure");
+		verifyForwardPath("/SimpleQueryInterface.do?pageOf=pageOfDepartment&aliasName=Department");
 		
 		//verify action error
-		String errormsg[] = new String[1];
-		errormsg[0] = "simpleQuery.intvalue.required"; 
+		String errormsg[] = new String[]{"simpleQuery.noRecordsFound"};
 		verifyActionErrors(errormsg);
 	}
 }
