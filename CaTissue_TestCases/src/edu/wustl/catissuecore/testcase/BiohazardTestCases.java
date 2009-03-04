@@ -83,8 +83,7 @@ public class BiohazardTestCases extends CaTissueSuiteBaseTest
 		{
 			verifyForward("failure");
 			//verify action errors
-			String errorNames[] = new String[1];
-			errorNames[0] = "simpleQuery.noRecordsFound";
+			String errorNames[] = new String[]{"simpleQuery.noRecordsFound"};
 			verifyActionErrors(errorNames);
 		}
 				

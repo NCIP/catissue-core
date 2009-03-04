@@ -110,9 +110,8 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
 			verifyForward("failure");
 			
 			//verify action errors
-			String errorNames[] = new String[1];
-			errorNames[0] = "simpleQuery.noRecordsFound";
-			verifyActionErrors(errorNames);
+			String errorNames[] = new String[]{"simpleQuery.noRecordsFound"};
+    		verifyActionErrors(errorNames);
 		}
 		
 		/*Site action.Generates SiteForm*/
