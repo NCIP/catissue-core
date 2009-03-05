@@ -1780,8 +1780,6 @@ queryLink{ /* for the text links in the Search category page */
 
 /* *********Added by Santosh for Autocomplete textboxes*************  */
 div.autocomplete {
-      position:absolute;
-      width:250px;
       background-color:white;
       border:1px solid #888;
       margin:0px;
@@ -1799,7 +1797,7 @@ div.autocomplete {
       margin:0;
       padding:2px;
 	  cursor:pointer;
-	  overflow:auto;
+	  overflow:none;
     }
     
    
