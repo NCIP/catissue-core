@@ -1426,6 +1426,30 @@ public class ParticipantBizLogic extends DefaultBizLogic
 		return edu.wustl.catissuecore.util.global.Utility.hasPrivilegeToView(objName, identifier, sessionDataBean, getReadDeniedPrivilegeName());
 	}
 	
+	
+	private List<Specimen> getSpecimenCollection(SpecimenCollectionGroup scg) throws DAOException
+	{
+
+		String hql = " select elements(scg.specimenCollection) from "
+		        + "edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg where scg.id =" 
+		        + scg.getId();
+
+		HibernateDAO dao = (HibernateDAO) DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+		dao.openSession(null);
+		List<Specimen> list = null;
+		try
+		{
+			list = dao.executeQuery(hql, null, false, null);
+		}
+		catch (ClassNotFoundException e)
+		{
+			Logger.out.error("Error occured while retrieving Specimen List", e);
+		}
+		dao.closeSession();
+		return list;
+
+	}
+	
 	@Override
 	public void refreshTitliSearchIndex(String operation, Object obj)
 	{
@@ -1450,16 +1474,26 @@ public class ParticipantBizLogic extends DefaultBizLogic
 						{
 							SpecimenCollectionGroup scg = (SpecimenCollectionGroup)itscgCollection.next();
 							super.refreshTitliSearchIndex(operation, scg);
-							Collection<Specimen> specimenCollection = scg.getSpecimenCollection();
+							// Collection<Specimen> specimenCollection = scg.getSpecimenCollection();
 							
-							if(specimenCollection != null)
+							// Fetch the Specimens in the given SCG explicitly
+							try
 							{
-								Iterator<Specimen> itspecimenCollection = specimenCollection.iterator();
-								while(itspecimenCollection.hasNext())
+								Collection<Specimen> specimenCollection = getSpecimenCollection(scg);
+								if (specimenCollection != null)
 								{
-									Specimen specimen = (Specimen)itspecimenCollection.next();
-									super.refreshTitliSearchIndex(operation, specimen);
+									Iterator<Specimen> itspecimenCollection = specimenCollection
+									        .iterator();
+									while (itspecimenCollection.hasNext())
+									{
+										Specimen specimen = (Specimen) itspecimenCollection.next();
+										super.refreshTitliSearchIndex(operation, specimen);
+									}
 								}
+							}
+							catch (DAOException e)
+							{
+								Logger.out.error("Error occured while retrieving Specimens from SCG", e);
 							}
 						}
 					}
