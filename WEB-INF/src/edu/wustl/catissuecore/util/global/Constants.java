@@ -2641,5 +2641,5 @@ public static final String ADD_MULTIPLE_SPECIMEN_TO_CART="addMltipleSpecimenToCa
 	
 	//Mandar:16Feb09 : For  exception Handling Action
 	public static final String EXCEPTION_OCCURED = "ExceptionOccured";
-	
+	public static final String USER_ROLE = "USER_ROLE";	
 }

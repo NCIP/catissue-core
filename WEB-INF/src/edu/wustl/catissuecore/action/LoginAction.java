@@ -110,6 +110,7 @@ public class LoginAction extends Action
 	                Logger.out.debug("CSM USer ID ....................... : "+validUser.getCsmUserId());
 	                sessionData.setCsmUserId(validUser.getCsmUserId().toString());
 	                session.setAttribute(Constants.SESSION_DATA,sessionData);
+	                session.setAttribute(Constants.USER_ROLE,validUser.getRoleId());
 	                UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.USER_FORM_ID);
 	                	
 	                String result = userBizLogic.checkFirstLoginAndExpiry(validUser);
