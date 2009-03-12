@@ -1426,28 +1426,40 @@ public class ParticipantBizLogic extends DefaultBizLogic
 		return edu.wustl.catissuecore.util.global.Utility.hasPrivilegeToView(objName, identifier, sessionDataBean, getReadDeniedPrivilegeName());
 	}
 	
-	
-	private List<Specimen> getSpecimenCollection(SpecimenCollectionGroup scg) throws DAOException
+	/**
+	 * Returns a list of Specimen objects with their IDs set as TiTLi 
+	 * needs only instance IDs in order to refresh indexes
+	 * @param the SpecimenCollectionGroup instance
+	 * @return list of Specimen objects
+	 * @throws DAOException
+	 */
+    private List<Specimen> getSpecimenCollection(SpecimenCollectionGroup scg) throws DAOException
 	{
-
-		String hql = " select elements(scg.specimenCollection) from "
-		        + "edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg where scg.id =" 
-		        + scg.getId();
+		String hql = " select s.id from edu.wustl.catissuecore.domain.Specimen s"
+		        + " where s.specimenCollectionGroup.id=" + scg.getId();
 
 		HibernateDAO dao = (HibernateDAO) DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
 		dao.openSession(null);
-		List<Specimen> list = null;
+		List<Specimen> specimens = new ArrayList<Specimen>();
 		try
 		{
-			list = dao.executeQuery(hql, null, false, null);
+			List specimenIds = dao.executeQuery(hql, null, false, null);
+			if (specimenIds != null && (!specimenIds.isEmpty()))
+			{
+				for (Iterator it = specimenIds.iterator(); it.hasNext();)
+				{
+					Specimen specimen = new Specimen();
+					specimen.setId((Long) it.next());
+					specimens.add(specimen);
+				}
+			}
 		}
 		catch (ClassNotFoundException e)
 		{
 			Logger.out.error("Error occured while retrieving Specimen List", e);
 		}
 		dao.closeSession();
-		return list;
-
+		return specimens;
 	}
 	
 	@Override
