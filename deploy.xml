@@ -3305,4 +3305,31 @@ Thanking You,
 			</catch>
 		</trycatch>
 	</target>
+	
+	<!-- IIS properties configuration -->
+	<target name="configure_IIS_properties">
+		<!-- Modify registry file -->
+		<pathconvert property="IISSettings.home.registry" dirsep="\\">
+			<path path="${basedir}\IISSettings"/>
+		</pathconvert>
+		<echo>${IISSettings.home.registry}</echo>
+		<replace file="${base.dir}/IISSettings/iis_redirect.reg">
+			<replacefilter token="@@IISSettings_HOME@@" value="${IISSettings.home.registry}" />
+		</replace>
+		
+		<!-- Modify property file -->
+		<pathconvert property="IISSettings.home">
+			<path path="${basedir}\IISSettings"/>
+		</pathconvert>
+		<echo>${IISSettings.home}</echo>
+		<replace file="${base.dir}/IISSettings/worker.properties">
+			<replacefilter token="@@IISSettings_HOME@@" value="${IISSettings.home}" />
+		</replace>
+		
+		<!-- Replace java home -->
+		<echo>${env.JAVA_HOME}</echo>
+		<replace file="${base.dir}/IISSettings/worker.properties">
+			<replacefilter token="@@JAVA_HOME@@" value="${env.JAVA_HOME}" />
+		</replace>
+	</target>
 </project>
