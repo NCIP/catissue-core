@@ -250,13 +250,14 @@ function updateField(type,i,isDis,valueToSet)
 			//var printFlag = document.getElementById("printCheckbox");
 			if(isPrintChecked)			
 			{
-				document.getElementById("printCheckbox").value = true;
+				//changes added to work in Mozilla
+				document.getElementsByName("printCheckbox")[0].value = true;
 				document.forms[0].action = url + '&printflag=1';
 				document.forms[0].submit();						
 			}
 			else
 			{
-				document.getElementById("printCheckbox").value = false;
+				document.getElementsByName("printCheckbox")[0].value = false;
 				document.forms[0].action =url+'&printflag=0'; 
 				document.forms[0].submit();
 			}
@@ -632,7 +633,7 @@ String lbl = "Apply first to all";
 		
 		<tr>					
 			<!-- <td class="formFieldNoBorders" colspan="5"  height="20" nowrap width="16%"> -->
-				<html:hidden property="printCheckbox" style="printCheckbox"/>		
+				<html:hidden property="printCheckbox" style="printCheckbox" styleId="printCheckbox"/>		
 			<!-- </td> -->
               <!--  Added for displaying  printer type and location -->
 			    
