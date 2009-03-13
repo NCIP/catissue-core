@@ -25,6 +25,7 @@ import edu.wustl.common.tree.QueryTreeNodeData;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.Variables;
 
 /**
  * Creates QueryOutputTree Object as per the data filled by the user on AddLimits section.
@@ -46,6 +47,18 @@ public class QueryOutputTreeBizLogic
 		String tableName = Constants.TEMP_OUPUT_TREE_TABLE_NAME + queryDetailsObj.getSessionData()
 			.getUserId()+queryDetailsObj.getRandomNumber();
 		String createTableSql = Constants.CREATE_TABLE + tableName + " " + Constants.AS + " " + selectSql;
+		if(Variables.databaseName.equals(Constants.MSSQLSERVER_DATABASE))
+		{
+			int indexOfFrom=selectSql.indexOf("from");
+			if(selectSql!=null && !"".equals(selectSql.trim()) && indexOfFrom > 1)
+			{
+				StringBuffer upToFrom=new StringBuffer(selectSql.substring(0,indexOfFrom));
+				StringBuffer afterFrom=new StringBuffer(selectSql.substring(indexOfFrom,selectSql.length()));
+				upToFrom.append(" INTO ").append(tableName).append(" ");
+				upToFrom.append(afterFrom);
+				createTableSql=upToFrom.toString();
+			}
+		}
 		QueryModuleSqlUtil.executeCreateTable(tableName, createTableSql, queryDetailsObj);
 	}
 	/**

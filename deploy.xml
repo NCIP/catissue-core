@@ -203,6 +203,15 @@
 				<echo>email.mailServer can be left blank.</echo>
 			</then>
 		</if>
+		
+		<!-- Validation of database schema name for MsSqlServer-->
+		<if>
+			<equals arg1="mssqlserver" arg2="${database.type}" />
+			<then>
+				<antcall target="validate_schema_name" />
+			</then>
+		</if>
+		
 	</target>
 
 	<!--Target for validation of connection parameters-->
@@ -2862,6 +2871,11 @@ Thanking You,
 	<!--MsSQLServer Database Creation -->
 	<target name="deploy_db_mssqlserver">
 		<echo message="Initializing MsSQLServer Database for caTissue Suite v1.1P1. Application..." />
+					
+		<replace file="${mssqlserver.sql.dir}/UniqueKey_Constraint.sql">
+			<replacefilter token="@@schema@@" value="${database.schemaname}" />
+		</replace>	
+				
 		<sql driver="${mssqlserver.driver.string}" url="jdbc:sqlserver://${database.host}:${database.port};databaseName=${database.name};" userid="${database.username}" password="${database.password}">
 			<transaction src="${mssqlserver.sql.dir}/catissuecore.sql" />
 			<transaction src="${mssqlserver.sql.dir}/InitDB_CreateTable.sql" />
@@ -2876,6 +2890,7 @@ Thanking You,
 			<transaction src="${mssqlserver.sql.dir}/query/query_schema_script.sql" />
 			<transaction src="${mssqlserver.sql.dir}/query/caB2B Table Generation Script.sql" />
 			<transaction src="${dbupgrade.sql.dir}/MsSqlServer/CAModel.sql"/>
+			<transaction src="${mssqlserver.sql.dir}/UniqueKey_Constraint.sql" />
 
 			<!-- 
 			<transaction>commit;</transaction>
@@ -2886,6 +2901,10 @@ Thanking You,
 				</fileset>
 			</classpath>
 		</sql>
+		
+		<replace file="${mssqlserver.sql.dir}/UniqueKey_Constraint.sql">
+			<replacefilter token="${database.schemaname}" value="@@schema@@" />
+		</replace>
 		
 		<antcall  target="Export_Clinical_diagnosis_mssqlserver"/>
 		<antcall target="CAModel_import_data" />
@@ -3115,8 +3134,7 @@ Thanking You,
 
 
 		</target>
-	
-		
+			
 	<!-- ACORN - mssqlserver migration - end -->
 	
 	<target name="show_hide_forms_based_on_CPs">
@@ -3303,4 +3321,51 @@ Thanking You,
 		</delete>
 	</target>
 	<!-- Add default conditions to forms start -->
+		
+	<!--Target for validation of database schema name for MsSqlServer-->
+	<target name="validate_schema_name">
+		<trycatch>
+	      	<try>
+				<sql driver="${mssqlserver.driver.string}" url="jdbc:sqlserver://${database.host}:${database.port};databaseName=${database.name};" userid="${database.username}" password="${database.password}">
+					<transaction>IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name = '${database.schemaname}')
+							     RAISERROR('Error is occured while validating schema name', 16, 1);</transaction>
+					<classpath>
+						<fileset dir="${lib.dir}">
+				  			<include name="*.jar" />
+						</fileset>
+					</classpath>
+				</sql>
+			</try>
+			<catch>
+				<fail message="Database schema name validation fails.Please enter a valid database.schemaname property" />
+			</catch>
+		</trycatch>
+	</target>
+	
+	<!-- IIS properties configuration -->
+	<target name="configure_IIS_properties">
+		<!-- Modify registry file -->
+		<pathconvert property="IISSettings.home.registry" dirsep="\\">
+			<path path="${basedir}\IISSettings"/>
+		</pathconvert>
+		<echo>${IISSettings.home.registry}</echo>
+		<replace file="${base.dir}/IISSettings/iis_redirect.reg">
+			<replacefilter token="@@IISSettings_HOME@@" value="${IISSettings.home.registry}" />
+		</replace>
+		
+		<!-- Modify property file -->
+		<pathconvert property="IISSettings.home">
+			<path path="${basedir}\IISSettings"/>
+		</pathconvert>
+		<echo>${IISSettings.home}</echo>
+		<replace file="${base.dir}/IISSettings/worker.properties">
+			<replacefilter token="@@IISSettings_HOME@@" value="${IISSettings.home}" />
+		</replace>
+		
+		<!-- Replace java home -->
+		<echo>${env.JAVA_HOME}</echo>
+		<replace file="${base.dir}/IISSettings/worker.properties">
+			<replacefilter token="@@JAVA_HOME@@" value="${env.JAVA_HOME}" />
+		</replace>
+	</target>
 </project>

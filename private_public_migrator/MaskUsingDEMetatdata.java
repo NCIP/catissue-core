@@ -14,6 +14,7 @@ import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.common.dynamicextensions.entitymanager.EntityManager;
 import edu.common.dynamicextensions.entitymanager.EntityManagerInterface;
+import edu.wustl.common.util.global.Constants;
 
 
 public class MaskUsingDEMetatdata
@@ -86,7 +87,8 @@ public class MaskUsingDEMetatdata
 			
 			/* Delete audit related tables starts */
 			
-			disableAuditTablesOracleConstraints(session);
+			// Disable constraints on audit tables.
+			disableAuditTables(session);
 			
 			sqlString="truncate table catissue_audit_event_details";
 			executeQuery(sqlString, session);
@@ -102,7 +104,8 @@ public class MaskUsingDEMetatdata
 			sqlString="truncate table catissue_audit_event";
 			executeQuery(sqlString, session);
 			
-			enableAuditTablesOracleConstraints(session);
+			// Enable constraints on audit tables.
+			enableAuditTables(session);
 			
 			/* Delete audit related tables ends */
 			
@@ -116,47 +119,7 @@ public class MaskUsingDEMetatdata
 			System.out.println(e);
 		}
 	}
-	private void disableAuditTablesOracleConstraints(Session session) throws SQLException
-	{
-		String dbType=session.connection().getMetaData().getDatabaseProductName();
-
-		if(dbType.equalsIgnoreCase("oracle"))
-		{
-			String sqlString="ALTER TABLE catissue_audit_event_details DISABLE CONSTRAINT FK5C07745D34FFD77F";
-			executeQuery(sqlString, session);
-
-			sqlString="ALTER TABLE catissue_audit_event_query_log DISABLE CONSTRAINT FK62DC439DBC7298A9";
-			executeQuery(sqlString, session);
-			
-			sqlString="ALTER TABLE CATISSUE_AUDIT_EVENT_LOG DISABLE CONSTRAINT FK8BB672DF77F0B904";
-			executeQuery(sqlString, session);
-			
-			sqlString="ALTER TABLE CATISSUE_AUDIT_EVENT DISABLE CONSTRAINT FKACAF697A2206F20F";
-			executeQuery(sqlString, session);
-			
-		}
-	}
-	private void enableAuditTablesOracleConstraints(Session session) throws SQLException
-	{
-		String dbType=session.connection().getMetaData().getDatabaseProductName();
-
-		if(dbType.equalsIgnoreCase("oracle"))
-		{
-			String sqlString="ALTER TABLE catissue_audit_event_details ENABLE CONSTRAINT FK5C07745D34FFD77F";
-			executeQuery(sqlString, session);
-
-			sqlString="ALTER TABLE catissue_audit_event_query_log ENABLE CONSTRAINT FK62DC439DBC7298A9";
-			executeQuery(sqlString, session);
-			
-			sqlString="ALTER TABLE CATISSUE_AUDIT_EVENT_LOG ENABLE CONSTRAINT FK8BB672DF77F0B904";
-			executeQuery(sqlString, session);
-			
-			sqlString="ALTER TABLE CATISSUE_AUDIT_EVENT ENABLE CONSTRAINT FKACAF697A2206F20F";
-			executeQuery(sqlString, session);
-			
-		}
-		
-	}
+	
 	private void maskDate(String columnName, String tableName, Session session) throws SQLException
 	{
 		String sqlString=null;
@@ -171,6 +134,9 @@ public class MaskUsingDEMetatdata
 			if(dbType.equalsIgnoreCase("mysql"))
 			{
 				sqlString="update "+tableName+" set "+columnName+"=date_add("+columnName+", INTERVAL -"+randomNumber+" MONTH);";
+			}
+			if(dbType.equalsIgnoreCase(Constants.MSSQLSERVER_DATABASE)) {
+				sqlString="update " + tableName + " set " + columnName + "=dateadd(\"MONTH\", " + randomNumber + ", " +  columnName + ");";
 			}
 			executeQuery(sqlString, session);
 		}		
@@ -187,12 +153,10 @@ public class MaskUsingDEMetatdata
 		String sqlString=null;
 		String dbType=session.connection().getMetaData().getDatabaseProductName();
 
-		if(dbType.equalsIgnoreCase("oracle"))
-		{
+		if(dbType.equalsIgnoreCase("oracle") || dbType.equalsIgnoreCase(Constants.MSSQLSERVER_DATABASE)) {
 			sqlString="update catissue_report_content set report_data=NULL where identifier in(select a.identifier from catissue_report_content a join catissue_report_textcontent b on a.identifier=b.identifier join catissue_pathology_report c on c.identifier=b.report_id where c.REPORT_STATUS in ('DEIDENTIFIED','DEID_PROCESS_FAILED','PENDING_FOR_DEID'))";
 		}
-		if(dbType.equalsIgnoreCase("mysql"))
-		{
+		if(dbType.equalsIgnoreCase("mysql")) {
 			sqlString="update CATISSUE_REPORT_CONTENT as rc, CATISSUE_REPORT_TEXTCONTENT as rt, CATISSUE_PATHOLOGY_REPORT as pr set rc.REPORT_DATA=NULL where pr.IDENTIFIER=rt.report_id and rt.IDENTIFIER=rc.IDENTIFIER and pr.REPORT_STATUS in ('DEIDENTIFIED','DEID_PROCESS_FAILED','PENDING_FOR_DEID')";
 		}
 		executeQuery(sqlString, session);
@@ -226,5 +190,117 @@ public class MaskUsingDEMetatdata
 			flag = true;
 		}
 		return flag;
+	}
+	
+	/**
+	 * Disable audit related tables constraints.
+	 * 
+	 * @param session
+	 * @throws SQLException
+	 */
+	private void disableAuditTables(Session session) throws SQLException {
+		String dbType=session.connection().getMetaData().getDatabaseProductName();
+
+		if(dbType.equalsIgnoreCase(Constants.ORACLE_DATABASE)) {
+			// oracle db.
+			disableAuditTablesOracleConstraints(session);
+		} else if(dbType.equalsIgnoreCase(Constants.MSSQLSERVER_DATABASE)) {
+			// mssqlserver db.
+			disableAuditTablesMsSqlServerConstraints(session);
+		}
+	}
+
+	/**
+	 * Enable audit related tables constraints.
+	 * 
+	 * @param session
+	 * @throws SQLException
+	 */
+	private void enableAuditTables(Session session) throws SQLException {
+		String dbType=session.connection().getMetaData().getDatabaseProductName();
+
+		if(dbType.equalsIgnoreCase(Constants.ORACLE_DATABASE)) {
+			// oracle db.
+			enableAuditTablesOracleConstraints(session);
+		} else if(dbType.equalsIgnoreCase(Constants.MSSQLSERVER_DATABASE)) {
+			// mssqlserver db.
+			enableAuditTablesMsSqlServerConstraints(session);
+		}
+	}
+	
+	/**
+	 * Disable constraints on audit tables for oracle db.
+	 *  
+	 * @param session
+	 * @throws SQLException
+	 */
+	private void disableAuditTablesOracleConstraints(Session session) throws SQLException {
+		String sqlString="ALTER TABLE catissue_audit_event_details DISABLE CONSTRAINT FK5C07745D34FFD77F";
+		executeQuery(sqlString, session);
+
+		sqlString="ALTER TABLE catissue_audit_event_query_log DISABLE CONSTRAINT FK62DC439DBC7298A9";
+		executeQuery(sqlString, session);
+		
+		sqlString="ALTER TABLE CATISSUE_AUDIT_EVENT_LOG DISABLE CONSTRAINT FK8BB672DF77F0B904";
+		executeQuery(sqlString, session);
+		
+		sqlString="ALTER TABLE CATISSUE_AUDIT_EVENT DISABLE CONSTRAINT FKACAF697A2206F20F";
+		executeQuery(sqlString, session);
+	}
+	
+	private void enableAuditTablesOracleConstraints(Session session) throws SQLException {
+		String sqlString="ALTER TABLE catissue_audit_event_details ENABLE CONSTRAINT FK5C07745D34FFD77F";
+		executeQuery(sqlString, session);
+
+		sqlString="ALTER TABLE catissue_audit_event_query_log ENABLE CONSTRAINT FK62DC439DBC7298A9";
+		executeQuery(sqlString, session);
+		
+		sqlString="ALTER TABLE CATISSUE_AUDIT_EVENT_LOG ENABLE CONSTRAINT FK8BB672DF77F0B904";
+		executeQuery(sqlString, session);
+		
+		sqlString="ALTER TABLE CATISSUE_AUDIT_EVENT ENABLE CONSTRAINT FKACAF697A2206F20F";
+		executeQuery(sqlString, session);
+	}
+	
+	/**
+	 * Disable audit related tables constraints if MsSQLServer DB.
+	 * To disable all constraints - ALTER TABLE <Table_Name> NOCHECK CONSTRAINT ALL
+	 *  
+	 * @param session
+	 * @exception SQLException
+	 */
+	private void disableAuditTablesMsSqlServerConstraints(Session session) throws SQLException {
+		String sqlString="ALTER TABLE catissue_audit_event_details NOCHECK CONSTRAINT ALL";
+		executeQuery(sqlString, session);
+
+		sqlString="ALTER TABLE catissue_audit_event_query_log NOCHECK CONSTRAINT ALL";
+		executeQuery(sqlString, session);
+		
+		sqlString="ALTER TABLE CATISSUE_AUDIT_EVENT_LOG NOCHECK CONSTRAINT ALL";
+		executeQuery(sqlString, session);
+		
+		sqlString="ALTER TABLE CATISSUE_AUDIT_EVENT NOCHECK CONSTRAINT ALL";
+		executeQuery(sqlString, session);
+	}
+	
+	/**
+	 * Enable audit related tables constraints if MsSQLServer DB.
+	 * To enable all constraints - ALTER TABLE <Table_Name> CHECK CONSTRAINT ALL
+	 *  
+	 * @param session
+	 * @exception SQLException
+	 */
+	private void enableAuditTablesMsSqlServerConstraints(Session session) throws SQLException {
+		String sqlString="ALTER TABLE catissue_audit_event_details CHECK CONSTRAINT ALL";
+		executeQuery(sqlString, session);
+
+		sqlString="ALTER TABLE catissue_audit_event_query_log CHECK CONSTRAINT ALL";
+		executeQuery(sqlString, session);
+		
+		sqlString="ALTER TABLE CATISSUE_AUDIT_EVENT_LOG CHECK CONSTRAINT ALL";
+		executeQuery(sqlString, session);
+		
+		sqlString="ALTER TABLE CATISSUE_AUDIT_EVENT CHECK CONSTRAINT ALL";
+		executeQuery(sqlString, session);
 	}
 }

@@ -4,6 +4,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
+import edu.wustl.catissuecore.util.global.Constants;
 /**
  * Description: This method with Automate date function and update the REPORTING_PERIOD of MDS DB. 
  * @author virender_mehta
@@ -89,16 +91,17 @@ public class ExtractLoadMinimalData
 		Class.forName(DATABASE_DRIVER);
 		String url = "";
 		// Create a connection to the database
-		if ("MySQL".equalsIgnoreCase(DATABASE_TYPE))
-		{
+		if ("MySQL".equalsIgnoreCase(DATABASE_TYPE)) {
 			url = "jdbc:mysql://" + DATABASE_SERVER_NAME + ":" + DATABASE_SERVER_PORT_NUMBER + "/"
 					+ DATABASE_NAME; 
-			
 		}
-		if ("Oracle".equalsIgnoreCase(DATABASE_TYPE))
-		{
+		if ("Oracle".equalsIgnoreCase(DATABASE_TYPE)) {
 			url = "jdbc:oracle:thin:@" + DATABASE_SERVER_NAME + ":" + DATABASE_SERVER_PORT_NUMBER
 					+ ":" + DATABASE_NAME;
+		}
+		if(Constants.MSSQLSERVER_DATABASE.equalsIgnoreCase(DATABASE_TYPE)) {
+			url = "jdbc:sqlserver://" + DATABASE_SERVER_NAME + ":" + DATABASE_SERVER_PORT_NUMBER + ";" 
+				+ "databaseName=" + DATABASE_NAME;
 		}
 		System.out.println("URL : " + url);
 		connection = DriverManager.getConnection(url, DATABASE_USERNAME, DATABASE_PASSWORD);
@@ -183,58 +186,58 @@ public class ExtractLoadMinimalData
 	    	  {
 	    		 startDate = year+"-01-01"; 
 	    		 endDate = year+"-03-31";
-	    		 if ("MySQL".equalsIgnoreCase(DATABASE_TYPE))
-	    		 {
-	    			 query = "UPDATE REPORTING_PERIOD SET START_DATE="+SINGLE_QUOTES+startDate+SINGLE_QUOTES+",END_DATE="+ SINGLE_QUOTES+endDate+SINGLE_QUOTES +" WHERE ID="+resultSet.getString(1);
-	    		 }
-	    		 else
-	    		 {
+	    		 
+	    		 if (Constants.ORACLE_DATABASE.equalsIgnoreCase(DATABASE_TYPE)) {
+	    			 // Oracle DB.
 	    			 query = "UPDATE REPORTING_PERIOD SET START_DATE = TO_DATE("+SINGLE_QUOTES+startDate+SINGLE_QUOTES+","+SINGLE_QUOTES+DATE_FORMAT+SINGLE_QUOTES+"),"
 	    			 +" END_DATE = TO_DATE("+SINGLE_QUOTES+endDate+SINGLE_QUOTES+","+SINGLE_QUOTES+DATE_FORMAT+SINGLE_QUOTES+") WHERE ID="+resultSet.getString(1);
+	    		 } else {
+	    			 // For MySQL and MsSqlServer DB.
+	    			 query = "UPDATE REPORTING_PERIOD SET START_DATE="+SINGLE_QUOTES+startDate+SINGLE_QUOTES+",END_DATE="+ SINGLE_QUOTES+endDate+SINGLE_QUOTES +" WHERE ID="+resultSet.getString(1);
 	    		 }
 	    	  }
 	    	  else if("2".equals(quarter))
 	    	  {
 	    		  startDate = year+"-04-01"; 
 	    		  endDate = year+"-06-30";
-    			 if ("MySQL".equalsIgnoreCase(DATABASE_TYPE))
-	    		 {
-	    			 query = "UPDATE REPORTING_PERIOD SET START_DATE="+SINGLE_QUOTES+startDate+SINGLE_QUOTES+",END_DATE="+ SINGLE_QUOTES+endDate+SINGLE_QUOTES +" WHERE ID="+resultSet.getString(1);
-	    		 }
-    			 else
-    			 {
-    				 query = "UPDATE REPORTING_PERIOD SET START_DATE= TO_DATE("+SINGLE_QUOTES+startDate+SINGLE_QUOTES+","+SINGLE_QUOTES+DATE_FORMAT+SINGLE_QUOTES+"),"
-	    			 +" END_DATE = TO_DATE("+SINGLE_QUOTES+endDate+SINGLE_QUOTES+","+SINGLE_QUOTES+DATE_FORMAT+SINGLE_QUOTES+") WHERE ID="+resultSet.getString(1); 
-    			 }
-
+	    		  
+	    		  if (Constants.ORACLE_DATABASE.equalsIgnoreCase(DATABASE_TYPE)) {
+	    			// Oracle DB.
+	    			query = "UPDATE REPORTING_PERIOD SET START_DATE= TO_DATE("+SINGLE_QUOTES+startDate+SINGLE_QUOTES+","+SINGLE_QUOTES+DATE_FORMAT+SINGLE_QUOTES+"),"
+	    			+" END_DATE = TO_DATE("+SINGLE_QUOTES+endDate+SINGLE_QUOTES+","+SINGLE_QUOTES+DATE_FORMAT+SINGLE_QUOTES+") WHERE ID="+resultSet.getString(1); 
+	    		  } else {
+	    			// For MySQL and MsSqlServer DB.
+	    			query = "UPDATE REPORTING_PERIOD SET START_DATE="+SINGLE_QUOTES+startDate+SINGLE_QUOTES+",END_DATE="+ SINGLE_QUOTES+endDate+SINGLE_QUOTES +" WHERE ID="+resultSet.getString(1);  
+	    		  }
 	    	  }
 	    	  else if("3".equals(quarter))
 	    	  {
 	    		  startDate = year+"-07-01"; 
 	    		  endDate = year+"-09-30";
-	    			 if ("MySQL".equalsIgnoreCase(DATABASE_TYPE))
-		    		 {
-		    			 query = "UPDATE REPORTING_PERIOD SET START_DATE="+SINGLE_QUOTES+startDate+SINGLE_QUOTES+",END_DATE="+ SINGLE_QUOTES+endDate+SINGLE_QUOTES +" WHERE ID="+resultSet.getString(1);
-		    		 }
-	    			 else
-	    			 {
-	    				 query = "UPDATE REPORTING_PERIOD SET START_DATE= TO_DATE("+SINGLE_QUOTES+startDate+SINGLE_QUOTES+","+SINGLE_QUOTES+DATE_FORMAT+SINGLE_QUOTES+"),"
-		    			 +" END_DATE = TO_DATE("+SINGLE_QUOTES+endDate+SINGLE_QUOTES+","+SINGLE_QUOTES+DATE_FORMAT+SINGLE_QUOTES+") WHERE ID="+resultSet.getString(1); 
-	    			 }
+	    		  
+	    		  if (Constants.ORACLE_DATABASE.equalsIgnoreCase(DATABASE_TYPE)) {
+	    			// Oracle DB.
+	    			query = "UPDATE REPORTING_PERIOD SET START_DATE= TO_DATE("+SINGLE_QUOTES+startDate+SINGLE_QUOTES+","+SINGLE_QUOTES+DATE_FORMAT+SINGLE_QUOTES+"),"
+	    			+" END_DATE = TO_DATE("+SINGLE_QUOTES+endDate+SINGLE_QUOTES+","+SINGLE_QUOTES+DATE_FORMAT+SINGLE_QUOTES+") WHERE ID="+resultSet.getString(1); 
+	    		  } else {
+	    			// For MySQL and MsSqlServer DB.
+	    			query = "UPDATE REPORTING_PERIOD SET START_DATE="+SINGLE_QUOTES+startDate+SINGLE_QUOTES+",END_DATE="+ SINGLE_QUOTES+endDate+SINGLE_QUOTES +" WHERE ID="+resultSet.getString(1);  
+	    		  }
 	    	  }
 	    	  else if("4".equals(quarter))
 	    	  {
 	    		  startDate = year+"-10-01"; 
 	    		  endDate = year+"-12-31";
-	    			 if ("MySQL".equalsIgnoreCase(DATABASE_TYPE))
-		    		 {
-		    			 query = "UPDATE REPORTING_PERIOD SET START_DATE="+SINGLE_QUOTES+startDate+SINGLE_QUOTES+",END_DATE="+ SINGLE_QUOTES+endDate+SINGLE_QUOTES +" WHERE ID="+resultSet.getString(1);
-		    		 }
-	    			 else
-	    			 {
-	    				 query = "UPDATE REPORTING_PERIOD SET START_DATE= TO_DATE("+SINGLE_QUOTES+startDate+SINGLE_QUOTES+","+SINGLE_QUOTES+DATE_FORMAT+SINGLE_QUOTES+"),"
-		    			 +" END_DATE = TO_DATE("+SINGLE_QUOTES+endDate+SINGLE_QUOTES+","+SINGLE_QUOTES+DATE_FORMAT+SINGLE_QUOTES+") WHERE ID="+resultSet.getString(1);
-	    			 }
+	    		  
+	    		  if (Constants.ORACLE_DATABASE.equalsIgnoreCase(DATABASE_TYPE)) {
+	    			// Oracle DB.
+    				 query = "UPDATE REPORTING_PERIOD SET START_DATE= TO_DATE("+SINGLE_QUOTES+startDate+SINGLE_QUOTES+","+SINGLE_QUOTES+DATE_FORMAT+SINGLE_QUOTES+"),"
+	    			 +" END_DATE = TO_DATE("+SINGLE_QUOTES+endDate+SINGLE_QUOTES+","+SINGLE_QUOTES+DATE_FORMAT+SINGLE_QUOTES+") WHERE ID="+resultSet.getString(1);
+	    			   
+	    		  } else {
+	    			// For MySQL and MsSqlServer DB.
+	    			  query = "UPDATE REPORTING_PERIOD SET START_DATE="+SINGLE_QUOTES+startDate+SINGLE_QUOTES+",END_DATE="+ SINGLE_QUOTES+endDate+SINGLE_QUOTES +" WHERE ID="+resultSet.getString(1);  
+	    		  }
 	    	  }
 	    	  System.out.println(query);
 	    	  updateStatement.executeUpdate(query);

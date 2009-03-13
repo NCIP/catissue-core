@@ -95,7 +95,7 @@
             type="boolean"
             update="true"
             insert="true"
-            column="FULL"
+            column="CONT_FULL"
         />
 
         <property
