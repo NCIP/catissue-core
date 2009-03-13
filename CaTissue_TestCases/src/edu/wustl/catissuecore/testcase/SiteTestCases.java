@@ -1,7 +1,9 @@
 package edu.wustl.catissuecore.testcase;
 
 import java.util.List;
+
 import org.junit.Test;
+
 import edu.wustl.catissuecore.actionForm.SiteForm;
 import edu.wustl.catissuecore.domain.Address;
 import edu.wustl.catissuecore.domain.Site;
@@ -20,7 +22,7 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
 	 * Test Site Add.
 	 */
 	@Test
-	public void testRepositorySiteAdd()
+	public void testAddRepositorySite()
 	{
 		RequestParameterUtility.setAddSiteParams(this);
 		addRequestParameter("type","Repository");
@@ -38,24 +40,15 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
 		
 		site.setId(form.getId());
 		site.setName(form.getName());
-		site.setType(form.getType());
-		site.setEmailAddress(form.getEmailAddress());
-		site.setCoordinator(coordinator);
-		Address address=new Address();
 		
-		address.setStreet(form.getStreet());
-		address.setCity(form.getCity());
-		address.setState(form.getState());
-		address.setCountry(form.getCountry());
-		address.setZipCode(form.getZipCode());
-		address.setPhoneNumber(form.getPhoneNumber());
-		
-		site.setAddress(address);
-		
+		//add site object to objectMap
 		TestCaseUtility.setNameObjectMap("Site",site);
 	}
-	
-	public void testCollectionSiteAdd()
+    /**
+	 * Add Collection site.
+	 */
+	@Test
+	public void testAddCollectionSite()
 	{
 		RequestParameterUtility.setAddSiteParams(this);
 		addRequestParameter("type","Collection Site");	
@@ -73,24 +66,13 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
 		
 		site.setId(form.getId());
 		site.setName(form.getName());
-		site.setType(form.getType());
-		site.setEmailAddress(form.getEmailAddress());
-		site.setCoordinator(coordinator);
-		Address address=new Address();
-		
-		address.setStreet(form.getStreet());
-		address.setCity(form.getCity());
-		address.setState(form.getState());
-		address.setCountry(form.getCountry());
-		address.setZipCode(form.getZipCode());
-		address.setPhoneNumber(form.getPhoneNumber());
-		
-		site.setAddress(address);
-		
-		TestCaseUtility.setNameObjectMap("Site",site);
+		TestCaseUtility.setNameObjectMap("CollectionSite",site);
 	}
-
-	public void testLaboratorySiteAdd()
+	/**
+	 * Add Laboratory site.
+	 */
+	@Test
+	public void testAddLaboratorySite()
 	{
 		RequestParameterUtility.setAddSiteParams(this);
 		addRequestParameter("type","Laboratory");		
@@ -122,9 +104,14 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
 		
 		site.setAddress(address);
 		
-		TestCaseUtility.setNameObjectMap("Site",site);
+		//add site object to objectMap
+		TestCaseUtility.setNameObjectMap("LaboratorySite",site);
 	}
-	public void testNotSpecifiedSiteAdd()
+	/**
+	 *  Add Not Specified site.
+	 */
+	@Test
+	public void testAddNotSpecifiedSite()
 	{
 		RequestParameterUtility.setAddSiteParams(this);
 		addRequestParameter("type","Not Specified"); 
@@ -157,8 +144,14 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
 		
 		site.setAddress(address);
 		
-		TestCaseUtility.setNameObjectMap("Site",site);
+		//add site object to objectMap
+		TestCaseUtility.setNameObjectMap("NotSpecifiedSite",site);
 	}
+	/**
+	 * Add Site without specifying mandatory Parameters.
+	 * Negative test case.
+	 */
+	@Test
 	public void testSiteAddWithoutMandatoryParams()
 	{
 		addRequestParameter("name","");
@@ -171,11 +164,16 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
 		setRequestPathInfo("/SiteAdd");
 		actionPerform();
 		verifyForward("failure");
+		//verify action errors
 		String errorNames[] = new String[]{"errors.item.required","errors.item.required","errors.item.required"
 				,"errors.item.required","errors.item.required","errors.item.required"};
 		verifyActionErrors(errorNames);	
 	}
-	
+	/**
+	 * Add Site with duplicate name.
+	 * Negative test case.
+	 */
+	@Test
 	public void testSiteAddWithSameName()
 	{
 		Site site = (Site) TestCaseUtility.getNameObjectMap("Site");
@@ -193,7 +191,7 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test Site Edit.
 	 */
-	//@Test
+	@Test
 	public void testSiteEdit()
 	{
 		setRequestPathInfo("/SimpleSearch");
@@ -253,9 +251,10 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
 	}
 	
 	/**
-	 * Test Site Edit.
+	 * Edit Site without specifying mandatory Parameters.
+	 * Negative test case.
 	 */
-	//@Test
+	@Test
 	public void testSiteEditEmptySiteParams()
 	{
 		setRequestPathInfo("/SimpleSearch");
@@ -314,9 +313,11 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
 		addRequestParameter("operation", "edit");
 		actionPerform();
 		verifyForward("failure");
+		//verify action errors
 		String errorNames[] = new String[]{"errors.item.required","errors.item.required","errors.item.required"
 				,"errors.item.required","errors.item.required","errors.item.required","errors.item.required"};
 		verifyActionErrors(errorNames);	
 	}
-
+	
+	
 }
