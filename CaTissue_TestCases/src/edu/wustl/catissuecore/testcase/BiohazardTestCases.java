@@ -16,10 +16,10 @@ import edu.wustl.common.util.dbManager.DAOException;
 public class BiohazardTestCases extends CaTissueSuiteBaseTest 
 {
 	/**
-	 * Test Biohazard Add.
+	 * Test Infectious Biohazard Add.
 	 */
 	@Test
-	public void testBioHazardAdd()
+	public void testAddBioHazard()
 	{
 		addRequestParameter("name", "Biohazard_" + UniqueKeyGeneratorUtil.getUniqueKey());
 		addRequestParameter("type", "Infectious");
@@ -36,7 +36,128 @@ public class BiohazardTestCases extends CaTissueSuiteBaseTest
 		biohazard.setName(form.getName());
 		biohazard.setType(form.getType());
 		
+		//add Biohazard object to objectMap
 		TestCaseUtility.setNameObjectMap("Biohazard",biohazard);
+	}
+	@Test
+	/**
+	 *  Add Carcinogen Biohazard.
+	 */
+	public void testAddCarcinogenBioHazard()
+	{
+		addRequestParameter("name", "Biohazard_" + UniqueKeyGeneratorUtil.getUniqueKey());
+		addRequestParameter("type", "Carcinogen");
+		addRequestParameter("operation", "add");
+		setRequestPathInfo("/BiohazardAdd");
+		actionPerform();
+		verifyForward("success");
+		verifyNoActionErrors();
+		
+		BiohazardForm form=(BiohazardForm) getActionForm();
+		
+		Biohazard biohazard = new Biohazard();
+		biohazard.setId(form.getId());
+		biohazard.setName(form.getName());
+		biohazard.setType(form.getType());
+		
+		//add Biohazard object to objectMap
+		TestCaseUtility.setNameObjectMap("CarcinogenBiohazard",biohazard);
+	}
+	@Test
+	/**
+	 * Add Mutagen Biohazard.
+	 */
+	public void testAddMutagenBioHazard()
+	{
+		addRequestParameter("name", "Biohazard_" + UniqueKeyGeneratorUtil.getUniqueKey());
+		addRequestParameter("type", "Mutagen");
+		addRequestParameter("operation", "add");
+		setRequestPathInfo("/BiohazardAdd");
+		actionPerform();
+		verifyForward("success");
+		verifyNoActionErrors();
+		
+		BiohazardForm form=(BiohazardForm) getActionForm();
+		
+		Biohazard biohazard = new Biohazard();
+		biohazard.setId(form.getId());
+		biohazard.setName(form.getName());
+		biohazard.setType(form.getType());
+		
+		//add Biohazard object to objectMap
+		TestCaseUtility.setNameObjectMap("MutagenBiohazard",biohazard);
+	}
+	@Test
+	/**
+	 * Add Not Specified Biohazard.
+	 */
+	public void testAddNotSpecifiedBioHazard()
+	{
+		addRequestParameter("name", "Biohazard_" + UniqueKeyGeneratorUtil.getUniqueKey());
+		addRequestParameter("type", "Not Specified");
+		addRequestParameter("operation", "add");
+		setRequestPathInfo("/BiohazardAdd");
+		actionPerform();
+		verifyForward("success");
+		verifyNoActionErrors();
+		
+		BiohazardForm form=(BiohazardForm) getActionForm();
+		
+		Biohazard biohazard = new Biohazard();
+		biohazard.setId(form.getId());
+		biohazard.setName(form.getName());
+		biohazard.setType(form.getType());
+		
+		//add Biohazard object to objectMap
+		TestCaseUtility.setNameObjectMap("NotSpecifiedBiohazard",biohazard);
+	}
+	@Test
+	/**
+	 * Add Radioactive Biohazard.
+	 */
+	public void testAddRadioactiveBioHazard()
+	{
+		addRequestParameter("name", "Biohazard_" + UniqueKeyGeneratorUtil.getUniqueKey());
+		addRequestParameter("type", "Radioactive");
+		addRequestParameter("operation", "add");
+		setRequestPathInfo("/BiohazardAdd");
+		actionPerform();
+		verifyForward("success");
+		verifyNoActionErrors();
+		
+		BiohazardForm form=(BiohazardForm) getActionForm();
+		
+		Biohazard biohazard = new Biohazard();
+		biohazard.setId(form.getId());
+		biohazard.setName(form.getName());
+		biohazard.setType(form.getType());
+		
+		//add Biohazard object to objectMap
+		TestCaseUtility.setNameObjectMap("RadioactiveBiohazard",biohazard);
+	}
+	@Test
+	/**
+	 * Add Toxic Biohazard.
+	 */
+	public void testAddToxicBioHazard()
+	{
+		addRequestParameter("name", "Biohazard_" + UniqueKeyGeneratorUtil.getUniqueKey());
+		addRequestParameter("type", "Toxic");
+		addRequestParameter("operation", "add");
+		setRequestPathInfo("/BiohazardAdd");
+		actionPerform();
+		verifyForward("success");
+		verifyNoActionErrors();
+		
+		BiohazardForm form=(BiohazardForm) getActionForm();
+		
+		Biohazard biohazard = new Biohazard();
+		biohazard.setId(form.getId());
+		biohazard.setName(form.getName());
+		biohazard.setType(form.getType());
+		
+		//add Biohazard object to objectMap
+		TestCaseUtility.setNameObjectMap("ToxicBiohazard",biohazard);
 	}
 	/**
 	 * Test Biohazard Edit.
@@ -46,13 +167,7 @@ public class BiohazardTestCases extends CaTissueSuiteBaseTest
 	{
 		/*Simple Search Action*/
 		setRequestPathInfo("/SimpleSearch");
-		addRequestParameter("aliasName", "Biohazard");
-		addRequestParameter("value(SimpleConditionsNode:1_Condition_DataElement_table)", "Biohazard");
-		addRequestParameter("value(SimpleConditionsNode:1_Condition_DataElement_field)","Biohazard.NAME.varchar");
-		addRequestParameter("value(SimpleConditionsNode:1_Condition_Operator_operator)","Starts With");
-		addRequestParameter("value(SimpleConditionsNode:1_Condition_value)","");
-		addRequestParameter("pageOf","pageOfBioHazard");
-		addRequestParameter("operation","search");
+		RequestParameterUtility.setEditBioHazardParams(this);
 		actionPerform();
 				
 		Biohazard biohazard = (Biohazard) TestCaseUtility.getNameObjectMap("Biohazard");
@@ -105,5 +220,74 @@ public class BiohazardTestCases extends CaTissueSuiteBaseTest
 		verifyNoActionErrors();
 		
 		TestCaseUtility.setNameObjectMap("Biohazard",biohazard);
+	}
+	/**
+	 * Add Biohazard without specifying mandatory Parameters as name and type.
+	 * Negative test case.
+	 */
+	@Test
+	public void testAddBioHazardAddWithoutMandatoryParams()
+	{
+		addRequestParameter("name", "");
+		addRequestParameter("type", "");
+		addRequestParameter("operation", "add");
+		setRequestPathInfo("/BiohazardAdd");
+		actionPerform();
+		verifyForward("failure");
+		//verify action errors
+		String errorNames[] = new String[]{"errors.item.required","errors.item.selected"};
+		verifyActionErrors(errorNames);	
+	}
+	/**
+	 * Edit Biohazard without specifying mandatory Parameters as name and type.
+	 * Negative test case.
+	 */
+	@Test
+	public void testEditBioHazardEditWithoutMandatoryParams()
+	{
+		setRequestPathInfo("/SimpleSearch");
+		RequestParameterUtility.setEditBioHazardParams(this);
+		actionPerform();
+				
+		Biohazard biohazard = (Biohazard) TestCaseUtility.getNameObjectMap("Biohazard");
+		DefaultBizLogic bizLogic = new DefaultBizLogic();
+		List<Biohazard> biohazardList = null;
+		try 
+		{
+			biohazardList = bizLogic.retrieve("Biohazard");
+		}
+		catch (DAOException e) 
+		{
+			e.printStackTrace();
+			System.out.println("BiohazardTestCases.testBioHazardEdit(): "+e.getMessage());
+			fail(e.getMessage());
+		}
+		
+		if(biohazardList.size() > 1)
+		{
+		    verifyForward("success");
+		    verifyNoActionErrors();
+		}
+		else if(biohazardList.size() == 1)
+		{
+			verifyForwardPath("/SearchObject.do?pageOf=pageOfBioHazard&operation=search&id=" + biohazard.getId());
+			verifyNoActionErrors();
+		}
+		else
+		{
+			verifyForward("failure");
+			//verify action errors
+			String errorNames[] = new String[]{"simpleQuery.noRecordsFound"};
+			verifyActionErrors(errorNames);
+		}
+		addRequestParameter("name", "");
+		addRequestParameter("type", "");
+		addRequestParameter("operation", "edit");
+		setRequestPathInfo("/BiohazardEdit");
+		actionPerform();
+		verifyForward("failure");
+		//verify action errors
+		String errorNames[] = new String[]{"errors.item.required","errors.item.selected"};
+		verifyActionErrors(errorNames);	
 	}
 }
