@@ -606,7 +606,23 @@ public class SpecimenForm extends AbstractActionForm
 
 		else
 		{
-			this.setStContSelection(1);
+			// bug #11177
+			if (specimen.getSpecimenRequirement() != null)
+			{
+				String storageType = specimen.getSpecimenRequirement().getStorageType();
+				if (storageType.equals(Constants.STORAGE_TYPE_POSITION_VIRTUAL))
+				{
+					this.setStContSelection(Constants.STORAGE_TYPE_POSITION_VIRTUAL_VALUE);
+				}
+				else if (storageType.equals(Constants.STORAGE_TYPE_POSITION_AUTO))
+				{
+					this.setStContSelection(Constants.STORAGE_TYPE_POSITION_AUTO_VALUE);
+				}
+				else if (storageType.equals(Constants.STORAGE_TYPE_POSITION_MANUAL))
+				{
+					this.setStContSelection(Constants.STORAGE_TYPE_POSITION_MANUAL_VALUE);
+				}
+			}
 		}
 
 		this.barcode = specimen.getBarcode();

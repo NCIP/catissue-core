@@ -222,7 +222,14 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	private void setParentSpecimenData(Specimen specimen) throws DAOException
 	{
 		Specimen parentSpecimen = (Specimen) specimen.getParentSpecimen();
-		specimen.setPathologicalStatus(parentSpecimen.getPathologicalStatus());
+		//11177 S
+		if(specimen.getPathologicalStatus() == null ||
+				Constants.DOUBLE_QUOTES.equals(specimen.getPathologicalStatus()))
+		{
+				specimen.setPathologicalStatus(parentSpecimen.getPathologicalStatus());
+		}
+		//specimen.setPathologicalStatus(parentSpecimen.getPathologicalStatus());
+		//11177 E
 		setParentCharacteristics(parentSpecimen, specimen);
 		setConsentTierStatus(specimen, parentSpecimen.getConsentTierStatusCollection());
 		setParentBioHazard(parentSpecimen, specimen);
@@ -1812,7 +1819,14 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 				Specimen derivedSpecimen = (Specimen) it.next();
 				derivedSpecimen.setSpecimenCharacteristics(specimen.getSpecimenCharacteristics());
 				derivedSpecimen.setSpecimenCollectionGroup(specimen.getSpecimenCollectionGroup());
-				derivedSpecimen.setPathologicalStatus(specimen.getPathologicalStatus());
+				//11177 S
+				if(derivedSpecimen.getPathologicalStatus() == null ||
+						Constants.DOUBLE_QUOTES.equals(derivedSpecimen.getPathologicalStatus()))
+				{
+					derivedSpecimen.setPathologicalStatus(specimen.getPathologicalStatus());					
+				}	
+				//derivedSpecimen.setPathologicalStatus(specimen.getPathologicalStatus());
+				//11177 E
 				derivedSpecimen.getParentSpecimen().setId(specimen.getId());
 				try
 				{
