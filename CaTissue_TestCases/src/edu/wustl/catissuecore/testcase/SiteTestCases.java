@@ -318,6 +318,51 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
 				,"errors.item.required","errors.item.required","errors.item.required","errors.item.required"};
 		verifyActionErrors(errorNames);	
 	}
+	/**
+	 * Add multiple sites and check whether sites are added or not. 
+	 */
+	@Test
+	public void testMultipleSiteSearch()
+	{
+		for(int i=0;i<6;i++)
+		{
+			testAddRepositorySite();
+		}
+		setRequestPathInfo("/SimpleSearch");
+		addRequestParameter("aliasName", "Site");
+		
+		addRequestParameter("value(SimpleConditionsNode:1_Condition_DataElement_table)", "Site");
+		addRequestParameter("value(SimpleConditionsNode:1_Condition_DataElement_field)","Site.NAME.varchar");
+		addRequestParameter("value(SimpleConditionsNode:1_Condition_Operator_operator)","Starts With");
+		addRequestParameter("value(SimpleConditionsNode:1_Condition_value)","Site_");
+		addRequestParameter("counter","1");
+		addRequestParameter("pageOf","pageOfSite");
+		addRequestParameter("operation","search");
+		actionPerform();
+	    DefaultBizLogic bizLogic = new DefaultBizLogic(); 
+		List siteList = null;
+		try 
+		{
+			siteList = bizLogic.retrieve(Site.class.getName(), new String[]{"name"}, new String[]{"name"}, new String[]{"like"}, new String[]{"Site_%"}, null);
+		}
+		catch (DAOException e) 
+		{
+			e.printStackTrace();
+			System.out.println("SiteTestCases.testSiteEdit(): "+e.getMessage());
+			fail(e.getMessage());
+		}
+		if(siteList.size() >= 6)
+		{
+		    verifyForward("success");
+		    verifyNoActionErrors();
+		}
+		else
+		{
+			fail("Site count should be greater than six.");			
+		}
+		
+	}
+
 	
 	
 }
