@@ -1,7 +1,7 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ page language="java" isELIgnored="false"%>
 <%@ page
-	import="edu.wustl.catissuecore.util.global.Constants,edu.wustl.common.beans.SessionDataBean"%>
+	import="edu.wustl.common.util.global.Constants,edu.wustl.common.beans.SessionDataBean"%>
 
 <%
 	
@@ -37,11 +37,7 @@ function editUserProfile(item){
 		<td width="97%" align="left">
 		<logic:notEmpty scope="session"
 			name="<%=Constants.SESSION_DATA%>">
-			<%if(!((String)request.getSession().getAttribute(Constants.USER_ROLE)).equals("7")){%>
 			<script type="text/javascript" src="jss/menus.js"></script>
-			<%}else{%>
-			<script type="text/javascript" src="jss/menus_sci.js"></script>
-			<%}%>
 			<div id="toolbarLoggedIn"></div>
 		</logic:notEmpty>
 		<logic:empty scope="session" name="<%=Constants.SESSION_DATA%>">
