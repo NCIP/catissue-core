@@ -349,7 +349,9 @@ public class CreateAliquotAction extends BaseAction
 						throw new BizLogicException(ApplicationProperties.getValue("errors.item.format", ApplicationProperties.getValue("specimen.storageContainer")));
 					}
 				}
-				if(!radioButton.equals("1"))
+				//bug 11479 S bug				
+				if(radioButton.equals("2"))
+				
 				{
 					if(validator.isEmpty(posDim1)||validator.isEmpty(posDim2))
 					{
@@ -362,17 +364,19 @@ public class CreateAliquotAction extends BaseAction
 			aliquotSpecimen.setPathologicalStatus(aliquotForm.getPathologicalStatus());
 			aliquotSpecimen.setInitialQuantity(new Double(quantity));
 			aliquotSpecimen.setAvailableQuantity(new Double(quantity));
-			
-			
-			
-			
-			if ((containerId != null||containername!=null) && posDim1 != null && posDim2 != null )
+								
+			//bug 11479			
+			if ((containerId != null || containername != null) && posDim1 != null
+					&& posDim2 != null)
 			{
 				SpecimenPosition specPos = new SpecimenPosition();
-			
-				specPos.setPositionDimensionOne(new Integer(posDim1));
-				specPos.setPositionDimensionTwo(new Integer(posDim2));
-				sc.setId(storageContainerId);
+
+				if (!posDim1.equals("") && !posDim2.equals(""))
+				{
+					specPos.setPositionDimensionOne(new Integer(posDim1));
+					specPos.setPositionDimensionTwo(new Integer(posDim2));
+					sc.setId(storageContainerId);
+				}
 				sc.setName(containername);
 				specPos.setStorageContainer(sc);
 				specPos.setSpecimen(aliquotSpecimen);

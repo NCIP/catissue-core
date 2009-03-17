@@ -77,6 +77,11 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 				((NewSpecimenBizLogic)bizLogic).bulkUpdateSpecimens(specimenDomainCollection, sessionDataBean);
 				setLabelBarCodesToSessionData(eventId, request, specimenDomainCollection);
 				
+				//11479 S
+				updateWithNewStorageLocation(session, sessionDataBean, eventId,
+						specimenDomainCollection);
+				//11479 E
+				
 				/*Iterator iter=specimenDomainCollection.iterator();
 				List specimenIdList=new ArrayList();
 				while( iter.hasNext())

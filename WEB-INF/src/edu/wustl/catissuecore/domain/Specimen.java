@@ -785,6 +785,11 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 									this.specimenPosition.positionDimensionTwo = Integer.valueOf(form.getPos2());
 									this.specimenPosition.specimen = this;
 								}
+								// bug 11479 S
+								else
+								{
+									this.specimenPosition.storageContainer.setName(form.getSelectedContainerName());
+								}
 							}
 							else
 							{
