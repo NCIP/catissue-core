@@ -837,7 +837,10 @@ public class CollectionProtocolUtil
 					reqSpecimen.setCollectionProtocolEvent(cpEvent);					
 					reqSpecimen.setSpecimenCharacteristics(specimenCharacteristics);
 					//Collected and received events
-					setSpecimenEvents(reqSpecimen, specimenRequirementBean);
+					if(reqSpecimen.getId()==null)
+					{
+						setSpecimenEvents(reqSpecimen, specimenRequirementBean);
+					}
 			}
 			else
 			{
@@ -847,7 +850,10 @@ public class CollectionProtocolUtil
 				//Collected and received events
 				if(specimenRequirementBean.getCollectionEventContainer()!=null && specimenRequirementBean.getReceivedEventReceivedQuality()!=null)
 				{
-					setSpecimenEvents(reqSpecimen, specimenRequirementBean);
+					if(reqSpecimen.getId()==null)
+					{
+						setSpecimenEvents(reqSpecimen, specimenRequirementBean);
+					}
 				}
 				else
 				{
