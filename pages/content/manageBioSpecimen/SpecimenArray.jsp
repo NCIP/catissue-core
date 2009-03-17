@@ -167,12 +167,16 @@ function checkStotagePosition()
 				<td align="left" class="black_ar">&nbsp;</td>
                 <td align="center" class="black_ar">&nbsp;</td>
                 <td align="left" class="black_ar">
+					<logic:equal name="specimenArrayForm" property="isBarcodeEditable" value="<%=Constants.TRUE%>">
 					<label for="barcode">
 						<bean:message key="array.barcode"/> 
 					</label>
+					</logic:equal>
 				</td>
 				<td align="left">
-					<html:text styleClass="black_ar"  maxlength="255"  size="30" styleId="barcode" property="barcode"/>
+					<logic:notEqual name="specimenArrayForm" property="isBarcodeEditable" value="<%=Constants.FALSE%>">
+						<html:text styleClass="black_ar"  maxlength="255"  size="30" styleId="barcode" property="barcode"/>
+					</logic:notEqual>
 				</td>
                 <td align="left" valign="top">&nbsp;</td>
               </tr>
