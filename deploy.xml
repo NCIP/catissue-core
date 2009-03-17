@@ -1393,11 +1393,13 @@
 				<equals arg1="mysql" arg2="${database.type}" />
 				<then>
 					<antcall target="upgrade_mysql_from_Suite1.1_to_1.1p" />
+					<antcall target="upgrade_mysql_from_Suite1.1_p2to_1.1p3" />
 				</then>
 				<elseif>
 					<equals arg1="oracle" arg2="${database.type}" />
 					<then>
 						<antcall target="upgrade_oracle_from_Suite1.1_to_1.1p" />
+						<antcall target="upgrade_oracle_from_Suite1.1_p2to_1.1p3" />
 					</then>
 				</elseif>
 				<else>
@@ -1440,7 +1442,36 @@
 			</sql>
    </target>
 
-
+	<!-- Upgrading from Suite1.1 p2 to p3 - MySQL -->
+	<target name="upgrade_mysql_from_Suite1.1_p2to_1.1p3">
+		<!-- Modifying catissue_container table by changing 'FULL' column name with 'CONT_FULL'. As 'FULL' is a keyword in some dbs. -->
+		<echo message="Upgrading MySQL Database. Modifying catissue_container table by changing 'FULL' column name with 'CONT_FULL'." />
+		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" >
+			<transaction src="${dbupgrade.sql.dir}/MySql/DBUpgrade_suite_1.1P2.sql" />
+			<transaction>commit;</transaction>
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</sql>
+	</target>
+	
+	<!-- Upgrading from Suite1.1 p2 to p3 - Oracle -->
+	<target name="upgrade_oracle_from_Suite1.1_p2to_1.1p3">
+		<!-- Modifying catissue_container table by changing 'FULL' column name with 'CONT_FULL'. As 'FULL' is a keyword in some dbs. -->
+		<echo message="Upgrading Oracle Database. Modifying catissue_container table by changing 'FULL' column name with 'CONT_FULL'." />
+		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">
+			<transaction src="${dbupgrade.sql.dir}/Oracle/DBUpgrade_suite_1.1P2.sql" />
+	   		<transaction>commit;</transaction>
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</sql>
+   </target>
+	
 	<!--MySQL Database Upgradation -->
 	<!--
 	<target name="upgrade_mysql_from_Suite1.0_to_1.1">
