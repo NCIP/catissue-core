@@ -1,26 +1,25 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
-<%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
-<%@ taglib uri="/WEB-INF/specimenDetails.tld" prefix="md" %>
-<%@ taglib uri="/WEB-INF/AutoCompleteTag.tld" prefix="autocomplete" %>
+<%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo"%>
+<%@ taglib uri="/WEB-INF/specimenDetails.tld" prefix="md"%>
+<%@ taglib uri="/WEB-INF/AutoCompleteTag.tld" prefix="autocomplete"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.bean.GenericSpecimen"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.ViewSpecimenSummaryForm"%>
 <%@ page import="java.io.*"%>
 <%@ page import="java.util.*"%>
-<%@ page import="edu.wustl.common.util.global.ApplicationProperties" %>
+<%@ page import="edu.wustl.common.util.global.ApplicationProperties"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
-<%@ include file="/pages/content/common/AutocompleterCommon.jsp" %>
-<%@ page language="java" isELIgnored="false" %>
-<% ViewSpecimenSummaryForm form = (ViewSpecimenSummaryForm)request.getAttribute("viewSpecimenSummaryForm"); 
-  %>
+<%@ include file="/pages/content/common/AutocompleterCommon.jsp"%>
+<%@ page language="java" isELIgnored="false"%>
+<% ViewSpecimenSummaryForm form = (ViewSpecimenSummaryForm)request.getAttribute("viewSpecimenSummaryForm");  %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
 <script language="JavaScript" type="text/javascript" src="jss/script.js"></script>
 <link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
-<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" /> 
+<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/antiSpecAjax.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/GenericSpecimenDetailsTag.js"></script>
@@ -395,7 +394,8 @@ function updateSCDetails(msg)
 <script language="javascript" type="text/javascript">
 	${requestScope.refreshTree}
 </script>
-<logic:equal name="viewSpecimenSummaryForm" property="requestType" value="Multiple Specimen">
+<logic:equal name="viewSpecimenSummaryForm" property="requestType"
+	value="Multiple Specimen">
 	<script language="javascript" type="text/javascript">
 		${requestScope.refreshTree}
 	</script>
@@ -403,223 +403,256 @@ function updateSCDetails(msg)
 <%
 String lbl = "Apply first to all";
 %>
-		<%@ include file="/pages/content/common/ActionErrors.jsp" %>
-		<logic:notEmpty name="messageKey">
-		<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
+<%@ include file="/pages/content/common/ActionErrors.jsp"%>
+<logic:notEmpty name="messageKey">
+	<html:messages id="messageKey" message="true" header="messages.header"
+		footer="messages.footer">
 			${requestScope.messageKey}
 		</html:messages>
-		</logic:notEmpty>
+</logic:notEmpty>
 
-		<html:form action="${requestScope.formAction}">		
-		<!-- Mandar : New Table design starts -->
-		<TABLE width="100%" cellspacing="0" cellpadding="0">
+<html:form action="${requestScope.formAction}">
+	<!-- Mandar : New Table design starts -->
+	<TABLE width="100%" cellspacing="0" cellpadding="0">
 		<TR>
-		<TD align="left" class="tr_anti_hdrbg_blue" width="100%" colspan=3>
-		<TABLE width="100%" border="0">
-		<TR>
-			<TD align="left" rowspan="2" valign="middle" class="tr_anti_hdrbg_blue" width="${requestScope.sfCol}%">
-			<span class="blue_ar_b">
-				<bean:write name="viewSpecimenSummaryForm" property="title" />
-			</span>
+			<TD align="left" class="tr_anti_hdrbg_blue" width="100%" colspan=3>
+			<TABLE width="100%" border="0">
+				<TR>
+					<TD align="left" rowspan="2" valign="middle"
+						class="tr_anti_hdrbg_blue" width="${requestScope.sfCol}%"><span
+						class="blue_ar_b"> <bean:write
+						name="viewSpecimenSummaryForm" property="title" /> </span></TD>
+					<TD class="tr_anti_hdrbg_blue" width=33% rowspan="2"
+						valign="middle" align="left"><A class="black_ar"
+						name="parent" HREF="#parent" onClick="ApplyToAll(this,'specimen')"
+						onmouseover="Tip(' Apply first location to all')"><bean:message
+						key="aliquots.applyFirstToAll" /></A></TD>
+					<td nowrap class="tr_anti_hdrbg_blue" scope="col" width="2%"
+						valign="middle" align="left" onmouseover="Tip('Collect All')">
+					<logic:equal name="viewSpecimenSummaryForm"
+						property="showCheckBoxes" value="true">
+						<span class="blue_ar_b"> <bean:message
+							key="anticipatorySpecimen.Collected" /> </span>
+					</logic:equal></td>
+					<td nowrap class="tr_anti_hdrbg_blue" scope="col" width="2%"
+						valign="middle" align="left" onmouseover="Tip('Print All')">
+					<logic:equal name="viewSpecimenSummaryForm"
+						property="showCheckBoxes" value="true">
+						<span class="blue_ar_b"> <bean:message
+							key="specimen.printLabel" /> </span>
+					</logic:equal></td>
+				</TR>
+				<TR>
+					<td nowrap class="tr_anti_hdrbg_blue_small" scope="col" width="2%"
+						valign="middle" align="center"><logic:equal
+						name="viewSpecimenSummaryForm" property="showCheckBoxes"
+						value="true">
+						<input type="checkbox" name="chkAllSpecimen"
+							onclick="ChangeCheckBoxStatus('specimen',this)" />
+					</logic:equal></td>
+					<td nowrap class="tr_anti_hdrbg_blue_small" scope="col" width="2%"
+						valign="middle" align="center"><logic:equal
+						name="viewSpecimenSummaryForm" property="showCheckBoxes"
+						value="true">
+						<input type="checkbox" name="printAll" checked="checked"
+							onclick="ChangePrintCheckBoxStatus('specimen',this)" />
+					</logic:equal></td>
+				</TR>
+			</TABLE>
 			</TD>
-			<TD class="tr_anti_hdrbg_blue" width=33% rowspan="2" valign="middle" align="left">
-			<A class="black_ar" name="parent" HREF="#parent" onClick="ApplyToAll(this,'specimen')" onmouseover="Tip(' Apply first location to all')"><bean:message key="aliquots.applyFirstToAll"/></A>
-			</TD>
-			<td nowrap class="tr_anti_hdrbg_blue" scope="col" width="2%" valign="middle" align="left" onmouseover="Tip('Collect All')">
-			<logic:equal name="viewSpecimenSummaryForm" property="showCheckBoxes" value="true">
-				<span class="blue_ar_b">
-				   <bean:message key="anticipatorySpecimen.Collected"/>
-				</span>
-			</logic:equal>	
-			</td>
-			<td nowrap class="tr_anti_hdrbg_blue" scope="col" width="2%" valign="middle" align="left" onmouseover="Tip('Print All')">
-			<logic:equal name="viewSpecimenSummaryForm" property="showCheckBoxes" value="true">
-				<span class="blue_ar_b">
-					<bean:message key="specimen.printLabel"/>
-				</span>
-			</logic:equal>	
-			</td>
-		</TR>
-		<TR>
-			<td nowrap class="tr_anti_hdrbg_blue_small" scope="col" width="2%" valign="middle" align="center">
-			<logic:equal name="viewSpecimenSummaryForm" property="showCheckBoxes" value="true">
-					<input type="checkbox" name="chkAllSpecimen" onclick="ChangeCheckBoxStatus('specimen',this)"/>	
-			</logic:equal>	
-			</td>
-			<td nowrap class="tr_anti_hdrbg_blue_small" scope="col" width="2%" valign="middle" align="center">
-				<logic:equal name="viewSpecimenSummaryForm" property="showCheckBoxes" value="true">
-				<input type="checkbox" name="printAll" checked="checked" onclick="ChangePrintCheckBoxStatus('specimen',this)"/>	
-				</logic:equal>	
-			</td>
-		</TR>
-		</TABLE>
-		</TD>
 		</TR>
 
-		<logic:empty name="viewSpecimenSummaryForm" property="specimenList" >
+		<logic:empty name="viewSpecimenSummaryForm" property="specimenList">
 			<tr>
-				<td class="dataTableWhiteCenterHeader" colspan="3">  
-					No specimens to display for current action!!
-				</td>
-			</tr>		
+				<td class="dataTableWhiteCenterHeader" colspan="3">No specimens
+				to display for current action!!</td>
+			</tr>
 		</logic:empty>
 		<TR>
 			<TD colspan="3">
-				<table border=0 width="100%">
-					<md:specDetFormat4  columnHeaderListName="columnHeaderList" formName="viewSpecimenSummaryForm" dataListName="specimenList" dataListType="Parent" columnListName="columnListName" isReadOnly="false" displayColumnListName="dispColumnsList" />
-				</table>
-				<logic:notEmpty name="viewSpecimenSummaryForm" property="eventId">
-					<html:hidden property="eventId"  />
-					<html:hidden property="lastSelectedSpecimenId"  />
-					<html:hidden property="selectedSpecimenId"  />
-				</logic:notEmpty>
-					<html:hidden property="userAction" />
-					<html:hidden property="requestType" />
-			</TD>
+			<table border=0 width="100%">
+				<md:specDetFormat4 columnHeaderListName="columnHeaderList"
+					formName="viewSpecimenSummaryForm" dataListName="specimenList"
+					dataListType="Parent" columnListName="columnListName"
+					isReadOnly="false" displayColumnListName="dispColumnsList" />
+			</table>
+			<logic:notEmpty name="viewSpecimenSummaryForm" property="eventId">
+				<html:hidden property="eventId" />
+				<html:hidden property="lastSelectedSpecimenId" />
+				<html:hidden property="selectedSpecimenId" />
+			</logic:notEmpty> <html:hidden property="userAction" /> <html:hidden
+				property="requestType" /></TD>
 		</TR>
-		<logic:empty name="viewSpecimenSummaryForm" property="aliquotList" >
-		<logic:empty name="viewSpecimenSummaryForm" property="derivedList" >
-		<TR>
-			<TD colspan="3">
-				<table>
-					<tr>
-						<td class="dataTablePrimaryLabel" colspan="6" height="20">  
-							Child specimens not defined.
-						</td>						
-					</tr>
-					<tr> <td> <br> </td> </tr>
-				</table>
-			</TD>
-		</TR>
-		</logic:empty>				
+		<logic:empty name="viewSpecimenSummaryForm" property="aliquotList">
+			<logic:empty name="viewSpecimenSummaryForm" property="derivedList">
+				<TR>
+					<TD colspan="3">
+					<table>
+						<tr>
+							<td class="dataTablePrimaryLabel" colspan="6" height="20">
+							Child specimens not defined.</td>
+						</tr>
+						<tr>
+							<td><br>
+							</td>
+						</tr>
+					</table>
+					</TD>
+				</TR>
+			</logic:empty>
 		</logic:empty>
-		
-		<logic:notEmpty name="viewSpecimenSummaryForm" property="derivedList" >
-		<TR>
-		<TD align="left" valign="middle" class="tr_anti_hdrbg_blue" width="100%" colspan=3>
-		<TABLE width="100%" border="0">
-		<TR>
-			<TD rowspan="2" align="left" class="tr_anti_hdrbg_blue" width="${requestScope.fCol}%">
-				<span class="blue_ar_b">	
-				<bean:message key="anticipatorySpecimen.DerivativeDetails"/>
-				</span>
-			</TD>
-			<TD class="tr_anti_hdrbg_blue" width=40% rowspan="2" valign="middle" align="left">
-			<A class="black_ar" name="derived" HREF="#derived" onClick="ApplyToAll(this,'derived')" onmouseover="Tip(' Apply first location to all')"><bean:message key="aliquots.applyFirstToAll"/></A>
-			</TD>
-			<td nowrap class="tr_anti_hdrbg_blue" scope="col" width="2%" align="left" valign="middle" onmouseover="Tip('Create All')">
-				<logic:equal name="viewSpecimenSummaryForm" property="showCheckBoxes" value="true">
-					<span class="blue_ar_b">
-				   <bean:message key="anticipatorySpecimen.Collected"/>
-				</span>
-				</logic:equal>	
-			</td>
-			<td nowrap  class="tr_anti_hdrbg_blue" scope="col" width="2%" align="left" valign="middle" onmouseover="Tip('Print All')">
-				<logic:equal name="viewSpecimenSummaryForm" property="showCheckBoxes" value="true">
-					<span class="blue_ar_b">
-					<bean:message key="specimen.printLabel"/>
-				</span>
-				</logic:equal>
-			</td>
-		</TR>
-		<TR>
-			<td nowrap class="tr_anti_hdrbg_blue_small" scope="col" width="3%" align="center" valign="middle">
-			<logic:equal name="viewSpecimenSummaryForm" property="showCheckBoxes" value="true">
-				<input type="checkbox" name="chkAllDerived" onclick="ChangeCheckBoxStatus('derived',this)"/>
-			</logic:equal>	
-			</td>
-			<td nowrap class="tr_anti_hdrbg_blue_small" scope="col" width="2%" align="center" valign="middle">
-			<logic:equal name="viewSpecimenSummaryForm" property="showCheckBoxes" value="true">
-				<input type="checkbox" name="printAllDerived" checked="checked" onclick="ChangePrintCheckBoxStatus('derived',this)"/>	
-			</logic:equal>	
-			</td>
-		</TR>
-		</TABLE>
-		</TD>
-		</TR>
-		<TR>
-			<TD colspan="3">
+
+		<logic:notEmpty name="viewSpecimenSummaryForm" property="derivedList">
+			<TR>
+				<TD align="left" valign="middle" class="tr_anti_hdrbg_blue"
+					width="100%" colspan=3>
+				<TABLE width="100%" border="0">
+					<TR>
+						<TD rowspan="2" align="left" class="tr_anti_hdrbg_blue"
+							width="${requestScope.fCol}%"><span class="blue_ar_b">
+						<bean:message key="anticipatorySpecimen.DerivativeDetails" /> </span></TD>
+						<TD class="tr_anti_hdrbg_blue" width=40% rowspan="2"
+							valign="middle" align="left"><A class="black_ar"
+							name="derived" HREF="#derived"
+							onClick="ApplyToAll(this,'derived')"
+							onmouseover="Tip(' Apply first location to all')"><bean:message
+							key="aliquots.applyFirstToAll" /></A></TD>
+						<td nowrap class="tr_anti_hdrbg_blue" scope="col" width="2%"
+							align="left" valign="middle" onmouseover="Tip('Create All')">
+						<logic:equal name="viewSpecimenSummaryForm"
+							property="showCheckBoxes" value="true">
+							<span class="blue_ar_b"> <bean:message
+								key="anticipatorySpecimen.Collected" /> </span>
+						</logic:equal></td>
+						<td nowrap class="tr_anti_hdrbg_blue" scope="col" width="2%"
+							align="left" valign="middle" onmouseover="Tip('Print All')">
+						<logic:equal name="viewSpecimenSummaryForm"
+							property="showCheckBoxes" value="true">
+							<span class="blue_ar_b"> <bean:message
+								key="specimen.printLabel" /> </span>
+						</logic:equal></td>
+					</TR>
+					<TR>
+						<td nowrap class="tr_anti_hdrbg_blue_small" scope="col" width="3%"
+							align="center" valign="middle"><logic:equal
+							name="viewSpecimenSummaryForm" property="showCheckBoxes"
+							value="true">
+							<input type="checkbox" name="chkAllDerived"
+								onclick="ChangeCheckBoxStatus('derived',this)" />
+						</logic:equal></td>
+						<td nowrap class="tr_anti_hdrbg_blue_small" scope="col" width="2%"
+							align="center" valign="middle"><logic:equal
+							name="viewSpecimenSummaryForm" property="showCheckBoxes"
+							value="true">
+							<input type="checkbox" name="printAllDerived" checked="checked"
+								onclick="ChangePrintCheckBoxStatus('derived',this)" />
+						</logic:equal></td>
+					</TR>
+				</TABLE>
+				</TD>
+			</TR>
+			<TR>
+				<TD colspan="3">
 				<table border=0 width="100%">
-					<md:specDetFormat4  columnHeaderListName="subSpecimenColHeaderList" formName="viewSpecimenSummaryForm" dataListName="derivedList" dataListType="Derived" columnListName="columnListName" isReadOnly="false" displayColumnListName="subSpecdispColumnsList" />
+					<md:specDetFormat4 columnHeaderListName="subSpecimenColHeaderList"
+						formName="viewSpecimenSummaryForm" dataListName="derivedList"
+						dataListType="Derived" columnListName="columnListName"
+						isReadOnly="false" displayColumnListName="subSpecdispColumnsList" />
 				</table>
-			</TD>
-		</TR>
+				</TD>
+			</TR>
 		</logic:notEmpty>
-		<logic:notEmpty name="viewSpecimenSummaryForm" property="aliquotList" >
-		<TR>
-		<TD align="left" valign="middle" class="tr_anti_hdrbg_blue" width="100%" colspan=3>
-		<TABLE width="100%" border="0">
-		<TR>
-			<TD colspan="1" rowspan="2" align="left" class="tr_anti_hdrbg_blue" width="${requestScope.fCol}%">
-				<span class="blue_ar_b">	
-				<bean:message key="anticipatorySpecimen.AliquotDetails"/> 
-				</span>
-			</TD>
-			<TD class="tr_anti_hdrbg_blue" rowspan="2" width=47% align="left" valign="middle">
-			<A class="black_ar" name="aliquot" HREF="#aliquot" onClick="ApplyToAll(this,'aliquot')" onmouseover="Tip(' Apply first location to all')"><bean:message key="aliquots.applyFirstToAll"/></A>
-			</TD>
-			<td nowrap align="left" valign="middle" class="tr_anti_hdrbg_blue" scope="col" width="2%" onmouseover="Tip('Create All')">
-			<logic:equal name="viewSpecimenSummaryForm" property="showCheckBoxes" value="true">
+
+		 <logic:notEmpty name="viewSpecimenSummaryForm" property="aliquotList">
+         <TR>
+		 <TD align="left" valign="middle" class="tr_anti_hdrbg_blue" width="100%" colspan=3> 
+		 <TABLE width="100%" border="0">
+		  <TR>
+		  <TD colspan="1" rowspan="2" align="left" class="tr_anti_hdrbg_blue" width="${requestScope.fCol}%">
+		     <span class="blue_ar_b">
+			   <bean:message key="anticipatorySpecimen.AliquotDetails"/>
+			  </span>
+		   </TD>
+
+		   <TD class="tr_anti_hdrbg_blue" rowspan="2" width=47% align="left" valign="middle">
+		     <A class="black_ar" name="aliquot" HREF="#aliquot" onClick="ApplyToAll(this,'aliquot')" onmouseover="Tip(' Apply first location to all')">
+			 <bean:message key="aliquots.applyFirstToAll" />
+			 </A>
+			 </TD>
+
+			 <td nowrap align="left" valign="middle" class="tr_anti_hdrbg_blue"
+							scope="col" width="2%" onmouseover="Tip('Create All')">
+				<logic:equal name="viewSpecimenSummaryForm" property="showCheckBoxes" value="true">
 					<span class="blue_ar_b">
-				   <bean:message key="anticipatorySpecimen.Collected"/>
-				</span>
-			</logic:equal>	
+					<bean:message key="anticipatorySpecimen.Collected"/>
+					</span>
+                </logic:equal>
 			</td>
-			<td nowrap align="left" valign="middle" class="tr_anti_hdrbg_blue" scope="col" width="2%" onmouseover="Tip('Print All')">
+
+			<td nowrap align="left" valign="middle" class="tr_anti_hdrbg_blue" scope="col" width="2%" onmouseover="Tip('Print  All')">
 			<logic:equal name="viewSpecimenSummaryForm" property="showCheckBoxes" value="true">
 				<span class="blue_ar_b">
-					<bean:message key="specimen.printLabel"/>
+				<bean:message key="specimen.printLabel"/>
 				</span>
-			</logic:equal>	
+			</logic:equal>
 			</td>
-		</TR>
-		<tr>
-			<td nowrap  class="tr_anti_hdrbg_blue" scope="col" width="2%" align="center" valign="middle">
-			<logic:equal name="viewSpecimenSummaryForm" property="showCheckBoxes" value="true">
-				<input type="checkbox" name="chkAllAliquot" onclick="ChangeCheckBoxStatus('aliquot',this)"/>	
-			</logic:equal>	
-			</td>
-			<td nowrap  class="tr_anti_hdrbg_blue" scope="col" width="2%" align="center" valign="middle">
-			<logic:equal name="viewSpecimenSummaryForm" property="showCheckBoxes" value="true">
-					<input type="checkbox" name="printAllAliquot" checked="checked" onclick="ChangePrintCheckBoxStatus('aliquot',this)"/>
-			</logic:equal>	
-			</td>
-		</tr>
-		</TABLE>
-		</TD>
-		</TR>
-		<TR>
-			<TD colspan="3">
-				<table border=0 width="100%">
-					<md:specDetFormat4  columnHeaderListName="subSpecimenColHeaderList" formName="viewSpecimenSummaryForm" dataListName="aliquotList" dataListType="Aliquot" columnListName="columnListName" isReadOnly="false" displayColumnListName="subSpecdispColumnsList" />
-				</table>
-			</TD>
-		</TR>
-		</logic:notEmpty>
-		</TABLE>
-		<table width="100%">
-		<tr>
-			<TD align="left" valign="middle" class="tr_anti_dividerbg_blue" colspan=4>
-		 </td>
-		</tr>
-		</table>
+          </TR>
 
-		<!-- New Table design ends -->
-		<table align="bottom">
-			<logic:equal name="viewSpecimenSummaryForm" property="requestType" value="Collection Protocol">
-			<tr>
-			   <td>
-				<html:submit  value="Save Collection Protocol" />
+		  <tr>
+		  	<td nowrap class="tr_anti_hdrbg_blue" scope="col" width="2%" align="center" valign="middle">
+			  <logic:equal name="viewSpecimenSummaryForm" property="showCheckBoxes" value="true">
+					<input type="checkbox" name="chkAllAliquot" onclick="ChangeCheckBoxStatus('aliquot',this)"/>
+			 </logic:equal>
+		    </td>
+
+			<td nowrap class="tr_anti_hdrbg_blue" scope="col" width="2%" align="center" valign="middle">
+			  <logic:equal name="viewSpecimenSummaryForm" property="showCheckBoxes" value="true">
+			     <input type="checkbox" name="printAllAliquot" checked="checked" onclick="ChangePrintCheckBoxStatus('aliquot',this)"/>
+			 </logic:equal>
+			</td>
+		  </tr>
+         </TABLE>
+          </TD>
+		 </TR>
+         <TR>
+          <TD colspan="3">
+		    <table width="100%">
+			  <tr>
+			    <td>
+				<md:specDetFormat4 columnHeaderListName="subSpecimenColHeaderList"
+						formName="viewSpecimenSummaryForm" dataListName="aliquotList"
+						dataListType="Aliquot" columnListName="columnListName"
+						isReadOnly="false" displayColumnListName="subSpecdispColumnsList" />
 				</td>
-				</tr>
-			</logic:equal>
-			<logic:equal name="viewSpecimenSummaryForm" property="requestType" value="Multiple Specimen">		
+			  </tr>					
+			 </table>
+		   </TD>
+         </TR>
+        </logic:notEmpty>
+
+	</TABLE>
+
+	<table width="100%">
+		<tr>
+			<TD align="left" valign="middle" class="tr_anti_dividerbg_blue"
+				colspan=4></td>
+		</tr>
+	</table>
+
+	<!-- New Table design ends -->
+	<table align="bottom">
+		<logic:equal name="viewSpecimenSummaryForm" property="requestType"
+			value="Collection Protocol">
 			<tr>
-				<td>
-				<html:submit value="Save Specimens" />
-				</td>
-			 </tr>
-			</logic:equal>
+				<td><html:submit value="Save Collection Protocol" /></td>
+			</tr>
+		</logic:equal>
+		<logic:equal name="viewSpecimenSummaryForm" property="requestType"
+			value="Multiple Specimen">
+			<tr>
+				<td><html:submit value="Save Specimens" /></td>
+			</tr>
+		</logic:equal>
 		<html:hidden property="targetSuccess" />
 		<html:hidden property="submitAction" />
 		<html:hidden property="showCheckBoxes" />
@@ -629,34 +662,36 @@ String lbl = "Apply first to all";
 		<html:hidden property="showParentStorage" />
 		<html:hidden property="forwardTo" />
 		<html:hidden property="multipleSpEditMode" />
-		<logic:equal name="viewSpecimenSummaryForm" property="readOnly" value="false">
-		
-		<tr>					
-			<!-- <td class="formFieldNoBorders" colspan="5"  height="20" nowrap width="16%"> -->
-				<html:hidden property="printCheckbox" style="printCheckbox" styleId="printCheckbox"/>		
-			<!-- </td> -->
-              <!--  Added for displaying  printer type and location -->
-			    
-				  <td>
-				       <%@ include file="/pages/content/common/PrinterLocationTypeComboboxes.jsp" %>
-			 	  </td>
-			<!--  End : Displaying   printer type and location -->								
-			</tr>
-           
+		<logic:equal name="viewSpecimenSummaryForm" property="readOnly"
+			value="false">
+
 			<tr>
-			<table border="0"> <tr> <td>
-			<input class="blue_ar_b" type="button" value="Submit" onclick="pageSubmit()" />
-			</td>
-			<td>
-			<input class="blue_ar_b" type="button" value="Add To My List" onclick="onAddToCart()" />
-			</td>
+				<!-- <td class="formFieldNoBorders" colspan="5"  height="20" nowrap width="16%"> -->
+				<html:hidden property="printCheckbox" style="printCheckbox"
+					styleId="printCheckbox" />
+				<!-- </td> -->
+				<!--  Added for displaying  printer type and location -->
+
+				<td>
+				<%@ include	file="/pages/content/common/PrinterLocationTypeComboboxes.jsp"%>
+				</td>
+				<!--  End : Displaying   printer type and location -->
 			</tr>
-			</table>
-		 </tr>
-          </logic:equal>
-		</table>
-		<div id="divForHiddenChild"></div>
-		</html:form>
+
+			<tr>
+				<table border="0">
+					<tr>
+						<td><input class="blue_ar_b" type="button" value="Submit"
+							onclick="pageSubmit()" /></td>
+						<td><input class="blue_ar_b" type="button"
+							value="Add To My List" onclick="onAddToCart()" /></td>
+					</tr>
+				</table>
+			</tr>
+		</logic:equal>
+	</table>
+	<div id="divForHiddenChild"></div>
+</html:form>
 </body>
 <script language="JavaScript" type="text/javascript">
 identifyDisabledCheckBox();
