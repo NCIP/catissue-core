@@ -16,7 +16,7 @@ public class DirectDistributionTestCase extends CaTissueSuiteBaseTest
 	 * Test Department Add.
 	 */
 	@Test
-	public void testAddPendingOrder()
+	public void testDirectDistribution()
 	{
 		List<String> specimenIds = new ArrayList<String>();
 		//specimenIds.add("10");
