@@ -53,14 +53,7 @@ public class BulkCartAction extends QueryShoppingCartAction
 	    if (Constants.ADD_TO_ORDER_LIST.equals(operation))
 		{			
 		 	removeSessionAttributes(session);
-			List<AttributeInterface> cartAttributeList = cart.getCartAttributeList();
-			 
-			if (cartAttributeList != null)
-			{
-				Map <String,Set<String>> entityIdsMap = getOrderableEntityIds(cartAttributeList,
-						getCheckboxValues(searchForm), cart);
-				getMapDetails(session, entityIdsMap);
-			}
+			getOrderableEntityIds(searchForm, session, cart);
 			
 			target = new String(Constants.REQUEST_TO_ORDER);
 		}
@@ -78,8 +71,26 @@ public class BulkCartAction extends QueryShoppingCartAction
 		{
 			target = createShipment(searchForm, session, operation);
 		}
+		else if("requestToDistribute".equals(operation))
+		{
+			getOrderableEntityIds(searchForm, session, cart);
+			target = "requestToDistribute";
+		}
 	    
 		return mapping.findForward(target);
+	}
+
+	private void getOrderableEntityIds(AdvanceSearchForm searchForm,
+			HttpSession session, QueryShoppingCart cart)
+	{
+		List<AttributeInterface> cartAttributeList = cart.getCartAttributeList();
+		 
+		if (cartAttributeList != null)
+		{
+			Map <String,Set<String>> entityIdsMap = getOrderableEntityIds(cartAttributeList,
+					getCheckboxValues(searchForm), cart);
+			getMapDetails(session, entityIdsMap);
+		}
 	}
 	
 	private String createShipment(AdvanceSearchForm searchForm, HttpSession session, String operation) 

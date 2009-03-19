@@ -748,7 +748,7 @@ public class OrderBizLogic extends DefaultBizLogic
 			while(orderListFromDBIterator.hasNext())
 			{
 				OrderDetails orderDetails = (OrderDetails)orderListFromDBIterator.next();
-				boolean hasDributionPrivilegeOnSite = isOrderItemValidTodistribute(orderDetails.getOrderItemCollection(),siteIdsList,dao);
+				boolean hasDributionPrivilegeOnSite = isOrderItemValidTodistribute(orderDetails.getOrderItemCollection(),siteIdsList);
 				SessionDataBean sdb = new SessionDataBean();
 				sdb.setUserId(userId);
 				sdb.setUserName(userName);
@@ -781,7 +781,7 @@ public class OrderBizLogic extends DefaultBizLogic
 	 * @param siteIdsList
 	 * @return
 	 */
-	private boolean isOrderItemValidTodistribute(Collection orderItemCollection,List siteIdsList,HibernateDAO dao)
+	private boolean isOrderItemValidTodistribute(Collection orderItemCollection,List siteIdsList)
 	{
 		boolean isValidToDistribute = false;
 		
@@ -942,7 +942,7 @@ public class OrderBizLogic extends DefaultBizLogic
 	 * @return
 	 * @throws DAOException 
 	 */
-	private List getUserSitesWithDistributionPrev(User user,PrivilegeCache privilegeCache)
+	public List getUserSitesWithDistributionPrev(User user,PrivilegeCache privilegeCache)
 	{
 						
 		List siteCollWithDistriPri = new ArrayList();
@@ -975,14 +975,11 @@ public class OrderBizLogic extends DefaultBizLogic
 	 * @param user
 	 * @return
 	 */
-	private boolean isSuperAdmin(User user)
+	public boolean isSuperAdmin(User user)
 	{
 		boolean isSuperAdmin = false;
 		
-		if (!user.getRoleId().equalsIgnoreCase(Constants.ADMIN_USER))
-		{
-			isSuperAdmin = false;
-		}else
+		if (user.getRoleId().equalsIgnoreCase(Constants.ADMIN_USER))
 		{
 			isSuperAdmin = true;
 		}
@@ -1034,6 +1031,24 @@ public class OrderBizLogic extends DefaultBizLogic
 		return OrderDetails;
 	}
 	
+	
+	public DistributionProtocol retrieveDistributionProtocol(String distributionProtId) 
+	{
+		try
+		{
+		   HibernateDAO dao = (HibernateDAO) DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+		   dao.openSession(null);
+		   DistributionProtocol distributionProtocol = (DistributionProtocol)dao.retrieve(DistributionProtocol.class.getName(),
+				   Long.parseLong(distributionProtId));
+		   dao.closeSession();
+		   return distributionProtocol;
+		}
+		catch(DAOException e)
+		{
+			Logger.out.error(e.getMessage(), e);
+    		return null;
+		}
+	}
 		
 	/**
 	 * @param request HttpServletRequest object

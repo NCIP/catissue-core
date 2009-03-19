@@ -75,6 +75,32 @@ public class RequestDetailsForm extends AbstractActionForm
 	 * The distribution protocol associated with that order.
 	 */
 	private String distributionProtocolId;
+	
+	/**
+	 * Name of the order
+	 */
+	private String orderName;
+	
+	public String getOrderName()
+	{
+		return orderName;
+	}
+
+	public void setOrderName(String orderName)
+	{
+		this.orderName = orderName;
+	}
+	
+	private Boolean isDirectDistribution = Boolean.FALSE;
+
+	public Boolean getIsDirectDistribution() {
+		return isDirectDistribution;
+	}
+
+	public void setIsDirectDistribution(Boolean isDirectDistribution) {
+		this.isDirectDistribution = isDirectDistribution;
+	}
+
 	/**
 	 * The tab page which should be visible to the user.
 	 */
@@ -729,6 +755,7 @@ public class RequestDetailsForm extends AbstractActionForm
 				totalSpecimenListInRequestForDropDown.add(i.next());
 			}
 			List specimenListToDisplay = OrderingSystemUtil.getNameValueBeanList(totalSpecimenColl,null);
+			Logger.out.debug("size of specimenListToDisplay :::"+specimenListToDisplay.size());
 			requestForDropDownMap.put(specimenList, specimenListToDisplay);
 			values.put(specimenCollGrpId, pathologicalCaseOrderItem.getSpecimenCollectionGroup().getId().toString());
 			if (totalSpecimenColl.size() != 0)
@@ -835,6 +862,19 @@ public class RequestDetailsForm extends AbstractActionForm
 		
 		 String noOfRecords=(String)request.getParameter("noOfRecords");
 	     int recordCount=Integer.parseInt(noOfRecords);
+	   
+	     
+	     if(this.getDistributionProtocolId() == null || this.getDistributionProtocolId().equalsIgnoreCase("") ||
+	    		 this.getDistributionProtocolId().equalsIgnoreCase("-1"))
+		 {
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.distribution.protocol"));
+		 }
+	     
+	     if(this.orderName == null || this.orderName.equals(""))
+	     {
+	    	 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.order.name"));
+	     }
+	   	     
 	     
 	 	for (int i = 0; i < recordCount; i++) 
 		{
@@ -843,8 +883,13 @@ public class RequestDetailsForm extends AbstractActionForm
 			String assignStatusKey = "RequestDetailsBean:" + i + "_assignedStatus";
 			String assignStatus = (String)getValue(assignStatusKey);
 			String canDistribute=(String)getValue("RequestDetailsBean:" +i+ "_canDistribute");
+			setValue("RequestDetailsBean:" +i+ "_availableQty",
+					getValue("RequestDetailsBean:" +i+ "_availableQty").toString());
+			setValue("RequestDetailsBean:" +i+ "_requestFor",
+					getValue("RequestDetailsBean:" +i+ "_requestFor").toString());
+			setValue("RequestDetailsBean:" +i+ "_orderItemId",
+					getValue("RequestDetailsBean:" +i+ "_orderItemId").toString());
 		
-			
 			if(verificationStatus!=null)
 			{	
 				if((verificationStatus.equalsIgnoreCase(Constants.VIEW_CONSENTS) && assignStatus.equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED))
@@ -899,6 +944,7 @@ public class RequestDetailsForm extends AbstractActionForm
 			}
 			if (specimenItem)
 			{
+				
 				if (requestDetailsBean.getAssignedQty() != null && !requestDetailsBean.getAssignedQty().equalsIgnoreCase(""))
 				{
 					if (!validator.isDouble(requestDetailsBean.getAssignedQty()))

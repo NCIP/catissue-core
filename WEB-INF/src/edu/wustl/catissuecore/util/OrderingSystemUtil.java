@@ -122,12 +122,25 @@ public final class OrderingSystemUtil
 	public static RequestViewBean getRequestViewBeanToDisplay(OrderDetails order)
 	{
 		RequestViewBean requestViewBean = new RequestViewBean();
-		requestViewBean.setDistributionProtocol(order.getDistributionProtocol().getTitle());
-		requestViewBean.setDistributionProtocolId(order.getDistributionProtocol().getId().toString());
-		requestViewBean.setOrderName(order.getName());
-		requestViewBean.setRequestedBy(order.getDistributionProtocol().getPrincipalInvestigator().getLastName()+", "+order.getDistributionProtocol().getPrincipalInvestigator().getFirstName());
+		
+		
+		if(order.getDistributionProtocol() != null && order.getName() != null)
+		{
+			requestViewBean.setDistributionProtocol(order.getDistributionProtocol().getTitle());
+			requestViewBean.setDistributionProtocolId(order.getDistributionProtocol().getId().toString());
+			requestViewBean.setOrderName(order.getName());
+			requestViewBean.setRequestedBy(order.getDistributionProtocol().getPrincipalInvestigator().getLastName()+", "+order.getDistributionProtocol().getPrincipalInvestigator().getFirstName());
+			requestViewBean.setEmail(order.getDistributionProtocol().getPrincipalInvestigator().getEmailAddress());
+		}
+		else
+		{
+			requestViewBean.setDistributionProtocol("");
+			requestViewBean.setDistributionProtocolId("");
+			requestViewBean.setOrderName("Order_"+order.getId().toString());
+			requestViewBean.setRequestedBy("");
+			requestViewBean.setEmail("");			
+		}
 		requestViewBean.setRequestedDate(Utility.parseDateToString(order.getRequestedDate(), edu.wustl.catissuecore.util.global.Variables.dateFormat));
-		requestViewBean.setEmail(order.getDistributionProtocol().getPrincipalInvestigator().getEmailAddress());
 		return requestViewBean;
 	}
 	/**

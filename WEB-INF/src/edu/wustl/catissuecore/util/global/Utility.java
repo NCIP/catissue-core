@@ -1134,9 +1134,9 @@ public class Utility extends edu.wustl.common.util.Utility {
 	 *             ClassNotFoundException
 	 */
 	public static List executeQuery(String hql) throws DAOException,
-			ClassNotFoundException {
-		HibernateDAO dao = (HibernateDAO) DAOFactory.getInstance().getDAO(
-				Constants.HIBERNATE_DAO);
+			ClassNotFoundException
+	{
+		HibernateDAO dao = (HibernateDAO) DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
 		dao.openSession(null);
 		List list = dao.executeQuery(hql, null, false, null);
 		dao.closeSession();

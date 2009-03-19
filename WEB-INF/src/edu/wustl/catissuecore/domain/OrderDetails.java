@@ -20,6 +20,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import edu.wustl.catissuecore.actionForm.DefineArrayForm;
 import edu.wustl.catissuecore.actionForm.OrderBiospecimenArrayForm;
 import edu.wustl.catissuecore.actionForm.OrderPathologyCaseForm;
@@ -303,6 +304,8 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 
 	}
 
+	
+	
 	/**
 	 * This function inserts order data to order table.
 	 * @param abstractActionForm object
@@ -603,13 +606,18 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 		this.setName(orderBiospecimenArrayForm.getOrderForm().getOrderRequestName());
 		this.setStatus(Constants.ORDER_REQUEST_STATUS_NEW);
 		this.setRequestedDate(new Date());
-		Long distributionProtocolId = Long.valueOf(orderBiospecimenArrayForm.getOrderForm().
-				getDistributionProtocol());
+		String protocolId = orderBiospecimenArrayForm.getOrderForm().
+		getDistributionProtocol();
 
-		DistributionProtocol distributionProtocolObj = new DistributionProtocol();
-		distributionProtocolObj.setId(distributionProtocolId);
+		if(protocolId != null && !protocolId.equals(""))
+		{
+			Long distributionId = Long.valueOf(orderBiospecimenArrayForm.getOrderForm().
+			getDistributionProtocol());
+			DistributionProtocol distributionProtocolObj = new DistributionProtocol();
+			distributionProtocolObj.setId(distributionId);
+			this.setDistributionProtocol(distributionProtocolObj);
+		}
 
-		this.setDistributionProtocol(distributionProtocolObj);
 		orderItemsMap = (HashMap) orderBiospecimenArrayForm.getValues();
 		return orderItemsMap;
 	}
@@ -626,12 +634,20 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 		this.setName(orderSpecimenForm.getOrderForm().getOrderRequestName());
 		this.setStatus(Constants.ORDER_REQUEST_STATUS_NEW);
 		this.setRequestedDate(new Date());
-		Long distributionProtocolId = Long.valueOf(orderSpecimenForm.getOrderForm().
-				getDistributionProtocol());
+		String protocolId = orderSpecimenForm.getOrderForm().
+				getDistributionProtocol();
+		
+		if(protocolId != null && !protocolId.equals(""))
+		{
+			Long distributionId = Long.valueOf(orderSpecimenForm.getOrderForm().
+			getDistributionProtocol());
+			DistributionProtocol distributionProtocolObj = new DistributionProtocol();
+			distributionProtocolObj.setId(distributionId);
+			this.setDistributionProtocol(distributionProtocolObj);
+		}
+		
 
-		DistributionProtocol distributionProtocolObj = new DistributionProtocol();
-		distributionProtocolObj.setId(distributionProtocolId);
-		this.setDistributionProtocol(distributionProtocolObj);
+		
 
 		orderItemsMap = (HashMap) orderSpecimenForm.getValues();
 		return orderItemsMap;
@@ -649,13 +665,17 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 		this.setName(orderPathologyCaseForm.getOrderForm().getOrderRequestName());
 		this.setStatus(Constants.ORDER_REQUEST_STATUS_NEW);
 		this.setRequestedDate(new Date());
-		Long distributionProtocolId = Long.valueOf(orderPathologyCaseForm.getOrderForm().
-				getDistributionProtocol());
+		String protocolId = orderPathologyCaseForm.getOrderForm().
+		getDistributionProtocol();
 
-		DistributionProtocol distributionProtocolObj = new DistributionProtocol();
-		distributionProtocolObj.setId(distributionProtocolId);
-
-		this.setDistributionProtocol(distributionProtocolObj);
+		if(protocolId != null && !protocolId.equals(""))
+		{
+			Long distributionId = Long.valueOf(orderPathologyCaseForm.getOrderForm().
+			getDistributionProtocol());
+			DistributionProtocol distributionProtocolObj = new DistributionProtocol();
+			distributionProtocolObj.setId(distributionId);
+			this.setDistributionProtocol(distributionProtocolObj);
+		}
 		orderItemsMap = (HashMap) orderPathologyCaseForm.getValues();
 		return orderItemsMap;
 	}
@@ -727,7 +747,14 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 		//Setting the order Id.
 		Long orderId = Long.valueOf(requestDetailsForm.getId());
 		this.setId(orderId);
-
+		
+		if (requestDetailsForm.getIsDirectDistribution() != null &&
+				requestDetailsForm.getIsDirectDistribution().booleanValue() == Boolean.TRUE)
+		{
+			this.setName(requestDetailsForm.getOrderName());
+			setDistributionProtocol(requestDetailsForm.getDistributionProtocolId());
+		}
+		
 		Collection beanObjSet = parseValuesMap(requestDetailsForm.getValues());
 		Iterator iter = beanObjSet.iterator();
 		Collection<OrderItem> domainObjSet = new HashSet<OrderItem>();
@@ -804,7 +831,17 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 		this.setDistributionCollection(distributionObjectCollection);
 		this.setOrderItemCollection(domainObjSet);
 	}
-
+	
+	
+	private void setDistributionProtocol(String distributionProtId)
+	{
+		OrderBizLogic orderBizLogic = (OrderBizLogic) BizLogicFactory.getInstance().
+		getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
+		DistributionProtocol distributionProtocol = orderBizLogic.retrieveDistributionProtocol(distributionProtId);
+		this.setDistributionProtocol(distributionProtocol);
+		
+		
+	}
 	/**
 	 * @param orderItem object
 	 * @param distributedItem object
