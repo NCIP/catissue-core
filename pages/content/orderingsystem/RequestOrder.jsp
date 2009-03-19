@@ -117,7 +117,7 @@
 						<html:select property="distributionProtocol" styleClass="formFieldSizedNew" styleId="distributionProtocol" 
 									size="1" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 								<html:options collection="<%=Constants.DISTRIBUTIONPROTOCOLLIST%>" labelProperty="name" property="value"/>
-							</html:select>
+						</html:select>
 						</td>
 						</tr>
                 <tr>

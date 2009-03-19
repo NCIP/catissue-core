@@ -24,7 +24,7 @@ if(requestDetailsList!=null && requestDetailsList.size()>0 )
  count=requestDetailsList.size();	
 }
 String checkQuantityforAll = "checkQuantityforAll("+count+")";
-String form_action = Constants.SUBMIT_REQUEST_DETAILS_ACTION+"?submittedFor=ForwardTo&noOfRecords="+count;;
+String form_action = Constants.SUBMIT_REQUEST_DETAILS_ACTION+"?submittedFor=ForwardTo&noOfRecords="+count;
 %>
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/ajax.js"></script>
@@ -178,6 +178,13 @@ function submitAndNotify()
 	document.getElementById("mailNotification").value= "true";
 	document.forms[0].submit();
 }
+
+function directDistribute()
+{
+	document.getElementById("isDirectDistribution").value= "true";
+	onDistriProtSet();
+}
+
 //this function used to view all the consents
 function showAllSpecimen(count)
 {
@@ -400,6 +407,29 @@ function checkQuantityforAll(count)
 
 	/*** code using ajax  ***/
 
+	
+	/***  code using ajax :to get the requester name  ***/
+	function onDistriProtSet()
+	{
+	
+		request = newXMLHTTPReq();			
+		var actionURL;
+		var handlerFunction = getReadyStateHandler(request,onResponseSetRequester,true);	
+		request.onreadystatechange = handlerFunction;				
+		actionURL = "distributionProtId="+ document.getElementById("distributionProtocolId").value+"&isOnChange=true"+"&identifier=";
+		var url = "RequestDetails.do";
+		<!-- Open connection to servlet -->
+		request.open("POST",url,true);	
+		request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");	
+		request.send(actionURL);	
+	}
+
+	function onResponseSetRequester(response) 
+	{
+		document.getElementById("requesterName").value	= response;
+	}
+
+	/*** code using ajax  ***/	
 
 
 </script>
@@ -437,21 +467,108 @@ function checkQuantityforAll(count)
 		</span></td>
         </tr>
         <tr>
+
+  			<jsp:useBean id="requestDetailsForm" class="edu.wustl.catissuecore.actionForm.RequestDetailsForm" scope="request"/>	
+			<% session.setAttribute("REQUEST_DETAILS_FORM",requestDetailsForm);%>
+				    
           <td align="left" class="showhide"><table width="100%" border="0" cellspacing="0" cellpadding="3" >
-              <tr>
-						  <jsp:useBean id="requestDetailsForm" class="edu.wustl.catissuecore.actionForm.RequestDetailsForm" scope="request"/>	
-				    <% 
-				    	session.setAttribute("REQUEST_DETAILS_FORM",requestDetailsForm);%>
+
+ 				<logic:equal name="requestDetailsForm" property="isDirectDistribution" value="true">
+				<tr>	 
+					<td class="noneditable"><span class="noneditable"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory"  /></span>
+						<strong>
+						<bean:message key='requestlist.dataTabel.OrderName.label'/>
+						</strong>
+					</td>
+					<td >
+					 	<html:text styleClass="black_ar" maxlength="50" size="30" styleId="orderName" property="orderName"/>
+					</td>
+
+  				</tr>
+				<tr>
+					<td class="noneditable"><span class="noneditable"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory"  /></span>
+                	<strong>
+						<bean:message key='requestlist.dataTabel.DistributionProtocol.label'/>
+					</strong>
+					</td>
+					
+					<td>
+					
+						<html:select property="distributionProtocolId" styleClass="formFieldSizedNew" styleId="distributionProtocolId"
+									size="1" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="directDistribute()">
+								<html:options collection="<%=Constants.DISTRIBUTIONPROTOCOLLIST%>" labelProperty="name" property="value"/>
+						</html:select>
+								
+					</td>
+				</tr>
+
+ 				<tr>
+						
 						<td width="17%" class="noneditable"><strong>
 								<bean:message key='requestdetails.header.label.RequestorName'/>
-							</strong></td>
-			            <td class="noneditable">- <span class="link">
+							</strong>
+						</td>
+								
+			            <td class="noneditable">- 
+			            <html:text styleClass="formFieldSmallNoBorderlargeSize" 
+						name="<%=  Constants.REQUEST_HEADER_OBJECT %>" styleId="requesterName" property="requestedBy" readonly="true" style="background-color:#f6f6f6;"/>
+			            
+			            <!--  <span class="link">
 								<a class="view" href='mailto:<bean:write name='<%=  Constants.REQUEST_HEADER_OBJECT  %>'  property='email' scope='request' />' >
 									<bean:write name="<%=  Constants.REQUEST_HEADER_OBJECT %>" property="requestedBy" scope="request"/> 
 								</a>
-							</span></td>
+							</span>-->
+						</td>
               </tr>
-              <tr>
+
+
+				</logic:equal>
+			
+				<logic:notEqual  name="requestDetailsForm" property="isDirectDistribution" value="true">
+				<tr>
+					<td class="noneditable">
+						<strong>
+						<bean:message key='requestlist.dataTabel.OrderName.label'/>
+						</strong>
+					</td>
+
+	                <td class="noneditable">-
+	                		<bean:write name="<%=  Constants.REQUEST_HEADER_OBJECT  %>" property="orderName" scope="request"/>
+					</td>
+				</tr>
+				<tr>
+					<td class="noneditable">
+                		<strong>
+						<bean:message key='requestlist.dataTabel.DistributionProtocol.label'/>
+						</strong>
+					</td>
+ 					<td class="noneditable">-
+							<bean:write name="<%=  Constants.REQUEST_HEADER_OBJECT  %>" property="distributionProtocol" scope="request"/>
+					</td>
+				</tr>
+
+				<tr>
+						
+						<td width="17%" class="noneditable"><strong>
+								<bean:message key='requestdetails.header.label.RequestorName'/>
+							</strong>
+						</td>
+								
+			            <td class="noneditable">- 
+  
+				           <span class="link">
+								<a class="view" href='mailto:<bean:write name='<%=  Constants.REQUEST_HEADER_OBJECT  %>'  property='email' scope='request' />' >
+									<bean:write name="<%=  Constants.REQUEST_HEADER_OBJECT %>" property="requestedBy" scope="request"/> 
+								</a>
+							</span>
+
+						</td>
+              </tr>
+	
+
+				</logic:notEqual>	
+
+           <tr>
                 <td class="noneditable"><strong>
 								<bean:message key='requestlist.dataTabel.label.RequestDate'/>
 							</strong></td>
@@ -459,20 +576,28 @@ function checkQuantityforAll(count)
 							<bean:write name="<%=  Constants.REQUEST_HEADER_OBJECT  %>" property="requestedDate" scope="request"/>
 						</td>
               </tr>
-              <tr>
-                <td class="noneditable"><strong>
-								<bean:message key='requestlist.dataTabel.DistributionProtocol.label'/>
-							</strong></td>
-                <td class="noneditable">-
-							<bean:write name="<%=  Constants.REQUEST_HEADER_OBJECT  %>" property="distributionProtocol" scope="request"/>
-						</td>
-              </tr>
-              <tr>
+            
+			<tr >
+                
+					<td class="noneditable"><strong>
+							<bean:message key='requestlist.dataTabel.label.Site'/> 
+ 					</strong></td>
+					<td>
+							<html:select property="site" name="requestDetailsForm" styleClass="formFieldSized51" styleId="siteId" size="1" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+							<html:options collection="<%= Constants.SITE_LIST_OBJECT  %>" labelProperty="name" property="value"/>		
+							</html:select>
+						 			
+					</td>
+					
+			</tr>
+ 			<tr>
+				<logic:notEqual  name="requestDetailsForm" property="isDirectDistribution" value="true">
                 <td class="noneditable"><strong>
 								<bean:message key='requestdetails.header.label.Comments'/> 
 								<bean:write name="<%=  Constants.REQUEST_HEADER_OBJECT  %>"  property="comments"  scope="request" />
 							</strong></td>
                 <td class="noneditable">&nbsp;</td>
+				</logic:notEqual>	
               </tr>
           </table></td>
         </tr>
@@ -912,7 +1037,7 @@ function checkQuantityforAll(count)
 		 			</td>
 					<td valign="top" class="black_ar"></td>
               </tr>
-              <tr >
+             <!-- <tr >
                 <td valign="top" class="black_ar">&nbsp;
 						<bean:message key='requestlist.dataTabel.label.Site'/> 
  					</td>
@@ -922,16 +1047,24 @@ function checkQuantityforAll(count)
 						</html:select> 						
 					</td>
 					<td valign="top" class="black_ar"></td>
-        				<html:hidden name="requestDetailsForm" property="id" />
+        				
+        				
+        			</tr>	
+        				 --> 
 		<%							
 			  String operationUpdate = "update";
 			  String distributionProtocol = ((RequestViewBean)request.getAttribute(Constants.REQUEST_HEADER_OBJECT)).getDistributionProtocolId(); 
+			  String orderName = ((RequestViewBean)request.getAttribute(Constants.REQUEST_HEADER_OBJECT)).getOrderName();
 		%>
+						<html:hidden name="requestDetailsForm" property="id" />
 						<html:hidden name="requestDetailsForm" property="operation" value="<%= operationUpdate %>"/>
-						<html:hidden name="requestDetailsForm" property="distributionProtocolId" value="<%= distributionProtocol %>"/>							
+						<html:hidden name="requestDetailsForm" property="distributionProtocolId" value="<%= distributionProtocol %>"/>	
+						<html:hidden name="requestDetailsForm" property="orderName" styleId="orderName" value="<%= orderName %>"/>					
 						<html:hidden name="requestDetailsForm" property="tabIndex" styleId="tabIndexId"/>			
-						<html:hidden name="requestDetailsForm" property="mailNotification" styleId="mailNotification"/>							
-				</tr>
+						<html:hidden name="requestDetailsForm" property="mailNotification" styleId="mailNotification"/>	
+						<html:hidden name="requestDetailsForm" property="isDirectDistribution" styleId="isDirectDistribution"/>	
+						
+				
           </table></td>
         </tr>
         <tr>
