@@ -165,8 +165,6 @@
 	            cascade="none"
 	            order-by="LABEL asc"
 	        >
-					
-				 <cache usage="read-write" />
 	              <key
 	                  column="SPECIMEN_COLLECTION_GROUP_ID"
 	              >
