@@ -145,6 +145,11 @@ function onSubmit()
 		//create Shipment
 		createShipment();
 	}
+	else if(document.forms[0].chkName[5].checked == true)
+	{
+		//distribute Order
+		distributeOrder();
+	}
 }
 
 function setCheckBoxState()
@@ -293,6 +298,23 @@ function createShipment()
 	
 }
 
+function distributeOrder()
+{
+	var isChecked = updateHiddenFields();
+	   
+	if(isChecked == "true")
+	{
+		var action = "BulkCart.do?operation=requestToDistribute";
+		document.forms[0].action = action;
+		document.forms[0].submit();
+	}
+	else
+	{
+		alert("Please select at least one checkbox");
+	}
+	
+}
+
 function checkAll(element)
 {
 	mygrid.setEditable(true);
@@ -432,6 +454,11 @@ function checkAll(element)
             <td class="black_ar" ><bean:message key="shipment.request"/></td>			
 			<td class="black_ar"><input type="radio" name="chkName"  value="createShipment" onclick="showEvents()" <%=disabledShipping%> ></td>
             <td class="black_ar" ><bean:message key="shipment.create"/></td>
+            
+            
+            		<td class="black_ar"><input type="radio" name="chkName"  value="distributeOrder" onclick="showEvents()" <%=disabledShipping%> ></td>
+            <td class="black_ar" >Distribute</td>
+            
 			<td colspan="3">&nbsp;</td>
 		  </tr>
         </table>          
