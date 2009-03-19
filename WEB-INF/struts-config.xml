@@ -322,7 +322,7 @@ PUBLIC
 		<forward name="specimenArrayDistributionReport" path="/ArrayDistributionReport.do" />
 		<forward name="failure" path="/RequestDetails.do" />
 	</action>
-	
+
 	<action path="/UpdateQuantity" 
 			 type="edu.wustl.catissuecore.action.UpdateAvailableQuantity"		 
 			 scope="request">	 
@@ -338,6 +338,108 @@ PUBLIC
 			scope="request">
 			<forward name="requestOrderPage" path=".catissuecore.orderDef" />
 		</action>
+		
+		<action path="/RequestToDistribute"
+			type="edu.wustl.catissuecore.action.OrderDistributeAction"
+			name="orderForm"
+			validate="false"
+			scope="request">
+			<forward name="specimen" path="/SpecDistribute.do?typeOf=specimen" redirect="true"/>
+			<forward name="specimenArray" path="/SpecArrayDistribute.do?typeOf=specimenArray" redirect="true"/>
+			<forward name="pathologyCase" path="/PathologyCaseDistribute.do?typeOf=pathologyCase" redirect="true"/>
+			<forward name="failure" path="/ShoppingCart.do" />
+		</action>
+		
+		<!-- Direct Distribute specimen orders -->
+		<action path="/SpecDistribute"
+			type="edu.wustl.catissuecore.action.DirectDistributeInitAction"
+			name="OrderSpecimenForm"
+		 	validate="false"
+			scope="request">
+		<forward name="success" path="/specToDistribute.do" />
+		<forward name="failure" path="/ShoppingCart.do"  />
+		</action>
+		
+		<action path="/specToDistribute"
+			type="edu.wustl.common.action.CommonAddEditAction"
+			name="OrderSpecimenForm"
+			validate="false"
+			scope="request">
+		<forward name="success" path="/DirectDistributeSpec.do?typeOf=specimen" />
+		<!-- forward name="success" path="/MyListTab.do" /-->
+		</action>
+		
+		
+		<action path="/DirectDistributeSpec"
+			type="edu.wustl.catissuecore.action.DirectDistributeAction"
+			name="OrderSpecimenForm"
+			validate="false"
+			scope="request">
+		<forward name="success" path="/RequestDetails.do?type=directDistribution" />
+		<!-- forward name="success" path="/MyListTab.do" /-->
+		</action>
+		
+		
+		<!--Direct Distribute Specimen array orders -->
+		<action path="/SpecArrayDistribute"
+			type="edu.wustl.catissuecore.action.DirectDistributeInitAction"
+			name="orderBiospecimenArrayForm"
+		 	validate="false"
+			scope="request">
+		<forward name="success" path="/specArrayToDistribute.do"/>
+		<forward name="failure" path="/ShoppingCart.do" />
+		</action>
+		
+		<action path="/specArrayToDistribute"
+			type="edu.wustl.common.action.CommonAddEditAction"
+			name="orderBiospecimenArrayForm"
+			validate="false"
+			scope="request">
+		<forward name="success" path="/DirectDistributeSpecArray.do?typeOf=specimenArray"/>
+		<!-- forward name="success" path="/MyListTab.do" /-->
+		</action>
+		
+		
+		<action path="/DirectDistributeSpecArray"
+			type="edu.wustl.catissuecore.action.DirectDistributeAction"
+			name="orderBiospecimenArrayForm"
+			validate="false"
+			scope="request">
+		<forward name="success" path="/RequestDetails.do?type=directDistribution"/>
+		<!-- forward name="success" path="/MyListTab.do" /-->
+		</action>
+		
+		
+		<!--Direct Distribute pathology case orders -->
+		<action path="/PathologyCaseDistribute"
+			type="edu.wustl.catissuecore.action.DirectDistributeInitAction"
+			name="orderPathologyCaseForm"
+		 	validate="false"
+			scope="request">
+		<forward name="success" path="/pathCaseToDistribute.do"/>
+		<forward name="failure" path="/ShoppingCart.do" />
+		</action>
+		
+		<action path="/pathCaseToDistribute"
+			type="edu.wustl.common.action.CommonAddEditAction"
+			name="orderPathologyCaseForm"
+			validate="false"
+			scope="request">
+		<forward name="success" path="/DirectDistributePathCase.do?typeOf=pathologyCase"/>
+		<!-- forward name="success" path="/MyListTab.do" /-->
+		</action>
+		
+		
+		<action path="/DirectDistributePathCase"
+			type="edu.wustl.catissuecore.action.DirectDistributeAction"
+			name="orderPathologyCaseForm"
+			validate="false"
+			scope="request">
+		<forward name="success" path="/RequestDetails.do?type=directDistribution"/>
+		<!-- forward name="success" path="/MyListTab.do" /-->
+		</action>
+		
+		
 
 	    <action path="/RequestToOrderSubmit"
 			type="edu.wustl.catissuecore.action.RequestToOrderSubmitAction"
@@ -731,6 +833,7 @@ PUBLIC
 			validate="false"
 			scope="request">
 			<forward name="requestToOrder" path="/RequestToOrder.do"/>
+			<forward name="requestToDistribute" path="/RequestToDistribute.do"/>
 			<forward name="bulkTransfers" path="/BulkTransferEvents.do?menuSelected=15"/>
 			<forward name="bulkDisposals" path="/BulkDisposalEvents.do?menuSelected=15"/>
 			<forward name="createShipmentRequest" path="/ProcessMyListCreateShipmentRequest.do?menuSelected=15"/>
