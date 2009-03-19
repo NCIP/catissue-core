@@ -353,6 +353,12 @@
 							cpChildSubmitAction = "CPQueryPrintSpecimenEdit";//Constants.CP_QUERY_SPECIMEN_EDIT_ACTION;
                     
 						}%>
+						//added this for print specimen when createCpChildCheckBox is clicked
+						var printFlag = document.getElementById("printCheckbox");				
+			            if(printFlag.checked)
+					    {
+							<% 	cpChildSubmitAction = "CPQueryPrintSpecimenEdit"; %> 							
+					    }	
 						setSubmitted("ForwardTo","<%=cpChildSubmitAction%>","cpChildSubmit");
 						confirmDisable("<%=actionToCall%>","document.forms[0].activityStatus");
 				}
@@ -783,7 +789,6 @@
 				
 			if(printFlag.checked)
 			{
-		
 			  setSubmittedForPrint(forwardTo,printaction,nextforwardTo);
 			}
 			else
