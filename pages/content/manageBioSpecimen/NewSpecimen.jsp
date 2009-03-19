@@ -441,10 +441,14 @@
 				if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
 				{
 					actionOnCollOrClassChange = "CPQueryNewSpecimen.do?pageOf=pageOfNewSpecimenCPQuery&virtualLocated=false";
-				}%>
+				}
+					
+					String forwardTo = form.getForwardTo();
+				%>
 				var action = "<%=actionOnCollOrClassChange%>"+"&value="+value;
-				document.forms[0].action = action + "&onCollOrClassChange=true";
+				document.forms[0].action = action + "&onCollOrClassChange=true"+"&forwardTo="+"<%=forwardTo%>";
 				document.forms[0].submit();
+				
 			}	
 		}
 		function onCollectionGroupChange(element)

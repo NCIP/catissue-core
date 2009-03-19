@@ -84,13 +84,16 @@
 		</logic:notEmpty>
 			
 		<logic:empty name="CPQuery">
-			
+
 			<logic:notEqual name="aliquotForm" property="forwardTo" value="orderDetails" >
 				document.forms[0].forwardTo.value= "printAliquot";
 			</logic:notEqual>
 			
+			<logic:equal name="aliquotForm" property="forwardTo" value="orderDetails" >
+				document.forms[0].forwardTo.value= "orderDetails";
+			</logic:equal>
+			
 		</logic:empty>
-		
 		document.forms[0].nextForwardTo.value = "success";
 		document.forms[0].submit();
 	}

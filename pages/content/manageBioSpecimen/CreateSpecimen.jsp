@@ -40,16 +40,17 @@
 		
 		function isLabelBarcodeOrClassChange()
 		{	
-			var parentLabelElement = document.getElementById("parentSpecimenLabel");
-			var parentBarcodeElement = document.getElementById("parentSpecimenBarcode");
-			var classNameElement = document.getElementById("className");
-			
-			if((parentLabelElement.value != "-1" || parentBarcodeElement.value != "-1") && classNameElement.value != "-1")
-			{
-				var action = "${requestScope.actionToCall2}";
-				document.forms[0].action = action + "&isLabelBarcodeOrClassChange=true";
-				document.forms[0].submit();
-			}	
+					var parentLabelElement = document.getElementById("parentSpecimenLabel");
+					var parentBarcodeElement = document.getElementById("parentSpecimenBarcode");
+					var classNameElement = document.getElementById("className");
+					
+					if((parentLabelElement.value != "-1" || parentBarcodeElement.value != "-1") && classNameElement.value != "-1")
+					{
+						var action = "${requestScope.actionToCall2}";
+						var temp = "${requestScope.frdTo}";		
+						document.forms[0].action = action + "&isLabelBarcodeOrClassChange=true"+"&forwardTo="+temp;
+						document.forms[0].submit();
+					}	
 		}
 
 	  	function onClassOrLabelOrBarcodeChange(multipleSpecimen,element)
@@ -102,7 +103,7 @@
 			}
 			else
 			{	
-				var temp = "${requestScope.frdTo}";				
+				var temp = "${requestScope.frdTo}";	
 				if(temp == "orderDetails")
 				{
 					setSubmitted('ForwardTo','${requestScope.printAction}','orderDetails');
