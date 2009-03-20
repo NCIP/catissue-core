@@ -74,13 +74,18 @@ public class DefaultSpecimenBarcodeGenerator implements BarcodeGenerator
 	}
 
 	/**
-	 * This method will retrive unique specimen Barcode.
+	 * This method will retrieve unique specimen Barcode.
 	 * @param databaseConstant databaseConstant
 	 * @return noOfRecords
 	 */
 	private Long getLastAvailableSpecimenBarcode(String databaseConstant)
 	{
-		String sql = "select MAX(" + databaseConstant + ") from CATISSUE_SPECIMEN";
+		StringBuffer sql = new StringBuffer("select MAX(" + databaseConstant + ") from CATISSUE_SPECIMEN");
+		
+		// Modify query for mssqlserver DB.
+		if (Constants.MSSQLSERVER_DATABASE.equals(Variables.databaseName)) {
+			sql.append(Constants.MSSQLSERVER_QRY_DT_CONVERSION_FOR_BARCODE_APPEND_STR);
+		}
 		Connection conn = null;
 		Long noOfRecords = new Long("0");
 		try
@@ -88,7 +93,7 @@ public class DefaultSpecimenBarcodeGenerator implements BarcodeGenerator
 			InitialContext ctx = new InitialContext();
 			DataSource ds = (DataSource) ctx.lookup(DATASOURCE_JNDI_NAME);
 			conn = ds.getConnection();
-			ResultSet resultSet = conn.createStatement().executeQuery(sql);
+			ResultSet resultSet = conn.createStatement().executeQuery(sql.toString());
 
 			if (resultSet.next())
 			{

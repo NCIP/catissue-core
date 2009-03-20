@@ -2618,6 +2618,8 @@ public static final String ADD_MULTIPLE_SPECIMEN_TO_CART="addMltipleSpecimenToCa
 	public static final String FORMAT_FILE_EXTENTION = "_FormatFile.txt";
 	public static final String MSSQLSERVER_NUM_TO_STR_FUNCTION_NAME_FOR_LABEL_GENRATION="CAST(label as bigint)";
 	public static final String MSSQLSERVER_MAX_BARCODE_COL="CAST(barcode as bigint)";
+	public static final String MSSQLSERVER_QRY_DT_CONVERSION_FOR_LABEL_APPEND_STR=" where ISNUMERIC(label)=1";
+	public static final String MSSQLSERVER_QRY_DT_CONVERSION_FOR_BARCODE_APPEND_STR=" where ISNUMERIC(barcode)=1";
 	
 	//Constants for barcode editable
 	public static final String IS_BARCODE_EDITABLE = "barcode.isEditable";
