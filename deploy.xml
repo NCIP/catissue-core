@@ -46,6 +46,8 @@
 
 	<property name="oracle_home" value="${env.ORACLE_HOME}"/>
 	<property name="jboss.bin.run.jar" value="${jboss.home.dir}/bin/run.jar"/>
+	<property name="env.COMPUTERNAME" value="${env.HOSTNAME}"/>
+	
 	<!--import file="dbunitbuild.xml"/>
 	<target name="dbunit_testcases">
 		<antcall target="RundbUnit" />
@@ -2966,7 +2968,7 @@ Thanking You,
 			<arg value="${mssqlserver.driver.string}"/>
 			<arg value="import"/>
 			<arg value="${basedir}/SQL/Permissible_values/MsSqlServer/dumpFileColumnInfo.txt" />
-			<arg value="${basedir}/SQL/Permissible_values/" />
+			<arg value="\\${env.COMPUTERNAME}/SQL/Permissible_values/" />
 		</java>
 		<delete dir="${temp.dir}" />
 	</target>
@@ -3004,7 +3006,7 @@ Thanking You,
 			<arg value="${mssqlserver.driver.string}"/>
 			<arg value="import"/>
 			<arg value="${dbupgrade.sql.dir}/Common/MsSqlServer/dumpFileColumnInfo.txt" />
-			<arg value="${basedir}/SQL/DBUpgrade/Common/MsSqlServer/CAModelCSVs/" />
+			<arg value="\\${env.COMPUTERNAME}/SQL/DBUpgrade/Common/MsSqlServer/CAModelCSVs/" />
 		</java>
 	</target>
 

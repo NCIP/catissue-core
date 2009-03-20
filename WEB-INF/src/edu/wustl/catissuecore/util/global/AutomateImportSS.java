@@ -74,7 +74,13 @@ public class AutomateImportSS
 			HashMap<String,String> tableIdentityInfo=automateImport.getTableNameAndIdentityInfoList(args[8]);
 						
 			int size = tableNamesList.size();
-			String filePath = args[9].replaceAll("\\\\", "//");
+			String filePath = "";
+			if (Constants.MSSQLSERVER_DATABASE.equals(DATABASE_TYPE.toUpperCase())) {
+				filePath = args[9];
+			} else {
+				filePath = args[9].replaceAll("\\\\", "//");
+			}
+			
 			if(Constants.ORACLE_DATABASE.equals(DATABASE_TYPE.toUpperCase()))
 			{
 				ORACLE_TNS_NAME = args[11];
