@@ -62,13 +62,33 @@
 	<path id="junit.classpath">
 		<pathelement location="${junit.jar}" />
 		<pathelement location="${target.dir}" />
-		<pathelement location="${base.dir}/cobertura/cobertura.jar" />
+		<pathelement location="${base.dir}/cobertura/lib/cobertura.jar" />
 		<pathelement location="${base.dir}/cobertura/lib/jakarta-oro-2.0.8.jar" />
 		<pathelement location="${base.dir}/cobertura/lib/asm-2.2.1.jar" />
 
 		<path refid="app.classpath" />
 	</path>
 
+	
+	
+	<!-- struts test case related properties -->
+		<property name="catissue.test" value="${base.dir}/CaTissue_TestCases" />
+		<property name="cat.test.classes.dir" value="${catissue.test}/classes" />
+		<property name="cat.test.src.dir" value="${catissue.test}/src"/>
+		<property name="cat.test.lib.dir" value="${catissue.test}/lib"/>
+		<property name="cat.cobertura.dir" value="${base.dir}" />
+		<property name="cat.instrumented.dir" value="./instrument"/>
+		<property name="cobertura.lib" value="./cobertura/lib"/>
+		<taskdef classpathref="cobertura.classpath" resource="tasks.properties"/>
+
+		
+		<path id="cobertura.classpath">
+			<fileset dir="${cobertura.lib}">
+				<include name="cobertura.jar" />
+				<include name="**/*.jar" />
+			</fileset>
+		</path>
+	
 	<!-- sub tasks -->
 	<target name="init" description="initialize">
 		<!-- Create the time stamp -->
@@ -155,6 +175,7 @@
 				</fileset>
 				<pathelement location="${ant.home}\lib\ant.jar"/>
 			</classpath>
+			<classpath refid="cobertura.classpath" />
 		</javac>
 		<copy todir="${target.dir}" overwrite="true">
 			<fileset dir="${src.dir}" >
@@ -1218,5 +1239,185 @@
 			</fileset>
 		</jar>
 	</target>
+
+	<!-- =================================================================== -->
+	<!-- Junit StrutsTestCases for Nightly Build  -->
+	<!-- =================================================================== -->
+	
+	
+	<target name="compile_struts_junit_testCases">
+		 
+		<echo>Compiling the test classes : </echo>
+		<delete dir="${cat.test.classes.dir}" />
+		<mkdir dir="${cat.test.classes.dir}" /> 
+		
+			
+	    <javac destdir="${cat.test.classes.dir}" includes="**/*.java" includeAntRuntime="false">
+	            <src path="${cat.test.src.dir}"/>
+	            <classpath>
+	       		  <fileset dir="${lib.dir}">
+	        			<include name="**/*.jar"/>
+	        	  </fileset>
+	            
+	            	<fileset dir="${cat.test.lib.dir}">
+	                	<include name="**/*.jar"/>
+	            	</fileset>
+	           	            		
+	            </classpath>
+	        	
+	    </javac>
+		
+		<copy todir="${cat.test.classes.dir}">
+			    <fileset dir="${catissue.test}">
+			      	<include name="**/*.properties" />
+			        <include name="**/*.xml" />
+			    	<include name="**/*.conf" />
+			    </fileset>
+		</copy>
+	</target>
+	
+	
+	<target name="instrument_struts_testCases" depends="compile">
+			<echo>Instrumenting the application classes : </echo>
+	
+			<!--
+				Remove the coverage data file.
+			-->
+				<delete file="${cat.cobertura.dir}/strutscoverage.ser"/>
+				
+				<delete dir="${cat.instrumented.dir}" />
+				<mkdir dir="${cat.instrumented.dir}" /> 
+				
+				<!--
+					Instrument the application classes, writing the
+					instrumented classes into ${build.instrumented.dir}.
+				-->
+
+				<cobertura-instrument todir="${cat.instrumented.dir}"  datafile="${cat.cobertura.dir}/strutscoverage.ser">
+					
+					<classpath>
+						<fileset dir="${lib.dir}">
+							<include name="**/*.jar"/>
+						</fileset>
+					</classpath>
+					<!--
+						The following line causes instrument to ignore any
+						source line containing a reference to log4j, for the
+						purposes of coverage reporting.
+					-->
+					<ignore regex="org.apache.log4j.*" />
+
+					<fileset dir="${target.dir}">
+						<!--
+							Instrument all the application classes, but
+							don't instrument the test classes.
+						-->
+						<include name="**/*.class" />
+						
+					</fileset>
+				</cobertura-instrument>
+		</target>
+
+	<target name="run_struts_junitTestCases" depends="compile_struts_junit_testCases">
+	        <mkdir dir="${base.dir}/Nightly_Build_Struts_Report" />
+			<mkdir dir="${base.dir}/Nightly_Build_Struts_Report/Html_reports" />
+			
+			
+			<junit printsummary="yes" fork="yes" forkmode="perTest" haltonfailure="yes"  maxmemory="1024m">
+				
+				<jvmarg value="-Xms128m"/>
+				<jvmarg value="-Xmx1024m"/>       
+				<sysproperty key="net.sourceforge.cobertura.datafile" file="${cat.cobertura.dir}/strutscoverage.ser" />
+				<sysproperty key="app.home" value="."/>
+	
+				<!--
+					Note the classpath order: instrumented classes are before the
+					original (uninstrumented) classes.  This is important.
+				-->	
+						
+				<classpath location="${cat.instrumented.dir}" />
+							
+				<classpath>
+					
+					<pathelement path="${cat.test.src.dir}" />
+					<pathelement path= "${target.dir}" /> 
+					<pathelement path= "${cat.test.classes.dir}" />
+					
+					<fileset dir="${cat.test.lib.dir}">
+					    <include name="**/*.jar"/>
+				   	</fileset>
+					
+					<fileset dir="${lib.dir}">
+						<include name="**/*.jar"/>
+					</fileset>
+										
+					
+					<fileset dir="${base.dir}/WEB-INF/">
+						<include name="**/*.properties"/>
+						<include name="**/*.xml" />
+						<include name="**/*.tld" />
+					</fileset>
+					
+				</classpath>
+
+				<classpath refid="cobertura.classpath" />
+
+				<formatter type="xml"/> 
+			
+				<batchtest fork="yes" todir="${base.dir}/Nightly_Build_Struts_Report">
+					<fileset dir="${cat.test.src.dir}">
+						<include name="**/CaTissueSuiteTestSuite.java" />
+					</fileset>				
+				</batchtest>
+			</junit>
+		</target>
+	
+		<target name="run_struts_nightlyBuild"  depends="run_struts_junitTestCases">
+			<echo> Generating struts nightly build reports :::</echo>
+			<junitreport todir="${base.dir}/Nightly_Build_Struts_Report">
+				<fileset dir="${base.dir}/Nightly_Build_Struts_Report">
+					<include name="TEST-*.xml" />
+				</fileset>
+				<report todir="${base.dir}/Nightly_Build_Struts_Report/Html_reports" />
+			</junitreport>
+		</target>
+	
+	
+		<target name="struts_coverage_report">
+			<echo> Generating coverage reports :</echo>
+			<mkdir dir="${base.dir}/Nightly_Build_Struts_Report/coveragereports/codeCoverageReportsXml"/>
+			<mkdir dir="${base.dir}/Nightly_Build_Struts_Report/coveragereports/codeCoverageReportsHtml"/>
+			
+			<!--
+				Generate an XML file containing the coverage data using
+				the "srcdir" attribute.
+			-->
+				
+			<cobertura-report srcdir="${base.dir}/WEB-INF/src"
+				destdir="${base.dir}/Nightly_Build_Struts_Report/coveragereports/codeCoverageReportsXml"
+				datafile="${cat.cobertura.dir}/strutscoverage.ser"
+				format="xml" />
+			
+			<!--
+					Generate a series of HTML files containing the coverage
+					data in a user-readable form using nested source filesets.
+			-->
+			<cobertura-report destdir="${base.dir}/Nightly_Build_Struts_Report/coveragereports/codeCoverageReportsHtml"
+				datafile="${cat.cobertura.dir}/strutscoverage.ser">
+				<fileset dir="${base.dir}/WEB-INF/src">
+					<include name="**/*.java"/>
+				</fileset>
+			</cobertura-report>
+		</target>
+	
+	<target name="struts_junit_coverage_reports">
+	
+		<antcall target="instrument_struts_testCases"/>
+		<antcall target="run_struts_junitTestCases"/>
+		<antcall target="struts_coverage_report"/>
+		
+	</target>
+		
+	
 	<!-- shippingtracking - end -->
 </project>
