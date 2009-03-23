@@ -1295,6 +1295,7 @@
 
 				<cobertura-instrument todir="${cat.instrumented.dir}"  datafile="${cat.cobertura.dir}/strutscoverage.ser">
 					
+					<classpath refid="cobertura.classpath" />
 					<classpath>
 						<fileset dir="${lib.dir}">
 							<include name="**/*.jar"/>
