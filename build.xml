@@ -1340,11 +1340,12 @@
 							
 				<classpath>
 					
-					<pathelement path="${cat.test.src.dir}" />
 					<pathelement path= "${target.dir}" /> 
+					<pathelement path="${cat.test.src.dir}" />
 					<pathelement path= "${cat.test.classes.dir}" />
 					
 					<fileset dir="${cat.test.lib.dir}">
+						<exclude name="catissuecore.jar"/>
 					    <include name="**/*.jar"/>
 				   	</fileset>
 					
