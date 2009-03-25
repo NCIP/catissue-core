@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -2027,25 +2029,36 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 	 */
 	public Vector<StorageContainerTreeNode> getStorageContainers(
 			Long identifier, String nodeName, String parentId)
-			throws DAOException {
-		String sql = createSql(identifier, parentId);
+			throws DAOException 
+			{
 		JDBCDAO dao = (JDBCDAO) DAOFactory.getInstance().getDAO(
 				Constants.JDBC_DAO);
+		List resultList = new ArrayList();
+		if(Constants.ZERO_ID.equals(parentId))
+		{
+			resultList = getContainersForSite(identifier, dao);//Bug 11694
+		}
+		else
+		{
+			String sql = createSql(identifier, parentId);
+			try
+			{
+				dao.openSession(null);
+				resultList = dao.executeQuery(sql, null, false, null);
+				dao.closeSession();
+			} 
+			catch (Exception daoExp)
+			{
+				throw new DAOException(daoExp.getMessage(), daoExp);
+			}
+		}
 		String dummyNodeName = Constants.DUMMY_NODE_NAME;
 		String containerName = null;
 		Long nodeIdentifier;
 		Long parentContainerId;
 		Long childCount;
 
-		List resultList = new ArrayList();
 		Vector<StorageContainerTreeNode> containerNodeVector = new Vector<StorageContainerTreeNode>();
-		try {
-			dao.openSession(null);
-			resultList = dao.executeQuery(sql, null, false, null);
-			dao.closeSession();
-		} catch (Exception daoExp) {
-			throw new DAOException(daoExp.getMessage(), daoExp);
-		}
 		Iterator iterator = resultList.iterator();
 		while (iterator.hasNext()) {
 			List rowList = (List) iterator.next();
@@ -2092,33 +2105,138 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 	 * @return String sql This method with return the sql depending on the node
 	 *         clicked (i.e parent Node or child node)
 	 */
-	private String createSql(Long identifier, String parentId) {
+	private String createSql(Long identifier, String parentId) 
+	{
 		String sql;
-		if (!Constants.ZERO_ID.equals(parentId)) {
-			sql = "SELECT cn.IDENTIFIER, cn.name, pos.PARENT_CONTAINER_ID,COUNT(sc3.IDENTIFIER) "
-					+ "FROM CATISSUE_CONTAINER cn join CATISSUE_STORAGE_CONTAINER sc ON sc.IDENTIFIER=cn.IDENTIFIER "
-					+ "left outer join catissue_container_position pos on pos.CONTAINER_ID=cn.IDENTIFIER left outer join "
-					+ "catissue_container_position con_pos on con_pos.PARENT_CONTAINER_ID=cn.IDENTIFIER left outer join "
-					+ "CATISSUE_STORAGE_CONTAINER sc3 on con_pos.CONTAINER_ID=sc3.IDENTIFIER "
-					+ "WHERE pos.PARENT_CONTAINER_ID= "
-					+ identifier
-					+ " AND cn.ACTIVITY_STATUS!='Disabled' GROUP BY cn.IDENTIFIER, cn.NAME,pos.PARENT_CONTAINER_ID"
-					+ " ORDER BY cn.IDENTIFIER ";
-		} else {
-			sql = "SELECT cn.IDENTIFIER, cn.NAME,site.identifier,COUNT(sc3.IDENTIFIER) "
-					+ "FROM CATISSUE_CONTAINER cn join CATISSUE_STORAGE_CONTAINER sc "
-					+ "ON sc.IDENTIFIER=cn.IDENTIFIER join CATISSUE_SITE site "
-					+ "ON sc.site_id = site.identifier left outer join CATISSUE_CONTAINER_POSITION pos "
-					+ "ON pos.PARENT_CONTAINER_ID=cn.IDENTIFIER left outer join "
-					+ "CATISSUE_STORAGE_CONTAINER sc3 ON pos.CONTAINER_ID=sc3.IDENTIFIER "
-					+ "WHERE site.identifier="
-					+ identifier
-					+ " AND cn.ACTIVITY_STATUS!='Disabled' AND cn.IDENTIFIER NOT IN (SELECT p2.CONTAINER_ID FROM CATISSUE_CONTAINER_POSITION p2) "
-					+ "GROUP BY cn.IDENTIFIER, cn.NAME,site.identifier " 
-					+ "ORDER BY cn.IDENTIFIER ";
-
-		}
+		sql = "SELECT cn.IDENTIFIER, cn.name, pos.PARENT_CONTAINER_ID,COUNT(sc3.IDENTIFIER) "
+			+ "FROM CATISSUE_CONTAINER cn join CATISSUE_STORAGE_CONTAINER sc ON sc.IDENTIFIER=cn.IDENTIFIER "
+			+ "left outer join catissue_container_position pos on pos.CONTAINER_ID=cn.IDENTIFIER left outer join "
+			+ "catissue_container_position con_pos on con_pos.PARENT_CONTAINER_ID=cn.IDENTIFIER left outer join "
+			+ "CATISSUE_STORAGE_CONTAINER sc3 on con_pos.CONTAINER_ID=sc3.IDENTIFIER "
+			+ "WHERE pos.PARENT_CONTAINER_ID= "
+			+ identifier
+			+ " AND cn.ACTIVITY_STATUS!='Disabled' GROUP BY cn.IDENTIFIER, cn.NAME,pos.PARENT_CONTAINER_ID"
+			+ " ORDER BY cn.IDENTIFIER ";		
 		return sql;
+	}	
+	//Bug 11694
+	/**
+	 * This method will return list of parent containers.
+	 * @param identifier - site id
+	 * @param dao
+	 * @return
+	 * @throws DAOException
+	 */
+	private List getContainersForSite(Long identifier,JDBCDAO dao) throws DAOException
+	{
+		List resultList = new ArrayList();
+		Map<Long,List> resultSCMap= new LinkedHashMap<Long,List>();
+		List storageContainerList = new ArrayList();
+		List childContainerList = new ArrayList();
+		Set childContainerIds = new LinkedHashSet();
+		/**
+		 *  This query will return list of all storage containers within the specified site.
+		 */
+		String query = "SELECT cn.IDENTIFIER,cn.NAME FROM CATISSUE_CONTAINER cn join CATISSUE_STORAGE_CONTAINER sc " +
+				"ON sc.IDENTIFIER=cn.IDENTIFIER join CATISSUE_SITE site "+
+				"ON sc.site_id = site.identifier WHERE " +
+				"cn.ACTIVITY_STATUS!='Disabled' AND site_id="+identifier;
+		try 
+		{
+			dao.openSession(null);
+			storageContainerList = dao.executeQuery(query, null, false, null);
+			Iterator iterator = storageContainerList.iterator();
+			while (iterator.hasNext())
+            {
+				List rowList = (List) iterator.next();
+				Long id = Long.valueOf((String) rowList.get(0));
+				String name = ((String)rowList.get(1));
+				resultSCMap.put(id, rowList);
+            }
+			/**
+			 * This query will return list of all child storage containers within the specified site.
+			 */
+			String childQuery = "SELECT pos.CONTAINER_ID FROM CATISSUE_CONTAINER_POSITION pos " +
+					"join CATISSUE_STORAGE_CONTAINER sc ON pos.CONTAINER_ID=sc.IDENTIFIER " +
+			        "WHERE sc.site_id="+ identifier;
+			childContainerList = dao.executeQuery(childQuery, null, false, null);
+			Iterator iterator1 = childContainerList.iterator();
+			while (iterator1.hasNext())
+            {
+				List rowListPos = (List) iterator1.next();
+				childContainerIds.add(Long.valueOf((String) rowListPos.get(0)));
+            }
+			Set parentIds = resultSCMap.keySet();
+			//removed all child containers 
+			//this will return set of all parent(1st level) containers 
+			parentIds.removeAll(childContainerIds);
+					
+			StringBuffer parentContainerIdsBuffer = new StringBuffer();
+			Iterator it = parentIds.iterator();
+			while(it.hasNext())
+			{ 
+				parentContainerIdsBuffer.append(it.next());
+				parentContainerIdsBuffer.append(",");
+			
+			}
+			parentContainerIdsBuffer.deleteCharAt(parentContainerIdsBuffer.length()-1);
+			
+			/*
+			 * This query will return child count of parent containers.
+			 */
+			String imediateChildCountQuery = "SELECT PARENT_CONTAINER_ID,COUNT(*) FROM CATISSUE_CONTAINER_POSITION GROUP BY " +
+					"PARENT_CONTAINER_ID HAVING PARENT_CONTAINER_ID IN ("+parentContainerIdsBuffer.toString()+")";
+			List result = dao.executeQuery(imediateChildCountQuery, null, false, null);
+			Map<Long,Long> childCountMap= new LinkedHashMap<Long,Long>();
+			Iterator itr = result.iterator();
+			while (itr.hasNext())
+            {
+				List rowList = (List) itr.next();
+				Long id = Long.valueOf((String) rowList.get(0));
+				Long childCount = Long.valueOf((String) rowList.get(1));
+				childCountMap.put(id, childCount);
+            }
+			dao.closeSession();		
+			
+			Iterator parentContainerIterator = parentIds.iterator();
+			/**
+			 * Formed resultList having data as follows:
+			 * 1. parent container id
+			 * 2. container name
+			 * 3. site id
+			 * 4. child count
+			 *  
+			 */
+			while(parentContainerIterator.hasNext())
+			{
+				Long id = (Long) parentContainerIterator.next();//parent container id
+				List strorageContainerList = resultSCMap.get(id);	
+				//strorageContainerList -> containing container id and name
+				strorageContainerList.add(identifier.toString());//site id			
+				if(childCountMap.containsKey(id))
+				{
+					strorageContainerList.add(childCountMap.get(id).toString()); //child count
+				}
+				else
+				{
+					strorageContainerList.add("0");
+				}
+				resultList.add(strorageContainerList);
+			}
+			
+		}
+		catch (Exception daoExp)
+		{
+			throw new DAOException(daoExp.getMessage(), daoExp);
+		}
+		finally
+		{
+			resultSCMap.clear();
+			storageContainerList.clear();
+			childContainerList.clear();
+			childContainerIds.clear();			
+		}
+		return resultList;
 	}
 
 	private boolean[][] getStorageContainerFullStatus(DAO dao,
