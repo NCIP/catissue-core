@@ -214,6 +214,13 @@
 			</then>
 		</if>
 		
+		<!-- Check whether JAVA_HOME environment variable set or not -->
+		<if>
+			<contains string="${env.JAVA_HOME}" substring="env.JAVA_HOME"/>
+			<then>
+				<fail message="JAVA_HOME is not set. Please make sure to set JAVA_HOME environment variable to the directory of your local JDK." />
+			</then>
+		</if>
 	</target>
 
 	<!--Target for validation of connection parameters-->
@@ -712,6 +719,14 @@
 		<antcall target="deploy_app" />
 		<antcall target="deploy_db" />
 		<antcall target="server_security" />
+		
+		<!-- Configure the IIS properties, if configure.IIS.properties is 'true'. -->
+		<if>
+			<equals arg1="${configure.IIS.properties}" arg2="true" />
+			<then>
+				<antcall target="configure_IIS_properties" />
+			</then>
+		</if>
 	</target>
 
 	<!--Target for checking server security -->
@@ -3377,6 +3392,16 @@ Thanking You,
 	
 	<!-- IIS properties configuration -->
 	<target name="configure_IIS_properties">
+		<echo message="Configuring IIS properties..." />
+		
+		<!-- Check whether JAVA_HOME environment variable is set or not -->
+		<if>
+			<contains string="${env.JAVA_HOME}" substring="env.JAVA_HOME"/>
+			<then>
+				<fail message="JAVA_HOME is not set. Please make sure to set JAVA_HOME environment variable to the directory of your local JDK." />
+			</then>
+		</if>
+		
 		<!-- Modify registry file -->
 		<pathconvert property="IISSettings.home.registry" dirsep="\\">
 			<path path="${basedir}\IISSettings"/>
