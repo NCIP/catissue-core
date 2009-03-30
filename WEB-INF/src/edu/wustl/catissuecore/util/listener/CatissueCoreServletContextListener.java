@@ -161,7 +161,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 	 */
 	private void initTitliIndex()
 	{
-		TitliResultGroup.isTitliConfigured = true;
+		TitliResultGroup.isTitliConfigured = Boolean.parseBoolean(XMLPropertyHandler.getValue(Constants.TITLI_CONFIGURED));
 	}
 
 	/**
