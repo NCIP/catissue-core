@@ -494,16 +494,12 @@ public class ParticipantAction extends SecureAction
 	}
 	
 	/*
-	 * Consent List for given coleection protocol
+	 * Consent List for given collection protocol
 	 * //Abhishek Mehta
 	 */
-	private Collection getConsentList(IBizLogic bizLogic,String collectionProtocolID) throws DAOException
+	private Collection getConsentList(IBizLogic bizLogic,String cpId) throws DAOException
     {   	
-		Object object  = bizLogic.retrieve(CollectionProtocol.class.getName(), new Long(collectionProtocolID));		
-		CollectionProtocol collectionProtocol = (CollectionProtocol) object;
-		//Setting consent tiers
-		//Resolved lazy --- collectionProtocol.getConsentTierCollection()
-		Collection consentTierCollection = (Collection)bizLogic.retrieveAttribute(CollectionProtocol.class.getName(), collectionProtocol.getId(), "elements(consentTierCollection)");
+		Collection consentTierCollection = (Collection)bizLogic.retrieveAttribute(CollectionProtocol.class.getName(), Long.parseLong(cpId), "elements(consentTierCollection)");
 		return consentTierCollection;
     }
 	
