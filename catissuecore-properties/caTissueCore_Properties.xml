@@ -533,6 +533,8 @@
 		<name>packingSlipFooterJsp</name>
 		<value></value>
 	</property>
-
-
+	<property>
+		<name>TitliConfigured</name>
+		<value>false</value>
+	</property>
 </properties>
