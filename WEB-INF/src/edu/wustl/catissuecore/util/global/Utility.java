@@ -38,6 +38,7 @@ import org.hibernate.Session;
 import edu.common.dynamicextensions.domain.Category;
 import edu.common.dynamicextensions.domain.integration.EntityMap;
 import edu.common.dynamicextensions.domain.integration.EntityMapCondition;
+import edu.common.dynamicextensions.domain.integration.EntityMapRecord;
 import edu.common.dynamicextensions.domain.integration.FormContext;
 import edu.common.dynamicextensions.entitymanager.EntityManager;
 import edu.common.dynamicextensions.entitymanager.EntityManagerConstantsInterface;
@@ -46,6 +47,7 @@ import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.wustl.catissuecore.actionForm.IPrinterTypeLocation;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
+import edu.wustl.catissuecore.bizlogic.AnnotationBizLogic;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolRegistrationBizLogic;
@@ -2478,16 +2480,16 @@ public class Utility extends edu.wustl.common.util.Utility {
 	 * @param entityMap to get formContext
 	 * @param conditionObjectId condition on forms
 	 * @param typeId collection protocol id
+	 * @throws DynamicExtensionsSystemException 
 	 */
-	public static void editConditions(EntityMap entityMap, Long conditionObjectId, Long typeId, boolean editAlreadyPresentCondition)
+	public static void editConditions(EntityMap entityMap, Long conditionObjectId, Long typeId, boolean editAlreadyPresentCondition) throws DynamicExtensionsSystemException
 	{
-		Collection<FormContext> formContextColl = entityMap.getFormContextCollection();
+		Collection<FormContext> formContextColl = getFormContexts(entityMap.getId());
 		if (formContextColl != null)
 		{
 			for (FormContext formContext : formContextColl)
 			{
-				Collection<EntityMapCondition> entityMapCondColl = formContext
-						.getEntityMapConditionCollection();
+				Collection<EntityMapCondition> entityMapCondColl = getEntityMapConditions(formContext.getId());
 
 				if (entityMapCondColl.isEmpty() || entityMapCondColl.size() <= 0)
 				{
@@ -2507,6 +2509,84 @@ public class Utility extends edu.wustl.common.util.Utility {
 				formContext.setEntityMapConditionCollection(entityMapCondColl);
 			}
 		}
+	}
+	
+	/**
+	 * @param entityMapId
+	 * @return
+	 * @throws DynamicExtensionsSystemException
+	 */
+	public static Collection<FormContext> getFormContexts(Long entityMapId) throws DynamicExtensionsSystemException
+	{
+		Collection<FormContext> formContextColl = null;
+		AnnotationBizLogic bizLogic = new AnnotationBizLogic();
+		
+		try
+		{
+			formContextColl = new ArrayList(bizLogic.executeQuery("from FormContext formContext where formContext.entityMap.id = "+entityMapId));
+		}
+		catch (ClassNotFoundException e)
+		{
+			throw new DynamicExtensionsSystemException("Exception encountered while retrieving object : "+e.getCause());
+		}
+		catch (DAOException e)
+		{
+			throw new DynamicExtensionsSystemException("Exception encountered while retrieving object : "+e.getCause());
+		}
+		
+		return formContextColl;
+	}
+	
+	/**
+	 * @param formContextId
+	 * @return
+	 * @throws DynamicExtensionsSystemException
+	 */
+	public static Collection<EntityMapCondition> getEntityMapConditions(Long formContextId) throws DynamicExtensionsSystemException
+	{
+		Collection<EntityMapCondition> entityMapConditions = null;
+		AnnotationBizLogic bizLogic = new AnnotationBizLogic();
+		
+		try
+		{
+			entityMapConditions = new HashSet(bizLogic.executeQuery("from EntityMapCondition entityMapCondtion where entityMapCondtion.formContext.id = "+formContextId));
+		}
+		catch (DAOException e) 
+		{
+			throw new DynamicExtensionsSystemException("Exception encountered while retrieving object : "+e.getCause());
+		}
+		catch (ClassNotFoundException e)
+		{
+			throw new DynamicExtensionsSystemException("Exception encountered while retrieving object : "+e.getCause());
+		}
+		
+		return entityMapConditions;
+	}
+	
+	/**
+	 * @param formContextId
+	 * @return
+	 * @throws DynamicExtensionsSystemException
+	 */
+	public static Collection<EntityMapRecord> getEntityMapRecords(Long formContextId) throws DynamicExtensionsSystemException
+	{
+		Collection<EntityMapRecord> entityMapRecords = null;
+		AnnotationBizLogic bizLogic = new AnnotationBizLogic();
+		
+		try
+		{
+			entityMapRecords = new HashSet(bizLogic.executeQuery("from EntityMapRecord entityMapRecord where entityMapRecord.formContext.id = "+formContextId));
+		}
+		catch (ClassNotFoundException e)
+		{
+			throw new DynamicExtensionsSystemException("Exception encountered while retrieving object : "+e.getCause());
+		}
+		catch (DAOException e)
+		{
+			throw new DynamicExtensionsSystemException("Exception encountered while retrieving object : "+e.getCause());
+		}
+		
+		return entityMapRecords;
 	}
 
 }
