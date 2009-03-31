@@ -4,7 +4,9 @@ package edu.wustl.catissuecore.annotations.xmi;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import edu.common.dynamicextensions.bizlogic.BizLogicFactory;
 import edu.common.dynamicextensions.domain.integration.EntityMap;
@@ -18,6 +20,7 @@ import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.catissuecore.bizlogic.AnnotationBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.util.dbManager.DAOException;
 
@@ -63,31 +66,32 @@ public class DECategoryIntegration
 						//create new entitymap object
 						EntityMap entityMap = getEntityMap(rootCategoryContainerId, objEntityMap.getStaticEntityId());
 
-						Collection<FormContext> formContextList = objEntityMap.getFormContextCollection();
+						Collection<FormContext> existingFormContexts = Utility.getFormContexts(objEntityMap.getId());
 
-						Collection<FormContext> formContextNewList = entityMap.getFormContextCollection();
-						for (FormContext objFormContext : formContextList)
+						Set<FormContext> newFormContexts = new HashSet<FormContext>(Utility.getFormContexts(entityMap.getId()));
+						for (FormContext existingFormContext : existingFormContexts)
 						{
-							FormContext objNewFormContext = new FormContext();
-							objNewFormContext.setIsInfiniteEntry(objFormContext.getIsInfiniteEntry());
-							objNewFormContext.setNoOfEntries(objFormContext.getNoOfEntries());
-							objNewFormContext.setStudyFormLabel(objFormContext.getStudyFormLabel());
-							objNewFormContext.setEntityMap(entityMap);
-							Collection<EntityMapCondition> entityMapConditionList = objFormContext.getEntityMapConditionCollection();
-							Collection<EntityMapCondition> entityMapConditionNewList = objNewFormContext.getEntityMapConditionCollection();
+							FormContext newFormContext = new FormContext();
+							newFormContext.setIsInfiniteEntry(existingFormContext.getIsInfiniteEntry());
+							newFormContext.setNoOfEntries(existingFormContext.getNoOfEntries());
+							newFormContext.setStudyFormLabel(existingFormContext.getStudyFormLabel());
+							newFormContext.setEntityMap(entityMap);
+							Collection<EntityMapCondition> existingEntityMapConditions = Utility.getEntityMapConditions(existingFormContext.getId());
+							Collection<EntityMapCondition> newEntityMapConditions = Utility.getEntityMapConditions(newFormContext.getId());
 
-							for (EntityMapCondition objEntityMapCondition : entityMapConditionList)
+							for (EntityMapCondition existingEntityMapCondition : existingEntityMapConditions)
 							{
-								EntityMapCondition objNewEntityMapCondition = new EntityMapCondition();
-								objNewEntityMapCondition.setStaticRecordId(objEntityMapCondition.getStaticRecordId());
-								objNewEntityMapCondition.setTypeId(objEntityMapCondition.getTypeId());
-								entityMapConditionNewList.add(objNewEntityMapCondition);
+								EntityMapCondition newEntityMapCondition = new EntityMapCondition();
+								newEntityMapCondition.setStaticRecordId(existingEntityMapCondition.getStaticRecordId());
+								newEntityMapCondition.setTypeId(existingEntityMapCondition.getTypeId());
+								newEntityMapConditions.add(newEntityMapCondition);
 
 							}
-							objNewFormContext.setEntityMapConditionCollection(entityMapConditionNewList);
-							formContextNewList.add(objNewFormContext);
+							newFormContext.setEntityMapConditionCollection(newEntityMapConditions);
+							newFormContexts.add(newFormContext);
 
 						}
+						entityMap.setFormContextCollection(newFormContexts);
 						AnnotationBizLogic annotation = new AnnotationBizLogic();
 						annotation.insert(entityMap, Constants.HIBERNATE_DAO);
 
