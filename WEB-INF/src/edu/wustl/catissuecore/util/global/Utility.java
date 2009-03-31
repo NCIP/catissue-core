@@ -685,8 +685,9 @@ public class Utility extends edu.wustl.common.util.Utility {
 	}
 
 	public static Long toLong(String string) throws NumberFormatException {
-		if ((string != null) && (string.trim() != "")) {
-			return new Long(string);
+		if ((string != null) && (string.trim() != "")) 
+		{
+			return Long.valueOf(string);
 		}
 		return null;
 	}
@@ -1014,7 +1015,7 @@ public class Utility extends edu.wustl.common.util.Utility {
 				.getInstance().getBizLogic(
 						Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);
 		Object object = scgbizLogic.retrieve(
-				sourceObjectName, new Long(specimenCollectionGroupId));
+				sourceObjectName, Long.valueOf(specimenCollectionGroupId));
 		SpecimenCollectionGroup specimenCollectionGroup = null;
 		if (object != null) {
 			specimenCollectionGroup = (SpecimenCollectionGroup) object;
@@ -1363,7 +1364,7 @@ public class Utility extends edu.wustl.common.util.Utility {
 	{
 		CollectionProtocolRegistrationBizLogic collectionProtocolRegistrationBizLogic = (CollectionProtocolRegistrationBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
 		
-		Object object = collectionProtocolRegistrationBizLogic.retrieve(CollectionProtocolRegistration.class.getName(), new Long(cpr_id));		
+		Object object = collectionProtocolRegistrationBizLogic.retrieve(CollectionProtocolRegistration.class.getName(),Long.valueOf(cpr_id));		
 		CollectionProtocolRegistration collectionProtocolRegistrationObject = (CollectionProtocolRegistration) object;
 		return collectionProtocolRegistrationObject;
 	}
@@ -1377,7 +1378,7 @@ public class Utility extends edu.wustl.common.util.Utility {
 	{
 		SpecimenCollectionGroupBizLogic specimenCollectionBizLogic = (SpecimenCollectionGroupBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);
 			
-		Object object = specimenCollectionBizLogic.retrieve(SpecimenCollectionGroup.class.getName(), new Long(scg_id));
+		Object object = specimenCollectionBizLogic.retrieve(SpecimenCollectionGroup.class.getName(), Long.valueOf(scg_id));
 		SpecimenCollectionGroup specimenCollectionGroupObject = null;
 		if(object != null)
 		{
@@ -2001,21 +2002,40 @@ public class Utility extends edu.wustl.common.util.Utility {
 		collectionProtocolDTO.setRowIdBeanMap(rowIdBeanMap);
 		return collectionProtocolDTO;
 	}
-	
+	//bug 11611 and 11659 start
+	/**
+	 * @param privilegeName - privilege name
+	 * @param protectionElementName - protection element name
+	 * @return UserNotAuthorizedException - exception if user is not authorized
+	 */
 	public static UserNotAuthorizedException getUserNotAuthorizedException(String privilegeName, String protectionElementName)
 	{
-		 UserNotAuthorizedException ex = new UserNotAuthorizedException();
-         ex.setPrivilegeName(privilegeName);
-         if (protectionElementName != null && (protectionElementName.contains("Site") || protectionElementName.contains("CollectionProtocol")))
-         {
-             String [] arr = protectionElementName.split("_");
-             String [] nameArr = arr[0].split("\\.");
-             String baseObject = nameArr[nameArr.length-1];
-             ex.setBaseObject(baseObject);
-             ex.setBaseObjectIdentifier(arr[1]);
-         }
-         return ex;
+		UserNotAuthorizedException ex = getUserNotAuthorizedException(privilegeName,protectionElementName,null);
+		return ex;
 	}
+	/**
+	 * @param privilegeName - privilege name
+	 * @param protectionElementName - protection element name
+	 * @param domainObjName - domain object
+	 * @return UserNotAuthorizedException - exception if user is not authorized
+	 */
+	public static UserNotAuthorizedException getUserNotAuthorizedException(String privilegeName, String protectionElementName,String domainObjName)
+	{
+		UserNotAuthorizedException ex = new UserNotAuthorizedException();
+        ex.setPrivilegeName(privilegeName);
+        ex.setDomainObjectName(domainObjName);
+        ex.setBaseObject(domainObjName);
+        if (protectionElementName != null && (protectionElementName.contains("Site") || protectionElementName.contains("CollectionProtocol")))
+        {
+            String [] arr = protectionElementName.split("_");
+            String [] nameArr = arr[0].split("\\.");
+            String baseObject = nameArr[nameArr.length-1];
+            ex.setBaseObject(baseObject);
+            ex.setBaseObjectIdentifier(arr[1]);
+        }
+        return ex;
+	}
+	//bug 11611 and 11659 end
 	
 	public static boolean hasPrivilegeToView(String objName, Long identifier, SessionDataBean sessionDataBean, String privilegeName)
 	{
@@ -2264,7 +2284,8 @@ public class Utility extends edu.wustl.common.util.Utility {
 		}
 		if (!isAuthorized)
         {
-			throw Utility.getUserNotAuthorizedException(privilegeName, protectionElementName);  
+            //bug 11611 and 11659
+			throw Utility.getUserNotAuthorizedException(privilegeName, protectionElementName,null);  
         }
 		return isAuthorized;
 	}
@@ -2297,7 +2318,8 @@ public class Utility extends edu.wustl.common.util.Utility {
 			
 			if(cpIdSet.contains(cpId))
 			{
-				throw Utility.getUserNotAuthorizedException(privilegeName, protectionElementName);    
+				//bug 11611 and 11659
+				throw Utility.getUserNotAuthorizedException(privilegeName, protectionElementName,domainObject.getClass().getSimpleName());
 			}
 			isAuthorized = edu.wustl.catissuecore.util.global.Utility.checkForAllCurrentAndFutureCPs(dao,privilegeName, sessionDataBean, protectionElementNames[1]);
 		}
@@ -2316,7 +2338,8 @@ public class Utility extends edu.wustl.common.util.Utility {
 
 		if (cpIdSet.contains(cpId))
 		{
-			throw Utility.getUserNotAuthorizedException(privilegeName, protectionElementName);
+		   //bug 11611 and 11659
+			throw Utility.getUserNotAuthorizedException(privilegeName, protectionElementName,null);
 		}
 		isAuthorized = edu.wustl.catissuecore.util.global.Utility.checkForAllCurrentAndFutureCPs(dao, privilegeName, sessionDataBean,
 				protectionElementNames[1]);
