@@ -66,9 +66,10 @@ public final class AddEntityMapConditions
 	 * @param typeId stores Id of Collection Protocol object
 	 * @param entityIds entityIds collection
 	 * @throws DAOException if it fails to retrieve entityMapObject from database
+	 * @throws DynamicExtensionsSystemException 
 	 */
 	private static void associateFormsToCP(Long cpId, Long typeId, Collection<Long> containerIds)
-			throws DAOException
+			throws DAOException, DynamicExtensionsSystemException
 	{
 		AnnotationBizLogic annotation = new AnnotationBizLogic();
 		DefaultBizLogic defaultBizLogic = BizLogicFactory.getDefaultBizLogic();
