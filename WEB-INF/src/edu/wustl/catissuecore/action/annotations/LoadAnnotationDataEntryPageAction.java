@@ -282,10 +282,11 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 	 * @param dynEntContainerId Dynamic Extensions Container Id
 	 * @throws CacheException fails to retrieve object from cache
 	 * @throws BizLogicException fails to retrieve bizLogic Object
+	 * @throws DynamicExtensionsApplicationException 
 	 */
 	private void processResponseFromDynamicExtensions(HttpServletRequest request,
 			String dynEntContainerId) throws CacheException,
-			BizLogicException
+			BizLogicException, DynamicExtensionsSystemException
 	{
 		String operationStatus = request.getParameter(WebUIManager
 				.getOperationStatusParameterName());
@@ -305,10 +306,11 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 	 * @param dynEntContainerId Dynamic Extension Container Id
 	 * @throws CacheException fails to retrieve object from cache
 	 * @throws BizLogicException fails to retrieve bizLogic Object
+	 * @throws DynamicExtensionsApplicationException 
 	 */
 	private void insertEntityMapRecord(HttpServletRequest request, String dynExtRecordId,
 		String dynEntContainerId) throws CacheException,
-			BizLogicException
+			BizLogicException, DynamicExtensionsSystemException
 	{
 		EntityMapRecord entityMapRecord = getEntityMapRecord(request, dynExtRecordId,
 				dynEntContainerId);
@@ -338,9 +340,10 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 	 * @param dynExtRecordId Dynamic Extension record Id
 	 * @return EntityMapRecord for the Dynamic Extension record Id
 	 * @throws CacheException fails to retrieve object from cache
+	 * @throws DynamicExtensionsApplicationException 
 	 */
 	private EntityMapRecord getEntityMapRecord(HttpServletRequest request, String dynExtRecordId,
-		String dynEntContainerId) throws CacheException
+		String dynEntContainerId) throws CacheException, DynamicExtensionsSystemException
 	{
 		EntityMapRecord entityMapRecord = null;
 		String staticEntityRecordId = (String) request.getSession().getAttribute(
@@ -387,10 +390,9 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 					Logger.out.error(e.getMessage(), e);
 				}
 				for (EntityMap entityMap : entityMapColl)
-				{
+				{					
 					FormContext formContext = getFormContext(entityMap.getId());
-					Collection<EntityMapRecord> recordColl = formContext
-							.getEntityMapRecordCollection();
+					Collection<EntityMapRecord> recordColl = Utility.getEntityMapRecords(formContext.getId());
 					for (EntityMapRecord eMR : recordColl)
 					{
 						if (eMR.getDynamicEntityRecordId().longValue() == Utility.toLong(
@@ -419,8 +421,9 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 	 * It gives the FormContext Object based on EntityMap
 	 * @param entityMapId identifier of entityMap
 	 * @return FormContext object for the particular entityMapId
+	 * @throws DynamicExtensionsApplicationException 
 	 */
-	private FormContext getFormContext(Long entityMapId)
+	private FormContext getFormContext(Long entityMapId) throws DynamicExtensionsSystemException
 	{
 		AnnotationBizLogic bizLogic = new AnnotationBizLogic();
 		Object object = bizLogic.getEntityMap(entityMapId);
@@ -428,10 +431,12 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 		if (object != null)
 		{
 			EntityMap entityMap = (EntityMap) object;
-			Iterator formIt = entityMap.getFormContextCollection().iterator();
-			while (formIt.hasNext())
+			Collection<FormContext> formContextMetadata = Utility.getFormContexts(entityMap.getId());
+
+			Iterator<FormContext> formContextIter = formContextMetadata.iterator();
+			while (formContextIter.hasNext())
 			{
-				FormContext formContext = (FormContext) formIt.next();
+				FormContext formContext = formContextIter.next();
 				if ((formContext.getNoOfEntries() == null || formContext.getNoOfEntries()
 						.equals(""))
 						&& (formContext.getStudyFormLabel() == null || formContext
@@ -641,8 +646,9 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 	 * @param staticEntityId Identifier of static entity
 	 * @param staticEntityRecordId Identifier of static record
 	 * @return collection of entityMapRecords
+	 * @throws DynamicExtensionsApplicationException 
 	 */
-	private List<EntityMapRecord> getEntityMapRecords(Long staticEntityId, Long staticEntityRecordId)
+	private List<EntityMapRecord> getEntityMapRecords(Long staticEntityId, Long staticEntityRecordId) throws DynamicExtensionsSystemException
 	{
 		List<EntityMapRecord> entityMapRecords = null;
 		if (staticEntityId != null)
@@ -658,8 +664,9 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 	/**
 	 * @param staticEntityId Identifier of static entity
 	 * @return collection of EntityMap for static entity
+	 * @throws DynamicExtensionsApplicationException 
 	 */
-	private List<Long> getListOfEntityMapIdsForSE(Long staticEntityId)
+	private List<Long> getListOfEntityMapIdsForSE(Long staticEntityId) throws DynamicExtensionsSystemException
 	{
 		List<Long> entityMapIds = new ArrayList<Long>();
 		AnnotationBizLogic annotationBizLogic = new AnnotationBizLogic();
