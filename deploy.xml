@@ -1403,14 +1403,12 @@
 	</target>
 	
 	<target name="upgrade_from_Suite1.1_to_1.1p">
-		<antcall target="update_metadata_for_model_changes">
-				<param name="isUpgrade" value="true"/>
-		</antcall>	
-		    <if>
+		        <if>
 				<equals arg1="mysql" arg2="${database.type}" />
 				<then>
 					<antcall target="upgrade_mysql_from_Suite1.1_to_1.1p" />
 					<antcall target="upgrade_mysql_from_Suite1.1_p2to_1.1p3" />
+						
 				</then>
 				<elseif>
 					<equals arg1="oracle" arg2="${database.type}" />
@@ -1461,6 +1459,10 @@
 
 	<!-- Upgrading from Suite1.1 p2 to p3 - MySQL -->
 	<target name="upgrade_mysql_from_Suite1.1_p2to_1.1p3">
+		<antcall target="update_metadata_for_model_changes">
+						<param name="isUpgrade" value="true"/>
+						<param name="buildVersion" value="p2"/>
+		</antcall>
 		<!-- Modifying catissue_container table by changing 'FULL' column name with 'CONT_FULL'. As 'FULL' is a keyword in some dbs. -->
 		<echo message="Upgrading MySQL Database. Modifying catissue_container table by changing 'FULL' column name with 'CONT_FULL'." />
 		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" >
@@ -1476,6 +1478,10 @@
 	
 	<!-- Upgrading from Suite1.1 p2 to p3 - Oracle -->
 	<target name="upgrade_oracle_from_Suite1.1_p2to_1.1p3">
+		<antcall target="update_metadata_for_model_changes">
+						<param name="isUpgrade" value="true"/>
+						<param name="buildVersion" value="p2"/>
+		</antcall>
 		<!-- Modifying catissue_container table by changing 'FULL' column name with 'CONT_FULL'. As 'FULL' is a keyword in some dbs. -->
 		<echo message="Upgrading Oracle Database. Modifying catissue_container table by changing 'FULL' column name with 'CONT_FULL'." />
 		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">
@@ -1585,6 +1591,7 @@
 			<then>
 				<antcall target="update_metadata_for_model_changes_mysql">
 				 <param name="isUpgrade" value="${isUpgrade}"/>
+				 <param name="buildVersion" value="${buildVersion}"/>
 				</antcall>
 			</then>
 			<elseif>
@@ -1592,6 +1599,7 @@
 				<then>
 					<antcall target="update_metadata_for_model_changes_oracle">
 						 <param name="isUpgrade" value="${isUpgrade}"/>
+						 <param name="buildVersion" value="${buildVersion}"/>
 					</antcall>
 				</then>
 			</elseif>
@@ -1600,6 +1608,7 @@
 				<then>
 					<antcall target="update_metadata_for_model_changes_mssqlserver">
 						 <param name="isUpgrade" value="${isUpgrade}"/>
+						 <param name="buildVersion" value="${buildVersion}"/>
 					</antcall>					
 				</then>
 			</elseif>
@@ -1677,6 +1686,7 @@
 			<arg value="${database.password}"/>
 			<arg value="${mysql.driver.string}"/>
 			<arg value="${isUpgrade}"/>
+			<arg value="${buildVersion}"/>			
 		</java>
 	</target>
 
@@ -1694,6 +1704,7 @@
 			<arg value="${database.password}"/>
 			<arg value="${oracle.driver.string}"/>
 			<arg value="${isUpgrade}"/>
+			<arg value="${buildVersion}"/>	
 		</java>
 		<antcall target="reset_sequences" />
 	</target>
@@ -2961,7 +2972,7 @@ Thanking You,
 		<antcall target="upgrade_db_demodel_mssqlserver" />
 		<antcall target="update_metadata_for_model_changes" >
 			 <param name="isUpgrade" value="false"/>
-		</antcall>
+	    </antcall>
 		<antcall target="update_metadata_for_CA_model_changes" />
 		
 	</target>
@@ -3039,6 +3050,7 @@ Thanking You,
 			<arg value="${database.password}"/>
 			<arg value="${mssqlserver.driver.string}"/>
 			<arg value="${isUpgrade}"/>
+			<arg value="${buildVersion}"/>
 		</java>
 	</target>
 	
