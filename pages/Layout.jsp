@@ -105,7 +105,17 @@
 				<%
 				   }
 				%>		  
-		}	
+		}
+
+		function detectApplicationUsageActivity()
+		{
+			if (lastRefreshTime <= pageLoadTime)
+			{
+				lastRefreshTime = new Date().getTime();
+				clearTimeout(advanceTime*60*1000);
+				sendBlankRequest();
+			}
+		}
 		
 		function getUmlModelLink()
 		{
@@ -134,7 +144,7 @@
 	type="image/vnd.microsoft.icon" />
 
 </head>
-<body>
+<body onclick="detectApplicationUsageActivity()">
 <table width="100%" height="99%" border="0" cellspacing="0" cellpadding="0">
 	<tr height="10%">
 		<td>
