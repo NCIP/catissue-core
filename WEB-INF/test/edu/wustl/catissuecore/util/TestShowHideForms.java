@@ -97,14 +97,12 @@ public class TestShowHideForms extends TestCase
 						if (entityMapList != null && entityMapList.size() > 0)
 						{
 							EntityMap entityMap = entityMapList.get(0);
-							Collection<FormContext> formContextColl = entityMap
-									.getFormContextCollection();
+							Collection<FormContext> formContextColl = Utility.getFormContexts(entityMap.getId());
 							if (formContextColl != null)
 							{
 								for (FormContext formContext : formContextColl)
 								{
-									Collection<EntityMapCondition> entityMapCondColl = formContext
-											.getEntityMapConditionCollection();
+									Collection<EntityMapCondition> entityMapCondColl = Utility.getEntityMapConditions(formContext.getId());
 									if (!entityMapCondColl.isEmpty()
 											|| entityMapCondColl.size() > 0)
 									{
@@ -181,14 +179,12 @@ public class TestShowHideForms extends TestCase
 						if (entityMapList != null && entityMapList.size() > 0)
 						{
 							EntityMap entityMap = entityMapList.get(0);
-							Collection<FormContext> formContextColl = entityMap
-									.getFormContextCollection();
+							Collection<FormContext> formContextColl = Utility.getFormContexts(entityMap.getId());
 							if (formContextColl != null)
 							{
 								for (FormContext formContext : formContextColl)
 								{
-									Collection<EntityMapCondition> entityMapCondColl = formContext
-											.getEntityMapConditionCollection();
+									Collection<EntityMapCondition> entityMapCondColl = Utility.getEntityMapConditions(formContext.getId());
 									if (!entityMapCondColl.isEmpty()
 											|| entityMapCondColl.size() > 0)
 									{
