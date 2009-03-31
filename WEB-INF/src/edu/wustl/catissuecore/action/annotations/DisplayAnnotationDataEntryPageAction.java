@@ -353,8 +353,9 @@ public class DisplayAnnotationDataEntryPageAction extends BaseAction
 	/**
 	 * @param entityId
 	 * @return
+	 * @throws DynamicExtensionsApplicationException 
 	 */
-	private List<EntityMapRecord> getEntityMapRecords(Long staticEntityId,Long staticEntityRecordId)
+	private List<EntityMapRecord> getEntityMapRecords(Long staticEntityId,Long staticEntityRecordId) throws DynamicExtensionsSystemException
 	{
 		List<EntityMapRecord> entityMapRecords = null;
 		if(staticEntityId!=null)
@@ -369,8 +370,9 @@ public class DisplayAnnotationDataEntryPageAction extends BaseAction
 	/**
 	 * @param staticEntityId
 	 * @return
+	 * @throws DynamicExtensionsApplicationException 
 	 */
-	private List<Long>  getListOfEntityMapIdsForSE(Long staticEntityId)
+	private List<Long>  getListOfEntityMapIdsForSE(Long staticEntityId) throws DynamicExtensionsSystemException
 	{
 		List<Long> entityMapIds = new ArrayList<Long>();
 		AnnotationBizLogic annotationBizLogic = new AnnotationBizLogic();
