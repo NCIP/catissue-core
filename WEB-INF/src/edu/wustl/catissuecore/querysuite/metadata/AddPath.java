@@ -223,6 +223,121 @@ public class AddPath
 			 }		 
 		 }
 		 stmt.close();
+		 insertPathSQL.addAll(getInsertPathStatementsSpecimen(connection));//bug 11336
 		 return insertPathSQL;
 	 }
+	//bug 11336
+	 /**
+	  * This method will return associationsMap which contains associations between specimen and its 
+	  * subclasses.
+	  */
+	 private Map<String,List<String>> getAssociationsMapForSpecimens()
+	 {
+		 Map <String,List<String>> associationsMap = new HashMap<String, List<String>>();
+
+		 List<String> associationsListSpecimen = new ArrayList<String>();
+		 associationsListSpecimen.add("edu.wustl.catissuecore.domain.FluidSpecimen");
+		 associationsListSpecimen.add("edu.wustl.catissuecore.domain.MolecularSpecimen");
+		 associationsListSpecimen.add("edu.wustl.catissuecore.domain.TissueSpecimen");
+		 associationsListSpecimen.add("edu.wustl.catissuecore.domain.CellSpecimen");
+		 associationsMap.put("edu.wustl.catissuecore.domain.Specimen", associationsListSpecimen);
+
+		 List<String> associationsListCell = new ArrayList<String>();
+		 associationsListCell.add("edu.wustl.catissuecore.domain.FluidSpecimen");
+		 associationsListCell.add("edu.wustl.catissuecore.domain.MolecularSpecimen");
+		 associationsListCell.add("edu.wustl.catissuecore.domain.TissueSpecimen");
+		 associationsMap.put("edu.wustl.catissuecore.domain.CellSpecimen", associationsListCell);
+
+		 List<String> associationsListFluid = new ArrayList<String>();
+		 associationsListFluid.add("edu.wustl.catissuecore.domain.CellSpecimen");
+		 associationsListFluid.add("edu.wustl.catissuecore.domain.MolecularSpecimen");
+		 associationsListFluid.add("edu.wustl.catissuecore.domain.TissueSpecimen");
+		 associationsMap.put("edu.wustl.catissuecore.domain.FluidSpecimen", associationsListFluid);
+
+		 List<String> associationsListMolecular = new ArrayList<String>();
+		 associationsListMolecular.add("edu.wustl.catissuecore.domain.CellSpecimen");
+		 associationsListMolecular.add("edu.wustl.catissuecore.domain.FluidSpecimen");
+		 associationsListMolecular.add("edu.wustl.catissuecore.domain.TissueSpecimen");
+		 associationsMap.put("edu.wustl.catissuecore.domain.MolecularSpecimen", associationsListMolecular);
+
+		 List<String> associationsListTissue = new ArrayList<String>();
+		 associationsListTissue.add("edu.wustl.catissuecore.domain.CellSpecimen");
+		 associationsListTissue.add("edu.wustl.catissuecore.domain.FluidSpecimen");
+		 associationsListTissue.add("edu.wustl.catissuecore.domain.MolecularSpecimen");
+		 associationsMap.put("edu.wustl.catissuecore.domain.TissueSpecimen", associationsListTissue);
+
+		 return associationsMap;
+	 }
+
+	 /**
+	  * Added paths in specimen and its subclasses(eg Specimen to Tissue)
+	  * and between subclasses also.(eg Tissue to Cell)
+	  */
+	 public List<String> getInsertPathStatementsSpecimen(Connection connection) throws SQLException
+	 {
+		 List<String> insertPathSQL = new ArrayList<String>();
+		 List<String> intermediatePathIds = new ArrayList<String>();
+		 String entityId = null;
+		 Statement stmt = null;
+		 String sql = "Select IDENTIFIER from dyextn_abstract_metadata where NAME "+UpdateMetadataUtil.getDBCompareModifier()+"'edu.wustl.catissuecore.domain.Specimen'";
+		 try
+		 {
+			 stmt = connection.createStatement();
+			 ResultSet specimenIdRS = stmt.executeQuery(sql);
+			 if(specimenIdRS.next())
+			 {
+				 entityId = String.valueOf(specimenIdRS.getLong(1));
+			 }
+			 sql = "Select INTERMEDIATE_PATH from PATH where FIRST_ENTITY_ID = "+entityId+" and LAST_ENTITY_ID = "+entityId;
+			 ResultSet intermediatePathRS = stmt.executeQuery(sql);
+			 while(intermediatePathRS.next())
+			 {
+				 String intermediatePathId = intermediatePathRS.getString(1);
+				 intermediatePathIds.add(intermediatePathId);
+			 }
+			 Map <String,List<String>> associationsMap = getAssociationsMapForSpecimens();
+			 for(String intermediatePathId : intermediatePathIds)
+			 {
+				 Set<String> keySet = associationsMap.keySet();
+				 Iterator<String> iterator = keySet.iterator();
+				 while(iterator.hasNext())
+				 {
+					 String key = iterator.next();
+					 String keyId = null;
+					 sql = "Select IDENTIFIER from dyextn_abstract_metadata where NAME "+UpdateMetadataUtil.getDBCompareModifier()+"'"+key+"'";
+					 ResultSet rs = stmt.executeQuery(sql);
+					 if(rs.next())
+					 {
+						 keyId = String.valueOf(rs.getLong(1)); 
+					 }
+
+					 List<String> classList = associationsMap.get(key);
+					 for(String entity : classList)
+					 {
+						 String associateEntityId = null;
+						 sql = "Select IDENTIFIER from dyextn_abstract_metadata where NAME "+UpdateMetadataUtil.getDBCompareModifier()+"'"+entity+"'";
+						 ResultSet entityIdRS = stmt.executeQuery(sql);
+						 if(entityIdRS.next())
+						 {
+							 associateEntityId = String.valueOf(entityIdRS.getLong(1));
+							 String sqlStmt = "insert into path values("+ identifier++ +","+keyId+","+intermediatePathId+","+associateEntityId+")";
+							 insertPathSQL.add(sqlStmt);
+						 } 
+
+					 }
+
+				 }
+			 }
+		 }
+		 finally
+		 {
+			 if(stmt!=null)
+			 {
+				 stmt.close();
+			 }
+		 }
+		 return insertPathSQL;
+	 }
+
+
 }

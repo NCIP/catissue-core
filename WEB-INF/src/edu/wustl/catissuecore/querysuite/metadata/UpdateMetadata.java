@@ -47,6 +47,8 @@ public class UpdateMetadata
 	
 	static String IS_UPGRADE = "false";
 	
+	static String BUILD_VERSION = null;
+	
 	public static void main(String[] args) throws SQLException, IOException, ClassNotFoundException
 	{
 		try
@@ -57,11 +59,22 @@ public class UpdateMetadata
 			stmt = connection.createStatement();
 			UpdateMetadataUtil.isExecuteStatement = true;
 			DB_SPECIFIC_COMPARE_OPERATOR = UpdateMetadataUtil.getDBCompareModifier();
-			
 			if(IS_UPGRADE.equals("true"))
 			{
-				AddAttributesForUpgrade addAttribute = new AddAttributesForUpgrade(connection);
-				addAttribute.addAttribute();	
+				if(BUILD_VERSION!=null && BUILD_VERSION.equals("p2"))
+				{
+					//bug 11336 start
+					AddPath pathObject = new AddPath();
+					List<String> insertPathSQL = pathObject.getInsertPathStatementsSpecimen(connection);
+					UpdateMetadataUtil.executeSQLs(insertPathSQL, connection.createStatement(), false);
+					//bug 11336 end
+				}
+				else
+				{
+					AddAttributesForUpgrade addAttribute = new AddAttributesForUpgrade(connection);
+					addAttribute.addAttribute();
+				}
+				
 			}
 			else
 			{
@@ -126,7 +139,7 @@ public class UpdateMetadata
 	 */
 	public static void configureDBConnection(String[] args)
 	{
-		if(args.length < 8)
+		if(args.length < 9)
 		{
 			throw new RuntimeException("In sufficient number of arguments");
 		}
@@ -138,6 +151,7 @@ public class UpdateMetadata
 			DATABASE_PASSWORD = args[5];
 			DATABASE_DRIVER = args[6];
 			IS_UPGRADE = args[7];
+			BUILD_VERSION = args[8];			
 	}
 	
     /**
