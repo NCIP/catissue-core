@@ -3342,7 +3342,8 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 					if (!siteIdSet.contains(site.getId()))
 					{
 						// return false;
-						throw Utility.getUserNotAuthorizedException(Constants.Association, site.getObjectId());
+						//bug 11611 and 11659
+						throw Utility.getUserNotAuthorizedException(Constants.Association, site.getObjectId(),domainObject.getClass().getSimpleName());
 					}
 				}
 			}
@@ -3378,11 +3379,11 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		else
 		// Check for ALL CURRENT & FUTURE CASE
 		{
-			isAuthorized = Utility.checkOnCurrentAndFuture(dao, sessionDataBean, protectionElementName, privilegeName);
+	                isAuthorized = Utility.checkOnCurrentAndFuture(dao, sessionDataBean, protectionElementName, privilegeName);
 		}
 		if (!isAuthorized)
 		{
-			throw Utility.getUserNotAuthorizedException(privilegeName, protectionElementName);
+			throw Utility.getUserNotAuthorizedException(privilegeName, protectionElementName,domainObject.getClass().getSimpleName());
 		}
 		return isAuthorized;
 	}

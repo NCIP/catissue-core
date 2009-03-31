@@ -2066,14 +2066,16 @@ public class UserBizLogic extends DefaultBizLogic
 	    		
 	    		if (!isAuthorized)
 	            {
-	    			throw Utility.getUserNotAuthorizedException(privilegeName, protectionElementName);    
+	    			//bug 11611 and 11659
+	    			throw Utility.getUserNotAuthorizedException(privilegeName, protectionElementName,domainObject.getClass().getSimpleName()); 
 	            }
 	    		return isAuthorized;		
 			}
 			else
 			{
 				// return false;
-				throw Utility.getUserNotAuthorizedException(privilegeName, protectionElementName);  
+				//bug 11611 and 11659
+				throw Utility.getUserNotAuthorizedException(privilegeName, protectionElementName,domainObject.getClass().getSimpleName());
 			}		
 		}			
 }

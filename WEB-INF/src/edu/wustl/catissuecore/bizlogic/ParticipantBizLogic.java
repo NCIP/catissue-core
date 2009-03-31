@@ -1398,14 +1398,16 @@ public class ParticipantBizLogic extends DefaultBizLogic
 				
 				if(cpIdSet.contains(cpId))
 				{
-					throw edu.wustl.catissuecore.util.global.Utility.getUserNotAuthorizedException(privilegeName, protectionElementName);    
+					//bug 11611 and 11659
+					throw edu.wustl.catissuecore.util.global.Utility.getUserNotAuthorizedException(privilegeName, protectionElementName,domainObject.getClass().getSimpleName());
 				}
 				isAuthorized = edu.wustl.catissuecore.util.global.Utility.checkForAllCurrentAndFutureCPs(dao,privilegeName, sessionDataBean, protectionElementNames[1]);
 			}
 		}
 		if (!isAuthorized)
         {
-			throw edu.wustl.catissuecore.util.global.Utility.getUserNotAuthorizedException(privilegeName, protectionElementName);    
+            //bug 11611 and 11659
+			throw edu.wustl.catissuecore.util.global.Utility.getUserNotAuthorizedException(privilegeName, protectionElementName,domainObject.getClass().getSimpleName());    
         }
 		return isAuthorized;		
 	}

@@ -414,6 +414,9 @@ public class DistributionProtocolBizLogic extends SpecimenProtocolBizLogic imple
         {
             UserNotAuthorizedException ex = new UserNotAuthorizedException();
             ex.setPrivilegeName(privilegeName);
+            //bug 11611 and 11659
+            ex.setBaseObject(Site.class.getSimpleName());
+            ex.setDomainObjectName(domainObject.getClass().getSimpleName());
             if (protectionElementName != null && (protectionElementName.contains("Site") || protectionElementName.contains("CollectionProtocol")))
             {
                 String [] arr = protectionElementName.split("_");

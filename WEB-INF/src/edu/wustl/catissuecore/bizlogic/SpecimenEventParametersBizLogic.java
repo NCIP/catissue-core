@@ -1055,7 +1055,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 
 		if (!isAuthorized)
         {
-			throw Utility.getUserNotAuthorizedException(privilegeName, protectionElementName);    
+			throw Utility.getUserNotAuthorizedException(privilegeName, protectionElementName,domainObject.getClass().getSimpleName());   //bug 11611 and 11659
         }
 		return isAuthorized;			
 	}
@@ -1089,7 +1089,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 		
 		if(!siteIdSet.contains(site.getId()))
 		{
-			throw Utility.getUserNotAuthorizedException(Constants.Association, site.getObjectId());
+			throw Utility.getUserNotAuthorizedException(Constants.Association, site.getObjectId(),domainObject.getClass().getSimpleName());
 		}	
 	}
 
@@ -1116,7 +1116,14 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 				
 				if(!siteIdSet.contains(site.getId()))
 				{
-					throw Utility.getUserNotAuthorizedException(Constants.Association, site.getObjectId());
+					//bug 11611 and 11659 start
+					UserNotAuthorizedException ex = Utility.getUserNotAuthorizedException(Constants.Association,specimen.getObjectId(),domainObject.getClass().getSimpleName());//
+					if(ex.getBaseObject()==null)
+					{
+						ex.setBaseObject("Specimen");
+					}
+					throw ex;
+					//bug 11611 and 11659 end
 				}
 			}
 		} 
