@@ -20,6 +20,8 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.common.dynamicextensions.domain.integration.EntityMap;
+import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationException;
+import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.common.dynamicextensions.ui.webui.util.WebUIManager;
 import edu.common.dynamicextensions.util.global.Constants;
 import edu.wustl.catissuecore.actionForm.AnnotationDataEntryForm;
@@ -59,8 +61,10 @@ public class LoadDynamicExtentionsDataEntryPageAction extends BaseAction
 	 * @param request
 	 * @param annotationDataEntryForm 
 	 * @throws CacheException 
+	 * @throws DynamicExtensionsApplicationException
+	 * @throws NumberFormatException 
 	 */
-	private void updateCache(HttpServletRequest request, AnnotationDataEntryForm annotationDataEntryForm) throws CacheException
+	private void updateCache(HttpServletRequest request, AnnotationDataEntryForm annotationDataEntryForm) throws CacheException, NumberFormatException, DynamicExtensionsSystemException
 	{
 		String staticEntityId = annotationDataEntryForm.getParentEntityId();
 		String dynEntContainerId = annotationDataEntryForm.getSelectedAnnotation();
@@ -76,8 +80,9 @@ public class LoadDynamicExtentionsDataEntryPageAction extends BaseAction
 
 	/**
 	 * @param annotationDataEntryForm
+	 * @throws DynamicExtensionsApplicationException 
 	 */
-	private Long getEntityMapId(Long staticEntityId, Long dynamicEntityContainerId)
+	private Long getEntityMapId(Long staticEntityId, Long dynamicEntityContainerId) throws DynamicExtensionsSystemException
 	{
 		if (staticEntityId != null)
 		{
