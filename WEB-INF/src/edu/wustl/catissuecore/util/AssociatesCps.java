@@ -182,9 +182,10 @@ public final class AssociatesCps
 	 * @throws DAOException if it fails to do database operation
 	 * @throws BizLogicException fails to get bizLogic object
 	 * @throws UserNotAuthorizedException user is not authorized to perform operation
+	 * @throws DynamicExtensionsSystemException 
 	 */
 	private static void associateEntitiesToCps(Long cpId, Long typeId, List<Long> entityIds)
-			throws DAOException, UserNotAuthorizedException, BizLogicException
+			throws DAOException, UserNotAuthorizedException, BizLogicException, DynamicExtensionsSystemException
 	{
 		AnnotationBizLogic annotation = new AnnotationBizLogic();
 		DefaultBizLogic defaultBizLogic = BizLogicFactory.getDefaultBizLogic();
@@ -209,10 +210,11 @@ public final class AssociatesCps
 	 * @param typeId
 	 * @param annotation
 	 * @param entityMapList
+	 * @throws DynamicExtensionsSystemException 
 	 */
 	private static void updateEntityMap(Long cpId,
 			Long typeId, AnnotationBizLogic annotation,
-			List<EntityMap> entityMapList)
+			List<EntityMap> entityMapList) throws DynamicExtensionsSystemException
 	{
 			if (entityMapList != null && !entityMapList.isEmpty())
 			{
@@ -255,16 +257,18 @@ public final class AssociatesCps
 	 * @param entityMap to get formContext
 	 * @param conditionObjectId to set particular condition
 	 * @param typeId stores the identifier value of Collection Protocol object
+	 * @throws DynamicExtensionsSystemException 
 	 */
-	private static void editConditions(EntityMap entityMap, Long conditionObjectId, Long typeId)
+	private static void editConditions(EntityMap entityMap, Long conditionObjectId, Long typeId) throws DynamicExtensionsSystemException
 	{
-		Collection<FormContext> formContextColl = entityMap.getFormContextCollection();
+		Collection<FormContext> formContextColl = Utility.getFormContexts(entityMap.getId());
+				
 		if (formContextColl != null)
 		{
 			for (FormContext formContext : formContextColl)
 			{
-				Collection<EntityMapCondition> entityMapCondColl = formContext
-						.getEntityMapConditionCollection();
+				Collection<EntityMapCondition> entityMapCondColl = Utility.getEntityMapConditions(formContext.getId());
+    			
 				if (entityMapCondColl.isEmpty() || entityMapCondColl.size() <= 0)
 				{
 					EntityMapCondition entityMapCond = Utility.getEntityMapCondition(formContext,
