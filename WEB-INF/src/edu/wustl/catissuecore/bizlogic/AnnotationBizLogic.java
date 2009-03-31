@@ -22,10 +22,12 @@ import edu.common.dynamicextensions.domaininterface.AssociationInterface;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.common.dynamicextensions.entitymanager.EntityManager;
 import edu.common.dynamicextensions.entitymanager.EntityManagerInterface;
+import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationException;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.wustl.cab2b.server.cache.EntityCache;
 import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.exception.BizLogicException;
@@ -85,8 +87,9 @@ public class AnnotationBizLogic extends DefaultBizLogic
 	 * @param staticEntityId
 	 * @return List of all dynamic entities Objects from a given static entity
 	 * eg: returns all dynamic entity objects from a Participant,Specimen etc
+	 * @throws DynamicExtensionsApplicationException
 	 */
-	public List getListOfDynamicEntities(long staticEntityId)
+	public List getListOfDynamicEntities(long staticEntityId) throws DynamicExtensionsSystemException
 	{
 		List dynamicList = new ArrayList();
 		try
@@ -96,8 +99,7 @@ public class AnnotationBizLogic extends DefaultBizLogic
 		}
 		catch (DAOException e)
 		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new DynamicExtensionsSystemException("Exception encountered while retrieving object : "+e.getCause());
 		}
 
 		return dynamicList;
@@ -494,8 +496,9 @@ public class AnnotationBizLogic extends DefaultBizLogic
 	 * @param dynEntitiesList
 	 * @param cpIdList
 	 * @return
+	 * @throws DynamicExtensionsApplicationException
 	 */
-	public List getAnnotationIdsBasedOnCondition(List dynEntitiesList, List cpIdList,boolean showForAll)
+	public List getAnnotationIdsBasedOnCondition(List dynEntitiesList, List cpIdList,boolean showForAll) throws DynamicExtensionsSystemException
 	{
 		List dynEntitiesIdList = new ArrayList();
 		List cpIdListForAll = new ArrayList();
@@ -506,30 +509,32 @@ public class AnnotationBizLogic extends DefaultBizLogic
 			while (dynEntitiesIterator.hasNext())
 			{
 				EntityMap entityMap = (EntityMap) dynEntitiesIterator.next();
-				Iterator formIterator = entityMap.getFormContextCollection().iterator();
-				while (formIterator.hasNext())
+				
+				Collection<FormContext> formContexts = Utility.getFormContexts(entityMap.getId());
+				Iterator<FormContext> formContextIter = formContexts.iterator();
+				while (formContextIter.hasNext())
 				{
-					FormContext formContext = (FormContext) formIterator.next();
+					FormContext formContext = formContextIter.next();
+					
+					Collection<EntityMapCondition> entityMapConditions = Utility.getEntityMapConditions(formContext.getId());
 					if ((formContext.getNoOfEntries() == null || formContext.getNoOfEntries()
 							.equals(""))
 							&& (formContext.getStudyFormLabel() == null || formContext
 									.getStudyFormLabel().equals("")))
 					{
-						if (formContext.getEntityMapConditionCollection() != null
-								&& !formContext.getEntityMapConditionCollection().isEmpty() && showForAll==false)
+						if (entityMapConditions != null
+								&& !entityMapConditions.isEmpty() && showForAll==false)
 						{
-							boolean check = checkStaticRecId(formContext
-									.getEntityMapConditionCollection(), cpIdList);
+							boolean check = checkStaticRecId(entityMapConditions, cpIdList);
 							if (check)
 							{
 								dynEntitiesIdList.add(entityMap.getContainerId());
 							}
 						}
-						if (formContext.getEntityMapConditionCollection() != null
-								&& !formContext.getEntityMapConditionCollection().isEmpty() && showForAll==true)
+						if (entityMapConditions != null
+								&& !entityMapConditions.isEmpty() && showForAll==true)
 						{
-							boolean check = checkStaticRecId(formContext
-									.getEntityMapConditionCollection(), cpIdListForAll);
+							boolean check = checkStaticRecId(entityMapConditions, cpIdListForAll);
 							if (check)
 							{
 								dynEntitiesIdList.add(entityMap.getContainerId());
@@ -539,6 +544,7 @@ public class AnnotationBizLogic extends DefaultBizLogic
 				}
 			}
 		}
+		
 		return dynEntitiesIdList;
 	}
 
