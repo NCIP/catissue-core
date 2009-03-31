@@ -167,9 +167,10 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 	 * @param containerId
 	 * @throws CacheException
 	 * @throws IllegalStateException
+	 * @throws DynamicExtensionsApplicationException 
 	 */
 	private void getCPConditions(AnnotationForm annotationForm, String containerId,
-			HttpServletRequest request) throws IllegalStateException, CacheException
+			HttpServletRequest request) throws IllegalStateException, CacheException, DynamicExtensionsSystemException
 	{
 		if (containerId != null)
 		{
@@ -182,22 +183,24 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 				int i = 0;
 				EntityMap entityMap = new EntityMap();
 				entityMap = (EntityMap) entitymapList.get(0);
-				Collection formContextConditionColl = entityMap.getFormContextCollection();
-				Iterator it = formContextConditionColl.iterator();
-
-				while (it.hasNext())
+				
+				Collection<FormContext> formContexts = Utility.getFormContexts(entityMap.getId());
+				Iterator<FormContext> formContextIter = formContexts.iterator();
+				while (formContextIter.hasNext())
 				{
-					FormContext formContext = (FormContext) it.next();
+					FormContext formContext = formContextIter.next();
+					
+					Collection<EntityMapCondition> entityMapConditions = Utility.getEntityMapConditions(formContext.getId());					
+					
 					if ((formContext.getNoOfEntries() == null || formContext.getNoOfEntries()
 							.equals(""))
 							&& (formContext.getStudyFormLabel() == null || formContext
 									.getStudyFormLabel().equals("")))
-						if (formContext.getEntityMapConditionCollection() != null
-								&& !formContext.getEntityMapConditionCollection().isEmpty())
+						if (entityMapConditions != null
+								&& !entityMapConditions.isEmpty())
 						{
 
-							Collection entityMapConditionColl = formContext
-									.getEntityMapConditionCollection();
+							Collection entityMapConditionColl = entityMapConditions;
 							whereColumnValue = new String[entityMapConditionColl.size()];
 							Iterator entityMapCondIterator = entityMapConditionColl.iterator();
 							while (entityMapCondIterator.hasNext())
