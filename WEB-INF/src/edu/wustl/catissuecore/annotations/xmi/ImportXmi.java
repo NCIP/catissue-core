@@ -43,6 +43,7 @@ import edu.wustl.catissuecore.bizlogic.AnnotationBizLogic;
 import edu.wustl.catissuecore.bizlogic.AnnotationUtil;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
@@ -400,15 +401,15 @@ public class ImportXmi
 	 */
 	private static void editConditions(EntityMap entityMap,List<Long> conditionObjectIds,Object typeId) throws DynamicExtensionsSystemException, DAOException
 	{
-		Collection<FormContext> formContextColl = entityMap.getFormContextCollection();
-		for(FormContext formContext : formContextColl)
+		Collection<FormContext> formContexts = new HashSet<FormContext>(Utility.getFormContexts(entityMap.getId()));
+		for(FormContext formContext : formContexts)
 		{
-			Collection<EntityMapCondition> entityMapCondColl = formContext.getEntityMapConditionCollection();
+			Collection<EntityMapCondition> entityMapConditions = Utility.getEntityMapConditions(formContext.getId());
 			
 			for(Long collectionProtocolId : conditionObjectIds)
 			{
 				int temp = 0;
-				for(EntityMapCondition condition : entityMapCondColl)
+				for(EntityMapCondition condition : entityMapConditions)
 				{
 					if(condition.getStaticRecordId().compareTo(collectionProtocolId) == 0)
 					{
@@ -419,11 +420,12 @@ public class ImportXmi
 				if(temp == 0)
 				{
 					EntityMapCondition entityMapCondition = getEntityMapCondition(formContext,collectionProtocolId,typeId);
-					entityMapCondColl.add(entityMapCondition);
+					entityMapConditions.add(entityMapCondition);
 				}				
 			}			
-			formContext.setEntityMapConditionCollection(entityMapCondColl);
+			formContext.setEntityMapConditionCollection(entityMapConditions);
 		}
+		entityMap.setFormContextCollection(formContexts);
 	}
 	/**
 	 * @param container
