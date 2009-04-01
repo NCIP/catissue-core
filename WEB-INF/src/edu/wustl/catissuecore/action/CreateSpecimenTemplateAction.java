@@ -68,7 +68,9 @@ public class CreateSpecimenTemplateAction extends BaseAction
 		}
 		if(pageOf!=null&&pageOf.equalsIgnoreCase("error"))
 		{
-			getEventAndSpecimenBean(mapkey, request);
+			//Bug 11567 S
+			//getEventAndSpecimenBean(mapkey, request);
+			//Bug 11567 E
 			mapkey=null;
 		}
 		request.setAttribute("pageOf", pageOf);
