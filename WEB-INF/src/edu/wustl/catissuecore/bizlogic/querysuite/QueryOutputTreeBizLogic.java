@@ -11,6 +11,7 @@ import java.util.Vector;
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.catissuecore.util.querysuite.AbstractQueryCSMUtil;
 import edu.wustl.catissuecore.util.querysuite.QueryDetails;
 import edu.wustl.catissuecore.util.querysuite.QueryModuleSqlUtil;
@@ -25,7 +26,7 @@ import edu.wustl.common.tree.QueryTreeNodeData;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
-import edu.wustl.common.util.global.Variables;
+
 
 /**
  * Creates QueryOutputTree Object as per the data filled by the user on AddLimits section.
@@ -95,7 +96,7 @@ public class QueryOutputTreeBizLogic
 
 		QueryCsmBizLogic queryCsmBizLogic = new QueryCsmBizLogic();
 		List dataList = queryCsmBizLogic.executeCSMQuery(selectSql, queryDetailsObj,
-				queryResultObjectDataBeanMap, root, hasConditionOnIdentifiedField);
+				queryResultObjectDataBeanMap, root, hasConditionOnIdentifiedField, 0 , Variables.maximumTreeNodeLimit);
 		Vector<QueryTreeNodeData> treeDataVector = new Vector<QueryTreeNodeData>();
 		if (dataList != null && dataList.size() != 0)
 		{
@@ -114,7 +115,7 @@ public class QueryOutputTreeBizLogic
 			treeDataVector = addNodeToTree(index,dataList,treeNode, root, treeDataVector);
 		}
 		return treeDataVector;
-			}
+	}
 	/**
 	 * @param treeNo
 	 * @param root
@@ -240,7 +241,7 @@ public class QueryOutputTreeBizLogic
  			String selectSql = getSql(parentNodeId, tableName, parentIdColumnName, childNode);
 			String name = childNode.getOutputEntity().getDynamicExtensionsEntity().getName();
 			name = Utility.parseClassName(name);
-			List<List<String>> dataList = getTreeDataList(queryDetailsObj, selectSql, null, false);
+			List<List<String>> dataList = getTreeDataList(queryDetailsObj, selectSql, null, false, node);
 			//List dataList = QueryModuleUtil.executeQuery(selectSql, sessionData);
 			int size = dataList.size();
 			if(size != 0)
@@ -374,7 +375,7 @@ public class QueryOutputTreeBizLogic
 			selectSql = selectSql.substring(0,selectSql.indexOf(Constants.NODE_SEPARATOR));
 		}
 		List<List<String>> dataList = getTreeDataList(queryDetailsObj, selectSql,
-				queryResultObjectDataBeanMap, hasConditionOnIdentifiedField);
+				queryResultObjectDataBeanMap, hasConditionOnIdentifiedField, currentNode);
 		
 		//List dataList = QueryModuleUtil.executeQuery(selectSql, sessionData);
 		String outputTreeStr = buildOutputTreeString(index, dataList, currentNode, nodeId, parentNode, queryDetailsObj);
@@ -454,16 +455,15 @@ public class QueryOutputTreeBizLogic
 	 */
 	private List<List<String>> getTreeDataList(QueryDetails queryDetailsObj, String selectSql,
 			Map<Long, QueryResultObjectDataBean> queryResultObjectDataBeanMap,
-			boolean hasConditionOnIdentifiedField) throws ClassNotFoundException, DAOException
+			boolean hasConditionOnIdentifiedField, OutputTreeDataNode root) throws ClassNotFoundException, DAOException
 	{
 		QuerySessionData querySessionData = new QuerySessionData();
 		querySessionData.setSql(selectSql);
 		querySessionData.setQueryResultObjectDataMap(queryResultObjectDataBeanMap);
 		querySessionData.setSecureExecute(queryDetailsObj.getSessionData().isSecurityRequired());
 		querySessionData.setHasConditionOnIdentifiedField(hasConditionOnIdentifiedField);
-		List<List<String>> dataList = QueryModuleSqlUtil.executeQuery(queryDetailsObj
-				.getSessionData(), querySessionData);
-
+		QueryCsmBizLogic queryCsmBizLogic = new QueryCsmBizLogic();
+		List<List<String>> dataList = queryCsmBizLogic.executeCSMQuery(selectSql, queryDetailsObj, queryResultObjectDataBeanMap, root, hasConditionOnIdentifiedField, 0, Variables.maximumTreeNodeLimit);
 		querySessionData.setTotalNumberOfRecords(dataList.size());
 
 		return dataList;

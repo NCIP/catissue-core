@@ -14,10 +14,12 @@ import java.util.Map;
 
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.catissuecore.util.querysuite.QueryDetails;
 import edu.wustl.common.beans.QueryResultObjectDataBean;
 import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.dao.JDBCDAO;
+import edu.wustl.common.dao.queryExecutor.PagenatedResultData;
 import edu.wustl.common.querysuite.queryobject.impl.OutputTreeDataNode;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.dbManager.DBUtil;
@@ -40,9 +42,9 @@ public class QueryCsmBizLogic
 	 * @throws DAOException 
 	 * @throws ClassNotFoundException 
 	 */
-	public List executeCSMQuery(String selectSql, QueryDetails queryDetailsObj,
+	public List<List<String>> executeCSMQuery(String selectSql, QueryDetails queryDetailsObj,
 			Map<Long, QueryResultObjectDataBean> queryResulObjectDataMap,
-			OutputTreeDataNode root, boolean hasConditionOnIdentifiedField)
+			OutputTreeDataNode root, boolean hasConditionOnIdentifiedField, int startIndex, int noOfRecords)
 	throws DAOException, ClassNotFoundException
 	{  
 		JDBCDAO dao = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
@@ -50,10 +52,11 @@ public class QueryCsmBizLogic
 		try
 		{ 
 			dao.openSession(queryDetailsObj.getSessionData());
-			dataList = dao.executeQuery(selectSql, queryDetailsObj.getSessionData(),
+			PagenatedResultData pagenatedResultData = dao.executeQuery(selectSql, queryDetailsObj.getSessionData(),
 					queryDetailsObj.getSessionData().isSecurityRequired(),
-					hasConditionOnIdentifiedField, queryResulObjectDataMap);
+					hasConditionOnIdentifiedField, queryResulObjectDataMap, startIndex, noOfRecords);
 			dao.commit();
+			dataList = pagenatedResultData.getResult();
 		}
 		finally
 		{

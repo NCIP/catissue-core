@@ -80,11 +80,6 @@ public class ExecuteQueryAction extends BaseAction
 			session.setAttribute(AppletConstants.PARAMETERIZED_QUERY, null);
 			target = Constants.SUCCESS;
 		}
-		else if(errorMessage.equalsIgnoreCase(Constants.TREE_NODE_LIMIT_EXCEEDED_RECORDS))
-		{
-			target = Constants.TREE_NODE_LIMIT_EXCEEDED_RECORDS;
-			return actionMapping.findForward(target);
-		}
 		else
 		{
 			ActionErrors errors = new ActionErrors();

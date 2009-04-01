@@ -18,7 +18,6 @@ import edu.wustl.catissuecore.bizlogic.querysuite.QueryOutputSpreadsheetBizLogic
 import edu.wustl.catissuecore.bizlogic.querysuite.QueryOutputTreeBizLogic;
 import edu.wustl.catissuecore.querysuite.QueryShoppingCart;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.beans.QueryResultObjectDataBean;
 import edu.wustl.common.bizlogic.QueryBizLogic;
 import edu.wustl.common.dao.QuerySessionData;
@@ -169,28 +168,10 @@ public class QueryModuleSearchQueryUtil
 			Vector<QueryTreeNodeData> treeData) throws QueryModuleException
 	{
 		int resultsSize = treeData.size();
-		if (option == null)
+		if (resultsSize == 0)
 		{
-			if (resultsSize == 0)
-			{
-				throw new QueryModuleException("Query Returns Zero Results",
-						QueryModuleError.NO_RESULT_PRESENT);
-			}
-			else if (resultsSize - 1 > Variables.maximumTreeNodeLimit)
-			{
-				String resultSizeStr = String.valueOf(resultsSize - 1);
-				session.setAttribute(Constants.TREE_NODE_LIMIT_EXCEEDED_RECORDS, resultSizeStr);
-				throw new QueryModuleException("Query Results Exceeded The Limit",
-						QueryModuleError.RESULTS_MORE_THAN_LIMIT);
-			}
-		}
-		else if (Constants.VIEW_LIMITED_RECORDS.equals(option))
-		{
-			List<QueryTreeNodeData> limitedRecordList = treeData.subList
-				(0, Variables.maximumTreeNodeLimit + 1);
-			Vector<QueryTreeNodeData> limitedTreeData = new Vector<QueryTreeNodeData>();
-			limitedTreeData.addAll(limitedRecordList);
-			treeData = limitedTreeData;
+			throw new QueryModuleException("Query Returns Zero Results",
+					QueryModuleError.NO_RESULT_PRESENT);
 		}
 		session.setAttribute(Constants.TREE_DATA + Constants.UNDERSCORE + initialValue, treeData);
 		initialValue += 1;
