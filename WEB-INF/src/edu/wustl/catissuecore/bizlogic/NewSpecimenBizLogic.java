@@ -1,5 +1,4 @@
 /**
- * <p>Title: NewSpecimenHDAO Class>
  * <p>Description:	NewSpecimenBizLogicHDAO is used to add new specimen information into the database using Hibernate.</p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
@@ -562,8 +561,73 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			specimen.setSpecimenCollectionGroup(parentSpecimen.getSpecimenCollectionGroup());
 			setParentSpecimenData(specimen);
 		}
+		//Bug 11481 S
+		String lineage = specimen.getLineage();
+		CollectionProtocol cp = new CollectionProtocol();
+		Long scgId = specimen.getSpecimenCollectionGroup().getId();
+		try
+		{
+			cp = getActivityStatusOfCollectionProtocol(dao, scgId);
+		}
+		catch (ClassNotFoundException e)
+		{
+			Logger.out.error("ClassNotFoundException occured : " + e.getMessage(), e);
+			throw new DAOException("Exception while fetching Collection Protocol details", e);
+		}
+		String activityStatus = cp.getActivityStatus();
+		if (lineage != null && !lineage.equalsIgnoreCase("New"))
+		{
+			String parentCollStatus = ((Specimen) specimen.getParentSpecimen())
+					.getCollectionStatus();
+			if (!parentCollStatus.equalsIgnoreCase(Constants.COLLECTION_STATUS_COLLECTED))
+			{
+				checkStatus(dao, cp, "Collection Protocol");
+			}
+		}
+		else
+		{
+			if (activityStatus.equals(Constants.ACTIVITY_STATUS_CLOSED))
+			{
+				checkStatus(dao, cp, "Collection Protocal");
+			}
+		}
+		//Bug 11481 E
+		
 		checkStatus(dao, specimen.getSpecimenCollectionGroup(), "Specimen Collection Group");
 	}
+	
+	//Bug 11481 S
+	/**
+	 * This Function is used to get Activity Status and Collection Protocol ID.	
+	 * @param dao DAO object
+	 * @param scgId
+	 * @return CollectionProtocol
+	 * @throws DAOException 
+	 * @throws ClassNotFoundException 	
+	*/
+	public CollectionProtocol getActivityStatusOfCollectionProtocol(DAO dao, Long scgId)
+			throws DAOException, ClassNotFoundException
+	{
+		List activityStatusList = null;
+		CollectionProtocol cp = new CollectionProtocol();
+		String activityStatusHQL = "select scg.collectionProtocolRegistration.collectionProtocol.id,"
+				+ "scg.collectionProtocolRegistration.collectionProtocol.activityStatus "
+				+ "from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg "
+				+ "where scg.id = " + scgId;
+		activityStatusList = dao.executeQuery(activityStatusHQL, null, false, null);
+		if (!activityStatusList.isEmpty())
+		{
+			Object[] array = new Object[1];
+			array = (Object[]) activityStatusList.get(0);
+			Long id = (Long) array[0];
+			String activityStatus = (String) array[1];
+			cp.setId(id);
+			cp.setActivityStatus(activityStatus);
+		}
+		return cp;
+	}
+
+	//Bug 11481 E
 
 	/**
 	 * @param dao
@@ -1717,6 +1781,61 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	protected boolean validate(Object obj, DAO dao, String operation) throws DAOException
 	{
 		boolean result = false;
+		//Bug 11481 S
+		if (obj instanceof Specimen)
+		{
+			Specimen specimen = (Specimen) obj;
+			List collStatusList = null;
+			Long scgId = specimen.getSpecimenCollectionGroup().getId();
+			CollectionProtocol cp = new CollectionProtocol();
+
+			String collStatusHQL = "select sp.collectionStatus "
+					+ "from edu.wustl.catissuecore.domain.Specimen as sp " + "where sp.id = "
+					+ specimen.getId();
+			try
+			{
+				collStatusList = dao.executeQuery(collStatusHQL, null, false, null);
+				cp = getActivityStatusOfCollectionProtocol(dao, scgId);
+			}
+			catch (ClassNotFoundException e1)
+			{
+				Logger.out.error("ClassNotFoundException occured : " + e1.getMessage(), e1);
+				throw new DAOException("Exception while fetching Collection Protocol details", e1);
+			}
+
+			String collStatus = null;
+			if (!collStatusList.isEmpty())
+			{
+				collStatus = (String) collStatusList.get(0);
+			}
+			if (specimen.getParentSpecimen() != null)
+			{
+				String ParentCollectionStatus = ((Specimen) specimen.getParentSpecimen())
+						.getCollectionStatus();
+				if (ParentCollectionStatus != null
+						&& !ParentCollectionStatus
+								.equalsIgnoreCase(Constants.COLLECTION_STATUS_COLLECTED))
+				{
+					if (collStatus != null
+							&& !collStatus.equalsIgnoreCase(Constants.COLLECTION_STATUS_COLLECTED)
+							&& !ParentCollectionStatus
+									.equalsIgnoreCase(Constants.COLLECTION_STATUS_PENDING))
+					{
+						checkStatus(dao, cp, "Collection Protocol");
+					}
+
+				}
+			}
+			else
+			{
+				if (collStatus != null
+						&& !collStatus.equalsIgnoreCase(Constants.COLLECTION_STATUS_COLLECTED))
+				{
+					checkStatus(dao, cp, "Collection Protocol");
+				}
+			}
+		}
+		//Bug 11481 E
 		if (obj instanceof LinkedHashSet)
 		{
 			//bug no. 8081 and 8083
@@ -2552,7 +2671,43 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			storageContainerIds.clear();
 		}
 	}
-
+	//Bug 11481 S
+	/**
+	 * This function validate if CP is closed then anticipatory specimen can not be collected.
+	 * @param dao DAO object
+	 * @param newSpecimen
+	 * @param specimenDO
+	 * @param dao
+	 * @throws DAOException Database exception
+	 */
+	public void validateIfCPisClosed(Specimen specimenDO, Specimen newSpecimen, DAO dao)
+			throws DAOException
+	{
+		String lineage = specimenDO.getLineage();
+		Long scgId = newSpecimen.getSpecimenCollectionGroup().getId();
+		CollectionProtocol cp = new CollectionProtocol();
+		try
+		{
+			cp = getActivityStatusOfCollectionProtocol(dao, scgId);
+		}
+		catch (ClassNotFoundException e)
+		{
+			Logger.out.error("ClassNotFoundException occured : " + e.getMessage(), e);
+			throw new DAOException("Exception while fetching Collection Protocol details", e);
+		}
+		String activityStatus = cp.getActivityStatus();
+		String oldCollectionStatus = specimenDO.getCollectionStatus();
+		String newCollectionStatus = newSpecimen.getCollectionStatus();
+		if (lineage.equals("New") && activityStatus.equals(Constants.ACTIVITY_STATUS_CLOSED))
+		{
+			if (!oldCollectionStatus.equalsIgnoreCase(newCollectionStatus))
+			{
+				checkStatus(dao, cp, "Collection Protocol");
+			}
+		}
+	}
+	//Bug 11481 E	
+	
 	/**
 	 * @param dao DAO object
 	 * @param sessionDataBean Session Details
@@ -2572,6 +2727,9 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 				if (object != null)
 				{
 					specimenDO = (Specimen) object;
+					//Bug 11481 S		
+					validateIfCPisClosed(specimenDO, newSpecimen, dao);
+					//Bug 11481 E	
 					updateSpecimenDomainObject(dao, newSpecimen, specimenDO, sessionDataBean);
 					if (updateChildrens)
 					{
