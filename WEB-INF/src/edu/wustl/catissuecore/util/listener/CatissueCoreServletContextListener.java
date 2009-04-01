@@ -154,6 +154,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
         Variables.applicationVersion = ApplicationProperties.getValue("app.version");
 		int maximumTreeNodeLimit = Integer.parseInt(XMLPropertyHandler.getValue(Constants.MAXIMUM_TREE_NODE_LIMIT));
 		Variables.maximumTreeNodeLimit = maximumTreeNodeLimit;
+		Variables.maximumTreeNodeLimitForChildNode = Integer.parseInt(XMLPropertyHandler.getValue(Constants.MAXIMUM_TREE_NODE_LIMIT_FOR_CHILD_NODE));
 	}
 
 	/**

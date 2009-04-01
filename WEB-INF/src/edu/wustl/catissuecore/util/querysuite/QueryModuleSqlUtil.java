@@ -109,4 +109,33 @@ public final class QueryModuleSqlUtil
 		selectSql = selectSql.append(Constants.NODE_SEPARATOR).append(index);
 		return selectSql.toString();
 	}
+	
+	public static int getCountForQuery(final String sql, QueryDetails queryDetailsObj) throws DAOException, ClassNotFoundException
+	{
+		int count = 0;
+		List<List<String>> dataList = null;
+		JDBCDAO jdbcDao = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
+		try
+		{
+			String countSql = "Select count(*) from (" + sql + ") alias";
+			jdbcDao.openSession(queryDetailsObj.getSessionData());
+			dataList = jdbcDao.executeQuery(countSql, queryDetailsObj.getSessionData(), true, null);
+			jdbcDao.commit();
+		}
+		catch (DAOException e)
+		{
+			Logger.out.error(e);
+			throw e;
+		}
+		finally
+		{
+			jdbcDao.closeSession();
+		}
+		if(dataList!=null)
+		{
+			List<String> countList = (List<String>)dataList.get(0);
+			count = Integer.valueOf(countList.get(0));
+		}
+		return count;
+	}
 }

@@ -92,7 +92,7 @@ public class QueryModuleSearchQueryUtil
 	 * @param option Option specifying whether to show limited records in tree view, etc.
 	 * @return status Depending upon success or failure, returns the appropriate status
 	 */
-	public QueryModuleError searchQuery(String option)
+	public QueryModuleError searchQuery()
 	{
 		session.removeAttribute(Constants.HYPERLINK_COLUMN_MAP);
 		QueryModuleError status = QueryModuleError.SUCCESS;
@@ -108,7 +108,7 @@ public class QueryModuleSearchQueryUtil
 				QueryOutputTreeBizLogic outputTreeBizLogic = auditQuery();
 				boolean hasCondOnIdentifiedField = edu.wustl.common.querysuite.security
 				.utility.Utility.isConditionOnIdentifiedField(query);
-				setDataInSession(option, outputTreeBizLogic, hasCondOnIdentifiedField);
+				setDataInSession(outputTreeBizLogic, hasCondOnIdentifiedField);
 			}
 		}
 		catch (QueryModuleException e)
@@ -124,7 +124,7 @@ public class QueryModuleSearchQueryUtil
 	 * @param hasCondOnIdentifiedField Specifies if there is a condition on Identified field in the query
 	 * @throws QueryModuleException QueryModuleException
 	 */
-	private void setDataInSession(String option, QueryOutputTreeBizLogic outputTreeBizLogic,
+	private void setDataInSession(QueryOutputTreeBizLogic outputTreeBizLogic,
 			boolean hasCondOnIdentifiedField)throws QueryModuleException
 	{
 		int initialValue = 0;
@@ -136,7 +136,7 @@ public class QueryModuleSearchQueryUtil
 				Vector<QueryTreeNodeData> treeData = null;
 				treeData = outputTreeBizLogic.createDefaultOutputTreeData
 				(initialValue, outnode, hasCondOnIdentifiedField, queryDetailsObj);
-				initialValue = setTreeData(option, initialValue, treeData);
+				initialValue = setTreeData(initialValue, treeData);
 			}
 		}
 		catch (DAOException e)
@@ -164,8 +164,7 @@ public class QueryModuleSearchQueryUtil
 	 * @return initialValue Initial value
 	 * @throws QueryModuleException QueryModuleException
 	 */
-	private int setTreeData(String option, int initialValue,
-			Vector<QueryTreeNodeData> treeData) throws QueryModuleException
+	private int setTreeData(int initialValue, Vector<QueryTreeNodeData> treeData) throws QueryModuleException
 	{
 		int resultsSize = treeData.size();
 		if (resultsSize == 0)

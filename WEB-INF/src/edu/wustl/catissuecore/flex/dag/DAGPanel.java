@@ -977,7 +977,7 @@ public class DAGPanel
 		QueryModuleSearchQueryUtil QMSearchQuery = new QueryModuleSearchQueryUtil(request, query);
 		if (isRulePresentInDag)
 		{
-			status=QMSearchQuery.searchQuery(null);
+			status=QMSearchQuery.searchQuery();
 		}
 		else
 		{

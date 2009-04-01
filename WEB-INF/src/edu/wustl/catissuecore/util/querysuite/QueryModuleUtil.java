@@ -503,7 +503,7 @@ public final class QueryModuleUtil
 		QueryModuleError errorCode;
 		if (isRulePresentInDag)
 		{
-			errorCode = qMSearchQuery.searchQuery(null);
+			errorCode = qMSearchQuery.searchQuery();
 		}
 		else
 		{

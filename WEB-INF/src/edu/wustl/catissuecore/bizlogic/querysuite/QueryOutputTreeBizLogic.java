@@ -100,10 +100,17 @@ public class QueryOutputTreeBizLogic
 		Vector<QueryTreeNodeData> treeDataVector = new Vector<QueryTreeNodeData>();
 		if (dataList != null && dataList.size() != 0)
 		{
+			String  size = ""+dataList.size();
+			if(dataList.size()==Variables.maximumTreeNodeLimit)
+			{
+				int count = QueryModuleSqlUtil.getCountForQuery(selectSql,queryDetailsObj);
+				size = size + "/" +count;
+			}
+			
 			QueryTreeNodeData treeNode = new QueryTreeNodeData();
 			String name = root.getOutputEntity().getDynamicExtensionsEntity().getName();
 			name = Utility.parseClassName(name);
-			String displayName = Utility.getDisplayLabel(name) + " (" + dataList.size() + ")";
+			String displayName = Utility.getDisplayLabel(name) + " (" + size + ")";
 			String nodeId = createNodeId(treeNo, root);
 			displayName = Constants.TREE_NODE_FONT+displayName+Constants.TREE_NODE_FONT_CLOSE;
 			treeNode.setIdentifier(nodeId);
@@ -243,8 +250,13 @@ public class QueryOutputTreeBizLogic
 			name = Utility.parseClassName(name);
 			List<List<String>> dataList = getTreeDataList(queryDetailsObj, selectSql, null, false, node);
 			//List dataList = QueryModuleUtil.executeQuery(selectSql, sessionData);
-			int size = dataList.size();
-			if(size != 0)
+			String  size = ""+dataList.size();
+			if(dataList.size()==Variables.maximumTreeNodeLimitForChildNode)
+			{
+				int count = QueryModuleSqlUtil.getCountForQuery(selectSql,queryDetailsObj);
+				size = size + "/" +count;
+			}
+			if(dataList.size() != 0)
 			{
 				String parId = id.substring(id.lastIndexOf(Constants.NODE_SEPARATOR) + 2, id.length());
 				String childNodeId = childNode.getUniqueNodeId() + Constants.UNDERSCORE + Constants.LABEL_TREE_NODE;
@@ -463,7 +475,7 @@ public class QueryOutputTreeBizLogic
 		querySessionData.setSecureExecute(queryDetailsObj.getSessionData().isSecurityRequired());
 		querySessionData.setHasConditionOnIdentifiedField(hasConditionOnIdentifiedField);
 		QueryCsmBizLogic queryCsmBizLogic = new QueryCsmBizLogic();
-		List<List<String>> dataList = queryCsmBizLogic.executeCSMQuery(selectSql, queryDetailsObj, queryResultObjectDataBeanMap, root, hasConditionOnIdentifiedField, 0, Variables.maximumTreeNodeLimit);
+		List<List<String>> dataList = queryCsmBizLogic.executeCSMQuery(selectSql, queryDetailsObj, queryResultObjectDataBeanMap, root, hasConditionOnIdentifiedField, 0, Variables.maximumTreeNodeLimitForChildNode);
 		querySessionData.setTotalNumberOfRecords(dataList.size());
 
 		return dataList;

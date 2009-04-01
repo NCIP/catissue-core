@@ -38,6 +38,7 @@ public class Variables extends edu.wustl.common.util.global.Variables
     public static String[] databasenames;
     public static String applicationCvsTag = new String();
     public static int maximumTreeNodeLimit;
+    public static int maximumTreeNodeLimitForChildNode;
     public static boolean isSpecimenLabelGeneratorAvl = false;
     public static boolean isStorageContainerLabelGeneratorAvl = false;
     public static boolean isSpecimenBarcodeGeneratorAvl = false;

@@ -300,9 +300,15 @@
 		<name>resultView.noOfRecordsPerPage</name>
 		<value>100</value>
 	</property>
+	<!-- This limit is for root node of the Tree on results view page -->
 	<property>
 		<name>resultView.maximumTreeNodeLimit</name>
 		<value>200</value>
+	</property>
+	<!-- This limit is for child nodes of the Tree on results view page -->
+	<property>
+		<name>resultView.maximumTreeNodeLimitForChildNode</name>
+		<value>20</value>
 	</property>
 	
 <!-- Constants for specifing columns per page in MultipleSpecimen -->
