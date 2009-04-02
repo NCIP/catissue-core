@@ -110,7 +110,7 @@
         <set
             name="specimenTypeCollection"
             table="CATISSUE_SPECIMEN_TYPE"
-            fetch="subselect" lazy="false" 
+            fetch="join" lazy="false" 
             inverse="false"
             cascade="save-update"
             sort="unsorted"
@@ -148,7 +148,7 @@
         <set
             name="holdsSpecimenClassCollection"
             table="CATISSUE_STOR_TYPE_SPEC_CLASS"
-            fetch="subselect" lazy="false" 
+            fetch="join" lazy="false" 
             inverse="false"
             cascade="save-update"
             sort="unsorted"
@@ -168,7 +168,7 @@
         <set
             name="holdsStorageTypeCollection"
             table="CATISSUE_STOR_TYPE_HOLDS_TYPE"
-            fetch="subselect" lazy="false" 
+            fetch="join" lazy="false" 
             inverse="false"
             cascade="none"
             sort="unsorted"
@@ -189,7 +189,7 @@
         <set
             name="holdsSpecimenArrayTypeCollection"
             table="CATISSUE_STORTY_HOLDS_SPARRTY"
-            fetch="subselect" lazy="false" 
+            fetch="join" lazy="false" 
             inverse="false"
             cascade="none"
             sort="unsorted"

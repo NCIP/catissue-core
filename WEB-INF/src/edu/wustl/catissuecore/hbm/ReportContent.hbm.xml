@@ -54,7 +54,7 @@
         <set
             name="reportSectionCollection"
             table="REPORT_SECTION"
-            fetch="subselect" lazy="false" 
+            fetch="join" lazy="false" 
             inverse="true"
             cascade="all"
             sort="unsorted"

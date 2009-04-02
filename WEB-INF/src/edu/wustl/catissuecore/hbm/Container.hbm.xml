@@ -228,7 +228,7 @@
         <set
             name="collectionProtocolCollection"
             table="CATISSUE_ST_CONT_COLL_PROT_REL"
-            lazy="false" fetch="subselect"
+            lazy="false" fetch="join"
             inverse="false"
             cascade="none"
             sort="unsorted"
@@ -251,7 +251,7 @@
         <set
             name="holdsSpecimenClassCollection"
             table="CATISSUE_STOR_CONT_SPEC_CLASS"
-            lazy="false" fetch="subselect"
+            lazy="false" fetch="join"
             inverse="false"
             cascade="save-update"
             sort="unsorted"
@@ -269,7 +269,7 @@
         <set
             name="holdsStorageTypeCollection"
             table="CATISSUE_ST_CONT_ST_TYPE_REL"
-            lazy="false" fetch="subselect"
+            lazy="false" fetch="join"
             inverse="false"
             cascade="none"
             sort="unsorted"
@@ -291,7 +291,7 @@
         <set
             name="holdsSpecimenArrayTypeCollection"
             table="CATISSUE_CONT_HOLDS_SPARRTYPE"
-            lazy="false" fetch="subselect"
+            lazy="false" fetch="join"
             inverse="false"
             cascade="none"
             sort="unsorted"

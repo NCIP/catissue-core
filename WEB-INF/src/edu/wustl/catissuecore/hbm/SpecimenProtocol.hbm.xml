@@ -162,7 +162,7 @@
         <set
             name="consentTierCollection"
             table="CATISSUE_CONSENT_TIER"
-            fetch="subselect" lazy="false" 
+            fetch="join" lazy="false" 
             inverse="false"
             cascade="save-update"
             sort="unsorted"
@@ -208,7 +208,7 @@
         <set
             name="coordinatorCollection"
             table="CATISSUE_COLL_COORDINATORS"
-            fetch="subselect" lazy="false" 
+            fetch="join" lazy="false" 
             inverse="false"
             cascade="none"
             sort="unsorted"
@@ -232,7 +232,7 @@
         <set
             name="assignedProtocolUserCollection"
             table="CATISSUE_USER_CP"
-            fetch="subselect" lazy="false" 
+            fetch="join" lazy="false" 
             inverse="false"
             cascade="none"
             sort="unsorted"
@@ -256,7 +256,7 @@
         <set
             name="siteCollection"
             table="CATISSUE_SITE_CP"
-            lazy="false" fetch="subselect"
+            lazy="false" fetch="join"
             inverse="false"
             cascade="none"
             sort="unsorted"
@@ -283,7 +283,7 @@
          
             inverse="true"
             cascade="save-update"
-            sort="unsorted"     fetch="subselect" lazy="false" 
+            sort="unsorted"     fetch="join" lazy="false" 
         >
         
         <cache usage="read-write" />
@@ -300,7 +300,7 @@
 	<set
             name="childCollectionProtocolCollection"
             table="CATISSUE_COLLECTION_PROTOCOL"
-            fetch="subselect" lazy="false" 
+            fetch="join" lazy="false" 
             inverse="true"
             cascade="save-update"
             sort="unsorted"
@@ -386,7 +386,7 @@
             inverse="true"
             cascade="save-update"
             sort="unsorted"
-            fetch="subselect"
+            fetch="join"
             lazy="false"
         >
         

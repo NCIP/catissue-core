@@ -81,7 +81,7 @@
         <set
             name="raceCollection"
             table="CATISSUE_RACE"
-            fetch="subselect" lazy="false" 
+            fetch="join" lazy="false" 
             inverse="true"
             cascade="save-update,all-delete-orphan"
             sort="unsorted"
@@ -146,7 +146,7 @@
         <set
             name="participantMedicalIdentifierCollection"
             table="CATISSUE_PART_MEDICAL_ID"
-            fetch="subselect" lazy="false" 
+            fetch="join" lazy="false" 
             inverse="true"
             cascade="none"
             sort="unsorted"
@@ -166,7 +166,7 @@
         <set
             name="collectionProtocolRegistrationCollection"
             table="CATISSUE_COLL_PROT_REG"
-            fetch="subselect" lazy="false" 
+            fetch="join" lazy="false" 
             inverse="true"
             cascade="none"
             sort="unsorted"

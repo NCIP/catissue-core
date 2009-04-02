@@ -108,7 +108,7 @@
         <set
             name="specimenEventCollection"
             table="CATISSUE_SPECIMEN_EVENT_PARAM"
-            fetch="subselect" lazy="false"
+            fetch="join" lazy="false"
             inverse="true"
             cascade="all"
             sort="unsorted"
@@ -149,7 +149,7 @@
 	    <set
             name="biohazardCollection"
             table="CATISSUE_SPECIMEN_BIOHZ_REL"
-            fetch="subselect" lazy="false"
+            fetch="join" lazy="false"
             inverse="false"
             cascade="none"
             sort="unsorted"
@@ -170,7 +170,7 @@
           <set
             name="externalIdentifierCollection"
             table="CATISSUE_EXTERNAL_IDENTIFIER"
-            fetch="subselect" lazy="false"
+            fetch="join" lazy="false"
             inverse="true"
             cascade="save-update"
             sort="unsorted"

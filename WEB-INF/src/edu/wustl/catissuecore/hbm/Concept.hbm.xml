@@ -27,7 +27,7 @@
         <set
             name="conceptReferentCollection"
             table="CATISSUE_CONCEPT_REFERENT"
-            fetch="subselect" lazy="false" 
+            fetch="join" lazy="false" 
             inverse="false"
             cascade="save-update"
             sort="unsorted"

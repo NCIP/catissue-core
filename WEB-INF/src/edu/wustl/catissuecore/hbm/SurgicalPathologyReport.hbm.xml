@@ -140,7 +140,7 @@
         <set
             name="conceptReferentCollection"
             table="CATISSUE_CONCEPT_REFERENT"
-            fetch="subselect" lazy="false" 
+            fetch="join" lazy="false" 
             inverse="false"
             cascade="all"
             sort="unsorted"
@@ -168,7 +168,7 @@
         <set
             name="quarantineEventParameterCollection"
             table="CATISSUE_QUARANTINE_PARAMS"
-            fetch="subselect" lazy="false" 
+            fetch="join" lazy="false" 
             inverse="false"
             cascade="none"
             sort="unsorted"

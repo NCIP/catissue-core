@@ -52,7 +52,7 @@
         <set
             name="specimenEventParametersCollection"
             table="CATISSUE_SPECIMEN_EVENT_PARAM"
-            fetch="subselect" lazy="false" 
+            fetch="join" lazy="false" 
             inverse="true"
             cascade="save-update"
             sort="unsorted"

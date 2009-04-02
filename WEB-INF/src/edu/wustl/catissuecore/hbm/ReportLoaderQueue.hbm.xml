@@ -80,7 +80,7 @@
         <set
             name="participantCollection"
             table="CATISSUE_REPORT_PARTICIP_REL"
-            fetch="subselect" lazy="false" 
+            fetch="join" lazy="false" 
             inverse="false"
             cascade="none"
             sort="unsorted"
