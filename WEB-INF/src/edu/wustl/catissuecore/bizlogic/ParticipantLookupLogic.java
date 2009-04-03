@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
@@ -89,7 +90,7 @@ public class ParticipantLookupLogic implements LookupLogic
 
 		// adjust cutoffPoints as per new total points 
 		cutoffPoints = cutoffPointsFromProperties * totalPoints / totalPointsFromProperties;
-		List listOfParticipants = participantParams.getListOfParticipants();
+		Map<String,Participant> listOfParticipants = participantParams.getListOfParticipants();
 
 		// In case List of participants is null or empty, return the Matching Participant List as null.
 		if (listOfParticipants == null || listOfParticipants.isEmpty() == true)
@@ -170,10 +171,10 @@ public class ParticipantLookupLogic implements LookupLogic
 	 * @param cutoff - is the value such that the participants above the cutoff values are stored in List.
 	 * @return list - List of matching Participants. 
 	 */
-	private List searchMatchingParticipant(Participant userParticipant, List listOfParticipants) throws Exception
+	private List searchMatchingParticipant(Participant userParticipant, Map<String,Participant> listOfParticipants) throws Exception
 	{
 		List participants = new ArrayList();
-		Iterator itr = listOfParticipants.iterator();
+		Iterator itr = listOfParticipants.values().iterator();
 
 		/*
 		 *attributes of userParticipant : we are doing this to improve performance
