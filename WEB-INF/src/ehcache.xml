@@ -129,16 +129,13 @@
     Mandatory Default Cache configuration. These settings will be applied to caches
     created programmtically using CacheManager.add(String cacheName)
     -->
-    <defaultCache
-            maxElementsInMemory="40000"
-            eternal="false"
-            timeToIdleSeconds="120"
-            timeToLiveSeconds="120"
-            overflowToDisk="true"
+   <defaultCache
+            maxElementsInMemory="5000"
+            eternal="true"
+            overflowToDisk="false"
             diskPersistent="false"
             diskExpiryThreadIntervalSeconds="120"
     />
-    
     
     <!--
     cache named cacheForParticipantLookUp 
@@ -153,11 +150,12 @@
            />
     
     
+    <!--
     <cache
 		name="edu.wustl.catissuecore.domain.Participant"
 		maxElementsInMemory="30000" eternal="true" overflowToDisk="true" /> 
 
-	<!--  <cache
+	  <cache
 		name="edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup.specimenCollection"
 		maxElementsInMemory="100" eternal="true" overflowToDisk="true" /> -->
     
