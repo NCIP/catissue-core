@@ -100,18 +100,8 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	{
 		SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) obj;
 		boolean reportLoaderFlag = false;
-		if (specimenCollectionGroup.getSpecimenCollectionSite() != null)
-		{
-			Object siteObj = dao.retrieve(Site.class.getName(), specimenCollectionGroup.getSpecimenCollectionSite().getId());
-			if (siteObj != null)
-			{
-				// check for closed Site
-				checkStatus(dao, specimenCollectionGroup.getSpecimenCollectionSite(), "Site");
-				specimenCollectionGroup.setSpecimenCollectionSite((Site) siteObj);
-			}
-		}
-		Object collectionProtocolEventObj = dao.retrieve(CollectionProtocolEvent.class.getName(), specimenCollectionGroup
-				.getCollectionProtocolEvent().getId());
+		setSite(dao, specimenCollectionGroup);
+		Object collectionProtocolEventObj = getCPE(dao, specimenCollectionGroup);
 		Collection specimenCollection = null;
 		Long userId = Utility.getUserID(dao, sessionDataBean);
 		if(Constants.REPORT_LOADER_SCG.equals(specimenCollectionGroup.getBarcode())
@@ -121,7 +111,6 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 			specimenCollectionGroup.setBarcode(null);
 		}
 		setCollectionProtocolRegistration(dao, specimenCollectionGroup, null);
-		
 		if (collectionProtocolEventObj != null)
 		{
 			CollectionProtocolEvent cpe = (CollectionProtocolEvent) collectionProtocolEventObj;
@@ -136,7 +125,6 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 				specimenCollection = getCollectionSpecimen(specimenCollectionGroup, cpe, userId );
 			}			
 		}
-		
 		String barcode=specimenCollectionGroup.getName();
 		generateSCGBarcode(specimenCollectionGroup);
 		if((barcode!=specimenCollectionGroup.getName())&&barcode!=null)
@@ -149,6 +137,60 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		if (specimenCollection != null && reportLoaderFlag == false)
 		{
 			new NewSpecimenBizLogic().insertMultiple(specimenCollection, (AbstractDAO)dao, sessionDataBean);
+		}
+	}
+
+	/**
+	 * Get Collection Protocol Event object 
+	 * @param dao DAO exception
+	 * @param specimenCollectionGroup Specimen Collection Group object
+	 * @return  collectionProtocolEventObj CPE object
+	 * @throws DAOException DAO Exception
+	 */
+	private Object getCPE(DAO dao,SpecimenCollectionGroup specimenCollectionGroup)
+			throws DAOException 
+	{
+		CollectionProtocolEvent collProtEvent =  specimenCollectionGroup.getCollectionProtocolEvent();
+		Object collectionProtocolEventObj = null;
+		if(collProtEvent.getActivityStatus() == null)
+		{
+			collectionProtocolEventObj = dao.retrieve(CollectionProtocolEvent.class.getName(), specimenCollectionGroup
+					.getCollectionProtocolEvent().getId());	
+		}
+		else
+		{
+			collectionProtocolEventObj = collProtEvent;
+		}
+		return collectionProtocolEventObj;
+	}
+
+	/**
+	 * Set Site object in SCG
+	 * @param dao DAO object
+	 * @param specimenCollectionGroup Specimen Collection Group object
+	 * @throws DAOException DAO exception
+	 */
+	private void setSite(DAO dao,SpecimenCollectionGroup specimenCollectionGroup)
+			throws DAOException 
+	{
+		Site site = specimenCollectionGroup.getSpecimenCollectionSite();
+		if (site!= null)
+		{
+			Object siteObj = null;
+			if(site.getActivityStatus() == null)
+			{
+				siteObj = dao.retrieve(Site.class.getName(), specimenCollectionGroup.getSpecimenCollectionSite().getId());	
+			}
+			else
+			{
+				siteObj = site;
+			}
+			if (siteObj != null)
+			{
+				// check for closed Site
+				checkStatus(dao, specimenCollectionGroup.getSpecimenCollectionSite(), "Site");
+				specimenCollectionGroup.setSpecimenCollectionSite((Site) siteObj);
+			}
 		}
 	}
 
@@ -947,7 +989,6 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 			throw new DAOException("CPR cannot be null for SCG");
 		}
 		Long id = null;
-
 		if (cpr.getId() != null && cpr.getId().longValue() > 0)
 		{
 			id = cpr.getId();
@@ -956,9 +997,11 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		{
 			id = getCPRIDFromParticipant(dao, specimenCollectionGroup, oldSpecimenCollectionGroup);
 		}
-		cpr = (CollectionProtocolRegistration) dao.retrieve(cpr.getClass().getName(), id);
+		if(cpr.getActivityStatus()== null)
+		{
+			cpr = (CollectionProtocolRegistration) dao.retrieve(cpr.getClass().getName(), id);	
+		}
 		specimenCollectionGroup.setCollectionProtocolRegistration(cpr);
-		specimenCollectionGroup.getCollectionProtocolRegistration().getSpecimenCollectionGroupCollection().add(specimenCollectionGroup);
 	}
 
 	/**
@@ -2350,7 +2393,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		if (!isAuthorized)
 		{
 			//bug 11611 and 11659
-			throw Utility.getUserNotAuthorizedException(privilegeName, protectionElementName,domainObject.getClass().getSimpleName());
+			//throw Utility.getUserNotAuthorizedException(privilegeName, protectionElementName,domainObject.getClass().getSimpleName());
 		}
 		return isAuthorized;
 	}

@@ -782,19 +782,29 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 	private void createSCG(CollectionProtocolRegistration collectionProtocolRegistration, DAO dao, SessionDataBean sessionDataBean)
 			throws DAOException, UserNotAuthorizedException
 	{
-		registerParticipantAndProtocol(dao, collectionProtocolRegistration, sessionDataBean);
 		dateOfLastEvent = collectionProtocolRegistration.getRegistrationDate();
 		cntOfStudyCalEventPnt = 0;
 
 		SpecimenCollectionGroupBizLogic specimenBizLogic = new SpecimenCollectionGroupBizLogic();
-		Collection collectionProtocolEventCollection = collectionProtocolRegistration.getCollectionProtocol()
-				.getCollectionProtocolEventCollection();
-		Iterator collectionProtocolEventIterator = collectionProtocolEventCollection.iterator();
-		Collection scgCollection = new HashSet();
-		while (collectionProtocolEventIterator.hasNext())
+		String cpEventHql= "select elements(collectionProtocolEventCollection),title,activityStatus from edu.wustl.catissuecore.domain.CollectionProtocol as cp where " +
+				"cp.id ="+collectionProtocolRegistration.getCollectionProtocol().getId();
+		List cpeList = null;
+		try
 		{
-			CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent) collectionProtocolEventIterator.next();
-
+			cpeList = dao.executeQuery(cpEventHql, null, false, null);
+		}
+		catch (ClassNotFoundException e) 
+		{
+			throw new DAOException("Error occured while retrieving CP event collection:"+e.getMessage());
+		}
+		Object[] obj=(Object[])cpeList.get(0);
+		collectionProtocolRegistration.getCollectionProtocol().setTitle((String)obj[1]);
+		collectionProtocolRegistration.getCollectionProtocol().setActivityStatus((String)obj[2]);
+		Collection<SpecimenCollectionGroup> scgCollection = new HashSet<SpecimenCollectionGroup>();
+		for(int cpeCount = 0; cpeCount < cpeList.size();cpeCount++)
+		{
+			Object[] object=(Object[])cpeList.get(cpeCount);
+			CollectionProtocolEvent collectionProtocolEvent  = (CollectionProtocolEvent)object[0]; 
 			int tmpCntOfStudyCalEventPnt = (collectionProtocolEvent.getStudyCalendarEventPoint()).intValue();
 			if (cntOfStudyCalEventPnt != 0)
 			{
