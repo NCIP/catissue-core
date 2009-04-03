@@ -2518,7 +2518,7 @@ Thanking You,
 			</fileset>
 		</delete>
 		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore" />
-		<unwar src="${base.dir}/dynamicExtensions.war" dest="${temp.dir}/catissuecore"/>
+		
 			<copy file="${base.dir}/DE_conf/hibernate.cfg.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true"/>
 			<copy file="${base.dir}/DE_conf/DynamicExtensionsHibernate.cfg.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true"/>
 
