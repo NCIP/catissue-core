@@ -105,6 +105,11 @@ public class Site extends AbstractDomainObject implements java.io.Serializable, 
 		super();
 		this.id = Long.valueOf(site.getId().longValue());
 		this.name = site.getName();
+		this.assignedSiteUserCollection = null;
+		this.collectionProtocolCollection=null;
+		this.abstractSpecimenCollectionGroupCollection = null;
+		this.coordinator = null;
+		this.address = null;
 	}
 
 	/**

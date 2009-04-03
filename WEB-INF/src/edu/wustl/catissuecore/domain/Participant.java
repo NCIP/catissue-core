@@ -196,7 +196,10 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 		this.activityStatus = participant.getActivityStatus();
 		this.deathDate = participant.getDeathDate();
 		this.vitalStatus = participant.getVitalStatus();
-
+		this.collectionProtocolRegistrationCollection = null;
+		this.clinicalStudyRegistrationCollection =null;
+		this.collectionProtocolRegistrationCollection = null;
+		this.clinicalStudyRegistrationCollection =null;
 		Collection<Race> raceCollection = new ArrayList<Race>();
 		Iterator<Race> raceItr = participant.getRaceCollection().iterator();
 		while (raceItr.hasNext())
