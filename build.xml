@@ -635,6 +635,10 @@
 		<copy todir="${zip.dir}/private_public_migrator" overwrite="true">
 			<fileset dir="${base.dir}/private_public_migrator" />
 		</copy>
+		<!-- Copying IISSettings directory -->
+		<copy todir="${zip.dir}/IISSettings" overwrite="true">
+			<fileset dir="${base.dir}/IISSettings" />
+		</copy>
 		<zip destfile="${zip.file}" basedir="${zip.dir}" />
 		<delete dir="${zip.dir}" />
 	</target>
