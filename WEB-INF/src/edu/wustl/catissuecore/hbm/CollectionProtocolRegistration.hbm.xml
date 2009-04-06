@@ -139,9 +139,6 @@
             cascade="none"
             sort="unsorted"
         >
-        
-        <cache usage="read-write" />
-
               <key
                   column="COLLECTION_PROTOCOL_REG_ID"
               />
