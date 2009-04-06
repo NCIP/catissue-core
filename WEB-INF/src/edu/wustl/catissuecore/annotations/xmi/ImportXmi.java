@@ -361,6 +361,11 @@ public class ImportXmi
 		DefaultBizLogic defaultBizLogic = BizLogicFactory.getDefaultBizLogic();		
 		//Set<String> keySet = entityNameVsContainers.keySet();
 //		for(String key : keySet)
+		if(conditionObjectIds == null || conditionObjectIds.isEmpty())
+		{
+			conditionObjectIds=new ArrayList<Long>();
+			conditionObjectIds.add(Long.valueOf(Constants.DEFAULT_CONDITION));
+		}
 		for(ContainerInterface container: mainContainerList)
 		{
 //			List<ContainerInterface> containerList = entityNameVsContainers.get(key);

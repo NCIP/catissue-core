@@ -57,7 +57,7 @@ public final class AddEntityMapConditions
 				AbstractMetadata.class.getName(), Constants.NAME);
 		Map<Long, Long> entityIdsVsContId = Utility.getAllContainers();
 		Collection<Long> containerIdColl = (Collection) entityIdsVsContId.values();
-		Long cpId = Long.valueOf(-1);
+		Long cpId = Long.valueOf(Constants.DEFAULT_CONDITION);
 		associateFormsToCP(cpId, typeId, containerIdColl);
 	}
 

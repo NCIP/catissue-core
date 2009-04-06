@@ -128,7 +128,7 @@ public final class AssociatesForms
 	{
 		AnnotationBizLogic annotation = new AnnotationBizLogic();
 		DefaultBizLogic defaultBizLogic = BizLogicFactory.getDefaultBizLogic();
-		Long conditionObject = Long.valueOf(-1);
+		Long conditionObject = Long.valueOf(Constants.DEFAULT_CONDITION);
 		for (Long entityId : entityIds)
 		{
 			Long containerId = getContainerId(entityId);

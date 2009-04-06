@@ -571,6 +571,7 @@ public class ParticipantAction extends SecureAction
 					String collectionProtocolIdKey = "CollectionProtocolRegistration:"+i+"_CollectionProtocol_id";
 					String collectionProtocolRegistrationIdKey = "CollectionProtocolRegistration:"+i+"_id";
 					String isActive = "CollectionProtocolRegistration:" + i +"_activityStatus";
+					// barcodekey added by geeta
 					String barcodeKey = "CollectionProtocolRegistration:" + i +"_barcode";
 					if(map.containsKey(collectionProtocolIdKey))
 					{

@@ -2197,6 +2197,9 @@ public class Constants extends edu.wustl.common.util.global.Constants
     public static final String SPREADSHEET_DATA_ENTITY="spreadsheetDataEntity";
     public static final String SPREADSHEET_DATA_RECORD="spreadsheetDataRecord";
     public static final String TITLE = "title";
+
+    //  Local extensions integration constants
+    public static final String DEFAULT_CONDITION="-1";
     
        
     //clinportal constants

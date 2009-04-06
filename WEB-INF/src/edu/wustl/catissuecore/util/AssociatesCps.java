@@ -163,7 +163,7 @@ public final class AssociatesCps
 		}
 		else
 		{
-			Long cpObjectId = Long.valueOf(-1);
+			Long cpObjectId = Long.valueOf(Constants.DEFAULT_CONDITION);
 			Collection<EntityMapCondition> entMapCondColl = entityManager
 					.getAllConditionsByStaticRecordId(cpObjectId);
 			for (EntityMapCondition entityMapCond : entMapCondColl)
@@ -225,7 +225,7 @@ public final class AssociatesCps
 				}
 				if (cpId == 0)
 				{
-					Long conditionObject = Long.valueOf(-1);
+					Long conditionObject = Long.valueOf(Constants.DEFAULT_CONDITION);
 					editConditions(entityMap, conditionObject, typeId);
 				}
 				annotation.updateEntityMap(entityMap);

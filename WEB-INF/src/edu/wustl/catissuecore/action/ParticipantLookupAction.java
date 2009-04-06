@@ -16,6 +16,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -32,6 +34,9 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.dao.AbstractDAO;
+import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.factory.AbstractDomainObjectFactory;
 import edu.wustl.common.factory.MasterFactory;
@@ -70,7 +75,16 @@ public class ParticipantLookupAction extends BaseAction
 		AbstractDomainObject abstractDomain = abstractDomainObjectFactory.getDomainObject(abstractForm.getFormId(),
 				abstractForm);
 		Participant participant = (Participant) abstractDomain;
-		
+		// 11968 S		
+		if(!isAuthorized(mapping,request,participant))
+		{
+	        ActionErrors errors = new ActionErrors();
+	        ActionError error = new ActionError("access.execute.action.denied");
+	        errors.add(ActionErrors.GLOBAL_ERROR, error);
+	        saveErrors(request, errors);
+	        return mapping.findForward("failure");	      
+		}
+		// 11968 E
 		Logger.out.debug("Participant Id :"+request.getParameter("participantId"));
 		//checks weather participant is selected from the list and so forwarding to next action instead of participant lookup.
 		//Abhishek Mehta
@@ -141,6 +155,28 @@ public class ParticipantLookupAction extends BaseAction
 		Logger.out.debug("target:"+target);
 		return (mapping.findForward(target));
 	}
+
+	// 11968 S
+	private boolean isAuthorized(ActionMapping mapping,HttpServletRequest request,Participant participant)
+	{
+		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+		SessionDataBean sessionDataBean = getSessionData(request);
+		boolean authorizedFlag=false;
+		try
+		{
+			dao.openSession(sessionDataBean);		
+			ParticipantBizLogic biz= new ParticipantBizLogic();			
+			authorizedFlag = biz.isAuthorized(dao,participant,sessionDataBean);
+			dao.closeSession();
+		}
+		catch (Exception e) 
+		{
+			Logger.out.error("Exception occured : " + e.getMessage() , e);
+			authorizedFlag=false;
+		}
+		return authorizedFlag;		
+	}
+	// 11968 E
 	
 	
 	private boolean isCallToLookupLogicNeeded(Participant participant)

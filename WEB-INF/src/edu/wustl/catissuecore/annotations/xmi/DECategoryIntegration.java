@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 import edu.common.dynamicextensions.bizlogic.BizLogicFactory;
+import edu.common.dynamicextensions.domain.AbstractMetadata;
 import edu.common.dynamicextensions.domain.integration.EntityMap;
 import edu.common.dynamicextensions.domain.integration.EntityMapCondition;
 import edu.common.dynamicextensions.domain.integration.FormContext;
@@ -79,13 +80,36 @@ public class DECategoryIntegration
 							Collection<EntityMapCondition> existingEntityMapConditions = Utility.getEntityMapConditions(existingFormContext.getId());
 							Collection<EntityMapCondition> newEntityMapConditions = Utility.getEntityMapConditions(newFormContext.getId());
 
+
 							for (EntityMapCondition existingEntityMapCondition : existingEntityMapConditions)
+							{
+							if(entityMapConditionList.isEmpty())
+
 							{
 								EntityMapCondition newEntityMapCondition = new EntityMapCondition();
 								newEntityMapCondition.setStaticRecordId(existingEntityMapCondition.getStaticRecordId());
 								newEntityMapCondition.setTypeId(existingEntityMapCondition.getTypeId());
 								newEntityMapConditions.add(newEntityMapCondition);
 
+								EntityMapCondition objNewEntityMapCondition = new EntityMapCondition();
+								Long typeId = (Long) Utility.getObjectIdentifier(Constants.COLLECTION_PROTOCOL,
+										AbstractMetadata.class.getName(), Constants.NAME);
+								objNewEntityMapCondition.setStaticRecordId(Long.valueOf(Constants.DEFAULT_CONDITION));
+								objNewEntityMapCondition.setTypeId(typeId);
+								objNewEntityMapCondition.setFormContext(objNewFormContext);
+								entityMapConditionNewList.add(objNewEntityMapCondition);
+							}
+							else
+							{
+								for (EntityMapCondition objEntityMapCondition : entityMapConditionList)
+								{
+									EntityMapCondition objNewEntityMapCondition = new EntityMapCondition();
+									objNewEntityMapCondition.setStaticRecordId(objEntityMapCondition.getStaticRecordId());
+									objNewEntityMapCondition.setTypeId(objEntityMapCondition.getTypeId());
+									objNewEntityMapCondition.setFormContext(objNewFormContext);
+									entityMapConditionNewList.add(objNewEntityMapCondition);
+								}
+							}
 							}
 							newFormContext.setEntityMapConditionCollection(newEntityMapConditions);
 							newFormContexts.add(newFormContext);

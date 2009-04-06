@@ -7,6 +7,7 @@ import java.util.Date;
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
+import edu.wustl.catissuecore.util.querysuite.QueryModuleConstants;
 import edu.wustl.common.querysuite.factory.QueryObjectFactory;
 import edu.wustl.common.querysuite.queryobject.ArithmeticOperator;
 import edu.wustl.common.querysuite.queryobject.IConnector;
@@ -485,16 +486,27 @@ public class TwoNodesTemporalQuery
 				//Date date = Utility.parseDate(timeValue, "MM/dd/yyyy HH:MM:SS");					
 				Date date=null;
 				String pattern="";
-				try {
-					if((firstAttributeType.equals("DateTime")) && (secondAttributeType.equals("DateTime")))
-						pattern = Variables.dateFormat+" HH:mm:ss";
-					else
+				try 
+				{
+					//bug 11705 start
+					if(timeValue.contains("-"))
+					{
 						pattern = Variables.dateFormat;
-					System.out.println("Date Pattern:" + pattern);
+					}
+					else if(timeValue.contains("/"))
+					{
+						pattern = QueryModuleConstants.DATE_FORMAT;
+					}
+					if((firstAttributeType.equals("DateTime")) && (secondAttributeType.equals("DateTime")))
+					{
+						pattern = pattern + " HH:mm:ss";						
+					}
+					//bug 11705 end
 					formatter = new SimpleDateFormat(pattern);						
 					date = formatter.parse(timeValue);
-				} catch (ParseException e) {
-					// TODO Auto-generated catch block
+				} 
+				catch (ParseException e)
+				{
 					e.printStackTrace();
 				}				
 				

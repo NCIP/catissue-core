@@ -502,7 +502,7 @@ public class AnnotationBizLogic extends DefaultBizLogic
 	{
 		List dynEntitiesIdList = new ArrayList();
 		List cpIdListForAll = new ArrayList();
-		cpIdListForAll.add(Long.valueOf(-1));
+		cpIdListForAll.add(Long.valueOf(edu.wustl.catissuecore.util.global.Constants.DEFAULT_CONDITION));
 		if (dynEntitiesList != null && !dynEntitiesList.isEmpty())
 		{
 			Iterator dynEntitiesIterator = dynEntitiesList.iterator();
