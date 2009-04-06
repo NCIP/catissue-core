@@ -2588,5 +2588,20 @@ public class Utility extends edu.wustl.common.util.Utility {
 		
 		return entityMapRecords;
 	}
+	//Bug 11481 S
+	/**
+	 * @param 
+	 * @return String	
+	 */
+	public static String getHQLString()
+	{
+		String hqlString = "select cpe.collectionProtocol.id,"
+				+ "cpe.collectionProtocol.activityStatus "
+				+ "from edu.wustl.catissuecore.domain.CollectionProtocolEvent as cpe "
+				+ "where cpe.id = ";
+		return hqlString;
+
+	}
+	//Bug 11481 E
 
 }
