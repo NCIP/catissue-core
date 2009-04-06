@@ -561,13 +561,15 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			specimen.setSpecimenCollectionGroup(parentSpecimen.getSpecimenCollectionGroup());
 			setParentSpecimenData(specimen);
 		}
+		
 		//Bug 11481 S
 		String lineage = specimen.getLineage();
 		CollectionProtocol cp = new CollectionProtocol();
-		Long scgId = specimen.getSpecimenCollectionGroup().getId();
+		Long scgId = specimen.getSpecimenCollectionGroup().getCollectionProtocolEvent().getId();
+		String activityStatusHQL = Utility.getHQLString()+ scgId;
 		try
 		{
-			cp = getActivityStatusOfCollectionProtocol(dao, scgId);
+			cp = getActivityStatusOfCollectionProtocol(dao,activityStatusHQL);
 		}
 		catch (ClassNotFoundException e)
 		{
@@ -605,15 +607,11 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	 * @throws DAOException 
 	 * @throws ClassNotFoundException 	
 	*/
-	public CollectionProtocol getActivityStatusOfCollectionProtocol(DAO dao, Long scgId)
+	public CollectionProtocol getActivityStatusOfCollectionProtocol(DAO dao,String activityStatusHQL)
 			throws DAOException, ClassNotFoundException
 	{
 		List activityStatusList = null;
 		CollectionProtocol cp = new CollectionProtocol();
-		String activityStatusHQL = "select scg.collectionProtocolRegistration.collectionProtocol.id,"
-				+ "scg.collectionProtocolRegistration.collectionProtocol.activityStatus "
-				+ "from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg "
-				+ "where scg.id = " + scgId;
 		activityStatusList = dao.executeQuery(activityStatusHQL, null, false, null);
 		if (!activityStatusList.isEmpty())
 		{
@@ -1786,16 +1784,30 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		{
 			Specimen specimen = (Specimen) obj;
 			List collStatusList = null;
-			Long scgId = specimen.getSpecimenCollectionGroup().getId();
-			CollectionProtocol cp = new CollectionProtocol();
-
+			Long scgId;
+			String activityStatusHQL =null;
+			CollectionProtocol cp = null;
+			if (specimen.getSpecimenCollectionGroup().getCollectionProtocolEvent() != null)
+			{
+				scgId = specimen.getSpecimenCollectionGroup().getCollectionProtocolEvent().getId();
+				activityStatusHQL = Utility.getHQLString()+ scgId;
+				
+			}
+			else
+			{
+			    scgId = specimen.getSpecimenCollectionGroup().getId();
+				activityStatusHQL = "select scg.collectionProtocolRegistration.collectionProtocol.id,"
+					+ "scg.collectionProtocolRegistration.collectionProtocol.activityStatus "
+					+ "from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg "
+					+ "where scg.id = " + scgId;
+			}
 			String collStatusHQL = "select sp.collectionStatus "
 					+ "from edu.wustl.catissuecore.domain.Specimen as sp " + "where sp.id = "
 					+ specimen.getId();
 			try
 			{
 				collStatusList = dao.executeQuery(collStatusHQL, null, false, null);
-				cp = getActivityStatusOfCollectionProtocol(dao, scgId);
+				cp = getActivityStatusOfCollectionProtocol(dao,activityStatusHQL);
 			}
 			catch (ClassNotFoundException e1)
 			{
@@ -2684,11 +2696,13 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			throws DAOException
 	{
 		String lineage = specimenDO.getLineage();
-		Long scgId = newSpecimen.getSpecimenCollectionGroup().getId();
-		CollectionProtocol cp = new CollectionProtocol();
+		Long scgId = newSpecimen.getSpecimenCollectionGroup().getCollectionProtocolEvent().getId();
+		CollectionProtocol cp = null;
+		String activityStatusHQL = Utility.getHQLString()+ scgId;
+		
 		try
 		{
-			cp = getActivityStatusOfCollectionProtocol(dao, scgId);
+			cp = getActivityStatusOfCollectionProtocol(dao,activityStatusHQL);
 		}
 		catch (ClassNotFoundException e)
 		{
