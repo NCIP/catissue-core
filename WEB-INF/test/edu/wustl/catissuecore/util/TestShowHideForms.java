@@ -110,7 +110,7 @@ public class TestShowHideForms extends TestCase
 //										throw new DynamicExtensionsSystemException(XMLFileName);
 										for(EntityMapCondition condition: entityMapCondColl)
 										{
-											if(condition.getStaticRecordId()==Long.valueOf(-1) || condition.getStaticRecordId()==-1)
+											if(condition.getStaticRecordId()==Long.valueOf(Constants.DEFAULT_CONDITION) || condition.getStaticRecordId()==-1)
 											{
 												count=count+1;
 											}

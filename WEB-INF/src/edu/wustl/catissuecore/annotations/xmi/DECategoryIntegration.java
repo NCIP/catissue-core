@@ -83,7 +83,7 @@ public class DECategoryIntegration
 
 							for (EntityMapCondition existingEntityMapCondition : existingEntityMapConditions)
 							{
-							if(entityMapConditionList.isEmpty())
+							if(existingEntityMapConditions.isEmpty())
 
 							{
 								EntityMapCondition newEntityMapCondition = new EntityMapCondition();
@@ -96,18 +96,18 @@ public class DECategoryIntegration
 										AbstractMetadata.class.getName(), Constants.NAME);
 								objNewEntityMapCondition.setStaticRecordId(Long.valueOf(Constants.DEFAULT_CONDITION));
 								objNewEntityMapCondition.setTypeId(typeId);
-								objNewEntityMapCondition.setFormContext(objNewFormContext);
-								entityMapConditionNewList.add(objNewEntityMapCondition);
+								objNewEntityMapCondition.setFormContext(newFormContext);
+								newEntityMapConditions.add(objNewEntityMapCondition);
 							}
 							else
 							{
-								for (EntityMapCondition objEntityMapCondition : entityMapConditionList)
+								for (EntityMapCondition objEntityMapCondition : existingEntityMapConditions)
 								{
 									EntityMapCondition objNewEntityMapCondition = new EntityMapCondition();
 									objNewEntityMapCondition.setStaticRecordId(objEntityMapCondition.getStaticRecordId());
 									objNewEntityMapCondition.setTypeId(objEntityMapCondition.getTypeId());
-									objNewEntityMapCondition.setFormContext(objNewFormContext);
-									entityMapConditionNewList.add(objNewEntityMapCondition);
+									objNewEntityMapCondition.setFormContext(newFormContext);
+									newEntityMapConditions.add(objNewEntityMapCondition);
 								}
 							}
 							}
