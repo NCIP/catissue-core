@@ -564,9 +564,9 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		
 		//Bug 11481 S
 		String lineage = specimen.getLineage();
-		CollectionProtocol cp = new CollectionProtocol();
-		Long scgId = specimen.getSpecimenCollectionGroup().getCollectionProtocolEvent().getId();
-		String activityStatusHQL = Utility.getHQLString()+ scgId;
+		CollectionProtocol cp = null;
+		Long id = specimen.getSpecimenCollectionGroup().getCollectionProtocolEvent().getId();
+		String activityStatusHQL = Utility.getHQLString()+ id;
 		try
 		{
 			cp = getActivityStatusOfCollectionProtocol(dao,activityStatusHQL);
@@ -1784,22 +1784,22 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		{
 			Specimen specimen = (Specimen) obj;
 			List collStatusList = null;
-			Long scgId;
+			Long id;
 			String activityStatusHQL =null;
 			CollectionProtocol cp = null;
 			if (specimen.getSpecimenCollectionGroup().getCollectionProtocolEvent() != null)
 			{
-				scgId = specimen.getSpecimenCollectionGroup().getCollectionProtocolEvent().getId();
-				activityStatusHQL = Utility.getHQLString()+ scgId;
+				id = specimen.getSpecimenCollectionGroup().getCollectionProtocolEvent().getId();
+				activityStatusHQL = Utility.getHQLString()+ id;
 				
 			}
 			else
 			{
-			    scgId = specimen.getSpecimenCollectionGroup().getId();
+			    id = specimen.getSpecimenCollectionGroup().getId();
 				activityStatusHQL = "select scg.collectionProtocolRegistration.collectionProtocol.id,"
 					+ "scg.collectionProtocolRegistration.collectionProtocol.activityStatus "
 					+ "from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg "
-					+ "where scg.id = " + scgId;
+					+ "where scg.id = " + id;
 			}
 			String collStatusHQL = "select sp.collectionStatus "
 					+ "from edu.wustl.catissuecore.domain.Specimen as sp " + "where sp.id = "
@@ -2696,9 +2696,9 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			throws DAOException
 	{
 		String lineage = specimenDO.getLineage();
-		Long scgId = newSpecimen.getSpecimenCollectionGroup().getCollectionProtocolEvent().getId();
+		Long id = newSpecimen.getSpecimenCollectionGroup().getCollectionProtocolEvent().getId();
 		CollectionProtocol cp = null;
-		String activityStatusHQL = Utility.getHQLString()+ scgId;
+		String activityStatusHQL = Utility.getHQLString()+ id;
 		
 		try
 		{
