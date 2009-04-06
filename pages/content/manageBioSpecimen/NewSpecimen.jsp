@@ -1857,10 +1857,10 @@
 										<input type="radio" value="3" id="deriveChk" name="specimenChild" onclick="onCheckboxButtonClick(this)"/>
 										<bean:message key="specimen.derivative" />
 									&nbsp;
-									<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">	
+										<!-- 11706 S Desctiption : Remove equal check for Edit operation only....-->										
 										<input type="radio" value="4" id="createCpChildCheckBox" name="specimenChild" onclick="onCheckboxButtonClick(this)"/>
-										<bean:message key="create.CpChildSp"/>
-									</logic:equal>
+										<bean:message key="create.CpChildSp"/>									
+										<!-- 11706 E -->
 									</td>
 								</tr>	
 								 
