@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -268,10 +269,11 @@ public class AddToOrderListAction  extends BaseAction
 	 */
 	private Map putValueInMapSpecimen(OrderSpecimenForm orderSpecimenFormObject,HttpServletRequest request)
 	{
-		Map specimenMap=new HashMap();
-		String []strSelectedItems=orderSpecimenFormObject.getSelectedItems();
+		// LinkedHashMap introduced to retain order
+		Map specimenMap = new LinkedHashMap();
+		String[] strSelectedItems = orderSpecimenFormObject.getSelectedItems();
 		Map tempOrderSpecimenFormObjectMap = orderSpecimenFormObject.getValues();
-		for(int j=0;j<strSelectedItems.length;j++)
+		for (int j = 0; j < strSelectedItems.length; j++)
     	{
 			specimenMap.put("OrderSpecimenBean:"+strSelectedItems[j]+"_specimenId", tempOrderSpecimenFormObjectMap.get("OrderSpecimenBean:"+strSelectedItems[j]+"_specimenId"));
 			specimenMap.put("OrderSpecimenBean:"+strSelectedItems[j]+"_specimenName", tempOrderSpecimenFormObjectMap.get("OrderSpecimenBean:"+strSelectedItems[j]+"_specimenName"));
@@ -282,7 +284,7 @@ public class AddToOrderListAction  extends BaseAction
 			specimenMap.put("OrderSpecimenBean:"+strSelectedItems[j]+"_specimenClass",tempOrderSpecimenFormObjectMap.get("OrderSpecimenBean:"+strSelectedItems[j]+"_specimenClass"));
 			specimenMap.put("OrderSpecimenBean:"+strSelectedItems[j]+"_specimenType",tempOrderSpecimenFormObjectMap.get("OrderSpecimenBean:"+strSelectedItems[j]+"_specimenType"));
 			specimenMap.put("OrderSpecimenBean:"+strSelectedItems[j]+"_isDerived",orderSpecimenFormObject.getTypeOfSpecimen());
-			if(orderSpecimenFormObject.getTypeOfSpecimen().equalsIgnoreCase("true"))
+			if (orderSpecimenFormObject.getTypeOfSpecimen().equalsIgnoreCase("true"))
 			{
 				specimenMap.put("OrderSpecimenBean:"+strSelectedItems[j]+"_specimenClass",orderSpecimenFormObject.getClassName());
 				specimenMap.put("OrderSpecimenBean:"+strSelectedItems[j]+"_specimenType",orderSpecimenFormObject.getType());

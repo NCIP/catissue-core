@@ -6,6 +6,7 @@ package edu.wustl.catissuecore.bizlogic.querysuite;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -120,7 +121,7 @@ public class QueryShoppingCartBizLogic
 	
 	public Set<String> getEntityIdsList(QueryShoppingCart cart,List entityName,List<Integer>chkBoxValues)
 	{
-		Set<String> entityIdsList = new HashSet<String>();
+		Set<String> entityIdsList = new LinkedHashSet<String>();
 	    List<Integer> entityIdsColumnIndexList = getIdsColumnIndexList(cart.getCartAttributeList(),entityName);
         List<List<String>> dataList = cart.getCart();
         if(chkBoxValues!=null)
@@ -156,7 +157,7 @@ public class QueryShoppingCartBizLogic
 	
 	public Set<String> getEntityLabelsList(QueryShoppingCart cart,List entityName,List<Integer>chkBoxValues,String attributeName)
 	{
-		Set<String> entityIdsList = new HashSet<String>();
+		Set<String> entityIdsList = new  LinkedHashSet<String>();
 	    List<Integer> entityIdsColumnIndexList = getLabelsColumnIndexList(cart.getCartAttributeList(),entityName,attributeName);
         List<List<String>> dataList = cart.getCart();
         if(chkBoxValues!=null)
@@ -196,7 +197,7 @@ public class QueryShoppingCartBizLogic
 	 */
 	public Set getListOfOrderItem(Set<String> entityIdsList)
 	{
-		 Set<String> orderIdsList = new HashSet<String>();
+		 Set<String> orderIdsList = new LinkedHashSet<String>();
 		 HibernateDAO dao = (HibernateDAO) DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);	
 		 try
 		   {

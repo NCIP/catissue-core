@@ -13,6 +13,7 @@ import java.util.StringTokenizer;
 import javax.servlet.http.HttpServletRequest;
 
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
+import edu.emory.mathcs.backport.java.util.Collections;
 import edu.wustl.catissuecore.actionForm.AdvanceSearchForm;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.querysuite.QueryShoppingCart;
@@ -97,6 +98,9 @@ abstract public class QueryShoppingCartAction extends BaseAction
 		{
 			chkBoxValues.add(getIndex(checkedValue));
 		}
+		
+		// Sorting indices so that the order is retained
+		Collections.sort(chkBoxValues);
 		return chkBoxValues;
 	}
 

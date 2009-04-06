@@ -17,6 +17,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -312,14 +314,14 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 	 */
 	private void insertOrderDetails(AbstractActionForm abstractActionForm)
 	{
-		HashMap orderItemsMap = null;
-		Collection orderItemsCollection = new HashSet();
+		Map orderItemsMap = null;
+		Collection orderItemsCollection = new LinkedHashSet();
 		List newSpecimenArrayObjList = null;
 
 		if (abstractActionForm.getPageOf().equals(Constants.SPECIMEN_ORDER_FORM_TYPE))
 		{
 			final OrderSpecimenForm orderSpecimenForm = (OrderSpecimenForm) abstractActionForm;
-			orderItemsMap = (HashMap) putOrderDetailsForSpecimen(orderSpecimenForm);
+			orderItemsMap = putOrderDetailsForSpecimen(orderSpecimenForm);
 			newSpecimenArrayObjList = (List) putnewArrayDetailsforArray(
 					orderSpecimenForm.getDefineArrayObj());
 		}
@@ -345,14 +347,14 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 		final MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.bean");
 		try
 		{
-			orderItemsCollection = (HashSet) parser.generateData(orderItemsMap);
+			orderItemsCollection = (LinkedHashSet) parser.generateData(orderItemsMap);
 		}
 		catch (Exception e)
 		{
 			logger.debug(e);
 		}
 
-		Collection orderItemsSet = new HashSet();
+		Collection orderItemsSet = new LinkedHashSet();
 
 		Iterator orderItemsCollectionItr = orderItemsCollection.iterator();
 		OrderItem orderItem = null;
@@ -383,7 +385,7 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 								Collection orderItemCollection = (Set) newSpecimenArrayObj.getSpecimenOrderItemCollection();
 								if (orderItemCollection == null)
 								{
-									orderItemCollection = new HashSet();
+									orderItemCollection = new LinkedHashSet();
 								}
 								specimenOrderItem.setNewSpecimenArrayOrderItem(newSpecimenArrayObj);
 								orderItem = specimenOrderItem;
@@ -628,7 +630,6 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 	 */
 	private Map putOrderDetailsForSpecimen(OrderSpecimenForm orderSpecimenForm)
 	{
-		HashMap orderItemsMap = null;
 		//IBizLogic defaultBizLogic = BizLogicFactory.getInstance().getBizLogic(-1);
 		this.setComment(orderSpecimenForm.getOrderForm().getComments());
 		this.setName(orderSpecimenForm.getOrderForm().getOrderRequestName());
@@ -645,11 +646,8 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 			distributionProtocolObj.setId(distributionId);
 			this.setDistributionProtocol(distributionProtocolObj);
 		}
-		
 
-		
-
-		orderItemsMap = (HashMap) orderSpecimenForm.getValues();
+		Map orderItemsMap = (LinkedHashMap) orderSpecimenForm.getValues();
 		return orderItemsMap;
 	}
 

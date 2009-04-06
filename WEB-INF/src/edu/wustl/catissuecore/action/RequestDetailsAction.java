@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
@@ -61,6 +62,7 @@ import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenOrderItem;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.util.IdComparator;
 import edu.wustl.catissuecore.util.OrderingSystemUtil;
 import edu.wustl.catissuecore.util.SpecimenComparator;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -319,9 +321,12 @@ public class RequestDetailsAction extends BaseAction
 				//List containing the list of defined arrays and existing arrays  
 				List arrayRequestDetailsList = new ArrayList();
 				List arrayRequestDetailsMapList = new ArrayList();
-				if ((orderItemsListFromDB != null) && (orderItemsListFromDB.isEmpty() == false))
+				if ((orderItemsListFromDB != null) && (!orderItemsListFromDB.isEmpty()))
 				{
-					Iterator iter = orderItemsListFromDB.iterator();
+					List<OrderItem> orderItemsList = new ArrayList<OrderItem>(orderItemsListFromDB);
+					// Sorting by Order.Id
+					Collections.sort(orderItemsList, new IdComparator());
+					ListIterator<OrderItem> iter = orderItemsList.listIterator();
 					while (iter.hasNext())
 					{
 						orderItem = (OrderItem) iter.next();

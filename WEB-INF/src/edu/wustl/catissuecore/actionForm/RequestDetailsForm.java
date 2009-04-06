@@ -13,8 +13,8 @@ package edu.wustl.catissuecore.actionForm;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -39,6 +39,7 @@ import edu.wustl.catissuecore.domain.PathologicalCaseOrderItem;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.SpecimenOrderItem;
+import edu.wustl.catissuecore.util.IdComparator;
 import edu.wustl.catissuecore.util.OrderingSystemUtil;
 import edu.wustl.catissuecore.util.SpecimenComparator;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -64,7 +65,7 @@ public class RequestDetailsForm extends AbstractActionForm
 	// The status which the user wants to update in one go.
 	private String status;
 	// The Map containg submitted values for 'assigned quantity', 'assigned status' and 'request for'. 
-	protected Map values = new HashMap();
+	protected Map values = new LinkedHashMap();
 	// The administrator comments.
 	private String administratorComments;
 	// The Order Id required to retrieve the corresponding order items from the database.
@@ -108,7 +109,7 @@ public class RequestDetailsForm extends AbstractActionForm
 	/**
 	 * The map to display the list of specimens in request For drop down.
 	 */
-	private Map requestForDropDownMap = new HashMap();
+	private Map requestForDropDownMap = new LinkedHashMap();
 	/**
 	 * 
 	 */
@@ -286,9 +287,12 @@ public class RequestDetailsForm extends AbstractActionForm
 		int existingArrayBeanCounter = 0;
 		OrderDetails order = (OrderDetails) abstractDomain;
 		Collection orderItemColl = order.getOrderItemCollection();
-		Iterator iter = orderItemColl.iterator();
+		List orderItemList = new ArrayList(orderItemColl);
+		// Sorting by OrderItem.id
+		Collections.sort(orderItemList, new IdComparator());
+		Iterator iter = orderItemList.iterator();
 		List totalSpecimenListInRequestForDropDown = new ArrayList();
-		Map definedArrayMap = new HashMap();
+		Map definedArrayMap = new LinkedHashMap();
 		while (iter.hasNext())
 		{
 			OrderItem orderItem = (OrderItem) iter.next();

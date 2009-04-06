@@ -9,6 +9,7 @@ import edu.wustl.catissuecore.bean.GenericSpecimen;
 import edu.wustl.catissuecore.domain.ConsentTier;
 import edu.wustl.catissuecore.domain.ConsentTierResponse;
 import edu.wustl.catissuecore.domain.ConsentTierStatus;
+import edu.wustl.catissuecore.domain.OrderItem;
 import edu.wustl.catissuecore.domain.Specimen;
 
 public class IdComparator implements Comparator
@@ -70,6 +71,11 @@ public class IdComparator implements Comparator
 			{
 				id1 = Long.parseLong(getId((String)arg0));
 				id2 = Long.parseLong(getId((String)arg1));
+			}
+			if (arg0 instanceof OrderItem && arg1 instanceof OrderItem)
+			{
+				id1 = ((OrderItem) arg0).getId();
+				id2 = ((OrderItem) arg1).getId();
 			}
 //			bug 8905 end
 			if (id1 != null && id2 != null)

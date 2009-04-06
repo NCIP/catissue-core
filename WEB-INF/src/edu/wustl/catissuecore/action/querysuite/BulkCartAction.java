@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -166,9 +168,9 @@ public class BulkCartAction extends QueryShoppingCartAction
 
 	private Map<String, Set<String>> getShippingEntityMap() 
 	{
-		Map <String,Set<String>> entityIdsMap = new HashMap<String, Set<String>>();
-		entityIdsMap.put(Constants.SPECIMEN_NAME, new HashSet<String>());
-		entityIdsMap.put(Constants.STORAGE_CONTAINER_CLASS_NAME, new HashSet<String>());
+		Map <String,Set<String>> entityIdsMap = new LinkedHashMap<String, Set<String>>();
+		entityIdsMap.put(Constants.SPECIMEN_NAME, new LinkedHashSet<String>());
+		entityIdsMap.put(Constants.STORAGE_CONTAINER_CLASS_NAME, new LinkedHashSet<String>());
 		return entityIdsMap;
 	}
 
@@ -187,7 +189,7 @@ public class BulkCartAction extends QueryShoppingCartAction
 		.getAttribute(Constants.QUERY_SHOPPING_CART);
 		
 		QueryShoppingCartBizLogic bizLogic = new QueryShoppingCartBizLogic();
-		Set<String> specimenIds = new HashSet<String>(bizLogic.getEntityIdsList(cart, 
+		Set<String> specimenIds = new LinkedHashSet<String>(bizLogic.getEntityIdsList(cart, 
 				Arrays.asList(Constants.specimenNameArray), getCheckboxValues(searchForm)));
 		session.setAttribute(Constants.SPECIMEN_ID, specimenIds);
 		
@@ -273,7 +275,7 @@ public class BulkCartAction extends QueryShoppingCartAction
 		entityIdsMap.put(Constants.IDENTIFIED_SURGICAL_PATHALOGY_REPORT_CLASS_NAME, new HashSet<String>());
 		entityIdsMap.put(Constants.DEIDENTIFIED_SURGICAL_PATHALOGY_REPORT_CLASS_NAME, new HashSet<String>());
 		entityIdsMap.put(Constants.SURGICAL_PATHALOGY_REPORT_CLASS_NAME, new HashSet<String>());
-		entityIdsMap.put(Constants.SPECIMEN_NAME, new HashSet<String>());
+		entityIdsMap.put(Constants.SPECIMEN_NAME, new LinkedHashSet<String>());
 		return entityIdsMap;
 	}
 	

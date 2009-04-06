@@ -4,6 +4,7 @@ package edu.wustl.catissuecore.actionForm;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -38,7 +39,7 @@ public class OrderSpecimenForm extends AbstractActionForm
 	/**
 	 * Map containing the key-value pairs
 	 */
-	private Map values = new HashMap();
+	private Map values = new LinkedHashMap();
 
 	/**
 	 * String containing the class of specimen 

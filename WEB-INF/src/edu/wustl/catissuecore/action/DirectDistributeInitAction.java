@@ -2,6 +2,7 @@ package edu.wustl.catissuecore.action;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,6 +15,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.emory.mathcs.backport.java.util.Collections;
 import edu.wustl.catissuecore.actionForm.OrderBiospecimenArrayForm;
 import edu.wustl.catissuecore.actionForm.OrderForm;
 import edu.wustl.catissuecore.actionForm.OrderPathologyCaseForm;
@@ -27,6 +29,7 @@ import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.domain.pathology.SurgicalPathologyReport;
+import edu.wustl.catissuecore.util.SpecimenComparator;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.BaseAction;
@@ -69,6 +72,7 @@ public class DirectDistributeInitAction extends BaseAction
     		OrderSpecimenForm orderSpecForm =(OrderSpecimenForm)form;
     		List specimenCollection = (List)orderBizLogic.getSpecimenDataFromDatabase(request);
     		isValidTodistribute = isValidToDistributeSpecimen(specimenCollection,siteIdsList);
+    		Collections.sort(specimenCollection, new SpecimenComparator());
     		orderSpecForm.setValues(putValueInSpecimenMap(specimenCollection));
     		OrderForm orderFrom = (OrderForm) request.getSession().getAttribute("OrderForm");
     		orderSpecForm.setOrderForm(orderFrom);
@@ -221,7 +225,7 @@ public class DirectDistributeInitAction extends BaseAction
 	 */
 	private Map putValueInSpecimenMap(List specimenCollection)
 	{
-		Map specimenMap=new HashMap();
+		Map specimenMap=new LinkedHashMap();
 		Iterator specCollIter = specimenCollection.iterator();
 		int counter = 0;
 		boolean isValidToDistribute = false;
