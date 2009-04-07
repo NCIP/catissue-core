@@ -10,15 +10,14 @@ import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.dao.DAOFactory;
-import edu.wustl.common.dao.HibernateDAO;
 import edu.wustl.common.exception.BizLogicException;
-import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
-import edu.wustl.common.util.dbManager.DAOException;
-import edu.wustl.common.util.dbManager.DBUtil;
+import edu.wustl.common.exception.ParseException;
+import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.DAO;
+import edu.wustl.dao.daofactory.DAOConfigFactory;
+import edu.wustl.dao.exception.DAOException;
 
 /**
  * This class is specifically for the migration code required to move legacy data to 
@@ -37,16 +36,15 @@ public class MSRMigration
 	 * @throws BizLogicException 
 	 * @throws DAOException 
 	 * @throws ClassNotFoundException 
-	 * @throws UserNotAuthorizedException 
 	 * @throws ClassNotFoundException 
 	 * @throws DAOException 
 	 * @throws BizLogicException 
-	 * @throws UserNotAuthorizedException 
+	 * @throws ParseException 
 	 */
 	
-	public static void main(String args[]) throws UserNotAuthorizedException, ClassNotFoundException, DAOException, BizLogicException
+	public static void main(String args[]) throws ClassNotFoundException, DAOException, BizLogicException, ParseException
 	{
-		Logger.configure("");
+		//Logger.configure("");
 		String p1 = args[0].replaceAll("\\\\", "/");
 		String p2 = args[1].replaceAll("\\\\", "/");
 		System.setProperty("gov.nih.nci.security.configFile",p1);
@@ -59,14 +57,15 @@ public class MSRMigration
 		msrmMigration.testMigrate(args[2]);
 	}
 	
-	public void testMigrate(String userName) throws ClassNotFoundException, DAOException, BizLogicException, UserNotAuthorizedException
+	public void testMigrate(String userName) throws ClassNotFoundException, DAOException, BizLogicException, ParseException
 	{
 		
-		Class.forName(DBUtil.class.getName());
+		
 		List<User> userList = null;
 		List<Site> siteList = null;
 		UserBizLogic userBizLogic = new UserBizLogic();
-		HibernateDAO dao = (HibernateDAO) DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+		DAO dao = DAOConfigFactory.getInstance().getDAOFactory(Constants.APPLICATION_NAME).
+					getDAO();
 		
 		int noOfSupervisorsOrTechnicians = 0;
 		
@@ -85,7 +84,7 @@ public class MSRMigration
 			if (user.getRoleId().equals("2") || user.getRoleId().equals("3"))
 			{
 				Long oldObjectId = (user).getId();
-				Session session = DBUtil.getCleanSession();
+				Session session = dao.getCleanSession();
 				User oldObject = (User) session.get(user.getClass().getName(), oldObjectId);
 				user.getSiteCollection().clear();
 				user.getSiteCollection().addAll(siteList);
@@ -103,7 +102,7 @@ public class MSRMigration
 	}
 	
 	
-	private List<Site> getRepositorySites() throws DAOException 
+	private List<Site> getRepositorySites() throws BizLogicException 
 	{
 		List<Site> siteList = new ArrayList<Site>();
 		List<Site> repositorySiteList = new ArrayList<Site>();

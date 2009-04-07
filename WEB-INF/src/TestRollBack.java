@@ -1,10 +1,10 @@
 import org.apache.log4j.PropertyConfigurator;
 
 import edu.wustl.catissuecore.domain.Department;
-import edu.wustl.common.dao.HibernateDAO;
-import edu.wustl.common.dao.HibernateDAOImpl;
-import edu.wustl.common.util.global.Variables;
+import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.HibernateDAO;
+import edu.wustl.dao.HibernateDAOImpl;
 
 /*
  * Created on Aug 25, 2006
@@ -24,9 +24,8 @@ public class TestRollBack
     public static void main(String[] args) throws Exception 
     {
     	System.out.println("Head");
-        Variables.applicationHome = System.getProperty("user.dir");
 		Logger.out = org.apache.log4j.Logger.getLogger("");
-		PropertyConfigurator.configure(Variables.applicationHome+"\\WEB-INF\\src\\"+"ApplicationResources.properties");
+		PropertyConfigurator.configure(CommonServiceLocator.getInstance().getAppHome()+"\\WEB-INF\\src\\"+"ApplicationResources.properties");
 		
 		Logger.out.debug("here1234");
         
@@ -35,7 +34,7 @@ public class TestRollBack
         
         HibernateDAO dao = new HibernateDAOImpl();
         dao.openSession(null);
-        dao.insert(dept,null,false,false);
+        dao.insert(dept,false);
         dao.rollback();
         dao.closeSession();
     }
