@@ -6,7 +6,7 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <SCRIPT LANGUAGE="JavaScript" SRC="jss/javaScript.js"></SCRIPT>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
-<%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
+<%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="java.util.*"%>
 
 <head>
@@ -85,10 +85,10 @@
 					<td width="25%" class='${pageScope.style}'><bean:write name="currentUser" property="emailAddress"/>	</td>
                     <c:set var="date" value='${currentUser.startDate}' scope="request" />
                      <%
-                     // Added by Geeta for date format change
-					   Date date=(Date)request.getAttribute("date");
-					   String startDate=Utility.parseDateToString(date,Variables.dateFormat);
-					 %>
+                     	// Added by Geeta for date format change
+                     			   Date date=(Date)request.getAttribute("date");
+                     			   String startDate=AppUtility.parseDateToString(date,Variables.dateFormat);
+                     %>
 					
 <!--<td width="31%" class='${pageScope.style}'><bean:write name="currentUser" property="startDate" /></td>-->
 					<td width="31%" class='${pageScope.style}'><%=startDate%></td>

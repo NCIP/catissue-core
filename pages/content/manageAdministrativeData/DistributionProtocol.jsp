@@ -7,9 +7,9 @@
 <%@ page import="edu.wustl.catissuecore.actionForm.DistributionProtocolForm"%>
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
-<%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
+<%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
-<%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
+<%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
 
 <%@ include file="/pages/content/common/AdminCommonCode.jsp" %>
 <head>
@@ -17,7 +17,6 @@
 <link href="css/catissue_suite.css" rel="stylesheet" type="text/css" /> 
 <script src="jss/javaScript.js"></script>
 <%
-	
 	List tissueSiteList = (List) request.getAttribute(Constants.TISSUE_SITE_LIST);
 
 	List pathologyStatusList = (List) request.getAttribute(Constants.PATHOLOGICAL_STATUS_LIST);
@@ -47,30 +46,30 @@
 		DistributionProtocolForm form = null;
 		if(obj != null && obj instanceof DistributionProtocolForm)
 		{
-			form = (DistributionProtocolForm)obj;
-			map = form.getValues();
-			noOfRows = form.getCounter();
+	form = (DistributionProtocolForm)obj;
+	map = form.getValues();
+	noOfRows = form.getCounter();
 
-			currentDistributionProtocolDate = form.getStartDate();
-			if(currentDistributionProtocolDate == null)
-				currentDistributionProtocolDate = "";
-			distributionProtocolEndDate=form.getEndDate();
-			 if(distributionProtocolEndDate == null)
-				 distributionProtocolEndDate="";
+	currentDistributionProtocolDate = form.getStartDate();
+	if(currentDistributionProtocolDate == null)
+		currentDistributionProtocolDate = "";
+	distributionProtocolEndDate=form.getEndDate();
+	 if(distributionProtocolEndDate == null)
+		 distributionProtocolEndDate="";
 		}
 		
 		
-			String reqPath = (String)request.getAttribute(Constants.REQ_PATH);
+	String reqPath = (String)request.getAttribute(Constants.REQ_PATH);
 		String appendingPath = "/DistributionProtocol.do?operation=add&pageOf=pageOfDistributionProtocol";
 		if (reqPath != null)
-			appendingPath = reqPath + "|/DistributionProtocol.do?operation=add&pageOf=pageOfDistributionProtocol";
+	appendingPath = reqPath + "|/DistributionProtocol.do?operation=add&pageOf=pageOfDistributionProtocol";
 	
 	   	if(!operation.equals("add") )
 	   	{
 	   		Object obj1 = request.getAttribute("distributionProtocolForm");
-			if(obj1 != null && obj instanceof DistributionProtocolForm)
-			{
-				DistributionProtocolForm form1 = (DistributionProtocolForm)obj1;
+	if(obj1 != null && obj instanceof DistributionProtocolForm)
+	{
+		DistributionProtocolForm form1 = (DistributionProtocolForm)obj1;
 		   		appendingPath = "/DistributionProtocolSearch.do?operation=search&pageOf=pageOfDistributionProtocol&id="+form1.getId() ;
 		   		System.out.println("---------- DP JSP appendingPath -------- : "+ appendingPath);
 		   	}
@@ -134,8 +133,7 @@ function insRow(subdivtag)
 	<%for(int i=0;i<specimenClassList.size();i++)
 	{
 		String specimenClassLabel = "" + ((NameValueBean)specimenClassList.get(i)).getName();
-		String specimenClassValue = "" + ((NameValueBean)specimenClassList.get(i)).getValue();
-	%>
+		String specimenClassValue = "" + ((NameValueBean)specimenClassList.get(i)).getValue();%>
 		sname = sname + "<option value='<%=specimenClassValue%>'><%=specimenClassLabel%></option>";
 	<%}%>
 	sname = sname + "</select>";
@@ -230,21 +228,21 @@ function insRow(subdivtag)
       <tr>
         <td width="4%" class="td_tab_bg" ><img src="images/uIEnhancementImages/spacer.gif" alt="spacer" width="50" height="1"></td>
 		<%
-						if(operation.equals(Constants.ADD))
-						{ 
-				%>
+			if(operation.equals(Constants.ADD))
+						{
+		%>
         <td valign="bottom"><img src="images/uIEnhancementImages/tab_add_selected.jpg" alt="Add" width="57" height="22" /></td>
         <td valign="bottom"><html:link page="/SimpleQueryInterface.do?pageOf=pageOfDistributionProtocol&aliasName=DistributionProtocol" ><img src="images/uIEnhancementImages/tab_edit_notSelected.jpg" alt="Edit" width="59" height="22" border="0" /></html:link></td>
-		<% 
-						}
+		<%
+			}
 						   if(operation.equals(Constants.EDIT))
 						{
-				%>
+		%>
 		<td valign="bottom"><html:link page="/DistributionProtocol.do?operation=add&pageOf=pageOfDistributionProtocol"><img src="images/uIEnhancementImages/tab_add_notSelected.jpg" alt="Add" width="57" height="22" /></html:link></td>
         <td valign="bottom"><img src="images/uIEnhancementImages/tab_edit_selected.jpg" alt="Edit" width="59" height="22" border="0" /></td>
 		<%
-						}
-				%>
+			}
+		%>
         <td width="90%" valign="bottom" class="td_tab_bg">&nbsp;</td>
       </tr>
     </table>
@@ -279,11 +277,17 @@ function insRow(subdivtag)
                   <td align="left" class="black_ar"><bean:message key="distributionprotocol.protocoltitle" /> </td>
                   
 				  <!--  Added by geeta --> 
-				   <%if(Variables.isCPTitleChange){%>
+				   <%
+ 				   	if(Variables.isCPTitleChange){
+ 				   %>
 						<td colspan="2" align="left"><html:textarea styleClass="black_ar" cols="28" rows="3" styleId="title" property="title" readonly="<%=readOnlyValue%>" /></td>
-				   <%}else{%>
+				   <%
+				   	}else{
+				   %>
 						<td colspan="2" align="left"><html:text styleClass="black_ar" maxlength="255"  size="30" styleId="title" property="title" readonly="<%=readOnlyValue%>" /></td>
-				   <%}%>
+				   <%
+				   	}
+				   %>
 
                 </tr>
                 <tr>
@@ -304,30 +308,34 @@ function insRow(subdivtag)
                   <td colspan="2" align="left" valign="top">
 				 
 				  <%
-						if(currentDistributionProtocolDate.trim().length() > 0)
-						{
-							Integer distributionProtocolYear = new Integer(Utility.getYear(currentDistributionProtocolDate ));
-							Integer distributionProtocolMonth = new Integer(Utility.getMonth(currentDistributionProtocolDate ));
-							Integer distributionProtocolDay = new Integer(Utility.getDay(currentDistributionProtocolDate ));
-				%>
+				 				  	if(currentDistributionProtocolDate.trim().length() > 0)
+				 				  				{
+				 				  					Integer distributionProtocolYear = new Integer(AppUtility.getYear(currentDistributionProtocolDate ));
+				 				  					Integer distributionProtocolMonth = new Integer(AppUtility.getMonth(currentDistributionProtocolDate ));
+				 				  					Integer distributionProtocolDay = new Integer(AppUtility.getDay(currentDistributionProtocolDate ));
+				 				  %>
 									<ncombo:DateTimeComponent name="startDate"
 								  		id="startDate"
 								  		formName="distributionProtocolForm"
-			  						    month= "<%= distributionProtocolMonth %>"
-								  		year= "<%= distributionProtocolYear %>"
-								  		day= "<%= distributionProtocolDay %>"
+			  						    month= "<%=distributionProtocolMonth%>"
+								  		year= "<%=distributionProtocolYear%>"
+								  		day= "<%=distributionProtocolDay%>"
     									pattern="<%=Variables.dateFormat%>"
 										value="<%=currentDistributionProtocolDate%>"
 								  		styleClass="black_ar"
 									/>
 							
-						<% }else{%>
+						<%
+														}else{
+													%>
 										<ncombo:DateTimeComponent name="startDate"
 								 	 	id="startDate"
 								  		formName="distributionProtocolForm"
 										pattern="<%=Variables.dateFormat%>"
 								  		styleClass="black_ar"/>
-					  <%}%>
+					  <%
+					  	}
+					  %>
 					<span class="grey_ar_s"><bean:message key="page.dateFormat" /></span>
 					  
 					</td>
@@ -338,9 +346,9 @@ function insRow(subdivtag)
 								<td align="center" class="black_ar">&nbsp;</td>
 								<td class="black_ar"><label for="endDate"><bean:message key="distributionprotocol.enddate" /></label></td>
 					<%
-							Integer distributionProtocolEndDateYear = new Integer(Utility.getYear(distributionProtocolEndDate ));
-							Integer distributionProtocolEndDateMonth = new Integer(Utility.getMonth(distributionProtocolEndDate ));
-							Integer distributionProtocolEndDateDay = new Integer(Utility.getDay(distributionProtocolEndDate ));
+						Integer distributionProtocolEndDateYear = new Integer(AppUtility.getYear(distributionProtocolEndDate ));
+										Integer distributionProtocolEndDateMonth = new Integer(AppUtility.getMonth(distributionProtocolEndDate ));
+										Integer distributionProtocolEndDateDay = new Integer(AppUtility.getDay(distributionProtocolEndDate ));
 					%>
 			   	
 							
@@ -348,9 +356,9 @@ function insRow(subdivtag)
 								<ncombo:DateTimeComponent name="endDate" 
 								 id="endDate"
 								 formName="distributionProtocolForm"
-								 month= "<%= distributionProtocolEndDateMonth %>"
-								year= "<%= distributionProtocolEndDateYear %>"
-								day= "<%= distributionProtocolEndDateDay %>"
+								 month= "<%=distributionProtocolEndDateMonth%>"
+								year= "<%=distributionProtocolEndDateYear%>"
+								day= "<%=distributionProtocolEndDateDay%>"
 								pattern="<%=Variables.dateFormat%>"
 	value="<%=distributionProtocolEndDate%>"
 								styleClass="black_ar"/>
@@ -414,49 +422,48 @@ function insRow(subdivtag)
                   <td width="13%" class="tableheading"><span class="black_ar_b"><bean:message key="distributionprotocol.quantity" /></span></td>
                 </tr>
 				<%
-				int maxcount=1;
-				for(int counter=noOfRows;counter>=1;counter--)
-				{		
-					String objname = "value(DistributionSpecimenRequirement:" + counter + "_specimenClass)";
-					String srCommonName = "DistributionSpecimenRequirement:" + counter;
-					String srKeyName = srCommonName + "_specimenClass";
-					String srSubTypeKeyName = srCommonName + "_specimenType";
-					
-					String objunit = "value(DistributionSpecimenRequirement:"+ counter +"_unitspan)";
-					String objsubTypeName = "value(DistributionSpecimenRequirement:" + counter + "_specimenType)";
-					String identifier = "value(DistributionSpecimenRequirement:"+ counter +"_id)";
-					String check = "chk_"+counter;
-					String mapIdKey = "DistributionSpecimenRequirement:" + counter + "_id";
+					int maxcount=1;
+						for(int counter=noOfRows;counter>=1;counter--)
+						{		
+							String objname = "value(DistributionSpecimenRequirement:" + counter + "_specimenClass)";
+							String srCommonName = "DistributionSpecimenRequirement:" + counter;
+							String srKeyName = srCommonName + "_specimenClass";
+							String srSubTypeKeyName = srCommonName + "_specimenType";
+							
+							String objunit = "value(DistributionSpecimenRequirement:"+ counter +"_unitspan)";
+							String objsubTypeName = "value(DistributionSpecimenRequirement:" + counter + "_specimenType)";
+							String identifier = "value(DistributionSpecimenRequirement:"+ counter +"_id)";
+							String check = "chk_"+counter;
+							String mapIdKey = "DistributionSpecimenRequirement:" + counter + "_id";
 
-					String idValue = String.valueOf((map.get(mapIdKey)));
-					int sysId = 0;
+							String idValue = String.valueOf((map.get(mapIdKey)));
+							int sysId = 0;
 
-					try
-					{
-						sysId = Integer.parseInt(idValue);
-					}
-					catch(Exception e) //Exception is handled. If NumberFormatException or NullPointerException then identfier value = 0
-					{
-						sysId = 0;
-					}
+							try
+							{
+								sysId = Integer.parseInt(idValue);
+							}
+							catch(Exception e) //Exception is handled. If NumberFormatException or NullPointerException then identfier value = 0
+							{
+								sysId = 0;
+							}
 
-					String classValue = (String)map.get(srKeyName);
-			%>
+							String classValue = (String)map.get(srKeyName);
+				%>
 								<tr>
 									<html:hidden property="<%=identifier%>" />
 			<%
 				String functionName ="changeUnit('" + objname + "',' " + objunit + "','" + objsubTypeName + "')"; 
-				String subTypeFunctionName ="onSubTypeChangeUnit('" + objname + "',this,' " + objunit + "')"; 
+					String subTypeFunctionName ="onSubTypeChangeUnit('" + objname + "',this,' " + objunit + "')";
 			%>
 
 
 			<%
-					
-					String key = "DistributionSpecimenRequirement:"+ counter +"_id";
-					boolean bool = Utility.isPersistedValue(map,key);
-					String condition = "";
-					if(bool)
-						condition = "disabled='disabled'";
+				String key = "DistributionSpecimenRequirement:"+ counter +"_id";
+						boolean bool = AppUtility.isPersistedValue(map,key);
+						String condition = "";
+						if(bool)
+							condition = "disabled='disabled'";
 			%>
 						<td class="black_ar">
 										<label>&nbsp; &nbsp;

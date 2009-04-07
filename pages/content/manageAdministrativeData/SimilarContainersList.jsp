@@ -8,7 +8,7 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 
 <%@ page import="edu.wustl.catissuecore.util.global.Constants" %>
-<%@ page import="edu.wustl.catissuecore.util.global.Utility" %>
+<%@ page import="edu.wustl.catissuecore.util.global.AppUtility" %>
 <%@ page import="edu.wustl.catissuecore.actionForm.StorageContainerForm" %>
 <%@ page import="edu.wustl.catissuecore.domain.StorageContainer" %>
 <%@ page import="edu.wustl.common.beans.NameValueBean" %>

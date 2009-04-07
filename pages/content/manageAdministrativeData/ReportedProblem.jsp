@@ -4,7 +4,7 @@
 <%@ taglib uri="/WEB-INF/PagenationTag.tld" prefix="custom"%>
 <%@ page language="java" isELIgnored="false"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
-<%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
+<%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page import="java.util.*"%>
 <html:form action="/ReportedProblemShow">
@@ -91,9 +91,9 @@
 												name="problem" property="from" /></td>
 					 <c:set var="date" value='${problem.reportedDate}' scope="request" />
 					 <%
-				     // Added by Geeta for date format change
-					   Date date=(Date)request.getAttribute("date");
-					   String reportedDate=Utility.parseDateToString(date,Variables.dateFormat);
+					 	// Added by Geeta for date format change
+					 			   Date date=(Date)request.getAttribute("date");
+					 			   String reportedDate=AppUtility.parseDateToString(date,Variables.dateFormat);
 					 %>
 
 				<!-- <td class='${pageScope.style}'><bean:write name="problem" property="reportedDate" /></td> -->

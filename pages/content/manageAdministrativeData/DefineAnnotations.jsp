@@ -14,7 +14,7 @@
 	
 %>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
-<%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
+<%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="java.util.Iterator"%>
 <html>
 <c:set var="groupsXML" value="${annotationForm.annotationGroupsXML}"/>
