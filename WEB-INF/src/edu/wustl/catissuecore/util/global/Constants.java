@@ -21,6 +21,7 @@ import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.SurgicalPathologyReport;
+import edu.wustl.common.util.global.CommonServiceLocator;
 
  
 /**
@@ -28,8 +29,14 @@ import edu.wustl.catissuecore.domain.pathology.SurgicalPathologyReport;
  * @author gautam_shetty
  */
 
-public class Constants extends edu.wustl.common.util.global.Constants
+public class Constants 
 {
+	
+	/**
+	 * Specify SELECT_OPTION.
+	 */
+	public static final String SELECT_OPTION = "-- Select --";
+	public static final String APPLICATION_NAME = CommonServiceLocator.getInstance().getAppName();
 	//caTissue DataSource name added.
 	public static final String DATASOURCE = "DataSource";
 	
@@ -131,7 +138,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 
 		
 	public static final String [][] defaultValueKeys= {
-		{Constants.DEFAULT_TISSUE_SITE, edu.wustl.common.util.global.Constants.CDE_NAME_TISSUE_SITE},
+		{Constants.DEFAULT_TISSUE_SITE, Constants.CDE_NAME_TISSUE_SITE},
 		{Constants.DEFAULT_CLINICAL_STATUS, Constants.CDE_NAME_CLINICAL_STATUS},
 		{Constants.DEFAULT_GENDER, Constants.CDE_NAME_GENDER},
 		{Constants.DEFAULT_GENOTYPE, Constants.CDE_NAME_GENOTYPE},
@@ -2197,9 +2204,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
     public static final String SPREADSHEET_DATA_ENTITY="spreadsheetDataEntity";
     public static final String SPREADSHEET_DATA_RECORD="spreadsheetDataRecord";
     public static final String TITLE = "title";
-
-    //  Local extensions integration constants
-    public static final String DEFAULT_CONDITION="-1";
     
        
     //clinportal constants
@@ -2649,4 +2653,131 @@ public static final String ADD_MULTIPLE_SPECIMEN_TO_CART="addMltipleSpecimenToCa
 	public static final String EXCEPTION_OCCURED = "ExceptionOccured";
 	public static final String USER_ROLE = "USER_ROLE";	
 	public static final String TITLI_CONFIGURED = "TitliConfigured";
+	
+	
+	
+	//merged constants......................................Deepti plz confirm
+	public static final String COLLECTION_PROTOCOL_CLASS_NAME = "edu.wustl.catissuecore.domain.CollectionProtocol";//CollectionProtocol.class.getName();
+	public static final String DISTRIBUTION_PROTOCOL_CLASS_NAME = "edu.wustl.catissuecore.domain.DistributionProtocol";//DistributionProtocol.class.getName();
+	public static final String COLUMN = "Column";
+	public static final String COLUMN_ID_MAP = "columnIdsMap";
+	public static final String CONFIGURED_COLUMN_DISPLAY_NAMES = "configuredColumnDisplayNames";
+	public static final String CONFIGURED_COLUMN_NAMES = "configuredColumnNames";
+	public static final String CONFIGURED_SELECT_COLUMN_LIST = "configuredSelectColumnList";
+	public static final String IDENTIFIER = "IDENTIFIER";
+	public static final String MENU_SELECTED = "menuSelected";
+	
+	public static final String PAGEOF_STORAGE_LOCATION = "pageOfStorageLocation";
+	public static final String PAGEOF_SPECIMEN = "pageOfSpecimen";
+	public static final String PAGEOF_STORAGECONTAINER="pageOfStorageContainer";
+	public static final String PAGEOF_TISSUE_SITE = "pageOfTissueSite";
+	
+	public static final String PAGEOF_SPECIMEN_TREE = "pageOfSpecimenTree";
+	// TissueSite Tree View Constants.
+	public static final String PROPERTY_NAME = "propertyName";
+	
+	// Query results view temporary table name.
+	public static final String QUERY_RESULTS_TABLE = "CATISSUE_QUERY_RESULTS";
+	public static final String QUERY = "query";
+	
+	public static final String SELECT_COLUMN_LIST = "selectColumnList";
+	public static final String SELECTED_NODE = "selectedNode";
+	
+	public static final String SESSION_DATA = "sessionData";
+	public static final String TEMP_SESSION_DATA = "tempSessionData";
+	public static final String PASSWORD_CHANGE_IN_SESSION = "changepassword";
+	
+	public static final int SIMPLE_QUERY_INTERFACE_ID = 40;
+	public static final String SPECIMEN_TYPE = "type";	
+	public static final String SPREADSHEET_VIEW = "Spreadsheet View";
+	
+	//Status message key Constants
+	public static final String STATUS_MESSAGE_KEY = "statusMessageKey";
+	
+	// Constants for Storage Container.
+	public static final String STORAGE_CONTAINER_TYPE = "storageType";
+	public static final String STORAGE_CONTAINER_TO_BE_SELECTED = "storageToBeSelected";
+	public static final String STORAGE_CONTAINER_POSITION = "position";
+	
+	public static final String SYSTEM_IDENTIFIER = "id";
+	
+	public static final String CDE_NAME = "cdeName";
+	public static final String CDE_NAME_TISSUE_SITE = "Tissue Site";
+	
+	/**
+	 * Constant for ACCESS_DENIED.
+	 */
+	public static final String ACCESS_DENIED = "access_denied";
+	
+	
+	/**
+	 * Constant for LOGIN.
+	 */
+	public static final String LOGIN = "login";
+	/**
+	 * Constant for LOGOUT.
+	 */
+	public static final String LOGOUT = "logout";
+	
+	public static final String ACTIVITY_STATUS_COLUMN = "ACTIVITY_STATUS";
+	
+	public static final String ADD_NEW_SITE_ID ="addNewSiteId";
+	public static final String ADD_NEW_STORAGE_TYPE_ID ="addNewStorageTypeId";
+
+	public static final String ADD_NEW_COLLECTION_PROTOCOL_ID ="addNewCollectionProtocolId";
+
+	public static final String ADD_NEW_USER_ID ="addNewUserId";
+	public static final String ADD_NEW_USER_TO ="addNewUserTo";
+	public static final String SUBMITTED_FOR = "submittedFor";
+	public static final String SUBMITTED_FOR_ADD_NEW = "AddNew";
+	public static final String SUBMITTED_FOR_FORWARD_TO = "ForwardTo";
+	public static final String SUBMITTED_FOR_DEFAULT = "Default";
+	public static final String FORM_BEAN_STACK= "formBeanStack";
+	public static final String ADD_NEW_FORWARD_TO ="addNewForwardTo";
+	public static final String FORWARD_TO = "forwardTo";
+	public static final String ADD_NEW_FOR = "addNewFor";
+	public static final String ERROR_DETAIL = "Error Detail";
+	
+
+	public static final String ANY = "Any";
+	
+	public static final String FIELD_TYPE_BIGINT = "bigint";
+	public static final String FIELD_TYPE_VARCHAR = "varchar";
+	public static final String FIELD_TYPE_TEXT = "text";
+	public static final String FIELD_TYPE_TINY_INT = "tinyint";
+	public static final String FIELD_TYPE_DATE = "date";
+	public static final String FIELD_TYPE_TIMESTAMP_DATE = "timestampdate";
+	
+	public static final String TABLE_ALIAS_NAME_COLUMN = "ALIAS_NAME";
+	public static final String TABLE_DATA_TABLE_NAME = "CATISSUE_QUERY_TABLE_DATA";
+	public static final String TABLE_DISPLAY_NAME_COLUMN = "DISPLAY_NAME";
+	
+	public static final String TABLE_FOR_SQI_COLUMN = "FOR_SQI";
+	
+	public static final String TABLE_ID_COLUMN = "TABLE_ID";
+	
+//	constants for TiTLi Search
+	public static final String TITLI_SORTED_RESULT_MAP="sortedResultMap";
+	public static final String TITLI_INSERT_OPERATION="insert";
+	public static final String TITLI_UPDATE_OPERATION="update";
+	public static final String TITLI_DELETE_OPERATION="delete";
+	public static final String TITLI_SINGLE_RESULT="singleResult";
+	public static final String TITLI_FETCH_ACTION="/TitliFetch.do";
+	
+	
+	public static final String PARENT_SPECIMEN_ID_COLUMN = "PARENT_SPECIMEN_ID";
+	public static final String RECORDS_PER_PAGE_PROPERTY_NAME="resultView.noOfRecordsPerPage";
+	public static final String TABLE_ALIAS_NAME = "aliasName";
+	public static final String VIEW_TYPE = "viewType";
+	
+	//have to ask deepti 
+	public static final String IS_SIMPLE_SEARCH = "isSimpleSearch";
+	public static final String SEARCH_OBJECT_ACTION = "/SearchObject.do";
+	public static final String ADMINISTRATOR = "Administrator";
+	public static final String ROLE_SUPER_ADMINISTRATOR="SUPERADMINISTRATOR";
+	public static final String PAGE_OF_SIMPLE_QUERY_INTERFACE = "pageOfSimpleQueryInterface";
+	public static final String PAGE_OF_STORAGE_LOCATION = "pageOfStorageLocation";	
+	
+	public static final String allowOperation = "allowOperation";
+
 }
