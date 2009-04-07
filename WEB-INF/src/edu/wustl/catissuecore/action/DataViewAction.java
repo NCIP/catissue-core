@@ -34,17 +34,16 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.bizlogic.QueryBizLogic;
-import edu.wustl.common.dao.QuerySessionData;
-import edu.wustl.common.dao.queryExecutor.PagenatedResultData;
-import edu.wustl.common.query.AdvancedQuery;
-import edu.wustl.common.query.Query;
-import edu.wustl.common.security.PrivilegeCache;
-import edu.wustl.common.security.PrivilegeManager;
-import edu.wustl.common.util.Permissions;
+import edu.wustl.common.querysuite.bizlogic.QueryBizLogic;
+import edu.wustl.common.querysuite.queryobject.impl.Query;
+import edu.wustl.common.util.PagenatedResultData;
 import edu.wustl.common.util.Utility;
-import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.global.QuerySessionData;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.exception.DAOException;
+import edu.wustl.security.global.Permissions;
+import edu.wustl.security.privilege.PrivilegeCache;
+import edu.wustl.security.privilege.PrivilegeManager;
 
 /**
  * DataViewAction is used to show the query results data in spreadsheet or

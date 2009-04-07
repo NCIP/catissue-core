@@ -45,13 +45,12 @@ import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
-import edu.wustl.common.cde.CDEManager;
-import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.util.MapDataParser;
-import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.common.util.tag.ScriptGenerator;
+import edu.wustl.dao.exception.DAOException;
+import edu.wustl.security.exception.SMException;
 
 /**
  * CreateSpecimenAction initializes the fields in the Create Specimen page.

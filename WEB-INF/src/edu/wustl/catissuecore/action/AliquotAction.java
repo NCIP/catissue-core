@@ -52,10 +52,10 @@ import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
-import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.tag.ScriptGenerator;
+import edu.wustl.dao.exception.DAOException;
 
 /**
  * AliquotAction initializes all the fields of the page, Aliquots.jsp.

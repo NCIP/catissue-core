@@ -19,11 +19,15 @@ import edu.common.dynamicextensions.entitymanager.EntityManager;
 import edu.common.dynamicextensions.entitymanager.EntityManagerInterface;
 import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationException;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
-import edu.wustl.common.dao.DAOFactory;
-import edu.wustl.common.dao.JDBCDAO;
 import edu.wustl.common.tree.QueryTreeNodeData;
-import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.Constants;
+import edu.wustl.dao.JDBCDAO;
+import edu.wustl.dao.QueryWhereClause;
+import edu.wustl.dao.condition.EqualClause;
+import edu.wustl.dao.daofactory.DAOConfigFactory;
+import edu.wustl.dao.daofactory.DAOFactory;
+import edu.wustl.dao.exception.DAOException;
 
 /**
  * 
@@ -64,8 +68,12 @@ public class DefineAdvancedResultsView
 			String[] whereColumnNames = {"SEARCH_CATEGORY_ID"};
 			String[] whereColumnCondition = {"="};
 			Object[] whereColumnValue = {searchedEntityId};
-			List<List<String>> entitiesList = getEntitiesListFromDatabase(tableName, selectColumnNames, whereColumnNames, whereColumnCondition,
-					whereColumnValue);
+			
+			QueryWhereClause queryWhereClause = new QueryWhereClause(tableName);
+			queryWhereClause.addCondition(new EqualClause("SEARCH_CATEGORY_ID",searchedEntityId));
+			
+			
+			List<List<String>> entitiesList = getEntitiesListFromDatabase(tableName, selectColumnNames,queryWhereClause);
 			for (List<String> objList : entitiesList)
 			{
 				String id = (String) objList.get(0);
@@ -141,20 +149,31 @@ public class DefineAdvancedResultsView
 	 * @param whereColumnValue whereColumnValue list
 	 * @return List EntitiesListFromDatabase
 	 */
-	private List<List<String>> getEntitiesListFromDatabase(String tableName, String[] selectColumnNames, String[] whereColumnNames,
-			String[] whereColumnCondition, Object[] whereColumnValue)
-			{
+	private List<List<String>> getEntitiesListFromDatabase(String tableName, String[] selectColumnNames,QueryWhereClause queryWhereClause)
+	{
 		List entityList = new ArrayList();
-		JDBCDAO jdbcDao = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
+		String applicationName = CommonServiceLocator.getInstance().getAppName();
+		JDBCDAO  jdbcDAO = null;
 		try
 		{
-			jdbcDao.openSession(null);
-			entityList = jdbcDao.retrieve(tableName, selectColumnNames, whereColumnNames, whereColumnCondition, whereColumnValue, null);
+			jdbcDAO = DAOConfigFactory.getInstance().getDAOFactory(applicationName).getJDBCDAO();
+			jdbcDAO.openSession(null);
+	
+			entityList = jdbcDAO.retrieve(tableName, selectColumnNames, queryWhereClause);
 		}
 		catch (DAOException e)
 		{
 			e.printStackTrace();
 		}
-		return (List<List<String>>) entityList;
+		finally
+		{
+			try {
+				jdbcDAO.closeSession();
+			} catch (DAOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
+		return (List<List<String>>) entityList;
+	}
 }

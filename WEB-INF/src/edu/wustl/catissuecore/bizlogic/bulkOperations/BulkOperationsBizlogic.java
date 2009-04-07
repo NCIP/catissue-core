@@ -18,24 +18,24 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.BizLogicException;
-import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.Utility;
+import edu.wustl.security.exception.UserNotAuthorizedException;
 
 public class BulkOperationsBizlogic extends SpecimenEventParametersBizLogic
 {
 	public void insertEvents(String operation, SessionDataBean sessionDataBean, List specimenIds, Long userId, String date, String timeInHours,
-			String timeInseconds, String comments, Map<String, String> eventSpecificData) throws BizLogicException, UserNotAuthorizedException
+			String timeInseconds, String comments, Map<String, String> eventSpecificData) throws BizLogicException
 	{
 		try
 		{
 			List eventObjects = getEventDomainObjects(operation, specimenIds, userId, date, timeInHours, timeInseconds, comments, eventSpecificData);
 			//IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.TRANSFER_EVENT_PARAMETERS_FORM_ID);
-			insert(eventObjects, sessionDataBean, Constants.HIBERNATE_DAO);
+			insert(eventObjects, sessionDataBean, 0);
 
 		}
 		catch (ParseException exp)
 		{
-			throw new BizLogicException(exp);
+			throw getBizLogicException(exp, "bizlogic.error", "");
 		}
 
 	}

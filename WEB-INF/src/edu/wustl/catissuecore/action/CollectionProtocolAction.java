@@ -36,10 +36,9 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.bizlogic.IBizLogic;
-import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.util.MapDataParser;
-import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.exception.DAOException;
 
 /**
  * This class initializes the fields in the CollectionProtocol Add/Edit webpage.

@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import edu.wustl.catissuecore.actionForm.CollectionEventParametersForm;
 import edu.wustl.catissuecore.actionForm.EventParametersForm;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.cde.CDEManager;
 
 
 /**

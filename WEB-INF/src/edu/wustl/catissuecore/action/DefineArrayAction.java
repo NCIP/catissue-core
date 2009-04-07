@@ -22,8 +22,8 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.bizlogic.IBizLogic;
-import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.exception.DAOException;
 
 public class DefineArrayAction extends BaseAction
 {
@@ -63,8 +63,7 @@ public class DefineArrayAction extends BaseAction
 	
 	    	if(request.getParameter("arrayType")!=null)
 	    	{
-	    		try
-	        	{
+	    		
 	        		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
 	
 	        		String sourceObjectName = SpecimenArrayType.class.getName();
@@ -85,12 +84,7 @@ public class DefineArrayAction extends BaseAction
 	    			response.setContentType("text/html");
 	    			out.write(dimen);
 	    			return null;
-	        	}
-	        	catch(DAOException e)
-	        	{
-	        		Logger.out.error(e.getMessage(), e);
-	        		return null;
-	        	}
+	        
 	    	}
 	    	String typeOf=null;
 	    	typeOf=request.getParameter("typeOf");

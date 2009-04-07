@@ -32,22 +32,18 @@ import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.bizlogic.QueryBizLogic;
-import edu.wustl.common.bizlogic.SimpleQueryBizLogic;
-import edu.wustl.common.dao.QuerySessionData;
-import edu.wustl.common.factory.AbstractBizLogicFactory;
-import edu.wustl.common.query.AdvancedConditionsImpl;
-import edu.wustl.common.query.AdvancedConditionsNode;
-import edu.wustl.common.query.AdvancedQuery;
-import edu.wustl.common.query.Condition;
-import edu.wustl.common.query.DataElement;
-import edu.wustl.common.query.Operator;
-import edu.wustl.common.query.Query;
-import edu.wustl.common.query.QueryFactory;
-import edu.wustl.common.query.Table;
+import edu.wustl.common.querysuite.bizlogic.QueryBizLogic;
+import edu.wustl.common.querysuite.queryobject.impl.Condition;
+import edu.wustl.common.querysuite.queryobject.impl.Query;
 import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.QuerySessionData;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.simplequery.bizlogic.SimpleQueryBizLogic;
+import edu.wustl.simplequery.query.DataElement;
+import edu.wustl.simplequery.query.Operator;
+import edu.wustl.simplequery.query.QueryFactory;
+import edu.wustl.simplequery.query.Table;
 
 /**
  * @author poornima_govindrao

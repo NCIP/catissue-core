@@ -34,7 +34,7 @@ import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.bizlogic.IBizLogic;
-import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.dao.exception.DAOException;
 
 /**
  * AddSpecimenAction gets the Specimen Id from Label or Barcode

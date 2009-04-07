@@ -18,9 +18,9 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.bizlogic.IBizLogic;
-import edu.wustl.common.bizlogic.QueryBizLogic;
-import edu.wustl.common.domain.QueryTableData;
+import edu.wustl.common.querysuite.bizlogic.QueryBizLogic;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.simplequery.query.QueryTableData;
 
 
 /**

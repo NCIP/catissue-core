@@ -44,7 +44,7 @@ import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.dao.exception.DAOException;
 
 /**
  * CreateArrayInitAction populates specimenarrayform object to display pre-populated data in specimenarray.jsp when 

@@ -30,17 +30,17 @@ import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
-import edu.wustl.common.bizlogic.QueryBizLogic;
-import edu.wustl.common.bizlogic.SimpleQueryBizLogic;
-import edu.wustl.common.query.DataElement;
-import edu.wustl.common.query.Operator;
-import edu.wustl.common.query.Query;
-import edu.wustl.common.query.QueryFactory;
-import edu.wustl.common.query.SimpleConditionsNode;
-import edu.wustl.common.query.SimpleQuery;
+import edu.wustl.common.querysuite.bizlogic.QueryBizLogic;
+import edu.wustl.common.querysuite.queryobject.impl.Query;
 import edu.wustl.common.util.ExportReport;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.simplequery.bizlogic.SimpleQueryBizLogic;
+import edu.wustl.simplequery.query.DataElement;
+import edu.wustl.simplequery.query.Operator;
+import edu.wustl.simplequery.query.QueryFactory;
+import edu.wustl.simplequery.query.SimpleConditionsNode;
+import edu.wustl.simplequery.query.SimpleQuery;
 
 /**
  * This is the Base action class for the Distribution report actions

@@ -44,7 +44,7 @@ import edu.wustl.common.querysuite.queryobject.IRule;
 import edu.wustl.common.querysuite.queryobject.ITerm;
 import edu.wustl.common.querysuite.queryobject.RelationalOperator;
 import edu.wustl.common.querysuite.queryobject.TermType;
-import edu.wustl.common.querysuite.queryobject.TimeInterval;
+
 import edu.wustl.common.querysuite.queryobject.impl.DateLiteral;
 import edu.wustl.common.querysuite.queryobject.impl.DateOffsetLiteral;
 import edu.wustl.common.querysuite.queryobject.impl.ParameterizedQuery;

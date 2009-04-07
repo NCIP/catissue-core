@@ -34,6 +34,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 
+import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.Variables;
 import edu.wustl.common.util.logger.Logger;
 
@@ -81,7 +82,8 @@ public class JniDeID
 		try 
 		{
 			JniDeID dummy = new JniDeID();
-			String dllPath = Variables.applicationHome+File.separator+"JniDeId.dll";
+			String appHome = CommonServiceLocator.getInstance().getAppHome();
+			String dllPath = appHome+File.separator+"JniDeId.dll";
 			dllPath = dllPath.replaceAll("%20", " ");
 		    File dllFile = new File(dllPath) ;
 	        dllPath = dllFile.getAbsolutePath() ;

@@ -32,11 +32,11 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.bizlogic.QueryBizLogic;
-import edu.wustl.common.dao.DAOFactory;
-import edu.wustl.common.dao.JDBCDAO;
-import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.querysuite.bizlogic.QueryBizLogic;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.JDBCDAO;
+import edu.wustl.dao.daofactory.DAOFactory;
+import edu.wustl.dao.exception.DAOException;
 
 public class DefaultSpecimenViewAction extends BaseAction
 {

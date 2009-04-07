@@ -37,11 +37,9 @@ import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
-import edu.wustl.common.factory.AbstractBizLogicFactory;
-import edu.wustl.common.security.SecurityManager;
-import edu.wustl.common.util.dbManager.HibernateMetaData;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.util.HibernateMetaData;
 import gov.nih.nci.security.authorization.domainobjects.Role;
 
 public class AssignPrivilegePageAction extends BaseAction

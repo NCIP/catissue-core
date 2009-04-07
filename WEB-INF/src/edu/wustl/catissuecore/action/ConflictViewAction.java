@@ -31,9 +31,9 @@ import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.dao.QuerySessionData;
-import edu.wustl.common.dao.queryExecutor.PagenatedResultData;
+import edu.wustl.common.util.PagenatedResultData;
 import edu.wustl.common.util.XMLPropertyHandler;
+import edu.wustl.common.util.global.QuerySessionData;
 
 public class ConflictViewAction extends SecureAction
 {

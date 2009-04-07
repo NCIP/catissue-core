@@ -26,7 +26,6 @@ import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
-import edu.wustl.common.vo.AdvanceSearchUI;
 import edu.wustl.common.vo.SearchFieldData;
 
 public class CollectionProtocolSearchAction extends AdvanceSearchUIAction

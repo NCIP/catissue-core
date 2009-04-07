@@ -17,11 +17,11 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
-import edu.wustl.common.actionForm.SimpleQueryInterfaceForm;
 import edu.wustl.common.beans.NameValueBean;
-import edu.wustl.common.bizlogic.QueryBizLogic;
+import edu.wustl.common.querysuite.bizlogic.QueryBizLogic;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.simplequery.actionForm.SimpleQueryInterfaceForm;
 
 public class ConfigureSimpleQueryAction extends BaseAction
 {

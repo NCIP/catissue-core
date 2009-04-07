@@ -38,7 +38,6 @@ import edu.wustl.common.querysuite.queryobject.IOutputTerm;
 import edu.wustl.common.querysuite.queryobject.ITerm;
 import edu.wustl.common.querysuite.queryobject.LogicalOperator;
 import edu.wustl.common.querysuite.queryobject.RelationalOperator;
-import edu.wustl.common.querysuite.queryobject.TimeInterval;
 import edu.wustl.common.querysuite.queryobject.impl.OutputAttribute;
 import edu.wustl.common.querysuite.queryobject.impl.OutputTreeDataNode;
 import edu.wustl.common.querysuite.queryobject.impl.metadata.QueryOutputTreeAttributeMetadata;
