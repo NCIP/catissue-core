@@ -42,10 +42,13 @@ import edu.wustl.catissuecore.domain.TissueSpecimenRequirement;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.multiRepository.bean.SiteUserRolePrivilegeBean;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
-import edu.wustl.common.dao.DAO;
-import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.catissuecore.util.global.AppUtility;
+import edu.wustl.dao.DAO;
+import edu.wustl.dao.exception.DAOException;
+import edu.wustl.common.exception.ApplicationException;
+import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.common.util.Utility;
 
 public class CollectionProtocolUtil 
 {
@@ -97,7 +100,7 @@ public class CollectionProtocolUtil
 		collectionProtocolBean.setProtocolCoordinatorIds(protocolCoordinatorIds);
 		collectionProtocolBean.setPrincipalInvestigatorId(collectionProtocol.getPrincipalInvestigator().getId().longValue());
 		Date date = collectionProtocol.getStartDate();
-		collectionProtocolBean.setStartDate(edu.wustl.common.util.Utility.parseDateToString(date, edu.wustl.catissuecore.util.global.Variables.dateFormat) );
+		collectionProtocolBean.setStartDate(edu.wustl.common.util.Utility.parseDateToString(date, Constants.DATE_FORMAT) );
 		collectionProtocolBean.setDescriptionURL(collectionProtocol.getDescriptionURL());
 		collectionProtocolBean.setUnsignedConsentURLName(collectionProtocol.getUnsignedConsentDocumentURL());
 		collectionProtocolBean.setConsentWaived (collectionProtocol.getConsentsWaived().booleanValue());   
@@ -108,7 +111,7 @@ public class CollectionProtocolUtil
 		collectionProtocolBean.setConsentValues(prepareConsentTierMap(collectionProtocol.getConsentTierCollection()));
 		collectionProtocolBean.setActivityStatus(collectionProtocol.getActivityStatus());
 		collectionProtocolBean.setAliqoutInSameContainer(collectionProtocol.getAliquotInSameContainer().booleanValue());
-		String endDate = Utility.parseDateToString(collectionProtocol.getEndDate(),edu.wustl.catissuecore.util.global.Variables.dateFormat);
+		String endDate = Utility.parseDateToString(collectionProtocol.getEndDate(),CommonServiceLocator.getInstance().getDatePattern());
 		collectionProtocolBean.setEndDate(endDate);
 		if(collectionProtocol.getCollectionProtocolRegistrationCollection().size() > 0)
 		{
@@ -569,13 +572,13 @@ public class CollectionProtocolUtil
 	 * @param cpSessionList
 	 */
 	public static void updateSession(HttpServletRequest request,  Long id)
-			throws DAOException{
+			throws ApplicationException{
 		
 		List sessionCpList = new CollectionProtocolBizLogic().retrieveCP(id);
 
 		if (sessionCpList == null || sessionCpList.size()<2){
 			
-			throw new DAOException("Fail to retrieve Collection protocol..");
+			throw AppUtility.getApplicationException("",null,"Fail to retrieve Collection protocol..");
 		}
 		
 		HttpSession session = request.getSession();
@@ -987,7 +990,7 @@ public class CollectionProtocolUtil
 		return reqSpecimen;
 	}
 	
-	public static CollectionProtocol getCollectionProtocolForSCG(String id) throws DAOException 
+	public static CollectionProtocol getCollectionProtocolForSCG(String id) throws ApplicationException
 	{
 		CollectionProtocolBizLogic collectionProtocolBizLogic = (CollectionProtocolBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.COLLECTION_PROTOCOL_FORM_ID);
 		String sourceObjectName =  SpecimenCollectionGroup.class.getName();

@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.util;
 
 import java.util.Collection;
@@ -22,14 +23,15 @@ import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.cde.CDEManager;
-import edu.wustl.common.dao.DAO;
-import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.DAO;
+import edu.wustl.dao.exception.DAOException;
 
 /**
  * <p>This class initializes the fields of MultipleSpecimenValidationUtil.java</p>
@@ -51,14 +53,16 @@ public final class MultipleSpecimenValidationUtil
 	/*
 	 * create singleton object
 	 */
-	private static MultipleSpecimenValidationUtil mulSpeciValiUtil= new MultipleSpecimenValidationUtil();
+	private static MultipleSpecimenValidationUtil mulSpeciValiUtil = new MultipleSpecimenValidationUtil();
+
 	/*
 	 * private constructor
 	 */
 	private MultipleSpecimenValidationUtil()
 	{
-		
+
 	}
+
 	/*
 	 * returns single object
 	 */
@@ -66,11 +70,13 @@ public final class MultipleSpecimenValidationUtil
 	{
 		return mulSpeciValiUtil;
 	}
-	public static boolean validateMultipleSpecimen(LinkedHashSet specimenMap, DAO dao, String operation) throws DAOException
-	{ 
+
+	public static boolean validateMultipleSpecimen(LinkedHashSet specimenMap, DAO dao,
+			String operation) throws ApplicationException
+	{
 		boolean result = true;
-		
-		setSCGinSpecimen(specimenMap,dao);
+
+		setSCGinSpecimen(specimenMap, dao);
 		Iterator specimenIterator = specimenMap.iterator();
 		int count = 0;
 		while (specimenIterator.hasNext() && result == true)
@@ -78,17 +84,8 @@ public final class MultipleSpecimenValidationUtil
 			Specimen specimen = (Specimen) specimenIterator.next();
 			count++;
 			// TODO uncomment code for label, performance
-			try
-			{
-				result = validateSingleSpecimen(specimen, dao, operation, true);
-			}
-			catch (DAOException daoException)
-			{
-				String message = daoException.getMessage();
-				message += " (This message is for Specimen number " + count + ")";
-				daoException.setMessage(message);
-				throw daoException;
-			}
+
+			result = validateSingleSpecimen(specimen, dao, operation, true);
 
 			Collection derivedSpecimens = specimen.getChildSpecimenCollection();
 
@@ -100,25 +97,14 @@ public final class MultipleSpecimenValidationUtil
 			Iterator it = derivedSpecimens.iterator();
 			//validate derived specimens
 			int i = 0;
-			while(it.hasNext())
+			while (it.hasNext())
 			{
-				Specimen derivedSpecimen = (Specimen)it.next();
+				Specimen derivedSpecimen = (Specimen) it.next();
 				derivedSpecimen.setSpecimenCharacteristics(specimen.getSpecimenCharacteristics());
 				derivedSpecimen.setSpecimenCollectionGroup(specimen.getSpecimenCollectionGroup());
 				derivedSpecimen.setPathologicalStatus(specimen.getPathologicalStatus());
 				derivedSpecimen.getParentSpecimen().setId(specimen.getId());
-				try
-				{
-					result = validateSingleSpecimen(derivedSpecimen, dao, operation, false);
-				}
-				catch (DAOException daoException)
-				{
-					int j = i + 1;
-					String message = daoException.getMessage();
-					message += " (This message is for Derived Specimen " + j + " of Parent Specimen number " + count + ")";
-					daoException.setMessage(message);
-					throw daoException;
-				}
+				result = validateSingleSpecimen(derivedSpecimen, dao, operation, false);
 
 				if (!result)
 				{
@@ -131,15 +117,14 @@ public final class MultipleSpecimenValidationUtil
 		Logger.out.info("End Inside validateMultipleSpecimen() " + result);
 		return result;
 	}
-	
-	
+
 	/**
 	 * Sets SCG in Specimen.
 	 * @param specimenMap map
 	 * @param dao dao
 	 * @throws DAOException dao exception
 	 */
-	public static void setSCGinSpecimen(LinkedHashSet specimenMap, DAO dao) throws DAOException
+	public static void setSCGinSpecimen(LinkedHashSet specimenMap, DAO dao) throws ApplicationException
 	{
 		Iterator specimenIterator = specimenMap.iterator();
 		while (specimenIterator.hasNext())
@@ -148,15 +133,17 @@ public final class MultipleSpecimenValidationUtil
 			//validate single specimen
 			if (specimen.getSpecimenCollectionGroup() != null)
 			{
-				String[] selectColumnName = {"id","collectionProtocolRegistration.id","collectionProtocolRegistration.collectionProtocol.id"};
+				String[] selectColumnName = {"id", "collectionProtocolRegistration.id",
+						"collectionProtocolRegistration.collectionProtocol.id"};
 				String[] whereColumnName = {Constants.NAME};
 				String[] whereColumnCondition = {"="};
 				String[] whereColumnValue = {specimen.getSpecimenCollectionGroup().getGroupName()};
-				List spCollGroupList = dao.retrieve(SpecimenCollectionGroup.class.getName(), selectColumnName, whereColumnName, whereColumnCondition,
-						whereColumnValue, null);
+				List spCollGroupList = dao.retrieve(SpecimenCollectionGroup.class.getName(),
+						selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue,
+						null);
 				// TODO saperate calls for SCG - ID and cpid
 				// SCG - ID will be needed before populateStorageLocations
-				
+
 				// TODO test
 				if (!spCollGroupList.isEmpty())
 				{
@@ -173,11 +160,13 @@ public final class MultipleSpecimenValidationUtil
 					CollectionProtocolRegistration cpr = new CollectionProtocolRegistration();
 					cpr.setId(Long.valueOf(cprId));
 					cpr.setCollectionProtocol(cp);
-					((SpecimenCollectionGroup) specimen.getSpecimenCollectionGroup()).setCollectionProtocolRegistration(cpr);
+					((SpecimenCollectionGroup) specimen.getSpecimenCollectionGroup())
+							.setCollectionProtocolRegistration(cpr);
 				}
 			}
 		}
 	}
+
 	/**
 	 * validates single specimen.
 	 * @param specimen
@@ -185,47 +174,50 @@ public final class MultipleSpecimenValidationUtil
 	 * @param operation
 	 * @param partOfMulipleSpecimen
 	 * @return
-	 * @throws DAOException
+	 * @throws ApplicationException Application Exception.
 	 */
-	public static boolean validateSingleSpecimen(Specimen specimen, DAO dao, String operation, boolean partOfMulipleSpecimen) throws DAOException
+	public static boolean validateSingleSpecimen(Specimen specimen, DAO dao, String operation,
+			boolean partOfMulipleSpecimen) throws ApplicationException
 	{
 		//Added by Ashish		
 		//Logger.out.debug("Start-Inside validate method of specimen bizlogic");
 		Logger.out.info("Inside validateSingleSpecimen() ");
 		if (specimen == null)
 		{
-			throw new DAOException(ApplicationProperties.getValue("domain.object.null.err.msg", "Specimen"));
+			throw AppUtility.getApplicationException("domain.object.null.err.msg", null, "Specimen");
 		}
 
 		Validator validator = new Validator();
-		if(operation.equals(Constants.ADD))
+		if (operation.equals(Constants.ADD))
 		{
 
-			if (specimen.getSpecimenCollectionGroup() == null || specimen.getSpecimenCollectionGroup().getId() == null
-					|| specimen.getSpecimenCollectionGroup().getId().longValue()==-1)
+			if (specimen.getSpecimenCollectionGroup() == null
+					|| specimen.getSpecimenCollectionGroup().getId() == null
+					|| specimen.getSpecimenCollectionGroup().getId().longValue() == -1)
 			{
 				String message = ApplicationProperties.getValue("specimen.specimenCollectionGroup");
-				throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+				throw AppUtility.getApplicationException("errors.item.required", null, message);
 			}
 		}
-		if(!Variables.isSpecimenLabelGeneratorAvl){
+		if (!Variables.isSpecimenLabelGeneratorAvl)
+		{
 			if (validator.isEmpty(specimen.getLabel()))
 			{
 				String message = ApplicationProperties.getValue("specimen.label");
-				throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+				throw AppUtility.getApplicationException("errors.item.required", null, message);
 			}
 		}
 
 		if (validator.isEmpty(specimen.getClassName()))
 		{
 			String message = ApplicationProperties.getValue("specimen.type");
-			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+			throw AppUtility.getApplicationException("errors.item.required", null, message);
 		}
 
 		if (validator.isEmpty(specimen.getSpecimenType()))
 		{
 			String message = ApplicationProperties.getValue("specimen.subType");
-			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+			throw AppUtility.getApplicationException("errors.item.required", null, message);
 		}
 
 		/*
@@ -256,7 +248,7 @@ public final class MultipleSpecimenValidationUtil
 				if (validator.isEmpty(extIdentifier.getValue()))
 				{
 					String message = ApplicationProperties.getValue("specimen.msg");
-					throw new DAOException(ApplicationProperties.getValue("errors.specimen.externalIdentifier.missing", message));
+					throw AppUtility.getApplicationException("errors.specimen.externalIdentifier.missing", null, message);
 				}
 			}
 		}
@@ -269,26 +261,28 @@ public final class MultipleSpecimenValidationUtil
 		}*/
 		validateFields(specimen, dao, operation, partOfMulipleSpecimen);
 
-		List specimenClassList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_SPECIMEN_CLASS, null);
-		String specimenClass = Utility.getSpecimenClassName(specimen);
+		List specimenClassList = CDEManager.getCDEManager().getPermissibleValueList(
+				Constants.CDE_NAME_SPECIMEN_CLASS, null);
+		String specimenClass = AppUtility.getSpecimenClassName(specimen);
 
 		if (!Validator.isEnumeratedValue(specimenClassList, specimenClass))
 		{
-			throw new DAOException(ApplicationProperties.getValue("protocol.class.errMsg"));
+			throw AppUtility.getApplicationException("protocol.class.errMsg", null, "");
 		}
 
-		if (!Validator.isEnumeratedValue(Utility.getSpecimenTypes(specimenClass), specimen.getSpecimenType()))
+		if (!Validator.isEnumeratedValue(AppUtility.getSpecimenTypes(specimenClass), specimen
+				.getSpecimenType()))
 		{
-			throw new DAOException(ApplicationProperties.getValue("protocol.type.errMsg"));
+			throw AppUtility.getApplicationException("protocol.type.errMsg", null, "");
 		}
 
-
-		if(specimen.getParentSpecimen()!=null)
+		if (specimen.getParentSpecimen() != null)
 		{
 
 			if (specimen.getSpecimenEventCollection() != null)
 			{
-				Iterator specimenEventCollectionIterator = specimen.getSpecimenEventCollection().iterator();
+				Iterator specimenEventCollectionIterator = specimen.getSpecimenEventCollection()
+						.iterator();
 				while (specimenEventCollectionIterator.hasNext())
 				{
 					//CollectionEvent validation.
@@ -308,74 +302,81 @@ public final class MultipleSpecimenValidationUtil
 					if (!validator.isValidOption(biohazard.getType()))
 					{
 						String message = ApplicationProperties.getValue("newSpecimen.msg");
-						throw new DAOException(ApplicationProperties.getValue("errors.newSpecimen.biohazard.missing", message));
+						throw AppUtility.getApplicationException("errors.newSpecimen.biohazard.missing", null, message);
 					}
 					if (biohazard.getId() == null || biohazard.getId().toString().equals("-1"))
 					{
 						String message = ApplicationProperties.getValue("newSpecimen.msg");
-						throw new DAOException(ApplicationProperties.getValue("errors.newSpecimen.biohazard.missing", message));
+						throw AppUtility.getApplicationException("errors.newSpecimen.biohazard.missing", null, message);
 					}
 				}
 			}
 			SpecimenCharacteristics characters = specimen.getSpecimenCharacteristics();
-			if(specimen.getParentSpecimen() == null)
+			if (specimen.getParentSpecimen() == null)
 			{
 				if (characters == null)
 				{
-					throw new DAOException(ApplicationProperties.getValue("specimen.characteristics.errMsg"));
+					throw AppUtility.getApplicationException("specimen.characteristics.errMsg", null, "");
 				}
 				else
 				{
 
-					if(specimen.getSpecimenCollectionGroup() != null)
+					if (specimen.getSpecimenCollectionGroup() != null)
 					{
-					
-						//				NameValueBean undefinedVal = new NameValueBean(Constants.UNDEFINED,Constants.UNDEFINED);
-						List tissueSiteList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_TISSUE_SITE, null);
 
-						if (!Validator.isEnumeratedValue(tissueSiteList, characters.getTissueSite()))
+						//				NameValueBean undefinedVal = new NameValueBean(Constants.UNDEFINED,Constants.UNDEFINED);
+						List tissueSiteList = CDEManager.getCDEManager().getPermissibleValueList(
+								Constants.CDE_NAME_TISSUE_SITE, null);
+
+						if (!Validator
+								.isEnumeratedValue(tissueSiteList, characters.getTissueSite()))
 						{
-							throw new DAOException(ApplicationProperties.getValue("protocol.tissueSite.errMsg"));
+							throw AppUtility.getApplicationException("protocol.tissueSite.errMsg", null, "");
 						}
 
 						//		    	NameValueBean unknownVal = new NameValueBean(Constants.UNKNOWN,Constants.UNKNOWN);
-						List tissueSideList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_TISSUE_SIDE, null);
+						List tissueSideList = CDEManager.getCDEManager().getPermissibleValueList(
+								Constants.CDE_NAME_TISSUE_SIDE, null);
 
-						if (!Validator.isEnumeratedValue(tissueSideList, characters.getTissueSide()))
+						if (!Validator
+								.isEnumeratedValue(tissueSideList, characters.getTissueSide()))
 						{
-							throw new DAOException(ApplicationProperties.getValue("specimen.tissueSide.errMsg"));
+							throw AppUtility.getApplicationException("specimen.tissueSide.errMsg", null, "");
 						}
 
-						List pathologicalStatusList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_PATHOLOGICAL_STATUS, null);
+						List pathologicalStatusList = CDEManager.getCDEManager()
+								.getPermissibleValueList(Constants.CDE_NAME_PATHOLOGICAL_STATUS,
+										null);
 
-						if (!Validator.isEnumeratedValue(pathologicalStatusList, specimen.getPathologicalStatus()))
+						if (!Validator.isEnumeratedValue(pathologicalStatusList, specimen
+								.getPathologicalStatus()))
 						{
-							throw new DAOException(ApplicationProperties.getValue("protocol.pathologyStatus.errMsg"));
+							throw AppUtility.getApplicationException("protocol.pathologyStatus.errMsg", null, "");
 						}
 					}
-					
+
 				}
 			}
-			
-		
+
 		}
 		if (operation.equals(Constants.ADD))
 		{
 			if (!specimen.getIsAvailable().booleanValue())
 			{
-				throw new DAOException(ApplicationProperties.getValue("specimen.available.errMsg"));
+				throw AppUtility.getApplicationException("specimen.available.errMsg", null, "");
 			}
 
 			if (!Constants.ACTIVITY_STATUS_ACTIVE.equals(specimen.getActivityStatus()))
 			{
-				throw new DAOException(ApplicationProperties.getValue("activityStatus.active.errMsg"));
+				throw AppUtility.getApplicationException("activityStatus.active.errMsg", null, "");
 			}
 		}
 		else
 		{
-			if (!Validator.isEnumeratedValue(Constants.ACTIVITY_STATUS_VALUES, specimen.getActivityStatus()))
+			if (!Validator.isEnumeratedValue(Constants.ACTIVITY_STATUS_VALUES, specimen
+					.getActivityStatus()))
 			{
-				throw new DAOException(ApplicationProperties.getValue("activityStatus.errMsg"));
+				throw AppUtility.getApplicationException("activityStatus.errMsg", null, "");
 			}
 		}
 		//Logger.out.debug("End-Inside validate method of specimen bizlogic");
@@ -388,9 +389,10 @@ public final class MultipleSpecimenValidationUtil
 	 * @param dao 
 	 * @param operation string operation
 	 * @param partOfMulipleSpecimen 
-	 * @throws DAOException
+	 * @throws ApplicationException Application Exception
 	 */
-	private static void validateFields(Specimen specimen, DAO dao, String operation, boolean partOfMulipleSpecimen) throws DAOException
+	private static void validateFields(Specimen specimen, DAO dao, String operation,
+			boolean partOfMulipleSpecimen) throws ApplicationException
 	{
 		Validator validator = new Validator();
 
@@ -399,26 +401,27 @@ public final class MultipleSpecimenValidationUtil
 			AbstractSpecimenCollectionGroup scg = specimen.getSpecimenCollectionGroup();
 			if (scg == null || validator.isEmpty(scg.getGroupName()))
 			{
-				if(scg.getId()== null)
+				if (scg.getId() == null)
 				{
-					String quantityString = ApplicationProperties.getValue("specimen.specimenCollectionGroup");
-					throw new DAOException(ApplicationProperties.getValue("errors.item.required", quantityString));
+					String quantityString = ApplicationProperties
+							.getValue("specimen.specimenCollectionGroup");
+					throw AppUtility.getApplicationException("errors.item.required", null, quantityString);
 				}
 			}
 
 		}
-		if  (!Variables.isSpecimenLabelGeneratorAvl)
+		if (!Variables.isSpecimenLabelGeneratorAvl)
 		{
 			if (validator.isEmpty(specimen.getLabel()))
 			{
 				String labelString = ApplicationProperties.getValue("specimen.label");
-				throw new DAOException(ApplicationProperties.getValue("errors.item.required", labelString));
+				throw AppUtility.getApplicationException("errors.item.required", null, labelString);
 			}
 		}
 		if (specimen.getInitialQuantity() == null || specimen.getInitialQuantity() == null)
 		{
 			String quantityString = ApplicationProperties.getValue("specimen.quantity");
-			throw new DAOException(ApplicationProperties.getValue("errors.item.required", quantityString));
+			throw AppUtility.getApplicationException("errors.item.required", null, quantityString);
 		}
 
 		/**
@@ -443,42 +446,43 @@ public final class MultipleSpecimenValidationUtil
 		*/
 	}
 
-	public static void setMultipleSpecimensInSession(
-			HttpServletRequest request,  Long scgId)
-			throws DAOException
+	public static void setMultipleSpecimensInSession(HttpServletRequest request, Long scgId)
+			throws ApplicationException
 	{
-		Map specimenMap = new SpecimenCollectionGroupBizLogic()
-								.getSpecimenList(scgId);
+		Map specimenMap = new SpecimenCollectionGroupBizLogic().getSpecimenList(scgId);
 		HttpSession session = request.getSession();
 		session.setAttribute(Constants.SPECIMEN_LIST_SESSION_MAP, specimenMap);
 	}
-	
+
 	/**
 	 * @param errors
 	 * @param validator
 	 */
-	public static void validateDate(ActionErrors errors, Validator validator, long userId, String dateOfEvent,
-			String timeInHours, String timeInMinutes)
+	public static void validateDate(ActionErrors errors, Validator validator, long userId,
+			String dateOfEvent, String timeInHours, String timeInMinutes)
 	{
 		// checks the userid
 		if ((userId) == -1L)
 		{
-			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("eventparameters.user")));
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+					ApplicationProperties.getValue("eventparameters.user")));
 		}
 		if (!validator.checkDate(dateOfEvent))
 		{
-			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("eventparameters.dateofevent")));
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+					ApplicationProperties.getValue("eventparameters.dateofevent")));
 		}
-		
-		if (!validator.isNumeric( timeInMinutes,0))
+
+		if (!validator.isNumeric(timeInMinutes, 0))
 		{
-			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.invalid",ApplicationProperties.getValue("eventparameters.timeinminutes")));
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.invalid",
+					ApplicationProperties.getValue("eventparameters.timeinminutes")));
 		}
-		
-		if (!validator.isNumeric( timeInHours,0))
+
+		if (!validator.isNumeric(timeInHours, 0))
 		{
-			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.invalid",ApplicationProperties.getValue("eventparameters.timeinhours")));
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.invalid",
+					ApplicationProperties.getValue("eventparameters.timeinhours")));
 		}
 	}
 }
-

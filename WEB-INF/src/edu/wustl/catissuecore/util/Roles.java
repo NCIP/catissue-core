@@ -8,7 +8,7 @@
  */ 
 package edu.wustl.catissuecore.util;
 
-public interface Roles extends edu.wustl.common.util.Roles
+public interface Roles extends edu.wustl.security.global.Roles
 {
 	public static final String PI = "PI";
     public static final String READ_ONLY = "READ_ONLY";

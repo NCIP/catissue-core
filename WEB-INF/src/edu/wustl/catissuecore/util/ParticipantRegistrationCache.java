@@ -13,16 +13,22 @@ import javax.servlet.http.HttpSession;
 
 import net.sf.ehcache.CacheException;
 import edu.common.dynamicextensions.util.global.Variables;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.SiteBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.security.PrivilegeCache;
-import edu.wustl.common.security.PrivilegeManager;
+import edu.wustl.common.exception.ApplicationException;
+import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.exception.DAOException;
+import edu.wustl.security.exception.SMException;
+import edu.wustl.security.privilege.PrivilegeCache;
+import edu.wustl.security.privilege.PrivilegeManager;
 
 /**
  * This class handles all ParticipantRegistration Cache related operations
@@ -287,7 +293,8 @@ class ParticipantRegistrationCache
 		List newList = new Vector();
 		List<NameValueBean> cpDetailsList = new ArrayList<NameValueBean>();
 		
-		UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.USER_FORM_ID);
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		UserBizLogic userBizLogic = (UserBizLogic)factory.getBizLogic(Constants.USER_FORM_ID);
 		Set cpIds = userBizLogic.getRelatedCPIds(sessionDataBean.getUserId(), true);
 		addPartRegInfo(newList, cpIds);
 		Set<Long> siteIds = userBizLogic.getRelatedSiteIds(sessionDataBean.getUserId());
@@ -297,7 +304,7 @@ class ParticipantRegistrationCache
 		{
 			List<NameValueBean> list = new ArrayList<NameValueBean>();
 			PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(sessionDataBean.getUserName());
-			SiteBizLogic siteBizLogic = (SiteBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.SITE_FORM_ID);
+			SiteBizLogic siteBizLogic = (SiteBizLogic)factory.getBizLogic(Constants.SITE_FORM_ID);
 			for (Long siteId : siteIds)
 			{
 				String peName = Constants.getCurrentAndFuturePGAndPEName(siteId);

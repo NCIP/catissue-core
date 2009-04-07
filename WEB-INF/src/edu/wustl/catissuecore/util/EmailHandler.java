@@ -9,17 +9,24 @@
 
 package edu.wustl.catissuecore.util;
 
+import javax.mail.MessagingException;
+
 import edu.wustl.catissuecore.domain.ReportedProblem;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Variables;
-import edu.wustl.common.security.SecurityManager;
-import edu.wustl.common.security.exceptions.SMException;
+import edu.wustl.common.exception.ApplicationException;
+import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.XMLPropertyHandler;
-import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.CommonServiceLocator;
+import edu.wustl.common.util.global.EmailDetails;
 import edu.wustl.common.util.global.SendEmail;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.exception.DAOException;
+import edu.wustl.security.exception.SMException;
+import edu.wustl.security.manager.SecurityManagerFactory;
+
 
 /**
  * EmailHandler is used to send emails during user signup, creation, forgot password.
@@ -32,7 +39,7 @@ public class EmailHandler
      * @param user The user whose registration is approved.
      * @param roleOfUser Role of the user.
      */
-    public void sendApprovalEmail(User user) throws DAOException
+    public void sendApprovalEmail(User user) throws ApplicationException
     {
         String subject = ApplicationProperties
         					.getValue("userRegistration.approve.subject");
@@ -167,7 +174,7 @@ public class EmailHandler
      * @return true if the email is successfully sent else returns false.
      * @throws DAOException
      */
-    public boolean sendLoginDetailsEmail(User user, String userDetailsBody) throws DAOException
+    public boolean sendLoginDetailsEmail(User user, String userDetailsBody) throws ApplicationException
     {
         boolean emailStatus = false;
         
@@ -184,7 +191,7 @@ public class EmailHandler
 			    body = userDetailsBody;
 			}
 			
-			gov.nih.nci.security.authorization.domainobjects.User csmUser = SecurityManager.getInstance(EmailHandler.class).getUserById(user.getCsmUserId().toString());
+			gov.nih.nci.security.authorization.domainobjects.User csmUser = SecurityManagerFactory.getSecurityManager().getUserById(user.getCsmUserId().toString());
 			 
 //			List pwdList = new ArrayList(user.getPasswordCollection());
 //			Collections.sort(pwdList);
@@ -202,7 +209,7 @@ public class EmailHandler
         }
         catch(SMException smExp)
         {
-            throw new DAOException(smExp.getMessage(), smExp);
+            throw AppUtility.getApplicationException(smExp.getErrorKeyAsString(), smExp, smExp.getMessage());
         }
         
         return emailStatus;
@@ -268,16 +275,32 @@ public class EmailHandler
      */
     private boolean sendEmailToUser(String userEmailAddress, String subject, String body)
     {
-        String mailServer = XMLPropertyHandler.getValue("email.mailServer");
-		String sendFromEmailAddress = XMLPropertyHandler.getValue("email.sendEmailFrom.emailAddress");
-		
-		body = body + "\n\n" + ApplicationProperties.getValue("loginDetails.catissue.url.message") + 
-				Variables.catissueURL;
-		
-		SendEmail email = new SendEmail();
-        boolean emailStatus = email.sendmail(userEmailAddress, sendFromEmailAddress,
-				                				mailServer, subject, body);
-        return emailStatus;
+    	 String mailServer = XMLPropertyHandler.getValue("email.mailServer");
+ 		String sendFromEmailAddress = XMLPropertyHandler.getValue("email.sendEmailFrom.emailAddress");
+ 		String appUrl = CommonServiceLocator.getInstance().getAppURL();
+ 		body = body + "\n\n" + ApplicationProperties.getValue("loginDetails.catissue.url.message") + 
+ 		appUrl;
+ 		
+ 		/*SendEmail email = new SendEmail();
+         boolean emailStatus = email.sendmail(userEmailAddress, sendFromEmailAddress,
+ 				                				mailServer, subject, body);*/
+         EmailDetails emailDetails= new EmailDetails();
+         emailDetails.setToAddress(new String[]{userEmailAddress});
+         emailDetails.setSubject(subject);
+         emailDetails.setBody(body);        
+         SendEmail email;
+         boolean emailStatus;
+ 		try
+ 		{
+ 			email = new SendEmail(mailServer,sendFromEmailAddress);
+ 			emailStatus=email.sendMail(emailDetails);
+ 		}
+ 		catch (MessagingException messExcp)
+ 		{
+ 			emailStatus=false;
+ 			Logger.out.info(messExcp.getMessage());
+ 		}
+         return emailStatus;
     }
     
     /**
@@ -290,16 +313,33 @@ public class EmailHandler
      */
     private boolean sendEmailToUserAndAdministrator(String userEmailAddress, String subject, String body)
     {
-        String adminEmailAddress = XMLPropertyHandler.getValue("email.administrative.emailAddress");
+    	String adminEmailAddress = XMLPropertyHandler.getValue("email.administrative.emailAddress");
         String sendFromEmailAddress = XMLPropertyHandler.getValue("email.sendEmailFrom.emailAddress");
         String mailServer = XMLPropertyHandler.getValue("email.mailServer");
-        
+        String appUrl = CommonServiceLocator.getInstance().getAppURL();
         body = body + "\n\n" + ApplicationProperties.getValue("loginDetails.catissue.url.message") + 
-				Variables.catissueURL;
+        appUrl;
          
-        SendEmail email = new SendEmail();
+        /*SendEmail email = new SendEmail();
         boolean emailStatus = email.sendmail(userEmailAddress, adminEmailAddress, 
-                							 null, sendFromEmailAddress, mailServer, subject, body);
+                							 null, sendFromEmailAddress, mailServer, subject, body);*/
+        EmailDetails emailDetails= new EmailDetails();
+        emailDetails.setToAddress(new String[]{userEmailAddress});
+        emailDetails.setCcAddress(new String[]{adminEmailAddress});
+        emailDetails.setSubject(subject);
+        emailDetails.setBody(body);        
+        SendEmail email;
+        boolean emailStatus;
+		try
+		{
+			email = new SendEmail(mailServer,sendFromEmailAddress);
+			emailStatus=email.sendMail(emailDetails);
+		}
+		catch (MessagingException messExcp)
+		{
+			emailStatus=false;
+			Logger.out.info(messExcp.getMessage());
+		}
         return emailStatus;
     }
     
@@ -312,18 +352,33 @@ public class EmailHandler
      */
     private boolean sendEmailToAdministrator(String subject, String body)
     {
-        String adminEmailAddress = XMLPropertyHandler.getValue("email.administrative.emailAddress");
-        String sendFromEmailAddress = XMLPropertyHandler.getValue("email.sendEmailFrom.emailAddress");
-        String mailServer = XMLPropertyHandler.getValue("email.mailServer");
-        
-        body = body + "\n\n" + ApplicationProperties.getValue("loginDetails.catissue.url.message") + 
-				Variables.catissueURL;
-         
-        SendEmail email = new SendEmail();
-        boolean emailStatus = email.sendmail(adminEmailAddress, 
-                								sendFromEmailAddress, mailServer, subject, body);
-        
-        return emailStatus;
+    	 String adminEmailAddress = XMLPropertyHandler.getValue("email.administrative.emailAddress");
+         String sendFromEmailAddress = XMLPropertyHandler.getValue("email.sendEmailFrom.emailAddress");
+         String mailServer = XMLPropertyHandler.getValue("email.mailServer");
+         String appUrl = CommonServiceLocator.getInstance().getAppURL();
+         body = body + "\n\n" + ApplicationProperties.getValue("loginDetails.catissue.url.message") + 
+         appUrl;
+          
+        /* SendEmail email = new SendEmail();
+         boolean emailStatus = email.sendmail(adminEmailAddress, 
+                 								sendFromEmailAddress, mailServer, subject, body);*/
+         EmailDetails emailDetails= new EmailDetails();
+         emailDetails.setToAddress(new String[]{adminEmailAddress});
+         emailDetails.setSubject(subject);
+         emailDetails.setBody(body);        
+         SendEmail email;
+         boolean emailStatus;
+ 		try
+ 		{
+ 			email = new SendEmail(mailServer,sendFromEmailAddress);
+ 			emailStatus=email.sendMail(emailDetails);
+ 		}
+ 		catch (MessagingException messExcp)
+ 		{
+ 			emailStatus=false;
+ 			Logger.out.info(messExcp.getMessage());
+ 		}
+         return emailStatus;
     }
     
     /**
@@ -340,9 +395,26 @@ public class EmailHandler
     	String sendFromEmailAddress = XMLPropertyHandler.getValue("email.sendEmailFrom.emailAddress");
     	String mailServer = XMLPropertyHandler.getValue("email.mailServer");
     	
-    	SendEmail email = new SendEmail();
+    	/*SendEmail email = new SendEmail();
     	boolean emailStatus = email.sendmail(toEmailAddress, ccEmailAddress,null,
-					sendFromEmailAddress, mailServer, subject, emailBody);
+					sendFromEmailAddress, mailServer, subject, emailBody);*/
+    	EmailDetails emailDetails= new EmailDetails();
+        emailDetails.setToAddress(new String[]{toEmailAddress});
+        emailDetails.setCcAddress(new String[]{ccEmailAddress});
+        emailDetails.setSubject(subject);
+        emailDetails.setBody(emailBody);        
+        SendEmail email;
+        boolean emailStatus;
+		try
+		{
+			email = new SendEmail(mailServer,sendFromEmailAddress);
+			emailStatus=email.sendMail(emailDetails);
+		}
+		catch (MessagingException messExcp)
+		{
+			emailStatus=false;
+			Logger.out.info(messExcp.getMessage());
+		}
     	return emailStatus;
     }
     /**
@@ -353,11 +425,29 @@ public class EmailHandler
     public boolean sendEmailForOrderDistribution(String body,String toEmailAddress,String fromEmailAddress, String ccEmailAddress, String bccEmailAddress,  String subject)
     {
     	String mailServer = XMLPropertyHandler.getValue("email.mailServer");
-        SendEmail email = new SendEmail();
+        /*SendEmail email = new SendEmail();
         Logger.out.info("Email body..........  \n"  + body);
-        Logger.out.info("Email body..........  \n"  + body);
+        System.out.println("Email body..........  \n"  + body);
         boolean emailStatus = email.sendmail(toEmailAddress, ccEmailAddress, bccEmailAddress,
-    			fromEmailAddress, mailServer, subject, body);
+    			fromEmailAddress, mailServer, subject, body);*/
+        EmailDetails emailDetails= new EmailDetails();
+        emailDetails.setToAddress(new String[]{toEmailAddress});
+        emailDetails.setCcAddress(new String[]{ccEmailAddress});
+        emailDetails.setBccAddress(new String[]{bccEmailAddress});
+        emailDetails.setSubject(subject);
+        emailDetails.setBody(body);        
+        SendEmail email;
+        boolean emailStatus;
+		try
+		{
+			email = new SendEmail(mailServer,fromEmailAddress);
+			emailStatus=email.sendMail(emailDetails);
+		}
+		catch (MessagingException messExcp)
+		{
+			emailStatus=false;
+			Logger.out.info(messExcp.getMessage());
+		}
     	
     	Logger.out.info("EmailStatus  "  + emailStatus);
         return emailStatus;

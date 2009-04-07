@@ -19,12 +19,18 @@ import edu.wustl.catissuecore.domain.Container;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
-import edu.wustl.common.dao.DAO;
-import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.exception.ApplicationException;
+import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.DAO;
+import edu.wustl.dao.QueryWhereClause;
+import edu.wustl.dao.condition.EqualClause;
+import edu.wustl.dao.exception.DAOException;
 
 public final class StorageContainerUtil
 {
@@ -33,23 +39,24 @@ public final class StorageContainerUtil
 	 * creates a singleton object
 	 */
 	private static StorageContainerUtil storcontUtil = new StorageContainerUtil();
+
 	/*
 	 * Private constructor
 	 */
 	private StorageContainerUtil()
 	{
-		
+
 	}
+
 	/*
 	 * returns single object
 	 */
-	
+
 	public static StorageContainerUtil getInstance()
 	{
 		return storcontUtil;
 	}
-	
-	
+
 	/**
 	 * This functions updates the storage container map when a new position is to be added in map
 	 * @param storageContainer - Storage container whose position is freed
@@ -57,9 +64,11 @@ public final class StorageContainerUtil
 	 * @param x - x position which is updated
 	 * @param y - y position which is updated
 	 */
-	public static synchronized void insertSinglePositionInContainerMap(Container storageContainer, Map containerMap, int x, int y)
+	public static synchronized void insertSinglePositionInContainerMap(Container storageContainer,
+			Map containerMap, int x, int y)
 	{
-		NameValueBean storageContainerId = new NameValueBean(storageContainer.getName(), (storageContainer.getId()));
+		NameValueBean storageContainerId = new NameValueBean(storageContainer.getName(),
+				(storageContainer.getId()));
 		TreeMap storageContainerMap = (TreeMap) containerMap.get(storageContainerId);
 		Integer xObj = Integer.valueOf(x);
 
@@ -74,7 +83,7 @@ public final class StorageContainerUtil
 		if (yPosList == null || yPosList.size() == 0)
 		{
 			yPosList = new ArrayList();
-			yPosList.add(new NameValueBean(Integer.valueOf(y),Integer.valueOf(y)));
+			yPosList.add(new NameValueBean(Integer.valueOf(y), Integer.valueOf(y)));
 		}
 		else
 		{
@@ -92,7 +101,7 @@ public final class StorageContainerUtil
 			}
 			if (insertFlag)
 			{
-				yPosList.add(new NameValueBean(Integer.valueOf(y),Integer.valueOf(y)));
+				yPosList.add(new NameValueBean(Integer.valueOf(y), Integer.valueOf(y)));
 				Collections.sort(yPosList);
 			}
 
@@ -107,9 +116,11 @@ public final class StorageContainerUtil
 	 * @param x - x position which is updated
 	 * @param y - y position which is updated
 	 */
-	public static synchronized void deleteSinglePositionInContainerMap(Container storageContainer, Map continersMap, int x, int y)
+	public static synchronized void deleteSinglePositionInContainerMap(Container storageContainer,
+			Map continersMap, int x, int y)
 	{
-		NameValueBean storageContainerId = new NameValueBean(storageContainer.getName(), storageContainer.getId());
+		NameValueBean storageContainerId = new NameValueBean(storageContainer.getName(),
+				storageContainer.getId());
 		TreeMap storageContainerMap = (TreeMap) continersMap.get(storageContainerId);
 
 		Integer xObj = Integer.valueOf(x);
@@ -156,21 +167,26 @@ public final class StorageContainerUtil
 	 * @param x - x position of parent storage container
 	 * @param y - y position of parent storage container
 	 */
-	public static synchronized void addStorageContainerInContainerMap(StorageContainer storageContainer, Map continersMap) throws DAOException
+	public static synchronized void addStorageContainerInContainerMap(
+			StorageContainer storageContainer, Map continersMap) throws DAOException
 	{
-		NameValueBean storageContainerId = new NameValueBean(storageContainer.getName(), storageContainer.getId());
+		NameValueBean storageContainerId = new NameValueBean(storageContainer.getName(),
+				storageContainer.getId());
 		TreeMap availabelPositionsMap = (TreeMap) getAvailablePositionMapForNewContainer(storageContainer);
 		if (availabelPositionsMap != null && !availabelPositionsMap.isEmpty())
 		{
 			continersMap.put(storageContainerId, availabelPositionsMap);
 		}
 
-		if (storageContainer.getLocatedAtPosition() != null && storageContainer.getLocatedAtPosition().getParentContainer() != null)
+		if (storageContainer.getLocatedAtPosition() != null
+				&& storageContainer.getLocatedAtPosition().getParentContainer() != null)
 		{
-			Container parentContainer = storageContainer.getLocatedAtPosition().getParentContainer();
+			Container parentContainer = storageContainer.getLocatedAtPosition()
+					.getParentContainer();
 			int x = storageContainer.getLocatedAtPosition().getPositionDimensionOne().intValue();
 			int y = storageContainer.getLocatedAtPosition().getPositionDimensionTwo().intValue();
-			deleteSinglePositionInContainerMap((StorageContainer) parentContainer, continersMap, x, y);
+			deleteSinglePositionInContainerMap((StorageContainer) parentContainer, continersMap, x,
+					y);
 		}
 
 	}
@@ -182,17 +198,22 @@ public final class StorageContainerUtil
 	 * @param x - x position of parent storage container
 	 * @param y - y position of parent storage container
 	 */
-	public static synchronized void removeStorageContainerInContainerMap(StorageContainer storageContainer, Map continersMap) throws DAOException
+	public static synchronized void removeStorageContainerInContainerMap(
+			StorageContainer storageContainer, Map continersMap) throws DAOException
 	{
-		NameValueBean storageContainerId = new NameValueBean(storageContainer.getName(), storageContainer.getId());
+		NameValueBean storageContainerId = new NameValueBean(storageContainer.getName(),
+				storageContainer.getId());
 		continersMap.remove(storageContainerId);
 
-		if (storageContainer.getLocatedAtPosition() != null && storageContainer.getLocatedAtPosition().getParentContainer() != null)
+		if (storageContainer.getLocatedAtPosition() != null
+				&& storageContainer.getLocatedAtPosition().getParentContainer() != null)
 		{
-			Container parentContainer = storageContainer.getLocatedAtPosition().getParentContainer();
+			Container parentContainer = storageContainer.getLocatedAtPosition()
+					.getParentContainer();
 			int x = storageContainer.getLocatedAtPosition().getPositionDimensionOne().intValue();
 			int y = storageContainer.getLocatedAtPosition().getPositionDimensionTwo().intValue();
-			insertSinglePositionInContainerMap((StorageContainer) parentContainer, continersMap, x, y);
+			insertSinglePositionInContainerMap((StorageContainer) parentContainer, continersMap, x,
+					y);
 		}
 
 	}
@@ -209,7 +230,8 @@ public final class StorageContainerUtil
 
 		// getting instance of catissueCoreCacheManager and getting participantMap from cache
 		CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager.getInstance();
-		Map containerMap = (TreeMap) catissueCoreCacheManager.getObjectFromCache(Constants.MAP_OF_STORAGE_CONTAINERS);
+		Map containerMap = (TreeMap) catissueCoreCacheManager
+				.getObjectFromCache(Constants.MAP_OF_STORAGE_CONTAINERS);
 		return containerMap;
 	}
 
@@ -225,7 +247,8 @@ public final class StorageContainerUtil
 
 		// getting instance of catissueCoreCacheManager and getting participantMap from cache
 		CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager.getInstance();
-		List disabledconts = (ArrayList) catissueCoreCacheManager.getObjectFromCache(Constants.MAP_OF_DISABLED_CONTAINERS);
+		List disabledconts = (ArrayList) catissueCoreCacheManager
+				.getObjectFromCache(Constants.MAP_OF_DISABLED_CONTAINERS);
 		return disabledconts;
 	}
 
@@ -236,7 +259,8 @@ public final class StorageContainerUtil
 	 * @throws DAOException
 	 */
 
-	public static Map getAvailablePositionMapForNewContainer(StorageContainer container) throws DAOException
+	public static Map getAvailablePositionMapForNewContainer(StorageContainer container)
+			throws DAOException
 	{
 		Map map = new TreeMap();
 
@@ -252,7 +276,7 @@ public final class StorageContainerUtil
 
 				for (int y = 1; y < dimY; y++)
 				{
-					list.add(new NameValueBean(Integer.valueOf(y),Integer.valueOf(y)));
+					list.add(new NameValueBean(Integer.valueOf(y), Integer.valueOf(y)));
 
 				}
 
@@ -268,44 +292,50 @@ public final class StorageContainerUtil
 
 		return map;
 	}
+
 	public static LinkedList<Integer> getFirstAvailablePositionsInContainer(
-			StorageContainer storageContainer, Map continersMap, HashSet<String> allocatedPositions) throws DAOException
+			StorageContainer storageContainer, Map continersMap, HashSet<String> allocatedPositions)
+			throws ApplicationException
 	{
 		//kalpana bug#6001
-		NameValueBean storageContainerId = new NameValueBean(storageContainer.getName(), storageContainer.getId());
+		NameValueBean storageContainerId = new NameValueBean(storageContainer.getName(),
+				storageContainer.getId());
 		TreeMap storageContainerMap = (TreeMap) continersMap.get(storageContainerId);
 
-		Integer xpos= null;
-		Integer ypos=null;
+		Integer xpos = null;
+		Integer ypos = null;
 		String containerName = storageContainer.getName();
 		if (storageContainerMap == null || storageContainerMap.isEmpty())
 		{
-			throw new DAOException("Storagecontainer information not found!");
+			throw AppUtility.getApplicationException("utility.error", null,
+					"StorageContainerUtil.java :" + "Storagecontainer information not found!");
 		}
-		
+
 		Iterator containerPosIterator = storageContainerMap.keySet().iterator();
 		while (containerPosIterator.hasNext())
 		{
-			
+
 			NameValueBean nvb = (NameValueBean) containerPosIterator.next();
 			xpos = Integer.valueOf(nvb.getValue());
 			List yposValues = (List) storageContainerMap.get(nvb);
 			Iterator yposIterator = yposValues.iterator();
 
-			while(yposIterator.hasNext())
+			while (yposIterator.hasNext())
 			{
-				nvb =(NameValueBean) yposIterator.next();
-				ypos= Integer.valueOf(nvb.getValue());
+				nvb = (NameValueBean) yposIterator.next();
+				ypos = Integer.valueOf(nvb.getValue());
 				//bug 8294
 				String containerValue = null;
 				Long containerId = storageContainer.getId();
-				if(containerName != null)
+				if (containerName != null)
 				{
-					containerValue = StorageContainerUtil.getStorageValueKey(containerName,null,xpos, ypos);
+					containerValue = StorageContainerUtil.getStorageValueKey(containerName, null,
+							xpos, ypos);
 				}
-				else 
+				else
 				{
-					containerValue = StorageContainerUtil.getStorageValueKey(null, containerId.toString(), xpos, ypos);
+					containerValue = StorageContainerUtil.getStorageValueKey(null, containerId
+							.toString(), xpos, ypos);
 				}
 				if (!allocatedPositions.contains(containerValue))
 				{
@@ -314,17 +344,21 @@ public final class StorageContainerUtil
 					positions.add(ypos);
 					return positions;
 				}
-			}			
+			}
 		}
-		throw new DAOException("Either Storagecontainer is full! or it cannot accomodate all the specimens.");
+		throw AppUtility.getApplicationException("utility.error", null,
+				"Either Storagecontainer is full! or it cannot accomodate all the specimens.");
 	}
-	public static synchronized void updateStoragePositions(Map containerMap, StorageContainer currentContainer, StorageContainer oldContainer)
+
+	public static synchronized void updateStoragePositions(Map containerMap,
+			StorageContainer currentContainer, StorageContainer oldContainer)
 	{
 		int xOld = oldContainer.getCapacity().getOneDimensionCapacity().intValue();
 		int xNew = currentContainer.getCapacity().getOneDimensionCapacity().intValue();
 		int yOld = oldContainer.getCapacity().getTwoDimensionCapacity().intValue();
 		int yNew = currentContainer.getCapacity().getTwoDimensionCapacity().intValue();
-		NameValueBean storageContainerId = new NameValueBean(currentContainer.getName(), (currentContainer.getId()));
+		NameValueBean storageContainerId = new NameValueBean(currentContainer.getName(),
+				(currentContainer.getId()));
 		TreeMap storageContainerMap = (TreeMap) containerMap.get(storageContainerId);
 		if (storageContainerMap == null)
 		{
@@ -336,12 +370,12 @@ public final class StorageContainerUtil
 		{
 			for (int i = xOld + 1; i <= xNew; i++)
 			{
-				NameValueBean xNvb = new NameValueBean(Integer.valueOf(i),Integer.valueOf(i));
+				NameValueBean xNvb = new NameValueBean(Integer.valueOf(i), Integer.valueOf(i));
 
 				List yPosList = new ArrayList();
 				for (int j = 1; j <= yOld; j++)
 				{
-					NameValueBean yNvb = new NameValueBean(Integer.valueOf(j),Integer.valueOf(j));
+					NameValueBean yNvb = new NameValueBean(Integer.valueOf(j), Integer.valueOf(j));
 					yPosList.add(yNvb);
 
 				}
@@ -356,11 +390,11 @@ public final class StorageContainerUtil
 		{
 			for (int i = 1; i <= xNew; i++)
 			{
-				NameValueBean xNvb = new NameValueBean(Integer.valueOf(i),Integer.valueOf(i));
+				NameValueBean xNvb = new NameValueBean(Integer.valueOf(i), Integer.valueOf(i));
 				List yPosList = new ArrayList();
 				for (int j = yOld + 1; j <= yNew; j++)
 				{
-					NameValueBean yNvb = new NameValueBean(Integer.valueOf(j),Integer.valueOf(j));
+					NameValueBean yNvb = new NameValueBean(Integer.valueOf(j), Integer.valueOf(j));
 
 					yPosList.add(yNvb);
 				}
@@ -390,11 +424,11 @@ public final class StorageContainerUtil
 		{
 			for (int i = 1; i <= xNew; i++)
 			{
-				NameValueBean xNvb = new NameValueBean(Integer.valueOf(i),Integer.valueOf(i));
+				NameValueBean xNvb = new NameValueBean(Integer.valueOf(i), Integer.valueOf(i));
 				List yPosList = new ArrayList();
 				for (int j = yNew + 1; j <= yOld; j++)
 				{
-					NameValueBean yNvb = new NameValueBean(Integer.valueOf(j),Integer.valueOf(j));
+					NameValueBean yNvb = new NameValueBean(Integer.valueOf(j), Integer.valueOf(j));
 
 					yPosList.add(yNvb);
 				}
@@ -408,7 +442,8 @@ public final class StorageContainerUtil
 		}
 	}
 
-	public static synchronized void updateNameInCache(Map containerMap, StorageContainer currentContainer, StorageContainer oldContainer)
+	public static synchronized void updateNameInCache(Map containerMap,
+			StorageContainer currentContainer, StorageContainer oldContainer)
 	{
 		//Using treeMap , so can't directly update the key contents.
 		Map positionMap = new TreeMap();
@@ -418,7 +453,8 @@ public final class StorageContainerUtil
 		while (itr.hasNext())
 		{
 			NameValueBean nvb = (NameValueBean) itr.next();
-			if (nvb.getValue().equals(oldContainer.getId().toString()) && nvb.getName().equals(oldContainer.getName().toString()))
+			if (nvb.getValue().equals(oldContainer.getId().toString())
+					&& nvb.getName().equals(oldContainer.getName().toString()))
 			{
 				positionMap = (Map) containerMap.get(nvb);
 				containerMap.remove(nvb);
@@ -428,13 +464,15 @@ public final class StorageContainerUtil
 		}
 		if (keyRemoved)
 		{
-			NameValueBean nvbUpdated = new NameValueBean(currentContainer.getName(), currentContainer.getId());
+			NameValueBean nvbUpdated = new NameValueBean(currentContainer.getName(),
+					currentContainer.getId());
 			containerMap.put(nvbUpdated, positionMap);
 		}
 
 	}
 
-	public static boolean chkContainerFull(String storageContainerId, String storageContainerName) throws Exception
+	public static boolean chkContainerFull(String storageContainerId, String storageContainerName)
+			throws Exception
 	{
 		Map containerMap = getContainerMapFromCache();
 		boolean flag;
@@ -449,23 +487,25 @@ public final class StorageContainerUtil
 		}
 		return flag;
 	}
-	public static boolean isPostionAvaialble(String storageContainerId , String storageContainerName , String x , String y) throws CacheException
+
+	public static boolean isPostionAvaialble(String storageContainerId,
+			String storageContainerName, String x, String y) throws CacheException
 	{
 		Map containerMap = getContainerMapFromCache();
 		NameValueBean nvb = new NameValueBean(storageContainerName, storageContainerId);
-		Map positionMap = (Map)containerMap.get(nvb);
+		Map positionMap = (Map) containerMap.get(nvb);
 		boolean flag = true;
-		
-		if(positionMap != null && !positionMap.isEmpty())
+
+		if (positionMap != null && !positionMap.isEmpty())
 		{
-			NameValueBean xNvb = new NameValueBean(Integer.valueOf(x),Integer.valueOf(x));
+			NameValueBean xNvb = new NameValueBean(Integer.valueOf(x), Integer.valueOf(x));
 			List yList = (List) positionMap.get(xNvb);
-			if(yList != null && !yList.isEmpty())
+			if (yList != null && !yList.isEmpty())
 			{
-				NameValueBean yNvb = new NameValueBean(y ,y);
-				if(!yList.contains(yNvb))
+				NameValueBean yNvb = new NameValueBean(y, y);
+				if (!yList.contains(yNvb))
 				{
-					flag =  false;
+					flag = false;
 				}
 			}
 			else
@@ -478,24 +518,27 @@ public final class StorageContainerUtil
 			flag = false;
 		}
 		return flag;
-		
+
 	}
 
 	/**
 	 *  This method gives first valid storage position to a specimen if it is not given. 
 	 *  If storage position is given it validates the storage position
 	 * @param specimen
-	 * @throws DAOException
+	 * @throws ApplicationException 
 	 */
-	public static void validateStorageLocationForSpecimen(Specimen specimen,HashSet<String> allocatedPositions) throws DAOException
+	public static void validateStorageLocationForSpecimen(Specimen specimen,
+			HashSet<String> allocatedPositions) throws ApplicationException
 	{
 		Integer xPos = null;
 		Integer yPos = null;
-		if (specimen.getSpecimenPosition() != null && specimen.getSpecimenPosition().getStorageContainer() != null)
+		if (specimen.getSpecimenPosition() != null
+				&& specimen.getSpecimenPosition().getStorageContainer() != null)
 		{
-			StorageContainer storageContainer=specimen.getSpecimenPosition().getStorageContainer();
+			StorageContainer storageContainer = specimen.getSpecimenPosition()
+					.getStorageContainer();
 			String containerValue = null;
-			if(specimen.getSpecimenPosition() != null)
+			if (specimen.getSpecimenPosition() != null)
 			{
 				xPos = specimen.getSpecimenPosition().getPositionDimensionOne();
 				yPos = specimen.getSpecimenPosition().getPositionDimensionTwo();
@@ -505,75 +548,82 @@ public final class StorageContainerUtil
 			 *  Following code is added to set the x and y dimension in case only storage container is given 
 			 *  and x and y positions are not given 
 			 */
-			
+
 			if (xPos == null || yPos == null)
 			{
 				isContainerFull = true;
 				Map containerMapFromCache = null;
 				try
 				{
-					containerMapFromCache = (TreeMap) StorageContainerUtil.getContainerMapFromCache();
+					containerMapFromCache = (TreeMap) StorageContainerUtil
+							.getContainerMapFromCache();
 				}
 				catch (CacheException e)
 				{
 					Logger.out.error(e);
 				}
-			
+
 				if (containerMapFromCache != null)
 				{
-					NameValueBean storageContainerId = new NameValueBean(storageContainer.getName(), storageContainer.getId());
-					TreeMap storageContainerMap = (TreeMap) containerMapFromCache.get(storageContainerId);
-			
+					NameValueBean storageContainerId = new NameValueBean(
+							storageContainer.getName(), storageContainer.getId());
+					TreeMap storageContainerMap = (TreeMap) containerMapFromCache
+							.get(storageContainerId);
+
 					Iterator containerPosIterator = storageContainerMap.keySet().iterator();
-					boolean positionAllottedFlag= false;
-					while (containerPosIterator.hasNext()&& !positionAllottedFlag)
+					boolean positionAllottedFlag = false;
+					while (containerPosIterator.hasNext() && !positionAllottedFlag)
 					{
-				
+
 						NameValueBean nvb = (NameValueBean) containerPosIterator.next();
 						xPos = Integer.valueOf(nvb.getValue());
 						List yposValues = (List) storageContainerMap.get(nvb);
 						Iterator yposIterator = yposValues.iterator();
-				
-						while(yposIterator.hasNext())
+
+						while (yposIterator.hasNext())
 						{
-							nvb =(NameValueBean) yposIterator.next();
-							yPos= Integer.valueOf(nvb.getValue());
-							
+							nvb = (NameValueBean) yposIterator.next();
+							yPos = Integer.valueOf(nvb.getValue());
+
 							Long containerId = storageContainer.getId();
-							if(containerId!=null)
+							if (containerId != null)
 							{
-								containerValue = StorageContainerUtil.getStorageValueKey(null, containerId.toString(), xPos, yPos);
+								containerValue = StorageContainerUtil.getStorageValueKey(null,
+										containerId.toString(), xPos, yPos);
 							}
-							else 
+							else
 							{
-								containerValue = StorageContainerUtil.getStorageValueKey(storageContainer.getName(),null,xPos, yPos);
+								containerValue = StorageContainerUtil.getStorageValueKey(
+										storageContainer.getName(), null, xPos, yPos);
 							}
 							if (!allocatedPositions.contains(containerValue))
 							{
-								SpecimenPosition specPos = specimen.getSpecimenPosition();							
+								SpecimenPosition specPos = specimen.getSpecimenPosition();
 								specPos.setPositionDimensionOne(xPos);
-							    specPos.setPositionDimensionTwo(yPos);
-							  
-							    specPos.setSpecimen(specimen);
-							    
-							    isContainerFull = false;
-							    positionAllottedFlag = true;
-							    allocatedPositions.add(containerValue);
-							    break;
+								specPos.setPositionDimensionTwo(yPos);
+
+								specPos.setSpecimen(specimen);
+
+								isContainerFull = false;
+								positionAllottedFlag = true;
+								allocatedPositions.add(containerValue);
+								break;
 							}
-						}			
+						}
 					}
 				}
 			}
-			if(containerValue==null)
+			if (containerValue == null)
 			{
-				if(storageContainer.getId()==null)
+				if (storageContainer.getId() == null)
 				{
-					containerValue = StorageContainerUtil.getStorageValueKey(storageContainer.getName(),null,xPos, yPos);
+					containerValue = StorageContainerUtil.getStorageValueKey(storageContainer
+							.getName(), null, xPos, yPos);
 				}
-				else 
+				else
 				{
-					containerValue = StorageContainerUtil.getStorageValueKey(null, storageContainer.getId().toString(), xPos, yPos);
+					containerValue = StorageContainerUtil.getStorageValueKey(null, storageContainer
+							.getId().toString(), xPos, yPos);
 				}
 				if (!allocatedPositions.contains(containerValue))
 				{
@@ -581,25 +631,29 @@ public final class StorageContainerUtil
 				}
 				else
 				{
-					throw new DAOException(
-							ApplicationProperties
-									.getValue("errors.storageContainer.Multiple.inUse"));
+					throw AppUtility.getApplicationException(
+							"errors.storageContainer.Multiple.inUse", null,
+							"StorageContainerUtil.java");
 				}
 			}
-		
-			if(isContainerFull)
+
+			if (isContainerFull)
 			{
-				throw new DAOException("The Storage Container you specified is full");
+				throw AppUtility.getApplicationException("errors.storageContainer.Multiple.inUse",
+						null, "StorageContainerUtil.java :"
+								+ "The Storage Container you specified is full");
 			}
 			else if (xPos == null || yPos == null || xPos.intValue() < 0 || yPos.intValue() < 0)
 			{
-				throw new DAOException(ApplicationProperties.getValue("errors.item.format", ApplicationProperties
-						.getValue("specimen.positionInStorageContainer")));
+				throw AppUtility.getApplicationException("errors.item.format", null,
+						"StorageContainerUtil.java :"
+								+ ApplicationProperties
+										.getValue("specimen.positionInStorageContainer"));
 			}
 		}
-		
+
 	}
-	
+
 	/**
 	 * 
 	 * Method which checks whether capacity of a container can be reduced
@@ -607,66 +661,64 @@ public final class StorageContainerUtil
 	 * @param container
 	 * @return
 	 */
-		
-		public static boolean checkCanReduceDimension(StorageContainer oldContainer, StorageContainer container) 
-		{
-			Integer oldContainerDimOne = oldContainer.getCapacity().getOneDimensionCapacity();
-			Integer oldContainerDimTwo = oldContainer.getCapacity().getTwoDimensionCapacity();
-			Integer newContainerDimOne = container.getCapacity().getOneDimensionCapacity();
-			Integer newContainerDimTwo = container.getCapacity().getTwoDimensionCapacity();
-			boolean flag=true;
-			List deletedPositions = new ArrayList();
-			
-			if(newContainerDimOne < oldContainerDimOne)
-			{
-				for(int i=newContainerDimOne+1;i<oldContainerDimOne+1;i++)
-				{
-					for(int j=1;j<oldContainerDimTwo+1;j++)
-					{
-						deletedPositions.add(i+"@"+j);
-					}
-				}
-			}
-			if(newContainerDimTwo < oldContainerDimTwo)
-			{
-				for(int i=newContainerDimTwo+1;i<oldContainerDimTwo+1;i++)
-				{
-					for(int j=1;j<oldContainerDimOne+1;j++)
-					{
-						if(!deletedPositions.contains(j+"@"+i))
-						{
-						   deletedPositions.add(j+"@"+i);
-						}
-					}
-				}
-			}
-			
-			Map containerMapFromCache = null;
-			try
-			{
-				containerMapFromCache = (TreeMap) StorageContainerUtil.getContainerMapFromCache();
-			}
-			catch (CacheException e)
-			{
-				Logger.out.error(e);
-			}
 
-			int count = 0;
-			if (containerMapFromCache != null)
+	public static boolean checkCanReduceDimension(StorageContainer oldContainer,
+			StorageContainer container)
+	{
+		Integer oldContainerDimOne = oldContainer.getCapacity().getOneDimensionCapacity();
+		Integer oldContainerDimTwo = oldContainer.getCapacity().getTwoDimensionCapacity();
+		Integer newContainerDimOne = container.getCapacity().getOneDimensionCapacity();
+		Integer newContainerDimTwo = container.getCapacity().getTwoDimensionCapacity();
+		boolean flag = true;
+		List deletedPositions = new ArrayList();
+
+		if (newContainerDimOne < oldContainerDimOne)
+		{
+			for (int i = newContainerDimOne + 1; i < oldContainerDimOne + 1; i++)
 			{
-				
-				count = updatePosition(container,
-						deletedPositions,containerMapFromCache);
+				for (int j = 1; j < oldContainerDimTwo + 1; j++)
+				{
+					deletedPositions.add(i + "@" + j);
+				}
 			}
-			
-			if(count!=deletedPositions.size())
+		}
+		if (newContainerDimTwo < oldContainerDimTwo)
+		{
+			for (int i = newContainerDimTwo + 1; i < oldContainerDimTwo + 1; i++)
 			{
-		    	flag= false;
+				for (int j = 1; j < oldContainerDimOne + 1; j++)
+				{
+					if (!deletedPositions.contains(j + "@" + i))
+					{
+						deletedPositions.add(j + "@" + i);
+					}
+				}
 			}
-			return flag;
 		}
 
-	
+		Map containerMapFromCache = null;
+		try
+		{
+			containerMapFromCache = (TreeMap) StorageContainerUtil.getContainerMapFromCache();
+		}
+		catch (CacheException e)
+		{
+			Logger.out.error(e);
+		}
+
+		int count = 0;
+		if (containerMapFromCache != null)
+		{
+
+			count = updatePosition(container, deletedPositions, containerMapFromCache);
+		}
+
+		if (count != deletedPositions.size())
+		{
+			flag = false;
+		}
+		return flag;
+	}
 
 	/**
 	 * @param container
@@ -675,9 +727,8 @@ public final class StorageContainerUtil
 	 * @param containerMapFromCache
 	 * @return
 	 */
-	private static int updatePosition(
-			StorageContainer container, List deletedPositions,
-			Map containerMapFromCache) 
+	private static int updatePosition(StorageContainer container, List deletedPositions,
+			Map containerMapFromCache)
 	{
 		Iterator itr = containerMapFromCache.keySet().iterator();
 		int count = 0;
@@ -689,567 +740,590 @@ public final class StorageContainerUtil
 
 				Map tempMap = (Map) containerMapFromCache.get(nvb);
 				Iterator tempIterator = tempMap.keySet().iterator();
-				while(tempIterator.hasNext())
+				while (tempIterator.hasNext())
 				{
-					
-				NameValueBean nvb1 = (NameValueBean) tempIterator.next();
-				List list = (List) tempMap.get(nvb1);
-				for(int i=0;i<list.size();i++)
-				{
-				  NameValueBean nvb2 = (NameValueBean) list.get(i);
-				  String formatedPosition = nvb1.getValue() + "@" + nvb2.getValue();
-				  if(deletedPositions.contains(formatedPosition))
-				  {
-					  count++;
-				  }
-				}
-						
+
+					NameValueBean nvb1 = (NameValueBean) tempIterator.next();
+					List list = (List) tempMap.get(nvb1);
+					for (int i = 0; i < list.size(); i++)
+					{
+						NameValueBean nvb2 = (NameValueBean) list.get(i);
+						String formatedPosition = nvb1.getValue() + "@" + nvb2.getValue();
+						if (deletedPositions.contains(formatedPosition))
+						{
+							count++;
+						}
+					}
+
 				}
 			}
 
 		}
 		return count;
 	}
-			
-		/**
-		 * @param dao
-		 * @param similarContainerMap
-		 * @param containerPrefixKey
-		 * @param positionsToBeAllocatedList
-		 * @param usedPositionsList
-		 * @param iCount
-		 * @throws DAOException
-		 */
-		public static void prepareContainerMap(DAO dao, Map similarContainerMap, String containerPrefixKey,
-				List positionsToBeAllocatedList, List usedPositionsList, int iCount, String contId) throws DAOException
+
+	/**
+	 * @param dao
+	 * @param similarContainerMap
+	 * @param containerPrefixKey
+	 * @param positionsToBeAllocatedList
+	 * @param usedPositionsList
+	 * @param iCount
+	 * @throws ApplicationException 
+	 */
+	public static void prepareContainerMap(DAO dao, Map similarContainerMap,
+			String containerPrefixKey, List positionsToBeAllocatedList, List usedPositionsList,
+			int iCount, String contId) throws ApplicationException
+	{
+		String radioButonKey = "radio_" + iCount;
+		String containerIdKey = containerPrefixKey + iCount + contId;
+		String containerNameKey = containerPrefixKey + iCount + "_StorageContainer_name";
+		String posDim1Key = containerPrefixKey + iCount + "_positionDimensionOne";
+		String posDim2Key = containerPrefixKey + iCount + "_positionDimensionTwo";
+
+		String containerName = null;
+		String containerId = null;
+		String posDim1 = null;
+		String posDim2 = null;
+		//get the container values based on user selection from dropdown or map
+		if (similarContainerMap.get(radioButonKey) != null
+				&& similarContainerMap.get(radioButonKey).equals("1"))
 		{
-			String radioButonKey = "radio_" + iCount;
-			String containerIdKey = containerPrefixKey + iCount + contId;
-			String containerNameKey = containerPrefixKey + iCount + "_StorageContainer_name";
-			String posDim1Key = containerPrefixKey + iCount + "_positionDimensionOne";
-			String posDim2Key = containerPrefixKey + iCount + "_positionDimensionTwo";
+			containerId = (String) similarContainerMap.get(containerIdKey);
+			posDim1 = (String) similarContainerMap.get(posDim1Key);
+			posDim2 = (String) similarContainerMap.get(posDim2Key);
+			usedPositionsList.add(containerId + Constants.STORAGE_LOCATION_SAPERATOR + posDim1
+					+ Constants.STORAGE_LOCATION_SAPERATOR + posDim2);
 
-			String containerName = null;
-			String containerId = null;
-			String posDim1 = null;
-			String posDim2 = null;
-			//get the container values based on user selection from dropdown or map
-			if (similarContainerMap.get(radioButonKey)!=null && similarContainerMap.get(radioButonKey).equals("1"))
+		}
+		else if (similarContainerMap.get(radioButonKey) != null
+				&& similarContainerMap.get(radioButonKey).equals("2"))
+		{
+			containerName = (String) similarContainerMap.get(containerNameKey + "_fromMap");
+
+			String sourceObjectName = StorageContainer.class.getName();
+			String[] selectColumnName = {"id"};
+			String[] whereColumnName = {"name"};
+			String[] whereColumnCondition = {"="};
+			Object[] whereColumnValue = {containerName};
+			String joinCondition = null;
+
+			QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
+			queryWhereClause.addCondition(new EqualClause("name", containerName));
+			List list = dao.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
+
+			if (!list.isEmpty())
 			{
-				containerId = (String) similarContainerMap.get(containerIdKey);
-				posDim1 = (String) similarContainerMap.get(posDim1Key);
-				posDim2 = (String) similarContainerMap.get(posDim2Key);
-				usedPositionsList.add(containerId + Constants.STORAGE_LOCATION_SAPERATOR + posDim1 + Constants.STORAGE_LOCATION_SAPERATOR + posDim2);
-
+				containerId = list.get(0).toString();
 			}
-			else if (similarContainerMap.get(radioButonKey)!=null && similarContainerMap.get(radioButonKey).equals("2"))
+			else
 			{
-				containerName = (String) similarContainerMap.get(containerNameKey + "_fromMap");
+				String message = ApplicationProperties.getValue("specimen.storageContainer");
+				throw AppUtility.getApplicationException("errors.invalid", null,
+						"StorageContainerUtil.java :" + message);
+			}
 
-				String sourceObjectName = StorageContainer.class.getName();
-				String[] selectColumnName = {"id"};
-				String[] whereColumnName = {"name"};
-				String[] whereColumnCondition = {"="};
-				Object[] whereColumnValue = {containerName};
-				String joinCondition = null;
+			posDim1 = (String) similarContainerMap.get(posDim1Key + "_fromMap");
+			posDim2 = (String) similarContainerMap.get(posDim2Key + "_fromMap");
 
-				List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
+			if (posDim1 == null || posDim1.trim().equals("") || posDim2 == null
+					|| posDim2.trim().equals(""))
+			{
+				positionsToBeAllocatedList.add(Integer.valueOf(iCount));
+			}
+			else
+			{
 
-				if (!list.isEmpty())
+				usedPositionsList.add(containerId + Constants.STORAGE_LOCATION_SAPERATOR + posDim1
+						+ Constants.STORAGE_LOCATION_SAPERATOR + posDim2);
+				similarContainerMap.put(containerIdKey, containerId);
+				similarContainerMap.put(posDim1Key, posDim1);
+				similarContainerMap.put(posDim2Key, posDim2);
+				similarContainerMap.remove(containerIdKey + "_fromMap");
+				similarContainerMap.remove(posDim1Key + "_fromMap");
+				similarContainerMap.remove(posDim2Key + "_fromMap");
+			}
+
+		}
+	}
+
+	/**
+	 * check for initial values for storage container.
+	 * @param containerMap container map
+	 * @return list of initial values
+	 */
+	public static List checkForInitialValues(Map containerMap)
+	{
+		List initialValues = null;
+
+		if (containerMap.size() > 0)
+		{
+			String[] startingPoints = new String[3];
+
+			Set keySet = containerMap.keySet();
+			Iterator itr = keySet.iterator();
+			NameValueBean nvb = (NameValueBean) itr.next();
+			startingPoints[0] = nvb.getValue();
+
+			Map map1 = (Map) containerMap.get(nvb);
+			keySet = map1.keySet();
+			itr = keySet.iterator();
+			nvb = (NameValueBean) itr.next();
+			startingPoints[1] = nvb.getValue();
+
+			List list = (List) map1.get(nvb);
+			nvb = (NameValueBean) list.get(0);
+			startingPoints[2] = nvb.getValue();
+
+			Logger.out.info("Starting points[0]" + startingPoints[0]);
+			Logger.out.info("Starting points[1]" + startingPoints[1]);
+			Logger.out.info("Starting points[2]" + startingPoints[2]);
+			initialValues = new ArrayList();
+			initialValues.add(startingPoints);
+		}
+		return initialValues;
+	}
+
+	/**
+	 * @param containerMap
+	 * @param aliquotCount
+	 * @param counter
+	 * @return
+	 */
+	public static int checkForLocation(Map containerMap, int aliquotCount, int counter)
+	{
+		Object[] containerId = containerMap.keySet().toArray();
+		for (int i = 0; i < containerId.length; i++)
+		{
+			Map xDimMap = (Map) containerMap.get(containerId[i]);
+			if (!xDimMap.isEmpty())
+			{
+				Object[] xDim = xDimMap.keySet().toArray();
+				for (int j = 0; j < xDim.length; j++)
 				{
-					containerId = list.get(0).toString();
+					List yDimList = (List) xDimMap.get(xDim[j]);
+					counter = counter + yDimList.size();
+					if (counter >= aliquotCount)
+					{
+						i = containerId.length;
+						break;
+					}
 				}
-				else
-				{
-					String message = ApplicationProperties.getValue("specimen.storageContainer");
-					throw new DAOException(ApplicationProperties.getValue("errors.invalid", message));
-				}
-
-				posDim1 = (String) similarContainerMap.get(posDim1Key + "_fromMap");
-				posDim2 = (String) similarContainerMap.get(posDim2Key + "_fromMap");
-
-				if (posDim1 == null || posDim1.trim().equals("") || posDim2 == null || posDim2.trim().equals(""))
-				{
-					positionsToBeAllocatedList.add(Integer.valueOf(iCount));
-				}
-				else
-				{
-
-					usedPositionsList.add(containerId + Constants.STORAGE_LOCATION_SAPERATOR + posDim1 + Constants.STORAGE_LOCATION_SAPERATOR
-							+ posDim2); 
-					similarContainerMap.put(containerIdKey, containerId);
-					similarContainerMap.put(posDim1Key, posDim1);
-					similarContainerMap.put(posDim2Key, posDim2);
-					similarContainerMap.remove(containerIdKey + "_fromMap");
-					similarContainerMap.remove(posDim1Key + "_fromMap");
-					similarContainerMap.remove(posDim2Key + "_fromMap");
-				}
-
 			}
 		}
+		return counter;
+	}
 
-		/**
-		 * check for initial values for storage container.
-		 * @param containerMap container map
-		 * @return list of initial values
-		 */
-		public static List checkForInitialValues(Map containerMap)
-		{
-			List initialValues = null;
+	/**
+	 * @param form
+	 * @param containerMap
+	 * @param aliquotMap
+	 */
 
-			if (containerMap.size() > 0)
-			{
-				String[] startingPoints = new String[3];
-
-				Set keySet = containerMap.keySet();
-				Iterator itr = keySet.iterator();
-				NameValueBean nvb = (NameValueBean) itr.next();
-				startingPoints[0] = nvb.getValue();
-
-				Map map1 = (Map) containerMap.get(nvb);
-				keySet = map1.keySet();
-				itr = keySet.iterator();
-				nvb = (NameValueBean) itr.next();
-				startingPoints[1] = nvb.getValue();
-
-				List list = (List) map1.get(nvb);
-				nvb = (NameValueBean) list.get(0);
-				startingPoints[2] = nvb.getValue();
-
-				Logger.out.info("Starting points[0]" + startingPoints[0]);
-				Logger.out.info("Starting points[1]" + startingPoints[1]);
-				Logger.out.info("Starting points[2]" + startingPoints[2]);
-				initialValues = new ArrayList();
-				initialValues.add(startingPoints);
-			}
-			return initialValues;
-		}
-		/**
-		 * @param containerMap
-		 * @param aliquotCount
-		 * @param counter
-		 * @return
-		 */
-		public static int checkForLocation(Map containerMap, int aliquotCount, int counter)
+	public static void populateAliquotMap(String objectKey, Map containerMap, Map aliquotMap,
+			String noOfAliquots)
+	{
+		int counter = 1;
+		if (!containerMap.isEmpty())
 		{
 			Object[] containerId = containerMap.keySet().toArray();
 			for (int i = 0; i < containerId.length; i++)
 			{
 				Map xDimMap = (Map) containerMap.get(containerId[i]);
-				if (!xDimMap.isEmpty())
+				counter = setAliquotMap(objectKey, xDimMap, containerId, noOfAliquots, counter,
+						aliquotMap, i);
+				if (counter <= Integer.parseInt(noOfAliquots))
 				{
-					Object[] xDim = xDimMap.keySet().toArray();
-					for (int j = 0; j < xDim.length; j++)
-					{
-						List yDimList = (List) xDimMap.get(xDim[j]);
-						counter = counter + yDimList.size();
-						if (counter >= aliquotCount)
-						{
-							i = containerId.length;
-							break;
-						}
-					}
+					i = containerId.length;
 				}
 			}
-			return counter;
-		}	
-		
-		/**
-		 * @param form
-		 * @param containerMap
-		 * @param aliquotMap
-		 */
-	
-		public static void populateAliquotMap(String objectKey, Map containerMap, Map aliquotMap, String noOfAliquots)
+		}
+	}
+
+	public static int setAliquotMap(String objectKey, Map xDimMap, Object[] containerId,
+			String noOfAliquots, int counter, Map aliquotMap, int i)
+	{
+		objectKey = objectKey + ":";
+
+		if (!xDimMap.isEmpty())
 		{
-			int counter = 1;
-			if (!containerMap.isEmpty())
+			Object[] xDim = xDimMap.keySet().toArray();
+			for (int j = 0; j < xDim.length; j++)
 			{
-				Object[] containerId = containerMap.keySet().toArray();
-				for (int i = 0; i < containerId.length; i++)
+				List yDimList = (List) xDimMap.get(xDim[j]);
+				for (int k = 0; k < yDimList.size(); k++)
 				{
-					Map xDimMap = (Map) containerMap.get(containerId[i]);
-					counter = setAliquotMap(objectKey, xDimMap,containerId, noOfAliquots,counter,aliquotMap, i);
 					if (counter <= Integer.parseInt(noOfAliquots))
 					{
-						i=containerId.length;
-					}
-				}
-			}
-		}
-		public static int setAliquotMap(String objectKey,Map xDimMap, Object[] containerId, String noOfAliquots, int counter, Map aliquotMap, int i)
-		{
-			objectKey = objectKey + ":";
+						String containerKey = objectKey + counter + "_StorageContainer_id";
+						String pos1Key = objectKey + counter + "_positionDimensionOne";
+						String pos2Key = objectKey + counter + "_positionDimensionTwo";
 
-			if (!xDimMap.isEmpty())
-			{
-			   Object[] xDim = xDimMap.keySet().toArray();
-				for (int j = 0; j < xDim.length; j++)
-				{
-					List yDimList = (List) xDimMap.get(xDim[j]);
-					for (int k = 0; k < yDimList.size(); k++)
+						aliquotMap.put(containerKey, ((NameValueBean) containerId[i]).getValue());
+						aliquotMap.put(pos1Key, ((NameValueBean) xDim[j]).getValue());
+						aliquotMap.put(pos2Key, ((NameValueBean) yDimList.get(k)).getValue());
+
+						counter++;
+					}
+					else
 					{
-						if (counter <= Integer.parseInt(noOfAliquots))
-						{
-							String containerKey = objectKey + counter + "_StorageContainer_id";
-							String pos1Key = objectKey + counter + "_positionDimensionOne";
-							String pos2Key = objectKey + counter + "_positionDimensionTwo";
-
-							aliquotMap.put(containerKey, ((NameValueBean) containerId[i]).getValue());
-							aliquotMap.put(pos1Key, ((NameValueBean) xDim[j]).getValue());
-							aliquotMap.put(pos2Key, ((NameValueBean) yDimList.get(k)).getValue());
-
-							counter++;
-						}
-						else
-						{
-							j = xDim.length;
-							//i = containerId.length;
-							break;
-						}
+						j = xDim.length;
+						//i = containerId.length;
+						break;
 					}
 				}
 			}
-			//counter = new Integer(intCounter);
-			return counter;
 		}
-	
-		/**
-		 * @param specimenArrayBizLogic
-		 * @param specimenArrayForm
-		 * @param containerMap
-		 * @return
-		 * @throws DAOException
-		 */
-		public static List setInitialValue(SpecimenArrayBizLogic specimenArrayBizLogic,
-				SpecimenArrayForm specimenArrayForm, TreeMap containerMap) throws DAOException
-		{
-			List initialValues = null;
-			String[] startingPoints = new String[]{"-1", "-1", "-1"};
-			String containerName = null;
-			if (specimenArrayForm.getStorageContainer() != null
-					&& !specimenArrayForm.getStorageContainer().equals("-1"))
-			{
-				startingPoints[0] = specimenArrayForm.getStorageContainer();
-				String[] selectColumnName = {"name"}; 
-				String[] whereColumnName = {Constants.SYSTEM_IDENTIFIER};
-				String[] whereColumnCondition = {"="};
-				Object[] whereColumnValue = {Long.valueOf(startingPoints[0])};
-				String joinCondition = Constants.AND_JOIN_CONDITION;		        			
-				List containerList = specimenArrayBizLogic.retrieve(StorageContainer.class.getName(),selectColumnName,whereColumnName,whereColumnCondition,whereColumnValue,joinCondition);
-				if ((containerList != null) && (!containerList.isEmpty())) 
-				{
-					containerName = (String) containerList.get(0);
-				}							
-			}		
-			if (specimenArrayForm.getPositionDimensionOne() != -1)
-			{
-				startingPoints[1] = String.valueOf(specimenArrayForm.getPositionDimensionOne());
-			}
-			
-			if (specimenArrayForm.getPositionDimensionTwo() != -1)
-			{
-				startingPoints[2] = String.valueOf(specimenArrayForm.getPositionDimensionTwo());
-			}
-			initialValues = new ArrayList();
-			initialValues.add(startingPoints);
-			// if not null
-			if (containerName != null)
-			{
-				addPostions(containerMap,Long.valueOf(startingPoints[0]),containerName,Integer.valueOf(startingPoints[1]),Integer.valueOf(startingPoints[2]));
-			}
-			return initialValues;
-		}
-		
-		/**
-		 * add positions while in edit mode
-		 * @param containerMap 
-		 * @param id
-		 * @param containerName
-		 * @param pos1
-		 * @param pos2
-		 */
-		public static void addPostions(Map containerMap, Long id, String containerName, Integer pos1, Integer pos2)
-		{
-			int flag = 0;
-			NameValueBean xpos = new NameValueBean(pos1, pos1);
-			NameValueBean ypos = new NameValueBean(pos2, pos2);
-			NameValueBean parentId = new NameValueBean(containerName, id);
+		//counter = new Integer(intCounter);
+		return counter;
+	}
 
-			Set keySet = containerMap.keySet();
-			Iterator itr = keySet.iterator();
+	/**
+	 * @param specimenArrayBizLogic
+	 * @param specimenArrayForm
+	 * @param containerMap
+	 * @return
+	 * @throws DAOException
+	 */
+	public static List setInitialValue(SpecimenArrayBizLogic specimenArrayBizLogic,
+			SpecimenArrayForm specimenArrayForm, TreeMap containerMap) throws ApplicationException
+	{
+		List initialValues = null;
+		String[] startingPoints = new String[]{"-1", "-1", "-1"};
+		String containerName = null;
+		if (specimenArrayForm.getStorageContainer() != null
+				&& !specimenArrayForm.getStorageContainer().equals("-1"))
+		{
+			startingPoints[0] = specimenArrayForm.getStorageContainer();
+			String[] selectColumnName = {"name"};
+			String[] whereColumnName = {Constants.SYSTEM_IDENTIFIER};
+			String[] whereColumnCondition = {"="};
+			Object[] whereColumnValue = {Long.valueOf(startingPoints[0])};
+			String joinCondition = Constants.AND_JOIN_CONDITION;
+			List containerList = specimenArrayBizLogic.retrieve(StorageContainer.class.getName(),
+					selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue,
+					joinCondition);
+			if ((containerList != null) && (!containerList.isEmpty()))
+			{
+				containerName = (String) containerList.get(0);
+			}
+		}
+		if (specimenArrayForm.getPositionDimensionOne() != -1)
+		{
+			startingPoints[1] = String.valueOf(specimenArrayForm.getPositionDimensionOne());
+		}
+
+		if (specimenArrayForm.getPositionDimensionTwo() != -1)
+		{
+			startingPoints[2] = String.valueOf(specimenArrayForm.getPositionDimensionTwo());
+		}
+		initialValues = new ArrayList();
+		initialValues.add(startingPoints);
+		// if not null
+		if (containerName != null)
+		{
+			addPostions(containerMap, Long.valueOf(startingPoints[0]), containerName, Integer
+					.valueOf(startingPoints[1]), Integer.valueOf(startingPoints[2]));
+		}
+		return initialValues;
+	}
+
+	/**
+	 * add positions while in edit mode
+	 * @param containerMap 
+	 * @param id
+	 * @param containerName
+	 * @param pos1
+	 * @param pos2
+	 */
+	public static void addPostions(Map containerMap, Long id, String containerName, Integer pos1,
+			Integer pos2)
+	{
+		int flag = 0;
+		NameValueBean xpos = new NameValueBean(pos1, pos1);
+		NameValueBean ypos = new NameValueBean(pos2, pos2);
+		NameValueBean parentId = new NameValueBean(containerName, id);
+
+		Set keySet = containerMap.keySet();
+		Iterator itr = keySet.iterator();
+		while (itr.hasNext())
+		{
+			NameValueBean nvb = (NameValueBean) itr.next();
+			if (nvb.getValue().equals(id.toString()))
+			{
+				Map pos1Map = (Map) containerMap.get(nvb);
+				Set keySet1 = pos1Map.keySet();
+				Iterator itr1 = keySet1.iterator();
+				while (itr1.hasNext())
+				{
+					NameValueBean nvb1 = (NameValueBean) itr1.next();
+					if (nvb1.getValue().equals(pos1.toString()))
+					{
+						List pos2List = (List) pos1Map.get(nvb1);
+						pos2List.add(ypos);
+						flag = 1;
+						break;
+					}
+				}
+				if (flag != 1)
+				{
+					List pos2List = new ArrayList();
+					pos2List.add(ypos);
+					pos1Map.put(xpos, pos2List);
+					flag = 1;
+				}
+			}
+		}
+		if (flag != 1)
+		{
+			List pos2List = new ArrayList();
+			pos2List.add(ypos);
+
+			Map pos1Map = new TreeMap();
+			pos1Map.put(xpos, pos2List);
+			containerMap.put(parentId, pos1Map);
+
+		}
+	}
+
+	/**
+	 *  This method allocates available position to single specimen
+	 * @param object
+	 * @param aliquotMap
+	 * @param usedPositionsList
+	 * @throws ApplicationException 
+	 */
+	public static void allocatePositionToSingleContainerOrSpecimen(Object object, Map aliquotMap,
+			List usedPositionsList, String spKey, String scId) throws ApplicationException
+	{
+		int specimenNumber = ((Integer) object).intValue();
+		String specimenKey = spKey;
+		String containerNameKey = specimenKey + specimenNumber + "_StorageContainer_name";
+		String containerIdKey = specimenKey + specimenNumber + scId;
+		String posDim1Key = specimenKey + specimenNumber + "_positionDimensionOne";
+		String posDim2Key = specimenKey + specimenNumber + "_positionDimensionTwo";
+		String containerName = (String) aliquotMap.get(containerNameKey + "_fromMap");
+
+		boolean isContainerFull = false;
+		Map containerMapFromCache = null;
+		try
+		{
+			containerMapFromCache = (TreeMap) StorageContainerUtil.getContainerMapFromCache();
+		}
+		catch (CacheException e)
+		{
+			Logger.out.error(e);
+		}
+
+		if (containerMapFromCache != null)
+		{
+			Iterator itr = containerMapFromCache.keySet().iterator();
 			while (itr.hasNext())
 			{
 				NameValueBean nvb = (NameValueBean) itr.next();
-				if (nvb.getValue().equals(id.toString()))
+				String containerNameFromCacheName = nvb.getName().toString();
+
+				// TODO
+				if (containerNameFromCacheName.equalsIgnoreCase(containerName.trim()))
 				{
-					Map pos1Map = (Map) containerMap.get(nvb);
-					Set keySet1 = pos1Map.keySet();
-					Iterator itr1 = keySet1.iterator();
-					while (itr1.hasNext())
+					String containerId = nvb.getValue();
+					Map tempMap = (Map) containerMapFromCache.get(nvb);
+					Iterator tempIterator = tempMap.keySet().iterator();
+
+					while (tempIterator.hasNext())
 					{
-						NameValueBean nvb1 = (NameValueBean) itr1.next();
-						if (nvb1.getValue().equals(pos1.toString()))
+						NameValueBean nvb1 = (NameValueBean) tempIterator.next();
+						List yPosList = (List) tempMap.get(nvb1);
+						for (int i = 0; i < yPosList.size(); i++)
 						{
-							List pos2List = (List) pos1Map.get(nvb1);
-							pos2List.add(ypos);
-							flag = 1;
-							break;
-						}
-					}
-					if (flag != 1)
-					{
-						List pos2List = new ArrayList();
-						pos2List.add(ypos);
-						pos1Map.put(xpos, pos2List);
-						flag = 1;
-					}
-				}
-			}
-			if (flag != 1)
-			{
-				List pos2List = new ArrayList();
-				pos2List.add(ypos);
+							NameValueBean nvb2 = (NameValueBean) yPosList.get(i);
+							String availaleStoragePosition = containerId
+									+ Constants.STORAGE_LOCATION_SAPERATOR + nvb1.getValue()
+									+ Constants.STORAGE_LOCATION_SAPERATOR + nvb2.getValue();
+							int j = 0;
 
-				Map pos1Map = new TreeMap();
-				pos1Map.put(xpos, pos2List);
-				containerMap.put(parentId, pos1Map);
-
-			}
-		}
-		/**
-		 *  This method allocates available position to single specimen
-		 * @param object
-		 * @param aliquotMap
-		 * @param usedPositionsList
-		 * @throws DAOException
-		 */
-		public static void allocatePositionToSingleContainerOrSpecimen(Object object, Map aliquotMap, 
-				List usedPositionsList,String spKey,String scId) throws DAOException
-		{
-			int specimenNumber = ((Integer) object).intValue();
-			String specimenKey = spKey;
-			String containerNameKey = specimenKey + specimenNumber + "_StorageContainer_name";
-			String containerIdKey = specimenKey + specimenNumber + scId;
-			String posDim1Key = specimenKey + specimenNumber + "_positionDimensionOne";
-			String posDim2Key = specimenKey + specimenNumber + "_positionDimensionTwo";
-			String containerName = (String) aliquotMap.get(containerNameKey + "_fromMap");
-
-			boolean isContainerFull = false;
-			Map containerMapFromCache = null;
-			try
-			{
-				containerMapFromCache = (TreeMap) StorageContainerUtil.getContainerMapFromCache();
-			}
-			catch (CacheException e)
-			{
-				Logger.out.error(e);
-			}
-
-			if (containerMapFromCache != null)
-			{
-				Iterator itr = containerMapFromCache.keySet().iterator();
-				while (itr.hasNext())
-				{
-					NameValueBean nvb = (NameValueBean) itr.next();
-					String containerNameFromCacheName = nvb.getName().toString();
-				
-					// TODO
-					if (containerNameFromCacheName.equalsIgnoreCase(containerName.trim()))
-					{
-						String containerId = nvb.getValue();
-						Map tempMap = (Map) containerMapFromCache.get(nvb);
-						Iterator tempIterator = tempMap.keySet().iterator();
-
-						while (tempIterator.hasNext())
-						{
-							NameValueBean nvb1 = (NameValueBean) tempIterator.next();
-							List yPosList = (List) tempMap.get(nvb1);
-							for (int i = 0; i < yPosList.size(); i++)
+							for (; j < usedPositionsList.size(); j++)
 							{
-								NameValueBean nvb2 = (NameValueBean) yPosList.get(i);
-								String availaleStoragePosition = containerId + Constants.STORAGE_LOCATION_SAPERATOR + nvb1.getValue()
-										+ Constants.STORAGE_LOCATION_SAPERATOR + nvb2.getValue();
-								int j = 0;
-								
-								for (; j < usedPositionsList.size(); j++)
+								if (usedPositionsList.get(j).toString().equals(
+										availaleStoragePosition))
 								{
-									if (usedPositionsList.get(j).toString().equals(availaleStoragePosition))
-									{
-										break;
-									}
+									break;
 								}
-								if (j==usedPositionsList.size())
-								{
-				            		 usedPositionsList.add(availaleStoragePosition);
-									 aliquotMap.put(containerIdKey,containerId);
-									 aliquotMap.put(posDim1Key, nvb1.getValue());
-									 aliquotMap.put(posDim2Key, nvb2.getValue());
-									 aliquotMap.remove(containerIdKey+"_fromMap");
-									 aliquotMap.remove(posDim1Key+"_fromMap");
-									 aliquotMap.remove(posDim2Key+"_fromMap");
-	                                 return;
-								}
-
 							}
-						}
-					}
-				}
-			}
-			
-			throw new DAOException("The container you specified does not have enough space to allocate storage position for Container Number " + specimenNumber);
-		}
-		
-		/**
-		 * @return
-		 */
-		public static boolean checkPos1AndPos2(String pos1, String pos2)
-		{
-			boolean flag = false;
-			if(pos1!=null&&!pos1.trim().equals(""))
-			{
-				long l = 1;
-			      try 
-				  {
-			        	l = Long.parseLong(pos1);
-				  }
-				 catch(Exception e)
-				 {
-				 	flag = true;
-					
-				 }
-				 if(l<=0)
-				 {
-				 	flag = true;
-				 }
-			}
-			if(pos2!=null&&!pos2.trim().equals(""))
-			{
-				long l = 1;
-			      try 
-				  {
-			        	l = Long.parseLong(pos2);
-				  }
-				 catch(Exception e)
-				 {
-				 	flag = true;
-					
-				 }
-				 if(l<=0)
-				 {
-				 	flag = true;
-				 }
-			}
-			return flag;
-		}
-		/**
-		 * @param dao
-		 * @param containerId
-		 * @return
-		 * @throws DAOException
-		 * @throws ClassNotFoundException 
-		 */
-		public static Collection getChildren(DAO dao,Long containerId) throws DAOException
-		{
-			String hql = "select cntPos.occupiedContainer from ContainerPosition cntPos, StorageContainer container where cntPos.occupiedContainer.id=container.id and cntPos.parentContainer.id ="+containerId;
-			List childrenColl = new ArrayList();
-			try
-			{
-				childrenColl = dao.executeQuery(hql, null, false, null);
-			}
-			catch (ClassNotFoundException e)
-			{
-				// TODO Auto-generated catch block
-				Logger.out.error(e);
-			}
-
-		      return childrenColl;
-		}
-		  
-		  /**
-		 * @param children
-		 * @param dao
-		 * @param containerId
-		 * @throws DAOException
-		 */
-		public static void setChildren(Collection children, DAO dao, Long containerId) throws DAOException
-		{
-			  if(children != null)
-			  {
-				  getChildren(dao, containerId).addAll(children);
-			  }
-		}
-		/**
-		 * Description: This method is used to create storage loaction key value.
-		 * Used while updating or inserting Specimen
-		 * @param containerName - storage container name
-		 * @param containerID - storage container id
-		 * @param containerPos1 - storage container Position 1
-		 * @param containerPos2 - storage container Position 2
-		 * @return storageValue : container name or container id:container Position 1,container Position 2
-		 */
-		//bug 8294
-		public static String getStorageValueKey(String containerName,String containerID,Integer containerPos1,Integer containerPos2)
-		{
-			StringBuffer storageValue = new StringBuffer();
-			if(containerName!=null)
-			{
-				storageValue.append(containerName);
-				storageValue.append(":");
-				storageValue.append(containerPos1);
-				storageValue.append(" ,");
-				storageValue.append(containerPos2);				
-			}
-			else if(containerID!=null)
-			{
-				storageValue.append(containerID);
-				storageValue.append(":");
-				storageValue.append(containerPos1);
-				storageValue.append(" ,");
-				storageValue.append(containerPos2);					
-			}
-			return storageValue.toString();
-		}
-
-
-		// added by Suman-bug 8228
-		  public static int getCountofFreeLocationOfContainer (String containerId, String storageContainerName)throws CacheException,Exception{
-			  Map <NameValueBean, NameValueBean>  containerMapFromCache = null;
-			  int freeSizeofContainer = 0;
-				try
-				{
-					containerMapFromCache = (TreeMap)getContainerMapFromCache();
-				}
-				catch (CacheException e)
-				{
-					Logger.out.error(e);
-				}
-											
-				if (containerMapFromCache != null && !(chkContainerFull(containerId,storageContainerName)))
-					{
-						Iterator <NameValueBean>itr = containerMapFromCache.keySet().iterator();
-						while (itr.hasNext())
-						{
-							NameValueBean nvb = (NameValueBean) itr.next();
-							String nvbName = nvb.getName();
-							String containerName = storageContainerName;
-							if(nvbName.equals(containerName))
+							if (j == usedPositionsList.size())
 							{
-								Map <NameValueBean ,NameValueBean>positionMap = (Map <NameValueBean ,NameValueBean> ) containerMapFromCache.get(nvb);
-								Iterator <NameValueBean>tempIterator = positionMap.keySet().iterator();;
-									while(tempIterator.hasNext())
-									{
-										NameValueBean nvb1 = (NameValueBean) tempIterator.next();
-										List <NameValueBean>locationList = (List) positionMap.get(nvb1);
-										freeSizeofContainer = freeSizeofContainer +locationList.size();
-									}
-								break;
+								usedPositionsList.add(availaleStoragePosition);
+								aliquotMap.put(containerIdKey, containerId);
+								aliquotMap.put(posDim1Key, nvb1.getValue());
+								aliquotMap.put(posDim2Key, nvb2.getValue());
+								aliquotMap.remove(containerIdKey + "_fromMap");
+								aliquotMap.remove(posDim1Key + "_fromMap");
+								aliquotMap.remove(posDim2Key + "_fromMap");
+								return;
 							}
+
 						}
 					}
-				
-					
-				return freeSizeofContainer;
-		  }
+				}
+			}
+		}
 
+		throw AppUtility
+				.getApplicationException(
+						"utility.error",
+						null,
+						"StorageContainerUtil.java :"
+								+ "The container you specified does not have enough space to allocate storage position for Container Number "
+								+ specimenNumber);
 	}
+
+	/**
+	 * @return
+	 */
+	public static boolean checkPos1AndPos2(String pos1, String pos2)
+	{
+		boolean flag = false;
+		if (pos1 != null && !pos1.trim().equals(""))
+		{
+			long l = 1;
+			try
+			{
+				l = Long.parseLong(pos1);
+			}
+			catch (Exception e)
+			{
+				flag = true;
+
+			}
+			if (l <= 0)
+			{
+				flag = true;
+			}
+		}
+		if (pos2 != null && !pos2.trim().equals(""))
+		{
+			long l = 1;
+			try
+			{
+				l = Long.parseLong(pos2);
+			}
+			catch (Exception e)
+			{
+				flag = true;
+
+			}
+			if (l <= 0)
+			{
+				flag = true;
+			}
+		}
+		return flag;
+	}
+
+	/**
+	 * @param dao
+	 * @param containerId
+	 * @return
+	 * @throws DAOException
+	 * @throws ClassNotFoundException 
+	 */
+	public static Collection getChildren(DAO dao, Long containerId) throws ApplicationException
+	{
+		String hql = "select cntPos.occupiedContainer from ContainerPosition cntPos, StorageContainer container where cntPos.occupiedContainer.id=container.id and cntPos.parentContainer.id ="
+				+ containerId;
+		List childrenColl = new ArrayList();
+		childrenColl = dao.executeQuery(hql);
+		return childrenColl;
+	}
+
+	/**
+	* @param children
+	* @param dao
+	* @param containerId
+	* @throws DAOException
+	*/
+	public static void setChildren(Collection children, DAO dao, Long containerId)
+			throws ApplicationException
+	{
+		if (children != null)
+		{
+			getChildren(dao, containerId).addAll(children);
+		}
+	}
+
+	/**
+	 * Description: This method is used to create storage loaction key value.
+	 * Used while updating or inserting Specimen
+	 * @param containerName - storage container name
+	 * @param containerID - storage container id
+	 * @param containerPos1 - storage container Position 1
+	 * @param containerPos2 - storage container Position 2
+	 * @return storageValue : container name or container id:container Position 1,container Position 2
+	 */
+	//bug 8294
+	public static String getStorageValueKey(String containerName, String containerID,
+			Integer containerPos1, Integer containerPos2)
+	{
+		StringBuffer storageValue = new StringBuffer();
+		if (containerName != null)
+		{
+			storageValue.append(containerName);
+			storageValue.append(":");
+			storageValue.append(containerPos1);
+			storageValue.append(" ,");
+			storageValue.append(containerPos2);
+		}
+		else if (containerID != null)
+		{
+			storageValue.append(containerID);
+			storageValue.append(":");
+			storageValue.append(containerPos1);
+			storageValue.append(" ,");
+			storageValue.append(containerPos2);
+		}
+		return storageValue.toString();
+	}
+
+	// added by Suman-bug 8228
+	public static int getCountofFreeLocationOfContainer(String containerId,
+			String storageContainerName) throws CacheException, Exception
+	{
+		Map<NameValueBean, NameValueBean> containerMapFromCache = null;
+		int freeSizeofContainer = 0;
+		try
+		{
+			containerMapFromCache = (TreeMap) getContainerMapFromCache();
+		}
+		catch (CacheException e)
+		{
+			Logger.out.error(e);
+		}
+
+		if (containerMapFromCache != null && !(chkContainerFull(containerId, storageContainerName)))
+		{
+			Iterator<NameValueBean> itr = containerMapFromCache.keySet().iterator();
+			while (itr.hasNext())
+			{
+				NameValueBean nvb = (NameValueBean) itr.next();
+				String nvbName = nvb.getName();
+				String containerName = storageContainerName;
+				if (nvbName.equals(containerName))
+				{
+					Map<NameValueBean, NameValueBean> positionMap = (Map<NameValueBean, NameValueBean>) containerMapFromCache
+							.get(nvb);
+					Iterator<NameValueBean> tempIterator = positionMap.keySet().iterator();;
+					while (tempIterator.hasNext())
+					{
+						NameValueBean nvb1 = (NameValueBean) tempIterator.next();
+						List<NameValueBean> locationList = (List) positionMap.get(nvb1);
+						freeSizeofContainer = freeSizeofContainer + locationList.size();
+					}
+					break;
+				}
+			}
+		}
+
+		return freeSizeofContainer;
+	}
+
+}

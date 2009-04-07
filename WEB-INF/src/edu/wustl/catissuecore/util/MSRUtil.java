@@ -23,7 +23,8 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.BizLogicException;
-import edu.wustl.common.factory.AbstractBizLogicFactory;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.global.ApplicationProperties;
 import gov.nih.nci.security.exceptions.CSException;
 
@@ -420,9 +421,10 @@ public class MSRUtil {
 	public AssignPrivilegePageBizLogic getAssignPrivilegePageBizLogic() throws BizLogicException
 	{
 		AssignPrivilegePageBizLogic apBizLogic = null;
-		apBizLogic = (AssignPrivilegePageBizLogic) AbstractBizLogicFactory
-			.getBizLogic(ApplicationProperties.getValue("app.bizLogicFactory"), "getBizLogic",
-					Constants.ASSIGN_PRIVILEGE_FORM_ID);
-		return apBizLogic;  
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		
+		apBizLogic = (AssignPrivilegePageBizLogic) factory
+			.getBizLogic(Constants.ASSIGN_PRIVILEGE_FORM_ID);
+		return apBizLogic; 
 	}
 }

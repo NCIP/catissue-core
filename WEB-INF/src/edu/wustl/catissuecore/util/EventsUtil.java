@@ -1,6 +1,6 @@
 /**
  * <p>Title: EventsUtil Class>
- * <p>Description: Utility methods related to events
+ * <p>Description: AppUtility methods related to events
  * of one or more specimen from a participant.</p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
@@ -40,11 +40,14 @@ import edu.wustl.catissuecore.domain.TissueSpecimenReviewEventParameters;
 import edu.wustl.catissuecore.domain.TransferEventParameters;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.cde.CDEManager;
-import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.exception.ApplicationException;
+
+import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
@@ -93,7 +96,7 @@ public final class EventsUtil
 		}
 		/* Bug id: 4179
 		 patch id: 4179_1*/
-		if (!validator.isValidTime(collectionTime, Constants.TIME_PATTERN_HH_MM_SS))
+		if (!validator.isValidTime(collectionTime, CommonServiceLocator.getInstance().getTimePattern()))
 		{
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected", ApplicationProperties
 					.getValue("collectionEvent.invalidTime")));
@@ -120,7 +123,7 @@ public final class EventsUtil
 		}
 		/* Bug id: 4179
 		 patch id: 4179_2*/
-		if (!validator.isValidTime(receivedTime, Constants.TIME_PATTERN_HH_MM_SS))
+		if (!validator.isValidTime(receivedTime,  CommonServiceLocator.getInstance().getTimePattern()))
 		{
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected", ApplicationProperties
 							.getValue("receivedTime.invalidTime")));
@@ -156,8 +159,9 @@ public final class EventsUtil
 	 * @throws DAOException
 	 * validating events from bizlogic
 	 */
-	public static void validateEventsObject(Object eventObject, Validator validator) throws DAOException
+	public static void validateEventsObject(Object eventObject, Validator validator) throws ApplicationException
 	{
+		String datePattern = CommonServiceLocator.getInstance().getDatePattern();
 		if (eventObject instanceof CollectionEventParameters)
 		{
 			CollectionEventParameters collectionEventParameters = (CollectionEventParameters) eventObject;
@@ -170,15 +174,15 @@ public final class EventsUtil
 					|| collectionEventParameters.getUser().getId() == 0))
 			{
 				String message = ApplicationProperties.getValue("specimen.collection.event.user");
-				throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+				throw AppUtility.getApplicationException("errors.item.required", null, message);
 			}
 			if (specimen != null)
 			{
 				//Date validation
-				if (!validator.checkDate(Utility.parseDateToString(collectionEventParameters.getTimestamp(), edu.wustl.catissuecore.util.global.Variables.dateFormat)))
+				if (!validator.checkDate(Utility.parseDateToString(collectionEventParameters.getTimestamp(), datePattern)))
 				{
 					String message = ApplicationProperties.getValue("specimen.collection.event.date");
-					throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+					throw AppUtility.getApplicationException("errors.item.required", null, message);
 				}
 			}
 			// checks the collectionProcedure
@@ -187,7 +191,7 @@ public final class EventsUtil
 				if (!validator.isValidOption(collectionEventParameters.getCollectionProcedure()))
 				{
 					String message = ApplicationProperties.getValue("collectioneventparameters.collectionprocedure");
-					throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+					throw AppUtility.getApplicationException("errors.item.required", null, message);
 				}
 
 				List procedureList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_COLLECTION_PROCEDURE, null);
@@ -196,7 +200,7 @@ public final class EventsUtil
 				{
 					if(!collectionEventParameters.getCollectionProcedure().equals(Constants.CP_DEFAULT))
 					{
-						throw new DAOException(ApplicationProperties.getValue("events.collectionProcedure.errMsg"));
+						throw AppUtility.getApplicationException("events.collectionProcedure.errMsg", null, "");
 					}
 				}
 			}
@@ -207,14 +211,14 @@ public final class EventsUtil
 				if (!validator.isValidOption(collectionEventParameters.getContainer()))
 				{
 					String message = ApplicationProperties.getValue("collectioneventparameters.container");
-					throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+					throw AppUtility.getApplicationException("errors.item.required", null, message);
 				}
 				List containerList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_CONTAINER, null);
 				if (!Validator.isEnumeratedValue(containerList, collectionEventParameters.getContainer()))
 				{
 					if(!collectionEventParameters.getContainer().equals(Constants.CP_DEFAULT))
 					{
-						throw new DAOException(ApplicationProperties.getValue("events.container.errMsg"));
+						throw AppUtility.getApplicationException("events.container.errMsg", null, "");
 					}
 				}
 			}
@@ -230,14 +234,14 @@ public final class EventsUtil
 					|| receivedEventParameters.getUser().getId() == 0))
 			{
 				String message = ApplicationProperties.getValue("specimen.recieved.event.user");
-				throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+				throw AppUtility.getApplicationException("errors.item.required", null, message);
 			}
 			if (specimen != null)
 			{
-				if (!validator.checkDate(Utility.parseDateToString(receivedEventParameters.getTimestamp(), edu.wustl.catissuecore.util.global.Variables.dateFormat)))
+				if (!validator.checkDate(Utility.parseDateToString(receivedEventParameters.getTimestamp(), datePattern)))
 				{
 					String message = ApplicationProperties.getValue("specimen.recieved.event.date");
-					throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+					throw AppUtility.getApplicationException("errors.item.required", null, message);
 				}
 			}
 			if (receivedEventParameters.getReceivedQuality() == null || !receivedEventParameters.getReceivedQuality().equals(""))
@@ -245,14 +249,14 @@ public final class EventsUtil
 				if (!validator.isValidOption(receivedEventParameters.getReceivedQuality()))
 				{
 					String message = ApplicationProperties.getValue("collectioneventparameters.receivedquality");
-					throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+					throw AppUtility.getApplicationException("errors.item.required", null, message);
 				}
 				List qualityList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_RECEIVED_QUALITY, null);
 				if (!Validator.isEnumeratedValue(qualityList, receivedEventParameters.getReceivedQuality()))
 				{
 					if(!receivedEventParameters.getReceivedQuality().equals(Constants.CP_DEFAULT))
 					{
-						throw new DAOException(ApplicationProperties.getValue("events.receivedQuality.errMsg"));
+						throw AppUtility.getApplicationException("events.receivedQuality.errMsg", null, "");
 					}
 				}
 			}

@@ -1,6 +1,6 @@
 /**
  * <p>Title: OrderingSystemUtil Class>
- * <p>Description:	Utility class for Ordering System</p>
+ * <p>Description:	AppUtility class for Ordering System</p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
  * @author Ashish Gupta
@@ -22,9 +22,11 @@ import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenOrderItem;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.beans.NameValueBean;
-import edu.wustl.common.util.dbManager.HibernateMetaData;
+import edu.wustl.common.util.Utility;
+import edu.wustl.common.util.global.CommonServiceLocator;
+import edu.wustl.dao.util.HibernateMetaData;
 
 
 
@@ -140,7 +142,7 @@ public final class OrderingSystemUtil
 			requestViewBean.setRequestedBy("");
 			requestViewBean.setEmail("");			
 		}
-		requestViewBean.setRequestedDate(Utility.parseDateToString(order.getRequestedDate(), edu.wustl.catissuecore.util.global.Variables.dateFormat));
+		requestViewBean.setRequestedDate(Utility.parseDateToString(order.getRequestedDate(), CommonServiceLocator.getInstance().getDatePattern()));
 		return requestViewBean;
 	}
 	/**

@@ -5,7 +5,7 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.dto.CollectionProtocolDTO;
 import edu.wustl.catissuecore.dto.UserDTO;
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.util.dbManager.HibernateMetaData;
+import edu.wustl.dao.util.HibernateMetaData;
 
 /**
  * 

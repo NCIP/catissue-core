@@ -14,9 +14,10 @@ import edu.common.dynamicextensions.domain.integration.EntityMap;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.wustl.catissuecore.bizlogic.AnnotationBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
-import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.exception.ApplicationException;
+import edu.wustl.dao.exception.DAOException;
 
 /**
  * @author suhas_khot
@@ -51,11 +52,11 @@ public final class AddEntityMapConditions
 	 * @throws DAOException if fails to get Object from database
 	 * @throws DynamicExtensionsSystemException fails to get container for all entities
 	 */
-	public static void main(String[] args) throws DynamicExtensionsSystemException, DAOException
+	public static void main(String[] args) throws DynamicExtensionsSystemException, ApplicationException
 	{
-		Long typeId = (Long) Utility.getObjectIdentifier(Constants.COLLECTION_PROTOCOL,
+		Long typeId = (Long) AppUtility.getObjectIdentifier(Constants.COLLECTION_PROTOCOL,
 				AbstractMetadata.class.getName(), Constants.NAME);
-		Map<Long, Long> entityIdsVsContId = Utility.getAllContainers();
+		Map<Long, Long> entityIdsVsContId = AppUtility.getAllContainers();
 		Collection<Long> containerIdColl = (Collection) entityIdsVsContId.values();
 		Long cpId = Long.valueOf(Constants.DEFAULT_CONDITION);
 		associateFormsToCP(cpId, typeId, containerIdColl);
@@ -69,7 +70,7 @@ public final class AddEntityMapConditions
 	 * @throws DynamicExtensionsSystemException 
 	 */
 	private static void associateFormsToCP(Long cpId, Long typeId, Collection<Long> containerIds)
-			throws DAOException, DynamicExtensionsSystemException
+			throws ApplicationException, DynamicExtensionsSystemException
 	{
 		AnnotationBizLogic annotation = new AnnotationBizLogic();
 		DefaultBizLogic defaultBizLogic = BizLogicFactory.getDefaultBizLogic();
@@ -82,7 +83,7 @@ public final class AddEntityMapConditions
 				if (entityMapList != null && !entityMapList.isEmpty())
 				{
 					EntityMap entityMap = entityMapList.get(0);
-					Utility.editConditions(entityMap, cpId, typeId, false);
+					AppUtility.editConditions(entityMap, cpId, typeId, false);
 					annotation.updateEntityMap(entityMap);
 				}
 			}

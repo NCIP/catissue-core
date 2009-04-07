@@ -9,14 +9,18 @@ import java.util.Map;
 import java.util.Set;
 
 import edu.wustl.catissuecore.bean.GenericSpecimen;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.security.exceptions.SMException;
-import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.exception.ApplicationException;
+import edu.wustl.common.exception.ErrorKey;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
+import edu.wustl.dao.exception.DAOException;
+import edu.wustl.security.exception.SMException;
 
 /**
  * This class exposes the functionality to set storage containers
@@ -64,7 +68,7 @@ public class SpecimenAutoStorageContainer {
 		specimenList.add(specimen);		
 	}
 
-	public void setSpecimenStoragePositions(SessionDataBean sessionDataBean) throws DAOException
+	public void setSpecimenStoragePositions(SessionDataBean sessionDataBean) throws ApplicationException
 	{
 
 		storageContainerIds.clear();
@@ -72,7 +76,7 @@ public class SpecimenAutoStorageContainer {
 		
 	}
 	public void setCollectionProtocolSpecimenStoragePositions(
-			SessionDataBean sessionDataBean) throws DAOException
+			SessionDataBean sessionDataBean) throws ApplicationException
 	{
 		
  
@@ -99,7 +103,7 @@ public class SpecimenAutoStorageContainer {
 	private void setAutoStoragePositions(
 			LinkedHashMap<String, LinkedList<GenericSpecimen>> autoSpecimenMap, 
 			SessionDataBean sessionDataBean, Long collectionProtocolId)
-			throws DAOException {
+			throws ApplicationException {
 		
 		Set<String> keySet = autoSpecimenMap.keySet();
 		if (!keySet.isEmpty())
@@ -117,14 +121,14 @@ public class SpecimenAutoStorageContainer {
 	}
 	
 	protected void setSpecimenStorageDetails(LinkedList<GenericSpecimen> specimenDataBeanList, 
-			String className, SessionDataBean bean, Long collectionProtocolId ) throws DAOException
+			String className, SessionDataBean bean, Long collectionProtocolId ) throws ApplicationException
 	{
  
 		Map containerMap;
 		try {
-			StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) 
-			BizLogicFactory.getInstance()
-							.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
+			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) factory
+					.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 
 			containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(
 					collectionProtocolId.longValue(), className, 0, "false", bean, true);
@@ -133,7 +137,7 @@ public class SpecimenAutoStorageContainer {
 
 		} catch (Exception exception) {
 
-			throw new DAOException(exception.getMessage(),exception);
+			throw AppUtility.getApplicationException("utility.error", exception, "");
 		}
 		
 	}

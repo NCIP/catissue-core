@@ -240,9 +240,9 @@ public final class SpecimenDetailsTagUtil
 	private static void setPageData(HttpServletRequest request)
 	{
 		String formAction = "SubmitSpecimenCollectionProtocol.do";
-		if(request.getAttribute(Constants.PAGEOF) != null)
+		if(request.getAttribute(Constants.PAGE_OF) != null)
 		{
-			formAction = formAction + "?pageOf="+request.getAttribute(Constants.PAGEOF);
+			formAction = formAction + "?pageOf="+request.getAttribute(Constants.PAGE_OF);
 		}
 		request.setAttribute("formAction",formAction);
 		String refreshTree = "refreshTree(\'"+Constants.CP_AND_PARTICIPANT_VIEW+"\',\'"+Constants.CP_TREE_VIEW+"\',\'"+Constants.CP_SEARCH_CP_ID+"\',\'"+Constants.CP_SEARCH_PARTICIPANT_ID+"\',\'1\');";

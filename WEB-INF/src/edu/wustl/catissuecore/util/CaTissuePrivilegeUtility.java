@@ -18,20 +18,27 @@ import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.multiRepository.bean.SiteUserRolePrivilegeBean;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.NameValueBean;
-import edu.wustl.common.dao.AbstractDAO;
-import edu.wustl.common.dao.DAOFactory;
-import edu.wustl.common.security.PrivilegeCache;
-import edu.wustl.common.security.PrivilegeManager;
-import edu.wustl.common.util.Permissions;
-import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.exception.ApplicationException;
+import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.exception.ErrorKey;
+import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.Variables;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.DAO;
+import edu.wustl.dao.daofactory.DAOConfigFactory;
+import edu.wustl.dao.daofactory.IDAOFactory;
+import edu.wustl.dao.exception.DAOException;
+import edu.wustl.security.exception.SMException;
+import edu.wustl.security.global.Permissions;
+import edu.wustl.security.privilege.PrivilegeCache;
+import edu.wustl.security.privilege.PrivilegeManager;
+import gov.nih.nci.security.exceptions.CSException;
 
 /**
- * A Utility class to do higher level, caTissue-specific processing of
+ * A AppUtility class to do higher level, caTissue-specific processing of
  * privileges
  * 
  * @author juberahamad_patel
@@ -66,17 +73,18 @@ public final class CaTissuePrivilegeUtility {
 	 * @param privilegeCache
 	 * @return list of SiteUserRolePrivilegeBean where each
 	 *         SiteUserRolePrivilegeBean represents privileges on a CP
-	 * @throws DAOException
+	 * @throws ApplicationException Application Exception
 	 */
 	public static Map<String, SiteUserRolePrivilegeBean> getCPPrivileges(
-			PrivilegeCache privilegeCache) {
+			PrivilegeCache privilegeCache) throws ApplicationException {
 		Map<String, SiteUserRolePrivilegeBean> map = new HashMap<String, SiteUserRolePrivilegeBean>();
-		AbstractDAO dao = DAOFactory.getInstance().getDAO(
-				Constants.HIBERNATE_DAO);
+		IDAOFactory daoFact = DAOConfigFactory.getInstance().getDAOFactory(CommonServiceLocator.getInstance().getAppName());
+		DAO dao = null;
 
 		try {
+			dao = daoFact.getDAO();
 			// TODO remove the DB call
-			User user = Utility.getUser(privilegeCache.getLoginName());
+			User user = AppUtility.getUser(privilegeCache.getLoginName());
 
 			// User is NULL for InActive / Closed users
 			if (user != null) {
@@ -87,7 +95,7 @@ public final class CaTissuePrivilegeUtility {
 								+ "_");
 
 				dao.openSession(null);
-				user = (User) dao.retrieve(User.class.getName(), user.getId());
+				user = (User) dao.retrieveById(User.class.getName(), user.getId());
 
 				for (Entry<String, List<NameValueBean>> entry : privileges
 						.entrySet()) {
@@ -118,7 +126,7 @@ public final class CaTissuePrivilegeUtility {
 	 * @throws DAOException
 	 */
 	private static void setSitePrivileges(
-			Map<String, SiteUserRolePrivilegeBean> map, AbstractDAO dao,
+			Map<String, SiteUserRolePrivilegeBean> map, DAO dao,
 			User user, Entry<String, List<NameValueBean>> entry)
 			throws DAOException 
 	{
@@ -132,7 +140,7 @@ public final class CaTissuePrivilegeUtility {
 		if (scanner.hasNextLong()) {
 			id = Long.valueOf((scanner.nextLong()));
 
-			CollectionProtocol cp = (CollectionProtocol) dao.retrieve(
+			CollectionProtocol cp = (CollectionProtocol) dao.retrieveById(
 					CollectionProtocol.class.getName(), id);
 
 			List<Site> siteList = new ArrayList<Site>();
@@ -202,27 +210,29 @@ public final class CaTissuePrivilegeUtility {
 	 * @param privilegeCache
 	 * @return list of SiteUserRolePrivilegeBean where each
 	 *         SiteUserRolePrivilegeBean represents privileges on a Site
-	 * @throws DAOException
+	 * @throws ApplicationException 
 	 */
 	public static Map<String, SiteUserRolePrivilegeBean> getSitePrivileges(
-			PrivilegeCache privilegeCache) throws DAOException 
+			PrivilegeCache privilegeCache) throws ApplicationException 
 	{
 		Map<String, SiteUserRolePrivilegeBean> map = new HashMap<String, SiteUserRolePrivilegeBean>();
 
 		// TODO remove the DB call
-		User user = Utility.getUser(privilegeCache.getLoginName());
+		User user = AppUtility.getUser(privilegeCache.getLoginName());
 
 		// User is NULL for InActive / Closed users
 		if (user != null) {
 			Map<String, List<NameValueBean>> privileges = privilegeCache
 					.getPrivilegesforPrefix(Site.class.getName() + "_");
 
-			AbstractDAO dao = DAOFactory.getInstance().getDAO(
-					Constants.HIBERNATE_DAO);
-			try {
+			IDAOFactory daoFact = DAOConfigFactory.getInstance().getDAOFactory(CommonServiceLocator.getInstance().getAppName());
+			DAO dao = null;
+			try
+			{
+				dao = daoFact.getDAO();
 				dao.openSession(null);
 
-				user = (User) dao.retrieve(User.class.getName(), user.getId());
+				user = (User) dao.retrieveById(User.class.getName(), user.getId());
 
 				for (Entry<String, List<NameValueBean>> entry : privileges
 						.entrySet()) {
@@ -236,7 +246,7 @@ public final class CaTissuePrivilegeUtility {
 						id = Long.valueOf(entry.getKey().substring(
 								entry.getKey().lastIndexOf("_") + 1));
 						Site site = null;
-						site = (Site) dao.retrieve(Site.class.getName(), id);
+						site = (Site) dao.retrieveById(Site.class.getName(), id);
 						List<Site> siteList = new ArrayList<Site>();
 						siteList.add(site);
 						bean.setSiteList(siteList);
@@ -284,10 +294,11 @@ public final class CaTissuePrivilegeUtility {
 	 * 
 	 * @param privilegeCache
 	 * @return
+	 * @throws ApplicationException 
 	 * @throws DAOException
 	 */
 	public static Map<String, SiteUserRolePrivilegeBean> getAllPrivileges(
-			PrivilegeCache privilegeCache) {
+			PrivilegeCache privilegeCache) throws ApplicationException {
 		Map<String, SiteUserRolePrivilegeBean> map = null;
 		try {
 			map = getCPPrivileges(privilegeCache);
@@ -316,8 +327,8 @@ public final class CaTissuePrivilegeUtility {
 
 		String objectId = CollectionProtocol.class.getName() + "_" + id;
 
-		AbstractDAO hibernateDao = DAOFactory.getInstance().getDAO(
-				Constants.HIBERNATE_DAO);
+		IDAOFactory daoFact = DAOConfigFactory.getInstance().getDAOFactory(CommonServiceLocator.getInstance().getAppName());
+		DAO hibernateDao = null;
 		CollectionProtocol cp = null;
 		// Added by Ravindra - contains user ids of those users who are asso. to
 		// the CP
@@ -326,8 +337,9 @@ public final class CaTissuePrivilegeUtility {
 		Set<Long> validUserIds = new HashSet<Long>();
 
 		try {
+			hibernateDao = daoFact.getDAO();
 			hibernateDao.openSession(null);
-			cp = (CollectionProtocol) hibernateDao.retrieve(
+			cp = (CollectionProtocol) hibernateDao.retrieveById(
 					CollectionProtocol.class.getName(), id);
 			
 			getValidUserIds(cp, validUserIds);
@@ -352,7 +364,7 @@ public final class CaTissuePrivilegeUtility {
 						.getAccesibleUsers(objectId, privilegeName);
 
 				for (String userName : users) {
-					User user = Utility.getUser(userName);
+					User user = AppUtility.getUser(userName);
 
 					// User is NULL for InActive / Closed users
 					if (user == null || !validUserIds.contains(user.getId())) {
@@ -386,7 +398,7 @@ public final class CaTissuePrivilegeUtility {
 
 						hibernateDao.openSession(null);
 						for (Long siteId : siteSet) {
-							Site site = (Site) hibernateDao.retrieve(Site.class
+							Site site = (Site) hibernateDao.retrieveById(Site.class
 									.getName(), siteId);
 							if (validSiteIds.contains(siteId)) {
 								siteList.add(site);
@@ -507,8 +519,8 @@ public final class CaTissuePrivilegeUtility {
 			Map<String, SiteUserRolePrivilegeBean> result) {
 		String objectId = Constants.getCurrentAndFuturePGAndPEName(siteId);
 
-		AbstractDAO hibernateDao = DAOFactory.getInstance().getDAO(
-				Constants.HIBERNATE_DAO);
+		IDAOFactory daoFact = DAOConfigFactory.getInstance().getDAOFactory(CommonServiceLocator.getInstance().getAppName());
+    	DAO hibernateDao = null;
 		CollectionProtocol cp = null;
 		// Added by Ravindra - contains user ids of those users who are asso. to
 		// the CP
@@ -517,9 +529,10 @@ public final class CaTissuePrivilegeUtility {
 		Set<Long> invalidUserIds = new HashSet<Long>();
 
 		try {
+			hibernateDao = daoFact.getDAO();
 			hibernateDao.openSession(null);
 			List siteList = new ArrayList();
-			Site site = (Site) hibernateDao.retrieve(Site.class.getName(),
+			Site site = (Site) hibernateDao.retrieveById(Site.class.getName(),
 					siteId);
 			siteList.add(site);
 
@@ -533,7 +546,7 @@ public final class CaTissuePrivilegeUtility {
 
 				for (String userName : users) 
 				{
-					User user = Utility.getUser(userName);
+					User user = AppUtility.getUser(userName);
 
 					// User is NULL for InActive / Closed users
 					if (user == null) 
@@ -611,11 +624,11 @@ public final class CaTissuePrivilegeUtility {
 	 * @param invalidUserIds
 	 * @throws DAOException
 	 */
-	private static void getInvalidUserIds(Long cpId, AbstractDAO hibernateDao,
+	private static void getInvalidUserIds(Long cpId, DAO hibernateDao,
 			Set<Long> invalidUserIds) throws DAOException {
 		if (cpId != null) {
 			CollectionProtocol cp;
-			cp = (CollectionProtocol) hibernateDao.retrieve(
+			cp = (CollectionProtocol) hibernateDao.retrieveById(
 					CollectionProtocol.class.getName(), cpId);
 
 			if (cp.getAssignedProtocolUserCollection() != null) {

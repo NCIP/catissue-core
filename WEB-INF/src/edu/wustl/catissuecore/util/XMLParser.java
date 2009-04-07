@@ -23,10 +23,12 @@ import edu.common.dynamicextensions.entitymanager.EntityManagerInterface;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
-import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.exception.ApplicationException;
+import edu.wustl.dao.exception.DAOException;
+
 
 /**
  * This class parses the XML file.
@@ -70,13 +72,12 @@ public class XMLParser extends DefaultHandler
 	/**
 	 * @param filePath path of XML file
 	 * @throws DynamicExtensionsSystemException
-	 * @throws DAOException fails to perform database operation
 	 * @throws ParserConfigurationException fail to get parser
 	 * @throws SAXException  fails to parse the XML file
 	 * @throws IOException fails to perform IO operation
+	 * @throws ApplicationException Application Exception
 	 */
-	public XMLParser(String filePath) throws DynamicExtensionsSystemException, DAOException,
-			ParserConfigurationException, SAXException, IOException
+	public XMLParser(String filePath) throws DynamicExtensionsSystemException, ParserConfigurationException, SAXException, IOException, ApplicationException
 	{
 		parseDocument(filePath);
 	}
@@ -84,14 +85,14 @@ public class XMLParser extends DefaultHandler
 	/**
 	 * Parses the XML file.
 	 * @param filePath path of XML file
-	 * @throws DAOException fails to connect database
 	 * @throws DynamicExtensionsSystemException
 	 * @throws SAXException fails to parse the XML file
 	 * @throws ParserConfigurationException fail to get parser object
 	 * @throws IOException fails to perform IO operation
+	 * @throws ApplicationException Application Exception
 	 */
 	private void parseDocument(String filePath) throws DynamicExtensionsSystemException,
-			DAOException, ParserConfigurationException, SAXException, IOException
+			ParserConfigurationException, SAXException, IOException, ApplicationException
 	{
 		//get a instance of factory
 		SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
@@ -289,10 +290,10 @@ public class XMLParser extends DefaultHandler
 	}
 
 	/**
-	 * @throws DAOException fails to do database operation
 	 * @throws DynamicExtensionsSystemException fails to get valid EntityGroup's or entity Name or form name
+	 * @throws ApplicationException Application Exception
 	 */
-	private void processIds() throws DAOException, DynamicExtensionsSystemException
+	private void processIds() throws DynamicExtensionsSystemException, ApplicationException
 
 	{
 		Long entityGroupId = null;
@@ -310,7 +311,7 @@ public class XMLParser extends DefaultHandler
 			}
 			else if ((cpName != null) && !(Constants.ALL.equalsIgnoreCase(cpName)))
 			{
-				cpId = (Long) Utility.getObjectIdentifier(cpName, CollectionProtocol.class.getName(),
+				cpId = (Long) AppUtility.getObjectIdentifier(cpName, CollectionProtocol.class.getName(),
 						Constants.TITLE);
 				if (cpId == null)
 				{

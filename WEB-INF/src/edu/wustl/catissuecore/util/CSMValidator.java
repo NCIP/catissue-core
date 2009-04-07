@@ -7,19 +7,22 @@ import org.hibernate.Session;
 
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.User;
-import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.AppUtility;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.querysuite.QueryModuleConstants;
 import edu.wustl.catissuecore.util.querysuite.TemporalColumnMetada;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.querysuite.queryobject.TermType;
 import edu.wustl.common.querysuite.queryobject.YMInterval;
-import edu.wustl.common.querysuite.security.utility.IValidator;
-import edu.wustl.common.security.PrivilegeCache;
-import edu.wustl.common.security.PrivilegeManager;
-import edu.wustl.common.util.Permissions;
-import edu.wustl.common.util.dbManager.DBUtil;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.DAO;
+import edu.wustl.dao.daofactory.DAOConfigFactory;
+import edu.wustl.security.exception.SMException;
+import edu.wustl.security.global.Permissions;
+import edu.wustl.security.privilege.IValidator;
+import edu.wustl.security.privilege.PrivilegeCache;
+import edu.wustl.security.privilege.PrivilegeManager;
 
 public class CSMValidator implements IValidator {
 
@@ -27,22 +30,23 @@ public class CSMValidator implements IValidator {
 			String privilegeName) 
 	{
 		boolean hasPrivilege = false;
-		hasPrivilege = Utility.checkForAllCurrentAndFutureCPs(null, privilegeName, sessionDataBean, baseObjectId);
+		hasPrivilege = AppUtility.checkForAllCurrentAndFutureCPs(null, privilegeName, sessionDataBean, baseObjectId);
 		return hasPrivilege;
 	}
 
 	public boolean hasPrivilegeToViewGlobalParticipant(SessionDataBean sessionDataBean) 
 	{
 		boolean hasPrivilege = false;
-		Session session = null;
-		PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(sessionDataBean.getUserName());
-		
+		DAO dao = null;
 		User user = null;
 		Collection<CollectionProtocol> cpCollection = null;
 		try 
 		{
-			session = DBUtil.getCleanSession();
-			user = (User) session.load(User.class.getName(), sessionDataBean.getUserId());
+			PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(sessionDataBean.getUserName());
+			dao = DAOConfigFactory.getInstance().getDAOFactory(Constants.APPLICATION_NAME).getDAO();
+			dao.openSession(sessionDataBean);
+			
+			user = (User) dao.retrieveById(User.class.getName(), sessionDataBean.getUserId());
 			cpCollection = user.getAssignedProtocolCollection();
 			
 			if (cpCollection != null && !cpCollection.isEmpty())
@@ -52,18 +56,14 @@ public class CSMValidator implements IValidator {
 	        } 
 			else
 	        {
-	        	hasPrivilege = edu.wustl.catissuecore.util.global.Utility.checkForAllCurrentAndFutureCPs(null,Permissions.REGISTRATION, sessionDataBean, null);
+	        	hasPrivilege = edu.wustl.catissuecore.util.global.AppUtility.checkForAllCurrentAndFutureCPs(null,Permissions.REGISTRATION, sessionDataBean, null);
 	        }
+			dao.closeSession();
 		} 
-		catch (BizLogicException e1) 
+		catch (Exception e1) 
 		{
 			Logger.out.debug(e1.getMessage(), e1);
 		}
-		finally
-		{
-			session.close();
-		}
-		
 		return hasPrivilege;
 	}
 
@@ -74,11 +74,12 @@ public class CSMValidator implements IValidator {
 	 * @param privilegeCache
 	 * @param cpCollection
 	 * @return
+	 * @throws SMException SM Exception.
 	 */
 	private boolean checkePriviliges(
 			SessionDataBean sessionDataBean, 
 			PrivilegeCache privilegeCache,
-			Collection<CollectionProtocol> cpCollection) 
+			Collection<CollectionProtocol> cpCollection) throws SMException 
 	{
 		boolean hasPrivilege = false;
 		for(CollectionProtocol cp : cpCollection)
@@ -91,7 +92,7 @@ public class CSMValidator implements IValidator {
 		}
 		if(!hasPrivilege)
 		{
-			hasPrivilege = edu.wustl.catissuecore.util.global.Utility.checkForAllCurrentAndFutureCPs(null,Permissions.REGISTRATION, sessionDataBean, null);
+			hasPrivilege = edu.wustl.catissuecore.util.global.AppUtility.checkForAllCurrentAndFutureCPs(null,Permissions.REGISTRATION, sessionDataBean, null);
 		}
 		return hasPrivilege;
 	} 

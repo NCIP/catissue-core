@@ -56,15 +56,15 @@ public class ClinicalDiagnosisHeirarchy
 
 		// Create a connection to the database
 		String url = "";
-		if (Constants.MYSQL_DATABASE.equalsIgnoreCase(DATABASE_TYPE)) {
+		if ("MySQL".equalsIgnoreCase(DATABASE_TYPE)) {
 			DATABASE_DRIVER="com.mysql.jdbc.Driver";
 			url=mysqlUrl;
 		}
-		if (Constants.ORACLE_DATABASE.equalsIgnoreCase(DATABASE_TYPE)) {
+		if ("Oracle".equalsIgnoreCase(DATABASE_TYPE)) {
 			DATABASE_DRIVER="oracle.jdbc.driver.OracleDriver";
 			url=oracleUrl;
 		}
-		if (Constants.MSSQLSERVER_DATABASE.equalsIgnoreCase(DATABASE_TYPE)) {
+		if ("MSSQLSERVER".equalsIgnoreCase(DATABASE_TYPE)) {
 			DATABASE_DRIVER="com.microsoft.sqlserver.jdbc.SQLServerDriver";
 			url=mssqlserverUrl;
 		}
