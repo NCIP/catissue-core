@@ -3,7 +3,7 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
-<%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
+<%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.*"%>
 <%@ page language="java" isELIgnored="false" %>
@@ -88,9 +88,7 @@ function withdrawAll(element)
 <%--Popup Window will open up on calling this function--%>	
 function popupWindow(nofConsentTiers)
 {
-	<%
-		List specimenList = (List)session.getAttribute(Constants.SPECIMEN_LIST);
-	%>
+	<%List specimenList = (List)session.getAttribute(Constants.SPECIMEN_LIST);%>
 	var withdraw = "<%=form.getConsentTierMap()%>";
 	var iCount=nofConsentTiers;
 	for(var i=0;i<nofConsentTiers;i++)
@@ -111,41 +109,29 @@ function popupWindow(nofConsentTiers)
 	else if(iCount==nofConsentTiers)
 	{	
 		
-		<%
-			if(pageOf.equals("pageOfConsent"))
-			{
-		%>
+		<%if(pageOf.equals("pageOfConsent"))
+			{%>
 			document.forms[0].submit();
 			self.close();
-		<%
-			}
-		%>
+		<%}%>
 		
 		if(changeInStatus==false)
 		{
-			<%
-				Object formInstance = form;
+			<%Object formInstance = form;
 				if(formInstance instanceof NewSpecimenForm)
-				{
-			%>
+				{%>
 					return onNormalSubmit();
-			<%
-				}
+			<%}
 				else
-			   {
-			%>
+			   {%>
 					return <%=normalSubmit%>;
-			<%
-			   }
-			%>
+			<%}%>
 		}
 		else
 		{
 			submitString();
-			<%	
-			if(specimenList!=null && specimenList.size()>1 || !(pageOf.equals("pageOfNewSpecimenCPQuery")))
-			{
-			%>	
+			<%if(specimenList!=null && specimenList.size()>1 || !(pageOf.equals("pageOfNewSpecimenCPQuery")))
+			{%>	
 		
 				var url="pages/content/ConsentTracking/consentDialog.jsp?withrawall=true&response=nowithdraw&pageOf="+"<%=pageOf%>";
 				window.open(url,'WithdrawAll','height=350,width=530,center=1,scrollbars=1,resizable=0');
@@ -154,8 +140,7 @@ function popupWindow(nofConsentTiers)
 			{%>
 				document.forms[0].action="<%=Constants.CP_QUERY_SPECIMEN_EDIT_ACTION%>";
 				document.forms[0].submit();
-			<%}
-			%>
+			<%}%>
 		}
 		
 	}	
@@ -163,21 +148,15 @@ function popupWindow(nofConsentTiers)
 	{
 	if(changeInStatus==false)
 		{
-			<%
-				Object formVar = form;
+			<%Object formVar = form;
 				if(formVar instanceof NewSpecimenForm)
-				{
-			%>
+				{%>
 					return onNormalSubmit();
-			<%
-				}
+			<%}
 				else if(formVar instanceof SpecimenCollectionGroupForm)
-			   {
-			%>
+			   {%>
 					return <%=normalSubmit%>;
-			<%
-			   }
-			%>
+			<%}%>
 		}
 	   var url="pages/content/ConsentTracking/consentDialog.jsp?withrawall=false&response=withdraw&pageOf="+"<%=pageOf%>";
 		window.open(url,'Withdraw','height=365,width=530,center=1,scrollbars=1,resizable=0');
@@ -197,37 +176,37 @@ function popupWindow(nofConsentTiers)
 	{
 		if(pageOf.equals("pageOfCollectionProtocolRegistration")||pageOf.equals("pageOfCollectionProtocolRegistrationCPQuery"))
 		{
-			width="81%";
-			innerWidth="100%";
-			collection="responseList";
+	width="81%";
+	innerWidth="100%";
+	collection="responseList";
 		}
 		else if(pageOf.equals("pageOfSpecimenCollectionGroupCPQuery")||pageOf.equals("pageOfSpecimenCollectionGroup"))
 		{
-			width="636px";
-			innerWidth = "636px";
-			collection="specimenCollectionGroupResponseList";
+	width="636px";
+	innerWidth = "636px";
+	collection="specimenCollectionGroupResponseList";
 		}
         else if(pageOf.equals("pageOfNewSpecimen")||pageOf.equals("pageOfNewSpecimenCPQuery"))
 		{
-			width="100%";
-			innerWidth="100%";
-			collection="specimenResponseList";
+	width="100%";
+	innerWidth="100%";
+	collection="specimenResponseList";
      	}  
         else if(pageOf.equals("pageOfDistribution"))
 		{
-			width="100%";
-			innerWidth="100%";
+	width="100%";
+	innerWidth="100%";
 		}
 		else if(pageOf.equals("pageOfOrdering"))
 		{
-			width="100%";
-			innerWidth="100%";
+	width="100%";
+	innerWidth="100%";
 		}
 		if(pageOf.equals("pageOfConsent"))
 		{
-			width="100%";
-			innerWidth="100%";
-			collection="responseList";
+	width="100%";
+	innerWidth="100%";
+	collection="responseList";
 		}
 	}
 	// Patch_Id: Improve_Space_Usability_On_Specimen_Page_2
@@ -241,14 +220,15 @@ function popupWindow(nofConsentTiers)
 		<tr>
 			<td align="left" class="tr_bg_blue1"><span class="blue_ar_b">
 				<%
-				ConsentTierData consentTierForm =(ConsentTierData)form;
-				List consentTierList=(List)consentTierForm.getConsentTiers();
-				boolean withdrawAllDisabled=false;
-				if(consentTierList==null||consentTierList.isEmpty())
-				{
-					consentTierList =new ArrayList();
-					withdrawAllDisabled=true;
-				}%>
+					ConsentTierData consentTierForm =(ConsentTierData)form;
+						List consentTierList=(List)consentTierForm.getConsentTiers();
+						boolean withdrawAllDisabled=false;
+						if(consentTierList==null||consentTierList.isEmpty())
+						{
+							consentTierList =new ArrayList();
+							withdrawAllDisabled=true;
+						}
+				%>
 				
 				<div style="margin-top:2px;">
 					<bean:message key="collectionprotocolregistration.consentform"/>
@@ -259,9 +239,9 @@ function popupWindow(nofConsentTiers)
 		
 			<%-- If page of Collection Protocol Registration --%>						
 			<%
-			if(pageOf.equals("pageOfCollectionProtocolRegistration")||pageOf.equals("pageOfCollectionProtocolRegistrationCPQuery") || pageOf.equals("pageOfConsent"))
-			{
-			%>
+										if(pageOf.equals("pageOfCollectionProtocolRegistration")||pageOf.equals("pageOfCollectionProtocolRegistrationCPQuery") || pageOf.equals("pageOfConsent"))
+										{
+									%>
 			<tr>
 				<td align="left" class="showhide"><table width="100%" border="0" cellspacing="0" cellpadding="3">
 						<%--Signed URL --%>				
@@ -292,46 +272,46 @@ function popupWindow(nofConsentTiers)
 							</td>	
 							<td class="noneditable">
 							<%
-							if(pageOf.equals("pageOfConsent"))
-							{
-								if(signedConsentDate.trim().length() > 0)
-								{
-									Integer consentYear = new Integer(Utility.getYear(signedConsentDate ));
-									Integer consentMonth = new Integer(Utility.getMonth(signedConsentDate ));
-									Integer consentDay = new Integer(Utility.getDay(signedConsentDate ));
-								%>
+								if(pageOf.equals("pageOfConsent"))
+												{
+													if(signedConsentDate.trim().length() > 0)
+													{
+														Integer consentYear = new Integer(AppUtility.getYear(signedConsentDate ));
+														Integer consentMonth = new Integer(AppUtility.getMonth(signedConsentDate ));
+														Integer consentDay = new Integer(AppUtility.getDay(signedConsentDate ));
+							%>
 								<ncombo:DateTimeComponent name="consentDate"
 									id="consentDate"
 									formName="consentForm"	
-									month= "<%=consentMonth %>"
-									year= "<%=consentYear %>"
-									day= "<%= consentDay %>" 
-									value="<%=signedConsentDate %>"
-									pattern="<%=Variables.dateFormat %>"
+									month= "<%=consentMonth%>"
+									year= "<%=consentYear%>"
+									day= "<%=consentDay%>" 
+									value="<%=signedConsentDate%>"
+									pattern="<%=Variables.dateFormat%>"
 									styleClass="black_ar"
 								/>		
-								<% 
-								}
-								else
-								{  
-								%>
+								<%
+											}
+																else
+																{
+										%>
 								<ncombo:DateTimeComponent name="consentDate"
 									id="consentDate"
 									formName="consentForm"	
 									styleClass="black_ar" 
-									pattern="<%=Variables.dateFormat %>"
+									pattern="<%=Variables.dateFormat%>"
 								/>		
 								<%
-								}
-							}
-							else
-							{
-								if(signedConsentDate.trim().length() > 0)
-								{
-									Integer consentYear = new Integer(Utility.getYear(signedConsentDate ));
-									Integer consentMonth = new Integer(Utility.getMonth(signedConsentDate ));
-									Integer consentDay = new Integer(Utility.getDay(signedConsentDate ));
-								%>
+											}
+															}
+															else
+															{
+																if(signedConsentDate.trim().length() > 0)
+																{
+																	Integer consentYear = new Integer(AppUtility.getYear(signedConsentDate ));
+																	Integer consentMonth = new Integer(AppUtility.getMonth(signedConsentDate ));
+																	Integer consentDay = new Integer(AppUtility.getDay(signedConsentDate ));
+										%>
 								<ncombo:DateTimeComponent name="consentDate"
 									id="consentDate"
 									formName="collectionProtocolRegistrationForm"	

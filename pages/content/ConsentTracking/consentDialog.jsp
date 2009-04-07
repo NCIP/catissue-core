@@ -2,7 +2,7 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="java.util.*"%>
-<%@ page import="java.util.List,edu.wustl.catissuecore.util.global.Constants,edu.wustl.catissuecore.util.global.Utility"%>
+<%@ page import="java.util.List,edu.wustl.catissuecore.util.global.Constants,edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 <%@ page import="java.util.ArrayList"%>
 <%@ page language="java" isELIgnored="false"%>
@@ -20,19 +20,19 @@
 
 
 <%
-	String withdrawAll = request.getParameter(Constants.WITHDRAW_ALL);
-	String getConsentResponse = request.getParameter(Constants.RESPONSE);
-	String pageOf = request.getParameter("pageOf");
-	request.setAttribute("pageOf",pageOf);
-	Integer identifierFieldIndex = new Integer(4);
-	request.setAttribute("identifierFieldIndex",identifierFieldIndex);
-%>
+			String withdrawAll = request.getParameter(Constants.WITHDRAW_ALL);
+			String getConsentResponse = request.getParameter(Constants.RESPONSE);
+			String pageOf = request.getParameter("pageOf");
+			request.setAttribute("pageOf",pageOf);
+			Integer identifierFieldIndex = new Integer(4);
+			request.setAttribute("identifierFieldIndex",identifierFieldIndex);
+		%>
 <script language="JavaScript">
 
 function getButtonStatus(element)
 {
 	var answer;
-	if(element.value=="<%=Constants.WITHDRAW_RESPONSE_DISCARD %>")
+	if(element.value=="<%=Constants.WITHDRAW_RESPONSE_DISCARD%>")
 	{
 		answer= confirm("Are you sure you want to discard the Specimen and all Sub Specimen(disable)?");
 	}
@@ -52,7 +52,7 @@ function getButtonStatus(element)
 		parent.opener.document.forms[0].withdrawlButtonStatus.value=element.value;
 		if(parent.opener.document.forms[0].name == "<%=Constants.NEWSPECIMEN_FORM%>")
 		{
-			if(element.value != "<%=Constants.WITHDRAW_RESPONSE_RESET %>")
+			if(element.value != "<%=Constants.WITHDRAW_RESPONSE_RESET%>")
 			{
 				parent.opener.document.forms[0].activityStatus.value="<%=Constants.ACTIVITY_STATUS_DISABLED%>" ;
 				parent.opener.document.forms[0].onSubmit.value="<%=Constants.BIO_SPECIMEN%>";
@@ -60,19 +60,14 @@ function getButtonStatus(element)
 			}
 			else
 			{
-					<%	if(pageOf.equals(Constants.PAGE_OF_SPECIMEN))
-					{
-					%>	
+					<%if(pageOf.equals(Constants.PAGE_OF_SPECIMEN))
+					{%>	
 						parent.opener.document.forms[0].action="<%=Constants.SPECIMEN_EDIT_ACTION%>";	
-					<%
-					}
+					<%}
 					else
-				    {
-					%>
+				    {%>
 						parent.opener.document.forms[0].action="<%=Constants.CP_QUERY_SPECIMEN_EDIT_ACTION%>";				
-					<%
-					}
-					%>
+					<%}%>
 			}
 		}
 		parent.opener.document.forms[0].submit();
@@ -93,20 +88,14 @@ function getStatus(element)
 		parent.opener.document.forms[0].applyChangesTo.value=element.value;
 		if(parent.opener.document.forms[0].name == "<%=Constants.NEWSPECIMEN_FORM%>")
 		{
-			<%	
-			if(pageOf.equals(Constants.PAGE_OF_SPECIMEN) ||pageOf.equals(Constants.PAGEOF_NEW_SPECIMEN) )
-			{
-			%>	
+			<%if(pageOf.equals(Constants.PAGE_OF_SPECIMEN) ||pageOf.equals(Constants.PAGEOF_NEW_SPECIMEN) )
+			{%>	
 				parent.opener.document.forms[0].action="<%=Constants.SPECIMEN_EDIT_ACTION%>";
-			<%
-			}
+			<%}
 			else
-			{
-			%>
+			{%>
 				parent.opener.document.forms[0].action="<%=Constants.CP_QUERY_SPECIMEN_EDIT_ACTION%>";
-			<%
-			}
-			%>
+			<%}%>
 		}
 		else
 		{
@@ -139,15 +128,15 @@ var useFunction = "derivedSpecimenGrid";
 			{
 		%>	
 				<title><bean:message key="consent.withdrawconsents"/></title>	 
-		<%		
-			}
-			else
-			{
-		%>	
+		<%
+	 			}
+	 			else
+	 			{
+	 		%>	
 				<title><bean:message key="consent.withdrawconsenttier" /></title>	 
-		<%		
-			}	
-		%>	
+		<%
+	 			}
+	 		%>	
 		
 	</head>
 		<body >
@@ -170,13 +159,13 @@ var useFunction = "derivedSpecimenGrid";
  <tr>
     <td align="center" class="showhide">
     <%
-			List dataList = (List)session.getAttribute(Constants.SPECIMEN_LIST);
-			List columnList = (List)session.getAttribute(Constants.COLUMNLIST);
-			Utility.setGridData(dataList,columnList,request);//JSP refactoring...to be removed after refacoring of this JSP(consent).
-			request.setAttribute("colWidthInPercent",Utility.getcolWidth(columnList,true));
-		if(dataList!=null&&dataList.size()>0)
-			{
-	%>
+    	List dataList = (List)session.getAttribute(Constants.SPECIMEN_LIST);
+    	List columnList = (List)session.getAttribute(Constants.COLUMNLIST);
+    	AppUtility.setGridData(dataList,columnList,request);//JSP refactoring...to be removed after refacoring of this JSP(consent).
+    	request.setAttribute("colWidthInPercent",AppUtility.getcolWidth(columnList,true));
+    		if(dataList!=null&&dataList.size()>0)
+    	{
+    %>
 	
 		   	<%@ include file="/pages/content/search/GridPage.jsp" %> 
 

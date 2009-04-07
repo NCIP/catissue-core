@@ -4,7 +4,7 @@
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.ConsentResponseForm"%>
-<%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
+<%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 
 <%@ page import="java.util.*"%>
@@ -19,29 +19,29 @@
 
 	<%
 		String normalSubmit="";
-		String pageOf=(String)request.getAttribute(Constants.PAGEOF);
-		String operation = (String)request.getAttribute(Constants.OPERATION);
-		List responseList =(List)request.getAttribute("responseList");
-		List witnessList = (List)request.getAttribute("witnessList");
-		String cpId = (String)request.getAttribute("cpId");
-		String consentResponse = "CP_"+cpId;
-		
-		Object obj = request.getAttribute("consentForm");
-		String signedConsentDate="";
-		ConsentResponseForm form =null;
-		long collectionProtocolID = -1;
-		if(obj != null && obj instanceof ConsentResponseForm)
-		{
-			form = (ConsentResponseForm)obj;
-			signedConsentDate = form.getConsentDate();
-			if(signedConsentDate == null || signedConsentDate.trim().length()==0){
-				signedConsentDate = Utility.parseDateToString(Calendar.getInstance().getTime(), Variables.dateFormat);
-			}
-			collectionProtocolID = form.getCollectionProtocolID();
+			String pageOf=(String)request.getAttribute(Constants.PAGEOF);
+			String operation = (String)request.getAttribute(Constants.OPERATION);
+			List responseList =(List)request.getAttribute("responseList");
+			List witnessList = (List)request.getAttribute("witnessList");
+			String cpId = (String)request.getAttribute("cpId");
+			String consentResponse = "CP_"+cpId;
 			
+			Object obj = request.getAttribute("consentForm");
+			String signedConsentDate="";
+			ConsentResponseForm form =null;
+			long collectionProtocolID = -1;
+			if(obj != null && obj instanceof ConsentResponseForm)
+			{
+		form = (ConsentResponseForm)obj;
+		signedConsentDate = form.getConsentDate();
+		if(signedConsentDate == null || signedConsentDate.trim().length()==0){
+			signedConsentDate = AppUtility.parseDateToString(Calendar.getInstance().getTime(), Variables.dateFormat);
 		}
+		collectionProtocolID = form.getCollectionProtocolID();
 		
-		String formName = "ConsentSubmit.do";
+			}
+			
+			String formName = "ConsentSubmit.do";
 	%>
 	<script type="text/javascript">
 		function submitConsentResponses()
