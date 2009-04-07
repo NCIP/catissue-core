@@ -53,7 +53,7 @@ public class ShowGridAction extends BaseAction
 	 	QueryDetails queryDetailsObj = new QueryDetails(session);
 	 	Map<String, IOutputTerm> outputTermsColumns = (Map<String, IOutputTerm>)session.getAttribute(Constants.OUTPUT_TERMS_COLUMNS);
 		IQuery query = (IQuery)session.getAttribute(AppletConstants.QUERY_OBJECT);
-		boolean hasConditionOnIdentifiedField = Utility.isConditionOnIdentifiedField(query);
+		boolean hasConditionOnIdentifiedField = AppUtility.isConditionOnIdentifiedField(query);
 		session.setAttribute(Constants.HAS_CONDITION_ON_IDENTIFIED_FIELD, hasConditionOnIdentifiedField);
 		Map<EntityInterface ,List<EntityInterface>> mainEntityMap =(Map<EntityInterface ,List<EntityInterface>>)session.getAttribute(Constants.MAIN_ENTITY_MAP);
 		Map<Long, QueryResultObjectDataBean> queryResultObjectDataMap = (Map<Long, QueryResultObjectDataBean>)session.getAttribute(Constants.DEFINE_VIEW_QUERY_REASULT_OBJECT_DATA_MAP);

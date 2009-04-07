@@ -14,7 +14,7 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.CancerResearchGroupForm;
 import edu.wustl.catissuecore.bizlogic.CancerResearchBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.action.CommonAddEditAction;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.exception.DAOException;

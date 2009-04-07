@@ -33,7 +33,7 @@ import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
-import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
@@ -584,7 +584,7 @@ public class SpecimenForm extends AbstractActionForm
 		 * See also: 1_1 to 1_5
 		 * Description : set createdOn date from database object
 		 */
-		this.createdDate = Utility.parseDateToString(specimen.getCreatedOn(), Variables.dateFormat);
+		this.createdDate = AppUtility.parseDateToString(specimen.getCreatedOn(), Variables.dateFormat);
 
 		if (specimen.getIsAvailable() != null)
 		{
@@ -674,7 +674,7 @@ public class SpecimenForm extends AbstractActionForm
 		else if (specimen instanceof MolecularSpecimen)
 		{
 			this.className = Constants.MOLECULAR;
-			this.concentration = Utility.toString(((MolecularSpecimen) specimen).getConcentrationInMicrogramPerMicroliter());
+			this.concentration = AppUtility.toString(((MolecularSpecimen) specimen).getConcentrationInMicrogramPerMicroliter());
 		}
 		else if (specimen instanceof TissueSpecimen)
 		{
@@ -685,7 +685,7 @@ public class SpecimenForm extends AbstractActionForm
 			this.className = specimen.getParentSpecimen().getClassName();
 		}
 
-		if (!Utility.isQuantityDouble(className, type))
+		if (!AppUtility.isQuantityDouble(className, type))
 		{
 			Double doubleQuantity = specimen.getInitialQuantity();
 			if (doubleQuantity.toString().contains("E"))
@@ -809,7 +809,7 @@ public class SpecimenForm extends AbstractActionForm
 					try
 					{
 						quantity = new BigDecimal(quantity).toPlainString();
-						if (Utility.isQuantityDouble(className, type))
+						if (AppUtility.isQuantityDouble(className, type))
 						{
 							if (!validator.isDouble(quantity, true))
 							{
@@ -866,7 +866,7 @@ public class SpecimenForm extends AbstractActionForm
 								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.availablequantity", ApplicationProperties
 										.getValue("specimen.availableQuantity")));
 							}
-							if (Utility.isQuantityDouble(className, type))
+							if (AppUtility.isQuantityDouble(className, type))
 							{
 								if (!validator.isDouble(availableQuantity, true))
 								{

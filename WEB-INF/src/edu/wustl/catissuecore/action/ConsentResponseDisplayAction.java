@@ -36,7 +36,7 @@ import edu.wustl.catissuecore.domain.ConsentTier;
 import edu.wustl.catissuecore.util.ConsentUtil;
 import edu.wustl.catissuecore.util.IdComparator;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
 
@@ -78,7 +78,7 @@ public class ConsentResponseDisplayAction extends BaseAction
 		{	
 			List<String> columnList=ConsentUtil.columnNames();		
 			session.setAttribute(Constants.COLUMNLIST,columnList);		
-			CollectionProtocolRegistration collectionProtocolRegistration = Utility.getcprObj(collectionProtocolRegIdValue);
+			CollectionProtocolRegistration collectionProtocolRegistration = AppUtility.getcprObj(collectionProtocolRegIdValue);
 			List specimenDetails= new ArrayList();
 			ConsentUtil.getSpecimenDetails(collectionProtocolRegistration,specimenDetails);
 			session.setAttribute(Constants.SPECIMEN_LIST,specimenDetails);
@@ -86,7 +86,7 @@ public class ConsentResponseDisplayAction extends BaseAction
 		//Getting witness name list for CollectionProtocolID
 		List witnessList = ConsentUtil.witnessNameList(collectionProtocolId);
 		//Getting ResponseList if Operation=Edit then "Withdraw" is added to the List 
-		List<NameValueBean> responseList= Utility.responceList(operation);
+		List<NameValueBean> responseList= AppUtility.responceList(operation);
 		
 		//Getting consent response map.
 		String consentResponseKey = Constants.CONSENT_RESPONSE_KEY+cpId;

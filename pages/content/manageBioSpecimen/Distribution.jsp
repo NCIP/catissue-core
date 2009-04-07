@@ -5,7 +5,7 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.DistributionForm"%>
 <%@ page import="java.util.List,java.util.Iterator"%>
-<%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
+<%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
@@ -37,58 +37,61 @@
 
 	}
 	
-	String formName;
-
+	String formName;%>
+	<%
+		String pageOf = (String) request.getAttribute(Constants.PAGEOF);
 	%>
-	<%String pageOf = (String) request.getAttribute(Constants.PAGEOF);%>
 <%@ include file="/pages/content/common/BioSpecimenCommonCode.jsp"%>
-<%List specimenIdList = (List) request
-					.getAttribute(Constants.SPECIMEN_ID_LIST);
-			DistributionForm formBean = (DistributionForm) request
-					.getAttribute("distributionForm");
-			String operation = (String) request
-					.getAttribute(Constants.OPERATION);
-			String submittedFor = (String) request
-					.getAttribute(Constants.SUBMITTED_FOR);
-			boolean readOnlyValue = false, readOnlyForAll = false;
-			if (operation.equals(Constants.EDIT)) {
-				formName = Constants.DISTRIBUTION_EDIT_ACTION;
-				if(pageOf.equals(Constants.PAGE_OF_DISTRIBUTION_CP_QUERY))
-				{
-					formName = Constants.CP_QUERY_DISTRIBUTION_EDIT_ACTION + "?pageOf="+pageOf;
-				}
+<%
+	List specimenIdList = (List) request
+			.getAttribute(Constants.SPECIMEN_ID_LIST);
+	DistributionForm formBean = (DistributionForm) request
+			.getAttribute("distributionForm");
+	String operation = (String) request
+			.getAttribute(Constants.OPERATION);
+	String submittedFor = (String) request
+			.getAttribute(Constants.SUBMITTED_FOR);
+	boolean readOnlyValue = false, readOnlyForAll = false;
+	if (operation.equals(Constants.EDIT)) {
+		formName = Constants.DISTRIBUTION_EDIT_ACTION;
+		if(pageOf.equals(Constants.PAGE_OF_DISTRIBUTION_CP_QUERY))
+		{
+			formName = Constants.CP_QUERY_DISTRIBUTION_EDIT_ACTION + "?pageOf="+pageOf;
+		}
 
-				readOnlyValue = true;
-			} else {
-			formName = Constants.DISTRIBUTION_ADD_ACTION;
-			if(pageOf.equals(Constants.PAGE_OF_DISTRIBUTION_CP_QUERY))
-			{
-				formName = Constants.CP_QUERY_DISTRIBUTION_ADD_ACTION + "?pageOf="+pageOf;
-			}
+		readOnlyValue = true;
+	} else {
+	formName = Constants.DISTRIBUTION_ADD_ACTION;
+	if(pageOf.equals(Constants.PAGE_OF_DISTRIBUTION_CP_QUERY))
+	{
+		formName = Constants.CP_QUERY_DISTRIBUTION_ADD_ACTION + "?pageOf="+pageOf;
+	}
 
-				readOnlyValue = false;
-			}
-			
+		readOnlyValue = false;
+	}
+	
 //	formName = "DistributionSubmit.do";
 	String signedConsentDate = "";
 	String selectProperty="";
-	
 %>
 <head>
 <script language="JavaScript" type="text/javascript"
 	src="jss/javaScript.js"></script>
 
-	<%if(pageOf.equals(Constants.PAGE_OF_DISTRIBUTION_CP_QUERY))
-	{
-		if(request.getAttribute(Constants.SPECIMEN_ID)!= null)
+	<%
+		if(pageOf.equals(Constants.PAGE_OF_DISTRIBUTION_CP_QUERY))
 		{
-			String spId = (String) request.getAttribute(Constants.SPECIMEN_ID);
-			String nodeId = "Specimen_"+spId;
-		%>
+			if(request.getAttribute(Constants.SPECIMEN_ID)!= null)
+			{
+		String spId = (String) request.getAttribute(Constants.SPECIMEN_ID);
+		String nodeId = "Specimen_"+spId;
+	%>
 		<script language="javascript">
 			refreshTree('<%=Constants.CP_AND_PARTICIPANT_VIEW%>','<%=Constants.CP_TREE_VIEW%>','<%=Constants.CP_SEARCH_CP_ID%>','<%=Constants.CP_SEARCH_PARTICIPANT_ID%>','<%=nodeId%>');								
 		</script>
-	<%}}%>
+	<%
+		}}
+	%>
 
 <script language="JavaScript"><!--
 		function onSpecimenIdChange(element)
@@ -400,40 +403,39 @@
 
 
 <%
-			String currentDistributionDate = "";
-			Object obj = request.getAttribute("distributionForm");
-			int noOfRows = 1;
-			Map map = null;
-			DistributionForm form = null;
-			if (obj != null && obj instanceof DistributionForm) 
-			{
-				form = (DistributionForm) obj;
-				noOfRows = form.getCounter();
-				map = form.getValues();
-				currentDistributionDate = form.getDateOfEvent();
+	String currentDistributionDate = "";
+	Object obj = request.getAttribute("distributionForm");
+	int noOfRows = 1;
+	Map map = null;
+	DistributionForm form = null;
+	if (obj != null && obj instanceof DistributionForm) 
+	{
+		form = (DistributionForm) obj;
+		noOfRows = form.getCounter();
+		map = form.getValues();
+		currentDistributionDate = form.getDateOfEvent();
 
-				if (currentDistributionDate == null)
-					currentDistributionDate = "";
-			}
+		if (currentDistributionDate == null)
+			currentDistributionDate = "";
+	}
 
-			String reqPath = (String) request.getAttribute(Constants.REQ_PATH);
-			String appendingPath = "/Distribution.do?operation=add&pageOf=pageOfDistribution";
-			if (reqPath != null)
-				appendingPath = reqPath
-						+ "|/Distribution.do?operation=add&pageOf=pageOfDistribution";
+	String reqPath = (String) request.getAttribute(Constants.REQ_PATH);
+	String appendingPath = "/Distribution.do?operation=add&pageOf=pageOfDistribution";
+	if (reqPath != null)
+		appendingPath = reqPath
+				+ "|/Distribution.do?operation=add&pageOf=pageOfDistribution";
 
-			if (!operation.equals("add")) {
-				Object obj1 = request.getAttribute("distributionForm");
-				if (obj1 != null && obj1 instanceof DistributionForm) {
-					DistributionForm form1 = (DistributionForm) obj1;
-					appendingPath = "/DistributionSearch.do?operation=search&pageOf=pageOfDistribution&id="
-							+ form1.getId();
-				}
-			}
-			String reportFormName = new String();
-			String reportChangeAction = new String();
-
-			%>
+	if (!operation.equals("add")) {
+		Object obj1 = request.getAttribute("distributionForm");
+		if (obj1 != null && obj1 instanceof DistributionForm) {
+			DistributionForm form1 = (DistributionForm) obj1;
+			appendingPath = "/DistributionSearch.do?operation=search&pageOf=pageOfDistribution&id="
+					+ form1.getId();
+		}
+	}
+	String reportFormName = new String();
+	String reportChangeAction = new String();
+%>
 
 <html:form action="DistributionSubmit.do">
 	<table  summary="" cellpadding="0" cellspacing="0" border="0"
@@ -483,7 +485,9 @@
 					<td class="formField">
 						<logic:iterate id="nvb"
 						name="<%=Constants.DISTRIBUTION_TYPE_LIST%>">
-						<%NameValueBean distributionType = (NameValueBean) nvb;%>
+						<%
+							NameValueBean distributionType = (NameValueBean) nvb;
+						%>
 						<html:radio property="distributionType"
 							value="<%=distributionType.getValue()%>">
 							<%=distributionType.getName()%>
@@ -546,27 +550,28 @@
 				&nbsp;<bean:message key="page.dateFormat" />&nbsp;
 				<a href="javascript:show_calendar('distributionForm.dateOfEvent',null,null,'MM-DD-YYYY');">
 					<img src="images\calendar.gif" width=24 height=22 border=0></a>
---> <!-- Date Component BY Mandar: 18-Aug-06 --> <%if (currentDistributionDate.trim().length() > 0) {
-					Integer distributionYear = new Integer(Utility
-							.getYear(currentDistributionDate));
-					Integer distributionMonth = new Integer(Utility
-							.getMonth(currentDistributionDate));
-					Integer distributionDay = new Integer(Utility
-							.getDay(currentDistributionDate));
-%> <ncombo:DateTimeComponent name="dateOfEvent" id="dateOfEvent"
-						formName="distributionForm" month="<%= distributionMonth %>"
-						year="<%= distributionYear %>" day="<%= distributionDay %>"
+--> <!-- Date Component BY Mandar: 18-Aug-06 --> <%
+ 	if (currentDistributionDate.trim().length() > 0) {
+ 			Integer distributionYear = new Integer(AppUtility
+ 					.getYear(currentDistributionDate));
+ 			Integer distributionMonth = new Integer(AppUtility
+ 					.getMonth(currentDistributionDate));
+ 			Integer distributionDay = new Integer(AppUtility
+ 					.getDay(currentDistributionDate));
+ %> <ncombo:DateTimeComponent name="dateOfEvent" id="dateOfEvent"
+						formName="distributionForm" month="<%=distributionMonth%>"
+						year="<%=distributionYear%>" day="<%=distributionDay%>"
 						pattern="<%=Variables.dateFormat%>"
-						value="<%=currentDistributionDate %>" styleClass="formDateSized10" />
-					<%} else {
-
-				%> <ncombo:DateTimeComponent name="dateOfEvent" id="dateOfEvent"
+						value="<%=currentDistributionDate%>" styleClass="formDateSized10" />
+					<%
+						} else {
+					%> <ncombo:DateTimeComponent name="dateOfEvent" id="dateOfEvent"
 						formName="distributionForm" 
 						pattern="<%=Variables.dateFormat%>"
 						styleClass="formDateSized10" />
-					<%}
-
-				%> <bean:message key="page.dateFormat" />&nbsp;</td>
+					<%
+						}
+					%> <bean:message key="page.dateFormat" />&nbsp;</td>
 				</tr>
 				
 				<!-- hours & minutes -->	
@@ -696,7 +701,9 @@
 						key="distribution.distributionBasedOn" /> </label></td>
 					<td class="formField" style="border-top:1px solid #5C5C5C"  colspan="5"><logic:iterate id="nvb"
 						name="<%=Constants.DISTRIBUTION_BASED_ON%>" >
-						<%NameValueBean distributionBasedOn = (NameValueBean) nvb;%>
+						<%
+							NameValueBean distributionBasedOn = (NameValueBean) nvb;
+						%>
 						<html:radio property="distributionBasedOn" 
 							value="<%=distributionBasedOn.getValue()%>">
 							<%=distributionBasedOn.getName()%> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -751,77 +758,78 @@
 
 				<tbody id="addMore">
 					<%
-					boolean disableBarcode = false;
-					boolean disableLabel = false;
-					
-					if(formBean.getDistributionBasedOn().intValue() == Constants.BARCODE_BASED_DISTRIBUTION) {
-						disableLabel = true;
-					} 
-					
-					if(formBean.getDistributionBasedOn().intValue() == Constants.LABEL_BASED_DISTRIBUTION) {
-						disableBarcode = true;
-					} 
-					for (int i = 1; i <= noOfRows; i++) {
-						String keyid = "";
-						String dIdentifier = "";
-						
-						if(formBean.getDistributionType().intValue() == Constants.SPECIMEN_DISTRIBUTION_TYPE) {
-							dIdentifier = "value(DistributedItem:" + i + "_id)";
-							keyid = "DistributedItem:" + i + "_id";
-						} else {
-							//dIdentifier = "value(SpecimenArray:" + i + "_id)";
-							dIdentifier = "value(DistributedItem:" + i +"_SpecimenArray_id)";
-							
-							keyid = "DistributedItem:" + i +"_SpecimenArray_id";
-							readOnlyForAll = true;
-						}
-						
-					
-					String itemName = "value(DistributedItem:" + i
-							+ "_Specimen_id)";
-					String barcodeKey = "value(DistributedItem:" + i + "_Specimen_barcode)";
-					String labelKey = "value(DistributedItem:" + i + "_Specimen_label)";
-					
-					String quantity = "value(DistributedItem:" + i
-							+ "_quantity)";
-					String availableQuantity = "value(DistributedItem:" + i
-							+ "_availableQty)";
-					String previousQuantity = "value(DistributedItem:" + i
-					+ "_previousQuantity)";
-					String check = "chk_" + i;
+						boolean disableBarcode = false;
+								boolean disableLabel = false;
+								
+								if(formBean.getDistributionBasedOn().intValue() == Constants.BARCODE_BASED_DISTRIBUTION) {
+									disableLabel = true;
+								} 
+								
+								if(formBean.getDistributionBasedOn().intValue() == Constants.LABEL_BASED_DISTRIBUTION) {
+									disableBarcode = true;
+								} 
+								for (int i = 1; i <= noOfRows; i++) {
+									String keyid = "";
+									String dIdentifier = "";
+									
+									if(formBean.getDistributionType().intValue() == Constants.SPECIMEN_DISTRIBUTION_TYPE) {
+										dIdentifier = "value(DistributedItem:" + i + "_id)";
+										keyid = "DistributedItem:" + i + "_id";
+									} else {
+										//dIdentifier = "value(SpecimenArray:" + i + "_id)";
+										dIdentifier = "value(DistributedItem:" + i +"_SpecimenArray_id)";
+										
+										keyid = "DistributedItem:" + i +"_SpecimenArray_id";
+										readOnlyForAll = true;
+									}
+									
+								
+								String itemName = "value(DistributedItem:" + i
+										+ "_Specimen_id)";
+								String barcodeKey = "value(DistributedItem:" + i + "_Specimen_barcode)";
+								String labelKey = "value(DistributedItem:" + i + "_Specimen_label)";
+								
+								String quantity = "value(DistributedItem:" + i
+										+ "_quantity)";
+								String availableQuantity = "value(DistributedItem:" + i
+										+ "_availableQty)";
+								String previousQuantity = "value(DistributedItem:" + i
+								+ "_previousQuantity)";
+								String check = "chk_" + i;
 
-					//Change added for Consent Tracking
-					String barcodeStatus="barcodeStatus"+i;
-					String barcodelabelStatus="barcodelabel"+i;
-					String verificationStatusKey = "value(DistributedItem:" + i + "_verificationKey)";
+								//Change added for Consent Tracking
+								String barcodeStatus="barcodeStatus"+i;
+								String barcodelabelStatus="barcodelabel"+i;
+								String verificationStatusKey = "value(DistributedItem:" + i + "_verificationKey)";
 
-					//Change added for Consent Tracking
-					
-/*					String tissueSite = "value(DistributedItem:" + i
-							+ "_tissueSite)";
-					String tissueSide = "value(DistributedItem:" + i
-							+ "_tissueSide)";
-					String pathologicalStatus = "value(DistributedItem:" + i
-							+ "_pathologicalStatus)";
-					String unitSpan = "value(DistributedItem:" + i
-							+ "_unitSpan)";
-					String className = "value(DistributedItem:" + i
-							+ "_Specimen_className)";
-					String type = "value(DistributedItem:" + i
-							+ "_Specimen_type)";
-					String key = "DistributedItem:" + i + "_Specimen_className";
-					
-					//String unitKey = "DistributedItem:" + i + "_unit";
-					//String unitProperty = "value(DistributedItem:"+i+"_unit)";
-					//String fName = "onSpecimenTypeChange(this,'" + unitSpan + "','" + itemName + "','" + unitProperty + "')";
-					String srKeyName = "DistributedItem:" + i + "_Specimen_id";
-					//String idValue=(String)formBean.getValue(srKeyName);
-					//String strUnitValue = ""+(String)formBean.getValue(unitProperty);
-					String classValue = (String) formBean.getValue(key);
-					key = "DistributedItem:" + i + "_Specimen_type";
-					String typeValue = (String) formBean.getValue(key);
-					String strUnitValue = changeUnit(classValue, typeValue);
-*/					%>
+								//Change added for Consent Tracking
+								
+					/*					String tissueSite = "value(DistributedItem:" + i
+										+ "_tissueSite)";
+								String tissueSide = "value(DistributedItem:" + i
+										+ "_tissueSide)";
+								String pathologicalStatus = "value(DistributedItem:" + i
+										+ "_pathologicalStatus)";
+								String unitSpan = "value(DistributedItem:" + i
+										+ "_unitSpan)";
+								String className = "value(DistributedItem:" + i
+										+ "_Specimen_className)";
+								String type = "value(DistributedItem:" + i
+										+ "_Specimen_type)";
+								String key = "DistributedItem:" + i + "_Specimen_className";
+								
+								//String unitKey = "DistributedItem:" + i + "_unit";
+								//String unitProperty = "value(DistributedItem:"+i+"_unit)";
+								//String fName = "onSpecimenTypeChange(this,'" + unitSpan + "','" + itemName + "','" + unitProperty + "')";
+								String srKeyName = "DistributedItem:" + i + "_Specimen_id";
+								//String idValue=(String)formBean.getValue(srKeyName);
+								//String strUnitValue = ""+(String)formBean.getValue(unitProperty);
+								String classValue = (String) formBean.getValue(key);
+								key = "DistributedItem:" + i + "_Specimen_type";
+								String typeValue = (String) formBean.getValue(key);
+								String strUnitValue = changeUnit(classValue, typeValue);
+					*/
+					%>
 				
 				<tr>
 					     <td class="formSerialNumberField" width="5%"><html:hidden  property="<%=dIdentifier%>" /><%=i%></td>
@@ -838,23 +846,23 @@
 						    </span><html:hidden
 							property="<%=previousQuantity%>" /></td>
 						<%
-					boolean bool = Utility.isPersistedValue(map, keyid);
-					String condition = "";
-					String labelbarcodeKey="";
-					String distributionBasedOn="1";
-					if (bool)
-						condition = "disabled='disabled'";
-					if(formBean.getDistributionBasedOn().intValue() == Constants.BARCODE_BASED_DISTRIBUTION)
-					{
-						labelbarcodeKey=barcodeKey;
-						distributionBasedOn=Constants.BARCODE_DISTRIBUTION;//"1"
-					} 
-					else
-					{
-						labelbarcodeKey=labelKey;
-						distributionBasedOn=Constants.LABLE_DISTRIBUTION;//"2"
-					}
-					%>
+							boolean bool = AppUtility.isPersistedValue(map, keyid);
+									String condition = "";
+									String labelbarcodeKey="";
+									String distributionBasedOn="1";
+									if (bool)
+										condition = "disabled='disabled'";
+									if(formBean.getDistributionBasedOn().intValue() == Constants.BARCODE_BASED_DISTRIBUTION)
+									{
+										labelbarcodeKey=barcodeKey;
+										distributionBasedOn=Constants.BARCODE_DISTRIBUTION;//"1"
+									} 
+									else
+									{
+										labelbarcodeKey=labelKey;
+										distributionBasedOn=Constants.LABLE_DISTRIBUTION;//"2"
+									}
+						%>
 						<td class="formField" width="5"><input type=checkbox
 							name="<%=check %>" id="<%=check %>" <%=condition%>
 							onClick="document.forms[0].deleteValue.disabled = false;">

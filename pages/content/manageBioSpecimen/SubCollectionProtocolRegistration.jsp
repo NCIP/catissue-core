@@ -5,7 +5,7 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.CollectionProtocolRegistrationForm"%>
-<%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
+<%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="java.util.*"%>	  
 <%@ include file="/pages/content/common/BioSpecimenCommonCode.jsp" %>
 <script src="jss/script.js" type="text/javascript"></script>
@@ -20,51 +20,50 @@
 		</script>
 <!-- Mandar 11-Aug-06 : calendar changes end -->
 <%
-	
-			String pageOf = (String)request.getAttribute(Constants.PAGEOF);
+	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
 	   		Object obj = request.getAttribute("collectionProtocolRegistrationForm");
-			CollectionProtocolRegistrationForm form =null;
-			Integer registrationYear = null,registrationMonth=null,registrationDay=null;
-			String currentRegistrationDate = "";
+	CollectionProtocolRegistrationForm form =null;
+	Integer registrationYear = null,registrationMonth=null,registrationDay=null;
+	String currentRegistrationDate = "";
 
-			String selectProperty="";
-			if(obj != null && obj instanceof CollectionProtocolRegistrationForm)
-			{
-				form = (CollectionProtocolRegistrationForm)obj;
-				currentRegistrationDate = form.getRegistrationDate();  
+	String selectProperty="";
+	if(obj != null && obj instanceof CollectionProtocolRegistrationForm)
+	{
+		form = (CollectionProtocolRegistrationForm)obj;
+		currentRegistrationDate = form.getRegistrationDate();  
+	
+		if(currentRegistrationDate == null)
+		{
+			currentRegistrationDate = "";
+		}
+		else
+		{
+			registrationYear = new Integer(AppUtility.getYear(currentRegistrationDate ));
+			registrationMonth = new Integer(AppUtility.getMonth(currentRegistrationDate ));
+			registrationDay = new Integer(AppUtility.getDay(currentRegistrationDate ));
+		}
+		
 			
-				if(currentRegistrationDate == null)
-				{
-					currentRegistrationDate = "";
-				}
-				else
-				{
-					registrationYear = new Integer(Utility.getYear(currentRegistrationDate ));
-					registrationMonth = new Integer(Utility.getMonth(currentRegistrationDate ));
-					registrationDay = new Integer(Utility.getDay(currentRegistrationDate ));
-				}
-				
-					
-			}
-			String cpId = null,participantId=null;
-			
-			if(request.getAttribute(Constants.CP_SEARCH_CP_ID) != null)
-			{
-				cpId = (String)request.getAttribute(Constants.CP_SEARCH_CP_ID);
-			}
-			if(request.getAttribute(Constants.CP_SEARCH_PARTICIPANT_ID) != null)
-			{
-				participantId = (String)request.getAttribute(Constants.CP_SEARCH_PARTICIPANT_ID);
-			}
-				
-				String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
-				boolean isAddNew = false;
-				
-			    String operation = (String) request.getAttribute(Constants.OPERATION);
+	}
+	String cpId = null,participantId=null;
+	
+	if(request.getAttribute(Constants.CP_SEARCH_CP_ID) != null)
+	{
+		cpId = (String)request.getAttribute(Constants.CP_SEARCH_CP_ID);
+	}
+	if(request.getAttribute(Constants.CP_SEARCH_PARTICIPANT_ID) != null)
+	{
+		participantId = (String)request.getAttribute(Constants.CP_SEARCH_PARTICIPANT_ID);
+	}
+		
+		String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
+		boolean isAddNew = false;
+		
+	    String operation = (String) request.getAttribute(Constants.OPERATION);
 		        String reqPath = (String)request.getAttribute(Constants.REQ_PATH);
 		        String appendingPath = "/CollectionProtocolRegistration.do?operation=add&pageOf=pageOfCollectionProtocolRegistration";
-				if (reqPath != null)
-					appendingPath = reqPath + "|/CollectionProtocolRegistration.do?operation=add&pageOf=pageOfCollectionProtocolRegistration";
+		if (reqPath != null)
+			appendingPath = reqPath + "|/CollectionProtocolRegistration.do?operation=add&pageOf=pageOfCollectionProtocolRegistration";
 		        
 		        String formName;
 
@@ -72,22 +71,21 @@
 		        if (operation.equals(Constants.EDIT))
 		        {						
 		            formName = Constants.SUB_COLLECTION_PROTOCOL_REGISTRATION_EDIT_ACTION;
-					if(pageOf.equals(Constants.PAGE_OF_COLLECTION_PROTOCOL_REGISTRATION_CP_QUERY))
-					{
-						formName = Constants.CP_QUERY_SUB_COLLECTION_PROTOCOL_REGISTRATION_EDIT_ACTION + "?pageOf="+pageOf+"&cpSearchCpId="+cpId+"&cpSearchParticipantId="+participantId;
-					}
+			if(pageOf.equals(Constants.PAGE_OF_COLLECTION_PROTOCOL_REGISTRATION_CP_QUERY))
+			{
+				formName = Constants.CP_QUERY_SUB_COLLECTION_PROTOCOL_REGISTRATION_EDIT_ACTION + "?pageOf="+pageOf+"&cpSearchCpId="+cpId+"&cpSearchParticipantId="+participantId;
+			}
 		            readOnlyValue = false;
 		        }
 		        else
 		        {
 		            formName = Constants.SUB_COLLECTIONP_ROTOCOL_REGISTRATION_ADD_ACTION;
-					if(pageOf.equals(Constants.PAGE_OF_COLLECTION_PROTOCOL_REGISTRATION_CP_QUERY))
-					{
-						formName = Constants.CP_QUERY_SUB_COLLECTION_PROTOCOL_REGISTRATION_ADD_ACTION + "?pageOf="+pageOf+"&cpSearchCpId="+cpId+"&cpSearchParticipantId="+participantId;
-					}
+			if(pageOf.equals(Constants.PAGE_OF_COLLECTION_PROTOCOL_REGISTRATION_CP_QUERY))
+			{
+				formName = Constants.CP_QUERY_SUB_COLLECTION_PROTOCOL_REGISTRATION_ADD_ACTION + "?pageOf="+pageOf+"&cpSearchCpId="+cpId+"&cpSearchParticipantId="+participantId;
+			}
 		            readOnlyValue = false;
 		        }
-
 %>
 
 <head>

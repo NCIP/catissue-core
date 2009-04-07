@@ -17,7 +17,7 @@ import edu.wustl.common.util.logger.Logger;
 
 /**
  * @author sandeep_ranade
- * Utility class containing all general purpose methods.
+ * AppUtility class containing all general purpose methods.
  */
 public class ReportLoaderUtil
 {

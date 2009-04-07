@@ -30,7 +30,7 @@ import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.bizlogic.IBizLogic;
@@ -94,7 +94,7 @@ public class NewSpecimenEventParametersAction  extends SecureAction
 	            			            			
 	            			User user = eventParameters.getUser();
 	            			rowData.add(user.getLastName() + ", " + user.getFirstName());
-	            			rowData.add(Utility.parseDateToString(eventParameters.getTimestamp(),Variables.dateFormat));
+	            			rowData.add(AppUtility.parseDateToString(eventParameters.getTimestamp(),Variables.dateFormat));
 	            			rowData.add(events[1]);//pageOf
 	            			gridData.add(rowData);
 	            		}

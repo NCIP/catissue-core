@@ -10,7 +10,7 @@
 	page language="java" contentType="text/html"
 	import="edu.wustl.catissuecore.util.global.Constants, org.apache.struts.Globals"
 %>
-<%@ page import="org.apache.struts.action.ActionMessages, edu.wustl.catissuecore.util.global.Utility"%>
+<%@ page import="org.apache.struts.action.ActionMessages,"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <script>
 function QueryWizard()
@@ -31,8 +31,8 @@ function QueryWizard()
 
 <body onunload='closeWaitPage()'>
 
-<% 
-boolean mac = false;
+<%
+	boolean mac = false;
 Object os = request.getHeader("user-agent");
 if(os!=null && os.toString().toLowerCase().indexOf("mac")!=-1)
 {
@@ -45,9 +45,12 @@ if(mac)
 }
 String message = null; 
 String popupMessage = (String)request.getAttribute(Constants.POPUP_MESSAGE);
-int queryCount = 0;%>
+int queryCount = 0;
+%>
 <html:messages id="messageKey" message="true" >
-<% message = messageKey;    %>
+<%
+	message = messageKey;
+%>
 </html:messages>
 	<html:form styleId='saveQueryForm' action='<%=Constants.FETCH_QUERY_ACTION%>' style="margin:0;padding:0;">
 		<table cellpadding='0' cellspacing='0' border='0' height="500"  align='center' style="width:100%;"> 
@@ -59,7 +62,7 @@ int queryCount = 0;%>
 					<span class="savedQueryHeading" > <bean:message key="query.savedQueries.label"/> </span>
 				</td>
 				<td  width="130" align="left" class="bgImage" > 					
-					<span class="savedQueryHeading" ><%= message %> </span>					
+					<span class="savedQueryHeading" ><%=message%> </span>					
 				</td>
 				<td width="1" valign="middle" class="bgImage" align="right">
 					<img src="images/dot.gif" width="1" height="25" />
@@ -85,13 +88,14 @@ int queryCount = 0;%>
 							<jsp:useBean id="parameterizedQuery" type="edu.wustl.common.querysuite.queryobject.IParameterizedQuery" />
 							
 								<tr>
-									<%String target = "executeQuery('"+parameterizedQuery.getId()+"')"; 
-									  String title = parameterizedQuery.getName();
-									  String newTitle = Utility.getQueryTitle(title);
-									  
-									  String tooltip = Utility.getTooltip(title);
-									  String function = "Tip('"+tooltip+"', WIDTH, 700)";
-									  queryCount++;
+									<%
+										String target = "executeQuery('"+parameterizedQuery.getId()+"')"; 
+																  String title = parameterizedQuery.getName();
+																  String newTitle = AppUtility.getQueryTitle(title);
+																  
+																  String tooltip = AppUtility.getTooltip(title);
+																  String function = "Tip('"+tooltip+"', WIDTH, 700)";
+																  queryCount++;
 									%>
 									
 									<td valign="top" height='20'width='30' style="font-size:1.2em;">

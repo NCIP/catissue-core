@@ -3,7 +3,7 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
-<%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
+<%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
@@ -56,9 +56,9 @@
 							<ncombo:DateTimeComponent name="dateOfEvent"
 							  id="dateOfEvent"
 							  formName="bulkEventOperationsForm"
-							  month= "<%= Utility.getMonth(eventDate) %>"
-							  year= "<%= Utility.getYear(eventDate) %>"
-							  day= "<%= Utility.getDay(eventDate) %>"
+							  month= "<%=AppUtility.getMonth(eventDate)%>"
+							  year= "<%=AppUtility.getYear(eventDate)%>"
+							  day= "<%=AppUtility.getDay(eventDate)%>"
     		  			      pattern="<%=Variables.dateFormat%>"
     		  			      value="<%= eventDate %>"
 							  styleClass="black_ar"

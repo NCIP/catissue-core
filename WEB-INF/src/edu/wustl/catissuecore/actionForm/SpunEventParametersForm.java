@@ -19,7 +19,7 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.SpunEventParameters;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
@@ -110,8 +110,8 @@ public class SpunEventParametersForm extends SpecimenEventParametersForm
        {
 			super.setAllValues(abstractDomain);
 			SpunEventParameters spunEventParametersObject = (SpunEventParameters)abstractDomain ;
-			this.gravityForce = Utility.toString(spunEventParametersObject.getGravityForce());
-			this.durationInMinutes = Utility.toString(spunEventParametersObject.getDurationInMinutes()); 
+			this.gravityForce = AppUtility.toString(spunEventParametersObject.getGravityForce());
+			this.durationInMinutes = AppUtility.toString(spunEventParametersObject.getDurationInMinutes()); 
 	    }
 	    catch(Exception excp)
 	    {

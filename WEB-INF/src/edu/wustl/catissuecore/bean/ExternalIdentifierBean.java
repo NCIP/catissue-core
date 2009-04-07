@@ -2,7 +2,7 @@ package edu.wustl.catissuecore.bean;
 
 import java.util.Map;
 
-import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.AppUtility;
 
 public class ExternalIdentifierBean 
 {
@@ -22,7 +22,7 @@ public class ExternalIdentifierBean
 			exIdentifier = "externalIdentifierValue(ExternalIdentifier:" + xtrnId +"_id)";
 			check = "chk_ex_"+xtrnId;
 			String exKey = "ExternalIdentifier:" + xtrnId +"_id";
-			boolean exBool = Utility.isPersistedValue(map,exKey);
+			boolean exBool = AppUtility.isPersistedValue(map,exKey);
 			if(exBool)
 				exCondition = "disabled='disabled'";
 		}

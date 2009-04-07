@@ -8,7 +8,7 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.CreateSpecimenForm"%>
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
-<%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
+<%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="java.util.*"%>
 <%@ page import="java.io.*"%>
 <%@ page import="edu.wustl.common.util.tag.ScriptGenerator" %>

@@ -7,7 +7,7 @@
 <%@ page import="edu.wustl.catissuecore.domain.Specimen"%>
 <%@ page import="edu.wustl.common.query.ShoppingCart"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
-<%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
+<%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 <%@ page import="java.util.ArrayList"%>
 
@@ -126,7 +126,7 @@ function checkAll(element)
 
 
 <%
-		if(dataList.size() != 0)
+	if(dataList.size() != 0)
 		{
 %>
 	<tr height="5%">

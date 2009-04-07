@@ -40,7 +40,7 @@ import edu.wustl.catissuecore.domain.ConsentTierResponse;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.util.ConsentUtil;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.AddNewSessionDataBean;
@@ -94,7 +94,7 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 		//Getting witness name list for CollectionProtocolID
 		List witnessList = ConsentUtil.witnessNameList(selectedCollectionProtocolId);
 		//Getting ResponseList if Operation=Edit then "Withdraw" is added to the List 
-		List responseList= Utility.responceList(operation);
+		List responseList= AppUtility.responceList(operation);
 		Set consentList = (Set)ConsentUtil.getConsentList(selectedCollectionProtocolId);
 		List requestConsentList = new ArrayList(consentList);
 		if(operation.equalsIgnoreCase(Constants.ADD))
@@ -110,7 +110,7 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 		else
 		{
 			String cprID = String.valueOf(collectionProtocolRegistrationForm.getId());
-			CollectionProtocolRegistration collectionProtocolRegistration = Utility.getcprObj(cprID);
+			CollectionProtocolRegistration collectionProtocolRegistration = AppUtility.getcprObj(cprID);
 			//List added for grid
 			List specimenDetails= new ArrayList();
 			ConsentUtil.getSpecimenDetails(collectionProtocolRegistration,specimenDetails);
@@ -136,7 +136,7 @@ public class CollectionProtocolRegistrationAction extends SecureAction
         	cpform.setId(0);
         	if(cpform.getRegistrationDate() == null)
         	{
-        		cpform.setRegistrationDate(Utility.parseDateToString(Calendar.getInstance().getTime(), Variables.dateFormat));
+        		cpform.setRegistrationDate(AppUtility.parseDateToString(Calendar.getInstance().getTime(), Variables.dateFormat));
         	}
         }
 

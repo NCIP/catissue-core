@@ -18,7 +18,7 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.FluidSpecimenReviewEventParameters;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
@@ -82,7 +82,7 @@ public class FluidSpecimenReviewEventParametersForm extends SpecimenEventParamet
 	{
 		super.setAllValues(abstractDomain);
 		FluidSpecimenReviewEventParameters fluidSpecimenReviewEventParametersObject = (FluidSpecimenReviewEventParameters)abstractDomain ;
-		this.cellCount = Utility.toString(fluidSpecimenReviewEventParametersObject.getCellCount()) ; 
+		this.cellCount = AppUtility.toString(fluidSpecimenReviewEventParametersObject.getCellCount()) ; 
 		logger.debug("############FormObject################## : ");
 		logger.debug(this.cellCount);
 		logger.debug("############################## : ");

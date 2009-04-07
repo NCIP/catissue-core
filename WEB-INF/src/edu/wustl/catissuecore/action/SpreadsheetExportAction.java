@@ -24,7 +24,7 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.AdvanceSearchForm;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.dao.QuerySessionData;
@@ -80,7 +80,7 @@ public class SpreadsheetExportAction  extends BaseAction
 			pageNum = 1;
     	}
 		QuerySessionData querySessionData = (QuerySessionData)session.getAttribute(edu.wustl.common.util.global.Constants.QUERY_SESSION_DATA);
-        List dataList1 = Utility.getPaginationDataList(request, getSessionData(request), recordsPerPage, pageNum, querySessionData);
+        List dataList1 = AppUtility.getPaginationDataList(request, getSessionData(request), recordsPerPage, pageNum, querySessionData);
         List<List<String>> dataList = (List<List<String>>) session.getAttribute(Constants.EXPORT_DATA_LIST);
         if(dataList == null )
         	dataList = dataList1;

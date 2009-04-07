@@ -23,7 +23,7 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.ReportedProblemForm;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.beans.SessionDataBean;
 
 
@@ -53,7 +53,7 @@ public class ReportProblemAction extends Action
 		}
     	
 		//Mandar 17-Apr-06 : 1667:- Application URL
-    	Utility.setApplicationURL(request.getRequestURL().toString());
+    	AppUtility.setApplicationURL(request.getRequestURL().toString());
 		
         //Gets the value of the operation parameter.
         String operation = request.getParameter(Constants.OPERATION);

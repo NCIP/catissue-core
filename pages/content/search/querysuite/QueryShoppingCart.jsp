@@ -5,7 +5,7 @@
 <%@ page import="edu.wustl.catissuecore.actionForm.ShoppingCartForm"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.querysuite.QueryShoppingCart"%>
-<%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
+<%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
@@ -369,9 +369,9 @@ function checkAll(element)
       <tr>
         <td colspan="2">
 		<%
-   if(dataList!=null && dataList.size()!=0)
-   {
-%><table width="99%" border="0" align="center" cellpadding="0" cellspacing="0">
+			if(dataList!=null && dataList.size()!=0)
+		   {
+		%><table width="99%" border="0" align="center" cellpadding="0" cellspacing="0">
            
 			<tr >
 	<td class="formFieldNoBordersSimple" align="left">

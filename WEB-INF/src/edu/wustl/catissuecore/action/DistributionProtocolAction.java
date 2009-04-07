@@ -24,7 +24,7 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.DistributionProtocolForm;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.logger.Logger;
@@ -56,7 +56,7 @@ public class DistributionProtocolAction extends SpecimenProtocolAction
     	
     	if(distributionProtocolForm.getStartDate() == null)
     	{
-    		distributionProtocolForm.setStartDate(Utility.parseDateToString(Calendar.getInstance().getTime(), Variables.dateFormat));
+    		distributionProtocolForm.setStartDate(AppUtility.parseDateToString(Calendar.getInstance().getTime(), Variables.dateFormat));
     	}
     	//List of keys used in map of ActionForm
 		List key = new ArrayList();

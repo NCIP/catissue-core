@@ -121,11 +121,11 @@
 
 				 		<html:hidden property="<%=exIdentifier%>" />
 						<%
-						String exKey = "ExternalIdentifier:" + i +"_id";
-						boolean exBool = Utility.isPersistedValue(map,exKey);
-						String exCondition = "";
-						if(exBool)
-							exCondition = "disabled='disabled'";
+							String exKey = "ExternalIdentifier:" + i +"_id";
+										boolean exBool = AppUtility.isPersistedValue(map,exKey);
+										String exCondition = "";
+										if(exBool)
+											exCondition = "disabled='disabled'";
 						%>
 					<td align="left" class="black_ar" ><input type=checkbox name="<%=check %>" id="<%=check %>" <%=exCondition%> onClick="enableButton(document.forms[0].deleteExId,document.forms[0].exIdCounter,'chk_ex_')">	
                   </td>

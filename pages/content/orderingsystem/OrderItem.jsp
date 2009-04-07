@@ -11,7 +11,7 @@
 <%@ page import="java.util.Map,java.util.List,java.util.ListIterator"%>
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
-<%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
+<%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.catissuecore.domain.Specimen"%>
 <%@ page import="edu.wustl.catissuecore.bean.OrderSpecimenBean"%>

@@ -139,16 +139,14 @@ function setEditableChkbox(checkAllPages)
 						List row = (List)dataList.get(i);
 					  	int j;
 					%>
-					<%="\""%><%for (j=0;j < (row.size()-1);j++){%><%=Utility.toNewGridFormatWithHref(row,hyperlinkColumnMap,j)+Constants.DHTMLXGRID_DELIMETER%><%}%><%=Utility.toNewGridFormatWithHref(row,hyperlinkColumnMap,j)%><%="\""%>,<%}%>
-					<%
-						List row = (List)dataList.get(i);
-					  	int j;
-					%>
-					<%="\""%><%for (j=0;j < (row.size()-1);j++){%><%=Utility.toNewGridFormatWithHref(row,hyperlinkColumnMap,j)+Constants.DHTMLXGRID_DELIMETER%><%}%><%=Utility.toNewGridFormatWithHref(row,hyperlinkColumnMap,j)%><%="\""%>
+					<%="\""%><%for (j=0;j < (row.size()-1);j++){%><%=AppUtility.toNewGridFormatWithHref(row,hyperlinkColumnMap,j)+Constants.DHTMLXGRID_DELIMETER%><%}%><%=AppUtility.toNewGridFormatWithHref(row,hyperlinkColumnMap,j)%><%="\""%>,<%}%>
+					<%List row = (List)dataList.get(i);
+					  	int j;%>
+					<%="\""%><%for (j=0;j < (row.size()-1);j++){%><%=AppUtility.toNewGridFormatWithHref(row,hyperlinkColumnMap,j)+Constants.DHTMLXGRID_DELIMETER%><%}%><%=AppUtility.toNewGridFormatWithHref(row,hyperlinkColumnMap,j)%><%="\""%>
 				];
 
 	var columns = <%="\""%><%int col;%><%for(col=0;col<(columnList.size()-1);col++){%><%=columnList.get(col)%>,<%}%><%=columnList.get(col)%><%="\""%>;
-	var colWidth = "<%=Utility.getColumnWidth(columnList)%>";
+	var colWidth = "<%=AppUtility.getColumnWidth(columnList)%>";
 	var colTypes = <%="\""%><%=Variables.prepareColTypes(dataList,true)%><%="\""%>;
 	var colDataTypes = colTypes;
 

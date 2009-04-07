@@ -19,7 +19,7 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.domain.FixedEventParameters;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
-import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
@@ -105,8 +105,8 @@ public class FixedEventParametersForm extends SpecimenEventParametersForm
         {
 			super.setAllValues(abstractDomain);
 			FixedEventParameters fixedEventParametersObject = (FixedEventParameters)abstractDomain ;
-			this.fixationType = Utility.toString(fixedEventParametersObject.getFixationType());
-			this.durationInMinutes = Utility.toString(fixedEventParametersObject.getDurationInMinutes());  
+			this.fixationType = AppUtility.toString(fixedEventParametersObject.getFixationType());
+			this.durationInMinutes = AppUtility.toString(fixedEventParametersObject.getDurationInMinutes());  
 	    }
 	    catch(Exception excp)
 	    {

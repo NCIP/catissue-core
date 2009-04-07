@@ -26,7 +26,7 @@ import edu.common.dynamicextensions.ui.webui.util.WebUIManager;
 import edu.common.dynamicextensions.util.global.Constants;
 import edu.wustl.catissuecore.actionForm.AnnotationDataEntryForm;
 import edu.wustl.catissuecore.bizlogic.AnnotationBizLogic;
-import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.util.logger.Logger;
@@ -72,7 +72,7 @@ public class LoadDynamicExtentionsDataEntryPageAction extends BaseAction
 		//Set into Cache
 		//CatissueCoreCacheManager cacheManager = CatissueCoreCacheManager.getInstance();
 		HttpSession session = request.getSession();
-		Long entityMapId = getEntityMapId(Utility.toLong(staticEntityId),Utility.toLong(dynEntContainerId));
+		Long entityMapId = getEntityMapId(AppUtility.toLong(staticEntityId),AppUtility.toLong(dynEntContainerId));
 		session.setAttribute(AnnotationConstants.SELECTED_ENTITY_MAP_ID, entityMapId);
 		session.setAttribute(AnnotationConstants.SELECTED_STATIC_ENTITYID,annotationDataEntryForm.getSelectedStaticEntityId());
 		session.setAttribute(AnnotationConstants.SELECTED_STATIC_ENTITY_RECORDID,annotationDataEntryForm.getSelectedStaticEntityRecordId());

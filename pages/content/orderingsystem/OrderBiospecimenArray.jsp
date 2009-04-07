@@ -8,7 +8,7 @@
 <%@ page import="java.util.Collection,java.util.Iterator,java.util.Map,java.util.List,java.util.ListIterator,java.util.HashMap,java.util.HashSet,java.util.ArrayList,java.util.Set"%>
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
-<%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
+<%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="edu.wustl.catissuecore.domain.SpecimenArrayType"%>
 <%@ page import="edu.wustl.catissuecore.domain.SpecimenArray"%>
 <%@ page import="edu.wustl.catissuecore.domain.StorageContainer"%>

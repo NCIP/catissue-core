@@ -31,7 +31,7 @@ import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.wustl.catissuecore.actionForm.AnnotationForm;
 import edu.wustl.catissuecore.bizlogic.AnnotationBizLogic;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
-import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.global.Constants;
@@ -76,7 +76,7 @@ public class SaveAnnotationsConditionsAction extends BaseAction
         {
             EntityMap entityMap = (EntityMap) dynamicList.get(0);
             
-            Collection<FormContext> formCollPrev = Utility.getFormContexts(entityMap.getId());
+            Collection<FormContext> formCollPrev = AppUtility.getFormContexts(entityMap.getId());
 
 			Collection<FormContext> currFormColl= new HashSet<FormContext>();
             int conditionValindex = 0;            
@@ -91,7 +91,7 @@ public class SaveAnnotationsConditionsAction extends BaseAction
 	                {
 	                    FormContext formContext = (FormContext) formCollIt.next();
 	                    
-	        			Collection<EntityMapCondition> entityMapConditions = Utility.getEntityMapConditions(formContext.getId());
+	        			Collection<EntityMapCondition> entityMapConditions = AppUtility.getEntityMapConditions(formContext.getId());
 	        			
 	                    if((formContext.getNoOfEntries() == null || formContext.getNoOfEntries().equals(""))&&(formContext.getStudyFormLabel() == null || formContext.getStudyFormLabel().equals("")))
 	                    {

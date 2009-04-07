@@ -17,7 +17,7 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.ClinicalStudyRegistration;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
@@ -84,10 +84,10 @@ public class ClinicalStudyRegistrationForm extends AbstractActionForm
         this.id = registration.getId().longValue();
         this.activityStatus = registration.getActivityStatus();
         this.clinicalStudyId = registration.getClinicalStudy().getId().longValue();
-        final String firstName = Utility.toString(registration.getParticipant().getFirstName());
-        final String lastName = Utility.toString(registration.getParticipant().getLastName());
-        final String birthDate = Utility.toString(registration.getParticipant().getBirthDate());
-        final String ssn = Utility.toString(registration.getParticipant().getSocialSecurityNumber());
+        final String firstName = AppUtility.toString(registration.getParticipant().getFirstName());
+        final String lastName = AppUtility.toString(registration.getParticipant().getLastName());
+        final String birthDate = AppUtility.toString(registration.getParticipant().getBirthDate());
+        final String ssn = AppUtility.toString(registration.getParticipant().getSocialSecurityNumber());
             
         if((registration.getParticipant() != null) && (firstName.trim().length()>0 || lastName.trim().length()>0 || birthDate.trim().length()>0 || ssn.trim().length()>0))
         {
@@ -97,8 +97,8 @@ public class ClinicalStudyRegistrationForm extends AbstractActionForm
             this.participantName = registration.getParticipant().getMessageLabel();
             //checkedButton = true;
         }
-        this.participantClinicalStudyID = Utility.toString(registration.getClinicalStudyParticipantIdentifier());
-        this.registrationDate = Utility.parseDateToString(registration.getRegistrationDate(),Variables.dateFormat);
+        this.participantClinicalStudyID = AppUtility.toString(registration.getClinicalStudyParticipantIdentifier());
+        this.registrationDate = AppUtility.parseDateToString(registration.getRegistrationDate(),Variables.dateFormat);
        }
     /**
     * @return Returns the id assigned to form bean

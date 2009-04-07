@@ -31,7 +31,7 @@ import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
@@ -57,7 +57,7 @@ public class SpecimenArrayAliquotAction extends SecureAction
 		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 		SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
 		//Bean List for the dropdown for the storage location
-		List<NameValueBean> storagePositionListForSpecimenArrayAliquot = Utility.getStoragePositionTypeListForTransferEvent();
+		List<NameValueBean> storagePositionListForSpecimenArrayAliquot = AppUtility.getStoragePositionTypeListForTransferEvent();
 		request.setAttribute("storagePositionListForSpecimenArrayAliquot", storagePositionListForSpecimenArrayAliquot);
 		//boolean to indicate whether the suitable containers to be shown in dropdown 
 		//is exceeding the max limit.
@@ -154,9 +154,9 @@ public class SpecimenArrayAliquotAction extends SecureAction
 			if (map != null)
 			{
 				//TODO
-				specimenArrayAliquotForm.setSpecimenClass(Utility.toString(map.get(Constants.ALIQUOT_SPECIMEN_CLASS)));				
-				specimenArrayAliquotForm.setSpecimenArrayType(Utility.toString(map.get(Constants.ALIQUOT_SPECIMEN_ARRAY_TYPE)));
-				specimenArrayAliquotForm.setAliquotCount(Utility.toString(map.get(Constants.ALIQUOT_ALIQUOT_COUNTS)));								
+				specimenArrayAliquotForm.setSpecimenClass(AppUtility.toString(map.get(Constants.ALIQUOT_SPECIMEN_CLASS)));				
+				specimenArrayAliquotForm.setSpecimenArrayType(AppUtility.toString(map.get(Constants.ALIQUOT_SPECIMEN_ARRAY_TYPE)));
+				specimenArrayAliquotForm.setAliquotCount(AppUtility.toString(map.get(Constants.ALIQUOT_ALIQUOT_COUNTS)));								
 				Collection specimenTypesCollection = (Collection) map.get(Constants.ALIQUOT_SPECIMEN_TYPES);
 				List specimenTypeList = setSpecimenTypes(specimenTypesCollection, specimenArrayAliquotForm);				
 				request.setAttribute(Constants.SPECIMEN_TYPE_LIST,specimenTypeList);				

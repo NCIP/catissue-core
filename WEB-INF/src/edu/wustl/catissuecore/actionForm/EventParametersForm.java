@@ -20,7 +20,7 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.util.MultipleSpecimenValidationUtil;
-import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
@@ -192,16 +192,16 @@ public abstract class EventParametersForm extends AbstractActionForm
  	public void setAllValues(AbstractDomainObject abstractDomain)
  	{
  	   SpecimenEventParameters eventParametersObject = (SpecimenEventParameters)abstractDomain;
- 	   this.comments  = Utility.toString(eventParametersObject.getComment());
+ 	   this.comments  = AppUtility.toString(eventParametersObject.getComment());
  	   this.id = eventParametersObject.getId().longValue() ;
 		
  	   Calendar calender = Calendar.getInstance();
  	   if(eventParametersObject.getTimestamp()!=null)
  	   {
  		   calender.setTime(eventParametersObject.getTimestamp());
- 		   this.timeInHours = Utility.toString(Integer.toString(calender.get(Calendar.HOUR_OF_DAY)));
- 	 	   this.timeInMinutes = Utility.toString(Integer.toString(calender.get(Calendar.MINUTE)));
- 	 	   this.dateOfEvent = Utility.parseDateToString(eventParametersObject.getTimestamp(),Variables.dateFormat);
+ 		   this.timeInHours = AppUtility.toString(Integer.toString(calender.get(Calendar.HOUR_OF_DAY)));
+ 	 	   this.timeInMinutes = AppUtility.toString(Integer.toString(calender.get(Calendar.MINUTE)));
+ 	 	   this.dateOfEvent = AppUtility.parseDateToString(eventParametersObject.getTimestamp(),Variables.dateFormat);
  	   }
  	   this.userId = eventParametersObject.getUser().getId().longValue() ;
  	   //this.dateOfEvent = (calender.get(Calendar.MONTH)+1)+"-"+calender.get(Calendar.DAY_OF_MONTH)+"-"+calender.get(Calendar.YEAR) ;

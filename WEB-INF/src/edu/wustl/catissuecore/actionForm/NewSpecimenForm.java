@@ -30,7 +30,7 @@ import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.dbManager.HibernateMetaData;
@@ -446,16 +446,16 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData,IPr
     	
     	if(specimenCollectionGroup!=null)
     	{
-    		this.specimenCollectionGroupId = Utility.toString(specimenCollectionGroup.getId());
+    		this.specimenCollectionGroupId = AppUtility.toString(specimenCollectionGroup.getId());
     		/**For Migration Start**/
-    		this.specimenCollectionGroupName= Utility.toString(specimenCollectionGroup.getName());
+    		this.specimenCollectionGroupName= AppUtility.toString(specimenCollectionGroup.getName());
     		/**For Migration End**/
     	}
     	if(specimen.getParentSpecimen() != null)
     	{
     		logger.debug("ParentSpecimen : -- "+specimen.getParentSpecimen());
     		this.parentSpecimenId = String.valueOf(specimen.getParentSpecimen().getId());
-    		this.parentSpecimenName = Utility.toString(((Specimen) specimen.getParentSpecimen()).getLabel());  
+    		this.parentSpecimenName = AppUtility.toString(((Specimen) specimen.getParentSpecimen()).getLabel());  
     		this.parentPresent = true;
     	}
     	
@@ -513,11 +513,11 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData,IPr
 		}
 		else
 		{
-			this.witnessName=Utility.toString(witness.getFirstName());
+			this.witnessName=AppUtility.toString(witness.getFirstName());
 		}
-		this.signedConsentUrl=Utility.toString(specimenCollectionGroup.getCollectionProtocolRegistration().getSignedConsentDocumentURL());
-		this.consentDate=Utility.parseDateToString(specimenCollectionGroup.getCollectionProtocolRegistration().getConsentSignatureDate(), Variables.dateFormat);
-		this.collectionStatus = Utility.toString(specimen.getCollectionStatus());
+		this.signedConsentUrl=AppUtility.toString(specimenCollectionGroup.getCollectionProtocolRegistration().getSignedConsentDocumentURL());
+		this.consentDate=AppUtility.parseDateToString(specimenCollectionGroup.getCollectionProtocolRegistration().getConsentSignatureDate(), Variables.dateFormat);
+		this.collectionStatus = AppUtility.toString(specimen.getCollectionStatus());
 	}
 	 /**
 	 * @return biohazard Type Returns the biohazardType.
@@ -577,7 +577,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData,IPr
                 {
                     errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("specimen.specimenCollectionGroupName")));
                 }
-//             	else if(specimenCollectionGroupName!=null && Utility.getSCGId(specimenCollectionGroupName.trim())==Utility.toString(null))
+//             	else if(specimenCollectionGroupName!=null && AppUtility.getSCGId(specimenCollectionGroupName.trim())==AppUtility.toString(null))
 //             	{
 //             		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.unknown", ApplicationProperties.getValue("specimen.specimenCollectionGroup")));
 //             	}
@@ -623,7 +623,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData,IPr
              		
              		if(quantityPerAliquot != null && quantityPerAliquot.trim().length() != 0)
                     {
-            			if(Utility.isQuantityDouble(className,type))
+            			if(AppUtility.isQuantityDouble(className,type))
             			{
             		        if(!validator.isDouble(quantityPerAliquot.trim(), true))
             		        {

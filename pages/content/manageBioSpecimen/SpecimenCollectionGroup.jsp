@@ -7,12 +7,12 @@
 <%@ include file="/pages/content/common/BioSpecimenCommonCode.jsp" %>
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
-<%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
+<%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.catissuecore.bizlogic.AnnotationUtil"%>
-<%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
+<%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="edu.wustl.catissuecore.action.annotations.AnnotationConstants"%>
 <%@ page language="java" isELIgnored="false"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -27,135 +27,133 @@
 <script src="jss/calendarComponent.js" type="text/javascript"></script>
 <LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
 <link href="css/catissue_suite.css" rel="stylesheet" type="text/css" /> 
-<% 
-		String operation = (String)request.getAttribute(Constants.OPERATION);
-		String tab = (String)request.getAttribute(Constants.SELECTED_TAB);
-		String reqPath = (String)request.getAttribute(Constants.REQ_PATH);
-		String pageOf = (String)request.getAttribute(Constants.PAGEOF);
-		String signedConsentDate = "";
-		String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
-		boolean isAddNew = false;	
-		//Falguni:Performance Enhancement.
-		Long scgEntityId = null;
-		scgEntityId = (Long)request.getAttribute("scgEntityId");
-		String staticEntityName=null;
-		staticEntityName = AnnotationConstants.ENTITY_NAME_SPECIMEN_COLLN_GROUP;
-		String participantId=null;
-		
-		// getting specimenCollectionGroupForm from request was called twice on this page.
-		// Thus make it common
-		Object obj = request.getAttribute("specimenCollectionGroupForm");
-		SpecimenCollectionGroupForm form =null;
-		if(obj != null && obj instanceof SpecimenCollectionGroupForm)
-		{
-			form=(SpecimenCollectionGroupForm)obj;
-			participantId=""+form.getParticipantId();
-		}
-		String id = request.getParameter("id");
-		String appendingPath = "/SpecimenCollectionGroup.do?operation=add&pageOf="+pageOf;
-		if (reqPath != null)
-			appendingPath = reqPath + "|/SpecimenCollectionGroup.do?operation=add&pageOf="+pageOf;
-	
-	   		if(form  != null)
-			{
-			//	form = (SpecimenCollectionGroupForm)obj;
-				/**
-				* Name : Vijay Pande
- 				* Reviewer Name : Sachin Lale 
- 				* Bug ID: 6472
- 				* Patch ID: 6472_1			
- 				* Description: ID is set from form, while coming back from SpecimenSummaryPage
-				**/
-				if(id==null)
-				{
-					id=String.valueOf(form.getId());
-				}
-			}	
-		String nodeId="";
-		String formName, pageView = operation ,editViewButton="buttons."+Constants.EDIT;
-		boolean readOnlyValue=false,readOnlyForAll=false;
-	   	if(!operation.equals("add") )
-	   	{
-	   		
-	   		
-			if(form != null)
-			{
-				appendingPath = "/SpecimenCollectionGroupSearch.do?operation=search&pageOf="+pageOf+"&id="+form.getId() ;
-		   		int radioButtonForParticipant1 = form.getRadioButtonForParticipant();
-				nodeId= "SpecimenCollectionGroup_"+form.getId();
-				
-		   	}
-			
-	   	}
-			
+<%
+ 	String operation = (String)request.getAttribute(Constants.OPERATION);
+ 		String tab = (String)request.getAttribute(Constants.SELECTED_TAB);
+ 		String reqPath = (String)request.getAttribute(Constants.REQ_PATH);
+ 		String pageOf = (String)request.getAttribute(Constants.PAGEOF);
+ 		String signedConsentDate = "";
+ 		String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
+ 		boolean isAddNew = false;	
+ 		//Falguni:Performance Enhancement.
+ 		Long scgEntityId = null;
+ 		scgEntityId = (Long)request.getAttribute("scgEntityId");
+ 		String staticEntityName=null;
+ 		staticEntityName = AnnotationConstants.ENTITY_NAME_SPECIMEN_COLLN_GROUP;
+ 		String participantId=null;
+ 		
+ 		// getting specimenCollectionGroupForm from request was called twice on this page.
+ 		// Thus make it common
+ 		Object obj = request.getAttribute("specimenCollectionGroupForm");
+ 		SpecimenCollectionGroupForm form =null;
+ 		if(obj != null && obj instanceof SpecimenCollectionGroupForm)
+ 		{
+ 	form=(SpecimenCollectionGroupForm)obj;
+ 	participantId=""+form.getParticipantId();
+ 		}
+ 		String id = request.getParameter("id");
+ 		String appendingPath = "/SpecimenCollectionGroup.do?operation=add&pageOf="+pageOf;
+ 		if (reqPath != null)
+ 	appendingPath = reqPath + "|/SpecimenCollectionGroup.do?operation=add&pageOf="+pageOf;
+ 	
+ 	   		if(form  != null)
+ 	{
+ 	//	form = (SpecimenCollectionGroupForm)obj;
+ 		/**
+ 		* Name : Vijay Pande
+  				* Reviewer Name : Sachin Lale 
+  				* Bug ID: 6472
+  				* Patch ID: 6472_1			
+  				* Description: ID is set from form, while coming back from SpecimenSummaryPage
+ 		**/
+ 		if(id==null)
+ 		{
+ 			id=String.valueOf(form.getId());
+ 		}
+ 	}	
+ 		String nodeId="";
+ 		String formName, pageView = operation ,editViewButton="buttons."+Constants.EDIT;
+ 		boolean readOnlyValue=false,readOnlyForAll=false;
+ 	   	if(!operation.equals("add") )
+ 	   	{
+ 	   		
+ 	   		
+ 	if(form != null)
+ 	{
+ 		appendingPath = "/SpecimenCollectionGroupSearch.do?operation=search&pageOf="+pageOf+"&id="+form.getId() ;
+ 		   		int radioButtonForParticipant1 = form.getRadioButtonForParticipant();
+ 		nodeId= "SpecimenCollectionGroup_"+form.getId();
+ 		
+ 		   	}
+ 	
+ 	   	}
+ 	
 
 
-		if(operation.equals(Constants.EDIT)|| operation.equals("viewAnnotations"))
-		{
-			editViewButton="buttons."+Constants.VIEW;
-			formName = Constants.SPECIMEN_COLLECTION_GROUP_EDIT_ACTION +"?";
-			readOnlyValue=true;
-			if(pageOf.equals(Constants.QUERY))
-				formName = Constants.QUERY_SPECIMEN_COLLECTION_GROUP_EDIT_ACTION + "?pageOf="+pageOf;
-			if(pageOf.equals(Constants.PAGE_OF_SCG_CP_QUERY))
-			{
-				formName = Constants.CP_QUERY_SPECIMEN_COLLECTION_GROUP_EDIT_ACTION + "?pageOf="+pageOf;
-			}
-		}
-		else
-		{
-			formName = Constants.SPECIMEN_COLLECTION_GROUP_ADD_ACTION;
-			if(pageOf.equals(Constants.PAGE_OF_SCG_CP_QUERY))
-			{
-				formName = Constants.CP_QUERY_SPECIMEN_COLLECTION_GROUP_ADD_ACTION + "?pageOf="+pageOf;
-			}
-			readOnlyValue=false;
-		}
-		long idToTree =0;
-		if(form!=null)
-		{
-			idToTree = form.getId();
-		}
-		
+ 		if(operation.equals(Constants.EDIT)|| operation.equals("viewAnnotations"))
+ 		{
+ 	editViewButton="buttons."+Constants.VIEW;
+ 	formName = Constants.SPECIMEN_COLLECTION_GROUP_EDIT_ACTION +"?";
+ 	readOnlyValue=true;
+ 	if(pageOf.equals(Constants.QUERY))
+ 		formName = Constants.QUERY_SPECIMEN_COLLECTION_GROUP_EDIT_ACTION + "?pageOf="+pageOf;
+ 	if(pageOf.equals(Constants.PAGE_OF_SCG_CP_QUERY))
+ 	{
+ 		formName = Constants.CP_QUERY_SPECIMEN_COLLECTION_GROUP_EDIT_ACTION + "?pageOf="+pageOf;
+ 	}
+ 		}
+ 		else
+ 		{
+ 	formName = Constants.SPECIMEN_COLLECTION_GROUP_ADD_ACTION;
+ 	if(pageOf.equals(Constants.PAGE_OF_SCG_CP_QUERY))
+ 	{
+ 		formName = Constants.CP_QUERY_SPECIMEN_COLLECTION_GROUP_ADD_ACTION + "?pageOf="+pageOf;
+ 	}
+ 	readOnlyValue=false;
+ 		}
+ 		long idToTree =0;
+ 		if(form!=null)
+ 		{
+ 	idToTree = form.getId();
+ 		}
+ 		
 
-/**
- 			* Name : Ashish Gupta
- 			* Reviewer Name : Sachin Lale 
- 			* Bug ID: 2741
- 			* Patch ID: 2741_20			
- 			* Description: Default Date to show in events
-			*/
-		String currentReceivedDate = "";
-		String currentCollectionDate = "";
-		if (form != null) 
-		{
-			currentReceivedDate = form.getReceivedEventDateOfEvent();
-			if(currentReceivedDate == null)
-					currentReceivedDate = "";
-			currentCollectionDate = form.getCollectionEventdateOfEvent();
-			if(currentCollectionDate == null)
-					currentCollectionDate = "";
-		}
-		
-		String formNameForCal = "specimenCollectionGroupForm"; 
-		
-		//Patch ID: Bug#3184_32
-		//Description: Get the actual number of specimen collections
-		String numberOfSpecimenCollection = (String)request.getAttribute(Constants.NUMBER_OF_SPECIMEN_REQUIREMENTS);
-		if(numberOfSpecimenCollection == null)
-		{
-			numberOfSpecimenCollection = "0";
-		}
-%>
+ /**
+  			* Name : Ashish Gupta
+  			* Reviewer Name : Sachin Lale 
+  			* Bug ID: 2741
+  			* Patch ID: 2741_20			
+  			* Description: Default Date to show in events
+ 	*/
+ 		String currentReceivedDate = "";
+ 		String currentCollectionDate = "";
+ 		if (form != null) 
+ 		{
+ 	currentReceivedDate = form.getReceivedEventDateOfEvent();
+ 	if(currentReceivedDate == null)
+ 			currentReceivedDate = "";
+ 	currentCollectionDate = form.getCollectionEventdateOfEvent();
+ 	if(currentCollectionDate == null)
+ 			currentCollectionDate = "";
+ 		}
+ 		
+ 		String formNameForCal = "specimenCollectionGroupForm"; 
+ 		
+ 		//Patch ID: Bug#3184_32
+ 		//Description: Get the actual number of specimen collections
+ 		String numberOfSpecimenCollection = (String)request.getAttribute(Constants.NUMBER_OF_SPECIMEN_REQUIREMENTS);
+ 		if(numberOfSpecimenCollection == null)
+ 		{
+ 	numberOfSpecimenCollection = "0";
+ 		}
+ %>
 <head>
 
 	<%
-	
-	String refreshTree = (String)request.getAttribute("refresh");
-	strCheckStatus= "checkActivityStatus(this,'" + Constants.CP_QUERY_BIO_SPECIMEN + "')";
-	if(pageOf.equals(Constants.PAGE_OF_SCG_CP_QUERY) && (refreshTree==null || !(refreshTree.equalsIgnoreCase("false"))))
-	{   
-	
+		String refreshTree = (String)request.getAttribute("refresh");
+		strCheckStatus= "checkActivityStatus(this,'" + Constants.CP_QUERY_BIO_SPECIMEN + "')";
+		if(pageOf.equals(Constants.PAGE_OF_SCG_CP_QUERY) && (refreshTree==null || !(refreshTree.equalsIgnoreCase("false"))))
+		{
 	%>
 		<script language="javascript">
 		//Added by Falguni to refresh participant tree 
@@ -170,8 +168,8 @@
 		}
 
 		</script>
-	<%}
-	
+	<%
+		}
 	%>
 
 	<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
@@ -558,20 +556,14 @@
 		
 		function checkForConsents()
 		{
-			<%
-				if(form!=null && form.getConsentTierCounter()>0)					
-				{
-				%>
+			<%if(form!=null && form.getConsentTierCounter()>0)					
+				{%>
 					switchToTab("consentTab");
-				<%
-				}
+				<%}
 				else
-				{
-				%>
+				{%>
 					alert("No consents available for selected Specimen Collection Group");
-				<%
-				}
-				%>
+				<%}%>
 		}
 
 	  function showConsents()
@@ -591,7 +583,7 @@
 		//View SPR Vijay pande
 		function viewSPR()
 		{
-			<% Long reportId=(Long)session.getAttribute(Constants.IDENTIFIED_REPORT_ID); %>
+			<%Long reportId=(Long)session.getAttribute(Constants.IDENTIFIED_REPORT_ID);%>
 			var reportId='<%=reportId%>';
 			if(reportId==null || reportId==-1)
 			{
@@ -674,13 +666,17 @@ function editSCG()
 	{
 %>
 	<body onload="disablebuttons();initializeSCGForm();showConsents();">
-<%}else{%> 
+<%
+	}else{
+%> 
 	<body>
- <%}%>
+ <%
+ 	}
+ %>
 <html:form action="<%=formName%>">
 	<%
-	if(pageView.equals("add"))
-	{
+		if(pageView.equals("add"))
+		{
 	%>
 		 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
 	  <tr>
@@ -704,13 +700,13 @@ function editSCG()
 				</tr>
 				</table>
 	<%
-	}
+		}
 	%>
 	
 	<%
-	if(pageView.equals("edit"))
-	{
-	%>
+			if(pageView.equals("edit"))
+			{
+		%>
 	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
 	  <tr>
 		<td class="tablepadding"><table width="100%" border="0" cellpadding="0" cellspacing="0">

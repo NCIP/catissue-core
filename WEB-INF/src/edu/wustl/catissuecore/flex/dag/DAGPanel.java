@@ -1071,7 +1071,7 @@ public class DAGPanel
 		{
 			IExpression exp = constraints.getExpression(expressionId.intValue());
 			IQueryEntity constraintEntity = exp.getQueryEntity();
-			String nodeDisplayName = edu.wustl.cab2b.common.util.Utility.getOnlyEntityName(constraintEntity.getDynamicExtensionsEntity()); 
+			String nodeDisplayName = edu.wustl.cab2b.common.util.AppUtility.getOnlyEntityName(constraintEntity.getDynamicExtensionsEntity()); 
 			DAGNode dagNode = new DAGNode();
 			dagNode.setExpressionId(exp.getExpressionId());
 			dagNode.setNodeName(nodeDisplayName);

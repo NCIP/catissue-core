@@ -6,14 +6,14 @@
 <link rel="stylesheet" type="text/css" href="css/xtheme-gray.css" />
 <link rel="stylesheet" type="text/css" href="css/combo.css" />
 <link rel="stylesheet" type="text/css" href="css/examples.css" />
-<%			
-/**
+<%
+	/**
  			* Name : Ashish Gupta
  			* Reviewer Name : Sachin Lale 
  			* Bug ID: 2741
  			* Patch ID: 2741_18 			
  			* Description: Adding check for changes function
-			*/
+	*/
 String printaction = "CPQueryPrintSCGAdd";
 if(operation.equals(Constants.ADD))
 {
@@ -57,13 +57,13 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 		
 		if(pageOf.equals(Constants.PAGE_OF_SCG_CP_QUERY))
 		{
-			// In case of CP based view query, formName variable already has 
-			// some parameter appended to the url. hence appending the button parameter by "&"
-			confirmDisableFuncNameForMultipleSpecimen =  "confirmDisableForSCG('" + formName +"&button=multipleSpecimen',document.forms[0].activityStatus)";
+	// In case of CP based view query, formName variable already has 
+	// some parameter appended to the url. hence appending the button parameter by "&"
+	confirmDisableFuncNameForMultipleSpecimen =  "confirmDisableForSCG('" + formName +"&button=multipleSpecimen',document.forms[0].activityStatus)";
 		}
 		else
 		{
-			confirmDisableFuncNameForMultipleSpecimen =  "confirmDisableForSCG('" + formName +"?button=multipleSpecimen',document.forms[0].activityStatus)";
+	confirmDisableFuncNameForMultipleSpecimen =  "confirmDisableForSCG('" + formName +"?button=multipleSpecimen',document.forms[0].activityStatus)";
 		}
 		
 		forwardToSubmitForMultipleSpecimen = "checkForChanges(),"+forwardToSubmitFunctionNameForMultipleSpecimen + ","+confirmDisableFuncNameForMultipleSpecimen;
@@ -74,16 +74,15 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 		forwardToSubmit = forwardToSubmitFuctionName + ","+confirmDisableFuncName;			
 		forwardToSubmitForMultipleSpecimen = forwardToSubmitFunctionNameForMultipleSpecimen + ","+confirmDisableFuncNameForMultipleSpecimen;
 	}
-	%>
+%>
 	<%
-	    //for Offset change we need Receieved and collected date.So as to change them when any offset is applied.
-		Integer received_Year = new Integer(Utility.getYear(currentReceivedDate ));
-		Integer received_Month = new Integer(Utility.getMonth(currentReceivedDate ));
-		Integer received_Date = new Integer(Utility.getDay(currentReceivedDate ));
-		Integer collection_Year = new Integer(Utility.getYear(currentCollectionDate ));
-		Integer collection_Month = new Integer(Utility.getMonth(currentCollectionDate ));
-		Integer collection_Day = new Integer(Utility.getDay(currentCollectionDate ));
-	
+		//for Offset change we need Receieved and collected date.So as to change them when any offset is applied.
+			Integer received_Year = new Integer(AppUtility.getYear(currentReceivedDate ));
+			Integer received_Month = new Integer(AppUtility.getMonth(currentReceivedDate ));
+			Integer received_Date = new Integer(AppUtility.getDay(currentReceivedDate ));
+			Integer collection_Year = new Integer(AppUtility.getYear(currentCollectionDate ));
+			Integer collection_Month = new Integer(AppUtility.getMonth(currentCollectionDate ));
+			Integer collection_Day = new Integer(AppUtility.getDay(currentCollectionDate ));
 	%>
 	<script language="javascript">
 	function registrationDateChange(newOffsetObject)
@@ -144,32 +143,41 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 				</tr>
 				 <tr>				 
 				<tr>
-				<%if((!Variables.isSpecimenCollGroupLabelGeneratorAvl) || operation.equals(Constants.EDIT))
-				{%>
+				<%
+					if((!Variables.isSpecimenCollGroupLabelGeneratorAvl) || operation.equals(Constants.EDIT))
+						{
+				%>
 				
 					 <td class="black_ar_t" nowrap><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="3" /></td>    
 					<td align="left" nowrap><span class="black_ar"><label for="name"><bean:message key="specimenCollectionGroup.groupName" /></label></span></td>
 					<td align="left" valign="top" nowrap><html:text styleClass="formFieldSizedSC"   maxlength="255" styleId="name" property="name" /></td>
 				
-				<%}if((!Variables.isSpecimenCollGroupBarcodeGeneratorAvl) || operation.equals(Constants.EDIT))
-				{%>
+				<%
+									}if((!Variables.isSpecimenCollGroupBarcodeGeneratorAvl) || operation.equals(Constants.EDIT))
+										{
+								%>
 					<td class="black_ar_t">&nbsp;</td>
 					<td align="left" valign="top" class="black_ar_t"><bean:message key="specimenCollectionGroup.barcode" /></td>
 					<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>" >
 						<logic:equal name ="specimenCollectionGroupForm" property="isBarcodeEditable" value="<%=Constants.FALSE%>">	
 						<td width="18%" align="left" class="black_ar_t">
 							<%
-							if(form.getBarcode()!=null)
-							{%>
+								if(form.getBarcode()!=null)
+												{
+							%>
 								<label for="barcode">
 									<%=form.getBarcode()%>
 								</label>
-							<%}
-							else
-							{%>
+							<%
+								}
+												else
+												{
+							%>
 								<label for="barcode">
 								</label>
-							<%}%>
+							<%
+								}
+							%>
 						<html:hidden property="barcode"/>
 						</td>
 						</logic:equal>
@@ -180,7 +188,9 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 					<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>" >
 						<td align="left" valign="top" nowrap><html:text styleClass="formFieldSizedSCG" size="30"  maxlength="255" styleId="barcode" property="barcode" /></td>
 					</logic:notEqual>
-					<%}%>
+					<%
+						}
+					%>
 				</tr>
 				
 				<tr>
@@ -254,7 +264,7 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 									<td>
 									<%
 										String url = "ShowFramedPage.do?pageOf=pageOfTissueSite&propertyName=clinicalDiagnosis&cdeName=Clinical%20Diagnosis";
-										%>
+									%>
 									<!-- // Patch ID: Bug#3090_22 -->
 									&nbsp;<!--  <a href="#" onclick="javascript:NewWindow('<%=url%>','name','360','525','no');return false"><span class="black_ar"><img src="images/uIEnhancementImages/ic_cl_diag.gif" border="0" width="16" height="16" title='CLinical Diagnosis Selector'></span></a>--></td></tr></table>
 								</td>
@@ -356,7 +366,7 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 				  		<td align="right" colspan="3">
 							<%
 								String changeAction = "setFormAction('"+formName+"')";
-				 			%>
+							%>
 				
 				  		</td>
 				 	</tr>
@@ -369,8 +379,8 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 	<!--  Consent Tracking Module Virender mehta	 -->
 	<%
 		List requestParticipantResponse = (List)request.getAttribute("specimenCollectionGroupResponseList");
-		if(requestParticipantResponse!=null&&form.getConsentTierCounter()>0)
-		{
+			if(requestParticipantResponse!=null&&form.getConsentTierCounter()>0)
+			{
 	%>
 	<tr>
 		<td colspan="3">
@@ -381,8 +391,8 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 		</tr>
 		
 	<%
-		}
-	%>
+				}
+			%>
 	<!--  Consent Tracking Module Virender mehta -->	
 
 		<tr>

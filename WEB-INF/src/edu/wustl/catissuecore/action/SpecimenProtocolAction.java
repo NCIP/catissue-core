@@ -30,7 +30,7 @@ import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.SpecimenProtocolBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.cde.CDE;
@@ -122,7 +122,7 @@ public class SpecimenProtocolAction  extends SecureAction
 	    	 * Patch ID:TissueSiteCombo_BugID_3
 		     * Description: Setting TissueList with only Leaf node. 
 	    	 */
-	    	List tissueSiteList = Utility.tissueSiteList();
+	    	List tissueSiteList = AppUtility.tissueSiteList();
 	    	request.setAttribute(Constants.TISSUE_SITE_LIST, tissueSiteList);
 	    	
 	    	List pathologyStatusList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_PATHOLOGICAL_STATUS,null);

@@ -19,7 +19,7 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.domain.DistributionSpecimenRequirement;
 import edu.wustl.catissuecore.domain.SpecimenProtocol;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
@@ -283,15 +283,15 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 			this.principalInvestigatorId = -1;
 		}
 		
-		this.title = Utility.toString(protocol.getTitle());
-		this.shortTitle = Utility.toString(protocol.getShortTitle());
-		this.startDate = Utility.parseDateToString(protocol.getStartDate(),Variables.dateFormat);
-		this.endDate = Utility.parseDateToString(protocol.getEndDate(),Variables.dateFormat);
-		this.irbID = Utility.toString(protocol.getIrbIdentifier());
-		this.enrollment = Utility.toString(protocol.getEnrollment());
-		this.descriptionURL = Utility.toString(protocol.getDescriptionURL());
+		this.title = AppUtility.toString(protocol.getTitle());
+		this.shortTitle = AppUtility.toString(protocol.getShortTitle());
+		this.startDate = AppUtility.parseDateToString(protocol.getStartDate(),Variables.dateFormat);
+		this.endDate = AppUtility.parseDateToString(protocol.getEndDate(),Variables.dateFormat);
+		this.irbID = AppUtility.toString(protocol.getIrbIdentifier());
+		this.enrollment = AppUtility.toString(protocol.getEnrollment());
+		this.descriptionURL = AppUtility.toString(protocol.getDescriptionURL());
 		
-		this.activityStatus = Utility.toString(protocol.getActivityStatus());
+		this.activityStatus = AppUtility.toString(protocol.getActivityStatus());
 	}
 	
 	/**
@@ -408,13 +408,13 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 	protected void setSpecimenRequirement(String [] key, DistributionSpecimenRequirement requirement)
 	{
 	    values.put(key[0] , requirement.getSpecimenClass());
-		values.put(key[1] , Utility.getUnit(requirement.getSpecimenClass() , requirement.getSpecimenType()));
+		values.put(key[1] , AppUtility.getUnit(requirement.getSpecimenClass() , requirement.getSpecimenType()));
 		values.put(key[2] , requirement.getSpecimenType());
 		values.put(key[3] , requirement.getTissueSite());
 		values.put(key[4] , requirement.getPathologyStatus());
-		//values.put(key[5] , Utility.toString(requirement.getQuantity().getValue()));
+		//values.put(key[5] , AppUtility.toString(requirement.getQuantity().getValue()));
 		
-		if(!Utility.isQuantityDouble(requirement.getSpecimenClass(),requirement.getSpecimenType()))
+		if(!AppUtility.isQuantityDouble(requirement.getSpecimenClass(),requirement.getSpecimenType()))
 		{
 			Double doubleQuantity = requirement.getQuantity();
 			if(doubleQuantity == null)
@@ -445,7 +445,7 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 			}
 		}
 		
-		values.put(key[6] , Utility.toString(requirement.getId()));
+		values.put(key[6] , AppUtility.toString(requirement.getId()));
 		
 		if(requirement.getSpecimenClass().equals(Constants.TISSUE) && requirement.getQuantity() != null)
 		{
@@ -455,7 +455,7 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 					||tissueType.equalsIgnoreCase(Constants.FROZEN_TISSUE_BLOCK)  
 			        ||tissueType.equalsIgnoreCase(Constants.FIXED_TISSUE_SLIDE))
 			{
-				values.put(key[5] , Utility.toString(new Integer(requirement.getQuantity().intValue())));
+				values.put(key[5] , AppUtility.toString(new Integer(requirement.getQuantity().intValue())));
 			}
 		}
 	}

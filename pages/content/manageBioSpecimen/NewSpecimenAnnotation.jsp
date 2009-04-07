@@ -6,7 +6,7 @@
 <%@ page import="java.util.ArrayList"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.ListSpecimenEventParametersForm"%>
-<%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
+<%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 <LINK href="css/catissue_suite.css" type=text/css rel=stylesheet>
 <link href="runtime/styles/xp/grid.css" rel="stylesheet" type="text/css" ></link>

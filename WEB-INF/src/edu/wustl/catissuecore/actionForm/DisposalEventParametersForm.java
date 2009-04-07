@@ -19,7 +19,7 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.DisposalEventParameters;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
@@ -97,7 +97,7 @@ public class DisposalEventParametersForm extends SpecimenEventParametersForm
 	{
 		super.setAllValues(abstractDomain);
 		final DisposalEventParameters disEvtPar = (DisposalEventParameters)abstractDomain ;
-		this.reason = Utility.toString(disEvtPar.getReason());
+		this.reason = AppUtility.toString(disEvtPar.getReason());
 		this.activityStatus = disEvtPar.getSpecimen().getActivityStatus(); 
 	}
 	

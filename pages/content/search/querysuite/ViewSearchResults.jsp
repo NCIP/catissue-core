@@ -5,7 +5,7 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
-<%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
+<%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 <%@ page import="edu.wustl.common.tree.QueryTreeNodeData"%>
 <html>
@@ -29,12 +29,10 @@
 var columns ;
 var colWidth;
 var colTypes 
-<%
-List columnList = (List) request.getSession().getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
+<%List columnList = (List) request.getSession().getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
 List dataList = (List) request.getSession().getAttribute(Constants.SPREADSHEET_DATA_LIST);
 Long trees = (Long)request.getSession().getAttribute("noOfTrees");
-int noOfTrees = trees.intValue();
-%>
+int noOfTrees = trees.intValue();%>
 	function checkAll(element)
 	{
 		var state=element.checked;
@@ -83,19 +81,15 @@ int noOfTrees = trees.intValue();
 		}	
 
 // ------------------------------  FUNCTION SECTION END
-<% if (columnList != null && columnList.size()!= 0 && dataList != null && dataList.size() != 0)
-{ %>
+<%if (columnList != null && columnList.size()!= 0 && dataList != null && dataList.size() != 0)
+{%>
 var myData = [<%int i;%><%for (i=0;i<(dataList.size()-1);i++){%>
-<%
-	List row = (List)dataList.get(i);
-  	int j;
-%>
-<%="\""%><%for (j=0;j < (row.size()-1);j++){%><%=Utility.toNewGridFormat(row.get(j))%>,<%}%><%=Utility.toNewGridFormat(row.get(j))%><%="\""%>,<%}%>
-<%
-	List row = (List)dataList.get(i);
-  	int j;
-%>
-<%="\""%><%for (j=0;j < (row.size()-1);j++){%><%=Utility.toNewGridFormat(row.get(j))%>,<%}%><%=Utility.toNewGridFormat(row.get(j))%><%="\""%>
+<%List row = (List)dataList.get(i);
+  	int j;%>
+<%="\""%><%for (j=0;j < (row.size()-1);j++){%><%=AppUtility.toNewGridFormat(row.get(j))%>,<%}%><%=AppUtility.toNewGridFormat(row.get(j))%><%="\""%>,<%}%>
+<%List row = (List)dataList.get(i);
+  	int j;%>
+<%="\""%><%for (j=0;j < (row.size()-1);j++){%><%=AppUtility.toNewGridFormat(row.get(j))%>,<%}%><%=AppUtility.toNewGridFormat(row.get(j))%><%="\""%>
 ];
 
 

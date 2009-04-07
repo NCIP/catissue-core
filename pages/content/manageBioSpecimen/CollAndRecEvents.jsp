@@ -62,35 +62,35 @@
 		</td>
         <td class="black_ar">
 							<%
-							if(currentCollectionDate.trim().length() > 0)
-							{
-								Integer collectionYear = new Integer(Utility.getYear(currentCollectionDate ));
-								Integer collectionMonth = new Integer(Utility.getMonth(currentCollectionDate ));
-								Integer collectionDay = new Integer(Utility.getDay(currentCollectionDate ));
+								if(currentCollectionDate.trim().length() > 0)
+												{
+													Integer collectionYear = new Integer(AppUtility.getYear(currentCollectionDate ));
+													Integer collectionMonth = new Integer(AppUtility.getMonth(currentCollectionDate ));
+													Integer collectionDay = new Integer(AppUtility.getDay(currentCollectionDate ));
 							%>
 							<ncombo:DateTimeComponent name="collectionEventdateOfEvent"
 										  id="collectionEventdateOfEvent"
 										  formName="<%=formNameForCal%>"
-										  month= "<%= collectionMonth %>"
-										  year= "<%= collectionYear %>"
-										  day= "<%= collectionDay %>"
+										  month= "<%=collectionMonth%>"
+										  year= "<%=collectionYear%>"
+										  day= "<%=collectionDay%>"
 										  pattern="<%=Variables.dateFormat%>"
-										  value="<%=currentCollectionDate %>"
+										  value="<%=currentCollectionDate%>"
 										  styleClass="black_ar"
 												/>
-							<% 
+							<%
 								}
-								else
-								{  
-							 %>
+													else
+													{
+							%>
 							<ncombo:DateTimeComponent name="collectionEventdateOfEvent"
 										  id="collectionEventdateOfEvent"
-										  formName="<%=formNameForCal %>"
+										  formName="<%=formNameForCal%>"
 										  pattern="<%=Variables.dateFormat%>"
 										  styleClass="black_ar"
 												/>
-							<% 
-								} 
+							<%
+								}
 							%>
 							<span class="grey_ar_s" ><bean:message key="scecimen.dateformat" /></span>
 		</td>
@@ -224,11 +224,11 @@
 		</td>
         <td class="black_ar">
 								<%
-								if(currentReceivedDate.trim().length() > 0)
-								{
-									Integer receivedYear = new Integer(Utility.getYear(currentReceivedDate ));
-									Integer receivedMonth = new Integer(Utility.getMonth(currentReceivedDate ));
-									Integer receivedDay = new Integer(Utility.getDay(currentReceivedDate ));
+									if(currentReceivedDate.trim().length() > 0)
+														{
+															Integer receivedYear = new Integer(AppUtility.getYear(currentReceivedDate ));
+															Integer receivedMonth = new Integer(AppUtility.getMonth(currentReceivedDate ));
+															Integer receivedDay = new Integer(AppUtility.getDay(currentReceivedDate ));
 								%>
 								<ncombo:DateTimeComponent name="receivedEventDateOfEvent"
 											  id="receivedEventDateOfEvent"

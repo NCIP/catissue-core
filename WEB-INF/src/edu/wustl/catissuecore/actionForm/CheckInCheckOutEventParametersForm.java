@@ -18,7 +18,7 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
@@ -78,7 +78,7 @@ public class CheckInCheckOutEventParametersForm extends SpecimenEventParametersF
 	{
 		super.setAllValues(abstractDomain);
 		final CheckInCheckOutEventParameter checkInCheckOutEventParameterObject = (CheckInCheckOutEventParameter)abstractDomain ;
-		this.storageStatus = Utility.toString(checkInCheckOutEventParameterObject.getStorageStatus()); 
+		this.storageStatus = AppUtility.toString(checkInCheckOutEventParameterObject.getStorageStatus()); 
 	}
 	
 	/**

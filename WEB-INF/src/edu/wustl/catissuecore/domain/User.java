@@ -760,7 +760,7 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
 	 */
 	public String getMessageLabel()
 	{
-		return edu.wustl.catissuecore.util.global.Utility.getlLabel(this.lastName, this.firstName);
+		return edu.wustl.catissuecore.util.global.AppUtility.getlLabel(this.lastName, this.firstName);
 	}
 
 	/**

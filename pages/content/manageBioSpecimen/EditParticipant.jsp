@@ -87,9 +87,7 @@ function participantRegRow(subdivtag)
 			cellNo +=1;
 			<%}%>
 			
-			<%
-				String registrationDate = Utility.parseDateToString(Calendar.getInstance().getTime(), Constants.DATE_PATTERN_MM_DD_YYYY);
-    		%>
+			<%String registrationDate = AppUtility.parseDateToString(Calendar.getInstance().getTime(), Constants.DATE_PATTERN_MM_DD_YYYY);%>
     		
 			//Fifth Cell
 			var cprRegistrationDate=row.insertCell(cellNo);
@@ -108,19 +106,15 @@ function participantRegRow(subdivtag)
 			sname="";
 			var name = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:" + (cprSize+1) +"_activityStatus)";
 			sname = sname +"<select name='" + name + "' size='1' class='formFieldSized8' id='" + name + "' disabled='disabled' onmouseover=showTip(this.id) onmouseout=hideTip(this.id) >";
-			<%
-				for(int i=0 ; i<activityStatusList.length; i++)
+			<%for(int i=0 ; i<activityStatusList.length; i++)
 				{
 					String selected= "";
 					if(i==1)
 					{
 						selected="selected='selected'";
-					}
-			%>
+					}%>
 					sname = sname + "<option value='<%=activityStatusList[i]%>' <%=selected%> ><%=activityStatusList[i]%></option>";
-			<%	
-				}
-			%>
+			<%}%>
 			sname = sname + "</select>";
 			cprActivityStatus.innerHTML=sname;
 			cellNo +=1;
@@ -163,23 +157,17 @@ function participantRegRow(subdivtag)
 				if(document.forms[0].radioValue.value=="Add")
 				{
 					document.forms[0].action="<%=Constants.PARTICIPANT_ADD_ACTION%>";
-					<%
-					if(pageOf.equals(Constants.PAGE_OF_PARTICIPANT_CP_QUERY))
+					<%if(pageOf.equals(Constants.PAGE_OF_PARTICIPANT_CP_QUERY))
 					{
 							if(operation.equals(Constants.ADD))
-							{
-						%>
+							{%>
 							document.forms[0].action="<%=Constants.CP_QUERY_PARTICIPANT_ADD_ACTION%>";
-						<%
-							}
+						<%}
 						else
-							{ 
-						%>
+							{%>
 							document.forms[0].action="<%=Constants.CP_QUERY_PARTICIPANT_EDIT_ACTION%>";
-						<%
-							}
-					}
-					%>
+						<%}
+					}%>
 				}
 				else
 				{
@@ -217,22 +205,18 @@ function participantRegRow(subdivtag)
 			var collectionProtocolId = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:" + i +"_CollectionProtocol_id)";
 			collectionProtocolIdValue=document.getElementById(collectionProtocolId).value;
 			var collectionProtocolTitle;
-			<%
-			if(collectionProtocolList!=null)
+			<%if(collectionProtocolList!=null)
 			{
 				Iterator iterator = collectionProtocolList.iterator();
 				while(iterator.hasNext())
 				{
-					NameValueBean bean = (NameValueBean)iterator.next();
-			%>
+					NameValueBean bean = (NameValueBean)iterator.next();%>
 					if(collectionProtocolIdValue =="<%=bean.getValue()%>")
 					{
 						collectionProtocolTitle = "<%=bean.getName()%>";
 					}
-			<%		
-				}
-			}
-			%>
+			<%}
+			}%>
 			var collectionProtocolTitleKey = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:" + i +"_CollectionProtocol_shortTitle)";
 			document.getElementById(collectionProtocolTitleKey).value = collectionProtocolTitle;
 		}
@@ -370,7 +354,9 @@ function participantRegRow(subdivtag)
 				<td colspan="2" align="left" class="showhide" height="100%">
 				<table width="100%" border="0" cellspacing="0" cellpadding="3" height="100%">
 					<!-- Added by Geeta -->
-					<% if(!Variables.isSSNRemove) {%>
+					<%
+						if(!Variables.isSSNRemove) {
+					%>
 						<tr>
 							<td width="1%" align="center" class="black_ar">&nbsp;</td>
 							<td width="17%"><label for="socialSecurityNumber"
@@ -396,7 +382,9 @@ function participantRegRow(subdivtag)
 								onchange="intOnly(this);" onkeyup="intOnly(this);"
 								style="text-align:right" /></td>
 						</tr>
-					<%}%>
+					<%
+						}
+					%>
 					<tr>
 						<td width="1%" align="center" class="black_ar">&nbsp;</td>
 						<td class="black_ar"><bean:message
@@ -433,21 +421,21 @@ function participantRegRow(subdivtag)
 							key="participant.birthDate" /></label></td>
 						<td>
 						<%
-										if (currentBirthDate.trim().length() > 0) {
-										Integer birthYear = new Integer(Utility
-										.getYear(currentBirthDate));
-										Integer birthMonth = new Integer(Utility
-										.getMonth(currentBirthDate));
-										Integer birthDay = new Integer(Utility.getDay(currentBirthDate));
-								%> <ncombo:DateTimeComponent name="birthDate" id="birthDate"
-							formName="participantForm" month="<%=birthMonth %>"
-							year="<%=birthYear %>" day="<%= birthDay %>" pattern="<%=Variables.dateFormat%>"
-							value="<%=currentBirthDate %>" styleClass="black_ar" /> <%
-									 } else {
-								%> <ncombo:DateTimeComponent name="birthDate" id="birthDate"
+							if (currentBirthDate.trim().length() > 0) {
+														Integer birthYear = new Integer(AppUtility
+														.getYear(currentBirthDate));
+														Integer birthMonth = new Integer(AppUtility
+														.getMonth(currentBirthDate));
+														Integer birthDay = new Integer(AppUtility.getDay(currentBirthDate));
+						%> <ncombo:DateTimeComponent name="birthDate" id="birthDate"
+							formName="participantForm" month="<%=birthMonth%>"
+							year="<%=birthYear%>" day="<%=birthDay%>" pattern="<%=Variables.dateFormat%>"
+							value="<%=currentBirthDate%>" styleClass="black_ar" /> <%
+ 	} else {
+ %> <ncombo:DateTimeComponent name="birthDate" id="birthDate"
 							formName="participantForm" pattern="<%=Variables.dateFormat%>" styleClass="black_ar" /> <%
-								 }
-								 %> <span class="grey_ar_s"> <bean:message
+ 	}
+ %> <span class="grey_ar_s"> <bean:message
 							key="page.dateFormat" /> </span>&nbsp;</td>
 					</tr>
 					<tr>
@@ -458,8 +446,8 @@ function participantRegRow(subdivtag)
 						<td class="black_ar"><logic:iterate id="nvb"
 							name="<%=Constants.VITAL_STATUS_LIST%>">
 							<%
-										NameValueBean nameValueBean = (NameValueBean) nvb;
-										%>
+								NameValueBean nameValueBean = (NameValueBean) nvb;
+							%>
 							<html:radio property="vitalStatus"
 								onclick="onVitalStatusRadioButtonClick(this)"
 								value="<%=nameValueBean.getValue()%>">
@@ -475,29 +463,29 @@ function participantRegRow(subdivtag)
 
 						<td>
 						<%
-									ParticipantForm form = (ParticipantForm) request
-											.getAttribute("participantForm");
-									Boolean deathDisable = new Boolean("false");
-									if (!form.getVitalStatus().trim().equals("Dead")) {
-										deathDisable = new Boolean("true");
-									}
-									if (currentDeathDate.trim().length() > 0) {
-										Integer deathYear = new Integer(Utility
-										.getYear(currentDeathDate));
-										Integer deathMonth = new Integer(Utility
-										.getMonth(currentDeathDate));
-										Integer deathDay = new Integer(Utility.getDay(currentDeathDate));
-								%> <ncombo:DateTimeComponent name="deathDate" id="deathDate"
-							formName="participantForm" month="<%=deathMonth %>"
-							year="<%=deathYear %>" day="<%= deathDay %>" pattern="<%=Variables.dateFormat%>"
-							value="<%=currentDeathDate %>" styleClass="black_ar"
+							ParticipantForm form = (ParticipantForm) request
+															.getAttribute("participantForm");
+													Boolean deathDisable = new Boolean("false");
+													if (!form.getVitalStatus().trim().equals("Dead")) {
+														deathDisable = new Boolean("true");
+													}
+													if (currentDeathDate.trim().length() > 0) {
+														Integer deathYear = new Integer(AppUtility
+														.getYear(currentDeathDate));
+														Integer deathMonth = new Integer(AppUtility
+														.getMonth(currentDeathDate));
+														Integer deathDay = new Integer(AppUtility.getDay(currentDeathDate));
+						%> <ncombo:DateTimeComponent name="deathDate" id="deathDate"
+							formName="participantForm" month="<%=deathMonth%>"
+							year="<%=deathYear%>" day="<%=deathDay%>" pattern="<%=Variables.dateFormat%>"
+							value="<%=currentDeathDate%>" styleClass="black_ar"
 							disabled="<%=deathDisable%>" /> <%
-									 } else {
-									 %> <ncombo:DateTimeComponent name="deathDate" id="deathDate"
+ 	} else {
+ %> <ncombo:DateTimeComponent name="deathDate" id="deathDate"
 							formName="participantForm"  pattern="<%=Variables.dateFormat%>" styleClass="black_ar"
 							disabled="<%=deathDisable%>" /> <%
-									 }
-								  %> <span class="grey_ar_s"> <bean:message
+ 	}
+ %> <span class="grey_ar_s"> <bean:message
 							key="page.dateFormat" /> </span>&nbsp;</td>
 					</tr>
 					<tr>
@@ -507,15 +495,17 @@ function participantRegRow(subdivtag)
 						<td class="black_ar"><logic:iterate id="nvb"
 							name="<%=Constants.GENDER_LIST%>">
 							<%
-										NameValueBean nameValueBean = (NameValueBean) nvb;
-										%>
+								NameValueBean nameValueBean = (NameValueBean) nvb;
+							%>
 							<html:radio property="gender"
 								value="<%=nameValueBean.getValue()%>">
 								<%=nameValueBean.getName()%>
 							</html:radio>&nbsp; &nbsp;
 								</logic:iterate></td>
 					</tr>
-				<%if(!Variables.isSexGenoTypeRemove) {%>
+				<%
+					if(!Variables.isSexGenoTypeRemove) {
+				%>
 					<tr>
 						<td width="1%" align="center" class="black_ar">&nbsp;</td>
 						<td class="black_ar"><bean:message
@@ -529,8 +519,12 @@ function participantRegRow(subdivtag)
 							styleClass="black_ar" size="27"/></label></td>
 
 					</tr>
-				<%}%>
-				<% if(!Variables.isRaceRemove) {%>
+				<%
+					}
+				%>
+				<%
+					if(!Variables.isRaceRemove) {
+				%>
 					<tr>
 						<td width="1%" align="center" class="black_ar">&nbsp;</td>
 						<td class="black_ar_t"><bean:message
@@ -544,8 +538,12 @@ function participantRegRow(subdivtag)
 								labelProperty="name" property="value" />
 						</html:select></td>
 					</tr>
-				<%}%>
-				<% if(!Variables.isEthnicityRemove){%>
+				<%
+					}
+				%>
+				<%
+					if(!Variables.isEthnicityRemove){
+				%>
 					<tr>
 						<td width="1%" align="center" class="black_ar">&nbsp;</td>
 						<td><span class="black_ar"><bean:message
@@ -556,7 +554,9 @@ function participantRegRow(subdivtag)
 							initialValue="<%=form.getEthnicity()%>"
 							styleClass="black_ar" size="27" /></label></td>
 					</tr>
-			   <%}%>
+			   <%
+			   	}
+			   %>
 					<!-- activitystatus -->
 					<logic:equal name="<%=Constants.OPERATION%>"
 						value="<%=Constants.EDIT%>">
@@ -604,26 +604,26 @@ function participantRegRow(subdivtag)
 					<script> document.forms[0].valueCounter.value = <%=noOfRows%> </script>
 					<tbody id="addMore">
 						<%
-										for (int i = 1; i <= noOfRows; i++) {
-										String siteName = "value(ParticipantMedicalIdentifier:" + i
-										+ "_Site_id)";
-										String medicalRecordNumber = "value(ParticipantMedicalIdentifier:"
-										+ i + "_medicalRecordNumber)";
-										String identifier = "value(ParticipantMedicalIdentifier:" + i
-										+ "_id)";
-										String check = "chk_" + i;
-								%>
+							for (int i = 1; i <= noOfRows; i++) {
+														String siteName = "value(ParticipantMedicalIdentifier:" + i
+														+ "_Site_id)";
+														String medicalRecordNumber = "value(ParticipantMedicalIdentifier:"
+														+ i + "_medicalRecordNumber)";
+														String identifier = "value(ParticipantMedicalIdentifier:" + i
+														+ "_id)";
+														String check = "chk_" + i;
+						%>
 						<tr>
 							<%
-											String key = "ParticipantMedicalIdentifier:" + i + "_id";
-											boolean bool = Utility.isPersistedValue(map, key);
-											String condition = "";
-											if (bool)
-												condition = "disabled='disabled'";
-									%>
+								String key = "ParticipantMedicalIdentifier:" + i + "_id";
+																boolean bool = AppUtility.isPersistedValue(map, key);
+																String condition = "";
+																if (bool)
+																	condition = "disabled='disabled'";
+							%>
 							<td align="left" class="black_ar"><html:hidden
 								property="<%=identifier%>" /> <input type="checkbox"
-								name="<%=check %>" id="<%=check %>" <%=condition%>
+								name="<%=check%>" id="<%=check%>" <%=condition%>
 								onClick="enableButton(document.forms[0].deleteMedicalIdentifierValue,document.forms[0].valueCounter,'chk_')">
 							</td>
 							<td nowrap class="black_ar"><html:select
@@ -639,8 +639,8 @@ function participantRegRow(subdivtag)
 								readonly="<%=readOnlyForAll%>"  /></td>
 						</tr>
 						<%
-								}
-								%>
+							}
+						%>
 					</tbody>
 
 					<!-- Medical Identifiers End here -->
@@ -712,12 +712,16 @@ function participantRegRow(subdivtag)
 						<td width="13%" align="left" class="black_ar_b"><bean:message
 							key="participant.collectionProtocolReg.participantProtocolID" />
 						</td>
-						<%if((!Variables.isSpecimenCollGroupBarcodeGeneratorAvl) || operation.equals(Constants.EDIT))
-						{%>
+						<%
+							if((!Variables.isSpecimenCollGroupBarcodeGeneratorAvl) || operation.equals(Constants.EDIT))
+										{
+						%>
 							<td width="13%" align="left" class="black_ar_b"><bean:message
 								key="participant.collectionProtocolReg.barcode" />
 							</td>
-						<%}%>
+						<%
+							}
+						%>
 						<td width="18%" align="left" class="black_ar_b"><bean:message
 							key="participant.collectionProtocolReg.participantRegistrationDate" />
 						</td>
@@ -750,91 +754,91 @@ function participantRegRow(subdivtag)
 					<script> document.forms[0].collectionProtocolRegistrationValueCounter.value = <%=noOrRowsCollectionProtocolRegistration%> </script>
 					<tbody id="addMoreParticipantRegistration">
 						<%
-										for (int i = 1; i <= noOrRowsCollectionProtocolRegistration; i++) {
-										String collectionProtocolId = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:"
-										+ i + "_CollectionProtocol_id)";
-										String collectionProtocolTitle = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:"
-										+ i + "_CollectionProtocol_shortTitle)";
-										String collectionProtocolParticipantId = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:"
-										+ i + "_protocolParticipantIdentifier)";
-										String barcode = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:"
-											+ i + "_barcode)";
-										String barcodeKey = "CollectionProtocolRegistration:"
-											+ i + "_barcode";
-										String collectionProtocolRegistrationDate = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:"
-										+ i + "_registrationDate)";
-										String collectionProtocolIdentifier = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:"
-										+ i + "_id)";
-										String collectionProtocolRegistrationActivityStatus = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:"
-										+ i + "_activityStatus)";
-										String collectionProtocolCheck = "CollectionProtocolRegistrationChk_"
-										+ i;
-										String key = "CollectionProtocolRegistration:" + i + "_id";
-										String collectionProtocolConsentCheck = "CollectionProtocolConsentChk_"
-										+ i;
-										String anchorTagKey = "ConsentCheck_" + i;
-										String consentCheckStatus = "consentCheckStatus_" + i;
+							for (int i = 1; i <= noOrRowsCollectionProtocolRegistration; i++) {
+														String collectionProtocolId = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:"
+														+ i + "_CollectionProtocol_id)";
+														String collectionProtocolTitle = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:"
+														+ i + "_CollectionProtocol_shortTitle)";
+														String collectionProtocolParticipantId = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:"
+														+ i + "_protocolParticipantIdentifier)";
+														String barcode = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:"
+															+ i + "_barcode)";
+														String barcodeKey = "CollectionProtocolRegistration:"
+															+ i + "_barcode";
+														String collectionProtocolRegistrationDate = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:"
+														+ i + "_registrationDate)";
+														String collectionProtocolIdentifier = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:"
+														+ i + "_id)";
+														String collectionProtocolRegistrationActivityStatus = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:"
+														+ i + "_activityStatus)";
+														String collectionProtocolCheck = "CollectionProtocolRegistrationChk_"
+														+ i;
+														String key = "CollectionProtocolRegistration:" + i + "_id";
+														String collectionProtocolConsentCheck = "CollectionProtocolConsentChk_"
+														+ i;
+														String anchorTagKey = "ConsentCheck_" + i;
+														String consentCheckStatus = "consentCheckStatus_" + i;
 
-										String consentResponseDisplay = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:"
-										+ i + "_isConsentAvailable)";
-										String consentResponseDisplayKey = "CollectionProtocolRegistration:"
-										+ i + "_isConsentAvailable";
-										String consentResponseDisplayValue = (String) form
-										.getCollectionProtocolRegistrationValue(consentResponseDisplayKey);
+														String consentResponseDisplay = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:"
+														+ i + "_isConsentAvailable)";
+														String consentResponseDisplayKey = "CollectionProtocolRegistration:"
+														+ i + "_isConsentAvailable";
+														String consentResponseDisplayValue = (String) form
+														.getCollectionProtocolRegistrationValue(consentResponseDisplayKey);
 
-										String collectionProtocolTitleKey = "CollectionProtocolRegistration:"
-										+ i + "_CollectionProtocol_shortTitle";
-										String collectionProtocolTitleValue = (String) form
-										.getCollectionProtocolRegistrationValue(collectionProtocolTitleKey);
+														String collectionProtocolTitleKey = "CollectionProtocolRegistration:"
+														+ i + "_CollectionProtocol_shortTitle";
+														String collectionProtocolTitleValue = (String) form
+														.getCollectionProtocolRegistrationValue(collectionProtocolTitleKey);
 
-										String collectionProtocolIdKey = "CollectionProtocolRegistration:"
-										+ i + "_CollectionProtocol_id";
-										String collectionProtocolIdValue = (String) form
-										.getCollectionProtocolRegistrationValue(collectionProtocolIdKey);
+														String collectionProtocolIdKey = "CollectionProtocolRegistration:"
+														+ i + "_CollectionProtocol_id";
+														String collectionProtocolIdValue = (String) form
+														.getCollectionProtocolRegistrationValue(collectionProtocolIdKey);
 
-										String collectionProtocolRegIdValue = (String) form
-										.getCollectionProtocolRegistrationValue("CollectionProtocolRegistration:"
-												+ i + "_id");
+														String collectionProtocolRegIdValue = (String) form
+														.getCollectionProtocolRegistrationValue("CollectionProtocolRegistration:"
+																+ i + "_id");
 
-										if (consentResponseDisplayValue == null) {
-											consentResponseDisplayValue = Constants.NO_CONSENTS_DEFINED;
-										}
-										boolean CollectionProtocolRegConditionBoolean = Utility
-										.isPersistedValue(mapCollectionProtocolRegistration,
-												key);
-										boolean activityStatusCondition = false;
-										if (!CollectionProtocolRegConditionBoolean)
-											activityStatusCondition = true;
+														if (consentResponseDisplayValue == null) {
+															consentResponseDisplayValue = Constants.NO_CONSENTS_DEFINED;
+														}
+														boolean CollectionProtocolRegConditionBoolean = AppUtility
+														.isPersistedValue(mapCollectionProtocolRegistration,
+																key);
+														boolean activityStatusCondition = false;
+														if (!CollectionProtocolRegConditionBoolean)
+															activityStatusCondition = true;
 
-										String onChangeFun = "getConsent('" + collectionProtocolCheck
-										+ "','" + collectionProtocolId + "', '"
-										+ collectionProtocolTitleKey + "','" + i + "','"
-										+ anchorTagKey + "','" + consentCheckStatus + "')";
-								%>
+														String onChangeFun = "getConsent('" + collectionProtocolCheck
+														+ "','" + collectionProtocolId + "', '"
+														+ collectionProtocolTitleKey + "','" + i + "','"
+														+ anchorTagKey + "','" + consentCheckStatus + "')";
+						%>
 
 						<tr>
 							<%
-											String CollectionProtocolRegCondition = "";
-											if (CollectionProtocolRegConditionBoolean)
-												CollectionProtocolRegCondition = "disabled='disabled'";
-									%>
+								String CollectionProtocolRegCondition = "";
+																if (CollectionProtocolRegConditionBoolean)
+																	CollectionProtocolRegCondition = "disabled='disabled'";
+							%>
 							<td align="left" class="black_ar"><html:hidden
 								property="<%=collectionProtocolIdentifier%>" /> <input
-								type=checkbox name="<%=collectionProtocolCheck %>"
-								id="<%=collectionProtocolCheck %>"
+								type=checkbox name="<%=collectionProtocolCheck%>"
+								id="<%=collectionProtocolCheck%>"
 								<%=CollectionProtocolRegCondition%>
 								onClick="javascript:enableButton(document.forms[0].deleteParticipantRegistrationValue,document.forms[0].collectionProtocolRegistrationValueCounter,'CollectionProtocolRegistrationChk_')">
 							</td>
 							<td align="left" nowrap class="black_ar">
 							<%
-									if (CollectionProtocolRegConditionBoolean) {
-									%> <html:text styleClass="black_ar" maxlength="50"
+								if (CollectionProtocolRegConditionBoolean) {
+							%> <html:text styleClass="black_ar" maxlength="50"
 								styleId="<%=collectionProtocolTitle%>"
 								property="<%=collectionProtocolTitle%>"
 								readonly="<%=readOnlyValue%>" /> <input type="hidden"
 								id="<%=collectionProtocolId%>" name="<%=collectionProtocolId%>"
 								value="<%=collectionProtocolIdValue%>" /> <%
- } else {
+ 	} else {
  %> <html:select property="<%=collectionProtocolId%>"
 								styleClass="formFieldSized12"
 								styleId="<%=collectionProtocolId%>"
@@ -845,33 +849,47 @@ function participantRegRow(subdivtag)
 							</html:select> <input type="hidden" id="<%=collectionProtocolTitle%>"
 								name="<%=collectionProtocolTitle%>"
 								value="<%=collectionProtocolTitleValue%>" /> <%
- }
+ 	}
  %>
 							</td>
-							<%if((!Variables.isProtocolParticipantIdentifierLabelGeneratorAvl) || operation.equals(Constants.EDIT) || operation.equals(Constants.ADD)){%>
+							<%
+								if((!Variables.isProtocolParticipantIdentifierLabelGeneratorAvl) || operation.equals(Constants.EDIT) || operation.equals(Constants.ADD)){
+							%>
 							<td align="left" class="black_ar"><html:text
 								styleClass="black_ar" size="10" maxlength="50"
 								styleId="<%=collectionProtocolParticipantId%>"
 								property="<%=collectionProtocolParticipantId%>" /></td>
-							<%}%>
-							<%if((!Variables.isCollectionProtocolRegistrationBarcodeGeneratorAvl) || operation.equals(Constants.EDIT)){%>
+							<%
+								}
+							%>
+							<%
+								if((!Variables.isCollectionProtocolRegistrationBarcodeGeneratorAvl) || operation.equals(Constants.EDIT)){
+							%>
 										<td align="left" class="black_ar">
 										<logic:equal name="participantForm" property="isBarcodeEditable" value="<%=Constants.FALSE%>">	
-										<% if(form.getCollectionProtocolRegistrationValue(barcodeKey)!=null) {%>
+										<%
+												if(form.getCollectionProtocolRegistrationValue(barcodeKey)!=null) {
+											%>
 											<label for="barcode" >
 											<%=form.getCollectionProtocolRegistrationValue(barcodeKey)%>
 											</label>									
-										<%}else{%>
+										<%
+																				}else{
+																			%>
 											<label for="barcode" >&nbsp;
 											</label>
-										<%}%>
+										<%
+											}
+										%>
 										<html:hidden property="<%=barcode%>" />
 										</logic:equal>
 										<logic:notEqual name="participantForm" property="isBarcodeEditable" value="<%=Constants.FALSE%>">
 										<html:text styleClass="black_ar" size="10" maxlength="50" styleId="<%=barcode%>" property="<%=barcode%>" />
 										</logic:notEqual>
 										</td>
-							<%}%>
+							<%
+								}
+							%>
 							<td align="left" class="black_ar"><html:text
 								styleClass="black_ar" size="10" maxlength="50"
 								styleId="<%=collectionProtocolRegistrationDate%>"
@@ -887,12 +905,12 @@ function participantRegRow(subdivtag)
 							</html:select></td>
 							<td align="left" class="black_ar"><span
 								id="<%=consentCheckStatus%>"> <%
-											if (!consentResponseDisplayValue
-											.equals(Constants.NO_CONSENTS_DEFINED)) {
-												if (operation.equals(Constants.EDIT)) {
-											consentResponseDisplayValue = Constants.PARTICIPANT_CONSENT_EDIT_RESPONSE;
-												}
-									%> <a id="<%=anchorTagKey%>"
+ 	if (!consentResponseDisplayValue
+ 									.equals(Constants.NO_CONSENTS_DEFINED)) {
+ 										if (operation.equals(Constants.EDIT)) {
+ 									consentResponseDisplayValue = Constants.PARTICIPANT_CONSENT_EDIT_RESPONSE;
+ 										}
+ %> <a id="<%=anchorTagKey%>"
 								href="javascript:openConsentPage('<%=collectionProtocolId%>','<%=i%>','<%=consentResponseDisplayValue%>','<%=collectionProtocolRegIdValue%>')">
 							<%=consentResponseDisplayValue%><br>
 							<input type='hidden' name="<%=collectionProtocolConsentCheck%>"
@@ -900,20 +918,20 @@ function participantRegRow(subdivtag)
 							<input type='hidden' name="<%=consentResponseDisplay%>"
 								value="<%=consentResponseDisplayValue%>"
 								id="<%=consentResponseDisplay%>"> </a> <%
-										 } else {
-										 %> <%=consentResponseDisplayValue%> <input type='hidden'
+ 	} else {
+ %> <%=consentResponseDisplayValue%> <input type='hidden'
 								name="<%=collectionProtocolConsentCheck%>" value='Consent'
 								id="<%=collectionProtocolConsentCheck%>"> <input
 								type='hidden' name="<%=consentResponseDisplay%>"
 								value="<%=consentResponseDisplayValue%>"
 								id="<%=consentResponseDisplay%>"> <%
-										 }
-										 %> </span></td>
+ 	}
+ %> </span></td>
 
 						</tr>
 						<%
-								}
-								%>
+							}
+						%>
 					</tbody>
 
 					<tr>
@@ -946,15 +964,15 @@ function participantRegRow(subdivtag)
 
 			<!---Following is the code for Data Grid. Participant Lookup Data is displayed-->
 			<%
-								if (request.getAttribute(Constants.SPREADSHEET_DATA_LIST) != null
-								&& dataList.size() > 0) {
-							isRegisterButton = true;
-							if (request.getAttribute(Constants.SUBMITTED_FOR) != null
-							&& request.getAttribute(Constants.SUBMITTED_FOR)
-									.equals("AddNew")) {
-								isRegisterButton = false;
-							}
-					%>
+				if (request.getAttribute(Constants.SPREADSHEET_DATA_LIST) != null
+									&& dataList.size() > 0) {
+								isRegisterButton = true;
+								if (request.getAttribute(Constants.SUBMITTED_FOR) != null
+								&& request.getAttribute(Constants.SUBMITTED_FOR)
+										.equals("AddNew")) {
+									isRegisterButton = false;
+								}
+			%>
 
 
 			<tr>

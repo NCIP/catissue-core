@@ -19,7 +19,7 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.ProcedureEventParameters;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
@@ -91,8 +91,8 @@ public class ProcedureEventParametersForm extends SpecimenEventParametersForm
 	{
 		super.setAllValues(abstractDomain);
 		ProcedureEventParameters procedureEventParametersObject = (ProcedureEventParameters) abstractDomain;
-		this.url = Utility.toString(procedureEventParametersObject.getUrl());
-		this.name = Utility.toString(procedureEventParametersObject.getName());
+		this.url = AppUtility.toString(procedureEventParametersObject.getUrl());
+		this.name = AppUtility.toString(procedureEventParametersObject.getName());
 	}
 	
 	/**

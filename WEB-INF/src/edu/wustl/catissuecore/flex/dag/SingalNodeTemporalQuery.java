@@ -480,7 +480,7 @@ public class SingalNodeTemporalQuery
 				String pattern="";
 				try 
 				{
-					//Date date = Utility.parseDate(rhsTimeValue, "MM/dd/yyyy HH:MM:SS");
+					//Date date = AppUtility.parseDate(rhsTimeValue, "MM/dd/yyyy HH:MM:SS");
 					if(attributeType.equals("DateTime"))
 						pattern = Variables.dateFormat+" HH:mm:ss";
 					else

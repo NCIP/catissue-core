@@ -32,7 +32,7 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
-import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
@@ -409,13 +409,13 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm implements C
 
 		id = specimenCollectionGroup.getId().longValue();
 		name = specimenCollectionGroup.getName();
-		barcode = Utility.toString(specimenCollectionGroup.getBarcode());
+		barcode = AppUtility.toString(specimenCollectionGroup.getBarcode());
 		logger.debug("specimenCollectionGroup.getClinicalDiagnosis() " + specimenCollectionGroup.getClinicalDiagnosis());
-		clinicalDiagnosis = Utility.toString(specimenCollectionGroup.getClinicalDiagnosis());
-		clinicalStatus = Utility.toString(specimenCollectionGroup.getClinicalStatus());
-		activityStatus = Utility.toString(specimenCollectionGroup.getActivityStatus());
-		collectionStatus = Utility.toString(specimenCollectionGroup.getCollectionStatus());
-		surgicalPathologyNumber = Utility.toString(specimenCollectionGroup.getSurgicalPathologyNumber());
+		clinicalDiagnosis = AppUtility.toString(specimenCollectionGroup.getClinicalDiagnosis());
+		clinicalStatus = AppUtility.toString(specimenCollectionGroup.getClinicalStatus());
+		activityStatus = AppUtility.toString(specimenCollectionGroup.getActivityStatus());
+		collectionStatus = AppUtility.toString(specimenCollectionGroup.getCollectionStatus());
+		surgicalPathologyNumber = AppUtility.toString(specimenCollectionGroup.getSurgicalPathologyNumber());
 		/**
 		* Name: Shital Lawhale
 		* Reviewer Name : Sachin Lale 
@@ -424,10 +424,10 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm implements C
 		* See also: 1_1 to 1_5
 		* Description : Get comment field from database and set it to form bean.
 		*/
-		comment = Utility.toString(specimenCollectionGroup.getComment());
+		comment = AppUtility.toString(specimenCollectionGroup.getComment());
 
 		////		ClinicalReport clinicalReport = specimenCollectionGroup.getClinicalReport();
-		//		surgicalPathologyNumber = Utility.toString(clinicalReport.getSurgicalPathologyNumber());
+		//		surgicalPathologyNumber = AppUtility.toString(clinicalReport.getSurgicalPathologyNumber());
 		//		
 		//		if(clinicalReport.getParticipantMedicalIdentifier()!=null)
 		//		{
@@ -489,9 +489,9 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm implements C
 		}
 
 		//kalpana :bug #5761
-		if (Utility.toString(specimenCollectionGroup.getCollectionProtocolRegistration().getProtocolParticipantIdentifier()) != null)
+		if (AppUtility.toString(specimenCollectionGroup.getCollectionProtocolRegistration().getProtocolParticipantIdentifier()) != null)
 		{
-			protocolParticipantIdentifier = Utility.toString(specimenCollectionGroup.getCollectionProtocolRegistration()
+			protocolParticipantIdentifier = AppUtility.toString(specimenCollectionGroup.getCollectionProtocolRegistration()
 					.getProtocolParticipantIdentifier());
 
 		}
@@ -527,10 +527,10 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm implements C
 		}
 		else
 		{
-			this.witnessName = Utility.toString(witness.getFirstName());
+			this.witnessName = AppUtility.toString(witness.getFirstName());
 		}
-		this.signedConsentUrl = Utility.toString(specimenCollectionGroup.getCollectionProtocolRegistration().getSignedConsentDocumentURL());
-		this.consentDate = Utility.parseDateToString(specimenCollectionGroup.getCollectionProtocolRegistration().getConsentSignatureDate(),
+		this.signedConsentUrl = AppUtility.toString(specimenCollectionGroup.getCollectionProtocolRegistration().getSignedConsentDocumentURL());
+		this.consentDate = AppUtility.parseDateToString(specimenCollectionGroup.getCollectionProtocolRegistration().getConsentSignatureDate(),
 				Variables.dateFormat);
 		/**
 		* Name : Ashish Gupta
@@ -568,12 +568,12 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm implements C
 					this.collectionEventUserId = collectionEventParameters.getUser().getId().longValue();
 
 					calender.setTime(collectionEventParameters.getTimestamp());
-					this.collectionEventdateOfEvent = Utility.parseDateToString(collectionEventParameters.getTimestamp(), Variables.dateFormat);
-					this.collectionEventTimeInHours = Utility.toString(Integer.toString(calender.get(Calendar.HOUR_OF_DAY)));
-					this.collectionEventTimeInMinutes = Utility.toString(Integer.toString(calender.get(Calendar.MINUTE)));
+					this.collectionEventdateOfEvent = AppUtility.parseDateToString(collectionEventParameters.getTimestamp(), Variables.dateFormat);
+					this.collectionEventTimeInHours = AppUtility.toString(Integer.toString(calender.get(Calendar.HOUR_OF_DAY)));
+					this.collectionEventTimeInMinutes = AppUtility.toString(Integer.toString(calender.get(Calendar.MINUTE)));
 					this.collectionEventCollectionProcedure = collectionEventParameters.getCollectionProcedure();
 					this.collectionEventContainer = collectionEventParameters.getContainer();
-					this.collectionEventComments = Utility.toString(collectionEventParameters.getComment());
+					this.collectionEventComments = AppUtility.toString(collectionEventParameters.getComment());
 				}
 				else if (tempObj instanceof ReceivedEventParameters)
 				{
@@ -583,11 +583,11 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm implements C
 					this.receivedEventId = receivedEventParameters.getId().longValue();
 					//	this.receivedEventSpecimenId = receivedEventParameters.getSpecimen().getId().longValue();
 					this.receivedEventUserId = receivedEventParameters.getUser().getId().longValue();
-					this.receivedEventDateOfEvent = Utility.parseDateToString(receivedEventParameters.getTimestamp(), Variables.dateFormat);
-					this.receivedEventTimeInHours = Utility.toString(Integer.toString(calender.get(Calendar.HOUR_OF_DAY)));
-					this.receivedEventTimeInMinutes = Utility.toString(Integer.toString(calender.get(Calendar.MINUTE)));
+					this.receivedEventDateOfEvent = AppUtility.parseDateToString(receivedEventParameters.getTimestamp(), Variables.dateFormat);
+					this.receivedEventTimeInHours = AppUtility.toString(Integer.toString(calender.get(Calendar.HOUR_OF_DAY)));
+					this.receivedEventTimeInMinutes = AppUtility.toString(Integer.toString(calender.get(Calendar.MINUTE)));
 					this.receivedEventReceivedQuality = receivedEventParameters.getReceivedQuality();
-					this.receivedEventComments = Utility.toString(receivedEventParameters.getComment());
+					this.receivedEventComments = AppUtility.toString(receivedEventParameters.getComment());
 				}
 			}
 		}
@@ -743,7 +743,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm implements C
 			{
 				//if participant name field is checked.
 				/**For Migration Start**/
-				if (this.participantName == null || validator.isEmpty(this.participantName)) // || Utility.this.participantName.trim().equals(""))
+				if (this.participantName == null || validator.isEmpty(this.participantName)) // || AppUtility.this.participantName.trim().equals(""))
 				{
 					if (this.participantNameWithProtocolId == null || validator.isEmpty(this.participantNameWithProtocolId))
 					{

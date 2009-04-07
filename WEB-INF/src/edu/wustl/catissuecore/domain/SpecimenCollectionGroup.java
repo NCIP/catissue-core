@@ -515,7 +515,7 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 				//value of radio button is 2 when participant name is selected
 				Participant participant = new Participant();
 				/**For Migration Start**/
-				//form.setParticipantId(Utility.getParticipantId(form.getParticipantName()));
+				//form.setParticipantId(AppUtility.getParticipantId(form.getParticipantName()));
 				/**For Migration End**/
 				participant.setId(Long.valueOf(form.getParticipantId()));
 				collectionProtocolRegistration.setParticipant(participant);

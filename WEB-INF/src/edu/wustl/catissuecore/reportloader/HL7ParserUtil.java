@@ -18,7 +18,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
 
 /**
- * Utility class for HL7Parser class.
+ * AppUtility class for HL7Parser class.
  * @author vijay_pande
  *
  */

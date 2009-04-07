@@ -31,7 +31,7 @@ import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
-import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.dbManager.HibernateMetaData;
@@ -234,9 +234,9 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 		StorageContainer container = (StorageContainer) abstractDomain;
 
 		this.id = container.getId().longValue();
-		this.activityStatus = Utility.toString(container.getActivityStatus());
+		this.activityStatus = AppUtility.toString(container.getActivityStatus());
 		this.containerName = container.getName();
-		isFull = Utility.initCap(Utility.toString(container.isFull()));
+		isFull = AppUtility.initCap(AppUtility.toString(container.isFull()));
 		logger.debug("isFULL />/>/> " + isFull);
 
 		this.typeId = container.getStorageType().getId().longValue();
@@ -275,11 +275,11 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 			this.siteName = container.getSite().getName();
 		}
 
-		this.defaultTemperature = Utility.toString(container.getTempratureInCentigrade());
+		this.defaultTemperature = AppUtility.toString(container.getTempratureInCentigrade());
 		this.oneDimensionCapacity = container.getCapacity().getOneDimensionCapacity().intValue();
 		this.twoDimensionCapacity = container.getCapacity().getTwoDimensionCapacity().intValue();
 		this.oneDimensionLabel = container.getStorageType().getOneDimensionLabel();
-		this.twoDimensionLabel = Utility.toString(container.getStorageType().getTwoDimensionLabel());
+		this.twoDimensionLabel = AppUtility.toString(container.getStorageType().getTwoDimensionLabel());
 
 		if (container.getNoOfContainers() != null)
 		{
@@ -291,7 +291,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 			this.startNumber = String.valueOf(container.getStartNo().intValue());
 		}
 
-		this.barcode = Utility.toString(container.getBarcode());
+		this.barcode = AppUtility.toString(container.getBarcode());
 
 		//Populating the collection protocol id array
 		Collection collectionProtocolCollection = container.getCollectionProtocolCollection();
@@ -333,7 +333,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 
 		if (specimenClassCollection != null)
 		{
-			if (specimenClassCollection.size() == Utility.getSpecimenClassTypes().size())
+			if (specimenClassCollection.size() == AppUtility.getSpecimenClassTypes().size())
 			{
 				holdsSpecimenClassTypes = new String[1];
 				holdsSpecimenClassTypes[0] = "-1";

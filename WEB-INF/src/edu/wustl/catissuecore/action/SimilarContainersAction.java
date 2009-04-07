@@ -38,7 +38,7 @@ import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
@@ -63,7 +63,7 @@ public class SimilarContainersAction extends SecureAction
 	{
 		Logger.out.debug("SimilarContainersAction : executeSecureAction() form: type " + form.getClass());
 		
-		List<NameValueBean> storagePositionListForTransferEvent = Utility.getStoragePositionTypeListForTransferEvent();
+		List<NameValueBean> storagePositionListForTransferEvent = AppUtility.getStoragePositionTypeListForTransferEvent();
 		request.setAttribute("storageListForTransferEvent", storagePositionListForTransferEvent);
 
 		StorageContainerForm similarContainersForm = (StorageContainerForm) form;
@@ -79,10 +79,10 @@ public class SimilarContainersAction extends SecureAction
 		Logger.out.info(" Map:---------------" + similarContainersForm.getSimilarContainersMap());
 		IBizLogic ibizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 		
-		//request = Utility.setCollectionProtocolList(request,similarContainersForm.getSiteId());
+		//request = AppUtility.setCollectionProtocolList(request,similarContainersForm.getSiteId());
 		if ("Site".equals(similarContainersForm.getParentContainerSelected()))
 		{
-			request = Utility.setCollectionProtocolList(request, similarContainersForm.getSiteId());
+			request = AppUtility.setCollectionProtocolList(request, similarContainersForm.getSiteId());
 		}
 		else if ("Auto".equals(similarContainersForm.getParentContainerSelected()))
 		{
@@ -91,7 +91,7 @@ public class SimilarContainersAction extends SecureAction
 			Site site = bizLogic.getRelatedSite(parentContId);
 			if(site!=null)
 			{
-				request = Utility.setCollectionProtocolList(request, site.getId());
+				request = AppUtility.setCollectionProtocolList(request, site.getId());
 			}
 			else
 			{
@@ -108,7 +108,7 @@ public class SimilarContainersAction extends SecureAction
 			Site site = bizLogic.getRelatedSiteForManual(selectedContName);
 			if(site!=null)
 			{
-				request = Utility.setCollectionProtocolList(request, site.getId());
+				request = AppUtility.setCollectionProtocolList(request, site.getId());
 			}
 			else
 			{
@@ -121,7 +121,7 @@ public class SimilarContainersAction extends SecureAction
 		
 		//Gets the Storage Type List and sets it in request 
 		List list2 = ibizLogic.retrieve(StorageType.class.getName());
-		List storageTypeListWithAny = Utility.getStorageTypeList(list2, true);
+		List storageTypeListWithAny = AppUtility.getStorageTypeList(list2, true);
 		request.setAttribute(Constants.HOLDS_LIST1, storageTypeListWithAny);
 
 		List storagetypeList = new ArrayList();
@@ -160,12 +160,12 @@ public class SimilarContainersAction extends SecureAction
 		request.setAttribute(Constants.SITELIST, list);
 
 		// get the Specimen class and type from the cde
-		List specimenClassTypeList = Utility.getSpecimenClassTypeListWithAny();
+		List specimenClassTypeList = AppUtility.getSpecimenClassTypeListWithAny();
 		request.setAttribute(Constants.HOLDS_LIST2, specimenClassTypeList);
 
 		//Gets the Specimen array Type List and sets it in request
 		List list3 = ibizLogic.retrieve(SpecimenArrayType.class.getName());
-		List spArrayTypeList = Utility.getSpecimenArrayTypeList(list3);
+		List spArrayTypeList = AppUtility.getSpecimenArrayTypeList(list3);
 		request.setAttribute(Constants.HOLDS_LIST3, spArrayTypeList);
 
 		request.setAttribute(Constants.ACTIVITYSTATUSLIST, Constants.ACTIVITY_STATUS_VALUES);

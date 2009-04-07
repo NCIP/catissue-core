@@ -6,7 +6,7 @@
 <%@ page import="java.util.Hashtable"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.AdvanceSearchForm"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
-<%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
+<%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 <%@ page language="java" isELIgnored="false"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -21,7 +21,6 @@ tr#hiddenCombo
 </style>
 <head>
 <%
-	
 	int pageNum = Integer.parseInt((String)request.getAttribute(Constants.PAGE_NUMBER));
 	
 	int totalResults = ((Integer)session.getAttribute(Constants.TOTAL_RESULTS)).intValue();
@@ -40,8 +39,7 @@ tr#hiddenCombo
 	String title = pageOf + ".searchResultTitle";
 	boolean isSpecimenData = false;	
 	int IDCount = 0;
-	
-	%>
+%>
 		
 
 	<script language="javascript">
@@ -96,8 +94,7 @@ tr#hiddenCombo
 				var action;
                 var isQueryModule = "<%=pageOf.equals(Constants.PAGEOF_QUERY_MODULE)%>";
                 <%if (pageOf.equals(Constants.PAGEOF_QUERY_MODULE))
-                {
-                %>
+                {%>
 				
 				 action = "AddDeleteCart.do?operation=add&pageNum="+pageNum+"&isCheckAllAcrossAllChecked="+isCheckAllAcrossAllChecked;
 				  document.forms[0].target = "gridFrame";
@@ -214,8 +211,8 @@ tr#hiddenCombo
 		   {
 			var chkBox = document.getElementById('checkAll');
 			var isCheckAllAcrossAllChecked = chkBox.checked;
-		<%	if(checkAllPages != null && checkAllPages.equals("true"))
-			{ %>
+		<%if(checkAllPages != null && checkAllPages.equals("true"))
+			{%>
 			chkBox.checked = true;
 				rowCount = mygrid.getRowsNum();
 				for(i=1;i<=rowCount;i++)
@@ -224,7 +221,7 @@ tr#hiddenCombo
 					if(cl.isCheckbox())
 					cl.setChecked(true);
 				}
-		<%	} %>
+		<%}%>
 		}
 		}
 //this function is called after executing ajax call from checkAllOnThisPage function.
@@ -237,34 +234,34 @@ function checkAllOnThisPageResponse()
 	</script>
 	<%
 		String configAction = new String();
-		String redefineQueryAction = new String();
-		if(pageOf.equals(Constants.PAGEOF_SIMPLE_QUERY_INTERFACE))
-		{
-			configAction = "onSimpleConfigure()";
-			redefineQueryAction = "onRedefineSimpleQuery()";
-		}
-		else if(pageOf.equals("pageOfQueryModule"))
-		{
-			configAction = "onQueryResultsConfigure()";
-			redefineQueryAction = "onRedefineDAGQuery()";
-		}
-		else
-		{
-			configAction = "onAdvanceConfigure()";
-			redefineQueryAction = "onRedefineAdvanceQuery()";
-		}
-		boolean mac = false;
-		Object os = request.getHeader("user-agent");
-		if(os!=null && os.toString().toLowerCase().indexOf("mac")!=-1)
-		{
-			mac = true;
-		}
-		String height = "100%";		
-		if(mac) 
-		{
-			/* mac gives problem if the values aer specified in percentage*/
-		  height="500";
-		}
+			String redefineQueryAction = new String();
+			if(pageOf.equals(Constants.PAGEOF_SIMPLE_QUERY_INTERFACE))
+			{
+		configAction = "onSimpleConfigure()";
+		redefineQueryAction = "onRedefineSimpleQuery()";
+			}
+			else if(pageOf.equals("pageOfQueryModule"))
+			{
+		configAction = "onQueryResultsConfigure()";
+		redefineQueryAction = "onRedefineDAGQuery()";
+			}
+			else
+			{
+		configAction = "onAdvanceConfigure()";
+		redefineQueryAction = "onRedefineAdvanceQuery()";
+			}
+			boolean mac = false;
+			Object os = request.getHeader("user-agent");
+			if(os!=null && os.toString().toLowerCase().indexOf("mac")!=-1)
+			{
+		mac = true;
+			}
+			String height = "100%";		
+			if(mac) 
+			{
+		/* mac gives problem if the values aer specified in percentage*/
+			  height="500";
+			}
 	%>
 	<!-- Mandar : 434 : for tooltip -->
 	<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
@@ -322,14 +319,15 @@ function checkAllOnThisPageResponse()
 <html:hidden property="checkAllPages" value=""/>	
 
 	<%
-		if(dataList == null && pageOf.equals(Constants.PAGEOF_QUERY_RESULTS))
-		{
+			if(dataList == null && pageOf.equals(Constants.PAGEOF_QUERY_RESULTS))
+				{
 		%>
 			<bean:message key="advanceQuery.noRecordsFound"/>
-		<%}
-		else if(dataList != null && dataList.size() != 0)
-		{
-	%>
+		<%
+			}
+				else if(dataList != null && dataList.size() != 0)
+				{
+		%>
 		<!-- 
 			Patch ID: Bug#3090_28
 			Description: The width of <td> are adjusted to fit into the iframe. 
@@ -349,8 +347,8 @@ function checkAllOnThisPageResponse()
 			</td>
 		</tr>
 		<%
-		if(pageOf.equals(Constants.PAGEOF_QUERY_RESULTS))
-		{			
+			if(pageOf.equals(Constants.PAGEOF_QUERY_RESULTS))
+				{			
 			String []selectedColumns=form.getSelectedColumnNames();
 		%>
 		
@@ -360,17 +358,18 @@ function checkAllOnThisPageResponse()
 	   			<html:select property="selectedColumnNames" styleClass="selectedColumnNames"  size="1" styleId="selectedColumnNames" multiple="true"
 				 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 	   				<%
-					for(int j=0;j<selectedColumns.length;j++)
-	   				{
+	   					for(int j=0;j<selectedColumns.length;j++)
+	   					   				{
 	   				%>
 						<html:option value="<%=selectedColumns[j]%>"><%=selectedColumns[j]%></html:option>
 					<%
-	   				}
-	   				%>
+						}
+					%>
 	   	 		</html:select>
 			</td>
 		</tr>
-		<% } 
+		<%
+			}
 		%>
 		
 		<tr valign="top" width="100%">

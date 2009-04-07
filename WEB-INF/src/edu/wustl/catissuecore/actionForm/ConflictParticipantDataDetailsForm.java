@@ -20,7 +20,7 @@ import java.util.Map;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.Race;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
@@ -305,11 +305,11 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 			this.vitalStatus=participant.getVitalStatus();
 			if(participant.getBirthDate()!=null)
 			{
-				this.birthDate=Utility.parseDateToString(participant.getBirthDate(), Variables.dateFormat);
+				this.birthDate=AppUtility.parseDateToString(participant.getBirthDate(), Variables.dateFormat);
 			}
 			if(participant.getDeathDate()!=null)
 			{
-				this.deathDate=Utility.parseDateToString(participant.getDeathDate(), Variables.dateFormat);
+				this.deathDate=AppUtility.parseDateToString(participant.getDeathDate(), Variables.dateFormat);
 			}
 			this.ethinicity=participant.getEthnicity();
 			final Collection tempRaceColl=participant.getRaceCollection();

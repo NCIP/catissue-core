@@ -27,7 +27,7 @@ import edu.wustl.catissuecore.bean.ConsentBean;
 import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.bizlogic.IActivityStatus;
@@ -479,7 +479,7 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 				 * Description : Set createdOn date for aliquot.
 				 */
 
-				this.createdOn = Utility.parseDate(form.getCreatedDate(),
+				this.createdOn = AppUtility.parseDate(form.getCreatedDate(),
 						edu.wustl.catissuecore.util.global.Variables.dateFormat);
 
 				if (!validator.isEmpty(form.getSpecimenLabel()))
@@ -594,7 +594,7 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 						 * See also: 1_1 to 1_5
 						 * Description : Set createdOn date in edit mode for new specimen
 						 */
-						this.createdOn = Utility.parseDate(form.getCreatedDate(),
+						this.createdOn = AppUtility.parseDate(form.getCreatedDate(),
 							edu.wustl.catissuecore.util.global.Variables.dateFormat);
 					}
 
@@ -685,7 +685,7 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 						 * Description :createdOn should be collection event date
 						 * for new specimen.
 						 */
-						this.createdOn = Utility.parseDate(form.getCollectionEventdateOfEvent(),
+						this.createdOn = AppUtility.parseDate(form.getCollectionEventdateOfEvent(),
 								edu.wustl.catissuecore.util.global.Variables.dateFormat);
 
 						logger.debug("Before specimenEventCollection.size(): " + specimenEventCollection.size());
@@ -866,7 +866,7 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 					 * See also: 1_1 to 1_5
 					 * Description : Set createdOn date for derived specimen .
 					 */
-					this.createdOn = Utility.parseDate(form.getCreatedDate(), edu.wustl.catissuecore.util.global.Variables.dateFormat);
+					this.createdOn = AppUtility.parseDate(form.getCreatedDate(), edu.wustl.catissuecore.util.global.Variables.dateFormat);
 
 					if (form.isAddOperation())
 					{

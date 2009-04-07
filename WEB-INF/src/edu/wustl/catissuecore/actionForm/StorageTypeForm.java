@@ -23,7 +23,7 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.global.ApplicationProperties;
@@ -105,7 +105,7 @@ public class StorageTypeForm extends AbstractActionForm
 				+ storageType.getHoldsSpecimenClassCollection().size());
 		this.id = storageType.getId().longValue();
 		this.type = storageType.getName();
-		this.defaultTemperature = Utility.toString(storageType.getDefaultTempratureInCentigrade());
+		this.defaultTemperature = AppUtility.toString(storageType.getDefaultTempratureInCentigrade());
 		this.oneDimensionCapacity = storageType.getCapacity().getOneDimensionCapacity().intValue();
 		this.twoDimensionCapacity = storageType.getCapacity().getTwoDimensionCapacity().intValue();
 		this.oneDimensionLabel = storageType.getOneDimensionLabel();
@@ -131,7 +131,7 @@ public class StorageTypeForm extends AbstractActionForm
 
 		if (specimenClassTypeCollection != null)
 		{
-			if (specimenClassTypeCollection.size() == Utility.getSpecimenClassTypes().size())
+			if (specimenClassTypeCollection.size() == AppUtility.getSpecimenClassTypes().size())
 			{
 				holdsSpecimenClassTypes = new String[1];
 				holdsSpecimenClassTypes[0] = "-1";

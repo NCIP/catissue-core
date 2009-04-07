@@ -22,7 +22,7 @@ import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.bizlogic.querysuite.QueryShoppingCartBizLogic;
 import edu.wustl.catissuecore.querysuite.QueryShoppingCart;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.SessionDataBean;
@@ -57,7 +57,7 @@ public abstract class BulkOperationAction extends SecureAction
 		}
 		// set the current Date and Time for the event.
 		Calendar cal = Calendar.getInstance();
-		eventParametersForm.setDateOfEvent(Utility.parseDateToString(cal.getTime(), Variables.dateFormat));
+		eventParametersForm.setDateOfEvent(AppUtility.parseDateToString(cal.getTime(), Variables.dateFormat));
 		eventParametersForm.setTimeInHours(Integer.toString(cal.get(Calendar.HOUR_OF_DAY)));
 		eventParametersForm.setTimeInMinutes(Integer.toString(cal.get(Calendar.MINUTE)));
 		

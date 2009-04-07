@@ -25,7 +25,7 @@ import edu.wustl.catissuecore.bizlogic.StorageTypeBizLogic;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.util.logger.Logger;
@@ -110,18 +110,18 @@ public class StorageTypeAction  extends SecureAction
         //Sets the operation attribute to be used in the Add/Edit Institute Page. 
         //Gets the Storage Type List and sets it in request
         List list1=bizLogic.retrieve(StorageType.class.getName());
-    	List storageTypeList=Utility.getStorageTypeList(list1,true);
+    	List storageTypeList=AppUtility.getStorageTypeList(list1,true);
     	//Collections.sort(storageTypeList);
     	request.setAttribute(Constants.HOLDS_LIST1, storageTypeList);
     	
        	
     	// get the Specimen class and type from the cde
-    	List specimenClassTypeList=Utility.getSpecimenClassTypeListWithAny();
+    	List specimenClassTypeList=AppUtility.getSpecimenClassTypeListWithAny();
 	  	request.setAttribute(Constants.HOLDS_LIST2, specimenClassTypeList);
         
 	  	//Gets the Specimen array Type List and sets it in request
         List list2=bizLogic.retrieve(SpecimenArrayType.class.getName());
-    	List spArrayTypeList=Utility.getSpecimenArrayTypeList(list2);
+    	List spArrayTypeList=AppUtility.getSpecimenArrayTypeList(list2);
     	request.setAttribute(Constants.HOLDS_LIST3, spArrayTypeList);
     	
     	//Bug #4297

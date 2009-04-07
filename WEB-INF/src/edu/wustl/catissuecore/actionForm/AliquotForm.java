@@ -24,7 +24,7 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.global.ApplicationProperties;
@@ -495,7 +495,7 @@ public class AliquotForm extends AbstractActionForm implements IPrinterTypeLocat
 					{
 	         			value = new BigDecimal(value).toPlainString();
 	         			
-	         			if(Utility.isQuantityDouble(className,type))
+	         			if(AppUtility.isQuantityDouble(className,type))
 	        			{
 	        		        if(!validator.isDouble(value,true))
 	        		        {

@@ -32,7 +32,7 @@ import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.ShoppingCartBizLogic;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.dao.QuerySessionData;
@@ -127,7 +127,7 @@ public class ShoppingCartAction  extends BaseAction
     				recordsPerPage = totalRecords;
     				pageNum = 1;
         		}
-        		paginationDataList = Utility.getPaginationDataList(request, getSessionData(request), recordsPerPage, pageNum, querySessionData);
+        		paginationDataList = AppUtility.getPaginationDataList(request, getSessionData(request), recordsPerPage, pageNum, querySessionData);
 	        
 	        	request.setAttribute(Constants.PAGINATION_DATA_LIST,paginationDataList);
         		

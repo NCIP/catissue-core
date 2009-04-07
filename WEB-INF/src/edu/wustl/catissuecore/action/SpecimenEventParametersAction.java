@@ -25,7 +25,7 @@ import edu.wustl.catissuecore.actionForm.SpecimenEventParametersForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
@@ -97,7 +97,7 @@ public class SpecimenEventParametersAction  extends BaseAction
 			Calendar cal = Calendar.getInstance();
 			if(eventParametersForm.getDateOfEvent()==null)
 			{
-				eventParametersForm.setDateOfEvent(Utility.parseDateToString(cal.getTime(), Variables.dateFormat));
+				eventParametersForm.setDateOfEvent(AppUtility.parseDateToString(cal.getTime(), Variables.dateFormat));
 			}
 			if(eventParametersForm.getTimeInHours()==null)
 			{
@@ -134,9 +134,9 @@ public class SpecimenEventParametersAction  extends BaseAction
 			currentEventParametersDate = "";
 		}
 		
-		Integer eventParametersYear = new Integer(Utility.getYear(currentEventParametersDate ));
-		Integer eventParametersMonth = new Integer(Utility.getMonth(currentEventParametersDate ));
-		Integer eventParametersDay = new Integer(Utility.getDay(currentEventParametersDate ));
+		Integer eventParametersYear = new Integer(AppUtility.getYear(currentEventParametersDate ));
+		Integer eventParametersMonth = new Integer(AppUtility.getMonth(currentEventParametersDate ));
+		Integer eventParametersDay = new Integer(AppUtility.getDay(currentEventParametersDate ));
 		request.setAttribute("eventParametersYear", eventParametersYear);
 		request.setAttribute("eventParametersDay", eventParametersDay);
 		request.setAttribute("eventParametersMonth", eventParametersMonth);

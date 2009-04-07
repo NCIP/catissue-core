@@ -11,7 +11,7 @@
 package edu.wustl.catissuecore.domain;
 
 import edu.wustl.catissuecore.actionForm.MolecularSpecimenReviewParametersForm;
-import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.util.logger.Logger;
@@ -257,22 +257,22 @@ public class MolecularSpecimenReviewParameters extends ReviewEventParameters imp
 		{
 			MolecularSpecimenReviewParametersForm form =
 				(MolecularSpecimenReviewParametersForm) abstractForm;
-			this.gelImageURL = Utility.toString(form.getGelImageURL());
-			this.qualityIndex = Utility.toString(form.getQualityIndex());
-			this.laneNumber = Utility.toString(form.getLaneNumber());
-			if (Utility.toString(form.getGelNumber()).trim().length() > 0)
+			this.gelImageURL = AppUtility.toString(form.getGelImageURL());
+			this.qualityIndex = AppUtility.toString(form.getQualityIndex());
+			this.laneNumber = AppUtility.toString(form.getLaneNumber());
+			if (AppUtility.toString(form.getGelNumber()).trim().length() > 0)
 			{
 				this.gelNumber = Integer.valueOf(form.getGelNumber());
 			}
-			if (Utility.toString(form.getAbsorbanceAt260()).trim().length() > 0)
+			if (AppUtility.toString(form.getAbsorbanceAt260()).trim().length() > 0)
 			{
 				this.absorbanceAt260 = new Double(form.getAbsorbanceAt260());
 			}
-			if (Utility.toString(form.getAbsorbanceAt280()).trim().length() > 0)
+			if (AppUtility.toString(form.getAbsorbanceAt280()).trim().length() > 0)
 			{
 				this.absorbanceAt280 = new Double(form.getAbsorbanceAt280());
 			}
-			if (Utility.toString(form.getRatio28STo18S()).trim().length() > 0)
+			if (AppUtility.toString(form.getRatio28STo18S()).trim().length() > 0)
 			{
 				this.ratio28STo18S = new Double(form.getRatio28STo18S());
 			}

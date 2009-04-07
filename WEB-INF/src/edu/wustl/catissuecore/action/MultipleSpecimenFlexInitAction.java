@@ -16,7 +16,7 @@ import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.actionForm.AbstractActionForm;
@@ -139,7 +139,7 @@ public class MultipleSpecimenFlexInitAction extends SecureAction
 		SpecimenCollectionGroup specimenCollectionGroup = null;
 		if(createSpecimenForm.getParentSpecimenId() != null && createSpecimenForm.getParentSpecimenId() != "")
 		{
-				Specimen specimen = Utility.getSpecimen(createSpecimenForm.getParentSpecimenId());
+				Specimen specimen = AppUtility.getSpecimen(createSpecimenForm.getParentSpecimenId());
 				specimenCollectionGroup = specimen.getSpecimenCollectionGroup();
 				CollectionProtocolRegistration cpr = specimenCollectionGroup.getCollectionProtocolRegistration();
 				if (cpr!= null)

@@ -19,7 +19,7 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
-import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
@@ -116,8 +116,8 @@ public class CollectionEventParametersForm extends SpecimenEventParametersForm
 	{
 		super.setAllValues(abstractDomain);
 		final CollectionEventParameters collectionEventParameterObject = (CollectionEventParameters)abstractDomain ;
-		this.collectionProcedure =  Utility.toString(collectionEventParameterObject.getCollectionProcedure()) ;
-		this.container = Utility.toString(collectionEventParameterObject.getContainer());
+		this.collectionProcedure =  AppUtility.toString(collectionEventParameterObject.getCollectionProcedure()) ;
+		this.container = AppUtility.toString(collectionEventParameterObject.getContainer());
 	}
 	
 	

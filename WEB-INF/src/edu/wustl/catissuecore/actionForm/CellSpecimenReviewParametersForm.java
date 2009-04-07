@@ -18,7 +18,7 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.CellSpecimenReviewParameters;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
@@ -105,8 +105,8 @@ public class CellSpecimenReviewParametersForm extends SpecimenEventParametersFor
 	{
 		super.setAllValues(abstractDomain);
 		final CellSpecimenReviewParameters cellSpecimenReviewParametersObject = (CellSpecimenReviewParameters)abstractDomain ;
-		this.neoplasticCellularityPercentage =Utility.toString(cellSpecimenReviewParametersObject.getNeoplasticCellularityPercentage()) ;
-		this.viableCellPercentage = Utility.toString(cellSpecimenReviewParametersObject.getViableCellPercentage()) ; 
+		this.neoplasticCellularityPercentage =AppUtility.toString(cellSpecimenReviewParametersObject.getNeoplasticCellularityPercentage()) ;
+		this.viableCellPercentage = AppUtility.toString(cellSpecimenReviewParametersObject.getViableCellPercentage()) ; 
 	}
 	
 	/**

@@ -4,7 +4,7 @@
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.MultipleSpecimenForm"%>
-<%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
+<%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="java.util.*"%>
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
 
@@ -16,30 +16,31 @@
 
 <link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
 
-<%MultipleSpecimenForm form = (MultipleSpecimenForm) request
-					.getAttribute("multipleSpecimenForm");
+<%
+	MultipleSpecimenForm form = (MultipleSpecimenForm) request
+			.getAttribute("multipleSpecimenForm");
 
-			String submitFunName ="",pageType="";
-			boolean readOnlyValue = false, readOnlyForAll = false;
-			Map map = form.getExternalIdentifier();
-			int exIdRows = 1;
-			int bhRows = 1;
+	String submitFunName ="",pageType="";
+	boolean readOnlyValue = false, readOnlyForAll = false;
+	Map map = form.getExternalIdentifier();
+	int exIdRows = 1;
+	int bhRows = 1;
             
-			String unitSpecimen = "";
-			if (form != null)
-			{
-				exIdRows = form.getExIdCounter();
-				bhRows = form.getBhCounter();
-			}
-			pageType = (String) request.getAttribute("type");
-			List biohazardList = (List) request.getAttribute(Constants.BIOHAZARD_TYPE_LIST);
+	String unitSpecimen = "";
+	if (form != null)
+	{
+		exIdRows = form.getExIdCounter();
+		bhRows = form.getBhCounter();
+	}
+	pageType = (String) request.getAttribute("type");
+	List biohazardList = (List) request.getAttribute(Constants.BIOHAZARD_TYPE_LIST);
 
-			
-			String action = Constants.NEW_MULTIPLE_SPECIMEN_ACTION;
-			/**
-			 * Get tool tip from the request to send it in the applets function call
-			 */
-			String toolTip=(String)request.getAttribute(Constants.TOOLTIP_TEXT);
+	
+	String action = Constants.NEW_MULTIPLE_SPECIMEN_ACTION;
+	/**
+	 * Get tool tip from the request to send it in the applets function call
+	 */
+	String toolTip=(String)request.getAttribute(Constants.TOOLTIP_TEXT);
 %>
 
 <%@ include file="/pages/content/common/ActionErrors.jsp" %>
@@ -73,44 +74,48 @@
 		<tr>
 			<td><input type="hidden" id="<%=Constants.SPECIMEN_ATTRIBUTE_KEY%>"
 				name="<%=Constants.SPECIMEN_ATTRIBUTE_KEY%>"
-				value="<%= request.getParameter(Constants.SPECIMEN_ATTRIBUTE_KEY) %>" />
+				value="<%=request.getParameter(Constants.SPECIMEN_ATTRIBUTE_KEY)%>" />
 			<html:hidden property="type" />
 
 			<table summary="" cellpadding="3" cellspacing="0" border="0">
 				<logic:equal name="type"
 					value="<%=Constants.COMMENTS_TYPE%>">
-					<%submitFunName = "submitComments();";%>
+					<%
+						submitFunName = "submitComments();";
+					%>
 					<%@ include file="comments.jsp"%>
 				</logic:equal>
 
 				<logic:equal name="type"
 					value="<%=Constants.EXTERNALIDENTIFIER_TYPE%>">
-					<%submitFunName = "submitExternalIdentifiers();";%>
+					<%
+						submitFunName = "submitExternalIdentifiers();";
+					%>
 					<%@ include file="ExternalIdentifiers.jsp"%>
 				</logic:equal>
 				
 				<logic:equal name="type" value="<%=Constants.BIOHAZARD_TYPE%>">
-					<%submitFunName = "submitBioHazards();";%>
+					<%
+						submitFunName = "submitBioHazards();";
+					%>
 					<%@ include file="BioHazards.jsp"%>
 				</logic:equal>
 				
 				<logic:equal name="type" value="<%=Constants.EVENTS_TYPE%>">
 				<%
 					submitFunName = "submitEvents()";
-					String currentReceivedDate = "";
-					String currentCollectionDate = "";
-					if (form != null) 
-					{
-						currentReceivedDate = form.getReceivedEventDateOfEvent();
-						if(currentReceivedDate == null)
-							currentReceivedDate = "";
-						currentCollectionDate = form.getCollectionEventdateOfEvent();
-						if(currentCollectionDate == null)
-							currentCollectionDate = "";
-					}
-					String formNameForCal = "multipleSpecimenForm";
-
-
+							String currentReceivedDate = "";
+							String currentCollectionDate = "";
+							if (form != null) 
+							{
+								currentReceivedDate = form.getReceivedEventDateOfEvent();
+								if(currentReceivedDate == null)
+									currentReceivedDate = "";
+								currentCollectionDate = form.getCollectionEventdateOfEvent();
+								if(currentCollectionDate == null)
+									currentCollectionDate = "";
+							}
+							String formNameForCal = "multipleSpecimenForm";
 				%>
 					<%@ include file="CollAndRecEvents.jsp"%>
 				</logic:equal>

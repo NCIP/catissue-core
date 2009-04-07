@@ -9,7 +9,7 @@
 <%@ page import="edu.wustl.catissuecore.actionForm.ParticipantForm"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.ViewSurgicalPathologyReportForm"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.CollectionProtocolRegistrationForm"%>
-<%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
+<%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 
@@ -41,8 +41,8 @@ tr#hiddenCombo
 
 <script src="jss/script.js" type="text/javascript"></script>
 <%@ include file="/pages/content/common/BioSpecimenCommonCode.jsp" %>
-<% 
-		String parentUrl = null;
+<%
+	String parentUrl = null;
 		String cpId = null;
 		List siteList = (List)request.getAttribute(Constants.SITELIST);
 		List collectionProtocolList = (List)request.getAttribute(Constants.PROTOCOL_LIST);
@@ -59,7 +59,7 @@ tr#hiddenCombo
 		String formName, pageView=operation,editViewButton="buttons."+Constants.EDIT;
 		boolean readOnlyValue=false,readOnlyForAll=false;
 		String pageOf = (String)request.getAttribute(Constants.PAGEOF);
-				
+		
 		String staticEntityName=null;
 		staticEntityName = AnnotationConstants.ENTITY_NAME_PARTICIPANT;
 		//Falguni:Performance Enhancement.
@@ -71,25 +71,25 @@ tr#hiddenCombo
 		 pageView=operation;
 		if(operation.equals(Constants.EDIT))
 		{
-			editViewButton="buttons."+Constants.VIEW;
-			formName = Constants.PARTICIPANT_EDIT_ACTION;
-			readOnlyValue=true;
-			if(pageOf.equals(Constants.QUERY))
-				formName = Constants.QUERY_PARTICIPANT_EDIT_ACTION + "?pageOf="+pageOf;
-			if(pageOf.equals(Constants.PAGE_OF_PARTICIPANT_CP_QUERY))
-			{
-				formName = Constants.CP_QUERY_PARTICIPANT_EDIT_ACTION + "?pageOf="+pageOf;
-			}
+	editViewButton="buttons."+Constants.VIEW;
+	formName = Constants.PARTICIPANT_EDIT_ACTION;
+	readOnlyValue=true;
+	if(pageOf.equals(Constants.QUERY))
+		formName = Constants.QUERY_PARTICIPANT_EDIT_ACTION + "?pageOf="+pageOf;
+	if(pageOf.equals(Constants.PAGE_OF_PARTICIPANT_CP_QUERY))
+	{
+		formName = Constants.CP_QUERY_PARTICIPANT_EDIT_ACTION + "?pageOf="+pageOf;
+	}
 		}
 		else
 		{
-			formName = Constants.PARTICIPANT_LOOKUP_ACTION;
-			if(pageOf.equals(Constants.PAGE_OF_PARTICIPANT_CP_QUERY))
-			{
-				formName = Constants.CP_QUERY_PARTICIPANT_LOOKUP_ACTION;
-			}
+	formName = Constants.PARTICIPANT_LOOKUP_ACTION;
+	if(pageOf.equals(Constants.PAGE_OF_PARTICIPANT_CP_QUERY))
+	{
+		formName = Constants.CP_QUERY_PARTICIPANT_LOOKUP_ACTION;
+	}
 
-			readOnlyValue=false;
+	readOnlyValue=false;
 		}
 
 
@@ -103,39 +103,37 @@ tr#hiddenCombo
 		int regID = 0;
 		if(obj != null && obj instanceof ParticipantForm)
 		{
-			ParticipantForm form = (ParticipantForm)obj;
-			
-			map = form.getValues();
-			mapCollectionProtocolRegistration = form.getCollectionProtocolRegistrationValues();
-			noOfRows = form.getValueCounter();
-			noOrRowsCollectionProtocolRegistration = form.getCollectionProtocolRegistrationValueCounter();
-			currentBirthDate = form.getBirthDate(); 
-			currentDeathDate = form.getDeathDate();
+	ParticipantForm form = (ParticipantForm)obj;
+	
+	map = form.getValues();
+	mapCollectionProtocolRegistration = form.getCollectionProtocolRegistrationValues();
+	noOfRows = form.getValueCounter();
+	noOrRowsCollectionProtocolRegistration = form.getCollectionProtocolRegistrationValueCounter();
+	currentBirthDate = form.getBirthDate(); 
+	currentDeathDate = form.getDeathDate();
 		}
 		else 
 		{
-			Object obj1 = request.getAttribute("viewSurgicalPathologyReportForm");
-			if(obj1 != null && obj1 instanceof ViewSurgicalPathologyReportForm)
-			{
-				ViewSurgicalPathologyReportForm viewSPRForm = (ViewSurgicalPathologyReportForm)obj1;
-				participantId = String.valueOf(viewSPRForm.getParticipantIdForReport());
-			}
+	Object obj1 = request.getAttribute("viewSurgicalPathologyReportForm");
+	if(obj1 != null && obj1 instanceof ViewSurgicalPathologyReportForm)
+	{
+		ViewSurgicalPathologyReportForm viewSPRForm = (ViewSurgicalPathologyReportForm)obj1;
+		participantId = String.valueOf(viewSPRForm.getParticipantIdForReport());
+	}
 		}
 	
 		if(noOfRows == 0)
 		{
-			noOfRows =1;
+	noOfRows =1;
 		}
 		
 		if(operation.equals(Constants.ADD))
 		{
-			if(noOrRowsCollectionProtocolRegistration == 0)
-			{
-				noOrRowsCollectionProtocolRegistration =1;
-			}
+	if(noOrRowsCollectionProtocolRegistration == 0)
+	{
+		noOrRowsCollectionProtocolRegistration =1;
+	}
 		}
-		
-	
 %>
 
 <head>
@@ -152,17 +150,17 @@ tr#hiddenCombo
 	</script>
 	
 	<%
-	String participantIdentifier="0";
-	List columnList = (List) request.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
-	List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
-	
-		
-	String title = "ParticipantList";
+			String participantIdentifier="0";
+			List columnList = (List) request.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
+			List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
+			
+				
+			String title = "ParticipantList";
 
-	boolean isSpecimenData = false;
+			boolean isSpecimenData = false;
 
-	int IDCount = 0;
-	%>
+			int IDCount = 0;
+		%>
 	
 	<script language="JavaScript">
 		//function to insert a row in the inner block
@@ -197,18 +195,15 @@ tr#hiddenCombo
 			sname = sname + "<input type='hidden' name='" + identifier + "' value='' id='" + identifier + "'>";
 			var name = "value(ParticipantMedicalIdentifier:" + (q+1) + "_Site_id)";
 			sname = sname +"<select name='" + name + "' size='1' class='formFieldSized12' id='" + name + "' onmouseover=showTip(this.id) onmouseout=hideTip(this.id)>";
-			<%
-				if(siteList!=null)
+			<%if(siteList!=null)
 				{
 					Iterator iterator = siteList.iterator();
 					while(iterator.hasNext())
 					{
-						NameValueBean bean = (NameValueBean)iterator.next();
-			%>
+						NameValueBean bean = (NameValueBean)iterator.next();%>
 						sname = sname + "<option value='<%=bean.getValue()%>'><%=bean.getName()%></option>";
-			<%		}
-				}
-			%>
+			<%}
+				}%>
 			sname = sname + "</select>";
 			spreqtype.innerHTML="" + sname;
 		
@@ -319,14 +314,10 @@ tr#hiddenCombo
 					var consentResponseKey = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:" + index +"_isConsentAvailable)";;
 					if(responseString=="<%=Constants.PARTICIPANT_CONSENT_ENTER_RESPONSE%>")
 					{
-						<%
-						if(operation.equals(Constants.EDIT))
-						{
-						%>
+						<%if(operation.equals(Constants.EDIT))
+						{%>
 							responseString = "<%=Constants.PARTICIPANT_CONSENT_EDIT_RESPONSE%>";
-						<%
-						}
-						%>
+						<%}%>
 						spanTag.innerHTML="";
 						if(anchorTag == null)
 						{
@@ -398,9 +389,7 @@ tr#hiddenCombo
 			{%>
 					document.forms[0].forwardTo.value="pageOfParticipantCPQuery";
 					document.forms[0].action="CPQueryParticipantRegistrationSelect.do?operation=edit&pageOf=pageOfParticipantCPQuery";
-			<%
-			}
-			%>
+			<%}%>
 			
 			document.forms[0].radioValue.value="";
 			for (var i = 0 ; i < document.forms[0].chkName.length; i++)
@@ -477,7 +466,7 @@ tr#hiddenCombo
 		//View SPR Vijay pande
 		function viewSPR()
 		{
-			<% Long reportId=(Long)session.getAttribute(Constants.IDENTIFIED_REPORT_ID); %>
+			<%Long reportId=(Long)session.getAttribute(Constants.IDENTIFIED_REPORT_ID);%>
 			var reportId='<%=reportId%>';
 			if(reportId==null || reportId==-1)
 			{
@@ -531,16 +520,16 @@ tr#hiddenCombo
 <html:form action="<%=formName%>">
 <html:hidden property="cpId" />
 	<%
-	if(pageView.equals("add"))
-	{
+		if(pageView.equals("add"))
+		{
 	%>
 		<%@ include file="EditParticipant.jsp" %>		
 	<%
-	}
-	%>
+				}
+			%>
 	<%
-	if(pageView.equals("edit"))
-	{
+		if(pageView.equals("edit"))
+		{
 	%>
 		<%@ include file="EditParticipant.jsp" %>
 	<%

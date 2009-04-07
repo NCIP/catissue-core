@@ -27,7 +27,7 @@ import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.action.BaseAction;
 
@@ -121,18 +121,18 @@ public class ScgEventsAjaxHandlerAction extends BaseAction
 		xmlData.append("</CollectorName>");
 		
 		xmlData.append("<CollectionDate>");
-		xmlData.append(Utility.parseDateToString(collectionEventParameters.getTimestamp(),Variables.dateFormat));
+		xmlData.append(AppUtility.parseDateToString(collectionEventParameters.getTimestamp(),Variables.dateFormat));
 		xmlData.append("</CollectionDate>");
 		
 		Calendar calender = Calendar.getInstance();
 		calender.setTime(collectionEventParameters.getTimestamp());
 		
 		xmlData.append("<CollectionTimeHours>");
-		xmlData.append(Utility.toString(Integer.toString( calender.get(Calendar.HOUR_OF_DAY))));
+		xmlData.append(AppUtility.toString(Integer.toString( calender.get(Calendar.HOUR_OF_DAY))));
 		xmlData.append("</CollectionTimeHours>");  
 		
 		xmlData.append("<CollectionTimeMinutes>");
-		xmlData.append(Utility.toString(Integer.toString(calender.get(Calendar.MINUTE))));
+		xmlData.append(AppUtility.toString(Integer.toString(calender.get(Calendar.MINUTE))));
 		xmlData.append("</CollectionTimeMinutes>");
 		
 		xmlData.append("<CollectionProcedure>");
@@ -146,8 +146,8 @@ public class ScgEventsAjaxHandlerAction extends BaseAction
 		xmlData.append("<CollectionComments>");
 		/* Bug Id: 4134
 		 Patch ID: 4134_2			
-		 Description: Added Utility.toString()		*/
-		xmlData.append(Utility.toString(collectionEventParameters.getComment()));
+		 Description: Added AppUtility.toString()		*/
+		xmlData.append(AppUtility.toString(collectionEventParameters.getComment()));
 		xmlData.append("</CollectionComments>");	
 		
 		return xmlData;
@@ -167,18 +167,18 @@ public class ScgEventsAjaxHandlerAction extends BaseAction
 		xmlData.append("</ReceiverName>");
 		
 		xmlData.append("<ReceivedDate>");
-		xmlData.append(Utility.parseDateToString(receivedEventParameters.getTimestamp(),Variables.dateFormat));
+		xmlData.append(AppUtility.parseDateToString(receivedEventParameters.getTimestamp(),Variables.dateFormat));
 		xmlData.append("</ReceivedDate>");
 		
 		Calendar calender = Calendar.getInstance();
 		calender.setTime(receivedEventParameters.getTimestamp());
 		
 		xmlData.append("<ReceivedTimeHours>");
-		xmlData.append(Utility.toString(Integer.toString( calender.get(Calendar.HOUR_OF_DAY))));
+		xmlData.append(AppUtility.toString(Integer.toString( calender.get(Calendar.HOUR_OF_DAY))));
 		xmlData.append("</ReceivedTimeHours>");  
 		
 		xmlData.append("<ReceivedTimeMinutes>");
-		xmlData.append(Utility.toString(Integer.toString(calender.get(Calendar.MINUTE))));
+		xmlData.append(AppUtility.toString(Integer.toString(calender.get(Calendar.MINUTE))));
 		xmlData.append("</ReceivedTimeMinutes>");
 		
 		xmlData.append("<ReceivedQuality>");
@@ -188,9 +188,9 @@ public class ScgEventsAjaxHandlerAction extends BaseAction
 		xmlData.append("<ReceivedComments>");
 		/*Bug Id: 4134
 	 	Patch ID: 4134_1			
-	 	Description: Added Utility.toString()		
+	 	Description: Added AppUtility.toString()		
 		*/
-		xmlData.append(Utility.toString(receivedEventParameters.getComment()));
+		xmlData.append(AppUtility.toString(receivedEventParameters.getComment()));
 		xmlData.append("</ReceivedComments>");	
 		
 		return xmlData;

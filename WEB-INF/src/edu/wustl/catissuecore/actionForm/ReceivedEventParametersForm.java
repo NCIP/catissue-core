@@ -15,7 +15,7 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
-import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
@@ -80,7 +80,7 @@ public class ReceivedEventParametersForm extends SpecimenEventParametersForm
 	{
 		super.setAllValues(abstractDomain);
 		ReceivedEventParameters receivedEventParameterObject = (ReceivedEventParameters)abstractDomain ;
-		this.receivedQuality =  Utility.toString(receivedEventParameterObject.getReceivedQuality()); 
+		this.receivedQuality =  AppUtility.toString(receivedEventParameterObject.getReceivedQuality()); 
 	}
 	
 	/**

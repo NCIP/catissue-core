@@ -20,7 +20,7 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.domain.EmbeddedEventParameters;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
-import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
@@ -75,7 +75,7 @@ public class EmbeddedEventParametersForm extends SpecimenEventParametersForm
 	{
 		super.setAllValues(abstractDomain);
 		EmbeddedEventParameters embeddedEventParametersObject = (EmbeddedEventParameters)abstractDomain ;
-		this.embeddingMedium = Utility.toString(embeddedEventParametersObject.getEmbeddingMedium());
+		this.embeddingMedium = AppUtility.toString(embeddedEventParametersObject.getEmbeddingMedium());
 	}
 	
 	

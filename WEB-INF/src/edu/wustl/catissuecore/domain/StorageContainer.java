@@ -16,7 +16,7 @@ import java.util.Map;
 import edu.wustl.catissuecore.actionForm.StorageContainerForm;
 import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.bizlogic.IActivityStatus;
@@ -396,7 +396,7 @@ public class StorageContainer extends Container implements IActivityStatus
 		StorageContainerForm form = (StorageContainerForm) abstractForm;
 		this.name = form.getContainerName();
 		this.noOfContainers = new Integer(form.getNoOfContainers());
-		if (Utility.toString(form.getDefaultTemperature()).trim().length() > 0)
+		if (AppUtility.toString(form.getDefaultTemperature()).trim().length() > 0)
 		{
 			this.tempratureInCentigrade = new Double(form.getDefaultTemperature());
 		}
@@ -584,7 +584,7 @@ public class StorageContainer extends Container implements IActivityStatus
 					Logger.out.debug("class Id :" + specimenClassArr[i]);
 					if (specimenClassArr[i].equals("-1"))
 					{
-						holdsSpecimenClassCollection.addAll(Utility.getSpecimenClassTypes());
+						holdsSpecimenClassCollection.addAll(AppUtility.getSpecimenClassTypes());
 						break;
 					}
 					else

@@ -14,7 +14,7 @@
 <%@ page language="java" isELIgnored="false" %>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants" %>
-<%@ page import="edu.wustl.catissuecore.util.global.Utility" %>
+<%@ page import="edu.wustl.catissuecore.util.global.AppUtility" %>
 <%@ page import="java.lang.Integer" %>
 <%@ page import="edu.wustl.common.util.tag.ScriptGenerator" %>
 

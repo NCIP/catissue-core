@@ -160,7 +160,7 @@ public class HarvardSrubberDeidentifier extends AbstractDeidentifier
 		
 		Element firstName=getElement(CaTIESConstants.TAG_FIRST_NAME, participant.getFirstName());
 		Element lastName=getElement(CaTIESConstants.TAG_LAST_NAME, participant.getLastName());
-		Element dateOfBirth=getElement(CaTIESConstants.TAG_DATE_OF_BIRTH, edu.wustl.catissuecore.util.global.Utility.toString(participant.getBirthDate()));
+		Element dateOfBirth=getElement(CaTIESConstants.TAG_DATE_OF_BIRTH, edu.wustl.catissuecore.util.global.AppUtility.toString(participant.getBirthDate()));
 		Element ssn=getElement(CaTIESConstants.TAG_SSN, participant.getSocialSecurityNumber());
 		Element accessionNumber=getElement(CaTIESConstants.TAG_ACCESSION_NUMBER, identifiedReport.getSpecimenCollectionGroup().getSurgicalPathologyNumber());
 		Collection<ParticipantMedicalIdentifier> participantMedicalIdentifierCollection=participant.getParticipantMedicalIdentifierCollection();

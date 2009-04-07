@@ -6,9 +6,9 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
-<%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
+<%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.AliquotForm"%>
-<%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
+<%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.catissuecore.domain.Specimen"%>
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
@@ -33,12 +33,15 @@
 	if(request.getAttribute(Constants.PARENT_SPECIMEN_ID) != null )
 	{
 		String parentSPId = (String) request.getAttribute(Constants.PARENT_SPECIMEN_ID);
-		nodeId = nodeId+parentSPId;%>
+		nodeId = nodeId+parentSPId;
+%>
     
 		<script language="javascript">
 			refreshTree('<%=Constants.CP_AND_PARTICIPANT_VIEW%>','<%=Constants.CP_TREE_VIEW%>','<%=Constants.CP_SEARCH_CP_ID%>','<%=Constants.CP_SEARCH_PARTICIPANT_ID%>','<%=nodeId%>');			
 		</script>
-	<%}}%>
+	<%
+		}}
+	%>
 
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 <link href="css/catissue_suite.css" rel="stylesheet" type="text/css" /> 
@@ -100,19 +103,19 @@
         
         <tr>
 		<%
-	AliquotForm form = (AliquotForm)request.getAttribute("aliquotForm");
-	String unit = "";
-	String conc = "";
-	if(form.getConcentration()!=null)
-	{
-		conc = form.getConcentration();
-	}
+			AliquotForm form = (AliquotForm)request.getAttribute("aliquotForm");
+			String unit = "";
+			String conc = "";
+			if(form.getConcentration()!=null)
+			{
+				conc = form.getConcentration();
+			}
 
-	if(form != null)
-	{
-		unit = Utility.getUnit(form.getClassName(),form.getType());
-	}
-%>
+			if(form != null)
+			{
+				unit = AppUtility.getUnit(form.getClassName(),form.getType());
+			}
+		%>
           <td colspan="2" align="left" class="tr_bg_blue1"><span class="blue_ar_b"> &nbsp;<bean:message key="aliquots.summaryTitle"/></span></td>
         </tr>
 		 <tr>

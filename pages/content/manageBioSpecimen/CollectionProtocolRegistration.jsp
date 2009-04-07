@@ -4,7 +4,7 @@
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.CollectionProtocolRegistrationForm"%>
-<%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
+<%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 <%@ page import="java.util.*"%>	  
 <%@ page import="edu.wustl.catissuecore.bean.ConsentBean"%>
@@ -21,37 +21,36 @@
 		</script>
 <!-- Mandar 11-Aug-06 : calendar changes end -->
 <%
-	
-			String pageOf = (String)request.getAttribute(Constants.PAGEOF);
+	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
 	   		Object obj = request.getAttribute("collectionProtocolRegistrationForm");
-			CollectionProtocolRegistrationForm form =null;
-			String currentRegistrationDate = "";
-			String signedConsentDate = "";
-			String selectProperty="";
-			if(obj != null && obj instanceof CollectionProtocolRegistrationForm)
-			{
-				form = (CollectionProtocolRegistrationForm)obj;
-				currentRegistrationDate = form.getRegistrationDate();  
-				signedConsentDate=form.getConsentDate();
-				
-				if(currentRegistrationDate == null)
-				{
-					currentRegistrationDate = "";
-			}
-				if(signedConsentDate == null)
-				{
-					signedConsentDate = "";
-				}
-					
-			}
-				String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
-				boolean isAddNew = false;
-				
-			    String operation = (String) request.getAttribute(Constants.OPERATION);
+	CollectionProtocolRegistrationForm form =null;
+	String currentRegistrationDate = "";
+	String signedConsentDate = "";
+	String selectProperty="";
+	if(obj != null && obj instanceof CollectionProtocolRegistrationForm)
+	{
+		form = (CollectionProtocolRegistrationForm)obj;
+		currentRegistrationDate = form.getRegistrationDate();  
+		signedConsentDate=form.getConsentDate();
+		
+		if(currentRegistrationDate == null)
+		{
+			currentRegistrationDate = "";
+	}
+		if(signedConsentDate == null)
+		{
+			signedConsentDate = "";
+		}
+			
+	}
+		String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
+		boolean isAddNew = false;
+		
+	    String operation = (String) request.getAttribute(Constants.OPERATION);
 		        String reqPath = (String)request.getAttribute(Constants.REQ_PATH);
 		        String appendingPath = "/CollectionProtocolRegistration.do?operation=add&pageOf=pageOfCollectionProtocolRegistration";
-				if (reqPath != null)
-					appendingPath = reqPath + "|/CollectionProtocolRegistration.do?operation=add&pageOf=pageOfCollectionProtocolRegistration";
+		if (reqPath != null)
+			appendingPath = reqPath + "|/CollectionProtocolRegistration.do?operation=add&pageOf=pageOfCollectionProtocolRegistration";
 		        
 		        String formName;
 
@@ -59,30 +58,30 @@
 		        if (operation.equals(Constants.EDIT))
 		        {						
 		            formName = Constants.COLLECTION_PROTOCOL_REGISTRATION_EDIT_ACTION;
-					if(pageOf.equals(Constants.PAGE_OF_COLLECTION_PROTOCOL_REGISTRATION_CP_QUERY))
-					{
-						formName = Constants.CP_QUERY_COLLECTION_PROTOCOL_REGISTRATION_EDIT_ACTION + "?pageOf="+pageOf;
-					}
+			if(pageOf.equals(Constants.PAGE_OF_COLLECTION_PROTOCOL_REGISTRATION_CP_QUERY))
+			{
+				formName = Constants.CP_QUERY_COLLECTION_PROTOCOL_REGISTRATION_EDIT_ACTION + "?pageOf="+pageOf;
+			}
 		            readOnlyValue = false;
 		        }
 		        else
 		        {
 		            formName = Constants.COLLECTIONP_ROTOCOL_REGISTRATION_ADD_ACTION;
-					if(pageOf.equals(Constants.PAGE_OF_COLLECTION_PROTOCOL_REGISTRATION_CP_QUERY))
-					{
-						formName = Constants.CP_QUERY_COLLECTION_PROTOCOL_REGISTRATION_ADD_ACTION + "?pageOf="+pageOf;
-					}
+			if(pageOf.equals(Constants.PAGE_OF_COLLECTION_PROTOCOL_REGISTRATION_CP_QUERY))
+			{
+				formName = Constants.CP_QUERY_COLLECTION_PROTOCOL_REGISTRATION_ADD_ACTION + "?pageOf="+pageOf;
+			}
 		            readOnlyValue = false;
 		        }
-
 %>
 
 <head>
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
-<%if(pageOf.equals(Constants.PAGE_OF_COLLECTION_PROTOCOL_REGISTRATION_CP_QUERY))
+<%
+	if(pageOf.equals(Constants.PAGE_OF_COLLECTION_PROTOCOL_REGISTRATION_CP_QUERY))
 	{
 	String participantId = (String)request.getAttribute(Constants.CP_SEARCH_PARTICIPANT_ID);
-	%>
+%>
 		<script language="javascript">
 			/*var cpId = window.parent.frames['<%=Constants.CP_AND_PARTICIPANT_VIEW%>'].document.getElementById("cpId").value;
 			<%if(participantId != null){%>
@@ -97,7 +96,9 @@
 		    top.frames["cpAndParticipantView"].refreshCpParticipants();
 		
 		</script>
-	<%}%>
+	<%
+		}
+	%>
 
 <script language="JavaScript">
 
@@ -155,6 +156,7 @@
 </script>		
 </head>
 <%
+	
 %>
 <%@ include file="/pages/content/common/ActionErrors.jsp" %>
 <html:form action="<%=formName%>">
@@ -165,7 +167,7 @@
 			String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms[0].activityStatus)";
 			String normalSubmit = normalSubmitFunctionName + ","+confirmDisableFuncName;
 			String forwardToSubmit = forwardToSubmitFuctionName + ","+confirmDisableFuncName;
-	%>	
+		%>	
 	
 		
 	<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
@@ -284,11 +286,11 @@
 						         <img src="images\calendar.gif" width=24 height=22 border=0></a>
 -->
 <%
-	 if(currentRegistrationDate.trim().length() > 0)
+	if(currentRegistrationDate.trim().length() > 0)
 	{
-			Integer registrationYear = new Integer(Utility.getYear(currentRegistrationDate ));
-			Integer registrationMonth = new Integer(Utility.getMonth(currentRegistrationDate ));
-			Integer registrationDay = new Integer(Utility.getDay(currentRegistrationDate ));
+	Integer registrationYear = new Integer(AppUtility.getYear(currentRegistrationDate ));
+	Integer registrationMonth = new Integer(AppUtility.getMonth(currentRegistrationDate ));
+	Integer registrationDay = new Integer(AppUtility.getDay(currentRegistrationDate ));
 %>
 			<ncombo:DateTimeComponent name="registrationDate"
 									  id="registrationDate"

@@ -14,7 +14,7 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.domain.AbstractDomainObject;
@@ -599,7 +599,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 						ApplicationProperties.getValue("specimen.type")));
 			}
 
-			if (!Validator.isEnumeratedValue(Utility.getSpecimenTypes(this.className), this.type))
+			if (!Validator.isEnumeratedValue(AppUtility.getSpecimenTypes(this.className), this.type))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.invalid",
 						ApplicationProperties.getValue("specimen.subType")));
@@ -610,7 +610,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 				try
 				{
 					quantity = new BigDecimal(quantity).toPlainString();
-					if(Utility.isQuantityDouble(className,type))
+					if(AppUtility.isQuantityDouble(className,type))
         			{						
         		        if(!validator.isDouble(quantity,true))
         		        {
@@ -644,7 +644,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 					try
 					{
 						quantityPerAliquot = new BigDecimal(quantityPerAliquot).toPlainString();
-						if (Utility.isQuantityDouble(this.className, this.type))
+						if (AppUtility.isQuantityDouble(this.className, this.type))
 						{
 							if (!validator.isDouble(quantityPerAliquot.trim()))
 							{
@@ -851,7 +851,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 							try
 							{
 								mapValue = new BigDecimal(mapValue).toPlainString();
-								if(Utility.isQuantityDouble(className,type))
+								if(AppUtility.isQuantityDouble(className,type))
 			        			{						
 			        		        if(!validator.isDouble(mapValue,true))
 			        		        {
