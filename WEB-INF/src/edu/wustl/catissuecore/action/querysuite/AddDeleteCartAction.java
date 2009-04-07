@@ -25,7 +25,7 @@ import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
 import edu.wustl.common.dao.QuerySessionData;
 import edu.wustl.common.querysuite.queryobject.impl.metadata.SelectedColumnsMetadata;
-import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.dao.exception.DAOException;
 
 /**
  * @author santhoshkumar_c
