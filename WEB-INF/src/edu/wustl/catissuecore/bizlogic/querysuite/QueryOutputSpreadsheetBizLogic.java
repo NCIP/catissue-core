@@ -44,7 +44,7 @@ import edu.wustl.common.querysuite.queryobject.impl.metadata.QueryOutputTreeAttr
 import edu.wustl.common.querysuite.queryobject.impl.metadata.SelectedColumnsMetadata;
 import edu.wustl.common.querysuite.utils.QueryUtility;
 import edu.wustl.common.util.Utility;
-import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.dao.exception.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
 /**

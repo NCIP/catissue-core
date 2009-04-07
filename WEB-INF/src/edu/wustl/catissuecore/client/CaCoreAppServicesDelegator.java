@@ -53,7 +53,7 @@ import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.util.Permissions;
 import edu.wustl.common.util.XMLPropertyHandler;
-import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.dao.exception.DAOException;
 import edu.wustl.common.util.dbManager.DBUtil;
 import edu.wustl.common.util.dbManager.HibernateMetaData;
 import edu.wustl.common.util.global.PasswordManager;

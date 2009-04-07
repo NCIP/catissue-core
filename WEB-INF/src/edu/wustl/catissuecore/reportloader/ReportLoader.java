@@ -26,7 +26,7 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.dao.exception.DAOException;
 import edu.wustl.common.util.logger.Logger;
 import gov.nih.nci.system.applicationservice.ApplicationException;
 

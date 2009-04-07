@@ -2,7 +2,6 @@ package edu.wustl.catissuecore.bizlogic;
 
 import java.util.List;
 
-import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.exception.BizLogicException;

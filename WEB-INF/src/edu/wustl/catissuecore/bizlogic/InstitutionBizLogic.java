@@ -72,7 +72,7 @@ public class InstitutionBizLogic extends DefaultBizLogic
 	/**
 	 * Called from DefaultBizLogic to get ObjectId for authorization check
 	 * (non-Javadoc)
-	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getObjectId(edu.wustl.common.dao.AbstractDAO, java.lang.Object)
+	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getObjectId(edu.wustl.common.dao.DAO, java.lang.Object)
 	 */
 	public String getObjectId(DAO dao, Object domainObject) 
 	{

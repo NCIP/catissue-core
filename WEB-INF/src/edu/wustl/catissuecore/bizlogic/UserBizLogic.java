@@ -23,10 +23,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
-import org.hibernate.Session;
-
 import edu.common.dynamicextensions.util.global.Variables;
-import edu.wustl.catissuecore.action.querysuite.GetDagViewDataAction;
 import edu.wustl.catissuecore.domain.CancerResearchGroup;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Department;
@@ -44,8 +41,6 @@ import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.bizlogic.DefaultBizLogic;
-import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
@@ -62,7 +57,6 @@ import edu.wustl.dao.DAO;
 import edu.wustl.dao.HibernateDAO;
 import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
-import edu.wustl.dao.daofactory.DAOFactory;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.security.beans.SecurityDataBean;
 import edu.wustl.security.exception.SMException;
@@ -2051,7 +2045,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 		 * his/her details e.g. Password 
 		 * (non-Javadoc)
 		 * @throws BizLogicException 
-		 * @see edu.wustl.common.bizlogic.DefaultBizLogic#isAuthorized(edu.wustl.common.dao.AbstractDAO, java.lang.Object, edu.wustl.common.beans.SessionDataBean)
+		 * @see edu.wustl.common.bizlogic.DefaultBizLogic#isAuthorized(edu.wustl.common.dao.DAO, java.lang.Object, edu.wustl.common.beans.SessionDataBean)
 		 */
 		public boolean isAuthorized(DAO dao, Object domainObject, SessionDataBean sessionDataBean) throws BizLogicException
 		{

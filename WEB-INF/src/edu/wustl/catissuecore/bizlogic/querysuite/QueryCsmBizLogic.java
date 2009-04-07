@@ -21,7 +21,7 @@ import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.dao.JDBCDAO;
 import edu.wustl.common.dao.queryExecutor.PagenatedResultData;
 import edu.wustl.common.querysuite.queryobject.impl.OutputTreeDataNode;
-import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.dao.exception.DAOException;
 import edu.wustl.common.util.dbManager.DBUtil;
 
 

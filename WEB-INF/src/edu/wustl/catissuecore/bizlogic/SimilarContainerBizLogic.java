@@ -316,9 +316,9 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 	/**
 	 * Called from DefaultBizLogic to get ObjectId for authorization check
 	 * (non-Javadoc)
-	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getObjectId(edu.wustl.common.dao.AbstractDAO, java.lang.Object)
+	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getObjectId(edu.wustl.common.dao.DAO, java.lang.Object)
 	 */
-	public String getObjectId(AbstractDAO dao, Object domainObject) 
+	public String getObjectId(DAO dao, Object domainObject) 
 	{
 		StringBuffer sb = new StringBuffer();
 		sb.append(Site.class.getName());

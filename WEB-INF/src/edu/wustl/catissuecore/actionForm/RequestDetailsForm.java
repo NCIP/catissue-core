@@ -44,7 +44,7 @@ import edu.wustl.catissuecore.util.OrderingSystemUtil;
 import edu.wustl.catissuecore.util.SpecimenComparator;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
-import edu.wustl.common.dao.AbstractDAO;
+import edu.wustl.common.dao.DAO;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.dbManager.HibernateMetaData;
@@ -281,7 +281,7 @@ public class RequestDetailsForm extends AbstractActionForm
 	/**
 	 * @param abstractDomain object
 	 */
-	public void setAllValuesForOrder(AbstractDomainObject abstractDomain, HttpServletRequest request,AbstractDAO dao)
+	public void setAllValuesForOrder(AbstractDomainObject abstractDomain, HttpServletRequest request,DAO dao)
 	{
 		int requestDetailsBeanCounter = 0;
 		int existingArrayBeanCounter = 0;
@@ -426,7 +426,7 @@ public class RequestDetailsForm extends AbstractActionForm
 	/**
 	 * @param definedArrayMap
 	 */
-	private void makeValuesMapForDefinedArray(Map definedArrayMap, List totalSpecimenListInRequestForDropDown,AbstractDAO dao)
+	private void makeValuesMapForDefinedArray(Map definedArrayMap, List totalSpecimenListInRequestForDropDown,DAO dao)
 	{
 		Set keySet = definedArrayMap.keySet();
 		Iterator iter = keySet.iterator();
@@ -456,7 +456,7 @@ public class RequestDetailsForm extends AbstractActionForm
 	 * @param arrayRequestBeanCounter
 	 * @param newSpecimenArrayOrderItem
 	 */
-	private void makeKeysForNewSpecimenArrayOrderItem(int arrayRequestBeanCounter, NewSpecimenArrayOrderItem newSpecimenArrayOrderItem,AbstractDAO dao)
+	private void makeKeysForNewSpecimenArrayOrderItem(int arrayRequestBeanCounter, NewSpecimenArrayOrderItem newSpecimenArrayOrderItem,DAO dao)
 	{
 		String assignStatus = "DefinedArrayRequestBean:" + arrayRequestBeanCounter + "_assignedStatus";
 		String orderItemId = "DefinedArrayRequestBean:" + arrayRequestBeanCounter + "_orderItemId";
@@ -503,7 +503,7 @@ public class RequestDetailsForm extends AbstractActionForm
 	 * @param totalSpecimenListInRequestForDropDown
 	 */
 	private void makeKeysForDefinedArrayContents(int arrayDetailsBeanCounter, SpecimenOrderItem specimenOrderItem,
-			List totalSpecimenListInRequestForDropDown,AbstractDAO dao)
+			List totalSpecimenListInRequestForDropDown,DAO dao)
 	{
 		String assignStatus = "DefinedArrayDetailsBean:" + arrayDetailsBeanCounter + "_assignedStatus";
 		String description = "DefinedArrayDetailsBean:" + arrayDetailsBeanCounter + "_description";
@@ -577,7 +577,7 @@ public class RequestDetailsForm extends AbstractActionForm
 			String requestFor, String specimenId, String assignQty, String instanceOf, String specimenList, String specimenCollGrpId,
 			List totalSpecimenListInRequestForDropDown, String actualSpecimenClass, String actualSpecimenType, String assignStatus,
 			String consentVerificationkey,String canDistributeKey,String rowStatuskey,String selectedSpecimenTypeKey,
-			String selectedSpecimenQuantityUnit,String selectedSpecimenQuantity,AbstractDAO dao)
+			String selectedSpecimenQuantityUnit,String selectedSpecimenQuantity,DAO dao)
 	{
 		if (orderItem instanceof ExistingSpecimenOrderItem)
 		{

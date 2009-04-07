@@ -14,7 +14,6 @@ import edu.wustl.catissuecore.bizlogic.shippingtracking.ShipmentBizLogic;
 import edu.wustl.catissuecore.bizlogic.shippingtracking.ShipmentReceivingBizLogic;
 import edu.wustl.catissuecore.bizlogic.shippingtracking.ShipmentRequestBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.querysuite.CatissuecoreQueryBizLogic;
 import edu.wustl.common.bizlogic.CDEBizLogic;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
@@ -56,7 +55,7 @@ public class BizLogicFactory //extends AbstractBizLogicFactory
     /**
      * Returns DAO instance according to the form bean type.
      * @param FORM_ID The form bean type.
-     * @return An AbstractDAO object.
+     * @return An DAO object.
      */
 	public IBizLogic getBizLogic(int FORM_ID)
     {
@@ -251,7 +250,7 @@ public class BizLogicFactory //extends AbstractBizLogicFactory
     /**
      * Returns DAO instance according to the fully qualified class name.
      * @param className The name of the class.
-     * @return An AbstractDAO object.
+     * @return An DAO object.
      */
     public IBizLogic getBizLogic(String className)
     {

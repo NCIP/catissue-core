@@ -953,7 +953,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		dao.closeSession();
 		
 		
-		AbstractDAO hibernateDao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+		DAO hibernateDao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
 		
 		hibernateDao.openSession(null);
 			
@@ -1293,7 +1293,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 	/**
 	 * Called from DefaultBizLogic to get ObjectId for authorization check
 	 * (non-Javadoc)
-	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getObjectId(edu.wustl.common.dao.AbstractDAO, java.lang.Object)
+	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getObjectId(edu.wustl.common.dao.DAO, java.lang.Object)
 	 */
 	public String getObjectId(DAO dao, Object domainObject) 
 	{
@@ -1352,7 +1352,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 	 * Over-ridden for the case of Non - Admin user should be able to Add 
 	 * Global Participant 
 	 * @throws UserNotAuthorizedException 
-	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#isAuthorized(edu.wustl.common.dao.AbstractDAO, java.lang.Object, edu.wustl.common.beans.SessionDataBean)
+	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#isAuthorized(edu.wustl.common.dao.DAO, java.lang.Object, edu.wustl.common.beans.SessionDataBean)
 	 */
 	public boolean isAuthorized(DAO dao, Object domainObject, SessionDataBean sessionDataBean) throws BizLogicException  
 	{

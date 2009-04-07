@@ -1,7 +1,7 @@
 
 package edu.wustl.catissuecore.test;
 
-import edu.wustl.common.dao.AbstractDAO;
+import edu.wustl.common.dao.DAO;
 import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.dao.HibernateDAO;
 import edu.wustl.common.dao.JDBCDAO;
@@ -30,9 +30,9 @@ public class MockDAOFactory extends DAOFactory
 	 * @param daoType type of DAO
 	 * @return DAO Interface 
 	 */
-   public AbstractDAO getDAO(int daoType)
+   public DAO getDAO(int daoType)
     {
-        AbstractDAO dao = null;
+        DAO dao = null;
         switch (daoType)
         {
             case Constants.HIBERNATE_DAO :
