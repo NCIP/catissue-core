@@ -38,15 +38,20 @@ import edu.common.dynamicextensions.entitymanager.EntityManager;
 import edu.common.dynamicextensions.entitymanager.EntityManagerInterface;
 import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationException;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
-import edu.common.dynamicextensions.util.global.Constants.AssociationDirection;
-import edu.common.dynamicextensions.util.global.Constants.AssociationType;
-import edu.common.dynamicextensions.util.global.Constants.Cardinality;
+import edu.common.dynamicextensions.util.global.DEConstants.AssociationDirection;
+import edu.common.dynamicextensions.util.global.DEConstants.AssociationType;
+import edu.common.dynamicextensions.util.global.DEConstants.Cardinality;
 import edu.wustl.cab2b.server.path.PathConstants;
 import edu.wustl.cab2b.server.path.PathFinder;
 import edu.wustl.catissuecore.annotations.PathObject;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.exception.BizLogicException;
-import edu.wustl.common.util.dbManager.DBUtil;
+import edu.wustl.common.exception.ErrorKey;
+import edu.wustl.common.util.global.CommonServiceLocator;
+import edu.wustl.dao.DAO;
+import edu.wustl.dao.JDBCDAO;
+import edu.wustl.dao.daofactory.DAOConfigFactory;
+import edu.wustl.dao.exception.DAOException;
 
 /**
  * @author vishvesh_mulay
@@ -82,17 +87,28 @@ public class AnnotationUtil
 
 		//This change is done because when the hierarchy of objects grow in dynamic extensions then NonUniqueObjectException is thrown.
 		//So static entity and dynamic entity are brought in one session and then associated.
-
 		Session session = null;
+		DAO dao = null;
+		
 		try
 		{
-			session = DBUtil.currentSession();
+			String appName = CommonServiceLocator.getInstance().getAppName();
+			dao = DAOConfigFactory.getInstance().getDAOFactory(appName).getDAO();
+			dao.openSession(null);
 		}
-		catch (HibernateException e1)
+		catch (HibernateException exp)
 		{
 			// TODO Auto-generated catch block
-			e1.printStackTrace();
-			throw new BizLogicException("", e1);
+			exp.printStackTrace();
+			ErrorKey errorKey = ErrorKey.getErrorKey("bizlogic.error");
+			throw new BizLogicException(errorKey,exp ,"AnnotationUtil.java :");   
+		}
+		catch (DAOException exp)
+		{
+			// TODO Auto-generated catch block
+			exp.printStackTrace();
+			ErrorKey errorKey = ErrorKey.getErrorKey("bizlogic.error");
+			throw new BizLogicException(errorKey,exp ,"AnnotationUtil.java :");   
 		}
 		AssociationInterface association = null;
 		EntityInterface staticEntity = null;
@@ -157,24 +173,33 @@ public class AnnotationUtil
 
 			addEntitiesToCache(isEntityFromXmi, dynamicEntity, staticEntity);
 		}
-		catch (HibernateException e1)
+		catch (HibernateException exp)
 		{
 			// TODO Auto-generated catch block
-			e1.printStackTrace();
-			throw new BizLogicException("", e1);
+			exp.printStackTrace();
+			ErrorKey errorKey = ErrorKey.getErrorKey("bizlogic.error");
+			throw new BizLogicException(errorKey,exp ,"AnnotationUtil.java :");   
 		}
 		finally
 		{
 			try
 			{
-				DBUtil.closeSession();
+				dao.closeSession();
 			}
-			catch (HibernateException e)
+			catch (HibernateException exp)
 			{
 				// TODO Auto-generated catch block
-				e.printStackTrace();
-				throw new BizLogicException("", e);
+				exp.printStackTrace();
+				ErrorKey errorKey = ErrorKey.getErrorKey("bizlogic.error");
+				throw new BizLogicException(errorKey,exp ,"AnnotationUtil.java :");   
 
+			}
+			catch (DAOException exp)
+			{
+				// TODO Auto-generated catch block
+				exp.printStackTrace();
+				ErrorKey errorKey = ErrorKey.getErrorKey("bizlogic.error");
+				throw new BizLogicException(errorKey,exp ,"AnnotationUtil.java :");   
 			}
 		}
 		return association.getId();
@@ -195,53 +220,67 @@ public class AnnotationUtil
 			DynamicExtensionsApplicationException, DynamicExtensionsSystemException,
 			BizLogicException
 	{
-		Session session = null;
+		String appName = CommonServiceLocator.getInstance().getAppName();
+		DAO dao = null;
+		AssociationInterface association = null;
 		
 		try
 		{
-			session = DBUtil.currentSession();
-		}
-		catch (HibernateException e1)
-		{
-			e1.printStackTrace();
-			throw new BizLogicException("", e1);
-		}
+			dao = DAOConfigFactory.getInstance().getDAOFactory(appName).getDAO();
+			dao.openSession(null);
 		
-		AssociationInterface association = null;
+		
+		
 		EntityInterface staticEntity = null;
 		EntityInterface dynamicEntity = null;
 		
-		try
-		{
-			staticEntity = (EntityInterface) session.load(Entity.class, staticEntityId);
-			dynamicEntity = (EntityInterface) ((Container) session.load(Container.class,
+		staticEntity = (EntityInterface) dao.retrieveById(Entity.class.getName(), staticEntityId);
+		dynamicEntity = (EntityInterface) ((Container) dao.retrieveById(Container.class.getName(),
 					dynamicEntityId)).getAbstractEntity();
 			
-			association = getAssociationForEntity(staticEntity, dynamicEntity);
+		association = getAssociationForEntity(staticEntity, dynamicEntity);
 
-			Set<PathObject> processedPathList = new HashSet<PathObject>();
+		Set<PathObject> processedPathList = new HashSet<PathObject>();
 			
-			addQueryPathsForEntityHierarchy(dynamicEntity, staticEntity, association.getId(), staticEntity.getId(), processedPathList);
+		addQueryPathsForEntityHierarchy(dynamicEntity, staticEntity, association.getId(), staticEntity.getId(), processedPathList);
+		addEntitiesToCache(isEntityFromXmi, dynamicEntity, staticEntity);
 
-			addEntitiesToCache(isEntityFromXmi, dynamicEntity, staticEntity);
 		}
-		catch (HibernateException e1)
+		catch (HibernateException exp)
 		{
 			// TODO Auto-generated catch block
-			e1.printStackTrace();
-			throw new BizLogicException("", e1);
+			exp.printStackTrace();
+			ErrorKey errorKey = ErrorKey.getErrorKey("bizlogic.error");
+			throw new BizLogicException(errorKey,exp ,"AnnotationUtil.java :");   
+		}
+		catch (DAOException exp)
+		{
+			// TODO Auto-generated catch block
+			exp.printStackTrace();
+			ErrorKey errorKey = ErrorKey.getErrorKey("bizlogic.error");
+			throw new BizLogicException(errorKey,exp ,"AnnotationUtil.java :");   
+
 		}
 		finally
 		{
 			try
 			{
-				DBUtil.closeSession();
+				dao.closeSession();
 			}
-			catch (HibernateException e)
+			catch (HibernateException exp)
 			{
 				// TODO Auto-generated catch block
-				e.printStackTrace();
-				throw new BizLogicException("", e);
+				exp.printStackTrace();
+				ErrorKey errorKey = ErrorKey.getErrorKey("bizlogic.error");
+				throw new BizLogicException(errorKey,exp ,"AnnotationUtil.java :");   
+
+			}
+			catch (DAOException exp)
+			{
+				// TODO Auto-generated catch block
+				exp.printStackTrace();
+				ErrorKey errorKey = ErrorKey.getErrorKey("bizlogic.error");
+				throw new BizLogicException(errorKey,exp ,"AnnotationUtil.java :");   
 
 			}
 		}
@@ -326,21 +365,16 @@ public class AnnotationUtil
 		boolean ispathAdded = false;
 		Connection conn = null;
 
+		JDBCDAO jdbcDAO = null;
 		try
 		{
-			conn = DBUtil.getConnection();
-		}
-		catch (HibernateException e1)
-		{
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		PreparedStatement preparedStatement = null;
-		ResultSet resultSet = null;
-		try
-		{
+	
+			jdbcDAO = openSession();
+			PreparedStatement preparedStatement = null;
+			ResultSet resultSet = null;
+		
 			String checkForPathQuery = "select path_id from path where FIRST_ENTITY_ID = ? and LAST_ENTITY_ID = ?";
-			preparedStatement = conn.prepareStatement(checkForPathQuery);
+			preparedStatement = jdbcDAO.getPreparedStatement(checkForPathQuery);
 			preparedStatement.setLong(1, staticEntityId);
 
 			preparedStatement.setLong(2, dynamicEntityId);
@@ -357,6 +391,11 @@ public class AnnotationUtil
 			System.out.println("ispathAdded  ----- " + ispathAdded);
 
 		}
+		catch (DAOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		catch (SQLException e)
 		{
 			// TODO Auto-generated catch block
@@ -367,16 +406,9 @@ public class AnnotationUtil
 
 			try
 			{
-				resultSet.close();
-				preparedStatement.close();
-				DBUtil.closeConnection();
+				closeSession(jdbcDAO);
 			}
-			catch (HibernateException e)
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			catch (SQLException e)
+			catch (DAOException e)
 			{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -570,14 +602,24 @@ public class AnnotationUtil
 	 */
 	private static AssociationInterface getAssociation(EntityInterface targetEntity,
 			AssociationDirection associationDirection, String assoName, RoleInterface sourceRole,
-			RoleInterface targetRole)
+			RoleInterface targetRole) throws BizLogicException 
 	{
-		AssociationInterface association = DomainObjectFactory.getInstance().createAssociation();
-		association.setTargetEntity(targetEntity);
-		association.setAssociationDirection(associationDirection);
-		association.setName(assoName);
-		association.setSourceRole(sourceRole);
-		association.setTargetRole(targetRole);
+		AssociationInterface association = null;
+		try 
+		{
+			association = DomainObjectFactory.getInstance().createAssociation();
+			association.setTargetEntity(targetEntity);
+			association.setAssociationDirection(associationDirection);
+			association.setName(assoName);
+			association.setSourceRole(sourceRole);
+			association.setTargetRole(targetRole);
+		} 
+		catch (DynamicExtensionsSystemException exp) {
+			// TODO Auto-generated catch block
+			exp.printStackTrace();
+			ErrorKey errorKey = ErrorKey.getErrorKey("bizlogic.error");
+			throw new BizLogicException(errorKey,exp ,"AnnotationUtil.java :");   
+		}
 		return association;
 	}
 
@@ -628,12 +670,14 @@ public class AnnotationUtil
 		PreparedStatement statement = null;
 		String query = "";
 		Connection conn = null;
+		JDBCDAO jdbcDAO = null;
 		try
 		{
-			conn = DBUtil.getConnection();
+			jdbcDAO = openSession();
+			
 			query = "select ASSOCIATION_ID from INTRA_MODEL_ASSOCIATION where DE_ASSOCIATION_ID="
 				+ deAssociationId;
-			statement = conn.prepareStatement(query);
+			statement = jdbcDAO.getPreparedStatement(query);
 			resultSet = statement.executeQuery();
 			resultSet.next();
 			Long intraModelAssociationId = resultSet.getLong(1);
@@ -664,18 +708,25 @@ public class AnnotationUtil
 		{
 			e.printStackTrace();
 		}
+		catch (DAOException daoExp)
+		{
+			daoExp.printStackTrace();
+		}
 		finally
 		{
 			try
 			{
 				resultSet.close();
-				statement.close();
-				DBUtil.closeConnection();
+				closeSession(jdbcDAO);
 			}
 			catch (SQLException e)
 			{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			}
+			catch (DAOException daoExp)
+			{
+				daoExp.printStackTrace();
 			}
 
 		}
@@ -692,10 +743,10 @@ public class AnnotationUtil
 		// StringBuffer query = new StringBuffer();
 		Long intraModelAssociationId = getMaxId("ASSOCIATION_ID", "ASSOCIATION");
 		intraModelAssociationId += 1;
-		Connection conn = null;
+		JDBCDAO jdbcDAO = null;
 		try
 		{
-			conn = DBUtil.getConnection();
+			jdbcDAO  = openSession();
 
 			String associationQuery = "insert into ASSOCIATION (ASSOCIATION_ID, ASSOCIATION_TYPE) values ("
 					+ intraModelAssociationId
@@ -717,11 +768,11 @@ public class AnnotationUtil
 			list.add(intraModelQuery);
 			list.add(directPathQuery);
 
-			executeQuery(conn, list);
+			executeQuery(jdbcDAO, list);
 
 			//addIndirectPaths(maxPathId, staticEntityId, dynamicEntityId, intraModelAssociationId,
 					//conn);
-			conn.commit();
+			jdbcDAO.commit();
 		}
 		catch (Exception e)
 		{
@@ -732,14 +783,30 @@ public class AnnotationUtil
 		{
 			try
 			{
-				DBUtil.closeConnection();
+				closeSession(jdbcDAO);
 			}
-			catch (HibernateException e)
+			catch (DAOException e)
 			{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	
+	private static JDBCDAO openSession() throws DAOException
+	{
+		String applicationName = CommonServiceLocator.getInstance().getAppName();
+		JDBCDAO jdbcDAO = DAOConfigFactory.getInstance().getDAOFactory(applicationName).getJDBCDAO();
+		jdbcDAO.openSession(null);
+		
+		return jdbcDAO;
+	}
+	
+	private static JDBCDAO closeSession(JDBCDAO jdbcDAO) throws DAOException
+	{
+		jdbcDAO.closeSession();
+		return jdbcDAO;
 	}
 
 	/**
@@ -849,35 +916,23 @@ public class AnnotationUtil
 	 * @param queryList
 	 * @throws SQLException
 	 */
-	private static void executeQuery(Connection conn, List<String> queryList)
+	private static void executeQuery(JDBCDAO jdbcDAO, List<String> queryList)
 	{
-		Statement statement = null;
+	
 		try
 		{
-			statement = conn.createStatement();
+			
 			for (String query : queryList)
 			{
-				statement.execute(query);
+				jdbcDAO.executeQuery(query);
 			}
 		}
-		catch (SQLException e)
+		catch (DAOException e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		finally
-		{
-			try
-			{
-				statement.close();
-			}
-			catch (SQLException e)
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+		
 	}
 
 	/**
@@ -890,14 +945,12 @@ public class AnnotationUtil
 		String query = "select max(" + columnName + ") from " + tableName;
 		//		HibernateDAO hibernateDAO = (HibernateDAO) DAOFactory.getInstance().getDAO(
 		//				Constants.HIBERNATE_DAO);
-		java.sql.PreparedStatement statement = null;
 		ResultSet resultSet = null;
-		Connection conn = null;
+		JDBCDAO jdbcDAO = null;
 		try
 		{
-			conn = DBUtil.getConnection();
-			statement = conn.prepareStatement(query);
-			resultSet = statement.executeQuery();
+			jdbcDAO = openSession();
+			resultSet = jdbcDAO.getQueryResultSet(query);
 			resultSet.next();
 			Long maxId = resultSet.getLong(1);
 
@@ -913,11 +966,10 @@ public class AnnotationUtil
 			try
 			{
 				resultSet.close();
-				statement.close();
-				DBUtil.closeConnection();
+				closeSession(jdbcDAO);
 
 			}
-			catch (HibernateException e)
+			catch (DAOException e)
 			{
 				// TODO Auto-generated catch block
 				e.printStackTrace();

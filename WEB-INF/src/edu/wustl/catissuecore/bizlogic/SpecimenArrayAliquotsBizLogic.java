@@ -20,16 +20,18 @@ import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IActivityStatus;
-import edu.wustl.common.dao.AbstractDAO;
-import edu.wustl.common.dao.DAO;
-import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.security.exceptions.SMException;
-import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
-import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.Status;
+import edu.wustl.dao.DAO;
+import edu.wustl.dao.JDBCDAO;
+import edu.wustl.dao.QueryWhereClause;
+import edu.wustl.dao.condition.EqualClause;
+import edu.wustl.dao.exception.DAOException;
+import edu.wustl.security.exception.UserNotAuthorizedException;
 
 
 /**
@@ -37,16 +39,18 @@ import edu.wustl.common.util.global.ApplicationProperties;
  * and to inserts all the aliquotes into the database 
  * @author jitendra_agrawal
  */
-public class SpecimenArrayAliquotsBizLogic extends DefaultBizLogic
+public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 {
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean)
-	throws DAOException, UserNotAuthorizedException
+	throws BizLogicException
 	{
+		try
+		{
 		SpecimenArray specimenArray = (SpecimenArray) obj;
 		String specimenKey = "SpecimenArray:";
 		String storageContainerId = "_StorageContainer_id";
 		Map aliquotMap = specimenArray.getAliqoutMap();
-		SpecimenArray parentSpecimenArray = (SpecimenArray) dao.retrieve(SpecimenArray.class.getName(), specimenArray.getId());
+		SpecimenArray parentSpecimenArray = (SpecimenArray) dao.retrieveById(SpecimenArray.class.getName(), specimenArray.getId());
 		SpecimenArrayBizLogic specimenArrayBizLogic = (SpecimenArrayBizLogic) BizLogicFactory
 		.getInstance().getBizLogic(Constants.SPECIMEN_ARRAY_FORM_ID);
 		List positionsToBeAllocatedList = new ArrayList();
@@ -132,50 +136,46 @@ public class SpecimenArrayAliquotsBizLogic extends DefaultBizLogic
 			}
 			aliquotSpecimenArray.setName(label);
 			StorageContainer storageContainerObj = new StorageContainer();
-			try
-			{
-				if (containerId != null)
-				{					
-					storageContainerObj.setId(new Long(containerId));
+			if (containerId != null)
+			{					
+				storageContainerObj.setId(new Long(containerId));
 
-						//check for closed Storage Container
-						checkStatus(dao, storageContainerObj, "Storage Container");
+				//check for closed Storage Container
+				checkStatus(dao, storageContainerObj, "Storage Container");
 
-						StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) BizLogicFactory
-								.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
+				StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) BizLogicFactory
+				.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 
-						//check for all validations on the storage container.
-						storageContainerBizLogic.checkContainer(dao, containerId, posDim1, posDim2,
-								sessionDataBean,false,null);
+				//check for all validations on the storage container.
+				storageContainerBizLogic.checkContainer(dao, containerId, posDim1, posDim2,
+						sessionDataBean,false,null);
 
-						
-						String sourceObjectName = StorageContainer.class.getName();
-						String[] selectColumnName = {"name"};
-						String[] whereColumnName = {"id"}; //"storageContainer."+Constants.SYSTEM_IDENTIFIER
-						String[] whereColumnCondition = {"="};
-						Object[] whereColumnValue = {new Long(containerId)};
-						String joinCondition = null;
 
-						List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
+				String sourceObjectName = StorageContainer.class.getName();
+				String[] selectColumnName = {"name"};
+				//String[] whereColumnName = {"id"}; //"storageContainer."+edu.wustl.common.util.global.Constants.SYSTEM_IDENTIFIER
+				//String[] whereColumnCondition = {"="};
+				//Object[] whereColumnValue = {new Long(containerId)};
+				//String joinCondition = null;
 
-						if (!list.isEmpty())
-						{
-							storageContainerObj.setName((String)list.get(0));
-							aliquotMap.put(storageContainerNameKey,(String)list.get(0));
-						}
-//					}
+				QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
+				queryWhereClause.addCondition(new EqualClause("id", Long.valueOf(containerId)));
+
+				List list = dao.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
+
+				if (!list.isEmpty())
+				{
+					storageContainerObj.setName((String)list.get(0));
+					aliquotMap.put(storageContainerNameKey,(String)list.get(0));
 				}
+				//					}
+			}
 				else
 				{
 					aliquotSpecimenArray.setLocatedAtPosition(null);
 			//		aliquotSpecimenArray.setStorageContainer(null);
 				}
-			}
-			catch (SMException sme)
-			{
-				sme.printStackTrace();
-				throw handleSMException(sme);
-			}
+			
 
 			
 			//Setting the attributes - storage positions, available, acivity status & lineage
@@ -200,13 +200,16 @@ public class SpecimenArrayAliquotsBizLogic extends DefaultBizLogic
 			//aliquotSpecimenArray.setLineage(Constants.ALIQUOT);
 
 			//Inserting an aliquot in the database
-			if (isAuthorized((AbstractDAO)dao, obj, sessionDataBean))
+			if (isAuthorized((DAO)dao, obj, sessionDataBean))
 	        {
-				specimenArrayBizLogic.insert(aliquotSpecimenArray, dao, sessionDataBean);
+				specimenArrayBizLogic.insert(aliquotSpecimenArray,  sessionDataBean);
 	        }
 			else
 		    {
-				throw new UserNotAuthorizedException();
+				ErrorKey errorKey = ErrorKey.getErrorKey("user.not.auth");
+				UserNotAuthorizedException exc = new UserNotAuthorizedException(errorKey, null,
+				"");
+				throw getBizLogicException(exc, "user.not.auth", "User not authorized");
 		    }
 			//postInsert(aliquotSpecimenArray, dao, sessionDataBean);
 			
@@ -217,21 +220,29 @@ public class SpecimenArrayAliquotsBizLogic extends DefaultBizLogic
 		
 		if (parentSpecimenArray != null)
 		{	
-			SpecimenArray oldSpecimenArray = (SpecimenArray) dao.retrieve(SpecimenArray.class.getName(), specimenArray.getId());;
+			SpecimenArray oldSpecimenArray = (SpecimenArray) dao.retrieveById(SpecimenArray.class.getName(), specimenArray.getId());;
 			updateParentSpecimenArray(parentSpecimenArray);
-			if (isAuthorized((AbstractDAO)dao, obj, sessionDataBean))
+			if (isAuthorized((DAO)dao, obj, sessionDataBean))
 			{
-				specimenArrayBizLogic.update(dao, parentSpecimenArray, oldSpecimenArray, sessionDataBean);
+				specimenArrayBizLogic.update(parentSpecimenArray, oldSpecimenArray, sessionDataBean);
 			}
 			else
 		    {
-				throw new UserNotAuthorizedException();
+				ErrorKey errorKey = ErrorKey.getErrorKey("user.not.auth");
+				UserNotAuthorizedException exc = new UserNotAuthorizedException(errorKey, null,
+				"");
+				throw getBizLogicException(exc, "user.not.auth", "User not authorized");
 		    }
 		}
 		
 		//Populate aliquot map with parent specimenArray's data
 		populateParentSpecimenArrayData(aliquotMap, specimenArray, parentSpecimenArray,dao);
 		
+		}
+		catch(Exception daoExp)
+		{
+			throw getBizLogicException(daoExp, "bizlogic.error", "");
+		}
 	}	 
 
 	private void updateParentSpecimenArray(SpecimenArray parentSpecimenArray)
@@ -261,23 +272,30 @@ public class SpecimenArrayAliquotsBizLogic extends DefaultBizLogic
 	 * 
 	 * @param aliquotMap Map
 	 * @param specimenArray SpecimenArray
-	 * @throws DAOException 
+	 * @throws BizLogicException 
 	 */
-	private void populateParentSpecimenArrayData(Map aliquotMap, SpecimenArray specimenArray, SpecimenArray parentSpecimenArray,DAO dao) throws DAOException
+	private void populateParentSpecimenArrayData(Map aliquotMap, SpecimenArray specimenArray, SpecimenArray parentSpecimenArray,DAO dao) throws BizLogicException
 	{
-		aliquotMap.put(Constants.ALIQUOT_SPECIMEN_ARRAY_TYPE, parentSpecimenArray.getSpecimenArrayType().getName());
-		aliquotMap.put(Constants.ALIQUOT_SPECIMEN_CLASS, parentSpecimenArray.getSpecimenArrayType().getSpecimenClass());
-		/**
-		 * Name : Virender
-		 * Reviewer: Prafull
-		 * Retriving specimenObject
-		 * replaced aliquotMap.put(Constants.ALIQUOT_SPECIMEN_TYPES, parentSpecimenArray.getSpecimenArrayType().getSpecimenTypeCollection());
-		 */
-		Collection specimenTypeCollection = (Collection)dao.retrieveAttribute(SpecimenArray.class.getName(),parentSpecimenArray.getId(),"elements(specimenArrayType.specimenTypeCollection)");
-		aliquotMap.put(Constants.ALIQUOT_SPECIMEN_TYPES, specimenTypeCollection);
-		aliquotMap.put(Constants.ALIQUOT_ALIQUOT_COUNTS, String.valueOf(specimenArray.getAliquotCount()));
-		
-		specimenArray.setAliqoutMap(aliquotMap);
+		try
+		{
+			aliquotMap.put(Constants.ALIQUOT_SPECIMEN_ARRAY_TYPE, parentSpecimenArray.getSpecimenArrayType().getName());
+			aliquotMap.put(Constants.ALIQUOT_SPECIMEN_CLASS, parentSpecimenArray.getSpecimenArrayType().getSpecimenClass());
+			/**
+			 * Name : Virender
+			 * Reviewer: Prafull
+			 * Retriving specimenObject
+			 * replaced aliquotMap.put(Constants.ALIQUOT_SPECIMEN_TYPES, parentSpecimenArray.getSpecimenArrayType().getSpecimenTypeCollection());
+			 */
+			Collection specimenTypeCollection = (Collection)dao.retrieveAttribute(SpecimenArray.class,Constants.SYSTEM_IDENTIFIER,parentSpecimenArray.getId(),"elements(specimenArrayType.specimenTypeCollection)");
+			aliquotMap.put(Constants.ALIQUOT_SPECIMEN_TYPES, specimenTypeCollection);
+			aliquotMap.put(Constants.ALIQUOT_ALIQUOT_COUNTS, String.valueOf(specimenArray.getAliquotCount()));
+
+			specimenArray.setAliqoutMap(aliquotMap);
+		}
+		catch(Exception daoExp)
+		{
+			throw getBizLogicException(daoExp, "bizlogic.error", "");
+		}
 	}
 	
 	/**
@@ -288,82 +306,101 @@ public class SpecimenArrayAliquotsBizLogic extends DefaultBizLogic
 	 * @param dao DAO
 	 * @return Collection
 	 */
-	private Collection populateSpecimenArrayContentCollectionForAliquot(SpecimenArray parentSpecimenArray, SpecimenArray aliquotSpecimenArray, int aliquotCount,DAO dao) throws DAOException
+	private Collection populateSpecimenArrayContentCollectionForAliquot(SpecimenArray parentSpecimenArray, SpecimenArray aliquotSpecimenArray, int aliquotCount,DAO dao) throws BizLogicException
 	{
-		Collection parentSpecimenArrayContentCollection = parentSpecimenArray.getSpecimenArrayContentCollection();
-		Collection specimenArrayContentCollection =  new HashSet();		
-		Iterator iter = parentSpecimenArrayContentCollection.iterator();
-		SpecimenArrayContent specimenArrayContent = null;	
-		
-		for(int i=0; iter.hasNext(); i++)
+		try
 		{
-			SpecimenArrayContent parentSpecimenArrayContent = (SpecimenArrayContent) iter.next();
-			specimenArrayContent = new SpecimenArrayContent();
-			
-			/**
-			 * Start: Change for API Search   --- Jitendra 06/10/2006
-			 * In Case of Api Search, previoulsy it was failing since there was default class level initialization 
-			 * on domain object. For example in User object, it was initialized as protected String lastName=""; 
-			 * So we removed default class level initialization on domain object and are initializing in method
-			 * setAllValues() of domain object. But in case of Api Search, default values will not get set 
-			 * since setAllValues() method of domainObject will not get called. To avoid null pointer exception,
-			 * we are setting the default values same as we were setting in setAllValues() method of domainObject.
-			 */			
-			ApiSearchUtil.setSpecimenArrayContentDefault(specimenArrayContent);
-			//End:-  Change for API Search 
-			
-			specimenArrayContent.setSpecimen(parentSpecimenArrayContent.getSpecimen());
-			specimenArrayContent.setPositionDimensionOne(parentSpecimenArrayContent.getPositionDimensionOne());
-			specimenArrayContent.setPositionDimensionTwo(parentSpecimenArrayContent.getPositionDimensionTwo());
-			specimenArrayContent.setSpecimenArray(aliquotSpecimenArray);
-			// Due to Lazy loading instanceOf method was returning false everytime. Fix for bug id:4864
-			// Object is explicitly retrieved from DB
-			Specimen specimen=(Specimen)dao.retrieve(Specimen.class.getName(), parentSpecimenArrayContent.getSpecimen().getId());
-			
-			Double quantity = new Double(0);
-			if (specimen instanceof MolecularSpecimen) 
+			Collection parentSpecimenArrayContentCollection = parentSpecimenArray.getSpecimenArrayContentCollection();
+			Collection specimenArrayContentCollection =  new HashSet();		
+			Iterator iter = parentSpecimenArrayContentCollection.iterator();
+			SpecimenArrayContent specimenArrayContent = null;	
+
+			for(int i=0; iter.hasNext(); i++)
 			{
-				if(aliquotCount > 0)
+				SpecimenArrayContent parentSpecimenArrayContent = (SpecimenArrayContent) iter.next();
+				specimenArrayContent = new SpecimenArrayContent();
+
+				/**
+				 * Start: Change for API Search   --- Jitendra 06/10/2006
+				 * In Case of Api Search, previoulsy it was failing since there was default class level initialization 
+				 * on domain object. For example in User object, it was initialized as protected String lastName=""; 
+				 * So we removed default class level initialization on domain object and are initializing in method
+				 * setAllValues() of domain object. But in case of Api Search, default values will not get set 
+				 * since setAllValues() method of domainObject will not get called. To avoid null pointer exception,
+				 * we are setting the default values same as we were setting in setAllValues() method of domainObject.
+				 */			
+				ApiSearchUtil.setSpecimenArrayContentDefault(specimenArrayContent);
+				//End:-  Change for API Search 
+
+				specimenArrayContent.setSpecimen(parentSpecimenArrayContent.getSpecimen());
+				specimenArrayContent.setPositionDimensionOne(parentSpecimenArrayContent.getPositionDimensionOne());
+				specimenArrayContent.setPositionDimensionTwo(parentSpecimenArrayContent.getPositionDimensionTwo());
+				specimenArrayContent.setSpecimenArray(aliquotSpecimenArray);
+				// Due to Lazy loading instanceOf method was returning false everytime. Fix for bug id:4864
+				// Object is explicitly retrieved from DB
+				Specimen specimen=(Specimen)dao.retrieveById(Specimen.class.getName(), parentSpecimenArrayContent.getSpecimen().getId());
+
+				Double quantity = new Double(0);
+				if (specimen instanceof MolecularSpecimen) 
 				{
-					Double parentInitialQuantity = parentSpecimenArrayContent.getInitialQuantity();
-					Double initialQuantity = parentInitialQuantity.doubleValue()/aliquotCount;
-					specimenArrayContent.setInitialQuantity(initialQuantity);
-					// reset quantity value of parent array content to 0.0
-					//parentSpecimenArrayContent.getInitialQuantity().setValue(Double.valueOf("0"));
+					if(aliquotCount > 0)
+					{
+						Double parentInitialQuantity = parentSpecimenArrayContent.getInitialQuantity();
+						Double initialQuantity = parentInitialQuantity.doubleValue()/aliquotCount;
+						specimenArrayContent.setInitialQuantity(initialQuantity);
+						// reset quantity value of parent array content to 0.0
+						//parentSpecimenArrayContent.getInitialQuantity().setValue(Double.valueOf("0"));
+					}
+
+					specimenArrayContent.setConcentrationInMicrogramPerMicroliter(parentSpecimenArrayContent.getConcentrationInMicrogramPerMicroliter());
 				}
-				
-				specimenArrayContent.setConcentrationInMicrogramPerMicroliter(parentSpecimenArrayContent.getConcentrationInMicrogramPerMicroliter());
+
+				specimenArrayContentCollection.add(specimenArrayContent);
 			}
-					
-			specimenArrayContentCollection.add(specimenArrayContent);
+			return specimenArrayContentCollection;
 		}
-		return specimenArrayContentCollection;
+		catch(Exception daoExp)
+		{
+			throw getBizLogicException(daoExp, "bizlogic.error", "");
+		}
 	}
 	
-	public long getNextAvailableNumber(String sourceObjectName) throws DAOException
+	public long getNextAvailableNumber(String sourceObjectName) throws BizLogicException
 	{
-		String[] selectColumnName = {"max(IDENTIFIER) as MAX_NAME"};
-		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
-		dao.openSession(null);
-		List list = dao.retrieve(sourceObjectName, selectColumnName);
-		dao.closeSession();
-		if (list!=null && !list.isEmpty())
+		JDBCDAO jdbcDao = null;
+		try
 		{
-			List columnList = (List) list.get(0);
-			if (!columnList.isEmpty())
+			String[] selectColumnName = {"max(IDENTIFIER) as MAX_NAME"};
+
+			jdbcDao = openJDBCSession();
+			List list = jdbcDao.retrieve(sourceObjectName, selectColumnName);
+			jdbcDao.closeSession();
+			if (list!=null && !list.isEmpty())
 			{
-				String str = (String) columnList.get(0);
-				if (!str.equals(""))
+				List columnList = (List) list.get(0);
+				if (!columnList.isEmpty())
 				{
-					long no = Long.parseLong(str);
-					return no + 1;
+					String str = (String) columnList.get(0);
+					if (!str.equals(""))
+					{
+						long no = Long.parseLong(str);
+						return no + 1;
+					}
 				}
 			}
+			return 1;
 		}
-		return 1;
+		catch(Exception daoExp)
+		{
+			throw getBizLogicException(daoExp, "bizlogic.error", "");
+		}
+		finally
+		{
+			closeJDBCSession(jdbcDao);
+		}
 	}
 	
-	public void postInsert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
+	public void postInsert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws BizLogicException
 	{		
 		SpecimenArray specimenArrayAliquot = (SpecimenArray) obj;
 		String specimenKey = "SpecimenArray:";
@@ -396,7 +433,7 @@ public class SpecimenArrayAliquotsBizLogic extends DefaultBizLogic
 		}
 
 	}
-	protected void checkStatus(DAO dao, IActivityStatus ado, String errorName) throws DAOException
+	protected void checkStatus(DAO dao, IActivityStatus ado, String errorName) throws BizLogicException
 	{
 		if (ado != null)
 		{
@@ -409,13 +446,13 @@ public class SpecimenArrayAliquotsBizLogic extends DefaultBizLogic
 				{
 					activityStatus = getActivityStatus(dao, className, identifier);
 				}
-				if (activityStatus.equals(Constants.ACTIVITY_STATUS_CLOSED))
+				if (activityStatus.equals(Status.ACTIVITY_STATUS_CLOSED))
 				{
-					throw new DAOException(errorName + " " + ApplicationProperties.getValue("error.object.closed"));
+					throw getBizLogicException(null, "error.object.closed", errorName);
 				}
-				if (activityStatus.equals(Constants.ACTIVITY_STATUS_DISABLED))
+				if (activityStatus.equals(Status.ACTIVITY_STATUS_DISABLED))
 				{
-					throw new DAOException(errorName + " " + ApplicationProperties.getValue("error.object.disabled"));
+					throw getBizLogicException(null, "error.object.disabled", errorName);
 				}
 			}
 		}
@@ -424,9 +461,9 @@ public class SpecimenArrayAliquotsBizLogic extends DefaultBizLogic
 	/**
 	 * Called from DefaultBizLogic to get ObjectId for authorization check
 	 * (non-Javadoc)
-	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getObjectId(edu.wustl.common.dao.AbstractDAO, java.lang.Object)
+	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getObjectId(edu.wustl.common.dao.DAO, java.lang.Object)
 	 */
-	public String getObjectId(AbstractDAO dao, Object domainObject)
+	public String getObjectId(DAO dao, Object domainObject)
 	{
 		SpecimenArrayBizLogic specimenArrayBizLogic = (SpecimenArrayBizLogic) BizLogicFactory
 		.getInstance().getBizLogic(Constants.SPECIMEN_ARRAY_FORM_ID);
@@ -435,10 +472,10 @@ public class SpecimenArrayAliquotsBizLogic extends DefaultBizLogic
 	
 	/**
 	 * (non-Javadoc)
-	 * @throws UserNotAuthorizedException 
-	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#isAuthorized(edu.wustl.common.dao.AbstractDAO, java.lang.Object, edu.wustl.common.beans.SessionDataBean)
+	 * @throws  
+	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#isAuthorized(edu.wustl.common.dao.DAO, java.lang.Object, edu.wustl.common.beans.SessionDataBean)
 	 */
-	public boolean isAuthorized(AbstractDAO dao, Object domainObject, SessionDataBean sessionDataBean) throws UserNotAuthorizedException
+	public boolean isAuthorized(DAO dao, Object domainObject, SessionDataBean sessionDataBean) throws BizLogicException
 	{
 		SpecimenArrayBizLogic specimenArrayBizLogic = (SpecimenArrayBizLogic) BizLogicFactory
 		.getInstance().getBizLogic(Constants.SPECIMEN_ARRAY_FORM_ID);

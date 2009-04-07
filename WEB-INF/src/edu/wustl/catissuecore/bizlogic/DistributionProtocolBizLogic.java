@@ -10,6 +10,7 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
+
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -23,23 +24,29 @@ import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.Roles;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
-import edu.wustl.common.beans.SecurityDataBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.cde.CDEManager;
-import edu.wustl.common.dao.AbstractDAO;
-import edu.wustl.common.dao.DAO;
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.security.PrivilegeCache;
-import edu.wustl.common.security.PrivilegeManager;
-import edu.wustl.common.security.SecurityManager;
-import edu.wustl.common.security.exceptions.SMException;
-import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
-import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.exception.ApplicationException;
+import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.exception.ErrorKey;
+import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.DAO;
+import edu.wustl.dao.HibernateDAO;
+import edu.wustl.dao.exception.DAOException;
+import edu.wustl.security.beans.SecurityDataBean;
+import edu.wustl.security.exception.SMException;
+import edu.wustl.security.exception.UserNotAuthorizedException;
+import edu.wustl.security.locator.CSMGroupLocator;
+import edu.wustl.security.manager.SecurityManagerFactory;
+import edu.wustl.security.privilege.PrivilegeCache;
+import edu.wustl.security.privilege.PrivilegeManager;
 
 /**
  * DistributionProtocolBizLogic is used to add DistributionProtocol information into the database using Hibernate.
@@ -53,24 +60,31 @@ public class DistributionProtocolBizLogic extends SpecimenProtocolBizLogic imple
 	 * @param session The session in which the object is saved.
 	 * @throws DAOException 
      */
-	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException 
+	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws BizLogicException
 	{
+		try
+		{
 		DistributionProtocol distributionProtocol = (DistributionProtocol)obj;
 		
 		checkStatus(dao, distributionProtocol.getPrincipalInvestigator(), "Principal Investigator");
 		
 		setPrincipalInvestigator(dao,distributionProtocol);
-		dao.insert(distributionProtocol,sessionDataBean, true, true);
+		dao.insert(distributionProtocol,true);
 
 		for(DistributionSpecimenRequirement distributionSpecimenRequirement : distributionProtocol.getDistributionSpecimenRequirementCollection())
 		{
 			distributionSpecimenRequirement.setDistributionProtocol(distributionProtocol);
-			dao.insert(distributionSpecimenRequirement,sessionDataBean, true, true);
+			dao.insert(distributionSpecimenRequirement, true);
 		}
 		
 		//Inserting authorization data
         Set protectionObjects=new HashSet();
         protectionObjects.add(distributionProtocol);
+		}
+		catch(DAOException daoExp)
+		{
+			throw getBizLogicException(daoExp, "bizlogic.error", "");
+		}
         
 	}
 	
@@ -80,52 +94,60 @@ public class DistributionProtocolBizLogic extends SpecimenProtocolBizLogic imple
 	 * @param session The session in which the object is saved.
 	 * @throws DAOException 
      */
-	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
+	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws BizLogicException
     {
-		DistributionProtocol distributionProtocol = (DistributionProtocol)obj;
-		DistributionProtocol distributionProtocolOld = (DistributionProtocol)oldObj;
-    	
-    	if(!distributionProtocol.getPrincipalInvestigator().getId().equals(distributionProtocolOld.getPrincipalInvestigator().getId()))
-			checkStatus(dao, distributionProtocol.getPrincipalInvestigator(), "Principal Investigator");
-    	
-		setPrincipalInvestigator(dao,distributionProtocol);
-		
-		checkForChangedStatus( distributionProtocol ,  distributionProtocolOld);
-		dao.update(distributionProtocol, sessionDataBean, true, true, false);
-		
-		//Audit of Distribution Protocol.
-		dao.audit(obj, oldObj, sessionDataBean, true);
-		
-		Collection<DistributionSpecimenRequirement> oldDistributionSpecimenRequirementCollection = distributionProtocolOld.getDistributionSpecimenRequirementCollection();
-		
-		for(DistributionSpecimenRequirement distributionSpecimenRequirement : distributionProtocol.getDistributionSpecimenRequirementCollection())
+		try
 		{
-			Logger.out.debug("DistributionSpecimenRequirement Id ............... : "+distributionSpecimenRequirement.getId());
-			distributionSpecimenRequirement.setDistributionProtocol(distributionProtocol);
-			dao.update(distributionSpecimenRequirement, sessionDataBean, true, true, false);
-			
-			DistributionSpecimenRequirement oldDistributionSpecimenRequirement 
+			DistributionProtocol distributionProtocol = (DistributionProtocol)obj;
+			DistributionProtocol distributionProtocolOld = (DistributionProtocol)oldObj;
+
+			if(!distributionProtocol.getPrincipalInvestigator().getId().equals(distributionProtocolOld.getPrincipalInvestigator().getId()))
+				checkStatus(dao, distributionProtocol.getPrincipalInvestigator(), "Principal Investigator");
+
+			setPrincipalInvestigator(dao,distributionProtocol);
+
+			checkForChangedStatus( distributionProtocol ,  distributionProtocolOld);
+			dao.update(distributionProtocol);
+
+			//Audit of Distribution Protocol.
+			((HibernateDAO)dao).audit(obj, oldObj);
+
+			Collection<DistributionSpecimenRequirement> oldDistributionSpecimenRequirementCollection = distributionProtocolOld.getDistributionSpecimenRequirementCollection();
+
+			for(DistributionSpecimenRequirement distributionSpecimenRequirement : distributionProtocol.getDistributionSpecimenRequirementCollection())
+			{
+				Logger.out.debug("DistributionSpecimenRequirement Id ............... : "+distributionSpecimenRequirement.getId());
+				distributionSpecimenRequirement.setDistributionProtocol(distributionProtocol);
+				dao.update(distributionSpecimenRequirement);
+
+				DistributionSpecimenRequirement oldDistributionSpecimenRequirement 
 				= (DistributionSpecimenRequirement)getCorrespondingOldObject(oldDistributionSpecimenRequirementCollection, 
-				        distributionSpecimenRequirement.getId());
-			
-			dao.audit(distributionSpecimenRequirement, oldDistributionSpecimenRequirement, sessionDataBean, true);
-		}
-		
-		Logger.out.debug("distributionProtocol.getActivityStatus() "+distributionProtocol.getActivityStatus());
-		if(distributionProtocol.getActivityStatus().equals(Constants.ACTIVITY_STATUS_DISABLED))
-		{
+						distributionSpecimenRequirement.getId());
+
+				((HibernateDAO)dao).audit(distributionSpecimenRequirement, oldDistributionSpecimenRequirement);
+			}
+
 			Logger.out.debug("distributionProtocol.getActivityStatus() "+distributionProtocol.getActivityStatus());
-			Long distributionProtocolIDArr[] = {distributionProtocol.getId()};
-			
-			DistributionBizLogic bizLogic = (DistributionBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.DISTRIBUTION_FORM_ID);
-			bizLogic.disableRelatedObjects(dao, distributionProtocolIDArr);
+			if(distributionProtocol.getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED))
+			{
+				Logger.out.debug("distributionProtocol.getActivityStatus() "+distributionProtocol.getActivityStatus());
+				Long distributionProtocolIDArr[] = {distributionProtocol.getId()};
+
+				DistributionBizLogic bizLogic = (DistributionBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.DISTRIBUTION_FORM_ID);
+				bizLogic.disableRelatedObjects(dao, distributionProtocolIDArr);
+			}
+
+		}
+		catch(DAOException daoExp)
+		{
+			throw getBizLogicException(daoExp, "bizlogic.error", "");
 		}
     }
 	
 	//This method sets the Principal Investigator
 	private void setPrincipalInvestigator(DAO dao,DistributionProtocol distributionProtocol) throws DAOException
 	{
-		Object userObj = dao.retrieve(User.class.getName() , distributionProtocol.getPrincipalInvestigator().getId());
+		Object userObj = dao.retrieveById(User.class.getName() , distributionProtocol.getPrincipalInvestigator().getId());
 		if (userObj != null)
 		{
 			User pi = (User) userObj;
@@ -133,21 +155,21 @@ public class DistributionProtocolBizLogic extends SpecimenProtocolBizLogic imple
 		}
 	}
 	
-	public void setPrivilege(DAO dao, String privilegeName, Class objectType, Long[] objectIds, Long userId, String roleId, boolean assignToUser, boolean assignOperation) throws SMException, DAOException
+/*	public void setPrivilege(DAO dao, String privilegeName, Class objectType, Long[] objectIds, Long userId, String roleId, boolean assignToUser, boolean assignOperation) throws SMException, DAOException
     {
 	    super.setPrivilege(dao,privilegeName,objectType,objectIds,userId, roleId, assignToUser, assignOperation);
 	    
 //		DistributionBizLogic bizLogic = (DistributionBizLogic)BizLogicFactory.getBizLogic(Constants.DISTRIBUTION_FORM_ID);
 //		bizLogic.assignPrivilegeToRelatedObjectsForDP(dao,privilegeName,objectIds,userId, roleId, assignToUser, assignOperation);
-    }
+    }*/
 	
 	/**
      * This method returns collection of UserGroupRoleProtectionGroup objects that speciefies the 
      * user group protection group linkage through a role. It also specifies the groups the protection  
      * elements returned by this class should be added to.
      * @return
-     */
-    private Vector getAuthorizationData(AbstractDomainObject obj) throws SMException 
+     *//*
+    private Vector getAuthorizationData(AbstractDomainObject obj) throws SMException ,ApplicationException
     {
         Logger.out.debug("--------------- In here ---------------");
         
@@ -158,24 +180,24 @@ public class DistributionProtocolBizLogic extends SpecimenProtocolBizLogic imple
         
     	String userId = String.valueOf(distributionProtocol.getPrincipalInvestigator().getCsmUserId());
         Logger.out.debug(" PI ID: "+userId);
-        gov.nih.nci.security.authorization.domainobjects.User csmUser = SecurityManager.getInstance(this.getClass()).getUserById(userId);
+        gov.nih.nci.security.authorization.domainobjects.User csmUser =  SecurityManagerFactory.getSecurityManager().getUserById(userId);
         Logger.out.debug(" PI: "+csmUser.getLoginName());
         group.add(csmUser);
         
         // Protection group of PI
-        String protectionGroupName = new String(Constants.getDistributionProtocolPGName(distributionProtocol.getId()));
+        String protectionGroupName = CSMGroupLocator.getInstance().getPGName(distributionProtocol.getId(),DistributionProtocol.class);
         SecurityDataBean userGroupRoleProtectionGroupBean = new SecurityDataBean();
         userGroupRoleProtectionGroupBean.setUser(userId);
         userGroupRoleProtectionGroupBean.setRoleName(PI);
-        userGroupRoleProtectionGroupBean.setGroupName(Constants.getDistributionProtocolPIGroupName(distributionProtocol.getId()));
-        userGroupRoleProtectionGroupBean.setProtectionGroupName(protectionGroupName);
+        userGroupRoleProtectionGroupBean.setGroupName(CSMGroupLocator.getInstance().getPIGroupName(distributionProtocol.getId(),DistributionProtocol.class));
+        userGroupRoleProtectionGroupBean.setProtGrpName(protectionGroupName);
         userGroupRoleProtectionGroupBean.setGroup(group);
         authorizationData.add(userGroupRoleProtectionGroupBean);
         
         Logger.out.debug(authorizationData.toString());
         return authorizationData;
     }
-    
+    */
     // Added by Ashish for validations while passing domain object from API
     /*
     Map values = null;
@@ -226,7 +248,7 @@ public class DistributionProtocolBizLogic extends SpecimenProtocolBizLogic imple
     /**
      * Overriding the parent class's method to validate the enumerated attribute values
      */
-	protected boolean validate(Object obj, DAO dao, String operation) throws DAOException
+	protected boolean validate(Object obj, DAO dao, String operation) throws BizLogicException
     {
 		//Added by Ashish
 		//setAllValues(obj);
@@ -251,25 +273,24 @@ public class DistributionProtocolBizLogic extends SpecimenProtocolBizLogic imple
         String message="";
 		if (protocol == null)
 		{			
-			throw new DAOException(ApplicationProperties.getValue("domain.object.null.err.msg","Distribution Protocol"));	
+			throw getBizLogicException(null, "domain.object.null.err.msg", "Distribution Protocol");
 		}			
 		
 		if(protocol.getPrincipalInvestigator() == null)
 		{
-			//message = ApplicationProperties.getValue("collectionprotocol.specimenstatus");
-			throw new DAOException(ApplicationProperties.getValue("errors.item.required","Principal Investigator"));	
+			throw getBizLogicException(null, "errors.item.required", "Principal Investigator");
 		}
 		
 		if (validator.isEmpty(protocol.getTitle()))
 		{
 			message = ApplicationProperties.getValue("distributionprotocol.protocoltitle");
-			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
+			throw getBizLogicException(null, "errors.item.required", message);
 		}
 		
 		if (validator.isEmpty(protocol.getShortTitle()))
 		{
 			message = ApplicationProperties.getValue("distributionprotocol.shorttitle");
-			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
+			throw getBizLogicException(null, "errors.item.required", message);
 		}
 		
 //		if (validator.isEmpty(protocol.getIrbIdentifier()))
@@ -290,7 +311,7 @@ public class DistributionProtocolBizLogic extends SpecimenProtocolBizLogic imple
 		else
 		{
 			message = ApplicationProperties.getValue("distributionprotocol.startdate");
-			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
+			throw getBizLogicException(null, "errors.item.required", message);
 		}	
 			
 		//END
@@ -309,7 +330,7 @@ public class DistributionProtocolBizLogic extends SpecimenProtocolBizLogic imple
 			{
 				if(requirement == null)
 				{
-					throw new DAOException(ApplicationProperties.getValue("protocol.spReqEmpty.errMsg"));
+					throw getBizLogicException(null, "protocol.spReqEmpty.errMsg", "");
 				}
 				else
 				{
@@ -329,22 +350,22 @@ public class DistributionProtocolBizLogic extends SpecimenProtocolBizLogic imple
 					
 					if(!Validator.isEnumeratedValue(specimenClassList,specimenClass))
 					{
-						throw new DAOException(ApplicationProperties.getValue("protocol.class.errMsg"));
+							throw getBizLogicException(null, "protocol.class.errMsg", "");
 					}
 
-					if(!Validator.isEnumeratedValue(Utility.getSpecimenTypes(specimenClass),requirement.getSpecimenType()))
+					if(!Validator.isEnumeratedValue(AppUtility.getSpecimenTypes(specimenClass),requirement.getSpecimenType()))
 					{
-						throw new DAOException(ApplicationProperties.getValue("protocol.type.errMsg"));
+						throw getBizLogicException(null, "protocol.type.errMsg", "");
 					}
 					
 					if(!Validator.isEnumeratedValue(tissueSiteList,requirement.getTissueSite()))
 					{
-						throw new DAOException(ApplicationProperties.getValue("protocol.tissueSite.errMsg"));
+						throw getBizLogicException(null, "protocol.tissueSite.errMsg", "");
 					}
 
 					if(!Validator.isEnumeratedValue(pathologicalStatusList,requirement.getPathologyStatus()))
 					{
-						throw new DAOException(ApplicationProperties.getValue("protocol.pathologyStatus.errMsg"));
+						throw getBizLogicException(null, "protocol.pathologyStatus.errMsg", "");
 					}
 				}
 			}
@@ -354,14 +375,14 @@ public class DistributionProtocolBizLogic extends SpecimenProtocolBizLogic imple
 		{
 			if(!Constants.ACTIVITY_STATUS_ACTIVE.equals(protocol.getActivityStatus()))
 			{
-				throw new DAOException(ApplicationProperties.getValue("activityStatus.active.errMsg"));
+				throw getBizLogicException(null, "activityStatus.active.errMsg", "");
 			}
 		}
 		else
 		{
 			if(!Validator.isEnumeratedValue(Constants.ACTIVITY_STATUS_VALUES,protocol.getActivityStatus()))
 			{
-				throw new DAOException(ApplicationProperties.getValue("activityStatus.errMsg"));
+				throw getBizLogicException(null, "activityStatus.errMsg", "");
 			}
 		}
 		
@@ -373,7 +394,7 @@ public class DistributionProtocolBizLogic extends SpecimenProtocolBizLogic imple
 	 * (non-Javadoc)
 	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getObjectId(edu.wustl.common.dao.AbstractDAO, java.lang.Object)
 	 */
-	public String getObjectId(AbstractDAO dao, Object domainObject) 
+	public String getObjectId(DAO dao, Object domainObject) 
 	{
 		return edu.wustl.catissuecore.util.global.Constants.ADMIN_PROTECTION_ELEMENT;
 	}
@@ -388,46 +409,42 @@ public class DistributionProtocolBizLogic extends SpecimenProtocolBizLogic imple
     	return Constants.ADD_EDIT_DP;
     }
 	
-	public boolean isAuthorized(AbstractDAO dao, Object domainObject, SessionDataBean sessionDataBean) throws UserNotAuthorizedException, DAOException
+	public boolean isAuthorized(DAO dao, Object domainObject, SessionDataBean sessionDataBean) throws BizLogicException
 	{
+
 		if(sessionDataBean != null && sessionDataBean.isAdmin())
 		{
 			return true;
 		}
 		boolean isAuthorized = false;
-		String protectionElementName = null;
-		protectionElementName = getObjectId(dao, domainObject);
-		//Get the required privilege name which we would like to check for the logged in user.
-		String privilegeName = getPrivilegeName(domainObject);
-		PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(sessionDataBean.getUserName());
-		Set<Long> siteIdSet = new UserBizLogic().getRelatedSiteIds(sessionDataBean.getUserId());
-		for(Long id : siteIdSet)
+
+		try
 		{
-			String objectId = Site.class.getName()+"_"+id;
-			if(privilegeCache.hasPrivilege(objectId, privilegeName))
+			String protectionElementName = null;
+			protectionElementName = getObjectId(dao, domainObject);
+			//Get the required privilege name which we would like to check for the logged in user.
+			String privilegeName = getPrivilegeName(domainObject);
+			PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(sessionDataBean.getUserName());
+			Set<Long> siteIdSet = new UserBizLogic().getRelatedSiteIds(sessionDataBean.getUserId());
+			for(Long id : siteIdSet)
 			{
-				return true;
+				String objectId = Site.class.getName()+"_"+id;
+				if(privilegeCache.hasPrivilege(objectId, privilegeName))
+				{
+					return true;
+				}
 			}
+			// control is here, that means, User is not Auth.
+			if (!isAuthorized)
+			{
+				throw AppUtility.getUserNotAuthorizedException(privilegeName, protectionElementName);
+			}
+
 		}
-		// control is here, that means, User is not Auth.
-        if (!isAuthorized)
-        {
-            UserNotAuthorizedException ex = new UserNotAuthorizedException();
-            ex.setPrivilegeName(privilegeName);
-            //bug 11611 and 11659
-            ex.setBaseObject(Site.class.getSimpleName());
-            ex.setDomainObjectName(domainObject.getClass().getSimpleName());
-            if (protectionElementName != null && (protectionElementName.contains("Site") || protectionElementName.contains("CollectionProtocol")))
-            {
-                String [] arr = protectionElementName.split("_");
-                String [] nameArr = arr[0].split("\\.");
-                String baseObject = nameArr[nameArr.length-1];
-                ex.setBaseObject(baseObject);
-                ex.setBaseObjectIdentifier(arr[1]);
-            }
-            throw ex;
-            //ex.setBaseObject()
-        }
+		catch (SMException e)
+		{
+			throw AppUtility.handleSMException(e);
+		}	
 		return isAuthorized;		
 	}
 }

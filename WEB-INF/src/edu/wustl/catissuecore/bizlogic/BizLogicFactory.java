@@ -10,16 +10,16 @@
 package edu.wustl.catissuecore.bizlogic;
 
 import edu.wustl.catissuecore.bizlogic.bulkOperations.BulkOperationsBizlogic;
-import edu.wustl.catissuecore.bizlogic.querysuite.CatissuecoreQueryBizLogic;
 import edu.wustl.catissuecore.bizlogic.shippingtracking.ShipmentBizLogic;
 import edu.wustl.catissuecore.bizlogic.shippingtracking.ShipmentReceivingBizLogic;
 import edu.wustl.catissuecore.bizlogic.shippingtracking.ShipmentRequestBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.querysuite.CatissuecoreQueryBizLogic;
 import edu.wustl.common.bizlogic.CDEBizLogic;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
-import edu.wustl.common.bizlogic.QueryBizLogic;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.simplequery.bizlogic.QueryBizLogic;
 
 /**
  * BizLogicFactory is a factory for DAO instances of various domain objects.
@@ -149,7 +149,7 @@ public class BizLogicFactory //extends AbstractBizLogicFactory
         	case Constants.ADVANCE_QUERY_INTERFACE_ID:
         		bizLogic = new AdvanceQueryBizlogic();
         		break;
-        	case Constants.QUERY_INTERFACE_ID:
+        	case edu.wustl.common.util.global.Constants.QUERY_INTERFACE_ID:
         		bizLogic = new QueryBizLogic();
     			break;
     		

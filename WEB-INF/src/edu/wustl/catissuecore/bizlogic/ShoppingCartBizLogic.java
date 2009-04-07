@@ -16,9 +16,9 @@ import java.util.List;
 
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
-import edu.wustl.common.query.ShoppingCart;
-import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.simplequery.query.ShoppingCart;
 
 /**
  * ShoppingCartBizLogic provides the shopping cart functionality.
@@ -26,22 +26,30 @@ import edu.wustl.common.util.dbManager.DAOException;
  */
 public class ShoppingCartBizLogic extends DefaultBizLogic
 {
-	public void add(ShoppingCart cart,Object obj[]) throws DAOException,BizLogicException  
+	public void add(ShoppingCart cart,Object obj[]) throws BizLogicException
     {
-		if(cart!=null && obj!=null)
+		try
 		{
-			for(int i=0;i<obj.length;i++)
+			if(cart!=null && obj!=null)
 			{
-				Object object = retrieve(Specimen.class.getName(), new Long(obj[i].toString()));
-				
-				if (object != null)
+				for(int i=0;i<obj.length;i++)
 				{
-					Specimen specimen = (Specimen) object;
-					cart.add(specimen);
+					Object object = retrieve(Specimen.class.getName(), new Long(obj[i].toString()));
+
+					if (object != null)
+					{
+						Specimen specimen = (Specimen) object;
+						cart.add(specimen);
+					}
 				}
 			}
 		}
-    }
+		catch(ApplicationException appExp)
+		{
+			throw getBizLogicException(appExp, "bizlogic.error", "");
+		}
+
+	}
     
 	public ShoppingCart delete(ShoppingCart cart,Object obj[])
     {

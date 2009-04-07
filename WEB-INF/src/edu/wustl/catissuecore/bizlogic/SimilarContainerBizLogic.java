@@ -26,14 +26,14 @@ import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.dao.AbstractDAO;
-import edu.wustl.common.dao.DAO;
-import edu.wustl.common.security.exceptions.SMException;
-import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.tree.TreeDataInterface;
-import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.DAO;
+import edu.wustl.dao.exception.DAOException;
+import edu.wustl.security.exception.SMException;
+import edu.wustl.security.exception.UserNotAuthorizedException;
 
 /**
  * StorageContainerHDAO is used to add Storage Container information into the
@@ -49,7 +49,7 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 	 * @param session The session in which the object is saved.
 	 * @throws DAOException
 	 */
-	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
+	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws BizLogicException
 	{
 		StorageContainer container = (StorageContainer) obj;
 		container.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);

@@ -15,23 +15,25 @@ import java.util.List;
 import edu.wustl.catissuecore.domain.Institution;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
-import edu.wustl.common.dao.AbstractDAO;
-import edu.wustl.common.dao.DAO;
-import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
+import edu.wustl.dao.DAO;
+import edu.wustl.dao.QueryWhereClause;
+import edu.wustl.dao.condition.EqualClause;
+import edu.wustl.dao.exception.DAOException;
 
 public class InstitutionBizLogic extends DefaultBizLogic
 {
     
-	protected boolean validate(Object obj, DAO dao, String operation) throws DAOException
+	protected boolean validate(Object obj, DAO dao, String operation) throws BizLogicException
 	{
 		// comment by Ashwin
 		Institution institution = (Institution) obj;
 		if (institution == null)
 		{
 			 String message = ApplicationProperties.getValue("app.institution");
-			 throw new DAOException(ApplicationProperties.getValue("domain.object.null.err.msg",message));   			
+			 throw getBizLogicException(null, "domain.object.null.err.msg", message);
 			//throw new DAOException("domain.object.null.err.msg", new String[]{"Institution"});
 		}
 		
@@ -39,7 +41,7 @@ public class InstitutionBizLogic extends DefaultBizLogic
 		if (validate.isEmpty(institution.getName()))
 		{
 			String message = ApplicationProperties.getValue("institution.name");
-			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));   			
+			throw getBizLogicException(null, "errors.item.required", message);
 			//throw new DAOException("errors.item.required", new String[]{message});
 		}
 		return true;
@@ -52,15 +54,15 @@ public class InstitutionBizLogic extends DefaultBizLogic
      * @return
      * @throws DAOException
      */
-	public String getLatestInstitution(String institutionName)throws DAOException
+	public String getLatestInstitution(String institutionName)throws BizLogicException
     {
     	String sourceObjectName = Institution.class.getName();
     	String[] selectColumnName = {Constants.SYSTEM_IDENTIFIER};
-    	String[] whereColumnName = {Constants.NAME};
-    	String[] whereColumnCondition = {Constants.EQUALS}; 
-    	String[] whereColumnValue = {institutionName};
+  
+    	QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
+    	queryWhereClause.addCondition(new EqualClause(Constants.NAME,institutionName));
     	
-    	List institutionList = retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, null);
+    	List institutionList = retrieve(sourceObjectName, selectColumnName,queryWhereClause);
     	
     	Long institutionId =(Long)institutionList.get(0);
     	return institutionId.toString();
@@ -72,7 +74,7 @@ public class InstitutionBizLogic extends DefaultBizLogic
 	 * (non-Javadoc)
 	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getObjectId(edu.wustl.common.dao.AbstractDAO, java.lang.Object)
 	 */
-	public String getObjectId(AbstractDAO dao, Object domainObject) 
+	public String getObjectId(DAO dao, Object domainObject) 
 	{
 		return Constants.ADMIN_PROTECTION_ELEMENT;
 	}

@@ -14,14 +14,14 @@ import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.cde.PermissibleValueImpl;
-import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.dao.exception.DAOException;
 
 /**
  * 
  * @author sagar_baldwa
  *
  */
-public class ComboDataBizLogic extends DefaultBizLogic
+public class ComboDataBizLogic extends CatissueDefaultBizLogic
 {
 	/**
 	 * This method would return the Clinical Diagnosis List

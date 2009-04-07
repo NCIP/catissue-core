@@ -13,14 +13,16 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
-import edu.wustl.common.dao.DAO;
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.security.SecurityManager;
-import edu.wustl.common.security.exceptions.SMException;
-import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
-import edu.wustl.common.util.Permissions;
-import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.exception.ApplicationException;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.DAO;
+import edu.wustl.dao.exception.DAOException;
+import edu.wustl.security.exception.SMException;
+import edu.wustl.security.global.Permissions;
+import edu.wustl.security.locator.CSMGroupLocator;
+import edu.wustl.security.manager.SecurityManagerFactory;
 
 /**
  * Used to store identified pathology report to the database 
@@ -36,12 +38,19 @@ public class IdentifiedSurgicalPathologyReportBizLogic  extends DefaultBizLogic
 	 * @param session The session in which the object is saved.
 	 * @throws DAOException 
 	 */
-	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
+	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws BizLogicException
 	{
-		IdentifiedSurgicalPathologyReport report = (IdentifiedSurgicalPathologyReport) obj;
-		dao.insert(report, sessionDataBean, false, true);
-		Set protectionObjects = new HashSet();
-		protectionObjects.add(report);
+		try
+		{
+			IdentifiedSurgicalPathologyReport report = (IdentifiedSurgicalPathologyReport) obj;
+			dao.insert(report, false);
+			Set protectionObjects = new HashSet();
+			protectionObjects.add(report);
+		}
+		catch(DAOException daoExp)
+		{
+			throw getBizLogicException(daoExp, "bizlogic.error", "");
+		}
 		
 	}
 
@@ -52,14 +61,14 @@ public class IdentifiedSurgicalPathologyReportBizLogic  extends DefaultBizLogic
 	 * @throws SMException Security manager exception
 	 * @throws DAOException 
 	 */
-	private String[] getDynamicGroups(DAO dao, AbstractDomainObject obj) throws SMException, DAOException
+	private String[] getDynamicGroups(DAO dao, AbstractDomainObject obj) throws ApplicationException, ClassNotFoundException
 	{
 		IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReport= (IdentifiedSurgicalPathologyReport)obj;
 		CollectionProtocolRegistration collectionProtocolRegistration=identifiedSurgicalPathologyReport.getSpecimenCollectionGroup().getCollectionProtocolRegistration();
 		String[] dynamicGroups = new String[1];
 
-		dynamicGroups[0] = SecurityManager.getInstance(this.getClass()).getProtectionGroupByName(
-				collectionProtocolRegistration, Constants.getCollectionProtocolPGName(null));
+		dynamicGroups[0] = SecurityManagerFactory.getSecurityManager().getProtectionGroupByName(
+				collectionProtocolRegistration, CSMGroupLocator.getInstance().getPGName(null,Class.forName("edu.wustl.catissuecore.domain.CollectionProtocol")));
 		Logger.out.debug("Dynamic Group name: " + dynamicGroups[0]);
 		return dynamicGroups;
 	}
@@ -70,16 +79,16 @@ public class IdentifiedSurgicalPathologyReportBizLogic  extends DefaultBizLogic
 	 * @param session The session in which the object is saved.
 	 * @throws DAOException 
 	 */
-	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
+	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws BizLogicException
 	{
 		try
 		{
 			IdentifiedSurgicalPathologyReport report = (IdentifiedSurgicalPathologyReport) obj;
 			if(report.getTextContent().getId()==null)
 			{
-				dao.insert(report.getTextContent(), sessionDataBean, false, false);	
+				dao.insert(report.getTextContent(), false);	
 			}
-			dao.update(report, sessionDataBean, true, false, false);
+			dao.update(report);
 			
 		}
 		catch(Exception ex)

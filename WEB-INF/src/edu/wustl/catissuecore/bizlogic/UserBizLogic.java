@@ -26,6 +26,7 @@ import java.util.Vector;
 import org.hibernate.Session;
 
 import edu.common.dynamicextensions.util.global.Variables;
+import edu.wustl.catissuecore.action.querysuite.GetDagViewDataAction;
 import edu.wustl.catissuecore.domain.CancerResearchGroup;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Department;
@@ -42,42 +43,46 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.beans.NameValueBean;
-import edu.wustl.common.beans.SecurityDataBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.cde.CDEManager;
-import edu.wustl.common.dao.AbstractDAO;
-import edu.wustl.common.dao.DAO;
-import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.exception.ErrorKey;
+import edu.wustl.common.exception.PasswordEncryptionException;
 import edu.wustl.common.exceptionformatter.DefaultExceptionFormatter;
-import edu.wustl.common.security.PrivilegeCache;
-import edu.wustl.common.security.PrivilegeManager;
-import edu.wustl.common.security.PrivilegeUtility;
-import edu.wustl.common.security.SecurityManager;
-import edu.wustl.common.security.exceptions.PasswordEncryptionException;
-import edu.wustl.common.security.exceptions.SMException;
-import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.XMLPropertyHandler;
-import edu.wustl.common.util.dbManager.DAOException;
-import edu.wustl.common.util.dbManager.DBUtil;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.PasswordManager;
+import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.DAO;
+import edu.wustl.dao.HibernateDAO;
+import edu.wustl.dao.QueryWhereClause;
+import edu.wustl.dao.condition.EqualClause;
+import edu.wustl.dao.daofactory.DAOFactory;
+import edu.wustl.dao.exception.DAOException;
+import edu.wustl.security.beans.SecurityDataBean;
+import edu.wustl.security.exception.SMException;
+import edu.wustl.security.locator.CSMGroupLocator;
+import edu.wustl.security.locator.SecurityManagerPropertiesLocator;
+import edu.wustl.security.manager.SecurityManagerFactory;
+import edu.wustl.security.privilege.PrivilegeCache;
+import edu.wustl.security.privilege.PrivilegeManager;
+import edu.wustl.security.privilege.PrivilegeUtility;
 import gov.nih.nci.security.authorization.domainobjects.ProtectionElement;
 import gov.nih.nci.security.authorization.domainobjects.ProtectionGroup;
 import gov.nih.nci.security.authorization.domainobjects.Role;
 import gov.nih.nci.security.dao.ProtectionElementSearchCriteria;
-import gov.nih.nci.security.exceptions.CSException;
 
 
 /**
  * UserBizLogic is used to add user information into the database using Hibernate.
  * @author kapil_kaveeshwar
  */
-public class UserBizLogic extends DefaultBizLogic
+public class UserBizLogic extends CatissueDefaultBizLogic
 {
 
 	public static final int FAIL_SAME_AS_LAST_N = 8;
@@ -93,9 +98,9 @@ public class UserBizLogic extends DefaultBizLogic
 	 * Saves the user object in the database.
 	 * @param obj The user object to be saved.
 	 * @param session The session in which the object is saved.
-	 * @throws DAOException
+	 * @throws BizLogicException
 	 */
-	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
+	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws BizLogicException
 	{
 		User user = null;
 		Map<String,SiteUserRolePrivilegeBean> userRowIdMap =new HashMap<String, SiteUserRolePrivilegeBean>();
@@ -115,21 +120,21 @@ public class UserBizLogic extends DefaultBizLogic
 
 		try
 		{
-			Object object = dao.retrieve(Department.class.getName(), user.getDepartment().getId());
+			Object object = dao.retrieveById(Department.class.getName(), user.getDepartment().getId());
 			Department department = null;
 			if (object != null)
 			{
 				department = (Department) object;
 			}
 
-			object = dao.retrieve(Institution.class.getName(), user.getInstitution().getId());
+			object = dao.retrieveById(Institution.class.getName(), user.getInstitution().getId());
 			Institution institution = null;
 			if (object != null)
 			{
 				institution = (Institution) object;
 			}
 
-			object = dao.retrieve(CancerResearchGroup.class.getName(), user.getCancerResearchGroup().getId());
+			object = dao.retrieveById(CancerResearchGroup.class.getName(), user.getCancerResearchGroup().getId());
 			CancerResearchGroup cancerResearchGroup = null;
 			if (object != null)
 			{
@@ -151,7 +156,7 @@ public class UserBizLogic extends DefaultBizLogic
 				csmUser.setStartDate(user.getStartDate());
 				csmUser.setPassword(generatedPassword);
 
-				SecurityManager.getInstance(UserBizLogic.class).createUser(csmUser);
+				SecurityManagerFactory.getSecurityManager().createUser(csmUser);
 
 				String role = "";
 				if (user.getRoleId() != null)
@@ -165,7 +170,7 @@ public class UserBizLogic extends DefaultBizLogic
                     	role = Constants.NON_ADMIN_USER;
                     }
                   
-					SecurityManager.getInstance(UserBizLogic.class).assignRoleToUser(csmUser.getUserId().toString(), role);
+                    SecurityManagerFactory.getSecurityManager().assignRoleToUser(csmUser.getUserId().toString(), role);
 				}
 
 				user.setCsmUserId(csmUser.getUserId());
@@ -202,12 +207,12 @@ public class UserBizLogic extends DefaultBizLogic
 			user.setFirstTimeLogin(new Boolean(true));
 
 			// Create address and the user in catissue tables.
-			dao.insert(user.getAddress(), sessionDataBean, true, false);
+			dao.insert(user.getAddress(), true);
 			if(userRowIdMap != null && !userRowIdMap.isEmpty())
 			{
 				updateUserDetails(user,userRowIdMap);
 			}
-			dao.insert(user, sessionDataBean, true, false);
+			dao.insert(user, true);
 
 			Set protectionObjects = new HashSet();
 			protectionObjects.add(user);
@@ -233,27 +238,25 @@ public class UserBizLogic extends DefaultBizLogic
 				emailHandler.sendApprovalEmail(user);
 			}
 		}
-		catch (DAOException daoExp)
-		{
-			Logger.out.debug(daoExp.getMessage(), daoExp);
-			deleteCSMUser(csmUser);
-			throw daoExp;
-		}
 		catch (SMException e)
 		{
 			// added to format constrainviolation message
 			deleteCSMUser(csmUser);
-			throw handleSMException(e);
+			throw getBizLogicException(e, "sm.operation.error",
+			"Error in checking has privilege");
 		}
-		catch (PasswordEncryptionException e)
+		catch (Exception e)
 		{
 			Logger.out.debug(e.getMessage(), e);
 			deleteCSMUser(csmUser);
-			throw new DAOException(e.getMessage(), e);
+			
+			ErrorKey errorKey = ErrorKey.getErrorKey("bizlogic.error");
+			throw new BizLogicException(errorKey,e ,"UserBizLogic.java :");
+		
 		}
 	}
 
-	public Map<String, SiteUserRolePrivilegeBean> getUserRowIdMap(User user, Map<String, SiteUserRolePrivilegeBean> userRowIdMap) throws DAOException 
+	public Map<String, SiteUserRolePrivilegeBean> getUserRowIdMap(User user, Map<String, SiteUserRolePrivilegeBean> userRowIdMap) throws BizLogicException 
 	{
 		if (user.getRoleId() != null && !user.getRoleId().equalsIgnoreCase("-1") && !user.getRoleId().equalsIgnoreCase("0"))
         {
@@ -263,7 +266,7 @@ public class UserBizLogic extends DefaultBizLogic
                 NameValueBean roleBean = new NameValueBean();
                 try
                 {
-                    Vector<Role> roleList = SecurityManager.getInstance(this.getClass()).getRoles();
+                    List<Role> roleList = SecurityManagerFactory.getSecurityManager().getRoles();
                     roleBean.setValue(user.getRoleId());
                     for (Role role : roleList)
                     {
@@ -276,7 +279,7 @@ public class UserBizLogic extends DefaultBizLogic
                 }
                 catch (SMException e)
                 {
-                	throw new DAOException(ApplicationProperties.getValue("user.roleNotFound"));
+                	             	throw getBizLogicException(e, "user.roleNotFound", "");
                 }
                 int i = 0;
                 userRowIdMap = new HashMap<String, SiteUserRolePrivilegeBean>(); 
@@ -300,20 +303,21 @@ public class UserBizLogic extends DefaultBizLogic
 	/**
 	 * Deletes the csm user from the csm user table.
 	 * @param csmUser The csm user to be deleted.
-	 * @throws DAOException
+	 * @throws BizLogicException
 	 */
-	public void deleteCSMUser(gov.nih.nci.security.authorization.domainobjects.User csmUser) throws DAOException
+	public void deleteCSMUser(gov.nih.nci.security.authorization.domainobjects.User csmUser) throws BizLogicException
 	{
 		try
 		{
 			if (csmUser.getUserId() != null)
 			{
-				SecurityManager.getInstance(ApproveUserBizLogic.class).removeUser(csmUser.getUserId().toString());
+				SecurityManagerFactory.getSecurityManager().removeUser(csmUser.getUserId().toString());
 			}
 		}
 		catch (SMException smExp)
 		{
-			throw handleSMException(smExp);
+			throw getBizLogicException(smExp, "sm.operation.error",
+			"Error in checking has privilege");
 		}
 	}
 
@@ -330,7 +334,7 @@ public class UserBizLogic extends DefaultBizLogic
 		User aUser = (User) obj;
 
 		String userId = String.valueOf(aUser.getCsmUserId());
-		gov.nih.nci.security.authorization.domainobjects.User user = SecurityManager.getInstance(this.getClass()).getUserById(userId);
+		gov.nih.nci.security.authorization.domainobjects.User user = SecurityManagerFactory.getSecurityManager().getUserById(userId);
 		Logger.out.debug(" User: " + user.getLoginName());
 		group.add(user);
 
@@ -340,7 +344,7 @@ public class UserBizLogic extends DefaultBizLogic
 		userGroupRoleProtectionGroupBean.setUser(userId);
 		userGroupRoleProtectionGroupBean.setRoleName(Roles.UPDATE_ONLY);
 		userGroupRoleProtectionGroupBean.setGroupName(Constants.getUserGroupName(aUser.getId()));
-		userGroupRoleProtectionGroupBean.setProtectionGroupName(protectionGroupName);
+		userGroupRoleProtectionGroupBean.setProtGrpName(protectionGroupName);
 		userGroupRoleProtectionGroupBean.setGroup(group);
 		authorizationData.add(userGroupRoleProtectionGroupBean);
 
@@ -544,8 +548,7 @@ public class UserBizLogic extends DefaultBizLogic
 					HashSet<gov.nih.nci.security.authorization.domainobjects.User> group = new HashSet<gov.nih.nci.security.authorization.domainobjects.User>();
 					group.add(csmUser);
 					
-					String protectionGroupName = new String(Constants
-							.getSitePGName(site.getId()));
+					String protectionGroupName = CSMGroupLocator.getInstance().getPGName(site.getId(), Site.class);
 					
 					createProtectionGroup(protectionGroupName, site, false);
 					
@@ -554,20 +557,20 @@ public class UserBizLogic extends DefaultBizLogic
 					userGroupRoleProtectionGroupBean.setRoleName(roleName);
 
 					userGroupRoleProtectionGroupBean.setGroupName(Constants.getSiteUserGroupName(site.getId(), user1.getCsmUserId()));
-					userGroupRoleProtectionGroupBean.setProtectionGroupName(protectionGroupName);
+					userGroupRoleProtectionGroupBean.setProtGrpName(protectionGroupName);
 					userGroupRoleProtectionGroupBean.setGroup(group);
 					authorizationData.add(userGroupRoleProtectionGroupBean);
 				}
 			} 
 			
-			catch (CSException e) 
-			{
-				Logger.out.error(e.getMessage(), e);
-			} 
 			catch (SMException e) 
 			{
 				Logger.out.error(e.getMessage(), e);
 			}
+			catch (ApplicationException e) {
+				Logger.out.error(e.getMessage(), e);
+				e.printStackTrace();
+			} 
 		}
 	}
 	
@@ -624,7 +627,7 @@ public class UserBizLogic extends DefaultBizLogic
 							roleName = siteUserRolePrivilegeBean.getRole().getName();
 						}*/
 
-						protectionGroupName = Constants.getCollectionProtocolPGName(cp.getId());
+						protectionGroupName = CSMGroupLocator.getInstance().getPGName(cp.getId(),CollectionProtocol.class);
 						createProtectionGroup(protectionGroupName, cp, false);
 					
 						userGroupRoleProtectionGroupBean.setGroupName(Constants.getCPUserGroupName(cp.getId(), user1.getCsmUserId()));
@@ -651,18 +654,18 @@ public class UserBizLogic extends DefaultBizLogic
 					
 					userGroupRoleProtectionGroupBean.setUser("");
 					userGroupRoleProtectionGroupBean.setRoleName(roleName);
-					userGroupRoleProtectionGroupBean.setProtectionGroupName(protectionGroupName);
+					userGroupRoleProtectionGroupBean.setProtGrpName(protectionGroupName);
 					userGroupRoleProtectionGroupBean.setGroup(group);
 					authorizationData.add(userGroupRoleProtectionGroupBean);
 				}
 			} 
-			catch (CSException e) 
-			{
-				Logger.out.error(e.getMessage(), e);
-			}
 			catch (SMException e) 
 			{
 				Logger.out.error(e.getMessage(), e);
+			}
+			catch (ApplicationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}	
 	}
@@ -682,7 +685,7 @@ public class UserBizLogic extends DefaultBizLogic
 				pe.setObjectId(Constants.getCurrentAndFuturePGAndPEName(obj.getId()));
 				pe.setProtectionElementName(Constants.getCurrentAndFuturePGAndPEName(obj.getId()));
 				pe.setProtectionElementDescription("For All Current & Future CP's for Site with Id "+obj.getId().toString());
-				pe.setApplication(privilegeUtility.getApplication(SecurityManager.APPLICATION_CONTEXT_NAME));
+				pe.setApplication(privilegeUtility.getApplication(SecurityManagerPropertiesLocator.getInstance().getApplicationCtxName()));
 				ProtectionElementSearchCriteria searchCriteria = new ProtectionElementSearchCriteria(pe);
 				peList = privilegeUtility.getUserProvisioningManager().getObjects(searchCriteria);
 				if (peList != null && !peList.isEmpty())
@@ -743,8 +746,9 @@ public class UserBizLogic extends DefaultBizLogic
 	private gov.nih.nci.security.authorization.domainobjects.User getUserByID(String userId)
 			throws SMException
 	{
-		gov.nih.nci.security.authorization.domainobjects.User user = SecurityManager.getInstance(
-				this.getClass()).getUserById(userId);
+		gov.nih.nci.security.authorization.domainobjects.User user = 
+			SecurityManagerFactory.getSecurityManager().getUser(userId); 
+			
 		return user;
 	}
 	
@@ -752,10 +756,9 @@ public class UserBizLogic extends DefaultBizLogic
 	 * @param obj The object to be updated
 	 * @param oldObj The old object
 	 * @param sessionDataBean The session in which the object is saved.
-	 * @throws DAOException
-	 * @throws UserNotAuthorizedException
-	 */
-	public void updateUser(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
+	 * @throws BizLogicException
+ */
+	public void updateUser(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws BizLogicException
 	{
 		update(dao, obj, oldObj, sessionDataBean);
 	}
@@ -764,9 +767,9 @@ public class UserBizLogic extends DefaultBizLogic
 	 * Updates the persistent object in the database.
 	 * @param obj The object to be updated.
 	 * @param session The session in which the object is saved.
-	 * @throws DAOException 
+	 * @throws BizLogicException 
 	 */
-	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
+	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws BizLogicException
 	{
 		User user = null;
 		Map<String,SiteUserRolePrivilegeBean> userRowIdMap =new HashMap<String, SiteUserRolePrivilegeBean>();
@@ -794,13 +797,14 @@ public class UserBizLogic extends DefaultBizLogic
 		//If the user is rejected, its record cannot be updated.
 		if (Constants.ACTIVITY_STATUS_REJECT.equals(oldUser.getActivityStatus()))
 		{
-			throw new DAOException(ApplicationProperties.getValue("errors.editRejectedUser"));
+			
+			throw getBizLogicException(null, "errors.editRejectedUser", "");
 		}
 		else if (Constants.ACTIVITY_STATUS_NEW.equals(oldUser.getActivityStatus())
 				|| Constants.ACTIVITY_STATUS_PENDING.equals(oldUser.getActivityStatus()))
 		{
 			//If the user is not approved yet, its record cannot be updated.
-			throw new DAOException(ApplicationProperties.getValue("errors.editNewPendingUser"));
+			throw getBizLogicException(null, "errors.editNewPendingUser", "");
 		}
 
 		try
@@ -814,12 +818,12 @@ public class UserBizLogic extends DefaultBizLogic
 			 */
 			if (user.getFirstTimeLogin() == null)
 			{
-				throw new DAOException(ApplicationProperties.getValue("domain.object.null.err.msg","First Time Login"));
+				throw getBizLogicException(null, "domain.object.null.err.msg","First Time Login");
 			}
 			
 			if(oldUser.getFirstTimeLogin() != null && user.getFirstTimeLogin().booleanValue() != oldUser.getFirstTimeLogin().booleanValue())
 			{
-				throw new DAOException(ApplicationProperties.getValue("errors.cannotedit.firsttimelogin"));
+				throw getBizLogicException(null, "errors.cannotedit.firsttimelogin","");
 			}
 			
 			if (user.getCsmUserId() != null)
@@ -827,7 +831,8 @@ public class UserBizLogic extends DefaultBizLogic
 				csmUserId = user.getCsmUserId().toString();
 			}
 
-			gov.nih.nci.security.authorization.domainobjects.User csmUser = SecurityManager.getInstance(UserBizLogic.class).getUserById(csmUserId);
+			gov.nih.nci.security.authorization.domainobjects.User csmUser = SecurityManagerFactory.getSecurityManager()
+			.getUserById(csmUserId);
 
 			//Bug:7979
 			if(Constants.DUMMY_PASSWORD.equals(user.getNewPassword()))
@@ -842,7 +847,7 @@ public class UserBizLogic extends DefaultBizLogic
 			{
 				if (!oldPassword.equals(csmUser.getPassword()))
 				{
-					throw new DAOException(ApplicationProperties.getValue("errors.oldPassword.wrong"));
+					throw getBizLogicException(null, "errors.oldPassword.wrong", "");
 				}
 
 				//Added for Password validation by Supriya Dankh.
@@ -860,7 +865,7 @@ public class UserBizLogic extends DefaultBizLogic
 						String errorMessage = getPasswordErrorMsg(result);
 
 						Logger.out.debug("Error Message from method" + errorMessage);
-						throw new DAOException(errorMessage);
+						throw getBizLogicException(null, "bizlogic.error", errorMessage);
 					}
 				}
 				csmUser.setPassword(user.getNewPassword());
@@ -888,7 +893,7 @@ public class UserBizLogic extends DefaultBizLogic
 						String errorMessage = getPasswordErrorMsg(result);
 
 						Logger.out.debug("Error Message from method" + errorMessage);
-						throw new DAOException(errorMessage);
+						throw getBizLogicException(null, "bizlogic.error", errorMessage);
 					}
 				}
 				csmUser.setPassword(user.getNewPassword());
@@ -920,7 +925,7 @@ public class UserBizLogic extends DefaultBizLogic
 	                    	role = Constants.NON_ADMIN_USER;
 	                    }
 	                  
-						SecurityManager.getInstance(UserBizLogic.class).assignRoleToUser(csmUser.getUserId().toString(), role);
+						SecurityManagerFactory.getSecurityManager().assignRoleToUser(csmUser.getUserId().toString(), role);
 					}
 				}
 				
@@ -940,20 +945,20 @@ public class UserBizLogic extends DefaultBizLogic
 				// privilegeManager.insertAuthorizationData(getAuthorizationData(user, userRowIdMap), 
 				//		protectionObjects, null, user.getObjectId());
 				
-				dao.update(user.getAddress(), sessionDataBean, true, false, false);
+				dao.update(user.getAddress());
 
 				// Audit of user address.
-				dao.audit(user.getAddress(), oldUser.getAddress(), sessionDataBean, true);
+				((HibernateDAO)dao).audit(user.getAddress(), oldUser.getAddress());
 			}
 			
 			if (Constants.PAGEOF_CHANGE_PASSWORD.equals(user.getPageOf())) 
 			{
 			    user.setFirstTimeLogin(new Boolean(false));
 			}
-			dao.update(user, sessionDataBean, true, true, true);  
+			dao.update(user);  
 			
 			//Modify the csm user.
-			SecurityManager.getInstance(UserBizLogic.class).modifyUser(csmUser);
+			SecurityManagerFactory.getSecurityManager().modifyUser(csmUser);
 			
 			if(isLoginUserUpdate)
 			{
@@ -961,7 +966,7 @@ public class UserBizLogic extends DefaultBizLogic
 			}
 
 			//Audit of user.
-			dao.audit(obj, oldObj, sessionDataBean, true);
+			((HibernateDAO)dao).audit(obj, oldObj);
 
 			/* pratha commented for bug# 7304 
 			if (Constants.ACTIVITY_STATUS_ACTIVE.equals(user.getActivityStatus()))
@@ -978,13 +983,15 @@ public class UserBizLogic extends DefaultBizLogic
 				
 			}  */
 		}
-		catch (SMException e)
+		catch (SMException smExp)
 		{
-			throw handleSMException(e);
+			throw getBizLogicException(smExp, "sm.operation.error",
+			"Error in checking has privilege");
 		}
-		catch (PasswordEncryptionException e)
+		catch (Exception e)
 		{
-			throw new DAOException(e.getMessage(), e);
+			ErrorKey errorKey = ErrorKey.getErrorKey("bizlogic.error");
+			throw new BizLogicException(errorKey,e,"UserBizLogic.java :");
 		}
 	}
 
@@ -993,9 +1000,9 @@ public class UserBizLogic extends DefaultBizLogic
 	 * and value as systemtIdentifier, of all users who are not disabled. 
 	 * @return the list of NameValueBeans with name as "LastName,Firstname" 
 	 * and value as systemtIdentifier, of all users who are not disabled.
-	 * @throws DAOException
+	 * @throws BizLogicException
 	 */
-	public Vector getUsers(String operation) throws DAOException
+	public Vector getUsers(String operation) throws BizLogicException
 	{
 		String sourceObjectName = User.class.getName();
 		//Get only the fields required 
@@ -1006,7 +1013,7 @@ public class UserBizLogic extends DefaultBizLogic
 		String joinCondition;
 		if (operation != null && operation.equalsIgnoreCase(Constants.ADD))
 		{
-			String tmpArray1[] = {Constants.ACTIVITY_STATUS};
+			String tmpArray1[] = {Status.ACTIVITY_STATUS.toString()};
 			String tmpArray2[] = {Constants.EQUALS};
 			String tmpArray3[] = {Constants.ACTIVITY_STATUS_ACTIVE};
 			whereColumnName = tmpArray1;
@@ -1016,7 +1023,7 @@ public class UserBizLogic extends DefaultBizLogic
 		}
 		else
 		{
-			String tmpArray1[] = {Constants.ACTIVITY_STATUS, Constants.ACTIVITY_STATUS};
+			String tmpArray1[] = {Status.ACTIVITY_STATUS.toString(), Status.ACTIVITY_STATUS.toString()};
 			String tmpArray2[] = {Constants.EQUALS,Constants.EQUALS};
 			String tmpArray3[] = {Constants.ACTIVITY_STATUS_ACTIVE, Constants.ACTIVITY_STATUS_CLOSED};
 			whereColumnName = tmpArray1;
@@ -1053,12 +1060,12 @@ public class UserBizLogic extends DefaultBizLogic
 	 * and value as systemtIdentifier, of all users who are not disabled. 
 	 * @return the list of NameValueBeans with name as "LastName,Firstname" 
 	 * and value as systemtIdentifier, of all users who are not disabled.
-	 * @throws DAOException
+	 * @throws BizLogicException
 	 */
-	public Vector getCSMUsers() throws DAOException, SMException
+	public Vector getCSMUsers() throws BizLogicException, SMException
 	{
 		//Retrieve the users whose activity status is not disabled.
-		List users = SecurityManager.getInstance(UserBizLogic.class).getUsers();
+		List users = SecurityManagerFactory.getSecurityManager().getUsers();
 
 		Vector nameValuePairs = new Vector();
 		nameValuePairs.add(new NameValueBean(Constants.SELECT_OPTION, String.valueOf(Constants.SELECT_OPTION_VALUE)));
@@ -1086,9 +1093,9 @@ public class UserBizLogic extends DefaultBizLogic
 	 * Returns a list of users according to the column name and value.
 	 * @param colName column name on the basis of which the user list is to be retrieved.
 	 * @param colValue Value for the column name.
-	 * @throws DAOException
+	 * @throws BizLogicException
 	 */
-	public List retrieve(String className, String colName, Object colValue) throws DAOException
+	public List retrieve(String className, String colName, Object colValue) throws BizLogicException
 	{
 		List userList = null;
 		Logger.out.debug("In user biz logic retrieve........................");
@@ -1105,7 +1112,7 @@ public class UserBizLogic extends DefaultBizLogic
 				if (appUser.getCsmUserId() != null)
 				{
 					//Get the role of the user.
-					Role role = SecurityManager.getInstance(UserBizLogic.class).getUserRole(appUser.getCsmUserId().longValue());
+					Role role = SecurityManagerFactory.getSecurityManager().getUserRole(appUser.getCsmUserId().longValue());
 					//Logger.out.debug("In USer biz logic.............role........id......." + role.getId().toString());
 
 					if (role != null)
@@ -1115,9 +1122,10 @@ public class UserBizLogic extends DefaultBizLogic
 				}
 			}
 		}
-		catch (SMException e)
+		catch (SMException smExp)
 		{
-			throw handleSMException(e);
+			throw getBizLogicException(smExp, "sm.operation.error",
+			"Error in checking has privilege");
 		}
 
 		return userList;
@@ -1128,73 +1136,79 @@ public class UserBizLogic extends DefaultBizLogic
 	 * else returns the error key in case of an error.  
 	 * @param emailAddress the email address of the user whose password is to be sent.
 	 * @return the error key in case of an error.
-	 * @throws DAOException
-	 * @throws DAOException
-	 * @throws UserNotAuthorizedException
-	 * @throws UserNotAuthorizedException
-	 */
-	public String sendForgotPassword(String emailAddress,SessionDataBean sessionData) throws DAOException, UserNotAuthorizedException 
-	{
-		String statusMessageKey = null;
-		List list = retrieve(User.class.getName(), "emailAddress", emailAddress);
-		if (list!=null && !list.isEmpty())
-		{
-			User user = (User) list.get(0);
-			if (user.getActivityStatus().equals(Constants.ACTIVITY_STATUS_ACTIVE))
-			{
-				EmailHandler emailHandler = new EmailHandler();
-				
+	 * @throws BizLogicException
+	 * @throws BizLogicException
 
-				//Send the login details email to the user.
-				boolean emailStatus = false;
-				try
+	 */
+	public String sendForgotPassword(String emailAddress,SessionDataBean sessionData) throws BizLogicException 
+	{
+		DAO dao = null;
+		try
+		{
+			String statusMessageKey = null;
+			List list = retrieve(User.class.getName(), "emailAddress", emailAddress);
+			if (list!=null && !list.isEmpty())
+			{
+				User user = (User) list.get(0);
+				if (user.getActivityStatus().equals(Constants.ACTIVITY_STATUS_ACTIVE))
 				{
+					EmailHandler emailHandler = new EmailHandler();
+
+
+					//Send the login details email to the user.
+					boolean emailStatus = false;
+
 					emailStatus = emailHandler.sendLoginDetailsEmail(user, null);
-				}
-				catch (DAOException e)
-				{
-						e.printStackTrace();
-				}
-				if (emailStatus)
-				{
-					// if success commit 
-					/**
-					 *  Update the field FirstTimeLogin which will ensure user changes his password on login
-					 *  Note --> We can not use CommonAddEditAction to update as the user has not still logged in
-					 *  and user authorisation will fail. So writing saperate code for update. 
-					 */
-					
-					user.setFirstTimeLogin(new Boolean(true));
-					AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
-					dao.openSession(sessionData);
-			    	dao.update(user, sessionData, true, true, true);
-					dao.commit();
-			        dao.closeSession();
-					statusMessageKey = "password.send.success";
+
+					if (emailStatus)
+					{
+						// if success commit 
+						/**
+						 *  Update the field FirstTimeLogin which will ensure user changes his password on login
+						 *  Note --> We can not use CommonAddEditAction to update as the user has not still logged in
+						 *  and user authorisation will fail. So writing saperate code for update. 
+						 */
+
+						user.setFirstTimeLogin(new Boolean(true));
+						dao = openDAOSession();
+						dao.update(user);
+						dao.commit();
+						
+						statusMessageKey = "password.send.success";
+					}
+					else
+					{
+						statusMessageKey = "password.send.failure";
+					}
 				}
 				else
 				{
-					statusMessageKey = "password.send.failure";
+					//Error key if the user is not active.
+					statusMessageKey = "errors.forgotpassword.user.notApproved";
 				}
 			}
 			else
 			{
-				//Error key if the user is not active.
-				statusMessageKey = "errors.forgotpassword.user.notApproved";
+				// Error key if the user is not present.
+				statusMessageKey = "errors.forgotpassword.user.unknown";
 			}
+			return statusMessageKey;
+
 		}
-		else
+		catch (DAOException daoExp)
 		{
-			// Error key if the user is not present.
-			statusMessageKey = "errors.forgotpassword.user.unknown";
+			throw getBizLogicException(daoExp, "bizlogic.error", "");
 		}
-		return statusMessageKey;
+		finally
+		{
+			closeDAOSession(dao);
+		}
 	}
 
 	/**
 	 * Overriding the parent class's method to validate the enumerated attribute values
 	 */
-	protected boolean validate(Object obj, DAO dao, String operation) throws DAOException
+	protected boolean validate(Object obj, DAO dao, String operation) throws BizLogicException
 	{
 		User user = null;
 		if (obj instanceof UserDTO)
@@ -1232,13 +1246,14 @@ public class UserBizLogic extends DefaultBizLogic
 				if (!Validator.isEnumeratedValue(CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_STATE_LIST, null), user
 					.getAddress().getState()))
 				{
-					throw new DAOException(ApplicationProperties.getValue("state.errMsg"));
+					
+					throw getBizLogicException(null, "state.errMsg", "");
 				}
 			}
 			if (!Validator.isEnumeratedValue(CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_COUNTRY_LIST, null), user
 					.getAddress().getCountry()))
 			{
-				throw new DAOException(ApplicationProperties.getValue("country.errMsg"));
+				throw getBizLogicException(null, "country.errMsg", "");
 			}
 
 			if (Constants.PAGEOF_USER_ADMIN.equals(user.getPageOf()))
@@ -1259,14 +1274,14 @@ public class UserBizLogic extends DefaultBizLogic
 				{
 					if (!Constants.ACTIVITY_STATUS_ACTIVE.equals(user.getActivityStatus()))
 					{
-						throw new DAOException(ApplicationProperties.getValue("activityStatus.active.errMsg"));
+						throw getBizLogicException(null, "activityStatus.active.errMsg", "");
 					}
 				}
 				else
 				{
 					if (!Validator.isEnumeratedValue(Constants.USER_ACTIVITY_STATUS_VALUES, user.getActivityStatus()))
 					{
-						throw new DAOException(ApplicationProperties.getValue("activityStatus.errMsg"));
+						throw getBizLogicException(null, "activityStatus.errMsg", "");
 					}
 				}
 			}
@@ -1287,11 +1302,11 @@ public class UserBizLogic extends DefaultBizLogic
 	 * @param dao
 	 * @param operation
 	 * @return 
-	 * @throws DAOException
+	 * @throws BizLogicException
 	 */
 	
 	private boolean apiValidate(User user, DAO dao, String operation)
-					throws DAOException
+					throws BizLogicException
 	{
 		Validator validator = new Validator();
 		String message = "";
@@ -1300,7 +1315,7 @@ public class UserBizLogic extends DefaultBizLogic
 		if (validator.isEmpty(user.getEmailAddress()))
 		{
 			message = ApplicationProperties.getValue("user.emailAddress");
-			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));		
+			throw getBizLogicException(null, "errors.item.required",message);
 			
 		}
 		else
@@ -1308,7 +1323,7 @@ public class UserBizLogic extends DefaultBizLogic
 			if (!validator.isValidEmailAddress(user.getEmailAddress()))
 			{
 				message = ApplicationProperties.getValue("user.emailAddress");
-				throw new DAOException(ApplicationProperties.getValue("errors.item.format",message));	
+				throw getBizLogicException(null,"errors.item.format",message);
 			}
 			/**
 			 * Name : Vijay_Pande
@@ -1325,42 +1340,42 @@ public class UserBizLogic extends DefaultBizLogic
 				arguments = new String[]{"User", ApplicationProperties.getValue("user.emailAddress")};
 				String errMsg = new DefaultExceptionFormatter().getErrorMessage("Err.ConstraintViolation", arguments);
 				Logger.out.debug("Unique Constraint Violated: " + errMsg);
-				throw new DAOException(errMsg);
+				throw getBizLogicException(null,"bizlogic.error",errMsg);
 			}
 			/** -- patch ends here -- */
 		}
 		if (validator.isEmpty(user.getLastName()))
 		{
 			message = ApplicationProperties.getValue("user.lastName");
-			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
+			throw getBizLogicException(null,"errors.item.required",message);
 		}
 		else if(validator.isXssVulnerable(user.getLastName()))
 		{
 			message = ApplicationProperties.getValue("user.lastName");
-			throw new DAOException(ApplicationProperties.getValue("errors.xss.invalid",message));	
+			throw getBizLogicException(null,"errors.xss.invalid",message);
 		}
 
 		if (validator.isEmpty(user.getFirstName()))
 		{
 			message = ApplicationProperties.getValue("user.firstName");
-			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
+			throw getBizLogicException(null,"errors.item.required",message);
 		}
 		else if(validator.isXssVulnerable(user.getFirstName()))
 		{
 			message = ApplicationProperties.getValue("user.firstName");
-			throw new DAOException(ApplicationProperties.getValue("errors.xss.invalid",message));	
+			throw getBizLogicException(null,"errors.xss.invalid",message);
 		}
 
 		if (validator.isEmpty(user.getAddress().getCity()))
 		{
 			message = ApplicationProperties.getValue("user.city");
-			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
+			throw getBizLogicException(null,"errors.item.required",message);
 		}
 		if(edu.wustl.catissuecore.util.global.Variables.isStateRequired){
 			if (!validator.isValidOption(user.getAddress().getState()) || validator.isEmpty(user.getAddress().getState()))
 			{
 				message = ApplicationProperties.getValue("user.state");
-				throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
+				throw getBizLogicException(null,"errors.item.required",message);
 			}
 		}
 		/*
@@ -1382,7 +1397,7 @@ public class UserBizLogic extends DefaultBizLogic
 		if (!validator.isValidOption(user.getAddress().getCountry()) || validator.isEmpty(user.getAddress().getCountry()))
 		{
 			message = ApplicationProperties.getValue("user.country");
-			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
+			throw getBizLogicException(null,"errors.item.required",message);
 		}
 // Commented by Geeta 
 		/*
@@ -1396,19 +1411,19 @@ public class UserBizLogic extends DefaultBizLogic
 		if (user.getInstitution().getId()==null || user.getInstitution().getId().longValue()<=0)
 		{
 			message = ApplicationProperties.getValue("user.institution");
-			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
+			throw getBizLogicException(null,"errors.item.required",message);
 		}
 
 		if (user.getDepartment().getId()==null || user.getDepartment().getId().longValue()<=0)
 		{
 			message = ApplicationProperties.getValue("user.department");
-			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
+			throw getBizLogicException(null,"errors.item.required",message);
 		}
 
 		if (user.getCancerResearchGroup().getId()==null || user.getCancerResearchGroup().getId().longValue()<=0)
 		{
 			message = ApplicationProperties.getValue("user.cancerResearchGroup");
-			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
+			throw getBizLogicException(null,"errors.item.required",message);	
 		}
 		
 //		if (user.getRoleId() != null)
@@ -1431,7 +1446,7 @@ public class UserBizLogic extends DefaultBizLogic
 	private List getRoles() throws SMException
 	{
 		//Sets the roleList attribute to be used in the Add/Edit User Page.
-		Vector roleList = SecurityManager.getInstance(UserBizLogic.class).getRoles();
+		List roleList = SecurityManagerFactory.getSecurityManager().getRoles();
 
 		List roleNameValueBeanList = new ArrayList();
 		NameValueBean nameValueBean = new NameValueBean();
@@ -1532,7 +1547,7 @@ public class UserBizLogic extends DefaultBizLogic
 	 * This function checks whether user has logged in for first time or whether user's password is expired. 
 	 * In both these case user needs to change his password so Error key is returned
 	 * @param user - user object
-	 * @throws DAOException - throws DAOException
+	 * @throws BizLogicException - throws BizLogicException
 	 */
 	public String checkFirstLoginAndExpiry(User user) 
 	{
@@ -1659,24 +1674,31 @@ public class UserBizLogic extends DefaultBizLogic
 	 * @param emailAddress email address to be check
 	 * @param dao an object of DAO
 	 * @return isUnique boolean value to indicate presence of similar email address
-	 * @throws DAOException database exception
+	 * @throws BizLogicException database exception
 	 */
-	private boolean isUniqueEmailAddress(String emailAddress, DAO dao) throws DAOException
+	private boolean isUniqueEmailAddress(String emailAddress, DAO dao) throws BizLogicException
 	{
 		boolean isUnique=true;
-		
-		String sourceObjectName=User.class.getName();
-		String[] selectColumnName=new String[] {"id"};
-		String[] whereColumnName = new String[]{"emailAddress"};
-		String[] whereColumnCondition = new String[]{"="};
-		Object[] whereColumnValue = new String[]{emailAddress};
-		String joinCondition = null;
-		
-		List userList = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
-		
-		if (userList.size() > 0)
+
+		try
 		{
-			isUnique=false;
+			String sourceObjectName=User.class.getName();
+			String[] selectColumnName=new String[] {"id"};
+
+			QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
+			queryWhereClause.addCondition(new EqualClause("emailAddress",emailAddress));
+
+
+			List userList = dao.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
+
+			if (userList.size() > 0)
+			{
+				isUnique=false;
+			}
+		}
+		catch(DAOException daoExp)
+		{
+			throw getBizLogicException(daoExp, "bizlogic.error", "");
 		}
 		return isUnique;
 	}
@@ -1698,7 +1720,7 @@ public class UserBizLogic extends DefaultBizLogic
 			try 
 			{
 				//Get the role of the user.
-				role = SecurityManager.getInstance(UserBizLogic.class).getUserRole(user.getCsmUserId().longValue());
+				role = SecurityManagerFactory.getSecurityManager().getUserRole(user.getCsmUserId().longValue());
 				if (role != null)
 				{
 					user.setRoleId(role.getId().toString());
@@ -1715,7 +1737,7 @@ public class UserBizLogic extends DefaultBizLogic
 
 	//					     //method to return a comma seperated list of emails of administrators of a particular institute
 	//					     
-	//					     private String getInstitutionAdmins(Long instID) throws DAOException,SMException 
+	//					     private String getInstitutionAdmins(Long instID) throws BizLogicException,SMException 
 	//					     {
 	//					     	String retStr="";
 	//					     	String[] userEmail;
@@ -1760,16 +1782,16 @@ public class UserBizLogic extends DefaultBizLogic
 
 	public Set<Long> getRelatedCPIds(Long userId, boolean isCheckForCPBasedView)
 	{
-		Session session = null;
+		DAO dao = null;
 		Collection<CollectionProtocol> userCpCollection = new HashSet<CollectionProtocol>();
 		Collection<CollectionProtocol> userColl;
 		Set<Long> cpIds = new HashSet<Long>();
 
 		try 
 		{
-			session = DBUtil.getCleanSession();
+			dao = openDAOSession();
 			
-			User user = (User) session.load(User.class.getName(), userId);
+			User user = (User)dao.retrieveById(User.class.getName(), userId);
 			userColl = user.getCollectionProtocolCollection();
 			userCpCollection = user.getAssignedProtocolCollection();
 
@@ -1816,7 +1838,7 @@ public class UserBizLogic extends DefaultBizLogic
 		}
 		finally
 		{
-			session.close();
+			closeDAOSession(dao);
 		}
 
 		return cpIds;
@@ -1824,15 +1846,15 @@ public class UserBizLogic extends DefaultBizLogic
 
 	public Set<Long> getRelatedSiteIds(Long userId) 
 	{
-		Session session = null;
+		DAO dao = null;
 	
 		HashSet<Long> idSet = null;
 		
 		try 
 		{
-			session = DBUtil.getCleanSession();
+			dao = openDAOSession();
 
-			User user = (User) session.load(User.class.getName(), userId);
+			User user = (User) dao.retrieveById(User.class.getName(), userId);
 			if (!user.getRoleId().equalsIgnoreCase(Constants.ADMIN_USER))
 			{
 				Collection<Site> siteCollection = user.getSiteCollection();
@@ -1844,13 +1866,18 @@ public class UserBizLogic extends DefaultBizLogic
 				}
 			}
 		}
-		catch (BizLogicException e1) 
+		catch (ApplicationException e1) 
 		{
 			Logger.out.debug(e1.getMessage(), e1);
 		}
 		finally
 		{
-			session.close();
+			try {
+				closeDAOSession(dao);
+			} catch (BizLogicException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		
 		return idSet;
@@ -1864,7 +1891,7 @@ public class UserBizLogic extends DefaultBizLogic
 		 * @param sessionDataBean
 		 * @return
 		 */
-		public String getObjectId(AbstractDAO dao, Object domainObject) 
+		public String getObjectId(DAO dao, Object domainObject) 
 		{	
 			User user = null;
 			UserDTO userDTO = null;
@@ -1896,7 +1923,7 @@ public class UserBizLogic extends DefaultBizLogic
 				{
 					userRowIdMap = getUserRowIdMap(user, userRowIdMap);
 				} 
-				catch (DAOException e) 
+				catch (BizLogicException e) 
 				{
 					e.printStackTrace();
 				}
@@ -1949,7 +1976,7 @@ public class UserBizLogic extends DefaultBizLogic
 	    	return Constants.ADD_EDIT_USER;
 	    }
 		
-		public boolean checkUser(Object domainObject, SessionDataBean sessionDataBean) throws DAOException 
+		public boolean checkUser(Object domainObject, SessionDataBean sessionDataBean) throws BizLogicException 
 		{
 			User user = null;
 			UserDTO userDTO = null;
@@ -1969,7 +1996,7 @@ public class UserBizLogic extends DefaultBizLogic
 				user = userDTO.getUser();
 				if(user.getRoleId().equals(Constants.SUPER_ADMIN_USER))
 				{
-					throw new DAOException(ApplicationProperties.getValue("user.cannotCreateSuperAdmin"));
+					throw getBizLogicException(null, "user.cannotCreateSuperAdmin", "");
 				}
 				userRowIdMap = userDTO.getUserRowIdBeanMap();
 				if(userRowIdMap != null)
@@ -1982,7 +2009,7 @@ public class UserBizLogic extends DefaultBizLogic
 						
 						if(bean.getSiteList()==null || bean.getSiteList().isEmpty())
 						{
-							throw new DAOException(ApplicationProperties.getValue("user.cannotCreateScientist"));
+							throw getBizLogicException(null, "user.cannotCreateScientist", "");
 						}
 					}
 				}
@@ -1990,11 +2017,13 @@ public class UserBizLogic extends DefaultBizLogic
 				{
 					if(user.getRoleId().equals(Constants.NON_ADMIN_USER))
 					{
-						throw new DAOException(ApplicationProperties.getValue("user.cannotCreateScientist"));
+						
+						throw getBizLogicException(null, "user.cannotCreateScientist", "");
 					}
 					if(user.getRoleId()==null || user.getRoleId().equals("") || user.getSiteCollection()==null || user.getSiteCollection().isEmpty())
 					{	
-						throw new DAOException(ApplicationProperties.getValue("user.siteIsRequired"));
+						
+						throw getBizLogicException(null, "user.siteIsRequired", "");
 					}
 				}
 			}
@@ -2021,61 +2050,68 @@ public class UserBizLogic extends DefaultBizLogic
 		 * Over-ridden for the case of Non - Admin user should be able to edit
 		 * his/her details e.g. Password 
 		 * (non-Javadoc)
-		 * @throws UserNotAuthorizedException 
-		 * @throws DAOException 
+		 * @throws BizLogicException 
 		 * @see edu.wustl.common.bizlogic.DefaultBizLogic#isAuthorized(edu.wustl.common.dao.AbstractDAO, java.lang.Object, edu.wustl.common.beans.SessionDataBean)
 		 */
-		public boolean isAuthorized(AbstractDAO dao, Object domainObject, SessionDataBean sessionDataBean) throws UserNotAuthorizedException, DAOException  
+		public boolean isAuthorized(DAO dao, Object domainObject, SessionDataBean sessionDataBean) throws BizLogicException
 		{
-			boolean isAuthorized = false;
-			isAuthorized = checkUser(domainObject, sessionDataBean);
-			if(isAuthorized)
+			try
 			{
-				return true;
+				boolean isAuthorized = false;
+				isAuthorized = checkUser(domainObject, sessionDataBean);
+				if(isAuthorized)
+				{
+					return true;
+				}
+
+				String privilegeName = getPrivilegeName(domainObject);
+				String protectionElementName = getObjectId(dao, domainObject);
+
+				if(Constants.cannotCreateSuperAdmin.equals(protectionElementName))
+				{
+					throw getBizLogicException(null, "user.cannotCreateSuperAdmin", "");
+				}
+				if(Constants.siteIsRequired.equals(protectionElementName))
+				{
+
+					throw getBizLogicException(null, "user.siteIsRequired", "");
+				}
+
+				PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(sessionDataBean.getUserName());
+
+				if (protectionElementName != null)
+				{
+					String [] prArray = protectionElementName.split(Constants.UNDERSCORE);
+					String baseObjectId = prArray[0];
+					String objId = null;
+
+					for (int i = 1 ; i < prArray.length;i++)
+					{
+						objId = baseObjectId+Constants.UNDERSCORE+prArray[i];
+						isAuthorized = privilegeCache.hasPrivilege(objId.toString(),privilegeName);
+						if (!isAuthorized)
+						{
+							break;
+						}
+					}
+
+					if (!isAuthorized)
+					{
+						//bug 11611 and 11659
+						throw Utility.getUserNotAuthorizedException(privilegeName, protectionElementName,domainObject.getClass().getSimpleName()); 
+					}
+					return isAuthorized;		
+				}
+				else
+				{
+					// return false;
+					//bug 11611 and 11659
+					throw Utility.getUserNotAuthorizedException(privilegeName, protectionElementName,domainObject.getClass().getSimpleName());
+				}
 			}
-			
-			String privilegeName = getPrivilegeName(domainObject);
-			String protectionElementName = getObjectId(dao, domainObject);
-			
-			if(Constants.cannotCreateSuperAdmin.equals(protectionElementName))
+			catch(ApplicationException exp)
 			{
-				throw new DAOException(ApplicationProperties.getValue("user.cannotCreateSuperAdmin"));
+				throw getBizLogicException(exp, "bizlogic.error", "");
 			}
-			if(Constants.siteIsRequired.equals(protectionElementName))
-			{
-				throw new DAOException(ApplicationProperties.getValue("user.siteIsRequired"));
-			}
-			
-			PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(sessionDataBean.getUserName());
-			 
-			if (protectionElementName != null)
-			{
-				String [] prArray = protectionElementName.split(Constants.UNDERSCORE);
-				String baseObjectId = prArray[0];
-				String objId = null;
-				
-	    		for (int i = 1 ; i < prArray.length;i++)
-	    		{
-	    			objId = baseObjectId+Constants.UNDERSCORE+prArray[i];
-	    			isAuthorized = privilegeCache.hasPrivilege(objId.toString(),privilegeName);
-	    			if (!isAuthorized)
-	    			{
-	    				break;
-	    			}
-	    		}
-	    		
-	    		if (!isAuthorized)
-	            {
-	    			//bug 11611 and 11659
-	    			throw Utility.getUserNotAuthorizedException(privilegeName, protectionElementName,domainObject.getClass().getSimpleName()); 
-	            }
-	    		return isAuthorized;		
-			}
-			else
-			{
-				// return false;
-				//bug 11611 and 11659
-				throw Utility.getUserNotAuthorizedException(privilegeName, protectionElementName,domainObject.getClass().getSimpleName());
-			}		
 		}			
 }

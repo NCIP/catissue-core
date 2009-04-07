@@ -6,20 +6,17 @@ import java.util.Vector;
 import edu.wustl.catissuecore.domain.pathology.ReportLoaderQueue;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.bizlogic.DefaultBizLogic;
-import edu.wustl.common.dao.DAO;
-import edu.wustl.common.dao.DAOFactory;
-import edu.wustl.common.dao.HibernateDAO;
-import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.tree.QueryTreeNodeData;
-import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.dao.DAO;
+import edu.wustl.dao.exception.DAOException;
 
 /**
  * This class is used add, update and retrieve report loader queue  
  * information using Hibernate.
  */
 
-public class ReportLoaderQueueBizLogic extends DefaultBizLogic
+public class ReportLoaderQueueBizLogic extends CatissueDefaultBizLogic
 {
 
 	/**
@@ -28,10 +25,17 @@ public class ReportLoaderQueueBizLogic extends DefaultBizLogic
 	 * @param session The session in which the object is saved.
 	 * @throws DAOException 
 	 */
-	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
+	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws BizLogicException
 	{
-		ReportLoaderQueue reportLoaderQueue = (ReportLoaderQueue) obj;
-		dao.insert(reportLoaderQueue, sessionDataBean, false, false);
+		try
+		{
+			ReportLoaderQueue reportLoaderQueue = (ReportLoaderQueue) obj;
+			dao.insert(reportLoaderQueue, false);
+		}
+		catch(DAOException daoExp)
+		{
+			throw getBizLogicException(daoExp, "bizlogic.error", "");
+		}
  	}
 
 	/**
@@ -40,9 +44,16 @@ public class ReportLoaderQueueBizLogic extends DefaultBizLogic
 	 * @param session The session in which the object is saved.
 	 * @throws DAOException 
 	 */
-	protected void delete(Object obj, DAO dao) throws DAOException, UserNotAuthorizedException
+	protected void delete(Object obj, DAO dao) throws BizLogicException
 	{
-		dao.delete(obj);
+		try
+		{
+			dao.delete(obj);
+		}
+		catch(DAOException daoExp)
+		{
+			throw getBizLogicException(daoExp, "bizlogic.error", "");
+		}
 	}
 
 
@@ -52,10 +63,17 @@ public class ReportLoaderQueueBizLogic extends DefaultBizLogic
 	 * @param session The session in which the object is saved.
 	 * @throws DAOException 
 	 */
-	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
+	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws BizLogicException
 	{
-		ReportLoaderQueue reportLoaderQueue = (ReportLoaderQueue)obj;
-		dao.update(reportLoaderQueue, sessionDataBean, false, false, false);
+		try
+		{
+			ReportLoaderQueue reportLoaderQueue = (ReportLoaderQueue)obj;
+			dao.update(reportLoaderQueue);
+		}
+		catch(DAOException daoExp)
+		{
+			throw getBizLogicException(daoExp, "bizlogic.error", "");
+		}	
 	}
 	
 	/**
@@ -77,7 +95,7 @@ public class ReportLoaderQueueBizLogic extends DefaultBizLogic
 	 * @throws DAOException
 	 * @throws ClassNotFoundException
 	 */
-	public Vector getTreeViewData(Long reportQueueId,String siteName,Vector treeDataVector) throws DAOException, ClassNotFoundException
+	public Vector getTreeViewData(Long reportQueueId,String siteName,Vector treeDataVector)throws BizLogicException
 	{
 			
 		int partcipantListSize=0,cprListSize=0,scgListSize=0;
@@ -207,13 +225,25 @@ public class ReportLoaderQueueBizLogic extends DefaultBizLogic
 	 * @throws DAOException DAOException
 	 * @throws ClassNotFoundException ClassNotFoundException
 	 */
-	public List executeQuery(String hql) throws DAOException, ClassNotFoundException
+	public List executeQuery(String hql) throws BizLogicException
 	{
-		HibernateDAO dao = (HibernateDAO) DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
-		dao.openSession(null);
-		List list = dao.executeQuery(hql, null, false, null);
-		dao.closeSession();
-		return list;
+		DAO dao = null;
+		
+		try
+		{
+			dao = openDAOSession(); 
+			List list = dao.executeQuery(hql);
+			dao.closeSession();
+			return list;
+		}
+		catch(DAOException daoExp)
+		{
+			throw getBizLogicException(daoExp, "bizlogic.error", "");
+		}
+		finally
+		{
+			closeDAOSession(dao);
+		}
 	}
 			
 	

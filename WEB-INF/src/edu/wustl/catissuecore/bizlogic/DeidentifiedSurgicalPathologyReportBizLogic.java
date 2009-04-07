@@ -15,14 +15,14 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
-import edu.wustl.common.dao.DAO;
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.security.SecurityManager;
-import edu.wustl.common.security.exceptions.SMException;
-import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
-import edu.wustl.common.util.Permissions;
-import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.DAO;
+import edu.wustl.dao.exception.DAOException;
+import edu.wustl.security.exception.SMException;
+import edu.wustl.security.exception.UserNotAuthorizedException;
+import edu.wustl.security.global.Permissions;
 
 /**
  * Used to store deidentified pathology report to the database 
@@ -36,18 +36,18 @@ public class DeidentifiedSurgicalPathologyReportBizLogic extends DefaultBizLogic
 	 * @param session The session in which the object is saved.
 	 * @throws DAOException 
 	 */
-	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
+	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws BizLogicException
 	{
 		try
 		{
 			DeidentifiedSurgicalPathologyReport deidentifiedReport = (DeidentifiedSurgicalPathologyReport) obj;
-			dao.insert(deidentifiedReport, sessionDataBean, false, false);
+			dao.insert(deidentifiedReport, false);
 			
-			
-			IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReport=(IdentifiedSurgicalPathologyReport)dao.retrieveAttribute(SpecimenCollectionGroup.class.getName(), deidentifiedReport.getSpecimenCollectionGroup().getId(), "identifiedSurgicalPathologyReport");
+			IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReport=(IdentifiedSurgicalPathologyReport)dao.retrieveAttribute(SpecimenCollectionGroup.class,
+					deidentifiedReport.getSpecimenCollectionGroup().getId(), "identifiedSurgicalPathologyReport",Constants.SYSTEM_IDENTIFIER);
 			identifiedSurgicalPathologyReport.setReportStatus(CaTIESConstants.DEIDENTIFIED);
 			identifiedSurgicalPathologyReport.setDeIdentifiedSurgicalPathologyReport(deidentifiedReport);
-			dao.update(identifiedSurgicalPathologyReport, sessionDataBean, true, false, false);
+			dao.update(identifiedSurgicalPathologyReport,null);
 			
 			Set protectionObjects = new HashSet();
 			protectionObjects.add(deidentifiedReport);
@@ -64,8 +64,8 @@ public class DeidentifiedSurgicalPathologyReportBizLogic extends DefaultBizLogic
 	 * @return Array of dynamicGroup
 	 * @throws SMException Security manager exception
 	 * @throws DAOException 
-	 */
-	private String[] getDynamicGroups(DAO dao, AbstractDomainObject obj) throws SMException, DAOException
+	 *//*
+	private String[] getDynamicGroups(DAO dao, AbstractDomainObject obj) throws BizLogicException
 	{
 		DeidentifiedSurgicalPathologyReport deIdentifiedSurgicalPathologyReport= (DeidentifiedSurgicalPathologyReport)obj;
 		CollectionProtocolRegistration collectionProtocolRegistration=(CollectionProtocolRegistration)dao.retrieveAttribute(SpecimenCollectionGroup.class.getName(),deIdentifiedSurgicalPathologyReport.getSpecimenCollectionGroup().getId(),Constants.COLUMN_NAME_CPR);
@@ -76,23 +76,23 @@ public class DeidentifiedSurgicalPathologyReportBizLogic extends DefaultBizLogic
 		Logger.out.debug("Dynamic Group name: " + dynamicGroups[0]);
 		return dynamicGroups;
 	}
-	
+	*/
 	/**
 	 * Updates the persistent object in the database.
 	 * @param obj The object to be updated.
 	 * @param session The session in which the object is saved.
 	 * @throws DAOException 
 	 */
-	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
+	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws BizLogicException
 	{
 		try
 		{
 			DeidentifiedSurgicalPathologyReport report = (DeidentifiedSurgicalPathologyReport) obj;
 			if(report.getTextContent().getId()==null)
 			{
-				dao.insert(report.getTextContent(), sessionDataBean, false, false);	
+				dao.insert(report.getTextContent(),false);	
 			}
-			dao.update(report, sessionDataBean, true, false, false);
+			dao.update(report,null);
 
 		}
 		catch(Exception ex)

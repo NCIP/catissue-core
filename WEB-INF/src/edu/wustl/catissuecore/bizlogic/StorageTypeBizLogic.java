@@ -20,12 +20,12 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
-import edu.wustl.common.dao.AbstractDAO;
-import edu.wustl.common.dao.DAO;
-import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
-import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
+import edu.wustl.dao.DAO;
+import edu.wustl.dao.HibernateDAO;
+import edu.wustl.dao.exception.DAOException;
 
 /**
  * StorageTypeHDAO is used to add site type information into the database using Hibernate.
@@ -38,75 +38,91 @@ public class StorageTypeBizLogic extends DefaultBizLogic
 	 * Saves the storageType object in the database.
 	 * @param obj The storageType object to be saved.
 	 * @param session The session in which the object is saved.
-	 * @throws DAOException 
+	 * @throws BizLogicException 
 	 */
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean)
-			throws DAOException, UserNotAuthorizedException
+			throws BizLogicException
 	{
-		StorageType type = (StorageType) obj;
+		try
+		{
+			StorageType type = (StorageType) obj;
 
-		/**
-		 * Start: Change for API Search   --- Jitendra 06/10/2006
-		 * In Case of Api Search, previoulsy it was failing since there was default class level initialization 
-		 * on domain object. For example in User object, it was initialized as protected String lastName=""; 
-		 * So we removed default class level initialization on domain object and are initializing in method
-		 * setAllValues() of domain object. But in case of Api Search, default values will not get set 
-		 * since setAllValues() method of domainObject will not get called. To avoid null pointer exception,
-		 * we are setting the default values same as we were setting in setAllValues() method of domainObject.
-		 */
-		ApiSearchUtil.setContainerTypeDefault(type);
-		//End:-  Change for API Search 
+			/**
+			 * Start: Change for API Search   --- Jitendra 06/10/2006
+			 * In Case of Api Search, previoulsy it was failing since there was default class level initialization 
+			 * on domain object. For example in User object, it was initialized as protected String lastName=""; 
+			 * So we removed default class level initialization on domain object and are initializing in method
+			 * setAllValues() of domain object. But in case of Api Search, default values will not get set 
+			 * since setAllValues() method of domainObject will not get called. To avoid null pointer exception,
+			 * we are setting the default values same as we were setting in setAllValues() method of domainObject.
+			 */
+			ApiSearchUtil.setContainerTypeDefault(type);
+			//End:-  Change for API Search 
 
-		dao.insert(type.getCapacity(), sessionDataBean, true, true);
-		dao.insert(type, sessionDataBean, true, true);
+			dao.insert(type.getCapacity(), true);
+			dao.insert(type, true);
+		}
+		catch(DAOException daoExp)
+		{
+			throw getBizLogicException(daoExp, "bizlogic.error", "");
+		}
 	}
 
 	/**
 	 * Updates the persistent object in the database.
 	 * @param obj The object to be updated.
 	 * @param session The session in which the object is saved.
-	 * @throws DAOException 
+	 * @throws BizLogicException 
 	 */
 	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean)
-			throws DAOException, UserNotAuthorizedException
+			throws BizLogicException
 	{
-		StorageType type = (StorageType) obj;
+		try
+		{
+			StorageType type = (StorageType) obj;
 
-		/**
-		 * Start: Change for API Search   --- Jitendra 06/10/2006
-		 * In Case of Api Search, previoulsy it was failing since there was default class level initialization 
-		 * on domain object. For example in User object, it was initialized as protected String lastName=""; 
-		 * So we removed default class level initialization on domain object and are initializing in method
-		 * setAllValues() of domain object. But in case of Api Search, default values will not get set 
-		 * since setAllValues() method of domainObject will not get called. To avoid null pointer exception,
-		 * we are setting the default values same as we were setting in setAllValues() method of domainObject.
-		 */
-		ApiSearchUtil.setContainerTypeDefault(type);
-		//End:-  Change for API Search 
+			/**
+			 * Start: Change for API Search   --- Jitendra 06/10/2006
+			 * In Case of Api Search, previoulsy it was failing since there was default class level initialization 
+			 * on domain object. For example in User object, it was initialized as protected String lastName=""; 
+			 * So we removed default class level initialization on domain object and are initializing in method
+			 * setAllValues() of domain object. But in case of Api Search, default values will not get set 
+			 * since setAllValues() method of domainObject will not get called. To avoid null pointer exception,
+			 * we are setting the default values same as we were setting in setAllValues() method of domainObject.
+			 */
+			ApiSearchUtil.setContainerTypeDefault(type);
+			//End:-  Change for API Search 
 
-		dao.update(type.getCapacity(), sessionDataBean, true, false, false);
-		dao.update(type, sessionDataBean, true, true, false);
+			dao.update(type.getCapacity());
+			dao.update(type);
 
-		//Audit of update.
-		StorageType oldStorageType = (StorageType) oldObj;
-		dao.audit(type.getCapacity(), oldStorageType.getCapacity(), sessionDataBean, true);
-		dao.audit(obj, oldObj, sessionDataBean, true);
+			//Audit of update.
+			StorageType oldStorageType = (StorageType) oldObj;
+			((HibernateDAO)dao).audit(type.getCapacity(), oldStorageType.getCapacity());
+			((HibernateDAO)dao).audit(obj, oldObj);
+		}
+		catch(DAOException daoExp)
+		{
+			throw getBizLogicException(daoExp, "bizlogic.error", "");
+		}
 	}
 
 	//Added by Ashish
 
-	protected boolean validate(Object obj, DAO dao, String operation) throws DAOException
+	protected boolean validate(Object obj, DAO dao, String operation) throws BizLogicException
 	{
 		StorageType storageType = (StorageType) obj;
 		String message = "";
 		if (storageType == null)
-			throw new DAOException("domain.object.null.err.msg");
+			throw getBizLogicException(null, "domain.object.null.err.msg", "");
+			
 		//throw new DAOException("domain.object.null.err.msg", new String[]{"Storage Type"});
 		Validator validator = new Validator();
 		if (validator.isEmpty(storageType.getName()))
 		{
-			throw new DAOException(ApplicationProperties.getValue("errors.item.required",
-					ApplicationProperties.getValue("storageType.type")));
+			
+			throw getBizLogicException(null, "errors.item.required",
+					ApplicationProperties.getValue("storageType.type"));
 		}
 		else
 		{
@@ -114,15 +130,16 @@ public class StorageTypeBizLogic extends DefaultBizLogic
 			String delimitedString = validator.delimiterExcludingGiven(s);
 			if (validator.containsSpecialCharacters(storageType.getName(), delimitedString))
 			{
-				throw new DAOException(ApplicationProperties.getValue("errors.valid.data",
-						ApplicationProperties.getValue("storageType.type")));
+				
+				throw getBizLogicException(null, "errors.valid.data",
+						ApplicationProperties.getValue("storageType.type"));
 			}
 
 		}
 		if (validator.isEmpty(String.valueOf(storageType.getCapacity().getOneDimensionCapacity())))
 		{
 			message = ApplicationProperties.getValue("storageType.oneDimensionCapacity");
-			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+			throw getBizLogicException(null, "errors.item.required", message);
 
 		}
 		else
@@ -131,8 +148,8 @@ public class StorageTypeBizLogic extends DefaultBizLogic
 					.getOneDimensionCapacity())))
 			{
 				message = ApplicationProperties.getValue("storageType.oneDimensionCapacity");
-				throw new DAOException(ApplicationProperties
-						.getValue("errors.item.format", message));
+				
+				throw getBizLogicException(null,"errors.item.format", message);
 
 			}
 		}
@@ -140,13 +157,13 @@ public class StorageTypeBizLogic extends DefaultBizLogic
 		if (validator.isEmpty(storageType.getOneDimensionLabel()))
 		{
 			message = ApplicationProperties.getValue("storageType.oneDimensionLabel");
-			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+			throw getBizLogicException(null,"errors.item.required", message);
 
 		}
 		if (validator.isEmpty(String.valueOf(storageType.getCapacity().getTwoDimensionCapacity())))
 		{
 			message = ApplicationProperties.getValue("storageType.twoDimensionCapacity");
-			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+			throw getBizLogicException(null,"errors.item.required", message);
 
 		}
 		else
@@ -155,8 +172,8 @@ public class StorageTypeBizLogic extends DefaultBizLogic
 					.getTwoDimensionCapacity())))
 			{
 				message = ApplicationProperties.getValue("storageType.twoDimensionCapacity");
-				throw new DAOException(ApplicationProperties
-						.getValue("errors.item.format", message));
+				
+				throw getBizLogicException(null,"errors.item.format", message);
 
 			}
 		}
@@ -165,7 +182,7 @@ public class StorageTypeBizLogic extends DefaultBizLogic
 				&& (storageType.getCapacity().getTwoDimensionCapacity().intValue() > 1))
 		{
 			message = ApplicationProperties.getValue("storageType.twoDimensionLabel");
-			throw new DAOException(ApplicationProperties.getValue("errors.labelRequired", message));
+			throw getBizLogicException(null,"errors.labelRequired", message);
 
 		}
 
@@ -174,7 +191,7 @@ public class StorageTypeBizLogic extends DefaultBizLogic
 						false))
 		{
 			message = ApplicationProperties.getValue("storageType.defaultTemperature");
-			throw new DAOException(ApplicationProperties.getValue("errors.item.format", message));
+			throw getBizLogicException(null,"errors.item.format", message);
 
 		}
 		return true;
@@ -185,9 +202,9 @@ public class StorageTypeBizLogic extends DefaultBizLogic
 	 * To get the ids of the StorageType that the given StorageType can hold. 
 	 * @param type The reference to StorageType object.
 	 * @return The array of ids of StorageType that the given StorageType can hold.
-	 * @throws DAOException
+	 * @throws BizLogicException
 	 */
-	public long[] getDefaultHoldStorageTypeList(StorageType type) throws DAOException
+	public long[] getDefaultHoldStorageTypeList(StorageType type) throws BizLogicException
 	{
 		Collection spcimenArrayTypeCollection = (Collection) retrieveAttribute(StorageType.class.getName(), type.getId(), "elements(holdsStorageTypeCollection)");
 		return Utility.getobjectIds(spcimenArrayTypeCollection);
@@ -196,7 +213,7 @@ public class StorageTypeBizLogic extends DefaultBizLogic
 	 * To get the Specimen Class types that the given StorageType can hold. 
 	 * @param type The reference to StorageType object.
 	 * @return The array of String representing Specimen Class types that the given StorageType can hold.
-	 * @throws DAOException
+	 * @throws BizLogicException
 	 */
 	public String[] getDefaultHoldsSpecimenClasstypeList(StorageType type)
 	{
@@ -230,9 +247,9 @@ public class StorageTypeBizLogic extends DefaultBizLogic
 	 * To get the ids of the SpecimenArrayType that the given StorageType can hold. 
 	 * @param type The reference to StorageType object.
 	 * @return The array of ids of SpecimenArrayType that the given StorageType can hold.
-	 * @throws DAOException
+	 * @throws BizLogicException
 	 */
-	public long[] getDefaultHoldSpecimenArrayTypeList(StorageType type) throws DAOException
+	public long[] getDefaultHoldSpecimenArrayTypeList(StorageType type) throws BizLogicException
 	{
 		//Collection spcimenArrayTypeCollection = (Collection) retrieveAttribute(StorageType.class.getName(), type.getId(), "elements(holdsSpecimenArrayTypeCollection)");
 		return Utility.getobjectIds(type.getHoldsSpecimenArrayTypeCollection());
@@ -243,7 +260,7 @@ public class StorageTypeBizLogic extends DefaultBizLogic
 	 * (non-Javadoc)
 	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getObjectId(edu.wustl.common.dao.AbstractDAO, java.lang.Object)
 	 */
-	public String getObjectId(AbstractDAO dao, Object domainObject) 
+	public String getObjectId(DAO dao, Object domainObject) 
 	{
 		return Constants.ADMIN_PROTECTION_ELEMENT;
 	}

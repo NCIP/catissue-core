@@ -8,9 +8,11 @@ import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
-import edu.wustl.common.dao.DAO;
-import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
-import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.dao.DAO;
+import edu.wustl.dao.HibernateDAO;
+import edu.wustl.dao.exception.DAOException;
+import edu.wustl.security.exception.UserNotAuthorizedException;
 
 
 public class RequirementSpecimenBizLogic extends DefaultBizLogic
@@ -28,10 +30,17 @@ public class RequirementSpecimenBizLogic extends DefaultBizLogic
 	 * @throws SMException 
 	 */
 
-	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
+	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws BizLogicException
 	{
-		SpecimenRequirement reqSpecimen  = (SpecimenRequirement) obj;
-		dao.insert(reqSpecimen, sessionDataBean, false, false);
+		try
+		{
+			SpecimenRequirement reqSpecimen  = (SpecimenRequirement) obj;
+			dao.insert(reqSpecimen, false);
+		}
+		catch(DAOException daoExp)
+		{
+			throw getBizLogicException(daoExp, "bizlogic.error", "");
+		}
 	}
 	
 	/**
@@ -43,7 +52,7 @@ public class RequirementSpecimenBizLogic extends DefaultBizLogic
 	 * @throws DAOException 
 	 * @throws DAOException Database related exception
 	 */
-	protected boolean validate(Object obj, DAO dao, String operation) throws DAOException
+	protected boolean validate(Object obj, DAO dao, String operation) throws BizLogicException
 	{
 		return true;
 	}
@@ -59,52 +68,60 @@ public class RequirementSpecimenBizLogic extends DefaultBizLogic
 	 */
 	public void updateSpecimens(DAO dao, SessionDataBean sessionDataBean,
 			CollectionProtocolEvent oldCollectionProtocolEvent,
-			CollectionProtocolEvent collectionProtocolEvent) throws DAOException,
-			UserNotAuthorizedException
+			CollectionProtocolEvent collectionProtocolEvent) throws BizLogicException
+			
 	{
-		//check for null added for Bug #8533
-		//Patch: 8533_1
-		if(collectionProtocolEvent.getSpecimenRequirementCollection() != null)
-		{	
-			Iterator<SpecimenRequirement> srIt = collectionProtocolEvent
-					.getSpecimenRequirementCollection().iterator();
-			Collection<SpecimenRequirement> oldReqspecimenCollection = null;
-			if (oldCollectionProtocolEvent != null)
-			{
-				oldReqspecimenCollection = oldCollectionProtocolEvent
-						.getSpecimenRequirementCollection();
-			}
-			while (srIt.hasNext())
-			{
-				SpecimenRequirement specimenRequirement = srIt.next();
-				if (specimenRequirement.getCollectionProtocolEvent().getId()==null) 
+		try
+		{
+			//check for null added for Bug #8533
+			//Patch: 8533_1
+			if(collectionProtocolEvent.getSpecimenRequirementCollection() != null)
+			{	
+				Iterator<SpecimenRequirement> srIt = collectionProtocolEvent
+				.getSpecimenRequirementCollection().iterator();
+				Collection<SpecimenRequirement> oldReqspecimenCollection = null;
+				if (oldCollectionProtocolEvent != null)
 				{
-					specimenRequirement.setCollectionProtocolEvent(collectionProtocolEvent);
+					oldReqspecimenCollection = oldCollectionProtocolEvent
+					.getSpecimenRequirementCollection();
 				}
-				if (specimenRequirement.getId() == null || specimenRequirement.getId() <= 0)
+				while (srIt.hasNext())
 				{
-					specimenRequirement.setCollectionProtocolEvent(collectionProtocolEvent);
-					insert(specimenRequirement, dao, sessionDataBean);
-				}
-				else
-				{
-					dao.update(specimenRequirement, sessionDataBean, true, false, false);
-					if(oldReqspecimenCollection!=null)
+					SpecimenRequirement specimenRequirement = srIt.next();
+					if (specimenRequirement.getCollectionProtocolEvent().getId()==null) 
 					{
-						SpecimenRequirement oldRequirementSpecimen = (SpecimenRequirement) getCorrespondingOldObject(
-								oldReqspecimenCollection, specimenRequirement.getId());
-						dao.audit(specimenRequirement, oldRequirementSpecimen, sessionDataBean, true);
+						specimenRequirement.setCollectionProtocolEvent(collectionProtocolEvent);
+					}
+					if (specimenRequirement.getId() == null || specimenRequirement.getId() <= 0)
+					{
+						specimenRequirement.setCollectionProtocolEvent(collectionProtocolEvent);
+						insert(specimenRequirement, dao, sessionDataBean);
+					}
+					else
+					{
+						dao.update(specimenRequirement);
+						if(oldReqspecimenCollection!=null)
+						{
+							SpecimenRequirement oldRequirementSpecimen = (SpecimenRequirement) getCorrespondingOldObject(
+									oldReqspecimenCollection, specimenRequirement.getId());
+							((HibernateDAO)dao).audit(specimenRequirement, oldRequirementSpecimen);
+						}
 					}
 				}
 			}
+			if(oldCollectionProtocolEvent!=null)
+			{
+				// Specimen delete code
+				Collection<SpecimenRequirement> oldReqSpecimenCollection = oldCollectionProtocolEvent.getSpecimenRequirementCollection();
+				Collection<SpecimenRequirement> newReqSpecimenCollection = collectionProtocolEvent.getSpecimenRequirementCollection();
+				checkSpecimenDelete(dao, oldReqSpecimenCollection,newReqSpecimenCollection);
+			}
 		}
-		if(oldCollectionProtocolEvent!=null)
+		catch(DAOException daoExp)
 		{
-			// Specimen delete code
-			Collection<SpecimenRequirement> oldReqSpecimenCollection = oldCollectionProtocolEvent.getSpecimenRequirementCollection();
-			Collection<SpecimenRequirement> newReqSpecimenCollection = collectionProtocolEvent.getSpecimenRequirementCollection();
-			checkSpecimenDelete(dao, oldReqSpecimenCollection,newReqSpecimenCollection);
+			throw getBizLogicException(daoExp, "bizlogic.error", "");
 		}
+
 	}
 	/**
 	 * 
@@ -115,7 +132,7 @@ public class RequirementSpecimenBizLogic extends DefaultBizLogic
 	 * @throws DAOException Database related exception
 	 */
 	private void checkSpecimenDelete(DAO dao,Collection oldReqSpecimenCollection, 
-			Collection newReqSpecimenCollection) throws DAOException
+			Collection newReqSpecimenCollection) throws BizLogicException
 	{
 		SpecimenRequirement oldSpReq = null;
 		SpecimenRequirement newSpReq = null;
@@ -145,7 +162,7 @@ public class RequirementSpecimenBizLogic extends DefaultBizLogic
 	 * @throws DAOException Databse related exception
 	 */
 	private void checkChildSpecimenDelete(DAO dao,Collection oldReqSpecimenCollection, 
-			Collection newReqSpecimenCollection) throws DAOException
+			Collection newReqSpecimenCollection) throws BizLogicException
 	{
 		SpecimenRequirement oldSpReq = null;
 		SpecimenRequirement newSpReq = null;
@@ -171,17 +188,25 @@ public class RequirementSpecimenBizLogic extends DefaultBizLogic
 	 * @param spReq Specimen Requirement to delete
 	 * @throws DAOException Database related exception
 	 */
-	public void deleteRequirementSpecimen(DAO dao, SpecimenRequirement spReq) throws DAOException
+	public void deleteRequirementSpecimen(DAO dao, SpecimenRequirement spReq) throws BizLogicException
 	{
-		SpecimenRequirement reqSp = (SpecimenRequirement)dao.retrieve(SpecimenRequirement.class.getName(), spReq.getId());
-		if(reqSp.getParentSpecimen()!= null)
+		try
 		{
-			Collection<AbstractSpecimen> childCollection = reqSp.getParentSpecimen().getChildSpecimenCollection();
-			childCollection.remove(reqSp);
-			reqSp.setSpecimenCharacteristics(null);
-			reqSp.setParentSpecimen(null);
+			SpecimenRequirement reqSp = (SpecimenRequirement)dao.retrieveById(SpecimenRequirement.class.getName(), spReq.getId());
+			if(reqSp.getParentSpecimen()!= null)
+			{
+				Collection<AbstractSpecimen> childCollection = reqSp.getParentSpecimen().getChildSpecimenCollection();
+				childCollection.remove(reqSp);
+				reqSp.setSpecimenCharacteristics(null);
+				reqSp.setParentSpecimen(null);
+			}
+			dao.delete(reqSp);
 		}
-		dao.delete(reqSp);
+		catch(DAOException daoExp)
+		{
+			throw getBizLogicException(daoExp, "bizlogic.error", "");
+		}
+
 	}
 	
 }

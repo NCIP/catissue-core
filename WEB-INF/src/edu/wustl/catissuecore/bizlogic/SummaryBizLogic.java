@@ -9,18 +9,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.xmlbeans.impl.common.IdentityConstraint.IdState;
-
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
-import edu.wustl.common.dao.DAOFactory;
-import edu.wustl.common.dao.JDBCDAO;
-import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.JDBCDAO;
+import edu.wustl.dao.daofactory.DAOFactory;
+import edu.wustl.dao.exception.DAOException;
 
 
-public class SummaryBizLogic extends DefaultBizLogic
+public class SummaryBizLogic extends CatissueDefaultBizLogic
 {
 	
 	/**
@@ -45,16 +44,14 @@ public class SummaryBizLogic extends DefaultBizLogic
 	 * @throws ClasssNotFoundException 
 	 */
 	private static JDBCDAO jdbcDAO = null;
-	public Map<String, Object> getTotalSummaryDetails() throws DAOException
+	public Map<String, Object> getTotalSummaryDetails() throws BizLogicException
 	{		
 		
 		Map<String, Object> summaryDataMap = null;
 		try
 		{
 			// Database connection established
-			jdbcDAO = (JDBCDAO) DAOFactory.getInstance().getDAO(
-					Constants.JDBC_DAO);
-			jdbcDAO.openSession(null);
+			jdbcDAO = openJDBCSession();
 
 			summaryDataMap = new HashMap<String, Object>();
 			summaryDataMap.put("TotalSpecimenCount",
@@ -112,7 +109,7 @@ public class SummaryBizLogic extends DefaultBizLogic
 		}
 		finally
 		{
-			jdbcDAO.closeSession();
+			closeJDBCSession(jdbcDAO);
 		}		
 		return summaryDataMap;
 	}
@@ -134,7 +131,7 @@ public class SummaryBizLogic extends DefaultBizLogic
 				+ "' and specimen.COLLECTION_STATUS = 'Collected' and specimen"+DISABLED;
 		try 
 		{
-			final List list = jdbcDAO.executeQuery(sql, null, false, null);
+			final List list = jdbcDAO.executeQuery(sql);
 
 			if (!list.isEmpty()) 
 			{
@@ -169,7 +166,7 @@ public class SummaryBizLogic extends DefaultBizLogic
 		List <NameValueBean>nameValuePairs = null;
 		try 
 		{
-			final List list = jdbcDAO.executeQuery(sql, null, false, null);			
+			final List list = jdbcDAO.executeQuery(sql);			
 			nameValuePairs = new ArrayList<NameValueBean>();
 			if (!list.isEmpty())
 			{
@@ -208,7 +205,7 @@ public class SummaryBizLogic extends DefaultBizLogic
 				+ " where absspec.SPECIMEN_CLASS='" + specimanType + "' and specimen"+DISABLED;
 		try 
 		{
-			final List list = jdbcDAO.executeQuery(sql, null, false, null);
+			final List list = jdbcDAO.executeQuery(sql);
 
 			if (!list.isEmpty()) 
 			{
@@ -305,7 +302,7 @@ public class SummaryBizLogic extends DefaultBizLogic
 		final String sql ="SELECT concat(FIRST_NAME,concat(',',LAST_NAME)), EMAIL_ADDRESS,B.PHONE_NUMBER FROM CATISSUE_USER A, CATISSUE_ADDRESS B WHERE CSM_USER_ID  IN (SELECT USER_ID FROM CSM_USER_GROUP WHERE GROUP_ID=1) AND A.IDENTIFIER>1 AND A.ADDRESS_ID=B.IDENTIFIER  AND A"+DISABLED;
 		try 
 		{
-			final List list = jdbcDAO.executeQuery(sql, null, false, null);
+			final List list = jdbcDAO.executeQuery(sql);
 			if (!list.isEmpty())
 			{
 				for(int cnt=0;cnt<list.size(); cnt++)
@@ -328,7 +325,7 @@ public class SummaryBizLogic extends DefaultBizLogic
 		String pValDNme = "0";	
 		try 
 		{
-			final List list = jdbcDAO.executeQuery(sql, null, false, null);
+			final List list = jdbcDAO.executeQuery(sql);
 			if (!list.isEmpty())
 			{
 				final List rowList = (List) list.get(0);
@@ -405,7 +402,7 @@ public class SummaryBizLogic extends DefaultBizLogic
 		List <NameValueBean>nameValuePairs = null;
 		try 
 		{
-			final List list = jdbcDAO.executeQuery(sql, null, false, null);			
+			final List list = jdbcDAO.executeQuery(sql);			
 			nameValuePairs = new ArrayList<NameValueBean>();
 			if (!list.isEmpty())
 			{

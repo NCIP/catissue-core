@@ -16,22 +16,21 @@ import java.util.Date;
 import java.util.List;
 
 import edu.wustl.catissuecore.domain.SpecimenProtocol;
-import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.bizlogic.DefaultBizLogic;
-import edu.wustl.common.dao.AbstractDAO;
-import edu.wustl.common.dao.DAOFactory;
-import edu.wustl.common.util.dbManager.DAOException;
-import edu.wustl.common.util.global.Constants;
+import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.util.Utility;
+import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
-
+import edu.wustl.dao.DAO;
+import edu.wustl.dao.exception.DAOException;
 
 /**
  * SpecimenProtocolBizLogic is a class which contains the common moethods requird for 
  * Collection Protocol and Distribution Protocol.
  * @author gautam_shetty
  */
-public class SpecimenProtocolBizLogic extends DefaultBizLogic
+public class SpecimenProtocolBizLogic extends CatissueDefaultBizLogic
 {
     /**
 	 * This method checks for the change in the Activity status of the object. If change is found
@@ -79,19 +78,16 @@ public class SpecimenProtocolBizLogic extends DefaultBizLogic
 	 * @throws DAOException
 	 * @throws ClassNotFoundException 
 	 */
-	public String getEndDate(long specimenProtocolIdentifier, SessionDataBean sessionBean) throws DAOException, ClassNotFoundException 
+	public String getEndDate(long specimenProtocolIdentifier, SessionDataBean sessionBean) throws BizLogicException
 	{
 		String endDate="";
-		
         String hqlQuery="select endDate from edu.wustl.catissuecore.domain.SpecimenProtocol where id="+specimenProtocolIdentifier;
-        AbstractDAO dao=DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
-        dao.openSession(sessionBean);
-        List endDateList = dao.executeQuery(hqlQuery, null, false, null);
-        dao.closeSession();
+        List endDateList = executeQuery(hqlQuery);
+
         if(endDateList != null && !endDateList.isEmpty()   )
         {
          	Date tmpDate = (Date) endDateList.get(0);
-           	endDate = Utility.parseDateToString(tmpDate,edu.wustl.catissuecore.util.global.Variables.dateFormat); 
+           	endDate = Utility.parseDateToString(tmpDate,CommonServiceLocator.getInstance().getDatePattern()); 
         }  
         
 		return endDate ;	

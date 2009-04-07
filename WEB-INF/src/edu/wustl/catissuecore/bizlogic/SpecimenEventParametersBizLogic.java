@@ -42,25 +42,27 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.cde.CDEManager;
-import edu.wustl.common.dao.AbstractDAO;
-import edu.wustl.common.dao.DAO;
-import edu.wustl.common.dao.DAOFactory;
-import edu.wustl.common.dao.JDBCDAO;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
-import edu.wustl.common.security.exceptions.SMException;
-import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
-import edu.wustl.common.util.dbManager.DAOException;
-import edu.wustl.common.util.dbManager.DBUtil;
-import edu.wustl.common.util.dbManager.HibernateMetaData;
+import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.DAO;
+import edu.wustl.dao.HibernateDAO;
+import edu.wustl.dao.QueryWhereClause;
+import edu.wustl.dao.condition.EqualClause;
+import edu.wustl.dao.condition.NotEqualClause;
+import edu.wustl.dao.exception.DAOException;
+import edu.wustl.dao.util.HibernateMetaData;
+import edu.wustl.security.exception.UserNotAuthorizedException;
 
 /**
  * @author mandar_deshmukh</p>
@@ -74,9 +76,9 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 	 * Saves the FrozenEventParameters object in the database.
 	 * @param obj The FrozenEventParameters object to be saved.
 	 * @param session The session in which the object is saved.
-	 * @throws DAOException 
+	 * @throws BizLogicException 
 	 */
-	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
+	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws BizLogicException
 	{
 		NewSpecimenBizLogic newSpecimenBizLogic = (NewSpecimenBizLogic) BizLogicFactory.getInstance().getBizLogic(
 				Constants.NEW_SPECIMEN_FORM_ID);
@@ -102,13 +104,13 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 		}
 	}
 
-	private void insertEvent(Object obj, DAO dao, SessionDataBean sessionDataBean, NewSpecimenBizLogic newSpecimenBizLogic,List specimenIds) throws DAOException, UserNotAuthorizedException
+	private void insertEvent(Object obj, DAO dao, SessionDataBean sessionDataBean, NewSpecimenBizLogic newSpecimenBizLogic,List specimenIds) throws BizLogicException
 	{
 		try
 		{			
 			SpecimenEventParameters specimenEventParametersObject = (SpecimenEventParameters) obj;
 
-			Object object = dao.retrieve(User.class.getName(), specimenEventParametersObject.getUser().getId());
+			Object object = dao.retrieveById(User.class.getName(), specimenEventParametersObject.getUser().getId());
 			if (object !=null)
 			{
 				User user = (User) object;
@@ -118,7 +120,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 				specimenEventParametersObject.setUser(user);
 			}
 //			Ashish - 6/6/07 - performance improvement
-			Object specimenObject = dao.retrieve(Specimen.class.getName(), specimenEventParametersObject.getSpecimen().getId());
+			Object specimenObject = dao.retrieveById(Specimen.class.getName(), specimenEventParametersObject.getSpecimen().getId());
 			Specimen specimen = (Specimen) specimenObject;
 			//(Specimen) dao.retrieveAttribute(SpecimenEventParameters.class.getName(), specimenEventParametersObject.getSpecimen().getId(),"specimen");
 			//(Specimen.class.getName(), specimenEventParametersObject.getSpecimen().getId(),Constants.SYSTEM_IDENTIFIER);
@@ -162,12 +164,15 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 						{
 							//storageContainerObj.setId(storageContainerObj.getId());
 							selectColumnName = new String[]{"id"};
-							whereColumnName = new String[]{"name"}; //"storageContainer."+Constants.SYSTEM_IDENTIFIER
+							/*	whereColumnName = new String[]{"name"}; //"storageContainer."+edu.wustl.common.util.global.Constants.SYSTEM_IDENTIFIER
 							whereColumnCondition = new String[]{"="};
 							whereColumnValue = new Object[]{transferEventParameters.getToStorageContainer().getName()};
-							joinCondition = null;
-							stNamelist = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue,
-									joinCondition);
+							joinCondition = null;*/
+
+							QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
+							queryWhereClause.addCondition(new EqualClause("name",transferEventParameters.getToStorageContainer().getName()));
+
+							stNamelist = dao.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
 							if (!stNamelist.isEmpty())
 							{
 								storageContainerObj.setId((Long) (stNamelist.get(0)));
@@ -177,17 +182,20 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 						{
 							//storageContainerObj.setId(transferEventParameters.getToStorageContainer().getId());
 							selectColumnName = new String[]{"name"};
-							whereColumnName = new String[]{"id"}; //"storageContainer."+Constants.SYSTEM_IDENTIFIER
+							/*whereColumnName = new String[]{"id"}; //"storageContainer."+edu.wustl.common.util.global.Constants.SYSTEM_IDENTIFIER
 							whereColumnCondition = new String[]{"="};
 							whereColumnValue = new Object[]{transferEventParameters.getToStorageContainer().getId()};
-							joinCondition = null;
-							stNamelist = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue,
-									joinCondition);
+							joinCondition = null;*/
+
+							QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
+							queryWhereClause.addCondition(new EqualClause("id",transferEventParameters.getToStorageContainer().getId()));
+
+							stNamelist = dao.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
 							if (!stNamelist.isEmpty())
 							{
 								storageContainerObj.setName((String) stNamelist.get(0));
 							}
-							
+
 						}
 						
 						// check for closed StorageContainer
@@ -203,7 +211,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 					
 						//storageContainerObj.setHoldsSpecimenClassCollection(storageContainerBizLogic.getSpecimenClassList(storageContainerObj.getId().toString()));
 						//storageContainerObj.setCollectionProtocolCollection(storageContainerBizLogic.getCollectionProtocolList(storageContainerObj.getId().toString()));
-						SpecimenCollectionGroup scg = (SpecimenCollectionGroup) dao.retrieveAttribute(Specimen.class.getName(),specimen.getId(),"specimenCollectionGroup");
+						SpecimenCollectionGroup scg = (SpecimenCollectionGroup) dao.retrieveAttribute(Specimen.class,Constants.SYSTEM_IDENTIFIER,specimen.getId(),"specimenCollectionGroup");
 						specimen.setSpecimenCollectionGroup(scg);
 						newSpecimenBizLogic.chkContainerValidForSpecimen(storageContainerObj, specimen, dao);
 						
@@ -226,13 +234,13 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 					specimenPosition.setPositionDimensionTwo(transferEventParameters.getToPositionDimensionTwo());
 					
 					
-					dao.update(specimen, sessionDataBean, true, true, false);
+					dao.update(specimen);
 					transferEventParameters.setToStorageContainer(storageContainerObj);
 				}
 				if (specimenEventParametersObject instanceof DisposalEventParameters)
 				{
 					DisposalEventParameters disposalEventParameters = (DisposalEventParameters) specimenEventParametersObject;
-					if (disposalEventParameters.getActivityStatus().equals(Constants.ACTIVITY_STATUS_DISABLED))
+					if (disposalEventParameters.getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED))
 					{
 						disableSubSpecimens(dao, specimen.getId().toString(),specimenIds);
 
@@ -258,7 +266,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 					Object objectContainer = null;
 					if(specimen.getSpecimenPosition() != null && specimen.getSpecimenPosition().getStorageContainer()!=null && specimen.getSpecimenPosition().getStorageContainer().getId()!=null)
 					{
-						objectContainer = dao.retrieve(StorageContainer.class.getName(), specimen.getSpecimenPosition().getStorageContainer().getId());
+						objectContainer = dao.retrieveById(StorageContainer.class.getName(), specimen.getSpecimenPosition().getStorageContainer().getId());
 					}
 					if(objectContainer != null)
 					{
@@ -280,7 +288,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 					 * Calling Domain object from Proxy Object
 					 */
 					//Specimen proxySpecimen = (Specimen)HibernateMetaData.getProxyObjectImpl(specimen);
-					dao.update(specimen, sessionDataBean, true, true, false);
+					dao.update(specimen);
 					if(prevPosition!=null)
 					{
 						dao.delete(prevPosition);
@@ -300,11 +308,11 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 			}
 			
 			specimen.getSpecimenEventCollection().add(specimenEventParametersObject);
-			dao.insert(specimenEventParametersObject, sessionDataBean, true, true);
+			dao.insert(specimenEventParametersObject, true);
 		}
-		catch (SMException e)
+		catch (DAOException daoExp)
 		{
-			throw handleSMException(e);
+			throw getBizLogicException(daoExp, "bizlogic.error", "");
 		}
 	}
 
@@ -314,9 +322,9 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 	 * @param dao DAo object.
 	 * @param specimen Specimen object on which event is happened.
 	 * @param objectType for knowing which event is happened.
-	 * @throws DAOException DAO Exception.
+	 * @throws BizLogicException DAO Exception.
 	 */
-	protected void checkStatus(DAO dao, Specimen specimen, String objectType) throws DAOException
+	protected void checkStatus(DAO dao, Specimen specimen, String objectType) throws BizLogicException
 	{
 		if (specimen != null)
 		{
@@ -333,7 +341,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 				if (Constants.ACTIVITY_STATUS_CLOSED.equals(activityStatus) &&
 						(!Constants.DISPOSAL_EVENT_PARAMETERS.equals(objectType)))
 				{
-					throw new DAOException(objectType + " " + ApplicationProperties.getValue("error.object.closed"));
+					throw getBizLogicException(null, "error.object.closed", objectType);
 				}
 			}
 		}
@@ -355,7 +363,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 
 	}
 
-	public void postInsert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
+	public void postInsert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws BizLogicException
 	{
 		//For bulk operations
 		if (obj instanceof List)
@@ -398,14 +406,14 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 
 				if (transferEventParameters.getFromStorageContainer() != null)
 				{
-					StorageContainer storageContainerFrom = (StorageContainer) dao.retrieve(StorageContainer.class.getName(), transferEventParameters
+					StorageContainer storageContainerFrom = (StorageContainer) dao.retrieveById(StorageContainer.class.getName(), transferEventParameters
 							.getFromStorageContainer().getId());
 					StorageContainerUtil.insertSinglePositionInContainerMap(storageContainerFrom, containerMap, transferEventParameters
 							.getFromPositionDimensionOne().intValue(), transferEventParameters.getFromPositionDimensionTwo().intValue());
 
 				}
 
-				StorageContainer storageContainerTo = (StorageContainer) dao.retrieve(StorageContainer.class.getName(), transferEventParameters
+				StorageContainer storageContainerTo = (StorageContainer) dao.retrieveById(StorageContainer.class.getName(), transferEventParameters
 						.getToStorageContainer().getId());
 				StorageContainerUtil.deleteSinglePositionInContainerMap(storageContainerTo, containerMap, transferEventParameters
 						.getToPositionDimensionOne().intValue(), transferEventParameters.getToPositionDimensionTwo().intValue());
@@ -462,48 +470,56 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 	 * Updates the persistent object in the database.
 	 * @param obj The object to be updated.
 	 * @param session The session in which the object is saved.
-	 * @throws DAOException 
+	 * @throws BizLogicException 
 	 */
-	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
+	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws BizLogicException
 	{
-		SpecimenEventParameters specimenEventParameters = (SpecimenEventParameters) obj;
-		SpecimenEventParameters oldSpecimenEventParameters = (SpecimenEventParameters) oldObj;
-		// Check for different User
-		if (!specimenEventParameters.getUser().getId().equals(oldSpecimenEventParameters.getUser().getId()))
+		try
 		{
-			checkStatus(dao, specimenEventParameters.getUser(), "User");
+			SpecimenEventParameters specimenEventParameters = (SpecimenEventParameters) obj;
+			SpecimenEventParameters oldSpecimenEventParameters = (SpecimenEventParameters) oldObj;
+			// Check for different User
+			if (!specimenEventParameters.getUser().getId().equals(oldSpecimenEventParameters.getUser().getId()))
+			{
+				checkStatus(dao, specimenEventParameters.getUser(), "User");
+			}
+			Specimen specimen = (Specimen)HibernateMetaData.getProxyObjectImpl(specimenEventParameters.getSpecimen());
+			List specimenIds=new ArrayList();
+			if (specimenEventParameters instanceof DisposalEventParameters)
+			{
+				DisposalEventParameters disposalEventParameters =
+					(DisposalEventParameters) specimenEventParameters;
+				SpecimenPosition prevPosition = specimen.getSpecimenPosition(); 
+				specimen.setSpecimenPosition(null);
+				specimen.setIsAvailable(new Boolean(false));
+				specimen.setActivityStatus(((DisposalEventParameters)specimenEventParameters).getActivityStatus());
+				//Update Specimen
+				if (disposalEventParameters.getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED))
+				{
+					disableSubSpecimens(dao, specimen.getId().toString(), specimenIds);
+				}
+				dao.update(specimen);
+				if(prevPosition!=null)
+				{
+					dao.delete(prevPosition);
+				}
+			}
+			//Update registration
+			dao.update(specimenEventParameters);
+			//Audit.
+			((HibernateDAO)dao).audit(obj, oldObj);
 		}
-		Specimen specimen = (Specimen)HibernateMetaData.getProxyObjectImpl(specimenEventParameters.getSpecimen());
-		List specimenIds=new ArrayList();
-		if (specimenEventParameters instanceof DisposalEventParameters)
+		catch(DAOException daoExp)
 		{
-			DisposalEventParameters disposalEventParameters =
-				(DisposalEventParameters) specimenEventParameters;
-			SpecimenPosition prevPosition = specimen.getSpecimenPosition(); 
-			specimen.setSpecimenPosition(null);
-			specimen.setIsAvailable(new Boolean(false));
-			specimen.setActivityStatus(((DisposalEventParameters)specimenEventParameters).getActivityStatus());
-			//Update Specimen
-			if (disposalEventParameters.getActivityStatus().equals(Constants.ACTIVITY_STATUS_DISABLED))
-			{
-				disableSubSpecimens(dao, specimen.getId().toString(), specimenIds);
-			}
-			dao.update(specimen, sessionDataBean, true, true, false);
-			if(prevPosition!=null)
-			{
-				dao.delete(prevPosition);
-			}
+			throw getBizLogicException(daoExp, "bizlogic.error", "");
 		}
-		//Update registration
-		dao.update(specimenEventParameters, sessionDataBean, true, true, false);
-		//Audit.
-		dao.audit(obj, oldObj, sessionDataBean, true);
+
 	}
 
 	/**
 	 * Overriding the parent class's method to validate the enumerated attribute values
 	 */
-	protected boolean validate(Object obj, DAO dao, String operation) throws DAOException
+	protected boolean validate(Object obj, DAO dao, String operation) throws BizLogicException
 	{
 		// For bulk operations
 		if (obj instanceof List)
@@ -558,7 +574,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 		return true;
 	}
 
-	private boolean validateSingleEvent(Object obj, DAO dao, String operation, int numberOfEvent) throws DAOException
+	private boolean validateSingleEvent(Object obj, DAO dao, String operation, int numberOfEvent) throws BizLogicException
 	{
 		SpecimenEventParameters eventParameter = (SpecimenEventParameters) obj;
 
@@ -586,13 +602,13 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 		Validator validator = new Validator();
 		/** -- patch ends here --*/
 		
-		switch (Utility.getEventParametersFormId(eventParameter))
+		switch (AppUtility.getEventParametersFormId(eventParameter))
 		{
 			case Constants.CHECKIN_CHECKOUT_EVENT_PARAMETERS_FORM_ID :
 				String storageStatus = ((CheckInCheckOutEventParameter) eventParameter).getStorageStatus();
 				if (!Validator.isEnumeratedValue(Constants.STORAGE_STATUS_ARRAY, storageStatus))
 				{
-					throw new DAOException(ApplicationProperties.getValue("events.storageStatus.errMsg"));
+					throw getBizLogicException(null, "events.storageStatus.errMsg", "");
 				}
 				break;
 
@@ -601,14 +617,14 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 				List procedureList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_COLLECTION_PROCEDURE, null);
 				if (!Validator.isEnumeratedValue(procedureList, procedure))
 				{
-					throw new DAOException(ApplicationProperties.getValue("events.collectionProcedure.errMsg"));
+					throw getBizLogicException(null, "events.collectionProcedure.errMsg", "");
 				}
 
 				String container = ((CollectionEventParameters) eventParameter).getContainer();
 				List containerList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_CONTAINER, null);
 				if (!Validator.isEnumeratedOrNullValue(containerList, container))
 				{
-					throw new DAOException(ApplicationProperties.getValue("events.container.errMsg"));
+					throw getBizLogicException(null, "events.container.errMsg", "");
 				}
 				/**
 				 * Name : Vijay_Pande
@@ -619,7 +635,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 				if (!validator.isValidOption(container))
 				{
 					String message = ApplicationProperties.getValue("collectioneventparameters.container");
-					throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+					throw getBizLogicException(null, "errors.item.required", message);
 				}
 				/** -- patch ends here --*/
 				break;
@@ -629,7 +645,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 				List embeddingMediumList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_EMBEDDING_MEDIUM, null);
 				if (!Validator.isEnumeratedValue(embeddingMediumList, embeddingMedium))
 				{
-					throw new DAOException(ApplicationProperties.getValue("events.embeddingMedium.errMsg"));
+					throw getBizLogicException(null, "events.embeddingMedium.errMsg", "");
 				}
 				break;
 
@@ -638,7 +654,8 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 				List fixationTypeList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_FIXATION_TYPE, null);
 				if (!Validator.isEnumeratedValue(fixationTypeList, fixationType))
 				{
-					throw new DAOException(ApplicationProperties.getValue("events.fixationType.errMsg"));
+					
+					throw getBizLogicException(null, "events.fixationType.errMsg", "");
 				}
 				break;
 
@@ -647,7 +664,8 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 				List methodList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_METHOD, null);
 				if (!Validator.isEnumeratedValue(methodList, method))
 				{
-					throw new DAOException(ApplicationProperties.getValue("events.method.errMsg"));
+				
+					throw getBizLogicException(null,"events.method.errMsg", "");
 				}
 				break;
 
@@ -656,7 +674,8 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 				List qualityList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_RECEIVED_QUALITY, null);
 				if (!Validator.isEnumeratedValue(qualityList, quality))
 				{
-					throw new DAOException(ApplicationProperties.getValue("events.receivedQuality.errMsg"));
+					
+					throw getBizLogicException(null,"events.receivedQuality.errMsg", "");
 				}
 				break;
 
@@ -665,13 +684,14 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 				List histologicalQualityList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_HISTOLOGICAL_QUALITY, null);
 				if (!Validator.isEnumeratedOrNullValue(histologicalQualityList, histQuality))
 				{
-					throw new DAOException(ApplicationProperties.getValue("events.histologicalQuality.errMsg"));
+					
+					throw getBizLogicException(null,"events.histologicalQuality.errMsg", "");
 				}
 				break;
 
 			case Constants.TRANSFER_EVENT_PARAMETERS_FORM_ID :
 				TransferEventParameters parameter = (TransferEventParameters) eventParameter;
-				Specimen specimen = (Specimen)dao.retrieve(Specimen.class.getName(), parameter.getSpecimen().getId());
+				Specimen specimen = getSpecimenObject(dao, parameter);
 //				Long fromContainerId = (Long) dao.retrieveAttribute(Specimen.class.getName(),parameter.getSpecimen().getId(),"specimenPosition");
 //				Integer pos1 = (Integer) dao.retrieveAttribute(Specimen.class.getName(),parameter.getSpecimen().getId(),"specimenPosition.positionDimensionOne");
 //				Integer pos2 = (Integer) dao.retrieveAttribute(Specimen.class.getName(),parameter.getSpecimen().getId(),"specimenPositionpositionDimensionTwo");
@@ -687,27 +707,23 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 				
 				if((fromContainerId == null && parameter.getFromStorageContainer() != null) || (fromContainerId != null && parameter.getFromStorageContainer() == null))
 				{
-					throw new DAOException("Specimen "+specimen.getLabel()+" had been moved to another location! Updated the locations. Please redo the transfers.");
+					throw getBizLogicException(null,"bizlogic.error", "Specimen "+specimen.getLabel()+" " +
+							"had been moved to another location! Updated the locations. Please redo the transfers.");
 				}
 				else if((fromContainerId != null && parameter.getFromStorageContainer() != null) && 
 						!((fromContainerId.equals(parameter.getFromStorageContainer().getId()) && 
 								pos1.equals(parameter.getFromPositionDimensionOne())
 										&& pos2.equals(parameter.getFromPositionDimensionTwo()))))
 				{
-					throw new DAOException("Specimen "+specimen.getLabel()+" had been moved to another location! Updated the locations. Please redo the transfers.");
+					
+					throw getBizLogicException(null,"bizlogic.error", "Specimen "+specimen.getLabel()+" " +
+							"had been moved to another location! Updated the locations. Please redo the transfers.");
 				}
 				if (parameter.getToStorageContainer() != null && parameter.getToStorageContainer().getName() != null)				
 				{
 					
 					StorageContainer storageContainerObj = parameter.getToStorageContainer();			
-					String sourceObjectName = StorageContainer.class.getName();
-					String[] selectColumnName = {"id"};
-					String[] whereColumnName = {"name"};
-					String[] whereColumnCondition = {"="};
-					Object[] whereColumnValue = {parameter.getToStorageContainer().getName()};
-					String joinCondition = null;
-
-					List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
+					List list = retrieveStorageContainers(dao, parameter);
 					
 					if (!list.isEmpty())
 					{
@@ -717,7 +733,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 					else
 					{
 						String message = ApplicationProperties.getValue("transfereventparameters.toposition");
-						throw new DAOException(ApplicationProperties.getValue("errors.invalid", message+" for specimen: "+specimen.getLabel()));
+						throw getBizLogicException(null, "errors.invalid", message+" for specimen: "+specimen.getLabel());
 					}
 
 					Integer xPos = parameter.getToPositionDimensionOne();
@@ -739,12 +755,14 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 					}
 					if(isContainerFull)
 					{
-						throw new DAOException("The Storage Container you specified is full");
+						
+						throw getBizLogicException(null, "bizlogic.error","The Storage Container you specified is full");
 					}
 					else if (xPos == null || yPos == null || xPos.intValue() < 0 || yPos.intValue() < 0)
 					{
-						throw new DAOException(ApplicationProperties.getValue("errors.item.format", ApplicationProperties
-								.getValue("transfereventparameters.toposition")));
+						
+						throw getBizLogicException(null, "errors.item.format",ApplicationProperties
+								.getValue("transfereventparameters.toposition"));
 					}
 				}
 				if (Constants.EDIT.equals(operation))
@@ -754,6 +772,43 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 				break;
 		}
 		return true;
+	}
+
+	private List retrieveStorageContainers(DAO dao,
+			TransferEventParameters parameter) throws BizLogicException 
+	{
+		try
+		{
+			String sourceObjectName = StorageContainer.class.getName();
+			String[] selectColumnName = {"id"};
+			/*String[] whereColumnName = {"name"};
+		String[] whereColumnCondition = {"="};
+		Object[] whereColumnValue = {parameter.getToStorageContainer().getName()};
+		String joinCondition = null;*/
+
+			QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
+			queryWhereClause.addCondition(new EqualClause("name",parameter.getToStorageContainer().getName()));
+			List list = dao.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
+			return list;
+		}
+		catch(DAOException daoExp)
+		{
+			throw getBizLogicException(daoExp, "bizlogic.error", "");
+		}
+	}
+
+	private Specimen getSpecimenObject(DAO dao,
+			TransferEventParameters parameter) throws BizLogicException
+	{
+		try
+		{
+			Specimen specimen = (Specimen)dao.retrieveById(Specimen.class.getName(), parameter.getSpecimen().getId());
+			return specimen;
+		}
+		catch(DAOException daoExp)
+		{
+			throw getBizLogicException(daoExp, "bizlogic.error", "");
+		}
 	}
 
 	/**
@@ -802,7 +857,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 		return isContainerFull;
 	}
 
-	private void validateTransferEventParameters(SpecimenEventParameters eventParameter) throws DAOException
+	private void validateTransferEventParameters(SpecimenEventParameters eventParameter) throws BizLogicException
 	{
 		TransferEventParameters parameter = (TransferEventParameters) eventParameter;
 		Object object =  retrieve(TransferEventParameters.class.getName(), parameter.getId());
@@ -817,7 +872,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 					|| !positionDimensionTwo.equals(parameter.getToPositionDimensionTwo().toString())
 					|| !storageContainer.equals(parameter.getToStorageContainer().getId().toString()))
 			{
-				throw new DAOException(ApplicationProperties.getValue("events.toPosition.errMsg"));
+				throw getBizLogicException(null, "events.toPosition.errMsg", "");
 			}
 		}
 	}
@@ -830,23 +885,27 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 			while (iterator.hasNext())
 			{
 				Specimen childSpecimen = (Specimen) iterator.next();
-				childSpecimen.setActivityStatus(Constants.ACTIVITY_STATUS_DISABLED);
+				childSpecimen.setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.toString());
 				setDisableToSubSpecimen(childSpecimen);
 			}
 		}
 	}
 
-	private void disableSubSpecimens(DAO dao, String speID,List specimenIds) throws DAOException
+	private void disableSubSpecimens(DAO dao, String speID,List specimenIds) throws BizLogicException,DAOException
 	{
 		String sourceObjectName = Specimen.class.getName();
-		String[] selectColumnName = {Constants.SYSTEM_IDENTIFIER};
-		String[] whereColumnName = {"parentSpecimen.id",Constants.ACTIVITY_STATUS};
+		String[] selectColumnName = {edu.wustl.common.util.global.Constants.SYSTEM_IDENTIFIER};
+		/*String[] whereColumnName = {"parentSpecimen.id",Constants.ACTIVITY_STATUS};
 		String[] whereColumnCondition = {"=", "!="};
-		Object[] whereColumnValue = {new Long(speID), Constants.ACTIVITY_STATUS_DISABLED};
+		Object[] whereColumnValue = {new Long(speID), Status.ACTIVITY_STATUS_DISABLED.toString()};
 		String joinCondition = Constants.AND_JOIN_CONDITION;
-		List listOfSpecimenIDs = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue,
-				joinCondition);
-			listOfSpecimenIDs = Utility.removeNull(listOfSpecimenIDs);
+		*/
+		QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
+		queryWhereClause.addCondition(new EqualClause("parentSpecimen.id",Long.valueOf(speID))).andOpr().
+		addCondition(new NotEqualClause(Status.ACTIVITY_STATUS.toString(),Status.ACTIVITY_STATUS_DISABLED.toString()));
+		
+		List listOfSpecimenIDs = dao.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
+			listOfSpecimenIDs = edu.wustl.common.util.Utility.removeNull(listOfSpecimenIDs);
 			//getRelatedObjects(dao, Specimen.class, "parentSpecimen", speIDArr);
 			
 			if (!listOfSpecimenIDs.isEmpty())
@@ -855,7 +914,9 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 				{
 					return;
 				}
-				throw new DAOException(ApplicationProperties.getValue("errors.specimen.contains.subspecimen"));
+			
+				ErrorKey errorKey = ErrorKey.getErrorKey("errors.specimen.contains.subspecimen");
+				throw new BizLogicException(errorKey,new Exception() ,"SpecimenEventParametersBizLogic.java :");
 			}
 			else
 			{
@@ -864,14 +925,26 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 	}
 
 	public List getRelatedObjects(DAO dao, Class sourceClass, String[] whereColumnName, String[] whereColumnValue, String[] whereColumnCondition)
-			throws DAOException
+			throws BizLogicException
 	{
-		String sourceObjectName = sourceClass.getName();
-		String joinCondition = Constants.AND_JOIN_CONDITION;
-		String selectColumnName[] = {Constants.SYSTEM_IDENTIFIER};
-		List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
+		List list = null;
+		try 
+		{
+			String sourceObjectName = sourceClass.getName();
+			String joinCondition = Constants.AND_JOIN_CONDITION;
+			String selectColumnName[] = {edu.wustl.common.util.global.Constants.SYSTEM_IDENTIFIER};
+			QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
 
-		list = Utility.removeNull(list);
+			queryWhereClause.getWhereCondition(whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
+
+
+			list = dao.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
+
+			list = edu.wustl.common.util.Utility.removeNull(list);
+		} catch (DAOException e) {
+			
+			throw getBizLogicException(e, "bizlogic.error", "SpecimenEventParametersBizLogic.java :");
+		}
 		return list;
 	}
 
@@ -886,7 +959,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 		return disabledconts;
 	}
 	
-	public List getSpecimenDataForBulkOperations(List specimenIds, SessionDataBean sessionDataBean, String queryString) throws ClassNotFoundException, DAOException
+	public List getSpecimenDataForBulkOperations(List specimenIds, SessionDataBean sessionDataBean, String queryString) throws BizLogicException
 	{
 		List specimenDataList = null;
 		StringBuffer specimenIdsString = new StringBuffer();
@@ -905,15 +978,11 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 		specimenIdsString.append(")");
 		
 		String sql =queryString+specimenIdsString;
-		
-		JDBCDAO dao = (JDBCDAO) DAOFactory.getInstance().getDAO(edu.wustl.common.util.global.Constants.JDBC_DAO);
-		dao.openSession(null);
-		specimenDataList = dao.executeQuery(sql,sessionDataBean, false, new HashMap());
-		dao.closeSession();
+		specimenDataList = executeQuery(sql);
 		return specimenDataList;
 	}
 	
-	public List getSpecimenDataForBulkOperations(String operation, List specimenIds, SessionDataBean sessionDataBean) throws ClassNotFoundException, DAOException
+	public List getSpecimenDataForBulkOperations(String operation, List specimenIds, SessionDataBean sessionDataBean) throws BizLogicException
 	{
 		if(operation.equals(Constants.BULK_TRANSFERS))
 		{
@@ -925,7 +994,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 		}
 	}
 	
-	public List getSpecimenDataForBulkTransfers(List specimenIds, SessionDataBean sessionDataBean) throws ClassNotFoundException, DAOException
+	public List getSpecimenDataForBulkTransfers(List specimenIds, SessionDataBean sessionDataBean) throws BizLogicException
 	{
 		
 		String sql ="Select specimen.IDENTIFIER, specimen.LABEL, abstractSpecimen.SPECIMEN_CLASS, Container.NAME , abstractposition.POSITION_DIMENSION_ONE, abstractposition.POSITION_DIMENSION_TWO, Container.IDENTIFIER " 
@@ -937,7 +1006,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 		return getSpecimenDataForBulkOperations(specimenIds, sessionDataBean, sql);
 	}
 	
-	public List getSpecimenDataForBulkDisposals(List specimenIds, SessionDataBean sessionDataBean) throws ClassNotFoundException, DAOException
+	public List getSpecimenDataForBulkDisposals(List specimenIds, SessionDataBean sessionDataBean) throws BizLogicException
 	{
 		String sql = "Select specimen.IDENTIFIER, specimen.LABEL "
 			+"from catissue_specimen specimen "
@@ -948,41 +1017,37 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 	/**
 	 * Called from DefaultBizLogic to get ObjectId for authorization check
 	 * (non-Javadoc)
-	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getObjectId(edu.wustl.common.dao.AbstractDAO, java.lang.Object)
+	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getObjectId(edu.wustl.common.dao.DAO, java.lang.Object)
 	 */
-	public String getObjectId(AbstractDAO dao, Object domainObject) 
+	public String getObjectId(DAO dao, Object domainObject) 
 	{
 		String objectId = "";
-		Session session = null;
-		
-		//TODO Optimize This code with HQL
-		if(domainObject instanceof SpecimenEventParameters)
+		try 
 		{
-			SpecimenCollectionGroup scg = null;
-			SpecimenEventParameters specimenEventParameters = (SpecimenEventParameters) domainObject;
-			AbstractSpecimen specimen = (AbstractSpecimen) specimenEventParameters.getSpecimen();
-			
-			try 
+
+			//TODO Optimize This code with HQL
+			if(domainObject instanceof SpecimenEventParameters)
 			{
-				session = DBUtil.getCleanSession();
-				specimen = (Specimen) session.load(Specimen.class.getName(), specimen.getId());
+				SpecimenCollectionGroup scg = null;
+				SpecimenEventParameters specimenEventParameters = (SpecimenEventParameters) domainObject;
+				AbstractSpecimen specimen = (AbstractSpecimen) specimenEventParameters.getSpecimen();
+
+
+				specimen = (Specimen) dao.retrieveById(Specimen.class.getName(), specimen.getId());
 				Specimen specimen1 = (Specimen) specimen;
 				scg = specimen1.getSpecimenCollectionGroup();
-				
+
 				CollectionProtocolRegistration cpr = scg.getCollectionProtocolRegistration();
 				CollectionProtocol cp = cpr.getCollectionProtocol();
 				objectId = Constants.COLLECTION_PROTOCOL_CLASS_NAME+"_"+cp.getId();
-			} 
-			catch (BizLogicException e) 
-			{
-				Logger.out.debug(e.getMessage(), e);
+
+
 			}
-			finally
-			{
-				session.close();
-			}
+		} 
+		catch (DAOException e) 
+		{
+			Logger.out.debug(e.getMessage(), e);
 		}
-		
 		return objectId;
 	}
 	
@@ -999,17 +1064,19 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 	/**
 	 * (non-Javadoc)
 	 * @throws UserNotAuthorizedException 
-	 * @throws DAOException 
-	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#isAuthorized(edu.wustl.common.dao.AbstractDAO, java.lang.Object, edu.wustl.common.beans.SessionDataBean)
+	 * @throws BizLogicException 
+	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#isAuthorized(edu.wustl.common.dao.DAO, java.lang.Object, edu.wustl.common.beans.SessionDataBean)
 	 * 
 	 */
-	public boolean isAuthorized(AbstractDAO dao, Object domainObject, SessionDataBean sessionDataBean) throws UserNotAuthorizedException, DAOException  
+	public boolean isAuthorized(DAO dao, Object domainObject, SessionDataBean sessionDataBean) throws BizLogicException
 	{
 		boolean isAuthorized = false;
 		boolean validOperation;
 		String protectionElementName = null;
 		String privilegeName = null;
 		
+		try
+		{
 		if(sessionDataBean != null && sessionDataBean.isAdmin())
 		{
 			return true;
@@ -1028,7 +1095,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 				protectionElementName = getObjectId(dao, domainObject2);
 				checkPrivilegeOnSourceSite(dao, domainObject2, sessionDataBean);
 				privilegeName = getPrivilegeName(domainObject2);
-				validOperation = Utility.checkPrivilegeOnCP(dao, domainObject2, protectionElementName, privilegeName, sessionDataBean);
+				validOperation = AppUtility.checkPrivilegeOnCP(dao, domainObject2, protectionElementName, privilegeName, sessionDataBean);
 				if(!validOperation)
 				{
 					isAuthorized = false;
@@ -1050,60 +1117,73 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 			checkPrivilegeOnSourceSite(dao, domainObject, sessionDataBean);
 			privilegeName = getPrivilegeName(domainObject);
 			protectionElementName = getObjectId(dao, domainObject);
-			isAuthorized = Utility.checkPrivilegeOnCP(dao, domainObject, protectionElementName, privilegeName, sessionDataBean);
+			isAuthorized = AppUtility.checkPrivilegeOnCP(dao, domainObject, protectionElementName, privilegeName, sessionDataBean);
 		}
 
 		if (!isAuthorized)
         {
-			throw Utility.getUserNotAuthorizedException(privilegeName, protectionElementName,domainObject.getClass().getSimpleName());   //bug 11611 and 11659
+			throw AppUtility.getUserNotAuthorizedException(privilegeName, protectionElementName);   //bug 11611 and 11659
         }
-		return isAuthorized;			
+		return isAuthorized;	
+		}
+		catch(ApplicationException daoExp)
+		{
+			throw getBizLogicException(daoExp, "bizlogic.error", "");
+		}
+
 	}
 
-	private void checkPrivilegeOnDestinationSite(AbstractDAO dao, Object domainObject, SessionDataBean sessionDataBean) throws UserNotAuthorizedException, DAOException 
+	private void checkPrivilegeOnDestinationSite(DAO dao, Object domainObject, SessionDataBean sessionDataBean) throws BizLogicException
 	{
-		TransferEventParameters tep = (TransferEventParameters) domainObject;
-		StorageContainer sc = null;
-		
-		if(tep.getToStorageContainer().getName() == null && tep.getToStorageContainer().getId() == null)
+		try
 		{
-			return; // Case when To & FROM Storage containers are the same
+			TransferEventParameters tep = (TransferEventParameters) domainObject;
+			StorageContainer sc = null;
+
+			if(tep.getToStorageContainer().getName() == null && tep.getToStorageContainer().getId() == null)
+			{
+				return; // Case when To & FROM Storage containers are the same
+			}
+			List list = null;
+			if(tep.getToStorageContainer().getId() == null)
+			{
+				list = dao.retrieve(StorageContainer.class.getName(), Constants.NAME, tep.getToStorageContainer().getName());
+			}
+			else
+			{
+				list = dao.retrieve(StorageContainer.class.getName(), Constants.ID, tep.getToStorageContainer().getId());
+			}
+			if(list.isEmpty())
+			{
+				throw getBizLogicException(null, "sc.unableToFindContainer", "");
+			}
+			sc = (StorageContainer) list.get(0);
+
+			Site site = sc.getSite();
+			Set<Long> siteIdSet = new UserBizLogic().getRelatedSiteIds(sessionDataBean.getUserId());
+
+			if(!siteIdSet.contains(site.getId()))
+			{
+				throw AppUtility.getUserNotAuthorizedException(Constants.Association, site.getObjectId());
+			}	
 		}
-		List list = null;
-		if(tep.getToStorageContainer().getId() == null)
+		catch(ApplicationException appExp)
 		{
-			list = dao.retrieve(StorageContainer.class.getName(), Constants.NAME, tep.getToStorageContainer().getName());
+			throw getBizLogicException(appExp, "bizlogic.error", "");
 		}
-		else
-		{
-			list = dao.retrieve(StorageContainer.class.getName(), Constants.ID, tep.getToStorageContainer().getId());
-		}
-		if(list.isEmpty())
-		{
-			throw new DAOException(ApplicationProperties.getValue("sc.unableToFindContainer"));
-		}
-		sc = (StorageContainer) list.get(0);
-		
-		Site site = sc.getSite();
-		Set<Long> siteIdSet = new UserBizLogic().getRelatedSiteIds(sessionDataBean.getUserId());
-		
-		if(!siteIdSet.contains(site.getId()))
-		{
-			throw Utility.getUserNotAuthorizedException(Constants.Association, site.getObjectId(),domainObject.getClass().getSimpleName());
-		}	
 	}
 
-	private void checkPrivilegeOnSourceSite(AbstractDAO dao, Object domainObject, SessionDataBean sessionDataBean) throws UserNotAuthorizedException 
+	private void checkPrivilegeOnSourceSite(DAO dao, Object domainObject, SessionDataBean sessionDataBean) throws BizLogicException
 	{
 		SpecimenPosition specimenPosition = null;
-		Session session = null;
+	
 		SpecimenEventParameters spe = (SpecimenEventParameters) domainObject;
 		AbstractSpecimen specimen = (AbstractSpecimen) spe.getSpecimen();
 		
 		try 
 		{
-			session = DBUtil.getCleanSession();
-			specimen = (Specimen) session.load(Specimen.class.getName(), specimen.getId());
+			
+			specimen = (Specimen) dao.retrieveById(Specimen.class.getName(), specimen.getId());
 			Specimen specimen1 = (Specimen) specimen;
 			specimenPosition = specimen1.getSpecimenPosition();
 			
@@ -1117,23 +1197,24 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 				if(!siteIdSet.contains(site.getId()))
 				{
 					//bug 11611 and 11659 start
-					UserNotAuthorizedException ex = Utility.getUserNotAuthorizedException(Constants.Association,specimen.getObjectId(),domainObject.getClass().getSimpleName());//
+					UserNotAuthorizedException ex = AppUtility.getUserNotAuthorizedException(Constants.Association,specimen.getObjectId());//
 					if(ex.getBaseObject()==null)
 					{
 						ex.setBaseObject("Specimen");
 					}
-					throw ex;
+					
+					throw getBizLogicException(ex, "bizlogic.error", "");
 					//bug 11611 and 11659 end
 				}
 			}
 		} 
-		catch (BizLogicException e) 
+		catch (DAOException e) 
 		{
 			Logger.out.debug(e.getMessage(), e);
 		}
 		finally
 		{
-			session.close();
+			
 		}		
 	}
 } 

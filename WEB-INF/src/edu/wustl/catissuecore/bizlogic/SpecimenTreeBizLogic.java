@@ -22,16 +22,16 @@ import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.tree.SpecimenTreeNode;
 import edu.wustl.common.tree.TreeDataInterface;
-import edu.wustl.common.util.dbManager.DAOException;
 
 /**
  * SpecimenTreeBizLogic contains the bizlogic required to display Specimen hierarchy in tree form in the ordering system module.
  * @author ramya_nagraj
  */
 
-public class SpecimenTreeBizLogic extends DefaultBizLogic implements TreeDataInterface
+public class SpecimenTreeBizLogic extends CatissueDefaultBizLogic implements TreeDataInterface
 {
 
 	/**
@@ -66,42 +66,51 @@ public class SpecimenTreeBizLogic extends DefaultBizLogic implements TreeDataInt
 	 * @return Vector Vector of Specimens
 	 */
 	
-	public Vector getTreeViewData() throws DAOException 
+	public Vector getTreeViewData()  
 	{
-		//Retrieve the Specimen instance for that particular id.
-		IBizLogic defaultBizLogic = BizLogicFactory.getInstance().getBizLogic(-1);
-		
 		Vector  allNodes = new Vector(); 
-		
-		//If specimenId is sent (Incase of biospecimen in orderlist or in defined array)
-		if(specimenCollGroup == false) 
+		try
 		{
-			Object object = defaultBizLogic.retrieve(Specimen.class.getName(), id);
-			
-			//The list consists of only one element that is:- specimen instance
-			Specimen specimenObj = (Specimen) object;
-			Collection childColl = (Collection) defaultBizLogic.retrieveAttribute(Specimen.class.getName(),id,"elements(childrenSpecimen)");
-			specimenObj.setChildSpecimenCollection(childColl);
-			allNodes = formTreeNode(specimenObj);
-		}
-		else //If specimenCollectiongroupId is sent(Incase of pathological case)
-		{
-			Object object = defaultBizLogic.retrieve(SpecimenCollectionGroup.class.getName(), id);
-			
-			//The list consists of only one element that is:- specimencollecitongroup instance
-			SpecimenCollectionGroup specimenCollGrpObj = (SpecimenCollectionGroup) object;
-			Long scgId = specimenCollGrpObj.getId();
-			Collection specimenSet = (Collection) 
-			defaultBizLogic.retrieveAttribute(SpecimenCollectionGroup.class.getName(),scgId,"elements(specimenCollection)");
-			
-			//Get the list of specimens for this group(SCG)
-//			Set specimenSet = (Set)specimenCollGrpObj.getSpecimenCollection();
-			Iterator specimenSetItr = specimenSet.iterator();
-			while(specimenSetItr.hasNext())
+			//Retrieve the Specimen instance for that particular id.
+			IBizLogic defaultBizLogic = BizLogicFactory.getInstance().getBizLogic(-1);
+
+
+
+			//If specimenId is sent (Incase of biospecimen in orderlist or in defined array)
+			if(specimenCollGroup == false) 
 			{
-				Specimen specimenObj = (Specimen)specimenSetItr.next();				
+				Object object = defaultBizLogic.retrieve(Specimen.class.getName(), id);
+
+				//The list consists of only one element that is:- specimen instance
+				Specimen specimenObj = (Specimen) object;
+				Collection childColl = (Collection) defaultBizLogic.retrieveAttribute(Specimen.class.getName(),id,"elements(childrenSpecimen)");
+				specimenObj.setChildSpecimenCollection(childColl);
 				allNodes = formTreeNode(specimenObj);
 			}
+			else //If specimenCollectiongroupId is sent(Incase of pathological case)
+			{
+				Object object = defaultBizLogic.retrieve(SpecimenCollectionGroup.class.getName(), id);
+
+				//The list consists of only one element that is:- specimencollecitongroup instance
+				SpecimenCollectionGroup specimenCollGrpObj = (SpecimenCollectionGroup) object;
+				Long scgId = specimenCollGrpObj.getId();
+				Collection specimenSet = (Collection) 
+				defaultBizLogic.retrieveAttribute(SpecimenCollectionGroup.class.getName(),scgId,"elements(specimenCollection)");
+
+				//Get the list of specimens for this group(SCG)
+				//			Set specimenSet = (Set)specimenCollGrpObj.getSpecimenCollection();
+				Iterator specimenSetItr = specimenSet.iterator();
+				while(specimenSetItr.hasNext())
+				{
+					Specimen specimenObj = (Specimen)specimenSetItr.next();				
+					allNodes = formTreeNode(specimenObj);
+				}
+			}
+
+		}
+		catch(BizLogicException exp)
+		{
+			exp.printStackTrace();
 		}
 		return allNodes;
 	}
@@ -111,7 +120,7 @@ public class SpecimenTreeBizLogic extends DefaultBizLogic implements TreeDataInt
 	 * @param specimenObj
 	 * @return rootNode SpecimentreeNode object
 	 */
-	private Vector formTreeNode(Specimen specimenObj) throws DAOException
+	private Vector formTreeNode(Specimen specimenObj) throws BizLogicException
 	{
 		Collection specimenSet = new HashSet();
 		Vector specimenTreeVector = new Vector();
@@ -149,7 +158,7 @@ public class SpecimenTreeBizLogic extends DefaultBizLogic implements TreeDataInt
 	 * @param childNodes Vector
 	 * @return Vector
 	 */
-	private Vector formSpecimenTree(Vector specimenTreeVector,SpecimenTreeNode parent,Collection childNodes) throws DAOException
+	private Vector formSpecimenTree(Vector specimenTreeVector,SpecimenTreeNode parent,Collection childNodes) throws BizLogicException
 	{
 		IBizLogic defaultBizLogic = BizLogicFactory.getInstance().getBizLogic(-1);
 		//If no childNodes present then tree will contain only the root node.
@@ -184,7 +193,8 @@ public class SpecimenTreeBizLogic extends DefaultBizLogic implements TreeDataInt
 		return specimenTreeVector;
 	}
 
-	public Vector getTreeViewData(SessionDataBean arg0, Map arg1, List arg2) throws DAOException, ClassNotFoundException {
+	public Vector getTreeViewData(SessionDataBean arg0, Map arg1, List arg2)
+	{
 		
 		return null;
 	}

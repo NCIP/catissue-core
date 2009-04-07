@@ -9,9 +9,10 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
-import edu.wustl.common.dao.DAO;
-import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
-import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.dao.DAO;
+import edu.wustl.dao.exception.DAOException;
+import edu.wustl.security.exception.UserNotAuthorizedException;
 
 /**
  * This class is used add, update and retrieve text contents on the surgical pathology reports 
@@ -27,10 +28,17 @@ public class TextReportContentBizLogic extends DefaultBizLogic
 		 * @param session The session in which the object is saved.
 		 * @throws DAOException 
 		 */
-		protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
+		protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws BizLogicException
 		{
-			TextContent textContent = (TextContent) obj;
-			dao.insert(textContent, sessionDataBean, true, false);
+			try
+			{
+				TextContent textContent = (TextContent) obj;
+				dao.insert(textContent, true);
+			}
+			catch(DAOException daoExp)
+			{
+				throw getBizLogicException(daoExp, "bizlogic.error", "");
+			}
 	 	}
 
 		/**
@@ -39,10 +47,17 @@ public class TextReportContentBizLogic extends DefaultBizLogic
 		 * @param session The session in which the object is saved.
 		 * @throws DAOException 
 		 */
-		protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
+		protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean)  throws BizLogicException
 		{
-			TextContent textContent = (TextContent) obj;
-			dao.update(textContent, sessionDataBean, true, false, false);
+			try
+			{
+				TextContent textContent = (TextContent) obj;
+				dao.update(textContent);
+			}
+			catch(DAOException daoExp)
+			{
+				throw getBizLogicException(daoExp, "bizlogic.error", "");
+			}
 		}
 
 		/**

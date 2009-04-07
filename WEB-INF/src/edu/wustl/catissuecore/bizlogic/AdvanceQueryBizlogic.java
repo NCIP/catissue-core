@@ -21,20 +21,18 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
-import edu.wustl.common.bizlogic.QueryBizLogic;
-import edu.wustl.common.dao.DAOFactory;
-import edu.wustl.common.dao.JDBCDAO;
-import edu.wustl.common.query.AdvancedConditionsNode;
-import edu.wustl.common.query.Condition;
-import edu.wustl.common.query.Operator;
-import edu.wustl.common.query.Table;
-import edu.wustl.common.tree.AdvanceQueryTreeNode;
+import edu.wustl.common.querysuite.bizlogic.QueryBizLogic;
+import edu.wustl.common.querysuite.queryobject.impl.Condition;
 import edu.wustl.common.tree.QueryTreeNodeData;
 import edu.wustl.common.tree.TreeDataInterface;
 import edu.wustl.common.tree.TreeNode;
 import edu.wustl.common.util.Utility;
-import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.JDBCDAO;
+import edu.wustl.dao.daofactory.DAOFactory;
+import edu.wustl.dao.exception.DAOException;
+import edu.wustl.simplequery.query.Operator;
+import edu.wustl.simplequery.query.Table;
 /**
  * @author poornima_govindrao
  *

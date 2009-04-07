@@ -22,19 +22,18 @@ import edu.common.dynamicextensions.domaininterface.AssociationInterface;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.common.dynamicextensions.entitymanager.EntityManager;
 import edu.common.dynamicextensions.entitymanager.EntityManagerInterface;
-import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationException;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.wustl.cab2b.server.cache.EntityCache;
 import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
-import edu.wustl.catissuecore.util.global.Utility;
-import edu.wustl.common.bizlogic.DefaultBizLogic;
-import edu.wustl.common.dao.DAO;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.exception.BizLogicException;
-import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
-import edu.wustl.common.util.dbManager.DAOException;
-import edu.wustl.common.util.global.Constants;
-
+import edu.wustl.common.exception.ErrorKey;
+import edu.wustl.common.util.global.Status;
+import edu.wustl.dao.DAO;
+import edu.wustl.dao.exception.DAOException;
+import edu.wustl.security.exception.UserNotAuthorizedException;
+import edu.wustl.catissuecore.util.global.Utility;
 /**
  * @author sandeep_chinta
  *
@@ -42,7 +41,7 @@ import edu.wustl.common.util.global.Constants;
  * Window - Preferences - Java - Code Style - Code Templates
  */
 
-public class AnnotationBizLogic extends DefaultBizLogic
+public class AnnotationBizLogic extends CatissueDefaultBizLogic
 {
 
 	/**
@@ -51,7 +50,7 @@ public class AnnotationBizLogic extends DefaultBizLogic
 	 * @return List of all dynamic entities id from a given static entity
 	 * eg: returns all dynamic entity id from a Participant,Specimen etc
 	 */
-	public List getListOfDynamicEntitiesIds(long staticEntityId)
+	public List getListOfDynamicEntitiesIds(long staticEntityId)throws BizLogicException
 	{
 		List<EntityMap> dynamicList = new ArrayList<EntityMap>();
 
@@ -61,8 +60,6 @@ public class AnnotationBizLogic extends DefaultBizLogic
 		Object[] whereColumnValue = {new Long(staticEntityId)};
 		String joinCondition = null;
 		List list = new ArrayList();
-		try
-		{
 			dynamicList = retrieve(EntityMap.class.getName(), "staticEntityId", new Long(
 					staticEntityId));
 			if (dynamicList != null && !dynamicList.isEmpty())
@@ -72,12 +69,7 @@ public class AnnotationBizLogic extends DefaultBizLogic
 					list.add(entityMap.getContainerId());
 				}
 			}
-		}
-		catch (DAOException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
 
 		return list;
 	}
@@ -97,11 +89,11 @@ public class AnnotationBizLogic extends DefaultBizLogic
 			dynamicList = retrieve(EntityMap.class.getName(), "staticEntityId", new Long(
 					staticEntityId));
 		}
-		catch (DAOException e)
+		catch (BizLogicException e)
 		{
-			throw new DynamicExtensionsSystemException("Exception encountered while retrieving object : "+e.getCause());
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-
 		return dynamicList;
 	}
 
@@ -113,7 +105,7 @@ public class AnnotationBizLogic extends DefaultBizLogic
 	 * @return List of all dynamic entities id from a given static entity based on its protocol linkage
 	 * eg: returns all dynamic entity id from a Participant,Specimen etc which is linked to Protocol 1, Protocol 2 etc
 	 */
-	public List getListOfDynamicEntitiesIds(long staticEntityId, long typeId, long staticRecordId)
+	public List getListOfDynamicEntitiesIds(long staticEntityId, long typeId, long staticRecordId) 
 	{
 		List dynamicList = new ArrayList();
 
@@ -129,7 +121,7 @@ public class AnnotationBizLogic extends DefaultBizLogic
 			dynamicList = retrieve(EntityMap.class.getName(), selectColumnName, whereColumnName,
 					whereColumnCondition, whereColumnValue, joinCondition);
 		}
-		catch (DAOException e)
+		catch (BizLogicException e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -148,18 +140,14 @@ public class AnnotationBizLogic extends DefaultBizLogic
 
 		try
 		{
-			update(entityRecord, Constants.HIBERNATE_DAO);
+			update(entityRecord);
 		}
 		catch (BizLogicException e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		catch (UserNotAuthorizedException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
 	}
 
 	/**
@@ -168,11 +156,11 @@ public class AnnotationBizLogic extends DefaultBizLogic
 	 * Inserts a new EntityRecord record in Database
 	 * @throws DAOException 
 	 */
-	public void insertEntityRecord(EntityMapRecord entityRecord) throws DAOException
+	public void insertEntityRecord(EntityMapRecord entityRecord) throws BizLogicException
 	{
 		try
 		{
-			insert(entityRecord, Constants.HIBERNATE_DAO);
+			insert(entityRecord);
 			Long entityMapId = entityRecord.getFormContext().getEntityMap().getId();
 			Long staticEntityRecordId = entityRecord.getStaticEntityRecordId();
 			Long dynExtRecordId = entityRecord.getDynamicEntityRecordId();
@@ -183,11 +171,7 @@ public class AnnotationBizLogic extends DefaultBizLogic
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		catch (UserNotAuthorizedException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
 	}
 
 	/**
@@ -197,9 +181,9 @@ public class AnnotationBizLogic extends DefaultBizLogic
 	 * @throws DAOException 
 	 */
 	private void associateRecords(Long entityMapId, Long staticEntityRecordId,
-			Long dynamicEntityRecordId) throws DAOException
+			Long dynamicEntityRecordId) throws BizLogicException
 	{
-		Object object = new DefaultBizLogic().retrieve(EntityMap.class.getName(), entityMapId);
+		Object object = new CatissueDefaultBizLogic().retrieve(EntityMap.class.getName(), entityMapId);
 		EntityManagerInterface entityManager = EntityManager.getInstance();
 		if (object != null)
 		{
@@ -247,7 +231,8 @@ public class AnnotationBizLogic extends DefaultBizLogic
 			}
 			catch (DynamicExtensionsSystemException e)
 			{
-				throw new DAOException("Can not associate static and dynamic records", e);
+				ErrorKey errorKey = ErrorKey.getErrorKey("bizlogic.error");
+				throw new BizLogicException(errorKey,e ,"AnnotationBizLogic.java :");     
 			}
 		}
 	}
@@ -262,7 +247,7 @@ public class AnnotationBizLogic extends DefaultBizLogic
 
 		try
 		{
-			update(entityMap, Constants.HIBERNATE_DAO);
+			update(entityMap);
 			//update(entityMap,null, Constants.HIBERNATE_DAO,null);
 		}
 		catch (BizLogicException e)
@@ -270,11 +255,7 @@ public class AnnotationBizLogic extends DefaultBizLogic
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		catch (UserNotAuthorizedException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
 	}
 
 	/**
@@ -292,7 +273,7 @@ public class AnnotationBizLogic extends DefaultBizLogic
 					false);
 			if (deAssociationID != null)
 			{
-				insert(entityMap, Constants.HIBERNATE_DAO);
+				insert(entityMap);
 			}
 		}
 		catch (Exception e)
@@ -324,7 +305,7 @@ public class AnnotationBizLogic extends DefaultBizLogic
 			dynamicList = retrieve(EntityMap.class.getName(), selectColumnName, whereColumnName,
 					whereColumnCondition, whereColumnValue, joinCondition);
 		}
-		catch (DAOException e)
+		catch (BizLogicException e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -348,7 +329,7 @@ public class AnnotationBizLogic extends DefaultBizLogic
 			dynamicList = retrieve(EntityMap.class.getName(), "containerId", new Long(
 					dynamicEntityContainerId));
 		}
-		catch (DAOException e)
+		catch (BizLogicException e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -370,7 +351,7 @@ public class AnnotationBizLogic extends DefaultBizLogic
 		{
 			map = (EntityMap) retrieve(EntityMap.class.getName(), entityMapId);
 		}
-		catch (DAOException e)
+		catch (BizLogicException e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -404,7 +385,7 @@ public class AnnotationBizLogic extends DefaultBizLogic
 						dynamicList.addAll(list);
 					}
 				}
-				catch (DAOException e)
+				catch (BizLogicException e)
 				{
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -444,7 +425,7 @@ public class AnnotationBizLogic extends DefaultBizLogic
 			{
 				EntityMapRecord entityRecord = (EntityMapRecord) dynamicList.get(0);
 				entityRecord.setLinkStatus(Constants.ACTIVITY_STATUS_DISABLED);
-				update(entityRecord, Constants.HIBERNATE_DAO);
+				update(entityRecord);
 			}
 			catch (UserNotAuthorizedException e1)
 			{
@@ -485,13 +466,17 @@ public class AnnotationBizLogic extends DefaultBizLogic
 	 * Deletes an object from the database.
 	 * @param obj The object to be deleted.
 	 * @throws DAOException
-	 * @throws UserNotAuthorizedException
+	 * @throws UserNotAuthorizedException TODO
 	 */
-	protected void delete(Object obj, DAO dao) throws DAOException, UserNotAuthorizedException
+	protected void delete(Object obj, DAO dao)
 	{
-		dao.delete(obj);
+		try {
+			dao.delete(obj);
+		} catch (DAOException e) {
+			
+			e.printStackTrace();
+		}
 	}
-
 	/**
 	 * @param dynEntitiesList
 	 * @param cpIdList
@@ -502,7 +487,7 @@ public class AnnotationBizLogic extends DefaultBizLogic
 	{
 		List dynEntitiesIdList = new ArrayList();
 		List cpIdListForAll = new ArrayList();
-		cpIdListForAll.add(Long.valueOf(edu.wustl.catissuecore.util.global.Constants.DEFAULT_CONDITION));
+		cpIdListForAll.add(Long.valueOf(-1));
 		if (dynEntitiesList != null && !dynEntitiesList.isEmpty())
 		{
 			Iterator dynEntitiesIterator = dynEntitiesList.iterator();
@@ -591,7 +576,7 @@ public class AnnotationBizLogic extends DefaultBizLogic
 		{
 			dynamicList = retrieve(EntityMap.class.getName(), "containerId", new Long(containerId));
 		}
-		catch (DAOException e)
+		catch (BizLogicException e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -608,7 +593,7 @@ public class AnnotationBizLogic extends DefaultBizLogic
 	{
 		try
 		{
-			insert(entityMapCondition, Constants.HIBERNATE_DAO);
+			insert(entityMapCondition);
 		}
 		catch (Exception e)
 		{
@@ -619,7 +604,7 @@ public class AnnotationBizLogic extends DefaultBizLogic
 	}
 
 	//Function added by Preeti :  to get all entitymap entries for a dynamic entity container
-	public Collection getEntityMapsForContainer(Long deContainerId) throws DAOException
+	public Collection getEntityMapsForContainer(Long deContainerId) throws BizLogicException
 	{
 		List entityMaps = retrieve(EntityMap.class.getName(), "containerId", deContainerId);
 		return entityMaps;

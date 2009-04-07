@@ -53,38 +53,44 @@ import edu.wustl.catissuecore.util.CollectionProtocolUtil;
 import edu.wustl.catissuecore.util.ConsentUtil;
 import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.catissuecore.util.SpecimenComparator;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.cde.PermissibleValueImpl;
-import edu.wustl.common.dao.AbstractDAO;
-import edu.wustl.common.dao.DAO;
-import edu.wustl.common.dao.DAOFactory;
-import edu.wustl.common.dao.HibernateDAO;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.exception.BizLogicException;
-import edu.wustl.common.security.SecurityManager;
-import edu.wustl.common.security.exceptions.SMException;
-import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
+import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.DomainBeanIdentifierComparator;
-import edu.wustl.common.util.Permissions;
-import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.CommonServiceLocator;
+import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.DAO;
+import edu.wustl.dao.HibernateDAO;
+import edu.wustl.dao.QueryWhereClause;
+import edu.wustl.dao.condition.EqualClause;
+import edu.wustl.dao.daofactory.DAOConfigFactory;
+import edu.wustl.dao.daofactory.DAOFactory;
+import edu.wustl.dao.exception.DAOException;
+import edu.wustl.security.exception.SMException;
+import edu.wustl.security.global.Permissions;
+import edu.wustl.security.locator.CSMGroupLocator;
+import edu.wustl.security.manager.SecurityManagerFactory;
 
 /**
  * UserHDAO is used to add user information into the database using Hibernate.
  * 
  * @author kapil_kaveeshwar
  */
-public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
+public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 {
 	/**
 	 * Saves the user object in the database.
@@ -93,104 +99,73 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	 *            The user object to be saved.
 	 * @param session
 	 *            The session in which the object is saved.
-	 * @throws DAOException
+	 * @throws BizLogicException
 	 * @throws  
 	 */
-	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
+	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws BizLogicException
 	{
-		SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) obj;
-		boolean reportLoaderFlag = false;
-		setSite(dao, specimenCollectionGroup);
-		Object collectionProtocolEventObj = getCPE(dao, specimenCollectionGroup);
-		Collection specimenCollection = null;
-		Long userId = Utility.getUserID(dao, sessionDataBean);
-		if(Constants.REPORT_LOADER_SCG.equals(specimenCollectionGroup.getBarcode())
-				&& specimenCollectionGroup.getName().startsWith(Constants.REPORT_LOADER_SCG))
+		try
 		{
-			reportLoaderFlag = true;
-			specimenCollectionGroup.setBarcode(null);
-		}
-		setCollectionProtocolRegistration(dao, specimenCollectionGroup, null);
-		if (collectionProtocolEventObj != null)
-		{
-			CollectionProtocolEvent cpe = (CollectionProtocolEvent) collectionProtocolEventObj;
-			// check for closed CollectionProtocol
-			checkStatus(dao, cpe.getCollectionProtocol(), "Collection Protocol");
-			specimenCollectionGroup.setCollectionProtocolEvent(cpe);
-			generateSCGLabel(specimenCollectionGroup);
-			//check added  for Bug #8533
-			//Patch: 8533_6
-			if(specimenCollectionGroup.getIsCPBasedSpecimenEntryChecked())
+			SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) obj;
+			boolean reportLoaderFlag = false;
+			if (specimenCollectionGroup.getSpecimenCollectionSite() != null)
 			{
-				specimenCollection = getCollectionSpecimen(specimenCollectionGroup, cpe, userId );
-			}			
-		}
-		String barcode=specimenCollectionGroup.getName();
-		generateSCGBarcode(specimenCollectionGroup);
-		if((barcode!=specimenCollectionGroup.getName())&&barcode!=null)
-		{
-			specimenCollectionGroup.setBarcode(barcode);
-		}
-		//This check is added if empty values added by UI tnen shud add default values in parameters
-		checkSCGEvents(specimenCollectionGroup.getSpecimenEventParametersCollection(),sessionDataBean);
-		dao.insert(specimenCollectionGroup, sessionDataBean, true, true);
-		if (specimenCollection != null && reportLoaderFlag == false)
-		{
-			new NewSpecimenBizLogic().insertMultiple(specimenCollection, (AbstractDAO)dao, sessionDataBean);
-		}
-	}
+				Object siteObj = dao.retrieveById(Site.class.getName(), specimenCollectionGroup.getSpecimenCollectionSite().getId());
+				if (siteObj != null)
+				{
+					// check for closed Site
+					checkStatus(dao, specimenCollectionGroup.getSpecimenCollectionSite(), "Site");
+					specimenCollectionGroup.setSpecimenCollectionSite((Site) siteObj);
+				}
+			}
+			Object collectionProtocolEventObj = dao.retrieveById(CollectionProtocolEvent.class.getName(), specimenCollectionGroup
+					.getCollectionProtocolEvent().getId());
+			Collection specimenCollection = null;
+			Long userId = AppUtility.getUserID(dao, sessionDataBean);
+			if(Constants.REPORT_LOADER_SCG.equals(specimenCollectionGroup.getBarcode())
+					&& specimenCollectionGroup.getName().startsWith(Constants.REPORT_LOADER_SCG))
+			{
+				reportLoaderFlag = true;
+				specimenCollectionGroup.setBarcode(null);
+			}
+			setCollectionProtocolRegistration(dao, specimenCollectionGroup, null);
 
-	/**
-	 * Get Collection Protocol Event object 
-	 * @param dao DAO exception
-	 * @param specimenCollectionGroup Specimen Collection Group object
-	 * @return  collectionProtocolEventObj CPE object
-	 * @throws DAOException DAO Exception
-	 */
-	private Object getCPE(DAO dao,SpecimenCollectionGroup specimenCollectionGroup)
-			throws DAOException 
-	{
-		CollectionProtocolEvent collProtEvent =  specimenCollectionGroup.getCollectionProtocolEvent();
-		Object collectionProtocolEventObj = null;
-		if(collProtEvent.getActivityStatus() == null)
-		{
-			collectionProtocolEventObj = dao.retrieve(CollectionProtocolEvent.class.getName(), specimenCollectionGroup
-					.getCollectionProtocolEvent().getId());	
-		}
-		else
-		{
-			collectionProtocolEventObj = collProtEvent;
-		}
-		return collectionProtocolEventObj;
-	}
+			if (collectionProtocolEventObj != null)
+			{
+				CollectionProtocolEvent cpe = (CollectionProtocolEvent) collectionProtocolEventObj;
+				// check for closed CollectionProtocol
+				checkStatus(dao, cpe.getCollectionProtocol(), "Collection Protocol");
+				specimenCollectionGroup.setCollectionProtocolEvent(cpe);
+				generateSCGLabel(specimenCollectionGroup);
+				//check added  for Bug #8533
+				//Patch: 8533_6
+				if(specimenCollectionGroup.getIsCPBasedSpecimenEntryChecked())
+				{
+					specimenCollection = getCollectionSpecimen(specimenCollectionGroup, cpe, userId );
+				}			
+			}
 
-	/**
-	 * Set Site object in SCG
-	 * @param dao DAO object
-	 * @param specimenCollectionGroup Specimen Collection Group object
-	 * @throws DAOException DAO exception
-	 */
-	private void setSite(DAO dao,SpecimenCollectionGroup specimenCollectionGroup)
-			throws DAOException 
-	{
-		Site site = specimenCollectionGroup.getSpecimenCollectionSite();
-		if (site!= null)
+			String barcode=specimenCollectionGroup.getName();
+			generateSCGBarcode(specimenCollectionGroup);
+			if((barcode!=specimenCollectionGroup.getName())&&barcode!=null)
+			{
+				specimenCollectionGroup.setBarcode(barcode);
+			}
+			//This check is added if empty values added by UI tnen shud add default values in parameters
+			checkSCGEvents(specimenCollectionGroup.getSpecimenEventParametersCollection(),sessionDataBean);
+			dao.insert(specimenCollectionGroup,  true);
+			if (specimenCollection != null && reportLoaderFlag == false)
+			{
+				new NewSpecimenBizLogic().insertMultiple(specimenCollection, (DAO)dao, sessionDataBean);
+			}
+		}
+		catch(DAOException daoExp)
 		{
-			Object siteObj = null;
-			if(site.getActivityStatus() == null)
-			{
-				siteObj = dao.retrieve(Site.class.getName(), specimenCollectionGroup.getSpecimenCollectionSite().getId());	
-			}
-			else
-			{
-				siteObj = site;
-			}
-			if (siteObj != null)
-			{
-				// check for closed Site
-				checkStatus(dao, specimenCollectionGroup.getSpecimenCollectionSite(), "Site");
-				specimenCollectionGroup.setSpecimenCollectionSite((Site) siteObj);
-			}
+			throw getBizLogicException(daoExp, "bizlogic.error", "DB related issues");
+		}
+		catch(ApplicationException exp)
+		{
+			throw getBizLogicException(exp, "bizlogic.error", "");
 		}
 	}
 
@@ -304,9 +279,9 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 
 	/**
 	 * @param specimenCollectionGroup
-	 * @throws DAOException
+	 * @throws BizLogicException
 	 */
-	private void generateSCGLabel(SpecimenCollectionGroup specimenCollectionGroup) throws DAOException
+	private void generateSCGLabel(SpecimenCollectionGroup specimenCollectionGroup) throws BizLogicException
 	{
 		try
 		{
@@ -319,16 +294,16 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		}
 		catch (NameGeneratorException nameGeneratorException)
 		{
-			throw new DAOException(nameGeneratorException.getMessage(), nameGeneratorException);
+			throw getBizLogicException(nameGeneratorException, "bizlogic.error", "");
 		}
 	}
 
 	/**
 	 * Method to generate barcode for the SpecimenCollectionGroup
 	 * @param specimenCollectionGroup Object of SpecimenCollectionGroup
-	 * @throws DAOException DAO exception
+	 * @throws BizLogicException DAO exception
 	 */
-	private void generateSCGBarcode(SpecimenCollectionGroup specimenCollectionGroup) throws DAOException
+	private void generateSCGBarcode(SpecimenCollectionGroup specimenCollectionGroup) throws BizLogicException
 	{
 		try
 		{
@@ -341,7 +316,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		}
 		catch (NameGeneratorException nameGeneratorException)
 		{
-			throw new DAOException(nameGeneratorException.getMessage(), nameGeneratorException);
+			throw getBizLogicException(nameGeneratorException, "bizlogic.error", "");
 		}
 	}
 
@@ -350,22 +325,22 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	 * populate all its associated entities.
 	 * @param scgId 				SpecimenCollectionGroup id
 	 * @param bean 					SessionDataBean
-	 * @param retrieveAssociates	flag for retrieve associated entities or not.
+	 * @param retrieveAssociates	flag for retrieveById associated entities or not.
 	 * @return object of CollectionProtocol
-	 * @throws BizLogicException If fails to retrieve any of the required entity.
+	 * @throws BizLogicException If fails to retrieveById any of the required entity.
 	 */
 	public SpecimenCollectionGroup getSCGFromId(Long scgId, SessionDataBean bean, boolean retrieveAssociates) throws BizLogicException
 	{
-		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+		DAO dao = null;
 		try
 		{
-			dao.openSession(bean);
+			dao = openDAOSession();
 
-			Object object = dao.retrieve(SpecimenCollectionGroup.class.getName(), scgId);
+			Object object = dao.retrieveById(SpecimenCollectionGroup.class.getName(), scgId);
 
 			if (object == null)
 			{
-				throw new BizLogicException("Cannot find CP. Failed to find " + "SCG for id " + scgId);
+				throw getBizLogicException(null, "bizlogic.error", "Cannot find CP. Failed to find " + "SCG for id " + scgId);
 			}
 			SpecimenCollectionGroup specCollGroup = (SpecimenCollectionGroup) object;
 			if (retrieveAssociates)
@@ -376,18 +351,11 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		}
 		catch (DAOException exception)
 		{
-			throw new BizLogicException(exception.getMessage(), exception);
+			throw getBizLogicException(exception, "bizlogic.error", "");
 		}
 		finally
 		{
-			try
-			{
-				dao.closeSession();
-			}
-			catch (DAOException daoException)
-			{
-				Logger.out.fatal("Failed to close session due to " + daoException.getMessage(), daoException);
-			}
+			closeDAOSession(dao);
 		}
 	}
 
@@ -403,12 +371,12 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 
 		if (collProtReg == null)
 		{
-			throw new BizLogicException("Cannot find CP. CPR for " + "SCG id " + scgId + " is unexpectedly null.");
+			throw getBizLogicException(null, "bizlogic.error", "Cannot find CP. CPR for " + "SCG id " + scgId + " is unexpectedly null.");
 		}
 		CollectionProtocol collProt = collProtReg.getCollectionProtocol();
 		if (collProt == null)
 		{
-			throw new BizLogicException("Cannot find CP. for SCG id " + scgId);
+			throw getBizLogicException(null, "bizlogic.error", "Cannot find CP. for SCG id " + scgId);
 		}
 		Long id = collProt.getId();
 
@@ -447,14 +415,27 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		return protectionObjects;
 	}
 
-	protected String[] getDynamicGroups(AbstractDomainObject obj) throws SMException
+	protected String[] getDynamicGroups(AbstractDomainObject obj) throws BizLogicException
 	{
 		SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) obj;
 		String[] dynamicGroups = new String[1];
-
-		dynamicGroups[0] = SecurityManager.getInstance(this.getClass()).getProtectionGroupByName(
-				specimenCollectionGroup.getCollectionProtocolRegistration(), Constants.getCollectionProtocolPGName(null));
-		Logger.out.debug("Dynamic Group name: " + dynamicGroups[0]);
+		String name;
+		try
+		{
+			name = CSMGroupLocator.getInstance().getPGName(null,CollectionProtocol.class);
+			dynamicGroups[0] = SecurityManagerFactory.getSecurityManager().getProtectionGroupByName(
+					specimenCollectionGroup.getCollectionProtocolRegistration(), name);
+			Logger.out.debug("Dynamic Group name: " + dynamicGroups[0]);
+		}
+		catch (SMException e)
+		{
+			throw getBizLogicException(e, "sm.operation.error", "Error in getting rpotection group by name");
+		}
+		catch (ApplicationException e)
+		{
+			throw getBizLogicException(e, "sm.operation.error", "Error in getting csm group locator instance");
+		}
+		
 		return dynamicGroups;
 
 	}
@@ -466,161 +447,167 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	 *            The object to be updated.
 	 * @param session
 	 *            The session in which the object is saved.
-	 * @throws DAOException
+	 * @throws BizLogicException
 	 */
-	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
+	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws BizLogicException
 	{
-		SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) obj;
-		SpecimenCollectionGroup oldspecimenCollectionGroup = (SpecimenCollectionGroup) oldObj;
-		//lazy false change
-
-		Object object = dao.retrieve(SpecimenCollectionGroup.class.getName(), oldspecimenCollectionGroup.getId());
-
-		SpecimenCollectionGroup persistentSCG = null;
-		if (object != null)
+		try
 		{
-			persistentSCG = (SpecimenCollectionGroup) object;
-		}
+			SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) obj;
+			SpecimenCollectionGroup oldspecimenCollectionGroup = (SpecimenCollectionGroup) oldObj;
+			//lazy false change
 
-		// Adding default events if they are null from API
-		Collection spEventColl = specimenCollectionGroup.getSpecimenEventParametersCollection();
-		
-		//Copy the SCG events for propagating changes in specimens.
-		Collection copiedSCGEventsColl = copySCGEvents(spEventColl);
-		if (spEventColl == null || spEventColl.isEmpty())
-		{
-			setDefaultEvents(specimenCollectionGroup, sessionDataBean);
-		}
-		else
-		{
-			//Collection pEvtPrmColl = persistentSCG.getSpecimenEventParametersCollection();
-			//Iterator evntIterator = pEvtPrmColl.iterator();
-			if (persistentSCG.getSpecimenEventParametersCollection() == null || persistentSCG.getSpecimenEventParametersCollection().isEmpty())
+			Object object = dao.retrieveById(SpecimenCollectionGroup.class.getName(), oldspecimenCollectionGroup.getId());
+
+			SpecimenCollectionGroup persistentSCG = null;
+			if (object != null)
 			{
-				//Collection newScgEventColl = checkSCGEvents(spEventColl,sessionDataBean);
-				persistentSCG.setSpecimenEventParametersCollection(spEventColl);
+				persistentSCG = (SpecimenCollectionGroup) object;
 			}
-			Collection pEvtPrmColl = persistentSCG.getSpecimenEventParametersCollection();
-			Iterator evntIterator = pEvtPrmColl.iterator();
-			while (evntIterator.hasNext())
+
+			// Adding default events if they are null from API
+			Collection spEventColl = specimenCollectionGroup.getSpecimenEventParametersCollection();
+
+			//Copy the SCG events for propagating changes in specimens.
+			Collection copiedSCGEventsColl = copySCGEvents(spEventColl);
+			if (spEventColl == null || spEventColl.isEmpty())
 			{
-				SpecimenEventParameters event = (SpecimenEventParameters) evntIterator.next();
-				SpecimenEventParameters newEvent = (SpecimenEventParameters) getCorrespondingObject(spEventColl, event.getClass());
-				updateEvent(event, newEvent, sessionDataBean);
-				//spEventColl.remove(newEvent);
-				
+				setDefaultEvents(specimenCollectionGroup, sessionDataBean);
 			}
-		}
-		// Check for different closed site
-		Site oldSite = oldspecimenCollectionGroup.getSpecimenCollectionSite();
-		Site site = specimenCollectionGroup.getSpecimenCollectionSite();
-		if (oldSite == null && site != null)
-		{
-			checkStatus(dao, site, "Site");
-		}
-		else if (!site.getId().equals(oldSite.getId()))
-		{
-			checkStatus(dao, site, "Site");
-		}
-
-		// site check complete
-		Long oldEventId = oldspecimenCollectionGroup.getCollectionProtocolEvent().getId();
-		Long eventId = specimenCollectionGroup.getCollectionProtocolEvent().getId();
-		if (oldEventId.longValue() != eventId.longValue())
-		{
-			// -- check for closed CollectionProtocol
-			Object proxyObject = dao.retrieve(CollectionProtocolEvent.class.getName(), specimenCollectionGroup.getCollectionProtocolEvent().getId());
-			if (proxyObject != null)
+			else
 			{
-				// check for closed CollectionProtocol
-				CollectionProtocolEvent cpe = (CollectionProtocolEvent) proxyObject;
-				if (!cpe.getCollectionProtocol().getId().equals(
-						oldspecimenCollectionGroup.getCollectionProtocolEvent().getCollectionProtocol().getId()))
-					checkStatus(dao, cpe.getCollectionProtocol(), "Collection Protocol");
+				//Collection pEvtPrmColl = persistentSCG.getSpecimenEventParametersCollection();
+				//Iterator evntIterator = pEvtPrmColl.iterator();
+				if (persistentSCG.getSpecimenEventParametersCollection() == null || persistentSCG.getSpecimenEventParametersCollection().isEmpty())
+				{
+					//Collection newScgEventColl = checkSCGEvents(spEventColl,sessionDataBean);
+					persistentSCG.setSpecimenEventParametersCollection(spEventColl);
+				}
+				Collection pEvtPrmColl = persistentSCG.getSpecimenEventParametersCollection();
+				Iterator evntIterator = pEvtPrmColl.iterator();
+				while (evntIterator.hasNext())
+				{
+					SpecimenEventParameters event = (SpecimenEventParameters) evntIterator.next();
+					SpecimenEventParameters newEvent = (SpecimenEventParameters) getCorrespondingObject(spEventColl, event.getClass());
+					updateEvent(event, newEvent, sessionDataBean);
+					//spEventColl.remove(newEvent);
 
-				specimenCollectionGroup.setCollectionProtocolEvent((CollectionProtocolEvent) proxyObject);
+				}
 			}
-		}
-		// CollectionProtocol check complete.
+			// Check for different closed site
+			Site oldSite = oldspecimenCollectionGroup.getSpecimenCollectionSite();
+			Site site = specimenCollectionGroup.getSpecimenCollectionSite();
+			if (oldSite == null && site != null)
+			{
+				checkStatus(dao, site, "Site");
+			}
+			else if (!site.getId().equals(oldSite.getId()))
+			{
+				checkStatus(dao, site, "Site");
+			}
 
-		//setCollectionProtocolRegistration(dao, specimenCollectionGroup, oldspecimenCollectionGroup);
+			// site check complete
+			Long oldEventId = oldspecimenCollectionGroup.getCollectionProtocolEvent().getId();
+			Long eventId = specimenCollectionGroup.getCollectionProtocolEvent().getId();
+			if (oldEventId.longValue() != eventId.longValue())
+			{
+				// -- check for closed CollectionProtocol
+				Object proxyObject = dao.retrieveById(CollectionProtocolEvent.class.getName(), specimenCollectionGroup.getCollectionProtocolEvent().getId());
+				if (proxyObject != null)
+				{
+					// check for closed CollectionProtocol
+					CollectionProtocolEvent cpe = (CollectionProtocolEvent) proxyObject;
+					if (!cpe.getCollectionProtocol().getId().equals(
+							oldspecimenCollectionGroup.getCollectionProtocolEvent().getCollectionProtocol().getId()))
+						checkStatus(dao, cpe.getCollectionProtocol(), "Collection Protocol");
 
-		// Mandar 22-Jan-07 To disable consents accordingly in SCG and
-		// Specimen(s) start
+					specimenCollectionGroup.setCollectionProtocolEvent((CollectionProtocolEvent) proxyObject);
+				}
+			}
+			// CollectionProtocol check complete.
 
-		if (!Constants.WITHDRAW_RESPONSE_NOACTION.equalsIgnoreCase(specimenCollectionGroup.getConsentWithdrawalOption()))
-		{
-			verifyAndUpdateConsentWithdrawn(specimenCollectionGroup, oldspecimenCollectionGroup, dao, sessionDataBean);
+			//setCollectionProtocolRegistration(dao, specimenCollectionGroup, oldspecimenCollectionGroup);
+
+			// Mandar 22-Jan-07 To disable consents accordingly in SCG and
+			// Specimen(s) start
+
+			if (!Constants.WITHDRAW_RESPONSE_NOACTION.equalsIgnoreCase(specimenCollectionGroup.getConsentWithdrawalOption()))
+			{
+				verifyAndUpdateConsentWithdrawn(specimenCollectionGroup, oldspecimenCollectionGroup, dao, sessionDataBean);
+				persistentSCG.setConsentTierStatusCollection(specimenCollectionGroup.getConsentTierStatusCollection());
+
+			}
+			// Mandar 22-Jan-07 To disable consents accordingly in SCG and
+			// Specimen(s) end
+			// Mandar 24-Jan-07 To update consents accordingly in SCG and
+			// Specimen(s) start
+			else if (!specimenCollectionGroup.getApplyChangesTo().equalsIgnoreCase(Constants.APPLY_NONE))
+			{
+				ConsentUtil.updateSpecimenStatusInSCG(specimenCollectionGroup, oldspecimenCollectionGroup, dao);
+			}
+			// Mandar 24-Jan-07 To update consents accordingly in SCG and
+			// Specimen(s) end
+			specimenCollectionGroup.setCollectionProtocolRegistration(persistentSCG.getCollectionProtocolRegistration());
+
+			Integer offset = specimenCollectionGroup.getOffset();
+			if (offset != null)
+			{
+
+				if (oldspecimenCollectionGroup.getOffset() != null)
+					offset = offset - oldspecimenCollectionGroup.getOffset();
+				if (offset != 0)
+				{
+					//updateOffset(offset, specimenCollectionGroup, sessionDataBean, dao);
+					getDetailsOfCPRForSCG(specimenCollectionGroup.getCollectionProtocolRegistration(), dao);
+					CollectionProtocolRegistrationBizLogic cprBizLogic = new CollectionProtocolRegistrationBizLogic();
+					cprBizLogic.checkAndUpdateChildOffset(dao, sessionDataBean, oldspecimenCollectionGroup.getCollectionProtocolRegistration(), offset
+							.intValue());
+					cprBizLogic.updateForOffset(dao, sessionDataBean, specimenCollectionGroup.getCollectionProtocolRegistration(), offset.intValue());
+				}
+
+			}
+
+			persistentSCG.setSpecimenCollectionSite(site);
+			persistentSCG.setOffset(offset);
+			persistentSCG.setCollectionStatus(specimenCollectionGroup.getCollectionStatus());
+			persistentSCG.setComment(specimenCollectionGroup.getComment());
+			persistentSCG.setActivityStatus(specimenCollectionGroup.getActivityStatus());
+			persistentSCG.setSurgicalPathologyNumber(specimenCollectionGroup.getSurgicalPathologyNumber());
+			persistentSCG.setClinicalDiagnosis(specimenCollectionGroup.getClinicalDiagnosis());
+			persistentSCG.setClinicalStatus(specimenCollectionGroup.getClinicalStatus());
+			persistentSCG.setName(specimenCollectionGroup.getName());
+			persistentSCG.setBarcode(specimenCollectionGroup.getBarcode());
 			persistentSCG.setConsentTierStatusCollection(specimenCollectionGroup.getConsentTierStatusCollection());
-
-		}
-		// Mandar 22-Jan-07 To disable consents accordingly in SCG and
-		// Specimen(s) end
-		// Mandar 24-Jan-07 To update consents accordingly in SCG and
-		// Specimen(s) start
-		else if (!specimenCollectionGroup.getApplyChangesTo().equalsIgnoreCase(Constants.APPLY_NONE))
-		{
-			ConsentUtil.updateSpecimenStatusInSCG(specimenCollectionGroup, oldspecimenCollectionGroup, dao);
-		}
-		// Mandar 24-Jan-07 To update consents accordingly in SCG and
-		// Specimen(s) end
-		specimenCollectionGroup.setCollectionProtocolRegistration(persistentSCG.getCollectionProtocolRegistration());
-
-		Integer offset = specimenCollectionGroup.getOffset();
-		if (offset != null)
-		{
-
-			if (oldspecimenCollectionGroup.getOffset() != null)
-				offset = offset - oldspecimenCollectionGroup.getOffset();
-			if (offset != 0)
+			dao.update(persistentSCG);
+			/**
+			 * Name : Ashish Gupta Reviewer Name : Sachin Lale Bug ID: 2741 Patch
+			 * ID: 2741_6 Description: Method to update events in all specimens
+			 * related to this scg
+			 */
+			// Populating Events in all specimens
+			if (specimenCollectionGroup.isApplyEventsToSpecimens())
 			{
-				//updateOffset(offset, specimenCollectionGroup, sessionDataBean, dao);
-				getDetailsOfCPRForSCG(specimenCollectionGroup.getCollectionProtocolRegistration(), dao);
-				CollectionProtocolRegistrationBizLogic cprBizLogic = new CollectionProtocolRegistrationBizLogic();
-				cprBizLogic.checkAndUpdateChildOffset(dao, sessionDataBean, oldspecimenCollectionGroup.getCollectionProtocolRegistration(), offset
-						.intValue());
-				cprBizLogic.updateForOffset(dao, sessionDataBean, specimenCollectionGroup.getCollectionProtocolRegistration(), offset.intValue());
+				updateEvents(copiedSCGEventsColl, oldspecimenCollectionGroup, dao, sessionDataBean);
 			}
+			// Audit.
+			((HibernateDAO)dao).audit(obj, oldObj);
+			SpecimenCollectionGroup oldSpecimenCollectionGroup = (SpecimenCollectionGroup) oldObj;
 
-		}
-
-		persistentSCG.setSpecimenCollectionSite(site);
-		persistentSCG.setOffset(offset);
-		persistentSCG.setCollectionStatus(specimenCollectionGroup.getCollectionStatus());
-		persistentSCG.setComment(specimenCollectionGroup.getComment());
-		persistentSCG.setActivityStatus(specimenCollectionGroup.getActivityStatus());
-		persistentSCG.setSurgicalPathologyNumber(specimenCollectionGroup.getSurgicalPathologyNumber());
-		persistentSCG.setClinicalDiagnosis(specimenCollectionGroup.getClinicalDiagnosis());
-		persistentSCG.setClinicalStatus(specimenCollectionGroup.getClinicalStatus());
-		persistentSCG.setName(specimenCollectionGroup.getName());
-		persistentSCG.setBarcode(specimenCollectionGroup.getBarcode());
-		persistentSCG.setConsentTierStatusCollection(specimenCollectionGroup.getConsentTierStatusCollection());
-		dao.update(persistentSCG, sessionDataBean, true, true, false);
-		/**
-		 * Name : Ashish Gupta Reviewer Name : Sachin Lale Bug ID: 2741 Patch
-		 * ID: 2741_6 Description: Method to update events in all specimens
-		 * related to this scg
-		 */
-		// Populating Events in all specimens
-		if (specimenCollectionGroup.isApplyEventsToSpecimens())
-		{
-			updateEvents(copiedSCGEventsColl, oldspecimenCollectionGroup, dao, sessionDataBean);
-		}
-		// Audit.
-		dao.audit(obj, oldObj, sessionDataBean, true);
-		SpecimenCollectionGroup oldSpecimenCollectionGroup = (SpecimenCollectionGroup) oldObj;
-
-		// Disable the related specimens to this specimen group
-		Logger.out.debug("specimenCollectionGroup.getActivityStatus() " + specimenCollectionGroup.getActivityStatus());
-		if (specimenCollectionGroup.getActivityStatus().equals(Constants.ACTIVITY_STATUS_DISABLED))
-		{
+			// Disable the related specimens to this specimen group
 			Logger.out.debug("specimenCollectionGroup.getActivityStatus() " + specimenCollectionGroup.getActivityStatus());
-			Long specimenCollectionGroupIDArr[] = {specimenCollectionGroup.getId()};
+			if (specimenCollectionGroup.getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED))
+			{
+				Logger.out.debug("specimenCollectionGroup.getActivityStatus() " + specimenCollectionGroup.getActivityStatus());
+				Long specimenCollectionGroupIDArr[] = {specimenCollectionGroup.getId()};
 
-			NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
-			bizLogic.disableRelatedObjectsForSpecimenCollectionGroup(dao, specimenCollectionGroupIDArr);
+				NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
+				bizLogic.disableRelatedObjectsForSpecimenCollectionGroup(dao, specimenCollectionGroupIDArr);
+			}
 		}
-
+		catch(DAOException daoExp)
+		{
+			throw getBizLogicException(daoExp, "bizlogic.error", "");
+		}
 	}
 
 	private Object getCorrespondingObject(Collection objectCollection, Class eventClass)
@@ -822,12 +809,10 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	 * @param oldspecimenCollectionGroup
 	 * @param dao
 	 * @param sessionDataBean
-	 * @throws UserNotAuthorizedException
-	 * @throws DAOException
+	 * @throws BizLogicException
 	 */
 	private void updateEvents(Collection newEventColl, SpecimenCollectionGroup oldspecimenCollectionGroup, DAO dao,
-			SessionDataBean sessionDataBean) throws UserNotAuthorizedException, DAOException
-	{
+			SessionDataBean sessionDataBean)	throws BizLogicException{
 		CollectionEventParameters scgCollectionEventParameters = null;
 		ReceivedEventParameters scgReceivedEventParameters = null;
 		if (newEventColl != null && !newEventColl.isEmpty())
@@ -869,7 +854,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 							CollectionEventParameters collectionEventParameters = (CollectionEventParameters) eventObj;
 							CollectionEventParameters newcollectionEventParameters = populateCollectionEventParameters(eventObj,
 									scgCollectionEventParameters, collectionEventParameters);
-							specimenEventParametersBizLogic.update(dao, newcollectionEventParameters, collectionEventParameters, sessionDataBean);
+							specimenEventParametersBizLogic.update(newcollectionEventParameters, collectionEventParameters, sessionDataBean);
 							continue;
 						}
 						else if (eventObj instanceof ReceivedEventParameters)
@@ -877,7 +862,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 							ReceivedEventParameters receivedEventParameters = (ReceivedEventParameters) eventObj;
 							ReceivedEventParameters newReceivedEventParameters = populateReceivedEventParameters(receivedEventParameters,
 									scgReceivedEventParameters);
-							specimenEventParametersBizLogic.update(dao, newReceivedEventParameters, receivedEventParameters, sessionDataBean);
+							specimenEventParametersBizLogic.update(newReceivedEventParameters, receivedEventParameters, sessionDataBean);
 						}
 					}
 				}
@@ -977,7 +962,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	}
 
 	private void setCollectionProtocolRegistration(DAO dao, SpecimenCollectionGroup specimenCollectionGroup,
-			SpecimenCollectionGroup oldSpecimenCollectionGroup) throws DAOException
+			SpecimenCollectionGroup oldSpecimenCollectionGroup) throws BizLogicException,DAOException
 	{
 		CollectionProtocolRegistration cpr = specimenCollectionGroup.getCollectionProtocolRegistration();
 		if (cpr == null)
@@ -986,9 +971,10 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		}
 		if (cpr == null)
 		{
-			throw new DAOException("CPR cannot be null for SCG");
+			throw getBizLogicException(null, "bizlogic.error", "CPR cannot be null for SCG");
 		}
 		Long id = null;
+
 		if (cpr.getId() != null && cpr.getId().longValue() > 0)
 		{
 			id = cpr.getId();
@@ -997,21 +983,19 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		{
 			id = getCPRIDFromParticipant(dao, specimenCollectionGroup, oldSpecimenCollectionGroup);
 		}
-		if(cpr.getActivityStatus()== null)
-		{
-			cpr = (CollectionProtocolRegistration) dao.retrieve(cpr.getClass().getName(), id);	
-		}
+		cpr = (CollectionProtocolRegistration) dao.retrieveById(cpr.getClass().getName(), id);
 		specimenCollectionGroup.setCollectionProtocolRegistration(cpr);
+		specimenCollectionGroup.getCollectionProtocolRegistration().getSpecimenCollectionGroupCollection().add(specimenCollectionGroup);
 	}
 
 	/**
 	 * @param dao
 	 * @param specimenCollectionGroup
 	 * @param oldSpecimenCollectionGroup
-	 * @throws DAOException
+	 * @throws BizLogicException
 	 */
 	private Long getCPRIDFromParticipant(DAO dao, SpecimenCollectionGroup specimenCollectionGroup, SpecimenCollectionGroup oldSpecimenCollectionGroup)
-			throws DAOException
+			throws BizLogicException
 	{
 		List list = getCPRIdList(dao, specimenCollectionGroup, oldSpecimenCollectionGroup);
 		if (!list.isEmpty())
@@ -1026,21 +1010,25 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	 * @param specimenCollectionGroup
 	 * @param oldSpecimenCollectionGroup
 	 * @return
-	 * @throws DAOException
+	 * @throws BizLogicException
 	 */
 	private List getCPRIdList(DAO dao, SpecimenCollectionGroup specimenCollectionGroup, SpecimenCollectionGroup oldSpecimenCollectionGroup)
-			throws DAOException
+			throws BizLogicException
 	{
 		String sourceObjectName = CollectionProtocolRegistration.class.getName();
-		String[] selectColumnName = {Constants.SYSTEM_IDENTIFIER};
+		String[] selectColumnName = {edu.wustl.common.util.global.Constants.SYSTEM_IDENTIFIER};
 		String[] whereColumnName = new String[2];
-		String[] whereColumnCondition = {"=", "="};
 		Object[] whereColumnValue = new Object[2];
-		String joinCondition = Constants.AND_JOIN_CONDITION;
 		CollectionProtocolRegistration cpr = specimenCollectionGroup.getCollectionProtocolRegistration();
 
-		whereColumnName[0] = "collectionProtocol." + Constants.SYSTEM_IDENTIFIER;
+		whereColumnName[0] = "collectionProtocol." + edu.wustl.common.util.global.Constants.SYSTEM_IDENTIFIER;
 		whereColumnValue[0] = specimenCollectionGroup.getCollectionProtocolRegistration().getCollectionProtocol().getId();
+		List list = new ArrayList();
+		try
+		{
+		QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
+		queryWhereClause.addCondition(new EqualClause(whereColumnName[0],whereColumnValue[0])).andOpr();
+		
 		if (cpr.getParticipant() != null)
 		{
 			// check for closed Participant
@@ -1055,7 +1043,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 			else
 				checkStatus(dao, participantObject, "Participant");
 
-			whereColumnName[1] = "participant." + Constants.SYSTEM_IDENTIFIER;
+			whereColumnName[1] = "participant." + edu.wustl.common.util.global.Constants.SYSTEM_IDENTIFIER;
 			whereColumnValue[1] = specimenCollectionGroup.getCollectionProtocolRegistration().getParticipant().getId();
 		}
 		else
@@ -1064,13 +1052,20 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 			whereColumnValue[1] = specimenCollectionGroup.getCollectionProtocolRegistration().getProtocolParticipantIdentifier();
 			Logger.out.debug("Value returned:" + whereColumnValue[1]);
 		}
-
-		List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
+		
+		queryWhereClause.addCondition(new EqualClause(whereColumnName[1],whereColumnValue[1]));
+		list = dao.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
+		}
+		catch(DAOException daoexp)
+		{
+			ErrorKey errorKey = ErrorKey.getErrorKey("bizlogic.error");
+			throw new BizLogicException(errorKey,daoexp ,"SpecimenCollectionGroup.java :");
+		}
 		return list;
 	}
 
 	private void setCollectionProtocolRegistrationOld(DAO dao, SpecimenCollectionGroup specimenCollectionGroup,
-			SpecimenCollectionGroup oldSpecimenCollectionGroup) throws DAOException
+			SpecimenCollectionGroup oldSpecimenCollectionGroup) throws BizLogicException
 	{
 		List list = getCPRIdList(dao, specimenCollectionGroup, oldSpecimenCollectionGroup);
 		if (!list.isEmpty())
@@ -1125,15 +1120,16 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	// }
 	// }
 
-	public void disableRelatedObjects(DAO dao, Long collProtRegIDArr[]) throws DAOException
+	public void disableRelatedObjects(DAO dao, Long collProtRegIDArr[]) throws BizLogicException
 	{
 		List listOfSubElement = getRelatedObjects(dao, SpecimenCollectionGroup.class, "collectionProtocolRegistration", collProtRegIDArr);
-		dao.disableRelatedObjects("CATISSUE_ABS_SPECI_COLL_GROUP", Constants.SYSTEM_IDENTIFIER_COLUMN_NAME, Utility.toLongArray(listOfSubElement));
+		disableRelatedObjects(dao,"CATISSUE_ABS_SPECI_COLL_GROUP", Constants.SYSTEM_IDENTIFIER_COLUMN_NAME, edu.wustl.common.util.Utility.toLongArray(listOfSubElement));
 		auditDisabledObjects(dao, "CATISSUE_SPECIMEN_COLL_GROUP", listOfSubElement);
 		if (!listOfSubElement.isEmpty())
 		{
 			NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
-			bizLogic.disableRelatedObjectsForSpecimenCollectionGroup(dao, Utility.toLongArray(listOfSubElement));
+			bizLogic.disableRelatedObjectsForSpecimenCollectionGroup(dao, edu.wustl.common.util.Utility.toLongArray(listOfSubElement));
+		
 		}
 	}
 
@@ -1144,28 +1140,28 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	 * @param assignToUser
 	 * @param roleId
 	 * @param longs
-	 * @throws DAOException
+	 * @throws BizLogicException
 	 * @throws SMException
-	 */
+	 *//*
 	public void assignPrivilegeToRelatedObjects(DAO dao, String privilegeName, Long[] objectIds, Long userId, String roleId, boolean assignToUser,
 			boolean assignOperation) throws SMException, DAOException
 	{
 		List listOfSubElement = super.getRelatedObjects(dao, SpecimenCollectionGroup.class, "collectionProtocolRegistration", objectIds);
 		if (!listOfSubElement.isEmpty())
 		{
-			super.setPrivilege(dao, privilegeName, SpecimenCollectionGroup.class, Utility.toLongArray(listOfSubElement), userId, roleId,
+			super.setPrivilege(dao, privilegeName, SpecimenCollectionGroup.class, edu.wustl.common.util.Utility.toLongArray(listOfSubElement), userId, roleId,
 					assignToUser, assignOperation);
 			NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
-			bizLogic.assignPrivilegeToRelatedObjectsForSCG(dao, privilegeName, Utility.toLongArray(listOfSubElement), userId, roleId, assignToUser,
+			bizLogic.assignPrivilegeToRelatedObjectsForSCG(dao, privilegeName, edu.wustl.common.util.Utility.toLongArray(listOfSubElement), userId, roleId, assignToUser,
 					assignOperation);
 		}
 
 	}
 
-	/**
+	*//**
 	 * @see edu.wustl.common.bizlogic.IBizLogic#setPrivilege(DAO, String, Class,
 	 *      Long[], Long, String, boolean)
-	 */
+	 *//*
 	protected void setPrivilege(DAO dao, String privilegeName, Class objectType, Long[] objectIds, Long userId, String roleId, boolean assignToUser,
 			boolean assignOperation) throws SMException, DAOException
 	{
@@ -1173,7 +1169,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 
 		NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
 		bizLogic.assignPrivilegeToRelatedObjectsForSCG(dao, privilegeName, objectIds, userId, roleId, assignToUser, assignOperation);
-	}
+	}*/
 
 	/**
 	 * check for the specimen associated with the SCG
@@ -1181,10 +1177,10 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	 * @param obj
 	 * @param dao
 	 * @return
-	 * @throws DAOException
+	 * @throws BizLogicException
 	 * @throws ClassNotFoundException
 	 */
-	protected boolean isSpecimenExists(Object obj, DAO dao, Long scgId) throws DAOException, ClassNotFoundException
+	protected boolean isSpecimenExists(Object obj, DAO dao, Long scgId) throws BizLogicException
 	{
 
 		String hql = " select" + " elements(scg.specimenCollection) " + " from " + " edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg , "
@@ -1207,199 +1203,206 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	 * Overriding the parent class's method to validate the enumerated attribute
 	 * values
 	 */
-	protected boolean validate(Object obj, DAO dao, String operation) throws DAOException
+	protected boolean validate(Object obj, DAO dao, String operation) throws BizLogicException
 	{
-		SpecimenCollectionGroup group = (SpecimenCollectionGroup) obj;
-
-		// Added by Ashish
-
-		if (group == null)
+		try
 		{
-			throw new DAOException(ApplicationProperties.getValue("domain.object.null.err.msg", "SpecimenCollectionGroup"));
-		}
+			SpecimenCollectionGroup group = (SpecimenCollectionGroup) obj;
 
-		Validator validator = new Validator();
-		String message = "";
+			// Added by Ashish
 
-		if (group.getCollectionProtocolRegistration() == null)
-		{
-			message = ApplicationProperties.getValue("errors.specimenCollectionGroup.collectionprotocolregistration");
-			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
-		}
-
-		if (group.getCollectionProtocolRegistration().getCollectionProtocol() == null
-				|| group.getCollectionProtocolRegistration().getCollectionProtocol().getId() == null)
-		{
-			message = ApplicationProperties.getValue("errors.specimenCollectionGroup.collectionprotocol");
-			throw new DAOException(ApplicationProperties.getValue("errors.invalid", message));
-		}
-
-		if ((group.getCollectionProtocolRegistration().getProtocolParticipantIdentifier() == null && (group.getCollectionProtocolRegistration()
-				.getParticipant() == null || group.getCollectionProtocolRegistration().getParticipant().getId() == null)))
-		{
-			throw new DAOException(ApplicationProperties.getValue("errors.collectionprotocolregistration.atleast"));
-		}
-
-		if (group.getSpecimenCollectionSite() == null || group.getSpecimenCollectionSite().getId() == null
-				|| group.getSpecimenCollectionSite().getId() == 0)
-		{
-			message = ApplicationProperties.getValue("specimenCollectionGroup.site");
-			throw new DAOException(ApplicationProperties.getValue("errors.item.invalid", message));
-		}
-
-		// Check what user has selected Participant Name / Participant Number
-
-		// if participant name field is checked.
-		// if(group.getCollectionProtocolRegistration().getParticipant().getId()
-		// == -1)
-		// {
-		// message =
-		// ApplicationProperties.getValue("specimenCollectionGroup.protocoltitle");
-		// throw new
-		// DAOException(ApplicationProperties.getValue("errors.item.required",message));
-		//				
-		// String message =
-		// ApplicationProperties.getValue("specimenCollectionGroup.collectedByParticipant");
-		// throw new DAOException("errors.item.selected", new
-		// String[]{message});
-		//				
-		// }
-
-		// if(!validator.isValidOption(group.getCollectionProtocolRegistration().getProtocolParticipantIdentifier()))
-		// {
-		// String message =
-		// ApplicationProperties.getValue("specimenCollectionGroup.collectedByProtocolParticipantNumber");
-		// throw new DAOException("errors.item.selected", new
-		// String[]{message});
-		//				
-		// }
-
-		if (validator.isEmpty(group.getName()))
-		{
-			if ((Constants.ADD.equals(operation) && !edu.wustl.catissuecore.util.global.Variables.isSpecimenCollGroupLabelGeneratorAvl)
-					|| Constants.EDIT.equals(operation))
+			if (group == null)
 			{
-				message = ApplicationProperties.getValue("specimenCollectionGroup.groupName");
-				throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+				throw getBizLogicException(null, "domain.object.null.err.msg", "SpecimenCollectionGroup");
 			}
-		}
 
-		// Mandatory Field : Study Calendar event point
-		if (group.getCollectionProtocolEvent() == null || group.getCollectionProtocolEvent().getId() == null)
-		{
-			message = ApplicationProperties.getValue("specimenCollectionGroup.studyCalendarEventPoint");
-			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
-		}
+			Validator validator = new Validator();
+			String message = "";
 
-		// Mandatory Field : clinical Diagnosis
-		if (validator.isEmpty(group.getClinicalDiagnosis()))
-		{
-			message = ApplicationProperties.getValue("specimenCollectionGroup.clinicalDiagnosis");
-			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
-		}
+			if (group.getCollectionProtocolRegistration() == null)
+			{
+				message = ApplicationProperties.getValue("errors.specimenCollectionGroup.collectionprotocolregistration");
+				throw getBizLogicException(null, "errors.item.required", message);
+			}
 
-		// Mandatory Field : clinical Status
-		if (validator.isEmpty(group.getClinicalStatus()))
-		{
-			message = ApplicationProperties.getValue("specimenCollectionGroup.clinicalStatus");
-			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
-		}
+			if (group.getCollectionProtocolRegistration().getCollectionProtocol() == null
+					|| group.getCollectionProtocolRegistration().getCollectionProtocol().getId() == null)
+			{
+				message = ApplicationProperties.getValue("errors.specimenCollectionGroup.collectionprotocol");
+				throw getBizLogicException(null, "errors.invalid", message);
+			}
 
-		// Condition for medical Record Number.
+			if ((group.getCollectionProtocolRegistration().getProtocolParticipantIdentifier() == null && (group.getCollectionProtocolRegistration()
+					.getParticipant() == null || group.getCollectionProtocolRegistration().getParticipant().getId() == null)))
+			{
+				throw getBizLogicException(null, "errors.collectionprotocolregistration.atleast", message);
+			}
 
-		// END
+			if (group.getSpecimenCollectionSite() == null || group.getSpecimenCollectionSite().getId() == null
+					|| group.getSpecimenCollectionSite().getId() == 0)
+			{
+				message = ApplicationProperties.getValue("specimenCollectionGroup.site");
+				throw getBizLogicException(null, "errors.item.invalid", message);
+			}
 
-		//TO DO FOR 6756
-		String sourceObjectName =PermissibleValueImpl.class.getName();
-		String[] selectColumnName ={ "value"};
-		String[] whereColumnName ={"cde.publicId"}; // "storageContainer."+Constants.SYSTEM_IDENTIFIER
+			// Check what user has selected Participant Name / Participant Number
+
+			// if participant name field is checked.
+			// if(group.getCollectionProtocolRegistration().getParticipant().getId()
+			// == -1)
+			// {
+			// message =
+			// ApplicationProperties.getValue("specimenCollectionGroup.protocoltitle");
+			// throw new
+			// DAOException(ApplicationProperties.getValue("errors.item.required",message));
+			//				
+			// String message =
+			// ApplicationProperties.getValue("specimenCollectionGroup.collectedByParticipant");
+			// throw new DAOException("errors.item.selected", new
+			// String[]{message});
+			//				
+			// }
+
+			// if(!validator.isValidOption(group.getCollectionProtocolRegistration().getProtocolParticipantIdentifier()))
+			// {
+			// String message =
+			// ApplicationProperties.getValue("specimenCollectionGroup.collectedByProtocolParticipantNumber");
+			// throw new DAOException("errors.item.selected", new
+			// String[]{message});
+			//				
+			// }
+
+			if (validator.isEmpty(group.getName()))
+			{
+				if ((Constants.ADD.equals(operation) && !edu.wustl.catissuecore.util.global.Variables.isSpecimenCollGroupLabelGeneratorAvl)
+						|| Constants.EDIT.equals(operation))
+				{
+					message = ApplicationProperties.getValue("specimenCollectionGroup.groupName");
+					throw getBizLogicException(null, "errors.item.required", message);
+				}
+			}
+
+			// Mandatory Field : Study Calendar event point
+			if (group.getCollectionProtocolEvent() == null || group.getCollectionProtocolEvent().getId() == null)
+			{
+				message = ApplicationProperties.getValue("specimenCollectionGroup.studyCalendarEventPoint");
+				throw getBizLogicException(null, "errors.item.required", message);
+			}
+
+			// Mandatory Field : clinical Diagnosis
+			if (validator.isEmpty(group.getClinicalDiagnosis()))
+			{
+				message = ApplicationProperties.getValue("specimenCollectionGroup.clinicalDiagnosis");
+				throw getBizLogicException(null, "errors.item.required", message);
+			}
+
+			// Mandatory Field : clinical Status
+			if (validator.isEmpty(group.getClinicalStatus()))
+			{
+				message = ApplicationProperties.getValue("specimenCollectionGroup.clinicalStatus");
+				throw getBizLogicException(null, "errors.item.required", message);
+			}
+
+			// Condition for medical Record Number.
+
+			//TO DO FOR 6756
+			String sourceObjectName =PermissibleValueImpl.class.getName();
+			String[] selectColumnName ={ "value"};
+			/*String[] whereColumnName ={"cde.publicId"}; // "storageContainer."+edu.wustl.common.util.global.Constants.SYSTEM_IDENTIFIER
 		String[] whereColumnCondition =  {"=" };
 		Object[] whereColumnValue ={"Clinical_Diagnosis_PID"};
 		String joinCondition = null;
-		Iterator<String> iterator =dao.retrieve(sourceObjectName,selectColumnName,whereColumnName, whereColumnCondition,whereColumnValue, joinCondition).iterator();
-		List clinicalDiagnosisList=new ArrayList();
-		while(iterator.hasNext())
-		{
-			 String clinicaDiagnosisvalue=iterator.next();
-			 clinicalDiagnosisList.add(new NameValueBean(clinicaDiagnosisvalue,clinicaDiagnosisvalue));
-			 
-		}
+			 */
+			QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
+			queryWhereClause.addCondition(new EqualClause("cde.publicId","Clinical_Diagnosis_PID"));
 
-		//List clinicalDiagnosisList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_CLINICAL_DIAGNOSIS, null);
-		if (!Validator.isEnumeratedValue(clinicalDiagnosisList, group.getClinicalDiagnosis()))
-		{
-			throw new DAOException(ApplicationProperties.getValue("spg.clinicalDiagnosis.errMsg"));
-		}
+			Iterator<Object> iterator;
 
-		// NameValueBean undefinedVal = new
-		// NameValueBean(Constants.UNDEFINED,Constants.UNDEFINED);
-		
-		List clinicalStatusList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_CLINICAL_STATUS, null);
-		if (!Validator.isEnumeratedValue(clinicalStatusList, group.getClinicalStatus()))
-		{
-			throw new DAOException(ApplicationProperties.getValue("collectionProtocol.clinicalStatus.errMsg"));
-		}
-
-		if (operation.equals(Constants.ADD))
-		{
-			if (!Constants.ACTIVITY_STATUS_ACTIVE.equals(group.getActivityStatus()))
+			iterator = dao.retrieve(sourceObjectName,selectColumnName,queryWhereClause).iterator();
+			List clinicalDiagnosisList=new ArrayList();
+			while(iterator.hasNext())
 			{
-				throw new DAOException(ApplicationProperties.getValue("activityStatus.active.errMsg"));
+				String clinicaDiagnosisvalue=(String)iterator.next();
+				clinicalDiagnosisList.add(new NameValueBean(clinicaDiagnosisvalue,clinicaDiagnosisvalue));
+
 			}
-		}
-		else
-		{
-			if (!Validator.isEnumeratedValue(Constants.ACTIVITY_STATUS_VALUES, group.getActivityStatus()))
+
+			//List clinicalDiagnosisList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_CLINICAL_DIAGNOSIS, null);
+			if (!Validator.isEnumeratedValue(clinicalDiagnosisList, group.getClinicalDiagnosis()))
 			{
-				throw new DAOException(ApplicationProperties.getValue("activityStatus.errMsg"));
+				throw getBizLogicException(null, "spg.clinicalDiagnosis.errMsg", "");
 			}
-		}
 
-		//Bug #7808
-		if (!Validator.isEnumeratedValue(Constants.SCG_COLLECTION_STATUS_VALUES, group.getCollectionStatus()))
-		{
-			throw new DAOException(ApplicationProperties.getValue("specimencollectiongroup.collectionStatus.errMsg"));
-		}
+			// NameValueBean undefinedVal = new
+			// NameValueBean(Constants.UNDEFINED,Constants.UNDEFINED);
 
-		// check the activity status of all the specimens associated to the
-		// Specimen Collection Group
-		if (group.getActivityStatus().equalsIgnoreCase(Constants.DISABLED))
-		{
-			try
+			List clinicalStatusList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_CLINICAL_STATUS, null);
+			if (!Validator.isEnumeratedValue(clinicalStatusList, group.getClinicalStatus()))
 			{
 
-				boolean isSpecimenExist = (boolean) isSpecimenExists(obj, dao, (Long) group.getId());
-				if (isSpecimenExist)
+				throw getBizLogicException(null, "collectionProtocol.clinicalStatus.errMsg", "");
+			}
+
+			if (operation.equals(Constants.ADD))
+			{
+				if (!Constants.ACTIVITY_STATUS_ACTIVE.equals(group.getActivityStatus()))
 				{
-					throw new DAOException(ApplicationProperties.getValue("specimencollectiongroup.specimen.exists"));
+					throw getBizLogicException(null, "activityStatus.active.errMsg", "");
 				}
-
 			}
-			catch (ClassNotFoundException e)
+			else
 			{
-				e.printStackTrace();
+				if (!Validator.isEnumeratedValue(Constants.ACTIVITY_STATUS_VALUES, group.getActivityStatus()))
+				{
+					throw getBizLogicException(null, "activityStatus.errMsg", "");
+				}
 			}
-		}
-		/*
-		 * Bug ID: 4165 Patch ID: 4165_11 Description: Validation added to check
-		 * incorrect events added through API
-		 */
-		// Events Validation
-		if (group.getSpecimenEventParametersCollection() != null && !group.getSpecimenEventParametersCollection().isEmpty())
-		{
-			Iterator specimenEventCollectionIterator = group.getSpecimenEventParametersCollection().iterator();
-			while (specimenEventCollectionIterator.hasNext())
-			{
-				Object eventObject = specimenEventCollectionIterator.next();
-				EventsUtil.validateEventsObject(eventObject, validator);
-			}
-		}
-		else
-		{
-			throw new DAOException(ApplicationProperties.getValue("error.specimenCollectionGroup.noevents"));
-		}
 
-		return true;
+			//Bug #7808
+			if (!Validator.isEnumeratedValue(Constants.SCG_COLLECTION_STATUS_VALUES, group.getCollectionStatus()))
+			{
+				throw getBizLogicException(null, "specimencollectiongroup.collectionStatus.errMsg", "");
+			}
+
+			// check the activity status of all the specimens associated to the
+			// Specimen Collection Group
+			if (group.getActivityStatus().equalsIgnoreCase(Constants.DISABLED))
+			{
+			
+					boolean isSpecimenExist = (boolean) isSpecimenExists(obj, dao, (Long) group.getId());
+					if (isSpecimenExist)
+					{
+						throw getBizLogicException(null, "specimencollectiongroup.specimen.exists", "");
+					}
+
+				
+			}
+			/*
+			 * Bug ID: 4165 Patch ID: 4165_11 Description: Validation added to check
+			 * incorrect events added through API
+			 */
+			// Events Validation
+			if (group.getSpecimenEventParametersCollection() != null && !group.getSpecimenEventParametersCollection().isEmpty())
+			{
+				Iterator specimenEventCollectionIterator = group.getSpecimenEventParametersCollection().iterator();
+				while (specimenEventCollectionIterator.hasNext())
+				{
+					Object eventObject = specimenEventCollectionIterator.next();
+					EventsUtil.validateEventsObject(eventObject, validator);
+				}
+			}
+			else
+			{
+				throw getBizLogicException(null, "error.specimenCollectionGroup.noevents", "");
+			}
+
+			return true;
+
+		}
+		catch(DAOException daoExp)
+		{
+			throw getBizLogicException(daoExp, "bizlogic.error", "");
+		}
 	}
 
 	public String getPageToShow()
@@ -1412,11 +1415,18 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		return new ArrayList();
 	}
 
-	public int getNextGroupNumber() throws DAOException
+	public int getNextGroupNumber() throws BizLogicException
 	{
-		String sourceObjectName = "CATISSUE_SPECIMEN_COLL_GROUP";
-		String[] selectColumnName = {"max(IDENTIFIER) as MAX_IDENTIFIER"};
-		return Utility.getNextUniqueNo(sourceObjectName, selectColumnName);
+		try
+		{
+			String sourceObjectName = "CATISSUE_SPECIMEN_COLL_GROUP";
+			String[] selectColumnName = {"max(IDENTIFIER) as MAX_IDENTIFIER"};
+			return AppUtility.getNextUniqueNo(sourceObjectName, selectColumnName);
+		}
+		catch(ApplicationException exp)
+		{
+			throw getBizLogicException(exp, "bizlogic.error", "");
+		}
 	}
 
 	/**
@@ -1438,7 +1448,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	 * @param participantId
 	 *            id of participant
 	 * @return Vector tree data structure
-	 * @throws DAOException
+	 * @throws BizLogicException
 	 *             daoException
 	 * @throws ClassNotFoundException
 	 *             classNotFoundException
@@ -1447,21 +1457,17 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 
 	Integer offsetForArmCP = null;
 
-	public String getSCGTreeForCPBasedView(Long cpId, Long participantId) throws DAOException, ClassNotFoundException
+	public String getSCGTreeForCPBasedView(Long cpId, Long participantId) throws BizLogicException, ClassNotFoundException
 	{
 
 		long startTime = System.currentTimeMillis();
-		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
-		try
-		{	
-			
-			offsetForCPOrEvent = null;
+		offsetForCPOrEvent = null;
 		Logger.out.debug("Start of getSCGTreeForCPBasedView");
 
 		Date regDate = null;
 		Integer offset = null;
 		String hql1 = "select cpr.registrationDate,cpr.offset from " + CollectionProtocolRegistration.class.getName()
-				+ " as cpr where cpr.collectionProtocol.id = " + cpId.toString() + " and cpr.participant.id = " + participantId.toString();
+		+ " as cpr where cpr.collectionProtocol.id = " + cpId.toString() + " and cpr.participant.id = " + participantId.toString();
 		List list = executeQuery(hql1);
 		if (list != null && list.size() > 0)
 		{
@@ -1480,25 +1486,9 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		childCPtree(xmlString, cpId, participantId, regDate,offsetForCPOrEvent);
 		xmlString.append("</node>");
 		long endTime = System.currentTimeMillis();
-			Logger.out.info("EXECUTE TIME FOR RETRIEVE IN EDIT FOR DB (SpecimenCollectionGroupBizlogic)-  : " + (endTime - startTime));
-		return xmlString.toString();}
-		catch (DAOException e)
-		{
-			Logger.out.error(e.getMessage(), e);
-			return null;
-		}
-		finally
-		{
-			try
-			{
-				dao.closeSession();
-			}
-			catch (DAOException daoEx)
-			{
-				Logger.out.error(daoEx.getMessage(), daoEx);
-				return null;
-			}
-		}
+		Logger.out.info("EXECUTE TIME FOR RETRIEVE IN EDIT FOR DB (SpecimenCollectionGroupBizlogic)-  : " + (endTime - startTime));
+		return xmlString.toString();
+		
 	}
 
 	/**
@@ -1507,10 +1497,10 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	 * @param participantId
 	 * @param collectionProtocolRegistration
 	 * @param collectionProtocol
-	 * @throws DAOException
+	 * @throws BizLogicException
 	 * @throws ClassNotFoundException
 	 */
-	public void childCPtree(StringBuffer xmlString, Long cpId, Long participantId, Date regDate, Integer parentOffset) throws DAOException, ClassNotFoundException	
+	public void childCPtree(StringBuffer xmlString, Long cpId, Long participantId, Date regDate, Integer parentOffset) throws BizLogicException, ClassNotFoundException	
 	{
 		//done
 		Date evtLastDate = SCGTreeForCPBasedView(xmlString, cpId, participantId, regDate,parentOffset);
@@ -1536,7 +1526,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 				if (participantRegDate != null)
 				{
 					//bug no:6526 date format changed to mm-dd-yyyy
-					anticipatoryDate = Utility.parseDateToString(participantRegDate, Variables.dateFormat);
+					anticipatoryDate = edu.wustl.common.util.Utility.parseDateToString(participantRegDate, CommonServiceLocator.getInstance().getDatePattern());
 					dispName = colProt.getShortTitle() + ":" + anticipatoryDate;
 
 				}
@@ -1570,10 +1560,10 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	 * @param collectionProtocol
 	 * @param collectionProtocolRegistration
 	 * @return
-	 * @throws DAOException
+	 * @throws BizLogicException
 	 * @throws ClassNotFoundException
 	 */
-	public Date SCGTreeForCPBasedView(StringBuffer xmlString, Long cpId, Long participantId, Date regDate,Integer parentOffset) throws DAOException,
+	public Date SCGTreeForCPBasedView(StringBuffer xmlString, Long cpId, Long participantId, Date regDate,Integer parentOffset) throws BizLogicException,
 	ClassNotFoundException
 {
 		/**  
@@ -1583,7 +1573,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 				+ "scg.collectionProtocolEvent.id,scg.collectionProtocolEvent.studyCalendarEventPoint,"
 				+ "scg.collectionProtocolEvent.collectionPointLabel from " + SpecimenCollectionGroup.class.getName()
 				+ " as scg where scg.collectionProtocolRegistration.collectionProtocol.id = " + cpId.toString()+" and scg.collectionProtocolRegistration.participant.id = " +participantId.toString()+ " and scg.activityStatus <> '"
-				+ Constants.ACTIVITY_STATUS_DISABLED + "' order by scg.collectionProtocolEvent.studyCalendarEventPoint";
+				+ Status.ACTIVITY_STATUS_DISABLED.toString() + "' order by scg.collectionProtocolEvent.studyCalendarEventPoint";
 
 		List list = executeQuery(hql);
 
@@ -1682,7 +1672,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		return collectionProtocolRegistration;
 
 	}*/
-	private CollectionProtocolRegistration getCollectionProtocolReg(CollectionProtocol colProt, Long participantId) throws DAOException, ClassNotFoundException
+	private CollectionProtocolRegistration getCollectionProtocolReg(CollectionProtocol colProt, Long participantId) throws BizLogicException, ClassNotFoundException
 	{
 		CollectionProtocolRegistration collectionProtocolRegistration = null;
 		String hql = "select cpr.id,cpr.registrationDate from "+CollectionProtocolRegistration.class.getName()+" as cpr where cpr.collectionProtocol.id="+colProt.getId()+" and cpr.participant.id="+participantId.toString();
@@ -1721,11 +1711,11 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	 * @param eventLastDate
 	 * @param parentOffset
 	 * @return
-	 * @throws DAOException
+	 * @throws BizLogicException
 	 * @throws ClassNotFoundException
 	 */
 	private Date getPartRegDateForCP(CollectionProtocol colProt, Long participantId, Date parentRegDate, Date eventLastDate, Integer parentOffset)
-			throws DAOException, ClassNotFoundException
+			throws BizLogicException, ClassNotFoundException
 	{
 		Date participantRegDate = null;
 		//		bug 6560 fix
@@ -1770,7 +1760,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	 * @param specimenEventParaCol
 	 * @return
 	 */
-	private Collection getCollectionEventParameters(SpecimenCollectionGroup specimenCollGroup) throws ClassNotFoundException,DAOException
+	private Collection getCollectionEventParameters(SpecimenCollectionGroup specimenCollGroup) throws BizLogicException
 	{
 		Collection collectionEventParameters = new ArrayList();
 		if(specimenCollGroup.getSpecimenEventParametersCollection() == null || specimenCollGroup.getSpecimenEventParametersCollection().isEmpty())
@@ -1807,11 +1797,11 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	 * @param regDate
 	 * @param parentOffset
 	 * @return
-	 * @throws DAOException
+	 * @throws BizLogicException
 	 * @throws ClassNotFoundException
 	 */
 	private Date createTreeNodeForExistngSCG(StringBuffer xmlString, Double eventPoint, String collectionPointLabel, List scgList, Date regDate,
-			Integer parentOffset) throws DAOException, ClassNotFoundException
+			Integer parentOffset) throws BizLogicException, ClassNotFoundException
 	{
 		Date eventLastDate = null;
 
@@ -1846,7 +1836,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 						CollectionEventParameters collectionEventParameters = (CollectionEventParameters) iter.next();
 						eventLastDate = collectionEventParameters.getTimestamp();
 						//bug no:6526 date format changed to mm-dd-yyyy
-						receivedDate = Utility.parseDateToString(collectionEventParameters.getTimestamp(),Variables.dateFormat);
+						receivedDate = edu.wustl.common.util.Utility.parseDateToString(collectionEventParameters.getTimestamp(),CommonServiceLocator.getInstance().getDatePattern());
 						scgNodeLabel = "T" + eventPoint + ": " + collectionPointLabel + ": " + receivedDate;
 						break;
 					}
@@ -1869,7 +1859,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 					Date evtDate = Utility.getNewDateByAdditionOfDays(regDate, noOfDaysToAdd);
 					eventLastDate = evtDate;
 					//bug no:6526 date format changed to mm-dd-yyyy
-					receivedDate = Utility.parseDateToString(evtDate, Variables.dateFormat);
+					receivedDate = edu.wustl.common.util.Utility.parseDateToString(evtDate, CommonServiceLocator.getInstance().getDatePattern());
 					// String toolTipText = scgNodeLabel+ ": "+scgName;//
 					scgNodeLabel = "T" + eventPoint + ": " + collectionPointLabel + ": " + receivedDate;
 				}
@@ -1902,10 +1892,10 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	 * 			4.1.3 recursively call createXML on childSpecimens 
 	 * @param xmlString
 	 * @param specimenCollectionGroup
-	 * @throws DAOException
+	 * @throws BizLogicException
 	 * @throws ClassNotFoundException
 	 */
-	private void addSpecimenNodesToSCGTree(StringBuffer xmlString, SpecimenCollectionGroup specimenCollectionGroup) throws DAOException,
+	private void addSpecimenNodesToSCGTree(StringBuffer xmlString, SpecimenCollectionGroup specimenCollectionGroup) throws BizLogicException,
 			ClassNotFoundException
 	{
 		/**
@@ -1915,7 +1905,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 
 		String hql = "select sp.id,sp.label,sp.parentSpecimen.id,sp.activityStatus,sp.specimenType,sp.collectionStatus	from "
 				+ Specimen.class.getName() + " as sp where sp.specimenCollectionGroup.id = " + specimenCollectionGroup.getId()
-				+ " and sp.activityStatus <> '" + Constants.ACTIVITY_STATUS_DISABLED + "' order by sp.id";
+				+ " and sp.activityStatus <> '" + Status.ACTIVITY_STATUS_DISABLED.toString() + "' order by sp.id";
 
 		List list = executeQuery(hql);
 
@@ -1968,7 +1958,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 
 	}
 
-	private void createSpecimenXML(StringBuffer xmlString, Specimen specimen, TreeMap<Long, List<Specimen>> specimenChildrenMap) throws DAOException,
+	private void createSpecimenXML(StringBuffer xmlString, Specimen specimen, TreeMap<Long, List<Specimen>> specimenChildrenMap) throws BizLogicException,
 			ClassNotFoundException
 	{
 		Long spId = specimen.getId();
@@ -2007,7 +1997,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 			Collections.sort(childrenSpecimen, comparator);
 			for (Specimen childSpecimen : childrenSpecimen)
 			{
-				if (!Constants.ACTIVITY_STATUS_DISABLED.equals(childSpecimen.getActivityStatus()))
+				if (!Status.ACTIVITY_STATUS_DISABLED.equals(childSpecimen.getActivityStatus()))
 					createSpecimenXML(xmlString, childSpecimen, specimenChildrenMap);
 			}
 
@@ -2079,9 +2069,9 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		return noOfDays;
 	}
 
-	private List executeHqlQuery(DAO dao, String hql) throws DAOException, ClassNotFoundException
+	private List executeHqlQuery(DAO dao, String hql) throws BizLogicException
 	{
-		List list = dao.executeQuery(hql, null, false, null);
+		List list = executeQuery(hql);
 		return list;
 	}
 
@@ -2151,7 +2141,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	 * consents
 	 */
 	private void verifyAndUpdateConsentWithdrawn(SpecimenCollectionGroup specimenCollectionGroup, SpecimenCollectionGroup oldspecimenCollectionGroup,
-			DAO dao, SessionDataBean sessionDataBean) throws DAOException
+			DAO dao, SessionDataBean sessionDataBean) throws BizLogicException
 	{
 		Collection newConsentTierStatusCollection = specimenCollectionGroup.getConsentTierStatusCollection();
 		Iterator itr = newConsentTierStatusCollection.iterator();
@@ -2168,35 +2158,49 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		}
 	}
 
-	public String retriveSCGNameFromSCGId(String id) throws DAOException
+	public String retriveSCGNameFromSCGId(String id) throws BizLogicException
 	{
 		String scgName = "";
 		String[] selectColumnName = {"name"};
 		String[] whereColumnName = {"id"};
 		String[] whereColumnCondition = {"="};
 		Object[] whereColumnValue = {Long.parseLong(id)};
-		HibernateDAO dao = (HibernateDAO) DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
-		dao.openSession(null);
-		List scgList = dao.retrieve(SpecimenCollectionGroup.class.getName(), selectColumnName, whereColumnName, whereColumnCondition,
-				whereColumnValue, null);
-		if (scgList != null && !scgList.isEmpty())
+		
+		DAO dao = null;
+		try 
 		{
+			dao = openDAOSession();
 
-			scgName = (String) scgList.get(0);
+			QueryWhereClause queryWhereClause = new QueryWhereClause(SpecimenCollectionGroup.class.getName());
+			queryWhereClause.addCondition(new EqualClause("id",Long.parseLong(id)));
+
+			List scgList = dao.retrieve(SpecimenCollectionGroup.class.getName(), selectColumnName, queryWhereClause);
+			if (scgList != null && !scgList.isEmpty())
+			{
+
+				scgName = (String) scgList.get(0);
+			}
+
+
+			dao.closeSession();
+		} catch (DAOException daoExp) {
+			throw getBizLogicException(daoExp, "bizlogic.error", "");
 		}
-
-		dao.closeSession();
+		finally
+		{
+			closeDAOSession(dao);
+		}
 		return scgName;
 	}
 
-	public Map getSpecimenList(Long id) throws DAOException
+	public Map getSpecimenList(Long id) throws BizLogicException
 	{
 
-		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+		DAO dao = null;
 		try
 		{
-			dao.openSession(null);
-			Object object = dao.retrieve(SpecimenCollectionGroup.class.getName(), id);
+			dao = openDAOSession();
+			Object object = dao.retrieveById(SpecimenCollectionGroup.class.getName(), id);
 
 			if (object != null)
 			{
@@ -2208,20 +2212,21 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 			{
 				return null;
 			}
+			
 		}
-		catch (DAOException exception)
+		catch (DAOException daoExp)
 		{
-			throw exception;
+			throw getBizLogicException(daoExp, "bizlogic.error", "");
 		}
 		finally
 		{
-			dao.commit();
-			dao.closeSession();
+			//dao.commit();
+			closeDAOSession(dao);
 		}
 	}
 
-	private void updateOffset(Integer offset, SpecimenCollectionGroup specimenCollectionGroup, SessionDataBean sessionDataBean, DAO dao)
-			throws DAOException, UserNotAuthorizedException
+	/*private void updateOffset(Integer offset, SpecimenCollectionGroup specimenCollectionGroup, SessionDataBean sessionDataBean, DAO dao)
+			throws BizLogicException
 	{
 		//CollectionProtocolRegistration cpr = getCollectionProtocolRegForSCG(specimenCollectionGroup, dao);
 		//specimenCollectionGroup.setCollectionProtocolRegistration(cpr);
@@ -2235,8 +2240,8 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 			Object whereColVal[] = {event.getId(), cpr.getId()};
 			List specimenCollectionGroupCollection = (List) dao.retrieve(sourceObjName, null, whereColName, whereColCond, whereColVal,
 					Constants.AND_JOIN_CONDITION);
-			/*Collection specimenCollectionGroupCollection = (Collection) dao.retrieveAttribute(CollectionProtocolRegistration.class.getName(), cpr
-			 .getId(), Constants.COLUMN_NAME_SCG_COLL);*/
+			Collection specimenCollectionGroupCollection = (Collection) dao.retrieveAttribute(CollectionProtocolRegistration.class.getName(), cpr
+			 .getId(), Constants.COLUMN_NAME_SCG_COLL);
 			if (specimenCollectionGroupCollection != null && !specimenCollectionGroupCollection.isEmpty())
 			{
 				Iterator specimenCollectionGroupIterator = specimenCollectionGroupCollection.iterator();
@@ -2249,15 +2254,15 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 						scg.setOffset(scg.getOffset() + offset);
 					else
 						scg.setOffset(offset);
-					dao.update(scg, sessionDataBean, true, true, false);
+					dao.update(scg);
 					//}
 				}
 			}
 		}
 
-	}
+	}*/
 
-	private void getDetailsOfCPRForSCG(CollectionProtocolRegistration cpr, DAO dao) throws DAOException
+	private void getDetailsOfCPRForSCG(CollectionProtocolRegistration cpr, DAO dao) throws BizLogicException,DAOException
 	{
 		if (cpr != null && cpr.getId() != null)
 		{
@@ -2266,8 +2271,11 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 			String[] whereColName = {"id"};
 			String[] whereColCond = {"="};
 			Object[] whereColVal = {cpr.getId()};
+			
+			QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjName);
+			queryWhereClause.addCondition(new EqualClause("id",cpr.getId()));
 
-			List list = dao.retrieve(sourceObjName, selectColName, whereColName, whereColCond, whereColVal, Constants.AND_JOIN_CONDITION);
+			List list = dao.retrieve(sourceObjName, selectColName, queryWhereClause);
 			if (list != null && !list.isEmpty())
 			{
 				Object[] obj = (Object[]) list.get(0);
@@ -2279,28 +2287,36 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		}
 	}
 
-	public SpecimenCollectionGroup retrieveSCG(DAO dao, AbstractSpecimenCollectionGroup scg) throws DAOException
+	public SpecimenCollectionGroup retrieveSCG(DAO dao, AbstractSpecimenCollectionGroup scg) throws BizLogicException
 	{
-		List scgList = null;
-		SpecimenCollectionGroup absScg = null;
-		if (scg.getId() != null)
+		try
 		{
-			absScg = (SpecimenCollectionGroup) dao.retrieve(SpecimenCollectionGroup.class.getName(), scg.getId());
-		}
-		else if (scg.getGroupName() != null)
-		{
-			scgList = dao.retrieve(SpecimenCollectionGroup.class.getName(), Constants.NAME, scg.getGroupName());
-			if (scgList == null || scgList.isEmpty())
+			List scgList = null;
+			SpecimenCollectionGroup absScg = null;
+			if (scg.getId() != null)
 			{
-				throw new DAOException("Failed to retrieve SCG, either Name or Identifier is required");
+				absScg = (SpecimenCollectionGroup) dao.retrieveById(SpecimenCollectionGroup.class.getName(), scg.getId());
 			}
-			absScg = ((SpecimenCollectionGroup) (scgList.get(0)));
+			else if (scg.getGroupName() != null)
+			{
+				scgList = dao.retrieve(SpecimenCollectionGroup.class.getName(), Constants.NAME, scg.getGroupName());
+				if (scgList == null || scgList.isEmpty())
+				{
+					throw getBizLogicException(null, "bizlogic.error", 
+					"Failed to retrieve SCG, either Name or Identifier is required");
+				}
+				absScg = ((SpecimenCollectionGroup) (scgList.get(0)));
+			}
+			return absScg;
 		}
-		return absScg;
+		catch(DAOException daoExp)
+		{
+			throw getBizLogicException(daoExp, "bizlogic.error", "");
+		}
 	}
 
 	public CollectionProtocolRegistration chkParticipantRegisteredToCP(Long participantId, Long collectionProtocolId)
-			throws ClassNotFoundException, DAOException
+			throws BizLogicException
 	{
 		//Date regDate = null;
 		CollectionProtocolRegistration cpr = null;
@@ -2331,9 +2347,9 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	/**
 	 * Called from DefaultBizLogic to get ObjectId for authorization check
 	 * (non-Javadoc)
-	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getObjectId(edu.wustl.common.dao.AbstractDAO, java.lang.Object)
+	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getObjectId(edu.wustl.common.dao.DAO, java.lang.Object)
 	 */
-	public String getObjectId(AbstractDAO dao, Object domainObject)
+	public String getObjectId(DAO dao, Object domainObject)
 	{
 		String objectId = "";
 		if (domainObject instanceof SpecimenCollectionGroup)
@@ -2359,43 +2375,50 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 
 	/**
 	 * (non-Javadoc)
-	 * @throws UserNotAuthorizedException 
-	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#isAuthorized(edu.wustl.common.dao.AbstractDAO, java.lang.Object, edu.wustl.common.beans.SessionDataBean)
+	 * @throws  
+	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#isAuthorized(edu.wustl.common.dao.DAO, java.lang.Object, edu.wustl.common.beans.SessionDataBean)
 	 * 
 	 */
-	public boolean isAuthorized(AbstractDAO dao, Object domainObject, SessionDataBean sessionDataBean) throws UserNotAuthorizedException
+	public boolean isAuthorized(DAO dao, Object domainObject, SessionDataBean sessionDataBean)throws BizLogicException
 	{
-		boolean isAuthorized = false;
-		String protectionElementName = null;
-
-		if (sessionDataBean != null && sessionDataBean.isAdmin())
+		try
 		{
-			return true;
-		}
+			boolean isAuthorized = false;
+			String protectionElementName = null;
 
-		//	Get the base object id against which authorization will take place 
-		if (domainObject instanceof List)
-		{
-			List list = (List) domainObject;
-			for (Object domainObject2 : list)
+			if (sessionDataBean != null && sessionDataBean.isAdmin())
 			{
-				protectionElementName = getObjectId(dao, domainObject2);
+				return true;
 			}
+
+			//	Get the base object id against which authorization will take place 
+			if (domainObject instanceof List)
+			{
+				List list = (List) domainObject;
+				for (Object domainObject2 : list)
+				{
+					protectionElementName = getObjectId(dao, domainObject2);
+				}
+			}
+			else
+			{
+				protectionElementName = getObjectId(dao, domainObject);
+			}
+			//Get the required privilege name which we would like to check for the logged in user.
+			String privilegeName = getPrivilegeName(domainObject);
+			isAuthorized = AppUtility.checkPrivilegeOnCP(dao, domainObject, protectionElementName, privilegeName, sessionDataBean);
+
+			if (!isAuthorized)
+			{
+				//bug 11611 and 11659
+				throw AppUtility.getUserNotAuthorizedException(privilegeName, protectionElementName);
+			}
+			return isAuthorized;
 		}
-		else
+		catch(ApplicationException exp)
 		{
-			protectionElementName = getObjectId(dao, domainObject);
+			throw getBizLogicException(exp, "bizlogic.error", "");
 		}
-		//Get the required privilege name which we would like to check for the logged in user.
-		String privilegeName = getPrivilegeName(domainObject);
-		isAuthorized = Utility.checkPrivilegeOnCP(dao, domainObject, protectionElementName, privilegeName, sessionDataBean);
-		
-		if (!isAuthorized)
-		{
-			//bug 11611 and 11659
-			//throw Utility.getUserNotAuthorizedException(privilegeName, protectionElementName,domainObject.getClass().getSimpleName());
-		}
-		return isAuthorized;
 	}
 
 	@Override

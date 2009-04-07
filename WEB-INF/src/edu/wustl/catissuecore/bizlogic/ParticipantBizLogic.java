@@ -33,37 +33,39 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.ParticipantRegistrationCacheManager;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.cde.CDEManager;
-import edu.wustl.common.dao.AbstractDAO;
-import edu.wustl.common.dao.DAO;
-import edu.wustl.common.dao.DAOFactory;
-import edu.wustl.common.dao.HibernateDAO;
-import edu.wustl.common.dao.JDBCDAO;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.lookup.DefaultLookupParameters;
 import edu.wustl.common.lookup.LookupLogic;
-import edu.wustl.common.security.PrivilegeCache;
-import edu.wustl.common.security.PrivilegeManager;
-import edu.wustl.common.security.exceptions.SMException;
-import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
-import edu.wustl.common.util.Permissions;
 import edu.wustl.common.util.Utility;
-import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.CommonServiceLocator;
+import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.global.Variables;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.DAO;
+import edu.wustl.dao.HibernateDAO;
+import edu.wustl.dao.JDBCDAO;
+import edu.wustl.dao.daofactory.DAOFactory;
+import edu.wustl.dao.exception.DAOException;
+import edu.wustl.security.exception.SMException;
+import edu.wustl.security.exception.UserNotAuthorizedException;
+import edu.wustl.security.global.Permissions;
+import edu.wustl.security.privilege.PrivilegeCache;
+import edu.wustl.security.privilege.PrivilegeManager;
 
 /**
  * ParticipantHDAO is used to to add Participant's information into the database using Hibernate.
  * @author aniruddha_phadnis
  */
-public class ParticipantBizLogic extends DefaultBizLogic
+public class ParticipantBizLogic extends CatissueDefaultBizLogic
 {
 	private List<Long> cprIdList = new ArrayList<Long>();
 	/**
@@ -73,10 +75,12 @@ public class ParticipantBizLogic extends DefaultBizLogic
 	 * @throws DAOException 
 	 */
 	@Override
-	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
+	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws BizLogicException
 	{
+		try
+		{
 		Participant participant = (Participant) obj;
-		dao.insert(participant, sessionDataBean, true, true);
+		dao.insert(participant, true);
 		Collection participantMedicalIdentifierCollection = participant.getParticipantMedicalIdentifierCollection();
 
 
@@ -99,7 +103,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 		{
 			ParticipantMedicalIdentifier pmIdentifier = (ParticipantMedicalIdentifier) it.next();
 			pmIdentifier.setParticipant(participant);
-			dao.insert(pmIdentifier, sessionDataBean, true, true);
+			dao.insert(pmIdentifier, true);
 		}
 		
 		//Inserting collection Protocol Registration info in the database after setting the participant associated.
@@ -115,6 +119,11 @@ public class ParticipantBizLogic extends DefaultBizLogic
 		{
 			insertAuthData(participant);
 		}
+		}catch(DAOException daoExp)
+		{
+			throw getBizLogicException(daoExp, "bizlogic.error", "");
+		}
+		
 	}
 
 	/**
@@ -135,7 +144,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 	 * @throws DAOException
 	 * @throws UserNotAuthorizedException
 	 */
-	private void registerToCPR(DAO dao, SessionDataBean sessionDataBean, Participant participant) throws DAOException, UserNotAuthorizedException
+	private void registerToCPR(DAO dao, SessionDataBean sessionDataBean, Participant participant) throws BizLogicException
 	{
 		CollectionProtocolRegistrationBizLogic cprBizLogic = new CollectionProtocolRegistrationBizLogic();
 		Collection cprCollection = participant.getCollectionProtocolRegistrationCollection();
@@ -160,7 +169,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 	 * @throws DAOException
 	 * @throws UserNotAuthorizedException 
 	 * */
-	protected void postInsert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
+	protected void postInsert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws BizLogicException
 	{
 		Participant participant = (Participant) obj;
 		Collection collectionProtocolRegistrationCollection = participant.getCollectionProtocolRegistrationCollection();
@@ -186,8 +195,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 	 * @throws DAOException
 	 * @throws UserNotAuthorizedException
 	 * */
-	protected void postUpdate(DAO dao, Object currentObj, Object oldObj, SessionDataBean sessionDataBean) throws BizLogicException,
-			UserNotAuthorizedException
+	protected void postUpdate(DAO dao, Object currentObj, Object oldObj, SessionDataBean sessionDataBean) throws BizLogicException
 	{
 		Participant participant = (Participant) currentObj;
 		Collection cprCollection = participant.getCollectionProtocolRegistrationCollection();
@@ -224,7 +232,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 						protocolParticipantId = Constants.DOUBLE_QUOTES;
 					}
 
-					if (collectionProtocolRegistration.getActivityStatus().equals(Constants.ACTIVITY_STATUS_DISABLED))
+					if (collectionProtocolRegistration.getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED))
 					{
 						participantRegCacheManager.deRegisterParticipant(cpId, participantId, protocolParticipantId);
 					}
@@ -279,7 +287,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 		{
 			catissueCoreCacheManager = CatissueCoreCacheManager.getInstance();
 			HashMap participantMap = (HashMap) catissueCoreCacheManager.getObjectFromCache(Constants.MAP_OF_PARTICIPANTS);
-			if (cloneParticipant.getActivityStatus().equalsIgnoreCase(Constants.ACTIVITY_STATUS_DISABLED))
+			if (cloneParticipant.getActivityStatus().equalsIgnoreCase(Status.ACTIVITY_STATUS_DISABLED.toString()))
 			{
 				participantMap.remove(cloneParticipant.getId());
 			}
@@ -331,102 +339,109 @@ public class ParticipantBizLogic extends DefaultBizLogic
 	 * @param session The session in which the object is saved.
 	 * @throws DAOException 
 	 */
-	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
+	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws BizLogicException
 	{
-		Participant participant = (Participant) obj;
-		Participant oldParticipant = (Participant) oldObj;
-		
-		/*Collection raceCollection = participant.getRaceCollection();
+		try
+		{
+			Participant participant = (Participant) obj;
+			Participant oldParticipant = (Participant) oldObj;
+
+			/*Collection raceCollection = participant.getRaceCollection();
 		participant.setRaceCollection(null);*/
-		
-		//deleteOldParticipantRaceColl(oldParticipant.getRaceCollection(),dao);
-		
-		dao.update(participant, sessionDataBean, true, true, false);
-		//insertNewParticipantRaceColl(raceCollection,participant,sessionDataBean,dao);
-		//Audit of Participant.
-		dao.audit(obj, oldObj, sessionDataBean, true);
 
-		Collection oldParticipantMedicalIdentifierCollection = (Collection) oldParticipant.getParticipantMedicalIdentifierCollection();
-		Collection participantMedicalIdentifierCollection = participant.getParticipantMedicalIdentifierCollection();
-		Iterator it = participantMedicalIdentifierCollection.iterator();
+			//deleteOldParticipantRaceColl(oldParticipant.getRaceCollection(),dao);
 
-		//Updating the medical identifiers of the participant
-		while (it.hasNext())
-		{
-			ParticipantMedicalIdentifier pmIdentifier = (ParticipantMedicalIdentifier) it.next();
+			dao.update(participant);
+			//insertNewParticipantRaceColl(raceCollection,participant,sessionDataBean,dao);
+			//Audit of Participant.
+			((HibernateDAO)dao).audit(obj, oldObj);
 
-			/**
-			 * Start: Change for API Search   --- Jitendra 06/10/2006
-			 * In Case of Api Search, previoulsy it was failing since there was default class level initialization 
-			 * on domain object. For example in User object, it was initialized as protected String lastName=""; 
-			 * So we removed default class level initialization on domain object and are initializing in method
-			 * setAllValues() of domain object. But in case of Api Search, default values will not get set 
-			 * since setAllValues() method of domainObject will not get called. To avoid null pointer exception,
-			 * we are setting the default values same as we were setting in setAllValues() method of domainObject.
-			 */
-			ApiSearchUtil.setParticipantMedicalIdentifierDefault(pmIdentifier);
-			//End:-  Change for API Search 
+			Collection oldParticipantMedicalIdentifierCollection = (Collection) oldParticipant.getParticipantMedicalIdentifierCollection();
+			Collection participantMedicalIdentifierCollection = participant.getParticipantMedicalIdentifierCollection();
+			Iterator it = participantMedicalIdentifierCollection.iterator();
 
-			pmIdentifier.setParticipant(participant);
-			if(pmIdentifier.getId()!=null)
+			//Updating the medical identifiers of the participant
+			while (it.hasNext())
 			{
-				dao.update(pmIdentifier, sessionDataBean, true, true, false);
-			}
-			else if(pmIdentifier.getId()==null||pmIdentifier.getId().equals(""))
-			{
-				dao.insert(pmIdentifier, sessionDataBean, true, true);
-			}
+				ParticipantMedicalIdentifier pmIdentifier = (ParticipantMedicalIdentifier) it.next();
 
-			//Audit of ParticipantMedicalIdentifier.
-			ParticipantMedicalIdentifier oldPmIdentifier = (ParticipantMedicalIdentifier) getCorrespondingOldObject(
-					oldParticipantMedicalIdentifierCollection, pmIdentifier.getId());
+				/**
+				 * Start: Change for API Search   --- Jitendra 06/10/2006
+				 * In Case of Api Search, previoulsy it was failing since there was default class level initialization 
+				 * on domain object. For example in User object, it was initialized as protected String lastName=""; 
+				 * So we removed default class level initialization on domain object and are initializing in method
+				 * setAllValues() of domain object. But in case of Api Search, default values will not get set 
+				 * since setAllValues() method of domainObject will not get called. To avoid null pointer exception,
+				 * we are setting the default values same as we were setting in setAllValues() method of domainObject.
+				 */
+				ApiSearchUtil.setParticipantMedicalIdentifierDefault(pmIdentifier);
+				//End:-  Change for API Search 
 
-			dao.audit(pmIdentifier, oldPmIdentifier, sessionDataBean, true);
-		}
-
-		//Updating the Collection Protocol Registration of the participant
-		//(Abhishek Mehta)
-		CollectionProtocolRegistrationBizLogic cprBizLogic = new CollectionProtocolRegistrationBizLogic();
-
-		Collection oldCollectionProtocolRegistrationCollection = oldParticipant.getCollectionProtocolRegistrationCollection();
-		Collection cprCollection = participant.getCollectionProtocolRegistrationCollection();
-
-		Iterator itCPRColl = cprCollection.iterator();
-		while (itCPRColl.hasNext())
-		{
-			CollectionProtocolRegistration collectionProtReg = (CollectionProtocolRegistration) itCPRColl.next();
-
-			ApiSearchUtil.setCollectionProtocolRegistrationDefault(collectionProtReg);
-
-			if(collectionProtReg.getCollectionProtocol().getId()!=null&&!collectionProtReg.equals(""))
-			{
-				collectionProtReg.setParticipant(participant);
-
-			//Audit of CollectionProtocolRegistration.
-				CollectionProtocolRegistration oldcollectionProtocolRegistration = (CollectionProtocolRegistration) getCorrespondingOldObject(
-					oldCollectionProtocolRegistrationCollection, collectionProtReg.getId());
-
-				if (collectionProtReg.getId() == null) // If Collection Protocol Registration is not happened for given participant
+				pmIdentifier.setParticipant(participant);
+				if(pmIdentifier.getId()!=null)
 				{
-					collectionProtReg.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
-					cprBizLogic.insert(collectionProtReg, dao, sessionDataBean);
-					cprIdList.add(collectionProtReg.getId());
-					continue;
+					dao.update(pmIdentifier);
 				}
-				cprBizLogic.update(dao, collectionProtReg, oldcollectionProtocolRegistration, sessionDataBean);
+				else if(pmIdentifier.getId()==null||pmIdentifier.getId().equals(""))
+				{
+					dao.insert(pmIdentifier,true);
+				}
+
+				//Audit of ParticipantMedicalIdentifier.
+				ParticipantMedicalIdentifier oldPmIdentifier = (ParticipantMedicalIdentifier) getCorrespondingOldObject(
+						oldParticipantMedicalIdentifierCollection, pmIdentifier.getId());
+
+				((HibernateDAO)dao).audit(pmIdentifier, oldPmIdentifier);
+			}
+
+			//Updating the Collection Protocol Registration of the participant
+			//(Abhishek Mehta)
+			CollectionProtocolRegistrationBizLogic cprBizLogic = new CollectionProtocolRegistrationBizLogic();
+
+			Collection oldCollectionProtocolRegistrationCollection = oldParticipant.getCollectionProtocolRegistrationCollection();
+			Collection cprCollection = participant.getCollectionProtocolRegistrationCollection();
+
+			Iterator itCPRColl = cprCollection.iterator();
+			while (itCPRColl.hasNext())
+			{
+				CollectionProtocolRegistration collectionProtReg = (CollectionProtocolRegistration) itCPRColl.next();
+
+				ApiSearchUtil.setCollectionProtocolRegistrationDefault(collectionProtReg);
+
+				if(collectionProtReg.getCollectionProtocol().getId()!=null&&!collectionProtReg.equals(""))
+				{
+					collectionProtReg.setParticipant(participant);
+
+					//Audit of CollectionProtocolRegistration.
+					CollectionProtocolRegistration oldcollectionProtocolRegistration = (CollectionProtocolRegistration) getCorrespondingOldObject(
+							oldCollectionProtocolRegistrationCollection, collectionProtReg.getId());
+
+					if (collectionProtReg.getId() == null) // If Collection Protocol Registration is not happened for given participant
+					{
+						collectionProtReg.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+						cprBizLogic.insert(collectionProtReg, dao, sessionDataBean);
+						cprIdList.add(collectionProtReg.getId());
+						continue;
+					}
+					cprBizLogic.update(dao, collectionProtReg, oldcollectionProtocolRegistration, sessionDataBean);
+				}
+			}
+
+			//Disable the associate collection protocol registration
+			Logger.out.debug("participant.getActivityStatus() " + participant.getActivityStatus());
+			if (participant.getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED))
+			{
+				Logger.out.debug("participant.getActivityStatus() " + participant.getActivityStatus());
+				Long participantIDArr[] = {participant.getId()};
+
+				CollectionProtocolRegistrationBizLogic bizLogic = (CollectionProtocolRegistrationBizLogic) BizLogicFactory.getInstance().getBizLogic(
+						Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
+				bizLogic.disableRelatedObjectsForParticipant(dao, participantIDArr);
 			}
 		}
-
-		//Disable the associate collection protocol registration
-		Logger.out.debug("participant.getActivityStatus() " + participant.getActivityStatus());
-		if (participant.getActivityStatus().equals(Constants.ACTIVITY_STATUS_DISABLED))
+		catch(DAOException daoExp)
 		{
-			Logger.out.debug("participant.getActivityStatus() " + participant.getActivityStatus());
-			Long participantIDArr[] = {participant.getId()};
-
-			CollectionProtocolRegistrationBizLogic bizLogic = (CollectionProtocolRegistrationBizLogic) BizLogicFactory.getInstance().getBizLogic(
-					Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
-			bizLogic.disableRelatedObjectsForParticipant(dao, participantIDArr);
+			throw getBizLogicException(daoExp, "bizlogic.error", "");
 		}
 	}
 
@@ -452,13 +467,13 @@ public class ParticipantBizLogic extends DefaultBizLogic
 			{
 				Race race = (Race) itr.next();
 				race.setParticipant(participant);
-				dao.insert(race,sessionDataBean,false,false);
+				dao.insert(race,false);
 			}
 		}
 	}
 	/**
 	 * @see edu.wustl.common.bizlogic.IBizLogic#setPrivilege(DAO, String, Class, Long[], Long, String, boolean)
-	 */
+	 *//*
 	protected void setPrivilege(DAO dao, String privilegeName, Class objectType, Long[] objectIds, Long userId, String roleId, boolean assignToUser,
 			boolean assignOperation) throws SMException, DAOException
 	{
@@ -470,7 +485,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 				Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
 		bizLogic.assignPrivilegeToRelatedObjectsForParticipant(dao, privilegeName, objectIds, userId, roleId, assignToUser, assignOperation);
 	}
-
+*/
 	/**
 	 * Assigns the privilege to related objects for Collection Protocol Registration.
 	 * @param dao
@@ -482,7 +497,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 	 * @throws DAOException
 	 * @throws SMException
 	 */
-	public void assignPrivilegeToRelatedObjectsForCPR(DAO dao, String privilegeName, Long[] objectIds, Long userId, String roleId,
+/*	public void assignPrivilegeToRelatedObjectsForCPR(DAO dao, String privilegeName, Long[] objectIds, Long userId, String roleId,
 			boolean assignToUser, boolean assignOperation) throws SMException, DAOException
 	{
 		List listOfSubElement = super.getRelatedObjects(dao, CollectionProtocolRegistration.class,
@@ -494,7 +509,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 			super.setPrivilege(dao, privilegeName, Participant.class, Utility.toLongArray(listOfSubElement), userId, roleId, assignToUser,
 					assignOperation);
 		}
-	}
+	}*/
 
 	/**
 	 * This method check for duplicate collection protocol registration for given participant
@@ -553,7 +568,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 	 * @throws DAOException
 	 * @throws ClassNotFoundException
 	 */
-	protected boolean isSpecimenExistsForRegistration(DAO dao, Long cprId) throws DAOException, ClassNotFoundException
+	protected boolean isSpecimenExistsForRegistration(DAO dao, Long cprId) throws BizLogicException
 	{
 
 		String hql = " select " + " elements(scg.specimenCollection) " + "from "
@@ -574,32 +589,33 @@ public class ParticipantBizLogic extends DefaultBizLogic
 
 	}
 
-	protected boolean isSpecimenExists(DAO dao, Long participantId) throws DAOException, ClassNotFoundException
+	protected boolean isSpecimenExists(DAO dao, Long participantId) throws BizLogicException
 	{
 
-		String hql = " select" + " elements(scg.specimenCollection) " + "from" + " edu.wustl.catissuecore.domain.Participant as p"
-				+ ",edu.wustl.catissuecore.domain.CollectionProtocolRegistration as cpr"
-				+ ", edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg" + ", edu.wustl.catissuecore.domain.Specimen as s"
-				+ " where p.id = " + participantId + " and" + " p.id = cpr.participant.id and"
-				+ " cpr.id = scg.collectionProtocolRegistration.id and" + " scg.id = s.specimenCollectionGroup.id and " + " s.activityStatus = '"
-				+ Constants.ACTIVITY_STATUS_ACTIVE + "'";
+			String hql = " select" + " elements(scg.specimenCollection) " + "from" + " edu.wustl.catissuecore.domain.Participant as p"
+			+ ",edu.wustl.catissuecore.domain.CollectionProtocolRegistration as cpr"
+			+ ", edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg" + ", edu.wustl.catissuecore.domain.Specimen as s"
+			+ " where p.id = " + participantId + " and" + " p.id = cpr.participant.id and"
+			+ " cpr.id = scg.collectionProtocolRegistration.id and" + " scg.id = s.specimenCollectionGroup.id and " + " s.activityStatus = '"
+			+ Constants.ACTIVITY_STATUS_ACTIVE + "'";
 
-		List specimenList = (List) executeHqlQuery(dao, hql);
-		if ((specimenList != null) && (specimenList).size() > 0)
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+			List specimenList = (List) executeHqlQuery(dao, hql);
+			if ((specimenList != null) && (specimenList).size() > 0)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		
 
 	}
 
 	/**
 	 * Overriding the parent class's method to validate the enumerated attribute values
 	 */
-	protected boolean validate(Object obj, DAO dao, String operation) throws DAOException
+	protected boolean validate(Object obj, DAO dao, String operation) throws BizLogicException
 	{
 		Participant participant = (Participant) obj;
 		Validator validator = new Validator();
@@ -608,31 +624,31 @@ public class ParticipantBizLogic extends DefaultBizLogic
 		String message = "";
 		if (participant == null)
 		{
-			throw new DAOException(ApplicationProperties.getValue("domain.object.null.err.msg", "Participant"));
+			throw getBizLogicException(null, "domain.object.null.err.msg", "Participant");
 		}
 
 		String errorKeyForBirthDate = "";
 		String errorKeyForDeathDate = "";
 
-		String birthDate = Utility.parseDateToString(participant.getBirthDate(),edu.wustl.catissuecore.util.global.Variables.dateFormat);
+		String birthDate = Utility.parseDateToString(participant.getBirthDate(),CommonServiceLocator.getInstance().getDatePattern());
 		if (!validator.isEmpty(birthDate))
 		{
 			errorKeyForBirthDate = validator.validateDate(birthDate, true);
 			if (errorKeyForBirthDate.trim().length() > 0)
 			{
 				message = ApplicationProperties.getValue("participant.birthDate");
-				throw new DAOException(ApplicationProperties.getValue(errorKeyForBirthDate, message));
+				throw getBizLogicException(null, errorKeyForBirthDate, message);
 			}
 		}
 
-		String deathDate = Utility.parseDateToString(participant.getDeathDate(), edu.wustl.catissuecore.util.global.Variables.dateFormat);
+		String deathDate = Utility.parseDateToString(participant.getDeathDate(),CommonServiceLocator.getInstance().getDatePattern());
 		if (!validator.isEmpty(deathDate))
 		{
 			errorKeyForDeathDate = validator.validateDate(deathDate, true);
 			if (errorKeyForDeathDate.trim().length() > 0)
 			{
 				message = ApplicationProperties.getValue("participant.deathDate");
-				throw new DAOException(ApplicationProperties.getValue(errorKeyForDeathDate, message));
+				throw getBizLogicException(null, errorKeyForDeathDate, message);
 			}
 		}
 
@@ -640,18 +656,19 @@ public class ParticipantBizLogic extends DefaultBizLogic
 		{
 			if (!validator.isEmpty(deathDate))
 			{
-				throw new DAOException(ApplicationProperties.getValue("participant.invalid.enddate"));
+				throw getBizLogicException(null, "participant.invalid.enddate", "");
 			}
 		}
 		if ((!validator.isEmpty(birthDate) && !validator.isEmpty(deathDate))
 				&& (errorKeyForDeathDate.trim().length() == 0 && errorKeyForBirthDate.trim().length() == 0))
 		{
-			boolean errorKey1 = validator.compareDates(Utility.parseDateToString(participant.getBirthDate(), edu.wustl.catissuecore.util.global.Variables.dateFormat),
-					Utility.parseDateToString(participant.getDeathDate(), edu.wustl.catissuecore.util.global.Variables.dateFormat));
+			boolean errorKey1 = validator.compareDates(Utility.parseDateToString(participant.getBirthDate(), CommonServiceLocator.getInstance().getDatePattern()),
+					Utility.parseDateToString(participant.getDeathDate(), CommonServiceLocator.getInstance().getDatePattern()));
 
 			if (!errorKey1)
 			{
-				throw new DAOException(ApplicationProperties.getValue("participant.invaliddate"));
+			
+				throw getBizLogicException(null, "participant.invaliddate", "");
 			}
 		}
 
@@ -660,7 +677,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 			if (!validator.isValidSSN(participant.getSocialSecurityNumber()))
 			{
 				message = ApplicationProperties.getValue("participant.socialSecurityNumber");
-				throw new DAOException(ApplicationProperties.getValue("errors.invalid", message));
+				throw getBizLogicException(null, "errors.invalid", message);
 			}
 		}
 
@@ -675,7 +692,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 				String medicalRecordNo = participantIdentifier.getMedicalRecordNumber();
 				if (validator.isEmpty(medicalRecordNo) || site == null || site.getId() == null)
 				{
-					throw new DAOException(ApplicationProperties.getValue("errors.participant.extiden.missing"));
+					throw getBizLogicException(null, "errors.participant.extiden.missing", "");
 				}
 			}
 		}
@@ -692,11 +709,11 @@ public class ParticipantBizLogic extends DefaultBizLogic
 				{
 					long collectionProtocolTitle = collectionProtocolRegistrationIdentifier.getCollectionProtocol().getId().longValue();
 					String collectionProtocolRegistrationDate = Utility.parseDateToString(collectionProtocolRegistrationIdentifier.getRegistrationDate(),
-							edu.wustl.catissuecore.util.global.Variables.dateFormat);
+							CommonServiceLocator.getInstance().getDatePattern());
 					String errorKey = validator.validateDate(collectionProtocolRegistrationDate, true);
 					if (collectionProtocolTitle <= 0 || errorKey.trim().length() > 0)
 					{
-						throw new DAOException(ApplicationProperties.getValue("errors.participant.collectionProtocolRegistration.missing"));
+						throw getBizLogicException(null, "errors.participant.collectionProtocolRegistration.missing", "");
 					}
 					
 				}
@@ -704,21 +721,16 @@ public class ParticipantBizLogic extends DefaultBizLogic
 				if (collectionProtocolRegistrationIdentifier.getActivityStatus() != null
 						&& collectionProtocolRegistrationIdentifier.getActivityStatus().equalsIgnoreCase(Constants.DISABLED))
 				{
-					try
-					{
-
+					
 						boolean isSpecimenExist = (boolean) isSpecimenExistsForRegistration(dao, (Long) collectionProtocolRegistrationIdentifier
 								.getId());
 						if (isSpecimenExist)
 						{
-							throw new DAOException(ApplicationProperties.getValue("collectionprotocolregistration.scg.exists"));
+							throw getBizLogicException(null, "collectionprotocolregistration.scg.exists", "");
 						}
 
-					}
-					catch (ClassNotFoundException e)
-					{
-						e.printStackTrace();
-					}
+					
+				
 				}
 
 			}
@@ -727,7 +739,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 		boolean isDuplicateCollectionProtocol = isDuplicateCollectionProtocol(collectionProtocolRegistrationCollection);
 		if (isDuplicateCollectionProtocol)
 		{
-			throw new DAOException(ApplicationProperties.getValue("errors.participant.duplicate.collectionProtocol"));
+			throw getBizLogicException(null, "errors.participant.duplicate.collectionProtocol", "");
 		}
 
 		//Validation for Blank Participant 
@@ -787,7 +799,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 			List vitalStatusList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_VITAL_STATUS, null);
 			if (!Validator.isEnumeratedOrNullValue(vitalStatusList, participant.getVitalStatus()))
 			{
-				throw new DAOException(ApplicationProperties.getValue("participant.gender.errMsg"));
+				throw getBizLogicException(null, "participant.gender.errMsg", "");
 			}
 		}
 
@@ -797,7 +809,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 
 			if (!Validator.isEnumeratedOrNullValue(genderList, participant.getGender()))
 			{
-				throw new DAOException(ApplicationProperties.getValue("participant.gender.errMsg"));
+				throw getBizLogicException(null, "participant.gender.errMsg", "");
 			}
 		}
 
@@ -806,7 +818,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 			List genotypeList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_GENOTYPE, null);
 			if (!Validator.isEnumeratedOrNullValue(genotypeList, participant.getSexGenotype()))
 			{
-				throw new DAOException(ApplicationProperties.getValue("participant.genotype.errMsg"));
+				throw getBizLogicException(null, "participant.genotype.errMsg", "");
 			}
 		}
 
@@ -823,7 +835,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 					String race_name = (String) race.getRaceName();
 					if (!validator.isEmpty(race_name) && !Validator.isEnumeratedOrNullValue(raceList, race_name))
 					{
-						throw new DAOException(ApplicationProperties.getValue("participant.race.errMsg"));
+						throw getBizLogicException(null, "participant.race.errMsg", "");
 					}
 				}
 			}
@@ -834,7 +846,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 			List ethnicityList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_ETHNICITY, null);
 			if (!Validator.isEnumeratedOrNullValue(ethnicityList, participant.getEthnicity()))
 			{
-				throw new DAOException(ApplicationProperties.getValue("participant.ethnicity.errMsg"));
+				throw getBizLogicException(null, "participant.ethnicity.errMsg", "");
 			}
 		}
 
@@ -842,34 +854,28 @@ public class ParticipantBizLogic extends DefaultBizLogic
 		{
 			if (!Constants.ACTIVITY_STATUS_ACTIVE.equals(participant.getActivityStatus()))
 			{
-				throw new DAOException(ApplicationProperties.getValue("activityStatus.active.errMsg"));
+				throw getBizLogicException(null, "activityStatus.active.errMsg", "");
 			}
 		}
 		else
 		{
 			if (!Validator.isEnumeratedValue(Constants.ACTIVITY_STATUS_VALUES, participant.getActivityStatus()))
 			{
-				throw new DAOException(ApplicationProperties.getValue("activityStatus.errMsg"));
+				throw getBizLogicException(null, "activityStatus.errMsg", "");
 			}
 		}
 
 		//check the activity status of all the specimens associated to the participant
 		if (participant.getActivityStatus().equalsIgnoreCase(Constants.DISABLED))
 		{
-			try
-			{
-
+			
 				boolean isSpecimenExist = (boolean) isSpecimenExists(dao, (Long) participant.getId());
 				if (isSpecimenExist)
 				{
-					throw new DAOException(ApplicationProperties.getValue("participant.specimen.exists"));
+					throw getBizLogicException(null, "participant.specimen.exists", "");
 				}
 
-			}
-			catch (ClassNotFoundException e)
-			{
-				e.printStackTrace();
-			}
+			
 		}
 		return true;
 	}
@@ -888,15 +894,23 @@ public class ParticipantBizLogic extends DefaultBizLogic
 		// This object contains the Participant with which matching participant are to be found and the cutoff value.
 		DefaultLookupParameters params = new DefaultLookupParameters();
 		params.setObject(participant);
+
+		List listOfParticipants = new ArrayList();
 		// getting instance of catissueCoreCacheManager and getting participantMap from cache
 		CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager.getInstance();
-		HashMap<String, Participant> participantMap = (HashMap<String,Participant>) catissueCoreCacheManager.getObjectFromCache(Constants.MAP_OF_PARTICIPANTS);
-		//listOfParticipants.addAll(participantMap.values());
-		params.setListOfParticipants(participantMap);
+		HashMap participantMap = (HashMap) catissueCoreCacheManager.getObjectFromCache(Constants.MAP_OF_PARTICIPANTS);
+
+		Object participants[] = participantMap.values().toArray();
+		listOfParticipants.addAll(participantMap.values());
+
+		params.setListOfParticipants(listOfParticipants);
+
 		//calling thr lookup function which returns the List of ParticipantResuld objects.
 		//ParticipantResult object contains the matching participant and the probablity.
-		List matchingParticipantList = lookupLogic.lookup(params);
+	List matchingParticipantList = lookupLogic.lookup(params);
+
 		return matchingParticipantList;
+
 	}
 
 	/**
@@ -1017,15 +1031,18 @@ public class ParticipantBizLogic extends DefaultBizLogic
 		return mapOfParticipants;
 
 	}*/
-	public Map<Long,Participant> getAllParticipants() throws Exception
+	public Map<Long,Participant> getAllParticipants() throws BizLogicException
 	{
-		AbstractDAO hibernateDao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
-		hibernateDao.openSession(null);
+		DAO dao = null;
 		Map<Long,Participant> mapOfParticipants = new HashMap<Long,Participant>();
-		String participantQueryStr = "from " + Participant.class.getName() + " where activityStatus !='" + Constants.ACTIVITY_STATUS_DISABLED + "'";
 		try
 		{
-			List<Participant> listOfParticipants = hibernateDao.executeQuery(participantQueryStr, null, false, null);
+			dao = openDAOSession();
+
+			
+			String participantQueryStr = "from " + Participant.class.getName() + " where activityStatus !='" + Status.ACTIVITY_STATUS_DISABLED.toString() + "'";
+
+			List<Participant> listOfParticipants = dao.executeQuery(participantQueryStr);
 			if(listOfParticipants != null)
 			{
 				Iterator<Participant> participantIterator = listOfParticipants.iterator();
@@ -1040,17 +1057,18 @@ public class ParticipantBizLogic extends DefaultBizLogic
 		}
 		catch (DAOException e) 
 		{
-			throw new BizLogicException("Couldn't get participant", e);
+			throw getBizLogicException(e, "bizlogic.error", "Couldn't get participant");
 		}
 		finally
 		{
 			try
 			{
-				hibernateDao.closeSession();
+				dao.closeSession();
 			} 
 			catch (DAOException e) 
 			{
-				throw new BizLogicException("Couldn't get participant", e);
+				
+				throw getBizLogicException(e, "bizlogic.error", "Couldn't get participant");
 			}
 		}
 		return mapOfParticipants;
@@ -1073,12 +1091,13 @@ public class ParticipantBizLogic extends DefaultBizLogic
 
 	}
 
-	public List getColumnList(List columnList,StringBuffer partMRNColName) throws DAOException
+	public List getColumnList(List columnList,StringBuffer partMRNColName) throws BizLogicException
 	{
 		List displayList = new ArrayList();
+		JDBCDAO jdbcDao = null;
 		try
 		{
-			JDBCDAO jdbcDao = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
+			jdbcDao = openJDBCSession();
 			jdbcDao.openSession(null);
 			String sql = "SELECT  columnData.COLUMN_NAME,displayData.DISPLAY_NAME FROM "
 					+ "CATISSUE_INTERFACE_COLUMN_DATA columnData,CATISSUE_TABLE_RELATION relationData,"
@@ -1088,7 +1107,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 					+ "columnData.IDENTIFIER = displayData.COL_ID and tableData.ALIAS_NAME = 'Participant'";
 
 			Logger.out.debug("DATA ELEMENT SQL : " + sql);
-			List list = jdbcDao.executeQuery(sql, null, false, null);
+			List list = jdbcDao.executeQuery(sql);
 			Iterator iterator1 = columnList.iterator();
 
 			while (iterator1.hasNext())
@@ -1113,9 +1132,13 @@ public class ParticipantBizLogic extends DefaultBizLogic
 			}
 			jdbcDao.closeSession();
 		}
-		catch (ClassNotFoundException classExp)
+		catch (Exception exp)
 		{
-			throw new DAOException(classExp.getMessage(), classExp);
+			throw getBizLogicException(exp, "bizlogic.error", "");
+		}
+		finally
+		{
+			closeJDBCSession(jdbcDao);
 		}
 
 		return displayList;
@@ -1137,28 +1160,34 @@ public class ParticipantBizLogic extends DefaultBizLogic
 	 * @throws DAOException DAOException
 	 * @throws ClassNotFoundException ClassNotFoundException
 	 */
-	public List getSCGList(Long participantId) throws DAOException
+	public List getSCGList(Long participantId) throws BizLogicException
 	{
+		DAO dao  = null;
+		try
+		{
 		String scgHql = "select scg.id, scg.surgicalPathologyNumber, scg.identifiedSurgicalPathologyReport.id "
 				+ " from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg, "
 				+ " edu.wustl.catissuecore.domain.CollectionProtocolRegistration as cpr," + " edu.wustl.catissuecore.domain.Participant as p "
 				+ " where p.id = " + participantId + " and p.id = cpr.participant.id "
 				+ " and scg.id in elements(cpr.specimenCollectionGroupCollection)";
 
-		HibernateDAO dao = (HibernateDAO) DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+		dao = openDAOSession();
 		dao.openSession(null);
 		List list = null;
-		try
-		{
-			list = dao.executeQuery(scgHql, null, false, null);
-		}
-		catch (ClassNotFoundException e)
-		{
-			Logger.out.error("Error occured while retrieving SCG List", e);
-			throw new DAOException(e.getMessage());
-		}
+		
+		list = dao.executeQuery(scgHql);
+		
 		dao.closeSession();
 		return list;
+		}
+		catch(Exception exp)
+		{
+			throw getBizLogicException(exp, "bizlogic.error", "");
+		}
+		finally
+		{
+			closeDAOSession(dao);
+		}
 	}
 
 	/**
@@ -1167,10 +1196,18 @@ public class ParticipantBizLogic extends DefaultBizLogic
 	 * @throws DAOException DAOException
 	 * @throws ClassNotFoundException ClassNotFoundException
 	 */
-	private List executeHqlQuery(DAO dao, String hql) throws DAOException, ClassNotFoundException
+	private List executeHqlQuery(DAO dao, String hql) throws BizLogicException
 	{
-		List list = dao.executeQuery(hql, null, false, null);
-		return list;
+		try
+		{
+			List list = dao.executeQuery(hql);
+			return list;
+		}
+		catch(DAOException daoExp)
+		{
+			throw getBizLogicException(daoExp, "bizlogic.error", "");
+		}
+		
 	}
 	
 	public List getCPForUserWithRegistrationAcess(long userId) throws BizLogicException
@@ -1178,11 +1215,11 @@ public class ParticipantBizLogic extends DefaultBizLogic
 		List<NameValueBean> cpList = new ArrayList<NameValueBean>();
 		Set<Long> cpIds = new HashSet<Long>();
 		cpList.add(new NameValueBean(Constants.SELECT_OPTION, "-1"));
-		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+		DAO dao = null;
 		try 
 		{
-			dao.openSession(null);
-			User user = (User) dao.retrieve(User.class.getName(),userId);
+			dao = openDAOSession();
+			User user = (User) dao.retrieveById(User.class.getName(),userId);
 			PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
 			PrivilegeCache privilegeCache = privilegeManager.getPrivilegeCache(user.getLoginName());
 			Collection <CollectionProtocol> cpCollection = user.getAssignedProtocolCollection();
@@ -1235,14 +1272,18 @@ public class ParticipantBizLogic extends DefaultBizLogic
 			
 
 		} catch (DAOException e) {
-			throw new BizLogicException("Couldn't get CP for user", e);
+			throw getBizLogicException(e, "bizlogic.error", "Couldn't get CP for user");
+		}
+		catch (SMException e) {
+			throw AppUtility.handleSMException(e);
 		}
 		finally
 		{
 			try {
 				dao.closeSession();
 			} catch (DAOException e) {
-				throw new BizLogicException("Couldn't get CP for user", e);
+				
+				throw getBizLogicException(e, "bizlogic.error", "problem is clossing session");
 			}
 		}
 		
@@ -1254,7 +1295,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 	 * (non-Javadoc)
 	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getObjectId(edu.wustl.common.dao.AbstractDAO, java.lang.Object)
 	 */
-	public String getObjectId(AbstractDAO dao, Object domainObject) 
+	public String getObjectId(DAO dao, Object domainObject) 
 	{
 		String objectId = Constants.ADD_GLOBAL_PARTICIPANT;
 		
@@ -1313,94 +1354,99 @@ public class ParticipantBizLogic extends DefaultBizLogic
 	 * @throws UserNotAuthorizedException 
 	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#isAuthorized(edu.wustl.common.dao.AbstractDAO, java.lang.Object, edu.wustl.common.beans.SessionDataBean)
 	 */
-	public boolean isAuthorized(AbstractDAO dao, Object domainObject, SessionDataBean sessionDataBean) throws UserNotAuthorizedException  
+	public boolean isAuthorized(DAO dao, Object domainObject, SessionDataBean sessionDataBean) throws BizLogicException  
 	{
 		boolean isAuthorized = false;
 		
-		if(sessionDataBean != null && sessionDataBean.isAdmin())
+		try 
 		{
-			return true;
-		}
-		
-		String privilegeName = getPrivilegeName(domainObject);
-		String protectionElementName = getObjectId(dao, domainObject);
-		PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(sessionDataBean.getUserName());
-		 
-		if(protectionElementName.equals(Constants.ADD_GLOBAL_PARTICIPANT))
-		{
+			if(sessionDataBean != null && sessionDataBean.isAdmin())
+			{
+				return true;
+			}
+
+			String privilegeName = getPrivilegeName(domainObject);
+			String protectionElementName = getObjectId(dao, domainObject);
+			PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(sessionDataBean.getUserName());
+
+			if(protectionElementName.equals(Constants.ADD_GLOBAL_PARTICIPANT))
+			{
 				User user = null;
 				try 
 				{
-					user = (User) dao.retrieve(User.class.getName(), sessionDataBean.getUserId());
+					user = (User) dao.retrieveById(User.class.getName(), sessionDataBean.getUserId());
 				} 
 				catch (DAOException e) 
 				{
 					Logger.out.error(e.getMessage(), e);
 				}
 				Collection<CollectionProtocol> cpCollection = user.getAssignedProtocolCollection();
-                if (cpCollection != null && !cpCollection.isEmpty())
-                {
-    				for(CollectionProtocol cp : cpCollection)
-    				{
-    					if(privilegeCache.hasPrivilege(CollectionProtocol.class.getName()+"_"+cp.getId(), privilegeName))
-    					{
-    						isAuthorized = true;
-    						break;
-    					}
-    				}
-    				if(!isAuthorized)
-    				{
-    					isAuthorized = edu.wustl.catissuecore.util.global.Utility.checkForAllCurrentAndFutureCPs(dao,privilegeName, sessionDataBean, null);
-    				}
-                } else
-                {
-                	isAuthorized = edu.wustl.catissuecore.util.global.Utility.checkForAllCurrentAndFutureCPs(dao,privilegeName, sessionDataBean, null);
-                }
-		} 
-		else
-		{
-			String [] prArray = protectionElementName.split("_");
-			String baseObjectId = prArray[0];
-			String objId = "";
-    		for (int i = 1 ; i < prArray.length;i++)
-    		{
-    			objId = baseObjectId + "_" + prArray[i];
-    			isAuthorized = privilegeCache.hasPrivilege(objId, privilegeName);
-    			if (!isAuthorized)
-    			{
-    				break;
-    			}
-    		}
-			
-		}
-		
-		if(isAuthorized)
-		{
-			return isAuthorized;
-		}
-		else
-		// Check for ALL CURRENT & FUTURE CASE
-		{
-			if(!protectionElementName.equals(Constants.ADD_GLOBAL_PARTICIPANT))
-			{
-				String protectionElementNames[] = protectionElementName.split("_");
-				
-				Long cpId = Long.valueOf(protectionElementNames[1]);
-				Set<Long> cpIdSet = new UserBizLogic().getRelatedCPIds(sessionDataBean.getUserId(), false);
-				
-				if(cpIdSet.contains(cpId))
+				if (cpCollection != null && !cpCollection.isEmpty())
 				{
-					//bug 11611 and 11659
-					throw edu.wustl.catissuecore.util.global.Utility.getUserNotAuthorizedException(privilegeName, protectionElementName,domainObject.getClass().getSimpleName());
+					for(CollectionProtocol cp : cpCollection)
+					{
+						if(privilegeCache.hasPrivilege(CollectionProtocol.class.getName()+"_"+cp.getId(), privilegeName))
+						{
+							isAuthorized = true;
+							break;
+						}
+					}
+					if(!isAuthorized)
+					{
+						isAuthorized = edu.wustl.catissuecore.util.global.Utility.checkForAllCurrentAndFutureCPs(dao,privilegeName, sessionDataBean, null);
+					}
+				} else
+				{
+					isAuthorized = edu.wustl.catissuecore.util.global.Utility.checkForAllCurrentAndFutureCPs(dao,privilegeName, sessionDataBean, null);
 				}
-				isAuthorized = edu.wustl.catissuecore.util.global.Utility.checkForAllCurrentAndFutureCPs(dao,privilegeName, sessionDataBean, protectionElementNames[1]);
+			} 
+			else
+			{
+				String [] prArray = protectionElementName.split("_");
+				String baseObjectId = prArray[0];
+				String objId = "";
+				for (int i = 1 ; i < prArray.length;i++)
+				{
+					objId = baseObjectId + "_" + prArray[i];
+					isAuthorized = privilegeCache.hasPrivilege(objId, privilegeName);
+					if (!isAuthorized)
+					{
+						break;
+					}
+				}
+
 			}
-		}
-		if (!isAuthorized)
-        {
-            //bug 11611 and 11659
-			throw edu.wustl.catissuecore.util.global.Utility.getUserNotAuthorizedException(privilegeName, protectionElementName,domainObject.getClass().getSimpleName());    
-        }
+
+			if(isAuthorized)
+			{
+				return isAuthorized;
+			}
+			else
+				// Check for ALL CURRENT & FUTURE CASE
+			{
+				if(!protectionElementName.equals(Constants.ADD_GLOBAL_PARTICIPANT))
+				{
+					String protectionElementNames[] = protectionElementName.split("_");
+
+					Long cpId = Long.valueOf(protectionElementNames[1]);
+					Set<Long> cpIdSet = new UserBizLogic().getRelatedCPIds(sessionDataBean.getUserId(), false);
+
+					if(cpIdSet.contains(cpId))
+					{
+						//bug 11611 and 11659
+						throw edu.wustl.catissuecore.util.global.Utility.getUserNotAuthorizedException(privilegeName, protectionElementName,domainObject.getClass().getSimpleName());
+					}
+					isAuthorized = edu.wustl.catissuecore.util.global.Utility.checkForAllCurrentAndFutureCPs(dao,privilegeName, sessionDataBean, protectionElementNames[1]);
+				}
+			}
+			if (!isAuthorized)
+			{
+				//bug 11611 and 11659
+				throw edu.wustl.catissuecore.util.global.Utility.getUserNotAuthorizedException(privilegeName, protectionElementName,domainObject.getClass().getSimpleName());    
+			}
+		} catch (SMException e1) {
+			e1.printStackTrace();
+		} 
 		return isAuthorized;		
 	}
 
@@ -1427,17 +1473,18 @@ public class ParticipantBizLogic extends DefaultBizLogic
 	 * @return list of Specimen objects
 	 * @throws DAOException
 	 */
-    private List<Specimen> getSpecimenCollection(SpecimenCollectionGroup scg) throws DAOException
+    private List<Specimen> getSpecimenCollection(SpecimenCollectionGroup scg)
 	{
 		String hql = " select s.id from edu.wustl.catissuecore.domain.Specimen s"
 		        + " where s.specimenCollectionGroup.id=" + scg.getId();
 
-		HibernateDAO dao = (HibernateDAO) DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
-		dao.openSession(null);
+		DAO dao = null;
+		
 		List<Specimen> specimens = new ArrayList<Specimen>();
 		try
 		{
-			List specimenIds = dao.executeQuery(hql, null, false, null);
+			dao = openDAOSession();
+			List specimenIds = dao.executeQuery(hql);
 			if (specimenIds != null && (!specimenIds.isEmpty()))
 			{
 				for (Iterator it = specimenIds.iterator(); it.hasNext();)
@@ -1448,11 +1495,19 @@ public class ParticipantBizLogic extends DefaultBizLogic
 				}
 			}
 		}
-		catch (ClassNotFoundException e)
+		catch (Exception e)
 		{
 			Logger.out.error("Error occured while retrieving Specimen List", e);
 		}
-		dao.closeSession();
+		finally
+		{
+			try {
+				dao.closeSession();
+			} catch (DAOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		return specimens;
 	}
 	
@@ -1483,11 +1538,9 @@ public class ParticipantBizLogic extends DefaultBizLogic
 							// Collection<Specimen> specimenCollection = scg.getSpecimenCollection();
 							
 							// Fetch the Specimens in the given SCG explicitly
-							try
+							Collection<Specimen> specimenCollection = getSpecimenCollection(scg);
+							if (specimenCollection != null)
 							{
-								Collection<Specimen> specimenCollection = getSpecimenCollection(scg);
-								if (specimenCollection != null)
-								{
 									Iterator<Specimen> itspecimenCollection = specimenCollection
 									        .iterator();
 									while (itspecimenCollection.hasNext())
@@ -1495,12 +1548,8 @@ public class ParticipantBizLogic extends DefaultBizLogic
 										Specimen specimen = (Specimen) itspecimenCollection.next();
 										super.refreshTitliSearchIndex(operation, specimen);
 									}
-								}
 							}
-							catch (DAOException e)
-							{
-								Logger.out.error("Error occured while retrieving Specimens from SCG", e);
-							}
+							
 						}
 					}
 				}

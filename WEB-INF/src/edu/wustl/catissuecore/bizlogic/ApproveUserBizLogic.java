@@ -25,36 +25,36 @@ import edu.wustl.catissuecore.multiRepository.bean.SiteUserRolePrivilegeBean;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.EmailHandler;
 import edu.wustl.catissuecore.util.Roles;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
-import edu.wustl.common.beans.SecurityDataBean;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.bizlogic.DefaultBizLogic;
-import edu.wustl.common.dao.AbstractDAO;
-import edu.wustl.common.dao.DAO;
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.security.PrivilegeManager;
-import edu.wustl.common.security.SecurityManager;
-import edu.wustl.common.security.exceptions.PasswordEncryptionException;
-import edu.wustl.common.security.exceptions.SMException;
-import edu.wustl.common.security.exceptions.SMTransactionException;
-import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
-import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.exception.ErrorKey;
+import edu.wustl.common.exception.PasswordEncryptionException;
 import edu.wustl.common.util.global.PasswordManager;
+import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.DAO;
+import edu.wustl.dao.exception.DAOException;
+import edu.wustl.security.beans.SecurityDataBean;
+import edu.wustl.security.exception.SMException;
+import edu.wustl.security.exception.UserNotAuthorizedException;
+import edu.wustl.security.manager.SecurityManagerFactory;
+import edu.wustl.security.privilege.PrivilegeManager;
 
 /**
  * ApproveUserBizLogic is the bizLogic class for approve users.
  * @author gautam_shetty
  */
-public class ApproveUserBizLogic extends DefaultBizLogic
+public class ApproveUserBizLogic  extends CatissueDefaultBizLogic
 {
 
 	/**
 	 * Overrides the insert method of DefaultBizLogic. 
 	 */
 	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) 
-	throws DAOException, UserNotAuthorizedException
+	throws BizLogicException
 	{
 		User user = null;        
 		UserDTO userDTO = null;
@@ -87,7 +87,7 @@ public class ApproveUserBizLogic extends DefaultBizLogic
 
 		try
 		{
-			dao.update(user.getAddress(), sessionDataBean, true, true, false);
+			dao.update(user.getAddress());
 			//If the activity status is Active, create a csm user.
 			if (Constants.ACTIVITY_STATUS_ACTIVE.equals(user.getActivityStatus()))
 			{
@@ -95,13 +95,13 @@ public class ApproveUserBizLogic extends DefaultBizLogic
 			}
 			else
 			{
-				dao.update(user, sessionDataBean, true, true, false);
+				dao.update(user);
 			}
 
 			//Audit of User Update during approving user.
 			User oldUser = (User) oldObj;
-			dao.audit(user.getAddress(), oldUser.getAddress(),sessionDataBean,true);
-			dao.audit(obj, oldObj,sessionDataBean,true);
+			dao.audit(user.getAddress(), oldUser.getAddress());
+			dao.audit(obj, oldObj);
 
 
 			EmailHandler emailHandler = new EmailHandler(); 
@@ -119,22 +119,13 @@ public class ApproveUserBizLogic extends DefaultBizLogic
 				emailHandler.sendRejectionEmail(user);
 			}
 		}
-		catch(DAOException daoExp)
+		catch(Exception exp)
 		{
-			Logger.out.debug(daoExp.getMessage(), daoExp);
-			new UserBizLogic().deleteCSMUser(csmUser);
-			throw new DAOException(daoExp.getMessage(), daoExp);
-		}
-		catch (SMException exp)
-		{
+			
 			Logger.out.debug(exp.getMessage(), exp);
 			new UserBizLogic().deleteCSMUser(csmUser);
-			throw new DAOException(exp.getMessage(), exp);
-		}
-		catch (PasswordEncryptionException e)
-		{
-			new UserBizLogic().deleteCSMUser(csmUser);
-			throw new DAOException(e.getMessage(), e);
+			ErrorKey errorKey = ErrorKey.getErrorKey("bizlogic.error");
+			throw new BizLogicException(errorKey,exp ,"ApproveUserBizLogic.java :"); 
 		}
 	}
 
@@ -149,7 +140,8 @@ public class ApproveUserBizLogic extends DefaultBizLogic
 	 * @throws PasswordEncryptionException
 	 * @throws DAOException 
 	 */
-	private void approveUser(Object user1, gov.nih.nci.security.authorization.domainobjects.User csmUser, DAO dao, SessionDataBean sessionDataBean) throws SMTransactionException, SMException, PasswordEncryptionException, DAOException {
+	private void approveUser(Object user1, gov.nih.nci.security.authorization.domainobjects.User csmUser,
+			DAO dao, SessionDataBean sessionDataBean) throws BizLogicException, DAOException, SMException, PasswordEncryptionException {
 		
 		User user = null;
 		UserDTO userDTO = null;
@@ -181,7 +173,7 @@ public class ApproveUserBizLogic extends DefaultBizLogic
 			csmUser.setPassword(generatedPassword);
 		}
 
-		SecurityManager.getInstance(ApproveUserBizLogic.class).createUser(csmUser);
+		SecurityManagerFactory.getSecurityManager().createUser(csmUser);
 
 		String role = "";
 		if (user.getRoleId() != null)
@@ -195,7 +187,7 @@ public class ApproveUserBizLogic extends DefaultBizLogic
             	role = Constants.NON_ADMIN_USER;
             }
             
-			SecurityManager.getInstance(ApproveUserBizLogic.class).assignRoleToUser(csmUser.getUserId().toString(), role);
+            SecurityManagerFactory.getSecurityManager().assignRoleToUser(csmUser.getUserId().toString(), role);
 		}
 
 		user.setCsmUserId(csmUser.getUserId());
@@ -221,7 +213,7 @@ public class ApproveUserBizLogic extends DefaultBizLogic
 //		SecurityManager.getInstance(this.getClass()).insertAuthorizationData(
 //		getAuthorizationData(user), protectionObjects, null);
 
-		dao.update(user, sessionDataBean, true, true, true);
+		dao.update(user);
 	}
 
 	/**
@@ -240,7 +232,7 @@ public class ApproveUserBizLogic extends DefaultBizLogic
 		User aUser = (User)obj;
 		String userId = String.valueOf(aUser.getCsmUserId());
 		gov.nih.nci.security.authorization.domainobjects.User user = 
-			SecurityManager.getInstance(this.getClass()).getUserById(userId);
+			SecurityManagerFactory.getSecurityManager().getUserById(userId);
 		Logger.out.debug(" User: "+user.getLoginName());
 		group.add(user);
 
@@ -250,7 +242,7 @@ public class ApproveUserBizLogic extends DefaultBizLogic
 		userGroupRoleProtectionGroupBean.setUser(userId);
 		userGroupRoleProtectionGroupBean.setRoleName(Roles.UPDATE_ONLY);
 		userGroupRoleProtectionGroupBean.setGroupName(Constants.getUserGroupName(aUser.getId()));
-		userGroupRoleProtectionGroupBean.setProtectionGroupName(protectionGroupName);
+		userGroupRoleProtectionGroupBean.setProtGrpName(protectionGroupName);
 		userGroupRoleProtectionGroupBean.setGroup(group);
 		authorizationData.add(userGroupRoleProtectionGroupBean);
 
@@ -268,7 +260,7 @@ public class ApproveUserBizLogic extends DefaultBizLogic
 	 * Returns the list of users according to the column name and value passed.
 	 * @return the list of users according to the column name and value passed.
 	 */
-	public List retrieve(String className, String colName, Object colValue) throws DAOException
+	public List retrieve(String className, String colName, Object colValue) throws BizLogicException
 	{
 		List userList = null;
 //		try
@@ -306,7 +298,7 @@ public class ApproveUserBizLogic extends DefaultBizLogic
 	 * (non-Javadoc)
 	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getObjectId(edu.wustl.common.dao.AbstractDAO, java.lang.Object)
 	 */
-	public String getObjectId(AbstractDAO dao, Object domainObject) 
+	public String getObjectId(DAO dao, Object domainObject) 
 	{
 		return new UserBizLogic().getObjectId(dao, domainObject);
 	}
@@ -323,12 +315,14 @@ public class ApproveUserBizLogic extends DefaultBizLogic
     
 	/**
 	 * (non-Javadoc)
+	 * @throws BizLogicException 
 	 * @throws UserNotAuthorizedException 
-	 * @throws DAOException 
-	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#isAuthorized(edu.wustl.common.dao.AbstractDAO, java.lang.Object, edu.wustl.common.beans.SessionDataBean)
+	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#isAuthorized(edu.wustl.dao.DAO, java.lang.Object, edu.wustl.common.beans.SessionDataBean)
 	 */
-	public boolean isAuthorized(AbstractDAO dao, Object domainObject, SessionDataBean sessionDataBean) throws UserNotAuthorizedException, DAOException  
+	public boolean isAuthorized(DAO dao, Object domainObject, SessionDataBean sessionDataBean) throws BizLogicException
 	{
+		try
+		{
 		boolean isAuthorized = false;
 		isAuthorized = checkUser(domainObject, sessionDataBean);
 		if(isAuthorized)
@@ -339,8 +333,18 @@ public class ApproveUserBizLogic extends DefaultBizLogic
 		String privilegeName = getPrivilegeName(domainObject);
 		String protectionElementName = getObjectId(dao, domainObject);
 		
-		return Utility.returnIsAuthorized(sessionDataBean, privilegeName,
-				protectionElementName);
+		
+			return AppUtility.returnIsAuthorized(sessionDataBean, privilegeName,
+					protectionElementName);
+		}
+		catch (UserNotAuthorizedException e)
+		{
+			throw getBizLogicException(e, "sm.operation.error", "User not authorized");
+		} catch (DAOException e)
+		{
+			ErrorKey errorKey = ErrorKey.getErrorKey("bizlogic.error");
+			throw new BizLogicException(errorKey,e ,"ApproveUserBizLogic.java :");	
+		}
 	}
 
 

@@ -14,16 +14,17 @@ import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
-import edu.wustl.common.dao.DAO;
-import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
+import edu.wustl.dao.DAO;
+import edu.wustl.dao.exception.DAOException;
 
 
 public class ParticipantMedicalIdentifierBizLogic extends DefaultBizLogic
 {
 
-	protected boolean validate(Object obj, DAO dao, String operation) throws DAOException
+	protected boolean validate(Object obj, DAO dao, String operation) throws BizLogicException
 	{	
 		
 		//throw new DAOException(ApplicationProperties.getValue("participant.medical.identifier.creation.error"));
@@ -36,20 +37,20 @@ public class ParticipantMedicalIdentifierBizLogic extends DefaultBizLogic
 		if (site==null || site.getId()==null)
 		{
 		
-			throw new DAOException(ApplicationProperties.getValue("errors.participant.extiden.missing"));
+			throw getBizLogicException(null, "errors.participant.extiden.missing", "");
 			//throw new DAOException("errors.item.required", new String[]{message});
 		}
 		if (participant==null || participant.getId()==null)
 		{
 		
-			throw new DAOException(ApplicationProperties.getValue("participant.medical.identifier.creation.error"));
+			throw getBizLogicException(null, "participant.medical.identifier.creation.error", "");
 			//throw new DAOException("errors.item.required", new String[]{message});
 		}
 		Validator validate = new Validator();
 		if (validate.isEmpty(medicalRecordNumber))
 		{
 		
-			throw new DAOException(ApplicationProperties.getValue("errors.participant.extiden.missing"));
+			throw getBizLogicException(null, "errors.participant.extiden.missing", "");
 			//throw new DAOException("errors.item.required", new String[]{message});
 		}
 		return true;

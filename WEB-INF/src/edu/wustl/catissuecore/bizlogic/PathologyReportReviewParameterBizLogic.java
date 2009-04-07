@@ -5,12 +5,14 @@ import edu.wustl.catissuecore.domain.pathology.PathologyReportReviewParameter;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
-import edu.wustl.common.dao.DAO;
-import edu.wustl.common.security.SecurityManager;
-import edu.wustl.common.security.exceptions.SMException;
-import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
-import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.DAO;
+import edu.wustl.dao.exception.DAOException;
+import edu.wustl.security.exception.SMException;
+import edu.wustl.security.exception.UserNotAuthorizedException;
+import edu.wustl.security.manager.ISecurityManager;
+import edu.wustl.security.manager.SecurityManagerFactory;
 import gov.nih.nci.security.authorization.domainobjects.Role;
 
 /**
@@ -27,28 +29,34 @@ public class PathologyReportReviewParameterBizLogic extends DefaultBizLogic
 	 * @throws DAOException
 	 * @throws UserNotAuthorizedException
 	 */
-	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
+	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws BizLogicException
 	{
-		PathologyReportReviewParameter reviewParam = (PathologyReportReviewParameter) obj;
-		
-		String className;
-		className=User.class.getName();
-		Object object = dao.retrieve(className, sessionDataBean.getUserId());
-		reviewParam.setUser((User)object);
-		String reviewerRole;
-		SecurityManager securityManager=SecurityManager.getInstance(this.getClass());
 		try
 		{
+			PathologyReportReviewParameter reviewParam = (PathologyReportReviewParameter) obj;
+
+			String className;
+			className=User.class.getName();
+			Object object = dao.retrieveById(className, sessionDataBean.getUserId());
+			reviewParam.setUser((User)object);
+			String reviewerRole;
+			ISecurityManager securityManager=SecurityManagerFactory.getSecurityManager();
+
 			Role role=securityManager.getUserRole(new Long(sessionDataBean.getCsmUserId()).longValue());
 			reviewerRole=role.getName();
 			reviewParam.setReviewerRole(reviewerRole);
+
+
+			dao.insert(reviewParam, true);
+		}
+		catch(DAOException daoExp)
+		{
+			throw getBizLogicException(daoExp, "bizlogic.error", "");
 		}
 		catch(SMException ex)
 		{
 			Logger.out.info("Review Role not found!");
 		}
-		dao.insert(reviewParam, sessionDataBean, true, false);
-		
 		// Since  PathologyReportReviewParameter is in PUBLIC_DATA_GROUP protection objects not required
 		/*Set protectionObjects = new HashSet();
 		protectionObjects.add(reviewParam);
@@ -75,9 +83,9 @@ public class PathologyReportReviewParameterBizLogic extends DefaultBizLogic
 			PathologyReportReviewParameter oldreviewParam = (PathologyReportReviewParameter) oldObj;
 			PathologyReportReviewParameter newreviewParam = (PathologyReportReviewParameter) obj;
 			oldreviewParam.setStatus(Constants.COMMENT_STATUS_REVIEWED);
-			dao.update(oldreviewParam, sessionDataBean, true, false, false);
+			dao.update(oldreviewParam);
 			newreviewParam.setStatus(Constants.COMMENT_STATUS_REPLIED);
-			dao.insert(newreviewParam, sessionDataBean, false, false);
+			dao.insert(newreviewParam, false);
 		}
 		catch(Exception ex)
 		{
