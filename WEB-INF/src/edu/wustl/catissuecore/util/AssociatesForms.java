@@ -103,7 +103,7 @@ public final class AssociatesForms
 	 * @throws DAOException if it fails to do database operation
 	 * @throws DynamicExtensionsSystemException 
 	 */
-	private static void disAssociateEntitiesAndForms(Long typeId) throws DAOException, DynamicExtensionsSystemException
+	private static void disAssociateEntitiesAndForms(Long typeId) throws ApplicationException, DynamicExtensionsSystemException
 	{
 		DefaultBizLogic defaultBizLogic = BizLogicFactory.getDefaultBizLogic();
 		AnnotationBizLogic annotation = new AnnotationBizLogic();
