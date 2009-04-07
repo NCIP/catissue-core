@@ -86,7 +86,7 @@ public class DefaultValueManager
 						(Constants.DEFAULT_SPECIMEN_TYPE))
 				{
 					//Get the Specimen Type List.
-					permissibleValueList = Utility.getSpecimenTypes(specimenClassName);
+					permissibleValueList = AppUtility.getSpecimenTypes(specimenClassName);
 				}
 				if ((Constants.defaultValueKeys[iCount][0]).equals
 						(Constants.DEFAULT_CLINICAL_DIAGNOSIS))
@@ -125,7 +125,7 @@ public class DefaultValueManager
 				}
 				else
 				{
-					permissibleValueList = Utility.getListFromCDE
+					permissibleValueList = AppUtility.getListFromCDE
 					(Constants.defaultValueKeys[iCount][1]);
 				}
 				//added for bug 10750

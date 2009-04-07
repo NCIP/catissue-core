@@ -31,7 +31,7 @@ import edu.wustl.common.beans.SessionDataBean;
  * TODO To change the template for this generated type comment go to
  * Window - Preferences - Java - Code Style - Code Templates
  */
-public class Variables extends edu.wustl.common.util.global.Variables
+public class Variables
 {
     public static Vector databaseDefinitions=new Vector();
     public static String databaseDriver=new String();
