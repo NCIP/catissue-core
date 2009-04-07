@@ -22,7 +22,7 @@ import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
-import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
+;
 
 public class UpdateCollectionProtocolAction extends BaseAction {
 

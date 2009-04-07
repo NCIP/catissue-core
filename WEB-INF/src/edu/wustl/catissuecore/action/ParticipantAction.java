@@ -53,12 +53,12 @@ import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.cde.CDEManager;
-import edu.wustl.common.dao.AbstractDAO;
+import edu.wustl.common.dao.DAO;
 import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.factory.AbstractDomainObjectFactory;
 import edu.wustl.common.factory.MasterFactory;
 import edu.wustl.common.util.MapDataParser;
-import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.dao.exception.DAOException;
 import edu.wustl.common.util.dbManager.DBUtil;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
@@ -662,7 +662,7 @@ public class ParticipantAction extends SecureAction
 	protected String getObjectId(AbstractActionForm form)
 	{
 		ParticipantForm participantForm = (ParticipantForm)form;
-		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+		DAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
 		
 		if(participantForm.getCpId()!=0L && participantForm.getCpId()!= -1L) 
 		   return Constants.COLLECTION_PROTOCOL_CLASS_NAME +"_"+participantForm.getCpId();

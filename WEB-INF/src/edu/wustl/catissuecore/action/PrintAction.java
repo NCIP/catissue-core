@@ -30,11 +30,11 @@ import edu.wustl.catissuecore.printserviceclient.LabelPrinterFactory;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.dao.AbstractDAO;
+import edu.wustl.common.dao.DAO;
 import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.security.exceptions.SMException;
-import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.dao.exception.DAOException;
 
 
 /**
@@ -80,7 +80,7 @@ public class PrintAction extends Action
 			if (forwardToPrintMap != null && forwardToPrintMap.size() >0 && forwardToPrintMap.get("specimenCollectionGroupId")!=null)
 			{
 				String scgId = (String) forwardToPrintMap.get("specimenCollectionGroupId");
-				AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+				DAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
 				SpecimenCollectionGroup objSCG =null;
 				boolean printStauts  =false;
 				try
@@ -114,7 +114,7 @@ public class PrintAction extends Action
 			if (forwardToPrintMap != null && forwardToPrintMap.size() >0 && forwardToPrintMap.get("specimenId")!=null)
 			{
 				String specimenId = (String) forwardToPrintMap.get("specimenId");
-				AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+				DAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
 				boolean printStauts  =false;
 				try
 				{
@@ -182,7 +182,7 @@ public class PrintAction extends Action
 			//added for Storage Container Printing 
 			if(forwardToPrintMap != null &&  forwardToPrintMap.size() >0 && forwardToPrintMap.get("StorageContainerObjID")!= null )
 			{
-				AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+				DAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
 				boolean printStauts = false;		    		
 				List similarContainerList = (List)request.getAttribute("similarContainerList");
 				LabelPrinter  labelPrinter= LabelPrinterFactory.getInstance("storagecontainer");
@@ -325,7 +325,7 @@ public class PrintAction extends Action
     private User getUserObject(HttpServletRequest request,SessionDataBean objBean) throws DAOException
     {
     	String strUserId = objBean.getUserId().toString();
-    	AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+    	DAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
     	dao.openSession(null);
     	User objUser = (User)dao.retrieve(User.class.getName(), new Long(strUserId));		
     	dao.closeSession();    	

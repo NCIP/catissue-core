@@ -35,7 +35,7 @@ import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.dao.AbstractDAO;
+import edu.wustl.common.dao.DAO;
 import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.factory.AbstractDomainObjectFactory;
@@ -44,7 +44,7 @@ import edu.wustl.common.lookup.DefaultLookupResult;
 import edu.wustl.common.lookup.LookupLogic;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.XMLPropertyHandler;
-import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.dao.exception.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
 public class ParticipantLookupAction extends BaseAction
@@ -159,7 +159,7 @@ public class ParticipantLookupAction extends BaseAction
 	// 11968 S
 	private boolean isAuthorized(ActionMapping mapping,HttpServletRequest request,Participant participant)
 	{
-		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+		DAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
 		SessionDataBean sessionDataBean = getSessionData(request);
 		boolean authorizedFlag=false;
 		try
