@@ -107,7 +107,7 @@ public class QueryModuleSearchQueryUtil
 			{
 				QueryOutputTreeBizLogic outputTreeBizLogic = auditQuery();
 				boolean hasCondOnIdentifiedField = edu.wustl.common.querysuite.security
-				.utility.Utility.isConditionOnIdentifiedField(query);
+				.utility.AppUtility.isConditionOnIdentifiedField(query);
 				setDataInSession(outputTreeBizLogic, hasCondOnIdentifiedField);
 			}
 		}

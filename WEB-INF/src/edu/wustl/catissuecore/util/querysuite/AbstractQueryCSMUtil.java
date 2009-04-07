@@ -108,7 +108,7 @@ public abstract class AbstractQueryCSMUtil
 					{
 						//get the names of all the main entities for the dependent entity
 						String name = entity.getName();
-						name = name.substring(name.lastIndexOf('.') + 1, name.length()); //TODO: use Utility Method for getting className
+						name = name.substring(name.lastIndexOf('.') + 1, name.length()); //TODO: use AppUtility Method for getting className
 						tmpMainEntityName = tmpMainEntityName.append(mainEntityNames)
 								.append(name).append(" or ");
 					}
@@ -118,7 +118,7 @@ public abstract class AbstractQueryCSMUtil
 					String message = ApplicationProperties.getValue("query.mainObjectError");
 					String entityName = mapEntity.getName();
 					entityName = entityName.substring(entityName.lastIndexOf('.') + 1,
-					entityName.length());//TODO: use Utility Method for getting className
+					entityName.length());//TODO: use AppUtility Method for getting className
 					arguments = new Object[]{entityName, mainEntityNames};
 					errorMsg = MessageFormat.format(message, arguments);
 					break;
@@ -271,7 +271,7 @@ public abstract class AbstractQueryCSMUtil
 			EntityInterface dynamicExtnEntity = node.getOutputEntity().getDynamicExtensionsEntity();
 			String entityName;
 			queryResultObjectDataBean.setPrivilegeType
-			(edu.wustl.common.querysuite.security.utility.Utility.getPrivilegeType(dynamicExtnEntity));
+			(edu.wustl.common.querysuite.security.utility.AppUtility.getPrivilegeType(dynamicExtnEntity));
 			queryResultObjectDataBean.setEntity(dynamicExtnEntity);
 
 			List<EntityInterface> mainEntityList =

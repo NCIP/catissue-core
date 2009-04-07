@@ -19,11 +19,15 @@ import javax.servlet.ServletContextListener;
 import javax.sql.DataSource;
 
 import net.sf.ehcache.CacheException;
+import titli.controller.Name;
+import titli.controller.interfaces.TitliInterface;
+import titli.model.Titli;
+import titli.model.TitliException;
+import titli.model.util.IndexUtility;
 import titli.model.util.TitliResultGroup;
 import edu.wustl.cab2b.server.path.PathFinder;
 import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.catissuecore.annotations.AnnotationUtil;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolRegistrationBizLogic;
 import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
@@ -49,16 +53,19 @@ import edu.wustl.catissuecore.util.ProtectionGroups;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.catissuecore.util.global.Variables;
-import edu.wustl.common.bizlogic.QueryBizLogic;
 import edu.wustl.common.cde.CDEManager;
+import edu.wustl.common.exception.ErrorKey;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.CVSTagReader;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.XMLPropertyHandler;
-import edu.wustl.common.util.dbManager.DAOException;
-import edu.wustl.common.util.dbManager.DBUtil;
-import edu.wustl.common.util.dbManager.HibernateMetaData;
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.common.util.logger.LoggerConfig;
+import edu.wustl.dao.exception.DAOException;
+import edu.wustl.simplequery.bizlogic.QueryBizLogic;
 
 
 /**
@@ -68,8 +75,7 @@ import edu.wustl.common.util.logger.Logger;
  * */
 public class CatissueCoreServletContextListener implements ServletContextListener
 {
-
-	private static org.apache.log4j.Logger logger =Logger.getLogger(CatissueCoreServletContextListener.class);
+	private static Logger logger = Logger.getCommonLogger(CatissueCoreServletContextListener.class);
 
 	/**
 	 * DATASOURCE_JNDI_NAME.
@@ -82,16 +88,20 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 	 */
 	public void contextInitialized(ServletContextEvent sce)
     {
-    	try{
+		try{
     		logger.info("Initializing catissue application");
 	    	ServletContext servletContext = sce.getServletContext();
-	    	Variables.applicationHome = sce.getServletContext().getRealPath("");
-	    	Logger.configDefaultLogger(servletContext);
+	    	CommonServiceLocator.getInstance().setAppHome(sce.getServletContext().getRealPath("")); 
+	    	System.out.println(":::::::::::::Application home ::::::::::::"+CommonServiceLocator.getInstance().getAppHome());
+	    	//Logger.configDefaultLogger(servletContext);
+	    	ErrorKey.init("~");
+	    	LoggerConfig.configureLogger(CommonServiceLocator.getInstance().getPropDirPath());
 	        ApplicationProperties.initBundle(servletContext.getInitParameter("resourcebundleclass"));
 			setGlobalVariable();
-			logger =Logger.getLogger(CatissueCoreServletContextListener.class);
+			logger =Logger.getCommonLogger(CatissueCoreServletContextListener.class);
 	        initCatissueParams();
-			logApplnInfo();
+			//logApplnInfo();
+			//initCDEManager();
 			DefaultValueManager.validateAndInitDefaultValueMap();
 			logger.info("Initialization complete");
     	}
@@ -110,10 +120,34 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 	 */
 	public void initCatissueParams() throws Exception, ClassNotFoundException, DAOException
 	{
-		edu.wustl.common.querysuite.security.utility.Utility.setReadDeniedAndEntitySqlMap();
+		edu.wustl.query.util.global.Utility.setReadDeniedAndEntitySqlMap();
 		addDefaultProtectionGroupsToMap();
 
-		Class.forName(DBUtil.class.getName());
+		//Class.forName(DBUtil.class.getName());
+		//	Variables.databaseName=HibernateMetaData.getDataBaseName();
+			QueryBizLogic bLogic = new QueryBizLogic();
+			bLogic.initializeQueryData();
+			//setDBFunctionNamesConstants();
+			createAliasAndPageOfMap();
+
+			LabelAndBarcodeGeneratorInitializer.init();
+//			Added By geeta 
+			InitialiseVariablesForEdinburgh();
+			
+			
+//			Added By geeta 
+			InitialiseVariablesForDFCI();
+			
+			initCatissueCache();
+			//initEntityCache();
+			Utility.initializePrivilegesMap();
+			initTitliIndex();
+			initCDEManager();
+			//added to set printer related information
+			String absolutePath=CommonServiceLocator.getInstance().getPropDirPath() +File.separator+"PrintServiceImplementor.properties";
+			Variables.setPrinterInfo(absolutePath);
+
+		/*Class.forName(DBUtil.class.getName());
 		Variables.databaseName=HibernateMetaData.getDataBaseName();
 		QueryBizLogic.initializeQueryData();
 		setDBFunctionNamesConstants();
@@ -135,7 +169,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 		initCDEManager();
 		//added to set printer related information
 		String absolutePath=Variables.propertiesDirPath +File.separator+"PrintServiceImplementor.properties";
-		Variables.setPrinterInfo(absolutePath);
+		Variables.setPrinterInfo(absolutePath);*/
 
 	}
 	
@@ -147,13 +181,8 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 		String path = System.getProperty("app.propertiesFile");
     	XMLPropertyHandler.init(path);
     	File propetiesDirPath = new File(path);
-    	Variables.propertiesDirPath = propetiesDirPath.getParent();
-
-        Variables.applicationName = ApplicationProperties.getValue("app.name");
-        Variables.applicationVersion = ApplicationProperties.getValue("app.version");
 		int maximumTreeNodeLimit = Integer.parseInt(XMLPropertyHandler.getValue(Constants.MAXIMUM_TREE_NODE_LIMIT));
 		Variables.maximumTreeNodeLimit = maximumTreeNodeLimit;
-		Variables.maximumTreeNodeLimitForChildNode = Integer.parseInt(XMLPropertyHandler.getValue(Constants.MAXIMUM_TREE_NODE_LIMIT_FOR_CHILD_NODE));
 	}
 
 	/**
@@ -207,13 +236,15 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 	 */
 	public void initCatissueCache() throws DAOException, Exception, ClassNotFoundException
 	{
-		StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic)factory.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
+		
 		Map storageContainersMap = storageContainerBizLogic.getAllocatedContainerMap();
 
-        ParticipantBizLogic bizlogic = (ParticipantBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.PARTICIPANT_FORM_ID);
+		ParticipantBizLogic bizlogic = (ParticipantBizLogic)factory.getBizLogic(Constants.PARTICIPANT_FORM_ID);
 		Map participantMap = bizlogic.getAllParticipants();
 
-		CollectionProtocolRegistrationBizLogic cBizLogic = (CollectionProtocolRegistrationBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
+		CollectionProtocolRegistrationBizLogic cBizLogic = (CollectionProtocolRegistrationBizLogic)factory.getBizLogic(Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
 		List participantRegInfoList = cBizLogic.getAllParticipantRegistrationInfo();
 		try
 		{
@@ -253,8 +284,9 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 	private void logApplnInfo()
 	{
 
+		String appHome = CommonServiceLocator.getInstance().getAppHome();
 		StringBuffer fileName = new StringBuffer();
-		fileName.append(Variables.applicationHome).append(File.separator)
+		fileName.append(appHome).append(File.separator)
 		.append(ApplicationProperties.getValue("application.version.file"));
 
         CVSTagReader cvsTagReader = new CVSTagReader();
@@ -262,11 +294,10 @@ public class CatissueCoreServletContextListener implements ServletContextListene
         Variables.applicationCvsTag = cvsTag;
         logger.info("========================================================");
         logger.info("Application Information");
-        logger.info("Name: "+Variables.applicationName);
-        logger.info("Version: "+Variables.applicationVersion);
+        logger.info("Name: "+CommonServiceLocator.getInstance().getAppName());
         logger.info("CVS TAG: "+Variables.applicationCvsTag);
-        logger.info("Path: "+ Variables.applicationHome);
-        logger.info("Database Name: "+Variables.databaseName);
+        logger.info("Path: "+ appHome);
+       // logger.info("Database Name: "+Variables.databaseName);
         logger.info("========================================================");
 	}
 
@@ -274,7 +305,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 	/**
 	 *
 	 */
-	private void setDBFunctionNamesConstants()
+	/*private void setDBFunctionNamesConstants()
 	{
 		if(Variables.databaseName.equals(Constants.ORACLE_DATABASE))
 		{
@@ -295,7 +326,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 			Variables.dateTostrFunction = "TO_CHAR";
 			Variables.strTodateFunction = "STR_TO_DATE";
 		}
-	}
+	}*/
 
 	/**
 	 * @param protectionGroupsForObjectTypes
@@ -338,9 +369,8 @@ public class CatissueCoreServletContextListener implements ServletContextListene
         protectionGroupsForObjectTypes.put(SpecimenCharacteristics.class.getName(),
                 new String[] {ProtectionGroups.PUBLIC_DATA_GROUP});
 
-        Constants.STATIC_PROTECTION_GROUPS_FOR_OBJECT_TYPES
+        edu.wustl.security.global.Constants.STATIC_PG_FOR_OBJ_TYPES
 		.putAll(protectionGroupsForObjectTypes);
-
 	}
 
     /**

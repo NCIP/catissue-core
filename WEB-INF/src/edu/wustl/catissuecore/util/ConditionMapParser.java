@@ -13,12 +13,11 @@ import javax.servlet.http.HttpSession;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.query.AdvancedConditionsNode;
+import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.simplequery.query.Condition;
 import edu.wustl.simplequery.query.DataElement;
 import edu.wustl.simplequery.query.Operator;
-import edu.wustl.common.util.logger.Logger;
 
 /**
  * @author poornima_govindrao

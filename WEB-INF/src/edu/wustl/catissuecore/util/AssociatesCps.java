@@ -20,12 +20,11 @@ import edu.common.dynamicextensions.entitymanager.EntityManager;
 import edu.common.dynamicextensions.entitymanager.EntityManagerInterface;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.wustl.catissuecore.bizlogic.AnnotationBizLogic;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.AppUtility;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
-import edu.wustl.common.exception.BizLogicException;
-import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
-import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.exception.ApplicationException;
+import edu.wustl.dao.exception.DAOException;
 
 /**
  * This class associates Collection Protocol with the Corresponding entities mention in XML file.
@@ -34,24 +33,28 @@ import edu.wustl.common.util.dbManager.DAOException;
  */
 public final class AssociatesCps
 {
-		/*
-		 * create singleton object
-		 */
-		private static AssociatesCps associateCp = new AssociatesCps();
-		/*
-		 * private constructor
-		 */
-		private AssociatesCps()
-		{
-			
-		}
-		/*
-		 * returns single object
-		 */
-		public static AssociatesCps getInstance()
-		{
-			return associateCp;
-		}
+
+	/*
+	 * create singleton object
+	 */
+	private static AssociatesCps associateCp = new AssociatesCps();
+
+	/*
+	 * private constructor
+	 */
+	private AssociatesCps()
+	{
+
+	}
+
+	/*
+	 * returns single object
+	 */
+	public static AssociatesCps getInstance()
+	{
+		return associateCp;
+	}
+
 	/**
 	 * Map for storing containers corresponding to entitiesIds
 	 */
@@ -60,16 +63,13 @@ public final class AssociatesCps
 	/**
 	 * @param args get the command line inputs
 	 * @throws DynamicExtensionsSystemException fails to validate
-	 * @throws DAOException if it fails to do database operation
 	 * @throws IOException if it fails to read file IO operation
-	 * @throws UserNotAuthorizedException if user is not authorized to perform the operations
-	 * @throws BizLogicException fails to get the instance of BizLogic
 	 * @throws SAXException fail to parse XML file.
 	 * @throws ParserConfigurationException fails to get parser
+	 * @throws ApplicationException Application Exception
 	 */
-	public static void main(String[] args) throws DynamicExtensionsSystemException, DAOException,
-			ParserConfigurationException, SAXException, IOException, UserNotAuthorizedException,
-			BizLogicException
+	public static void main(String[] args) throws DynamicExtensionsSystemException,
+			ParserConfigurationException, SAXException, IOException, ApplicationException
 	{
 		//Validates arguments
 		validateXML(args);
@@ -87,9 +87,9 @@ public final class AssociatesCps
 		//stores mapping of cpIds and override option
 		Map<Long, String> cpIdsVsoverride = xmlParser.getCpIdVsOverride();
 
-		Long typeId = (Long) Utility.getObjectIdentifier(Constants.COLLECTION_PROTOCOL,
+		Long typeId = (Long) AppUtility.getObjectIdentifier(Constants.COLLECTION_PROTOCOL,
 				AbstractMetadata.class.getName(), Constants.NAME);
-		entityIdsVsContId = Utility.getAllContainers();
+		entityIdsVsContId = AppUtility.getAllContainers();
 		dissAssociateEntitiesFormsPerCpId(cpIdsVsoverride, typeId);
 		for (Long cpId : cpIdsVsEntityIds.keySet())
 		{
@@ -100,20 +100,17 @@ public final class AssociatesCps
 			associateEntitiesToCps(cpId, typeId, cpIdsVsFormIds.get(cpId));
 		}
 	}
-	
+
 	/**
 	 * this method dissAssociate Entities per cpId.
 	 * @param cpIdsVsoverride
 	 * @param typeId
-	 * @throws DAOException
 	 * @throws DynamicExtensionsSystemException
-	 * @throws UserNotAuthorizedException
-	 * @throws BizLogicException
+	 * @throws ApplicationException Application Exception
 	 */
-	private static void dissAssociateEntitiesFormsPerCpId(
-			Map<Long, String> cpIdsVsoverride, Long typeId)
-			throws DAOException, DynamicExtensionsSystemException,
-			UserNotAuthorizedException, BizLogicException 
+	private static void dissAssociateEntitiesFormsPerCpId(Map<Long, String> cpIdsVsoverride,
+			Long typeId) throws DynamicExtensionsSystemException,
+			ApplicationException
 	{
 		for (Long cpId : cpIdsVsoverride.keySet())
 		{
@@ -142,11 +139,10 @@ public final class AssociatesCps
 	 * @param cpId stores collection protocol's identifier
 	 * @throws DAOException if it fails to do database operation
 	 * @throws DynamicExtensionsSystemException 
-	 * @throws BizLogicException 
-	 * @throws UserNotAuthorizedException 
+	 * @throws ApplicationException Application Exception
 	 */
-	private static void disAssociateEntitiesForms(Long typeId, long cpId) throws DAOException,
-			DynamicExtensionsSystemException, UserNotAuthorizedException, BizLogicException
+	private static void disAssociateEntitiesForms(Long typeId, long cpId)
+			throws DynamicExtensionsSystemException, ApplicationException
 	{
 		AnnotationBizLogic annotation = new AnnotationBizLogic();
 		EntityManagerInterface entityManager = EntityManager.getInstance();
@@ -158,19 +154,19 @@ public final class AssociatesCps
 			{
 				entityMapCond.setTypeId(typeId);
 				entityMapCond.setStaticRecordId(Long.valueOf(0));
-				annotation.update(entityMapCond, Constants.HIBERNATE_DAO);
+				annotation.update(entityMapCond);
 			}
 		}
 		else
 		{
-			Long cpObjectId = Long.valueOf(Constants.DEFAULT_CONDITION);
+			Long cpObjectId = Long.valueOf(-1);
 			Collection<EntityMapCondition> entMapCondColl = entityManager
 					.getAllConditionsByStaticRecordId(cpObjectId);
 			for (EntityMapCondition entityMapCond : entMapCondColl)
 			{
 				entityMapCond.setTypeId(typeId);
 				entityMapCond.setStaticRecordId(Long.valueOf(0));
-				annotation.update(entityMapCond, Constants.HIBERNATE_DAO);
+				annotation.update(entityMapCond);
 			}
 		}
 	}
@@ -179,13 +175,11 @@ public final class AssociatesCps
 	 * @param cpId stores Id of Collection Protocol 
 	 * @param typeId stores Id of Collection Protocol object
 	 * @param entityIds entityIds collection
-	 * @throws DAOException if it fails to do database operation
-	 * @throws BizLogicException fails to get bizLogic object
-	 * @throws UserNotAuthorizedException user is not authorized to perform operation
 	 * @throws DynamicExtensionsSystemException 
+	 * @throws ApplicationException Application Exception
 	 */
 	private static void associateEntitiesToCps(Long cpId, Long typeId, List<Long> entityIds)
-			throws DAOException, UserNotAuthorizedException, BizLogicException, DynamicExtensionsSystemException
+			throws ApplicationException
 	{
 		AnnotationBizLogic annotation = new AnnotationBizLogic();
 		DefaultBizLogic defaultBizLogic = BizLogicFactory.getDefaultBizLogic();
@@ -196,14 +190,12 @@ public final class AssociatesCps
 			{
 				List<EntityMap> entityMapList = defaultBizLogic.retrieve(EntityMap.class.getName(),
 						Constants.CONTAINERID, containerId);
-				updateEntityMap(cpId, typeId, annotation,
-						entityMapList);
+				updateEntityMap(cpId, typeId, annotation, entityMapList);
 			}
 
 		}
 	}
 
-	
 	/**
 	 * method updates EntityMap after chaking entityMapList for Null.   
 	 * @param cpId
@@ -211,25 +203,25 @@ public final class AssociatesCps
 	 * @param annotation
 	 * @param entityMapList
 	 * @throws DynamicExtensionsSystemException 
+	 * @throws ApplicationException Application Exception
 	 */
-	private static void updateEntityMap(Long cpId,
-			Long typeId, AnnotationBizLogic annotation,
-			List<EntityMap> entityMapList) throws DynamicExtensionsSystemException
+	private static void updateEntityMap(Long cpId, Long typeId, AnnotationBizLogic annotation,
+			List<EntityMap> entityMapList) throws ApplicationException
 	{
-			if (entityMapList != null && !entityMapList.isEmpty())
+		if (entityMapList != null && !entityMapList.isEmpty())
+		{
+			EntityMap entityMap = entityMapList.get(0);
+			if (cpId != 0)
 			{
-				EntityMap entityMap = entityMapList.get(0);
-				if (cpId != 0)
-				{
-					editConditions(entityMap, cpId, typeId);
-				}
-				if (cpId == 0)
-				{
-					Long conditionObject = Long.valueOf(Constants.DEFAULT_CONDITION);
-					editConditions(entityMap, conditionObject, typeId);
-				}
-				annotation.updateEntityMap(entityMap);
+				editConditions(entityMap, cpId, typeId);
 			}
+			if (cpId == 0)
+			{
+				Long conditionObject = Long.valueOf(-1);
+				editConditions(entityMap, conditionObject, typeId);
+			}
+			annotation.updateEntityMap(entityMap);
+		}
 	}
 
 	/**
@@ -258,21 +250,24 @@ public final class AssociatesCps
 	 * @param conditionObjectId to set particular condition
 	 * @param typeId stores the identifier value of Collection Protocol object
 	 * @throws DynamicExtensionsSystemException 
+	 * @throws ApplicationException Application Exception
 	 */
-	private static void editConditions(EntityMap entityMap, Long conditionObjectId, Long typeId) throws DynamicExtensionsSystemException
+	private static void editConditions(EntityMap entityMap, Long conditionObjectId, Long typeId)
+			throws ApplicationException
 	{
-		Collection<FormContext> formContextColl = Utility.getFormContexts(entityMap.getId());
-				
+		Collection<FormContext> formContextColl = AppUtility.getFormContexts(entityMap.getId());
+
 		if (formContextColl != null)
 		{
 			for (FormContext formContext : formContextColl)
 			{
-				Collection<EntityMapCondition> entityMapCondColl = Utility.getEntityMapConditions(formContext.getId());
-    			
+				Collection<EntityMapCondition> entityMapCondColl = AppUtility
+						.getEntityMapConditions(formContext.getId());
+
 				if (entityMapCondColl.isEmpty() || entityMapCondColl.size() <= 0)
 				{
-					EntityMapCondition entityMapCond = Utility.getEntityMapCondition(formContext,
-							conditionObjectId, typeId);
+					EntityMapCondition entityMapCond = AppUtility.getEntityMapCondition(
+							formContext, conditionObjectId, typeId);
 					entityMapCondColl.add(entityMapCond);
 				}
 				else
@@ -291,8 +286,8 @@ public final class AssociatesCps
 						else if ((entityMapCondition.getStaticRecordId() != 0) && (flag == true))
 						{
 							flag = false;
-							EntityMapCondition entityMapCond = Utility.getEntityMapCondition(formContext,
-									conditionObjectId, typeId);
+							EntityMapCondition entityMapCond = AppUtility.getEntityMapCondition(
+									formContext, conditionObjectId, typeId);
 							entityMapCondColl.add(entityMapCond);
 							break;
 						}

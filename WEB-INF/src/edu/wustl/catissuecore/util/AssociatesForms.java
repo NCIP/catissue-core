@@ -2,21 +2,29 @@
 package edu.wustl.catissuecore.util;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import edu.common.dynamicextensions.bizlogic.BizLogicFactory;
 import edu.common.dynamicextensions.domain.AbstractMetadata;
+import edu.common.dynamicextensions.domain.Category;
 import edu.common.dynamicextensions.domain.integration.EntityMap;
+import edu.common.dynamicextensions.domain.integration.EntityMapCondition;
+import edu.common.dynamicextensions.domain.integration.FormContext;
+import edu.common.dynamicextensions.entitymanager.EntityManager;
+import edu.common.dynamicextensions.entitymanager.EntityManagerInterface;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.wustl.catissuecore.bizlogic.AnnotationBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
-import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
-import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.dao.exception.DAOException;
+import edu.wustl.security.exception.UserNotAuthorizedException;
 
 /**
  * This class show/hides entities-forms mention in CSV file.
@@ -58,7 +66,7 @@ public final class AssociatesForms
 	 * @throws UserNotAuthorizedException if user is not authorized to perform the operations
 	 */
 	public static void main(String[] args) throws DynamicExtensionsSystemException, IOException,
-			DAOException, UserNotAuthorizedException, BizLogicException
+	ApplicationException
 	{
 		//Validates arguments
 		validateCSV(args);
@@ -67,10 +75,10 @@ public final class AssociatesForms
 		//get EntityGroup with Collection Protocol along with corresponding entities
 		csvFileParser.processCSV();
 
-		Long typeId = (Long) Utility.getObjectIdentifier(Constants.COLLECTION_PROTOCOL,
+		Long typeId = (Long) AppUtility.getObjectIdentifier(Constants.COLLECTION_PROTOCOL,
 				AbstractMetadata.class.getName(), Constants.NAME);
 
-		entityIdsVsContainersId = Utility.getAllContainers(csvFileParser.getEntityGroupIds());
+		entityIdsVsContainersId = AppUtility.getAllContainers(csvFileParser.getEntityGroupIds());
 
 		disAssociateEntitiesAndForms(typeId);
 
@@ -109,7 +117,7 @@ public final class AssociatesForms
 				if (entityMapList != null && !entityMapList.isEmpty())
 				{
 					EntityMap entityMap = entityMapList.get(0);
-					Utility.editConditions(entityMap, cpId, typeId, true);
+					AppUtility.editConditions(entityMap, cpId, typeId, true);
 					annotation.updateEntityMap(entityMap);
 				}
 			}
@@ -118,17 +126,14 @@ public final class AssociatesForms
 
 	/**
 	 * @param entityIds entityIds collection
-	 * @throws DAOException if it fails to do database operation
 	 * @throws DynamicExtensionsSystemException
-	 * @throws UserNotAuthorizedException if user is not authorized to perform the operations
-	 * @throws BizLogicException fails to get the instance of BizLogic
+	 * @throws ApplicationException Application Exception
 	 */
-	private static void associateEntitiesForms(List<Long> entityIds, Long typeId) throws DAOException,
-			DynamicExtensionsSystemException, UserNotAuthorizedException, BizLogicException
+	private static void associateEntitiesForms(List<Long> entityIds, Long typeId) throws DynamicExtensionsSystemException, ApplicationException
 	{
 		AnnotationBizLogic annotation = new AnnotationBizLogic();
 		DefaultBizLogic defaultBizLogic = BizLogicFactory.getDefaultBizLogic();
-		Long conditionObject = Long.valueOf(Constants.DEFAULT_CONDITION);
+		Long conditionObject = Long.valueOf(-1);
 		for (Long entityId : entityIds)
 		{
 			Long containerId = getContainerId(entityId);
@@ -144,7 +149,7 @@ public final class AssociatesForms
 				if (entityMapList != null && !entityMapList.isEmpty())
 				{
 					EntityMap entityMap = entityMapList.get(0);
-					Utility.editConditions(entityMap, conditionObject, typeId, true);
+					AppUtility.editConditions(entityMap, conditionObject, typeId, true);
 					annotation.updateEntityMap(entityMap);
 				}
 			}

@@ -17,7 +17,7 @@ import edu.wustl.catissuecore.actionForm.CategorySearchForm;
 import edu.wustl.catissuecore.bizlogic.querysuite.QueryShoppingCartBizLogic;
 import edu.wustl.catissuecore.querysuite.QueryShoppingCart;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.beans.QueryResultObjectDataBean;
 import edu.wustl.common.dao.QuerySessionData;
 import edu.wustl.common.querysuite.queryobject.IConstraints;
@@ -75,7 +75,7 @@ public final class QueryModuleUtil
 		{
 			for (Object columnData : row)
 			{
-				gridObj = (Object) Utility.toNewGridFormat(columnData);
+				gridObj = (Object) AppUtility.toNewGridFormat(columnData);
 				gridStr = gridObj.toString();
 				gridStrBuff.append(gridStr);
 				gridStrBuff.append(',');
