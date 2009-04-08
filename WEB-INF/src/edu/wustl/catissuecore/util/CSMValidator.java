@@ -27,7 +27,7 @@ public class CSMValidator implements IValidator {
 			String privilegeName) 
 	{
 		boolean hasPrivilege = false;
-		hasPrivilege = AppUtility.checkForAllCurrentAndFutureCPs(null, privilegeName, sessionDataBean, baseObjectId);
+		hasPrivilege = AppUtility.checkForAllCurrentAndFutureCPs(privilegeName, sessionDataBean, baseObjectId);
 		return hasPrivilege;
 	}
 
@@ -53,7 +53,7 @@ public class CSMValidator implements IValidator {
 	        } 
 			else
 	        {
-	        	hasPrivilege = edu.wustl.catissuecore.util.global.AppUtility.checkForAllCurrentAndFutureCPs(null,Permissions.REGISTRATION, sessionDataBean, null);
+	        	hasPrivilege = edu.wustl.catissuecore.util.global.AppUtility.checkForAllCurrentAndFutureCPs(Permissions.REGISTRATION, sessionDataBean, null);
 	        }
 			dao.closeSession();
 		} 
@@ -89,7 +89,7 @@ public class CSMValidator implements IValidator {
 		}
 		if(!hasPrivilege)
 		{
-			hasPrivilege = edu.wustl.catissuecore.util.global.AppUtility.checkForAllCurrentAndFutureCPs(null,Permissions.REGISTRATION, sessionDataBean, null);
+			hasPrivilege = edu.wustl.catissuecore.util.global.AppUtility.checkForAllCurrentAndFutureCPs(Permissions.REGISTRATION, sessionDataBean, null);
 		}
 		return hasPrivilege;
 	} 

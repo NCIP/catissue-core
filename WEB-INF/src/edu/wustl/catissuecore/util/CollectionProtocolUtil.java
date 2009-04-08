@@ -578,7 +578,7 @@ public class CollectionProtocolUtil
 
 		if (sessionCpList == null || sessionCpList.size()<2){
 			
-			throw AppUtility.getApplicationException("",null,"Fail to retrieve Collection protocol..");
+			throw AppUtility.getApplicationException(null,"app.error","Fail to retrieve Collection protocol..");
 		}
 		
 		HttpSession session = request.getSession();

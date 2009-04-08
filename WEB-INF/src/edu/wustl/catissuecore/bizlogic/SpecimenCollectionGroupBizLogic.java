@@ -56,7 +56,7 @@ import edu.wustl.catissuecore.util.SpecimenComparator;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
-import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
@@ -161,11 +161,11 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
-			throw getBizLogicException(daoExp, "bizlogic.error", "DB related issues");
+			throw getBizLogicException(daoExp, "dao.error", "DB related issues");
 		}
 		catch(ApplicationException exp)
 		{
-			throw getBizLogicException(exp, "bizlogic.error", "");
+			throw getBizLogicException(exp, "dao.error", "");
 		}
 	}
 
@@ -294,7 +294,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (NameGeneratorException nameGeneratorException)
 		{
-			throw getBizLogicException(nameGeneratorException, "bizlogic.error", "");
+			throw getBizLogicException(nameGeneratorException, "dao.error", "");
 		}
 	}
 
@@ -316,7 +316,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (NameGeneratorException nameGeneratorException)
 		{
-			throw getBizLogicException(nameGeneratorException, "bizlogic.error", "");
+			throw getBizLogicException(nameGeneratorException, "dao.error", "");
 		}
 	}
 
@@ -340,7 +340,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 
 			if (object == null)
 			{
-				throw getBizLogicException(null, "bizlogic.error", "Cannot find CP. Failed to find " + "SCG for id " + scgId);
+				throw getBizLogicException(null, "dao.error", "Cannot find CP. Failed to find " + "SCG for id " + scgId);
 			}
 			SpecimenCollectionGroup specCollGroup = (SpecimenCollectionGroup) object;
 			if (retrieveAssociates)
@@ -351,7 +351,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (DAOException exception)
 		{
-			throw getBizLogicException(exception, "bizlogic.error", "");
+			throw getBizLogicException(exception, "dao.error", "");
 		}
 		finally
 		{
@@ -371,12 +371,12 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 
 		if (collProtReg == null)
 		{
-			throw getBizLogicException(null, "bizlogic.error", "Cannot find CP. CPR for " + "SCG id " + scgId + " is unexpectedly null.");
+			throw getBizLogicException(null, "dao.error", "Cannot find CP. CPR for " + "SCG id " + scgId + " is unexpectedly null.");
 		}
 		CollectionProtocol collProt = collProtReg.getCollectionProtocol();
 		if (collProt == null)
 		{
-			throw getBizLogicException(null, "bizlogic.error", "Cannot find CP. for SCG id " + scgId);
+			throw getBizLogicException(null, "dao.error", "Cannot find CP. for SCG id " + scgId);
 		}
 		Long id = collProt.getId();
 
@@ -606,7 +606,9 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
-			throw getBizLogicException(daoExp, "bizlogic.error", "");
+			throw getBizLogicException(daoExp, "dao.error", "");
+		} catch (ApplicationException e) {
+			throw getBizLogicException(e, "utility.error", "");
 		}
 	}
 
@@ -971,7 +973,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		}
 		if (cpr == null)
 		{
-			throw getBizLogicException(null, "bizlogic.error", "CPR cannot be null for SCG");
+			throw getBizLogicException(null, "dao.error", "CPR cannot be null for SCG");
 		}
 		Long id = null;
 
@@ -1058,7 +1060,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException daoexp)
 		{
-			ErrorKey errorKey = ErrorKey.getErrorKey("bizlogic.error");
+			ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
 			throw new BizLogicException(errorKey,daoexp ,"SpecimenCollectionGroup.java :");
 		}
 		return list;
@@ -1401,7 +1403,9 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
-			throw getBizLogicException(daoExp, "bizlogic.error", "");
+			throw getBizLogicException(daoExp, "dao.error", "");
+		} catch (ApplicationException e) {
+			throw getBizLogicException(e, "utility.error", "");
 		}
 	}
 
@@ -1425,7 +1429,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(ApplicationException exp)
 		{
-			throw getBizLogicException(exp, "bizlogic.error", "");
+			throw getBizLogicException(exp, "dao.error", "");
 		}
 	}
 
@@ -1737,13 +1741,13 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 						//This check is beaause child cp take there anticipated dates according to there parent cp and if in parent date already offset is captured then no need ot take that offeet in child
 						if (parentOffset != null)
 							noOfDaysToAdd = noOfDaysToAdd - parentOffset.intValue();
-						participantRegDate = Utility.getNewDateByAdditionOfDays(parentRegDate, noOfDaysToAdd);
+						participantRegDate = AppUtility.getNewDateByAdditionOfDays(parentRegDate, noOfDaysToAdd);
 
 					}
 					else if (eventLastDate != null)
-						participantRegDate = Utility.getNewDateByAdditionOfDays(eventLastDate, Constants.DAYS_TO_ADD_CP);
+						participantRegDate = AppUtility.getNewDateByAdditionOfDays(eventLastDate, Constants.DAYS_TO_ADD_CP);
 					else if (parentRegDate != null)
-						participantRegDate = Utility.getNewDateByAdditionOfDays(parentRegDate, Constants.DAYS_TO_ADD_CP);
+						participantRegDate = AppUtility.getNewDateByAdditionOfDays(parentRegDate, Constants.DAYS_TO_ADD_CP);
 				}
 			}
 		}
@@ -1856,7 +1860,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 						noOfDaysToAdd -= parentOffset.intValue();
 					}
 
-					Date evtDate = Utility.getNewDateByAdditionOfDays(regDate, noOfDaysToAdd);
+					Date evtDate = AppUtility.getNewDateByAdditionOfDays(regDate, noOfDaysToAdd);
 					eventLastDate = evtDate;
 					//bug no:6526 date format changed to mm-dd-yyyy
 					receivedDate = edu.wustl.common.util.Utility.parseDateToString(evtDate, CommonServiceLocator.getInstance().getDatePattern());
@@ -2141,7 +2145,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 	 * consents
 	 */
 	private void verifyAndUpdateConsentWithdrawn(SpecimenCollectionGroup specimenCollectionGroup, SpecimenCollectionGroup oldspecimenCollectionGroup,
-			DAO dao, SessionDataBean sessionDataBean) throws BizLogicException
+			DAO dao, SessionDataBean sessionDataBean) throws BizLogicException,ApplicationException
 	{
 		Collection newConsentTierStatusCollection = specimenCollectionGroup.getConsentTierStatusCollection();
 		Iterator itr = newConsentTierStatusCollection.iterator();
@@ -2184,7 +2188,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 
 			dao.closeSession();
 		} catch (DAOException daoExp) {
-			throw getBizLogicException(daoExp, "bizlogic.error", "");
+			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 		finally
 		{
@@ -2216,7 +2220,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (DAOException daoExp)
 		{
-			throw getBizLogicException(daoExp, "bizlogic.error", "");
+			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 		finally
 		{
@@ -2302,7 +2306,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 				scgList = dao.retrieve(SpecimenCollectionGroup.class.getName(), Constants.NAME, scg.getGroupName());
 				if (scgList == null || scgList.isEmpty())
 				{
-					throw getBizLogicException(null, "bizlogic.error", 
+					throw getBizLogicException(null, "dao.error", 
 					"Failed to retrieve SCG, either Name or Identifier is required");
 				}
 				absScg = ((SpecimenCollectionGroup) (scgList.get(0)));
@@ -2311,7 +2315,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
-			throw getBizLogicException(daoExp, "bizlogic.error", "");
+			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
 
@@ -2406,7 +2410,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			}
 			//Get the required privilege name which we would like to check for the logged in user.
 			String privilegeName = getPrivilegeName(domainObject);
-			isAuthorized = AppUtility.checkPrivilegeOnCP(dao, domainObject, protectionElementName, privilegeName, sessionDataBean);
+			isAuthorized = AppUtility.checkPrivilegeOnCP(domainObject, protectionElementName, privilegeName, sessionDataBean);
 
 			if (!isAuthorized)
 			{
@@ -2417,7 +2421,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(ApplicationException exp)
 		{
-			throw getBizLogicException(exp, "bizlogic.error", "");
+			throw getBizLogicException(exp, "dao.error", "");
 		}
 	}
 
@@ -2435,7 +2439,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 	
 	public boolean hasPrivilegeToView(String objName, Long identifier, SessionDataBean sessionDataBean)
 	{
-		return edu.wustl.catissuecore.util.global.Utility.hasPrivilegeToView(objName, identifier, sessionDataBean, getReadDeniedPrivilegeName());
+		return AppUtility.hasPrivilegeToView(objName, identifier, sessionDataBean, getReadDeniedPrivilegeName());
 	}
 
 }

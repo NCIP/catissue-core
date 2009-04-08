@@ -34,7 +34,7 @@ public class DeidentifiedSurgicalPathologyReportBizLogic extends DefaultBizLogic
 	 * Saves the Deidentified pathology reportobject in the database.
 	 * @param obj The storageType object to be saved.
 	 * @param session The session in which the object is saved.
-	 * @throws DAOException 
+	 * @throws BizLogicException 
 	 */
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws BizLogicException
 	{
@@ -43,8 +43,8 @@ public class DeidentifiedSurgicalPathologyReportBizLogic extends DefaultBizLogic
 			DeidentifiedSurgicalPathologyReport deidentifiedReport = (DeidentifiedSurgicalPathologyReport) obj;
 			dao.insert(deidentifiedReport, false);
 			
-			IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReport=(IdentifiedSurgicalPathologyReport)dao.retrieveAttribute(SpecimenCollectionGroup.class,
-					deidentifiedReport.getSpecimenCollectionGroup().getId(), "identifiedSurgicalPathologyReport",Constants.SYSTEM_IDENTIFIER);
+			IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReport=(IdentifiedSurgicalPathologyReport)dao.retrieveAttribute(SpecimenCollectionGroup.class,Constants.SYSTEM_IDENTIFIER,
+					deidentifiedReport.getSpecimenCollectionGroup().getId(), "identifiedSurgicalPathologyReport");
 			identifiedSurgicalPathologyReport.setReportStatus(CaTIESConstants.DEIDENTIFIED);
 			identifiedSurgicalPathologyReport.setDeIdentifiedSurgicalPathologyReport(deidentifiedReport);
 			dao.update(identifiedSurgicalPathologyReport,null);
@@ -63,7 +63,7 @@ public class DeidentifiedSurgicalPathologyReportBizLogic extends DefaultBizLogic
 	 * @param obj DeidentifiedSurgicalPathologyReport object
 	 * @return Array of dynamicGroup
 	 * @throws SMException Security manager exception
-	 * @throws DAOException 
+	 * @throws BizLogicException 
 	 *//*
 	private String[] getDynamicGroups(DAO dao, AbstractDomainObject obj) throws BizLogicException
 	{
@@ -81,7 +81,7 @@ public class DeidentifiedSurgicalPathologyReportBizLogic extends DefaultBizLogic
 	 * Updates the persistent object in the database.
 	 * @param obj The object to be updated.
 	 * @param session The session in which the object is saved.
-	 * @throws DAOException 
+	 * @throws BizLogicException 
 	 */
 	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws BizLogicException
 	{

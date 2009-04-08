@@ -15,8 +15,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.management.openmbean.OpenDataException;
-
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
@@ -26,7 +24,6 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.global.ApplicationProperties;
@@ -35,9 +32,7 @@ import edu.wustl.common.util.global.Variables;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.HibernateDAO;
-import edu.wustl.dao.daofactory.DAOFactory;
 import edu.wustl.dao.exception.DAOException;
-import edu.wustl.security.exception.SMException;
 import edu.wustl.security.privilege.PrivilegeManager;
 
 /**
@@ -84,7 +79,7 @@ public class SiteBizLogic extends CatissueDefaultBizLogic {
 		}
 		catch(Exception daoExp)
 		{
-			throw getBizLogicException(daoExp, "bizlogic.error", "");
+			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 
 	}
@@ -114,7 +109,7 @@ public class SiteBizLogic extends CatissueDefaultBizLogic {
 			// Mandar : 21Aug08 ----start
 			if (Constants.ACTIVITY_STATUS_CLOSED.equals(site.getActivityStatus())) {
 				if (isSiteOccupied(dao, site)) {
-					throw getBizLogicException(null, "bizlogic.error",
+					throw getBizLogicException(null, "dao.error",
 					"Site contains specimens in the associated containers. Cannot close a site containing specimens.");
 
 				}
@@ -134,7 +129,7 @@ public class SiteBizLogic extends CatissueDefaultBizLogic {
 		}
 		catch(DAOException daoExp)
 		{
-			throw getBizLogicException(daoExp, "bizlogic.error", "");
+			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
 
@@ -155,7 +150,7 @@ public class SiteBizLogic extends CatissueDefaultBizLogic {
 			}
 		} catch (Exception excp) {
 			
-			throw getBizLogicException(null, "bizlogic.error", "Error while checking site for presence of specimens");
+			throw getBizLogicException(null, "dao.error", "Error while checking site for presence of specimens");
 		}
 
 		return result;
@@ -188,7 +183,7 @@ public class SiteBizLogic extends CatissueDefaultBizLogic {
 		}
 		catch(DAOException daoExp)
 		{
-			throw getBizLogicException(daoExp, "bizlogic.error", "");
+			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 
 		

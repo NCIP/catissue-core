@@ -59,7 +59,7 @@ public class SpecimenArrayTypeBizLogic extends DefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
-			throw getBizLogicException(daoExp, "bizlogic.error", "");
+			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 
 	}
@@ -99,7 +99,7 @@ public class SpecimenArrayTypeBizLogic extends DefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
-			throw getBizLogicException(daoExp, "bizlogic.error", "");
+			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 
 	}	

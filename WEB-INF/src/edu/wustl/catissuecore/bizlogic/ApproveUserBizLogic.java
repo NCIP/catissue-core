@@ -33,9 +33,9 @@ import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.exception.PasswordEncryptionException;
 import edu.wustl.common.util.global.PasswordManager;
-import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
+import edu.wustl.dao.HibernateDAO;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.security.beans.SecurityDataBean;
 import edu.wustl.security.exception.SMException;
@@ -100,8 +100,8 @@ public class ApproveUserBizLogic  extends CatissueDefaultBizLogic
 
 			//Audit of User Update during approving user.
 			User oldUser = (User) oldObj;
-			dao.audit(user.getAddress(), oldUser.getAddress());
-			dao.audit(obj, oldObj);
+			((HibernateDAO)dao).audit(user.getAddress(), oldUser.getAddress());
+			((HibernateDAO)dao).audit(obj, oldObj);
 
 
 			EmailHandler emailHandler = new EmailHandler(); 
@@ -124,7 +124,7 @@ public class ApproveUserBizLogic  extends CatissueDefaultBizLogic
 			
 			Logger.out.debug(exp.getMessage(), exp);
 			new UserBizLogic().deleteCSMUser(csmUser);
-			ErrorKey errorKey = ErrorKey.getErrorKey("bizlogic.error");
+			ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
 			throw new BizLogicException(errorKey,exp ,"ApproveUserBizLogic.java :"); 
 		}
 	}
@@ -138,7 +138,7 @@ public class ApproveUserBizLogic  extends CatissueDefaultBizLogic
 	 * @throws SMTransactionException
 	 * @throws SMException
 	 * @throws PasswordEncryptionException
-	 * @throws DAOException 
+	 * @throws BizLogicException 
 	 */
 	private void approveUser(Object user1, gov.nih.nci.security.authorization.domainobjects.User csmUser,
 			DAO dao, SessionDataBean sessionDataBean) throws BizLogicException, DAOException, SMException, PasswordEncryptionException {
@@ -340,15 +340,15 @@ public class ApproveUserBizLogic  extends CatissueDefaultBizLogic
 		catch (UserNotAuthorizedException e)
 		{
 			throw getBizLogicException(e, "sm.operation.error", "User not authorized");
-		} catch (DAOException e)
+		} catch (BizLogicException e)
 		{
-			ErrorKey errorKey = ErrorKey.getErrorKey("bizlogic.error");
+			ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
 			throw new BizLogicException(errorKey,e ,"ApproveUserBizLogic.java :");	
 		}
 	}
 
 
-	private boolean checkUser(Object domainObject, SessionDataBean sessionDataBean) throws DAOException 
+	private boolean checkUser(Object domainObject, SessionDataBean sessionDataBean) throws BizLogicException 
 	{
 		return new UserBizLogic().checkUser(domainObject, sessionDataBean);
 	}		

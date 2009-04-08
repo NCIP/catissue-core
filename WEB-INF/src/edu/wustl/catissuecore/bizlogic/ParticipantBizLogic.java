@@ -37,7 +37,6 @@ import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.exception.BizLogicException;
@@ -53,7 +52,6 @@ import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.HibernateDAO;
 import edu.wustl.dao.JDBCDAO;
-import edu.wustl.dao.daofactory.DAOFactory;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.security.exception.SMException;
 import edu.wustl.security.exception.UserNotAuthorizedException;
@@ -72,7 +70,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 	 * Saves the Participant object in the database.
 	 * @param obj The storageType object to be saved.
 	 * @param session The session in which the object is saved.
-	 * @throws DAOException 
+	 * @throws BizLogicException 
 	 */
 	@Override
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws BizLogicException
@@ -121,7 +119,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		}
 		}catch(DAOException daoExp)
 		{
-			throw getBizLogicException(daoExp, "bizlogic.error", "");
+			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 		
 	}
@@ -192,7 +190,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 	 * @param currentObj The object to be updated.
 	 * @param oldObj The old object.
 	 * @param sessionDataBean session specific data
-	 * @throws DAOException
+	 * @throws BizLogicException
 	 * @throws UserNotAuthorizedException
 	 * */
 	protected void postUpdate(DAO dao, Object currentObj, Object oldObj, SessionDataBean sessionDataBean) throws BizLogicException
@@ -337,7 +335,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 	 * Updates the persistent object in the database.
 	 * @param obj The object to be updated.
 	 * @param session The session in which the object is saved.
-	 * @throws DAOException 
+	 * @throws BizLogicException 
 	 */
 	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws BizLogicException
 	{
@@ -441,7 +439,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
-			throw getBizLogicException(daoExp, "bizlogic.error", "");
+			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
 
@@ -1057,7 +1055,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (DAOException e) 
 		{
-			throw getBizLogicException(e, "bizlogic.error", "Couldn't get participant");
+			throw getBizLogicException(e, "dao.error", "Couldn't get participant");
 		}
 		finally
 		{
@@ -1068,7 +1066,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 			catch (DAOException e) 
 			{
 				
-				throw getBizLogicException(e, "bizlogic.error", "Couldn't get participant");
+				throw getBizLogicException(e, "dao.error", "Couldn't get participant");
 			}
 		}
 		return mapOfParticipants;
@@ -1134,7 +1132,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (Exception exp)
 		{
-			throw getBizLogicException(exp, "bizlogic.error", "");
+			throw getBizLogicException(exp, "dao.error", "");
 		}
 		finally
 		{
@@ -1157,7 +1155,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 	/**
 	 * Executes hql Query and returns the list of associated scg id
 	 * @param participant Participant
-	 * @throws DAOException DAOException
+	 * @throws BizLogicException DAOException
 	 * @throws ClassNotFoundException ClassNotFoundException
 	 */
 	public List getSCGList(Long participantId) throws BizLogicException
@@ -1182,7 +1180,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(Exception exp)
 		{
-			throw getBizLogicException(exp, "bizlogic.error", "");
+			throw getBizLogicException(exp, "dao.error", "");
 		}
 		finally
 		{
@@ -1193,7 +1191,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 	/**
 	 * Executes hql Query and returns the results.
 	 * @param hql String hql
-	 * @throws DAOException DAOException
+	 * @throws BizLogicException DAOException
 	 * @throws ClassNotFoundException ClassNotFoundException
 	 */
 	private List executeHqlQuery(DAO dao, String hql) throws BizLogicException
@@ -1205,7 +1203,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
-			throw getBizLogicException(daoExp, "bizlogic.error", "");
+			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 		
 	}
@@ -1272,7 +1270,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 			
 
 		} catch (DAOException e) {
-			throw getBizLogicException(e, "bizlogic.error", "Couldn't get CP for user");
+			throw getBizLogicException(e, "dao.error", "Couldn't get CP for user");
 		}
 		catch (SMException e) {
 			throw AppUtility.handleSMException(e);
@@ -1283,7 +1281,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 				dao.closeSession();
 			} catch (DAOException e) {
 				
-				throw getBizLogicException(e, "bizlogic.error", "problem is clossing session");
+				throw getBizLogicException(e, "dao.error", "problem is clossing session");
 			}
 		}
 		
@@ -1393,11 +1391,11 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 					}
 					if(!isAuthorized)
 					{
-						isAuthorized = edu.wustl.catissuecore.util.global.Utility.checkForAllCurrentAndFutureCPs(dao,privilegeName, sessionDataBean, null);
+						isAuthorized = AppUtility.checkForAllCurrentAndFutureCPs(privilegeName, sessionDataBean, null);
 					}
 				} else
 				{
-					isAuthorized = edu.wustl.catissuecore.util.global.Utility.checkForAllCurrentAndFutureCPs(dao,privilegeName, sessionDataBean, null);
+					isAuthorized = AppUtility.checkForAllCurrentAndFutureCPs(privilegeName, sessionDataBean, null);
 				}
 			} 
 			else
@@ -1434,15 +1432,15 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 					if(cpIdSet.contains(cpId))
 					{
 						//bug 11611 and 11659
-						throw edu.wustl.catissuecore.util.global.Utility.getUserNotAuthorizedException(privilegeName, protectionElementName,domainObject.getClass().getSimpleName());
+						throw AppUtility.getUserNotAuthorizedException(privilegeName, protectionElementName);
 					}
-					isAuthorized = edu.wustl.catissuecore.util.global.Utility.checkForAllCurrentAndFutureCPs(dao,privilegeName, sessionDataBean, protectionElementNames[1]);
+					isAuthorized = AppUtility.checkForAllCurrentAndFutureCPs(privilegeName, sessionDataBean, protectionElementNames[1]);
 				}
 			}
 			if (!isAuthorized)
 			{
 				//bug 11611 and 11659
-				throw edu.wustl.catissuecore.util.global.Utility.getUserNotAuthorizedException(privilegeName, protectionElementName,domainObject.getClass().getSimpleName());    
+				throw AppUtility.getUserNotAuthorizedException(privilegeName, protectionElementName);    
 			}
 		} catch (SMException e1) {
 			e1.printStackTrace();
@@ -1463,7 +1461,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 	
 	public boolean hasPrivilegeToView(String objName, Long identifier, SessionDataBean sessionDataBean)
 	{
-		return edu.wustl.catissuecore.util.global.Utility.hasPrivilegeToView(objName, identifier, sessionDataBean, getReadDeniedPrivilegeName());
+		return AppUtility.hasPrivilegeToView(objName, identifier, sessionDataBean, getReadDeniedPrivilegeName());
 	}
 	
 	/**
@@ -1471,7 +1469,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 	 * needs only instance IDs in order to refresh indexes
 	 * @param the SpecimenCollectionGroup instance
 	 * @return list of Specimen objects
-	 * @throws DAOException
+	 * @throws BizLogicException
 	 */
     private List<Specimen> getSpecimenCollection(SpecimenCollectionGroup scg)
 	{

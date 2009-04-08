@@ -119,14 +119,9 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 
 		List<NameValueBean> siteNameValueBeanList = null;
 		List<NameValueBean> tempSiteNameValueBeanList = new ArrayList<NameValueBean>();
-		try 
-		{
-			siteNameValueBeanList = new StorageContainerBizLogic().getRepositorySiteList(sourceObjectName, siteDisplayField, valueField, activityStatusArray, isToExcludeDisabled);
-		} 
-		catch (DAOException e) 
-		{
-			logger.debug(e.getMessage(), e);
-		}
+		
+		siteNameValueBeanList = new StorageContainerBizLogic().getRepositorySiteList(sourceObjectName, siteDisplayField, valueField, activityStatusArray, isToExcludeDisabled);
+		
 		
 		// To remove 1st row which contains "Select" & "-1"
 		siteNameValueBeanList.remove(0);
@@ -218,7 +213,7 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 		} 
 		catch (SMException e)
 		{
-			ErrorKey errorKey = ErrorKey.getErrorKey("bizlogic.error");
+			ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
 			throw new BizLogicException(errorKey,e ,"AssignPrivilegePageBizLogic.java :"+"Could not get List of Roles");
 		}
         
@@ -374,21 +369,14 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (DAOException e)
 		{
-			ErrorKey errorKey = ErrorKey.getErrorKey("bizlogic.error");
+			ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
 			throw new BizLogicException(errorKey,e ,"AssignPrivilegePageBizLogic.java :"+"Could not get Object of Site");
 		
 		}
 		finally
 		{
-			try
-			{
 				closeDAOSession(dao);
-			}
-			catch (DAOException e)
-			{
-				ErrorKey errorKey = ErrorKey.getErrorKey("bizlogic.error");
-				throw new BizLogicException(errorKey,e ,"AssignPrivilegePageBizLogic.java :"+"Couldn't close hibernate session");
-			}
+			
 		}
 		
 		return nameValuBeanList;
@@ -457,7 +445,7 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (DAOException e)
 		{
-			ErrorKey errorKey = ErrorKey.getErrorKey("bizlogic.error");
+			ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
 			throw new BizLogicException(errorKey,e ,"AssignPrivilegePageBizLogic.java :"+"Could not get Object of Site");
 		}
 		finally
@@ -468,7 +456,7 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 			}
 			catch (DAOException e)
 			{
-				ErrorKey errorKey = ErrorKey.getErrorKey("bizlogic.error");
+				ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
 				throw new BizLogicException(errorKey,e ,"AssignPrivilegePageBizLogic.java :"+"Couldn't close hibernate session");
 			}
 		}
@@ -1073,7 +1061,7 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 						}
 						catch (CSException e)
 						{
-							ErrorKey errorKey = ErrorKey.getErrorKey("bizlogic.error");
+							ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
 							throw new BizLogicException(errorKey,e ,"AssignPrivilegePageBizLogic.java :"+"Could not get the role");
 						}
 					}
@@ -1116,13 +1104,13 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 		{
 			
 			daoExp.printStackTrace();
-				ErrorKey errorKey = ErrorKey.getErrorKey("bizlogic.error");
+				ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
 				throw new BizLogicException(errorKey,daoExp ,"AssignPrivilegePageBizLogic.java :"+"DAOException in  getting objectList for AssignPrivilegePageBizLogic  " +
 						"in ShowAssignPrivilegePageAction...");
-		} catch (SMException e)
+		} catch (SMException smExp)
 		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw getBizLogicException(smExp, "sm.operation.error",
+			"Error in checking has privilege");
 		}
 		finally
 		{
@@ -1165,7 +1153,7 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 	 * @return List of String array  
 	 * @throws CSObjectNotFoundException
 	 * @throws CSException
-	 * @throws DAOException
+	 * @throws BizLogicException
 	 */
 public List<String[]> privilegeDataOnTabSwitch(Map<String, SiteUserRolePrivilegeBean>map,String pageOf) throws BizLogicException 
 {
@@ -1602,21 +1590,14 @@ public List<JSONObject> addPrivilegeForUserPage(Map<String, SiteUserRolePrivileg
 	}  
 	catch (Exception e) 
 	{
-		ErrorKey errorKey = ErrorKey.getErrorKey("bizlogic.error");
+		ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
 		throw new BizLogicException(errorKey,e ,"AssignPrivilegePageBizLogic.java :"+"DAOException in  getting objectList for AssignPrivilegePageBizLogic" +
 				"  in ShowAssignPrivilegePageAction...");
 	} 
 	finally
 	{
-		try
-		{
 			closeDAOSession(dao);
-		}
-		catch(DAOException daoEx)
-		{
-			logger.error(daoEx.getMessage(), daoEx);
-    		return null;
-		}
+		
 	}
 	return listForUPSummary;
 }
@@ -1825,23 +1806,34 @@ public List<JSONObject> editPrivilegeForUserPage (Map<String, SiteUserRolePrivil
  * @throws CSException
  */
 // Takes List of ids of actions and gives list of NameValueBean pairs of actions.
-public List<NameValueBean> getPrivilegesNameValueBeanList(List<String> actionIdsList) throws CSException {
+public List<NameValueBean> getPrivilegesNameValueBeanList(List<String> actionIdsList) throws BizLogicException
+{
 	List<NameValueBean> actionBeanList=new ArrayList<NameValueBean>();
-	 NameValueBean nameValueBean=null;
-	 for(int len=0;len<actionIdsList.size();len++)
-	 {
-		 nameValueBean=new NameValueBean();
-		 String actionId=actionIdsList.get(len);
-		 String actionName="";
-		 PrivilegeUtility privilegeUtility = new PrivilegeUtility();
-		 Privilege action=null;
-			
+	NameValueBean nameValueBean=null;
+	String actionId = "";
+	try 
+	{
+		for(int len=0;len<actionIdsList.size();len++)
+		{
+			nameValueBean=new NameValueBean();
+			actionId=actionIdsList.get(len);
+			String actionName="";
+			PrivilegeUtility privilegeUtility = new PrivilegeUtility();
+			Privilege action=null;
+
+
 			action = privilegeUtility.getPrivilegeById(actionId);
+
 			actionName=action.getName();
-			nameValueBean.setName(Utility.getDisplayLabelForUnderscore(actionName));
+			nameValueBean.setName(AppUtility.getDisplayLabelForUnderscore(actionName));
 			nameValueBean.setValue(actionId);
 			actionBeanList.add(nameValueBean);
-	 }
+		}
+	} 
+	catch (SMException e)
+	{
+		throw getBizLogicException(e, "sm.operation.error", "Error while getting privilege by id"+actionId);
+	}
 	return actionBeanList;
 }
 

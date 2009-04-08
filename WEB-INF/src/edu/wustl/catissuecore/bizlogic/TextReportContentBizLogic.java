@@ -12,7 +12,6 @@ import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.exception.DAOException;
-import edu.wustl.security.exception.UserNotAuthorizedException;
 
 /**
  * This class is used add, update and retrieve text contents on the surgical pathology reports 
@@ -37,7 +36,7 @@ public class TextReportContentBizLogic extends DefaultBizLogic
 			}
 			catch(DAOException daoExp)
 			{
-				throw getBizLogicException(daoExp, "bizlogic.error", "");
+				throw getBizLogicException(daoExp, "dao.error", "");
 			}
 	 	}
 
@@ -56,7 +55,7 @@ public class TextReportContentBizLogic extends DefaultBizLogic
 			}
 			catch(DAOException daoExp)
 			{
-				throw getBizLogicException(daoExp, "bizlogic.error", "");
+				throw getBizLogicException(daoExp, "dao.error", "");
 			}
 		}
 

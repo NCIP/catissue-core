@@ -52,7 +52,7 @@ public class InstitutionBizLogic extends DefaultBizLogic
      * This method returns the id of the Institution given the name 
      * @param institutionName
      * @return
-     * @throws DAOException
+     * @throws BizLogicException
      */
 	public String getLatestInstitution(String institutionName)throws BizLogicException
     {

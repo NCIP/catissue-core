@@ -25,6 +25,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -54,7 +56,6 @@ import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.bizlogic.SiteBizLogic;
 import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
-
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter;
@@ -97,17 +98,14 @@ import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.PagenatedResultData;
-import edu.wustl.common.util.QueryParams;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.QuerySessionData;
-import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.TextConstants;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.AbstractJDBCDAOImpl;
 import edu.wustl.dao.DAO;
-import edu.wustl.dao.HibernateDAO;
 import edu.wustl.dao.JDBCDAO;
 import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
@@ -2045,52 +2043,54 @@ public class AppUtility
 	}
 
 	public static void processDeletedPrivileges(SiteUserRolePrivilegeBean siteUserRolePrivilegeBean)
-			throws ApplicationException, ClassNotFoundException
-	{
+			throws ApplicationException
+			{
 		SiteUserRolePrivilegeBean bean = siteUserRolePrivilegeBean;
 		String groupName = null;
 		String pgName = null;
-		if (bean.getSiteList().isEmpty())
-		{
-			processDeletedPrivilegesOnCPPage(siteUserRolePrivilegeBean, bean
-					.getCollectionProtocol().getId());
-			return;
-		}
-		Site site = bean.getSiteList().get(0);
-		User user = bean.getUser();
-		CollectionProtocol cp = bean.getCollectionProtocol();
-		PrivilegeUtility privilegeUtility = new PrivilegeUtility();
 
-		List<Group> grpList = new ArrayList<Group>();
-		List<ProtectionGroup> pgList = new ArrayList<ProtectionGroup>();
-
-		if (bean.getCollectionProtocol() != null)
+		try
 		{
-			groupName = Constants.getCPUserGroupName(cp.getId(), user.getCsmUserId());
-			pgName = CSMGroupLocator.getInstance().getPGName(cp.getId(),
-					Class.forName("edu.wustl.catissuecore.domain.CollectionProtocol"));
-
-		}
-		else
-		{
-			if (bean.isAllCPChecked())
+			if (bean.getSiteList().isEmpty())
 			{
-				pgName = Constants.getCurrentAndFuturePGAndPEName(site.getId());
+				processDeletedPrivilegesOnCPPage(siteUserRolePrivilegeBean, bean
+						.getCollectionProtocol().getId());
+				return;
+			}
+			Site site = bean.getSiteList().get(0);
+			User user = bean.getUser();
+			CollectionProtocol cp = bean.getCollectionProtocol();
+			PrivilegeUtility privilegeUtility = new PrivilegeUtility();
+
+			List<Group> grpList = new ArrayList<Group>();
+			List<ProtectionGroup> pgList = new ArrayList<ProtectionGroup>();
+
+			if (bean.getCollectionProtocol() != null)
+			{
+				groupName = Constants.getCPUserGroupName(cp.getId(), user.getCsmUserId());
+				pgName = CSMGroupLocator.getInstance().getPGName(cp.getId(),
+						Class.forName("edu.wustl.catissuecore.domain.CollectionProtocol"));
+
 			}
 			else
 			{
-				pgName = CSMGroupLocator.getInstance().getPGName(site.getId(),
-						Class.forName("edu.wustl.catissuecore.domain.Site"));
+				if (bean.isAllCPChecked())
+				{
+					pgName = Constants.getCurrentAndFuturePGAndPEName(site.getId());
+				}
+				else
+				{
+					pgName = CSMGroupLocator.getInstance().getPGName(site.getId(),
+							Class.forName("edu.wustl.catissuecore.domain.Site"));
+				}
+
+				groupName = Constants.getSiteUserGroupName(site.getId(), user.getCsmUserId());
 			}
 
-			groupName = Constants.getSiteUserGroupName(site.getId(), user.getCsmUserId());
-		}
+			Group group = new Group();
+			group.setGroupName(groupName);
+			GroupSearchCriteria groupSearchCriteria = new GroupSearchCriteria(group);
 
-		Group group = new Group();
-		group.setGroupName(groupName);
-		GroupSearchCriteria groupSearchCriteria = new GroupSearchCriteria(group);
-		try
-		{
 			grpList = privilegeUtility.getUserProvisioningManager().getObjects(groupSearchCriteria);
 
 			if (grpList != null && !grpList.isEmpty())
@@ -2117,7 +2117,9 @@ public class AppUtility
 		}
 		catch (CSTransactionException e)
 		{
-			e.printStackTrace();
+			throw getApplicationException(e, "utility.error", "");
+		} catch (ClassNotFoundException e) {
+			throw getApplicationException(e, "clz.not.found.error", "");
 		}
 	}
 
@@ -2135,26 +2137,27 @@ public class AppUtility
 
 	public static void processDeletedPrivilegesOnCPPage(
 			SiteUserRolePrivilegeBean siteUserRolePrivilegeBean, Long cpId)
-			throws ApplicationException
+			
 	{
-		SiteUserRolePrivilegeBean bean = siteUserRolePrivilegeBean;
-		String groupName = null;
-		String pgName = null;
-		User user = bean.getUser();
-
-		PrivilegeUtility privilegeUtility = new PrivilegeUtility();
-
-		List<Group> grpList = new ArrayList<Group>();
-		List<ProtectionGroup> pgList = new ArrayList<ProtectionGroup>();
-
-		groupName = Constants.getCPUserGroupName(cpId, user.getCsmUserId());
-		pgName = CSMGroupLocator.getInstance().getPGName(cpId, CollectionProtocol.class);
-
-		Group group = new Group();
-		group.setGroupName(groupName);
-		GroupSearchCriteria groupSearchCriteria = new GroupSearchCriteria(group);
 		try
 		{
+			SiteUserRolePrivilegeBean bean = siteUserRolePrivilegeBean;
+			String groupName = null;
+			String pgName = null;
+			User user = bean.getUser();
+
+			PrivilegeUtility privilegeUtility = new PrivilegeUtility();
+
+			List<Group> grpList = new ArrayList<Group>();
+			List<ProtectionGroup> pgList = new ArrayList<ProtectionGroup>();
+
+			groupName = Constants.getCPUserGroupName(cpId, user.getCsmUserId());
+			pgName = CSMGroupLocator.getInstance().getPGName(cpId, CollectionProtocol.class);
+
+			Group group = new Group();
+			group.setGroupName(groupName);
+			GroupSearchCriteria groupSearchCriteria = new GroupSearchCriteria(group);
+
 			grpList = privilegeUtility.getUserProvisioningManager().getObjects(groupSearchCriteria);
 
 			if (grpList != null && !grpList.isEmpty())
@@ -2179,14 +2182,15 @@ public class AppUtility
 					pg.getProtectionGroupId().toString(), group.getGroupId().toString());
 			PrivilegeManager.getInstance().removePrivilegeCache(user.getLoginName());
 		}
-		catch (CSException e)
+		catch (ApplicationException e)
 		{
 			Logger.out.debug(e.getMessage(), e);
+			e.printStackTrace();
+		} catch (CSTransactionException e) {
+			Logger.out.debug(e.getMessage(), e);
+			e.printStackTrace();
 		}
-		catch (SMException e)
-		{
-			handleSMException(e);
-		}
+		
 	}
 
 	/**
@@ -2518,7 +2522,7 @@ public class AppUtility
 	 * @throws UserNotAuthorizedException
 	 */
 	public static boolean returnIsAuthorized(SessionDataBean sessionDataBean, String privilegeName,
-			String protectionElementName) throws ApplicationException
+			String protectionElementName) throws UserNotAuthorizedException
 	{
 		boolean isAuthorized = false;
 		PrivilegeCache privilegeCache;
@@ -2800,14 +2804,22 @@ public class AppUtility
 	 * @throws BizLogicException 
 	 */
 	public static Collection<FormContext> getFormContexts(Long entityMapId)
-			throws ApplicationException
+			
 	{
 		Collection<FormContext> formContextColl = null;
 		AnnotationBizLogic bizLogic = new AnnotationBizLogic();
 
-		formContextColl = new ArrayList(bizLogic
-				.executeQuery("from FormContext formContext where formContext.entityMap.id = "
-						+ entityMapId));
+		try 
+		{
+			formContextColl = new ArrayList(bizLogic
+					.executeQuery("from FormContext formContext where formContext.entityMap.id = "
+							+ entityMapId));
+		}
+		catch (BizLogicException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		return formContextColl;
 	}
@@ -2818,16 +2830,24 @@ public class AppUtility
 	 * @throws DynamicExtensionsSystemException
 	 */
 	public static Collection<EntityMapCondition> getEntityMapConditions(Long formContextId)
-			throws ApplicationException
+			
 	{
 		Collection<EntityMapCondition> entityMapConditions = null;
-		AnnotationBizLogic bizLogic = new AnnotationBizLogic();
+		try
+		{
+			
+			AnnotationBizLogic bizLogic = new AnnotationBizLogic();
+			entityMapConditions = new HashSet(
+					bizLogic
+							.executeQuery("from EntityMapCondition entityMapCondtion where entityMapCondtion.formContext.id = "
+									+ formContextId));
+		
 
-		entityMapConditions = new HashSet(
-				bizLogic
-						.executeQuery("from EntityMapCondition entityMapCondtion where entityMapCondtion.formContext.id = "
-								+ formContextId));
-
+		
+		} catch (BizLogicException exp) {
+			Logger.out.error("Bizlogic  : exp : " + exp);
+			exp.printStackTrace();
+		}
 		return entityMapConditions;
 	}
 
@@ -2850,11 +2870,94 @@ public class AppUtility
 		return entityMapRecords;
 	}
 
+	
+	
+	/**
+	 * To check the validity of the date format specified by user in the config file.
+	 */
+	public static boolean isValidDateFormat(String dateFormat){
+    	boolean result = false;
+    	boolean result1 = false;
+    	boolean isValidDatePattern = false;
+    	try
+		{
+    		Pattern re = Pattern.compile("MM-dd-yyyy", Pattern.CASE_INSENSITIVE);
+    		Pattern re1 = Pattern.compile("dd-MM-yyyy", Pattern.CASE_INSENSITIVE);
+    		Matcher  mat =re.matcher(dateFormat);
+    		Matcher  mat1 =re1.matcher(dateFormat);
+    		result = mat.matches();
+    		result1 = mat1.matches();
+    		if(!(result || result1))
+    		{
+    			re = Pattern.compile("MM/dd/yyyy", Pattern.CASE_INSENSITIVE);
+        		re1 = Pattern.compile("dd/MM/yyyy", Pattern.CASE_INSENSITIVE);
+        		mat =re.matcher(dateFormat);
+        		mat1 =re1.matcher(dateFormat);
+        		result = mat.matches();
+        		result1 = mat1.matches();
+    		}
+    		if(result || result1){
+    			isValidDatePattern=true;
+        	}else{
+        		isValidDatePattern=false;
+        	}
+		}
+    	catch(Exception exp)
+		{
+			Logger.out.error("IsValidDatePattern : exp : " + exp);
+    		return false;
+		}
+    	//System.out.println("dtCh : " +dtCh );
+    	return isValidDatePattern;	
+    }
+
+	/**
+	 * This method gets Display Label For Underscore.
+	 * @param objectName object Name.
+	 * @return Label.
+	 */
+	public static String getDisplayLabelForUnderscore(String objectName)
+	{
+		StringBuffer formatedStr = new StringBuffer();
+		String[] tokens = objectName.split("_");
+		for (int i = 0; i < tokens.length; i++)
+		{
+			if (!TextConstants.EMPTY_STRING.equals(tokens[i]))
+			{
+				formatedStr.append(initCap(tokens[i]));
+				formatedStr.append(edu.wustl.common.util.global.Constants.CONST_SPACE_CAHR);
+			}
+		}
+		return formatedStr.toString();
+	}
+	/**
+	 * @param str String to be converted to Proper case.
+	 * @return The String in Proper case.
+	 */
+	public static String initCap(String str)
+	{
+		StringBuffer retStr;
+		if (Validator.isEmpty(str))
+		{
+			retStr = new StringBuffer();
+			logger.debug("Utility.initCap : - String provided is either empty or null" + str);
+		}
+		else
+		{
+			retStr = new StringBuffer(str.toLowerCase(CommonServiceLocator.getInstance()
+					.getDefaultLocale()));
+			retStr.setCharAt(0, Character.toUpperCase(str.charAt(0)));
+		}
+		return retStr.toString();
+	}
+	
 	public static ApplicationException getApplicationException(Exception exception,String errorName, String msgValues)
 	{
 		return new ApplicationException(ErrorKey.getErrorKey(errorName),exception,msgValues);
 
 	}
+	
+	
 	
 	public static JDBCDAO openJDBCSession() throws ApplicationException
 	{
@@ -2867,7 +2970,7 @@ public class AppUtility
 		}
 		catch(DAOException daoExp)
 		{
-			throw getApplicationException(daoExp, "bizlogic.error", "");
+			throw getApplicationException(daoExp, "dao.error", "");
 		}
 		return jdbcDAO;
 	}
@@ -2880,7 +2983,7 @@ public class AppUtility
 		}
 		catch(DAOException daoExp)
 		{
-			throw getApplicationException(daoExp, "bizlogic.error", "");
+			throw getApplicationException(daoExp, "dao.error", "");
 		}
 		return jdbcDAO;
 	}
@@ -2896,7 +2999,7 @@ public class AppUtility
 			}
 			catch(DAOException daoExp)
 			{
-				throw getApplicationException(daoExp, "bizlogic.error", "");
+				throw getApplicationException(daoExp, "dao.error", "");
 			}
 			return dao;
 	}
@@ -2909,7 +3012,7 @@ public class AppUtility
 		}
 		catch(DAOException daoExp)
 		{
-			throw getApplicationException(daoExp, "bizlogic.error", "");
+			throw getApplicationException(daoExp, "dao.error", "");
 		}
 		return dao;
 	}

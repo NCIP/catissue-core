@@ -26,6 +26,7 @@ import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.tree.TreeDataInterface;
 import edu.wustl.common.util.global.ApplicationProperties;
@@ -63,153 +64,149 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 		int checkButton = Integer.parseInt((String) simMap.get("checkedButton"));
 		//int checkButton = 1;
 
-		for (int i = 1; i <= noOfContainers; i++)
+		try
 		{
-			String simContPrefix = "simCont:" + i + "_";
-			String IdKey = simContPrefix + "Id";
-			String parentContNameKey = simContPrefix + "parentContName";
-			String contName = (String) simMap.get(simContPrefix + "name");
-			String barcode = (String) simMap.get(simContPrefix + "barcode");
-
-			if (barcode != null && barcode.equals("")) // this is done because barcode is empty string set by struts
-			{ // but barcode in DB is unique but can be null.
-				barcode = null;
-			}
-			StorageContainer cont = new StorageContainer(container);
-			if (checkButton == 1) // site
+			for (int i = 1; i <= noOfContainers; i++)
 			{
-				String siteId = (String) simMap.get(simContPrefix + "siteId");
-				String siteName = (String) simMap.get(simContPrefix + "siteName");
-				
-				
-				Site site = new Site();
+				String simContPrefix = "simCont:" + i + "_";
+				String IdKey = simContPrefix + "Id";
+				String parentContNameKey = simContPrefix + "parentContName";
+				String contName = (String) simMap.get(simContPrefix + "name");
+				String barcode = (String) simMap.get(simContPrefix + "barcode");
 
-				/**
-				 * Start: Change for API Search   --- Jitendra 06/10/2006
-				 * In Case of Api Search, previoulsy it was failing since there was default class level initialization 
-				 * on domain object. For example in User object, it was initialized as protected String lastName=""; 
-				 * So we removed default class level initialization on domain object and are initializing in method
-				 * setAllValues() of domain object. But in case of Api Search, default values will not get set 
-				 * since setAllValues() method of domainObject will not get called. To avoid null pointer exception,
-				 * we are setting the default values same as we were setting in setAllValues() method of domainObject.
-				 */
-				ApiSearchUtil.setSiteDefault(site);
-				//End:- Change for API Search   -
-
-				site.setId(new Long(siteId));
-				site.setName(siteName);
-				cont.setSite(site);
-				loadSite(dao, cont); // <<----
-
-			}
-			else
-			// parentContainer
-			{
-				StorageContainer parentContainer = null;
-				String parentId = (String) simMap.get(simContPrefix + "parentContainerId");
-				String posOne = (String) simMap.get(simContPrefix + "positionDimensionOne");
-				String posTwo = (String) simMap.get(simContPrefix + "positionDimensionTwo");
-
-				Object object = dao.retrieve(StorageContainer.class.getName(), new Long(parentId));
-				if (object != null)
+				if (barcode != null && barcode.equals("")) // this is done because barcode is empty string set by struts
+				{ // but barcode in DB is unique but can be null.
+					barcode = null;
+				}
+				StorageContainer cont = new StorageContainer(container);
+				if (checkButton == 1) // site
 				{
+					String siteId = (String) simMap.get(simContPrefix + "siteId");
+					String siteName = (String) simMap.get(simContPrefix + "siteName");
 
-					parentContainer = (StorageContainer) object;
 
-					cont.setSite(parentContainer.getSite());
+					Site site = new Site();
+
+					/**
+					 * Start: Change for API Search   --- Jitendra 06/10/2006
+					 * In Case of Api Search, previoulsy it was failing since there was default class level initialization 
+					 * on domain object. For example in User object, it was initialized as protected String lastName=""; 
+					 * So we removed default class level initialization on domain object and are initializing in method
+					 * setAllValues() of domain object. But in case of Api Search, default values will not get set 
+					 * since setAllValues() method of domainObject will not get called. To avoid null pointer exception,
+					 * we are setting the default values same as we were setting in setAllValues() method of domainObject.
+					 */
+					ApiSearchUtil.setSiteDefault(site);
+					//End:- Change for API Search   -
+
+					site.setId(new Long(siteId));
+					site.setName(siteName);
+					cont.setSite(site);
+					loadSite(dao, cont); // <<----
 
 				}
-				
-				StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(
-						Constants.STORAGE_CONTAINER_FORM_ID);
-				try
+				else
+					// parentContainer
 				{
+					StorageContainer parentContainer = null;
+					String parentId = (String) simMap.get(simContPrefix + "parentContainerId");
+					String posOne = (String) simMap.get(simContPrefix + "positionDimensionOne");
+					String posTwo = (String) simMap.get(simContPrefix + "positionDimensionTwo");
+
+					Object object = dao.retrieveById(StorageContainer.class.getName(), new Long(parentId));
+					if (object != null)
+					{
+
+						parentContainer = (StorageContainer) object;
+
+						cont.setSite(parentContainer.getSite());
+
+					}
+
+					StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(
+							Constants.STORAGE_CONTAINER_FORM_ID);
 					//check for all validations on the storage container.
 					storageContainerBizLogic.checkContainer(dao, parentContainer.getId().toString(), posOne, posTwo, sessionDataBean, false,null);
-				}
-				catch (SMException sme)
-				{
-					sme.printStackTrace();
-					throw handleSMException(sme);
-				}
 
-				//		StorageContainer parentContainer = new StorageContainer();
-				//	parentContainer.setId(new Long(parentId));
-				
-				ContainerPosition cntPos = cont.getLocatedAtPosition();
-				if(cntPos == null)
-					cntPos = new ContainerPosition();
-				
-				cntPos.setPositionDimensionOne(new Integer(posOne));
-				cntPos.setPositionDimensionTwo(new Integer(posTwo));
-				cntPos.setOccupiedContainer(cont);
-				cntPos.setParentContainer(parentContainer);
-				
-				cont.setLocatedAtPosition(cntPos);
+					//		StorageContainer parentContainer = new StorageContainer();
+					//	parentContainer.setId(new Long(parentId));
 
-				
-			//	cont.setParent(parentContainer); // <<----
+					ContainerPosition cntPos = cont.getLocatedAtPosition();
+					if(cntPos == null)
+						cntPos = new ContainerPosition();
 
-				//chk for positions 
-				// check for availability of position
-				
+					cntPos.setPositionDimensionOne(new Integer(posOne));
+					cntPos.setPositionDimensionTwo(new Integer(posTwo));
+					cntPos.setOccupiedContainer(cont);
+					cntPos.setParentContainer(parentContainer);
 
-				
-				/*boolean canUse = isContainerAvailableForPositions(dao, cont);
+					cont.setLocatedAtPosition(cntPos);
+
+
+					//	cont.setParent(parentContainer); // <<----
+
+					//chk for positions 
+					// check for availability of position
+
+
+
+					/*boolean canUse = isContainerAvailableForPositions(dao, cont);
 
 				if (!canUse)
 				{
 					throw new DAOException(ApplicationProperties.getValue("errors.storageContainer.inUse"));
 				} */
 
-				// Have to set Site object for parentContainer
-				loadSite(dao, parentContainer); // 17-07-2006
-				loadSiteFromContainerId(dao, parentContainer);
-				
-				cntPos.setPositionDimensionOne(new Integer(posOne));
-				cntPos.setPositionDimensionTwo(new Integer(posTwo));
-				cntPos.setOccupiedContainer(cont);
-				cont.setLocatedAtPosition(cntPos);
-				cont.setSite(parentContainer.getSite()); // 16-07-2006 chetan
-				Logger.out.debug("^^>> " + parentContainer.getSite());
-				simMap.put(parentContNameKey, parentContainer.getName());
-			}
-			//StorageContainer cont = new StorageContainer();
-			cont.setName(contName); // <<----
-			cont.setBarcode(barcode); // <<----     		
-			//by falguni
-			//Storage container label generator
-			
-			//Call Storage container label generator if its specified to use automatic label generator
-			if(edu.wustl.catissuecore.util.global.Variables.isStorageContainerLabelGeneratorAvl )
-			{
-				LabelGenerator storagecontLblGenerator;
-				try 
+					// Have to set Site object for parentContainer
+					loadSite(dao, parentContainer); // 17-07-2006
+					loadSiteFromContainerId(dao, parentContainer);
+
+					cntPos.setPositionDimensionOne(new Integer(posOne));
+					cntPos.setPositionDimensionTwo(new Integer(posTwo));
+					cntPos.setOccupiedContainer(cont);
+					cont.setLocatedAtPosition(cntPos);
+					cont.setSite(parentContainer.getSite()); // 16-07-2006 chetan
+					Logger.out.debug("^^>> " + parentContainer.getSite());
+					simMap.put(parentContNameKey, parentContainer.getName());
+				}
+				//StorageContainer cont = new StorageContainer();
+				cont.setName(contName); // <<----
+				cont.setBarcode(barcode); // <<----     		
+				//by falguni
+				//Storage container label generator
+
+				//Call Storage container label generator if its specified to use automatic label generator
+				if(edu.wustl.catissuecore.util.global.Variables.isStorageContainerLabelGeneratorAvl )
 				{
+					LabelGenerator storagecontLblGenerator;
 					storagecontLblGenerator = LabelGeneratorFactory.getInstance(Constants.STORAGECONTAINER_LABEL_GENERATOR_PROPERTY_NAME);
 					storagecontLblGenerator.setLabel(cont);
+
 				}
-				catch (NameGeneratorException e) 
-				{
-					throw new DAOException(e.getMessage());
-				}
+
+				simMap.put(simContPrefix + "name",cont.getName());
+
+				Logger.out.debug("cont.getCollectionProtocol().size() " + cont.getCollectionProtocolCollection().size());
+				cont.setActivityStatus("Active");
+				dao.insert(cont.getCapacity(),  true);
+				dao.insert(cont, true);
+
+				contList.add(cont);
+				container.setId(cont.getId());
+				simMap.put(IdKey, cont.getId().toString());
+				//simMap.put(parentContNameKey,cont.getParent().getName());
 			}
-			
-			simMap.put(simContPrefix + "name",cont.getName());
-
-			Logger.out.debug("cont.getCollectionProtocol().size() " + cont.getCollectionProtocolCollection().size());
-			cont.setActivityStatus("Active");
-			dao.insert(cont.getCapacity(), sessionDataBean, true, true);
-			dao.insert(cont, sessionDataBean, true, true);
-
-			contList.add(cont);
-			container.setId(cont.getId());
-			simMap.put(IdKey, cont.getId().toString());
-			//simMap.put(parentContNameKey,cont.getParent().getName());
+		}
+		catch(DAOException daoExp)
+		{
+			throw getBizLogicException(daoExp, "dao.error", "");
+		} catch (NameGeneratorException e) 
+		{
+			throw getBizLogicException(e, "utility.error", "");
 		}
 	}
 
-	synchronized public void postInsert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
+	synchronized public void postInsert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws BizLogicException
 	{
 		StorageContainer container = (StorageContainer) obj;
 		try
@@ -263,8 +260,10 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 	/**
 	 * Overriding the parent class's method to validate the enumerated attribute values
 	 */
-	protected boolean validate(Object obj, DAO dao, String operation) throws DAOException
+	protected boolean validate(Object obj, DAO dao, String operation) throws BizLogicException
 	{
+		try
+		{
 		StorageContainer container = (StorageContainer) obj;
 		Map similarContainerMap = container.getSimilarContainerMap();
 		String containerPrefixKey = "simCont:";
@@ -295,20 +294,26 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 					String positionDimensionTwo = (String) similarContainerMap.get("simCont:" + i + "_positionDimensionTwo");
 					if (parentContId.equals("-1") || positionDimensionOne.equals("-1") || positionDimensionTwo.equals("-1"))
 					{
-						throw new DAOException(ApplicationProperties.getValue("errors.item.required", ApplicationProperties
-								.getValue("similarcontainers.location")));
-
+						
+						throw getBizLogicException(null, "errors.item.required", ApplicationProperties
+								.getValue("similarcontainers.location"));
+						
 					}
 				}
 				else
 				{
 					if (siteId.equals("-1"))
 					{
-						throw new DAOException(ApplicationProperties.getValue("errors.item.required", ApplicationProperties
-								.getValue("storageContainer.site")));
+						throw getBizLogicException(null, "errors.item.required", ApplicationProperties
+								.getValue("storageContainer.site"));
 					}
 				}
 			}
+		}
+		}
+		catch(ApplicationException exp)
+		{
+			throw getBizLogicException(exp, "utility.error", "");
 		}
 		return true;
 	}
@@ -322,58 +327,61 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 	{
 		StringBuffer sb = new StringBuffer();
 		sb.append(Site.class.getName());
-		
-		if (domainObject instanceof StorageContainer)
+		try 
 		{
-			StorageContainer storageContainer = (StorageContainer) domainObject;
-			Map similarContainerMap = storageContainer.getSimilarContainerMap();
-			Object keys[] = similarContainerMap.keySet().toArray();
-			Set<Long> scIds = new HashSet<Long>();
-			Set<Long> siteIds = new HashSet<Long>();
-			
-			for(Object key : keys)
+			if (domainObject instanceof StorageContainer)
 			{
-				if(key.toString().contains("parentContainerId"))
+				StorageContainer storageContainer = (StorageContainer) domainObject;
+				Map similarContainerMap = storageContainer.getSimilarContainerMap();
+				Object keys[] = similarContainerMap.keySet().toArray();
+				Set<Long> scIds = new HashSet<Long>();
+				Set<Long> siteIds = new HashSet<Long>();
+
+				for(Object key : keys)
 				{
-					scIds.add(Long.valueOf(similarContainerMap.get(key).toString()));
-				}
-				if(key.toString().contains("siteId"))
-				{
-					siteIds.add(Long.valueOf(similarContainerMap.get(key).toString()));
-				}
-			}
-			
-			for(Long scId : scIds)
-			{
-				Site site = null;
-	            Object object = null;
-				try 
-				{
-					object = dao.retrieve(StorageContainer.class.getName(),scId);
-				} 
-				catch (DAOException e) 
-				{
-					e.printStackTrace();
-				}
-	            if (object != null)
-	            {
-	                StorageContainer parentContainer = (StorageContainer) object;
-	                site = parentContainer.getSite();
-	            }
-				if (site != null)
-				{
-					if(!siteIds.contains(site.getId()))
+					if(key.toString().contains("parentContainerId"))
 					{
-						sb.append("_"+site.getId().toString());
+						scIds.add(Long.valueOf(similarContainerMap.get(key).toString()));
 					}
-					siteIds.add(site.getId());
+					if(key.toString().contains("siteId"))
+					{
+						siteIds.add(Long.valueOf(similarContainerMap.get(key).toString()));
+					}
+				}
+
+				for(Long scId : scIds)
+				{
+					Site site = null;
+					Object object = null;
+
+					object = dao.retrieveById(StorageContainer.class.getName(),scId);
+
+					if (object != null)
+					{
+						StorageContainer parentContainer = (StorageContainer) object;
+						site = parentContainer.getSite();
+					}
+					if (site != null)
+					{
+						if(!siteIds.contains(site.getId()))
+						{
+							sb.append("_"+site.getId().toString());
+						}
+						siteIds.add(site.getId());
+					}
+				}
+
+				for(Long siteId : siteIds)
+				{
+					sb.append("_"+siteId.toString());
 				}
 			}
-			
-			for(Long siteId : siteIds)
-			{
-				sb.append("_"+siteId.toString());
-			}
+		} 
+		catch(DAOException daoExp)
+		{
+			//TODO : have to look for this
+			daoExp.printStackTrace();
+			//throw getBizLogicException(daoExp, "dao.error", "");
 		}
 		return sb.toString(); 
 	}

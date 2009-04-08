@@ -174,7 +174,7 @@ public final class EventsUtil
 					|| collectionEventParameters.getUser().getId() == 0))
 			{
 				String message = ApplicationProperties.getValue("specimen.collection.event.user");
-				throw AppUtility.getApplicationException("errors.item.required", null, message);
+				throw AppUtility.getApplicationException(null,"errors.item.required",  message);
 			}
 			if (specimen != null)
 			{
@@ -182,7 +182,7 @@ public final class EventsUtil
 				if (!validator.checkDate(Utility.parseDateToString(collectionEventParameters.getTimestamp(), datePattern)))
 				{
 					String message = ApplicationProperties.getValue("specimen.collection.event.date");
-					throw AppUtility.getApplicationException("errors.item.required", null, message);
+					throw AppUtility.getApplicationException(null,"errors.item.required",  message);
 				}
 			}
 			// checks the collectionProcedure
@@ -191,7 +191,7 @@ public final class EventsUtil
 				if (!validator.isValidOption(collectionEventParameters.getCollectionProcedure()))
 				{
 					String message = ApplicationProperties.getValue("collectioneventparameters.collectionprocedure");
-					throw AppUtility.getApplicationException("errors.item.required", null, message);
+					throw AppUtility.getApplicationException( null,"errors.item.required", message);
 				}
 
 				List procedureList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_COLLECTION_PROCEDURE, null);
@@ -200,7 +200,7 @@ public final class EventsUtil
 				{
 					if(!collectionEventParameters.getCollectionProcedure().equals(Constants.CP_DEFAULT))
 					{
-						throw AppUtility.getApplicationException("events.collectionProcedure.errMsg", null, "");
+						throw AppUtility.getApplicationException( null,"events.collectionProcedure.errMsg", "");
 					}
 				}
 			}
@@ -211,14 +211,14 @@ public final class EventsUtil
 				if (!validator.isValidOption(collectionEventParameters.getContainer()))
 				{
 					String message = ApplicationProperties.getValue("collectioneventparameters.container");
-					throw AppUtility.getApplicationException("errors.item.required", null, message);
+					throw AppUtility.getApplicationException(null,"errors.item.required",  message);
 				}
 				List containerList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_CONTAINER, null);
 				if (!Validator.isEnumeratedValue(containerList, collectionEventParameters.getContainer()))
 				{
 					if(!collectionEventParameters.getContainer().equals(Constants.CP_DEFAULT))
 					{
-						throw AppUtility.getApplicationException("events.container.errMsg", null, "");
+						throw AppUtility.getApplicationException(null,"events.container.errMsg",  "");
 					}
 				}
 			}
@@ -234,14 +234,14 @@ public final class EventsUtil
 					|| receivedEventParameters.getUser().getId() == 0))
 			{
 				String message = ApplicationProperties.getValue("specimen.recieved.event.user");
-				throw AppUtility.getApplicationException("errors.item.required", null, message);
+				throw AppUtility.getApplicationException( null,"errors.item.required", message);
 			}
 			if (specimen != null)
 			{
 				if (!validator.checkDate(Utility.parseDateToString(receivedEventParameters.getTimestamp(), datePattern)))
 				{
 					String message = ApplicationProperties.getValue("specimen.recieved.event.date");
-					throw AppUtility.getApplicationException("errors.item.required", null, message);
+					throw AppUtility.getApplicationException(null,"errors.item.required",  message);
 				}
 			}
 			if (receivedEventParameters.getReceivedQuality() == null || !receivedEventParameters.getReceivedQuality().equals(""))
@@ -249,14 +249,14 @@ public final class EventsUtil
 				if (!validator.isValidOption(receivedEventParameters.getReceivedQuality()))
 				{
 					String message = ApplicationProperties.getValue("collectioneventparameters.receivedquality");
-					throw AppUtility.getApplicationException("errors.item.required", null, message);
+					throw AppUtility.getApplicationException( null, "errors.item.required",message);
 				}
 				List qualityList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_RECEIVED_QUALITY, null);
 				if (!Validator.isEnumeratedValue(qualityList, receivedEventParameters.getReceivedQuality()))
 				{
 					if(!receivedEventParameters.getReceivedQuality().equals(Constants.CP_DEFAULT))
 					{
-						throw AppUtility.getApplicationException("events.receivedQuality.errMsg", null, "");
+						throw AppUtility.getApplicationException(null,"events.receivedQuality.errMsg",  "");
 					}
 				}
 			}

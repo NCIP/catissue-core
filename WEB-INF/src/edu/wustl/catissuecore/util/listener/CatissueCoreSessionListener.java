@@ -12,11 +12,12 @@ import javax.servlet.http.HttpSessionListener;
 
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.dao.DAOFactory;
-import edu.wustl.common.dao.JDBCDAO;
-import edu.wustl.common.security.PrivilegeManager;
-import edu.wustl.dao.exception.DAOException;
+import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.JDBCDAO;
+import edu.wustl.dao.daofactory.DAOConfigFactory;
+import edu.wustl.dao.daofactory.DAOFactory;
+import edu.wustl.dao.exception.DAOException;
 
 /**
  * @author poornima_govindrao
@@ -55,7 +56,8 @@ public class CatissueCoreSessionListener implements HttpSessionListener{
 		String tempTableName = Constants.QUERY_RESULTS_TABLE+"_"+sessionData.getUserId();
 		try
 		{
-			JDBCDAO jdbcDao = (JDBCDAO)DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
+			String appName = CommonServiceLocator.getInstance().getAppName();
+			JDBCDAO jdbcDao = DAOConfigFactory.getInstance().getDAOFactory(appName).getJDBCDAO();
 			jdbcDao.openSession(sessionData);
 			jdbcDao.delete(tempTableName);
 			jdbcDao.closeSession();
@@ -67,7 +69,8 @@ public class CatissueCoreSessionListener implements HttpSessionListener{
 		String tempTableNameForQuery = Constants.TEMP_OUPUT_TREE_TABLE_NAME + sessionData.getUserId()+randomNumber;
 		try
 		{
-			JDBCDAO jdbcDao = (JDBCDAO)DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
+			String appName = CommonServiceLocator.getInstance().getAppName();
+			JDBCDAO jdbcDao = DAOConfigFactory.getInstance().getDAOFactory(appName).getJDBCDAO();
 			jdbcDao.openSession(sessionData);
 			jdbcDao.delete(tempTableNameForQuery);
 			jdbcDao.closeSession();

@@ -12,7 +12,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -70,10 +69,8 @@ public class AnnotationUtil
 	 * @throws BizLogicException
 	 */
 	public static synchronized Long addAssociation(Long staticEntityId, Long dynamicEntityId,
-			boolean isEntityFromXmi)
-			throws //DynamicExtensionsSystemException,
-			DynamicExtensionsApplicationException, DynamicExtensionsSystemException,
-			BizLogicException
+			boolean isEntityFromXmi)throws BizLogicException
+			
 	{
 		//
 		//        // Get instance of static entity from entity cache maintained by caB2B code
@@ -89,38 +86,25 @@ public class AnnotationUtil
 		//So static entity and dynamic entity are brought in one session and then associated.
 		Session session = null;
 		DAO dao = null;
+
+		AssociationInterface association = null;
+		EntityInterface staticEntity = null;
+		EntityInterface dynamicEntity = null;
 		
 		try
 		{
 			String appName = CommonServiceLocator.getInstance().getAppName();
 			dao = DAOConfigFactory.getInstance().getDAOFactory(appName).getDAO();
 			dao.openSession(null);
-		}
-		catch (HibernateException exp)
-		{
-			// TODO Auto-generated catch block
-			exp.printStackTrace();
-			ErrorKey errorKey = ErrorKey.getErrorKey("bizlogic.error");
-			throw new BizLogicException(errorKey,exp ,"AnnotationUtil.java :");   
-		}
-		catch (DAOException exp)
-		{
-			// TODO Auto-generated catch block
-			exp.printStackTrace();
-			ErrorKey errorKey = ErrorKey.getErrorKey("bizlogic.error");
-			throw new BizLogicException(errorKey,exp ,"AnnotationUtil.java :");   
-		}
-		AssociationInterface association = null;
-		EntityInterface staticEntity = null;
-		EntityInterface dynamicEntity = null;
-		try
-		{
+
+			
+
 			staticEntity = (EntityInterface) session.load(Entity.class, staticEntityId);
 			dynamicEntity = (EntityInterface) ((Container) session.load(Container.class,
 					dynamicEntityId)).getAbstractEntity();
-//			Get entitygroup that is used by caB2B for path finder purpose.
+			//			Get entitygroup that is used by caB2B for path finder purpose.
 
-//			Commented this line since performance issue for Bug 6433
+			//			Commented this line since performance issue for Bug 6433
 			//EntityGroupInterface entityGroupInterface = Utility.getEntityGroup(staticEntity);
 			//List<EntityInterface> processedEntityList = new ArrayList<EntityInterface>();
 
@@ -177,8 +161,25 @@ public class AnnotationUtil
 		{
 			// TODO Auto-generated catch block
 			exp.printStackTrace();
-			ErrorKey errorKey = ErrorKey.getErrorKey("bizlogic.error");
+			ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
 			throw new BizLogicException(errorKey,exp ,"AnnotationUtil.java :");   
+		}
+		catch (DAOException exp)
+		{
+			// TODO Auto-generated catch block
+			exp.printStackTrace();
+			ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
+			throw new BizLogicException(errorKey,exp ,"AnnotationUtil.java :");   
+		} catch (DynamicExtensionsSystemException e)
+		{
+			ErrorKey errorKey = ErrorKey.getErrorKey("de.error");
+			throw new BizLogicException(errorKey,e ,"AnnotationUtil.java :");   
+			
+		} catch (DynamicExtensionsApplicationException e)
+		{
+			ErrorKey errorKey = ErrorKey.getErrorKey("de.error");
+			throw new BizLogicException(errorKey,e ,"AnnotationUtil.java :");   
+			
 		}
 		finally
 		{
@@ -190,7 +191,7 @@ public class AnnotationUtil
 			{
 				// TODO Auto-generated catch block
 				exp.printStackTrace();
-				ErrorKey errorKey = ErrorKey.getErrorKey("bizlogic.error");
+				ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
 				throw new BizLogicException(errorKey,exp ,"AnnotationUtil.java :");   
 
 			}
@@ -198,7 +199,7 @@ public class AnnotationUtil
 			{
 				// TODO Auto-generated catch block
 				exp.printStackTrace();
-				ErrorKey errorKey = ErrorKey.getErrorKey("bizlogic.error");
+				ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
 				throw new BizLogicException(errorKey,exp ,"AnnotationUtil.java :");   
 			}
 		}
@@ -250,14 +251,14 @@ public class AnnotationUtil
 		{
 			// TODO Auto-generated catch block
 			exp.printStackTrace();
-			ErrorKey errorKey = ErrorKey.getErrorKey("bizlogic.error");
+			ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
 			throw new BizLogicException(errorKey,exp ,"AnnotationUtil.java :");   
 		}
 		catch (DAOException exp)
 		{
 			// TODO Auto-generated catch block
 			exp.printStackTrace();
-			ErrorKey errorKey = ErrorKey.getErrorKey("bizlogic.error");
+			ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
 			throw new BizLogicException(errorKey,exp ,"AnnotationUtil.java :");   
 
 		}
@@ -271,7 +272,7 @@ public class AnnotationUtil
 			{
 				// TODO Auto-generated catch block
 				exp.printStackTrace();
-				ErrorKey errorKey = ErrorKey.getErrorKey("bizlogic.error");
+				ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
 				throw new BizLogicException(errorKey,exp ,"AnnotationUtil.java :");   
 
 			}
@@ -279,7 +280,7 @@ public class AnnotationUtil
 			{
 				// TODO Auto-generated catch block
 				exp.printStackTrace();
-				ErrorKey errorKey = ErrorKey.getErrorKey("bizlogic.error");
+				ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
 				throw new BizLogicException(errorKey,exp ,"AnnotationUtil.java :");   
 
 			}
@@ -617,7 +618,7 @@ public class AnnotationUtil
 		catch (DynamicExtensionsSystemException exp) {
 			// TODO Auto-generated catch block
 			exp.printStackTrace();
-			ErrorKey errorKey = ErrorKey.getErrorKey("bizlogic.error");
+			ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
 			throw new BizLogicException(errorKey,exp ,"AnnotationUtil.java :");   
 		}
 		return association;

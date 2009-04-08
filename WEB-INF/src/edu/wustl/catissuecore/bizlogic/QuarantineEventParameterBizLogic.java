@@ -25,13 +25,15 @@ public class QuarantineEventParameterBizLogic extends DefaultBizLogic
 	 * Saves the Pathology Report Quarantine Event Parameter object in the database.
 	 * @param obj The storageType object to be saved.
 	 * @param session The session in which the object is saved.
-	 * @throws DAOException 
+	 * @throws BizLogicException 
 	 * @throws UserNotAuthorizedException
 	 */
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws BizLogicException
 	{
+		try
+		{
 		QuarantineEventParameter quarantineParam = (QuarantineEventParameter) obj;
-		DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport =(DeidentifiedSurgicalPathologyReport)dao.retrieve(DeidentifiedSurgicalPathologyReport.class.getName(), quarantineParam.getDeIdentifiedSurgicalPathologyReport().getId()); 
+		DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport =(DeidentifiedSurgicalPathologyReport)dao.retrieveById(DeidentifiedSurgicalPathologyReport.class.getName(), quarantineParam.getDeIdentifiedSurgicalPathologyReport().getId()); 
 		deidentifiedSurgicalPathologyReport.setIsQuarantined(Constants.QUARANTINE_REQUEST);
 		deidentifiedSurgicalPathologyReport.setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.toString());
 		dao.update(deidentifiedSurgicalPathologyReport);
@@ -53,13 +55,18 @@ public class QuarantineEventParameterBizLogic extends DefaultBizLogic
 		{
 			throw handleSMException(e);
 		}*/
+		}
+		catch(DAOException daoExp)
+		{
+			throw getBizLogicException(daoExp, "dao.error", "");
+		}
 	}
 
 	/**
 	 * Updates the persistent object in the database.
 	 * @param obj The object to be updated.
 	 * @param session The session in which the object is saved.
-	 * @throws DAOException 
+	 * @throws BizLogicException 
 	 */
 	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws BizLogicException
 	{

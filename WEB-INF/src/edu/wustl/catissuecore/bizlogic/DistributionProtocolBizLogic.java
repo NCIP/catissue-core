@@ -16,7 +16,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.Vector;
 
 import edu.wustl.catissuecore.domain.DistributionProtocol;
 import edu.wustl.catissuecore.domain.DistributionSpecimenRequirement;
@@ -28,11 +27,7 @@ import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.cde.CDEManager;
-import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
-import edu.wustl.common.exception.ErrorKey;
-import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
@@ -40,11 +35,7 @@ import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.HibernateDAO;
 import edu.wustl.dao.exception.DAOException;
-import edu.wustl.security.beans.SecurityDataBean;
 import edu.wustl.security.exception.SMException;
-import edu.wustl.security.exception.UserNotAuthorizedException;
-import edu.wustl.security.locator.CSMGroupLocator;
-import edu.wustl.security.manager.SecurityManagerFactory;
 import edu.wustl.security.privilege.PrivilegeCache;
 import edu.wustl.security.privilege.PrivilegeManager;
 
@@ -58,7 +49,7 @@ public class DistributionProtocolBizLogic extends SpecimenProtocolBizLogic imple
      * Saves the DistributionProtocol object in the database.
 	 * @param obj The DistributionProtocol object to be saved.
 	 * @param session The session in which the object is saved.
-	 * @throws DAOException 
+	 * @throws BizLogicException 
      */
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws BizLogicException
 	{
@@ -83,7 +74,7 @@ public class DistributionProtocolBizLogic extends SpecimenProtocolBizLogic imple
 		}
 		catch(DAOException daoExp)
 		{
-			throw getBizLogicException(daoExp, "bizlogic.error", "");
+			throw getBizLogicException(daoExp, "dao.error", "");
 		}
         
 	}
@@ -92,7 +83,7 @@ public class DistributionProtocolBizLogic extends SpecimenProtocolBizLogic imple
      * Updates the persistent object in the database.
 	 * @param obj The object to be updated.
 	 * @param session The session in which the object is saved.
-	 * @throws DAOException 
+	 * @throws BizLogicException 
      */
 	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws BizLogicException
     {
@@ -140,7 +131,7 @@ public class DistributionProtocolBizLogic extends SpecimenProtocolBizLogic imple
 		}
 		catch(DAOException daoExp)
 		{
-			throw getBizLogicException(daoExp, "bizlogic.error", "");
+			throw getBizLogicException(daoExp, "dao.error", "");
 		}
     }
 	

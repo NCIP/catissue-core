@@ -9,6 +9,7 @@ import java.util.Set;
 
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
@@ -49,7 +50,7 @@ public class IdentifiedSurgicalPathologyReportBizLogic  extends DefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
-			throw getBizLogicException(daoExp, "bizlogic.error", "");
+			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 		
 	}
@@ -60,7 +61,7 @@ public class IdentifiedSurgicalPathologyReportBizLogic  extends DefaultBizLogic
 	 * @return Array of dynamicGroup
 	 * @throws SMException Security manager exception
 	 * @throws DAOException 
-	 */
+	 *//*
 	private String[] getDynamicGroups(DAO dao, AbstractDomainObject obj) throws ApplicationException, ClassNotFoundException
 	{
 		IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReport= (IdentifiedSurgicalPathologyReport)obj;
@@ -71,7 +72,7 @@ public class IdentifiedSurgicalPathologyReportBizLogic  extends DefaultBizLogic
 				collectionProtocolRegistration, CSMGroupLocator.getInstance().getPGName(null,Class.forName("edu.wustl.catissuecore.domain.CollectionProtocol")));
 		Logger.out.debug("Dynamic Group name: " + dynamicGroups[0]);
 		return dynamicGroups;
-	}
+	}*/
 	
 	/**
 	 * Updates the persistent object in the database.
@@ -151,7 +152,7 @@ public class IdentifiedSurgicalPathologyReportBizLogic  extends DefaultBizLogic
 	
 	public boolean hasPrivilegeToView(String objName, Long identifier, SessionDataBean sessionDataBean)
 	{
-		return edu.wustl.catissuecore.util.global.Utility.hasPrivilegeToView(objName, identifier, sessionDataBean, getReadDeniedPrivilegeName());
+		return AppUtility.hasPrivilegeToView(objName, identifier, sessionDataBean, getReadDeniedPrivilegeName());
 	}
 }
 

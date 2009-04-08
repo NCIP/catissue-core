@@ -55,7 +55,7 @@ public class ReportedProblemBizLogic extends DefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
-			throw getBizLogicException(daoExp, "bizlogic.error", "");
+			throw getBizLogicException(daoExp, "dao.error", "");
 		}
     }
     
@@ -88,7 +88,7 @@ public class ReportedProblemBizLogic extends DefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
-			throw getBizLogicException(daoExp, "bizlogic.error", "");
+			throw getBizLogicException(daoExp, "dao.error", "");
 		}
     }
 }

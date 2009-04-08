@@ -17,9 +17,6 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import net.sf.ehcache.CacheException;
-
-import org.hibernate.Session;
-
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
@@ -312,7 +309,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 		}
 		catch (DAOException daoExp)
 		{
-			throw getBizLogicException(daoExp, "bizlogic.error", "");
+			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
 
@@ -511,7 +508,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
-			throw getBizLogicException(daoExp, "bizlogic.error", "");
+			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 
 	}
@@ -707,7 +704,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 				
 				if((fromContainerId == null && parameter.getFromStorageContainer() != null) || (fromContainerId != null && parameter.getFromStorageContainer() == null))
 				{
-					throw getBizLogicException(null,"bizlogic.error", "Specimen "+specimen.getLabel()+" " +
+					throw getBizLogicException(null,"dao.error", "Specimen "+specimen.getLabel()+" " +
 							"had been moved to another location! Updated the locations. Please redo the transfers.");
 				}
 				else if((fromContainerId != null && parameter.getFromStorageContainer() != null) && 
@@ -716,7 +713,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 										&& pos2.equals(parameter.getFromPositionDimensionTwo()))))
 				{
 					
-					throw getBizLogicException(null,"bizlogic.error", "Specimen "+specimen.getLabel()+" " +
+					throw getBizLogicException(null,"dao.error", "Specimen "+specimen.getLabel()+" " +
 							"had been moved to another location! Updated the locations. Please redo the transfers.");
 				}
 				if (parameter.getToStorageContainer() != null && parameter.getToStorageContainer().getName() != null)				
@@ -756,7 +753,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 					if(isContainerFull)
 					{
 						
-						throw getBizLogicException(null, "bizlogic.error","The Storage Container you specified is full");
+						throw getBizLogicException(null, "dao.error","The Storage Container you specified is full");
 					}
 					else if (xPos == null || yPos == null || xPos.intValue() < 0 || yPos.intValue() < 0)
 					{
@@ -793,7 +790,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
-			throw getBizLogicException(daoExp, "bizlogic.error", "");
+			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
 
@@ -807,7 +804,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
-			throw getBizLogicException(daoExp, "bizlogic.error", "");
+			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
 
@@ -943,7 +940,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 			list = edu.wustl.common.util.Utility.removeNull(list);
 		} catch (DAOException e) {
 			
-			throw getBizLogicException(e, "bizlogic.error", "SpecimenEventParametersBizLogic.java :");
+			throw getBizLogicException(e, "dao.error", "SpecimenEventParametersBizLogic.java :");
 		}
 		return list;
 	}
@@ -1095,7 +1092,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 				protectionElementName = getObjectId(dao, domainObject2);
 				checkPrivilegeOnSourceSite(dao, domainObject2, sessionDataBean);
 				privilegeName = getPrivilegeName(domainObject2);
-				validOperation = AppUtility.checkPrivilegeOnCP(dao, domainObject2, protectionElementName, privilegeName, sessionDataBean);
+				validOperation = AppUtility.checkPrivilegeOnCP(domainObject2, protectionElementName, privilegeName, sessionDataBean);
 				if(!validOperation)
 				{
 					isAuthorized = false;
@@ -1117,7 +1114,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 			checkPrivilegeOnSourceSite(dao, domainObject, sessionDataBean);
 			privilegeName = getPrivilegeName(domainObject);
 			protectionElementName = getObjectId(dao, domainObject);
-			isAuthorized = AppUtility.checkPrivilegeOnCP(dao, domainObject, protectionElementName, privilegeName, sessionDataBean);
+			isAuthorized = AppUtility.checkPrivilegeOnCP(domainObject, protectionElementName, privilegeName, sessionDataBean);
 		}
 
 		if (!isAuthorized)
@@ -1128,7 +1125,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 		}
 		catch(ApplicationException daoExp)
 		{
-			throw getBizLogicException(daoExp, "bizlogic.error", "");
+			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 
 	}
@@ -1169,7 +1166,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 		}
 		catch(ApplicationException appExp)
 		{
-			throw getBizLogicException(appExp, "bizlogic.error", "");
+			throw getBizLogicException(appExp, "dao.error", "");
 		}
 	}
 
@@ -1203,7 +1200,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 						ex.setBaseObject("Specimen");
 					}
 					
-					throw getBizLogicException(ex, "bizlogic.error", "");
+					throw getBizLogicException(ex, "dao.error", "");
 					//bug 11611 and 11659 end
 				}
 			}

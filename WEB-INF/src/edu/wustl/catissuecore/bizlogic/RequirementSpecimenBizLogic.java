@@ -22,8 +22,8 @@ public class RequirementSpecimenBizLogic extends DefaultBizLogic
 	 * @param obj The Specimen object to be saved.
 	 * @param sessionDataBean The session in which the object is saved.
 	 * @param dao DAO object
-	 * @throws DAOException 
-	 * @throws DAOException Database related Exception
+	 * @throws BizLogicException 
+	 * @throws BizLogicException Database related Exception
 	 * @throws UserNotAuthorizedException 
 	 * @throws UserNotAuthorizedException User Not Authorized Exception
 	 * @throws  
@@ -39,7 +39,7 @@ public class RequirementSpecimenBizLogic extends DefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
-			throw getBizLogicException(daoExp, "bizlogic.error", "");
+			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
 	
@@ -49,8 +49,8 @@ public class RequirementSpecimenBizLogic extends DefaultBizLogic
 	 * @param dao DAO object
 	 * @param operation Type of Operation
 	 * @return result
-	 * @throws DAOException 
-	 * @throws DAOException Database related exception
+	 * @throws BizLogicException 
+	 * @throws BizLogicException Database related exception
 	 */
 	protected boolean validate(Object obj, DAO dao, String operation) throws BizLogicException
 	{
@@ -63,7 +63,7 @@ public class RequirementSpecimenBizLogic extends DefaultBizLogic
 	 * @param sessionDataBean Session data
 	 * @param collectionProtocolEvent Transient CPE 
 	 * @param oldCollectionProtocolEvent Persistent CPE
-	 * @throws DAOException Database related exception
+	 * @throws BizLogicException Database related exception
 	 * @throws UserNotAuthorizedException User not Authorized Exception
 	 */
 	public void updateSpecimens(DAO dao, SessionDataBean sessionDataBean,
@@ -119,7 +119,7 @@ public class RequirementSpecimenBizLogic extends DefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
-			throw getBizLogicException(daoExp, "bizlogic.error", "");
+			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 
 	}
@@ -129,7 +129,7 @@ public class RequirementSpecimenBizLogic extends DefaultBizLogic
 	 * @param dao DAO object
 	 * @param oldReqSpecimenCollection Persistent Requirement Specimen Collection
 	 * @param newReqSpecimenCollection New Requirement Specimen Collection
-	 * @throws DAOException Database related exception
+	 * @throws BizLogicException Database related exception
 	 */
 	private void checkSpecimenDelete(DAO dao,Collection oldReqSpecimenCollection, 
 			Collection newReqSpecimenCollection) throws BizLogicException
@@ -159,7 +159,7 @@ public class RequirementSpecimenBizLogic extends DefaultBizLogic
 	 * @param dao DAO Object
 	 * @param oldReqSpecimenCollection Old Specimen Requirement Object
 	 * @param newReqSpecimenCollection New Specimen Requirement Object
-	 * @throws DAOException Databse related exception
+	 * @throws BizLogicException Databse related exception
 	 */
 	private void checkChildSpecimenDelete(DAO dao,Collection oldReqSpecimenCollection, 
 			Collection newReqSpecimenCollection) throws BizLogicException
@@ -186,7 +186,7 @@ public class RequirementSpecimenBizLogic extends DefaultBizLogic
 	 * This method will delete requirement Specimen from database
 	 * @param dao DAO Object
 	 * @param spReq Specimen Requirement to delete
-	 * @throws DAOException Database related exception
+	 * @throws BizLogicException Database related exception
 	 */
 	public void deleteRequirementSpecimen(DAO dao, SpecimenRequirement spReq) throws BizLogicException
 	{
@@ -204,7 +204,7 @@ public class RequirementSpecimenBizLogic extends DefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
-			throw getBizLogicException(daoExp, "bizlogic.error", "");
+			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 
 	}

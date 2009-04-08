@@ -50,7 +50,7 @@ public class DepartmentBizLogic extends CatissueDefaultBizLogic
 	 * This method returns the Id of the latest department corresponding to the name
 	 * @param departmentName
 	 * @return
-	 * @throws DAOException
+	 * @throws BizLogicException
 	 */
 	public String getLatestDepartment(String departmentName)throws BizLogicException
 	{

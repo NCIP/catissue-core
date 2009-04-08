@@ -40,7 +40,6 @@ import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.cde.CDEManager;
@@ -54,7 +53,6 @@ import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
-import edu.wustl.dao.daofactory.DAOFactory;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.dao.util.HibernateMetaData;
 import edu.wustl.security.exception.SMException;
@@ -97,7 +95,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
-			throw getBizLogicException(daoExp, "bizlogic.error", "");
+			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
 
@@ -308,13 +306,13 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 				}
 				catch (CacheException e)
 				{
-					throw getBizLogicException(e, "bizlogic.error", "Problem while chaching");
+					throw getBizLogicException(e, "dao.error", "Problem while chaching");
 				}
 			}
 		}
 	catch(DAOException daoExp)
 	{
-		throw getBizLogicException(daoExp, "bizlogic.error", "");
+		throw getBizLogicException(daoExp, "dao.error", "");
 	}
 		
 		
@@ -419,7 +417,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 						// check whether array & specimen are compatible on the basis of class
 						if (!isArrayAndSpecimenCompatibile(arrayType, specimen))
 						{
-							throw getBizLogicException(null, "bizlogic.error", Constants.ARRAY_SPEC_NOT_COMPATIBLE_EXCEPTION_MESSAGE);
+							throw getBizLogicException(null, "dao.error", Constants.ARRAY_SPEC_NOT_COMPATIBLE_EXCEPTION_MESSAGE);
 						}
 
 						// set quantity object to null when there is no value.. [due to Hibernate exception]
@@ -455,14 +453,14 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 
 									if (!isAvailableQty(specimen, quantity))
 									{
-										throw getBizLogicException(null, "bizlogic.error", " Quantity '" + tempQuantity + "' should be less than current Distributed Quantity '"
+										throw getBizLogicException(null, "dao.error", " Quantity '" + tempQuantity + "' should be less than current Distributed Quantity '"
 												+ specimen.getAvailableQuantity().doubleValue() + "' of specimen :: " + specimen.getLabel());
 									}
 								}
 							}
 							else
 							{
-								throw getBizLogicException(null, "bizlogic.error", Constants.ARRAY_MOLECULAR_QUAN_EXCEPTION_MESSAGE + specimen.getLabel());
+								throw getBizLogicException(null, "dao.error", Constants.ARRAY_MOLECULAR_QUAN_EXCEPTION_MESSAGE + specimen.getLabel());
 							}
 						}
 						specimenArrayContent.setSpecimen(specimen);
@@ -479,7 +477,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 			// There should be at least one valid specimen in array
 			if (updatedSpecArrayContentCollection.isEmpty())
 			{
-				throw getBizLogicException(null, "bizlogic.error", Constants.ARRAY_NO_SPECIMEN__EXCEPTION_MESSAGE);
+				throw getBizLogicException(null, "dao.error", Constants.ARRAY_NO_SPECIMEN__EXCEPTION_MESSAGE);
 			}
 
 			//In case of update, if specimen is removed from specimen array, then specimen array content's quantity 
@@ -512,7 +510,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
-			throw getBizLogicException(daoExp, "bizlogic.error", "");
+			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
 
@@ -571,7 +569,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
-			throw getBizLogicException(daoExp, "bizlogic.error", "");
+			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
 
@@ -648,13 +646,13 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 					//Bug: 2872:-  User should not able to add close/disable specimen in Specimen Array.
 					if (!activityStatus.equals(Constants.ACTIVITY_STATUS_ACTIVE))
 					{
-						throw getBizLogicException(null, "bizlogic.error", Constants.ARRAY_SPECIMEN_NOT_ACTIVE_EXCEPTION_MESSAGE + columnValue);
+						throw getBizLogicException(null, "dao.error", Constants.ARRAY_SPECIMEN_NOT_ACTIVE_EXCEPTION_MESSAGE + columnValue);
 					}
 					//return specimenCollectionGroup;
 				}
 				else
 				{
-					throw getBizLogicException(null, "bizlogic.error", Constants.ARRAY_SPECIMEN_DOES_NOT_EXIST_EXCEPTION_MESSAGE + columnValue);
+					throw getBizLogicException(null, "dao.error", Constants.ARRAY_SPECIMEN_DOES_NOT_EXIST_EXCEPTION_MESSAGE + columnValue);
 				}
 			}
 			return specimen;
@@ -662,7 +660,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
-			throw getBizLogicException(daoExp, "bizlogic.error", "");
+			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
 
@@ -817,7 +815,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 
 			if (isContainerFull)
 			{
-				throw getBizLogicException(null, "bizlogic.error","The Storage Container you specified is full");
+				throw getBizLogicException(null, "dao.error","The Storage Container you specified is full");
 			}
 			else if (xPos == null || yPos == null || xPos.intValue() < 0 || yPos.intValue() < 0)
 			{
@@ -864,7 +862,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 				while (itr.hasNext())
 				{
 					String specimenType = (String) itr.next();
-					if (!Validator.isEnumeratedValue(Utility.getSpecimenTypes(specimenClass), specimenType))
+					if (!Validator.isEnumeratedValue(AppUtility.getSpecimenTypes(specimenClass), specimenType))
 					{
 						throw getBizLogicException(null, "protocol.type.errMsg", "");
 					}
@@ -897,13 +895,13 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 			}
 			else
 			{
-				throw getBizLogicException(null, "bizlogic.error", "Specimen Array for uploading is null");
+				throw getBizLogicException(null, "dao.error", "Specimen Array for uploading is null");
 			}
 			return true;
 		}
 		catch(DAOException daoExp)
 		{
-			throw getBizLogicException(daoExp, "bizlogic.error", "");
+			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
 
@@ -984,7 +982,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
-			throw getBizLogicException(daoExp, "bizlogic.error", "");
+			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
 
@@ -1013,7 +1011,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(ApplicationException exp)
 		{
-			throw getBizLogicException(exp, "bizlogic.error", "");
+			throw getBizLogicException(exp, "dao.error", "");
 		}
 	}
 
@@ -1192,7 +1190,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 						if (!siteIdSet.contains(site.getId()))
 						{
 							//bug 11611 and 11659
-							throw Utility.getUserNotAuthorizedException(Constants.Association, site.getObjectId(),domainObject.getClass().getSimpleName());
+							throw AppUtility.getUserNotAuthorizedException(Constants.Association, site.getObjectId());
 						}
 					}
 				}
@@ -1227,7 +1225,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 			else
 				// Check for ALL CURRENT & FUTURE CASE
 			{
-				isAuthorized = AppUtility.checkOnCurrentAndFuture(dao, sessionDataBean, protectionElementName, privilegeName);
+				isAuthorized = AppUtility.checkOnCurrentAndFuture(sessionDataBean, protectionElementName, privilegeName);
 			}
 			if (!isAuthorized)
 			{
@@ -1240,7 +1238,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 		{
 			throw getBizLogicException(e, "sm.operation.error", "Error in checking has privilege");
 		} catch (ApplicationException e) {
-			ErrorKey errorKey = ErrorKey.getErrorKey("bizlogic.error");
+			ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
 			throw new BizLogicException(errorKey,e ,"SpecimenArrayBizLogic.java :");	
 		}
 		return isAuthorized;

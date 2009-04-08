@@ -15,10 +15,8 @@ import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.exception.BizLogicException;
-import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.dao.DAO;
-import edu.wustl.dao.exception.DAOException;
 
 
 public class ParticipantMedicalIdentifierBizLogic extends DefaultBizLogic

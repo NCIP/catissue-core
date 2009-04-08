@@ -46,7 +46,7 @@ public class ShoppingCartBizLogic extends DefaultBizLogic
 		}
 		catch(ApplicationException appExp)
 		{
-			throw getBizLogicException(appExp, "bizlogic.error", "");
+			throw getBizLogicException(appExp, "dao.error", "");
 		}
 
 	}

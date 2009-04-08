@@ -46,7 +46,7 @@ import edu.wustl.catissuecore.util.EmailHandler;
 import edu.wustl.catissuecore.util.OrderingSystemUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
@@ -86,7 +86,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 	 * @param obj The OrderDetails Item object to be saved.
 	 * @param sessionDataBean The session in which the object is saved.
 	 * @param dao object.
-	 * @throws DAOException object.
+	 * @throws BizLogicException object.
 	 * @throws UserNotAuthorizedException object.
 	 */
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws BizLogicException
@@ -98,7 +98,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
-			throw getBizLogicException(daoExp, "bizlogic.error", "");
+			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 		//	mailOnSuccessfulSave(sessionDataBean, order, dao);
 	}
@@ -108,7 +108,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 	 * @param sessionDataBean object
 	 * @param order object
 	 * @param dao object
-	 * @throws DAOException object
+	 * @throws BizLogicException object
 	 */
 	private void mailOnSuccessfulSave(SessionDataBean sessionDataBean, OrderDetails order, DAO dao) throws BizLogicException
 	{
@@ -139,7 +139,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
-			throw getBizLogicException(daoExp, "bizlogic.error", "");
+			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
 
@@ -149,7 +149,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 	 * @param sessionDataBean The session in which the object is saved.
 	 * @param dao object.
 	 * @param oldObj The old object from DB.
-	 * @throws DAOException object
+	 * @throws BizLogicException object
 	 * @throws UserNotAuthorizedException object
 	 */
 	
@@ -171,7 +171,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
-			throw getBizLogicException(daoExp, "bizlogic.error", "");
+			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
 	
@@ -181,7 +181,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 	 * @param dao object
 	 * @param operation object
 	 * @return boolean object
-	 * @throws DAOException object
+	 * @throws BizLogicException object
 	 */
 	protected boolean validate(Object obj, Object oldObj, DAO dao, String operation) throws BizLogicException
 	{
@@ -356,7 +356,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 	 * @param dao object
 	 * @param sessionDataBean object
 	 * @return OrderDetails object
-	 * @throws DAOException object.
+	 * @throws BizLogicException object.
 	 * @throws UserNotAuthorizedException object.
 	 */
 	private OrderDetails updateObject(Object oldObj, Object obj, DAO dao, SessionDataBean sessionDataBean) throws BizLogicException
@@ -451,7 +451,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 									}
 									catch(NullPointerException npe)
 									{
-										throw getBizLogicException(null, "bizlogic.error", "Please mention distributedBy attribute");
+										throw getBizLogicException(null, "dao.error", "Please mention distributedBy attribute");
 									}
 									distribution.setDistributedBy(user);
 									//Setting activity status
@@ -505,7 +505,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
-			throw getBizLogicException(daoExp, "bizlogic.error", "");
+			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
 
@@ -732,7 +732,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 	/**
 	 * @param requestStatusSelected object
 	 * @return requestList List
-	 * @throws DAOException object
+	 * @throws BizLogicException object
 	 */
 	public List getRequestList(String requestStatusSelected,String userName,Long userId) throws BizLogicException
 	{
@@ -804,7 +804,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException exp )
 		{
-			throw getBizLogicException(exp, "bizlogic.error", "");
+			throw getBizLogicException(exp, "dao.error", "");
 		}
 		finally
 		{
@@ -895,7 +895,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 	 * @param userId
 	 * @param privilegeCache
 	 * @return
-	 * @throws DAOException 
+	 * @throws BizLogicException 
 	 */
 	public List getRelatedSiteIds(HibernateDAO dao,Long userId,PrivilegeCache privilegeCache) throws BizLogicException 
 	{
@@ -928,7 +928,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		{
 			throw getBizLogicException(e, "sm.operation.error", "error in checking privilge on"+objectId);
 		} catch (DAOException e) {
-			throw getBizLogicException(e, "bizlogic.error", "Retrive error ");
+			throw getBizLogicException(e, "dao.error", "Retrive error ");
 		}
 		return (List)siteCollWithDistriPri;
 	} 
@@ -938,7 +938,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 	 * @param privilegeCache
 	 * @param orderItemCollection
 	 * @return
-	 * @throws DAOException
+	 * @throws BizLogicException
 	 */
 	public boolean checkDistributionPrivilegeOnCP(User user,PrivilegeCache privilegeCache,Collection orderItemCollection, SessionDataBean sessionDataBean) throws BizLogicException 
 	{
@@ -967,7 +967,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 						boolean isAuthorized = privilegeCache.hasPrivilege(objectId, Variables.privilegeDetailsMap.get(Constants.DISTRIBUTE_SPECIMENS));
 						if(!isAuthorized)
 						{
-							isAuthorized = Utility.checkForAllCurrentAndFutureCPs(null, Permissions.DISTRIBUTION, sessionDataBean, cpId.toString());
+							isAuthorized = AppUtility.checkForAllCurrentAndFutureCPs( Permissions.DISTRIBUTION, sessionDataBean, cpId.toString());
 						}
 
 						if(isAuthorized)
@@ -1007,7 +1007,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 	 * Get the list of sites of user on which user have distribution privilege
 	 * @param request
 	 * @return
-	 * @throws DAOException 
+	 * @throws BizLogicException 
 	 */
 	public List getUserSitesWithDistributionPrev(User user,PrivilegeCache privilegeCache)throws BizLogicException
 	{
@@ -1097,7 +1097,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 	 * @param dao
 	 * @return to retrieve the orderDetails object. 
 	 * @throws NumberFormatException
-	 * @throws DAOException
+	 * @throws BizLogicException
 	 */
 	public OrderDetails getOrderListFromDB(String id,DAO dao) throws BizLogicException
 	{
@@ -1110,11 +1110,11 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (NumberFormatException e)
 		{
-			throw getBizLogicException(e, "bizlogic.error", "Issue while parsing number");
+			throw getBizLogicException(e, "dao.error", "Issue while parsing number");
 		}
 		catch (DAOException e)
 		{
-			throw getBizLogicException(e, "bizlogic.error", "Issue while retrieving object");
+			throw getBizLogicException(e, "dao.error", "Issue while retrieving object");
 		}
 	}
 	
@@ -1360,7 +1360,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 	 * @param sessionDataBean
 	 * @param dao
 	 * @throws UserNotAuthorizedException
-	 * @throws DAOException
+	 * @throws BizLogicException
 	 */
 	private void disposeSpecimen(OrderDetails orderNew,
 			SessionDataBean sessionDataBean, DAO dao) throws BizLogicException {
@@ -1420,7 +1420,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (Exception e) 
 		{
-			throw getBizLogicException(e, "bizlogic.error", "");
+			throw getBizLogicException(e, "dao.error", "");
 		}
 	}
 
@@ -1428,8 +1428,8 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 	 * @param specimenArray
 	 * @param dao
 	 * @param sessionDataBean
-	 * @throws DAOException
-	 * @throws BizLogicException 
+	 * @throws BizLogicException
+	 * @throws DAOException 
 	 * @throws UserNotAuthorizedException
 	 */
 	private void updateSpecimenArray(SpecimenArray specimenArray, DAO dao, SessionDataBean sessionDataBean) throws DAOException, BizLogicException {
@@ -1599,7 +1599,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 	 * @param orderItemId
 	 * @param dao
 	 * @return
-	 * @throws DAOException
+	 * @throws BizLogicException
 	 */
 	private SpecimenArray getSpecimenArray(Long orderItemId,DAO dao) throws BizLogicException
 	{
@@ -1621,7 +1621,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
-			throw getBizLogicException(daoExp, "bizlogic.error", "");
+			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 		return specimenArray;
 	}
@@ -1652,7 +1652,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
-			throw getBizLogicException(daoExp, "bizlogic.error", "");
+			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 		
 	}

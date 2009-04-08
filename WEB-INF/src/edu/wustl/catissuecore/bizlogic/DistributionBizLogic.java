@@ -64,7 +64,7 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 	 * Saves the Distribution object in the database.
 	 * @param obj The storageType object to be saved.
 	 * @param session The session in which the object is saved.
-	 * @throws DAOException 
+	 * @throws BizLogicException 
 	 */
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws BizLogicException
 	{
@@ -114,7 +114,7 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (Exception ex)
 		{
-			throw getBizLogicException(ex, "bizlogic.error", "");
+			throw getBizLogicException(ex, "dao.error", "");
 		}
 		return distributed;
 	}
@@ -161,7 +161,7 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 	 * Updates the persistent object in the database.
 	 * @param obj The object to be updated.
 	 * @param session The session in which the object is saved.
-	 * @throws DAOException 
+	 * @throws BizLogicException 
 	 * @throws HibernateException Exception thrown during hibernate operations.
 	 */
 	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws BizLogicException
@@ -243,7 +243,7 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
-			throw getBizLogicException(daoExp, "bizlogic.error", "");
+			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
 
@@ -335,7 +335,7 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 	 * @param roleId
 	 * @param assignToUser
 	 * @throws SMException
-	 * @throws DAOException
+	 * @throws BizLogicException
 	 *//*
 	public void assignPrivilegeToRelatedObjectsForDP(DAO dao, String privilegeName, Long[] objectIds, Long userId, String roleId,
 			boolean assignToUser, boolean assignOperation) throws BizLogicException
@@ -465,7 +465,7 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 	catch(DAOException daoExp)
 	{
 
-		throw getBizLogicException(daoExp, "bizlogic.error", "");
+		throw getBizLogicException(daoExp, "dao.error", "");
 	}
 		return true;
 	}
@@ -555,7 +555,7 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 		catch(DAOException daoExp)
 		{
 
-			throw getBizLogicException(daoExp, "bizlogic.error", "");
+			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
 
@@ -587,7 +587,7 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 			Logger.out.debug("Update Successful ...04-Apr-06");
 		} catch (DAOException e) {
 
-			throw getBizLogicException(e, "bizlogic.error", "");
+			throw getBizLogicException(e, "dao.error", "");
 		}
 	}
 

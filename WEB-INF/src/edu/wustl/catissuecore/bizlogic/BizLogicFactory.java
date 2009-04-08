@@ -145,9 +145,9 @@ public class BizLogicFactory //extends AbstractBizLogicFactory
         	case Constants.SIMPLE_QUERY_INTERFACE_ID:
         		bizLogic = new QueryBizLogic();
         		break;
-        	case Constants.ADVANCE_QUERY_INTERFACE_ID:
+        	/*case Constants.ADVANCE_QUERY_INTERFACE_ID:
         		bizLogic = new AdvanceQueryBizlogic();
-        		break;
+        		break;*/
         	case edu.wustl.common.util.global.Constants.QUERY_INTERFACE_ID:
         		bizLogic = new QueryBizLogic();
     			break;
@@ -221,9 +221,9 @@ public class BizLogicFactory //extends AbstractBizLogicFactory
     		case Constants.QUARANTINE_EVENT_PARAMETER_FORM_ID:
     			bizLogic=new QuarantineEventParameterBizLogic();
     			break;
-    		case Constants.CATISSUECORE_QUERY_INTERFACE_ID://CatissecoreQueryBizLogic
+    		/*case Constants.CATISSUECORE_QUERY_INTERFACE_ID://CatissecoreQueryBizLogic
     			bizLogic = new CatissuecoreQueryBizLogic();
-    			break;
+    			break;*/
     		case edu.wustl.catissuecore.util.shippingtracking.Constants.SHIPMENT_FORM_ID:
             	bizLogic = new ShipmentBizLogic();
             	break;

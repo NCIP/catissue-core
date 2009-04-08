@@ -36,11 +36,12 @@ import edu.wustl.catissuecore.multiRepository.bean.SiteUserRolePrivilegeBean;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.EmailHandler;
 import edu.wustl.catissuecore.util.Roles;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
@@ -244,7 +245,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 			Logger.out.debug(e.getMessage(), e);
 			deleteCSMUser(csmUser);
 			
-			ErrorKey errorKey = ErrorKey.getErrorKey("bizlogic.error");
+			ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
 			throw new BizLogicException(errorKey,e ,"UserBizLogic.java :");
 		
 		}
@@ -371,7 +372,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
             siteUserRolePrivilegeBean.setUser(user1);
 			if(siteUserRolePrivilegeBean.isAllCPChecked())
 			{
-				Map<String, SiteUserRolePrivilegeBean> map = Utility.splitBeanData(siteUserRolePrivilegeBean);
+				Map<String, SiteUserRolePrivilegeBean> map = AppUtility.splitBeanData(siteUserRolePrivilegeBean);
 				SiteUserRolePrivilegeBean bean1 = map.get("SITE");
 				SiteUserRolePrivilegeBean bean2 = map.get("CP");
 				userRowIdMap.remove(key);
@@ -509,7 +510,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 				
 				if(siteUserRolePrivilegeBean.isRowDeleted())
 				{
-					Utility.processDeletedPrivileges(siteUserRolePrivilegeBean);
+					AppUtility.processDeletedPrivileges(siteUserRolePrivilegeBean);
 				}
 				else if(siteUserRolePrivilegeBean.isRowEdited())
 				{
@@ -530,7 +531,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 						privileges.add(privilege.getValue());
 					}
 					
-					Utility.processRole(roleName);
+					AppUtility.processRole(roleName);
 					
 					PrivilegeManager.getInstance().createRole(roleName,
 								privileges);
@@ -584,7 +585,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 				
 				if(siteUserRolePrivilegeBean.isRowDeleted())
 				{
-					Utility.processDeletedPrivileges(siteUserRolePrivilegeBean);
+					AppUtility.processDeletedPrivileges(siteUserRolePrivilegeBean);
 				}
 				else if(siteUserRolePrivilegeBean.isRowEdited())
 				{
@@ -635,7 +636,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 						privileges.add(privilege.getValue());
 					}
 					
-					Utility.processRole(roleName);
+					AppUtility.processRole(roleName);
 					
 					PrivilegeManager.getInstance().createRole(roleName,
 								privileges);
@@ -859,7 +860,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 						String errorMessage = getPasswordErrorMsg(result);
 
 						Logger.out.debug("Error Message from method" + errorMessage);
-						throw getBizLogicException(null, "bizlogic.error", errorMessage);
+						throw getBizLogicException(null, "dao.error", errorMessage);
 					}
 				}
 				csmUser.setPassword(user.getNewPassword());
@@ -887,7 +888,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 						String errorMessage = getPasswordErrorMsg(result);
 
 						Logger.out.debug("Error Message from method" + errorMessage);
-						throw getBizLogicException(null, "bizlogic.error", errorMessage);
+						throw getBizLogicException(null, "dao.error", errorMessage);
 					}
 				}
 				csmUser.setPassword(user.getNewPassword());
@@ -984,7 +985,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (Exception e)
 		{
-			ErrorKey errorKey = ErrorKey.getErrorKey("bizlogic.error");
+			ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
 			throw new BizLogicException(errorKey,e,"UserBizLogic.java :");
 		}
 	}
@@ -1191,7 +1192,9 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (DAOException daoExp)
 		{
-			throw getBizLogicException(daoExp, "bizlogic.error", "");
+			throw getBizLogicException(daoExp, "dao.error", "");
+		} catch (ApplicationException e) {
+			throw getBizLogicException(e, "utility.error", "");
 		}
 		finally
 		{
@@ -1334,7 +1337,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 				arguments = new String[]{"User", ApplicationProperties.getValue("user.emailAddress")};
 				String errMsg = new DefaultExceptionFormatter().getErrorMessage("Err.ConstraintViolation", arguments);
 				Logger.out.debug("Unique Constraint Violated: " + errMsg);
-				throw getBizLogicException(null,"bizlogic.error",errMsg);
+				throw getBizLogicException(null,"dao.error",errMsg);
 			}
 			/** -- patch ends here -- */
 		}
@@ -1692,7 +1695,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
-			throw getBizLogicException(daoExp, "bizlogic.error", "");
+			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 		return isUnique;
 	}
@@ -2092,7 +2095,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 					if (!isAuthorized)
 					{
 						//bug 11611 and 11659
-						throw Utility.getUserNotAuthorizedException(privilegeName, protectionElementName,domainObject.getClass().getSimpleName()); 
+						throw AppUtility.getUserNotAuthorizedException(privilegeName, protectionElementName); 
 					}
 					return isAuthorized;		
 				}
@@ -2100,12 +2103,12 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 				{
 					// return false;
 					//bug 11611 and 11659
-					throw Utility.getUserNotAuthorizedException(privilegeName, protectionElementName,domainObject.getClass().getSimpleName());
+					throw AppUtility.getUserNotAuthorizedException(privilegeName, protectionElementName);
 				}
 			}
 			catch(ApplicationException exp)
 			{
-				throw getBizLogicException(exp, "bizlogic.error", "");
+				throw getBizLogicException(exp, "dao.error", "");
 			}
 		}			
 }

@@ -2772,5 +2772,10 @@ public static final String ADD_MULTIPLE_SPECIMEN_TO_CART="addMltipleSpecimenToCa
 	public static final String PAGE_OF_SIMPLE_QUERY_INTERFACE = "pageOfSimpleQueryInterface";
 	
 	public static final String allowOperation = "allowOperation";
+	
+	//Constants for Summary Page
+	public static final String MOLECULE = "Molecular";
+	
+	
 
 }

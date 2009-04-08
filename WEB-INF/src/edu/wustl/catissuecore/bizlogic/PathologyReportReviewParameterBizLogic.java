@@ -26,7 +26,7 @@ public class PathologyReportReviewParameterBizLogic extends DefaultBizLogic
 	 * Saves the Pathology Report Review Parameter object in the database.
 	 * @param obj The storageType object to be saved.
 	 * @param session The session in which the object is saved.
-	 * @throws DAOException
+	 * @throws BizLogicException
 	 * @throws UserNotAuthorizedException
 	 */
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws BizLogicException
@@ -51,7 +51,7 @@ public class PathologyReportReviewParameterBizLogic extends DefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
-			throw getBizLogicException(daoExp, "bizlogic.error", "");
+			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 		catch(SMException ex)
 		{

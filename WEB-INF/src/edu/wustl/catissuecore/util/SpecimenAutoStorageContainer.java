@@ -137,7 +137,7 @@ public class SpecimenAutoStorageContainer {
 
 		} catch (Exception exception) {
 
-			throw AppUtility.getApplicationException("utility.error", exception, "");
+			throw AppUtility.getApplicationException( exception,"utility.error", "");
 		}
 		
 	}

@@ -2,6 +2,7 @@ package edu.wustl.catissuecore.bizlogic;
 
 import java.util.List;
 
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.exception.BizLogicException;
@@ -30,7 +31,7 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 	 * @param sessionDataBean session specific Data
 	 * @return isAuthorized
 	 * @throws UserNotAuthorizedException User Not Authorized Exception
-	 * @throws DAOException generic DAOException
+	 * @ generic DAOException
 	 */
 	public boolean isAuthorized(DAO dao, Object domainObject,
 			SessionDataBean sessionDataBean) throws BizLogicException
@@ -140,7 +141,7 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
-			throw getBizLogicException(daoExp, "bizlogic.error", "");
+			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 		return jdbcDAO;
 	}
@@ -153,7 +154,7 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
-			throw getBizLogicException(daoExp, "bizlogic.error", "");
+			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 		return jdbcDAO;
 	}
@@ -169,7 +170,7 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 			}
 			catch(DAOException daoExp)
 			{
-				throw getBizLogicException(daoExp, "bizlogic.error", "");
+				throw getBizLogicException(daoExp, "dao.error", "");
 			}
 			return dao;
 	}
@@ -182,7 +183,7 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
-			throw getBizLogicException(daoExp, "bizlogic.error", "");
+			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 		return dao;
 	}

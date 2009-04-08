@@ -22,7 +22,6 @@ import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
-import edu.wustl.dao.DAO;
 import edu.wustl.dao.exception.DAOException;
 
 /**

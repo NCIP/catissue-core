@@ -45,6 +45,7 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.namegenerator.LabelAndBarcodeGeneratorInitializer;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.ProtectionGroups;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.catissuecore.util.global.Variables;
@@ -438,7 +439,7 @@ public void InitialiseVariablesForEdinburgh(){
 		String dateFormat=XMLPropertyHandler.getValue(Constants.DATEFORMAT);
 		if(dateFormat!=null && dateFormat!=""){
 			
-			if (Utility.isValidDateFormat(dateFormat)){
+			if (AppUtility.isValidDateFormat(dateFormat)){
 				edu.wustl.common.util.global.Variables.dateFormat=dateFormat;
 			}else{
 				throw new RuntimeException("Invalid Date Format. Enter the format either in  dd-MM-yyyy or MM-dd-yyyy Format");

@@ -34,11 +34,13 @@ import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.exception.ApplicationException;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.common.util.global.Status;
@@ -82,9 +84,10 @@ public final class ConsentUtil
 	 * @param withdrawOption Action to be performed on the withdrawn collectiongroup.
 	 * @param dao DAO instance. Used for inserting disposal event. 
 	 * @param sessionDataBean SessionDataBean instance. Used for inserting disposal event.
+	 * @throws ApplicationException 
 	 * @throws DAOException 
 	 */
-	public static void updateSCG(SpecimenCollectionGroup scg, SpecimenCollectionGroup oldscg, long consentTierID, String withdrawOption,DAO dao, SessionDataBean sessionDataBean) throws DAOException
+	public static void updateSCG(SpecimenCollectionGroup scg, SpecimenCollectionGroup oldscg, long consentTierID, String withdrawOption,DAO dao, SessionDataBean sessionDataBean) throws ApplicationException 
 	{
 		Collection newScgStatusCollection = new HashSet();
 		Collection consentTierStatusCollection =scg.getConsentTierStatusCollection();
@@ -114,17 +117,20 @@ public final class ConsentUtil
 	 * @param withdrawOption Action to be performed on the withdrawn collectiongroup.
 	 * @param dao DAO instance. Used for inserting disposal event. 
 	 * @param sessionDataBean SessionDataBean instance. Used for inserting disposal event.
+	 * @throws ApplicationException 
 	 *  
 	 */
-	public static void updateSCG(SpecimenCollectionGroup scg, long consentTierID, String withdrawOption,  DAO dao, SessionDataBean sessionDataBean) throws DAOException
+	public static void updateSCG(SpecimenCollectionGroup scg, long consentTierID, String withdrawOption,  DAO dao, SessionDataBean sessionDataBean) throws ApplicationException 
 	{
 		updateSCG(scg, scg, consentTierID,withdrawOption,dao, sessionDataBean);
 	}
 	/*
 	 * This method updates the specimens for the given SCG and sets the consent status to withdraw.
 	 */
-	private static void updateSpecimensInSCG(SpecimenCollectionGroup scg, SpecimenCollectionGroup oldscg, long consentTierID, String consentWithdrawalOption,  DAO dao, SessionDataBean sessionDataBean) throws DAOException
+	private static void updateSpecimensInSCG(SpecimenCollectionGroup scg, SpecimenCollectionGroup oldscg, long consentTierID, String consentWithdrawalOption,  DAO dao, SessionDataBean sessionDataBean) throws ApplicationException
 	{
+		try
+		{
 		Collection specimenCollection =(Collection)dao.retrieveAttribute(SpecimenCollectionGroup.class,"elements(specimenCollection)",scg.getId(),"id"); 
 		Collection updatedSpecimenCollection = new HashSet();
 		Iterator specimenItr = specimenCollection.iterator() ;
@@ -135,6 +141,11 @@ public final class ConsentUtil
 			updatedSpecimenCollection.add(specimen );
 		}
 		scg.setSpecimenCollection(updatedSpecimenCollection);
+		}
+		catch(DAOException daoExp)
+		{
+			throw AppUtility.getApplicationException(daoExp, "dao.error", "");
+		}
 	}
 	
 	/**
@@ -144,9 +155,10 @@ public final class ConsentUtil
 	 * @param consentTierID Identifier of ConsentTier to be withdrawn.
 	 * @param dao DAO instance. Used for inserting disposal event. 
 	 * @param sessionDataBean SessionDataBean instance. Used for inserting disposal event.
+	 * @throws ApplicationException 
 	 * @throws DAOException 
 	 */
-	public static void updateSpecimenStatus(Specimen specimen, String consentWithdrawalOption, long consentTierID,  DAO dao, SessionDataBean sessionDataBean) throws DAOException
+	public static void updateSpecimenStatus(Specimen specimen, String consentWithdrawalOption, long consentTierID,  DAO dao, SessionDataBean sessionDataBean) throws ApplicationException 
 	{
 		
 		Collection consentTierStatusCollection = specimen.getConsentTierStatusCollection();
@@ -261,23 +273,29 @@ public final class ConsentUtil
 		}
 	}
 	
-	private static void updateChildSpecimens(Specimen specimen, String consentWithdrawalOption, long consentTierID, DAO dao, SessionDataBean sessionDataBean) throws DAOException
+	private static void updateChildSpecimens(Specimen specimen, String consentWithdrawalOption, long consentTierID, DAO dao, SessionDataBean sessionDataBean) throws ApplicationException 
 	{
-		Long specimenId = (Long)specimen.getId();	
-		Collection childSpecimens = (Collection)dao.retrieveAttribute(Specimen.class, "elements(childSpecimenCollection)",specimenId, Constants.SYSTEM_IDENTIFIER);
-		//Collection childSpecimens = specimen.getChildrenSpecimen();
-		if(childSpecimens!=null)
-		{	
-			Iterator childItr = childSpecimens.iterator();  
-			while(childItr.hasNext() )
-			{
-				Specimen childSpecimen = (Specimen)childItr.next();
-				consentWithdrawForchildSpecimens(childSpecimen , dao,  sessionDataBean, consentWithdrawalOption, consentTierID);
+		try 
+		{
+			Long specimenId = (Long)specimen.getId();	
+			Collection childSpecimens = (Collection)dao.retrieveAttribute(Specimen.class, "elements(childSpecimenCollection)",specimenId, Constants.SYSTEM_IDENTIFIER);
+
+			//Collection childSpecimens = specimen.getChildrenSpecimen();
+			if(childSpecimens!=null)
+			{	
+				Iterator childItr = childSpecimens.iterator();  
+				while(childItr.hasNext() )
+				{
+					Specimen childSpecimen = (Specimen)childItr.next();
+					consentWithdrawForchildSpecimens(childSpecimen , dao,  sessionDataBean, consentWithdrawalOption, consentTierID);
+				}
 			}
-		}	
+		} catch (DAOException e) {
+			throw AppUtility.getApplicationException(e, "dao.error", "");
+		}
 	}
 	
-	private static void consentWithdrawForchildSpecimens(Specimen specimen, DAO dao, SessionDataBean sessionDataBean, String consentWithdrawalOption, long consentTierID) throws DAOException
+	private static void consentWithdrawForchildSpecimens(Specimen specimen, DAO dao, SessionDataBean sessionDataBean, String consentWithdrawalOption, long consentTierID) throws ApplicationException 
 	{
 		if(specimen!=null)
 		{

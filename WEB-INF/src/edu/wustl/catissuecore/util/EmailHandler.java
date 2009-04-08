@@ -209,7 +209,7 @@ public class EmailHandler
         }
         catch(SMException smExp)
         {
-            throw AppUtility.getApplicationException(smExp.getErrorKeyAsString(), smExp, smExp.getMessage());
+            throw AppUtility.getApplicationException(smExp,smExp.getErrorKeyAsString(),  smExp.getMessage());
         }
         
         return emailStatus;

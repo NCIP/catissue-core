@@ -23,7 +23,7 @@ public class ReportLoaderQueueBizLogic extends CatissueDefaultBizLogic
 	 * Saves the ReportLoaderQueue object in the database.
 	 * @param obj The storageType object to be saved.
 	 * @param session The session in which the object is saved.
-	 * @throws DAOException 
+	 * @throws BizLogicException 
 	 */
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws BizLogicException
 	{
@@ -34,7 +34,7 @@ public class ReportLoaderQueueBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
-			throw getBizLogicException(daoExp, "bizlogic.error", "");
+			throw getBizLogicException(daoExp, "dao.error", "");
 		}
  	}
 
@@ -42,7 +42,7 @@ public class ReportLoaderQueueBizLogic extends CatissueDefaultBizLogic
 	 * Deletes the ReportLoaderQueue object in the database.
 	 * @param obj The object to be updated.
 	 * @param session The session in which the object is saved.
-	 * @throws DAOException 
+	 * @throws BizLogicException 
 	 */
 	protected void delete(Object obj, DAO dao) throws BizLogicException
 	{
@@ -52,7 +52,7 @@ public class ReportLoaderQueueBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
-			throw getBizLogicException(daoExp, "bizlogic.error", "");
+			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
 
@@ -61,7 +61,7 @@ public class ReportLoaderQueueBizLogic extends CatissueDefaultBizLogic
 	 * Updates the ReportLoaderQueue object in the database.
 	 * @param obj The object to be updated.
 	 * @param session The session in which the object is saved.
-	 * @throws DAOException 
+	 * @throws BizLogicException 
 	 */
 	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws BizLogicException
 	{
@@ -72,7 +72,7 @@ public class ReportLoaderQueueBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
-			throw getBizLogicException(daoExp, "bizlogic.error", "");
+			throw getBizLogicException(daoExp, "dao.error", "");
 		}	
 	}
 	
@@ -92,7 +92,7 @@ public class ReportLoaderQueueBizLogic extends CatissueDefaultBizLogic
 	 * @param siteName
 	 * @param treeDataVector
 	 * @return
-	 * @throws DAOException
+	 * @throws BizLogicException
 	 * @throws ClassNotFoundException
 	 */
 	public Vector getTreeViewData(Long reportQueueId,String siteName,Vector treeDataVector)throws BizLogicException
@@ -222,7 +222,7 @@ public class ReportLoaderQueueBizLogic extends CatissueDefaultBizLogic
 	/**
 	 * Executes hql Query and returns the results.
 	 * @param hql String hql
-	 * @throws DAOException DAOException
+	 * @throws BizLogicException DAOException
 	 * @throws ClassNotFoundException ClassNotFoundException
 	 */
 	public List executeQuery(String hql) throws BizLogicException
@@ -238,7 +238,7 @@ public class ReportLoaderQueueBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
-			throw getBizLogicException(daoExp, "bizlogic.error", "");
+			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 		finally
 		{

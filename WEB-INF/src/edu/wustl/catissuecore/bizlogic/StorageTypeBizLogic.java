@@ -16,8 +16,8 @@ import java.util.Iterator;
 
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.exception.BizLogicException;
@@ -64,7 +64,7 @@ public class StorageTypeBizLogic extends DefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
-			throw getBizLogicException(daoExp, "bizlogic.error", "");
+			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
 
@@ -103,7 +103,7 @@ public class StorageTypeBizLogic extends DefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
-			throw getBizLogicException(daoExp, "bizlogic.error", "");
+			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
 
@@ -207,7 +207,7 @@ public class StorageTypeBizLogic extends DefaultBizLogic
 	public long[] getDefaultHoldStorageTypeList(StorageType type) throws BizLogicException
 	{
 		Collection spcimenArrayTypeCollection = (Collection) retrieveAttribute(StorageType.class.getName(), type.getId(), "elements(holdsStorageTypeCollection)");
-		return Utility.getobjectIds(spcimenArrayTypeCollection);
+		return AppUtility.getobjectIds(spcimenArrayTypeCollection);
 	}
 	/**
 	 * To get the Specimen Class types that the given StorageType can hold. 
@@ -222,7 +222,7 @@ public class StorageTypeBizLogic extends DefaultBizLogic
 
 		if (specimenClassTypeCollection != null)
 		{
-			if (specimenClassTypeCollection.size() == Utility.getSpecimenClassTypes().size())
+			if (specimenClassTypeCollection.size() == AppUtility.getSpecimenClassTypes().size())
 			{
 				holdsSpecimenClasses =  new String[] {"-1"};
 			}
@@ -252,7 +252,7 @@ public class StorageTypeBizLogic extends DefaultBizLogic
 	public long[] getDefaultHoldSpecimenArrayTypeList(StorageType type) throws BizLogicException
 	{
 		//Collection spcimenArrayTypeCollection = (Collection) retrieveAttribute(StorageType.class.getName(), type.getId(), "elements(holdsSpecimenArrayTypeCollection)");
-		return Utility.getobjectIds(type.getHoldsSpecimenArrayTypeCollection());
+		return AppUtility.getobjectIds(type.getHoldsSpecimenArrayTypeCollection());
 	}
 	
 	/**

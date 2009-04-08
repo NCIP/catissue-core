@@ -24,13 +24,11 @@ import edu.wustl.common.bizlogic.IActivityStatus;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exception.ErrorKey;
-import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.JDBCDAO;
 import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
-import edu.wustl.dao.exception.DAOException;
 import edu.wustl.security.exception.UserNotAuthorizedException;
 
 
@@ -241,7 +239,7 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(Exception daoExp)
 		{
-			throw getBizLogicException(daoExp, "bizlogic.error", "");
+			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}	 
 
@@ -294,7 +292,7 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(Exception daoExp)
 		{
-			throw getBizLogicException(daoExp, "bizlogic.error", "");
+			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
 	
@@ -361,7 +359,7 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(Exception daoExp)
 		{
-			throw getBizLogicException(daoExp, "bizlogic.error", "");
+			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
 	
@@ -392,7 +390,7 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(Exception daoExp)
 		{
-			throw getBizLogicException(daoExp, "bizlogic.error", "");
+			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 		finally
 		{

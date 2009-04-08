@@ -15,11 +15,11 @@ import java.util.List;
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
+import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.dao.DAO;
-import edu.wustl.dao.exception.DAOException;
 
 /**
  * BiohazardHDAO is used to add biohazard information into the database using Hibernate.

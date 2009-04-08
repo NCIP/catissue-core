@@ -307,7 +307,7 @@ public final class StorageContainerUtil
 		String containerName = storageContainer.getName();
 		if (storageContainerMap == null || storageContainerMap.isEmpty())
 		{
-			throw AppUtility.getApplicationException("utility.error", new Exception(),
+			throw AppUtility.getApplicationException(null,"utility.error", 
 					"StorageContainerUtil.java :" + "Storagecontainer information not found!");
 		}
 
@@ -346,7 +346,7 @@ public final class StorageContainerUtil
 				}
 			}
 		}
-		throw AppUtility.getApplicationException("utility.error", null,
+		throw AppUtility.getApplicationException( null,"utility.error",
 				"Either Storagecontainer is full! or it cannot accomodate all the specimens.");
 	}
 
@@ -631,21 +631,23 @@ public final class StorageContainerUtil
 				}
 				else
 				{
-					throw AppUtility.getApplicationException(
-							"errors.storageContainer.Multiple.inUse", null,
+					throw AppUtility.getApplicationException( null,
+							"errors.storageContainer.Multiple.inUse",
 							"StorageContainerUtil.java");
 				}
 			}
 
 			if (isContainerFull)
 			{
-				throw AppUtility.getApplicationException("errors.storageContainer.Multiple.inUse",
-						null, "StorageContainerUtil.java :"
+				throw AppUtility.getApplicationException( null,
+						"errors.storageContainer.Multiple.inUse",
+						 "StorageContainerUtil.java :"
 								+ "The Storage Container you specified is full");
 			}
 			else if (xPos == null || yPos == null || xPos.intValue() < 0 || yPos.intValue() < 0)
 			{
-				throw AppUtility.getApplicationException("errors.item.format", null,
+				throw AppUtility.getApplicationException( null,
+						"errors.item.format", 
 						"StorageContainerUtil.java :"
 								+ ApplicationProperties
 										.getValue("specimen.positionInStorageContainer"));
@@ -819,7 +821,7 @@ public final class StorageContainerUtil
 			else
 			{
 				String message = ApplicationProperties.getValue("specimen.storageContainer");
-				throw AppUtility.getApplicationException("errors.invalid", null,
+				throw AppUtility.getApplicationException( null,"errors.invalid",
 						"StorageContainerUtil.java :" + message);
 			}
 
@@ -1169,9 +1171,9 @@ public final class StorageContainerUtil
 		}
 
 		throw AppUtility
-				.getApplicationException(
+				.getApplicationException(null,
 						"utility.error",
-						null,
+						
 						"StorageContainerUtil.java :"
 								+ "The container you specified does not have enough space to allocate storage position for Container Number "
 								+ specimenNumber);
