@@ -38,6 +38,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.common.util.global.Status;
@@ -124,7 +125,7 @@ public final class ConsentUtil
 	 */
 	private static void updateSpecimensInSCG(SpecimenCollectionGroup scg, SpecimenCollectionGroup oldscg, long consentTierID, String consentWithdrawalOption,  DAO dao, SessionDataBean sessionDataBean) throws DAOException
 	{
-		Collection specimenCollection =(Collection)dao.retrieveAttribute(SpecimenCollectionGroup.class,scg.getId(),"elements(specimenCollection)","id"); 
+		Collection specimenCollection =(Collection)dao.retrieveAttribute(SpecimenCollectionGroup.class,"elements(specimenCollection)",scg.getId(),"id"); 
 		Collection updatedSpecimenCollection = new HashSet();
 		Iterator specimenItr = specimenCollection.iterator() ;
 		while(specimenItr.hasNext())
@@ -263,7 +264,7 @@ public final class ConsentUtil
 	private static void updateChildSpecimens(Specimen specimen, String consentWithdrawalOption, long consentTierID, DAO dao, SessionDataBean sessionDataBean) throws DAOException
 	{
 		Long specimenId = (Long)specimen.getId();	
-		Collection childSpecimens = (Collection)dao.retrieveAttribute(Specimen.class, specimenId,"elements(childSpecimenCollection)", Constants.SYSTEM_IDENTIFIER);
+		Collection childSpecimens = (Collection)dao.retrieveAttribute(Specimen.class, "elements(childSpecimenCollection)",specimenId, Constants.SYSTEM_IDENTIFIER);
 		//Collection childSpecimens = specimen.getChildrenSpecimen();
 		if(childSpecimens!=null)
 		{	
@@ -302,7 +303,7 @@ public final class ConsentUtil
 	{
 		Collection consentTierStatusCollection = new HashSet();
 		//Lazy Resolved ----  parentSpecimen.getConsentTierStatusCollection();
-		Collection parentStatusCollection = (Collection)dao.retrieveAttribute(Specimen.class, parentSpecimen.getId(),"elements(consentTierStatusCollection)",  Constants.SYSTEM_IDENTIFIER); 
+		Collection parentStatusCollection = (Collection)dao.retrieveAttribute(Specimen.class, "elements(consentTierStatusCollection)",parentSpecimen.getId(),  Constants.SYSTEM_IDENTIFIER); 
 		Iterator parentStatusCollectionIterator = parentStatusCollection.iterator();
 		while(parentStatusCollectionIterator.hasNext() )
 		{
@@ -363,7 +364,7 @@ public final class ConsentUtil
 	 */
 	private static void updateSCGSpecimenCollection(SpecimenCollectionGroup specimenCollectionGroup, SpecimenCollectionGroup oldSpecimenCollectionGroup, long consentTierID, String  statusValue, Collection newSCGConsentCollection, Collection oldSCGConsentCollection,DAO dao) throws DAOException
 	{
-		Collection specimenCollection = (Collection)dao.retrieveAttribute(SpecimenCollectionGroup.class.getName(), specimenCollectionGroup.getId(),"elements(specimenCollection)");  
+		Collection specimenCollection = (Collection)dao.retrieveAttribute(SpecimenCollectionGroup.class, "elements(specimenCollection)",specimenCollectionGroup.getId(),Constants.SYSTEM_IDENTIFIER);  
 		//oldSpecimenCollectionGroup.getSpecimenCollection();
 		Collection updatedSpecimenCollection = new HashSet();
 		String applyChangesTo =  specimenCollectionGroup.getApplyChangesTo(); 
@@ -535,7 +536,7 @@ public final class ConsentUtil
 	 * @param finalDataList
 	 * @throws DAOException 
 	 */
-	public static void getSpecimenDetails(CollectionProtocolRegistration collectionProtocolRegistration, List finalDataList) throws DAOException
+	public static void getSpecimenDetails(CollectionProtocolRegistration collectionProtocolRegistration, List finalDataList) throws ApplicationException
 	{
 		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 		Collection specimencollectionGroup = (Collection)bizLogic.retrieveAttribute(CollectionProtocolRegistration.class.getName(),collectionProtocolRegistration.getId(), "elements(specimenCollectionGroupCollection)");
@@ -553,7 +554,7 @@ public final class ConsentUtil
 	 * @param finalDataList
 	 * @throws DAOException 
 	 */
-	private static void getDetailsOfSpecimen(SpecimenCollectionGroup specimenCollGroupObj, List finalDataList) throws DAOException
+	private static void getDetailsOfSpecimen(SpecimenCollectionGroup specimenCollGroupObj, List finalDataList) throws ApplicationException
 	{
 		// lazy Resolved specimenCollGroupObj.getSpecimenCollection();
 		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
@@ -588,7 +589,7 @@ public final class ConsentUtil
 	 * @param collProtId Get Witness List for this ID
 	 * @return consentWitnessList
 	 */ 
-	public static List witnessNameList(String collProtId) throws DAOException
+	public static List witnessNameList(String collProtId) throws ApplicationException
 	{		
 		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 		
@@ -635,7 +636,7 @@ public final class ConsentUtil
 	 * @param collProtId Get Witness List for this ID
 	 * @return consentWitnessList
 	 */ 
-	public static Collection getConsentList(String collectionProtocolID) throws DAOException
+	public static Collection getConsentList(String collectionProtocolID) throws ApplicationException
     {   	
     	CollectionProtocolBizLogic collectionProtocolBizLogic = (CollectionProtocolBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.COLLECTION_PROTOCOL_FORM_ID);
     	Object object  = collectionProtocolBizLogic.retrieve(CollectionProtocol.class.getName(), Long.valueOf(collectionProtocolID));		
