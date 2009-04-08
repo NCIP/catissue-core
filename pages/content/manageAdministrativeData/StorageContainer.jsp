@@ -21,7 +21,7 @@
 <%
 		//StorageContainerForm form = (StorageContainerForm)request.getAttribute("storageContainerForm");
 		String strCheckStatusForCont = "checkActivityStatus(this,'" + Constants.CONTAINER_DELETE_MAPPING + "')";
-		String pageOf = request.getParameter(Constants.PAGEOF);
+		String pageOf = request.getParameter(Constants.PAGE_OF);
         String operation = (String) request.getAttribute(Constants.OPERATION);
 		//String containerNumber=(String)request.getAttribute("ContainerNumber");
         String formName;
@@ -122,7 +122,7 @@
 				if(document.forms[0].noOfContainers.value > 1)
 				{
 					action = "<%=Constants.CREATE_SIMILAR_CONTAINERS_ACTION%>";
-					action = action + "?pageOf="+"<%=Constants.PAGEOF_CREATE_SIMILAR_CONTAINERS%>"+"&menuSelected=7";
+					action = action + "?pageOf="+"<%=Constants.PAGE_OF_CREATE_SIMILAR_CONTAINERS%>"+"&menuSelected=7";
 					/**
 					 * Name : Vijay_Pande
 					 * Bug ID: 4145
@@ -588,13 +588,13 @@ function onEditChange()
 function vieMapTabSelected(){
  window.parent.tabSelected("viewmapTab");
  var activityStatus= window.parent.getActivityStatus();
- var action= "OpenStorageContainer.do?<%=Constants.SYSTEM_IDENTIFIER%>=${requestScope.storageContainerIdentifier}&<%=Constants.PAGEOF%>=viewMapTab&<%=Constants.ACTIVITY_STATUS%>="+activityStatus+""; 
+ var action= "OpenStorageContainer.do?<%=Constants.SYSTEM_IDENTIFIER%>=${requestScope.storageContainerIdentifier}&<%=Constants.PAGE_OF%>=viewMapTab&<%=Constants.ACTIVITY_STATUS%>="+activityStatus+""; 
 	document.forms[0].action=action;
 	document.forms[0].submit();
 }
 function refresh_tree()
 {	
-	window.parent.frames['SCTreeView'].location="<%=Constants.TREE_NODE_DATA_ACTION%>?<%=Constants.PAGEOF%>=<%=pageOf%>&<%=Constants.RELOAD%>=true&<%=Constants.TREE_NODE_ID%>=${requestScope.storageContainerIdentifier}";
+	window.parent.frames['SCTreeView'].location="<%=Constants.TREE_NODE_DATA_ACTION%>?<%=Constants.PAGE_OF%>=<%=pageOf%>&<%=Constants.RELOAD%>=true&<%=Constants.TREE_NODE_ID%>=${requestScope.storageContainerIdentifier}";
 }
 
 function parentContainerTypeChanged(element)

@@ -35,11 +35,11 @@ public class TreeViewAction extends Action
             HttpServletRequest request, HttpServletResponse response) throws Exception
     {
         //Sets the pageOf attribute (for Add,Edit or Query Interface)
-        String pageOf  = request.getParameter(Constants.PAGEOF);
+        String pageOf  = request.getParameter(Constants.PAGE_OF);
         Logger.out.debug("pageOf in treeview........"+pageOf);
-        request.setAttribute(Constants.PAGEOF,pageOf);
+        request.setAttribute(Constants.PAGE_OF,pageOf);
         
-        if (pageOf.equals(Constants.PAGEOF_STORAGE_LOCATION))
+        if (pageOf.equals(Constants.PAGE_OF_STORAGE_LOCATION))
         {
         	String storageContainerType = request.getParameter(Constants.STORAGE_CONTAINER_TYPE);
         	request.setAttribute(Constants.STORAGE_CONTAINER_TYPE,storageContainerType);
@@ -48,7 +48,7 @@ public class TreeViewAction extends Action
         	String position = request.getParameter(Constants.STORAGE_CONTAINER_POSITION);
         	request.setAttribute(Constants.STORAGE_CONTAINER_POSITION,position); 	
         }
-        else if (pageOf.equals(Constants.PAGEOF_TISSUE_SITE))
+        else if (pageOf.equals(Constants.PAGE_OF_TISSUE_SITE))
         {
             HttpSession session = request.getSession();
             String cdeName = (String)session.getAttribute(Constants.CDE_NAME);

@@ -113,12 +113,12 @@ public class ConsentResponseDisplayAction extends BaseAction
 		consentForm.setCollectionProtocolID(cpId);
 		consentForm.setConsentResponseValues(consentResponseMap);
 		consentForm.setConsentTierCounter(consentCounter);
-		String pageOf  = request.getParameter(Constants.PAGEOF);
+		String pageOf  = request.getParameter(Constants.PAGE_OF);
 		
 		request.setAttribute("witnessList", witnessList);			
 		request.setAttribute("responseList", responseList);
 		request.setAttribute("cpId", collectionProtocolId);
-		request.setAttribute(Constants.PAGEOF, pageOf);
+		request.setAttribute(Constants.PAGE_OF, pageOf);
 		request.setAttribute(consentResponseKey, consentResponseMap);
 		
 		

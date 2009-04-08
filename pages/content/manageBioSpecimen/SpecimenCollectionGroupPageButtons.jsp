@@ -73,7 +73,7 @@
 												%>
 												
 											
-												<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
+												<logic:notEqual name="<%=Constants.PAGE_OF%>" value="<%=Constants.QUERY%>">
 												
 													<!-- Patch ID: Bug#4227_7 -->
 													<html:button styleClass="blue_ar_c"  

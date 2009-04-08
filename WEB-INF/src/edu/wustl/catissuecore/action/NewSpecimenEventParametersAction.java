@@ -111,6 +111,6 @@ public class NewSpecimenEventParametersAction  extends SecureAction
         	Logger.out.error(e.getMessage(),e);
 		}
     	
-        return mapping.findForward((String)request.getParameter(Constants.PAGEOF));
+        return mapping.findForward((String)request.getParameter(Constants.PAGE_OF));
     }
 }

@@ -546,7 +546,7 @@ public class UserForm extends AbstractActionForm
 	public int getFormId()
 	{
 		int formId = Constants.APPROVE_USER_FORM_ID;
-		if ((pageOf != null) && (Constants.PAGEOF_APPROVE_USER.equals(pageOf) == false))
+		if ((pageOf != null) && (Constants.PAGE_OF_APPROVE_USER.equals(pageOf) == false))
 		{
 			formId = Constants.USER_FORM_ID;
 		}
@@ -626,7 +626,7 @@ public class UserForm extends AbstractActionForm
 	 */
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
-		if (Constants.PAGEOF_CHANGE_PASSWORD.equals(pageOf) == false)
+		if (Constants.PAGE_OF_CHANGE_PASSWORD.equals(pageOf) == false)
 		{
 			User user = (User) abstractDomain;
 
@@ -644,7 +644,7 @@ public class UserForm extends AbstractActionForm
 			setAddr(user);
 			//Populate the activity status, comments and role for approve user and user edit.  
 			setUserData(user);
-			if (Constants.PAGEOF_USER_ADMIN.equals(pageOf))
+			if (Constants.PAGE_OF_USER_ADMIN.equals(pageOf))
 			{
 				//Bug-1516: Jitendra
 				String pwd = PasswordManager.decode(user.getLatestPassword());	
@@ -658,7 +658,7 @@ public class UserForm extends AbstractActionForm
 					logger.error(e.getMessage(),e);
 				}                
 			}
-			if (Constants.PAGEOF_USER_PROFILE.equals(pageOf))
+			if (Constants.PAGE_OF_USER_PROFILE.equals(pageOf))
 			{
 				this.role = user.getRoleId();
 			}
@@ -698,7 +698,7 @@ public class UserForm extends AbstractActionForm
 	 */
 	private void setUserData(User user)
 	{
-		if ((getFormId() == Constants.APPROVE_USER_FORM_ID) || ((pageOf != null) && (Constants.PAGEOF_USER_ADMIN.equals(pageOf))))
+		if ((getFormId() == Constants.APPROVE_USER_FORM_ID) || ((pageOf != null) && (Constants.PAGE_OF_USER_ADMIN.equals(pageOf))))
 		{
 			this.activityStatus = user.getActivityStatus();
 
@@ -826,7 +826,7 @@ public class UserForm extends AbstractActionForm
 		{
 			if (operation != null)
 			{
-				if (pageOf.equals(Constants.PAGEOF_CHANGE_PASSWORD))
+				if (pageOf.equals(Constants.PAGE_OF_CHANGE_PASSWORD))
 				{
 					chkEmpty(errors, validator, "user.oldPassword", oldPassword);
 					chkEmpty(errors, validator, "user.newPassword", newPassword);
@@ -840,7 +840,7 @@ public class UserForm extends AbstractActionForm
 					logger.debug("user form ");
 					ifAddEdit(errors, validator);
 
-					if (pageOf.equals(Constants.PAGEOF_APPROVE_USER))
+					if (pageOf.equals(Constants.PAGE_OF_APPROVE_USER))
 					{
 						chkValOpt(errors, validator, "user.approveOperation", status);
 					}
@@ -870,7 +870,7 @@ public class UserForm extends AbstractActionForm
 			chkMail(errors, validator,"user.emailAddress", emailAddress);
 
 			// Mandar : 24-Apr-06 Bugid:972 confirmEmailAddress start
-			if (!pageOf.equals(Constants.PAGEOF_USER_PROFILE))
+			if (!pageOf.equals(Constants.PAGE_OF_USER_PROFILE))
 			{
 				chkMail(errors, validator,"user.confirmemailAddress", confirmEmailAddress);
 				compMail(errors);
@@ -914,7 +914,7 @@ public class UserForm extends AbstractActionForm
 	 */
 	private void adminEdit(HttpServletRequest request, ActionErrors errors, Validator validator)
 	{
-		if(pageOf.equals(Constants.PAGEOF_USER_ADMIN) && operation.equals(Constants.EDIT))
+		if(pageOf.equals(Constants.PAGE_OF_USER_ADMIN) && operation.equals(Constants.EDIT))
 		{
 			String pageFrom = request.getParameter("pageFrom");
 			if(!"ApproveUser".equals(pageFrom))

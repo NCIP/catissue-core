@@ -35,7 +35,7 @@
 	//columnList.add(0," ");
     String checkAllPages = (String)session.getAttribute("checkAllPages");
 	List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
-	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
+	String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 %>
 
 	<script language="javascript">

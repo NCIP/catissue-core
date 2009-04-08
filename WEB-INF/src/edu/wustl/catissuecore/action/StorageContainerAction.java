@@ -65,7 +65,7 @@ public class StorageContainerAction extends SecureAction
 		//boolean to indicate whether the suitable containers to be shown in dropdown 
 		//is exceeding the max limit.
 		String exceedingMaxLimit = "false";
-		String pageOf = request.getParameter(Constants.PAGEOF);
+		String pageOf = request.getParameter(Constants.PAGE_OF);
 		String containerId=request.getParameter("containerIdentifier"); 
 		String isPageFromStorageType=(String)session.getAttribute("isPageFromStorageType");
 		//String isSiteChanged=(String)request.getParameter("isSiteChanged");
@@ -247,7 +247,7 @@ public class StorageContainerAction extends SecureAction
 		session.removeAttribute(Constants.STORAGE_CONTAINER_SESSION_BEAN);
 		session.removeAttribute("isPageFromStorageType");
 		Utility.setDefaultPrinterTypeLocation(storageContainerForm);
-		return mapping.findForward((String) request.getParameter(Constants.PAGEOF));
+		return mapping.findForward((String) request.getParameter(Constants.PAGE_OF));
 	}
 	
 	private void setStorageType(HttpServletRequest request, StorageContainerForm storageContainerForm,HttpSession session)

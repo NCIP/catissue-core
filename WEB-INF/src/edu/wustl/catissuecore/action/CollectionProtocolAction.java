@@ -66,7 +66,7 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
     	
     	String tabSel=(String)request.getParameter("tabSel");
     	request.setAttribute("tabSel", tabSel);
-    	String pageOf = (String)request.getParameter(Constants.PAGEOF);
+    	String pageOf = (String)request.getParameter(Constants.PAGE_OF);
     	String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
     	String invokeFunction = (String)request.getParameter("invokeFunction");
     	if(invokeFunction==null){

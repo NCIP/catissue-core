@@ -51,7 +51,7 @@ public class SiteAction  extends SecureAction
 
         //Sets the operation attribute to be used in the Add/Edit User Page.
            
-        String pageOf = (String) request.getParameter(Constants.PAGEOF);
+        String pageOf = (String) request.getParameter(Constants.PAGE_OF);
         String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
         
         siteForm.setSubmittedFor(submittedFor);

@@ -122,7 +122,7 @@ if(!hasAccess)
 
         <tr>
           <td colspan="2" align="left">
-		  <% if(pageOf.equals(Constants.PAGEOF_PARTICIPANT) || pageOf.equals(Constants.PAGE_OF_PARTICIPANT_CP_QUERY))
+		  <% if(pageOf.equals(Constants.PAGE_OF_PARTICIPANT) || pageOf.equals(Constants.PAGE_OF_PARTICIPANT_CP_QUERY))
 			{
 		  %>
 		  <table width="100%" border="0" cellspacing="0" cellpadding="2">
@@ -185,7 +185,7 @@ if(!hasAccess)
 
 	<%
 				String requestFor=(String)request.getParameter(Constants.REQUEST_FOR);
-				if(requestFor!=null||pageOf.equals(Constants.PAGEOF_REVIEW_SPR)||pageOf.equals(Constants.PAGEOF_QUARANTINE_SPR)||requestFor!=null)
+				if(requestFor!=null||pageOf.equals(Constants.PAGE_OF_REVIEW_SPR)||pageOf.equals(Constants.PAGE_OF_QUARANTINE_SPR)||requestFor!=null)
 				{
 				%>
 					<tr>
@@ -419,15 +419,15 @@ if(!hasAccess)
         
         <tr>
           <td colspan="2" class="buttonbg"><%
-	pageOf=request.getParameter(Constants.PAGEOF);
-	if(pageOf.equals(Constants.PAGEOF_REVIEW_SPR))
+	pageOf=request.getParameter(Constants.PAGE_OF);
+	if(pageOf.equals(Constants.PAGE_OF_REVIEW_SPR))
 	{
 %>
 		<input type="button" name="doneButton" style="actionButton" value="Finish Review " onclick="finishReview()"/>
 		
 <%					
 	}
-	else if(pageOf.equals(Constants.PAGEOF_QUARANTINE_SPR))
+	else if(pageOf.equals(Constants.PAGE_OF_QUARANTINE_SPR))
 	{
 %>
 		

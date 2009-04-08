@@ -47,8 +47,8 @@ public class MSRUtil {
 			
 			errorsMesssagesForPriv(request);
 			
-			//if(!(Constants.PAGE_OF_USER).equalsIgnoreCase(pageOf)&&!(Constants.PAGEOF_USER_PROFILE).equals(pageOf))
-			if(pageOf!=null && (Constants.PAGEOF_ASSIGN_PRIVILEGE).equalsIgnoreCase(pageOf))
+			//if(!(Constants.PAGE_OF_USER).equalsIgnoreCase(pageOf)&&!(Constants.PAGE_OF_USER_PROFILE).equals(pageOf))
+			if(pageOf!=null && (Constants.PAGE_OF_ASSIGN_PRIVILEGE).equalsIgnoreCase(pageOf))
 			{
 				if (session.getAttribute(Constants.ROW_ID_OBJECT_BEAN_MAP) != null)
 				{
@@ -265,7 +265,7 @@ public class MSRUtil {
 		Map<String, SiteUserRolePrivilegeBean> rowIdBeanMap= new HashMap<String, SiteUserRolePrivilegeBean>();
 		
 		//if (!(Constants.PAGE_OF_USER).equals(pageOf)&& (session.getAttribute(Constants.ROW_ID_OBJECT_BEAN_MAP) != null))
-		if (pageOf!=null && (Constants.PAGEOF_ASSIGN_PRIVILEGE).equals(pageOf)&& (session.getAttribute(Constants.ROW_ID_OBJECT_BEAN_MAP) != null))
+		if (pageOf!=null && (Constants.PAGE_OF_ASSIGN_PRIVILEGE).equals(pageOf)&& (session.getAttribute(Constants.ROW_ID_OBJECT_BEAN_MAP) != null))
 		{
 			rowIdBeanMap = (Map<String, SiteUserRolePrivilegeBean>) session.getAttribute(Constants.ROW_ID_OBJECT_BEAN_MAP);
 			temp=Constants.ROW_ID_OBJECT_BEAN_MAP;
@@ -310,7 +310,7 @@ public class MSRUtil {
 		
 		Map<String, SiteUserRolePrivilegeBean> rowIdBeanMap= new HashMap<String, SiteUserRolePrivilegeBean>();
 		
-		if (pageOf!=null && ! pageOf.equals("") && (Constants.PAGEOF_ASSIGN_PRIVILEGE).equals(pageOf))
+		if (pageOf!=null && ! pageOf.equals("") && (Constants.PAGE_OF_ASSIGN_PRIVILEGE).equals(pageOf))
 		{
 			if(session.getAttribute(Constants.ROW_ID_OBJECT_BEAN_MAP) != null)
 			{

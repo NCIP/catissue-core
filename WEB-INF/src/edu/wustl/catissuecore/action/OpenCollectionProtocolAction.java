@@ -27,7 +27,7 @@ public class OpenCollectionProtocolAction extends BaseAction{
 			HttpServletRequest request, HttpServletResponse response) throws Exception {
 		CollectionProtocolForm formName = (CollectionProtocolForm)form;
 		String operation = (String)request.getParameter(Constants.OPERATION);
-		String pageOf = (String)request.getParameter(Constants.PAGEOF);
+		String pageOf = (String)request.getParameter(Constants.PAGE_OF);
 		HttpSession session = request.getSession();
 		if("pageOfmainCP".equalsIgnoreCase(pageOf))
 		{

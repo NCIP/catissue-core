@@ -152,7 +152,7 @@ public class MSRBaseTestCase extends CaTissueBaseTestCase
             //TODO how to make it site admin ?
             user.setRoleId(roleId);
             user.setActivityStatus("Active");
-            user.setPageOf(Constants.PAGEOF_USER_ADMIN);
+            user.setPageOf(Constants.PAGE_OF_USER_ADMIN);
             user.getSiteCollection().clear();
             user.getSiteCollection().addAll(siteList);
             

@@ -42,7 +42,7 @@ public class AssignPrivilegeAction extends BaseAction
             throws IOException, ServletException
     {
     	AssignPrivilegesForm privilegeForm = (AssignPrivilegesForm)form;
-    	String target = (String)request.getParameter(Constants.PAGEOF);
+    	String target = (String)request.getParameter(Constants.PAGE_OF);
     	
     	try
 		{

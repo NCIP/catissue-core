@@ -108,7 +108,7 @@ public class SpecimenArrayTypeAction extends SecureAction
 			Logger.out.debug(Constants.MENU_SELECTED + " " +strMenu +" set successfully");
 		}
 */		
-    	String pageOf = (String)request.getParameter(Constants.PAGEOF);
+    	String pageOf = (String)request.getParameter(Constants.PAGE_OF);
     	
     	if (pageOf == null) {
     		pageOf = Constants.SUCCESS;

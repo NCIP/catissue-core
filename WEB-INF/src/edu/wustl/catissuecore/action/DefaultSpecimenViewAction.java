@@ -139,7 +139,7 @@ public class DefaultSpecimenViewAction extends BaseAction
 			request.setAttribute(Constants.SPECIMENT_VIEW_ATTRIBUTE, defaultViewAttribute);
 		}
 
-		request.setAttribute(Constants.PAGEOF, Constants.PAGEOF_QUERY_RESULTS);
+		request.setAttribute(Constants.PAGE_OF, Constants.PAGE_OF_QUERY_RESULTS);
 		return mapping.findForward(target);
 	}
 

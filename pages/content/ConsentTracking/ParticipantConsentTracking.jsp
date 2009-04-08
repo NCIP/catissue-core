@@ -19,7 +19,7 @@
 
 	<%
 		String normalSubmit="";
-			String pageOf=(String)request.getAttribute(Constants.PAGEOF);
+			String pageOf=(String)request.getAttribute(Constants.PAGE_OF);
 			String operation = (String)request.getAttribute(Constants.OPERATION);
 			List responseList =(List)request.getAttribute("responseList");
 			List witnessList = (List)request.getAttribute("witnessList");

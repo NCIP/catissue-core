@@ -13,7 +13,7 @@
 	<tr height="5%">
 		<td>
 <%
-if(pageOf.equals(Constants.PAGEOF_REVIEW_SPR))
+if(pageOf.equals(Constants.PAGE_OF_REVIEW_SPR))
 {
 %>
 	<b>
@@ -21,7 +21,7 @@ if(pageOf.equals(Constants.PAGEOF_REVIEW_SPR))
 	</b>
 <%
 }
-else if(pageOf.equals(Constants.PAGEOF_QUARANTINE_SPR))
+else if(pageOf.equals(Constants.PAGE_OF_QUARANTINE_SPR))
 {
 %>
 	<b>

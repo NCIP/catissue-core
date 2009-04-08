@@ -51,7 +51,7 @@ public class AddSpecimenAction extends SecureAction
 	{
 
 		CreateSpecimenForm createForm = (CreateSpecimenForm) form;
-		String pageOf = request.getParameter(Constants.PAGEOF);
+		String pageOf = request.getParameter(Constants.PAGE_OF);
 		
 		String sourceObjectName = Specimen.class.getName();
 		String[] selectColumnName = {Constants.SYSTEM_IDENTIFIER};

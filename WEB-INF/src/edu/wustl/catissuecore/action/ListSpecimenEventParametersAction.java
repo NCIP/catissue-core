@@ -240,8 +240,8 @@ public class ListSpecimenEventParametersAction extends SecureAction
 			Logger.out.error(e.getMessage(), e);
 		}
 		request.setAttribute(Constants.MENU_SELECTED, new String("15"));
-		String pageOf = request.getParameter(Constants.PAGEOF);
-		request.setAttribute(Constants.PAGEOF, pageOf);
+		String pageOf = request.getParameter(Constants.PAGE_OF);
+		request.setAttribute(Constants.PAGE_OF, pageOf);
 
 		if (pageOf.equals(Constants.PAGE_OF_LIST_SPECIMEN_EVENT_PARAMETERS_CP_QUERY))
 		{
@@ -272,7 +272,7 @@ public class ListSpecimenEventParametersAction extends SecureAction
 			Logger.out.error(e.getMessage(), e);
 		}
 		request.setAttribute("specimenEntityId",specimenEntityId);
-		return mapping.findForward((String) request.getParameter(Constants.PAGEOF));
+		return mapping.findForward((String) request.getParameter(Constants.PAGE_OF));
 	}
 
 	// Patch ID: Bug#4180_2

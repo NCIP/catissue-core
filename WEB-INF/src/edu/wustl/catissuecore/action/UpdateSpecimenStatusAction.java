@@ -141,9 +141,9 @@ public class UpdateSpecimenStatusAction extends BaseAction
 			actionErrors.add(actionErrors.GLOBAL_MESSAGE, new ActionError("errors.item", s));
 			saveErrors(request, actionErrors);
 			saveToken(request);
-			String pageOf = request.getParameter(Constants.PAGEOF);
+			String pageOf = request.getParameter(Constants.PAGE_OF);
 			if(pageOf != null)
-				request.setAttribute(Constants.PAGEOF,pageOf);
+				request.setAttribute(Constants.PAGE_OF,pageOf);
 			return mapping.findForward(Constants.FAILURE);
 		}
 

@@ -35,7 +35,7 @@ tr#hiddenCombo
 	columnList.add(0," ");
 	List dataList = (List) request.getAttribute(Constants.PAGINATION_DATA_LIST);
 	
-	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
+	String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 	String title = pageOf + ".searchResultTitle";
 	boolean isSpecimenData = false;	
 	int IDCount = 0;
@@ -92,8 +92,8 @@ tr#hiddenCombo
 		    {
 			    var pageNum = "<%=pageNum%>";
 				var action;
-                var isQueryModule = "<%=pageOf.equals(Constants.PAGEOF_QUERY_MODULE)%>";
-                <%if (pageOf.equals(Constants.PAGEOF_QUERY_MODULE))
+                var isQueryModule = "<%=pageOf.equals(Constants.PAGE_OF_QUERY_MODULE)%>";
+                <%if (pageOf.equals(Constants.PAGE_OF_QUERY_MODULE))
                 {%>
 				
 				 action = "AddDeleteCart.do?operation=add&pageNum="+pageNum+"&isCheckAllAcrossAllChecked="+isCheckAllAcrossAllChecked;
@@ -235,7 +235,7 @@ function checkAllOnThisPageResponse()
 	<%
 		String configAction = new String();
 			String redefineQueryAction = new String();
-			if(pageOf.equals(Constants.PAGEOF_SIMPLE_QUERY_INTERFACE))
+			if(pageOf.equals(Constants.PAGE_OF_SIMPLE_QUERY_INTERFACE))
 			{
 		configAction = "onSimpleConfigure()";
 		redefineQueryAction = "onRedefineSimpleQuery()";
@@ -273,7 +273,7 @@ function checkAllOnThisPageResponse()
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
 <tr>
 		<td class="td_color_bfdcf3">
-<logic:equal name="pageOf" value="<%=Constants.PAGEOF_SIMPLE_QUERY_INTERFACE%>">
+<logic:equal name="pageOf" value="<%=Constants.PAGE_OF_SIMPLE_QUERY_INTERFACE%>">
 			<table border="0" cellpadding="0" cellspacing="0">
 		      <tr>
 				<td class="td_table_head">
@@ -319,7 +319,7 @@ function checkAllOnThisPageResponse()
 <html:hidden property="checkAllPages" value=""/>	
 
 	<%
-			if(dataList == null && pageOf.equals(Constants.PAGEOF_QUERY_RESULTS))
+			if(dataList == null && pageOf.equals(Constants.PAGE_OF_QUERY_RESULTS))
 				{
 		%>
 			<bean:message key="advanceQuery.noRecordsFound"/>
@@ -342,12 +342,12 @@ function checkAllOnThisPageResponse()
 		<tr>
 			<td class="black_ar" >					
 				<custom:test name="" pageNum="<%=pageNum%>" totalResults="<%=totalResults%>" numResultsPerPage="<%=numResultsPerPage%>" pageName="<%=pageName%>"  showPageSizeCombo="<%=true%>" recordPerPageList="<%=Constants.RESULT_PERPAGE_OPTIONS%>" />
-				<html:hidden property="<%=Constants.PAGEOF%>" value="<%=pageOf%>"/>
+				<html:hidden property="<%=Constants.PAGE_OF%>" value="<%=pageOf%>"/>
 				<html:hidden property="isPaging" value="true"/>			
 			</td>
 		</tr>
 		<%
-			if(pageOf.equals(Constants.PAGEOF_QUERY_RESULTS))
+			if(pageOf.equals(Constants.PAGE_OF_QUERY_RESULTS))
 				{			
 			String []selectedColumns=form.getSelectedColumnNames();
 		%>
@@ -406,7 +406,7 @@ function checkAllOnThisPageResponse()
 						boolean isDefaultView = (obj!=null);
 					%>
 					<td width="5%" valign="top">
-					<%if(pageOf.equals(Constants.PAGEOF_QUERY_RESULTS)){%>
+					<%if(pageOf.equals(Constants.PAGE_OF_QUERY_RESULTS)){%>
 						<input type='checkbox' <%if (isDefaultView){%>checked='checked' <%}%>name='checkDefaultSpecimenView' id='checkDefaultSpecimenView' onClick='setDefaultView(this)'>
 						<span class="black_ar"><bean:message key="buttons.defaultSpecimenView" /></span>&nbsp;
 					<%}else{%>
@@ -417,7 +417,7 @@ function checkAllOnThisPageResponse()
 						&nbsp;
 					</td>
 					<td width="5%" nowrap align="right" valign="top">
-					<%if(pageOf.equals(Constants.PAGEOF_QUERY_RESULTS) || pageOf.equals(Constants.PAGEOF_QUERY_MODULE) ){
+					<%if(pageOf.equals(Constants.PAGE_OF_QUERY_RESULTS) || pageOf.equals(Constants.PAGE_OF_QUERY_MODULE) ){
 						
 					%>
 						<img src="images/b_add_list.gif" width="100" hspace="3" onclick="getData()"/>&nbsp;

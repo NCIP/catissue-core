@@ -56,7 +56,7 @@ public class NewShopingCartAction extends BaseAction {
 		List<AttributeInterface> oldAttributeList=new ArrayList<AttributeInterface>();
 		List<AttributeInterface> cartAttributeList=new ArrayList<AttributeInterface>();
 		List<String> columnList=new ArrayList<String>();
-		String pageOf = request.getParameter(edu.wustl.catissuecore.util.global.Constants.PAGEOF);
+		String pageOf = request.getParameter(edu.wustl.catissuecore.util.global.Constants.PAGE_OF);
 		
 		//int[] searchTarget = prepareSearchTarget();
 		//int basedOn = 0;

@@ -22,9 +22,9 @@
 </style>
 <%
 	String title = null;
-	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
+	String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 	if(pageOf == null)
-	    pageOf =(String)request.getParameter(Constants.PAGEOF);
+	    pageOf =(String)request.getParameter(Constants.PAGE_OF);
 	    
 	String consentTierCounter =(String)request.getParameter("consentTierCounter");
 	Integer identifierFieldIndex = new Integer(0);

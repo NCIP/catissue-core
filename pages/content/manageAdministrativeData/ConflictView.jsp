@@ -94,7 +94,7 @@
 			{
 			%>
               <custom:test name="New User Search Results" pageNum="<%=pageNum%>" totalResults="<%=totalResults%>" numResultsPerPage="<%=numResultsPerPage%>" pageName="<%=pageName%>" showPageSizeCombo="<%=true%>" recordPerPageList="<%=Constants.RESULT_PERPAGE_OPTIONS%>"/>
-			<html:hidden property="<%=Constants.PAGEOF%>" value="<%=pageOf%>"/>
+			<html:hidden property="<%=Constants.PAGE_OF%>" value="<%=pageOf%>"/>
 			<html:hidden property="isPaging" value="true"/>
 			</td>
 			  <%}%>

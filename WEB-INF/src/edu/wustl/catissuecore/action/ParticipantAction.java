@@ -228,7 +228,7 @@ public class ParticipantAction extends SecureAction
 		//Sets the collection Protocol if page is opened from collection protocol registration
 		if (participantForm.getOperation().equals(Constants.ADD))
 		{
-			String pageOf = request.getParameter(Constants.PAGEOF);
+			String pageOf = request.getParameter(Constants.PAGE_OF);
 			if(pageOf.equalsIgnoreCase(Constants.PAGE_OF_PARTICIPANT_CP_QUERY)) // If one is registering for given collection protocol
 			{
 				String collectionProtocolId = request.getParameter(Constants.CP_SEARCH_CP_ID);
@@ -280,9 +280,9 @@ public class ParticipantAction extends SecureAction
 		request.setAttribute(Constants.OPERATION, operation);
 
 		//Sets the pageOf attribute (for Add,Edit or Query Interface)
-		String pageOf = request.getParameter(Constants.PAGEOF);
+		String pageOf = request.getParameter(Constants.PAGE_OF);
 
-		request.setAttribute(Constants.PAGEOF, pageOf);
+		request.setAttribute(Constants.PAGE_OF, pageOf);
 		
 		//Sets the genderList attribute to be used in the Add/Edit Participant Page.
 		List genderList = CDEManager.getCDEManager().getPermissibleValueList(

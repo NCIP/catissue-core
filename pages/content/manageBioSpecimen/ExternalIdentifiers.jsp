@@ -1,5 +1,5 @@
 <!-- Patch_Id: Improve_Space_Usability_On_Specimen_Page_4
-	Description: import statement required for Constants.PAGEOF  -->
+	Description: import statement required for Constants.PAGE_OF  -->
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <head>
 <%
@@ -84,9 +84,9 @@
 		     
 			<%
 			String delExtIds="deleteExternalIdentifiers('pageOfMultipleSpecimen')";
-			if((String)request.getAttribute(Constants.PAGEOF)!=null)
+			if((String)request.getAttribute(Constants.PAGE_OF)!=null)
 			{
-				delExtIds="deleteExternalIdentifiers('"+(String)request.getAttribute(Constants.PAGEOF)+"');";
+				delExtIds="deleteExternalIdentifiers('"+(String)request.getAttribute(Constants.PAGE_OF)+"');";
 			}
 			%>
 		   

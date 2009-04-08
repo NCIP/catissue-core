@@ -46,8 +46,8 @@ public class ShowFramedPageAction extends Action
             HttpServletRequest request, HttpServletResponse response) throws Exception
     {
         //Sets the pageOf attribute (for Add,Edit or Query Interface)
-        String pageOf  = request.getParameter(Constants.PAGEOF);
-        request.setAttribute(Constants.PAGEOF,pageOf);
+        String pageOf  = request.getParameter(Constants.PAGE_OF);
+        request.setAttribute(Constants.PAGE_OF,pageOf);
         HttpSession session = request.getSession();
        
         //Aniruddha : For removing hardcoded names of html component
@@ -66,8 +66,8 @@ public class ShowFramedPageAction extends Action
      	session.removeAttribute(Constants.CAN_HOLD_SPECIMEN_CLASS);
      	session.removeAttribute(Constants.CAN_HOLD_SPECIMEN_ARRAY_TYPE);
 
-        if (pageOf.equals(edu.wustl.common.util.global.Constants.PAGEOF_SPECIMEN) ||
-        		pageOf.equals(Constants.PAGEOF_ALIQUOT) || pageOf.equals(Constants.PAGEOF_STORAGE_CONTAINER))
+        if (pageOf.equals(edu.wustl.common.util.global.Constants.PAGE_OF_SPECIMEN) ||
+        		pageOf.equals(Constants.PAGE_OF_ALIQUOT) || pageOf.equals(Constants.PAGE_OF_STORAGE_CONTAINER))
         {
         	String storageType = request.getParameter("storageType");
         	String isStorageContainer = request.getParameter("storageContainer");
@@ -83,7 +83,7 @@ public class ShowFramedPageAction extends Action
           	
           	session.setAttribute(Constants.CAN_HOLD_SPECIMEN_ARRAY_TYPE,specimenarrayType);
         }
-        else if (pageOf.equals(Constants.PAGEOF_STORAGE_LOCATION))
+        else if (pageOf.equals(Constants.PAGE_OF_STORAGE_LOCATION))
         {
             String storageContainerType = request.getParameter(Constants.STORAGE_CONTAINER_TYPE);
             request.setAttribute(Constants.STORAGE_CONTAINER_TYPE,storageContainerType);
@@ -93,7 +93,7 @@ public class ShowFramedPageAction extends Action
             request.setAttribute(Constants.STORAGE_CONTAINER_POSITION,position);
             
         }
-        else if (pageOf.equals(Constants.PAGEOF_TISSUE_SITE))
+        else if (pageOf.equals(Constants.PAGE_OF_TISSUE_SITE))
         {
             String propertyName = request.getParameter(Constants.PROPERTY_NAME);
             request.setAttribute(Constants.PROPERTY_NAME,propertyName);
@@ -101,7 +101,7 @@ public class ShowFramedPageAction extends Action
             String cdeName = request.getParameter(Constants.CDE_NAME);
             session.setAttribute(Constants.CDE_NAME, cdeName);
         }
-        else if (pageOf.equals(Constants.PAGEOF_MULTIPLE_SPECIMEN)) 
+        else if (pageOf.equals(Constants.PAGE_OF_MULTIPLE_SPECIMEN)) 
         {
         	String specimenClass = request.getParameter(Constants.SPECIMEN_CLASS);
         	String collectionGroupName = request.getParameter(Constants.SPECIMEN_COLLECTION_GROUP);
@@ -122,7 +122,7 @@ public class ShowFramedPageAction extends Action
             }
         }
         //Added By Ramya for orderingsystem module.
-        else if(pageOf.equals(Constants.PAGEOF_SPECIMEN_TREE))
+        else if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_TREE))
         {
         	session = request.getSession();
         	IBizLogic bizLogic = null;

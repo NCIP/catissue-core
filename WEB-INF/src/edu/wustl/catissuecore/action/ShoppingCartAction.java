@@ -100,7 +100,7 @@ public class ShoppingCartAction  extends BaseAction
 	        	Logger.out.debug("map of shopping form:"+map);
 	        	Object obj[] = map.keySet().toArray();
 	        	
-	        	if(pageOff !=null && pageOff.equals(Constants.PAGEOF_QUERY_MODULE))
+	        	if(pageOff !=null && pageOff.equals(Constants.PAGE_OF_QUERY_MODULE))
 	        	{ 
 	        		List spreadsheetColumns = (List)session.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
 	        		System.out.println("");
@@ -207,7 +207,7 @@ public class ShoppingCartAction  extends BaseAction
        			//List dataList = (List) session.getAttribute(Constants.SPREADSHEET_DATA_LIST);
         		List columnList = (List)session.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
         		request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST,columnList);
-        		request.setAttribute(Constants.PAGEOF,Constants.PAGEOF_QUERY_RESULTS);
+        		request.setAttribute(Constants.PAGE_OF,Constants.PAGE_OF_QUERY_RESULTS);
         		if(!isError )
         		{
         			target=Constants.SHOPPING_CART_ADD;

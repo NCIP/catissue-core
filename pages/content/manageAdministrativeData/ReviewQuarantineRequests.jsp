@@ -12,7 +12,7 @@
 	
 	List dataList = (List) request.getAttribute(Constants.SHOW_DOMAIN_OBJECT_LIST);
 	List columnList = (List)request.getAttribute(Constants.COLUMN_LIST);
-	String pageOf = (String)request.getParameter(Constants.PAGEOF);
+	String pageOf = (String)request.getParameter(Constants.PAGE_OF);
 	String reportAction = (String)request.getParameter(Constants.REPORT_ACTION);
 	String title = pageOf + ".report.request";
 	if(reportAction.equals(Constants.REVIEW))
@@ -44,7 +44,7 @@
 			<html:form action="/ReviewRequests">				
 				<custom:test name="Search Results" pageNum="<%=pageNum%>" totalResults="<%=totalResults%>" numResultsPerPage="<%=numResultsPerPage%>" pageName="<%=pageName%>" showPageSizeCombo="<%=true%>"/>
 				<html:hidden property="reportAction" value="<%=reportAction%>"/>
-				<html:hidden property="<%=Constants.PAGEOF%>" value="<%=pageOf%>"/>
+				<html:hidden property="<%=Constants.PAGE_OF%>" value="<%=pageOf%>"/>
 			</html:form>
 		</td>
 	</tr>

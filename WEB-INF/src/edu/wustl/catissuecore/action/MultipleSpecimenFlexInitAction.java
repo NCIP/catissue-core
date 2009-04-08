@@ -61,12 +61,12 @@ public class MultipleSpecimenFlexInitAction extends SecureAction
 		String pageOf = (String) request.getParameter("pageOf");
 		if (pageOf != null)
 		{
-			request.setAttribute(Constants.PAGEOF, pageOf);
+			request.setAttribute(Constants.PAGE_OF, pageOf);
 			return mapping.findForward(pageOf);
 		}
 		else if(Constants.EDIT.equalsIgnoreCase(mode))
 		{
-			request.setAttribute(Constants.PAGEOF,"pageOfMultipleSpWithMenu");
+			request.setAttribute(Constants.PAGE_OF,"pageOfMultipleSpWithMenu");
 		}
 			
 		return mapping.findForward("success");

@@ -20,7 +20,7 @@
 		</script>
 <!-- Mandar 11-Aug-06 : calendar changes end -->
 <%
-	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
+	String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 	   		Object obj = request.getAttribute("collectionProtocolRegistrationForm");
 	CollectionProtocolRegistrationForm form =null;
 	Integer registrationYear = null,registrationMonth=null,registrationDay=null;

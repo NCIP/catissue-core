@@ -141,7 +141,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 			String generatedPassword = PasswordManager.generatePassword();
 
 			// If the page is of signup user don't create the csm user.
-			if (user.getPageOf().equals(Constants.PAGEOF_SIGNUP) == false)
+			if (user.getPageOf().equals(Constants.PAGE_OF_SIGNUP) == false)
 			{
 				csmUser.setLoginName(user.getLoginName());
 				csmUser.setLastName(user.getLastName());
@@ -213,7 +213,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 
 			EmailHandler emailHandler = new EmailHandler();
 			// Send the user registration email to user and the administrator.
-			if (Constants.PAGEOF_SIGNUP.equals(user.getPageOf()))
+			if (Constants.PAGE_OF_SIGNUP.equals(user.getPageOf()))
 			{
 				//SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null, protectionObjects, null);
 
@@ -837,7 +837,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 			String oldPassword = user.getOldPassword();
 			// If the page is of change password, 
 			// update the password of the user in csm and catissue tables. 
-			if (Constants.PAGEOF_CHANGE_PASSWORD.equals(user.getPageOf()))
+			if (Constants.PAGE_OF_CHANGE_PASSWORD.equals(user.getPageOf()))
 			{
 				if (!oldPassword.equals(csmUser.getPassword()))
 				{
@@ -871,7 +871,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 			}
 			
 			//Bug-1516: Jitendra Administartor should be able to edit the password 
-			else if(Constants.PAGEOF_USER_ADMIN.equals(user.getPageOf()) && !user.getNewPassword().equals(csmUser.getPassword()))
+			else if(Constants.PAGE_OF_USER_ADMIN.equals(user.getPageOf()) && !user.getNewPassword().equals(csmUser.getPassword()))
 			{				
 				Validator validator = new Validator();
 				if (!validator.isEmpty(user.getNewPassword()))
@@ -904,8 +904,8 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 				csmUser.setEmailId(user.getEmailAddress());
 
 				// Assign Role only if the page is of Administrative user edit.
-				if ((Constants.PAGEOF_USER_PROFILE.equals(user.getPageOf()) == false)
-						&& (Constants.PAGEOF_CHANGE_PASSWORD.equals(user.getPageOf()) == false))
+				if ((Constants.PAGE_OF_USER_PROFILE.equals(user.getPageOf()) == false)
+						&& (Constants.PAGE_OF_CHANGE_PASSWORD.equals(user.getPageOf()) == false))
 				{	
 					String role = "";
 					if (user.getRoleId() != null)
@@ -945,7 +945,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 				((HibernateDAO)dao).audit(user.getAddress(), oldUser.getAddress());
 			}
 			
-			if (Constants.PAGEOF_CHANGE_PASSWORD.equals(user.getPageOf())) 
+			if (Constants.PAGE_OF_CHANGE_PASSWORD.equals(user.getPageOf())) 
 			{
 			    user.setFirstTimeLogin(new Boolean(false));
 			}
@@ -1233,7 +1233,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 			throw new DAOException("domain.object.null.err.msg", new String[]{"User"});
 			*/
 		//END	
-		if (Constants.PAGEOF_CHANGE_PASSWORD.equals(user.getPageOf()) == false)
+		if (Constants.PAGE_OF_CHANGE_PASSWORD.equals(user.getPageOf()) == false)
 		{
 			// if condition added by Geeta for ECMC 
 			if((user.getAddress().getState()!="null" && user.getAddress().getState()!="") && edu.wustl.catissuecore.util.global.Variables.isStateRequired ){
@@ -1250,7 +1250,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 				throw getBizLogicException(null, "country.errMsg", "");
 			}
 
-			if (Constants.PAGEOF_USER_ADMIN.equals(user.getPageOf()))
+			if (Constants.PAGE_OF_USER_ADMIN.equals(user.getPageOf()))
 			{
 //				try
 //				{

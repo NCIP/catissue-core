@@ -180,7 +180,7 @@ public class SpecimenArrayAction extends SecureAction
     	}
     	
     	request.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);    	
-    	String pageOf = (String)request.getParameter(Constants.PAGEOF);
+    	String pageOf = (String)request.getParameter(Constants.PAGE_OF);
     	
     	if (pageOf == null) {
     		pageOf = Constants.SUCCESS;

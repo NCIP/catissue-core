@@ -56,7 +56,7 @@
 		function onCreate()
 		{
 			var action = '<%=Constants.CREATE_SIMILAR_CONTAINERS_ACTION%>';			
-			action = action + "?pageOf=" + '<%=Constants.PAGEOF_CREATE_SIMILAR_CONTAINERS%>' + "&menuSelected=7";
+			action = action + "?pageOf=" + '<%=Constants.PAGE_OF_CREATE_SIMILAR_CONTAINERS%>' + "&menuSelected=7";
 			//alert("action "+action);
 			document.forms[0].action = action;
 			document.forms[0].submit();
@@ -108,9 +108,9 @@
 			elementSpecimenHolds.disabled = false;
 			
 			//action = "<%=Constants.CREATE_SIMILAR_CONTAINERS_ACTION%>";
-			//action = action + "?pageOf="+"<%=Constants.PAGEOF_CREATE_SIMILAR_CONTAINERS%>"+"&menuSelected=7";
+			//action = action + "?pageOf="+"<%=Constants.PAGE_OF_CREATE_SIMILAR_CONTAINERS%>"+"&menuSelected=7";
 			var action = document.forms[0].action; //"<%=Constants.CREATE_SIMILAR_CONTAINERS_ACTION%>";
-			action = action + "?pageOf="+"<%=Constants.PAGEOF_CREATE_SIMILAR_CONTAINERS%>"+"&operation=add&menuSelected=7";
+			action = action + "?pageOf="+"<%=Constants.PAGE_OF_CREATE_SIMILAR_CONTAINERS%>"+"&operation=add&menuSelected=7";
 			document.forms[0].action = action
 			//Added for printing
 			var printFlag = document.getElementById("printCheckbox");
@@ -314,7 +314,7 @@
 		String sType = simForm.getTypeName();
 		String siteName = simForm.getSiteName();
 		String siteId = Long.toString(simForm.getSiteId());
-		String pageOf = (String)request.getAttribute(Constants.PAGEOF);
+		String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 		String checkButtonStatus;
 		String parentContainerSelected = (String)(simForm.getParentContainerSelected());
 		if("Site".equals(parentContainerSelected))
@@ -328,7 +328,7 @@
 		String noOfContainers = Integer.toString(simForm.getNoOfContainers());
 		//int maxIdentifier = Integer.parseInt((String)request.getAttribute(Constants.MAX_IDENTIFIER));
 	//maxIdentifier++;
-		if(!Constants.PAGEOF_SIMILAR_CONTAINERS.equals(pageOf))
+		if(!Constants.PAGE_OF_SIMILAR_CONTAINERS.equals(pageOf))
 		{
 		%>
 		<tr>

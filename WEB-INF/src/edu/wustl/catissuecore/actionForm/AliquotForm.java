@@ -464,7 +464,7 @@ public class AliquotForm extends AbstractActionForm implements IPrinterTypeLocat
     	 final ActionErrors errors = new ActionErrors();
     	 final Validator validator = new Validator();
          
-         if(Constants.PAGEOF_ALIQUOT_SUMMARY.equals(request.getParameter(Constants.PAGEOF)))
+         if(Constants.PAGE_OF_ALIQUOT_SUMMARY.equals(request.getParameter(Constants.PAGE_OF)))
          {
              /**
                * Patch ID: 3835_1_9

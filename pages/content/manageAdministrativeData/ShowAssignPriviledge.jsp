@@ -36,7 +36,7 @@ function updateCPTree()
 </script>
 <%
 	//Object obj=  request.getAttribute(Constants.ACTIONLIST);
-	//String pageOf = (String) request.getAttribute(Constants.PAGEOF);
+	//String pageOf = (String) request.getAttribute(Constants.PAGE_OF);
 	String operation = (String) request
 			.getAttribute(Constants.OPERATION);
 	List siteList = (List) request.getAttribute(Constants.SITELIST);

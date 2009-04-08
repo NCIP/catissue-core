@@ -5,7 +5,7 @@
 
 <%
 	String operation = (String) request.getAttribute(Constants.OPERATION);
-	String pageOf = (String) request.getAttribute(Constants.PAGEOF);
+	String pageOf = (String) request.getAttribute(Constants.PAGE_OF);
 	SessionDataBean sessionData = null;
 	if(session.getAttribute(Constants.TEMP_SESSION_DATA) != null) 
 	{

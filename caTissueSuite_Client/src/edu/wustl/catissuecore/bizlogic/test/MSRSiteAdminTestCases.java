@@ -90,7 +90,7 @@ public class MSRSiteAdminTestCases extends MSRBaseTestCase
 		user.setRoleId("1");
 		user.getSiteCollection().clear();
 		user.getSiteCollection().add(site2);
-		user.setPageOf(Constants.PAGEOF_USER_ADMIN);
+		user.setPageOf(Constants.PAGE_OF_USER_ADMIN);
 		try
 		{
 			user = (User)appService.createObject(user);

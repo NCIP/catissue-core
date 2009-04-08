@@ -652,7 +652,7 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
 			UserForm uform = (UserForm) abstractForm;
 			this.pageOf = uform.getPageOf();
 
-			if (pageOf.equals(Constants.PAGEOF_CHANGE_PASSWORD))
+			if (pageOf.equals(Constants.PAGE_OF_CHANGE_PASSWORD))
 			{
 				this.newPassword = uform.getNewPassword();
 				this.oldPassword = uform.getOldPassword();
@@ -687,23 +687,23 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
 
 				this.department.setId(Long.valueOf(uform.getDepartmentId()));
 				this.cancerResearchGroup.setId(Long.valueOf(uform.getCancerResearchGroupId()));
-				if (Constants.PAGEOF_USER_PROFILE.equals(pageOf) == Boolean.FALSE)
+				if (Constants.PAGE_OF_USER_PROFILE.equals(pageOf) == Boolean.FALSE)
 				{
 					this.activityStatus = uform.getActivityStatus();
 				}
 
-				if (pageOf.equals(Constants.PAGEOF_SIGNUP))
+				if (pageOf.equals(Constants.PAGE_OF_SIGNUP))
 				{
 					this.setStartDate(Calendar.getInstance().getTime());
 				}
 
-				if (!pageOf.equals(Constants.PAGEOF_SIGNUP) &&
-						!pageOf.equals(Constants.PAGEOF_USER_PROFILE))
+				if (!pageOf.equals(Constants.PAGE_OF_SIGNUP) &&
+						!pageOf.equals(Constants.PAGE_OF_USER_PROFILE))
 				{
 					this.comments = uform.getComments();
 				}
 
-				if (uform.getPageOf().equals(Constants.PAGEOF_USER_ADMIN) &&
+				if (uform.getPageOf().equals(Constants.PAGE_OF_USER_ADMIN) &&
 						uform.getOperation().equals(Constants.ADD))
 				{
 					this.activityStatus = Constants.ACTIVITY_STATUS_ACTIVE;
@@ -711,13 +711,13 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
 				}
 
 				//Bug-1516: Jitendra
-				if (uform.getPageOf().equals(Constants.PAGEOF_USER_ADMIN) &&
+				if (uform.getPageOf().equals(Constants.PAGE_OF_USER_ADMIN) &&
 						uform.getOperation().equals(Constants.EDIT))
 				{
 					this.newPassword = uform.getNewPassword();
 				}
 
-				if (uform.getPageOf().equals(Constants.PAGEOF_APPROVE_USER))
+				if (uform.getPageOf().equals(Constants.PAGE_OF_APPROVE_USER))
 				{
 					if (uform.getStatus().equals(Constants.APPROVE_USER_APPROVE_STATUS))
 					{
@@ -742,7 +742,7 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
 				this.address.setPhoneNumber(uform.getPhoneNumber());
 				this.address.setFaxNumber(uform.getFaxNumber());
 
-				if (Constants.PAGEOF_USER_ADMIN.equals(pageOf))
+				if (Constants.PAGE_OF_USER_ADMIN.equals(pageOf))
 				{
 					this.csmUserId = uform.getCsmUserId();
 				}

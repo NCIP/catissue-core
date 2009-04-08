@@ -58,7 +58,7 @@ tr#hiddenCombo
 		String operation = (String)request.getAttribute(Constants.OPERATION);
 		String formName, pageView=operation,editViewButton="buttons."+Constants.EDIT;
 		boolean readOnlyValue=false,readOnlyForAll=false;
-		String pageOf = (String)request.getAttribute(Constants.PAGEOF);
+		String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 		
 		String staticEntityName=null;
 		staticEntityName = AnnotationConstants.ENTITY_NAME_PARTICIPANT;

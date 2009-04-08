@@ -2,7 +2,6 @@
  * 
  */
 package edu.wustl.catissuecore.action;
-
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -34,25 +33,24 @@ import titli.model.TitliException;
 import titli.model.fetch.TitliFetchException;
 import titli.model.util.TitliResultGroup;
 import edu.wustl.catissuecore.actionForm.TitliSearchForm;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.bizlogic.SimpleQueryBizLogic;
-import edu.wustl.common.dao.DAOFactory;
-import edu.wustl.common.dao.JDBCDAO;
-import edu.wustl.common.dao.QuerySessionData;
-import edu.wustl.common.dao.queryExecutor.PagenatedResultData;
-import edu.wustl.common.query.Condition;
-import edu.wustl.common.query.DataElement;
-import edu.wustl.common.query.Operator;
-import edu.wustl.common.query.Query;
-import edu.wustl.common.query.QueryFactory;
-import edu.wustl.common.query.SimpleConditionsNode;
-import edu.wustl.common.query.SimpleQuery;
-import edu.wustl.common.query.Table;
+import edu.wustl.common.util.PagenatedResultData;
 import edu.wustl.common.util.XMLPropertyHandler;
-import edu.wustl.dao.exception.DAOException;
-import edu.wustl.common.util.global.Constants;
+import edu.wustl.common.util.global.QuerySessionData;
 import edu.wustl.common.util.logger.Logger;
-
+import edu.wustl.dao.JDBCDAO;
+import edu.wustl.dao.daofactory.DAOConfigFactory;
+import edu.wustl.dao.exception.DAOException;
+import edu.wustl.simplequery.bizlogic.SimpleQueryBizLogic;
+import edu.wustl.simplequery.query.Condition;
+import edu.wustl.simplequery.query.DataElement;
+import edu.wustl.simplequery.query.Operator;
+import edu.wustl.simplequery.query.Query;
+import edu.wustl.simplequery.query.QueryFactory;
+import edu.wustl.simplequery.query.SimpleConditionsNode;
+import edu.wustl.simplequery.query.SimpleQuery;
+import edu.wustl.simplequery.query.Table;
 /**
  * show the records from the selected entity
  * @author Juber Patel
@@ -99,7 +97,7 @@ public class TitliFetchAction extends Action
 				
 				List row = (List)(dataList.get(0));
 																		
-				String path = Constants.SEARCH_OBJECT_ACTION + "?" + Constants.PAGEOF + "="
+				String path = Constants.SEARCH_OBJECT_ACTION + "?" + Constants.PAGE_OFF + "="
 									+ pageOf + "&" + Constants.OPERATION + "="
 									+ Constants.SEARCH + "&" + Constants.SYSTEM_IDENTIFIER + "="
 									+ (String)(row.get(id));
@@ -108,7 +106,7 @@ public class TitliFetchAction extends Action
 			}
 			 
 			
-			request.setAttribute(Constants.PAGEOF, resultGroup.getPageOf());
+			request.setAttribute(Constants.PAGE_OF, resultGroup.getPageOf());
 			request.setAttribute(Constants.SPREADSHEET_DATA_LIST, dataList);
 			request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST, columnNames);
 			request.setAttribute(Constants.IDENTIFIER_FIELD_INDEX, identifierIndex);

@@ -22,6 +22,7 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.BiohazardForm;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
+import edu.wustl.common.cde.CDEManager;
 
 public class BiohazardAction  extends SecureAction
 {
@@ -71,6 +72,6 @@ public class BiohazardAction  extends SecureAction
         List biohazardList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_BIOHAZARD, null);
     	request.setAttribute(Constants.BIOHAZARD_TYPE_LIST, biohazardList);
     	
-        return mapping.findForward((String)request.getParameter(Constants.PAGEOF));
+        return mapping.findForward((String)request.getParameter(Constants.PAGE_OF));
     }
 }

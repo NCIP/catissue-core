@@ -53,7 +53,7 @@ public class SpecimenArrayAliquotAction extends SecureAction
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{	
 		SpecimenArrayAliquotForm specimenArrayAliquotForm = (SpecimenArrayAliquotForm) form;
-		String pageOf = request.getParameter(Constants.PAGEOF);		
+		String pageOf = request.getParameter(Constants.PAGE_OF);		
 		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 		SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
 		//Bean List for the dropdown for the storage location
@@ -133,9 +133,9 @@ public class SpecimenArrayAliquotAction extends SecureAction
 				containerMap = bizLogic.getAllocatedContaienrMapForSpecimenArray(id.longValue(), 0,sessionData,exceedingMaxLimit);				
 				populateAliquotsStorageLocations(specimenArrayAliquotForm, containerMap);				
 				request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
-				request.setAttribute(Constants.PAGEOF, Constants.PAGEOF_SPECIMEN_ARRAY_CREATE_ALIQUOT);
+				request.setAttribute(Constants.PAGE_OF, Constants.PAGE_OF_SPECIMEN_ARRAY_CREATE_ALIQUOT);
 				saveErrors(request, errors);
-				return mapping.findForward(Constants.PAGEOF_SPECIMEN_ARRAY_CREATE_ALIQUOT);
+				return mapping.findForward(Constants.PAGE_OF_SPECIMEN_ARRAY_CREATE_ALIQUOT);
 
 			}
 			else
@@ -147,7 +147,7 @@ public class SpecimenArrayAliquotAction extends SecureAction
 
 		}	
 		
-		if (Constants.PAGEOF_SPECIMEN_ARRAY_ALIQUOT_SUMMARY.equals(pageOf))
+		if (Constants.PAGE_OF_SPECIMEN_ARRAY_ALIQUOT_SUMMARY.equals(pageOf))
 		{	
 			Map map = (Map) request.getAttribute("forwardToHashMap");
 		
@@ -176,22 +176,22 @@ public class SpecimenArrayAliquotAction extends SecureAction
 		
 		
 		Map containerMap = new HashMap();		
-		if (Constants.PAGEOF_SPECIMEN_ARRAY_CREATE_ALIQUOT.equals(request.getParameter(Constants.PAGEOF)))
+		if (Constants.PAGE_OF_SPECIMEN_ARRAY_CREATE_ALIQUOT.equals(request.getParameter(Constants.PAGE_OF)))
 		{			
 			pageOf = validate(request, specimenArrayAliquotForm);
 
-			if (Constants.PAGEOF_SPECIMEN_ARRAY_CREATE_ALIQUOT.equals(pageOf))
+			if (Constants.PAGE_OF_SPECIMEN_ARRAY_CREATE_ALIQUOT.equals(pageOf))
 			{
 				pageOf = checkForSpecimenArray(request, specimenArrayAliquotForm);
 
-				if (Constants.PAGEOF_SPECIMEN_ARRAY_CREATE_ALIQUOT.equals(pageOf))
+				if (Constants.PAGE_OF_SPECIMEN_ARRAY_CREATE_ALIQUOT.equals(pageOf))
 				{
 					int aliquotCount = Integer.parseInt(specimenArrayAliquotForm.getAliquotCount());
 					Long id = (Long)request.getAttribute(Constants.STORAGE_TYPE_ID);
 					containerMap = bizLogic.getAllocatedContaienrMapForSpecimenArray(id.longValue(), 0,sessionData,exceedingMaxLimit);					
 					pageOf = checkForSufficientAvailablePositions(request, containerMap, aliquotCount);
 
-					if (Constants.PAGEOF_SPECIMEN_ARRAY_CREATE_ALIQUOT.equals(pageOf))
+					if (Constants.PAGE_OF_SPECIMEN_ARRAY_CREATE_ALIQUOT.equals(pageOf))
 					{
 						ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
 						if (errors == null || errors.size() == 0)
@@ -204,7 +204,7 @@ public class SpecimenArrayAliquotAction extends SecureAction
 		}
 		request.setAttribute(Constants.EXCEEDS_MAX_LIMIT,exceedingMaxLimit);
 		request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
-		request.setAttribute(Constants.PAGEOF, pageOf);
+		request.setAttribute(Constants.PAGE_OF, pageOf);
 		return mapping.findForward(pageOf);
 	}
 	
@@ -212,7 +212,7 @@ public class SpecimenArrayAliquotAction extends SecureAction
 	private String validate(HttpServletRequest request, SpecimenArrayAliquotForm form)
 	{		
 		
-		return Constants.PAGEOF_SPECIMEN_ARRAY_CREATE_ALIQUOT; 
+		return Constants.PAGE_OF_SPECIMEN_ARRAY_CREATE_ALIQUOT; 
 	}
 	
 	/**
@@ -247,7 +247,7 @@ public class SpecimenArrayAliquotAction extends SecureAction
 			ActionErrors errors = getActionErrors(request);
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.specimenArrayAliquots.notExists", errorString));
 			saveErrors(request, errors);
-			return Constants.PAGEOF_SPECIMEN_ARRAY_ALIQUOT;
+			return Constants.PAGE_OF_SPECIMEN_ARRAY_ALIQUOT;
 		} 
 		else
 		{
@@ -263,7 +263,7 @@ public class SpecimenArrayAliquotAction extends SecureAction
 				ActionErrors errors = getActionErrors(request);
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.specimenArrayAliquots.disabled","Parent Specimen Array"));
 				saveErrors(request,errors);
-				return Constants.PAGEOF_SPECIMEN_ARRAY_ALIQUOT;
+				return Constants.PAGE_OF_SPECIMEN_ARRAY_ALIQUOT;
 				//throw BizLogicException("Fail to create Aliquots, Parent SpecimenArray" + " " + ApplicationProperties.getValue("error.object.disabled"));
 			}
 			SpecimenArrayType arrayType = (SpecimenArrayType)bizLogic.retrieveAttribute(SpecimenArray.class.getName(),specimenArray.getId(),"specimenArrayType");
@@ -305,7 +305,7 @@ public class SpecimenArrayAliquotAction extends SecureAction
 			
 		}
 		
-		return Constants.PAGEOF_SPECIMEN_ARRAY_CREATE_ALIQUOT; 
+		return Constants.PAGE_OF_SPECIMEN_ARRAY_CREATE_ALIQUOT; 
 	}
 	
 	/**
@@ -323,7 +323,7 @@ public class SpecimenArrayAliquotAction extends SecureAction
 			ActionErrors errors = getActionErrors(request);
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.specimenArrayAliquots.locationsNotSufficient"));
 			saveErrors(request, errors);
-			return Constants.PAGEOF_SPECIMEN_ARRAY_ALIQUOT;
+			return Constants.PAGE_OF_SPECIMEN_ARRAY_ALIQUOT;
 		}
 		else
 		{
@@ -331,14 +331,14 @@ public class SpecimenArrayAliquotAction extends SecureAction
 		}
 		if (counter >= aliquotCount)
 		{
-			return Constants.PAGEOF_SPECIMEN_ARRAY_CREATE_ALIQUOT;
+			return Constants.PAGE_OF_SPECIMEN_ARRAY_CREATE_ALIQUOT;
 		}
 		else
 		{
 			ActionErrors errors = getActionErrors(request);
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.specimenArrayAliquots.locationsNotSufficient"));
 			saveErrors(request, errors);
-			return Constants.PAGEOF_SPECIMEN_ARRAY_ALIQUOT;
+			return Constants.PAGE_OF_SPECIMEN_ARRAY_ALIQUOT;
 		}		 
 	}
 

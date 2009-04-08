@@ -112,7 +112,7 @@ public class CreateSpecimenAction extends SecureAction
          }
          else
          {
-        	 pageOf = request.getParameter(Constants.PAGEOF);
+        	 pageOf = request.getParameter(Constants.PAGE_OF);
         	 request.getSession().setAttribute("pageOf", pageOf);
          }
          
@@ -124,9 +124,9 @@ public class CreateSpecimenAction extends SecureAction
 		 Map containerMap = bizLogic.getAllocatedContainerMap();
 		 request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP,containerMap);
 		 // -------------------------
-		 request.setAttribute(Constants.PAGEOF,pageOf);
+		 request.setAttribute(Constants.PAGE_OF,pageOf);
 		 */
-		request.setAttribute(Constants.PAGEOF,pageOf);
+		request.setAttribute(Constants.PAGE_OF,pageOf);
 		DefaultBizLogic dao = new DefaultBizLogic(); 
 		TreeMap containerMap = new TreeMap();
 		List initialValues = null;
@@ -456,7 +456,7 @@ public class CreateSpecimenAction extends SecureAction
 		
 		setConstantValues(request);
 		Utility.setDefaultPrinterTypeLocation(form);
-		String pageOf = (String)request.getAttribute(Constants.PAGEOF);
+		String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 		setPageData1(request,  form);
 		setPageData2(request, form, pageOf);
 		setPageData3(request, form, pageOf);
@@ -467,7 +467,7 @@ public class CreateSpecimenAction extends SecureAction
 	private void setPageData1(HttpServletRequest request, CreateSpecimenForm form)
 	{
 		String operation = (String)request.getAttribute(Constants.OPERATION);
-		String pageOf = (String)request.getAttribute(Constants.PAGEOF);
+		String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 
 		//TODO to check where are these used
 //			String exceedsMaxLimit = (String)request.getAttribute(Constants.EXCEEDS_MAX_LIMIT);
@@ -720,9 +720,9 @@ public class CreateSpecimenAction extends SecureAction
 		request.setAttribute("eiDispType1",eiDispType1);
 		
 		String delExtIds="deleteExternalIdentifiers('pageOfMultipleSpecimen')";
-		if((String)request.getAttribute(Constants.PAGEOF)!=null)
+		if((String)request.getAttribute(Constants.PAGE_OF)!=null)
 		{
-			delExtIds="deleteExternalIdentifiers('"+(String)request.getAttribute(Constants.PAGEOF)+"');";
+			delExtIds="deleteExternalIdentifiers('"+(String)request.getAttribute(Constants.PAGE_OF)+"');";
 		}
 		request.setAttribute("delExtIds",delExtIds);
 	}

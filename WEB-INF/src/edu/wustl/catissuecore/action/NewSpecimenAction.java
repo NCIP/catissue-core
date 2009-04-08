@@ -95,10 +95,10 @@ public class NewSpecimenAction extends SecureAction
 		NewSpecimenForm specimenForm = (NewSpecimenForm) form;
 		List<NameValueBean> storagePositionList =  Utility.getStoragePositionTypeList();
 		request.setAttribute("storageList", storagePositionList);
-		String pageOf = request.getParameter(Constants.PAGEOF);
+		String pageOf = request.getParameter(Constants.PAGE_OF);
 		String forwardPage=specimenForm.getForwardTo();
 		
-        if(forwardPage.equals(Constants.PAGEOF_SPECIMEN_COLLECTION_REQUIREMENT_GROUP))
+        if(forwardPage.equals(Constants.PAGE_OF_SPECIMEN_COLLECTION_REQUIREMENT_GROUP))
 	    {
         	pageOf=forwardPage;
         	request.setAttribute(Constants.STATUS_MESSAGE_KEY, "errors.specimencollectionrequirementgroupedit");
@@ -346,8 +346,8 @@ public class NewSpecimenAction extends SecureAction
 			request.setAttribute(Constants.SPECIMEN_RESPONSELIST, specimenResponseList);
 		//Consent Tracking (Virender Mehta)		- Stop 		
      		
-		pageOf = request.getParameter(Constants.PAGEOF);
-		request.setAttribute(Constants.PAGEOF, pageOf);
+		pageOf = request.getParameter(Constants.PAGE_OF);
+		request.setAttribute(Constants.PAGE_OF, pageOf);
 
 		//Sets the activityStatusList attribute to be used in the Site Add/Edit Page.
 		request.setAttribute(Constants.ACTIVITYSTATUSLIST, Constants.ACTIVITY_STATUS_VALUES);

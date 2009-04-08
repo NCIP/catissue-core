@@ -16,7 +16,7 @@
 <script>
 
 <%
-String pageOf = (String)request.getAttribute(Constants.PAGEOF);
+String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 String [][] childContainerName = (String [][])request.getAttribute(Constants.CHILD_CONTAINER_NAME);
 %>
 function setParentWindowValue(elementName,elementValue)
@@ -59,7 +59,7 @@ function closeFramedWindow()
 
 function refresh_tree(nodeId)
 {	
-	window.parent.frames["SCTreeView"].location="<%=Constants.TREE_NODE_DATA_ACTION%>?<%=Constants.PAGEOF%>=<%=pageOf%>&<%=Constants.RELOAD%>=true&<%=Constants.TREE_NODE_ID%>="+nodeId;
+	window.parent.frames["SCTreeView"].location="<%=Constants.TREE_NODE_DATA_ACTION%>?<%=Constants.PAGE_OF%>=<%=pageOf%>&<%=Constants.RELOAD%>=true&<%=Constants.TREE_NODE_ID%>="+nodeId;
 }
 
 function containerChanged()
@@ -98,7 +98,7 @@ function containerInfoTab()
 	Integer startNumber = null;
 	Long positionOne = (Long)request.getAttribute(Constants.POS_ONE);
 	Long positionTwo = (Long)request.getAttribute(Constants.POS_TWO);	
-	if (pageOf.equals(Constants.PAGEOF_STORAGE_LOCATION))
+	if (pageOf.equals(Constants.PAGE_OF_STORAGE_LOCATION))
 	{
 		storageContainerType = (String)request.getAttribute(Constants.STORAGE_CONTAINER_TYPE);
 		startNumber = (Integer)request.getAttribute(Constants.START_NUMBER);
@@ -160,7 +160,7 @@ function containerInfoTab()
 	String specimenCallBackFunction = null;
 	String nodeName = null;
  
-   if (pageOf.equals(Constants.PAGEOF_MULTIPLE_SPECIMEN)) {
+   if (pageOf.equals(Constants.PAGE_OF_MULTIPLE_SPECIMEN)) {
 	   specimenClass = (String) session.getAttribute(Constants.SPECIMEN_CLASS);
 	   collectionGroup = (String) session.getAttribute(Constants.SPECIMEN_COLLECTION_GROUP);
 	   specimenMapKey = (String) session.getAttribute(Constants.SPECIMEN_ATTRIBUTE_KEY);
@@ -357,18 +357,18 @@ function containerInfoTab()
 						if (fullStatus[i][j] != 0)
 						{
 							String openStorageContainer = null;
-							if (pageOf.equals(Constants.PAGEOF_STORAGE_CONTAINER))
+							if (pageOf.equals(Constants.PAGE_OF_STORAGE_CONTAINER))
 							{
 								openStorageContainer = Constants.SHOW_STORAGE_CONTAINER_GRID_VIEW_ACTION
                     			+ "?" + Constants.SYSTEM_IDENTIFIER + "=" + childContainerIds[i][j]
-                    			+ "&" + Constants.PAGEOF + "=" + pageOf;
+                    			+ "&" + Constants.PAGE_OF + "=" + pageOf;
 							}
 							else
 							{
 								openStorageContainer = Constants.SHOW_STORAGE_CONTAINER_GRID_VIEW_ACTION
                     			+ "?" + Constants.SYSTEM_IDENTIFIER + "=" + childContainerIds[i][j]
                     			+ "&" + Constants.STORAGE_CONTAINER_TYPE + "=" + storageContainerType
-								+ "&" + Constants.PAGEOF + "=" + pageOf;
+								+ "&" + Constants.PAGE_OF + "=" + pageOf;
 							}
 							if (fullStatus[i][j] == 1)
 							{
@@ -406,13 +406,13 @@ function containerInfoTab()
 							
 								if(pageOfSpecimen!=null && pageOfSpecimen.equals(Constants.ALIAS_SPECIMEN))
 								{%>
-								<a  class="view" href="QuerySpecimenSearch.do?<%=Constants.PAGEOF%>=pageOfNewSpecimenCPQuery&<%=Constants.SYSTEM_IDENTIFIER%>=<%=childContainerIds[i][j]%>" onmouseover="Tip('<%=childContainerType[i][j]%>')" ><img src="images/uIEnhancementImages/specimen.gif" alt="Unused" width="32" height="32"  border="0"><br><%=containerName%><!--: <%=childContainerIds[i][j]%> -->
+								<a  class="view" href="QuerySpecimenSearch.do?<%=Constants.PAGE_OF%>=pageOfNewSpecimenCPQuery&<%=Constants.SYSTEM_IDENTIFIER%>=<%=childContainerIds[i][j]%>" onmouseover="Tip('<%=childContainerType[i][j]%>')" ><img src="images/uIEnhancementImages/specimen.gif" alt="Unused" width="32" height="32"  border="0"><br><%=containerName%><!--: <%=childContainerIds[i][j]%> -->
 								</a>
 								
 								<%}
 								if(pageOfSpecimen!=null && pageOfSpecimen.equals(Constants.ALIAS_SPECIMEN_ARRAY))
 								{%>
-								<a class="view" href="QuerySpecimenArraySearch.do?<%=Constants.PAGEOF%>=pageOfSpecimenArray&<%=Constants.SYSTEM_IDENTIFIER%>=<%=childContainerIds[i][j]%> " onmouseover="Tip('<%=childContainerType[i][j]%>')" ><img src="images/uIEnhancementImages/specimen_array.gif" alt="Unused" width="32" height="32"  border="0"><br><%=containerName%><!--: <%=childContainerIds[i][j]%> -->
+								<a class="view" href="QuerySpecimenArraySearch.do?<%=Constants.PAGE_OF%>=pageOfSpecimenArray&<%=Constants.SYSTEM_IDENTIFIER%>=<%=childContainerIds[i][j]%> " onmouseover="Tip('<%=childContainerType[i][j]%>')" ><img src="images/uIEnhancementImages/specimen_array.gif" alt="Unused" width="32" height="32"  border="0"><br><%=containerName%><!--: <%=childContainerIds[i][j]%> -->
 								</a>
 								</td>
 								<% }
@@ -421,12 +421,12 @@ function containerInfoTab()
 						else
 						{
 							String setParentWindowContainer = null;
-							if (pageOf.equals(Constants.PAGEOF_MULTIPLE_SPECIMEN)) 
+							if (pageOf.equals(Constants.PAGE_OF_MULTIPLE_SPECIMEN)) 
 							{
 								setParentWindowContainer = "javascript:" + specimenCallBackFunction + "('" + specimenMapKey + "' , '" + storageContainerGridObject.getId() + "' , '" + storageContainerGridObject.getName() + 
 								"' , '" + i + "' , '" + j + "' );closeFramedWindow()" ;
 							} 							
-							else if (pageOf.equals(Constants.PAGEOF_STORAGE_CONTAINER))
+							else if (pageOf.equals(Constants.PAGE_OF_STORAGE_CONTAINER))
 							{
 								setParentWindowContainer = "javascript:setTextBoxValue('" + containerId + "','"+  storageContainerGridObject.getId() + "');" + 
 															"javascript:setTextBoxValue('" + selectedContainerName + "','"+  storageContainerGridObject.getName() + "');" + 
@@ -436,7 +436,7 @@ function containerInfoTab()
 								
 								setParentWindowContainer = setParentWindowContainer + "javascript:closeFramedWindow()";
 							}	
-							else if (pageOf.equals(Constants.PAGEOF_ALIQUOT))
+							else if (pageOf.equals(Constants.PAGE_OF_ALIQUOT))
 							{
 								setParentWindowContainer = "javascript:setTextBoxValue('" + containerStyleId + "','"
 								+ storageContainerGridObject.getId() + "');"+"javascript:setTextBoxValue('" + containerStyle + "','"

@@ -20,7 +20,7 @@
 		disabled = true;
 		operation="edit";
 	}
-	request.setAttribute(Constants.PAGEOF,pageOf);
+	request.setAttribute(Constants.PAGE_OF,pageOf);
 	boolean mac = false;
     Object os = request.getHeader("user-agent");
     if(os!=null && os.toString().toLowerCase().indexOf("mac")!=-1)
@@ -100,7 +100,7 @@
 	        <td height="20" width="10%" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" id="consentTab" onclick="consentPage()">
 			    <bean:message key="consents.consents" />        
 	        </td>
-			<logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.VIEW_SUMMARY%>">
+			<logic:equal name="<%=Constants.PAGE_OF%>" value="<%=Constants.VIEW_SUMMARY%>">
 					<td height="20" width="10%" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" 	onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onclick="defineEvents()">
 						<bean:message key="cpbasedentry.defineevents" />					
 					</td>
@@ -109,7 +109,7 @@
 						 <bean:message key="cpbasedentry.viewsummary" />
 					</td>
 			</logic:equal>
-			<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.VIEW_SUMMARY%>">
+			<logic:notEqual name="<%=Constants.PAGE_OF%>" value="<%=Constants.VIEW_SUMMARY%>">
 				<td height="20" width="9%" nowrap class="tabMenuItemSelected" id="collectionProtocolTab">
 					<bean:message key="cpbasedentry.defineevents" />
 				</td>
@@ -141,7 +141,7 @@
 									<html:button styleClass="actionButton" property="submitPage" onclick="defineEvents()" disabled = "<%=disabled%>">
 										 <bean:message key="cpbasedentry.addnewevent" />
 									</html:button>
-									<logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.VIEW_SUMMARY%>">
+									<logic:equal name="<%=Constants.PAGE_OF%>" value="<%=Constants.VIEW_SUMMARY%>">
 										<html:button styleClass="actionButton" property="submitPage" onclick="defineEvents()">
 											<< <bean:message key="cpbasedentry.defineevents" />
 										</html:button>
@@ -151,14 +151,14 @@
                         </table>	
 					</td>
 					<!--P.G. - Start 24May07:Bug 4291:Added source as initial action for blank screen-->
-					<logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.VIEW_SUMMARY%>">
+					<logic:equal name="<%=Constants.PAGE_OF%>" value="<%=Constants.VIEW_SUMMARY%>">
 					<td width="100%" height="100%" valign="top">
 						<iframe name="SpecimenRequirementView" src="GenericSpecimenSummary.do?Event_Id=dummyId" scrolling="auto" frameborder="0" width="800px" height="500px">
 							Your Browser doesn't support IFrames.
 						</iframe>
 					</td>
 					</logic:equal>
-					<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.VIEW_SUMMARY%>">
+					<logic:notEqual name="<%=Constants.PAGE_OF%>" value="<%=Constants.VIEW_SUMMARY%>">
 						<td width="100%" height="100%" valign="top">
 							<iframe name="SpecimenRequirementView" src="ProtocolEventsDetails.do?&operation=add&pageOf=newEvent" scrolling="auto" frameborder="0" width="800px" height="500px">
 								Your Browser doesn't support IFrames.

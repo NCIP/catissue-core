@@ -350,7 +350,7 @@ public class SubmitUserAction extends Action
 		           		target = forwardTo;
 		            }
 	            
-	           String pageOf = (String)request.getParameter(Constants.PAGEOF);
+	           String pageOf = (String)request.getParameter(Constants.PAGE_OF);
 	           Logger.out.debug("pageof for query edit=="+pageOf);
 	           if(pageOf != null)
 	           {

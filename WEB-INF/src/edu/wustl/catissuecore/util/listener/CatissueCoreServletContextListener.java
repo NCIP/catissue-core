@@ -19,11 +19,6 @@ import javax.servlet.ServletContextListener;
 import javax.sql.DataSource;
 
 import net.sf.ehcache.CacheException;
-import titli.controller.Name;
-import titli.controller.interfaces.TitliInterface;
-import titli.model.Titli;
-import titli.model.TitliException;
-import titli.model.util.IndexUtility;
 import titli.model.util.TitliResultGroup;
 import edu.wustl.cab2b.server.path.PathFinder;
 import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
@@ -374,8 +369,8 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 	}
 
     /**
-     * TO create map of Alias verses corresponding pageOf values.
-     * This is required in Simple Query Edit feature, It contains mapping of alias name for the query tables & the corresponding pageOf values.
+     * TO create map of Alias verses corresponding PAGE_OF values.
+     * This is required in Simple Query Edit feature, It contains mapping of alias name for the query tables & the corresponding PAGE_OF values.
 	 * Patch ID: SimpleSearchEdit_9
      */
     private void createAliasAndPageOfMap()
@@ -391,7 +386,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
     	Variables.aliasAndPageOfMap.put(Constants.ALIAS_INSTITUTE, Constants.PAGE_OF_INSTITUTE);
     	Variables.aliasAndPageOfMap.put(Constants.ALIAS_PARTICIPANT, Constants.PAGE_OF_PARTICIPANT);
     	Variables.aliasAndPageOfMap.put(Constants.ALIAS_SITE, Constants.PAGE_OF_SITE);
-    	Variables.aliasAndPageOfMap.put(Constants.ALIAS_SPECIMEN, Constants.PAGEOF_NEW_SPECIMEN);
+    	Variables.aliasAndPageOfMap.put(Constants.ALIAS_SPECIMEN, Constants.PAGE_OF_NEW_SPECIMEN);
     	Variables.aliasAndPageOfMap.put(Constants.ALIAS_SPECIMEN_ARRAY,Constants.PAGE_OF_SPECIMEN_ARRAY);
     	Variables.aliasAndPageOfMap.put(Constants.ALIAS_SPECIMEN_ARRAY_TYPE, Constants.PAGE_OF_SPECIMEN_ARRAY_TYPE);
     	Variables.aliasAndPageOfMap.put(Constants.ALIAS_SPECIMEN_COLLECTION_GROUP, Constants.PAGE_OF_SPECIMEN_COLLECTION_GROUP);

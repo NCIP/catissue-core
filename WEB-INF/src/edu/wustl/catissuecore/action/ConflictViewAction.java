@@ -120,7 +120,7 @@ public class ConflictViewAction extends SecureAction
 			recordsPerPage = new Integer(recordsPerPageSessionValue).intValue();
 	
 		PagenatedResultData pagenatedResultData=null;	
-		pagenatedResultData = Utility.executeForPagination(sqlString,getSessionData(request), false, null, false,0,recordsPerPage);
+		pagenatedResultData = AppUtility.executeForPagination(sqlString,getSessionData(request), false, null, false,0,recordsPerPage);
 	
 		
   	
@@ -158,7 +158,7 @@ public class ConflictViewAction extends SecureAction
         session.setAttribute(Constants.RESULTS_PER_PAGE,recordsPerPage+"");
 		
 		List dataList = makeGridData(list);
-		Utility.setGridData( dataList,columnList, request);
+		AppUtility.setGridData( dataList,columnList, request);
 		Integer identifierFieldIndex = new Integer(1);
 		request.setAttribute("identifierFieldIndex", identifierFieldIndex.intValue());
 		request.setAttribute("pageOf", "pageOfConflictResolver");

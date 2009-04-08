@@ -33,7 +33,7 @@
 	String showCal = "";
 	String dateClass = "hideTD";
 	Object obj = request.getAttribute("simpleQueryInterfaceForm");
-	String pageOf = (String) request.getAttribute(Constants.PAGEOF);
+	String pageOf = (String) request.getAttribute(Constants.PAGE_OF);
 
 	String selectMenu = (String) request
 			.getAttribute(Constants.MENU_SELECTED);
@@ -54,7 +54,7 @@
 			.getAttribute(Constants.SIMPLE_QUERY_INTERFACE_TITLE);
 	String header;
 	String alias = (String) request.getParameter("aliasName");
-	if (pageOf.equals(Constants.PAGEOF_SIMPLE_QUERY_INTERFACE)) {
+	if (pageOf.equals(Constants.PAGE_OF_SIMPLE_QUERY_INTERFACE)) {
 		title = "simpleQuery.title";
 		header = "SimpleQuery.header";
 	} else {
@@ -204,26 +204,26 @@ function vieMapTabSelected(){
   </tr>
   <tr>
     <td class="tablepadding"><table width="100%" border="0" cellpadding="0" cellspacing="0">
-	<logic:notEqual name="pageOf" value="<%=Constants.PAGEOF_SIMPLE_QUERY_INTERFACE%>">
+	<logic:notEqual name="pageOf" value="<%=Constants.PAGE_OF_SIMPLE_QUERY_INTERFACE%>">
 	<tr>
 	<td class="td_tab_bg" ><img src="images/uIEnhancementImages/spacer.gif" alt="spacer" width="50" height="1"></td>
 	<!----Add tab hidden for the Specimen Search----->
-	<logic:notEqual name="pageOf" value="<%=Constants.PAGEOF_DISTRIBUTION%>">
-		<logic:notEqual name="pageOf" value="<%=Constants.PAGEOF_NEW_SPECIMEN%>">
+	<logic:notEqual name="pageOf" value="<%=Constants.PAGE_OF_DISTRIBUTION%>">
+		<logic:notEqual name="pageOf" value="<%=Constants.PAGE_OF_NEW_SPECIMEN%>">
         <td valign="bottom"><html:link href="#" onclick="callSerachAction('CommonTab.do')">
 		<img src="images/uIEnhancementImages/tab_add_notSelected.jpg" alt="Add" width="57" height="22" /></html:link></td>
 		</logic:notEqual>
        
 		<td valign="bottom"><img src="images/uIEnhancementImages/tab_edit_selected.jpg" alt="Edit" width="59" height="22" border="0" /></td>
 	</logic:notEqual>
-		<logic:equal name="pageOf" value="<%=Constants.PAGEOF_USER_ADMIN%>">
+		<logic:equal name="pageOf" value="<%=Constants.PAGE_OF_USER_ADMIN%>">
         <td valign="bottom"><html:link page="/ApproveUserShow.do?pageNum=1"><img src="images/uIEnhancementImages/tab_approve_user.jpg" alt="Approve New Users" width="139" height="22" border="0" /></html:link></td>
 		</logic:equal>
 		<logic:equal name="pageOf" value="pageOfStorageContainer">
 		<td  valign="bottom"><a href="#"><img src="images/uIEnhancementImages/view_map2.gif" alt="View Map"width="76" height="22" border="0" onclick="vieMapTabSelected()"/></a></td>
 		</logic:equal>
 <!-- These tabs are visible in case of specimen page--->
-		 <logic:equal name="pageOf" value="<%=Constants.PAGEOF_NEW_SPECIMEN%>">
+		 <logic:equal name="pageOf" value="<%=Constants.PAGE_OF_NEW_SPECIMEN%>">
 			<td valign="bottom"><html:link page="/CreateSpecimen.do?operation=add&amp;pageOf=&virtualLocated=true">	<img src="images/uIEnhancementImages/tab_derive2.gif" alt="Derive" width="56" height="22" border="0"/>	</html:link></td>
 			<td valign="bottom"><html:link page="/Aliquots.do?pageOf=pageOfAliquot"><img src="images/uIEnhancementImages/tab_aliquot2.gif" alt="Aliquot" width="66" height="22" border="0" >		</html:link></td>
 			<td valign="bottom"><html:link page="/QuickEvents.do?operation=add"><img src="images/uIEnhancementImages/tab_events2.gif" alt="Events" width="56" height="22" border="0" />		</html:link></td>
@@ -233,7 +233,7 @@ function vieMapTabSelected(){
 
 	</tr>
 	</logic:notEqual>
-	<logic:equal name="pageOf" value="<%=Constants.PAGEOF_SIMPLE_QUERY_INTERFACE%>">
+	<logic:equal name="pageOf" value="<%=Constants.PAGE_OF_SIMPLE_QUERY_INTERFACE%>">
       <tr>
         <td width="90%" valign="bottom" class="td_tab_bg">&nbsp;</td>
       </tr>
@@ -249,7 +249,7 @@ function vieMapTabSelected(){
 
       </tr>
 	 <%
- 		if (pageOf.equals(Constants.PAGEOF_SIMPLE_QUERY_INTERFACE)) {
+ 		if (pageOf.equals(Constants.PAGE_OF_SIMPLE_QUERY_INTERFACE)) {
  		String configAction = "callSerachAction('"
  		+ Constants.CONFIGURE_SIMPLE_QUERY_VALIDATE_ACTION
  		+ "?pageOf=pageOfSimpleQueryInterface')";
@@ -269,7 +269,7 @@ function vieMapTabSelected(){
       <tr>
         <td colspan="2" align="center" class="showhide"><table width="99%" border="0" cellspacing="0" cellpadding="3">
             <tr class="tableheading">
-<logic:equal name="pageOf" value="<%=Constants.PAGEOF_SIMPLE_QUERY_INTERFACE%>">
+<logic:equal name="pageOf" value="<%=Constants.PAGE_OF_SIMPLE_QUERY_INTERFACE%>">
               <td width="6%" align="left" class="black_ar_b">Select</td>
               <td width="26%" align="left" class="black_ar_b"><label for="object"> <bean:message
 											key="query.object" /> </label> </td>
@@ -281,7 +281,7 @@ function vieMapTabSelected(){
 			  <td width="4%">&nbsp;</td>
               <td width="15%" class="black_ar_b" ><label for="value">
 									<bean:message key="query.value" /> </label></td>
-	<logic:equal name="pageOf" value="<%=Constants.PAGEOF_SIMPLE_QUERY_INTERFACE%>">
+	<logic:equal name="pageOf" value="<%=Constants.PAGE_OF_SIMPLE_QUERY_INTERFACE%>">
               <td width="11%" class="black_ar_b"><label for="attributes">
 										<bean:message key="query.operator" /> </label></td>
 	</logic:equal>
@@ -338,7 +338,7 @@ function vieMapTabSelected(){
 											+ "_Condition_Operator_operator";
 					%>
             <tr>
-			<logic:equal name="pageOf" value="<%=Constants.PAGEOF_SIMPLE_QUERY_INTERFACE%>">
+			<logic:equal name="pageOf" value="<%=Constants.PAGE_OF_SIMPLE_QUERY_INTERFACE%>">
               <td align="left" class="black_ar" ><input type=checkbox
 												name="<%=check %>" id="<%=check %>" disabled="true"
 												onClick="enablePreviousCheckBox(this);enableButton(document.forms[0].deleteValue,document.forms[0].counter,'chk_')"></td>
@@ -352,7 +352,7 @@ function vieMapTabSelected(){
 												else
 													attributeAction = attributeAction + "')";
 										%>
-			<logic:equal name="pageOf" value="<%=Constants.PAGEOF_SIMPLE_QUERY_INTERFACE%>">
+			<logic:equal name="pageOf" value="<%=Constants.PAGE_OF_SIMPLE_QUERY_INTERFACE%>">
               <td nowrap class="black_ar"><html:select
 												property="<%=objectName%>" styleClass="formFieldSized18"
 												styleId="<%=objectName%>" size="1"
@@ -369,7 +369,7 @@ function vieMapTabSelected(){
 											</html:select>
 				</td>
 				</logic:equal>
-				<logic:notEqual name="pageOf" value="<%=Constants.PAGEOF_SIMPLE_QUERY_INTERFACE%>">
+				<logic:notEqual name="pageOf" value="<%=Constants.PAGE_OF_SIMPLE_QUERY_INTERFACE%>">
 									<html:hidden property="<%=objectName%>"
 												value="<%=aliasName%>" />
 				</logic:notEqual>
@@ -576,7 +576,7 @@ function vieMapTabSelected(){
  }
  %>
 			  </td>
-			  <logic:equal name="pageOf" value="<%=Constants.PAGEOF_SIMPLE_QUERY_INTERFACE%>">
+			  <logic:equal name="pageOf" value="<%=Constants.PAGE_OF_SIMPLE_QUERY_INTERFACE%>">
               <td nowrap class="black_ar"><html:select
 												property="<%=nextOperator%>" styleClass="formFieldSized8">
 												<html:option value="And">
@@ -594,7 +594,7 @@ function vieMapTabSelected(){
 			%>
 			</tbody>
 			<logic:equal name="pageOf"
-										value="<%=Constants.PAGEOF_SIMPLE_QUERY_INTERFACE%>">
+										value="<%=Constants.PAGE_OF_SIMPLE_QUERY_INTERFACE%>">
 										<%
 													String addAction = "setPropertyValue('andOrOperation','true');"
 													+ "incrementCounter();callSerachAction('SimpleQueryInterfaceValidate.do?pageOf="

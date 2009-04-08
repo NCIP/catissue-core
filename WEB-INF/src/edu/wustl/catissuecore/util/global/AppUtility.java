@@ -1659,10 +1659,11 @@ public class AppUtility
 
 	public static Specimen getSpecimen(String specimenId)
 	{
-		DAO dao = DAOConfigFactory.getInstance().getDAOFactory(Constants.APPLICATION_NAME).getDAO();
+		DAO dao = null;
 		Specimen specimen = null;
 		try
 		{
+			dao = DAOConfigFactory.getInstance().getDAOFactory(Constants.APPLICATION_NAME).getDAO();
 			dao.openSession(null);
 			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 			NewSpecimenBizLogic newSpecimenBizLogic = (NewSpecimenBizLogic) factory
@@ -1670,7 +1671,7 @@ public class AppUtility
 			specimen = newSpecimenBizLogic.getSpecimenObj(specimenId, dao);
 			dao.closeSession();
 		}
-		catch (DAOException e)
+		catch (ApplicationException e)
 		{
 			// TODO Auto-generated catch block
 			Logger.out.debug(e.getMessage(), e);

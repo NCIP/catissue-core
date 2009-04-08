@@ -33,9 +33,9 @@
 		String operation = (String)request.getAttribute(Constants.OPERATION);
 		String tab = (String)request.getAttribute(Constants.SELECTED_TAB);
 		String reqPath = (String)request.getAttribute(Constants.REQ_PATH);
-		String pageOf = (String)request.getAttribute(Constants.PAGEOF);
+		String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 		if(pageOf == null)
-			pageOf =(String)request.getParameter(Constants.PAGEOF);
+			pageOf =(String)request.getParameter(Constants.PAGE_OF);
 		String signedConsentDate = "";
 		String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
 		boolean isAddNew = false;	

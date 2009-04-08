@@ -13,9 +13,9 @@
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 <%
 String formAction = "SubmitSpecimenCollectionProtocol.do";
-if(request.getAttribute(Constants.PAGEOF) != null)
+if(request.getAttribute(Constants.PAGE_OF) != null)
 {
-	formAction = formAction + "?pageOf="+request.getAttribute(Constants.PAGEOF);
+	formAction = formAction + "?pageOf="+request.getAttribute(Constants.PAGE_OF);
 }
 
 %>

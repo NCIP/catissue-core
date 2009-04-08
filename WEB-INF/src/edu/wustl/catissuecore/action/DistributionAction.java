@@ -298,10 +298,10 @@ public class DistributionAction extends SecureAction
 		}
         //Consent Tracking (Virender Mehta)
         Logger.out.debug("executeSecureAction");
-        String pageOf = request.getParameter(Constants.PAGEOF);
-		request.setAttribute(Constants.PAGEOF, pageOf);
+        String pageOf = request.getParameter(Constants.PAGE_OF);
+		request.setAttribute(Constants.PAGE_OF, pageOf);
 
-        return mapping.findForward((String) request.getParameter(Constants.PAGEOF));
+        return mapping.findForward((String) request.getParameter(Constants.PAGE_OF));
     }	
 	/**
 	 * This function will fetch witness name,url,consent date for a barcode/lable

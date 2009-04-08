@@ -40,7 +40,7 @@
 		<!-- Commented as per bug 2115. Mandar. 10-July-06
 											</tr>
 											<tr>							
-											<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
+											<logic:notEqual name="<%=Constants.PAGE_OF%>" value="<%=Constants.QUERY%>">
 												<td class="formFieldNoBorders" nowrap>
 													<html:button styleClass="actionButton"  
 															property="submitPage"

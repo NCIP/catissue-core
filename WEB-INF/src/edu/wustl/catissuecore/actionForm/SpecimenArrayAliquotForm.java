@@ -139,7 +139,7 @@ public class SpecimenArrayAliquotForm extends AbstractActionForm
  			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format", ApplicationProperties.getValue("specimenArrayAliquots.noOfAliquots"))); 			
  	  	 }
  		 
- 		 if(request.getParameter(Constants.PAGEOF).equals(Constants.PAGEOF_SPECIMEN_ARRAY_ALIQUOT_SUMMARY)) 
+ 		 if(request.getParameter(Constants.PAGE_OF).equals(Constants.PAGE_OF_SPECIMEN_ARRAY_ALIQUOT_SUMMARY)) 
 		 {
  		 	Iterator keyIterator = specimenArrayAliquotMap.keySet().iterator();         	
          	while(keyIterator.hasNext())

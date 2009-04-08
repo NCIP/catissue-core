@@ -6,7 +6,7 @@
 <%@ page import="edu.wustl.catissuecore.actionForm.MultipleSpecimenForm"%>
 
 <%
-	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
+	String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
     String action = Constants.NEW_MULTIPLE_SPECIMEN_ACTION + "?method=showMultipleSpecimen&amp;menuSelected=15";
 	if(pageOf != null && pageOf.equals(Constants.PAGE_OF_MULTIPLE_SPECIMEN_CP_QUERY))
 	{

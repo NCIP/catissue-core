@@ -145,7 +145,7 @@ public class StorageTypeAction  extends SecureAction
         
         Logger.out.debug("StorageTypeAction redirect :---------- "+ reqPath  );
         
-        return mapping.findForward((String)request.getParameter(Constants.PAGEOF));
+        return mapping.findForward((String)request.getParameter(Constants.PAGE_OF));
     }
    
 }

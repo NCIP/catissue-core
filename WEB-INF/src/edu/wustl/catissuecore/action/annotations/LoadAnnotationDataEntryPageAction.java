@@ -178,7 +178,7 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 				initializeDataEntryForm(request, staticEntityId, staticEntityRecordId,
 					staticEntityName,
 					annotationDataEntryForm);
-//				String pageOf = request.getParameter(Constants.PAGEOF);
+//				String pageOf = request.getParameter(Constants.PAGE_OF);
 				actionfwd = mapping.findForward(Constants.SUCCESS);
 			}
 		}

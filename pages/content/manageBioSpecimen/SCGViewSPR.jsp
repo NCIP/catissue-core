@@ -16,7 +16,7 @@
 </style>
 
 <%
-	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
+	String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 	
 	String operation = (String)request.getAttribute(Constants.OPERATION);
 		

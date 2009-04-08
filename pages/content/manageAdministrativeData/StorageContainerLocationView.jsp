@@ -1,15 +1,15 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 
 <%
-	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
-	String treeViewAction = Constants.TREE_VIEW_ACTION + "?" + Constants.PAGEOF + "=" + pageOf;
-	String treeNodeDataAction = Constants.TREE_NODE_DATA_ACTION + "?" + Constants.PAGEOF + "=" + pageOf;
+	String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
+	String treeViewAction = Constants.TREE_VIEW_ACTION + "?" + Constants.PAGE_OF + "=" + pageOf;
+	String treeNodeDataAction = Constants.TREE_NODE_DATA_ACTION + "?" + Constants.PAGE_OF + "=" + pageOf;
 	//Get the storage type.
 	String storageContainerType = (String)request.getAttribute(Constants.STORAGE_CONTAINER_TYPE);
 	if (storageContainerType != null)
 	{
 		treeViewAction = Constants.TREE_VIEW_ACTION +
-						 "?" + Constants.PAGEOF + "=" + pageOf +
+						 "?" + Constants.PAGE_OF + "=" + pageOf +
 						 "&"+ Constants.STORAGE_CONTAINER_TYPE + "=" + storageContainerType;
 	}
 	String storageContainerID = (String)request.getAttribute(Constants.STORAGE_CONTAINER_TO_BE_SELECTED);

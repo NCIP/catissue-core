@@ -40,8 +40,8 @@ public class ConfigureSimpleQueryAction extends BaseAction
 	throws Exception
 	{
 		//Set the tables for the configuration 
-		String pageOf=request.getParameter(Constants.PAGEOF);
-		if(pageOf.equals(Constants.PAGEOF_SIMPLE_QUERY_INTERFACE))
+		String pageOf=request.getParameter(Constants.PAGE_OF);
+		if(pageOf.equals(Constants.PAGE_OF_SIMPLE_QUERY_INTERFACE))
 		{
 			SimpleQueryInterfaceForm simpleQueryInterfaceForm =  (SimpleQueryInterfaceForm)form;
 			HttpSession session =request.getSession();
@@ -123,7 +123,7 @@ public class ConfigureSimpleQueryAction extends BaseAction
 			session.setAttribute(Constants.SIMPLE_QUERY_MAP,map);
 		}
 		
-		request.setAttribute(Constants.PAGEOF,pageOf);
+		request.setAttribute(Constants.PAGE_OF,pageOf);
 		
 		return (mapping.findForward(pageOf));
 	}

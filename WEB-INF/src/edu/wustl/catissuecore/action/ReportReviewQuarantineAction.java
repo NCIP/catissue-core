@@ -53,7 +53,7 @@ public class ReportReviewQuarantineAction extends BaseAction
 	{
 		DefaultBizLogic defaultBizLogic=new DefaultBizLogic();
 		String reportAction = request.getParameter(Constants.REPORT_ACTION);
-		String pageOf =(String)request.getParameter(Constants.PAGEOF);
+		String pageOf =(String)request.getParameter(Constants.PAGE_OF);
 		if(reportAction==null)
 		{
 			reportAction = (String)request.getAttribute(Constants.REPORT_ACTION);

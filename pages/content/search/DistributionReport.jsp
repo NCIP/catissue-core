@@ -14,7 +14,7 @@
 		ConfigureResultViewForm form = (ConfigureResultViewForm)request.getAttribute("configureResultViewForm");
 		String []selectedColumns=form.getSelectedColumnNames();
 		String reportSaveAction = "";
-		String pageOf = (String) request.getAttribute(Constants.PAGEOF);
+		String pageOf = (String) request.getAttribute(Constants.PAGE_OF);
 		
 		if(distForm.getDistributionType().intValue() == Constants.SPECIMEN_DISTRIBUTION_TYPE) {
 			reportSaveAction = Constants.DISTRIBUTION_REPORT_SAVE_ACTION;

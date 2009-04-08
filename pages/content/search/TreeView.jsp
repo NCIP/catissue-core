@@ -1,21 +1,21 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 
 <% 	
-	String pageOf = request.getParameter(Constants.PAGEOF);
+	String pageOf = request.getParameter(Constants.PAGE_OF);
 	String containerName = request.getParameter(Constants.STORAGE_CONTAINER);
 	String storageContainerType = null;
 	String storageContainerID = null;
 	String position = null;
 	String propertyName = null, cdeName=null;
 	
-	if (pageOf.equals(Constants.PAGEOF_STORAGE_LOCATION) || pageOf.equals(Constants.PAGEOF_SPECIMEN)|| pageOf.equals(Constants.PAGEOF_ALIQUOT))
+	if (pageOf.equals(Constants.PAGE_OF_STORAGE_LOCATION) || pageOf.equals(Constants.PAGE_OF_SPECIMEN)|| pageOf.equals(Constants.PAGE_OF_ALIQUOT))
 	{
 		//For all storage container maps...
 		storageContainerType = (String)request.getAttribute(Constants.STORAGE_CONTAINER_TYPE);
 		storageContainerID = (String)request.getAttribute(Constants.STORAGE_CONTAINER_TO_BE_SELECTED);
 		position = (String)request.getAttribute(Constants.STORAGE_CONTAINER_POSITION);
 	}
-	else if (pageOf.equals(Constants.PAGEOF_TISSUE_SITE))
+	else if (pageOf.equals(Constants.PAGE_OF_TISSUE_SITE))
 	{
 		propertyName = request.getParameter(Constants.PROPERTY_NAME);
 		cdeName = request.getParameter(Constants.CDE_NAME);
@@ -69,7 +69,7 @@
 					'<PARAM name="name" value="<%=Constants.TREE_APPLET_NAME%>">\n'+
 					'<PARAM name="<%=Constants.PROPERTY_NAME%>" value="<%=propertyName%>">\n'+
 					'<PARAM name="<%=Constants.CDE_NAME%>" value="<%=cdeName%>">\n'+
-					'<PARAM name="<%=Constants.PAGEOF%>" value="<%=pageOf%>">\n'+
+					'<PARAM name="<%=Constants.PAGE_OF%>" value="<%=pageOf%>">\n'+
 					'<PARAM name="<%=Constants.STORAGE_CONTAINER%>" value="<%=containerName%>">\n'+
 					'<PARAM name="<%=Constants.STORAGE_CONTAINER_TYPE%>" value="<%=storageContainerType%>">\n'+
 					'<PARAM name="session_id" value="<%=session.getId()%>">\n'+
@@ -90,7 +90,7 @@
     <PARAM name="<%=Constants.PROPERTY_NAME%>" value="<%=propertyName%>">
 	<PARAM name="<%=Constants.CDE_NAME%>" value="<%=cdeName%>">
 	<PARAM name="type" value="application/x-java-applet;jpi-version=1.4.2">
-	<PARAM name="<%=Constants.PAGEOF%>" value="<%=pageOf%>">
+	<PARAM name="<%=Constants.PAGE_OF%>" value="<%=pageOf%>">
 	<PARAM name="<%=Constants.STORAGE_CONTAINER_TYPE%>" value="<%=storageContainerType%>">
 	<PARAM name="<%=Constants.STORAGE_CONTAINER_TO_BE_SELECTED%>" value="<%=storageContainerID%>">
 	<PARAM name="<%=Constants.STORAGE_CONTAINER_POSITION%>" value="<%=position%>">
@@ -106,7 +106,7 @@
     <PARAM name="code" value="<%=Constants.QUERY_TREE_APPLET%>">
 	<PARAM name="archive" value="Applet/TreeApplet.jar">
 	<PARAM name="type" value="application/x-java-applet;jpi-version=1.4.2">
-	<PARAM name="<%=Constants.PAGEOF%>" value="<%=pageOf%>">
+	<PARAM name="<%=Constants.PAGE_OF%>" value="<%=pageOf%>">
 	<PARAM name="<%=Constants.STORAGE_CONTAINER_TYPE%>" value="<%=storageContainerType%>">
 	<PARAM name="<%=Constants.STORAGE_CONTAINER_TO_BE_SELECTED%>" value="<%=storageContainerID%>">
 	<PARAM name="<%=Constants.STORAGE_CONTAINER_POSITION%>" value="<%=position%>">

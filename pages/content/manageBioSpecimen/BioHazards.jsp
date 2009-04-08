@@ -225,9 +225,9 @@
                         
 						<%
 					String delBioHazard="deleteBioHazards('pageOfMultipleSpecimen')";
-					if((String)request.getAttribute(Constants.PAGEOF)!=null)
+					if((String)request.getAttribute(Constants.PAGE_OF)!=null)
 					{
-						delBioHazard="deleteBioHazards('"+(String)request.getAttribute(Constants.PAGEOF)+"');";
+						delBioHazard="deleteBioHazards('"+(String)request.getAttribute(Constants.PAGE_OF)+"');";
 					}
 					%>
 						<html:button property="deleteBiohazard" styleClass="black_ar" onclick='<%=delBioHazard%>' disabled="true" accesskey="D">

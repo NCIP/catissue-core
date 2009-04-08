@@ -24,7 +24,7 @@
 </script>
 <%
 	String formName = Constants.ALIQUOT_SUMMARY_ACTION;
-	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
+	String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 	String CPQuery = (String)request.getAttribute(Constants.CP_QUERY);
 	if(CPQuery != null)
 	{

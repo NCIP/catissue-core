@@ -66,6 +66,6 @@ public class DepartmentAction extends SecureAction
         request.setAttribute("formName",formName);
         request.setAttribute("readOnlyValue",readOnlyValue );
                
-        return mapping.findForward((String)request.getParameter(Constants.PAGEOF));
+        return mapping.findForward((String)request.getParameter(Constants.PAGE_OF));
     }
 }

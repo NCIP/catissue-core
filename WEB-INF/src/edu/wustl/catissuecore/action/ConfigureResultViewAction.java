@@ -45,10 +45,10 @@ public class ConfigureResultViewAction extends BaseAction
 			
 			//String target = new String();
 			IBizLogic bizlogic = BizLogicFactory.getInstance().getBizLogic(Constants.CONFIGURE_RESULT_VIEW_ID);
-			String pageOf = (String) request.getAttribute(Constants.PAGEOF);
+			String pageOf = (String) request.getAttribute(Constants.PAGE_OF);
 			if(pageOf == null)
 			{
-				pageOf = (String) request.getParameter(Constants.PAGEOF);
+				pageOf = (String) request.getParameter(Constants.PAGE_OF);
 			}
 			//String []tables = (String [])request.getAttribute(Constants.TABLE_ALIAS_NAME);
 			HttpSession session =request.getSession();
@@ -93,12 +93,12 @@ public class ConfigureResultViewAction extends BaseAction
 	        
 	        Logger.out.debug("Table Map"+tableColumnDataMap);
 	        request.setAttribute(Constants.TABLE_COLUMN_DATA_MAP,tableColumnDataMap);
-	        request.setAttribute(Constants.PAGEOF,pageOf);
+	        request.setAttribute(Constants.PAGE_OF,pageOf);
 	        Logger.out.debug("pageOf in configure result view:"+pageOf);
-	        /*if(pageOf.equals(Constants.PAGEOF_SIMPLE_QUERY_INTERFACE))
-	        	target = Constants.PAGEOF_SIMPLE_QUERY_INTERFACE;
-			else if(pageOf.equals(Constants.PAGEOF_QUERY_RESULTS))
-				target = Constants.PAGEOF_QUERY_RESULTS;*/
+	        /*if(pageOf.equals(Constants.PAGE_OF_SIMPLE_QUERY_INTERFACE))
+	        	target = Constants.PAGE_OF_SIMPLE_QUERY_INTERFACE;
+			else if(pageOf.equals(Constants.PAGE_OF_QUERY_RESULTS))
+				target = Constants.PAGE_OF_QUERY_RESULTS;*/
 	        
 			return mapping.findForward(pageOf);
 	        //return mapping.findForward("success");

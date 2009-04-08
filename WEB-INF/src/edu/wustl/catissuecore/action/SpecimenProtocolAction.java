@@ -143,6 +143,6 @@ public class SpecimenProtocolAction  extends SecureAction
 	    	// Mandar : 03-apr-06 end
 	    	
 	
-        return mapping.findForward((String)request.getParameter(Constants.PAGEOF));
+        return mapping.findForward((String)request.getParameter(Constants.PAGE_OF));
     }
 }

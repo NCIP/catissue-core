@@ -37,7 +37,7 @@ for(int i=0;i<columnList1.length;i++)
 String title = null;
 List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 String label=(String)request.getAttribute(Constants.SPECIMEN_LABEL);
-String pageOf = (String)request.getAttribute(Constants.PAGEOF);
+String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 Integer identifierFieldIndex = new Integer(0);
 String specimenIdentifier = (String)request.getAttribute(Constants.SPECIMEN_ID);
 if(specimenIdentifier == null || specimenIdentifier.equals("0"))

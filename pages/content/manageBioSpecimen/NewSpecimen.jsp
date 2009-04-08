@@ -87,7 +87,7 @@
 <%
 	String[] columnList = (String[]) request.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
 	List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
-	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
+	String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 
 	
 	String formName,pageView=operation,editViewButton="buttons."+Constants.EDIT;
@@ -1019,7 +1019,7 @@
 								<html:hidden property="derivedClicked"/>
 								
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
-<logic:equal name="<%=Constants.PAGEOF%>" value="pageOfNewSpecimen">
+<logic:equal name="<%=Constants.PAGE_OF%>" value="pageOfNewSpecimen">
 <tr>
 		<td class="td_color_bfdcf3">
 			<table border="0" cellpadding="0" cellspacing="0">
@@ -1903,7 +1903,7 @@
 								<td class="dividerline" colspan="3"><span class="black_ar"></td>
 								</tr>
 								<tr>
-								<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">	
+								<logic:notEqual name="<%=Constants.PAGE_OF%>" value="<%=Constants.QUERY%>">	
 								
 											<td colspan="1" valign="center">
 													<html:checkbox styleId="printCheckbox" property="printCheckbox" value="true" onclick="showPriterTypeLocation()">

@@ -42,7 +42,7 @@ public class SimpleSearchEditAction extends BaseAction
 //		request.setAttribute(Constants.TABLE_ALIAS_NAME, aliasName);
 
 		String pageOf = Variables.aliasAndPageOfMap.get(aliasName);
-		request.setAttribute(Constants.PAGEOF, pageOf);
+		request.setAttribute(Constants.PAGE_OF, pageOf);
 
 		Logger.out.debug("identifier:" + identifier + " TABLE_ALIAS_NAME:" + aliasName + ":PAGEOF:"
 				+ pageOf);

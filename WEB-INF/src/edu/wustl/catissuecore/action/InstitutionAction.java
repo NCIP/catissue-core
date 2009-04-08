@@ -61,6 +61,6 @@ public class InstitutionAction extends SecureAction
             
         }
         request.setAttribute("formName", formName);
-        return mapping.findForward((String)request.getParameter(Constants.PAGEOF));
+        return mapping.findForward((String)request.getParameter(Constants.PAGE_OF));
     }
 }

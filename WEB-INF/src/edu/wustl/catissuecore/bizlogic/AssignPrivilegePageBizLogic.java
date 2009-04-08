@@ -234,7 +234,7 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 	        {
 	            Role role = (Role) iterator.next();
 	            NameValueBean nameValueBean = new NameValueBean();
-	            if((Constants.PAGEOF_ASSIGN_PRIVILEGE).equalsIgnoreCase(pageOf))
+	            if((Constants.PAGE_OF_ASSIGN_PRIVILEGE).equalsIgnoreCase(pageOf))
 	            {
 	            	if(!((Constants.ROLE_SUPER_ADMINISTRATOR).equals(role.getName()))&&!((Constants.ROLE_ADMINISTRATOR).equals(role.getName())))
 	            	{
@@ -489,7 +489,7 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 		List<NameValueBean> actionList = new ArrayList<NameValueBean> ();
 		List<NameValueBean> selectedActionsList=null;
 		List<NameValueBean> cpList = null;
-		if (pageOf != null && pageOf.equalsIgnoreCase(Constants.PAGEOF_ASSIGN_PRIVILEGE))
+		if (pageOf != null && pageOf.equalsIgnoreCase(Constants.PAGE_OF_ASSIGN_PRIVILEGE))
 		{
 			if("7".equals(roleId))
 			{
@@ -1216,8 +1216,8 @@ public List<String[]> privilegeDataOnTabSwitch(Map<String, SiteUserRolePrivilege
 					// for privileges
 					String actionNames = displayPrivilegesNames(bean);
 					
-				//	if((! (Constants.PAGE_OF_USER).equalsIgnoreCase(pageOf))&&!((Constants.PAGEOF_USER_PROFILE).equals(pageOf)))
-					if((pageOf!=null && (Constants.PAGEOF_ASSIGN_PRIVILEGE).equalsIgnoreCase(pageOf)))
+				//	if((! (Constants.PAGE_OF_USER).equalsIgnoreCase(pageOf))&&!((Constants.PAGE_OF_USER_PROFILE).equals(pageOf)))
+					if((pageOf!=null && (Constants.PAGE_OF_ASSIGN_PRIVILEGE).equalsIgnoreCase(pageOf)))
 					{
 						// for user
 						String userName ="";

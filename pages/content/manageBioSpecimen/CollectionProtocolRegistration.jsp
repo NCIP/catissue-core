@@ -21,7 +21,7 @@
 		</script>
 <!-- Mandar 11-Aug-06 : calendar changes end -->
 <%
-	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
+	String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 	   		Object obj = request.getAttribute("collectionProtocolRegistrationForm");
 	CollectionProtocolRegistrationForm form =null;
 	String currentRegistrationDate = "";
@@ -220,7 +220,7 @@
 						    <html:options collection="<%=Constants.PROTOCOL_LIST%>" labelProperty="name" property="value"/>															
 					    </html:select>
 						&nbsp;
-						<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_COLLECTION_PROTOCOL_REGISTRATION_CP_QUERY%>">
+						<logic:notEqual name="<%=Constants.PAGE_OF%>" value="<%=Constants.PAGE_OF_COLLECTION_PROTOCOL_REGISTRATION_CP_QUERY%>">
 						<html:link href="#" styleId="newCollectionProtocol" onclick="addNewAction('ParticipantRegistrationAddNew.do?addNewForwardTo=collectionProtocol&forwardTo=participantRegistration&addNewFor=collectionProtocolId')">
 							<bean:message key="buttons.addNew" />
 						</html:link>					   
@@ -241,12 +241,12 @@
 						<html:text styleClass="formFieldSized" maxlength="10"  size="30" styleId="participantName" 
 					     		property="participantName" disabled="true"/>	
 						&nbsp;
-						<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_COLLECTION_PROTOCOL_REGISTRATION_CP_QUERY%>">
+						<logic:notEqual name="<%=Constants.PAGE_OF%>" value="<%=Constants.PAGE_OF_COLLECTION_PROTOCOL_REGISTRATION_CP_QUERY%>">
 						<html:link href="#" styleId="newParticipant" onclick="addNewAction('ParticipantRegistrationAddNew.do?addNewForwardTo=participant&forwardTo=participantRegistration&addNewFor=participantId')">
 							<bean:message key="buttons.addNew" />
 						</html:link>			
 						</logic:notEqual>
-						<logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_COLLECTION_PROTOCOL_REGISTRATION_CP_QUERY%>">
+						<logic:equal name="<%=Constants.PAGE_OF%>" value="<%=Constants.PAGE_OF_COLLECTION_PROTOCOL_REGISTRATION_CP_QUERY%>">
 						<html:link href="#" styleId="newParticipant" onclick="addNewAction('CPQueryParticipantRegistrationAddNew.do?addNewForwardTo=participant&forwardTo=participantRegistration&addNewFor=participantId')">
 							<bean:message key="buttons.addNew" />
 						</html:link>			

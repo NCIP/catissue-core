@@ -18,7 +18,7 @@
 	<%
 		String normalSubmit="";
 		String signedConsentDate="";
-		String pageOf=(String)request.getAttribute(Constants.PAGEOF);
+		String pageOf=(String)request.getAttribute(Constants.PAGE_OF);
 		String operation = (String) request.getAttribute(Constants.OPERATION);
 		Object obj = request.getAttribute("collectionProtocolRegistrationForm");
 		CollectionProtocolRegistrationForm form =null;

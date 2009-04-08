@@ -216,7 +216,7 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 									    />
 					
 
-						<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_SCG_CP_QUERY%>">
+						<logic:notEqual name="<%=Constants.PAGE_OF%>" value="<%=Constants.PAGE_OF_SCG_CP_QUERY%>">
 						&nbsp;
 						<html:link href="#" styleId="newSite" styleClass="view" onclick="addNewAction('SpecimenCollectionGroupAddNew.do?addNewForwardTo=site&forwardTo=specimenCollectionGroup&addNewFor=site')">
 							<bean:message key="buttons.addNew" />

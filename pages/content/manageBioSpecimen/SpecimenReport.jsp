@@ -8,7 +8,7 @@
 <%@ page import="java.util.*"%>
 
 <%
-	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
+	String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 %>
 <head>
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>

@@ -292,7 +292,6 @@ public class Constants
     public static final String QUERY_TREE_VIEW_ACTION = "QueryTreeView.do";
     public static final String QUERY_GRID_VIEW_ACTION = "QueryGridView.do";
     public static final String NO_OF_TREES = "noOfTrees";
-    public static final String PAGEOF_QUERY_MODULE = "pageOfQueryModule";
     public static final String TREE_ROOTS = "treeRoots";
     //	 Frame names in Query Module Results page.--ends here
 	public static final String MAX_IDENTIFIER = "maxIdentifier";
@@ -688,9 +687,9 @@ public class Constants
 	public static final String ALIQUOT_SUMMARY_ACTION = "AliquotSummary.do";
 	
 	//Constants related to Aliquots functionality
-	public static final String PAGEOF_ALIQUOT = "pageOfAliquot";
-	public static final String PAGEOF_CREATE_ALIQUOT = "pageOfCreateAliquot";
-	public static final String PAGEOF_ALIQUOT_SUMMARY = "pageOfAliquotSummary";
+	public static final String PAGE_OF_ALIQUOT = "pageOfAliquot";
+	public static final String PAGE_OF_CREATE_ALIQUOT = "pageOfCreateAliquot";
+	public static final String PAGE_OF_ALIQUOT_SUMMARY = "pageOfAliquotSummary";
 	public static final String AVAILABLE_CONTAINER_MAP = "availableContainerMap";
 	public static final String COMMON_ADD_EDIT = "commonAddEdit";
 	
@@ -704,9 +703,9 @@ public class Constants
 	public static final String QUERY_SESSION_DATA = "querySessionData";
 	
 	//Specimen Array Aliquots pages
-	public static final String PAGEOF_SPECIMEN_ARRAY_ALIQUOT = "pageOfSpecimenArrayAliquot";
-	public static final String PAGEOF_SPECIMEN_ARRAY_CREATE_ALIQUOT = "pageOfSpecimenArrayCreateAliquot";
-	public static final String PAGEOF_SPECIMEN_ARRAY_ALIQUOT_SUMMARY = "pageOfSpecimenArrayAliquotSummary";	
+	public static final String PAGE_OF_SPECIMEN_ARRAY_ALIQUOT = "pageOfSpecimenArrayAliquot";
+	public static final String PAGE_OF_SPECIMEN_ARRAY_CREATE_ALIQUOT = "pageOfSpecimenArrayCreateAliquot";
+	public static final String PAGE_OF_SPECIMEN_ARRAY_ALIQUOT_SUMMARY = "pageOfSpecimenArrayAliquotSummary";	
 		
 	//Specimen Array Aliquots Action
 	public static final String SPECIMEN_ARRAY_ALIQUOT_ACTION = "SpecimenArrayAliquots.do";
@@ -722,10 +721,9 @@ public class Constants
 	public static final String SIMILAR_CONTAINERS_ADD_ACTION = "SimilarContainersAdd.do";
 	
 	//Constants related to Similar Containsers
-	public static final String PAGEOF_SIMILAR_CONTAINERS = "pageOfSimilarContainers";
-	public static final String PAGEOF_CREATE_SIMILAR_CONTAINERS = "pageOfCreateSimilarContainers";
-	public static final String PAGEOF_STORAGE_CONTAINER = "pageOfStorageContainer";
-	
+	public static final String PAGE_OF_SIMILAR_CONTAINERS = "pageOfSimilarContainers";
+	public static final String PAGE_OF_CREATE_SIMILAR_CONTAINERS = "pageOfCreateSimilarContainers";
+		
 	//Levels of nodes in query results tree.
 	public static final int MAX_LEVEL = 5;
 	public static final int MIN_LEVEL = 1;
@@ -862,15 +860,15 @@ public class Constants
 	public static final String APPROVE_USER_EMAIL_SUBJECT = "Your membership status in caTISSUE Core.";
 	
 	//Query Interface Results View Constants
-	public static final String PAGEOF_APPROVE_USER = "pageOfApproveUser";
-	public static final String PAGEOF_SIGNUP = "pageOfSignUp";
-	public static final String PAGEOF_USERADD = "pageOfUserAdd";
-	public static final String PAGEOF_USER_ADMIN = "pageOfUserAdmin";
-	public static final String PAGEOF_USER_PROFILE = "pageOfUserProfile";
-	public static final String PAGEOF_CHANGE_PASSWORD = "pageOfChangePassword";
+	public static final String PAGE_OF_APPROVE_USER = "pageOfApproveUser";
+	public static final String PAGE_OF_SIGNUP = "pageOfSignUp";
+	public static final String PAGE_OF_USERADD = "pageOfUserAdd";
+	public static final String PAGE_OF_USER_ADMIN = "pageOfUserAdmin";
+	public static final String PAGE_OF_USER_PROFILE = "pageOfUserProfile";
+	public static final String PAGE_OF_CHANGE_PASSWORD = "pageOfChangePassword";
 	
 	//For Simple Query Interface and Edit.
-	public static final String PAGEOF_EDIT_OBJECT = "pageOfEditObject";
+	public static final String PAGE_OF_EDIT_OBJECT = "pageOfEditObject";
 	
 	//Query results view temporary table columns.
 	public static final String QUERY_RESULTS_PARTICIPANT_ID = "PARTICIPANT_ID";
@@ -912,7 +910,7 @@ public class Constants
 	public static final String ERROR_MESSAGE_FOR_CP = "errorMessageForCP";
 	public static final String ERROR_MESSAGE_FOR_ACTION = "errorMessageForPrivilege";
 	public static final String DEFAULT_ROLE = "Default role";
-	public static final String PAGEOF_ASSIGN_PRIVILEGE = "pageOfAssignPrivilegePage";
+	public static final String PAGE_OF_ASSIGN_PRIVILEGE = "pageOfAssignPrivilegePage";
 	public static final String ALL_DEFAULT_PRIVILEGES= "All Default Privileges";
 	public static final String ALL_DEFAULT_USERS = "All Default Users";
 	
@@ -1306,7 +1304,6 @@ public class Constants
 	public static final String CONFIGURE_SIMPLE_SEARCH_ACTION = "ConfigureSimpleSearch.do";
 	public static final String SIMPLE_SEARCH_ACTION = "SimpleSearch.do";
 	public static final String SIMPLE_SEARCH_AFTER_CONFIGURE_ACTION = "SimpleSearchAfterConfigure.do";
-	public static final String PAGEOF_DISTRIBUTION = "pageOfDistribution";
 	public static final String RESULT_VIEW_VECTOR = "resultViewVector";
 	public static final String SPECIMENT_VIEW_ATTRIBUTE = "defaultViewAttribute";
 	//public static final String SIMPLE_QUERY_COUNTER = "simpleQueryCount";
@@ -1411,10 +1408,10 @@ public class Constants
 	public static final String EVENT_CONDITIONS = "eventConditions";
 	
 	public static final String IDENTIFIER_COLUMN_ID_MAP = "identifierColumnIdsMap";
-	public static final String PAGEOF_PARTICIPANT_QUERY_EDIT= "pageOfParticipantQueryEdit";
-	public static final String PAGEOF_COLLECTION_PROTOCOL_QUERY_EDIT= "pageOfCollectionProtocolQueryEdit";
-	public static final String PAGEOF_SPECIMEN_COLLECTION_GROUP_QUERY_EDIT= "pageOfSpecimenCollectionGroupQueryEdit";
-	public static final String PAGEOF_SPECIMEN_QUERY_EDIT= "pageOfSpecimenQueryEdit";
+	public static final String PAGE_OF_PARTICIPANT_QUERY_EDIT= "pageOfParticipantQueryEdit";
+	public static final String PAGE_OF_COLLECTION_PROTOCOL_QUERY_EDIT= "pageOfCollectionProtocolQueryEdit";
+	public static final String PAGE_OF_SPECIMEN_COLLECTION_GROUP_QUERY_EDIT= "pageOfSpecimenCollectionGroupQueryEdit";
+	public static final String PAGE_OF_SPECIMEN_QUERY_EDIT= "pageOfSpecimenQueryEdit";
 	public static final String PARTICIPANT_COLUMNS = "particpantColumns";
 	public static final String COLLECTION_PROTOCOL_COLUMNS = "collectionProtocolColumns";
 	public static final String SPECIMEN_COLLECTION_GROUP_COLUMNS = "SpecimenCollectionGroupColumns";
@@ -1663,8 +1660,8 @@ public class Constants
 //			"Aliquots"
 	};
 	
-	public static final String PAGEOF_MULTIPLE_SPECIMEN = "pageOfMultipleSpecimen";
-	public static final String PAGEOF_MULTIPLE_SPECIMEN_MAIN = "pageOfMultipleSpecimenMain";
+	public static final String PAGE_OF_MULTIPLE_SPECIMEN = "pageOfMultipleSpecimen";
+	public static final String PAGE_OF_MULTIPLE_SPECIMEN_MAIN = "pageOfMultipleSpecimenMain";
 	public static final String MULTIPLE_SPECIMEN_ACTION = "MultipleSpecimen.do";
 	public static final String INIT_MULTIPLE_SPECIMEN_ACTION = "InitMultipleSpecimen.do";
 	public static final String MULTIPLE_SPECIMEN_APPLET_ACTION = "MultipleSpecimenAppletAction.do";
@@ -1826,7 +1823,7 @@ public class Constants
 	public static final String MULTIPLE_SPECIMEN_STORAGE_LOCATION_AVAILABLE_MAP="locationMap";
 	public static final String MULTIPLE_SPECIMEN_STORAGE_LOCATION_SPECIMEN_MAP= "specimenMap";
 	public static final String MULTIPLE_SPECIMEN_STORAGE_LOCATION_KEY_SEPARATOR = "$";
-	public static final String PAGEOF_MULTIPLE_SPECIMEN_STORAGE_LOCATION = "formSubmitted";
+	public static final String PAGE_OF_MULTIPLE_SPECIMEN_STORAGE_LOCATION = "formSubmitted";
 	public static final String MULTIPLE_SPECIMEN_SUBMIT_SUCCESSFUL = "submitSuccessful";
 	public static final String MULTIPLE_SPECIMEN_SPECIMEN_ORDER_LIST= "specimenOrderList";
 	public static final String MULTIPLE_SPECIMEN_DELETELAST_SPECIMEN_ID = "SpecimenId";
@@ -1910,7 +1907,7 @@ public class Constants
 	public static final String PAGE_OF_MULTIPLE_SPECIMEN_CP_QUERY = "pageOfMultipleSpecimenCPQuery";
 	public static final String CP_QUERY_NEW_MULTIPLE_SPECIMEN_ACTION = "CPQueryNewMultipleSpecimenAction.do";
 	public static final String CP_QUERY_MULTIPLE_SPECIMEN_STORAGE_LOCATION_ACTION="CPQueryMultipleSpecimenStorageLocationAdd.do";
-	public static final String CP_QUERY_PAGEOF_MULTIPLE_SPECIMEN_STORAGE_LOCATION = "CPQueryformSubmitted";
+	public static final String CP_QUERY_PAGE_OF_MULTIPLE_SPECIMEN_STORAGE_LOCATION = "CPQueryformSubmitted";
 	public static final String CP_QUERY_COLLECTION_PROTOCOL_REGISTRATION_ADD_ACTION = "CPQueryCollectionProtocolRegistrationAdd.do";
 	public static final String CP_QUERY_COLLECTION_PROTOCOL_REGISTRATION_EDIT_ACTION = "CPQueryCollectionProtocolRegistrationEdit.do";
 	public static final String CP_QUERY_PARTICIPANT_LOOKUP_ACTION= "CPQueryParticipantLookup.do";
@@ -2006,7 +2003,6 @@ public class Constants
 	public static final String PAGE_OF_PARTICIPANT = "pageOfParticipant";
 	
 	public static final String PAGE_OF_SITE = "pageOfSite";
-	public static final String PAGE_OF_SPECIMEN = "pageOfSpecimen";
 	public static final String PAGE_OF_SPECIMEN_ARRAY = "pageOfSpecimenArray";
 	public static final String PAGE_OF_SPECIMEN_ARRAY_TYPE = "pageOfSpecimenArrayType";
 	public static final String PAGE_OF_SPECIMEN_COLLECTION_GROUP = "pageOfSpecimenCollectionGroup";
@@ -2162,8 +2158,8 @@ public class Constants
 	public static final String 	USER_NAME_ADMIN_VIEW="User Name";
 	public static final String 	SCG_NAME="Specimen Collection Group";
 	public static final String 	ACCESSION_NO="Accession Number";
-	public static final String  PAGEOF_REVIEW_SPR="pageOfReviewSPR";
-	public static final String  PAGEOF_QUARANTINE_SPR="pageOfQuarantineSPR";
+	public static final String  PAGE_OF_REVIEW_SPR="pageOfReviewSPR";
+	public static final String  PAGE_OF_QUARANTINE_SPR="pageOfQuarantineSPR";
 	public static final String  SITE="Site";
 	public static final String  REQUEST_FOR="requestFor";
 	public static final String  REPORT_ACTION="reportAction";
@@ -2175,9 +2171,7 @@ public class Constants
 	public static final String VIEW_SPR_ACTION="ViewSurgicalPathologyReport.do";
 	public static final String SPR_EVENT_PARAM_ACTION="SurgicalPathologyReportEventParam.do";
 	public static final String VIEW_SURGICAL_PATHOLOGY_REPORT="viewSPR";
-	public static final String PAGEOF_SPECIMEN_COLLECTION_GROUP="pageOfSpecimenCollectionGroup";
-	public static final String PAGEOF_PARTICIPANT="pageOfParticipant";
-	public static final String PAGEOF_NEW_SPECIMEN="pageOfNewSpecimen";
+	public static final String PAGE_OF_NEW_SPECIMEN="pageOfNewSpecimen";
 	public static final String REVIEW="review";
 	public static final String QUARANTINE="quarantine";
 	public static final String COMMENT_STATUS_RENDING="PENDING";
@@ -2398,7 +2392,7 @@ public class Constants
 	public static final String CONTAINTMENT_ASSOCIATION = "CONTAINTMENT";
 	public static final String MAIN_ENTITY_MAP = "mainEntityMap";
 	
-	public static final String PAGEOF_SPECIMEN_COLLECTION_REQUIREMENT_GROUP = "pageOfSpecimenCollectionRequirementGroup";
+	public static final String PAGE_OF_SPECIMEN_COLLECTION_REQUIREMENT_GROUP = "pageOfSpecimenCollectionRequirementGroup";
 	public static final String NO_MAIN_OBJECT_IN_QUERY = "noMainObjectInQuery";
 	public static final String QUERY_ALREADY_DELETED = "queryAlreadyDeleted";
 	public static final String[] INHERITED_ENTITY_NAMES = {
@@ -2667,12 +2661,12 @@ public static final String ADD_MULTIPLE_SPECIMEN_TO_CART="addMltipleSpecimenToCa
 	public static final String IDENTIFIER = "IDENTIFIER";
 	public static final String MENU_SELECTED = "menuSelected";
 	
-	public static final String PAGEOF_STORAGE_LOCATION = "pageOfStorageLocation";
-	public static final String PAGEOF_SPECIMEN = "pageOfSpecimen";
-	public static final String PAGEOF_STORAGECONTAINER="pageOfStorageContainer";
-	public static final String PAGEOF_TISSUE_SITE = "pageOfTissueSite";
+	public static final String PAGE_OF_STORAGE_LOCATION = "pageOfStorageLocation";
+	public static final String PAGE_OF_SPECIMEN = "pageOfSpecimen";
+	public static final String PAGE_OF_STORAGECONTAINER="pageOfStorageContainer";
+	public static final String PAGE_OF_TISSUE_SITE = "pageOfTissueSite";
 	
-	public static final String PAGEOF_SPECIMEN_TREE = "pageOfSpecimenTree";
+	public static final String PAGE_OF_SPECIMEN_TREE = "pageOfSpecimenTree";
 	// TissueSite Tree View Constants.
 	public static final String PROPERTY_NAME = "propertyName";
 	
@@ -2776,7 +2770,6 @@ public static final String ADD_MULTIPLE_SPECIMEN_TO_CART="addMltipleSpecimenToCa
 	public static final String ADMINISTRATOR = "Administrator";
 	public static final String ROLE_SUPER_ADMINISTRATOR="SUPERADMINISTRATOR";
 	public static final String PAGE_OF_SIMPLE_QUERY_INTERFACE = "pageOfSimpleQueryInterface";
-	public static final String PAGE_OF_STORAGE_LOCATION = "pageOfStorageLocation";	
 	
 	public static final String allowOperation = "allowOperation";
 

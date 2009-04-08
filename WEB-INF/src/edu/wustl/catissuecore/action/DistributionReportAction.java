@@ -98,8 +98,8 @@ public class DistributionReportAction extends BaseDistributionReportAction
     	request.setAttribute(Constants.DISTRIBUTED_ITEMS_DATA, listOfData);
     	setSelectedMenuRequestAttribute(request);
 
-    	String pageOf = request.getParameter(Constants.PAGEOF);
-		request.setAttribute(Constants.PAGEOF, pageOf);
+    	String pageOf = request.getParameter(Constants.PAGE_OF);
+		request.setAttribute(Constants.PAGE_OF, pageOf);
 
 		return (mapping.findForward(forward));
 	}

@@ -96,9 +96,9 @@ public class SubCollectionProtocolRegistrationAction extends SecureAction
 		request.setAttribute(Constants.ACTIVITYSTATUSLIST, Constants.ACTIVITY_STATUS_VALUES);
 
 		// Sets the pageOf attribute
-		String pageOf = request.getParameter(Constants.PAGEOF);
+		String pageOf = request.getParameter(Constants.PAGE_OF);
 
-		request.setAttribute(Constants.PAGEOF, "pageOfCollectionProtocolRegistrationCPQuery");
+		request.setAttribute(Constants.PAGE_OF, "pageOfCollectionProtocolRegistrationCPQuery");
 
 		return mapping.findForward(pageOf);
 	}

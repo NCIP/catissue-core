@@ -91,7 +91,7 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 		{
 			viewSPR.setHasAccess(false);
 		}
-        request.setAttribute(Constants.PAGEOF, pageOf);
+        request.setAttribute(Constants.PAGE_OF, pageOf);
         request.setAttribute(Constants.OPERATION, Constants.VIEW_SURGICAL_PATHOLOGY_REPORT);
         request.setAttribute(Constants.REQ_PATH, "");
         request.setAttribute(Constants.SUBMITTED_FOR, submittedFor);
@@ -120,7 +120,7 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 			CatissueCoreCacheManager.getInstance().addObjectToCache("participantEntityId",participantEntityId);		
 		}
 		request.setAttribute("participantEntityId",participantEntityId);
-        if(pageOf.equalsIgnoreCase(Constants.PAGEOF_NEW_SPECIMEN)|| pageOf.equalsIgnoreCase(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
+        if(pageOf.equalsIgnoreCase(Constants.PAGE_OF_NEW_SPECIMEN)|| pageOf.equalsIgnoreCase(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
         {
         	request.setAttribute(Constants.ID,id.toString());
         }
@@ -144,7 +144,7 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 	 */
 	private void retrieveAndSetObject(String pageOf, Long reportId, HttpServletRequest request, ViewSurgicalPathologyReportForm viewSPR) throws DAOException
 	{
-		if(pageOf.equalsIgnoreCase(Constants.PAGEOF_PARTICIPANT) || pageOf.equalsIgnoreCase(Constants.PAGE_OF_PARTICIPANT_CP_QUERY))
+		if(pageOf.equalsIgnoreCase(Constants.PAGE_OF_PARTICIPANT) || pageOf.equalsIgnoreCase(Constants.PAGE_OF_PARTICIPANT_CP_QUERY))
 		{
 			
 			Long participantId=getParticipantId(reportId);
@@ -207,9 +207,9 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 		
 		String witnessFullName=null;
 		DefaultBizLogic defaultBizLogic=new DefaultBizLogic();
-		String pageOf = request.getParameter(Constants.PAGEOF);
+		String pageOf = request.getParameter(Constants.PAGE_OF);
 		
-		if(pageOf.equalsIgnoreCase(Constants.PAGEOF_REVIEW_SPR))
+		if(pageOf.equalsIgnoreCase(Constants.PAGE_OF_REVIEW_SPR))
 		{
 			request.setAttribute(Constants.OPERATION, Constants.REVIEW);
 			viewSPR.setOperation(Constants.REVIEW);

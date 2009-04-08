@@ -3313,7 +3313,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		if ((proxySpecimenCollectionGroup instanceof CollectionProtocolEvent))
 		{
 			NewSpecimenForm newSpecimenForm = (NewSpecimenForm) uiForm;
-			newSpecimenForm.setForwardTo(Constants.PAGEOF_SPECIMEN_COLLECTION_REQUIREMENT_GROUP);
+			newSpecimenForm.setForwardTo(Constants.PAGE_OF_SPECIMEN_COLLECTION_REQUIREMENT_GROUP);
 			throw getBizLogicException(null, "bizlogic.error", 
 					"The Specimen is Added as Requirement, this can not be edited!!");
 

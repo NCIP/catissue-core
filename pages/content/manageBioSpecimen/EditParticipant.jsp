@@ -283,7 +283,7 @@ function participantRegRow(subdivtag)
 
 
 	
-		<logic:notEqual name="<%=Constants.PAGEOF%>"
+		<logic:notEqual name="<%=Constants.PAGE_OF%>"
 							value="<%=Constants.PAGE_OF_PARTICIPANT_CP_QUERY%>">
 		<tr>
 			<td class="td_color_bfdcf3">
@@ -304,7 +304,7 @@ function participantRegRow(subdivtag)
 	<tr height="98%">
 		<td class="tablepadding">
 		<logic:equal name="operation" value="add">
-			<logic:notEqual name="<%=Constants.PAGEOF%>"
+			<logic:notEqual name="<%=Constants.PAGE_OF%>"
 							value="<%=Constants.PAGE_OF_PARTICIPANT_CP_QUERY%>">
 			<table width="100%" border="0" cellpadding="0" cellspacing="0">
 				<tr>
@@ -1075,7 +1075,7 @@ function participantRegRow(subdivtag)
 
 						<!-- PUT YOUR COMMENT HERE -->
 
-						<logic:equal name="<%=Constants.PAGEOF%>"
+						<logic:equal name="<%=Constants.PAGE_OF%>"
 							value="<%=Constants.PAGE_OF_PARTICIPANT_CP_QUERY%>">
 						<td nowrap >
 							<html:button
@@ -1087,7 +1087,7 @@ function participantRegRow(subdivtag)
 						</td>
 						</logic:equal>
 
-						<logic:notEqual name="<%=Constants.PAGEOF%>"
+						<logic:notEqual name="<%=Constants.PAGE_OF%>"
 							value="<%=Constants.PAGE_OF_PARTICIPANT_CP_QUERY%>">
 
 							<td>
@@ -1107,7 +1107,7 @@ function participantRegRow(subdivtag)
 							</td>
 						</logic:notEqual>
 
-						<logic:equal name="<%=Constants.PAGEOF%>"
+						<logic:equal name="<%=Constants.PAGE_OF%>"
 							value="<%=Constants.PAGE_OF_PARTICIPANT_CP_QUERY%>">
 
 							<td nowrap>&nbsp;|&nbsp;<html:button styleClass="blue_ar_c"

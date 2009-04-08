@@ -147,7 +147,7 @@ public class SpecimenEventParametersAction  extends BaseAction
 		request.setAttribute("pageOf", pageOf);
 		// This method will be overridden by the sub classes
 		setRequestParameters(request, eventParametersForm);
-    	return mapping.findForward((String)request.getParameter(Constants.PAGEOF));
+    	return mapping.findForward((String)request.getParameter(Constants.PAGE_OF));
     }
     
     /*  This method will be overridden by the sub classes

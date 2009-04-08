@@ -141,9 +141,9 @@ public class CollectionProtocolRegistrationAction extends SecureAction
         }
 
 		//Sets the pageOf attribute
-        String pageOf  = request.getParameter(Constants.PAGEOF);
+        String pageOf  = request.getParameter(Constants.PAGE_OF);
         
-        request.setAttribute(Constants.PAGEOF,pageOf);
+        request.setAttribute(Constants.PAGE_OF,pageOf);
         
 		// Mandar : code for Addnew Collection Protocol data 24-Jan-06
 //		String collectionProtocolID = (String)request.getAttribute(Constants.ADD_NEW_COLLECTION_PROTOCOL_ID);

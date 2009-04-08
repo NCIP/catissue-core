@@ -90,7 +90,7 @@ public class ConfigureAdvanceSearchResultsAction extends BaseAction
             request.setAttribute(Constants.SPREADSHEET_DATA_LIST,list);
         	
             request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST,columnDisplayNames);
-            request.setAttribute(Constants.PAGEOF,Constants.PAGEOF_QUERY_RESULTS);
+            request.setAttribute(Constants.PAGE_OF,Constants.PAGE_OF_QUERY_RESULTS);
 		}
         catch(DAOException exp)
 		{

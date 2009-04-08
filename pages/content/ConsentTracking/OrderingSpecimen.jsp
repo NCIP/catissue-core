@@ -71,7 +71,7 @@
 		{
 			form = (DistributionForm)obj;
 		}	
-		String pageOf=(String)request.getParameter(Constants.PAGEOF);
+		String pageOf=(String)request.getParameter(Constants.PAGE_OF);
 		String operation = (String)request.getParameter(Constants.OPERATION);
 		String signedConsentDate="";
 	%>

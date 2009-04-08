@@ -8,7 +8,7 @@
 								<tr>
 								
 								<!-- PUT YOUR COMMENT HERE -->
-								<!--logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>"-->
+								<!--logic:equal name="<%=Constants.PAGE_OF%>" value="<%=Constants.QUERY%>"-->
 						   			<td nowrap class="formFieldNoBorders">
 										<html:button styleClass="actionButton" 
 												property="submitPage" 
@@ -18,7 +18,7 @@
 									</td>
 								<!--/logic:equal-->	
 								
-								<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
+								<logic:notEqual name="<%=Constants.PAGE_OF%>" value="<%=Constants.QUERY%>">
 									<td nowrap class="formFieldNoBorders">									
 										<html:button styleClass="actionButton"  
 												property="submitPage" 

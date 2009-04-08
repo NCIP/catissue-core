@@ -3,21 +3,18 @@ package edu.wustl.catissuecore.util;
 import java.util.Collection;
 import java.util.List;
 
-import org.hibernate.Session;
-
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.querysuite.QueryModuleConstants;
-import edu.wustl.catissuecore.util.querysuite.TemporalColumnMetada;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.querysuite.queryobject.TermType;
 import edu.wustl.common.querysuite.queryobject.YMInterval;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.daofactory.DAOConfigFactory;
+import edu.wustl.query.util.querysuite.QueryModuleConstants;
+import edu.wustl.query.util.querysuite.TemporalColumnMetada;
 import edu.wustl.security.exception.SMException;
 import edu.wustl.security.global.Permissions;
 import edu.wustl.security.privilege.IValidator;

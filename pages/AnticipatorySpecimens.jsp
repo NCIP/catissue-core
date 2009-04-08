@@ -243,7 +243,7 @@ function updateField(type,i,isDis,valueToSet)
 	function pageSubmit() {
 		checkPrintStatusOfAllSpecimens();
 		var url = 'GenericSpecimenSummary.do?save=SCGSpecimens';
-<%	if(request.getAttribute(Constants.PAGEOF) != null && request.getAttribute(Constants.PAGEOF).equals(Constants.CP_CHILD_SUBMIT)) {%>
+<%	if(request.getAttribute(Constants.PAGE_OF) != null && request.getAttribute(Constants.PAGE_OF).equals(Constants.CP_CHILD_SUBMIT)) {%>
 			 url = 	'GenericSpecimenSummaryForSpecimen.do?save=SCGSpecimens';
 			<%}%>
 			//var printFlag = document.getElementById("printCheckbox");
@@ -272,7 +272,7 @@ function updateField(type,i,isDis,valueToSet)
 		function onParentRadioBtnClick()
 		{
 			var url = 'GenericSpecimenSummary.do';
-			<%	if(request.getAttribute(Constants.PAGEOF) != null && request.getAttribute(Constants.PAGEOF).equals(Constants.CP_CHILD_SUBMIT)) {%>
+			<%	if(request.getAttribute(Constants.PAGE_OF) != null && request.getAttribute(Constants.PAGE_OF).equals(Constants.CP_CHILD_SUBMIT)) {%>
 			 url = 	'GenericSpecimenSummaryForSpecimen.do?pageOf=<%=Constants.CP_CHILD_SUBMIT%>';
 			<%}%>
 			document.forms[0].action =url;

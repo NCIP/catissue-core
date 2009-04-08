@@ -120,7 +120,7 @@ public class AliquotAction extends SecureAction
 
 		//Getting the value pageOf parameter.
 
-		String pageOf = request.getParameter(Constants.PAGEOF);
+		String pageOf = request.getParameter(Constants.PAGE_OF);
 		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 
 		//Map containerMap = bizLogic.getAllocatedContainerMap();
@@ -138,7 +138,7 @@ public class AliquotAction extends SecureAction
 
 		request.setAttribute(Constants.EXCEEDS_MAX_LIMIT, exceedingMaxLimit);
 		request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
-		request.setAttribute(Constants.PAGEOF, pageOf);
+		request.setAttribute(Constants.PAGE_OF, pageOf);
 		setParentSpecimenInRequest(request);
 		setPageData(request, pageOf,aliquotForm);
 		return mapping.findForward(pageOf);
@@ -219,7 +219,7 @@ public class AliquotAction extends SecureAction
 		Map tempAliquotMap = new HashMap();
 		//Extracting the values of the operation & pageOf parameters.
 		String operation = request.getParameter(Constants.OPERATION);
-		String pageOf = request.getParameter(Constants.PAGEOF);
+		String pageOf = request.getParameter(Constants.PAGE_OF);
 		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 		SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
 		Utility.setDefaultPrinterTypeLocation(aliquotForm);
@@ -405,9 +405,9 @@ public class AliquotAction extends SecureAction
 				saveErrors(request, errors);
 				request.setAttribute(Constants.EXCEEDS_MAX_LIMIT, exceedingMaxLimit);
 				request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
-				request.setAttribute(Constants.PAGEOF, Constants.PAGEOF_CREATE_ALIQUOT);
+				request.setAttribute(Constants.PAGE_OF, Constants.PAGE_OF_CREATE_ALIQUOT);
 				setPageData(request, pageOf,aliquotForm);
-				return mapping.findForward(Constants.PAGEOF_CREATE_ALIQUOT);
+				return mapping.findForward(Constants.PAGE_OF_CREATE_ALIQUOT);
 
 			}
 
@@ -474,9 +474,9 @@ public class AliquotAction extends SecureAction
 					populateAliquotsStorageLocations(aliquotForm, containerMap);
 					request.setAttribute(Constants.EXCEEDS_MAX_LIMIT, exceedingMaxLimit);
 					request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
-					request.setAttribute(Constants.PAGEOF, Constants.PAGEOF_CREATE_ALIQUOT);
+					request.setAttribute(Constants.PAGE_OF, Constants.PAGE_OF_CREATE_ALIQUOT);
 					setPageData(request, pageOf,aliquotForm);
-					return mapping.findForward(Constants.PAGEOF_CREATE_ALIQUOT);
+					return mapping.findForward(Constants.PAGE_OF_CREATE_ALIQUOT);
 				}
 				aliquotForm.setButtonClicked("none");
 				setPageData(request, pageOf,aliquotForm);
@@ -486,7 +486,7 @@ public class AliquotAction extends SecureAction
 		}
 		// --------END Bug 2309----------		
 
-		if (Constants.PAGEOF_ALIQUOT_SUMMARY.equals(pageOf))
+		if (Constants.PAGE_OF_ALIQUOT_SUMMARY.equals(pageOf))
 		{
 			Map map = (Map) request.getAttribute("forwardToHashMap");		
 
@@ -548,17 +548,17 @@ public class AliquotAction extends SecureAction
 
 		//Map containerMap = bizLogic.getAllocatedContainerMap();
 		TreeMap containerMap = new TreeMap();
-		if (Constants.PAGEOF_CREATE_ALIQUOT.equals(request.getParameter(Constants.PAGEOF)))
+		if (Constants.PAGE_OF_CREATE_ALIQUOT.equals(request.getParameter(Constants.PAGE_OF)))
 		{
 			pageOf = validate(request, aliquotForm);
 
-			if (Constants.PAGEOF_CREATE_ALIQUOT.equals(pageOf))
+			if (Constants.PAGE_OF_CREATE_ALIQUOT.equals(pageOf))
 			{
 				if (!aliquotForm.getButtonClicked().equals("none"))
 				{
 					pageOf = checkForSpecimen(request, aliquotForm);
 				}
-				if (Constants.PAGEOF_CREATE_ALIQUOT.equals(pageOf))
+				if (Constants.PAGE_OF_CREATE_ALIQUOT.equals(pageOf))
 				{
 					int aliquotCount = Integer.parseInt(aliquotForm.getNoOfAliquots());
 					if (aliquotForm.isAliqoutInSameContainer())
@@ -574,7 +574,7 @@ public class AliquotAction extends SecureAction
 					}
 					pageOf = checkForSufficientAvailablePositions(request, containerMap, aliquotCount);
 
-					if (Constants.PAGEOF_CREATE_ALIQUOT.equals(pageOf))
+					if (Constants.PAGE_OF_CREATE_ALIQUOT.equals(pageOf))
 					{
 						if (!aliquotForm.getButtonClicked().equals("none"))
 						{
@@ -586,7 +586,7 @@ public class AliquotAction extends SecureAction
 		}
 		request.setAttribute(Constants.EXCEEDS_MAX_LIMIT, exceedingMaxLimit);
 		request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
-		request.setAttribute(Constants.PAGEOF, pageOf);
+		request.setAttribute(Constants.PAGE_OF, pageOf);
 
 		/*  String [] displayNameField = {Constants.SYSTEM_IDENTIFIER};
 		 List specimenIdList = bizLogic.getList(Specimen.class.getName(), displayNameField, Constants.SYSTEM_IDENTIFIER, true);
@@ -604,7 +604,7 @@ public class AliquotAction extends SecureAction
 	 */
 	private String checkForSpecimen(HttpServletRequest request, AliquotForm form) throws Exception
 	{
-		String pageOf = request.getParameter(Constants.PAGEOF);
+		String pageOf = request.getParameter(Constants.PAGE_OF);
 		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 		String specimenLabel = form.getSpecimenLabel();
 		List specimenList = new ArrayList();
@@ -629,7 +629,7 @@ public class AliquotAction extends SecureAction
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("aliquots.specimen.notExists", errorString));
 			saveErrors(request, errors);
 
-			return Constants.PAGEOF_ALIQUOT;
+			return Constants.PAGE_OF_ALIQUOT;
 		}
 		
 		else
@@ -650,13 +650,13 @@ public class AliquotAction extends SecureAction
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.parentobject.closed" , "Specimen"));
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.aliquots" , "Aliquot(s)"));
 				saveErrors(request, errors);
-				if(pageOf.equalsIgnoreCase(Constants.PAGEOF_ALIQUOT))
+				if(pageOf.equalsIgnoreCase(Constants.PAGE_OF_ALIQUOT))
 				{
-					return Constants.PAGEOF_ALIQUOT;
+					return Constants.PAGE_OF_ALIQUOT;
 				}
-				else if(pageOf.equalsIgnoreCase(Constants.PAGEOF_CREATE_ALIQUOT))
+				else if(pageOf.equalsIgnoreCase(Constants.PAGE_OF_CREATE_ALIQUOT))
 				{
-					return Constants.PAGEOF_CREATE_ALIQUOT;
+					return Constants.PAGE_OF_CREATE_ALIQUOT;
 				}
 				else
 				{
@@ -676,9 +676,9 @@ public class AliquotAction extends SecureAction
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.parentobject.disabled" , "Specimen"));
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.aliquots" , "Aliquot(s)"));
 				saveErrors(request, errors);
-				if(pageOf.equalsIgnoreCase(Constants.PAGEOF_CREATE_ALIQUOT))
+				if(pageOf.equalsIgnoreCase(Constants.PAGE_OF_CREATE_ALIQUOT))
 				{
-					return Constants.PAGEOF_CREATE_ALIQUOT;
+					return Constants.PAGE_OF_CREATE_ALIQUOT;
 				}
 				else
 				{
@@ -709,7 +709,7 @@ public class AliquotAction extends SecureAction
 			
 			pageOf = checkQuantityPerAliquot(request, form);
 			
-			if (Constants.PAGEOF_CREATE_ALIQUOT.equals(pageOf))
+			if (Constants.PAGE_OF_CREATE_ALIQUOT.equals(pageOf))
 			{
 				boolean isDouble = Utility.isQuantityDouble(form.getClassName(), form.getType());
 
@@ -720,16 +720,16 @@ public class AliquotAction extends SecureAction
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.qtyInsufficient"));
 					saveErrors(request, errors);
 
-					return Constants.PAGEOF_ALIQUOT;
+					return Constants.PAGE_OF_ALIQUOT;
 				}
 				else
 				{
-					return Constants.PAGEOF_CREATE_ALIQUOT;
+					return Constants.PAGE_OF_CREATE_ALIQUOT;
 				}
 			}
 			else
 			{
-				return Constants.PAGEOF_ALIQUOT;
+				return Constants.PAGE_OF_ALIQUOT;
 			}
 		}
 	}
@@ -751,7 +751,7 @@ public class AliquotAction extends SecureAction
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.locations.notSufficient"));
 			saveErrors(request, errors);
 
-			return Constants.PAGEOF_ALIQUOT;
+			return Constants.PAGE_OF_ALIQUOT;
 		}
 		else
 		{
@@ -759,14 +759,14 @@ public class AliquotAction extends SecureAction
 		}
 		if (counter >= aliquotCount)
 		{
-			return Constants.PAGEOF_CREATE_ALIQUOT;
+			return Constants.PAGE_OF_CREATE_ALIQUOT;
 		}
 		else
 		{
 			ActionErrors errors = getActionErrors(request);
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.locations.notSufficient"));
 			saveErrors(request, errors);
-			return Constants.PAGEOF_ALIQUOT;
+			return Constants.PAGE_OF_ALIQUOT;
 		}
 	}
 
@@ -1049,7 +1049,7 @@ public class AliquotAction extends SecureAction
 						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format", ApplicationProperties
 								.getValue("aliquots.qtyPerAliquot")));
 						saveErrors(request, errors);
-						return Constants.PAGEOF_ALIQUOT;
+						return Constants.PAGE_OF_ALIQUOT;
 					}
 				}
 				else
@@ -1059,7 +1059,7 @@ public class AliquotAction extends SecureAction
 						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format", ApplicationProperties
 								.getValue("aliquots.qtyPerAliquot")));
 						saveErrors(request, errors);
-						return Constants.PAGEOF_ALIQUOT;
+						return Constants.PAGE_OF_ALIQUOT;
 					}
 				}
 			}
@@ -1067,11 +1067,11 @@ public class AliquotAction extends SecureAction
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format", ApplicationProperties.getValue("specimen.quantity")));
 				saveErrors(request, errors);
-				return Constants.PAGEOF_ALIQUOT;
+				return Constants.PAGE_OF_ALIQUOT;
 			}
 		}
 
-		return Constants.PAGEOF_CREATE_ALIQUOT;
+		return Constants.PAGE_OF_CREATE_ALIQUOT;
 	}
 
 	/**
@@ -1085,7 +1085,7 @@ public class AliquotAction extends SecureAction
 		Validator validator = new Validator();
 		ActionErrors errors = getActionErrors(request);
 
-		String pageOf = Constants.PAGEOF_CREATE_ALIQUOT;
+		String pageOf = Constants.PAGE_OF_CREATE_ALIQUOT;
 
 		if (form.getCheckedButton().equals("1"))
 		{
@@ -1093,7 +1093,7 @@ public class AliquotAction extends SecureAction
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
 						.getValue("createSpecimen.parentLabel")));
-				pageOf = Constants.PAGEOF_ALIQUOT;
+				pageOf = Constants.PAGE_OF_ALIQUOT;
 			}
 		}
 		else
@@ -1101,14 +1101,14 @@ public class AliquotAction extends SecureAction
 			if (form.getBarcode() == null || form.getBarcode().trim().length() == 0)
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties.getValue("specimen.barcode")));
-				pageOf = Constants.PAGEOF_ALIQUOT;
+				pageOf = Constants.PAGE_OF_ALIQUOT;
 			}
 		}
 
 		if (!validator.isNumeric(form.getNoOfAliquots()))
 		{
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format", ApplicationProperties.getValue("aliquots.noOfAliquots")));
-			pageOf = Constants.PAGEOF_ALIQUOT;
+			pageOf = Constants.PAGE_OF_ALIQUOT;
 		}
 
 		saveErrors(request, errors);
@@ -1202,9 +1202,9 @@ public class AliquotAction extends SecureAction
 		if(exceedsMaxLimit == null)
 		{	exceedsMaxLimit = "";	}
 		request.setAttribute("exceedsMaxLimit",exceedsMaxLimit);
-		if(Constants.PAGEOF_ALIQUOT.equals(pageOf))
+		if(Constants.PAGE_OF_ALIQUOT.equals(pageOf))
 		{	buttonKey = "buttons.submit";	}
-		else if(Constants.PAGEOF_CREATE_ALIQUOT.equals(pageOf))
+		else if(Constants.PAGE_OF_CREATE_ALIQUOT.equals(pageOf))
 		{	buttonKey = "buttons.resubmit";	}
 		request.setAttribute("buttonKey", buttonKey);
 		 
@@ -1216,34 +1216,34 @@ public class AliquotAction extends SecureAction
 		request.setAttribute("refreshTree", refreshTree);
 
 		request.setAttribute("CREATE_ALIQUOT_ACTION", Constants.CREATE_ALIQUOT_ACTION);
-		request.setAttribute("PAGEOF_CREATE_ALIQUOT",Constants.PAGEOF_CREATE_ALIQUOT);
+		request.setAttribute("PAGEOF_CREATE_ALIQUOT",Constants.PAGE_OF_CREATE_ALIQUOT);
 		request.setAttribute("CP_QUERY_CREATE_ALIQUOT_ACTION",Constants.CP_QUERY_CREATE_ALIQUOT_ACTION);
 		request.setAttribute("ALIQUOT_ACTION",Constants.ALIQUOT_ACTION);
-		request.setAttribute("PAGEOF_ALIQUOT",Constants.PAGEOF_ALIQUOT);
+		request.setAttribute("PAGEOF_ALIQUOT",Constants.PAGE_OF_ALIQUOT);
 		
 		String action1 = "";
 		String action2 = "";
 		String action3 = "";
 		if(CPQuery !=null)
 		{
-			action1 =  Constants.CP_QUERY_CREATE_ALIQUOT_ACTION + "?pageOf=" + Constants.PAGEOF_CREATE_ALIQUOT + 
+			action1 =  Constants.CP_QUERY_CREATE_ALIQUOT_ACTION + "?pageOf=" + Constants.PAGE_OF_CREATE_ALIQUOT + 
 			"&operation=add&menuSelected=15&buttonClicked=submit&" +Constants.PARENT_SPECIMEN_ID+"="+psid+"&"+Constants.CP_QUERY+"="+CPQuery;
 			
-			action2 = Constants.CP_QUERY_CREATE_ALIQUOT_ACTION + "?pageOf=" + Constants.PAGEOF_CREATE_ALIQUOT + 
+			action2 = Constants.CP_QUERY_CREATE_ALIQUOT_ACTION + "?pageOf=" + Constants.PAGE_OF_CREATE_ALIQUOT + 
 			"&operation=add&menuSelected=15&buttonClicked=create&"+Constants.PARENT_SPECIMEN_ID+"="+psid+"&"+Constants.CP_QUERY+"="+CPQuery;
 
-			action3 = Constants.CP_QUERY_CREATE_ALIQUOT_ACTION + "?pageOf=" + Constants.PAGEOF_CREATE_ALIQUOT + 
+			action3 = Constants.CP_QUERY_CREATE_ALIQUOT_ACTION + "?pageOf=" + Constants.PAGE_OF_CREATE_ALIQUOT + 
 			"&operation=add&menuSelected=15&buttonClicked=checkbox&"+Constants.PARENT_SPECIMEN_ID+"="+psid+"&"+Constants.CP_QUERY+"="+CPQuery;
 		}
 		else
 		{
-			action1 =  Constants.CREATE_ALIQUOT_ACTION + "?pageOf=" + Constants.PAGEOF_CREATE_ALIQUOT + 
+			action1 =  Constants.CREATE_ALIQUOT_ACTION + "?pageOf=" + Constants.PAGE_OF_CREATE_ALIQUOT + 
 			"&operation=add&menuSelected=15&buttonClicked=submit&" +Constants.PARENT_SPECIMEN_ID+"="+psid;
 			
-			action2 = Constants.CREATE_ALIQUOT_ACTION + "?pageOf=" + Constants.PAGEOF_CREATE_ALIQUOT + 
+			action2 = Constants.CREATE_ALIQUOT_ACTION + "?pageOf=" + Constants.PAGE_OF_CREATE_ALIQUOT + 
 			"&operation=add&menuSelected=15&buttonClicked=create&"+Constants.PARENT_SPECIMEN_ID+"="+psid;
 
-			action3 = Constants.CREATE_ALIQUOT_ACTION + "?pageOf=" + Constants.PAGEOF_CREATE_ALIQUOT + 
+			action3 = Constants.CREATE_ALIQUOT_ACTION + "?pageOf=" + Constants.PAGE_OF_CREATE_ALIQUOT + 
 			"&operation=add&menuSelected=15&buttonClicked=checkbox&"+Constants.PARENT_SPECIMEN_ID+"="+psid;
 		}
 		request.setAttribute("action1",action1);

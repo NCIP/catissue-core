@@ -109,7 +109,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 		request.setAttribute(Constants.MENU_SELECTED, "14");
 
 		//pageOf and operation attributes required for Advance Query Object view.
-		String pageOf = request.getParameter(Constants.PAGEOF);
+		String pageOf = request.getParameter(Constants.PAGE_OF);
 
 		//Gets the value of the operation parameter.
 		String operation = (String) request.getParameter(Constants.OPERATION);
@@ -623,8 +623,8 @@ public class SpecimenCollectionGroupAction extends SecureAction
 			}
 		}
 
-		request.setAttribute(Constants.PAGEOF, pageOf);
-		Logger.out.debug("page of in Specimen coll grp action:" + request.getParameter(Constants.PAGEOF));
+		request.setAttribute(Constants.PAGE_OF, pageOf);
+		Logger.out.debug("page of in Specimen coll grp action:" + request.getParameter(Constants.PAGE_OF));
 		// -------called from Collection Protocol Registration end -------------------------------
 		//Falguni:Performance Enhancement.
 		Long scgEntityId = null;

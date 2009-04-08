@@ -857,7 +857,7 @@ public class DemoQueryData
 
 		userObj.setRoleId("1");
 		userObj.setActivityStatus("Active");
-		userObj.setPageOf(Constants.PAGEOF_USER_ADMIN);		
+		userObj.setPageOf(Constants.PAGE_OF_USER_ADMIN);		
 		
 		userObj = (User) appService.createObject(userObj);
 		userList.add(userObj);

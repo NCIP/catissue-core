@@ -74,10 +74,10 @@ public class SpreadsheetViewAction extends BaseAction
 		QuerySessionData querySessionData = (QuerySessionData) session
 				.getAttribute(edu.wustl.common.util.global.Constants.QUERY_SESSION_DATA);
 
-		String pageOf = (String) request.getAttribute(Constants.PAGEOF);
+		String pageOf = (String) request.getAttribute(Constants.PAGE_OF);
 		if (pageOf == null)
 		{
-			pageOf = (String) request.getParameter(Constants.PAGEOF);
+			pageOf = (String) request.getParameter(Constants.PAGE_OF);
 		}
 		if (request.getAttribute(Constants.IDENTIFIER_FIELD_INDEX) == null)
 		{
@@ -167,7 +167,7 @@ public class SpreadsheetViewAction extends BaseAction
 		//Set the result per page attribute in the request to be uesd by pagination Tag.
 		//      Prafull:Commented this can be retrived directly from constants on jsp, so no need to save it in request.
 		//        request.setAttribute(Constants.RESULTS_PER_PAGE,Integer.toString(Constants.NUMBER_RESULTS_PER_PAGE_SEARCH));
-		request.setAttribute(Constants.PAGEOF, pageOf);
+		request.setAttribute(Constants.PAGE_OF, pageOf);
 		return mapping.findForward(pageOf);
 	}
 

@@ -55,7 +55,7 @@ public class SubmitSpecimenCPAction extends BaseAction {
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		String target = Constants.SUCCESS;
-		String pageOf = request.getParameter(Constants.PAGEOF);
+		String pageOf = request.getParameter(Constants.PAGE_OF);
 		HashMap resultMap = new HashMap();
 		try {
 			specimenSummaryForm = (ViewSpecimenSummaryForm) form;

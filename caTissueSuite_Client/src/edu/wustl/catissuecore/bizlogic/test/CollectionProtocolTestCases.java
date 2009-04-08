@@ -54,7 +54,7 @@ public class CollectionProtocolTestCases extends CaTissueBaseTestCase
 			resultList1 = appService.search(User.class, user);
 			user=(User)resultList1.get(0);
 			user.setRoleId("1");
-			user.setPageOf(Constants.PAGEOF_USER_ADMIN);
+			user.setPageOf(Constants.PAGE_OF_USER_ADMIN);
 		}
 		catch(Exception e)
 		{

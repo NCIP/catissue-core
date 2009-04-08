@@ -128,7 +128,7 @@ public class SimilarContainersAction extends SecureAction
 		NameValueBean nvb = new NameValueBean(similarContainersForm.getTypeName(), new Long(similarContainersForm.getTypeId()));
 		storagetypeList.add(nvb);
 		request.setAttribute(Constants.STORAGETYPELIST, storagetypeList);
-		String pageOf = request.getParameter(Constants.PAGEOF);
+		String pageOf = request.getParameter(Constants.PAGE_OF);
 
 		//		Populating the Site Array
 		String[] siteDisplayField = {"name"};
@@ -281,7 +281,7 @@ public class SimilarContainersAction extends SecureAction
 							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format", ApplicationProperties
 									.getValue("storageContainer.parentContainerFull")));
 							saveErrors(request, errors);
-							return (mapping.findForward(Constants.PAGEOF_STORAGE_CONTAINER));
+							return (mapping.findForward(Constants.PAGE_OF_STORAGE_CONTAINER));
 						}
 
 					
@@ -300,7 +300,7 @@ public class SimilarContainersAction extends SecureAction
 						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format", ApplicationProperties
 								.getValue("storageContainer.parentContainer")));
 						saveErrors(request, errors);
-						return (mapping.findForward(Constants.PAGEOF_STORAGE_CONTAINER));
+						return (mapping.findForward(Constants.PAGE_OF_STORAGE_CONTAINER));
 					}
 
 				}
@@ -395,7 +395,7 @@ public class SimilarContainersAction extends SecureAction
 							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format", ApplicationProperties
 									.getValue("storageContainer.parentContainerPostionInUseOrExceed")));
 							saveErrors(request, errors);
-							return (mapping.findForward(Constants.PAGEOF_STORAGE_CONTAINER));
+							return (mapping.findForward(Constants.PAGE_OF_STORAGE_CONTAINER));
 						}
 					}
 					request.setAttribute("initValues", initialValues);
@@ -411,7 +411,7 @@ public class SimilarContainersAction extends SecureAction
 					System.out.println("errors " + errors + ", ActionErrors.GLOBAL_ERROR " + ActionErrors.GLOBAL_ERROR
 							+ ", new ActionError(\"errors.storageContainer.overflow\") " + new ActionError("errors.storageContainer.overflow"));
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.storageContainer.overflow"));
-					pageOf = Constants.PAGEOF_STORAGE_CONTAINER;
+					pageOf = Constants.PAGE_OF_STORAGE_CONTAINER;
 					saveErrors(request, errors);
 				}
 			}
@@ -447,7 +447,7 @@ public class SimilarContainersAction extends SecureAction
 			similarContainersForm.setSimilarContainerMapValue("simCont:1_name", contName);
 			similarContainersForm.setSimilarContainerMapValue("simCont:1_barcode", barcode);
 
-			request.setAttribute(Constants.PAGEOF, pageOf);
+			request.setAttribute(Constants.PAGE_OF, pageOf);
 
 		}
 

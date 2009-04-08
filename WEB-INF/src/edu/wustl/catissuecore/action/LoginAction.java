@@ -126,7 +126,7 @@ public class LoginAction extends Action
 	                
 	                      session.setAttribute(Constants.SESSION_DATA,null);
 	                      session.setAttribute(Constants.TEMP_SESSION_DATA,sessionData);
-	                      request.setAttribute(Constants.PAGEOF,Constants.PAGEOF_CHANGE_PASSWORD);
+	                      request.setAttribute(Constants.PAGE_OF,Constants.PAGE_OF_CHANGE_PASSWORD);
 	                      return mapping.findForward(Constants.ACCESS_DENIED);
 	                }
 					

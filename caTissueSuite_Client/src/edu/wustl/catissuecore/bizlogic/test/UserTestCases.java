@@ -85,7 +85,7 @@ public class UserTestCases extends CaTissueBaseTestCase {
 			
 			userObj.setRoleId("2");
 			userObj.setActivityStatus("Active");
-			userObj.setPageOf(Constants.PAGEOF_USER_ADMIN);		
+			userObj.setPageOf(Constants.PAGE_OF_USER_ADMIN);		
 			userObj = (User)appService.createObject(userObj);	
 			
 
@@ -93,7 +93,7 @@ public class UserTestCases extends CaTissueBaseTestCase {
 			
 			userObj.setRoleId("2");
 			userObj.setActivityStatus("Active");
-			userObj.setPageOf(Constants.PAGEOF_USER_ADMIN);	
+			userObj.setPageOf(Constants.PAGE_OF_USER_ADMIN);	
 			userObj = (User)appService.updateObject(userObj);	
 			
 		}
@@ -143,7 +143,7 @@ public class UserTestCases extends CaTissueBaseTestCase {
 			
 			userObj.setRoleId("3");
 			userObj.setActivityStatus("Active");
-			userObj.setPageOf(Constants.PAGEOF_USER_ADMIN);
+			userObj.setPageOf(Constants.PAGE_OF_USER_ADMIN);
 		
 			userObj = (User)appService.createObject(userObj);			
 			Logger.out.info("User successfully added with Role of Technician");
@@ -153,7 +153,7 @@ public class UserTestCases extends CaTissueBaseTestCase {
 			
 			userObj.setRoleId("3");
 			userObj.setActivityStatus("Active");
-			userObj.setPageOf(Constants.PAGEOF_USER_ADMIN);	
+			userObj.setPageOf(Constants.PAGE_OF_USER_ADMIN);	
 			userObj = (User)appService.updateObject(userObj);	
 			
 		}catch(Exception e){
@@ -202,7 +202,7 @@ public class UserTestCases extends CaTissueBaseTestCase {
 			
 			userObj.setRoleId("7");
 			userObj.setActivityStatus("Active");
-			userObj.setPageOf(Constants.PAGEOF_USER_ADMIN);
+			userObj.setPageOf(Constants.PAGE_OF_USER_ADMIN);
 
 		
 			userObj = (User)appService.createObject(userObj);
@@ -211,7 +211,7 @@ public class UserTestCases extends CaTissueBaseTestCase {
 			
 			userObj.setRoleId("7");
 			userObj.setActivityStatus("Active");
-			userObj.setPageOf(Constants.PAGEOF_USER_ADMIN);	
+			userObj.setPageOf(Constants.PAGE_OF_USER_ADMIN);	
 			userObj = (User)appService.updateObject(userObj);	
 		 }
 		 catch(Exception e){

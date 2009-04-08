@@ -20,7 +20,7 @@
 </style>
 <%
 	String checkAllPages = (String)session.getAttribute("checkAllPages");
-	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
+	String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 	String isSpecimenIdPresent = (String)request.getAttribute(Constants.IS_SPECIMENID_PRESENT);
 	String isContainerPresent=(String)request.getAttribute(Constants.IS_CONTAINER_PRESENT);
 	

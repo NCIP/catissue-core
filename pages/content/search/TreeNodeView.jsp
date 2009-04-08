@@ -8,7 +8,7 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <script src="jss/ajax.js"></script>	   
 <% 	String reload =request.getParameter(Constants.RELOAD);
-	String pageOf = request.getParameter(Constants.PAGEOF);
+	String pageOf = request.getParameter(Constants.PAGE_OF);
 	String storageContainerType = null;
 	String treeNodeIDToBeReloaded= null;
 	String storageContainerID = null;
@@ -19,13 +19,13 @@
     	{
     		treeNodeIDToBeReloaded=request.getParameter(Constants.TREE_NODE_ID);
 		}
-	if (pageOf.equals(Constants.PAGEOF_STORAGE_LOCATION) || pageOf.equals(Constants.PAGEOF_SPECIMEN)|| pageOf.equals(Constants.PAGEOF_ALIQUOT))
+	if (pageOf.equals(Constants.PAGE_OF_STORAGE_LOCATION) || pageOf.equals(Constants.PAGE_OF_SPECIMEN)|| pageOf.equals(Constants.PAGE_OF_ALIQUOT))
 	{
 		storageContainerType = (String)request.getAttribute(Constants.STORAGE_CONTAINER_TYPE);
 		storageContainerID = (String)request.getAttribute(Constants.STORAGE_CONTAINER_TO_BE_SELECTED);
 		position = (String)request.getAttribute(Constants.STORAGE_CONTAINER_POSITION);
 	}
-	else if (pageOf.equals(Constants.PAGEOF_TISSUE_SITE))
+	else if (pageOf.equals(Constants.PAGE_OF_TISSUE_SITE))
 	{
 		propertyName = request.getParameter(Constants.PROPERTY_NAME);
 		cdeName = request.getParameter(Constants.CDE_NAME);
@@ -151,13 +151,13 @@ window.onresize = function() { setFrameHeight('treeboxbox_tree', 1.0,slope); }
 			    var parentId=tree.getUserData(id,'parentId');
 				if( parentId != "0")
 				{					
-					if("<%=pageOf%>" == "<%=Constants.PAGEOF_SPECIMEN%>")
+					if("<%=pageOf%>" == "<%=Constants.PAGE_OF_SPECIMEN%>")
 					{
-						window.parent.<%=Constants.DATA_VIEW_FRAME%>.location="<%=Constants.SHOW_STORAGE_CONTAINER_GRID_VIEW_ACTION%>?<%=Constants.SYSTEM_IDENTIFIER%>="+nodeId+"&<%=Constants.PAGEOF%>=<%=pageOf%>&<%=Constants.ACTIVITY_STATUS%>="+activityStatus+"";
+						window.parent.<%=Constants.DATA_VIEW_FRAME%>.location="<%=Constants.SHOW_STORAGE_CONTAINER_GRID_VIEW_ACTION%>?<%=Constants.SYSTEM_IDENTIFIER%>="+nodeId+"&<%=Constants.PAGE_OF%>=<%=pageOf%>&<%=Constants.ACTIVITY_STATUS%>="+activityStatus+"";
 					}	
 					else
 					{
-						window.parent.<%=Constants.DATA_VIEW_FRAME%>.location="<%=Constants.SHOW_STORAGE_CONTAINER_GRID_VIEW_ACTION%>?<%=Constants.SYSTEM_IDENTIFIER%>="+nodeId+"&<%=Constants.STORAGE_CONTAINER_TYPE%>=<%=storageContainerType%>&<%=Constants.PAGEOF%>=<%=pageOf%>&<%=Constants.ACTIVITY_STATUS%>="+activityStatus;
+						window.parent.<%=Constants.DATA_VIEW_FRAME%>.location="<%=Constants.SHOW_STORAGE_CONTAINER_GRID_VIEW_ACTION%>?<%=Constants.SYSTEM_IDENTIFIER%>="+nodeId+"&<%=Constants.STORAGE_CONTAINER_TYPE%>=<%=storageContainerType%>&<%=Constants.PAGE_OF%>=<%=pageOf%>&<%=Constants.ACTIVITY_STATUS%>="+activityStatus;
 					}
 				}
 				else

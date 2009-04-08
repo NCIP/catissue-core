@@ -36,8 +36,8 @@ public class SearchObjectAction extends Action
         Long identifier = Long.valueOf(request.getParameter(Constants.SYSTEM_IDENTIFIER));
         request.setAttribute(Constants.SYSTEM_IDENTIFIER, identifier);
         
-        String pageOf = request.getParameter(Constants.PAGEOF);
-        request.setAttribute(Constants.PAGEOF, pageOf);
+        String pageOf = request.getParameter(Constants.PAGE_OF);
+        request.setAttribute(Constants.PAGE_OF, pageOf);
         
         Logger.out.debug("identifier:"+identifier+" PAGEOF:"+pageOf);
         return mapping.findForward(pageOf);

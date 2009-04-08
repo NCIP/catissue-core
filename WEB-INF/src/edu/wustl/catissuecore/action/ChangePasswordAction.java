@@ -38,8 +38,8 @@ public class ChangePasswordAction extends BaseAction
             HttpServletResponse response) throws Exception
     {
         UserForm userForm = (UserForm) form;
-    	String pageOf = request.getParameter(Constants.PAGEOF);
-        request.setAttribute(Constants.PAGEOF, pageOf);
+    	String pageOf = request.getParameter(Constants.PAGE_OF);
+        request.setAttribute(Constants.PAGE_OF, pageOf);
         return mapping.findForward(pageOf);
     }
 

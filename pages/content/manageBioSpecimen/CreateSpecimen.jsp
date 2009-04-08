@@ -195,7 +195,7 @@
 		<table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable" >
 			<tr>
 				<td>
-					<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_CREATE_SPECIMEN_CP_QUERY%>">
+					<logic:notEqual name="<%=Constants.PAGE_OF%>" value="<%=Constants.PAGE_OF_CREATE_SPECIMEN_CP_QUERY%>">
 					<table border="0" cellpadding="0" cellspacing="0">
 						<tr>
 							<td class="td_table_head">
@@ -218,7 +218,7 @@
 							<td width="4%" class="td_tab_bg">
 								<img src="images/spacer.gif" alt="spacer" width="50" height="1">
 							</td>
-							<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_CREATE_SPECIMEN_CP_QUERY%>">
+							<logic:notEqual name="<%=Constants.PAGE_OF%>" value="<%=Constants.PAGE_OF_CREATE_SPECIMEN_CP_QUERY%>">
 							<td valign="bottom">
 								<a href="SimpleQueryInterface.do?pageOf=pageOfNewSpecimen&aliasName=Specimen"><img src="images/uIEnhancementImages/tab_edit_user.jpg" border="0" alt="Edit" width="59" height="22"/></a>
 							</td>
@@ -236,7 +236,7 @@
 							</td>
 							</logic:notEqual>
 
-							<logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_CREATE_SPECIMEN_CP_QUERY%>">
+							<logic:equal name="<%=Constants.PAGE_OF%>" value="<%=Constants.PAGE_OF_CREATE_SPECIMEN_CP_QUERY%>">
 							<td valign="bottom">
 								<img src="images/uIEnhancementImages/tab_derive.gif" alt="Derive" width="56" height="22" border="0"/>
 							</td>
@@ -606,7 +606,7 @@
 								<table>
 								 <tr>
 								  <td  nowrap  width="20%" colspan="1">
-								   <logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">	
+								   <logic:notEqual name="<%=Constants.PAGE_OF%>" value="<%=Constants.QUERY%>">	
 								 		<html:checkbox styleId="printCheckbox" property="printCheckbox" value="true" onclick="showPriterTypeLocation()">
 										<span class="black_ar">
 											<bean:message key="print.checkboxLabel"/>

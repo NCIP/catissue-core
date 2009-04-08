@@ -61,7 +61,7 @@ public class UserAction extends SecureAction {
 
 		// Gets the value of the operation parameter.
 		String operation = request.getParameter(Constants.OPERATION);
-		String pageOf = (String) request.getParameter(Constants.PAGEOF);
+		String pageOf = (String) request.getParameter(Constants.PAGE_OF);
 		String reqPath = (String) request.getParameter(Constants.REQ_PATH);
 		String submittedFor = (String) request
 				.getAttribute(Constants.SUBMITTED_FOR);
@@ -81,7 +81,7 @@ public class UserAction extends SecureAction {
 		
 		if((Constants.PAGE_OF_USER).equals(pageOf)&& sessionDataBean!=null && loggedInUserId == userForm.getId())
 		{
-			pageOf = Constants.PAGEOF_USER_PROFILE;
+			pageOf = Constants.PAGE_OF_USER_PROFILE;
 //			readOnlyForPrivOnEdit = "disabled='true'";
 //			disablePrivButton ="true";
 //			request.setAttribute("readOnlyForPrivOnEdit", readOnlyForPrivOnEdit);
@@ -104,7 +104,7 @@ public class UserAction extends SecureAction {
 
 		String formName, prevPage = null, nextPage = null;
 		boolean roleStatus = false;
-		if (pageOf.equals(Constants.PAGEOF_APPROVE_USER)) {
+		if (pageOf.equals(Constants.PAGE_OF_APPROVE_USER)) {
 			Long identifier = (Long) request
 					.getAttribute(Constants.PREVIOUS_PAGE);
 			request.setAttribute("prevPageId", identifier);
@@ -116,7 +116,7 @@ public class UserAction extends SecureAction {
 			request.setAttribute("nextPageId", identifier);
 
 		}
-		if (!pageOf.equals(Constants.PAGEOF_APPROVE_USER)) {
+		if (!pageOf.equals(Constants.PAGE_OF_APPROVE_USER)) {
 			if (operation.equals(Constants.EDIT)
 					&& (userForm.getCsmUserId() != null)) {
 				if (userForm.getCsmUserId().longValue() == 0) {
@@ -140,28 +140,28 @@ public class UserAction extends SecureAction {
 			}
 		}
 		if (operation.equals(Constants.EDIT)) {
-			if (!pageOf.equals(Constants.PAGEOF_APPROVE_USER)) {
+			if (!pageOf.equals(Constants.PAGE_OF_APPROVE_USER)) {
 				setUserPrivileges(request.getSession(), userForm.getId());
 			}
 
-			if (pageOf.equals(Constants.PAGEOF_APPROVE_USER)) {
+			if (pageOf.equals(Constants.PAGE_OF_APPROVE_USER)) {
 				formName = Constants.APPROVE_USER_EDIT_ACTION;
-			} else if (pageOf.equals(Constants.PAGEOF_USER_PROFILE)) {
+			} else if (pageOf.equals(Constants.PAGE_OF_USER_PROFILE)) {
 				formName = Constants.USER_EDIT_PROFILE_ACTION;
 			} else {
 				formName = Constants.USER_EDIT_ACTION;
 			}
 		} else {
-			if (pageOf.equals(Constants.PAGEOF_APPROVE_USER)) {
+			if (pageOf.equals(Constants.PAGE_OF_APPROVE_USER)) {
 				formName = Constants.APPROVE_USER_ADD_ACTION;
 			} else {
 				formName = Constants.USER_ADD_ACTION;
-				if (pageOf.equals(Constants.PAGEOF_SIGNUP)) {
+				if (pageOf.equals(Constants.PAGE_OF_SIGNUP)) {
 					formName = Constants.SIGNUP_USER_ADD_ACTION;
 				}
 			}
 		}
-		if (pageOf.equals(Constants.PAGEOF_APPROVE_USER)
+		if (pageOf.equals(Constants.PAGE_OF_APPROVE_USER)
 				&& (userForm.getStatus().equals(
 						Constants.APPROVE_USER_PENDING_STATUS)
 						|| userForm.getStatus().equals(
@@ -173,7 +173,7 @@ public class UserAction extends SecureAction {
 				operation = Constants.EDIT;
 			}
 		}
-		if (pageOf.equals(Constants.PAGEOF_USER_PROFILE)) {
+		if (pageOf.equals(Constants.PAGE_OF_USER_PROFILE)) {
 			roleStatus = true;
 		}
 		if (operation.equalsIgnoreCase(Constants.ADD)) {
@@ -187,7 +187,7 @@ public class UserAction extends SecureAction {
 			
 			
 		}
-		if (pageOf.equals(Constants.PAGEOF_SIGNUP)) {
+		if (pageOf.equals(Constants.PAGE_OF_SIGNUP)) {
 			userForm.setStatus(Constants.ACTIVITY_STATUS_NEW);
 			userForm.setActivityStatus(Constants.ACTIVITY_STATUS_NEW);
 		}
@@ -247,7 +247,7 @@ public class UserAction extends SecureAction {
 		// Populate the activity status dropdown if the operation is edit
 		// and the user page is of administrative tab.
 		if (operation.equals(Constants.EDIT)
-				&& pageOf.equals(Constants.PAGEOF_USER_ADMIN)) {
+				&& pageOf.equals(Constants.PAGE_OF_USER_ADMIN)) {
 			String activityStatusList = Constants.ACTIVITYSTATUSLIST;
 			request.setAttribute("activityStatusList",
 					Constants.USER_ACTIVITY_STATUS_VALUES);
@@ -255,9 +255,9 @@ public class UserAction extends SecureAction {
 
 		// Populate the role dropdown if the page is of approve user or
 		// (Add/Edit) user page of adminitraive tab.
-		// if (pageOf.equals(Constants.PAGEOF_APPROVE_USER) ||
-		// pageOf.equals(Constants.PAGEOF_USER_ADMIN)
-		// ||pageOf.equals(Constants.PAGEOF_USER_PROFILE ))
+		// if (pageOf.equals(Constants.PAGE_OF_APPROVE_USER) ||
+		// pageOf.equals(Constants.PAGE_OF_USER_ADMIN)
+		// ||pageOf.equals(Constants.PAGE_OF_USER_PROFILE ))
 		// {
 		// List roleNameValueBeanList = getRoles();
 		// request.setAttribute("roleList", roleNameValueBeanList);
@@ -265,7 +265,7 @@ public class UserAction extends SecureAction {
 
 		// Populate the status dropdown for approve user
 		// page.(Approve,Reject,Pending)
-		if (pageOf.equals(Constants.PAGEOF_APPROVE_USER)) {
+		if (pageOf.equals(Constants.PAGE_OF_APPROVE_USER)) {
 			request.setAttribute("statusList",
 					Constants.APPROVE_USER_STATUS_VALUES);
 		}
@@ -312,14 +312,14 @@ public class UserAction extends SecureAction {
 		int SELECT_OPTION_VALUE = Constants.SELECT_OPTION_VALUE;
 		boolean readOnlyEmail = false;
 		if (operation.equals(Constants.EDIT)
-				&& pageOf.equals(Constants.PAGEOF_USER_PROFILE)) {
+				&& pageOf.equals(Constants.PAGE_OF_USER_PROFILE)) {
 			readOnlyEmail = true;
 		}
 		request.setAttribute("SELECT_OPTION_VALUE", SELECT_OPTION_VALUE);
 		request.setAttribute("Approve", Constants.APPROVE_USER_APPROVE_STATUS);
 		request
 				.setAttribute("pageOfApproveUser",
-						Constants.PAGEOF_APPROVE_USER);
+						Constants.PAGE_OF_APPROVE_USER);
 		request.setAttribute("backPage", Constants.APPROVE_USER_SHOW_ACTION
 				+ "?" + Constants.PAGE_NUMBER + "=" + Constants.START_PAGE);
 		request.setAttribute("redirectTo", Constants.REQ_PATH);
@@ -329,9 +329,9 @@ public class UserAction extends SecureAction {
 		request.setAttribute("readOnlyEmail", readOnlyEmail);
 		request
 				.setAttribute("pageOfUserProfile",
-						Constants.PAGEOF_USER_PROFILE);
-		request.setAttribute("pageOfUserAdmin", Constants.PAGEOF_USER_ADMIN);
-		request.setAttribute("pageOfSignUp", Constants.PAGEOF_SIGNUP);
+						Constants.PAGE_OF_USER_PROFILE);
+		request.setAttribute("pageOfUserAdmin", Constants.PAGE_OF_USER_ADMIN);
+		request.setAttribute("pageOfSignUp", Constants.PAGE_OF_SIGNUP);
 		request.setAttribute("pageOf", pageOf);
 		request.setAttribute("operation", operation);
 		request.setAttribute("openInCPFrame", openInCPFrame);
@@ -381,8 +381,8 @@ public class UserAction extends SecureAction {
 	 */
 	protected boolean isAuthorizedToExecute(HttpServletRequest request)
 			throws Exception {
-		String pageOf = request.getParameter(Constants.PAGEOF);
-		if (pageOf.equals(Constants.PAGEOF_USER_ADMIN)) {
+		String pageOf = request.getParameter(Constants.PAGE_OF);
+		if (pageOf.equals(Constants.PAGE_OF_USER_ADMIN)) {
 			return super.isAuthorizedToExecute(request);
 		}
 		return true;
@@ -394,8 +394,8 @@ public class UserAction extends SecureAction {
 	 * @see edu.wustl.catissuecore.action.BaseAction#getSessionData(javax.servlet.http.HttpServletRequest)
 	 */
 	protected SessionDataBean getSessionData(HttpServletRequest request) {
-		String pageOf = request.getParameter(Constants.PAGEOF);
-		if (pageOf.equals(Constants.PAGEOF_USER_ADMIN)) {
+		String pageOf = request.getParameter(Constants.PAGE_OF);
+		if (pageOf.equals(Constants.PAGE_OF_USER_ADMIN)) {
 			return super.getSessionData(request);
 		}
 		return new SessionDataBean();

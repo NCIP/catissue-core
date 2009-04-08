@@ -10,7 +10,7 @@
 <script src="jss/script.js" type="text/javascript"></script>
 
 	<%	
-		String pageOf = (String)request.getAttribute(Constants.PAGEOF);
+		String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 		String participantId=(String)request.getAttribute("participantId");
 		String cpId=(String)request.getAttribute("cpId");
 		if(pageOf != null && pageOf.equals(Constants.PAGE_OF_PARTICIPANT_CP_QUERY))

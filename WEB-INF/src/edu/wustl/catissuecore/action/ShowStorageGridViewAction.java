@@ -93,10 +93,10 @@ public class ShowStorageGridViewAction  extends BaseAction
 //        	return mapping.findForward(Constants.FAILURE);
 //		}
         
-        String pageOf = request.getParameter(Constants.PAGEOF);
-        if(pageOf.equals(Constants.PAGEOF_STORAGE_CONTAINER))
+        String pageOf = request.getParameter(Constants.PAGE_OF);
+        if(pageOf.equals(Constants.PAGE_OF_STORAGE_CONTAINER))
         {
-        	target=Constants.PAGEOF_STORAGE_CONTAINER;
+        	target=Constants.PAGE_OF_STORAGE_CONTAINER;
         }
 
         //Sri: Added to get the position of the storage container map
@@ -284,7 +284,7 @@ public class ShowStorageGridViewAction  extends BaseAction
         }
         
         request.setAttribute(Constants.CONTENT_OF_CONTAINNER, contentOfContainer);
-        if (pageOf.equals(Constants.PAGEOF_STORAGE_LOCATION))
+        if (pageOf.equals(Constants.PAGE_OF_STORAGE_LOCATION))
         {
         	String storageContainerType = request.getParameter(Constants.STORAGE_CONTAINER_TYPE);
         	Logger.out.info("Id-----------------"+id);
@@ -295,7 +295,7 @@ public class ShowStorageGridViewAction  extends BaseAction
             request.setAttribute(Constants.START_NUMBER,new Integer(startNumber));
         }
          
-        request.setAttribute(Constants.PAGEOF, pageOf);
+        request.setAttribute(Constants.PAGE_OF, pageOf);
         request.setAttribute(Constants.CHILD_CONTAINER_SYSTEM_IDENTIFIERS, childContainerIds);
         request.setAttribute(Constants.CHILD_CONTAINER_TYPE, childContainerType);
         request.setAttribute(Constants.CHILD_CONTAINER_NAME, childContainerName);

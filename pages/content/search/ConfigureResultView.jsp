@@ -20,14 +20,14 @@
     String [] columnNames=null;
 
 
-    if(pageOf.equals(Constants.PAGEOF_SIMPLE_QUERY_INTERFACE))
+    if(pageOf.equals(Constants.PAGE_OF_SIMPLE_QUERY_INTERFACE))
 	{
-		callAction=Constants.SIMPLE_SEARCH_AFTER_CONFIGURE_ACTION+"?pageOf="+Constants.PAGEOF_SIMPLE_QUERY_INTERFACE;
+		callAction=Constants.SIMPLE_SEARCH_AFTER_CONFIGURE_ACTION+"?pageOf="+Constants.PAGE_OF_SIMPLE_QUERY_INTERFACE;
 	    SimpleQueryInterfaceForm form = (SimpleQueryInterfaceForm)request.getAttribute("simpleQueryInterfaceForm");
 	    selectedColumns = form.getSelectedColumnNames();
 
 	}
-	else if(pageOf.equals(Constants.PAGEOF_DISTRIBUTION))
+	else if(pageOf.equals(Constants.PAGE_OF_DISTRIBUTION))
 	{
 		callAction=Constants.DISTRIBUTION_REPORT_ACTION;
 		ConfigureResultViewForm form = (ConfigureResultViewForm)request.getAttribute("configureResultViewForm");
@@ -42,7 +42,7 @@
 
 	}
 
-	else if(pageOf.equals(Constants.PAGEOF_QUERY_RESULTS))
+	else if(pageOf.equals(Constants.PAGE_OF_QUERY_RESULTS))
 	{
 		callAction = Constants.CONFIGURE_ADVANCED_SEARCH_RESULTS_ACTION;
 		AdvanceSearchForm form = (AdvanceSearchForm)request.getAttribute("advanceSearchForm");
@@ -307,7 +307,7 @@
 		    <td>
 			 	<table summary="" cellpadding="3" cellspacing="0" border="0">
 					<tr>
-						<logic:equal name="pageOf" value="<%=Constants.PAGEOF_DISTRIBUTION%>">
+						<logic:equal name="pageOf" value="<%=Constants.PAGE_OF_DISTRIBUTION%>">
 							<td align="right" colspan="3">
 								<html:hidden property="nextAction" value="configure"/>
 
@@ -319,7 +319,7 @@
 							</td>
 						</logic:equal>
 
-						<logic:equal name="pageOf" value="<%=Constants.PAGEOF_SIMPLE_QUERY_INTERFACE%>">
+						<logic:equal name="pageOf" value="<%=Constants.PAGE_OF_SIMPLE_QUERY_INTERFACE%>">
 							<html:hidden property="counter"/>
 						</logic:equal>
 						<logic:equal name="pageOf" value="<%=Constants.PAGE_OF_DISTRIBUTION_CP_QUERY%>">

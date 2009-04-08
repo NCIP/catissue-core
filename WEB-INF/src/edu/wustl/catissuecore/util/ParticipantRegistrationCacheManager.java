@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import edu.wustl.catissuecore.domain.Participant;
+import edu.wustl.common.exception.ApplicationException;
 
 /**
  * This class handles Cache related operations
@@ -96,8 +97,9 @@ public class ParticipantRegistrationCacheManager
 	/**
 	 * This method returns the CP ids and CP titles
 	 * @return
+	 * @throws ApplicationException 
 	 */
-	public List getCPDetailCollection()
+	public List getCPDetailCollection() throws ApplicationException
 	{
 		return participantRegCache.getCPDetailCollection();
 	}

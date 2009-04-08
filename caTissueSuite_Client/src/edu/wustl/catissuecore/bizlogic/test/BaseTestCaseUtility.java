@@ -310,7 +310,7 @@ public class BaseTestCaseUtility {
 		
 		userObj.setRoleId("1");
 		userObj.setActivityStatus("Active");
-		userObj.setPageOf(Constants.PAGEOF_SIGNUP);
+		userObj.setPageOf(Constants.PAGE_OF_SIGNUP);
 
 		return userObj;
 	}

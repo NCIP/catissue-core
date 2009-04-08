@@ -15,7 +15,7 @@
 <%=messageKey%>
 </html:messages>
 <%
-	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
+	String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 	String operation = (String)request.getAttribute(Constants.OPERATION);
 %>
 <table summary="" cellpadding="0" cellspacing="0" border="0" height="20" class="tabPage" width="600">

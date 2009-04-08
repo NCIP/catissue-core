@@ -19,7 +19,7 @@
 		function onSubmit()
 		{
 			var action = '<%=Constants.SPECIMEN_ARRAY_CREATE_ALIQUOT_ACTION%>';
-			document.forms[0].action = action + "?pageOf=" + '<%=Constants.PAGEOF_SPECIMEN_ARRAY_CREATE_ALIQUOT%>' + "&buttonClicked=submit&menuSelected=20";
+			document.forms[0].action = action + "?pageOf=" + '<%=Constants.PAGE_OF_SPECIMEN_ARRAY_CREATE_ALIQUOT%>' + "&buttonClicked=submit&menuSelected=20";
 			document.forms[0].submit();
 		}
 		
@@ -41,7 +41,7 @@
 		{
 			var action = '<%=Constants.SPECIMEN_ARRAY_CREATE_ALIQUOT_ACTION%>';
 			document.forms[0].submittedFor.value = "ForwardTo";
-			document.forms[0].action = action + "?pageOf=" + '<%=Constants.PAGEOF_SPECIMEN_ARRAY_CREATE_ALIQUOT%>' + "&operation=add&menuSelected=20&buttonClicked=create";
+			document.forms[0].action = action + "?pageOf=" + '<%=Constants.PAGE_OF_SPECIMEN_ARRAY_CREATE_ALIQUOT%>' + "&operation=add&menuSelected=20&buttonClicked=create";
 		    document.forms[0].submit();
 		}
 
@@ -77,14 +77,14 @@ function mapButtonClickedInAliquot(frameUrl,count)
 	</script>
 </head>
 <%
-	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
+	String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 	String buttonKey = "";
 	String exceedsMaxLimit = (String)request.getAttribute(Constants.EXCEEDS_MAX_LIMIT);
-	if(Constants.PAGEOF_SPECIMEN_ARRAY_ALIQUOT.equals(pageOf))
+	if(Constants.PAGE_OF_SPECIMEN_ARRAY_ALIQUOT.equals(pageOf))
 	{
 		buttonKey = "buttons.submit";
 	}
-	else if(Constants.PAGEOF_SPECIMEN_ARRAY_CREATE_ALIQUOT.equals(pageOf))
+	else if(Constants.PAGE_OF_SPECIMEN_ARRAY_CREATE_ALIQUOT.equals(pageOf))
 	{
 		buttonKey = "buttons.resubmit";
 	}
@@ -222,7 +222,7 @@ function mapButtonClickedInAliquot(frameUrl,count)
    </tr>
 		<%	
 	SpecimenArrayAliquotForm form = (SpecimenArrayAliquotForm)request.getAttribute("specimenArrayAliquotForm");
-	if(!Constants.PAGEOF_SPECIMEN_ARRAY_ALIQUOT.equals(pageOf))
+	if(!Constants.PAGE_OF_SPECIMEN_ARRAY_ALIQUOT.equals(pageOf))
 	{
 	%>
 	<tr>

@@ -27,7 +27,7 @@ public class DefineEventsAction extends BaseAction
 	{
 		CollectionProtocolForm cpForm = (CollectionProtocolForm)form;
 
-		String pageOf=request.getParameter(Constants.PAGEOF);
+		String pageOf=request.getParameter(Constants.PAGE_OF);
 		String operation=request.getParameter("operation");
 		request.setAttribute("operation", operation);
 		String invokeFunction=request.getParameter("invokeFunction");

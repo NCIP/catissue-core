@@ -763,7 +763,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 				if (value6.equalsIgnoreCase(Constants.DISABLED))
 				{
 					forwardTo = "blankPage";
-					request.setAttribute(Constants.PAGEOF, pageOf);
+					request.setAttribute(Constants.PAGE_OF, pageOf);
 					request.setAttribute("participantId", new Long(id).toString());
 					request.setAttribute("cpId", value1);
 				}

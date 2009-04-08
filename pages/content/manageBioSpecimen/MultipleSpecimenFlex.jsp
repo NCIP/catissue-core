@@ -37,9 +37,9 @@ function callSubmitSpecimen()
 {
 	<%
 		String formAction2 = "GenericSpecimenSummary.do";
-		if(request.getAttribute(Constants.PAGEOF) != null)
+		if(request.getAttribute(Constants.PAGE_OF) != null)
 		{
-			formAction2 = "MultipleSpecimenView.do?pageOf="+request.getAttribute(Constants.PAGEOF)+"&mode=add";
+			formAction2 = "MultipleSpecimenView.do?pageOf="+request.getAttribute(Constants.PAGE_OF)+"&mode=add";
 		}
 	%>
 	document.forms[0].action = "<%=formAction2%>";
@@ -51,9 +51,9 @@ function callUpdateSpecimen()
 {
 	<%
 		String formAction1 = "GenericSpecimenSummary.do";
-		if(request.getAttribute(Constants.PAGEOF) != null)
+		if(request.getAttribute(Constants.PAGE_OF) != null)
 		{
-			formAction1 = "MultipleSpecimenView.do?pageOf="+request.getAttribute(Constants.PAGEOF)+"&mode=edit";
+			formAction1 = "MultipleSpecimenView.do?pageOf="+request.getAttribute(Constants.PAGE_OF)+"&mode=edit";
 		}
 	%>
 	document.forms[0].action = "<%=formAction1%>";
