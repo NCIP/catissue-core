@@ -74,7 +74,7 @@
 										  month= "<%=collectionMonth%>"
 										  year= "<%=collectionYear%>"
 										  day= "<%=collectionDay%>"
-										  pattern="<%=Variables.dateFormat%>"
+										  pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>"
 										  value="<%=currentCollectionDate%>"
 										  styleClass="black_ar"
 												/>
@@ -86,7 +86,7 @@
 							<ncombo:DateTimeComponent name="collectionEventdateOfEvent"
 										  id="collectionEventdateOfEvent"
 										  formName="<%=formNameForCal%>"
-										  pattern="<%=Variables.dateFormat%>"
+										  pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>"
 										  styleClass="black_ar"
 												/>
 							<%
@@ -235,7 +235,7 @@
 											  month= "<%= receivedMonth %>"
 											  year= "<%= receivedYear %>"
 											  day= "<%= receivedDay %>"
-											  pattern="<%=Variables.dateFormat%>"
+											  pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>"
 											  value="<%=currentReceivedDate %>"
 											  formName= "<%=formNameForCal %>"
 											  styleClass="black_ar"
@@ -248,7 +248,7 @@
 								<ncombo:DateTimeComponent name="receivedEventDateOfEvent"
 											  id="receivedEventDateOfEvent"
 											  formName="<%=formNameForCal %>"
-											  pattern="<%=Variables.dateFormat%>"
+											  pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>"
 											  styleClass="black_ar"
 													/>
 								<% 

@@ -272,7 +272,7 @@
 									  month= "<%=registrationMonth %>"
 									  year= "<%=registrationYear %>"
 									  day= "<%= registrationDay %>" 
-									  pattern="<%=Variables.dateFormat%>"
+									  pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>"
 									  value="<%=currentRegistrationDate %>"
 									  styleClass="formDateSized10"
 											 />		
@@ -284,7 +284,7 @@
 					<ncombo:DateTimeComponent name="registrationDate"
 									  id="registrationDate"
  									  formName="collectionProtocolRegistrationForm"	
- 									  pattern="<%=Variables.dateFormat%>"
+ 									  pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>"
 									  styleClass="formDateSized10" 
 											 />		
 					<%

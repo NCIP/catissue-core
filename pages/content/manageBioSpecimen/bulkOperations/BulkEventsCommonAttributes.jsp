@@ -59,7 +59,7 @@
 							  month= "<%=AppUtility.getMonth(eventDate)%>"
 							  year= "<%=AppUtility.getYear(eventDate)%>"
 							  day= "<%=AppUtility.getDay(eventDate)%>"
-    		  			      pattern="<%=Variables.dateFormat%>"
+    		  			      pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>"
     		  			      value="<%= eventDate %>"
 							  styleClass="black_ar"
 							/><span class="grey_ar_s">

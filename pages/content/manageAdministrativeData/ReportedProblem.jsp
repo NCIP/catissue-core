@@ -93,7 +93,7 @@
 					 <%
 					 	// Added by Geeta for date format change
 					 			   Date date=(Date)request.getAttribute("date");
-					 			   String reportedDate=AppUtility.parseDateToString(date,Variables.dateFormat);
+					 			   String reportedDate=AppUtility.parseDateToString(date,CommonServiceLocator.getInstance().getDatePattern());
 					 %>
 
 				<!-- <td class='${pageScope.style}'><bean:write name="problem" property="reportedDate" /></td> -->

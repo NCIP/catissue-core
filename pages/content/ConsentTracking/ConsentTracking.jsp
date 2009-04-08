@@ -287,7 +287,7 @@ function popupWindow(nofConsentTiers)
 									year= "<%=consentYear%>"
 									day= "<%=consentDay%>" 
 									value="<%=signedConsentDate%>"
-									pattern="<%=Variables.dateFormat%>"
+									pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>"
 									styleClass="black_ar"
 								/>		
 								<%
@@ -299,7 +299,7 @@ function popupWindow(nofConsentTiers)
 									id="consentDate"
 									formName="consentForm"	
 									styleClass="black_ar" 
-									pattern="<%=Variables.dateFormat%>"
+									pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>"
 								/>		
 								<%
 											}
@@ -318,7 +318,7 @@ function popupWindow(nofConsentTiers)
 									month= "<%=consentMonth %>"
 									year= "<%=consentYear %>"
 									day= "<%= consentDay %>" 
-									pattern="<%=Variables.dateFormat %>"
+									pattern="<%=CommonServiceLocator.getInstance().getDatePattern() %>"
 									value="<%=signedConsentDate %>"
 									
 									styleClass="black_ar"
@@ -332,7 +332,7 @@ function popupWindow(nofConsentTiers)
 									id="consentDate"
 									formName="collectionProtocolRegistrationForm"	
 									styleClass="black_ar" 
-									pattern="<%=Variables.dateFormat %>"
+									pattern="<%=CommonServiceLocator.getInstance().getDatePattern() %>"
 								/>		
 								<%
 								}

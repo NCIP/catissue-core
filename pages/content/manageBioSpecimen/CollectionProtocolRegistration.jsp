@@ -299,7 +299,7 @@
 									  year= "<%=registrationYear %>"
 									  day= "<%= registrationDay %>" 
 									  value="<%=currentRegistrationDate %>"
-									  pattern="<%=Variables.dateFormat%>"
+									  pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>"
 									  styleClass="formDateSized10"
 											 />		
 <% 
@@ -311,7 +311,7 @@
 									  id="registrationDate"
  									  formName="collectionProtocolRegistrationForm"	
 									  styleClass="formDateSized10" 
-									  pattern="<%=Variables.dateFormat%>"
+									  pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>"
 											 />		
 <%
 	}

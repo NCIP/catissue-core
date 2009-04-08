@@ -118,7 +118,7 @@ function updateCPTree()
 							  month= '${requestScope.collectionProtocolMonth}'
 							  year= '${requestScope.collectionProtocolYear}'
 							  day= '${requestScope.collectionProtocolDay}'
-							  pattern="<%=Variables.dateFormat %>"
+							  pattern="<%=CommonServiceLocator.getInstance().getDatePattern() %>"
 							  value='${requestScope.currentCollectionProtocolDate}'
 							  styleClass="black_ar"
 						/>

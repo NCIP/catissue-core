@@ -63,14 +63,14 @@
 					 year='${requestScope.eventParametersYear}'
 					 day='${requestScope.eventParametersDay}'
 					 value='${requestScope.currentEventParametersDate}'
-					 pattern="<%=Variables.dateFormat%>"
+					 pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>"
 					 styleClass="black_ar" />
 			  </logic:notEmpty>
 			  <logic:empty name="currentEventParametersDate">
 				<ncombo:DateTimeComponent name="dateOfEvent"
 					  id="dateOfEvent"
 					  formName="collectionEventParametersForm"
-					  pattern="<%=Variables.dateFormat%>"
+					  pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>"
 					  styleClass="black_ar"	/>
 			  </logic:empty>
 			  <span class="grey_ar_s"><bean:message key="page.dateFormat" /></span></td>

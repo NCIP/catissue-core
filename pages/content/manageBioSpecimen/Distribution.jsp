@@ -561,13 +561,13 @@
  %> <ncombo:DateTimeComponent name="dateOfEvent" id="dateOfEvent"
 						formName="distributionForm" month="<%=distributionMonth%>"
 						year="<%=distributionYear%>" day="<%=distributionDay%>"
-						pattern="<%=Variables.dateFormat%>"
+						pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>"
 						value="<%=currentDistributionDate%>" styleClass="formDateSized10" />
 					<%
 						} else {
 					%> <ncombo:DateTimeComponent name="dateOfEvent" id="dateOfEvent"
 						formName="distributionForm" 
-						pattern="<%=Variables.dateFormat%>"
+						pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>"
 						styleClass="formDateSized10" />
 					<%
 						}

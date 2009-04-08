@@ -343,7 +343,7 @@
 			var showCalValue = ""+showCal.value;
 			if(showCalValue!= null && showCalValue.length>0)
 			{
-				sname = "<div id='"+overDiv+"' style='position:absolute; visibility:hidden; z-index:1000;'></div><a href='javascript:show_calendar('"+fieldName+"',null,null,'<%=Variables.dateFormat%>');'><img src='images\calendar.gif' width=24 height=22 border=0></a>";
+				sname = "<div id='"+overDiv+"' style='position:absolute; visibility:hidden; z-index:1000;'></div><a href='javascript:show_calendar('"+fieldName+"',null,null,'<%=CommonServiceLocator.getInstance().getDatePattern()%>');'><img src='images\calendar.gif' width=24 height=22 border=0></a>";
 			}
 			else
 			{
@@ -401,7 +401,7 @@
 					txtField.readOnly="";
 					calendarShow.value = "Show";
 					var innerStr = "<div id='"+ overDiv +"' style='position:absolute; visibility:hidden; z-index:1000;'></div>";
-					innerStr = innerStr + "<a href=\"javascript:show_calendar('"+fieldValue+"',null,null,'<%=Variables.dateFormat%>');\">";
+					innerStr = innerStr + "<a href=\"javascript:show_calendar('"+fieldValue+"',null,null,'<%=CommonServiceLocator.getInstance().getDatePattern()%>');\">";
 					innerStr = innerStr + "<img src=\"images\\calendar.gif\" width=24 height=22 border=0>";
 					innerStr = innerStr + "</a>";
 					td.innerHTML = innerStr;
@@ -873,7 +873,7 @@
 			<ncombo:DateTimeComponent name="<%=createdDate%>"
 									  id="<%=createdDateStr + 1%>"
  									  formName="<%=formName%>"	
-			    					  pattern="<%=Variables.dateFormat%>"
+			    					  pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>"
            				  			  value="<%=createdDateValue1%>"							 
 									  styleClass="formDateSized10" 
 									  disabled="<%=disabled%>"
@@ -883,7 +883,7 @@
 			<ncombo:DateTimeComponent name="<%=createdDate2%>"
 									  id="<%=createdDateStr + 2%>"
  									  formName="<%=formName%>"	
-									     pattern="<%=Variables.dateFormat%>"
+									     pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>"
 				  			  value="<%=createdDateValue2%>"						
 									  styleClass="formDateSized10" 
 									  disabled="<%=disabled2%>"
@@ -1018,7 +1018,7 @@
 		{
 	%>
 	<div id="<%=overDiv%>" style="position:absolute; visibility:hidden; z-index:1000;"></div>
-	<a href="javascript:show_calendar('<%=fieldName%>',null,null,'<%=Variables.dateFormat%>');">
+	<a href="javascript:show_calendar('<%=fieldName%>',null,null,'<%=CommonServiceLocator.getInstance().getDatePattern()%>');">
 		<img src="images\calendar.gif" width=24 height=22 border=0>
 	</a>
 	<%		

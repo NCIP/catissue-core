@@ -429,11 +429,11 @@ function participantRegRow(subdivtag)
 														Integer birthDay = new Integer(AppUtility.getDay(currentBirthDate));
 						%> <ncombo:DateTimeComponent name="birthDate" id="birthDate"
 							formName="participantForm" month="<%=birthMonth%>"
-							year="<%=birthYear%>" day="<%=birthDay%>" pattern="<%=Variables.dateFormat%>"
+							year="<%=birthYear%>" day="<%=birthDay%>" pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>"
 							value="<%=currentBirthDate%>" styleClass="black_ar" /> <%
  	} else {
  %> <ncombo:DateTimeComponent name="birthDate" id="birthDate"
-							formName="participantForm" pattern="<%=Variables.dateFormat%>" styleClass="black_ar" /> <%
+							formName="participantForm" pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>" styleClass="black_ar" /> <%
  	}
  %> <span class="grey_ar_s"> <bean:message
 							key="page.dateFormat" /> </span>&nbsp;</td>
@@ -477,12 +477,12 @@ function participantRegRow(subdivtag)
 														Integer deathDay = new Integer(AppUtility.getDay(currentDeathDate));
 						%> <ncombo:DateTimeComponent name="deathDate" id="deathDate"
 							formName="participantForm" month="<%=deathMonth%>"
-							year="<%=deathYear%>" day="<%=deathDay%>" pattern="<%=Variables.dateFormat%>"
+							year="<%=deathYear%>" day="<%=deathDay%>" pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>"
 							value="<%=currentDeathDate%>" styleClass="black_ar"
 							disabled="<%=deathDisable%>" /> <%
  	} else {
  %> <ncombo:DateTimeComponent name="deathDate" id="deathDate"
-							formName="participantForm"  pattern="<%=Variables.dateFormat%>" styleClass="black_ar"
+							formName="participantForm"  pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>" styleClass="black_ar"
 							disabled="<%=deathDisable%>" /> <%
  	}
  %> <span class="grey_ar_s"> <bean:message

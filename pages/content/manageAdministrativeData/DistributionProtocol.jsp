@@ -320,7 +320,7 @@ function insRow(subdivtag)
 			  						    month= "<%=distributionProtocolMonth%>"
 								  		year= "<%=distributionProtocolYear%>"
 								  		day= "<%=distributionProtocolDay%>"
-    									pattern="<%=Variables.dateFormat%>"
+    									pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>"
 										value="<%=currentDistributionProtocolDate%>"
 								  		styleClass="black_ar"
 									/>
@@ -331,7 +331,7 @@ function insRow(subdivtag)
 										<ncombo:DateTimeComponent name="startDate"
 								 	 	id="startDate"
 								  		formName="distributionProtocolForm"
-										pattern="<%=Variables.dateFormat%>"
+										pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>"
 								  		styleClass="black_ar"/>
 					  <%
 					  	}
@@ -359,7 +359,7 @@ function insRow(subdivtag)
 								 month= "<%=distributionProtocolEndDateMonth%>"
 								year= "<%=distributionProtocolEndDateYear%>"
 								day= "<%=distributionProtocolEndDateDay%>"
-								pattern="<%=Variables.dateFormat%>"
+								pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>"
 	value="<%=distributionProtocolEndDate%>"
 								styleClass="black_ar"/>
 								<span class="grey_ar_s"><bean:message key="page.dateFormat" /> </span>

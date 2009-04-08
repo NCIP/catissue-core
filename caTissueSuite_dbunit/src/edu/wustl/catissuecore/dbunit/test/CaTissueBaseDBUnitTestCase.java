@@ -190,7 +190,7 @@ public abstract class CaTissueBaseDBUnitTestCase extends JdbcBasedDBTestCase
 			IBizLogic bizLogic =BizLogicFactory.getInstance()
 						.getBizLogic(object.getClass().getName());
 			System.out.println("............"+object);
-			bizLogic.insert(object,sessionDataBean, Constants.HIBERNATE_DAO);
+			bizLogic.insert(object,sessionDataBean, 0);
 			System.out.println(".......inserted.....");
 		}
 		catch(UserNotAuthorizedException authorizedException)
@@ -224,7 +224,7 @@ public abstract class CaTissueBaseDBUnitTestCase extends JdbcBasedDBTestCase
 				session = DBUtil.getCleanSession();
 
 				Object oldObject = session.get(object.getClass().getName(), oldObjectId);
-				bizLogic.update(object,oldObject, Constants.HIBERNATE_DAO,sessionDataBean);
+				bizLogic.update(object,oldObject, 0,sessionDataBean);
 
 		   }
 		   catch(UserNotAuthorizedException authorizedException)

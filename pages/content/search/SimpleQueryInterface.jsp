@@ -68,7 +68,7 @@
 
 function showDateColumn(element,valueField,columnID,showCalendarID,fieldValue,overDiv)
 {
-    setDateFormat("<%=Variables.dateFormat%>");
+    setDateFormat("<%=CommonServiceLocator.getInstance().getDatePattern()%>");
 	var dataStr = element.options[element.selectedIndex].value;
 	var dataValue = new String(dataStr);
 	var lastInd = dataValue.lastIndexOf(".");

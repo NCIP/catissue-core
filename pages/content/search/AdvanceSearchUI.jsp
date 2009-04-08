@@ -204,7 +204,7 @@
  									  formName="<%=advSearch.getFormName()%>"	
 									  styleClass="formDateSized10" 
 									  disabled="<%=isDisabled  %>" 
-									  pattern="<%=Variables.dateFormat%>"
+									  pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>"
 				  			  		  value="<%=firstDate%>"							 
 									 
 									  onClickImage="<%=dateField1Click %>"
@@ -215,7 +215,7 @@
  									  formName="<%=advSearch.getFormName()%>"	
 									  styleClass="formDateSized10" 
 									  disabled="<%=isDisabled1 %>"
-									  pattern="<%=Variables.dateFormat%>"
+									  pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>"
 				  			          value="<%=secondDate%>"							 
 									  onClickImage="<%=dateField2Click %>"
 											 />	

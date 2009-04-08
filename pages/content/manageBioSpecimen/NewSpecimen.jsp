@@ -1421,7 +1421,7 @@
 								<td class="black_ar" >
 									<ncombo:DateTimeComponent name="createdDate" id="createdDate"
 			  							formName="newSpecimenForm" 
-			  							pattern="<%=Variables.dateFormat%>" 
+			  							pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>" 
 			  							value='${requestScope.createdDate}'
 			  							styleClass="black_ar"/>
 										<span class="grey_ar_s">

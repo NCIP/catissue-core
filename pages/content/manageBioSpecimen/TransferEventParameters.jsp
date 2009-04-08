@@ -85,7 +85,7 @@ function toStoragePositionChange(element)
 			                  month='${requestScope.eventParametersMonth}'
 							  year='${requestScope.eventParametersYear}'
 							  day='${requestScope.eventParametersDay}'
-							  pattern="<%=Variables.dateFormat%>"
+							  pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>"
 							  value='${requestScope.currentEventParametersDate}'
 							  styleClass="black_ar" />
 				</logic:notEmpty>
@@ -93,7 +93,7 @@ function toStoragePositionChange(element)
 					<ncombo:DateTimeComponent name="dateOfEvent"
 						  id="dateOfEvent"
 						  formName="transferEventParametersForm"
-						  pattern="<%=Variables.dateFormat%>"
+						  pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>"
 						  styleClass="black_ar" size="5" />
 				</logic:empty>
                     <span class="grey_ar_s"><bean:message key="page.dateFormat" /></span></td>
