@@ -6,10 +6,10 @@ import java.util.Calendar;
 
 import edu.wustl.catissuecore.domain.Distribution;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.AppUtility;
-import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.util.Utility;
+import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -88,13 +88,13 @@ public class DistributionReportForm extends AbstractActionForm
  		this.userName = lName + ", " + fName;
  		Calendar calender = Calendar.getInstance();
  		calender.setTime(distribution.getTimestamp());
- 		this.timeInHours = AppUtility.toString(Integer.toString( calender.get(Calendar.HOUR_OF_DAY)));
- 		this.timeInMinutes = AppUtility.toString(Integer.toString(calender.get(Calendar.MINUTE)));
- 		this.dateOfEvent = AppUtility.parseDateToString(distribution.getTimestamp(),Variables.dateFormat);
+ 		this.timeInHours = Utility.toString(Integer.toString( calender.get(Calendar.HOUR_OF_DAY)));
+ 		this.timeInMinutes = Utility.toString(Integer.toString(calender.get(Calendar.MINUTE)));
+ 		this.dateOfEvent = Utility.parseDateToString(distribution.getTimestamp(),CommonServiceLocator.getInstance().getDatePattern());
  		this.id = distribution.getId().longValue() ;
 		//this.fromSite = String.valueOf(distribution.getFromSite().getName());
 		this.toSite = String.valueOf(distribution.getToSite().getName());
-		this.comments  = AppUtility.toString(distribution.getComment());
+		this.comments  = Utility.toString(distribution.getComment());
 		distributionId = distribution.getId();
 	}
 	
@@ -262,6 +262,12 @@ public class DistributionReportForm extends AbstractActionForm
      * This method defined in ActionForm is overridden in this class.
      */
 	protected void reset()
+	{
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void setAddNewObjectIdentifier(String arg0, Long arg1)
 	{
 		// TODO Auto-generated method stub
 		

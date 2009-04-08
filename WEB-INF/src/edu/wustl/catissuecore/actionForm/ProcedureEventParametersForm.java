@@ -19,8 +19,8 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.ProcedureEventParameters;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
@@ -91,8 +91,8 @@ public class ProcedureEventParametersForm extends SpecimenEventParametersForm
 	{
 		super.setAllValues(abstractDomain);
 		ProcedureEventParameters procedureEventParametersObject = (ProcedureEventParameters) abstractDomain;
-		this.url = AppUtility.toString(procedureEventParametersObject.getUrl());
-		this.name = AppUtility.toString(procedureEventParametersObject.getName());
+		this.url = Utility.toString(procedureEventParametersObject.getUrl());
+		this.name = Utility.toString(procedureEventParametersObject.getName());
 	}
 	
 	/**
@@ -139,6 +139,13 @@ public class ProcedureEventParametersForm extends SpecimenEventParametersForm
 //		this.url = null;
 //		this.name = null;
     }
+
+	@Override
+	public void setAddNewObjectIdentifier(String arg0, Long arg1)
+	{
+		// TODO Auto-generated method stub
+		
+	}
 	
 
 }

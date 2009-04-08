@@ -930,6 +930,13 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 	{
 		this.nodeKey = nodeKey;
 	}
+
+	@Override
+	public void setAddNewObjectIdentifier(String arg0, Long arg1)
+	{
+		// TODO Auto-generated method stub
+		
+	}
     
 
 }

@@ -33,11 +33,11 @@ import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.util.MultipleSpecimenValidationUtil;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.AppUtility;
-import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
@@ -145,16 +145,16 @@ private static org.apache.log4j.Logger logger = Logger.getLogger(DistributionFor
 
 		final Distribution distObj = (Distribution) abstractDomain;
 
-		this.comments = AppUtility.toString(distObj.getComment());
-		this.id = distObj.getId().longValue();
+		this.comments = Utility.toString(distObj.getComment());
+		this.setId(distObj.getId().longValue());
 
 		final Calendar calender = Calendar.getInstance();
 		if (distObj.getTimestamp() != null)
 		{
 			calender.setTime(distObj.getTimestamp());
-			this.timeInHours = AppUtility.toString(Integer.toString(calender.get(Calendar.HOUR_OF_DAY)));
-			this.timeInMinutes = AppUtility.toString(Integer.toString(calender.get(Calendar.MINUTE)));
-			this.dateOfEvent = AppUtility.parseDateToString(distObj.getTimestamp(), Variables.dateFormat);
+			this.timeInHours = Utility.toString(Integer.toString(calender.get(Calendar.HOUR_OF_DAY)));
+			this.timeInMinutes = Utility.toString(Integer.toString(calender.get(Calendar.MINUTE)));
+			this.dateOfEvent = Utility.parseDateToString(distObj.getTimestamp(), CommonServiceLocator.getInstance().getDatePattern());
 		}
 		this.userId = distObj.getDistributedBy().getId().longValue();
 
@@ -165,8 +165,8 @@ private static org.apache.log4j.Logger logger = Logger.getLogger(DistributionFor
 
 		this.distributionProtocolId = String.valueOf(distObj.getDistributionProtocol().getId());
 		this.toSite = String.valueOf(distObj.getToSite().getId());
-		this.activityStatus = AppUtility.toString(distObj.getActivityStatus());
-		logger.debug("this.activityStatus " + this.activityStatus);
+		this.setActivityStatus(Utility.toString(distObj.getActivityStatus()));
+		logger.debug("this.activityStatus " + this.getActivityStatus());
  
 		if (distObj.getDistributedItemCollection().size() != 0)
 		{
@@ -257,8 +257,8 @@ private static org.apache.log4j.Logger logger = Logger.getLogger(DistributionFor
 				final Double quantity = dItem.getQuantity();
 				//dItem.setPreviousQty(quantity);
 
-				values.put(key1, AppUtility.toString(dItem.getId()));
-				values.put(key2, AppUtility.toString(specimen.getId()));
+				values.put(key1, Utility.toString(dItem.getId()));
+				values.put(key2, Utility.toString(specimen.getId()));
 				values.put(key3, quantity);
 				values.put(key9, getAvailableQty(specimen));
 				values.put(key10, quantity);

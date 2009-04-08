@@ -22,12 +22,13 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.security.SecurityManager;
-import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.PasswordManager;
+import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.security.exception.SMException;
+import edu.wustl.security.manager.SecurityManagerFactory;
 
 /**
  * UserForm Class is used to encapsulate all the request parameters passed 
@@ -546,7 +547,7 @@ public class UserForm extends AbstractActionForm
 	public int getFormId()
 	{
 		int formId = Constants.APPROVE_USER_FORM_ID;
-		if ((pageOf != null) && (Constants.PAGE_OF_APPROVE_USER.equals(pageOf) == false))
+		if ((this.getPageOf() != null) && (Constants.PAGE_OF_APPROVE_USER.equals(this.getPageOf()) == false))
 		{
 			formId = Constants.USER_FORM_ID;
 		}
@@ -626,11 +627,11 @@ public class UserForm extends AbstractActionForm
 	 */
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
-		if (Constants.PAGE_OF_CHANGE_PASSWORD.equals(pageOf) == false)
+		if (Constants.PAGE_OF_CHANGE_PASSWORD.equals(this.getPageOf()) == false)
 		{
 			User user = (User) abstractDomain;
 
-			this.id = user.getId().longValue();
+			this.setId(user.getId().longValue());
 			this.lastName = user.getLastName();
 			this.firstName = user.getFirstName();
 			setInstId(user);
@@ -644,7 +645,7 @@ public class UserForm extends AbstractActionForm
 			setAddr(user);
 			//Populate the activity status, comments and role for approve user and user edit.  
 			setUserData(user);
-			if (Constants.PAGE_OF_USER_ADMIN.equals(pageOf))
+			if (Constants.PAGE_OF_USER_ADMIN.equals(this.getPageOf()))
 			{
 				//Bug-1516: Jitendra
 				String pwd = PasswordManager.decode(user.getLatestPassword());	
@@ -658,12 +659,12 @@ public class UserForm extends AbstractActionForm
 					logger.error(e.getMessage(),e);
 				}                
 			}
-			if (Constants.PAGE_OF_USER_PROFILE.equals(pageOf))
+			if (Constants.PAGE_OF_USER_PROFILE.equals(this.getPageOf()))
 			{
 				this.role = user.getRoleId();
 			}
 		}
-		logger.debug("this.activityStatus............." + this.activityStatus);
+		logger.debug("this.activityStatus............." + this.getActivityStatus());
 		logger.debug("this.comments" + this.comments);
 		logger.debug("this.role" + this.role);
 		logger.debug("this.status" + this.status);
@@ -678,7 +679,8 @@ public class UserForm extends AbstractActionForm
 	{
 		if(this.csmUserId != null) //in case user not approved
 		{
-			gov.nih.nci.security.authorization.domainobjects.User csmUser = SecurityManager.getInstance(UserForm.class).getUserById(this.getCsmUserId().toString());
+			gov.nih.nci.security.authorization.domainobjects.User csmUser = 
+				SecurityManagerFactory.getSecurityManager().getUserById(this.getCsmUserId().toString());
 			if(csmUser != null)
 		    {
 		    	this.setNewPassword(csmUser.getPassword());
@@ -698,9 +700,9 @@ public class UserForm extends AbstractActionForm
 	 */
 	private void setUserData(User user)
 	{
-		if ((getFormId() == Constants.APPROVE_USER_FORM_ID) || ((pageOf != null) && (Constants.PAGE_OF_USER_ADMIN.equals(pageOf))))
+		if ((getFormId() == Constants.APPROVE_USER_FORM_ID) || ((this.getPageOf() != null) && (Constants.PAGE_OF_USER_ADMIN.equals(this.getPageOf()))))
 		{
-			this.activityStatus = user.getActivityStatus();
+			this.setActivityStatus(user.getActivityStatus());
 
 			setCmts(user);
 			this.setUserRole(user.getRoleId());
@@ -718,15 +720,15 @@ public class UserForm extends AbstractActionForm
 	 */
 	private void setStats()
 	{
-		if (activityStatus.equals(Constants.ACTIVITY_STATUS_ACTIVE))
+		if (this.getActivityStatus().equals(Constants.ACTIVITY_STATUS_ACTIVE))
 		{
 			this.status = Constants.APPROVE_USER_APPROVE_STATUS;
 		}
-		else if (activityStatus.equals(Constants.ACTIVITY_STATUS_CLOSED))
+		else if (this.getActivityStatus().equals(Constants.ACTIVITY_STATUS_CLOSED))
 		{
 			this.status = Constants.APPROVE_USER_REJECT_STATUS;
 		}
-		else if (activityStatus.equals(Constants.ACTIVITY_STATUS_NEW))
+		else if (this.getActivityStatus().equals(Constants.ACTIVITY_STATUS_NEW))
 		{
 			this.status = Constants.APPROVE_USER_PENDING_STATUS;
 		}
@@ -824,9 +826,9 @@ public class UserForm extends AbstractActionForm
 		Validator validator = new Validator();
 		try
 		{
-			if (operation != null)
+			if (this.getOperation() != null)
 			{
-				if (pageOf.equals(Constants.PAGE_OF_CHANGE_PASSWORD))
+				if (this.getPageOf().equals(Constants.PAGE_OF_CHANGE_PASSWORD))
 				{
 					chkEmpty(errors, validator, "user.oldPassword", oldPassword);
 					chkEmpty(errors, validator, "user.newPassword", newPassword);
@@ -840,7 +842,7 @@ public class UserForm extends AbstractActionForm
 					logger.debug("user form ");
 					ifAddEdit(errors, validator);
 
-					if (pageOf.equals(Constants.PAGE_OF_APPROVE_USER))
+					if (this.getPageOf().equals(Constants.PAGE_OF_APPROVE_USER))
 					{
 						chkValOpt(errors, validator, "user.approveOperation", status);
 					}
@@ -864,13 +866,13 @@ public class UserForm extends AbstractActionForm
 	 */
 	private void ifAddEdit(ActionErrors errors, Validator validator)
 	{
-		if (operation.equals(Constants.ADD) || operation.equals(Constants.EDIT))
+		if (this.getOperation().equals(Constants.ADD) || this.getOperation().equals(Constants.EDIT))
 		{
 			chkSites(errors, validator);
 			chkMail(errors, validator,"user.emailAddress", emailAddress);
 
 			// Mandar : 24-Apr-06 Bugid:972 confirmEmailAddress start
-			if (!pageOf.equals(Constants.PAGE_OF_USER_PROFILE))
+			if (!this.getPageOf().equals(Constants.PAGE_OF_USER_PROFILE))
 			{
 				chkMail(errors, validator,"user.confirmemailAddress", confirmEmailAddress);
 				compMail(errors);
@@ -885,7 +887,7 @@ public class UserForm extends AbstractActionForm
 			chkValOpt(errors, validator, "user.institution", String.valueOf(institutionId));
 			chkValOpt(errors, validator, "user.department", String.valueOf(departmentId));
 			chkValOpt(errors, validator, "user.cancerResearchGroup", String.valueOf(cancerResearchGroupId));
-			chkValOpt(errors, validator, "user.activityStatus", activityStatus);
+			chkValOpt(errors, validator, "user.activityStatus", this.getActivityStatus());
 		}
 	}
 
@@ -914,7 +916,7 @@ public class UserForm extends AbstractActionForm
 	 */
 	private void adminEdit(HttpServletRequest request, ActionErrors errors, Validator validator)
 	{
-		if(pageOf.equals(Constants.PAGE_OF_USER_ADMIN) && operation.equals(Constants.EDIT))
+		if(this.getPageOf().equals(Constants.PAGE_OF_USER_ADMIN) && this.getOperation().equals(Constants.EDIT))
 		{
 			String pageFrom = request.getParameter("pageFrom");
 			if(!"ApproveUser".equals(pageFrom))
@@ -938,7 +940,8 @@ public class UserForm extends AbstractActionForm
 	{
 		int result=PasswordManager.SUCCESS;
 		if(!Constants.DUMMY_PASSWORD.equals(newPassword)){
-			result = PasswordManager.validatePasswordOnFormBean(newPassword, oldPassword, request.getSession());
+			Boolean  isPasswordChanged = (Boolean)request.getSession() .getAttribute(Constants.PASSWORD_CHANGE_IN_SESSION);
+			result = PasswordManager.validatePasswordOnFormBean(newPassword, oldPassword,isPasswordChanged);
 		}
 		
 		if (result != PasswordManager.SUCCESS)
@@ -1024,7 +1027,8 @@ public class UserForm extends AbstractActionForm
 		{
 			// Call static method PasswordManager.validatePasswordOnFormBean() where params are
 			// new password,old password,user name
-			int result = PasswordManager.validatePasswordOnFormBean(newPassword, oldPassword, request.getSession());
+			Boolean  isPasswordChanged = (Boolean)request.getSession() .getAttribute(Constants.PASSWORD_CHANGE_IN_SESSION);
+			int result = PasswordManager.validatePasswordOnFormBean(newPassword, oldPassword, isPasswordChanged);
 				
 			if (result != PasswordManager.SUCCESS)
 			{

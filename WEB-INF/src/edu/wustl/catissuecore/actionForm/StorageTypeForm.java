@@ -22,10 +22,11 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.domain.StorageType;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.AppUtility;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
@@ -103,9 +104,9 @@ public class StorageTypeForm extends AbstractActionForm
 		StorageType storageType = (StorageType) abstractDomain;
 		logger.info("in storege type form :"
 				+ storageType.getHoldsSpecimenClassCollection().size());
-		this.id = storageType.getId().longValue();
+		this.setId(storageType.getId().longValue());
 		this.type = storageType.getName();
-		this.defaultTemperature = AppUtility.toString(storageType.getDefaultTempratureInCentigrade());
+		this.defaultTemperature = Utility.toString(storageType.getDefaultTempratureInCentigrade());
 		this.oneDimensionCapacity = storageType.getCapacity().getOneDimensionCapacity().intValue();
 		this.twoDimensionCapacity = storageType.getCapacity().getTwoDimensionCapacity().intValue();
 		this.oneDimensionLabel = storageType.getOneDimensionLabel();
@@ -501,6 +502,13 @@ public class StorageTypeForm extends AbstractActionForm
 	public void setSpecimenOrArrayType(String specimenOrArrayType)
 	{
 		this.specimenOrArrayType = specimenOrArrayType;
+	}
+
+	@Override
+	public void setAddNewObjectIdentifier(String arg0, Long arg1)
+	{
+		// TODO Auto-generated method stub
+		
 	}
 
 }

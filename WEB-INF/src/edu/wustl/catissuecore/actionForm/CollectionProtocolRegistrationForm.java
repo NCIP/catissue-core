@@ -26,7 +26,9 @@ import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
@@ -171,14 +173,15 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm imple
 	 */	
     public void setAllValues(AbstractDomainObject abstractDomain)
     {
+    	String dtePattern =CommonServiceLocator.getInstance().getDatePattern();
     	final CollectionProtocolRegistration registration = (CollectionProtocolRegistration)abstractDomain;
-		this.id = registration.getId().longValue();
-		this.activityStatus = registration.getActivityStatus();
+		this.setId(registration.getId().longValue());
+		this.setActivityStatus(registration.getActivityStatus());
 		this.collectionProtocolID = registration.getCollectionProtocol().getId().longValue();
-		final String firstName = AppUtility.toString(registration.getParticipant().getFirstName());;
-		final String lastName = AppUtility.toString(registration.getParticipant().getLastName());
-		final String birthDate = AppUtility.toString(registration.getParticipant().getBirthDate());
-		final String ssn = AppUtility.toString(registration.getParticipant().getSocialSecurityNumber());
+		final String firstName = Utility.toString(registration.getParticipant().getFirstName());;
+		final String lastName = Utility.toString(registration.getParticipant().getLastName());
+		final String birthDate = Utility.toString(registration.getParticipant().getBirthDate());
+		final String ssn = Utility.toString(registration.getParticipant().getSocialSecurityNumber());
 			
 		if((registration.getParticipant() != null) && (firstName.trim().length()>0 || lastName.trim().length()>0 || birthDate.trim().length()>0 || ssn.trim().length()>0))
 	  	{
@@ -188,8 +191,8 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm imple
 	  		this.participantName = registration.getParticipant().getMessageLabel();
 	  		//checkedButton = true;
 	  	}
-	  	this.participantProtocolID = AppUtility.toString(registration.getProtocolParticipantIdentifier());
-	  	this.registrationDate = AppUtility.parseDateToString(registration.getRegistrationDate(),Variables.dateFormat);
+	  	this.participantProtocolID = Utility.toString(registration.getProtocolParticipantIdentifier());
+	  	this.registrationDate = Utility.parseDateToString(registration.getRegistrationDate(),dtePattern);
        /**
 	  	 * For Consent tracking setting UI attributes
 	  	 */
@@ -198,8 +201,8 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm imple
 	  	{
 	  		this.witnessId=witness.getId();
 	  	}
-	  	this.signedConsentUrl=AppUtility.toString(registration.getSignedConsentDocumentURL());
-	  	this.consentDate=AppUtility.parseDateToString(registration.getConsentSignatureDate(),Variables.dateFormat);
+	  	this.signedConsentUrl=Utility.toString(registration.getSignedConsentDocumentURL());
+	  	this.consentDate=Utility.parseDateToString(registration.getConsentSignatureDate(),dtePattern);
 	  	// Offset changes 27th Dec 2007
 //	  	this.setOffset(registration.getOffset().intValue());
 	  	this.setOffset(0);
@@ -339,7 +342,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm imple
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKey,ApplicationProperties.getValue("collectionprotocolregistration.date")));
 			}
 			//
-			if (!validator.isValidOption(activityStatus))
+			if (!validator.isValidOption(this.getActivityStatus()))
 			{
 			    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocolregistration.activityStatus")));
 			}

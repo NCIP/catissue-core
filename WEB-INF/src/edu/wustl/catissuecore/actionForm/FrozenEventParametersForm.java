@@ -20,8 +20,8 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.domain.FrozenEventParameters;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
-import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
@@ -80,7 +80,7 @@ public class FrozenEventParametersForm extends SpecimenEventParametersForm
 	{
 		super.setAllValues(abstractDomain);
 		FrozenEventParameters frozenEventParametersObject = (FrozenEventParameters)abstractDomain ;
-		this.method = AppUtility.toString(frozenEventParametersObject.getMethod());
+		this.method = Utility.toString(frozenEventParametersObject.getMethod());
 	}
 	
 	/**
@@ -120,6 +120,13 @@ public class FrozenEventParametersForm extends SpecimenEventParametersForm
 //         super.reset();
 //         this.method = null;
      }
+
+	@Override
+	public void setAddNewObjectIdentifier(String arg0, Long arg1)
+	{
+		// TODO Auto-generated method stub
+		
+	}
        
    
 }

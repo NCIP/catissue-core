@@ -24,6 +24,8 @@ import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.util.Utility;
+import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
 
 
@@ -298,6 +300,7 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	 */
 	public void setAllValues(AbstractDomainObject domainObj)
 	{
+		String dtePattern =CommonServiceLocator.getInstance().getDatePattern();
 		final Participant participant =(Participant)domainObj;
 		try
 		{
@@ -305,11 +308,11 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 			this.vitalStatus=participant.getVitalStatus();
 			if(participant.getBirthDate()!=null)
 			{
-				this.birthDate=AppUtility.parseDateToString(participant.getBirthDate(), Variables.dateFormat);
+				this.birthDate= Utility.parseDateToString(participant.getBirthDate(), dtePattern);
 			}
 			if(participant.getDeathDate()!=null)
 			{
-				this.deathDate=AppUtility.parseDateToString(participant.getDeathDate(), Variables.dateFormat);
+				this.deathDate= Utility.parseDateToString(participant.getDeathDate(), dtePattern);
 			}
 			this.ethinicity=participant.getEthnicity();
 			final Collection tempRaceColl=participant.getRaceCollection();
@@ -349,7 +352,7 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	 */
 	public int getFormId()
 	{	int result = Constants.PATHOLOGY_REPORT_REVIEW_FORM_ID; 
-		if(this.submittedFor.equalsIgnoreCase("quarantine"))
+		if(this.getSubmittedFor().equalsIgnoreCase("quarantine"))
 		{
 			result = Constants.QUARANTINE_EVENT_PARAMETER_FORM_ID;
 		}
@@ -430,7 +433,7 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	 */
 	public long getId()
 	{
-		return id;
+		return super.getId();
 	}
 	
 	/** 
@@ -440,7 +443,14 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	 */
 	public void setId(final long id)
 	{
-		this.id = id;
+		super.setId(id);
+	}
+
+	@Override
+	public void setAddNewObjectIdentifier(String arg0, Long arg1)
+	{
+		// TODO Auto-generated method stub
+		
 	}
 
 	

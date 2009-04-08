@@ -742,4 +742,10 @@ public class AliquotForm extends AbstractActionForm implements IPrinterTypeLocat
 	public void setPrinterType(final String printerType) {
 		this.printerType = printerType;
 	}
+
+	@Override
+	public void setAddNewObjectIdentifier(String arg0, Long arg1)
+	{
+		// TODO Auto-generated method stub
+	}
 }

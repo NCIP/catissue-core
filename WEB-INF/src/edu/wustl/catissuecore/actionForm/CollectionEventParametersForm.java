@@ -21,6 +21,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
@@ -116,8 +117,8 @@ public class CollectionEventParametersForm extends SpecimenEventParametersForm
 	{
 		super.setAllValues(abstractDomain);
 		final CollectionEventParameters collectionEventParameterObject = (CollectionEventParameters)abstractDomain ;
-		this.collectionProcedure =  AppUtility.toString(collectionEventParameterObject.getCollectionProcedure()) ;
-		this.container = AppUtility.toString(collectionEventParameterObject.getContainer());
+		this.collectionProcedure =  Utility.toString(collectionEventParameterObject.getCollectionProcedure()) ;
+		this.container = Utility.toString(collectionEventParameterObject.getContainer());
 	}
 	
 	
@@ -159,6 +160,13 @@ public class CollectionEventParametersForm extends SpecimenEventParametersForm
 //        this.collectionProcedure = null;
 //        this.container = null;     	
      }
+
+	@Override
+	public void setAddNewObjectIdentifier(String arg0, Long arg1)
+	{
+		// TODO Auto-generated method stub
+		
+	}
 
 	
 }

@@ -139,4 +139,10 @@ public class LoginForm extends AbstractActionForm
             // TODO Auto-generated method stub
 
         }
+		@Override
+		public void setAddNewObjectIdentifier(String arg0, Long arg1)
+		{
+			// TODO Auto-generated method stub
+			
+		}
 }

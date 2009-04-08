@@ -62,7 +62,7 @@ public class DepartmentForm extends AbstractActionForm
     public void setAllValues(AbstractDomainObject abstractDomain)
     {
         Department department = (Department)abstractDomain;
-        this.id = department.getId().longValue();
+        this.setId(department.getId().longValue());
         this.name = department.getName();
     }
     
@@ -124,5 +124,12 @@ public class DepartmentForm extends AbstractActionForm
         }
         return errors;
      }
+
+	@Override
+	public void setAddNewObjectIdentifier(String arg0, Long arg1)
+	{
+		// TODO Auto-generated method stub
+		
+	}
     
 }

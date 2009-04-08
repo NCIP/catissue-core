@@ -363,4 +363,11 @@ public class SpecimenArrayAliquotForm extends AbstractActionForm
 	{
 		this.specimenArrayId = specimenArrayId;
 	}
+
+	@Override
+	public void setAddNewObjectIdentifier(String arg0, Long arg1)
+	{
+		// TODO Auto-generated method stub
+		
+	}
 }

@@ -38,16 +38,18 @@ import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Race;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
-import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.dao.exception.DAOException;
+import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.exception.DAOException;
 
 /**
  * ParticipantForm Class is used to encapsulate all the request parameters passed 
@@ -208,11 +210,11 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
 		Participant participant = (Participant) abstractDomain;
-		this.id = participant.getId().longValue();
+		this.setId(participant.getId().longValue());
 		this.lastName = Utility.toString(participant.getLastName());
 		this.firstName = Utility.toString(participant.getFirstName());
 		this.middleName = Utility.toString(participant.getMiddleName());
-		this.birthDate = Utility.parseDateToString(participant.getBirthDate(), Variables.dateFormat);
+		this.birthDate = Utility.parseDateToString(participant.getBirthDate(), CommonServiceLocator.getInstance().getDatePattern());
 		this.gender = participant.getGender();
 		this.genotype = participant.getSexGenotype();
 		setSSN(participant.getSocialSecurityNumber());
@@ -237,9 +239,9 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 		}
 
 		//        this.race = participant.getRace();
-		this.activityStatus = participant.getActivityStatus();
+		this.setActivityStatus(participant.getActivityStatus());
 		this.ethnicity = participant.getEthnicity();
-		this.deathDate = Utility.parseDateToString(participant.getDeathDate(), Variables.dateFormat);;
+		this.deathDate = Utility.parseDateToString(participant.getDeathDate(), CommonServiceLocator.getInstance().getDatePattern());;
 		this.vitalStatus = participant.getVitalStatus();
 
 		//Populating the map with the participant medical identifiers data 
@@ -255,9 +257,9 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 			{
 				ParticipantMedicalIdentifier participantMedicalIdentifier = (ParticipantMedicalIdentifier) it.next();
 
-				String key1 = Utility.getParticipantMedicalIdentifierKeyFor(i, Constants.PARTICIPANT_MEDICAL_IDENTIFIER_SITE_ID); // "ParticipantMedicalIdentifier:" + i +"_Site_id";
-				String key2 = Utility.getParticipantMedicalIdentifierKeyFor(i, Constants.PARTICIPANT_MEDICAL_IDENTIFIER_MEDICAL_NUMBER); // "ParticipantMedicalIdentifier:" + i +"_medicalRecordNumber";
-				String key3 = Utility.getParticipantMedicalIdentifierKeyFor(i, Constants.PARTICIPANT_MEDICAL_IDENTIFIER_ID); // "ParticipantMedicalIdentifier:" + i +"_id";
+				String key1 = AppUtility.getParticipantMedicalIdentifierKeyFor(i, Constants.PARTICIPANT_MEDICAL_IDENTIFIER_SITE_ID); // "ParticipantMedicalIdentifier:" + i +"_Site_id";
+				String key2 = AppUtility.getParticipantMedicalIdentifierKeyFor(i, Constants.PARTICIPANT_MEDICAL_IDENTIFIER_MEDICAL_NUMBER); // "ParticipantMedicalIdentifier:" + i +"_medicalRecordNumber";
+				String key3 = AppUtility.getParticipantMedicalIdentifierKeyFor(i, Constants.PARTICIPANT_MEDICAL_IDENTIFIER_ID); // "ParticipantMedicalIdentifier:" + i +"_id";
 
 				Site site = participantMedicalIdentifier.getSite();
 
@@ -318,7 +320,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 						collectionProtocolRegistrationValues.put(isConsentAvailable, Constants.PARTICIPANT_CONSENT_ENTER_RESPONSE);
 					}
 
-					String date = Utility.parseDateToString(collectionProtocolRegistration.getRegistrationDate(), Variables.dateFormat);
+					String date = Utility.parseDateToString(collectionProtocolRegistration.getRegistrationDate(), CommonServiceLocator.getInstance().getDatePattern());
 
 					collectionProtocolRegistrationValues.put(collectionProtocolId, Utility.toString(collectionProtocolRegistration
 							.getCollectionProtocol().getId()));
@@ -363,7 +365,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 				witnessId = consentWitness.getId();
 			}
 
-			String consentSignatureDate = Utility.parseDateToString(collectionProtocolRegistration.getConsentSignatureDate(), Variables.dateFormat);
+			String consentSignatureDate = Utility.parseDateToString(collectionProtocolRegistration.getConsentSignatureDate(), CommonServiceLocator.getInstance().getDatePattern());
 			Collection consentResponseCollection = collectionProtocolRegistration.getConsentTierResponseCollection();
 			Collection consentResponse;
 
@@ -383,7 +385,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 			String consentResponseKey = Constants.CONSENT_RESPONSE_KEY + collectionProtocolID;
 			if (consentResponseHashTable.containsKey(consentResponseKey))
 			{
-				throw new DAOException(ApplicationProperties.getValue("errors.participant.duplicate.collectionProtocol"));
+				throw AppUtility.getApplicationException(null, "errors.participant.duplicate.collectionProtocol", "ParticipantForm.java");
 			}
 			consentResponseHashTable.put(consentResponseKey, consentResponseBean);
 			consentResponseBeanCollection.add(consentResponseBean);
@@ -762,9 +764,9 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 				}
 				if (value6.equalsIgnoreCase(Constants.DISABLED))
 				{
-					forwardTo = "blankPage";
-					request.setAttribute(Constants.PAGE_OF, pageOf);
-					request.setAttribute("participantId", new Long(id).toString());
+					this.setForwardTo("blankPage");
+					request.setAttribute(Constants.PAGE_OF, this.getPageOf());
+					request.setAttribute("participantId", new Long(this.getId()).toString());
 					request.setAttribute("cpId", value1);
 				}
 
@@ -1146,6 +1148,13 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 	public void setIsBarcodeEditable(String isBarcodeEditable)
 	{
 		this.isBarcodeEditable = isBarcodeEditable;
+	}
+
+	@Override
+	public void setAddNewObjectIdentifier(String arg0, Long arg1)
+	{
+		// TODO Auto-generated method stub
+		
 	}
 
 }

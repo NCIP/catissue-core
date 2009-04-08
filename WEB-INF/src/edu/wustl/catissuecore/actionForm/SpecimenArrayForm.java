@@ -383,7 +383,7 @@ public class SpecimenArrayForm extends ContainerForm
 		Validator validator = new Validator();
 		try
 		{
-			if (operation.equals(Constants.ADD) || operation.equals(Constants.EDIT))
+			if (this.getOperation().equals(Constants.ADD) || this.getOperation().equals(Constants.EDIT))
 			{
 				if (this.specimenArrayTypeId == -1)
 				{

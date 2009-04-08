@@ -72,5 +72,12 @@ public class ConflictSCGForm extends AbstractActionForm
 		this.newConflictedReport = newConflictedReport;
 	}
 
+	@Override
+	public void setAddNewObjectIdentifier(String arg0, Long arg1)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
 	
 }

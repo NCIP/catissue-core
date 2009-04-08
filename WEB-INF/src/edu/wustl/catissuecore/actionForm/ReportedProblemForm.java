@@ -22,6 +22,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
@@ -105,7 +106,7 @@ public class ReportedProblemForm extends AbstractActionForm
      */
     public ReportedProblemForm()
     {
-    	activityStatus = Constants.ACTIVITY_STATUS_PENDING;
+    	this.setActivityStatus(Status.ACTIVITY_STATUS_PENDING.toString());
     	clear();
     }
 
@@ -222,7 +223,7 @@ public class ReportedProblemForm extends AbstractActionForm
         this.subject = reportedProblem.getSubject();
         this.messageBody = reportedProblem.getMessageBody();
         this.comments = reportedProblem.getComments();
-        this.activityStatus = reportedProblem.getActivityStatus();
+        this.setActivityStatus(reportedProblem.getActivityStatus());
         this.affiliation = reportedProblem.getAffiliation();
         this.nameOfReporter = reportedProblem.getNameOfReporter() ;
     }
@@ -241,9 +242,9 @@ public class ReportedProblemForm extends AbstractActionForm
 
         try
         {
-            if (operation != null)
+            if (this.getOperation() != null)
             {
-                if (operation.equals(Constants.ADD))
+                if (this.getOperation().equals(Constants.ADD))
                 {
                     if (validator.isEmpty(from))
                     {
@@ -302,9 +303,9 @@ public class ReportedProblemForm extends AbstractActionForm
                     
                 }
                 
-                if (operation.equals(Constants.EDIT))
+                if (this.getOperation().equals(Constants.EDIT))
                 {
-                    if (activityStatus.trim().equals(Constants.SELECT_OPTION))
+                    if (this.getActivityStatus().trim().equals(Constants.SELECT_OPTION))
                     {
                         errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
                                 "errors.item.required", ApplicationProperties
@@ -319,5 +320,11 @@ public class ReportedProblemForm extends AbstractActionForm
         }
         return errors;
     }
+	@Override
+	public void setAddNewObjectIdentifier(String arg0, Long arg1)
+	{
+		// TODO Auto-generated method stub
+		
+	}
     
 }

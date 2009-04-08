@@ -37,7 +37,9 @@ import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
@@ -573,18 +575,18 @@ public class SpecimenForm extends AbstractActionForm
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
 		Specimen specimen = (Specimen) abstractDomain;
-		this.id = specimen.getId().longValue();
+		this.setId(specimen.getId().longValue());
 		this.type = specimen.getSpecimenType();
 		this.concentration = "";
 		this.comments = specimen.getComment();
-		this.activityStatus = specimen.getActivityStatus();
+		this.setActivityStatus(specimen.getActivityStatus());
 
 		/**
 		 * Patch ID: 3835_1_30
 		 * See also: 1_1 to 1_5
 		 * Description : set createdOn date from database object
 		 */
-		this.createdDate = AppUtility.parseDateToString(specimen.getCreatedOn(), Variables.dateFormat);
+		this.createdDate = Utility.parseDateToString(specimen.getCreatedOn(), CommonServiceLocator.getInstance().getDatePattern());
 
 		if (specimen.getIsAvailable() != null)
 		{
@@ -674,7 +676,7 @@ public class SpecimenForm extends AbstractActionForm
 		else if (specimen instanceof MolecularSpecimen)
 		{
 			this.className = Constants.MOLECULAR;
-			this.concentration = AppUtility.toString(((MolecularSpecimen) specimen).getConcentrationInMicrogramPerMicroliter());
+			this.concentration = Utility.toString(((MolecularSpecimen) specimen).getConcentrationInMicrogramPerMicroliter());
 		}
 		else if (specimen instanceof TissueSpecimen)
 		{
@@ -768,7 +770,7 @@ public class SpecimenForm extends AbstractActionForm
 
 		try
 		{
-			if (operation.equals(Constants.ADD) || operation.equals(Constants.EDIT))
+			if (this.getOperation().equals(Constants.ADD) || this.getOperation().equals(Constants.EDIT))
 			{
 				/**
 				     * Patch ID: 3835_1_31
@@ -854,7 +856,7 @@ public class SpecimenForm extends AbstractActionForm
 				{
 					quantity = "0";
 				}
-				if (this instanceof NewSpecimenForm && operation.equalsIgnoreCase(Constants.EDIT))
+				if (this instanceof NewSpecimenForm && this.getOperation().equalsIgnoreCase(Constants.EDIT))
 				{
 					if (!validator.isEmpty(availableQuantity))
 					{
@@ -1191,5 +1193,12 @@ public class SpecimenForm extends AbstractActionForm
 	public void setIsBarcodeEditable(String isBarcodeEditable)
 	{
 		this.isBarcodeEditable = isBarcodeEditable;
+	}
+
+	@Override
+	public void setAddNewObjectIdentifier(String arg0, Long arg1)
+	{
+		// TODO Auto-generated method stub
+		
 	}
 }

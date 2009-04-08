@@ -19,8 +19,8 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.domain.TissueSpecimenReviewEventParameters;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
-import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
@@ -192,11 +192,11 @@ public class TissueSpecimenReviewEventParametersForm extends SpecimenEventParame
 		super.setAllValues(abstractDomain);
 		TissueSpecimenReviewEventParameters tissueSpecimenReviewParametersObject = (TissueSpecimenReviewEventParameters)abstractDomain ;
 		
-		this.neoplasticCellularityPercentage = AppUtility.toString(tissueSpecimenReviewParametersObject.getNeoplasticCellularityPercentage());
-		this.necrosisPercentage = AppUtility.toString(tissueSpecimenReviewParametersObject.getNecrosisPercentage());
-		this.lymphocyticPercentage =AppUtility.toString(tissueSpecimenReviewParametersObject.getLymphocyticPercentage());
-		this.totalCellularityPercentage =AppUtility.toString(tissueSpecimenReviewParametersObject.getTotalCellularityPercentage());
-		this.histologicalQuality = AppUtility.toString(tissueSpecimenReviewParametersObject.getHistologicalQuality());
+		this.neoplasticCellularityPercentage = Utility.toString(tissueSpecimenReviewParametersObject.getNeoplasticCellularityPercentage());
+		this.necrosisPercentage = Utility.toString(tissueSpecimenReviewParametersObject.getNecrosisPercentage());
+		this.lymphocyticPercentage =Utility.toString(tissueSpecimenReviewParametersObject.getLymphocyticPercentage());
+		this.totalCellularityPercentage =Utility.toString(tissueSpecimenReviewParametersObject.getTotalCellularityPercentage());
+		this.histologicalQuality = Utility.toString(tissueSpecimenReviewParametersObject.getHistologicalQuality());
 		logger.debug("this.neoplasticCellularityPercentage : "+ this.neoplasticCellularityPercentage);
 		logger.debug("this.necrosisPercentage : " + this.necrosisPercentage);
 		logger.debug("this.lymphocyticPercentage : " + this.lymphocyticPercentage);
@@ -273,6 +273,13 @@ public class TissueSpecimenReviewEventParametersForm extends SpecimenEventParame
 //        this.histologicalQuality = null;
 
 	 }
+
+	@Override
+	public void setAddNewObjectIdentifier(String arg0, Long arg1)
+	{
+		// TODO Auto-generated method stub
+		
+	}
 
     
 	

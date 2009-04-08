@@ -13,6 +13,7 @@ package edu.wustl.catissuecore.actionForm;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -44,13 +45,17 @@ import edu.wustl.catissuecore.util.OrderingSystemUtil;
 import edu.wustl.catissuecore.util.SpecimenComparator;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
-import edu.wustl.common.dao.DAO;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.MapDataParser;
-import edu.wustl.common.util.dbManager.HibernateMetaData;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.DAO;
+import edu.wustl.dao.exception.DAOException;
+import edu.wustl.dao.util.HibernateMetaData;
 
 public class RequestDetailsForm extends AbstractActionForm
 {
@@ -1059,6 +1064,13 @@ public class RequestDetailsForm extends AbstractActionForm
 	{
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void setAddNewObjectIdentifier(String arg0, Long arg1)
+	{
+		// TODO Auto-generated method stub
+		
 	}
 
 }

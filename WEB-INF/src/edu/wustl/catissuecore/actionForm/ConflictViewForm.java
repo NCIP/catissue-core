@@ -62,5 +62,12 @@ public class ConflictViewForm extends AbstractActionForm
 	{
 		this.selectedFilter = selectedFilter;
 	}
+
+	@Override
+	public void setAddNewObjectIdentifier(String arg0, Long arg1)
+	{
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

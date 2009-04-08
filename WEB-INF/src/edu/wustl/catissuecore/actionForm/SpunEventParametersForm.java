@@ -19,8 +19,8 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.SpunEventParameters;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
@@ -110,8 +110,8 @@ public class SpunEventParametersForm extends SpecimenEventParametersForm
        {
 			super.setAllValues(abstractDomain);
 			SpunEventParameters spunEventParametersObject = (SpunEventParameters)abstractDomain ;
-			this.gravityForce = AppUtility.toString(spunEventParametersObject.getGravityForce());
-			this.durationInMinutes = AppUtility.toString(spunEventParametersObject.getDurationInMinutes()); 
+			this.gravityForce = Utility.toString(spunEventParametersObject.getGravityForce());
+			this.durationInMinutes = Utility.toString(spunEventParametersObject.getDurationInMinutes()); 
 	    }
 	    catch(Exception excp)
 	    {
@@ -196,5 +196,12 @@ public class SpunEventParametersForm extends SpecimenEventParametersForm
 	public void setGravityForce(String gravityForce)
 	{
 		this.gravityForce = gravityForce;
+	}
+
+	@Override
+	public void setAddNewObjectIdentifier(String arg0, Long arg1)
+	{
+		// TODO Auto-generated method stub
+		
 	}
 }

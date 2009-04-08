@@ -115,7 +115,7 @@ public class SiteForm extends AbstractActionForm
     {
         Site site = (Site)abstractDomain;
         
-        this.id = site.getId().longValue();
+        this.setId(site.getId().longValue());
         this.name 			= site.getName();
         this.type			= site.getType();
         this.emailAddress 	= site.getEmailAddress();
@@ -126,7 +126,7 @@ public class SiteForm extends AbstractActionForm
         this.zipCode 		= site.getAddress().getZipCode();
         this.phoneNumber 	= site.getAddress().getPhoneNumber();
         this.faxNumber 		= site.getAddress().getFaxNumber();
-        this.activityStatus = site.getActivityStatus();
+        this.setActivityStatus(site.getActivityStatus());
         this.coordinatorId	= site.getCoordinator().getId().longValue();
     }
     
@@ -472,7 +472,7 @@ public class SiteForm extends AbstractActionForm
 //                         new ActionError("errors.phoneNumber.format",
 //                                 ApplicationProperties.getValue("site.faxNumber")));
 //             }
-             if(operation.equals(Constants.EDIT) && !validator.isValidOption(activityStatus))
+             if(this.getOperation().equals(Constants.EDIT) && !validator.isValidOption(this.getActivityStatus()))
              {
              	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("site.activityStatus")));
              }

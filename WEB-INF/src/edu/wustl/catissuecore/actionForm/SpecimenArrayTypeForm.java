@@ -187,7 +187,7 @@ public class SpecimenArrayTypeForm extends AbstractActionForm
 		if (domainObject instanceof SpecimenArrayType) 
 		{
 			SpecimenArrayType arrayType = (SpecimenArrayType) domainObject;
-	        this.id = arrayType.getId().longValue();
+	        this.setId(arrayType.getId().longValue());
 	        this.name = arrayType.getName();
 	        this.specimenClass = arrayType.getSpecimenClass();
 	        this.oneDimensionCapacity = arrayType.getCapacity().getOneDimensionCapacity().intValue();
@@ -228,8 +228,8 @@ public class SpecimenArrayTypeForm extends AbstractActionForm
         ActionErrors errors = new ActionErrors();
         Validator validator = new Validator();
         try {
-            if (operation.equals(Constants.ADD)
-                    || operation.equals(Constants.EDIT))
+            if (this.getOperation().equals(Constants.ADD)
+                    || this.getOperation().equals(Constants.EDIT))
             {
 //            	validate name of array type
                 if (validator.isEmpty(name))
@@ -289,6 +289,13 @@ public class SpecimenArrayTypeForm extends AbstractActionForm
 			logger.error(e.getMessage());
 		}
 		return errors;
+	}
+
+	@Override
+	public void setAddNewObjectIdentifier(String arg0, Long arg1)
+	{
+		// TODO Auto-generated method stub
+		
 	}
 
 }

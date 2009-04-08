@@ -29,14 +29,16 @@ import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.EventsUtil;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.AppUtility;
-import edu.wustl.catissuecore.util.global.Variables;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.util.dbManager.HibernateMetaData;
+import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.util.HibernateMetaData;
+
 
 /**
  * NewSpecimenForm Class is used to encapsulate all the request parameters passed 
@@ -446,16 +448,16 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData,IPr
     	
     	if(specimenCollectionGroup!=null)
     	{
-    		this.specimenCollectionGroupId = AppUtility.toString(specimenCollectionGroup.getId());
+    		this.specimenCollectionGroupId = Utility.toString(specimenCollectionGroup.getId());
     		/**For Migration Start**/
-    		this.specimenCollectionGroupName= AppUtility.toString(specimenCollectionGroup.getName());
+    		this.specimenCollectionGroupName= Utility.toString(specimenCollectionGroup.getName());
     		/**For Migration End**/
     	}
     	if(specimen.getParentSpecimen() != null)
     	{
     		logger.debug("ParentSpecimen : -- "+specimen.getParentSpecimen());
     		this.parentSpecimenId = String.valueOf(specimen.getParentSpecimen().getId());
-    		this.parentSpecimenName = AppUtility.toString(((Specimen) specimen.getParentSpecimen()).getLabel());  
+    		this.parentSpecimenName = Utility.toString(((Specimen) specimen.getParentSpecimen()).getLabel());  
     		this.parentPresent = true;
     	}
     	
@@ -513,11 +515,11 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData,IPr
 		}
 		else
 		{
-			this.witnessName=AppUtility.toString(witness.getFirstName());
+			this.witnessName=Utility.toString(witness.getFirstName());
 		}
-		this.signedConsentUrl=AppUtility.toString(specimenCollectionGroup.getCollectionProtocolRegistration().getSignedConsentDocumentURL());
-		this.consentDate=AppUtility.parseDateToString(specimenCollectionGroup.getCollectionProtocolRegistration().getConsentSignatureDate(), Variables.dateFormat);
-		this.collectionStatus = AppUtility.toString(specimen.getCollectionStatus());
+		this.signedConsentUrl=Utility.toString(specimenCollectionGroup.getCollectionProtocolRegistration().getSignedConsentDocumentURL());
+		this.consentDate=Utility.parseDateToString(specimenCollectionGroup.getCollectionProtocolRegistration().getConsentSignatureDate(), CommonServiceLocator.getInstance().getDatePattern());
+		this.collectionStatus = Utility.toString(specimen.getCollectionStatus());
 	}
 	 /**
 	 * @return biohazard Type Returns the biohazardType.
@@ -563,9 +565,9 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData,IPr
 
          try
          {
-             if (operation.equals(Constants.ADD) || operation.equals(Constants.EDIT))
+             if (this.getOperation().equals(Constants.ADD) || this.getOperation().equals(Constants.EDIT))
              {
-            	 if (operation.equals(Constants.EDIT))
+            	 if (this.getOperation().equals(Constants.EDIT))
                  {
 	            	 if(collectionStatus.trim().length() <= 0)
 	            	 {
@@ -603,7 +605,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData,IPr
                 }
              	
              	//Mandar 18-July-06: AutoEvents: 
-             	if(operation.equalsIgnoreCase(Constants.ADD))
+             	if(this.getOperation().equalsIgnoreCase(Constants.ADD))
              	{
 //             		Time validation
         			String collectionTime = this.collectionEventTimeInHours+":"+this.collectionEventTimeInMinutes+":00";
@@ -684,7 +686,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData,IPr
                 	}
                 	index++;
                 }
-                if (operation.equals(Constants.ADD))
+                if (this.getOperation().equals(Constants.ADD))
 				{
 					this.collectionStatus = Constants.COLLECTION_STATUS_COLLECTED;
 				}

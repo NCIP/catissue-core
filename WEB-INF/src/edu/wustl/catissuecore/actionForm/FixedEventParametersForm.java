@@ -19,8 +19,8 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.domain.FixedEventParameters;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
-import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
@@ -105,8 +105,8 @@ public class FixedEventParametersForm extends SpecimenEventParametersForm
         {
 			super.setAllValues(abstractDomain);
 			FixedEventParameters fixedEventParametersObject = (FixedEventParameters)abstractDomain ;
-			this.fixationType = AppUtility.toString(fixedEventParametersObject.getFixationType());
-			this.durationInMinutes = AppUtility.toString(fixedEventParametersObject.getDurationInMinutes());  
+			this.fixationType = Utility.toString(fixedEventParametersObject.getFixationType());
+			this.durationInMinutes = Utility.toString(fixedEventParametersObject.getDurationInMinutes());  
 	    }
 	    catch(Exception excp)
 	    {
@@ -160,4 +160,11 @@ public class FixedEventParametersForm extends SpecimenEventParametersForm
 //         this.fixationType = null;
 //         this.durationInMinutes = 0;
      }
+
+	@Override
+	public void setAddNewObjectIdentifier(String arg0, Long arg1)
+	{
+		// TODO Auto-generated method stub
+		
+	}
 }

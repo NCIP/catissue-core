@@ -18,8 +18,8 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.CellSpecimenReviewParameters;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
@@ -105,8 +105,8 @@ public class CellSpecimenReviewParametersForm extends SpecimenEventParametersFor
 	{
 		super.setAllValues(abstractDomain);
 		final CellSpecimenReviewParameters cellSpecimenReviewParametersObject = (CellSpecimenReviewParameters)abstractDomain ;
-		this.neoplasticCellularityPercentage =AppUtility.toString(cellSpecimenReviewParametersObject.getNeoplasticCellularityPercentage()) ;
-		this.viableCellPercentage = AppUtility.toString(cellSpecimenReviewParametersObject.getViableCellPercentage()) ; 
+		this.neoplasticCellularityPercentage =Utility.toString(cellSpecimenReviewParametersObject.getNeoplasticCellularityPercentage()) ;
+		this.viableCellPercentage = Utility.toString(cellSpecimenReviewParametersObject.getViableCellPercentage()) ; 
 	}
 	
 	/**
@@ -149,4 +149,11 @@ public class CellSpecimenReviewParametersForm extends SpecimenEventParametersFor
 //     	this.neoplasticCellularityPercentage = null;
 //     	this.viableCellPercentage = null;
  	}
+
+	@Override
+	public void setAddNewObjectIdentifier(String arg0, Long arg1)
+	{
+		// TODO Auto-generated method stub
+		
+	}
 }

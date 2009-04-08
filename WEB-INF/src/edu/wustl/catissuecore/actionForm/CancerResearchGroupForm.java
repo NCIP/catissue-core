@@ -58,7 +58,7 @@ public class CancerResearchGroupForm extends AbstractActionForm
     public void setAllValues(AbstractDomainObject abstractDomain)
     {
         CancerResearchGroup cancerResearchGroup = (CancerResearchGroup)abstractDomain;
-        this.id = cancerResearchGroup.getId().longValue();
+        setId(cancerResearchGroup.getId().longValue());
         this.name = cancerResearchGroup.getName();
     }
 
@@ -129,4 +129,11 @@ public class CancerResearchGroupForm extends AbstractActionForm
         }
         return errors;
      }
+
+	@Override
+	public void setAddNewObjectIdentifier(String arg0, Long arg1)
+	{
+		// TODO Auto-generated method stub
+		
+	}
 }

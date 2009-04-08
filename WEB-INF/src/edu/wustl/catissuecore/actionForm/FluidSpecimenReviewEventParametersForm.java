@@ -18,8 +18,8 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.FluidSpecimenReviewEventParameters;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
@@ -82,7 +82,7 @@ public class FluidSpecimenReviewEventParametersForm extends SpecimenEventParamet
 	{
 		super.setAllValues(abstractDomain);
 		FluidSpecimenReviewEventParameters fluidSpecimenReviewEventParametersObject = (FluidSpecimenReviewEventParameters)abstractDomain ;
-		this.cellCount = AppUtility.toString(fluidSpecimenReviewEventParametersObject.getCellCount()) ; 
+		this.cellCount = Utility.toString(fluidSpecimenReviewEventParametersObject.getCellCount()) ; 
 		logger.debug("############FormObject################## : ");
 		logger.debug(this.cellCount);
 		logger.debug("############################## : ");
@@ -124,6 +124,13 @@ public class FluidSpecimenReviewEventParametersForm extends SpecimenEventParamet
 //         super.reset();
        //  this.cellCount = null;
       }
+
+	@Override
+	public void setAddNewObjectIdentifier(String arg0, Long arg1)
+	{
+		// TODO Auto-generated method stub
+		
+	}
        
 
 	

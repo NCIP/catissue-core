@@ -13,10 +13,10 @@ import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyRepo
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.SurgicalPathologyReport;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.AppUtility;
-import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.util.Utility;
+import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -513,6 +513,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	 */
 	public void setParticipant(final Participant participant)
 	{
+		String datePattern = CommonServiceLocator.getInstance().getDatePattern();
 		try
 		{
 			this.participantIdForReport=participant.getId();
@@ -520,11 +521,11 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 			this.vitalStatus=participant.getVitalStatus();
 			if(participant.getBirthDate()!=null)
 			{
-				this.birthDate=AppUtility.parseDateToString(participant.getBirthDate(), Variables.dateFormat);
+				this.birthDate=Utility.parseDateToString(participant.getBirthDate(), datePattern);
 			}
 			if(participant.getDeathDate()!=null)
 			{
-				this.deathDate=AppUtility.parseDateToString(participant.getDeathDate(), Variables.dateFormat);
+				this.deathDate=Utility.parseDateToString(participant.getDeathDate(), datePattern);
 			}
 			this.ethinicity=participant.getEthnicity();
 			Collection tempRaceColl=participant.getRaceCollection();
@@ -562,7 +563,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	 */
 	public int getFormId()
 	{	
-		if(this.submittedFor.equalsIgnoreCase(Constants.QUARANTINE))
+		if(this.getSubmittedFor().equalsIgnoreCase(Constants.QUARANTINE))
 		{
 			return Constants.QUARANTINE_EVENT_PARAMETER_FORM_ID;
 		}
@@ -879,5 +880,12 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	public void setParticipantIdForReport(long participantIdForReport) 
 	{
 		this.participantIdForReport = participantIdForReport;
+	}
+
+	@Override
+	public void setAddNewObjectIdentifier(String arg0, Long arg1)
+	{
+		// TODO Auto-generated method stub
+		
 	}
 }

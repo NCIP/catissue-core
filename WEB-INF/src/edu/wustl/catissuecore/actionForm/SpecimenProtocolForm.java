@@ -18,12 +18,13 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.DistributionSpecimenRequirement;
 import edu.wustl.catissuecore.domain.SpecimenProtocol;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.AppUtility;
-import edu.wustl.catissuecore.util.global.Variables;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
@@ -271,7 +272,7 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 	{
 	    SpecimenProtocol protocol = (SpecimenProtocol)abstractDomain;
 		
-		this.id = protocol.getId().longValue();
+		this.setId(protocol.getId().longValue());
 		
 		if(protocol.getPrincipalInvestigator() != null && protocol.getPrincipalInvestigator().getId() != null)
 		{
@@ -283,15 +284,15 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 			this.principalInvestigatorId = -1;
 		}
 		
-		this.title = AppUtility.toString(protocol.getTitle());
-		this.shortTitle = AppUtility.toString(protocol.getShortTitle());
-		this.startDate = AppUtility.parseDateToString(protocol.getStartDate(),Variables.dateFormat);
-		this.endDate = AppUtility.parseDateToString(protocol.getEndDate(),Variables.dateFormat);
-		this.irbID = AppUtility.toString(protocol.getIrbIdentifier());
-		this.enrollment = AppUtility.toString(protocol.getEnrollment());
-		this.descriptionURL = AppUtility.toString(protocol.getDescriptionURL());
+		this.title = Utility.toString(protocol.getTitle());
+		this.shortTitle = Utility.toString(protocol.getShortTitle());
+		this.startDate = Utility.parseDateToString(protocol.getStartDate(),CommonServiceLocator.getInstance().getDatePattern());
+		this.endDate = Utility.parseDateToString(protocol.getEndDate(),CommonServiceLocator.getInstance().getDatePattern());
+		this.irbID = Utility.toString(protocol.getIrbIdentifier());
+		this.enrollment = Utility.toString(protocol.getEnrollment());
+		this.descriptionURL = Utility.toString(protocol.getDescriptionURL());
 		
-		this.activityStatus = AppUtility.toString(protocol.getActivityStatus());
+		this.setActivityStatus(Utility.toString(protocol.getActivityStatus()));
 	}
 	
 	/**
@@ -324,7 +325,7 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 		Validator validator = new Validator();
 		try
 		{
-			if (operation!=null && (operation.equals(Constants.ADD) || operation.equals(Constants.EDIT) || operation.equals("AssignPrivilegePage")))
+			if (this.getOperation()!=null && (this.getOperation().equals(Constants.ADD) || this.getOperation().equals(Constants.EDIT) || this.getOperation().equals("AssignPrivilegePage")))
             {
                 if(this.principalInvestigatorId == -1)
 				{
@@ -445,7 +446,7 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 			}
 		}
 		
-		values.put(key[6] , AppUtility.toString(requirement.getId()));
+		values.put(key[6] , Utility.toString(requirement.getId()));
 		
 		if(requirement.getSpecimenClass().equals(Constants.TISSUE) && requirement.getQuantity() != null)
 		{
@@ -455,7 +456,7 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 					||tissueType.equalsIgnoreCase(Constants.FROZEN_TISSUE_BLOCK)  
 			        ||tissueType.equalsIgnoreCase(Constants.FIXED_TISSUE_SLIDE))
 			{
-				values.put(key[5] , AppUtility.toString(new Integer(requirement.getQuantity().intValue())));
+				values.put(key[5] , Utility.toString(new Integer(requirement.getQuantity().intValue())));
 			}
 		}
 	}

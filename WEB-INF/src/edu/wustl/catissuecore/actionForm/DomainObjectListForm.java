@@ -147,9 +147,9 @@ public class DomainObjectListForm extends AbstractActionForm
                   
          try
          {
-             if (values.size() == 0 && (!operation.equals(Constants.USER_DETAILS)))
+             if (values.size() == 0 && (!this.getOperation().equals(Constants.USER_DETAILS)))
              {
-                 errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.approveUser.required",operation));
+                 errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.approveUser.required",this.getOperation()));
              }
          }
          catch(Exception excp)
@@ -158,4 +158,11 @@ public class DomainObjectListForm extends AbstractActionForm
          }
          return errors;
       }
+
+	@Override
+	public void setAddNewObjectIdentifier(String arg0, Long arg1)
+	{
+		// TODO Auto-generated method stub
+		
+	}
 }

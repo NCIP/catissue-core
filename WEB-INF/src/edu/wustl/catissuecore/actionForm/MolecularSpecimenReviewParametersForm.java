@@ -20,6 +20,7 @@ import edu.wustl.catissuecore.domain.MolecularSpecimenReviewParameters;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
@@ -240,13 +241,13 @@ public class MolecularSpecimenReviewParametersForm extends SpecimenEventParamete
 	{
 		super.setAllValues(abstractDomain);
 		MolecularSpecimenReviewParameters molecularSpecimenReviewParametersObject = (MolecularSpecimenReviewParameters)abstractDomain ;
-		this.gelImageURL = AppUtility.toString(molecularSpecimenReviewParametersObject.getGelImageURL()) ;
-		this.qualityIndex = AppUtility.toString(molecularSpecimenReviewParametersObject.getQualityIndex());
-		this.laneNumber = AppUtility.toString(molecularSpecimenReviewParametersObject.getLaneNumber()) ;
-		this.gelNumber = AppUtility.toString(molecularSpecimenReviewParametersObject.getGelNumber()) ;
-		this.absorbanceAt260 = AppUtility.toString(molecularSpecimenReviewParametersObject.getAbsorbanceAt260());
-		this.absorbanceAt280 = AppUtility.toString(molecularSpecimenReviewParametersObject.getAbsorbanceAt280());  
-		this.ratio28STo18S = AppUtility.toString(molecularSpecimenReviewParametersObject.getRatio28STo18S()) ; 
+		this.gelImageURL = Utility.toString(molecularSpecimenReviewParametersObject.getGelImageURL()) ;
+		this.qualityIndex = Utility.toString(molecularSpecimenReviewParametersObject.getQualityIndex());
+		this.laneNumber = Utility.toString(molecularSpecimenReviewParametersObject.getLaneNumber()) ;
+		this.gelNumber = Utility.toString(molecularSpecimenReviewParametersObject.getGelNumber()) ;
+		this.absorbanceAt260 = Utility.toString(molecularSpecimenReviewParametersObject.getAbsorbanceAt260());
+		this.absorbanceAt280 = Utility.toString(molecularSpecimenReviewParametersObject.getAbsorbanceAt280());  
+		this.ratio28STo18S = Utility.toString(molecularSpecimenReviewParametersObject.getRatio28STo18S()) ; 
 		if(this.ratio28STo18S.trim().length()>0)
 		{
 			this.isRNA = "true"; 
@@ -368,5 +369,12 @@ public class MolecularSpecimenReviewParametersForm extends SpecimenEventParamete
 
 	public void setCheckRNA(String checkRNA) {
 		this.checkRNA = checkRNA;
+	}
+
+	@Override
+	public void setAddNewObjectIdentifier(String arg0, Long arg1)
+	{
+		// TODO Auto-generated method stub
+		
 	}
 }

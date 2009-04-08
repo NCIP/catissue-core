@@ -284,7 +284,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	 */
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
-		logger.debug("OPERATION : ----- : " + operation);
+		logger.debug("OPERATION : ----- : " + this.getOperation());
 		ActionErrors errors = super.validate(mapping, request);
 //		Validator validator = new Validator();
 		try

@@ -67,7 +67,7 @@ public class BiohazardForm extends AbstractActionForm
     public void setAllValues(AbstractDomainObject abstractDomain)
     {
         Biohazard hazard=(Biohazard)abstractDomain;
-        this.id = hazard.getId().longValue();
+        setId(hazard.getId().longValue());
         this.name = hazard.getName();
         this.type = hazard.getType();
         this.comments = hazard.getComment();
@@ -223,4 +223,11 @@ public class BiohazardForm extends AbstractActionForm
         }
         return errors;
      }
+
+	@Override
+	public void setAddNewObjectIdentifier(String arg0, Long arg1)
+	{
+		// TODO Auto-generated method stub
+		
+	}
 }

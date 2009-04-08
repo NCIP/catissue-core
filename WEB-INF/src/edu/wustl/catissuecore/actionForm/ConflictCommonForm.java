@@ -192,6 +192,13 @@ public class ConflictCommonForm extends AbstractActionForm
 		this.reportCollectionDate = reportCollectionDate;
 	}
 
+	@Override
+	public void setAddNewObjectIdentifier(String arg0, Long arg1)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
 	
 	
 

@@ -58,7 +58,7 @@ public class InstitutionForm extends AbstractActionForm
     public void setAllValues(AbstractDomainObject abstractDomain)
     {
         Institution institute = (Institution) abstractDomain;
-        this.id = institute.getId().longValue();
+        this.setId(institute.getId().longValue());
         this.name = institute.getName();
     }
 
@@ -125,5 +125,12 @@ public class InstitutionForm extends AbstractActionForm
         }
         return errors;
      }
+
+	@Override
+	public void setAddNewObjectIdentifier(String arg0, Long arg1)
+	{
+		// TODO Auto-generated method stub
+		
+	}
        
 }

@@ -96,7 +96,7 @@ public class ContainerForm extends AbstractActionForm
 		if (domainObject instanceof Container) 
 		{
 			Container container = (Container) domainObject;
-			this.id = container.getId().longValue();
+			this.setId(container.getId().longValue());
 			this.barcode = container.getBarcode();
 			this.activityStatus = container.getActivityStatus();
 			this.isFull = String.valueOf(container.isFull().booleanValue());
@@ -285,6 +285,13 @@ public class ContainerForm extends AbstractActionForm
 	public void setPositionInStorageContainer(String positionInStorageContainer) 
 	{
 		this.positionInStorageContainer = positionInStorageContainer;
+	}
+
+	@Override
+	public void setAddNewObjectIdentifier(String arg0, Long arg1)
+	{
+		// TODO Auto-generated method stub
+		
 	}
 
 }
