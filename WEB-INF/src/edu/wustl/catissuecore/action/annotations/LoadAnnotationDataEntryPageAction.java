@@ -216,7 +216,7 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 						annotationBizLogic.deleteAnnotationRecords(entityMap.getContainerId(),
 								recordList);
 						annotationBizLogic.delete(entityMapRecord,
-								edu.wustl.catissuecore.util.global.Constants.HIBERNATE_DAO);
+								edu.wustl.catissuecore.util.global.0);
 					}
 				}
 			}

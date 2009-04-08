@@ -251,7 +251,7 @@ public class ParticipantAction extends SecureAction
 						participantForm.setCollectionProtocolRegistrationValue(isConsentAvailableKey,Constants.PARTICIPANT_CONSENT_ENTER_RESPONSE);
 					}
 					participantForm.setCollectionProtocolRegistrationValue(collectionProtocolRegistrationActivityStausKey, Constants.ACTIVITY_STATUS_ACTIVE);
-					String collectionProtocolRegistrationDateValue = Utility.parseDateToString(Calendar.getInstance().getTime(), Variables.dateFormat);
+					String collectionProtocolRegistrationDateValue = Utility.parseDateToString(Calendar.getInstance().getTime(), CommonServiceLocator.getInstance().getDatePattern());
 					participantForm.setCollectionProtocolRegistrationValue(collectionProtocolRegistrationDateKey, collectionProtocolRegistrationDateValue);
 					participantForm.setCollectionProtocolRegistrationValueCounter(1);
 				}
@@ -263,7 +263,7 @@ public class ParticipantAction extends SecureAction
 		{
 			String collectionProtocolRegistrationDateKey = "CollectionProtocolRegistration:1_registrationDate";
 			String collectionProtocolRegistrationActivityStausKey = "CollectionProtocolRegistration:1_activityStatus";
-			String collectionProtocolRegistrationDateValue = Utility.parseDateToString(Calendar.getInstance().getTime(), Variables.dateFormat);
+			String collectionProtocolRegistrationDateValue = Utility.parseDateToString(Calendar.getInstance().getTime(), CommonServiceLocator.getInstance().getDatePattern());
 			participantForm.setDefaultCollectionProtocolRegistrationValue(collectionProtocolRegistrationDateKey, collectionProtocolRegistrationDateValue);
 			participantForm.setDefaultCollectionProtocolRegistrationValue(collectionProtocolRegistrationActivityStausKey, Constants.ACTIVITY_STATUS_ACTIVE);
 			participantForm.setCollectionProtocolRegistrationValueCounter(1);
@@ -662,7 +662,7 @@ public class ParticipantAction extends SecureAction
 	protected String getObjectId(AbstractActionForm form)
 	{
 		ParticipantForm participantForm = (ParticipantForm)form;
-		DAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+		DAO dao = DAOFactory.getInstance().getDAO(0);
 		
 		if(participantForm.getCpId()!=0L && participantForm.getCpId()!= -1L) 
 		   return Constants.COLLECTION_PROTOCOL_CLASS_NAME +"_"+participantForm.getCpId();

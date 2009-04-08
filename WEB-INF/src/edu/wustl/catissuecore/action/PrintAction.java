@@ -80,7 +80,7 @@ public class PrintAction extends Action
 			if (forwardToPrintMap != null && forwardToPrintMap.size() >0 && forwardToPrintMap.get("specimenCollectionGroupId")!=null)
 			{
 				String scgId = (String) forwardToPrintMap.get("specimenCollectionGroupId");
-				DAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+				DAO dao = DAOFactory.getInstance().getDAO(0);
 				SpecimenCollectionGroup objSCG =null;
 				boolean printStauts  =false;
 				try
@@ -114,7 +114,7 @@ public class PrintAction extends Action
 			if (forwardToPrintMap != null && forwardToPrintMap.size() >0 && forwardToPrintMap.get("specimenId")!=null)
 			{
 				String specimenId = (String) forwardToPrintMap.get("specimenId");
-				DAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+				DAO dao = DAOFactory.getInstance().getDAO(0);
 				boolean printStauts  =false;
 				try
 				{
@@ -182,7 +182,7 @@ public class PrintAction extends Action
 			//added for Storage Container Printing 
 			if(forwardToPrintMap != null &&  forwardToPrintMap.size() >0 && forwardToPrintMap.get("StorageContainerObjID")!= null )
 			{
-				DAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+				DAO dao = DAOFactory.getInstance().getDAO(0);
 				boolean printStauts = false;		    		
 				List similarContainerList = (List)request.getAttribute("similarContainerList");
 				LabelPrinter  labelPrinter= LabelPrinterFactory.getInstance("storagecontainer");
@@ -325,7 +325,7 @@ public class PrintAction extends Action
     private User getUserObject(HttpServletRequest request,SessionDataBean objBean) throws DAOException
     {
     	String strUserId = objBean.getUserId().toString();
-    	DAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+    	DAO dao = DAOFactory.getInstance().getDAO(0);
     	dao.openSession(null);
     	User objUser = (User)dao.retrieve(User.class.getName(), new Long(strUserId));		
     	dao.closeSession();    	

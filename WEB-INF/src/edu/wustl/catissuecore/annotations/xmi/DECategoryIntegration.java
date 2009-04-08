@@ -117,7 +117,7 @@ public class DECategoryIntegration
 						}
 						entityMap.setFormContextCollection(newFormContexts);
 						AnnotationBizLogic annotation = new AnnotationBizLogic();
-						annotation.insert(entityMap, Constants.HIBERNATE_DAO);
+						annotation.insert(entityMap, 0);
 
 					}
 				}

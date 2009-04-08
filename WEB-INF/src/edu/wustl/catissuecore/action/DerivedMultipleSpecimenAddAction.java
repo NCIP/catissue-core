@@ -51,14 +51,14 @@ public class DerivedMultipleSpecimenAddAction extends SecureAction
 	/* (non-Javadoc)
 	 * @see edu.wustl.common.action.SecureAction#getObjectId(edu.wustl.common.actionForm.AbstractActionForm)
 	 */
-	@Override
+	
 	protected String getObjectId(AbstractActionForm form)
 	{ 
 		CreateSpecimenForm createSpecimenForm = (CreateSpecimenForm) form;
 		SpecimenCollectionGroup specimenCollectionGroup = null;
 		if(createSpecimenForm.getParentSpecimenId() != null || createSpecimenForm.getParentSpecimenId() != "")
 		{
-				Specimen specimen = Utility.getSpecimen(createSpecimenForm.getParentSpecimenId());
+				Specimen specimen = AppUtility.getSpecimen(createSpecimenForm.getParentSpecimenId());
 				specimenCollectionGroup = specimen.getSpecimenCollectionGroup();
 				CollectionProtocolRegistration cpr = specimenCollectionGroup.getCollectionProtocolRegistration();
 				if (cpr!= null)

@@ -16,6 +16,7 @@ import edu.wustl.catissuecore.bizlogic.CancerResearchBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.action.CommonAddEditAction;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.exception.DAOException;
 
@@ -38,7 +39,7 @@ public class AddCRGAction extends CommonAddEditAction
 		
 		if((forward != null) && (forward.getName().equals(Constants.FAILURE)))
 		{
-			responseString = Utility.getResponseString(request, responseString);
+			responseString = AppUtility.getResponseString(request, responseString);
 		}
 		else
 		{
@@ -47,10 +48,10 @@ public class AddCRGAction extends CommonAddEditAction
 				crgId = bizlogic.getLatestCRG(crgName);
 				responseString = crgId + Constants.RESPONSE_SEPARATOR + crgName;
 			}
-			catch(DAOException e)
+			catch(BizLogicException e)
 			{
 				Logger.out.error("Exception occurred in retrieving Cancer Research Group");
-			e.printStackTrace();
+				e.printStackTrace();
 			}
 		}
 		

@@ -28,9 +28,10 @@ import edu.wustl.catissuecore.bizlogic.DistributionBizLogic;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.AppUtility;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.dao.exception.DAOException;
 
 
@@ -103,7 +104,7 @@ public class CheckConsents extends BaseAction
 		        {
 		        	bizLogic.getSpecimenId(barcodeLable,barcodeLabelBasedDistribution);
 		        }
-		        catch (DAOException dao)
+		        catch (BizLogicException dao)
 		        {
 		        	ActionErrors errors = new ActionErrors();
 					ActionError error = new ActionError(dao.getMessage());
@@ -121,7 +122,7 @@ public class CheckConsents extends BaseAction
 				" edu.wustl.catissuecore.domain.Specimen as spec " +
 				" where spec.specimenCollectionGroup.id=scg.id and spec.id="+specimenId;
 			
-		        List collectionProtocolList= Utility.executeQuery(colProtHql);
+		        List collectionProtocolList= AppUtility.executeQuery(colProtHql);
 		        CollectionProtocol collectionProtocol =null;
 		        if(collectionProtocolList!=null)
 		        {
@@ -155,7 +156,7 @@ public class CheckConsents extends BaseAction
 	 * @param barcode  Barcode is the Unique number,using barcode this function return specimenCollectionGroup object
 	 * @return specimenCollectionGroup SpecimenCollectionGroup object
 	 */
-    private Specimen getConsentListForSpecimen(String barcodeLabel,int barcodeLabelBasedDistribution) throws DAOException
+    private Specimen getConsentListForSpecimen(String barcodeLabel,int barcodeLabelBasedDistribution) throws BizLogicException
 	{
 		NewSpecimenBizLogic  newSpecimenBizLogic = (NewSpecimenBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
 		String colName=null;

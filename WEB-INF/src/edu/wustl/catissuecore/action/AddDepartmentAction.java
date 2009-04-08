@@ -16,6 +16,7 @@ import edu.wustl.catissuecore.bizlogic.DepartmentBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.action.CommonAddEditAction;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.exception.DAOException;
 
@@ -41,7 +42,7 @@ public class AddDepartmentAction extends CommonAddEditAction
 		ActionForward forward = super.execute(mapping,departmentForm,request,response);
 		if((forward != null) && (forward.getName().equals(Constants.FAILURE)))
 		{
-			responseString = Utility.getResponseString(request, responseString);
+			responseString = AppUtility.getResponseString(request, responseString);
 		}
 		else
 		{
@@ -50,7 +51,7 @@ public class AddDepartmentAction extends CommonAddEditAction
 				departmentId = bizlogic.getLatestDepartment(departmentName);
 				responseString = departmentId + Constants.RESPONSE_SEPARATOR + departmentName;
 			}
-			catch(DAOException e)
+			catch(BizLogicException e)
 			{
 				Logger.out.error("Exception occurred in retrieving Department");
 			e.printStackTrace();

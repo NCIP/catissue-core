@@ -26,11 +26,13 @@ import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.SpecimenArrayContent;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.vo.ArrayDistributionReportEntry;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
+import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.util.Utility;
+import edu.wustl.common.util.global.Status;
 import edu.wustl.dao.exception.DAOException;
 
 /**
@@ -85,7 +87,7 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 		if (distributionId != null)
 			configForm.setDistributionId(distributionId);
 
-		Distribution dist = getDistribution(distributionId, getSessionData(request), Constants.CLASS_LEVEL_SECURE_RETRIEVE);
+		Distribution dist = getDistribution(distributionId, getSessionData(request), edu.wustl.security.global.Constants.CLASS_LEVEL_SECURE_RETRIEVE);
 
 		//Retrieve the distributed items data
 		DistributionReportForm distributionReportForm = getDistributionReportForm(dist);
@@ -158,10 +160,10 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 	 * @param sessionData
 	 * @param arrayEntry
 	 * @param fillerList
-	 * @throws DAOException 
+	 * @throws BizLogicException 
 	 */
 	private void getSpecimenDetails(SpecimenArray array, String[] specimenColumns, SessionDataBean sessionData,
-			ArrayDistributionReportEntry arrayEntry) throws DAOException
+			ArrayDistributionReportEntry arrayEntry) throws BizLogicException
 	{
 		List specimensDetails = new ArrayList();
 		List gridInfo = new ArrayList();
@@ -329,9 +331,9 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 	 * Reviewer: Prafull
 	 * Retrive SpecimenArrayCollection from parent Specimen
 	 * Replaced Iterator itr = dist.getSpecimenArrayCollection().iterator();
-	 * @throws DAOException 
+	 * @throws BizLogicException 
 	 */
-	private Collection getSpecimenArrayCollection(Distribution dist) throws DAOException
+	private Collection getSpecimenArrayCollection(Distribution dist) throws BizLogicException
 	{
 		Collection specimenArrayCollection = new HashSet();
 		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DISTRIBUTION_FORM_ID);

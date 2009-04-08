@@ -39,14 +39,16 @@ import edu.wustl.catissuecore.domain.ConsentTier;
 import edu.wustl.catissuecore.domain.ConsentTierResponse;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.util.ConsentUtil;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.AppUtility;
-import edu.wustl.catissuecore.util.global.Variables;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.AddNewSessionDataBean;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.bizlogic.IBizLogic;
+import edu.wustl.common.util.global.CommonServiceLocator;
+import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.daofactory.DAOConfigFactory;
 
 /**
  * This class initializes the fields in the User Add/Edit webpage.
@@ -136,7 +138,8 @@ public class CollectionProtocolRegistrationAction extends SecureAction
         	cpform.setId(0);
         	if(cpform.getRegistrationDate() == null)
         	{
-        		cpform.setRegistrationDate(AppUtility.parseDateToString(Calendar.getInstance().getTime(), Variables.dateFormat));
+        		cpform.setRegistrationDate(edu.wustl.common.util.Utility.parseDateToString(Calendar.getInstance().getTime(),
+        				CommonServiceLocator.getInstance().getDatePattern()));
         	}
         }
 
@@ -216,12 +219,16 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 		String[] whereColumnCondition;
 		Object[] whereColumnValue;
 		
-		// get Database name and set conditions 
-		if(Variables.databaseName.equals(Constants.MYSQL_DATABASE))
+		// get Database name and set conditions
+		
+		String appName = CommonServiceLocator.getInstance().getAppName();
+		String databaseType = DAOConfigFactory.getInstance().getDAOFactory(appName).getDataBaseType();
+		
+		if(databaseType.equals(Constants.MYSQL_DATABASE))
 		{
 			whereColumnCondition = new String[]{"!=","!=","is not","is not"};
 			whereColumnValue = new String[]{"","",null,null};
-		} else if (Variables.databaseName.equals(Constants.MSSQLSERVER_DATABASE)){
+		} else if (databaseType.equals(Constants.MSSQLSERVER_DATABASE)){
 			// for MsSqlServer DB.
 			whereColumnCondition = new String[]{"!= '' ","!= '' ","is not null","is not null"};
 			whereColumnValue = new String[]{};
@@ -242,7 +249,7 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 		String[] participantsFields2 = {Constants.SYSTEM_IDENTIFIER};
 		String[] whereColumnName2 = {"activityStatus"};
 		String[] whereColumnCondition2 = {"="};
-		String[] whereColumnValue2 = {Constants.ACTIVITY_STATUS_DISABLED};
+		String[] whereColumnValue2 = {Status.ACTIVITY_STATUS_DISABLED.toString()};
 		String joinCondition2 = Constants.AND_JOIN_CONDITION;
 		String separatorBetweenFields2 = ",";
 		

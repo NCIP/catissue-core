@@ -41,16 +41,19 @@ import edu.wustl.catissuecore.domain.DistributionProtocol;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.User;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.AppUtility;
-import edu.wustl.catissuecore.util.global.Variables;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
+import edu.wustl.common.exception.ApplicationException;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.MapDataParser;
-import edu.wustl.dao.exception.DAOException;
+import edu.wustl.common.util.Utility;
+import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.exception.DAOException;
 
 /**
  * This class initializes the fields in the  Distribution Add/Edit webpage.
@@ -143,7 +146,7 @@ public class DistributionAction extends SecureAction
 			Calendar cal = Calendar.getInstance();
 			if(dForm.getDateOfEvent()==null)
 			{
-				dForm.setDateOfEvent(Utility.parseDateToString(cal.getTime(), Variables.dateFormat));
+				dForm.setDateOfEvent(Utility.parseDateToString(cal.getTime(), CommonServiceLocator.getInstance().getDatePattern()));
 			}
 			if(dForm.getTimeInHours()==null)
 			{
@@ -312,7 +315,7 @@ public class DistributionAction extends SecureAction
 	 * @throws DAOException 
 	 * @throws ClassNotFoundException 
 	 */
-	private void showConsents(DistributionForm dForm ,Specimen specimen, HttpServletRequest request, String barcodeLable) throws DAOException, ClassNotFoundException
+	private void showConsents(DistributionForm dForm ,Specimen specimen, HttpServletRequest request, String barcodeLable) throws ApplicationException
 	{
 		
 		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
@@ -326,7 +329,7 @@ public class DistributionAction extends SecureAction
 		" edu.wustl.catissuecore.domain.Specimen as spec " +
 		" where spec.specimenCollectionGroup.id=scg.id and spec.id="+specimenId;
         
-        List collectionProtocolRegistrationList= Utility.executeQuery(colProtHql);
+        List collectionProtocolRegistrationList= AppUtility.executeQuery(colProtHql);
         CollectionProtocolRegistration collectionProtocolRegistration=null;
         if(collectionProtocolRegistrationList!=null)
         {
@@ -403,7 +406,7 @@ public class DistributionAction extends SecureAction
 		}
 		else
 		{
-			getConsentDate=Utility.parseDateToString(cprObject.getConsentSignatureDate(),Variables.dateFormat);
+			getConsentDate=Utility.parseDateToString(cprObject.getConsentSignatureDate(),CommonServiceLocator.getInstance().getDatePattern());
 		}
 		
 		if(cprObject.getSignedConsentDocumentURL()==null)
@@ -478,7 +481,7 @@ public class DistributionAction extends SecureAction
 	 * @param request object of HttpServletRequest
 	 * @throws DAOException DAO exception
 	 */
-	private void setSpecimenCharateristics(DistributionForm dForm, HttpServletRequest request) throws DAOException
+	private void setSpecimenCharateristics(DistributionForm dForm, HttpServletRequest request) throws BizLogicException
 	{
 		//Set specimen characteristics according to the specimen ID changed
 		DistributionBizLogic dao = (DistributionBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.DISTRIBUTION_FORM_ID);
@@ -573,7 +576,7 @@ public class DistributionAction extends SecureAction
 	 * @param barcode  Barcode is the Unique number,using barcode this function return specimenCollectionGroup object
 	 * @return specimenCollectionGroup SpecimenCollectionGroup object
 	 */
-    private Specimen getConsentListForSpecimen(String barcode,int barcodeLabelBasedDistribution) throws DAOException
+    private Specimen getConsentListForSpecimen(String barcode,int barcodeLabelBasedDistribution) throws BizLogicException
 	{
 		NewSpecimenBizLogic  newSpecimenBizLogic = (NewSpecimenBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
 		String colName=null;

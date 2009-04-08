@@ -66,7 +66,7 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 				//Abhishek Mehta : Performance related Changes
 				Collection<AbstractDomainObject> specimenCollection = new LinkedHashSet<AbstractDomainObject>();
 				specimenCollection.addAll(specimenDomainCollection);
-				new NewSpecimenBizLogic().insert(specimenCollection,sessionDataBean, Constants.HIBERNATE_DAO,false);
+				new NewSpecimenBizLogic().insert(specimenCollection,sessionDataBean, 0,false);
 				setLabelBarCodesToSessionData(eventId, request, specimenDomainCollection);
 				
 				updateWithNewStorageLocation(session, sessionDataBean, eventId,
@@ -184,7 +184,7 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 		LinkedHashMap<String,GenericSpecimen> specimenMap = (LinkedHashMap) eventBean.getSpecimenRequirementbeanMap();
 		Collection<GenericSpecimen> specCollection = specimenMap.values();
 		Iterator<GenericSpecimen> iterator = specCollection.iterator();
-		HibernateDAO dao = (HibernateDAO) DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+		HibernateDAO dao = (HibernateDAO) DAOFactory.getInstance().getDAO(0);
 		dao.openSession(sessionDataBean);
 		while (iterator.hasNext())
 		{

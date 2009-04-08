@@ -812,10 +812,10 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 			innerList.add(staticEntityName);
 			entityMapXML.append("<cell>"
 					+ Utility
-							.parseDateToString(entityMapObj.getCreatedDate(), Variables.dateFormat)
+							.parseDateToString(entityMapObj.getCreatedDate(), CommonServiceLocator.getInstance().getDatePattern())
 					+ "</cell>");
 			innerList.add(Utility.parseDateToString(entityMapObj.getCreatedDate(),
-					Variables.dateFormat));
+					CommonServiceLocator.getInstance().getDatePattern()));
 			entityMapXML.append("<cell>" + entityMapObj.getCreatedBy() + "</cell>");
 			String name = entityMapObj.getCreatedBy();
 			if (name == null)

@@ -1242,7 +1242,7 @@ public class AppUtility
 	 * @throws ClassNotFoundException
 	 *             ClassNotFoundException
 	 */
-	public static List executeQuery(String hql) throws DAOException
+	public static List executeQuery(String hql) throws ApplicationException
 	{
 		IDAOFactory daofactory = DAOConfigFactory.getInstance().getDAOFactory(
 				Constants.APPLICATION_NAME);
@@ -1323,7 +1323,7 @@ public class AppUtility
 	 * @throws DAOException
 	 * @throws ClassNotFoundException
 	 */
-	public static boolean isQuarantined(Long reportId) throws DAOException, ClassNotFoundException
+	public static boolean isQuarantined(Long reportId) throws ApplicationException
 	{
 		String hqlString = "select ispr.deIdentifiedSurgicalPathologyReport.id "
 				+ " from edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport as ispr, "

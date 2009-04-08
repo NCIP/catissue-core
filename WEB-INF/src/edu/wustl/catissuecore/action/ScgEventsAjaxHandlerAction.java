@@ -121,7 +121,7 @@ public class ScgEventsAjaxHandlerAction extends BaseAction
 		xmlData.append("</CollectorName>");
 		
 		xmlData.append("<CollectionDate>");
-		xmlData.append(AppUtility.parseDateToString(collectionEventParameters.getTimestamp(),Variables.dateFormat));
+		xmlData.append(AppUtility.parseDateToString(collectionEventParameters.getTimestamp(),CommonServiceLocator.getInstance().getDatePattern()));
 		xmlData.append("</CollectionDate>");
 		
 		Calendar calender = Calendar.getInstance();
@@ -167,7 +167,7 @@ public class ScgEventsAjaxHandlerAction extends BaseAction
 		xmlData.append("</ReceiverName>");
 		
 		xmlData.append("<ReceivedDate>");
-		xmlData.append(AppUtility.parseDateToString(receivedEventParameters.getTimestamp(),Variables.dateFormat));
+		xmlData.append(AppUtility.parseDateToString(receivedEventParameters.getTimestamp(),CommonServiceLocator.getInstance().getDatePattern()));
 		xmlData.append("</ReceivedDate>");
 		
 		Calendar calender = Calendar.getInstance();

@@ -273,7 +273,7 @@ public class UserAction extends SecureAction {
 		Logger.out.debug("pageOf :---------- " + pageOf);
 		
 		// To show Role as Scientist
-		HibernateDAO dao = (HibernateDAO) DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+		HibernateDAO dao = (HibernateDAO) DAOFactory.getInstance().getDAO(0);
 		dao.openSession(sessionDataBean);
 		List<User> userList = dao.retrieve(User.class.getName(), "emailAddress" , userForm.getEmailAddress());
 		if(!userList.isEmpty())

@@ -262,7 +262,7 @@ public class NewSpecimenAction extends SecureAction
 			}
 			else
 			{
-				getConsentDate=Utility.parseDateToString(cprObject.getConsentSignatureDate(), Variables.dateFormat);
+				getConsentDate=Utility.parseDateToString(cprObject.getConsentSignatureDate(), CommonServiceLocator.getInstance().getDatePattern());
 			}
 			
 			if(cprObject.getSignedConsentDocumentURL()==null)
@@ -893,7 +893,7 @@ public class NewSpecimenAction extends SecureAction
 		//Collection Event fields
 		if (specimenForm.getCollectionEventdateOfEvent() == null)
 		{
-			specimenForm.setCollectionEventdateOfEvent(Utility.parseDateToString(cal.getTime(), Variables.dateFormat));
+			specimenForm.setCollectionEventdateOfEvent(Utility.parseDateToString(cal.getTime(), CommonServiceLocator.getInstance().getDatePattern()));
 		}
 		if (specimenForm.getCollectionEventTimeInHours() == null)
 		{
@@ -907,7 +907,7 @@ public class NewSpecimenAction extends SecureAction
 		//ReceivedEvent Fields
 		if (specimenForm.getReceivedEventDateOfEvent() == null)
 		{
-			specimenForm.setReceivedEventDateOfEvent(Utility.parseDateToString(cal.getTime(), Variables.dateFormat));
+			specimenForm.setReceivedEventDateOfEvent(Utility.parseDateToString(cal.getTime(), CommonServiceLocator.getInstance().getDatePattern()));
 		}
 		if (specimenForm.getReceivedEventTimeInHours() == null)
 		{
@@ -1196,7 +1196,7 @@ public class NewSpecimenAction extends SecureAction
 						specimenForm.setCollectionEventUserId(scgCollEventParam.getUser().getId().longValue());		
 						specimenForm.setCollectionEventCollectionProcedure(scgCollEventParam.getCollectionProcedure());	
 						specimenForm.setCollectionEventContainer(scgCollEventParam.getContainer());	
-						specimenForm.setCollectionEventdateOfEvent(Utility.parseDateToString(scgCollEventParam.getTimestamp(),Variables.dateFormat));
+						specimenForm.setCollectionEventdateOfEvent(Utility.parseDateToString(scgCollEventParam.getTimestamp(),CommonServiceLocator.getInstance().getDatePattern()));
 						specimenForm.setCollectionEventTimeInHours(Utility.toString(Integer.toString(calender.get(Calendar.HOUR_OF_DAY))));	
 						specimenForm.setCollectionEventTimeInMinutes(Utility.toString(Integer.toString(calender.get(Calendar.MINUTE))));
 					}
@@ -1207,7 +1207,7 @@ public class NewSpecimenAction extends SecureAction
 						
 						specimenForm.setReceivedEventUserId(scgReceivedEventParam.getUser().getId().longValue());		
 						specimenForm.setReceivedEventReceivedQuality(scgReceivedEventParam.getReceivedQuality());	
-						specimenForm.setReceivedEventDateOfEvent(Utility.parseDateToString(scgReceivedEventParam.getTimestamp(),Variables.dateFormat));
+						specimenForm.setReceivedEventDateOfEvent(Utility.parseDateToString(scgReceivedEventParam.getTimestamp(),CommonServiceLocator.getInstance().getDatePattern()));
 						specimenForm.setReceivedEventTimeInHours(Utility.toString(Integer.toString(calender.get(Calendar.HOUR_OF_DAY))));	
 						specimenForm.setReceivedEventTimeInMinutes(Utility.toString(Integer.toString(calender.get(Calendar.MINUTE))));
 						

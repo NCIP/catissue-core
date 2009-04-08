@@ -37,16 +37,20 @@ import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.AppUtility;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
+import edu.wustl.common.cde.CDEManager;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.MapDataParser;
+import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.common.util.tag.ScriptGenerator;
 import edu.wustl.dao.exception.DAOException;
@@ -67,7 +71,7 @@ public class CreateSpecimenAction extends SecureAction
 	{
 		CreateSpecimenForm createForm = (CreateSpecimenForm) form;
 		
-		List<NameValueBean> storagePositionList =  Utility.getStoragePositionTypeList();
+		List<NameValueBean> storagePositionList =  AppUtility.getStoragePositionTypeList();
 		
 		request.setAttribute("storageList", storagePositionList);
 		//List of keys used in map of ActionForm
@@ -102,7 +106,7 @@ public class CreateSpecimenAction extends SecureAction
           * Description : CreatedOn date by default should be current date.
           */ 
     
-         createForm.setCreatedDate(Utility.parseDateToString(Calendar.getInstance().getTime(), Variables.dateFormat));
+         createForm.setCreatedDate(edu.wustl.common.util.Utility.parseDateToString(Calendar.getInstance().getTime(), CommonServiceLocator.getInstance().getDatePattern()));
                        
          String pageOf = null;
          String tempPageOf = (String)request.getParameter("pageOf"); 
@@ -142,7 +146,7 @@ public class CreateSpecimenAction extends SecureAction
 				if(forwardToHashMap != null && forwardToHashMap.get("parentSpecimenId") != null && forwardToHashMap.get(Constants.SPECIMEN_LABEL) != null)
 				{
 					parentSpecimenID = (Long)forwardToHashMap.get("parentSpecimenId");
-					parentSpecimenLabel = Utility.toString(forwardToHashMap.get(Constants.SPECIMEN_LABEL));
+					parentSpecimenLabel =forwardToHashMap.get(Constants.SPECIMEN_LABEL).toString();
 					request.setAttribute(Constants.PARENT_SPECIMEN_ID, parentSpecimenID);
 					createForm.setParentSpecimenLabel(parentSpecimenLabel);
 					createForm.setLabel("");					
@@ -339,8 +343,8 @@ public class CreateSpecimenAction extends SecureAction
 				Constants.CDE_NAME_BIOHAZARD, null);
 		request.setAttribute(Constants.BIOHAZARD_TYPE_LIST, biohazardList);
 		
-		Map subTypeMap = Utility.getSpecimenTypeMap();	
-		List specimenClassList = Utility.getSpecimenClassList();
+		Map subTypeMap = AppUtility.getSpecimenTypeMap();	
+		List specimenClassList = AppUtility.getSpecimenClassList();
 		request.setAttribute(Constants.SPECIMEN_CLASS_LIST, specimenClassList);
 		// set the map to subtype
 		request.setAttribute(Constants.SPECIMEN_TYPE_MAP, subTypeMap);
@@ -399,17 +403,17 @@ public class CreateSpecimenAction extends SecureAction
 		}
 		setPageData(request, createForm);	
 		request.setAttribute("createdDate", createForm.getCreatedDate());
-		List dataList =(List)request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
+		List dataList =(List)request.getAttribute(edu.wustl.simplequery.global.Constants.SPREADSHEET_DATA_LIST);
 		List columnList = new ArrayList();
 		columnList.addAll(Arrays.asList(Constants.DERIVED_SPECIMEN_COLUMNS));
-		Utility.setGridData( dataList,columnList, request);
+		AppUtility.setGridData( dataList,columnList, request);
 		Integer identifierFieldIndex = new Integer(4);
 		request.setAttribute("identifierFieldIndex", identifierFieldIndex.intValue());
 		return mapping.findForward(Constants.SUCCESS);
 	}
 
 	TreeMap getContainerMap(String specimenId, String className, DefaultBizLogic dao,
-			StorageContainerBizLogic scbizLogic,String exceedingMaxLimit, HttpServletRequest request) throws DAOException,SMException
+			StorageContainerBizLogic scbizLogic,String exceedingMaxLimit, HttpServletRequest request) throws BizLogicException
 	{
 		TreeMap containerMap = new TreeMap();
 
@@ -429,7 +433,7 @@ public class CreateSpecimenAction extends SecureAction
 		return containerMap;
 	}
 	
-	private long getCpId(DefaultBizLogic dao, Long scgId) throws DAOException
+	private long getCpId(DefaultBizLogic dao, Long scgId) throws BizLogicException
 	{
 		long cpId = -1;
 		String []columnName = new String[1];
@@ -455,7 +459,7 @@ public class CreateSpecimenAction extends SecureAction
 	{
 		
 		setConstantValues(request);
-		Utility.setDefaultPrinterTypeLocation(form);
+		AppUtility.setDefaultPrinterTypeLocation(form);
 		String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 		setPageData1(request,  form);
 		setPageData2(request, form, pageOf);
@@ -731,14 +735,14 @@ public class CreateSpecimenAction extends SecureAction
 	/* (non-Javadoc)
 	 * @see edu.wustl.common.action.SecureAction#getObjectId(edu.wustl.common.actionForm.AbstractActionForm)
 	 */
-	@Override
+	
 	protected String getObjectId(AbstractActionForm form)
 	{ 
 		CreateSpecimenForm createSpecimenForm = (CreateSpecimenForm) form;
 		SpecimenCollectionGroup specimenCollectionGroup = null;
 		if(createSpecimenForm.getParentSpecimenId() != null && createSpecimenForm.getParentSpecimenId() != "")
 		{
-				Specimen specimen = Utility.getSpecimen(createSpecimenForm.getParentSpecimenId());
+				Specimen specimen = AppUtility.getSpecimen(createSpecimenForm.getParentSpecimenId());
 				specimenCollectionGroup = specimen.getSpecimenCollectionGroup();
 				CollectionProtocolRegistration cpr = specimenCollectionGroup.getCollectionProtocolRegistration();
 				if (cpr!= null)

@@ -582,7 +582,7 @@ public class FlexInterface
 	 sdb.setUserId(1L);
 	 sdb.setUserName("admin@admin.com");
 
-	 bizLogic.insert(sp, sdb, Constants.HIBERNATE_DAO);
+	 bizLogic.insert(sp, sdb, 0);
 	 message = "SUCCESS";
 	 }
 	 catch (Exception ex)
@@ -1798,7 +1798,7 @@ public class FlexInterface
 
 	private List executeQuery(String hql) throws DAOException, ClassNotFoundException
 	{
-		HibernateDAO dao = (HibernateDAO) DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+		HibernateDAO dao = (HibernateDAO) DAOFactory.getInstance().getDAO(0);
 		dao.openSession(null);
 		List list = dao.executeQuery(hql, null, false, null);
 		dao.closeSession();

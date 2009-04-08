@@ -30,17 +30,20 @@ import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.domain.pathology.SurgicalPathologyReport;
 import edu.wustl.catissuecore.util.SpecimenComparator;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.AppUtility;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.dao.DAOFactory;
-import edu.wustl.common.dao.HibernateDAO;
-import edu.wustl.common.security.PrivilegeCache;
-import edu.wustl.common.security.PrivilegeManager;
-import edu.wustl.common.util.Permissions;
-import edu.wustl.dao.exception.DAOException;
+import edu.wustl.common.exception.ApplicationException;
+import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.Variables;
+import edu.wustl.dao.DAO;
+import edu.wustl.dao.exception.DAOException;
+import edu.wustl.security.exception.SMException;
+import edu.wustl.security.global.Permissions;
+import edu.wustl.security.privilege.PrivilegeCache;
+import edu.wustl.security.privilege.PrivilegeManager;
 
 public class DirectDistributeInitAction extends BaseAction
 {
@@ -120,18 +123,18 @@ public class DirectDistributeInitAction extends BaseAction
 	 * @return
 	 * @throws DAOException
 	 */
-	private User getUser(String userName,Long  userId) throws DAOException
+	private User getUser(String userName,Long  userId) throws ApplicationException
 	{	
-		HibernateDAO dao = (HibernateDAO) DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+		DAO dao = null;
 		try
 		{
-			dao.openSession(null);
-			User user = (User) dao.retrieve(User.class.getName(), userId);
+			dao = AppUtility.openDAOSession();
+			User user = (User) dao.retrieveById(User.class.getName(), userId);
 			return user;
 		}
 		finally
 		{
-			dao.closeSession();
+			AppUtility.closeDAOSession(dao);
 		}
 		
 	}
@@ -184,14 +187,16 @@ public class DirectDistributeInitAction extends BaseAction
 	
 	
 	private boolean isValidToDistributePathoCase(List pathologyReports,PrivilegeCache privilegeCache,
-			SessionDataBean sessionDataBean)
+			SessionDataBean sessionDataBean) throws ApplicationException
 	{
 		boolean isValidToDistribute = true;
 		
 		Iterator pathologyReportsIter = pathologyReports.iterator();
 	
-		while(pathologyReportsIter.hasNext())
-    	{
+		try
+		{
+			while(pathologyReportsIter.hasNext())
+			{
 			SurgicalPathologyReport surgPathReports = (SurgicalPathologyReport)pathologyReportsIter.next();
 			SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup)surgPathReports.getSpecimenCollectionGroup();
 			
@@ -204,7 +209,7 @@ public class DirectDistributeInitAction extends BaseAction
 				boolean isAuthorized = privilegeCache.hasPrivilege(objectId, Variables.privilegeDetailsMap.get(Constants.DISTRIBUTE_SPECIMENS));
 				if(!isAuthorized)
 				{
-					isAuthorized = Utility.checkForAllCurrentAndFutureCPs(null, Permissions.DISTRIBUTION, sessionDataBean, cpId.toString());
+					isAuthorized = AppUtility.checkForAllCurrentAndFutureCPs(Permissions.DISTRIBUTION, sessionDataBean, cpId.toString());
 				}
 				
 				if(!isAuthorized)
@@ -214,7 +219,12 @@ public class DirectDistributeInitAction extends BaseAction
 				}
 			}
 		}
-		
+		}
+		catch(SMException smExp)
+		{
+			throw AppUtility.getApplicationException(smExp, "sm.operation.error",
+			"Error in checking has privilege");
+		}
 		
 		return isValidToDistribute;
 	}

@@ -451,7 +451,7 @@ public class ImportXmi
 					
 		entityMap.setFormContextCollection(formContextColl);
 		AnnotationBizLogic annotation = new AnnotationBizLogic();
-		annotation.insert(entityMap, Constants.HIBERNATE_DAO);
+		annotation.insert(entityMap, 0);
 		AnnotationUtil.addAssociation(staticEntity.getId(), container.getId(), true);
 		
 	}

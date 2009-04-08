@@ -94,7 +94,7 @@ public class NewSpecimenEventParametersAction  extends SecureAction
 	            			            			
 	            			User user = eventParameters.getUser();
 	            			rowData.add(user.getLastName() + ", " + user.getFirstName());
-	            			rowData.add(AppUtility.parseDateToString(eventParameters.getTimestamp(),Variables.dateFormat));
+	            			rowData.add(AppUtility.parseDateToString(eventParameters.getTimestamp(),CommonServiceLocator.getInstance().getDatePattern()));
 	            			rowData.add(events[1]);//pageOf
 	            			gridData.add(rowData);
 	            		}

@@ -286,7 +286,7 @@ public class RequestDetailsAction extends BaseAction
 		//fetching the order object corresponding to obtained id.
 
 		long startTime = System.currentTimeMillis();
-		DAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+		DAO dao = DAOFactory.getInstance().getDAO(0);
 
 		try
 		{

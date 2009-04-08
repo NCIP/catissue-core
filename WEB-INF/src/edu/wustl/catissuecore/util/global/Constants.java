@@ -2775,6 +2775,7 @@ public static final String ADD_MULTIPLE_SPECIMEN_TO_CART="addMltipleSpecimenToCa
 	
 	//Constants for Summary Page
 	public static final String MOLECULE = "Molecular";
+	public static final String SEARCH = "search";
 	
 	
 

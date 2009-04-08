@@ -47,7 +47,7 @@ public class UpdateCollectionProtocolAction extends BaseAction {
 							session.getAttribute(Constants.SESSION_DATA);
 			CollectionProtocolDTO collectionProtocolDTO = Utility.getCoolectionProtocolDTO(collectionProtocol,session);
 			bizLogic.update(collectionProtocolDTO, null, 
-					Constants.HIBERNATE_DAO, sessionDataBean);
+					0, sessionDataBean);
 			CollectionProtocolUtil.updateSession(request, collectionProtocol.getId());
 			if(Constants.DISABLED.equals(collectionProtocolBean.getActivityStatus()))
 			{

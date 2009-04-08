@@ -31,16 +31,19 @@ import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenObjectFactory;
 import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.StorageContainer;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.AppUtility;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.action.CommonAddEditAction;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.security.exception.UserNotAuthorizedException;
@@ -169,7 +172,7 @@ public class CreateAliquotAction extends BaseAction
 	{
 		try
 		{
-			new NewSpecimenBizLogic().insert(specimenCollection, sessionDataBean,Constants.HIBERNATE_DAO , false);
+			new NewSpecimenBizLogic().insert(specimenCollection, sessionDataBean,0 , false);
 			disposeParentSpecimen(sessionDataBean, specimenCollection,Constants.SPECIMEN_DISPOSAL_REASON);
 		}
 		catch (BizLogicException e)
@@ -199,7 +202,7 @@ public class CreateAliquotAction extends BaseAction
 			ActionErrors actionErrors = new ActionErrors();
 			
             String className = new CommonAddEditAction().getActualClassName(Specimen.class.getName());
-            String decoratedPrivilegeName = Utility.getDisplayLabelForUnderscore(((UserNotAuthorizedException)e).getPrivilegeName());
+            String decoratedPrivilegeName = AppUtility.getDisplayLabelForUnderscore(((UserNotAuthorizedException)e).getPrivilegeName());
             String baseObject = "";
             if (excp.getBaseObject() != null && excp.getBaseObject().trim().length() != 0)
             {
@@ -277,7 +280,7 @@ public class CreateAliquotAction extends BaseAction
 	 * @return
 	 */
 	private Collection<AbstractDomainObject> createAliquotDomainObject(AliquotForm aliquotForm, SpecimenCollectionGroup scg,
-			Specimen parentSpecimen) throws BizLogicException
+			Specimen parentSpecimen) throws ApplicationException
 	{
 		Collection<AbstractDomainObject> specimenCollection = new LinkedHashSet<AbstractDomainObject>();
 		boolean disposeParentSpecimen = aliquotForm.getDisposeParentSpecimen();
@@ -286,7 +289,7 @@ public class CreateAliquotAction extends BaseAction
 		Integer noOfAliquots = new Integer(aliquotForm.getNoOfAliquots());
 		for (int i = 1; i <= noOfAliquots.intValue(); i++)
 		{
-			Specimen aliquotSpecimen = Utility.getSpecimen(parentSpecimen);
+			Specimen aliquotSpecimen = AppUtility.getSpecimen(parentSpecimen);
 			StorageContainer sc = new StorageContainer();
 			String fromMapsuffixKey = "_fromMap";
 			boolean booleanfromMap = false;
@@ -339,14 +342,14 @@ public class CreateAliquotAction extends BaseAction
 				{
 					if(validator.isEmpty(containerId))
 					{
-						throw new BizLogicException(ApplicationProperties.getValue("errors.item.format", ApplicationProperties.getValue("specimen.storageContainer")));
+						throw AppUtility.getApplicationException(null, "errors.item.format", ApplicationProperties.getValue("specimen.storageContainer"));
 					}
 				}
 				if(radioButton.equals("3"))
 				{
 					if(validator.isEmpty(containername))
 					{
-						throw new BizLogicException(ApplicationProperties.getValue("errors.item.format", ApplicationProperties.getValue("specimen.storageContainer")));
+						throw AppUtility.getApplicationException(null, "errors.item.format", ApplicationProperties.getValue("specimen.storageContainer"));
 					}
 				}
 				//bug 11479 S bug				
@@ -355,7 +358,7 @@ public class CreateAliquotAction extends BaseAction
 				{
 					if(validator.isEmpty(posDim1)||validator.isEmpty(posDim2))
 					{
-						throw new BizLogicException(ApplicationProperties.getValue("errors.item.format", ApplicationProperties.getValue("specimen.positionInStorageContainer")));
+						throw AppUtility.getApplicationException(null, "errors.item.format", ApplicationProperties.getValue("specimen.positionInStorageContainer"));
 					}
 				}
 			}	
@@ -399,7 +402,7 @@ public class CreateAliquotAction extends BaseAction
 				}
 			}
 			Date currentDate = new Date();
-			DateFormat myDateFormat = new SimpleDateFormat(Variables.dateFormat);
+			DateFormat myDateFormat = new SimpleDateFormat(CommonServiceLocator.getInstance().getDatePattern());
 			Date myDate = null;
 			try {
 			     myDate = myDateFormat.parse(aliquotForm.getCreatedDate());

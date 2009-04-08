@@ -56,7 +56,7 @@ public class MultipleSpecimenFlexInitAction extends SecureAction
 		{
 			showBarcode = "false";
 		}
-		setMSPRequestParame(request, mode, parentType, parentName, numberOfSpecimens, showParentSelection, showLabel, showBarcode,Variables.dateFormat);
+		setMSPRequestParame(request, mode, parentType, parentName, numberOfSpecimens, showParentSelection, showLabel, showBarcode,CommonServiceLocator.getInstance().getDatePattern());
 
 		String pageOf = (String) request.getParameter("pageOf");
 		if (pageOf != null)

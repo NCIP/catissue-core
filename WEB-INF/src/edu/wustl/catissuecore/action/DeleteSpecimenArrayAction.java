@@ -21,6 +21,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.CommonAddEditAction;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.util.MapDataParser;
+import edu.wustl.common.util.global.Status;
 
 
 public class DeleteSpecimenArrayAction extends CommonAddEditAction {
@@ -35,7 +36,7 @@ public class DeleteSpecimenArrayAction extends CommonAddEditAction {
 		Map arrayContentMap = (Map) request.getSession().getAttribute(
 				Constants.SPECIMEN_ARRAY_CONTENT_KEY);
 		AbstractActionForm abstractForm = (AbstractActionForm) form;
-		abstractForm.setActivityStatus(Constants.ACTIVITY_STATUS_DISABLED);
+		abstractForm.setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.toString());
 		try {
 			if (arrayContentMap != null) {
 				MapDataParser mapDataParser = new MapDataParser(

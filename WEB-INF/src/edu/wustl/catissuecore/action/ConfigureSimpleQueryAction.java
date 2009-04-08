@@ -14,14 +14,16 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
-import edu.wustl.common.querysuite.bizlogic.QueryBizLogic;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.simplequery.actionForm.SimpleQueryInterfaceForm;
+import edu.wustl.simplequery.bizlogic.QueryBizLogic;
+
 
 public class ConfigureSimpleQueryAction extends BaseAction
 {
@@ -50,7 +52,7 @@ public class ConfigureSimpleQueryAction extends BaseAction
 			Logger.out.debug("Form map"+map); 
 			if(map.size()==0)
 			{
-				map=(Map)session.getAttribute(Constants.SIMPLE_QUERY_MAP);
+				map=(Map)session.getAttribute(edu.wustl.simplequery.global.Constants.SIMPLE_QUERY_MAP);
 				Logger.out.debug("Session map size"+map.size());
 				Logger.out.debug("Session map"+map);
 			}
@@ -95,8 +97,9 @@ public class ConfigureSimpleQueryAction extends BaseAction
 				selectedColumns = (String[])session.getAttribute(Constants.CONFIGURED_SELECT_COLUMN_LIST);
 				if(selectedColumns==null)
 				{
-					QueryBizLogic bizLogic = (QueryBizLogic) BizLogicFactory
-					.getInstance().getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
+					
+					IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+					QueryBizLogic bizLogic = (QueryBizLogic) factory.getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
 					List columnNameValueBeans = new ArrayList();
 					int i;
 					for(i=0;i<selectedTables.length;i++)
@@ -120,7 +123,7 @@ public class ConfigureSimpleQueryAction extends BaseAction
 			//Logger.out.debug("counter in configure"+(String)session.getAttribute(Constants.SIMPLE_QUERY_COUNTER));
 			//Counter required for redefining the query
 			map.put("counter",new String(""+counter));
-			session.setAttribute(Constants.SIMPLE_QUERY_MAP,map);
+			session.setAttribute(edu.wustl.simplequery.global.Constants.SIMPLE_QUERY_MAP,map);
 		}
 		
 		request.setAttribute(Constants.PAGE_OF,pageOf);

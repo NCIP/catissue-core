@@ -945,7 +945,7 @@ public class AnnotationUtil
 	{
 		String query = "select max(" + columnName + ") from " + tableName;
 		//		HibernateDAO hibernateDAO = (HibernateDAO) DAOFactory.getInstance().getDAO(
-		//				Constants.HIBERNATE_DAO);
+		//				0);
 		ResultSet resultSet = null;
 		JDBCDAO jdbcDAO = null;
 		try

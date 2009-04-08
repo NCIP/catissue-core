@@ -337,7 +337,7 @@ public class ListSpecimenEventParametersAction extends SecureAction
 			
 			Date date = (Date)rowDataMap.get(Constants.EVENT_DATE);
 			//String eventDate = Utility.parseDateToString(date,Constants.TIMESTAMP_PATTERN ); // Sri: Changed format for bug #463
-			String eventDate = Utility.parseDateToString(date, Variables.dateFormat+edu.wustl.catissuecore.util.global.Constants.TIMESTAMP_PATTERN_MM_SS); // Sri: Changed format for bug #463
+			String eventDate = Utility.parseDateToString(date, CommonServiceLocator.getInstance().getDatePattern()+edu.wustl.catissuecore.util.global.Constants.TIMESTAMP_PATTERN_MM_SS); // Sri: Changed format for bug #463
 			rowData.add(eventDate);
 			
 			String paggeOf = (String)rowDataMap.get(Constants.PAGE_OF);

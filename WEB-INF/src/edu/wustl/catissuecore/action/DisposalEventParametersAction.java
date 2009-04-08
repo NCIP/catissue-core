@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import edu.wustl.catissuecore.actionForm.DisposalEventParametersForm;
 import edu.wustl.catissuecore.actionForm.EventParametersForm;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.util.global.Status;
 
 /**
  * @author vaishali_khandelwal
@@ -53,7 +54,7 @@ public class DisposalEventParametersAction extends SpecimenEventParametersAction
 		
 //		request.setAttribute(Constants.ACTIVITYSTATUSLIST,
 //				Constants.DISPOSAL_EVENT_ACTIVITY_STATUS_VALUES);
-		request.setAttribute("activityStatusDisabled",Constants.ACTIVITY_STATUS_DISABLED);
+		request.setAttribute("activityStatusDisabled",Status.ACTIVITY_STATUS_DISABLED.toString());
 		request.setAttribute("activityStatusClosed",Constants.ACTIVITY_STATUS_CLOSED);
 		request.setAttribute("activityStatusList",Constants.DISPOSAL_EVENT_ACTIVITY_STATUS_VALUES);
 		request.setAttribute("disposalEventParametersAddAction",Constants.DISPOSAL_EVENT_PARAMETERS_ADD_ACTION);

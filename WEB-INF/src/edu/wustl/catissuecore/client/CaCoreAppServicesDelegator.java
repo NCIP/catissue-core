@@ -118,7 +118,7 @@ public class CaCoreAppServicesDelegator
 			*/
 	    	checkNullObject(domainObject,"Domain Object");
 			IBizLogic bizLogic = getBizLogic(domainObject.getClass().getName());
-			bizLogic.insert(domainObject,getSessionDataBean(userName),Constants.HIBERNATE_DAO);
+			bizLogic.insert(domainObject,getSessionDataBean(userName),0);
 			Logger.out.info(" Domain Object has been successfully inserted " + domainObject);
 	    }
 	    catch(Exception e)
@@ -161,7 +161,7 @@ public class CaCoreAppServicesDelegator
 			AbstractDomainObject abstractDomainOld = (AbstractDomainObject) object;
 			Session sessionClean = DBUtil.getCleanSession();
 			abstractDomainOld = (AbstractDomainObject) sessionClean.load(Class.forName(objectName), new Long(abstractDomainObject.getId()));
-			bizLogic.update(abstractDomainObject, abstractDomainOld, Constants.HIBERNATE_DAO, getSessionDataBean(userName));
+			bizLogic.update(abstractDomainObject, abstractDomainOld, 0, getSessionDataBean(userName));
 			sessionClean.close();
 			Logger.out.info(" Domain Object has been successfully updated " + domainObject);
 		}
@@ -187,7 +187,7 @@ public class CaCoreAppServicesDelegator
 		{
 			BizLogicFactory bizLogicFactory = BizLogicFactory.getInstance();
 			IBizLogic bizLogic = bizLogicFactory.getBizLogic(domainObject.getClass().getName());
-			bizLogic.delete(domainObject,Constants.HIBERNATE_DAO);
+			bizLogic.delete(domainObject,0);
 			return null;
 		}
 		else

@@ -21,6 +21,7 @@ import edu.wustl.catissuecore.vo.ArrayDistributionReportEntry;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.util.ExportReport;
 import edu.wustl.common.util.SendFile;
+import edu.wustl.common.util.global.CommonServiceLocator;
 
 /**
  * This is the action class for saving the Distribution report
@@ -40,7 +41,7 @@ public class ArrayDistributionReportSaveAction extends ArrayDistributionReportAc
 		//Retrieve the distribution ID
 		Long distributionId =configForm.getDistributionId();;
 		
-		Distribution dist =  getDistribution(distributionId, getSessionData(request), Constants.CLASS_LEVEL_SECURE_RETRIEVE);
+		Distribution dist =  getDistribution(distributionId, getSessionData(request), edu.wustl.security.global.Constants.CLASS_LEVEL_SECURE_RETRIEVE);
     	SessionDataBean sessionData = getSessionData(request);
     	DistributionReportForm distributionReportForm = getDistributionReportForm(dist);
     	distributionReportForm.setDistributionType(new Integer(Constants.SPECIMEN_ARRAY_DISTRIBUTION_TYPE));
@@ -60,7 +61,7 @@ public class ArrayDistributionReportSaveAction extends ArrayDistributionReportAc
 		HttpSession session=request.getSession();
 		if(session!=null)
 		{
-			String filePath = Variables.applicationHome+System.getProperty("file.separator")+"DistributionReport_"+session.getId()+".csv";
+			String filePath = CommonServiceLocator.getInstance().getAppHome()+System.getProperty("file.separator")+"DistributionReport_"+session.getId()+".csv";
 
 			saveReport(distributionReportForm,listOfData,filePath,columnNames,specimenColumnNames);
 			

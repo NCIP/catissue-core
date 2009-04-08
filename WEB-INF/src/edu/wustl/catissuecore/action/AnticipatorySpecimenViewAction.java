@@ -40,8 +40,9 @@ import edu.wustl.catissuecore.util.SpecimenAutoStorageContainer;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.dao.exception.DAOException;
+import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.exception.DAOException;
 
 /**
  * @author abhijit_naik
@@ -98,9 +99,9 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 			target = Constants.SUCCESS;
 			session.setAttribute(Constants.SCGFORM, specimenCollectionGroupForm.getId());
 			SpecimenCollectionGroup specimencollectionGroup = scgBizLogic.getSCGFromId(id, bean, true);
-			if (specimencollectionGroup.getActivityStatus().equalsIgnoreCase(Constants.ACTIVITY_STATUS_DISABLED))
+			if (specimencollectionGroup.getActivityStatus().equalsIgnoreCase(Status.ACTIVITY_STATUS_DISABLED.toString()))
 			{
-				target = Constants.ACTIVITY_STATUS_DISABLED;
+				target = Status.ACTIVITY_STATUS_DISABLED.toString();
 			}
 			cpId = specimencollectionGroup.getCollectionProtocolRegistration().getCollectionProtocol().getId();
 
@@ -153,7 +154,7 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 		while (itr.hasNext())
 		{
 			Specimen specimen = (Specimen) itr.next();
-			if(!Constants.ACTIVITY_STATUS_DISABLED.equals(specimen.getActivityStatus()))
+			if(!Status.ACTIVITY_STATUS_DISABLED.equals(specimen.getActivityStatus()))
 			{
 				specimenList.add(specimen);
 			}
@@ -439,7 +440,7 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 			while (itr.hasNext())
 			{
 				Specimen specimen = (Specimen) itr.next();
-				if(!Constants.ACTIVITY_STATUS_DISABLED.equals(specimen.getActivityStatus()))
+				if(!Status.ACTIVITY_STATUS_DISABLED.equals(specimen.getActivityStatus()))
 				{
 					if (specimen.getId().equals(specimenId)
 							|| (specimen.getParentSpecimen() != null && specimen.getParentSpecimen().getId().equals(specimenId)))

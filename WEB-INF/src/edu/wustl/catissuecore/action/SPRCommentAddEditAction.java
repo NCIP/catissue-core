@@ -40,7 +40,7 @@ public class SPRCommentAddEditAction extends BaseAction
 					DeidentifiedSurgicalPathologyReport deidReport=(DeidentifiedSurgicalPathologyReport)bizLogic.retrieveAttribute(QuarantineEventParameter.class.getName(), quarantineEventParamanter.getId(), Constants.COLUMN_NAME_DEID_REPORT);
 					quarantineEventParamanter.setDeIdentifiedSurgicalPathologyReport(deidReport);
 				}
-	            bizLogic.update(abstractDomain, abstractDomainOld, Constants.HIBERNATE_DAO, getSessionData(request));
+	            bizLogic.update(abstractDomain, abstractDomainOld, 0, getSessionData(request));
 			}
         }
         catch (Exception ex) 

@@ -17,6 +17,7 @@ import edu.wustl.catissuecore.bizlogic.InstitutionBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.action.CommonAddEditAction;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.exception.DAOException;
 
@@ -39,7 +40,7 @@ public class AddInstitutionAction extends CommonAddEditAction
 		
 		if((forward != null) && (forward.getName().equals(Constants.FAILURE)))
 		{
-			responseString = Utility.getResponseString(request, responseString);
+			responseString = AppUtility.getResponseString(request, responseString);
 		}
 		else
 		{
@@ -48,7 +49,7 @@ public class AddInstitutionAction extends CommonAddEditAction
 				institutionId = bizlogic.getLatestInstitution(institutionName);
 				responseString = institutionId + Constants.RESPONSE_SEPARATOR + institutionName;
 			}
-			catch(DAOException e)
+			catch(BizLogicException e)
 			{
 				Logger.out.error("Exception occurred in retrieving Institution");
 			e.printStackTrace();

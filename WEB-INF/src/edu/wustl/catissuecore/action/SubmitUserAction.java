@@ -99,7 +99,7 @@ public class SubmitUserAction extends Action
         //UserBizLogic bizLogic = (UserBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.USER_FORM_ID);
         HttpSession session = request.getSession();
         //SessionDataBean sessionDataBean = (SessionDataBean) session.getAttribute(Constants.SESSION_DATA);
-        //bizLogic.insert(user, sessionDataBean, Constants.HIBERNATE_DAO);
+        //bizLogic.insert(user, sessionDataBean, 0);
         target = new String(Constants.SUCCESS);
         AbstractDomainObject abstractDomain = (AbstractDomainObject) user;
         UserDTO userDTO = getUserDTO(user, session);
@@ -450,7 +450,7 @@ public class SubmitUserAction extends Action
 	{
     	IBizLogic bizLogic =BizLogicFactory.getInstance().getBizLogic(form.getFormId());
 		SessionDataBean sessionDataBean = (SessionDataBean) session.getAttribute(Constants.SESSION_DATA);		
-		bizLogic.insert(userDTO, sessionDataBean, Constants.HIBERNATE_DAO);
+		bizLogic.insert(userDTO, sessionDataBean, 0);
 	}
     
     private void updateUser(UserDTO userCurrent, User userOld, HttpSession session, AbstractActionForm form)
@@ -458,7 +458,7 @@ public class SubmitUserAction extends Action
 	{
     	IBizLogic bizLogic =BizLogicFactory.getInstance().getBizLogic(form.getFormId());
 		SessionDataBean sessionDataBean = (SessionDataBean) session.getAttribute(Constants.SESSION_DATA);		
-		bizLogic.update(userCurrent, userOld , Constants.HIBERNATE_DAO, sessionDataBean);
+		bizLogic.update(userCurrent, userOld , 0, sessionDataBean);
 	}
     
     /**

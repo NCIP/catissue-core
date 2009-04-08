@@ -23,6 +23,7 @@ import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.util.Utility;
+import edu.wustl.common.util.global.CommonServiceLocator;
 
 public class ConflictCommonAction extends BaseAction{
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
@@ -40,7 +41,7 @@ public class ConflictCommonAction extends BaseAction{
 	
 		Participant participant = (Participant) edu.wustl.catissuecore.caties.util.Utility.getParticipantFromReportLoaderQueue(reportQueueId);
 		String participantName = (String)participant.getLastName()+","+ (String)participant.getFirstName();
-		String birthDate = Utility.parseDateToString(participant.getBirthDate(), edu.wustl.common.util.global.Variables.dateFormat);
+		String birthDate = Utility.parseDateToString(participant.getBirthDate(), CommonServiceLocator.getInstance().getDatePattern());
 		conflictCommonForm.setParticipantName(participantName);
 		conflictCommonForm.setBirthDate(birthDate);
 		conflictCommonForm.setSocialSecurityNumber(participant.getSocialSecurityNumber());

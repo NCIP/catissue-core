@@ -13,15 +13,15 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.bizlogic.IBizLogic;
-import edu.wustl.common.querysuite.bizlogic.QueryBizLogic;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.simplequery.bizlogic.QueryBizLogic;
 import edu.wustl.simplequery.query.QueryTableData;
-
 
 /**
  * This is the action class for configuring columns in result view 
@@ -43,8 +43,9 @@ public class ConfigureResultViewAction extends BaseAction
 			throws Exception 
 	{
 			
+			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 			//String target = new String();
-			IBizLogic bizlogic = BizLogicFactory.getInstance().getBizLogic(Constants.CONFIGURE_RESULT_VIEW_ID);
+			IBizLogic bizlogic = factory.getBizLogic(Constants.CONFIGURE_RESULT_VIEW_ID);
 			String pageOf = (String) request.getAttribute(Constants.PAGE_OF);
 			if(pageOf == null)
 			{
@@ -81,7 +82,7 @@ public class ConfigureResultViewAction extends BaseAction
 	        	NameValueBean tableData = (NameValueBean)itr.next();
 	        	if(!tableData.getName().equals(Constants.SELECT_OPTION))
 	        	{
-	        		QueryBizLogic bizLogic = (QueryBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
+	        		QueryBizLogic bizLogic = (QueryBizLogic)factory.getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
 	        		List columnList =  bizLogic.setColumnNames(tableData.getValue());
 	        		tableColumnDataMap.put(tableData,columnList);
 	        		

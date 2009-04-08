@@ -25,7 +25,7 @@ public class RedirectToSCGAction extends Action {
 
 		SpecimenCollectionGroupForm specimenCollectionGroupForm =(SpecimenCollectionGroupForm) form;
 		Long id = (Long) request.getSession().getAttribute("SCGFORM");
-		DAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+		DAO dao = DAOFactory.getInstance().getDAO(0);
 		
 		SessionDataBean sessionDataBean = (SessionDataBean)request.getSession().getAttribute(Constants.SESSION_DATA);
 

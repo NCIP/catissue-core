@@ -33,10 +33,13 @@ import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.ConsentTier;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.bizlogic.IBizLogic;
+import edu.wustl.common.cde.CDEManager;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.MapDataParser;
+import edu.wustl.common.util.Utility;
+import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.exception.DAOException;
 
@@ -118,7 +121,8 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
     	}
     	if(collectionProtocolForm.getStartDate() == null)
     	{
-    		collectionProtocolForm.setStartDate(Utility.parseDateToString(Calendar.getInstance().getTime(), Variables.dateFormat));
+    		collectionProtocolForm.setStartDate(Utility.parseDateToString(Calendar.getInstance().getTime(), 
+    				CommonServiceLocator.getInstance().getDatePattern()));
     	}
     	//Name of delete button clicked
         String button = request.getParameter("button");
@@ -269,7 +273,7 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 	 * @param cp_id Selected SpecimenCollectionGroup ID
 	 * @return collectionProtocolObject
 	 */
-	private CollectionProtocol getCPObj(String cp_id) throws DAOException
+	private CollectionProtocol getCPObj(String cp_id) throws BizLogicException
 	{
 		CollectionProtocolBizLogic collectionProtocolBizLogic = (CollectionProtocolBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.COLLECTION_PROTOCOL_FORM_ID);
 					

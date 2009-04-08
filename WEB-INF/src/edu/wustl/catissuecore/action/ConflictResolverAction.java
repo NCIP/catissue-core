@@ -134,7 +134,7 @@ public class ConflictResolverAction extends BaseAction
 		ParticipantBizLogic participantBizLogic = (ParticipantBizLogic)BizLogicFactory.getInstance().getBizLogic(Participant.class.getName());
 		try
 		{
-			participantBizLogic.insert(participant,getSessionData(request),Constants.HIBERNATE_DAO);
+			participantBizLogic.insert(participant,getSessionData(request),0);
 		}
 		catch(Exception e)
 		{
@@ -275,7 +275,7 @@ public class ConflictResolverAction extends BaseAction
 		try
 		{
 			ReportLoaderQueueBizLogic reportLoaderQueueBizLogic = (ReportLoaderQueueBizLogic)BizLogicFactory.getInstance().getBizLogic(ReportLoaderQueue.class.getName());
-			reportLoaderQueueBizLogic.update(reportLoaderQueue, reportLoaderQueue, Constants.HIBERNATE_DAO, getSessionData(request));
+			reportLoaderQueueBizLogic.update(reportLoaderQueue, reportLoaderQueue, 0, getSessionData(request));
 			
 		}
 		catch(Exception e)
@@ -341,7 +341,7 @@ public class ConflictResolverAction extends BaseAction
 			ReportLoaderQueueBizLogic reportLoaderQueueBizLogic = (ReportLoaderQueueBizLogic)BizLogicFactory.getInstance().getBizLogic(ReportLoaderQueue.class.getName());
 			
 			//deleting the reportloaderQueue object
-			reportLoaderQueueBizLogic.delete(reportLoaderQueue, Constants.HIBERNATE_DAO);
+			reportLoaderQueueBizLogic.delete(reportLoaderQueue, 0);
 				  
 	  }
 	  

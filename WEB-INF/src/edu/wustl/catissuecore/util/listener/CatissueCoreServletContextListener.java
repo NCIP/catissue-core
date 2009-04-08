@@ -308,7 +308,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 			//set string/function for oracle
 			Variables.datePattern = "mm-dd-yyyy";
 			Variables.timePattern = "hh-mi-ss";
-			Variables.dateFormatFunction="TO_CHAR";
+			CommonServiceLocator.getInstance().getDatePattern()Function="TO_CHAR";
 			Variables.timeFormatFunction="TO_CHAR";
 			Variables.dateTostrFunction = "TO_CHAR";
 			Variables.strTodateFunction = "TO_DATE";
@@ -317,7 +317,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 		{
 			Variables.datePattern = "%m-%d-%Y";
 			Variables.timePattern = "%H:%i:%s";
-			Variables.dateFormatFunction="DATE_FORMAT";
+			CommonServiceLocator.getInstance().getDatePattern()Function="DATE_FORMAT";
 			Variables.timeFormatFunction="TIME_FORMAT";
 			Variables.dateTostrFunction = "TO_CHAR";
 			Variables.strTodateFunction = "STR_TO_DATE";
@@ -440,12 +440,12 @@ public void InitialiseVariablesForEdinburgh(){
 		if(dateFormat!=null && dateFormat!=""){
 			
 			if (AppUtility.isValidDateFormat(dateFormat)){
-				edu.wustl.common.util.global.Variables.dateFormat=dateFormat;
+				edu.wustl.common.util.global.CommonServiceLocator.getInstance().getDatePattern()=dateFormat;
 			}else{
 				throw new RuntimeException("Invalid Date Format. Enter the format either in  dd-MM-yyyy or MM-dd-yyyy Format");
 			}
 		}else{
-			edu.wustl.common.util.global.Variables.dateFormat="MM-dd-yyyy";
+			edu.wustl.common.util.global.CommonServiceLocator.getInstance().getDatePattern()="MM-dd-yyyy";
 		}
 		
 	}

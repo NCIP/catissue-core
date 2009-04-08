@@ -159,7 +159,7 @@ public class ParticipantLookupAction extends BaseAction
 	// 11968 S
 	private boolean isAuthorized(ActionMapping mapping,HttpServletRequest request,Participant participant)
 	{
-		DAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+		DAO dao = DAOFactory.getInstance().getDAO(0);
 		SessionDataBean sessionDataBean = getSessionData(request);
 		boolean authorizedFlag=false;
 		try
@@ -262,7 +262,7 @@ public class ParticipantLookupAction extends BaseAction
 		
 		//participantInfo.add(Utility.toString(participant.getBirthDate()));
 		// Added by Geeta  for date format change.
-		participantInfo.add(Utility.parseDateToString(participant.getBirthDate(),Variables.dateFormat));
+		participantInfo.add(Utility.parseDateToString(participant.getBirthDate(),CommonServiceLocator.getInstance().getDatePattern()));
 		// End by geeta  
 		if(!Variables.isSSNRemove)
 		{
@@ -270,7 +270,7 @@ public class ParticipantLookupAction extends BaseAction
 		}
 		//participantInfo.add(Utility.toString(participant.getDeathDate()));
 		// Added by Geeta  for date format change.
-		participantInfo.add(Utility.parseDateToString(participant.getDeathDate(),Variables.dateFormat));
+		participantInfo.add(Utility.parseDateToString(participant.getDeathDate(),CommonServiceLocator.getInstance().getDatePattern()));
 		//End by Geeta
 		participantInfo.add(Utility.toString(participant.getVitalStatus()));
 		participantInfo.add(participant.getId());

@@ -480,7 +480,7 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 				 */
 
 				this.createdOn = AppUtility.parseDate(form.getCreatedDate(),
-						edu.wustl.catissuecore.util.global.Variables.dateFormat);
+						edu.wustl.catissuecore.util.global.CommonServiceLocator.getInstance().getDatePattern());
 
 				if (!validator.isEmpty(form.getSpecimenLabel()))
 				{
@@ -595,7 +595,7 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 						 * Description : Set createdOn date in edit mode for new specimen
 						 */
 						this.createdOn = AppUtility.parseDate(form.getCreatedDate(),
-							edu.wustl.catissuecore.util.global.Variables.dateFormat);
+							edu.wustl.catissuecore.util.global.CommonServiceLocator.getInstance().getDatePattern());
 					}
 
 					logger.debug("isParentChanged " + isParentChanged);
@@ -686,7 +686,7 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 						 * for new specimen.
 						 */
 						this.createdOn = AppUtility.parseDate(form.getCollectionEventdateOfEvent(),
-								edu.wustl.catissuecore.util.global.Variables.dateFormat);
+								edu.wustl.catissuecore.util.global.CommonServiceLocator.getInstance().getDatePattern());
 
 						logger.debug("Before specimenEventCollection.size(): " + specimenEventCollection.size());
 						specimenEventCollection.add(receivedEventParameters);
@@ -866,7 +866,7 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 					 * See also: 1_1 to 1_5
 					 * Description : Set createdOn date for derived specimen .
 					 */
-					this.createdOn = AppUtility.parseDate(form.getCreatedDate(), edu.wustl.catissuecore.util.global.Variables.dateFormat);
+					this.createdOn = AppUtility.parseDate(form.getCreatedDate(), edu.wustl.catissuecore.util.global.CommonServiceLocator.getInstance().getDatePattern());
 
 					if (form.isAddOperation())
 					{

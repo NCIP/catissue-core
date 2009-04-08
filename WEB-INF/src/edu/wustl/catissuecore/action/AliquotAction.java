@@ -43,8 +43,8 @@ import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.AppUtility;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.actionForm.AbstractActionForm;
@@ -52,7 +52,12 @@ import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
+import edu.wustl.common.exception.ApplicationException;
+import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.CommonServiceLocator;
+import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.tag.ScriptGenerator;
 import edu.wustl.dao.exception.DAOException;
@@ -85,7 +90,7 @@ public class AliquotAction extends SecureAction
 			methodName = "executeAliquotAction";
 		}
 		
-		List<NameValueBean> storagePositionList =  Utility.getStoragePositionTypeList();
+		List<NameValueBean> storagePositionList =  AppUtility.getStoragePositionTypeList();
 		request.setAttribute("storageList", storagePositionList);
          /**
           * Patch ID: 3835_1_6
@@ -95,7 +100,8 @@ public class AliquotAction extends SecureAction
       //   if(((AliquotForm)form).getCreatedDate() == null||)
     	   if((((AliquotForm)form).getNextForwardTo()!=null)&&(((AliquotForm)form).getNextForwardTo()).equals(""))
            {
-             ((AliquotForm)form).setCreatedDate(Utility.parseDateToString(Calendar.getInstance().getTime(), Variables.dateFormat));
+             ((AliquotForm)form).setCreatedDate(Utility.parseDateToString(Calendar.getInstance().getTime(), 
+            		 CommonServiceLocator.getInstance().getDatePattern()));
            }
      
 		return invokeMethod(methodName, mapping, form, request, response);
@@ -222,7 +228,7 @@ public class AliquotAction extends SecureAction
 		String pageOf = request.getParameter(Constants.PAGE_OF);
 		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 		SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
-		Utility.setDefaultPrinterTypeLocation(aliquotForm);
+		AppUtility.setDefaultPrinterTypeLocation(aliquotForm);
 		/**
 		 *  Following code ensures that 
 		 *  1. Label/Barcode, Aliquot Count, Quantity per Aliquot submitted on click of Submit button 
@@ -663,7 +669,7 @@ public class AliquotAction extends SecureAction
 					return Constants.PAGE_OF_SPECIMEN;
 				}
 			}
-			else if(specimen.getActivityStatus().equals(Constants.ACTIVITY_STATUS_DISABLED))
+			else if(specimen.getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED))
 			{
 				/**
 	 			* Name : Falguni Sachde
@@ -711,7 +717,7 @@ public class AliquotAction extends SecureAction
 			
 			if (Constants.PAGE_OF_CREATE_ALIQUOT.equals(pageOf))
 			{
-				boolean isDouble = Utility.isQuantityDouble(form.getClassName(), form.getType());
+				boolean isDouble = AppUtility.isQuantityDouble(form.getClassName(), form.getType());
 
 				if (!distributeAvailableQuantity(form, isDouble))
 				{
@@ -778,7 +784,7 @@ public class AliquotAction extends SecureAction
 	 * @throws DAOException DAO exception
 	 * @throws ClassNotFoundException 
 	 */
-	private void populateParentSpecimenData(AliquotForm form, Specimen specimen, IBizLogic bizLogic) throws DAOException, ClassNotFoundException
+	private void populateParentSpecimenData(AliquotForm form, Specimen specimen, IBizLogic bizLogic) throws ApplicationException
 	{
 		//SpecimenCharacteristics chars= null;
 		Long cpID=null;
@@ -802,7 +808,7 @@ public class AliquotAction extends SecureAction
 		" edu.wustl.catissuecore.domain.Specimen as spec " +
 		" where spec.specimenCollectionGroup.id=scg.id and spec.id="+specimen.getId();
 
-		List collectionProtocolList = Utility.executeQuery(colProtHql);
+		List collectionProtocolList = AppUtility.executeQuery(colProtHql);
 		Object obj = (Object) collectionProtocolList.get(0);
 		if(obj!=null)
 		{
@@ -1042,7 +1048,7 @@ public class AliquotAction extends SecureAction
 			try
 			{
 				quantityPerAliquot = new BigDecimal(quantityPerAliquot).toPlainString();
-				if (Utility.isQuantityDouble(form.getClassName(), form.getType()))
+				if (AppUtility.isQuantityDouble(form.getClassName(), form.getType()))
 				{
 					if (!validator.isDouble(quantityPerAliquot.trim()))
 					{
@@ -1253,7 +1259,7 @@ public class AliquotAction extends SecureAction
 		String unit = "";
 		if(form != null)
 		{
-			unit = Utility.getUnit(form.getClassName(),form.getType());
+			unit = AppUtility.getUnit(form.getClassName(),form.getType());
 		}
 		//request.setAttribute("operation",Utility.toString(Constants.OPERATION));
 		request.setAttribute("unit",unit);
@@ -1344,7 +1350,6 @@ public class AliquotAction extends SecureAction
   /* (non-Javadoc)
 	 * @see edu.wustl.common.action.SecureAction#getObjectId(edu.wustl.common.actionForm.AbstractActionForm)
 	 */
-	@Override
 	protected String getObjectId(AbstractActionForm form)
 	{
 		AliquotForm aliquotForm = (AliquotForm) form;
@@ -1355,7 +1360,7 @@ public class AliquotAction extends SecureAction
 		}
 		return null; 
 	}
-	public synchronized long getTotalNoOfAliquotSpecimen(Long specId)throws DAOException
+	public synchronized long getTotalNoOfAliquotSpecimen(Long specId)throws BizLogicException
 	{
 		long aliquotChildCount =0;
 		String[] selectColumnName = {"id"};

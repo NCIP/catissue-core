@@ -44,6 +44,7 @@ import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.dao.exception.DAOException;
 
 /**
@@ -74,7 +75,7 @@ public class CreateArrayInitAction extends BaseAction
 		
 		String arrayName = (String)request.getAttribute(Constants.ARRAY_NAME);
 		String operation = (String)request.getAttribute(Constants.OPERATION);
-		List<NameValueBean> storagePositionListForSpecimenArray = Utility.getStoragePositionTypeListForTransferEvent();
+		List<NameValueBean> storagePositionListForSpecimenArray = AppUtility.getStoragePositionTypeListForTransferEvent();
 		request.setAttribute("storagePositionListForSpecimenArray", storagePositionListForSpecimenArray);
 
 		String exceedingMaxLimit = "false";
@@ -202,7 +203,7 @@ public class CreateArrayInitAction extends BaseAction
 	 * @throws NumberFormatException
 	 * @throws DAOException
 	 */
-	private List constructSpecimenObjList(List specimenIdList) throws NumberFormatException, DAOException
+	private List constructSpecimenObjList(List specimenIdList) throws BizLogicException
 	{
 		List specimensObjList = new ArrayList();
 		OrderBizLogic orderBizLogic = (OrderBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.REQUEST_DETAILS_FORM_ID);
@@ -277,7 +278,7 @@ public class CreateArrayInitAction extends BaseAction
      * @return  array type
      * @throws DAOException
      */
-	private List setClassAndtype(SpecimenArrayForm specimenArrayForm,SpecimenArrayType specimenArrayType) throws DAOException
+	private List setClassAndtype(SpecimenArrayForm specimenArrayForm,SpecimenArrayType specimenArrayType) throws BizLogicException
 	{  
 		List specimenTypeList = new ArrayList();
 		String specimentype = new String();

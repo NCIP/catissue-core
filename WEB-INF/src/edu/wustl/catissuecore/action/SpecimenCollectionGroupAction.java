@@ -205,7 +205,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 			specimenCollectionGroupForm.setWitnessName(witnessFullName);
 		}
 		String getConsentDate = Utility
-				.parseDateToString(collectionProtocolRegistration.getConsentSignatureDate(), Variables.dateFormat);
+				.parseDateToString(collectionProtocolRegistration.getConsentSignatureDate(), CommonServiceLocator.getInstance().getDatePattern());
 		specimenCollectionGroupForm.setConsentDate(getConsentDate);
 		String getSignedConsentURL = Utility.toString(collectionProtocolRegistration.getSignedConsentDocumentURL());
 		specimenCollectionGroupForm.setSignedConsentUrl(getSignedConsentURL);
@@ -788,7 +788,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 			}
 			else
 			{
-				specimenForm.setCollectionEventdateOfEvent(Utility.parseDateToString(cal.getTime(), Variables.dateFormat));
+				specimenForm.setCollectionEventdateOfEvent(Utility.parseDateToString(cal.getTime(), CommonServiceLocator.getInstance().getDatePattern()));
 			}
 		}
 		if (specimenForm.getCollectionEventTimeInHours() == null)
@@ -810,7 +810,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 			}
 			else
 			{
-			specimenForm.setReceivedEventDateOfEvent(Utility.parseDateToString(cal.getTime(), Variables.dateFormat));
+			specimenForm.setReceivedEventDateOfEvent(Utility.parseDateToString(cal.getTime(), CommonServiceLocator.getInstance().getDatePattern()));
 			}
 		}
 		if (specimenForm.getReceivedEventTimeInHours() == null)

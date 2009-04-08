@@ -87,7 +87,7 @@ public class SubCollectionProtocolRegistrationAction extends SecureAction
 				}
 				if (cpform.getRegistrationDate() == null || cpform.getRegistrationDate().equals(""))
 				{
-					cpform.setRegistrationDate(Utility.parseDateToString(Calendar.getInstance().getTime(), Variables.dateFormat));
+					cpform.setRegistrationDate(Utility.parseDateToString(Calendar.getInstance().getTime(), CommonServiceLocator.getInstance().getDatePattern()));
 
 				}
 			}
@@ -214,7 +214,7 @@ public class SubCollectionProtocolRegistrationAction extends SecureAction
 			}
 			form.setId(id);
 			form.setRegistrationDate(regDate.toString());
-			form.setRegistrationDate(Utility.parseDateToString(regDate, Variables.dateFormat));
+			form.setRegistrationDate(Utility.parseDateToString(regDate, CommonServiceLocator.getInstance().getDatePattern()));
 
 			return true;
 		}

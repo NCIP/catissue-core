@@ -308,7 +308,7 @@ public class DisplayAnnotationDataEntryPageAction extends BaseAction
 				entityMapRecordXML.append("<cell>" + dynamicEntity.getValue()+"^"+strURLForEditRecord+"</cell>");
 				//entityMapRecordXML.append("<cell>" + Utility.parseDateToString(entityMapRecord.getCreatedDate(),Constants.TIMESTAMP_PATTERN) + "</cell>");
 				// By Date format change by geeta
-				entityMapRecordXML.append("<cell>" + Utility.parseDateToString(entityMapRecord.getCreatedDate(),Variables.dateFormat+edu.wustl.catissuecore.util.global.Constants.TIMESTAMP_PATTERN_MM_SS) + "</cell>");
+				entityMapRecordXML.append("<cell>" + Utility.parseDateToString(entityMapRecord.getCreatedDate(),CommonServiceLocator.getInstance().getDatePattern()+edu.wustl.catissuecore.util.global.Constants.TIMESTAMP_PATTERN_MM_SS) + "</cell>");
 				entityMapRecordXML.append("<cell>" + entityMapRecord.getCreatedBy() + "</cell>");
 				entityMapRecordXML.append("<cell>" + "Edit" +"^"+ strURLForEditRecord+"</cell>");
 				entityMapRecordXML.append("</row>");

@@ -57,7 +57,7 @@ public abstract class BulkOperationAction extends SecureAction
 		}
 		// set the current Date and Time for the event.
 		Calendar cal = Calendar.getInstance();
-		eventParametersForm.setDateOfEvent(AppUtility.parseDateToString(cal.getTime(), Variables.dateFormat));
+		eventParametersForm.setDateOfEvent(AppUtility.parseDateToString(cal.getTime(), CommonServiceLocator.getInstance().getDatePattern()));
 		eventParametersForm.setTimeInHours(Integer.toString(cal.get(Calendar.HOUR_OF_DAY)));
 		eventParametersForm.setTimeInMinutes(Integer.toString(cal.get(Calendar.MINUTE)));
 		

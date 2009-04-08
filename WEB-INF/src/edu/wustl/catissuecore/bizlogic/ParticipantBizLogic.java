@@ -951,7 +951,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		dao.closeSession();
 		
 		
-		DAO hibernateDao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+		DAO hibernateDao = DAOFactory.getInstance().getDAO(0);
 		
 		hibernateDao.openSession(null);
 			

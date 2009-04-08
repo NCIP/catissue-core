@@ -97,7 +97,7 @@ public class SpecimenEventParametersAction  extends BaseAction
 			Calendar cal = Calendar.getInstance();
 			if(eventParametersForm.getDateOfEvent()==null)
 			{
-				eventParametersForm.setDateOfEvent(AppUtility.parseDateToString(cal.getTime(), Variables.dateFormat));
+				eventParametersForm.setDateOfEvent(AppUtility.parseDateToString(cal.getTime(), CommonServiceLocator.getInstance().getDatePattern()));
 			}
 			if(eventParametersForm.getTimeInHours()==null)
 			{

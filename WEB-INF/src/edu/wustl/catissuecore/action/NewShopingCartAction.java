@@ -300,7 +300,7 @@ public class NewShopingCartAction extends BaseAction {
 				{	
 					if(obj1[j] instanceof Date)
 					{
-						cartList[j]=Utility.parseDateToString((Date)obj1[j],  Variables.dateFormat);
+						cartList[j]=Utility.parseDateToString((Date)obj1[j],  CommonServiceLocator.getInstance().getDatePattern());
 					}
 					else
 					{

@@ -28,6 +28,7 @@ import edu.wustl.catissuecore.caties.util.ViewSPRUtil;
 import edu.wustl.catissuecore.domain.pathology.ReportLoaderQueue;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.dao.exception.DAOException;
 
 public class ConflictReportAction extends BaseAction{
@@ -59,7 +60,7 @@ public class ConflictReportAction extends BaseAction{
 	 * @return
 	 * @throws DAOException
 	 */
-	private List getReportQueueDataList(String reportQueueId) throws DAOException
+	private List getReportQueueDataList(String reportQueueId) throws BizLogicException
 	{
 		
 		ReportLoaderQueueBizLogic reportLoaderQueueBizLogic = (ReportLoaderQueueBizLogic)BizLogicFactory.getInstance().getBizLogic(ReportLoaderQueue.class.getName());

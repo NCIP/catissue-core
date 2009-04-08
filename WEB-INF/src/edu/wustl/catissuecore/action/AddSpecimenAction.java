@@ -29,11 +29,13 @@ import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.AppUtility;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.bizlogic.IBizLogic;
+import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.util.global.Status;
 import edu.wustl.dao.exception.DAOException;
 
 /**
@@ -47,7 +49,7 @@ public class AddSpecimenAction extends SecureAction
 	 * Overrides the execute method of Action class.
 	 */
 	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
-			throws IOException, ServletException, DAOException
+			throws IOException, ServletException, BizLogicException
 	{
 
 		CreateSpecimenForm createForm = (CreateSpecimenForm) form;
@@ -86,7 +88,7 @@ public class AddSpecimenAction extends SecureAction
 		{
 			Specimen objSpecimen = (Specimen) list.get(0);
 			
-			if(objSpecimen.getActivityStatus().equals(Constants.ACTIVITY_STATUS_DISABLED))
+			if(objSpecimen.getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED))
 			{
 				/**
 	 			* Name : Falguni Sachde
@@ -153,14 +155,13 @@ public class AddSpecimenAction extends SecureAction
 	/* (non-Javadoc)
 	 * @see edu.wustl.common.action.SecureAction#getObjectId(edu.wustl.common.actionForm.AbstractActionForm)
 	 */
-	@Override
 	protected String getObjectId(AbstractActionForm form)
 	{ 
 		CreateSpecimenForm createSpecimenForm = (CreateSpecimenForm) form;
 		SpecimenCollectionGroup specimenCollectionGroup = null;
 		if(createSpecimenForm.getParentSpecimenId() != null && createSpecimenForm.getParentSpecimenId() != "")
 		{
-				Specimen specimen = Utility.getSpecimen(createSpecimenForm.getParentSpecimenId());
+				Specimen specimen = AppUtility.getSpecimen(createSpecimenForm.getParentSpecimenId());
 				specimenCollectionGroup = specimen.getSpecimenCollectionGroup();
 				CollectionProtocolRegistration cpr = specimenCollectionGroup.getCollectionProtocolRegistration();
 				if (cpr!= null)

@@ -190,7 +190,7 @@ public class SubmitSpecimenCPAction extends BaseAction {
 				Constants.NEW_SPECIMEN_FORM_ID);
 		SessionDataBean sessionDataBean = (SessionDataBean) session
 				.getAttribute(Constants.SESSION_DATA);
-		bizLogic.insert(cpEventMap, sessionDataBean, Constants.HIBERNATE_DAO);
+		bizLogic.insert(cpEventMap, sessionDataBean, 0);
 	}
 
 	/**
@@ -202,7 +202,7 @@ public class SubmitSpecimenCPAction extends BaseAction {
 			throws BizLogicException, UserNotAuthorizedException {
 		IBizLogic bizLogic =BizLogicFactory.getInstance().getBizLogic(Constants.COLLECTION_PROTOCOL_FORM_ID);
 				SessionDataBean sessionDataBean = (SessionDataBean) session.getAttribute(Constants.SESSION_DATA);		
-		bizLogic.insert(collectionProtocolDTO, sessionDataBean, Constants.HIBERNATE_DAO);
+		bizLogic.insert(collectionProtocolDTO, sessionDataBean, 0);
 	}
 
 	/**

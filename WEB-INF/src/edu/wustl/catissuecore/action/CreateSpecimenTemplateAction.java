@@ -26,12 +26,15 @@ import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.CollectionProtocolUtil;
 import edu.wustl.catissuecore.util.EventsUtil;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
-import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.cde.CDEManager;
+import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.util.Utility;
 import edu.wustl.dao.exception.DAOException;
 
 
@@ -80,21 +83,21 @@ public class CreateSpecimenTemplateAction extends BaseAction
 		
 		String key = (String)session.getAttribute("listKey");
 		
-		List specimenTypeList = Utility.getListFromCDE(Constants.CDE_NAME_SPECIMEN_TYPE);
+		List specimenTypeList = AppUtility.getListFromCDE(Constants.CDE_NAME_SPECIMEN_TYPE);
 		List tissueSiteList = new ArrayList();
 		List tissueSideList = new ArrayList();
 		List pathologicalStatusList = new ArrayList();
 		List specimenClassList = null;
 		
-		tissueSiteList.addAll(Utility.tissueSiteList());
+		tissueSiteList.addAll(AppUtility.tissueSiteList());
     	
 		//Getting tissue side list
-		tissueSideList.addAll(Utility.getListFromCDE(Constants.CDE_NAME_TISSUE_SIDE));
+		tissueSideList.addAll(AppUtility.getListFromCDE(Constants.CDE_NAME_TISSUE_SIDE));
 		
 		//Getting pathological status list
-		pathologicalStatusList.addAll(Utility.getListFromCDE(Constants.CDE_NAME_PATHOLOGICAL_STATUS));
-		Map subTypeMap = Utility.getSpecimenTypeMap();
-		specimenClassList = Utility.getSpecimenClassList();
+		pathologicalStatusList.addAll(AppUtility.getListFromCDE(Constants.CDE_NAME_PATHOLOGICAL_STATUS));
+		Map subTypeMap = AppUtility.getSpecimenTypeMap();
+		specimenClassList = AppUtility.getSpecimenClassList();
 		if(operation.equals("add")&&pageOf!=null&&!pageOf.equals("error")&&!pageOf.equals("delete"))
 		{
 			// Setting the default values
@@ -252,7 +255,7 @@ public class CreateSpecimenTemplateAction extends BaseAction
 		{
 			userCollection = userBizLogic.getUsers(operation);
 		}
-		catch (DAOException e)
+		catch (BizLogicException e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();

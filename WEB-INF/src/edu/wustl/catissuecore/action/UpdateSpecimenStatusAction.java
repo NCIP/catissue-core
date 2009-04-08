@@ -66,7 +66,7 @@ public class UpdateSpecimenStatusAction extends BaseAction
 
 			//bizLogic.updaupdateAnticipatorySpecimens(specimenDomainCollection, sessionDataBean);
 			if (specimenDomainCollection != null && specimenDomainCollection.size() > 0)
-				bizLogic.update(specimenDomainCollection, specimenDomainCollection, Constants.HIBERNATE_DAO, sessionDataBean);
+				bizLogic.update(specimenDomainCollection, specimenDomainCollection, 0, sessionDataBean);
 			Object obj = session.getAttribute("SCGFORM");
 
 			//11July08 : Mandar : For GenericSpecimen

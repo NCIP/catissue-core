@@ -35,7 +35,7 @@ public class MockDAOFactory extends DAOFactory
         DAO dao = null;
         switch (daoType)
         {
-            case Constants.HIBERNATE_DAO :
+            case 0 :
                 dao = hibDAO;
                 break;
 

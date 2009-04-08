@@ -134,7 +134,7 @@ public class SubmitCPAction extends BaseAction
 	{
 		IBizLogic bizLogic =BizLogicFactory.getInstance().getBizLogic(Constants.COLLECTION_PROTOCOL_FORM_ID);
 		SessionDataBean sessionDataBean = (SessionDataBean) session.getAttribute(Constants.SESSION_DATA);		
-		bizLogic.insert(collectionProtocolDTO, sessionDataBean, Constants.HIBERNATE_DAO);
+		bizLogic.insert(collectionProtocolDTO, sessionDataBean, 0);
 	}
 
 }
