@@ -1853,17 +1853,17 @@ public class AppUtility
 		return storagePositionTypeList;
 	}
 
-	public static boolean checkForAllCurrentAndFutureCPs(DAO dao, String privilegeName,
+	public static boolean checkForAllCurrentAndFutureCPs(String privilegeName,
 			SessionDataBean sessionDataBean, String cpId)
 	{
 		boolean allowOperation = false;
-		Session session = null;
+		DAO dao = null;
 		Collection<CollectionProtocol> cpCollection = null;
 		try
 		{
-			session = DBUtil.getCleanSession();
+			dao = openDAOSession();
 			Set<Long> cpIds = new HashSet<Long>();
-			User user = (User) session.load(User.class.getName(), sessionDataBean.getUserId());
+			User user = (User) dao.retrieveById(User.class.getName(), sessionDataBean.getUserId());
 			cpCollection = user.getAssignedProtocolCollection();
 
 			if (cpCollection != null && !cpCollection.isEmpty())
@@ -1878,83 +1878,89 @@ public class AppUtility
 			{
 				return false;
 			}
+
+			String privilegeNames[] = privilegeName.split(",");
+			Collection<Site> siteCollection = null;
+			if (cpId != null && cpId.trim().length() != 0)
+			{
+				siteCollection = new CollectionProtocolBizLogic().getRelatedSites(Long.valueOf(cpId));
+			}
+			else
+			{
+				Set<Long> siteIds = new UserBizLogic().getRelatedSiteIds(sessionDataBean.getUserId());
+				if (siteIds != null && !siteIds.isEmpty())
+				{
+					siteCollection = new ArrayList<Site>();
+					for (Long siteId : siteIds)
+					{
+						Site site = new Site();
+						site.setId(siteId);
+						siteCollection.add(site);
+					}
+				}
+			}
+			Set<Long> idSet = new HashSet<Long>();
+
+			if (siteCollection == null)
+			{
+				return false;
+			}
+
+			for (Site site : siteCollection)
+			{
+				idSet.add(site.getId());
+			}
+			// Set<Long> idSet = new UserBizLogic().getRelatedSiteIds(sessionDataBean.getUserId());
+			/*if (dao instanceof HibernateDAO)
+			{
+				try
+				{
+					((HibernateDAO) dao).openSession(null);
+				}
+				catch (DAOException e)
+				{
+					Logger.out.debug(e.getMessage(), e);
+				}
+			}*/
+			for (Long id : idSet)
+			{
+				if (privilegeNames.length > 1)
+				{
+					if ((PrivilegeManager.getInstance()
+							.getPrivilegeCache(sessionDataBean.getUserName()).hasPrivilege(Constants
+									.getCurrentAndFuturePGAndPEName(id), privilegeNames[0]))
+									|| (PrivilegeManager.getInstance().getPrivilegeCache(
+											sessionDataBean.getUserName()).hasPrivilege(Constants
+													.getCurrentAndFuturePGAndPEName(id), privilegeNames[1])))
+					{
+						allowOperation = true;
+					}
+				}
+				else if (PrivilegeManager.getInstance()
+						.getPrivilegeCache(sessionDataBean.getUserName()).hasPrivilege(
+								Constants.getCurrentAndFuturePGAndPEName(id), privilegeName))
+				{
+					allowOperation = true;
+				}
+
+				if (allowOperation)
+				{
+					return true;
+				}
+			}
+			
 		}
-		catch (BizLogicException e)
+		catch (ApplicationException e)
 		{
 			Logger.out.debug(e.getMessage(), e);
 		}
 		finally
 		{
-			session.close();
-		}
-
-		String privilegeNames[] = privilegeName.split(",");
-		Collection<Site> siteCollection = null;
-		if (cpId != null && cpId.trim().length() != 0)
-		{
-			siteCollection = new CollectionProtocolBizLogic().getRelatedSites(Long.valueOf(cpId));
-		}
-		else
-		{
-			Set<Long> siteIds = new UserBizLogic().getRelatedSiteIds(sessionDataBean.getUserId());
-			if (siteIds != null && !siteIds.isEmpty())
-			{
-				siteCollection = new ArrayList<Site>();
-				for (Long siteId : siteIds)
-				{
-					Site site = new Site();
-					site.setId(siteId);
-					siteCollection.add(site);
-				}
-			}
-		}
-		Set<Long> idSet = new HashSet<Long>();
-
-		if (siteCollection == null)
-		{
-			return false;
-		}
-
-		for (Site site : siteCollection)
-		{
-			idSet.add(site.getId());
-		}
-		// Set<Long> idSet = new UserBizLogic().getRelatedSiteIds(sessionDataBean.getUserId());
-		if (dao instanceof HibernateDAO)
-		{
-			try
-			{
-				((HibernateDAO) dao).openSession(null);
-			}
-			catch (DAOException e)
-			{
+			try {
+				dao.closeSession();
+			} catch (DAOException e) {
 				Logger.out.debug(e.getMessage(), e);
-			}
-		}
-		for (Long id : idSet)
-		{
-			if (privilegeNames.length > 1)
-			{
-				if ((PrivilegeManager.getInstance()
-						.getPrivilegeCache(sessionDataBean.getUserName()).hasPrivilege(Constants
-						.getCurrentAndFuturePGAndPEName(id), privilegeNames[0]))
-						|| (PrivilegeManager.getInstance().getPrivilegeCache(
-								sessionDataBean.getUserName()).hasPrivilege(Constants
-								.getCurrentAndFuturePGAndPEName(id), privilegeNames[1])))
-				{
-					allowOperation = true;
-				}
-			}
-			else if (PrivilegeManager.getInstance()
-					.getPrivilegeCache(sessionDataBean.getUserName()).hasPrivilege(
-							Constants.getCurrentAndFuturePGAndPEName(id), privilegeName))
-			{
-				allowOperation = true;
-			}
-
-			if (allowOperation)
-			{
-				return true;
+				e.printStackTrace();
 			}
 		}
 		return false;
@@ -2360,15 +2366,15 @@ public class AppUtility
 	private static boolean returnHasPrivilege(SessionDataBean sessionDataBean,
 			String privilegeName, PrivilegeCache privilegeCache, StringBuffer sb, Object cpId)
 	{
-		Session session = null;
+		DAO dao = null;
 		boolean isPresent = false;
 		Collection<CollectionProtocol> cpCollection = null;
 
 		try
 		{
-			session = DBUtil.getCleanSession();
+			dao = openDAOSession();
 			Set<Long> cpIds = new HashSet<Long>();
-			User user = (User) session.load(User.class.getName(), sessionDataBean.getUserId());
+			User user = (User) dao.retrieveById(User.class.getName(), sessionDataBean.getUserId());
 			cpCollection = user.getAssignedProtocolCollection();
 
 			if (cpCollection != null && !cpCollection.isEmpty())
@@ -2392,7 +2398,7 @@ public class AppUtility
 				}
 				if (!isPresent)
 				{
-					isPresent = checkForAllCurrentAndFutureCPs(null, privilegeNames[0],
+					isPresent = checkForAllCurrentAndFutureCPs( privilegeNames[0],
 							sessionDataBean, cpId.toString());
 				}
 				if (isPresent)
@@ -2408,7 +2414,7 @@ public class AppUtility
 						privilegeName);
 				if (!isPresent && Permissions.REGISTRATION.equals(privilegeName))
 				{
-					isPresent = checkForAllCurrentAndFutureCPs(null, privilegeName,
+					isPresent = checkForAllCurrentAndFutureCPs(privilegeName,
 							sessionDataBean, cpId.toString());
 				}
 				if (privilegeName != null
@@ -2418,13 +2424,18 @@ public class AppUtility
 				}
 			}
 		}
-		catch (BizLogicException e)
+		catch (ApplicationException e)
 		{
 			Logger.out.debug(e.getMessage(), e);
 		}
 		finally
 		{
-			session.close();
+			try {
+				closeDAOSession(dao);
+			} catch (ApplicationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
 		return isPresent;
@@ -2552,7 +2563,7 @@ public class AppUtility
 		return isAuthorized;
 	}
 
-	public static boolean checkPrivilegeOnCP(DAO dao, Object domainObject,
+	public static boolean checkPrivilegeOnCP(Object domainObject,
 			String protectionElementName, String privilegeName, SessionDataBean sessionDataBean)
 			throws ApplicationException
 	{
@@ -2588,13 +2599,13 @@ public class AppUtility
 						.getUserNotAuthorizedException(privilegeName, protectionElementName);
 			}
 			isAuthorized = edu.wustl.catissuecore.util.global.AppUtility
-					.checkForAllCurrentAndFutureCPs(dao, privilegeName, sessionDataBean,
+					.checkForAllCurrentAndFutureCPs(privilegeName, sessionDataBean,
 							protectionElementNames[1]);
 		}
 		return isAuthorized;
 	}
 
-	public static boolean checkOnCurrentAndFuture(DAO dao, SessionDataBean sessionDataBean,
+	public static boolean checkOnCurrentAndFuture(SessionDataBean sessionDataBean,
 			String protectionElementName, String privilegeName) throws UserNotAuthorizedException
 	{
 		boolean isAuthorized = false;
@@ -2609,7 +2620,7 @@ public class AppUtility
 			throw AppUtility.getUserNotAuthorizedException(privilegeName, protectionElementName);
 		}
 		isAuthorized = edu.wustl.catissuecore.util.global.AppUtility
-				.checkForAllCurrentAndFutureCPs(dao, privilegeName, sessionDataBean,
+				.checkForAllCurrentAndFutureCPs(privilegeName, sessionDataBean,
 						protectionElementNames[1]);
 		return isAuthorized;
 	}
@@ -2839,9 +2850,67 @@ public class AppUtility
 		return entityMapRecords;
 	}
 
-	public static ApplicationException getApplicationException(String errorName, Exception exception, String msgValues)
+	public static ApplicationException getApplicationException(Exception exception,String errorName, String msgValues)
 	{
 		return new ApplicationException(ErrorKey.getErrorKey(errorName),exception,msgValues);
 
+	}
+	
+	public static JDBCDAO openJDBCSession() throws ApplicationException
+	{
+		JDBCDAO jdbcDAO = null;
+		try
+		{
+			String applicationName = CommonServiceLocator.getInstance().getAppName();
+			jdbcDAO = DAOConfigFactory.getInstance().getDAOFactory(applicationName).getJDBCDAO();
+			jdbcDAO.openSession(null);
+		}
+		catch(DAOException daoExp)
+		{
+			throw getApplicationException(daoExp, "bizlogic.error", "");
+		}
+		return jdbcDAO;
+	}
+	
+	public static DAO closeJDBCSession(JDBCDAO jdbcDAO) throws ApplicationException
+	{
+		try
+		{
+			jdbcDAO.closeSession();
+		}
+		catch(DAOException daoExp)
+		{
+			throw getApplicationException(daoExp, "bizlogic.error", "");
+		}
+		return jdbcDAO;
+	}
+	
+	public static DAO openDAOSession() throws ApplicationException
+	{
+			DAO dao = null;
+			try
+			{
+				String applicationName = CommonServiceLocator.getInstance().getAppName();
+				dao = DAOConfigFactory.getInstance().getDAOFactory(applicationName).getDAO();
+				dao.openSession(null);
+			}
+			catch(DAOException daoExp)
+			{
+				throw getApplicationException(daoExp, "bizlogic.error", "");
+			}
+			return dao;
+	}
+	
+	public static DAO closeDAOSession(DAO dao) throws ApplicationException
+	{
+		try
+		{
+			dao.closeSession();
+		}
+		catch(DAOException daoExp)
+		{
+			throw getApplicationException(daoExp, "bizlogic.error", "");
+		}
+		return dao;
 	}
 }
