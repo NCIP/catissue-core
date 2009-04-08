@@ -6,7 +6,7 @@ import org.junit.Test;
 import edu.wustl.catissuecore.actionForm.InstitutionForm;
 import edu.wustl.catissuecore.domain.Institution;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
-import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.dao.exception.DAOException;
 
 /**
  * This class contains test cases for institution add/edit

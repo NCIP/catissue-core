@@ -7,7 +7,7 @@ import org.junit.Test;
 import edu.wustl.catissuecore.actionForm.CancerResearchGroupForm;
 import edu.wustl.catissuecore.domain.CancerResearchGroup;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
-import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.dao.exception.DAOException;
 
 /**
  * This class contains test cases for Cancer Research Group add/edit

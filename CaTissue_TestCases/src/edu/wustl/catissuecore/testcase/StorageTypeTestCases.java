@@ -12,7 +12,7 @@ import edu.wustl.catissuecore.domain.Capacity;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.dao.AbstractDAO;
-import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.dao.exception.DAOException;
 
 /**
  * This class contains test cases for Storage Type add/edit
