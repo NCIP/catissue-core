@@ -31,6 +31,8 @@ import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
+import edu.wustl.dao.QueryWhereClause;
+import edu.wustl.dao.condition.EqualClause;
 import edu.wustl.dao.exception.DAOException;
 
 /**
@@ -133,15 +135,16 @@ public final class MultipleSpecimenValidationUtil
 			//validate single specimen
 			if (specimen.getSpecimenCollectionGroup() != null)
 			{
-				String[] selectColumnName = {"id", "collectionProtocolRegistration.id",
-						"collectionProtocolRegistration.collectionProtocol.id"};
-				String[] whereColumnName = {Constants.NAME};
+				String[] selectColumnName = {"id","collectionProtocolRegistration.id","collectionProtocolRegistration.collectionProtocol.id"};
+				/*String[] whereColumnName = {Constants.NAME};
 				String[] whereColumnCondition = {"="};
-				String[] whereColumnValue = {specimen.getSpecimenCollectionGroup().getGroupName()};
-				List spCollGroupList = dao.retrieve(SpecimenCollectionGroup.class.getName(),
-						selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue,
-						null);
-				// TODO saperate calls for SCG - ID and cpid
+				String[] whereColumnValue = {specimen.getSpecimenCollectionGroup().getGroupName()};*/
+				
+				QueryWhereClause queryWhereClause = new QueryWhereClause(SpecimenCollectionGroup.class.getName());
+				queryWhereClause.addCondition(new EqualClause(Constants.NAME,specimen.getSpecimenCollectionGroup().getGroupName()));
+				
+				List spCollGroupList = dao.retrieve(SpecimenCollectionGroup.class.getName(), selectColumnName, queryWhereClause);
+			// TODO saperate calls for SCG - ID and cpid
 				// SCG - ID will be needed before populateStorageLocations
 
 				// TODO test
@@ -184,7 +187,7 @@ public final class MultipleSpecimenValidationUtil
 		Logger.out.info("Inside validateSingleSpecimen() ");
 		if (specimen == null)
 		{
-			throw AppUtility.getApplicationException("domain.object.null.err.msg", null, "Specimen");
+			throw AppUtility.getApplicationException( null,"domain.object.null.err.msg", "Specimen");
 		}
 
 		Validator validator = new Validator();
@@ -196,7 +199,7 @@ public final class MultipleSpecimenValidationUtil
 					|| specimen.getSpecimenCollectionGroup().getId().longValue() == -1)
 			{
 				String message = ApplicationProperties.getValue("specimen.specimenCollectionGroup");
-				throw AppUtility.getApplicationException("errors.item.required", null, message);
+				throw AppUtility.getApplicationException(null,"errors.item.required",  message);
 			}
 		}
 		if (!Variables.isSpecimenLabelGeneratorAvl)
@@ -204,20 +207,20 @@ public final class MultipleSpecimenValidationUtil
 			if (validator.isEmpty(specimen.getLabel()))
 			{
 				String message = ApplicationProperties.getValue("specimen.label");
-				throw AppUtility.getApplicationException("errors.item.required", null, message);
+				throw AppUtility.getApplicationException(null,"errors.item.required", message);
 			}
 		}
 
 		if (validator.isEmpty(specimen.getClassName()))
 		{
 			String message = ApplicationProperties.getValue("specimen.type");
-			throw AppUtility.getApplicationException("errors.item.required", null, message);
+			throw AppUtility.getApplicationException(null,"errors.item.required", message);
 		}
 
 		if (validator.isEmpty(specimen.getSpecimenType()))
 		{
 			String message = ApplicationProperties.getValue("specimen.subType");
-			throw AppUtility.getApplicationException("errors.item.required", null, message);
+			throw AppUtility.getApplicationException(null,"errors.item.required", message);
 		}
 
 		/*
@@ -248,7 +251,7 @@ public final class MultipleSpecimenValidationUtil
 				if (validator.isEmpty(extIdentifier.getValue()))
 				{
 					String message = ApplicationProperties.getValue("specimen.msg");
-					throw AppUtility.getApplicationException("errors.specimen.externalIdentifier.missing", null, message);
+					throw AppUtility.getApplicationException(null,"errors.specimen.externalIdentifier.missing",  message);
 				}
 			}
 		}
@@ -267,13 +270,13 @@ public final class MultipleSpecimenValidationUtil
 
 		if (!Validator.isEnumeratedValue(specimenClassList, specimenClass))
 		{
-			throw AppUtility.getApplicationException("protocol.class.errMsg", null, "");
+			throw AppUtility.getApplicationException( null, "protocol.class.errMsg","");
 		}
 
 		if (!Validator.isEnumeratedValue(AppUtility.getSpecimenTypes(specimenClass), specimen
 				.getSpecimenType()))
 		{
-			throw AppUtility.getApplicationException("protocol.type.errMsg", null, "");
+			throw AppUtility.getApplicationException(null,"protocol.type.errMsg",  "");
 		}
 
 		if (specimen.getParentSpecimen() != null)
@@ -302,12 +305,12 @@ public final class MultipleSpecimenValidationUtil
 					if (!validator.isValidOption(biohazard.getType()))
 					{
 						String message = ApplicationProperties.getValue("newSpecimen.msg");
-						throw AppUtility.getApplicationException("errors.newSpecimen.biohazard.missing", null, message);
+						throw AppUtility.getApplicationException( null,"errors.newSpecimen.biohazard.missing", message);
 					}
 					if (biohazard.getId() == null || biohazard.getId().toString().equals("-1"))
 					{
 						String message = ApplicationProperties.getValue("newSpecimen.msg");
-						throw AppUtility.getApplicationException("errors.newSpecimen.biohazard.missing", null, message);
+						throw AppUtility.getApplicationException( null,"errors.newSpecimen.biohazard.missing",  message);
 					}
 				}
 			}
@@ -316,7 +319,7 @@ public final class MultipleSpecimenValidationUtil
 			{
 				if (characters == null)
 				{
-					throw AppUtility.getApplicationException("specimen.characteristics.errMsg", null, "");
+					throw AppUtility.getApplicationException( null,"specimen.characteristics.errMsg",  "");
 				}
 				else
 				{
@@ -331,7 +334,7 @@ public final class MultipleSpecimenValidationUtil
 						if (!Validator
 								.isEnumeratedValue(tissueSiteList, characters.getTissueSite()))
 						{
-							throw AppUtility.getApplicationException("protocol.tissueSite.errMsg", null, "");
+							throw AppUtility.getApplicationException( null,"protocol.tissueSite.errMsg",  "");
 						}
 
 						//		    	NameValueBean unknownVal = new NameValueBean(Constants.UNKNOWN,Constants.UNKNOWN);
@@ -341,7 +344,7 @@ public final class MultipleSpecimenValidationUtil
 						if (!Validator
 								.isEnumeratedValue(tissueSideList, characters.getTissueSide()))
 						{
-							throw AppUtility.getApplicationException("specimen.tissueSide.errMsg", null, "");
+							throw AppUtility.getApplicationException( null,"specimen.tissueSide.errMsg",  "");
 						}
 
 						List pathologicalStatusList = CDEManager.getCDEManager()
@@ -351,7 +354,7 @@ public final class MultipleSpecimenValidationUtil
 						if (!Validator.isEnumeratedValue(pathologicalStatusList, specimen
 								.getPathologicalStatus()))
 						{
-							throw AppUtility.getApplicationException("protocol.pathologyStatus.errMsg", null, "");
+							throw AppUtility.getApplicationException( null,"protocol.pathologyStatus.errMsg",  "");
 						}
 					}
 
@@ -363,12 +366,12 @@ public final class MultipleSpecimenValidationUtil
 		{
 			if (!specimen.getIsAvailable().booleanValue())
 			{
-				throw AppUtility.getApplicationException("specimen.available.errMsg", null, "");
+				throw AppUtility.getApplicationException( null,"specimen.available.errMsg",  "");
 			}
 
 			if (!Constants.ACTIVITY_STATUS_ACTIVE.equals(specimen.getActivityStatus()))
 			{
-				throw AppUtility.getApplicationException("activityStatus.active.errMsg", null, "");
+				throw AppUtility.getApplicationException( null,"activityStatus.active.errMsg", "");
 			}
 		}
 		else
@@ -376,7 +379,7 @@ public final class MultipleSpecimenValidationUtil
 			if (!Validator.isEnumeratedValue(Constants.ACTIVITY_STATUS_VALUES, specimen
 					.getActivityStatus()))
 			{
-				throw AppUtility.getApplicationException("activityStatus.errMsg", null, "");
+				throw AppUtility.getApplicationException( null,"activityStatus.errMsg", "");
 			}
 		}
 		//Logger.out.debug("End-Inside validate method of specimen bizlogic");
@@ -405,7 +408,7 @@ public final class MultipleSpecimenValidationUtil
 				{
 					String quantityString = ApplicationProperties
 							.getValue("specimen.specimenCollectionGroup");
-					throw AppUtility.getApplicationException("errors.item.required", null, quantityString);
+					throw AppUtility.getApplicationException( null,"errors.item.required", quantityString);
 				}
 			}
 
@@ -415,13 +418,13 @@ public final class MultipleSpecimenValidationUtil
 			if (validator.isEmpty(specimen.getLabel()))
 			{
 				String labelString = ApplicationProperties.getValue("specimen.label");
-				throw AppUtility.getApplicationException("errors.item.required", null, labelString);
+				throw AppUtility.getApplicationException( null,"errors.item.required", labelString);
 			}
 		}
 		if (specimen.getInitialQuantity() == null || specimen.getInitialQuantity() == null)
 		{
 			String quantityString = ApplicationProperties.getValue("specimen.quantity");
-			throw AppUtility.getApplicationException("errors.item.required", null, quantityString);
+			throw AppUtility.getApplicationException( null,"errors.item.required", quantityString);
 		}
 
 		/**
