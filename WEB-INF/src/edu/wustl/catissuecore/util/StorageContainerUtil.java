@@ -307,7 +307,7 @@ public final class StorageContainerUtil
 		String containerName = storageContainer.getName();
 		if (storageContainerMap == null || storageContainerMap.isEmpty())
 		{
-			throw AppUtility.getApplicationException("utility.error", null,
+			throw AppUtility.getApplicationException("utility.error", new Exception(),
 					"StorageContainerUtil.java :" + "Storagecontainer information not found!");
 		}
 

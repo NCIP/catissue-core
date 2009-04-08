@@ -2838,9 +2838,9 @@ public class AppUtility
 		return entityMapRecords;
 	}
 
-	public static ApplicationException getApplicationException()
+	public static ApplicationException getApplicationException(String errorName, Exception exception, String msgValues)
 	{
-		return null;
+		return new ApplicationException(ErrorKey.getErrorKey(errorName),exception,msgValues);
 
 	}
 }
