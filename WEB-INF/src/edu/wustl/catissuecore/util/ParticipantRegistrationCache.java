@@ -283,9 +283,10 @@ class ParticipantRegistrationCache
 	 * This method returns a list of CP ids and CP short titles 
 	 * from the participantRegistrationInfoList
 	 * @return
+	 * @throws ApplicationException 
 	 * @throws DAOException 
 	 */
-	public List getCPDetailCollection()
+	public List getCPDetailCollection() throws ApplicationException
 	{
 		HttpSession session = null;
 		session = flex.messaging.FlexContext.getHttpRequest().getSession();
@@ -308,7 +309,7 @@ class ParticipantRegistrationCache
 			for (Long siteId : siteIds)
 			{
 				String peName = Constants.getCurrentAndFuturePGAndPEName(siteId);
-				if (privilegeCache.hasPrivilege(peName,Variables.privilegeDetailsMap.get(Constants.EDIT_PROFILE_PRIVILEGE)))
+				if (privilegeCache.hasPrivilege(peName,edu.wustl.common.util.global.Variables.privilegeDetailsMap.get(Constants.EDIT_PROFILE_PRIVILEGE)))
 				{
 					Collection<CollectionProtocol> cpCollection = siteBizLogic.getRelatedCPs(siteId);
 					
