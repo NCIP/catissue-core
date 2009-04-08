@@ -30,6 +30,8 @@ import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IDomainObjectFactory;
 import edu.wustl.common.util.XMLPropertyHandler;
 
 /**
@@ -99,8 +101,8 @@ public class DomainObjectListAction extends SecureAction
         } 
         int endIndex = recordsPerPage;
         
-        AbstractDomainObjectFactory abstractDomainObjectFactory = (AbstractDomainObjectFactory)
-        						MasterFactory.getFactory("edu.wustl.catissuecore.domain.DomainObjectFactory");
+        IDomainObjectFactory domainObjectFactory = AbstractFactoryConfig.getInstance().getDomainObjectFactory();
+        
         if (pageNum == Constants.START_PAGE)
         {
             //If start page is to be shown retrieve the list from the database.
@@ -110,12 +112,12 @@ public class DomainObjectListAction extends SecureAction
                 String [] whereColumnConditions = {"=","="};
                 String [] whereColumnValues = {"New","Pending"};
                 
-                list = bizLogic.retrieve(abstractDomainObjectFactory.getDomainObjectName(abstractForm.getFormId()),
+                list = bizLogic.retrieve(domainObjectFactory.getDomainObjectName(abstractForm.getFormId()),
     					whereColumnNames,whereColumnConditions,whereColumnValues,Constants.OR_JOIN_CONDITION);
             }
             else
             {
-                list = bizLogic.retrieve(abstractDomainObjectFactory.getDomainObjectName(abstractForm.getFormId()),
+                list = bizLogic.retrieve(domainObjectFactory.getDomainObjectName(abstractForm.getFormId()),
     					"activityStatus","Pending");
             }
             

@@ -20,6 +20,7 @@ import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.util.ExportReport;
 import edu.wustl.common.util.SendFile;
+import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -47,7 +48,7 @@ public class DistributionReportSaveAction extends BaseDistributionReportAction
 		//Retrieve the distribution ID
 		Long distributionId =configForm.getDistributionId();
 		
-		Distribution dist =  getDistribution(distributionId, getSessionData(request), Constants.CLASS_LEVEL_SECURE_RETRIEVE);
+		Distribution dist =  getDistribution(distributionId, getSessionData(request), edu.wustl.security.global.Constants.CLASS_LEVEL_SECURE_RETRIEVE);
     	SessionDataBean sessionData = getSessionData(request);
     	DistributionReportForm distributionReportForm = getDistributionReportForm(dist);
     	List listOfData = getListOfData(dist, configForm,sessionData) ;
@@ -62,7 +63,7 @@ public class DistributionReportSaveAction extends BaseDistributionReportAction
 		HttpSession session=request.getSession();
 		if(session!=null)
 		{
-			String filePath = Variables.applicationHome+System.getProperty("file.separator")+"DistributionReport_"+session.getId()+".csv";
+			String filePath = CommonServiceLocator.getInstance().getAppHome()+System.getProperty("file.separator")+"DistributionReport_"+session.getId()+".csv";
 			saveReport(distributionReportForm,listOfData,filePath,columnNames);
 			String fileName = Constants.DISTRIBUTION_REPORT_NAME;
 			String contentType= "application/download";

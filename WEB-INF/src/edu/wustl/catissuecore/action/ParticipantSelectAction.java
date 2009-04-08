@@ -33,9 +33,9 @@ import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.BizLogicException;
-import edu.wustl.common.factory.AbstractDomainObjectFactory;
-import edu.wustl.common.factory.AbstractForwardToFactory;
-import edu.wustl.common.factory.MasterFactory;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IDomainObjectFactory;
+import edu.wustl.common.factory.IForwordToFactory;
 import edu.wustl.common.util.AbstractForwardToProcessor;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.ApplicationProperties;
@@ -61,8 +61,7 @@ public class ParticipantSelectAction extends BaseAction
 		String target = null;
 		AbstractActionForm abstractForm = (AbstractActionForm) form;
 		ParticipantForm participantForm=(ParticipantForm) form;
-		AbstractDomainObjectFactory abstractDomainObjectFactory = (AbstractDomainObjectFactory) MasterFactory
-				.getFactory("edu.wustl.catissuecore.domain.DomainObjectFactory");
+		IDomainObjectFactory abstractDomainObjectFactory = AbstractFactoryConfig.getInstance().getDomainObjectFactory();
 
 		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(abstractForm.getFormId());
 
@@ -220,9 +219,8 @@ public class ParticipantSelectAction extends BaseAction
         //getting instance of ForwardToProcessor
 //	        AbstractForwardToProcessor forwardToProcessor= ForwardToFactory.getForwardToProcessor();
         
-        AbstractForwardToProcessor forwardToProcessor = AbstractForwardToFactory.getForwardToProcessor(
-					ApplicationProperties.getValue("app.forwardToFactory"),
-					"getForwardToProcessor");
+    	IForwordToFactory factory = AbstractFactoryConfig.getInstance().getForwToFactory();
+		AbstractForwardToProcessor forwardToProcessor = factory.getForwardToProcessor();
         
         //Populating HashMap of the data required to be forwarded on next page
         HashMap forwardToHashMap = (HashMap)forwardToProcessor.populateForwardToData(abstractForm,abstractDomain);

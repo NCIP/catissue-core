@@ -58,7 +58,7 @@ public class MSRMigration
 	}
 	
 	public void testMigrate(String userName) throws ClassNotFoundException, DAOException, BizLogicException, ParseException
-	{
+	{/*
 		
 		
 		List<User> userList = null;
@@ -99,7 +99,7 @@ public class MSRMigration
 		System.out.println();
 		System.out.println("Number of Non-Administrator Users Updated : "+noOfSupervisorsOrTechnicians);
 		System.out.println();
-	}
+	*/}
 	
 	
 	private List<Site> getRepositorySites() throws BizLogicException 

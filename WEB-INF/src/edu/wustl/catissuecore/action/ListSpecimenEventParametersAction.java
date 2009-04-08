@@ -38,13 +38,15 @@ import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.EventsUtil;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.AppUtility;
-import edu.wustl.catissuecore.util.global.Variables;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.bizlogic.IBizLogic;
-import edu.wustl.dao.exception.DAOException;
+import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.util.Utility;
+import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.exception.DAOException;
 
 public class ListSpecimenEventParametersAction extends SecureAction
 {
@@ -223,8 +225,8 @@ public class ListSpecimenEventParametersAction extends SecureAction
 					{
 						columnList.add(columnList1[i]);
 					}
-					Utility.setGridData( gridDataList,columnList, request);
-					request.setAttribute(Constants.SPREADSHEET_DATA_LIST, gridDataList);
+					AppUtility.setGridData( gridDataList,columnList, request);
+					request.setAttribute(edu.wustl.simplequery.global.Constants.SPREADSHEET_DATA_LIST, gridDataList);
 					Integer identifierFieldIndex = new Integer(0);
 					request.setAttribute("identifierFieldIndex", identifierFieldIndex.intValue());
 				}
@@ -337,7 +339,7 @@ public class ListSpecimenEventParametersAction extends SecureAction
 			
 			Date date = (Date)rowDataMap.get(Constants.EVENT_DATE);
 			//String eventDate = Utility.parseDateToString(date,Constants.TIMESTAMP_PATTERN ); // Sri: Changed format for bug #463
-			String eventDate = Utility.parseDateToString(date, CommonServiceLocator.getInstance().getDatePattern()+edu.wustl.catissuecore.util.global.Constants.TIMESTAMP_PATTERN_MM_SS); // Sri: Changed format for bug #463
+			String eventDate = edu.wustl.common.util.Utility.parseDateToString(date, CommonServiceLocator.getInstance().getDatePattern()+edu.wustl.catissuecore.util.global.Constants.TIMESTAMP_PATTERN_MM_SS); // Sri: Changed format for bug #463
 			rowData.add(eventDate);
 			
 			String paggeOf = (String)rowDataMap.get(Constants.PAGE_OF);
@@ -355,7 +357,7 @@ public class ListSpecimenEventParametersAction extends SecureAction
 	 * @throws DAOException
 	 * Retriving the User from SpecimenEventParameters
 	 */
-	private User getUser(Long eventId,IBizLogic bizLogic)throws DAOException
+	private User getUser(Long eventId,IBizLogic bizLogic)throws BizLogicException
 	{
 		String[] selectColumnName = {"user"};
 		String[] whereColumnName = {Constants.SYSTEM_IDENTIFIER};
@@ -377,7 +379,7 @@ public class ListSpecimenEventParametersAction extends SecureAction
 	 * @throws DAOException
 	 * Retriving eventsCollection from Specimen
 	 */
-	private Collection getSpecimenEventParametersColl(String specimenId,IBizLogic bizLogic)throws DAOException
+	private Collection getSpecimenEventParametersColl(String specimenId,IBizLogic bizLogic)throws BizLogicException
 	{
 		String className = SpecimenEventParameters.class.getName();
 		String columnName =Constants.COLUMN_NAME_SPECIMEN_ID;

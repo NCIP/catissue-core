@@ -15,11 +15,11 @@ import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.AppUtility;
-import edu.wustl.catissuecore.util.global.Variables;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.util.global.CommonServiceLocator;
 
 //import edu.wustl.common.action.SecureAction;
 
@@ -132,7 +132,7 @@ public class MultipleSpecimenFlexInitAction extends SecureAction
 	/* (non-Javadoc)
 	 * @see edu.wustl.common.action.SecureAction#getObjectId(edu.wustl.common.actionForm.AbstractActionForm)
 	 */
-	@Override
+
 	protected String getObjectId(AbstractActionForm form)
 	{ 
 		CreateSpecimenForm createSpecimenForm = (CreateSpecimenForm) form;

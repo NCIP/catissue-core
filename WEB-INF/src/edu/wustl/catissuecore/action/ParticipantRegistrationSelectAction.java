@@ -29,8 +29,8 @@ import edu.wustl.common.action.CommonAddEditAction;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.factory.AbstractDomainObjectFactory;
-import edu.wustl.common.factory.MasterFactory;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IDomainObjectFactory;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
@@ -45,8 +45,7 @@ public class ParticipantRegistrationSelectAction extends CommonAddEditAction{
 			AbstractDomainObject abstractDomain = null;
 	
 			ParticipantForm participantForm=(ParticipantForm) form;
-			AbstractDomainObjectFactory abstractDomainObjectFactory = (AbstractDomainObjectFactory) MasterFactory
-					.getFactory("edu.wustl.catissuecore.domain.DomainObjectFactory");
+			IDomainObjectFactory abstractDomainObjectFactory = AbstractFactoryConfig.getInstance().getDomainObjectFactory();
 	
 			IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(participantForm.getFormId());
 	

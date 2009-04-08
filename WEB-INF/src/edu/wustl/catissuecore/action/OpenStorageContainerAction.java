@@ -14,6 +14,7 @@ import edu.wustl.catissuecore.actionForm.StorageContainerForm;
 import edu.wustl.catissuecore.bean.StorageContainerBean;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
+import edu.wustl.common.util.global.Status;
 
 public class OpenStorageContainerAction extends BaseAction{
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
@@ -29,9 +30,9 @@ public class OpenStorageContainerAction extends BaseAction{
 		{
 			 target=pageOf;
 			 String id = request.getParameter(Constants.SYSTEM_IDENTIFIER);
-			 String activityStatus =request.getParameter(Constants.ACTIVITY_STATUS);
+			 String activityStatus =request.getParameter(Status.ACTIVITY_STATUS.toString());
 			 request.setAttribute(Constants.SYSTEM_IDENTIFIER, id);
-			 request.setAttribute(Constants.ACTIVITY_STATUS,activityStatus);
+			 request.setAttribute(Status.ACTIVITY_STATUS.toString(),activityStatus);
 		}
 		if(Constants.ADD.equals(operation))
 		{

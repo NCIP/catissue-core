@@ -29,11 +29,11 @@ import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.EventsUtil;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.AppUtility;
-import edu.wustl.catissuecore.util.global.Variables;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.bizlogic.IBizLogic;
+import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
 
 public class NewSpecimenEventParametersAction  extends SecureAction
@@ -94,13 +94,13 @@ public class NewSpecimenEventParametersAction  extends SecureAction
 	            			            			
 	            			User user = eventParameters.getUser();
 	            			rowData.add(user.getLastName() + ", " + user.getFirstName());
-	            			rowData.add(AppUtility.parseDateToString(eventParameters.getTimestamp(),CommonServiceLocator.getInstance().getDatePattern()));
+	            			rowData.add(edu.wustl.common.util.Utility.parseDateToString(eventParameters.getTimestamp(),CommonServiceLocator.getInstance().getDatePattern()));
 	            			rowData.add(events[1]);//pageOf
 	            			gridData.add(rowData);
 	            		}
 	            	}
 	            	
-	            	request.setAttribute(Constants.SPREADSHEET_DATA_LIST,gridData);
+	            	request.setAttribute(edu.wustl.simplequery.global.Constants.SPREADSHEET_DATA_LIST,gridData);
 	            }
 	    	}
 	    	

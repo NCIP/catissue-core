@@ -76,7 +76,7 @@ public class DistributionReportAction extends BaseDistributionReportAction
     		configForm.setDistributionId(distributionId);
 		}
 			
-    	Distribution dist =  getDistribution(distributionId, getSessionData(request), Constants.CLASS_LEVEL_SECURE_RETRIEVE);
+    	Distribution dist =  getDistribution(distributionId, getSessionData(request), edu.wustl.security.global.Constants.CLASS_LEVEL_SECURE_RETRIEVE);
     	
     	//Retrieve the distributed items data
     	DistributionReportForm distributionReportForm = getDistributionReportForm(dist);

@@ -57,10 +57,9 @@ import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.ConsentUtil;
 import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
-import edu.wustl.catissuecore.util.global.AppUtility;
-import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.beans.NameValueBean;
@@ -69,9 +68,13 @@ import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.cde.CDE;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.cde.PermissibleValue;
+import edu.wustl.common.exception.ApplicationException;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.MapDataParser;
-import edu.wustl.dao.exception.DAOException;
+import edu.wustl.common.util.Utility;
+import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.exception.DAOException;
 
 /**
  * NewSpecimenAction initializes the fields in the New Specimen page.
@@ -93,7 +96,7 @@ public class NewSpecimenAction extends SecureAction
 	{
 		//Logger.out.debug("NewSpecimenAction start@@@@@@@@@");
 		NewSpecimenForm specimenForm = (NewSpecimenForm) form;
-		List<NameValueBean> storagePositionList =  Utility.getStoragePositionTypeList();
+		List<NameValueBean> storagePositionList =  AppUtility.getStoragePositionTypeList();
 		request.setAttribute("storageList", storagePositionList);
 		String pageOf = request.getParameter(Constants.PAGE_OF);
 		String forwardPage=specimenForm.getForwardTo();
@@ -192,7 +195,7 @@ public class NewSpecimenAction extends SecureAction
 				request.setAttribute(Constants.SELECTED_TAB,tabSelected);
 			}
 			String scg_id=String.valueOf(specimenForm.getSpecimenCollectionGroupId());
-			SpecimenCollectionGroup specimenCollectionGroup= Utility.getSCGObj(scg_id);
+			SpecimenCollectionGroup specimenCollectionGroup= AppUtility.getSCGObj(scg_id);
 			//PHI Data
 			String initialURLValue="";
 			String initialWitnessValue="";
@@ -329,7 +332,7 @@ public class NewSpecimenAction extends SecureAction
 				" from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg," +
 				" edu.wustl.catissuecore.domain.Specimen as spec " +
 				" where spec.specimenCollectionGroup.id=scg.id and spec.id="+ specimen.getId();
-				Collection consentResponse = Utility.executeQuery(consentResponseHql);
+				Collection consentResponse = AppUtility.executeQuery(consentResponseHql);
 				Collection consentResponseStatuslevel=(Collection)bizLogicObj.retrieveAttribute(Specimen.class.getName(),specimen.getId(), "elements(consentTierStatusCollection)");
 				String specimenResponse = "_specimenLevelResponse";
 				String specimenResponseId = "_specimenLevelResponseID";
@@ -342,7 +345,7 @@ public class NewSpecimenAction extends SecureAction
 				session.setAttribute(Constants.COLUMNLIST,columnList);
 			}
 			List specimenResponseList = new ArrayList();
-			specimenResponseList=Utility.responceList(operation);
+			specimenResponseList=AppUtility.responceList(operation);
 			request.setAttribute(Constants.SPECIMEN_RESPONSELIST, specimenResponseList);
 		//Consent Tracking (Virender Mehta)		- Stop 		
      		
@@ -738,7 +741,7 @@ public class NewSpecimenAction extends SecureAction
 		{
 			reportId=new Long(-1);
 		}
-		else if(Utility.isQuarantined(reportId))
+		else if(AppUtility.isQuarantined(reportId))
 		{
 			reportId=new Long(-2);
 		}
@@ -1093,10 +1096,10 @@ public class NewSpecimenAction extends SecureAction
 	 */private void populateAllLists(NewSpecimenForm specimenForm, List<NameValueBean> specimenClassList, List<NameValueBean> specimenTypeList, 
 			List<NameValueBean> tissueSiteList,	List<NameValueBean> tissueSideList,	List<NameValueBean> pathologicalStatusList,
 			Map<String, List<NameValueBean>> subTypeMap) 
-			throws DAOException
+			throws BizLogicException
 	{
 		// Getting the specimen type list
-		specimenTypeList = Utility.getListFromCDE(Constants.CDE_NAME_SPECIMEN_TYPE);
+		specimenTypeList = AppUtility.getListFromCDE(Constants.CDE_NAME_SPECIMEN_TYPE);
 		
 		/**
 	     * Name : Virender Mehta
@@ -1106,13 +1109,13 @@ public class NewSpecimenAction extends SecureAction
 	     * See also:TissueSiteCombo_BugID_2
 	     * Description: Getting TissueList with only Leaf node
 		 */
-		tissueSiteList.addAll(Utility.tissueSiteList());
+		tissueSiteList.addAll(AppUtility.tissueSiteList());
     	
 		//Getting tissue side list
-		tissueSideList.addAll(Utility.getListFromCDE(Constants.CDE_NAME_TISSUE_SIDE));
+		tissueSideList.addAll(AppUtility.getListFromCDE(Constants.CDE_NAME_TISSUE_SIDE));
 		
 		//Getting pathological status list
-		pathologicalStatusList.addAll(Utility.getListFromCDE(Constants.CDE_NAME_PATHOLOGICAL_STATUS));
+		pathologicalStatusList.addAll(AppUtility.getListFromCDE(Constants.CDE_NAME_PATHOLOGICAL_STATUS));
 					
 		// get the Specimen class and type from the cde
 		CDE specimenClassCDE = CDEManager.getCDEManager().getCDE(Constants.CDE_NAME_SPECIMEN_CLASS);
@@ -1149,7 +1152,7 @@ public class NewSpecimenAction extends SecureAction
 		{
 			specimenForm.setPathologicalStatus((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_PATHOLOGICAL_STATUS));
 		}
-		Utility.setDefaultPrinterTypeLocation(specimenForm);
+		AppUtility.setDefaultPrinterTypeLocation(specimenForm);
 	}
 	 /**
 		 * Name : Ashish Gupta
@@ -1241,14 +1244,14 @@ public class NewSpecimenAction extends SecureAction
 		return columnList; 
 	}
 	
-	private Long getAssociatedIdentifiedReportId(Long specimenId) throws DAOException, ClassNotFoundException
+	private Long getAssociatedIdentifiedReportId(Long specimenId) throws ApplicationException
 	{
 		String hqlString="select scg.identifiedSurgicalPathologyReport.id " +
 		" from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg, " +
 		" edu.wustl.catissuecore.domain.Specimen as specimen" +
 		" where specimen.id = " + specimenId +
 		" and specimen.id in elements(scg.specimenCollection)";
-		List reportIDList=Utility.executeQuery(hqlString);
+		List reportIDList=AppUtility.executeQuery(hqlString);
 		if(reportIDList!=null && reportIDList.size()>0)
 		{
 			return ((Long)reportIDList.get(0));
@@ -1258,7 +1261,7 @@ public class NewSpecimenAction extends SecureAction
 	/* (non-Javadoc)
 	 * @see edu.wustl.common.action.SecureAction#getObjectId(edu.wustl.common.actionForm.AbstractActionForm)
 	 */
-	@Override
+	
 	protected String getObjectId(AbstractActionForm form)
 	{
 		NewSpecimenForm specimenForm = (NewSpecimenForm)form;
@@ -1267,7 +1270,7 @@ public class NewSpecimenAction extends SecureAction
 		{
 			try
 			{
-				specimenCollectionGroup= Utility.getSCGObj(specimenForm.getSpecimenCollectionGroupId());
+				specimenCollectionGroup= AppUtility.getSCGObj(specimenForm.getSpecimenCollectionGroupId());
 				CollectionProtocolRegistration cpr = specimenCollectionGroup.getCollectionProtocolRegistration();
 				if (cpr!= null)
 				{
@@ -1275,7 +1278,7 @@ public class NewSpecimenAction extends SecureAction
 					return Constants.COLLECTION_PROTOCOL_CLASS_NAME +"_"+cp.getId();
 				}
 			}
-			catch (DAOException e)
+			catch (ApplicationException e)
 			{
 				// TODO Auto-generated catch block
 				e.printStackTrace();

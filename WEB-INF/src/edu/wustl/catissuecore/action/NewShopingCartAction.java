@@ -28,23 +28,25 @@ import edu.wustl.catissuecore.actionForm.AliquotForm;
 import edu.wustl.catissuecore.actionForm.SpecimenForm;
 import edu.wustl.catissuecore.actionForm.ViewSpecimenSummaryForm;
 import edu.wustl.catissuecore.bizlogic.AnnotationUtil;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
-import edu.wustl.catissuecore.bizlogic.querysuite.QueryShoppingCartBizLogic;
+import edu.wustl.catissuecore.bizlogic.QueryShoppingCartBizLogic;
 import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.catissuecore.querysuite.QueryShoppingCart;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
-import edu.wustl.catissuecore.util.global.Variables;
-import edu.wustl.catissuecore.util.querysuite.EntityCacheFactory;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.Utility;
+import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.dao.exception.DAOException;
+import edu.wustl.query.querysuite.QueryShoppingCart;
+import edu.wustl.query.util.querysuite.EntityCacheFactory;
 
 public class NewShopingCartAction extends BaseAction {
 	
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response) throws DAOException,DynamicExtensionsSystemException, CheckedException, DynamicExtensionsApplicationException {
+			HttpServletRequest request, HttpServletResponse response) throws BizLogicException,DynamicExtensionsSystemException, CheckedException, DynamicExtensionsApplicationException {
 		
 		List<List<String>> cartnew = new ArrayList<List<String>>();
 		HttpSession session = request.getSession();
@@ -216,7 +218,8 @@ public class NewShopingCartAction extends BaseAction {
 	 * @return cart
 	 * @throws DAOException Database related Exception
 	 */
-	private List<List<String>> createListOfItems(ActionForm form,String[] selectColumnName, HttpServletRequest request) throws DAOException {
+	private List<List<String>> createListOfItems(ActionForm form,String[] selectColumnName, 
+			HttpServletRequest request) throws BizLogicException {
 		String objName=Specimen.class.getName();
 		IBizLogic bizLogic=getBizLogic(objName);
 		Object searchObjects = null;
@@ -276,12 +279,14 @@ public class NewShopingCartAction extends BaseAction {
 	/**
 	 * @param domainObjectName name of domain object
 	 * @return
+	 * @throws BizLogicException 
 	 */
-	private IBizLogic getBizLogic(String domainObjectName) 
+	private IBizLogic getBizLogic(String domainObjectName) throws BizLogicException 
 	{
-		BizLogicFactory factory = BizLogicFactory.getInstance();
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 		IBizLogic bizLogic = factory.getBizLogic(domainObjectName);
 		return bizLogic;
+		
 	}
 	
 	/**

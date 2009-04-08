@@ -20,6 +20,7 @@ import edu.wustl.catissuecore.reportloader.HL7ParserUtil;
 import edu.wustl.catissuecore.reportloader.IdentifiedReportGenerator;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.common.util.global.Variables;
 
@@ -29,7 +30,7 @@ public class ViewSPRUtil
 	 * @param request
 	 * @param deidentifiedSurgicalPathologyReport
 	 */
-	public static List getConceptBeanList(DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport) throws DAOException
+	public static List getConceptBeanList(DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport) throws BizLogicException
 	{		
 		List conceptBeanList = new ArrayList();
 		if(deidentifiedSurgicalPathologyReport != null)

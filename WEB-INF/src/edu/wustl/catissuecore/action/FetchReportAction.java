@@ -25,6 +25,7 @@ import edu.wustl.catissuecore.domain.pathology.TextContent;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.dao.exception.DAOException;
 
 
@@ -69,7 +70,7 @@ public class FetchReportAction extends BaseAction
 	 * @return
 	 * @throws DAOException 
 	 */
-	private StringBuffer makeXMLData(StringBuffer xmlData, IdentifiedSurgicalPathologyReport identifiedReport) throws DAOException, SQLException
+	private StringBuffer makeXMLData(StringBuffer xmlData, IdentifiedSurgicalPathologyReport identifiedReport) throws BizLogicException
 	{	
 		DefaultBizLogic defaultBizLogic = new DefaultBizLogic();
 		SpecimenCollectionGroup scg=(SpecimenCollectionGroup)defaultBizLogic.retrieveAttribute(IdentifiedSurgicalPathologyReport.class.getName(), identifiedReport.getId(), Constants.COLUMN_NAME_SCG);

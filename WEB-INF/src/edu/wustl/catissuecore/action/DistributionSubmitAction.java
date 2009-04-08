@@ -19,8 +19,10 @@ import org.apache.struts.action.ActionMessages;
 import edu.wustl.catissuecore.actionForm.DistributionForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.DistributionBizLogic;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.CommonAddEditAction;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.dao.exception.DAOException;
 
 /**
@@ -49,7 +51,7 @@ public class DistributionSubmitAction extends CommonAddEditAction
 		{
 			return executeAction(mapping, form, request, response);
 		} 
-		catch (DAOException e) 
+		catch (ApplicationException e) 
 		{
 			ActionErrors errors = new ActionErrors();
 			ActionError error = new ActionError(e.getMessage());
@@ -69,7 +71,7 @@ public class DistributionSubmitAction extends CommonAddEditAction
      */
 	private ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
-			throws IOException, ServletException, DAOException 
+			throws IOException, ServletException, ApplicationException 
 	{
 
 		DistributionForm dform = (DistributionForm) form;
@@ -156,8 +158,8 @@ public class DistributionSubmitAction extends CommonAddEditAction
 				Long specimenArrayId = bizLogic.getSpecimenArrayId(
 						barcodeLabel, dform.getDistributionBasedOn()); 
 				if (bizLogic.isSpecimenArrayDistributed(specimenArrayId)) {
-					throw new DAOException(
-							"errors.distribution.arrayAlreadyDistributed");
+							
+					throw AppUtility.getApplicationException(null, "errors.distribution.arrayAlreadyDistributed", "");
 
 				}
 

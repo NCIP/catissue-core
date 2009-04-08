@@ -30,22 +30,25 @@ import edu.wustl.catissuecore.domain.DomainObjectFactory;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Site;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.dao.DAO;
-import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.factory.AbstractDomainObjectFactory;
-import edu.wustl.common.factory.MasterFactory;
+import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IDomainObjectFactory;
 import edu.wustl.common.lookup.DefaultLookupResult;
 import edu.wustl.common.lookup.LookupLogic;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.XMLPropertyHandler;
-import edu.wustl.dao.exception.DAOException;
+import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.DAO;
+import edu.wustl.dao.daofactory.DAOFactory;
+import edu.wustl.dao.exception.DAOException;
 
 public class ParticipantLookupAction extends BaseAction
 {
@@ -68,11 +71,10 @@ public class ParticipantLookupAction extends BaseAction
 		
 		AbstractActionForm abstractForm = (AbstractActionForm) form;
 		
-		AbstractDomainObjectFactory abstractDomainObjectFactory = (AbstractDomainObjectFactory) MasterFactory
-				.getFactory(DomainObjectFactory.class.getName());
+		IDomainObjectFactory factoryObj = AbstractFactoryConfig.getInstance().getDomainObjectFactory();
 		
 		
-		AbstractDomainObject abstractDomain = abstractDomainObjectFactory.getDomainObject(abstractForm.getFormId(),
+		AbstractDomainObject abstractDomain = factoryObj.getDomainObject(abstractForm.getFormId(),
 				abstractForm);
 		Participant participant = (Participant) abstractDomain;
 		// 11968 S		
@@ -115,7 +117,7 @@ public class ParticipantLookupAction extends BaseAction
 				
 				//Getitng the Participant List in Data Grid Format
 				List participantDisplayList=getParticipantDisplayList(matchingParticipantList,bizlogic);
-				request.setAttribute(Constants.SPREADSHEET_DATA_LIST, participantDisplayList);
+				request.setAttribute(edu.wustl.simplequery.global.Constants.SPREADSHEET_DATA_LIST, participantDisplayList);
 				
 				target=Constants.PARTICIPANT_LOOKUP_SUCCESS;
 			}
@@ -159,15 +161,15 @@ public class ParticipantLookupAction extends BaseAction
 	// 11968 S
 	private boolean isAuthorized(ActionMapping mapping,HttpServletRequest request,Participant participant)
 	{
-		DAO dao = DAOFactory.getInstance().getDAO(0);
+		DAO dao = null;
 		SessionDataBean sessionDataBean = getSessionData(request);
 		boolean authorizedFlag=false;
 		try
 		{
-			dao.openSession(sessionDataBean);		
+			 dao = AppUtility.openDAOSession();
 			ParticipantBizLogic biz= new ParticipantBizLogic();			
 			authorizedFlag = biz.isAuthorized(dao,participant,sessionDataBean);
-			dao.closeSession();
+			AppUtility.closeDAOSession(dao);
 		}
 		catch (Exception e) 
 		{
@@ -218,7 +220,7 @@ public class ParticipantLookupAction extends BaseAction
 	 * @throws DAOException : db exception
 	 */
 	private List getParticipantDisplayList(List participantList,
-			ParticipantBizLogic bizLogic)throws DAOException
+			ParticipantBizLogic bizLogic)throws BizLogicException
 	{
 		List participantDisplayList=new ArrayList();
 		Iterator<DefaultLookupResult> itr=participantList.iterator();
@@ -241,7 +243,7 @@ public class ParticipantLookupAction extends BaseAction
 	 * @throws DAOException :db exception
 	 */
 	private List getParticipantInfo(ParticipantBizLogic bizLogic, Participant participant)
-			throws DAOException
+			throws BizLogicException
 	{
 		StringBuffer participantName = new StringBuffer();
 		List participantInfo = new ArrayList();
@@ -285,7 +287,7 @@ public class ParticipantLookupAction extends BaseAction
  * @throws DAOException : db exception
  */
 	private String getParticipantMrnDisplay(ParticipantBizLogic bizLogic,
-			Participant participant)throws DAOException
+			Participant participant)throws BizLogicException
 	{
 		StringBuffer mrn = new StringBuffer();
 		Long siteId;

@@ -26,8 +26,7 @@ import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
-;
-import edu.wustl.dao.exception.DAOException;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -62,16 +61,12 @@ public class ForgotPasswordSearchAction extends Action
 
 			target = new String(Constants.SUCCESS);
 		}
-		catch (DAOException excp)
+		catch (BizLogicException excp)
 		{
 			target = new String(Constants.FAILURE);
 			Logger.out.error(excp.getMessage());
 		}
-		catch (UserNotAuthorizedException e)
-		{
-			target = new String(Constants.FAILURE);
-			Logger.out.error(e.getMessage());
-		}
+		
 		return (mapping.findForward(target));
 	}
 }

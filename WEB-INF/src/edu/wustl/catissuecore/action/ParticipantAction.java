@@ -25,8 +25,6 @@ import javax.servlet.http.HttpSession;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.catissuecore.actionForm.ParticipantForm;
@@ -44,24 +42,23 @@ import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.AppUtility;
-import edu.wustl.catissuecore.util.global.Variables;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.cde.CDEManager;
-import edu.wustl.common.dao.DAO;
-import edu.wustl.common.dao.DAOFactory;
-import edu.wustl.common.factory.AbstractDomainObjectFactory;
-import edu.wustl.common.factory.MasterFactory;
+import edu.wustl.common.exception.ApplicationException;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.MapDataParser;
-import edu.wustl.dao.exception.DAOException;
-import edu.wustl.common.util.dbManager.DBUtil;
-import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.Utility;
+import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.DAO;
+import edu.wustl.dao.daofactory.DAOFactory;
+import edu.wustl.dao.exception.DAOException;
 
 /**
  * This class initializes the fields in the Participant Add/Edit webpage.
@@ -402,7 +399,7 @@ public class ParticipantAction extends SecureAction
 		{
 			reportId=new Long(-1);
 		}
-		else if(Utility.isQuarantined(reportId))
+		else if(AppUtility.isQuarantined(reportId))
 		{
 			reportId=new Long(-2);
 		}
@@ -497,7 +494,7 @@ public class ParticipantAction extends SecureAction
 	 * Consent List for given collection protocol
 	 * //Abhishek Mehta
 	 */
-	private Collection getConsentList(IBizLogic bizLogic,String cpId) throws DAOException
+	private Collection getConsentList(IBizLogic bizLogic,String cpId) throws BizLogicException
     {   	
 		Collection consentTierCollection = (Collection)bizLogic.retrieveAttribute(CollectionProtocol.class.getName(), Long.parseLong(cpId), "elements(consentTierCollection)");
 		return consentTierCollection;
@@ -528,10 +525,10 @@ public class ParticipantAction extends SecureAction
 				if(pmi.getMedicalRecordNumber()!=null && pmi.getSite().getId().toString()!=null)
 				{
 					// check for site id and medical number, if they both matches then set id to the respective participant medical number
-					if(((String)(map.get(Utility.getParticipantMedicalIdentifierKeyFor(i, Constants.PARTICIPANT_MEDICAL_IDENTIFIER_MEDICAL_NUMBER)))).equalsIgnoreCase(pmi.getMedicalRecordNumber()) 
-							&& ((String)(map.get(Utility.getParticipantMedicalIdentifierKeyFor(i,Constants.PARTICIPANT_MEDICAL_IDENTIFIER_SITE_ID)))).equalsIgnoreCase(pmi.getSite().getId().toString()))
+					if(((String)(map.get(AppUtility.getParticipantMedicalIdentifierKeyFor(i, Constants.PARTICIPANT_MEDICAL_IDENTIFIER_MEDICAL_NUMBER)))).equalsIgnoreCase(pmi.getMedicalRecordNumber()) 
+							&& ((String)(map.get(AppUtility.getParticipantMedicalIdentifierKeyFor(i,Constants.PARTICIPANT_MEDICAL_IDENTIFIER_SITE_ID)))).equalsIgnoreCase(pmi.getSite().getId().toString()))
 					{
-						map.put(Utility.getParticipantMedicalIdentifierKeyFor(i, Constants.PARTICIPANT_MEDICAL_IDENTIFIER_ID), pmi.getId().toString());
+						map.put(AppUtility.getParticipantMedicalIdentifierKeyFor(i, Constants.PARTICIPANT_MEDICAL_IDENTIFIER_ID), pmi.getId().toString());
 						break;
 					}
 				}
@@ -637,7 +634,7 @@ public class ParticipantAction extends SecureAction
 		}
 	}
 	
-	private Long getAssociatedIdentifiedReportId(ParticipantBizLogic participantBizlogic,Long participantId) throws DAOException
+	private Long getAssociatedIdentifiedReportId(ParticipantBizLogic participantBizlogic,Long participantId) throws BizLogicException
 	{
 		//By Abhishek Mehta
 		List idList=participantBizlogic.getSCGList(participantId);
@@ -658,11 +655,11 @@ public class ParticipantAction extends SecureAction
 	/* (non-Javadoc)
 	 * @see edu.wustl.common.action.SecureAction#getObjectId(edu.wustl.common.actionForm.AbstractActionForm)
 	 */
-	@Override
+
 	protected String getObjectId(AbstractActionForm form)
 	{
 		ParticipantForm participantForm = (ParticipantForm)form;
-		DAO dao = DAOFactory.getInstance().getDAO(0);
+		DAO dao = null;
 		
 		if(participantForm.getCpId()!=0L && participantForm.getCpId()!= -1L) 
 		   return Constants.COLLECTION_PROTOCOL_CLASS_NAME +"_"+participantForm.getCpId();
@@ -671,11 +668,11 @@ public class ParticipantAction extends SecureAction
 		{
 			try
 			{
+				dao = AppUtility.openDAOSession();
 				StringBuffer sb = new StringBuffer();
 				Participant participant;
-				dao.openSession(null);
-			
-				participant = (Participant) dao.retrieve(Participant.class.getName(), participantForm.getId());
+					
+				participant = (Participant) dao.retrieveById(Participant.class.getName(), participantForm.getId());
 				 
 				Collection<CollectionProtocolRegistration> collection = participant.getCollectionProtocolRegistrationCollection();
 				
@@ -696,8 +693,8 @@ public class ParticipantAction extends SecureAction
 			finally
 			{
 				try {
-					dao.closeSession();
-				} catch (DAOException e) {
+					AppUtility.closeDAOSession(dao);
+				} catch (ApplicationException e) {
 					e.printStackTrace();
 				}
 			}

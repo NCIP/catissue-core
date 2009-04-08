@@ -19,18 +19,21 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
 import edu.wustl.catissuecore.actionForm.LoginForm;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.bizlogic.DefaultBizLogic;
-import edu.wustl.common.security.SecurityManager;
-import edu.wustl.common.security.exceptions.SMException;
-import edu.wustl.common.util.Roles;
-import edu.wustl.dao.exception.DAOException;
+import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
+import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
-
+import edu.wustl.security.exception.SMException;
+import edu.wustl.security.global.Roles;
+import edu.wustl.security.manager.ISecurityManager;
+import edu.wustl.security.manager.SecurityManagerFactory;
+import edu.wustl.security.privilege.PrivilegeCache;
+import edu.wustl.security.privilege.PrivilegeManager;
 /**
  * 
  *<p>Title: </p>
@@ -80,11 +83,10 @@ public class LoginAction extends Action
         	String password = loginForm.getPassword();
         	if (validUser != null)
         	{ 
-	            boolean loginOK = SecurityManager.getInstance(LoginAction.class).login(loginName, password);
+	            boolean loginOK = SecurityManagerFactory.getSecurityManager().login(loginName, password);
 	            if (loginOK) 
 	            {
-	                DefaultBizLogic defaultBizLogic = new DefaultBizLogic();
-	            	defaultBizLogic.cachePrivileges(loginName);
+	            	PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(loginName);
 	            	
 	            	Logger.out.info(">>>>>>>>>>>>> SUCESSFUL LOGIN A <<<<<<<<< ");
 	                HttpSession session = request.getSession(true);
@@ -111,7 +113,8 @@ public class LoginAction extends Action
 	                sessionData.setCsmUserId(validUser.getCsmUserId().toString());
 	                session.setAttribute(Constants.SESSION_DATA,sessionData);
 	                session.setAttribute(Constants.USER_ROLE,validUser.getRoleId());
-	                UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.USER_FORM_ID);
+	                IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+	                UserBizLogic userBizLogic = (UserBizLogic)factory.getBizLogic(Constants.USER_FORM_ID);
 	                	
 	                String result = userBizLogic.checkFirstLoginAndExpiry(validUser);
 													
@@ -178,7 +181,7 @@ public class LoginAction extends Action
 	private void setSecurityParamsInSessionData(User validUser, SessionDataBean sessionData)
 			throws SMException
 	{
-		String userRole = SecurityManager.getInstance(LoginAction.class).getUserGroup(
+		String userRole = SecurityManagerFactory.getSecurityManager().getRoleName(
 				validUser.getCsmUserId());
 		if (userRole.equals(Roles.ADMINISTRATOR) || userRole.equals(Roles.SUPERVISOR))
 		{
@@ -202,8 +205,8 @@ public class LoginAction extends Action
     
     private String getForwardToPageOnLogin(Long loginId) throws SMException
     {
-    	SecurityManager securityManager = SecurityManager.getInstance(LoginAction.class);
-        String roleName = securityManager.getUserGroup(loginId);
+    	ISecurityManager securityManager = SecurityManagerFactory.getSecurityManager();
+        String roleName = securityManager.getRoleName(loginId);
         String modifiedRolename="";
         if(roleName==null || roleName.equals(""))
         	
@@ -225,9 +228,10 @@ public class LoginAction extends Action
         }
     }
     
-    private User getUser(String loginName) throws DAOException
+    private User getUser(String loginName) throws BizLogicException
     {
-    	UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.USER_FORM_ID);
+    	IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+    	UserBizLogic userBizLogic = (UserBizLogic)factory.getBizLogic(Constants.USER_FORM_ID);
     	String[] whereColumnName = {"activityStatus","loginName"};
     	String[] whereColumnCondition = {"=","="};
     	String[] whereColumnValue = {Constants.ACTIVITY_STATUS_ACTIVE, loginName};
