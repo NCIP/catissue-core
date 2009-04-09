@@ -11,7 +11,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import edu.wustl.common.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Constants;
+
 
 public class AddAttributesForUpgrade extends BaseMetadata
 {

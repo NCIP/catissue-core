@@ -6,8 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import edu.wustl.common.util.dbManager.DBUtil;
-import edu.wustl.common.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Constants;
 
 public class AddAssociations
 {

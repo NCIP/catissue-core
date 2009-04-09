@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import edu.wustl.common.util.dbManager.DBUtil;
 
 /**
  * @author pooja_deshpande

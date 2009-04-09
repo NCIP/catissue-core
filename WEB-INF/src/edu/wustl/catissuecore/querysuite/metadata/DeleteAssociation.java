@@ -15,7 +15,7 @@ import java.util.StringTokenizer;
 
 import edu.common.dynamicextensions.domain.Entity;
 import edu.common.dynamicextensions.domain.databaseproperties.TableProperties;
-import edu.wustl.common.util.dbManager.DBUtil;
+
 
 /**
  * 
