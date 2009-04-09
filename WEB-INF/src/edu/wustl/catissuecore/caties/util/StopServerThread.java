@@ -12,8 +12,10 @@ import java.net.UnknownHostException;
 
 import org.apache.log4j.PropertyConfigurator;
 
+import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.Variables;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.common.util.logger.LoggerConfig;
 
 public class StopServerThread 
 {
@@ -28,11 +30,11 @@ public class StopServerThread
 	    try 
 	    {    
 	    	// initialization 
-	    	Variables.applicationHome = System.getProperty("user.dir");
+	    	//Variables.applicationHome = System.getProperty("user.dir");
 			Logger.out = org.apache.log4j.Logger.getLogger("");
-			Logger.configure(CaTIESConstants.LOGGER_GENERAL);
+			LoggerConfig.configureLogger(CaTIESConstants.LOGGER_GENERAL);
 			// Configuring logger properties
-			PropertyConfigurator.configure(Variables.applicationHome + File.separator+"logger.properties");
+			PropertyConfigurator.configure(CommonServiceLocator.getInstance().getAppHome() + File.separator+"logger.properties");
 			System.setProperty("gov.nih.nci.security.configFile",
 					"./catissuecore-properties"+File.separator+"ApplicationSecurityConfig.xml");	
 			// get port number of DeidServer

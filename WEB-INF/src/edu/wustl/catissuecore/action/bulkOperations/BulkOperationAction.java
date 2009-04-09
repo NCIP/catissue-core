@@ -17,15 +17,15 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.BulkEventOperationsForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.bizlogic.QueryShoppingCartBizLogic;
 import edu.wustl.catissuecore.bizlogic.SpecimenEventParametersBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
-import edu.wustl.catissuecore.bizlogic.querysuite.QueryShoppingCartBizLogic;
 import edu.wustl.catissuecore.querysuite.QueryShoppingCart;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.AppUtility;
-import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.util.Utility;
+import edu.wustl.common.util.global.CommonServiceLocator;
 
 public abstract class BulkOperationAction extends SecureAction
 {
@@ -57,7 +57,7 @@ public abstract class BulkOperationAction extends SecureAction
 		}
 		// set the current Date and Time for the event.
 		Calendar cal = Calendar.getInstance();
-		eventParametersForm.setDateOfEvent(AppUtility.parseDateToString(cal.getTime(), CommonServiceLocator.getInstance().getDatePattern()));
+		eventParametersForm.setDateOfEvent(Utility.parseDateToString(cal.getTime(), CommonServiceLocator.getInstance().getDatePattern()));
 		eventParametersForm.setTimeInHours(Integer.toString(cal.get(Calendar.HOUR_OF_DAY)));
 		eventParametersForm.setTimeInMinutes(Integer.toString(cal.get(Calendar.MINUTE)));
 		

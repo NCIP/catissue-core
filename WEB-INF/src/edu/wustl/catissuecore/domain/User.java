@@ -25,9 +25,9 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.bizlogic.IActivityStatus;
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.security.SecurityManager;
-import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.security.exception.SMException;
+import edu.wustl.security.manager.SecurityManagerFactory;
 import gov.nih.nci.security.authorization.domainobjects.Role;
 
 /**
@@ -545,7 +545,7 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
 		{
 			if (roleId.equals(Constants.DOUBLE_QUOTES) && id != null && id != 0 && csmUserId != null)
 			{
-				Role role = SecurityManager.getInstance(User.class).getUserRole(csmUserId);
+				Role role = SecurityManagerFactory.getSecurityManager().getUserRole(csmUserId);
 				roleId = role.getId().toString();
 			}
 		}

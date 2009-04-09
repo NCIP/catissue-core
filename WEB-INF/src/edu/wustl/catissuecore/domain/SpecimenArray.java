@@ -14,6 +14,8 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.exception.AssignDataException;
+import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.dao.exception.DAOException;
 
 /**
  * @author gautam_shetty
@@ -87,7 +89,8 @@ public class SpecimenArray extends Container
 	/**
 	 * @param newSpecimenArrayOrderItemCollection the newSpecimenArrayOrderItemCollection to set
 	 */
-	public void setNewSpecimenArrayOrderItemCollection(Collection newSpecimenArrayOrderItemCollection)
+	public void setNewSpecimenArrayOrderItemCollection(
+			Collection newSpecimenArrayOrderItemCollection)
 	{
 		this.newSpecimenArrayOrderItemCollection = newSpecimenArrayOrderItemCollection;
 	}
@@ -215,97 +218,111 @@ public class SpecimenArray extends Container
 	 */
 	public void setAllValues(IValueObject actionForm) throws AssignDataException
 	{
-		if (SearchUtil.isNullobject(specimenArrayType))
+		try
 		{
-			specimenArrayType = new SpecimenArrayType();
-		}
-		if (SearchUtil.isNullobject(createdBy))
-		{
-			createdBy = new User();
-		}
-		if (SearchUtil.isNullobject(locatedAtPosition))
-		{
-			locatedAtPosition = new ContainerPosition();
-		}
-		if (SearchUtil.isNullobject(locatedAtPosition.parentContainer))
-		{
-			locatedAtPosition.parentContainer = new StorageContainer();
-		}
-		if (SearchUtil.isNullobject(available))
-		{
-			available = Boolean.TRUE;
-		}
-		if (actionForm instanceof SpecimenArrayAliquotForm)
-		{
-			SpecimenArrayAliquotForm form = (SpecimenArrayAliquotForm) actionForm;
-			this.aliqoutMap = form.getSpecimenArrayAliquotMap();
-			this.aliquotCount = Integer.parseInt(form.getAliquotCount());
-			this.id = Long.valueOf(form.getSpecimenArrayId());
-		}
-		else
-		{
-			super.setAllValues(actionForm);
-			SpecimenArrayForm specimenArrayForm = (SpecimenArrayForm) actionForm;
-			specimenArrayType.setId(Long.valueOf(specimenArrayForm.getSpecimenArrayTypeId()));
-
-			if (this.locatedAtPosition == null)
+			if (SearchUtil.isNullobject(specimenArrayType))
 			{
-				this.locatedAtPosition = new ContainerPosition();
+				specimenArrayType = new SpecimenArrayType();
 			}
-			if (specimenArrayForm.getStContSelection() == 1)
-			{
-				this.locatedAtPosition.parentContainer.setId(Long.valueOf(
-						specimenArrayForm.getStorageContainer()));
-
-				this.locatedAtPosition.positionDimensionOne = Integer.valueOf(
-						specimenArrayForm.getPositionDimensionOne());
-				this.locatedAtPosition.positionDimensionTwo = Integer.valueOf(
-						specimenArrayForm.getPositionDimensionTwo());
-				this.locatedAtPosition.occupiedContainer = this;
-
-			}
-			else
-			{
-				this.locatedAtPosition.parentContainer.setName(specimenArrayForm.
-						getSelectedContainerName());
-				if (specimenArrayForm.getPos1() != null && !specimenArrayForm.getPos1().trim().
-					equals(Constants.DOUBLE_QUOTES) && specimenArrayForm.getPos2() != null
-						&& !specimenArrayForm.getPos2().trim().equals(""))
-				{
-					this.locatedAtPosition.positionDimensionOne = Integer.valueOf(
-							specimenArrayForm.getPos1());
-					this.locatedAtPosition.positionDimensionTwo = Integer.valueOf(
-							specimenArrayForm.getPos2());
-					this.locatedAtPosition.occupiedContainer = this;
-				}
-			}
-			if (createdBy == null)
+			if (SearchUtil.isNullobject(createdBy))
 			{
 				createdBy = new User();
 			}
-			createdBy.setId(Long.valueOf(specimenArrayForm.getCreatedBy()));
-			// done in Container class
-			/*
-			capacity.setOneDimensionCapacity(new Integer(specimenArrayForm.getOneDimensionCapacity()));
-			capacity.setTwoDimensionCapacity(new Integer(specimenArrayForm.getTwoDimensionCapacity()));
-			*/
-			specimenArrayContentCollection = specimenArrayForm.getSpecArrayContentCollection();
-//			SpecimenArrayUtil.getSpecimenContentCollection(specimenArrayForm.
-//			getSpecimenArrayGridContentList());
-
-			//Ordering System
-			if (specimenArrayForm.getIsDefinedArray().equalsIgnoreCase("True"))
+			if (SearchUtil.isNullobject(locatedAtPosition))
 			{
-				SpecimenArrayBizLogic specimenArrayBizLogic = (SpecimenArrayBizLogic)
-				BizLogicFactory.getInstance().getBizLogic(Constants.SPECIMEN_ARRAY_FORM_ID);
-				NewSpecimenArrayOrderItem newSpecimenArrayOrderItem = specimenArrayBizLogic.
-					getNewSpecimenArrayOrderItem(Long.valueOf(
-							specimenArrayForm.getNewArrayOrderItemId()));
-				Collection tempColl = new HashSet();
-				tempColl.add(newSpecimenArrayOrderItem);
-				this.newSpecimenArrayOrderItemCollection = tempColl;
-				newSpecimenArrayOrderItem.setSpecimenArray(this);
+				locatedAtPosition = new ContainerPosition();
 			}
+			if (SearchUtil.isNullobject(locatedAtPosition.parentContainer))
+			{
+				locatedAtPosition.parentContainer = new StorageContainer();
+			}
+			if (SearchUtil.isNullobject(available))
+			{
+				available = Boolean.TRUE;
+			}
+			if (actionForm instanceof SpecimenArrayAliquotForm)
+			{
+				SpecimenArrayAliquotForm form = (SpecimenArrayAliquotForm) actionForm;
+				this.aliqoutMap = form.getSpecimenArrayAliquotMap();
+				this.aliquotCount = Integer.parseInt(form.getAliquotCount());
+				this.id = Long.valueOf(form.getSpecimenArrayId());
+			}
+			else
+			{
+				super.setAllValues(actionForm);
+				SpecimenArrayForm specimenArrayForm = (SpecimenArrayForm) actionForm;
+				specimenArrayType.setId(Long.valueOf(specimenArrayForm.getSpecimenArrayTypeId()));
+
+				if (this.locatedAtPosition == null)
+				{
+					this.locatedAtPosition = new ContainerPosition();
+				}
+				if (specimenArrayForm.getStContSelection() == 1)
+				{
+					this.locatedAtPosition.parentContainer.setId(Long.valueOf(specimenArrayForm
+							.getStorageContainer()));
+
+					this.locatedAtPosition.positionDimensionOne = Integer.valueOf(specimenArrayForm
+							.getPositionDimensionOne());
+					this.locatedAtPosition.positionDimensionTwo = Integer.valueOf(specimenArrayForm
+							.getPositionDimensionTwo());
+					this.locatedAtPosition.occupiedContainer = this;
+
+				}
+				else
+				{
+					this.locatedAtPosition.parentContainer.setName(specimenArrayForm
+							.getSelectedContainerName());
+					if (specimenArrayForm.getPos1() != null
+							&& !specimenArrayForm.getPos1().trim().equals(Constants.DOUBLE_QUOTES)
+							&& specimenArrayForm.getPos2() != null
+							&& !specimenArrayForm.getPos2().trim().equals(""))
+					{
+						this.locatedAtPosition.positionDimensionOne = Integer
+								.valueOf(specimenArrayForm.getPos1());
+						this.locatedAtPosition.positionDimensionTwo = Integer
+								.valueOf(specimenArrayForm.getPos2());
+						this.locatedAtPosition.occupiedContainer = this;
+					}
+				}
+				if (createdBy == null)
+				{
+					createdBy = new User();
+				}
+				createdBy.setId(Long.valueOf(specimenArrayForm.getCreatedBy()));
+				// done in Container class
+				/*
+				capacity.setOneDimensionCapacity(new Integer(specimenArrayForm.getOneDimensionCapacity()));
+				capacity.setTwoDimensionCapacity(new Integer(specimenArrayForm.getTwoDimensionCapacity()));
+				*/
+				specimenArrayContentCollection = specimenArrayForm.getSpecArrayContentCollection();
+				//			SpecimenArrayUtil.getSpecimenContentCollection(specimenArrayForm.
+				//			getSpecimenArrayGridContentList());
+
+				//Ordering System
+				if (specimenArrayForm.getIsDefinedArray().equalsIgnoreCase("True"))
+				{
+					SpecimenArrayBizLogic specimenArrayBizLogic = (SpecimenArrayBizLogic) BizLogicFactory
+							.getInstance().getBizLogic(Constants.SPECIMEN_ARRAY_FORM_ID);
+					NewSpecimenArrayOrderItem newSpecimenArrayOrderItem = specimenArrayBizLogic
+							.getNewSpecimenArrayOrderItem(Long.valueOf(specimenArrayForm
+									.getNewArrayOrderItemId()));
+					Collection tempColl = new HashSet();
+					tempColl.add(newSpecimenArrayOrderItem);
+					this.newSpecimenArrayOrderItemCollection = tempColl;
+					newSpecimenArrayOrderItem.setSpecimenArray(this);
+				}
+			}
+		}
+		catch (BizLogicException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (NumberFormatException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 

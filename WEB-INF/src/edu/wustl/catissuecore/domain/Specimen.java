@@ -32,7 +32,10 @@ import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.bizlogic.IActivityStatus;
 import edu.wustl.common.exception.AssignDataException;
+import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.MapDataParser;
+import edu.wustl.common.util.Utility;
+import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
@@ -479,8 +482,8 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 				 * Description : Set createdOn date for aliquot.
 				 */
 
-				this.createdOn = AppUtility.parseDate(form.getCreatedDate(),
-						edu.wustl.catissuecore.util.global.CommonServiceLocator.getInstance().getDatePattern());
+				this.createdOn = Utility.parseDate(form.getCreatedDate(),
+						CommonServiceLocator.getInstance().getDatePattern());
 
 				if (!validator.isEmpty(form.getSpecimenLabel()))
 				{
@@ -594,8 +597,8 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 						 * See also: 1_1 to 1_5
 						 * Description : Set createdOn date in edit mode for new specimen
 						 */
-						this.createdOn = AppUtility.parseDate(form.getCreatedDate(),
-							edu.wustl.catissuecore.util.global.CommonServiceLocator.getInstance().getDatePattern());
+						this.createdOn = Utility.parseDate(form.getCreatedDate(),
+							CommonServiceLocator.getInstance().getDatePattern());
 					}
 
 					logger.debug("isParentChanged " + isParentChanged);
@@ -685,8 +688,8 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 						 * Description :createdOn should be collection event date
 						 * for new specimen.
 						 */
-						this.createdOn = AppUtility.parseDate(form.getCollectionEventdateOfEvent(),
-								edu.wustl.catissuecore.util.global.CommonServiceLocator.getInstance().getDatePattern());
+						this.createdOn = Utility.parseDate(form.getCollectionEventdateOfEvent(),
+								CommonServiceLocator.getInstance().getDatePattern());
 
 						logger.debug("Before specimenEventCollection.size(): " + specimenEventCollection.size());
 						specimenEventCollection.add(receivedEventParameters);
@@ -866,7 +869,7 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 					 * See also: 1_1 to 1_5
 					 * Description : Set createdOn date for derived specimen .
 					 */
-					this.createdOn = AppUtility.parseDate(form.getCreatedDate(), edu.wustl.catissuecore.util.global.CommonServiceLocator.getInstance().getDatePattern());
+					this.createdOn = Utility.parseDate(form.getCreatedDate(), CommonServiceLocator.getInstance().getDatePattern());
 
 					if (form.isAddOperation())
 					{
@@ -930,8 +933,9 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 		}
 		catch (Exception excp)
 		{
-			logger.error(excp.getMessage(), excp);
-			throw new AssignDataException(excp);
+			Logger.out.error(excp.getMessage(), excp);
+			ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
+			throw new AssignDataException(errorKey,null ,"Specimen.java :");
 
 		}
 		//Setting the consentTier responses. (Virender Mehta)

@@ -25,7 +25,6 @@ import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.action.CommonAddEditAction;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.BizLogicException;
-;
 import edu.wustl.common.util.logger.Logger;
 
 public class BulkOperationSubmitAction extends BaseAction
@@ -86,7 +85,7 @@ public class BulkOperationSubmitAction extends BaseAction
 			}
 		}
 		
-		catch (UserNotAuthorizedException ex)
+		/*catch (UserNotAuthorizedException ex)
 		{
 			SessionDataBean sessionDataBean = getSessionData(request);
 	        String userName = "";
@@ -111,7 +110,7 @@ public class BulkOperationSubmitAction extends BaseAction
             ActionError error = new ActionError("access.addedit.object.denied", userName, className,decoratedPrivilegeName,baseObject);
 			errors.add(ActionErrors.GLOBAL_ERROR, error);
 			saveErrors(request, errors);
-		}
+		}*/
 		catch (BizLogicException excp)
 		{
 			ActionErrors errors = new ActionErrors();

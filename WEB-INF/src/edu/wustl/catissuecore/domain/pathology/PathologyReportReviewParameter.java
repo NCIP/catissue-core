@@ -9,6 +9,7 @@ import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
+import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -201,7 +202,8 @@ public class PathologyReportReviewParameter extends AbstractDomainObject impleme
 		catch(Exception ex)
 		{
 			Logger.out.error(ex.getMessage(),ex);
-			throw new AssignDataException();
+			ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
+			throw new AssignDataException(errorKey,null ,"PathologyReportReviewParameter.java :");
 		}
 	}
 	

@@ -9,6 +9,7 @@ import edu.wustl.common.bizlogic.IActivityStatus;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -229,8 +230,9 @@ implements Serializable, IActivityStatus
 		}
 		catch(Exception e)
 		{
-			logger.error(e.getMessage(), e);
-			throw new AssignDataException();
+			Logger.out.error(e.getMessage(),e);
+			ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
+			throw new AssignDataException(errorKey,null ,"AbstractSpecimenCollectionGroup.java :");
 		}
 	}
 }

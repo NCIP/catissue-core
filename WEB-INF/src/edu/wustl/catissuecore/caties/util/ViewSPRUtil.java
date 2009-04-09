@@ -22,6 +22,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.dao.exception.DAOException;
+import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.Variables;
 
 public class ViewSPRUtil 
@@ -92,7 +93,7 @@ public class ViewSPRUtil
 		String sysnthesizedReportText="";
 		
 
-		String configFileName = Variables.propertiesDirPath +File.separator+"SectionHeaderConfig.txt";
+		String configFileName = CommonServiceLocator.getInstance().getPropDirPath() +File.separator+"SectionHeaderConfig.txt";
 		
 		//initialize section header map
 		Map abbrToHeader = new HashMap();;
@@ -128,15 +129,15 @@ public class ViewSPRUtil
 			Site site =participantMedicalIdentifier.getSite();
 			if(site!=null)
 			{
-				values.put(key1,edu.wustl.catissuecore.util.global.Utility.toString(site.getName()));
+				values.put(key1,edu.wustl.common.util.Utility.toString(site.getName()));
 			}
 			else
 			{
-				values.put(key1,edu.wustl.catissuecore.util.global.Utility.toString(Constants.SELECT_OPTION));
+				values.put(key1,edu.wustl.common.util.Utility.toString(Constants.SELECT_OPTION));
 			}					
 			
-			values.put(key2,edu.wustl.catissuecore.util.global.Utility.toString(participantMedicalIdentifier.getMedicalRecordNumber()));
-			values.put(key3,edu.wustl.catissuecore.util.global.Utility.toString(participantMedicalIdentifier.getId()));
+			values.put(key2,edu.wustl.common.util.Utility.toString(participantMedicalIdentifier.getMedicalRecordNumber()));
+			values.put(key3,edu.wustl.common.util.Utility.toString(participantMedicalIdentifier.getId()));
 			
 			i++;
     	}

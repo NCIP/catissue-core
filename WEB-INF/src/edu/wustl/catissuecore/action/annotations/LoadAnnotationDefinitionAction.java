@@ -33,7 +33,6 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.hibernate.HibernateException;
-import org.hibernate.Session;
 
 import edu.common.dynamicextensions.bizlogic.BizLogicFactory;
 import edu.common.dynamicextensions.domain.Entity;
@@ -41,6 +40,7 @@ import edu.common.dynamicextensions.domain.integration.EntityMap;
 import edu.common.dynamicextensions.domain.integration.EntityMapCondition;
 import edu.common.dynamicextensions.domain.integration.FormContext;
 import edu.common.dynamicextensions.domain.userinterface.Container;
+import edu.common.dynamicextensions.domaininterface.AbstractEntityInterface;
 import edu.common.dynamicextensions.domaininterface.AssociationInterface;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.common.dynamicextensions.domaininterface.userinterface.ContainerInterface;
@@ -56,18 +56,21 @@ import edu.wustl.catissuecore.annotations.PathObject;
 import edu.wustl.catissuecore.bizlogic.AnnotationBizLogic;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.AppUtility;
-import edu.wustl.catissuecore.util.global.Variables;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
-;
-import edu.wustl.dao.exception.DAOException;
-import edu.wustl.common.util.dbManager.DBUtil;
+import edu.wustl.common.exception.ErrorKey;
+import edu.wustl.common.util.Utility;
+import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.DAO;
+import edu.wustl.dao.daofactory.DAOConfigFactory;
+import edu.wustl.dao.exception.DAOException;
 
 /**
  * @author preeti_munot
@@ -184,13 +187,13 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 				EntityMap entityMap = new EntityMap();
 				entityMap = (EntityMap) entitymapList.get(0);
 				
-				Collection<FormContext> formContexts = Utility.getFormContexts(entityMap.getId());
+				Collection<FormContext> formContexts = AppUtility.getFormContexts(entityMap.getId());
 				Iterator<FormContext> formContextIter = formContexts.iterator();
 				while (formContextIter.hasNext())
 				{
 					FormContext formContext = formContextIter.next();
 					
-					Collection<EntityMapCondition> entityMapConditions = Utility.getEntityMapConditions(formContext.getId());					
+					Collection<EntityMapCondition> entityMapConditions = AppUtility.getEntityMapConditions(formContext.getId());					
 					
 					if ((formContext.getNoOfEntries() == null || formContext.getNoOfEntries()
 							.equals(""))
@@ -224,14 +227,13 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 	/**
 	 * @param request
 	 * @throws UserNotAuthorizedException
-	 * @throws BizLogicException
 	 * @throws CacheException
 	 * @throws DynamicExtensionsApplicationException
 	 * @throws DynamicExtensionsSystemException
+	 * @throws ApplicationException 
 	 */
 	private void processResponseFromDynamicExtensions(HttpServletRequest request)
-			throws BizLogicException, UserNotAuthorizedException, CacheException, DAOException,
-			DynamicExtensionsSystemException, DynamicExtensionsApplicationException
+			throws CacheException, DynamicExtensionsSystemException, DynamicExtensionsApplicationException, ApplicationException
 	{
 		String operationStatus = request.getParameter(WebUIManager
 				.getOperationStatusParameterName());
@@ -255,18 +257,17 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 	 * @param staticEntityId
 	 * @param dynExtContainerId
 	 * @throws UserNotAuthorizedException
-	 * @throws BizLogicException
 	 * @throws CacheException
-	 * @throws DAOException
 	 * @throws DynamicExtensionsApplicationException
 	 * @throws DynamicExtensionsSystemException
+	 * @throws ApplicationException 
 	 */
 	private void linkEntities(HttpServletRequest request, String staticEntityId,
-			String dynExtContainerId, String[] staticRecordIds) throws BizLogicException,
-			DynamicExtensionsSystemException, DynamicExtensionsApplicationException
+			String dynExtContainerId, String[] staticRecordIds) throws DynamicExtensionsSystemException, DynamicExtensionsApplicationException, ApplicationException
 	{
 		if (dynExtContainerId != null)
 		{
+			DAO dao = null;
 			String deletedAssociationIds = request
 					.getParameter(WebUIManagerConstants.DELETED_ASSOCIATION_IDS);
 			String[] deletedAssociationIdArray = null;
@@ -295,26 +296,28 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 					staticEntityId = baseLevelEntityMap.getStaticEntityId().toString();
 
 					//Retrieving the container
-					Session session = null;
 					try
 					{
-						session = DBUtil.currentSession();
+						dao = DAOConfigFactory.getInstance().getDAOFactory(
+								Constants.APPLICATION_NAME).getDAO();
+						dao.openSession(null);
+
 					}
-					catch (HibernateException e1)
+					catch (HibernateException excep)
 					{
-						// TODO Auto-generated catch block
-						Logger.out.debug(e1.getMessage(), e1);
-						throw new BizLogicException("", e1);
+						excep.printStackTrace();
+						throw new ApplicationException(ErrorKey.getErrorKey("action.error"), excep,
+								"LoadAnnotationDefinitionAction.java");
 					}
 
 					ContainerInterface dynamicContainer = null;
 					EntityInterface staticEntity = null;
 					try
 					{
-						staticEntity = (EntityInterface) session.load(Entity.class, new Long(
-								staticEntityId));
-						dynamicContainer = (Container) session.load(Container.class, new Long(
-								dynExtContainerId));
+						staticEntity = (EntityInterface) dao.retrieveById(Entity.class.getName(),
+								new Long(staticEntityId));
+						dynamicContainer = (Container) dao.retrieveById(Container.class.getName(),
+								new Long(dynExtContainerId));
 
 						AssociationInterface association = edu.wustl.catissuecore.bizlogic.AnnotationUtil
 								.getAssociationForEntity(staticEntity, dynamicContainer
@@ -338,38 +341,38 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 								(EntityInterface) dynamicContainer.getAbstractEntity(),
 								staticEntity);
 					}
-					catch (HibernateException e1)
+					catch (BizLogicException excep)
 					{
-						// TODO Auto-generated catch block
-						Logger.out.debug(e1.getMessage(), e1);
-						throw new BizLogicException("", e1);
+						excep.printStackTrace();
+						throw AppUtility.getApplicationException(excep, "action.error",
+								"LoadAnnotationDefinitionAction.java");
 					}
 					finally
 					{
 						try
 						{
-							DBUtil.closeSession();
+							dao.closeSession();
 						}
-						catch (HibernateException e)
+						catch (HibernateException excep)
 						{
-							// TODO Auto-generated catch block
-							Logger.out.debug(e.getMessage(), e);
-							throw new BizLogicException("", e);
+							excep.printStackTrace();
+							throw AppUtility.getApplicationException(excep, "action.error",
+									"LoadAnnotationDefinitionAction.java");
 						}
 					}
 				}
 			}
-			catch (NumberFormatException e2)
+			catch (NumberFormatException excep)
 			{
-				// TODO Auto-generated catch block
-				Logger.out.debug(e2.getMessage(), e2);
-				throw new BizLogicException("", e2);
+				excep.printStackTrace();
+				throw AppUtility.getApplicationException(excep, "action.error",
+				"LoadAnnotationDefinitionAction.java");
 			}
-			catch (DAOException e2)
+			catch (DAOException excep)
 			{
-				// TODO Auto-generated catch block
-				Logger.out.debug(e2.getMessage(), e2);
-				throw new BizLogicException("", e2);
+				excep.printStackTrace();
+				throw AppUtility.getApplicationException(excep, "action.error",
+				"LoadAnnotationDefinitionAction.java");
 			}
 			finally
 			{
@@ -984,7 +987,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 			conditionalInstancesList.add(0, new NameValueBean(
 					edu.wustl.catissuecore.util.global.Constants.HOLDS_ANY, "-1"));
 		}
-		catch (DAOException e)
+		catch (BizLogicException e)
 		{
 			Logger.out.debug(e.getMessage(), e);
 		}

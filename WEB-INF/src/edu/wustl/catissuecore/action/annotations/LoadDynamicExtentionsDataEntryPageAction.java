@@ -23,12 +23,14 @@ import edu.common.dynamicextensions.domain.integration.EntityMap;
 import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationException;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.common.dynamicextensions.ui.webui.util.WebUIManager;
-import edu.common.dynamicextensions.util.global.Constants;
+import edu.common.dynamicextensions.util.global.DEConstants;
 import edu.wustl.catissuecore.actionForm.AnnotationDataEntryForm;
 import edu.wustl.catissuecore.bizlogic.AnnotationBizLogic;
 import edu.wustl.catissuecore.util.global.AppUtility;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -63,8 +65,9 @@ public class LoadDynamicExtentionsDataEntryPageAction extends BaseAction
 	 * @throws CacheException 
 	 * @throws DynamicExtensionsApplicationException
 	 * @throws NumberFormatException 
+	 * @throws BizLogicException BizLogic Exception
 	 */
-	private void updateCache(HttpServletRequest request, AnnotationDataEntryForm annotationDataEntryForm) throws CacheException, NumberFormatException, DynamicExtensionsSystemException
+	private void updateCache(HttpServletRequest request, AnnotationDataEntryForm annotationDataEntryForm) throws CacheException, NumberFormatException, DynamicExtensionsSystemException, BizLogicException
 	{
 		String staticEntityId = annotationDataEntryForm.getParentEntityId();
 		String dynEntContainerId = annotationDataEntryForm.getSelectedAnnotation();
@@ -80,9 +83,10 @@ public class LoadDynamicExtentionsDataEntryPageAction extends BaseAction
 
 	/**
 	 * @param annotationDataEntryForm
+	 * @throws BizLogicException BizLogic Exception
 	 * @throws DynamicExtensionsApplicationException 
 	 */
-	private Long getEntityMapId(Long staticEntityId, Long dynamicEntityContainerId) throws DynamicExtensionsSystemException
+	private Long getEntityMapId(Long staticEntityId, Long dynamicEntityContainerId) throws DynamicExtensionsSystemException, BizLogicException
 	{
 		if (staticEntityId != null)
 		{

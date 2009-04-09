@@ -23,6 +23,7 @@ import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
+import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.logger.Logger;
@@ -353,8 +354,9 @@ public class Distribution extends AbstractDomainObject implements java.io.Serial
 			}
 			catch (Exception excp)
 			{
-				logger.error(excp.getMessage(), excp);
-				throw new AssignDataException(excp);
+				Logger.out.error(excp.getMessage(), excp);
+				ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
+				throw new AssignDataException(errorKey,null ,"Distribution.java :");
 			}
 
 			if (SearchUtil.isNullobject(toSite))

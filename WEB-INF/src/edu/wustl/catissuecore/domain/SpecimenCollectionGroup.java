@@ -26,6 +26,7 @@ import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.logger.Logger;
 
@@ -565,8 +566,9 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 		}
 		catch (Exception e)
 		{
-			logger.error(e.getMessage(), e);
-			throw new AssignDataException(e);
+			Logger.out.error(e.getMessage(), e);
+			ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
+			throw new AssignDataException(errorKey,null ,"SpecimenCollectionGroup.java :");
 		}
 	}
 
@@ -758,8 +760,9 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 
 		if (gpName == null)
 		{
-			throw new BizLogicException("group name can't be null for " +
-					"SpecimenCollectionGroup Object");
+			ErrorKey errorKey = ErrorKey.getErrorKey("scg.name.null.error");
+			throw new BizLogicException(errorKey,null ,"SpecimenArrayTypeBizLogic.java :"+
+					"group name can't be null for " + "SpecimenCollectionGroup Object");	
 		}
 		this.setName(gpName);
 	}

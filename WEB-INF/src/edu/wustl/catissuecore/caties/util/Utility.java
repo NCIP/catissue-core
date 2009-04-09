@@ -34,8 +34,11 @@ import edu.wustl.catissuecore.reportloader.HL7ParserUtil;
 import edu.wustl.catissuecore.reportloader.ReportLoaderUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.dao.exception.DAOException;
+import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.Variables;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.common.util.logger.LoggerConfig;
 
 public class Utility 
 {
@@ -46,12 +49,12 @@ public class Utility
 	public static void init()throws Exception
 	{
 		// Initialization methods
-		Variables.applicationHome = System.getProperty("user.dir");
+		//Variables.applicationHome = System.getProperty("user.dir");
 		//Logger.out = org.apache.log4j.Logger.getLogger("");
 		// Configuring common logger
-		Logger.configure(CaTIESConstants.LOGGER_GENERAL);
+		LoggerConfig.configureLogger(CaTIESConstants.LOGGER_GENERAL);
 		// Configuring logger properties
-		PropertyConfigurator.configure(Variables.applicationHome + File.separator+"logger.properties");
+		PropertyConfigurator.configure(CommonServiceLocator.getInstance().getAppHome() + File.separator+"logger.properties");
 		// initializing caties property configurator
 		CaTIESProperties.initBundle("caTIES");
 	}
@@ -198,9 +201,11 @@ public class Utility
 	 * To retrive the reportLoaderQueueObject
 	 * @param reportQueueId
 	 * @return
+	 * @throws BizLogicException BizLogic Exception
+	 * @throws NumberFormatException 
 	 * @throws DAOException
 	 */
-	public static ReportLoaderQueue getReportQueueObject(String reportQueueId) throws DAOException
+	public static ReportLoaderQueue getReportQueueObject(String reportQueueId) throws NumberFormatException, BizLogicException
 	{
 		
 		ReportLoaderQueue reportLoaderQueue =null;

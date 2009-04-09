@@ -21,16 +21,18 @@ import edu.wustl.catissuecore.domain.shippingtracking.ShipmentRequest;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.AssignDataException;
-import edu.wustl.common.factory.AbstractDomainObjectFactory;
-import edu.wustl.common.query.ShoppingCart;
+import edu.wustl.common.factory.IDomainObjectFactory;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.simplequery.query.ShoppingCart;
+
 
 /**
  * DomainObjectFactory is a factory for instances of various domain objects.
  * @author gautam_shetty
  */
-public class DomainObjectFactory extends AbstractDomainObjectFactory
+public class DomainObjectFactory implements IDomainObjectFactory
 {
 	/**
 	 * logger Logger - Generic logger.
@@ -429,5 +431,11 @@ public class DomainObjectFactory extends AbstractDomainObjectFactory
 				break;
 		}
 		return abstractDomain;
+	}
+
+	public AbstractActionForm getFormBean(Object arg0, String arg1) throws ApplicationException
+	{
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

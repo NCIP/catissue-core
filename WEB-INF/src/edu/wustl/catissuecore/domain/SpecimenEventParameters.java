@@ -20,6 +20,7 @@ import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
+import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.logger.Logger;
 
@@ -246,9 +247,11 @@ public abstract class SpecimenEventParameters extends AbstractDomainObject
 			calendar.set(Calendar.MINUTE, Integer.parseInt(form.getTimeInMinutes()));
 			this.timestamp = calendar.getTime();
 		}
-		catch (ParseException e)
+		catch (ParseException excp)
 		{
-			throw new AssignDataException(e);
+			Logger.out.error(excp.getMessage(), excp);
+			ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
+			throw new AssignDataException(errorKey,null ,"SpecimenEventParameters.java :");
 		}
 	}
 

@@ -13,14 +13,16 @@ package edu.wustl.catissuecore.domain;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
+
 import edu.wustl.catissuecore.actionForm.StorageContainerForm;
 import edu.wustl.catissuecore.util.SearchUtil;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.AppUtility;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.bizlogic.IActivityStatus;
 import edu.wustl.common.exception.AssignDataException;
+import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -396,7 +398,7 @@ public class StorageContainer extends Container implements IActivityStatus
 		StorageContainerForm form = (StorageContainerForm) abstractForm;
 		this.name = form.getContainerName();
 		this.noOfContainers = new Integer(form.getNoOfContainers());
-		if (AppUtility.toString(form.getDefaultTemperature()).trim().length() > 0)
+		if (Utility.toString(form.getDefaultTemperature()).trim().length() > 0)
 		{
 			this.tempratureInCentigrade = new Double(form.getDefaultTemperature());
 		}

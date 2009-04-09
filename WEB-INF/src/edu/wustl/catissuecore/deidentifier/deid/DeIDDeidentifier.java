@@ -19,6 +19,7 @@ import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.TextContent;
+import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.Variables;
 import edu.wustl.common.util.logger.Logger;
 
@@ -31,7 +32,7 @@ public class DeIDDeidentifier extends AbstractDeidentifier
 	public void initialize() throws Exception 
 	{
 		// To store path of the directory for the config files, here 'catissue-properties' directory
-		pathToConfigFiles=new String(Variables.applicationHome + System.getProperty("file.separator")+"caTIES_conf"+System.getProperty("file.separator"));
+		pathToConfigFiles=new String(CommonServiceLocator.getInstance().getAppHome() + System.getProperty("file.separator")+"caTIES_conf"+System.getProperty("file.separator"));
 
 		// Function call to store name of config file name required for de-identification native call, deid.cfg
 		setConfigFileName();

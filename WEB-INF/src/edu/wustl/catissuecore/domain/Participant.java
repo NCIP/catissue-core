@@ -18,21 +18,24 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Map;
+
 import edu.wustl.catissuecore.actionForm.ParticipantForm;
 import edu.wustl.catissuecore.bean.ConsentResponseBean;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
 import edu.wustl.catissuecore.util.ConsentUtil;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.bizlogic.IActivityStatus;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.Utility;
-import edu.wustl.dao.exception.DAOException;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.exception.DAOException;
 
 /**
  * An individual from whom a specimen is collected.
@@ -807,9 +810,11 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 	 * Consent List for given collection protocol.
 	 * @param collectionProtocolID String.
 	 * @return Collection.
+	 * @throws BizLogicException 
+	 * @throws NumberFormatException 
 	 * @throws DAOException DAOException.
 	 */
-	private Collection getConsentList(String collectionProtocolID) throws DAOException
+	private Collection getConsentList(String collectionProtocolID) throws NumberFormatException, BizLogicException
 	{
 		CollectionProtocolBizLogic collectionProtocolBizLogic =
 			(CollectionProtocolBizLogic) BizLogicFactory.getInstance().getBizLogic(
@@ -826,6 +831,6 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 	 */
 	public String getMessageLabel()
 	{
-		return edu.wustl.catissuecore.util.global.Utility.getlLabel(this.lastName, this.firstName);
+		return AppUtility.getlLabel(this.lastName, this.firstName);
 	}
 }

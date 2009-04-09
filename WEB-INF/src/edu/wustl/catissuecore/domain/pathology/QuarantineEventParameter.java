@@ -8,6 +8,7 @@ import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
+import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -194,10 +195,11 @@ public class QuarantineEventParameter extends AbstractDomainObject implements ja
 				this.setQuarantineStatus(false);
 			}
 		}
-		catch(Exception e)
+		catch(Exception ex)
 		{
-			Logger.out.error(e.getMessage(),e);
-			throw new AssignDataException();
+			Logger.out.error(ex.getMessage(),ex);
+			 ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
+			 throw new AssignDataException(errorKey,null ,"QuarantineEventParameter.java :");
 		}
 	}
 	

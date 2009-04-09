@@ -23,6 +23,7 @@ import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.bizlogic.IActivityStatus;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
+import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.logger.Logger;
@@ -466,8 +467,9 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 		}
 		catch (Exception e)
 		{
-			logger.error(e.getMessage());
-			throw new AssignDataException();
+			Logger.out.error(e.getMessage());
+			ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
+			throw new AssignDataException(errorKey,null ,"CollectionProtocolRegistration.java :");
 		}
 	}
 
