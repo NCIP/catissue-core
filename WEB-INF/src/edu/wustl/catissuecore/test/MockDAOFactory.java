@@ -1,11 +1,12 @@
 
 package edu.wustl.catissuecore.test;
 
-import edu.wustl.common.dao.DAO;
-import edu.wustl.common.dao.DAOFactory;
-import edu.wustl.common.dao.HibernateDAO;
-import edu.wustl.common.dao.JDBCDAO;
-import edu.wustl.common.util.global.Constants;
+
+import edu.wustl.dao.DAO;
+import edu.wustl.dao.HibernateDAO;
+import edu.wustl.dao.JDBCDAO;
+import edu.wustl.dao.daofactory.DAOFactory;
+import edu.wustl.dao.util.DAOConstants;
 
 /**
  * This is a mock class for DAOFactory.This class returns mock for  HibernateDAO & JDBC DAO interface.
@@ -39,7 +40,7 @@ public class MockDAOFactory extends DAOFactory
                 dao = hibDAO;
                 break;
 
-            case Constants.JDBC_DAO :
+            case 1 :
                 dao = jdbcDAO;
             default :
                 break;
