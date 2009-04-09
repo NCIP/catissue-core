@@ -10,7 +10,7 @@ import java.util.Date;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
-import edu.wustl.catissuecore.util.global.AppUtility;
+import edu.wustl.common.util.Utility;
 
 
 public class EventParamtersBean implements Externalizable
@@ -38,8 +38,8 @@ public class EventParamtersBean implements Externalizable
 		this.comment = "";
 		Calendar calender = Calendar.getInstance();
 		//calender.setTime(new Date().getT);
-		this.eventHour = AppUtility.toString(Integer.toString(calender.get(Calendar.HOUR_OF_DAY)));
-		this.eventMinute = AppUtility.toString(Integer.toString(calender.get(Calendar.MINUTE)));
+		this.eventHour = Utility.toString(Integer.toString(calender.get(Calendar.HOUR_OF_DAY)));
+		this.eventMinute = Utility.toString(Integer.toString(calender.get(Calendar.MINUTE)));
 	}
 	public void copy(SpecimenEventParameters event)
 	{
@@ -61,8 +61,8 @@ public class EventParamtersBean implements Externalizable
 		Calendar calender = Calendar.getInstance();
 		calender.setTime(event.getTimestamp());
 		this.eventdDate = event.getTimestamp();
-		this.eventHour = AppUtility.toString(Integer.toString(calender.get(Calendar.HOUR_OF_DAY)));
-		this.eventMinute = AppUtility.toString(Integer.toString(calender.get(Calendar.MINUTE)));
+		this.eventHour = Utility.toString(Integer.toString(calender.get(Calendar.HOUR_OF_DAY)));
+		this.eventMinute = Utility.toString(Integer.toString(calender.get(Calendar.MINUTE)));
 		
 	}
 	public void writeExternal(ObjectOutput out) throws IOException 
