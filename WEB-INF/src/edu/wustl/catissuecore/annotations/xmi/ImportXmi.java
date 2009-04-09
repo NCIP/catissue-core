@@ -42,12 +42,12 @@ import edu.wustl.catissuecore.annotations.PathObject;
 import edu.wustl.catissuecore.bizlogic.AnnotationBizLogic;
 import edu.wustl.catissuecore.bizlogic.AnnotationUtil;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.AppUtility;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.exception.BizLogicException;
-;
 import edu.wustl.dao.exception.DAOException;
+import edu.wustl.security.exception.UserNotAuthorizedException;
 
 /**
  * @author ashish_gupta
@@ -176,7 +176,7 @@ public class ImportXmi
 			
 			List<String> containerNames = readFile(pathCsvFileName);
 			XMIImportProcessor xmiImportProcessor = new XMIImportProcessor();
-			List<ContainerInterface> mainContainerList = xmiImportProcessor.processXmi(uml, domainModelName,packageName, containerNames, isEntityGroupSystemGenerated);
+			List<ContainerInterface> mainContainerList = xmiImportProcessor.processXmi(uml, domainModelName,packageName, containerNames);
 			
 			boolean isEditedXmi = xmiImportProcessor.isEditedXmi;
 			System.out.println("\n--------------------------------------------------\n");
@@ -355,7 +355,7 @@ public class ImportXmi
 	 * @throws DynamicExtensionsApplicationException 
 	 * 
 	 */
-	private static void associateHookEntity(List<ContainerInterface> mainContainerList,List<Long> conditionObjectIds,EntityInterface staticEntity,boolean isEditedXmi) throws DAOException, DynamicExtensionsSystemException, BizLogicException, UserNotAuthorizedException, DynamicExtensionsApplicationException
+	private static void associateHookEntity(List<ContainerInterface> mainContainerList,List<Long> conditionObjectIds,EntityInterface staticEntity,boolean isEditedXmi) throws DAOException, DynamicExtensionsSystemException, BizLogicException, DynamicExtensionsApplicationException
 	{		
 		Object typeId = getObjectIdentifier("edu.wustl.catissuecore.domain.CollectionProtocol",AbstractMetadata.class.getName(),Constants.NAME);
 		DefaultBizLogic defaultBizLogic = BizLogicFactory.getDefaultBizLogic();		
@@ -406,10 +406,10 @@ public class ImportXmi
 	 */
 	private static void editConditions(EntityMap entityMap,List<Long> conditionObjectIds,Object typeId) throws DynamicExtensionsSystemException, DAOException
 	{
-		Collection<FormContext> formContexts = new HashSet<FormContext>(Utility.getFormContexts(entityMap.getId()));
+		Collection<FormContext> formContexts = new HashSet<FormContext>(AppUtility.getFormContexts(entityMap.getId()));
 		for(FormContext formContext : formContexts)
 		{
-			Collection<EntityMapCondition> entityMapConditions = Utility.getEntityMapConditions(formContext.getId());
+			Collection<EntityMapCondition> entityMapConditions = AppUtility.getEntityMapConditions(formContext.getId());
 			
 			for(Long collectionProtocolId : conditionObjectIds)
 			{
@@ -443,7 +443,7 @@ public class ImportXmi
 	 * @throws UserNotAuthorizedException
 	 * @throws DynamicExtensionsApplicationException
 	 */
-	private static void createIntegrationObjects(ContainerInterface container,EntityInterface staticEntity,List<Long> conditionObjectIds,Object typeId) throws DynamicExtensionsSystemException, DAOException, BizLogicException, UserNotAuthorizedException, DynamicExtensionsApplicationException
+	private static void createIntegrationObjects(ContainerInterface container,EntityInterface staticEntity,List<Long> conditionObjectIds,Object typeId) throws DynamicExtensionsSystemException, DAOException, BizLogicException, DynamicExtensionsApplicationException
 	{
 		EntityMap entityMap = getEntityMap(container,staticEntity.getId());
 					
@@ -529,9 +529,9 @@ public class ImportXmi
 	/**
 	 * @param hookEntityName
 	 * @return
-	 * @throws DAOException
+	 * @throws BizLogicException 
 	 */
-	private static Object getObjectIdentifier(String whereColumnValue,String selectObjName,String whereColumnName) throws DAOException
+	private static Object getObjectIdentifier(String whereColumnValue,String selectObjName,String whereColumnName) throws BizLogicException
 	{
 		DefaultBizLogic defaultBizLogic = BizLogicFactory.getDefaultBizLogic();
 		String[] selectColName = {Constants.SYSTEM_IDENTIFIER};

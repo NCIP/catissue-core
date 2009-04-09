@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import edu.wustl.common.util.global.Constants;
+import edu.wustl.common.util.global.Status;
 
 public class StorageContainerBean implements Serializable
 {
@@ -12,7 +12,7 @@ public class StorageContainerBean implements Serializable
 
 	private long typeId = -1;
 
-	private String activityStatus = Constants.ACTIVITY_STATUS_ACTIVE;
+	private String activityStatus = Status.ACTIVITY_STATUS_ACTIVE.toString();
 	/**
 	 * An name which refers to the type of the storage.
 	 */

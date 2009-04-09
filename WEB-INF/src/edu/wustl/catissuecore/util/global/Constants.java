@@ -2777,6 +2777,7 @@ public static final String ADD_MULTIPLE_SPECIMEN_TO_CART="addMltipleSpecimenToCa
 	public static final String MOLECULE = "Molecular";
 	public static final String SEARCH = "search";
 	
-	
+	 //  Local extensions integration constants
+    public static final String DEFAULT_CONDITION="-1";
 
 }

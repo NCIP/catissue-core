@@ -67,9 +67,9 @@ public class DECategoryIntegration
 						//create new entitymap object
 						EntityMap entityMap = getEntityMap(rootCategoryContainerId, objEntityMap.getStaticEntityId());
 
-						Collection<FormContext> existingFormContexts = Utility.getFormContexts(objEntityMap.getId());
+						Collection<FormContext> existingFormContexts = AppUtility.getFormContexts(objEntityMap.getId());
 
-						Set<FormContext> newFormContexts = new HashSet<FormContext>(Utility.getFormContexts(entityMap.getId()));
+						Set<FormContext> newFormContexts = new HashSet<FormContext>(AppUtility.getFormContexts(entityMap.getId()));
 						for (FormContext existingFormContext : existingFormContexts)
 						{
 							FormContext newFormContext = new FormContext();
@@ -77,8 +77,8 @@ public class DECategoryIntegration
 							newFormContext.setNoOfEntries(existingFormContext.getNoOfEntries());
 							newFormContext.setStudyFormLabel(existingFormContext.getStudyFormLabel());
 							newFormContext.setEntityMap(entityMap);
-							Collection<EntityMapCondition> existingEntityMapConditions = Utility.getEntityMapConditions(existingFormContext.getId());
-							Collection<EntityMapCondition> newEntityMapConditions = Utility.getEntityMapConditions(newFormContext.getId());
+							Collection<EntityMapCondition> existingEntityMapConditions = AppUtility.getEntityMapConditions(existingFormContext.getId());
+							Collection<EntityMapCondition> newEntityMapConditions = AppUtility.getEntityMapConditions(newFormContext.getId());
 
 
 							for (EntityMapCondition existingEntityMapCondition : existingEntityMapConditions)
@@ -92,7 +92,7 @@ public class DECategoryIntegration
 								newEntityMapConditions.add(newEntityMapCondition);
 
 								EntityMapCondition objNewEntityMapCondition = new EntityMapCondition();
-								Long typeId = (Long) Utility.getObjectIdentifier(Constants.COLLECTION_PROTOCOL,
+								Long typeId = (Long) AppUtility.getObjectIdentifier(Constants.COLLECTION_PROTOCOL,
 										AbstractMetadata.class.getName(), Constants.NAME);
 								objNewEntityMapCondition.setStaticRecordId(Long.valueOf(Constants.DEFAULT_CONDITION));
 								objNewEntityMapCondition.setTypeId(typeId);

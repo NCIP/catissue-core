@@ -4,7 +4,8 @@
  *<p>Copyright:TODO</p>
  *@author 
  *@version 1.0
- */ 
+ */
+
 package edu.wustl.catissuecore.annotations;
 
 import java.io.InputStream;
@@ -31,201 +32,201 @@ import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationExcept
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
-import edu.wustl.common.util.global.Constants;
 
 public class AnnotationUtil
 
 {
 
-    /**
-     * This method updates module map by parsing xml file
-     * @param xmlFileName file to be parsed
-     * @return dataType Map
-     * @throws DataTypeFactoryInitializationException on Exception
-     */
-    public static Map map = new HashMap();
-    
-    public final List<NameValueBean> populateStaticEntityList(
-            String xmlFileName, String displayNam)
-            throws DataTypeFactoryInitializationException
-    {
-        List list = new ArrayList();
+	/**
+	 * This method updates module map by parsing xml file
+	 * @param xmlFileName file to be parsed
+	 * @return dataType Map
+	 * @throws DataTypeFactoryInitializationException on Exception
+	 */
+	public static Map map = new HashMap();
 
-        SAXReader saxReader = new SAXReader();
-        InputStream inputStream = this.getClass().getClassLoader()
-                .getResourceAsStream(xmlFileName);
+	public final List<NameValueBean> populateStaticEntityList(String xmlFileName, String displayNam)
+			throws DataTypeFactoryInitializationException
+	{
+		List list = new ArrayList();
 
-        Document document = null;
+		SAXReader saxReader = new SAXReader();
+		InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(xmlFileName);
 
-        try
-        {
-            document = saxReader.read(inputStream);
-            Element className = null;
-            Element displayName = null;
-            Element conditionInvoker = null;
+		Document document = null;
 
-            Element primitiveAttributesElement = document.getRootElement();
-            Iterator primitiveAttributeElementIterator = primitiveAttributesElement
-                    .elementIterator("static-entity");
+		try
+		{
+			document = saxReader.read(inputStream);
+			Element className = null;
+			Element displayName = null;
+			Element conditionInvoker = null;
 
-            Element primitiveAttributeElement = null;
+			Element primitiveAttributesElement = document.getRootElement();
+			Iterator primitiveAttributeElementIterator = primitiveAttributesElement
+					.elementIterator("static-entity");
 
-            while (primitiveAttributeElementIterator.hasNext())
-            {
-                primitiveAttributeElement = (Element) primitiveAttributeElementIterator
-                        .next();
+			Element primitiveAttributeElement = null;
 
-                className = primitiveAttributeElement.element("name");
-                displayName = primitiveAttributeElement.element("displayName");
-                conditionInvoker = primitiveAttributeElement
-                        .element("conditionInvoker");
-                list.add(new NameValueBean(displayName.getStringValue(),
-                        className.getStringValue()));
+			while (primitiveAttributeElementIterator.hasNext())
+			{
+				primitiveAttributeElement = (Element) primitiveAttributeElementIterator.next();
 
-                if (displayNam != null)
-                {
-                    if (className.getText().equals(displayNam))
-                    {
-                        map.put("name", className.getText());
-                        map.put("displayName", displayName.getText());
-                        map.put("conditionInvoker", conditionInvoker.getText());
-                    }
-                }
+				className = primitiveAttributeElement.element("name");
+				displayName = primitiveAttributeElement.element("displayName");
+				conditionInvoker = primitiveAttributeElement.element("conditionInvoker");
+				list
+						.add(new NameValueBean(displayName.getStringValue(), className
+								.getStringValue()));
 
-            }
-        }
-        catch (DocumentException documentException)
-        {
-            throw new DataTypeFactoryInitializationException(documentException);
-        }
+				if (displayNam != null)
+				{
+					if (className.getText().equals(displayNam))
+					{
+						map.put("name", className.getText());
+						map.put("displayName", displayName.getText());
+						map.put("conditionInvoker", conditionInvoker.getText());
+					}
+				}
 
-        return list;
-    }
-    /*
-    public Collection getEntityMapConditionsCollection(String[] conditions,
-            EntityMap entityMapObj)
-    {
-        Collection entityMapConditionCollection = new HashSet();
-        if(conditions!=null)    
-        for (int i = 0; i < conditions.length; i++)
-        {
-           boolean check = checkForAll(conditions);
-           if(!check)
-            if (!conditions[i]
-                    .equals(new Integer(Constants.SELECT_OPTION_VALUE)
-                            .toString())
-                    && !conditions[i].equals(Constants.ALL))
-            {
-                EntityMapCondition entityMapCondition = new EntityMapCondition();
-                entityMapCondition.setEntityMap(entityMapObj);
-                entityMapCondition.setStaticRecordId(new Long(conditions[i]));
-                entityMapCondition.setTypeId(new Long(4));
-                entityMapConditionCollection.add(entityMapCondition);
-            }
-        }
-        return entityMapConditionCollection;
+			}
+		}
+		catch (DocumentException documentException)
+		{
+			throw new DataTypeFactoryInitializationException(documentException);
+		}
 
-    }*/
-    
-    public Collection getFormContextCollection(String[] conditions,
-            EntityMap entityMapObj) throws CacheException
-    {
-        CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager.getInstance();
-        Collection formContextCollection = new HashSet();
-        FormContext formContext = new FormContext();
-        Collection entityMapConditionCollection = new HashSet();
-        if(conditions!=null)    
-        for (int i = 0; i < conditions.length; i++)
-        {
-			
-        	/*Here every time new formcontext can be created for each condition 
-             *though form is one , just to make different formcontext as "noOfEntries" attribute
-             *for form Context can change or can be assigned in future */
-            formContext.setEntityMap(entityMapObj);
-           boolean check = checkForAll(conditions);
-           if(!check)
-            if (!conditions[i].equals(Constants.ALL))
-            {
-                EntityMapCondition entityMapCondition = new EntityMapCondition();
-                entityMapCondition.setFormContext(formContext);
-                entityMapCondition.setStaticRecordId(new Long(conditions[i]));
-                entityMapCondition.setTypeId(new Long(catissueCoreCacheManager.getObjectFromCache(AnnotationConstants.COLLECTION_PROTOCOL_ENTITY_ID).toString()));
-                entityMapConditionCollection.add(entityMapCondition);
-                formContext.setEntityMapConditionCollection(entityMapConditionCollection);
-                
-            }
-           
-        }
-        formContextCollection.add(formContext);
-        return formContextCollection;
+		return list;
+	}
 
-    }
-    
-    public boolean checkForAll(String[] conditions)
-    {
-        if(conditions!=null)    
-            for (int i = 0; i < conditions.length; i++)
-            {
-                if (conditions[i].equals(Constants.ALL))
-                    return true;
-            }
-        
-        return false;
-    }
-    /**
-     * @param annotationForm 
-     * @throws DynamicExtensionsApplicationException 
-     * @throws DynamicExtensionsSystemException 
-     * @throws CacheException 
-     * 
-     */
-    public static List getSystemEntityList() throws DynamicExtensionsSystemException,
-            DynamicExtensionsApplicationException, CacheException
-    {
-        List<NameValueBean> systemEntityList = new ArrayList<NameValueBean>();
-        AnnotationUtil util = new AnnotationUtil();
-        List<NameValueBean> staticEntityInformationList = util.populateStaticEntityList("StaticEntityInformation.xml",null);
-        CatissueCoreCacheManager cache= CatissueCoreCacheManager.getInstance();
-            systemEntityList.add(new NameValueBean(Constants.SELECT_OPTION,
-                    Constants.SELECT_OPTION_VALUE));
-            String key="";
-            if (staticEntityInformationList != null
-                    && !staticEntityInformationList.isEmpty())
-            {
-                Iterator listIterator = staticEntityInformationList.iterator();
-                while (listIterator.hasNext())
-                {
-                    NameValueBean nameValueBean = (NameValueBean) listIterator
-                            .next();                  
-                    key=getKeyFromEntityName(nameValueBean.getValue());
-                    if(key!=null && !key.equals(""))
-                        systemEntityList.add(new NameValueBean(nameValueBean
-                            .getName(),(Long)cache.getObjectFromCache(key)));                    
-                }
-            }
-        return systemEntityList;
-    }
-    /**
-     * 
-     * @param entityName
-     * @return
-     */
-    private static String getKeyFromEntityName(String entityName)
-    {
-        String key="";
-        if(entityName!=null)
-        {
-            if(entityName.equals(AnnotationConstants.ENTITY_NAME_PARTICIPANT))
-                key=AnnotationConstants.PARTICIPANT_ENTITY_ID;
-            else   if(entityName.equals(AnnotationConstants.ENTITY_NAME_SPECIMEN_COLLN_GROUP))
-                key=AnnotationConstants.SCG_ENTITY_ID;
-            else if(entityName.equals(AnnotationConstants.ENTITY_NAME_SPECIMEN))
-                key=AnnotationConstants.SPECIMEN_ENTITY_ID;
-        }
-        return key;
-    }
+	/*
+	public Collection getEntityMapConditionsCollection(String[] conditions,
+	        EntityMap entityMapObj)
+	{
+	    Collection entityMapConditionCollection = new HashSet();
+	    if(conditions!=null)    
+	    for (int i = 0; i < conditions.length; i++)
+	    {
+	       boolean check = checkForAll(conditions);
+	       if(!check)
+	        if (!conditions[i]
+	                .equals(new Integer(Constants.SELECT_OPTION_VALUE)
+	                        .toString())
+	                && !conditions[i].equals(Constants.ALL))
+	        {
+	            EntityMapCondition entityMapCondition = new EntityMapCondition();
+	            entityMapCondition.setEntityMap(entityMapObj);
+	            entityMapCondition.setStaticRecordId(new Long(conditions[i]));
+	            entityMapCondition.setTypeId(new Long(4));
+	            entityMapConditionCollection.add(entityMapCondition);
+	        }
+	    }
+	    return entityMapConditionCollection;
 
-    
+	}*/
+
+	public Collection getFormContextCollection(String[] conditions, EntityMap entityMapObj)
+			throws CacheException
+	{
+		CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager.getInstance();
+		Collection formContextCollection = new HashSet();
+		FormContext formContext = new FormContext();
+		Collection entityMapConditionCollection = new HashSet();
+		if (conditions != null)
+			for (int i = 0; i < conditions.length; i++)
+			{
+
+				/*Here every time new formcontext can be created for each condition 
+				 *though form is one , just to make different formcontext as "noOfEntries" attribute
+				 *for form Context can change or can be assigned in future */
+				formContext.setEntityMap(entityMapObj);
+				boolean check = checkForAll(conditions);
+				if (!check)
+					if (!conditions[i].equals(Constants.ALL))
+					{
+						EntityMapCondition entityMapCondition = new EntityMapCondition();
+						entityMapCondition.setFormContext(formContext);
+						entityMapCondition.setStaticRecordId(new Long(conditions[i]));
+						entityMapCondition.setTypeId(new Long(catissueCoreCacheManager
+								.getObjectFromCache(
+										AnnotationConstants.COLLECTION_PROTOCOL_ENTITY_ID)
+								.toString()));
+						entityMapConditionCollection.add(entityMapCondition);
+						formContext.setEntityMapConditionCollection(entityMapConditionCollection);
+
+					}
+
+			}
+		formContextCollection.add(formContext);
+		return formContextCollection;
+
+	}
+
+	public boolean checkForAll(String[] conditions)
+	{
+		if (conditions != null)
+			for (int i = 0; i < conditions.length; i++)
+			{
+				if (conditions[i].equals(Constants.ALL))
+					return true;
+			}
+
+		return false;
+	}
+
+	/**
+	 * @param annotationForm 
+	 * @throws DynamicExtensionsApplicationException 
+	 * @throws DynamicExtensionsSystemException 
+	 * @throws CacheException 
+	 * 
+	 */
+	public static List getSystemEntityList() throws DynamicExtensionsSystemException,
+			DynamicExtensionsApplicationException, CacheException
+	{
+		List<NameValueBean> systemEntityList = new ArrayList<NameValueBean>();
+		AnnotationUtil util = new AnnotationUtil();
+		List<NameValueBean> staticEntityInformationList = util.populateStaticEntityList(
+				"StaticEntityInformation.xml", null);
+		CatissueCoreCacheManager cache = CatissueCoreCacheManager.getInstance();
+		systemEntityList.add(new NameValueBean(Constants.SELECT_OPTION,
+				Constants.SELECT_OPTION_VALUE));
+		String key = "";
+		if (staticEntityInformationList != null && !staticEntityInformationList.isEmpty())
+		{
+			Iterator listIterator = staticEntityInformationList.iterator();
+			while (listIterator.hasNext())
+			{
+				NameValueBean nameValueBean = (NameValueBean) listIterator.next();
+				key = getKeyFromEntityName(nameValueBean.getValue());
+				if (key != null && !key.equals(""))
+					systemEntityList.add(new NameValueBean(nameValueBean.getName(), (Long) cache
+							.getObjectFromCache(key)));
+			}
+		}
+		return systemEntityList;
+	}
+
+	/**
+	 * 
+	 * @param entityName
+	 * @return
+	 */
+	private static String getKeyFromEntityName(String entityName)
+	{
+		String key = "";
+		if (entityName != null)
+		{
+			if (entityName.equals(AnnotationConstants.ENTITY_NAME_PARTICIPANT))
+				key = AnnotationConstants.PARTICIPANT_ENTITY_ID;
+			else if (entityName.equals(AnnotationConstants.ENTITY_NAME_SPECIMEN_COLLN_GROUP))
+				key = AnnotationConstants.SCG_ENTITY_ID;
+			else if (entityName.equals(AnnotationConstants.ENTITY_NAME_SPECIMEN))
+				key = AnnotationConstants.SPECIMEN_ENTITY_ID;
+		}
+		return key;
+	}
 
 }

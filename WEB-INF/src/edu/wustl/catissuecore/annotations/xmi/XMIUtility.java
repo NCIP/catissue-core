@@ -23,6 +23,7 @@ import edu.common.dynamicextensions.entitymanager.EntityManagerInterface;
 import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationException;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.wustl.catissuecore.bizlogic.AnnotationBizLogic;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.dao.exception.DAOException;
 
 
@@ -44,7 +45,7 @@ public class XMIUtility
 		}
 		return null;
 	}
-	public static void addHookEntitiesToGroup(EntityGroupInterface entityGroup) throws DAOException, DynamicExtensionsSystemException, DynamicExtensionsApplicationException
+	public static void addHookEntitiesToGroup(EntityGroupInterface entityGroup) throws DynamicExtensionsSystemException, DynamicExtensionsApplicationException, BizLogicException
 	{
 		//ContainerInterface mainContainer = getMainContainer(entityGroup);
 		Collection<ContainerInterface> mainContainers = entityGroup.getMainContainerCollection();

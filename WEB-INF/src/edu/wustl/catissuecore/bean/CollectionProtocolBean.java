@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import edu.wustl.common.util.global.Constants;
+import edu.wustl.common.util.global.Status;
 
 
 public class CollectionProtocolBean implements Serializable
@@ -55,7 +56,7 @@ public class CollectionProtocolBean implements Serializable
 	 /**
      * Activity Status.
      */
-    protected String activityStatus = Constants.ACTIVITY_STATUS_ACTIVE;
+    protected String activityStatus = Status.ACTIVITY_STATUS_ACTIVE.toString();
 	
 	/**
 	 * Unsigned Form Url for the Consents
