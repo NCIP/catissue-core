@@ -16,7 +16,7 @@ import javax.sql.DataSource;
 
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Variables;
+import edu.wustl.dao.daofactory.DAOConfigFactory;
 
 /**
  * This class  contains the default  implementation for Specimen Barcode generation.
@@ -55,12 +55,12 @@ public class DefaultSpecimenBarcodeGeneratorForWashu implements BarcodeGenerator
 	{
 		try
 		{
-			if (Constants.ORACLE_DATABASE.equals(Variables.databaseName))
+			if (Constants.ORACLE_DATABASE.equals(DAOConfigFactory.getInstance().getDAOFactory(Constants.APPLICATION_NAME).getDataBaseType()))
 			{
 				currentBarcode = getLastAvailableSpecimenBarcode
 								(Constants.ORACLE_MAX_BARCODE_COL);
 			}
-			else if (Constants.MSSQLSERVER_DATABASE.equals(Variables.databaseName))
+			else if (Constants.MSSQLSERVER_DATABASE.equals(DAOConfigFactory.getInstance().getDAOFactory(Constants.APPLICATION_NAME).getDataBaseType()))
 			{
 				currentBarcode = getLastAvailableSpecimenBarcode
 								(Constants.MSSQLSERVER_MAX_BARCODE_COL);
@@ -86,7 +86,7 @@ public class DefaultSpecimenBarcodeGeneratorForWashu implements BarcodeGenerator
 	{
 		StringBuffer sql = new StringBuffer("select MAX(" + databaseConstant + ") from CATISSUE_SPECIMEN");
 		// Modify query for mssqlserver DB.
-		if (Constants.MSSQLSERVER_DATABASE.equals(Variables.databaseName)) {
+		if (Constants.MSSQLSERVER_DATABASE.equals(DAOConfigFactory.getInstance().getDAOFactory(Constants.APPLICATION_NAME).getDataBaseType())) {
 			sql.append(Constants.MSSQLSERVER_QRY_DT_CONVERSION_FOR_BARCODE_APPEND_STR);
 		}
 		

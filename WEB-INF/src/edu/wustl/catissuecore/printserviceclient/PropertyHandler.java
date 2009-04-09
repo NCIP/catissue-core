@@ -5,7 +5,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.Properties;
 
-import edu.wustl.catissuecore.util.global.Variables;
+import edu.wustl.common.util.global.CommonServiceLocator;
 
 /**
  * This class has functions to read PrintServiceImplementor Properties file.
@@ -28,7 +28,7 @@ public class PropertyHandler {
 	{
 		try
 		{
-			String absolutePath=Variables.propertiesDirPath +File.separator+path;
+			String absolutePath=CommonServiceLocator.getInstance().getPropDirPath() +File.separator+path;
 			InputStream inpurStream= new FileInputStream(new File(absolutePath));
 			printimplClassProperties = new Properties();
 			printimplClassProperties.load(inpurStream);

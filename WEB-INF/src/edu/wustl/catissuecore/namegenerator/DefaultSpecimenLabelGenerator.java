@@ -15,7 +15,7 @@ import javax.sql.DataSource;
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Variables;
+import edu.wustl.dao.daofactory.DAOConfigFactory;
 
 /**
  * This  class which contains the default  implementation for Specimen label generation.
@@ -53,12 +53,12 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 	{
 		try
 		{
-			if (Constants.ORACLE_DATABASE.equals(Variables.databaseName))
+			if (Constants.ORACLE_DATABASE.equals(DAOConfigFactory.getInstance().getDAOFactory(Constants.APPLICATION_NAME).getDataBaseType()))
 			{
 				currentLabel = getLastAvailableSpecimenLabel
 				(Constants.ORACLE_NUM_TO_STR_FUNCTION_NAME_FOR_LABEL_GENRATION);
 			}
-			else if (Constants.MSSQLSERVER_DATABASE.equals(Variables.databaseName))
+			else if (Constants.MSSQLSERVER_DATABASE.equals(DAOConfigFactory.getInstance().getDAOFactory(Constants.APPLICATION_NAME).getDataBaseType()))
 			{
 				currentLabel = getLastAvailableSpecimenLabel(Constants.MSSQLSERVER_NUM_TO_STR_FUNCTION_NAME_FOR_LABEL_GENRATION);
 			}
@@ -84,7 +84,7 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 		StringBuffer sql = new StringBuffer("select MAX(" + databaseConstant + ") from CATISSUE_SPECIMEN");
 		
 		// Modify query for mssqlserver DB.
-		if (Constants.MSSQLSERVER_DATABASE.equals(Variables.databaseName)) {
+		if (Constants.MSSQLSERVER_DATABASE.equals(DAOConfigFactory.getInstance().getDAOFactory(Constants.APPLICATION_NAME).getDataBaseType())) {
 			sql.append(Constants.MSSQLSERVER_QRY_DT_CONVERSION_FOR_LABEL_APPEND_STR);
 		}
 		Connection conn = null;
