@@ -15,6 +15,7 @@ import edu.wustl.catissuecore.caties.util.Utility;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.pathology.ReportLoaderQueue;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.Variables;
 import edu.wustl.common.util.logger.Logger;
 
@@ -38,7 +39,7 @@ public class ReportLoaderQueueProcessor extends Thread
 		Long startTime=null;
 		Long endTime=null;
 		
-		String configFileName=new String(Variables.applicationHome + System.getProperty("file.separator")+"caTIES_conf"+System.getProperty("file.separator"));
+		String configFileName=new String(CommonServiceLocator.getInstance().getAppHome() + System.getProperty("file.separator")+"caTIES_conf"+System.getProperty("file.separator"));
 		configFileName+=CaTIESProperties.getValue(CaTIESConstants.SECTION_HEADER_FILENAME);
 		while(true)
 		{
