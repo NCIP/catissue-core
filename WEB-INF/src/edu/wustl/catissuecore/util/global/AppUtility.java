@@ -2977,7 +2977,7 @@ public class AppUtility
 		return jdbcDAO;
 	}
 	
-	public static DAO closeJDBCSession(JDBCDAO jdbcDAO) throws ApplicationException
+	public static void closeJDBCSession(JDBCDAO jdbcDAO) throws ApplicationException
 	{
 		try
 		{
@@ -2987,7 +2987,7 @@ public class AppUtility
 		{
 			throw getApplicationException(daoExp, "dao.error", "");
 		}
-		return jdbcDAO;
+		
 	}
 	
 	public static DAO openDAOSession(SessionDataBean sessionDataBean) throws ApplicationException
@@ -3006,7 +3006,7 @@ public class AppUtility
 			return dao;
 	}
 	
-	public static DAO closeDAOSession(DAO dao) throws ApplicationException
+	public static void closeDAOSession(DAO dao) throws ApplicationException
 	{
 		try
 		{
@@ -3016,6 +3016,6 @@ public class AppUtility
 		{
 			throw getApplicationException(daoExp, "dao.error", "");
 		}
-		return dao;
+		
 	}
 }
