@@ -40,6 +40,7 @@ import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.logger.Logger;
 
@@ -947,9 +948,17 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 				|| "Pathological".equalsIgnoreCase(requestDetailsBean.getInstanceOf().trim()))
 		{
 			pathologicalCaseOrderItem = new PathologicalCaseOrderItem();
-			SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup)
-				orderBizLogic.retrieveSCG(Long.parseLong(requestDetailsBean
-					.getSpecimenCollGroupId()));
+			SpecimenCollectionGroup specimenCollectionGroup=null;
+			try
+			{
+				specimenCollectionGroup = (SpecimenCollectionGroup)
+					orderBizLogic.retrieveSCG(Long.parseLong(requestDetailsBean
+						.getSpecimenCollGroupId()));
+			}			
+			catch (BizLogicException exception)
+			{
+				logger.debug("Not able to retrieve SpecimenCollectionGroup.", exception);
+			}
 			pathologicalCaseOrderItem.setSpecimenCollectionGroup(specimenCollectionGroup);
 			pathologicalCaseOrderItem.setSpecimenClass(requestDetailsBean.getClassName());
 			pathologicalCaseOrderItem.setSpecimenType(requestDetailsBean.getType());
@@ -1056,8 +1065,15 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 		ExistingSpecimenOrderItem existingSpecimenOrderItem = null;
 		DerivedSpecimenOrderItem derivedSpecimenOrderItem = null;
 		PathologicalCaseOrderItem pathologicalCaseOrderItem = null;
-		specOrderItem = (SpecimenOrderItem) orderBizLogic.retrieveSpecimenOrderItem(
-				Long.parseLong(definedArrayDetailsBean.getOrderItemId()));
+		try
+		{
+			specOrderItem = (SpecimenOrderItem) orderBizLogic.retrieveSpecimenOrderItem(
+					Long.parseLong(definedArrayDetailsBean.getOrderItemId()));
+		}		
+		catch (BizLogicException exception)
+		{
+			logger.debug("Not able to retrieve SpecimenCollectionGroup.", exception);
+		}
 
 		if (specOrderItem instanceof ExistingSpecimenOrderItem)
 		{
@@ -1135,8 +1151,16 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 	{
 		OrderBizLogic orderBizLogic = (OrderBizLogic) BizLogicFactory.getInstance().
 			getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
-		NewSpecimenArrayOrderItem orderItem = (NewSpecimenArrayOrderItem) orderBizLogic.
-			retrieveNewSpecimenArrayOrderItem(Long.valueOf(definedArrayRequestBean.getOrderItemId()));
+		NewSpecimenArrayOrderItem orderItem=null;
+		try
+		{
+			orderItem = (NewSpecimenArrayOrderItem) orderBizLogic.
+				retrieveNewSpecimenArrayOrderItem(Long.valueOf(definedArrayRequestBean.getOrderItemId()));
+		}		
+		catch (BizLogicException exception)
+		{
+			logger.debug("Not able to retrieve Order item.", exception);
+		}
 
 		//Updating Description and Status.
 		orderItem.setStatus(definedArrayRequestBean.getAssignedStatus());
