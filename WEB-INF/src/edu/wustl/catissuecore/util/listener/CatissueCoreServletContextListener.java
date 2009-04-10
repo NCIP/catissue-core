@@ -436,18 +436,6 @@ public void InitialiseVariablesForEdinburgh(){
 		if(Constants.TRUE.equals(XMLPropertyHandler.getValue(Constants.IS_REMOVE_ETHNICITY))){
 			Variables.isEthnicityRemove=true;
 		}
-		String dateFormat=XMLPropertyHandler.getValue(Constants.DATEFORMAT);
-		if(dateFormat!=null && dateFormat!=""){
-			
-			if (AppUtility.isValidDateFormat(dateFormat)){
-				edu.wustl.common.util.global.CommonServiceLocator.getInstance().getDatePattern()=dateFormat;
-			}else{
-				throw new RuntimeException("Invalid Date Format. Enter the format either in  dd-MM-yyyy or MM-dd-yyyy Format");
-			}
-		}else{
-			edu.wustl.common.util.global.CommonServiceLocator.getInstance().getDatePattern()="MM-dd-yyyy";
-		}
-		
 	}
 
 	public void InitialiseVariablesForDFCI(){
