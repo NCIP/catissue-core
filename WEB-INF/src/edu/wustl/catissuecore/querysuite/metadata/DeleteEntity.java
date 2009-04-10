@@ -24,7 +24,7 @@ public class DeleteEntity
 	private String entityNameToDelete;
 	private Entity entityToDelete;
 	
-	public static void main(String[] args) throws Exception
+/*	public static void main(String[] args) throws Exception
 	{
 		Connection connection = DBUtil.getConnection();
 		connection.setAutoCommit(true);
@@ -45,7 +45,7 @@ public class DeleteEntity
 		
 		connection.close();
 	}
-
+*/
 	public  List<String> deleteEntity() throws SQLException
 	{
 		List<String> deleteSQL = new ArrayList<String>();

@@ -16,11 +16,11 @@ public class AddAssociations
 	{
 		this.connection = connection;
 	}
-	public static void main(String args[])throws Exception
+	/*public static void main(String args[])throws Exception
 	{
 		Connection connection = DBUtil.getConnection();
 		connection.setAutoCommit(true);
-	}
+	}*/
 
 	public void addAssociation(String entityName,String associatedEntityName,String associationName,String associationType, String roleName,boolean isSwap,String roleNameTable,String srcAssociationId,String targetAssociationId,int maxCardinality,int isSystemGenerated,String direction) throws SQLException, IOException
 	{

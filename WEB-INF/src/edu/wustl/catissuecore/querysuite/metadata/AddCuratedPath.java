@@ -20,7 +20,7 @@ public class AddCuratedPath
 	private static Connection connection;
 	private List<String> entityList;
 	
-	public static void main(String[] args) throws IOException, SQLException, ClassNotFoundException
+	/*public static void main(String[] args) throws IOException, SQLException, ClassNotFoundException
 	{
 		Connection connection=DBUtil.getConnection();
 		
@@ -30,7 +30,7 @@ public class AddCuratedPath
 		
 		AddCuratedPath addCurratedPath = new AddCuratedPath(connection);
 		addCurratedPath.addCurratedPath();
-	}
+	}*/
 	
 	public void addCurratedPath() throws IOException, SQLException
 	{

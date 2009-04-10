@@ -18,14 +18,14 @@ public class CleanUpMetadata
 {
 	private static Connection connection;
 
-	public static void main(String[] args) throws IOException, SQLException, ClassNotFoundException
+	/*public static void main(String[] args) throws IOException, SQLException, ClassNotFoundException
 	{
 		Connection connection=DBUtil.getConnection();
 		
 		CleanUpMetadata cleanUpMetadata = new CleanUpMetadata(connection);
 		cleanUpMetadata.cleanMetadata();
 	}
-	
+	*/
 	public List<String> cleanMetadata() throws SQLException
 	{
 		StringTokenizer st;

@@ -31,7 +31,7 @@ public class DeleteAssociation
 	private static List<String> entityNameListDelete = new ArrayList<String>();
 	private static List<Entity> entityToDelete = new ArrayList<Entity>();
 	static Map<String,String> twoEntityMap = new HashMap<String, String>();
-	public static void main(String[] args) throws Exception
+	/*public static void main(String[] args) throws Exception
 	{
 		Connection connection = DBUtil.getConnection();
 		connection.setAutoCommit(true);
@@ -50,7 +50,7 @@ public class DeleteAssociation
 			deleteSQL.addAll(deleteAssociation.deleteAssociation(srcName,twoEntityMap.get(srcName)));	
 		}		
 		connection.close();
-	}
+	}*/
 
 	private void populateAssociationToDelete()
 	{

@@ -20,11 +20,11 @@ public class AddEntity
 		this.connection = connection;
 	}
 	
-	public static void main(String args[])throws Exception
+	/*public static void main(String args[])throws Exception
 	{
 		Connection connection = DBUtil.getConnection();
 		connection.setAutoCommit(true);
-	}
+	}*/
 	
 	public void addEntity(List<String> entityList,String tableName,String parentEntity,int inheritanceStrategy,int isAbstract) throws SQLException, IOException
 	{
