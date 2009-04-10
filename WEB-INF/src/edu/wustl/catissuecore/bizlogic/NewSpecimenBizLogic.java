@@ -2651,7 +2651,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		int childSpecimenCtr = 0;
 		try
 		{
-			dao = openDAOSession();
+			dao = openDAOSession(sessionDataBean);
 			while (iterator.hasNext())
 			{
 				Specimen newSpecimen = (Specimen) iterator.next();
@@ -2674,7 +2674,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				specimenCtr++;
 			}
 			specimenCtr = 0;
-			 dao.commit();
+			dao.commit();
 			postInsert(newSpecimenCollection, dao, sessionDataBean);
 		}
 		catch (Exception exception)
@@ -2697,11 +2697,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		finally
 		{
-			try {
-				dao.closeSession();
-			} catch (DAOException exception) {
-				throw getBizLogicException(exception, "dao.error", "");
-			}
+			closeDAOSession(dao);
 		}
 	}
 
@@ -3344,7 +3340,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		DAO dao = null;
 		try
 		{
-			dao = openDAOSession();
+			dao = openDAOSession(sessionData);
 			Specimen specimen = getSpecimenObj(specimenID, dao);
 			getSpecimenInternal(specimen, finalDataList);
 			specimen.getConsentTierStatusCollection();

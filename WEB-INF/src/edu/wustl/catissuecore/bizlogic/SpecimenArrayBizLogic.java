@@ -1046,9 +1046,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 		NewSpecimenArrayOrderItem newSpecimenArrayOrderItem = null;
 		try
 		{
-
-
-			dao = openDAOSession();
+			dao = openDAOSession(null);
 			newSpecimenArrayOrderItem = (NewSpecimenArrayOrderItem) dao.retrieveById(NewSpecimenArrayOrderItem.class.getName(), orderItemId);
 
 		}

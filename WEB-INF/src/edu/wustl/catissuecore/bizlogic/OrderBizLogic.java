@@ -742,7 +742,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		List requestViewBeanList = new ArrayList();
 		try
 		{
-			dao = openDAOSession();
+			dao = openDAOSession(null);
 			PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
 			PrivilegeCache privilegeCache = privilegeManager.getPrivilegeCache(userName);
 		
@@ -808,14 +808,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		}
 		finally
 		{
-			try
-			{
-				dao.closeSession();
-			}
-			catch (DAOException e)
-			{
-				Logger.out.error(e.getMessage(), e);
-			}
+			closeDAOSession(dao);
 		}
 		return requestViewBeanList;
 	};
@@ -1123,7 +1116,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 	{
 		try
 		{
-		   DAO dao = openDAOSession();
+		   DAO dao = openDAOSession(null);
 		   DistributionProtocol distributionProtocol = (DistributionProtocol)dao.retrieveById(DistributionProtocol.class.getName(),
 				   Long.parseLong(distributionProtId));
 		   dao.closeSession();
@@ -1140,7 +1133,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 	 * @param request HttpServletRequest object
 	 * @return List specimen array objects
 	 */
-	public List getSpecimenArrayDataFromDatabase(HttpServletRequest request) 
+	public List getSpecimenArrayDataFromDatabase(HttpServletRequest request) throws BizLogicException
 	{
 		long startTime = System.currentTimeMillis();
 		DAO dao = null;
@@ -1152,7 +1145,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
     		
     		String sourceObjectName = SpecimenArray.class.getName();
         	List valueField=(List)session.getAttribute(Constants.SPECIMEN_ARRAY_ID);
-        	dao = openDAOSession();
+        	dao = openDAOSession(null);
         	List specimenArrayList=new ArrayList();
     		if(valueField != null && valueField.size() >0)
 	    	{
@@ -1178,15 +1171,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
     	}
     	finally
 		{
-			try
-			{
-				dao.closeSession();
-			}
-			catch(DAOException daoEx)
-			{
-				Logger.out.error(daoEx.getMessage(), daoEx);
-	    		return null;
-			}
+			closeDAOSession(dao);
 		}	
     	
     	  
@@ -1198,79 +1183,70 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 	 * @return List of specimen objects
 	 * @throws BizLogicException 
 	 */
-	public List getSpecimenDataFromDatabase(HttpServletRequest request)
+	public List getSpecimenDataFromDatabase(HttpServletRequest request)throws BizLogicException
 	{
 		//to get data from database when specimen id is given
 		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
 		HttpSession session = request.getSession(true);
-		
+
 		long startTime = System.currentTimeMillis();
 		DAO dao = null;
-				
+		List specimenList=new ArrayList();		
 		try
-    	{
-    	
-			dao = openDAOSession();
-	    	String sourceObjectName = Specimen.class.getName();
-	    	String columnName="id";
-	    	List valueField=(List)session.getAttribute("specimenId");
-	    	List specimenList=new ArrayList();
-	       	if(valueField != null && valueField.size() >0)
-	    	{
-	    		
+		{
+
+			dao = openDAOSession(null);
+			String sourceObjectName = Specimen.class.getName();
+			String columnName="id";
+			List valueField=(List)session.getAttribute("specimenId");
+
+			if(valueField != null && valueField.size() >0)
+			{
+
 				for(int i=0;i<valueField.size();i++)
 				{
 					Object object = dao.retrieveById(sourceObjectName, Long.parseLong((String)valueField.get(i)));
 					Specimen spec=(Specimen)object;
 					specimenList.add(spec);
 				}
-				
-	    	}
-	    	long endTime = System.currentTimeMillis();
+
+			}
+			long endTime = System.currentTimeMillis();
 			Logger.out.info("EXECUTE TIME FOR RETRIEVE IN EDIT FOR DB -  : "+ (endTime - startTime));
-		
-			return specimenList;
-    	}
-    	catch(Exception e)
-    	{
-    		Logger.out.error(e.getMessage(), e);
-    		return null;
-    	}
-    	finally
-		{
-			try
-			{
-				dao.closeSession();
-			}
-			catch(DAOException daoEx)
-			{
-				Logger.out.error(daoEx.getMessage(), daoEx);
-	    		return null;
-			}
+
+
 		}
-    	
+		catch(Exception e)
+		{
+			getBizLogicException(e, "dao.error", "");
+		}
+		finally
+		{
+			closeDAOSession(dao);
+		}
+		return specimenList;
 	}
 	
 	/**
 	 * @param request HttpServletRequest object
 	 * @return List of Pathology Case objects
 	 */
-	public List getPathologyDataFromDatabase(HttpServletRequest request) 
+	public List getPathologyDataFromDatabase(HttpServletRequest request) throws BizLogicException
 	{
-		
+
 		// to get data from database when specimen id is given
 		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.NEW_PATHOLOGY_FORM_ID);
 		List pathologicalCaseList = new ArrayList();
-		
+
 		long startTime = System.currentTimeMillis();
 		DAO dao = null;
-				
+
 		try
-    	{
-			dao = openDAOSession();
+		{
+			dao = openDAOSession(null);
 			//retriving the id list from session.
 			String [] className = {IdentifiedSurgicalPathologyReport.class.getName(),DeidentifiedSurgicalPathologyReport.class.getName(),SurgicalPathologyReport.class.getName()};
-					
+
 			if(request.getSession().getAttribute(Constants.PATHALOGICAL_CASE_ID) != null)
 			{
 				getList(request, Constants.PATHALOGICAL_CASE_ID , className[0], pathologicalCaseList, bizLogic ,dao);
@@ -1281,32 +1257,23 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 			}
 			if(request.getSession().getAttribute(Constants.SURGICAL_PATHALOGY_CASE_ID) != null)
 			{
-				 getList(request, Constants.SURGICAL_PATHALOGY_CASE_ID , className[2], pathologicalCaseList, bizLogic ,dao);
+				getList(request, Constants.SURGICAL_PATHALOGY_CASE_ID , className[2], pathologicalCaseList, bizLogic ,dao);
 			}
-			
+
 			long endTime = System.currentTimeMillis();
 			Logger.out.info("EXECUTE TIME FOR RETRIEVE IN EDIT FOR DB -  : "+ (endTime - startTime));
 			System.out.println("EXECUTE TIME FOR RETRIEVE IN EDIT FOR DB -  : "+ (endTime - startTime));
-			return pathologicalCaseList;
-    	}
-    	catch(Exception e)
-    	{
-    		Logger.out.error(e.getMessage(), e);
-    		return null;
-    	}
-    	finally
+
+		}
+		catch(Exception e)
 		{
-			try
-			{
-				dao.closeSession();
-			}
-			catch(DAOException daoEx)
-			{
-				Logger.out.error(daoEx.getMessage(), daoEx);
-				return null;
-			}
+			getBizLogicException(e, "dao.error", "");
+		}
+		finally
+		{
+			closeDAOSession(dao);
 		}	
-		
+		return pathologicalCaseList;
 	}
 	
 	/**
@@ -1446,13 +1413,13 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 	 * @param specimenId
 	 * @return
 	 */
-	public Specimen getSpecimenObject(Long specimenId)
+	public Specimen getSpecimenObject(Long specimenId)throws BizLogicException
 	{
 		DAO dao =null;
 		Specimen specimen = null;
     	try
     	{
-    		dao = openDAOSession();
+    		dao = openDAOSession(null);
     		String sourceObjectName = Specimen.class.getName();
     		specimen = (Specimen)dao.retrieveById(sourceObjectName,specimenId);
 		   		
@@ -1464,15 +1431,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
     	}
     	finally
 		{
-			try
-			{
-				dao.closeSession();
-			}
-			catch(DAOException daoEx)
-			{
-				Logger.out.error(daoEx.getMessage(), daoEx);
-				
-			}
+			closeDAOSession(dao);
 		}
     	return specimen;
 	}
@@ -1499,28 +1458,20 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 	 * @param scgId
 	 * @return
 	 */
-	public SpecimenCollectionGroup retrieveSCG(Long scgId)
+	public SpecimenCollectionGroup retrieveSCG(Long scgId)throws BizLogicException
 	{
 		DAO dao = null;
 		SpecimenCollectionGroup scg = null;
 		try {
 			
-			dao = openDAOSession();
+			dao = openDAOSession(null);
 			scg = (SpecimenCollectionGroup)dao.retrieveById(SpecimenCollectionGroup.class.getName(),	scgId);
 		} catch (Exception e) {
-			
-			e.printStackTrace();
+
+			throw getBizLogicException(e, "dao.error", "");
 		}finally
 		{
-			try
-			{
-				dao.closeSession();
-			}
-			catch(DAOException daoEx)
-			{
-				Logger.out.error(daoEx.getMessage(), daoEx);
-				
-			}
+			closeDAOSession(dao);
 		}
 		
 		return scg;
@@ -1530,12 +1481,12 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 	 * @param newSpecimenArrayId
 	 * @return
 	 */
-	public NewSpecimenArrayOrderItem retrieveNewSpecimenArrayOrderItem(Long newSpecimenArrayId)
+	public NewSpecimenArrayOrderItem retrieveNewSpecimenArrayOrderItem(Long newSpecimenArrayId)throws BizLogicException
 	{
 		DAO dao = null;
 		NewSpecimenArrayOrderItem newSpecimenArrayOrderItem = null;
 		try {
-			dao = openDAOSession();
+			dao = openDAOSession(null);
 
 			newSpecimenArrayOrderItem = (NewSpecimenArrayOrderItem)dao.retrieveById(NewSpecimenArrayOrderItem.class.getName(),	newSpecimenArrayId);
 			newSpecimenArrayOrderItem.setSpecimenArray((SpecimenArray)getSpecimenArray(newSpecimenArrayOrderItem.getId(), dao));
@@ -1543,18 +1494,10 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		
 		} catch (Exception e) {
 			
-			e.printStackTrace();
+			throw getBizLogicException(e, "dao.error", "");
 		}finally
 		{
-			try
-			{
-				dao.closeSession();
-			}
-			catch(DAOException daoEx)
-			{
-				Logger.out.error(daoEx.getMessage(), daoEx);
-				
-			}
+			closeDAOSession(dao);
 		}
 		
 		return newSpecimenArrayOrderItem;
@@ -1565,31 +1508,24 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 	 * @param specimenOrderItemId
 	 * @return
 	 */
-	public SpecimenOrderItem retrieveSpecimenOrderItem(Long specimenOrderItemId)
+	public SpecimenOrderItem retrieveSpecimenOrderItem(Long specimenOrderItemId)throws BizLogicException
 	{
 		DAO dao = null;
 		SpecimenOrderItem specimenOrderItem = null;
 		try {
-			dao = openDAOSession();
+			dao = openDAOSession(null);
 			specimenOrderItem = (SpecimenOrderItem)dao.retrieveById(SpecimenOrderItem.class.getName(),	specimenOrderItemId);
 			NewSpecimenArrayOrderItem newSpecimenArrayOrderItem = (NewSpecimenArrayOrderItem)specimenOrderItem.getNewSpecimenArrayOrderItem();
 			specimenOrderItem.setNewSpecimenArrayOrderItem(newSpecimenArrayOrderItem);
 			
 		} catch (Exception e) {
 			
-			e.printStackTrace();
+			throw getBizLogicException(e, "dao.error", "");
 		}finally
 		{
-			try
-			{
-				dao.closeSession();
-			}
-			catch(DAOException daoEx)
-			{
-				Logger.out.error(daoEx.getMessage(), daoEx);
-				
-			}
+			closeDAOSession(dao);
 		}
+		
 		
 		return specimenOrderItem;
 	}

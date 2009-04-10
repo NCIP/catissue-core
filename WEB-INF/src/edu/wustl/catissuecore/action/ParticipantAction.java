@@ -668,7 +668,7 @@ public class ParticipantAction extends SecureAction
 		{
 			try
 			{
-				dao = AppUtility.openDAOSession();
+				dao = AppUtility.openDAOSession(null);
 				StringBuffer sb = new StringBuffer();
 				Participant participant;
 					

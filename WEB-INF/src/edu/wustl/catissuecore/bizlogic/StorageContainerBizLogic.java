@@ -1505,11 +1505,10 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		{
 			String sourceObjectName = "CATISSUE_STORAGE_CONTAINER";
 			String[] selectColumnName = { "max(IDENTIFIER) as MAX_NAME" };
-			dao = openDAOSession();
+			dao = openDAOSession(null);
 
 			List list = dao.retrieve(sourceObjectName, selectColumnName);
 
-			dao.closeSession();
 			if (!list.isEmpty()) {
 				List columnList = (List) list.get(0);
 				if (!columnList.isEmpty()) {
@@ -2449,18 +2448,14 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		Collection<Container> children = null;
 		try 
 		{
-			dao = openDAOSession();
+			dao = openDAOSession(null);
 			children = StorageContainerUtil.getChildren(dao, containerId);
 		} 
 		catch (ApplicationException e) {
 			throw getBizLogicException(e, "utility.error", "");
 		} 
 		finally {
-			try {
-				dao.closeSession();
-			} catch (DAOException daoExp) {
-				throw getBizLogicException(daoExp, "dao.error", "");
-			}
+			closeDAOSession(dao);
 		}
 		return children;
 	}
@@ -3825,15 +3820,13 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 	/* temp function end */
 
 	
-	private Long getSiteIdForStorageContainerId(Long scId) 
+	private Long getSiteIdForStorageContainerId(Long scId) throws BizLogicException
 	{
 		DAO dao = null;
 		Long siteId = null;
 		try 
 		{
-			dao = openDAOSession();
-		
-
+			dao = openDAOSession(null);
 			StorageContainer sc = (StorageContainer) dao.retrieveById(StorageContainer.class.getName(), scId);
 			if(sc != null)
 			{
@@ -3843,17 +3836,11 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		}
 		catch (Exception e1) 
 		{
-			Logger.out.debug(e1.getMessage(), e1);
+			throw getBizLogicException(e1, "dao.error", "");
 		}
 		finally
 		{
-			try {
-				closeDAOSession(dao);
-			} catch (BizLogicException e)
-			{
-				
-				e.printStackTrace();
-			}
+			closeDAOSession(dao);
 		}
 		return siteId;
 	}
@@ -3897,7 +3884,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 					sc.setId(new Long(Id));
 					boolean hasAccess = true;
 				
-					DAO dao = openDAOSession();
+					DAO dao = openDAOSession(null);
 					hasAccess = validateContainerAccess(dao,sc, sessionData,cpId);
 					closeDAOSession(dao);
 					
@@ -4726,7 +4713,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		{
 			if(containerId >=1)
 			{
-				dao = openDAOSession();
+				dao = openDAOSession(null);
 				StorageContainer storageContainer = null;
 				storageContainer = (StorageContainer) dao.retrieveById(StorageContainer.class.getName(), containerId);		
 
@@ -4760,7 +4747,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		{
 			if(containerName!=null&&!("").equals(containerName))
 			{
-				dao = openDAOSession();
+				dao = openDAOSession(null);
 				StorageContainer storageContainer = null;
 				String[] strArray = {containerName};
 				List contList = null;
@@ -4784,7 +4771,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		} 
 		catch (DAOException e) 
 		{
-			Logger.out.debug(e.getMessage(), e);
+			throw getBizLogicException(e, "dao.error", "");
 		}
 		finally
 		{
@@ -4805,7 +4792,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		
 		try 
 		{
-			dao = openDAOSession();
+			dao = openDAOSession(null);
 			NameValueBean cpNameValueBean;
 			for(long cpId:cpIds)
 			{
@@ -4813,7 +4800,6 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 				{
 					CollectionProtocol cp = new CollectionProtocol();
 
-					dao.openSession(null);
 					cp = (CollectionProtocol) dao.retrieveById(CollectionProtocol.class.getName(), cpId);		
 
 					String cpShortTitle = cp.getShortTitle();

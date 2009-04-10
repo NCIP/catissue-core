@@ -1301,7 +1301,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	public List retrieveCP(Long id) throws BizLogicException
 	{
 
-		DAO dao = openDAOSession();
+		DAO dao = openDAOSession(null);
 		try
 		{
 			Object object = dao.retrieveById(CollectionProtocol.class.getName(), id);
@@ -1340,7 +1340,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	{
 
 		List<CollectionProtocol> cpList = null;
-		DAO dao = openDAOSession();
+		DAO dao = openDAOSession(null);
 		try
 		{
 			cpList = dao.retrieve(className, colName, colValue);
@@ -1379,7 +1379,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	throws BizLogicException
 	{
 		CollectionProtocol collectionProtocol = null;
-		DAO dao = openDAOSession();
+		DAO dao = openDAOSession(null);
 		try
 		{
 			Object object = dao.retrieveById(className, id);
@@ -1515,7 +1515,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	{
 		String shortTitle = null;
 		
-		DAO dao = openDAOSession();
+		DAO dao = openDAOSession(null);
 		try
 		{
 			Object object = dao.retrieveAttribute(CollectionProtocol.class,Constants.SYSTEM_IDENTIFIER, cpId, Constants.shortTitle);
@@ -1621,7 +1621,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	{
 		CollectionProtocol cp = null;
 		Collection<Site> siteCollection = null;
-		DAO dao = openDAOSession();
+		DAO dao = openDAOSession(null);
 		try 
 		{
 		

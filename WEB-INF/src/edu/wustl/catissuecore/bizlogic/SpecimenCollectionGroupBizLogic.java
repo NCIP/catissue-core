@@ -334,7 +334,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		DAO dao = null;
 		try
 		{
-			dao = openDAOSession();
+			dao = openDAOSession(bean);
 
 			Object object = dao.retrieveById(SpecimenCollectionGroup.class.getName(), scgId);
 
@@ -2173,7 +2173,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		DAO dao = null;
 		try 
 		{
-			dao = openDAOSession();
+			dao = openDAOSession(null);
 
 			QueryWhereClause queryWhereClause = new QueryWhereClause(SpecimenCollectionGroup.class.getName());
 			queryWhereClause.addCondition(new EqualClause("id",Long.parseLong(id)));
@@ -2185,8 +2185,6 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 				scgName = (String) scgList.get(0);
 			}
 
-
-			dao.closeSession();
 		} catch (DAOException daoExp) {
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
@@ -2203,7 +2201,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		DAO dao = null;
 		try
 		{
-			dao = openDAOSession();
+			dao = openDAOSession(null);
 			Object object = dao.retrieveById(SpecimenCollectionGroup.class.getName(), id);
 
 			if (object != null)

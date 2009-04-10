@@ -354,7 +354,7 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 		try
 		{
 	
-			dao = openDAOSession();
+			dao = openDAOSession(null);
 			Object obj = dao.retrieveById(Site.class.getName(),Long.valueOf(siteId) );
 			Site site = (Site)obj;
 			Collection<User> userCollection = site.getAssignedSiteUserCollection();
@@ -431,7 +431,7 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 		List<NameValueBean> nameValuBeanList=new ArrayList<NameValueBean>();
 		try
 		{
-			dao = openDAOSession();
+			dao = openDAOSession(null);
 			Object obj = dao.retrieveById(Site.class.getName(),siteId); 
 			Site site = (Site)obj;
 			Collection<CollectionProtocol> cpCollection=site.getCollectionProtocolCollection();
@@ -450,15 +450,7 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 		}
 		finally
 		{
-			try
-			{
-				dao.closeSession();
-			}
-			catch (DAOException e)
-			{
-				ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
-				throw new BizLogicException(errorKey,e ,"AssignPrivilegePageBizLogic.java :"+"Couldn't close hibernate session");
-			}
+			closeDAOSession(dao);
 		}
 		return nameValuBeanList;
 	}
@@ -986,7 +978,7 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 	
 		try
 		{
-			dao = openDAOSession();
+			dao = openDAOSession(null);
 			JSONObject jsonObject = new JSONObject();
 			if(!isCustChecked && (siteIdsList!=null|| !siteIdsList.isEmpty()))
 			{
@@ -1002,8 +994,6 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 					if(userIdsList==null || userIdsList.isEmpty())
 					{
 						String rowId = "Site_" +siteId;
-
-						dao.openSession(null);
 
 						Object object = dao.retrieveById(Site.class.getName(), siteId);
 						Site site  = (Site)object;
@@ -1075,7 +1065,6 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 					}
 
 					long userId = userIdsList.get(k);
-					dao.openSession(null); 
 					Object object = dao.retrieveById(User.class.getName(), userId);
 					User user  = (User)object;
 
@@ -1114,15 +1103,7 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 		}
 		finally
 		{
-			try
-			{
-				dao.closeSession();
-			}
-			catch(DAOException daoEx)
-			{
-				logger.error(daoEx.getMessage(), daoEx);
-	    		return null;
-			}
+			closeDAOSession(dao);
 		}
 		return listForUPSummary;
 	}
@@ -1483,7 +1464,9 @@ public List<String[]> privilegeDataOnTabSwitch(Map<String, SiteUserRolePrivilege
  
  */
 // for user page--
-public List<JSONObject> addPrivilegeForUserPage(Map<String, SiteUserRolePrivilegeBean> rowIdBeanMap, String cpIds, String siteIds, String roleId, String actionIds,boolean isAllCPChecked,String operation)throws BizLogicException,JSONException, CSException 
+public List<JSONObject> addPrivilegeForUserPage(Map<String, SiteUserRolePrivilegeBean> rowIdBeanMap,
+		String cpIds, String siteIds, String roleId, String actionIds,boolean isAllCPChecked,String operation)
+		throws BizLogicException,JSONException, CSException 
 {  
 	List<JSONObject> listForUPSummary = new ArrayList<JSONObject>();
 	List<Long> siteIdsList = new ArrayList<Long>();
@@ -1497,7 +1480,7 @@ public List<JSONObject> addPrivilegeForUserPage(Map<String, SiteUserRolePrivileg
 
 	try 
 	{
-		dao = openDAOSession();
+		dao = openDAOSession(null);
 		if(cpIdsList!=null&&!cpIdsList.isEmpty())
 		{
 			for (int k = 0; k < cpIdsList.size(); k++) 
@@ -1519,7 +1502,6 @@ public List<JSONObject> addPrivilegeForUserPage(Map<String, SiteUserRolePrivileg
 				}
 				
 				 long cpId = cpIdsList.get(k);
-				 dao.openSession(null); 
 				 Object object = dao.retrieveById(CollectionProtocol.class.getName(), cpId);
 				 CollectionProtocol collectionProtocol  = (CollectionProtocol)object;
 				 
@@ -1566,7 +1548,6 @@ public List<JSONObject> addPrivilegeForUserPage(Map<String, SiteUserRolePrivileg
 				}
 				
 				 long siteId = siteIdsList.get(k);
-				 dao.openSession(null); 
 				 Object object = dao.retrieveById(Site.class.getName(), siteId);
 				 Site site  = (Site)object;
 				 List <Site> siteLists = new ArrayList<Site>();

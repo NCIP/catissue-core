@@ -159,14 +159,14 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 		return jdbcDAO;
 	}
 	
-	protected DAO openDAOSession() throws BizLogicException
+	protected DAO openDAOSession(SessionDataBean sessionDataBean) throws BizLogicException
 	{
 			DAO dao = null;
 			try
 			{
 				String applicationName = CommonServiceLocator.getInstance().getAppName();
 				dao = DAOConfigFactory.getInstance().getDAOFactory(applicationName).getDAO();
-				dao.openSession(null);
+				dao.openSession(sessionDataBean);
 			}
 			catch(DAOException daoExp)
 			{

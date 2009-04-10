@@ -197,11 +197,10 @@ public class QueryShoppingCartBizLogic extends CatissueDefaultBizLogic
 	public Set getListOfOrderItem(Set<String> entityIdsList)throws BizLogicException
 	{
 		 Set<String> orderIdsList = new HashSet<String>();
-		 DAO dao = openDAOSession();	
+		 DAO dao = openDAOSession(null);	
 		 try
 		   {
-	    	   	dao.openSession(null);
-	    	   	Iterator itr = entityIdsList.iterator();
+	    	  	Iterator itr = entityIdsList.iterator();
 	    	   	while(itr.hasNext())
 	    	   	{
 	    	   		Long specimenId = Long.parseLong(itr.next().toString());
@@ -211,25 +210,13 @@ public class QueryShoppingCartBizLogic extends CatissueDefaultBizLogic
 	    	   		}
 	    	   		
 				}
-	    	   	
 		 
 		   } catch (NumberFormatException e) {
 			   e.printStackTrace();
-		   } catch (DAOException e) {
-		
-			   e.printStackTrace();
+		   }finally
+		   {
+				closeDAOSession(dao);
 		   }
-		    finally
-			{
-				try
-				{
-					dao.closeSession();
-				}
-				catch (DAOException e)
-				{
-					Logger.out.error(e.getMessage(), e);
-				}
-			}
 		 return orderIdsList;
 	}
 	

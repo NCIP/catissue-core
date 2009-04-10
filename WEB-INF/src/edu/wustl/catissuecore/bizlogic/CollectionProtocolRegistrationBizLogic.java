@@ -642,13 +642,13 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 			
 			String hql1 = "select cpr.registrationDate from " + CollectionProtocolRegistration.class.getName()
 				+ " as cpr where cpr.collectionProtocol.id = " + maincpId.toString() + " and cpr.participant.id = " + participantId.toString();
-			DAO dao = (HibernateDAO)openDAOSession();
+			DAO dao = openDAOSession(null);
 			List dateList = dao.executeQuery(hql1);
 			if (dateList != null && dateList.size() > 0)
 			{
 				regDate = (Date) dateList.get(0);
 			}
-			dao.closeSession();
+			closeDAOSession(dao);
 		}
 		catch(DAOException daoExp)
 		{
@@ -1546,7 +1546,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 		DAO dao = null;
 		try
 		{
-			dao = openDAOSession();
+			dao = openDAOSession(null);
 
 			List list = dao.executeQuery(hql);
 			Logger.out.info("list size -----------:" + list.size());

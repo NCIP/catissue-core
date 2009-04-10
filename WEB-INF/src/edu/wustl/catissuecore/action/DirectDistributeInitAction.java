@@ -128,7 +128,7 @@ public class DirectDistributeInitAction extends BaseAction
 		DAO dao = null;
 		try
 		{
-			dao = AppUtility.openDAOSession();
+			dao = AppUtility.openDAOSession(null);
 			User user = (User) dao.retrieveById(User.class.getName(), userId);
 			return user;
 		}

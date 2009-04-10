@@ -1859,7 +1859,7 @@ public class AppUtility
 		Collection<CollectionProtocol> cpCollection = null;
 		try
 		{
-			dao = openDAOSession();
+			dao = openDAOSession(null);
 			Set<Long> cpIds = new HashSet<Long>();
 			User user = (User) dao.retrieveById(User.class.getName(), sessionDataBean.getUserId());
 			cpCollection = user.getAssignedProtocolCollection();
@@ -2376,7 +2376,7 @@ public class AppUtility
 
 		try
 		{
-			dao = openDAOSession();
+			dao = openDAOSession(null);
 			Set<Long> cpIds = new HashSet<Long>();
 			User user = (User) dao.retrieveById(User.class.getName(), sessionDataBean.getUserId());
 			cpCollection = user.getAssignedProtocolCollection();
@@ -2988,14 +2988,14 @@ public class AppUtility
 		return jdbcDAO;
 	}
 	
-	public static DAO openDAOSession() throws ApplicationException
+	public static DAO openDAOSession(SessionDataBean sessionDataBean) throws ApplicationException
 	{
 			DAO dao = null;
 			try
 			{
 				String applicationName = CommonServiceLocator.getInstance().getAppName();
 				dao = DAOConfigFactory.getInstance().getDAOFactory(applicationName).getDAO();
-				dao.openSession(null);
+				dao.openSession(sessionDataBean);
 			}
 			catch(DAOException daoExp)
 			{

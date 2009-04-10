@@ -1165,7 +1165,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 						 */
 
 						user.setFirstTimeLogin(new Boolean(true));
-						dao = openDAOSession();
+						dao = openDAOSession(sessionData);
 						dao.update(user);
 						dao.commit();
 						
@@ -1786,7 +1786,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 
 		try 
 		{
-			dao = openDAOSession();
+			dao = openDAOSession(null);
 			
 			User user = (User)dao.retrieveById(User.class.getName(), userId);
 			userColl = user.getCollectionProtocolCollection();
@@ -1841,7 +1841,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 		return cpIds;
 	}
 
-	public Set<Long> getRelatedSiteIds(Long userId) 
+	public Set<Long> getRelatedSiteIds(Long userId) throws BizLogicException
 	{
 		DAO dao = null;
 	
@@ -1849,7 +1849,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 		
 		try 
 		{
-			dao = openDAOSession();
+			dao = openDAOSession(null);
 
 			User user = (User) dao.retrieveById(User.class.getName(), userId);
 			if (!user.getRoleId().equalsIgnoreCase(Constants.ADMIN_USER))
@@ -1865,16 +1865,11 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (ApplicationException e1) 
 		{
-			Logger.out.debug(e1.getMessage(), e1);
+			throw getBizLogicException(e1, "dao.error", "");
 		}
 		finally
 		{
-			try {
-				closeDAOSession(dao);
-			} catch (BizLogicException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			closeDAOSession(dao);
 		}
 		
 		return idSet;

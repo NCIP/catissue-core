@@ -1035,7 +1035,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		Map<Long,Participant> mapOfParticipants = new HashMap<Long,Participant>();
 		try
 		{
-			dao = openDAOSession();
+			dao = openDAOSession(null);
 
 			
 			String participantQueryStr = "from " + Participant.class.getName() + " where activityStatus !='" + Status.ACTIVITY_STATUS_DISABLED.toString() + "'";
@@ -1059,15 +1059,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		}
 		finally
 		{
-			try
-			{
-				dao.closeSession();
-			} 
-			catch (DAOException e) 
-			{
-				
-				throw getBizLogicException(e, "dao.error", "Couldn't get participant");
-			}
+			closeDAOSession(dao);
 		}
 		return mapOfParticipants;
 	}
@@ -1163,20 +1155,17 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		DAO dao  = null;
 		try
 		{
-		String scgHql = "select scg.id, scg.surgicalPathologyNumber, scg.identifiedSurgicalPathologyReport.id "
+			String scgHql = "select scg.id, scg.surgicalPathologyNumber, scg.identifiedSurgicalPathologyReport.id "
 				+ " from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg, "
 				+ " edu.wustl.catissuecore.domain.CollectionProtocolRegistration as cpr," + " edu.wustl.catissuecore.domain.Participant as p "
 				+ " where p.id = " + participantId + " and p.id = cpr.participant.id "
 				+ " and scg.id in elements(cpr.specimenCollectionGroupCollection)";
 
-		dao = openDAOSession();
-		dao.openSession(null);
-		List list = null;
-		
-		list = dao.executeQuery(scgHql);
-		
-		dao.closeSession();
-		return list;
+			dao = openDAOSession(null);
+			List list = null;
+
+			list = dao.executeQuery(scgHql);
+			return list;
 		}
 		catch(Exception exp)
 		{
@@ -1216,7 +1205,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		DAO dao = null;
 		try 
 		{
-			dao = openDAOSession();
+			dao = openDAOSession(null);
 			User user = (User) dao.retrieveById(User.class.getName(),userId);
 			PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
 			PrivilegeCache privilegeCache = privilegeManager.getPrivilegeCache(user.getLoginName());
@@ -1240,7 +1229,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 			
 			UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.USER_FORM_ID);
 			Set<Long> siteIds = userBizLogic.getRelatedSiteIds(userId);
-			dao.openSession(null);
+		
 			if (siteIds != null && !siteIds.isEmpty())
 			{
 				SiteBizLogic siteBizLogic = (SiteBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.SITE_FORM_ID);
@@ -1250,7 +1239,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 					if (privilegeCache.hasPrivilege(peName,Variables.privilegeDetailsMap.get(Constants.CP_BASED_VIEW_FILTRATION)))
 					{
 						Collection<CollectionProtocol> cp1Collection = siteBizLogic.getRelatedCPs(siteId);
-						 dao.openSession(null);
+						
 						if (cp1Collection != null && !cp1Collection.isEmpty())
 						{
 							List<NameValueBean> list = new ArrayList<NameValueBean>();
@@ -1277,12 +1266,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		}
 		finally
 		{
-			try {
-				dao.closeSession();
-			} catch (DAOException e) {
-				
-				throw getBizLogicException(e, "dao.error", "problem is clossing session");
-			}
+			closeDAOSession(dao);
 		}
 		
 		return cpList;
@@ -1471,7 +1455,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 	 * @return list of Specimen objects
 	 * @throws BizLogicException
 	 */
-    private List<Specimen> getSpecimenCollection(SpecimenCollectionGroup scg)
+    private List<Specimen> getSpecimenCollection(SpecimenCollectionGroup scg)throws BizLogicException
 	{
 		String hql = " select s.id from edu.wustl.catissuecore.domain.Specimen s"
 		        + " where s.specimenCollectionGroup.id=" + scg.getId();
@@ -1481,7 +1465,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		List<Specimen> specimens = new ArrayList<Specimen>();
 		try
 		{
-			dao = openDAOSession();
+			dao = openDAOSession(null);
 			List specimenIds = dao.executeQuery(hql);
 			if (specimenIds != null && (!specimenIds.isEmpty()))
 			{
@@ -1499,12 +1483,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		}
 		finally
 		{
-			try {
-				dao.closeSession();
-			} catch (DAOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			closeDAOSession(dao);
 		}
 		return specimens;
 	}
@@ -1512,46 +1491,53 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 	@Override
 	public void refreshTitliSearchIndex(String operation, Object obj)
 	{
-		super.refreshTitliSearchIndex(operation, obj);
-		Participant participant = (Participant) obj;
-		Collection<CollectionProtocolRegistration> collectionProtocolRegistrationCollection = participant.getCollectionProtocolRegistrationCollection();
-		if(collectionProtocolRegistrationCollection != null)
+		try
 		{
-			Iterator<CollectionProtocolRegistration> itcprCollection = collectionProtocolRegistrationCollection.iterator();
-	
-			while (itcprCollection.hasNext())
+			super.refreshTitliSearchIndex(operation, obj);
+			Participant participant = (Participant) obj;
+			Collection<CollectionProtocolRegistration> collectionProtocolRegistrationCollection = participant.getCollectionProtocolRegistrationCollection();
+			if(collectionProtocolRegistrationCollection != null)
 			{
-				CollectionProtocolRegistration cpr = (CollectionProtocolRegistration) itcprCollection.next();
-				if(cprIdList.contains(cpr.getId()))
+				Iterator<CollectionProtocolRegistration> itcprCollection = collectionProtocolRegistrationCollection.iterator();
+
+				while (itcprCollection.hasNext())
 				{
-					Collection<SpecimenCollectionGroup> specimenCollectionGroupCollection=cpr.getSpecimenCollectionGroupCollection();
-					
-					if(specimenCollectionGroupCollection != null)
+					CollectionProtocolRegistration cpr = (CollectionProtocolRegistration) itcprCollection.next();
+					if(cprIdList.contains(cpr.getId()))
 					{
-						Iterator<SpecimenCollectionGroup> itscgCollection = specimenCollectionGroupCollection.iterator();
-						while(itscgCollection.hasNext())
+						Collection<SpecimenCollectionGroup> specimenCollectionGroupCollection=cpr.getSpecimenCollectionGroupCollection();
+
+						if(specimenCollectionGroupCollection != null)
 						{
-							SpecimenCollectionGroup scg = (SpecimenCollectionGroup)itscgCollection.next();
-							super.refreshTitliSearchIndex(operation, scg);
-							// Collection<Specimen> specimenCollection = scg.getSpecimenCollection();
-							
-							// Fetch the Specimens in the given SCG explicitly
-							Collection<Specimen> specimenCollection = getSpecimenCollection(scg);
-							if (specimenCollection != null)
+							Iterator<SpecimenCollectionGroup> itscgCollection = specimenCollectionGroupCollection.iterator();
+							while(itscgCollection.hasNext())
 							{
+								SpecimenCollectionGroup scg = (SpecimenCollectionGroup)itscgCollection.next();
+								super.refreshTitliSearchIndex(operation, scg);
+								// Collection<Specimen> specimenCollection = scg.getSpecimenCollection();
+
+								// Fetch the Specimens in the given SCG explicitly
+								Collection<Specimen> specimenCollection = getSpecimenCollection(scg);
+								if (specimenCollection != null)
+								{
 									Iterator<Specimen> itspecimenCollection = specimenCollection
-									        .iterator();
+									.iterator();
 									while (itspecimenCollection.hasNext())
 									{
 										Specimen specimen = (Specimen) itspecimenCollection.next();
 										super.refreshTitliSearchIndex(operation, specimen);
 									}
+								}
+
 							}
-							
 						}
 					}
 				}
 			}
+		}
+		catch(BizLogicException exp)
+		{
+				Logger.out.debug(exp.getMessage());
 		}
 	}
 }

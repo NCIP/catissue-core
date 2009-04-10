@@ -231,7 +231,7 @@ public class ReportLoaderQueueBizLogic extends CatissueDefaultBizLogic
 		
 		try
 		{
-			dao = openDAOSession(); 
+			dao = openDAOSession(null); 
 			List list = dao.executeQuery(hql);
 			dao.closeSession();
 			return list;

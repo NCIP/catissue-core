@@ -37,6 +37,7 @@ import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IDomainObjectFactory;
@@ -166,15 +167,26 @@ public class ParticipantLookupAction extends BaseAction
 		boolean authorizedFlag=false;
 		try
 		{
-			 dao = AppUtility.openDAOSession();
+			 dao = AppUtility.openDAOSession(null);
 			ParticipantBizLogic biz= new ParticipantBizLogic();			
 			authorizedFlag = biz.isAuthorized(dao,participant,sessionDataBean);
-			AppUtility.closeDAOSession(dao);
+			
 		}
 		catch (Exception e) 
 		{
 			Logger.out.error("Exception occured : " + e.getMessage() , e);
 			authorizedFlag=false;
+		}
+		finally
+		{
+			try 
+			{
+				AppUtility.closeDAOSession(dao);
+			}
+			catch (ApplicationException e)
+			{
+				Logger.out.error("Exception occured : " + e.getMessage() , e);
+			}
 		}
 		return authorizedFlag;		
 	}

@@ -747,12 +747,10 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 	{
 		List arrayEntries = new ArrayList();
 		long startTime = System.currentTimeMillis();
-		DAO dao = openDAOSession();
+		DAO dao = openDAOSession(null);
 				
 		try
     	{
-			dao.openSession(null);
-			
 			Object object = dao.retrieveById(Distribution.class.getName(), dist.getId());
 			Distribution distribution = (Distribution)object;
 			setSpecimenArrayDetails(distribution , arrayEntries);
@@ -769,15 +767,7 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
     	}
     	finally
 		{
-			try
-			{
-				dao.closeSession();
-			}
-			catch(DAOException daoEx)
-			{
-				Logger.out.error(daoEx.getMessage(), daoEx);
-				return null;
-			}
+			closeDAOSession(dao);
 		}	
 		
 	}

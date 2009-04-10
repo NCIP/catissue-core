@@ -15,6 +15,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.spin.loader.scrubber.impl.batch.BatchInitializationException;
+
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
@@ -394,22 +396,19 @@ public class SiteBizLogic extends CatissueDefaultBizLogic {
 		return privilegeName;
 	}
 
-	public Collection<CollectionProtocol> getRelatedCPs(Long siteId) {
-		
+	public Collection<CollectionProtocol> getRelatedCPs(Long siteId)throws BizLogicException
+	{
+
 		DAO dao = null;
 		Site site = null;
 		try 
 		{
-			dao = openDAOSession();
+			dao = openDAOSession(null);
 			site = (Site) dao.retrieveById(Site.class.getName(), siteId);
 		} catch (Exception e) {
-			Logger.out.debug(e.getMessage(), e);
+			throw getBizLogicException(e, "dao.error", "");
 		} finally {
-			try {
-				dao.closeSession();
-			} catch (DAOException e) {
-				Logger.out.error(e.getMessage(), e);
-			}
+			closeDAOSession(dao);
 		}
 
 		if (site == null) {

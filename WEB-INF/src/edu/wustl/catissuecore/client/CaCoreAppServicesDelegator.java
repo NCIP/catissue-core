@@ -20,6 +20,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+
+import javax.management.openmbean.OpenDataException;
+
 import oracle.sql.CLOB;
 
 import org.hibernate.Session;
@@ -139,6 +142,7 @@ public class CaCoreAppServicesDelegator
 	 */
 	public Object delegateEdit(String userName, Object domainObject) throws Exception
 	{
+		DAO dao = null;
 		try
 		{
 			/*
@@ -161,18 +165,24 @@ public class CaCoreAppServicesDelegator
 						"No such domain object found for update !! Please enter valid domain object for edit");
 			}
 			AbstractDomainObject abstractDomainOld = (AbstractDomainObject) object;
-			Session sessionClean = DBUtil.getCleanSession();
-			abstractDomainOld = (AbstractDomainObject) sessionClean.load(Class.forName(objectName),
+			
+			dao = AppUtility.openDAOSession(null);
+				
+			abstractDomainOld = (AbstractDomainObject) dao.retrieveById(Class.forName(objectName).getName(),
 					new Long(abstractDomainObject.getId()));
 			bizLogic.update(abstractDomainObject, abstractDomainOld, 0,
 					getSessionDataBean(userName));
-			sessionClean.close();
+			
 			Logger.out.info(" Domain Object has been successfully updated " + domainObject);
 		}
 		catch (Exception e)
 		{
 			Logger.out.error("Delegate Edit" + e.getMessage());
 			throw e;
+		}
+		finally
+		{
+			AppUtility.closeDAOSession(dao);
 		}
 		return domainObject;
 	}
