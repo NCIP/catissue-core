@@ -146,7 +146,7 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 		return jdbcDAO;
 	}
 	
-	protected DAO closeJDBCSession(JDBCDAO jdbcDAO) throws BizLogicException
+	protected void closeJDBCSession(JDBCDAO jdbcDAO) throws BizLogicException
 	{
 		try
 		{
@@ -156,7 +156,7 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 		{
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
-		return jdbcDAO;
+	
 	}
 	
 	protected DAO openDAOSession(SessionDataBean sessionDataBean) throws BizLogicException
@@ -175,7 +175,7 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 			return dao;
 	}
 	
-	protected DAO closeDAOSession(DAO dao) throws BizLogicException
+	protected void closeDAOSession(DAO dao) throws BizLogicException
 	{
 		try
 		{
@@ -185,6 +185,6 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 		{
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
-		return dao;
+		
 	}
 }
