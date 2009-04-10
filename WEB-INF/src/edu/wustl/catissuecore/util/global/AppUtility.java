@@ -104,7 +104,6 @@ import edu.wustl.common.util.global.QuerySessionData;
 import edu.wustl.common.util.global.TextConstants;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
-import edu.wustl.dao.AbstractJDBCDAOImpl;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.JDBCDAO;
 import edu.wustl.dao.QueryWhereClause;
@@ -115,6 +114,7 @@ import edu.wustl.dao.exception.DAOException;
 import edu.wustl.dao.util.DAOConstants;
 import edu.wustl.query.beans.QueryResultObjectDataBean;
 import edu.wustl.query.bizlogic.QueryOutputSpreadsheetBizLogic;
+import edu.wustl.query.executor.AbstractQueryExecutor;
 import edu.wustl.security.exception.SMException;
 import edu.wustl.security.exception.UserNotAuthorizedException;
 import edu.wustl.security.global.Permissions;
@@ -128,7 +128,6 @@ import gov.nih.nci.security.authorization.domainobjects.ProtectionGroup;
 import gov.nih.nci.security.authorization.domainobjects.Role;
 import gov.nih.nci.security.dao.GroupSearchCriteria;
 import gov.nih.nci.security.dao.ProtectionGroupSearchCriteria;
-import gov.nih.nci.security.exceptions.CSException;
 import gov.nih.nci.security.exceptions.CSTransactionException;
 
 /**
@@ -142,7 +141,7 @@ public class AppUtility
 	/**
 	 * Class Logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(AbstractJDBCDAOImpl.class);
+	private static org.apache.log4j.Logger logger = Logger.getLogger(AppUtility.class);
 
 	public static Set getSpecimenClassCDE()
 	{
@@ -488,7 +487,7 @@ public class AppUtility
 			Object obj = itr.next();
 			PermissibleValue pv = (PermissibleValue) obj;
 			String tmpStr = pv.getValue();
-			Logger.out.info("specimen class:" + tmpStr);
+			logger.info("specimen class:" + tmpStr);
 			specimenClassTypeList.add(new NameValueBean(tmpStr, tmpStr));
 
 		} // class and values set
@@ -638,7 +637,7 @@ public class AppUtility
 		}
 		catch (Exception e)
 		{
-			Logger.out.error(e);
+			logger.error(e);
 			Calendar calendar = Calendar.getInstance();
 			return calendar;
 		}
@@ -1266,15 +1265,18 @@ public class AppUtility
 			JDBCDAO dao = daofactory.getJDBCDAO();
 			dao.openSession(null);
 			Logger.out.debug("SQL************" + sql);
-			PagenatedResultData pagenatedResultData = dao.executeQuery(sql, sessionDataBean,
+			AbstractQueryExecutor queryExecutor =  edu.wustl.query.util.global.Utility.getQueryExecutor();			
+			PagenatedResultData pagenatedResultData = queryExecutor.getQueryResultList(sql,null, sessionDataBean,
 					isSecureExecute, hasConditionOnIdentifiedField, queryResultObjectDataMap,
 					startIndex, totoalRecords);
 			dao.closeSession();
 			return pagenatedResultData;
 		}
-		catch (DAOException daoExp)
+		catch (SMException exception)
 		{
-			throw new DAOException(daoExp.getMessage(), daoExp);
+			logger.debug("Security Exception:", exception);
+			ErrorKey errorKey = ErrorKey.getErrorKey("sm.operation.error");
+			throw new DAOException(errorKey,exception,"");
 		}
 	}
 
