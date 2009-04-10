@@ -16,36 +16,37 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
-import org.hibernate.Session;
 
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.dto.UserDTO;
 import edu.wustl.catissuecore.multiRepository.bean.SiteUserRolePrivilegeBean;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.action.CommonAddEditAction;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.beans.AddNewSessionDataBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
-import edu.wustl.common.bizlogic.QueryBizLogic;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.exception.BizLogicException;
-import edu.wustl.common.factory.AbstractDomainObjectFactory;
-import edu.wustl.common.factory.AbstractForwardToFactory;
-import edu.wustl.common.factory.MasterFactory;
-;
+import edu.wustl.common.exception.ErrorKey;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IDomainObjectFactory;
+import edu.wustl.common.factory.IFactory;
+import edu.wustl.common.factory.IForwordToFactory;
 import edu.wustl.common.util.AbstractForwardToProcessor;
 import edu.wustl.common.util.Utility;
-import edu.wustl.dao.exception.DAOException;
-import edu.wustl.common.util.dbManager.DBUtil;
-import edu.wustl.common.util.dbManager.HibernateMetaData;
-import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
-
+import edu.wustl.dao.DAO;
+import edu.wustl.dao.daofactory.DAOConfigFactory;
+import edu.wustl.dao.exception.DAOException;
+import edu.wustl.dao.util.HibernateMetaData;
+import edu.wustl.security.exception.UserNotAuthorizedException;
+import edu.wustl.simplequery.bizlogic.QueryBizLogic;
 
 public class SubmitUserAction extends Action
 {
@@ -84,14 +85,19 @@ public class SubmitUserAction extends Action
             target = Constants.FAILURE;
             Logger.out.error(excp.getMessage(), excp);
         }
+		catch (ApplicationException excep)
+		{
+			target = Constants.FAILURE;
+			Logger.out.error(excep.getMessage(), excep);
+		}
 		return mapping.findForward(target);
 	}
 	
 	
-	private ActionForward executeAddUser(ActionMapping mapping, HttpServletRequest request, AbstractActionForm form) throws AssignDataException, BizLogicException 
+	private ActionForward executeAddUser(ActionMapping mapping, HttpServletRequest request, AbstractActionForm form) throws ApplicationException 
 	{
 		User user = null;
-		AbstractDomainObjectFactory abstractDomainObjectFactory=getAbstractDomainObjectFactory();
+		IDomainObjectFactory abstractDomainObjectFactory = getIDomainObjectFactory();
 		AbstractActionForm form1 = (AbstractActionForm)form;
         user = (User) abstractDomainObjectFactory.getDomainObject(form1.getFormId(), form1);
         AbstractActionForm abstractForm = (AbstractActionForm)form;
@@ -103,28 +109,16 @@ public class SubmitUserAction extends Action
         target = new String(Constants.SUCCESS);
         AbstractDomainObject abstractDomain = (AbstractDomainObject) user;
         UserDTO userDTO = getUserDTO(user, session);
-		
-		try 
-		{
-			insertUser(userDTO, request.getSession(), form);
-		} 
-		catch (UserNotAuthorizedException e) 
-		{
-			SessionDataBean sessionDataBean = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
-			ActionErrors errors = new ActionErrors();
-            getUserNotAuthorizedException(abstractDomain, e, sessionDataBean,
-					errors);
-        	saveErrors(request, errors);
-        	target = Constants.FAILURE;
-        	return (mapping.findForward(target));
-		}
+
+		insertUser(userDTO, request.getSession(), form);
 
 		//	Attributes to decide AddNew action
         String submittedFor = (String) request.getParameter(Constants.SUBMITTED_FOR);
         request.setAttribute(Constants.SYSTEM_IDENTIFIER, user.getId());
         Logger.out.debug("Checking parameter SubmittedFor in CommonAddEditAction--->"+request.getParameter(Constants.SUBMITTED_FOR));
         Logger.out.debug("SubmittedFor attribute of Form-Bean received---->"+abstractForm.getSubmittedFor());
-        IBizLogic queryBizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.QUERY_INTERFACE_ID);
+        IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+        IBizLogic queryBizLogic = factory.getBizLogic(edu.wustl.common.util.global.Constants.QUERY_INTERFACE_ID);
         messages = new ActionMessages();
         
         addMessage(messages, abstractDomain, "add", (QueryBizLogic)queryBizLogic, objectName);
@@ -241,8 +235,8 @@ public class SubmitUserAction extends Action
 		{
 		    userName = sessionDataBean.getUserName();
 		}
-		String className = new CommonAddEditAction().getActualClassName(abstractDomain.getClass().getName());
-		String decoratedPrivilegeName = Utility.getDisplayLabelForUnderscore(e.getPrivilegeName());
+		String className = Utility.getActualClassName(abstractDomain.getClass().getName());
+		String decoratedPrivilegeName = AppUtility.getDisplayLabelForUnderscore(e.getPrivilegeName());
 		String baseObject = "";
 		if (e.getBaseObject() != null && e.getBaseObject().trim().length() != 0)
 		{
@@ -256,10 +250,10 @@ public class SubmitUserAction extends Action
 		errors.add(ActionErrors.GLOBAL_ERROR, error);
 	}
 	
-	 private ActionForward executeEditUser(ActionMapping mapping, HttpServletRequest request, AbstractActionForm abstractForm) throws DAOException, BizLogicException, AssignDataException 
+	 private ActionForward executeEditUser(ActionMapping mapping, HttpServletRequest request, AbstractActionForm abstractForm) throws ApplicationException 
 	    {
 	    	target = new String(Constants.SUCCESS);
-	        
+	    	DAO dao = null;
 	    	//If operation is edit, update the data in the database.
 	        
 //	        List list = bizLogic.retrieve(objectName, Constants.SYSTEM_IDENTIFIER,
@@ -268,18 +262,20 @@ public class SubmitUserAction extends Action
 //	        {
 //	        	abstractDomain = (AbstractDomainObject) list.get(0);
 //	            abstractDomain.setAllValues(abstractForm);
-	        	DefaultBizLogic defaultBizLogic = new DefaultBizLogic();
-	        	AbstractDomainObjectFactory abstractDomainObjectFactory=getAbstractDomainObjectFactory();
-				 String objectName=getObjectName(abstractDomainObjectFactory, abstractForm);
-				 abstractDomain = defaultBizLogic.populateDomainObject(objectName,
+	    	DefaultBizLogic defaultBizLogic = new DefaultBizLogic();
+        	IDomainObjectFactory abstractDomainObjectFactory = getIDomainObjectFactory();
+			String objectName=getObjectName(abstractDomainObjectFactory, abstractForm);
+			abstractDomain = defaultBizLogic.populateDomainObject(objectName,
 				  new Long(abstractForm.getId()), abstractForm);
 			if(abstractDomain!=null)
 			{
-				Session sessionClean = DBUtil.getCleanSession();
+				dao = DAOConfigFactory.getInstance().getDAOFactory(Constants.APPLICATION_NAME).getDAO();
+				
+				dao.openSession(null);
 				AbstractDomainObject abstractDomainOld = null;
 				try
 				{
-					abstractDomainOld = (AbstractDomainObject) sessionClean.load(Class.forName(objectName), new Long(abstractForm.getId()));
+					abstractDomainOld = (AbstractDomainObject) dao.retrieveById(objectName, new Long(abstractForm.getId()));
 				}
 				catch(Exception ex)
 				{
@@ -289,24 +285,11 @@ public class SubmitUserAction extends Action
 				UserDTO userCurrent = getUserDTO((User)abstractDomain, session);
 				User userOld = (User) abstractDomainOld;
 				
-	            try 
-	            {
-					updateUser(userCurrent, userOld, request.getSession(), abstractForm);
-				} 
-	            catch (UserNotAuthorizedException e) 
-	    		{
-	            	ActionErrors errors = new ActionErrors();
-	                SessionDataBean sessionDataBean = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
-	                getUserNotAuthorizedException(abstractDomain, e, sessionDataBean,
-	    					errors);
-	            	saveErrors(request, errors);
-	            	target = Constants.FAILURE;
-	            	return (mapping.findForward(target));
-	    		}
-	            
+				updateUser(userCurrent, userOld, request.getSession(), abstractForm);
+
 	            try
 	            {
-	            	sessionClean.close();                     
+	            	dao.closeSession();            
 				}
 				catch(Exception ex)
 				{
@@ -314,7 +297,7 @@ public class SubmitUserAction extends Action
 				}
 				
 	            if((abstractForm.getActivityStatus() != null) &&
-	                    (Constants.ACTIVITY_STATUS_DISABLED.equals(abstractForm.getActivityStatus())))
+	                    (Status.ACTIVITY_STATUS_DISABLED.toString().equals(abstractForm.getActivityStatus())))
 	            {
 	            	String moveTo = abstractForm.getOnSubmit(); 
 	            	Logger.out.debug("MoveTo in Disabled :-- : "+ moveTo);
@@ -360,7 +343,8 @@ public class SubmitUserAction extends Action
 	           	}
 	           }
 	           messages = new ActionMessages();
-	           IBizLogic queryBizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.QUERY_INTERFACE_ID);
+	           IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+	           IBizLogic queryBizLogic = factory.getBizLogic(edu.wustl.common.util.global.Constants.QUERY_INTERFACE_ID);
 	           addMessage(messages, abstractDomain, "edit", (QueryBizLogic)queryBizLogic, objectName);
 	        }
 	        else
@@ -395,9 +379,8 @@ public class SubmitUserAction extends Action
     private HashMap generateForwardToPrintMap(AbstractActionForm abstractForm, AbstractDomainObject abstractDomain)throws BizLogicException
     {
         HashMap forwardToPrintMap = null;
-        AbstractForwardToProcessor forwardToProcessor=AbstractForwardToFactory.getForwardToProcessor(
-				ApplicationProperties.getValue("app.forwardToFactory"),
-				"getForwardToPrintProcessor");
+        IForwordToFactory factory = AbstractFactoryConfig.getInstance().getForwToFactory();
+		AbstractForwardToProcessor forwardToProcessor = factory.getForwardToPrintProcessor();
         forwardToPrintMap = (HashMap)forwardToProcessor.populateForwardToData(abstractForm,abstractDomain);
         return forwardToPrintMap;
     }
@@ -405,19 +388,13 @@ public class SubmitUserAction extends Action
 	    private HashMap generateForwardToHashMap(AbstractActionForm abstractForm, AbstractDomainObject abstractDomain)throws BizLogicException
 	    {
 	        HashMap forwardToHashMap;
-	        AbstractForwardToProcessor forwardToProcessor=AbstractForwardToFactory.getForwardToProcessor(
-						ApplicationProperties.getValue("app.forwardToFactory"),
-						"getForwardToProcessor");
+	        IForwordToFactory factory = AbstractFactoryConfig.getInstance().getForwToFactory();
+			AbstractForwardToProcessor forwardToProcessor = factory.getForwardToProcessor();
 	        forwardToHashMap = (HashMap)forwardToProcessor.populateForwardToData(abstractForm,abstractDomain);
 	        return forwardToHashMap;
 	    }
 
-	public AbstractDomainObjectFactory getAbstractDomainObjectFactory() 
-	{	
-		return (AbstractDomainObjectFactory) MasterFactory.getFactory(ApplicationProperties.getValue("app.domainObjectFactory"));
-	}
-	
-	public String getObjectName(AbstractDomainObjectFactory abstractDomainObjectFactory,AbstractActionForm abstractForm) 
+	public String getObjectName(IDomainObjectFactory abstractDomainObjectFactory,AbstractActionForm abstractForm) 
 	{
 	    return abstractDomainObjectFactory.getDomainObjectName(abstractForm.getFormId());
 	}
@@ -446,17 +423,19 @@ public class SubmitUserAction extends Action
      * @throws UserNotAuthorizedException
      */
     private void insertUser(UserDTO userDTO, HttpSession session, AbstractActionForm form)
-	throws BizLogicException, UserNotAuthorizedException 
+	throws BizLogicException
 	{
-    	IBizLogic bizLogic =BizLogicFactory.getInstance().getBizLogic(form.getFormId());
+    	IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+    	IBizLogic bizLogic =factory.getBizLogic(form.getFormId());
 		SessionDataBean sessionDataBean = (SessionDataBean) session.getAttribute(Constants.SESSION_DATA);		
 		bizLogic.insert(userDTO, sessionDataBean, 0);
 	}
     
     private void updateUser(UserDTO userCurrent, User userOld, HttpSession session, AbstractActionForm form)
-	throws BizLogicException, UserNotAuthorizedException 
+	throws BizLogicException
 	{
-    	IBizLogic bizLogic =BizLogicFactory.getInstance().getBizLogic(form.getFormId());
+    	IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+    	IBizLogic bizLogic =factory.getBizLogic(form.getFormId());
 		SessionDataBean sessionDataBean = (SessionDataBean) session.getAttribute(Constants.SESSION_DATA);		
 		bizLogic.update(userCurrent, userOld , 0, sessionDataBean);
 	}
@@ -493,4 +472,19 @@ public class SubmitUserAction extends Action
     	} 
     }
 
+    public IDomainObjectFactory getIDomainObjectFactory() throws ApplicationException
+	{
+		try
+		{
+			IDomainObjectFactory factory = AbstractFactoryConfig.getInstance()
+					.getDomainObjectFactory();
+			return factory;
+		}
+		catch (BizLogicException exception)
+		{
+			//logger.error("Failed to get QueryBizLogic object from BizLogic Factory");
+			throw new ApplicationException(ErrorKey.getErrorKey("errors.item"), exception,
+					"Failed to get DomainObjectFactory in base Add/Edit.");
+		}
+	}
 }

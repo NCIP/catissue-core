@@ -17,11 +17,12 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.AdvanceSearchForm;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.AppUtility;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
-import edu.wustl.common.dao.QuerySessionData;
+import edu.wustl.common.util.global.QuerySessionData;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.query.util.global.AQConstants;
 
 
 /**
@@ -79,12 +80,12 @@ public class SpreadsheetViewAction extends BaseAction
 		{
 			pageOf = (String) request.getParameter(Constants.PAGE_OF);
 		}
-		if (request.getAttribute(Constants.IDENTIFIER_FIELD_INDEX) == null)
+		if (request.getAttribute(AQConstants.IDENTIFIER_FIELD_INDEX) == null)
 		{
-			String identifierFieldIndex = request.getParameter(Constants.IDENTIFIER_FIELD_INDEX);
+			String identifierFieldIndex = request.getParameter(AQConstants.IDENTIFIER_FIELD_INDEX);
 			if (identifierFieldIndex != null && !identifierFieldIndex.equals(""))
 			{
-				request.setAttribute(Constants.IDENTIFIER_FIELD_INDEX, new Integer(
+				request.setAttribute(AQConstants.IDENTIFIER_FIELD_INDEX, new Integer(
 						identifierFieldIndex));
 			}
 		}
@@ -92,18 +93,18 @@ public class SpreadsheetViewAction extends BaseAction
 		Object defaultViewAttribute = request.getAttribute(Constants.SPECIMENT_VIEW_ATTRIBUTE);
 		if (defaultViewAttribute != null)// When the Default specimen view Check box is checked or unchecked, this will be evaluated.
 		{
-			List list = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
+			List list = (List) request.getAttribute(AQConstants.SPREADSHEET_DATA_LIST);
 			List columnNames = (List) request.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
 //			edu.wustl.catissuecore.util.global.AppUtility.setGridData( list,columnNames, request);
 			session.setAttribute(Constants.SPREADSHEET_COLUMN_LIST, columnNames);
-			request.setAttribute(Constants.SPREADSHEET_DATA_LIST, list);
+			request.setAttribute(AQConstants.SPREADSHEET_DATA_LIST, list);
 		}
 		List list = null;
 		String pagination = request.getParameter("isPaging");
 		if (pagination == null || pagination.equals("false"))
 		{
 
-			list = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
+			list = (List) request.getAttribute(AQConstants.SPREADSHEET_DATA_LIST);
 			List columnNames = (List) request.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
 
 			//Set the SPREADSHEET_DATA_LIST and SPREADSHEET_COLUMN_LIST in the session.

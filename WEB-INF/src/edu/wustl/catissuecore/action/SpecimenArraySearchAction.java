@@ -32,6 +32,7 @@ import edu.wustl.common.action.CommonSearchAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
@@ -47,13 +48,14 @@ public class SpecimenArraySearchAction extends CommonSearchAction {
 	 * @see org.apache.struts.action.Action#execute(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
 	 */
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) 
-						throws IOException, ServerException 
+						throws IOException, ServerException
 	{
-		ActionForward forward = super.execute(mapping, form, request, response);
-		SpecimenArrayForm specimenArrayForm = (SpecimenArrayForm) form;
+		
+		
 		try
 		{
-			
+			ActionForward forward = super.execute(mapping, form, request, response);
+			SpecimenArrayForm specimenArrayForm = (SpecimenArrayForm) form;
 			List specimenTypeList = new ArrayList();
 			
 			String[] specimenTypeArr = specimenArrayForm.getSpecimenTypes();
@@ -147,8 +149,9 @@ public class SpecimenArraySearchAction extends CommonSearchAction {
 			// set sub operation :: solution for problem with specimen type selection 
 			specimenArrayForm.setSubOperation("");
 			request.getSession().setAttribute(Constants.SPECIMEN_ARRAY_CONTENT_KEY,arrayContentMap);
+			return forward;
 		}
-		catch(DAOException excp)
+		catch(ApplicationException excp)
 		{
 			Logger.out.error(excp.getMessage(), excp);
 			ActionErrors errors = new ActionErrors();
@@ -158,6 +161,6 @@ public class SpecimenArraySearchAction extends CommonSearchAction {
 			
             return mapping.findForward(Constants.FAILURE);
 		}
-		return forward;
+		
 	}
 }

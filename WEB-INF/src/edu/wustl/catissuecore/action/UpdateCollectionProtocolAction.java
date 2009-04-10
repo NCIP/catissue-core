@@ -22,6 +22,7 @@ import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
+import edu.wustl.security.exception.UserNotAuthorizedException;
 ;
 
 public class UpdateCollectionProtocolAction extends BaseAction {
@@ -45,7 +46,7 @@ public class UpdateCollectionProtocolAction extends BaseAction {
 			HttpSession session = request.getSession();
 			SessionDataBean sessionDataBean = (SessionDataBean)
 							session.getAttribute(Constants.SESSION_DATA);
-			CollectionProtocolDTO collectionProtocolDTO = Utility.getCoolectionProtocolDTO(collectionProtocol,session);
+			CollectionProtocolDTO collectionProtocolDTO = AppUtility.getCoolectionProtocolDTO(collectionProtocol,session);
 			bizLogic.update(collectionProtocolDTO, null, 
 					0, sessionDataBean);
 			CollectionProtocolUtil.updateSession(request, collectionProtocol.getId());
@@ -78,7 +79,7 @@ public class UpdateCollectionProtocolAction extends BaseAction {
 	        	    userName = sessionDataBean.getUserName();
 	        	}
 	            String className = Constants.COLLECTION_PROTOCOL;
-	            String decoratedPrivilegeName = Utility.getDisplayLabelForUnderscore(ex.getPrivilegeName());
+	            String decoratedPrivilegeName = AppUtility.getDisplayLabelForUnderscore(ex.getPrivilegeName());
 	            String baseObject = "";
 	            if (ex.getBaseObject() != null && ex.getBaseObject().trim().length() != 0)
 	            {

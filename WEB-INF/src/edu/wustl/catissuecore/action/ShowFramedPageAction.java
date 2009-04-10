@@ -66,7 +66,7 @@ public class ShowFramedPageAction extends Action
      	session.removeAttribute(Constants.CAN_HOLD_SPECIMEN_CLASS);
      	session.removeAttribute(Constants.CAN_HOLD_SPECIMEN_ARRAY_TYPE);
 
-        if (pageOf.equals(edu.wustl.common.util.global.Constants.PAGE_OF_SPECIMEN) ||
+        if (pageOf.equals(Constants.PAGE_OF_SPECIMEN) ||
         		pageOf.equals(Constants.PAGE_OF_ALIQUOT) || pageOf.equals(Constants.PAGE_OF_STORAGE_CONTAINER))
         {
         	String storageType = request.getParameter("storageType");

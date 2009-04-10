@@ -29,6 +29,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
@@ -152,9 +153,9 @@ public class QuickEventsSpecimenSearchAction extends BaseAction {
 	 	
 	 	String sourceObjectName = Specimen.class.getName();
         String[] selectColumnName = {Constants.SYSTEM_IDENTIFIER  };
-        String[] whereColumnName = {sourceObject , Constants.ACTIVITY_STATUS}; //"storageContainer."+Constants.SYSTEM_IDENTIFIER
+        String[] whereColumnName = {sourceObject , Status.ACTIVITY_STATUS.toString()}; //"storageContainer."+Constants.SYSTEM_IDENTIFIER
         String[] whereColumnCondition = {"=","!="};
-        Object[] whereColumnValue = {value, Constants.ACTIVITY_STATUS_DISABLED};
+        Object[] whereColumnValue = {value, Status.ACTIVITY_STATUS_DISABLED.toString()};
         String joinCondition = Constants.AND_JOIN_CONDITION;
 
         List list = bizlogic.retrieve(sourceObjectName, selectColumnName,

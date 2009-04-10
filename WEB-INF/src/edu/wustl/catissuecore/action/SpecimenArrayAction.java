@@ -36,6 +36,7 @@ import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.cde.CDEManager;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
@@ -56,7 +57,7 @@ public class SpecimenArrayAction extends SecureAction
     {
         String operation = request.getParameter(Constants.OPERATION);
         request.setAttribute(Constants.OPERATION, operation);
-	    List<NameValueBean> storagePositionListForSpecimenArray = Utility.getStoragePositionTypeListForTransferEvent();
+	    List<NameValueBean> storagePositionListForSpecimenArray = AppUtility.getStoragePositionTypeListForTransferEvent();
 		request.setAttribute("storagePositionListForSpecimenArray", storagePositionListForSpecimenArray);
         SpecimenArrayForm specimenArrayForm = (SpecimenArrayForm) form;
         SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
@@ -210,9 +211,10 @@ public class SpecimenArrayAction extends SecureAction
      * @param request
      * @return  array type
      * @throws DAOException
+     * @throws BizLogicException 
      */
     private List doSetClassAndType(SpecimenArrayForm specimenArrayForm,SpecimenArrayBizLogic specimenArrayBizLogic,SpecimenArrayType arrayType) 
-    							throws DAOException	
+    							throws BizLogicException	
     {
     	
     	List specimenTypeList = null;

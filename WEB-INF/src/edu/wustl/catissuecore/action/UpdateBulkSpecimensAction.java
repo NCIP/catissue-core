@@ -26,23 +26,25 @@ import edu.wustl.catissuecore.actionForm.ViewSpecimenSummaryForm;
 import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
 import edu.wustl.catissuecore.bean.GenericSpecimen;
 import edu.wustl.catissuecore.bean.SpecimenDataBean;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.util.SpecimenDetailsTagUtil;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.AppUtility;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
-import edu.wustl.common.dao.DAOFactory;
-import edu.wustl.common.dao.HibernateDAO;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
-;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
+import edu.wustl.dao.HibernateDAO;
+import edu.wustl.dao.daofactory.DAOConfigFactory;
 import edu.wustl.dao.exception.DAOException;
+import edu.wustl.security.exception.UserNotAuthorizedException;
 
 public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 {
@@ -53,8 +55,8 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 			HttpServletResponse response) throws Exception {
 		
 		HttpSession session = request.getSession();
-		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(
-				Constants.NEW_SPECIMEN_FORM_ID);
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		IBizLogic bizLogic = factory.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
 		SessionDataBean sessionDataBean = (SessionDataBean) session.getAttribute(Constants.SESSION_DATA);
 		try{
 			specimenSummaryForm =(ViewSpecimenSummaryForm)form;
@@ -148,7 +150,7 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 	        	    userName = sessionDataBean.getUserName();
 	        	}
 	            String className = Constants.SPECIMEN;
-	            String decoratedPrivilegeName = Utility.getDisplayLabelForUnderscore(ex.getPrivilegeName());
+	            String decoratedPrivilegeName = AppUtility.getDisplayLabelForUnderscore(ex.getPrivilegeName());
 	            String baseObject = "";
 	            if (ex.getBaseObject() != null && ex.getBaseObject().trim().length() != 0)
 	            {
@@ -175,7 +177,7 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 	}
 	private void updateWithNewStorageLocation(HttpSession session,
 			SessionDataBean sessionDataBean, String eventId,
-			LinkedHashSet specimenDomainCollection) throws DAOException {
+			LinkedHashSet specimenDomainCollection) throws DAOException{
 		Iterator<Specimen> specimensItr = specimenDomainCollection.iterator();
 		Map collectionProtocolEventMap = (Map) session.getAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
 
@@ -184,7 +186,7 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 		LinkedHashMap<String,GenericSpecimen> specimenMap = (LinkedHashMap) eventBean.getSpecimenRequirementbeanMap();
 		Collection<GenericSpecimen> specCollection = specimenMap.values();
 		Iterator<GenericSpecimen> iterator = specCollection.iterator();
-		HibernateDAO dao = (HibernateDAO) DAOFactory.getInstance().getDAO(0);
+		HibernateDAO dao = (HibernateDAO)  DAOConfigFactory.getInstance().getDAOFactory(Constants.APPLICATION_NAME).getDAO();
 		dao.openSession(sessionDataBean);
 		while (iterator.hasNext())
 		{
@@ -217,8 +219,9 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 	/**
 	 * @param specimenVO
 	 * @return
+	 * @throws ApplicationException 
 	 */
-	protected Specimen createSpecimenDomainObject(GenericSpecimen specimenVO) throws BizLogicException {
+	protected Specimen createSpecimenDomainObject(GenericSpecimen specimenVO) throws ApplicationException{
 
 		specimenVO = (SpecimenDataBean) specimenVO;
 		specimenVO.setCheckedSpecimen(true);

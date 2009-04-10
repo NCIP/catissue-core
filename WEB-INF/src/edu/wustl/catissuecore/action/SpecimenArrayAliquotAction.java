@@ -30,13 +30,15 @@ import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.AppUtility;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.util.Utility;
+import edu.wustl.common.util.global.Status;
 
 
 /**
@@ -154,9 +156,9 @@ public class SpecimenArrayAliquotAction extends SecureAction
 			if (map != null)
 			{
 				//TODO
-				specimenArrayAliquotForm.setSpecimenClass(AppUtility.toString(map.get(Constants.ALIQUOT_SPECIMEN_CLASS)));				
-				specimenArrayAliquotForm.setSpecimenArrayType(AppUtility.toString(map.get(Constants.ALIQUOT_SPECIMEN_ARRAY_TYPE)));
-				specimenArrayAliquotForm.setAliquotCount(AppUtility.toString(map.get(Constants.ALIQUOT_ALIQUOT_COUNTS)));								
+				specimenArrayAliquotForm.setSpecimenClass(Utility.toString(map.get(Constants.ALIQUOT_SPECIMEN_CLASS)));				
+				specimenArrayAliquotForm.setSpecimenArrayType(Utility.toString(map.get(Constants.ALIQUOT_SPECIMEN_ARRAY_TYPE)));
+				specimenArrayAliquotForm.setAliquotCount(Utility.toString(map.get(Constants.ALIQUOT_ALIQUOT_COUNTS)));								
 				Collection specimenTypesCollection = (Collection) map.get(Constants.ALIQUOT_SPECIMEN_TYPES);
 				List specimenTypeList = setSpecimenTypes(specimenTypesCollection, specimenArrayAliquotForm);				
 				request.setAttribute(Constants.SPECIMEN_TYPE_LIST,specimenTypeList);				
@@ -258,7 +260,7 @@ public class SpecimenArrayAliquotAction extends SecureAction
 			 * Retriving specimenArrayTypeObject
 			 * replaced SpecimenArrayType arrayType = specimenArray.getSpecimenArrayType();
 			 */
-			if(Constants.ACTIVITY_STATUS_DISABLED.equals(specimenArray.getActivityStatus()))
+			if(Status.ACTIVITY_STATUS_DISABLED.toString().equals(specimenArray.getActivityStatus()))
 			{
 				ActionErrors errors = getActionErrors(request);
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.specimenArrayAliquots.disabled","Parent Specimen Array"));

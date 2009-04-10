@@ -35,16 +35,16 @@ import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.dto.CollectionProtocolDTO;
 import edu.wustl.catissuecore.util.CollectionProtocolUtil;
 import edu.wustl.catissuecore.util.MultipleSpecimenValidationUtil;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
-import edu.wustl.common.action.CommonAddEditAction;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.exception.BizLogicException;
-;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.security.exception.UserNotAuthorizedException;
  
 public class SubmitSpecimenCPAction extends BaseAction {
 
@@ -84,7 +84,7 @@ public class SubmitSpecimenCPAction extends BaseAction {
 					CollectionProtocol collectionProtocol = CollectionProtocolUtil
 							.populateCollectionProtocolObjects(request);
 
-					CollectionProtocolDTO collectionProtocolDTO = edu.wustl.catissuecore.util.global.Utility.getCoolectionProtocolDTO(collectionProtocol,session);
+					CollectionProtocolDTO collectionProtocolDTO = AppUtility.getCoolectionProtocolDTO(collectionProtocol,session);
 					insertCollectionProtocol(collectionProtocolDTO, request.getSession());
 
 					collectionProtocolBean.setIdentifier(collectionProtocol.getId());
@@ -153,8 +153,8 @@ public class SubmitSpecimenCPAction extends BaseAction {
 			{
                 UserNotAuthorizedException excp = (UserNotAuthorizedException) ex;
                  
-                String className = new CommonAddEditAction().getActualClassName(CollectionProtocol.class.getName());
-                String decoratedPrivilegeName = Utility.getDisplayLabelForUnderscore(((UserNotAuthorizedException)ex).getPrivilegeName());
+                String className = Utility.getActualClassName(CollectionProtocol.class.getName());
+                String decoratedPrivilegeName = AppUtility.getDisplayLabelForUnderscore(((UserNotAuthorizedException)ex).getPrivilegeName());
                 String baseObject = "";
                 if (excp.getBaseObject() != null && excp.getBaseObject().trim().length() != 0)
                 {
@@ -185,7 +185,7 @@ public class SubmitSpecimenCPAction extends BaseAction {
 	 * @throws UserNotAuthorizedException
 	 */
 	private void insertSpecimens(LinkedHashMap cpEventMap, HttpSession session )
-			throws BizLogicException, UserNotAuthorizedException {
+			throws BizLogicException {
 		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(
 				Constants.NEW_SPECIMEN_FORM_ID);
 		SessionDataBean sessionDataBean = (SessionDataBean) session
@@ -199,7 +199,7 @@ public class SubmitSpecimenCPAction extends BaseAction {
 	 * @throws UserNotAuthorizedException
 	 */
 	private void insertCollectionProtocol(CollectionProtocolDTO collectionProtocolDTO, HttpSession session)
-			throws BizLogicException, UserNotAuthorizedException {
+			throws BizLogicException {
 		IBizLogic bizLogic =BizLogicFactory.getInstance().getBizLogic(Constants.COLLECTION_PROTOCOL_FORM_ID);
 				SessionDataBean sessionDataBean = (SessionDataBean) session.getAttribute(Constants.SESSION_DATA);		
 		bizLogic.insert(collectionProtocolDTO, sessionDataBean, 0);

@@ -42,6 +42,7 @@ import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.JDBCDAO;
 import edu.wustl.dao.daofactory.DAOConfigFactory;
 import edu.wustl.dao.exception.DAOException;
+import edu.wustl.query.util.global.AQConstants;
 import edu.wustl.simplequery.bizlogic.SimpleQueryBizLogic;
 import edu.wustl.simplequery.query.Condition;
 import edu.wustl.simplequery.query.DataElement;
@@ -88,7 +89,7 @@ public class TitliFetchAction extends Action
 		
 		try
 		{
-			request.getSession().setAttribute(edu.wustl.common.util.global.Constants.IS_SIMPLE_SEARCH, Constants.TRUE);
+			request.getSession().setAttribute(AQConstants.IS_SIMPLE_SEARCH, Constants.TRUE);
 			
 			//if there is only one record in the selected group, go directly to the edit page
 			if(dataList.size()==1)
@@ -97,7 +98,7 @@ public class TitliFetchAction extends Action
 				
 				List row = (List)(dataList.get(0));
 																		
-				String path = Constants.SEARCH_OBJECT_ACTION + "?" + Constants.PAGE_OFF + "="
+				String path = Constants.SEARCH_OBJECT_ACTION + "?" + Constants.PAGE_OF + "="
 									+ pageOf + "&" + Constants.OPERATION + "="
 									+ Constants.SEARCH + "&" + Constants.SYSTEM_IDENTIFIER + "="
 									+ (String)(row.get(id));
@@ -107,9 +108,9 @@ public class TitliFetchAction extends Action
 			 
 			
 			request.setAttribute(Constants.PAGE_OF, resultGroup.getPageOf());
-			request.setAttribute(Constants.SPREADSHEET_DATA_LIST, dataList);
+			request.setAttribute(AQConstants.SPREADSHEET_DATA_LIST, dataList);
 			request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST, columnNames);
-			request.setAttribute(Constants.IDENTIFIER_FIELD_INDEX, identifierIndex);
+			request.setAttribute(AQConstants.IDENTIFIER_FIELD_INDEX, identifierIndex);
 			request.setAttribute(Constants.PAGE_NUMBER, 1);
 			request.getSession().setAttribute(Constants.TOTAL_RESULTS,	dataList.size());
 			//request.getSession().setAttribute(Constants.RESULTS_PER_PAGE, 10);
@@ -311,12 +312,12 @@ public class TitliFetchAction extends Action
 		
 		//String query=null;
 		
-		String query = "select "+Constants.TABLE_ALIAS_NAME_COLUMN+" from "+Constants.TABLE_DATA_TABLE_NAME+" where "+Constants.TABLE_TABLE_NAME_COLUMN+"='"+tableName+"'";
-		JDBCDAO dao = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
+		String query = "select "+Constants.TABLE_ALIAS_NAME_COLUMN+" from "+Constants.TABLE_DATA_TABLE_NAME+" where "+Constants.TABLE_DATA_TABLE_NAME+"='"+tableName+"'";
+		JDBCDAO dao = DAOConfigFactory.getInstance().getDAOFactory(Constants.APPLICATION_NAME).
+		getJDBCDAO();
 		dao.openSession(getSessionData(request));
 		
-		List list  = dao.executeQuery(query, getSessionData(request), false, null);
-		
+		List list  = dao.executeQuery(query);
 		List subList = (List) (list.get(0)); 
 		alias = (String)(subList.get(0));
 		dao.closeSession();

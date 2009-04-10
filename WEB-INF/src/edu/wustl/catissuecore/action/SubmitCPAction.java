@@ -21,14 +21,14 @@ import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.dto.CollectionProtocolDTO;
 import edu.wustl.catissuecore.multiRepository.bean.SiteUserRolePrivilegeBean;
 import edu.wustl.catissuecore.util.CollectionProtocolUtil;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
-import edu.wustl.common.action.CommonAddEditAction;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.exception.BizLogicException;
-;
 import edu.wustl.common.util.Utility;
+import edu.wustl.security.exception.UserNotAuthorizedException;
 
 /**
  * This is the method for submitting Collection Protocol
@@ -90,8 +90,8 @@ public class SubmitCPAction extends BaseAction
 			if(ex instanceof UserNotAuthorizedException)
 			{
 				UserNotAuthorizedException excp = (UserNotAuthorizedException) ex;
-				 String className = new CommonAddEditAction().getActualClassName(CollectionProtocol.class.getName());
-		            String decoratedPrivilegeName = Utility.getDisplayLabelForUnderscore(excp.getPrivilegeName());
+				 String className = Utility.getActualClassName(CollectionProtocol.class.getName());
+		            String decoratedPrivilegeName = AppUtility.getDisplayLabelForUnderscore(excp.getPrivilegeName());
 		            String baseObject = "";
 		            if (excp.getBaseObject() != null && excp.getBaseObject().trim().length() != 0)
 		            {
@@ -130,7 +130,7 @@ public class SubmitCPAction extends BaseAction
 	 * @throws UserNotAuthorizedException User Not Authorized Exception
 	 */
 	private void insertCollectionProtocol(CollectionProtocolDTO collectionProtocolDTO, HttpSession session)
-			throws BizLogicException, UserNotAuthorizedException 
+			throws BizLogicException
 	{
 		IBizLogic bizLogic =BizLogicFactory.getInstance().getBizLogic(Constants.COLLECTION_PROTOCOL_FORM_ID);
 		SessionDataBean sessionDataBean = (SessionDataBean) session.getAttribute(Constants.SESSION_DATA);		

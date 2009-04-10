@@ -36,11 +36,13 @@ import edu.wustl.catissuecore.storage.StorageContainerGridObject;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.bizlogic.IBizLogic;
-import edu.wustl.common.security.PrivilegeCache;
-import edu.wustl.common.security.PrivilegeManager;
-import edu.wustl.dao.exception.DAOException;
-import edu.wustl.common.util.dbManager.HibernateMetaData;
+import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.exception.DAOException;
+import edu.wustl.dao.util.HibernateMetaData;
+import edu.wustl.security.privilege.PrivilegeCache;
+import edu.wustl.security.privilege.PrivilegeManager;
 /**
  * ShowStorageGridViewAction shows the grid view of the map according to the
  * storage container selected from the tree view.
@@ -320,17 +322,18 @@ public class ShowStorageGridViewAction  extends BaseAction
      * @param storageContainer The Storage container object reference.
      * @param bizLogic reference to bizLogic class. 
      * @throws DAOException 
+     * @throws BizLogicException 
 	 */
-	private void setEnablePageAttributeIfRequired(HttpServletRequest request, StorageContainer storageContainer, StorageContainerBizLogic bizLogic) throws DAOException
+	private void setEnablePageAttributeIfRequired(HttpServletRequest request, StorageContainer storageContainer, StorageContainerBizLogic bizLogic) throws BizLogicException
 	{
 		boolean enablePage=true;
-		String activityStatus = request.getParameter(Constants.ACTIVITY_STATUS);
+		String activityStatus = request.getParameter(Status.ACTIVITY_STATUS.toString());
 		if(activityStatus == null)
 		{
-			activityStatus=(String)request.getAttribute(Constants.ACTIVITY_STATUS);
+			activityStatus=(String)request.getAttribute(Status.ACTIVITY_STATUS.toString());
 		}
 			
-		if (activityStatus!=null && activityStatus.equals(Constants.ACTIVITY_STATUS_CLOSED))
+		if (activityStatus!=null && activityStatus.equals(Status.ACTIVITY_STATUS_CLOSED.toString()))
 		{
 			enablePage=false;
 			ActionErrors errors = new ActionErrors();

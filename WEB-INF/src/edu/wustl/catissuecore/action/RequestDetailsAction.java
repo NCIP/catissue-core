@@ -72,16 +72,21 @@ import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.cde.CDEManager;
-import edu.wustl.common.dao.DAO;
-import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.exception.BizLogicException;
-import edu.wustl.common.security.PrivilegeCache;
-import edu.wustl.common.security.PrivilegeManager;
-import edu.wustl.common.security.SecurityManager;
-import edu.wustl.common.util.Permissions;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
+import edu.wustl.dao.DAO;
+import edu.wustl.dao.daofactory.DAOConfigFactory;
+import edu.wustl.dao.daofactory.IDAOFactory;
 import edu.wustl.dao.exception.DAOException;
-import edu.wustl.common.util.dbManager.DBUtil;
+import edu.wustl.security.exception.SMException;
+import edu.wustl.security.global.Permissions;
+import edu.wustl.security.manager.SecurityManagerFactory;
+import edu.wustl.security.privilege.PrivilegeCache;
+import edu.wustl.security.privilege.PrivilegeManager;
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.CommonServiceLocator;
+import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
 import gov.nih.nci.security.authorization.domainobjects.Role;
 
@@ -211,7 +216,7 @@ public class RequestDetailsAction extends BaseAction
 		SessionDataBean sessionLoginInfo = getSessionData(request);
 		Long loggedInUserID = sessionLoginInfo.getUserId();
 		long csmUserId = new Long(sessionLoginInfo.getCsmUserId()).longValue();
-		Role role = SecurityManager.getInstance(UserBizLogic.class).getUserRole(csmUserId);
+		Role role = SecurityManagerFactory.getSecurityManager().getUserRole(csmUserId);
 
 		List distributionProtocolList = loadDistributionProtocol(loggedInUserID, role.getName(), sessionLoginInfo);
 		request.setAttribute(Constants.DISTRIBUTIONPROTOCOLLIST, distributionProtocolList);
@@ -286,7 +291,10 @@ public class RequestDetailsAction extends BaseAction
 		//fetching the order object corresponding to obtained id.
 
 		long startTime = System.currentTimeMillis();
-		DAO dao = DAOFactory.getInstance().getDAO(0);
+		IDAOFactory daoFact = DAOConfigFactory.getInstance().getDAOFactory(
+				CommonServiceLocator.getInstance().getAppName());
+		DAO dao = null;
+		dao = daoFact.getDAO();
 
 		try
 		{
@@ -831,11 +839,13 @@ private OrderItem getOrderItem(OrderDetails orderDetails , Long orderItemId )
 	/**
 	 * @param id
 	 * @return
-	 * @throws DAOException
+	 * @throws BizLogicException 
 	 */
-	private Specimen getSpecimenFromDB(String id) throws DAOException
+	private Specimen getSpecimenFromDB(String id) throws BizLogicException
 	{
-		NewSpecimenBizLogic newSpecimenBizLogic = (NewSpecimenBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		NewSpecimenBizLogic newSpecimenBizLogic = (NewSpecimenBizLogic) factory
+				.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
 		Object object = newSpecimenBizLogic.retrieve(Specimen.class.getName(), new Long(id));
 		return (Specimen) object;
 	}
@@ -843,37 +853,43 @@ private OrderItem getOrderItem(OrderDetails orderDetails , Long orderItemId )
 	/**
 	 * @param id
 	 * @return
+	 * @throws BizLogicException 
+	 * @throws NumberFormatException 
 	 * @throws DAOException
 	 */
-	private SpecimenCollectionGroup getSpecimenCollGrpFromDB(String id) throws DAOException
+	private SpecimenCollectionGroup getSpecimenCollGrpFromDB(String id) throws BizLogicException
 	{
-		SpecimenCollectionGroupBizLogic specimenCollectionGroupBizLogic = (SpecimenCollectionGroupBizLogic) BizLogicFactory.getInstance()
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		SpecimenCollectionGroupBizLogic specimenCollectionGroupBizLogic = (SpecimenCollectionGroupBizLogic) factory
 				.getBizLogic(Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);
-		Object object = specimenCollectionGroupBizLogic.retrieve(SpecimenCollectionGroup.class.getName(), new Long(id));
-		
+		Object object = specimenCollectionGroupBizLogic.retrieve(SpecimenCollectionGroup.class
+				.getName(), new Long(id));
 		return (SpecimenCollectionGroup) object;
 	}
 
 	/**
 	 * @param id
 	 * @return
-	 * @throws DAOException
+	 * @throws BizLogicException 
 	 */
-	private OrderItem getOrderItemFromDB(String id) throws DAOException
+	private OrderItem getOrderItemFromDB(String id) throws BizLogicException
 	{
-		OrderBizLogic orderBizLogic = (OrderBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		OrderBizLogic orderBizLogic = (OrderBizLogic) factory.getBizLogic(
+				Constants.REQUEST_LIST_FILTERATION_FORM_ID);
 		Object object = orderBizLogic.retrieve(OrderItem.class.getName(), new Long(id));
 		return (OrderItem) object;
 	}
 
 	/**
 	 * @return List of site objects.
-	 * @throws DAOException object
+	 * @throws BizLogicException 
 	 */
-	private List getSiteListToDisplay() throws DAOException
+	private List getSiteListToDisplay() throws BizLogicException
 	{
-		OrderBizLogic orderBizLogic = (OrderBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
-
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		OrderBizLogic orderBizLogic = (OrderBizLogic) factory.getBizLogic(
+				Constants.REQUEST_LIST_FILTERATION_FORM_ID);
 		//Sets the Site list.
 		String sourceObjectName = Site.class.getName();
 		String[] displayNameFields = {"name"};
@@ -1203,7 +1219,7 @@ private OrderItem getOrderItem(OrderDetails orderDetails , Long orderItemId )
 		String[] displayName = {"title"};
 		String valueFieldCol = Constants.ID;
 
-		String[] whereColNames ={Constants.ACTIVITY_STATUS};
+		String[] whereColNames ={Status.ACTIVITY_STATUS.toString()};
 		String[] whereColCond = {"!="};
 		Object[] whereColVal = {Constants.ACTIVITY_STATUS_CLOSED};	
 		String separatorBetweenFields = "";
@@ -1215,7 +1231,7 @@ private OrderItem getOrderItem(OrderDetails orderDetails , Long orderItemId )
 		}
 		else
 		{
-			String[] whereColumnName = {"principalInvestigator.id",Constants.ACTIVITY_STATUS};
+			String[] whereColumnName = {"principalInvestigator.id",Status.ACTIVITY_STATUS.toString()};
 			String[] colCondition = {"=","!="};
 			Object[] whereColumnValue = {piID,Constants.ACTIVITY_STATUS_CLOSED};
 			String joinCondition = Constants.AND_JOIN_CONDITION;
@@ -1285,7 +1301,10 @@ private OrderItem getOrderItem(OrderDetails orderDetails , Long orderItemId )
 	private boolean checkDistributionPrivilege(SessionDataBean sessionDataBean,
 			HashSet<Long> siteIds, HashSet<Long> cpIds) 
 	{
+		
 		boolean hasDistributionPrivilege = false;
+		try
+		{
 		String objectId = Site.class.getName();
 		PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(sessionDataBean.getUserName());
 		
@@ -1304,9 +1323,12 @@ private OrderItem getOrderItem(OrderDetails orderDetails , Long orderItemId )
 			{
 				return true;
 			}
-			hasDistributionPrivilege = Utility.checkForAllCurrentAndFutureCPs(null, Permissions.DISTRIBUTION, sessionDataBean, cpId.toString());
+			hasDistributionPrivilege = AppUtility.checkForAllCurrentAndFutureCPs(Permissions.DISTRIBUTION, sessionDataBean, cpId.toString());
 		}
-		
+		}catch (SMException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
 		return hasDistributionPrivilege;
 	}
 

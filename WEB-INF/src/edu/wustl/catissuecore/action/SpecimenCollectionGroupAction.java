@@ -53,17 +53,20 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.ConsentUtil;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
-import edu.wustl.catissuecore.util.global.AppUtility;
-import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.cde.CDEManager;
-import edu.wustl.dao.exception.DAOException;
+import edu.wustl.common.exception.ApplicationException;
+import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.util.Utility;
+import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.exception.DAOException;
 
 /**
  * SpecimenCollectionGroupAction initializes the fields in the
@@ -233,7 +236,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 		else
 		{
 			String scgID = String.valueOf(specimenCollectionGroupForm.getId());
-			SpecimenCollectionGroup specimenCollectionGroup= Utility.getSCGObj(scgID);
+			SpecimenCollectionGroup specimenCollectionGroup= AppUtility.getSCGObj(scgID);
 			//List added for grid
 			List specimenDetails = new ArrayList();
 			getSpecimenDetails(specimenCollectionGroup, specimenDetails);
@@ -254,7 +257,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 			session.setAttribute(Constants.SPECIMEN_LIST, specimenDetails);
 			session.setAttribute(Constants.COLUMNLIST, columnList);
 		}
-		List specimenCollectionGroupResponseList = Utility.responceList(operation);
+		List specimenCollectionGroupResponseList = AppUtility.responceList(operation);
 		request.setAttribute(Constants.LIST_OF_SPECIMEN_COLLECTION_GROUP, specimenCollectionGroupResponseList);
 
 		String tabSelected = request.getParameter(Constants.SELECTED_TAB);
@@ -638,7 +641,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 			CatissueCoreCacheManager.getInstance().addObjectToCache("scgEntityId", scgEntityId);
 		}
 		request.setAttribute("scgEntityId", scgEntityId);
-		Utility.setDefaultPrinterTypeLocation(specimenCollectionGroupForm);
+		AppUtility.setDefaultPrinterTypeLocation(specimenCollectionGroupForm);
 		/**
 		 * Name : Ashish Gupta
 		 * Reviewer Name : Sachin Lale 
@@ -665,7 +668,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 		{
 			reportId = new Long(-1);
 		}
-		else if (Utility.isQuarantined(reportId))
+		else if (AppUtility.isQuarantined(reportId))
 		{
 			reportId = new Long(-2);
 		}
@@ -679,9 +682,9 @@ public class SpecimenCollectionGroupAction extends SecureAction
 	/**
 	 * @param specimenCollectionGroupForm
 	 * @param bizLogic
-	 * @throws DAOException
+	 * @throws BizLogicException 
 	 */
-	private void setEventsId(SpecimenCollectionGroupForm specimenCollectionGroupForm, SpecimenCollectionGroupBizLogic bizLogic) throws DAOException
+	private void setEventsId(SpecimenCollectionGroupForm specimenCollectionGroupForm, SpecimenCollectionGroupBizLogic bizLogic) throws BizLogicException
 	{
 		Object object = bizLogic.retrieve(SpecimenCollectionGroup.class.getName(), specimenCollectionGroupForm.getId());
 		if (object != null)
@@ -717,7 +720,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 	 * @param specimenCollectionGroupForm
 	 */
 	private void setDefaultEvents(HttpServletRequest request, SpecimenCollectionGroupForm specimenCollectionGroupForm, String operation)
-			throws DAOException
+			throws ApplicationException
 	{
 		setDateParameters(specimenCollectionGroupForm, request);
 		String collProcedure = (String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_COLLECTION_PROCEDURE);
@@ -738,8 +741,8 @@ public class SpecimenCollectionGroupAction extends SecureAction
 			specimenCollectionGroupForm.setReceivedEventReceivedQuality(Constants.CP_DEFAULT);
 		}
 		//setting the collector and receiver drop downs
-		Utility.setUserInForm(request, operation);
-		long collectionEventUserId = Utility.setUserInForm(request,operation);
+		AppUtility.setUserInForm(request, operation);
+		long collectionEventUserId = AppUtility.setUserInForm(request,operation);
 		if(specimenCollectionGroupForm.getCollectionEventUserId() == 0)
 		{
 			specimenCollectionGroupForm.setCollectionEventUserId(collectionEventUserId);
@@ -1123,7 +1126,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 	 * @return collectionProtocolRegistration CollectionProtocolRegistration object
 	 */
 	private CollectionProtocolRegistration getcollectionProtocolRegistrationObj(String idOfSelectedRadioButton, String cp_id, String indexType)
-			throws DAOException
+			throws BizLogicException
 	{
 
 		CollectionProtocolRegistrationBizLogic collectionProtocolRegistrationBizLogic = (CollectionProtocolRegistrationBizLogic) BizLogicFactory
@@ -1194,7 +1197,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 	 * @param finalDataList
 	 * @throws DAOException 
 	 */
-	private void getSpecimenDetails(SpecimenCollectionGroup specimenCollectionGroupObj, List finalDataList) throws DAOException
+	private void getSpecimenDetails(SpecimenCollectionGroup specimenCollectionGroupObj, List finalDataList) throws BizLogicException
 	{
 		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 		Collection specimen = null;
@@ -1218,7 +1221,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 	 * @param finalDataList
 	 * @throws DAOException 
 	 */
-	private void getDetailsOfSpecimen(Specimen specimenObj, List finalDataList) throws DAOException
+	private void getDetailsOfSpecimen(Specimen specimenObj, List finalDataList)
 	{
 		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 		List specimenDetailList = new ArrayList();
@@ -1251,7 +1254,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 		}
 
 	}
-	private Long getAssociatedIdentifiedReportId(Long scgId) throws DAOException
+	private Long getAssociatedIdentifiedReportId(Long scgId) throws BizLogicException
 	{
 		IdentifiedSurgicalPathologyReportBizLogic bizLogic = (IdentifiedSurgicalPathologyReportBizLogic) BizLogicFactory.getInstance().getBizLogic(
 				IdentifiedSurgicalPathologyReport.class.getName());
@@ -1278,7 +1281,6 @@ public class SpecimenCollectionGroupAction extends SecureAction
 	/* (non-Javadoc)
 	 * @see edu.wustl.common.action.SecureAction#getObjectId(edu.wustl.common.actionForm.AbstractActionForm)
 	 */
-	@Override
 	protected String getObjectId(AbstractActionForm form)
 	{
 		SpecimenCollectionGroupForm specimenCollectionGroupForm = (SpecimenCollectionGroupForm)form;

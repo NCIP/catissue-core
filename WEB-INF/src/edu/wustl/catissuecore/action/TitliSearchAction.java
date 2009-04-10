@@ -23,6 +23,7 @@ import titli.model.TitliException;
 import titli.model.util.TitliTableMapper;
 import edu.wustl.catissuecore.actionForm.TitliSearchForm;
 import edu.wustl.common.util.global.Constants;
+import edu.wustl.common.util.global.TitliSearchConstants;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -57,7 +58,7 @@ public class TitliSearchAction extends Action
 						
 			// set the result in the action form
 			titliSearchForm.setSortedResultMap(sortedResultMap); 
-			request.getSession().setAttribute(Constants.TITLI_SORTED_RESULT_MAP,sortedResultMap);
+			request.getSession().setAttribute(TitliSearchConstants.TITLI_SORTED_RESULT_MAP,sortedResultMap);
 			
 			
 			//set the internationalized displaySearchString 
@@ -92,8 +93,8 @@ public class TitliSearchAction extends Action
 					Logger.out.error("Exception in TitliFetchAction : "	+ e.getMessage(), e);
 				}
 				
-				String path =Constants.TITLI_FETCH_ACTION;
-				return getActionForward(Constants.TITLI_SINGLE_RESULT, path);
+				String path =TitliSearchConstants.TITLI_FETCH_ACTION;
+				return getActionForward(TitliSearchConstants.TITLI_SINGLE_RESULT, path);
 				
 			}
 			

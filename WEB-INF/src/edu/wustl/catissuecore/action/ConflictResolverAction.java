@@ -167,9 +167,10 @@ public class ConflictResolverAction extends BaseAction
 	 * @param request
 	 * @param reportQueueId
 	 * @param participantIdToAssociate
-	 * @throws DAOException
+	 * @throws BizLogicException 
+	 * @throws NumberFormatException 
 	 */
-	private void createNewSCG(HttpServletRequest request,String reportQueueId,String participantIdToAssociate) throws DAOException
+	private void createNewSCG(HttpServletRequest request,String reportQueueId,String participantIdToAssociate) throws NumberFormatException, BizLogicException
 	{
 		
 		ReportLoaderQueue reportLoaderQueue =null;
@@ -349,9 +350,11 @@ public class ConflictResolverAction extends BaseAction
 	 /**To overwrite the existing report
 	 * @param request
 	 * @param reportQueueId
+	 * @throws BizLogicException 
+	 * @throws NumberFormatException 
 	 * @throws DAOException
 	 */
-	protected void overwriteReport(HttpServletRequest request,String reportQueueId) throws DAOException
+	protected void overwriteReport(HttpServletRequest request,String reportQueueId) throws NumberFormatException, BizLogicException
 	  {
 		   ReportLoaderQueue reportLoaderQueue =null;
 		   reportLoaderQueue = Utility.getReportQueueObject(reportQueueId);

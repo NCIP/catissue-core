@@ -25,6 +25,7 @@ import edu.wustl.catissuecore.actionForm.ReportedProblemForm;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.util.global.CommonServiceLocator;
 
 
 /**
@@ -53,7 +54,7 @@ public class ReportProblemAction extends Action
 		}
     	
 		//Mandar 17-Apr-06 : 1667:- Application URL
-    	AppUtility.setApplicationURL(request.getRequestURL().toString());
+		CommonServiceLocator.getInstance().setAppURL(request.getRequestURL().toString());
 		
         //Gets the value of the operation parameter.
         String operation = request.getParameter(Constants.OPERATION);

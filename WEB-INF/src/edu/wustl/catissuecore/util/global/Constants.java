@@ -2617,7 +2617,6 @@ public static final String ADD_MULTIPLE_SPECIMEN_TO_CART="addMltipleSpecimenToCa
 	
 	// Constants for ACORN
 	public static final String MSSQLSERVER_DATABASE = "MSSQLSERVER";
-	public static final String  ORACLE_DATABASE = "ORACLE";
 	public static final String FORMAT_FILE_EXTENTION = "_FormatFile.txt";
 	public static final String MSSQLSERVER_NUM_TO_STR_FUNCTION_NAME_FOR_LABEL_GENRATION="CAST(label as bigint)";
 	public static final String MSSQLSERVER_MAX_BARCODE_COL="CAST(barcode as bigint)";
@@ -2780,5 +2779,10 @@ public static final String ADD_MULTIPLE_SPECIMEN_TO_CART="addMltipleSpecimenToCa
 	
 	 //  Local extensions integration constants
     public static final String DEFAULT_CONDITION="-1";
+    
+	public static final String  ORACLE_DATABASE = "ORACLE";
+    public static final String  MYSQL_DATABASE = "MYSQL";
+	public static final String  POSTGRESQL_DATABASE = "POSTGRESQL";
+	public static final String  DB2_DATABASE = "DB2";
 
 }

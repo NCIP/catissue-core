@@ -26,6 +26,7 @@ import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.dao.exception.DAOException;
 
@@ -183,7 +184,7 @@ public class ReportReviewQuarantineAction extends BaseAction
         
         //Saves the list of users to be shown on the page in the request.
         //request.setAttribute(Constants.SHOW_DOMAIN_OBJECT_LIST,showList);
-        Utility.setGridData( showList,columnList, request);
+        AppUtility.setGridData( showList,columnList, request);
         Integer identifierFieldIndex = new Integer(4);
         request.setAttribute("identifierFieldIndex", identifierFieldIndex.intValue());
         //Saves the page number in the request.
@@ -204,8 +205,9 @@ public class ReportReviewQuarantineAction extends BaseAction
 	 * Adding name,value pair in NameValueBean for Witness Name
 	 * @param collProtId Get Witness List for this ID
 	 * @return consentWitnessList
+	 * @throws BizLogicException 
 	 */ 
-	public List getReportStatus(String reportStatus,String reportAction) throws DAOException
+	public List getReportStatus(String reportStatus,String reportAction) throws BizLogicException
 	{   	
 		IBizLogic bizLogic=null;
 		List pendingStatusList=null;

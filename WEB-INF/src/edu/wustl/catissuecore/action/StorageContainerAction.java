@@ -40,12 +40,15 @@ import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.AppUtility;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.dao.exception.DAOException;
+import edu.wustl.common.exception.ApplicationException;
+import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.util.Utility;
+import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
 
 public class StorageContainerAction extends SecureAction
@@ -126,7 +129,7 @@ public class StorageContainerAction extends SecureAction
 				if(site!=null)
 				{
 					long siteId = site.getId();
-					Utility.setCollectionProtocolList(request,siteId);
+					AppUtility.setCollectionProtocolList(request,siteId);
 				}
 			}
 			else if(parentEleType.equals("parentContManual"))
@@ -137,14 +140,14 @@ public class StorageContainerAction extends SecureAction
 				if(site!=null)
 				{
 					long siteId = site.getId();
-					Utility.setCollectionProtocolList(request,siteId);
+					AppUtility.setCollectionProtocolList(request,siteId);
 				}
 			}
 			else if(parentEleType.equals("parentContSite"))
 			{
 				long siteId = new Long(request.getParameter("siteId"));
 				//	String contName = storageContainerForm.getSelectedContainerName();
-				Utility.setCollectionProtocolList(request,siteId);
+				AppUtility.setCollectionProtocolList(request,siteId);
 			}
 			JSONObject jsonObject = null;
 			List<NameValueBean> cpList = (List<NameValueBean>)request.getAttribute(Constants.PROTOCOL_LIST);
@@ -241,12 +244,12 @@ public class StorageContainerAction extends SecureAction
 		{
 			request.setAttribute(Constants.REQ_PATH, reqPath);
 		}
-		List<NameValueBean> parentContainerTypeList =  Utility.getParentContainerTypeList();
+		List<NameValueBean> parentContainerTypeList =  AppUtility.getParentContainerTypeList();
 		request.setAttribute("parentContainerTypeList", parentContainerTypeList);
 		request.setAttribute("parentContainerSelected", storageContainerForm.getParentContainerSelected());
 		session.removeAttribute(Constants.STORAGE_CONTAINER_SESSION_BEAN);
 		session.removeAttribute("isPageFromStorageType");
-		Utility.setDefaultPrinterTypeLocation(storageContainerForm);
+		AppUtility.setDefaultPrinterTypeLocation(storageContainerForm);
 		return mapping.findForward((String) request.getParameter(Constants.PAGE_OF));
 	}
 	
@@ -283,7 +286,7 @@ public class StorageContainerAction extends SecureAction
 
 	}
 
-	private void setRequestAttributes(HttpServletRequest request,StorageContainerForm storageContainerForm) throws DAOException
+	private void setRequestAttributes(HttpServletRequest request,StorageContainerForm storageContainerForm) throws ApplicationException
 	{
 		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 		//Gets the value of the operation parameter.
@@ -303,7 +306,7 @@ public class StorageContainerAction extends SecureAction
 		 * Bug ID: 4922
 		 * Description: get the list of site with activity status "Active"  
 	    */
-		String[] activityStatusArray = {Constants.ACTIVITY_STATUS_DISABLED,Constants.ACTIVITY_STATUS_CLOSED};
+		String[] activityStatusArray = {Status.ACTIVITY_STATUS_DISABLED.toString(),Constants.ACTIVITY_STATUS_CLOSED};
 		SessionDataBean sessionDataBean = getSessionData(request);
 		
 		//List list = bizLogic.getSiteList(Site.class.getName(), siteDisplayField, valueField,activityStatusArray, false);
@@ -321,25 +324,25 @@ public class StorageContainerAction extends SecureAction
 		}
 		request.setAttribute(Constants.SITELIST, list);
 		//get the Specimen class and type from the cde
-		List specimenClassTypeList = Utility.getSpecimenClassTypeListWithAny();
+		List specimenClassTypeList = AppUtility.getSpecimenClassTypeListWithAny();
 		request.setAttribute(Constants.HOLDS_LIST2, specimenClassTypeList);
 		//Gets the Specimen array Type List and sets it in request
 		List list3 = bizLogic.retrieve(SpecimenArrayType.class.getName());
-		List spArrayTypeList = Utility.getSpecimenArrayTypeList(list3);
+		List spArrayTypeList = AppUtility.getSpecimenArrayTypeList(list3);
 		request.setAttribute(Constants.HOLDS_LIST3, spArrayTypeList);
 
 		List list2 = bizLogic.retrieve(StorageType.class.getName());
-		List storageTypeListWithAny = Utility.getStorageTypeList(list2, true);
+		List storageTypeListWithAny = AppUtility.getStorageTypeList(list2, true);
 		request.setAttribute(Constants.HOLDS_LIST1, storageTypeListWithAny);
 
 		if (Constants.ADD.equals(request.getAttribute(Constants.OPERATION)))
 		{
-			List StorageTypeListWithoutAny = Utility.getStorageTypeList(list2, false);
+			List StorageTypeListWithoutAny = AppUtility.getStorageTypeList(list2, false);
 			request.setAttribute(Constants.STORAGETYPELIST, StorageTypeListWithoutAny);
 		}
 		if ("Site".equals(storageContainerForm.getParentContainerSelected()))
 		{
-			request = Utility.setCollectionProtocolList(request, storageContainerForm.getSiteId());
+			request = AppUtility.setCollectionProtocolList(request, storageContainerForm.getSiteId());
 		}
 		else if ("Auto".equals(storageContainerForm.getParentContainerSelected()))
 		{
@@ -347,7 +350,7 @@ public class StorageContainerAction extends SecureAction
 			Site site = bizLogic.getRelatedSite(parentContId);
 			if(site!=null)
 			{
-				request = Utility.setCollectionProtocolList(request, site.getId());
+				request = AppUtility.setCollectionProtocolList(request, site.getId());
 			}
 			else
 			{
@@ -363,7 +366,7 @@ public class StorageContainerAction extends SecureAction
 			Site site = bizLogic.getRelatedSiteForManual(containerName);
 			if(site!=null)
 			{
-				request = Utility.setCollectionProtocolList(request, site.getId());
+				request = AppUtility.setCollectionProtocolList(request, site.getId());
 			}
 			else
 			{
@@ -376,7 +379,7 @@ public class StorageContainerAction extends SecureAction
 	}
 	
 
-	private void onTypeChange(StorageContainerForm storageContainerForm, String operation, HttpServletRequest request) throws DAOException
+	private void onTypeChange(StorageContainerForm storageContainerForm, String operation, HttpServletRequest request) throws BizLogicException
 	{
 		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 		long typeSelected = -1;
@@ -457,7 +460,7 @@ public class StorageContainerAction extends SecureAction
 	}
 
 	private void SetParentStorageContainersForAdd(TreeMap containerMap, StorageContainerForm storageContainerForm, HttpServletRequest request)
-			throws DAOException
+			throws ApplicationException
 	{ 
 		List initialValues = null;
 		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
@@ -479,7 +482,7 @@ public class StorageContainerAction extends SecureAction
 					Site site = container.getSite();
 					if(site!=null)
 					{
-						Utility.setCollectionProtocolList(request,site.getId());
+						AppUtility.setCollectionProtocolList(request,site.getId());
 					}
 					//storageContainerForm.setCollectionIds(collectionIds);
 					//storageContainerForm.setCollectionIds(bizLogic.getDefaultHoldCollectionProtocolList(container));
@@ -495,7 +498,7 @@ public class StorageContainerAction extends SecureAction
 	}
 
 	private void SetParentStorageCOntainersForEdit(TreeMap containerMap, StorageContainerForm storageContainerForm, HttpServletRequest request)
-			throws DAOException
+			throws BizLogicException
 	{
 		List initialValues = null;
 		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
@@ -606,7 +609,7 @@ public class StorageContainerAction extends SecureAction
 		sendCollectionIds(collectionIds,response);;
 	}
 */
-	private long[] parentContChange(HttpServletRequest request) throws DAOException
+	private long[] parentContChange(HttpServletRequest request) throws BizLogicException
 	{
 		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 		

@@ -33,9 +33,7 @@ import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.action.BaseAction;
-import edu.wustl.common.action.CommonAddEditAction;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.ApplicationException;
@@ -201,7 +199,7 @@ public class CreateAliquotAction extends BaseAction
 			UserNotAuthorizedException excp = (UserNotAuthorizedException) e;
 			ActionErrors actionErrors = new ActionErrors();
 			
-            String className = new CommonAddEditAction().getActualClassName(Specimen.class.getName());
+            String className = Utility.getActualClassName(Specimen.class.getName());
             String decoratedPrivilegeName = AppUtility.getDisplayLabelForUnderscore(((UserNotAuthorizedException)e).getPrivilegeName());
             String baseObject = "";
             if (excp.getBaseObject() != null && excp.getBaseObject().trim().length() != 0)

@@ -28,10 +28,10 @@ import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.AppUtility;
-import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.action.SecureAction;
-import edu.wustl.dao.exception.DAOException;
+import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.util.Utility;
+import edu.wustl.common.util.global.CommonServiceLocator;
 
 public class SubCollectionProtocolRegistrationAction extends SecureAction
 {
@@ -103,7 +103,7 @@ public class SubCollectionProtocolRegistrationAction extends SecureAction
 		return mapping.findForward(pageOf);
 	}
 
-	private void setAttributesOfCPInForm(Long cpId, CollectionProtocolRegistrationForm form) throws DAOException
+	private void setAttributesOfCPInForm(Long cpId, CollectionProtocolRegistrationForm form) throws BizLogicException
 	{
 		String sourceObjName = CollectionProtocol.class.getName();
 		String[] selectColName = {"shortTitle", "studyCalendarEventPoint"};
@@ -132,7 +132,7 @@ public class SubCollectionProtocolRegistrationAction extends SecureAction
 
 	}
 
-	private void setAttributesOfParticipantInForm(Long participantId, CollectionProtocolRegistrationForm form) throws DAOException
+	private void setAttributesOfParticipantInForm(Long participantId, CollectionProtocolRegistrationForm form) throws BizLogicException
 	{
 
 		CollectionProtocolRegistrationBizLogic bizLogic = (CollectionProtocolRegistrationBizLogic) BizLogicFactory.getInstance().getBizLogic(
@@ -149,7 +149,7 @@ public class SubCollectionProtocolRegistrationAction extends SecureAction
 
 	}
 
-	private String chkOperation(Long participantId, Long cpId, CollectionProtocolRegistrationForm form) throws DAOException
+	private String chkOperation(Long participantId, Long cpId, CollectionProtocolRegistrationForm form) throws BizLogicException
 	{
 		boolean isParticipantRegToCP = chkParticipantRegToCP(participantId, cpId, form);
 		if (isParticipantRegToCP)
@@ -184,7 +184,7 @@ public class SubCollectionProtocolRegistrationAction extends SecureAction
 	 * return false; }
 	 */
 	/* offset changes 27th dec */
-	private boolean chkParticipantRegToCP(Long participantId, Long cpId, CollectionProtocolRegistrationForm form) throws DAOException
+	private boolean chkParticipantRegToCP(Long participantId, Long cpId, CollectionProtocolRegistrationForm form) throws BizLogicException
 	{
 		CollectionProtocolRegistrationBizLogic bizLogic = (CollectionProtocolRegistrationBizLogic) BizLogicFactory.getInstance().getBizLogic(
 				Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
@@ -224,7 +224,7 @@ public class SubCollectionProtocolRegistrationAction extends SecureAction
 
 	/* offset changes end */
 
-	private void setParticipantMedicalIdentifierInForm(Long parentCPId,Long participantId,CollectionProtocolRegistrationForm form) throws DAOException
+	private void setParticipantMedicalIdentifierInForm(Long parentCPId,Long participantId,CollectionProtocolRegistrationForm form) throws BizLogicException
 	{
 		CollectionProtocolRegistrationBizLogic bizLogic = (CollectionProtocolRegistrationBizLogic) BizLogicFactory.getInstance().getBizLogic(
 				Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);

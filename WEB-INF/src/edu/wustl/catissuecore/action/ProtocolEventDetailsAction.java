@@ -26,7 +26,7 @@ import edu.wustl.dao.exception.DAOException;
 public class ProtocolEventDetailsAction extends BaseAction
 {
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response) throws DAOException
+			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		ProtocolEventDetailsForm protocolEventDetailsForm =(ProtocolEventDetailsForm)form;
 		String operation = (String)request.getParameter(Constants.OPERATION);
@@ -52,7 +52,7 @@ public class ProtocolEventDetailsAction extends BaseAction
 		}
 		String pageOf = request.getParameter(Constants.PAGE_OF);
 		long collectionEventUserId = 0;
-		collectionEventUserId = Utility.setUserInForm(request,operation);
+		collectionEventUserId = AppUtility.setUserInForm(request,operation);
 		selectedNode = protocolEventDetailsForm.getCollectionPointLabel()+"class_"+eventKey;
 		if(key == null || "New".equals(checkForSpecimen))
 		{

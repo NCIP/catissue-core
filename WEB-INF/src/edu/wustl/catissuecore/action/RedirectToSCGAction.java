@@ -12,9 +12,10 @@ import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.dao.DAO;
-import edu.wustl.common.dao.DAOFactory;
-import edu.wustl.common.dao.HibernateDAO;
+import edu.wustl.common.util.global.CommonServiceLocator;
+import edu.wustl.dao.DAO;
+import edu.wustl.dao.daofactory.DAOConfigFactory;
+import edu.wustl.dao.daofactory.IDAOFactory;
 
 public class RedirectToSCGAction extends Action {
 
@@ -25,19 +26,21 @@ public class RedirectToSCGAction extends Action {
 
 		SpecimenCollectionGroupForm specimenCollectionGroupForm =(SpecimenCollectionGroupForm) form;
 		Long id = (Long) request.getSession().getAttribute("SCGFORM");
-		DAO dao = DAOFactory.getInstance().getDAO(0);
+		IDAOFactory daoFact = DAOConfigFactory.getInstance().getDAOFactory(CommonServiceLocator.getInstance().getAppName());
+		DAO hibernateDao = null;
+		hibernateDao = daoFact.getDAO();
 		
 		SessionDataBean sessionDataBean = (SessionDataBean)request.getSession().getAttribute(Constants.SESSION_DATA);
 
-		((HibernateDAO)dao).openSession(sessionDataBean);
+		hibernateDao.openSession(sessionDataBean);
 		
-		Object object = dao.retrieve(SpecimenCollectionGroup.class.getName(), new Long(id));
+		Object object = hibernateDao.retrieveById(SpecimenCollectionGroup.class.getName(), new Long(id));
 		if (object != null)
 		{
 			SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) object;
 			specimenCollectionGroupForm.setAllValues(specimenCollectionGroup);
 		}
-		((HibernateDAO)dao).closeSession();
+		hibernateDao.closeSession();
 		return mapping.findForward(Constants.SUCCESS);
 	}
 

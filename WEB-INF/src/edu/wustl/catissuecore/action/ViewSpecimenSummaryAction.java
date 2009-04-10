@@ -39,6 +39,8 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.exception.ApplicationException;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.dao.exception.DAOException;
 
 public class ViewSpecimenSummaryAction extends Action {
@@ -549,7 +551,7 @@ public class ViewSpecimenSummaryAction extends Action {
 		
 		summaryForm.setAliquotList(getSpecimenList(nestedAliquots));
 		summaryForm.setDerivedList(getSpecimenList(nestedDerives));
-		Utility.setDefaultPrinterTypeLocation(summaryForm);
+		AppUtility.setDefaultPrinterTypeLocation(summaryForm);
 		
 	}
 	private void getNestedChildSpecimens(Collection topChildCollection,
@@ -649,10 +651,10 @@ public class ViewSpecimenSummaryAction extends Action {
 	 * To check the associated specimens to the Collection protocol
 	 * @param cpId
 	 * @return
-	 * @throws DAOException
 	 * @throws ClassNotFoundException
+	 * @throws ApplicationException 
 	 */
-	protected boolean isSpecimenExists(Long cpId) throws DAOException, ClassNotFoundException
+	protected boolean isSpecimenExists(Long cpId) throws ApplicationException
 	{
 		
 		String hql = " select" +
@@ -668,7 +670,7 @@ public class ViewSpecimenSummaryAction extends Action {
         " scg.id = s.specimenCollectionGroup.id and " +
         " s.activityStatus = '"+Constants.ACTIVITY_STATUS_ACTIVE+"'";
 		
-		List specimenList=(List)Utility.executeQuery(hql);
+		List specimenList=(List)AppUtility.executeQuery(hql);
 		if((specimenList!=null) && (specimenList).size()>0)
 		{
 			return true;
@@ -753,7 +755,7 @@ public class ViewSpecimenSummaryAction extends Action {
 	}
 
 
-	private void getAvailablePosition(HttpServletRequest request, HttpServletResponse response) throws IOException, DAOException
+	private void getAvailablePosition(HttpServletRequest request, HttpServletResponse response) throws IOException, BizLogicException
 	{
 		response.setContentType("text/html");
 		response.setHeader("Cache-Control", "no-cache");

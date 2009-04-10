@@ -27,20 +27,22 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import edu.wustl.catissuecore.actionForm.AdvanceSearchForm;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.ShoppingCartBizLogic;
 import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.AppUtility;
-import edu.wustl.catissuecore.util.global.Variables;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
-import edu.wustl.common.dao.QuerySessionData;
 import edu.wustl.common.exception.BizLogicException;
-import edu.wustl.common.query.ShoppingCart;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.ExportReport;
 import edu.wustl.common.util.SendFile;
+import edu.wustl.common.util.global.CommonServiceLocator;
+import edu.wustl.common.util.global.QuerySessionData;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.query.actionForm.AdvanceSearchForm;
+import edu.wustl.query.util.global.AQConstants;
+import edu.wustl.simplequery.query.ShoppingCart;
 
 public class ShoppingCartAction  extends BaseAction
 {
@@ -66,7 +68,8 @@ public class ShoppingCartAction  extends BaseAction
         String target = Constants.SUCCESS;
        
         ShoppingCart cart = (ShoppingCart)session.getAttribute(Constants.SHOPPING_CART);
-        ShoppingCartBizLogic bizLogic = (ShoppingCartBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.SHOPPING_CART_FORM_ID);
+        IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+        ShoppingCartBizLogic bizLogic = (ShoppingCartBizLogic)factory.getBizLogic(Constants.SHOPPING_CART_FORM_ID);
         //ShoppingCartForm shopForm = (ShoppingCartForm)form;
         AdvanceSearchForm advForm = (AdvanceSearchForm)form;
     	String isCheckAllAcrossAllChecked = (String)request.getParameter(Constants.CHECK_ALL_ACROSS_ALL_PAGES);
@@ -88,7 +91,7 @@ public class ShoppingCartAction  extends BaseAction
         	
         	session.setAttribute(Constants.SHOPPING_CART,cart);*/
         	
-        	request.setAttribute(Constants.SPREADSHEET_DATA_LIST,makeGridData(cart));        		
+        	request.setAttribute(AQConstants.SPREADSHEET_DATA_LIST,makeGridData(cart));        		
         }
         else
         { 
@@ -207,7 +210,7 @@ public class ShoppingCartAction  extends BaseAction
        			//List dataList = (List) session.getAttribute(Constants.SPREADSHEET_DATA_LIST);
         		List columnList = (List)session.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
         		request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST,columnList);
-        		request.setAttribute(Constants.PAGE_OF,Constants.PAGE_OF_QUERY_RESULTS);
+        		request.setAttribute(Constants.PAGE_OF,AQConstants.PAGEOF_QUERY_RESULTS);
         		if(!isError )
         		{
         			target=Constants.SHOPPING_CART_ADD;
@@ -228,7 +231,7 @@ public class ShoppingCartAction  extends BaseAction
 	        }
 	        else if(operation.equals(Constants.EXPORT)) //IF OPERATION IS "EXPORT"
 	        {
-	        	String fileName = Variables.applicationHome + System.getProperty("file.separator") + session.getId() + ".csv";
+	        	String fileName = CommonServiceLocator.getInstance().getAppHome() + System.getProperty("file.separator") + session.getId() + ".csv";
 	        	
 	        	//Extracting map from formbean that gives rows to be exported
 	        	Map map = advForm.getValues();
@@ -252,7 +255,7 @@ public class ShoppingCartAction  extends BaseAction
 	        	addToOrderLiist(advForm,request,cart,session);
 				target = new String("requestToOrder");
 	        }
-        	request.setAttribute(Constants.SPREADSHEET_DATA_LIST,makeGridData(cart));
+        	request.setAttribute(AQConstants.SPREADSHEET_DATA_LIST,makeGridData(cart));
         }
         //Sets the operation attribute to be used in the Add/Edit Shopping Cart Page. 
         request.setAttribute(Constants.OPERATION, operation);

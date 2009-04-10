@@ -39,11 +39,14 @@ import edu.wustl.catissuecore.util.CollectionProtocolUtil;
 import edu.wustl.catissuecore.util.IdComparator;
 import edu.wustl.catissuecore.util.SpecimenDetailsTagUtil;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.logger.Logger;
 
 public class UpdateSpecimenStatusAction extends BaseAction
@@ -149,7 +152,7 @@ public class UpdateSpecimenStatusAction extends BaseAction
 
 	}
 	
-	private Set getSpecimensFromGenericSpecimens(Set specimenprintCollection) throws BizLogicException
+	private Set getSpecimensFromGenericSpecimens(Set specimenprintCollection) throws ApplicationException
 	{
 		Set<Specimen> specimens = new LinkedHashSet<Specimen>();
 		Iterator<GenericSpecimen> it = specimenprintCollection.iterator();
@@ -236,9 +239,9 @@ public class UpdateSpecimenStatusAction extends BaseAction
 	 * @param eventId
 	 * @param session
 	 * @return
-	 * @throws BizLogicException
+	 * @throws ApplicationException 
 	 */
-	protected LinkedHashSet getSpecimensToSave(String eventId, HttpSession session) throws BizLogicException
+	protected LinkedHashSet getSpecimensToSave(String eventId, HttpSession session) throws ApplicationException
 	{
 		Map collectionProtocolEventMap = (Map) session.getAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
 
@@ -269,7 +272,7 @@ public class UpdateSpecimenStatusAction extends BaseAction
 	}
 
 	//Abhishek Mehta : Performance related Changes
-	private Collection getChildrenSpecimens(GenericSpecimen specimenVO, Specimen parentSpecimen) throws BizLogicException
+	private Collection getChildrenSpecimens(GenericSpecimen specimenVO, Specimen parentSpecimen) throws ApplicationException
 	{
 		LinkedHashSet childrenSpecimens = new LinkedHashSet();
 		LinkedHashMap aliquotMap = specimenVO.getAliquotSpecimenCollection();
@@ -325,8 +328,9 @@ public class UpdateSpecimenStatusAction extends BaseAction
 	/**
 	 * @param specimenVO
 	 * @return
+	 * @throws ApplicationException Application Exception
 	 */
-	protected Specimen createSpecimenDomainObject(GenericSpecimen specimenVO) throws BizLogicException
+	protected Specimen createSpecimenDomainObject(GenericSpecimen specimenVO) throws ApplicationException
 	{
 
 		Specimen specimen;
@@ -409,8 +413,9 @@ public class UpdateSpecimenStatusAction extends BaseAction
 	/**
 	 * @param specimenVO
 	 * @param specimen
+	 * @throws ApplicationException 
 	 */
-	private void setStorageContainer(GenericSpecimen specimenVO, Specimen specimen) throws BizLogicException
+	private void setStorageContainer(GenericSpecimen specimenVO, Specimen specimen) throws ApplicationException
 	{
 
 		String pos1 = specimenVO.getPositionDimensionOne();
@@ -464,7 +469,9 @@ public class UpdateSpecimenStatusAction extends BaseAction
 		}
 		if (specimenVO.getSelectedContainerName() == null || specimenVO.getSelectedContainerName().trim().length() == 0)
 		{
-			throw new BizLogicException("Container name is missing for specimen :" + specimenVO.getDisplayName());
+			ErrorKey errorKey = ErrorKey.getErrorKey("action.error");
+			
+			throw AppUtility.getApplicationException(null, "action.error", "UpdateSpecimenStatusAction.java :"+"Container name is missing for specimen :" + specimenVO.getDisplayName());
 		}
 		storageContainer.setName(specimenVO.getSelectedContainerName());
 		//	specimen.setStorageContainer(storageContainer);

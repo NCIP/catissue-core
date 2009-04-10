@@ -10,9 +10,11 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.security.SecurityManager;
-import edu.wustl.common.security.exceptions.SMException;
-import edu.wustl.common.util.Roles;
+import edu.wustl.security.exception.SMException;
+import edu.wustl.security.global.Roles;
+import edu.wustl.security.manager.ISecurityManager;
+import edu.wustl.security.manager.SecurityManagerFactory;
+
 /**
  * This class is called when user clicks on BioSpecimen tab.
  * Technicians can not access cp based view. But other users can access , so this class checks if the logged user is a technician .If yes then 
@@ -47,8 +49,8 @@ public class RoleBasedForwardAction extends BaseAction
 	private String getRoleNameForUser(HttpServletRequest request) throws NumberFormatException, SMException {
 		SessionDataBean sessionData = getSessionData(request);
 		Long userId = new Long(sessionData.getCsmUserId());
-		SecurityManager securityManager = SecurityManager.getInstance(LoginAction.class);
-		String roleName = securityManager.getUserGroup(userId);
+		ISecurityManager securityManager = SecurityManagerFactory.getSecurityManager();
+		String roleName = securityManager.getRoleName(userId);
 		return roleName;
 	}
 }

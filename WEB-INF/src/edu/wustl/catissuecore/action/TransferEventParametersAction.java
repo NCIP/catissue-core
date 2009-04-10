@@ -33,6 +33,10 @@ import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
+import edu.wustl.common.exception.ApplicationException;
+import edu.wustl.common.exception.ErrorKey;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.common.util.tag.ScriptGenerator;
@@ -48,12 +52,12 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 	{
 		TransferEventParametersForm transferEventParametersForm = (TransferEventParametersForm)eventParametersForm ;
 		
-		List<NameValueBean> storagePositionListForTransferEvent = Utility.getStoragePositionTypeListForTransferEvent();
+		List<NameValueBean> storagePositionListForTransferEvent = AppUtility.getStoragePositionTypeListForTransferEvent();
 		
 		request.setAttribute("storageListForTransferEvent", storagePositionListForTransferEvent);				
 		
-		StorageContainerBizLogic scbizLogic = (StorageContainerBizLogic) BizLogicFactory
-				.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		StorageContainerBizLogic scbizLogic = (StorageContainerBizLogic) factory.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 		TreeMap containerMap = new TreeMap();
 		//boolean to indicate whether the suitable containers to be shown in dropdown 
 		//is exceeding the max limit.
@@ -328,7 +332,7 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
  * @throws DAOException
  * Retriving collection protocol id from specimen.
  */
-	private Long getCollectionProtocolId(Long specimenId, IBizLogic bizLogic) throws DAOException
+	private Long getCollectionProtocolId(Long specimenId, IBizLogic bizLogic) throws ApplicationException
 	{
 		//Changed by Falguni.
 		//Find collectionprotocol id using HQL
@@ -337,12 +341,7 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 		" edu.wustl.catissuecore.domain.Specimen as spec " +
 		" where spec.specimenCollectionGroup.id=scg.id and spec.id="+specimenId.longValue();
 		List collectionProtocolIdList;
-		try {
-			collectionProtocolIdList = Utility.executeQuery(colProtHql);
-		} catch (ClassNotFoundException e) {
-			throw new DAOException(e.getMessage());
-		}
-		
+		collectionProtocolIdList = AppUtility.executeQuery(colProtHql);
 		Long collectionProtocolId = (Long)collectionProtocolIdList.get(0);
 		return collectionProtocolId;
 	}

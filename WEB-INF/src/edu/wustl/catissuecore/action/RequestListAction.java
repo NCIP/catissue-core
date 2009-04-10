@@ -29,6 +29,9 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.cde.CDEManager;
+import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.common.util.global.Validator;
 
@@ -144,12 +147,13 @@ public class RequestListAction extends SecureAction
 	
 	/**
 	 * @param requestListFilterationForm object
-	 * @throws DAOException object
+	 * @throws BizLogicException 
 	 */
-	private void setNumberOfRequests(RequestListFilterationForm requestListFilterationForm,String userName,Long userId) throws DAOException
+	private void setNumberOfRequests(RequestListFilterationForm requestListFilterationForm,String userName,Long userId) throws BizLogicException
 	{
 		
-		OrderBizLogic orderBizLogic = (OrderBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		OrderBizLogic orderBizLogic = (OrderBizLogic)factory.getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
 		List requestViewBeanList = orderBizLogic.getRequestList("All",userName,userId);
 		setNumberOfNewAndPendingRequests(requestListFilterationForm,requestViewBeanList);		
 		

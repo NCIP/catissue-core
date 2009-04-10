@@ -22,7 +22,6 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.UserForm;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.CancerResearchGroup;
 import edu.wustl.catissuecore.domain.Department;
@@ -37,12 +36,15 @@ import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.cde.CDEManager;
-import edu.wustl.common.dao.DAOFactory;
-import edu.wustl.common.dao.HibernateDAO;
-import edu.wustl.common.security.PrivilegeCache;
-import edu.wustl.common.security.PrivilegeManager;
-import edu.wustl.dao.exception.DAOException;
+import edu.wustl.common.exception.ApplicationException;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
+import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.DAO;
+import edu.wustl.dao.daofactory.DAOConfigFactory;
+import edu.wustl.security.privilege.PrivilegeCache;
+import edu.wustl.security.privilege.PrivilegeManager;
 
 /**
  * This class initializes the fields in the User Add/Edit webpage.
@@ -120,8 +122,8 @@ public class UserAction extends SecureAction {
 			if (operation.equals(Constants.EDIT)
 					&& (userForm.getCsmUserId() != null)) {
 				if (userForm.getCsmUserId().longValue() == 0) {
-					UserBizLogic bizLogic = (UserBizLogic) BizLogicFactory
-							.getInstance().getBizLogic(Constants.USER_FORM_ID);
+					IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+					UserBizLogic bizLogic = (UserBizLogic)factory.getBizLogic(Constants.USER_FORM_ID);
 					String sourceObjName = User.class.getName();
 					String[] selectColName = { "csmUserId" };
 					String[] whereColName = { "id" };
@@ -215,7 +217,8 @@ public class UserAction extends SecureAction {
 
 		// Sets the pageOf attribute (for Add,Edit or Query Interface).
 		String target = pageOf;
-		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		IBizLogic bizLogic = factory.getBizLogic(
 				Constants.USER_FORM_ID);
 
 		// Sets the instituteList attribute to be used in the Add/Edit User
@@ -273,7 +276,8 @@ public class UserAction extends SecureAction {
 		Logger.out.debug("pageOf :---------- " + pageOf);
 		
 		// To show Role as Scientist
-		HibernateDAO dao = (HibernateDAO) DAOFactory.getInstance().getDAO(0);
+		DAO dao = DAOConfigFactory.getInstance().getDAOFactory(Constants.APPLICATION_NAME).
+		getDAO();
 		dao.openSession(sessionDataBean);
 		List<User> userList = dao.retrieve(User.class.getName(), "emailAddress" , userForm.getEmailAddress());
 		if(!userList.isEmpty())
@@ -351,7 +355,8 @@ public class UserAction extends SecureAction {
     	}
     	try
     	{
-	    	IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.USER_FORM_ID);
+    		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+	    	IBizLogic bizLogic = factory.getBizLogic(Constants.USER_FORM_ID);
 	    	User user = (User)bizLogic.retrieve(User.class.getName(), id);
             String role = user.getRoleId();
             if (role != null && !role.equalsIgnoreCase(Constants.ADMIN_USER))
@@ -364,11 +369,7 @@ public class UserAction extends SecureAction {
                 session.setAttribute(Constants.USER_ROW_ID_BEAN_MAP, privilegeMap);
             }
     	}
-    	catch(DAOException e)
-    	{
-    		e.printStackTrace();
-    	}
-    	catch (Exception e) 
+    	catch (ApplicationException e) 
     	{
 			e.printStackTrace();
 		}
