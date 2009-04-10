@@ -2612,7 +2612,7 @@ public class AppUtility
 	}
 
 	public static boolean checkOnCurrentAndFuture(SessionDataBean sessionDataBean,
-			String protectionElementName, String privilegeName) throws UserNotAuthorizedException
+			String protectionElementName, String privilegeName) throws UserNotAuthorizedException, BizLogicException
 	{
 		boolean isAuthorized = false;
 		String protectionElementNames[] = protectionElementName.split("_");

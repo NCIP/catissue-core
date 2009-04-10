@@ -1777,7 +1777,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 	 * @author ravindra_jain 
 	 */
 
-	public Set<Long> getRelatedCPIds(Long userId, boolean isCheckForCPBasedView)
+	public Set<Long> getRelatedCPIds(Long userId, boolean isCheckForCPBasedView) throws BizLogicException
 	{
 		DAO dao = null;
 		Collection<CollectionProtocol> userCpCollection = new HashSet<CollectionProtocol>();
@@ -1786,8 +1786,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 
 		try 
 		{
-			dao = openDAOSession(null);
-			
+			dao = getHibernateDao(getAppName(), null);			
 			User user = (User)dao.retrieveById(User.class.getName(), userId);
 			userColl = user.getCollectionProtocolCollection();
 			userCpCollection = user.getAssignedProtocolCollection();
@@ -1806,8 +1805,8 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 	
 					for (CollectionProtocol collectionProtocol : userCpCollection)
 					{
-						if (privilegeCache.hasPrivilege(collectionProtocol.getObjectId(),
-								Variables.privilegeDetailsMap.get(Constants.EDIT_PROFILE_PRIVILEGE))
+						String privilegeName=edu.wustl.common.util.global.Variables.privilegeDetailsMap.get(Constants.EDIT_PROFILE_PRIVILEGE);
+						if (privilegeCache.hasPrivilege(collectionProtocol.getObjectId(),privilegeName)
 								|| collectionProtocol.getPrincipalInvestigator().getLoginName().equals(
 										user.getLoginName()))
 						{
@@ -1829,7 +1828,11 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 				}
 			}
 		} 
-		catch (BizLogicException e) 
+		catch (DAOException e) 
+		{
+			Logger.out.debug(e.getMessage(), e);
+		}
+		catch (SMException e) 
 		{
 			Logger.out.debug(e.getMessage(), e);
 		}
