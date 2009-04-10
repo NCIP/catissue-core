@@ -13,7 +13,8 @@ import edu.wustl.catissuecore.util.IdComparator;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.catissuecore.domain.User;
+import gov.nih.nci.security.authorization.domainobjects.User;
+
 /**
  * This class is used to define method for Specimen label printing
  * @author falguni_sachde
