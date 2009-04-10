@@ -49,9 +49,11 @@ import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.lookup.LookupLogic;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.XMLPropertyHandler;
+import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.PasswordManager;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
+import edu.wustl.dao.JDBCDAO;
 import edu.wustl.dao.daofactory.DAOConfigFactory;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.dao.util.HibernateMetaData;
@@ -834,15 +836,13 @@ public class CaCoreAppServicesDelegator
 	private void insertQuery(String sqlQuery, SessionDataBean sessionData) throws Exception
 	{
 
-		JDBCDAO jdbcDAO = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
+		JDBCDAO jdbcDAO=null;
 		try
 		{
 
 			String sqlQuery1 = sqlQuery.replaceAll("'", "''");
 			long no = 1;
-
-			jdbcDAO.openSession(null);
-
+			jdbcDAO = AppUtility.openJDBCSession();			
 			SimpleDateFormat fSDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			String timeStamp = fSDateFormat.format(new Date());
 
@@ -850,12 +850,13 @@ public class CaCoreAppServicesDelegator
 
 			String userId = sessionData.getUserId().toString();
 			String comments = "APIQueryLog";
-
-			if (Variables.databaseName.equals(Constants.ORACLE_DATABASE))
+			String applicationName = CommonServiceLocator.getInstance().getAppName();
+			String databaseType=DAOConfigFactory.getInstance().getDAOFactory(applicationName).getDataBaseType();
+			if (databaseType.equals(Constants.ORACLE_DATABASE))
 			{
 				String sql = "select CATISSUE_AUDIT_EVENT_PARAM_SEQ.nextVal from dual";
 
-				List list = jdbcDAO.executeQuery(sql, null, false, null);
+				List list = jdbcDAO.executeQuery(sql);
 
 				if (!list.isEmpty())
 				{
@@ -884,7 +885,7 @@ public class CaCoreAppServicesDelegator
 				long queryNo = 1;
 				sql = "select CATISSUE_AUDIT_EVENT_QUERY_SEQ.nextVal from dual";
 
-				list = jdbcDAO.executeQuery(sql, null, false, null);
+				list = jdbcDAO.executeQuery(sql);
 
 				if (!list.isEmpty())
 				{
@@ -905,7 +906,7 @@ public class CaCoreAppServicesDelegator
 				jdbcDAO.executeUpdate(sqlForQueryLog);
 				String sql1 = "select QUERY_DETAILS from catissue_audit_event_query_log where IDENTIFIER="
 						+ queryNo + " for update";
-				list = jdbcDAO.executeQuery(sql1, null, false, null);
+				list = jdbcDAO.executeQuery(sql1);
 
 				CLOB clob = null;
 
@@ -940,7 +941,7 @@ public class CaCoreAppServicesDelegator
 				String sql = "select max(identifier) from catissue_audit_event where USER_ID='"
 						+ userId + "'";
 
-				List list = jdbcDAO.executeQuery(sql, null, false, null);
+				List list = jdbcDAO.executeQuery(sql);
 
 				if (!list.isEmpty())
 				{
@@ -968,7 +969,7 @@ public class CaCoreAppServicesDelegator
 		}
 		finally
 		{
-			jdbcDAO.closeSession();
+			AppUtility.closeJDBCSession(jdbcDAO);
 		}
 		/*String sqlForQueryLog = "insert into catissue_audit_event_query_log(IDENTIFIER,QUERY_DETAILS) values ('"
 		 + no + "','" + sqlQuery1 + "')";
