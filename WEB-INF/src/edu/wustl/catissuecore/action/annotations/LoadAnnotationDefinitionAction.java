@@ -68,6 +68,7 @@ import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
+import edu.wustl.dao.JDBCDAO;
 import edu.wustl.dao.daofactory.DAOConfigFactory;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.security.exception.UserNotAuthorizedException;
@@ -387,60 +388,34 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 	 *
 	 */
 	private void removeQueryPathsForEntityHierarchy(String[] deletedAssociationIdArray)
-			throws BizLogicException
+			throws ApplicationException
 	{
 		if (deletedAssociationIdArray != null && deletedAssociationIdArray.length > 0)
 		{
-			Connection conn = null;
-			try
-			{
-				conn = DBUtil.getConnection();
-			}
-			catch (HibernateException e1)
-			{
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-				throw new BizLogicException("", e1);
-			}
+			JDBCDAO jdbcDAO = null;
+			jdbcDAO = AppUtility.openJDBCSession();
+			
 			PreparedStatement statement = null;
 			try
 			{
 				String deleteQuery = "delete from intra_model_association where de_association_id = ?";
-				statement = conn.prepareStatement(deleteQuery);
+				statement = jdbcDAO.getPreparedStatement(deleteQuery);
 				for (String id : deletedAssociationIdArray)
 				{
 					statement.setLong(1, new Long(id));
 					statement.executeUpdate();
 					statement.clearParameters();
 				}
-				conn.commit();
+				jdbcDAO.commit();
 			}
-			catch (SQLException e)
+			catch (SQLException excep)
 			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				throw new BizLogicException("", e);
+				throw new ApplicationException(ErrorKey.getErrorKey("action.error"), excep,
+				"LoadAnnotationDefinitionAction.java");
 			}
 			finally
 			{
-				try
-				{
-					statement.close();
-					DBUtil.closeConnection();
-				}
-				catch (HibernateException e)
-				{
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					throw new BizLogicException("", e);
-				}
-				catch (SQLException e)
-				{
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					throw new BizLogicException("", e);
-				}
-
+				AppUtility.closeJDBCSession(jdbcDAO);
 			}
 		}
 	}
@@ -501,23 +476,16 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 	private boolean isPathAdded(Long staticEntityId, Long dynamicEntityId/*, Long deAssociationId*/)
 	{
 		boolean ispathAdded = false;
-		Connection conn = null;
+		JDBCDAO jdbcDAO = null;
+		
 
-		try
-		{
-			conn = DBUtil.getConnection();
-		}
-		catch (HibernateException e1)
-		{
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
 		try
 		{
+			jdbcDAO = AppUtility.openJDBCSession();
 			String checkForPathQuery = "select path_id from path where FIRST_ENTITY_ID = ? and LAST_ENTITY_ID = ?";
-			preparedStatement = conn.prepareStatement(checkForPathQuery);
+			preparedStatement = jdbcDAO.getPreparedStatement(checkForPathQuery);
 			preparedStatement.setLong(1, staticEntityId);
 
 			preparedStatement.setLong(2, dynamicEntityId);
@@ -539,26 +507,22 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		catch (ApplicationException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		finally
 		{
-
 			try
 			{
-				resultSet.close();
-				preparedStatement.close();
-				DBUtil.closeConnection();
+				AppUtility.closeJDBCSession(jdbcDAO);
 			}
-			catch (HibernateException e)
+			catch (ApplicationException e)
 			{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			catch (SQLException e)
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
 		}
 		return ispathAdded;
 	}
@@ -1087,12 +1051,12 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.action.SecureAction#isAuthorizedToExecute(javax.servlet.http.HttpServletRequest)
 	 */
-	protected boolean isAuthorizedToExecute(HttpServletRequest request) throws Exception
+	/*protected boolean isAuthorizedToExecute(HttpServletRequest request) throws Exception
 	{
 
 		return super.isAuthorizedToExecute(request);
 
-	}
+	}*/
 
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.action.BaseAction#getSessionData(javax.servlet.http.HttpServletRequest)

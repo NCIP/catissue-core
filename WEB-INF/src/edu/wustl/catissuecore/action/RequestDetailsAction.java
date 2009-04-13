@@ -1209,8 +1209,9 @@ private OrderItem getOrderItem(OrderDetails orderDetails , Long orderItemId )
 	 * @param piID User id of PI for which all the distribution protocol is to be loaded.
 	 * @return Returns the list of namevalue bean of ditribution protocol for a given PI.
 	 * @throws DAOException Throws DAOException if any database releated error occures
+	 * @throws BizLogicException 
 	 **/
-	private List loadDistributionProtocol(final Long piID, String roleName, SessionDataBean sessionDataBean) throws DAOException
+	private List loadDistributionProtocol(final Long piID, String roleName, SessionDataBean sessionDataBean) throws DAOException, BizLogicException
 	{
 		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 		List distributionProtocolList = new ArrayList();
@@ -1250,12 +1251,15 @@ private OrderItem getOrderItem(OrderDetails orderDetails , Long orderItemId )
 			HashSet<Long> siteIds = new HashSet<Long>();
 			HashSet<Long> cpIds = new HashSet<Long>();
 			boolean hasDistributionPrivilege = false;
-			
+			IDAOFactory daoFact = DAOConfigFactory.getInstance().getDAOFactory(
+					CommonServiceLocator.getInstance().getAppName());
+			DAO dao = null;
+			dao = daoFact.getDAO();
 			try 
 			{
-				session = DBUtil.getCleanSession();
-
-				User user = (User) session.load(User.class.getName(), sessionDataBean.getUserId());
+				//session = DBUtil.getCleanSession();
+				dao.openSession(null);
+				User user = (User) dao.retrieveById(User.class.getName(), sessionDataBean.getUserId());
 				Collection<Site> siteCollection = user.getSiteCollection();
 				Collection<CollectionProtocol> cpCollection = user.getAssignedProtocolCollection();
 				
@@ -1289,7 +1293,15 @@ private OrderItem getOrderItem(OrderDetails orderDetails , Long orderItemId )
 			}
 			finally
 			{
-				session.close();
+				try
+				{
+					dao.closeSession();
+				}
+				catch(DAOException daoEx)
+				{
+					Logger.out.error(daoEx.getMessage(), daoEx);
+
+				}
 			}
 		}
 		

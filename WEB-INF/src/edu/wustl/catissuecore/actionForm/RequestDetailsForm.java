@@ -978,7 +978,20 @@ public class RequestDetailsForm extends AbstractActionForm
 						
 						} else {
 							
-							specimen = (Specimen)orderBizLogic.getSpecimenObject(Long.valueOf(requestDetailsBean.getRequestFor()));
+							try
+							{
+								specimen = (Specimen)orderBizLogic.getSpecimenObject(Long.valueOf(requestDetailsBean.getRequestFor()));
+							}
+							catch (NumberFormatException e)
+							{
+								logger.debug("RequestDetailsForm.java", e);
+								e.printStackTrace();
+							}
+							catch (BizLogicException e)
+							{
+								logger.debug("RequestDetailsForm.java", e);
+								e.printStackTrace();
+							}
 							if(!(specimen.getClassName().equals(requestDetailsBean.getClassName()) && 
 									specimen.getSpecimenType().equals(requestDetailsBean.getType())))
 							{

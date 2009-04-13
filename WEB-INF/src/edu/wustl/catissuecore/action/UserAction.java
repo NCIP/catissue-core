@@ -380,14 +380,14 @@ public class UserAction extends SecureAction {
 	 * 
 	 * @see edu.wustl.catissuecore.action.SecureAction#isAuthorizedToExecute(javax.servlet.http.HttpServletRequest)
 	 */
-	protected boolean isAuthorizedToExecute(HttpServletRequest request)
+	/*protected boolean isAuthorizedToExecute(HttpServletRequest request)
 			throws Exception {
 		String pageOf = request.getParameter(Constants.PAGE_OF);
 		if (pageOf.equals(Constants.PAGE_OF_USER_ADMIN)) {
 			return super.isAuthorizedToExecute(request);
 		}
 		return true;
-	}
+	}*/
 
 	/*
 	 * (non-Javadoc)
