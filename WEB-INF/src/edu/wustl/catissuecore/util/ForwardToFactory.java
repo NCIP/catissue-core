@@ -10,11 +10,13 @@
 
 package edu.wustl.catissuecore.util;
 
+import edu.wustl.common.factory.IForwordToFactory;
+
 /**
  * ForwardToFactory is a factory that returns instance of ForwardToProcessor
  * @author Krunal Thakkar
  */
-public final class ForwardToFactory 
+public final class ForwardToFactory implements IForwordToFactory
 {
 	/*
 	 * create singleton object
@@ -35,11 +37,11 @@ public final class ForwardToFactory
 		return fwdToFactory;
 	}
 	
-	public static ForwardToProcessor getForwardToProcessor()
+	public ForwardToProcessor getForwardToProcessor()
     {
         return new ForwardToProcessor();
     }
-    public static ForwardToPrintProcessor getForwardToPrintProcessor()
+    public ForwardToPrintProcessor getForwardToPrintProcessor()
     {
         return new ForwardToPrintProcessor();
     }

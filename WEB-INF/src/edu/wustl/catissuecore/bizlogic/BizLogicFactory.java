@@ -17,6 +17,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.bizlogic.CDEBizLogic;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.simplequery.bizlogic.QueryBizLogic;
 
@@ -24,7 +25,7 @@ import edu.wustl.simplequery.bizlogic.QueryBizLogic;
  * BizLogicFactory is a factory for DAO instances of various domain objects.
  * @author gautam_shetty
  */
-public class BizLogicFactory //extends AbstractBizLogicFactory
+public class BizLogicFactory implements IFactory
 {
 	//Singleton instance
 	private static BizLogicFactory factory = null;
