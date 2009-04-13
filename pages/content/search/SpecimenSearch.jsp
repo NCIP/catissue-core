@@ -10,6 +10,7 @@
 <%@ page import="edu.wustl.common.query.Operator"%>
 <%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
+<%@ page import="edu.wustl.common.util.global.CommonServiceLocator"%>
 
 <%@ include file="/pages/content/common/SpecimenCommonScripts.jsp" %>
 

@@ -8,6 +8,7 @@
 <%@ page import="edu.wustl.common.vo.AdvanceSearchUI"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.util.SearchUtil"%>
+<%@ page import="edu.wustl.common.util.global.CommonServiceLocator"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.AdvanceSearchForm"%>
 <%@ page import="edu.wustl.common.query.Operator"%>
 
