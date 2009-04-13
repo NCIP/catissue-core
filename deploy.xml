@@ -2929,16 +2929,13 @@ Thanking You,
 	
 	<!--MsSQLServer Database Creation -->
 	<target name="deploy_db_mssqlserver">
-<<<<<<< .working
+
 		<echo message="Initializing MsSQLServer Database for caTissue Suite v1.1P2. Application..." />
-					
+
 		<replace file="${mssqlserver.sql.dir}/UniqueKey_Constraint.sql">
 			<replacefilter token="@@schema@@" value="${database.schemaname}" />
 		</replace>	
 				
-=======
-		<echo message="Initializing MsSQLServer Database for caTissue Suite v1.1P2. Application..." />
->>>>>>> .merge-right.r18987
 		<sql driver="${mssqlserver.driver.string}" url="jdbc:sqlserver://${database.host}:${database.port};databaseName=${database.name};" userid="${database.username}" password="${database.password}">
 			<transaction src="${mssqlserver.sql.dir}/catissuecore.sql" />
 			<transaction src="${mssqlserver.sql.dir}/InitDB_CreateTable.sql" />
