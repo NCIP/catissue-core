@@ -29,6 +29,7 @@ import edu.common.dynamicextensions.domain.Entity;
 import edu.common.dynamicextensions.domain.userinterface.Container;
 import edu.common.dynamicextensions.domaininterface.AbstractEntityInterface;
 import edu.common.dynamicextensions.domaininterface.AssociationInterface;
+import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.common.dynamicextensions.domaininterface.EntityGroupInterface;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.common.dynamicextensions.domaininterface.RoleInterface;
@@ -581,17 +582,25 @@ public class AnnotationUtil
 	 * @param dynamicEntity
 	 * @return
 	 */
-	private static ConstraintPropertiesInterface getConstraintProperties(
-			EntityInterface staticEntity, EntityInterface dynamicEntity)
-	{
-		ConstraintPropertiesInterface cp = DomainObjectFactory.getInstance()
-		.createConstraintProperties();
-		cp.setName(dynamicEntity.getTableProperties().getName());
-		cp.setTargetEntityKey("DYEXTN_AS_" + staticEntity.getId().toString() + "_"
-		+ dynamicEntity.getId().toString());
-		cp.setSourceEntityKey(null);
-		return cp;
-	}
+	 private static ConstraintPropertiesInterface getConstraintProperties(
+				EntityInterface staticEntity, EntityInterface dynamicEntity)
+		{
+			ConstraintPropertiesInterface constprop = DomainObjectFactory.getInstance()
+					.createConstraintProperties();
+			constprop.setName(dynamicEntity.getTableProperties().getName());
+			for (AttributeInterface attribute : staticEntity.getPrimaryKeyAttributeCollection())
+			{
+				constprop.getTgtEntityConstraintKeyProperties().getTgtForiegnKeyColumnProperties()
+						.setName(
+								"DYEXTN_AS_" + staticEntity.getId().toString() + "_"
+										+ dynamicEntity.getId().toString());
+				constprop.getTgtEntityConstraintKeyProperties().setSrcPrimaryKeyAttribute(attribute);
+
+			}
+			constprop.getSrcEntityConstraintKeyPropertiesCollection().clear();
+			return constprop;
+		}
+
 
 	/**
 	 * @param targetEntity
