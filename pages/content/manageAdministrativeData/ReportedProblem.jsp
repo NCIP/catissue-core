@@ -5,6 +5,7 @@
 <%@ page language="java" isELIgnored="false"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 <%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
+<%@ page import="edu.wustl.common.util.global.CommonServiceLocator"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page import="java.util.*"%>
 <html:form action="/ReportedProblemShow">

@@ -7,6 +7,7 @@
 <SCRIPT LANGUAGE="JavaScript" SRC="jss/javaScript.js"></SCRIPT>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 <%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
+<%@ page import="edu.wustl.common.util.global.CommonServiceLocator"%>
 <%@ page import="java.util.*"%>
 
 <head>
