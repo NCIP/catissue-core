@@ -1732,7 +1732,7 @@
 	<target name="Export_Clinical_diagnosis_mysql">
 		<echo message="Exporting data of Clinical diagnosis ..." />
 		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
-		<java classname="edu.wustl.common.util.global.AutomateImport" fork="false">
+		<java classname="edu.wustl.common.util.impexp.AutomateImport" fork="true">
 			<classpath refid="temp.classpath" />
 			<arg value="${database.host}"/>
 			<arg value="${database.port}"/>
@@ -1751,7 +1751,7 @@
 	<target name="Export_Clinical_diagnosis_oracle">
 		<echo message="Exporting data of Clinical diagnosis ..." />
 		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
-		<java classname="edu.wustl.common.util.global.AutomateImport" fork="true">
+		<java classname="edu.wustl.common.util.impexp.AutomateImport" fork="true">
 			<classpath refid="temp.classpath" />
 			<arg value="${database.host}"/>
 			<arg value="${database.port}"/>
@@ -1854,7 +1854,7 @@
 
 	<target name="CAModel_import_data_mysql">
 		<echo message="Importing CA models data for caTISSUE Suite Application to MySQL Database ..." />
-		<java classname="edu.wustl.common.util.global.AutomateImport"  fork="true" maxmemory="512m">
+		<java classname="edu.wustl.common.util.impexp.AutomateImport"  fork="true" maxmemory="512m">
 			<classpath refid="temp.classpath" />
 			<arg value="${database.host}"/>
 			<arg value="${database.port}"/>
@@ -1871,7 +1871,7 @@
 	
 	<target name="CAModel_import_data_oracle">
 		<echo message="Importing CA models data for caTISSUE Suite Application to Oracle Database ..." />
-		<java classname="edu.wustl.common.util.global.AutomateImport"  fork="true" >
+		<java classname="edu.wustl.common.util.impexp.AutomateImport"  fork="true" >
 
 			<classpath refid="temp.classpath" />
 
@@ -1914,7 +1914,7 @@
 
 	<target name="CAModel_export_data_mysql">
 		<echo message="Exporting data of CA models for MySQL Database..." />
-		<java classname="edu.wustl.common.util.global.AutomateImport" fork="true">
+		<java classname="edu.wustl.common.util.impexp.AutomateImport" fork="true">
 			<classpath refid="temp.classpath" />
 			<arg value="${database.host}"/>
 			<arg value="${database.port}"/>
@@ -1967,7 +1967,7 @@
 	</target>
 	<target name="CAModel_export_data_oracle">
 		<echo message="Exporting data of CA models for Oracle Database..." />
-		<java classname="edu.wustl.common.util.global.AutomateImport" fork="false">
+		<java classname="edu.wustl.common.util.impexp.AutomateImport" fork="false">
 			<classpath refid="temp.classpath" />
 			<arg value="${database.host}"/>
 			<arg value="${database.port}"/>
@@ -2981,7 +2981,7 @@ Thanking You,
 	<target name="Export_Clinical_diagnosis_mssqlserver">
 		<echo message="Exporting data of Clinical diagnosis ..." />
 		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
-		<java classname="edu.wustl.catissuecore.util.global.AutomateImportSS" fork="false">
+		<java classname="edu.wustl.catissuecore.util.global.AutomateImportSS" fork="true">
 			<classpath refid="temp.classpath" />
 			<classpath>
 				<pathelement location="${temp.dir}/catissuecore/WEB-INF/classes/"/>
