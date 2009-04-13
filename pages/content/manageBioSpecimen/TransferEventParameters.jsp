@@ -5,6 +5,7 @@
 <%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
+<%@ page import="edu.wustl.common.util.global.CommonServiceLocator"%>
 <%@ page import="edu.wustl.common.util.tag.ScriptGenerator" %>
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.TransferEventParametersForm"%>

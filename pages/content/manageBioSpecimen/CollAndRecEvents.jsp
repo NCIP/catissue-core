@@ -1,3 +1,4 @@
+<%@ page import="edu.wustl.common.util.global.CommonServiceLocator"%>
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
 <%
 	// Patch_Id: Improve_Space_Usability_On_Specimen_Page_2

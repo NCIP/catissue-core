@@ -9,6 +9,7 @@
 <%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.AliquotForm"%>
 <%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
+<%@ page import="edu.wustl.common.util.global.CommonServiceLocator"%>
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
 <%@ page import="java.util.*"%>
 <%@ page import="java.io.*"%>

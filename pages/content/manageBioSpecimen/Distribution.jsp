@@ -7,6 +7,7 @@
 <%@ page import="java.util.List,java.util.Iterator"%>
 <%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
+<%@ page import="edu.wustl.common.util.global.CommonServiceLocator"%>
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
 <script src="jss/ajax.js"></script>	   

@@ -6,6 +6,7 @@
 <%@ page import="edu.wustl.catissuecore.actionForm.CollectionProtocolRegistrationForm"%>
 <%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
+<%@ page import="edu.wustl.common.util.global.CommonServiceLocator"%>
 <%@ page import="java.util.*"%>	  
 <%@ page import="edu.wustl.catissuecore.bean.ConsentBean"%>
 <%@ include file="/pages/content/common/BioSpecimenCommonCode.jsp" %>

@@ -6,6 +6,7 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.TissueSpecimenReviewEventParametersForm"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
+<%@ page import="edu.wustl.common.util.global.CommonServiceLocator"%>
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %>
 <%@ page language="java" isELIgnored="false" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>

@@ -4,6 +4,7 @@
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo"%>
 <%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
+<%@ page import="edu.wustl.common.util.global.CommonServiceLocator"%>
 <%@ page
 	import="edu.wustl.catissuecore.actionForm.FixedEventParametersForm"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>

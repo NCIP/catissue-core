@@ -5,6 +5,7 @@
 <%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.CollectionEventParametersForm"%>
+<%@ page import="edu.wustl.common.util.global.CommonServiceLocator"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
 <%@ page language="java" isELIgnored="false" %>
