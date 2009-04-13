@@ -648,35 +648,39 @@ PUBLIC
 		
 	<!--Added by Deepti -define array end-->
 	<!-- Action code : Query Module Starts : 06/11/06 -->
-		<action path="/QueryWizard"
+		<!-- <action path="/QueryWizard"
 			type="edu.wustl.catissuecore.action.querysuite.QueryWizardAction"
 			name="categorySearchForm"
 			validate="false"
 			scope="request">
 			<forward name="success" path=".catissuecore.searchCategory"/>
 		</action>
-		<action path="/SearchCategory"
+		
+		 <action path="/SearchCategory"
 			type="edu.wustl.catissuecore.action.querysuite.CategorySearchAction"
 			name="categorySearchForm"
 			validate="false"
 			scope="request">
 			<forward name="success" path=".catissuecore.searchCategory"/>
-		</action>
-		<action path="/ValidateQuery"
+		</action> -->
+		
+		<!--<action path="/ValidateQuery"
 			type="edu.wustl.catissuecore.action.querysuite.ValidateQueryAction"
 			name="categorySearchForm"
 			validate="false"
 			scope="request">
 			<forward name="success" path=".catissuecore.searchCategory"/>
 		</action>
-		<action path="/LoadSaveQueryPage"
+		
+		 <action path="/LoadSaveQueryPage"
             type="edu.wustl.catissuecore.action.querysuite.LoadSaveQueryPageAction"
             name="saveQueryForm"
             validate="false"
             scope="request">
             <forward name="success" path="/pages/content/search/querysuite/SavedQueryConditionPage.jsp"/>
-        </action>
-        <action path="/SaveQueryAction"
+        </action> -->
+        
+       	<!-- <action path="/SaveQueryAction"
 			type="edu.wustl.catissuecore.action.querysuite.SaveQueryAction"
 			name="saveQueryForm"
 			validate="true"
@@ -685,15 +689,16 @@ PUBLIC
 			<forward name="success" path="/LoadSaveQueryPage.do"/>
 			<forward name="failure" path="/LoadSaveQueryPage.do"/>
 		</action>
-		<action path="/RetrieveQueryAction"
+		 <action path="/RetrieveQueryAction"
 			type="edu.wustl.catissuecore.action.querysuite.RetrieveQueryAction"
 			name="saveQueryForm"
 			validate="false"
 			scope="request">
 			<forward name="success" path=".catissuecore.queryViewPageDef"/>
 			<forward name="failure" path=".catissuecore.errorPageDef"/>
-		</action>
-		<action path="/ExecuteQueryAction"
+		</action> -->
+		
+		<!-- <action path="/ExecuteQueryAction"
 			type="edu.wustl.catissuecore.action.querysuite.ExecuteQueryAction"
 			name="saveQueryForm"
 			validate="false"
@@ -701,15 +706,17 @@ PUBLIC
 			<forward name="success" path=".catissuecore.viewSearchResults"/>
 			<forward name="failure" path="/RetrieveQueryAction.do"/>
 			<forward name="InvalidValues" path="/FetchQuery.do"/>
-		</action>
-		<action path="/DeleteQuery"
+		</action> -->
+		
+		<!-- <action path="/DeleteQuery"
 			type="edu.wustl.catissuecore.action.querysuite.DeleteQueryAction"
 			validate="false"
 			scope="request">
 			<forward name="success" path="/RetrieveQueryAction.do"/>
 			<forward name="failure" path="/RetrieveQueryAction.do"/>
-		</action>
-		<action path="/FetchQuery"
+		</action> -->
+		
+		<!-- <action path="/FetchQuery"
 			type="edu.wustl.catissuecore.action.querysuite.FetchQueryAction"
 			name="saveQueryForm"
 			validate="false"
@@ -717,15 +724,18 @@ PUBLIC
 			<forward name="success" path=".catissuecore.collectQueryParameter"/>
 			<forward name="failure" path="/RetrieveQueryAction.do"/>
 			<forward name="executeQuery" path="/ExecuteQueryAction.do"/>
-		</action>
-		<action path="/loadDefineSearchRules"
+		</action> -->
+		
+		<!-- <action path="/loadDefineSearchRules"
 			type="edu.wustl.catissuecore.action.querysuite.LoadDefineSearchRulesAction"
 			name="categorySearchForm"
 			validate="false"
 			scope="request">
 			<forward name="success" path=".catissuecore.searchCategory"/>
-		</action>
-		<action path="/ViewSearchResultsJSPAction"
+		</action> -->
+		
+		
+		<!--<action path="/ViewSearchResultsJSPAction"
 			type="edu.wustl.catissuecore.action.querysuite.ViewSearchResultsJSPAction"
 			name="categorySearchForm"
 			validate="false"
@@ -734,14 +744,14 @@ PUBLIC
 			<forward name="failure" path=".catissuecore.errorPageDef"/>
 	
 		</action>
-		<action path="/DefineSearchResultsView"
+		 <action path="/DefineSearchResultsView"
 			type="edu.wustl.catissuecore.action.querysuite.DefineSearchResultsViewAction"
 			name="categorySearchForm"
 			validate="false"
 			scope="request">
 			<forward name="success" path=".catissuecore.defineSearchResultsView"/>
 			<forward name="BuildNewTree" path=".catissuecore.defineSearchResultsViewBNT"/>
-		</action>
+		</action>  -->
 		
 		<action path="/BuildCustomizeTree"
 			type="edu.wustl.catissuecore.action.querysuite.BuildCustomizeTreeAction"
@@ -750,14 +760,16 @@ PUBLIC
 			scope="request">
 			<forward name="success" path=".catissuecore.defineSearchResultsViewBNT"/>			
 		</action>
-		<action path="/BuildQueryOutputTree"
+		
+		<!-- <action path="/BuildQueryOutputTree"
 			type="edu.wustl.catissuecore.action.querysuite.BuildQueryOutputTreeAction"
 			name="categorySearchForm"
 			validate="false"
 			scope="request">
 			<forward name="success" path=".catissuecore.defineSearchResultsViewBNT"/>			
-		</action>
-		<action path="/ShowGrid"
+		</action> -->
+		
+		<!--<action path="/ShowGrid"
 			type="edu.wustl.catissuecore.action.querysuite.ShowGridAction"
 			name="categorySearchForm"
 			validate="false"
@@ -772,24 +784,25 @@ PUBLIC
 			scope="request">
 			<forward name="success" path=".catissuecore.defineSearchResultsViewBNT"/>			
 		</action>
-		<action path="/DefineQueryResultsView"
+		
+		 <action path="/DefineQueryResultsView"
 			type="edu.wustl.catissuecore.action.querysuite.DefineQueryResultsViewAction"
 			name="categorySearchForm"
 			validate="false"
 			scope="request">
 			<forward name="success" path=".catissuecore.defineQueryResultsView"/>			
-		</action>
+		</action> -->
 		
-		<action path="/ConfigureGridView"
+		<!-- <action path="/ConfigureGridView"
 			type="edu.wustl.catissuecore.action.querysuite.ConfigureGridViewAction"
 			name="categorySearchForm"
 			validate="false"
 			scope="request">
 			<forward name="success" path=".catissuecore.queryResultsSpreadsheetViewDef"/>			
-		</action>
+		</action> -->
 		
 		<action path="/ViewCart"
-			type="edu.wustl.catissuecore.action.querysuite.ViewCartAction"
+			type="edu.wustl.catissuecore.action.ViewCartAction"
 			name="advanceSearchForm"
 			validate="false"
 			scope="request">
@@ -799,7 +812,7 @@ PUBLIC
 		</action>
 		
 		<action path="/ExportCart"
-			type="edu.wustl.catissuecore.action.querysuite.ExportCartAction"
+			type="edu.wustl.catissuecore.action.ExportCartAction"
 			name="advanceSearchForm"
 			validate="false"
 			scope="request">			
@@ -807,7 +820,7 @@ PUBLIC
      		<forward name="access_denied" path=".catissuecore.searchHomeDef" />
 		</action>
 		
-		<action path="/AddDeleteCart"
+		<!-- <action path="/AddDeleteCart"
 			type="edu.wustl.catissuecore.action.querysuite.AddDeleteCartAction"
 			name="advanceSearchForm"
 			validate="false"
@@ -816,9 +829,9 @@ PUBLIC
 			<forward name="duplicateObject" path=".catissuecore.queryResultsSpreadsheetViewDef" />
 			<forward name="shoppingCartDelete" path=".catissuecore.shoppingCartDef" />
 			<forward name="access_denied" path=".catissuecore.searchHomeDef" />
-		</action>
+		</action> -->
 		
-		<action path="/BulkCart"
+		<!-- <action path="/BulkCart"
 			type="edu.wustl.catissuecore.action.querysuite.BulkCartAction"
 			name="advanceSearchForm"
 			validate="false"
@@ -832,7 +845,7 @@ PUBLIC
 			<forward name="editMultipleSp" path="/MultipleSpecimenFlexInitAction.do?operation=edit"/>
 			<forward name="access_denied" path=".catissuecore.searchHomeDef" />
 			<forward name="access_denied" path=".catissuecore.searchHomeDef" />
-		</action>
+		</action> -->
 		
 		<action path="/AddSpecimenToCart"
 			type="edu.wustl.catissuecore.action.NewShopingCartAction"
@@ -884,15 +897,17 @@ PUBLIC
 			<forward name="pageOfNewSpecimenCPQuery" path=".catissuecore.aliquotSummaryCpQueryDef" />
 		</action>
 		
-		<action path="/QueryMessageAction"
+		<!-- <action path="/QueryMessageAction"
 			type="edu.wustl.catissuecore.action.querysuite.QueryMessageAction"
 			name="categorySearchForm"
 			validate="false"
 			scope="request">
 			<forward name="success" path=".catissuecore.searchCategory"/>
-		</action>
+		</action>  -->
+		
+		
 		<!-- Applet Action mapping for query Module -->
-		<action path="/ViewSearchResultsAction" 
+		<!--<action path="/ViewSearchResultsAction" 
 			type="edu.wustl.catissuecore.action.querysuite.ViewSearchResultsAction" 
 			parameter="method">
 		<forward name="success" path=".catissuecore.viewSearchResults"/>
@@ -902,18 +917,19 @@ PUBLIC
 			parameter="method">
 		</action>
 		
-		<action path="/PathFinderAction" 
+		 <action path="/PathFinderAction" 
 			type="edu.wustl.catissuecore.action.querysuite.PathFinderAction" 
 			parameter="method">
-		</action>
-		<action path="/getDagViewDataAction" 
+		</action> -->
+		
+		<!-- <action path="/getDagViewDataAction" 
 			type="edu.wustl.catissuecore.action.querysuite.GetDagViewDataAction" 
 			parameter="method">
-		</action>
+		</action> -->
 		
 		<!-- Action code : Query Module changes for pagination starts : 20/07/2007 -->
 		
-		<action path="/QueryTreeView"
+		<!--<action path="/QueryTreeView"
 			type="edu.wustl.catissuecore.action.querysuite.QueryTreeViewAction">
 			<forward name="success" path=".catissuecore.queryTreeViewDef" />
 		</action>
@@ -921,7 +937,7 @@ PUBLIC
 		<action path="/QueryGridView"
 			type="edu.wustl.catissuecore.action.querysuite.QueryGridViewAction">
 			<forward name="success" path=".catissuecore.queryResultsSpreadsheetViewDef" />
-		</action>
+		</action>  -->
 		<!-- Action code : Query Module changes for pagination ends : 20/07/2007 -->		
 		
 		<!-- Action code : Query Module Ends : 06/11/06 -->	
@@ -1094,7 +1110,7 @@ PUBLIC
 			<forward name="pageOfSupervisor" path="/CpBasedSearch.do?menuSelected=22" />
 			<!--forward name="pageOfTechnician" path="/CpBasedSearch.do?menuSelected=22" /-->
 			<forward name="pageOfTechnician" path="/SimpleQueryInterface.do?pageOf=pageOfNewSpecimen&amp;aliasName=Specimen&amp;menuSelected=15"/>
-			<forward name="pageOfScientist" path="/RetrieveQueryAction.do" />
+			<!--  <forward name="pageOfScientist" path="/RetrieveQueryAction.do" />-->
 			<forward name="access_denied" path=".catissuecore.changePasswordDef"/>
 			<forward name="failure" path=".catissuecore.mainTitlePageDef" />
 		</action>
@@ -3325,13 +3341,13 @@ PUBLIC
 			<forward name="pageOfStorageContainer" path=".catissuecore.storageContainerTreeDef"/>
 		</action>
 
-	<action path="/DataView"
+		<!--<action path="/DataView"
 			type="edu.wustl.catissuecore.action.DataViewAction"
 			name="advanceSearchForm"
 			scope="request">
 			<forward name="success" path="/SpreadsheetView.do" />
 			<forward name="failure" path=".catissuecore.commonErrorDetailsDef"/>
-		</action>
+		</action>  -->
 		
 		<action path="/ShowStorageGridView"
 		    type="edu.wustl.catissuecore.action.ShowStorageGridViewAction">
@@ -3586,7 +3602,7 @@ PUBLIC
 		<!-- Shopping Cart Actions Ends -->
 		
 		<!-- Assign Privileges Action Begins -->
-		<action path="/AssignPrivilegesPage"
+		<!-- <action path="/AssignPrivilegesPage"
 			type="edu.wustl.catissuecore.action.AssignPrivilegePageAction"
 			name="assignPrivilegesForm"
 			validate="false"
@@ -3605,11 +3621,11 @@ PUBLIC
 			<forward name="pageOfAssignPrivileges" path=".catissuecore.assignPrivilegesDef" />
 			<forward name="failure" path="/AssignPrivilegesPage.do?pageOf=pageOfAssignPrivilegesPage" />
 			<forward name="access_denied" path="/Home.do" />
-		</action>
+		</action> -->
 		<!-- Assign Privileges Actions Ends -->
 		
 		<!-- Advance Query Interface Action Begins -->
-		<action path="/AdvanceQueryInterface"
+		<!-- <action path="/AdvanceQueryInterface"
 			type="edu.wustl.catissuecore.action.AdvanceQueryInterfaceAction"
 			name="advanceSearchForm"
 			validate="false"
@@ -3623,9 +3639,9 @@ PUBLIC
 			validate="false"
 			scope="request">
 			<forward name="success" path=".catissuecore.defaultSearchDef" />
-		</action>
+		</action> -->
 					
-		<action path="/ParticipantAdvanceSearch"
+		<!--<action path="/ParticipantAdvanceSearch"
 			type="edu.wustl.catissuecore.action.ParticipantSearchAction"
 			name="advanceSearchForm"
 			validate="false"
@@ -3652,16 +3668,16 @@ PUBLIC
 			<forward name="access_denied" path="/Home.do" />
 		</action>
 		
-		<action path="/CollectionProtocolAdvanceSearch"
+		 <action path="/CollectionProtocolAdvanceSearch"
 			type="edu.wustl.catissuecore.action.CollectionProtocolSearchAction"
 			name="advanceSearchForm"
 			validate="false"
 			scope="request">
 			<forward name="pageOfCollectionProtocolAdvanceSearch" path=".catissuecore.collectionProtocolSearchDef" />
 			<forward name="access_denied" path="/Home.do" />
-		</action>
+		</action> -->
 		
-		<action path="/AdvanceQueryView"
+		<!--<action path="/AdvanceQueryView"
 			type="edu.wustl.catissuecore.action.AdvanceQueryView"
 			name="advanceSearchForm"
 			scope="request">
@@ -3705,7 +3721,7 @@ PUBLIC
 			<forward name="failure" path="/AdvanceQuery.do" />
 		</action>
 		
-		<action path="/AdvanceSearchSCG"
+		 <action path="/AdvanceSearchSCG"
 			type="edu.wustl.catissuecore.action.AdvanceSearchAction"
 			name="advanceSearchForm"
 			validate="true"
@@ -3732,7 +3748,7 @@ PUBLIC
 			<forward name="success" path="/ShowFramedPage.do?pageOf=pageOfQueryResults" />
 			<forward name="failure" path="/AdvanceQueryInterface.do?pageOf=pageOfAdvanceQueryInterface" />
 			<forward name="noResults" path="/AdvanceQueryInterface.do?pageOf=pageOfAdvanceQueryInterface&amp;operation=redefine" />
-		</action>
+		</action> -->
 		
 		<action path="/ConfigureAdvanceSearchView"
 			type="edu.wustl.catissuecore.action.ConfigureResultViewAction"
@@ -3742,7 +3758,7 @@ PUBLIC
 			<forward name="pageOfQueryResults" path=".catissuecore.advanceConfigurationSuccessDef" />
 		</action>
 		
-		<action path="/DefaultSpecimenView"
+		<!--<action path="/DefaultSpecimenView"
 			type="edu.wustl.catissuecore.action.DefaultSpecimenViewAction"
 			name="advanceSearchForm"
 			validate="false"
@@ -3751,14 +3767,14 @@ PUBLIC
 			<forward name="failure" path=".catissuecore.commonErrorDetailsDef" />
 		</action>
 		
-		<action path="/ConfigureAdvanceSearchResults"
+		 <action path="/ConfigureAdvanceSearchResults"
 			type="edu.wustl.catissuecore.action.ConfigureAdvanceSearchResultsAction"
 			name="advanceSearchForm"
 			validate="false"
 			scope="request">
 			<forward name="success" path="/DataView.do" />
 			<forward name="failure" path=".catissuecore.commonErrorDetailsDef" />
-		</action>
+		</action> -->
 		
 		<!-- Advance Query Interface Actions Ends -->
 		
