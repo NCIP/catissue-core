@@ -41,14 +41,15 @@ import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.TissueSpecimenRequirement;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.multiRepository.bean.SiteUserRolePrivilegeBean;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.AppUtility;
+import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.exception.ApplicationException;
+import edu.wustl.common.util.Utility;
+import edu.wustl.common.util.global.CommonServiceLocator;
+import edu.wustl.common.util.global.Status;
+import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.exception.DAOException;
-import edu.wustl.common.exception.ApplicationException;
-import edu.wustl.common.util.global.CommonServiceLocator;
-import edu.wustl.common.util.logger.Logger;
-import edu.wustl.common.util.Utility;
 
 public class CollectionProtocolUtil 
 {
@@ -781,7 +782,7 @@ public class CollectionProtocolUtil
 		collectionProtocolEvent.setClinicalStatus(cpEventBean.getClinicalStatus());
 		collectionProtocolEvent.setCollectionPointLabel(cpEventBean.getCollectionPointLabel());
 		collectionProtocolEvent.setStudyCalendarEventPoint(cpEventBean.getStudyCalenderEventPoint());
-		collectionProtocolEvent.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+		collectionProtocolEvent.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());
 		collectionProtocolEvent.setClinicalDiagnosis(cpEventBean.getClinicalDiagnosis());
 		if (cpEventBean.getId()==-1)
 		{
@@ -975,7 +976,7 @@ public class CollectionProtocolUtil
 		{
 			reqSpecimen.setId(Long.valueOf(specimenRequirementBean.getId()));
 		}
-		reqSpecimen.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+		reqSpecimen.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());
 		reqSpecimen.setInitialQuantity(new Double(specimenRequirementBean.getQuantity()));
 		reqSpecimen.setLineage(specimenRequirementBean.getLineage());
 		reqSpecimen.setPathologicalStatus(specimenRequirementBean.getPathologicalStatus());		

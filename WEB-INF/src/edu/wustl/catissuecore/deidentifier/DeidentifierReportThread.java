@@ -7,7 +7,7 @@ import edu.wustl.catissuecore.caties.util.CaCoreAPIService;
 import edu.wustl.catissuecore.caties.util.CaTIESConstants;
 import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
-import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -76,7 +76,7 @@ public class DeidentifierReportThread extends Thread
 			// set default values for deidentified report
 			deidentifiedReport.setActivityStatus(identifiedReport.getActivityStatus()); 
 			deidentifiedReport.setReportStatus(CaTIESConstants.PENDING_FOR_XML);
-			deidentifiedReport.setIsQuarantined(Constants.ACTIVITY_STATUS_ACTIVE);
+			deidentifiedReport.setIsQuarantined(Status.ACTIVITY_STATUS_ACTIVE.toString());
 			deidentifiedReport.setSpecimenCollectionGroup(identifiedReport.getSpecimenCollectionGroup());
 	        
     		Logger.out.info("Saving deidentified report for identified report id="+identifiedReport.getId().toString());

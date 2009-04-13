@@ -43,6 +43,7 @@ import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.Utility;
+import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.security.exception.UserNotAuthorizedException;
  
@@ -342,7 +343,7 @@ public class SubmitSpecimenCPAction extends BaseAction {
 			return null;
 		}		
 		
-		specimen.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+		specimen.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());
 		specimen.setBarcode(specimenDataBean.getBarCode());
 		specimen.setComment(specimenDataBean.getComment());
 		specimen.setCreatedOn(new Date());

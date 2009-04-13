@@ -6,6 +6,7 @@
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.common.tree.StorageContainerTreeNode"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
+<%@ page import="edu.wustl.common.util.global.Status" %>
 <%@ page language="java" isELIgnored="false"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <script src="jss/ajax.js"></script>	   
@@ -165,7 +166,7 @@ window.onresize = function() { setFrameHeight('treeboxbox_tree', 1.0,slope); }
 				if( parentId != "0")
 				{	
 					window.parent.frames['StorageContainerView'].location="SearchObject.do?pageOf=pageOfTreeSC&operation=search&id="+nodeId;
-					//window.parent.frames['StorageContainerView'].location="<%=Constants.SHOW_STORAGE_CONTAINER_GRID_VIEW_ACTION%>?<%=Constants.SYSTEM_IDENTIFIER%>="+nodeId+"&<%=Constants.STORAGE_CONTAINER_TYPE%>=<%=storageContainerType%>&<%=Constants.PAGE_OF%>=<%=pageOf%>&<%=Constants.ACTIVITY_STATUS%>="+activityStatus;
+					//window.parent.frames['StorageContainerView'].location="<%=Constants.SHOW_STORAGE_CONTAINER_GRID_VIEW_ACTION%>?<%=Constants.SYSTEM_IDENTIFIER%>="+nodeId+"&<%=Constants.STORAGE_CONTAINER_TYPE%>=<%=storageContainerType%>&<%=Constants.PAGE_OF%>=<%=pageOf%>&<%=Status.ACTIVITY_STATUS.toString()%>="+activityStatus;
 				}
 				else
 				{

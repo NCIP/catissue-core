@@ -12,6 +12,7 @@ import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport
 import edu.wustl.catissuecore.domain.pathology.ReportSection;
 import edu.wustl.catissuecore.domain.pathology.TextContent;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -171,7 +172,7 @@ public class IdentifiedReportGenerator
 			String newObrLine = obrLine.replace('|', '~');
 			newObrLine = newObrLine.replaceAll("~", "|~~");
 			//set default values to report
-			report.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+			report.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());
 			report.setIsFlagForReview(Boolean.FALSE);
 			StringTokenizer strTokenizer = new StringTokenizer(newObrLine, "|");
 			// iterate over token to create report

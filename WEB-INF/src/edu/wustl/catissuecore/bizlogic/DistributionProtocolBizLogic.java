@@ -364,7 +364,7 @@ public class DistributionProtocolBizLogic extends SpecimenProtocolBizLogic imple
 		
 		if(operation.equals(Constants.ADD))
 		{
-			if(!Constants.ACTIVITY_STATUS_ACTIVE.equals(protocol.getActivityStatus()))
+			if(!Status.ACTIVITY_STATUS_ACTIVE.equals(protocol.getActivityStatus()))
 			{
 				throw getBizLogicException(null, "activityStatus.active.errMsg", "");
 			}

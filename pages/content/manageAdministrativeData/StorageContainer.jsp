@@ -12,6 +12,7 @@
 <%@ page import="java.io.*"%>
 <%@ page import="edu.wustl.common.util.global.ApplicationProperties" %>
 <%@ page import="edu.wustl.common.util.tag.ScriptGenerator" %>
+<%@ page import="edu.wustl.common.util.global.Status" %>
 <%@ include file="/pages/content/common/AdminCommonCode.jsp" %>
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %>
 <%@ page language="java" isELIgnored="false"%>
@@ -588,7 +589,7 @@ function onEditChange()
 function vieMapTabSelected(){
  window.parent.tabSelected("viewmapTab");
  var activityStatus= window.parent.getActivityStatus();
- var action= "OpenStorageContainer.do?<%=Constants.SYSTEM_IDENTIFIER%>=${requestScope.storageContainerIdentifier}&<%=Constants.PAGE_OF%>=viewMapTab&<%=Constants.ACTIVITY_STATUS%>="+activityStatus+""; 
+ var action= "OpenStorageContainer.do?<%=Constants.SYSTEM_IDENTIFIER%>=${requestScope.storageContainerIdentifier}&<%=Constants.PAGE_OF%>=viewMapTab&<%=Status.ACTIVITY_STATUS.toString()%>="+activityStatus+""; 
 	document.forms[0].action=action;
 	document.forms[0].submit();
 }

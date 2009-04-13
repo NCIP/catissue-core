@@ -644,7 +644,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 					specimen = (Specimen) HibernateMetaData.getProxyObjectImpl(specimen);
 					String activityStatus = specimen.getActivityStatus();
 					//Bug: 2872:-  User should not able to add close/disable specimen in Specimen Array.
-					if (!activityStatus.equals(Constants.ACTIVITY_STATUS_ACTIVE))
+					if (!activityStatus.equals(Status.ACTIVITY_STATUS_ACTIVE.toString()))
 					{
 						throw getBizLogicException(null, "dao.error", Constants.ARRAY_SPECIMEN_NOT_ACTIVE_EXCEPTION_MESSAGE + columnValue);
 					}
@@ -743,7 +743,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 
 			if (specimenArray.getActivityStatus() == null)
 			{
-				specimenArray.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+				specimenArray.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());
 			}
 			String message = "";
 			if (specimenArray.getSpecimenArrayType() == null || specimenArray.getSpecimenArrayType().getId() == null

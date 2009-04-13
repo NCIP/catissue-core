@@ -46,7 +46,6 @@ import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.bizlogic.OrderBizLogic;
 import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
-import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.DerivedSpecimenOrderItem;
 import edu.wustl.catissuecore.domain.DistributionProtocol;
@@ -65,8 +64,8 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.IdComparator;
 import edu.wustl.catissuecore.util.OrderingSystemUtil;
 import edu.wustl.catissuecore.util.SpecimenComparator;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.AppUtility;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
@@ -75,6 +74,10 @@ import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
+import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.CommonServiceLocator;
+import edu.wustl.common.util.global.Status;
+import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.daofactory.DAOConfigFactory;
 import edu.wustl.dao.daofactory.IDAOFactory;
@@ -84,10 +87,6 @@ import edu.wustl.security.global.Permissions;
 import edu.wustl.security.manager.SecurityManagerFactory;
 import edu.wustl.security.privilege.PrivilegeCache;
 import edu.wustl.security.privilege.PrivilegeManager;
-import edu.wustl.common.util.global.ApplicationProperties;
-import edu.wustl.common.util.global.CommonServiceLocator;
-import edu.wustl.common.util.global.Status;
-import edu.wustl.common.util.logger.Logger;
 import gov.nih.nci.security.authorization.domainobjects.Role;
 
 public class RequestDetailsAction extends BaseAction
@@ -1222,7 +1221,7 @@ private OrderItem getOrderItem(OrderDetails orderDetails , Long orderItemId )
 
 		String[] whereColNames ={Status.ACTIVITY_STATUS.toString()};
 		String[] whereColCond = {"!="};
-		Object[] whereColVal = {Constants.ACTIVITY_STATUS_CLOSED};	
+		Object[] whereColVal = {Status.ACTIVITY_STATUS_CLOSED.toString()};	
 		String separatorBetweenFields = "";
 
 		// checking for the role. if role is admin / supervisor then show all the distribution protocols.
@@ -1234,7 +1233,7 @@ private OrderItem getOrderItem(OrderDetails orderDetails , Long orderItemId )
 		{
 			String[] whereColumnName = {"principalInvestigator.id",Status.ACTIVITY_STATUS.toString()};
 			String[] colCondition = {"=","!="};
-			Object[] whereColumnValue = {piID,Constants.ACTIVITY_STATUS_CLOSED};
+			Object[] whereColumnValue = {piID,Status.ACTIVITY_STATUS_CLOSED.toString()};
 			String joinCondition = Constants.AND_JOIN_CONDITION;
 			boolean isToExcludeDisabled = true;
 

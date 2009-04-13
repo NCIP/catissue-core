@@ -15,8 +15,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.spin.loader.scrubber.impl.batch.BatchInitializationException;
-
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
@@ -29,9 +27,9 @@ import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.global.Variables;
-import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.HibernateDAO;
 import edu.wustl.dao.exception.DAOException;
@@ -109,7 +107,7 @@ public class SiteBizLogic extends CatissueDefaultBizLogic {
 
 			setCordinator(dao, site);
 			// Mandar : 21Aug08 ----start
-			if (Constants.ACTIVITY_STATUS_CLOSED.equals(site.getActivityStatus())) {
+			if (Status.ACTIVITY_STATUS_CLOSED.equals(site.getActivityStatus())) {
 				if (isSiteOccupied(dao, site)) {
 					throw getBizLogicException(null, "dao.error",
 					"Site contains specimens in the associated containers. Cannot close a site containing specimens.");
@@ -356,7 +354,7 @@ public class SiteBizLogic extends CatissueDefaultBizLogic {
 		}
 
 		if (operation.equals(Constants.ADD)) {
-			if (!Constants.ACTIVITY_STATUS_ACTIVE.equals(site
+			if (!Status.ACTIVITY_STATUS_ACTIVE.equals(site
 					.getActivityStatus())) {
 				
 				throw getBizLogicException(null,"activityStatus.active.errMsg","");

@@ -55,7 +55,7 @@ public class DisposalEventParametersAction extends SpecimenEventParametersAction
 //		request.setAttribute(Constants.ACTIVITYSTATUSLIST,
 //				Constants.DISPOSAL_EVENT_ACTIVITY_STATUS_VALUES);
 		request.setAttribute("activityStatusDisabled",Status.ACTIVITY_STATUS_DISABLED.toString());
-		request.setAttribute("activityStatusClosed",Constants.ACTIVITY_STATUS_CLOSED);
+		request.setAttribute("activityStatusClosed",Status.ACTIVITY_STATUS_CLOSED.toString());
 		request.setAttribute("activityStatusList",Constants.DISPOSAL_EVENT_ACTIVITY_STATUS_VALUES);
 		request.setAttribute("disposalEventParametersAddAction",Constants.DISPOSAL_EVENT_PARAMETERS_ADD_ACTION);
 

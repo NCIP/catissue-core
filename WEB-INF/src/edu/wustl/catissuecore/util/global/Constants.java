@@ -22,6 +22,7 @@ import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyRepo
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.SurgicalPathologyReport;
 import edu.wustl.common.util.global.CommonServiceLocator;
+import edu.wustl.common.util.global.Status;
 
  
 /**
@@ -830,17 +831,17 @@ public class Constants
 	public static final int QUERY_RESULT_TREE_JDBC_DAO = 1;
 	
 	//Activity Status values
-	public static final String ACTIVITY_STATUS_APPROVE = "Approve";
-	public static final String ACTIVITY_STATUS_REJECT = "Reject";
-	public static final String ACTIVITY_STATUS_NEW = "New";
-	public static final String ACTIVITY_STATUS_PENDING = "Pending";
-	public static final String ACTIVITY_STATUS_ACTIVE = "Active";
-	public static final String ACTIVITY_STATUS_CLOSED = "Closed";
+	//public static final String ACTIVITY_STATUS_APPROVE = "Approve";
+	//public static final String ACTIVITY_STATUS_REJECT = "Reject";
+	//public static final String ACTIVITY_STATUS_NEW = "New";
+	//public static final String ACTIVITY_STATUS_PENDING = "Pending";
+	//public static final String ACTIVITY_STATUS_ACTIVE = "Active";
+	//public static final String ACTIVITY_STATUS_CLOSED = "Closed";
 	
 	//Approve User status values.
-	public static final String APPROVE_USER_APPROVE_STATUS = "Approve";
-	public static final String APPROVE_USER_REJECT_STATUS = "Reject";
-	public static final String APPROVE_USER_PENDING_STATUS = "Pending";
+	//public static final String APPROVE_USER_APPROVE_STATUS = "Approve";
+	//public static final String APPROVE_USER_REJECT_STATUS = "Reject";
+	//public static final String APPROVE_USER_PENDING_STATUS = "Pending";
 	
 	//Approve User Constants		
 	public static final int ZERO = 0;
@@ -999,9 +1000,9 @@ public class Constants
 	
 	public static final String [] APPROVE_USER_STATUS_VALUES = {
 	        SELECT_OPTION,
-	        APPROVE_USER_APPROVE_STATUS,
-	        APPROVE_USER_REJECT_STATUS,
-	        APPROVE_USER_PENDING_STATUS,
+	        Status.APPROVE_USER_APPROVE_STATUS.toString(),
+	        Status.APPROVE_USER_REJECT_STATUS.toString(),
+	        Status.APPROVE_USER_PENDING_STATUS.toString(),
 	};
 
 	public static final String [] REPORTED_PROBLEM_ACTIVITY_STATUS_VALUES = {

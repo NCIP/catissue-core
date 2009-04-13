@@ -340,7 +340,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		SpecimenEventParametersBizLogic specimenEventParametersBizLogic = new SpecimenEventParametersBizLogic();
 		specimenEventParametersBizLogic.insert(disposalEvent, sessionDataBean, 0);
 		((Specimen) specimen).setIsAvailable(Boolean.FALSE);
-		specimen.setActivityStatus(Constants.ACTIVITY_STATUS_CLOSED);
+		specimen.setActivityStatus(Status.ACTIVITY_STATUS_CLOSED.toString());
 	}
 
 	/**
@@ -358,7 +358,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		SpecimenEventParametersBizLogic specimenEventParametersBizLogic = new SpecimenEventParametersBizLogic();
 		specimenEventParametersBizLogic.insert(disposalEvent, sessionDataBean);
 		((Specimen) specimen).setIsAvailable(Boolean.FALSE);
-		specimen.setActivityStatus(Constants.ACTIVITY_STATUS_CLOSED);
+		specimen.setActivityStatus(Status.ACTIVITY_STATUS_CLOSED.toString());
 	}
 
 	/**
@@ -376,7 +376,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		User user = new User();
 		user.setId(sessionDataBean.getUserId());
 		disposalEvent.setUser(user);
-		disposalEvent.setActivityStatus(Constants.ACTIVITY_STATUS_CLOSED);
+		disposalEvent.setActivityStatus(Status.ACTIVITY_STATUS_CLOSED.toString());
 		return disposalEvent;
 	}
 
@@ -579,7 +579,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		else
 		{
-			if (activityStatus.equals(Constants.ACTIVITY_STATUS_CLOSED))
+			if (activityStatus.equals(Status.ACTIVITY_STATUS_CLOSED.toString()))
 			{
 				checkStatus(dao, cp, "Collection Protocal");
 			}
@@ -1429,7 +1429,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			}
 		}
 		setQuantity(specimen);
-		specimen.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+		specimen.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());
 		if (specimen.getBarcode() != null && specimen.getBarcode().trim().equals(""))
 		{
 			specimen.setBarcode(null);
@@ -1504,7 +1504,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				{
 					storageContainerObj = setStorageContainerId(dao, specimen);
 				}
-				if (!Constants.ACTIVITY_STATUS_ACTIVE.equals(storageContainerObj.getActivityStatus()))
+				if (!Status.ACTIVITY_STATUS_ACTIVE.equals(storageContainerObj.getActivityStatus()))
 				{
 					throw getBizLogicException(null, "dao.error", "Storage container is closed!");
 				}
@@ -2093,7 +2093,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				throw getBizLogicException(null, "specimen.available.errMsg", "");
 			}
 
-			if (!Constants.ACTIVITY_STATUS_ACTIVE.equals(specimen.getActivityStatus()))
+			if (!Status.ACTIVITY_STATUS_ACTIVE.equals(specimen.getActivityStatus()))
 			{
 				throw getBizLogicException(null, "activityStatus.active.errMsg", "");
 			}
@@ -2829,7 +2829,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		String activityStatus = cp.getActivityStatus();
 		String oldCollectionStatus = specimenDO.getCollectionStatus();
 		String newCollectionStatus = newSpecimen.getCollectionStatus();
-		if (lineage.equals("New") && activityStatus.equals(Constants.ACTIVITY_STATUS_CLOSED))
+		if (lineage.equals("New") && activityStatus.equals(Status.ACTIVITY_STATUS_CLOSED.toString()))
 		{
 			if (!oldCollectionStatus.equalsIgnoreCase(newCollectionStatus))
 			{
@@ -3736,7 +3736,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	public void disposeAndCloseSpecimen(SessionDataBean sessionDataBean, AbstractSpecimen specimen, DAO dao, String disposalReason)
 			throws BizLogicException, UserNotAuthorizedException, BizLogicException
 	{
-		if (!Constants.ACTIVITY_STATUS_CLOSED.equals(specimen.getActivityStatus()))
+		if (!Status.ACTIVITY_STATUS_CLOSED.equals(specimen.getActivityStatus()))
 		{
 			disposeSpecimen(sessionDataBean, specimen, dao, disposalReason);
 		}

@@ -30,11 +30,10 @@ import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.tree.TreeDataInterface;
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.exception.DAOException;
-import edu.wustl.security.exception.SMException;
-import edu.wustl.security.exception.UserNotAuthorizedException;
 
 /**
  * StorageContainerHDAO is used to add Storage Container information into the
@@ -53,7 +52,7 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws BizLogicException
 	{
 		StorageContainer container = (StorageContainer) obj;
-		container.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+		container.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());
 
 		List contList = new ArrayList();
 		int noOfContainers = container.getNoOfContainers().intValue();

@@ -18,6 +18,7 @@ import edu.wustl.common.lookup.MatchingStatus;
 import edu.wustl.common.lookup.MatchingStatusForSSNPMI;
 import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.Status;
 
 public class ParticipantLookupLogicForSPR implements LookupLogic
 {
@@ -143,7 +144,7 @@ public class ParticipantLookupLogicForSPR implements LookupLogic
 			int socialSecurityNumberWeight = 0; // points of social security number
 			int birthDateWeight = 0; // points of birth date
 			// Check for the participant only in case its Activity Status = active
-			if (existingParticipant.getActivityStatus() != null && (existingParticipant.getActivityStatus().equals(Constants.ACTIVITY_STATUS_ACTIVE) || existingParticipant.getActivityStatus().equals(Constants.ACTIVITY_STATUS_CLOSED)))
+			if (existingParticipant.getActivityStatus() != null && (existingParticipant.getActivityStatus().equals(Status.ACTIVITY_STATUS_ACTIVE.toString()) || existingParticipant.getActivityStatus().equals(Status.ACTIVITY_STATUS_CLOSED.toString())))
 			{
 				if(!isEmptyParticipant(existingParticipant))
 				{

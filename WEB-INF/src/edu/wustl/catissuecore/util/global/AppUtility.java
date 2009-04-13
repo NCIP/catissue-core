@@ -101,6 +101,7 @@ import edu.wustl.common.util.PagenatedResultData;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.QuerySessionData;
+import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.TextConstants;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
@@ -1825,7 +1826,7 @@ public class AppUtility
 		UserBizLogic userBizLogic = (UserBizLogic) factory.getBizLogic(User.class.getName());
 		String[] whereColumnName = {"activityStatus", "loginName"};
 		String[] whereColumnCondition = {"=", "="};
-		String[] whereColumnValue = {Constants.ACTIVITY_STATUS_ACTIVE, loginName};
+		String[] whereColumnValue = {Status.ACTIVITY_STATUS_ACTIVE.toString(), loginName};
 
 		List users = userBizLogic.retrieve(User.class.getName(), whereColumnName,
 				whereColumnCondition, whereColumnValue, Constants.AND_JOIN_CONDITION);

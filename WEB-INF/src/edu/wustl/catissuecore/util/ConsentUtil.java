@@ -582,7 +582,7 @@ public final class ConsentUtil
 		{
 			Specimen specimenObj =(Specimen)specimenIterator.next();
 			List specimenDetailList=new ArrayList();
-			if(specimenObj.getActivityStatus().equals(Constants.ACTIVITY_STATUS_ACTIVE))
+			if(specimenObj.getActivityStatus().equals(Status.ACTIVITY_STATUS_ACTIVE.toString()))
 			{
 				specimenDetailList.add(specimenObj.getLabel());
 				specimenDetailList.add(specimenObj.getSpecimenType());

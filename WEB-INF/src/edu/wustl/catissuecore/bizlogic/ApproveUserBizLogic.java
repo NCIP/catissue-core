@@ -33,6 +33,7 @@ import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.exception.PasswordEncryptionException;
 import edu.wustl.common.util.global.PasswordManager;
+import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.HibernateDAO;
@@ -89,7 +90,7 @@ public class ApproveUserBizLogic  extends CatissueDefaultBizLogic
 		{
 			dao.update(user.getAddress());
 			//If the activity status is Active, create a csm user.
-			if (Constants.ACTIVITY_STATUS_ACTIVE.equals(user.getActivityStatus()))
+			if (Status.ACTIVITY_STATUS_ACTIVE.equals(user.getActivityStatus()))
 			{
 				approveUser(obj, csmUser, dao, sessionDataBean );
 			}
@@ -107,12 +108,12 @@ public class ApproveUserBizLogic  extends CatissueDefaultBizLogic
 			EmailHandler emailHandler = new EmailHandler(); 
 
 			//If user is approved send approval and login details emails to the user and administrator.
-			if (Constants.ACTIVITY_STATUS_ACTIVE.equals(user.getActivityStatus()))
+			if (Status.ACTIVITY_STATUS_ACTIVE.equals(user.getActivityStatus()))
 			{
 				//Send approval email to the user and administrator.
 				emailHandler.sendApprovalEmail(user);
 			}
-			else if (Constants.ACTIVITY_STATUS_REJECT.equals(user.getActivityStatus()))
+			else if (Status.ACTIVITY_STATUS_REJECT.equals(user.getActivityStatus()))
 			{
 				//If user is rejected send rejection email to the user and administrator.
 				//Send rejection email to the user and administrator.
@@ -168,7 +169,7 @@ public class ApproveUserBizLogic  extends CatissueDefaultBizLogic
 
 		String generatedPassword = PasswordManager.generatePassword();
 
-		if (user.getActivityStatus().equals(Constants.ACTIVITY_STATUS_ACTIVE))
+		if (user.getActivityStatus().equals(Status.ACTIVITY_STATUS_ACTIVE.toString()))
 		{
 			csmUser.setPassword(generatedPassword);
 		}

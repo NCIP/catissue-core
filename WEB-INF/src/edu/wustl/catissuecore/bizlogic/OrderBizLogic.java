@@ -46,13 +46,11 @@ import edu.wustl.catissuecore.util.EmailHandler;
 import edu.wustl.catissuecore.util.OrderingSystemUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.XMLPropertyHandler;
-import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Variables;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
@@ -60,7 +58,6 @@ import edu.wustl.dao.HibernateDAO;
 import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
 import edu.wustl.dao.condition.INClause;
-import edu.wustl.dao.daofactory.DAOFactory;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.dao.util.HibernateMetaData;
 import edu.wustl.security.exception.SMException;
@@ -455,7 +452,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 									}
 									distribution.setDistributedBy(user);
 									//Setting activity status
-									distribution.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+									distribution.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());
 									//Setting Event Timestamp
 									Date date = new Date();
 									distribution.setTimestamp(date);

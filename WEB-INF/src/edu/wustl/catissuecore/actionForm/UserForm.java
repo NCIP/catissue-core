@@ -720,17 +720,17 @@ public class UserForm extends AbstractActionForm
 	 */
 	private void setStats()
 	{
-		if (this.getActivityStatus().equals(Constants.ACTIVITY_STATUS_ACTIVE))
+		if (this.getActivityStatus().equals(Status.ACTIVITY_STATUS_ACTIVE.toString()))
 		{
-			this.status = Constants.APPROVE_USER_APPROVE_STATUS;
+			this.status = Status.APPROVE_USER_APPROVE_STATUS.toString();
 		}
-		else if (this.getActivityStatus().equals(Constants.ACTIVITY_STATUS_CLOSED))
+		else if (this.getActivityStatus().equals(Status.ACTIVITY_STATUS_CLOSED.toString()))
 		{
-			this.status = Constants.APPROVE_USER_REJECT_STATUS;
+			this.status = Status.APPROVE_USER_REJECT_STATUS.toString();
 		}
-		else if (this.getActivityStatus().equals(Constants.ACTIVITY_STATUS_NEW))
+		else if (this.getActivityStatus().equals(Status.ACTIVITY_STATUS_NEW.toString()))
 		{
-			this.status = Constants.APPROVE_USER_PENDING_STATUS;
+			this.status = Status.APPROVE_USER_PENDING_STATUS.toString();
 		}
 	}
 

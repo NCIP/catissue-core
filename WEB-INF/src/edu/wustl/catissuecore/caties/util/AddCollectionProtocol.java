@@ -15,6 +15,7 @@ import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
 
 
@@ -73,7 +74,7 @@ public class AddCollectionProtocol
 
 		collectionProtocol.setAliquotInSameContainer(new Boolean(false));
 		collectionProtocol.setDescriptionURL("");
-		collectionProtocol.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+		collectionProtocol.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());
 		
 		collectionProtocol.setTitle(CaTIESProperties.getValue(CaTIESConstants.COLLECTION_PROTOCOL_TITLE));
 		collectionProtocol.setShortTitle(CaTIESProperties.getValue(CaTIESConstants.COLLECTION_PROTOCOL_TITLE));
@@ -114,7 +115,7 @@ public class AddCollectionProtocol
 		collectionProtocolEvent.setStudyCalendarEventPoint(new Double(1));
 		collectionProtocolEvent.setCollectionPointLabel("Collection Point Label 1");
 		collectionProtocolEvent.setClinicalStatus((String)CaCoreAPIService.getDefaultValue(Constants.DEFAULT_CLINICAL_STATUS));
-		collectionProtocolEvent.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+		collectionProtocolEvent.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());
 		collectionProtocolEvent.setClinicalDiagnosis((String)CaCoreAPIService.getDefaultValue(Constants.DEFAULT_CLINICAL_DIAGNOSIS));
 
 		

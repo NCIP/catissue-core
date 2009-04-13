@@ -165,13 +165,13 @@ public class UserAction extends SecureAction {
 		}
 		if (pageOf.equals(Constants.PAGE_OF_APPROVE_USER)
 				&& (userForm.getStatus().equals(
-						Constants.APPROVE_USER_PENDING_STATUS)
+						Status.APPROVE_USER_PENDING_STATUS.toString())
 						|| userForm.getStatus().equals(
-								Constants.APPROVE_USER_REJECT_STATUS) || userForm
+								Status.APPROVE_USER_REJECT_STATUS.toString()) || userForm
 						.getStatus().equals(Constants.SELECT_OPTION))) {
 			roleStatus = true;
 			if (userForm.getStatus().equals(
-					Constants.APPROVE_USER_PENDING_STATUS)) {
+					Status.APPROVE_USER_PENDING_STATUS.toString())) {
 				operation = Constants.EDIT;
 			}
 		}
@@ -190,8 +190,8 @@ public class UserAction extends SecureAction {
 			
 		}
 		if (pageOf.equals(Constants.PAGE_OF_SIGNUP)) {
-			userForm.setStatus(Constants.ACTIVITY_STATUS_NEW);
-			userForm.setActivityStatus(Constants.ACTIVITY_STATUS_NEW);
+			userForm.setStatus(Status.ACTIVITY_STATUS_NEW.toString());
+			userForm.setActivityStatus(Status.ACTIVITY_STATUS_NEW.toString());
 		}
 		userForm.setOperation(operation);
 		userForm.setPageOf(pageOf);
@@ -320,7 +320,7 @@ public class UserAction extends SecureAction {
 			readOnlyEmail = true;
 		}
 		request.setAttribute("SELECT_OPTION_VALUE", SELECT_OPTION_VALUE);
-		request.setAttribute("Approve", Constants.APPROVE_USER_APPROVE_STATUS);
+		request.setAttribute("Approve", Status.APPROVE_USER_APPROVE_STATUS.toString());
 		request
 				.setAttribute("pageOfApproveUser",
 						Constants.PAGE_OF_APPROVE_USER);

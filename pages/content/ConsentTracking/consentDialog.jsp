@@ -4,6 +4,7 @@
 <%@ page import="java.util.*"%>
 <%@ page import="java.util.List,edu.wustl.catissuecore.util.global.Constants,edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
+<%@ page import="edu.wustl.common.util.global.Status"%>
 <%@ page import="java.util.ArrayList"%>
 <%@ page language="java" isELIgnored="false"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -54,7 +55,7 @@ function getButtonStatus(element)
 		{
 			if(element.value != "<%=Constants.WITHDRAW_RESPONSE_RESET%>")
 			{
-				parent.opener.document.forms[0].activityStatus.value="<%=Constants.ACTIVITY_STATUS_DISABLED%>" ;
+				parent.opener.document.forms[0].activityStatus.value="<%=Status.ACTIVITY_STATUS_DISABLED.toString()%>" ;
 				parent.opener.document.forms[0].onSubmit.value="<%=Constants.BIO_SPECIMEN%>";
 				parent.opener.document.forms[0].target = "_top";
 			}

@@ -194,7 +194,7 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 			aliquotSpecimenArray.setLocatedAtPosition(cntPos);
 			
 			aliquotSpecimenArray.setAvailable(Boolean.TRUE);
-			aliquotSpecimenArray.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+			aliquotSpecimenArray.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());
 			//aliquotSpecimenArray.setLineage(Constants.ALIQUOT);
 
 			//Inserting an aliquot in the database

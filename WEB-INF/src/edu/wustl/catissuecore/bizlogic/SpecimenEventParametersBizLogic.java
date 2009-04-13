@@ -335,7 +335,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 					activityStatus = getActivityStatus(dao, className, identifier);
 				}
 				
-				if (Constants.ACTIVITY_STATUS_CLOSED.equals(activityStatus) &&
+				if (Status.ACTIVITY_STATUS_CLOSED.equals(activityStatus) &&
 						(!Constants.DISPOSAL_EVENT_PARAMETERS.equals(objectType)))
 				{
 					throw getBizLogicException(null, "error.object.closed", objectType);

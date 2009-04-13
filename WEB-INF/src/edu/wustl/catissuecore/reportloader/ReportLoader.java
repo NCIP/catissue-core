@@ -27,6 +27,7 @@ import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyRepo
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.dao.exception.DAOException;
+import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
 import gov.nih.nci.system.applicationservice.ApplicationException;
 
@@ -164,7 +165,7 @@ public class ReportLoader
 		// set default values for scg
 		Logger.out.info("Creating New Specimen Collection Group");
 		SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
-		scg.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+		scg.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());
 		scg.setCollectionStatus(Constants.COMPLETE);
 		scg.setClinicalDiagnosis(Constants.NOT_SPECIFIED);
 		scg.setClinicalStatus(Constants.NOT_SPECIFIED);
@@ -196,7 +197,7 @@ public class ReportLoader
 				// otherwise create new CollectionProtocolRegistration
 				Logger.out.info("Creating New CollectionProtocolRegistration object");
 				collProtocolReg=new CollectionProtocolRegistration();
-				collProtocolReg.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+				collProtocolReg.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());
 				collProtocolReg.setRegistrationDate(new Date());
 				
 				Participant transientParticipant = new Participant();

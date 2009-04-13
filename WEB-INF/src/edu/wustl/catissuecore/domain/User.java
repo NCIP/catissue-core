@@ -19,12 +19,14 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+
 import edu.wustl.catissuecore.actionForm.UserForm;
 import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.bizlogic.IActivityStatus;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.security.exception.SMException;
 import edu.wustl.security.manager.SecurityManagerFactory;
@@ -706,7 +708,7 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
 				if (uform.getPageOf().equals(Constants.PAGE_OF_USER_ADMIN) &&
 						uform.getOperation().equals(Constants.ADD))
 				{
-					this.activityStatus = Constants.ACTIVITY_STATUS_ACTIVE;
+					this.activityStatus = Status.ACTIVITY_STATUS_ACTIVE.toString();
 					this.setStartDate(Calendar.getInstance().getTime());
 				}
 
@@ -719,17 +721,17 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
 
 				if (uform.getPageOf().equals(Constants.PAGE_OF_APPROVE_USER))
 				{
-					if (uform.getStatus().equals(Constants.APPROVE_USER_APPROVE_STATUS))
+					if (uform.getStatus().equals(Status.APPROVE_USER_APPROVE_STATUS.toString()))
 					{
-						this.activityStatus = Constants.ACTIVITY_STATUS_ACTIVE;
+						this.activityStatus = Status.ACTIVITY_STATUS_ACTIVE.toString();
 					}
-					else if (uform.getStatus().equals(Constants.APPROVE_USER_REJECT_STATUS))
+					else if (uform.getStatus().equals(Status.APPROVE_USER_REJECT_STATUS.toString()))
 					{
-						this.activityStatus = Constants.ACTIVITY_STATUS_REJECT;
+						this.activityStatus = Status.ACTIVITY_STATUS_REJECT.toString();
 					}
 					else
 					{
-						this.activityStatus = Constants.ACTIVITY_STATUS_PENDING;
+						this.activityStatus = Status.ACTIVITY_STATUS_PENDING.toString();
 					}
 				}
 

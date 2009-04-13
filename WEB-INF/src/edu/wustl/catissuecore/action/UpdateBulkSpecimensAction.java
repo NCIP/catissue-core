@@ -38,9 +38,9 @@ import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.ApplicationException;
-import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
+import edu.wustl.common.util.global.Status;
 import edu.wustl.dao.HibernateDAO;
 import edu.wustl.dao.daofactory.DAOConfigFactory;
 import edu.wustl.dao.exception.DAOException;
@@ -240,7 +240,7 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 	{
 		SpecimenDataBean specimenDataBean = (SpecimenDataBean) genericSpecimen;
 
-		specimen.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+		specimen.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());
 		specimen.setComment(specimenDataBean.getComment());
 		if(specimen.getCreatedOn()==null)
 		{

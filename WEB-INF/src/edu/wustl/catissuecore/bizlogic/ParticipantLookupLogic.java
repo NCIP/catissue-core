@@ -20,6 +20,7 @@ import edu.wustl.common.lookup.LookupParameters;
 import edu.wustl.common.lookup.MatchingStatus;
 import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.Status;
 
 /**
  * @author santosh_chandak
@@ -223,7 +224,7 @@ public class ParticipantLookupLogic implements LookupLogic
 			Participant existingParticipant = (Participant) itr.next();
 
 			// Check for the participant only in case its Activity Status = active
-			if (existingParticipant.getActivityStatus() != null && (existingParticipant.getActivityStatus().equals(Constants.ACTIVITY_STATUS_ACTIVE) || existingParticipant.getActivityStatus().equals(Constants.ACTIVITY_STATUS_CLOSED)))
+			if (existingParticipant.getActivityStatus() != null && (existingParticipant.getActivityStatus().equals(Status.ACTIVITY_STATUS_ACTIVE.toString()) || existingParticipant.getActivityStatus().equals(Status.ACTIVITY_STATUS_CLOSED.toString())))
 			{
 
 				/**

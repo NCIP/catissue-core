@@ -234,7 +234,7 @@ public class LoginAction extends Action
     	UserBizLogic userBizLogic = (UserBizLogic)factory.getBizLogic(Constants.USER_FORM_ID);
     	String[] whereColumnName = {"activityStatus","loginName"};
     	String[] whereColumnCondition = {"=","="};
-    	String[] whereColumnValue = {Constants.ACTIVITY_STATUS_ACTIVE, loginName};
+    	String[] whereColumnValue = {Status.ACTIVITY_STATUS_ACTIVE.toString(), loginName};
     	
     	List users = userBizLogic.retrieve(User.class.getName(), whereColumnName, 
     			whereColumnCondition, whereColumnValue,Constants.AND_JOIN_CONDITION);

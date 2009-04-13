@@ -51,7 +51,6 @@ import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.exceptionformatter.DefaultExceptionFormatter;
-import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
@@ -352,8 +351,8 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		{
 			collectionProtocolOld = getOldCollectionProtocol(dao, collectionProtocol.getId());
 			
-			if(!Constants.ACTIVITY_STATUS_ACTIVE.equals(collectionProtocol.getActivityStatus())
-				& !Constants.ACTIVITY_STATUS_CLOSED.equals(collectionProtocol.getActivityStatus()))
+			if(!Status.ACTIVITY_STATUS_ACTIVE.equals(collectionProtocol.getActivityStatus())
+				& !Status.ACTIVITY_STATUS_CLOSED.equals(collectionProtocol.getActivityStatus()))
 			{
 				setCPEventCollection(collectionProtocol);
 				editCPObj(dao, sessionDataBean, collectionProtocol, collectionProtocolOld);
@@ -789,7 +788,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 
 						//checkStatus(dao, coordinator, "coordinator");
 						String activityStatus = coordinator.getActivityStatus();
-						if (activityStatus.equals(Constants.ACTIVITY_STATUS_CLOSED))
+						if (activityStatus.equals(Status.ACTIVITY_STATUS_CLOSED.toString()))
 						{
 							String message = "Coordinator " + coordinator.getLastName() + " "
 							+ coordinator.getFirstName() + " ";
@@ -847,7 +846,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 				+ "  and" + " cp.id = cpr.collectionProtocol.id and"
 				+ " cpr.id = scg.collectionProtocolRegistration.id and"
 				+ " scg.id = s.specimenCollectionGroup.id and " + " s.activityStatus = '"
-				+ Constants.ACTIVITY_STATUS_ACTIVE + "'";
+				+ Status.ACTIVITY_STATUS_ACTIVE.toString() + "'";
 
 		List specimenList = (List) executeHqlQuery(hql);
 		if ((specimenList != null) && (specimenList).size() > 0)
@@ -1127,7 +1126,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		{
 
 			validateCPTitle(protocol);
-			if (!Constants.ACTIVITY_STATUS_ACTIVE.equals(protocol.getActivityStatus()))
+			if (!Status.ACTIVITY_STATUS_ACTIVE.equals(protocol.getActivityStatus()))
 			{
 				
 				throw getBizLogicException(null,"activityStatus.active.errMsg" , "");

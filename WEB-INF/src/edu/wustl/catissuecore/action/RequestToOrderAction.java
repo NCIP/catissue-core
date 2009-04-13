@@ -29,7 +29,6 @@ import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.global.Status;
-import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.daofactory.DAOConfigFactory;
 import edu.wustl.dao.exception.DAOException;
@@ -111,7 +110,7 @@ public class RequestToOrderAction extends BaseAction
 			String[] whereColumnName = {"principalInvestigator.id",
 					Status.ACTIVITY_STATUS.toString()};
 			String[] colCondition = {"=", "!="};
-			Object[] whereColumnValue = {piID, Constants.ACTIVITY_STATUS_CLOSED};
+			Object[] whereColumnValue = {piID, Status.ACTIVITY_STATUS_CLOSED.toString()};
 			String joinCondition = Constants.AND_JOIN_CONDITION;
 			boolean isToExcludeDisabled = true;
 

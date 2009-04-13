@@ -36,7 +36,6 @@ import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.global.Status;
-import edu.wustl.dao.exception.DAOException;
 
 /**
  * AddSpecimenAction gets the Specimen Id from Label or Barcode
@@ -103,7 +102,7 @@ public class AddSpecimenAction extends SecureAction
 				saveErrors(request, errors);
 				return mapping.findForward(Constants.FAILURE);
 			}
-			else if(objSpecimen.getActivityStatus().equals(Constants.ACTIVITY_STATUS_CLOSED ))
+			else if(objSpecimen.getActivityStatus().equals(Status.ACTIVITY_STATUS_CLOSED.toString() ))
 			{
 				/**
 	 			* Name : Falguni Sachde

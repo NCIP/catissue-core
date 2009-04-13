@@ -42,6 +42,7 @@ import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.CommonServiceLocator;
+import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.security.exception.UserNotAuthorizedException;
@@ -414,7 +415,7 @@ public class CreateAliquotAction extends BaseAction
 			aliquotSpecimen.setSpecimenCollectionGroup(scg);
 			aliquotSpecimen.setLineage(Constants.ALIQUOT);
 			aliquotSpecimen.setIsAvailable(Boolean.TRUE);
-			aliquotSpecimen.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+			aliquotSpecimen.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());
 			aliquotSpecimen.setCollectionStatus(Constants.COLLECTION_STATUS_COLLECTED);
 			aliquotSpecimen.setDisposeParentSpecimen(disposeParentSpecimen);
 			SpecimenCharacteristics specimenCharacteristics = new SpecimenCharacteristics();

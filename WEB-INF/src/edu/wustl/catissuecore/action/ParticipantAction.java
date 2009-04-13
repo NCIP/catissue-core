@@ -55,10 +55,9 @@ import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.CommonServiceLocator;
+import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
-import edu.wustl.dao.daofactory.DAOFactory;
-import edu.wustl.dao.exception.DAOException;
 
 /**
  * This class initializes the fields in the Participant Add/Edit webpage.
@@ -214,7 +213,7 @@ public class ParticipantAction extends SecureAction
 					String collectionProtocolRegistrationActivityStausKey = "CollectionProtocolRegistration:"+i+"_activityStatus";
 					if(mapCollectionProtocolRegistration.get(collectionProtocolRegistrationActivityStausKey) == null)
 					{
-						participantForm.setCollectionProtocolRegistrationValue(collectionProtocolRegistrationActivityStausKey, Constants.ACTIVITY_STATUS_ACTIVE);
+						participantForm.setCollectionProtocolRegistrationValue(collectionProtocolRegistrationActivityStausKey, Status.ACTIVITY_STATUS_ACTIVE.toString());
 					}
 				}
 			}
@@ -247,7 +246,7 @@ public class ParticipantAction extends SecureAction
 					{
 						participantForm.setCollectionProtocolRegistrationValue(isConsentAvailableKey,Constants.PARTICIPANT_CONSENT_ENTER_RESPONSE);
 					}
-					participantForm.setCollectionProtocolRegistrationValue(collectionProtocolRegistrationActivityStausKey, Constants.ACTIVITY_STATUS_ACTIVE);
+					participantForm.setCollectionProtocolRegistrationValue(collectionProtocolRegistrationActivityStausKey, Status.ACTIVITY_STATUS_ACTIVE.toString());
 					String collectionProtocolRegistrationDateValue = Utility.parseDateToString(Calendar.getInstance().getTime(), CommonServiceLocator.getInstance().getDatePattern());
 					participantForm.setCollectionProtocolRegistrationValue(collectionProtocolRegistrationDateKey, collectionProtocolRegistrationDateValue);
 					participantForm.setCollectionProtocolRegistrationValueCounter(1);
@@ -262,7 +261,7 @@ public class ParticipantAction extends SecureAction
 			String collectionProtocolRegistrationActivityStausKey = "CollectionProtocolRegistration:1_activityStatus";
 			String collectionProtocolRegistrationDateValue = Utility.parseDateToString(Calendar.getInstance().getTime(), CommonServiceLocator.getInstance().getDatePattern());
 			participantForm.setDefaultCollectionProtocolRegistrationValue(collectionProtocolRegistrationDateKey, collectionProtocolRegistrationDateValue);
-			participantForm.setDefaultCollectionProtocolRegistrationValue(collectionProtocolRegistrationActivityStausKey, Constants.ACTIVITY_STATUS_ACTIVE);
+			participantForm.setDefaultCollectionProtocolRegistrationValue(collectionProtocolRegistrationActivityStausKey, Status.ACTIVITY_STATUS_ACTIVE.toString());
 			participantForm.setCollectionProtocolRegistrationValueCounter(1);
 		}
 		
@@ -465,7 +464,7 @@ public class ParticipantAction extends SecureAction
 			}
 			if(activityStatus == null)
     		{
-				mapCollectionProtocolRegistration.put(isActive, Constants.ACTIVITY_STATUS_ACTIVE);
+				mapCollectionProtocolRegistration.put(isActive, Status.ACTIVITY_STATUS_ACTIVE.toString());
     		}
 			
 			if(activityStatus != null && activityStatus.equalsIgnoreCase(Constants.DISABLED) || (cpId != null && cpId.equalsIgnoreCase("-1")))

@@ -23,12 +23,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.Vector;
 
-import javax.management.openmbean.OpenDataException;
-
 import net.sf.ehcache.CacheException;
-
-import org.hibernate.Session;
-
 import edu.wustl.catissuecore.domain.Capacity;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Container;
@@ -50,10 +45,8 @@ import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
@@ -76,7 +69,6 @@ import edu.wustl.dao.condition.EqualClause;
 import edu.wustl.dao.condition.INClause;
 import edu.wustl.dao.condition.NullClause;
 import edu.wustl.dao.daofactory.DAOConfigFactory;
-import edu.wustl.dao.daofactory.DAOFactory;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.dao.util.HibernateMetaData;
 import edu.wustl.security.exception.SMException;
@@ -113,7 +105,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		try
 		{
 			StorageContainer container = (StorageContainer) obj;
-			container.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+			container.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());
 
 			// Setting the Parent Container if applicable
 			int posOneCapacity = 1, posTwoCapacity = 1;
@@ -3406,7 +3398,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 
 			}
 			if (operation.equals(Constants.ADD)) {
-				if (!Constants.ACTIVITY_STATUS_ACTIVE.equals(container
+				if (!Status.ACTIVITY_STATUS_ACTIVE.equals(container
 						.getActivityStatus())) {
 
 					throw getBizLogicException(null, "activityStatus.active.errMsg", "");
@@ -3731,7 +3723,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 				+ type_id
 				+ "' OR t4.STORAGE_TYPE_ID='1' and t4.STORAGE_CONTAINER_ID not in (select IDENTIFIER from catissue_storage_container where site_id in (select IDENTIFIER from catissue_site s1 where s1.ACTIVITY_STATUS='Closed'))) AND "
 				+ "t1.ACTIVITY_STATUS='"
-				+ Constants.ACTIVITY_STATUS_ACTIVE + "' order by IDENTIFIER";
+				+ Status.ACTIVITY_STATUS_ACTIVE.toString() + "' order by IDENTIFIER";
 
 
 			Logger.out.debug("Storage Container query......................"
@@ -4445,7 +4437,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 
 		// check for closed Site
 		if (site != null) {
-			if (Constants.ACTIVITY_STATUS_CLOSED.equals(site
+			if (Status.ACTIVITY_STATUS_CLOSED.equals(site
 					.getActivityStatus())) {
 				
 				throw getBizLogicException(null, "error.object.closed", "");

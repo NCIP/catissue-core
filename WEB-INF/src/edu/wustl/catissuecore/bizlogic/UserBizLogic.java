@@ -790,13 +790,13 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 		}
 		
 		//If the user is rejected, its record cannot be updated.
-		if (Constants.ACTIVITY_STATUS_REJECT.equals(oldUser.getActivityStatus()))
+		if (Status.ACTIVITY_STATUS_REJECT.equals(oldUser.getActivityStatus()))
 		{
 			
 			throw getBizLogicException(null, "errors.editRejectedUser", "");
 		}
-		else if (Constants.ACTIVITY_STATUS_NEW.equals(oldUser.getActivityStatus())
-				|| Constants.ACTIVITY_STATUS_PENDING.equals(oldUser.getActivityStatus()))
+		else if (Status.ACTIVITY_STATUS_NEW.equals(oldUser.getActivityStatus())
+				|| Status.ACTIVITY_STATUS_PENDING.equals(oldUser.getActivityStatus()))
 		{
 			//If the user is not approved yet, its record cannot be updated.
 			throw getBizLogicException(null, "errors.editNewPendingUser", "");
@@ -1010,7 +1010,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 		{
 			String tmpArray1[] = {Status.ACTIVITY_STATUS.toString()};
 			String tmpArray2[] = {Constants.EQUALS};
-			String tmpArray3[] = {Constants.ACTIVITY_STATUS_ACTIVE};
+			String tmpArray3[] = {Status.ACTIVITY_STATUS_ACTIVE.toString()};
 			whereColumnName = tmpArray1;
 			whereColumnCondition = tmpArray2;
 			whereColumnValue = tmpArray3;
@@ -1020,7 +1020,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 		{
 			String tmpArray1[] = {Status.ACTIVITY_STATUS.toString(), Status.ACTIVITY_STATUS.toString()};
 			String tmpArray2[] = {Constants.EQUALS,Constants.EQUALS};
-			String tmpArray3[] = {Constants.ACTIVITY_STATUS_ACTIVE, Constants.ACTIVITY_STATUS_CLOSED};
+			String tmpArray3[] = {Status.ACTIVITY_STATUS_ACTIVE.toString(), Status.ACTIVITY_STATUS_CLOSED.toString()};
 			whereColumnName = tmpArray1;
 			whereColumnCondition = tmpArray2;
 			whereColumnValue = tmpArray3;
@@ -1145,7 +1145,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 			if (list!=null && !list.isEmpty())
 			{
 				User user = (User) list.get(0);
-				if (user.getActivityStatus().equals(Constants.ACTIVITY_STATUS_ACTIVE))
+				if (user.getActivityStatus().equals(Status.ACTIVITY_STATUS_ACTIVE.toString()))
 				{
 					EmailHandler emailHandler = new EmailHandler();
 
@@ -1269,7 +1269,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 
 				if (operation.equals(Constants.ADD))
 				{
-					if (!Constants.ACTIVITY_STATUS_ACTIVE.equals(user.getActivityStatus()))
+					if (!Status.ACTIVITY_STATUS_ACTIVE.equals(user.getActivityStatus()))
 					{
 						throw getBizLogicException(null, "activityStatus.active.errMsg", "");
 					}

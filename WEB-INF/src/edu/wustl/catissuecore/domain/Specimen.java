@@ -17,6 +17,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
+
 import edu.wustl.catissuecore.actionForm.AliquotForm;
 import edu.wustl.catissuecore.actionForm.CollectionEventParametersForm;
 import edu.wustl.catissuecore.actionForm.CreateSpecimenForm;
@@ -27,7 +29,6 @@ import edu.wustl.catissuecore.bean.ConsentBean;
 import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.bizlogic.IActivityStatus;
@@ -36,6 +37,7 @@ import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.CommonServiceLocator;
+import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
@@ -1265,7 +1267,7 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 	public Specimen(SpecimenRequirement reqSpecimen)
 	{
 		super();
-		this.activityStatus = Constants.ACTIVITY_STATUS_ACTIVE;
+		this.activityStatus = Status.ACTIVITY_STATUS_ACTIVE.toString();
 		this.initialQuantity = new Double(reqSpecimen.getInitialQuantity());
 		this.availableQuantity = new Double(0);
 		this.lineage = reqSpecimen.getLineage();

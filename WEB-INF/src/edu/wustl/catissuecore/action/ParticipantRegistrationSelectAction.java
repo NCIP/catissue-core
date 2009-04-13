@@ -31,6 +31,7 @@ import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IDomainObjectFactory;
+import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
@@ -222,7 +223,7 @@ public class ParticipantRegistrationSelectAction extends CommonAddEditAction{
 			mapCollectionProtocolRegistrationOld.put(collectionProtocolRegistrationDateNew,mapCollectionProtocolRegistration.get(collectionProtocolRegistrationDate));
 			mapCollectionProtocolRegistrationOld.put(collectionProtocolIdentifierNew,mapCollectionProtocolRegistration.get(collectionProtocolIdentifier));
 			mapCollectionProtocolRegistrationOld.put(isConsentAvailableNew,mapCollectionProtocolRegistration.get(isConsentAvailable));
-			String status = Constants.ACTIVITY_STATUS_ACTIVE;
+			String status = Status.ACTIVITY_STATUS_ACTIVE.toString();
 			if(mapCollectionProtocolRegistration.get(isActive)!=null)
 			{
 				status = (String)mapCollectionProtocolRegistration.get(isActive);

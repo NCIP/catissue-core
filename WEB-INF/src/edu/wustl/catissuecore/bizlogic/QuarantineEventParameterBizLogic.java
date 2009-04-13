@@ -83,7 +83,7 @@ public class QuarantineEventParameterBizLogic extends DefaultBizLogic
 			}
 			else
 			{
-				deidentifiedSurgicalPathologyReport.setIsQuarantined(Constants.ACTIVITY_STATUS_ACTIVE);
+				deidentifiedSurgicalPathologyReport.setIsQuarantined(Status.ACTIVITY_STATUS_ACTIVE.toString());
 			}
 			newquarantineParam.setStatus(Constants.COMMENT_STATUS_REPLIED);
 			dao.update(deidentifiedSurgicalPathologyReport);

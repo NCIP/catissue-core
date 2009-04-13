@@ -56,7 +56,6 @@ import edu.wustl.catissuecore.util.SpecimenComparator;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
-import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
@@ -77,8 +76,6 @@ import edu.wustl.dao.DAO;
 import edu.wustl.dao.HibernateDAO;
 import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
-import edu.wustl.dao.daofactory.DAOConfigFactory;
-import edu.wustl.dao.daofactory.DAOFactory;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.security.exception.SMException;
 import edu.wustl.security.global.Permissions;
@@ -1187,7 +1184,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 
 		String hql = " select" + " elements(scg.specimenCollection) " + " from " + " edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg , "
 				+ " edu.wustl.catissuecore.domain.Specimen as s" + " where scg.id = " + scgId + " and"
-				+ " scg.id = s.specimenCollectionGroup.id and " + " s.activityStatus = '" + Constants.ACTIVITY_STATUS_ACTIVE + "'";
+				+ " scg.id = s.specimenCollectionGroup.id and " + " s.activityStatus = '" + Status.ACTIVITY_STATUS_ACTIVE.toString() + "'";
 
 		List specimenList = (List) executeHqlQuery(dao, hql);
 		if ((specimenList != null) && (specimenList).size() > 0)
@@ -1347,7 +1344,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 
 			if (operation.equals(Constants.ADD))
 			{
-				if (!Constants.ACTIVITY_STATUS_ACTIVE.equals(group.getActivityStatus()))
+				if (!Status.ACTIVITY_STATUS_ACTIVE.equals(group.getActivityStatus()))
 				{
 					throw getBizLogicException(null, "activityStatus.active.errMsg", "");
 				}

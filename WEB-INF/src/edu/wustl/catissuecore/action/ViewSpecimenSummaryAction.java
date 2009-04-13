@@ -35,13 +35,13 @@ import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.exception.CatissueException;
 import edu.wustl.catissuecore.util.IdComparator;
 import edu.wustl.catissuecore.util.SpecimenDetailsTagUtil;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.AppUtility;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
-import edu.wustl.dao.exception.DAOException;
+import edu.wustl.common.util.global.Status;
 
 public class ViewSpecimenSummaryAction extends Action {
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
@@ -668,7 +668,7 @@ public class ViewSpecimenSummaryAction extends Action {
         " cp.id = cpr.collectionProtocol.id and" +
         " cpr.id = scg.collectionProtocolRegistration.id and" +
         " scg.id = s.specimenCollectionGroup.id and " +
-        " s.activityStatus = '"+Constants.ACTIVITY_STATUS_ACTIVE+"'";
+        " s.activityStatus = '"+Status.ACTIVITY_STATUS_ACTIVE.toString()+"'";
 		
 		List specimenList=(List)AppUtility.executeQuery(hql);
 		if((specimenList!=null) && (specimenList).size()>0)

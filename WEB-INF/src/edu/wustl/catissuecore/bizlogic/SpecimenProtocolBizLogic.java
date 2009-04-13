@@ -21,6 +21,7 @@ import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.CommonServiceLocator;
+import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.exception.DAOException;
 
@@ -57,13 +58,13 @@ public class SpecimenProtocolBizLogic extends CatissueDefaultBizLogic
 	{
 		String activityStatus =  protocol.getActivityStatus();
 		Logger.out.debug("in setClosedDate of DBZL, ActivityStatus  : "+ activityStatus);
-		if(activityStatus.equalsIgnoreCase(Constants.ACTIVITY_STATUS_CLOSED))
+		if(activityStatus.equalsIgnoreCase(Status.ACTIVITY_STATUS_CLOSED.toString()))
 		{
 			Date currentDate = Calendar.getInstance().getTime();
 			protocol.setEndDate(currentDate);
 			Logger.out.debug("EndDate set");
 		}
-		else if(activityStatus.equalsIgnoreCase(Constants.ACTIVITY_STATUS_ACTIVE))
+		else if(activityStatus.equalsIgnoreCase(Status.ACTIVITY_STATUS_ACTIVE.toString()))
 		{
 			protocol.setEndDate(null);
 			Logger.out.debug("EndDate cleared");

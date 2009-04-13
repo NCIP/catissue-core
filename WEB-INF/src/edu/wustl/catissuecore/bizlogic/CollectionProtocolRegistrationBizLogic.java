@@ -1159,7 +1159,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 		participant.setFirstName("");
 		participant.setMiddleName("");
 		participant.setSocialSecurityNumber(null);
-		participant.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+		participant.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());
 
 		// Create a dummy participant medical identifier.
 		Set partMedIdentifierColl = new HashSet();
@@ -1369,7 +1369,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 		// End
 		if (operation.equals(Constants.ADD))
 		{
-			if (!Constants.ACTIVITY_STATUS_ACTIVE.equals(registration.getActivityStatus()))
+			if (!Status.ACTIVITY_STATUS_ACTIVE.equals(registration.getActivityStatus()))
 			{
 				throw getBizLogicException(null, "activityStatus.active.errMsg", "");
 			}

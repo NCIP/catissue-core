@@ -65,6 +65,7 @@ import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.CommonServiceLocator;
+import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.exception.DAOException;
 
@@ -1226,7 +1227,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 		List specimenDetailList = new ArrayList();
 
-		if (specimenObj.getActivityStatus().equals(Constants.ACTIVITY_STATUS_ACTIVE))
+		if (specimenObj.getActivityStatus().equals(Status.ACTIVITY_STATUS_ACTIVE.toString()))
 		{
 			specimenDetailList.add(specimenObj.getLabel());
 			specimenDetailList.add(specimenObj.getSpecimenType());

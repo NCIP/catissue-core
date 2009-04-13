@@ -448,7 +448,7 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 
 			if (operation.equals(Constants.ADD))
 			{
-				if (!Constants.ACTIVITY_STATUS_ACTIVE.equals(distribution.getActivityStatus()))
+				if (!Status.ACTIVITY_STATUS_ACTIVE.equals(distribution.getActivityStatus()))
 				{
 					throw getBizLogicException(null, "activityStatus.active.errMsg", "");
 				}

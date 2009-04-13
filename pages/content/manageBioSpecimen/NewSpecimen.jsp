@@ -8,7 +8,8 @@
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.NewSpecimenForm"%>
-<%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
+<%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
+<%@ page import="edu.wustl.common.util.global.Status" %>
 <%@ page import="java.util.*"%>
 <%@ page import="java.io.*"%>
 <%@ page import="edu.wustl.common.util.global.ApplicationProperties" %>
@@ -1535,7 +1536,7 @@
 								</td>
 								<td align="left" class="black_ar">
 								<logic:equal name="newSpecimenForm" property="activityStatus" 
-									value="<%=Constants.ACTIVITY_STATUS_CLOSED%>">
+									value="<%=Status.ACTIVITY_STATUS_CLOSED.toString()%>">
 										<autocomplete:AutoCompleteTag property="activityStatus"
 										  optionsList = '${requestScope.specimenActivityStatus}'
 										  onChange=''
@@ -1543,7 +1544,7 @@
 										  styleClass="black_ar" size="25"/>
 								</logic:equal>
 								<logic:notEqual name="newSpecimenForm" property="activityStatus" 
-									value="<%=Constants.ACTIVITY_STATUS_CLOSED%>">
+									value="<%=Status.ACTIVITY_STATUS_CLOSED.toString()%>">
 									<label for="activityStatus">
 										<%=form.getActivityStatus()%>
 									</label>

@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
+
 import edu.wustl.catissuecore.caties.util.CaCoreAPIService;
 import edu.wustl.catissuecore.caties.util.CaTIESConstants;
 import edu.wustl.catissuecore.caties.util.SiteInfoHandler;
@@ -15,6 +16,7 @@ import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -147,7 +149,7 @@ public class HL7ParserUtil
 		Participant participant = new Participant();
 		try
 		{
-			participant.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+			participant.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());
 			ParticipantMedicalIdentifier medicalIdentification = null;
 			Collection<ParticipantMedicalIdentifier> medicalIdentificationCollection = null;
 			String field = null;

@@ -47,9 +47,9 @@ import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.CommonServiceLocator;
+import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
-import edu.wustl.dao.exception.DAOException;
 
 /**
  * ParticipantForm Class is used to encapsulate all the request parameters passed 
@@ -760,7 +760,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 
 				if (value6 == null)
 				{
-					value6 = Constants.ACTIVITY_STATUS_ACTIVE;
+					value6 = Status.ACTIVITY_STATUS_ACTIVE.toString();
 				}
 				if (value6.equalsIgnoreCase(Constants.DISABLED))
 				{

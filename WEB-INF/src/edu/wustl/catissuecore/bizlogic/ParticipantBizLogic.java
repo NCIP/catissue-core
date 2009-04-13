@@ -153,7 +153,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		{
 			CollectionProtocolRegistration cpr = (CollectionProtocolRegistration) itcprCollection.next();
 			cpr.setParticipant(participant);
-			cpr.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+			cpr.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());
 			cprBizLogic.insert(cpr, dao, sessionDataBean);
 			cprIdList.add(cpr.getId());
 		}
@@ -416,7 +416,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 
 					if (collectionProtReg.getId() == null) // If Collection Protocol Registration is not happened for given participant
 					{
-						collectionProtReg.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+						collectionProtReg.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());
 						cprBizLogic.insert(collectionProtReg, dao, sessionDataBean);
 						cprIdList.add(collectionProtReg.getId());
 						continue;
@@ -573,7 +573,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 				+ " edu.wustl.catissuecore.domain.CollectionProtocolRegistration as cpr"
 				+ ", edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg" + ", edu.wustl.catissuecore.domain.Specimen as s"
 				+ " where cpr.id = " + cprId + " and " + " cpr.id = scg.collectionProtocolRegistration.id and"
-				+ " scg.id = s.specimenCollectionGroup.id and " + " s.activityStatus = '" + Constants.ACTIVITY_STATUS_ACTIVE + "'";
+				+ " scg.id = s.specimenCollectionGroup.id and " + " s.activityStatus = '" + Status.ACTIVITY_STATUS_ACTIVE.toString() + "'";
 
 		List scgList = (List) executeHqlQuery(dao, hql);
 		if ((scgList != null) && (scgList).size() > 0)
@@ -595,7 +595,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 			+ ", edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg" + ", edu.wustl.catissuecore.domain.Specimen as s"
 			+ " where p.id = " + participantId + " and" + " p.id = cpr.participant.id and"
 			+ " cpr.id = scg.collectionProtocolRegistration.id and" + " scg.id = s.specimenCollectionGroup.id and " + " s.activityStatus = '"
-			+ Constants.ACTIVITY_STATUS_ACTIVE + "'";
+			+ Status.ACTIVITY_STATUS_ACTIVE.toString() + "'";
 
 			List specimenList = (List) executeHqlQuery(dao, hql);
 			if ((specimenList != null) && (specimenList).size() > 0)
@@ -850,7 +850,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 
 		if (operation.equals(Constants.ADD))
 		{
-			if (!Constants.ACTIVITY_STATUS_ACTIVE.equals(participant.getActivityStatus()))
+			if (!Status.ACTIVITY_STATUS_ACTIVE.equals(participant.getActivityStatus()))
 			{
 				throw getBizLogicException(null, "activityStatus.active.errMsg", "");
 			}

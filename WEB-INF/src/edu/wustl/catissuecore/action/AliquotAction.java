@@ -642,7 +642,7 @@ public class AliquotAction extends SecureAction
 		{
 			Specimen specimen = (Specimen) specimenList.get(0);
 			
-			if(specimen.getActivityStatus().equals(Constants.ACTIVITY_STATUS_CLOSED))
+			if(specimen.getActivityStatus().equals(Status.ACTIVITY_STATUS_CLOSED.toString()))
 			{
 				/**
 	 			* Name : Virender Mehta

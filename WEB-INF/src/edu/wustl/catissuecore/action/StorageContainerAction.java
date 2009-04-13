@@ -306,7 +306,7 @@ public class StorageContainerAction extends SecureAction
 		 * Bug ID: 4922
 		 * Description: get the list of site with activity status "Active"  
 	    */
-		String[] activityStatusArray = {Status.ACTIVITY_STATUS_DISABLED.toString(),Constants.ACTIVITY_STATUS_CLOSED};
+		String[] activityStatusArray = {Status.ACTIVITY_STATUS_DISABLED.toString(),Status.ACTIVITY_STATUS_CLOSED.toString()};
 		SessionDataBean sessionDataBean = getSessionData(request);
 		
 		//List list = bizLogic.getSiteList(Site.class.getName(), siteDisplayField, valueField,activityStatusArray, false);
