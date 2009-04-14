@@ -102,7 +102,7 @@ public class DefaultValueManager
 					Object[] whereColumnValue =
 					{Constants.NOT_SPECIFIED, "Clinical_Diagnosis_PID"};
 
-					String joinCondition = null;
+					String joinCondition = edu.wustl.common.util.global.Constants.AND_JOIN_CONDITION;
 					List clinicalDiagnosisList = new ArrayList();
 					IBizLogic bizLogic = new DefaultBizLogic();
 					try
