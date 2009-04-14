@@ -24,7 +24,7 @@ import edu.wustl.simplequery.query.ShoppingCart;
  * ShoppingCartBizLogic provides the shopping cart functionality.
  * @author aniruddha_phadnis
  */
-public class ShoppingCartBizLogic extends DefaultBizLogic
+public class ShoppingCartBizLogic extends CatissueDefaultBizLogic
 {
 	public void add(ShoppingCart cart,Object obj[]) throws BizLogicException
     {

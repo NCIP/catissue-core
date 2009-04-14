@@ -31,7 +31,7 @@ import edu.wustl.dao.exception.DAOException;
  * StorageTypeHDAO is used to add site type information into the database using Hibernate.
  * @author vaishali_khandelwal
  */
-public class StorageTypeBizLogic extends DefaultBizLogic
+public class StorageTypeBizLogic extends CatissueDefaultBizLogic
 {
 
 	/**

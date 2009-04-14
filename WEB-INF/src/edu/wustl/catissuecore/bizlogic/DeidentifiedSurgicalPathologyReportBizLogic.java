@@ -28,7 +28,7 @@ import edu.wustl.security.global.Permissions;
  * Used to store deidentified pathology report to the database 
  *
  */
-public class DeidentifiedSurgicalPathologyReportBizLogic extends DefaultBizLogic
+public class DeidentifiedSurgicalPathologyReportBizLogic extends CatissueDefaultBizLogic
 {	
 	/**
 	 * Saves the Deidentified pathology reportobject in the database.

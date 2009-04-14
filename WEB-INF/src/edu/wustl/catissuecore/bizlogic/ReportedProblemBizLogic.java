@@ -23,7 +23,7 @@ import edu.wustl.dao.exception.DAOException;
  * TODO To change the template for this generated type comment go to
  * Window - Preferences - Java - Code Style - Code Templates
  */
-public class ReportedProblemBizLogic extends DefaultBizLogic
+public class ReportedProblemBizLogic extends CatissueDefaultBizLogic
 {
 
     /* (non-Javadoc)

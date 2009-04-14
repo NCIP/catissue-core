@@ -15,7 +15,7 @@ import edu.wustl.dao.exception.DAOException;
 import edu.wustl.security.exception.UserNotAuthorizedException;
 
 
-public class RequirementSpecimenBizLogic extends DefaultBizLogic
+public class RequirementSpecimenBizLogic extends CatissueDefaultBizLogic
 {
 	/**
 	 * Saves the Specimen object in the database.

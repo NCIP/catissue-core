@@ -23,7 +23,7 @@ import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
 import edu.wustl.dao.exception.DAOException;
 
-public class InstitutionBizLogic extends DefaultBizLogic
+public class InstitutionBizLogic extends CatissueDefaultBizLogic
 {
     
 	protected boolean validate(Object obj, DAO dao, String operation) throws BizLogicException

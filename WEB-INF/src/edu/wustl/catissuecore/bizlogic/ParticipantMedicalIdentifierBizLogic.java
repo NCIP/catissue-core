@@ -19,7 +19,7 @@ import edu.wustl.common.util.global.Validator;
 import edu.wustl.dao.DAO;
 
 
-public class ParticipantMedicalIdentifierBizLogic extends DefaultBizLogic
+public class ParticipantMedicalIdentifierBizLogic extends CatissueDefaultBizLogic
 {
 
 	protected boolean validate(Object obj, DAO dao, String operation) throws BizLogicException

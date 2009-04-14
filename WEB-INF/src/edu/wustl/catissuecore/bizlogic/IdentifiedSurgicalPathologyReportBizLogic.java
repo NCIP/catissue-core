@@ -30,7 +30,7 @@ import edu.wustl.security.manager.SecurityManagerFactory;
  *
  */
 
-public class IdentifiedSurgicalPathologyReportBizLogic  extends DefaultBizLogic
+public class IdentifiedSurgicalPathologyReportBizLogic  extends CatissueDefaultBizLogic
 {
 	
 	/**

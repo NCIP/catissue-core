@@ -17,7 +17,7 @@ import edu.wustl.dao.exception.DAOException;
  * This class is used add, update and retrieve text contents on the surgical pathology reports 
  * information using Hibernate.
  */
-public class TextReportContentBizLogic extends DefaultBizLogic
+public class TextReportContentBizLogic extends CatissueDefaultBizLogic
 {
 
 

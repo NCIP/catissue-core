@@ -19,7 +19,7 @@ import edu.wustl.security.exception.UserNotAuthorizedException;
  * @author vijay_pande
  * 
  */
-public class QuarantineEventParameterBizLogic extends DefaultBizLogic
+public class QuarantineEventParameterBizLogic extends CatissueDefaultBizLogic
 {
 	/**
 	 * Saves the Pathology Report Quarantine Event Parameter object in the database.

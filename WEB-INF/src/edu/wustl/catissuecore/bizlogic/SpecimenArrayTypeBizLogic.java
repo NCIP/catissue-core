@@ -29,7 +29,7 @@ import edu.wustl.dao.exception.DAOException;
  * @author Ashwin Gupta
  * @version 1.1
  */
-public class SpecimenArrayTypeBizLogic extends DefaultBizLogic
+public class SpecimenArrayTypeBizLogic extends CatissueDefaultBizLogic
 {
 
 	/* (non-Javadoc)

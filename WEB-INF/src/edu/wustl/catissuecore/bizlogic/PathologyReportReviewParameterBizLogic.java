@@ -20,7 +20,7 @@ import gov.nih.nci.security.authorization.domainobjects.Role;
  * @author vijay_pande
  * 
  */
-public class PathologyReportReviewParameterBizLogic extends DefaultBizLogic
+public class PathologyReportReviewParameterBizLogic extends CatissueDefaultBizLogic
 {
 	/**
 	 * Saves the Pathology Report Review Parameter object in the database.

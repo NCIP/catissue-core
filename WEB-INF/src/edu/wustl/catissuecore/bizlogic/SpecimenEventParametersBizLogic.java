@@ -66,7 +66,7 @@ import edu.wustl.security.exception.UserNotAuthorizedException;
  * This class contains the Business Logic for all EventParameters Classes.
  * This will be the class which will be used for data transactions of the EventParameters. 
  */
-public class SpecimenEventParametersBizLogic extends DefaultBizLogic
+public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 {
 
 	/**

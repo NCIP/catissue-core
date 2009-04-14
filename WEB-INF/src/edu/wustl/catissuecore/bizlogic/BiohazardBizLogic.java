@@ -25,7 +25,7 @@ import edu.wustl.dao.DAO;
  * BiohazardHDAO is used to add biohazard information into the database using Hibernate.
  * @author aniruddha_phadnis
  */
-public class BiohazardBizLogic extends DefaultBizLogic
+public class BiohazardBizLogic extends CatissueDefaultBizLogic
 {
 
 	/**
