@@ -25,7 +25,7 @@ public final class ForwardToFactory implements IForwordToFactory
 	/*
 	 * Private constructor
 	 */
-	private ForwardToFactory ()
+	public ForwardToFactory ()
 	{
 		
 	}
