@@ -36,7 +36,7 @@ public class BizLogicFactory implements IFactory
 		factory = new BizLogicFactory();
 	}
 	
-	protected BizLogicFactory()
+	public BizLogicFactory()
 	{
 	}
 	
