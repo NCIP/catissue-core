@@ -13,10 +13,11 @@ import javax.servlet.http.HttpServletRequest;
 
 import edu.wustl.catissuecore.actionForm.EventParametersForm;
 import edu.wustl.catissuecore.actionForm.MolecularSpecimenReviewParametersForm;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 
 /**
  * @author mandar_deshmukh
@@ -73,7 +74,8 @@ public class MolecularSpecimenReviewParametersAction extends SpecimenEventParame
 
         if(specimenID != null)
         {
-            DefaultBizLogic  specimenBizLogic = (DefaultBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
+        	IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+            DefaultBizLogic  specimenBizLogic = (DefaultBizLogic)factory.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
             Object object = specimenBizLogic.retrieve(Specimen.class.getName(), new Long(specimenID));
             if(object != null)
             {

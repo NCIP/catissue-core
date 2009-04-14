@@ -32,7 +32,6 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
 import edu.wustl.catissuecore.bizlogic.AnnotationUtil;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolRegistrationBizLogic;
 import edu.wustl.catissuecore.bizlogic.IdentifiedSurgicalPathologyReportBizLogic;
 import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
@@ -63,6 +62,8 @@ import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.Status;
@@ -76,6 +77,7 @@ import edu.wustl.dao.exception.DAOException;
  */
 public class SpecimenCollectionGroupAction extends SecureAction
 {
+
 	/**
 	 * Overrides the execute method of Action class.
 	 * @param mapping object of ActionMapping
@@ -84,19 +86,19 @@ public class SpecimenCollectionGroupAction extends SecureAction
 	 * @param response object of HttpServletResponse
 	 * @throws Exception generic exception
 	 */
-	public ActionForward executeSecureAction(ActionMapping mapping,
-			final ActionForm form, final HttpServletRequest request,
-			final HttpServletResponse response)
-			throws Exception
+	public ActionForward executeSecureAction(ActionMapping mapping, final ActionForm form,
+			final HttpServletRequest request, final HttpServletResponse response) throws Exception
 	{
 		//changes made by Baljeet
 		String treeRefresh = request.getParameter("refresh");
 		request.setAttribute("refresh", treeRefresh);
-		String test = (String)request.getParameter("clinicalDiagnosis");
+		String test = (String) request.getParameter("clinicalDiagnosis");
 		SpecimenCollectionGroupForm specimenCollectionGroupForm = (SpecimenCollectionGroupForm) form;
-		request.setAttribute("clinicalDiagnosis", specimenCollectionGroupForm.getClinicalDiagnosis());
+		request.setAttribute("clinicalDiagnosis", specimenCollectionGroupForm
+				.getClinicalDiagnosis());
 		specimenCollectionGroupForm.setClinicalDiagnosis(test);
-		IBizLogic bizLogicObj = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		IBizLogic bizLogicObj = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 		Logger.out.debug("SCGA : " + specimenCollectionGroupForm.getId());
 		String nodeId = null;
 		/**
@@ -144,57 +146,67 @@ public class SpecimenCollectionGroupAction extends SecureAction
 		String selectedParticipantOrPPIdentifier_id = null;
 		// Radio button for Protocol Participant Identifier or Participant
 		String radioButtonSelectedForType = null;
-		String selectedCollectionProtocol_id = String.valueOf(specimenCollectionGroupForm.getCollectionProtocolId());
-		if (selectedCollectionProtocol_id.equalsIgnoreCase(Constants.SELECTED_COLLECTION_PROTOCOL_ID))
+		String selectedCollectionProtocol_id = String.valueOf(specimenCollectionGroupForm
+				.getCollectionProtocolId());
+		if (selectedCollectionProtocol_id
+				.equalsIgnoreCase(Constants.SELECTED_COLLECTION_PROTOCOL_ID))
 		{
 			Map forwardToHashMap = (Map) request.getAttribute(Constants.FORWARD_TO_HASHMAP);
 			if (forwardToHashMap != null)
 			{
-				selectedCollectionProtocol_id = forwardToHashMap.get(Constants.COLLECTION_PROTOCOL_ID).toString();
-				selectedParticipantOrPPIdentifier_id = forwardToHashMap.get(Constants.PARTICIPANT_ID).toString();
+				selectedCollectionProtocol_id = forwardToHashMap.get(
+						Constants.COLLECTION_PROTOCOL_ID).toString();
+				selectedParticipantOrPPIdentifier_id = forwardToHashMap.get(
+						Constants.PARTICIPANT_ID).toString();
 				radioButtonSelectedForType = Constants.PARTICIPANT_ID;
 				if (selectedParticipantOrPPIdentifier_id.equals("0"))
 				{
-					selectedParticipantOrPPIdentifier_id = forwardToHashMap.get(Constants.PARTICIPANT_PROTOCOL_ID).toString();
+					selectedParticipantOrPPIdentifier_id = forwardToHashMap.get(
+							Constants.PARTICIPANT_PROTOCOL_ID).toString();
 					radioButtonSelectedForType = Constants.PARTICIPANT_PROTOCOL_ID;
 				}
 			}
 		}
 		else
 		{
-//			radioButtonSelected = (int) specimenCollectionGroupForm.getRadioButtonForParticipant();
-//			if (radioButtonSelected == 1)
-			if(specimenCollectionGroupForm.getParticipantId() >0 )
+			//			radioButtonSelected = (int) specimenCollectionGroupForm.getRadioButtonForParticipant();
+			//			if (radioButtonSelected == 1)
+			if (specimenCollectionGroupForm.getParticipantId() > 0)
 			{
-				selectedParticipantOrPPIdentifier_id = Long.toString(specimenCollectionGroupForm.getParticipantId());
+				selectedParticipantOrPPIdentifier_id = Long.toString(specimenCollectionGroupForm
+						.getParticipantId());
 				radioButtonSelectedForType = Constants.PARTICIPANT_ID;
 			}
 			else
 			{
-				selectedParticipantOrPPIdentifier_id = specimenCollectionGroupForm.getProtocolParticipantIdentifier();
+				selectedParticipantOrPPIdentifier_id = specimenCollectionGroupForm
+						.getProtocolParticipantIdentifier();
 				radioButtonSelectedForType = Constants.PARTICIPANT_PROTOCOL_ID;
 			}
 		}
 		CollectionProtocolRegistration collectionProtocolRegistration = null;
-		if (selectedParticipantOrPPIdentifier_id != null && !(selectedParticipantOrPPIdentifier_id.equalsIgnoreCase("0")))
+		if (selectedParticipantOrPPIdentifier_id != null
+				&& !(selectedParticipantOrPPIdentifier_id.equalsIgnoreCase("0")))
 		{
 			//Get CollectionprotocolRegistration Object
-			collectionProtocolRegistration = getcollectionProtocolRegistrationObj(selectedParticipantOrPPIdentifier_id,
-					selectedCollectionProtocol_id, radioButtonSelectedForType);
+			collectionProtocolRegistration = getcollectionProtocolRegistrationObj(
+					selectedParticipantOrPPIdentifier_id, selectedCollectionProtocol_id,
+					radioButtonSelectedForType);
 		}
 		else if (specimenCollectionGroupForm.getId() != 0)
 		{
 			//Get CollectionprotocolRegistration Object
-			SpecimenCollectionGroupBizLogic specimenCollectiongroupBizLogic = (SpecimenCollectionGroupBizLogic) BizLogicFactory.getInstance()
+			SpecimenCollectionGroupBizLogic specimenCollectiongroupBizLogic = (SpecimenCollectionGroupBizLogic) factory
 					.getBizLogic(Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);
-			collectionProtocolRegistration = (CollectionProtocolRegistration) specimenCollectiongroupBizLogic.retrieveAttribute(
-					SpecimenCollectionGroup.class.getName(), specimenCollectionGroupForm.getId(), "collectionProtocolRegistration");
+			collectionProtocolRegistration = (CollectionProtocolRegistration) specimenCollectiongroupBizLogic
+					.retrieveAttribute(SpecimenCollectionGroup.class.getName(),
+							specimenCollectionGroupForm.getId(), "collectionProtocolRegistration");
 		}
 		User witness = null;
 		if (collectionProtocolRegistration.getId() != null)
 		{
-			witness = (User) bizLogicObj.retrieveAttribute(CollectionProtocolRegistration.class.getName(), collectionProtocolRegistration.getId(),
-					"consentWitness");
+			witness = (User) bizLogicObj.retrieveAttribute(CollectionProtocolRegistration.class
+					.getName(), collectionProtocolRegistration.getId(), "consentWitness");
 		}
 		//User witness= userObj.getConsentWitness();
 		//Resolved Lazy 
@@ -208,18 +220,21 @@ public class SpecimenCollectionGroupAction extends SecureAction
 			String witnessFullName = witness.getLastName() + ", " + witness.getFirstName();
 			specimenCollectionGroupForm.setWitnessName(witnessFullName);
 		}
-		String getConsentDate = Utility
-				.parseDateToString(collectionProtocolRegistration.getConsentSignatureDate(), CommonServiceLocator.getInstance().getDatePattern());
+		String getConsentDate = Utility.parseDateToString(collectionProtocolRegistration
+				.getConsentSignatureDate(), CommonServiceLocator.getInstance().getDatePattern());
 		specimenCollectionGroupForm.setConsentDate(getConsentDate);
-		String getSignedConsentURL = Utility.toString(collectionProtocolRegistration.getSignedConsentDocumentURL());
+		String getSignedConsentURL = Utility.toString(collectionProtocolRegistration
+				.getSignedConsentDocumentURL());
 		specimenCollectionGroupForm.setSignedConsentUrl(getSignedConsentURL);
 		//Set witnessName,ConsentDate and SignedConsentURL			
 		//Resolved Lazy ----collectionProtocolRegistration.getConsentTierResponseCollection()
-		Collection consentTierResponseCollection = (Collection) bizLogicObj.retrieveAttribute(CollectionProtocolRegistration.class.getName(),
-				collectionProtocolRegistration.getId(), "elements(consentTierResponseCollection)");
+		Collection consentTierResponseCollection = (Collection) bizLogicObj.retrieveAttribute(
+				CollectionProtocolRegistration.class.getName(), collectionProtocolRegistration
+						.getId(), "elements(consentTierResponseCollection)");
 		Set participantResponseSet = (Set) consentTierResponseCollection;
 		List participantResponseList = new ArrayList(participantResponseSet);
-		specimenCollectionGroupForm.setCollectionProtocolRegistrationId(collectionProtocolRegistration.getId());
+		specimenCollectionGroupForm
+				.setCollectionProtocolRegistrationId(collectionProtocolRegistration.getId());
 		if (operation.equalsIgnoreCase(Constants.ADD))
 		{
 			ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
@@ -237,7 +252,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 		else
 		{
 			String scgID = String.valueOf(specimenCollectionGroupForm.getId());
-			SpecimenCollectionGroup specimenCollectionGroup= AppUtility.getSCGObj(scgID);
+			SpecimenCollectionGroup specimenCollectionGroup = AppUtility.getSCGObj(scgID);
 			//List added for grid
 			List specimenDetails = new ArrayList();
 			getSpecimenDetails(specimenCollectionGroup, specimenDetails);
@@ -245,13 +260,16 @@ public class SpecimenCollectionGroupAction extends SecureAction
 			//Resolved Lazy
 			//Collection consentResponse = specimenCollectionGroup.getCollectionProtocolRegistration().getConsentTierResponseCollection();
 			//Collection consentResponseStatuslevel= specimenCollectionGroup.getConsentTierStatusCollection();
-			Collection consentResponse = (Collection) bizLogicObj.retrieveAttribute(SpecimenCollectionGroup.class.getName(), specimenCollectionGroup
-					.getId(), "elements(collectionProtocolRegistration.consentTierResponseCollection)");
-			Collection consentResponseStatuslevel = (Collection) bizLogicObj.retrieveAttribute(SpecimenCollectionGroup.class.getName(),
-					specimenCollectionGroup.getId(), "elements(consentTierStatusCollection)");
-			String scgResponsekey =  "_specimenCollectionGroupLevelResponse";
+			Collection consentResponse = (Collection) bizLogicObj.retrieveAttribute(
+					SpecimenCollectionGroup.class.getName(), specimenCollectionGroup.getId(),
+					"elements(collectionProtocolRegistration.consentTierResponseCollection)");
+			Collection consentResponseStatuslevel = (Collection) bizLogicObj.retrieveAttribute(
+					SpecimenCollectionGroup.class.getName(), specimenCollectionGroup.getId(),
+					"elements(consentTierStatusCollection)");
+			String scgResponsekey = "_specimenCollectionGroupLevelResponse";
 			String scgResponseIDkey = "_specimenCollectionGroupLevelResponseID";
-			Map tempMap=ConsentUtil.prepareSCGResponseMap(consentResponseStatuslevel, consentResponse,scgResponsekey,scgResponseIDkey);
+			Map tempMap = ConsentUtil.prepareSCGResponseMap(consentResponseStatuslevel,
+					consentResponse, scgResponsekey, scgResponseIDkey);
 			specimenCollectionGroupForm.setConsentResponseForScgValues(tempMap);
 			specimenCollectionGroupForm.setConsentTierCounter(participantResponseList.size());
 			HttpSession session = request.getSession();
@@ -259,7 +277,8 @@ public class SpecimenCollectionGroupAction extends SecureAction
 			session.setAttribute(Constants.COLUMNLIST, columnList);
 		}
 		List specimenCollectionGroupResponseList = AppUtility.responceList(operation);
-		request.setAttribute(Constants.LIST_OF_SPECIMEN_COLLECTION_GROUP, specimenCollectionGroupResponseList);
+		request.setAttribute(Constants.LIST_OF_SPECIMEN_COLLECTION_GROUP,
+				specimenCollectionGroupResponseList);
 
 		String tabSelected = request.getParameter(Constants.SELECTED_TAB);
 		if (tabSelected != null)
@@ -270,15 +289,15 @@ public class SpecimenCollectionGroupAction extends SecureAction
 		//	For Consent Tracking (Virender Mehta)	    -  End
 
 		// get list of Protocol title.
-		SpecimenCollectionGroupBizLogic bizLogic = (SpecimenCollectionGroupBizLogic) BizLogicFactory.getInstance().getBizLogic(
-				Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);
+		SpecimenCollectionGroupBizLogic bizLogic = (SpecimenCollectionGroupBizLogic) factory
+				.getBizLogic(Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);
 		//populating protocolist bean.
 		String sourceObjectName = CollectionProtocol.class.getName();
 		String[] displayNameFields = {"shortTitle"};
 		String valueField = Constants.SYSTEM_IDENTIFIER;
 		List list = bizLogic.getList(sourceObjectName, displayNameFields, valueField, true);
 		request.setAttribute(Constants.PROTOCOL_LIST, list);
-		
+
 		//Populating the Site Type bean
 		sourceObjectName = Site.class.getName();
 		String[] siteDisplaySiteFields = {"name"};
@@ -292,20 +311,23 @@ public class SpecimenCollectionGroupAction extends SecureAction
 		//Populating the protocol participants id registered to a given protocol
 		//By Abhishek Mehta -Performance Enhancement
 		//loadPaticipantNumberList(specimenCollectionGroupForm.getCollectionProtocolId(),bizLogic,request);
-		String protocolParticipantId = specimenCollectionGroupForm.getProtocolParticipantIdentifier();
+		String protocolParticipantId = specimenCollectionGroupForm
+				.getProtocolParticipantIdentifier();
 		//Populating the participants Medical Identifier for a given participant
-		loadParticipantMedicalIdentifier(specimenCollectionGroupForm.getParticipantId(), bizLogic, request);
+		loadParticipantMedicalIdentifier(specimenCollectionGroupForm.getParticipantId(), bizLogic,
+				request);
 
 		//Load Clinical status for a given study calander event point
 		String changeOn = request.getParameter(Constants.CHANGE_ON);
-		
+
 		if (changeOn != null && changeOn.equals(Constants.COLLECTION_PROTOCOL_ID))
 		{
 			specimenCollectionGroupForm.setCollectionProtocolEventId(new Long(-1));
 		}
 
 		//Populating the Collection Protocol Events
-		loadCollectionProtocolEvent(specimenCollectionGroupForm.getCollectionProtocolId(), bizLogic, request, specimenCollectionGroupForm);
+		loadCollectionProtocolEvent(specimenCollectionGroupForm.getCollectionProtocolId(),
+				bizLogic, request, specimenCollectionGroupForm);
 
 		Object CPEObject = bizLogic.retrieve(CollectionProtocolEvent.class.getName(), new Long(
 				specimenCollectionGroupForm.getCollectionProtocolEventId()));
@@ -318,31 +340,36 @@ public class SpecimenCollectionGroupAction extends SecureAction
 		}
 
 		// populating clinical Diagnosis field 
-//		CDE cde = CDEManager.getCDEManager().getCDE(Constants.CDE_NAME_CLINICAL_DIAGNOSIS);
-//		CDEBizLogic cdeBizLogic = (CDEBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.CDE_FORM_ID);
-//		List clinicalDiagnosisList = new ArrayList();
-//		clinicalDiagnosisList.add(new NameValueBean(Constants.SELECT_OPTION, "" + Constants.SELECT_OPTION_VALUE));
-//		cdeBizLogic.getFilteredCDE(cde.getPermissibleValues(), clinicalDiagnosisList);
-//		request.setAttribute(Constants.CLINICAL_DIAGNOSIS_LIST, clinicalDiagnosisList);
+		//		CDE cde = CDEManager.getCDEManager().getCDE(Constants.CDE_NAME_CLINICAL_DIAGNOSIS);
+		//		CDEBizLogic cdeBizLogic = (CDEBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.CDE_FORM_ID);
+		//		List clinicalDiagnosisList = new ArrayList();
+		//		clinicalDiagnosisList.add(new NameValueBean(Constants.SELECT_OPTION, "" + Constants.SELECT_OPTION_VALUE));
+		//		cdeBizLogic.getFilteredCDE(cde.getPermissibleValues(), clinicalDiagnosisList);
+		//		request.setAttribute(Constants.CLINICAL_DIAGNOSIS_LIST, clinicalDiagnosisList);
 		//request.getSession().setAttribute(Constants.CLINICAL_DIAGNOSIS_LIST, clinicalDiagnosisList);
 
 		// populating clinical Status field
 		//		NameValueBean undefinedVal = new NameValueBean(Constants.UNDEFINED,Constants.UNDEFINED);
-		List clinicalStatusList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_CLINICAL_STATUS, null);
+		List clinicalStatusList = CDEManager.getCDEManager().getPermissibleValueList(
+				Constants.CDE_NAME_CLINICAL_STATUS, null);
 		request.setAttribute(Constants.CLINICAL_STATUS_LIST, clinicalStatusList);
 
 		//Sets the activityStatusList attribute to be used in the Site Add/Edit Page.
 		request.setAttribute(Constants.ACTIVITYSTATUSLIST, Constants.ACTIVITY_STATUS_VALUES);
 		//Sets the collectionStatusList attribute to be used in the Site Add/Edit Page.
-		request.setAttribute(Constants.COLLECTIONSTATUSLIST, Constants.SCG_COLLECTION_STATUS_VALUES);
+		request
+				.setAttribute(Constants.COLLECTIONSTATUSLIST,
+						Constants.SCG_COLLECTION_STATUS_VALUES);
 		//fix for bug no.7390
-		if(specimenCollectionGroupForm.getCollectionStatus()==null)
+		if (specimenCollectionGroupForm.getCollectionStatus() == null)
 		{
 			specimenCollectionGroupForm.setCollectionStatus(Constants.COLLECTION_STATUS_PENDING);
 		}
 		//end for fix. Bug no.7390
-		Logger.out.debug("CP ID in SCG Action======>" + specimenCollectionGroupForm.getCollectionProtocolId());
-		Logger.out.debug("Participant ID in SCG Action=====>" + specimenCollectionGroupForm.getParticipantId() + "  "
+		Logger.out.debug("CP ID in SCG Action======>"
+				+ specimenCollectionGroupForm.getCollectionProtocolId());
+		Logger.out.debug("Participant ID in SCG Action=====>"
+				+ specimenCollectionGroupForm.getParticipantId() + "  "
 				+ specimenCollectionGroupForm.getProtocolParticipantIdentifier());
 
 		/**
@@ -352,8 +379,8 @@ public class SpecimenCollectionGroupAction extends SecureAction
 		 */
 		// -------called from Collection Protocol Registration start-------------------------------
 		if ((request.getAttribute(Constants.SUBMITTED_FOR) != null)
-				&& ((request.getAttribute(Constants.SUBMITTED_FOR).equals("Default")) || (request.getAttribute(Constants.SUBMITTED_FOR)
-						.equals(Constants.ADDNEW_LINK))))
+				&& ((request.getAttribute(Constants.SUBMITTED_FOR).equals("Default")) || (request
+						.getAttribute(Constants.SUBMITTED_FOR).equals(Constants.ADDNEW_LINK))))
 		{
 			Logger.out.debug("Populating CP and Participant in SCG ====  AddNew operation loop");
 
@@ -361,7 +388,8 @@ public class SpecimenCollectionGroupAction extends SecureAction
 
 			if (cprId != null)
 			{
-				Object CPRObject = bizLogic.retrieve(CollectionProtocolRegistration.class.getName(), cprId);
+				Object CPRObject = bizLogic.retrieve(
+						CollectionProtocolRegistration.class.getName(), cprId);
 				if (CPRObject != null)
 				{
 					CollectionProtocolRegistration cpr = (CollectionProtocolRegistration) CPRObject;
@@ -370,7 +398,8 @@ public class SpecimenCollectionGroupAction extends SecureAction
 					long pID = cpr.getParticipant().getId().longValue();
 					String ppID = cpr.getProtocolParticipantIdentifier();
 
-					Logger.out.debug("cpID : " + cpID + "   ||  pID : " + pID + "    || ppID : " + ppID);
+					Logger.out.debug("cpID : " + cpID + "   ||  pID : " + pID + "    || ppID : "
+							+ ppID);
 
 					specimenCollectionGroupForm.setCollectionProtocolId(cpID);
 
@@ -385,18 +414,21 @@ public class SpecimenCollectionGroupAction extends SecureAction
 					 * Reviewer Name: Aarti Sharma
 					 * participant associated with collection protocol is explicitly retrived from DB since its lazy load property is true
 					 */
-					Participant cprParticipant = (Participant) bizLogic.retrieveAttribute(CollectionProtocolRegistration.class.getName(),
-							cpr.getId(), Constants.COLUMN_NAME_PARTICIPANT);
+					Participant cprParticipant = (Participant) bizLogic.retrieveAttribute(
+							CollectionProtocolRegistration.class.getName(), cpr.getId(),
+							Constants.COLUMN_NAME_PARTICIPANT);
 					// set participant id in request. This is required only in CP based View since SpecimenTreeView.jsp is retrieveing participant id from request
 					if (cprParticipant.getId() != null)
 					{
-						request.setAttribute(Constants.CP_SEARCH_PARTICIPANT_ID, cprParticipant.getId().toString());
+						request.setAttribute(Constants.CP_SEARCH_PARTICIPANT_ID, cprParticipant
+								.getId().toString());
 					}
 					String firstName = Utility.toString(cprParticipant.getFirstName());
 					String lastName = Utility.toString(cprParticipant.getLastName());
 					String birthDate = Utility.toString(cprParticipant.getBirthDate());
 					String ssn = Utility.toString(cprParticipant.getSocialSecurityNumber());
-					if (firstName.trim().length() > 0 || lastName.trim().length() > 0 || birthDate.trim().length() > 0 || ssn.trim().length() > 0)
+					if (firstName.trim().length() > 0 || lastName.trim().length() > 0
+							|| birthDate.trim().length() > 0 || ssn.trim().length() > 0)
 					{
 						specimenCollectionGroupForm.setParticipantId(pID);
 						specimenCollectionGroupForm.setRadioButtonForParticipant(1);
@@ -411,11 +443,13 @@ public class SpecimenCollectionGroupAction extends SecureAction
 					}
 
 					//Populating the Collection Protocol Events
-					loadCollectionProtocolEvent(specimenCollectionGroupForm.getCollectionProtocolId(), bizLogic, request, specimenCollectionGroupForm);
+					loadCollectionProtocolEvent(specimenCollectionGroupForm
+							.getCollectionProtocolId(), bizLogic, request,
+							specimenCollectionGroupForm);
 
 					//Load Clinical status for a given study calander event point
-					CPEObject = bizLogic.retrieve(CollectionProtocolEvent.class.getName(), new Long(
-							specimenCollectionGroupForm.getCollectionProtocolEventId()));
+					CPEObject = bizLogic.retrieve(CollectionProtocolEvent.class.getName(),
+							new Long(specimenCollectionGroupForm.getCollectionProtocolEventId()));
 					if (isOnChange && CPEObject != null)
 					{
 						setCalendarEventPoint(CPEObject, request, specimenCollectionGroupForm);
@@ -439,7 +473,8 @@ public class SpecimenCollectionGroupAction extends SecureAction
 
 			Long collectionProtocolId = (Long) forwardToHashMap.get("collectionProtocolId");
 			String collectionProtocolName = (String) request.getSession().getAttribute("cpTitle");
-			if (collectionProtocolId == null && request.getParameter("cpId") != null && !request.getParameter("cpId").equals("null"))
+			if (collectionProtocolId == null && request.getParameter("cpId") != null
+					&& !request.getParameter("cpId").equals("null"))
 			{
 				collectionProtocolId = new Long(request.getParameter("cpId"));
 			}
@@ -471,7 +506,8 @@ public class SpecimenCollectionGroupAction extends SecureAction
 				request.setAttribute(Constants.CP_SEARCH_PARTICIPANT_ID, participantId.toString());
 				/**For Migration Start**/
 
-				Object participantObject = bizLogic.retrieve(Participant.class.getName(), participantId);
+				Object participantObject = bizLogic.retrieve(Participant.class.getName(),
+						participantId);
 				if (participantObject != null)
 				{
 
@@ -510,11 +546,12 @@ public class SpecimenCollectionGroupAction extends SecureAction
 				 */
 				if (participantProtocolId == null)
 				{
-					participantProtocolId = getParticipantProtocolIdForCPAndParticipantId(participantId.toString(), collectionProtocolId.toString(),
-							bizLogic);
+					participantProtocolId = getParticipantProtocolIdForCPAndParticipantId(
+							participantId.toString(), collectionProtocolId.toString(), bizLogic);
 					if (participantProtocolId != null)
 					{
-						specimenCollectionGroupForm.setProtocolParticipantIdentifier(participantProtocolId);
+						specimenCollectionGroupForm
+								.setProtocolParticipantIdentifier(participantProtocolId);
 						specimenCollectionGroupForm.setRadioButtonForParticipant(2);
 					}
 				}
@@ -529,7 +566,8 @@ public class SpecimenCollectionGroupAction extends SecureAction
 				//loadPaticipantNumberList(specimenCollectionGroupForm.getCollectionProtocolId(),bizLogic,request);
 				specimenCollectionGroupForm.setProtocolParticipantIdentifier(participantProtocolId);
 				specimenCollectionGroupForm.setRadioButtonForParticipant(2);
-				String cpParticipantId = getParticipantIdForProtocolId(participantProtocolId, bizLogic);
+				String cpParticipantId = getParticipantIdForProtocolId(participantProtocolId,
+						bizLogic);
 				if (cpParticipantId != null)
 				{
 					request.setAttribute(Constants.CP_SEARCH_PARTICIPANT_ID, cpParticipantId);
@@ -554,7 +592,8 @@ public class SpecimenCollectionGroupAction extends SecureAction
 			}
 			//Bug 1915:SpecimenCollectionGroup.Study Calendar Event Point not populated when page is loaded through proceedTo
 			//Populating the Collection Protocol Events
-			loadCollectionProtocolEvent(specimenCollectionGroupForm.getCollectionProtocolId(), bizLogic, request, specimenCollectionGroupForm);
+			loadCollectionProtocolEvent(specimenCollectionGroupForm.getCollectionProtocolId(),
+					bizLogic, request, specimenCollectionGroupForm);
 
 			//Load Clinical status for a given study calander event point
 			CPEObject = bizLogic.retrieve(CollectionProtocolEvent.class.getName(), new Long(
@@ -564,9 +603,12 @@ public class SpecimenCollectionGroupAction extends SecureAction
 				setCalendarEventPoint(CPEObject, request, specimenCollectionGroupForm);
 			}
 
-			Logger.out.debug("CollectionProtocolID found in forwardToHashMap========>>>>>>" + collectionProtocolId);
-			Logger.out.debug("ParticipantID found in forwardToHashMap========>>>>>>" + participantId);
-			Logger.out.debug("ParticipantProtocolID found in forwardToHashMap========>>>>>>" + participantProtocolId);
+			Logger.out.debug("CollectionProtocolID found in forwardToHashMap========>>>>>>"
+					+ collectionProtocolId);
+			Logger.out.debug("ParticipantID found in forwardToHashMap========>>>>>>"
+					+ participantId);
+			Logger.out.debug("ParticipantProtocolID found in forwardToHashMap========>>>>>>"
+					+ participantProtocolId);
 		}
 		//*************  ForwardTo implementation *************
 		//Populate the group name field with default value in the form of 
@@ -576,8 +618,9 @@ public class SpecimenCollectionGroupAction extends SecureAction
 		//Get the collection protocol title for the collection protocol Id selected
 		String collectionProtocolTitle = "";
 		String collectionProtocolName = "";
-		
-		Object CPObject  = bizLogic.retrieve(CollectionProtocol.class.getName(), specimenCollectionGroupForm.getCollectionProtocolId());
+
+		Object CPObject = bizLogic.retrieve(CollectionProtocol.class.getName(),
+				specimenCollectionGroupForm.getCollectionProtocolId());
 
 		if (CPObject != null)
 		{
@@ -593,11 +636,13 @@ public class SpecimenCollectionGroupAction extends SecureAction
 
 		//Set the name to default if reset name link was clicked or page is loading for first time 
 		//through add link or forward to link 
-		if (forwardToHashMap != null || (specimenCollectionGroupForm.getName() != null && specimenCollectionGroupForm.getName().equals(""))
-				|| (resetName != null && resetName.equals("Yes")))
+		if (forwardToHashMap != null
+				|| (specimenCollectionGroupForm.getName() != null && specimenCollectionGroupForm
+						.getName().equals("")) || (resetName != null && resetName.equals("Yes")))
 		{
 			if (!collectionProtocolTitle.equals("")
-					&& (groupParticipantId > 0 || (protocolParticipantId != null && !protocolParticipantId.equals(""))))
+					&& (groupParticipantId > 0 || (protocolParticipantId != null && !protocolParticipantId
+							.equals(""))))
 			{
 				//Poornima:Bug 2833 - Error thrown when adding a specimen collection group
 				//Max length of CP is 150 and Max length of SCG is 55, in Oracle the name does not truncate 
@@ -605,40 +650,49 @@ public class SpecimenCollectionGroupAction extends SecureAction
 				String maxCollTitle = collectionProtocolName;
 				if (collectionProtocolName.length() > Constants.COLLECTION_PROTOCOL_TITLE_LENGTH)
 				{
-					maxCollTitle = collectionProtocolName.substring(0, Constants.COLLECTION_PROTOCOL_TITLE_LENGTH - 1);
+					maxCollTitle = collectionProtocolName.substring(0,
+							Constants.COLLECTION_PROTOCOL_TITLE_LENGTH - 1);
 				}
 				//During add operation the id to set in the default name is generated
 				if (operation.equals(Constants.ADD))
 				{
-					specimenCollectionGroupForm.setName(maxCollTitle + "_" + groupParticipantId + "_" + groupNumber);
+					specimenCollectionGroupForm.setName(maxCollTitle + "_" + groupParticipantId
+							+ "_" + groupNumber);
 				}
 				//During edit operation the id to set in the default name using the id
-				else if (operation.equals(Constants.EDIT) && (resetName != null && resetName.equals("Yes")))
+				else if (operation.equals(Constants.EDIT)
+						&& (resetName != null && resetName.equals("Yes")))
 				{
 					if (groupParticipantId > 0)
 					{
-						specimenCollectionGroupForm.setName(maxCollTitle + "_" + groupParticipantId + "_" + specimenCollectionGroupForm.getId());
+						specimenCollectionGroupForm.setName(maxCollTitle + "_" + groupParticipantId
+								+ "_" + specimenCollectionGroupForm.getId());
 					}
 					else
 					{
-						specimenCollectionGroupForm.setName(maxCollTitle + "_" + protocolParticipantId + "_" + specimenCollectionGroupForm.getId());
+						specimenCollectionGroupForm
+								.setName(maxCollTitle + "_" + protocolParticipantId + "_"
+										+ specimenCollectionGroupForm.getId());
 					}
 				}
 			}
 		}
 
 		request.setAttribute(Constants.PAGE_OF, pageOf);
-		Logger.out.debug("page of in Specimen coll grp action:" + request.getParameter(Constants.PAGE_OF));
+		Logger.out.debug("page of in Specimen coll grp action:"
+				+ request.getParameter(Constants.PAGE_OF));
 		// -------called from Collection Protocol Registration end -------------------------------
 		//Falguni:Performance Enhancement.
 		Long scgEntityId = null;
 		if (CatissueCoreCacheManager.getInstance().getObjectFromCache("scgEntityId") != null)
 		{
-			scgEntityId = (Long) CatissueCoreCacheManager.getInstance().getObjectFromCache("scgEntityId");
+			scgEntityId = (Long) CatissueCoreCacheManager.getInstance().getObjectFromCache(
+					"scgEntityId");
 		}
 		else
 		{
-			scgEntityId = AnnotationUtil.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN_COLLN_GROUP);
+			scgEntityId = AnnotationUtil
+					.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN_COLLN_GROUP);
 			CatissueCoreCacheManager.getInstance().addObjectToCache("scgEntityId", scgEntityId);
 		}
 		request.setAttribute("scgEntityId", scgEntityId);
@@ -685,9 +739,11 @@ public class SpecimenCollectionGroupAction extends SecureAction
 	 * @param bizLogic
 	 * @throws BizLogicException 
 	 */
-	private void setEventsId(SpecimenCollectionGroupForm specimenCollectionGroupForm, SpecimenCollectionGroupBizLogic bizLogic) throws BizLogicException
+	private void setEventsId(SpecimenCollectionGroupForm specimenCollectionGroupForm,
+			SpecimenCollectionGroupBizLogic bizLogic) throws BizLogicException
 	{
-		Object object = bizLogic.retrieve(SpecimenCollectionGroup.class.getName(), specimenCollectionGroupForm.getId());
+		Object object = bizLogic.retrieve(SpecimenCollectionGroup.class.getName(),
+				specimenCollectionGroupForm.getId());
 		if (object != null)
 		{
 			SpecimenCollectionGroup scg = (SpecimenCollectionGroup) object;
@@ -710,8 +766,10 @@ public class SpecimenCollectionGroupAction extends SecureAction
 					}
 				}
 				//				Setting the ids
-				specimenCollectionGroupForm.setCollectionEventId(collectionEventParameters.getId().longValue());
-				specimenCollectionGroupForm.setReceivedEventId(receivedEventParameters.getId().longValue());
+				specimenCollectionGroupForm.setCollectionEventId(collectionEventParameters.getId()
+						.longValue());
+				specimenCollectionGroupForm.setReceivedEventId(receivedEventParameters.getId()
+						.longValue());
 			}
 		}
 	}
@@ -720,18 +778,22 @@ public class SpecimenCollectionGroupAction extends SecureAction
 	 * @param request
 	 * @param specimenCollectionGroupForm
 	 */
-	private void setDefaultEvents(HttpServletRequest request, SpecimenCollectionGroupForm specimenCollectionGroupForm, String operation)
+	private void setDefaultEvents(HttpServletRequest request,
+			SpecimenCollectionGroupForm specimenCollectionGroupForm, String operation)
 			throws ApplicationException
 	{
 		setDateParameters(specimenCollectionGroupForm, request);
-		String collProcedure = (String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_COLLECTION_PROCEDURE);
-		String collEventContainer = (String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_CONTAINER);
-		String recQuantity = (String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_RECEIVED_QUALITY);
-		
+		String collProcedure = (String) DefaultValueManager
+				.getDefaultValue(Constants.DEFAULT_COLLECTION_PROCEDURE);
+		String collEventContainer = (String) DefaultValueManager
+				.getDefaultValue(Constants.DEFAULT_CONTAINER);
+		String recQuantity = (String) DefaultValueManager
+				.getDefaultValue(Constants.DEFAULT_RECEIVED_QUALITY);
+
 		if (specimenCollectionGroupForm.getCollectionEventCollectionProcedure() == null)
 		{
 			specimenCollectionGroupForm.setCollectionEventCollectionProcedure(Constants.CP_DEFAULT);
-			
+
 		}
 		if (specimenCollectionGroupForm.getCollectionEventContainer() == null)
 		{
@@ -743,32 +805,36 @@ public class SpecimenCollectionGroupAction extends SecureAction
 		}
 		//setting the collector and receiver drop downs
 		AppUtility.setUserInForm(request, operation);
-		long collectionEventUserId = AppUtility.setUserInForm(request,operation);
-		if(specimenCollectionGroupForm.getCollectionEventUserId() == 0)
+		long collectionEventUserId = AppUtility.setUserInForm(request, operation);
+		if (specimenCollectionGroupForm.getCollectionEventUserId() == 0)
 		{
 			specimenCollectionGroupForm.setCollectionEventUserId(collectionEventUserId);
 		}
-		if(specimenCollectionGroupForm.getReceivedEventUserId() == 0)
+		if (specimenCollectionGroupForm.getReceivedEventUserId() == 0)
 		{
 			specimenCollectionGroupForm.setReceivedEventUserId(collectionEventUserId);
 		}
 		//Setting the List for drop downs
 		setEventsListInRequest(request);
 	}
+
 	/**
 	 * @param request
 	 */
 	private void setEventsListInRequest(HttpServletRequest request)
 	{
 		//setting the procedure
-		List procedureList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_COLLECTION_PROCEDURE, null);
+		List procedureList = CDEManager.getCDEManager().getPermissibleValueList(
+				Constants.CDE_NAME_COLLECTION_PROCEDURE, null);
 		request.setAttribute(Constants.PROCEDURE_LIST, procedureList);
 		//		set the container lists
-		List containerList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_CONTAINER, null);
+		List containerList = CDEManager.getCDEManager().getPermissibleValueList(
+				Constants.CDE_NAME_CONTAINER, null);
 		request.setAttribute(Constants.CONTAINER_LIST, containerList);
 
 		//setting the quality for received events
-		List qualityList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_RECEIVED_QUALITY, null);
+		List qualityList = CDEManager.getCDEManager().getPermissibleValueList(
+				Constants.CDE_NAME_RECEIVED_QUALITY, null);
 		request.setAttribute(Constants.RECEIVED_QUALITY_LIST, qualityList);
 
 		//Sets the hourList attribute to be used in the Add/Edit FrozenEventParameters Page.
@@ -776,10 +842,12 @@ public class SpecimenCollectionGroupAction extends SecureAction
 		//Sets the minutesList attribute to be used in the Add/Edit FrozenEventParameters Page.
 		request.setAttribute(Constants.MINUTES_LIST, Constants.MINUTES_ARRAY);
 	}
+
 	/**
 	 * @param specimenForm
 	 */
-	private void setDateParameters(SpecimenCollectionGroupForm specimenForm, HttpServletRequest request)
+	private void setDateParameters(SpecimenCollectionGroupForm specimenForm,
+			HttpServletRequest request)
 	{
 		// set the current Date and Time for the event.
 		Calendar cal = Calendar.getInstance();
@@ -792,16 +860,19 @@ public class SpecimenCollectionGroupAction extends SecureAction
 			}
 			else
 			{
-				specimenForm.setCollectionEventdateOfEvent(Utility.parseDateToString(cal.getTime(), CommonServiceLocator.getInstance().getDatePattern()));
+				specimenForm.setCollectionEventdateOfEvent(Utility.parseDateToString(cal.getTime(),
+						CommonServiceLocator.getInstance().getDatePattern()));
 			}
 		}
 		if (specimenForm.getCollectionEventTimeInHours() == null)
 		{
-			specimenForm.setCollectionEventTimeInHours(Integer.toString(cal.get(Calendar.HOUR_OF_DAY)));
+			specimenForm.setCollectionEventTimeInHours(Integer.toString(cal
+					.get(Calendar.HOUR_OF_DAY)));
 		}
 		if (specimenForm.getCollectionEventTimeInMinutes() == null)
 		{
-			specimenForm.setCollectionEventTimeInMinutes(Integer.toString(cal.get(Calendar.MINUTE)));
+			specimenForm
+					.setCollectionEventTimeInMinutes(Integer.toString(cal.get(Calendar.MINUTE)));
 		}
 
 		//ReceivedEvent Fields
@@ -814,12 +885,14 @@ public class SpecimenCollectionGroupAction extends SecureAction
 			}
 			else
 			{
-			specimenForm.setReceivedEventDateOfEvent(Utility.parseDateToString(cal.getTime(), CommonServiceLocator.getInstance().getDatePattern()));
+				specimenForm.setReceivedEventDateOfEvent(Utility.parseDateToString(cal.getTime(),
+						CommonServiceLocator.getInstance().getDatePattern()));
 			}
 		}
 		if (specimenForm.getReceivedEventTimeInHours() == null)
 		{
-			specimenForm.setReceivedEventTimeInHours(Integer.toString(cal.get(Calendar.HOUR_OF_DAY)));
+			specimenForm.setReceivedEventTimeInHours(Integer
+					.toString(cal.get(Calendar.HOUR_OF_DAY)));
 		}
 		if (specimenForm.getReceivedEventTimeInMinutes() == null)
 		{
@@ -972,8 +1045,8 @@ public class SpecimenCollectionGroupAction extends SecureAction
 	 * @param form
 	 * @throws Exception
 	 */
-	private void loadCollectionProtocolEvent(long protocolID, IBizLogic bizLogic, HttpServletRequest request, SpecimenCollectionGroupForm form)
-			throws Exception
+	private void loadCollectionProtocolEvent(long protocolID, IBizLogic bizLogic,
+			HttpServletRequest request, SpecimenCollectionGroupForm form) throws Exception
 	{
 		String sourceObjectName = CollectionProtocolEvent.class.getName();
 		String displayEventFields[] = {"studyCalendarEventPoint", "collectionPointLabel"};
@@ -984,8 +1057,9 @@ public class SpecimenCollectionGroupAction extends SecureAction
 		String joinCondition = Constants.AND_JOIN_CONDITION;
 		String separatorBetweenFields = ",";
 
-		List list = bizLogic.getList(sourceObjectName, displayEventFields, valueField, whereColumnName, whereColumnCondition, whereColumnValue,
-				joinCondition, separatorBetweenFields, false);
+		List list = bizLogic.getList(sourceObjectName, displayEventFields, valueField,
+				whereColumnName, whereColumnCondition, whereColumnValue, joinCondition,
+				separatorBetweenFields, false);
 
 		request.setAttribute(Constants.STUDY_CALENDAR_EVENT_POINT_LIST, list);
 		//Bug #8533
@@ -1003,20 +1077,23 @@ public class SpecimenCollectionGroupAction extends SecureAction
 	 * @param request
 	 * @throws Exception
 	 */
-	private void loadParticipantMedicalIdentifier(long participantID, IBizLogic bizLogic, HttpServletRequest request) throws Exception
+	private void loadParticipantMedicalIdentifier(long participantID, IBizLogic bizLogic,
+			HttpServletRequest request) throws Exception
 	{
 		//get list of Participant's names
 		String sourceObjectName = ParticipantMedicalIdentifier.class.getName();
 		String displayEventFields[] = {"medicalRecordNumber"};
 		String valueField = Constants.SYSTEM_IDENTIFIER;
-		String whereColumnName[] = {"participant." + Constants.SYSTEM_IDENTIFIER, "medicalRecordNumber"};
+		String whereColumnName[] = {"participant." + Constants.SYSTEM_IDENTIFIER,
+				"medicalRecordNumber"};
 		String whereColumnCondition[] = {"=", "!="};
 		Object[] whereColumnValue = {new Long(participantID), "null"};
 		String joinCondition = Constants.AND_JOIN_CONDITION;
 		String separatorBetweenFields = "";
 
-		List list = bizLogic.getList(sourceObjectName, displayEventFields, valueField, whereColumnName, whereColumnCondition, whereColumnValue,
-				joinCondition, separatorBetweenFields, false);
+		List list = bizLogic.getList(sourceObjectName, displayEventFields, valueField,
+				whereColumnName, whereColumnCondition, whereColumnValue, joinCondition,
+				separatorBetweenFields, false);
 
 		request.setAttribute(Constants.PARTICIPANT_MEDICAL_IDNETIFIER_LIST, list);
 	}
@@ -1028,14 +1105,16 @@ public class SpecimenCollectionGroupAction extends SecureAction
 	 * @return
 	 * @throws Exception
 	 */
-	private String getParticipantIdForProtocolId(String participantProtocolId, IBizLogic bizLogic) throws Exception
+	private String getParticipantIdForProtocolId(String participantProtocolId, IBizLogic bizLogic)
+			throws Exception
 	{
 		String sourceObjectName = CollectionProtocolRegistration.class.getName();
 		String selectColumnName[] = {"participant.id"};
 		String whereColumnName[] = {"protocolParticipantIdentifier"};
 		String whereColumnCondition[] = {"="};
 		Object[] whereColumnValue = {participantProtocolId};
-		List participantList = bizLogic.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue,
+		List participantList = bizLogic.retrieve(sourceObjectName, selectColumnName,
+				whereColumnName, whereColumnCondition, whereColumnValue,
 				Constants.AND_JOIN_CONDITION);
 		if (participantList != null && !participantList.isEmpty())
 		{
@@ -1055,15 +1134,16 @@ public class SpecimenCollectionGroupAction extends SecureAction
 	 * @return
 	 * @throws Exception
 	 */
-	private String getParticipantProtocolIdForCPAndParticipantId(String participantId, String cpId, IBizLogic bizLogic) throws Exception
+	private String getParticipantProtocolIdForCPAndParticipantId(String participantId, String cpId,
+			IBizLogic bizLogic) throws Exception
 	{
 		String sourceObjectName = CollectionProtocolRegistration.class.getName();
 		String selectColumnName[] = {"protocolParticipantIdentifier"};
 		String whereColumnName[] = {"participant.id", "collectionProtocol.id"};
 		String whereColumnCondition[] = {"=", "="};
 		Object[] whereColumnValue = {new Long(participantId), new Long(cpId)};
-		List list = bizLogic.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue,
-				Constants.AND_JOIN_CONDITION);
+		List list = bizLogic.retrieve(sourceObjectName, selectColumnName, whereColumnName,
+				whereColumnCondition, whereColumnValue, Constants.AND_JOIN_CONDITION);
 		if (list != null && !list.isEmpty())
 		{
 			Iterator iter = list.iterator();
@@ -1126,12 +1206,14 @@ public class SpecimenCollectionGroupAction extends SecureAction
 	 * @param indexType i.e Which Radio button is selected participantId or protocolParticipantIdentifier 
 	 * @return collectionProtocolRegistration CollectionProtocolRegistration object
 	 */
-	private CollectionProtocolRegistration getcollectionProtocolRegistrationObj(String idOfSelectedRadioButton, String cp_id, String indexType)
+	private CollectionProtocolRegistration getcollectionProtocolRegistrationObj(
+			String idOfSelectedRadioButton, String cp_id, String indexType)
 			throws BizLogicException
 	{
 
-		CollectionProtocolRegistrationBizLogic collectionProtocolRegistrationBizLogic = (CollectionProtocolRegistrationBizLogic) BizLogicFactory
-				.getInstance().getBizLogic(Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		CollectionProtocolRegistrationBizLogic collectionProtocolRegistrationBizLogic = (CollectionProtocolRegistrationBizLogic) factory
+				.getBizLogic(Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
 		String[] colName = new String[2];
 		Object[] val = new Object[2];
 		if (indexType.equalsIgnoreCase(Constants.PARTICIPANT_ID))
@@ -1147,15 +1229,16 @@ public class SpecimenCollectionGroupAction extends SecureAction
 			val[0] = idOfSelectedRadioButton;
 		}
 
-		val[1]=Long.valueOf(cp_id);
-		
+		val[1] = Long.valueOf(cp_id);
+
 		String[] colCondition = {"=", "="};
-		List collProtRegObj = collectionProtocolRegistrationBizLogic
-		.retrieve( CollectionProtocolRegistration.class.getName(), colName, colCondition,
-				val, null);
-		CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) collProtRegObj.get(0);
+		List collProtRegObj = collectionProtocolRegistrationBizLogic.retrieve(
+				CollectionProtocolRegistration.class.getName(), colName, colCondition, val, null);
+		CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) collProtRegObj
+				.get(0);
 		return collectionProtocolRegistration;
 	}
+
 	/**
 	 * Prepare Map for Consent tiers
 	 * @param participantResponseList This list will be iterated to map to populate participant Response status.
@@ -1170,14 +1253,17 @@ public class SpecimenCollectionGroupAction extends SecureAction
 			Iterator consentResponseCollectionIter = participantResponseList.iterator();
 			while (consentResponseCollectionIter.hasNext())
 			{
-				ConsentTierResponse consentTierResponse = (ConsentTierResponse) consentResponseCollectionIter.next();
+				ConsentTierResponse consentTierResponse = (ConsentTierResponse) consentResponseCollectionIter
+						.next();
 				ConsentTier consent = consentTierResponse.getConsentTier();
 				String idKey = "ConsentBean:" + i + "_consentTierID";
 				String statementKey = "ConsentBean:" + i + "_statement";
 				String responseKey = "ConsentBean:" + i + "_participantResponse";
 				String participantResponceIdKey = "ConsentBean:" + i + "_participantResponseID";
-				String scgResponsekey = "ConsentBean:" + i + "_specimenCollectionGroupLevelResponse";
-				String scgResponseIDkey = "ConsentBean:" + i + "_specimenCollectionGroupLevelResponseID";
+				String scgResponsekey = "ConsentBean:" + i
+						+ "_specimenCollectionGroupLevelResponse";
+				String scgResponseIDkey = "ConsentBean:" + i
+						+ "_specimenCollectionGroupLevelResponseID";
 
 				tempMap.put(idKey, consent.getId());
 				tempMap.put(statementKey, consent.getStatement());
@@ -1190,6 +1276,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 		}
 		return tempMap;
 	}
+
 	//Consent Tracking Virender Mehta
 
 	/**
@@ -1198,14 +1285,16 @@ public class SpecimenCollectionGroupAction extends SecureAction
 	 * @param finalDataList
 	 * @throws DAOException 
 	 */
-	private void getSpecimenDetails(SpecimenCollectionGroup specimenCollectionGroupObj, List finalDataList) throws BizLogicException
+	private void getSpecimenDetails(SpecimenCollectionGroup specimenCollectionGroupObj,
+			List finalDataList) throws BizLogicException
 	{
-		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 		Collection specimen = null;
 		if (specimenCollectionGroupObj.getId() != null)
 		{
-			specimen = (Collection) bizLogic.retrieveAttribute(SpecimenCollectionGroup.class.getName(), specimenCollectionGroupObj.getId(),
-					"elements(specimenCollection)");
+			specimen = (Collection) bizLogic.retrieveAttribute(SpecimenCollectionGroup.class
+					.getName(), specimenCollectionGroupObj.getId(), "elements(specimenCollection)");
 		}
 		//Collection specimen = specimenCollectionGroupObj.getSpecimenCollection();
 		Iterator specimenIterator = specimen.iterator();
@@ -1220,11 +1309,14 @@ public class SpecimenCollectionGroupAction extends SecureAction
 	 * This function is used for retriving specimen and sub specimen's attributes.
 	 * @param specimenObj
 	 * @param finalDataList
+	 * @throws BizLogicException 
 	 * @throws DAOException 
 	 */
 	private void getDetailsOfSpecimen(Specimen specimenObj, List finalDataList)
+			throws BizLogicException
 	{
-		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 		List specimenDetailList = new ArrayList();
 
 		if (specimenObj.getActivityStatus().equals(Status.ACTIVITY_STATUS_ACTIVE.toString()))
@@ -1237,16 +1329,19 @@ public class SpecimenCollectionGroupAction extends SecureAction
 			}
 			else
 			{
-				
-//				StorageContainer storageContainer = (StorageContainer) bizLogic.retrieveAttribute(Specimen.class.getName(), specimenObj.getId(),
-//						"storageContainer");
-				StorageContainer storageContainer = specimenObj.getSpecimenPosition().getStorageContainer();
-				
+
+				//				StorageContainer storageContainer = (StorageContainer) bizLogic.retrieveAttribute(Specimen.class.getName(), specimenObj.getId(),
+				//						"storageContainer");
+				StorageContainer storageContainer = specimenObj.getSpecimenPosition()
+						.getStorageContainer();
+
 				//specimenObj.getStorageContainer().getName()+": X-Axis-"+specimenObj.getPositionDimensionOne()+", Y-Axis-"+specimenObj.getPositionDimensionTwo();
-				if(specimenObj != null && specimenObj.getSpecimenPosition() != null)
+				if (specimenObj != null && specimenObj.getSpecimenPosition() != null)
 				{
-					String storageLocation = storageContainer.getName() + ": X-Axis-" + specimenObj.getSpecimenPosition().getPositionDimensionOne() + ", Y-Axis-"
-						+ specimenObj.getSpecimenPosition().getPositionDimensionTwo();
+					String storageLocation = storageContainer.getName() + ": X-Axis-"
+							+ specimenObj.getSpecimenPosition().getPositionDimensionOne()
+							+ ", Y-Axis-"
+							+ specimenObj.getSpecimenPosition().getPositionDimensionTwo();
 					specimenDetailList.add(storageLocation);
 				}
 			}
@@ -1255,10 +1350,12 @@ public class SpecimenCollectionGroupAction extends SecureAction
 		}
 
 	}
+
 	private Long getAssociatedIdentifiedReportId(Long scgId) throws BizLogicException
 	{
-		IdentifiedSurgicalPathologyReportBizLogic bizLogic = (IdentifiedSurgicalPathologyReportBizLogic) BizLogicFactory.getInstance().getBizLogic(
-				IdentifiedSurgicalPathologyReport.class.getName());
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		IdentifiedSurgicalPathologyReportBizLogic bizLogic = (IdentifiedSurgicalPathologyReportBizLogic) factory
+				.getBizLogic(IdentifiedSurgicalPathologyReport.class.getName());
 		String sourceObjectName = IdentifiedSurgicalPathologyReport.class.getName();
 		String displayEventFields[] = {"id"};
 		String valueField = Constants.SYSTEM_IDENTIFIER;
@@ -1268,8 +1365,9 @@ public class SpecimenCollectionGroupAction extends SecureAction
 		String joinCondition = Constants.AND_JOIN_CONDITION;
 		String separatorBetweenFields = "";
 
-		List list = bizLogic.getList(sourceObjectName, displayEventFields, valueField, whereColumnName, whereColumnCondition, whereColumnValue,
-				joinCondition, separatorBetweenFields, false);
+		List list = bizLogic.getList(sourceObjectName, displayEventFields, valueField,
+				whereColumnName, whereColumnCondition, whereColumnValue, joinCondition,
+				separatorBetweenFields, false);
 		if (list != null && list.size() > 1)
 		{
 			NameValueBean nvBean = (NameValueBean) list.get(1);
@@ -1277,18 +1375,19 @@ public class SpecimenCollectionGroupAction extends SecureAction
 		}
 		return null;
 	}
-	
-	
+
 	/* (non-Javadoc)
 	 * @see edu.wustl.common.action.SecureAction#getObjectId(edu.wustl.common.actionForm.AbstractActionForm)
 	 */
 	protected String getObjectId(AbstractActionForm form)
 	{
-		SpecimenCollectionGroupForm specimenCollectionGroupForm = (SpecimenCollectionGroupForm)form;
-		if(specimenCollectionGroupForm.getCollectionProtocolId()!=0L && specimenCollectionGroupForm.getCollectionProtocolId()!= -1L) 
-		   return Constants.COLLECTION_PROTOCOL_CLASS_NAME +"_"+specimenCollectionGroupForm.getCollectionProtocolId();
+		SpecimenCollectionGroupForm specimenCollectionGroupForm = (SpecimenCollectionGroupForm) form;
+		if (specimenCollectionGroupForm.getCollectionProtocolId() != 0L
+				&& specimenCollectionGroupForm.getCollectionProtocolId() != -1L)
+			return Constants.COLLECTION_PROTOCOL_CLASS_NAME + "_"
+					+ specimenCollectionGroupForm.getCollectionProtocolId();
 		else
-		   return null;
-		 
+			return null;
+
 	}
 }

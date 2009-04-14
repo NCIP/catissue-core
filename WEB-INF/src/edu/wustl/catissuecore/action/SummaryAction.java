@@ -22,9 +22,10 @@ import edu.wustl.catissuecore.actionForm.SummaryForm;
 import edu.wustl.catissuecore.bean.SummaryAdminDetails;
 import edu.wustl.catissuecore.bean.SummaryPartDetails;
 import edu.wustl.catissuecore.bean.SummarySpDetails;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.SummaryBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.logger.Logger;
 
 
@@ -55,7 +56,8 @@ public class SummaryAction extends Action
 		{
 			summaryForm = (SummaryForm) form;
 			// preparing QueryBizLogic to query
-			final SummaryBizLogic bizLogic = (SummaryBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.SUMMARY_BIZLOGIC_ID);
+			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			final SummaryBizLogic bizLogic = (SummaryBizLogic) factory.getBizLogic(Constants.SUMMARY_BIZLOGIC_ID);
 
 			//Populating the Map<String, Object> with data from database for summary report
 			final Map<String, Object> summaryDataMap = bizLogic.getTotalSummaryDetails();

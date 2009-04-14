@@ -17,13 +17,13 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessages;
 
 import edu.wustl.catissuecore.actionForm.DistributionForm;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.DistributionBizLogic;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.CommonAddEditAction;
 import edu.wustl.common.exception.ApplicationException;
-import edu.wustl.dao.exception.DAOException;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 
 /**
  * @author Rahul Ner 
@@ -76,8 +76,8 @@ public class DistributionSubmitAction extends CommonAddEditAction
 
 		DistributionForm dform = (DistributionForm) form;
 		long verificationKeyCounter=0;
-		DistributionBizLogic bizLogic = (DistributionBizLogic) BizLogicFactory
-				.getInstance().getBizLogic(Constants.DISTRIBUTION_FORM_ID);
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		DistributionBizLogic bizLogic = (DistributionBizLogic) factory.getBizLogic(Constants.DISTRIBUTION_FORM_ID);
 
 		boolean barcodeBased = true;
 		if (dform.getDistributionBasedOn().intValue() == Constants.LABEL_BASED_DISTRIBUTION) 

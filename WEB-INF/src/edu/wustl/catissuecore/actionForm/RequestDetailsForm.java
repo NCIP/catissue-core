@@ -13,7 +13,6 @@ package edu.wustl.catissuecore.actionForm;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -28,7 +27,6 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.bean.DefinedArrayDetailsBean;
 import edu.wustl.catissuecore.bean.RequestDetailsBean;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.OrderBizLogic;
 import edu.wustl.catissuecore.domain.DerivedSpecimenOrderItem;
 import edu.wustl.catissuecore.domain.ExistingSpecimenArrayOrderItem;
@@ -54,12 +52,10 @@ import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
-import edu.wustl.dao.exception.DAOException;
 import edu.wustl.dao.util.HibernateMetaData;
 
 public class RequestDetailsForm extends AbstractActionForm
 {
-
 
 	private static final long serialVersionUID = 1L;
 
@@ -81,12 +77,12 @@ public class RequestDetailsForm extends AbstractActionForm
 	 * The distribution protocol associated with that order.
 	 */
 	private String distributionProtocolId;
-	
+
 	/**
 	 * Name of the order
 	 */
 	private String orderName;
-	
+
 	public String getOrderName()
 	{
 		return orderName;
@@ -96,14 +92,16 @@ public class RequestDetailsForm extends AbstractActionForm
 	{
 		this.orderName = orderName;
 	}
-	
+
 	private Boolean isDirectDistribution = Boolean.FALSE;
 
-	public Boolean getIsDirectDistribution() {
+	public Boolean getIsDirectDistribution()
+	{
 		return isDirectDistribution;
 	}
 
-	public void setIsDirectDistribution(Boolean isDirectDistribution) {
+	public void setIsDirectDistribution(Boolean isDirectDistribution)
+	{
 		this.isDirectDistribution = isDirectDistribution;
 	}
 
@@ -119,8 +117,8 @@ public class RequestDetailsForm extends AbstractActionForm
 	 * 
 	 */
 	private String specimenId;
-	
-	private Boolean mailNotification = Boolean.FALSE ;
+
+	private Boolean mailNotification = Boolean.FALSE;
 
 	/** Associates the specified object with the specified key in the map.
 	 * @param key the key to which the object is mapped.
@@ -145,7 +143,6 @@ public class RequestDetailsForm extends AbstractActionForm
 		return ((List) (requestForDropDownMap.get(key)));
 	}
 
-	
 	/**
 	 * @return Returns the mailNotification.
 	 */
@@ -286,7 +283,8 @@ public class RequestDetailsForm extends AbstractActionForm
 	/**
 	 * @param abstractDomain object
 	 */
-	public void setAllValuesForOrder(AbstractDomainObject abstractDomain, HttpServletRequest request,DAO dao)
+	public void setAllValuesForOrder(AbstractDomainObject abstractDomain,
+			HttpServletRequest request, DAO dao)
 	{
 		int requestDetailsBeanCounter = 0;
 		int existingArrayBeanCounter = 0;
@@ -319,10 +317,10 @@ public class RequestDetailsForm extends AbstractActionForm
 			String distributedItemId = "";
 			String specimenList = "";
 			String specimenCollGrpId = "";
-			String consentVerificationkey="";
-			String rowStatuskey="";
-			String selectedSpecimenTypeKey="";
-			
+			String consentVerificationkey = "";
+			String rowStatuskey = "";
+			String selectedSpecimenTypeKey = "";
+
 			String actualSpecimenClass = "";
 			String actualSpecimenType = "";
 			//For array
@@ -331,50 +329,71 @@ public class RequestDetailsForm extends AbstractActionForm
 			String selectedSpecimenQuantityUnit = "";
 			String selectedSpecimenQuantity = "";
 
-			if (((orderItem instanceof ExistingSpecimenOrderItem) || (orderItem instanceof DerivedSpecimenOrderItem) || (orderItem instanceof PathologicalCaseOrderItem)))
+			if (((orderItem instanceof ExistingSpecimenOrderItem)
+					|| (orderItem instanceof DerivedSpecimenOrderItem) || (orderItem instanceof PathologicalCaseOrderItem)))
 			{
 				SpecimenOrderItem specimenOrderItem = (SpecimenOrderItem) orderItem;
 				if (specimenOrderItem.getNewSpecimenArrayOrderItem() == null)
 				{
-					assignStatus = "RequestDetailsBean:" + requestDetailsBeanCounter + "_assignedStatus";
-					description = "RequestDetailsBean:" + requestDetailsBeanCounter + "_description";
-					requestedQty = "RequestDetailsBean:" + requestDetailsBeanCounter + "_requestedQty";
+					assignStatus = "RequestDetailsBean:" + requestDetailsBeanCounter
+							+ "_assignedStatus";
+					description = "RequestDetailsBean:" + requestDetailsBeanCounter
+							+ "_description";
+					requestedQty = "RequestDetailsBean:" + requestDetailsBeanCounter
+							+ "_requestedQty";
 
-					orderItemId = "RequestDetailsBean:" + requestDetailsBeanCounter + "_orderItemId";
+					orderItemId = "RequestDetailsBean:" + requestDetailsBeanCounter
+							+ "_orderItemId";
 
-					requestedItem = "RequestDetailsBean:" + requestDetailsBeanCounter + "_requestedItem";
-					availableQty = "RequestDetailsBean:" + requestDetailsBeanCounter + "_availableQty";
-					specimenClass = "RequestDetailsBean:" + requestDetailsBeanCounter + "_className";
+					requestedItem = "RequestDetailsBean:" + requestDetailsBeanCounter
+							+ "_requestedItem";
+					availableQty = "RequestDetailsBean:" + requestDetailsBeanCounter
+							+ "_availableQty";
+					specimenClass = "RequestDetailsBean:" + requestDetailsBeanCounter
+							+ "_className";
 					specimenType = "RequestDetailsBean:" + requestDetailsBeanCounter + "_type";
 
 					requestFor = "RequestDetailsBean:" + requestDetailsBeanCounter + "_requestFor";
 					specimenId = "RequestDetailsBean:" + requestDetailsBeanCounter + "_specimenId";
-					consentVerificationkey = "RequestDetailsBean:" + requestDetailsBeanCounter + "_consentVerificationkey";
-					canDistributeKey = "RequestDetailsBean:" + requestDetailsBeanCounter + "_canDistribute";
-					
-					rowStatuskey = "RequestDetailsBean:"+requestDetailsBeanCounter+"_rowStatuskey";
-					
+					consentVerificationkey = "RequestDetailsBean:" + requestDetailsBeanCounter
+							+ "_consentVerificationkey";
+					canDistributeKey = "RequestDetailsBean:" + requestDetailsBeanCounter
+							+ "_canDistribute";
+
+					rowStatuskey = "RequestDetailsBean:" + requestDetailsBeanCounter
+							+ "_rowStatuskey";
+
 					assignQty = "RequestDetailsBean:" + requestDetailsBeanCounter + "_assignedQty";
 					instanceOf = "RequestDetailsBean:" + requestDetailsBeanCounter + "_instanceOf";
-					distributedItemId = "RequestDetailsBean:" + requestDetailsBeanCounter + "_distributedItemId";
-					specimenCollGrpId = "RequestDetailsBean:" + requestDetailsBeanCounter + "_specimenCollGroupId";
+					distributedItemId = "RequestDetailsBean:" + requestDetailsBeanCounter
+							+ "_distributedItemId";
+					specimenCollGrpId = "RequestDetailsBean:" + requestDetailsBeanCounter
+							+ "_specimenCollGroupId";
 					specimenList = "RequestForDropDownList:" + requestDetailsBeanCounter;
 
-					actualSpecimenClass = "RequestDetailsBean:" + requestDetailsBeanCounter + "_actualSpecimenClass";
-					actualSpecimenType = "RequestDetailsBean:" + requestDetailsBeanCounter + "_actualSpecimenType";
-					selectedSpecimenTypeKey = "RequestDetailsBean:" + requestDetailsBeanCounter + "_selectedSpecimenType";
-					selectedSpecimenQuantityUnit = "RequestDetailsBean:" + requestDetailsBeanCounter + "_specimenQuantityUnit";
-					selectedSpecimenQuantity = "RequestDetailsBean:" + requestDetailsBeanCounter + "_selectedSpecimenQuantity";
+					actualSpecimenClass = "RequestDetailsBean:" + requestDetailsBeanCounter
+							+ "_actualSpecimenClass";
+					actualSpecimenType = "RequestDetailsBean:" + requestDetailsBeanCounter
+							+ "_actualSpecimenType";
+					selectedSpecimenTypeKey = "RequestDetailsBean:" + requestDetailsBeanCounter
+							+ "_selectedSpecimenType";
+					selectedSpecimenQuantityUnit = "RequestDetailsBean:"
+							+ requestDetailsBeanCounter + "_specimenQuantityUnit";
+					selectedSpecimenQuantity = "RequestDetailsBean:" + requestDetailsBeanCounter
+							+ "_selectedSpecimenQuantity";
 
-					populateValuesMap(orderItem, requestedItem, availableQty, specimenClass, specimenType, requestFor, specimenId, assignQty,
-							instanceOf, specimenList, specimenCollGrpId, totalSpecimenListInRequestForDropDown, actualSpecimenClass,
-							actualSpecimenType, assignStatus,consentVerificationkey,canDistributeKey, rowStatuskey,
-							selectedSpecimenTypeKey,selectedSpecimenQuantityUnit,selectedSpecimenQuantity,dao);
+					populateValuesMap(orderItem, requestedItem, availableQty, specimenClass,
+							specimenType, requestFor, specimenId, assignQty, instanceOf,
+							specimenList, specimenCollGrpId, totalSpecimenListInRequestForDropDown,
+							actualSpecimenClass, actualSpecimenType, assignStatus,
+							consentVerificationkey, canDistributeKey, rowStatuskey,
+							selectedSpecimenTypeKey, selectedSpecimenQuantityUnit,
+							selectedSpecimenQuantity, dao);
 					requestDetailsBeanCounter++;
 				}
 				else
 				{
-					
+
 					List defineArrayContentsList = null;
 					if (definedArrayMap.get(specimenOrderItem.getNewSpecimenArrayOrderItem()) == null)
 					{
@@ -382,27 +401,38 @@ public class RequestDetailsForm extends AbstractActionForm
 					}
 					else
 					{
-						defineArrayContentsList = (List) definedArrayMap.get(specimenOrderItem.getNewSpecimenArrayOrderItem());
+						defineArrayContentsList = (List) definedArrayMap.get(specimenOrderItem
+								.getNewSpecimenArrayOrderItem());
 					}
 					defineArrayContentsList.add(specimenOrderItem);
-					definedArrayMap.put(specimenOrderItem.getNewSpecimenArrayOrderItem(), defineArrayContentsList);
+					definedArrayMap.put(specimenOrderItem.getNewSpecimenArrayOrderItem(),
+							defineArrayContentsList);
 				}
 			}
 			else if (orderItem instanceof ExistingSpecimenArrayOrderItem)
 			{
-				assignStatus = "ExistingArrayDetailsBean:" + existingArrayBeanCounter + "_assignedStatus";
-				description = "ExistingArrayDetailsBean:" + existingArrayBeanCounter + "_description";
-				requestedQty = "ExistingArrayDetailsBean:" + existingArrayBeanCounter + "_requestedQuantity";
-				orderItemId = "ExistingArrayDetailsBean:" + existingArrayBeanCounter + "_orderItemId";
+				assignStatus = "ExistingArrayDetailsBean:" + existingArrayBeanCounter
+						+ "_assignedStatus";
+				description = "ExistingArrayDetailsBean:" + existingArrayBeanCounter
+						+ "_description";
+				requestedQty = "ExistingArrayDetailsBean:" + existingArrayBeanCounter
+						+ "_requestedQuantity";
+				orderItemId = "ExistingArrayDetailsBean:" + existingArrayBeanCounter
+						+ "_orderItemId";
 
-				requestedItem = "ExistingArrayDetailsBean:" + existingArrayBeanCounter + "_bioSpecimenArrayName";
+				requestedItem = "ExistingArrayDetailsBean:" + existingArrayBeanCounter
+						+ "_bioSpecimenArrayName";
 				arrayId = "ExistingArrayDetailsBean:" + existingArrayBeanCounter + "_arrayId";
-				assignQty = "ExistingArrayDetailsBean:" + existingArrayBeanCounter + "_assignedQuantity";
-				distributedItemId = "ExistingArrayDetailsBean:" + existingArrayBeanCounter + "_distributedItemId";
+				assignQty = "ExistingArrayDetailsBean:" + existingArrayBeanCounter
+						+ "_assignedQuantity";
+				distributedItemId = "ExistingArrayDetailsBean:" + existingArrayBeanCounter
+						+ "_distributedItemId";
 
 				ExistingSpecimenArrayOrderItem existingSpecimenArrayOrderItem = (ExistingSpecimenArrayOrderItem) orderItem;
-				values.put(requestedItem, existingSpecimenArrayOrderItem.getSpecimenArray().getName());
-				values.put(arrayId, existingSpecimenArrayOrderItem.getSpecimenArray().getId().toString());
+				values.put(requestedItem, existingSpecimenArrayOrderItem.getSpecimenArray()
+						.getName());
+				values.put(arrayId, existingSpecimenArrayOrderItem.getSpecimenArray().getId()
+						.toString());
 				values.put(assignQty, "0.0");
 
 				existingArrayBeanCounter++;
@@ -417,21 +447,25 @@ public class RequestDetailsForm extends AbstractActionForm
 					definedArrayMap.put(newSpecimenArrayOrderItem, defineArrayContentsList);
 				}
 			}*/
-			putCommonValuesInValuesMap(orderItem, assignStatus, description, requestedQty, assignQty, orderItemId, distributedItemId);
+			putCommonValuesInValuesMap(orderItem, assignStatus, description, requestedQty,
+					assignQty, orderItemId, distributedItemId);
 		}
 		// Putting defined array values in Values map
 		if (definedArrayMap.size() > 0)
 		{
-			makeValuesMapForDefinedArray(definedArrayMap, totalSpecimenListInRequestForDropDown,dao);
+			makeValuesMapForDefinedArray(definedArrayMap, totalSpecimenListInRequestForDropDown,
+					dao);
 		}
 		request.getSession().removeAttribute("finalSpecimenList");
-		request.getSession().setAttribute("finalSpecimenList", totalSpecimenListInRequestForDropDown);
+		request.getSession().setAttribute("finalSpecimenList",
+				totalSpecimenListInRequestForDropDown);
 	}
 
 	/**
 	 * @param definedArrayMap
 	 */
-	private void makeValuesMapForDefinedArray(Map definedArrayMap, List totalSpecimenListInRequestForDropDown,DAO dao)
+	private void makeValuesMapForDefinedArray(Map definedArrayMap,
+			List totalSpecimenListInRequestForDropDown, DAO dao)
 	{
 		Set keySet = definedArrayMap.keySet();
 		Iterator iter = keySet.iterator();
@@ -439,8 +473,10 @@ public class RequestDetailsForm extends AbstractActionForm
 		int arrayDetailsBeanCounter = 0;
 		while (iter.hasNext())
 		{
-			NewSpecimenArrayOrderItem newSpecimenArrayOrderItem = (NewSpecimenArrayOrderItem) iter.next();
-			makeKeysForNewSpecimenArrayOrderItem(arrayRequestBeanCounter, newSpecimenArrayOrderItem,dao);
+			NewSpecimenArrayOrderItem newSpecimenArrayOrderItem = (NewSpecimenArrayOrderItem) iter
+					.next();
+			makeKeysForNewSpecimenArrayOrderItem(arrayRequestBeanCounter,
+					newSpecimenArrayOrderItem, dao);
 			List specimenOrderItemList = (List) definedArrayMap.get(newSpecimenArrayOrderItem);
 
 			String noOfItems = "DefinedArrayRequestBean:" + arrayRequestBeanCounter + "_noOfItems";
@@ -449,8 +485,10 @@ public class RequestDetailsForm extends AbstractActionForm
 			Iterator specimenItemListIter = specimenOrderItemList.iterator();
 			while (specimenItemListIter.hasNext())
 			{
-				SpecimenOrderItem specimenOrderItem = (SpecimenOrderItem) specimenItemListIter.next();
-				makeKeysForDefinedArrayContents(arrayDetailsBeanCounter, specimenOrderItem, totalSpecimenListInRequestForDropDown, dao);
+				SpecimenOrderItem specimenOrderItem = (SpecimenOrderItem) specimenItemListIter
+						.next();
+				makeKeysForDefinedArrayContents(arrayDetailsBeanCounter, specimenOrderItem,
+						totalSpecimenListInRequestForDropDown, dao);
 				arrayDetailsBeanCounter++;
 			}
 			arrayRequestBeanCounter++;
@@ -461,26 +499,34 @@ public class RequestDetailsForm extends AbstractActionForm
 	 * @param arrayRequestBeanCounter
 	 * @param newSpecimenArrayOrderItem
 	 */
-	private void makeKeysForNewSpecimenArrayOrderItem(int arrayRequestBeanCounter, NewSpecimenArrayOrderItem newSpecimenArrayOrderItem,DAO dao)
+	private void makeKeysForNewSpecimenArrayOrderItem(int arrayRequestBeanCounter,
+			NewSpecimenArrayOrderItem newSpecimenArrayOrderItem, DAO dao)
 	{
-		String assignStatus = "DefinedArrayRequestBean:" + arrayRequestBeanCounter + "_assignedStatus";
+		String assignStatus = "DefinedArrayRequestBean:" + arrayRequestBeanCounter
+				+ "_assignedStatus";
 		String orderItemId = "DefinedArrayRequestBean:" + arrayRequestBeanCounter + "_orderItemId";
 
 		String requestedItem = "DefinedArrayRequestBean:" + arrayRequestBeanCounter + "_arrayName";
 		String specimenClass = "DefinedArrayRequestBean:" + arrayRequestBeanCounter + "_arrayClass";
 		String specimenType = "DefinedArrayRequestBean:" + arrayRequestBeanCounter + "_arrayType";
-		String positionDimensionOne = "DefinedArrayRequestBean:" + arrayRequestBeanCounter + "_oneDimensionCapacity";
-		String positionDimensionTwo = "DefinedArrayRequestBean:" + arrayRequestBeanCounter + "_twoDimensionCapacity";
+		String positionDimensionOne = "DefinedArrayRequestBean:" + arrayRequestBeanCounter
+				+ "_oneDimensionCapacity";
+		String positionDimensionTwo = "DefinedArrayRequestBean:" + arrayRequestBeanCounter
+				+ "_twoDimensionCapacity";
 
 		String arrayId = "DefinedArrayRequestBean:" + arrayRequestBeanCounter + "_arrayId";
-		String distributedItemId = "DefinedArrayRequestBean:" + arrayRequestBeanCounter + "_distributedItemId";
-		String createArrayCondition = "DefinedArrayRequestBean:" + arrayRequestBeanCounter + "_createArrayButtonDisabled";
+		String distributedItemId = "DefinedArrayRequestBean:" + arrayRequestBeanCounter
+				+ "_distributedItemId";
+		String createArrayCondition = "DefinedArrayRequestBean:" + arrayRequestBeanCounter
+				+ "_createArrayButtonDisabled";
 
-		
 		values.put(requestedItem, newSpecimenArrayOrderItem.getName());
-		values.put(positionDimensionOne, newSpecimenArrayOrderItem.getSpecimenArrayType().getCapacity().getOneDimensionCapacity().toString());
-		values.put(positionDimensionTwo, newSpecimenArrayOrderItem.getSpecimenArrayType().getCapacity().getTwoDimensionCapacity().toString());
-		values.put(specimenClass, newSpecimenArrayOrderItem.getSpecimenArrayType().getSpecimenClass());
+		values.put(positionDimensionOne, newSpecimenArrayOrderItem.getSpecimenArrayType()
+				.getCapacity().getOneDimensionCapacity().toString());
+		values.put(positionDimensionTwo, newSpecimenArrayOrderItem.getSpecimenArrayType()
+				.getCapacity().getTwoDimensionCapacity().toString());
+		values.put(specimenClass, newSpecimenArrayOrderItem.getSpecimenArrayType()
+				.getSpecimenClass());
 		values.put(specimenType, newSpecimenArrayOrderItem.getSpecimenArrayType().getName());
 
 		SpecimenArray specimenArrayObj = newSpecimenArrayOrderItem.getSpecimenArray();
@@ -488,17 +534,22 @@ public class RequestDetailsForm extends AbstractActionForm
 		{
 			values.put(arrayId, specimenArrayObj.getId().toString());
 		}
-		Collection specimenOrderItemCollection = newSpecimenArrayOrderItem.getSpecimenOrderItemCollection();
+		Collection specimenOrderItemCollection = newSpecimenArrayOrderItem
+				.getSpecimenOrderItemCollection();
 		//Calculating the condition to enable or disable "Create Array Button"
-		String condition = OrderingSystemUtil.determineCreateArrayCondition(specimenOrderItemCollection);
+		String condition = OrderingSystemUtil
+				.determineCreateArrayCondition(specimenOrderItemCollection);
 
-		if (newSpecimenArrayOrderItem.getStatus().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED)
-				||(newSpecimenArrayOrderItem.getStatus().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE)))
+		if (newSpecimenArrayOrderItem.getStatus().trim().equalsIgnoreCase(
+				Constants.ORDER_REQUEST_STATUS_DISTRIBUTED)
+				|| (newSpecimenArrayOrderItem.getStatus().trim()
+						.equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE)))
 		{
 			condition = "true";
 		}
 		values.put(createArrayCondition, condition);
-		putCommonValuesInValuesMap(newSpecimenArrayOrderItem, assignStatus, "", "", "", orderItemId, distributedItemId);
+		putCommonValuesInValuesMap(newSpecimenArrayOrderItem, assignStatus, "", "", "",
+				orderItemId, distributedItemId);
 
 	}
 
@@ -507,34 +558,44 @@ public class RequestDetailsForm extends AbstractActionForm
 	 * @param specimenOrderItem
 	 * @param totalSpecimenListInRequestForDropDown
 	 */
-	private void makeKeysForDefinedArrayContents(int arrayDetailsBeanCounter, SpecimenOrderItem specimenOrderItem,
-			List totalSpecimenListInRequestForDropDown,DAO dao)
+	private void makeKeysForDefinedArrayContents(int arrayDetailsBeanCounter,
+			SpecimenOrderItem specimenOrderItem, List totalSpecimenListInRequestForDropDown, DAO dao)
 	{
-		String assignStatus = "DefinedArrayDetailsBean:" + arrayDetailsBeanCounter + "_assignedStatus";
+		String assignStatus = "DefinedArrayDetailsBean:" + arrayDetailsBeanCounter
+				+ "_assignedStatus";
 		String description = "DefinedArrayDetailsBean:" + arrayDetailsBeanCounter + "_description";
-		String requestedQty = "DefinedArrayDetailsBean:" + arrayDetailsBeanCounter + "_requestedQuantity";
+		String requestedQty = "DefinedArrayDetailsBean:" + arrayDetailsBeanCounter
+				+ "_requestedQuantity";
 		String orderItemId = "DefinedArrayDetailsBean:" + arrayDetailsBeanCounter + "_orderItemId";
 
-		String requestedItem = "DefinedArrayDetailsBean:" + arrayDetailsBeanCounter + "_requestedItem";
-		String availableQty = "DefinedArrayDetailsBean:" + arrayDetailsBeanCounter + "_availableQuantity";
+		String requestedItem = "DefinedArrayDetailsBean:" + arrayDetailsBeanCounter
+				+ "_requestedItem";
+		String availableQty = "DefinedArrayDetailsBean:" + arrayDetailsBeanCounter
+				+ "_availableQuantity";
 		String specimenClass = "DefinedArrayDetailsBean:" + arrayDetailsBeanCounter + "_className";
 		String specimenType = "DefinedArrayDetailsBean:" + arrayDetailsBeanCounter + "_type";
 
 		String requestFor = "DefinedArrayDetailsBean:" + arrayDetailsBeanCounter + "_requestFor";
 		String specimenId = "DefinedArrayDetailsBean:" + arrayDetailsBeanCounter + "_specimenId";
-		String assignQty = "DefinedArrayDetailsBean:" + arrayDetailsBeanCounter + "_assignedQuantity";
+		String assignQty = "DefinedArrayDetailsBean:" + arrayDetailsBeanCounter
+				+ "_assignedQuantity";
 		String instanceOf = "DefinedArrayDetailsBean:" + arrayDetailsBeanCounter + "_instanceOf";
 		//distributedItemId = "DefinedArrayDetailsBean:"+arrayDetailsBeanCounter+"_distributedItemId";
 		String specimenList = "RequestForDropDownListArray:" + arrayDetailsBeanCounter;
-		String specimenCollGrpId = "DefinedArrayDetailsBean:" + arrayDetailsBeanCounter + "_specimenCollGroupId";
+		String specimenCollGrpId = "DefinedArrayDetailsBean:" + arrayDetailsBeanCounter
+				+ "_specimenCollGroupId";
 
-		String actualSpecimenClass = "DefinedArrayDetailsBean:" + arrayDetailsBeanCounter + "_actualSpecimenClass";
-		String actualSpecimenType = "DefinedArrayDetailsBean:" + arrayDetailsBeanCounter + "_actualSpecimenType";
+		String actualSpecimenClass = "DefinedArrayDetailsBean:" + arrayDetailsBeanCounter
+				+ "_actualSpecimenClass";
+		String actualSpecimenType = "DefinedArrayDetailsBean:" + arrayDetailsBeanCounter
+				+ "_actualSpecimenType";
 
-		populateValuesMap(specimenOrderItem, requestedItem, availableQty, specimenClass, specimenType, requestFor,
-				specimenId, assignQty, instanceOf,specimenList, specimenCollGrpId, totalSpecimenListInRequestForDropDown,
-				actualSpecimenClass, actualSpecimenType, assignStatus,"","","","","","",dao);
-		putCommonValuesInValuesMap(specimenOrderItem, assignStatus, description, requestedQty, assignQty, orderItemId, "");
+		populateValuesMap(specimenOrderItem, requestedItem, availableQty, specimenClass,
+				specimenType, requestFor, specimenId, assignQty, instanceOf, specimenList,
+				specimenCollGrpId, totalSpecimenListInRequestForDropDown, actualSpecimenClass,
+				actualSpecimenType, assignStatus, "", "", "", "", "", "", dao);
+		putCommonValuesInValuesMap(specimenOrderItem, assignStatus, description, requestedQty,
+				assignQty, orderItemId, "");
 	}
 
 	/**
@@ -545,8 +606,9 @@ public class RequestDetailsForm extends AbstractActionForm
 	 * @param orderItemId
 	 * @param distributedItemId
 	 */
-	private void putCommonValuesInValuesMap(OrderItem orderItem, String assignStatus, String description, String requestedQty, String assignQty,
-			String orderItemId, String distributedItemId)
+	private void putCommonValuesInValuesMap(OrderItem orderItem, String assignStatus,
+			String description, String requestedQty, String assignQty, String orderItemId,
+			String distributedItemId)
 	{
 		if (values.get(assignStatus) == null)
 			values.put(assignStatus, orderItem.getStatus());
@@ -578,81 +640,100 @@ public class RequestDetailsForm extends AbstractActionForm
 	 * @param specimenClass
 	 * @param specimenType
 	 */
-	private void populateValuesMap(OrderItem orderItem, String requestedItem, String availableQty, String specimenClass, String specimenType,
-			String requestFor, String specimenId, String assignQty, String instanceOf, String specimenList, String specimenCollGrpId,
-			List totalSpecimenListInRequestForDropDown, String actualSpecimenClass, String actualSpecimenType, String assignStatus,
-			String consentVerificationkey,String canDistributeKey,String rowStatuskey,String selectedSpecimenTypeKey,
-			String selectedSpecimenQuantityUnit,String selectedSpecimenQuantity,DAO dao)
+	private void populateValuesMap(OrderItem orderItem, String requestedItem, String availableQty,
+			String specimenClass, String specimenType, String requestFor, String specimenId,
+			String assignQty, String instanceOf, String specimenList, String specimenCollGrpId,
+			List totalSpecimenListInRequestForDropDown, String actualSpecimenClass,
+			String actualSpecimenType, String assignStatus, String consentVerificationkey,
+			String canDistributeKey, String rowStatuskey, String selectedSpecimenTypeKey,
+			String selectedSpecimenQuantityUnit, String selectedSpecimenQuantity, DAO dao)
 	{
 		if (orderItem instanceof ExistingSpecimenOrderItem)
 		{
-			
+
 			ExistingSpecimenOrderItem existingSpecimenOrderItem = (ExistingSpecimenOrderItem) orderItem;
-//			OrderBizLogic orderBizLogic = (OrderBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
-			existingSpecimenOrderItem = (ExistingSpecimenOrderItem)HibernateMetaData.getProxyObjectImpl(existingSpecimenOrderItem);
-				//orderBizLogic.getSpecimen(existingSpecimenOrderItem.getSpecimen().getId(),dao);			
+			//			OrderBizLogic orderBizLogic = (OrderBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
+			existingSpecimenOrderItem = (ExistingSpecimenOrderItem) HibernateMetaData
+					.getProxyObjectImpl(existingSpecimenOrderItem);
+			//orderBizLogic.getSpecimen(existingSpecimenOrderItem.getSpecimen().getId(),dao);			
 			values.put(requestedItem, existingSpecimenOrderItem.getSpecimen().getLabel());
-			values.put(availableQty, existingSpecimenOrderItem.getSpecimen().getAvailableQuantity());
+			values
+					.put(availableQty, existingSpecimenOrderItem.getSpecimen()
+							.getAvailableQuantity());
 			values.put(specimenClass, existingSpecimenOrderItem.getSpecimen().getSpecimenClass());
 			values.put(specimenType, existingSpecimenOrderItem.getSpecimen().getSpecimenType());
 			values.put(specimenId, existingSpecimenOrderItem.getSpecimen().getId().toString());
 			values.put(instanceOf, "Existing");
-			if(existingSpecimenOrderItem.getStatus().equals(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED)
-					||existingSpecimenOrderItem.getStatus().equals(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE))
+			if (existingSpecimenOrderItem.getStatus().equals(
+					Constants.ORDER_REQUEST_STATUS_DISTRIBUTED)
+					|| existingSpecimenOrderItem.getStatus().equals(
+							Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE))
 			{
 				values.put(canDistributeKey, Constants.TRUE);
 				values.put(rowStatuskey, "disable");
-			
-			}else{
+
+			}
+			else
+			{
 				values.put(canDistributeKey, Constants.FALSE);
 				values.put(rowStatuskey, "enable");
 			}
-			
-			Collection col = existingSpecimenOrderItem.getSpecimen().getConsentTierStatusCollection();
+
+			Collection col = existingSpecimenOrderItem.getSpecimen()
+					.getConsentTierStatusCollection();
 			Iterator itr = col.iterator();
-			if(itr.hasNext())
-			{	
+			if (itr.hasNext())
+			{
 				values.put(consentVerificationkey, Constants.VIEW_CONSENTS);
-			}	
+			}
 			else
 			{
-				values.put(consentVerificationkey,Constants.NO_CONSENTS);
+				values.put(consentVerificationkey, Constants.NO_CONSENTS);
 			}
 			//values.put(consentVerificationkey, "No Consents");
 			//Fix me second condition added by vaishali
-			if (existingSpecimenOrderItem.getDistributedItem() != null && existingSpecimenOrderItem.getDistributedItem().getQuantity() != null)
+			if (existingSpecimenOrderItem.getDistributedItem() != null
+					&& existingSpecimenOrderItem.getDistributedItem().getQuantity() != null)
 			{
-				values.put(assignQty, existingSpecimenOrderItem.getDistributedItem().getQuantity().toString());
+				values.put(assignQty, existingSpecimenOrderItem.getDistributedItem().getQuantity()
+						.toString());
 			}
 			values.put(actualSpecimenClass, existingSpecimenOrderItem.getSpecimen().getClassName());
-			values.put(actualSpecimenType, existingSpecimenOrderItem.getSpecimen().getSpecimenType());
-			
+			values.put(actualSpecimenType, existingSpecimenOrderItem.getSpecimen()
+					.getSpecimenType());
+
 			// setting default status
 			if (existingSpecimenOrderItem.getStatus().equals(Constants.ORDER_REQUEST_STATUS_NEW))
 			{
 				if (existingSpecimenOrderItem.getNewSpecimenArrayOrderItem() == null)
 				{
-					values.put(assignStatus, Constants.ORDER_REQUEST_STATUS_PENDING_FOR_DISTRIBUTION);
+					values.put(assignStatus,
+							Constants.ORDER_REQUEST_STATUS_PENDING_FOR_DISTRIBUTION);
 				}
 				else
 				{
-					values.put(assignStatus, Constants.ORDER_REQUEST_STATUS_READY_FOR_ARRAY_PREPARATION);
+					values.put(assignStatus,
+							Constants.ORDER_REQUEST_STATUS_READY_FOR_ARRAY_PREPARATION);
 				}
 			}
-			
+
 			values.put(requestFor, existingSpecimenOrderItem.getSpecimen().getId());
-			values.put(selectedSpecimenTypeKey,existingSpecimenOrderItem.getSpecimen().getSpecimenType());
-			values.put(selectedSpecimenQuantity,existingSpecimenOrderItem.getSpecimen().getAvailableQuantity().toString());
-			values.put(selectedSpecimenQuantityUnit, OrderingSystemUtil.getUnit(existingSpecimenOrderItem.getSpecimen()));
-			
+			values.put(selectedSpecimenTypeKey, existingSpecimenOrderItem.getSpecimen()
+					.getSpecimenType());
+			values.put(selectedSpecimenQuantity, existingSpecimenOrderItem.getSpecimen()
+					.getAvailableQuantity().toString());
+			values.put(selectedSpecimenQuantityUnit, OrderingSystemUtil
+					.getUnit(existingSpecimenOrderItem.getSpecimen()));
+
 			List allSpecimen = new ArrayList();
-			allSpecimen = OrderingSystemUtil.getAllSpecimen(existingSpecimenOrderItem.getSpecimen());
+			allSpecimen = OrderingSystemUtil
+					.getAllSpecimen(existingSpecimenOrderItem.getSpecimen());
 			SpecimenComparator comparator = new SpecimenComparator();
 			Collections.sort(allSpecimen, comparator);
-			List childrenSpecimenListToDisplay = OrderingSystemUtil.getNameValueBeanList(allSpecimen,existingSpecimenOrderItem.getSpecimen());
+			List childrenSpecimenListToDisplay = OrderingSystemUtil.getNameValueBeanList(
+					allSpecimen, existingSpecimenOrderItem.getSpecimen());
 			requestForDropDownMap.put(specimenList, childrenSpecimenListToDisplay);
-			
-			
+
 		}
 		else if (orderItem instanceof DerivedSpecimenOrderItem)
 		{
@@ -660,77 +741,94 @@ public class RequestDetailsForm extends AbstractActionForm
 			values.put(requestedItem, derivedSpecimenOrderItem.getParentSpecimen().getLabel());
 			//Collection childrenSpecimenList = OrderingSystemUtil.getAllChildrenSpecimen(derivedSpecimenOrderItem.getParentSpecimen().getChildSpecimenCollection());
 			//List finalChildrenSpecimenList = OrderingSystemUtil.getChildrenSpecimenForClassAndType(childrenSpecimenList, derivedSpecimenOrderItem
-				//	.getSpecimenClass(), derivedSpecimenOrderItem.getSpecimenType());
+			//	.getSpecimenClass(), derivedSpecimenOrderItem.getSpecimenType());
 			//Iterator i = finalChildrenSpecimenList.iterator();
 			//while (i.hasNext())
 			//{//	Ajax  conditions
-				//totalSpecimenListInRequestForDropDown.add(i.next());
+			//totalSpecimenListInRequestForDropDown.add(i.next());
 			//}
-			
+
 			List allSpecimen = new ArrayList();
-			if(derivedSpecimenOrderItem.getNewSpecimenArrayOrderItem()!=null)
+			if (derivedSpecimenOrderItem.getNewSpecimenArrayOrderItem() != null)
 			{
-				Collection childrenSpecimenList = OrderingSystemUtil.getAllChildrenSpecimen(derivedSpecimenOrderItem.getParentSpecimen().getChildSpecimenCollection());
-				allSpecimen = OrderingSystemUtil.getChildrenSpecimenForClassAndType(childrenSpecimenList, derivedSpecimenOrderItem
-						.getSpecimenClass(), derivedSpecimenOrderItem.getSpecimenType());
-								
-			} else {
-				
-				allSpecimen = OrderingSystemUtil.getAllSpecimen(derivedSpecimenOrderItem.getParentSpecimen());
-				
+				Collection childrenSpecimenList = OrderingSystemUtil
+						.getAllChildrenSpecimen(derivedSpecimenOrderItem.getParentSpecimen()
+								.getChildSpecimenCollection());
+				allSpecimen = OrderingSystemUtil.getChildrenSpecimenForClassAndType(
+						childrenSpecimenList, derivedSpecimenOrderItem.getSpecimenClass(),
+						derivedSpecimenOrderItem.getSpecimenType());
+
 			}
-			
+			else
+			{
+
+				allSpecimen = OrderingSystemUtil.getAllSpecimen(derivedSpecimenOrderItem
+						.getParentSpecimen());
+
+			}
+
 			SpecimenComparator comparator = new SpecimenComparator();
 			Collections.sort(allSpecimen, comparator);
-			List childrenSpecimenListToDisplay  = OrderingSystemUtil.getNameValueBeanList(allSpecimen,null);
-			values.put(availableQty, derivedSpecimenOrderItem.getParentSpecimen().getAvailableQuantity().toString());
-			values.put(selectedSpecimenTypeKey,"NA");
-			
+			List childrenSpecimenListToDisplay = OrderingSystemUtil.getNameValueBeanList(
+					allSpecimen, null);
+			values.put(availableQty, derivedSpecimenOrderItem.getParentSpecimen()
+					.getAvailableQuantity().toString());
+			values.put(selectedSpecimenTypeKey, "NA");
+
 			if (orderItem.getStatus().equals(Constants.ORDER_REQUEST_STATUS_NEW))
 				values.put(assignStatus, Constants.ORDER_REQUEST_STATUS_PENDING_FOR_DISTRIBUTION);
-			
-			
-			Collection col = derivedSpecimenOrderItem.getParentSpecimen().getConsentTierStatusCollection();
+
+			Collection col = derivedSpecimenOrderItem.getParentSpecimen()
+					.getConsentTierStatusCollection();
 			Iterator itr = col.iterator();
-					
+
 			if (!allSpecimen.isEmpty())
 			{
-				values.put(availableQty, (((Specimen) allSpecimen.get(0)).getAvailableQuantity().toString()));
-				if(itr.hasNext())
-				{	
+				values.put(availableQty, (((Specimen) allSpecimen.get(0)).getAvailableQuantity()
+						.toString()));
+				if (itr.hasNext())
+				{
 					values.put(consentVerificationkey, Constants.VIEW_CONSENTS);
-				}	
+				}
 				else
 				{
-					values.put(consentVerificationkey,Constants.NO_CONSENTS);
+					values.put(consentVerificationkey, Constants.NO_CONSENTS);
 				}
-				
+
 			}
 			else
 			{
 				values.put(availableQty, "");//derivedSpecimenorderItem.getSpecimen().getAvailableQuantity().getValue().toString()
-				
-				values.put(consentVerificationkey,Constants.NO_CONSENTS);
+
+				values.put(consentVerificationkey, Constants.NO_CONSENTS);
 
 			}
-			
-			
-			if(allSpecimen.size() != 0  && derivedSpecimenOrderItem.getNewSpecimenArrayOrderItem()!=null)
+
+			if (allSpecimen.size() != 0
+					&& derivedSpecimenOrderItem.getNewSpecimenArrayOrderItem() != null)
 			{
-					Specimen spec = ((Specimen)allSpecimen.get(0));
-					values.put(requestFor, spec.getId());
-			} else {
-					values.put(requestFor, "#");
+				Specimen spec = ((Specimen) allSpecimen.get(0));
+				values.put(requestFor, spec.getId());
 			}
-			
-			
-			if(derivedSpecimenOrderItem.getStatus().equals(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED)
-					||derivedSpecimenOrderItem.getStatus().equals(assignStatus.equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE)))
+			else
+			{
+				values.put(requestFor, "#");
+			}
+
+			if (derivedSpecimenOrderItem.getStatus().equals(
+					Constants.ORDER_REQUEST_STATUS_DISTRIBUTED)
+					|| derivedSpecimenOrderItem
+							.getStatus()
+							.equals(
+									assignStatus
+											.equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE)))
 			{
 				values.put(canDistributeKey, Constants.TRUE);
 				values.put(rowStatuskey, "disable");
-			
-			}else{
+
+			}
+			else
+			{
 				values.put(canDistributeKey, Constants.FALSE);
 				values.put(rowStatuskey, "enable");
 			}
@@ -741,59 +839,72 @@ public class RequestDetailsForm extends AbstractActionForm
 			values.put(instanceOf, "Derived");
 
 			//fix me second condition added by vaishali
-			if (derivedSpecimenOrderItem.getDistributedItem() != null && derivedSpecimenOrderItem.getDistributedItem().getQuantity() != null)
+			if (derivedSpecimenOrderItem.getDistributedItem() != null
+					&& derivedSpecimenOrderItem.getDistributedItem().getQuantity() != null)
 			{
-				values.put(assignQty, derivedSpecimenOrderItem.getDistributedItem().getQuantity().toString());
-				
+				values.put(assignQty, derivedSpecimenOrderItem.getDistributedItem().getQuantity()
+						.toString());
+
 			}
-			
-			values.put(actualSpecimenClass, derivedSpecimenOrderItem.getParentSpecimen().getSpecimenClass());
-			values.put(actualSpecimenType, derivedSpecimenOrderItem.getParentSpecimen().getSpecimenType());
+
+			values.put(actualSpecimenClass, derivedSpecimenOrderItem.getParentSpecimen()
+					.getSpecimenClass());
+			values.put(actualSpecimenType, derivedSpecimenOrderItem.getParentSpecimen()
+					.getSpecimenType());
 			requestForDropDownMap.put(specimenList, childrenSpecimenListToDisplay);
 		}
 		else if (orderItem instanceof PathologicalCaseOrderItem)
 		{
 			PathologicalCaseOrderItem pathologicalCaseOrderItem = (PathologicalCaseOrderItem) orderItem;
-			values.put(requestedItem, pathologicalCaseOrderItem.getSpecimenCollectionGroup().getSurgicalPathologyNumber());
+			values.put(requestedItem, pathologicalCaseOrderItem.getSpecimenCollectionGroup()
+					.getSurgicalPathologyNumber());
 			//Fetching requestFor list
-			List totalSpecimenColl = OrderingSystemUtil.getAllSpecimensForPathologicalCases(pathologicalCaseOrderItem
-					.getSpecimenCollectionGroup(), pathologicalCaseOrderItem);
+			List totalSpecimenColl = OrderingSystemUtil.getAllSpecimensForPathologicalCases(
+					pathologicalCaseOrderItem.getSpecimenCollectionGroup(),
+					pathologicalCaseOrderItem);
 			Iterator i = totalSpecimenColl.iterator();
 			while (i.hasNext())
 			{//	Ajax  conditions
 				totalSpecimenListInRequestForDropDown.add(i.next());
 			}
-			List specimenListToDisplay = OrderingSystemUtil.getNameValueBeanList(totalSpecimenColl,null);
-			Logger.out.debug("size of specimenListToDisplay :::"+specimenListToDisplay.size());
+			List specimenListToDisplay = OrderingSystemUtil.getNameValueBeanList(totalSpecimenColl,
+					null);
+			Logger.out.debug("size of specimenListToDisplay :::" + specimenListToDisplay.size());
 			requestForDropDownMap.put(specimenList, specimenListToDisplay);
-			values.put(specimenCollGrpId, pathologicalCaseOrderItem.getSpecimenCollectionGroup().getId().toString());
+			values.put(specimenCollGrpId, pathologicalCaseOrderItem.getSpecimenCollectionGroup()
+					.getId().toString());
 			if (totalSpecimenColl.size() != 0)
 			{
-				Specimen spec = ((Specimen)totalSpecimenColl.get(0));
-				
+				Specimen spec = ((Specimen) totalSpecimenColl.get(0));
+
 				Collection col = spec.getConsentTierStatusCollection();
 				Iterator itr = col.iterator();
-				if(itr.hasNext())
-				{	
-					values.put(consentVerificationkey, Constants.VIEW_CONSENTS);
-				}else
+				if (itr.hasNext())
 				{
-					values.put(consentVerificationkey,Constants.NO_CONSENTS);
+					values.put(consentVerificationkey, Constants.VIEW_CONSENTS);
 				}
-				
+				else
+				{
+					values.put(consentVerificationkey, Constants.NO_CONSENTS);
+				}
+
 				values.put(requestFor, spec.getId());
-				values.put(selectedSpecimenTypeKey,spec.getSpecimenType());
-				values.put(selectedSpecimenQuantityUnit,OrderingSystemUtil.getUnit(spec));
+				values.put(selectedSpecimenTypeKey, spec.getSpecimenType());
+				values.put(selectedSpecimenQuantityUnit, OrderingSystemUtil.getUnit(spec));
 				values.put(selectedSpecimenQuantity, spec.getAvailableQuantity().toString());
-				
-			} else {
+
+			}
+			else
+			{
 				values.put(requestFor, "#");
-				values.put(selectedSpecimenTypeKey,"NA");
-				values.put(consentVerificationkey,Constants.NO_CONSENTS);
+				values.put(selectedSpecimenTypeKey, "NA");
+				values.put(consentVerificationkey, Constants.NO_CONSENTS);
 			}
 			if (specimenListToDisplay.isEmpty()
-					|| (pathologicalCaseOrderItem.getSpecimenClass() != null && pathologicalCaseOrderItem.getSpecimenType() != null
-							&& !pathologicalCaseOrderItem.getSpecimenClass().trim().equalsIgnoreCase("") && !pathologicalCaseOrderItem
+					|| (pathologicalCaseOrderItem.getSpecimenClass() != null
+							&& pathologicalCaseOrderItem.getSpecimenType() != null
+							&& !pathologicalCaseOrderItem.getSpecimenClass().trim()
+									.equalsIgnoreCase("") && !pathologicalCaseOrderItem
 							.getSpecimenType().trim().equalsIgnoreCase("")))
 			{
 				values.put(instanceOf, "DerivedPathological");
@@ -804,22 +915,29 @@ public class RequestDetailsForm extends AbstractActionForm
 			}
 			if (pathologicalCaseOrderItem.getDistributedItem() != null)
 			{
-				values.put(assignQty, pathologicalCaseOrderItem.getDistributedItem().getQuantity().toString());
-				
+				values.put(assignQty, pathologicalCaseOrderItem.getDistributedItem().getQuantity()
+						.toString());
+
 			}
-			
-			
+
 			values.put(specimenClass, pathologicalCaseOrderItem.getSpecimenClass());
 			values.put(specimenType, pathologicalCaseOrderItem.getSpecimenType());
 			values.put(actualSpecimenClass, pathologicalCaseOrderItem.getSpecimenClass());
 			values.put(actualSpecimenType, pathologicalCaseOrderItem.getSpecimenType());
-			if(pathologicalCaseOrderItem.getStatus().equals(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED)
-					||pathologicalCaseOrderItem.getStatus().equals(assignStatus.equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE)))
+			if (pathologicalCaseOrderItem.getStatus().equals(
+					Constants.ORDER_REQUEST_STATUS_DISTRIBUTED)
+					|| pathologicalCaseOrderItem
+							.getStatus()
+							.equals(
+									assignStatus
+											.equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE)))
 			{
 				values.put(canDistributeKey, Constants.TRUE);
 				values.put(rowStatuskey, "disable");
-			
-			}else{
+
+			}
+			else
+			{
 				values.put(canDistributeKey, Constants.FALSE);
 				values.put(rowStatuskey, "enable");
 			}
@@ -868,54 +986,58 @@ public class RequestDetailsForm extends AbstractActionForm
 	{
 		ActionErrors errors = new ActionErrors();
 		Validator validator = new Validator();
-		
-		 String noOfRecords=(String)request.getParameter("noOfRecords");
-	     int recordCount=Integer.parseInt(noOfRecords);
-	   
-	     
-	     if(this.getDistributionProtocolId() == null || this.getDistributionProtocolId().equalsIgnoreCase("") ||
-	    		 this.getDistributionProtocolId().equalsIgnoreCase("-1"))
-		 {
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.distribution.protocol"));
-		 }
-	     
-	     if(this.orderName == null || this.orderName.equals(""))
-	     {
-	    	 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.order.name"));
-	     }
-	   	     
-	     
-	 	for (int i = 0; i < recordCount; i++) 
+
+		String noOfRecords = (String) request.getParameter("noOfRecords");
+		int recordCount = Integer.parseInt(noOfRecords);
+
+		if (this.getDistributionProtocolId() == null
+				|| this.getDistributionProtocolId().equalsIgnoreCase("")
+				|| this.getDistributionProtocolId().equalsIgnoreCase("-1"))
 		{
-			String consentVerificationkey = "RequestDetailsBean:" +i+ "_consentVerificationkey";
-			String verificationStatus=(String)getValue(consentVerificationkey);
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.distribution.protocol"));
+		}
+
+		if (this.orderName == null || this.orderName.equals(""))
+		{
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.order.name"));
+		}
+
+		for (int i = 0; i < recordCount; i++)
+		{
+			String consentVerificationkey = "RequestDetailsBean:" + i + "_consentVerificationkey";
+			String verificationStatus = (String) getValue(consentVerificationkey);
 			String assignStatusKey = "RequestDetailsBean:" + i + "_assignedStatus";
-			String assignStatus = (String)getValue(assignStatusKey);
-			String canDistribute=(String)getValue("RequestDetailsBean:" +i+ "_canDistribute");
-			setValue("RequestDetailsBean:" +i+ "_availableQty",
-					getValue("RequestDetailsBean:" +i+ "_availableQty").toString());
-			setValue("RequestDetailsBean:" +i+ "_requestFor",
-					getValue("RequestDetailsBean:" +i+ "_requestFor").toString());
-			setValue("RequestDetailsBean:" +i+ "_orderItemId",
-					getValue("RequestDetailsBean:" +i+ "_orderItemId").toString());
-		
-			if(verificationStatus!=null)
-			{	
-				if((verificationStatus.equalsIgnoreCase(Constants.VIEW_CONSENTS) && assignStatus.equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED))
-						||(verificationStatus.equalsIgnoreCase(Constants.VIEW_CONSENTS )&&assignStatus.equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE)))
+			String assignStatus = (String) getValue(assignStatusKey);
+			String canDistribute = (String) getValue("RequestDetailsBean:" + i + "_canDistribute");
+			setValue("RequestDetailsBean:" + i + "_availableQty", getValue(
+					"RequestDetailsBean:" + i + "_availableQty").toString());
+			setValue("RequestDetailsBean:" + i + "_requestFor", getValue(
+					"RequestDetailsBean:" + i + "_requestFor").toString());
+			setValue("RequestDetailsBean:" + i + "_orderItemId", getValue(
+					"RequestDetailsBean:" + i + "_orderItemId").toString());
+
+			if (verificationStatus != null)
+			{
+				if ((verificationStatus.equalsIgnoreCase(Constants.VIEW_CONSENTS) && assignStatus
+						.equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED))
+						|| (verificationStatus.equalsIgnoreCase(Constants.VIEW_CONSENTS) && assignStatus
+								.equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE)))
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.verify.Consent"));
 					break;
 				}
 			}
-			if(canDistribute!=null && Constants.FALSE.equals(canDistribute) && (assignStatus.equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED)
-					||assignStatus.equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE) ))
+			if (canDistribute != null
+					&& Constants.FALSE.equals(canDistribute)
+					&& (assignStatus.equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED) || assignStatus
+							.equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE)))
 			{
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.distribution.quantity.should.equal"));
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+						"errors.distribution.quantity.should.equal"));
 				break;
 			}
 
-		}	
+		}
 		//getting values from a map.
 		RequestDetailsBean requestDetailsBean = null;
 		DefinedArrayDetailsBean definedArrayDetailsBean = null;
@@ -953,70 +1075,87 @@ public class RequestDetailsForm extends AbstractActionForm
 			}
 			if (specimenItem)
 			{
-				
-				if (requestDetailsBean.getAssignedQty() != null && !requestDetailsBean.getAssignedQty().equalsIgnoreCase(""))
+
+				if (requestDetailsBean.getAssignedQty() != null
+						&& !requestDetailsBean.getAssignedQty().equalsIgnoreCase(""))
 				{
 					if (!validator.isDouble(requestDetailsBean.getAssignedQty()))
 					{
-						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format", ApplicationProperties
-								.getValue("itemrecord.quantity")));
+						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
+								ApplicationProperties.getValue("itemrecord.quantity")));
 						break;
 					}
 				}
-				if(requestDetailsBean.getInstanceOf().equals("Derived") || requestDetailsBean.getInstanceOf().equals("Pathological")
+				if (requestDetailsBean.getInstanceOf().equals("Derived")
+						|| requestDetailsBean.getInstanceOf().equals("Pathological")
 						|| requestDetailsBean.getInstanceOf().equals("DerivedPathological"))
 				{
-					OrderBizLogic orderBizLogic = (OrderBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
-					Specimen specimen = null;
-					if(requestDetailsBean.getRowStatuskey().equals("enable") && (requestDetailsBean.getAssignedStatus().equals(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED)
-							||requestDetailsBean.getAssignedStatus().equals(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE)))
-					{	
-						if(requestDetailsBean.getRequestFor().equals("#"))
-						{
-							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.distribution.derivedspecimen.no.specimen"));
-							break;
-						
-						} else {
-							
-							try
-							{
-								specimen = (Specimen)orderBizLogic.getSpecimenObject(Long.valueOf(requestDetailsBean.getRequestFor()));
-							}
-							catch (NumberFormatException e)
-							{
-								logger.debug("RequestDetailsForm.java", e);
-								e.printStackTrace();
-							}
-							catch (BizLogicException e)
-							{
-								logger.debug("RequestDetailsForm.java", e);
-								e.printStackTrace();
-							}
-							if(!(specimen.getClassName().equals(requestDetailsBean.getClassName()) && 
-									specimen.getSpecimenType().equals(requestDetailsBean.getType())))
-							{
-								
-								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.distribution.derivedspecimen.type.class"));
-								break;
-							}
-											
-						}
-					}	
-					
-				}
-			}
-			else if (arrayDetailsItem)
-			{
-				if (definedArrayDetailsBean.getAssignedQuantity() != null && !definedArrayDetailsBean.getAssignedQuantity().equalsIgnoreCase(""))
-				{
-					if (!validator.isDouble(definedArrayDetailsBean.getAssignedQuantity()))
+					try
 					{
-						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format", ApplicationProperties
-								.getValue("itemrecord.quantity")));
-						break;
+						IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+						OrderBizLogic orderBizLogic = (OrderBizLogic) factory
+								.getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
+						Specimen specimen = null;
+						if (requestDetailsBean.getRowStatuskey().equals("enable")
+								&& (requestDetailsBean.getAssignedStatus().equals(
+										Constants.ORDER_REQUEST_STATUS_DISTRIBUTED) || requestDetailsBean
+										.getAssignedStatus()
+										.equals(
+												Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE)))
+						{
+							if (requestDetailsBean.getRequestFor().equals("#"))
+							{
+								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+										"errors.distribution.derivedspecimen.no.specimen"));
+								break;
+
+							}
+							else
+							{
+
+								specimen = (Specimen) orderBizLogic.getSpecimenObject(Long
+										.valueOf(requestDetailsBean.getRequestFor()));
+
+								if (!(specimen.getClassName().equals(
+										requestDetailsBean.getClassName()) && specimen
+										.getSpecimenType().equals(requestDetailsBean.getType())))
+								{
+
+									errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+											"errors.distribution.derivedspecimen.type.class"));
+									break;
+								}
+
+							}
+						}
+
+					}
+					catch (BizLogicException e)
+					{
+						Logger.out.debug("Bizlogic exception while getting IFactory instance:" + e);
+						e.printStackTrace();
+					}
+					catch (NumberFormatException e)
+					{
+						logger.debug("RequestDetailsForm.java", e);
+						e.printStackTrace();
 					}
 				}
+				else if (arrayDetailsItem)
+				{
+					if (definedArrayDetailsBean.getAssignedQuantity() != null
+							&& !definedArrayDetailsBean.getAssignedQuantity().equalsIgnoreCase(""))
+					{
+						if (!validator.isDouble(definedArrayDetailsBean.getAssignedQuantity()))
+						{
+							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+									"errors.item.format", ApplicationProperties
+											.getValue("itemrecord.quantity")));
+							break;
+						}
+					}
 
+				}
 			}
 		}
 		return errors;
@@ -1083,7 +1222,7 @@ public class RequestDetailsForm extends AbstractActionForm
 	public void setAddNewObjectIdentifier(String arg0, Long arg1)
 	{
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

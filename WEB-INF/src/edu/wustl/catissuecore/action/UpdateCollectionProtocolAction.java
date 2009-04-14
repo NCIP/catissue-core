@@ -13,15 +13,16 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
 import edu.wustl.catissuecore.bean.CollectionProtocolBean;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.dto.CollectionProtocolDTO;
 import edu.wustl.catissuecore.util.CollectionProtocolUtil;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.AppUtility;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.security.exception.UserNotAuthorizedException;
 ;
 
@@ -41,8 +42,8 @@ public class UpdateCollectionProtocolAction extends BaseAction {
 			CollectionProtocolBean collectionProtocolBean = 
 				(CollectionProtocolBean)(request.getSession())
 				.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
-			
-			IBizLogic bizLogic =BizLogicFactory.getInstance().getBizLogic(Constants.COLLECTION_PROTOCOL_FORM_ID);
+			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			IBizLogic bizLogic =factory.getBizLogic(Constants.COLLECTION_PROTOCOL_FORM_ID);
 			HttpSession session = request.getSession();
 			SessionDataBean sessionDataBean = (SessionDataBean)
 							session.getAttribute(Constants.SESSION_DATA);

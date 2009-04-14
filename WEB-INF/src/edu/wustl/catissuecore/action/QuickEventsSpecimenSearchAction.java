@@ -23,11 +23,12 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.QuickEventsForm;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.bizlogic.IBizLogic;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
@@ -63,7 +64,8 @@ public class QuickEventsSpecimenSearchAction extends BaseAction {
   	 	if(pageOf.equals(Constants.SUCCESS ) )
   	 	{
   	 		//DefaultBizLogic bizLogic = BizLogicFactory.getDefaultBizLogic();
-  	 		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+  	 		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+  	 		IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
   	 		String specimenFound="0";
   	 		String errorString="";
   	 		String specimenLabel="";

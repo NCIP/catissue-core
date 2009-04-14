@@ -25,7 +25,6 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
 import edu.wustl.catissuecore.bizlogic.ReportLoaderQueueBizLogic;
 import edu.wustl.catissuecore.caties.util.CaTIESConstants;
@@ -39,6 +38,8 @@ import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.exception.DAOException;
@@ -131,7 +132,8 @@ public class ConflictResolverAction extends BaseAction
 		
 		Participant participant = Utility.getParticipantFromReportLoaderQueue(reportQueueId);
 	
-		ParticipantBizLogic participantBizLogic = (ParticipantBizLogic)BizLogicFactory.getInstance().getBizLogic(Participant.class.getName());
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		ParticipantBizLogic participantBizLogic = (ParticipantBizLogic)factory.getBizLogic(Participant.class.getName());
 		try
 		{
 			participantBizLogic.insert(participant,getSessionData(request),0);
@@ -224,7 +226,8 @@ public class ConflictResolverAction extends BaseAction
 		if(specimenCollGrpId != null && !specimenCollGrpId.equals(""))
 		{		
 			SpecimenCollectionGroup scg=null;
-			ReportLoaderQueueBizLogic reportLoaderQueueBizLogic = (ReportLoaderQueueBizLogic)BizLogicFactory.getInstance().getBizLogic(ReportLoaderQueue.class.getName());
+			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			ReportLoaderQueueBizLogic reportLoaderQueueBizLogic = (ReportLoaderQueueBizLogic)factory.getBizLogic(ReportLoaderQueue.class.getName());
 			Object object = reportLoaderQueueBizLogic.retrieve(SpecimenCollectionGroup.class.getName(), new Long(specimenCollGrpId));
 			if(object != null)
 			{
@@ -275,7 +278,8 @@ public class ConflictResolverAction extends BaseAction
 					
 		try
 		{
-			ReportLoaderQueueBizLogic reportLoaderQueueBizLogic = (ReportLoaderQueueBizLogic)BizLogicFactory.getInstance().getBizLogic(ReportLoaderQueue.class.getName());
+			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			ReportLoaderQueueBizLogic reportLoaderQueueBizLogic = (ReportLoaderQueueBizLogic)factory.getBizLogic(ReportLoaderQueue.class.getName());
 			reportLoaderQueueBizLogic.update(reportLoaderQueue, reportLoaderQueue, 0, getSessionData(request));
 			
 		}
@@ -339,7 +343,8 @@ public class ConflictResolverAction extends BaseAction
 		   	Long cprId =null;
 			ReportLoaderQueue reportLoaderQueue =null;
 			reportLoaderQueue = Utility.getReportQueueObject(reportQueueId);
-			ReportLoaderQueueBizLogic reportLoaderQueueBizLogic = (ReportLoaderQueueBizLogic)BizLogicFactory.getInstance().getBizLogic(ReportLoaderQueue.class.getName());
+			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			ReportLoaderQueueBizLogic reportLoaderQueueBizLogic = (ReportLoaderQueueBizLogic)factory.getBizLogic(ReportLoaderQueue.class.getName());
 			
 			//deleting the reportloaderQueue object
 			reportLoaderQueueBizLogic.delete(reportLoaderQueue, 0);

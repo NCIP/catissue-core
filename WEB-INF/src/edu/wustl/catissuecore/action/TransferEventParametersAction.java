@@ -94,7 +94,7 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 		//    	
 		if (transferEventParametersForm.getOperation().equals(Constants.ADD))
 		{
-			IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(
+			IBizLogic bizLogic = factory.getBizLogic(
 					Constants.DEFAULT_BIZ_LOGIC);
 			String identifier = (String) request.getAttribute(Constants.SPECIMEN_ID);
 			if (identifier == null)

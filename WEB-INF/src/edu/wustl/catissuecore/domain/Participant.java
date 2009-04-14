@@ -21,7 +21,6 @@ import java.util.Map;
 
 import edu.wustl.catissuecore.actionForm.ParticipantForm;
 import edu.wustl.catissuecore.bean.ConsentResponseBean;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
 import edu.wustl.catissuecore.util.ConsentUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
@@ -31,6 +30,8 @@ import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.bizlogic.IActivityStatus;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.Validator;
@@ -816,8 +817,9 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 	 */
 	private Collection getConsentList(String collectionProtocolID) throws NumberFormatException, BizLogicException
 	{
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 		CollectionProtocolBizLogic collectionProtocolBizLogic =
-			(CollectionProtocolBizLogic) BizLogicFactory.getInstance().getBizLogic(
+			(CollectionProtocolBizLogic) factory.getBizLogic(
 				Constants.COLLECTION_PROTOCOL_FORM_ID);
 		Collection consentTierCollection = (Collection) collectionProtocolBizLogic.
 			retrieveAttribute(CollectionProtocol.class.getName(), Long

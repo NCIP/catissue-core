@@ -16,15 +16,12 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
 import edu.wustl.catissuecore.actionForm.BulkEventOperationsForm;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.bulkOperations.BulkOperationsBizlogic;
-import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.action.BaseAction;
-import edu.wustl.common.action.CommonAddEditAction;
-import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.logger.Logger;
 
 public class BulkOperationSubmitAction extends BaseAction
@@ -52,7 +49,8 @@ public class BulkOperationSubmitAction extends BaseAction
 			if (specimenIds != null && specimenIds.size() > 0)
 			{
 				//Insert bulk events
-				BulkOperationsBizlogic bizlogic = (BulkOperationsBizlogic) BizLogicFactory.getInstance().getBizLogic(Constants.BULK_OPERATIONS_FORM_ID);
+				IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+				BulkOperationsBizlogic bizlogic = (BulkOperationsBizlogic) factory.getBizLogic(Constants.BULK_OPERATIONS_FORM_ID);
 				bizlogic.insertEvents(bulkEventOperationsForm.getOperation(), getSessionData(request), specimenIds, bulkEventOperationsForm.getUserId(), bulkEventOperationsForm
 								.getDateOfEvent(), bulkEventOperationsForm.getTimeInHours(),
 						bulkEventOperationsForm.getTimeInMinutes(), bulkEventOperationsForm.getComments(), bulkEventOperationsForm.getEventSpecificData());

@@ -22,12 +22,13 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.ReportLoaderQueueBizLogic;
 import edu.wustl.catissuecore.domain.pathology.ReportLoaderQueue;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.dao.exception.DAOException;
 
 public class ConflictParticipantSCGTreeAction extends BaseAction{
@@ -36,7 +37,8 @@ public class ConflictParticipantSCGTreeAction extends BaseAction{
 	{
 		String reportQueueId = (String)request.getParameter(Constants.REPORT_ID);	
 		ReportLoaderQueue reportLoaderQueue =null;
-		ReportLoaderQueueBizLogic reportLoaderQueueBizLogic = (ReportLoaderQueueBizLogic)BizLogicFactory.getInstance().getBizLogic(ReportLoaderQueue.class.getName());
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		ReportLoaderQueueBizLogic reportLoaderQueueBizLogic = (ReportLoaderQueueBizLogic)factory.getBizLogic(ReportLoaderQueue.class.getName());
 		
 		Vector treeData = new Vector();
 		List reportQueueData = new ArrayList();
@@ -65,7 +67,8 @@ public class ConflictParticipantSCGTreeAction extends BaseAction{
 	 */
 	private List getReportQueueDataList(String reportQueueId) throws BizLogicException
 	{
-		ReportLoaderQueueBizLogic reportLoaderQueueBizLogic = (ReportLoaderQueueBizLogic)BizLogicFactory.getInstance().getBizLogic(ReportLoaderQueue.class.getName());
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		ReportLoaderQueueBizLogic reportLoaderQueueBizLogic = (ReportLoaderQueueBizLogic)factory.getBizLogic(ReportLoaderQueue.class.getName());
 	    List reportQueueList = (List)reportLoaderQueueBizLogic.retrieve(ReportLoaderQueue.class.getName(),Constants.SYSTEM_IDENTIFIER, new Long(reportQueueId));
 		return reportQueueList;		
 	}

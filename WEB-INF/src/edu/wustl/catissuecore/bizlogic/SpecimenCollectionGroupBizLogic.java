@@ -66,6 +66,8 @@ import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exception.ErrorKey;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.DomainBeanIdentifierComparator;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.CommonServiceLocator;
@@ -597,7 +599,8 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 				Logger.out.debug("specimenCollectionGroup.getActivityStatus() " + specimenCollectionGroup.getActivityStatus());
 				Long specimenCollectionGroupIDArr[] = {specimenCollectionGroup.getId()};
 
-				NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
+				IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+				NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic) factory.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
 				bizLogic.disableRelatedObjectsForSpecimenCollectionGroup(dao, specimenCollectionGroupIDArr);
 			}
 		}
@@ -835,7 +838,8 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		Collection specimenColl = oldspecimenCollectionGroup.getSpecimenCollection();
 		if (specimenColl != null && !specimenColl.isEmpty())
 		{
-			SpecimenEventParametersBizLogic specimenEventParametersBizLogic = (SpecimenEventParametersBizLogic) BizLogicFactory.getInstance()
+			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			SpecimenEventParametersBizLogic specimenEventParametersBizLogic = (SpecimenEventParametersBizLogic) factory
 					.getBizLogic(Constants.COLLECTION_EVENT_PARAMETERS_FORM_ID);
 			Iterator iter = specimenColl.iterator();
 			while (iter.hasNext())
@@ -1126,7 +1130,8 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		auditDisabledObjects(dao, "CATISSUE_SPECIMEN_COLL_GROUP", listOfSubElement);
 		if (!listOfSubElement.isEmpty())
 		{
-			NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
+			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic) factory.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
 			bizLogic.disableRelatedObjectsForSpecimenCollectionGroup(dao, edu.wustl.common.util.Utility.toLongArray(listOfSubElement));
 		
 		}

@@ -21,12 +21,13 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.SiteForm;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.cde.CDEManager;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
@@ -85,8 +86,8 @@ public class SiteAction  extends SecureAction
         //Sets the siteTypeList attribute to be used in the Site Add/Edit Page.
         List siteList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_SITE_TYPE,null);
         request.setAttribute(Constants.SITETYPELIST, siteList);
-        
-    	UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.USER_FORM_ID);
+        IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+    	UserBizLogic userBizLogic = (UserBizLogic)factory.getBizLogic(Constants.USER_FORM_ID);
     	Collection coll =  userBizLogic.getUsers(operation);
     	request.setAttribute(Constants.USERLIST, coll);
     	

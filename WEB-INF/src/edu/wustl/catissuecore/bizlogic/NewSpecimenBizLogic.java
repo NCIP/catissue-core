@@ -72,6 +72,8 @@ import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exception.ErrorKey;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.CommonServiceLocator;
@@ -1544,7 +1546,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			{
 				storageContainerIds.add(storageValue);
 			}
-			StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(
+			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) factory.getBizLogic(
 					Constants.STORAGE_CONTAINER_FORM_ID);
 			storageContainerBizLogic.checkContainer(dao, storageContainerObj.getId().toString(), specimen.getSpecimenPosition()
 						.getPositionDimensionOne().toString(), specimen.getSpecimenPosition().getPositionDimensionTwo().toString(), sessionDataBean,

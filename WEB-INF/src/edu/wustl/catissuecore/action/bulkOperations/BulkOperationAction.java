@@ -16,13 +16,14 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.BulkEventOperationsForm;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.QueryShoppingCartBizLogic;
 import edu.wustl.catissuecore.bizlogic.SpecimenEventParametersBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.query.querysuite.QueryShoppingCart;
@@ -95,7 +96,8 @@ public abstract class BulkOperationAction extends SecureAction
         request.setAttribute(Constants.HOUR_LIST, Constants.HOUR_ARRAY);
         
         //Set User List
-       	UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.USER_FORM_ID);
+        IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+       	UserBizLogic userBizLogic = (UserBizLogic)factory.getBizLogic(Constants.USER_FORM_ID);
     	Collection userCollection =  userBizLogic.getUsers(Constants.ADD);
     	request.setAttribute(Constants.USERLIST, userCollection);
     	
@@ -108,7 +110,8 @@ public abstract class BulkOperationAction extends SecureAction
 		
 		if(specimenIds != null && specimenIds.size()>0)
 		{
-			SpecimenEventParametersBizLogic bizlogic = (SpecimenEventParametersBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.BULK_OPERATIONS_FORM_ID);
+			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			SpecimenEventParametersBizLogic bizlogic = (SpecimenEventParametersBizLogic) factory.getBizLogic(Constants.BULK_OPERATIONS_FORM_ID);
 			System.out.println("");
 			List specimenDataList = bizlogic.getSpecimenDataForBulkOperations(eventParametersForm.getOperation(),specimenIds, getSessionData(request));
 			List specimenRow = null;

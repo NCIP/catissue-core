@@ -23,7 +23,6 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessages;
 
 import edu.wustl.catissuecore.actionForm.ParticipantForm;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
@@ -35,10 +34,10 @@ import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IDomainObjectFactory;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.factory.IForwordToFactory;
 import edu.wustl.common.util.AbstractForwardToProcessor;
 import edu.wustl.common.util.Utility;
-import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
 
 
@@ -61,11 +60,13 @@ public class ParticipantSelectAction extends BaseAction
 		String target = null;
 		AbstractActionForm abstractForm = (AbstractActionForm) form;
 		ParticipantForm participantForm=(ParticipantForm) form;
-		IDomainObjectFactory abstractDomainObjectFactory = AbstractFactoryConfig.getInstance().getDomainObjectFactory();
+		IDomainObjectFactory iDomainObjectFactory = AbstractFactoryConfig.getInstance()
+		.getDomainObjectFactory();
 
-		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(abstractForm.getFormId());
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		IBizLogic bizLogic = factory.getBizLogic(abstractForm.getFormId());
 
-		String objectName = abstractDomainObjectFactory.getDomainObjectName(abstractForm.getFormId());
+		String objectName = iDomainObjectFactory.getDomainObjectName(abstractForm.getFormId());
 	  	
 		Logger.out.info("Participant Id-------------------"+request.getParameter("participantId"));
 		

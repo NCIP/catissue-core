@@ -43,11 +43,12 @@ import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exception.ErrorKey;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
@@ -77,7 +78,8 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 	 */
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws BizLogicException
 	{
-		NewSpecimenBizLogic newSpecimenBizLogic = (NewSpecimenBizLogic) BizLogicFactory.getInstance().getBizLogic(
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		NewSpecimenBizLogic newSpecimenBizLogic = (NewSpecimenBizLogic) factory.getBizLogic(
 				Constants.NEW_SPECIMEN_FORM_ID);
 		//For bulk operations 
 		List specimenIds=new ArrayList();
@@ -198,7 +200,8 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 						// check for closed StorageContainer
 						checkStatus(dao, storageContainerObj, "Storage Container");
 	
-						StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(
+						IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+						StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) factory.getBizLogic(
 								Constants.STORAGE_CONTAINER_FORM_ID);
 	
 						// --- check for all validations on the storage container.

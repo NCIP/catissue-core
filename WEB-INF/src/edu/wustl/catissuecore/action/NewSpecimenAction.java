@@ -36,7 +36,6 @@ import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
 import edu.wustl.catissuecore.bizlogic.AnnotationUtil;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
@@ -70,6 +69,8 @@ import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.cde.PermissibleValue;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.CommonServiceLocator;
@@ -107,8 +108,9 @@ public class NewSpecimenAction extends SecureAction
         	request.setAttribute(Constants.STATUS_MESSAGE_KEY, "errors.specimencollectionrequirementgroupedit");
         	return mapping.findForward(pageOf);
 	    }
-		IBizLogic bizLogicObj = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
-		NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
+        IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		IBizLogic bizLogicObj = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+		NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic) factory.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
 		
 		String treeRefresh = request.getParameter("refresh");
 		request.setAttribute("refresh",treeRefresh);
@@ -509,7 +511,7 @@ public class NewSpecimenAction extends SecureAction
 			setDateParameters(specimenForm);
 		}
 		//    	 ---- chetan 15-06-06 ----
-		StorageContainerBizLogic scbizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(
+		StorageContainerBizLogic scbizLogic = (StorageContainerBizLogic)factory.getBizLogic(
 				Constants.STORAGE_CONTAINER_FORM_ID);
 		TreeMap containerMap = new TreeMap();
 		List initialValues = null;
@@ -814,8 +816,9 @@ public class NewSpecimenAction extends SecureAction
 		//        String specimenId = request.getParameter(Constants.SPECIMEN_ID); 
 		//        request.setAttribute(Constants.SPECIMEN_ID, specimenId);
 		//        Logger.out.debug("\t\t SpecimenEventParametersAction************************************ : "+specimenId );
-		//        
-		UserBizLogic userBizLogic = (UserBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.USER_FORM_ID);
+		//  
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		UserBizLogic userBizLogic = (UserBizLogic) factory.getBizLogic(Constants.USER_FORM_ID);
 		Collection userCollection = userBizLogic.getUsers(operation);
 
 		request.setAttribute(Constants.USERLIST, userCollection);

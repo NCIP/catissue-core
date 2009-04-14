@@ -20,7 +20,6 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.ConfigureResultViewForm;
 import edu.wustl.catissuecore.actionForm.DistributionReportForm;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.domain.DistributedItem;
 import edu.wustl.catissuecore.domain.Distribution;
 import edu.wustl.catissuecore.domain.Specimen;
@@ -29,6 +28,8 @@ import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.ExportReport;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
@@ -89,7 +90,8 @@ public abstract class BaseDistributionReportAction extends BaseAction
     protected Distribution getDistribution(Long distributionId, SessionDataBean sessionDataBean, int securityParam)throws Exception
     {
     	//For a given Distribution ID retrieve the distribution object
-    	IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DISTRIBUTION_FORM_ID);
+    	IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		IBizLogic bizLogic = factory.getBizLogic(Constants.DISTRIBUTION_FORM_ID);
     	Object object = bizLogic.retrieve(Distribution.class.getName(), distributionId);
     	Distribution dist = (Distribution) object;
     	return dist;
@@ -105,7 +107,8 @@ public abstract class BaseDistributionReportAction extends BaseAction
 		 * Retriving collection of Distributed Items.
 		 * dist.getDistributedItemCollection(); 
 		 */
-    	IBizLogic bizLogicObj = BizLogicFactory.getInstance().getBizLogic(Constants.DISTRIBUTION_FORM_ID);
+    	IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		IBizLogic bizLogicObj = factory.getBizLogic(Constants.DISTRIBUTION_FORM_ID);
     	Collection distributedItemCollection = (Collection)bizLogicObj.retrieveAttribute(Distribution.class.getName(),dist.getId(),"elements(distributedItemCollection)"); 
        	//Specimen Ids which are getting distributed.
     	String []specimenIds = new String[distributedItemCollection.size()];
@@ -202,8 +205,8 @@ public abstract class BaseDistributionReportAction extends BaseAction
     				while (tableInPathTokenizer.hasMoreTokens())
     				{
     				    Long tableId = Long.valueOf(tableInPathTokenizer.nextToken());
-    				    QueryBizLogic bizLogic = (QueryBizLogic)BizLogicFactory.getInstance()
-    				    							.getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
+    				    QueryBizLogic bizLogic = (QueryBizLogic) factory
+						.getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
     				    aliasName = bizLogic.getAliasName(Constants.TABLE_ID_COLUMN, tableId);
     				    Logger.out.debug("aliasName for from Set**************************"+aliasName);
     				}

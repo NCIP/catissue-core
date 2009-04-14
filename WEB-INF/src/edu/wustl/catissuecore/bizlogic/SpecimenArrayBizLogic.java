@@ -46,6 +46,8 @@ import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exception.ErrorKey;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
@@ -217,7 +219,8 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 
 			if (flag)
 			{
-				StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(
+				IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+				StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) factory.getBizLogic(
 						Constants.STORAGE_CONTAINER_FORM_ID);
 				//check for all validations on the storage container.
 				//				if(specimenArray.getLocatedAtPosition() != null)
@@ -524,7 +527,8 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 			StorageContainer storageContainerObj = (StorageContainer) specimenArray.getLocatedAtPosition().getParentContainer();
 			//check for closed Storage Container
 			checkStatus(dao, storageContainerObj, "Storage Container");
-			StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(
+			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) factory.getBizLogic(
 					Constants.STORAGE_CONTAINER_FORM_ID);
 			// --- check for all validations on the storage container.
 			storageContainerBizLogic.checkContainer(dao, storageContainerObj.getId().toString(), specimenArray.getLocatedAtPosition()

@@ -29,7 +29,6 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.StorageContainerForm;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.Site;
@@ -37,12 +36,14 @@ import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.AppUtility;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
 
@@ -70,14 +71,15 @@ public class SimilarContainersAction extends SecureAction
 		//boolean to indicate whether the suitable containers to be shown in dropdown 
 		//is exceeding the max limit.
 		String exceedingMaxLimit = "false";
-		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) factory.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 		String selectedParentContainer=similarContainersForm.getParentContainerSelected();
 		if (similarContainersForm.getSpecimenOrArrayType() == null)
 		{
 			similarContainersForm.setSpecimenOrArrayType("Specimen");
 		}
 		Logger.out.info(" Map:---------------" + similarContainersForm.getSimilarContainersMap());
-		IBizLogic ibizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+		IBizLogic ibizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 		
 		//request = AppUtility.setCollectionProtocolList(request,similarContainersForm.getSiteId());
 		if ("Site".equals(similarContainersForm.getParentContainerSelected()))

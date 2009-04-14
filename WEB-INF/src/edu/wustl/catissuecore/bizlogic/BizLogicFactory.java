@@ -27,32 +27,7 @@ import edu.wustl.simplequery.bizlogic.QueryBizLogic;
  */
 public class BizLogicFactory implements IFactory
 {
-	//Singleton instance
-	private static BizLogicFactory factory = null;
-	
-	
-	static
-	{
-		factory = new BizLogicFactory();
-	}
-	
-	public BizLogicFactory()
-	{
-	}
-	
-	/**
-	 * Setter method in singleton class is to setup mock unit testing.
-	 * */
-	public static void setBizLogicFactory(BizLogicFactory externalFactory)
-	{
-		factory = externalFactory;
-	}
-	
-	public static BizLogicFactory getInstance()
-	{
-		return factory;
-	}
-	
+
     /**
      * Returns DAO instance according to the form bean type.
      * @param FORM_ID The form bean type.

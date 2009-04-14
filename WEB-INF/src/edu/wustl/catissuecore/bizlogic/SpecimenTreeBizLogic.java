@@ -23,6 +23,8 @@ import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.tree.SpecimenTreeNode;
 import edu.wustl.common.tree.TreeDataInterface;
 
@@ -72,7 +74,8 @@ public class SpecimenTreeBizLogic extends CatissueDefaultBizLogic implements Tre
 		try
 		{
 			//Retrieve the Specimen instance for that particular id.
-			IBizLogic defaultBizLogic = BizLogicFactory.getInstance().getBizLogic(-1);
+			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			IBizLogic defaultBizLogic = factory.getBizLogic(-1);
 
 
 
@@ -160,7 +163,8 @@ public class SpecimenTreeBizLogic extends CatissueDefaultBizLogic implements Tre
 	 */
 	private Vector formSpecimenTree(Vector specimenTreeVector,SpecimenTreeNode parent,Collection childNodes) throws BizLogicException
 	{
-		IBizLogic defaultBizLogic = BizLogicFactory.getInstance().getBizLogic(-1);
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		IBizLogic defaultBizLogic = factory.getBizLogic(-1);
 		//If no childNodes present then tree will contain only the root node.
 		if(childNodes == null)
 		{

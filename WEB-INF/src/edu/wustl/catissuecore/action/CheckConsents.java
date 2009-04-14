@@ -22,7 +22,6 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
 import edu.wustl.catissuecore.bizlogic.DistributionBizLogic;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
@@ -32,7 +31,8 @@ import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.exception.BizLogicException;
-import edu.wustl.dao.exception.DAOException;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 
 
 /**
@@ -69,7 +69,8 @@ public class CheckConsents extends BaseAction
 				}
 				else
 				{
-					CollectionProtocolBizLogic collectionProtocolBizLogic = (CollectionProtocolBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.COLLECTION_PROTOCOL_FORM_ID);
+					IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+					CollectionProtocolBizLogic collectionProtocolBizLogic = (CollectionProtocolBizLogic)factory.getBizLogic(Constants.COLLECTION_PROTOCOL_FORM_ID);
 					Object object  = collectionProtocolBizLogic.retrieve(CollectionProtocol.class.getName(), new Long(collectionProtocolId));		
 					CollectionProtocol collectionProtocol = (CollectionProtocol)object;
 					Collection consentTierCollection = (Collection)collectionProtocolBizLogic.retrieveAttribute(CollectionProtocol.class.getName(), collectionProtocol.getId(), "elements(consentTierCollection)");
@@ -99,7 +100,8 @@ public class CheckConsents extends BaseAction
 					barcodeLabelBasedDistribution=2;
 				}
 				barcodeLable = request.getParameter(Constants.BARCODE_LABLE);	        		        	
-		        DistributionBizLogic bizLogic = (DistributionBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.DISTRIBUTION_FORM_ID);
+				IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		        DistributionBizLogic bizLogic = (DistributionBizLogic) factory.getBizLogic(Constants.DISTRIBUTION_FORM_ID);
 		        try
 		        {
 		        	bizLogic.getSpecimenId(barcodeLable,barcodeLabelBasedDistribution);
@@ -158,7 +160,8 @@ public class CheckConsents extends BaseAction
 	 */
     private Specimen getConsentListForSpecimen(String barcodeLabel,int barcodeLabelBasedDistribution) throws BizLogicException
 	{
-		NewSpecimenBizLogic  newSpecimenBizLogic = (NewSpecimenBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
+    	IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		NewSpecimenBizLogic  newSpecimenBizLogic = (NewSpecimenBizLogic)factory.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
 		String colName=null;
 		if(barcodeLabelBasedDistribution==Constants.BARCODE_BASED_DISTRIBUTION)
 		{

@@ -20,7 +20,6 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.DefineArrayForm;
 import edu.wustl.catissuecore.actionForm.OrderForm;
 import edu.wustl.catissuecore.actionForm.OrderPathologyCaseForm;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.OrderBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
@@ -28,6 +27,8 @@ import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.cde.CDE;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.cde.PermissibleValue;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 
 
 /**
@@ -63,8 +64,8 @@ public class OrderPathologyCaseAction extends BaseAction
 			{
 				getProtocolName(request, pathology, orderForm);
 			}
-
-			OrderBizLogic orderBizLogic = (OrderBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
+			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			OrderBizLogic orderBizLogic = (OrderBizLogic) factory.getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
 			Collection pathologyCase  = (List)orderBizLogic.getPathologyDataFromDatabase(request);
 			
 			request.setAttribute("pathologyCase", pathologyCase);
@@ -182,7 +183,8 @@ public class OrderPathologyCaseAction extends BaseAction
 	private void getProtocolName(HttpServletRequest request, OrderPathologyCaseForm pathology, OrderForm orderForm) throws Exception
 	{
 		// to get the distribution protocol name
-		OrderBizLogic orderBizLogic = (OrderBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		OrderBizLogic orderBizLogic = (OrderBizLogic) factory.getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
 		List protocolList = orderBizLogic.getDistributionProtocol(request);
 		
 		for (int i = 0; i < protocolList.size(); i++)

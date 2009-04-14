@@ -24,7 +24,6 @@ import edu.wustl.catissuecore.actionForm.ViewSpecimenSummaryForm;
 import edu.wustl.catissuecore.bean.CollectionProtocolBean;
 import edu.wustl.catissuecore.bean.GenericSpecimen;
 import edu.wustl.catissuecore.bean.SpecimenDataBean;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
@@ -42,6 +41,8 @@ import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
@@ -187,7 +188,8 @@ public class SubmitSpecimenCPAction extends BaseAction {
 	 */
 	private void insertSpecimens(LinkedHashMap cpEventMap, HttpSession session )
 			throws BizLogicException {
-		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		IBizLogic bizLogic = factory.getBizLogic(
 				Constants.NEW_SPECIMEN_FORM_ID);
 		SessionDataBean sessionDataBean = (SessionDataBean) session
 				.getAttribute(Constants.SESSION_DATA);
@@ -201,7 +203,8 @@ public class SubmitSpecimenCPAction extends BaseAction {
 	 */
 	private void insertCollectionProtocol(CollectionProtocolDTO collectionProtocolDTO, HttpSession session)
 			throws BizLogicException {
-		IBizLogic bizLogic =BizLogicFactory.getInstance().getBizLogic(Constants.COLLECTION_PROTOCOL_FORM_ID);
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		IBizLogic bizLogic =factory.getBizLogic(Constants.COLLECTION_PROTOCOL_FORM_ID);
 				SessionDataBean sessionDataBean = (SessionDataBean) session.getAttribute(Constants.SESSION_DATA);		
 		bizLogic.insert(collectionProtocolDTO, sessionDataBean, 0);
 	}
@@ -247,8 +250,8 @@ public class SubmitSpecimenCPAction extends BaseAction {
 					
 					Long scgId =
 						parentSpeciemn.getSpecimenCollectionGroup().getId();
-					
-					IBizLogic iBizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+					IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+					IBizLogic iBizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 					Object object = iBizLogic.retrieve(SpecimenCollectionGroup.class.getName(), scgId);
 					specimen.setSpecimenCollectionGroup((SpecimenCollectionGroup) object);
 					

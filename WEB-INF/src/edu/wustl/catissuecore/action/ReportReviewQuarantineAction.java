@@ -12,7 +12,6 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
@@ -20,15 +19,16 @@ import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport
 import edu.wustl.catissuecore.domain.pathology.PathologyReportReviewParameter;
 import edu.wustl.catissuecore.domain.pathology.QuarantineEventParameter;
 import edu.wustl.catissuecore.domain.pathology.SurgicalPathologyReport;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.AppUtility;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.XMLPropertyHandler;
-import edu.wustl.dao.exception.DAOException;
 
 /**
  * <p>Title: ReportReviewQuarantineAction Class>
@@ -212,14 +212,15 @@ public class ReportReviewQuarantineAction extends BaseAction
 		IBizLogic bizLogic=null;
 		List pendingStatusList=null;
 		String colName = Constants.STATUS;
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 		if(reportAction.equalsIgnoreCase(Constants.REVIEW))
 		{
-			bizLogic =BizLogicFactory.getInstance().getBizLogic(Constants.PATHOLOGY_REPORT_REVIEW_FORM_ID);
+			bizLogic =factory.getBizLogic(Constants.PATHOLOGY_REPORT_REVIEW_FORM_ID);
 			pendingStatusList  = bizLogic.retrieve(PathologyReportReviewParameter.class.getName(), colName, reportStatus);
 		}
 		else
 		{
-			bizLogic =BizLogicFactory.getInstance().getBizLogic(Constants.QUARANTINE_EVENT_PARAMETER_FORM_ID);
+			bizLogic =factory.getBizLogic(Constants.QUARANTINE_EVENT_PARAMETER_FORM_ID);
 			pendingStatusList  = bizLogic.retrieve(QuarantineEventParameter.class.getName(), colName, reportStatus);
 		}
 		return pendingStatusList;

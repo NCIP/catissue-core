@@ -22,12 +22,13 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.EventParametersForm;
 import edu.wustl.catissuecore.actionForm.SpecimenEventParametersForm;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
@@ -63,8 +64,8 @@ public class SpecimenEventParametersAction  extends BaseAction
         String specimenId = request.getParameter(Constants.SPECIMEN_ID); 
         request.setAttribute(Constants.SPECIMEN_ID, specimenId);
         Logger.out.debug("\t\t SpecimenEventParametersAction************************************ : "+specimenId );
-        
-       	UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.USER_FORM_ID);
+        IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+       	UserBizLogic userBizLogic = (UserBizLogic)factory.getBizLogic(Constants.USER_FORM_ID);
     	Collection userCollection =  userBizLogic.getUsers(operation);
     	
     	request.setAttribute(Constants.USERLIST, userCollection);

@@ -46,6 +46,8 @@ import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.exceptionformatter.DefaultExceptionFormatter;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.CommonServiceLocator;
@@ -1032,7 +1034,8 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 				Logger.out.debug("collectionProtocolRegistration.getActivityStatus() " + collectionProtocolRegistration.getActivityStatus());
 				Long collectionProtocolRegistrationIDArr[] = {collectionProtocolRegistration.getId()};
 
-				SpecimenCollectionGroupBizLogic bizLogic = (SpecimenCollectionGroupBizLogic) BizLogicFactory.getInstance().getBizLogic(
+				IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+				SpecimenCollectionGroupBizLogic bizLogic = (SpecimenCollectionGroupBizLogic) factory.getBizLogic(
 						Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);
 				bizLogic.disableRelatedObjects(dao, collectionProtocolRegistrationIDArr);
 			}
@@ -1189,7 +1192,8 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 				"PARTICIPANT_ID", participantIDArr);
 		if (!listOfSubElement.isEmpty())
 		{
-			SpecimenCollectionGroupBizLogic bizLogic = (SpecimenCollectionGroupBizLogic) BizLogicFactory.getInstance().getBizLogic(
+			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			SpecimenCollectionGroupBizLogic bizLogic = (SpecimenCollectionGroupBizLogic) factory.getBizLogic(
 					Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);
 			bizLogic.disableRelatedObjects(dao, Utility.toLongArray(listOfSubElement));
 		}
@@ -1205,7 +1209,8 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 				"COLLECTION_PROTOCOL_ID", collectionProtocolIDArr);
 		if (!listOfSubElement.isEmpty())
 		{
-			SpecimenCollectionGroupBizLogic bizLogic = (SpecimenCollectionGroupBizLogic) BizLogicFactory.getInstance().getBizLogic(
+			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			SpecimenCollectionGroupBizLogic bizLogic = (SpecimenCollectionGroupBizLogic) factory.getBizLogic(
 					Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);
 			bizLogic.disableRelatedObjects(dao, Utility.toLongArray(listOfSubElement));
 		}

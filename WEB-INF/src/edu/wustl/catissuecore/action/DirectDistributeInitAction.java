@@ -20,7 +20,6 @@ import edu.wustl.catissuecore.actionForm.OrderBiospecimenArrayForm;
 import edu.wustl.catissuecore.actionForm.OrderForm;
 import edu.wustl.catissuecore.actionForm.OrderPathologyCaseForm;
 import edu.wustl.catissuecore.actionForm.OrderSpecimenForm;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.OrderBizLogic;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArray;
@@ -35,8 +34,8 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.ApplicationException;
-import edu.wustl.common.exception.BizLogicException;
-import edu.wustl.common.util.Utility;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.global.Variables;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.exception.DAOException;
@@ -60,7 +59,8 @@ public class DirectDistributeInitAction extends BaseAction
             HttpServletRequest request, HttpServletResponse response) throws Exception
     {
     	String typeOf = request.getParameter("typeOf");
-    	OrderBizLogic orderBizLogic = (OrderBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
+    	IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+    	OrderBizLogic orderBizLogic = (OrderBizLogic) factory.getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
 		
     	SessionDataBean sessionData = getSessionData(request);
     	PrivilegeManager privilegeManager = PrivilegeManager.getInstance();

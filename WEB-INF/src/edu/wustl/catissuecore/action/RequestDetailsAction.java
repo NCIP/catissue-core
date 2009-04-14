@@ -42,7 +42,6 @@ import edu.wustl.catissuecore.bean.DefinedArrayRequestBean;
 import edu.wustl.catissuecore.bean.ExistingArrayDetailsBean;
 import edu.wustl.catissuecore.bean.RequestDetailsBean;
 import edu.wustl.catissuecore.bean.RequestViewBean;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.bizlogic.OrderBizLogic;
 import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
@@ -151,7 +150,9 @@ public class RequestDetailsAction extends BaseAction
 		
 		
 //		ajax call to change the available quantity on change of specimen
-		OrderBizLogic orderBizLogic = (OrderBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		OrderBizLogic orderBizLogic = (OrderBizLogic) factory
+				.getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
 		boolean isAjaxCalled = isAjaxCalled(request);
 		
 		if(isAjaxCalled && request.getParameter("specimenId")!=null)
@@ -298,7 +299,9 @@ public class RequestDetailsAction extends BaseAction
 		try
 		{
 			dao.openSession(null);
-			OrderBizLogic orderBizLogic = (OrderBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
+			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			OrderBizLogic orderBizLogic = (OrderBizLogic) factory
+					.getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
 
 			OrderDetails orderDetails = (OrderDetails)orderBizLogic.getOrderListFromDB(id,dao);
 
@@ -1212,7 +1215,8 @@ private OrderItem getOrderItem(OrderDetails orderDetails , Long orderItemId )
 	 **/
 	private List loadDistributionProtocol(final Long piID, String roleName, SessionDataBean sessionDataBean) throws DAOException, BizLogicException
 	{
-		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+		 IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 		List distributionProtocolList = new ArrayList();
 
 		String sourceObjectName = DistributionProtocol.class.getName();

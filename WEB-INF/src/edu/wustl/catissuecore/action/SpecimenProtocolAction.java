@@ -26,16 +26,17 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.SpecimenProtocolForm;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.SpecimenProtocolBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.AppUtility;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.cde.CDE;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.cde.PermissibleValue;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -64,7 +65,8 @@ public class SpecimenProtocolAction  extends SecureAction
         //Sets the activityStatusList attribute to be used in the Site Add/Edit Page.
         request.setAttribute(Constants.ACTIVITYSTATUSLIST, Constants.ACTIVITY_STATUS_VALUES);
         
-        	UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.USER_FORM_ID);
+        IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+        	UserBizLogic userBizLogic = (UserBizLogic)factory.getBizLogic(Constants.USER_FORM_ID);
         	Collection userCollection =  userBizLogic.getUsers(operation);
         	request.setAttribute(Constants.USERLIST, userCollection);
         	Logger.out.debug("1");
@@ -135,7 +137,7 @@ public class SpecimenProtocolAction  extends SecureAction
 	    	if(operation.equalsIgnoreCase(Constants.EDIT))
    			{
 	    		//Mandar: 25-july-06 bizlogic call updated.
-	    		SpecimenProtocolBizLogic bizLogic = (SpecimenProtocolBizLogic)BizLogicFactory.getInstance().getBizLogic(spForm.getFormId());	
+	    		SpecimenProtocolBizLogic bizLogic = (SpecimenProtocolBizLogic)factory.getBizLogic(spForm.getFormId());	
 	    		String tmpEndDate = bizLogic.getEndDate( spForm.getId(), getSessionData(request) );
 	    		Logger.out.debug("tmpendDate : " + tmpEndDate);
 	    		spForm.setEndDate(tmpEndDate );

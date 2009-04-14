@@ -24,21 +24,22 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.SpecimenArrayForm;
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.applet.util.SpecimenArrayAppletUtil;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.SpecimenArrayBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.AppUtility;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.exception.BizLogicException;
-import edu.wustl.dao.exception.DAOException;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.exception.DAOException;
 
 
 /**
@@ -66,7 +67,8 @@ public class SpecimenArrayAction extends SecureAction
 		String exceedingMaxLimit = "false";
         String[] arrayTypeLabelProperty = {"name"};
         String  arrayTypeProperty = "id";
-        SpecimenArrayBizLogic specimenArrayBizLogic = (SpecimenArrayBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.SPECIMEN_ARRAY_FORM_ID);
+        IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+        SpecimenArrayBizLogic specimenArrayBizLogic = (SpecimenArrayBizLogic)factory.getBizLogic(Constants.SPECIMEN_ARRAY_FORM_ID);
         List specimenArrayTypeList = new ArrayList();
 
         if (operation.equals(Constants.ADD))
@@ -119,7 +121,7 @@ public class SpecimenArrayAction extends SecureAction
 		
     	//Setting the specimen type list
     	List specimenTypeList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_SPECIMEN_TYPE,null);
-    	UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.USER_FORM_ID);
+    	UserBizLogic userBizLogic = (UserBizLogic)factory.getBizLogic(Constants.USER_FORM_ID);
     	Collection userCollection =  userBizLogic.getUsers(operation);
     	request.setAttribute(Constants.USERLIST, userCollection);
     	TreeMap containerMap = new TreeMap();
@@ -158,7 +160,7 @@ public class SpecimenArrayAction extends SecureAction
     		}
     		specimenArrayForm.setSubOperation("");
     	}
-		StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
+		StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic)factory.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 		containerMap = storageContainerBizLogic.getAllocatedContaienrMapForSpecimenArray(specimenArrayForm.getSpecimenArrayTypeId(),0,sessionData,exceedingMaxLimit);
 		request.setAttribute(Constants.EXCEEDS_MAX_LIMIT,exceedingMaxLimit);
     	request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP,containerMap);

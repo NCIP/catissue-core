@@ -21,7 +21,6 @@ import java.util.Map;
 import java.util.Set;
 
 import edu.wustl.catissuecore.bean.ConsentBean;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
@@ -40,11 +39,12 @@ import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.exception.ApplicationException;
-import edu.wustl.common.exception.BizLogicException;
-import edu.wustl.dao.DAO;
-import edu.wustl.dao.exception.DAOException;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.DAO;
+import edu.wustl.dao.exception.DAOException;
 
 /**
  * This class is designed to contain common methods for the Consent Withdraw process.
@@ -556,7 +556,8 @@ public final class ConsentUtil
 	 */
 	public static void getSpecimenDetails(CollectionProtocolRegistration collectionProtocolRegistration, List finalDataList) throws ApplicationException
 	{
-		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 		Collection specimencollectionGroup = (Collection)bizLogic.retrieveAttribute(CollectionProtocolRegistration.class.getName(),collectionProtocolRegistration.getId(), "elements(specimenCollectionGroupCollection)");
 		//Collection specimencollectionGroup = collectionProtocolRegistration.getSpecimenCollectionGroupCollection();
 		Iterator specimenCollGroupIterator = specimencollectionGroup.iterator();
@@ -575,7 +576,8 @@ public final class ConsentUtil
 	private static void getDetailsOfSpecimen(SpecimenCollectionGroup specimenCollGroupObj, List finalDataList) throws ApplicationException
 	{
 		// lazy Resolved specimenCollGroupObj.getSpecimenCollection();
-		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 		Collection specimenCollection = (Collection)bizLogic.retrieveAttribute(SpecimenCollectionGroup.class.getName(), specimenCollGroupObj.getId(), "elements(specimenCollection)");
 		Iterator specimenIterator = specimenCollection.iterator();
 		while(specimenIterator.hasNext())
@@ -609,7 +611,8 @@ public final class ConsentUtil
 	 */ 
 	public static List witnessNameList(String collProtId) throws ApplicationException
 	{		
-		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 		
 		Object object = bizLogic.retrieve(CollectionProtocol.class.getName(), Long.valueOf(collProtId));		
 		CollectionProtocol collectionProtocol = (CollectionProtocol) object;
@@ -656,7 +659,8 @@ public final class ConsentUtil
 	 */ 
 	public static Collection getConsentList(String collectionProtocolID) throws ApplicationException
     {   	
-    	CollectionProtocolBizLogic collectionProtocolBizLogic = (CollectionProtocolBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.COLLECTION_PROTOCOL_FORM_ID);
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+    	CollectionProtocolBizLogic collectionProtocolBizLogic = (CollectionProtocolBizLogic)factory.getBizLogic(Constants.COLLECTION_PROTOCOL_FORM_ID);
     	Object object  = collectionProtocolBizLogic.retrieve(CollectionProtocol.class.getName(), Long.valueOf(collectionProtocolID));		
 		CollectionProtocol collectionProtocol = (CollectionProtocol) object;
 		Collection consentTierCollection = (Collection)collectionProtocolBizLogic.retrieveAttribute(CollectionProtocol.class.getName(), collectionProtocol.getId(), "elements(consentTierCollection)");

@@ -49,6 +49,8 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Variables;
@@ -426,7 +428,8 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 								//Direct call to DistributionBizLogic
 								Collection newDistributionColl = order.getDistributionCollection();
 								Iterator iter = newDistributionColl.iterator();
-								DistributionBizLogic distributionBizLogic = (DistributionBizLogic) BizLogicFactory.getInstance().getBizLogic(
+								IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+								DistributionBizLogic distributionBizLogic = (DistributionBizLogic) factory.getBizLogic(
 										Constants.DISTRIBUTION_FORM_ID);
 								while (iter.hasNext())
 								{
@@ -1183,7 +1186,8 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 	public List getSpecimenDataFromDatabase(HttpServletRequest request)throws BizLogicException
 	{
 		//to get data from database when specimen id is given
-		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		IBizLogic bizLogic = factory.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
 		HttpSession session = request.getSession(true);
 
 		long startTime = System.currentTimeMillis();
@@ -1232,7 +1236,8 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 	{
 
 		// to get data from database when specimen id is given
-		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.NEW_PATHOLOGY_FORM_ID);
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		IBizLogic bizLogic = factory.getBizLogic(Constants.NEW_PATHOLOGY_FORM_ID);
 		List pathologicalCaseList = new ArrayList();
 
 		long startTime = System.currentTimeMillis();
@@ -1306,7 +1311,8 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 	public List getDistributionProtocol(HttpServletRequest request) throws Exception
 	{
 //		to get the distribution protocol name
-		DistributionBizLogic dao = (DistributionBizLogic) BizLogicFactory.getInstance()
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		DistributionBizLogic dao = (DistributionBizLogic) factory
         .getBizLogic(Constants.DISTRIBUTION_FORM_ID);
 		
     	String sourceObjectName = DistributionProtocol.class.getName();

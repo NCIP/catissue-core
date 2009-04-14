@@ -22,7 +22,6 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.CollectionProtocolRegistrationForm;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolRegistrationBizLogic;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
@@ -30,6 +29,8 @@ import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.CommonServiceLocator;
 
@@ -111,7 +112,8 @@ public class SubCollectionProtocolRegistrationAction extends SecureAction
 		String[] whereColCond = {"="};
 		Object[] whereColVal = {cpId};
 
-		CollectionProtocolRegistrationBizLogic bizLogic = (CollectionProtocolRegistrationBizLogic) BizLogicFactory.getInstance().getBizLogic(
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		CollectionProtocolRegistrationBizLogic bizLogic = (CollectionProtocolRegistrationBizLogic) factory.getBizLogic(
 				Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
 
 		List list = bizLogic.retrieve(sourceObjName, selectColName, whereColName, whereColCond, whereColVal, Constants.AND_JOIN_CONDITION);
@@ -135,7 +137,8 @@ public class SubCollectionProtocolRegistrationAction extends SecureAction
 	private void setAttributesOfParticipantInForm(Long participantId, CollectionProtocolRegistrationForm form) throws BizLogicException
 	{
 
-		CollectionProtocolRegistrationBizLogic bizLogic = (CollectionProtocolRegistrationBizLogic) BizLogicFactory.getInstance().getBizLogic(
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		CollectionProtocolRegistrationBizLogic bizLogic = (CollectionProtocolRegistrationBizLogic) factory.getBizLogic(
 				Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
 
 		form.setParticipantID(participantId.longValue());
@@ -186,7 +189,8 @@ public class SubCollectionProtocolRegistrationAction extends SecureAction
 	/* offset changes 27th dec */
 	private boolean chkParticipantRegToCP(Long participantId, Long cpId, CollectionProtocolRegistrationForm form) throws BizLogicException
 	{
-		CollectionProtocolRegistrationBizLogic bizLogic = (CollectionProtocolRegistrationBizLogic) BizLogicFactory.getInstance().getBizLogic(
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		CollectionProtocolRegistrationBizLogic bizLogic = (CollectionProtocolRegistrationBizLogic) factory.getBizLogic(
 				Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
 
 		String sourceObjName = CollectionProtocolRegistration.class.getName();
@@ -226,7 +230,8 @@ public class SubCollectionProtocolRegistrationAction extends SecureAction
 
 	private void setParticipantMedicalIdentifierInForm(Long parentCPId,Long participantId,CollectionProtocolRegistrationForm form) throws BizLogicException
 	{
-		CollectionProtocolRegistrationBizLogic bizLogic = (CollectionProtocolRegistrationBizLogic) BizLogicFactory.getInstance().getBizLogic(
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		CollectionProtocolRegistrationBizLogic bizLogic = (CollectionProtocolRegistrationBizLogic) factory.getBizLogic(
 				Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
 
 		String sourceObjName = CollectionProtocolRegistration.class.getName();

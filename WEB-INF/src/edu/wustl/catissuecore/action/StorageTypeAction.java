@@ -20,14 +20,15 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.StorageTypeForm;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.StorageTypeBizLogic;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.domain.StorageType;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.AppUtility;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.logger.Logger;
 
 public class StorageTypeAction  extends SecureAction
@@ -103,7 +104,8 @@ public class StorageTypeAction  extends SecureAction
     	{
     		storageTypeForm.setSpecimenOrArrayType("Specimen");
     	}
-    	StorageTypeBizLogic bizLogic = (StorageTypeBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_TYPE_FORM_ID);
+    	IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+    	StorageTypeBizLogic bizLogic = (StorageTypeBizLogic)factory.getBizLogic(Constants.STORAGE_TYPE_FORM_ID);
         //Gets the value of the operation parameter.
         
         

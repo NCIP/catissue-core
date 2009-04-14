@@ -21,11 +21,12 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.CreateSpecimenForm;
 import edu.wustl.catissuecore.actionForm.RequestDetailsForm;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.OrderBizLogic;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 
 public class CreateDerivedSpecimenAction extends BaseAction
 {
@@ -60,7 +61,8 @@ public class CreateDerivedSpecimenAction extends BaseAction
 		//whether request is from request details page or defined array page 
 		if(specimenId!=null)
 		{
-			OrderBizLogic orderBizLogic = (OrderBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
+			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			OrderBizLogic orderBizLogic = (OrderBizLogic) factory.getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
 			Specimen specimen = (Specimen)orderBizLogic.getSpecimenObject(Long.parseLong(specimenId));
 			parentSpecimenLabel = specimen.getLabel();	
 			requestedClass = specimen.getClassName();

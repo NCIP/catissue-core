@@ -1,7 +1,6 @@
 package edu.wustl.catissuecore.action;
 
 import java.io.PrintWriter;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -14,7 +13,6 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.bean.ConceptHighLightingBean;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.IdentifiedSurgicalPathologyReportBizLogic;
 import edu.wustl.catissuecore.caties.util.ViewSPRUtil;
 import edu.wustl.catissuecore.domain.Site;
@@ -26,6 +24,8 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.dao.exception.DAOException;
 
 
@@ -47,7 +47,8 @@ public class FetchReportAction extends BaseAction
     	StringBuffer xmlData = new StringBuffer();
     	if(reportId != null && !reportId.equals(""))
     	{
-    		IdentifiedSurgicalPathologyReportBizLogic identifiedReportBizLogic = (IdentifiedSurgicalPathologyReportBizLogic)BizLogicFactory.getInstance().getBizLogic(IdentifiedSurgicalPathologyReport.class.getName());
+    		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+    		IdentifiedSurgicalPathologyReportBizLogic identifiedReportBizLogic = (IdentifiedSurgicalPathologyReportBizLogic)factory.getBizLogic(IdentifiedSurgicalPathologyReport.class.getName());
     		
     		Object object = identifiedReportBizLogic.retrieve(IdentifiedSurgicalPathologyReport.class.getName(), new Long(reportId));
     		if(object != null)

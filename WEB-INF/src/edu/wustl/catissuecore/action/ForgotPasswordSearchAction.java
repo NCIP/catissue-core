@@ -22,11 +22,12 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.ForgotPasswordForm;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -49,7 +50,8 @@ public class ForgotPasswordSearchAction extends Action
 		try
 		{
 			ForgotPasswordForm forgotPasswordForm = (ForgotPasswordForm) form;
-			UserBizLogic userBizLogic = (UserBizLogic) BizLogicFactory.getInstance().getBizLogic(forgotPasswordForm.getFormId());
+			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			UserBizLogic userBizLogic = (UserBizLogic) factory.getBizLogic(forgotPasswordForm.getFormId());
 
 			//Retrieves and sends the password to the user whose email address is passed 
 			//else returns the error key in case of an error.

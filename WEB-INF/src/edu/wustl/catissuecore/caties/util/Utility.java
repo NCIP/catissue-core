@@ -24,7 +24,6 @@ import org.jdom.xpath.XPath;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.ReportLoaderQueueBizLogic;
 import edu.wustl.catissuecore.bizlogic.SiteBizLogic;
 import edu.wustl.catissuecore.domain.Participant;
@@ -33,12 +32,13 @@ import edu.wustl.catissuecore.domain.pathology.ReportLoaderQueue;
 import edu.wustl.catissuecore.reportloader.HL7ParserUtil;
 import edu.wustl.catissuecore.reportloader.ReportLoaderUtil;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.dao.exception.DAOException;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.global.CommonServiceLocator;
-import edu.wustl.common.util.global.Variables;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.common.util.logger.LoggerConfig;
+import edu.wustl.dao.exception.DAOException;
 
 public class Utility 
 {
@@ -209,7 +209,8 @@ public class Utility
 	{
 		
 		ReportLoaderQueue reportLoaderQueue =null;
-		ReportLoaderQueueBizLogic reportLoaderQueueBizLogic = (ReportLoaderQueueBizLogic)BizLogicFactory.getInstance().getBizLogic(ReportLoaderQueue.class.getName());
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		ReportLoaderQueueBizLogic reportLoaderQueueBizLogic = (ReportLoaderQueueBizLogic)factory.getBizLogic(ReportLoaderQueue.class.getName());
 		Object object = reportLoaderQueueBizLogic.retrieve(ReportLoaderQueue.class.getName(), new Long(reportQueueId));
 	    if(object != null)
 		{
@@ -237,7 +238,8 @@ public class Utility
 
 		//retrieve site
 		String siteName = reportLoaderQueue.getSiteName();
-		SiteBizLogic siteBizLogic = (SiteBizLogic)BizLogicFactory.getInstance().getBizLogic(Site.class.getName());
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		SiteBizLogic siteBizLogic = (SiteBizLogic)factory.getBizLogic(Site.class.getName());
 		List siteList = (List)siteBizLogic.retrieve(Site.class.getName(),Constants.SYSTEM_NAME, siteName);
 		
 		

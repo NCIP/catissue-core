@@ -14,7 +14,6 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.DefineArrayForm;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.SpecimenArrayBizLogic;
 import edu.wustl.catissuecore.domain.Capacity;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
@@ -22,8 +21,9 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.bizlogic.IBizLogic;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.logger.Logger;
-import edu.wustl.dao.exception.DAOException;
 
 public class DefineArrayAction extends BaseAction
 {
@@ -38,7 +38,9 @@ public class DefineArrayAction extends BaseAction
 	    	{
 	    		String[] arrayTypeLabelProperty = {"name"};
 	            String  arrayTypeProperty = "id";
-	            SpecimenArrayBizLogic specimenArrayBizLogic = (SpecimenArrayBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.SPECIMEN_ARRAY_FORM_ID);
+	            IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+				SpecimenArrayBizLogic specimenArrayBizLogic = (SpecimenArrayBizLogic) factory
+						.getBizLogic(Constants.SPECIMEN_ARRAY_FORM_ID);
 	            List specimenArrayTypeList = new ArrayList();
 	
 	   	        specimenArrayTypeList = specimenArrayBizLogic.getList(SpecimenArrayType.class.getName(),arrayTypeLabelProperty, arrayTypeProperty, true);
@@ -64,7 +66,8 @@ public class DefineArrayAction extends BaseAction
 	    	if(request.getParameter("arrayType")!=null)
 	    	{
 	    		
-	        		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
+	    		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+				IBizLogic bizLogic = factory.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
 	
 	        		String sourceObjectName = SpecimenArrayType.class.getName();
 	    	    	

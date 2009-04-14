@@ -40,6 +40,8 @@ import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.lookup.DefaultLookupParameters;
 import edu.wustl.common.lookup.LookupLogic;
 import edu.wustl.common.util.Utility;
@@ -432,7 +434,8 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 				Logger.out.debug("participant.getActivityStatus() " + participant.getActivityStatus());
 				Long participantIDArr[] = {participant.getId()};
 
-				CollectionProtocolRegistrationBizLogic bizLogic = (CollectionProtocolRegistrationBizLogic) BizLogicFactory.getInstance().getBizLogic(
+				IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+				CollectionProtocolRegistrationBizLogic bizLogic = (CollectionProtocolRegistrationBizLogic) factory.getBizLogic(
 						Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
 				bizLogic.disableRelatedObjectsForParticipant(dao, participantIDArr);
 			}
@@ -1071,7 +1074,8 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 	public Participant getParticipantById(Long identifier) throws Exception
 	{
 		// Initialising instance of IBizLogic
-		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 		String sourceObjectName = Participant.class.getName();
 
 		// getting all the participants from the database 
@@ -1226,13 +1230,13 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 					}
 				}
 			}
-			
-			UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.USER_FORM_ID);
+			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			UserBizLogic userBizLogic = (UserBizLogic)factory.getBizLogic(Constants.USER_FORM_ID);
 			Set<Long> siteIds = userBizLogic.getRelatedSiteIds(userId);
 		
 			if (siteIds != null && !siteIds.isEmpty())
 			{
-				SiteBizLogic siteBizLogic = (SiteBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.SITE_FORM_ID);
+				SiteBizLogic siteBizLogic = (SiteBizLogic)factory.getBizLogic(Constants.SITE_FORM_ID);
 				for (Long siteId : siteIds)
 				{
 					String peName = Constants.getCurrentAndFuturePGAndPEName(siteId);

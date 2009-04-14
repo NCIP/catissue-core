@@ -25,7 +25,6 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
@@ -37,6 +36,8 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.exception.DAOException;
@@ -124,9 +125,8 @@ public class ShowStorageGridViewAction  extends BaseAction
         	request.setAttribute(Constants.POS_TWO,positionTwo);
 
         }
-        
-        StorageContainerBizLogic bizLogic = (StorageContainerBizLogic)BizLogicFactory
-        .getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
+        IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+        StorageContainerBizLogic bizLogic = (StorageContainerBizLogic)factory.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
         
         Object containerObject = bizLogic.retrieve(StorageContainer.class.getName(), new Long(id));
         StorageContainerGridObject storageContainerGridObject = null;
@@ -212,7 +212,7 @@ public class ShowStorageGridViewAction  extends BaseAction
                 }
             }          
             
-            IBizLogic specimenBizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
+            IBizLogic specimenBizLogic = factory.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
             
             //Showing Specimens in the Container map.
             String sourceObjectName = Specimen.class.getName();

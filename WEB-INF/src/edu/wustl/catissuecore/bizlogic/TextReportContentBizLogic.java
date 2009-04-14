@@ -7,9 +7,10 @@ import java.util.Map;
 import edu.wustl.catissuecore.domain.pathology.TextContent;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.exception.DAOException;
 
@@ -66,7 +67,8 @@ public class TextReportContentBizLogic extends CatissueDefaultBizLogic
 		public Map getAllTextContents() throws Exception
 		{
 			// Initialising instance of IBizLogic
-			IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 			String sourceObjectName = TextContent.class.getName();
 
 			// getting all the text content from the database 
@@ -88,7 +90,8 @@ public class TextReportContentBizLogic extends CatissueDefaultBizLogic
 		public TextContent getTextContentById(Long identifier) throws Exception
 		{
 			// Initialising instance of IBizLogic
-			IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 			String sourceObjectName = TextContent.class.getName();
 
 			// getting all the participants from the database 

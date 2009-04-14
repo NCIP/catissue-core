@@ -24,7 +24,6 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
 import edu.wustl.catissuecore.actionForm.SpecimenArrayAliquotForm;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.SpecimenArrayAliquotsBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.domain.SpecimenArray;
@@ -37,6 +36,8 @@ import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.Status;
 
@@ -55,8 +56,9 @@ public class SpecimenArrayAliquotAction extends SecureAction
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{	
 		SpecimenArrayAliquotForm specimenArrayAliquotForm = (SpecimenArrayAliquotForm) form;
-		String pageOf = request.getParameter(Constants.PAGE_OF);		
-		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
+		String pageOf = request.getParameter(Constants.PAGE_OF);
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) factory.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 		SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
 		//Bean List for the dropdown for the storage location
 		List<NameValueBean> storagePositionListForSpecimenArrayAliquot = AppUtility.getStoragePositionTypeListForTransferEvent();
@@ -226,7 +228,8 @@ public class SpecimenArrayAliquotAction extends SecureAction
 	 */
 	private String checkForSpecimenArray(HttpServletRequest request, SpecimenArrayAliquotForm form) throws BizLogicException,Exception
 	{	
-		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);		
+		 IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);		
 		List specimenArrayList = new ArrayList();
 		String errorString = "";
 		String specimenArrayLabel = form.getParentSpecimenArrayLabel();
@@ -287,8 +290,7 @@ public class SpecimenArrayAliquotAction extends SecureAction
 			request.setAttribute(Constants.STORAGE_TYPE_ID, arrayType.getId());
 			
 			Map aliquotMap = form.getSpecimenArrayAliquotMap();
-			
-			SpecimenArrayAliquotsBizLogic aliquotBizLogic = (SpecimenArrayAliquotsBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.SPECIMEN_ARRAY_ALIQUOT_FORM_ID);
+			SpecimenArrayAliquotsBizLogic aliquotBizLogic = (SpecimenArrayAliquotsBizLogic) factory.getBizLogic(Constants.SPECIMEN_ARRAY_ALIQUOT_FORM_ID);
 			long nextAvailablenumber = aliquotBizLogic.getNextAvailableNumber("CATISSUE_SPECIMEN_ARRAY");
 			
 			/**

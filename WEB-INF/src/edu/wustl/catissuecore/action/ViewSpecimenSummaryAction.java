@@ -30,7 +30,6 @@ import edu.wustl.catissuecore.actionForm.ViewSpecimenSummaryForm;
 import edu.wustl.catissuecore.bean.CollectionProtocolBean;
 import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
 import edu.wustl.catissuecore.bean.GenericSpecimen;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.exception.CatissueException;
 import edu.wustl.catissuecore.util.IdComparator;
@@ -41,6 +40,8 @@ import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.global.Status;
 
 public class ViewSpecimenSummaryAction extends Action {
@@ -770,7 +771,8 @@ public class ViewSpecimenSummaryAction extends Action {
 		String cpid = (String)request.getParameter("cpid");
 		List initialValues = null;
 		TreeMap containerMap = new TreeMap();
-		StorageContainerBizLogic scbizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		StorageContainerBizLogic scbizLogic = (StorageContainerBizLogic) factory.getBizLogic(
 				Constants.STORAGE_CONTAINER_FORM_ID);
 		String exceedingMaxLimit = new String();
 		SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);

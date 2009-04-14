@@ -27,7 +27,6 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.DistributionForm;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.client.CaCoreAppServicesDelegator;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
@@ -43,6 +42,8 @@ import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
@@ -136,7 +137,8 @@ public class ConsentVerificationAction extends BaseAction
 	private void showConsents(DistributionForm dForm ,Specimen specimen, HttpServletRequest request, String barcodeLable) throws ApplicationException
 	{
 		
-		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 		String initialURLValue="";
 		String initialWitnessValue="";
 		String initialSignedConsentDateValue="";
@@ -350,12 +352,14 @@ public class ConsentVerificationAction extends BaseAction
 	 */
 
 	 private Specimen getListOfSpecimen(Long specimenId) throws BizLogicException
-	 {
-	    	
-	    	NewSpecimenBizLogic  newSpecimenBizLogic = (NewSpecimenBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
-	    	Object object  = newSpecimenBizLogic.retrieve(Specimen.class.getName(), specimenId);
-	    	Specimen specimen = (Specimen)object;
-			return specimen;
-	  }
+	{
+
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		NewSpecimenBizLogic newSpecimenBizLogic = (NewSpecimenBizLogic) factory
+				.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
+		Object object = newSpecimenBizLogic.retrieve(Specimen.class.getName(), specimenId);
+		Specimen specimen = (Specimen) object;
+		return specimen;
+	}
 
 }

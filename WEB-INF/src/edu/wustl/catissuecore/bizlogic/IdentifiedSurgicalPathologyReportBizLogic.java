@@ -7,23 +7,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
-import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.exception.DAOException;
-import edu.wustl.security.exception.SMException;
 import edu.wustl.security.global.Permissions;
-import edu.wustl.security.locator.CSMGroupLocator;
-import edu.wustl.security.manager.SecurityManagerFactory;
 
 /**
  * Used to store identified pathology report to the database 
@@ -105,7 +100,8 @@ public class IdentifiedSurgicalPathologyReportBizLogic  extends CatissueDefaultB
 	public Map getAllIdentifiedReports() throws Exception
 	{
 		// Initialising instance of IBizLogic
-		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 		String sourceObjectName = IdentifiedSurgicalPathologyReport.class.getName();
 
 		// getting all the Identified reports from the database 
@@ -129,7 +125,8 @@ public class IdentifiedSurgicalPathologyReportBizLogic  extends CatissueDefaultB
 	public IdentifiedSurgicalPathologyReport getReportById(Long identifier) throws Exception
 	{
 		// Initialising instance of IBizLogic
-		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 		String sourceObjectName = IdentifiedSurgicalPathologyReport.class.getName();
 
 		// getting all the identified reports from the database 

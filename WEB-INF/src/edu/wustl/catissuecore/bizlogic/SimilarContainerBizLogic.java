@@ -28,6 +28,8 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.tree.TreeDataInterface;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Status;
@@ -122,7 +124,8 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 
 					}
 
-					StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(
+					IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+					StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) factory.getBizLogic(
 							Constants.STORAGE_CONTAINER_FORM_ID);
 					//check for all validations on the storage container.
 					storageContainerBizLogic.checkContainer(dao, parentContainer.getId().toString(), posOne, posTwo, sessionDataBean, false,null);

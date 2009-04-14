@@ -22,7 +22,6 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.SpecimenArrayForm;
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.applet.util.SpecimenArrayAppletUtil;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArray;
@@ -33,7 +32,8 @@ import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.ApplicationException;
-import edu.wustl.dao.exception.DAOException;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.logger.Logger;
 
 
@@ -93,7 +93,8 @@ public class SpecimenArraySearchAction extends CommonSearchAction {
 				 * Retriving specimenObject
 				 * replaced arrayContent.getSpecimen()
 				 */
-				DefaultBizLogic bizLogic =(DefaultBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+				IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+				DefaultBizLogic bizLogic =(DefaultBizLogic)factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 				Specimen specimen = null;
 				specimen = (Specimen)bizLogic.retrieveAttribute(SpecimenArrayContent.class.getName(),arrayContent.getId(),"specimen");
 				if (specimen != null) 

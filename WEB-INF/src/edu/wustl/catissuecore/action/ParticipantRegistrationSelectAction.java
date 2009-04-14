@@ -22,7 +22,6 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.ParticipantForm;
 import edu.wustl.catissuecore.bean.ConsentResponseBean;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.CommonAddEditAction;
@@ -31,6 +30,7 @@ import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IDomainObjectFactory;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
@@ -46,11 +46,12 @@ public class ParticipantRegistrationSelectAction extends CommonAddEditAction{
 			AbstractDomainObject abstractDomain = null;
 	
 			ParticipantForm participantForm=(ParticipantForm) form;
-			IDomainObjectFactory abstractDomainObjectFactory = AbstractFactoryConfig.getInstance().getDomainObjectFactory();
+			IDomainObjectFactory iDomainObjectFactory = AbstractFactoryConfig.getInstance()
+			.getDomainObjectFactory();
+			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			IBizLogic bizLogic = factory.getBizLogic(participantForm.getFormId());
 	
-			IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(participantForm.getFormId());
-	
-			String objectName = abstractDomainObjectFactory.getDomainObjectName(participantForm.getFormId());
+			String objectName = iDomainObjectFactory.getDomainObjectName(participantForm.getFormId());
 		  	
 			Logger.out.info("Participant Id-------------------"+request.getParameter("participantId"));
 			

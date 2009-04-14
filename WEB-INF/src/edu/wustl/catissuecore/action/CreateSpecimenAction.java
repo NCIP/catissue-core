@@ -29,7 +29,6 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.CreateSpecimenForm;
 import edu.wustl.catissuecore.bean.ExternalIdentifierBean;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
@@ -47,14 +46,13 @@ import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.MapDataParser;
-import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.common.util.tag.ScriptGenerator;
-import edu.wustl.dao.exception.DAOException;
-import edu.wustl.security.exception.SMException;
 
 /**
  * CreateSpecimenAction initializes the fields in the Create Specimen page.
@@ -218,8 +216,8 @@ public class CreateSpecimenAction extends SecureAction
 						if(spClass!=null && createForm.getStContSelection() != Constants.RADIO_BUTTON_VIRTUALLY_LOCATED)
 						{
 						
-							StorageContainerBizLogic scbizLogic = (StorageContainerBizLogic) BizLogicFactory
-								.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
+							IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+							StorageContainerBizLogic scbizLogic = (StorageContainerBizLogic) factory.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 							containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId,
 									spClass, 0,exceedingMaxLimit,sessionData,true);
 							ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);

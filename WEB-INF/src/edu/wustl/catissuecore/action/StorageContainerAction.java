@@ -31,7 +31,6 @@ import org.json.JSONObject;
 
 import edu.wustl.catissuecore.actionForm.StorageContainerForm;
 import edu.wustl.catissuecore.bean.StorageContainerBean;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageTypeBizLogic;
 import edu.wustl.catissuecore.domain.Container;
@@ -47,6 +46,8 @@ import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
@@ -109,8 +110,8 @@ public class StorageContainerAction extends SecureAction
 		}
 		setRequestAttributes(request,storageContainerForm);
 		setStorageType(request, storageContainerForm,session);
-		
-		StorageContainerBizLogic bizLogic  = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		StorageContainerBizLogic bizLogic  = (StorageContainerBizLogic) factory.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 		//    	 ---- chetan 15-06-06 ----
 //		if (isSiteChanged != null && isSiteChanged.equals("true"))
 //		{
@@ -181,8 +182,7 @@ public class StorageContainerAction extends SecureAction
 		}
 		if(containerId != null)
         {
-        	StorageContainerBizLogic storageContaineriBzLogic = (StorageContainerBizLogic)BizLogicFactory
-            .getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
+        	StorageContainerBizLogic storageContaineriBzLogic = (StorageContainerBizLogic)factory.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
         	String name = StorageContainer.class.getName();
 			Long long1 = new Long(containerId);
 			StorageType storageType = (StorageType)storageContaineriBzLogic.retrieveAttribute(name,long1, "storageType");
@@ -288,7 +288,8 @@ public class StorageContainerAction extends SecureAction
 
 	private void setRequestAttributes(HttpServletRequest request,StorageContainerForm storageContainerForm) throws ApplicationException
 	{
-		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) factory.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 		//Gets the value of the operation parameter.
 		String operation = request.getParameter(Constants.OPERATION);
 		//Sets the operation attribute to be used in the Add/Edit Institute Page. 
@@ -381,7 +382,8 @@ public class StorageContainerAction extends SecureAction
 
 	private void onTypeChange(StorageContainerForm storageContainerForm, String operation, HttpServletRequest request) throws BizLogicException
 	{
-		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) factory.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 		long typeSelected = -1;
 		
 		String selectedType = String.valueOf(storageContainerForm.getTypeId());
@@ -422,7 +424,7 @@ public class StorageContainerAction extends SecureAction
 				// If operation is add opeartion then set the holds list according to storage type selected.
 				if (operation != null && operation.equals(Constants.ADD))
 				{
-					StorageTypeBizLogic storageTypebizLogic = (StorageTypeBizLogic) BizLogicFactory.getInstance().getBizLogic(
+					StorageTypeBizLogic storageTypebizLogic = (StorageTypeBizLogic) factory.getBizLogic(
 							Constants.STORAGE_TYPE_FORM_ID);
 					long[] defHoldsStorageTypeList = storageTypebizLogic.getDefaultHoldStorageTypeList(type);
 					if (defHoldsStorageTypeList != null)
@@ -463,7 +465,8 @@ public class StorageContainerAction extends SecureAction
 			throws ApplicationException
 	{ 
 		List initialValues = null;
-		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) factory.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 		initialValues = StorageContainerUtil.checkForInitialValues(containerMap);
 		if (initialValues != null)
 		{
@@ -501,7 +504,8 @@ public class StorageContainerAction extends SecureAction
 			throws BizLogicException
 	{
 		List initialValues = null;
-		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) factory.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 		if (!Constants.SITE.equals(storageContainerForm.getParentContainerSelected()))
 		{
 			String[] startingPoints = new String[]{"-1", "-1", "-1"};
@@ -611,7 +615,8 @@ public class StorageContainerAction extends SecureAction
 */
 	private long[] parentContChange(HttpServletRequest request) throws BizLogicException
 	{
-		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) factory.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 		
 		String parentContId = request.getParameter("parentContainerId");
 		if (parentContId != null)

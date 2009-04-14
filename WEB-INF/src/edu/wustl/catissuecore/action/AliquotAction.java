@@ -34,7 +34,6 @@ import org.apache.struts.action.ActionMessages;
 
 import edu.wustl.catissuecore.actionForm.AliquotForm;
 import edu.wustl.catissuecore.bean.AliquotBean;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
@@ -54,6 +53,8 @@ import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.CommonServiceLocator;
@@ -127,7 +128,8 @@ public class AliquotAction extends SecureAction
 		//Getting the value pageOf parameter.
 
 		String pageOf = request.getParameter(Constants.PAGE_OF);
-		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) factory.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 
 		//Map containerMap = bizLogic.getAllocatedContainerMap();
 		TreeMap containerMap = new TreeMap();
@@ -226,7 +228,8 @@ public class AliquotAction extends SecureAction
 		//Extracting the values of the operation & pageOf parameters.
 		String operation = request.getParameter(Constants.OPERATION);
 		String pageOf = request.getParameter(Constants.PAGE_OF);
-		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) factory.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 		SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
 		AppUtility.setDefaultPrinterTypeLocation(aliquotForm);
 		/**
@@ -320,7 +323,7 @@ public class AliquotAction extends SecureAction
 						String[] whereColumnCondition = {"="};
 						Object[] whereColumnValue = {containerName};
 						String joinCondition = null;
-						IBizLogic defaultBizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+						IBizLogic defaultBizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 						List list = defaultBizLogic.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition,
 								whereColumnValue, joinCondition);
 
@@ -611,7 +614,8 @@ public class AliquotAction extends SecureAction
 	private String checkForSpecimen(HttpServletRequest request, AliquotForm form) throws Exception
 	{
 		String pageOf = request.getParameter(Constants.PAGE_OF);
-		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 		String specimenLabel = form.getSpecimenLabel();
 		List specimenList = new ArrayList();
 		String errorString = "";

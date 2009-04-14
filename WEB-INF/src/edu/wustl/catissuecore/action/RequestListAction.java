@@ -23,7 +23,6 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.RequestListFilterationForm;
 import edu.wustl.catissuecore.bean.RequestViewBean;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.OrderBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
@@ -32,7 +31,6 @@ import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
-import edu.wustl.dao.exception.DAOException;
 import edu.wustl.common.util.global.Validator;
 
 public class RequestListAction extends SecureAction
@@ -77,7 +75,8 @@ public class RequestListAction extends SecureAction
         	// Request List to display
     		if (requestListForm.getRequestStatusSelected() != null && !requestListForm.getRequestStatusSelected().trim().equalsIgnoreCase(""))
     		{
-    			OrderBizLogic orderBizLogic = (OrderBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
+    			 IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+    			OrderBizLogic orderBizLogic = (OrderBizLogic)factory.getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
     			requestViewBeanList = orderBizLogic.getRequestList(requestListForm.getRequestStatusSelected(),
     					sessionData.getUserName(),sessionData.getUserId());
     			int totalResults = requestViewBeanList.size();

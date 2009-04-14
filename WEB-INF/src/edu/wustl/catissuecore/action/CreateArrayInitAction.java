@@ -31,7 +31,6 @@ import edu.wustl.catissuecore.actionForm.SpecimenArrayForm;
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.applet.util.SpecimenArrayAppletUtil;
 import edu.wustl.catissuecore.bean.DefinedArrayRequestBean;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.OrderBizLogic;
 import edu.wustl.catissuecore.bizlogic.SpecimenArrayBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
@@ -39,12 +38,14 @@ import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.AppUtility;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.dao.exception.DAOException;
 
 /**
@@ -82,7 +83,8 @@ public class CreateArrayInitAction extends BaseAction
 		SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
 		
 		//Obtain specimenArray BizLogic
-		SpecimenArrayBizLogic specimenArrayBizLogic = (SpecimenArrayBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.SPECIMEN_ARRAY_FORM_ID);
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		SpecimenArrayBizLogic specimenArrayBizLogic = (SpecimenArrayBizLogic)factory.getBizLogic(Constants.SPECIMEN_ARRAY_FORM_ID);
 		
 		List definedArrayRequestMapList = (ArrayList)session.getAttribute(Constants.DEFINEDARRAY_REQUESTS_LIST);
 		Iterator definedArrayRequestMapListItr = definedArrayRequestMapList.iterator();
@@ -158,7 +160,7 @@ public class CreateArrayInitAction extends BaseAction
 				specimenArrayForm.setTwoDimensionCapacity(Integer.parseInt(definedArrayRequestBean.getTwoDimensionCapacity()));
 				
 				//Set the User List in request attribute.
-				UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.USER_FORM_ID);
+				UserBizLogic userBizLogic = (UserBizLogic)factory.getBizLogic(Constants.USER_FORM_ID);
 		    	Collection userCollection =  userBizLogic.getUsers(operation);
 		    	request.setAttribute(Constants.USERLIST, userCollection);
 		    	
@@ -179,7 +181,7 @@ public class CreateArrayInitAction extends BaseAction
 		        	specimenTypeList = setClassAndtype(specimenArrayForm,arrayType);
 		    	}
 		    	
-		    	StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
+		    	StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic)factory.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 				containerMap = storageContainerBizLogic.getAllocatedContaienrMapForSpecimenArray(specimenArrayForm.getSpecimenArrayTypeId(),0,sessionData,exceedingMaxLimit);
 				request.setAttribute(Constants.EXCEEDS_MAX_LIMIT,exceedingMaxLimit);
 		    	request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP,containerMap);
@@ -206,7 +208,8 @@ public class CreateArrayInitAction extends BaseAction
 	private List constructSpecimenObjList(List specimenIdList) throws BizLogicException
 	{
 		List specimensObjList = new ArrayList();
-		OrderBizLogic orderBizLogic = (OrderBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.REQUEST_DETAILS_FORM_ID);
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		OrderBizLogic orderBizLogic = (OrderBizLogic)factory.getBizLogic(Constants.REQUEST_DETAILS_FORM_ID);
 		Iterator itr = specimenIdList.iterator();
 		while(itr.hasNext())
 		{
@@ -283,7 +286,8 @@ public class CreateArrayInitAction extends BaseAction
 		List specimenTypeList = new ArrayList();
 		String specimentype = new String();
 		NameValueBean specTypeNameValue = null; 
-		SpecimenArrayBizLogic specimenArrayBizLogic = (SpecimenArrayBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.SPECIMEN_ARRAY_FORM_ID);
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		SpecimenArrayBizLogic specimenArrayBizLogic = (SpecimenArrayBizLogic)factory.getBizLogic(Constants.SPECIMEN_ARRAY_FORM_ID);
 		Collection specimenArrayTypeCollection = (Collection) specimenArrayBizLogic.retrieveAttribute(SpecimenArrayType.class.getName(),
 				specimenArrayType.getId(), "elements(specimenTypeCollection)");
 		

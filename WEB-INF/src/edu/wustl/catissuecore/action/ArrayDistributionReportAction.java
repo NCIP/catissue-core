@@ -17,7 +17,6 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.ConfigureResultViewForm;
 import edu.wustl.catissuecore.actionForm.DistributionReportForm;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.DistributionBizLogic;
 import edu.wustl.catissuecore.domain.DistributedItem;
 import edu.wustl.catissuecore.domain.Distribution;
@@ -31,9 +30,9 @@ import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.Utility;
-import edu.wustl.common.util.global.Status;
-import edu.wustl.dao.exception.DAOException;
 
 /**
  * This is the action class for displaying the Distribution report
@@ -107,9 +106,9 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 		String[] specimenColumns = Constants.SPECIMEN_IN_ARRAY_SELECTED_COLUMNS;
 		String[] specimenColumnNames = getColumnNames(specimenColumns);
 
-		DistributionBizLogic bizLogic = (DistributionBizLogic) BizLogicFactory
-		.getInstance().getBizLogic(Constants.DISTRIBUTION_FORM_ID);
-	
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		DistributionBizLogic bizLogic = (DistributionBizLogic) factory
+				.getBizLogic(Constants.DISTRIBUTION_FORM_ID);
 		List listOfData = bizLogic.getListOfArray(dist);
 
 		//Set the request attributes for the Distribution report data
@@ -187,7 +186,9 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 		 * Retriving collection of Specimen Type.
 		 * Replaced array.getSpecimenArrayContentCollection().iterator();
 		 */
-		DefaultBizLogic bizLogic = (DefaultBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		DefaultBizLogic bizLogic = (DefaultBizLogic) factory
+				.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 		Collection specimenArrayContentCollection = (Collection) bizLogic.retrieveAttribute(SpecimenArray.class.getName(), array.getId(),
 				"elements(specimenArrayContentCollection)");
 		Iterator itr = specimenArrayContentCollection.iterator();
@@ -250,7 +251,8 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 		 * array.getSpecimenArrayType().getSpecimenClass()
 		 * array.getSpecimenArrayType().getSpecimenTypeCollection()
 		 */
-		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.SPECIMEN_ARRAY_TYPE_FORM_ID);
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		IBizLogic bizLogic = factory.getBizLogic(Constants.SPECIMEN_ARRAY_TYPE_FORM_ID);
 		SpecimenArrayType specimenArrayType = (SpecimenArrayType) bizLogic.retrieveAttribute(SpecimenArray.class.getName(), array.getId(),
 				"specimenArrayType");
 		arrayDetails.add(Utility.toString(specimenArrayType.getName()));
@@ -336,7 +338,8 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 	private Collection getSpecimenArrayCollection(Distribution dist) throws BizLogicException
 	{
 		Collection specimenArrayCollection = new HashSet();
-		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DISTRIBUTION_FORM_ID);
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		IBizLogic bizLogic = factory.getBizLogic(Constants.DISTRIBUTION_FORM_ID);
 		Collection distributedItemCollection = (Collection) bizLogic.retrieveAttribute(Distribution.class.getName(), dist.getId(),
 				"elements(distributedItemCollection)");
 		Iterator itr = distributedItemCollection.iterator();

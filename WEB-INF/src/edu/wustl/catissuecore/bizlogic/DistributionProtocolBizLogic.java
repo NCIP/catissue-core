@@ -28,6 +28,8 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
@@ -124,7 +126,8 @@ public class DistributionProtocolBizLogic extends SpecimenProtocolBizLogic imple
 				Logger.out.debug("distributionProtocol.getActivityStatus() "+distributionProtocol.getActivityStatus());
 				Long distributionProtocolIDArr[] = {distributionProtocol.getId()};
 
-				DistributionBizLogic bizLogic = (DistributionBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.DISTRIBUTION_FORM_ID);
+				IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+				DistributionBizLogic bizLogic = (DistributionBizLogic)factory.getBizLogic(Constants.DISTRIBUTION_FORM_ID);
 				bizLogic.disableRelatedObjects(dao, distributionProtocolIDArr);
 			}
 

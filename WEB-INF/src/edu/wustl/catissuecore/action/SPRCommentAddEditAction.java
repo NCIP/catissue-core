@@ -8,7 +8,6 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.ViewSurgicalPathologyReportForm;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.domain.DomainObjectFactory;
 import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.QuarantineEventParameter;
@@ -17,6 +16,8 @@ import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.logger.Logger;
 
 public class SPRCommentAddEditAction extends BaseAction
@@ -29,7 +30,8 @@ public class SPRCommentAddEditAction extends BaseAction
         {
 			AbstractDomainObject abstractDomain=(AbstractDomainObject)(new DomainObjectFactory().getDomainObject(viewSurgicalPathologyReportForm.getFormId(), viewSurgicalPathologyReportForm));
 	    	abstractDomain = defaultBizLogic.populateDomainObject(abstractDomain.getClass().getName(), new Long(viewSurgicalPathologyReportForm.getId()), viewSurgicalPathologyReportForm);
-	    	IBizLogic bizLogic= BizLogicFactory.getInstance().getBizLogic(viewSurgicalPathologyReportForm.getFormId());
+	    	IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+	    	IBizLogic bizLogic= factory.getBizLogic(viewSurgicalPathologyReportForm.getFormId());
 			if(abstractDomain!=null)
 			{
 				Object object = bizLogic.retrieve(abstractDomain.getClass().getName(), new Long(viewSurgicalPathologyReportForm.getId()));

@@ -22,10 +22,11 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.RequestDetailsForm;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 
 public class CreateSpecimenFromOrderAction extends BaseAction
 {
@@ -88,8 +89,9 @@ public class CreateSpecimenFromOrderAction extends BaseAction
 
 		if (specimenCollGrpId != null)
 		{
-			SpecimenCollectionGroupBizLogic bizLogic = (SpecimenCollectionGroupBizLogic) BizLogicFactory.getInstance().getBizLogic(
-					Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);
+			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			SpecimenCollectionGroupBizLogic bizLogic = (SpecimenCollectionGroupBizLogic) factory
+					.getBizLogic(Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);
 			String scgName = bizLogic.retriveSCGNameFromSCGId(specimenCollGrpId);
 			newSpecimenForm.setSpecimenCollectionGroupName(scgName);
 		}

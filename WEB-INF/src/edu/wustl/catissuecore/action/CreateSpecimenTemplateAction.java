@@ -21,7 +21,6 @@ import edu.wustl.catissuecore.actionForm.CreateSpecimenTemplateForm;
 import edu.wustl.catissuecore.bean.CollectionProtocolBean;
 import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
 import edu.wustl.catissuecore.bean.SpecimenRequirementBean;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.CollectionProtocolUtil;
@@ -34,7 +33,8 @@ import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.exception.BizLogicException;
-import edu.wustl.common.util.Utility;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.dao.exception.DAOException;
 
 
@@ -220,9 +220,10 @@ public class CreateSpecimenTemplateAction extends BaseAction
 	 * @param request HttpServletRequest
 	 * @param operation add/ edit
 	 * @param specimenCollectionGroupForm SpecimenCollectionGroup Form
+	 * @throws BizLogicException 
 	 * @throws DAOException Database exception
 	 */
-	private void setUserInForm(HttpServletRequest request,String operation,CreateSpecimenTemplateForm createSpecimenTemplateForm) 
+	private void setUserInForm(HttpServletRequest request,String operation,CreateSpecimenTemplateForm createSpecimenTemplateForm) throws BizLogicException 
 	{
 		Collection<User> userCollection =retriveUser(request, operation);
 		SessionDataBean sessionData = getSessionData(request);
@@ -246,10 +247,12 @@ public class CreateSpecimenTemplateAction extends BaseAction
 	 * @param request HttpServletRequest
 	 * @param operation operation add/edit
 	 * @return userCollection
+	 * @throws BizLogicException 
 	 */
-	private Collection<User> retriveUser(HttpServletRequest request, String operation)
+	private Collection<User> retriveUser(HttpServletRequest request, String operation) throws BizLogicException
 	{
-		UserBizLogic userBizLogic = (UserBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.USER_FORM_ID);
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		UserBizLogic userBizLogic = (UserBizLogic) factory.getBizLogic(Constants.USER_FORM_ID);
 		Collection<User> userCollection = null;
 		try
 		{

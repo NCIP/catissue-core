@@ -31,7 +31,6 @@ import edu.wustl.catissuecore.actionForm.ParticipantForm;
 import edu.wustl.catissuecore.bean.ConsentBean;
 import edu.wustl.catissuecore.bean.ConsentResponseBean;
 import edu.wustl.catissuecore.bizlogic.AnnotationUtil;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
 import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
@@ -52,6 +51,8 @@ import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.CommonServiceLocator;
@@ -94,9 +95,9 @@ public class ParticipantAction extends SecureAction
 		//This if condition is for participant lookup. When participant is selected from the list then 
 		//that participant gets stored in request as participantform1.
 		//After that we have to show the slected participant in o/p
-		
-		ParticipantBizLogic participantBizlogic = (ParticipantBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.PARTICIPANT_FORM_ID);
-		IBizLogic bizlogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		ParticipantBizLogic participantBizlogic = (ParticipantBizLogic) factory.getBizLogic(Constants.PARTICIPANT_FORM_ID);
+		IBizLogic bizlogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 		
 		if (request.getAttribute("participantSelect") != null)
 		{
@@ -372,7 +373,7 @@ public class ParticipantAction extends SecureAction
 		}
 		else 
 		{
-			CollectionProtocolBizLogic cpBizLogic = (CollectionProtocolBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.COLLECTION_PROTOCOL_FORM_ID);
+			CollectionProtocolBizLogic cpBizLogic = (CollectionProtocolBizLogic) factory.getBizLogic(Constants.COLLECTION_PROTOCOL_FORM_ID);
 			String cpId = request.getParameter(Constants.CP_SEARCH_CP_ID);
 			list = participantBizlogic.getCPForUserWithRegistrationAcess(sessionDataBean.getUserId());
 			
@@ -558,7 +559,8 @@ public class ParticipantAction extends SecureAction
 					//DFCI requirement : barcode should be same as identifier
 					List list =null;
 					String barcode=null;
-					IBizLogic bizLogic1 = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);		
+					IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+					IBizLogic bizLogic1 = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);		
 					list = bizLogic1.retrieve(CollectionProtocolRegistration.class.getName(), new String[]{"barcode"}, new String[]{"id"}, new String[]{"="}, new Long[]{cpri.getId()}, null);
 					if (list!=null && !list.isEmpty())
 					{

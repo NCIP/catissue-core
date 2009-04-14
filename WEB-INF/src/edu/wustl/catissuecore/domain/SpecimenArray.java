@@ -5,9 +5,9 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+
 import edu.wustl.catissuecore.actionForm.SpecimenArrayAliquotForm;
 import edu.wustl.catissuecore.actionForm.SpecimenArrayForm;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.SpecimenArrayBizLogic;
 import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -15,7 +15,8 @@ import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.exception.BizLogicException;
-import edu.wustl.dao.exception.DAOException;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 
 /**
  * @author gautam_shetty
@@ -302,8 +303,9 @@ public class SpecimenArray extends Container
 				//Ordering System
 				if (specimenArrayForm.getIsDefinedArray().equalsIgnoreCase("True"))
 				{
-					SpecimenArrayBizLogic specimenArrayBizLogic = (SpecimenArrayBizLogic) BizLogicFactory
-							.getInstance().getBizLogic(Constants.SPECIMEN_ARRAY_FORM_ID);
+					IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+					SpecimenArrayBizLogic specimenArrayBizLogic = (SpecimenArrayBizLogic) factory
+							.getBizLogic(Constants.SPECIMEN_ARRAY_FORM_ID);
 					NewSpecimenArrayOrderItem newSpecimenArrayOrderItem = specimenArrayBizLogic
 							.getNewSpecimenArrayOrderItem(Long.valueOf(specimenArrayForm
 									.getNewArrayOrderItemId()));

@@ -11,10 +11,11 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 
 /**
  * This action is for getting the collection protocol and 
@@ -52,7 +53,8 @@ public class ShowTreeAction extends BaseAction
 		Vector treeData = null;
 		if (cpId != null && participantId != null && !cpId.equals("") && !participantId.equals(""))
 		{
-			SpecimenCollectionGroupBizLogic bizLogic = (SpecimenCollectionGroupBizLogic) BizLogicFactory.getInstance().getBizLogic(
+			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			SpecimenCollectionGroupBizLogic bizLogic = (SpecimenCollectionGroupBizLogic) factory.getBizLogic(
 					Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);
 			/**
 			 * Patch Id : FutureSCG_2
