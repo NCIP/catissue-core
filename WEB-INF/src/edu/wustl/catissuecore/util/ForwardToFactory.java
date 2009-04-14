@@ -18,24 +18,6 @@ import edu.wustl.common.factory.IForwordToFactory;
  */
 public final class ForwardToFactory implements IForwordToFactory
 {
-	/*
-	 * create singleton object
-	 */
-	private static ForwardToFactory  fwdToFactory= new ForwardToFactory();
-	/*
-	 * Private constructor
-	 */
-	public ForwardToFactory ()
-	{
-		
-	}
-	/*
-	 * return single object
-	 */
-	public static ForwardToFactory getInstance()
-	{
-		return fwdToFactory;
-	}
 	
 	public ForwardToProcessor getForwardToProcessor()
     {
