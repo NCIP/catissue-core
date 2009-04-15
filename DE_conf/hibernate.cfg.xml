@@ -70,8 +70,8 @@
 		<mapping resource="edu/wustl/catissuecore/hbm/ContainerType.hbm.xml"/>
 		<mapping resource="edu/wustl/common/hbm/CDEImpl.hbm.xml"/>
 		<mapping resource="edu/wustl/common/hbm/PermissibleValueImpl.hbm.xml"/>
-		<mapping resource="edu/wustl/common/hbm/QueryColumnData.hbm.xml"/>
-		<mapping resource="edu/wustl/common/hbm/QueryTableData.hbm.xml"/>
+		<mapping resource="edu/wustl/simplequery/hbm/QueryColumnData.hbm.xml"/>
+		<mapping resource="edu/wustl/simplequery/hbm/QueryTableData.hbm.xml"/>
 		
 		<mapping resource="edu/wustl/catissuecore/hbm/OrderItem.hbm.xml" />
 		<mapping resource="edu/wustl/catissuecore/hbm/OrderDetails.hbm.xml" />	
