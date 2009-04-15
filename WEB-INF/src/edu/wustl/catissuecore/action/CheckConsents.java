@@ -33,6 +33,7 @@ import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
+import edu.wustl.common.util.logger.Logger;
 
 
 /**
@@ -41,7 +42,7 @@ import edu.wustl.common.factory.IFactory;
  */
 public class CheckConsents extends BaseAction
 {
-
+	private transient Logger logger = Logger.getCommonLogger(CheckConsents.class);
 	 /**
      * Overrides the execute method in Action class.
      * @param mapping ActionMapping object
@@ -108,6 +109,7 @@ public class CheckConsents extends BaseAction
 		        }
 		        catch (BizLogicException dao)
 		        {
+		        	logger.info(dao.getMessage(), dao);
 		        	ActionErrors errors = new ActionErrors();
 					ActionError error = new ActionError(dao.getMessage());
 					errors.add(ActionErrors.GLOBAL_ERROR, error);

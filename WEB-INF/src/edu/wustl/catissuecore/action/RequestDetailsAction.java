@@ -90,6 +90,7 @@ import gov.nih.nci.security.authorization.domainobjects.Role;
 
 public class RequestDetailsAction extends BaseAction
 {
+	private transient Logger logger = Logger.getCommonLogger(RequestDetailsAction.class);
 	/**
 	 * Overrides the execute method of Action class.
 	 * Initializes the various fields in RequestDetails.jsp Page.
@@ -392,7 +393,7 @@ public class RequestDetailsAction extends BaseAction
 
 		catch(DAOException e)
 		{
-			Logger.out.error(e.getMessage(), e);
+			logger.error(e.getMessage(), e);
 
 
 		}
@@ -404,7 +405,7 @@ public class RequestDetailsAction extends BaseAction
 			}
 			catch(DAOException daoEx)
 			{
-				Logger.out.error(daoEx.getMessage(), daoEx);
+				logger.error(daoEx.getMessage(), daoEx);
 
 			}
 		}
@@ -1292,7 +1293,7 @@ private OrderItem getOrderItem(OrderDetails orderDetails , Long orderItemId )
 			}
 			catch (BizLogicException e1) 
 			{
-				Logger.out.debug(e1.getMessage(), e1);
+				logger.debug(e1.getMessage(), e1);
 			}
 			finally
 			{
@@ -1302,7 +1303,7 @@ private OrderItem getOrderItem(OrderDetails orderDetails , Long orderItemId )
 				}
 				catch(DAOException daoEx)
 				{
-					Logger.out.error(daoEx.getMessage(), daoEx);
+					logger.error(daoEx.getMessage(), daoEx);
 
 				}
 			}
@@ -1341,7 +1342,7 @@ private OrderItem getOrderItem(OrderDetails orderDetails , Long orderItemId )
 			hasDistributionPrivilege = AppUtility.checkForAllCurrentAndFutureCPs(Permissions.DISTRIBUTION, sessionDataBean, cpId.toString());
 		}
 		}catch (SMException e) {
-			// TODO: handle exception
+			logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 		}
 		return hasDistributionPrivilege;

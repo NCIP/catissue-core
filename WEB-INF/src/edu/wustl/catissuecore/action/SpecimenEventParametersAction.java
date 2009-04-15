@@ -41,6 +41,7 @@ import edu.wustl.common.util.logger.Logger;
 
 public class SpecimenEventParametersAction  extends BaseAction
 {
+	private transient Logger logger = Logger.getCommonLogger(SpecimenEventParametersAction.class);
 	/**
 	 * This method sets all the common parameters for the SpecimenEventParameter pages
 	 * @param request HttpServletRequest instance in which the data will be set. 
@@ -63,7 +64,7 @@ public class SpecimenEventParametersAction  extends BaseAction
         //The id of specimen of this event.
         String specimenId = request.getParameter(Constants.SPECIMEN_ID); 
         request.setAttribute(Constants.SPECIMEN_ID, specimenId);
-        Logger.out.debug("\t\t SpecimenEventParametersAction************************************ : "+specimenId );
+        logger.debug("\t\t SpecimenEventParametersAction************************************ : "+specimenId );
         IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
        	UserBizLogic userBizLogic = (UserBizLogic)factory.getBizLogic(Constants.USER_FORM_ID);
     	Collection userCollection =  userBizLogic.getUsers(operation);

@@ -14,15 +14,15 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.InstitutionForm;
 import edu.wustl.catissuecore.bizlogic.InstitutionBizLogic;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.AppUtility;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.CommonAddEditAction;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.logger.Logger;
-import edu.wustl.dao.exception.DAOException;
 
 public class AddInstitutionAction extends CommonAddEditAction
 {
+	private transient Logger logger = Logger.getCommonLogger(AddInstitutionAction.class);
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
 	throws IOException, ServletException
 	{
@@ -51,8 +51,8 @@ public class AddInstitutionAction extends CommonAddEditAction
 			}
 			catch(BizLogicException e)
 			{
-				Logger.out.error("Exception occurred in retrieving Institution");
-			e.printStackTrace();
+				logger.error("Exception occurred in retrieving Institution");
+				e.printStackTrace();
 			}
 		}
 		PrintWriter out = response.getWriter();

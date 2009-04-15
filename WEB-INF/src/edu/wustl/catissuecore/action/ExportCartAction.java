@@ -18,6 +18,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.ExportReport;
 import edu.wustl.common.util.SendFile;
 import edu.wustl.common.util.global.CommonServiceLocator;
+import edu.wustl.common.util.logger.Logger;
 import edu.wustl.query.actionForm.AdvanceSearchForm;
 import edu.wustl.query.querysuite.QueryShoppingCart;
 
@@ -27,7 +28,7 @@ import edu.wustl.query.querysuite.QueryShoppingCart;
  */
 public class ExportCartAction extends QueryShoppingCartAction
 {
-	
+	private transient Logger logger = Logger.getCommonLogger(ExportCartAction.class);
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -71,6 +72,7 @@ public class ExportCartAction extends QueryShoppingCartAction
 		}
 		catch (IOException e)
 		{
+			logger.debug(e.getMessage(), e);
 			ActionErrors errors = new ActionErrors();
 			ActionError error = new ActionError("shoppingcart.exportfilexception");
 			errors.add(ActionErrors.GLOBAL_ERROR, error);

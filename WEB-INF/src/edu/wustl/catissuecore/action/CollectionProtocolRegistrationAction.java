@@ -58,7 +58,7 @@ import edu.wustl.dao.daofactory.DAOConfigFactory;
 
 public class CollectionProtocolRegistrationAction extends SecureAction
 {
-	
+	private transient Logger logger = Logger.getCommonLogger(CollectionProtocolRegistrationAction.class);
 	//This will keep track of no of consents for a particular participant
 	int consentCounter;
 	/**
@@ -90,7 +90,7 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 			}
         	catch(ClassCastException exp)
 			{
-        		Logger.out.debug("Class cast Exception in CollectionProtocolRegistrationAction ~~~~~~~~~~~~~~~~~~~~~~~>"+exp);
+        		logger.debug("Class cast Exception in CollectionProtocolRegistrationAction ~~~~~~~~~~~~~~~~~~~~~~~>"+exp);
 			}
 		}
 		selectedCollectionProtocolId = String.valueOf(collectionProtocolRegistrationForm.getCollectionProtocolID());
@@ -178,7 +178,7 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 		List list = bizLogic.getList(sourceObjectName, displayNameFields, valueField, true);
 		request.setAttribute(Constants.PROTOCOL_LIST, list);
 		
-		Logger.out.debug("SubmittedFor on CPRAction====>"+request.getAttribute(Constants.SUBMITTED_FOR));
+		logger.debug("SubmittedFor on CPRAction====>"+request.getAttribute(Constants.SUBMITTED_FOR));
 		if((request.getAttribute(Constants.SUBMITTED_FOR) != null) && (request.getAttribute(Constants.SUBMITTED_FOR).equals("AddNew")))
 		{
 		    HttpSession session = request.getSession();
@@ -196,7 +196,7 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 				}
 	        	catch(ClassCastException exp)
 				{
-	        		Logger.out.debug("Class cast Exception in CollectionProtocolRegistrationAction ~~~~~~~~~~~~~~~~~~~~~~~>"+exp);
+	        		logger.debug("Class cast Exception in CollectionProtocolRegistrationAction ~~~~~~~~~~~~~~~~~~~~~~~>"+exp);
 				}
 	        }
 		}
@@ -309,7 +309,7 @@ public class CollectionProtocolRegistrationAction extends SecureAction
         		}
         		catch(NumberFormatException e)
         		{
-        			Logger.out.debug("NumberFormatException Occured :"+e);
+        			logger.debug("NumberFormatException Occured :"+e);
         		}
         	}
         	       	
@@ -331,7 +331,7 @@ public class CollectionProtocolRegistrationAction extends SecureAction
         		}
         		catch(NumberFormatException e)
         		{
-        			Logger.out.debug("NumberFormatException Occured :"+e);
+        			logger.debug("NumberFormatException Occured :"+e);
         		}
         	}
         }
@@ -400,7 +400,7 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 	       }
 	   }
 	   
-	   Logger.out.debug("No.Of Active Participants ~~~~~~~~~~~~~~~~~~~~~~~>"+listOfActiveParticipant.size());
+	   logger.debug("No.Of Active Participants ~~~~~~~~~~~~~~~~~~~~~~~>"+listOfActiveParticipant.size());
 	   
 	   return listOfActiveParticipant;
 	}

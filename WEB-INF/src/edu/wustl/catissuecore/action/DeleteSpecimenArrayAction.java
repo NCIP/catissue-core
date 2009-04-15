@@ -22,9 +22,12 @@ import edu.wustl.common.action.CommonAddEditAction;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.global.Status;
+import edu.wustl.common.util.logger.Logger;
 
 
 public class DeleteSpecimenArrayAction extends CommonAddEditAction {
+	
+	private transient Logger logger = Logger.getCommonLogger(DeleteSpecimenArrayAction.class);
 	/**
 	 * This method sets the activity status to 'Disabled' and then calls execute method of CommonAddEditAction. 
 	 * @author nitesh_marwaha
@@ -50,6 +53,7 @@ public class DeleteSpecimenArrayAction extends CommonAddEditAction {
 				}
 			}
 		} catch (Exception exception) {
+			logger.debug(exception.getMessage(), exception);
 			exception.printStackTrace();
 		}
 		return super.execute(mapping, abstractForm, request, response);

@@ -67,6 +67,7 @@ import edu.wustl.dao.DAO;
 public class ParticipantAction extends SecureAction
 {
 
+	private transient Logger logger = Logger.getCommonLogger(ParticipantAction.class);
 	/**
 	 * Overrides the execute method of Action class.
 	 * Sets the various fields in Participant Add/Edit webpage.
@@ -423,7 +424,7 @@ public class ParticipantAction extends SecureAction
 		}
 		request.setAttribute("participantEntityId",participantEntityId);
 
-		Logger.out.debug("pageOf :---------- " + pageOf);
+		logger.debug("pageOf :---------- " + pageOf);
 
 		return mapping.findForward(pageOf);
 	}
@@ -689,6 +690,7 @@ public class ParticipantAction extends SecureAction
 				return sb.toString();
 			}
 			catch (Exception e) {
+				logger.debug(e.getMessage(), e);
 				return null;
 			}
 			finally
@@ -696,6 +698,7 @@ public class ParticipantAction extends SecureAction
 				try {
 					AppUtility.closeDAOSession(dao);
 				} catch (ApplicationException e) {
+					logger.debug(e.getMessage(), e);
 					e.printStackTrace();
 				}
 			}

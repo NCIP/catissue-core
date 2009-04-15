@@ -29,6 +29,7 @@ import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.global.Status;
+import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.daofactory.DAOConfigFactory;
 import edu.wustl.dao.exception.DAOException;
@@ -49,6 +50,7 @@ import gov.nih.nci.security.authorization.domainobjects.Role;
 public class RequestToOrderAction extends BaseAction
 {
 
+	private transient Logger logger = Logger.getCommonLogger(RequestToOrderAction.class);
 	/**
 	 * Method to initialize the fields required on the UI pages.
 	 * @param mapping Struts's ActionMapping
@@ -208,6 +210,7 @@ public class RequestToOrderAction extends BaseAction
 		}
 		catch (SMException e)
 		{
+			logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 		}
 		return hasDistributionPrivilege;

@@ -84,6 +84,7 @@ import edu.wustl.dao.exception.DAOException;
 public class NewSpecimenAction extends SecureAction 
 {
 
+	private transient Logger logger = Logger.getCommonLogger(NewSpecimenAction.class);
 	/**
 	 * Overrides the execute method of Action class.
 	 * @param mapping object of ActionMapping
@@ -171,10 +172,10 @@ public class NewSpecimenAction extends SecureAction
 			/**For Migration Start**/
 			
 			specimenCollectionGroupName = (String) forwardToHashMap.get("specimenCollectionGroupName");
-			Logger.out.debug("specimenCollectionGroupName found in forwardToHashMap========>>>>>>" + specimenCollectionGroupName);
+			logger.debug("specimenCollectionGroupName found in forwardToHashMap========>>>>>>" + specimenCollectionGroupName);
 			specimenForm.setSpecimenCollectionGroupName(specimenCollectionGroupName);
 			/**For Migration End**/
-			Logger.out.debug("SpecimenCollectionGroupId found in forwardToHashMap========>>>>>>" + specimenCollectionGroupId);
+			logger.debug("SpecimenCollectionGroupId found in forwardToHashMap========>>>>>>" + specimenCollectionGroupId);
 
 			if (specimenCollectionGroupId != null)
 			{
@@ -550,7 +551,7 @@ public class NewSpecimenAction extends SecureAction
 					//							.get(0);
 					long cpId = ((Long) spCollGroupList.get(0)).longValue();
 					String spClass = specimenForm.getClassName();
-					Logger.out.info("cpId :" + cpId + "spClass:" + spClass);
+					logger.info("cpId :" + cpId + "spClass:" + spClass);
 					request.setAttribute(Constants.COLLECTION_PROTOCOL_ID, cpId + "");
 					if (virtuallyLocated != null && virtuallyLocated.equals("false"))
 					{
@@ -563,7 +564,7 @@ public class NewSpecimenAction extends SecureAction
 						sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
 						containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId, spClass, 0, exceedingMaxLimit, sessionData, true);
 						//Logger.out.debug("exceedingMaxLimit in action for Boolean:"+exceedingMaxLimit);
-						Logger.out.debug("finish ---calling getAllocatedContaienrMapForSpecimen() function from NewSpecimenAction---");
+						logger.debug("finish ---calling getAllocatedContaienrMapForSpecimen() function from NewSpecimenAction---");
 						ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
 						if (containerMap.isEmpty()) 
 						{
@@ -575,7 +576,7 @@ public class NewSpecimenAction extends SecureAction
 							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("storageposition.not.available"));
 							saveErrors(request, errors);
 						}
-						Logger.out.debug("calling checkForInitialValues() function from NewSpecimenAction---");
+						logger.debug("calling checkForInitialValues() function from NewSpecimenAction---");
 						if (errors == null || errors.size() == 0)
 						{
 							initialValues = StorageContainerUtil.checkForInitialValues(containerMap);
@@ -589,7 +590,7 @@ public class NewSpecimenAction extends SecureAction
 							initialValues = new Vector();
 							initialValues.add(startingPoints);
 						}
-						Logger.out.debug("finish ---calling checkForInitialValues() function from NewSpecimenAction---");
+						logger.debug("finish ---calling checkForInitialValues() function from NewSpecimenAction---");
 					}
 				}
 			}
@@ -599,9 +600,9 @@ public class NewSpecimenAction extends SecureAction
 			containerMap = new TreeMap();
 			String[] startingPoints = new String[]{"-1", "-1", "-1"};
 
-			Logger.out.info("--------------container:" + specimenForm.getStorageContainer());
-			Logger.out.info("--------------pos1:" + specimenForm.getPositionDimensionOne());
-			Logger.out.info("--------------pos2:" + specimenForm.getPositionDimensionTwo());
+			logger.info("--------------container:" + specimenForm.getStorageContainer());
+			logger.info("--------------pos1:" + specimenForm.getPositionDimensionOne());
+			logger.info("--------------pos2:" + specimenForm.getPositionDimensionTwo());
 			
 			if (specimenForm.getStorageContainer() != null && !specimenForm.getStorageContainer().equals(""))
 			{
@@ -644,9 +645,9 @@ public class NewSpecimenAction extends SecureAction
 				}
 			}
 			initialValues = new Vector();
-			Logger.out.info("Starting points[0]" + startingPoints[0]);
-			Logger.out.info("Starting points[1]" + startingPoints[1]);
-			Logger.out.info("Starting points[2]" + startingPoints[2]);
+			logger.info("Starting points[0]" + startingPoints[0]);
+			logger.info("Starting points[1]" + startingPoints[1]);
+			logger.info("Starting points[2]" + startingPoints[2]);
 			initialValues.add(startingPoints);
 			
 			if((specimenForm.getStContSelection() == Constants.RADIO_BUTTON_FOR_MAP)||specimenForm.getStContSelection()==2)
@@ -663,7 +664,7 @@ public class NewSpecimenAction extends SecureAction
 					
 					long cpId = ((Long) spCollGroupList.get(0)).longValue();
 					String spClass = specimenForm.getClassName();
-					Logger.out.info("cpId :" + cpId + "spClass:" + spClass);
+					logger.info("cpId :" + cpId + "spClass:" + spClass);
 					request.setAttribute(Constants.COLLECTION_PROTOCOL_ID, cpId + "");
 					if (virtuallyLocated != null && virtuallyLocated.equals("false"))
 					{
@@ -674,7 +675,7 @@ public class NewSpecimenAction extends SecureAction
 						sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
 						containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId, spClass, 0, exceedingMaxLimit, sessionData, true);
 						
-						Logger.out.debug("finish ---calling getAllocatedContaienrMapForSpecimen() function from NewSpecimenAction---");
+						logger.debug("finish ---calling getAllocatedContaienrMapForSpecimen() function from NewSpecimenAction---");
 						ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
 						if (containerMap.isEmpty()) 
 						{
@@ -688,7 +689,7 @@ public class NewSpecimenAction extends SecureAction
 								saveErrors(request, errors);
 							}
 						}
-							Logger.out.debug("calling checkForInitialValues() function from NewSpecimenAction---");
+						logger.debug("calling checkForInitialValues() function from NewSpecimenAction---");
 							if (errors == null || errors.size() == 0)
 							{
 								initialValues = StorageContainerUtil.checkForInitialValues(containerMap);
@@ -1126,25 +1127,25 @@ public class NewSpecimenAction extends SecureAction
 		for (PermissibleValue pv : setPV)
 		{
 			String tmpStr = pv.getValue();
-			Logger.out.debug(tmpStr);
+			logger.debug(tmpStr);
 			specimenClassList.add(new NameValueBean(tmpStr, tmpStr));
 
 			List<NameValueBean> innerList = new ArrayList<NameValueBean>();
 			innerList.add(new NameValueBean(Constants.SELECT_OPTION, "-1"));
 			
 			Set<PermissibleValue> list1 = pv.getSubPermissibleValues();
-			Logger.out.debug("list1 " + list1);
+			logger.debug("list1 " + list1);
 			for (PermissibleValue pv1 : list1)
 			{
 				// set specimen type
 				String tmpInnerStr = pv1.getValue();
-				Logger.out.debug("\t\t" + tmpInnerStr);
+				logger.debug("\t\t" + tmpInnerStr);
 				innerList.add(new NameValueBean(tmpInnerStr, tmpInnerStr));
 			}
 			Collections.sort(innerList);
 			subTypeMap.put(tmpStr, innerList);
 		} // class and values set
-		Logger.out.debug("\n\n\n\n**********MAP DATA************\n");
+		logger.debug("\n\n\n\n**********MAP DATA************\n");
 		
 		// Setting the default values
 		if (specimenForm.getTissueSite() == null)
@@ -1283,7 +1284,7 @@ public class NewSpecimenAction extends SecureAction
 			}
 			catch (ApplicationException e)
 			{
-				// TODO Auto-generated catch block
+				logger.debug(e.getMessage(), e);
 				e.printStackTrace();
 			}
 			

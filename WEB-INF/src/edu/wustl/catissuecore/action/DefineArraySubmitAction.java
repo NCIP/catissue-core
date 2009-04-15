@@ -22,9 +22,11 @@ import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
+import edu.wustl.common.util.logger.Logger;
 
 public class DefineArraySubmitAction extends BaseAction
 {
+	private transient Logger logger = Logger.getCommonLogger(DefineArraySubmitAction.class);
     public ActionForward executeAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws Exception
     {
@@ -58,7 +60,7 @@ public class DefineArraySubmitAction extends BaseAction
     	}
     	catch(Exception e)
     	{
-    		System.out.println(e);
+    		logger.error(e.getMessage(), e);
     	}
 		
     	//added for checking if array of same name exists

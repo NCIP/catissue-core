@@ -31,6 +31,7 @@ import edu.wustl.common.util.logger.Logger;
 
 public class DistributionReportSaveAction extends BaseDistributionReportAction
 {
+	private transient Logger logger = Logger.getCommonLogger(DistributionReportSaveAction.class);
 	 /**
      * Overrides the execute method of Action class.
      * Sets the various fields in DistributionProtocol Add/Edit webpage.
@@ -83,7 +84,7 @@ public class DistributionReportSaveAction extends BaseDistributionReportAction
 																	String []columnNames) throws IOException
 	{
 		//Save the report data in a CSV file at server side
-		Logger.out.debug("Save action");
+		logger.debug("Save action");
 		ExportReport report = new ExportReport(fileName);
 		List distributionData = new ArrayList();
 		addDistributionHeader(distributionData, distributionReportForm,report);
@@ -93,7 +94,7 @@ public class DistributionReportSaveAction extends BaseDistributionReportAction
 		for(int k=0;k<columnNames.length;k++)
 		{
 			columns.add(columnNames[k]);
-			Logger.out.debug("Selected columns in save action "+columnNames[k]);
+			logger.debug("Selected columns in save action "+columnNames[k]);
 		}
 		distributedItemsColumns.add(columns);
 		distributionData.addAll(distributedItemsColumns);

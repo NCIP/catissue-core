@@ -26,10 +26,12 @@ import edu.wustl.catissuecore.util.IdComparator;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.util.MapDataParser;
+import edu.wustl.common.util.logger.Logger;
 
 
 public class SaveSpecimenRequirementAction extends BaseAction
 {
+	private transient Logger logger = Logger.getCommonLogger(SaveSpecimenRequirementAction.class);
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 	{
@@ -59,6 +61,7 @@ public class SaveSpecimenRequirementAction extends BaseAction
 			}
 			catch(Exception e)
 			{
+				logger.debug(e.getMessage(), e);
 				ActionErrors actionErrors = new ActionErrors();
 				actionErrors.add(actionErrors.GLOBAL_MESSAGE, new ActionError(
 						"errors.item",e.getMessage()));
@@ -97,6 +100,7 @@ public class SaveSpecimenRequirementAction extends BaseAction
 		}
 		catch (Exception e)
 		{
+			logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 		}
 		
@@ -240,6 +244,7 @@ public class SaveSpecimenRequirementAction extends BaseAction
 			int totalNewAliquots = noOfAliquots - noOfBeanAliquots;
 			if(totalNewAliquots<0)
 			{
+				logger.debug("Cannot delete aliquot(s)");
 				throw new Exception("Cannot delete aliquot(s)");
 			}
 			LinkedHashMap newAliquotSpecimenMap =

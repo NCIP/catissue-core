@@ -28,6 +28,7 @@ import edu.wustl.common.util.logger.Logger;
 public abstract class BaseAppletAction extends SecureAction
 {
 
+	private transient Logger logger = Logger.getCommonLogger(BaseAppletAction.class);
 	/**
 	 * This method write input map to the response in the form of BaseAppletModel.
 	 * 
@@ -154,15 +155,15 @@ public abstract class BaseAppletAction extends SecureAction
 			}
 	   		catch(NoSuchMethodException excp1)
 			{
-	   			Logger.out.error(excp1.getMessage(),excp1 );
+	   			logger.error(excp1.getMessage(),excp1 );
 			}
 	   		catch(NullPointerException excp2)
 			{
-	   			Logger.out.error(excp2.getMessage(),excp2 );
+	   			logger.error(excp2.getMessage(),excp2 );
 			}
 	   		catch(SecurityException excp3)
 			{
-	   			Logger.out.error(excp3.getMessage(),excp3 );
+	   			logger.error(excp3.getMessage(),excp3 );
 			}
 		    return null;
 	   }

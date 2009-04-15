@@ -1,6 +1,7 @@
 package edu.wustl.catissuecore;
 
-import org.apache.log4j.Logger;
+import edu.wustl.common.util.logger.Logger;
+
 
 /**
  * This class provides functionality to log performance of a given task.
@@ -24,7 +25,7 @@ public final class TaskTimeCalculater
 	 * be created.
 	 */
 	protected TaskTimeCalculater(Class clazz){
-		logger = Logger.getLogger(clazz);
+		logger = Logger.getCommonLogger(clazz);
 	}
 	/**
 	 * Default private constructor. Used for internal purpose only.

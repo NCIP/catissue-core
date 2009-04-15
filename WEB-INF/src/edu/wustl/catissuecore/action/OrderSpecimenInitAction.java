@@ -38,7 +38,7 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class  OrderSpecimenInitAction  extends BaseAction
 {
-	
+	private transient Logger logger = Logger.getCommonLogger(OrderSpecimenInitAction.class);
 	/**
 	 * @param mapping ActionMapping object
 	 * @param form ActionForm object
@@ -100,7 +100,7 @@ public class  OrderSpecimenInitAction  extends BaseAction
 	    	
 		    catch(Exception excp)
 		    {
-		    	Logger.out.error(excp.getMessage(),excp); 
+		    	logger.error(excp.getMessage(),excp); 
 		    }
 		    
 		    request.setAttribute("typeOf","specimen");

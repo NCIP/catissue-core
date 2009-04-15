@@ -61,7 +61,7 @@ import edu.wustl.dao.exception.DAOException;
  */
 public class DistributionAction extends SecureAction
 {
-
+	private transient Logger logger = Logger.getCommonLogger(DistributionAction.class);
 	//This counter will keep track of the no of consentTiers 
 	int consentTierCounter;
 	List listOfMap = null;
@@ -310,7 +310,7 @@ public class DistributionAction extends SecureAction
 			return mapping.findForward(Constants.POPUP);
 		}
 		//Consent Tracking (Virender Mehta)
-		Logger.out.debug("executeSecureAction");
+		logger.debug("executeSecureAction");
 		String pageOf = request.getParameter(Constants.PAGE_OF);
 		request.setAttribute(Constants.PAGE_OF, pageOf);
 
@@ -383,6 +383,7 @@ public class DistributionAction extends SecureAction
 		}
 		catch (Exception e)
 		{
+			logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 		}
 		CollectionProtocolRegistration cprObject = collectionProtocolRegistration;//(CollectionProtocolRegistration)collProtObject.get(0);
@@ -521,7 +522,7 @@ public class DistributionAction extends SecureAction
 		int rowNo = parser.parseKeyAndGetRowNo(specimenIdKey);
 
 		//int a = Integer.parseInt()
-		Logger.out.debug("row number of the dist item: " + rowNo);
+		logger.debug("row number of the dist item: " + rowNo);
 
 		String specimenId = (String) dForm.getValue("DistributedItem:" + rowNo + "_Specimen_id");
 
@@ -540,7 +541,7 @@ public class DistributionAction extends SecureAction
 					.getAvailableQty(specimen));
 		}
 
-		Logger.out.debug("Map values after speci chars are set: " + dForm.getValues());
+		logger.debug("Map values after speci chars are set: " + dForm.getValues());
 		//Set back the idChange boolean to false.
 		dForm.setIdChange(false);
 	}
@@ -655,8 +656,7 @@ public class DistributionAction extends SecureAction
 		//The id of specimen of this event.
 		String specimenId = request.getParameter(Constants.SPECIMEN_ID);
 		request.setAttribute(Constants.SPECIMEN_ID, specimenId);
-		Logger.out
-				.debug("\t\t SpecimenEventParametersAction************************************ : "
+		logger.debug("\t\t SpecimenEventParametersAction************************************ : "
 						+ specimenId);
 
 		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();

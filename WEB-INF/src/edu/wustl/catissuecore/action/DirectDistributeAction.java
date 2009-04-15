@@ -17,7 +17,7 @@ import edu.wustl.common.util.logger.Logger;
 public class DirectDistributeAction extends BaseAction
 {
 
-
+	private transient Logger logger = Logger.getCommonLogger(DirectDistributeAction.class);
 	 /**
     * @param mapping ActionMapping object
     * @param form ActionForm object
@@ -30,7 +30,7 @@ public class DirectDistributeAction extends BaseAction
            HttpServletRequest request, HttpServletResponse response) throws Exception
    {
 	  
-	   Logger.out.debug("Inside DirectDistributeSpecAction ");
+	   logger.debug("Inside DirectDistributeSpecAction ");
 	   String typeOf = request.getParameter("typeOf");
 	   Long orderId = null;
 	   if(typeOf.equals(Constants.SPECIMEN_ORDER_FORM_TYPE))
@@ -48,7 +48,7 @@ public class DirectDistributeAction extends BaseAction
 		   OrderPathologyCaseForm pathologyForm = (OrderPathologyCaseForm) form;
 		   orderId = pathologyForm.getId();
 	   }
-	   Logger.out.debug("order Id ::"+orderId);
+	   logger.debug("order Id ::"+orderId);
 	   request.setAttribute("id", orderId.toString());
   	   
 	   return mapping.findForward("success");

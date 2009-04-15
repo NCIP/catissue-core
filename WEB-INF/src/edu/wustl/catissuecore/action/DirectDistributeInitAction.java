@@ -37,6 +37,7 @@ import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.global.Variables;
+import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.security.exception.SMException;
@@ -46,7 +47,7 @@ import edu.wustl.security.privilege.PrivilegeManager;
 
 public class DirectDistributeInitAction extends BaseAction
 {
-
+	private transient Logger logger = Logger.getCommonLogger(DirectDistributeInitAction.class);
 	 /**
      * @param mapping ActionMapping object
      * @param form ActionForm object
@@ -222,6 +223,7 @@ public class DirectDistributeInitAction extends BaseAction
 		}
 		catch(SMException smExp)
 		{
+			logger.debug(smExp.getMessage(), smExp);
 			throw AppUtility.getApplicationException(smExp, "sm.operation.error",
 			"Error in checking has privilege");
 		}

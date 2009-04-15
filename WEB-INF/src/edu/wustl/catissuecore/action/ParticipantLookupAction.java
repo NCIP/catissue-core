@@ -51,6 +51,7 @@ import edu.wustl.dao.exception.DAOException;
 
 public class ParticipantLookupAction extends BaseAction
 {
+	private transient Logger logger = Logger.getCommonLogger(ParticipantLookupAction.class);
 	/**
 	 * @param mapping object of ActionMapping
 	 * @param form object of ActionForm
@@ -86,14 +87,14 @@ public class ParticipantLookupAction extends BaseAction
 	        return mapping.findForward("failure");	      
 		}
 		// 11968 E
-		Logger.out.debug("Participant Id :"+request.getParameter("participantId"));
+		logger.debug("Participant Id :"+request.getParameter("participantId"));
 		//checks weather participant is selected from the list and so forwarding to next action instead of participant lookup.
 		//Abhishek Mehta
 		if(request.getAttribute("continueLookup") == null)
 		{
 			if(request.getParameter("participantId")!=null &&!request.getParameter("participantId").equals("null")&&!request.getParameter("participantId").equals("")&&!request.getParameter("participantId").equals("0"))
 			{
-				Logger.out.info("inside the participant mapping");
+				logger.info("inside the participant mapping");
 				return mapping.findForward("participantSelect");
 			}
 		}
@@ -154,7 +155,7 @@ public class ParticipantLookupAction extends BaseAction
 	            saveMessages(request,messages);
 	        }
 		}
-		Logger.out.debug("target:"+target);
+		logger.debug("target:"+target);
 		return (mapping.findForward(target));
 	}
 
@@ -173,7 +174,7 @@ public class ParticipantLookupAction extends BaseAction
 		}
 		catch (Exception e) 
 		{
-			Logger.out.error("Exception occured : " + e.getMessage() , e);
+			logger.error("Exception occured : " + e.getMessage() , e);
 			authorizedFlag=false;
 		}
 		finally
@@ -184,7 +185,7 @@ public class ParticipantLookupAction extends BaseAction
 			}
 			catch (ApplicationException e)
 			{
-				Logger.out.error("Exception occured : " + e.getMessage() , e);
+				logger.error("Exception occured : " + e.getMessage() , e);
 			}
 		}
 		return authorizedFlag;		
@@ -211,12 +212,12 @@ public class ParticipantLookupAction extends BaseAction
 		//Creating the column list which is used in Data grid to display column headings
 		String[] columnHeaderList = new String[]{Constants.PARTICIPANT_MEDICAL_RECORD_NO,Constants.PARTICIPANT_GENDER,Constants.PARTICIPANT_BIRTH_DATE,Constants.PARTICIPANT_SOCIAL_SECURITY_NUMBER,Constants.PARTICIPANT_DEATH_DATE,Constants.PARTICIPANT_VITAL_STATUS};
 		List columnList = new ArrayList();
-		Logger.out.info("column List header size ;"+columnHeaderList.length);	
+		logger.info("column List header size ;"+columnHeaderList.length);	
 		for (int i = 0; i < columnHeaderList.length; i++)
 		{
 			columnList.add(columnHeaderList[i]);
 		}
-		Logger.out.info("column List size ;"+columnList.size());
+		logger.info("column List size ;"+columnList.size());
 		List displayList=bizlogic.getColumnList(columnList,partMRNColName);
 	
 		displayList.add(0, Constants.PARTICIPANT_NAME_HEADERLABEL);

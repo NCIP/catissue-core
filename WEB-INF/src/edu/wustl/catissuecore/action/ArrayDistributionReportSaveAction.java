@@ -16,7 +16,6 @@ import edu.wustl.catissuecore.actionForm.ConfigureResultViewForm;
 import edu.wustl.catissuecore.actionForm.DistributionReportForm;
 import edu.wustl.catissuecore.domain.Distribution;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.catissuecore.vo.ArrayDistributionReportEntry;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.util.ExportReport;

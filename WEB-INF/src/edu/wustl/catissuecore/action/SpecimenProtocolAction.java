@@ -46,6 +46,7 @@ import edu.wustl.common.util.logger.Logger;
 public class SpecimenProtocolAction  extends SecureAction
 {
 
+	private transient Logger logger = Logger.getCommonLogger(SpecimenProtocolAction.class);
     /**
      * Overrides the execute method of Action class.
      * Sets the various fields in Collection / Distribution Add/Edit webpage.
@@ -69,20 +70,20 @@ public class SpecimenProtocolAction  extends SecureAction
         	UserBizLogic userBizLogic = (UserBizLogic)factory.getBizLogic(Constants.USER_FORM_ID);
         	Collection userCollection =  userBizLogic.getUsers(operation);
         	request.setAttribute(Constants.USERLIST, userCollection);
-        	Logger.out.debug("1");
+        	logger.debug("1");
         	// get the Specimen class and type from the cde
 	    	List specimenTypeList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_SPECIMEN_TYPE,null);
 	    	request.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
 	    	
         	CDE specimenClassCDE = CDEManager.getCDEManager().getCDE(Constants.CDE_NAME_SPECIMEN_CLASS);
 	    	Set setPV = specimenClassCDE.getPermissibleValues();
-	    	Logger.out.debug("2");
+	    	logger.debug("2");
 	    	Iterator itr = setPV.iterator();
 		    
 //	    	String classValues[][] = new String[setPV.size()][];
 	    	List specimenClassList =  new ArrayList();
 	    	Map subTypeMap = new HashMap();
-	    	Logger.out.debug("\n\n\n\n**********MAP DATA************\n");
+	    	logger.debug("\n\n\n\n**********MAP DATA************\n");
 	    	specimenClassList.add(new NameValueBean(Constants.SELECT_OPTION,"-1"));
 	    	
 	    	// Fill the Map with Specimen as Keys and Subtypes as values.
@@ -93,11 +94,11 @@ public class SpecimenProtocolAction  extends SecureAction
 	    		Object obj = itr.next();
 	    		PermissibleValue pv = (PermissibleValue)obj;
 	    		String tmpStr = pv.getValue();
-	    		Logger.out.debug(tmpStr);
+	    		logger.debug(tmpStr);
 	    		specimenClassList.add(new NameValueBean( tmpStr,tmpStr));
 	    		
 				Set list1 = pv.getSubPermissibleValues();
-				Logger.out.debug("list1 "+list1);
+				logger.debug("list1 "+list1);
 	        	Iterator itr1 = list1.iterator();
 	        	innerList.add(new NameValueBean(Constants.SELECT_OPTION,"-1"));
 	        	while(itr1.hasNext())
@@ -106,12 +107,12 @@ public class SpecimenProtocolAction  extends SecureAction
 	        		PermissibleValue pv1 = (PermissibleValue)obj1;
 	        		// set specimen type
 	        		String tmpInnerStr = pv1.getValue(); 
-	        		Logger.out.debug("\t\t"+tmpInnerStr);
+	        		logger.debug("\t\t"+tmpInnerStr);
 	        		innerList.add(new NameValueBean( tmpInnerStr,tmpInnerStr));  
 	        	}
 	        	subTypeMap.put(pv.getValue(),innerList);
 	    	} // class and values set
-	    	Logger.out.debug("\n\n\n\n**********MAP DATA************\n");
+	    	logger.debug("\n\n\n\n**********MAP DATA************\n");
 	    	
 	    	// sets the Class list
 	    	request.setAttribute(Constants.SPECIMEN_CLASS_LIST, specimenClassList);
@@ -132,14 +133,14 @@ public class SpecimenProtocolAction  extends SecureAction
 	        
 	    	// Mandar : 03-apr-06 start
 	    	/*End date is not been refreshed after Protocol is closed or activated. Refreshing the enddate manually. */
-	    	Logger.out.debug("04-Apr-06");
+	    	logger.debug("04-Apr-06");
 	    	SpecimenProtocolForm spForm = (SpecimenProtocolForm )form;
 	    	if(operation.equalsIgnoreCase(Constants.EDIT))
    			{
 	    		//Mandar: 25-july-06 bizlogic call updated.
 	    		SpecimenProtocolBizLogic bizLogic = (SpecimenProtocolBizLogic)factory.getBizLogic(spForm.getFormId());	
 	    		String tmpEndDate = bizLogic.getEndDate( spForm.getId(), getSessionData(request) );
-	    		Logger.out.debug("tmpendDate : " + tmpEndDate);
+	    		logger.debug("tmpendDate : " + tmpEndDate);
 	    		spForm.setEndDate(tmpEndDate );
    			}
 	    	// Mandar : 03-apr-06 end

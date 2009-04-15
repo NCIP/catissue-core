@@ -27,6 +27,7 @@ import edu.wustl.common.util.logger.Logger;
 
 public class DefineArrayAction extends BaseAction
 {
+	private transient Logger logger = Logger.getCommonLogger(DefineArrayAction.class);
     public ActionForward executeAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws Exception
     {
@@ -58,7 +59,7 @@ public class DefineArrayAction extends BaseAction
 	    	}
 	    	catch(Exception e)
 	    	{
-	    		Logger.out.error(e.getMessage(), e);
+	    		logger.error(e.getMessage(), e);
 	    		return null;
 	    	}
 	    	

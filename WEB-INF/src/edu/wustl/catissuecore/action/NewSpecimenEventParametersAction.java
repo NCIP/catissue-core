@@ -38,6 +38,7 @@ import edu.wustl.common.util.logger.Logger;
 
 public class NewSpecimenEventParametersAction  extends SecureAction
 {
+	private transient Logger logger = Logger.getCommonLogger(NewSpecimenEventParametersAction.class);
     /**
      * Overrides the execute method of Action class.
      * Initializes the various fields in Biohazard.jsp Page.
@@ -109,7 +110,7 @@ public class NewSpecimenEventParametersAction  extends SecureAction
 		}
         catch(Exception e)
 		{
-        	Logger.out.error(e.getMessage(),e);
+        	logger.error(e.getMessage(),e);
 		}
     	
         return mapping.findForward((String)request.getParameter(Constants.PAGE_OF));

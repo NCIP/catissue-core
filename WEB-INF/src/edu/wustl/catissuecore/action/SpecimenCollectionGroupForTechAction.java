@@ -32,6 +32,7 @@ import edu.wustl.common.action.BaseAction;
  */
 public class SpecimenCollectionGroupForTechAction extends BaseAction
 {
+	
 	/**
 	 * Overrides the execute method of Action class.
 	 */

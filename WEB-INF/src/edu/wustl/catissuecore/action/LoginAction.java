@@ -46,6 +46,7 @@ import edu.wustl.security.privilege.PrivilegeManager;
 public class LoginAction extends Action
 {
 
+	private transient Logger logger = Logger.getCommonLogger(LoginAction.class);
     /**
      * Overrides the execute method of Action class.
      * Initializes the various drop down fields in Institute.jsp Page.
@@ -88,7 +89,7 @@ public class LoginAction extends Action
 	            {
 	            	PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(loginName);
 	            	
-	            	Logger.out.info(">>>>>>>>>>>>> SUCESSFUL LOGIN A <<<<<<<<< ");
+	            	logger.info(">>>>>>>>>>>>> SUCESSFUL LOGIN A <<<<<<<<< ");
 	                HttpSession session = request.getSession(true);
 	                
 	                Long userId = validUser.getId();
@@ -109,7 +110,7 @@ public class LoginAction extends Action
 	                sessionData.setUserId(userId);
 	                sessionData.setFirstName(validUser.getFirstName());
 	                sessionData.setLastName(validUser.getLastName());
-	                Logger.out.debug("CSM USer ID ....................... : "+validUser.getCsmUserId());
+	                logger.debug("CSM USer ID ....................... : "+validUser.getCsmUserId());
 	                sessionData.setCsmUserId(validUser.getCsmUserId().toString());
 	                session.setAttribute(Constants.SESSION_DATA,sessionData);
 	                session.setAttribute(Constants.USER_ROLE,validUser.getRoleId());
@@ -153,21 +154,21 @@ public class LoginAction extends Action
 	            }
 	            else
 	            {
-	                Logger.out.info("User " + loginName + " Invalid user. Sending back to the login Page");
+	            	logger.info("User " + loginName + " Invalid user. Sending back to the login Page");
 	                handleError(request, "errors.incorrectLoginNamePassword");
 	                return (mapping.findForward(Constants.FAILURE));
 	            }
         	} // if valid user
         	else
         	{                
-        		Logger.out.info("User " + loginName + " Invalid user. Sending back to the login Page");
+        		logger.info("User " + loginName + " Invalid user. Sending back to the login Page");
         		handleError(request, "errors.incorrectLoginNamePassword");
 	            return (mapping.findForward(Constants.FAILURE));
         	} // invalid user
        	}
         catch (Exception e)
         {
-            Logger.out.info("Exception: " + e.getMessage(), e);
+        	logger.info("Exception: " + e.getMessage(), e);
             handleError(request, "errors.incorrectLoginNamePassword");
             return (mapping.findForward(Constants.FAILURE));
         }

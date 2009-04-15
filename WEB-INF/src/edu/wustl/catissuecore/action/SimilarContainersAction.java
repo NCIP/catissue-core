@@ -55,6 +55,7 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class SimilarContainersAction extends SecureAction
 {
+	private transient Logger logger = Logger.getCommonLogger(SimilarContainersAction.class);
 
 	/* (non-Javadoc)
 	 * @see edu.wustl.common.action.SecureAction#executeSecureAction(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
@@ -62,7 +63,7 @@ public class SimilarContainersAction extends SecureAction
 	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
 			throws Exception
 	{
-		Logger.out.debug("SimilarContainersAction : executeSecureAction() form: type " + form.getClass());
+		logger.debug("SimilarContainersAction : executeSecureAction() form: type " + form.getClass());
 		
 		List<NameValueBean> storagePositionListForTransferEvent = AppUtility.getStoragePositionTypeListForTransferEvent();
 		request.setAttribute("storageListForTransferEvent", storagePositionListForTransferEvent);
@@ -78,7 +79,7 @@ public class SimilarContainersAction extends SecureAction
 		{
 			similarContainersForm.setSpecimenOrArrayType("Specimen");
 		}
-		Logger.out.info(" Map:---------------" + similarContainersForm.getSimilarContainersMap());
+		logger.info(" Map:---------------" + similarContainersForm.getSimilarContainersMap());
 		IBizLogic ibizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 		
 		//request = AppUtility.setCollectionProtocolList(request,similarContainersForm.getSiteId());
@@ -203,9 +204,9 @@ public class SimilarContainersAction extends SecureAction
 		//Suman: for bug 8904
 		else if (Constants.STORAGE_TYPE_POSITION_MANUAL.equals(selectedParentContainer))
 		{
-			Logger.out.debug("Long.parseLong(request.getParameter(parentContainerId)......................."
+			logger.debug("Long.parseLong(request.getParameter(parentContainerId)......................."
 					+ request.getParameter("parentContainerId"));
-			Logger.out.debug("similarContainerForm.getTypeId()......................." + similarContainersForm.getTypeId());
+			logger.debug("similarContainerForm.getTypeId()......................." + similarContainersForm.getTypeId());
 			String parentContId = request.getParameter("parentContainerId");
 			//commented for bug:8904
 			//if (similarContainersForm.getParentContainerId() == 0)
@@ -246,6 +247,7 @@ public class SimilarContainersAction extends SecureAction
 					}
 					catch (CacheException e)
 					{
+						logger.debug(e.getMessage(), e);
 						e.printStackTrace();
 					}
 					
@@ -324,7 +326,7 @@ public class SimilarContainersAction extends SecureAction
 					similarContainersForm.setSiteName(site.getName());
 					siteName = site.getName();
 					siteId = site.getId().longValue();
-					Logger.out.debug("Site Name :" + similarContainersForm.getSiteName());
+					logger.debug("Site Name :" + similarContainersForm.getSiteName());
 				}
 			}
 		}
@@ -390,6 +392,7 @@ public class SimilarContainersAction extends SecureAction
 					}
 					catch(Exception e)
 					{
+						logger.debug(e.getMessage(), e);
 						ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
 						if (errors == null || errors.size() == 0)
 						{
@@ -445,7 +448,7 @@ public class SimilarContainersAction extends SecureAction
 			String contName = similarContainersForm.getContainerName();
 			String barcode = similarContainersForm.getBarcode();
 
-			Logger.out.debug("contName " + contName + " barcode " + barcode + " <<<<---");
+			logger.debug("contName " + contName + " barcode " + barcode + " <<<<---");
 			similarContainersForm.setSimilarContainerMapValue("simCont:1_name", contName);
 			similarContainersForm.setSimilarContainerMapValue("simCont:1_barcode", barcode);
 
@@ -496,7 +499,7 @@ public class SimilarContainersAction extends SecureAction
 			request.setAttribute("initValues", returner);
 
 		}
-		Logger.out.debug("Similar container map value:" + similarContainersForm.getSimilarContainersMap());
+		logger.debug("Similar container map value:" + similarContainersForm.getSimilarContainersMap());
 
 		return mapping.findForward(pageOf);
 	}

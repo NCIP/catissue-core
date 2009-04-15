@@ -23,7 +23,6 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.ReportedProblemForm;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.util.global.CommonServiceLocator;
 

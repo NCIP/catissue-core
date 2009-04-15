@@ -56,7 +56,7 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 	private static final String SPECIMEN_KEY_PREFIX = "S_";
 	Long cpId = null;
 	private SpecimenAutoStorageContainer autoStorageContainer;
-	
+	private transient Logger logger = Logger.getCommonLogger(AnticipatorySpecimenViewAction.class);
 	Set asignedPositonSet = null;
 	/* (non-Javadoc)
 	 * @see edu.wustl.common.action.BaseAction#executeAction(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
@@ -127,6 +127,7 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 		}
 		catch (Exception e)
 		{
+			logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 		}
 		finally
@@ -351,7 +352,7 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 		if (specimen != null && specimen.getSpecimenPosition() != null)
 		{
 			StorageContainer container = specimen.getSpecimenPosition().getStorageContainer();
-			Logger.out.info("-----------Container while getting from domain--:" + container);
+			logger.info("-----------Container while getting from domain--:" + container);
 			specimenDataBean.setContainerId(String.valueOf(container.getId()));
 			specimenDataBean.setSelectedContainerName(container.getName());
 			specimenDataBean.setPositionDimensionOne(String.valueOf(specimen.getSpecimenPosition().getPositionDimensionOne()));

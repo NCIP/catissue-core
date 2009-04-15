@@ -53,6 +53,7 @@ import edu.wustl.security.privilege.PrivilegeManager;
 public class ShowStorageGridViewAction  extends BaseAction
 {
 
+	private transient Logger logger = Logger.getCommonLogger(ShowStorageGridViewAction.class);
     /**
 	 * Overrides the execute method of Action class.
 	 */
@@ -117,6 +118,7 @@ public class ShowStorageGridViewAction  extends BaseAction
 			}
         	catch (Exception ex)
 			{
+        		logger.debug(ex.getMessage(), ex);
 			    //Will not select anything
         		positionOne = null;
         		positionTwo = null;
@@ -289,8 +291,8 @@ public class ShowStorageGridViewAction  extends BaseAction
         if (pageOf.equals(Constants.PAGE_OF_STORAGE_LOCATION))
         {
         	String storageContainerType = request.getParameter(Constants.STORAGE_CONTAINER_TYPE);
-        	Logger.out.info("Id-----------------"+id);
-        	Logger.out.info("storageContainerType:"+storageContainerType);
+        	logger.info("Id-----------------"+id);
+        	logger.info("storageContainerType:"+storageContainerType);
             int startNumber = bizLogic.getNextContainerNumber(Long.parseLong(id),
                     Long.parseLong(storageContainerType),false);
             request.setAttribute(Constants.STORAGE_CONTAINER_TYPE,storageContainerType);

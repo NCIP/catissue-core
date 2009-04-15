@@ -35,11 +35,13 @@ import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
+import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.exception.DAOException;
 
 
 public class CreateSpecimenTemplateAction extends BaseAction
 {
+	private transient Logger logger = Logger.getCommonLogger(CreateSpecimenTemplateAction.class);
 	/**
 	 * Overrides the execute method of Action class.
 	 * @param mapping object of ActionMapping
@@ -260,7 +262,7 @@ public class CreateSpecimenTemplateAction extends BaseAction
 		}
 		catch (BizLogicException e)
 		{
-			// TODO Auto-generated catch block
+			logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 		}
 

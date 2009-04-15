@@ -37,6 +37,7 @@ import edu.wustl.common.util.logger.Logger;
 
 public class ParticipantRegistrationSelectAction extends CommonAddEditAction{
 	
+	private transient Logger logger = Logger.getCommonLogger(ParticipantRegistrationSelectAction.class);
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
     {
@@ -53,13 +54,13 @@ public class ParticipantRegistrationSelectAction extends CommonAddEditAction{
 	
 			String objectName = iDomainObjectFactory.getDomainObjectName(participantForm.getFormId());
 		  	
-			Logger.out.info("Participant Id-------------------"+request.getParameter("participantId"));
+			logger.info("Participant Id-------------------"+request.getParameter("participantId"));
 			
 			Object object = bizLogic.retrieve(objectName, new Long(request.getParameter("participantId")));
 			abstractDomain = (AbstractDomainObject) object;
 			Participant participant=(Participant)abstractDomain;
 			
-			Logger.out.info("Last name in ParticipantSelectAction:"+participant.getLastName());
+			logger.info("Last name in ParticipantSelectAction:"+participant.getLastName());
 			
 			// To append the cpr to already existing cprs
 			//Gets the collection Protocol Registration map from ActionForm
@@ -111,7 +112,7 @@ public class ParticipantRegistrationSelectAction extends CommonAddEditAction{
 			}
 		}
 		catch(Exception e){
-			Logger.out.info(e.getMessage());
+			logger.info(e.getMessage());
 		}
 		
 		return forward;

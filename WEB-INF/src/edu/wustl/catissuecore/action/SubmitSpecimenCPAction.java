@@ -50,6 +50,7 @@ import edu.wustl.security.exception.UserNotAuthorizedException;
  
 public class SubmitSpecimenCPAction extends BaseAction {
 
+	private transient Logger logger = Logger.getCommonLogger(SubmitSpecimenCPAction.class);
 	private ViewSpecimenSummaryForm specimenSummaryForm;
 	private SpecimenCollectionGroup specimenCollectionGroup = null;
 	
@@ -130,6 +131,7 @@ public class SubmitSpecimenCPAction extends BaseAction {
 			specimenSummaryForm.setUserAction(ViewSpecimenSummaryForm.UPDATE_USER_ACTION);
 		} 
 		catch (Exception ex) {
+			logger.debug(ex.getMessage(), ex);
 			target = Constants.FAILURE;
 			if(pageOf!=null && pageOf.equals("pageOfMultipleSpWithMenu"))
 			{
@@ -174,7 +176,7 @@ public class SubmitSpecimenCPAction extends BaseAction {
 		}
 		resultMap.put(Constants.MULTIPLE_SPECIMEN_RESULT, target);
 		// writeMapToResponse(response, resultMap);
-		Logger.out.debug("In MultipleSpecimenAppletAction :- resultMap : "
+		logger.debug("In MultipleSpecimenAppletAction :- resultMap : "
 				+ resultMap);
 		
 		return mapping.findForward(target);

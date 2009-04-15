@@ -32,6 +32,10 @@ public class ConfigureResultViewAction extends BaseAction
 {
 
 	/**
+	 * logger.
+	 */
+	private transient Logger logger = Logger.getCommonLogger(ConfigureResultViewAction.class);
+	/**
 	 * @param mapping object of ActionMapping
 	 * @param form object of ActionForm
 	 * @param request object of HttpServletRequest
@@ -87,15 +91,15 @@ public class ConfigureResultViewAction extends BaseAction
 	        		tableColumnDataMap.put(tableData,columnList);
 	        		
 	        	}
-	        	Logger.out.debug("Table Name"+ tableData.getValue());
+	        	logger.debug("Table Name"+ tableData.getValue());
 		        //Logger.out.debug("Column List"+ columnList);
 		        
 	        }
 	        
-	        Logger.out.debug("Table Map"+tableColumnDataMap);
+	        logger.debug("Table Map"+tableColumnDataMap);
 	        request.setAttribute(Constants.TABLE_COLUMN_DATA_MAP,tableColumnDataMap);
 	        request.setAttribute(Constants.PAGE_OF,pageOf);
-	        Logger.out.debug("pageOf in configure result view:"+pageOf);
+	        logger.debug("pageOf in configure result view:"+pageOf);
 	        /*if(pageOf.equals(Constants.PAGE_OF_SIMPLE_QUERY_INTERFACE))
 	        	target = Constants.PAGE_OF_SIMPLE_QUERY_INTERFACE;
 			else if(pageOf.equals(Constants.PAGE_OF_QUERY_RESULTS))

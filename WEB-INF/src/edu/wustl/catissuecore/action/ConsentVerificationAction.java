@@ -53,6 +53,7 @@ import edu.wustl.dao.exception.DAOException;
 public class ConsentVerificationAction extends BaseAction
 {
 
+	private transient Logger logger = Logger.getCommonLogger(ConsentVerificationAction.class);
     //This counter will keep track of the no of consentTiers 
 	int consentTierCounter;
 	List listOfMap=null;
@@ -119,7 +120,7 @@ public class ConsentVerificationAction extends BaseAction
 					
         }	
         //Consent Tracking 
-        Logger.out.debug("executeSecureAction");
+		logger.debug("executeSecureAction");
         String pageOf = request.getParameter(Constants.PAGE_OF);
 		request.setAttribute(Constants.PAGE_OF, pageOf);
 
@@ -187,6 +188,7 @@ public class ConsentVerificationAction extends BaseAction
 		}
 		catch (Exception e)
 		{
+			logger.error(e.getMessage(), e);
 			e.printStackTrace();
 		}
 		CollectionProtocolRegistration cprObject = collectionProtocolRegistration;//(CollectionProtocolRegistration)collProtObject.get(0);

@@ -15,6 +15,7 @@ import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.action.BaseAction;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * @author abhijit_naik
@@ -23,6 +24,7 @@ import edu.wustl.common.action.BaseAction;
 public class MultipleSpecimenViewAction extends BaseAction 
 {
 
+	private transient Logger logger = Logger.getCommonLogger(MultipleSpecimenViewAction.class);
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
@@ -66,6 +68,7 @@ public class MultipleSpecimenViewAction extends BaseAction
 		}
 		catch(Exception e)
 		{
+			logger.error(e.getMessage(), e);
 			e.printStackTrace();
 		}
 		return null;

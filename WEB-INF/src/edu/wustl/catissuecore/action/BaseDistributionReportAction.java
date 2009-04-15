@@ -49,6 +49,7 @@ import edu.wustl.simplequery.query.SimpleQuery;
  */
 public abstract class BaseDistributionReportAction extends BaseAction
 {
+	private transient Logger logger = Logger.getCommonLogger(BaseDistributionReportAction.class);
 	protected String []getColumnNames(String []selectedColumnsList)
 	{
 		String [] columnNames=new String[selectedColumnsList.length];
@@ -63,7 +64,7 @@ public abstract class BaseDistributionReportAction extends BaseAction
 	    		st.nextToken();
 	    		st.nextToken();
 	    		columnNames[i]=st.nextToken();
-	    		Logger.out.debug("Selected column names in configuration "+columnNames[i]);
+	    		logger.debug("Selected column names in configuration "+columnNames[i]);
 	    		if(st.hasMoreTokens())
 	    			st.nextToken();
 	    	}
@@ -144,13 +145,13 @@ public abstract class BaseDistributionReportAction extends BaseAction
     	listOfSpecimenId = listOfSpecimenId + ")";
     	String action = configForm.getNextAction();
     	
-    	Logger.out.debug("Configure/Default action "+action);
+    	logger.debug("Configure/Default action "+action);
     	String selectedColumns[] = getSelectedColumns(action,configForm,false);
-    	Logger.out.debug("Selected columns length"+selectedColumns.length);
+    	logger.debug("Selected columns length"+selectedColumns.length);
     		Collection simpleConditionNodeCollection = new ArrayList();
     		Query query = QueryFactory.getInstance().newQuery(Query.SIMPLE_QUERY, Query.PARTICIPANT);
 		
-		Logger.out.debug("Specimen IDs" +listOfSpecimenId);
+    		logger.debug("Specimen IDs" +listOfSpecimenId);
     		SimpleConditionsNode simpleConditionsNode = new SimpleConditionsNode();
 		simpleConditionsNode.getCondition().setValue(listOfSpecimenId);
     		simpleConditionsNode.getCondition().getDataElement().setTableName(Query.SPECIMEN);
@@ -208,7 +209,7 @@ public abstract class BaseDistributionReportAction extends BaseAction
     				    QueryBizLogic bizLogic = (QueryBizLogic) factory
 						.getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
     				    aliasName = bizLogic.getAliasName(Constants.TABLE_ID_COLUMN, tableId);
-    				    Logger.out.debug("aliasName for from Set**************************"+aliasName);
+    				    logger.debug("aliasName for from Set**************************"+aliasName);
     				}
     				
     				if (aliasName != null)
@@ -243,7 +244,7 @@ public abstract class BaseDistributionReportAction extends BaseAction
     	if(("configure").equals(action))
     	{
     		String selectedColumns[] = form.getSelectedColumnNames();
-    		Logger.out.debug("Selected columns length"+selectedColumns.length);
+    		logger.debug("Selected columns length"+selectedColumns.length);
     		return selectedColumns;
     	}
     	else {

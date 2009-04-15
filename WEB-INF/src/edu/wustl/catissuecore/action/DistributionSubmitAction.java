@@ -24,6 +24,7 @@ import edu.wustl.common.action.CommonAddEditAction;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * @author Rahul Ner 
@@ -33,6 +34,7 @@ import edu.wustl.common.factory.IFactory;
 public class DistributionSubmitAction extends CommonAddEditAction 
 {
 
+	private transient Logger logger = Logger.getCommonLogger(DistributionSubmitAction.class);
 	/**
      * Overrides the execute method of Action class.
      * Sets the various fields in DistributionProtocol Add/Edit webpage.
@@ -53,6 +55,7 @@ public class DistributionSubmitAction extends CommonAddEditAction
 		} 
 		catch (ApplicationException e) 
 		{
+			logger.debug(e.getMessage(), e);
 			ActionErrors errors = new ActionErrors();
 			ActionError error = new ActionError(e.getMessage());
 			errors.add(ActionErrors.GLOBAL_ERROR, error);

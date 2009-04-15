@@ -48,6 +48,7 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class CollectionProtocolAction extends SpecimenProtocolAction 
 {
+	private transient Logger logger = Logger.getCommonLogger(CollectionProtocolAction.class);
 	//This will keep track of no of consents for a particular participant
 	int consentCounter=0;	
     /**
@@ -104,7 +105,7 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
     		initCleanSession(request);
     	}
     	
-        Logger.out.debug("operation in coll prot action"+operation);
+    	logger.debug("operation in coll prot action"+operation);
         //Sets the operation attribute to be used in the Edit/View Collection Protocol Page in Advance Search Object View. 
            	
     	CollectionProtocolForm collectionProtocolForm = (CollectionProtocolForm)form; 
@@ -159,7 +160,7 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
     	List clinicalStatusList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_CLINICAL_STATUS,null);
     	request.setAttribute(Constants.CLINICAL_STATUS_LIST, clinicalStatusList);
 
-		Logger.out.debug("page of in collectionProtocol action:"+pageOf);
+    	logger.debug("page of in collectionProtocol action:"+pageOf);
 		request.setAttribute("pageOf",pageOf);
 
 		List tissueSiteList = (List) request.getAttribute(Constants.TISSUE_SITE_LIST);

@@ -17,6 +17,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.CommonAddEditAction;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.util.MapDataParser;
+import edu.wustl.common.util.logger.Logger;
 
 
 /**
@@ -26,6 +27,7 @@ import edu.wustl.common.util.MapDataParser;
  */
 public class SpecimenArrayAddEditAction extends CommonAddEditAction {
 
+	private transient Logger logger = Logger.getCommonLogger(SpecimenArrayAddEditAction.class);
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) 
 		throws IOException, ServletException {
 		
@@ -52,6 +54,7 @@ public class SpecimenArrayAddEditAction extends CommonAddEditAction {
 			}
 			catch (Exception exception) 
 			{
+				logger.debug(exception.getMessage(), exception);
 				exception.printStackTrace();
 			}
 		}

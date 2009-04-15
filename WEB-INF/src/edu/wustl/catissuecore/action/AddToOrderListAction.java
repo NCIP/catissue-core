@@ -30,6 +30,7 @@ import edu.wustl.common.util.logger.Logger;
 
 public class AddToOrderListAction  extends BaseAction
 {
+	private transient Logger logger = Logger.getCommonLogger(AddToOrderListAction.class);
 	 /**
      * Overrides the execute method of BaseAction class.
      * Initializes various fields in OrderItem and OrderList.jsp.Also removes the selected orderitems from speicmen map 
@@ -47,7 +48,7 @@ public class AddToOrderListAction  extends BaseAction
 		HttpSession session = request.getSession();
 		if(session.getAttribute("OrderForm")!=null)
         {
-			Logger.out.debug(" Start --------- In AddToOrderListAction.java ");
+			logger.debug(" Start --------- In AddToOrderListAction.java ");
 			Map itemMap=new HashMap();
 			
 			String target=null;
@@ -175,7 +176,7 @@ public class AddToOrderListAction  extends BaseAction
 			}//End else
 	
 			
-			Logger.out.debug(" End --------- In AddToOrderListAction.java ");
+			logger.debug(" End --------- In AddToOrderListAction.java ");
 	    	return mapping.findForward(target);
         }
 		else

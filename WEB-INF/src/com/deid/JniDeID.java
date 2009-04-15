@@ -35,8 +35,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 
 import edu.wustl.common.util.global.CommonServiceLocator;
-import edu.wustl.common.util.global.Variables;
 import edu.wustl.common.util.logger.Logger;
+
 
 /**
  *
@@ -44,6 +44,8 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class JniDeID 
 {
+	
+	private static Logger logger = Logger.getCommonLogger(JniDeID.class);
    /** 
     * loadDeidLibrary maps the DeID6 library into the applications addressspace via the Windows API function LoadLibrary
     *  @return boolean 
@@ -88,11 +90,11 @@ public class JniDeID
 		    File dllFile = new File(dllPath) ;
 	        dllPath = dllFile.getAbsolutePath() ;
 	        System.load(dllPath);
-	        Logger.out.info("Loading dll file at "+dllPath);
+	       logger.info("Loading dll file at "+dllPath);
 		} 
 		catch (Exception x) 
 		{
-			Logger.out.error("Error in method loadUsingAbsolutePath of JniDeID");
+			logger.error("Error in method loadUsingAbsolutePath of JniDeID");
 		}
 	}
 	
@@ -120,7 +122,7 @@ public class JniDeID
 		} 
 		catch (Exception x) 
 		{
-			Logger.out.error("Error in main method of JniDeID");
+			logger.error("Error in main method of JniDeID");
 		}
 		
 	}

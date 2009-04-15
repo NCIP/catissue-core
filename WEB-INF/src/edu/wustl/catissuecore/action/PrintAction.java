@@ -31,6 +31,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.daofactory.DAOConfigFactory;
 import edu.wustl.dao.exception.DAOException;
@@ -45,6 +46,7 @@ import gov.nih.nci.security.authorization.domainobjects.User;
 public class PrintAction extends Action
 {
 
+	private transient Logger logger = Logger.getCommonLogger(PrintAction.class);
 	/**
 	 * Overrides the execute method of Action class.
 	 * 
@@ -108,6 +110,7 @@ public class PrintAction extends Action
 				}
 				catch (DAOException exception)
 				{
+					logger.debug(exception.getMessage(), exception);
 					throw exception;
 				}
 				finally
@@ -140,6 +143,7 @@ public class PrintAction extends Action
 				}
 				catch (DAOException exception)
 				{
+					logger.debug(exception.getMessage(), exception);
 					throw exception;
 				}
 				finally
@@ -238,6 +242,7 @@ public class PrintAction extends Action
 				}
 				catch (DAOException exception)
 				{
+					logger.debug(exception.getMessage(), exception);
 					throw exception;
 				}
 				finally
@@ -251,6 +256,7 @@ public class PrintAction extends Action
 		{
 			//Any other exception
 			//e.printStackTrace();
+			logger.debug(e.getMessage(), e);
 			ActionMessages messages = (ActionMessages) request.getAttribute(MESSAGE_KEY);
 			if (messages == null)
 			{
@@ -283,6 +289,7 @@ public class PrintAction extends Action
 		}
 		catch (SMException e)
 		{
+			logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 			throw AppUtility.handleSMException(e);
 		}
@@ -297,6 +304,7 @@ public class PrintAction extends Action
 		}
 		catch (Exception e)
 		{
+			logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 			throw new Exception("Error Printing label");
 		}

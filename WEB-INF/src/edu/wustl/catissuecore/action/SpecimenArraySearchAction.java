@@ -44,6 +44,7 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class SpecimenArraySearchAction extends CommonSearchAction {
 
+	private transient Logger logger = Logger.getCommonLogger(SpecimenArraySearchAction.class);
 	/**
 	 * @see org.apache.struts.action.Action#execute(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
 	 */
@@ -154,7 +155,7 @@ public class SpecimenArraySearchAction extends CommonSearchAction {
 		}
 		catch(ApplicationException excp)
 		{
-			Logger.out.error(excp.getMessage(), excp);
+			logger.error(excp.getMessage(), excp);
 			ActionErrors errors = new ActionErrors();
 			String objName = SpecimenArray.class.getName();
             errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.unknown", AbstractDomainObject.parseClassName(objName)));

@@ -37,6 +37,7 @@ import edu.wustl.query.actionForm.AdvanceSearchForm;
  */
 public class SpreadsheetExportAction  extends BaseAction
 {
+	private transient Logger logger = Logger.getCommonLogger(SpreadsheetExportAction.class);
     /**
      * This class exports the data of a spreadsheet to a file.
      */
@@ -88,12 +89,12 @@ public class SpreadsheetExportAction  extends BaseAction
         Map<Integer, List<String>> entityIdsMap = (Map<Integer, List<String>>)session.getAttribute(Constants.ENTITY_IDS_MAP);
     	//Mandar 06-Apr-06 Bugid:1165 : Extra ID columns displayed.  start
     	
-    	Logger.out.debug("---------------------------------------------------------------------------------");
-       	Logger.out.debug("06-apr-06 : cl size :-"+columnList.size()  );
-    	Logger.out.debug(columnList); 
-    	Logger.out.debug("--");
-    	Logger.out.debug("06-apr-06 : dl size :-"+dataList.size()  );
-    	Logger.out.debug(dataList); 
+        logger.debug("---------------------------------------------------------------------------------");
+        logger.debug("06-apr-06 : cl size :-"+columnList.size()  );
+        logger.debug(columnList); 
+        logger.debug("--");
+        logger.debug("06-apr-06 : dl size :-"+dataList.size()  );
+        logger.debug(dataList); 
     	
     	List tmpColumnList = new ArrayList();
     	int idColCount=0;
@@ -101,7 +102,7 @@ public class SpreadsheetExportAction  extends BaseAction
     	for(int cnt=0;cnt<columnList.size();cnt++  )
     	{
     		String columnName = (String)columnList.get(cnt );
-    		Logger.out.debug(columnName + " : " + columnName.length()    );
+    		logger.debug(columnName + " : " + columnName.length()    );
     		if(columnName.trim().equalsIgnoreCase("ID") )
     		{
     			idColCount++; 
@@ -126,14 +127,14 @@ public class SpreadsheetExportAction  extends BaseAction
         	tmpDataList.add(tmpNewList ); 
     	}
     	
-    	Logger.out.debug("--");
-    	Logger.out.debug("tmpcollist :" + tmpColumnList.size() ); 
-    	Logger.out.debug(tmpColumnList); 
-    	Logger.out.debug("--");
-    	Logger.out.debug("tmpdatalist :" + tmpDataList.size() ); 
-    	Logger.out.debug(tmpDataList); 
+    	logger.debug("--");
+    	logger.debug("tmpcollist :" + tmpColumnList.size() ); 
+    	logger.debug(tmpColumnList); 
+    	logger.debug("--");
+    	logger.debug("tmpdatalist :" + tmpDataList.size() ); 
+    	logger.debug(tmpDataList); 
 
-    	Logger.out.debug("---------------------------------------------------------------------------------");
+    	logger.debug("---------------------------------------------------------------------------------");
     	columnList = tmpColumnList ;
     	dataList = tmpDataList ;
     	//    	Mandar 06-Apr-06 Bugid:1165 : Extra ID columns end  

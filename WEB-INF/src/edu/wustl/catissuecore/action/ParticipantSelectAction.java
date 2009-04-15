@@ -43,6 +43,7 @@ import edu.wustl.common.util.logger.Logger;
 
 public class ParticipantSelectAction extends BaseAction
 {
+	private transient Logger logger = Logger.getCommonLogger(ParticipantSelectAction.class);
 	/**
 	 * @param mapping object of ActionMapping
 	 * @param form object of ActionForm
@@ -68,13 +69,13 @@ public class ParticipantSelectAction extends BaseAction
 
 		String objectName = iDomainObjectFactory.getDomainObjectName(abstractForm.getFormId());
 	  	
-		Logger.out.info("Participant Id-------------------"+request.getParameter("participantId"));
+		logger.info("Participant Id-------------------"+request.getParameter("participantId"));
 		
 		Object object = bizLogic.retrieve(objectName, new Long(request.getParameter("participantId")));
 		request.removeAttribute("participantForm");
 		Participant participant=(Participant) object;
 		
-		Logger.out.info("Last name in ParticipantSelectAction:"+participant.getLastName());
+		logger.info("Last name in ParticipantSelectAction:"+participant.getLastName());
 		/**
 		 * Name: Vijay Pande
 		 * Reviewer Name: Aarti Sharma
@@ -92,7 +93,7 @@ public class ParticipantSelectAction extends BaseAction
 		//Attributes to decide AddNew action
         String submittedFor = (String)request.getParameter(Constants.SUBMITTED_FOR);
         
-        Logger.out.info("submittedFor in ParticipantSelectAction:"+submittedFor);
+        logger.info("submittedFor in ParticipantSelectAction:"+submittedFor);
         //------------------------------------------------ AddNewAction Starts----------------------------
         //if AddNew action is executing, load FormBean from Session and redirect to Action which initiated AddNew action
         if((submittedFor !=null)&& (submittedFor.equals("AddNew")))
@@ -111,9 +112,9 @@ public class ParticipantSelectAction extends BaseAction
     	            AbstractActionForm sessionFormBean = addNewSessionDataBean.getAbstractActionForm();
     	            
     	            String forwardTo = addNewSessionDataBean.getForwardTo();
-    	            Logger.out.debug("forwardTo in ParticipantSelectAction--------->"+forwardTo);
+    	            logger.debug("forwardTo in ParticipantSelectAction--------->"+forwardTo);
     	            
-    	            Logger.out.info("Id-----------------"+abstractDomain.getId());
+    	            logger.info("Id-----------------"+abstractDomain.getId());
     	            //Setting Identifier of new object into the FormBean to populate it on the JSP page 
     	            sessionFormBean.setAddNewObjectIdentifier(addNewSessionDataBean.getAddNewFor(), abstractDomain.getId());
     	            
@@ -124,9 +125,9 @@ public class ParticipantSelectAction extends BaseAction
     	            {
     	                session.removeAttribute(Constants.FORM_BEAN_STACK);
     	                request.setAttribute(Constants.SUBMITTED_FOR, "Default");
-    	                Logger.out.debug("SubmittedFor set as Default in ParticipantSelectAction===========");
+    	                logger.debug("SubmittedFor set as Default in ParticipantSelectAction===========");
     	                
-    	                Logger.out.debug("cleaning FormBeanStack from session*************");
+    	                logger.debug("cleaning FormBeanStack from session*************");
     	            }
     	            else
     	            {
@@ -138,7 +139,7 @@ public class ParticipantSelectAction extends BaseAction
     	            String formBeanName = Utility.getFormBeanName(sessionFormBean);
     	            request.setAttribute(formBeanName, sessionFormBean);
     	            
-    	            Logger.out.debug("InitiliazeAction operation=========>"+sessionFormBean.getOperation());
+    	            logger.debug("InitiliazeAction operation=========>"+sessionFormBean.getOperation());
     	            
     	            //Storing Success messages into Request to display on JSP page being forwarded after AddNew activity
     	            if (messages != null)
@@ -153,14 +154,14 @@ public class ParticipantSelectAction extends BaseAction
     	            //Changing operation attribute in parth specified in ForwardTo mapping, If AddNew activity started from Edit page
     	            if((sessionFormBean.getOperation().equals("edit")))
     	            {
-    	                Logger.out.debug("Edit object Identifier while AddNew is from Edit operation==>"+sessionFormBean.getId());
+    	            	logger.debug("Edit object Identifier while AddNew is from Edit operation==>"+sessionFormBean.getId());
     	                ActionForward editForward = new ActionForward();
     	                
     	                String addPath = (mapping.findForward(forwardTo)).getPath();
-    	                Logger.out.debug("Operation before edit==========>"+addPath);
+    	                logger.debug("Operation before edit==========>"+addPath);
     	                
     	                String editPath = addPath.replaceFirst("operation=add","operation=edit");
-    	                Logger.out.debug("Operation edited=============>"+editPath);
+    	                logger.debug("Operation edited=============>"+editPath);
                    		editForward.setPath(editPath);
                    		
                    		return editForward;
@@ -185,7 +186,7 @@ public class ParticipantSelectAction extends BaseAction
        //----------ForwardTo Starts----------------
         else if((submittedFor !=null)&& (submittedFor.equals("ForwardTo")))
         {
-            Logger.out.debug("SubmittedFor is ForwardTo in CommonAddEditAction...................");
+        	logger.debug("SubmittedFor is ForwardTo in CommonAddEditAction...................");
             
             //Storing appropriate value of SUBMITTED_FOR attribute
             request.setAttribute(Constants.SUBMITTED_FOR, "Default");
@@ -199,12 +200,12 @@ public class ParticipantSelectAction extends BaseAction
         if(abstractForm.getForwardTo()!= null && abstractForm.getForwardTo().trim().length()>0)
        {
        		String forwardTo = abstractForm.getForwardTo(); 
-       		Logger.out.debug("ForwardTo in Add :-- : "+ forwardTo);
+       		logger.debug("ForwardTo in Add :-- : "+ forwardTo);
        		target = forwardTo;
        		//return (mapping.findForward(forwardTo));
        }
 
-        Logger.out.info("target in ParticipantSelectAction:"+target);	
+        logger.info("target in ParticipantSelectAction:"+target);	
         return (mapping.findForward(target));
 		
 	}

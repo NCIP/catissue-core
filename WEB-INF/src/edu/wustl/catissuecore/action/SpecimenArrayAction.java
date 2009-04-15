@@ -49,7 +49,7 @@ import edu.wustl.dao.exception.DAOException;
  */
 public class SpecimenArrayAction extends SecureAction
 {
-    
+	private transient Logger logger = Logger.getCommonLogger(SpecimenArrayAction.class);
     /**
      * @see edu.wustl.common.action.SecureAction#executeSecureAction(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
      */
@@ -115,7 +115,7 @@ public class SpecimenArrayAction extends SecureAction
 		if(strMenu != null )
 		{
 			request.setAttribute(Constants.MENU_SELECTED ,strMenu);
-			Logger.out.debug(Constants.MENU_SELECTED + " " +strMenu +" set successfully");
+			logger.debug(Constants.MENU_SELECTED + " " +strMenu +" set successfully");
 		}
     	
 		
@@ -261,7 +261,7 @@ public class SpecimenArrayAction extends SecureAction
     	int rowCount = specimenArrayForm.getOneDimensionCapacity();
     	int columnCount = specimenArrayForm.getTwoDimensionCapacity();
     	
-		for (int i=0; i < rowCount ; i++) 
+		for (int i=0; i < rowCount ; i++)
 		{
 			  for (int j=0;j < columnCount; j++) 
 			  {

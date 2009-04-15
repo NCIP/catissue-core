@@ -78,6 +78,7 @@ import edu.wustl.dao.exception.DAOException;
 public class SpecimenCollectionGroupAction extends SecureAction
 {
 
+	private transient Logger logger = Logger.getCommonLogger(SpecimenCollectionGroupAction.class);
 	/**
 	 * Overrides the execute method of Action class.
 	 * @param mapping object of ActionMapping
@@ -99,7 +100,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 		specimenCollectionGroupForm.setClinicalDiagnosis(test);
 		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 		IBizLogic bizLogicObj = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
-		Logger.out.debug("SCGA : " + specimenCollectionGroupForm.getId());
+		logger.debug("SCGA : " + specimenCollectionGroupForm.getId());
 		String nodeId = null;
 		/**
 		 * Bug id : 4213
@@ -125,7 +126,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 		if (operation.equalsIgnoreCase(Constants.ADD))
 		{
 			specimenCollectionGroupForm.setId(0);
-			Logger.out.debug("SCGA : set to 0 " + specimenCollectionGroupForm.getId());
+			logger.debug("SCGA : set to 0 " + specimenCollectionGroupForm.getId());
 		}
 
 		boolean isOnChange = false;
@@ -366,9 +367,9 @@ public class SpecimenCollectionGroupAction extends SecureAction
 			specimenCollectionGroupForm.setCollectionStatus(Constants.COLLECTION_STATUS_PENDING);
 		}
 		//end for fix. Bug no.7390
-		Logger.out.debug("CP ID in SCG Action======>"
+		logger.debug("CP ID in SCG Action======>"
 				+ specimenCollectionGroupForm.getCollectionProtocolId());
-		Logger.out.debug("Participant ID in SCG Action=====>"
+		logger.debug("Participant ID in SCG Action=====>"
 				+ specimenCollectionGroupForm.getParticipantId() + "  "
 				+ specimenCollectionGroupForm.getProtocolParticipantIdentifier());
 
@@ -382,7 +383,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 				&& ((request.getAttribute(Constants.SUBMITTED_FOR).equals("Default")) || (request
 						.getAttribute(Constants.SUBMITTED_FOR).equals(Constants.ADDNEW_LINK))))
 		{
-			Logger.out.debug("Populating CP and Participant in SCG ====  AddNew operation loop");
+			logger.debug("Populating CP and Participant in SCG ====  AddNew operation loop");
 
 			Long cprId = new Long(specimenCollectionGroupForm.getCollectionProtocolRegistrationId());
 
@@ -398,7 +399,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 					long pID = cpr.getParticipant().getId().longValue();
 					String ppID = cpr.getProtocolParticipantIdentifier();
 
-					Logger.out.debug("cpID : " + cpID + "   ||  pID : " + pID + "    || ppID : "
+					logger.debug("cpID : " + cpID + "   ||  pID : " + pID + "    || ppID : "
 							+ ppID);
 
 					specimenCollectionGroupForm.setCollectionProtocolId(cpID);
@@ -603,11 +604,11 @@ public class SpecimenCollectionGroupAction extends SecureAction
 				setCalendarEventPoint(CPEObject, request, specimenCollectionGroupForm);
 			}
 
-			Logger.out.debug("CollectionProtocolID found in forwardToHashMap========>>>>>>"
+			logger.debug("CollectionProtocolID found in forwardToHashMap========>>>>>>"
 					+ collectionProtocolId);
-			Logger.out.debug("ParticipantID found in forwardToHashMap========>>>>>>"
+			logger.debug("ParticipantID found in forwardToHashMap========>>>>>>"
 					+ participantId);
-			Logger.out.debug("ParticipantProtocolID found in forwardToHashMap========>>>>>>"
+			logger.debug("ParticipantProtocolID found in forwardToHashMap========>>>>>>"
 					+ participantProtocolId);
 		}
 		//*************  ForwardTo implementation *************
@@ -679,7 +680,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 		}
 
 		request.setAttribute(Constants.PAGE_OF, pageOf);
-		Logger.out.debug("page of in Specimen coll grp action:"
+		logger.debug("page of in Specimen coll grp action:"
 				+ request.getParameter(Constants.PAGE_OF));
 		// -------called from Collection Protocol Registration end -------------------------------
 		//Falguni:Performance Enhancement.

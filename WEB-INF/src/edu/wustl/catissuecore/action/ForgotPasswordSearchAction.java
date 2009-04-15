@@ -37,6 +37,7 @@ import edu.wustl.common.util.logger.Logger;
 public class ForgotPasswordSearchAction extends Action
 {
 
+	private transient Logger logger = Logger.getCommonLogger(ForgotPasswordSearchAction.class);
 	/**
 	 * Overrides the execute method of Action class.
 	 * Adds the user information in the database.
@@ -66,7 +67,7 @@ public class ForgotPasswordSearchAction extends Action
 		catch (BizLogicException excp)
 		{
 			target = new String(Constants.FAILURE);
-			Logger.out.error(excp.getMessage());
+			logger.error(excp.getMessage());
 		}
 		
 		return (mapping.findForward(target));

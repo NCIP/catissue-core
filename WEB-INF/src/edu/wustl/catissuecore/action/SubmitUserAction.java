@@ -50,6 +50,7 @@ import edu.wustl.simplequery.bizlogic.QueryBizLogic;
 
 public class SubmitUserAction extends Action
 {
+	private transient Logger logger = Logger.getCommonLogger(SubmitUserAction.class);
 	 String target = null;
 	 AbstractDomainObject abstractDomain = null;
 	 ActionMessages messages = null;  
@@ -78,17 +79,17 @@ public class SubmitUserAction extends Action
         	saveErrors(request,errors);
             target = new String(Constants.FAILURE);
             
-            Logger.out.error(excp.getMessage(), excp);
+            logger.error(excp.getMessage(), excp);
         }
 		catch (DAOException excp)
         {
             target = Constants.FAILURE;
-            Logger.out.error(excp.getMessage(), excp);
+            logger.error(excp.getMessage(), excp);
         }
 		catch (ApplicationException excep)
 		{
 			target = Constants.FAILURE;
-			Logger.out.error(excep.getMessage(), excep);
+			logger.error(excep.getMessage(), excep);
 		}
 		return mapping.findForward(target);
 	}
@@ -115,8 +116,8 @@ public class SubmitUserAction extends Action
 		//	Attributes to decide AddNew action
         String submittedFor = (String) request.getParameter(Constants.SUBMITTED_FOR);
         request.setAttribute(Constants.SYSTEM_IDENTIFIER, user.getId());
-        Logger.out.debug("Checking parameter SubmittedFor in CommonAddEditAction--->"+request.getParameter(Constants.SUBMITTED_FOR));
-        Logger.out.debug("SubmittedFor attribute of Form-Bean received---->"+abstractForm.getSubmittedFor());
+        logger.debug("Checking parameter SubmittedFor in CommonAddEditAction--->"+request.getParameter(Constants.SUBMITTED_FOR));
+        logger.debug("SubmittedFor attribute of Form-Bean received---->"+abstractForm.getSubmittedFor());
         IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
         IBizLogic queryBizLogic = factory.getBizLogic(edu.wustl.common.util.global.Constants.QUERY_INTERFACE_ID);
         messages = new ActionMessages();
@@ -125,7 +126,7 @@ public class SubmitUserAction extends Action
        
         if( (submittedFor !=null)&& (submittedFor.equals("AddNew")) )
         {
-            Logger.out.debug("SubmittedFor is AddNew in CommonAddEditAction...................");
+        	logger.debug("SubmittedFor is AddNew in CommonAddEditAction...................");
             
             
             Stack formBeanStack = (Stack)session.getAttribute(Constants.FORM_BEAN_STACK);
@@ -140,16 +141,16 @@ public class SubmitUserAction extends Action
     	            AbstractActionForm sessionFormBean = addNewSessionDataBean.getAbstractActionForm();
     	            
     	            String forwardTo = addNewSessionDataBean.getForwardTo();
-    	            Logger.out.debug("forwardTo in CommonAddEditAction--------->"+forwardTo);
+    	            logger.debug("forwardTo in CommonAddEditAction--------->"+forwardTo);
     	            sessionFormBean.setAddNewObjectIdentifier(addNewSessionDataBean.getAddNewFor(), abstractDomain.getId());
     	            sessionFormBean.setMutable(false);
     	            if(formBeanStack.isEmpty())
     	            {
     	                session.removeAttribute(Constants.FORM_BEAN_STACK);
     	                request.setAttribute(Constants.SUBMITTED_FOR, "Default");
-    	                Logger.out.debug("SubmittedFor set as Default in CommonAddEditAction===========");
+    	                logger.debug("SubmittedFor set as Default in CommonAddEditAction===========");
     	                
-    	                Logger.out.debug("cleaning FormBeanStack from session*************");
+    	                logger.debug("cleaning FormBeanStack from session*************");
     	            }
     	            else
     	            {
@@ -158,7 +159,7 @@ public class SubmitUserAction extends Action
     	            String formBeanName = Utility.getFormBeanName(sessionFormBean);
     	            request.setAttribute(formBeanName, sessionFormBean);
     	            
-    	            Logger.out.debug("InitiliazeAction operation=========>"+sessionFormBean.getOperation());
+    	            logger.debug("InitiliazeAction operation=========>"+sessionFormBean.getOperation());
     	            
     	            if (messages != null)
                     {
@@ -169,14 +170,14 @@ public class SubmitUserAction extends Action
                     request.setAttribute(Constants.STATUS_MESSAGE_KEY,statusMessageKey);
     	            if( (sessionFormBean.getOperation().equals("edit") ) )
     	            {
-    	                Logger.out.debug("Edit object Identifier while AddNew is from Edit operation==>"+sessionFormBean.getId());
+    	            	logger.debug("Edit object Identifier while AddNew is from Edit operation==>"+sessionFormBean.getId());
     	                ActionForward editForward = new ActionForward();
     	                
     	                String addPath = (mapping.findForward(forwardTo)).getPath();
-    	                Logger.out.debug("Operation before edit==========>"+addPath);
+    	                logger.debug("Operation before edit==========>"+addPath);
     	                
     	                String editPath = addPath.replaceFirst("operation=add","operation=edit");
-    	                Logger.out.debug("Operation edited=============>"+editPath);
+    	                logger.debug("Operation edited=============>"+editPath);
                    		editForward.setPath(editPath);
                    		
                    		return editForward;
@@ -197,14 +198,14 @@ public class SubmitUserAction extends Action
         }
         else if( (submittedFor !=null)&& (submittedFor.equals("ForwardTo")) )
         {
-            Logger.out.debug("SubmittedFor is ForwardTo in CommonAddEditAction...................");
+        	logger.debug("SubmittedFor is ForwardTo in CommonAddEditAction...................");
             request.setAttribute(Constants.SUBMITTED_FOR, "Default");
             request.setAttribute("forwardToHashMap", generateForwardToHashMap(abstractForm, abstractDomain));
         }
         if(abstractForm.getForwardTo()!= null && abstractForm.getForwardTo().trim().length()>0  )
        {
        		String forwardTo = abstractForm.getForwardTo(); 
-       		Logger.out.debug("ForwardTo in Add :-- : "+ forwardTo);
+       		logger.debug("ForwardTo in Add :-- : "+ forwardTo);
        		target = forwardTo;
        }
        request.setAttribute("forwardToPrintMap",generateForwardToPrintMap(abstractForm, abstractDomain));
@@ -279,6 +280,7 @@ public class SubmitUserAction extends Action
 				}
 				catch(Exception ex)
 				{
+					logger.debug(ex.getMessage(), ex);
 					ex.printStackTrace();
 				}
 				HttpSession session = request.getSession();
@@ -293,6 +295,7 @@ public class SubmitUserAction extends Action
 				}
 				catch(Exception ex)
 				{
+					logger.debug(ex.getMessage(), ex);
 					ex.printStackTrace();
 				}
 				
@@ -300,7 +303,7 @@ public class SubmitUserAction extends Action
 	                    (Status.ACTIVITY_STATUS_DISABLED.toString().equals(abstractForm.getActivityStatus())))
 	            {
 	            	String moveTo = abstractForm.getOnSubmit(); 
-	            	Logger.out.debug("MoveTo in Disabled :-- : "+ moveTo);
+	            	logger.debug("MoveTo in Disabled :-- : "+ moveTo);
 	           		ActionForward reDirectForward = new ActionForward();
 	           		reDirectForward.setPath(moveTo );
 	           		return reDirectForward;
@@ -309,16 +312,16 @@ public class SubmitUserAction extends Action
 	            if(abstractForm.getOnSubmit()!= null && abstractForm.getOnSubmit().trim().length()>0  )
 	            {
 	            	String forwardTo = abstractForm.getOnSubmit(); 
-	            	Logger.out.debug("OnSubmit :-- : "+ forwardTo);
+	            	logger.debug("OnSubmit :-- : "+ forwardTo);
 	                return (mapping.findForward(forwardTo));
 	            }
 
 	            String submittedFor = (String) request.getParameter(Constants.SUBMITTED_FOR);
-	            Logger.out.debug("Submitted for in Edit CommonAddEditAction===>" + submittedFor);
+	            logger.debug("Submitted for in Edit CommonAddEditAction===>" + submittedFor);
 	            
 	            if( (submittedFor !=null)&& (submittedFor.equals("ForwardTo")) )
 		            {
-	                Logger.out.debug("SubmittedFor is ForwardTo in CommonAddEditAction...................");
+	            	logger.debug("SubmittedFor is ForwardTo in CommonAddEditAction...................");
 	                
 		                request.setAttribute(Constants.SUBMITTED_FOR, "Default");
 		                
@@ -328,13 +331,13 @@ public class SubmitUserAction extends Action
 	            if(abstractForm.getForwardTo()!= null && abstractForm.getForwardTo().trim().length()>0  )
 		            {
 		           	    String forwardTo = abstractForm.getForwardTo(); 
-		           		Logger.out.debug("ForwardTo in Edit :-- : "+ forwardTo);
+		           	 logger.debug("ForwardTo in Edit :-- : "+ forwardTo);
 		           		
 		           		target = forwardTo;
 		            }
 	            
 	           String pageOf = (String)request.getParameter(Constants.PAGE_OF);
-	           Logger.out.debug("pageof for query edit=="+pageOf);
+	           logger.debug("pageof for query edit=="+pageOf);
 	           if(pageOf != null)
 	           {
 	           	if(pageOf.equals(Constants.QUERY))
@@ -460,7 +463,7 @@ public class SubmitUserAction extends Action
     	catch(Exception excp)
 		{
     		displayName = AbstractDomainObject.parseClassName(objectName);
-    		Logger.out.error(excp.getMessage(), excp);
+    		logger.error(excp.getMessage(), excp);
 		}
     	
     	if (!isEmpty)    	{

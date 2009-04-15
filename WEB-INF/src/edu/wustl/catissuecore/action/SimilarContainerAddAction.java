@@ -26,20 +26,21 @@ import edu.wustl.common.util.logger.Logger;
 public class SimilarContainerAddAction extends CommonAddEditAction
 {
 
+	private transient Logger logger = Logger.getCommonLogger(SimilarContainerAddAction.class);
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException
 	{
 		StorageContainerForm storageContainerForm = (StorageContainerForm) form;
-		Logger.out.info("Map in similarContainerAction:"
+		logger.info("Map in similarContainerAction:"
 				+ storageContainerForm.getSimilarContainersMap());
 		ActionForward forward = super.execute(mapping, form, request, response);
-		Logger.out.info("forward in similar container add action:" + forward.getName());
+		logger.info("forward in similar container add action:" + forward.getName());
 
 		List list = new ArrayList();
 		ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
 
-		Logger.out.info("Errors:" + errors);
+		logger.info("Errors:" + errors);
 		if (errors == null || errors.size() == 0)
 		{
 			ActionMessages messages = null;
@@ -51,7 +52,7 @@ public class SimilarContainerAddAction extends CommonAddEditAction
 			{
 				saveMessages(request, messages);
 			}
-			Logger.out.info("Map in similarContainerAction after insert:"
+			logger.info("Map in similarContainerAction after insert:"
 					+ storageContainerForm.getSimilarContainersMap());
 
 			int noOfContainers = storageContainerForm.getNoOfContainers();
@@ -62,16 +63,16 @@ public class SimilarContainerAddAction extends CommonAddEditAction
 				String simContPrefix = "simCont:" + i + "_";
 				String contName = (String) simMap.get(simContPrefix + "name");
 				String Id = (String) simMap.get(simContPrefix + "Id");
-				Logger.out.info("contName:" + contName);
+				logger.info("contName:" + contName);
 				/*String Id = new Long(storageContainerForm.getId()
 						- (noOfContainers - i)).toString();*/
-				Logger.out.info("Id:" + Id);
+				logger.info("Id:" + Id);
 				list.add(new NameValueBean(contName, Id));
 			}
 			request.setAttribute("similarContainerList", list);
 
 		}
-		Logger.out.info("Forward:" + forward.getName());
+		logger.info("Forward:" + forward.getName());
 		return forward;
 
 	}

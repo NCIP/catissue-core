@@ -38,6 +38,7 @@ import edu.wustl.common.util.logger.Logger;
 public class SpecimenArrayTypeAction extends SecureAction
 {
 
+	private transient Logger logger = Logger.getCommonLogger(SpecimenArrayTypeAction.class);
 	/**
 	 * Key used in map 
 	 */
@@ -139,7 +140,7 @@ public class SpecimenArrayTypeAction extends SecureAction
     		pvObject = itr.next();
     		pv = (PermissibleValue)pvObject;
     		pvValue = pv.getValue();
-    		Logger.out.debug(pvValue);
+    		logger.debug(pvValue);
     		specimenClassList.add(new NameValueBean( pvValue,pvValue));
     		specimenTypeList = getSpecimenTypeList(pv);
         	subTypeMap.put(pv.getValue(),specimenTypeList);
@@ -159,7 +160,7 @@ public class SpecimenArrayTypeAction extends SecureAction
     private List getSpecimenTypeList(PermissibleValue specimenClassPV) {
     	List specimenTypeList = new ArrayList();
 		Set subPVList = specimenClassPV.getSubPermissibleValues();
-		Logger.out.debug("subPVList "+subPVList);
+		logger.debug("subPVList "+subPVList);
     	Iterator subPVItr = subPVList.iterator();
     	specimenTypeList.add(new NameValueBean(Constants.SELECT_OPTION,"-1"));
     	Object subPVObj = null;
@@ -171,7 +172,7 @@ public class SpecimenArrayTypeAction extends SecureAction
     		subPV = (PermissibleValue)subPVObj;
     		// set specimen type
     		subPVValue = subPV.getValue(); 
-    		Logger.out.debug("\t\t"+subPVValue);
+    		logger.debug("\t\t"+subPVValue);
     		specimenTypeList.add(new NameValueBean( subPVValue,subPVValue));  
     	}
     	return specimenTypeList;

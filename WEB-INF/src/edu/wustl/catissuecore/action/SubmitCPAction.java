@@ -29,6 +29,7 @@ import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.Utility;
+import edu.wustl.common.util.logger.Logger;
 import edu.wustl.security.exception.UserNotAuthorizedException;
 
 /**
@@ -38,6 +39,7 @@ import edu.wustl.security.exception.UserNotAuthorizedException;
  */
 public class SubmitCPAction extends BaseAction
 {
+	private transient Logger logger = Logger.getCommonLogger(SubmitCPAction.class);
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
@@ -75,6 +77,7 @@ public class SubmitCPAction extends BaseAction
 		}
 		catch(Exception ex)
 		{
+			logger.debug(ex.getMessage(), ex);
 			target = Constants.FAILURE;
 		 	String errorMsg = ex.getMessage();
 			resultMap.put(Constants.ERROR_DETAIL, errorMsg);

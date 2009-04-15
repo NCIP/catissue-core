@@ -55,6 +55,7 @@ import edu.wustl.common.util.logger.Logger;
 public class StorageContainerAction extends SecureAction
 {
 
+	private transient Logger logger = Logger.getCommonLogger(StorageContainerAction.class);
 	/**
 	 * Overrides the execute method of Action class.
 	 * Initializes the various fields in StorageContainer.jsp Page.
@@ -265,7 +266,7 @@ public class StorageContainerAction extends SecureAction
 		if (forwardToHashMap != null && forwardToHashMap.size() >0)
 		{
 			Long storageTypeId = (Long) forwardToHashMap.get("storageTypeId");
-			Logger.out.debug("storageTypeId found in forwardToHashMap========>>>>>>" + storageTypeId);
+			logger.debug("storageTypeId found in forwardToHashMap========>>>>>>" + storageTypeId);
 			storageContainerForm.setTypeId(storageTypeId.longValue());
 		}
 		else
@@ -387,7 +388,7 @@ public class StorageContainerAction extends SecureAction
 		long typeSelected = -1;
 		
 		String selectedType = String.valueOf(storageContainerForm.getTypeId());
-		Logger.out.debug(">>>>>>>>>>><<<<<<<<<<<<<<<<>>>>>>>>>>>>> ST : " + selectedType);
+		logger.debug(">>>>>>>>>>><<<<<<<<<<<<<<<<>>>>>>>>>>>>> ST : " + selectedType);
 		if (selectedType != null && !selectedType.equals("-1"))
 		{
 
@@ -419,7 +420,7 @@ public class StorageContainerAction extends SecureAction
 
 				//type_name=type.getType();
 
-				Logger.out.debug("Type Name:" + storageContainerForm.getTypeName());
+				logger.debug("Type Name:" + storageContainerForm.getTypeName());
 
 				// If operation is add opeartion then set the holds list according to storage type selected.
 				if (operation != null && operation.equals(Constants.ADD))
@@ -570,7 +571,7 @@ public class StorageContainerAction extends SecureAction
 		String storageTypeID = (String) request.getAttribute(Constants.ADD_NEW_STORAGE_TYPE_ID);
 		if (storageTypeID != null && storageTypeID.trim().length() > 0)
 		{
-			Logger.out.debug(">>>>>>>>>>><<<<<<<<<<<<<<<<>>>>>>>>>>>>> ST : " + storageTypeID);
+			logger.debug(">>>>>>>>>>><<<<<<<<<<<<<<<<>>>>>>>>>>>>> ST : " + storageTypeID);
 			storageContainerForm.setTypeId(Long.parseLong(storageTypeID));
 		}
 		// -- 23-Jan-06 end
@@ -578,7 +579,7 @@ public class StorageContainerAction extends SecureAction
 		String siteID = (String) request.getAttribute(Constants.ADD_NEW_SITE_ID);
 		if (siteID != null && siteID.trim().length() > 0)
 		{
-			Logger.out.debug(">>>>>>>>>>><<<<<<<<<<<<<<<<>>>>>>>>>>>>> ToSite ID in Distribution Action : " + siteID);
+			logger.debug(">>>>>>>>>>><<<<<<<<<<<<<<<<>>>>>>>>>>>>> ToSite ID in Distribution Action : " + siteID);
 			storageContainerForm.setSiteId(Long.parseLong(siteID));
 		}
 

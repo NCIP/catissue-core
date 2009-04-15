@@ -44,6 +44,7 @@ import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
+import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.security.exception.UserNotAuthorizedException;
 
@@ -53,6 +54,7 @@ import edu.wustl.security.exception.UserNotAuthorizedException;
  */
 public class CreateAliquotAction extends BaseAction
 {
+	private transient Logger logger = Logger.getCommonLogger(CreateAliquotAction.class);
 	/**
      * @param mapping object of ActionMapping
 	 * @param form object of ActionForm
@@ -81,6 +83,7 @@ public class CreateAliquotAction extends BaseAction
 		}
 		catch (BizLogicException e)
 		{
+			logger.info(e.getMessage(), e);
 		    ActionErrors actionErrors = new ActionErrors();
 			actionErrors.add(actionErrors.GLOBAL_MESSAGE, new ActionError("errors.item",e.getMessage()));
 			saveErrors(request, actionErrors);
@@ -176,6 +179,7 @@ public class CreateAliquotAction extends BaseAction
 		}
 		catch (BizLogicException e)
 		{
+			logger.info(e.getMessage(), e);
 		    ActionErrors actionErrors = new ActionErrors();
 			actionErrors.add(actionErrors.GLOBAL_MESSAGE, new ActionError("errors.item",e.getMessage()));
 			saveErrors(request, actionErrors);
@@ -184,6 +188,7 @@ public class CreateAliquotAction extends BaseAction
 		}
 		catch(DAOException e)
 		{
+			logger.info(e.getMessage(), e);
 			ActionErrors actionErrors = new ActionErrors();
 			actionErrors.add(actionErrors.GLOBAL_MESSAGE, new ActionError("errors.item",e.getMessage()));
 			saveErrors(request, actionErrors);
@@ -407,7 +412,8 @@ public class CreateAliquotAction extends BaseAction
 			     myDate = myDateFormat.parse(aliquotForm.getCreatedDate());
 			     
 			} catch (ParseException e) {
-			     System.out.println("Invalid Date Parser Exception ");
+				logger.debug("Invalid Date Parser Exception: "+ e.getMessage(), e);
+			    // System.out.println("Invalid Date Parser Exception ");
 			     e.printStackTrace();
 			}
 			aliquotSpecimen.setCreatedOn(myDate);

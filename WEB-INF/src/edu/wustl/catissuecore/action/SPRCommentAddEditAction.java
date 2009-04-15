@@ -22,6 +22,7 @@ import edu.wustl.common.util.logger.Logger;
 
 public class SPRCommentAddEditAction extends BaseAction
 {
+	private transient Logger logger = Logger.getCommonLogger(SPRCommentAddEditAction.class);
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		DefaultBizLogic defaultBizLogic=new DefaultBizLogic();
@@ -47,7 +48,7 @@ public class SPRCommentAddEditAction extends BaseAction
         }
         catch (Exception ex) 
         {
-			Logger.out.error("Error occured in SPRCommentAddEditAction "+ex);
+        	logger.error("Error occured in SPRCommentAddEditAction "+ex);
 			return (mapping.findForward(Constants.FAILURE));
 		}
         // OnSubmit

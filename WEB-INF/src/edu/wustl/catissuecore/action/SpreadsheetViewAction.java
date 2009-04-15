@@ -34,6 +34,7 @@ import edu.wustl.query.util.global.AQConstants;
 public class SpreadsheetViewAction extends BaseAction
 {
 
+	private transient Logger logger = Logger.getCommonLogger(SpreadsheetViewAction.class);
 	/**
 	 * This method get call for simple search as well as advanced search.
 	 * This method also get call when user clicks on page no of Pagination tag 
@@ -89,7 +90,7 @@ public class SpreadsheetViewAction extends BaseAction
 						identifierFieldIndex));
 			}
 		}
-		Logger.out.debug("Pageof in spreadsheetviewaction.........:" + pageOf);
+		logger.debug("Pageof in spreadsheetviewaction.........:" + pageOf);
 		Object defaultViewAttribute = request.getAttribute(Constants.SPECIMENT_VIEW_ATTRIBUTE);
 		if (defaultViewAttribute != null)// When the Default specimen view Check box is checked or unchecked, this will be evaluated.
 		{

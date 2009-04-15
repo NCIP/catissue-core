@@ -46,6 +46,7 @@ import edu.wustl.simplequery.query.ShoppingCart;
 
 public class ShoppingCartAction  extends BaseAction
 {
+	private transient Logger logger = Logger.getCommonLogger(ShoppingCartAction.class);
     /**
      * Overrides the execute method of Action class.
      * Initializes the various fields in ShoppingCart.jsp Page.
@@ -198,6 +199,7 @@ public class ShoppingCartAction  extends BaseAction
 				}
         		catch(BizLogicException bizEx)
 				{
+        			logger.debug(bizEx.getMessage(), bizEx);
                 	ActionErrors errors = new ActionErrors();
                 	ActionError error = new ActionError("shoppingcart.error",bizEx.getMessage());
                 	errors.add(ActionErrors.GLOBAL_ERROR,error);
@@ -221,9 +223,9 @@ public class ShoppingCartAction  extends BaseAction
 	        	
 	        	//Extracting map from formbean that gives rows to be deleted
 	        	Map map = advForm.getValues();
-	        	Logger.out.debug("map of shopping form:"+map);
+	        	logger.debug("map of shopping form:"+map);
 	        	Object obj[] = map.keySet().toArray();
-	        	Logger.out.debug("cart in shopping cart action "+cart.getCart());
+	        	logger.debug("cart in shopping cart action "+cart.getCart());
 	        	/*Deleting the selected rows from Shopping Cart object & setting
 	        	 *it again in the session 
 	        	 */
@@ -262,7 +264,7 @@ public class ShoppingCartAction  extends BaseAction
         
         
     	request.setAttribute(Constants.MENU_SELECTED,new String("18") );
-    	Logger.out.debug(Constants.MENU_SELECTED + " set in ShoppingCart Action : 18  -- "  ); 
+    	logger.debug(Constants.MENU_SELECTED + " set in ShoppingCart Action : 18  -- "  ); 
 
         
     	if(advForm.getValues().size()!=0)

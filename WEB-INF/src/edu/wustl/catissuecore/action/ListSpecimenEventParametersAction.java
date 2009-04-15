@@ -50,6 +50,7 @@ import edu.wustl.dao.exception.DAOException;
 
 public class ListSpecimenEventParametersAction extends SecureAction
 {
+	private transient Logger logger = Logger.getCommonLogger(ListSpecimenEventParametersAction.class);
 	/**
 	 * Overrides the execute method of Action class.
 	 * Initializes the various fields in SpecimenEventParameters.jsp Page.
@@ -240,7 +241,7 @@ public class ListSpecimenEventParametersAction extends SecureAction
 		}
 		catch (Exception e)
 		{
-			Logger.out.error(e.getMessage(), e);
+			logger.error(e.getMessage(), e);
 		}
 		request.setAttribute(Constants.MENU_SELECTED, new String("15"));
 		String pageOf = request.getParameter(Constants.PAGE_OF);
@@ -272,7 +273,7 @@ public class ListSpecimenEventParametersAction extends SecureAction
 		}
 		catch (Exception e)
 		{
-			Logger.out.error(e.getMessage(), e);
+			logger.error(e.getMessage(), e);
 		}
 		request.setAttribute("specimenEntityId",specimenEntityId);
 		return mapping.findForward((String) request.getParameter(Constants.PAGE_OF));

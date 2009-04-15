@@ -38,6 +38,7 @@ import edu.wustl.common.util.logger.Logger;
 public class SiteAction  extends SecureAction
 {
 
+	private transient Logger logger = Logger.getCommonLogger(SiteAction.class);
     /**
      * Overrides the execute method of Action class.
      * Sets the various fields in Site Add/Edit webpage.
@@ -117,7 +118,7 @@ public class SiteAction  extends SecureAction
     	    	if (user != null)
         		{
         		    emailAddress = user.getEmailAddress() ; 
-        		    Logger.out.debug("Email Id of Coordinator of Site : " + emailAddress );
+        		    logger.debug("Email Id of Coordinator of Site : " + emailAddress );
     
         		    siteForm.setEmailAddress(emailAddress);
            		    if(user.getAddress()!=null)
@@ -172,6 +173,7 @@ public class SiteAction  extends SecureAction
 		}
 		catch(Exception e)
 		{
+			logger.debug(e.getMessage(), e);
 			coordinatorId = null;
 		}
 		return coordinatorId;

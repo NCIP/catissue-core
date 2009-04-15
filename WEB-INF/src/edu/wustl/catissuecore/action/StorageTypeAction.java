@@ -33,6 +33,7 @@ import edu.wustl.common.util.logger.Logger;
 
 public class StorageTypeAction  extends SecureAction
 {
+	private transient Logger logger = Logger.getCommonLogger(StorageTypeAction.class);
     /**
      * Overrides the execute method of Action class.
      * Initializes the various fields in StorageType.jsp Page.
@@ -99,7 +100,7 @@ public class StorageTypeAction  extends SecureAction
 
 	
     	
-    	Logger.out.info("SpecimenArray/specimen:"+storageTypeForm.getSpecimenOrArrayType());
+	    logger.info("SpecimenArray/specimen:"+storageTypeForm.getSpecimenOrArrayType());
     	if(storageTypeForm.getSpecimenOrArrayType() == null)
     	{
     		storageTypeForm.setSpecimenOrArrayType("Specimen");
@@ -145,7 +146,7 @@ public class StorageTypeAction  extends SecureAction
         if(reqPath != null  && aForm !=null)
         	aForm.setRedirectTo(reqPath);
         
-        Logger.out.debug("StorageTypeAction redirect :---------- "+ reqPath  );
+        logger.debug("StorageTypeAction redirect :---------- "+ reqPath  );
         
         return mapping.findForward((String)request.getParameter(Constants.PAGE_OF));
     }

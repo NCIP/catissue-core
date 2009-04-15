@@ -49,6 +49,7 @@ import edu.wustl.security.exception.UserNotAuthorizedException;
 
 public class ConflictResolverAction extends BaseAction
 {
+	private transient Logger logger = Logger.getCommonLogger(ConflictResolverAction.class);
 	/**
 	 * Overrides the execute method of Action class.
 	 * Initializes the various fields in ConflictView.jsp Page.
@@ -140,6 +141,7 @@ public class ConflictResolverAction extends BaseAction
 		}
 		catch(Exception e)
 		{
+			logger.info(e.getMessage(), e);
 			//System.out.println("Error Occurred !!!!!");
 			errorMessage = ApplicationProperties.getValue("errors.caTies.conflict.genericmessage");
 			//Setting the status to NEW
@@ -285,7 +287,7 @@ public class ConflictResolverAction extends BaseAction
 		}
 		catch(Exception e)
 		{
-			Logger.out.error("Error Updating ReportQueue" + e);
+			logger.error("Error Updating ReportQueue" + e);
 		}
 	}
 	

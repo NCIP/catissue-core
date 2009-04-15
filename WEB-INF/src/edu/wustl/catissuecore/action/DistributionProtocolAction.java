@@ -23,7 +23,6 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.DistributionProtocolForm;
-import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.global.CommonServiceLocator;
@@ -37,6 +36,7 @@ import edu.wustl.common.util.logger.Logger;
 public class DistributionProtocolAction extends SpecimenProtocolAction 
 { 
 
+	private transient Logger logger = Logger.getCommonLogger(DistributionProtocolAction.class);
     /**
      * Overrides the execute method of Action class.
      * Sets the various fields in DistributionProtocol Add/Edit webpage.
@@ -76,13 +76,13 @@ public class DistributionProtocolAction extends SpecimenProtocolAction
 		String reqPath = request.getParameter(Constants.REQ_PATH);
 		if(reqPath != null)
 			request.setAttribute(Constants.REQ_PATH, reqPath);
-		Logger.out.debug("DP Action reqPath : ---- " + reqPath);
+		logger.debug("DP Action reqPath : ---- " + reqPath);
 		
 		// Mandar : code for Addnew Coordinator data 24-Jan-06
 		String coordinatorID = (String)request.getAttribute(Constants.ADD_NEW_USER_ID); 
 		if(coordinatorID != null && coordinatorID.trim().length() > 0)
 		{
-			Logger.out.debug(">>>>>>>>>>><<<<<<<<<<<<<<<<>>>>>>>>>>>>> User ID in DP : "+ coordinatorID);
+			logger.debug(">>>>>>>>>>><<<<<<<<<<<<<<<<>>>>>>>>>>>>> User ID in DP : "+ coordinatorID);
 			distributionProtocolForm.setPrincipalInvestigatorId(Long.parseLong(coordinatorID)) ;
 		}
 		// -- 24-Jan-06 end

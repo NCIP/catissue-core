@@ -44,7 +44,6 @@ import edu.wustl.common.util.global.Status;
  */
 public class AddSpecimenAction extends SecureAction
 {
-
 	/**
 	 * Overrides the execute method of Action class.
 	 */
