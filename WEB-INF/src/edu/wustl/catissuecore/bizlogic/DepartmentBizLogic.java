@@ -18,7 +18,6 @@ import edu.wustl.common.util.global.Validator;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
-import edu.wustl.dao.exception.DAOException;
 
 public class DepartmentBizLogic extends CatissueDefaultBizLogic
 {

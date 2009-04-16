@@ -8,6 +8,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.tree.QueryTreeNodeData;
+import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.exception.DAOException;
 
@@ -19,6 +20,7 @@ import edu.wustl.dao.exception.DAOException;
 public class ReportLoaderQueueBizLogic extends CatissueDefaultBizLogic
 {
 
+	private transient Logger logger = Logger.getCommonLogger(ReportLoaderQueueBizLogic.class);
 	/**
 	 * Saves the ReportLoaderQueue object in the database.
 	 * @param obj The storageType object to be saved.
@@ -34,6 +36,7 @@ public class ReportLoaderQueueBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
  	}
@@ -52,6 +55,7 @@ public class ReportLoaderQueueBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
@@ -72,6 +76,7 @@ public class ReportLoaderQueueBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}	
 	}
@@ -238,6 +243,7 @@ public class ReportLoaderQueueBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 		finally

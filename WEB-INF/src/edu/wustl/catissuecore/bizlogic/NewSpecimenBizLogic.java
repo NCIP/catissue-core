@@ -102,6 +102,7 @@ import edu.wustl.security.privilege.PrivilegeManager;
 public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 {
 
+	private transient Logger logger = Logger.getCommonLogger(NewSpecimenBizLogic.class);
 	private Map<Long, Collection<String>> containerHoldsSpecimenClasses = new HashMap<Long, Collection<String>>();
 	private Map<Long, Collection<CollectionProtocol>> containerHoldsCPs = new HashMap<Long, Collection<CollectionProtocol>>();
 	private HashSet<String> storageContainerIds = new HashSet<String>();
@@ -132,6 +133,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(Exception exp)
 		{
+			logger.debug(exp.getMessage(), exp);
 			throw getBizLogicException(exp, "dao.error", "");
 		}
 
@@ -515,6 +517,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				}
 				catch (NameGeneratorException e)
 				{
+					logger.debug(e.getMessage(), e);
 					throw getBizLogicException(e, "dao.error", "");
 				}
 			}
@@ -625,6 +628,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 		return cp;
@@ -662,6 +666,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		} 
 		catch (DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 		return parentSpecimen;
@@ -703,6 +708,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			}
 			catch (NameGeneratorException e)
 			{
+				logger.debug(e.getMessage(), e);
 				throw getBizLogicException(e, "dao.error", "");
 			}
 		}
@@ -785,6 +791,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (Exception e)
 		{
+			logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 		}
 		return containerMap;
@@ -815,7 +822,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			}
 			catch (Exception e)
 			{
-				Logger.out.debug("Exception occured while updating aliquots");
+				logger.debug("Exception occured while updating aliquots");
 			}
 			finally
 			{
@@ -841,7 +848,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (Exception e)
 		{
-			Logger.out.error("Exception occured while updating aliquots");
+			logger.error("Exception occured while updating aliquots");
 		}
 	}
 
@@ -863,10 +870,11 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 			dynamicGroups[0] = securityManager.getProtectionGroupByName(obj, name);
 
-			Logger.out.debug("Dynamic Group name: " + dynamicGroups[0]);
+			logger.debug("Dynamic Group name: " + dynamicGroups[0]);
 			TaskTimeCalculater.endTask(getDynaGrps);
 		} catch (ApplicationException e)
 		{
+			logger.debug(e.getMessage(), e);
 			throw getBizLogicException(e, "dao.error", "");
 		}
 		return dynamicGroups;
@@ -924,6 +932,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 
@@ -961,6 +970,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 		return protocol;
@@ -998,6 +1008,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 		return null;
@@ -1071,6 +1082,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 		finally
@@ -1183,6 +1195,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		
 		}catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
@@ -1230,7 +1243,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				throw getBizLogicException(null, "errors.specimen.under.subspecimen", 
 				"");
 			}
-			Logger.out.debug("Loading ParentSpecimen: " + specimen.getParentSpecimen().getId());
+			logger.debug("Loading ParentSpecimen: " + specimen.getParentSpecimen().getId());
 			SpecimenCollectionGroup scg = loadSpecimenCollectionGroup(specimen.getParentSpecimen().getId(), dao);
 			specimen.setSpecimenCollectionGroup(scg);
 		}
@@ -1359,6 +1372,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
@@ -1557,6 +1571,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(Exception daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
@@ -1597,6 +1612,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 						"User is not authorized to use " + "storage container " + storageContainerObj.getName());
 			}
 		} catch (SMException e) {
+			logger.debug(e.getMessage(), e);
 			throw AppUtility.handleSMException(e);
 		}
 	}
@@ -1644,6 +1660,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 
@@ -1727,7 +1744,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	 */
 	public void disableRelatedObjectsForSpecimenCollectionGroup(DAO dao, Long specimenCollectionGroupArr[]) throws BizLogicException 
 	{
-		Logger.out.debug("disableRelatedObjects NewSpecimenBizLogic");
+		logger.debug("disableRelatedObjects NewSpecimenBizLogic");
 		List listOfSpecimenId = super.disableObjects(dao, Specimen.class, "specimenCollectionGroup", "CATISSUE_SPECIMEN",
 				"SPECIMEN_COLLECTION_GROUP_ID", specimenCollectionGroupArr);
 		if (!listOfSpecimenId.isEmpty())
@@ -1945,6 +1962,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(Exception exp)
 		{
+			logger.debug(exp.getMessage(), exp);
 			throw getBizLogicException(exp, "dao.error", "");
 		}
 		return result;
@@ -2046,6 +2064,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 					int j = i + 1;
 					String message = exp.getMessage();
 					message += " (This message is for Derived Specimen " + j + " of Parent Specimen number )";
+					logger.debug(message, exp);
 					throw getBizLogicException(exp, "dao.error", message);
 				}
 
@@ -2230,6 +2249,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(ApplicationException exp)
 		{
+			logger.debug(exp.getMessage(), exp);
 			throw getBizLogicException(exp, "utility.error", "");
 		}
 	}
@@ -2281,6 +2301,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
@@ -2393,6 +2414,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(Exception daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 
@@ -2475,6 +2497,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (CloneNotSupportedException exception)
 		{
+			logger.debug(exception.getMessage(), exception);
 			exception.printStackTrace();
 		}
 		return deriveEventCollection;
@@ -2504,6 +2527,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (Exception exception)
 		{
+			logger.debug(exception.getMessage(), exception);
 			exception.printStackTrace();
 		}
 		
@@ -2542,6 +2566,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
@@ -2577,6 +2602,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				}
 			}
 		} catch (ApplicationException e) {
+			logger.debug(e.getMessage(), e);
 			throw getBizLogicException(e, "dao.error", "");
 		}
 	}
@@ -2616,6 +2642,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			}
 			catch(DAOException daoExp)
 			{
+				logger.debug(daoExp.getMessage(), daoExp);
 				throw getBizLogicException(daoExp, "dao.error", "");
 			}
 		}
@@ -2682,9 +2709,11 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (Exception exception)
 		{
+			logger.debug(exception.getMessage(), exception);
 			try {
 				dao.rollback();
 			} catch (DAOException e) {
+				logger.debug(e.getMessage(), e);
 				throw getBizLogicException(exception, "dao.error", "");
 			}
 			String errorMsg = "Failed to save. ";
@@ -2806,6 +2835,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 		finally
@@ -2880,6 +2910,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (DAOException exception)
 		{
+			logger.debug(exception.getMessage(), exception);
 			throw getBizLogicException(exception, "dao.error", "User not authorized to update specimens");
 		}
 		
@@ -2974,6 +3005,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
@@ -3108,6 +3140,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				}
 				catch (DAOException e)
 				{
+					logger.debug(e.getMessage(), e);
 					throw getBizLogicException(e, "dao.error", "External identifier on multiple Specimen can not be inserted or updated");
 				}
 			}
@@ -3352,6 +3385,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (Exception exception)
 		{
+			logger.debug(exception.getMessage(), exception);
 			throw getBizLogicException(exception, "dao.error", "Failed to get specimen details" + exception.getMessage());
 		}
 		finally
@@ -3359,6 +3393,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			try {
 				dao.closeSession();
 			} catch (DAOException e) {
+				logger.debug(e.getMessage(), e);
 				throw getBizLogicException(e, "dao.error", "");
 			}
 		}
@@ -3425,7 +3460,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException exp)
 		{
-			throw getBizLogicException(null, "dao.error", "");
+			logger.debug(exp.getMessage(), exp);
+			throw getBizLogicException(exp, "dao.error", "");
 		}
 		
 	}
@@ -3449,6 +3485,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			}
 			catch (BizLogicException ex)
 			{
+				logger.debug(ex.getMessage(), ex);
 				ActionErrors actionErrors = new ActionErrors();
 				actionErrors.add(actionErrors.GLOBAL_MESSAGE, new ActionError("errors.item", ex.getMessage()));
 			}
@@ -3508,9 +3545,9 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (BizLogicException e)
 		{
-			Logger.out.debug(e.getMessage(), e);
+			logger.debug(e.getMessage(), e);
 		} catch (DAOException e) {
-			// TODO Auto-generated catch block
+			logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 		}
 		return objectId;
@@ -3694,9 +3731,10 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			}
 		}
 		catch (SMException e) {
+			logger.debug(e.getMessage(), e);
 			throw AppUtility.handleSMException(e);
 		} catch (ApplicationException e) {
-			
+			logger.debug(e.getMessage(), e);
 			ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
 			throw new BizLogicException(errorKey, null,"NewSpecimenBizLogic.java :");	
 		}
@@ -3767,7 +3805,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (BizLogicException e)
 		{
-			Logger.out.error(e.getMessage(), e);
+			logger.error(e.getMessage(), e);
 		}
 		if (result != null)
 		{

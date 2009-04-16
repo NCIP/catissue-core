@@ -67,6 +67,7 @@ import edu.wustl.security.privilege.PrivilegeManager;
  */
 public class ParticipantBizLogic extends CatissueDefaultBizLogic
 {
+	private transient Logger logger = Logger.getCommonLogger(ParticipantBizLogic.class);
 	private List<Long> cprIdList = new ArrayList<Long>();
 	/**
 	 * Saves the Participant object in the database.
@@ -121,6 +122,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		}
 		}catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 		
@@ -327,7 +329,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (CacheException e)
 		{
-			Logger.out.debug("Exception occured while getting instance of cachemanager");
+			logger.debug("Exception occured while getting instance of cachemanager");
 			e.printStackTrace();
 		}
 
@@ -428,10 +430,10 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 			}
 
 			//Disable the associate collection protocol registration
-			Logger.out.debug("participant.getActivityStatus() " + participant.getActivityStatus());
+			logger.debug("participant.getActivityStatus() " + participant.getActivityStatus());
 			if (participant.getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED))
 			{
-				Logger.out.debug("participant.getActivityStatus() " + participant.getActivityStatus());
+				logger.debug("participant.getActivityStatus() " + participant.getActivityStatus());
 				Long participantIDArr[] = {participant.getId()};
 
 				IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
@@ -442,6 +444,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
@@ -1058,6 +1061,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (DAOException e) 
 		{
+			logger.debug(e.getMessage(), e);
 			throw getBizLogicException(e, "dao.error", "Couldn't get participant");
 		}
 		finally
@@ -1100,20 +1104,20 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 					+ "relationData.RELATIONSHIP_ID = displayData.RELATIONSHIP_ID and "
 					+ "columnData.IDENTIFIER = displayData.COL_ID and tableData.ALIAS_NAME = 'Participant'";
 
-			Logger.out.debug("DATA ELEMENT SQL : " + sql);
+			logger.debug("DATA ELEMENT SQL : " + sql);
 			List list = jdbcDao.executeQuery(sql);
 			Iterator iterator1 = columnList.iterator();
 
 			while (iterator1.hasNext())
 			{
 				String colName1 = (String) iterator1.next();
-				Logger.out.debug("colName1------------------------" + colName1);
+				logger.debug("colName1------------------------" + colName1);
 				Iterator iterator2 = list.iterator();
 				while (iterator2.hasNext())
 				{
 					List rowList = (List) iterator2.next();
 					String colName2 = (String) rowList.get(0);
-					Logger.out.debug("colName2------------------------" + colName2);
+					logger.debug("colName2------------------------" + colName2);
 					if (colName1.equals(colName2))
 					{
 						if(colName1.equals(Constants.PARTICIPANT_MEDICAL_RECORD_NO))
@@ -1128,6 +1132,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (Exception exp)
 		{
+			logger.debug(exp.getMessage(), exp);
 			throw getBizLogicException(exp, "dao.error", "");
 		}
 		finally
@@ -1173,6 +1178,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(Exception exp)
 		{
+			logger.debug(exp.getMessage(), exp);
 			throw getBizLogicException(exp, "dao.error", "");
 		}
 		finally
@@ -1196,6 +1202,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 		
@@ -1263,9 +1270,11 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 			
 
 		} catch (DAOException e) {
+			logger.debug(e.getMessage(), e);
 			throw getBizLogicException(e, "dao.error", "Couldn't get CP for user");
 		}
 		catch (SMException e) {
+			logger.debug(e.getMessage(), e);
 			throw AppUtility.handleSMException(e);
 		}
 		finally
@@ -1364,7 +1373,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 				} 
 				catch (DAOException e) 
 				{
-					Logger.out.error(e.getMessage(), e);
+					logger.error(e.getMessage(), e);
 				}
 				Collection<CollectionProtocol> cpCollection = user.getAssignedProtocolCollection();
 				if (cpCollection != null && !cpCollection.isEmpty())
@@ -1431,6 +1440,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 				throw AppUtility.getUserNotAuthorizedException(privilegeName, protectionElementName);    
 			}
 		} catch (SMException e1) {
+			logger.debug(e1.getMessage(), e1);
 			e1.printStackTrace();
 		} 
 		return isAuthorized;		
@@ -1483,7 +1493,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (Exception e)
 		{
-			Logger.out.error("Error occured while retrieving Specimen List", e);
+			logger.error("Error occured while retrieving Specimen List", e);
 		}
 		finally
 		{
@@ -1541,7 +1551,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(BizLogicException exp)
 		{
-				Logger.out.debug(exp.getMessage());
+				logger.debug(exp.getMessage());
 		}
 	}
 }

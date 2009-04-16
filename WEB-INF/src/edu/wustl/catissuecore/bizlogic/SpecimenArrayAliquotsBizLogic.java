@@ -43,7 +43,7 @@ import edu.wustl.security.exception.UserNotAuthorizedException;
 public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 {
 
-	Logger logger = Logger.getCommonLogger(SpecimenArrayAliquotsBizLogic.class);
+	private transient Logger logger = Logger.getCommonLogger(SpecimenArrayAliquotsBizLogic.class);
 
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean)
 			throws BizLogicException
@@ -253,6 +253,7 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (Exception daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
@@ -313,6 +314,7 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (Exception daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
@@ -390,6 +392,7 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (Exception daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
@@ -421,6 +424,7 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (Exception daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 		finally
@@ -461,7 +465,7 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (Exception e)
 		{
-
+			logger.debug(e.getMessage(), e);
 		}
 
 	}

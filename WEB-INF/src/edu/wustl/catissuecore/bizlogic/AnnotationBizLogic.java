@@ -30,6 +30,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.global.Status;
+import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.security.exception.UserNotAuthorizedException;
@@ -44,6 +45,7 @@ import edu.wustl.catissuecore.util.global.AppUtility;;
 public class AnnotationBizLogic extends CatissueDefaultBizLogic
 {
 
+	private transient Logger logger = Logger.getCommonLogger(AnnotationBizLogic.class);
 	/**
 	 * 
 	 * @param staticEntityId
@@ -117,7 +119,7 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (BizLogicException e)
 		{
-			// TODO Auto-generated catch block
+			logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 		}
 
@@ -207,6 +209,7 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 			}
 			catch (DynamicExtensionsSystemException e)
 			{
+				logger.debug(e.getMessage(), e);
 				ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
 				throw new BizLogicException(errorKey,e ,"AnnotationBizLogic.java :");     
 			}
@@ -267,7 +270,7 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (BizLogicException e)
 		{
-			// TODO Auto-generated catch block
+			logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 		}
 
@@ -291,7 +294,7 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (BizLogicException e)
 		{
-			// TODO Auto-generated catch block
+			logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 		}
 
@@ -313,7 +316,7 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (BizLogicException e)
 		{
-			// TODO Auto-generated catch block
+			logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 		}
 
@@ -347,7 +350,7 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 				}
 				catch (BizLogicException e)
 				{
-					// TODO Auto-generated catch block
+					logger.debug(e.getMessage(), e);
 					e.printStackTrace();
 				}
 			}
@@ -386,7 +389,7 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (BizLogicException e)
 		{
-			// TODO Auto-generated catch block
+			logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 		}
 	}
@@ -407,6 +410,7 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (Exception e)
 		{
+			logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 			/*   throw new BizLogicException(ApplicationProperties
 			           .getValue("app.annotatations.errors.deleteRecord"), e);*/
@@ -424,7 +428,7 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 		try {
 			dao.delete(obj);
 		} catch (DAOException e) {
-			
+			logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 		}
 	}
@@ -510,6 +514,7 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (Exception e)
 		{
+			logger.debug(e.getMessage(), e);
 		}
 		return false;
 	}
@@ -529,7 +534,7 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (BizLogicException e)
 		{
-			// TODO Auto-generated catch block
+			logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 		}
 
@@ -548,7 +553,7 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (Exception e)
 		{
-
+			logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 		}
 

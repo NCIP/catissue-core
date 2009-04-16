@@ -26,6 +26,7 @@ import edu.wustl.security.global.Permissions;
  */
 public class DeidentifiedSurgicalPathologyReportBizLogic extends CatissueDefaultBizLogic
 {	
+	private transient Logger logger = Logger.getCommonLogger(DeidentifiedSurgicalPathologyReportBizLogic.class);
 	/**
 	 * Saves the Deidentified pathology reportobject in the database.
 	 * @param obj The storageType object to be saved.
@@ -50,6 +51,7 @@ public class DeidentifiedSurgicalPathologyReportBizLogic extends CatissueDefault
 		
 		}catch (Exception e)
 		{
+			logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 		}
 	}
@@ -93,7 +95,7 @@ public class DeidentifiedSurgicalPathologyReportBizLogic extends CatissueDefault
 		}
 		catch(Exception ex)
 		{
-			Logger.out.error("Error occured while updating DeidentifiedSurgicalPathologyReport domain object"+ex);
+			logger.error("Error occured while updating DeidentifiedSurgicalPathologyReport domain object"+ex);
 		}
 	}
 

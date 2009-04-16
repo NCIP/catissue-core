@@ -69,6 +69,7 @@ import edu.wustl.security.locator.CSMGroupLocator;
  */
 public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLogic
 {
+	private transient Logger logger = Logger.getCommonLogger(CollectionProtocolRegistrationBizLogic.class);
 	/**
 	 * Saves the user object in the database.
 	 * 
@@ -135,6 +136,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 				armCheckandRegistration(collectionProtocolRegistration, dao, sessionDataBean);
 			}
 		} catch (DAOException e) {
+			logger.debug(e.getMessage(), e);
 			throw getBizLogicException(e, "dao.error", "");
 		}
 	}
@@ -159,6 +161,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 		}
 		catch(NameGeneratorException nameGeneratorException)
 		{
+			logger.debug(nameGeneratorException.getMessage(),nameGeneratorException);
 			throw getBizLogicException(nameGeneratorException, "dao.error", "");
 		}
 	}
@@ -414,7 +417,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 			}
 		}
 		catch (DAOException e) {
-			// TODO Auto-generated catch block
+			logger.debug(e.getMessage(),e);
 			e.printStackTrace();
 		}
 		return id;
@@ -463,6 +466,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 		}
 		
 		} catch (DAOException e) {
+			logger.debug(e.getMessage(),e);
 			throw getBizLogicException(e, "dao.error", "");
 		}
 	}
@@ -567,6 +571,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(),daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
@@ -654,6 +659,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(),daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 		return regDate;
@@ -704,6 +710,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 			}
 
 		} catch (DAOException e) {
+			logger.debug(e.getMessage(),e);
 			throw getBizLogicException(e, "dao.error", "");
 		}	
 	}
@@ -1027,11 +1034,11 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 			((HibernateDAO)dao).audit(obj, oldObj);
 
 			// Disable all specimen Collection group under this registration.
-			Logger.out.debug("collectionProtocolRegistration.getActivityStatus() " + collectionProtocolRegistration.getActivityStatus());
+			logger.debug("collectionProtocolRegistration.getActivityStatus() " + collectionProtocolRegistration.getActivityStatus());
 			if (collectionProtocolRegistration.getConsentWithdrawalOption().equalsIgnoreCase(Constants.WITHDRAW_RESPONSE_RETURN)
 					||collectionProtocolRegistration.getConsentWithdrawalOption().equalsIgnoreCase(Constants.WITHDRAW_RESPONSE_DISCARD))
 			{
-				Logger.out.debug("collectionProtocolRegistration.getActivityStatus() " + collectionProtocolRegistration.getActivityStatus());
+				logger.debug("collectionProtocolRegistration.getActivityStatus() " + collectionProtocolRegistration.getActivityStatus());
 				Long collectionProtocolRegistrationIDArr[] = {collectionProtocolRegistration.getId()};
 
 				IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
@@ -1042,6 +1049,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(),daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
@@ -1119,8 +1127,10 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 			dynamicGroups[0] = CSMGroupLocator.getInstance().getPGName(collectionProtocolRegistration.getCollectionProtocol().getId(),Class.forName("edu.wustl.catissuecore.domain.CollectionProtocol"));
 			return dynamicGroups;
 		} catch (ApplicationException e) {
+			logger.debug(e.getMessage(),e);
 			throw getBizLogicException(e, "dao.error", "");
 		} catch (ClassNotFoundException e) {
+			logger.debug(e.getMessage(),e);
 			throw getBizLogicException(e, "dao.error", "");
 		}
 		
@@ -1145,6 +1155,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 		}
 		catch(DAOException exp)
 		{
+			logger.debug(exp.getMessage(),exp);
 			throw getBizLogicException(exp, "dao.error", "");
 		}
 	}
@@ -1440,21 +1451,21 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 									.getProtocolParticipantIdentifier())))
 					{
 						// if list is not empty the Constraint Violation occurs
-						Logger.out.debug("Unique Constraint Violated: " + l.get(0));
+						logger.debug("Unique Constraint Violated: " + l.get(0));
 						errMsg = new DefaultExceptionFormatter().getErrorMessage("Err.ConstraintViolation", arguments);
-						Logger.out.debug("Unique Constraint Violated: " + errMsg);
+						logger.debug("Unique Constraint Violated: " + errMsg);
 
 						ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
 						throw new BizLogicException(errorKey,new Exception() ,"CollectionProtocolBizLogic.java :"+errMsg);
 					}
 					else
 					{
-						Logger.out.debug("Unique Constraint Passed");
+						logger.debug("Unique Constraint Passed");
 					}
 				}
 				else
 				{
-					Logger.out.debug("Unique Constraint Passed");
+					logger.debug("Unique Constraint Passed");
 				}
 
 			}
@@ -1507,21 +1518,22 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 				if (l.size() > 0)
 				{
 					// if list is not empty the Constraint Violation occurs
-					Logger.out.debug("Unique Constraint Violated: " + l.get(0));
+					logger.debug("Unique Constraint Violated: " + l.get(0));
 					errMsg = new DefaultExceptionFormatter().getErrorMessage("Err.ConstraintViolation", arguments);
-					Logger.out.debug("Unique Constraint Violated: " + errMsg);
+					logger.debug("Unique Constraint Violated: " + errMsg);
 					ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
 					throw new BizLogicException(errorKey,new Exception() ,"CollectionProtocolBizLogic.java :"+errMsg);
 				}
 				else
 				{
-					Logger.out.debug("Unique Constraint Passed");
+					logger.debug("Unique Constraint Passed");
 				}
 			}
 
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(),daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 
@@ -1554,7 +1566,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 			dao = openDAOSession(null);
 
 			List list = dao.executeQuery(hql);
-			Logger.out.info("list size -----------:" + list.size());
+			logger.info("list size -----------:" + list.size());
 
 			// Iterating over each Collection Protocol and finding out all its
 			// registerd participant
@@ -1610,6 +1622,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(),daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 		finally
@@ -1671,6 +1684,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 			}
 			collectionProtocolRegistration.setSpecimenCollectionGroupCollection(newScgCollection);
 		} catch (ApplicationException e) {
+			logger.debug(e.getMessage(),e);
 			throw getBizLogicException(e, "utility.error", "");
 		}
 	}
@@ -1752,6 +1766,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 			}
 
 		} catch (DAOException e) {
+			logger.debug(e.getMessage(),e);
 			throw getBizLogicException(e, "dao.error", "");
 		}
 	}
@@ -1838,6 +1853,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 			}
 		}catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(),daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 		return collectionProtocolRegistrationretrieve;
@@ -1957,6 +1973,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 			}
 			catch (NameGeneratorException e)
 			{
+				logger.debug(e.getMessage(),e);
 				throw getBizLogicException(e, "dao.error", "");
 			}
 		}

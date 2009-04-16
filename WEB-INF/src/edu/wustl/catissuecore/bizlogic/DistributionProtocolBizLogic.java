@@ -47,6 +47,7 @@ import edu.wustl.security.privilege.PrivilegeManager;
  */
 public class DistributionProtocolBizLogic extends SpecimenProtocolBizLogic implements Roles
 {
+	private transient Logger logger = Logger.getCommonLogger(DistributionProtocolBizLogic.class);
 	/**
      * Saves the DistributionProtocol object in the database.
 	 * @param obj The DistributionProtocol object to be saved.
@@ -76,6 +77,7 @@ public class DistributionProtocolBizLogic extends SpecimenProtocolBizLogic imple
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
         
@@ -109,7 +111,7 @@ public class DistributionProtocolBizLogic extends SpecimenProtocolBizLogic imple
 
 			for(DistributionSpecimenRequirement distributionSpecimenRequirement : distributionProtocol.getDistributionSpecimenRequirementCollection())
 			{
-				Logger.out.debug("DistributionSpecimenRequirement Id ............... : "+distributionSpecimenRequirement.getId());
+				logger.debug("DistributionSpecimenRequirement Id ............... : "+distributionSpecimenRequirement.getId());
 				distributionSpecimenRequirement.setDistributionProtocol(distributionProtocol);
 				dao.update(distributionSpecimenRequirement);
 
@@ -120,10 +122,10 @@ public class DistributionProtocolBizLogic extends SpecimenProtocolBizLogic imple
 				((HibernateDAO)dao).audit(distributionSpecimenRequirement, oldDistributionSpecimenRequirement);
 			}
 
-			Logger.out.debug("distributionProtocol.getActivityStatus() "+distributionProtocol.getActivityStatus());
+			logger.debug("distributionProtocol.getActivityStatus() "+distributionProtocol.getActivityStatus());
 			if(distributionProtocol.getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED))
 			{
-				Logger.out.debug("distributionProtocol.getActivityStatus() "+distributionProtocol.getActivityStatus());
+				logger.debug("distributionProtocol.getActivityStatus() "+distributionProtocol.getActivityStatus());
 				Long distributionProtocolIDArr[] = {distributionProtocol.getId()};
 
 				IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
@@ -134,6 +136,7 @@ public class DistributionProtocolBizLogic extends SpecimenProtocolBizLogic imple
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
     }
@@ -437,6 +440,7 @@ public class DistributionProtocolBizLogic extends SpecimenProtocolBizLogic imple
 		}
 		catch (SMException e)
 		{
+			logger.debug(e.getMessage(), e);
 			throw AppUtility.handleSMException(e);
 		}	
 		return isAuthorized;		

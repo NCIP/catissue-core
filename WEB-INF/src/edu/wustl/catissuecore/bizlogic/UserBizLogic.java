@@ -23,7 +23,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
-import edu.common.dynamicextensions.util.global.Variables;
 import edu.wustl.catissuecore.domain.CancerResearchGroup;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Department;
@@ -80,6 +79,7 @@ import gov.nih.nci.security.dao.ProtectionElementSearchCriteria;
 public class UserBizLogic extends CatissueDefaultBizLogic
 {
 
+	private transient Logger logger = Logger.getCommonLogger(UserBizLogic.class);
 	public static final int FAIL_SAME_AS_LAST_N = 8;
 	public static final int FAIL_FIRST_LOGIN = 9;
 	public static final int FAIL_EXPIRE = 10;
@@ -191,7 +191,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 
 				user.getPasswordCollection().add(password);
 
-				Logger.out.debug("password stored in passwore table");
+				logger.debug("password stored in passwore table");
 
 				// user.setPassword(csmUser.getPassword());            
 			}
@@ -235,6 +235,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (SMException e)
 		{
+			logger.debug(e.getMessage(), e);
 			// added to format constrainviolation message
 			deleteCSMUser(csmUser);
 			throw getBizLogicException(e, "sm.operation.error",
@@ -242,7 +243,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (Exception e)
 		{
-			Logger.out.debug(e.getMessage(), e);
+			logger.debug(e.getMessage(), e);
 			deleteCSMUser(csmUser);
 			
 			ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
@@ -274,7 +275,8 @@ public class UserBizLogic extends CatissueDefaultBizLogic
                 }
                 catch (SMException e)
                 {
-                	             	throw getBizLogicException(e, "user.roleNotFound", "");
+                	logger.debug(e.getMessage(), e);
+                	throw getBizLogicException(e, "user.roleNotFound", "");
                 }
                 int i = 0;
                 userRowIdMap = new HashMap<String, SiteUserRolePrivilegeBean>(); 
@@ -311,6 +313,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (SMException smExp)
 		{
+			logger.debug(smExp.getMessage(), smExp);
 			throw getBizLogicException(smExp, "sm.operation.error",
 			"Error in checking has privilege");
 		}
@@ -330,7 +333,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 
 		String userId = String.valueOf(aUser.getCsmUserId());
 		gov.nih.nci.security.authorization.domainobjects.User user = SecurityManagerFactory.getSecurityManager().getUserById(userId);
-		Logger.out.debug(" User: " + user.getLoginName());
+		logger.debug(" User: " + user.getLoginName());
 		group.add(user);
 
 		// Protection group of User
@@ -343,7 +346,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 		userGroupRoleProtectionGroupBean.setGroup(group);
 		authorizationData.add(userGroupRoleProtectionGroupBean);
 
-		Logger.out.debug(authorizationData.toString());
+		logger.debug(authorizationData.toString());
 		
 		if(userRowIdMap !=null)
 		{
@@ -560,10 +563,10 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 			
 			catch (SMException e) 
 			{
-				Logger.out.error(e.getMessage(), e);
+				logger.error(e.getMessage(), e);
 			}
 			catch (ApplicationException e) {
-				Logger.out.error(e.getMessage(), e);
+				logger.error(e.getMessage(), e);
 				e.printStackTrace();
 			} 
 		}
@@ -656,10 +659,10 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 			} 
 			catch (SMException e) 
 			{
-				Logger.out.error(e.getMessage(), e);
+				logger.error(e.getMessage(), e);
 			}
 			catch (ApplicationException e) {
-				// TODO Auto-generated catch block
+				logger.debug(e.getMessage(), e);
 				e.printStackTrace();
 			}
 		}	
@@ -708,7 +711,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 		} 
 		catch (Exception e) 
 		{
-			Logger.out.debug(e.getMessage(), e);
+			logger.debug(e.getMessage(), e);
 		}
 			
 	}
@@ -851,7 +854,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 				{
 					int result = validatePassword(oldUser, user.getNewPassword(), oldPassword);
 
-					Logger.out.debug("return from Password validate " + result);
+					logger.debug("return from Password validate " + result);
 
 					//if validatePassword method returns value greater than zero then validation fails
 					if (result != SUCCESS)
@@ -859,7 +862,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 						// get error message of validation failure 
 						String errorMessage = getPasswordErrorMsg(result);
 
-						Logger.out.debug("Error Message from method" + errorMessage);
+						logger.debug("Error Message from method" + errorMessage);
 						throw getBizLogicException(null, "dao.error", errorMessage);
 					}
 				}
@@ -879,7 +882,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 				{
 					int result = validatePassword(oldUser, user.getNewPassword(), oldPassword);
 
-					Logger.out.debug("return from Password validate " + result);
+					logger.debug("return from Password validate " + result);
 
 					//if validatePassword method returns value greater than zero then validation fails
 					if (result != SUCCESS)
@@ -887,7 +890,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 						// get error message of validation failure 
 						String errorMessage = getPasswordErrorMsg(result);
 
-						Logger.out.debug("Error Message from method" + errorMessage);
+						logger.debug("Error Message from method" + errorMessage);
 						throw getBizLogicException(null, "dao.error", errorMessage);
 					}
 				}
@@ -980,11 +983,13 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (SMException smExp)
 		{
+			logger.debug(smExp.getMessage(), smExp);
 			throw getBizLogicException(smExp, "sm.operation.error",
 			"Error in checking has privilege");
 		}
 		catch (Exception e)
 		{
+			logger.debug(e.getMessage(), e);
 			ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
 			throw new BizLogicException(errorKey,e,"UserBizLogic.java :");
 		}
@@ -1075,7 +1080,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 				NameValueBean nameValueBean = new NameValueBean();
 				nameValueBean.setName(user.getLastName() + ", " + user.getFirstName());
 				nameValueBean.setValue(String.valueOf(user.getUserId()));
-				Logger.out.debug(nameValueBean.toString());
+				logger.debug(nameValueBean.toString());
 				nameValuePairs.add(nameValueBean);
 			}
 		}
@@ -1093,7 +1098,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 	public List retrieve(String className, String colName, Object colValue) throws BizLogicException
 	{
 		List userList = null;
-		Logger.out.debug("In user biz logic retrieve........................");
+		logger.debug("In user biz logic retrieve........................");
 		try
 		{
 			// Get the caTISSUE user.
@@ -1108,7 +1113,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 				{
 					//Get the role of the user.
 					Role role = SecurityManagerFactory.getSecurityManager().getUserRole(appUser.getCsmUserId().longValue());
-					//Logger.out.debug("In USer biz logic.............role........id......." + role.getId().toString());
+					//logger.debug("In USer biz logic.............role........id......." + role.getId().toString());
 
 					if (role != null)
 					{
@@ -1119,6 +1124,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (SMException smExp)
 		{
+			logger.debug(smExp.getMessage(), smExp);
 			throw getBizLogicException(smExp, "sm.operation.error",
 			"Error in checking has privilege");
 		}
@@ -1192,8 +1198,10 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		} catch (ApplicationException e) {
+			logger.debug(e.getMessage(), e);
 			throw getBizLogicException(e, "utility.error", "");
 		}
 		finally
@@ -1336,7 +1344,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 				String arguments[] = null;
 				arguments = new String[]{"User", ApplicationProperties.getValue("user.emailAddress")};
 				String errMsg = new DefaultExceptionFormatter().getErrorMessage("Err.ConstraintViolation", arguments);
-				Logger.out.debug("Unique Constraint Violated: " + errMsg);
+				logger.debug("Unique Constraint Violated: " + errMsg);
 				throw getBizLogicException(null,"dao.error",errMsg);
 			}
 			/** -- patch ends here -- */
@@ -1483,7 +1491,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 			String encryptedPassword = PasswordManager.encrypt(newPassword);
 			if (checkPwdNotSameAsLastN(encryptedPassword, oldPwdList))
 			{
-				Logger.out.debug("Password is not valid returning FAIL_SAME_AS_LAST_N");
+				logger.debug("Password is not valid returning FAIL_SAME_AS_LAST_N");
 				return FAIL_SAME_AS_LAST_N;
 			}
 
@@ -1499,7 +1507,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 			if (checkPwdUpdatedOnSameDay(lastestUpdateDate))
 			{
 
-				Logger.out.debug("Password is not valid returning FAIL_CHANGED_WITHIN_SOME_DAY");
+				logger.debug("Password is not valid returning FAIL_CHANGED_WITHIN_SOME_DAY");
 				return FAIL_CHANGED_WITHIN_SOME_DAY;
 			}
 			}
@@ -1519,19 +1527,19 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 			StringBuffer sb = new StringBuffer(newPassword);
 			if (emailAddress != null && newPassword.toLowerCase().indexOf(emailAddress.toLowerCase())!=-1)
 			{
-				Logger.out.debug("Password is not valid returning FAIL_SAME_NAME_SURNAME_EMAIL");
+				logger.debug("Password is not valid returning FAIL_SAME_NAME_SURNAME_EMAIL");
 				return FAIL_SAME_NAME_SURNAME_EMAIL; 
 			}
 			
 			if (userFirstName != null && newPassword.toLowerCase().indexOf(userFirstName.toLowerCase())!=-1)
 			{
-				Logger.out.debug("Password is not valid returning FAIL_SAME_NAME_SURNAME_EMAIL");
+				logger.debug("Password is not valid returning FAIL_SAME_NAME_SURNAME_EMAIL");
 				return FAIL_SAME_NAME_SURNAME_EMAIL; 
 			}
 			
 			if (userLastName != null && newPassword.toLowerCase().indexOf(userLastName.toLowerCase())!=-1)
 			{
-				Logger.out.debug("Password is not valid returning FAIL_SAME_NAME_SURNAME_EMAIL");
+				logger.debug("Password is not valid returning FAIL_SAME_NAME_SURNAME_EMAIL");
 				return FAIL_SAME_NAME_SURNAME_EMAIL; 
 			}
 			
@@ -1609,7 +1617,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 		int dayDiffConstant = Integer.parseInt(XMLPropertyHandler.getValue("daysCount"));
 		if (dayDiff < dayDiffConstant)
 		{
-			Logger.out.debug("Password is not valid returning FAIL_CHANGED_WITHIN_SOME_DAY");
+			logger.debug("Password is not valid returning FAIL_CHANGED_WITHIN_SOME_DAY");
 			return true;
 		}
 		return false;
@@ -1695,6 +1703,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 		return isUnique;
@@ -1708,7 +1717,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 	 */
 	protected void prePopulateUIBean(AbstractDomainObject domainObj, IValueObject uiForm) throws BizLogicException
 	{	
-		Logger.out.info("Inside prePopulateUIBean method of UserBizLogic...");
+		logger.info("Inside prePopulateUIBean method of UserBizLogic...");
 		 
     	User user = (User)domainObj;
     	Role role=null;
@@ -1722,11 +1731,11 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 				{
 					user.setRoleId(role.getId().toString());
 				}
-				//	Logger.out.debug("In USer biz logic.............role........id......." + role.getId().toString());
+				//	logger.debug("In USer biz logic.............role........id......." + role.getId().toString());
 			} 
 			catch (SMException e) 
 			{
-				Logger.out.error("SMException in prePopulateUIBean method of UserBizLogic..."+e);
+				logger.error("SMException in prePopulateUIBean method of UserBizLogic..."+e);
 				//throw new BizLogicException(e.getMessage());
 			}
 		}  	     
@@ -1759,7 +1768,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 	//					                 {
 	//					                 	User adminUser = (User)users.get(0);
 	//					                 	retStr = retStr + "," + adminUser.getEmailAddress();
-	//					                 	Logger.out.debug(retStr);
+	//					                 	logger.debug(retStr);
 	//					                 }
 	//					         	}
 	//					         	retStr = retStr.substring(retStr.indexOf(",")+1 );
@@ -1830,11 +1839,11 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 		} 
 		catch (DAOException e) 
 		{
-			Logger.out.debug(e.getMessage(), e);
+			logger.debug(e.getMessage(), e);
 		}
 		catch (SMException e) 
 		{
-			Logger.out.debug(e.getMessage(), e);
+			logger.debug(e.getMessage(), e);
 		}
 		finally
 		{
@@ -1868,6 +1877,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (ApplicationException e1) 
 		{
+			logger.debug(e1.getMessage(), e1);
 			throw getBizLogicException(e1, "dao.error", "");
 		}
 		finally
@@ -1920,6 +1930,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 				} 
 				catch (BizLogicException e) 
 				{
+					logger.debug(e.getMessage(), e);
 					e.printStackTrace();
 				}
 			}
@@ -2106,6 +2117,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 			}
 			catch(ApplicationException exp)
 			{
+				logger.debug(exp.getMessage(), exp);
 				throw getBizLogicException(exp, "dao.error", "");
 			}
 		}			

@@ -60,6 +60,7 @@ import edu.wustl.security.locator.CSMGroupLocator;
 public class DistributionBizLogic extends CatissueDefaultBizLogic
 {
 
+	private transient Logger logger = Logger.getCommonLogger(DistributionBizLogic.class);
 	/**
 	 * Saves the Distribution object in the database.
 	 * @param obj The storageType object to be saved.
@@ -89,6 +90,7 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 		} 
 		catch (DAOException e)
 		{
+			logger.debug(e.getMessage(), e);
 			throw getBizLogicException(e, "errors.distribution.closedOrDisableSite", "");
 		}
 		
@@ -114,6 +116,7 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (Exception ex)
 		{
+			logger.debug(ex.getMessage(), ex);
 			throw getBizLogicException(ex, "dao.error", "");
 		}
 		return distributed;
@@ -149,9 +152,11 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 		
 		} catch (ApplicationException e) 
 		{
+			logger.debug(e.getMessage(), e);
 			throw getBizLogicException(e, "errors.distribution.closedOrDisableSite", "");
 		} catch (ClassNotFoundException e) 
 		{
+			logger.debug(e.getMessage(), e);
 			throw getBizLogicException(e, "errors.distribution.closedOrDisableSite", "");
 		}
 
@@ -238,11 +243,12 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 		}
 		//Mandar : 04-Apr-06 for updating the removed specimens start
 		updateRemovedSpecimens(distributedItemCollection, oldDistributedItemCollection, dao, sessionDataBean);
-		Logger.out.debug("Update Successful ...04-Apr-06");
+		logger.debug("Update Successful ...04-Apr-06");
 		// Mandar : 04-Apr-06 end
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
@@ -259,7 +265,7 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 		{
 			TissueSpecimen tissueSpecimen = (TissueSpecimen) specimen;
 			double availabeQty = Double.parseDouble(tissueSpecimen.getAvailableQuantity().toString());//tissueSpecimen.getAvailableQuantityInGram().doubleValue();
-			Logger.out.debug("TissueAvailabeQty" + availabeQty);
+			logger.debug("TissueAvailabeQty" + availabeQty);
 			if (availabeQty <= quantity)
 			{
 				tissueSpecimen.setAvailableQuantity(new Double(0.0));
@@ -267,7 +273,7 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 			else
 			{
 				availabeQty = availabeQty - quantity;
-				Logger.out.debug("TissueAvailabeQty after deduction" + availabeQty);
+				logger.debug("TissueAvailabeQty after deduction" + availabeQty);
 				tissueSpecimen.setAvailableQuantity(new Double(availabeQty));//tissueSpecimen.setAvailableQuantityInGram(new Double(availabeQty));
 			}
 		}
@@ -464,7 +470,7 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 		}
 	catch(DAOException daoExp)
 	{
-
+		logger.debug(daoExp.getMessage(), daoExp);
 		throw getBizLogicException(daoExp, "dao.error", "");
 	}
 		return true;
@@ -554,7 +560,7 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
-
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
@@ -571,7 +577,7 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 			{
 				DistributedItem item = (DistributedItem) it.next();
 				boolean isPresentInNew = newDistributedItemCollection.contains(item);
-				Logger.out.debug("Old Object in New Collection : " + isPresentInNew);
+				logger.debug("Old Object in New Collection : " + isPresentInNew);
 				if (!isPresentInNew)
 				{
 					Object specimenObj;
@@ -584,9 +590,9 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 				}
 
 			}
-			Logger.out.debug("Update Successful ...04-Apr-06");
+			logger.debug("Update Successful ...04-Apr-06");
 		} catch (DAOException e) {
-
+			logger.debug(e.getMessage(), e);
 			throw getBizLogicException(e, "dao.error", "");
 		}
 	}
@@ -598,9 +604,9 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 		{
 			TissueSpecimen tissueSpecimen = (TissueSpecimen) specimen;
 			double availabeQty = Double.parseDouble(tissueSpecimen.getAvailableQuantity().toString());//tissueSpecimen.getAvailableQuantityInGram().doubleValue();
-			Logger.out.debug("TissueAvailabeQty" + availabeQty);
+			logger.debug("TissueAvailabeQty" + availabeQty);
 			availabeQty = availabeQty + quantity;
-			Logger.out.debug("TissueAvailabeQty after addition" + availabeQty);
+			logger.debug("TissueAvailabeQty after addition" + availabeQty);
 			tissueSpecimen.setAvailableQuantity(new Double(availabeQty));//tissueSpecimen.setAvailableQuantityInGram(new Double(availabeQty));
 		}
 		else if (specimen instanceof CellSpecimen)
@@ -762,7 +768,7 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
     	}
     	catch(DAOException e)
     	{
-    		Logger.out.error(e.getMessage(), e);
+    		logger.error(e.getMessage(), e);
     		return null;	
     	}
     	finally

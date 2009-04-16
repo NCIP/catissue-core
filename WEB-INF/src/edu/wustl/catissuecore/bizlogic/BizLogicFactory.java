@@ -28,6 +28,7 @@ import edu.wustl.simplequery.bizlogic.QueryBizLogic;
 public class BizLogicFactory implements IFactory
 {
 
+	private transient Logger logger = Logger.getCommonLogger(BizLogicFactory.class);
     /**
      * Returns DAO instance according to the form bean type.
      * @param FORM_ID The form bean type.
@@ -35,7 +36,7 @@ public class BizLogicFactory implements IFactory
      */
 	public IBizLogic getBizLogic(int FORM_ID)
     {
-		Logger.out.debug("In Biz Logic Factory , Form ID: "+FORM_ID);
+		logger.debug("In Biz Logic Factory , Form ID: "+FORM_ID);
 		
     	IBizLogic bizLogic = null;
         

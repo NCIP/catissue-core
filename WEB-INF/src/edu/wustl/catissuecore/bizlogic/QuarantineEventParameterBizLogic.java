@@ -5,7 +5,6 @@ import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyRepo
 import edu.wustl.catissuecore.domain.pathology.QuarantineEventParameter;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
@@ -21,6 +20,7 @@ import edu.wustl.security.exception.UserNotAuthorizedException;
  */
 public class QuarantineEventParameterBizLogic extends CatissueDefaultBizLogic
 {
+	private transient Logger logger = Logger.getCommonLogger(QuarantineEventParameterBizLogic.class);
 	/**
 	 * Saves the Pathology Report Quarantine Event Parameter object in the database.
 	 * @param obj The storageType object to be saved.
@@ -58,6 +58,7 @@ public class QuarantineEventParameterBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
@@ -93,7 +94,7 @@ public class QuarantineEventParameterBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(Exception ex)
 		{
-			Logger.out.error("Error occured while updating object of QuarantineEventParameter"+ex);
+			logger.error("Error occured while updating object of QuarantineEventParameter"+ex);
 		}
 	}
 }

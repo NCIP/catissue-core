@@ -15,11 +15,11 @@ import java.util.Iterator;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
+import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.HibernateDAO;
 import edu.wustl.dao.exception.DAOException;
@@ -31,6 +31,7 @@ import edu.wustl.dao.exception.DAOException;
  */
 public class SpecimenArrayTypeBizLogic extends CatissueDefaultBizLogic
 {
+	private transient Logger logger = Logger.getCommonLogger(SpecimenArrayTypeBizLogic.class);
 
 	/* (non-Javadoc)
 	 * @see edu.wustl.common.bizlogic.AbstractBizLogic#insert(java.lang.Object, edu.wustl.common.dao.DAO, edu.wustl.common.beans.SessionDataBean)
@@ -59,6 +60,7 @@ public class SpecimenArrayTypeBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp, daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 
@@ -99,6 +101,7 @@ public class SpecimenArrayTypeBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp, daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 

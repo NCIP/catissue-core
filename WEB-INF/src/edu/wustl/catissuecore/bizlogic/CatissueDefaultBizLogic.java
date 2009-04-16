@@ -8,6 +8,7 @@ import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.Constants;
+import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.JDBCDAO;
 import edu.wustl.dao.daofactory.DAOConfigFactory;
@@ -24,6 +25,7 @@ import edu.wustl.security.privilege.PrivilegeManager;
  */
 public class CatissueDefaultBizLogic extends DefaultBizLogic
 {
+	private transient Logger logger = Logger.getCommonLogger(CatissueDefaultBizLogic.class);
 	/**
 	 * @see edu.wustl.common.bizlogic.IBizLogic#isAuthorized
 	 * @param dao The dao object.
@@ -111,6 +113,7 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 		}
 		}catch(SMException exception)
 		{
+			logger.debug(exception.getMessage(), exception);
 			throw getBizLogicException(exception, exception.getErrorKeyAsString(), exception.getLogMessage());
 		}
 		return isAuthorized;
@@ -141,6 +144,7 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 		return jdbcDAO;
@@ -154,6 +158,7 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	
@@ -170,6 +175,7 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 			}
 			catch(DAOException daoExp)
 			{
+				logger.debug(daoExp.getMessage(), daoExp);
 				throw getBizLogicException(daoExp, "dao.error", "");
 			}
 			return dao;
@@ -183,6 +189,7 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 		

@@ -11,11 +11,9 @@ import java.util.Map;
 
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
-import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.JDBCDAO;
-import edu.wustl.dao.daofactory.DAOFactory;
 import edu.wustl.dao.exception.DAOException;
 
 
@@ -33,7 +31,7 @@ public class SummaryBizLogic extends CatissueDefaultBizLogic
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(SummaryBizLogic.class);
+	private static Logger logger = Logger.getCommonLogger(SummaryBizLogic.class);
 
 
 	

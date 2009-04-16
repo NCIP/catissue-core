@@ -45,6 +45,7 @@ import edu.wustl.dao.exception.DAOException;
 public class SimilarContainerBizLogic extends StorageContainerBizLogic implements TreeDataInterface
 {
 
+	private transient Logger logger = Logger.getCommonLogger(SimilarContainerBizLogic.class);
 	/**
 	 * Saves the storageContainer object in the database.
 	 * @param obj The storageType object to be saved.
@@ -61,7 +62,7 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 		Map simMap = container.getSimilarContainerMap();
 		// --- common values for all similar containers ---
 		loadStorageType(dao, container);
-		Logger.out.debug(simMap);
+		logger.debug(simMap);
 		int checkButton = Integer.parseInt((String) simMap.get("checkedButton"));
 		//int checkButton = 1;
 
@@ -168,7 +169,7 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 					cntPos.setOccupiedContainer(cont);
 					cont.setLocatedAtPosition(cntPos);
 					cont.setSite(parentContainer.getSite()); // 16-07-2006 chetan
-					Logger.out.debug("^^>> " + parentContainer.getSite());
+					logger.debug("^^>> " + parentContainer.getSite());
 					simMap.put(parentContNameKey, parentContainer.getName());
 				}
 				//StorageContainer cont = new StorageContainer();
@@ -188,7 +189,7 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 
 				simMap.put(simContPrefix + "name",cont.getName());
 
-				Logger.out.debug("cont.getCollectionProtocol().size() " + cont.getCollectionProtocolCollection().size());
+				logger.debug("cont.getCollectionProtocol().size() " + cont.getCollectionProtocolCollection().size());
 				cont.setActivityStatus("Active");
 				dao.insert(cont.getCapacity(),  true);
 				dao.insert(cont, true);
@@ -201,9 +202,11 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		} catch (NameGeneratorException e) 
 		{
+			logger.debug(e.getMessage(), e);
 			throw getBizLogicException(e, "utility.error", "");
 		}
 	}
@@ -255,7 +258,7 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 		}
 		catch (Exception e)
 		{
-
+			logger.debug(e.getMessage(), e);
 		}
 	}
 
@@ -315,6 +318,7 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 		}
 		catch(ApplicationException exp)
 		{
+			logger.debug(exp.getMessage(), exp);
 			throw getBizLogicException(exp, "utility.error", "");
 		}
 		return true;
@@ -381,7 +385,7 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 		} 
 		catch(DAOException daoExp)
 		{
-			//TODO : have to look for this
+			logger.debug(daoExp.getMessage(), daoExp);
 			daoExp.printStackTrace();
 			//throw getBizLogicException(daoExp, "dao.error", "");
 		}

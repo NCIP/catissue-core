@@ -7,8 +7,8 @@ import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.HibernateDAO;
 import edu.wustl.dao.exception.DAOException;
@@ -17,6 +17,7 @@ import edu.wustl.security.exception.UserNotAuthorizedException;
 
 public class RequirementSpecimenBizLogic extends CatissueDefaultBizLogic
 {
+	private transient Logger logger = Logger.getCommonLogger(RequirementSpecimenBizLogic.class);
 	/**
 	 * Saves the Specimen object in the database.
 	 * @param obj The Specimen object to be saved.
@@ -39,6 +40,7 @@ public class RequirementSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
@@ -119,6 +121,7 @@ public class RequirementSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 
@@ -204,6 +207,7 @@ public class RequirementSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 

@@ -30,6 +30,7 @@ import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.global.Variables;
+import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.HibernateDAO;
 import edu.wustl.dao.exception.DAOException;
@@ -43,6 +44,7 @@ import edu.wustl.security.privilege.PrivilegeManager;
  */
 public class SiteBizLogic extends CatissueDefaultBizLogic {
 
+	private transient Logger logger = Logger.getCommonLogger(SiteBizLogic.class);
 	/**
 	 * Saves the storageType object in the database.
 	 * 
@@ -79,6 +81,7 @@ public class SiteBizLogic extends CatissueDefaultBizLogic {
 		}
 		catch(Exception daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 
@@ -129,6 +132,7 @@ public class SiteBizLogic extends CatissueDefaultBizLogic {
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
@@ -149,7 +153,7 @@ public class SiteBizLogic extends CatissueDefaultBizLogic {
 				result = true;
 			}
 		} catch (Exception excp) {
-			
+			logger.debug(excp.getMessage(), excp);
 			throw getBizLogicException(null, "dao.error", "Error while checking site for presence of specimens");
 		}
 
@@ -183,6 +187,7 @@ public class SiteBizLogic extends CatissueDefaultBizLogic {
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 
@@ -404,6 +409,7 @@ public class SiteBizLogic extends CatissueDefaultBizLogic {
 			dao = openDAOSession(null);
 			site = (Site) dao.retrieveById(Site.class.getName(), siteId);
 		} catch (Exception e) {
+			logger.debug(e.getMessage(), e);
 			throw getBizLogicException(e, "dao.error", "");
 		} finally {
 			closeDAOSession(dao);

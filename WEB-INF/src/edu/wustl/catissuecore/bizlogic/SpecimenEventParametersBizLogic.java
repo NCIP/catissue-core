@@ -70,6 +70,7 @@ import edu.wustl.security.exception.UserNotAuthorizedException;
 public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 {
 
+	private transient Logger logger = Logger.getCommonLogger(SpecimenEventParametersBizLogic.class);
 	/**
 	 * Saves the FrozenEventParameters object in the database.
 	 * @param obj The FrozenEventParameters object to be saved.
@@ -252,6 +253,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 					}
 					catch (Exception e1)
 					{
+						logger.debug(e1.getMessage(), e1);
 						e1.printStackTrace();
 					}
 					if(disabledCont == null)
@@ -300,7 +302,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 					}
 					catch (CacheException e)
 					{
-
+						logger.debug(e.getMessage(), e);
 					}
 
 				}
@@ -312,6 +314,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
@@ -381,7 +384,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 			}
 			catch (CacheException e)
 			{
-				Logger.out.debug(e.getMessage());
+				logger.debug(e.getMessage(),e);
 			}
 			
 		}
@@ -462,7 +465,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (Exception e)
 		{
-
+			logger.debug(e.getMessage(), e);
 		}
 	}
 
@@ -511,6 +514,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 
@@ -793,6 +797,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
@@ -807,6 +812,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
@@ -942,7 +948,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 
 			list = edu.wustl.common.util.Utility.removeNull(list);
 		} catch (DAOException e) {
-			
+			logger.debug(e.getMessage(), e);
 			throw getBizLogicException(e, "dao.error", "SpecimenEventParametersBizLogic.java :");
 		}
 		return list;
@@ -1046,7 +1052,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 		} 
 		catch (DAOException e) 
 		{
-			Logger.out.debug(e.getMessage(), e);
+			logger.debug(e.getMessage(), e);
 		}
 		return objectId;
 	}
@@ -1128,6 +1134,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(ApplicationException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 
@@ -1169,6 +1176,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(ApplicationException appExp)
 		{
+			logger.debug(appExp.getMessage(), appExp);
 			throw getBizLogicException(appExp, "dao.error", "");
 		}
 	}
@@ -1210,7 +1218,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 		} 
 		catch (DAOException e) 
 		{
-			Logger.out.debug(e.getMessage(), e);
+			logger.debug(e.getMessage(), e);
 		}
 		finally
 		{

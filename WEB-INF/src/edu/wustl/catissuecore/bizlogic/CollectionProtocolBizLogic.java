@@ -74,6 +74,7 @@ import edu.wustl.security.privilege.PrivilegeManager;
 public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic implements Roles
 {
 
+	private transient Logger logger = Logger.getCommonLogger(CollectionProtocolBizLogic.class);
 	/**
 	 * Saves the CollectionProtocol object in the database.
 	 * @param obj The CollectionProtocol object to be saved.
@@ -122,6 +123,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		}
 		catch (ApplicationException e)
 		{
+			logger.debug(e.getMessage(), e);
 			ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
 			throw new BizLogicException(errorKey, e, "CollectionProtocolBizLogic.java :");
 		}
@@ -325,10 +327,12 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			}
 			catch (SMException e)
 			{
+				logger.debug(e.getMessage(), e);
 				getBizLogicException(e, "sm.operation.error", "Error in checking has privilege");
 			}
 			catch (ApplicationException e)
 			{
+				logger.debug(e.getLogMessage(), e);
 				throw getBizLogicException(e, "utility.error", "");
 			}
 		}
@@ -374,6 +378,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		}
 		catch (BizLogicException e)
 		{
+			logger.debug(e.getMessage(), e);
 			throw getBizLogicException(e, "dao.error", "CollectionProtocolBizLogic.java :");
 		}
 
@@ -457,6 +462,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		}
 		catch (DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
@@ -498,6 +504,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		}
 		catch (DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
@@ -540,7 +547,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			if (csmUserId != null)
 			{
 				collectionProtocol.getPrincipalInvestigator().setCsmUserId(csmUserId);
-				Logger.out.debug("PI ....."
+				logger.debug("PI ....."
 						+ collectionProtocol.getPrincipalInvestigator().getCsmUserId());
 				collectionProtocolAuthorization.updatePIAndCoordinatorGroup(dao,
 						collectionProtocol, false);
@@ -548,7 +555,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		}
 		catch (Exception smExp)
 		{
-
+			logger.debug(smExp.getMessage(), smExp);
 			throw getBizLogicException(smExp, "dao.error", "CollectionProtocolBizLogic.java :");
 
 		}
@@ -570,6 +577,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		}
 		catch (Exception e)
 		{
+			logger.debug(e.getMessage(), e);
 			throw getBizLogicException(e, "dao.error", "");
 		}
 		return collectionProtocolOld;
@@ -611,12 +619,12 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			throws BizLogicException
 	{
 		//Disable related Objects
-		Logger.out.debug("collectionProtocol.getActivityStatus() "
+		logger.debug("collectionProtocol.getActivityStatus() "
 				+ collectionProtocol.getActivityStatus());
 		if (collectionProtocol.getActivityStatus().equals(
 				Status.ACTIVITY_STATUS_DISABLED.toString()))
 		{
-			Logger.out.debug("collectionProtocol.getActivityStatus() "
+			logger.debug("collectionProtocol.getActivityStatus() "
 					+ collectionProtocol.getActivityStatus());
 			Long collectionProtocolIDArr[] = {collectionProtocol.getId()};
 
@@ -670,6 +678,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		}
 		catch (DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(),daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
@@ -728,6 +737,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		}
 		catch (DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(),daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
@@ -749,6 +759,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		}
 		catch (DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(),daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
@@ -773,6 +784,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		}
 		catch (DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(),daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
@@ -782,7 +794,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			throws BizLogicException
 	{
 		Long piID = collectionProtocol.getPrincipalInvestigator().getId();
-		Logger.out
+		logger
 				.debug("Coordinator Size " + collectionProtocol.getCoordinatorCollection().size());
 		Collection coordinatorColl = new HashSet();
 		try
@@ -793,7 +805,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 				User aUser = (User) it.next();
 				if (!aUser.getId().equals(piID))
 				{
-					Logger.out.debug("Coordinator ID :" + aUser.getId());
+					logger.debug("Coordinator ID :" + aUser.getId());
 					Object obj;
 
 					obj = dao.retrieveById(User.class.getName(), aUser.getId());
@@ -821,6 +833,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		}
 		catch (DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(),daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
@@ -1188,13 +1201,14 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			List<String> titleList = jdbcDao.executeQuery(queryStr);
 			if (!titleList.isEmpty())
 			{
+				logger.debug("Collection Protocol with the same Title already exists");
 				throw getBizLogicException(null, "",
 						"Collection Protocol with the same Title already exists");
 			}
 		}
 		catch (DAOException e1)
 		{
-
+			logger.debug(e1.getMessage(),e1);
 			throw getBizLogicException(e1, "dao.error", "Error while checking Title");
 		}
 		finally
@@ -1273,7 +1287,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 								"Collection point label"};
 						String errMsg = new DefaultExceptionFormatter().getErrorMessage(
 								"Err.ConstraintViolation", arguments);
-						Logger.out.debug("Unique Constraint Violated: " + errMsg);
+						logger.debug("Unique Constraint Violated: " + errMsg);
 						//throw new DAOException(errMsg);
 					}
 					else
@@ -1342,6 +1356,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		}
 		catch (DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(),daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 		finally
@@ -1375,6 +1390,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		}
 		catch (DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(),daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 		finally
@@ -1386,6 +1402,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			}
 			catch (DAOException daoExp)
 			{
+				logger.debug(daoExp.getMessage(),daoExp);
 				throw getBizLogicException(daoExp, "dao.error", "");
 			}
 
@@ -1412,6 +1429,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		}
 		catch (DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(),daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 		finally
@@ -1423,6 +1441,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			}
 			catch (DAOException daoExp)
 			{
+				logger.debug(daoExp.getMessage(),daoExp);
 				throw getBizLogicException(daoExp, "dao.error", "");
 			}
 
@@ -1551,6 +1570,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		}
 		catch (DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(),daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 
@@ -1591,6 +1611,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		}
 		catch (UserNotAuthorizedException exp)
 		{
+			logger.debug(exp.getMessage(),exp);
 			throw getBizLogicException(exp, "user.not.auth", "");
 		}
 		return isAuthorized;
@@ -1661,6 +1682,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		}
 		catch (DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(),daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 		finally

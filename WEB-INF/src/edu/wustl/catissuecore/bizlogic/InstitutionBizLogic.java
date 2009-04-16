@@ -14,18 +14,17 @@ import java.util.List;
 
 import edu.wustl.catissuecore.domain.Institution;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
+import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
-import edu.wustl.dao.exception.DAOException;
 
 public class InstitutionBizLogic extends CatissueDefaultBizLogic
 {
-    
+	private transient Logger logger = Logger.getCommonLogger(InstitutionBizLogic.class);
 	protected boolean validate(Object obj, DAO dao, String operation) throws BizLogicException
 	{
 		// comment by Ashwin
@@ -33,6 +32,7 @@ public class InstitutionBizLogic extends CatissueDefaultBizLogic
 		if (institution == null)
 		{
 			 String message = ApplicationProperties.getValue("app.institution");
+			 logger.debug(message);
 			 throw getBizLogicException(null, "domain.object.null.err.msg", message);
 			//throw new DAOException("domain.object.null.err.msg", new String[]{"Institution"});
 		}
@@ -41,6 +41,7 @@ public class InstitutionBizLogic extends CatissueDefaultBizLogic
 		if (validate.isEmpty(institution.getName()))
 		{
 			String message = ApplicationProperties.getValue("institution.name");
+			logger.debug(message);
 			throw getBizLogicException(null, "errors.item.required", message);
 			//throw new DAOException("errors.item.required", new String[]{message});
 		}

@@ -15,7 +15,7 @@ import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.cde.PermissibleValueImpl;
 import edu.wustl.common.exception.BizLogicException;
-import edu.wustl.dao.exception.DAOException;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * 
@@ -24,6 +24,7 @@ import edu.wustl.dao.exception.DAOException;
  */
 public class ComboDataBizLogic extends CatissueDefaultBizLogic
 {
+	private transient Logger logger = Logger.getCommonLogger(ComboDataBizLogic.class);
 	/**
 	 * This method would return the Clinical Diagnosis List
 	 * @return List which contains the Clinical Diagnosis Data
@@ -133,6 +134,7 @@ public class ComboDataBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (Exception e)
 		{
+			logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 			System.out.println(e);
 		}	

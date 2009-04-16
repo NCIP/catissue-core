@@ -54,7 +54,7 @@ import gov.nih.nci.security.exceptions.CSObjectNotFoundException;
 
 public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 {
-	private static org.apache.log4j.Logger logger =Logger.getLogger(CatissueCoreServletContextListener.class); 
+	private static Logger logger = Logger.getCommonLogger(AssignPrivilegePageBizLogic.class); 
 	List<NameValueBean> scientistPrivilegesList = Variables.privilegeGroupingMap.get("SCIENTIST");
 	
 	public List getRecordNames(Set recordIds, AssignPrivilegesForm privilegesForm) throws BizLogicException
@@ -213,6 +213,7 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 		} 
 		catch (SMException e)
 		{
+			logger.debug(e.getMessage(), e);
 			ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
 			throw new BizLogicException(errorKey,e ,"AssignPrivilegePageBizLogic.java :"+"Could not get List of Roles");
 		}
@@ -369,6 +370,7 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (DAOException e)
 		{
+			logger.debug(e.getMessage(), e);
 			ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
 			throw new BizLogicException(errorKey,e ,"AssignPrivilegePageBizLogic.java :"+"Could not get Object of Site");
 		
@@ -445,6 +447,7 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (DAOException e)
 		{
+			logger.debug(e.getMessage(), e);
 			ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
 			throw new BizLogicException(errorKey,e ,"AssignPrivilegePageBizLogic.java :"+"Could not get Object of Site");
 		}
@@ -690,6 +693,7 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 			   }
 			   catch (SMException e)
 				{
+				   logger.debug(e.getMessage(), e);
 					throw getBizLogicException(e, "sm.operation.error", "Error while getting privileges from given role"+roleId);
 				}
 			}
@@ -1051,6 +1055,7 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 						}
 						catch (CSException e)
 						{
+							logger.debug(e.getMessage(), e);
 							ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
 							throw new BizLogicException(errorKey,e ,"AssignPrivilegePageBizLogic.java :"+"Could not get the role");
 						}
@@ -1091,13 +1096,14 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
-			
+			logger.debug(daoExp.getMessage(), daoExp);
 			daoExp.printStackTrace();
 				ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
 				throw new BizLogicException(errorKey,daoExp ,"AssignPrivilegePageBizLogic.java :"+"DAOException in  getting objectList for AssignPrivilegePageBizLogic  " +
 						"in ShowAssignPrivilegePageAction...");
 		} catch (SMException smExp)
 		{
+			logger.debug(smExp.getMessage(), smExp);
 			throw getBizLogicException(smExp, "sm.operation.error",
 			"Error in checking has privilege");
 		}
@@ -1571,6 +1577,7 @@ public List<JSONObject> addPrivilegeForUserPage(Map<String, SiteUserRolePrivileg
 	}  
 	catch (Exception e) 
 	{
+		logger.debug(e.getMessage(), e);
 		ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
 		throw new BizLogicException(errorKey,e ,"AssignPrivilegePageBizLogic.java :"+"DAOException in  getting objectList for AssignPrivilegePageBizLogic" +
 				"  in ShowAssignPrivilegePageAction...");
@@ -1813,6 +1820,7 @@ public List<NameValueBean> getPrivilegesNameValueBeanList(List<String> actionIds
 	} 
 	catch (SMException e)
 	{
+		logger.debug(e.getMessage(), e);
 		throw getBizLogicException(e, "sm.operation.error", "Error while getting privilege by id"+actionId);
 	}
 	return actionBeanList;

@@ -24,7 +24,7 @@ import edu.wustl.query.querysuite.QueryShoppingCart;
  */
 public class QueryShoppingCartBizLogic extends CatissueDefaultBizLogic
 {
-	
+	private transient Logger logger = Logger.getCommonLogger(QueryShoppingCartBizLogic.class);
 	/**
 	 * Adds a object in the shopping cart if the object is not present in cart.
 	 * 
@@ -212,6 +212,7 @@ public class QueryShoppingCartBizLogic extends CatissueDefaultBizLogic
 				}
 		 
 		   } catch (NumberFormatException e) {
+			   logger.debug(e.getMessage(), e);
 			   e.printStackTrace();
 		   }finally
 		   {
@@ -254,6 +255,7 @@ public class QueryShoppingCartBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 		return isSpecimenValid;

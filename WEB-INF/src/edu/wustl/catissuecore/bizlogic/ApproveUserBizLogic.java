@@ -51,6 +51,7 @@ import edu.wustl.security.privilege.PrivilegeManager;
 public class ApproveUserBizLogic  extends CatissueDefaultBizLogic
 {
 
+	private transient Logger logger = Logger.getCommonLogger(ApproveUserBizLogic.class);
 	/**
 	 * Overrides the insert method of DefaultBizLogic. 
 	 */
@@ -123,7 +124,7 @@ public class ApproveUserBizLogic  extends CatissueDefaultBizLogic
 		catch(Exception exp)
 		{
 			
-			Logger.out.debug(exp.getMessage(), exp);
+			logger.debug(exp.getMessage(), exp);
 			new UserBizLogic().deleteCSMUser(csmUser);
 			ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
 			throw new BizLogicException(errorKey,exp ,"ApproveUserBizLogic.java :"); 
@@ -340,9 +341,11 @@ public class ApproveUserBizLogic  extends CatissueDefaultBizLogic
 		}
 		catch (UserNotAuthorizedException e)
 		{
+			logger.debug(e.getMessage(), e);
 			throw getBizLogicException(e, "sm.operation.error", "User not authorized");
 		} catch (BizLogicException e)
 		{
+			logger.debug(e.getMessage(), e);
 			ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
 			throw new BizLogicException(errorKey,e ,"ApproveUserBizLogic.java :");	
 		}

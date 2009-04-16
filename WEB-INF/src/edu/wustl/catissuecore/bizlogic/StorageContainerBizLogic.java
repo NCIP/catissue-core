@@ -85,6 +85,7 @@ import edu.wustl.security.privilege.PrivilegeManager;
 public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		TreeDataInterface {
 
+	private transient Logger logger = Logger.getCommonLogger(StorageContainerBizLogic.class);
 	// Getting containersMaxLimit from the xml file in static variable
 	private static final int containersMaxLimit = Integer
 			.parseInt(XMLPropertyHandler
@@ -219,7 +220,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 					cont.setLocatedAtPosition(cntPos);
 				}
 
-				Logger.out.debug("Collection protocol size:"
+				logger.debug("Collection protocol size:"
 						+ container.getCollectionProtocolCollection().size());
 				// by falguni
 				// Call Storage container label generator if its specified to use
@@ -232,7 +233,8 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 						storagecontLblGenerator.setLabel(cont);
 						container.setName(cont.getName());
 					} catch (NameGeneratorException e) {
-						throw getBizLogicException(null, "dao.error", "");
+						logger.debug(e.getMessage(), e);
+						throw getBizLogicException(e, "dao.error", "");
 
 					}
 				}
@@ -243,8 +245,8 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 						.getInstance(Constants.STORAGECONTAINER_BARCODE_GENERATOR_PROPERTY_NAME);
 						// storagecontBarcodeGenerator.setBarcode(cont);
 					} catch (NameGeneratorException e) {
-
-						throw getBizLogicException(null, "dao.error", "");
+						logger.debug(e.getMessage(), e);
+						throw getBizLogicException(e, "dao.error", "");
 					}
 				}
 				dao.insert(cont.getCapacity(), true);
@@ -261,7 +263,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 
 				if (container.getLocatedAtPosition() != null
 						&& container.getLocatedAtPosition().getParentContainer() != null) {
-					Logger.out.debug("In if: ");
+					logger.debug("In if: ");
 					do {
 						if (positionDimensionTwo == posTwoCapacity) {
 							if (positionDimensionOne == posOneCapacity)
@@ -275,9 +277,9 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 							positionDimensionTwo = positionDimensionTwo + 1;
 						}
 
-						Logger.out.debug("positionDimensionTwo: "
+						logger.debug("positionDimensionTwo: "
 								+ positionDimensionTwo);
-						Logger.out.debug("positionDimensionOne: "
+						logger.debug("positionDimensionOne: "
 								+ positionDimensionOne);
 					} while (fullStatus[positionDimensionOne][positionDimensionTwo] != false);
 				}
@@ -285,8 +287,10 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 
 		}catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		} catch (ApplicationException e) {
+			logger.debug(e.getMessage(), e);
 			throw getBizLogicException(e, "utility.error", "");
 		}
 	}
@@ -406,7 +410,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 					containerMap);
 
 		} catch (Exception e) {
-
+			logger.debug(e.getMessage(), e);
 		}
 
 	}
@@ -445,7 +449,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 						parentStorageContainer);
 			}
 
-			Logger.out.debug("container.isParentChanged() : "
+			logger.debug("container.isParentChanged() : "
 					+ container.isParentChanged());
 
 			if (container.isParentChanged()) {
@@ -458,7 +462,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 
 						throw getBizLogicException(null, "errors.container.under.subcontainer", "");
 					}
-					Logger.out.debug("Loading ParentContainer: "
+					logger.debug("Loading ParentContainer: "
 							+ container.getLocatedAtPosition().getParentContainer()
 							.getId());
 
@@ -486,7 +490,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 					// start
 					boolean canUse = isContainerAvailableForPositions(dao,
 							container);
-					Logger.out.debug("canUse : " + canUse);
+					logger.debug("canUse : " + canUse);
 					if (!canUse) {
 						throw getBizLogicException(null, "errors.storageContainer.inUse", "");
 					}
@@ -533,12 +537,12 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 
 					if (!list.isEmpty()) {
 						Object[] obj1 = (Object[]) list.get(0);
-						Logger.out
+						logger
 						.debug("**************PC obj::::::: --------------- "
 								+ obj1);
-						Logger.out.debug((Long) obj1[0]);
-						Logger.out.debug((Integer) obj1[1]);
-						Logger.out.debug((Integer) obj1[2]);
+						logger.debug((Long) obj1[0]);
+						logger.debug((Integer) obj1[1]);
+						logger.debug((Integer) obj1[2]);
 
 						Integer pcCapacityOne = (Integer) obj1[1];
 						Integer pcCapacityTwo = (Integer) obj1[2];
@@ -584,7 +588,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 							.getPositionDimensionTwo().intValue()) {
 						boolean canUse = isContainerAvailableForPositions(dao,
 								container);
-						Logger.out.debug("canUse : " + canUse);
+						logger.debug("canUse : " + canUse);
 						if (!canUse) {
 
 							throw getBizLogicException(null, "errors.storageContainer.inUse", "");
@@ -666,13 +670,13 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 			setSiteForSubContainers(container, container.getSite(), dao);
 
 			boolean restrictionsCanChange = isContainerEmpty(dao, container);
-			Logger.out.info("--------------container Available :"
+			logger.info("--------------container Available :"
 					+ restrictionsCanChange);
 			if (!restrictionsCanChange) {
 
 				boolean restrictionsChanged = checkForRestrictionsChanged(
 						container, oldContainer);
-				Logger.out.info("---------------restriction changed -:"
+				logger.info("---------------restriction changed -:"
 						+ restrictionsChanged);
 				if (restrictionsChanged) {
 
@@ -692,7 +696,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 			((HibernateDAO)dao)	.audit(obj, oldObj);
 			((HibernateDAO)dao)	.audit(container.getCapacity(), oldContainer.getCapacity());
 
-			Logger.out.debug("container.getActivityStatus() "
+			logger.debug("container.getActivityStatus() "
 					+ container.getActivityStatus());
 			// lazy change
 			/*
@@ -724,7 +728,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 
 					persistentOldContainerForChange.getOccupiedPositions().clear();
 
-					Logger.out.debug("container.getActivityStatus() "
+					logger.debug("container.getActivityStatus() "
 							+ container.getActivityStatus());
 
 					disableSubStorageContainer(dao, sessionDataBean,
@@ -746,7 +750,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 								Constants.MAP_OF_DISABLED_CONTAINERS,
 								(Serializable) disabledConts);
 					} catch (CacheException e) {
-
+						logger.debug(e.getMessage(), e);
 					}
 
 				} else {
@@ -757,6 +761,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 
@@ -832,6 +837,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		}
 		catch(ApplicationException exp)
 		{
+			logger.debug(exp.getMessage(), exp);
 			throw getBizLogicException(exp, "utility.error", "");
 		}
 	}
@@ -973,7 +979,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 			}
 
 		} catch (Exception e) {
-			Logger.out.error(e.getMessage(), e);
+			logger.error(e.getMessage(), e);
 			throw getBizLogicException(e, "dao.error", "");
 		}
 	}
@@ -1173,7 +1179,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 					StorageContainer.class, selectColumnNames, whereColumnNames,
 					objectIds);
 
-			Logger.out.debug("Related Objects>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+			logger.debug("Related Objects>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
 					+ listOfSubElement.size());
 
 			String userName = new String();
@@ -1203,7 +1209,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 					className = Site.class.getName();
 				}
 
-				Logger.out.debug("Container Object After ********************** : "
+				logger.debug("Container Object After ********************** : "
 						+ containerObject + "row[1] : " + row[1]);
 
 				boolean permission = false;
@@ -1253,6 +1259,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		}
 		catch(SMException exp)
 		{
+			logger.debug(exp.getMessage(), exp);
 			throw AppUtility.handleSMException(exp);
 		}
 	}
@@ -1350,6 +1357,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
@@ -1371,6 +1379,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
@@ -1389,7 +1398,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 
 				Collection children = StorageContainerUtil.getChildren(dao,
 						storageContainer.getId());
-				Logger.out
+				logger
 				.debug("storageContainer.getChildrenContainerCollection() "
 						+ children.size());
 
@@ -1404,6 +1413,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		}
 		catch(ApplicationException exp)
 		{
+			logger.debug(exp.getMessage(), exp);
 			throw getBizLogicException(exp, "utility.error", "");
 		}
 
@@ -1441,6 +1451,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		}
 		catch(ApplicationException exp)
 		{
+			logger.debug(exp.getMessage(), exp);
 			throw getBizLogicException(exp, "utility.error", "");
 		}
 
@@ -1484,6 +1495,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		}
 		catch(ApplicationException exp)
 		{
+			logger.debug(exp.getMessage(), exp);
 			throw getBizLogicException(exp, "utility.error", "");
 		}
 
@@ -1516,6 +1528,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 		finally
@@ -1614,7 +1627,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 				List columnList = (List) list.get(0);
 				if (!columnList.isEmpty()) {
 					String str = (String) columnList.get(0);
-					Logger.out.info("str---------------:" + str);
+					logger.info("str---------------:" + str);
 					if (!str.equals("")) {
 						int no = Integer.parseInt(str);
 						return no + 1;
@@ -1626,6 +1639,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
@@ -1699,6 +1713,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 
@@ -1803,7 +1818,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 				+ "WHERE "
 				+ "t8.SITE_ID = t4.IDENTIFIER  AND t8.STORAGE_TYPE_ID = t5.IDENTIFIER ";
 
-			Logger.out.debug("Storage Container query......................"
+			logger.debug("Storage Container query......................"
 					+ queryStr);
 		
 
@@ -1813,6 +1828,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		
 			// printRecords(list);
 		} catch (Exception ex) {
+			logger.debug(ex.getMessage(), ex);
 			ex.printStackTrace();
 		}
 		finally
@@ -1820,6 +1836,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 			try {
 				closeJDBCSession(dao);
 			} catch (BizLogicException e) {
+				logger.debug(e.getMessage(), e);
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -2048,7 +2065,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 			}
 
 		} catch (Exception daoExp) {
-			
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 		finally
@@ -2056,7 +2073,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 			try {
 				dao.closeSession();
 			} catch (DAOException e) {
-				// TODO Auto-generated catch block
+				logger.debug(e.getMessage(), e);
 				e.printStackTrace();
 			}
 		}
@@ -2077,7 +2094,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 				+ " where sc.SITE_ID = site.IDENTIFIER AND sc.IDENTIFIER = "
 				+ identifier.longValue();
 
-		Logger.out.debug("Site Query........................." + sql);
+		logger.debug("Site Query........................." + sql);
 
 		List resultList = executeSQL(sql);
 
@@ -2146,6 +2163,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 
 		} catch (Exception daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 		return containerNodeVector;
@@ -2229,6 +2247,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 		finally
@@ -2236,7 +2255,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 			try {
 				dao.closeSession();
 			} catch (DAOException e) {
-				// TODO Auto-generated catch block
+				logger.debug(e.getMessage(), e);
 				e.printStackTrace();
 			}
 		}
@@ -2374,6 +2393,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		}
 		catch (Exception daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 		finally
@@ -2404,7 +2424,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 
 		if (children != null) {
 			Iterator iterator = children.iterator();
-			Logger.out
+			logger
 					.debug("storageContainer.getChildrenContainerCollection().size(): "
 							+ children.size());
 			while (iterator.hasNext()) {
@@ -2415,9 +2435,9 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 							.getLocatedAtPosition().getPositionDimensionOne();
 					Integer positionDimensionTwo = childStorageContainer
 							.getLocatedAtPosition().getPositionDimensionTwo();
-					Logger.out.debug("positionDimensionOne : "
+					logger.debug("positionDimensionOne : "
 							+ positionDimensionOne.intValue());
-					Logger.out.debug("positionDimensionTwo : "
+					logger.debug("positionDimensionTwo : "
 							+ positionDimensionTwo.intValue());
 					fullStatus[positionDimensionOne.intValue()][positionDimensionTwo
 							.intValue()] = true;
@@ -2444,6 +2464,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 			children = StorageContainerUtil.getChildren(dao, containerId);
 		} 
 		catch (ApplicationException e) {
+			logger.debug(e.getMessage(), e);
 			throw getBizLogicException(e, "utility.error", "");
 		} 
 		finally {
@@ -2488,6 +2509,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
@@ -2541,6 +2563,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
@@ -2550,7 +2573,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 	// This is needed since now users can enter the values in the edit box
 	public boolean validateContainerAccess(DAO dao, StorageContainer container,
 			SessionDataBean sessionDataBean) throws BizLogicException {
-		Logger.out.debug("validateContainerAccess..................");
+		logger.debug("validateContainerAccess..................");
 		String userName = sessionDataBean.getUserName();
 
 		if(sessionDataBean != null && sessionDataBean.isAdmin())
@@ -2577,6 +2600,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 					((HibernateDAO)dao).openSession(null);
 				}
 		} catch (DAOException e) {
+			logger.debug(e.getMessage(), e);
 			return false;
 		} finally {
 			// try {
@@ -2627,17 +2651,17 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		int positionDimensionTwo = current.getLocatedAtPosition()
 				.getPositionDimensionTwo().intValue();
 
-		Logger.out.debug("validatePosition C : " + positionDimensionOne + " : "
+		logger.debug("validatePosition C : " + positionDimensionOne + " : "
 				+ positionDimensionTwo);
-		Logger.out.debug("validatePosition P : " + posOneCapacity + " : "
+		logger.debug("validatePosition P : " + posOneCapacity + " : "
 				+ posTwoCapacity);
 
 		if ((positionDimensionOne > posOneCapacity)
 				|| (positionDimensionTwo > posTwoCapacity)) {
-			Logger.out.debug("validatePosition false");
+			logger.debug("validatePosition false");
 			return false;
 		}
-		Logger.out.debug("validatePosition true");
+		logger.debug("validatePosition true");
 		return true;
 	}
 
@@ -2648,17 +2672,17 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		int positionDimensionTwo = current.getLocatedAtPosition()
 				.getPositionDimensionTwo().intValue();
 
-		Logger.out.debug("validatePosition C : " + positionDimensionOne + " : "
+		logger.debug("validatePosition C : " + positionDimensionOne + " : "
 				+ positionDimensionTwo);
-		Logger.out.debug("validatePosition P : " + posOneCapacity + " : "
+		logger.debug("validatePosition P : " + posOneCapacity + " : "
 				+ posTwoCapacity);
 
 		if ((positionDimensionOne > posOneCapacity)
 				|| (positionDimensionTwo > posTwoCapacity)) {
-			Logger.out.debug("validatePosition false");
+			logger.debug("validatePosition false");
 			return false;
 		}
-		Logger.out.debug("validatePosition true");
+		logger.debug("validatePosition true");
 		return true;
 	}
 
@@ -2708,21 +2732,22 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 			int positionDimensionTwo = container.getLocatedAtPosition()
 			.getPositionDimensionTwo().intValue();
 
-			Logger.out.debug("validatePosition C : " + positionDimensionOne + " : "
+			logger.debug("validatePosition C : " + positionDimensionOne + " : "
 					+ positionDimensionTwo);
-			Logger.out.debug("validatePosition P : " + pcCapacityOne + " : "
+			logger.debug("validatePosition P : " + pcCapacityOne + " : "
 					+ pcCapacityTwo);
 
 			if ((positionDimensionOne > pcCapacityOne)
 					|| (positionDimensionTwo > pcCapacityTwo)) {
-				Logger.out.debug("validatePosition false");
+				logger.debug("validatePosition false");
 				return false;
 			}
-			Logger.out.debug("validatePosition true");
+			logger.debug("validatePosition true");
 			return true;
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
@@ -2774,7 +2799,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 				}
 
 			} catch (Exception e) {
-				Logger.out.debug("Error in isContainerAvailable : " + e);
+				logger.debug("Error in isContainerAvailable : " + e);
 				return false;
 			}
 		} else {
@@ -2809,13 +2834,13 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 
 			List list = dao.retrieve(sourceObjectName, selectColumnName,
 					queryWhereClause);
-			Logger.out.debug("current.getParentContainer() :"
+			logger.debug("current.getParentContainer() :"
 					+ current.getLocatedAtPosition().getParentContainer());
 			// check if StorageContainer exists with the given storageContainer
 			// information
 			if (list.size() != 0) {
 				Object obj = list.get(0);
-				Logger.out
+				logger
 				.debug("**********IN isContainerAvailable : obj::::::: --------- "
 						+ obj);
 				return false;
@@ -2849,7 +2874,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 				// information
 				if (list.size() != 0) {
 					Object obj = list.get(0);
-					Logger.out
+					logger
 					.debug("**************IN isPositionAvailable : obj::::::: --------------- "
 							+ obj);
 					return false;
@@ -2876,7 +2901,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 					// information
 					if (list.size() != 0) {
 						Object obj = list.get(0);
-						Logger.out
+						logger
 						.debug("**************IN isPositionAvailable : obj::::::: --------------- "
 								+ obj);
 						return false;
@@ -2887,7 +2912,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 
 			return true;
 		} catch (Exception e) {
-			Logger.out.debug("Error in isContainerAvailable : " + e);
+			logger.debug("Error in isContainerAvailable : " + e);
 			return false;
 		}
 	}
@@ -2896,11 +2921,11 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 	protected boolean validatePosition(StorageContainer storageContainer,
 			String posOne, String posTwo) {
 		try {
-			Logger.out
+			logger
 					.debug("storageContainer.getCapacity().getOneDimensionCapacity() : "
 							+ storageContainer.getCapacity()
 									.getOneDimensionCapacity());
-			Logger.out
+			logger
 					.debug("storageContainer.getCapacity().getTwoDimensionCapacity() : "
 							+ storageContainer.getCapacity()
 									.getTwoDimensionCapacity());
@@ -2916,7 +2941,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 			}
 			return true;
 		} catch (Exception e) {
-			Logger.out.debug("Error in validatePosition : " + e);
+			logger.debug("Error in validatePosition : " + e);
 			return false;
 		}
 	}
@@ -2944,7 +2969,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 
 			List list = dao.retrieve(sourceObjectName, selectColumnName,
 					queryWhereClause);
-			Logger.out.debug("storageContainer.getId() :"
+			logger.debug("storageContainer.getId() :"
 					+ storageContainer.getId());
 			// check if Specimen exists with the given storageContainer
 			// information
@@ -2960,7 +2985,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 						isPosAvail= true;
 					}
 				}
-				Logger.out
+				logger
 				.debug("**************IN isPositionAvailable : obj::::::: --------------- "
 						+ obj);
 				// Logger.out.debug((Long)obj[0] );
@@ -2988,13 +3013,13 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 				list = dao.retrieve(sourceObjectName, selectColumnName,
 						queryWhereClauseNew);
 				
-				Logger.out.debug("storageContainer.getId() :"
+				logger.debug("storageContainer.getId() :"
 						+ storageContainer.getId());
 				// check if Specimen exists with the given storageContainer
 				// information
 				if (list.size() != 0) {
 					Object obj = list.get(0);
-					Logger.out
+					logger
 					.debug("**********IN isPositionAvailable : obj::::: --------- "
 							+ obj);
 					return false;
@@ -3016,13 +3041,13 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 					list = dao.retrieve(sourceObjectName, selectColumnName,
 							queryWhereClauseInner);
 
-					Logger.out.debug("storageContainer.getId() :"
+					logger.debug("storageContainer.getId() :"
 							+ storageContainer.getId());
 					// check if Specimen exists with the given storageContainer
 					// information
 					if (list.size() != 0) {
 						Object obj = list.get(0);
-						Logger.out
+						logger
 						.debug("**********IN isPositionAvailable : obj::::: --------- "
 								+ obj);
 						return false;
@@ -3033,7 +3058,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 			return true;
 
 		} catch (Exception e) {
-			Logger.out.debug("Error in isPositionAvailable : " + e);
+			logger.debug("Error in isPositionAvailable : " + e);
 			return false;
 		}
 	}
@@ -3066,13 +3091,13 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 			// check if StorageContainer exists with the given ID
 			if (list.size() != 0) {
 				Object[] obj = (Object[]) list.get(0);
-				Logger.out
+				logger
 				.debug("**********SC found for given ID ****obj::::::: --------------- "
 						+ obj);
-				Logger.out.debug((Long) obj[0]);
-				Logger.out.debug((Integer) obj[1]);
-				Logger.out.debug((Integer) obj[2]);
-				Logger.out.debug((String) obj[3]);
+				logger.debug((Long) obj[0]);
+				logger.debug((Integer) obj[1]);
+				logger.debug((Integer) obj[2]);
+				logger.debug((String) obj[3]);
 
 				StorageContainer pc = new StorageContainer();
 				pc.setId((Long) obj[0]);
@@ -3087,7 +3112,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 
 				// check if user has privilege to use the container
 				boolean hasAccess = validateContainerAccess(dao,pc, sessionDataBean);
-				Logger.out.debug("hasAccess..............." + hasAccess);
+				logger.debug("hasAccess..............." + hasAccess);
 				if (!hasAccess) {
 
 					throw getBizLogicException(null, "access.use.object.denied", "");
@@ -3106,7 +3131,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 				// check for valid position
 				boolean isValidPosition = validatePosition(pc, positionOne,
 						positionTwo);
-				Logger.out.debug("isValidPosition : " + isValidPosition);
+				logger.debug("isValidPosition : " + isValidPosition);
 				boolean canUsePosition = false;
 				if (isValidPosition) // if position is valid
 				{
@@ -3127,7 +3152,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 					 * (CacheException e) { // TODO Auto-generated catch block
 					 * e.printStackTrace(); }
 					 */
-					Logger.out.debug("canUsePosition : " + canUsePosition);
+					logger.debug("canUsePosition : " + canUsePosition);
 					if (canUsePosition) // position empty. can be used
 					{
 
@@ -3155,6 +3180,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
@@ -3313,6 +3339,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 						containerMapFromCache = (TreeMap) StorageContainerUtil
 						.getContainerMapFromCache();
 					} catch (CacheException e) {
+						logger.debug(e.getMessage(), e);
 						e.printStackTrace();
 					}
 
@@ -3420,6 +3447,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 
@@ -3651,7 +3679,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 				"capacity.twoDimensionCapacity" };
 		List list = retrieve(StorageContainer.class.getName(), selectColumnName);
 		Map containerMap = new TreeMap();
-		Logger.out.info("===================== list size:" + list.size());
+		logger.info("===================== list size:" + list.size());
 		Iterator itr = list.iterator();
 		while (itr.hasNext()) {
 			Object containerList[] = (Object[]) itr.next();
@@ -3690,6 +3718,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 
@@ -3726,7 +3755,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 				+ Status.ACTIVITY_STATUS_ACTIVE.toString() + "' order by IDENTIFIER";
 
 
-			Logger.out.debug("Storage Container query......................"
+			logger.debug("Storage Container query......................"
 					+ queryStr);
 			List list = new ArrayList();
 
@@ -3745,7 +3774,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 				containerMapFromCache = StorageContainerUtil
 				.getContainerMapFromCache();
 			} catch (Exception e1) {
-				// TODO Auto-generated catch block
+				logger.debug(e1.getMessage(), e1);
 				e1.printStackTrace();
 			}
 			boolean flag = true;
@@ -3791,7 +3820,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 					}
 
 					catch (Exception e) {
-						Logger.out.info("Error while getting map from cache");
+						logger.info("Error while getting map from cache");
 						e.printStackTrace();
 					}
 
@@ -3801,6 +3830,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 			return containerMap;
 
 		} catch (Exception ex) {
+			logger.debug(ex.getMessage(), ex);
 			throw getBizLogicException(ex, "dao.error", "");
 		}
 		finally
@@ -3828,6 +3858,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		}
 		catch (Exception e1) 
 		{
+			logger.debug(e1.getMessage(), e1);
 			throw getBizLogicException(e1, "dao.error", "");
 		}
 		finally
@@ -3844,11 +3875,11 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 			throws BizLogicException {
 
 		NameValueBeanRelevanceComparator comparator = new NameValueBeanRelevanceComparator();
-		Logger.out
+		logger
 				.debug("method : getAllocatedContaienrMapForSpecimen()---getting containers for specimen--------------");
 		TreeMap containerMap = new TreeMap(comparator);
 		List list = getRelevantContainerList(cpId, specimenClass, closeSession);
-		Logger.out
+		logger
 				.debug("getAllocatedContaienrMapForSpecimen()----- Size of list--------:"
 						+ list.size());
 		Map containerMapFromCache = null;
@@ -3856,7 +3887,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 			containerMapFromCache = (TreeMap) StorageContainerUtil
 					.getContainerMapFromCache();
 		} catch (Exception e1) {
-			// TODO Auto-generated catch block
+			logger.debug(e1.getMessage(), e1);
 			e1.printStackTrace();
 		}
 
@@ -3884,7 +3915,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 						continue;
 
 					if (i > containersMaxLimit) {
-						Logger.out.debug("CONTAINERS_MAX_LIMIT reached");
+						logger.debug("CONTAINERS_MAX_LIMIT reached");
 						exceedingMaxLimit = new String("true");
 						break;
 					} else {
@@ -3901,11 +3932,11 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 				}
 				relevenceCounter++;
 			}
-			Logger.out
+			logger
 					.debug("getAllocatedContaienrMapForSpecimen()----Size of containerMap:"
 							+ containerMap.size());
 		}
-		Logger.out.debug("exceedingMaxLimit----------" + exceedingMaxLimit);
+		logger.debug("exceedingMaxLimit----------" + exceedingMaxLimit);
 
 		return containerMap;
 
@@ -4046,7 +4077,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 			queryArray[5] = queryStr6;
 
 			for (int i = 0; i < 6; i++) {
-				Logger.out.debug("Storage Container query......................"
+				logger.debug("Storage Container query......................"
 						+ queryArray[i]);
 				System.out.println("Storage Container query......................"
 						+ queryArray[i]);
@@ -4062,6 +4093,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 		finally
@@ -4081,13 +4113,14 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 	public List executeStorageContQuery(String query, JDBCDAO dao)
 			throws BizLogicException 
 			{
-		Logger.out.debug("Storage Container query......................"
+		logger.debug("Storage Container query......................"
 				+ query);
 		List list = new ArrayList();
 
 		try {
 			list = dao.executeQuery(query);
 		} catch (DAOException daoExp) {
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 			
 		}
@@ -4136,7 +4169,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 				+ includeAllIdQueryStr
 				+ ") and t1.IDENTIFIER = t2.IDENTIFIER";
 
-		Logger.out.debug("SPECIMEN ARRAY QUERY ......................"
+		logger.debug("SPECIMEN ARRAY QUERY ......................"
 				+ queryStr);
 		List list = new ArrayList();
 		
@@ -4144,13 +4177,13 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		list = dao.executeQuery(queryStr);
 		
 		
-		Logger.out.info("Size of list:" + list.size());
+		logger.info("Size of list:" + list.size());
 		Map containerMapFromCache = null;
 		try {
 			containerMapFromCache = (TreeMap) StorageContainerUtil
 					.getContainerMapFromCache();
 		} catch (Exception e1) {
-			// TODO Auto-generated catch block
+			logger.debug(e1.getMessage(), e1);
 			e1.printStackTrace();
 		}
 
@@ -4203,6 +4236,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 	}
 	catch(DAOException daoExp)
 	{
+		logger.debug(daoExp.getMessage(), daoExp);
 		throw getBizLogicException(daoExp, "dao.error", "");
 	}
 	finally
@@ -4286,6 +4320,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 			resultList = dao.executeQuery(sql);
 			
 		} catch (Exception daoExp) {
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 		finally
@@ -4421,6 +4456,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
@@ -4634,6 +4670,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 		return null;
@@ -4666,6 +4703,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
                 }
                 catch (DAOException e)
                 {
+                	logger.debug(e.getMessage(), e);
                    return null;
                 }
             }
@@ -4717,7 +4755,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		} 
 		catch (DAOException e) 
 		{
-			Logger.out.debug(e.getMessage(), e);
+			logger.debug(e.getMessage(), e);
 		}
 		finally
 		{
@@ -4763,6 +4801,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		} 
 		catch (DAOException e) 
 		{
+			logger.debug(e.getMessage(), e);
 			throw getBizLogicException(e, "dao.error", "");
 		}
 		finally
@@ -4802,7 +4841,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		} 
 		catch (DAOException e) 
 		{
-			Logger.out.debug(e.getMessage(), e);
+			logger.debug(e.getMessage(), e);
 		}
 		finally
 		{

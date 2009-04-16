@@ -16,7 +16,6 @@ import java.util.Date;
 import java.util.List;
 
 import edu.wustl.catissuecore.domain.SpecimenProtocol;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.Utility;
@@ -32,6 +31,7 @@ import edu.wustl.dao.exception.DAOException;
  */
 public class SpecimenProtocolBizLogic extends CatissueDefaultBizLogic
 {
+	private transient Logger logger = Logger.getCommonLogger(SpecimenProtocolBizLogic.class);
     /**
 	 * This method checks for the change in the Activity status of the object. If change is found
 	 *  then it calls the setClosedDate() to update the End date.
@@ -40,8 +40,8 @@ public class SpecimenProtocolBizLogic extends CatissueDefaultBizLogic
 	 */
 	protected void checkForChangedStatus(SpecimenProtocol newObject, SpecimenProtocol oldObject)
 	{
-		Logger.out.debug("newObject.getActivityStatus() : " + newObject.getActivityStatus());
-		Logger.out.debug("oldObject.getActivityStatus()   " + oldObject.getActivityStatus());
+		logger.debug("newObject.getActivityStatus() : " + newObject.getActivityStatus());
+		logger.debug("oldObject.getActivityStatus()   " + oldObject.getActivityStatus());
 		
 		if(!newObject.getActivityStatus().equals(oldObject.getActivityStatus()))
 		{
@@ -57,17 +57,17 @@ public class SpecimenProtocolBizLogic extends CatissueDefaultBizLogic
 	private void setClosedDate(SpecimenProtocol protocol)
 	{
 		String activityStatus =  protocol.getActivityStatus();
-		Logger.out.debug("in setClosedDate of DBZL, ActivityStatus  : "+ activityStatus);
+		logger.debug("in setClosedDate of DBZL, ActivityStatus  : "+ activityStatus);
 		if(activityStatus.equalsIgnoreCase(Status.ACTIVITY_STATUS_CLOSED.toString()))
 		{
 			Date currentDate = Calendar.getInstance().getTime();
 			protocol.setEndDate(currentDate);
-			Logger.out.debug("EndDate set");
+			logger.debug("EndDate set");
 		}
 		else if(activityStatus.equalsIgnoreCase(Status.ACTIVITY_STATUS_ACTIVE.toString()))
 		{
 			protocol.setEndDate(null);
-			Logger.out.debug("EndDate cleared");
+			logger.debug("EndDate cleared");
 		}
 	}
 	

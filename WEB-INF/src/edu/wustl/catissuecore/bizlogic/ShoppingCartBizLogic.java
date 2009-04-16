@@ -15,9 +15,9 @@ import java.util.Hashtable;
 import java.util.List;
 
 import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.util.logger.Logger;
 import edu.wustl.simplequery.query.ShoppingCart;
 
 /**
@@ -26,6 +26,7 @@ import edu.wustl.simplequery.query.ShoppingCart;
  */
 public class ShoppingCartBizLogic extends CatissueDefaultBizLogic
 {
+	private transient Logger logger = Logger.getCommonLogger(ShoppingCartBizLogic.class);
 	public void add(ShoppingCart cart,Object obj[]) throws BizLogicException
     {
 		try
@@ -46,6 +47,7 @@ public class ShoppingCartBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(ApplicationException appExp)
 		{
+			logger.debug(appExp.getMessage(), appExp);
 			throw getBizLogicException(appExp, "dao.error", "");
 		}
 

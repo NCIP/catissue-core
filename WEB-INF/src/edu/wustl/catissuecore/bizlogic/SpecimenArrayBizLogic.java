@@ -70,6 +70,7 @@ import edu.wustl.security.privilege.PrivilegeManager;
 public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 {
 
+	private transient Logger logger = Logger.getCommonLogger(SpecimenArrayBizLogic.class);
 	/**
 	 * @see edu.wustl.common.bizlogic.AbstractBizLogic#insert(java.lang.Object, edu.wustl.common.dao.DAO, edu.wustl.common.beans.SessionDataBean)
 	 */
@@ -97,6 +98,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
@@ -309,12 +311,14 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 				}
 				catch (CacheException e)
 				{
+					logger.debug(e.getMessage(), e);
 					throw getBizLogicException(e, "dao.error", "Problem while chaching");
 				}
 			}
 		}
 	catch(DAOException daoExp)
 	{
+		logger.debug(daoExp.getMessage(), daoExp);
 		throw getBizLogicException(daoExp, "dao.error", "");
 	}
 		
@@ -513,6 +517,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
@@ -573,6 +578,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
@@ -664,6 +670,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
@@ -905,6 +912,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
@@ -986,6 +994,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
@@ -1015,6 +1024,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(ApplicationException exp)
 		{
+			logger.debug(exp.getMessage(), exp);
 			throw getBizLogicException(exp, "dao.error", "");
 		}
 	}
@@ -1056,6 +1066,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			daoExp.printStackTrace();
 		}
 		finally
@@ -1113,6 +1124,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(Exception e)
 		{
+			logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 		}
 		return sb.toString();
@@ -1198,7 +1210,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 				}
 				catch (DAOException e)
 				{
-					Logger.out.debug(e.getMessage(), e);
+					logger.debug(e.getMessage(), e);
 				}
 			}
 
@@ -1238,8 +1250,10 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (SMException e)
 		{
+			logger.debug(e.getMessage(), e);
 			throw getBizLogicException(e, "sm.operation.error", "Error in checking has privilege");
 		} catch (ApplicationException e) {
+			logger.debug(e.getMessage(), e);
 			ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
 			throw new BizLogicException(errorKey,e ,"SpecimenArrayBizLogic.java :");	
 		}

@@ -11,6 +11,7 @@ import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
+import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.exception.DAOException;
 
@@ -22,6 +23,7 @@ public class TextReportContentBizLogic extends CatissueDefaultBizLogic
 {
 
 
+	private transient Logger logger = Logger.getCommonLogger(TextReportContentBizLogic.class);
 		/**
 		 * Saves the Text content object in the database.
 		 * @param obj The storageType object to be saved.
@@ -37,6 +39,7 @@ public class TextReportContentBizLogic extends CatissueDefaultBizLogic
 			}
 			catch(DAOException daoExp)
 			{
+				logger.debug(daoExp.getMessage(), daoExp);
 				throw getBizLogicException(daoExp, "dao.error", "");
 			}
 	 	}
@@ -56,6 +59,7 @@ public class TextReportContentBizLogic extends CatissueDefaultBizLogic
 			}
 			catch(DAOException daoExp)
 			{
+				logger.debug(daoExp.getMessage(), daoExp);
 				throw getBizLogicException(daoExp, "dao.error", "");
 			}
 		}

@@ -27,6 +27,7 @@ import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.tree.SpecimenTreeNode;
 import edu.wustl.common.tree.TreeDataInterface;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * SpecimenTreeBizLogic contains the bizlogic required to display Specimen hierarchy in tree form in the ordering system module.
@@ -36,6 +37,7 @@ import edu.wustl.common.tree.TreeDataInterface;
 public class SpecimenTreeBizLogic extends CatissueDefaultBizLogic implements TreeDataInterface
 {
 
+	private transient Logger logger = Logger.getCommonLogger(SpecimenTreeBizLogic.class);
 	/**
 	 * Long containing the id of specimen/specimen Collection group Id.
 	 */
@@ -113,6 +115,7 @@ public class SpecimenTreeBizLogic extends CatissueDefaultBizLogic implements Tre
 		}
 		catch(BizLogicException exp)
 		{
+			logger.debug(exp.getMessage(), exp);
 			exp.printStackTrace();
 		}
 		return allNodes;

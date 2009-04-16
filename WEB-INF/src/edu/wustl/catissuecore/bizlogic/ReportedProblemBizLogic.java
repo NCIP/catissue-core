@@ -11,8 +11,8 @@ import edu.wustl.catissuecore.domain.ReportedProblem;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.EmailHandler;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.HibernateDAO;
 import edu.wustl.dao.exception.DAOException;
@@ -26,6 +26,7 @@ import edu.wustl.dao.exception.DAOException;
 public class ReportedProblemBizLogic extends CatissueDefaultBizLogic
 {
 
+	private transient Logger logger = Logger.getCommonLogger(ReportedProblemBizLogic.class);
     /* (non-Javadoc)
      * @see edu.wustl.common.dao.HibernateDAO#add(java.lang.Object)
      */
@@ -55,6 +56,7 @@ public class ReportedProblemBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
     }
@@ -88,6 +90,7 @@ public class ReportedProblemBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
     }

@@ -4,7 +4,6 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.domain.pathology.PathologyReportReviewParameter;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
@@ -22,6 +21,7 @@ import gov.nih.nci.security.authorization.domainobjects.Role;
  */
 public class PathologyReportReviewParameterBizLogic extends CatissueDefaultBizLogic
 {
+	private transient Logger logger = Logger.getCommonLogger(PathologyReportReviewParameterBizLogic.class);
 	/**
 	 * Saves the Pathology Report Review Parameter object in the database.
 	 * @param obj The storageType object to be saved.
@@ -51,11 +51,12 @@ public class PathologyReportReviewParameterBizLogic extends CatissueDefaultBizLo
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 		catch(SMException ex)
 		{
-			Logger.out.info("Review Role not found!");
+			logger.info("Review Role not found!");
 		}
 		// Since  PathologyReportReviewParameter is in PUBLIC_DATA_GROUP protection objects not required
 		/*Set protectionObjects = new HashSet();
@@ -89,7 +90,7 @@ public class PathologyReportReviewParameterBizLogic extends CatissueDefaultBizLo
 		}
 		catch(Exception ex)
 		{
-			Logger.out.error("Error occured while updating object of PathologyReportReviewParameter"+ex);
+			logger.error("Error occured while updating object of PathologyReportReviewParameter"+ex);
 		}
 	}
 }

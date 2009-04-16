@@ -27,7 +27,7 @@ import edu.wustl.security.global.Permissions;
 
 public class IdentifiedSurgicalPathologyReportBizLogic  extends CatissueDefaultBizLogic
 {
-	
+	private transient Logger logger = Logger.getCommonLogger(IdentifiedSurgicalPathologyReportBizLogic.class);
 	/**
 	 * Saves the Identified pathology reportobject in the database.
 	 * @param obj The storageType object to be saved.
@@ -45,6 +45,7 @@ public class IdentifiedSurgicalPathologyReportBizLogic  extends CatissueDefaultB
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 		
@@ -89,7 +90,7 @@ public class IdentifiedSurgicalPathologyReportBizLogic  extends CatissueDefaultB
 		}
 		catch(Exception ex)
 		{
-			Logger.out.error("Error occured while updating IdentifiedSurgicalPathologyReport domain object"+ex);
+			logger.error("Error occured while updating IdentifiedSurgicalPathologyReport domain object"+ex);
 		}
 	}
 
