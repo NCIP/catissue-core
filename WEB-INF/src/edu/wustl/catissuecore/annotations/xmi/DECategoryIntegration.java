@@ -23,6 +23,7 @@ import edu.wustl.catissuecore.bizlogic.AnnotationBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
+import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.exception.DAOException;
 
 /**
@@ -33,6 +34,7 @@ import edu.wustl.dao.exception.DAOException;
 public class DECategoryIntegration
 {
 
+	private static Logger logger = Logger.getCommonLogger(DECategoryIntegration.class);
 	/**
 	 * @param rootCategoryList
 	 */
@@ -126,7 +128,8 @@ public class DECategoryIntegration
 		}
 		catch (Exception ex)
 		{
-			System.out.println("Exception: " + ex.getMessage());
+			logger.debug(ex.getMessage(), ex);
+			//System.out.println("Exception: " + ex.getMessage());
 			throw new RuntimeException(ex);
 		}
 	}

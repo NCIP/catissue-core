@@ -6,6 +6,7 @@
 package edu.wustl.catissuecore.annotations.xmi;
 
 import edu.common.dynamicextensions.domaininterface.EntityGroupInterface;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * @author preeti_lodha
@@ -15,6 +16,7 @@ import edu.common.dynamicextensions.domaininterface.EntityGroupInterface;
  */
 public class XMIExporter
 {
+	private static Logger logger = Logger.getCommonLogger(XMIExporter.class);
 	public static final String XMI_VERSION_1_1 = "1.1";
 	public static final String XMI_VERSION_1_2 = "1.2";
 	/**
@@ -28,11 +30,13 @@ public class XMIExporter
 		{
 		if(args.length<3)
 		{
+			logger.info("Please specify all parameters. '-Dgroupname <groupname> -Dfilename <export filename> -Dversion <version>'");
 			throw new Exception("Please specify all parameters. '-Dgroupname <groupname> -Dfilename <export filename> -Dversion <version>'");
 		}
 		String groupName = args[0];
 		if(groupName==null)
 		{
+			logger.info("Please specify groupname to be exported");
 			throw new Exception("Please specify groupname to be exported");
 		}
 		else
@@ -40,6 +44,7 @@ public class XMIExporter
 			String filename = args[1]; 
 			if(filename==null)
 			{
+				logger.info("Kindly specify the filename where XMI should be exported.");
 				throw new Exception("Kindly specify the filename where XMI should be exported.");
 			}
 			else
@@ -47,6 +52,7 @@ public class XMIExporter
 				String xmiVersion = args[2]; 
 				if(xmiVersion==null)
 				{
+					logger.info("Export version not specified. Exporting as XMI 1.2");
 					System.out.println("Export version not specified. Exporting as XMI 1.2");
 					xmiVersion = XMI_VERSION_1_2;
 				}
@@ -55,6 +61,7 @@ public class XMIExporter
 				XMIUtility.addHookEntitiesToGroup(entityGroup);
 				if(entityGroup==null)
 				{
+					logger.info("Specified group does not exist. Could not export to XMI");
 					throw new Exception("Specified group does not exist. Could not export to XMI");
 				}
 				else
@@ -66,6 +73,7 @@ public class XMIExporter
 		}
 		}catch(Exception e)
 		{
+			logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 		}
 

@@ -46,6 +46,7 @@ import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.security.exception.UserNotAuthorizedException;
 
@@ -55,6 +56,7 @@ import edu.wustl.security.exception.UserNotAuthorizedException;
  */
 public class ImportXmi
 {
+	private static Logger logger = Logger.getCommonLogger(ImportXmi.class);
 //	 name of a UML extent (instance of UML metamodel) that the UML models will be loaded into
 	private static final String UML_INSTANCE = "UMLInstance";
 	// name of a MOF extent that will contain definition of UML metamodel
@@ -86,9 +88,9 @@ public class ImportXmi
 			
 			File file = new File(fileName);
 
-			System.out.println("--------------------------------------------------\n");
-			System.out.println("Filename = " +file.getName());
-			System.out.println("Hook Entity = " +hookEntity);
+			logger.info("--------------------------------------------------\n");
+			logger.info("Filename = " +file.getName());
+			logger.info("Hook Entity = " +hookEntity);
 			
 			String packageName = "";			
 			String conditionRecordObjectCsvFileName = "";
@@ -106,8 +108,8 @@ public class ImportXmi
 				domainModelName = file.getName().substring(0,indexOfExtension);
 			}
 			
-			System.out.println("Name of the file = " +domainModelName);
-			System.out.println("\n--------------------------------------------------\n");
+			logger.info("Name of the file = " +domainModelName);
+			logger.info("\n--------------------------------------------------\n");
 			// get the default repository
 			rep = MDRManager.getDefault().getDefaultRepository();
 			// create an XMIReader
@@ -146,7 +148,7 @@ public class ImportXmi
 				List<String> conditionObjectNames = readFile(conditionRecordObjectCsvFileName);				
 				for(String conditionObjName :conditionObjectNames)
 				{
-					System.out.println("conditionObjName = " + conditionObjName);
+					logger.info("conditionObjName = " + conditionObjName);
 					Long cpId =(Long) getObjectIdentifier(conditionObjName,CollectionProtocol.class.getName(),Constants.TITLE);
 					if(cpId == null)
 					{
@@ -179,12 +181,12 @@ public class ImportXmi
 			List<ContainerInterface> mainContainerList = xmiImportProcessor.processXmi(uml, domainModelName,packageName, containerNames);
 			
 			boolean isEditedXmi = xmiImportProcessor.isEditedXmi;
-			System.out.println("\n--------------------------------------------------\n");
-			System.out.println("Package name = " +packageName);
-			System.out.println("isEditedXmi = "+isEditedXmi);
-			System.out.println("Forms have been created !!!!");
-			System.out.println("Associating with hook entity.");
-			System.out.println("\n--------------------------------------------------\n");
+			logger.info("\n--------------------------------------------------\n");
+			logger.info("Package name = " +packageName);
+			logger.info("isEditedXmi = "+isEditedXmi);
+			logger.info("Forms have been created !!!!");
+			logger.info("Associating with hook entity.");
+			logger.info("\n--------------------------------------------------\n");
 			//List<ContainerInterface> mainContainerList = getMainContainerList(pathCsvFileName,entityNameVsContainers);
 			if(!hookEntity.equalsIgnoreCase(AnnotationConstants.NONE))
 			{//Integrating with hook entity
@@ -198,15 +200,15 @@ public class ImportXmi
 					AnnotationUtil.addQueryPathsForAllAssociatedEntities(((EntityInterface)mainContainer.getAbstractEntity()), null, null,null, processedPathList);
 				}
 			}
-			System.out.println("--------------- Done ------------");
+			logger.info("--------------- Done ------------");
 		
 		}
 		catch (Exception e)
 		{
-			System.out.println("Fatal error reading XMI.");
-			System.out.println("------------------------ERROR:--------------------------------\n");
-			System.out.println(e.getMessage());		
-			System.out.println("\n--------------------------------------------------------------");
+			logger.info("Fatal error reading XMI.");
+			logger.info("------------------------ERROR:--------------------------------\n");
+			logger.info(e.getMessage());		
+			logger.info("\n--------------------------------------------------------------");
 		}
 		finally
 		{
@@ -219,7 +221,7 @@ public class ImportXmi
 			}
 			catch(IOException io)
 			{
-				System.out.println("Error. Specified file does not exist.");
+				logger.info("Error. Specified file does not exist.");
 			}
 			XMIUtilities.cleanUpRepository();
 		
@@ -233,18 +235,22 @@ public class ImportXmi
 	{
 		if(args.length == 0)
 		{
+			logger.debug("Please Specify the file name to be imported");
 			throw new Exception("Please Specify the file name to be imported");
 		}
 		if(args.length < 2)
 		{
+			logger.debug("Please Specify the hook entity name");
 			throw new Exception("Please Specify the hook entity name");
 		}
 		if(args.length < 3)
 		{
+			logger.debug("Please Specify the main container csv file name");
 			throw new Exception("Please Specify the main container csv file name");
 		}
 		if(args.length < 4)
 		{
+			logger.debug("Please Specify the name of the Package to be imported");
 			throw new Exception("Please Specify the name of the Package to be imported");
 		}	
 	}
@@ -331,11 +337,11 @@ public class ImportXmi
 	private static MofPackage getUmlPackage(ModelPackage umlMM)
 	{
 		// iterate through all instances of package
-		System.out.println("Here");
+		logger.info("Here");
 		for (Iterator it = umlMM.getMofPackage().refAllOfClass().iterator(); it.hasNext();)
 		{
 			MofPackage pkg = (MofPackage) it.next();
-			System.out.println("\n\nName = " + pkg.getName());			
+			logger.info("\n\nName = " + pkg.getName());			
 			// is the package topmost and is it named "UML"?
 			if (pkg.getContainer() == null && "UML".equals(pkg.getName()))
 			{				
