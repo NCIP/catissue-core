@@ -39,13 +39,10 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
-import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
-import edu.wustl.dao.exception.DAOException;
 import edu.wustl.security.global.Permissions;
 import edu.wustl.security.privilege.PrivilegeCache;
 import edu.wustl.security.privilege.PrivilegeManager;
@@ -59,6 +56,7 @@ import edu.wustl.security.privilege.PrivilegeManager;
 public class DisplayAnnotationDataEntryPageAction extends BaseAction
 {
 
+	private transient Logger logger = Logger.getCommonLogger(DisplayAnnotationDataEntryPageAction.class);
 	/* (non-Javadoc)
 	 * @see edu.wustl.common.action.BaseAction#executeAction(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
 	 */
@@ -175,7 +173,7 @@ public class DisplayAnnotationDataEntryPageAction extends BaseAction
 		if((operationStatus!=null)&&(operationStatus.trim().equals(WebUIManagerConstants.SUCCESS)))
 		{
 			String dynExtRecordId = request.getParameter(WebUIManager.getRecordIdentifierParameterName());
-			Logger.out.info("Dynamic Entity Record Id [" + dynExtRecordId + "]");
+			logger.info("Dynamic Entity Record Id [" + dynExtRecordId + "]");
 			insertEntityMapRecord(request,dynExtRecordId);
 		}
 	}
@@ -198,6 +196,7 @@ public class DisplayAnnotationDataEntryPageAction extends BaseAction
             }
 			catch (BizLogicException e)
 			{
+				logger.debug(e.getMessage(), e);
 				e.printStackTrace();
 			}
 		}

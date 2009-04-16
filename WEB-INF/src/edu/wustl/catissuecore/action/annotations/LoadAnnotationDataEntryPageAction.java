@@ -64,6 +64,7 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 			DynamicExtensionsQueryBuilderConstantsInterface
 {
 
+	private transient Logger logger = Logger.getCommonLogger(LoadAnnotationDataEntryPageAction.class);
 	/* (non-Javadoc)
 	 * @see edu.wustl.common.action.BaseAction#executeAction(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
 	 */
@@ -177,7 +178,7 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 			}
 			else
 			{
-				Logger.out.info("Updating for Entity Id " + staticEntityId);
+				logger.info("Updating for Entity Id " + staticEntityId);
 				initializeDataEntryForm(request, staticEntityId, staticEntityRecordId,
 					staticEntityName,
 					annotationDataEntryForm);
@@ -224,8 +225,7 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 			}
 			catch (BizLogicException e)
 			{
-				// TODO Auto-generated catch block
-				Logger.out.error(e.getMessage(), e);
+				logger.error(e.getMessage(), e);
 			}
 		}
 
@@ -297,7 +297,7 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 		{
 			String dynExtRecordId = request.getParameter(WebUIManager
 					.getRecordIdentifierParameterName());
-			Logger.out.info("Dynamic Entity Record Id [" + dynExtRecordId + "]");
+			logger.info("Dynamic Entity Record Id [" + dynExtRecordId + "]");
 			insertEntityMapRecord(request, dynExtRecordId, dynEntContainerId);
 		}
 	}
@@ -325,9 +325,8 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 			}
 			catch (BizLogicException e)
 			{
-				// TODO ERROR HANDLING STILL REMAINING
-				Logger.out.debug("Got exception while creating entity map record....");
-				Logger.out.error(e.getMessage(), e);
+				logger.debug("Got exception while creating entity map record....");
+				logger.error(e.getMessage(), e);
 			}
 		}
 		else
@@ -384,13 +383,11 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 				}
 				catch (NumberFormatException e)
 				{
-					// TODO Auto-generated catch block
-					Logger.out.error(e.getMessage(), e);
+					logger.error(e.getMessage(), e);
 				}
 				catch (BizLogicException e)
 				{
-					// TODO Auto-generated catch block
-					Logger.out.error(e.getMessage(), e);
+					logger.error(e.getMessage(), e);
 				}
 				for (EntityMap entityMap : entityMapColl)
 				{					
@@ -615,7 +612,7 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 		}
 		catch (BizLogicException e)
 		{
-			Logger.out.error(e.getMessage(), e);
+			logger.error(e.getMessage(), e);
 		}
 		return urlForEditRecord;
 
@@ -845,7 +842,7 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 		catch (DAOException e)
 		{
 
-			Logger.out.error(e.getMessage(), e);
+			logger.error(e.getMessage(), e);
 		}
 		if ((deContainerId != null) && (deEntityName != null))
 		{
@@ -940,20 +937,20 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 		}
 		catch (DataTypeFactoryInitializationException e)
 		{
-			Logger.out.debug(e.getMessage(), e);
+			logger.debug(e.getMessage(), e);
 		}
 		catch (ClassNotFoundException e)
 		{
-			Logger.out.debug(e.getMessage(), e);
+			logger.debug(e.getMessage(), e);
 		}
 		catch (InstantiationException e)
 		{
-			Logger.out.debug(e.getMessage(), e);
+			logger.debug(e.getMessage(), e);
 		}
 
 		catch (IllegalAccessException e)
 		{
-			Logger.out.debug(e.getMessage(), e);
+			logger.debug(e.getMessage(), e);
 		}
 		return annoCondn;
 

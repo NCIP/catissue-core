@@ -23,7 +23,6 @@ import edu.common.dynamicextensions.domain.integration.EntityMap;
 import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationException;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.common.dynamicextensions.ui.webui.util.WebUIManager;
-import edu.common.dynamicextensions.util.global.DEConstants;
 import edu.wustl.catissuecore.actionForm.AnnotationDataEntryForm;
 import edu.wustl.catissuecore.bizlogic.AnnotationBizLogic;
 import edu.wustl.catissuecore.util.global.AppUtility;
@@ -42,6 +41,7 @@ import edu.wustl.common.util.logger.Logger;
 public class LoadDynamicExtentionsDataEntryPageAction extends BaseAction
 {
 
+	private transient Logger logger = Logger.getCommonLogger(LoadDynamicExtentionsDataEntryPageAction.class);
 	/* (non-Javadoc)
 	 * @see edu.wustl.common.action.BaseAction#executeAction(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
 	 */
@@ -142,12 +142,12 @@ public class LoadDynamicExtentionsDataEntryPageAction extends BaseAction
 		}
 		
 		//Append container id
-		Logger.out.info("Load data entry page for Dynamic Extension Entity [" + annotationDataEntryForm.getSelectedAnnotation() + "]");
+		logger.info("Load data entry page for Dynamic Extension Entity [" + annotationDataEntryForm.getSelectedAnnotation() + "]");
 		dynExtDataEntryURL = dynExtDataEntryURL + "&" + WebUIManager.CONATINER_IDENTIFIER_PARAMETER_NAME + "="
 				+ annotationDataEntryForm.getSelectedAnnotation();
 		if (request.getParameter("recordId") != null)
 		{
-			Logger.out.info("Loading details of record id [" + request.getParameter("recordId") + "]");
+			logger.info("Loading details of record id [" + request.getParameter("recordId") + "]");
 			dynExtDataEntryURL = dynExtDataEntryURL + "&" + WebUIManager.RECORD_IDENTIFIER_PARAMETER_NAME + "=" + request.getParameter("recordId");
 		}
 		String operation = request.getParameter("operation");

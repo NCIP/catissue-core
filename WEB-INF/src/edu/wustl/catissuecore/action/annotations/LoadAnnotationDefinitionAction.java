@@ -10,7 +10,6 @@ package edu.wustl.catissuecore.action.annotations;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -83,6 +82,7 @@ import edu.wustl.security.exception.UserNotAuthorizedException;
 public class LoadAnnotationDefinitionAction extends SecureAction
 {
 
+	private transient Logger logger = Logger.getCommonLogger(LoadAnnotationDefinitionAction.class);
 	/* (non-Javadoc)
 	 * @see edu.wustl.common.action.BaseAction#executeAction(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
 	 */
@@ -247,7 +247,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 
 			String[] staticRecordId = getStaticRecordIdForLinking(request);
 
-			Logger.out.info("Need to link static entity [" + staticEntityId + "] to dyn ent ["
+			logger.info("Need to link static entity [" + staticEntityId + "] to dyn ent ["
 					+ dynExtContainerId + "]");
 			linkEntities(request, staticEntityId, dynExtContainerId, staticRecordId);
 		}
@@ -306,6 +306,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 					}
 					catch (HibernateException excep)
 					{
+						logger.debug(excep.getMessage(), excep);
 						excep.printStackTrace();
 						throw new ApplicationException(ErrorKey.getErrorKey("action.error"), excep,
 								"LoadAnnotationDefinitionAction.java");
@@ -344,6 +345,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 					}
 					catch (BizLogicException excep)
 					{
+						logger.debug(excep.getMessage(), excep);
 						excep.printStackTrace();
 						throw AppUtility.getApplicationException(excep, "action.error",
 								"LoadAnnotationDefinitionAction.java");
@@ -356,6 +358,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 						}
 						catch (HibernateException excep)
 						{
+							logger.debug(excep.getMessage(), excep);
 							excep.printStackTrace();
 							throw AppUtility.getApplicationException(excep, "action.error",
 									"LoadAnnotationDefinitionAction.java");
@@ -365,12 +368,14 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 			}
 			catch (NumberFormatException excep)
 			{
+				logger.debug(excep.getMessage(), excep);
 				excep.printStackTrace();
 				throw AppUtility.getApplicationException(excep, "action.error",
 				"LoadAnnotationDefinitionAction.java");
 			}
 			catch (DAOException excep)
 			{
+				logger.debug(excep.getMessage(), excep);
 				excep.printStackTrace();
 				throw AppUtility.getApplicationException(excep, "action.error",
 				"LoadAnnotationDefinitionAction.java");
@@ -410,6 +415,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 			}
 			catch (SQLException excep)
 			{
+				logger.debug(excep.getMessage(), excep);
 				throw new ApplicationException(ErrorKey.getErrorKey("action.error"), excep,
 				"LoadAnnotationDefinitionAction.java");
 			}
@@ -504,12 +510,12 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 		}
 		catch (SQLException e)
 		{
-			// TODO Auto-generated catch block
+			logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 		}
 		catch (ApplicationException e)
 		{
-			// TODO Auto-generated catch block
+			logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 		}
 		finally
@@ -520,7 +526,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 			}
 			catch (ApplicationException e)
 			{
-				// TODO Auto-generated catch block
+				logger.error(e.getLogMessage(), e);
 				e.printStackTrace();
 			}
 		}
@@ -953,7 +959,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 		}
 		catch (BizLogicException e)
 		{
-			Logger.out.debug(e.getMessage(), e);
+			logger.debug(e.getMessage(), e);
 		}
 		return conditionalInstancesList;
 	}
