@@ -59,6 +59,7 @@ import edu.wustl.simplequery.query.Table;
  */
 public class TitliFetchAction extends Action
 {
+	private transient Logger logger = Logger.getCommonLogger(TitliFetchAction.class);
 	private String alias;
 	private List dataList;
 	private List columnNames;
@@ -118,11 +119,11 @@ public class TitliFetchAction extends Action
 		}
 		catch (TitliFetchException e)
 		{
-			Logger.out.error("Exception in TitliFetchAction : "	+ e.getMessage(), e);
+			logger.error("Exception in TitliFetchAction : "	+ e.getMessage(), e);
 		}
 		catch(Exception e)
 		{
-			Logger.out.error("Exception in TitliFetchAction : "	+ e.getMessage(), e);
+			logger.error("Exception in TitliFetchAction : "	+ e.getMessage(), e);
 		}
 		
 		
@@ -174,15 +175,15 @@ public class TitliFetchAction extends Action
 		}
 		catch(TitliException e)
 		{
-			Logger.out.error("Exception in TitliFetchAction : "	+ e.getMessage(), e);
+			logger.error("Exception in TitliFetchAction : "	+ e.getMessage(), e);
 		}
 		catch(DAOException e)
 		{
-			Logger.out.error("DAOException in TitliFetchAction : "	+ e.getMessage(), e);
+			logger.error("DAOException in TitliFetchAction : "	+ e.getMessage(), e);
 		}
 		catch(ClassNotFoundException e)
 		{
-			Logger.out.error("ClassNotFoundException in TitliFetchAction : "	+ e.getMessage(), e);
+			logger.error("ClassNotFoundException in TitliFetchAction : "	+ e.getMessage(), e);
 		}
 		
 		return simpleConditionsNodeCollection;
@@ -291,11 +292,11 @@ public class TitliFetchAction extends Action
 		}
 		catch(DAOException e)
 		{
-			Logger.out.error("DAOException in TitliFetchAction : "	+ e.getMessage(), e);
+			logger.error("DAOException in TitliFetchAction : "	+ e.getMessage(), e);
 		}
 		catch(SQLException e)
 		{
-			Logger.out.error("SQLException in TitliFetchAction : "	+ e.getMessage(), e);
+			logger.error("SQLException in TitliFetchAction : "	+ e.getMessage(), e);
 		}
 	
 	}

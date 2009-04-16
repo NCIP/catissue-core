@@ -26,6 +26,7 @@ import edu.wustl.common.util.logger.Logger;
 public class TitliInitialiseSearchAction extends Action
 {
 
+	private transient Logger logger = Logger.getCommonLogger(TitliInitialiseSearchAction.class);
 	/**
 	 * @param mapping
 	 *            the mapping
@@ -47,7 +48,7 @@ public class TitliInitialiseSearchAction extends Action
 		}
 		catch (TitliException e)
 		{
-			Logger.out.error("TitliException in InitialiseTitliSearchAction : "+ e.getMessage(), e);
+			logger.error("TitliException in InitialiseTitliSearchAction : "+ e.getMessage(), e);
 		}
 
 		TitliTableMapper.getInstance();

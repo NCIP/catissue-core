@@ -53,6 +53,7 @@ import edu.wustl.security.privilege.PrivilegeManager;
  */
 public class UserAction extends SecureAction {
 
+	private transient Logger logger = Logger.getCommonLogger(UserAction.class);
 	/**
 	 * Overrides the execute method of Action class. Sets the various fields in
 	 * User Add/Edit webpage.
@@ -273,7 +274,7 @@ public class UserAction extends SecureAction {
 					Constants.APPROVE_USER_STATUS_VALUES);
 		}
 
-		Logger.out.debug("pageOf :---------- " + pageOf);
+		logger.debug("pageOf :---------- " + pageOf);
 		
 		// To show Role as Scientist
 		DAO dao = DAOConfigFactory.getInstance().getDAOFactory(Constants.APPLICATION_NAME).
@@ -340,7 +341,7 @@ public class UserAction extends SecureAction {
 		request.setAttribute("operation", operation);
 		request.setAttribute("openInCPFrame", openInCPFrame);
 		// ------------- add new
-	      Logger.out.debug("USerAction redirect :---------- "+ reqPath  );
+		logger.debug("USerAction redirect :---------- "+ reqPath  );
         if(openInCPFrame != null && Constants.TRUE.equalsIgnoreCase(openInCPFrame))
         	target=Constants.OPEN_PAGE_IN_CPFRAME;
         return mapping.findForward(target);
@@ -371,6 +372,7 @@ public class UserAction extends SecureAction {
     	}
     	catch (ApplicationException e) 
     	{
+    		logger.debug(e.getLogMessage(), e);
 			e.printStackTrace();
 		}
 	}

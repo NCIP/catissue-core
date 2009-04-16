@@ -34,6 +34,7 @@ import edu.wustl.common.util.logger.Logger;
 public class TitliSearchAction extends Action
 {
 
+	private transient Logger logger = Logger.getCommonLogger(TitliSearchAction.class);
 	/**
 	 * @param mapping the mapping
 	 * @param form the action form
@@ -46,7 +47,7 @@ public class TitliSearchAction extends Action
 	{   
 
 		TitliSearchForm titliSearchForm = (TitliSearchForm) form;
-		Logger.out.info("Search string entered is...... :"+ titliSearchForm.getSearchString());
+		logger.info("Search string entered is...... :"+ titliSearchForm.getSearchString());
 
 		try 
 		{    
@@ -90,7 +91,7 @@ public class TitliSearchAction extends Action
 				}
 				catch (Exception e)
 				{
-					Logger.out.error("Exception in TitliFetchAction : "	+ e.getMessage(), e);
+					logger.error("Exception in TitliFetchAction : "	+ e.getMessage(), e);
 				}
 				
 				String path =TitliSearchConstants.TITLI_FETCH_ACTION;
@@ -101,9 +102,10 @@ public class TitliSearchAction extends Action
 		}
 		catch (TitliException e)
 		{
-			Logger.out.error("TitliException in TitliSearchAction : "+ e.getMessage(), e);
+			logger.error("TitliException in TitliSearchAction : "+ e.getMessage(), e);
 		}
-		System.out.println("from titli search action..............!!");
+		logger.info("from titli search action..............!!");
+		//System.out.println("from titli search action..............!!");
 		return mapping.findForward(Constants.SUCCESS);
 	}
 	

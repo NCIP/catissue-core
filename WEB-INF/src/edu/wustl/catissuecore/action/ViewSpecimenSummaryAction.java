@@ -43,8 +43,11 @@ import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.global.Status;
+import edu.wustl.common.util.logger.Logger;
 
 public class ViewSpecimenSummaryAction extends Action {
+	
+	private transient Logger logger = Logger.getCommonLogger(ViewSpecimenSummaryAction.class);
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
@@ -194,6 +197,7 @@ public class ViewSpecimenSummaryAction extends Action {
 
 			return mapping.findForward(target);
 		} catch (Exception exception) {
+			logger.debug(exception.getMessage(), exception);
 //			exception.printStackTrace();
 			ActionErrors actionErrors = new ActionErrors();
 			actionErrors.add(actionErrors.GLOBAL_MESSAGE, new ActionError(

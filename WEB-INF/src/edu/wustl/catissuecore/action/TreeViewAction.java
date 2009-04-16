@@ -27,7 +27,7 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class TreeViewAction extends Action
 {
-    
+	private transient Logger logger = Logger.getCommonLogger(TreeViewAction.class);
     /**
      * Overrides the execute method in Action class.
      */
@@ -36,7 +36,7 @@ public class TreeViewAction extends Action
     {
         //Sets the pageOf attribute (for Add,Edit or Query Interface)
         String pageOf  = request.getParameter(Constants.PAGE_OF);
-        Logger.out.debug("pageOf in treeview........"+pageOf);
+        logger.debug("pageOf in treeview........"+pageOf);
         request.setAttribute(Constants.PAGE_OF,pageOf);
         
         if (pageOf.equals(Constants.PAGE_OF_STORAGE_LOCATION))

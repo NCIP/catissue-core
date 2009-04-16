@@ -31,6 +31,7 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class TreeNodeDataAction extends BaseAction
 {
+	private transient Logger logger = Logger.getCommonLogger(TreeNodeDataAction.class);
 	Vector finalDataListVector=null;
     public ActionForward executeAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
@@ -39,7 +40,7 @@ public class TreeNodeDataAction extends BaseAction
     
     	Map columnIdsMap = new HashMap();
         String pageOf  = request.getParameter(Constants.PAGE_OF);
-        Logger.out.debug("pageOf in treeview........"+pageOf);
+        logger.debug("pageOf in treeview........"+pageOf);
         request.setAttribute(Constants.PAGE_OF,pageOf);
         String operation=request.getParameter(Constants.OPERATION);
 		request.setAttribute(Constants.OPERATION, operation);
@@ -103,7 +104,7 @@ public class TreeNodeDataAction extends BaseAction
         }
         catch (Exception exp)
         {
-        	Logger.out.error(exp.getMessage(), exp);
+        	logger.error(exp.getMessage(), exp);
         }
         return mapping.findForward(target);
     }

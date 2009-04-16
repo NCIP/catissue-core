@@ -39,7 +39,7 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class TreeDataAction extends BaseAction
 {
-    
+	private transient Logger logger = Logger.getCommonLogger(TreeDataAction.class);
     /**
      * Overrides the execute method of the Action class.
      */
@@ -88,7 +88,7 @@ public class TreeDataAction extends BaseAction
         }
         catch (Exception exp)
         {
-            Logger.out.error(exp.getMessage(), exp);
+        	logger.error(exp.getMessage(), exp);
         }
         finally
         {

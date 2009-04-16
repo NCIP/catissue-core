@@ -51,6 +51,7 @@ import edu.wustl.security.privilege.PrivilegeManager;
 public class ViewSurgicalPathologyReportAction extends BaseAction
 {
 
+	private transient Logger logger = Logger.getCommonLogger(ViewSurgicalPathologyReportAction.class);
 	/**
 	 * @see edu.wustl.common.action.BaseAction#executeAction(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
 	 */
@@ -189,7 +190,7 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 			}
 			catch (Exception ex)
 			{
-				Logger.out.error(ex);
+				logger.error(ex);
 			}
 		}
 	}
@@ -327,6 +328,7 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 		}
 		catch (Exception ex)
 		{
+			logger.debug(ex.getMessage(), ex);
 			return null;
 		}
 	}

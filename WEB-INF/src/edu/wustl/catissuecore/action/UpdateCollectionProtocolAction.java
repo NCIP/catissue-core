@@ -23,12 +23,14 @@ import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
+import edu.wustl.common.util.logger.Logger;
 import edu.wustl.security.exception.UserNotAuthorizedException;
 ;
 
 public class UpdateCollectionProtocolAction extends BaseAction {
 
 
+	private transient Logger logger = Logger.getCommonLogger(UpdateCollectionProtocolAction.class);
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
@@ -67,6 +69,7 @@ public class UpdateCollectionProtocolAction extends BaseAction {
 		}
 		catch (Exception exception)
 		{
+			logger.debug(exception.getMessage(), exception);
 			ActionErrors actionErrors = new ActionErrors();
 			
 			if(exception instanceof UserNotAuthorizedException)

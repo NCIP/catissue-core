@@ -41,6 +41,7 @@ import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.global.Status;
+import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.HibernateDAO;
 import edu.wustl.dao.daofactory.DAOConfigFactory;
 import edu.wustl.dao.exception.DAOException;
@@ -48,6 +49,7 @@ import edu.wustl.security.exception.UserNotAuthorizedException;
 
 public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 {
+	private transient Logger logger = Logger.getCommonLogger(UpdateBulkSpecimensAction.class);
 	private SpecimenCollectionGroup specimenCollectionGroup = null;
 	private ViewSpecimenSummaryForm specimenSummaryForm = null;
 	public ActionForward executeAction(ActionMapping mapping,
@@ -134,6 +136,7 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 		}
 		catch(Exception exception)
 		{
+			logger.debug(exception.getMessage(), exception);
 			//11July08 : Mandar : For GenericSpecimen
 			SpecimenDetailsTagUtil.setAnticipatorySpecimenDetails(request, specimenSummaryForm, true);
 		   

@@ -52,6 +52,7 @@ import edu.wustl.common.util.logger.Logger;
 public class UpdateSpecimenStatusAction extends BaseAction
 {
 
+	private transient Logger logger = Logger.getCommonLogger(UpdateSpecimenStatusAction.class);
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
 			throws Exception
 	{
@@ -82,7 +83,7 @@ public class UpdateSpecimenStatusAction extends BaseAction
 				//To get all specimen related with give SCG ,query with SCG id and get SpecimenCollection 
 				if (obj == null)
 				{
-					Logger.out.fatal("SCG id is null failed to execute print of scg -UpdateSpecimenStatusAction");
+					logger.fatal("SCG id is null failed to execute print of scg -UpdateSpecimenStatusAction");
 				}
 				else
 				{
@@ -127,6 +128,7 @@ public class UpdateSpecimenStatusAction extends BaseAction
 		}
 		catch (Exception exception)
 		{
+			logger.debug(exception.getMessage(), exception);
 			//11July08 : Mandar : For GenericSpecimen
 			SpecimenDetailsTagUtil.setAnticipatorySpecimenDetails(request, specimenSummaryForm, false);
 			// Suman-For bug #8228
@@ -189,6 +191,7 @@ public class UpdateSpecimenStatusAction extends BaseAction
 			}
 			catch (Exception e) 
 			{
+				logger.debug(e.getMessage(), e);
 				e.printStackTrace();
 		    }
 		}
@@ -340,6 +343,7 @@ public class UpdateSpecimenStatusAction extends BaseAction
 		}
 		catch (AssignDataException e1)
 		{
+			logger.debug(e1.getMessage(), e1);
 			e1.printStackTrace();
 			return null;
 		}
@@ -353,6 +357,7 @@ public class UpdateSpecimenStatusAction extends BaseAction
 			}
 			catch (Exception exception)
 			{
+				logger.debug(exception.getMessage(), exception);
 				concentration = new Double(0);
 			}
 			((MolecularSpecimen) specimen).setConcentrationInMicrogramPerMicroliter(concentration);
@@ -442,6 +447,7 @@ public class UpdateSpecimenStatusAction extends BaseAction
 			}
 			catch (NumberFormatException exception)
 			{
+				logger.debug(exception.getMessage(), exception);
 				specPos.setPositionDimensionOne(null);
 			}
 		}
@@ -453,6 +459,7 @@ public class UpdateSpecimenStatusAction extends BaseAction
 			}
 			catch (NumberFormatException exception)
 			{
+				logger.debug(exception.getMessage(), exception);
 				specPos.setPositionDimensionTwo(null);
 			}
 		}

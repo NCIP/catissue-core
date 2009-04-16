@@ -41,6 +41,7 @@ import edu.wustl.common.util.logger.Logger;
 
 public class UpdateStatusAction extends BaseAction
 {
+	private transient Logger logger = Logger.getCommonLogger(UpdateStatusAction.class);
 	 /**
      * Overrides the execute method in Action class.
      * @param mapping ActionMapping object
@@ -110,7 +111,7 @@ public class UpdateStatusAction extends BaseAction
 		}
 		catch(IOException ie)
 		{
-			Logger.out.error("Error occurred while sending response string for update status - " + ie.getMessage());
+			logger.error("Error occurred while sending response string for update status - " + ie.getMessage());
 		}
 	}
 	
@@ -130,7 +131,7 @@ public class UpdateStatusAction extends BaseAction
 		}
 		catch(IOException ie)
 		{
-			Logger.out.error("Error occurred while sending response string for update status - " + ie.getMessage());
+			logger.error("Error occurred while sending response string for update status - " + ie.getMessage());
 		}
 	}
 	

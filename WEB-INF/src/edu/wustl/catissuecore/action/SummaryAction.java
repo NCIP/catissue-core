@@ -39,7 +39,7 @@ public class SummaryAction extends Action
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(SummaryAction.class);
+	private static Logger logger = Logger.getCommonLogger(SummaryAction.class);
 
     
     /* (non-Javadoc)

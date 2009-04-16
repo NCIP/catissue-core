@@ -23,23 +23,21 @@ import org.apache.struts.action.ActionErrors;
 
 import edu.wustl.catissuecore.actionForm.EventParametersForm;
 import edu.wustl.catissuecore.actionForm.TransferEventParametersForm;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.AppUtility;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.exception.ApplicationException;
-import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
-import edu.wustl.dao.exception.DAOException;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.common.util.tag.ScriptGenerator;
+import edu.wustl.dao.exception.DAOException;
 
 /**
  * @author mandar_deshmukh
@@ -48,6 +46,7 @@ import edu.wustl.common.util.tag.ScriptGenerator;
 public class TransferEventParametersAction extends SpecimenEventParametersAction
 {
 
+	private transient Logger logger = Logger.getCommonLogger(TransferEventParametersAction.class);
 	protected void setRequestParameters(HttpServletRequest request, EventParametersForm eventParametersForm) throws Exception
 	{
 		TransferEventParametersForm transferEventParametersForm = (TransferEventParametersForm)eventParametersForm ;
@@ -100,7 +99,7 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 			if (identifier == null)
 				identifier = (String) request.getParameter(Constants.SPECIMEN_ID);
 
-			Logger.out.debug("\t\t*******************************SpecimenID : " + identifier);
+			logger.debug("\t\t*******************************SpecimenID : " + identifier);
 			Object object = bizLogic.retrieve(Specimen.class.getName(), new Long(identifier));
 
 			//	 ---- chetan 15-06-06 ----
@@ -153,10 +152,10 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 				
 				String className = specimen.getClassName();
 				
-				Logger.out.info("COllection Protocol Id :"+ cpId);
+				logger.info("COllection Protocol Id :"+ cpId);
 				request.setAttribute(Constants.COLLECTION_PROTOCOL_ID,cpId+"");
 				request.setAttribute(Constants.SPECIMEN_CLASS_NAME,className);
-				Logger.out.info("Spcimen Class:" + className);
+				logger.info("Spcimen Class:" + className);
 				
 				SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
 				
@@ -205,9 +204,9 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 				startingPoints[2] = transferEventParametersForm.getPositionDimensionTwo();
 			}
 			initialValues = new ArrayList();
-			Logger.out.info("Starting points[0]" + startingPoints[0]);
-			Logger.out.info("Starting points[1]" + startingPoints[1]);
-			Logger.out.info("Starting points[2]" + startingPoints[2]);
+			logger.info("Starting points[0]" + startingPoints[0]);
+			logger.info("Starting points[1]" + startingPoints[1]);
+			logger.info("Starting points[2]" + startingPoints[2]);
 			initialValues.add(startingPoints);
 
 		}
