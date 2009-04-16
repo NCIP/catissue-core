@@ -19,10 +19,11 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.Utility;
-import edu.wustl.security.exception.UserNotAuthorizedException;
+import edu.wustl.common.util.logger.Logger;
 
 public class BulkOperationsBizlogic extends SpecimenEventParametersBizLogic
 {
+	private transient Logger logger = Logger.getCommonLogger(BulkOperationsBizlogic.class);
 	public void insertEvents(String operation, SessionDataBean sessionDataBean, List specimenIds, Long userId, String date, String timeInHours,
 			String timeInseconds, String comments, Map<String, String> eventSpecificData) throws BizLogicException
 	{
@@ -35,6 +36,7 @@ public class BulkOperationsBizlogic extends SpecimenEventParametersBizLogic
 		}
 		catch (ParseException exp)
 		{
+			logger.debug(exp.getMessage(), exp);
 			throw getBizLogicException(exp, "dao.error", "");
 		}
 
