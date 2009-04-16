@@ -13,6 +13,7 @@ import edu.wustl.common.util.logger.Logger;
 
 public class BiohazardBean implements Externalizable
 {
+	private transient Logger logger = Logger.getCommonLogger(BiohazardBean.class);
     private static final long serialVersionUID = 1234567890L;
 
     /**
@@ -112,7 +113,8 @@ public class BiohazardBean implements Externalizable
         }
         catch (Exception excp)
         {
-            Logger.out.error(excp.getMessage());
+        	logger.debug(excp.getMessage(), excp);
+        	logger.error(excp.getMessage());
         }
     }
 

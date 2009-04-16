@@ -78,13 +78,14 @@ import edu.wustl.query.flex.dag.SingleNodeCustomFormulaNode;
 public class FlexInterface
 {
 
+	private transient Logger logger = Logger.getCommonLogger(FlexInterface.class);
 	public FlexInterface() throws Exception
 	{
 		//		Variables.applicationHome = System.getProperty("user.dir");
-		//		Logger.out = org.apache.log4j.Logger.getLogger("");
+		//		logger = org.apache.log4j.Logger.getLogger("");
 		//		PropertyConfigurator.configure(Variables.applicationHome+"\\WEB-INF\\src\\"+"ApplicationResources.properties");
 		//		
-		//		Logger.out.debug("here");
+		//		logger.debug("here");
 		//		CDEManager.init();
 	}
 
@@ -144,7 +145,7 @@ public class FlexInterface
 										.getName(), selectColName, whereColName, whereColCond,
 										whereColVal, Constants.AND_JOIN_CONDITION);
 
-								Logger.out.info("List:" + list);
+								logger.info("List:" + list);
 								if (list != null && !list.isEmpty())
 								{
 									User user = (User) list.get(0);
@@ -167,6 +168,7 @@ public class FlexInterface
 		}
 		catch (Exception e)
 		{
+			logger.debug(e.getMessage(), e);
 			System.out.println("Error while init flex for multiple sp :" + e.getMessage());
 		}
 
@@ -368,7 +370,7 @@ public class FlexInterface
 		}
 		catch (BizLogicException e)
 		{
-			Logger.out.debug("Error mesg :" + e.getMessage());
+			logger.debug("Error mesg :" + e.getMessage());
 		}
 
 		return biohazardNameList;
@@ -379,7 +381,7 @@ public class FlexInterface
 
 	public String writeSpecimen(List<SpecimenBean> spBeanList)
 	{
-		Logger.out.debug("spBeanList size " + spBeanList.size());
+		logger.debug("spBeanList size " + spBeanList.size());
 		//Map<String, String> msgMap = new HashMap<String, String>();
 		//LinkedHashMap<Specimen,List> specimenMap = new LinkedHashMap<Specimen,List>();
 		LinkedHashMap<String, GenericSpecimen> viewSpecimenMap = new LinkedHashMap<String, GenericSpecimen>();
@@ -411,7 +413,7 @@ public class FlexInterface
 		catch (Exception ex)
 		{
 			message = ex.getMessage();
-
+			logger.debug(message, ex);
 		}
 
 		return message;
@@ -438,7 +440,7 @@ public class FlexInterface
 		catch (Exception ex)
 		{
 			message = ex.getMessage();
-
+			logger.debug(message, ex);
 		}
 
 		return message;
@@ -547,6 +549,7 @@ public class FlexInterface
 						}
 						catch (ApplicationException e)
 						{
+							logger.debug(e.getMessage(), e);
 							System.out.println("Error while derived:" + e.getMessage());
 						}
 					}
@@ -564,6 +567,7 @@ public class FlexInterface
 		}
 		catch (ApplicationException e)
 		{
+			logger.debug(e.getMessage(), e);
 			System.out.println("Error while derived:" + e.getMessage());
 		}
 
@@ -629,7 +633,7 @@ public class FlexInterface
 
 	public SpecimenBean readSpecimen()
 	{
-		Logger.out.info("SERVER readSpecimen");
+		logger.info("SERVER readSpecimen");
 		SpecimenBean sb = new SpecimenBean();
 		sb.specimenLabel = "tp";
 		sb.tissueSite = "VULVA";
@@ -1248,7 +1252,7 @@ public class FlexInterface
 		}
 		catch (BizLogicException e)
 		{
-			Logger.out.debug("Error whioe getting biohazard Id:" + e.getMessage());
+			logger.debug("Error whioe getting biohazard Id:" + e.getMessage());
 			System.out.println("Error whioe getting biohazard Id:" + e.getMessage());
 
 		}
@@ -1279,7 +1283,7 @@ public class FlexInterface
 		}
 		catch (BizLogicException e)
 		{
-			Logger.out.debug("Error whioe getting scg :" + e.getMessage());
+			logger.debug("Error whioe getting scg :" + e.getMessage());
 			System.out.println("Error whioe getting scg:" + e.getMessage());
 
 		}
@@ -1311,7 +1315,7 @@ public class FlexInterface
 		}
 		catch (BizLogicException e)
 		{
-			Logger.out.debug("Error whioe getting scg :" + e.getMessage());
+			logger.debug("Error whioe getting scg :" + e.getMessage());
 			System.out.println("Error whioe getting scg:" + e.getMessage());
 
 		}
@@ -1343,7 +1347,7 @@ public class FlexInterface
 
 		catch (BizLogicException e)
 		{
-			Logger.out.debug("Error whioe getting attributes for sp :" + e.getMessage());
+			logger.debug("Error whioe getting attributes for sp :" + e.getMessage());
 			System.out.println("Error whioe getting attributes for sp:" + e.getMessage());
 		}
 
@@ -1382,7 +1386,7 @@ public class FlexInterface
 		}
 		catch (BizLogicException e)
 		{
-			Logger.out.debug("Error whioe getting specimen :" + e.getMessage());
+			logger.debug("Error whioe getting specimen :" + e.getMessage());
 			System.out.println("Error whioe getting specimen :" + e.getMessage());
 		}
 
@@ -1776,7 +1780,7 @@ public class FlexInterface
 		}
 		catch (ApplicationException e)
 		{
-			// TODO Auto-generated catch block
+			logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 		}
 		return cpList;
@@ -1851,6 +1855,7 @@ public class FlexInterface
 		}
 		catch (Exception e)
 		{
+			logger.debug("Error while getting tree date :"+ e.getMessage(), e);
 			System.out.println("Error while getting tree date :");
 			e.printStackTrace();
 		}
