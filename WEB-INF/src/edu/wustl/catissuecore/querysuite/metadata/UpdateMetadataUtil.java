@@ -22,9 +22,11 @@ import edu.common.dynamicextensions.domain.databaseproperties.ColumnProperties;
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.common.dynamicextensions.domaininterface.AttributeTypeInformationInterface;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.util.logger.Logger;
 
 public class UpdateMetadataUtil
 {
+	private static Logger logger = Logger.getCommonLogger(UpdateMetadataUtil.class);
 	public static BufferedWriter metadataSQLFile;
 	public static String fileName="./metadata.sql";
 	public static BufferedWriter failureWriter;
@@ -48,6 +50,7 @@ public class UpdateMetadataUtil
 		}
 		catch (SQLException e)
 		{
+			logger.debug(e.getMessage(), e);
 			if(failureWriter == null)
 			{
 				failureWriter = new BufferedWriter(new FileWriter(new File(errorFileName)));
@@ -83,6 +86,7 @@ public class UpdateMetadataUtil
 		}
 		catch (SQLException e)
 		{
+			logger.debug(e.getMessage(), e);
 			if(failureWriter == null)
 			{
 				failureWriter = new BufferedWriter(new FileWriter(new File(errorFileName)));
@@ -124,6 +128,7 @@ public class UpdateMetadataUtil
 				}
 				catch (SQLException e)
 				{
+					logger.debug(e.getMessage(), e);
 					if(failureWriter == null)
 					{
 						failureWriter = new BufferedWriter(new FileWriter(new File(errorFileName)));
