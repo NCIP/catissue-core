@@ -23,6 +23,7 @@ import gate.Gate;
  */
 public class ConceptCodeManager
 {	
+	private transient Logger logger = Logger.getCommonLogger(ConceptCodeManager.class);
 	/**
 	 * Field coderVersion.
 	 */
@@ -78,7 +79,7 @@ public class ConceptCodeManager
 		}
 		catch(Exception ex)
 		{
-			Logger.out.error("Initialization of concept coding process failed or error in main thread",ex);
+			logger.error("Initialization of concept coding process failed or error in main thread",ex);
 		}
 	}
 		
@@ -118,11 +119,11 @@ public class ConceptCodeManager
 	public void initialize() 
 	{
 		establishCaTIESExporterPR();
-		Logger.out.debug("Established Exporter PR.");
+		logger.debug("Established Exporter PR.");
 		establishTiesPipeForDirectAccess();
-		Logger.out.debug("Established Ties Pipe.");
+		logger.debug("Established Ties Pipe.");
 		establishGateInterface();
-		Logger.out.debug("Established Gate Interface.");
+		logger.debug("Established Gate Interface.");
 	}
 	/**
 	 * Method establishCaTIESExporterPR.
@@ -151,7 +152,7 @@ public class ConceptCodeManager
 		} 
 		catch (Exception x) 
 		{
-			Logger.out.fatal(x.getMessage());
+			logger.fatal(x.getMessage());
 		}
 	}
 
@@ -167,7 +168,7 @@ public class ConceptCodeManager
 		} 
 		catch (Exception x) 
 		{
-			Logger.out.fatal(x.getMessage());
+			logger.fatal(x.getMessage());
 		}
 	}
 
@@ -181,14 +182,14 @@ public class ConceptCodeManager
 		{
 			try
 			{
-				Logger.out.info("Concept Coding process started at "+new Date().toString());		
+				logger.info("Concept Coding process started at "+new Date().toString());		
 				List deidReportIDList=getReportIDList();
 				processReports(deidReportIDList);
 			}
 			catch(Exception ex)
 			{
-				Logger.out.error("Unexpected Exception in Concept Code Pipeline ",ex);
-				Logger.out.info("Concept Coding process finished at "+new Date().toString()+ ". Thread is going to sleep.");
+				logger.error("Unexpected Exception in Concept Code Pipeline ",ex);
+				logger.info("Concept Coding process finished at "+new Date().toString()+ ". Thread is going to sleep.");
 				Thread.sleep(Integer.parseInt(CaTIESProperties.getValue(CaTIESConstants.CONCEPT_CODER_SLEEPTIME)));
 			}
 		}
@@ -203,7 +204,7 @@ public class ConceptCodeManager
 	{
 		if(deidReportIDList!=null && deidReportIDList.size()>0)
 		{
-			Logger.out.info(deidReportIDList.size()+" reports found for Concept Coding");
+			logger.info(deidReportIDList.size()+" reports found for Concept Coding");
 			try
 			{	
 				CSVLogger.info(CaTIESConstants.LOGGER_CONCEPT_CODER,CaTIESConstants.CSVLOGGER_DATETIME+CaTIESConstants.CSVLOGGER_SEPARATOR+CaTIESConstants.CSVLOGGER_DEIDENTIFIED_REPORT+CaTIESConstants.CSVLOGGER_SEPARATOR+CaTIESConstants.CSVLOGGER_STATUS+CaTIESConstants.CSVLOGGER_SEPARATOR+CaTIESConstants.CSVLOGGER_MESSAGE+CaTIESConstants.CSVLOGGER_SEPARATOR+CaTIESConstants.CSVLOGGER_PROCESSING_TIME);
@@ -213,20 +214,20 @@ public class ConceptCodeManager
 				{
 					deidReport=(DeidentifiedSurgicalPathologyReport)CaCoreAPIService.getObject(DeidentifiedSurgicalPathologyReport.class, Constants.SYSTEM_IDENTIFIER, (Long)deidReportIDList.get(i));
 					cc=new ConceptCoder(deidReport,exporterPR, tiesPipe);
-					Logger.out.info("Concept coding of report serial no "+i+" started....");
+					logger.info("Concept coding of report serial no "+i+" started....");
 					cc.process();
 					System.gc();
-					Logger.out.info("Concept coding of report serial no "+i+" finished.");
+					logger.info("Concept coding of report serial no "+i+" finished.");
 				}			
 			}
 			catch(Exception ex)
 			{
-				Logger.out.error("Concept Coding pipeline failed:",ex);			
+				logger.error("Concept Coding pipeline failed:",ex);			
 			}
 		}
 		else
 		{
-			Logger.out.info("Concept Coding process finished at "+new Date().toString()+ ". Thread is going to sleep.");
+			logger.info("Concept Coding process finished at "+new Date().toString()+ ". Thread is going to sleep.");
 			Thread.sleep(Integer.parseInt(CaTIESProperties.getValue(CaTIESConstants.CONCEPT_CODER_SLEEPTIME)));
 		}
 	}

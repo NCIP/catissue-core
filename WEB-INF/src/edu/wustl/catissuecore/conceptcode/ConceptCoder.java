@@ -36,6 +36,7 @@ import edu.wustl.common.util.logger.Logger;
 
 public class ConceptCoder 
 {
+	private transient Logger logger = Logger.getCommonLogger(ConceptCoder.class);
 	public ConceptCoder(DeidentifiedSurgicalPathologyReport deidReport, CaTIES_ExporterPR exporterPR, TiesPipe tiesPipe)throws SQLException
 	{
 		this.deidPathologyReport=deidReport;
@@ -54,17 +55,17 @@ public class ConceptCoder
 		Long startTime=new Date().getTime();
 		try
 		{
-			Logger.out.info("Inside Concept coder");
+			logger.info("Inside Concept coder");
 			processPathologyReport();
-			Logger.out.info("Report is Concept coded by caties");
-			Logger.out.info("Updating Report");
+			logger.info("Report is Concept coded by caties");
+			logger.info("Updating Report");
 			updateReport();
 			this.deidPathologyReport=(DeidentifiedSurgicalPathologyReport)CaCoreAPIService.updateObject(this.deidPathologyReport);
 		}
 		catch (Exception ex) 
 		{
 			Long endTime=new Date().getTime();
-			Logger.out.error("Concept coding process failed for report id:"+this.deidPathologyReport.getId()+" "+ex.getMessage());
+			logger.error("Concept coding process failed for report id:"+this.deidPathologyReport.getId()+" "+ex.getMessage());
 			this.deidPathologyReport.setReportStatus(CaTIESConstants.CC_PROCESS_FAILED);
 			this.deidPathologyReport=(DeidentifiedSurgicalPathologyReport)CaCoreAPIService.updateObject(this.deidPathologyReport);
 			CSVLogger.info(CaTIESConstants.LOGGER_CONCEPT_CODER, new Date().toString()+","+this.deidPathologyReport.getId()+","+CaTIESConstants.CC_PROCESS_FAILED+","+ex.getMessage()+","+(endTime-startTime));
@@ -72,11 +73,11 @@ public class ConceptCoder
 		if(!this.deidPathologyReport.getReportStatus().equalsIgnoreCase(CaTIESConstants.CC_PROCESS_FAILED))
 		{
 			Long endTime=new Date().getTime();
-			Logger.out.info("Report is updated");
+			logger.info("Report is updated");
 			CSVLogger.info(CaTIESConstants.LOGGER_CONCEPT_CODER, new Date().toString()+","+this.deidPathologyReport.getId()+","+CaTIESConstants.CONCEPT_CODED+","+"Report Concept Coded successfully,"+(endTime-startTime));
 		}
 		this.deidPathologyReport=null;
-		Logger.out.info("Report is updated");
+		logger.info("Report is updated");
 	}
 	
 	private void processPathologyReport() throws Exception
@@ -102,8 +103,8 @@ public class ConceptCoder
 		requestDocument.getRootElement().addContent(bodyElement);
 		String requestAsString = CaTIES_JDomUtils.convertDocumentToString(requestDocument, null);
 		String tiesResponse = this.tiesPipe.processMessage(requestAsString);
-		Logger.out.info("Got ties respose!");
-		Logger.out.debug("Got ties response of length " + tiesResponse.length());
+		logger.info("Got ties respose!");
+		logger.debug("Got ties response of length " + tiesResponse.length());
 		return tiesResponse;
 	}
 
@@ -112,7 +113,7 @@ public class ConceptCoder
 	 */
 	 private void updateReport() throws Exception
 	 {
-		Logger.out.info("*********************Inside update report***************");
+		logger.info("*********************Inside update report***************");
 		 try 
 		 {
 			 if((CaTIESProperties.getValue(CaTIESConstants.CATIES_SAVE_BI_CONTENT)).equalsIgnoreCase("true"))
@@ -133,7 +134,7 @@ public class ConceptCoder
 		}
 		 catch (Exception ex) 
 		 {
-			 Logger.out.error("Error occured while updating deidentified pathology report");
+			 logger.error("Error occured while updating deidentified pathology report");
 			 throw ex;
 		 }
 	 }
@@ -148,7 +149,7 @@ public class ConceptCoder
 		//
 		try 
 		{
-			Logger.out.info("Extracting GATE XML and chirps");
+			logger.info("Extracting GATE XML and chirps");
 			SAXBuilder builder = new SAXBuilder();
 			byte[] byteArray = this.tiesResponse.getBytes();
 			if(this.tiesResponse.equalsIgnoreCase(CaTIESConstants.ERROR_GATE))
@@ -174,19 +175,19 @@ public class ConceptCoder
 			Document chirpsXMLDocument = new Document((Element) chirpsXMLElement.clone());
 			this.gateXML = CaTIES_JDomUtils.convertDocumentToString(gateXMLDocument, null);
 			this.chirpsXML = CaTIES_JDomUtils.convertDocumentToString(chirpsXMLDocument, null);
-			Logger.out.debug("Got gateXML of length " + this.gateXML.length());
-			Logger.out.debug("Got chirpsXML of length " + this.chirpsXML.length());
+			logger.debug("Got gateXML of length " + this.gateXML.length());
+			logger.debug("Got chirpsXML of length " + this.chirpsXML.length());
 		}
 		catch(JDOMParseException ex)
 		{
-			Logger.out.error("Error in disassembleTiesResponse()");
-			Logger.out.error("Error in parsing TIES response. Not in XML format"+ex);
+			logger.error("Error in disassembleTiesResponse()");
+			logger.error("Error in parsing TIES response. Not in XML format"+ex);
 			throw new Exception("Error in parsing TIES response. Not in XML format");
 		}
 		catch (Exception ex) 
 		{
-			Logger.out.error("Error in disassembleTiesResponse()");
-			Logger.out.error("Failed to parse the pay load XML."+ex);
+			logger.error("Error in disassembleTiesResponse()");
+			logger.error("Failed to parse the pay load XML."+ex);
 			this.gateXML = "";
 			this.chirpsXML = "";
 			throw new Exception("Failed to parse the pay load XML");
@@ -204,7 +205,7 @@ public class ConceptCoder
 		this.exporterPR.setCHIRPsDocument(chirpsXML);
 		this.exporterPR.execute();
 		this.theCodes = this.exporterPR.getCodesAsString();
-		Logger.out.debug("Got codes of length " + this.theCodes.length());
+		logger.debug("Got codes of length " + this.theCodes.length());
 	}
 	
 	public Collection<ConceptReferent> xmlDeSerializeLocal(Element conceptSetElement) throws Exception
@@ -266,7 +267,7 @@ public class ConceptCoder
 		catch (Exception ex) 
 		{
 			ex.printStackTrace();
-			Logger.out.error("Exception in deserialize"+ex);
+			logger.error("Exception in deserialize"+ex);
 			throw ex;
 		}
 		return conceptReferentSet;
