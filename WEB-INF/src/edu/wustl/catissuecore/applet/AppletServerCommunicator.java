@@ -16,9 +16,11 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import edu.wustl.catissuecore.applet.model.AppletModelInterface;
+import edu.wustl.common.util.logger.Logger;
 
 public class AppletServerCommunicator implements Serializable {
 
+	private static Logger logger = Logger.getCommonLogger(AppletServerCommunicator.class);
 	/**
 	 * Serial version ID
 	 */
@@ -65,11 +67,13 @@ public class AppletServerCommunicator implements Serializable {
         }
         catch(IOException e)
         {
+        	logger.debug(e.getMessage(), e);
         //	System.out.println(" IO Exception " + e);
         	e.printStackTrace();
         }
         catch(ClassNotFoundException e)
         {
+        	logger.debug(e.getMessage(), e);
             e.printStackTrace();
         }
         finally
