@@ -25,6 +25,7 @@ import edu.wustl.common.util.logger.Logger;
 
 public class DeIDDeidentifier extends AbstractDeidentifier
 {
+	private transient Logger logger = Logger.getCommonLogger(DeIDDeidentifier.class);
 	protected static String configFileName;
 	protected static JniDeID deid;
 	private static String pathToConfigFiles;
@@ -41,14 +42,14 @@ public class DeIDDeidentifier extends AbstractDeidentifier
 		// set path of the directionary that is required by native call for deidentification 
 		deid.setDictionaryLocation(CaTIESProperties.getValue(CaTIESConstants.DEID_DCTIONARY_FOLDER));
 		
-		Logger.out.info("Loading deid library");
+		logger.info("Loading deid library");
 		// load deidLibrary required for native call
 		JniDeID.loadDeidLibrary();
 	}
 
 	public void shutdown() 
 	{
-		Logger.out.info("Unloading deid library");
+		logger.info("Unloading deid library");
 		// unload deid library
 		JniDeID.unloadDeidLibrary();
 	}
@@ -73,7 +74,7 @@ public class DeIDDeidentifier extends AbstractDeidentifier
         File cfgFile = new File(cfgFileName);
         // set configFileName  to the path of config file 
         configFileName = cfgFile.getAbsolutePath();
-        Logger.out.info("Config file name is "+configFileName);
+        logger.info("Config file name is "+configFileName);
     }
 
 	/**
@@ -83,7 +84,7 @@ public class DeIDDeidentifier extends AbstractDeidentifier
 	 */
 	public DeidentifiedSurgicalPathologyReport getDeidentifiedReport(IdentifiedSurgicalPathologyReport identifiedReport) throws Exception
 	{
-		Logger.out.info("De-identification process started for "+identifiedReport.getId().toString());
+		logger.info("De-identification process started for "+identifiedReport.getId().toString());
 		// instantiate document
 		org.jdom.Document currentRequestDocument = new org.jdom.Document(new Element("Dataset"));
 		Participant participant=identifiedReport.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getParticipant();
@@ -99,20 +100,20 @@ public class DeIDDeidentifier extends AbstractDeidentifier
         
         String deidReportText=null;
     
-        Logger.out.info("Calling native call for report "+identifiedReport.getId().toString());
+        logger.info("Calling native call for report "+identifiedReport.getId().toString());
         // function call which contains the actual native call for deidentification
         deidReportText=deIdentify(deidRequest);
-        Logger.out.info("Calling native call finished successfully for report "+identifiedReport.getId().toString());
-        Logger.out.info("Extracting report text for report "+identifiedReport.getId().toString());
+        logger.info("Calling native call finished successfully for report "+identifiedReport.getId().toString());
+        logger.info("Extracting report text for report "+identifiedReport.getId().toString());
         // extract the report text
         deidText=Utility.extractReport(deidReportText, CaTIESProperties.getValue(CaTIESConstants.DEID_DTD_FILENAME), CaTIESConstants.DEID_XPATH, CaTIESConstants.DEID_REPORT_TEXT_TAG_NAME);
-        Logger.out.info("Extracting report text finished for report "+identifiedReport.getId().toString());
+        logger.info("Extracting report text finished for report "+identifiedReport.getId().toString());
 
         deidText = deidText.substring(0, deidText.lastIndexOf("||-"));
-        Logger.out.info("Creating deidentified report for identified report id="+identifiedReport.getId().toString());
+        logger.info("Creating deidentified report for identified report id="+identifiedReport.getId().toString());
         // Create object of deidentified report
         DeidentifiedSurgicalPathologyReport deidentifiedReport = createDeidPathologyReport(identifiedReport, deidText);
-        Logger.out.info("De-identification process finished for "+identifiedReport.getId().toString());
+        logger.info("De-identification process finished for "+identifiedReport.getId().toString());
         
         return deidentifiedReport;
 	}
@@ -126,7 +127,7 @@ public class DeIDDeidentifier extends AbstractDeidentifier
 	 */
 	private DeidentifiedSurgicalPathologyReport createDeidPathologyReport(IdentifiedSurgicalPathologyReport ispr, String deidText) throws Exception
 	{
-		Logger.out.info("Creating deid report for identifiedReport id="+ispr.getId());
+		logger.info("Creating deid report for identifiedReport id="+ispr.getId());
 		// instnatiate deidentified report
 		DeidentifiedSurgicalPathologyReport deidReport=new DeidentifiedSurgicalPathologyReport();
 		
@@ -166,9 +167,9 @@ public class DeIDDeidentifier extends AbstractDeidentifier
 				// write contents to input xml file
 				fw.write(text);
 				fw.close();
-				Logger.out.info("Calling native call");
+				logger.info("Calling native call");
 				deid.createDeidentifier(predeidFile.getAbsolutePath(), postdeidFile.getAbsolutePath()+ "?XML", configFileName);
-				Logger.out.info("Native call success");
+				logger.info("Native call success");
 				BufferedReader br = new BufferedReader(new FileReader(postdeidFile));
 				
 				//read all contents from output file
@@ -178,7 +179,7 @@ public class DeIDDeidentifier extends AbstractDeidentifier
 					// add content to output string
 					output += line + "\n";
 				}
-				Logger.out.info("Deleting temp files");
+				logger.info("Deleting temp files");
 				br.close();
 				// delete temporary input and output files
 				predeidFile.delete();
@@ -189,12 +190,12 @@ public class DeIDDeidentifier extends AbstractDeidentifier
 		}
 		catch (IOException ex)
 		{
-			Logger.out.error("File system error occured while creating or deleting temporary files for deidentification",ex);
+			logger.error("File system error occured while creating or deleting temporary files for deidentification",ex);
 			throw ex;
 		}
 		catch (Exception ex)
 		{
-			Logger.out.error("Severe error occured in the native method call for deidentification",ex);
+			logger.error("Severe error occured in the native method call for deidentification",ex);
 			throw ex;
 		}
 		return output;

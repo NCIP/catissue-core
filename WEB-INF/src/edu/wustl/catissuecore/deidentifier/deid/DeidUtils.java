@@ -20,6 +20,7 @@ import edu.wustl.common.util.logger.Logger;
 public class DeidUtils
 {
 
+	private static Logger logger = Logger.getCommonLogger(DeidUtils.class);
 	/**
 	 * This mathod takes the identified report, its participant and converts 
 	 * all the information into an appropriate xml document
@@ -77,7 +78,7 @@ public class DeidUtils
 		}
 		catch (Exception ex) 
 		{
-			Logger.out.error("Error in buildReportElement method for DeID",ex);
+			logger.error("Error in buildReportElement method for DeID",ex);
 		}
 		return reportElement;
 	}
@@ -164,7 +165,7 @@ public class DeidUtils
 				// check for illegal character
 				if (sb.charAt(idx) == illegalChar) 
 				{
-					Logger.out.error("Found bad character.");
+					logger.error("Found bad character.");
 					sb.setCharAt(idx, ' ');
 				}
 			}
@@ -172,7 +173,7 @@ public class DeidUtils
 		}
 		catch (Exception ex) 
 		{
-			Logger.out.error("Error in removeIllegalXmlCharacters method",ex);
+			logger.error("Error in removeIllegalXmlCharacters method",ex);
 		}
 
 		return result;
