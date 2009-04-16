@@ -17,6 +17,8 @@ import javax.swing.JRadioButton;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
+import edu.wustl.common.util.logger.Logger;
+
 /**
  * This is base Handler class for all the Item events on the components in caTissuecore.
  * 
@@ -25,6 +27,7 @@ import javax.swing.JTextField;
  */
 public class BaseItemHandler implements ItemListener {
 
+	private transient Logger logger = Logger.getCommonLogger(BaseItemHandler.class);
 	protected JTable table;
 	
 	public BaseItemHandler(JTable table)
@@ -112,6 +115,7 @@ public class BaseItemHandler implements ItemListener {
 		}
 		catch(Exception excp)
 		{
+			logger.debug(excp.getMessage(), excp);
 			System.out.println("Error: "+ excp.getMessage() );
 		}
 		try
@@ -120,6 +124,7 @@ public class BaseItemHandler implements ItemListener {
 		}
 		catch(Exception excp)
 		{
+			logger.debug(excp.getMessage(), excp);
 			System.out.println("Error in table update: "+ excp.getMessage() );
 		}
 	
