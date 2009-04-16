@@ -16,6 +16,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * <p> Base Applet class for all applets.It will contain basic functionality
@@ -28,6 +29,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 
 public class BaseApplet extends JApplet {
 
+	private transient Logger logger = Logger.getCommonLogger(BaseApplet.class);
 	/**
 	 * Default Serial Version ID
 	 */
@@ -86,12 +88,16 @@ public class BaseApplet extends JApplet {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (ClassNotFoundException e) {
+        	logger.debug(e.getMessage(), e);
             e.printStackTrace();
         } catch (InstantiationException e) {
+        	logger.debug(e.getMessage(), e);
             e.printStackTrace();
         } catch (IllegalAccessException e) {
+        	logger.debug(e.getMessage(), e);
             e.printStackTrace();
         } catch (UnsupportedLookAndFeelException e) {
+        	logger.debug(e.getMessage(), e);
             e.printStackTrace();
         }
     }

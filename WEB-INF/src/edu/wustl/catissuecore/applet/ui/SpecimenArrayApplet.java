@@ -37,6 +37,7 @@ import edu.wustl.catissuecore.applet.listener.SpecimenArrayPasteActionHandler;
 import edu.wustl.catissuecore.applet.model.AppletModelInterface;
 import edu.wustl.catissuecore.applet.model.BaseAppletModel;
 import edu.wustl.catissuecore.applet.model.SpecimenArrayTableModel;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * <p>This class specifies the methods used to render specimen array applet.It is extending
@@ -47,6 +48,8 @@ import edu.wustl.catissuecore.applet.model.SpecimenArrayTableModel;
  */
 
 public class SpecimenArrayApplet extends BaseApplet {
+	
+	private transient Logger logger = Logger.getCommonLogger(SpecimenArrayApplet.class);
 	/**
 	 * Default Serial Version ID
 	 */
@@ -222,8 +225,10 @@ public class SpecimenArrayApplet extends BaseApplet {
 			tableDataMap = model.getData();
 			//System.out.println(" getTableModelData()   tableDataMap :: " + tableDataMap);
 		} catch (IOException e) {
+			logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
+			logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 		}
 		return tableDataMap;
@@ -244,8 +249,10 @@ public class SpecimenArrayApplet extends BaseApplet {
 			model = (AppletModelInterface) AppletServerCommunicator.doAppletServerCommunication(urlString,model);
 			//arrayContentDataMap = model.getData();
 		} catch (IOException e) {
+			logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
+			logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 		}
 	}
@@ -272,6 +279,7 @@ public class SpecimenArrayApplet extends BaseApplet {
 		}
 		catch(Exception exception)
 		{
+			logger.debug(exception.getMessage(), exception);
 			System.out.println(" Exception occurred in setLastCellData() method" + exception.getMessage());
 		}
 		System.out.println(" end setLastCellData() method");
@@ -283,6 +291,7 @@ public class SpecimenArrayApplet extends BaseApplet {
 	 */
 	public void changeEnterSpecimenBy(String enterSpecimenBy)
 	{
+		logger.info(" Enter Specimen By " + enterSpecimenBy);
 		System.out.println(" Enter Specimen By " + enterSpecimenBy);
 		this.enterSpecimenBy = enterSpecimenBy;
 		((SpecimenArrayTableModel) arrayTable.getModel()).changeEnterSpecimenBy(enterSpecimenBy);
