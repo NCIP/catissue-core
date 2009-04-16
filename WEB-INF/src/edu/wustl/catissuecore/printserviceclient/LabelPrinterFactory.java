@@ -3,6 +3,8 @@ package edu.wustl.catissuecore.printserviceclient;
 
 import java.util.HashMap;
 
+import edu.wustl.common.util.logger.Logger;
+
 /**
  * This is the factory class to retrieve singleton instance of LabelPrinter class. 
  * @author falguni_sachde
@@ -10,6 +12,7 @@ import java.util.HashMap;
  */
 public class LabelPrinterFactory {
 	
+	private static Logger logger = Logger.getCommonLogger(LabelPrinterFactory.class);
 	/**
 	 * Map of class
 	 */
@@ -36,6 +39,7 @@ public class LabelPrinterFactory {
 			
 		}
 		catch (Exception e) {
+			logger.debug(e.getMessage(), e);
 			throw e;
 			
 		}

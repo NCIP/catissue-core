@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 import edu.wustl.common.util.global.CommonServiceLocator;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * This class has functions to read PrintServiceImplementor Properties file.
@@ -14,6 +15,7 @@ import edu.wustl.common.util.global.CommonServiceLocator;
  */
 public class PropertyHandler {
 
+	private static Logger logger = Logger.getCommonLogger(PropertyHandler.class);
 	/**
 	 * 
 	 */
@@ -40,6 +42,7 @@ public class PropertyHandler {
 		}
 		catch(Exception e)
 		{
+			logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 		}
 		
