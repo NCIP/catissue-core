@@ -20,6 +20,7 @@ import netscape.javascript.JSObject;
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.applet.component.BaseTable;
 import edu.wustl.catissuecore.applet.model.BaseTabelModel;
+import edu.wustl.common.util.logger.Logger;
 
 
 
@@ -33,6 +34,7 @@ import edu.wustl.catissuecore.applet.model.BaseTabelModel;
 public final class CommonAppletUtil
 {
 
+	private static Logger logger = Logger.getCommonLogger(CommonAppletUtil.class);
 	/**
 	 * gets the base applet from a given component
 	 * @param component component
@@ -89,6 +91,7 @@ public final class CommonAppletUtil
         }
         catch(NumberFormatException exp)
         {
+        	logger.debug(exp.getMessage(), exp);
             return false;
         }
     }
