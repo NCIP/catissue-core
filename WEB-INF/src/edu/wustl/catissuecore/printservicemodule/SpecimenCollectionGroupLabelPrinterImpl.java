@@ -13,6 +13,7 @@ import edu.wustl.catissuecore.util.IdComparator;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.util.logger.Logger;
 import gov.nih.nci.security.authorization.domainobjects.User;
 
 /**
@@ -21,6 +22,7 @@ import gov.nih.nci.security.authorization.domainobjects.User;
  */
 public class SpecimenCollectionGroupLabelPrinterImpl implements LabelPrinter {
 
+	private transient Logger logger = Logger.getCommonLogger(SpecimenCollectionGroupLabelPrinterImpl.class);
 	public boolean printLabel(final AbstractDomainObject abstractDomainObject, final String ipAddress,
 			final User userObj, final String printerType, final String printerLocation)
 	{
@@ -34,6 +36,7 @@ public class SpecimenCollectionGroupLabelPrinterImpl implements LabelPrinter {
 		}
 		catch(Exception exp)
 		{
+			logger.debug(exp.getMessage(), exp);
 			return false;
 
 		}

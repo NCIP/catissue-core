@@ -12,6 +12,7 @@ import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.printserviceclient.LabelPrinter;
 import edu.wustl.catissuecore.util.IdComparator;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.util.logger.Logger;
 import gov.nih.nci.security.authorization.domainobjects.User;
 /**
  * This Class is used to define method for Specimen label printing
@@ -20,6 +21,7 @@ import gov.nih.nci.security.authorization.domainobjects.User;
 public class SpecimenLabelPrinterImpl implements LabelPrinter {
 
 
+	private transient Logger logger = Logger.getCommonLogger(SpecimenLabelPrinterImpl.class);
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.printserviceclient.LabelPrinter#printLabel(edu.wustl.common.domain.AbstractDomainObject, java.lang.String, gov.nih.nci.security.authorization.domainobjects.User)
 	 */
@@ -36,6 +38,7 @@ public class SpecimenLabelPrinterImpl implements LabelPrinter {
 		}
 		catch(Exception exp)
 		{
+			logger.debug(exp.getMessage(), exp);
 			return false;
 			
 		}
@@ -63,6 +66,7 @@ public class SpecimenLabelPrinterImpl implements LabelPrinter {
 		}
 		catch(Exception exp)
 		{
+			logger.debug(exp.getMessage(), exp);
 			exp.printStackTrace();
 			return false;	
 		}

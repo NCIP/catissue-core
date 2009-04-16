@@ -7,12 +7,14 @@ import java.util.List;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.printserviceclient.LabelPrinter;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.util.logger.Logger;
 import gov.nih.nci.security.authorization.domainobjects.User;
 
 
 public class StorageContainerLabelPrinterImpl implements LabelPrinter
 {
 
+	private transient Logger logger = Logger.getCommonLogger(StorageContainerLabelPrinterImpl.class);
 	public static String defaultEmptyString = " ";
  
 	/**
@@ -32,6 +34,7 @@ public class StorageContainerLabelPrinterImpl implements LabelPrinter
 		}
 		catch(Exception exp)
 		{
+			logger.debug(exp.getMessage(), exp);
 			return false;
 			
 		}
@@ -57,6 +60,7 @@ public class StorageContainerLabelPrinterImpl implements LabelPrinter
 		}
 		catch(Exception exp)
 		{
+			logger.debug(exp.getMessage(), exp);
 			exp.printStackTrace();
 			return false;	
 		}

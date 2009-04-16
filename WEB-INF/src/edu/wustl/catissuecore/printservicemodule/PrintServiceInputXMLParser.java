@@ -24,6 +24,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import edu.wustl.catissuecore.printserviceclient.PropertyHandler;
+import edu.wustl.common.util.logger.Logger;
 import edu.wustl.webservice.catissuecore.print.PrintService;
 import edu.wustl.webservice.catissuecore.print.PrintWebService;
 
@@ -34,6 +35,7 @@ import edu.wustl.webservice.catissuecore.print.PrintWebService;
  */
 public class PrintServiceInputXMLParser implements PrintServiceInputParserInterface 
 {
+	private transient Logger logger = Logger.getCommonLogger(PrintServiceInputXMLParser.class);
 	private Document document;
 
 	String value = null;
@@ -61,6 +63,7 @@ public class PrintServiceInputXMLParser implements PrintServiceInputParserInterf
 		}
 		catch(Exception e)
 		{
+			logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 			return false;				
 		}
@@ -81,6 +84,7 @@ public class PrintServiceInputXMLParser implements PrintServiceInputParserInterf
 			System.out.println(writer.toString());
 			return writer.toString();
 		} catch (TransformerException ex) {
+			logger.debug(ex.getMessage(), ex);
 			ex.printStackTrace();
 			return null;
 		}
@@ -99,6 +103,7 @@ public class PrintServiceInputXMLParser implements PrintServiceInputParserInterf
 			DocumentBuilder builder = factory.newDocumentBuilder();
 			document = builder.newDocument();
 		} catch (ParserConfigurationException parserException) {
+			logger.debug(parserException.getMessage(), parserException);
 			parserException.printStackTrace();
 		}
 		// create root element for Document
