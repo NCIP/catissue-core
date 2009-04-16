@@ -27,6 +27,7 @@ import edu.wustl.common.util.logger.Logger;
 public class BulkOperationSubmitAction extends BaseAction
 {
 
+	private transient Logger logger = Logger.getCommonLogger(BulkOperationSubmitAction.class);
 	@Override
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
 			throws Exception
@@ -111,12 +112,13 @@ public class BulkOperationSubmitAction extends BaseAction
 		}*/
 		catch (BizLogicException excp)
 		{
+			logger.debug(excp.getMessage(), excp);
 			ActionErrors errors = new ActionErrors();
 			ActionError error = new ActionError("errors.item", excp.getMessage());
 			errors.add(ActionErrors.GLOBAL_ERROR, error);
 			saveErrors(request, errors);
 			
-			Logger.out.error(excp.getMessage(), excp);
+			logger.error(excp.getMessage(), excp);
 		}
 
 		return mapping.findForward(target);
