@@ -16,6 +16,7 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class DeidentifierReportThread extends Thread
 {
+	private transient Logger logger = Logger.getCommonLogger(DeidentifierReportThread.class);
 	public static final Object obj=new Object();
 	private IdentifiedSurgicalPathologyReport identifiedReport;
 	private AbstractDeidentifier deidentifier;
@@ -39,13 +40,13 @@ public class DeidentifierReportThread extends Thread
 		Long startTime = new Date().getTime();
 		try
 		{
-			Logger.out.info("De-identification process started for "+identifiedReport.getId().toString());
+			logger.info("De-identification process started for "+identifiedReport.getId().toString());
 			DeidentifiedSurgicalPathologyReport deidentifiedReport=deidentifier.deidentify(identifiedReport);
 			saveReports(deidentifiedReport);
 		}
     	catch(Throwable ex)
     	{
-    		Logger.out.error("Deidentification process is failed:",ex);
+    		logger.error("Deidentification process is failed:",ex);
 			try
 			{
 				// if any exception occures then update the status of the identified report to failed
@@ -56,9 +57,9 @@ public class DeidentifierReportThread extends Thread
 			}
 			catch(Exception e)
 			{
-				Logger.out.error("DeidReportThread: Updating Identified report status failed",e);
+				logger.error("DeidReportThread: Updating Identified report status failed",e);
 			}
-    		Logger.out.error("Upexpected error in DeidReportThread thread", ex);
+    		logger.error("Upexpected error in DeidReportThread thread", ex);
     		return;
     	}
 		Long endTime = new Date().getTime();
@@ -79,10 +80,10 @@ public class DeidentifierReportThread extends Thread
 			deidentifiedReport.setIsQuarantined(Status.ACTIVITY_STATUS_ACTIVE.toString());
 			deidentifiedReport.setSpecimenCollectionGroup(identifiedReport.getSpecimenCollectionGroup());
 	        
-    		Logger.out.info("Saving deidentified report for identified report id="+identifiedReport.getId().toString());
+    		logger.info("Saving deidentified report for identified report id="+identifiedReport.getId().toString());
     		// save deidentified report
     		deidentifiedReport=(DeidentifiedSurgicalPathologyReport)CaCoreAPIService.createObject(deidentifiedReport);
-    		Logger.out.info("deidentified report saved for identified report id="+identifiedReport.getId().toString());
+    		logger.info("deidentified report saved for identified report id="+identifiedReport.getId().toString());
         }
 	}
 }

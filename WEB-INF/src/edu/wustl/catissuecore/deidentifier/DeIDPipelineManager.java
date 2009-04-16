@@ -33,6 +33,7 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class DeIDPipelineManager
 {
+	private transient Logger logger = Logger.getCommonLogger(DeIDPipelineManager.class);
 	protected static HashMap<String,String> abbrToHeader;
 	
 	private RejectedExecutionHandler rejectedExecutionHandler;
@@ -52,7 +53,7 @@ public class DeIDPipelineManager
 		}
 		catch(Exception ex)
 		{
-			Logger.out.error("Initialization of deidentification process failed or error in main thread",ex);
+			logger.error("Initialization of deidentification process failed or error in main thread",ex);
 			throw ex;
 		}
 	}
@@ -80,7 +81,7 @@ public class DeIDPipelineManager
 		}
 		catch (ClassCastException ex) 
 		{
-			Logger.out.error("Class not found:"+CaTIESProperties.getValue(CaTIESConstants.DEIDENTIFIER_CLASSNAME+"\n"+ex));
+			logger.error("Class not found:"+CaTIESProperties.getValue(CaTIESConstants.DEIDENTIFIER_CLASSNAME+"\n"+ex));
 			throw ex;
 		}
 		deidentifier.initialize();
@@ -92,24 +93,24 @@ public class DeIDPipelineManager
 	 */
 	public void startProcess() throws InterruptedException
 	{
-		Logger.out.info("Inside process manager");
+		logger.info("Inside process manager");
 		while(true)
 		{
 			try
 			{
-				Logger.out.info("Deidentification process started at "+new Date().toString());		
+				logger.info("Deidentification process started at "+new Date().toString());		
 				// Fetch the list of identified report Ids that are pending for de-identification
 				List isprIDList=getReportIDList();
 				// Process reports that are pending for de-identification
 				processReports(isprIDList);
 				// if report list contains less than one report then thread will go to sleep
-				Logger.out.info("Deidentification process finished at "+new Date().toString()+ ". Thread is going to sleep.");
+				logger.info("Deidentification process finished at "+new Date().toString()+ ". Thread is going to sleep.");
 				Thread.sleep(Integer.parseInt(CaTIESProperties.getValue(CaTIESConstants.DEID_SLEEPTIME)));
 			}
 			catch(Exception ex)
 			{
-				Logger.out.error("Unexpected Exception in deid Pipeline ",ex);
-				Logger.out.info("Deidentification process finished at "+new Date().toString()+ ". Thread is going to sleep.");
+				logger.error("Unexpected Exception in deid Pipeline ",ex);
+				logger.info("Deidentification process finished at "+new Date().toString()+ ". Thread is going to sleep.");
 				Thread.sleep(Integer.parseInt(CaTIESProperties.getValue(CaTIESConstants.DEID_SLEEPTIME)));
 			}
 		}
@@ -135,16 +136,16 @@ public class DeIDPipelineManager
 				CSVLogger.info(CaTIESConstants.LOGGER_DEID_SERVER,CaTIESConstants.CSVLOGGER_DATETIME+CaTIESConstants.CSVLOGGER_SEPARATOR+CaTIESConstants.CSVLOGGER_IDENTIFIED_REPORT+CaTIESConstants.CSVLOGGER_SEPARATOR+CaTIESConstants.CSVLOGGER_STATUS+CaTIESConstants.CSVLOGGER_SEPARATOR+CaTIESConstants.CSVLOGGER_MESSAGE+CaTIESConstants.CSVLOGGER_SEPARATOR+CaTIESConstants.CSVLOGGER_PROCESSING_TIME);
 				IdentifiedSurgicalPathologyReport identifiedReport=null;	
 				// loop to process each report
-				Logger.out.info("Starting to process list of size "+ isprIDList.size());
+				logger.info("Starting to process list of size "+ isprIDList.size());
 				int isprListSize=isprIDList.size();
 				for(int i=0;i<isprListSize;i++)
 				{
-					Logger.out.info("Processing report serial no:"+i);
+					logger.info("Processing report serial no:"+i);
 					// retrieve the identified report using its id
 					
 					identifiedReport=getIdentifiedReport((Long)isprIDList.get(i));
 					// instantiate a thread to process the report
-					Logger.out.info("Instantiating thread for report id="+identifiedReport.getId());
+					logger.info("Instantiating thread for report id="+identifiedReport.getId());
 					Thread th = new DeidentifierReportThread(identifiedReport, deidentifier);
 					// add thread to thread pool manager
 					deidExecutor.execute(th);
@@ -152,7 +153,7 @@ public class DeIDPipelineManager
 			}
 			catch(Exception ex)
 			{
-				Logger.out.error("Deidentification pipeline is failed:",ex);
+				logger.error("Deidentification pipeline is failed:",ex);
 				// shut down the thread pool manager
 				deidExecutor.shutdown();
 				throw ex;
@@ -232,7 +233,8 @@ public class DeIDPipelineManager
 		}
 		catch(Exception ex)
 		{
-			Logger.out.error("Error while initializing DeidPipelineManager "+ ex);
+			ex.printStackTrace();
+			//Logger.error("Error while initializing DeidPipelineManager "+ ex);
 		}
 		
 	}	
