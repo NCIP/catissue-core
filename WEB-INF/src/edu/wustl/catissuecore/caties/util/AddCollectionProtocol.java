@@ -24,7 +24,7 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class AddCollectionProtocol
 {
-	private static org.apache.log4j.Logger logger =Logger.getLogger(AddCollectionProtocol.class);
+	private static Logger logger =Logger.getCommonLogger(AddCollectionProtocol.class);
 	
 	/**
 	 * Default entry point of program
@@ -58,6 +58,7 @@ public class AddCollectionProtocol
 		}
 		catch(Exception ex)
 		{
+			logger.debug("Exception in AddCollectionProtocol = "+ ex.getMessage(), ex);
 			System.out.println("Exception in AddCollectionProtocol = "+ ex.getMessage());
 			logger.error("Exception in AddCollectionProtocol = "+ ex);
 		}

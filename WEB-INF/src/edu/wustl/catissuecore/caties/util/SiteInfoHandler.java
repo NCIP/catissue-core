@@ -34,6 +34,7 @@ import edu.wustl.common.util.logger.Logger;
 public class SiteInfoHandler
 {
 
+	private static Logger logger = Logger.getCommonLogger(SiteInfoHandler.class);
 	private static Document document = null;
 	
 	/**
@@ -57,17 +58,17 @@ public class SiteInfoHandler
 		}
 		catch (SAXException e)
 		{
-			Logger.out.error(e.getMessage(),e);
+			logger.error(e.getMessage(),e);
 			throw e;
 		}
 		catch (IOException e)
 		{
-			Logger.out.error(e.getMessage(),e);
+			logger.error(e.getMessage(),e);
 			throw e;
 		}
 		catch (ParserConfigurationException e)
 		{
-			Logger.out.error("Could not locate a JAXP parser: "+e.getMessage(),e);
+			logger.error("Could not locate a JAXP parser: "+e.getMessage(),e);
 			throw e;
 		}
 	}
@@ -216,7 +217,7 @@ public class SiteInfoHandler
 		}
 		catch (Exception ex) 
 		{
-			Logger.out.error("Error occured while", ex);
+			logger.error("Error occured while", ex);
 		}
 		return null;
 	}

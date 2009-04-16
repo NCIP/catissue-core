@@ -17,6 +17,7 @@ import org.hibernate.criterion.Restrictions;
 
 public class CaCoreAPIService 
 {
+	private static Logger logger = Logger.getCommonLogger(CaCoreAPIService.class);
 	private static ApplicationService appService;
 	private static ClientSession cs;
 	
@@ -49,13 +50,13 @@ public class CaCoreAPIService
 			catch (Exception ex) 
 			{
 				System.out.println("Please check your login information!");
-				Logger.out.error("Error in initializing CaCoreAPIService "+ex); 
+				logger.error("Error in initializing CaCoreAPIService "+ex); 
 				throw ex;
 			}
 		}
 		catch(Exception ex)
 		{
-			Logger.out.error("Test client throws Exception = "+ ex);
+			logger.error("Test client throws Exception = "+ ex);
 			throw ex;
 		}
 	}
@@ -79,7 +80,7 @@ public class CaCoreAPIService
 		} 
 		catch (Exception e) 
 		{
-			Logger.out.error("Error while retrieving object "+ targertClass+e);
+			logger.error("Error while retrieving object "+ targertClass+e);
 		}
 		return null;
 	}
@@ -101,7 +102,7 @@ public class CaCoreAPIService
 		} 
 		catch (ApplicationException e) 
 		{
-			Logger.out.error("Error while retrieving List for "+ targertClass+e);
+			logger.error("Error while retrieving List for "+ targertClass+e);
 		}
 		return null;
 	}
@@ -124,7 +125,7 @@ public class CaCoreAPIService
 		}
 		catch (ApplicationException ex) 
 		{
-			Logger.out.error("Error while executing query "+hqlQuery+ex);
+			logger.error("Error while executing query "+hqlQuery+ex);
 			throw new Exception("Error while executing query "+ex.getMessage());
 		}
 	}
@@ -145,7 +146,7 @@ public class CaCoreAPIService
 		}
 		catch (ApplicationException ex) 
 		{
-			Logger.out.error("Error while executing query "+ex);
+			logger.error("Error while executing query "+ex);
 			throw new Exception("Error while executing query "+ex.getMessage());
 		}
 	}
@@ -164,7 +165,7 @@ public class CaCoreAPIService
 		} 
 		catch (ApplicationException e) 
 		{
-			Logger.out.error("Error occured while adding object using CaCoreAPI for object:"+object.getClass());
+			logger.error("Error occured while adding object using CaCoreAPI for object:"+object.getClass());
 			throw new Exception("Error occured while adding object using CaCoreAPI "+e.getMessage());
 		}
 	}
@@ -183,7 +184,7 @@ public class CaCoreAPIService
 		}
 		catch (ApplicationException e) 
 		{
-			Logger.out.error("Error occured while updating object using CaCoreAPI for object:"+object.getClass());
+			logger.error("Error occured while updating object using CaCoreAPI for object:"+object.getClass());
 			throw new Exception("Error occured while updating object using CaCoreAPI "+e.getMessage());
 		}
 	}
@@ -200,7 +201,7 @@ public class CaCoreAPIService
 		} 
 		catch (ApplicationException e) 
 		{
-			Logger.out.error("Error occured while updating object using CaCoreAPI for object:"+object.getClass());
+			logger.error("Error occured while updating object using CaCoreAPI for object:"+object.getClass());
 			throw new Exception("Error occured while updating object using CaCoreAPI "+e.getMessage());
 		}
 	}
@@ -218,7 +219,7 @@ public class CaCoreAPIService
 		} 
 		catch (ApplicationException e) 
 		{
-			Logger.out.error("Error occured while retrieving SCG label");
+			logger.error("Error occured while retrieving SCG label");
 			throw new Exception("Error occured while retrieving SCG label "+e.getMessage());
 		}
 	}
@@ -236,7 +237,7 @@ public class CaCoreAPIService
 		} 
 		catch (ApplicationException e) 
 		{
-			Logger.out.error("Error occured while retrieving default value for "+key);
+			logger.error("Error occured while retrieving default value for "+key);
 			throw new Exception("Error occured while retrieving default value for "+key+e.getMessage());
 		}
 	}
@@ -254,7 +255,7 @@ public class CaCoreAPIService
 		} 
 		catch (ApplicationException e) 
 		{
-			Logger.out.error("Error while retrieving matching participant list");
+			logger.error("Error while retrieving matching participant list");
 			throw new Exception("Error while retrieving matching participant list"+e.getMessage());
 		}
 	}

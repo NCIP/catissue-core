@@ -15,6 +15,7 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class StopServer extends Thread 
 {
+	private transient Logger logger = Logger.getCommonLogger(StopServer.class);
 	private String port;
 	
 	/**
@@ -41,7 +42,7 @@ public class StopServer extends Thread
 	    	PrintWriter out = new PrintWriter(new OutputStreamWriter(sock.getOutputStream()),true);
 	    	String str=r.readLine();
 	    	
-	    	Logger.out.info("Stopping server");
+	    	logger.info("Stopping server");
 	    	r.close();
 	    	sock.close(); 
 	    	// close server socket
@@ -51,7 +52,7 @@ public class StopServer extends Thread
 		}
 		catch(Exception e)
 		{
-			Logger.out.error("Error stopping server ",e);
+			logger.error("Error stopping server ",e);
 		}
 	}
 }

@@ -13,7 +13,6 @@ import java.net.UnknownHostException;
 import org.apache.log4j.PropertyConfigurator;
 
 import edu.wustl.common.util.global.CommonServiceLocator;
-import edu.wustl.common.util.global.Variables;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.common.util.logger.LoggerConfig;
 
