@@ -21,6 +21,7 @@ import edu.wustl.catissuecore.bean.GenericSpecimen;
 import edu.wustl.catissuecore.bean.SpecimenDetailsInfo;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * This tag will accept the list of specimens and display them in 
@@ -39,6 +40,7 @@ import edu.wustl.common.util.global.ApplicationProperties;
  */
 public class SpecimenDetailsNewFormat extends TagSupport
 {
+	private transient Logger logger = Logger.getCommonLogger(SpecimenDetailsNewFormat.class);
 	private static final long serialVersionUID = 1234567890L;
 	// data type list used to display different types of data.
 	private transient final String dataListTypes[] = {"Parent","Aliquot","Derived"};
@@ -225,7 +227,8 @@ public class SpecimenDetailsNewFormat extends TagSupport
 		}
 		catch(IOException ioe) 
 		{
-				throw new JspTagException("Error:IOException while writing to the user");
+			logger.debug(ioe.getMessage(), ioe);
+			throw new JspTagException("Error:IOException while writing to the user");
 		}
 		return SKIP_BODY;
 	}

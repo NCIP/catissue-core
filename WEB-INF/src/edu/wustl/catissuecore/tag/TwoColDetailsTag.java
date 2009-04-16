@@ -28,7 +28,7 @@ public class TwoColDetailsTag extends TagSupport
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(TwoColDetailsTag.class);
+	private static Logger logger = Logger.getCommonLogger(TwoColDetailsTag.class);
 	
 
 	// --------------- attributes section --------------
