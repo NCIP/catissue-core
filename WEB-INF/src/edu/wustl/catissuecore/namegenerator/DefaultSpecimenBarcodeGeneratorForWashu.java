@@ -16,6 +16,7 @@ import javax.sql.DataSource;
 
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.daofactory.DAOConfigFactory;
 
 /**
@@ -26,6 +27,7 @@ import edu.wustl.dao.daofactory.DAOConfigFactory;
 public class DefaultSpecimenBarcodeGeneratorForWashu implements BarcodeGenerator
 {
 
+	private transient Logger logger = Logger.getCommonLogger(DefaultSpecimenBarcodeGeneratorForWashu.class);
 	/**
 	 * Current Barcode.
 	 */
@@ -72,6 +74,7 @@ public class DefaultSpecimenBarcodeGeneratorForWashu implements BarcodeGenerator
 		}
 		catch (Exception ex)
 		{
+			logger.debug(ex.getMessage(), ex);
 			ex.printStackTrace();
 		}
 
@@ -106,10 +109,12 @@ public class DefaultSpecimenBarcodeGeneratorForWashu implements BarcodeGenerator
 		}
 		catch (NamingException e)
 		{
+			logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 		}
 		catch (SQLException ex)
 		{
+			logger.debug(ex.getMessage(), ex);
 			ex.printStackTrace();
 		}
 		finally
@@ -122,7 +127,7 @@ public class DefaultSpecimenBarcodeGeneratorForWashu implements BarcodeGenerator
 				}
 				catch (SQLException exception)
 				{
-					// TODO Auto-generated catch block
+					logger.debug(exception.getMessage(), exception);
 					exception.printStackTrace();
 				}
 			}

@@ -3,6 +3,8 @@ package edu.wustl.catissuecore.namegenerator;
 
 import java.util.HashMap;
 
+import edu.wustl.common.util.logger.Logger;
+
 /**
  * This is the factory Class to retrieve singleton instance of LabelGenerator.
  * @author Falguni_Sachde
@@ -10,6 +12,7 @@ import java.util.HashMap;
 public class LabelGeneratorFactory
 {
 
+	private static Logger logger = Logger.getCommonLogger(LabelGeneratorFactory.class);
 	/**
 	 * Singleton instance of SpecimenLabelGenerator.
 	 */
@@ -47,21 +50,25 @@ public class LabelGeneratorFactory
 		}
 		catch (IllegalAccessException e)
 		{
+			logger.debug(e.getMessage(), e);
 			throw new NameGeneratorException
 			("Could not create LabelGenerator instance: "+ e.getMessage());
 		}
 		catch (InstantiationException e)
 		{
+			logger.debug(e.getMessage(), e);
 			throw new NameGeneratorException
 			("Could not create LabelGenerator instance: "+ e.getMessage());
 		}
 		catch (ClassNotFoundException e)
 		{
+			logger.debug(e.getMessage(), e);
 			throw new NameGeneratorException
 			("Could not create LabelGenerator instance: "+ e.getMessage());
 		}
 		catch (Exception ex)
 		{
+			logger.debug(ex.getMessage(), ex);
 			throw new NameGeneratorException(ex.getMessage(), ex);
 		}
 	}

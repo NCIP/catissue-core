@@ -1,6 +1,8 @@
 package edu.wustl.catissuecore.namegenerator;
 
 import java.util.HashMap;
+
+import edu.wustl.common.util.logger.Logger;
 /**
  * This is the factory Class to retrieve singleton instance of BarcodeGenerator.
  *
@@ -8,6 +10,7 @@ import java.util.HashMap;
  */
 public class BarcodeGeneratorFactory
 {
+	private static Logger logger = Logger.getCommonLogger(BarcodeGeneratorFactory.class);
 	/**
 	 * Singleton instance of BarcodeGenerator.
      */
@@ -41,21 +44,25 @@ public class BarcodeGeneratorFactory
 		}
 		catch(IllegalAccessException e)
 		{
+			logger.debug(e.getMessage(), e);
 			throw new NameGeneratorException
 			("Could not create BarcodeGenerator instance: " +e.getMessage());
 		}
 		catch(InstantiationException e)
 		{
+			logger.debug(e.getMessage(), e);
 			throw new NameGeneratorException
 			("Could not create BarcodeGenerator instance: " +e.getMessage());
 		}
 		catch(ClassNotFoundException e)
 		{
+			logger.debug(e.getMessage(), e);
 			throw new NameGeneratorException
 			("Could not create BarcodeGenerator instance: " +e.getMessage());
 		}
 		catch(Exception ex)
 		{
+			logger.debug(ex.getMessage(), ex);
 			throw new NameGeneratorException(ex.getMessage(),ex);
 		}
 	}

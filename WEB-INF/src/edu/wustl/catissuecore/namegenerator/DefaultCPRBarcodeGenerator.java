@@ -23,7 +23,7 @@ public class DefaultCPRBarcodeGenerator implements BarcodeGenerator
 	/**
 	 * Creating Logger instance.
 	 */
-	private static org.apache.log4j.Logger logger =Logger.getLogger(DefaultCPRBarcodeGenerator.class);
+	private static Logger logger =Logger.getCommonLogger(DefaultCPRBarcodeGenerator.class);
 
 	/**
 	 * Current barcode.

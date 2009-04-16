@@ -10,6 +10,7 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.common.util.logger.Logger;
 
 
 /**
@@ -19,6 +20,7 @@ import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
  */
 public class DefaultSCGBarcodeGenerator implements BarcodeGenerator
 {
+	private transient Logger logger = Logger.getCommonLogger(DefaultSCGBarcodeGenerator.class);
 	/**
 	 * Current barcode.
 	 */
@@ -59,6 +61,7 @@ public class DefaultSCGBarcodeGenerator implements BarcodeGenerator
 		}
 		catch (Exception daoException)
 		{
+			logger.debug(daoException.getMessage(), daoException);
 			daoException.printStackTrace();
 		}
 		finally
@@ -71,6 +74,7 @@ public class DefaultSCGBarcodeGenerator implements BarcodeGenerator
 				}
 				catch (SQLException exception)
 				{
+					logger.debug(exception.getMessage(), exception);
 					exception.printStackTrace();
 				}
 			}

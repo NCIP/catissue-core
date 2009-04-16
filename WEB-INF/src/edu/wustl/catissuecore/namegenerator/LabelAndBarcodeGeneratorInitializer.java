@@ -3,6 +3,7 @@ package edu.wustl.catissuecore.namegenerator;
 
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * This class initialize  label and barcode generator depending upon configuration.
@@ -11,6 +12,7 @@ import edu.wustl.catissuecore.util.global.Variables;
  */
 public class LabelAndBarcodeGeneratorInitializer
 {
+	private static Logger logger = Logger.getCommonLogger(LabelAndBarcodeGeneratorInitializer.class);
 
 	/**
 	 * This method reads configuration file and set the conditions
@@ -83,6 +85,7 @@ public class LabelAndBarcodeGeneratorInitializer
 		}
 		catch (Exception e)
 		{
+			logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 		}
 

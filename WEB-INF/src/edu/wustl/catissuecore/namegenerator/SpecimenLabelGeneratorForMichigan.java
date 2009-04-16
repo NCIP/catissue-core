@@ -15,6 +15,7 @@ import javax.sql.DataSource;
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * This is the Specimen Label Generator for Michigan University.
@@ -23,6 +24,7 @@ import edu.wustl.catissuecore.util.global.Constants;
  */
 public class SpecimenLabelGeneratorForMichigan extends DefaultSpecimenLabelGenerator
 {
+	private transient Logger logger = Logger.getCommonLogger(SpecimenLabelGeneratorForMichigan.class);
 	/**
 	 * Default Constructor.
 	 */
@@ -62,10 +64,12 @@ public class SpecimenLabelGeneratorForMichigan extends DefaultSpecimenLabelGener
 		}
 		catch (NamingException e)
 		{
+			logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 		}
 		catch (SQLException ex)
 		{
+			logger.debug(ex.getMessage(), ex);
 			ex.printStackTrace();
 		}
 		finally
@@ -78,7 +82,7 @@ public class SpecimenLabelGeneratorForMichigan extends DefaultSpecimenLabelGener
 				}
 				catch (SQLException exception)
 				{
-					// TODO Auto-generated catch block
+					logger.debug(exception.getMessage(), exception);
 					exception.printStackTrace();
 				}
 			}

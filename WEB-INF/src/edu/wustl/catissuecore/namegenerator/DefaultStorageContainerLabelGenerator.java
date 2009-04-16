@@ -11,6 +11,7 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * This class contains the default  Storage container label  implementation.
@@ -20,6 +21,7 @@ import edu.wustl.catissuecore.domain.StorageContainer;
 public class DefaultStorageContainerLabelGenerator implements LabelGenerator
 {
 
+	private transient Logger logger = Logger.getCommonLogger(DefaultStorageContainerLabelGenerator.class);
 	/**
 	 * Current label.
 	 */
@@ -63,6 +65,7 @@ public class DefaultStorageContainerLabelGenerator implements LabelGenerator
 		}
 		catch (Exception daoException)
 		{
+			logger.debug(daoException.getMessage(), daoException);
 			daoException.printStackTrace();
 
 		}
@@ -76,7 +79,7 @@ public class DefaultStorageContainerLabelGenerator implements LabelGenerator
 				}
 				catch (SQLException exception)
 				{
-					// TODO Auto-generated catch block
+					logger.debug(exception.getMessage(), exception);
 					exception.printStackTrace();
 				}
 			}

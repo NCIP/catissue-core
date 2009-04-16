@@ -15,6 +15,7 @@ import javax.sql.DataSource;
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.daofactory.DAOConfigFactory;
 
 /**
@@ -25,6 +26,7 @@ import edu.wustl.dao.daofactory.DAOConfigFactory;
 public class DefaultSpecimenLabelGenerator implements LabelGenerator
 {
 
+	private transient Logger logger = Logger.getCommonLogger(DefaultSpecimenLabelGenerator.class);
 	/**
 	 * Current label.
 	 */
@@ -70,6 +72,7 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 		}
 		catch (Exception ex)
 		{
+			logger.debug(ex.getMessage(), ex);
 			ex.printStackTrace();
 		}
 	}
@@ -103,10 +106,12 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 		}
 		catch (NamingException e)
 		{
+			logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 		}
 		catch (SQLException ex)
 		{
+			logger.debug(ex.getMessage(), ex);
 			ex.printStackTrace();
 		}
 		finally
@@ -119,7 +124,7 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 				}
 				catch (SQLException exception)
 				{
-					// TODO Auto-generated catch block
+					logger.debug(exception.getMessage(), exception);
 					exception.printStackTrace();
 				}
 			}

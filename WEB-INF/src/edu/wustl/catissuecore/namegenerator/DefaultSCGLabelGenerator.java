@@ -13,6 +13,7 @@ import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.util.logger.Logger;
 
 
 /**
@@ -21,6 +22,10 @@ import edu.wustl.catissuecore.util.global.Constants;
  */
 public class DefaultSCGLabelGenerator implements LabelGenerator
 {
+	/**
+	 * logger Generic logger.
+	 */
+	private transient Logger logger = Logger.getCommonLogger(DefaultSCGLabelGenerator.class);
 	/**
 	 * Current label.
 	 */
@@ -71,10 +76,12 @@ public class DefaultSCGLabelGenerator implements LabelGenerator
 		}
         catch(NamingException e)
         {
+        	logger.debug(e.getMessage(), e);
         	e.printStackTrace();
         }
         catch(SQLException ex)
         {
+        	logger.debug(ex.getMessage(), ex);
         	ex.printStackTrace();
         }
         finally
@@ -87,6 +94,7 @@ public class DefaultSCGLabelGenerator implements LabelGenerator
 				}
         		catch (SQLException exception)
         		{
+        			logger.debug(exception.getMessage(), exception);
 					exception.printStackTrace();
 				}
         	}

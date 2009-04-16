@@ -15,6 +15,7 @@ import javax.sql.DataSource;
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * This is the Specimen Barcode Generator for Michigan University.
@@ -24,6 +25,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 public class SpecimenBarcodeGeneratorForMichigan extends DefaultSpecimenBarcodeGenerator
 {
 
+	private transient Logger logger = Logger.getCommonLogger(SpecimenBarcodeGeneratorForMichigan.class);
 	/**
 	 * Default Constructor.
 	 */
@@ -62,10 +64,12 @@ public class SpecimenBarcodeGeneratorForMichigan extends DefaultSpecimenBarcodeG
 		}
 		catch (NamingException e)
 		{
+			logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 		}
 		catch (SQLException ex)
 		{
+			logger.debug(ex.getMessage(), ex);
 			ex.printStackTrace();
 		}
 		finally
@@ -78,7 +82,7 @@ public class SpecimenBarcodeGeneratorForMichigan extends DefaultSpecimenBarcodeG
 				}
 				catch (SQLException exception)
 				{
-					// TODO Auto-generated catch block
+					logger.debug(exception.getMessage(), exception);
 					exception.printStackTrace();
 				}
 			}

@@ -11,6 +11,7 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * This  class which contains the default StorageContainer barcode implementation.
@@ -20,6 +21,7 @@ import edu.wustl.catissuecore.domain.StorageContainer;
 public class DefaultStorageContainerBarcodeGenerator implements BarcodeGenerator
 {
 
+	private transient Logger logger = Logger.getCommonLogger(DefaultStorageContainerBarcodeGenerator.class);
 	/**
 	 * Current label.
 	 */
@@ -63,6 +65,7 @@ public class DefaultStorageContainerBarcodeGenerator implements BarcodeGenerator
 		}
 		catch (Exception daoException)
 		{
+			logger.debug(daoException.getMessage(), daoException);
 			daoException.printStackTrace();
 
 		}
@@ -76,7 +79,7 @@ public class DefaultStorageContainerBarcodeGenerator implements BarcodeGenerator
 				}
 				catch (SQLException exception)
 				{
-
+					logger.debug(exception.getMessage(), exception);
 					exception.printStackTrace();
 				}
 			}
