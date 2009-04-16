@@ -34,11 +34,13 @@ import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.util.logger.Logger;
 
 public class AnnotationUtil
 
 {
 
+	private transient Logger logger = Logger.getCommonLogger(AnnotationUtil.class);
 	/**
 	 * This method updates module map by parsing xml file
 	 * @param xmlFileName file to be parsed
@@ -95,6 +97,7 @@ public class AnnotationUtil
 		}
 		catch (DocumentException documentException)
 		{
+			logger.debug(documentException.getMessage(), documentException);
 			throw new DataTypeFactoryInitializationException(documentException);
 		}
 

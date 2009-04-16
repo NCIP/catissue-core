@@ -18,10 +18,11 @@ import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.exception.BizLogicException;
-import edu.wustl.dao.exception.DAOException;
+import edu.wustl.common.util.logger.Logger;
 
 public class ParticipantAnnotationCondition implements ICPCondition
 {
+	private transient Logger logger = Logger.getCommonLogger(ParticipantAnnotationCondition.class);
     /**
      * Returns the list of protocol with which the given participant is registered 
      * 
@@ -60,6 +61,7 @@ public class ParticipantAnnotationCondition implements ICPCondition
         }
         catch (BizLogicException e)
         {
+        	logger.debug(e.getMessage(), e);
             e.printStackTrace();
         }
 

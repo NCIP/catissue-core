@@ -16,11 +16,12 @@ import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.exception.BizLogicException;
-import edu.wustl.dao.exception.DAOException;
+import edu.wustl.common.util.logger.Logger;
 
 public class SpecimenAnnotationCondition implements ICPCondition
 {
 
+	private transient Logger logger = Logger.getCommonLogger(SpecimenAnnotationCondition.class);
 	/**
 	 *Returns the list Of collection protocol with which the given specimen is registerd 
 	 */
@@ -50,6 +51,7 @@ public class SpecimenAnnotationCondition implements ICPCondition
 		}
 		catch (BizLogicException e)
 		{
+			logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 		}
 
