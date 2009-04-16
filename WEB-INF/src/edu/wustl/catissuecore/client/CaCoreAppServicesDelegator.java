@@ -13,19 +13,15 @@ package edu.wustl.catissuecore.client;
 
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.text.SimpleDateFormat;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.management.openmbean.OpenDataException;
-
 import oracle.sql.CLOB;
-
-import org.hibernate.Session;
 import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
@@ -74,6 +70,7 @@ import gov.nih.nci.security.authorization.domainobjects.Role;
 public class CaCoreAppServicesDelegator
 {
 
+	private transient Logger logger = Logger.getCommonLogger(CaCoreAppServicesDelegator.class);
 	/**
 	 * Passes User credentials to CaTissueHTTPClient to connect User with caTISSUE Core Application
 	 * @param userName userName of the User to connect to caTISSUE Core Application
@@ -125,11 +122,11 @@ public class CaCoreAppServicesDelegator
 			checkNullObject(domainObject, "Domain Object");
 			IBizLogic bizLogic = getBizLogic(domainObject.getClass().getName());
 			bizLogic.insert(domainObject, getSessionDataBean(userName), 0);
-			Logger.out.info(" Domain Object has been successfully inserted " + domainObject);
+			logger.info(" Domain Object has been successfully inserted " + domainObject);
 		}
 		catch (Exception e)
 		{
-			Logger.out.error("Delegate Add-->" + e.getMessage());
+			logger.error("Delegate Add-->" + e.getMessage());
 			throw e;
 		}
 		return domainObject;
@@ -175,11 +172,11 @@ public class CaCoreAppServicesDelegator
 			bizLogic.update(abstractDomainObject, abstractDomainOld, 0,
 					getSessionDataBean(userName));
 			
-			Logger.out.info(" Domain Object has been successfully updated " + domainObject);
+			logger.info(" Domain Object has been successfully updated " + domainObject);
 		}
 		catch (Exception e)
 		{
-			Logger.out.error("Delegate Edit" + e.getMessage());
+			logger.error("Delegate Edit" + e.getMessage());
 			throw e;
 		}
 		finally
@@ -241,10 +238,10 @@ public class CaCoreAppServicesDelegator
 	public List delegateSearchFilter(String userName, List list) throws Exception
 	{
 		List nonDisbaledObjectList = filterDisabledObjects(list);
-		Logger.out.debug("User Name : " + userName);
-		Logger.out.debug("list obtained from ApplicationService Search************** : "
+		logger.debug("User Name : " + userName);
+		logger.debug("list obtained from ApplicationService Search************** : "
 				+ nonDisbaledObjectList.getClass().getName());
-		Logger.out.debug("Super Class ApplicationService Search************** : "
+		logger.debug("Super Class ApplicationService Search************** : "
 				+ nonDisbaledObjectList.getClass().getSuperclass().getName());
 		List filteredObjects = null;//new ArrayList();
 		User validUser = AppUtility.getUser(userName);
@@ -261,7 +258,7 @@ public class CaCoreAppServicesDelegator
 		}
 		catch (SMException ex)
 		{
-			Logger.out.info("Review Role not found!");
+			logger.info("Review Role not found!");
 		}
 		if (reviewerRole != null && (reviewerRole.equalsIgnoreCase(Constants.ADMINISTRATOR)))
 		{
@@ -275,6 +272,7 @@ public class CaCoreAppServicesDelegator
 			}
 			catch (Exception exp)
 			{
+				logger.debug(exp.getMessage(), exp);
 				exp.printStackTrace();
 				throw exp;
 			}
@@ -316,7 +314,7 @@ public class CaCoreAppServicesDelegator
 				catch (Exception ex)
 				{
 					// Exception occured if Domain Oject is not having ActivityStatus field
-					Logger.out.error("in CaCoreAppServicesDelegator" + ex.getMessage());
+					logger.error("in CaCoreAppServicesDelegator" + ex.getMessage());
 					result.add(abstractDomainObject);
 				}
 			}
@@ -328,7 +326,7 @@ public class CaCoreAppServicesDelegator
 			}
 		}
 		long et = System.currentTimeMillis();
-		Logger.out.info("Time to filer disable objects:" + (et - st) / 1000);
+		logger.info("Time to filer disable objects:" + (et - st) / 1000);
 		return result;
 	}
 
@@ -342,7 +340,7 @@ public class CaCoreAppServicesDelegator
 	 */
 	private List filterObjects(String userName, List objectList) throws Exception
 	{
-		Logger.out.debug("In Filter Objects ......");
+		logger.debug("In Filter Objects ......");
 
 		SessionDataBean sessionDataBean = getSessionDataBean(userName);
 		// boolean that indicates whether user has READ_DENIED privilege on the main object.
@@ -357,7 +355,7 @@ public class CaCoreAppServicesDelegator
 		PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
 		PrivilegeCache privilegeCache = privilegeManager.getPrivilegeCache(userName);
 
-		Logger.out.debug("Total Objects>>>>>>>>>>>>>>>>>>>>>" + objectList.size());
+		logger.debug("Total Objects>>>>>>>>>>>>>>>>>>>>>" + objectList.size());
 		Iterator iterator = objectList.iterator();
 		while (iterator.hasNext())
 		{
@@ -393,7 +391,7 @@ public class CaCoreAppServicesDelegator
 						sessionDataBean, Permissions.READ_DENIED);
 			}
 
-			Logger.out.debug("Main object:" + aliasName + " Has READ_DENIED privilege:"
+			logger.debug("Main object:" + aliasName + " Has READ_DENIED privilege:"
 					+ hasReadDeniedForMain);
 
 			/**
@@ -412,7 +410,7 @@ public class CaCoreAppServicesDelegator
 						sessionDataBean);
 
 				filteredObjects.add(abstractDomainObject);
-				Logger.out.debug("Intermediate Size of filteredObjects .............."
+				logger.debug("Intermediate Size of filteredObjects .............."
 						+ filteredObjects.size());
 			}
 		}
@@ -434,14 +432,14 @@ public class CaCoreAppServicesDelegator
 		//				filteredObjects = new ArrayList();
 		//			}
 		//		}
-		Logger.out.debug("Before Final Objects >>>>>>>>>>>>>>>>>>>>>>>>>" + filteredObjects.size());
+		logger.debug("Before Final Objects >>>>>>>>>>>>>>>>>>>>>>>>>" + filteredObjects.size());
 		//		boolean status = objectList.removeAll(toBeRemoved);
-		//		Logger.out.debug("Remove Status>>>>>>>>>>>>>>>>>>>>>>>>"+status);
+		//		logger.debug("Remove Status>>>>>>>>>>>>>>>>>>>>>>>>"+status);
 		//		SDKListProxy finalFilteredObjects = new SDKListProxy();
 		//		finalFilteredObjects.setHasAllRecords(true);
 		//		finalFilteredObjects.addAll(filteredObjects);
 
-		//		Logger.out.debug("Final Objects >>>>>>>>>>>>>>>>>>>>>>>>>"+finalFilteredObjects.size());
+		//		logger.debug("Final Objects >>>>>>>>>>>>>>>>>>>>>>>>>"+finalFilteredObjects.size());
 
 		return filteredObjects;
 	}
@@ -504,16 +502,16 @@ public class CaCoreAppServicesDelegator
 				.getName());
 		String domainClassName = domainObjectClassName;
 		//String domainClassName = domainObjectClassName.substring(0, (domainObjectClassName.length()-4));
-		Logger.out.debug("Class Name >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + domainClassName);
+		logger.debug("Class Name >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + domainClassName);
 		System.out.println("Class Name >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + domainClassName);
-		Logger.out.info("Class Name >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + domainClassName);
+		logger.info("Class Name >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + domainClassName);
 		try
 		{
 			className = Class.forName("edu.wustl.catissuecore.domain." + domainClassName);
 		}
 		catch (ClassNotFoundException ex)
 		{
-			Logger.out
+			logger
 					.error("ClassNotFoundException in CaCoreAppServicesDelegator.getAliasName() method");
 			className = Class.forName(object.getClass().getName());
 		}
@@ -653,7 +651,7 @@ public class CaCoreAppServicesDelegator
 	{
 		Object childObject = null;
 		fieldName = "get" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
-		Logger.out.debug("Method Name***********************" + fieldName);
+		logger.debug("Method Name***********************" + fieldName);
 
 		try
 		{
@@ -662,15 +660,15 @@ public class CaCoreAppServicesDelegator
 		}
 		catch (NoSuchMethodException noMetExp)
 		{
-			Logger.out.debug(noMetExp.getMessage(), noMetExp);
+			logger.debug(noMetExp.getMessage(), noMetExp);
 		}
 		catch (IllegalAccessException illAccExp)
 		{
-			Logger.out.debug(illAccExp.getMessage(), illAccExp);
+			logger.debug(illAccExp.getMessage(), illAccExp);
 		}
 		catch (InvocationTargetException invoTarExp)
 		{
-			Logger.out.debug(invoTarExp.getMessage(), invoTarExp);
+			logger.debug(invoTarExp.getMessage(), invoTarExp);
 		}
 
 		return childObject;
@@ -879,7 +877,7 @@ public class CaCoreAppServicesDelegator
 						+ "',to_date('"
 						+ timeStamp
 						+ "','yyyy-mm-dd HH24:MI:SS'),'" + userId + "','" + comments + "')";
-				Logger.out.info("sqlForAuditLog:" + sqlForAudiEvent);
+				logger.info("sqlForAuditLog:" + sqlForAudiEvent);
 				jdbcDAO.executeUpdate(sqlForAudiEvent);
 
 				long queryNo = 1;
@@ -930,7 +928,7 @@ public class CaCoreAppServicesDelegator
 				osw.close();
 				os.close();
 				jdbcDAO.commit();
-				Logger.out.info("sqlForQueryLog:" + sqlForQueryLog);
+				logger.info("sqlForQueryLog:" + sqlForQueryLog);
 			}
 			else
 			{
@@ -958,13 +956,14 @@ public class CaCoreAppServicesDelegator
 				}
 				String sqlForQueryLog = "insert into catissue_audit_event_query_log(QUERY_DETAILS,AUDIT_EVENT_ID) values ('"
 						+ sqlQuery1 + "','" + no + "')";
-				Logger.out.debug("sqlForQueryLog:" + sqlForQueryLog);
+				logger.debug("sqlForQueryLog:" + sqlForQueryLog);
 				jdbcDAO.executeUpdate(sqlForQueryLog);
 				jdbcDAO.commit();
 			}
 		}
 		catch (Exception e)
 		{
+			logger.debug(e.getMessage(), e);
 			throw new Exception(e.getMessage());
 		}
 		finally
