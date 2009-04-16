@@ -13,7 +13,7 @@ public final class ParserManager
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(ParserManager.class);
+	private static Logger logger = Logger.getCommonLogger(ParserManager.class);
 
 	/**
 	 * ParserManager.

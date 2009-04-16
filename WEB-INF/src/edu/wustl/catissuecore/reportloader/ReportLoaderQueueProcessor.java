@@ -16,7 +16,6 @@ import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.pathology.ReportLoaderQueue;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.global.CommonServiceLocator;
-import edu.wustl.common.util.global.Variables;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -27,6 +26,7 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class ReportLoaderQueueProcessor extends Thread
 {
+	private transient Logger logger = Logger.getCommonLogger(ReportLoaderQueueProcessor.class);
 	/**
 	 * @see java.lang.Thread#run()
 	 */
@@ -50,15 +50,15 @@ public class ReportLoaderQueueProcessor extends Thread
 				List reportLoaderQueueList=getReportLoaderQueueIDList();
 				if(reportLoaderQueueList!=null && reportLoaderQueueList.size()>0)
 				{
-					Logger.out.info("Total objects found in ReportLoaderQueue are:"+reportLoaderQueueList.size());
+					logger.info("Total objects found in ReportLoaderQueue are:"+reportLoaderQueueList.size());
 					SiteInfoHandler.init(CaTIESProperties.getValue(CaTIESConstants.SITE_INFO_FILENAME));
 					for(int i=0;i<reportLoaderQueueList.size();i++)
 					{	
 						reportLoaderQueue=(ReportLoaderQueue)CaCoreAPIService.getObject(ReportLoaderQueue.class, Constants.SYSTEM_IDENTIFIER, (Long)reportLoaderQueueList.get(i));
-						Logger.out.info("Processing report loader queue id:"+reportLoaderQueue.getId());
+						logger.info("Processing report loader queue id:"+reportLoaderQueue.getId());
 						try
 						{
-							Logger.out.debug("Processing report from Queue with serial no="+reportLoaderQueue.getId());
+							logger.debug("Processing report from Queue with serial no="+reportLoaderQueue.getId());
 							participantSet=(Set)reportLoaderQueue.getParticipantCollection();
 							Iterator it = participantSet.iterator();
 							
@@ -75,14 +75,15 @@ public class ReportLoaderQueueProcessor extends Thread
 							startTime=new Date().getTime();
 							parser.parseString(participant, reportText, reportLoaderQueue.getSpecimenCollectionGroup(), abbrToHeader);
 							endTime=new Date().getTime();
-							Logger.out.info("Report loaded successfully, deleting report queue object");
+							logger.info("Report loaded successfully, deleting report queue object");
 							// delete record from queue
 							CaCoreAPIService.removeObject(reportLoaderQueue);
 							CSVLogger.info(CaTIESConstants.LOGGER_QUEUE_PROCESSOR,new Date().toString()+","+reportLoaderQueue.getId()+","+"SUCCESS"+",Report Loaded SuccessFully  ,"+(endTime-startTime));
-							Logger.out.info("Processed report from Queue with id ="+reportLoaderQueue.getId());
+							logger.info("Processed report from Queue with id ="+reportLoaderQueue.getId());
 						}
 						catch(Exception ex)
 						{
+							logger.debug(ex.getMessage(), ex);
 							endTime=new Date().getTime();
 							reportLoaderQueue.setStatus(CaTIESConstants.FAILURE);
 							if(ex.getMessage().equalsIgnoreCase(CaTIESConstants.CP_NOT_FOUND_ERROR_MSG))
@@ -94,28 +95,28 @@ public class ReportLoaderQueueProcessor extends Thread
 						}
 					}
 				}				
-				Logger.out.info("Report loader Queue server is going to sleep for "+CaTIESProperties.getValue(CaTIESConstants.POLLER_SLEEPTIME)+ "ms");
+				logger.info("Report loader Queue server is going to sleep for "+CaTIESProperties.getValue(CaTIESConstants.POLLER_SLEEPTIME)+ "ms");
 				Thread.sleep(Long.parseLong(CaTIESProperties.getValue(CaTIESConstants.POLLER_SLEEPTIME)));
 			}
 			catch (NumberFormatException ex) 
 			{
-				Logger.out.error("Error stopping ReportLoaderQueueThread ",ex);
+				logger.error("Error stopping ReportLoaderQueueThread ",ex);
 			}
 			catch (InterruptedException ex) 
 			{
-				Logger.out.error("Error stopping ReportLoaderQueueThread ",ex);
+				logger.error("Error stopping ReportLoaderQueueThread ",ex);
 			}
 			catch(Exception ex)
 			{
-				Logger.out.error("Error in processing of ReportLoaderQueueThread ",ex);
+				logger.error("Error in processing of ReportLoaderQueueThread ",ex);
 				try
 				{
-					Logger.out.info("Report loader Queue server is going to sleep for "+CaTIESProperties.getValue(CaTIESConstants.POLLER_SLEEPTIME)+ "ms");
+					logger.info("Report loader Queue server is going to sleep for "+CaTIESProperties.getValue(CaTIESConstants.POLLER_SLEEPTIME)+ "ms");
 					Thread.sleep(Long.parseLong(CaTIESProperties.getValue(CaTIESConstants.POLLER_SLEEPTIME)));
 				}
 				catch(Exception e)
 				{
-					Logger.out.error("Error while calling Thread.sleep for ReportLoaderQueueProcessor thread",e);
+					logger.error("Error while calling Thread.sleep for ReportLoaderQueueProcessor thread",e);
 				}
 			}
 		}
@@ -129,7 +130,7 @@ public class ReportLoaderQueueProcessor extends Thread
 	private List getReportLoaderQueueIDList() throws Exception
 	{
 		String hqlQuery="select id from edu.wustl.catissuecore.domain.pathology.ReportLoaderQueue where "+Constants.COLUMN_NAME_STATUS+"='"+CaTIESConstants.NEW+"' OR "+Constants.COLUMN_NAME_STATUS+"='"+CaTIESConstants.SITE_NOT_FOUND+"' OR "+Constants.COLUMN_NAME_STATUS+"='"+CaTIESConstants.CP_NOT_FOUND+"' OR "+Constants.COLUMN_NAME_STATUS+"='"+CaTIESConstants.OVERWRITE_REPORT+"'";
-		Logger.out.info("HQL Query:"+hqlQuery);
+		logger.info("HQL Query:"+hqlQuery);
 		List queue=(List)CaCoreAPIService.executeQuery(hqlQuery, ReportLoaderQueue.class.getName());
 		return queue;
 	}

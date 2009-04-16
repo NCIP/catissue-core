@@ -26,9 +26,9 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.dao.exception.DAOException;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.exception.DAOException;
 import gov.nih.nci.system.applicationservice.ApplicationException;
 
 /**
@@ -39,6 +39,7 @@ import gov.nih.nci.system.applicationservice.ApplicationException;
 public class ReportLoader 
 {
 
+	private transient Logger logger = Logger.getCommonLogger(ReportLoader.class);
 	/**
 	 * Participant of the report
 	 */
@@ -107,7 +108,7 @@ public class ReportLoader
 	public void process()throws Exception
 	{
 		
-		Logger.out.debug("Processing Report ");
+		logger.debug("Processing Report ");
 		identifiedReport.setReportStatus(CaTIESConstants.PENDING_FOR_DEID);
 		identifiedReport.setReportSource(this.site);
 		try
@@ -116,17 +117,17 @@ public class ReportLoader
 			if(this.scg==null || this.scg.getId()==0)
 			{
 				//check for exactly matching SCG
-				Logger.out.info("Checking for Matching SCG. Default site name:"+defaultSiteName+ " :" +this.site.getName());
+				logger.info("Checking for Matching SCG. Default site name:"+defaultSiteName+ " :" +this.site.getName());
 				if(this.site.getName().equalsIgnoreCase(defaultSiteName))
 				{
-					Logger.out.info("Inside if");
+					logger.info("Inside if");
 					scg = (SpecimenCollectionGroup)CaCoreAPIService.getObject(SpecimenCollectionGroup.class, "surgicalPathologyNumber", surgicalPathologyNumber);
 				//	scg=ReportLoaderUtil.getExactMatchingSCG(this.site, surgicalPathologyNumber);
 				}
 				if(this.scg==null || this.scg.getId()==0)
 				{
 					// if scg is null create new scg
-					Logger.out.debug("Null SCG found in ReportLoader, Creating New SCG");
+					logger.debug("Null SCG found in ReportLoader, Creating New SCG");
 					this.scg=createNewSpecimenCollectionGroup();
 					this.scg=(SpecimenCollectionGroup)CaCoreAPIService.createObject(this.scg);
 					this.identifiedReport.setSpecimenCollectionGroup(this.scg);
@@ -143,11 +144,11 @@ public class ReportLoader
 				// use existing scg
 				retrieveAndSetSCG();
 			}	
-			Logger.out.info("Processing finished for Report ");
+			logger.info("Processing finished for Report ");
 		}
 		catch(Exception ex)
 		{
-			Logger.out.error("Failed to process report "+ex);
+			logger.error("Failed to process report "+ex);
 			throw ex;
 		}
 	}
@@ -163,7 +164,7 @@ public class ReportLoader
 	private SpecimenCollectionGroup createNewSpecimenCollectionGroup()throws Exception
 	{
 		// set default values for scg
-		Logger.out.info("Creating New Specimen Collection Group");
+		logger.info("Creating New Specimen Collection Group");
 		SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
 		scg.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());
 		scg.setCollectionStatus(Constants.COMPLETE);
@@ -195,7 +196,7 @@ public class ReportLoader
 			if(collProtocolReg==null)
 			{	
 				// otherwise create new CollectionProtocolRegistration
-				Logger.out.info("Creating New CollectionProtocolRegistration object");
+				logger.info("Creating New CollectionProtocolRegistration object");
 				collProtocolReg=new CollectionProtocolRegistration();
 				collProtocolReg.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());
 				collProtocolReg.setRegistrationDate(new Date());
@@ -216,7 +217,7 @@ public class ReportLoader
 				}
 				catch(Exception ex)
 				{
-					Logger.out.error("Error: Could not save object of CollectionProtocolRegistration",ex);
+					logger.error("Error: Could not save object of CollectionProtocolRegistration",ex);
 					throw new Exception("Could not save object of CollectionProtocolRegistration :"+ex.getMessage());
 				}		
 			}	
@@ -228,7 +229,7 @@ public class ReportLoader
 		}
 		else
 		{
-			Logger.out.error("Associated Collection Protocol Event not found for "+ CaTIESProperties.getValue(CaTIESConstants.COLLECTION_PROTOCOL_TITLE));
+			logger.error("Associated Collection Protocol Event not found for "+ CaTIESProperties.getValue(CaTIESConstants.COLLECTION_PROTOCOL_TITLE));
 			throw new Exception("Associated Collection Protocol Event not found for "+ CaTIESProperties.getValue(CaTIESConstants.COLLECTION_PROTOCOL_TITLE));
 		}
 			
@@ -257,7 +258,7 @@ public class ReportLoader
 			if(cprList!=null && cprList.size()>0)
 			{
 				// cpr exist then return existing cpr
-				Logger.out.info("Existing CPR found for participant id="+participant.getId()+" collectionProtocol id="+cp.getId());
+				logger.info("Existing CPR found for participant id="+participant.getId()+" collectionProtocol id="+cp.getId());
 				CollectionProtocolRegistration collProtocolReg=(CollectionProtocolRegistration)cprList.get(0);
 				collProtocolReg.setParticipant(participant);	
 				collProtocolReg.setCollectionProtocol(cp);
@@ -266,9 +267,9 @@ public class ReportLoader
 		} 
 		catch (ApplicationException appEx) 
 		{
-			Logger.out.error("Error while retrieving List for "+ CollectionProtocolRegistration.class.getName()+appEx);
+			logger.error("Error while retrieving List for "+ CollectionProtocolRegistration.class.getName()+appEx);
 		}
-		Logger.out.info("No Existing CPR found for participant id="+participant.getId()+" collectionProtocol id="+cp.getId());
+		logger.info("No Existing CPR found for participant id="+participant.getId()+" collectionProtocol id="+cp.getId());
 		return null;
 	}
 	
@@ -310,7 +311,7 @@ public class ReportLoader
 		if(this.scg.getIdentifiedSurgicalPathologyReport()!=null)
 		{
 			
-			Logger.out.info("inside"+this.scg.getIdentifiedSurgicalPathologyReport().getId());
+			logger.info("inside"+this.scg.getIdentifiedSurgicalPathologyReport().getId());
 			
 			IdentifiedSurgicalPathologyReport existingReport=(IdentifiedSurgicalPathologyReport)CaCoreAPIService.getObject(IdentifiedSurgicalPathologyReport.class, Constants.SYSTEM_IDENTIFIER, this.scg.getIdentifiedSurgicalPathologyReport().getId());
 			DeidentifiedSurgicalPathologyReport existingDeidReport=null;
@@ -324,23 +325,23 @@ public class ReportLoader
 			try 
 			{
 				existingReport=(IdentifiedSurgicalPathologyReport)CaCoreAPIService.updateObject(existingReport);
-				Logger.out.info("existingReport updated:"+existingReport.getId());
+				logger.info("existingReport updated:"+existingReport.getId());
 				if(existingDeidReport!=null)
 				{
 					existingDeidReport.setSpecimenCollectionGroup(null);
 					DeidentifiedSurgicalPathologyReport deidreport=(DeidentifiedSurgicalPathologyReport)CaCoreAPIService.updateObject(existingDeidReport);
-					Logger.out.info("deid report updated: "+deidreport.getId());
+					logger.info("deid report updated: "+deidreport.getId());
 				}
 			}
 			catch (ApplicationException ex) 
 			{
-				Logger.out.error("Error while updating old report!",ex);
+				logger.error("Error while updating old report!",ex);
 				throw new Exception(ex.getMessage());
 			}
 		}
 		else
 		{
-			Logger.out.info("No associated report with SCG");
+			logger.info("No associated report with SCG");
 			this.scg.setIdentifiedSurgicalPathologyReport(this.identifiedReport);
 			this.identifiedReport.setSpecimenCollectionGroup(this.scg);
 			CaCoreAPIService.createObject(this.identifiedReport);

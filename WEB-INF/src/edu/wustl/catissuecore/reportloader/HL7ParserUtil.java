@@ -30,7 +30,7 @@ public class HL7ParserUtil
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(HL7ParserUtil.class);
+	private static Logger logger = Logger.getCommonLogger(HL7ParserUtil.class);
 
 	/**
 	 * Method to validate report map.

@@ -34,7 +34,7 @@ public class HL7Parser implements Parser
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(HL7Parser.class);
+	private static Logger logger = Logger.getCommonLogger(HL7Parser.class);
 
 	/**
 	 * Points for exact SSN.

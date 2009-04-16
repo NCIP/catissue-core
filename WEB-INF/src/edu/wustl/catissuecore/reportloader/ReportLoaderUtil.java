@@ -21,6 +21,7 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class ReportLoaderUtil
 {
+	private static Logger logger = Logger.getCommonLogger(ReportLoaderUtil.class);
 	/**
 	 * @param participant object of Participant
 	 * @return number of matching participants
@@ -95,6 +96,7 @@ public class ReportLoaderUtil
     	}
     	catch(Exception exp)
 		{
+    		logger.debug(exp.getMessage(), exp);
 			return buff.toString();
 		}
     	return buff.toString();
@@ -134,7 +136,7 @@ public class ReportLoaderUtil
 		
 		List resultList=(List)CaCoreAPIService.executeQuery(scgHql, SpecimenCollectionGroup.class.getName());
 		
-		Logger.out.info("-------------"+scgHql+"   "+resultList.size());
+		logger.info("-------------"+scgHql+"   "+resultList.size());
 		if(resultList!=null && resultList.size()==1)
 		{
 			return (SpecimenCollectionGroup)resultList.get(0);

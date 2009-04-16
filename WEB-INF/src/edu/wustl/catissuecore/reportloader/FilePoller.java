@@ -23,7 +23,7 @@ public class FilePoller implements Observable
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(FilePoller.class);
+	private static Logger logger = Logger.getCommonLogger(FilePoller.class);
 
 	/**
 	 * Observer.

@@ -25,7 +25,7 @@ public class IdentifiedReportGenerator
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(IdentifiedReportGenerator.class);
+	private static Logger logger = Logger.getCommonLogger(IdentifiedReportGenerator.class);
 
 	/**
 	 * @param reportMap Map of String, Set

@@ -19,7 +19,7 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class ReportProcessor implements Observer
 {
-	
+	private transient Logger logger = Logger.getCommonLogger(ReportProcessor.class);
 	/**
 	 * Represents parser manager 
 	 */
@@ -75,30 +75,30 @@ public class ReportProcessor implements Observer
 				{		
 					if(isValidFile(inputFileDir+File.separator+files[i]))
 					{
-						Logger.out.info("parsing file "+files[i]);
+						logger.info("parsing file "+files[i]);
 						// Initializing SiteInfoHandler to avoid restart of server to get new site names added to file at run time
 						SiteInfoHandler.init(siteInfoFileName);
 						// calling parser to parse file
 						Long startTime=new Date().getTime();
 						parser.parse(inputFileDir+File.separator+files[i]);
 						Long endTime=new Date().getTime();
-						Logger.out.info("parsing of file "+files[i]+" finished. Time required:"+(endTime-startTime));
+						logger.info("parsing of file "+files[i]+" finished. Time required:"+(endTime-startTime));
 					}
 					else
 					{
-						Logger.out.info("Bad file found. Moving file to bad files directory. Filename:"+inputFileDir+File.separator+files[i]);
+						logger.info("Bad file found. Moving file to bad files directory. Filename:"+inputFileDir+File.separator+files[i]);
 						CSVLogger.info(CaTIESConstants.LOGGER_FILE_POLLER,"Bad file found "+inputFileDir+File.separator+files[i]);
 						moveToBadFileDir(files[i]);
 					}					
 				}
 				catch(IOException ex)
 				{
-					Logger.out.error("Error while reading file ",ex);
+					logger.error("Error while reading file ",ex);
 				}
 				catch(Exception ex)
 				{     
 					moveToBadFileDir(files[i]);
-					Logger.out.error("Bad File ",ex);
+					logger.error("Bad File ",ex);
 				}
 				moveToProcessedFileDir(files[i]);
 			}
@@ -106,7 +106,7 @@ public class ReportProcessor implements Observer
 		}
 		catch(Exception ex)
 		{     
-	  		Logger.out.error("Error while initializing parser manager ",ex);
+			logger.error("Error while initializing parser manager ",ex);
 		}	
 	}
 	
