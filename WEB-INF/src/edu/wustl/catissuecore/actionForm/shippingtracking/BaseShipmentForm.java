@@ -33,6 +33,7 @@ import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.catissuecore.util.global.Variables;
 /**
@@ -769,12 +770,12 @@ public class BaseShipmentForm extends AbstractActionForm
 		}
 		if(shipment.getCreatedDate()==null)
 		{
-			this.createdDate=Utility.parseDateToString(new Date(),Variables.dateFormat);
+			this.createdDate=Utility.parseDateToString(new Date(),CommonServiceLocator.getInstance().getDatePattern());
 			//this.createdDate=Utility.parseDateToString(shipment.getCreatedDate(),Variables.dateFormat);
 		}
 		else
 		{
-			this.createdDate=Utility.parseDateToString(shipment.getCreatedDate(),Variables.dateFormat);
+			this.createdDate=Utility.parseDateToString(shipment.getCreatedDate(),CommonServiceLocator.getInstance().getDatePattern());
 		}
 		this.label=shipment.getLabel();
 		Calendar calender = Calendar.getInstance();
@@ -784,7 +785,7 @@ public class BaseShipmentForm extends AbstractActionForm
 			this.sendTimeHour = Utility.toString(Integer.toString(calender.get(Calendar.HOUR_OF_DAY)));
 	 	   	this.sendTimeMinutes = Utility.toString(Integer.toString(calender.get(Calendar.MINUTE)));
 	 		// date foramt change by geeta
-	 	   	this.sendDate = Utility.parseDateToString(shipment.getSendDate(),Variables.dateFormat);
+	 	   	this.sendDate = Utility.parseDateToString(shipment.getSendDate(),CommonServiceLocator.getInstance().getDatePattern());
 		}
 		this.senderComments=shipment.getSenderComments();
 		this.setActivityStatus(shipment.getActivityStatus());
