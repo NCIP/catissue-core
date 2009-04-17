@@ -37,7 +37,7 @@
 							</tr>
 							<!---Following is the code button ParticipantLookupAgain-->
 							
-							<%if(request.getAttribute(Constants.SPREADSHEET_DATA_LIST)!=null){%>	
+							<%if(request.getAttribute(edu.wustl.simplequery.global.Constants.SPREADSHEET_DATA_LIST)!=null){%>	
 								<tr>
 									<td>
 

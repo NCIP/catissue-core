@@ -122,7 +122,7 @@
 				 		<html:hidden property="<%=exIdentifier%>" />
 						<%
 							String exKey = "ExternalIdentifier:" + i +"_id";
-										boolean exBool = AppUtility.isPersistedValue(map,exKey);
+										boolean exBool = edu.wustl.common.util.Utility.isPersistedValue(map,exKey);
 										String exCondition = "";
 										if(exBool)
 											exCondition = "disabled='disabled'";

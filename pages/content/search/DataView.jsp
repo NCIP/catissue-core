@@ -4,6 +4,7 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ page import="java.util.List,edu.wustl.catissuecore.util.global.Constants,edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
+<%@ page import="edu.wustl.query.util.global.AQConstants"%>
 <%@ page language="java" isELIgnored="false"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
@@ -11,7 +12,7 @@
 	List columnList = (List) request.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
 	List dataList = (List) request.getAttribute(Constants.PAGINATION_DATA_LIST);
 	String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
-	Integer identifierFieldIndex = (Integer)request.getAttribute(Constants.IDENTIFIER_FIELD_INDEX);
+	Integer identifierFieldIndex = (Integer)request.getAttribute(AQConstants.IDENTIFIER_FIELD_INDEX);
 	String title = pageOf + ".searchResultTitle";
 	int pageNum = Integer.parseInt((String)request.getAttribute(Constants.PAGE_NUMBER));
 	int totalResults = ((Integer)session.getAttribute(Constants.TOTAL_RESULTS)).intValue();

@@ -19,6 +19,7 @@
 <%@ page import="edu.wustl.catissuecore.action.annotations.AnnotationConstants"%>
 <%@ page import="edu.wustl.catissuecore.bizlogic.AnnotationUtil"%>
 <%@ page import="edu.wustl.common.util.global.CommonServiceLocator"%>
+<%@ page import="edu.wustl.simplequery.global.Constants"%>
 
 <%@ include file="/pages/content/common/BioSpecimenCommonCode.jsp" %>
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
@@ -88,7 +89,7 @@
 
 <%
 	String[] columnList = (String[]) request.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
-	List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
+	List dataList = (List) request.getAttribute(edu.wustl.simplequery.global.Constants.SPREADSHEET_DATA_LIST);
 	String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 
 	

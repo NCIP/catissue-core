@@ -9,6 +9,7 @@
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 
 <%@ page import="java.util.HashMap,java.util.Map,edu.wustl.common.beans.QueryResultObjectData"%>
+<%@ page import="edu.wustl.query.util.global.AQConstants"%>
 <script>
 <%
 String checkAllPagesSession = (String)session.getAttribute("checkAllPages");
@@ -124,7 +125,7 @@ function setEditableChkbox(checkAllPages)
 	// Patch ID: 4270_2
 	// getting hyperlinkColumnMap from session instead of request, so that it will persiste when the records per page drop down changed or page number changed.
 	// Value for this map will be set in SimpleSearchAction
-		Map hyperlinkColumnMap = (Map)session.getAttribute(Constants.HYPERLINK_COLUMN_MAP);
+		Map hyperlinkColumnMap = (Map)session.getAttribute(AQConstants.HYPERLINK_COLUMN_MAP);
 		if (hyperlinkColumnMap==null)
 			hyperlinkColumnMap = new HashMap();
 			

@@ -36,7 +36,7 @@
 		form = (ConsentResponseForm)obj;
 		signedConsentDate = form.getConsentDate();
 		if(signedConsentDate == null || signedConsentDate.trim().length()==0){
-			signedConsentDate = AppUtility.parseDateToString(Calendar.getInstance().getTime(), CommonServiceLocator.getInstance().getDatePattern());
+			signedConsentDate = edu.wustl.common.util.Utility.parseDateToString(Calendar.getInstance().getTime(), CommonServiceLocator.getInstance().getDatePattern());
 		}
 		collectionProtocolID = form.getCollectionProtocolID();
 		

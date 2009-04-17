@@ -8,6 +8,7 @@
 <%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 <%@ page import="edu.wustl.common.tree.QueryTreeNodeData"%>
+
 <html>
 <head>
 
@@ -30,7 +31,7 @@ var columns ;
 var colWidth;
 var colTypes 
 <%List columnList = (List) request.getSession().getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
-List dataList = (List) request.getSession().getAttribute(Constants.SPREADSHEET_DATA_LIST);
+List dataList = (List) request.getSession().getAttribute(edu.wustl.simplequery.global.Constants.SPREADSHEET_DATA_LIST);
 Long trees = (Long)request.getSession().getAttribute("noOfTrees");
 int noOfTrees = trees.intValue();%>
 	function checkAll(element)

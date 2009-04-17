@@ -88,7 +88,7 @@
                      <%
                      	// Added by Geeta for date format change
                      			   Date date=(Date)request.getAttribute("date");
-                     			   String startDate=AppUtility.parseDateToString(date,CommonServiceLocator.getInstance().getDatePattern());
+                     			   String startDate=edu.wustl.common.util.Utility.parseDateToString(date,CommonServiceLocator.getInstance().getDatePattern());
                      %>
 					
 <!--<td width="31%" class='${pageScope.style}'><bean:write name="currentUser" property="startDate" /></td>-->

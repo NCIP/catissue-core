@@ -12,6 +12,7 @@
 <%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
+<%@ page import="edu.wustl.common.util.global.CommonServiceLocator"%>
 
 <%@ page import="edu.wustl.catissuecore.bizlogic.AnnotationUtil"%>
 <%@ page import="edu.wustl.catissuecore.action.annotations.AnnotationConstants"%>
@@ -152,7 +153,7 @@ tr#hiddenCombo
 	<%
 			String participantIdentifier="0";
 			List columnList = (List) request.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
-			List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
+			List dataList = (List) request.getAttribute(edu.wustl.simplequery.global.Constants.SPREADSHEET_DATA_LIST);
 			
 				
 			String title = "ParticipantList";

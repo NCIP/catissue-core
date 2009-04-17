@@ -12,6 +12,7 @@
 <%@ page import="edu.wustl.catissuecore.action.annotations.AnnotationConstants"%>
 <%@ page import="edu.wustl.catissuecore.bizlogic.AnnotationUtil"%>
 <%@ page import="edu.wustl.catissuecore.util.CatissueCoreCacheManager"%>
+<%@ page import="edu.wustl.simplequery.global.Constants"%>
 <%@ page language="java" isELIgnored="false"%>
 
 <%@ include file="/pages/content/common/EventAction.jsp" %> 
@@ -35,7 +36,7 @@ for(int i=0;i<columnList1.length;i++)
 	columnList.add(columnList1[i]);
 }
 String title = null;
-List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
+List dataList = (List) request.getAttribute(edu.wustl.simplequery.global.Constants.SPREADSHEET_DATA_LIST);
 String label=(String)request.getAttribute(Constants.SPECIMEN_LABEL);
 String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 Integer identifierFieldIndex = new Integer(0);

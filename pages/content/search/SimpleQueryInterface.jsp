@@ -5,10 +5,12 @@
 <%@ page
 	import="edu.wustl.catissuecore.util.global.Constants,edu.wustl.simplequery.actionForm.SimpleQueryInterfaceForm,java.util.List,edu.wustl.common.beans.NameValueBean"%>
 <%@ page import="edu.wustl.simplequery.query.Operator"%>
+
 <%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 <%@ page import="edu.wustl.common.util.global.CommonServiceLocator"%>
 <%@ page import="edu.wustl.common.util.global.ApplicationProperties"%>
+
 <%@ page import="java.util.*"%>
 
 
@@ -27,7 +29,7 @@
 </head>
 <%
 			String[] attributeConditionArray = (String[]) request
-			.getAttribute(Constants.ATTRIBUTE_CONDITION_LIST);
+			.getAttribute(edu.wustl.simplequery.global.Constants.ATTRIBUTE_CONDITION_LIST);
 	String aliasName = (String) request
 			.getAttribute(Constants.TABLE_ALIAS_NAME);
 	String noOfRows = "1";

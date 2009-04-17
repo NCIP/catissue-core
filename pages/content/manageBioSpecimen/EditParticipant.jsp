@@ -87,7 +87,7 @@ function participantRegRow(subdivtag)
 			cellNo +=1;
 			<%}%>
 			
-			<%String registrationDate = AppUtility.parseDateToString(Calendar.getInstance().getTime(), Constants.DATE_PATTERN_MM_DD_YYYY);%>
+			<%String registrationDate = edu.wustl.common.util.Utility.parseDateToString(Calendar.getInstance().getTime(), CommonServiceLocator.getInstance().getDatePattern());%>
     		
 			//Fifth Cell
 			var cprRegistrationDate=row.insertCell(cellNo);
@@ -152,7 +152,7 @@ function participantRegRow(subdivtag)
 			<%if(request.getAttribute(Constants.SUBMITTED_FOR)!=null && request.getAttribute(Constants.SUBMITTED_FOR).equals("AddNew")){%>
 				document.forms[0].submittedFor.value = "AddNew";
 			<%}%>			
-			<%if(request.getAttribute(Constants.SPREADSHEET_DATA_LIST)!=null && dataList.size()>0){%>	
+			<%if(request.getAttribute(edu.wustl.simplequery.global.Constants.SPREADSHEET_DATA_LIST)!=null && dataList.size()>0){%>	
 
 				if(document.forms[0].radioValue.value=="Add")
 				{
@@ -616,7 +616,7 @@ function participantRegRow(subdivtag)
 						<tr>
 							<%
 								String key = "ParticipantMedicalIdentifier:" + i + "_id";
-																boolean bool = AppUtility.isPersistedValue(map, key);
+																boolean bool = edu.wustl.common.util.Utility.isPersistedValue(map, key);
 																String condition = "";
 																if (bool)
 																	condition = "disabled='disabled'";
@@ -803,7 +803,7 @@ function participantRegRow(subdivtag)
 														if (consentResponseDisplayValue == null) {
 															consentResponseDisplayValue = Constants.NO_CONSENTS_DEFINED;
 														}
-														boolean CollectionProtocolRegConditionBoolean = AppUtility
+														boolean CollectionProtocolRegConditionBoolean = edu.wustl.common.util.Utility
 														.isPersistedValue(mapCollectionProtocolRegistration,
 																key);
 														boolean activityStatusCondition = false;
@@ -964,7 +964,7 @@ function participantRegRow(subdivtag)
 
 			<!---Following is the code for Data Grid. Participant Lookup Data is displayed-->
 			<%
-				if (request.getAttribute(Constants.SPREADSHEET_DATA_LIST) != null
+				if (request.getAttribute(edu.wustl.simplequery.global.Constants.SPREADSHEET_DATA_LIST) != null
 									&& dataList.size() > 0) {
 								isRegisterButton = true;
 								if (request.getAttribute(Constants.SUBMITTED_FOR) != null

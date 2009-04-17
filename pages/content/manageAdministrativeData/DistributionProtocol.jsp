@@ -11,9 +11,9 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 <%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="edu.wustl.common.util.global.CommonServiceLocator"%>
-
 <%@ include file="/pages/content/common/AdminCommonCode.jsp" %>
-<head>
+
+<%@page import="edu.wustl.common.util.Utility"%><head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <link href="css/catissue_suite.css" rel="stylesheet" type="text/css" /> 
 <script src="jss/javaScript.js"></script>
@@ -461,7 +461,7 @@ function insRow(subdivtag)
 
 			<%
 				String key = "DistributionSpecimenRequirement:"+ counter +"_id";
-						boolean bool = AppUtility.isPersistedValue(map,key);
+						boolean bool = Utility.isPersistedValue(map,key);
 						String condition = "";
 						if(bool)
 							condition = "disabled='disabled'";

@@ -5,7 +5,7 @@
 <%@ page import="java.util.Hashtable"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.ShoppingCartForm"%>
 <%@ page import="edu.wustl.catissuecore.domain.Specimen"%>
-<%@ page import="edu.wustl.common.query.ShoppingCart"%>
+<%@ page import="edu.wustl.simplequery.query.ShoppingCart"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
@@ -34,8 +34,8 @@
 	}
 	//columnList.add(0," ");
     String checkAllPages = (String)session.getAttribute("checkAllPages");
-	List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
-	String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
+	List dataList = (List) request.getAttribute(edu.wustl.simplequery.global.Constants.SPREADSHEET_DATA_LIST);
+	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
 %>
 
 	<script language="javascript">

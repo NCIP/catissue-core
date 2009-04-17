@@ -847,7 +847,7 @@
 						    </span><html:hidden
 							property="<%=previousQuantity%>" /></td>
 						<%
-							boolean bool = AppUtility.isPersistedValue(map, keyid);
+							boolean bool = edu.wustl.common.util.Utility.isPersistedValue(map, keyid);
 									String condition = "";
 									String labelbarcodeKey="";
 									String distributionBasedOn="1";
