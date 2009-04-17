@@ -102,7 +102,12 @@ PUBLIC
 		<form-bean name="conflictSCGForm" type="edu.wustl.catissuecore.actionForm.ConflictSCGForm"/>
 <!-- end :Conflict Resolver -->		
 
-		
+<!-- Shipping Tracking Merge : Himanshu -->
+		<form-bean name="shipmentRequestForm" type="edu.wustl.catissuecore.actionForm.shippingtracking.ShipmentRequestForm"/>
+		<form-bean name="dashboardForm" type="edu.wustl.catissuecore.actionForm.shippingtracking.DashboardForm"/>
+		<form-bean name="shipmentForm" type="edu.wustl.catissuecore.actionForm.shippingtracking.ShipmentForm"/>
+		<form-bean name="shipmentReceivingForm" type="edu.wustl.catissuecore.actionForm.shippingtracking.ShipmentReceivingForm" />
+<!-- end of shipping tracking form beans-->		
 		
 				
 	</form-beans>
@@ -1789,6 +1794,298 @@ PUBLIC
 			<forward name="failure" path="/error.jsp" />
 		</action>
   		<!--Report Problem Actions Ends-->
+  		
+  		<!-- Shipping Tracking action mappings : Himanshu -->
+<action path="/ShippingTrackingDashboard"
+			type="edu.wustl.catissuecore.action.shippingtracking.ShippingTrackingDashBoardAction"
+			name="dashboardForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path=".shippingtracking.dashboardPageDef" />
+		</action>
+		<action path="/st_RequestDetails"
+			type="edu.wustl.catissuecore.action.shippingtracking.RequestDetailsAction"
+			name="shipmentRequestForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path="/ShowDashboardAction.do"/>
+		</action>
+		<action path="/ShipmentDetails"
+			type="edu.wustl.catissuecore.action.shippingtracking.ShipmentDetailsAction"
+			name="shipmentForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path="/ShowDashboardAction.do"/>
+		</action>
+		<action path="/Shipment"
+			type="edu.wustl.catissuecore.action.shippingtracking.ShipmentAction"
+			name="shipmentForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path="/ShowDashboardAction.do" />
+		</action>
+			<action path="/ShipmentRequest"
+			type="edu.wustl.catissuecore.action.shippingtracking.ShipmentRequestAction"
+			name="shipmentRequestForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path="/ShowDashboardAction.do" />
+		</action>
+		
+		<!-- For Shipment -->	
+		<action path="/BaseShipment"
+			type="edu.wustl.catissuecore.action.shippingtracking.BaseShipmentAction"
+			validate="false"
+			scope="request">
+			<forward name="success" path=".shippingTracking.newShipment" />
+		</action>
+		
+		<action path="/CreateNewShipment"
+			type="edu.wustl.common.action.CommonAddEditAction"
+			validate="true"
+			name="shipmentForm"
+			input="/BaseShipment.do?operation=add"
+			scope="request">
+			<forward name="success" path="/ShowShipmentSummary.do?operation=view" />
+			<forward name="failure" path="/BaseShipment.do?operation=add" />
+		</action>
+		
+		<action path="/SNTSearchObject"
+		    type="edu.wustl.catissuecore.action.SearchObjectAction"
+			scope="request">
+			<forward name="pageOfShipment" path="/ShipmentSearch.do"/>
+		</action>	
+		
+		<action path="/ShipmentSearch"
+			type="edu.wustl.common.action.CommonSearchAction"
+			name="shipmentForm"
+			input="/BaseShipment.do?operation=edit"
+			scope="request">
+			<forward name="pageOfShipment" path="/BaseShipment.do?operation=edit&amp;pageOf=pageOfShipment"/>
+			<forward name="pageOfSimpleQueryInterface" path="/BaseShipment.do?operation=edit&amp;pageOf=pageOfSimpleQueryInterface&amp;menuSelected=3"/>
+			<forward name="failure" path="/BaseShipment.do?operation=edit&amp;pageOf=pageOfShipment&amp;menuSelected=3"/>
+		</action>
+		<!-- End of For Shipment -->	
+		
+		<!-- For ShipmentRequest -->
+		<action path="/ShipmentRequestAction"
+			type="edu.wustl.catissuecore.action.shippingtracking.BaseShipmentAction"
+			validate="false"
+			scope="request">
+			<forward name="success" path=".shippingTracking.newShipmentRequest" />
+		</action>	
+		
+		<action path="/CreateShipmentRequest"
+			type="edu.wustl.common.action.CommonAddEditAction"
+			validate="true"
+			name="shipmentRequestForm"
+			input="/ShipmentRequestAction.do?operation=add"
+			scope="request">
+			<forward name="success" path="/ShipmentRequestAction.do?operation=edit"/>
+			<forward name="failure" path="/ShipmentRequestAction.do?operation=add" />
+		</action>
+		
+		<action path="/EditShipmentRequest"
+			type="edu.wustl.common.action.CommonAddEditAction"
+			validate="true"
+			name="shipmentRequestForm"
+			input="/ShipmentRequestAction.do?operation=edit"
+			scope="request">
+			<forward name="success" path="/ShipmentRequestAction.do?operation=edit"/>
+			<forward name="failure" path="/ShipmentRequestAction.do?operation=add" />
+		</action>
+		
+		<action path="/ViewRequestSummary"
+			type="edu.wustl.catissuecore.action.shippingtracking.ViewRequestSummaryAction"
+			validate="true"
+			name="shipmentRequestForm"
+			input="/ShipmentRequestAction.do"
+			scope="request">
+			<forward name="success" path="/AddEditShipmentRequest.do" />
+			<forward name="failure" path="/ShipmentRequestAction.do?operation=add" />
+		</action>
+		
+		<action path="/AddEditShipmentRequest"
+			type="edu.wustl.catissuecore.action.shippingtracking.AddEditShipmentRequestAction"
+			validate="false"
+			name="shipmentRequestForm"
+			input="/ShipmentRequestAction.do"
+			scope="request">
+			<forward name="success" path=".shippingTracking.viewShipmentRequestSummary" />
+			<forward name="Drafted" path="/OutgoingShipmentRequest.do?operation=edit" />
+		</action>
+		<!-- End of for ShipmentRequest -->
+		
+		<!-- For Dashboard -->
+		<action path="/ShowDashboardAction"
+			type="edu.wustl.catissuecore.action.shippingtracking.ShowDashboardAction"
+			name="dashboardForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path=".shippingTracking.dashboard" />
+		</action>
+		
+		<action path="/ShowShipmentSummary"
+			type="edu.wustl.catissuecore.action.shippingtracking.BaseShipmentAction"
+			validate="false"
+			name="shipmentForm"
+			scope="request">
+			<forward name="success" path=".shippingTracking.viewShipmentSummary" />
+		</action>
+		
+			<action path="/PrintShipmentSummary"
+			type="edu.wustl.catissuecore.action.shippingtracking.PrintSummaryAction"
+			validate="false"
+			name="shipmentForm"
+			scope="request">
+			<forward name="success" path=".shipment.summaryPrint" />
+		</action>
+		
+		<action path="/ShipmentReceived"
+			type="edu.wustl.catissuecore.action.shippingtracking.ShipmentReceivedAction"
+			validate="false"
+			scope="request">
+			<forward name="acceptOrRejectShipment" path="/ShowShipmentSummary.do"/>
+			<forward name="viewShipment" path="/ShowShipmentSummary.do?operation=view&amp;pageOf=pageOfShipment"/>
+			<forward name="failure" path="/ShowDashboardAction.do"/>
+		</action>
+		
+		<action path="/OutgoingShipment"
+			type="edu.wustl.catissuecore.action.shippingtracking.OutgoingShipmentAction"
+			validate="false"
+			scope="request">
+			<forward name="editShipment" path="/BaseShipment.do?operation=edit&amp;pageOf=pageOfShipment"/>
+			<forward name="viewShipment" path="/ShowShipmentSummary.do"/>
+			<forward name="failure" path="/ShowDashboardAction.do"/>
+		</action>
+
+		<action path="/OutgoingShipmentRequest"
+			type="edu.wustl.catissuecore.action.shippingtracking.OutgoingShipmentRequestAction"
+			name="shipmentRequestForm"
+			validate="false"
+			scope="request">
+			<forward name="editShipmentRequest" path="/ShipmentRequestAction.do?operation=edit&amp;pageOf=pageOfShipmentRequest"/>
+			<forward name="viewShipmentRequest" path="/ShipmentRequestAction.do?operation=edit&amp;pageOf=pageOfShipmentRequest"/>
+			<forward name="failure" path="/ShowDashboardAction.do"/>
+		</action>
+		
+		<action path="/IncomingShipmentRequest"
+			type="edu.wustl.catissuecore.action.shippingtracking.IncomingShipmentRequestAction"
+			name="shipmentRequestForm"
+			validate="false"
+			scope="request">
+			<forward name="createShipment" path="/ShipmentRequestAction.do?operation=edit&amp;pageOf=pageOfShipmentRequest"/>
+			<forward name="viewShipmentRequest" path="/ShipmentRequestAction.do?operation=edit&amp;pageOf=pageOfShipmentRequest"/>
+			<forward name="failure" path="/ShowDashboardAction.do"/>
+		</action>
+		
+		<action path="/RequestReceived"
+			type="edu.wustl.catissuecore.action.shippingtracking.RequestReceivedAction"
+			validate="false"
+			scope="request">
+			<forward name="createShipmentForRequest" path="/ShipmentFromRequest.do?operation=add&amp;pageOf=pageOfShipment"/>
+			<forward name="viewShipmentRequest" path="/ShipmentRequestAction.do?operation=view&amp;pageOf=pageOfShipmentRequest"/>
+			<forward name="failure" path="/ShowDashboardAction.do"/>
+		</action>
+		
+		<action path="/ShowRequestDetails"
+			type="edu.wustl.catissuecore.action.shippingtracking.ViewRequestSummaryAction"
+			validate="false"
+			name="shipmentRequestForm"
+			input="/ShowDashboardAction.do"
+			scope="request">
+			<forward name="success" path=".shippingTracking.viewShipmentRequestSummary" />
+		</action>
+		
+		
+		<action path="/ShipmentFromRequest"
+			type="edu.wustl.catissuecore.action.shippingtracking.ShipmentFromRequestAction"
+			validate="false"
+			scope="request">
+			<forward name="success" path="/BaseShipment.do?operation=add&amp;pageOf=pageOfShipment"/>
+		</action>
+		
+		<action path="/RejectShipmentRequest"
+			type="edu.wustl.catissuecore.action.shippingtracking.RejectShipmentRequestAction"
+			name="shipmentRequestForm"
+ 			validate="false"
+			scope="request">
+			<forward name="success" path="/EditShipmentRequestForwardToDashboard.do?operation=edit&amp;pageOf=pageOfShipmentRequest"/>
+		</action>
+		
+		<action path="/EditShipmentRequestForwardToDashboard"
+			type="edu.wustl.common.action.CommonAddEditAction"
+			validate="false"
+			name="shipmentRequestForm"
+			input="/ShipmentRequestAction.do?operation=edit"
+			scope="request">
+			<forward name="success" path="/ShowDashboardAction.do"/>
+			<forward name="failure" path="/ShowDashboardAction.do" />
+		</action>
+		
+		<action path="/ProcessMyListCreateShipmentRequest"
+			type="edu.wustl.catissuecore.action.shippingtracking.ProcessMyListInputAction"
+			validate="false"
+			name="shipmentRequestForm"
+			input="/ShipmentRequestAction.do?operation=edit"
+			scope="request">
+			<forward name="success" path="/ShipmentRequestAction.do?operation=add"/>
+		</action>
+		
+		<action path="/ProcessMyListCreateShipment"
+			type="edu.wustl.catissuecore.action.shippingtracking.ProcessMyListInputAction"
+			validate="false"
+			name="shipmentForm"
+			input="/ShipmentRequestAction.do?operation=edit"
+			scope="request">
+			<forward name="success" path="/BaseShipment.do?operation=add"/>
+		</action>
+		<!-- End of for ShipmentRequest -->
+	
+		<!--  Shipment receiving -->
+		<action path="/st_ShowShipmentReceving"
+			type="edu.wustl.catissuecore.action.shippingtracking.ShowShipmentReceivingAction"
+			validate="false"
+			name="shipmentReceivingForm"
+			scope="request">
+			<forward name="success" path=".shippingTracking.shipmentReceiving" />
+			<forward name="failure" path="/ShowDashboardAction.do" />
+		</action>
+		
+		<action path="/st_ShipmentReceving"
+			type="edu.wustl.common.action.CommonAddEditAction"
+			validate="false"
+			name="shipmentReceivingForm"
+			input="/st_ShowShipmentReceving.do"
+			scope="request">
+			<forward name="success" path="/ShowDashboardAction.do" />
+			<forward name="failure" path="/ShowDashboardAction.do" />
+		</action>
+		
+		<action path="/ProcessShipmentReceived"
+			type="edu.wustl.catissuecore.action.shippingtracking.ProcessShipmentReceivedAction"
+			validate="false"
+			name="shipmentReceivingForm"
+			input="/st_ShowShipmentReceving.do"
+			scope="request">
+			<forward name="success" path="/ShowDashboardAction.do" />
+			<forward name="rejectAndResend" path="/BaseShipment.do??operation=add" />
+			<forward name="failure" path="/st_ShowShipmentReceving.do?requestFor=storageLocation" />
+		</action>
+		
+		<action path="/SaveDraftShipmentRequest"
+			type="edu.wustl.catissuecore.action.shippingtracking.SaveDraftShipmentRequestAction"
+			validate="true"
+			name="shipmentRequestForm"
+			input="/ShipmentRequestAction.do"
+			scope="request">
+			<!-- <forward name="success" path="/ShowDashboardAction.do" /> -->
+			<forward name="success" path="/AddEditShipmentRequest.do" />
+			<forward name="failure" path="/ShipmentRequestAction.do?operation=add" />
+		</action>
+<!-- End Shipping Tracking mappings -->	
+  		
+  		
 		<!--print Actions Begins-->
 		<action path="/CPQueryPrintSCGEdit"
 			type="edu.wustl.catissuecore.action.PrintAction"
@@ -5230,6 +5527,7 @@ PUBLIC
 			<forward name="multipleSpWithMenu" path=".catissuecore.viewSpecimenSummary" />			
 	   </action>
 	   
+	   
 	   <action path="/ComboDataAction" type="edu.wustl.catissuecore.action.ComboDataAction" scope="request"/>					
 
 	</action-mappings>
@@ -5237,10 +5535,11 @@ PUBLIC
 	<controller processorClass="edu.wustl.common.struts.ApplicationRequestProcessor" />
 	
 	<message-resources parameter="ApplicationResources" />
+	<message-resources parameter="ShippingTrackingApplicationResources" key="msg.shippingtracking" null="false" />
 	
 	<plug-in className="org.apache.struts.tiles.TilesPlugin" >
 		<set-property property="definitions-config"
-		value="/WEB-INF/tiles-defs.xml" />
+		value="/WEB-INF/tiles-defs.xml, /WEB-INF/ShippingTracking-tiles-defs.xml" />
 		<set-property property="moduleAware" value="true" />
 		<set-property property="definitions-parser-validate" value="true" />
 	</plug-in>
