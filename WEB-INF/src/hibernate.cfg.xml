@@ -115,7 +115,10 @@
 		<mapping resource="edu/wustl/catissuecore/hbm/ClinicalStudyEvent.hbm.xml"/>		
 		<mapping resource="edu/wustl/catissuecore/hbm/ClinicalStudyEventEntry.hbm.xml"/>	
 		<mapping resource="edu/wustl/catissuecore/hbm/AbstractPosition.hbm.xml"/>		
-
+		
+		<!-- Shipping Tracking Merge Himanshu-->
+		<mapping resource="edu/wustl/catissuecore/hbm/shippingtracking/BaseShipment.hbm.xml"/>
+		<!-- shipping tracking merge ends -->
     </session-factory>
     
 </hibernate-configuration>
