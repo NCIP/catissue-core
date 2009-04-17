@@ -16,7 +16,6 @@ import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.JDBCDAO;
 import edu.wustl.dao.daofactory.DAOConfigFactory;
-import edu.wustl.dao.daofactory.DAOFactory;
 import edu.wustl.dao.exception.DAOException;
 
 /**
@@ -26,6 +25,7 @@ import edu.wustl.dao.exception.DAOException;
  */
 public class CatissueCoreSessionListener implements HttpSessionListener{
 
+	private transient Logger logger = Logger.getCommonLogger(CatissueCoreSessionListener.class);
 	public void sessionCreated(HttpSessionEvent arg0) {
 
 	}
@@ -64,7 +64,7 @@ public class CatissueCoreSessionListener implements HttpSessionListener{
 		}
 		catch(DAOException ex)
 		{
-			Logger.out.error("Could not delete the Advance Search temporary table."+ex.getMessage(),ex);
+			logger.error("Could not delete the Advance Search temporary table."+ex.getMessage(),ex);
 		}
 		String tempTableNameForQuery = Constants.TEMP_OUPUT_TREE_TABLE_NAME + sessionData.getUserId()+randomNumber;
 		try
@@ -77,7 +77,7 @@ public class CatissueCoreSessionListener implements HttpSessionListener{
 		}
 		catch(DAOException ex)
 		{
-			Logger.out.error("Could not delete the Query Module Search temporary table."+ex.getMessage(),ex);
+			logger.error("Could not delete the Query Module Search temporary table."+ex.getMessage(),ex);
 		}
 	}
 }
