@@ -56,6 +56,7 @@ import edu.wustl.dao.exception.DAOException;
 
 public final class ConsentUtil
 {
+	private static Logger logger = Logger.getCommonLogger(ConsentUtil.class);
 	/*
 	 * creates a singleton object
 	 * 
@@ -144,6 +145,7 @@ public final class ConsentUtil
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw AppUtility.getApplicationException(daoExp, "dao.error", "");
 		}
 	}
@@ -221,7 +223,7 @@ public final class ConsentUtil
 			}
 			catch (Exception e)
 			{
-				Logger.out.error(e);
+				logger.error(e);
 			}
 			StorageContainerUtil.insertSinglePositionInContainerMap(specimen.getSpecimenPosition().getStorageContainer(),containerMap,specimen.getSpecimenPosition().getPositionDimensionOne().intValue(), specimen.getSpecimenPosition().getPositionDimensionTwo().intValue()    );
 		}
@@ -250,7 +252,7 @@ public final class ConsentUtil
 		}
 		catch(Exception excp)
 		{
-			Logger.out.error(excp);
+			logger.error(excp);
 		}
 	}
 
@@ -269,7 +271,7 @@ public final class ConsentUtil
 		}
 		catch(Exception excp)
 		{
-			Logger.out.error(excp);
+			logger.error(excp);
 		}
 	}
 	
@@ -291,6 +293,7 @@ public final class ConsentUtil
 				}
 			}
 		} catch (DAOException e) {
+			logger.debug(e.getMessage(), e);
 			throw AppUtility.getApplicationException(e, "dao.error", "");
 		}
 	}

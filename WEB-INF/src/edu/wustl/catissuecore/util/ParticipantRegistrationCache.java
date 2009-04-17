@@ -12,21 +12,17 @@ import java.util.Vector;
 import javax.servlet.http.HttpSession;
 
 import net.sf.ehcache.CacheException;
-import edu.common.dynamicextensions.util.global.Variables;
 import edu.wustl.catissuecore.bizlogic.SiteBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
-import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.ApplicationException;
-import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.exception.DAOException;
-import edu.wustl.security.exception.SMException;
 import edu.wustl.security.privilege.PrivilegeCache;
 import edu.wustl.security.privilege.PrivilegeManager;
 
@@ -37,6 +33,7 @@ import edu.wustl.security.privilege.PrivilegeManager;
 class ParticipantRegistrationCache
 {
 
+	private transient Logger logger = Logger.getCommonLogger(ParticipantRegistrationCache.class);
 	//participantRegistrationInfoList contains list of ParticipantRegistration Info objects
 	List participantRegistrationInfoList;
 
@@ -64,13 +61,13 @@ class ParticipantRegistrationCache
 		}
 		catch (IllegalStateException e)
 		{
-			Logger.out.error(e);
-			Logger.out.info("Error while accessing cache");
+			logger.error(e);
+			logger.info("Error while accessing cache");
 		}
 		catch (CacheException e)
 		{
-			Logger.out.error(e);
-			Logger.out.info("Error while accessing cache");
+			logger.error(e);
+			logger.info("Error while accessing cache");
 		}
 		return participantRegInfoList;
 	}

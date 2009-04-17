@@ -22,12 +22,12 @@ import edu.common.dynamicextensions.entitymanager.EntityManager;
 import edu.common.dynamicextensions.entitymanager.EntityManagerInterface;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.AppUtility;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.exception.ApplicationException;
-import edu.wustl.dao.exception.DAOException;
+import edu.wustl.common.util.logger.Logger;
 
 
 /**
@@ -38,6 +38,7 @@ import edu.wustl.dao.exception.DAOException;
 public class XMLParser extends DefaultHandler
 {
 
+	private transient Logger logger = Logger.getCommonLogger(XMLParser.class);
 	//stores names of Collection Protocol
 	private String[] collProtNamecoll = null;
 	//store the form name
@@ -129,6 +130,7 @@ public class XMLParser extends DefaultHandler
 				}
 				catch (DynamicExtensionsSystemException e)
 				{
+					logger.debug(e.getMessage(), e);
 					throw new SAXException(e);
 				}
 			}
@@ -151,6 +153,7 @@ public class XMLParser extends DefaultHandler
 					}
 					catch (DynamicExtensionsSystemException e)
 					{
+						logger.debug(e.getMessage(), e);
 						throw new SAXException(e);
 					}
 				}
@@ -171,6 +174,7 @@ public class XMLParser extends DefaultHandler
 				}
 				catch (DynamicExtensionsSystemException e)
 				{
+					logger.debug(e.getMessage(), e);
 					throw new SAXException(e);
 				}
 			}
@@ -181,11 +185,13 @@ public class XMLParser extends DefaultHandler
 			{
 				try
 				{
+					logger.debug("Entity cannot be null. Please enter Entity name.");
 					throw new DynamicExtensionsSystemException(
 							"Entity cannot be null. Please enter Entity name.");
 				}
 				catch (DynamicExtensionsSystemException e)
 				{
+					logger.debug(e.getMessage(), e);
 					throw new SAXException(e);
 				}
 
@@ -198,11 +204,13 @@ public class XMLParser extends DefaultHandler
 			{
 				try
 				{
+					logger.debug("Node Entity must be specified inside the EntityGroup node or check the EntityGroup's tag name.");
 					throw new DynamicExtensionsSystemException(
 							"Node Entity must be specified inside the EntityGroup node or check the EntityGroup's tag name.");
 				}
 				catch (DynamicExtensionsSystemException e)
 				{
+					logger.debug(e.getMessage(), e);
 					throw new SAXException(e);
 				}
 			}
@@ -219,6 +227,7 @@ public class XMLParser extends DefaultHandler
 				}
 				catch (DynamicExtensionsSystemException e)
 				{
+					logger.debug(e.getMessage(), e);
 					throw new SAXException(e);
 				}
 			}
@@ -259,6 +268,7 @@ public class XMLParser extends DefaultHandler
 				}
 				catch (DynamicExtensionsSystemException e)
 				{
+					logger.debug(e.getMessage(), e);
 					throw new SAXException(e);
 				}
 			}
@@ -282,6 +292,7 @@ public class XMLParser extends DefaultHandler
 				}
 				catch (DynamicExtensionsSystemException e)
 				{
+					logger.debug(e.getMessage(), e);
 					throw new SAXException(e);
 				}
 			}

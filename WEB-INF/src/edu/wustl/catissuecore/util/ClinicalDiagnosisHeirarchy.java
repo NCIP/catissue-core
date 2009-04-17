@@ -12,7 +12,6 @@ import java.util.List;
 
 import edu.wustl.catissuecore.exception.CatissueException;
 import edu.wustl.common.exceptionformatter.ConstraintViolationFormatter;
-import edu.wustl.common.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
 
 

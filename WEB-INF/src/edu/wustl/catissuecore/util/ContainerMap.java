@@ -19,6 +19,7 @@ import edu.wustl.common.util.tag.NLevelCustomCombo;
  */
 public class ContainerMap extends NLevelCustomCombo {
 	
+	private transient Logger logger = Logger.getCommonLogger(ContainerMap.class);
 	/**
 	 * Name for the button component.
 	 */
@@ -127,7 +128,7 @@ public class ContainerMap extends NLevelCustomCombo {
 			out.println("</tr></table> ");
 		}catch(IOException io)
 		{
-			Logger.out.error(io);
+			logger.error(io);
 		}
 		// Call to NLevelCustomCombo's doEndTag();
 		return super.doEndTag();
@@ -135,12 +136,12 @@ public class ContainerMap extends NLevelCustomCombo {
 	
 	private void print(String[] strArray)
 	{
-		 Logger.out.info("-------------" + strArray.length + "-----------");
+		 logger.info("-------------" + strArray.length + "-----------");
 		for(int i = 0; i< strArray.length; i++)
 		{
-			Logger.out.info(i + " : " + strArray[i]);
+			logger.info(i + " : " + strArray[i]);
 		}
-		Logger.out.info("----------------------------------------------");
+		logger.info("----------------------------------------------");
 	}
 	
 }

@@ -57,7 +57,7 @@ import edu.wustl.dao.exception.DAOException;
  */
 public final class EventsUtil
 {
-	
+	private static Logger logger = Logger.getCommonLogger(EventsUtil.class);
 	/*
 	 * create singleton object
 	 */
@@ -287,7 +287,7 @@ public final class EventsUtil
 			}
 			catch (ParseException e)
 			{
-				Logger.out.debug("Exception in Parsing Date" + e);
+				logger.debug("Exception in Parsing Date" + e);
 			}
 		}
 		else

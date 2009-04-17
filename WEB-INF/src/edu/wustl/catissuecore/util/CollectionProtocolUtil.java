@@ -55,7 +55,7 @@ import edu.wustl.dao.exception.DAOException;
 public class CollectionProtocolUtil 
 {
 
-	
+	private static Logger logger = Logger.getCommonLogger(CollectionProtocolUtil.class);
 	private static final String MOLECULAR_SPECIMEN_CLASS = "Molecular";
 
 	private LinkedHashMap<String, CollectionProtocolEventBean> eventBean = 
@@ -702,6 +702,7 @@ public class CollectionProtocolUtil
 		try{
 			enrollmentNo = Integer.valueOf(cpBean.getEnrollment());
 		}catch(NumberFormatException e){
+			logger.debug(e.getMessage(), e);
 			enrollmentNo = Integer.valueOf(0);
 		}
 		collectionProtocol.setEnrollment(enrollmentNo);
@@ -965,7 +966,7 @@ public class CollectionProtocolUtil
 		} 
 		catch (Exception e1) 
 		{
-			Logger.out.error("Error in setting Section header Priorities",e1);
+			logger.error("Error in setting Section header Priorities",e1);
 			return null;
 		}
 		

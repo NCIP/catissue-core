@@ -23,6 +23,7 @@ import edu.wustl.security.privilege.PrivilegeManager;
 
 public class CSMValidator implements IValidator {
 
+	private transient Logger logger = Logger.getCommonLogger(CSMValidator.class);
 	public boolean hasPrivilegeToView(SessionDataBean sessionDataBean, String baseObjectId,
 			String privilegeName) 
 	{
@@ -59,7 +60,7 @@ public class CSMValidator implements IValidator {
 		} 
 		catch (Exception e1) 
 		{
-			Logger.out.debug(e1.getMessage(), e1);
+			logger.debug(e1.getMessage(), e1);
 		}
 		return hasPrivilege;
 	}

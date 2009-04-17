@@ -21,6 +21,7 @@ import edu.wustl.common.util.logger.Logger;
 public class ParticipantCache
 {
 
+	private transient Logger logger = Logger.getCommonLogger(ParticipantCache.class);
 	//	participantsMap is map which contains all participants information.
 	Map participantsMap;
 
@@ -44,13 +45,13 @@ public class ParticipantCache
 		}
 		catch (IllegalStateException e)
 		{
-			Logger.out.error(e);
-			Logger.out.info("Error while accessing cache");
+			logger.error(e);
+			logger.info("Error while accessing cache");
 		}
 		catch (CacheException e)
 		{
-			Logger.out.error(e);
-			Logger.out.info("Error while accessing cache");
+			logger.error(e);
+			logger.info("Error while accessing cache");
 		}
 		return participantMap;
 	}

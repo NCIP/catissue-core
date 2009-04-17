@@ -23,8 +23,6 @@ import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.exception.ApplicationException;
-import edu.wustl.common.exception.BizLogicException;
-import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
@@ -35,12 +33,13 @@ import edu.wustl.dao.exception.DAOException;
 public final class StorageContainerUtil
 {
 
-	/*
+	private static Logger logger = Logger.getCommonLogger(StorageContainerUtil.class);
+	/**
 	 * creates a singleton object
 	 */
 	private static StorageContainerUtil storcontUtil = new StorageContainerUtil();
 
-	/*
+	/**
 	 * Private constructor
 	 */
 	private StorageContainerUtil()
@@ -48,7 +47,7 @@ public final class StorageContainerUtil
 
 	}
 
-	/*
+	/**
 	 * returns single object
 	 */
 
@@ -131,13 +130,13 @@ public final class StorageContainerUtil
 		if (yPosList != null)
 		{
 
-			//Logger.out.debug("deleteSinglePositionInContainerMap method :----yPosList :" + yPosList);
+			//logger.debug("deleteSinglePositionInContainerMap method :----yPosList :" + yPosList);
 			for (int i = 0; i < yPosList.size(); i++)
 			{
 				NameValueBean yPosnvb = (NameValueBean) yPosList.get(i);
 				if (yPosnvb.getValue().equals("" + y))
 				{
-					//Logger.out.debug("Removing value:" + y);
+					//logger.debug("Removing value:" + y);
 					yPosList.remove(i);
 					break;
 				}
@@ -146,7 +145,7 @@ public final class StorageContainerUtil
 
 			}
 		}
-		//Logger.out.debug("deleteSinglePositionInContainerMap method after deleting :----yPosList :" + yPosList);
+		//logger.debug("deleteSinglePositionInContainerMap method after deleting :----yPosList :" + yPosList);
 
 		if (yPosList == null || yPosList.isEmpty())
 		{
@@ -560,7 +559,8 @@ public final class StorageContainerUtil
 				}
 				catch (CacheException e)
 				{
-					Logger.out.error(e);
+					logger.debug(e.getMessage(), e);
+					logger.error(e);
 				}
 
 				if (containerMapFromCache != null)
@@ -705,7 +705,8 @@ public final class StorageContainerUtil
 		}
 		catch (CacheException e)
 		{
-			Logger.out.error(e);
+			logger.debug(e.getMessage(), e);
+			logger.error(e);
 		}
 
 		int count = 0;
@@ -877,9 +878,9 @@ public final class StorageContainerUtil
 			nvb = (NameValueBean) list.get(0);
 			startingPoints[2] = nvb.getValue();
 
-			Logger.out.info("Starting points[0]" + startingPoints[0]);
-			Logger.out.info("Starting points[1]" + startingPoints[1]);
-			Logger.out.info("Starting points[2]" + startingPoints[2]);
+			logger.info("Starting points[0]" + startingPoints[0]);
+			logger.info("Starting points[1]" + startingPoints[1]);
+			logger.info("Starting points[2]" + startingPoints[2]);
 			initialValues = new ArrayList();
 			initialValues.add(startingPoints);
 		}
@@ -1114,7 +1115,8 @@ public final class StorageContainerUtil
 		}
 		catch (CacheException e)
 		{
-			Logger.out.error(e);
+			logger.debug(e.getMessage(), e);
+			logger.error(e);
 		}
 
 		if (containerMapFromCache != null)
@@ -1194,6 +1196,7 @@ public final class StorageContainerUtil
 			}
 			catch (Exception e)
 			{
+				logger.debug(e.getMessage(), e);
 				flag = true;
 
 			}
@@ -1211,6 +1214,7 @@ public final class StorageContainerUtil
 			}
 			catch (Exception e)
 			{
+				logger.debug(e.getMessage(), e);
 				flag = true;
 
 			}
@@ -1298,7 +1302,7 @@ public final class StorageContainerUtil
 		}
 		catch (CacheException e)
 		{
-			Logger.out.error(e);
+			logger.error(e);
 		}
 
 		if (containerMapFromCache != null && !(chkContainerFull(containerId, storageContainerName)))

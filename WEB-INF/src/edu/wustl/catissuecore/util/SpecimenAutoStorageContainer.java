@@ -16,9 +16,9 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.ApplicationException;
-import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
+import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.security.exception.SMException;
 
@@ -30,6 +30,7 @@ import edu.wustl.security.exception.SMException;
  */
 public class SpecimenAutoStorageContainer {
 
+	private transient Logger logger = Logger.getCommonLogger(SpecimenAutoStorageContainer.class);
 	private LinkedHashMap<String, LinkedList<GenericSpecimen>> specimenMap = 
 		new LinkedHashMap<String, LinkedList<GenericSpecimen>> ();
 	private Long cpId = null;
@@ -135,8 +136,9 @@ public class SpecimenAutoStorageContainer {
 			populateStorageLocations(specimenDataBeanList,
 					collectionProtocolId.longValue(), containerMap, bean, className);
 
-		} catch (Exception exception) {
-
+		} catch (Exception exception) 
+		{
+			logger.debug(exception.getMessage(), exception);
 			throw AppUtility.getApplicationException( exception,"utility.error", "");
 		}
 		

@@ -16,7 +16,6 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.exception.ApplicationException;
-import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.CommonServiceLocator;
@@ -34,6 +33,7 @@ import edu.wustl.security.manager.SecurityManagerFactory;
  */
 public class EmailHandler
 {
+	private transient Logger logger = Logger.getCommonLogger(EmailHandler.class);
     /**
      * Creates and sends the user registration approval emails to user and the administrator.
      * @param user The user whose registration is approved.
@@ -60,13 +60,13 @@ public class EmailHandler
 		
 		if (emailStatus)
         {
-            Logger.out.info(ApplicationProperties
+            logger.info(ApplicationProperties
                     .getValue("user.approve.email.success")
                     + user.getLastName() + " " + user.getFirstName());
         }
         else
         {
-            Logger.out.info(ApplicationProperties
+            logger.info(ApplicationProperties
                     .getValue("user.approve.email.failure")
                     + user.getLastName() + " " + user.getFirstName());
         }
@@ -124,13 +124,13 @@ public class EmailHandler
         
         if (emailStatus)
         {
-            Logger.out.info(ApplicationProperties
+            logger.info(ApplicationProperties
                     .getValue("user.reject.email.success")
                     + user.getLastName() + " " + user.getFirstName());
         }
         else
         {
-            Logger.out.info(ApplicationProperties
+            logger.info(ApplicationProperties
                     .getValue("user.reject.email.success")
                     + user.getLastName() + " " + user.getFirstName());
         }
@@ -154,13 +154,13 @@ public class EmailHandler
         
         if (emailStatus)
         {
-            Logger.out.info(ApplicationProperties
+            logger.info(ApplicationProperties
                     .getValue("userRegistration.email.success")
                     + user.getLastName() + " " + user.getFirstName());
         }
         else
         {
-            Logger.out.info(ApplicationProperties
+            logger.info(ApplicationProperties
                     .getValue("userRegistration.email.failure")
                     + user.getLastName() + " " + user.getFirstName());
         }
@@ -209,6 +209,7 @@ public class EmailHandler
         }
         catch(SMException smExp)
         {
+        	logger.debug(smExp.getMessage(), smExp);
             throw AppUtility.getApplicationException(smExp,smExp.getErrorKeyAsString(),  smExp.getMessage());
         }
         
@@ -224,13 +225,13 @@ public class EmailHandler
 	{
 		if (emailStatus)
 		{
-			Logger.out.info(ApplicationProperties
+			logger.info(ApplicationProperties
 			    .getValue("user.loginDetails.email.success")
 			    + user.getLastName() + " " + user.getFirstName());
 		}
 		else
 		{
-			Logger.out.info(ApplicationProperties
+			logger.info(ApplicationProperties
 			    .getValue("user.loginDetails.email.failure")
 			    + user.getLastName() + " " + user.getFirstName());
 		}
@@ -255,12 +256,12 @@ public class EmailHandler
         
         if (emailStatus)
 		{
-			Logger.out.info(ApplicationProperties
+			logger.info(ApplicationProperties
 			    .getValue("reportedProblem.email.success"));
 		}
 		else
 		{
-			Logger.out.info(ApplicationProperties
+			logger.info(ApplicationProperties
 			    .getValue("reportedProblem.email.failure"));
 		}
     }
@@ -298,7 +299,7 @@ public class EmailHandler
  		catch (MessagingException messExcp)
  		{
  			emailStatus=false;
- 			Logger.out.info(messExcp.getMessage());
+ 			logger.info(messExcp.getMessage());
  		}
          return emailStatus;
     }
@@ -338,7 +339,7 @@ public class EmailHandler
 		catch (MessagingException messExcp)
 		{
 			emailStatus=false;
-			Logger.out.info(messExcp.getMessage());
+			logger.info(messExcp.getMessage());
 		}
         return emailStatus;
     }
@@ -376,7 +377,7 @@ public class EmailHandler
  		catch (MessagingException messExcp)
  		{
  			emailStatus=false;
- 			Logger.out.info(messExcp.getMessage());
+ 			logger.info(messExcp.getMessage());
  		}
          return emailStatus;
     }
@@ -413,7 +414,7 @@ public class EmailHandler
 		catch (MessagingException messExcp)
 		{
 			emailStatus=false;
-			Logger.out.info(messExcp.getMessage());
+			logger.info(messExcp.getMessage());
 		}
     	return emailStatus;
     }
@@ -426,7 +427,7 @@ public class EmailHandler
     {
     	String mailServer = XMLPropertyHandler.getValue("email.mailServer");
         /*SendEmail email = new SendEmail();
-        Logger.out.info("Email body..........  \n"  + body);
+        logger.info("Email body..........  \n"  + body);
         System.out.println("Email body..........  \n"  + body);
         boolean emailStatus = email.sendmail(toEmailAddress, ccEmailAddress, bccEmailAddress,
     			fromEmailAddress, mailServer, subject, body);*/
@@ -446,10 +447,10 @@ public class EmailHandler
 		catch (MessagingException messExcp)
 		{
 			emailStatus=false;
-			Logger.out.info(messExcp.getMessage());
+			logger.info(messExcp.getMessage());
 		}
     	
-    	Logger.out.info("EmailStatus  "  + emailStatus);
+    	logger.info("EmailStatus  "  + emailStatus);
         return emailStatus;
     }
     

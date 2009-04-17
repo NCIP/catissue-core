@@ -22,8 +22,6 @@ import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.exception.ApplicationException;
-import edu.wustl.common.exception.BizLogicException;
-import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.Variables;
 import edu.wustl.common.util.logger.Logger;
@@ -31,7 +29,6 @@ import edu.wustl.dao.DAO;
 import edu.wustl.dao.daofactory.DAOConfigFactory;
 import edu.wustl.dao.daofactory.IDAOFactory;
 import edu.wustl.dao.exception.DAOException;
-import edu.wustl.security.exception.SMException;
 import edu.wustl.security.global.Permissions;
 import edu.wustl.security.privilege.PrivilegeCache;
 import edu.wustl.security.privilege.PrivilegeManager;
@@ -47,6 +44,7 @@ import gov.nih.nci.security.exceptions.CSException;
 
 public final class CaTissuePrivilegeUtility {
 
+	private static Logger logger = Logger.getCommonLogger(CaTissuePrivilegeUtility.class);
 	/*
 	 * create singleton Object
 	 */
@@ -103,12 +101,12 @@ public final class CaTissuePrivilegeUtility {
 				}
 			}
 		} catch (DAOException e) {
-			Logger.out.debug(e.getMessage(), e);
+			logger.debug(e.getMessage(), e);
 		} finally {
 			try {
 				dao.closeSession();
 			} catch (DAOException e) {
-				Logger.out.debug(e.getMessage(), e);
+				logger.debug(e.getMessage(), e);
 			}
 		}
 
@@ -305,7 +303,7 @@ public final class CaTissuePrivilegeUtility {
 			map.putAll(getSitePrivileges(privilegeCache));
 
 		} catch (DAOException e) {
-			Logger.out.error(e);
+			logger.error(e);
 		}
 
 		return map;
@@ -428,7 +426,7 @@ public final class CaTissuePrivilegeUtility {
 			updatePrivilegeMap(privilegeOnCPMap, siteCollection,
 					siteIdSetSpecific);
 		} catch (Exception e) {
-			Logger.out.debug(e.getMessage(), e);
+			logger.debug(e.getMessage(), e);
 			// return null;
 		} 
 		finally
@@ -439,7 +437,7 @@ public final class CaTissuePrivilegeUtility {
 			}
 			catch (DAOException e) 
 			{
-				Logger.out.debug(e.getMessage(), e);
+				logger.debug(e.getMessage(), e);
 			}
 		}
 
@@ -598,7 +596,7 @@ public final class CaTissuePrivilegeUtility {
 				}
 			}
 		} catch (Exception e) {
-			Logger.out.error(e);
+			logger.error(e);
 			return null;
 		} 
 		finally 
@@ -609,7 +607,7 @@ public final class CaTissuePrivilegeUtility {
 			} 
 			catch (DAOException e) 
 			{
-				Logger.out.error(e);
+				logger.error(e);
 
 			}
 		}
