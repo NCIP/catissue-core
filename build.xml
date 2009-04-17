@@ -539,7 +539,7 @@
 		<copy file="${base.dir}/WEB-INF/lib/PrintCatissueCore_Client.jar" todir="${zip.dir}" overwrite="true" />
 		<copy file="dynamicExtensions.war" todir="${zip.dir}" overwrite="true" />
 		<copy file="caTissuePrintWebService.war" todir="${zip.dir}" overwrite="true" />
-		<copy file="shippingtracking.zip" todir="${zip.dir}" overwrite="true" />
+		<!--<copy file="shippingtracking.zip" todir="${zip.dir}" overwrite="true" />-->
 		<!-- only single war file is being used so comment it -->
 		<!-- <copy file="catissuecorecsm.war" todir="${zip.dir}" overwrite="true" /> -->
 		<copy file="catissuecore-ds.xml" todir="${zip.dir}" overwrite="true" />
@@ -994,7 +994,7 @@
 		<copy todir="${base.dir}/caTissueSuite_Client/lib" overwrite="true">
             <fileset dir="${lib.dir}">
             	<include name="commonpackage.jar"/>
-            	<include name="shippingtracking.jar"/>
+            	<!-- <include name="shippingtracking.jar"/> -->
             	<include name="washu-commons.jar"/>
             </fileset>
 			<fileset dir="${temp.dir}">
@@ -1005,8 +1005,7 @@
 		<copy todir="${base.dir}/CaTissueSuite_caGrid_Service/lib" overwrite="true">
 	            <fileset dir="${lib.dir}">
 	            	<include name="commonpackage.jar"/>
-	            	<include name="shippingtracking.jar"/>
-					<include name="washu-commons.jar"/>
+	            	<include name="washu-commons.jar"/>
 	            </fileset>
 				<fileset dir="${temp.dir}">
 		            	<include name="catissuecore.jar"/>
@@ -1016,8 +1015,7 @@
 		<copy todir="${base.dir}/catissue_de_integration_client/lib" overwrite="true">
             <fileset dir="${lib.dir}">
             	<include name="commonpackage.jar"/>
-				<include name="shippingtracking.jar"/>
-				<include name="washu-commons.jar"/>
+            	<include name="washu-commons.jar"/>
             </fileset>
 			 <fileset dir="${temp.dir}">
 	            	<include name="catissuecore.jar"/>
@@ -1030,7 +1028,6 @@
             </fileset>
 			<fileset dir="${lib.dir}">
             	<include name="commonpackage.jar"/>
-				<include name="shippingtracking.jar"/>
 				<include name="washu-commons.jar"/>
             </fileset>
         </copy>
@@ -1242,7 +1239,8 @@
 				<exclude name="**/java.policy.applet*" />
 			</fileset>
 		</jar>
-	</target>
+	</target> 
+	<!-- shippingtracking - end -->
 
 	<!-- =================================================================== -->
 	<!-- Junit StrutsTestCases for Nightly Build  -->
@@ -1425,5 +1423,5 @@
 	</target>
 		
 	
-	<!-- shippingtracking - end -->
+	
 </project>
