@@ -18,6 +18,7 @@ import edu.wustl.common.util.global.Validator;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
+import edu.wustl.dao.exception.DAOException;
 
 public class DepartmentBizLogic extends CatissueDefaultBizLogic
 {
@@ -53,19 +54,26 @@ public class DepartmentBizLogic extends CatissueDefaultBizLogic
 	 */
 	public String getLatestDepartment(String departmentName)throws BizLogicException
 	{
-		String sourceObjectName = Department.class.getName();
-    	String[] selectColumnName = {Constants.SYSTEM_IDENTIFIER};
-        	
-    	QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
-    	queryWhereClause.addCondition(new EqualClause(Constants.NAME,departmentName));
-		
-    	List departmentList = retrieve(sourceObjectName, selectColumnName,queryWhereClause);
-    	Long departmentId = null;
-    	if((departmentList != null) && (departmentList.size()>0))
-    	{
-    		departmentId =(Long)departmentList.get(0);
-    	}
-    	return departmentId.toString();
+		try
+		{
+			String sourceObjectName = Department.class.getName();
+			String[] selectColumnName = {Constants.SYSTEM_IDENTIFIER};
+
+			QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
+			queryWhereClause.addCondition(new EqualClause(Constants.NAME,departmentName));
+
+			List departmentList = retrieve(sourceObjectName, selectColumnName,queryWhereClause);
+			Long departmentId = null;
+			if((departmentList != null) && (departmentList.size()>0))
+			{
+				departmentId =(Long)departmentList.get(0);
+			}
+			return departmentId.toString();
+		}
+		catch(DAOException daoexp)
+		{
+			throw getBizLogicException(daoexp, "dao.error", "");
+		}
 	}
 	
 	/**

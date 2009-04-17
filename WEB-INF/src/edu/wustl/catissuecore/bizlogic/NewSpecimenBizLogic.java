@@ -3806,6 +3806,9 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		catch (BizLogicException e)
 		{
 			logger.error(e.getMessage(), e);
+		} catch (DAOException e)
+		{
+			logger.error(e.getMessage(), e);
 		}
 		if (result != null)
 		{

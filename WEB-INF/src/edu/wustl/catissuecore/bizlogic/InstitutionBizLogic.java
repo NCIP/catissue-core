@@ -21,6 +21,7 @@ import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
+import edu.wustl.dao.exception.DAOException;
 
 public class InstitutionBizLogic extends CatissueDefaultBizLogic
 {
@@ -56,18 +57,25 @@ public class InstitutionBizLogic extends CatissueDefaultBizLogic
      * @throws BizLogicException
      */
 	public String getLatestInstitution(String institutionName)throws BizLogicException
-    {
-    	String sourceObjectName = Institution.class.getName();
-    	String[] selectColumnName = {Constants.SYSTEM_IDENTIFIER};
-  
-    	QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
-    	queryWhereClause.addCondition(new EqualClause(Constants.NAME,institutionName));
-    	
-    	List institutionList = retrieve(sourceObjectName, selectColumnName,queryWhereClause);
-    	
-    	Long institutionId =(Long)institutionList.get(0);
-    	return institutionId.toString();
-    }
+	{
+		try
+		{
+			String sourceObjectName = Institution.class.getName();
+			String[] selectColumnName = {Constants.SYSTEM_IDENTIFIER};
+
+			QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
+			queryWhereClause.addCondition(new EqualClause(Constants.NAME,institutionName));
+
+			List institutionList = retrieve(sourceObjectName, selectColumnName,queryWhereClause);
+
+			Long institutionId =(Long)institutionList.get(0);
+			return institutionId.toString();
+		}
+		catch(DAOException daoexp)
+		{
+			throw getBizLogicException(daoexp, "dao.error", "");
+		}
+	}
 	
 	
 	/**

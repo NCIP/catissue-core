@@ -942,14 +942,12 @@ public class AppUtility
 		if (specimenClass == null || !Validator.isEnumeratedValue(specimenClassList, specimenClass))
 		{
 			ErrorKey errorKey = ErrorKey.getErrorKey("protocol.class.errMsg");
-			throw new DAOException(errorKey, new Exception(), "AppUtility.java"
-					+ DAOConstants.OPEN_SESSION_ERROR);
+			throw new DAOException(errorKey, new Exception(), "AppUtility.java");
 		}
 		if (!Validator.isEnumeratedValue(AppUtility.getSpecimenTypes(specimenClass), specimenType))
 		{
 			ErrorKey errorKey = ErrorKey.getErrorKey("protocol.type.errMsg");
-			throw new DAOException(errorKey, new Exception(), "AppUtility.java"
-					+ DAOConstants.OPEN_SESSION_ERROR);
+			throw new DAOException(errorKey, new Exception(), "AppUtility.java");
 		}
 		/* Patch ends here */
 		return true;

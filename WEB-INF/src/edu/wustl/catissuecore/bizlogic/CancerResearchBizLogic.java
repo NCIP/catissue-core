@@ -51,19 +51,26 @@ public class CancerResearchBizLogic extends CatissueDefaultBizLogic
 	 */
 	public String getLatestCRG(String crgName)throws BizLogicException
 	{
-		String sourceObjectName = CancerResearchGroup.class.getName();
-    	String[] selectColumnName = {Constants.SYSTEM_IDENTIFIER};
-    		
-    	QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
-    	queryWhereClause.addCondition(new EqualClause(Constants.NAME,crgName));
-    	
-    	List crgList = retrieve(sourceObjectName, selectColumnName, queryWhereClause);
-    	Long crgId = null;
-    	if((crgList != null) && (crgList.size()>0))
-    	{
-    		crgId =(Long)crgList.get(0);
-    	}
-    	return crgId.toString();
+		try
+		{
+			String sourceObjectName = CancerResearchGroup.class.getName();
+			String[] selectColumnName = {Constants.SYSTEM_IDENTIFIER};
+
+			QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
+			queryWhereClause.addCondition(new EqualClause(Constants.NAME,crgName));
+
+			List crgList = retrieve(sourceObjectName, selectColumnName, queryWhereClause);
+			Long crgId = null;
+			if((crgList != null) && (crgList.size()>0))
+			{
+				crgId =(Long)crgList.get(0);
+			}
+			return crgId.toString();
+		}
+		catch(DAOException daoexp)
+		{
+			throw getBizLogicException(daoexp, "dao.error", "");
+		}
 	}
 	
 	/**
