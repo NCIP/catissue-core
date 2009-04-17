@@ -24,6 +24,7 @@ import java.util.Vector;
 
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * @author aarti_sharma
@@ -33,6 +34,7 @@ import edu.wustl.common.beans.SessionDataBean;
  */
 public class Variables
 {
+	private static Logger logger = Logger.getCommonLogger(Variables.class);
     public static Vector databaseDefinitions=new Vector();
     public static String databaseDriver=new String();
     public static String[] databasenames;
@@ -152,10 +154,12 @@ public class Variables
 		}
 		catch (FileNotFoundException e)
 		{
+			logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 		}
 		catch (IOException e)
 		{
+			logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 		}		
 		

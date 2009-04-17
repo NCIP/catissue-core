@@ -17,8 +17,9 @@ import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.StringTokenizer;
+
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * This class is for import/export data to database.
@@ -27,6 +28,7 @@ import java.util.StringTokenizer;
  */
 public class AutomateImportSS 
 {
+	private transient Logger logger = Logger.getCommonLogger(AutomateImportSS.class);
 	// The Name of the server for the database. For example : localhost
 	static String DATABASE_SERVER_NAME;
 	// The Port number of the server for the database.
@@ -428,6 +430,7 @@ public class AutomateImportSS
 	        return sb.toString();
     	}
 	    catch(SQLException exception){
+	    	logger.debug(exception.getMessage(), exception);
 	    	throw exception;
 	    } 
 	    finally
@@ -479,6 +482,7 @@ public class AutomateImportSS
     	}
     	catch(Exception e)
     	{
+    		logger.debug(e.getMessage(), e);
     		throw e;
     	}
     	finally

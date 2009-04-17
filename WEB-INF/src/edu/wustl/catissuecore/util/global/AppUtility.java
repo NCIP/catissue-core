@@ -142,7 +142,7 @@ public class AppUtility
 	/**
 	 * Class Logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(AppUtility.class);
+	private static Logger logger = Logger.getCommonLogger(AppUtility.class);
 
 	public static Set getSpecimenClassCDE()
 	{
@@ -1263,7 +1263,7 @@ public class AppUtility
 					Constants.APPLICATION_NAME);
 			JDBCDAO dao = daofactory.getJDBCDAO();
 			dao.openSession(null);
-			Logger.out.debug("SQL************" + sql);
+			logger.debug("SQL************" + sql);
 			AbstractQueryExecutor queryExecutor =  edu.wustl.query.util.global.Utility.getQueryExecutor();			
 			PagenatedResultData pagenatedResultData = queryExecutor.getQueryResultList(sql,null, sessionDataBean,
 					isSecureExecute, hasConditionOnIdentifiedField, queryResultObjectDataMap,
@@ -1375,7 +1375,7 @@ public class AppUtility
 			}
 			catch (ParseException e)
 			{
-				Logger.out
+				logger
 						.error("Can not parse the given date in getAttributeValuesInProperOrder() method :"
 								+ e.getMessage());
 				e.printStackTrace();
@@ -1608,7 +1608,7 @@ public class AppUtility
 	public static String getResponseString(HttpServletRequest request, String responseString)
 	{
 		ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
-		Logger.out.info("Errors:" + errors);
+		logger.info("Errors:" + errors);
 		if (errors != null || errors.size() != 0)
 		{
 			Iterator iterator = errors.get();
@@ -1673,7 +1673,7 @@ public class AppUtility
 		catch (ApplicationException e)
 		{
 			// TODO Auto-generated catch block
-			Logger.out.debug(e.getMessage(), e);
+			logger.debug(e.getMessage(), e);
 			return null;
 		}
 		return specimen;
@@ -1918,7 +1918,7 @@ public class AppUtility
 				}
 				catch (DAOException e)
 				{
-					Logger.out.debug(e.getMessage(), e);
+					logger.debug(e.getMessage(), e);
 				}
 			}*/
 			for (Long id : idSet)
@@ -1951,14 +1951,14 @@ public class AppUtility
 		}
 		catch (ApplicationException e)
 		{
-			Logger.out.debug(e.getMessage(), e);
+			logger.debug(e.getMessage(), e);
 		}
 		finally
 		{
 			try {
 				dao.closeSession();
 			} catch (DAOException e) {
-				Logger.out.debug(e.getMessage(), e);
+				logger.debug(e.getMessage(), e);
 				e.printStackTrace();
 			}
 		}
@@ -2114,12 +2114,15 @@ public class AppUtility
 		}
 		catch (SMException e)
 		{
+			logger.debug(e.getMessage(), e);
 			handleSMException(e);
 		}
 		catch (CSTransactionException e)
 		{
+			logger.debug(e.getMessage(), e);
 			throw getApplicationException(e, "utility.error", "");
 		} catch (ClassNotFoundException e) {
+			logger.debug(e.getMessage(), e);
 			throw getApplicationException(e, "clz.not.found.error", "");
 		}
 	}
@@ -2185,10 +2188,10 @@ public class AppUtility
 		}
 		catch (ApplicationException e)
 		{
-			Logger.out.debug(e.getMessage(), e);
+			logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 		} catch (CSTransactionException e) {
-			Logger.out.debug(e.getMessage(), e);
+			logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 		}
 		
@@ -2305,7 +2308,7 @@ public class AppUtility
 			}
 			catch (ApplicationException e)
 			{
-				// TODO Auto-generated catch block
+				logger.debug(e.getMessage(), e);
 				e.printStackTrace();
 			}
 		}
@@ -2341,7 +2344,7 @@ public class AppUtility
 		}
 		catch (SMException e)
 		{
-			// TODO Auto-generated catch block
+			logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 		}
 		return true;
@@ -2431,14 +2434,14 @@ public class AppUtility
 		}
 		catch (ApplicationException e)
 		{
-			Logger.out.debug(e.getMessage(), e);
+			logger.debug(e.getMessage(), e);
 		}
 		finally
 		{
 			try {
 				closeDAOSession(dao);
 			} catch (ApplicationException e) {
-				// TODO Auto-generated catch block
+				logger.debug(e.getMessage(), e);
 				e.printStackTrace();
 			}
 		}
@@ -2509,7 +2512,7 @@ public class AppUtility
 			}
 			catch (Exception e)
 			{
-				Logger.out.debug(e.getMessage(), e);
+				logger.debug(e.getMessage(), e);
 			}
 		}
 	}
@@ -2558,6 +2561,7 @@ public class AppUtility
 		}
 		catch (SMException e)
 		{
+			logger.debug(e.getMessage(), e);
 			handleSMException(e);
 		}
 		if (!isAuthorized)
@@ -2818,7 +2822,7 @@ public class AppUtility
 		}
 		catch (BizLogicException e)
 		{
-			// TODO Auto-generated catch block
+			logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 		}
 
@@ -2846,7 +2850,7 @@ public class AppUtility
 
 		
 		} catch (BizLogicException exp) {
-			Logger.out.error("Bizlogic  : exp : " + exp);
+			logger.error("Bizlogic  : exp : " + exp);
 			exp.printStackTrace();
 		}
 		return entityMapConditions;
@@ -2905,7 +2909,7 @@ public class AppUtility
 		}
     	catch(Exception exp)
 		{
-			Logger.out.error("IsValidDatePattern : exp : " + exp);
+			logger.error("IsValidDatePattern : exp : " + exp);
     		return false;
 		}
     	//System.out.println("dtCh : " +dtCh );
@@ -2971,6 +2975,7 @@ public class AppUtility
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getApplicationException(daoExp, "dao.error", "");
 		}
 		return jdbcDAO;
@@ -2984,6 +2989,7 @@ public class AppUtility
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getApplicationException(daoExp, "dao.error", "");
 		}
 		
@@ -3000,6 +3006,7 @@ public class AppUtility
 			}
 			catch(DAOException daoExp)
 			{
+				logger.debug(daoExp.getMessage(), daoExp);
 				throw getApplicationException(daoExp, "dao.error", "");
 			}
 			return dao;
@@ -3013,6 +3020,7 @@ public class AppUtility
 		}
 		catch(DAOException daoExp)
 		{
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getApplicationException(daoExp, "dao.error", "");
 		}
 		

@@ -29,6 +29,7 @@ import edu.wustl.common.util.logger.Logger;
 public class DefaultValueManager
 {
 
+	private static Logger logger = Logger.getCommonLogger(DefaultValueManager.class);
 	private static HashMap defaultValueMap = new HashMap();
 
 	/**
@@ -71,7 +72,7 @@ public class DefaultValueManager
 			}
 			if (Constants.defaultValueKeys[iCount][0].equalsIgnoreCase(Constants.IS_BARCODE_EDITABLE))
 			{
-				Logger.out.error("......barcode.isEditable....." + defaultValue +
+				logger.error("......barcode.isEditable....." + defaultValue +
 						"default keys : " + Constants.defaultValueKeys[iCount][0]);
 				DefaultValueManager.setDefaultValue
 				(Constants.defaultValueKeys[iCount][0], defaultValue);
@@ -120,6 +121,7 @@ public class DefaultValueManager
 					}
 					catch (Exception e)
 					{
+						logger.debug(e.getMessage(), e);
 						e.printStackTrace();
 					}
 				}
@@ -166,7 +168,7 @@ public class DefaultValueManager
 				{
 					DefaultValueManager.setDefaultValue
 					(Constants.defaultValueKeys[iCount][0], "");
-					Logger.out.error("Default Value set for '" +
+					logger.error("Default Value set for '" +
 						Constants.defaultValueKeys[iCount][0] + "' is not in the CDEList");
 				}
 			}
