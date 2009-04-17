@@ -36,6 +36,7 @@ import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.Utility;
+import edu.wustl.common.util.global.CommonServiceLocator;
 /**
  * class for base shipment action.
  */
@@ -119,7 +120,7 @@ public class BaseShipmentAction extends SecureAction
 				{
 					// date Format added by geeta
 					shipmentForm.setSendDate(Utility.parseDateToString(cal.getTime(),
-							Variables.dateFormat));
+							CommonServiceLocator.getInstance().getDatePattern()));
 				}
 				if(shipmentForm.getSendTimeHour()==null)
 				{
@@ -204,7 +205,7 @@ public class BaseShipmentAction extends SecureAction
         Calendar calendar=Calendar.getInstance();
         calendar.setTime(new Date());
         // date format added by geeta
-        request.setAttribute("initialShippingDate",Utility.parseDateToString(new Date(),Variables.dateFormat));
+        request.setAttribute("initialShippingDate",Utility.parseDateToString(new Date(),CommonServiceLocator.getInstance().getDatePattern()));
         request.setAttribute("initialShippingHour", ""+calendar.get(calendar.HOUR_OF_DAY));
         request.setAttribute("initialShippingmMinute", ""+calendar.get(calendar.MINUTE));
        	return mapping.findForward(edu.wustl.catissuecore.util.global.Constants.SUCCESS);
