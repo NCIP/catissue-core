@@ -3,7 +3,7 @@
 	<JDBCProperties>
 	
 		<Class-name name = "edu.wustl.dao.MySQLDAOImpl"/>
-		<DatabaseType name = "MySQL"/>
+		<DatabaseType name = "MYSQL"/>
 		<DefaultBatchSize value = "5"/>
 		<DataSource name = ""/>
 		<JDBCConnectionManager name = "edu.wustl.dao.connectionmanager.ConnectionManager"/>
