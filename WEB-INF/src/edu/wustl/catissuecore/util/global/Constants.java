@@ -2785,5 +2785,9 @@ public static final String ADD_MULTIPLE_SPECIMEN_TO_CART="addMltipleSpecimenToCa
     public static final String  MYSQL_DATABASE = "MYSQL";
 	public static final String  POSTGRESQL_DATABASE = "POSTGRESQL";
 	public static final String  DB2_DATABASE = "DB2";
+	public static final String FIELD_TYPE_TIMESTAMP_TIME = "timestamptime";
+	public static final String SHOW_STORAGE_CONTAINER_GRID_VIEW_ACTION = "ShowStorageGridView.do";
+	public static final String DHTMLXGRID_DELIMETER = "|@|"; 
+	public static final String PAGE_OF_QUERY_RESULTS = "pageOfQueryResults";
 
 }
