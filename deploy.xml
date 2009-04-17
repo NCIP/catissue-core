@@ -812,9 +812,6 @@
 			<param name="mysqlDriver" value="org.gjt.mm.mysql.Driver"/>
 		</antcall>
 		
-		<!-- Integrate shippingtracking application, if shippingtracking.zip present in root -->
-		<antcall target="st_integrate_app" />
-
 		<antcall target="build_war" />
 		<antcall target="copy_files" />
 		<replace file="${basedir}/caTissueSuite_Client/conf/remoteService.xml">
@@ -930,7 +927,7 @@
 	</target>
 
 	<!--Target for Database Creation-->
-	<target name="deploy_db">
+	<target name = "deploy_db">
 		<if>
 			<equals arg1="mysql" arg2="${database.type}" />
 			<then>
@@ -2659,16 +2656,16 @@ Thanking You,
 	</target>
 
 	<!--  ShippingTracking - start -->
-	<!-- Check user selected deploy.shippingtracking to true and shippingtracking.zip exists -->
-	<target name="st_check_prerequisite">
-		<!-- Check shippingtracking.zip file exists or not in base directory. -->
+	<!-- Check user selected deploy.shippingtracking to true and shippingtracking.zip exists 
+	<target name="st_check_prerequisite"> -->
+		<!-- Check shippingtracking.zip file exists or not in base directory.
 		<available file="${base.dir}/shippingtracking.zip" property="file.exists" value="false" />
 		<if>
 			<not>
 			   <isset property="file.exists"/>
 			</not>
-			<then>
-			   <!-- <fail message="ShippingTracking.zip file not found. It should be in base directory to deploy shippingtracking." />  -->
+			<then> -->
+			   <!-- <fail message="ShippingTracking.zip file not found. It should be in base directory to deploy shippingtracking." />  
 			   <echo message="ShippingTracking.zip file not found. It should be in base directory to deploy shippingtracking." level="error" />
 			</then>
 			<else>
@@ -2676,13 +2673,13 @@ Thanking You,
 			</else>
 		</if>
 	</target>
-
-	<!-- Integrating shipping tracking application with catissue -->
+	-->
+	<!-- Integrating shipping tracking application with catissue 
 	<target name="st_integrate_app" depends="st_check_prerequisite" if="file.exists" >
 		<echo message="Integrating shippingtracking app ...." />
 		<unzip src="shippingtracking.zip" dest="${temp.dir}/shippingtracking" overwrite="true" />
-
-		<!-- Inject db specific information to configuration files -->
+	-->
+		<!-- Inject db specific information to configuration files
 		<if>
 			<equals arg1="mysql" arg2="${database.type}" />
 			<then>
@@ -2701,11 +2698,11 @@ Thanking You,
 				</then>
 			</elseif>
 		</if>
-
-		<!-- 1) Copy shippingtracking.jar -> copy it to catissue/WEB-INF/Lib -->
+	 	-->
+		<!-- 1) Copy shippingtracking.jar -> copy it to catissue/WEB-INF/Lib 
 		<copy file="${temp.dir}/shippingtracking/shippingtracking.jar" todir="${temp.dir}/catissuecore/WEB-INF/lib" overwrite="true" />
-
-		<!-- 2) Copy *.properties, st*.cfg.xml, *.jsp, *.css, *.images, st*-struts-config.xml to respective folders -->
+		-->
+		<!-- 2) Copy *.properties, st*.cfg.xml, *.jsp, *.css, *.images, st*-struts-config.xml to respective folders
 		<copy todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true">
 			<fileset dir="${temp.dir}/shippingtracking">
 				<include name="ShippingTrackingApplicationResources.properties" />
@@ -2731,49 +2728,49 @@ Thanking You,
 		<copy todir="${temp.dir}/catissuecore/images" overwrite="true">
 			<fileset dir="${temp.dir}/shippingtracking/images" />
 		</copy>
-
-		<!-- 3) Inject st-struts-config.xml entry in catisssue -> web.xml -->
+		 -->
+		<!-- 3) Inject st-struts-config.xml entry in catisssue -> web.xml 
 		<replace file="${temp.dir}/catissuecore/WEB-INF/web.xml">
 			<replacefilter token="/WEB-INF/${catissue.struts.config.file}" value="/WEB-INF/${catissue.struts.config.file}, /WEB-INF/shippingtracking-struts-config.xml" />
 		</replace>
-
-		<!-- 4) Inject db-util.properties entry in catissue -> db-util.properties -->
+		-->
+		<!-- 4) Inject db-util.properties entry in catissue -> db-util.properties 
 		<replace file="${temp.dir}/catissuecore/WEB-INF/classes/dbutil.properties">
 			<replacefilter token="${catissue.hibernate.config.file}" value="${catissue.hibernate.config.file}, ShippingTrackingHibernate.cfg.xml" />
 		</replace>
-
-		<!-- 5) Inject "/WEB-INF/ShippingTracking-tiles-defs.xml" entry in catisssue -> struts-config.xml -->
+		-->
+		<!-- 5) Inject "/WEB-INF/ShippingTracking-tiles-defs.xml" entry in catisssue -> struts-config.xml 
 		<replace file="${temp.dir}/catissuecore/WEB-INF/${catissue.struts.config.file}">
 			<replacefilter token="/WEB-INF/${catissue.tiles.def.file}" value="/WEB-INF/${catissue.tiles.def.file}, /WEB-INF/ShippingTracking-tiles-defs.xml" />
 		</replace>
 
 	</target>
-
-	<!-- Modify shippingtracking configuration For MySQL -->
+	-->
+	<!-- Modify shippingtracking configuration For MySQL 
 	<target name="st_mysql_config">
 		<replace file="${temp.dir}/shippingtracking/ShippingTrackingHibernate.cfg.xml">
 			<replacefilter token="${mysql.dialect.string}" value="${mysql.dialect.string}" />
 		</replace>
 	</target>
-
-	<!-- Modify shippingtracking configuration For ORACLE -->
+	-->
+	<!-- Modify shippingtracking configuration For ORACLE 
 	<target name="st_oracle_config">
 		<replace file="${temp.dir}/shippingtracking/ShippingTrackingHibernate.cfg.xml">
 			<replacefilter token="${mysql.dialect.string}" value="${oracle.dialect.string}" />
 		</replace>
 	</target>
-	
-	<!-- Modify shippingtracking configuration For MsSQLServer -->
+	-->
+	<!-- Modify shippingtracking configuration For MsSQLServer 
 	<target name="st_mssqlserver_config">
 		<replace file="${temp.dir}/shippingtracking/ShippingTrackingHibernate.cfg.xml">
 			<replacefilter token="${mysql.dialect.string}" value="${mssqlserver.dialect.string}" />
 		</replace>
 	</target>
-	
+	-->
 	<!-- Deploying shippingtracking db -->
-	<target name="st_deploy_db" depends="st_check_prerequisite" if="file.exists">
+	<target name="st_deploy_db">
 		<echo message="Deploying shippingtracking db ...." />
-		<unzip src="shippingtracking.zip" dest="${temp.dir}/shippingtracking" overwrite="true" />
+	<!--	<unzip src="shippingtracking.zip" dest="${temp.dir}/shippingtracking" overwrite="true" /> -->
 
 		<if>
 			<equals arg1="mysql" arg2="${database.type}" />
@@ -2797,13 +2794,13 @@ Thanking You,
 			</else>
 		</if>
 
-		<delete dir="${temp.dir}"/>
+	<!--	<delete dir="${temp.dir}"/> -->
 	</target>
 
 	<!-- Deploying shippingtracking db for mysql -->
 	<target name="st_deploy_db_mysql">
 		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" onerror="continue">
-			<transaction src="${temp.dir}/shippingtracking/SQL/MYSQL/shippingtracking.sql" />
+			<transaction src="${base.dir}/SQL/MySql/shippingtracking.sql"  />
 
 			<transaction>commit;</transaction>
 			<classpath>
@@ -2817,7 +2814,7 @@ Thanking You,
 	<!-- Deploying shippingtracking db for oracle -->
 	<target name="st_deploy_db_oracle">
 		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle" onerror="continue">
-			<transaction src="${temp.dir}/shippingtracking/SQL/oracle/shippingtracking.sql" />
+			<transaction src="${base.dir}/SQL/Oracle/shippingtracking.sql"/>
 
 			<transaction>commit;</transaction>
 			<classpath>
@@ -2831,7 +2828,7 @@ Thanking You,
 	<!-- Deploying shippingtracking db for mssqlserver -->
 	<target name="st_deploy_db_mssqlserver">
 		<sql driver="${mssqlserver.driver.string}" url="jdbc:sqlserver://${database.host}:${database.port};databaseName=${database.name};" userid="${database.username}" password="${database.password}" onerror="continue">
-			<transaction src="${temp.dir}/shippingtracking/SQL/MsSqlServer/shippingtracking.sql" />
+			<transaction src="${base.dir}/SQL/MsSqlServer/shippingtracking.sql"/>
 
 			<classpath>
 				<fileset dir="${lib.dir}">
