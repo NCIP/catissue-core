@@ -889,14 +889,12 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	 */
 	protected void chkContainerValidForSpecimen(StorageContainer container, Specimen specimen, DAO dao) throws BizLogicException
 	{
-		try
-		{
 			Collection holdsSpecimenClassColl = containerHoldsSpecimenClasses.get(container.getId());
 			if (holdsSpecimenClassColl == null || holdsSpecimenClassColl.isEmpty())
 			{
 				if (container.getHoldsSpecimenClassCollection() == null || container.getHoldsSpecimenClassCollection().isEmpty())
 				{
-					holdsSpecimenClassColl = (Collection) dao.retrieveAttribute(StorageContainer.class,Constants.SYSTEM_IDENTIFIER
+					holdsSpecimenClassColl = (Collection) retrieveAttribute(StorageContainer.class
 							, container.getId(), "elements(holdsSpecimenClassCollection)");
 				}
 				else
@@ -915,7 +913,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				collectionProtColl = container.getCollectionProtocolCollection();
 				if (collectionProtColl == null || collectionProtColl.isEmpty())
 				{
-					collectionProtColl = (Collection) dao.retrieveAttribute(StorageContainer.class, Constants.SYSTEM_IDENTIFIER,container.getId(),
+					collectionProtColl = (Collection) retrieveAttribute(StorageContainer.class,container.getId(),
 					"elements(collectionProtocolCollection)");
 				}
 				containerHoldsCPs.put(container.getId(), collectionProtColl);
@@ -929,12 +927,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 							"This Storage Container cannot hold specimen of collection protocol " + protocol.getTitle());
 				}
 			}
-		}
-		catch(DAOException daoExp)
-		{
-			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
-		}
+		
 
 	}
 
@@ -948,31 +941,24 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	{
 		AbstractSpecimenCollectionGroup scg = null;
 		CollectionProtocol protocol = null;
-		try
+		if (specimen.getSpecimenCollectionGroup() != null)
 		{
-			if (specimen.getSpecimenCollectionGroup() != null)
-			{
-				scg = specimen.getSpecimenCollectionGroup();
-			}
-			else if (specimen.getId() != null)
-			{
-				scg = (AbstractSpecimenCollectionGroup) dao.retrieveAttribute(Specimen.class, Constants.SYSTEM_IDENTIFIER,specimen.getId(), "specimenCollectionGroup");
-			}
-			if (scg != null)
-			{
-				protocol = (CollectionProtocol) dao.retrieveAttribute(SpecimenCollectionGroup.class, Constants.SYSTEM_IDENTIFIER,scg.getId(),
-				"collectionProtocolRegistration.collectionProtocol");
-			}
-			if (protocol == null)
-			{
-				throw getBizLogicException(null, "dao.error", "This Collection Protocol not found");
-			}
+			scg = specimen.getSpecimenCollectionGroup();
 		}
-		catch(DAOException daoExp)
+		else if (specimen.getId() != null)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			scg = (AbstractSpecimenCollectionGroup) retrieveAttribute(Specimen.class,specimen.getId(), "specimenCollectionGroup");
 		}
+		if (scg != null)
+		{
+			protocol = (CollectionProtocol) retrieveAttribute(SpecimenCollectionGroup.class, scg.getId(),
+					"collectionProtocolRegistration.collectionProtocol");
+		}
+		if (protocol == null)
+		{
+			throw getBizLogicException(null, "dao.error", "This Collection Protocol not found");
+		}
+
 		return protocol;
 	}
 
@@ -2618,9 +2604,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	{
 		if (!specimen.getApplyChangesTo().equalsIgnoreCase(Constants.APPLY_NONE))
 		{
-			try
-			{
-				String applyChangesTo = specimen.getApplyChangesTo();
+			String applyChangesTo = specimen.getApplyChangesTo();
 				Collection<ConsentTierStatus> consentTierStatusCollection = specimen.getConsentTierStatusCollection();
 				Collection<ConsentTierStatus> oldConsentTierStatusCollection = oldSpecimen.getConsentTierStatusCollection();
 				Iterator<ConsentTierStatus> itr = consentTierStatusCollection.iterator();
@@ -2629,7 +2613,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 					ConsentTierStatus status = (ConsentTierStatus) itr.next();
 					long consentTierID = status.getConsentTier().getId().longValue();
 					String statusValue = status.getStatus();
-					Collection childSpecimens = (Collection) dao.retrieveAttribute(Specimen.class,Constants.SYSTEM_IDENTIFIER, specimen.getId(),
+					Collection childSpecimens = (Collection) retrieveAttribute(Specimen.class, specimen.getId(),
 					"elements(childSpecimenCollection)");
 					Iterator childItr = childSpecimens.iterator();
 					while (childItr.hasNext())
@@ -2639,12 +2623,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 								oldConsentTierStatusCollection, dao);
 					}
 				}
-			}
-			catch(DAOException daoExp)
-			{
-				logger.debug(daoExp.getMessage(), daoExp);
-				throw getBizLogicException(daoExp, "dao.error", "");
-			}
+			
 		}
 	}
 
@@ -2811,7 +2790,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				Specimen newSpecimen = (Specimen) iterator.next();
 				if (scg == null)
 				{
-					scg = (SpecimenCollectionGroup) dao.retrieveAttribute(Specimen.class,Constants.SYSTEM_IDENTIFIER, newSpecimen.getId(), "specimenCollectionGroup");
+					scg = (SpecimenCollectionGroup)retrieveAttribute(Specimen.class, newSpecimen.getId(), "specimenCollectionGroup");
 				}
 				newSpecimen.setSpecimenCollectionGroup(scg);
 				allocateSpecimenPostionsRecursively(newSpecimen);
@@ -2833,11 +2812,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			}
 			postInsert(newSpecimenCollection, dao, sessionDataBean);
 		}
-		catch(DAOException daoExp)
-		{
-			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
-		}
+		
 		finally
 		{
 			storageContainerIds.clear();

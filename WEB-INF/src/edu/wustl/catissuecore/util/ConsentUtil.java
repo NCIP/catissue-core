@@ -39,6 +39,7 @@ import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.exception.ApplicationException;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.global.Status;
@@ -86,7 +87,7 @@ public final class ConsentUtil
 	 * @param dao DAO instance. Used for inserting disposal event. 
 	 * @param sessionDataBean SessionDataBean instance. Used for inserting disposal event.
 	 * @throws ApplicationException 
-	 * @throws DAOException 
+	 * @throws BizLogicException 
 	 */
 	public static void updateSCG(SpecimenCollectionGroup scg, SpecimenCollectionGroup oldscg, long consentTierID, String withdrawOption,DAO dao, SessionDataBean sessionDataBean) throws ApplicationException 
 	{
@@ -132,7 +133,10 @@ public final class ConsentUtil
 	{
 		try
 		{
-		Collection specimenCollection =(Collection)dao.retrieveAttribute(SpecimenCollectionGroup.class,"elements(specimenCollection)",scg.getId(),"id"); 
+			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+		
+		Collection specimenCollection =(Collection)bizLogic.retrieveAttribute(SpecimenCollectionGroup.class,scg.getId(),"elements(specimenCollection)"); 
 		Collection updatedSpecimenCollection = new HashSet();
 		Iterator specimenItr = specimenCollection.iterator() ;
 		while(specimenItr.hasNext())
@@ -158,7 +162,7 @@ public final class ConsentUtil
 	 * @param dao DAO instance. Used for inserting disposal event. 
 	 * @param sessionDataBean SessionDataBean instance. Used for inserting disposal event.
 	 * @throws ApplicationException 
-	 * @throws DAOException 
+	 * @throws BizLogicException 
 	 */
 	public static void updateSpecimenStatus(Specimen specimen, String consentWithdrawalOption, long consentTierID,  DAO dao, SessionDataBean sessionDataBean) throws ApplicationException 
 	{
@@ -279,8 +283,10 @@ public final class ConsentUtil
 	{
 		try 
 		{
+			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 			Long specimenId = (Long)specimen.getId();	
-			Collection childSpecimens = (Collection)dao.retrieveAttribute(Specimen.class, "elements(childSpecimenCollection)",specimenId, Constants.SYSTEM_IDENTIFIER);
+			Collection childSpecimens = (Collection)bizLogic.retrieveAttribute(Specimen.class,specimenId, "elements(childSpecimenCollection)");
 
 			//Collection childSpecimens = specimen.getChildrenSpecimen();
 			if(childSpecimens!=null)
@@ -318,13 +324,15 @@ public final class ConsentUtil
 	 * 
 	 * @param specimen Instance of specimen. It is the child specimen to which the consents will be set.
 	 * @param parentSpecimen Instance of specimen. It is the parent specimen from which the consents will be copied.
-	 * @throws DAOException 
+	 * @throws BizLogicException 
 	 */
-	public static void setConsentsFromParent(Specimen specimen, Specimen parentSpecimen, DAO dao) throws DAOException
+	public static void setConsentsFromParent(Specimen specimen, Specimen parentSpecimen, DAO dao) throws BizLogicException
 	{
 		Collection consentTierStatusCollection = new HashSet();
 		//Lazy Resolved ----  parentSpecimen.getConsentTierStatusCollection();
-		Collection parentStatusCollection = (Collection)dao.retrieveAttribute(Specimen.class, "elements(consentTierStatusCollection)",parentSpecimen.getId(),  Constants.SYSTEM_IDENTIFIER); 
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+		Collection parentStatusCollection = (Collection)bizLogic.retrieveAttribute(Specimen.class, parentSpecimen.getId(), "elements(consentTierStatusCollection)"); 
 		Iterator parentStatusCollectionIterator = parentStatusCollection.iterator();
 		while(parentStatusCollectionIterator.hasNext() )
 		{
@@ -364,9 +372,9 @@ public final class ConsentUtil
 	 * @param oldSpecimenCollectionGroup
 	 * @param dao
 	 * @param sessionDataBean
-	 * @throws DAOException 
+	 * @throws BizLogicException 
 	 */
-	public static void updateSpecimenStatusInSCG(SpecimenCollectionGroup specimenCollectionGroup,SpecimenCollectionGroup oldSpecimenCollectionGroup, DAO dao) throws DAOException
+	public static void updateSpecimenStatusInSCG(SpecimenCollectionGroup specimenCollectionGroup,SpecimenCollectionGroup oldSpecimenCollectionGroup, DAO dao) throws BizLogicException
 	{
 		Collection newConsentTierStatusCollection = specimenCollectionGroup.getConsentTierStatusCollection();
 		Collection oldConsentTierStatusCollection =  oldSpecimenCollectionGroup.getConsentTierStatusCollection();
@@ -383,9 +391,11 @@ public final class ConsentUtil
 	/*
 	 * This method updates the specimen consent status. 
 	 */
-	private static void updateSCGSpecimenCollection(SpecimenCollectionGroup specimenCollectionGroup, SpecimenCollectionGroup oldSpecimenCollectionGroup, long consentTierID, String  statusValue, Collection newSCGConsentCollection, Collection oldSCGConsentCollection,DAO dao) throws DAOException
+	private static void updateSCGSpecimenCollection(SpecimenCollectionGroup specimenCollectionGroup, SpecimenCollectionGroup oldSpecimenCollectionGroup, long consentTierID, String  statusValue, Collection newSCGConsentCollection, Collection oldSCGConsentCollection,DAO dao) throws BizLogicException
 	{
-		Collection specimenCollection = (Collection)dao.retrieveAttribute(SpecimenCollectionGroup.class, "elements(specimenCollection)",specimenCollectionGroup.getId(),Constants.SYSTEM_IDENTIFIER);  
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+		Collection specimenCollection = (Collection)bizLogic.retrieveAttribute(SpecimenCollectionGroup.class, specimenCollectionGroup.getId(),"elements(specimenCollection)");  
 		//oldSpecimenCollectionGroup.getSpecimenCollection();
 		Collection updatedSpecimenCollection = new HashSet();
 		String applyChangesTo =  specimenCollectionGroup.getApplyChangesTo(); 
@@ -399,7 +409,7 @@ public final class ConsentUtil
 		specimenCollectionGroup.setSpecimenCollection(updatedSpecimenCollection );
 	}
 	
-	public static void updateSpecimenConsentStatus(Specimen specimen, String applyChangesTo, long consentTierID, String  statusValue, Collection newConsentCollection, Collection oldConsentCollection,DAO dao) throws DAOException
+	public static void updateSpecimenConsentStatus(Specimen specimen, String applyChangesTo, long consentTierID, String  statusValue, Collection newConsentCollection, Collection oldConsentCollection,DAO dao) throws BizLogicException
 	{
 		if(applyChangesTo.equalsIgnoreCase(Constants.APPLY_ALL))
 			updateSpecimenConsentStatus(specimen, consentTierID, statusValue, applyChangesTo, dao);
@@ -415,9 +425,9 @@ public final class ConsentUtil
 	 * @param specimen  Instance of Specimen to be updated. 
 	 * @param consentWithdrawalOption Action to be performed on the withdrawn specimen.
 	 * @param consentTierID Identifier of ConsentTier to be withdrawn.
-	 * @throws DAOException 
+	 * @throws BizLogicException 
 	 */
-	private static void updateSpecimenConsentStatus(Specimen specimen, long consentTierID, String statusValue, String applyChangesTo, DAO dao) throws DAOException
+	private static void updateSpecimenConsentStatus(Specimen specimen, long consentTierID, String statusValue, String applyChangesTo, DAO dao) throws BizLogicException
 	{
 		Collection consentTierStatusCollection = specimen.getConsentTierStatusCollection();
 		Collection updatedSpecimenStatusCollection = new HashSet();
@@ -443,7 +453,7 @@ public final class ConsentUtil
 		}
 	}
 
-	private static void consentStatusUpdateForchildSpecimens(Specimen specimen, long consentTierID, String statusValue, String applyChangesTo, DAO dao) throws DAOException
+	private static void consentStatusUpdateForchildSpecimens(Specimen specimen, long consentTierID, String statusValue, String applyChangesTo, DAO dao) throws BizLogicException
 	{
 		if(specimen!=null)
 		{
@@ -473,7 +483,7 @@ public final class ConsentUtil
 	 *      d. Put all changed Sepcimen ConsnetStatus object in new collection updatedSpecimenConsentStatusCollection 
 	 *         and set updatedSpecimenConsentStatusCollection in specimen.
 	 */
-	private static void checkConflictingConsents(Collection newConsentCollection, Collection oldConsentCollection, Specimen specimen, DAO dao ) throws DAOException
+	private static void checkConflictingConsents(Collection newConsentCollection, Collection oldConsentCollection, Specimen specimen, DAO dao ) throws BizLogicException
 	{
 /*		 if oldSCG.c1 == S.c1 then update specimen with new SCG.c1
  * 			OR
@@ -536,7 +546,7 @@ public final class ConsentUtil
 		}
 	}
 	
-	private static void consentStatusUpdateForchildSpecimens(Specimen specimen, Collection newConsentCollection, Collection oldConsentCollection, DAO dao) throws DAOException
+	private static void consentStatusUpdateForchildSpecimens(Specimen specimen, Collection newConsentCollection, Collection oldConsentCollection, DAO dao) throws BizLogicException
 	{
 		if(specimen!=null)
 		{
@@ -555,7 +565,7 @@ public final class ConsentUtil
 	 * This function is used for retriving Specimen collection group  from Collection protocol registration Object
 	 * @param specimenObj
 	 * @param finalDataList
-	 * @throws DAOException 
+	 * @throws BizLogicException 
 	 */
 	public static void getSpecimenDetails(CollectionProtocolRegistration collectionProtocolRegistration, List finalDataList) throws ApplicationException
 	{
@@ -574,7 +584,7 @@ public final class ConsentUtil
 	 * This function is used for retriving specimen and sub specimen's attributes.
 	 * @param specimenObj
 	 * @param finalDataList
-	 * @throws DAOException 
+	 * @throws BizLogicException 
 	 */
 	private static void getDetailsOfSpecimen(SpecimenCollectionGroup specimenCollGroupObj, List finalDataList) throws ApplicationException
 	{

@@ -303,8 +303,8 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 			 * Retriving specimenObject
 			 * replaced aliquotMap.put(Constants.ALIQUOT_SPECIMEN_TYPES, parentSpecimenArray.getSpecimenArrayType().getSpecimenTypeCollection());
 			 */
-			Collection specimenTypeCollection = (Collection) dao.retrieveAttribute(
-					SpecimenArray.class, Constants.SYSTEM_IDENTIFIER, parentSpecimenArray.getId(),
+			Collection specimenTypeCollection = (Collection) retrieveAttribute(
+					SpecimenArray.class, parentSpecimenArray.getId(),
 					"elements(specimenArrayType.specimenTypeCollection)");
 			aliquotMap.put(Constants.ALIQUOT_SPECIMEN_TYPES, specimenTypeCollection);
 			aliquotMap.put(Constants.ALIQUOT_ALIQUOT_COUNTS, String.valueOf(specimenArray

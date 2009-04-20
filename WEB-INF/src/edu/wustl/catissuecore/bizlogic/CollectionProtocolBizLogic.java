@@ -1554,11 +1554,8 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	{
 		String shortTitle = null;
 
-		DAO dao = openDAOSession(null);
-		try
-		{
-			Object object = dao.retrieveAttribute(CollectionProtocol.class,
-					Constants.SYSTEM_IDENTIFIER, cpId, Constants.shortTitle);
+		Object object = retrieveAttribute(CollectionProtocol.class,
+					cpId, Constants.shortTitle);
 
 			if (object == null)
 			{
@@ -1567,17 +1564,6 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			}
 
 			shortTitle = (String) object;
-		}
-		catch (DAOException daoExp)
-		{
-			logger.debug(daoExp.getMessage(),daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
-		}
-
-		finally
-		{
-			closeDAOSession(dao);
-		}
 		return shortTitle;
 	}
 

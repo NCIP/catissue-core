@@ -212,7 +212,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 					
 						//storageContainerObj.setHoldsSpecimenClassCollection(storageContainerBizLogic.getSpecimenClassList(storageContainerObj.getId().toString()));
 						//storageContainerObj.setCollectionProtocolCollection(storageContainerBizLogic.getCollectionProtocolList(storageContainerObj.getId().toString()));
-						SpecimenCollectionGroup scg = (SpecimenCollectionGroup) dao.retrieveAttribute(Specimen.class,Constants.SYSTEM_IDENTIFIER,specimen.getId(),"specimenCollectionGroup");
+						SpecimenCollectionGroup scg = (SpecimenCollectionGroup)retrieveAttribute(Specimen.class,specimen.getId(),"specimenCollectionGroup");
 						specimen.setSpecimenCollectionGroup(scg);
 						newSpecimenBizLogic.chkContainerValidForSpecimen(storageContainerObj, specimen, dao);
 						

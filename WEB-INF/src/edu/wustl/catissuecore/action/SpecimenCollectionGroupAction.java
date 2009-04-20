@@ -1231,10 +1231,9 @@ public class SpecimenCollectionGroupAction extends SecureAction
 		}
 
 		val[1] = Long.valueOf(cp_id);
-
 		String[] colCondition = {"=", "="};
 		List collProtRegObj = collectionProtocolRegistrationBizLogic.retrieve(
-				CollectionProtocolRegistration.class.getName(), colName, colCondition, val, null);
+				CollectionProtocolRegistration.class.getName(), colName, colCondition, val, Constants.AND_JOIN_CONDITION);
 		CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) collProtRegObj
 				.get(0);
 		return collectionProtocolRegistration;

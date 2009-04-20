@@ -1559,10 +1559,9 @@ public class AppUtility
 	public static int getNextUniqueNo(String sourceObjectName, String[] selectColumnName)
 			throws ApplicationException
 	{
-		DAO dao = DAOConfigFactory.getInstance().getDAOFactory(Constants.APPLICATION_NAME).getDAO();
-		dao.openSession(null);
-		List list = dao.retrieve(sourceObjectName, selectColumnName);
-		dao.closeSession();
+		JDBCDAO jdbcDAO = openJDBCSession();
+		List list = jdbcDAO.retrieve(sourceObjectName, selectColumnName);
+		closeJDBCSession(jdbcDAO);
 
 		if (!list.isEmpty())
 		{

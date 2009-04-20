@@ -40,7 +40,7 @@ public class DeidentifiedSurgicalPathologyReportBizLogic extends CatissueDefault
 			DeidentifiedSurgicalPathologyReport deidentifiedReport = (DeidentifiedSurgicalPathologyReport) obj;
 			dao.insert(deidentifiedReport, false);
 			
-			IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReport=(IdentifiedSurgicalPathologyReport)dao.retrieveAttribute(SpecimenCollectionGroup.class,Constants.SYSTEM_IDENTIFIER,
+			IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReport=(IdentifiedSurgicalPathologyReport)retrieveAttribute(SpecimenCollectionGroup.class,
 					deidentifiedReport.getSpecimenCollectionGroup().getId(), "identifiedSurgicalPathologyReport");
 			identifiedSurgicalPathologyReport.setReportStatus(CaTIESConstants.DEIDENTIFIED);
 			identifiedSurgicalPathologyReport.setDeIdentifiedSurgicalPathologyReport(deidentifiedReport);

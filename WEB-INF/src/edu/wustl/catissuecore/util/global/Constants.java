@@ -2789,5 +2789,9 @@ public static final String ADD_MULTIPLE_SPECIMEN_TO_CART="addMltipleSpecimenToCa
 	public static final String SHOW_STORAGE_CONTAINER_GRID_VIEW_ACTION = "ShowStorageGridView.do";
 	public static final String DHTMLXGRID_DELIMETER = "|@|"; 
 	public static final String PAGE_OF_QUERY_RESULTS = "pageOfQueryResults";
+	public static final String STORAGE_CONTAINER = "storageContainerName";
+	// Frame names in Query Results page.
+	public static final String DATA_VIEW_FRAME = "myframe1";
+	public static final String APPLET_VIEW_FRAME = "appletViewFrame";
 
 }
