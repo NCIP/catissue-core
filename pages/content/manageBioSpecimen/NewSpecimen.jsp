@@ -19,7 +19,6 @@
 <%@ page import="edu.wustl.catissuecore.action.annotations.AnnotationConstants"%>
 <%@ page import="edu.wustl.catissuecore.bizlogic.AnnotationUtil"%>
 <%@ page import="edu.wustl.common.util.global.CommonServiceLocator"%>
-<%@ page import="edu.wustl.simplequery.global.Constants"%>
 
 <%@ include file="/pages/content/common/BioSpecimenCommonCode.jsp" %>
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 

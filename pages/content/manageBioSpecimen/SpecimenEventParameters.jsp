@@ -12,7 +12,6 @@
 <%@ page import="edu.wustl.catissuecore.action.annotations.AnnotationConstants"%>
 <%@ page import="edu.wustl.catissuecore.bizlogic.AnnotationUtil"%>
 <%@ page import="edu.wustl.catissuecore.util.CatissueCoreCacheManager"%>
-<%@ page import="edu.wustl.simplequery.global.Constants"%>
 <%@ page language="java" isELIgnored="false"%>
 
 <%@ include file="/pages/content/common/EventAction.jsp" %> 
