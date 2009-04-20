@@ -6,6 +6,7 @@
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.common.tree.StorageContainerTreeNode"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
+<%@ page import="edu.wustl.common.util.global.Status"%>
 <script src="jss/ajax.js"></script>	   
 <% 	String reload =request.getParameter(Constants.RELOAD);
 	String pageOf = request.getParameter(Constants.PAGE_OF);
