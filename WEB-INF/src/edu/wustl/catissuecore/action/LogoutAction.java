@@ -45,9 +45,9 @@ public class LogoutAction  extends BaseAction
 	 	SessionDataBean sessionData = getSessionData(request);
 	 	//Advance Query table name with userID attached
 		String tempTableName = Constants.QUERY_RESULTS_TABLE+"_"+sessionData.getUserId();
-
- 		JDBCDAO jdbcDao = AppUtility.openJDBCSession();
-       	jdbcDao.delete(tempTableName);
+		
+		JDBCDAO jdbcDao = AppUtility.openJDBCSession();
+       	jdbcDao.deleteTable(tempTableName);
        	AppUtility.closeJDBCSession(jdbcDao);
 
 		session.invalidate();
