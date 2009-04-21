@@ -2,7 +2,9 @@
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>	
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %>	
+<%@ page import = "edu.wustl.common.util.global.CommonServiceLocator" %>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
+<%@ page import="edu.wustl.common.util.Utility" %>
 
 <script src="jss/calendarComponent.js"></script>
 <SCRIPT>var imgsrc="images/";</SCRIPT>
@@ -88,7 +90,7 @@
 															  month= "<%=month %>"
 															  year= "<%=year %>"
 															  day= "<%= day %>" 
-															    pattern="<%=Variables.dateFormat%>"
+															    pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>"
 															  value="<%=shipmentDate %>"
 															  styleClass="black_ar"
 																	 />		
@@ -109,7 +111,7 @@
 						 									  month= "<%=month %>"
 															  year= "<%=year %>"
 															  day= "<%= day %>" 
-															    pattern="<%=Variables.dateFormat%>"
+															    pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>"
 															  value="<%=initialShippingDate%>"
 															  styleClass="black_ar" 
 																	 />		
@@ -120,7 +122,7 @@
 								%>
 									<ncombo:DateTimeComponent name="sendDate"
 															  id="sendDate"
-															    pattern="<%=Variables.dateFormat%>"
+															    pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>"
 						 									  formName="shipmentRequestForm"	
 															  styleClass="black_ar" 
 																	 />		

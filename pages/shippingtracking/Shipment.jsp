@@ -3,8 +3,7 @@
 <%@ taglib uri="/WEB-INF/struts-tiles.tld" prefix="tiles"%>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.shippingtracking.ShipmentForm"%>
-<%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
-
+<%@ page import="edu.wustl.common.util.Utility"%>
 
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />

@@ -3,7 +3,7 @@
 <%@ taglib uri="/WEB-INF/struts-tiles.tld" prefix="tiles"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.shippingtracking.ShipmentForm "%>
-<%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
+<%@ page import="edu.wustl.common.util.Utility"%>
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
 <%@ page import="java.util.HashMap,edu.wustl.common.beans.SessionDataBean"%>
 <%@ page language="java" isELIgnored="false"%>
