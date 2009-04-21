@@ -28,6 +28,7 @@ import edu.wustl.dao.DAO;
 import edu.wustl.dao.daofactory.DAOFactory;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.AssignDataException;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.Utility;
@@ -37,6 +38,7 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class ViewRequestSummaryAction extends SecureAction
 {
+	Logger logger = Logger.getCommonLogger(ViewRequestSummaryAction.class);
 	/**
 	 * action method for shipment request summary.
 	 * @param mapping object of ActionMapping class.
@@ -46,9 +48,8 @@ public class ViewRequestSummaryAction extends SecureAction
 	 * @return forward mapping.
 	 * @throws Exception if some problem occurs.
 	 */
-
 	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response) throws Exception
+			HttpServletRequest request, HttpServletResponse response)
 	{
 		String target = edu.wustl.catissuecore.util.global.Constants.SUCCESS;
 		String operation=request.getParameter(edu.wustl.catissuecore.util.global.Constants.OPERATION);
@@ -178,10 +179,24 @@ public class ViewRequestSummaryAction extends SecureAction
 	        request.setAttribute(Constants.REQUESTERS_SITE_LIST, siteList);
 	        request.setAttribute("senderSiteName", ShippingTrackingUtility.getDisplayName(siteList,""+shipmentRequestForm.getSenderSiteId()));
 		}
+		catch(BizLogicException ex)
+		{
+			target = edu.wustl.catissuecore.util.global.Constants.FAILURE;
+			actionErrors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item",ex.getLogMessage()));
+			logger.debug(ex.getMessage(), ex);
+		}
+		catch (AssignDataException assignDataException)
+		{
+			target = edu.wustl.catissuecore.util.global.Constants.FAILURE;
+			actionErrors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item",assignDataException.getLogMessage()));
+			logger.debug(assignDataException.getMessage(), assignDataException);
+		}
+
 		catch(ApplicationException appException)
 		{
 			target = edu.wustl.catissuecore.util.global.Constants.FAILURE;
-			actionErrors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item",appException.getMessage()));
+			actionErrors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item",appException.getLogMessage()));
+			logger.debug(appException.getMessage(), appException);
 		}
 //		catch (UserNotAuthorizedException excp)
 //		{

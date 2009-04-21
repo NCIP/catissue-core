@@ -17,7 +17,6 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.shippingtracking.BaseShipmentForm;
 import edu.wustl.catissuecore.actionForm.shippingtracking.ShipmentForm;
 import edu.wustl.catissuecore.actionForm.shippingtracking.ShipmentRequestForm;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.shippingtracking.ShipmentBizLogic;
 import edu.wustl.catissuecore.domain.Address;
 import edu.wustl.catissuecore.domain.Site;
@@ -25,7 +24,6 @@ import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.domain.shippingtracking.Shipment;
-import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.catissuecore.util.shippingtracking.Constants;
 import edu.wustl.catissuecore.util.shippingtracking.ShippingTrackingUtility;
 import edu.wustl.common.action.SecureAction;
@@ -282,8 +280,7 @@ public class BaseShipmentAction extends SecureAction
 	 * gets the sender contact person based on id.
 	 * @param userId id of the person.
 	 * @return object of User class.
-	 * @throws BizLogicException 
-	 * @throws DAOException if some database operation fails.
+	 * @throws BizLogicException if bizlogic error occurs.
 	 */
 	private User getSenderContactPerson(Long userId) throws BizLogicException
 	{
@@ -304,7 +301,7 @@ public class BaseShipmentAction extends SecureAction
 	/**
 	 * sets the receiver site data.
 	 * @param shipmentForm form containing all values.
-	 * @throws DAOException if some database operation fails.
+	 * @throws BizLogicException if bizlogic error occurs.
 	 */
 	private void setShipmentReceiverSiteData(BaseShipmentForm shipmentForm) throws BizLogicException
 	{
@@ -347,7 +344,7 @@ public class BaseShipmentAction extends SecureAction
 	 * sets the shipment barcode.
 	 * @param shipmentForm in which barcode is to be set.
 	 * @param identifier the id of shipment.
-	 * @throws DAOException if some database operation fails.
+	 * @throws BizLogicException if some bizlogic operation fails.
 	 */
 	private void setShipmentBarcode(ActionForm shipmentForm,Long identifier) throws BizLogicException
 	{
@@ -369,7 +366,7 @@ public class BaseShipmentAction extends SecureAction
 	 * 	in populateSpecimenContents() and set it in shipmentForm.
 	 * list contains values of label or barcode according to SpecimenLabelChoice.
 	 * @param shipmentForm form containing all values.
-	 * @throws DAOException if some database operation fails.
+	 * @throws BizLogicException if some bizlogic operation fails.
 	 */
 	private void getSpecimens(BaseShipmentForm shipmentForm) throws BizLogicException
 	{
@@ -417,7 +414,7 @@ public class BaseShipmentAction extends SecureAction
 	/**
 	 * retreives the containers list.
 	 * @param shipmentForm form containing all values.
-	 * @throws DAOException if some database operation fails.
+	 * @throws BizLogicException if some database operation fails.
 	 */
 	private void getContainers(BaseShipmentForm shipmentForm) throws BizLogicException
 	{

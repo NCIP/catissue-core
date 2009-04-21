@@ -24,7 +24,6 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.shippingtracking.ShipmentRequestForm;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.shippingtracking.ShipmentRequestBizLogic;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.shippingtracking.ShipmentRequest;
@@ -32,19 +31,25 @@ import edu.wustl.catissuecore.util.shippingtracking.Constants;
 import edu.wustl.catissuecore.util.shippingtracking.ShippingTrackingUtility;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.actionForm.AbstractActionForm;
-import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
-import edu.wustl.dao.daofactory.DAOConfigFactory;
-import edu.wustl.dao.daofactory.DAOFactory;
-import edu.wustl.common.util.Utility;
-
-import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
-
-public class SaveDraftShipmentRequestAction extends SecureAction 
+import edu.wustl.dao.daofactory.DAOConfigFactory;
+/**
+ * this class implements the save draft functionality of the shipment.
+ */
+public class SaveDraftShipmentRequestAction extends SecureAction
 {
+	/**
+	 * action method for save draft.
+	 * @param mapping the object of ActionMapping class.
+	 * @param form containing all values.
+	 * @param request denoting HttpRequest.
+	 * @param response denoting HttpResponse.
+	 * @throws Exception if some problem occurs.
+	 * @return actionforward object.
+	 */
 	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		String target = edu.wustl.catissuecore.util.global.Constants.SUCCESS;
@@ -153,7 +158,8 @@ public class SaveDraftShipmentRequestAction extends SecureAction
 	        {
 	            baseObject = className;
 	        }
-	        ActionError error = new ActionError("access.addedit.object.denied", userName, className,decoratedPrivilegeName,baseObject);
+	        ActionError error = new ActionError("access.addedit.object.denied",
+	        	userName, className,decoratedPrivilegeName,baseObject);
 	        actionErrors.add(ActionErrors.GLOBAL_ERROR, error);
 	    	//saveErrors(request, errors);
 	    	target = edu.wustl.catissuecore.util.global.Constants.FAILURE;
@@ -183,7 +189,6 @@ public class SaveDraftShipmentRequestAction extends SecureAction
 	{
 		return true;
 	}
-
 	/**
 	 * parses the string to get the class name.
      * @param name string to be parsed.

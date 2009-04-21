@@ -37,7 +37,6 @@ public class ShowDashboardAction extends SecureAction
 	 * @param request object of HttpServletRequest class.
 	 * @param response object of HttpServletResponse class.
 	 * @return forward mapping.
-	 * @throws UserNotAuthorizedException if user is found unauthorized
 	 */
 	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
@@ -335,9 +334,9 @@ public class ShowDashboardAction extends SecureAction
 	 * @param bizLogic the ShipmentBizLogic object.
 	 * @param siteId id of the site.
 	 * @param startIndex the starting index of shipments.
-	 * @param numOfRecords
+	 * @param numOfRecords integer containing no. of records.
 	 * @return list of objects.
-	 * @throws BizLogicException
+	 * @throws BizLogicException if some bizlogic operation fails.
 	 */
 	private List<Object[]> getIncomingShipmentsList(ShipmentBizLogic bizLogic, Long[] siteId,
 			int startIndex, int numOfRecords) throws BizLogicException

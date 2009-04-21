@@ -57,7 +57,6 @@ public class AddEditShipmentRequestAction extends SecureAction
 		ActionMessages messages=new ActionMessages();
 		Collection<ShipmentRequest> shipmentReqCollection=(Collection<ShipmentRequest>)request.getSession()
 			.getAttribute("shipmentRequestCollection");
-		
 		try
 		{
 			//Call ShipmentRequestBizlogic's method to validate the contents of the shipment request
@@ -95,12 +94,12 @@ public class AddEditShipmentRequestAction extends SecureAction
 						{
 							dao = AppUtility.openDAOSession(null);
 							shipmentReqOld = (ShipmentRequest) dao.retrieveById(Class.forName(ShipmentRequest.class.getName()).getName(),Long.valueOf(Constants.SHIPMENT_REQUEST_FORM_ID));
-						
 			            bizLogic.update(shipmentRequest, shipmentReqOld,
 			            		0, getSessionData(request));
 			            messages.add(ActionErrors.GLOBAL_MESSAGE,new ActionMessage("object." + operation + ".success", "Shipment Request(s)", "site(s)."));
-			            
-						}catch(Exception ex)
+
+						}
+						catch(Exception ex)
 						{
 							ex.printStackTrace();
 						}

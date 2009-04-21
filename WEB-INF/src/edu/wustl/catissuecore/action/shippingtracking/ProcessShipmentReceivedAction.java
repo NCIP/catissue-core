@@ -26,6 +26,9 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class ProcessShipmentReceivedAction extends CommonAddEditAction
 {
+	/**
+	 * common catissue logger.
+	 */
 	Logger logger = Logger.getCommonLogger(ProcessShipmentReceivedAction.class);
 	/**
 	 * action method to process shipment receiving.
@@ -193,14 +196,21 @@ public class ProcessShipmentReceivedAction extends CommonAddEditAction
 		}
 		return isRejectAndResend;
 	}
+	/**
+	 * gets the actual class name from a string.
+	 * @param name name containing classname.
+	 * @return string containing actual class name.
+	 */
 	private String getActualClassName(String name)
 	{
 		if(name != null && name.trim().length() != 0)
 	    {
 			String splitter = "\\.";
-	        String arr[] = name.split(splitter);
+	        String[] arr = name.split(splitter);
 	        if(arr != null && arr.length != 0)
+	        {
 	        	return arr[arr.length - 1];
+	        }
 	    }
 	    return name;
 	}

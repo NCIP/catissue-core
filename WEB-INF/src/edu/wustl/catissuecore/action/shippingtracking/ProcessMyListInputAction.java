@@ -10,7 +10,6 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.shippingtracking.BaseShipmentForm;
-import edu.wustl.catissuecore.util.shippingtracking.Constants;
 import edu.wustl.common.action.SecureAction;
 /**
  * this class implements the action for MyList inputs.

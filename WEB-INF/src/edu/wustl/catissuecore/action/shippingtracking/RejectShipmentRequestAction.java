@@ -8,7 +8,6 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.shippingtracking.ShipmentRequestForm;
-import edu.wustl.catissuecore.util.shippingtracking.Constants;
 import edu.wustl.common.util.global.Status;
 /**
  * This class implements the action for shipment reject request action.

@@ -9,7 +9,6 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.shippingtracking.ShipmentForm;
 import edu.wustl.catissuecore.actionForm.shippingtracking.ShipmentRequestForm;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.shippingtracking.ShipmentRequestBizLogic;
 import edu.wustl.catissuecore.domain.shippingtracking.ShipmentRequest;
 import edu.wustl.catissuecore.util.shippingtracking.Constants;

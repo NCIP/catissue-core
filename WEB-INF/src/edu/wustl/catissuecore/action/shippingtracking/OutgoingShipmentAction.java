@@ -42,6 +42,11 @@ public class OutgoingShipmentAction extends ProcessShipmentAction
 //		}
 		return forwardTo;
 	}
+	/**
+	 * gets the page to which control is to be forwarded.
+	 * @param activityStatus sctivityStatus of shipment.
+	 * @return string containing info of forwarding page.
+	 */
 	private String getForwardToPage(String activityStatus)
 	{
 		String forwardPage = edu.wustl.catissuecore.util.global.Constants.FAILURE;
