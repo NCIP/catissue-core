@@ -37,7 +37,6 @@ public class MailUtility
 		String sendFromEmailAddress = XMLPropertyHandler.getValue("email.sendEmailFrom.emailAddress");
 		EmailDetails emailDetails = new EmailDetails();
 		emailDetails.setToAddress(toUserEmailAddress);
-		emailDetails.setCcAddress(ccUserMailAddress);
 		emailDetails.setBody(body);
 		emailDetails.setSubject(subject);
 		SendEmail email = null;
