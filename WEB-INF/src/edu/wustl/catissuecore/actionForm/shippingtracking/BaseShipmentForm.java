@@ -35,7 +35,6 @@ import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.Validator;
-import edu.wustl.catissuecore.util.global.Variables;
 /**
  * BaseShipmentForm class  contains all the common fields
  * of ShipmentForm and ShipmentRequestForm.
