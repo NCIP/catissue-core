@@ -74,7 +74,7 @@ public class SubmitUserAction extends Action
 		catch (BizLogicException excp)
         {
         	ActionErrors errors = new ActionErrors();
-        	ActionError error = new ActionError("errors.item",excp.getMessage());
+        	ActionError error = new ActionError("errors.item",excp.toMsgValuesArray());
         	errors.add(ActionErrors.GLOBAL_ERROR,error);
         	saveErrors(request,errors);
             target = new String(Constants.FAILURE);
