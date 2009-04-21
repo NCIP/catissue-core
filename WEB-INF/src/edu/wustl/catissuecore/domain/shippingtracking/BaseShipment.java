@@ -10,7 +10,6 @@
 package edu.wustl.catissuecore.domain.shippingtracking;
 
 import java.io.Serializable;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
