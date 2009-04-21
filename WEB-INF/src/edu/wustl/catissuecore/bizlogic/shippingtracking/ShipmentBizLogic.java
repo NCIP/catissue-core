@@ -26,14 +26,13 @@ import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.shippingtracking.Constants;
 import edu.wustl.catissuecore.util.shippingtracking.ShipmentMailFormatterUtility;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.dao.DAO;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.DAO;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.dao.util.DAOConstants;
-import edu.wustl.dao.util.DAOConstants;
-import edu.wustl.query.util.global.AQConstants;
+import edu.wustl.security.exception.UserNotAuthorizedException;
 
 /**
  * Manipulate Shipment information into the database using Hibernate.

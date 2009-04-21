@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
-import edu.wustl.common.util.global.Status;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenPosition;
@@ -23,13 +22,13 @@ import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.shippingtracking.Constants;
 import edu.wustl.catissuecore.util.shippingtracking.ShipmentMailFormatterUtility;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.catissuecore.util.global.AppUtility;
-import edu.wustl.dao.DAO;
-import edu.wustl.dao.exception.DAOException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exception.ErrorKey;
-import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.DAO;
+import edu.wustl.dao.exception.DAOException;
+import edu.wustl.security.exception.UserNotAuthorizedException;
 /**
  * this class contains the bizlogic for shipment receiving.
  */
@@ -92,7 +91,8 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 		boolean mailStatus = sendNotification(shipment,sessionDataBean);
 		if (!mailStatus)
 		{
-			logger.debug(ApplicationProperties.getValue("errors.mail.sending.failed"),AppUtility.getApplicationException(null, "errors.mail.sending.failed", "Mail sending operation failed."));				
+			logger.debug("failed to send email..");
+//			logger.debug(ApplicationProperties.getValue("errors.mail.sending.failed"),AppUtility.getApplicationException(null, "errors.mail.sending.failed", "Mail sending operation failed."));				
 		}
 	}
 	/**

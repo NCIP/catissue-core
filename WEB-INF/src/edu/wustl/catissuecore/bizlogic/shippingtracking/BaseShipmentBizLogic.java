@@ -11,10 +11,7 @@
 package edu.wustl.catissuecore.bizlogic.shippingtracking;
 
 import java.io.Serializable;
-import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -25,10 +22,6 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import net.sf.ehcache.CacheException;
-
-import org.hibernate.Query;
-import org.hibernate.Session;
-
 import edu.wustl.catissuecore.bizlogic.CatissueDefaultBizLogic;
 import edu.wustl.catissuecore.bizlogic.SpecimenEventParametersBizLogic;
 import edu.wustl.catissuecore.domain.Capacity;
@@ -46,19 +39,15 @@ import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.shippingtracking.Constants;
 import edu.wustl.catissuecore.util.shippingtracking.MailUtility;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exception.ErrorKey;
-import edu.wustl.common.util.Utility;
-import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.HibernateDAO;
-import edu.wustl.dao.HibernateDAOImpl;
-import edu.wustl.dao.daofactory.DAOConfigFactory;
 import edu.wustl.dao.exception.DAOException;
+import edu.wustl.security.exception.UserNotAuthorizedException;
 
 /**
  * Manipulate Shipment information into the database using Hibernate.
@@ -108,9 +97,9 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 			boolean mailStatus = sendNotification(baseShipment, sessionDataBean);
 			if (!mailStatus)
 			{
-				logger.debug(ApplicationProperties
-						.getValue("errors.mail.sending.failed"),
-						new BizLogicException(ErrorKey.getErrorKey("errors.mail.sending.failed"),null,""));
+				logger.debug("failed to send email..");
+//				logger.debug(ApplicationProperties.getValue("errors.mail.sending.failed"),
+//						new BizLogicException(ErrorKey.getErrorKey("errors.mail.sending.failed"),null,""));
 			}
     		Map containerMap = StorageContainerUtil.getContainerMapFromCache();
 			if (specimenPositionList != null && !specimenPositionList.isEmpty())
@@ -142,7 +131,7 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 		catch (DAOException daoException)
 		{
 			logger.debug(daoException.getMessage(), daoException);
-			throw new BizLogicException(ErrorKey.getErrorKey("dao.error"),daoException,"");   //DAOException(bizLogicException.getMessage());
+			throw new BizLogicException(ErrorKey.getErrorKey("dao.error"),daoException,"exception occurred in baseshipmentbizlogic");   //DAOException(bizLogicException.getMessage());
 		}
 	}
 	/**
@@ -1216,7 +1205,8 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 			boolean mailStatus = sendNotification(shipment, sessionDataBean);
 			if (!mailStatus)
 			{
-				logger.debug(ApplicationProperties.getValue("errors.mail.sending.failed"),new BizLogicException(ErrorKey.getErrorKey("errors.mail.sending.failed"),null,""));
+				logger.debug("failed to send email...");
+//				logger.debug(ApplicationProperties.getValue("errors.mail.sending.failed"),new BizLogicException(ErrorKey.getErrorKey("errors.mail.sending.failed"),null,""));
 						//new DAOException(ApplicationProperties.getValue("errors.mail.sending.failed")));
 			}
 		}

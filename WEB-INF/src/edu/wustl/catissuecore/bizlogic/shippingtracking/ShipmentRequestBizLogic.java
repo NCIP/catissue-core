@@ -28,15 +28,15 @@ import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.shippingtracking.Constants;
 import edu.wustl.catissuecore.util.shippingtracking.ShipmentMailFormatterUtility;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.dao.DAO;
-import edu.wustl.dao.exception.DAOException;
-import edu.wustl.dao.util.DAOConstants;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exception.ErrorKey;
-import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.DAO;
+import edu.wustl.dao.exception.DAOException;
+import edu.wustl.dao.util.DAOConstants;
+import edu.wustl.security.exception.UserNotAuthorizedException;
 /**
  * Manipulate ShipmentRequest information into the database using Hibernate.
  */
@@ -339,7 +339,8 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 				boolean mailStatus = sendNotification(shipmentRequest,sessionDataBean);
 				if (!mailStatus)
 				{
-					logger.debug(ApplicationProperties.getValue("errors.mail.sending.failed"),new BizLogicException(ErrorKey.getErrorKey("errors.mail.sending.failed"),null,"error occured in sending the mail"));
+					logger.debug("failed to send email");
+//					logger.debug(ApplicationProperties.getValue("errors.mail.sending.failed"),new BizLogicException(ErrorKey.getErrorKey("errors.mail.sending.failed"),null,"error occured in sending the mail"));
 				}
 			}
 		}
@@ -748,7 +749,8 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 			boolean mailStatus = sendNotification(shipmentRequest,sessionDataBean);
 			if (!mailStatus)
 			{
-				logger.debug(ApplicationProperties.getValue("errors.mail.sending.failed"),new BizLogicException(ErrorKey.getErrorKey("errors.mail.sending.failed"),null,"mail sending failed"));
+				logger.debug("failed to send email");
+//				logger.debug(ApplicationProperties.getValue("errors.mail.sending.failed"),new BizLogicException(ErrorKey.getErrorKey("errors.mail.sending.failed"),null,"mail sending failed"));
 			}
 		}
 		catch(DAOException daoException)
