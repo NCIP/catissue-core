@@ -745,7 +745,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 			throws SMException
 	{
 		gov.nih.nci.security.authorization.domainobjects.User user = 
-			SecurityManagerFactory.getSecurityManager().getUser(userId); 
+			SecurityManagerFactory.getSecurityManager().getUserById(userId); 
 			
 		return user;
 	}
