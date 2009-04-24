@@ -17,6 +17,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -47,21 +48,22 @@ import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.HibernateDAO;
 import edu.wustl.dao.exception.DAOException;
-import edu.wustl.security.exception.UserNotAuthorizedException;
 
 /**
  * Manipulate Shipment information into the database using Hibernate.
  */
 public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 {
+	/**
+	 * common logger for BaseShipmentBizLogic class.
+	 */
 	Logger logger = Logger.getCommonLogger(BaseShipmentBizLogic.class);
 	/**
 	 * Saves the baseShipment object in the database.
 	 * @param obj the user object to be saved.
 	 * @param sessionDataBean the current session bean.
 	 * @param dao the object of DAO class.
-	 * @throws DAOException if some database operation fails.
-	 * @throws UserNotAuthorizedException if user is not authorized for the transaction.
+	 * @throws BizLogicException if some bizlogic operation fails.
 	 */
 	@Override
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws BizLogicException
@@ -98,8 +100,6 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 			if (!mailStatus)
 			{
 				logger.debug("failed to send email..");
-//				logger.debug(ApplicationProperties.getValue("errors.mail.sending.failed"),
-//						new BizLogicException(ErrorKey.getErrorKey("errors.mail.sending.failed"),null,""));
 			}
     		Map containerMap = StorageContainerUtil.getContainerMapFromCache();
 			if (specimenPositionList != null && !specimenPositionList.isEmpty())
@@ -142,16 +142,14 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 	 * @param updateSite condition to check.
 	 * @param containerPositionList list of container positions.
 	 * @return containerObjectsCollection collection of storage containers.
-	 * @throws UserNotAuthorizedException thrown if user is not found authorized.
 	 * @throws BizLogicException if some bizlogic operation fails.
 	 * @throws DAOException if some database operation fails.
-	 * @throws edu.wustl.dao.exception.DAOException 
 	 */
 	protected Collection<StorageContainer> updateContainerDetails(
 			Collection<StorageContainer> containerCollection, DAO dao,
 			SessionDataBean sessionDataBean, boolean updateSite,
 			List<ContainerPosition> containerPositionList)
-			throws BizLogicException, DAOException, edu.wustl.dao.exception.DAOException
+			throws BizLogicException, DAOException
 	{
 		// Get site to be set for containers part of the shipment
 		Site site = null;
@@ -215,7 +213,6 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 	 * @param property containing the property name.
 	 * @return container the object of StorageContainer class.
 	 * @throws DAOException if some database operation fails.
-	 * @throws edu.wustl.dao.exception.DAOException 
 	 */
 	protected StorageContainer getContainerByNameOrBarcode(	String nameOrBarcode,DAO dao,String property)
 				throws DAOException
@@ -239,10 +236,9 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 	 * @param propertyValue value of the property.
 	 * @return list of storage containers.
 	 * @throws DAOException if some database operation fails.
-	 * @throws edu.wustl.dao.exception.DAOException 
 	 */
 	protected List<StorageContainer> getContainerByProperty(DAO dao,
-			String propertyName, String propertyValue) throws DAOException, edu.wustl.dao.exception.DAOException
+			String propertyName, String propertyValue) throws DAOException
 	{
 		return dao.retrieve(StorageContainer.class.getName(), propertyName,propertyValue);
 	}
@@ -255,13 +251,11 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 	 * @param operation operation to be performed.
 	 * @param specimenPositionList containing the list of specimen position.
 	 * @throws DAOException if asome database operation fails.
-	 * @throws edu.wustl.dao.exception.DAOException 
-	 * @throws UserNotAuthorizedException if user is found unauthorized.
 	 */
 	protected void updateSpecimenDetails(Collection<SpecimenPosition> specimenPositionCollection,
 			StorageContainer container, DAO dao,
 			SessionDataBean sessionDataBean, String operation,
-			List<SpecimenPosition> specimenPositionList) throws DAOException, edu.wustl.dao.exception.DAOException
+			List<SpecimenPosition> specimenPositionList) throws DAOException
 	{
 		Iterator<SpecimenPosition> specimenPositionIterator = specimenPositionCollection
 				.iterator();
@@ -469,10 +463,9 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 	 * @param propertyValue value of the property.
 	 * @return the list of the specimen.
 	 * @throws DAOException if some database operation fails.
-	 * @throws edu.wustl.dao.exception.DAOException 
 	 */
 	protected List<Specimen> getSpecimenByProperty(DAO dao,	String propertyName,
-			String propertyValue) throws DAOException, edu.wustl.dao.exception.DAOException
+			String propertyValue) throws DAOException
 	{
 		return dao.retrieve(Specimen.class.getName(), propertyName,propertyValue);
 	}
@@ -516,7 +509,6 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 	 * @param operation the operation to be performed.
 	 * @return object of storage container.
 	 * @throws DAOException if some database operation fails.
-	 * @throws UserNotAuthorizedException if user is not found authorized.
 	 * @throws BizLogicException if bizlogic operation fails.
 	 */
 	protected StorageContainer saveOrUpdateContainer(Collection<StorageContainer> containerCollection, DAO dao,
@@ -536,6 +528,7 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 		}
 		else
 		{
+			logger.debug("shipment in transit site is empty");
 			throw new BizLogicException(ErrorKey.getErrorKey("error.shipment.inTransitSite.empty"),null,"");
 		}
 		if(storageTypeList != null && storageTypeList.size() == 1)
@@ -544,6 +537,7 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 		}
 		else
 		{
+			logger.debug("shipment storage type is empty");
 			throw new BizLogicException(ErrorKey.getErrorKey("error.shipment.storageType.empty"),null,"");
 		}
 		Iterator<StorageContainer> containerIterator = containerCollection.iterator();
@@ -644,7 +638,7 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 	 * @param obj the base shipment object.
 	 * @param operation string containing the operation to be performed.
 	 * @return isValid the boolean containing the validity.
-	 * @throws DAOException if database operation fails.
+	 * @throws BizLogicException if bizlogic operation fails.
 	 */
 	@Override
 	protected boolean validate(Object obj, DAO dao, String operation)throws BizLogicException
@@ -877,7 +871,7 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 	 * @param siteId containing the site id.
 	 * @param belongsTo whether specimen belongs to the site
 	 * @return containerBelongsTo boolean containing the result.
-	 * @throws DAOException if database operation fails.
+	 * @throws BizLogicException if bizlogic operation fails.
 	 */
 	protected boolean specimenBelongsToSite(
 			Collection<SpecimenPosition> specimenPositionCollection, DAO dao,
@@ -902,7 +896,7 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 						{
 //							if (specimen.getId() != null)
 //							{
-//								// This specimen belongs to this shipment, so do not
+//						This specimen belongs to this shipment, so do not
 //								// validate
 //							}
 							if(specimen.getId()==null)
@@ -962,7 +956,7 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 								}
 								else
 								{
-									// No specimen with such name or barcode exists
+// 								No specimen with such name or barcode exists
 									containerBelongsTo = false;
 									errorMsg.append("<li>No specimen with name "
 										+ label + " exists</li>");
@@ -987,14 +981,13 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 		{
 			logger.debug(e.getMessage(), e);
 			throw new BizLogicException(ErrorKey.getErrorKey("dao.error"),e,e.toString());
-		}	
+		}
 		if (errorMsg != null && errorMsg.length() > 0)
 		{
 			logger.debug(errorMsg.toString());
 			throw new BizLogicException(ErrorKey.getErrorKey("dao.error"),null,errorMsg.toString());
 			//throw new DAOException(errorMsg.toString());
 		}
-		
 		return containerBelongsTo;
 	}
 	/**
@@ -1136,8 +1129,7 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 	 * @param oldObj old object of base shipment.
 	 * @param sessionDataBean the session in which the object is saved.
 	 * @param dao object of DAO class.
-	 * @throws DAOException if any database operation fails.
-	 * @throws UserNotAuthorizedException if user authorization fails.
+	 * @throws BizLogicException if any bizlogic operation fails.
 	 */
 	@Override
 	protected void update(DAO dao, Object obj, Object oldObj,
@@ -1206,8 +1198,6 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 			if (!mailStatus)
 			{
 				logger.debug("failed to send email...");
-//				logger.debug(ApplicationProperties.getValue("errors.mail.sending.failed"),new BizLogicException(ErrorKey.getErrorKey("errors.mail.sending.failed"),null,""));
-						//new DAOException(ApplicationProperties.getValue("errors.mail.sending.failed")));
 			}
 		}
 		catch (DAOException daoException)
@@ -1249,40 +1239,19 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 			int numOfRecords)
 	{
 		List dataList = null;
-		List paramValuesList = new ArrayList();
+		LinkedList paramValuesList = new LinkedList();
 		StringBuffer sqlBuff = new StringBuffer();
-//		Session session = null;
-//		Query query = null;
-//		String className = Utility.parseClassName(objectsClassName);
 		DAO dao = null;
 		try
 		{
 			dao = AppUtility.openDAOSession(null);
-			
-			//hibernateDao =  (HibernateDAO) DAOConfigFactory.getInstance().getDAOFactory(edu.wustl.catissuecore.util.global.Constants.APPLICATION_NAME).getDAO();
-			//to be verified.
-			//hibernateDao = (HibernateDAO) AppUtility.openDAOSession(null);
-//			session = DBUtil.getCleanSession();
 			sqlBuff.append("select " + selectColumnName + " from " + objectsClassName + " " + "shipment " + "where " + whereClause + " order by shipment." + orderByField + " desc");
-//			sqlBuff.append("select " + selectColumnName);
-//			sqlBuff.append(" from " + objectsClassName + " " + "shipment ");
-//			sqlBuff.append("where " + whereClause);
-//			sqlBuff.append(" order by shipment." + orderByField + " desc");
-//			query = session.createQuery(sqlBuff.toString());
-//			int counter = 0;
 			for (Object object : whereColumnValue)
 			{
 				paramValuesList.add(object);
 			}
-//			query.setMaxResults(numOfRecords);
-//			query.setFirstResult(startIndex);
 			dataList = ((HibernateDAO)dao).executeQuery(sqlBuff.toString(), startIndex,numOfRecords, paramValuesList);
 		}
-		/*catch (BizLogicException e)
-		{
-			logger.debug(e.getMessage(), e);
-			e.printStackTrace();
-		}*/
 		catch (ApplicationException appException)
 		{
 			logger.debug(appException.getMessage(), appException);
@@ -1311,7 +1280,6 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 	 * @param numOfRecords integer containing number of records.
 	 * @return recordCount count of records.
 	 */
-	//to be verified.........
 	public static int getShipmentsCount(String objectsClassName,
 			String whereClause, Object[] whereColumnValue, String orderByField,
 			int startIndex, int numOfRecords)
@@ -1319,28 +1287,16 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 		int recordCount = 0;
 		List dataList = null;
 		StringBuffer sqlBuff = new StringBuffer();
-//		Session session = null;
-//		Query query = null;
-//		String className = Utility.parseClassName(objectsClassName);
-		List paramValuesList = new ArrayList();
+		LinkedList paramValuesList = new LinkedList();
 		DAO dao = null;
 		try
 		{
 			dao = AppUtility.openDAOSession(null);
-			//hibernateDao =  (HibernateDAO) DAOConfigFactory.getInstance().getDAOFactory(edu.wustl.catissuecore.util.global.Constants.APPLICATION_NAME).getDAO();
-//			session = DBUtil.getCleanSession();
 			sqlBuff.append("select count(shipment) from " + objectsClassName + " " + "shipment where " + whereClause);
-//			sqlBuff.append("select count(shipment)");
-//			sqlBuff.append(" from " + objectsClassName + " " + "shipment ");
-//			sqlBuff.append("where " + whereClause);
-//			query = session.createQuery(sqlBuff.toString());
-//			int counter = 0;
 			for (Object object : whereColumnValue)
 			{
 				paramValuesList.add(object);
 			}
-//			query.setMaxResults(numOfRecords);
-//			query.setFirstResult(startIndex);
 			dataList = ((HibernateDAO)dao).executeQuery(sqlBuff.toString(), startIndex,numOfRecords, paramValuesList);
 			if (dataList != null && dataList.size() == 1)
 			{
@@ -1351,13 +1307,9 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 				recordCount = 0;
 			}
 		}
-		/*catch (BizLogicException e)
-		{
-			recordCount = 0;
-		}*/
 		catch(ApplicationException excp)
 		{
-			//recordCount = 0; to be verified
+			recordCount = 0;
 			excp.printStackTrace();
 		}
 		finally
@@ -1378,7 +1330,7 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 	 * @param userId site corresponding to user id.
 	 * @param isAdmin to decide whether the user is admin or not.
 	 * @return list of site ids.
-	 * @throws DAOException if some database operation fails.
+	 * @throws BizLogicException if some bizlogic operation fails.
 	 */
 	public List<Long> getPermittedSiteIdsForUser(Long userId, boolean isAdmin)
 			throws BizLogicException
@@ -1397,8 +1349,7 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 	 * @param userId the id of user.
 	 * @param isAdmin decides whether the user is admin or not.
 	 * @return collection of sites.
-	 * @throws DAOException if some database operation fails.
-	 * @throws BizLogicException 
+	 * @throws BizLogicException if some bizlogic operation fails.
 	 */
 	public Collection<Site> getPermittedSitesForUser(Long userId,
 			boolean isAdmin) throws BizLogicException
@@ -1431,24 +1382,10 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 	 * @param queryString the query to execute.
 	 * @return list the list of objects.
 	 * @throws SQLException if query operation fails.
+	 * @throws ApplicationException wrapping the dao exception.
 	 */
 	public List executeSQL(String queryString) throws SQLException,ApplicationException
 	{
-//		Session session = DBUtil.currentSession();
-//		Connection con = session.connection();
-//		Statement statement = con.createStatement();
-//		ResultSet resultSet = dao.executeQuery(queryString);
-//		if (resultSet != null)
-//		{
-//			List list = new ArrayList();
-//			while (resultSet.next())
-//			{
-//				list.add(resultSet.getObject(1));
-//			}
-//			return list;
-//		}
-//
-//		return null;
 		List list = null;
 		DAO dao = AppUtility.openJDBCSession();
 		list = dao.executeQuery(queryString);
