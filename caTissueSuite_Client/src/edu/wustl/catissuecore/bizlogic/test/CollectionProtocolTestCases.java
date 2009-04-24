@@ -15,9 +15,9 @@ import edu.wustl.catissuecore.domain.ConsentTier;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.User;
-import edu.wustl.catissuecore.util.global.AppUtility;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.util.global.Constants;
+import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.logger.Logger;
 
 public class CollectionProtocolTestCases extends CaTissueBaseTestCase 

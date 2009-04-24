@@ -29,7 +29,7 @@ public class CaTissueBaseTestCase extends BaseTestCase{
 	 */
 	public void setUp(){
 		
-		Logger.configure("");
+		//Logger.configure("");
 		System.setProperty("javax.net.ssl.trustStore", "D://jboss_18080//server//default//conf//chap8.keystore");
 		appService = ApplicationServiceProvider.getApplicationService();
 		ClientSession cs = ClientSession.getInstance();

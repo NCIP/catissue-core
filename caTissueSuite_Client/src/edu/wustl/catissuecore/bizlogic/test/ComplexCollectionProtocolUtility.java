@@ -14,8 +14,9 @@ import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.ConsentTier;
 import edu.wustl.catissuecore.domain.User;
-import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.AppUtility;
+import edu.wustl.common.util.Utility;
+import edu.wustl.common.util.global.Status;
+
 
 public class ComplexCollectionProtocolUtility
 {
@@ -446,7 +447,7 @@ public class ComplexCollectionProtocolUtility
 		//specimenCollectionRequirementGroup.setClinicalDiagnosis("Abdominal fibromatosis");
 		//specimenCollectionRequirementGroup.setClinicalStatus("Operative");
 		//collectionProtocolEvent.setRequiredCollectionSpecimenGroup(specimenCollectionRequirementGroup);
-		collectionProtocolEvent.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+		collectionProtocolEvent.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());
 		collectionProtocolEvent.setClinicalDiagnosis("Abdominal fibromatosis");
 		collectionProtocolEvent.setClinicalStatus("Operative");
 		Collection specimenCollection =null;

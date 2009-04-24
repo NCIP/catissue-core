@@ -41,10 +41,9 @@ import edu.wustl.catissuecore.domain.Institution;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.OrderDetails;
 import edu.wustl.catissuecore.domain.Participant;
-import edu.wustl.catissuecore.domain.ReceivedEventParameters;
-import edu.wustl.catissuecore.domain.SpecimenRequirement;
-import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Race;
+import edu.wustl.catissuecore.domain.ReceivedEventParameters;
+import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.SpecimenArrayContent;
@@ -52,6 +51,7 @@ import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenObjectFactory;
+import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
@@ -63,9 +63,11 @@ import edu.wustl.catissuecore.domain.pathology.TextContent;
 import edu.wustl.catissuecore.namegenerator.LabelGenerator;
 import edu.wustl.catissuecore.namegenerator.LabelGeneratorFactory;
 import edu.wustl.catissuecore.util.EventsUtil;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.util.Utility;
-import edu.wustl.common.util.global.Constants;
+import edu.wustl.common.util.global.CommonServiceLocator;
+import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
 
 public class BaseTestCaseUtility {
@@ -143,7 +145,7 @@ public class BaseTestCaseUtility {
 		collectionProtocolEvent.setStudyCalendarEventPoint(new Double(1.0));
 		collectionProtocolEvent.setCollectionPointLabel("PreStudy1"+ Math.random());
 		collectionProtocolEvent.setClinicalStatus("Operative");		
-		collectionProtocolEvent.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+		collectionProtocolEvent.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());
 		collectionProtocolEvent.setClinicalDiagnosis("Abdominal fibromatosis (disorder)");
 		Collection specimenCollection =null;
 		CollectionProtocolEventBean cpEventBean = new CollectionProtocolEventBean();
@@ -1248,7 +1250,8 @@ public class BaseTestCaseUtility {
           order.setStatus("New");
           try
           {
-                order.setRequestedDate(Utility.parseDate("04-02-1984", Constants.DATE_PATTERN_MM_DD_YYYY));
+                order.setRequestedDate(Utility.parseDate("04-02-1984", CommonServiceLocator.getInstance().getDatePattern()
+                		));
           }
 
           catch (ParseException e)
@@ -1286,7 +1289,7 @@ public class BaseTestCaseUtility {
         orderObj.setStatus("Pending");
         try
         {
-        	orderObj.setRequestedDate(Utility.parseDate("05-02-1984", Constants.DATE_PATTERN_MM_DD_YYYY));
+        	orderObj.setRequestedDate(Utility.parseDate("05-02-1984", CommonServiceLocator.getInstance().getDatePattern()));
         }
         catch (ParseException e)
         {
@@ -1980,7 +1983,7 @@ public class BaseTestCaseUtility {
 	public static IdentifiedSurgicalPathologyReport initIdentifiedSurgicalPathologyReport()
 	{
 		IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReport=new IdentifiedSurgicalPathologyReport();
-		identifiedSurgicalPathologyReport.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+		identifiedSurgicalPathologyReport.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());
 		identifiedSurgicalPathologyReport.setCollectionDateTime(new Date());
 		identifiedSurgicalPathologyReport.setIsFlagForReview(new Boolean(false));
 		identifiedSurgicalPathologyReport.setReportStatus(CaTIESConstants.PENDING_FOR_DEID);
@@ -2029,7 +2032,7 @@ public class BaseTestCaseUtility {
 		IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReport=(IdentifiedSurgicalPathologyReport)TestCaseUtility.getObjectMap(IdentifiedSurgicalPathologyReport.class);
 		deidentifiedSurgicalPathologyReport.setIsFlagForReview(new Boolean(false));
 		deidentifiedSurgicalPathologyReport.setReportStatus(CaTIESConstants.PENDING_FOR_XML);
-		deidentifiedSurgicalPathologyReport.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+		deidentifiedSurgicalPathologyReport.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());
 		deidentifiedSurgicalPathologyReport.setSpecimenCollectionGroup(identifiedSurgicalPathologyReport.getSpecimenCollectionGroup());
 		
 		TextContent textContent = new TextContent();

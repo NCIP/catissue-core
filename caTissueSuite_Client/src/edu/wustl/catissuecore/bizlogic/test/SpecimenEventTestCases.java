@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+
 import edu.wustl.catissuecore.domain.Capacity;
 import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.CellSpecimenReviewParameters;
@@ -30,6 +31,7 @@ import edu.wustl.catissuecore.domain.TissueSpecimenReviewEventParameters;
 import edu.wustl.catissuecore.domain.TransferEventParameters;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.util.global.Status;
 
 public class SpecimenEventTestCases extends CaTissueBaseTestCase
 {
@@ -248,7 +250,7 @@ public class SpecimenEventTestCases extends CaTissueBaseTestCase
 			System.out.println("After Creating Specimen object");
 
 			DisposalEventParameters disposalEvent = new DisposalEventParameters();
-			disposalEvent.setActivityStatus(Constants.ACTIVITY_STATUS_CLOSED);
+			disposalEvent.setActivityStatus(Status.ACTIVITY_STATUS_CLOSED.toString());
 			disposalEvent.setSpecimen(tSpecimenObj);
 			disposalEvent.setTimestamp(new Date(System.currentTimeMillis()));
 			User user = new User();
@@ -256,11 +258,11 @@ public class SpecimenEventTestCases extends CaTissueBaseTestCase
 			disposalEvent.setUser(user);
 			disposalEvent.setReason("Testing API");
 			disposalEvent.setComment("Dispose Event");
-			disposalEvent.setActivityStatus(Constants.ACTIVITY_STATUS_CLOSED);
+			disposalEvent.setActivityStatus(Status.ACTIVITY_STATUS_CLOSED.toString());
 			System.out.println("Before Creating DisposeEvent");
 			disposalEvent = (DisposalEventParameters) appService.createObject(disposalEvent);
 			TestCaseUtility.setObjectMap(disposalEvent, DisposalEventParameters.class);
-			if (Constants.ACTIVITY_STATUS_CLOSED.equals(disposalEvent.getSpecimen().getActivityStatus()))
+			if (Status.ACTIVITY_STATUS_CLOSED.toString().equals(disposalEvent.getSpecimen().getActivityStatus()))
 			{
 				assertTrue("Disposed event sucessfully fired: Activity Status Closed :" + disposalEvent, true);
 			}
@@ -304,7 +306,7 @@ public class SpecimenEventTestCases extends CaTissueBaseTestCase
 			System.out.println("After Creating Specimen object");
 
 			DisposalEventParameters disposalEvent = new DisposalEventParameters();
-			disposalEvent.setActivityStatus(Constants.ACTIVITY_STATUS_CLOSED);
+			disposalEvent.setActivityStatus(Status.ACTIVITY_STATUS_CLOSED.toString());
 			disposalEvent.setSpecimen(tSpecimenObj);
 			disposalEvent.setTimestamp(new Date(System.currentTimeMillis()));
 			User user = new User();
@@ -312,13 +314,13 @@ public class SpecimenEventTestCases extends CaTissueBaseTestCase
 			disposalEvent.setUser(user);
 			disposalEvent.setReason("Disposing Specimen");
 			disposalEvent.setComment("Dispose Event");
-			disposalEvent.setActivityStatus(Constants.ACTIVITY_STATUS_CLOSED);
+			disposalEvent.setActivityStatus(Status.ACTIVITY_STATUS_CLOSED.toString());
 			
 			System.out.println("Before Creating DisposeEvent");
 			disposalEvent = (DisposalEventParameters) appService.createObject(disposalEvent);
-			disposalEvent.setActivityStatus(Constants.ACTIVITY_STATUS_DISABLED);
+			disposalEvent.setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.toString());
 			disposalEvent = (DisposalEventParameters) appService.updateObject(disposalEvent);
-			if (Constants.ACTIVITY_STATUS_DISABLED.equals(disposalEvent.getSpecimen().getActivityStatus()))
+			if (Status.ACTIVITY_STATUS_DISABLED.toString().equals(disposalEvent.getSpecimen().getActivityStatus()))
 			{
 				assertTrue("Disposed event sucessfully fired: Activity Status changed from Closed to Disbled:" + disposalEvent, true);
 			}
@@ -343,9 +345,9 @@ public class SpecimenEventTestCases extends CaTissueBaseTestCase
 		try
 		{
 			DisposalEventParameters disposalEvent = (DisposalEventParameters) TestCaseUtility.getObjectMap(DisposalEventParameters.class);
-			disposalEvent.setActivityStatus(Constants.ACTIVITY_STATUS_DISABLED);
+			disposalEvent.setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.toString());
 			disposalEvent = (DisposalEventParameters) appService.updateObject(disposalEvent);
-			if (Constants.ACTIVITY_STATUS_DISABLED.equals(disposalEvent.getActivityStatus()))
+			if (Status.ACTIVITY_STATUS_DISABLED.toString().equals(disposalEvent.getActivityStatus()))
 			{
 				assertTrue("Disposed event sucessfully fired" + disposalEvent, true);
 			}

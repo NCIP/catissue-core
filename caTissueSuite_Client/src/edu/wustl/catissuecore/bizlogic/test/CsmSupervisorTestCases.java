@@ -32,7 +32,7 @@ public class CsmSupervisorTestCases extends BaseTestCase {
 	
 	public void setUp(){
 		
-		Logger.configure("");
+		//Logger.configure("");
 		appService = ApplicationServiceProvider.getApplicationService();
 		cs = ClientSession.getInstance();
 		try

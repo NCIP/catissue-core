@@ -1,30 +1,25 @@
 package edu.wustl.catissuecore.bizlogic.test;
 
 import java.text.ParseException;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.Set;
 
 import edu.wustl.catissuecore.caties.util.CaTIESConstants;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
-import edu.wustl.catissuecore.domain.ConsentTier;
-import edu.wustl.catissuecore.domain.ConsentTierResponse;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
-import edu.wustl.catissuecore.domain.StorageContainer;
-import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.ReportSection;
 import edu.wustl.catissuecore.domain.pathology.TextContent;
 import edu.wustl.common.util.Utility;
+import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.Constants;
+import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
 
 public class CsmTestData extends CaTissueBaseTestCase{
@@ -46,7 +41,7 @@ public class CsmTestData extends CaTissueBaseTestCase{
 		    participant.setSocialSecurityNumber("111-22-1232");
 		    try
 	        {
-				participant.setBirthDate(Utility.parseDate("05-02-1984", Constants.DATE_PATTERN_MM_DD_YYYY));
+				participant.setBirthDate(Utility.parseDate("05-02-1984", CommonServiceLocator.getInstance().getDatePattern()));
 	        }
 	        catch (ParseException e)
 	        {
@@ -140,7 +135,7 @@ public class CsmTestData extends CaTissueBaseTestCase{
 			}
 			
 			IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReport=new IdentifiedSurgicalPathologyReport();
-			identifiedSurgicalPathologyReport.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+			identifiedSurgicalPathologyReport.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());
 			identifiedSurgicalPathologyReport.setCollectionDateTime(new Date());
 			identifiedSurgicalPathologyReport.setIsFlagForReview(new Boolean(false));
 			identifiedSurgicalPathologyReport.setReportStatus(CaTIESConstants.PENDING_FOR_DEID);
@@ -216,7 +211,7 @@ public class CsmTestData extends CaTissueBaseTestCase{
 	    participant.setSocialSecurityNumber("111-22-5565");
 	    try
         {
-			participant.setBirthDate(Utility.parseDate("05-02-1984", Constants.DATE_PATTERN_MM_DD_YYYY));
+			participant.setBirthDate(Utility.parseDate("05-02-1984", CommonServiceLocator.getInstance().getDatePattern()));
         }
         catch (ParseException e)
         {
@@ -292,7 +287,7 @@ public class CsmTestData extends CaTissueBaseTestCase{
 		}
 		
 		IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReport=new IdentifiedSurgicalPathologyReport();
-		identifiedSurgicalPathologyReport.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+		identifiedSurgicalPathologyReport.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());
 		identifiedSurgicalPathologyReport.setCollectionDateTime(new Date());
 		identifiedSurgicalPathologyReport.setIsFlagForReview(new Boolean(false));
 		identifiedSurgicalPathologyReport.setReportStatus(CaTIESConstants.PENDING_FOR_DEID);
@@ -354,7 +349,7 @@ public class CsmTestData extends CaTissueBaseTestCase{
 			    participant.setSocialSecurityNumber("111-22-3233");
 			    try
 		        {
-					participant.setBirthDate(Utility.parseDate("05-02-1984", Constants.DATE_PATTERN_MM_DD_YYYY));
+					participant.setBirthDate(Utility.parseDate("05-02-1984", CommonServiceLocator.getInstance().getDatePattern()));
 		        }
 		        catch (ParseException e)
 		        {
@@ -448,7 +443,7 @@ public class CsmTestData extends CaTissueBaseTestCase{
 				}
 				
 				IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReport = new IdentifiedSurgicalPathologyReport();
-				identifiedSurgicalPathologyReport.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+				identifiedSurgicalPathologyReport.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());
 				identifiedSurgicalPathologyReport.setCollectionDateTime(new Date());
 				identifiedSurgicalPathologyReport.setIsFlagForReview(new Boolean(false));
 				identifiedSurgicalPathologyReport.setReportStatus(CaTIESConstants.PENDING_FOR_DEID);

@@ -33,6 +33,7 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.Utility;
+import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
 
 
@@ -1293,7 +1294,7 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 				   System.out.println("After Creating Specimen object");
 				   			   
 				   DisposalEventParameters disposalEvent = new DisposalEventParameters();
-			       disposalEvent.setActivityStatus(Constants.ACTIVITY_STATUS_CLOSED);
+			       disposalEvent.setActivityStatus(Status.ACTIVITY_STATUS_CLOSED.toString());
  		           disposalEvent.setSpecimen(tSpecimenObj);
 			       disposalEvent.setTimestamp(new Date(System.currentTimeMillis()));
 			       User user = new User();
@@ -1301,10 +1302,10 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 			       disposalEvent.setUser(user);
 			       disposalEvent.setReason("Testing API");
 			       disposalEvent.setComment("Dispose Event");
-			       disposalEvent.setActivityStatus(Constants.ACTIVITY_STATUS_DISABLED);
+			       disposalEvent.setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.toString());
 			       System.out.println("Before Creating DisposeEvent");
 			       disposalEvent = (DisposalEventParameters) appService.createObject(disposalEvent);
-			       if(Constants.ACTIVITY_STATUS_DISABLED.equals(disposalEvent.getSpecimen().getActivityStatus()))
+			       if(Status.ACTIVITY_STATUS_DISABLED.toString().equals(disposalEvent.getSpecimen().getActivityStatus()))
 			       {
 			    	   assertTrue("Disposed event sucessfully fired: Activity Status Disable :" + disposalEvent , true);   
 			       }

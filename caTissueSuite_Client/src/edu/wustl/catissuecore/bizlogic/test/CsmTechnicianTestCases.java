@@ -26,7 +26,7 @@ public class CsmTechnicianTestCases extends BaseTestCase{
 	 static ApplicationService appService = null;
 	  ClientSession cs = null;
 	  public void setUp(){
-		 Logger.configure("");
+		// Logger.configure("");
 		appService = ApplicationServiceProvider.getApplicationService();
 		cs = ClientSession.getInstance();
 		try
