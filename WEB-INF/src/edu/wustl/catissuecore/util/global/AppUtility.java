@@ -37,6 +37,7 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 
 import edu.common.dynamicextensions.bizlogic.BizLogicFactory;
+import edu.common.dynamicextensions.dao.impl.DynamicExtensionDAO;
 import edu.common.dynamicextensions.domain.Category;
 import edu.common.dynamicextensions.domain.integration.EntityMap;
 import edu.common.dynamicextensions.domain.integration.EntityMapCondition;
@@ -2812,6 +2813,7 @@ public class AppUtility
 	{
 		Collection<FormContext> formContextColl = null;
 		AnnotationBizLogic bizLogic = new AnnotationBizLogic();
+		bizLogic.setAppName(DynamicExtensionDAO.getInstance().getAppName());
 
 		try 
 		{
@@ -2841,6 +2843,7 @@ public class AppUtility
 		{
 			
 			AnnotationBizLogic bizLogic = new AnnotationBizLogic();
+			bizLogic.setAppName(DynamicExtensionDAO.getInstance().getAppName());
 			entityMapConditions = new HashSet(
 					bizLogic
 							.executeQuery("from EntityMapCondition entityMapCondtion where entityMapCondtion.formContext.id = "
