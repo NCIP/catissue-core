@@ -136,14 +136,17 @@ public final class ConsentUtil
 			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 			IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 		
-		Collection specimenCollection =(Collection)bizLogic.retrieveAttribute(SpecimenCollectionGroup.class,scg.getId(),"elements(specimenCollection)"); 
+		Collection specimenCollection =(Collection)dao.retrieveAttribute(SpecimenCollectionGroup.class,Constants.SYSTEM_IDENTIFIER,scg.getId(),"elements(specimenCollection)"); 
 		Collection updatedSpecimenCollection = new HashSet();
-		Iterator specimenItr = specimenCollection.iterator() ;
-		while(specimenItr.hasNext())
+		if(specimenCollection != null)
 		{
-			Specimen specimen = (Specimen)specimenItr.next();
-			updateSpecimenStatus(specimen, consentWithdrawalOption, consentTierID, dao, sessionDataBean);
-			updatedSpecimenCollection.add(specimen );
+			Iterator specimenItr = specimenCollection.iterator() ;
+			while(specimenItr.hasNext())
+			{
+				Specimen specimen = (Specimen)specimenItr.next();
+				updateSpecimenStatus(specimen, consentWithdrawalOption, consentTierID, dao, sessionDataBean);
+				updatedSpecimenCollection.add(specimen );
+			}
 		}
 		scg.setSpecimenCollection(updatedSpecimenCollection);
 		}
@@ -286,7 +289,7 @@ public final class ConsentUtil
 			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 			IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 			Long specimenId = (Long)specimen.getId();	
-			Collection childSpecimens = (Collection)bizLogic.retrieveAttribute(Specimen.class,specimenId, "elements(childSpecimenCollection)");
+			Collection childSpecimens = (Collection)dao.retrieveAttribute(Specimen.class,Constants.SYSTEM_IDENTIFIER,specimenId, "elements(childSpecimenCollection)");
 
 			//Collection childSpecimens = specimen.getChildrenSpecimen();
 			if(childSpecimens!=null)
@@ -325,22 +328,27 @@ public final class ConsentUtil
 	 * @param specimen Instance of specimen. It is the child specimen to which the consents will be set.
 	 * @param parentSpecimen Instance of specimen. It is the parent specimen from which the consents will be copied.
 	 * @throws BizLogicException 
+	 * @throws DAOException 
 	 */
-	public static void setConsentsFromParent(Specimen specimen, Specimen parentSpecimen, DAO dao) throws BizLogicException
+	public static void setConsentsFromParent(Specimen specimen, Specimen parentSpecimen, DAO dao) throws BizLogicException, DAOException
 	{
 		Collection consentTierStatusCollection = new HashSet();
 		//Lazy Resolved ----  parentSpecimen.getConsentTierStatusCollection();
 		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 		IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
-		Collection parentStatusCollection = (Collection)bizLogic.retrieveAttribute(Specimen.class, parentSpecimen.getId(), "elements(consentTierStatusCollection)"); 
-		Iterator parentStatusCollectionIterator = parentStatusCollection.iterator();
-		while(parentStatusCollectionIterator.hasNext() )
+		Collection parentStatusCollection = (Collection)dao.retrieveAttribute(Specimen.class,Constants.SYSTEM_IDENTIFIER, parentSpecimen.getId(), "elements(consentTierStatusCollection)"); 
+		
+		if(parentStatusCollection != null)
 		{
-			ConsentTierStatus cts = (ConsentTierStatus)parentStatusCollectionIterator.next();
-			ConsentTierStatus newCts = new ConsentTierStatus();
-			newCts.setStatus(cts.getStatus());
-			newCts.setConsentTier(cts.getConsentTier());
-			consentTierStatusCollection.add(newCts);
+			Iterator parentStatusCollectionIterator = parentStatusCollection.iterator();
+			while(parentStatusCollectionIterator.hasNext() )
+			{
+				ConsentTierStatus cts = (ConsentTierStatus)parentStatusCollectionIterator.next();
+				ConsentTierStatus newCts = new ConsentTierStatus();
+				newCts.setStatus(cts.getStatus());
+				newCts.setConsentTier(cts.getConsentTier());
+				consentTierStatusCollection.add(newCts);
+			}
 		}
 		specimen.setConsentTierStatusCollection( consentTierStatusCollection);
 	}
@@ -373,8 +381,9 @@ public final class ConsentUtil
 	 * @param dao
 	 * @param sessionDataBean
 	 * @throws BizLogicException 
+	 * @throws DAOException 
 	 */
-	public static void updateSpecimenStatusInSCG(SpecimenCollectionGroup specimenCollectionGroup,SpecimenCollectionGroup oldSpecimenCollectionGroup, DAO dao) throws BizLogicException
+	public static void updateSpecimenStatusInSCG(SpecimenCollectionGroup specimenCollectionGroup,SpecimenCollectionGroup oldSpecimenCollectionGroup, DAO dao) throws BizLogicException, DAOException
 	{
 		Collection newConsentTierStatusCollection = specimenCollectionGroup.getConsentTierStatusCollection();
 		Collection oldConsentTierStatusCollection =  oldSpecimenCollectionGroup.getConsentTierStatusCollection();
@@ -391,20 +400,23 @@ public final class ConsentUtil
 	/*
 	 * This method updates the specimen consent status. 
 	 */
-	private static void updateSCGSpecimenCollection(SpecimenCollectionGroup specimenCollectionGroup, SpecimenCollectionGroup oldSpecimenCollectionGroup, long consentTierID, String  statusValue, Collection newSCGConsentCollection, Collection oldSCGConsentCollection,DAO dao) throws BizLogicException
+	private static void updateSCGSpecimenCollection(SpecimenCollectionGroup specimenCollectionGroup, SpecimenCollectionGroup oldSpecimenCollectionGroup, long consentTierID, String  statusValue, Collection newSCGConsentCollection, Collection oldSCGConsentCollection,DAO dao) throws BizLogicException, DAOException
 	{
 		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 		IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
-		Collection specimenCollection = (Collection)bizLogic.retrieveAttribute(SpecimenCollectionGroup.class, specimenCollectionGroup.getId(),"elements(specimenCollection)");  
+		Collection specimenCollection = (Collection)dao.retrieveAttribute(SpecimenCollectionGroup.class,Constants.SYSTEM_IDENTIFIER, specimenCollectionGroup.getId(),"elements(specimenCollection)");  
 		//oldSpecimenCollectionGroup.getSpecimenCollection();
 		Collection updatedSpecimenCollection = new HashSet();
 		String applyChangesTo =  specimenCollectionGroup.getApplyChangesTo(); 
-		Iterator specimenItr = specimenCollection.iterator() ;
-		while(specimenItr.hasNext() )
+		if(specimenCollection != null)
 		{
-			Specimen specimen = (Specimen)specimenItr.next();
-			updateSpecimenConsentStatus(specimen, applyChangesTo, consentTierID, statusValue, newSCGConsentCollection, oldSCGConsentCollection, dao );
-			updatedSpecimenCollection.add(specimen );
+			Iterator specimenItr = specimenCollection.iterator() ;
+			while(specimenItr.hasNext() )
+			{
+				Specimen specimen = (Specimen)specimenItr.next();
+				updateSpecimenConsentStatus(specimen, applyChangesTo, consentTierID, statusValue, newSCGConsentCollection, oldSCGConsentCollection, dao );
+				updatedSpecimenCollection.add(specimen );
+			}
 		}
 		specimenCollectionGroup.setSpecimenCollection(updatedSpecimenCollection );
 	}

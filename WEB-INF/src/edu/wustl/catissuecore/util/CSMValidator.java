@@ -95,7 +95,7 @@ public class CSMValidator implements IValidator {
 		return hasPrivilege;
 	} 
 
-	public boolean hasPrivilegeToViewTemporalColumn(List tqColumnMetadataList,
+	/*public boolean hasPrivilegeToViewTemporalColumn(List tqColumnMetadataList,
 			List<String> row,boolean isAuthorizedUser) 
 	{
 		boolean removeRow = false;
@@ -139,6 +139,6 @@ public class CSMValidator implements IValidator {
 			}
 		}
 		return removeRow;
-	}
+	}*/
 	
 }
