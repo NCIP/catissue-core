@@ -1,26 +1,10 @@
 package edu.wustl.catissuecore.bizlogic.test;
 
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
-import edu.wustl.catissuecore.domain.Biohazard;
-import edu.wustl.catissuecore.domain.CancerResearchGroup;
-import edu.wustl.catissuecore.domain.CellSpecimen;
-import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
-import edu.wustl.catissuecore.domain.Department;
-import edu.wustl.catissuecore.domain.DistributionProtocol;
-import edu.wustl.catissuecore.domain.FluidSpecimen;
-import edu.wustl.catissuecore.domain.Institution;
-import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Participant;
-import edu.wustl.catissuecore.domain.Site;
-import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
-import edu.wustl.catissuecore.domain.StorageContainer;
-import edu.wustl.catissuecore.domain.StorageType;
-import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.common.util.logger.Logger;
 import gov.nih.nci.system.applicationservice.ApplicationService;
 import gov.nih.nci.system.applicationservice.ApplicationServiceProvider;
@@ -30,11 +14,14 @@ public class ScientistRoleTestCases extends CaTissueBaseTestCase {
 		 static ApplicationService appService = null;
 		  public void setUp(){
 			appService = ApplicationServiceProvider.getApplicationService();
+			System.out.println("appService !!!!"+appService);
 			ClientSession cs = ClientSession.getInstance();
+			System.out.println("cs !!!!"+cs);
 			//System.setProperty("javax.net.ssl.trustStore", "E://jboss//server//default//conf//chap8.keystore");
 			try
 			{ 
 				cs.startSession("scientist@admin.com", "Test123");
+				System.out.println("Session started!!!!");
 			} 	
 						
 			catch (Exception ex) 

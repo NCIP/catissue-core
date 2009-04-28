@@ -30,7 +30,6 @@ import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.domain.TissueSpecimenReviewEventParameters;
 import edu.wustl.catissuecore.domain.TransferEventParameters;
 import edu.wustl.catissuecore.domain.User;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.global.Status;
 
 public class SpecimenEventTestCases extends CaTissueBaseTestCase
