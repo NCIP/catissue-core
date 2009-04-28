@@ -67,14 +67,16 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 			}
 		}
 		//Get the required privilege name which we would like to check for the logged in user.
-		String privilegeName = getPrivilegeName(domainObject);
+		String privilegeName=null;
 		try
 		{
-		PrivilegeCache privilegeCache = getPrivilegeCache(sessionDataBean);
+		PrivilegeCache privilegeCache=null;
 		//Checking whether the logged in user has the required privilege on the given protection element
 
 		if (!isAuthorized)
 		{
+			privilegeName = getPrivilegeName(domainObject);
+			privilegeCache = getPrivilegeCache(sessionDataBean);
 			if (!protectionElementName.equalsIgnoreCase("ADMIN_PROTECTION_ELEMENT"))
 			{
 				String[] prArray = protectionElementName.split("_");
