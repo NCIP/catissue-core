@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import edu.common.dynamicextensions.bizlogic.BizLogicFactory;
+import edu.common.dynamicextensions.dao.impl.DynamicExtensionDAO;
 import edu.common.dynamicextensions.domain.AbstractMetadata;
 import edu.common.dynamicextensions.domain.integration.EntityMap;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
@@ -72,6 +73,7 @@ public final class AddEntityMapConditions
 			throws DynamicExtensionsSystemException, ApplicationException
 	{
 		AnnotationBizLogic annotation = new AnnotationBizLogic();
+		annotation.setAppName(DynamicExtensionDAO.getInstance().getAppName());
 		DefaultBizLogic defaultBizLogic = BizLogicFactory.getDefaultBizLogic();
 		for (Long containerId : containerIds)
 		{

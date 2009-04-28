@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import edu.common.dynamicextensions.bizlogic.BizLogicFactory;
+import edu.common.dynamicextensions.dao.impl.DynamicExtensionDAO;
 import edu.common.dynamicextensions.domain.AbstractMetadata;
 import edu.common.dynamicextensions.domain.integration.EntityMap;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
@@ -100,6 +101,7 @@ public final class AssociatesForms
 	{
 		DefaultBizLogic defaultBizLogic = BizLogicFactory.getDefaultBizLogic();
 		AnnotationBizLogic annotation = new AnnotationBizLogic();
+		annotation.setAppName(DynamicExtensionDAO.getInstance().getAppName());
 		Long cpId = Long.valueOf(0);
 		for (Long containerId : entityIdsVsContainersId.values())
 		{
@@ -125,6 +127,7 @@ public final class AssociatesForms
 	private static void associateEntitiesForms(List<Long> entityIds, Long typeId) throws DynamicExtensionsSystemException, ApplicationException
 	{
 		AnnotationBizLogic annotation = new AnnotationBizLogic();
+		annotation.setAppName(DynamicExtensionDAO.getInstance().getAppName());
 		DefaultBizLogic defaultBizLogic = BizLogicFactory.getDefaultBizLogic();
 		Long conditionObject = Long.valueOf(-1);
 		for (Long entityId : entityIds)
