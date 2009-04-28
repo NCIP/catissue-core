@@ -515,7 +515,7 @@ public class CaCoreAppServicesDelegator
 					.error("ClassNotFoundException in CaCoreAppServicesDelegator.getAliasName() method");
 			className = Class.forName(object.getClass().getName());
 		}
-		String tableName = "'" + HibernateMetaData.getTableName(className) + "'";
+		String tableName = HibernateMetaData.getTableName(className);
 
 		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 		QueryBizLogic bizLogic = (QueryBizLogic) factory
