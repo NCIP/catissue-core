@@ -172,7 +172,7 @@ public class UserTestCases extends CaTissueBaseTestCase {
 	 {
 		try{
 			User userObj = new User();
-			userObj.setEmailAddress("scientist@admin.com");
+			userObj.setEmailAddress("ddd"+ UniqueKeyGeneratorUtil.getUniqueKey()+"@admin.com");
 			userObj.setLoginName(userObj.getEmailAddress());
 			userObj.setLastName("last" + UniqueKeyGeneratorUtil.getUniqueKey());
 			userObj.setFirstName("name" + UniqueKeyGeneratorUtil.getUniqueKey());
