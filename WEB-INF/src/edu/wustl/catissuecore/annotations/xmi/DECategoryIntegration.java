@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 import edu.common.dynamicextensions.bizlogic.BizLogicFactory;
+import edu.common.dynamicextensions.dao.impl.DynamicExtensionDAO;
 import edu.common.dynamicextensions.domain.AbstractMetadata;
 import edu.common.dynamicextensions.domain.integration.EntityMap;
 import edu.common.dynamicextensions.domain.integration.EntityMapCondition;
@@ -119,6 +120,7 @@ public class DECategoryIntegration
 						}
 						entityMap.setFormContextCollection(newFormContexts);
 						AnnotationBizLogic annotation = new AnnotationBizLogic();
+						annotation.setAppName(DynamicExtensionDAO.getInstance().getAppName());
 						annotation.insert(entityMap, 0);
 
 					}
