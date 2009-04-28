@@ -499,8 +499,8 @@ public class BaseTestCaseUtility {
 		//Logger.configure("");
 		CollectionProtocolRegistration collectionProtocolRegistration = new CollectionProtocolRegistration();
 
-		CollectionProtocol collectionProtocol =(CollectionProtocol)TestCaseUtility.getObjectMap(CollectionProtocol.class); 
-		//new CollectionProtocol();
+		CollectionProtocol collectionProtocol =  (CollectionProtocol)TestCaseUtility.getObjectMap(CollectionProtocol.class); 
+		//CollectionProtocol collectionProtocol = new CollectionProtocol();
 		//collectionProtocol.setId(new Long(3));
 		collectionProtocolRegistration.setCollectionProtocol(collectionProtocol);
 
@@ -535,14 +535,17 @@ public class BaseTestCaseUtility {
 		
 		Collection consentTierResponseCollection = new HashSet();
 		Collection consentTierCollection = collectionProtocol.getConsentTierCollection();
-		Iterator consentTierItr = consentTierCollection.iterator();
-		while(consentTierItr.hasNext())
+		if(consentTierCollection != null)
 		{
-			ConsentTier consentTier = (ConsentTier)consentTierItr.next();
-			ConsentTierResponse consentResponse = new ConsentTierResponse();
-			consentResponse.setConsentTier(consentTier);
-			consentResponse.setResponse("Yes");
-			consentTierResponseCollection.add(consentResponse);
+			Iterator consentTierItr = consentTierCollection.iterator();
+			while(consentTierItr.hasNext())
+			{
+				ConsentTier consentTier = (ConsentTier)consentTierItr.next();
+				ConsentTierResponse consentResponse = new ConsentTierResponse();
+				consentResponse.setConsentTier(consentTier);
+				consentResponse.setResponse("Yes");
+				consentTierResponseCollection.add(consentResponse);
+			}
 		}
 		collectionProtocolRegistration.setConsentTierResponseCollection(consentTierResponseCollection);		
 		SpecimenCollectionGroup specimenCollectionGroup = createSCG(collectionProtocolRegistration);
@@ -561,42 +564,48 @@ public class BaseTestCaseUtility {
 		try 
 		{
 			Collection collectionProtocolEventCollection = collectionProtocolRegistration.getCollectionProtocol().getCollectionProtocolEventCollection();
-			Iterator collectionProtocolEventIterator = collectionProtocolEventCollection.iterator();
-			User user = (User)TestCaseUtility.getObjectMap(User.class);
-			while(collectionProtocolEventIterator.hasNext())
+			if(collectionProtocolEventCollection != null)
 			{
-				CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent)collectionProtocolEventIterator.next();
-				specimenCollectionGroup = new SpecimenCollectionGroup(collectionProtocolEvent);
-				specimenCollectionGroup.setCollectionProtocolRegistration(collectionProtocolRegistration);
-				specimenCollectionGroup.setConsentTierStatusCollectionFromCPR(collectionProtocolRegistration);
-				
-				LabelGenerator specimenCollectionGroupLableGenerator = LabelGeneratorFactory.getInstance("speicmenCollectionGroupLabelGeneratorClass");
-				specimenCollectionGroupLableGenerator.setLabel(specimenCollectionGroup);
-				
-				Collection cloneSpecimenCollection = new LinkedHashSet();
-				Collection<SpecimenRequirement> specimenCollection = collectionProtocolEvent.getSpecimenRequirementCollection();
-				if(specimenCollection != null && !specimenCollection.isEmpty())
+				Iterator collectionProtocolEventIterator = collectionProtocolEventCollection.iterator();
+				User user = (User)TestCaseUtility.getObjectMap(User.class);
+				//User user = new User();
+				//user.setId(new Long(1));
+				System.out.println("SpecimenCollectionGroup in process");
+				while(collectionProtocolEventIterator.hasNext())
 				{
-					Iterator itSpecimenCollection = specimenCollection.iterator();
-					while(itSpecimenCollection.hasNext())
+					CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent)collectionProtocolEventIterator.next();
+					specimenCollectionGroup = new SpecimenCollectionGroup(collectionProtocolEvent);
+					specimenCollectionGroup.setCollectionProtocolRegistration(collectionProtocolRegistration);
+					specimenCollectionGroup.setConsentTierStatusCollectionFromCPR(collectionProtocolRegistration);
+
+					LabelGenerator specimenCollectionGroupLableGenerator = LabelGeneratorFactory.getInstance("speicmenCollectionGroupLabelGeneratorClass");
+					specimenCollectionGroupLableGenerator.setLabel(specimenCollectionGroup);
+
+					Collection cloneSpecimenCollection = new LinkedHashSet();
+					Collection<SpecimenRequirement> specimenCollection = collectionProtocolEvent.getSpecimenRequirementCollection();
+					if(specimenCollection != null && !specimenCollection.isEmpty())
 					{
-						SpecimenRequirement reqSpecimen = (SpecimenRequirement)itSpecimenCollection.next();
-						if(reqSpecimen.getLineage().equalsIgnoreCase("new"))
+						Iterator itSpecimenCollection = specimenCollection.iterator();
+						while(itSpecimenCollection.hasNext())
 						{
-							Specimen cloneSpecimen = getCloneSpecimen(specimenMap, reqSpecimen,null,specimenCollectionGroup,user);
-							LabelGenerator specimenLableGenerator = LabelGeneratorFactory.getInstance("specimenLabelGeneratorClass");
-							specimenLableGenerator.setLabel(cloneSpecimen);
-							cloneSpecimen.setSpecimenCollectionGroup(specimenCollectionGroup);
-							cloneSpecimenCollection.add(cloneSpecimen);
+							SpecimenRequirement reqSpecimen = (SpecimenRequirement)itSpecimenCollection.next();
+							if(reqSpecimen.getLineage().equalsIgnoreCase("new"))
+							{
+								Specimen cloneSpecimen = getCloneSpecimen(specimenMap, reqSpecimen,null,specimenCollectionGroup,user);
+								LabelGenerator specimenLableGenerator = LabelGeneratorFactory.getInstance("specimenLabelGeneratorClass");
+								specimenLableGenerator.setLabel(cloneSpecimen);
+								cloneSpecimen.setSpecimenCollectionGroup(specimenCollectionGroup);
+								cloneSpecimenCollection.add(cloneSpecimen);
+							}
 						}
 					}
+
+					specimenCollectionGroup.setSpecimenCollection(cloneSpecimenCollection);
 				}
-				
-				specimenCollectionGroup.setSpecimenCollection(cloneSpecimenCollection);
 			}
 		}catch(Exception e)
 		{
-			
+			e.printStackTrace();
 		}
 			return specimenCollectionGroup;
 	}
@@ -1070,12 +1079,12 @@ public class BaseTestCaseUtility {
 		storageContainer.setName("sc" + UniqueKeyGeneratorUtil.getUniqueKey());
 
 		StorageType storageType =(StorageType)TestCaseUtility.getObjectMap(StorageType.class); 
-		//new StorageType();
+		//StorageType storageType = new StorageType();
 		//storageType.setId(new Long(3));
 		storageContainer.setStorageType(storageType);
 		
 		Site site = (Site)TestCaseUtility.getObjectMap(Site.class); 
-		//new Site();
+		//Site site = new Site();
 		//site.setId(new Long(1));
 		
 		storageContainer.setSite(site);
@@ -1091,7 +1100,7 @@ public class BaseTestCaseUtility {
 		storageContainer.setCapacity(capacity);
 
 		CollectionProtocol collectionProtocol = (CollectionProtocol) TestCaseUtility.getObjectMap(CollectionProtocol.class); 
-		//new CollectionProtocol();
+		//CollectionProtocol collectionProtocol= new CollectionProtocol();
 		//collectionProtocol.setId(new Long(3));
 		Collection collectionProtocolCollection = new HashSet();
 		collectionProtocolCollection.add(collectionProtocol);
