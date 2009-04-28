@@ -302,6 +302,10 @@ public class BizLogicFactory implements IFactory
     	{
     		bizLogic = new SpecimenEventParametersBizLogic();
     	}
+    	else if(className.equals("edu.wustl.catissuecore.domain.MolecularSpecimenReviewParameters"))
+    	{
+    		bizLogic = new SpecimenEventParametersBizLogic();
+    	}
     	else if(className.equals("edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter"))
     	{
     		bizLogic = new SpecimenEventParametersBizLogic();

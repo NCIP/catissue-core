@@ -267,7 +267,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 				}
 				else
 				{
-					dao.update(specimenArrayContent, true);
+					dao.update(specimenArrayContent);
 				}
 			}
 

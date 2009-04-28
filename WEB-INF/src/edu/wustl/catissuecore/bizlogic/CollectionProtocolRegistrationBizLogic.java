@@ -253,7 +253,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 								}
 
 							}
-							dao.update(collectionProtocolRegistrationCheck,false);
+							dao.update(collectionProtocolRegistrationCheck);
 							//							updateOffsetForEventsForAlreadyRegisteredCPR(dao, sessionDataBean, collectionProtocolRegistrationCheck);
 							checkAndUpdateChildDate(dao, sessionDataBean, collectionProtocolRegistrationCheck);
 
@@ -458,7 +458,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 					{
 						specimenCollectionGroup.setCollectionStatus("Not Collected");
 						
-							dao.update(specimenCollectionGroup,false);
+							dao.update(specimenCollectionGroup);
 						
 					}
 				}
@@ -599,7 +599,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 						.getRegistrationDate(), offsetOfCurrentCPR.intValue()));
 			}
 		}
-		dao.update(cpr,false);
+		dao.update(cpr);
 		//						updateOffsetForEventsForAlreadyRegisteredCPR(dao, sessionDataBean, cpr);
 		if (cp.getChildCollectionProtocolCollection() != null && cp.getChildCollectionProtocolCollection().size() != 0)
 		{
@@ -1026,7 +1026,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 			// Mandar 22-Jan-07 To disable consents accordingly in SCG and
 			// Specimen(s) end
 			// Update registration
-			dao.update(persistentCPR,false);
+			dao.update(persistentCPR);
 
 
 
@@ -1074,11 +1074,11 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 				{
 					Specimen specimen = (Specimen) itSpecimenCollection.next();
 					specimen.setConsentTierStatusCollectionFromSCG(specimenCollectionGroup);
-					dao.update(specimen,false);
+					dao.update(specimen);
 				}
 			}
 			
-			dao.update(specimenCollectionGroup,false);
+			dao.update(specimenCollectionGroup);
 		}
 	}
 
@@ -1747,7 +1747,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 								//							else
 								//								cpr.setOffset(new Integer(offset));
 								//							updateOffsetForEvents(dao, sessionDataBean, cpr, offset);
-								dao.update(cpr, false);
+								dao.update(cpr);
 
 								checkAndUpdateChildOffset(dao, sessionDataBean, cpr, offset);
 							}
@@ -1809,7 +1809,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 	{
 		cpr.setRegistrationDate(AppUtility.getNewDateByAdditionOfDays(cpr.getRegistrationDate(),
 				offset));
-		dao.update(cpr, false);
+		dao.update(cpr);
 		if (cp.getChildCollectionProtocolCollection() != null && cp.getChildCollectionProtocolCollection().size() != 0)
 		{
 			return true; 

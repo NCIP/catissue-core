@@ -83,7 +83,7 @@ public class ReportedProblemBizLogic extends CatissueDefaultBizLogic
 			ApiSearchUtil.setReportedProblemDefault(reportedProblem);
 			//End:-  Change for API Search 
 
-			dao.update(obj, true);
+			dao.update(obj);
 
 			//Audit.
 			((HibernateDAO)dao).audit(obj, oldObj);

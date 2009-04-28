@@ -33,6 +33,7 @@ import edu.wustl.dao.DAO;
 import edu.wustl.dao.JDBCDAO;
 import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
+import edu.wustl.dao.exception.DAOException;
 import edu.wustl.security.exception.UserNotAuthorizedException;
 
 /**
@@ -289,7 +290,7 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 	 * @throws BizLogicException 
 	 */
 	private void populateParentSpecimenArrayData(Map aliquotMap, SpecimenArray specimenArray,
-			SpecimenArray parentSpecimenArray, DAO dao) throws BizLogicException
+			SpecimenArray parentSpecimenArray, DAO dao) throws BizLogicException,DAOException
 	{
 		try
 		{
@@ -303,9 +304,10 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 			 * Retriving specimenObject
 			 * replaced aliquotMap.put(Constants.ALIQUOT_SPECIMEN_TYPES, parentSpecimenArray.getSpecimenArrayType().getSpecimenTypeCollection());
 			 */
-			Collection specimenTypeCollection = (Collection) retrieveAttribute(
-					SpecimenArray.class, parentSpecimenArray.getId(),
+			Collection specimenTypeCollection = (Collection) retrieveAttribute(dao,
+					SpecimenArray.class,parentSpecimenArray.getId(),
 					"elements(specimenArrayType.specimenTypeCollection)");
+		
 			aliquotMap.put(Constants.ALIQUOT_SPECIMEN_TYPES, specimenTypeCollection);
 			aliquotMap.put(Constants.ALIQUOT_ALIQUOT_COUNTS, String.valueOf(specimenArray
 					.getAliquotCount()));

@@ -40,11 +40,11 @@ public class DeidentifiedSurgicalPathologyReportBizLogic extends CatissueDefault
 			DeidentifiedSurgicalPathologyReport deidentifiedReport = (DeidentifiedSurgicalPathologyReport) obj;
 			dao.insert(deidentifiedReport, false);
 			
-			IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReport=(IdentifiedSurgicalPathologyReport)retrieveAttribute(SpecimenCollectionGroup.class,
+			IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReport=(IdentifiedSurgicalPathologyReport)retrieveAttribute(dao,SpecimenCollectionGroup.class,
 					deidentifiedReport.getSpecimenCollectionGroup().getId(), "identifiedSurgicalPathologyReport");
 			identifiedSurgicalPathologyReport.setReportStatus(CaTIESConstants.DEIDENTIFIED);
 			identifiedSurgicalPathologyReport.setDeIdentifiedSurgicalPathologyReport(deidentifiedReport);
-			dao.update(identifiedSurgicalPathologyReport,null);
+			dao.update(identifiedSurgicalPathologyReport);
 			
 			Set protectionObjects = new HashSet();
 			protectionObjects.add(deidentifiedReport);
@@ -90,7 +90,7 @@ public class DeidentifiedSurgicalPathologyReportBizLogic extends CatissueDefault
 			{
 				dao.insert(report.getTextContent(),false);	
 			}
-			dao.update(report,null);
+			dao.update(report);
 
 		}
 		catch(Exception ex)

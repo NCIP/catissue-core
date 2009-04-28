@@ -349,10 +349,11 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			CollectionProtocol collectionProtocol) throws BizLogicException
 	{
 		CollectionProtocol collectionProtocolOld;
-
+		DAO cleanDAO = null;
 		try
 		{
-			collectionProtocolOld = getOldCollectionProtocol(dao, collectionProtocol.getId());
+			cleanDAO = openDAOSession(sessionDataBean);
+			collectionProtocolOld = getOldCollectionProtocol(cleanDAO, collectionProtocol.getId());
 
 			if (!Status.ACTIVITY_STATUS_ACTIVE.equals(collectionProtocol.getActivityStatus())
 					& !Status.ACTIVITY_STATUS_CLOSED.equals(collectionProtocol.getActivityStatus()))
@@ -380,6 +381,10 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		{
 			logger.debug(e.getMessage(), e);
 			throw getBizLogicException(e, "dao.error", "CollectionProtocolBizLogic.java :");
+		}
+		finally
+		{
+			closeDAOSession(cleanDAO);
 		}
 
 	}
@@ -663,7 +668,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 				}
 				else
 				{
-					dao.update(collectionProtocolEvent, false);
+					dao.update(collectionProtocolEvent);
 					oldCollectionProtocolEvent = (CollectionProtocolEvent) getCorrespondingOldObject(
 							oldCPEventCollection, collectionProtocolEvent.getId());
 					((HibernateDAO) dao).audit(collectionProtocolEvent, oldCollectionProtocolEvent);
@@ -1202,7 +1207,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			if (!titleList.isEmpty())
 			{
 				logger.debug("Collection Protocol with the same Title already exists");
-				throw getBizLogicException(null, "",
+				throw getBizLogicException(null, "dao.error",
 						"Collection Protocol with the same Title already exists");
 			}
 		}

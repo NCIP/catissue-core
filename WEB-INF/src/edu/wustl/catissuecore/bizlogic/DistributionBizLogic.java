@@ -175,7 +175,7 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 		try
 		{
 		Distribution distribution = (Distribution) obj;
-		dao.update(obj, Constants.IS_AUDITABLE_TRUE);
+		dao.update(obj);
 
 		//Audit of Distribution.
 		((HibernateDAO)dao).audit(obj, oldObj);
@@ -222,7 +222,7 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 				{
 					((Specimen) specimenObj).setIsAvailable(new Boolean(false));
 				}
-				dao.update(specimenObj, null);
+				dao.update(specimenObj);
 				//Audit of Specimen.
 				//If a new specimen is distributed.
 				if (oldItem == null)
@@ -236,7 +236,7 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 			}
 			item.setDistribution(distribution);
 
-			dao.update(item, null);
+			dao.update(item);
 
 			//Audit of Distributed Item.
 			((HibernateDAO)dao).audit(item, oldItem);
@@ -586,7 +586,7 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 
 					double quantity = item.getQuantity().doubleValue();
 					updateAvailableQty((Specimen) specimenObj, quantity);
-					dao.update(specimenObj, null);
+					dao.update(specimenObj);
 				}
 
 			}
