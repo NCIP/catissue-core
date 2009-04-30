@@ -89,14 +89,19 @@ public class UpdateSpecimenStatusAction extends BaseAction
 				{
 					//HashSet specimenprintCollection = getSpecimensToPrint((Long) obj, sessionDataBean);
 					//bug 11169
-					Set specimenprintCollection = specimenSummaryForm.getSpecimenPrintList();
+				    Set specimenprintCollection = specimenSummaryForm.getSpecimenPrintList();
 					Set domainObjSet = this.getSpecimensFromGenericSpecimens(specimenprintCollection);					
 					
 					HashMap forwardToPrintMap = new HashMap();					
 					forwardToPrintMap.put("printAntiSpecimen", domainObjSet);
 					request.setAttribute("forwardToPrintMap", forwardToPrintMap);
 					request.setAttribute("AntiSpecimen", "1");
-					return mapping.findForward("printAnticipatorySpecimens");
+					//bug 12141 start
+					if(specimenSummaryForm.getForwardTo() != null && !specimenSummaryForm.getForwardTo().equals(Constants.ADD_MULTIPLE_SPECIMEN_TO_CART))
+					{
+						return mapping.findForward(Constants.PRINT_ANTICIPATORY_SPECIMENS);
+					}
+					//bug 12141 end
 				}
 			}
 
@@ -112,7 +117,16 @@ public class UpdateSpecimenStatusAction extends BaseAction
 				}
 				request.setAttribute("specimenIdList", specimenIdList);				
 				saveToken(request);
-				return mapping.findForward(Constants.ADD_MULTIPLE_SPECIMEN_TO_CART);
+				//bug 12141 start
+				if (specimenSummaryForm.getPrintCheckbox() != null && specimenSummaryForm.getPrintCheckbox().equals("true"))
+				{
+				   return mapping.findForward(Constants.ADD_MULTIPLE_SPECIMEN_TO_CART_AND_PRINT);//"printAnticipatorySpecimens";
+				}
+				else
+				{
+					return mapping.findForward(Constants.ADD_MULTIPLE_SPECIMEN_TO_CART);
+				}
+				//bug 12141 end
 			}
 			if (request.getParameter("target") != null && request.getParameter("target").equals("viewSummary"))
 			{

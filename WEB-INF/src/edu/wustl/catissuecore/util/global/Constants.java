@@ -2514,8 +2514,9 @@ public class Constants
 	public static final String CART_COLUMN_LIST = "cartColumnList";
 	public static final String CART_ATTRIBUTE_LIST = "cartAttributeList";
 	public static final String ADD_SPECIMEN_TO_CART="addSpecimenToCart";
-public static final String ADD_MULTIPLE_SPECIMEN_TO_CART="addMltipleSpecimenToCart";
-	
+    public static final String ADD_MULTIPLE_SPECIMEN_TO_CART="addMltipleSpecimenToCart";
+    public static final String ADD_MULTIPLE_SPECIMEN_TO_CART_AND_PRINT="addMltipleSpecimenToCartAndPrint";
+    public static final String PRINT_ANTICIPATORY_SPECIMENS = "printAnticipatorySpecimens";
 	public static final String ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE = "Distributed And Close"; 				
 	
 	public static final String shortTitle="shortTitle";
