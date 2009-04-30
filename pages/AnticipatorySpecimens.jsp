@@ -683,7 +683,7 @@ String lbl = "Apply first to all";
 					<tr>
 						<td><input class="blue_ar_b" type="button" value="Submit"
 							onclick="pageSubmit()" /></td>
-						<td><input class="blue_ar_b" type="button"
+						<td><input class="blue_ar_b" type="button"  id="addToCart"
 							value="Add To My List" onclick="onAddToCart()" /></td>
 					</tr>
 				</table>

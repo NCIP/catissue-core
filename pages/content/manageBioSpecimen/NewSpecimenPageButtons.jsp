@@ -68,7 +68,7 @@
 		
 		
 		|&nbsp;<html:button
-				styleClass="blue_ar_c" property="addToCart"
+				styleClass="blue_ar_c" property="addToCart"  styleId="addToCart"
 				title="<%=Constants.SPECIMEN_BUTTON_TIPS[0]%>"
 				onclick="onAddToCart()">
 				<bean:message key="buttons.addToCart"/>

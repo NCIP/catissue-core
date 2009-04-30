@@ -120,7 +120,17 @@
 		function onAddToCart()
 		{
 			confirmDisable('${requestScope.actionToCall}',document.forms[0].activityStatus);
-			setSubmittedFor("ForwardTo","addSpecimenToCart");
+			var printFlag = document.getElementById("printCheckbox");
+			if(printFlag.checked)
+		    {
+				setSubmittedForAddToMyList("ForwardTo",'addSpecimenToCartAndPrint','pageOfNewSpecimen');           							
+		    }	
+            else
+            {
+               // setSubmittedForAddToMyList("ForwardTo",'addSpecimenToCartForwardtoDerive','success');
+            	setSubmittedFor("ForwardTo","addSpecimenToCart");
+            }
+			
 		}
 
 		</script>
@@ -638,7 +648,7 @@
 								</html:button>&nbsp;|&nbsp;
 								<html:button styleClass="blue_ar_c" property="moreButton" 		title="${requestScope.SPECIMEN_BUTTON_TIPS}"			value="${requestScope.SPECIMEN_FORWARD_TO_LIST}" onclick="${requestScope.addMoreSubmit}" >
 								</html:button>&nbsp;|&nbsp;
-								<html:submit styleClass="blue_ar_c" onclick="onAddToCart()">
+								<html:submit styleClass="blue_ar_c"  styleId="addToCart" onclick="onAddToCart()">
 									<bean:message key="buttons.addToCart"/>
 								</html:submit>
 								</logic:notEqual> <!-- to verify for valid case 4 -->

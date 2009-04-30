@@ -5,16 +5,24 @@
 		if(document.getElementById('printCheckbox').checked == true)
 		{
 			displayPrinterTypeLocation();
+			if(document.getElementById('addToCart')!=null)
+			{
+			  document.getElementById('addToCart').disabled = true;
+			}
 		}
 		else
 		{
 			document.getElementById('printerSelection').style.display="none";
+			if(document.getElementById('addToCart')!=null)
+			{
+			  document.getElementById('addToCart').disabled = false;
+			}
 			setSubmittedForPrint("","","");
 		}
 	}
 	function displayPrinterTypeLocation()
 	{
-             <%
+		     <%
 				 int listsize = Variables.printerLocationList.size(); 
 			   %>
 			if("<%=listsize%>" == "1" || "<%=listsize%>" == "0" )
@@ -24,7 +32,7 @@
 			else
 			{
 			   document.getElementById('printerSelection').style.display="";
-			}
+			}			
 	}
 
 </script>
