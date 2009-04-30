@@ -860,8 +860,14 @@ PUBLIC
             <forward name="pageOfNewSpecimenCPQuery" path="/QuerySpecimenSearch.do?pageOf=pageOfNewSpecimenCPQuery" />
 			<forward name="pageOfNewSpecimen" path="/NewSpecimenSearch.do?pageOf=pageOfNewSpecimen" />
 			<forward name="pageOfCreateAliquot" path="/CPQueryCreateAliquots.do?pageOf=pageOfCreateAliquot&amp;operation=add&amp;menuSelected=15&amp;buttonClicked=submit&amp;parentSpecimenId=-1&amp;CPQuery=CPQuery" />
-			<forward name="cpChildSubmit" path="/AnticipatorySpecimenView.do" />
+			<!--  <forward name="CPQueryPrintSpecimenEdit" path="/CPQueryPrintSpecimenEdit.do"/>-->
 			<forward name="createNew" path="/CPQueryCreateSpecimen.do?operation=add&amp;pageOf=pageOfCreateSpecimenCPQuery&amp;menuSelected=15&amp;virtualLocated=true" />
+			<!-- bug 12185 -->
+			<forward name="createNewDerivative" path="/CreateSpecimen.do?operation=add&amp;pageOf=pageOfCreateSpecimen" />
+			<forward name="pageOfCreateAliquotSpecimenEdit" path="/CreateAliquots.do?pageOf=pageOfCreateAliquot&amp;operation=add" />
+			<forward name="cpChildSubmit" path="/AnticipatorySpecimenView.do?target=pageOfMultipleSpWithMenu" />
+			<forward name="CPQuerycpChildSubmit" path="/AnticipatorySpecimenView.do" />
+			<!--  <forward name="PrintSpecimenEdit" path="/PrintSpecimenEdit.do"/>-->
 		</action>
 		
 		<action path="/AddScgToCart"
@@ -870,6 +876,7 @@ PUBLIC
 			validate="false"
 			scope="request">
 			<forward name="success" path="/redirecttoSCG.do" />	
+			<forward name="printMultiple" path="/printMultiple.do" />
 		</action>
 		
 			<action path="/AddMltipleSpecimenToCart"
@@ -877,7 +884,8 @@ PUBLIC
 			name="viewSpecimenSummaryForm"
 			validate="false"
 			scope="request">
-			<forward name="success" path="/pages/AnticipatorySpecimens.jsp" />
+			<!-- bug 11829 - previously it show AnticipatorySpecimens.jsp page without menubar-->
+			<forward name="success" path=".catissuecore.viewSpecimenSummary" />
 			<forward name="multipleSpWithMenu" path=".catissuecore.viewSpecimenSummary" />	
 			<forward name="failure" path="/pages/AnticipatorySpecimens.jsp" />
 			<forward name="multipleSpWithMenuFaliure" path=".catissuecore.viewSpecimenSummary" />
@@ -891,6 +899,7 @@ PUBLIC
 			scope="request">
 			<forward name="pageOfNewSpecimen" path="/NewSpecimenSearch.do?operation=search&amp;pageOf=pageOfNewSpecimen&amp;id=0" />
 			<forward name="pageOfNewSpecimenCPQuery" path="/QuerySpecimenSearch.do?operation=search&amp;pageOf=pageOfNewSpecimenCPQuery&amp;id=0" />
+			<forward name="CPQueryPrintSpecimenAdd" path="/CPQueryPrintSpecimenAdd.do"/>
 		</action>
 		
 		<action path="/AddAliquotSpecimenToCart"
@@ -2115,6 +2124,7 @@ PUBLIC
 			<forward name="pageOfCreateAliquot" path="/CPQueryCreateAliquots.do?pageOf=pageOfCreateAliquot&amp;operation=add&amp;menuSelected=15&amp;buttonClicked=submit&amp;parentSpecimenId=-1&amp;CPQuery=CPQuery" />
 			<forward name="distribution" path="/CPQueryDistribution.do?operation=add&amp;pageOf=pageOfDistributionCPQuery&amp;menuSelected=16" />		
 			<forward name="deriveMultiple" path="/MultipleSpecimenFlexInitAction.do?operation=add&amp;pageOf=pageOfMultipleSpWithoutMenu&amp;parentType=Derived_Specimen"/>
+			<forward name="pageOfNewSpecimen" path="/NewSpecimenSearch.do?operation=search&amp;pageOf=pageOfNewSpecimen&amp;id=0" />
 		</action>
 		<action path="/CPQueryPrintSpecimenEdit"
 			type="edu.wustl.catissuecore.action.PrintAction"
@@ -2129,7 +2139,32 @@ PUBLIC
 			<forward name="pageOfCreateAliquot" path="/CPQueryCreateAliquots.do?pageOf=pageOfCreateAliquot&amp;operation=add&amp;menuSelected=15&amp;buttonClicked=submit&amp;parentSpecimenId=-1&amp;CPQuery=CPQuery" />
 			<forward name="distribution" path="/CPQueryDistribution.do?operation=add&amp;pageOf=pageOfDistributionCPQuery&amp;menuSelected=16" />
 			<forward name="deriveMultiple" path="/MultipleSpecimenFlexInitAction.do?operation=add&amp;pageOf=pageOfMultipleSpWithoutMenu&amp;parentType=Derived_Specimen"/>
-			<forward name="cpChildSubmit" path="/AnticipatorySpecimenView.do" />
+			<!-- bug 12195 -->
+			<forward name="cpChildSubmit" path="/AnticipatorySpecimenView.do" />			
+			</action>
+			
+			<!-- added for printing specimen from specimen edit -->
+			<action path="/PrintSpecimenEdit"
+			type="edu.wustl.catissuecore.action.PrintAction"
+			scope="request">
+			<forward name="success" path="/QuerySpecimenSearch.do?pageOf=pageOfNewSpecimen"/>
+			<forward name="failure" path="/CPQueryNewSpecimen.do?operation=edit&amp;pageOf=pageOfNewSpecimenCPQuery&amp;menuSelected=15" />
+			<!-- added to printing issues - bug 12185 -->
+			<forward name="cpChildSubmit" path="/AnticipatorySpecimenView.do?target=pageOfMultipleSpWithMenu" />
+			<forward name="createNew" path="/CreateSpecimen.do?operation=add&amp;pageOf=pageOfCreateSpecimen" />
+			<forward name="pageOfCreateAliquot" path="/CreateAliquots.do?pageOf=pageOfCreateAliquot&amp;operation=add" />
+			
+			</action>
+			
+			<action path="/PrintSpecimenAdd"
+			type="edu.wustl.catissuecore.action.PrintAction"
+			scope="request">
+			<forward name="success" path="/QuerySpecimenSearch.do?pageOf=pageOfNewSpecimen"/>
+			<forward name="failure" path="/CPQueryNewSpecimen.do?operation=edit&amp;pageOf=pageOfNewSpecimenCPQuery&amp;menuSelected=15" />
+			<!-- added to printing issues - bug 12185 -->
+			<forward name="cpChildSubmit" path="/AnticipatorySpecimenView.do?target=pageOfMultipleSpWithMenu" />
+			<forward name="createNew" path="/CreateSpecimen.do?operation=add&amp;pageOf=pageOfCreateSpecimen" />
+			<forward name="pageOfCreateAliquot" path="/CreateAliquots.do?pageOf=pageOfCreateAliquot&amp;operation=add" />
 		</action>
 		<action path="/CPQueryPrintDeriveSpecimen"
 			type="edu.wustl.catissuecore.action.PrintAction"
@@ -2162,7 +2197,7 @@ PUBLIC
 			<forward name="pageOfCreateAliquot" path="/CreateAliquots.do?pageOf=pageOfCreateAliquot&amp;operation=add&amp;menuSelected=15&amp;buttonClicked=submit" />
 			<forward name="sameCollectionGroup" path="/NewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimen&amp;menuSelected=15" />
 			<forward name="orderDetails" path="/RequestDetails.do" />
-			<forward name="newSpecimenEdit" path="/QuerySpecimenSearch.do?operation=search&amp;pageOf=pageOfNewSpecimenCPQuery&amp;id=0" />
+			<forward name="newSpecimenEdit" path="/QuerySpecimenSearch.do?operation=search&amp;pageOf=pageOfNewSpecimen&amp;id=0" />			
 		</action>
 		
 		<!-- Added for Storage container printing  -->
@@ -2364,10 +2399,20 @@ PUBLIC
 			<forward name="orderDetails" path="/RequestDetails.do" />
 			<forward name="addSpecimenToCart" path="/AddSpecimenToCart.do?pageOf=pageOfNewSpecimen" />	
 			<forward name="CPQueryPrintSpecimenEdit" path="/CPQueryPrintSpecimenEdit.do"/>
-			<forward name="deriveMultiple" path="/MultipleSpecimenFlexInitAction.do?operation=add&amp;pageOf=pageOfMultipleSpWithMenu&amp;parentType=Derived_Specimen"/>	
-			<forward name="addSpecimenToCartForwardtoAliquot" path="/AddSpecimenToCart.do?pageOf=pageOfCreateAliquot" />
-		    <forward name="addSpecimenToCartForwardtoDerive" path="/AddSpecimenToCart.do?pageOf=createNew" />
-		    <forward name="addSpecimenToCartForwardtoCpChild" path="/AddSpecimenToCart.do?pageOf=cpChildSubmit" />	
+			<forward name="deriveMultiple" path="/MultipleSpecimenFlexInitAction.do?operation=add&amp;pageOf=pageOfMultipleSpWithMenu&amp;parentType=Derived_Specimen"/>
+		    <!-- added separate mappings for "Add to my list" from specimen edit and cp based view -->			    
+		    <forward name="addSpecimenToCartForwardtoAliquot" path="/AddSpecimenToCart.do?pageOf=pageOfCreateAliquotSpecimenEdit" />
+		    <forward name="addSpecimenToCartForwardtoDerive" path="/AddSpecimenToCart.do?pageOf=createNewDerivative" />
+		    <forward name="addSpecimenToCartForwardtoCpChild" path="/AddSpecimenToCart.do?pageOf=cpChildSubmit" />
+		    
+		    <!-- for CP -->
+		   <!--   <forward name="CPQueryAddSpecimenToCartForwardtoAliquot" path="/AddSpecimenToCart.do?pageOf=pageOfCreateAliquot" />
+		    <forward name="CPQueryAddSpecimenToCartForwardtoDerive" path="/AddSpecimenToCart.do?pageOf=createNew" />
+		    <forward name="CPQueryAddSpecimenToCartForwardtoCpChild" path="/AddSpecimenToCart.do?pageOf=CPQuerycpChildSubmit" />-->
+		    
+		     <forward name="PrintSpecimenEdit" path="/PrintSpecimenEdit.do"/>
+		    
+		   		    
 		</action>
 		
 		<action path="/NewSpecimenSearch"
@@ -3825,6 +3870,8 @@ PUBLIC
 			<forward name="query" path=".catissuecore.querySpecimenViewDef" />
 			<forward name="collectionProtocol" path=".catissuecore.querySpecimenViewDef" />
 			<forward name="pageOfNewSpecimenCPQuery" path=".catissuecore.querySpecimenViewDef" />
+			
+			<forward name="pageOfNewSpecimen" path=".catissuecore.newSpecimenDef" />
 			<forward name="failure" path=".catissuecore.querySpecimenViewDef" />
 			<forward name="access_denied" path="/ManageBioSpecimenAccessDeniedCPBased.do" />
 		</action>
@@ -3844,7 +3891,9 @@ PUBLIC
 			validate="false"						
 			scope="request">
 			<forward name="pageOfSpecimenQueryEdit" path="/QuerySpecimen.do?operation=edit&amp;pageOf=query"/>
-			<forward name="pageOfNewSpecimenCPQuery" path="/QuerySpecimen.do?operation=edit&amp;pageOf=pageOfNewSpecimenCPQuery"/> 	
+			<forward name="pageOfNewSpecimenCPQuery" path="/QuerySpecimen.do?operation=edit&amp;pageOf=pageOfNewSpecimenCPQuery"/>
+			
+			<forward name="pageOfNewSpecimen" path="/QuerySpecimen.do?operation=edit&amp;pageOf=pageOfNewSpecimen"/> 	
 			<forward name="failure" path="/QuerySpecimen.do?pageOf=query"/>
 			<forward name="access_denied" path="/ManageAdministrativeData.do" />	
 		</action>
@@ -4898,10 +4947,13 @@ PUBLIC
 		<forward name="pageOfCreateAliquot" path="/CPQueryCreateAliquots.do?pageOf=pageOfCreateAliquot&amp;operation=add&amp;menuSelected=15&amp;buttonClicked=submit&amp;parentSpecimenId=-1&amp;CPQuery=CPQuery" />
 		<forward name="distribution" path="/CPQueryDistribution.do?operation=add&amp;pageOf=pageOfDistributionCPQuery&amp;menuSelected=16" />
 		<forward name="deriveMultiple" path="/MultipleSpecimenFlexInitAction.do?operation=add&amp;pageOf=pageOfMultipleSpWithoutMenu&amp;parentType=Derived_Specimen"/>
-		<forward name="addSpecimenToCart" path="/AddSpecimenToCart.do?pageOf=pageOfNewSpecimenCPQuery" />	
+		<forward name="addSpecimenToCart" path="/AddSpecimenToCart.do?pageOf=pageOfNewSpecimenCPQuery" />
+			
 		<forward name="addSpecimenToCartForwardtoAliquot" path="/AddSpecimenToCart.do?pageOf=pageOfCreateAliquot" />
 		<forward name="addSpecimenToCartForwardtoDerive" path="/AddSpecimenToCart.do?pageOf=createNew" />
-		<forward name="addSpecimenToCartForwardtoCpChild" path="/AddSpecimenToCart.do?pageOf=cpChildSubmit" />	
+		<forward name="addSpecimenToCartForwardtoCpChild" path="/AddSpecimenToCart.do?pageOf=CPQuerycpChildSubmit" />
+			 
+		<forward name="addSpecimenToCartPrintAndForward" path="/AddSpecimenToCart.do?pageOf=CPQueryPrintSpecimenEdit" />	
 	</action>
 
 	<action path="/CPQuerySpecimenCollectionGroupAddNew"
@@ -5293,6 +5345,7 @@ PUBLIC
 					<forward name="success" path="/pages/SpecimenSummary.jsp" />
 					<forward name="bulkUpdateSpecimens"  path="/bulkUpdateSpecimens.do" />
 					<forward name="pageOfbulkUpdateSpecimens"  path="/bulkUpdateSpecimens.do?pageOf=multipleSpWithMenu" />
+					<!-- bug 11829 - previously it show AnticipatorySpecimens.jsp page without menubar-->
 					<forward name="anticipatory" path="/pages/AnticipatorySpecimens.jsp" />  
 					<forward name="pageOfMultipleSpWithoutMenu" path="/pages/SpecimenSummary.jsp" />
 					<forward name="updateSpecimenStatus" path="/updateSpecimenStatus.do" />
@@ -5313,7 +5366,7 @@ PUBLIC
 					<forward name="success" path="/GenericSpecimenSummary.do?target=anticipatory&amp;submitAction=updateSpecimenStatus" />
 					<forward name="cpChildSubmit" path="/GenericSpecimenSummary.do?target=anticipatory&amp;submitAction=updateSpecimenStatus&amp;" />					
 					<forward name="cpQuery" path="/pages/SpecimenSummary.jsp" />
-					<forward name="pageOfMultipleSpWithMenu" path=".catissuecore.viewSpecimenSummary" />
+					<forward name="pageOfMultipleSpWithMenu" path="/GenericSpecimenSummary.do?target=pageOfMultipleSpWithMenu&amp;submitAction=updateSpecimenStatus" />
 	                <forward name="failure" path="/Home.do" />
 	                 <forward name="Disabled" path="/homeAction.do" />
        </action>    
@@ -5346,7 +5399,7 @@ PUBLIC
 			<forward name="success" path="/pages/AnticipatorySpecimens.jsp" />
 			<forward name="failure" path="/pages/AnticipatorySpecimens.jsp" />	
 			<forward name="printAntiSuccess" path="/redirecttoSCG.do" />	
-			<forward name="multipleSpWithMenu" path=".catissuecore.viewSpecimenSummary" />			
+			<forward name="multipleSpWithMenu" path=".catissuecore.viewSpecimenSummary" />					
 	   </action>
        <action path="/updateSpecimenStatus"
                 type="edu.wustl.catissuecore.action.UpdateSpecimenStatusAction"
@@ -5357,6 +5410,7 @@ PUBLIC
 					<forward name="printAnticipatorySpecimens" path="/printMultiple.do" />	
 					<forward name="failure" path="/pages/AnticipatorySpecimens.jsp" />
 					<forward name="addMltipleSpecimenToCart" path="/AddScgToCart.do?pageOf=success" />
+					<forward name="addMltipleSpecimenToCartAndPrint" path="/AddScgToCart.do?pageOf=printMultiple" />
        </action>    
 
        <action path="/redirecttoSCG"
@@ -5517,6 +5571,9 @@ PUBLIC
 				<forward name="success" path=".catissuecore.viewSpecimenSummary" />	
 				<forward name="printAnticipatorySpecimens" path="/printMultipleForSpecimen.do" />	
 				<forward name="failure" path=".catissuecore.viewSpecimenSummary" />
+				<!-- bug 11829 -->
+				<forward name="addMltipleSpecimenToCart" path="/AddMltipleSpecimenToCart.do?pageOf=success" />
+				<forward name="addMltipleSpecimenToCartAndPrint" path="/AddScgToCart.do?pageOf=printMultiple" />
        </action>    
         <action path="/printMultipleForSpecimen"
 			type="edu.wustl.catissuecore.action.PrintAction"
