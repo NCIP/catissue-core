@@ -36,6 +36,7 @@
 	String tab = (String)request.getAttribute(Constants.SELECTED_TAB);
 	String exceedsMaxLimit = (String)request.getAttribute(Constants.EXCEEDS_MAX_LIMIT);
 	String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
+	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
 	boolean isAddNew = false;
 	String signedConsentDate = "";
 	String selectProperty="";
@@ -89,7 +90,7 @@
 <%
 	String[] columnList = (String[]) request.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
 	List dataList = (List) request.getAttribute(edu.wustl.simplequery.global.Constants.SPREADSHEET_DATA_LIST);
-	String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
+	//String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 
 	
 	String formName,pageView=operation,editViewButton="buttons."+Constants.EDIT;
@@ -212,66 +213,90 @@
 		}
 		
 		
-		function onDeriveSubmit()
+	function onDeriveSubmit()
+	{
+	var operation = document.forms[0].operation.value;
+		<%String forwardToPrintPath = "PrintSpecimenAdd";%>
+	
+		if(document.getElementById("deriveChk").checked == true)
 		{
-		var operation = document.forms[0].operation.value;
-		
-			if(document.getElementById("deriveChk").checked == true)
+			document.forms[0].derivedClicked.value=true;
+			document.forms[0].checkedButton.value=false;
+			if(document.getElementById("numberOfSpecimens").value > 1)
 			{
-				document.forms[0].derivedClicked.value=true;
-				document.forms[0].checkedButton.value=false;
-				if(document.getElementById("numberOfSpecimens").value > 1)
+				if(operation == "add")
 				{
-					if(operation == "add")
-					{
-						setSubmitted("ForwardTo","CPQueryPrintSpecimenAdd","deriveMultiple");
-						confirmDisable("<%=formName%>","document.forms[0].activityStatus");
-					}
-					else
-					{
-					setSubmitted("ForwardTo","CPQueryPrintSpecimenEdit","deriveMultiple");
+					<%								
+				    if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
+				   {
+				  	    forwardToPrintPath = "CPQueryPrintSpecimenAdd";
+				    }%>
+					setSubmitted("ForwardTo",'<%=forwardToPrintPath%>',"deriveMultiple");
 					confirmDisable("<%=formName%>","document.forms[0].activityStatus");
-					}
-					
-					
 				}
 				else
 				{
-					if(operation == "add")
-					{
-						setSubmitted("ForwardTo","CPQueryPrintSpecimenAdd","createNew");
-						confirmDisable("<%=formName%>","document.forms[0].activityStatus");
-					}
-					else
-					{
-						setSubmitted("ForwardTo","CPQueryPrintSpecimenEdit","createNew");
-						confirmDisable("<%=formName%>","document.forms[0].activityStatus");
-					}
-					
+					<%								
+				    if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
+				   {
+				  	    forwardToPrintPath = "CPQueryPrintSpecimenEdit";
+				    }%>
+					setSubmitted("ForwardTo",'<%=forwardToPrintPath%>',"deriveMultiple");
+					confirmDisable("<%=formName%>","document.forms[0].activityStatus");
 				}
-
-
+				
+				
 			}
 			else
 			{
-				if(operation =="add")
-					onNormalSubmit();
+				if(operation == "add")
+				{
+						<%								
+				    if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
+				   {
+				  	    forwardToPrintPath = "CPQueryPrintSpecimenAdd";
+				    }%>
+					setSubmitted("ForwardTo",'<%=forwardToPrintPath%>',"createNew");
+				    confirmDisable("<%=formName%>","document.forms[0].activityStatus");
+				}
 				else
 				{
-				document.forms[0].checkedButton.value=false;
-				document.forms[0].derivedClicked.value=false;
-				<%	ConsentTierData consentForm =(ConsentTierData)form;
-				List consentTier=(List)consentForm.getConsentTiers();
-				
-				if(consentTier.size()>0)
-				{%>
-					popupWindow("<%=consentTier.size()%>");
-				<%}else{%>
-					onNormalSubmit();
-				<%}%>
+					<%
+					forwardToPrintPath = "PrintSpecimenEdit";		
+				    if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
+				   {
+				  	      forwardToPrintPath = "CPQueryPrintSpecimenEdit";
+				    }%>
+											
+					setSubmitted("ForwardTo",'<%=forwardToPrintPath%>',"createNew");
+					confirmDisable("<%=formName%>","document.forms[0].activityStatus");
 				}
+				
+			}
+
+
+		}
+		else
+		{
+			if(operation =="add")
+				onNormalSubmit();
+			else
+			{
+			document.forms[0].checkedButton.value=false;
+			document.forms[0].derivedClicked.value=false;
+			<%	ConsentTierData consentForm =(ConsentTierData)form;
+			List consentTier=(List)consentForm.getConsentTiers();
+			
+			if(consentTier.size()>0)
+			{%>
+				popupWindow("<%=consentTier.size()%>");
+			<%}else{%>
+				onNormalSubmit();
+			<%}%>
 			}
 		}
+	}
+	
 
 		function onNormalSubmit()
 		{
@@ -287,47 +312,55 @@
 			
            
 			var temp = "<%=frdTo%>";
+			<%String forwardToValue = "PrintSpecimenAdd";%>
 			//Bug ID: 4040(Virender)
 			if(checked)
 			{
-				<% String actionToCall = null;%>
+				<% String actionToCall = null;
+				
+				   %>
 				if(operation == "add")
 				{
-				  if(temp == "orderDetails")
+					<%actionToCall = "NewSpecimenAdd.do";
+					if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
 					{
-						setSubmitted('ForwardTo','CPQueryPrintSpecimenAdd','orderDetails');
+					  	actionToCall = Constants.CP_QUERY_SPECIMEN_ADD_ACTION;
+						forwardToValue = "CPQueryPrintSpecimenAdd";
+					}%>
+					
+				    if(temp == "orderDetails")
+					{
+						setSubmitted('ForwardTo','<%=forwardToValue%>','orderDetails');
 					}
 					else
 					{
 					   
-						setSubmitted('ForwardTo','CPQueryPrintSpecimenAdd','pageOfCreateAliquot');
+						setSubmitted('ForwardTo','<%=forwardToValue%>','pageOfCreateAliquot');
                     }
-					<%
-					actionToCall = "NewSpecimenAdd.do";
-					if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
-					{
-					  	actionToCall = Constants.CP_QUERY_SPECIMEN_ADD_ACTION;
-					}%>
-					
+									
 					confirmDisable('<%=actionToCall%>',document.forms[0].activityStatus);
 				}
 				else
 				{
-					if(temp == "orderDetails")
-					{
-						setSubmitted('ForwardTo','CPQueryPrintSpecimenEdit','orderDetails');
-					}
-					else
-					{
-						setSubmitted('ForwardTo','CPQueryPrintSpecimenEdit','pageOfCreateAliquot');
-					}
 					<%
 					actionToCall = "NewSpecimenEdit.do";
+					forwardToValue = "PrintSpecimenEdit";
 					if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
 					{
 						actionToCall = Constants.CP_QUERY_SPECIMEN_EDIT_ACTION;
+                        forwardToValue = "CPQueryPrintSpecimenEdit";
                     
 					}%>
+				
+					if(temp == "orderDetails")
+					{
+						setSubmitted('ForwardTo','<%=forwardToValue%>','orderDetails');
+					}
+					else
+					{
+						setSubmitted('ForwardTo','<%=forwardToValue%>','pageOfCreateAliquot');
+					}
+					
 					
 					confirmDisable('<%=actionToCall%>',document.forms[0].activityStatus);
 				}
@@ -349,6 +382,7 @@
 						<%
 						String cpChildSubmitAction = "NewSpecimenEdit.do";
 						actionToCall = "NewSpecimenEdit.do";
+						forwardToValue = "PrintSpecimenEdit";
 						if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
 						{
 							actionToCall = Constants.CP_QUERY_SPECIMEN_EDIT_ACTION;
@@ -359,7 +393,14 @@
 						var printFlag = document.getElementById("printCheckbox");				
 			            if(printFlag.checked)
 					    {
-							<% 	cpChildSubmitAction = "CPQueryPrintSpecimenEdit"; %> 							
+			            	<% if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
+							{
+							   	cpChildSubmitAction = "CPQueryPrintSpecimenEdit"; 
+							}
+			            	else
+			            	{
+			            		 	cpChildSubmitAction = "PrintSpecimenEdit"; 
+			            	} %>							
 					    }	
 						setSubmitted("ForwardTo","<%=cpChildSubmitAction%>","cpChildSubmit");
 						confirmDisable("<%=actionToCall%>","document.forms[0].activityStatus");
@@ -368,20 +409,23 @@
 				{
 					if(operation == "add")
 					{
-						if(temp == "orderDetails")
-						{
-						   	setSubmitted('ForwardTo','CPQueryPrintSpecimenAdd','orderDetails');
-						}
-						else
-						{
-							setSubmitted('null','CPQueryPrintSpecimenAdd','success');
-						}
 						<%
 						actionToCall = "NewSpecimenAdd.do";
+						forwardToValue = "PrintSpecimenAdd";
 						if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
 						{
 							actionToCall = Constants.CP_QUERY_SPECIMEN_ADD_ACTION;
 						}%>
+					
+						if(temp == "orderDetails")
+						{
+						   	setSubmitted('ForwardTo','<%=forwardToValue%>','orderDetails');
+						}
+						else
+						{
+							setSubmitted('null','<%=forwardToValue%>','success');
+						}
+						
 						if(document.forms[0].nextForwardTo.value!=null)
 						{
 						 confirmDisable('<%=actionToCall%>'+"?nextForwardTo="+document.forms[0].nextForwardTo.value,document.forms[0].activityStatus);
@@ -392,22 +436,24 @@
 						}
 					 
 					}
-					else
+					else //none + submit
 					{
-						if(temp == "orderDetails")
-						{
-							setSubmitted('ForwardTo','CPQueryPrintSpecimenEdit','orderDetails');
-						}
-						else
-						{
-							setSubmitted('null','CPQueryPrintSpecimenEdit','success');
-						}
 						<%
 						actionToCall = "NewSpecimenEdit.do";
+						forwardToValue = "PrintSpecimenEdit";
 						if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
 						{
 							actionToCall = Constants.CP_QUERY_SPECIMEN_EDIT_ACTION;
+							forwardToValue = "CPQueryPrintSpecimenEdit";
 						}%>
+						if(temp == "orderDetails")
+						{
+							setSubmitted('ForwardTo','<%=forwardToValue%>','orderDetails');
+						}
+						else
+						{
+							setSubmitted('null','<%=forwardToValue%>','success');
+						}
 						confirmDisable('<%=actionToCall%>',document.forms[0].activityStatus);
 					}
 				}
@@ -897,20 +943,58 @@
 			onCollOrClassChange();
 		}
 	}
-	function onAddToCart()
+	/* 
+	    Added separate mappings for pages opened from CP based view(without menubar) and 
+	    Biospecimen data -> Specimen (with menubar)
+	*/
+	
+    function onAddToCart()
 	{
-	    <% String actionToCall1 = "NewSpecimenEdit.do";%>
-	  	 if(document.getElementById("aliquotChk").checked == true)
+	    <% String actionToCall1 = "NewSpecimenEdit.do";
+	       String nextForwardToForAddToCart = "";
+	       String forwardToPath = "";
+	    %>
+	    var operation = document.forms[0].operation.value;
+	    if(document.getElementById("aliquotChk").checked == true)
 		 {
-			 setSubmittedFor("ForwardTo",'addSpecimenToCartForwardtoAliquot');					   
+	    	<%forwardToPath = "addSpecimenToCartForwardtoAliquot";
+	  			if(pageOf == (Constants.PAGE_OF_SPECIMEN_CP_QUERY))
+	  			{
+	  				nextForwardToForAddToCart = "pageOfCreateAliquot";	 					
+	  			}
+	  			else
+	  			{
+	  				nextForwardToForAddToCart = "pageOfCreateAliquotSpecimenEdit"; 
+					
+	  			}%>
+			   setSubmittedForAddToMyList("ForwardTo",'<%=forwardToPath%>','<%=nextForwardToForAddToCart%>');      					   
 		 }
 		else if(document.getElementById("deriveChk").checked == true)
 		{
-			 setSubmittedForAddToMyList("ForwardTo",'addSpecimenToCartForwardtoDerive','success');
+			<%forwardToPath = "addSpecimenToCartForwardtoDerive";
+			   if(pageOf == (Constants.PAGE_OF_SPECIMEN_CP_QUERY))
+	  			{
+	  				nextForwardToForAddToCart = "createNew";						
+	  			}
+	  			else
+	  			{
+	  				nextForwardToForAddToCart = "createNewDerivative";					
+	  			}%>
+               setSubmittedForAddToMyList("ForwardTo",'<%=forwardToPath%>','<%=nextForwardToForAddToCart%>');             
 		}
 		else if(document.getElementById("createCpChildCheckBox").checked == true)
 		{
-			setSubmittedForAddToMyList("ForwardTo",'addSpecimenToCartForwardtoCpChild','success');
+			<%forwardToPath = "addSpecimenToCartForwardtoCpChild";
+			
+			 if(pageOf == (Constants.PAGE_OF_SPECIMEN_CP_QUERY))
+	  			{
+	  				nextForwardToForAddToCart = "CPQuerycpChildSubmit";	 					
+	  			}
+	  			else
+	  			{
+	  				nextForwardToForAddToCart = "cpChildSubmit";   				
+	  			}%>
+               setSubmittedForAddToMyList("ForwardTo",'<%=forwardToPath%>','<%=nextForwardToForAddToCart%>'); 			
 		}
 		else
 		{
