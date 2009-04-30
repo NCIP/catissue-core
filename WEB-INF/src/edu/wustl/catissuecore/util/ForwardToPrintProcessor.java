@@ -79,7 +79,7 @@ public class ForwardToPrintProcessor extends AbstractForwardToProcessor
 			{
 				forwardToPrintMap.put("parentSpecimenId", domainObject.getId().toString());
 			}
-			else if ( actionForm.getForwardTo().equals("CPQueryPrintSpecimenEdit") || actionForm.getForwardTo().equals("CPQueryPrintSpecimenAdd") || actionForm.getForwardTo().equals("CPQueryPrintDeriveSpecimen") || actionForm.getForwardTo().equals("printDeriveSpecimen"))
+			else if (actionForm.getForwardTo().equals("addSpecimenToCartPrintAndForward") ||actionForm.getForwardTo().equals("CPQueryPrintSpecimenEdit") || actionForm.getForwardTo().equals("PrintSpecimenEdit") || actionForm.getForwardTo().equals("CPQueryPrintSpecimenAdd") || actionForm.getForwardTo().equals("CPQueryPrintDeriveSpecimen") || actionForm.getForwardTo().equals("printDeriveSpecimen"))
 			{
 				forwardToPrintMap.put("specimenId", domainObject.getId().toString());
 			}

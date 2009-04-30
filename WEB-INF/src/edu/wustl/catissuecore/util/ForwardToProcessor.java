@@ -84,7 +84,7 @@ public class ForwardToProcessor extends AbstractForwardToProcessor
 			}
 			//end of fix for bug no.7439
 			//Derive New from This Specimen
-			if (actionForm.getForwardTo().equals("createNew") || actionForm.getForwardTo().equals("CPQueryPrintSpecimenAdd")||actionForm.getForwardTo().equals("CPQueryPrintSpecimenEdit") || actionForm.getForwardTo().equals("addSpecimenToCartForwardtoDerive"))
+			if (actionForm.getForwardTo().equals("createNew") || actionForm.getForwardTo().equals("CPQueryPrintSpecimenAdd")||actionForm.getForwardTo().equals("CPQueryPrintSpecimenEdit") || actionForm.getForwardTo().equals("PrintSpecimenEdit") || actionForm.getForwardTo().equals("addSpecimenToCartForwardtoDerive") || actionForm.getForwardTo().equals("addSpecimenToCartPrintAndForward"))
 			{
 				forwardToHashMap.put("parentSpecimenId", domainObject.getId());
 				forwardToHashMap.put(Constants.SPECIMEN_LABEL, specimen.getLabel());
@@ -139,7 +139,7 @@ public class ForwardToProcessor extends AbstractForwardToProcessor
 			}
 
              //updated to solve printing issue in case of "Create Aliquot/Derived Specimen as per CP"
-			if(actionForm.getForwardTo().equals(Constants.CP_CHILD_SUBMIT)|| actionForm.getForwardTo().equals("CPQueryPrintSpecimenAdd")||actionForm.getForwardTo().equals("CPQueryPrintSpecimenEdit") || actionForm.getForwardTo().equals("addSpecimenToCartForwardtoCpChild"))
+			if(actionForm.getForwardTo().equals(Constants.CP_CHILD_SUBMIT)|| actionForm.getForwardTo().equals("addSpecimenToCartPrintAndForward") || actionForm.getForwardTo().equals("CPQueryPrintSpecimenAdd")||actionForm.getForwardTo().equals("CPQueryPrintSpecimenEdit") || actionForm.getForwardTo().equals("PrintSpecimenEdit") || actionForm.getForwardTo().equals("addSpecimenToCartForwardtoCpChild"))
 			{
 				forwardToHashMap.put("specimenCollectionGroupId", specimen.getSpecimenCollectionGroup().getId());
 				forwardToHashMap.put("specimenId", specimen.getId());
