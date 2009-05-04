@@ -14,6 +14,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import net.sf.ehcache.CacheException;
+import edu.common.dynamicextensions.dao.impl.DynamicExtensionDAO;
 import edu.common.dynamicextensions.domain.integration.EntityMap;
 import edu.common.dynamicextensions.domain.integration.EntityMapCondition;
 import edu.common.dynamicextensions.domain.integration.EntityMapRecord;
@@ -46,6 +47,11 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 {
 
 	private transient Logger logger = Logger.getCommonLogger(AnnotationBizLogic.class);
+	
+	public AnnotationBizLogic()
+	{
+		setAppName(DynamicExtensionDAO.getInstance().getAppName());
+	}
 	/**
 	 * 
 	 * @param staticEntityId
