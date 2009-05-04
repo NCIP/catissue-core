@@ -16,7 +16,7 @@ import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
-import edu.wustl.query.actionForm.AdvanceSearchForm;
+import edu.wustl.query.actionForm.QueryAdvanceSearchForm;
 import edu.wustl.query.querysuite.QueryShoppingCart;
 
 /**
@@ -89,7 +89,7 @@ abstract public class QueryShoppingCartAction extends BaseAction
 		return new Integer(index);
 	}
 
-	protected  List<Integer> getCheckboxValues(AdvanceSearchForm searchForm) {
+	protected  List<Integer> getCheckboxValues(QueryAdvanceSearchForm searchForm) {
 		Map map = searchForm.getValues();
 		Set chkBoxValuesSet = map.keySet();
 		List<Integer> chkBoxValues = new ArrayList<Integer>();

@@ -21,4 +21,11 @@
 		<min-pool-size>10</min-pool-size>
     	<max-pool-size>25</max-pool-size>
 	</local-tx-datasource>
+	<local-tx-datasource>
+		<jndi-name>query</jndi-name>
+		<connection-url>@@databaseurl@@</connection-url>
+		<user-name>@@username@@</user-name>
+		<password>@@pasword@@</password>
+		<driver-class>@@databasedriver@@</driver-class>
+	</local-tx-datasource>
 </datasources>

@@ -19,7 +19,7 @@ import edu.wustl.common.util.ExportReport;
 import edu.wustl.common.util.SendFile;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
-import edu.wustl.query.actionForm.AdvanceSearchForm;
+import edu.wustl.query.actionForm.QueryAdvanceSearchForm;
 import edu.wustl.query.querysuite.QueryShoppingCart;
 
 /**
@@ -41,7 +41,7 @@ public class ExportCartAction extends QueryShoppingCartAction
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		AdvanceSearchForm searchForm = (AdvanceSearchForm) form;	
+		QueryAdvanceSearchForm searchForm = (QueryAdvanceSearchForm) form;	
 		export(getCheckboxValues(searchForm), request, response);
 		return null;								
 	}

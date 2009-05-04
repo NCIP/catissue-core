@@ -40,7 +40,7 @@ import edu.wustl.common.util.SendFile;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.QuerySessionData;
 import edu.wustl.common.util.logger.Logger;
-import edu.wustl.query.actionForm.AdvanceSearchForm;
+import edu.wustl.query.actionForm.QueryAdvanceSearchForm;
 import edu.wustl.query.util.global.AQConstants;
 import edu.wustl.simplequery.query.ShoppingCart;
 
@@ -72,7 +72,7 @@ public class ShoppingCartAction  extends BaseAction
         IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
         ShoppingCartBizLogic bizLogic = (ShoppingCartBizLogic)factory.getBizLogic(Constants.SHOPPING_CART_FORM_ID);
         //ShoppingCartForm shopForm = (ShoppingCartForm)form;
-        AdvanceSearchForm advForm = (AdvanceSearchForm)form;
+        QueryAdvanceSearchForm advForm = (QueryAdvanceSearchForm)form;
     	String isCheckAllAcrossAllChecked = (String)request.getParameter(Constants.CHECK_ALL_ACROSS_ALL_PAGES);
         if(cart == null)
         {
@@ -339,7 +339,7 @@ public class ShoppingCartAction  extends BaseAction
 		return gridData;
     }
     
-    private void addToOrderLiist(AdvanceSearchForm advForm,HttpServletRequest request,ShoppingCart cart,HttpSession session)
+    private void addToOrderLiist(QueryAdvanceSearchForm advForm,HttpServletRequest request,ShoppingCart cart,HttpSession session)
     {
     	Map map = advForm.getValues();
     	Object obj[] = map.keySet().toArray();

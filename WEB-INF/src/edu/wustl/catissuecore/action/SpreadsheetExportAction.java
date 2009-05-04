@@ -30,7 +30,7 @@ import edu.wustl.common.util.SendFile;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.QuerySessionData;
 import edu.wustl.common.util.logger.Logger;
-import edu.wustl.query.actionForm.AdvanceSearchForm;
+import edu.wustl.query.actionForm.QueryAdvanceSearchForm;
 
 /**
  * @author aniruddha_phadnis
@@ -45,7 +45,7 @@ public class SpreadsheetExportAction  extends BaseAction
             HttpServletRequest request, HttpServletResponse response)
             throws Exception
     {
-    	AdvanceSearchForm searchForm = (AdvanceSearchForm)form;
+    	QueryAdvanceSearchForm searchForm = (QueryAdvanceSearchForm)form;
     	HttpSession session = request.getSession();
     	String path = CommonServiceLocator.getInstance().getAppHome() + System.getProperty("file.separator");
 		String csvfileName = path + Constants.SEARCH_RESULT;

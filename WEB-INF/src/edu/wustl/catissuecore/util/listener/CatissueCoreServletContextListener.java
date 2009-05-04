@@ -60,6 +60,7 @@ import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.common.util.logger.LoggerConfig;
 import edu.wustl.dao.exception.DAOException;
+import edu.wustl.query.util.listener.QueryCoreServletContextListenerUtil;
 import edu.wustl.simplequery.bizlogic.QueryBizLogic;
 
 
@@ -106,6 +107,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
     		throw new RuntimeException( e.getLocalizedMessage(), e);
 
     	}
+    	QueryCoreServletContextListenerUtil.contextInitialized(sce,"java:/query");
     }
 
 	/**

@@ -1575,7 +1575,7 @@ public class FlexInterface
 		return singleNodeDataMap;
 	}
 
-	public Map retrieveQueryData(List<DAGNode> linkedNodeList)
+	/*public Map retrieveQueryData(List<DAGNode> linkedNodeList)
 	{
 		DAGNode sourceNode = linkedNodeList.get(0);
 		DAGNode destinationNode = linkedNodeList.get(1);
@@ -1590,7 +1590,7 @@ public class FlexInterface
 				.getSecondNodeExpId(), customNode.getFirstNodeName(), customNode
 				.getSecondNodeName());
 		return queryDataMap;
-	}
+	}*/
 
 	public void removeCustomFormula(String nodeID)
 	{

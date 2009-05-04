@@ -15,7 +15,7 @@
 			</authentication>
 			<authorization>
 				<authorization-provider-class>
-					edu.wustl.common.security.UserProvisioningManagerImpl
+					edu.wustl.security.impl.UserProvisioningManagerImpl
 				</authorization-provider-class>
 				<hibernate-config-file>
 					@@hibernate-config-file@@
