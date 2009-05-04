@@ -24,6 +24,7 @@ import javax.sql.DataSource;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 
+import edu.common.dynamicextensions.dao.impl.DynamicExtensionDAO;
 import edu.common.dynamicextensions.domain.DomainObjectFactory;
 import edu.common.dynamicextensions.domain.Entity;
 import edu.common.dynamicextensions.domain.userinterface.Container;
@@ -87,7 +88,6 @@ public class AnnotationUtil
 
 		//This change is done because when the hierarchy of objects grow in dynamic extensions then NonUniqueObjectException is thrown.
 		//So static entity and dynamic entity are brought in one session and then associated.
-		Session session = null;
 		DAO dao = null;
 
 		AssociationInterface association = null;
@@ -96,15 +96,39 @@ public class AnnotationUtil
 		
 		try
 		{
-			String appName = CommonServiceLocator.getInstance().getAppName();
+			String appName = DynamicExtensionDAO.getInstance().getAppName();
 			dao = DAOConfigFactory.getInstance().getDAOFactory(appName).getDAO();
 			dao.openSession(null);
-
-			
-
-			staticEntity = (EntityInterface) session.load(Entity.class, staticEntityId);
-			dynamicEntity = (EntityInterface) ((Container) session.load(Container.class,
+			staticEntity = (EntityInterface) dao.retrieveById(Entity.class.getName(), staticEntityId);
+			dynamicEntity = (EntityInterface) ((Container) dao.retrieveById(Container.class.getName(),
 					dynamicEntityId)).getAbstractEntity();
+			
+			dao.closeSession();
+		}
+		catch (DAOException exp)
+		{
+			logger.debug(exp.getMessage(), exp);
+			exp.printStackTrace();
+			ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
+			throw new BizLogicException(errorKey,exp ,"AnnotationUtil.java :");   
+		}
+		finally
+		{
+			try
+			{
+				dao.closeSession();
+			}			
+			catch (DAOException exp)
+			{
+				logger.debug(exp.getMessage(), exp);
+				exp.printStackTrace();
+				ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
+				throw new BizLogicException(errorKey,exp ,"AnnotationUtil.java :");   
+			}
+		}
+		
+		try
+		{
 			//			Get entitygroup that is used by caB2B for path finder purpose.
 
 			//			Commented this line since performance issue for Bug 6433
@@ -160,20 +184,7 @@ public class AnnotationUtil
 
 			addEntitiesToCache(isEntityFromXmi, dynamicEntity, staticEntity);
 		}
-		catch (HibernateException exp)
-		{
-			logger.debug(exp.getMessage(), exp);
-			exp.printStackTrace();
-			ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
-			throw new BizLogicException(errorKey,exp ,"AnnotationUtil.java :");   
-		}
-		catch (DAOException exp)
-		{
-			logger.debug(exp.getMessage(), exp);
-			exp.printStackTrace();
-			ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
-			throw new BizLogicException(errorKey,exp ,"AnnotationUtil.java :");   
-		} catch (DynamicExtensionsSystemException e)
+		catch (DynamicExtensionsSystemException e)
 		{
 			logger.debug(e.getMessage(), e);
 			ErrorKey errorKey = ErrorKey.getErrorKey("de.error");
@@ -185,28 +196,6 @@ public class AnnotationUtil
 			ErrorKey errorKey = ErrorKey.getErrorKey("de.error");
 			throw new BizLogicException(errorKey,e ,"AnnotationUtil.java :");   
 			
-		}
-		finally
-		{
-			try
-			{
-				dao.closeSession();
-			}
-			catch (HibernateException exp)
-			{
-				logger.debug(exp.getMessage(), exp);
-				exp.printStackTrace();
-				ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
-				throw new BizLogicException(errorKey,exp ,"AnnotationUtil.java :");   
-
-			}
-			catch (DAOException exp)
-			{
-				logger.debug(exp.getMessage(), exp);
-				exp.printStackTrace();
-				ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
-				throw new BizLogicException(errorKey,exp ,"AnnotationUtil.java :");   
-			}
 		}
 		return association.getId();
 	}
@@ -943,7 +932,7 @@ public class AnnotationUtil
 			
 			for (String query : queryList)
 			{
-				jdbcDAO.executeQuery(query);
+				jdbcDAO.executeUpdate(query);
 			}
 		}
 		catch (DAOException e)
