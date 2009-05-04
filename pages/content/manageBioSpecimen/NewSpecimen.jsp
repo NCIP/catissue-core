@@ -36,7 +36,7 @@
 	String tab = (String)request.getAttribute(Constants.SELECTED_TAB);
 	String exceedsMaxLimit = (String)request.getAttribute(Constants.EXCEEDS_MAX_LIMIT);
 	String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
-	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
+	String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 	boolean isAddNew = false;
 	String signedConsentDate = "";
 	String selectProperty="";
