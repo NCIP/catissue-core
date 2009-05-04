@@ -34,6 +34,7 @@ import org.apache.struts.action.ActionMapping;
 import org.hibernate.HibernateException;
 
 import edu.common.dynamicextensions.bizlogic.BizLogicFactory;
+import edu.common.dynamicextensions.dao.impl.DynamicExtensionDAO;
 import edu.common.dynamicextensions.domain.Entity;
 import edu.common.dynamicextensions.domain.integration.EntityMap;
 import edu.common.dynamicextensions.domain.integration.EntityMapCondition;
@@ -299,8 +300,8 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 					//Retrieving the container
 					try
 					{
-						dao = DAOConfigFactory.getInstance().getDAOFactory(
-								Constants.APPLICATION_NAME).getDAO();
+						String appName= DynamicExtensionDAO.getInstance().getAppName(); 
+						dao = DAOConfigFactory.getInstance().getDAOFactory(appName).getDAO();
 						dao.openSession(null);
 
 					}
