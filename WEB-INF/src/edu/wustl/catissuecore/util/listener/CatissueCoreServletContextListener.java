@@ -136,7 +136,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 			InitialiseVariablesForDFCI();
 			
 			initCatissueCache();
-			//initEntityCache();
+			initEntityCache();
 			Utility.initializePrivilegesMap();
 			initTitliIndex();
 			initCDEManager();
