@@ -22,7 +22,6 @@ import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
 import org.hibernate.HibernateException;
-import org.hibernate.Session;
 
 import edu.common.dynamicextensions.dao.impl.DynamicExtensionDAO;
 import edu.common.dynamicextensions.domain.DomainObjectFactory;
@@ -42,7 +41,6 @@ import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.common.dynamicextensions.util.global.DEConstants.AssociationDirection;
 import edu.common.dynamicextensions.util.global.DEConstants.AssociationType;
 import edu.common.dynamicextensions.util.global.DEConstants.Cardinality;
-import edu.wustl.cab2b.server.path.PathConstants;
 import edu.wustl.cab2b.server.path.PathFinder;
 import edu.wustl.catissuecore.annotations.PathObject;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -758,7 +756,7 @@ public class AnnotationUtil
 			String associationQuery = "insert into ASSOCIATION (ASSOCIATION_ID, ASSOCIATION_TYPE) values ("
 					+ intraModelAssociationId
 					+ ","
-					+ PathConstants.AssociationType.INTRA_MODEL_ASSOCIATION.getValue() + ")";
+					+ edu.wustl.cab2b.server.path.AssociationType.INTRA_MODEL_ASSOCIATION.getValue() + ")";
 			String intraModelQuery = "insert into INTRA_MODEL_ASSOCIATION (ASSOCIATION_ID, DE_ASSOCIATION_ID) values ("
 					+ intraModelAssociationId + "," + deAssociationID + ")";
 			String directPathQuery = "insert into PATH (PATH_ID, FIRST_ENTITY_ID,INTERMEDIATE_PATH, LAST_ENTITY_ID) values ("
