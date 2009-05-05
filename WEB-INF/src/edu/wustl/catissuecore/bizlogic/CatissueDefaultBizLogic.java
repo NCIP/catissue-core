@@ -1,6 +1,13 @@
 package edu.wustl.catissuecore.bizlogic;
 
+import java.security.Permissions;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import javax.servlet.http.HttpServletRequest;
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.beans.SessionDataBean;
@@ -196,4 +203,73 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 		}
 		
 	}
+	
+	
+	public boolean hasPrivilegeToView(String objName, Long identifier, SessionDataBean sessionDataBean)throws BizLogicException
+	{
+		if(sessionDataBean != null && sessionDataBean.isAdmin())
+		{
+			return true;
+		}
+
+		List cpIdsList = new ArrayList();
+		Set<Long> cpIds = new HashSet<Long>();
+
+		cpIdsList = edu.wustl.query.util.global.Utility.getCPIdsList(objName, identifier, sessionDataBean);
+
+		if(cpIdsList == null)
+		{
+			return false;
+		}
+
+		for(Object cpId : cpIdsList)
+		{
+			cpId = cpIdsList.get(0);
+			cpIds.add(Long.valueOf(cpId.toString()));
+		}
+		try
+		{
+			PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(sessionDataBean.getUserName());
+
+			StringBuffer sb = new StringBuffer();
+			sb.append(edu.wustl.catissuecore.util.global.Constants.COLLECTION_PROTOCOL_CLASS_NAME).append("_");
+			boolean isPresent = false;
+
+			for (Long cpId : cpIds)
+			{
+				String privilegeName = getReadDeniedPrivilegeName();
+
+				String [] privilegeNames = privilegeName.split(",");
+				if(privilegeNames.length > 1)
+				{	
+					if((privilegeCache.hasPrivilege(sb.toString()+cpId.toString(), privilegeNames[0])))
+					{
+						isPresent = privilegeCache.hasPrivilege(sb.toString()+cpId.toString(), privilegeNames[1]);
+						isPresent = !isPresent;
+					}
+				}
+				else
+				{
+					isPresent = privilegeCache.hasPrivilege(sb.toString()+cpId.toString(), privilegeName);
+				}
+
+				if (privilegeName != null && privilegeName.equalsIgnoreCase(edu.wustl.security.global.Permissions.READ_DENIED))
+				{
+					isPresent = !isPresent;
+				}
+				if (!isPresent)
+				{
+					return false;
+				} 
+			}
+
+		}
+		catch (SMException e)
+		{
+			throw getBizLogicException(e, "sm.operation.error", "");
+		}
+		return true;
+	}
+	
+	 
 }
