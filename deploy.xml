@@ -48,6 +48,9 @@
 	<property name="jboss.bin.run.jar" value="${jboss.home.dir}/bin/run.jar"/>
 	<property name="env.COMPUTERNAME" value="${env.HOSTNAME}"/>
 	
+	<property name="mysql.dao.prop.filename" value="MySQLDAOProperties.xml" />
+	<property name="oracle.dao.prop.filename" value="OracleDAOProperties.xml" />
+	
 	<!--import file="dbunitbuild.xml"/>
 	<target name="dbunit_testcases">
 		<antcall target="RundbUnit" />
@@ -395,9 +398,13 @@
 		</replace>
 
 		<replace file="${temp.dir}/dynamicExtensions/WEB-INF/classes/DynamicExtensionsHibernate.cfg.xml">
-			<replacefilter token="${mysql.dialect.string}" value="${mysql.dialect.string}" />
+			<replacefilter token="${oracle.dialect.string}" value="${mysql.dialect.string}" />
 		</replace>
 
+		<replace file="${temp.dir}/dynamicExtensions/WEB-INF/classes/ApplicationDAOProperties.xml">
+			<replacefilter token="${oracle.dao.prop.filename}" value="${mysql.dao.prop.filename}" />
+		</replace>
+		
 		<replace file="${temp.dir}/dynamicExtensionsjar/DynamicExtensionsHibernate.cfg.xml">
 			<replacefilter token="${mysql.dialect.string}" value="${mysql.dialect.string}" />
 			<replacefilter token="${dynamicextensions.datasource}" value="${catissue.datasource}" />
@@ -458,6 +465,10 @@
 			<replacefilter token="${mysql.dialect.string}" value="${oracle.dialect.string}" />
 		</replace>
 
+		<replace file="${temp.dir}/dynamicExtensions/WEB-INF/classes/ApplicationDAOProperties.xml">
+			<replacefilter token="${mysql.dao.prop.filename}" value="${oracle.dao.prop.filename}" />
+		</replace>
+		
 		<replace file="${temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsHibernate.cfg.xml">
 			<replacefilter token="${mysql.dialect.string}" value="${oracle.dialect.string}" />
 			<replacefilter token="&lt;!-- My sql settings -->" value="&lt;!-- My sql settings " />
