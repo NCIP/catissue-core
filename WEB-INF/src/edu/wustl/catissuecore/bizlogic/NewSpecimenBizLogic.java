@@ -571,8 +571,12 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		String lineage = specimen.getLineage();
 		CollectionProtocol cp = new CollectionProtocol();
 		Long scgId = specimen.getSpecimenCollectionGroup().getId();
-		cp = getActivityStatusOfCollectionProtocol(dao, scgId);
-		String activityStatus = cp.getActivityStatus();
+		
+		Long colpId = (Long)specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getId();
+		String activityStatus = specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getActivityStatus();
+		cp.setId(colpId);
+		cp.setActivityStatus(activityStatus);
+			
 		if (lineage != null && !lineage.equalsIgnoreCase("New"))
 		{
 			String parentCollStatus = ((Specimen) specimen.getParentSpecimen())
@@ -603,19 +607,24 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	 * @throws BizLogicException 
 	 * @throws ClassNotFoundException 	
 	*/
-	public CollectionProtocol getActivityStatusOfCollectionProtocol(DAO dao, Long scgId)
+	/*public CollectionProtocol getActivityStatusOfCollectionProtocol(DAO dao, Long scgId)
 			throws BizLogicException
 	{
-		List activityStatusList = null;
 		CollectionProtocol cp = new CollectionProtocol();
 		try
 		{
-			
-			String activityStatusHQL = "select scg.collectionProtocolRegistration.collectionProtocol.id,"
+			String activityStatusHQL =  "select scg.collectionProtocolRegistration.collectionProtocol.id,"
 				+ "scg.collectionProtocolRegistration.collectionProtocol.activityStatus "
 				+ "from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg "
 				+ "where scg.id = " + scgId;
 			activityStatusList = dao.executeQuery(activityStatusHQL);
+			String sourceObjectName="edu.wustl.catissuecore.domain.SpecimenCollectionGroup";
+			String []selectColumnName={"collectionProtocolRegistration.collectionProtocol.id",
+						"collectionProtocolRegistration.collectionProtocol.activityStatus"};
+			QueryWhereClause queryWhereClause= new QueryWhereClause(sourceObjectName);
+			queryWhereClause.addCondition(new EqualClause("id",scgId));
+			activityStatusList = dao.retrieve(sourceObjectName, selectColumnName,queryWhereClause);
+			SpecimenCollectionGroup specimenCollectionGroup=(SpecimenCollectionGroup)dao.retrieveById("edu.wustl.catissuecore.domain.SpecimenCollectionGroup", scgId);
 			if (!activityStatusList.isEmpty())
 			{
 				Object[] array = new Object[1];
@@ -625,6 +634,11 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				cp.setId(id);
 				cp.setActivityStatus(activityStatus);
 			}
+			if(specimenCollectionGroup!=null)
+			{
+				cp.setId(specimenCollectionGroup.getCollectionProtocolRegistration().getCollectionProtocol().getId());
+				cp.setActivityStatus(specimenCollectionGroup.getCollectionProtocolRegistration().getCollectionProtocol().getActivityStatus());
+			}
 		}
 		catch(DAOException daoExp)
 		{
@@ -632,7 +646,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 		return cp;
-	}
+	}*/
 
 	//Bug 11481 E
 
@@ -1899,7 +1913,11 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 					+ "from edu.wustl.catissuecore.domain.Specimen as sp " + "where sp.id = "
 					+ specimen.getId();
 				collStatusList = dao.executeQuery(collStatusHQL);
-				cp = getActivityStatusOfCollectionProtocol(dao, scgId);
+				//cp = getActivityStatusOfCollectionProtocol(dao, scgId);
+				Long colpId = (Long)specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getId();
+				String activityStatus = specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getActivityStatus();
+				cp.setId(colpId);
+				cp.setActivityStatus(activityStatus);
 
 
 				String collStatus = null;
@@ -2848,8 +2866,12 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		String lineage = specimenDO.getLineage();
 		Long scgId = newSpecimen.getSpecimenCollectionGroup().getId();
 		CollectionProtocol cp = new CollectionProtocol();
-		cp = getActivityStatusOfCollectionProtocol(dao, scgId);
-		String activityStatus = cp.getActivityStatus();
+		//cp = getActivityStatusOfCollectionProtocol(dao, scgId);
+		Long colpId = (Long)newSpecimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getId();
+		String activityStatus = newSpecimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getActivityStatus();
+		cp.setId(colpId);
+		cp.setActivityStatus(activityStatus);
+		//String activityStatus = cp.getActivityStatus();
 		String oldCollectionStatus = specimenDO.getCollectionStatus();
 		String newCollectionStatus = newSpecimen.getCollectionStatus();
 		if (lineage.equals("New") && activityStatus.equals(Status.ACTIVITY_STATUS_CLOSED.toString()))
