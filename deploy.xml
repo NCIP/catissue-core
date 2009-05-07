@@ -396,6 +396,10 @@
 		<replace file="${temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsHibernate.cfg.xml">
 			<replacefilter token="${mysql.dialect.string}" value="${mysql.dialect.string}" />
 		</replace>
+		
+		<replace file="${temp.dir}/catissuecore/WEB-INF/classes/ApplicationDAOProperties.xml">
+			<replacefilter token="${oracle.dao.prop.filename}" value="${mysql.dao.prop.filename}" />
+		</replace>
 
 		<replace file="${temp.dir}/dynamicExtensions/WEB-INF/classes/DynamicExtensionsHibernate.cfg.xml">
 			<replacefilter token="${oracle.dialect.string}" value="${mysql.dialect.string}" />
@@ -475,6 +479,10 @@
 			<replacefilter token="&lt;!-- My sql settings end -->" value="My sql settings end -->" />
 		</replace>
 
+		<replace file="${temp.dir}/catissuecore/WEB-INF/classes/ApplicationDAOProperties.xml">
+			<replacefilter token="${mysql.dao.prop.filename}" value="${oracle.dao.prop.filename}" />
+		</replace>
+		
 		<replace file="${temp.dir}/dynamicExtensions/WEB-INF/classes/DynamicExtensionsHibernate.cfg.xml">
 			<replacefilter token="${mysql.dialect.string}" value="${oracle.dialect.string}" />
 			<replacefilter token="&lt;!-- My sql settings -->" value="&lt;!-- My sql settings " />
