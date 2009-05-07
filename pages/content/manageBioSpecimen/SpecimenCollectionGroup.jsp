@@ -19,10 +19,6 @@
 
 
 <script src="jss/script.js" type="text/javascript"></script>
-<!-- Bug Id: 4159
-	 Patch ID: 4159_1			
-	 Description: Including calenderComponent.js to show date in events
--->
 <SCRIPT>var imgsrc="images/";</SCRIPT>
 <script src="jss/calendarComponent.js" type="text/javascript"></script>
 <LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
@@ -35,15 +31,11 @@
  		String signedConsentDate = "";
  		String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
  		boolean isAddNew = false;	
- 		//Falguni:Performance Enhancement.
  		Long scgEntityId = null;
  		scgEntityId = (Long)request.getAttribute("scgEntityId");
  		String staticEntityName=null;
  		staticEntityName = AnnotationConstants.ENTITY_NAME_SPECIMEN_COLLN_GROUP;
  		String participantId=null;
- 		
- 		// getting specimenCollectionGroupForm from request was called twice on this page.
- 		// Thus make it common
  		Object obj = request.getAttribute("specimenCollectionGroupForm");
  		SpecimenCollectionGroupForm form =null;
  		if(obj != null && obj instanceof SpecimenCollectionGroupForm)
@@ -58,14 +50,6 @@
  	
  	   		if(form  != null)
  	{
- 	//	form = (SpecimenCollectionGroupForm)obj;
- 		/**
- 		* Name : Vijay Pande
-  				* Reviewer Name : Sachin Lale 
-  				* Bug ID: 6472
-  				* Patch ID: 6472_1			
-  				* Description: ID is set from form, while coming back from SpecimenSummaryPage
- 		**/
  		if(id==null)
  		{
  			id=String.valueOf(form.getId());
@@ -116,15 +100,6 @@
  		{
  	idToTree = form.getId();
  		}
- 		
-
- /**
-  			* Name : Ashish Gupta
-  			* Reviewer Name : Sachin Lale 
-  			* Bug ID: 2741
-  			* Patch ID: 2741_20			
-  			* Description: Default Date to show in events
- 	*/
  		String currentReceivedDate = "";
  		String currentCollectionDate = "";
  		if (form != null) 
@@ -190,7 +165,6 @@
 			var action="DisplayAnnotationDataEntryPage.do?entityId=<%=scgEntityId%>&entityRecordId=<%=id%>&staticEntityName=<%=staticEntityName%>&pageOf=<%=pageOf%>&operation=viewAnnotations";
 			document.forms[0].action=action;
 			document.forms[0].submit();
-			//var action="DisplayAnnotationDataEntryPage.do?entityId="+specimenEntityId+"&entityRecordId="+ID+"&pageOf="+pageOf+"&operation=viewAnnotations&consentTierCounter="+consentTierCounter+"&staticEntityName="+staticEntityName;
 		}
 		
     	function onRadioButtonClick(element)
@@ -250,15 +224,6 @@
 			document.forms[0].action = action;
 			document.forms[0].submit();
         }		 
-      //Consent Tracking Module Virender mehta
-       
-          /**
- 			* Name : Ashish Gupta
- 			* Reviewer Name : Sachin Lale 
- 			* Bug ID: 2741
- 			* Patch ID: 2741_21 			
- 			* Description: Function to check whether user has entered any data in events and to prompt him whether he wants to propagate it to all specimens under this scg
-			*/
 		var applyToSpecimen;
 		function checkForChanges()
 		{
@@ -307,19 +272,6 @@
 			
 			if(receivedEventUserId == "")
 			   receivedEventUserId = "0";
-			     
-			//alert("collectionEventdateOfEvent "+collectionEventdateOfEvent+" collectionEventdateOfEventForm"+collectionEventdateOfEventForm);
-			//alert("collectionEventUserIdForm "+collectionEventUserIdForm+" collectionEventUserId"+collectionEventUserId);
-			//alert("collectionEventTimeInHoursForm"+collectionEventTimeInHoursForm+" collectionEventTimeInHours"+collectionEventTimeInHours);
-			//alert("collectionEventTimeInMinutesForm"+collectionEventTimeInMinutesForm+" collectionEventTimeInMinutes"+collectionEventTimeInMinutes);
-			//alert("collectionEventCollectionProcedureForm"+collectionEventCollectionProcedureForm+" collectionEventCollectionProcedure"+collectionEventCollectionProcedure);
-			//alert("collectionEventContainerForm"+collectionEventContainerForm+" collectionEventContainer"+collectionEventContainer);
-			//alert("receivedEventUserIdForm"+receivedEventUserIdForm+ " receivedEventUserId"+receivedEventUserId);
-			//alert("currentReceivedDateForm"+currentReceivedDateForm + " receivedEventdateOfEvent"+receivedEventdateOfEvent);
-			//alert("receivedEventTimeInHoursForm"+receivedEventTimeInHoursForm +" receivedEventTimeInHours"+receivedEventTimeInHours);
-			//alert("receivedEventTimeInMinutesForm"+receivedEventTimeInMinutesForm+" receivedEventTimeInMinutes"+receivedEventTimeInMinutes);
-			//alert("receivedEventReceivedQualityForm"+receivedEventReceivedQualityForm+" receivedEventReceivedQuality"+receivedEventReceivedQuality);
-			
 			
 			if((collectionEventdateOfEvent != collectionEventdateOfEventForm) 
 				|| (collectionEventUserId != collectionEventUserIdForm)
@@ -372,14 +324,6 @@
 			}			
 		}
 			
-        /**
- 			* Name : Ashish Gupta
- 			* Reviewer Name : Sachin Lale 
- 			* Bug ID: Multiple Specimen Bug
- 			* Patch ID: Multiple Specimen Bug_2 
- 			* See also: 1-8
- 			* Description: Function to disable "Submit" and "Add Specimen" buttons if number of specimens entered  > 1
-			*/
 		function disablebuttons()
 		{
 			var enteredValue = document.getElementById("numberOfSpecimen").value;
@@ -412,11 +356,7 @@
 			}
 		}
 		
-		/**
-		 * Patch ID: Bug#3184_11
-		 * Description: The following functions enables and disables the Submit and Add Specimen buttons as and when
-		 * needed.
-		 */
+
 		function disableButtonsOnCheck(restrictCheckbox)
 		{
 			var submitButton = document.getElementById("submitOnly");
@@ -647,19 +587,6 @@ function editSCG()
        
  </script>
 </head>
-			<!-- 
- 			* Name : Ashish Gupta
- 			* Reviewer Name : Sachin Lale 
- 			* Bug ID: Multiple Specimen Bug
- 			* Patch ID: Multiple Specimen Bug_2 
- 			* See also: 1-8
- 			* Description: Call to function to disable "Submit" and "Add Specimen" buttons if number of specimens entered  > 1 on body refreshing
-			*/
-			-->
-
-<!--
-	Patch ID: Bug#3184_12
--->
 <!-- As it was giving javascript error on disableButtons() as the scg form is not loaded for DE -->
 <%
 	if(pageView != null && !pageView.equals("viewAnnotations") && !pageView.equals(Constants.VIEW_SURGICAL_PATHOLOGY_REPORT))
