@@ -356,8 +356,6 @@ public class AnnotationUtil
 	private static boolean isPathAdded(Long staticEntityId, Long dynamicEntityId/*, Long deAssociationId*/)
 	{
 		boolean ispathAdded = false;
-		Connection conn = null;
-
 		JDBCDAO jdbcDAO = null;
 		try
 		{
@@ -671,7 +669,6 @@ public class AnnotationUtil
 		ResultSet resultSet = null;
 		PreparedStatement statement = null;
 		String query = "";
-		Connection conn = null;
 		JDBCDAO jdbcDAO = null;
 		try
 		{
@@ -683,28 +680,28 @@ public class AnnotationUtil
 			resultSet = statement.executeQuery();
 			resultSet.next();
 			Long intraModelAssociationId = resultSet.getLong(1);
-
+			jdbcDAO.closeStatement(resultSet);			
 
 			query = "select INTERMEDIATE_PATH from path where FIRST_ENTITY_ID="
 					+ hookEntityId + " and LAST_ENTITY_ID=" + previousDynamicEntity;
-			statement = conn.prepareStatement(query);
+			statement = jdbcDAO.getPreparedStatement(query);
 			resultSet = statement.executeQuery();
 			resultSet.next();
 			String path = resultSet.getString(1);
 			path = path.concat("_").concat(intraModelAssociationId.toString());
-
+			jdbcDAO.closeStatement(resultSet);	
 
 
 			query = "insert into path (PATH_ID, FIRST_ENTITY_ID,INTERMEDIATE_PATH, LAST_ENTITY_ID) values (?,?,?,?)";
-			statement = conn.prepareStatement(query);
+			statement = jdbcDAO.getPreparedStatement(query);
 
 			statement.setLong(1, maxPathId);
 			statement.setLong(2, hookEntityId);
 			statement.setString(3, path);
 			statement.setLong(4, dynamicEntityId);
 			statement.execute();
-
-			conn.commit();
+			statement.close();
+			jdbcDAO.commit();
 		}
 		catch (SQLException e)
 		{
