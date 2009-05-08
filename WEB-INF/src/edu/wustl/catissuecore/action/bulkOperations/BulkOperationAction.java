@@ -26,7 +26,7 @@ import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.CommonServiceLocator;
-import edu.wustl.query.querysuite.QueryShoppingCart;
+import edu.wustl.catissuecore.querysuite.QueryShoppingCart;
 
 public abstract class BulkOperationAction extends SecureAction
 {
