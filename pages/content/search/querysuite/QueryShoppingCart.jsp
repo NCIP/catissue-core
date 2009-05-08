@@ -64,7 +64,7 @@
 		disabledButton = true;
 	}
 
-    QueryShoppingCart cart = (QueryShoppingCart)session.getAttribute(Constants.QUERY_SHOPPING_CART);
+    QueryShoppingCart cart = (QueryShoppingCart) session.getAttribute(Constants.QUERY_SHOPPING_CART);
 	List columnList = new ArrayList();
 	List dataList = new ArrayList() ;
     
@@ -330,6 +330,7 @@ function checkAll(element)
 	</script>
 </head>
 <body onload="setCheckBoxState()">
+
 <html:html>
 
 <html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
