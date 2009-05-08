@@ -825,8 +825,8 @@ PUBLIC
      		<forward name="access_denied" path=".catissuecore.searchHomeDef" />
 		</action>
 		
-		<!-- <action path="/AddDeleteCart"
-			type="edu.wustl.catissuecore.action.querysuite.AddDeleteCartAction"
+		 <action path="/AddDeleteCart"
+			type="edu.wustl.catissuecore.action.AddDeleteCartAction"
 			name="advanceSearchForm"
 			validate="false"
 			scope="request">
@@ -834,10 +834,10 @@ PUBLIC
 			<forward name="duplicateObject" path=".catissuecore.queryResultsSpreadsheetViewDef" />
 			<forward name="shoppingCartDelete" path=".catissuecore.shoppingCartDef" />
 			<forward name="access_denied" path=".catissuecore.searchHomeDef" />
-		</action> -->
+		</action> 
 		
-		<!-- <action path="/BulkCart"
-			type="edu.wustl.catissuecore.action.querysuite.BulkCartAction"
+		<action path="/BulkCart"
+			type="edu.wustl.catissuecore.action.BulkCartAction"
 			name="advanceSearchForm"
 			validate="false"
 			scope="request">
@@ -850,7 +850,7 @@ PUBLIC
 			<forward name="editMultipleSp" path="/MultipleSpecimenFlexInitAction.do?operation=edit"/>
 			<forward name="access_denied" path=".catissuecore.searchHomeDef" />
 			<forward name="access_denied" path=".catissuecore.searchHomeDef" />
-		</action> -->
+		</action>
 		
 		<action path="/AddSpecimenToCart"
 			type="edu.wustl.catissuecore.action.NewShopingCartAction"
