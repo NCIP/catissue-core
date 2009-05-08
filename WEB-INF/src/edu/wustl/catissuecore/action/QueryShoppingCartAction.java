@@ -13,11 +13,12 @@ import java.util.StringTokenizer;
 import javax.servlet.http.HttpServletRequest;
 
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
+import edu.wustl.catissuecore.actionForm.AdvanceSearchForm;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.query.actionForm.QueryAdvanceSearchForm;
-import edu.wustl.query.querysuite.QueryShoppingCart;
+import edu.wustl.catissuecore.querysuite.QueryShoppingCart;
 
 /**
  * @author supriya_dankh Handles all the actions related to shopping cart.
@@ -89,7 +90,7 @@ abstract public class QueryShoppingCartAction extends BaseAction
 		return new Integer(index);
 	}
 
-	protected  List<Integer> getCheckboxValues(QueryAdvanceSearchForm searchForm) {
+	protected  List<Integer> getCheckboxValues(AdvanceSearchForm searchForm) {
 		Map map = searchForm.getValues();
 		Set chkBoxValuesSet = map.keySet();
 		List<Integer> chkBoxValues = new ArrayList<Integer>();

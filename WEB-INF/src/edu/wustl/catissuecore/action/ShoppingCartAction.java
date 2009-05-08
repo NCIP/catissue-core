@@ -27,6 +27,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.actionForm.AdvanceSearchForm;
 import edu.wustl.catissuecore.bizlogic.ShoppingCartBizLogic;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.util.global.AppUtility;
@@ -55,7 +56,7 @@ public class ShoppingCartAction  extends BaseAction
             HttpServletRequest request, HttpServletResponse response)
             throws Exception
     { 
-    	 HttpSession session = request.getSession(true);
+    	HttpSession session = request.getSession(true);
         //Gets the value of the operation parameter.
         String operation = (String)request.getParameter(Constants.OPERATION);
         String pageNo = (String)request.getParameter(Constants.PAGE_NUMBER);
@@ -72,7 +73,7 @@ public class ShoppingCartAction  extends BaseAction
         IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
         ShoppingCartBizLogic bizLogic = (ShoppingCartBizLogic)factory.getBizLogic(Constants.SHOPPING_CART_FORM_ID);
         //ShoppingCartForm shopForm = (ShoppingCartForm)form;
-        QueryAdvanceSearchForm advForm = (QueryAdvanceSearchForm)form;
+        AdvanceSearchForm advForm = (AdvanceSearchForm)form;
     	String isCheckAllAcrossAllChecked = (String)request.getParameter(Constants.CHECK_ALL_ACROSS_ALL_PAGES);
         if(cart == null)
         {
@@ -339,7 +340,7 @@ public class ShoppingCartAction  extends BaseAction
 		return gridData;
     }
     
-    private void addToOrderLiist(QueryAdvanceSearchForm advForm,HttpServletRequest request,ShoppingCart cart,HttpSession session)
+    private void addToOrderLiist(AdvanceSearchForm advForm,HttpServletRequest request,ShoppingCart cart,HttpSession session)
     {
     	Map map = advForm.getValues();
     	Object obj[] = map.keySet().toArray();
@@ -365,8 +366,5 @@ public class ShoppingCartAction  extends BaseAction
 				session.setAttribute("specimenId", specimenIdList);
 			}
 		}
-
     }
-    
-    
 }

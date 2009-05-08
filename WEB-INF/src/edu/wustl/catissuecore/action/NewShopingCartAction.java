@@ -40,7 +40,7 @@ import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.dao.exception.DAOException;
-import edu.wustl.query.querysuite.QueryShoppingCart;
+import edu.wustl.catissuecore.querysuite.QueryShoppingCart;
 import edu.wustl.query.util.querysuite.EntityCacheFactory;
 
 public class NewShopingCartAction extends BaseAction {

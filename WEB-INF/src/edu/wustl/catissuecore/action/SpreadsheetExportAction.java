@@ -22,6 +22,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.actionForm.AdvanceSearchForm;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
@@ -30,7 +31,6 @@ import edu.wustl.common.util.SendFile;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.QuerySessionData;
 import edu.wustl.common.util.logger.Logger;
-import edu.wustl.query.actionForm.QueryAdvanceSearchForm;
 
 /**
  * @author aniruddha_phadnis
@@ -45,7 +45,7 @@ public class SpreadsheetExportAction  extends BaseAction
             HttpServletRequest request, HttpServletResponse response)
             throws Exception
     {
-    	QueryAdvanceSearchForm searchForm = (QueryAdvanceSearchForm)form;
+    	AdvanceSearchForm searchForm = (AdvanceSearchForm)form;
     	HttpSession session = request.getSession();
     	String path = CommonServiceLocator.getInstance().getAppHome() + System.getProperty("file.separator");
 		String csvfileName = path + Constants.SEARCH_RESULT;

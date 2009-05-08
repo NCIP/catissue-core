@@ -13,6 +13,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.actionForm.AdvanceSearchForm;
 import edu.wustl.catissuecore.bizlogic.QueryShoppingCartBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.ExportReport;
@@ -20,7 +21,7 @@ import edu.wustl.common.util.SendFile;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.query.actionForm.QueryAdvanceSearchForm;
-import edu.wustl.query.querysuite.QueryShoppingCart;
+import edu.wustl.catissuecore.querysuite.QueryShoppingCart;
 
 /**
  * @author santhoshkumar_c
@@ -41,7 +42,7 @@ public class ExportCartAction extends QueryShoppingCartAction
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		QueryAdvanceSearchForm searchForm = (QueryAdvanceSearchForm) form;	
+		AdvanceSearchForm searchForm = (AdvanceSearchForm) form;	
 		export(getCheckboxValues(searchForm), request, response);
 		return null;								
 	}

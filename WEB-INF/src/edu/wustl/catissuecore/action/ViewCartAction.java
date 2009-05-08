@@ -9,7 +9,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.query.querysuite.QueryShoppingCart;
+import edu.wustl.catissuecore.querysuite.QueryShoppingCart;
 import edu.wustl.query.util.global.AQConstants;
 
 /**
