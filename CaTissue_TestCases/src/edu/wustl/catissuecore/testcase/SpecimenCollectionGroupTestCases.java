@@ -19,7 +19,7 @@ import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
-import edu.wustl.common.dao.AbstractDAO;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.dao.exception.DAOException;
 /**
  * This class contains test cases for Specimen Collection Group add/edit
@@ -121,7 +121,7 @@ public class SpecimenCollectionGroupTestCases extends CaTissueSuiteBaseTest
 		addRequestParameter("value(SimpleConditionsNode:1_Condition_DataElement_table)", "SpecimenCollectionGroup");
 		addRequestParameter("value(SimpleConditionsNode:1_Condition_DataElement_field)","SpecimenCollectionGroup.NAME.varchar");
 		addRequestParameter("value(SimpleConditionsNode:1_Condition_Operator_operator)","Starts With");
-		addRequestParameter("value(SimpleConditionsNode:1__Condition_value)","");
+		addRequestParameter("value(SimpleConditionsNode:1__Condition_value)","c");
 		addRequestParameter("pageOf","pageOfSpecimenCollectionGroup");
 		addRequestParameter("operation","search");
 		actionPerform();
@@ -133,7 +133,7 @@ public class SpecimenCollectionGroupTestCases extends CaTissueSuiteBaseTest
 		{
 			specimenCollectionGroupList = bizLogic.retrieve("SpecimenCollectionGroup");
 		}
-		catch (DAOException e) 
+		catch (BizLogicException e) 
 		{
 			e.printStackTrace();
 			System.out.println("SpecimenCollectionGroupTestCases.testSpecimenCollectionGroupEdit(): "+e.getMessage());

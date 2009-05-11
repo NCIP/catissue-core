@@ -6,7 +6,7 @@ import org.junit.Test;
 import edu.wustl.catissuecore.actionForm.InstitutionForm;
 import edu.wustl.catissuecore.domain.Institution;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
-import edu.wustl.dao.exception.DAOException;
+import edu.wustl.common.exception.BizLogicException;
 
 /**
  * This class contains test cases for institution add/edit
@@ -96,9 +96,8 @@ public class InstitutionTestCases extends CaTissueSuiteBaseTest
 		{
 
 			institutionList = bizLogic.retrieve("Institution");
-
 		}
-		catch (DAOException e) 
+		catch (BizLogicException e) 
 		{
 			e.printStackTrace();
 			System.out.println("InstitutionTestCases.testInstitutionEdit(): "+e.getMessage());

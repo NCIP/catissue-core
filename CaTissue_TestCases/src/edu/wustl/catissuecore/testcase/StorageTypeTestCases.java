@@ -11,8 +11,7 @@ import edu.wustl.catissuecore.actionForm.StorageTypeForm;
 import edu.wustl.catissuecore.domain.Capacity;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
-import edu.wustl.common.dao.AbstractDAO;
-import edu.wustl.dao.exception.DAOException;
+import edu.wustl.common.exception.BizLogicException;
 
 /**
  * This class contains test cases for Storage Type add/edit
@@ -401,7 +400,7 @@ public class StorageTypeTestCases extends CaTissueSuiteBaseTest
 		{
 			storageTypeList = bizLogic.retrieve("StorageType");
 		}
-		catch (DAOException e)
+		catch (BizLogicException e)
 		{
 			e.printStackTrace();
 			System.out.println("StorageTypeTestCases.testStorageTypeEdit(): " + e.getMessage());
@@ -465,7 +464,7 @@ public class StorageTypeTestCases extends CaTissueSuiteBaseTest
 				"ContainerType.NAME.varchar");
 		addRequestParameter("value(SimpleConditionsNode:1_Condition_Operator_operator)",
 				"Starts With");
-		addRequestParameter("value(SimpleConditionsNode:1_Condition_value)", "");
+		addRequestParameter("value(SimpleConditionsNode:1_Condition_value)", "s");
 		addRequestParameter("pageOf", "pageOfStorageType");
 		addRequestParameter("operation", "search");
 		actionPerform();
@@ -477,7 +476,7 @@ public class StorageTypeTestCases extends CaTissueSuiteBaseTest
 		{
 			storageTypeList = bizLogic.retrieve("StorageType");
 		}
-		catch (DAOException e)
+		catch (BizLogicException e)
 		{
 			e.printStackTrace();
 			System.out.println("StorageTypeTestCases.testStorageTypeEdit(): " + e.getMessage());
@@ -542,7 +541,7 @@ public class StorageTypeTestCases extends CaTissueSuiteBaseTest
 				"ContainerType.NAME.varchar");
 		addRequestParameter("value(SimpleConditionsNode:1_Condition_Operator_operator)",
 				"Starts With");
-		addRequestParameter("value(SimpleConditionsNode:1_Condition_value)", "");
+		addRequestParameter("value(SimpleConditionsNode:1_Condition_value)", "s");
 		addRequestParameter("pageOf", "pageOfStorageType");
 		addRequestParameter("operation", "search");
 		actionPerform();
@@ -554,7 +553,7 @@ public class StorageTypeTestCases extends CaTissueSuiteBaseTest
 		{
 			storageTypeList = bizLogic.retrieve("StorageType");
 		}
-		catch (DAOException e)
+		catch (BizLogicException e)
 		{
 			e.printStackTrace();
 			System.out.println("StorageTypeTestCases.testStorageTypeEdit(): " + e.getMessage());
@@ -647,7 +646,7 @@ public class StorageTypeTestCases extends CaTissueSuiteBaseTest
 		{
 			storageTypeList = bizLogic.retrieve("StorageType");
 		}
-		catch (DAOException e)
+		catch (BizLogicException e)
 		{
 			e.printStackTrace();
 			System.out.println("StorageTypeTestCases.testStorageTypeEdit(): " + e.getMessage());
@@ -712,7 +711,7 @@ public class StorageTypeTestCases extends CaTissueSuiteBaseTest
 				"ContainerType.NAME.varchar");
 		addRequestParameter("value(SimpleConditionsNode:1_Condition_Operator_operator)",
 				"Starts With");
-		addRequestParameter("value(SimpleConditionsNode:1_Condition_value)", "");
+		addRequestParameter("value(SimpleConditionsNode:1_Condition_value)", "s");
 		addRequestParameter("pageOf", "pageOfStorageType");
 		addRequestParameter("operation", "search");
 		actionPerform();
@@ -724,7 +723,7 @@ public class StorageTypeTestCases extends CaTissueSuiteBaseTest
 		{
 			storageTypeList = bizLogic.retrieve("StorageType");
 		}
-		catch (DAOException e)
+		catch (BizLogicException e)
 		{
 			e.printStackTrace();
 			System.out.println("StorageTypeTestCases.testStorageTypeEdit(): " + e.getMessage());

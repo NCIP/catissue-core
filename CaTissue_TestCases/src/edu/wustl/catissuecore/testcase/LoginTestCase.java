@@ -7,7 +7,6 @@ import org.junit.Test;
 
 import edu.wustl.catissuecore.actionForm.InstitutionForm;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.actionForm.SimpleQueryInterfaceForm;
 import edu.wustl.common.beans.SessionDataBean;
 /**
 *

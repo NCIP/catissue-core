@@ -19,9 +19,10 @@ import oracle.jdbc.pool.OracleDataSource;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.catissuecore.util.listener.CatissueCoreServletContextListener;
+import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.XMLPropertyHandler;
-import edu.wustl.common.util.dbManager.DBUtil;
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -86,12 +87,13 @@ public class InitializationTestCase extends CaTissueSuiteBaseTest
 	{
 		try
 		{
-			Logger.configure("");
+//			Logger.configure("");
 			// Create a Properties object and set properties appropriately
 			System.setProperty("java.naming.factory.initial", NamingContextFactory.class.getName());
 			System.setProperty("java.naming.factory.url.pkgs", "org.jboss.naming:org.jnp.interfaces");
 			// start JNDI server
-			NamingBeanImpl server = new NamingBeanImpl();
+			NamingBeanImpl server = new
+			NamingBeanImpl();
 			server.start();
 			// Create the initial context from the properties we just created
 			Context initialContext = new InitialContext();
@@ -128,22 +130,22 @@ public class InitializationTestCase extends CaTissueSuiteBaseTest
 	{
 			try
 			{
-				Variables.applicationHome = ".";
+				String applicationHome = ".";
 
 				initCaTissueSuite();
 
 				//System.setProperties(props);
 				System.setProperty("gov.nih.nci.security.configFile",
-						Variables.applicationHome+"/CaTissue_TestCases/ApplicationSecurityConfig.xml");
+						applicationHome+"/CaTissue_TestCases/ApplicationSecurityConfig.xml");
 				System.setProperty("app.propertiesFile",
-						Variables.applicationHome+"/catissuecore-properties/caTissueCore_Properties.xml");
+						applicationHome+"/catissuecore-properties/caTissueCore_Properties.xml");
 				System.setProperty("java.security.auth.login.config",
-						Variables.applicationHome+"/CaTissue_TestCases/test_login.conf");
+						applicationHome+"/CaTissue_TestCases/test_login.conf");
 				if (!initComplete)
 				{
 					initComplete = true;
 
-					Class.forName(DBUtil.class.getName());
+//					Class.forName(DBUtil.class.getName());
 
 					CatissueCoreServletContextListener init =
 						new CatissueCoreServletContextListener();
@@ -151,18 +153,20 @@ public class InitializationTestCase extends CaTissueSuiteBaseTest
 					String path = System.getProperty("app.propertiesFile");
 			    	XMLPropertyHandler.init(path);
 			    	File propetiesDirPath = new File(path);
-			    	Variables.propertiesDirPath = propetiesDirPath.getParent();
-			    	if (Variables.propertiesDirPath.startsWith("file:\\"))
+			    	String propertiesDirPath = propetiesDirPath.getParent();
+			    	if (propertiesDirPath.startsWith("file:\\"))
 			    	{
 			    		int beginIndex = "file:\\".length();
-			    		Variables.propertiesDirPath=
-			    			Variables.propertiesDirPath.substring(beginIndex);
+			    		propertiesDirPath=
+			    			propertiesDirPath.substring(beginIndex);
 			    	}
-			    	Variables.applicationName = ApplicationProperties.getValue("app.name");
-			        Variables.applicationVersion = ApplicationProperties.getValue("app.version");
+			    	String applicationName = ApplicationProperties.getValue("app.name");
+			        String applicationVersion = ApplicationProperties.getValue("app.version");
 					int maximumTreeNodeLimit = Integer.parseInt(XMLPropertyHandler.getValue
 							(Constants.MAXIMUM_TREE_NODE_LIMIT));
 					Variables.maximumTreeNodeLimit = maximumTreeNodeLimit;
+					CommonServiceLocator.getInstance().setAppHome(System.getProperty("user.dir"));
+					ErrorKey.init("~");
 					init.initCatissueParams();
 				}
 			}

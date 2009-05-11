@@ -9,6 +9,7 @@ import edu.wustl.catissuecore.actionForm.DistributionProtocolForm;
 import edu.wustl.catissuecore.domain.DistributionProtocol;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.dao.exception.DAOException;
 
 /**
@@ -70,7 +71,7 @@ public class DistributionProtocolTestCases extends CaTissueSuiteBaseTest
 		addRequestParameter("value(SimpleConditionsNode:1_Condition_DataElement_table)", "DistributionProtocol");
 		addRequestParameter("value(SimpleConditionsNode:1_Condition_DataElement_field)","SpecimenProtocol.TITLE.varchar");
 		addRequestParameter("value(SimpleConditionsNode:1_Condition_Operator_operator)","Starts With");
-		addRequestParameter("value(SimpleConditionsNode:1_Condition_value)","");
+		addRequestParameter("value(SimpleConditionsNode:1_Condition_value)","d");
 		addRequestParameter("pageOf","pageOfDistributionProtocol");
 		addRequestParameter("operation","search");
 		actionPerform();
@@ -82,7 +83,7 @@ public class DistributionProtocolTestCases extends CaTissueSuiteBaseTest
 		{
 			distributionProtocolList = bizLogic.retrieve("DistributionProtocol");
 		}
-		catch (DAOException e) 
+		catch (BizLogicException e) 
 		{
 			e.printStackTrace();
 			System.out.println("DistributionProtocolTestCases.testDistributionProtocolEdit(): "+e.getMessage());

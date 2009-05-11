@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.Properties;
 /**
  * This class retrieves database credentials from caTissueInstall properties file. 
- * Hard code path of your caTissueInstall.properties file
  * @author Himanshu Aseeja
  *
  */

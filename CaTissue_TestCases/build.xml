@@ -24,7 +24,9 @@
 	     <property name="mysql.url.string" value="jdbc:mysql://localhost:${database.port}/${database.name}"></property>
 	     <property name="oracle.url.string" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}"></property>
          <property name="log4jproperties.file.path" value="../log4j.properties"></property>
-
+		 <property name="jdbctransactionfactory.class.name.string" value="org.hibernate.transaction.JDBCTransactionFactory"></property>
+	     <property name="jtatransactionfactory.class.name.string" value="org.hibernate.transaction.JTATransactionFactory"></property>
+	
     <target name="init">
         <copy file="${ApplicationSecurityConfig.file.path}" todir="${basedir}" overwrite="true"/>
         <replace dir="${basedir}">
@@ -51,7 +53,12 @@
     	          </replace>	
     	     </then>
     	 </if>
-    	                    
+    	 
+    	<replace dir="${basedir}">
+        	<include name="catissuecore.hibernate.cfg.xml"/>
+    		<replacefilter token="${jtatransactionfactory.class.name.string}" value="${jdbctransactionfactory.class.name.string}"/>
+        </replace>	
+    	
     	<copy file="${login-conf.file.path}" tofile="test_login.conf" overwrite="true"/>
     	 <if>
     	   <equals arg1="${database.type}" arg2="mysql"/>

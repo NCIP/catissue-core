@@ -9,6 +9,9 @@ import edu.wustl.catissuecore.domain.Address;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
+import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.dao.QueryWhereClause;
+import edu.wustl.dao.condition.LikeClause;
 import edu.wustl.dao.exception.DAOException;
 
 /**
@@ -205,7 +208,7 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
 		{
 			siteList = bizLogic.retrieve("Site");
 		}
-		catch (DAOException e) 
+		catch (BizLogicException e) 
 		{
 			e.printStackTrace();
 			System.out.println("SiteTestCases.testSiteEdit(): "+e.getMessage());
@@ -268,7 +271,7 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
 		{
 			siteList = bizLogic.retrieve("Site");
 		}
-		catch (DAOException e) 
+		catch (BizLogicException e) 
 		{
 			e.printStackTrace();
 			System.out.println("SiteTestCases.testSiteEdit(): "+e.getMessage());
@@ -343,13 +346,21 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
 		List siteList = null;
 		try 
 		{
-			siteList = bizLogic.retrieve(Site.class.getName(), new String[]{"name"}, new String[]{"name"}, new String[]{"like"}, new String[]{"Site_%"}, null);
+//			siteList = bizLogic.retrieve(Site.class.getName(), new String[]{"name"}, new String[]{"name"}, new String[]{"like"}, new String[]{"Site_%"}, null);
+			QueryWhereClause queryWhereClause = new QueryWhereClause(Site.class.getName());
+			queryWhereClause.addCondition(new LikeClause("name","Site_"));
+			siteList = bizLogic.retrieve(Site.class.getName(),  new String[]{"name"}, queryWhereClause);
 		}
-		catch (DAOException e) 
+		catch (BizLogicException e) 
 		{
 			e.printStackTrace();
 			System.out.println("SiteTestCases.testSiteEdit(): "+e.getMessage());
 			fail(e.getMessage());
+		}
+		catch (DAOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		if(siteList.size() >= 6)
 		{
@@ -362,7 +373,4 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
 		}
 		
 	}
-
-	
-	
 }

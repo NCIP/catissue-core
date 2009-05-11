@@ -13,7 +13,7 @@ import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
-import edu.wustl.common.dao.AbstractDAO;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.dao.exception.DAOException;
 
 /**
@@ -92,7 +92,7 @@ public class ParticipantTestCases extends CaTissueSuiteBaseTest
 		addRequestParameter("value(SimpleConditionsNode:1_Condition_DataElement_table)", "Participant");
 		addRequestParameter("value(SimpleConditionsNode:1_Condition_DataElement_field)","Participant.FIRST_NAME.varchar");
 		addRequestParameter("value(SimpleConditionsNode:1_Condition_Operator_operator)","Starts With");
-		addRequestParameter("value(SimpleConditionsNode:1__Condition_value)","");
+		addRequestParameter("value(SimpleConditionsNode:1__Condition_value)","p");
 		addRequestParameter("counter","1");
 		addRequestParameter("pageOf","pageOfParticipant");
 		addRequestParameter("operation","search");
@@ -105,7 +105,7 @@ public class ParticipantTestCases extends CaTissueSuiteBaseTest
 		{
 			participantList = bizLogic.retrieve("Participant");
 		}
-		catch (DAOException e) 
+		catch (BizLogicException e) 
 		{
 			e.printStackTrace();
 			System.out.println("ParticipantTestCases.testParticipantEdit(): "+e.getMessage());

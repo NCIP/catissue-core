@@ -7,6 +7,7 @@ import org.junit.Test;
 import edu.wustl.catissuecore.actionForm.CancerResearchGroupForm;
 import edu.wustl.catissuecore.domain.CancerResearchGroup;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.dao.exception.DAOException;
 
 /**
@@ -82,7 +83,7 @@ public class CancerReaserchGroupTestCases extends CaTissueSuiteBaseTest
 		addRequestParameter("value(SimpleConditionsNode:1_Condition_DataElement_table)", "CancerResearchGroup");
 		addRequestParameter("value(SimpleConditionsNode:1_Condition_DataElement_field)","CancerResearchGroup.NAME.varchar");
 		addRequestParameter("value(SimpleConditionsNode:1_Condition_Operator_operator)","Starts With");
-		addRequestParameter("value(SimpleConditionsNode:1_Condition_value)","");
+		addRequestParameter("value(SimpleConditionsNode:1_Condition_value)","c");
 		addRequestParameter("pageOf","pageOfCancerResearchGroup");
 		addRequestParameter("operation","search");
 		actionPerform();
@@ -94,7 +95,7 @@ public class CancerReaserchGroupTestCases extends CaTissueSuiteBaseTest
 		{
 			crgList = bizLogic.retrieve("CancerResearchGroup");
 		}
-		catch (DAOException e) 
+		catch (BizLogicException e) 
 		{
 			e.printStackTrace();
 			System.out.println("CancerResearchGroupTestCases.testCancerResearchGroupEdit(): "+e.getMessage());

@@ -7,6 +7,7 @@ import org.junit.Test;
 import edu.wustl.catissuecore.actionForm.DepartmentForm;
 import edu.wustl.catissuecore.domain.Department;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.dao.exception.DAOException;
 
 
@@ -96,7 +97,7 @@ public class DepartmentTestCases extends CaTissueSuiteBaseTest
 		{
 			departmentList = bizLogic.retrieve("Department");
 		}
-		catch (DAOException e) 
+		catch (BizLogicException e) 
 		{
 			e.printStackTrace();
 	     	System.out.println("DepartmentTestCases.testDepartmentEdit(): "+e.getMessage());
