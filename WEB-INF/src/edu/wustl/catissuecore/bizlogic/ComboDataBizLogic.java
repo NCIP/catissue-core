@@ -16,6 +16,11 @@ import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.cde.PermissibleValueImpl;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.DAO;
+import edu.wustl.dao.QueryWhereClause;
+import edu.wustl.dao.condition.EqualClause;
+import edu.wustl.dao.condition.LikeClause;
+import edu.wustl.dao.exception.DAOException;
 
 /**
  * 
@@ -35,12 +40,13 @@ public class ComboDataBizLogic extends CatissueDefaultBizLogic
 	{
 		//populating clinical Diagnosis field 
 		//		
+		List clinicalDiagnosisList = new ArrayList();
 		String sourceObjectName =PermissibleValueImpl.class.getName();
 		String[] selectColumnName ={"value"};
 		String[] whereColumnName ={"value" ,"cde.publicId"}; // "storageContainer."+Constants.SYSTEM_IDENTIFIER
 		String[] whereColumnCondition = {"like","=" };
 		Object[] whereColumnValue ={"%"+query+"%","Clinical_Diagnosis_PID"};
-		String joinCondition = null;
+		String joinCondition = Constants.AND_JOIN_CONDITION;
 
 		//	String hql= "from "+PermissibleValueImpl.class.getName();
 
@@ -51,31 +57,55 @@ public class ComboDataBizLogic extends CatissueDefaultBizLogic
 		//		List list1 = bizLogic.retrieve(PermissibleValueImpl.class.getName(),"cde.publicId","Clinical_Diagnosis_PID");
 		//		Logger.out.info("************************"+list1.size());
 		//		
-
-		IBizLogic bizLogic = new DefaultBizLogic();
-		//		List list1 = bizLogic.retrieve(CDE.class.getName(),"publicId","Clinical_Diagnosis_PID");
-		List clinicalDiagnosisList = new ArrayList();
-
-		Iterator<String> iterator = bizLogic.retrieve(sourceObjectName,selectColumnName,whereColumnName, whereColumnCondition,whereColumnValue, joinCondition).iterator();
-
-		//			CDEBizLogic cdeBizLogic = (CDEBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.CDE_FORM_ID);
-		clinicalDiagnosisList.add(new NameValueBean(Constants.SELECT_OPTION, "" + Constants.SELECT_OPTION_VALUE));
-
-		while(iterator.hasNext())
+		DAO dao = null;
+		try
 		{
-			String clinicaDiagnosisvalue=iterator.next();
-			clinicalDiagnosisList.add(new NameValueBean(clinicaDiagnosisvalue,clinicaDiagnosisvalue));
+
+			IBizLogic bizLogic = new DefaultBizLogic();
+			//		List list1 = bizLogic.retrieve(CDE.class.getName(),"publicId","Clinical_Diagnosis_PID");
+
+
+			dao = openDAOSession(null);
+
+			QueryWhereClause whereClause = new QueryWhereClause(sourceObjectName);
+			whereClause.addCondition(new LikeClause("value","%"+query+"%")).andOpr().
+			addCondition(new EqualClause("cde.publicId","Clinical_Diagnosis_PID"));
+
+			List dataList = dao.retrieve(sourceObjectName, selectColumnName, whereClause);
+			
+			closeDAOSession(dao);
+			
+			//Iterator<String> iterator = bizLogic.retrieve(sourceObjectName,selectColumnName,whereColumnName, whereColumnCondition,whereColumnValue, joinCondition).iterator();
+			Iterator<String> iterator = dataList.iterator();
+			
+			//			CDEBizLogic cdeBizLogic = (CDEBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.CDE_FORM_ID);
+			clinicalDiagnosisList.add(new NameValueBean(Constants.SELECT_OPTION, "" + Constants.SELECT_OPTION_VALUE));
+
+			while(iterator.hasNext())
+			{
+				String clinicaDiagnosisvalue=iterator.next();
+				clinicalDiagnosisList.add(new NameValueBean(clinicaDiagnosisvalue,clinicaDiagnosisvalue));
+
+			}
+			Collections.sort(clinicalDiagnosisList);
+			//cdeBizLogic.getFilteredCDE( new HashSet(list), clinicalDiagnosisList);		
+
+
+			//		CDE cde = CDEManager.getCDEManager().getCDE(Constants.CDE_NAME_CLINICAL_DIAGNOSIS);
+			//		CDEBizLogic cdeBizLogic = (CDEBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.CDE_FORM_ID);
+			//		List clinicalDiagnosisList = new ArrayList();
+			//		clinicalDiagnosisList.add(new NameValueBean(Constants.SELECT_OPTION, "" + Constants.SELECT_OPTION_VALUE));
+			//		cdeBizLogic.getFilteredCDE(cde.getPermissibleValues(), clinicalDiagnosisList);
 
 		}
-		Collections.sort(clinicalDiagnosisList);
-		//cdeBizLogic.getFilteredCDE( new HashSet(list), clinicalDiagnosisList);		
-
-
-		//		CDE cde = CDEManager.getCDEManager().getCDE(Constants.CDE_NAME_CLINICAL_DIAGNOSIS);
-		//		CDEBizLogic cdeBizLogic = (CDEBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.CDE_FORM_ID);
-		//		List clinicalDiagnosisList = new ArrayList();
-		//		clinicalDiagnosisList.add(new NameValueBean(Constants.SELECT_OPTION, "" + Constants.SELECT_OPTION_VALUE));
-		//		cdeBizLogic.getFilteredCDE(cde.getPermissibleValues(), clinicalDiagnosisList);		
+		catch(DAOException exp)
+		{
+			throw getBizLogicException(exp, "dao.error", "");
+		}
+		finally
+		{
+			closeDAOSession(dao);
+		}
 		return clinicalDiagnosisList;		
 	}
 	
