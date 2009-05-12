@@ -20,7 +20,9 @@ import edu.wustl.catissuecore.util.AssociatesCps;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.dao.exception.DAOException;
+import edu.wustl.catissuecore.util.global.AppUtility;
 
 /**
  * @author suhas_khot
@@ -84,7 +86,7 @@ public class TestShowHideForms extends TestCase
 			DefaultBizLogic defaultBizLogic = BizLogicFactory.getDefaultBizLogic();
 			Map<Long, Long> entityIdsVsContId = new HashMap<Long, Long>();
 			//store containerIds and its Corresponding entityId
-			entityIdsVsContId = Utility.getAllContainers();;
+			entityIdsVsContId = AppUtility.getAllContainers();;
 			if (entityIdsVsContId != null)
 			{
 				for (Long containerId : entityIdsVsContId.values())
@@ -97,12 +99,12 @@ public class TestShowHideForms extends TestCase
 						if (entityMapList != null && entityMapList.size() > 0)
 						{
 							EntityMap entityMap = entityMapList.get(0);
-							Collection<FormContext> formContextColl = Utility.getFormContexts(entityMap.getId());
+							Collection<FormContext> formContextColl = AppUtility.getFormContexts(entityMap.getId());
 							if (formContextColl != null)
 							{
 								for (FormContext formContext : formContextColl)
 								{
-									Collection<EntityMapCondition> entityMapCondColl = Utility.getEntityMapConditions(formContext.getId());
+									Collection<EntityMapCondition> entityMapCondColl = AppUtility.getEntityMapConditions(formContext.getId());
 									if (!entityMapCondColl.isEmpty()
 											|| entityMapCondColl.size() > 0)
 									{
@@ -166,7 +168,7 @@ public class TestShowHideForms extends TestCase
 			DefaultBizLogic defaultBizLogic = BizLogicFactory.getDefaultBizLogic();
 			Map<Long, Long> entityIdsVsContId = new HashMap<Long, Long>();
 			
-			entityIdsVsContId = Utility.getAllContainers();
+			entityIdsVsContId = AppUtility.getAllContainers();
 			if (entityIdsVsContId != null)
 			{
 				for (Long containerId : entityIdsVsContId.values())
@@ -179,12 +181,12 @@ public class TestShowHideForms extends TestCase
 						if (entityMapList != null && entityMapList.size() > 0)
 						{
 							EntityMap entityMap = entityMapList.get(0);
-							Collection<FormContext> formContextColl = Utility.getFormContexts(entityMap.getId());
+							Collection<FormContext> formContextColl = AppUtility.getFormContexts(entityMap.getId());
 							if (formContextColl != null)
 							{
 								for (FormContext formContext : formContextColl)
 								{
-									Collection<EntityMapCondition> entityMapCondColl = Utility.getEntityMapConditions(formContext.getId());
+									Collection<EntityMapCondition> entityMapCondColl = AppUtility.getEntityMapConditions(formContext.getId());
 									if (!entityMapCondColl.isEmpty()
 											|| entityMapCondColl.size() > 0)
 									{
@@ -278,9 +280,10 @@ public class TestShowHideForms extends TestCase
 	/**
 	 * @return collection of static record Id
 	 * @throws DAOException if fails to retrieve the objects form database
+	 * @throws BizLogicException 
 	 */
 	@SuppressWarnings("unchecked")
-	private List<Long> retrieveEntityGroup() throws DAOException
+	private List<Long> retrieveEntityGroup() throws DAOException, BizLogicException
 	{
 		List<Long> staticRecordIdColl = null;
 		DefaultBizLogic defaultBizLogic = BizLogicFactory.getDefaultBizLogic();
