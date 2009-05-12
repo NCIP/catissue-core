@@ -100,9 +100,9 @@ public class CaCoreAPIService
 			List resultList = appService.query(criteria, targertClass.getName());
 			return resultList;
 		} 
-		catch (ApplicationException e) 
+		catch (Exception e) 
 		{
-			logger.error("Error while retrieving List for "+ targertClass+e);
+			logger.error("Error while retrieving List for "+ targertClass,e);
 		}
 		return null;
 	}
