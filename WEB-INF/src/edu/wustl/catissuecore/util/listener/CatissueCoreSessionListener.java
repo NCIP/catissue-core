@@ -59,7 +59,7 @@ public class CatissueCoreSessionListener implements HttpSessionListener{
 			String appName = CommonServiceLocator.getInstance().getAppName();
 			JDBCDAO jdbcDao = DAOConfigFactory.getInstance().getDAOFactory(appName).getJDBCDAO();
 			jdbcDao.openSession(sessionData);
-			jdbcDao.delete(tempTableName);
+			jdbcDao.deleteTable(tempTableName);
 			jdbcDao.closeSession();
 		}
 		catch(DAOException ex)
@@ -72,7 +72,7 @@ public class CatissueCoreSessionListener implements HttpSessionListener{
 			String appName = CommonServiceLocator.getInstance().getAppName();
 			JDBCDAO jdbcDao = DAOConfigFactory.getInstance().getDAOFactory(appName).getJDBCDAO();
 			jdbcDao.openSession(sessionData);
-			jdbcDao.delete(tempTableNameForQuery);
+			jdbcDao.deleteTable(tempTableNameForQuery);
 			jdbcDao.closeSession();
 		}
 		catch(DAOException ex)
