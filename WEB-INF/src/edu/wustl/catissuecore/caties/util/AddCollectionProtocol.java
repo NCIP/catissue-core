@@ -60,7 +60,6 @@ public class AddCollectionProtocol
 		{
 			logger.debug("Exception in AddCollectionProtocol = "+ ex.getMessage(), ex);
 			System.out.println("Exception in AddCollectionProtocol = "+ ex.getMessage());
-			logger.error("Exception in AddCollectionProtocol = "+ ex);
 		}
 	}
 
