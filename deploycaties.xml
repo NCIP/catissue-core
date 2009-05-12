@@ -335,7 +335,7 @@
 		<copy file="${temp.caties.dir}/caTIES_conf/remoteService.xml" todir="${report.loader.installation.dir}/caTIES_conf" overwrite="true" />
 		<copy file="${basedir}/caTIES_conf/SectionHeaderConfig.txt" todir="${report.loader.installation.dir}/caTIES_conf" overwrite="true" />
 		<copy file="${basedir}/caTIES_conf/sites_configuration.xml" todir="${report.loader.installation.dir}/caTIES_conf" overwrite="true" />
-		<copy file="${basedir}/caTIES_conf/logger.properties" todir="${report.loader.installation.dir}" overwrite="true" />
+		<copyfile src="${basedir}/caTIES_conf/logger.properties" dest="${report.loader.installation.dir}/log4j.properties" />
 		<copy file="${temp.caties.dir}/caTIES_conf/build.xml" todir="${report.loader.installation.dir}" overwrite="true" />
 		<copy file="./catissuecore-properties/caTissueCore_Properties.xml" todir="${report.loader.installation.dir}/caTIES_conf" overwrite="true" />		
 		<copy file="${temp.caties.dir}/caties.jar" todir="${report.loader.installation.dir}" overwrite="true" />	
@@ -348,7 +348,7 @@
 		<copy file="${temp.caties.dir}/caTIES_conf/caTIES.properties" todir="${concept.code.installation.dir}/caTIES_conf" overwrite="true" />
 		<copy file="${temp.caties.dir}/caTIES_conf/remoteService.xml" todir="${concept.code.installation.dir}/caTIES_conf" overwrite="true" />
 		<copy file="${temp.caties.dir}/caTIES_conf/build.xml" todir="${concept.code.installation.dir}" overwrite="true" />
-		<copy file="${basedir}/caTIES_conf/logger.properties" todir="${concept.code.installation.dir}" overwrite="true" />
+		<copyfile src="${basedir}/caTIES_conf/logger.properties" dest="${concept.code.installation.dir}/log4j.properties" />
 		<copy file="${temp.caties.dir}/caties.jar" todir="${concept.code.installation.dir}" overwrite="true" />	
 		<unzip src="gate.zip" dest="${concept.code.installation.dir}/gate" /> 
 		<replace file="${concept.code.installation.dir}/gate/gate_3_1/application/plugins/caTIES/creole.xml">
@@ -392,7 +392,7 @@
 		</copy>
 		<copy file="${temp.caties.dir}/caTIES_conf/caTIES.properties" todir="${deidentifier.installation.dir}/caTIES_conf" overwrite="true" />
 		<copy file="${temp.caties.dir}/caTIES_conf/remoteService.xml" todir="${deidentifier.installation.dir}/caTIES_conf" overwrite="true" />
-		<copy file="${basedir}/caTIES_conf/logger.properties" todir="${deidentifier.installation.dir}" overwrite="true" />
+		<copyfile src="${basedir}/caTIES_conf/logger.properties" dest="${deidentifier.installation.dir}/log4j.properties" />
 		<copy file="${temp.caties.dir}/caTIES_conf/build.xml" todir="${deidentifier.installation.dir}" overwrite="true" />
 		<copy file="${temp.caties.dir}/caties.jar" todir="${deidentifier.installation.dir}" overwrite="true" />	
 	</target>
