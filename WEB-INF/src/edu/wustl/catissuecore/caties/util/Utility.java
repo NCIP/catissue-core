@@ -49,12 +49,11 @@ public class Utility
 	public static void init()throws Exception
 	{
 		// Initialization methods
-		//Variables.applicationHome = System.getProperty("user.dir");
-		//Logger.out = org.apache.log4j.Logger.getLogger("");
-		// Configuring common logger
-		LoggerConfig.configureLogger(CaTIESConstants.LOGGER_GENERAL);
+		String appHome = System.getProperty("user.dir");
+		
 		// Configuring logger properties
-		PropertyConfigurator.configure(CommonServiceLocator.getInstance().getAppHome() + File.separator+"logger.properties");
+		LoggerConfig.configureLogger(appHome);
+		
 		// initializing caties property configurator
 		CaTIESProperties.initBundle("caTIES");
 	}
