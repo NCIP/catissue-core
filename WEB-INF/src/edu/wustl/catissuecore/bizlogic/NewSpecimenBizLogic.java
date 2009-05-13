@@ -1914,12 +1914,17 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 					+ specimen.getId();
 				collStatusList = dao.executeQuery(collStatusHQL);
 				//cp = getActivityStatusOfCollectionProtocol(dao, scgId);
-				Long colpId = (Long)specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getId();
-				String activityStatus = specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getActivityStatus();
-				cp.setId(colpId);
-				cp.setActivityStatus(activityStatus);
+				
+				if(scgId != null)
+				{
+					AbstractSpecimenCollectionGroup specimenCollectionGroup=(AbstractSpecimenCollectionGroup)dao.retrieveById("edu.wustl.catissuecore.domain.SpecimenCollectionGroup", scgId);
 
-
+					Long colpId = (Long)specimenCollectionGroup.getCollectionProtocolRegistration().getCollectionProtocol().getId();
+					String activityStatus = specimenCollectionGroup.getCollectionProtocolRegistration().getCollectionProtocol().getActivityStatus();
+					cp.setId(colpId);
+					cp.setActivityStatus(activityStatus);
+					
+				}
 				String collStatus = null;
 				if (!collStatusList.isEmpty())
 				{
@@ -2863,14 +2868,24 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	public void validateIfCPisClosed(Specimen specimenDO, Specimen newSpecimen, DAO dao)
 			throws BizLogicException
 	{
+		try
+		{
 		String lineage = specimenDO.getLineage();
 		Long scgId = newSpecimen.getSpecimenCollectionGroup().getId();
 		CollectionProtocol cp = new CollectionProtocol();
 		//cp = getActivityStatusOfCollectionProtocol(dao, scgId);
-		Long colpId = (Long)newSpecimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getId();
-		String activityStatus = newSpecimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getActivityStatus();
-		cp.setId(colpId);
-		cp.setActivityStatus(activityStatus);
+		
+		AbstractSpecimenCollectionGroup specimenCollectionGroup=(AbstractSpecimenCollectionGroup)dao.retrieveById("edu.wustl.catissuecore.domain.SpecimenCollectionGroup", scgId);
+		String activityStatus = "";
+		//if(specimenCollectionGroup instanceof SpecimenCollectionGroup)
+		//{
+
+			Long colpId = (Long)specimenCollectionGroup.getCollectionProtocolRegistration().getCollectionProtocol().getId();
+			activityStatus = specimenCollectionGroup.getCollectionProtocolRegistration().getCollectionProtocol().getActivityStatus();
+
+			cp.setId(colpId);
+			cp.setActivityStatus(activityStatus);
+		//}
 		//String activityStatus = cp.getActivityStatus();
 		String oldCollectionStatus = specimenDO.getCollectionStatus();
 		String newCollectionStatus = newSpecimen.getCollectionStatus();
@@ -2880,6 +2895,11 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			{
 				checkStatus(dao, cp, "Collection Protocol");
 			}
+		}
+		}
+		catch(DAOException exp)
+		{
+			throw getBizLogicException(exp, "dao.error", "");
 		}
 	}
 	//Bug 11481 E	

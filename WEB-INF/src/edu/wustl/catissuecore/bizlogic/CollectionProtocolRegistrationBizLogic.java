@@ -1456,7 +1456,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 						logger.debug("Unique Constraint Violated: " + errMsg);
 
 						ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
-						throw new BizLogicException(errorKey,new Exception() ,"CollectionProtocolBizLogic.java :"+errMsg);
+						throw new BizLogicException(errorKey,null ,"CollectionProtocolBizLogic.java :"+errMsg);
 					}
 					else
 					{
@@ -1522,7 +1522,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 					errMsg = new DefaultExceptionFormatter().getErrorMessage("Err.ConstraintViolation", arguments);
 					logger.debug("Unique Constraint Violated: " + errMsg);
 					ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
-					throw new BizLogicException(errorKey,new Exception() ,"CollectionProtocolBizLogic.java :"+errMsg);
+					throw new BizLogicException(errorKey,null ,"CollectionProtocolBizLogic.java :"+errMsg);
 				}
 				else
 				{

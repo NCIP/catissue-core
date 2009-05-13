@@ -791,7 +791,6 @@ public class AliquotAction extends SecureAction
 	private void populateParentSpecimenData(AliquotForm form, Specimen specimen, IBizLogic bizLogic) throws ApplicationException
 	{
 		//SpecimenCharacteristics chars= null;
-		Long cpID=null;
 		form.setClassName(specimen.getClassName());
 		form.setType(specimen.getSpecimenType());
 		SpecimenCharacteristics chars = specimen.getSpecimenCharacteristics();
@@ -807,20 +806,20 @@ public class AliquotAction extends SecureAction
 		 * For retrive specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getId(),
 		 * fired hql.
 		 */
-		String colProtHql = "select scg.collectionProtocolRegistration.collectionProtocol"+
+		String hql = "select scg.id "+
 		" from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg," +
 		" edu.wustl.catissuecore.domain.Specimen as spec " +
 		" where spec.specimenCollectionGroup.id=scg.id and spec.id="+specimen.getId();
 
-		List collectionProtocolList = AppUtility.executeQuery(colProtHql);
-		Object obj = (Object) collectionProtocolList.get(0);
-		if(obj!=null)
+		List scgIdList = AppUtility.executeQuery(hql);
+		Object scgId = (Object) scgIdList.get(0);
+		/*if(obj!=null)
 		{
 			CollectionProtocol collectionProtocol = (CollectionProtocol) obj;
 			cpID = collectionProtocol.getId();
-		}
+		}*/
 		//cpID = (Long)bizLogic.retrieveAttribute(Specimen.class.getName(), specimen.getId(), "specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id" );
-		form.setSpCollectionGroupId(cpID);
+		form.setSpCollectionGroupId(Long.valueOf(scgId.toString()));
 		if (specimen instanceof MolecularSpecimen)
 		{
 			String concentration = Utility.toString(((MolecularSpecimen) specimen).getConcentrationInMicrogramPerMicroliter());
