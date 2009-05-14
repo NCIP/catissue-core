@@ -4,12 +4,14 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.logger.LoggerConfig;
 
 public class PrivateToPublicMigrator
 {
 	private Runtime runtime;
 	public static void main(String[] args) 
 	{
+		LoggerConfig.configureLogger(System.getProperty("user.dir"));
 		PrivateToPublicMigrator mig=new PrivateToPublicMigrator();
 		mig.init();
 		try {
