@@ -321,17 +321,17 @@ public class MaskUsingDEMetatdata
 	{
 		boolean isTagPresent = false;
 		Collection<TaggedValueInterface> taggedValueCollection = entity.getTaggedValueCollection();
-		System.out.println(taggedValueCollection.size());
+		//System.out.println(taggedValueCollection.size());
 		for (TaggedValueInterface tagValue : taggedValueCollection)
 		{
-			System.out.println(tagValue.getKey());
+			//System.out.println(tagValue.getKey());
 			if (tagValue.getKey().equalsIgnoreCase(tag))
 			{
 				isTagPresent = true;
 				break;
 			}
 		}		
-		System.out.println("\nisTagPresent:"+isTagPresent);
+		//System.out.println("\nisTagPresent:"+isTagPresent);
 		
 		return isTagPresent;
 	}
