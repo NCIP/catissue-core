@@ -14,7 +14,10 @@ import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.common.dynamicextensions.entitymanager.EntityManager;
 import edu.common.dynamicextensions.entitymanager.EntityManagerInterface;
-import edu.wustl.common.util.global.Constants;
+import edu.common.dynamicextensions.domaininterface.AbstractMetadataInterface;
+import edu.common.dynamicextensions.domaininterface.TaggedValueInterface;
+import edu.wustl.catissuecore.util.global.Constants;
+
 
 
 public class MaskUsingDEMetatdata
@@ -57,19 +60,23 @@ public class MaskUsingDEMetatdata
             {
                 Collection<AttributeInterface> attributeCollection = entity.getAttributeCollection();
                 for (AttributeInterface attribute: attributeCollection)
-                {
-                	if(attribute.getIsIdentified()!=null && attribute.getIsIdentified()==true && attribute.getAttributeTypeInformation().getDataType().equalsIgnoreCase("String"))
+                {                	
+                	// updated code for derived attributes
+                	if(!isTagPresent(attribute, "Derived"))    //Please verify the tag value used to identify whether the attributes is inherited or not
                 	{
-      					maskString(attribute.getColumnProperties().getName(),entity.getTableProperties().getName(), session);
-					}
-					else if(attribute.getAttributeTypeInformation().getDataType().equalsIgnoreCase("Date"))
-					{
-						maskDate(attribute.getColumnProperties().getName(),entity.getTableProperties().getName(), session);
-					}
-					else if(isCommentFiled(attribute))
-					{
-						maskString(attribute.getColumnProperties().getName(),entity.getTableProperties().getName(), session);
-					}
+	                	if(attribute.getIsIdentified()!=null && attribute.getIsIdentified()==true && attribute.getAttributeTypeInformation().getDataType().equalsIgnoreCase("String"))
+	                	{
+	      					maskString(attribute.getColumnProperties().getName(),entity.getTableProperties().getName(), session);
+						}
+						else if(attribute.getAttributeTypeInformation().getDataType().equalsIgnoreCase("Date"))
+						{
+							maskDate(attribute.getColumnProperties().getName(),entity.getTableProperties().getName(), session);
+						}
+						else if(isCommentFiled(attribute))
+						{
+							maskString(attribute.getColumnProperties().getName(),entity.getTableProperties().getName(), session);
+						}
+                	}
                 }
             }
 			
@@ -116,7 +123,7 @@ public class MaskUsingDEMetatdata
 		}
 		catch (Exception e) 
 		{
-			System.out.println(e);
+			e.printStackTrace();
 		}
 	}
 	
@@ -302,5 +309,30 @@ public class MaskUsingDEMetatdata
 		
 		sqlString="ALTER TABLE CATISSUE_AUDIT_EVENT CHECK CONSTRAINT ALL";
 		executeQuery(sqlString, session);
+	}
+	
+	/**
+	 * updated code for derived attributes
+	 * @param entity
+	 * @param tag
+	 * @return
+	 */
+	private boolean isTagPresent(AbstractMetadataInterface entity, String tag)
+	{
+		boolean isTagPresent = false;
+		Collection<TaggedValueInterface> taggedValueCollection = entity.getTaggedValueCollection();
+		System.out.println(taggedValueCollection.size());
+		for (TaggedValueInterface tagValue : taggedValueCollection)
+		{
+			System.out.println(tagValue.getKey());
+			if (tagValue.getKey().equalsIgnoreCase(tag))
+			{
+				isTagPresent = true;
+				break;
+			}
+		}		
+		System.out.println("\nisTagPresent:"+isTagPresent);
+		
+		return isTagPresent;
 	}
 }
