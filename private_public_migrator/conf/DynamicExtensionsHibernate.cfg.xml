@@ -62,43 +62,44 @@
         <!-- List of all Mapping files -->
         
  		<mapping resource="edu/common/dynamicextensions/hbm/AbstractMetadata.hbm.xml"/>
- 		<mapping resource="edu/common/dynamicextensions/hbm/AttributeTypeInformation.hbm.xml"/>
+        <mapping resource="edu/common/dynamicextensions/hbm/AttributeTypeInformation.hbm.xml"/>
         <mapping resource="edu/common/dynamicextensions/hbm/PermissibleValue.hbm.xml"/>
-        
+
         <mapping resource="edu/common/dynamicextensions/hbm/Role.hbm.xml"/>
         <mapping resource="edu/common/dynamicextensions/hbm/SemanticProperty.hbm.xml"/>
         <mapping resource="edu/common/dynamicextensions/hbm/DataElement.hbm.xml"/>
-        
-		<mapping resource="edu/common/dynamicextensions/hbm/TaggedValue.hbm.xml"/>
-	    <mapping resource="edu/common/dynamicextensions/hbm/AttributeRecord.hbm.xml"/>
-	    <mapping resource="edu/common/dynamicextensions/hbm/CollectionAttributeRecordValue.hbm.xml"/>
-	                 
+
+        <mapping resource="edu/common/dynamicextensions/hbm/TaggedValue.hbm.xml"/>
+        <mapping resource="edu/common/dynamicextensions/hbm/AttributeRecord.hbm.xml"/>
+        <mapping resource="edu/common/dynamicextensions/hbm/CollectionAttributeRecordValue.hbm.xml"/>
+
         <mapping resource="edu/common/dynamicextensions/hbm/AssociationDisplayAttribute.hbm.xml"/>
         <mapping resource="edu/common/dynamicextensions/hbm/databaseproperties/DatabaseProperties.hbm.xml"/>
         <mapping resource="edu/common/dynamicextensions/hbm/CaDSRValueDomainInfo.hbm.xml"/>
-              
+
         <mapping resource="edu/common/dynamicextensions/hbm/FileAttributeRecordValue.hbm.xml"/>
         <mapping resource="edu/common/dynamicextensions/hbm/FileExtension.hbm.xml"/>
-        <mapping resource="edu/common/dynamicextensions/hbm/ObjectAttributeRecordValue.hbm.xml"/> 
-              
+        <mapping resource="edu/common/dynamicextensions/hbm/ObjectAttributeRecordValue.hbm.xml"/>
+
         <mapping resource="edu/common/dynamicextensions/hbm/userinterface/DEContainer.hbm.xml"/>
         <mapping resource="edu/common/dynamicextensions/hbm/userinterface/Control.hbm.xml"/>
         <mapping resource="edu/common/dynamicextensions/hbm/userinterface/View.hbm.xml"/>
-                        
+
         <mapping resource="edu/common/dynamicextensions/hbm/validationrules/Rule.hbm.xml"/>
         <mapping resource="edu/common/dynamicextensions/hbm/validationrules/RuleParameter.hbm.xml"/>
         <mapping resource="edu/common/dynamicextensions/hbm/EntityManagerHQL.hbm.xml"/>
 
-		<mapping resource="edu/common/dynamicextensions/hbm/integration/EntityMap.hbm.xml"/>
+        <mapping resource="edu/common/dynamicextensions/hbm/integration/EntityMap.hbm.xml"/>
         <mapping resource="edu/common/dynamicextensions/hbm/integration/EntityMapCondition.hbm.xml"/>
         <mapping resource="edu/common/dynamicextensions/hbm/integration/FormContext.hbm.xml"/>
         <mapping resource="edu/common/dynamicextensions/hbm/integration/EntityMapRecord.hbm.xml"/>
-        
+
         <mapping resource="edu/common/dynamicextensions/hbm/IdGenerator.hbm.xml"/>
         <mapping resource="edu/common/dynamicextensions/hbm/Path.hbm.xml"/>
         <mapping resource="edu/common/dynamicextensions/hbm/PathAssociationRelation.hbm.xml"/>
-		<mapping resource="edu/common/dynamicextensions/hbm/DESQLAudit.hbm.xml"/>
-      	  <mapping resource="edu/common/dynamicextensions/hbm/FormControlNotes.hbm.xml"/>
+	    <mapping resource="edu/common/dynamicextensions/hbm/DESQLAudit.hbm.xml"/>
+	    <mapping resource="edu/common/dynamicextensions/hbm/FormControlNotes.hbm.xml"/>
+	    <mapping resource="edu/common/dynamicextensions/hbm/databaseproperties/ConstraintKeyProperties.hbm.xml"/>
    
     </session-factory>
     

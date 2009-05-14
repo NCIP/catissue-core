@@ -76,8 +76,9 @@
 		<mapping resource="edu/wustl/catissuecore/hbm/ContainerType.hbm.xml"/>
 		<mapping resource="edu/wustl/common/hbm/CDEImpl.hbm.xml"/>
 		<mapping resource="edu/wustl/common/hbm/PermissibleValueImpl.hbm.xml"/>
-		<mapping resource="edu/wustl/common/hbm/QueryColumnData.hbm.xml"/>
-		<mapping resource="edu/wustl/common/hbm/QueryTableData.hbm.xml"/>
+		
+		<mapping resource="edu/wustl/simplequery/hbm/QueryColumnData.hbm.xml"/>
+		<mapping resource="edu/wustl/simplequery/hbm/QueryTableData.hbm.xml"/>
 		
 		<mapping resource="edu/wustl/catissuecore/hbm/OrderItem.hbm.xml" />
 		<mapping resource="edu/wustl/catissuecore/hbm/OrderDetails.hbm.xml" />	
@@ -86,11 +87,37 @@
 		<mapping resource="edu/wustl/common/hbm/AbstractCategorialAttribute.hbm.xml"/>
 		<mapping resource="edu/wustl/common/hbm/AbstractCategorialClass.hbm.xml"/>
 		<mapping resource="edu/wustl/common/hbm/AbstractCategory.hbm.xml"/>
+
+		<mapping resource="edu/wustl/common/hbm/BaseExpression.hbm.xml" />
+		<mapping resource="edu/wustl/common/hbm/Condition.hbm.xml" />
+		<mapping resource="edu/wustl/common/hbm/Connector.hbm.xml" />
+		<mapping resource="edu/wustl/common/hbm/Constraints.hbm.xml" />
+		<mapping resource="edu/wustl/common/hbm/Expression.hbm.xml" />
+		<mapping resource="edu/wustl/common/hbm/ExpressionOperand.hbm.xml" />
+		<mapping resource="edu/wustl/common/hbm/IOperand.hbm.xml" />
+		<mapping resource="edu/wustl/common/hbm/JoinGraph.hbm.xml" />
+		<mapping resource="edu/wustl/common/hbm/ModelAssociation.hbm.xml" />
+		<mapping resource="edu/wustl/common/hbm/OutputAttribute.hbm.xml" />
+		<mapping resource="edu/wustl/common/hbm/Query.hbm.xml" />
+		<mapping resource="edu/wustl/common/hbm/QueryEntity.hbm.xml" />
+		<mapping resource="edu/wustl/common/hbm/QueryHQL.hbm.xml" />
+		<mapping resource="edu/wustl/common/hbm/Term.hbm.xml" />
+		<mapping resource="edu/wustl/common/hbm/ArithmeticOperand.hbm.xml" />
+		<mapping resource="edu/wustl/common/hbm/CustomFormula.hbm.xml" />
+		<mapping resource="edu/wustl/common/hbm/OutputTerm.hbm.xml" />
+		<mapping resource="edu/wustl/common/hbm/PersistentGraph.hbm.xml" />
+		<mapping resource="edu/wustl/common/hbm/Parameter.hbm.xml" />
+
+	
 		
 		<mapping resource="edu/wustl/catissuecore/hbm/ClinicalStudyRegistration.hbm.xml"/>		
 		<mapping resource="edu/wustl/catissuecore/hbm/ClinicalStudyEvent.hbm.xml"/>		
 		<mapping resource="edu/wustl/catissuecore/hbm/ClinicalStudyEventEntry.hbm.xml"/>	
 		<mapping resource="edu/wustl/catissuecore/hbm/AbstractPosition.hbm.xml"/>		
+		
+		<!-- Shipping Tracking Merge Himanshu-->
+		<mapping resource="edu/wustl/catissuecore/hbm/shippingtracking/BaseShipment.hbm.xml"/>
+		<!-- shipping tracking merge ends -->		
 	
     </session-factory>
     
