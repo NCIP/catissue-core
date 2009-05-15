@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationException;
+import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.wustl.catissuecore.util.global.Constants;
 
 
@@ -89,7 +91,18 @@ public class UpdateMetadata
 				deletePermissibleValue();
 				addPermissibleValue();
 				cleanUpMetadata();
+				UpdateMetadataTagPath.readTaggedValues("taggedvalues.xml");
 			}
+		}
+		catch (DynamicExtensionsApplicationException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (DynamicExtensionsSystemException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		finally
 		{
