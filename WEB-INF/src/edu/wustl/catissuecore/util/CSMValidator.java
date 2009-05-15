@@ -1,12 +1,17 @@
 package edu.wustl.catissuecore.util;
 
 import java.util.Collection;
+import java.util.List;
 
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.querysuite.QueryModuleConstants;
+import edu.wustl.catissuecore.util.querysuite.TemporalColumnMetada;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.querysuite.queryobject.TermType;
+import edu.wustl.common.querysuite.queryobject.YMInterval;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.daofactory.DAOConfigFactory;
@@ -32,30 +37,32 @@ public class CSMValidator implements IValidator {
 		DAO dao = null;
 		User user = null;
 		Collection<CollectionProtocol> cpCollection = null;
-		try 
-		{
-			PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(sessionDataBean.getUserName());
-			dao = DAOConfigFactory.getInstance().getDAOFactory(Constants.APPLICATION_NAME).getDAO();
-			dao.openSession(sessionDataBean);
-			
-			user = (User) dao.retrieveById(User.class.getName(), sessionDataBean.getUserId());
-			cpCollection = user.getAssignedProtocolCollection();
-			
-			if (cpCollection != null && !cpCollection.isEmpty())
-	        {
-				hasPrivilege = checkePriviliges(sessionDataBean, privilegeCache,
-						cpCollection);
-	        } 
-			else
-	        {
-	        	hasPrivilege = edu.wustl.catissuecore.util.global.AppUtility.checkForAllCurrentAndFutureCPs(Permissions.REGISTRATION, sessionDataBean, null);
-	        }
-			dao.closeSession();
-		} 
-		catch (Exception e1) 
-		{
-			logger.debug(e1.getMessage(), e1);
-		}
+
+			try 
+			{
+				PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(sessionDataBean.getUserName());
+				dao = DAOConfigFactory.getInstance().getDAOFactory(Constants.APPLICATION_NAME).getDAO();
+				dao.openSession(sessionDataBean);
+				
+				user = (User) dao.retrieveById(User.class.getName(), sessionDataBean.getUserId());
+				cpCollection = user.getAssignedProtocolCollection();
+				
+				if (cpCollection != null && !cpCollection.isEmpty())
+		        {
+					hasPrivilege = checkePriviliges(sessionDataBean, privilegeCache,
+							cpCollection);
+		        } 
+				else
+		        {
+		        	hasPrivilege = edu.wustl.catissuecore.util.global.AppUtility.checkForAllCurrentAndFutureCPs(Permissions.REGISTRATION, sessionDataBean, null);
+		        }
+				dao.closeSession();
+			} 
+			catch (Exception e1) 
+			{
+				logger.debug(e1.getMessage(), e1);
+			}
+
 		return hasPrivilege;
 	}
 
@@ -89,7 +96,7 @@ public class CSMValidator implements IValidator {
 		return hasPrivilege;
 	} 
 
-	/*public boolean hasPrivilegeToViewTemporalColumn(List tqColumnMetadataList,
+	public boolean hasPrivilegeToViewTemporalColumn(List tqColumnMetadataList,
 			List<String> row,boolean isAuthorizedUser) 
 	{
 		boolean removeRow = false;
@@ -133,6 +140,6 @@ public class CSMValidator implements IValidator {
 			}
 		}
 		return removeRow;
-	}*/
+	}
 	
 }
