@@ -1,18 +1,17 @@
+
 package edu.wustl.catissuecore.bizlogic;
 
-import java.security.Permissions;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import javax.servlet.http.HttpServletRequest;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
 
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
@@ -32,7 +31,9 @@ import edu.wustl.security.privilege.PrivilegeManager;
  */
 public class CatissueDefaultBizLogic extends DefaultBizLogic
 {
+
 	private transient Logger logger = Logger.getCommonLogger(CatissueDefaultBizLogic.class);
+
 	/**
 	 * @see edu.wustl.common.bizlogic.IBizLogic#isAuthorized
 	 * @param dao The dao object.
@@ -42,8 +43,8 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 	 * @throws UserNotAuthorizedException User Not Authorized Exception
 	 * @ generic DAOException
 	 */
-	public boolean isAuthorized(DAO dao, Object domainObject,
-			SessionDataBean sessionDataBean) throws BizLogicException
+	public boolean isAuthorized(DAO dao, Object domainObject, SessionDataBean sessionDataBean)
+			throws BizLogicException
 	{
 		boolean isAuthorized = false;
 		String protectionElementName = null;
@@ -74,58 +75,70 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 			}
 		}
 		//Get the required privilege name which we would like to check for the logged in user.
-		String privilegeName=null;
+		String privilegeName = null;
 		try
 		{
-		PrivilegeCache privilegeCache=null;
-		//Checking whether the logged in user has the required privilege on the given protection element
+			PrivilegeCache privilegeCache = null;
+			//Checking whether the logged in user has the required privilege on the given protection element
 
-		if (!isAuthorized)
-		{
-			privilegeName = getPrivilegeName(domainObject);
-			privilegeCache = getPrivilegeCache(sessionDataBean);
-			if (!protectionElementName.equalsIgnoreCase("ADMIN_PROTECTION_ELEMENT"))
+			if (!isAuthorized)
 			{
-				String[] prArray = protectionElementName.split("_");
-				String baseObjectId = prArray[0];
-				String objId = "";
-				for (int i = 1; i < prArray.length; i++)
+				privilegeName = getPrivilegeName(domainObject);
+				privilegeCache = getPrivilegeCache(sessionDataBean);
+				if (!protectionElementName.equalsIgnoreCase("ADMIN_PROTECTION_ELEMENT"))
 				{
-					objId = baseObjectId + "_" + prArray[i];
-					isAuthorized = privilegeCache.hasPrivilege(objId, privilegeName);
-					if (!isAuthorized)
+					String[] prArray = protectionElementName.split("_");
+					String baseObjectId = prArray[0];
+					String objId = "";
+					for (int i = 1; i < prArray.length; i++)
 					{
-						break;
+						objId = baseObjectId + "_" + prArray[i];
+						isAuthorized = privilegeCache.hasPrivilege(objId, privilegeName);
+						if (!isAuthorized)
+						{
+							break;
+						}
 					}
 				}
+				else
+				{
+					isAuthorized = privilegeCache
+							.hasPrivilege(protectionElementName, privilegeName);
+				}
 			}
-			else
+			if (!isAuthorized)
 			{
-				isAuthorized = privilegeCache.hasPrivilege(protectionElementName, privilegeName);
+				BizLogicException exception = AppUtility.getUserNotAuthorizedException(
+						privilegeName, protectionElementName,domainObject.getClass().getSimpleName());
+				throw exception;
 			}
 		}
-		if (!isAuthorized)
-		{
-			UserNotAuthorizedException exception = AppUtility.getUserNotAuthorizedException(privilegeName, protectionElementName);
-			exception.setPrivilegeName(privilegeName);
-			if (protectionElementName != null
-					&& (protectionElementName.contains("Site") || protectionElementName
-							.contains("CollectionProtocol")))
-			{
-				String[] arr = protectionElementName.split("_");
-				String[] nameArr = arr[0].split("\\.");
-				String baseObject = nameArr[nameArr.length - 1];
-				exception.setBaseObject(baseObject);
-				exception.setBaseObjectIdentifier(arr[1]);
-			}
-			throw getBizLogicException(exception, exception.getErrorKeyAsString(), exception.getLogMessage());
-		}
-		}catch(SMException exception)
+		catch (SMException exception)
 		{
 			logger.debug(exception.getMessage(), exception);
-			throw getBizLogicException(exception, exception.getErrorKeyAsString(), exception.getLogMessage());
+			throw getBizLogicException(exception, exception.getErrorKeyAsString(), exception
+					.getLogMessage());
 		}
+		
 		return isAuthorized;
+	}
+
+	/**
+	* @param name
+	* @return
+	*/
+	public String getActualClassName(String name)
+	{
+		if (name != null && name.trim().length() != 0)
+		{
+			String splitter = "\\.";
+			String[] arr = name.split(splitter);
+			if (arr != null && arr.length != 0)
+			{
+				return arr[arr.length - 1];
+			}
+		}
+		return name;
 	}
 
 	/**
@@ -151,63 +164,63 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 			jdbcDAO = DAOConfigFactory.getInstance().getDAOFactory(applicationName).getJDBCDAO();
 			jdbcDAO.openSession(null);
 		}
-		catch(DAOException daoExp)
+		catch (DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 		return jdbcDAO;
 	}
-	
+
 	protected void closeJDBCSession(JDBCDAO jdbcDAO) throws BizLogicException
 	{
 		try
 		{
 			jdbcDAO.closeSession();
 		}
-		catch(DAOException daoExp)
+		catch (DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
-	
+
 	}
-	
+
 	protected DAO openDAOSession(SessionDataBean sessionDataBean) throws BizLogicException
 	{
-			DAO dao = null;
-			try
-			{
-				String applicationName = CommonServiceLocator.getInstance().getAppName();
-				dao = DAOConfigFactory.getInstance().getDAOFactory(applicationName).getDAO();
-				dao.openSession(sessionDataBean);
-			}
-			catch(DAOException daoExp)
-			{
-				logger.debug(daoExp.getMessage(), daoExp);
-				throw getBizLogicException(daoExp, "dao.error", "");
-			}
-			return dao;
+		DAO dao = null;
+		try
+		{
+			String applicationName = CommonServiceLocator.getInstance().getAppName();
+			dao = DAOConfigFactory.getInstance().getDAOFactory(applicationName).getDAO();
+			dao.openSession(sessionDataBean);
+		}
+		catch (DAOException daoExp)
+		{
+			logger.debug(daoExp.getMessage(), daoExp);
+			throw getBizLogicException(daoExp, "dao.error", "");
+		}
+		return dao;
 	}
-	
+
 	protected void closeDAOSession(DAO dao) throws BizLogicException
 	{
 		try
 		{
 			dao.closeSession();
 		}
-		catch(DAOException daoExp)
+		catch (DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
-		
+
 	}
-	
-	
-	public boolean hasPrivilegeToView(String objName, Long identifier, SessionDataBean sessionDataBean)throws BizLogicException
+
+	public boolean hasPrivilegeToView(String objName, Long identifier,
+			SessionDataBean sessionDataBean) throws BizLogicException
 	{
-		if(sessionDataBean != null && sessionDataBean.isAdmin())
+		if (sessionDataBean != null && sessionDataBean.isAdmin())
 		{
 			return true;
 		}
@@ -215,52 +228,60 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 		List cpIdsList = new ArrayList();
 		Set<Long> cpIds = new HashSet<Long>();
 
-		cpIdsList = edu.wustl.query.util.global.Utility.getCPIdsList(objName, identifier, sessionDataBean);
+		cpIdsList = edu.wustl.query.util.global.Utility.getCPIdsList(objName, identifier,
+				sessionDataBean);
 
-		if(cpIdsList == null)
+		if (cpIdsList == null)
 		{
 			return false;
 		}
 
-		for(Object cpId : cpIdsList)
+		for (Object cpId : cpIdsList)
 		{
 			cpId = cpIdsList.get(0);
 			cpIds.add(Long.valueOf(cpId.toString()));
 		}
 		try
 		{
-			PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(sessionDataBean.getUserName());
+			PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(
+					sessionDataBean.getUserName());
 
 			StringBuffer sb = new StringBuffer();
-			sb.append(edu.wustl.catissuecore.util.global.Constants.COLLECTION_PROTOCOL_CLASS_NAME).append("_");
+			sb.append(edu.wustl.catissuecore.util.global.Constants.COLLECTION_PROTOCOL_CLASS_NAME)
+					.append("_");
 			boolean isPresent = false;
 
 			for (Long cpId : cpIds)
 			{
 				String privilegeName = getReadDeniedPrivilegeName();
 
-				String [] privilegeNames = privilegeName.split(",");
-				if(privilegeNames.length > 1)
-				{	
-					if((privilegeCache.hasPrivilege(sb.toString()+cpId.toString(), privilegeNames[0])))
+				String[] privilegeNames = privilegeName.split(",");
+				if (privilegeNames.length > 1)
+				{
+					if ((privilegeCache.hasPrivilege(sb.toString() + cpId.toString(),
+							privilegeNames[0])))
 					{
-						isPresent = privilegeCache.hasPrivilege(sb.toString()+cpId.toString(), privilegeNames[1]);
+						isPresent = privilegeCache.hasPrivilege(sb.toString() + cpId.toString(),
+								privilegeNames[1]);
 						isPresent = !isPresent;
 					}
 				}
 				else
 				{
-					isPresent = privilegeCache.hasPrivilege(sb.toString()+cpId.toString(), privilegeName);
+					isPresent = privilegeCache.hasPrivilege(sb.toString() + cpId.toString(),
+							privilegeName);
 				}
 
-				if (privilegeName != null && privilegeName.equalsIgnoreCase(edu.wustl.security.global.Permissions.READ_DENIED))
+				if (privilegeName != null
+						&& privilegeName
+								.equalsIgnoreCase(edu.wustl.security.global.Permissions.READ_DENIED))
 				{
 					isPresent = !isPresent;
 				}
 				if (!isPresent)
 				{
 					return false;
-				} 
+				}
 			}
 
 		}
@@ -270,6 +291,5 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 		}
 		return true;
 	}
-	
-	 
+
 }

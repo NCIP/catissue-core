@@ -1126,18 +1126,18 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 			protectionElementName = getObjectId(dao, domainObject);
 			isAuthorized = AppUtility.checkPrivilegeOnCP(domainObject, protectionElementName, privilegeName, sessionDataBean);
 		}
-
-		if (!isAuthorized)
-        {
-			throw AppUtility.getUserNotAuthorizedException(privilegeName, protectionElementName);   //bug 11611 and 11659
-        }
-		return isAuthorized;	
 		}
 		catch(ApplicationException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
+		if (!isAuthorized)
+        {
+			throw AppUtility.getUserNotAuthorizedException(privilegeName, protectionElementName,domainObject.getClass().getSimpleName());   //bug 11611 and 11659
+        }
+		return isAuthorized;	
+		
 
 	}
 
@@ -1172,7 +1172,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 
 			if(!siteIdSet.contains(site.getId()))
 			{
-				throw AppUtility.getUserNotAuthorizedException(Constants.Association, site.getObjectId());
+				throw AppUtility.getUserNotAuthorizedException(Constants.Association, site.getObjectId(),domainObject.getClass().getSimpleName());
 			}	
 		}
 		catch(ApplicationException appExp)
@@ -1206,20 +1206,21 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 				if(!siteIdSet.contains(site.getId()))
 				{
 					//bug 11611 and 11659 start
-					UserNotAuthorizedException ex = AppUtility.getUserNotAuthorizedException(Constants.Association,specimen.getObjectId());//
-					if(ex.getBaseObject()==null)
+					//UserNotAuthorizedException ex = 
+					throw AppUtility.getUserNotAuthorizedException(Constants.Association,specimen.getObjectId(),domainObject.getClass().getSimpleName());
+					/*if(ex.getBaseObject()==null)
 					{
 						ex.setBaseObject("Specimen");
 					}
-					
-					throw getBizLogicException(ex, "dao.error", "");
+					throw getBizLogicException(ex, "dao.error", "");*/
 					//bug 11611 and 11659 end
 				}
 			}
 		} 
 		catch (DAOException e) 
 		{
-			logger.debug(e.getMessage(), e);
+			
+			throw getBizLogicException(e, "dao.error", "");
 		}
 		finally
 		{

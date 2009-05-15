@@ -75,6 +75,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 {
 
 	private transient Logger logger = Logger.getCommonLogger(CollectionProtocolBizLogic.class);
+
 	/**
 	 * Saves the CollectionProtocol object in the database.
 	 * @param obj The CollectionProtocol object to be saved.
@@ -683,7 +684,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		}
 		catch (DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(),daoExp);
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
@@ -742,7 +743,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		}
 		catch (DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(),daoExp);
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
@@ -764,7 +765,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		}
 		catch (DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(),daoExp);
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
@@ -789,7 +790,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		}
 		catch (DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(),daoExp);
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
@@ -799,8 +800,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			throws BizLogicException
 	{
 		Long piID = collectionProtocol.getPrincipalInvestigator().getId();
-		logger
-				.debug("Coordinator Size " + collectionProtocol.getCoordinatorCollection().size());
+		logger.debug("Coordinator Size " + collectionProtocol.getCoordinatorCollection().size());
 		Collection coordinatorColl = new HashSet();
 		try
 		{
@@ -838,7 +838,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		}
 		catch (DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(),daoExp);
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 	}
@@ -1213,7 +1213,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		}
 		catch (DAOException e1)
 		{
-			logger.debug(e1.getMessage(),e1);
+			logger.debug(e1.getMessage(), e1);
 			throw getBizLogicException(e1, "dao.error", "Error while checking Title");
 		}
 		finally
@@ -1361,7 +1361,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		}
 		catch (DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(),daoExp);
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 		finally
@@ -1395,7 +1395,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		}
 		catch (DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(),daoExp);
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 		finally
@@ -1407,7 +1407,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			}
 			catch (DAOException daoExp)
 			{
-				logger.debug(daoExp.getMessage(),daoExp);
+				logger.debug(daoExp.getMessage(), daoExp);
 				throw getBizLogicException(daoExp, "dao.error", "");
 			}
 
@@ -1434,7 +1434,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		}
 		catch (DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(),daoExp);
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 		finally
@@ -1446,7 +1446,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			}
 			catch (DAOException daoExp)
 			{
-				logger.debug(daoExp.getMessage(),daoExp);
+				logger.debug(daoExp.getMessage(), daoExp);
 				throw getBizLogicException(daoExp, "dao.error", "");
 			}
 
@@ -1559,16 +1559,15 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	{
 		String shortTitle = null;
 
-		Object object = retrieveAttribute(CollectionProtocol.class,
-					cpId, Constants.shortTitle);
+		Object object = retrieveAttribute(CollectionProtocol.class, cpId, Constants.shortTitle);
 
-			if (object == null)
-			{
-				throw getBizLogicException(null, "dao.error",
-						"Cannot retrieve Short Title incorrect id " + cpId);
-			}
+		if (object == null)
+		{
+			throw getBizLogicException(null, "dao.error",
+					"Cannot retrieve Short Title incorrect id " + cpId);
+		}
 
-			shortTitle = (String) object;
+		shortTitle = (String) object;
 		return shortTitle;
 	}
 
@@ -1586,25 +1585,18 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 
 		boolean isAuthorized = false;
 
-		try
+		isAuthorized = checkCP(domainObject, sessionDataBean);
+		if (isAuthorized)
 		{
-			isAuthorized = checkCP(domainObject, sessionDataBean);
-			if (isAuthorized)
-			{
-				return true;
-			}
-
-			String privilegeName = getPrivilegeName(domainObject);
-			String protectionElementName = getObjectId(dao, domainObject);
-
-			isAuthorized = AppUtility.returnIsAuthorized(sessionDataBean, privilegeName,
-					protectionElementName);
+			return true;
 		}
-		catch (UserNotAuthorizedException exp)
-		{
-			logger.debug(exp.getMessage(),exp);
-			throw getBizLogicException(exp, "user.not.auth", "");
-		}
+
+		String privilegeName = getPrivilegeName(domainObject);
+		String protectionElementName = getObjectId(dao, domainObject);
+
+		isAuthorized = AppUtility.returnIsAuthorized(sessionDataBean, privilegeName,
+				protectionElementName);
+
 		return isAuthorized;
 	}
 
@@ -1673,7 +1665,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		}
 		catch (DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(),daoExp);
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, "dao.error", "");
 		}
 		finally

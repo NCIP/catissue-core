@@ -898,21 +898,14 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		// This object contains the Participant with which matching participant are to be found and the cutoff value.
 		DefaultLookupParameters params = new DefaultLookupParameters();
 		params.setObject(participant);
-
-		List listOfParticipants = new ArrayList();
 		// getting instance of catissueCoreCacheManager and getting participantMap from cache
 		CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager.getInstance();
-		HashMap participantMap = (HashMap) catissueCoreCacheManager.getObjectFromCache(Constants.MAP_OF_PARTICIPANTS);
-
-		Object participants[] = participantMap.values().toArray();
-		listOfParticipants.addAll(participantMap.values());
-
-		params.setListOfParticipants(listOfParticipants);
-
+		HashMap<String, Participant> participantMap = (HashMap<String,Participant>) catissueCoreCacheManager.getObjectFromCache(Constants.MAP_OF_PARTICIPANTS);
+		//listOfParticipants.addAll(participantMap.values());
+		params.setListOfParticipants(participantMap);
 		//calling thr lookup function which returns the List of ParticipantResuld objects.
 		//ParticipantResult object contains the matching participant and the probablity.
-	List matchingParticipantList = lookupLogic.lookup(params);
-
+		List matchingParticipantList = lookupLogic.lookup(params);
 		return matchingParticipantList;
 
 	}
@@ -1429,7 +1422,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 					if(cpIdSet.contains(cpId))
 					{
 						//bug 11611 and 11659
-						throw AppUtility.getUserNotAuthorizedException(privilegeName, protectionElementName);
+						throw AppUtility.getUserNotAuthorizedException(privilegeName, protectionElementName,domainObject.getClass().getSimpleName());
 					}
 					isAuthorized = AppUtility.checkForAllCurrentAndFutureCPs(privilegeName, sessionDataBean, protectionElementNames[1]);
 				}
@@ -1437,7 +1430,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 			if (!isAuthorized)
 			{
 				//bug 11611 and 11659
-				throw AppUtility.getUserNotAuthorizedException(privilegeName, protectionElementName);    
+				throw AppUtility.getUserNotAuthorizedException(privilegeName, protectionElementName,domainObject.getClass().getSimpleName());    
 			}
 		} catch (SMException e1) {
 			logger.debug(e1.getMessage(), e1);

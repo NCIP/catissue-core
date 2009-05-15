@@ -25,6 +25,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
@@ -43,7 +44,7 @@ public class SubmitCPAction extends BaseAction
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		HashMap<String, String> resultMap = new HashMap<String, String>();
+		//HashMap<String, String> resultMap = new HashMap<String, String>();
 		String target = Constants.SUCCESS;
 		try
 		{
@@ -75,15 +76,15 @@ public class SubmitCPAction extends BaseAction
 					"object.add.successOnly", "Collection Protocol"));
 			saveMessages(request, actionMessages);
 		}
-		catch(Exception ex)
+		catch(ApplicationException ex)
 		{
 			logger.debug(ex.getMessage(), ex);
 			target = Constants.FAILURE;
-		 	String errorMsg = ex.getMessage();
-			resultMap.put(Constants.ERROR_DETAIL, errorMsg);
+		 	//String errorMsg = ex.getFormattedMessage();
+			//resultMap.put(Constants.ERROR_DETAIL, errorMsg);
 			ActionErrors actionErrors = new ActionErrors();
 			actionErrors.add(actionErrors.GLOBAL_MESSAGE, new ActionError(
-					"errors.item",ex.getMessage()));
+					"errors.item",ex.toMsgValuesArray()));
 			SessionDataBean sessionDataBean = getSessionData(request);
 	        String userName = "";
             if(sessionDataBean != null)

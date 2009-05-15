@@ -100,6 +100,7 @@ import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.PagenatedResultData;
 import edu.wustl.common.util.Utility;
+import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.QuerySessionData;
 import edu.wustl.common.util.global.Status;
@@ -2212,13 +2213,13 @@ public class AppUtility
 		collectionProtocolDTO.setRowIdBeanMap(rowIdBeanMap);
 		return collectionProtocolDTO;
 	}
-
+/*
 	//bug 11611 and 11659 start
-	/**
+	*//**
 	 * @param privilegeName - privilege name
 	 * @param protectionElementName - protection element name
 	 * @return UserNotAuthorizedException - exception if user is not authorized
-	 */
+	 *//*
 	public static UserNotAuthorizedException getUserNotAuthorizedException(String privilegeName,
 			String protectionElementName)
 	{
@@ -2237,30 +2238,29 @@ public class AppUtility
 			ex.setBaseObjectIdentifier(arr[1]);
 		}
 		return ex;
-	}
+	}*/
 
-	/*public static UserNotAuthorizedException getUserNotAuthorizedException(String privilegeName,
+	public static BizLogicException getUserNotAuthorizedException(String privilegeName,
 			String protectionElementName)
 	{
-		UserNotAuthorizedException ex = getUserNotAuthorizedException(privilegeName,
+		BizLogicException ex = getUserNotAuthorizedException(privilegeName,
 				protectionElementName, null);
 		return ex;
 	}
 
-	*//**
-						 * @param privilegeName - privilege name
-						 * @param protectionElementName - protection element name
-						 * @param domainObjName - domain object
-						 * @return UserNotAuthorizedException - exception if user is not authorized
-						 */
-	/*
-		public static UserNotAuthorizedException getUserNotAuthorizedException(String privilegeName,
+	/**
+	 * @param privilegeName - privilege name
+	 * @param protectionElementName - protection element name
+	 * @param domainObjName - domain object
+	 * @return UserNotAuthorizedException - exception if user is not authorized
+	 */
+	
+		public static BizLogicException getUserNotAuthorizedException(String privilegeName,
 				String protectionElementName, String domainObjName)
 		{
-			ErrorKey errorKey=ErrorKey.getErrorKey("user.not.auth");
-			UserNotAuthorizedException ex = new UserNotAuthorizedException(errorKey,null,"User not authorized");
-			ex.setPrivilegeName(privilegeName);
-			ex.setBaseObject(domainObjName);
+			String baseObjectUpdated = domainObjName;
+			String baseObjectId = "";
+			
 			if (protectionElementName != null
 					&& (protectionElementName.contains("Site") || protectionElementName
 							.contains("CollectionProtocol")))
@@ -2268,12 +2268,51 @@ public class AppUtility
 				String[] arr = protectionElementName.split("_");
 				String[] nameArr = arr[0].split("\\.");
 				String baseObject = nameArr[nameArr.length - 1];
-				ex.setBaseObject(baseObject);
-				ex.setBaseObjectIdentifier(arr[1]);
+				baseObjectUpdated = baseObject;
+				baseObjectId = arr[1];
 			}
-			return ex;
+			
+			String className = getActualClassName(baseObjectUpdated);
+			String decoratedPrivilegeName = AppUtility.getDisplayLabelForUnderscore(privilegeName);
+			
+			if (!(baseObjectUpdated != null
+					&& baseObjectUpdated.trim().length() != 0))
+			{
+				baseObjectUpdated = className;
+			}
+			
+			if (domainObjName == null)
+			{
+				domainObjName = baseObjectUpdated;
+			}
+			List<String> list  = new ArrayList<String>();
+			list.add(domainObjName);
+			list.add(decoratedPrivilegeName);
+			list.add(baseObjectUpdated);
+
+			String message = ApplicationProperties.getValue("access.addedit.object.denied", list);
+			ErrorKey errorKey = ErrorKey.getErrorKey("access.addedit.object.denied");	
+			return new BizLogicException(errorKey,null, message);
 		}
-	*/
+		
+		/**
+		* @param name
+		* @return
+		*/
+		private static String getActualClassName(String name)
+		{
+			if (name != null && name.trim().length() != 0)
+			{
+				String splitter = "\\.";
+				String[] arr = name.split(splitter);
+				if (arr != null && arr.length != 0)
+				{
+					return arr[arr.length - 1];
+				}
+			}
+			return name;
+		}
+	
 	//bug 11611 and 11659 end
 	public static boolean hasPrivilegeToView(String objName, Long identifier,
 			SessionDataBean sessionDataBean, String privilegeName)
@@ -2526,7 +2565,7 @@ public class AppUtility
 	 * @throws UserNotAuthorizedException
 	 */
 	public static boolean returnIsAuthorized(SessionDataBean sessionDataBean, String privilegeName,
-			String protectionElementName) throws UserNotAuthorizedException
+			String protectionElementName) throws BizLogicException
 	{
 		boolean isAuthorized = false;
 		PrivilegeCache privilegeCache;
@@ -2615,7 +2654,7 @@ public class AppUtility
 	}
 
 	public static boolean checkOnCurrentAndFuture(SessionDataBean sessionDataBean,
-			String protectionElementName, String privilegeName) throws UserNotAuthorizedException, BizLogicException
+			String protectionElementName, String privilegeName) throws BizLogicException
 	{
 		boolean isAuthorized = false;
 		String protectionElementNames[] = protectionElementName.split("_");

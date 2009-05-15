@@ -323,32 +323,20 @@ public class ApproveUserBizLogic  extends CatissueDefaultBizLogic
 	 */
 	public boolean isAuthorized(DAO dao, Object domainObject, SessionDataBean sessionDataBean) throws BizLogicException
 	{
-		try
-		{
 		boolean isAuthorized = false;
 		isAuthorized = checkUser(domainObject, sessionDataBean);
 		if(isAuthorized)
 		{
 			return true;
 		}
-		
+
 		String privilegeName = getPrivilegeName(domainObject);
 		String protectionElementName = getObjectId(dao, domainObject);
-		
-		
-			return AppUtility.returnIsAuthorized(sessionDataBean, privilegeName,
-					protectionElementName);
-		}
-		catch (UserNotAuthorizedException e)
-		{
-			logger.debug(e.getMessage(), e);
-			throw getBizLogicException(e, "sm.operation.error", "User not authorized");
-		} catch (BizLogicException e)
-		{
-			logger.debug(e.getMessage(), e);
-			ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
-			throw new BizLogicException(errorKey,e ,"ApproveUserBizLogic.java :");	
-		}
+
+
+		return AppUtility.returnIsAuthorized(sessionDataBean, privilegeName,
+				protectionElementName);
+
 	}
 
 

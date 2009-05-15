@@ -434,7 +434,7 @@ public class DistributionProtocolBizLogic extends SpecimenProtocolBizLogic imple
 			// control is here, that means, User is not Auth.
 			if (!isAuthorized)
 			{
-				throw AppUtility.getUserNotAuthorizedException(privilegeName, protectionElementName);
+				throw AppUtility.getUserNotAuthorizedException(privilegeName, protectionElementName,domainObject.getClass().getSimpleName());
 			}
 
 		}

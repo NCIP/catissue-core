@@ -1204,7 +1204,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 						if (!siteIdSet.contains(site.getId()))
 						{
 							//bug 11611 and 11659
-							throw AppUtility.getUserNotAuthorizedException(Constants.Association, site.getObjectId());
+							throw AppUtility.getUserNotAuthorizedException(Constants.Association, site.getObjectId(),domainObject.getClass().getSimpleName());
 						}
 					}
 				}
@@ -1244,7 +1244,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 			if (!isAuthorized)
 			{
 				//throw Utility.getUserNotAuthorizedException(privilegeName, protectionElementName);
-				throw AppUtility.getUserNotAuthorizedException(privilegeName, protectionElementName);
+				throw AppUtility.getUserNotAuthorizedException(privilegeName, protectionElementName,domainObject.getClass().getSimpleName());
 			}
 
 		}

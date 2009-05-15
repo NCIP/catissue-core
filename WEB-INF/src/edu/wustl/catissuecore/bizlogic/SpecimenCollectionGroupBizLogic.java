@@ -2434,7 +2434,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			if (!isAuthorized)
 			{
 				//bug 11611 and 11659
-				throw AppUtility.getUserNotAuthorizedException(privilegeName, protectionElementName);
+				throw AppUtility.getUserNotAuthorizedException(privilegeName, protectionElementName,domainObject.getClass().getSimpleName());
 			}
 			return isAuthorized;
 		}

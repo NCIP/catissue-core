@@ -2104,7 +2104,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 					if (!isAuthorized)
 					{
 						//bug 11611 and 11659
-						throw AppUtility.getUserNotAuthorizedException(privilegeName, protectionElementName); 
+						throw AppUtility.getUserNotAuthorizedException(privilegeName, protectionElementName,domainObject.getClass().getSimpleName()); 
 					}
 					return isAuthorized;		
 				}
@@ -2112,13 +2112,18 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 				{
 					// return false;
 					//bug 11611 and 11659
-					throw AppUtility.getUserNotAuthorizedException(privilegeName, protectionElementName);
+					throw AppUtility.getUserNotAuthorizedException(privilegeName, protectionElementName,domainObject.getClass().getSimpleName());
 				}
 			}
-			catch(ApplicationException exp)
+			/*catch(ApplicationException exp)
 			{
 				logger.debug(exp.getMessage(), exp);
 				throw getBizLogicException(exp, "dao.error", "");
+			}*/
+			catch (SMException e)
+			{
+				logger.debug(e.getMessage(), e);
+				throw AppUtility.handleSMException(e);
 			}
 		}			
 }
