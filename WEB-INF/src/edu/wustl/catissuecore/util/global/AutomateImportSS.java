@@ -17,6 +17,7 @@ import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.StringTokenizer;
 
 import edu.wustl.common.util.logger.Logger;
@@ -64,7 +65,7 @@ public class AutomateImportSS
 	 * 			- oracle.tns.name required in case of oracle 
 	 */
 	public static void main(String[] args) throws Exception
-    {/*
+    {
 		Connection connection=null;
 		try
 		{
@@ -165,7 +166,7 @@ public class AutomateImportSS
 					e.printStackTrace();
 				}
 		}
-    */}
+    }
 	
 	private void test(String[] args) throws SQLException, IOException , ClassNotFoundException
 	{
