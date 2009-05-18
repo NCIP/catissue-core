@@ -9,7 +9,6 @@
 package edu.wustl.catissuecore.action;
 
 import java.util.Collection;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -67,7 +66,7 @@ public class ParticipantRegistrationSelectAction extends CommonAddEditAction{
 			Map mapCollectionProtocolRegistration = participantForm.getCollectionProtocolRegistrationValues();
 			int cprCount = participantForm.getCollectionProtocolRegistrationValueCounter();
 			Collection consentResponseBeanCollection = participantForm.getConsentResponseBeanCollection();
-			Hashtable consentResponseHashTable = participantForm.getConsentResponseHashTable();
+			Map consentResponseHashTable = participantForm.getConsentResponseHashTable();
 			Map mapParticipantMedicalIdentifier = participantMedicalIdentifierMap(participantForm.getValues());
 			
 			//Gets the collection Protocol Registration map from Database
@@ -77,7 +76,7 @@ public class ParticipantRegistrationSelectAction extends CommonAddEditAction{
 			Map mapCollectionProtocolRegistrationOld = participantForm.getCollectionProtocolRegistrationValues();
 			int cprCountOld = participantForm.getCollectionProtocolRegistrationValueCounter();
 			Collection consentResponseBeanCollectionOld = participantForm.getConsentResponseBeanCollection();
-			Hashtable consentResponseHashTableOld = participantForm.getConsentResponseHashTable();
+			Map consentResponseHashTableOld = participantForm.getConsentResponseHashTable();
 			
 			Map mapCollectionProtocolRegistrationAppended = appendCollectionProtocolRegistrations(mapCollectionProtocolRegistration ,cprCount ,mapCollectionProtocolRegistrationOld ,cprCountOld);
 			Map mapParticipantMedicalIdentifierOld = participantMedicalIdentifierMap(participantForm.getValues());
@@ -121,7 +120,7 @@ public class ParticipantRegistrationSelectAction extends CommonAddEditAction{
 	/*
 	 * This method is for updating consent response 
 	 */
-	private void updateConsentResponse(Collection consentResponseBeanCollection, Collection consentResponseBeanCollectionOld, Hashtable consentResponseHashTableOld)
+	private void updateConsentResponse(Collection consentResponseBeanCollection, Collection consentResponseBeanCollectionOld, Map consentResponseHashTableOld)
 	{
 		Iterator it = consentResponseBeanCollection.iterator();
 		while(it.hasNext())

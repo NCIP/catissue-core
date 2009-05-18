@@ -713,6 +713,7 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 	 */
 	private void setConsentsResponseToCollectionProtocolRegistration(ParticipantForm form) throws Exception
 	{
+			logger.debug(":: participant id  :"+form.getId());
 			Collection<ConsentResponseBean> consentResponseBeanCollection =
 				form.getConsentResponseBeanCollection();
 			Iterator itr = this.collectionProtocolRegistrationCollection.iterator();
@@ -740,6 +741,9 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 				long cpIDcollectionProtocolRegistration = collectionProtocolRegistration.getCollectionProtocol().getId().longValue();
 				long cpIDconsentRegistrationBean =  consentResponseBean.getCollectionProtocolID();
 				if(cpIDcollectionProtocolRegistration == cpIDconsentRegistrationBean){
+					
+					logger.debug(":: collection protocol id :"+cpIDcollectionProtocolRegistration);
+					logger.debug(":: collection protocol Registration id  :"+collectionProtocolRegistration.getId());
 					
 					String signedConsentUrl = consentResponseBean.getSignedConsentUrl();
 					long witnessId = consentResponseBean.getWitnessId();

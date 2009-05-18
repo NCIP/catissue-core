@@ -90,7 +90,7 @@ public class ConsentResponseDisplayAction extends BaseAction
 		
 		//Getting consent response map.
 		String consentResponseKey = Constants.CONSENT_RESPONSE_KEY+cpId;
-		Hashtable consentResponseHashTable = (Hashtable)session.getAttribute(Constants.CONSENT_RESPONSE);
+		Map consentResponseHashTable = (Map)session.getAttribute(Constants.CONSENT_RESPONSE);
 		
 		
 		Map consentResponseMap;

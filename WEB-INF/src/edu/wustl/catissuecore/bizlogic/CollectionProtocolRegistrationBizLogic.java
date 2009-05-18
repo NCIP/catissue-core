@@ -986,41 +986,43 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 		collectionProtocolRegistration.setSpecimenCollectionGroupCollection(specimenCollectionGroupCollection);
 
 		updateConsentResponseForSCG(collectionProtocolRegistration, dao, sessionDataBean);*/
-			Collection specimenCollectionGroupCollection = persistentCPR.getSpecimenCollectionGroupCollection();
-			collectionProtocolRegistration.setSpecimenCollectionGroupCollection(specimenCollectionGroupCollection);
-			updateConsentResponseForSCG(collectionProtocolRegistration, dao, sessionDataBean);
-			persistentCPR.setConsentTierResponseCollection(collectionProtocolRegistration.getConsentTierResponseCollection());
-			persistentCPR.setConsentWitness(collectionProtocolRegistration.getConsentWitness());
-			persistentCPR.setConsentSignatureDate(collectionProtocolRegistration.getConsentSignatureDate());
-			persistentCPR.setSignedConsentDocumentURL(collectionProtocolRegistration.getSignedConsentDocumentURL());
-			persistentCPR.setProtocolParticipantIdentifier(collectionProtocolRegistration.getProtocolParticipantIdentifier());
-			persistentCPR.setRegistrationDate(collectionProtocolRegistration.getRegistrationDate());
-			persistentCPR.setActivityStatus(collectionProtocolRegistration.getActivityStatus());
-			persistentCPR.setBarcode(collectionProtocolRegistration.getBarcode());
-			persistentCPR.setSpecimenCollectionGroupCollection(collectionProtocolRegistration.getSpecimenCollectionGroupCollection());
-			/* for offset 27th Dec 2007 */
-			// Check if Offset is present.If it is present then all the below
-			// hierarchy protocols are shifted according to the Offset.Integer offsetOld=oldCollectionProtocolRegistration.getOffset();
-			Integer offsetOld = oldCollectionProtocolRegistration.getOffset();
-			Integer offsetNew = collectionProtocolRegistration.getOffset();
-			if (offsetNew != null)
+		Collection specimenCollectionGroupCollection = persistentCPR.getSpecimenCollectionGroupCollection();
+		collectionProtocolRegistration.setSpecimenCollectionGroupCollection(specimenCollectionGroupCollection);
+		updateConsentResponseForSCG(collectionProtocolRegistration, dao, sessionDataBean);
+		persistentCPR.setConsentTierResponseCollection(collectionProtocolRegistration.getConsentTierResponseCollection());
+		persistentCPR.setConsentWitness(collectionProtocolRegistration.getConsentWitness());
+		persistentCPR.setConsentSignatureDate(collectionProtocolRegistration.getConsentSignatureDate());
+		persistentCPR.setSignedConsentDocumentURL(collectionProtocolRegistration.getSignedConsentDocumentURL());
+		persistentCPR.setProtocolParticipantIdentifier(collectionProtocolRegistration.getProtocolParticipantIdentifier());
+		persistentCPR.setRegistrationDate(collectionProtocolRegistration.getRegistrationDate());
+		persistentCPR.setActivityStatus(collectionProtocolRegistration.getActivityStatus());
+		persistentCPR.setBarcode(collectionProtocolRegistration.getBarcode());
+		persistentCPR.setSpecimenCollectionGroupCollection(collectionProtocolRegistration.getSpecimenCollectionGroupCollection());
+		persistentCPR.setParticipant(collectionProtocolRegistration.getParticipant());
+		/* for offset 27th Dec 2007 */
+		// Check if Offset is present.If it is present then all the below
+		// hierarchy protocols are shifted according to the Offset.Integer offsetOld=oldCollectionProtocolRegistration.getOffset();
+		Integer offsetOld = oldCollectionProtocolRegistration.getOffset();
+		Integer offsetNew = collectionProtocolRegistration.getOffset();
+		if (offsetNew != null)
+		{
+			int offset = 0;
+			if (offsetOld != null)
+				offset = offsetNew.intValue() - offsetOld.intValue();
+			else
+				offset = offsetNew.intValue() - 0;
+			if (offset != 0)
 			{
-				int offset = 0;
-				if (offsetOld != null)
-					offset = offsetNew.intValue() - offsetOld.intValue();
-				else
-					offset = offsetNew.intValue() - 0;
-				if (offset != 0)
-				{
-					//updateOffsetForEvents(dao, sessionDataBean, collectionProtocolRegistration, offset);
-					checkAndUpdateChildOffset(dao, sessionDataBean, oldCollectionProtocolRegistration, offset);
-					updateForOffset(dao, sessionDataBean, oldCollectionProtocolRegistration, offset);
-				}
-				/*else
+				//updateOffsetForEvents(dao, sessionDataBean, collectionProtocolRegistration, offset);
+				checkAndUpdateChildOffset(dao, sessionDataBean, oldCollectionProtocolRegistration, offset);
+				updateForOffset(dao, sessionDataBean, oldCollectionProtocolRegistration, offset);
+			}
+			/*else
 			{
 				//updateConsentResponseForSCG(collectionProtocolRegistration, dao, sessionDataBean);
 			}*/
-			}
+		}
+
 
 			/* offset changes end */
 			// Mandar 22-Jan-07 To disable consents accordingly in SCG and

@@ -40,6 +40,7 @@ import edu.wustl.catissuecore.util.SpecimenAutoStorageContainer;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.exception.DAOException;
@@ -141,8 +142,9 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 	 * @param session
 	 * @param specimencollectionGroup
 	 * @throws DAOException
+	 * @throws BizLogicException 
 	 */
-	private void addSCGSpecimensToSession(HttpSession session, SpecimenCollectionGroup specimencollectionGroup) throws DAOException
+	private void addSCGSpecimensToSession(HttpSession session, SpecimenCollectionGroup specimencollectionGroup) throws DAOException, BizLogicException
 	{
 		LinkedHashMap<String, CollectionProtocolEventBean> cpEventMap = new LinkedHashMap<String, CollectionProtocolEventBean>();
 
@@ -152,6 +154,7 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 		// sorting of specimen collection accoding to id 
 		LinkedList<Specimen> specimenList = new LinkedList<Specimen>();
 		Iterator<Specimen> itr = specimencollectionGroup.getSpecimenCollection().iterator();
+		
 		while (itr.hasNext())
 		{
 			Specimen specimen = (Specimen) itr.next();
@@ -162,6 +165,20 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 		}
 		Comparator spIdComp = new IdComparator();
 		Collections.sort(specimenList, spIdComp);
+		
+		Iterator itr2 = specimenList.iterator();
+		while (itr2.hasNext())
+		{   
+			Specimen specimen = (Specimen) itr2.next();
+			if(specimen.getChildSpecimenCollection() != null) 
+			{
+				long lastAliquotNo = new AliquotAction().getTotalNoOfAliquotSpecimen(specimen.getId()); 
+				LinkedList<Specimen> childList = new LinkedList(specimen.getChildSpecimenCollection());
+				Collections.sort(childList, spIdComp);
+			    setLabelInSpecimen(specimen.getId(),childList, lastAliquotNo);
+		   }
+		}
+		
 		eventBean.setSpecimenRequirementbeanMap(getSpecimensMap(specimenList, cpId));
 		//eventBean.setSpecimenRequirementbeanMap(getSpecimensMap(
 		//specimencollectionGroup.getSpecimenCollection(),cpId ));
@@ -408,8 +425,9 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 	 * @param session
 	 * @param specimencollectionGroup
 	 * @throws DAOException
+	 * @throws BizLogicException 
 	 */
-	private void addSpecimensToSession(HttpSession session, Long specimenId, List specimenList) throws DAOException
+	private void addSpecimensToSession(HttpSession session, Long specimenId, List specimenList) throws DAOException, BizLogicException
 	{
 		LinkedHashMap<String, CollectionProtocolEventBean> cpEventMap = new LinkedHashMap<String, CollectionProtocolEventBean>();
 
@@ -421,6 +439,24 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 
 		Comparator spIdComp = new IdComparator();
 		Collections.sort(specimenList, spIdComp);
+		
+		List specList = new LinkedList();
+		long lastAliquotNo = new AliquotAction().getTotalNoOfAliquotSpecimen(specimenId);
+	    setLabelInSpecimen(specimenId, specimenList, lastAliquotNo);
+		
+		Iterator itr2 = specimenList.iterator();
+		while (itr2.hasNext())
+		{   
+			Specimen specimen = (Specimen) itr2.next();
+			if(specimen.getChildSpecimenCollection() != null)
+			{
+				lastAliquotNo = new AliquotAction ().getTotalNoOfAliquotSpecimen(specimen.getId());
+				LinkedList<Specimen> childList = new LinkedList(specimen.getChildSpecimenCollection());
+				Collections.sort(childList, spIdComp);
+				setLabelInSpecimen(specimen.getId(),childList, lastAliquotNo);
+			}
+			
+	 	}
 		eventBean.setSpecimenRequirementbeanMap(getSpecimensMap(specimenList,specimenId,cpId));
 
 		String globalSpecimenId = "E" + eventBean.getUniqueIdentifier() + "_";
@@ -430,7 +466,7 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 	}
 
 
-	private void getSpcimensToShowOnSummary(long specimenId, Collection scgSpecimenList, HttpSession session) throws DAOException
+	private void getSpcimensToShowOnSummary(long specimenId, Collection scgSpecimenList, HttpSession session) throws DAOException, BizLogicException
 	{
 		List<Specimen> specimenList = new ArrayList<Specimen>();
 		//Collection scgSpecimenList = specimencollectionGroup.getSpecimenCollection();
@@ -453,4 +489,33 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 		}
 		addSpecimensToSession(session, specimenId, specimenList);
 	}
+	
+	public void setLabelInSpecimen(Long specimenId, Collection specimenList, long lastChildNo) throws DAOException 
+	 {
+		 if (specimenList != null)
+			{
+				Iterator itr = specimenList.iterator();
+				while (itr.hasNext())
+				{   
+					Specimen specimen = (Specimen) itr.next();
+					if (specimen.getId().equals(specimenId)
+							|| (specimen.getParentSpecimen() != null && specimen.getParentSpecimen().getId().equals(specimenId)))
+					{
+						if(specimen.getLabel() == null || specimen.getLabel().equals("")) {
+
+							if(specimen.getLineage().equals(Constants.ALIQUOT))
+							{
+								 if(specimen.getParentSpecimen().getLabel() != null)	
+									 specimen.setLabel(specimen.getParentSpecimen().getLabel()+"_"+(++lastChildNo))  ;
+						     }
+							else if(specimen.getLineage().equals(Constants.DERIVED_SPECIMEN))
+							{
+								specimen.setLabel(specimen.getLabel()) ;
+							}
+						}
+						
+					}	
+				}  
+			}
+		} 
 }

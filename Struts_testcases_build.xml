@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Ant Script to setup configuration files for test cases-->
+
+<project name="struts_testcases" default="init_struts_testcases" >
+<import file="build.xml"/>	
+     <taskdef resource="net/sf/antcontrib/antcontrib.properties">
+		<classpath>
+			<pathelement location="./lib/ant-contrib.jar" />
+		</classpath>
+	</taskdef>
+
+	     <property file="./caTissueInstall.properties"/>
+	     <property name="catissue.test" value="${base.dir}/CaTissue_TestCases" />
+         <property name="database.username.string"  value="root"> </property>
+         <property name="database.url.string" value="jdbc:mysql://localhost:3306/catissuesuite"> </property>
+         <property name="database.password.string" value="himanshu"> </property>
+         <property name="mysql.dialect.string" value="org.hibernate.dialect.MySQLDialect"> </property>
+	     <property name="oracle.dialect.string" value="org.hibernate.dialect.Oracle9Dialect"></property>
+         <property name="mysql.driver.string" value="com.mysql.jdbc.Driver"> </property>
+	     <property name="oracle.driver.string" value="oracle.jdbc.driver.OracleDriver"></property>
+         <property name="hibernate-cfg.path.string" value="${catissue.test}\catissuecore.hibernate.cfg.xml"></property>
+         <property name="ApplicationSecurityConfig.file.path" value="./catissuecore-properties/ApplicationSecurityConfig.xml"></property>
+         <property name="hibernate-cfg.file.path" value="./catissuecore-properties/catissuecore.hibernate.cfg.xml"></property>
+	     <property name="login-conf.file.path" value="./CaTissue_TestCases/login.conf"></property>
+	     <property name="mysql.url.string" value="jdbc:mysql://localhost:${database.port}/${database.name}"></property>
+	     <property name="oracle.url.string" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}"></property>
+         <property name="log4jproperties.file.path" value="./log4j.properties"></property>
+         
+         <!-- struts test case related properties -->
+		<property name="cat.test.classes.dir" value="${catissue.test}/classes" />
+		<property name="cat.test.src.dir" value="${catissue.test}/src"/>
+		<property name="cat.test.lib.dir" value="${catissue.test}/lib"/>
+		<property name="cat.cobertura.dir" value="${base.dir}" />
+		<property name="cat.instrumented.dir" value="./instrument"/>
+		<property name="cobertura.lib" value="./cobertura/lib"/>
+		<taskdef classpathref="cobertura.classpath" resource="tasks.properties"/>
+		
+		<path id="cobertura.classpath">
+			<fileset dir="${cobertura.lib}">
+				<include name="cobertura.jar" />
+				<include name="**/*.jar" />
+			</fileset>
+		</path>
+
+    <target name="init_struts_testcases">
+        <copy file="${ApplicationSecurityConfig.file.path}" todir="${catissue.test}" overwrite="true"/>
+        <replace dir="${catissue.test}">
+        	<include name="ApplicationSecurityConfig.xml" />
+			<replacefilter token="@@hibernate-config-file@@" value="${hibernate-cfg.path.string}" />
+		</replace>
+        <copy file="${hibernate-cfg.file.path}" todir="${catissue.test}" overwrite="true"/>
+        
+    	<if>
+	       <equals arg1="${database.type}" arg2="mysql"/>
+	      	  <then>
+	        		<replace dir="${catissue.test}">
+	        			<include name="catissuecore.hibernate.cfg.xml"/>
+	        			<replacefilter token="@@dialect@@" value="${mysql.dialect.string}"/>
+	        		</replace>	
+	          </then>
+	    </if>
+        <if>
+    	  <equals arg1="${database.type}" arg2="oracle"/>
+    	     <then>
+    	          <replace dir="${catissue.test}">
+    	        	  <include name="catissuecore.hibernate.cfg.xml"/>
+    	        	  <replacefilter token="@@dialect@@" value="${oracle.dialect.string}"/>
+    	          </replace>	
+    	     </then>
+    	 </if>
+    	                    
+    	<copy file="${login-conf.file.path}" tofile="${catissue.test}/test_login.conf" overwrite="true"/>
+    	 <if>
+    	   <equals arg1="${database.type}" arg2="mysql"/>
+    	      <then>
+    	    	   <replace dir="${catissue.test}" propertyfile="./caTissueInstall.properties">
+    	    	       <include name="test_login.conf"/>
+    	    	       <replacefilter token="@@DRIVER@@" value="${mysql.driver.string}"/>
+    	    	       <replacefilter token="@@USER@@" value="${database.username}"/>
+    	    	       <replacefilter token="@@PASSWORD@@" value="${database.password}"/>
+    	    	       <replacefilter token="@@DBURL@@" value="${mysql.url.string}"/>
+    	    	   </replace>	
+    	      </then>
+    	 </if>
+    	 <if>
+    	   <equals arg1="${database.type}" arg2="oracle"/>
+    	      <then>
+    	    	   <replace dir="${catissue.test}" propertyfile="./caTissueInstall.properties">
+    	    	      <include name="test_login.conf" />
+    	    	      <replacefilter token="@@DRIVER@@" value="${oracle.driver.string}" />
+    	    	      <replacefilter token="@@USER@@" value="${database.username}" />
+    	    	      <replacefilter token="@@PASSWORD@@" value="${database.password}" />
+    	    	      <replacefilter token="@@DBURL@@" value="${oracle.url.string}" />
+    	    	    </replace>	
+    	      </then>
+    	 </if>
+    	<copy file="${log4jproperties.file.path}" todir="./catissuecore-properties" overwrite="true"/>
+    </target>
+    
+    	<!-- =================================================================== -->
+	<!-- Junit StrutsTestCases for Nightly Build  -->
+	<!-- =================================================================== -->
+	
+	
+	<target name="compile_struts_junit_testCases" depends="init_struts_testcases,compile">
+		 
+		<echo>Compiling the test classes : </echo>
+		<delete dir="${cat.test.classes.dir}" />
+		<mkdir dir="${cat.test.classes.dir}" /> 
+		
+			
+	    <javac destdir="${cat.test.classes.dir}" includes="**/*.java" includeAntRuntime="false">
+	            <src path="${cat.test.src.dir}"/>
+	            <classpath>
+	       		  <fileset dir="${lib.dir}">
+	        			<include name="**/*.jar"/>
+	        	  </fileset>
+	            
+	            	<fileset dir="${cat.test.lib.dir}">
+	                	<include name="**/*.jar"/>
+	            	</fileset>
+	           	            		
+	            </classpath>
+	        	
+	    </javac>
+	</target>
+	
+	
+	<target name="instrument_struts_testCases" depends="compile">
+			<echo>Instrumenting the application classes : </echo>
+	
+			<!--
+				Remove the coverage data file.
+			-->
+				<delete file="${cat.cobertura.dir}/strutscoverage.ser"/>
+				
+				<delete dir="${cat.instrumented.dir}" />
+				<mkdir dir="${cat.instrumented.dir}" /> 
+				
+				<!--
+					Instrument the application classes, writing the
+					instrumented classes into ${build.instrumented.dir}.
+				-->
+
+				<cobertura-instrument todir="${cat.instrumented.dir}"  datafile="${cat.cobertura.dir}/strutscoverage.ser">
+					
+					<classpath refid="cobertura.classpath" />
+					<classpath>
+						<fileset dir="${lib.dir}">
+							<include name="**/*.jar"/>
+						</fileset>
+					</classpath>
+					<!--
+						The following line causes instrument to ignore any
+						source line containing a reference to log4j, for the
+						purposes of coverage reporting.
+					-->
+					<ignore regex="org.apache.log4j.*" />
+
+					<fileset dir="${target.dir}">
+						<!--
+							Instrument all the application classes, but
+							don't instrument the test classes.
+						-->
+						<include name="**/*.class" />
+						
+					</fileset>
+				</cobertura-instrument>
+		</target>
+
+	<target name="run_struts_junitTestCases" depends="compile_struts_junit_testCases">
+	        <mkdir dir="${base.dir}/Nightly_Build_Struts_Report" />
+			<mkdir dir="${base.dir}/Nightly_Build_Struts_Report/Html_reports" />
+			
+			
+			<junit printsummary="yes" fork="yes" forkmode="perTest" haltonfailure="yes"  maxmemory="1024m">
+				
+				<jvmarg value="-Xms128m"/>
+				<jvmarg value="-Xmx1024m"/>       
+				<sysproperty key="net.sourceforge.cobertura.datafile" file="${cat.cobertura.dir}/strutscoverage.ser" />
+				<sysproperty key="app.home" value="."/>
+	
+				<!--
+					Note the classpath order: instrumented classes are before the
+					original (uninstrumented) classes.  This is important.
+				-->	
+						
+				<classpath location="${cat.instrumented.dir}" />
+							
+				<classpath>
+					
+					<pathelement path= "${target.dir}" /> 
+					<pathelement path="${cat.test.src.dir}" />
+					<pathelement path= "${cat.test.classes.dir}" />
+					
+					<fileset dir="${cat.test.lib.dir}">
+						<exclude name="catissuecore.jar"/>
+					    <include name="**/*.jar"/>
+				   	</fileset>
+					
+					<fileset dir="${lib.dir}">
+						<include name="**/*.jar"/>
+					</fileset>
+										
+					
+					<fileset dir="${base.dir}/WEB-INF/">
+						<include name="**/*.properties"/>
+						<include name="**/*.xml" />
+						<include name="**/*.tld" />
+					</fileset>
+					
+				</classpath>
+
+				<classpath refid="cobertura.classpath" />
+
+				<formatter type="xml"/> 
+			
+				<batchtest fork="yes" todir="${base.dir}/Nightly_Build_Struts_Report">
+					<fileset dir="${cat.test.src.dir}">
+						<include name="**/CaTissueSuiteTestSuite.java" />
+					</fileset>				
+				</batchtest>
+			</junit>
+		</target>
+	
+		<target name="run_struts_nightlyBuild"  depends="run_struts_junitTestCases">
+			<echo> Generating struts nightly build reports :::</echo>
+			<junitreport todir="${base.dir}/Nightly_Build_Struts_Report">
+				<fileset dir="${base.dir}/Nightly_Build_Struts_Report">
+					<include name="TEST-*.xml" />
+				</fileset>
+				<report todir="${base.dir}/Nightly_Build_Struts_Report/Html_reports" />
+			</junitreport>
+		</target>
+	
+	
+		<target name="struts_coverage_report">
+			<echo> Generating coverage reports :</echo>
+			<mkdir dir="${base.dir}/Nightly_Build_Struts_Report/coveragereports/codeCoverageReportsXml"/>
+			<mkdir dir="${base.dir}/Nightly_Build_Struts_Report/coveragereports/codeCoverageReportsHtml"/>
+			
+			<!--
+				Generate an XML file containing the coverage data using
+				the "srcdir" attribute.
+			-->
+				
+			<cobertura-report srcdir="${base.dir}/WEB-INF/src"
+				destdir="${base.dir}/Nightly_Build_Struts_Report/coveragereports/codeCoverageReportsXml"
+				datafile="${cat.cobertura.dir}/strutscoverage.ser"
+				format="xml" />
+			
+			<!--
+					Generate a series of HTML files containing the coverage
+					data in a user-readable form using nested source filesets.
+			-->
+			<cobertura-report destdir="${base.dir}/Nightly_Build_Struts_Report/coveragereports/codeCoverageReportsHtml"
+				datafile="${cat.cobertura.dir}/strutscoverage.ser">
+				<fileset dir="${base.dir}/WEB-INF/src">
+					<include name="**/*.java"/>
+				</fileset>
+			</cobertura-report>
+		</target>
+	
+	<target name="struts_junit_coverage_reports">
+	
+		<antcall target="instrument_struts_testCases"/>
+		<antcall target="run_struts_junitTestCases"/>
+		<antcall target="struts_coverage_report"/>
+		
+	</target>
+		
+    
+ </project>

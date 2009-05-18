@@ -321,8 +321,8 @@
 				<include name="client-config.wsdd" />
 				<include name="Applet/**" />
 				<include name="caTissue_Suite_User_Manual.pdf" />
-				<include name="caTissue_Suite_User_Manual.doc" />
-				<include name="caTissueSuiteV11_Technical_Guide.doc" />
+				<include name="caTissue_Suite_User_Manual_v11p2.doc" />
+				<include name="caTissueSuite_Technical_Guide_V11p1.doc" />
 				<include name="caTissueSuiteV11_UML.zip" />
 	    		<exclude name="**/WEB-INF/classes/**/namegenerator/*"/>
 				
@@ -537,9 +537,10 @@
 		<copy file="printservice_module.jar" todir="${zip.dir}" overwrite="true" />
 		<copy file="printservice_client.jar" todir="${zip.dir}" overwrite="true" />
 		<copy file="${base.dir}/WEB-INF/lib/PrintCatissueCore_Client.jar" todir="${zip.dir}" overwrite="true" />
-		<copy file="dynamicExtensions.war" todir="${zip.dir}" overwrite="true" />
 		<copy file="caTissuePrintWebService.war" todir="${zip.dir}" overwrite="true" />
 		<!--<copy file="shippingtracking.zip" todir="${zip.dir}" overwrite="true" />-->
+		<copy file="dynamicextensions.zip" todir="${zip.dir}" overwrite="true" />
+		
 		<!-- only single war file is being used so comment it -->
 		<!-- <copy file="catissuecorecsm.war" todir="${zip.dir}" overwrite="true" /> -->
 		<copy file="catissuecore-ds.xml" todir="${zip.dir}" overwrite="true" />

@@ -650,70 +650,74 @@ public class NewSpecimenAction extends SecureAction
 			logger.info("Starting points[2]" + startingPoints[2]);
 			initialValues.add(startingPoints);
 			
-			if((specimenForm.getStContSelection() == Constants.RADIO_BUTTON_FOR_MAP)||specimenForm.getStContSelection()==2)
+			String showContainer = (String)request.getAttribute("showContainer");
+			if(showContainer == null || showContainer.equals("Pending")) 
 			{
-				String[] selectColumnName = {"collectionProtocolRegistration.collectionProtocol.id"};
-				String[] whereColumnName = {"name"};
-				String[] whereColumnCondition = {"="};
-				String[] whereColumnValue = {specimenForm.getSpecimenCollectionGroupName()};
-				List spCollGroupList = bizLogic.retrieve(SpecimenCollectionGroup.class.getName(), selectColumnName, whereColumnName,
-						whereColumnCondition, whereColumnValue, null);
-				
-				if (spCollGroupList!=null && !spCollGroupList.isEmpty())
+				if((specimenForm.getStContSelection() == Constants.RADIO_BUTTON_FOR_MAP ||specimenForm.getStContSelection()==2))
 				{
+					String[] selectColumnName = {"collectionProtocolRegistration.collectionProtocol.id"};
+					String[] whereColumnName = {"name"};
+					String[] whereColumnCondition = {"="};
+					String[] whereColumnValue = {specimenForm.getSpecimenCollectionGroupName()};
+					List spCollGroupList = bizLogic.retrieve(SpecimenCollectionGroup.class.getName(), selectColumnName, whereColumnName,
+							whereColumnCondition, whereColumnValue, null);
 					
-					long cpId = ((Long) spCollGroupList.get(0)).longValue();
-					String spClass = specimenForm.getClassName();
-					logger.info("cpId :" + cpId + "spClass:" + spClass);
-					request.setAttribute(Constants.COLLECTION_PROTOCOL_ID, cpId + "");
-					if (virtuallyLocated != null && virtuallyLocated.equals("false"))
+					if (spCollGroupList!=null && !spCollGroupList.isEmpty())
 					{
-						specimenForm.setVirtuallyLocated(false);
-					}
-						SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA); 
-					
-						sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
-						containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId, spClass, 0, exceedingMaxLimit, sessionData, true);
 						
-						logger.debug("finish ---calling getAllocatedContaienrMapForSpecimen() function from NewSpecimenAction---");
-						ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
-						if (containerMap.isEmpty()) 
+						long cpId = ((Long) spCollGroupList.get(0)).longValue();
+						String spClass = specimenForm.getClassName();
+						Logger.out.info("cpId :" + cpId + "spClass:" + spClass);
+						request.setAttribute(Constants.COLLECTION_PROTOCOL_ID, cpId + "");
+						if (virtuallyLocated != null && virtuallyLocated.equals("false"))
 						{
-							if(specimenForm.getSelectedContainerName()==null || "".equals(specimenForm.getSelectedContainerName()))
+							specimenForm.setVirtuallyLocated(false);
+						}
+							SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA); 
+						
+							sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
+							containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId, spClass, 0, exceedingMaxLimit, sessionData, true);
+							
+							Logger.out.debug("finish ---calling getAllocatedContaienrMapForSpecimen() function from NewSpecimenAction---");
+							ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
+							if (containerMap.isEmpty()) 
 							{
+								if(specimenForm.getSelectedContainerName()==null || "".equals(specimenForm.getSelectedContainerName()))
+								{
+									if (errors == null || errors.size() == 0)
+									{
+										errors = new ActionErrors();
+									}
+									errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("storageposition.not.available"));
+									saveErrors(request, errors);
+								}
+							}
+								Logger.out.debug("calling checkForInitialValues() function from NewSpecimenAction---");
 								if (errors == null || errors.size() == 0)
 								{
-									errors = new ActionErrors();
+									initialValues = StorageContainerUtil.checkForInitialValues(containerMap);
 								}
-								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("storageposition.not.available"));
-								saveErrors(request, errors);
-							}
+								else
+								{
+									String[] startingPoints1 = new String[3];
+									startingPoints1[0] = specimenForm.getStorageContainer();
+									startingPoints1[1] = specimenForm.getPositionDimensionOne();
+									startingPoints1[2] = specimenForm.getPositionDimensionTwo() ;
+									initialValues = new Vector();
+									initialValues.add(startingPoints1);
+									
+								}
+						
+								if(spClass!=null && specimenForm.getStContSelection() == Constants.RADIO_BUTTON_FOR_MAP)
+								{
+									String[] startingPoints2 = new String[]{"-1", "-1", "-1"};
+									initialValues = new ArrayList();
+									initialValues.add(startingPoints2);
+									request.setAttribute("initValues", initialValues);
+								}
 						}
-						logger.debug("calling checkForInitialValues() function from NewSpecimenAction---");
-							if (errors == null || errors.size() == 0)
-							{
-								initialValues = StorageContainerUtil.checkForInitialValues(containerMap);
-							}
-							else
-							{
-								String[] startingPoints1 = new String[3];
-								startingPoints1[0] = specimenForm.getStorageContainer();
-								startingPoints1[1] = specimenForm.getPositionDimensionOne();
-								startingPoints1[2] = specimenForm.getPositionDimensionTwo() ;
-								initialValues = new Vector();
-								initialValues.add(startingPoints1);
-								
-							}
-					
-							if(spClass!=null && specimenForm.getStContSelection() == Constants.RADIO_BUTTON_FOR_MAP)
-							{
-								String[] startingPoints2 = new String[]{"-1", "-1", "-1"};
-								initialValues = new ArrayList();
-								initialValues.add(startingPoints2);
-								request.setAttribute("initValues", initialValues);
-							}
-					}
 				}
+			}
 		}
 		request.setAttribute("initValues", initialValues);
 		request.setAttribute(Constants.EXCEEDS_MAX_LIMIT, exceedingMaxLimit);

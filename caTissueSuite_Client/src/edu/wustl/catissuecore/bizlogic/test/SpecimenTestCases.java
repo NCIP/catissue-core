@@ -1168,7 +1168,7 @@ public class SpecimenTestCases extends CaTissueBaseTestCase
 		childSpecimen1.setConsentTierStatusCollection(ts.getConsentTierStatusCollection());
 		childSpecimen1.setLabel("TisSpec_child_" + UniqueKeyGeneratorUtil.getUniqueKey());
 		childSpecimen1.setLineage("Aliquot");
-		childSpecimen1.setSpecimenCollectionGroup(scg);
+		childSpecimen1.setSpecimenCollectionGroup(scg);//bug 12073 and 12074
 		System.out.println("Befor creating Tissue Specimen");
 
 		try
@@ -1799,7 +1799,7 @@ public class SpecimenTestCases extends CaTissueBaseTestCase
 			childSpecimen1.setParentSpecimen(specimenObj);
 			childSpecimen1.setLabel(null);
 			childSpecimen1.setLineage("Aliquot");
-			childSpecimen1.setSpecimenCollectionGroup(scg);
+			childSpecimen1.setSpecimenCollectionGroup(scg);//bug 12073 and 12074
 			System.out.println("Befor creating Tissue Specimen");
 
 			try
@@ -1815,7 +1815,7 @@ public class SpecimenTestCases extends CaTissueBaseTestCase
 			childSpecimen2.setParentSpecimen(specimenObj);
 			childSpecimen2.setLabel(null);
 			childSpecimen2.setLineage("Aliquot");
-			childSpecimen2.setSpecimenCollectionGroup(scg);
+			childSpecimen2.setSpecimenCollectionGroup(scg);//bug 12073 and 12074
 			System.out.println("Befor creating Tissue Specimen");
 
 			try
@@ -1869,7 +1869,7 @@ public class SpecimenTestCases extends CaTissueBaseTestCase
 			TissueSpecimen childSpecimen1 = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
 			childSpecimen1.setParentSpecimen(parentSpecimen);
 			childSpecimen1.setLineage("Aliquot");
-			childSpecimen1.setSpecimenCollectionGroup(scg);
+			childSpecimen1.setSpecimenCollectionGroup(scg);//bug 12073 and 12074
 			childSpecimen1 = (TissueSpecimen) appService.createObject(childSpecimen1);
 			System.out.println("Child label is " + childSpecimen1.getLabel());
 		}

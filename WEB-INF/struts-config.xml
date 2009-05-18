@@ -805,7 +805,7 @@ PUBLIC
 			scope="request">
 			<forward name="success" path=".catissuecore.queryResultsSpreadsheetViewDef"/>			
 		</action> -->
-		
+								
 		<action path="/ViewCart"
 			type="edu.wustl.catissuecore.action.ViewCartAction"
 			name="advanceSearchForm"
@@ -884,7 +884,7 @@ PUBLIC
 			name="viewSpecimenSummaryForm"
 			validate="false"
 			scope="request">
-			<!-- bug 11829 - previously it show AnticipatorySpecimens.jsp page without menubar-->
+			<!-- bug 11829 - previously it show AnticipatorySpecimens.jsp page without menubar -->
 			<forward name="success" path=".catissuecore.viewSpecimenSummary" />
 			<forward name="multipleSpWithMenu" path=".catissuecore.viewSpecimenSummary" />	
 			<forward name="failure" path="/pages/AnticipatorySpecimens.jsp" />
@@ -5345,8 +5345,11 @@ PUBLIC
 					<forward name="success" path="/pages/SpecimenSummary.jsp" />
 					<forward name="bulkUpdateSpecimens"  path="/bulkUpdateSpecimens.do" />
 					<forward name="pageOfbulkUpdateSpecimens"  path="/bulkUpdateSpecimens.do?pageOf=multipleSpWithMenu" />
-					<!-- bug 11829 - previously it show AnticipatorySpecimens.jsp page without menubar-->
-					<forward name="anticipatory" path="/pages/AnticipatorySpecimens.jsp" />  
+					<!-- bug 11829 - previously it show AnticipatorySpecimens.jsp page without menubar -->
+					<!-- Bug 12140 S -->
+					<!--<forward name="anticipatory" path=".catissuecore.viewSpecimenSummary" />-->
+					<forward name="anticipatory" path="/pages/AnticipatorySpecimens.jsp" />
+					<!-- Bug 12140 E -->
 					<forward name="pageOfMultipleSpWithoutMenu" path="/pages/SpecimenSummary.jsp" />
 					<forward name="updateSpecimenStatus" path="/updateSpecimenStatus.do" />
 					<forward name="pageOfMultipleSpWithMenu" path=".catissuecore.viewSpecimenSummary" />

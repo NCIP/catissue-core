@@ -167,17 +167,43 @@ function checkStotagePosition()
 				<td align="left" class="black_ar">&nbsp;</td>
                 <td align="center" class="black_ar">&nbsp;</td>
                 <td align="left" class="black_ar">
-					<logic:equal name="specimenArrayForm" property="isBarcodeEditable" value="<%=Constants.TRUE%>">
+					
 					<label for="barcode">
 						<bean:message key="array.barcode"/> 
 					</label>
+				</td>
+				<td width="34%" align="left" class="black_ar">
+				<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>" >
+					<logic:equal name="specimenArrayForm" property="isBarcodeEditable" value="<%=Constants.FALSE%>" >
+						
+						<%
+						if(form.getBarcode()!=null)
+						{
+						%>
+							<label for="barcode">
+								<%=form.getBarcode()%>
+							</label>
+						<%
+						}
+						else
+						{%>
+							<label for="barcode">
+							</label>
+						<%}%>
+						
 					</logic:equal>
-				</td>
-				<td align="left">
 					<logic:notEqual name="specimenArrayForm" property="isBarcodeEditable" value="<%=Constants.FALSE%>">
-						<html:text styleClass="black_ar"  maxlength="255"  size="30" styleId="barcode" property="barcode"/>
+						
+							<html:text styleClass="black_ar" maxlength="255"  size="30" styleId="barcode" property="barcode" />
+						
 					</logic:notEqual>
+				</logic:equal>
+							
+				<logic:notEqual name="specimenArrayForm" property="isBarcodeEditable" value="<%=Constants.FALSE%>">
+					<html:text styleClass="black_ar"  maxlength="255"  size="30" styleId="barcode" property="barcode"/>
+				</logic:notEqual>
 				</td>
+				
                 <td align="left" valign="top">&nbsp;</td>
               </tr>
 			  <tr>

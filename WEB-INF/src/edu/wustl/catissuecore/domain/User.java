@@ -548,7 +548,8 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
 			if (roleId.equals(Constants.DOUBLE_QUOTES) && id != null && id != 0 && csmUserId != null)
 			{
 				Role role = SecurityManagerFactory.getSecurityManager().getUserRole(csmUserId);
-				roleId = role.getId().toString();
+        		if(role!=null && role.getId()!=null)
+        			roleId = role.getId().toString();
 			}
 		}
 		catch (SMException e)
@@ -558,7 +559,7 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
 
 		return roleId;
 	}
-
+	
 	/**
 	 * @param roleId The roleId to set.
 	 */

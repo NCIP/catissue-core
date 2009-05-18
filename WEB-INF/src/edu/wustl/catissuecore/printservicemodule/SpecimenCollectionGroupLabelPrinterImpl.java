@@ -26,7 +26,7 @@ public class SpecimenCollectionGroupLabelPrinterImpl implements LabelPrinter {
 	public boolean printLabel(final AbstractDomainObject abstractDomainObject, final String ipAddress,
 			final User userObj, final String printerType, final String printerLocation)
 	{
-		final List listMap = (List) createObjectMap(abstractDomainObject,printerType,printerLocation);
+		final List listMap = (List) createObjectMap(abstractDomainObject,printerType,printerLocation,ipAddress);
 
 		try
 		{
@@ -54,7 +54,7 @@ public class SpecimenCollectionGroupLabelPrinterImpl implements LabelPrinter {
 	 * @param abstractDomainObject Specimen Collection group
 	 * @return List List of all Specimen including child Specimen
 	 */
-	List createObjectMap(AbstractDomainObject abstractDomainObject,String printerType,String printerLocation)
+	List createObjectMap(AbstractDomainObject abstractDomainObject,String printerType,String printerLocation,String ipAddress)
 	{
 		List listMap = new ArrayList ();
 		if(abstractDomainObject instanceof SpecimenCollectionGroup)

@@ -120,6 +120,17 @@ public class LoginAction extends Action
 	                String result = userBizLogic.checkFirstLoginAndExpiry(validUser);
 													
 					setSecurityParamsInSessionData(validUser, sessionData);
+
+					String validRole=getForwardToPageOnLogin(validUser.getCsmUserId().longValue());
+                    if(validRole!=null && validRole.contains(Constants.PAGE_OF_SCIENTIST))
+                    {
+                            ActionErrors errors = new ActionErrors();
+                            errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.noRole"));
+                            saveErrors(request, errors);
+                            session.setAttribute(Constants.SESSION_DATA, null);
+                            return mapping.findForward(Constants.FAILURE);
+                    }                   
+                    
 					
 					if(!result.equals(Constants.SUCCESS)) 
 					{
@@ -184,7 +195,7 @@ public class LoginAction extends Action
 	{
 		String userRole = SecurityManagerFactory.getSecurityManager().getRoleName(
 				validUser.getCsmUserId());
-		if (userRole.equals(Roles.ADMINISTRATOR) || userRole.equals(Roles.SUPERVISOR))
+        if (userRole!=null && (userRole.equals(Roles.ADMINISTRATOR) || userRole.equals(Roles.SUPERVISOR)))
 		{
 			sessionData.setSecurityRequired(false);
 		}

@@ -29,7 +29,7 @@ public class SpecimenLabelPrinterImpl implements LabelPrinter {
 		
 		ArrayList listMap = new ArrayList ();
 		//createObjectMap(abstractDomainObject,listMap);
-		createObjectMap(abstractDomainObject,listMap,printerType,printerLocation);
+		createObjectMap(abstractDomainObject,listMap,printerType,printerLocation,ipAddress);
 		try
 		{
 			  PrintServiceInputParserInterface objParser = new PrintServiceInputXMLParser();
@@ -57,7 +57,7 @@ public class SpecimenLabelPrinterImpl implements LabelPrinter {
 		{
 			AbstractDomainObject abstractDomainObject = abstractDomainObjectList.get(cnt); 
 			//createObjectMap(abstractDomainObject,listMap);
-			createObjectMap(abstractDomainObject,listMap,printerType,printerLocation);
+			createObjectMap(abstractDomainObject,listMap,printerType,printerLocation,ipAddress);
 		}
 		try
 		{
@@ -75,7 +75,7 @@ public class SpecimenLabelPrinterImpl implements LabelPrinter {
 	 * @param abstractDomainObject Specimen Object
 	 * @param listMap List of Specimen details including all child specimen.
 	 */
-	void createObjectMap(AbstractDomainObject abstractDomainObject,ArrayList listMap,String printerType,String printerLocation)
+	void createObjectMap(AbstractDomainObject abstractDomainObject,ArrayList listMap,String printerType,String printerLocation,String ipAddress)
 	{
 		
 		if(abstractDomainObject instanceof Specimen)

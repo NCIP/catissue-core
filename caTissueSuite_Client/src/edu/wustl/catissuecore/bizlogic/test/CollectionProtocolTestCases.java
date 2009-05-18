@@ -233,6 +233,7 @@ public class CollectionProtocolTestCases extends CaTissueBaseTestCase
 	    	CollectionProtocol updatedCollectionProtocol = (CollectionProtocol)appService.updateObject(collectionProtocol);
 	    	Logger.out.info("Domain object successfully updated ---->"+updatedCollectionProtocol);
 	    	assertTrue("Domain object updated successfully", true);
+	    	TestCaseUtility.setObjectMap(updatedCollectionProtocol,CollectionProtocol.class);//bug 12073 and 12074
 	    } 
 	    catch (Exception e)
 	    {

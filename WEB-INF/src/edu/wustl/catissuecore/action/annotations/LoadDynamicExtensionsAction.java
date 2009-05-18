@@ -53,7 +53,7 @@ public class LoadDynamicExtensionsAction extends BaseAction
         session.setAttribute(AnnotationConstants.SELECTED_STATIC_RECORDID, conditions);          
         
         //Get Dynamic extensions URL
-        String dynamicExtensionsURL =getDynamicExtensionsURL(request);
+        String dynamicExtensionsURL = getDynamicExtensionsURL(request);
         //Set as request attribute
         request.setAttribute(AnnotationConstants.DYNAMIC_EXTN_URL_ATTRIB, dynamicExtensionsURL);           
         return mapping.findForward(Constants.SUCCESS);
@@ -66,7 +66,7 @@ public class LoadDynamicExtensionsAction extends BaseAction
     private String getDynamicExtensionsURL(HttpServletRequest request)
     {
         //Get Dynamic extensions URL
-        String dynamicExtensionsURL = WebUIManager.getCreateContainerURL();
+        String dynamicExtensionsURL = request.getContextPath() + WebUIManager.getCreateContainerURL();
         
         SessionDataBean sessionbean = (SessionDataBean)request.getSession().getAttribute(edu.wustl.catissuecore.util.global.Constants.SESSION_DATA);
                

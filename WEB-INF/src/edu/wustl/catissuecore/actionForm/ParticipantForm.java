@@ -157,7 +157,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 	/**
 	 * Consent Response hashtable entered by the user.
 	 */
-	protected Hashtable consentResponseHashTable;
+	protected Map consentResponseHashTable;
 
 	/**
 	 * Counter that contains number of rows in the 'Add More' functionality for medical identifier.
@@ -289,7 +289,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 			collectionProtocolRegistrationValues = new LinkedHashMap();
 			if (consentResponseHashTable == null)
 			{
-				consentResponseHashTable = new Hashtable();
+				consentResponseHashTable = new LinkedHashMap();
 			}
 			consentResponseBeanCollection = new LinkedHashSet<ConsentResponseBean>();
 			int i = 1;
@@ -356,6 +356,9 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 		try
 		{
 
+			logger.debug(":::::::: collection protocol id  :"+collectionProtocolRegistration.getCollectionProtocol().getId());
+			logger.debug(":::::::: collection protocol registration  id :"+collectionProtocolRegistration.getId());
+			
 			long collectionProtocolID = collectionProtocolRegistration.getCollectionProtocol().getId();
 			String signedConsentURL = collectionProtocolRegistration.getSignedConsentDocumentURL();
 			User consentWitness = collectionProtocolRegistration.getConsentWitness();
@@ -417,6 +420,8 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 					consentBean.setStatement(consentTier.getStatement());
 					consentBean.setParticipantResponse(consentTierResponse.getResponse());
 					consentBean.setParticipantResponseID(Utility.toString(consentTierResponse.getId()));
+					logger.debug("::::::: participant response :::"+consentTierResponse.getResponse());
+					logger.debug("::::::: participant response id :::"+consentTierResponse.getId());
 				}
 				else
 				{
@@ -825,7 +830,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 	private void setConsentResponse(HttpSession session)
 	{
 
-		Hashtable consentResponsesHashTable = (Hashtable) session.getAttribute(Constants.CONSENT_RESPONSE);
+		Map consentResponsesHashTable = (Map) session.getAttribute(Constants.CONSENT_RESPONSE);
 		if (consentResponsesHashTable != null)
 		{
 			int size = consentResponsesHashTable.size();
@@ -1102,7 +1107,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 	 * Returns the Consent Response HashTable entered by the user. 
 	 * @return
 	 */
-	public Hashtable getConsentResponseHashTable()
+	public Map getConsentResponseHashTable()
 	{
 		return consentResponseHashTable;
 	}
@@ -1129,7 +1134,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 	 * 
 	 * @param consentResponseHashTable Consent Response HashTable entered by the user
 	 */
-	public void setConsentResponseHashTable(Hashtable consentResponseHashTable)
+	public void setConsentResponseHashTable(Map consentResponseHashTable)
 	{
 		this.consentResponseHashTable = consentResponseHashTable;
 	}

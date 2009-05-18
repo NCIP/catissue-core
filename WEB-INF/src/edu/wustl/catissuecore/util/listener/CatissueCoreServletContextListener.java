@@ -98,6 +98,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 	        initCatissueParams();
 			//logApplnInfo();
 			//initCDEManager();
+			//initCDEManager();
 			DefaultValueManager.validateAndInitDefaultValueMap();
 			logger.info("Initialization complete");
     	}

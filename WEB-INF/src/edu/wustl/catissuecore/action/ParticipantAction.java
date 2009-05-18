@@ -42,6 +42,7 @@ import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.global.AppUtility;
+import edu.wustl.catissuecore.util.ConsentUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.actionForm.AbstractActionForm;
@@ -133,7 +134,7 @@ public class ParticipantAction extends SecureAction
 			request.setAttribute("participantId", new Long(participantForm.getId()).toString());			
 			//Setting Consent Response Bean to Session
 			//Abhishek Mehta
-			Hashtable consentResponseHashTable = participantForm.getConsentResponseHashTable();
+			Map consentResponseHashTable = participantForm.getConsentResponseHashTable();
 			if(consentResponseHashTable != null)
 			{
 				session.setAttribute(Constants.CONSENT_RESPONSE, consentResponseHashTable);
@@ -544,6 +545,7 @@ public class ParticipantAction extends SecureAction
 	 */
 	private void setParticipantCollectionProtocolRegistrationId(IBizLogic bizLogic,Long participantId, Map  map, Collection consentResponseBeanCollection , int cprCount)throws Exception
 	{
+		logger.debug("Action ::: participant id :: " + participantId );
 		//By Abhishek Mehta
 		//ParticipantBizLogic bizLogic = (ParticipantBizLogic) BizLogicFactory.getInstance().getBizLogic(Participant.class.getName());
 		Collection collectionProtocolRegistrationCollection=(Collection)bizLogic.retrieveAttribute(Participant.class.getName(), participantId, "elements(collectionProtocolRegistrationCollection)");
@@ -584,7 +586,7 @@ public class ParticipantAction extends SecureAction
 										cpri.getProtocolParticipantIdentifier());
 							if(consentResponseBeanCollection != null)
 							{
-								setConsentResponseId(bizLogic,cpri.getId() , consentResponseBeanCollection);
+								setConsentResponseId(bizLogic,cpri.getId() ,cpri.getCollectionProtocol().getId(), consentResponseBeanCollection);
 							}
 							break;
 						}
@@ -598,18 +600,21 @@ public class ParticipantAction extends SecureAction
 	 * To set the consent response id for add/edit page
 	 * //Abhishek Mehta
 	 */
-	private void setConsentResponseId(IBizLogic bizLogic,Long collectionProtocolId, Collection consentResponseBeanCollection)throws Exception
+	private void setConsentResponseId(IBizLogic bizLogic,Long cprId, Long colProtId, Collection consentResponseBeanCollection)throws Exception
 	{
 		//By Abhishek Mehta
-		Collection consentTierResponseCollection=(Collection)bizLogic.retrieveAttribute(CollectionProtocolRegistration.class.getName(), collectionProtocolId, "elements(consentTierResponseCollection)");
+		Collection consentTierResponseCollection=(Collection)bizLogic.retrieveAttribute(CollectionProtocolRegistration.class.getName(), cprId, "elements(consentTierResponseCollection)");
 		
 		Iterator it = consentResponseBeanCollection.iterator();
 		while(it.hasNext())
 		{
 			ConsentResponseBean consentResponseBean = (ConsentResponseBean)it.next();
 			long cpId = consentResponseBean.getCollectionProtocolID();
-			if(cpId == collectionProtocolId) // Searching for same collection protocol
+			if(cpId == colProtId) // Searching for same collection protocol
 			{
+				
+				logger.debug("Action ::: collection protocol id :: " + colProtId );
+				logger.debug("Action ::: collection protocol registration id  :: " + cprId );
 				Iterator iter=consentTierResponseCollection.iterator();
 				while(iter.hasNext())
 				{
@@ -626,6 +631,7 @@ public class ParticipantAction extends SecureAction
 							String ctId = consentBean.getConsentTierID();
 							if(ctId.equals(consentTierId))
 							{
+								logger.debug("Action ::: consent response  :: " +consentTierResponse.getResponse());
 								consentBean.setParticipantResponseID(consentTierResponse.getId().toString());
 								break;
 							}

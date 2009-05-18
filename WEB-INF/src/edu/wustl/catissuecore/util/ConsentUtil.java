@@ -765,6 +765,9 @@ public final class ConsentUtil
 			ConsentTierResponse consentTierResponse = new ConsentTierResponse();
 			//Setting response
 			consentTierResponse.setResponse(consentBean.getParticipantResponse());
+			logger.debug(":: participant response :"+consentBean.getParticipantResponse());
+			logger.debug(":: participant response Id :"+consentBean.getParticipantResponseID());
+			
 			if(consentBean.getParticipantResponseID()!=null&&consentBean.getParticipantResponseID().trim().length()>0)
 			{
 				consentTierResponse.setId(Long.parseLong(consentBean.getParticipantResponseID()));

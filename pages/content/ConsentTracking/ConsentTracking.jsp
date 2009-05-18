@@ -109,14 +109,26 @@ function popupWindow(nofConsentTiers)
 		}
 	else if(iCount==nofConsentTiers)
 	{	
+		var isPageConsent = false;
 		
 		<%if(pageOf.equals("pageOfConsent"))
 			{%>
-			document.forms[0].submit();
-			self.close();
-		<%}%>
+		isPageConsent = true;
 		
-		if(changeInStatus==false)
+		document.forms[0].action = "ConsentSubmit.do";
+		self.document.forms[0].submit();
+		alert("Consent status updated, register participant to save the changes.");
+		if(self.document.forms[0].name == "consentForm")
+		{
+			self.close();
+		}
+		
+		//self.setTimeout('self.close()',2);
+		<%
+			}
+		%>
+		
+		if(changeInStatus==false & isPageConsent == false)
 		{
 			<%Object formInstance = form;
 				if(formInstance instanceof NewSpecimenForm)
@@ -138,7 +150,8 @@ function popupWindow(nofConsentTiers)
 				window.open(url,'WithdrawAll','height=350,width=530,center=1,scrollbars=1,resizable=0');
 			<%}
 			else
-			{%>
+			{
+			%>
 				document.forms[0].action="<%=Constants.CP_QUERY_SPECIMEN_EDIT_ACTION%>";
 				document.forms[0].submit();
 			<%}%>

@@ -4,6 +4,7 @@ package edu.wustl.catissuecore.util;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -295,6 +296,7 @@ public final class AssociatesCps
 				}
 				formContext.setEntityMapConditionCollection(entityMapCondColl);
 			}
+			entityMap.setFormContextCollection(formContextColl);
 		}
 	}
 }

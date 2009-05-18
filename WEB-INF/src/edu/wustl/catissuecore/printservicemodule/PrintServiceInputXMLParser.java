@@ -124,9 +124,9 @@ public class PrintServiceInputXMLParser implements PrintServiceInputParserInterf
 
 				if (it.hasNext()) 
 				{
-					it.next();
+					//it.next();
 					String classname = (String) objMap.get("class");
-					key = (String) it.next();
+					//key = (String) it.next();
 					String id = (String) objMap.get("id");
 					// add child element
 					Node objectNode = createObjectNode(document, classname, id);

@@ -132,7 +132,7 @@ public class LoadDynamicExtentionsDataEntryPageAction extends BaseAction
 	 */
 	private String getDynamicExtensionsDataEntryURL(HttpServletRequest request, AnnotationDataEntryForm annotationDataEntryForm)
 	{
-		String dynExtDataEntryURL = WebUIManager.getLoadDataEntryFormActionURL();
+		String dynExtDataEntryURL = request.getContextPath() + WebUIManager.getLoadDataEntryFormActionURL();
 		 SessionDataBean sessionbean = (SessionDataBean)request.getSession().getAttribute(edu.wustl.catissuecore.util.global.Constants.SESSION_DATA);
          String userId= sessionbean.getUserId().toString();
 		String isAuthenticatedUser = "false";

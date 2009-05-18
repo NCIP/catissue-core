@@ -741,7 +741,14 @@ function participantRegRow(subdivtag)
 							<td width="13%" align="left" class="black_ar_b"><bean:message
 							key="participant.collectionProtocolReg.participantProtocolID" />
 							</td>
-						
+						<!-- Bug# 11470 S -->
+						<%if((!Variables.isCollectionProtocolRegistrationBarcodeGeneratorAvl))
+						{%>
+							<td width="13%" align="left" class="black_ar_b"><bean:message
+								key="participant.collectionProtocolReg.barcode" />
+							</td>
+						<%}%>
+						<!-- Bug# 11470 E -->
 						<td width="25%" align="left" class="black_ar_b"><bean:message
 							key="participant.collectionProtocolReg.participantRegistrationDate" />
 						</td>
@@ -987,17 +994,10 @@ function participantRegRow(subdivtag)
 						<script>
 					function participant(id)
 					{
-						//do nothing
-						//mandar for grid
+
 						var cl = mygrid.cells(id,mygrid.getColumnCount()-1);
 						var pid = cl.getValue();
-						//alert(pid);
-						/* 
-							 Resolved bug# 4240
-	                    	 Name: Virender Mehta
-	                    	 Reviewer: Sachin Lale
-	                    	 Description: removed URL On  onclick
-	                     */
+
 						 document.forms[0].submittedFor.value = "AddNew";
 						 var pageOf = "<%=pageOf%>";
 						if(pageOf == "<%=Constants.PAGE_OF_PARTICIPANT_CP_QUERY%>")
@@ -1053,13 +1053,7 @@ function participantRegRow(subdivtag)
 								%>
 					</logic:equal>
 					<tr>
-						<%--
-									String normalSubmitFunctionName = "setSubmittedForParticipant('" + submittedFor+ "','" + Constants.PARTICIPANT_FORWARD_TO_LIST[0][1]+"')";
-									String forwardToSubmitFunctionName = "setSubmittedForParticipant('ForwardTo','" + Constants.PARTICIPANT_FORWARD_TO_LIST[1][1]+"')";									
-									String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms[0].activityStatus)";
-									String normalSubmit = normalSubmitFunctionName + ","+confirmDisableFuncName;
-									String forwardToSubmit = forwardToSubmitFunctionName + ","+confirmDisableFuncName;
-								--%>
+
 						<%
 											String normalSubmitFunctionName = "setSubmittedForParticipant('"
 											+ submittedFor + "','"

@@ -588,13 +588,18 @@ function submitBioHazards()
   form.action =  form.action + "?method=submitBioHazards";
   form.submit();
 }
+
+// Bug 11446 S
+
 // function to delete External identifiers
 // Patch-Id: Improve_Space_Usability_On_Specimen_Page_1
 // Description: pageOf variable is added as an argument to function. If pageOf=pageOfNewSpecimenPage then do not call action.
-function deleteExternalIdentifiers(pageOf)
+/*function deleteExternalIdentifiers(pageOf)
 {
 	deleteChecked('addExternalIdentifier','NewMultipleSpecimenAction.do?method=deleteExternalIdentifiers&status=true&button=deleteExId',document.forms[0].exIdCounter,'chk_ex_',false,pageOf)
-}
+}*/
+
+//Bug 11446 E
 
 function submitEvents() 
 {
@@ -602,13 +607,17 @@ function submitEvents()
   form.action =  form.action + "?method=submitEvents&operation=addMultipleSpecimen";
   form.submit();
 }
+
+//Bug 11446 S
 // function to delete bioHazards
 // Patch-Id: Improve_Space_Usability_On_Specimen_Page_1
 // Description: pageOf variable is added as an argument to function. If pageOf=pageOfNewSpecimenPage then do not call action.
-function deleteBioHazards(pageOf)
+/*function deleteBioHazards(pageOf)
 {
 	deleteChecked('addBiohazardRow','NewMultipleSpecimenAction.do?method=deleteBioHazards&status=true&button=deleteBiohazard',document.forms[0].bhCounter,'chk_bio_',false,pageOf);
-}
+}*/
+
+//Bug 11446 E
 
 
 
