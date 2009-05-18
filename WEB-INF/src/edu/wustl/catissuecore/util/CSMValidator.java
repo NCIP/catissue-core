@@ -1,15 +1,20 @@
 package edu.wustl.catissuecore.util;
 
 import java.util.Collection;
+import java.util.List;
 
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.querysuite.queryobject.TermType;
+import edu.wustl.common.querysuite.queryobject.YMInterval;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.daofactory.DAOConfigFactory;
+import edu.wustl.query.util.global.AQConstants;
+import edu.wustl.query.util.querysuite.TemporalColumnMetadata;
 import edu.wustl.security.exception.SMException;
 import edu.wustl.security.global.Permissions;
 import edu.wustl.security.privilege.IValidator;
@@ -32,30 +37,31 @@ public class CSMValidator implements IValidator {
 		DAO dao = null;
 		User user = null;
 		Collection<CollectionProtocol> cpCollection = null;
-		try 
-		{
-			PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(sessionDataBean.getUserName());
-			dao = DAOConfigFactory.getInstance().getDAOFactory(Constants.APPLICATION_NAME).getDAO();
-			dao.openSession(sessionDataBean);
-			
-			user = (User) dao.retrieveById(User.class.getName(), sessionDataBean.getUserId());
-			cpCollection = user.getAssignedProtocolCollection();
-			
-			if (cpCollection != null && !cpCollection.isEmpty())
-	        {
-				hasPrivilege = checkePriviliges(sessionDataBean, privilegeCache,
-						cpCollection);
-	        } 
-			else
-	        {
-	        	hasPrivilege = edu.wustl.catissuecore.util.global.AppUtility.checkForAllCurrentAndFutureCPs(Permissions.REGISTRATION, sessionDataBean, null);
-	        }
-			dao.closeSession();
-		} 
-		catch (Exception e1) 
-		{
-			logger.debug(e1.getMessage(), e1);
-		}
+			try 
+			{
+				PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(sessionDataBean.getUserName());
+				dao = DAOConfigFactory.getInstance().getDAOFactory(Constants.APPLICATION_NAME).getDAO();
+				dao.openSession(sessionDataBean);
+				
+				user = (User) dao.retrieveById(User.class.getName(), sessionDataBean.getUserId());
+				cpCollection = user.getAssignedProtocolCollection();
+				
+				if (cpCollection != null && !cpCollection.isEmpty())
+		        {
+					hasPrivilege = checkePriviliges(sessionDataBean, privilegeCache,
+							cpCollection);
+		        } 
+				else
+		        {
+		        	hasPrivilege = edu.wustl.catissuecore.util.global.AppUtility.checkForAllCurrentAndFutureCPs(Permissions.REGISTRATION, sessionDataBean, null);
+		        }
+				dao.closeSession();
+			} 
+			catch (Exception e1) 
+			{
+				logger.debug(e1.getMessage(), e1);
+			}
+
 		return hasPrivilege;
 	}
 
@@ -89,23 +95,23 @@ public class CSMValidator implements IValidator {
 		return hasPrivilege;
 	} 
 
-	/*public boolean hasPrivilegeToViewTemporalColumn(List tqColumnMetadataList,
+	public boolean hasPrivilegeToViewTemporalColumn(List tqColumnMetadataList,
 			List<String> row,boolean isAuthorizedUser) 
 	{
 		boolean removeRow = false;
 		for (Object object : tqColumnMetadataList) 
 		{ 
-			TemporalColumnMetada tqMetadata = (TemporalColumnMetada) object;
+			TemporalColumnMetadata tqMetadata = (TemporalColumnMetadata) object;
 			String ageString = row.get(tqMetadata.getColumnIndex() - 1);
 			long age = 0;
 			
 			if (tqMetadata.getTermType().equals(TermType.Timestamp) || !isAuthorizedUser) 
 			{
-				row.set(tqMetadata.getColumnIndex() - 1, QueryModuleConstants.HASHED_OUT);
+				row.set(tqMetadata.getColumnIndex() - 1, AQConstants.HASHED_OUT);
 			} 
 			else if (tqMetadata.getTermType().equals(TermType.DSInterval)) 
 			{
-				if(!ageString.equals(QueryModuleConstants.PHI_AGE))
+				if(!ageString.equals(edu.wustl.query.util.global.Constants.PHI_AGE))
 				{
 				    age = Long.parseLong(ageString);
 				
@@ -127,12 +133,12 @@ public class CSMValidator implements IValidator {
 					}
 					if (Math.abs(age) > 89)
 					{
-						row.set(tqMetadata.getColumnIndex() - 1, QueryModuleConstants.PHI_AGE);
+						row.set(tqMetadata.getColumnIndex() - 1, edu.wustl.query.util.global.Constants.PHI_AGE);
 					}
 				}
 			}
 		}
 		return removeRow;
-	}*/
+	}
 	
 }
