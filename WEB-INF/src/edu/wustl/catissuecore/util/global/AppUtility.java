@@ -2813,7 +2813,7 @@ public class AppUtility
 			boolean editAlreadyPresentCondition) throws DynamicExtensionsSystemException,
 			ApplicationException
 	{
-		Collection<FormContext> formContextColl = getFormContexts(entityMap.getId());
+		Collection<FormContext> formContextColl = new HashSet<FormContext>(getFormContexts(entityMap.getId()));
 		if (formContextColl != null)
 		{
 			for (FormContext formContext : formContextColl)
@@ -2838,6 +2838,7 @@ public class AppUtility
 				}
 				formContext.setEntityMapConditionCollection(entityMapCondColl);
 			}
+			entityMap.setFormContextCollection(formContextColl);
 		}
 	}
 

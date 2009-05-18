@@ -256,7 +256,7 @@ public final class AssociatesCps
 	private static void editConditions(EntityMap entityMap, Long conditionObjectId, Long typeId)
 			throws ApplicationException
 	{
-		Collection<FormContext> formContextColl = AppUtility.getFormContexts(entityMap.getId());
+		Collection<FormContext> formContextColl = new HashSet<FormContext>(AppUtility.getFormContexts(entityMap.getId()));
 
 		if (formContextColl != null)
 		{
