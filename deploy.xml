@@ -1615,7 +1615,6 @@
 				</fileset>
 			</classpath>
 		</sql>
-		<antcall target="upgrade_metadata_for_constraintproperties" />
 	</target>
 	
 	<!-- Removing unnecessary PE Oracle-->
@@ -1632,7 +1631,6 @@
 						</fileset>
 					</classpath>
 			</sql>
-		<antcall target="upgrade_metadata_for_constraintproperties" />
    </target>
 
 	<!-- Upgrading from Suite1.1 p2 to p3 - MySQL -->
@@ -1652,6 +1650,7 @@
 				</fileset>
 			</classpath>
 		</sql>
+		<antcall target="upgrade_metadata_for_constraintproperties" />
 	</target>
 	
 	<!-- Upgrading from Suite1.1 p2 to p3 - Oracle -->
@@ -1671,6 +1670,7 @@
 				</fileset>
 			</classpath>
 		</sql>
+		<antcall target="upgrade_metadata_for_constraintproperties" />
    </target>
 	
 	<!--MySQL Database Upgradation -->
