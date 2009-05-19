@@ -84,7 +84,7 @@ public class SubmitCPAction extends BaseAction
 			//resultMap.put(Constants.ERROR_DETAIL, errorMsg);
 			ActionErrors actionErrors = new ActionErrors();
 			actionErrors.add(actionErrors.GLOBAL_MESSAGE, new ActionError(
-					"errors.item",ex.toMsgValuesArray()));
+					"errors.item",ex.getMessage()));
 			SessionDataBean sessionDataBean = getSessionData(request);
 	        String userName = "";
             if(sessionDataBean != null)

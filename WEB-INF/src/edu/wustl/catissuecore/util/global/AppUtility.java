@@ -2285,14 +2285,14 @@ public class AppUtility
 			{
 				domainObjName = baseObjectUpdated;
 			}
-			List<String> list  = new ArrayList<String>();
+			/*List<String> list  = new ArrayList<String>();
 			list.add(domainObjName);
 			list.add(decoratedPrivilegeName);
 			list.add(baseObjectUpdated);
 
-			String message = ApplicationProperties.getValue("access.addedit.object.denied", list);
+			String message = ApplicationProperties.getValue("access.addedit.object.denied", list);*/
 			ErrorKey errorKey = ErrorKey.getErrorKey("access.addedit.object.denied");	
-			return new BizLogicException(errorKey,null, message);
+			return new BizLogicException(errorKey,null, domainObjName+":"+decoratedPrivilegeName+":"+baseObjectUpdated);
 		}
 		
 		/**

@@ -1039,8 +1039,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			if (manager == null)
 			{
 
-				throw getBizLogicException(null, "dao.error", "Failed to get CDE manager object. "
-						+ "CDE Manager is not yet initialized.");
+				throw getBizLogicException(null, "cde.init.issue", "");
 			}
 
 			List specimenClassList = manager.getPermissibleValueList(
@@ -1207,14 +1206,13 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			if (!titleList.isEmpty())
 			{
 				logger.debug("Collection Protocol with the same Title already exists");
-				throw getBizLogicException(null, "dao.error",
-						"Collection Protocol with the same Title already exists");
+				throw getBizLogicException(null, "collprot.title.exists","");
 			}
 		}
 		catch (DAOException e1)
 		{
 			logger.debug(e1.getMessage(), e1);
-			throw getBizLogicException(e1, "dao.error", "Error while checking Title");
+			throw getBizLogicException(e1, "dao.error", "");
 		}
 		finally
 		{

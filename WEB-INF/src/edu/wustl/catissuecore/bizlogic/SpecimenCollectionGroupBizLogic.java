@@ -556,7 +556,8 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			}
 			// Mandar 24-Jan-07 To update consents accordingly in SCG and
 			// Specimen(s) end
-			specimenCollectionGroup.setCollectionProtocolRegistration(persistentSCG.getCollectionProtocolRegistration());
+			// change by pathik
+			//specimenCollectionGroup.setCollectionProtocolRegistration(persistentSCG.getCollectionProtocolRegistration());
 
 			Integer offset = specimenCollectionGroup.getOffset();
 			if (offset != null)
@@ -587,7 +588,17 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			persistentSCG.setName(specimenCollectionGroup.getName());
 			persistentSCG.setBarcode(specimenCollectionGroup.getBarcode());
 			persistentSCG.setConsentTierStatusCollection(specimenCollectionGroup.getConsentTierStatusCollection());
+			
+			// change by pathik
+			if(!specimenCollectionGroup.getCollectionProtocolRegistration().getId().equals(0L) && 
+					!persistentSCG.getCollectionProtocolRegistration().getId().equals(specimenCollectionGroup.getCollectionProtocolRegistration().getId()))
+			{
+				persistentSCG.setCollectionProtocolRegistration(specimenCollectionGroup.getCollectionProtocolRegistration());
+			}
+			
 			dao.update(persistentSCG);
+			
+		
 			/**
 			 * Name : Ashish Gupta Reviewer Name : Sachin Lale Bug ID: 2741 Patch
 			 * ID: 2741_6 Description: Method to update events in all specimens
